@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Button, Form, FormField, Header, Icon, Message, Segment, Step, TransitionGroup,
+  Button, Form, FormField, Header, Message, Segment, TransitionGroup,
 } from 'semantic-ui-react';
 import i18n from '../../../lib/i18n';
 import EventIcon from '../../wca/EventIcon';
@@ -33,34 +33,31 @@ export default function RegistrationOverview({
       </Message>
       )}
       <TransitionGroup animation="slide down">
-        <>
-          <Segment>
-            <Header>Your Registration:</Header>
-            <Form onSubmit={nextStep}>
-              <FormField>
-                <label>{i18n.t('activerecord.attributes.registration.registration_competition_events')}</label>
-                {registration.competing.event_ids.map((id) => (<EventIcon key={id} id={id} style={{ cursor: 'unset' }} />))}
-              </FormField>
-              <FormField>
-                <label>{i18n.t('competitions.registration_v2.register.comment')}</label>
-                {registration.competing.comment.length > 0 ? registration.competing.comment : i18n.t('competitions.schedule.rooms_panel.none')}
-              </FormField>
-              <FormField>
-                <label>{i18n.t('activerecord.attributes.registration.guests')}</label>
-                {registration.guests}
-              </FormField>
-            </Form>
-          </Segment>
-          { editsAllowed && (
-          <Button
-            primary
-            attached
-            type="submit"
-          >
-            {i18n.t('registrations.update')}
-          </Button>
-          )}
-        </>
+        <Segment>
+          <Header>{i18n.t('competitions.nav.menu.registration')}</Header>
+          <Form onSubmit={nextStep}>
+            <FormField>
+              <label>{i18n.t('activerecord.attributes.registration.registration_competition_events')}</label>
+              {registration.competing.event_ids.map((id) => (<EventIcon key={id} id={id} style={{ cursor: 'unset' }} />))}
+            </FormField>
+            <FormField>
+              <label>{i18n.t('competitions.registration_v2.register.comment')}</label>
+              {registration.competing.comment.length > 0 ? registration.competing.comment : i18n.t('competitions.schedule.rooms_panel.none')}
+            </FormField>
+            <FormField>
+              <label>{i18n.t('activerecord.attributes.registration.guests')}</label>
+              {registration.guests}
+            </FormField>
+            { editsAllowed && (
+            <Button
+              primary
+              type="submit"
+            >
+              {i18n.t('registrations.update')}
+            </Button>
+            )}
+          </Form>
+        </Segment>
       </TransitionGroup>
     </>
   );

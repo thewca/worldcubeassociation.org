@@ -310,76 +310,42 @@ export default function CompetingStep({
             />
           </Form.Field>
           {isRegistered ? (
-            <>
-              <Message warning icon>
-                <Popup
-                  trigger={<Icon name="circle info" />}
-                  position="top center"
-                  content={
-                    canUpdateRegistration
-                      ? i18n.t('competitions.registration_v2.register.until', {
-                        date: getMediumDateString(
-                          competitionInfo.event_change_deadline_date
-                          ?? competitionInfo.start_date,
-                        ),
-                      })
-                      : i18n.t('competitions.registration_v2.register.passed')
-                  }
-                />
-                <Message.Content>
-                  <Message.Header>
-                    {i18n.t(
-                      `competitions.registration_v2.register.registration_status.${registration.competing.registration_status}`,
-                    )}
-                  </Message.Header>
-                  {/* eslint-disable-next-line no-nested-ternary */}
-                  {canUpdateRegistration
-                    ? i18n.t('registrations.update')
-                    : hasRegistrationEditDeadlinePassed
-                      ? i18n.t('competitions.registration_v2.errors.-4001')
-                      : i18n.t(
-                        'competitions.registration_v2.register.editing_disabled',
-                      )}
-                </Message.Content>
-              </Message>
-
-              <ButtonGroup widths={2}>
-                {shouldShowUpdateButton && (
-                  <>
-                    <Button
-                      primary
-                      disabled={
-                        isUpdating || !canUpdateRegistration || !hasChanges
+            <ButtonGroup widths={2}>
+              {shouldShowUpdateButton && (
+              <>
+                <Button
+                  primary
+                  disabled={
+                        isUpdating || !hasChanges
                       }
-                      type="submit"
-                    >
-                      {i18n.t('registrations.update')}
-                    </Button>
-                    <ButtonOr />
-                  </>
-                )}
+                  type="submit"
+                >
+                  {i18n.t('registrations.update')}
+                </Button>
+                <ButtonOr />
+              </>
+              )}
 
-                {shouldShowReRegisterButton && (
-                  <Button
-                    secondary
-                    disabled={isUpdating}
-                    type="submit"
-                  >
-                    {i18n.t('competitions.registration_v2.register.re-register')}
-                  </Button>
-                )}
+              {shouldShowReRegisterButton && (
+              <Button
+                secondary
+                disabled={isUpdating}
+                type="submit"
+              >
+                {i18n.t('competitions.registration_v2.register.re-register')}
+              </Button>
+              )}
 
-                {shouldShowDeleteButton && (
-                  <Button
-                    disabled={isUpdating}
-                    negative
-                    onClick={() => attemptAction(actionDeleteRegistration)}
-                  >
-                    {i18n.t('registrations.delete_registration')}
-                  </Button>
-                )}
-              </ButtonGroup>
-            </>
+              {shouldShowDeleteButton && (
+              <Button
+                disabled={isUpdating}
+                negative
+                onClick={() => attemptAction(actionDeleteRegistration)}
+              >
+                {i18n.t('registrations.delete_registration')}
+              </Button>
+              )}
+            </ButtonGroup>
           ) : (
             <>
               <Message info icon floating>
