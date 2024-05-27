@@ -1766,7 +1766,7 @@ en:
         re-register: "Re-Register"
         success: "You are registered for %{comp_name}"
         error: "Registration failed with error %{error}"
-        early_registration: "Registration is not open yet, but you can still register as a competition organizer or Delegate."
+        early_registration: "Registration is not open yet - you are pre-registering as an organizer/delegate"
         comment: "Additional comments to the organizers"
         until: "You can update your registration until %{date}"
         passed: "You can no longer update your registration"
