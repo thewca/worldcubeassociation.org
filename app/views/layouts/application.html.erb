@@ -22,7 +22,7 @@
 
   <% if session.delete(:should_reset_jwt) %>
     <script>
-      localStorage.setItem("jwt", null);
+      localStorage.removeItem("jwt");
     </script>
   <% end %>
 
