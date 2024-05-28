@@ -297,6 +297,7 @@ export default function CompetingStep({
             </p>
           </Form.Field>
           <Form.Field>
+            <label>{i18n.t('activerecord.attributes.registration.guests')}</label>
             <Input
               id="guest-dropdown"
               type="number"
@@ -305,7 +306,6 @@ export default function CompetingStep({
                 setGuests(Number.parseInt(data.value, 10));
               }}
               min="0"
-              label={<Label>{i18n.t('activerecord.attributes.registration.guests')}</Label>}
               max={competitionInfo.guests_per_registration_limit}
             />
           </Form.Field>
