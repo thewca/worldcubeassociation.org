@@ -558,8 +558,23 @@ class RegistrationsController < ApplicationController
   end
 
   def payment_completion
-    registration = Registration.includes(:competition).find(params[:id])
+    uses_v2 = params[:attendee_id].present?
+
+
+    registration = if uses_v2
+                     competition_id, user_id_s = params[:attendee_id].split("-")
+                     user_id = user_id_s.to_i
+                     MicroserviceRegistration.find_by(competition_id: competition_id, user_id: user_id)
+                   else
+                     Registration.includes(:competition).find(params[:id])
+                   end
     @competition = registration.competition
+
+    if registration.user.id == current_user.id
+      flash[:error] = t("registrations.payment_form.errors.not_allowed")
+      return redirect_to competition_register_path(@competition)
+    end
+
 
     # Provided by Stripe upon redirect when the "PaymentElement" workflow is completed
     intent_id = params[:payment_intent]
@@ -591,12 +606,20 @@ class RegistrationsController < ApplicationController
     stored_intent.update_status_and_charges(stripe_intent, current_user) do |charge_transaction|
       ruby_money = charge_transaction.money_amount
 
-      registration.record_payment(
-        ruby_money.cents,
-        ruby_money.currency.iso_code,
-        charge_transaction,
-        current_user.id,
-      )
+      if uses_v2
+        begin
+          Microservices::Registrations.update_registration_payment(attendee_id, charge.id, ruby_money.cents, ruby_money.currency.iso_code, stripe_intent.status)
+        rescue Faraday::Error
+          return redirect_to competition_register_path(competition_id, "registration_unreachable")
+        end
+      else
+        registration.record_payment(
+          ruby_money.cents,
+          ruby_money.currency.iso_code,
+          charge_transaction,
+          current_user.id,
+          )
+      end
 
       # Running in sync mode, so if the code reaches this point we're reasonably confident that the time the Stripe payment
       #   succeeded matches the time that the information reached our database. There are cases for async webhooks where
