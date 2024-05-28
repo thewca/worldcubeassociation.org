@@ -43,7 +43,10 @@ const potentialWarnings = (competitionInfo) => {
       max_events: competitionInfo.events_per_registration_limit,
     }));
   }
-
+  // Guest Limit
+  if (competitionInfo.guests_per_registration_limit) {
+    warnings.push(i18n.t('competitions.competition_info.guest_limit', { count: competitionInfo.guests_per_registration_limit }));
+  }
   return warnings;
 };
 
@@ -326,11 +329,6 @@ export default function CompetingStep({
               min="0"
               max={competitionInfo.guests_per_registration_limit}
             />
-            { competitionInfo.guests_per_registration_limit && (
-              <p>
-                {i18n.t('competitions.competition_info.guest_limit', { count: competitionInfo.guests_per_registration_limit })}
-              </p>
-            )}
           </Form.Field>
           {isRegistered ? (
             <ButtonGroup widths={2}>
