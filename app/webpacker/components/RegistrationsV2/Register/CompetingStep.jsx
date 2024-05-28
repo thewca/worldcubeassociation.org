@@ -332,7 +332,7 @@ export default function CompetingStep({
                 disabled={isUpdating}
                 type="submit"
               >
-                {i18n.t('competitions.registration_v2.register.re-register')}
+                {i18n.t('registrations.register')}
               </Button>
               )}
 
