@@ -143,6 +143,10 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     end
   end
 
+  private def changed_value_to_human_readable(changed_value)
+    changed_value.nil? ? 'None' : changed_value
+  end
+
   # update method is written in a way that at a time, only one parameter can be changed. If multiple
   # values needs to be changed, then they need to be sent as separate APIs from the client.
   def update
@@ -264,8 +268,8 @@ class Api::V0::UserRolesController < Api::V0::ApiController
         if changed_parameter.present?
           changes << UserRole::UserRoleChange.new(
             changed_parameter: changed_parameter,
-            previous_value: values[0] || 'None',
-            new_value: values[1] || 'None',
+            previous_value: changed_value_to_human_readable(values[0]),
+            new_value: changed_value_to_human_readable(values[1]),
           )
         end
       end
