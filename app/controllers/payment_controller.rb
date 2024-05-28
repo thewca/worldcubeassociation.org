@@ -38,7 +38,7 @@ class PaymentController < ApplicationController
         end
       end
 
-      redirect_to competition_register_path(competition_id, stored_stripe_record.stripe_status)
+      redirect_to competition_register_path(competition_id, stripe_intent.status)
     else
       redirect_to user_session_path
     end
