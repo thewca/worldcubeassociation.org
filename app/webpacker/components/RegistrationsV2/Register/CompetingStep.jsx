@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import _ from 'lodash';
 import React, {
-  useCallback, useEffect, useState,
+  useCallback, useEffect, useMemo, useState,
 } from 'react';
 import {
   Button,
@@ -26,6 +26,26 @@ import { setMessage } from './RegistrationMessage';
 import i18n from '../../../lib/i18n';
 
 const maxCommentLength = 240;
+
+const potentialWarnings = (competitionInfo) => {
+  const warnings = [];
+  // Required Comment
+  if (competitionInfo.force_comment_in_registration) {
+    warnings.push(i18n.t('registrations.errors.cannot_register_without_comment'));
+  }
+  // Organizer Pre Registration
+  if (!competitionInfo['registration_opened?']) {
+    warnings.push(i18n.t('competitions.registration_v2.register.early_registration'));
+  }
+  // Favourites Competition
+  if (competitionInfo.events_per_registration_limit) {
+    warnings.push(i18n.t('competitions.registration_v2.register.event_limit', {
+      max_events: competitionInfo.events_per_registration_limit,
+    }));
+  }
+
+  return warnings;
+};
 
 export default function CompetingStep({
   nextStep,
@@ -226,6 +246,8 @@ export default function CompetingStep({
     shouldShowUpdateButton,
   ]);
 
+  const formWarnings = useMemo(() => potentialWarnings(competitionInfo), [competitionInfo]);
+
   return (
     <Segment basic>
       {processing && (
@@ -245,20 +267,18 @@ export default function CompetingStep({
       )}
 
       <>
-        {!competitionInfo['registration_opened?'] && (
-          <Message warning>
-            {i18n.t('competitions.registration_v2.register.early_registration')}
-          </Message>
-        )}
-
         {hasPaid && (
           <Message success>
             {i18n.t('competitions.registration_v2.register.already_paid', { comp_name: competitionInfo.name })}
           </Message>
         )}
 
-        <Form onSubmit={handleSubmit}>
-          <Form.Field required>
+        <Form onSubmit={handleSubmit} warning={formWarnings.length > 0}>
+          <Message
+            warning
+            list={formWarnings}
+          />
+          <Form.Field required error={selectedEvents.length === 0}>
             <EventSelector
               onEventSelection={handleEventSelection}
               eventList={competitionInfo.event_ids}
@@ -266,28 +286,26 @@ export default function CompetingStep({
               id="event-selection"
               maxEvents={maxEvents}
             />
-            <p
-              dangerouslySetInnerHTML={{
-                __html: i18n.t(!competitionInfo.events_per_registration_limit ? 'registrations.preferred_events_prompt_html' : 'competitions.registration_v2.register.event_limit', {
-                  link: `<a href="${userPreferencesRoute}">here</a>`,
-                  max_events: competitionInfo.events_per_registration_limit,
-                }),
-              }}
-            />
+            {!competitionInfo.events_per_registration_limit
+              && (
+              <p
+                dangerouslySetInnerHTML={{
+                  __html: i18n.t('registrations.preferred_events_prompt_html', {
+                    link: `<a href="${userPreferencesRoute}">here</a>`,
+                  }),
+                }}
+              />
+              )}
           </Form.Field>
-          <Form.Field required={Boolean(competitionInfo.force_comment_in_registration)}>
+          <Form.Field required={Boolean(competitionInfo.force_comment_in_registration)} error={competitionInfo.force_comment_in_registration && comment.trim().length === 0}>
             <label htmlFor="comment">
               {i18n.t('competitions.registration_v2.register.comment')}
             </label>
             <TextArea
+              required={Boolean(competitionInfo.force_comment_in_registration)}
               maxLength={maxCommentLength}
               onChange={(event, data) => setComment(data.value)}
               value={comment}
-              placeholder={
-                competitionInfo.force_comment_in_registration
-                  ? i18n.t('registrations.errors.cannot_register_without_comment')
-                  : ''
-              }
               id="comment"
             />
             <p>
