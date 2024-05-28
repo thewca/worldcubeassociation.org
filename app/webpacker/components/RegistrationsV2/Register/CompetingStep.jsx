@@ -276,7 +276,7 @@ export default function CompetingStep({
           </Message>
         )}
 
-        <Form onSubmit={handleSubmit} warning={formWarnings.length > 0}>
+        <Form onSubmit={handleSubmit} warning={formWarnings.length > 0} size="large">
           <Message
             warning
             list={formWarnings}

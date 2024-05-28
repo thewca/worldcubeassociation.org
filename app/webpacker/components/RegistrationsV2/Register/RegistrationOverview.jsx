@@ -35,7 +35,7 @@ export default function RegistrationOverview({
       <TransitionGroup animation="slide down">
         <Segment>
           <Header>{i18n.t('competitions.nav.menu.registration')}</Header>
-          <Form onSubmit={nextStep}>
+          <Form onSubmit={nextStep} size="large">
             <FormField>
               <label>{i18n.t('activerecord.attributes.registration.registration_competition_events')}</label>
               {registration.competing.event_ids.map((id) => (<EventIcon key={id} id={id} style={{ cursor: 'unset' }} />))}
