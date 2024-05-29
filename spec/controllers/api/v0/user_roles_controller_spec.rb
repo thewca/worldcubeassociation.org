@@ -30,7 +30,7 @@ RSpec.describe Api::V0::UserRolesController do
         expect(response.body).to eq(user_whose_delegate_status_changes.active_roles.to_json)
       end
 
-      it 'fetches list of banned competitos' do
+      it 'does not fetches list of banned competitos' do
         get :index_for_group_type, params: { group_type: UserGroup.group_types[:banned_competitors] }
 
         expect(response.body).to eq([banned_competitor].to_json)
