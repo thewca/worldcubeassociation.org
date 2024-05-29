@@ -93,9 +93,11 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     if group.banned_competitors?
       user = User.find(user_id)
       upcoming_comps_for_user = user.competitions_registered_for.not_over.merge(Registration.not_deleted).pluck(:id)
-      return render status: :unprocessable_entity, json: {
+      unless upcoming_comps_for_user.empty?
+        return render status: :unprocessable_entity, json: {
           error: "The user has upcoming competitions: #{upcoming_comps_for_user.join(', ')}. Before banning the user, make sure their registrations are deleted.",
-        } unless upcoming_comps_for_user.empty?
+        }
+      end
     end
 
     return render status: :unprocessable_entity, json: { error: "Invalid group type" } unless create_supported_groups.include?(group.group_type)
