@@ -614,6 +614,10 @@ class User < ApplicationRecord
       groups << UserGroup.translators.ids
     end
 
+    if can_edit_banned_competitors?
+      groups += UserGroup.banned_competitors.ids
+    end
+
     groups
   end
 

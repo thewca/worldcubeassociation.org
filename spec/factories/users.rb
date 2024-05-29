@@ -207,6 +207,20 @@ FactoryBot.define do
       otp_secret { User.generate_otp_secret }
     end
 
+    trait :with_past_competitions do
+      after(:create) do |user|
+        competition = FactoryBot.create(:competition, :past)
+        FactoryBot.create(:registration, :accepted, user: user, competition: competition, events: %w(333))
+      end
+    end
+
+    trait :with_future_competitions do
+      after(:create) do |user|
+        competition = FactoryBot.create(:competition, :future)
+        FactoryBot.create(:registration, :accepted, user: user, competition: competition, events: %w(333))
+      end
+    end
+
     wca_id { person&.wca_id }
 
     after(:build) do |user|
