@@ -610,7 +610,7 @@ class RegistrationsController < ApplicationController
           ruby_money.currency.iso_code,
           charge_transaction,
           current_user.id,
-          )
+        )
       end
 
       # Running in sync mode, so if the code reaches this point we're reasonably confident that the time the Stripe payment
@@ -729,7 +729,7 @@ class RegistrationsController < ApplicationController
         refund_receipt,
         payment.id,
         current_user.id,
-        )
+      )
     end
 
     flash[:success] = 'Payment was refunded'
