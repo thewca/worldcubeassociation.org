@@ -558,27 +558,10 @@ class RegistrationsController < ApplicationController
   end
 
   def payment_completion
-    uses_v2 = params[:attendee_id].present?
-
-
-    registration = if uses_v2
-                     competition_id, user_id_s = params[:attendee_id].split("-")
-                     user_id = user_id_s.to_i
-                     MicroserviceRegistration.find_by(competition_id: competition_id, user_id: user_id)
-                   else
-                     Registration.includes(:competition).find(params[:id])
-                   end
-    @competition = registration.competition
-
-    if registration.user.id != current_user.id
-      flash[:error] = t("registrations.payment_form.errors.not_allowed")
-      return redirect_to competition_register_path(@competition)
-    end
-
-
     # Provided by Stripe upon redirect when the "PaymentElement" workflow is completed
     intent_id = params[:payment_intent]
     intent_secret = params[:payment_intent_client_secret]
+    @competition = params[:competition_id]
 
     # We expect that the record here is a top-level PaymentIntent in Stripe's API model
     stored_record = StripeRecord.find_by(stripe_id: intent_id)
@@ -589,6 +572,14 @@ class RegistrationsController < ApplicationController
     end
 
     stored_intent = stored_record.payment_intent
+
+    registration = stored_intent.holder
+    uses_v2 = registration.is_a? MicroserviceRegistration
+
+    if registration.user.id != current_user.id
+      flash[:error] = t("registrations.payment_form.errors.not_allowed")
+      return redirect_to competition_register_path(@competition)
+    end
 
     unless stored_intent.client_secret == intent_secret
       flash[:error] = t("registrations.payment_form.errors.stripe_secret_invalid")
