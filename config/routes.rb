@@ -180,7 +180,7 @@ Rails.application.routes.draw do
   get 'polls/:id/vote' => 'votes#vote', as: 'polls_vote'
   get 'polls/:id/results' => 'polls#results', as: 'polls_results'
 
-  resources :teams, only: [:update, :edit]
+  resources :teams, only: [:update]
 
   resources :votes, only: [:create, :update]
 
