@@ -6,15 +6,13 @@ import React, {
 import {
   Button,
   ButtonGroup,
-  ButtonOr, Divider,
+  ButtonOr,
   Form,
   Icon,
   Input,
-  Label,
   Message,
   Popup,
   Segment,
-  TextArea,
 } from 'semantic-ui-react';
 import updateRegistration from '../api/registration/patch/update_registration';
 import submitEventRegistration from '../api/registration/post/submit_registration';
@@ -30,10 +28,6 @@ const maxCommentLength = 240;
 
 const potentialWarnings = (competitionInfo) => {
   const warnings = [];
-  // Required Comment
-  if (competitionInfo.force_comment_in_registration) {
-    warnings.push(i18n.t('registrations.errors.cannot_register_without_comment'));
-  }
   // Organizer Pre Registration
   if (!competitionInfo['registration_opened?']) {
     warnings.push(i18n.t('competitions.registration_v2.register.early_registration'));
@@ -300,16 +294,17 @@ export default function CompetingStep({
                 />
               )}
           </Form.Field>
-          <Form.Field required={Boolean(competitionInfo.force_comment_in_registration)} error={competitionInfo.force_comment_in_registration && comment.trim().length === 0}>
+          <Form.Field required={Boolean(competitionInfo.force_comment_in_registration)}>
             <label htmlFor="comment">
               {i18n.t('competitions.registration_v2.register.comment')}
             </label>
-            <TextArea
+            <Form.TextArea
               required={Boolean(competitionInfo.force_comment_in_registration)}
               maxLength={maxCommentLength}
               onChange={(event, data) => setComment(data.value)}
               value={comment}
               id="comment"
+              error={competitionInfo.force_comment_in_registration && comment.trim().length === 0 && i18n.t('registrations.errors.cannot_register_without_comment')}
             />
             <p>
               {comment.length}
