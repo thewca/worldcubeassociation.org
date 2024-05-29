@@ -7,6 +7,7 @@ import SEARCH_MODELS from '../../../SearchWidget/SearchModel';
 import UtcDatePicker from '../../../wca/UtcDatePicker';
 import useSaveAction from '../../../../lib/hooks/useSaveAction';
 import Loading from '../../../Requests/Loading';
+import Errored from '../../../Requests/Errored';
 
 export default function BanendCompetitorForm({
   sync, banAction, banActionRole, closeForm,
@@ -15,6 +16,7 @@ export default function BanendCompetitorForm({
     user: null,
     endDate: banActionRole?.end_date,
   });
+  const [formError, setFormError] = useState();
   const { save, saving } = useSaveAction();
 
   const handleFormChange = (_, { name, value }) => setFormValues({ ...formValues, [name]: value });
@@ -27,7 +29,9 @@ export default function BanendCompetitorForm({
     }, () => {
       sync();
       closeForm();
-    }, { method: 'POST' });
+    }, { method: 'POST' }, (error) => {
+      setFormError(error);
+    });
   };
 
   const editBannedCompetitor = () => {
@@ -36,12 +40,15 @@ export default function BanendCompetitorForm({
     }, () => {
       sync();
       closeForm();
-    }, { method: 'PATCH' });
+    }, { method: 'PATCH' }, (error) => {
+      setFormError(error);
+    });
   };
 
   const formSubmitHandler = banAction === 'new' ? createNewBannedCompetitor : editBannedCompetitor;
 
   if (saving) return <Loading />;
+  if (formError) return <Errored error={formError} />;
 
   return (
     <Form onSubmit={formSubmitHandler}>
