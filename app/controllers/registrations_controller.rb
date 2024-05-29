@@ -561,14 +561,14 @@ class RegistrationsController < ApplicationController
     # Provided by Stripe upon redirect when the "PaymentElement" workflow is completed
     intent_id = params[:payment_intent]
     intent_secret = params[:payment_intent_client_secret]
-    @competition = params[:competition_id]
+    competition_id = params[:competition_id]
 
     # We expect that the record here is a top-level PaymentIntent in Stripe's API model
     stored_record = StripeRecord.find_by(stripe_id: intent_id)
 
     unless stored_record.payment_intent?
       flash[:error] = t("registrations.payment_form.errors.stripe_not_an_intent")
-      return redirect_to competition_register_path(@competition)
+      return redirect_to competition_register_path(competition_id)
     end
 
     stored_intent = stored_record.payment_intent
@@ -578,12 +578,12 @@ class RegistrationsController < ApplicationController
 
     if registration.user.id != current_user.id
       flash[:error] = t("registrations.payment_form.errors.not_allowed")
-      return redirect_to competition_register_path(@competition)
+      return redirect_to competition_register_path(competition_id)
     end
 
     unless stored_intent.client_secret == intent_secret
       flash[:error] = t("registrations.payment_form.errors.stripe_secret_invalid")
-      return redirect_to competition_register_path(@competition)
+      return redirect_to competition_register_path(competition_id)
     end
 
     # No need to create a new intent here. We can just query the stored intent from Stripe directly.
@@ -591,7 +591,7 @@ class RegistrationsController < ApplicationController
 
     unless stripe_intent.present?
       flash[:error] = t("registrations.payment_form.errors.stripe_not_found")
-      return redirect_to competition_register_path(@competition)
+      return redirect_to competition_register_path(competition_id)
     end
 
     stored_intent.update_status_and_charges(stripe_intent, current_user) do |charge_transaction|
@@ -638,7 +638,7 @@ class RegistrationsController < ApplicationController
       flash[:error] = "Invalid PaymentIntent status"
     end
 
-    redirect_to competition_register_path(@competition)
+    redirect_to competition_register_path(competition_id)
   end
 
   # This method implements the PaymentElements workflow described at:
