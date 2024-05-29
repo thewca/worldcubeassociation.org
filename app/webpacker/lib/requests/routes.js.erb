@@ -84,7 +84,7 @@ export const adminFixResultsUrl = (personId, competition_id = undefined, event_i
   return `<%= CGI.unescape(Rails.application.routes.url_helpers.admin_fix_results_path) %>?${searchParams.toString()}`
 };
 
-export const paymentFinishUrl = (competitionId, userId) => `<%= Rails.application.routes.url_helpers.finish_url(host: EnvConfig.ROOT_URL) %>?attendee_id=${competitionId}-${userId}`
+export const paymentFinishUrl = (competitionId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.registration_payment_completion("${competitionId}", host: EnvConfig.ROOT_URL)) %>`
 
 export const paymentRefundsUrl = (competitionId, userId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.refunds_path) %>?attendee_id=${competitionId}-${userId}`
 
