@@ -34,44 +34,4 @@ class PaymentController < ApplicationController
       render status: :unauthorized, json: { error: I18n.t('api.login_message') }
     end
   end
-
-  def payment_refund
-    payment_id = params.require(:payment_id)
-
-    attendee_id = params.require(:attendee_id)
-    competition_id, user_id = attendee_id.split("-")
-
-    ms_registration = MicroserviceRegistration.includes(:competition)
-                                              .find_by(competition_id: competition_id, user_id: user_id)
-    return render status: :bad_request, json: { error: "Registration not found" } unless ms_registration.present?
-
-    competition = ms_registration.competition
-    return render status: :unauthorized, json: { error: 'unauthorized' } unless current_user.can_issue_refunds?(competition)
-
-    stripe_integration = competition.payment_account_for(:stripe)
-    return render json: { error: "no_stripe" } unless stripe_integration.present?
-
-    charge = StripeRecord.charge.find(payment_id)
-    return render json: { error: "invalid_transaction" } unless charge.present?
-
-    intent = charge.root_record.payment_intent
-    return render json: { error: "invalid_transaction" } unless intent.holder == ms_registration
-
-    refund_amount_param = params.require(:refund_amount)
-    refund_amount = refund_amount_param.to_i
-
-    return render json: { error: "refund_zero" } if refund_amount < 0
-
-    refund_receipt = stripe_integration.issue_refund(charge.stripe_id, refund_amount)
-
-    currency_iso = refund_receipt.currency_code
-
-    begin
-      Microservices::Registrations.update_registration_payment(attendee_id, refund_receipt.id, refund_amount, currency_iso, "refund")
-    rescue Faraday::Error
-      return render json: { error: "registration_unreachable" }
-    end
-
-    render json: { status: "ok" }
-  end
 end

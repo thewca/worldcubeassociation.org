@@ -677,15 +677,19 @@ class RegistrationsController < ApplicationController
   end
 
   def refund_payment
-    registration = Registration.find(params[:id])
-    stripe_integration = registration.competition.payment_account_for(:stripe)
+    competition_id = params[:competition_id]
+    competition = Competition(competition_id)
+    stripe_integration = competition.payment_account_for(:stripe)
+
+    payment = StripeRecord.charge.find(params[:payment_id])
+
+    registration = payment.holder
+    uses_v2 = registration.is_a? MicroserviceRegistration
 
     unless stripe_integration.present?
       flash[:danger] = "You cannot emit refund for this competition anymore. Please use your Stripe dashboard to do so."
       return redirect_to edit_registration_path(registration)
     end
-
-    payment = RegistrationPayment.find(params[:payment_id])
 
     refund_amount_param = params.require(:payment).require(:refund_amount)
     refund_amount = refund_amount_param.to_i
@@ -712,13 +716,21 @@ class RegistrationsController < ApplicationController
     # FIXME: This method only exists because we silently assume it's Stripe
     ruby_money = refund_receipt.money_amount
 
-    registration.record_refund(
-      ruby_money.cents,
-      ruby_money.currency.iso_code,
-      refund_receipt,
-      payment.id,
-      current_user.id,
-    )
+    if uses_v2
+      begin
+        Microservices::Registrations.update_registration_payment(attendee_id, refund_receipt.id, refund_amount, currency_iso, "refund")
+      rescue Faraday::Error
+        flash[:error] = 'Registration Service is not reachable'
+      end
+    else
+      registration.record_refund(
+        ruby_money.cents,
+        ruby_money.currency.iso_code,
+        refund_receipt,
+        payment.id,
+        current_user.id,
+        )
+    end
 
     flash[:success] = 'Payment was refunded'
     redirect_to edit_registration_path(registration)

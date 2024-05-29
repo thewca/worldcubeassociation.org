@@ -42,7 +42,7 @@ Rails.application.routes.draw do
     delete 'users/sign-out-other' => 'sessions#destroy_other', as: :destroy_other_user_sessions
   end
   post 'registration/:id/load-payment-intent' => 'registrations#load_payment_intent', as: :registration_payment_intent
-  post 'competitions/:competition_id/refund/:payment_id' => 'registrations#refund_payment', as: :registration_payment_refund
+  post 'competitions/:competition_id/:payment_id/refund' => 'registrations#refund_payment', as: :registration_payment_refund
   get 'competitions/:competition_id/payment-completion' => 'registrations#payment_completion', as: :registration_payment_completion
   post 'registration/stripe-webhook' => 'registrations#stripe_webhook', as: :registration_stripe_webhook
   get 'registration/payment-denomination' => 'registrations#payment_denomination', as: :registration_payment_denomination
