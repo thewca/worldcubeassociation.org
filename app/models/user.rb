@@ -545,11 +545,11 @@ class User < ApplicationRecord
   end
 
   def banned?
-    current_teams.include?(Team.banned)
+    group_member?(UserGroup.banned_competitors.first)
   end
 
   def current_ban
-    current_team_members.where(team: Team.banned).first
+    active_roles.select { |role| role.group == UserGroup.banned_competitors.first }.first
   end
 
   def ban_end
