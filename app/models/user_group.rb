@@ -14,6 +14,7 @@ class UserGroup < ApplicationRecord
     translators: "translators",
     board: "board",
     officers: "officers",
+    banned_competitors: "banned_competitors",
   }
 
   # There are few associations/methods here that are used only for testing. They are to make sure
@@ -146,6 +147,10 @@ class UserGroup < ApplicationRecord
 
   def self.teams_committees_group_wsot
     GroupsMetadataTeamsCommittees.find_by(friendly_id: 'wsot').user_group
+  end
+
+  def self.banned_competitors_group
+    UserGroup.banned_competitors.first
   end
 
   def senior_delegate

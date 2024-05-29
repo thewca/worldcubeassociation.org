@@ -198,6 +198,10 @@ FactoryBot.define do
       group_id { UserGroup.board_group.id }
     end
 
+    trait :banned_competitor do
+      group_id { UserGroup.banned_competitors.first.id }
+    end
+
     factory :probation_role, traits: [:delegate_probation, :active]
     factory :translator_role, traits: [:translators, :active]
     factory :trainee_delegate_role, traits: [:delegate_regions, :delegate_regions_trainee_delegate, :active]
@@ -236,5 +240,6 @@ FactoryBot.define do
     factory :wrc_senior_member_role, traits: [:wrc_senior_member, :active]
     factory :wrc_leader_role, traits: [:wrc_leader, :active]
     factory :board_role, traits: [:board, :active]
+    factory :banned_competitor_role, traits: [:banned_competitor, :active]
   end
 end

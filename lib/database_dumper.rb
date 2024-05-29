@@ -921,6 +921,7 @@ module DatabaseDumper
         ),
       ),
     }.freeze,
+    "roles_metadata_banned_competitors" => :skip_all_rows,
     "jwt_denylist" => :skip_all_rows,
     "wfc_xero_users" => :skip_all_rows,
     "wfc_dues_redirects" => :skip_all_rows,

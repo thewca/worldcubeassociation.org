@@ -196,6 +196,9 @@ Rails.application.routes.draw do
     get 'board' => 'panel#board', as: :panel_board
     get 'leader' => 'panel#leader', as: :panel_leader
     get 'senior_delegate' => 'panel#senior_delegate', as: :panel_senior_delegate
+    get 'wdc' => 'panel#wdc', as: :panel_wdc
+    get 'wec' => 'panel#wec', as: :panel_wec
+    get 'weat' => 'panel#weat', as: :panel_weat
   end
   resources :notifications, only: [:index]
 
