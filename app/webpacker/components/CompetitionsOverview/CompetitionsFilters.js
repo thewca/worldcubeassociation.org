@@ -11,7 +11,6 @@ import {
 
 import useDelegatesData from './useDelegatesData';
 import UtcDatePicker from '../wca/UtcDatePicker';
-import i18n from '../../lib/i18n';
 
 export const WCA_EVENT_IDS = Object.values(events.official).map((e) => e.id);
 
@@ -95,7 +94,7 @@ export function EventSelector({
             <span><Button disabled={disabled || eventList.length >= maxEvents} primary type="button" size="mini" id="select-all-events" onClick={() => onEventSelection({ type: 'select_all_events' })}>{I18n.t('competitions.index.all_events')}</Button></span>
         }
         >
-          {i18n.t('competitions.registration_v2.register.event_limit', {
+          {I18n.t('competitions.registration_v2.register.event_limit', {
             max_events: maxEvents,
           })}
         </Popup>
