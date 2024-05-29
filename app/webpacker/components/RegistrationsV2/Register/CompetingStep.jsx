@@ -9,7 +9,6 @@ import {
   ButtonOr,
   Form,
   Icon,
-  Input,
   Message,
   Popup,
   Segment,
@@ -37,10 +36,6 @@ const potentialWarnings = (competitionInfo) => {
     warnings.push(i18n.t('competitions.registration_v2.register.event_limit', {
       max_events: competitionInfo.events_per_registration_limit,
     }));
-  }
-  // Guest Limit
-  if (competitionInfo.guests_per_registration_limit) {
-    warnings.push(i18n.t('competitions.competition_info.guest_limit', { count: competitionInfo.guests_per_registration_limit }));
   }
   return warnings;
 };
@@ -314,7 +309,7 @@ export default function CompetingStep({
           </Form.Field>
           <Form.Field>
             <label>{i18n.t('activerecord.attributes.registration.guests')}</label>
-            <Input
+            <Form.Input
               id="guest-dropdown"
               type="number"
               value={guests}
@@ -323,6 +318,7 @@ export default function CompetingStep({
               }}
               min="0"
               max={competitionInfo.guests_per_registration_limit}
+              error={guests > competitionInfo.guests_per_registration_limit && i18n.t('competitions.competition_info.guest_limit', { count: competitionInfo.guests_per_registration_limit })}
             />
           </Form.Field>
           {isRegistered ? (
