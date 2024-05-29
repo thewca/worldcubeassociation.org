@@ -36,16 +36,6 @@ class TeamMember < ApplicationRecord
     end
   end
 
-  validate :cannot_ban_user_with_upcoming_comps
-  def cannot_ban_user_with_upcoming_comps
-    if team == Team.banned && current_member?
-      upcoming_comps = user.competitions_registered_for.not_over.merge(Registration.not_deleted).pluck(:id)
-      unless upcoming_comps.empty?
-        errors.add(:user_id, "The user has upcoming competitions: #{upcoming_comps.join(', ')}. Before banning the user, make sure their registrations are deleted.")
-      end
-    end
-  end
-
   validates :start_date, presence: true
 
   DEFAULT_SERIALIZE_OPTIONS = {
