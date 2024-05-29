@@ -24,6 +24,7 @@ import { EventSelector } from '../../CompetitionsOverview/CompetitionsFilters';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { setMessage } from './RegistrationMessage';
 import i18n from '../../../lib/i18n';
+import I18nHTMLTranslate from '../../I18nHTMLTranslate';
 
 const maxCommentLength = 240;
 
@@ -291,13 +292,12 @@ export default function CompetingStep({
             />
             {!competitionInfo.events_per_registration_limit
               && (
-              <p
-                dangerouslySetInnerHTML={{
-                  __html: i18n.t('registrations.preferred_events_prompt_html', {
+                <I18nHTMLTranslate
+                  options={{
                     link: `<a href="${userPreferencesRoute}">here</a>`,
-                  }),
-                }}
-              />
+                  }}
+                  i18nKey="registrations.preferred_events_prompt_html"
+                />
               )}
           </Form.Field>
           <Form.Field required={Boolean(competitionInfo.force_comment_in_registration)} error={competitionInfo.force_comment_in_registration && comment.trim().length === 0}>
