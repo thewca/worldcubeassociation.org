@@ -79,7 +79,7 @@
     "react-simplemde-editor": "^5.2.0",
     "react-spinners": "^0.13.8",
     "react-textarea-autosize": "^8.5.3",
-    "react_ujs": "^3.2.0",
+    "react_ujs": "^3.2.1",
     "regenerator-runtime": "^0.14.1",
     "resolve-url-loader": "^5.0.0",
     "sass": "^1.76.0",
