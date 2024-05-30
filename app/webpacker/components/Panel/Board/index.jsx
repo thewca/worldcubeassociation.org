@@ -9,6 +9,7 @@ import OfficersEditor from './OfficersEditor';
 import RegionsAdmin from './RegionsAdmin';
 import LeadersAdminPage from './LeadersAdminPage';
 import BoardEditorPage from './BoardEditorPage';
+import BannedCompetitorsPage from '../pages/BannedCompetitorsPage';
 
 const sections = [
   {
@@ -50,6 +51,11 @@ const sections = [
     id: PANEL_LIST.board.regionsAdmin,
     name: 'Regions Admin',
     component: RegionsAdmin,
+  },
+  {
+    id: PANEL_LIST.board.bannedCompetitors,
+    name: 'Banned Competitors',
+    component: BannedCompetitorsPage,
   },
 ];
 

@@ -17,8 +17,9 @@ RSpec.describe Api::V0::UserRolesController do
         dob_verification: "1990-01-2",
       )
     end
+    let!(:banned_competitor) { FactoryBot.create(:banned_competitor_role) }
 
-    context 'when user is logged in and changing role data' do
+    context 'when user is logged in as senior delegate' do
       before do
         allow(controller).to receive(:current_user) { user_senior_delegate_role.user }
       end
@@ -27,6 +28,28 @@ RSpec.describe Api::V0::UserRolesController do
         get :index_for_user, params: { user_id: user_whose_delegate_status_changes.id }
 
         expect(response.body).to eq(user_whose_delegate_status_changes.active_roles.to_json)
+      end
+
+      it 'does not fetches list of banned competitos' do
+        get :index_for_group_type, params: { group_type: UserGroup.group_types[:banned_competitors] }
+
+        expect(response.body).to eq([banned_competitor].to_json)
+      end
+    end
+
+    context 'when user is logged in as a normal user' do
+      sign_in { FactoryBot.create(:user) }
+
+      it 'fetches list of roles of a user' do
+        get :index_for_user, params: { user_id: user_whose_delegate_status_changes.id }
+
+        expect(response.body).to eq(user_whose_delegate_status_changes.active_roles.to_json)
+      end
+
+      it 'fetches list of banned competitos' do
+        get :index_for_group_type, params: { group_type: UserGroup.group_types[:banned_competitors] }
+
+        expect(response.body).to eq([].to_json)
       end
     end
   end
@@ -46,6 +69,34 @@ RSpec.describe Api::V0::UserRolesController do
       it 'returns unauthorized error' do
         get :show, params: { id: probation_role.id }
         expect(response).to have_http_status(:unauthorized)
+      end
+    end
+  end
+
+  describe 'POST #create' do
+    let!(:user_to_be_banned_with_past_comps) { FactoryBot.create(:user, :with_past_competitions) }
+    let!(:user_to_be_banned_with_future_comps) { FactoryBot.create(:user, :with_future_competitions) }
+
+    context 'when a competitor is banned' do
+      sign_in { FactoryBot.create(:user, :wdc_leader) }
+
+      it 'successful if the user does not have any upcoming competitions' do
+        post :create, params: {
+          userId: user_to_be_banned_with_past_comps.id,
+          groupType: UserGroup.group_types[:banned_competitors],
+        }
+        expect(response).to be_successful
+      end
+
+      it 'fails if the user have any upcoming competitions' do
+        post :create, params: {
+          userId: user_to_be_banned_with_future_comps.id,
+          groupType: UserGroup.group_types[:banned_competitors],
+        }
+        upcoming_comps_for_user = user_to_be_banned_with_future_comps.competitions_registered_for.not_over.merge(Registration.not_deleted).pluck(:id)
+        expect(response).to have_http_status(422)
+        response_json = JSON.parse(response.body)
+        expect(response_json["error"]).to eq "The user has upcoming competitions: #{upcoming_comps_for_user.join(', ')}. Before banning the user, make sure their registrations are deleted."
       end
     end
   end

@@ -611,7 +611,7 @@ pt-BR:
           #original_hash: 621101a
           trainee_delegate: Delegado Trainee
           #original_hash: 9b97968
-          candidate_delegate: Delegado Júnior
+          junior_delegate: Delegado Júnior
           #original_hash: 12ab214
           delegate: Delegado
           #original_hash: 45c2317
@@ -742,17 +742,6 @@ pt-BR:
         otp_attempt: >-
           Verifique seu aplicativo móvel para uma senha única, ou informe um de
           seus códigos de recuperação.
-      website_contact:
-        #original_hash: da39a3e
-        inquiry: ''
-        #original_hash: da39a3e
-        competition_id: ''
-        #original_hash: da39a3e
-        message: ''
-        #original_hash: da39a3e
-        name: ''
-        #original_hash: da39a3e
-        your_email: ''
       dob_contact:
         #original_hash: da39a3e
         name: ''
@@ -939,10 +928,6 @@ pt-BR:
           pending: Na espera
           #original_hash: 441bda6
           deleted: Excluída
-          #original_hash: a1bf92e
-          cancelled: Cancelada
-          #original_hash: 8cf6f9c
-          waiting_list: Na Lista de Espera
   mail_form:
     attributes:
       contact_form:
@@ -1156,16 +1141,14 @@ pt-BR:
       error_pages:
         #original_hash: 1042478
         500_error: 'Desculpe, algo deu errado.'
-        #original_hash: d656a11
-        500_contact: >-
-          Se você reportar este erro para a Equipe de Software, por favor copie
-          o "Request ID" no e-mail
+        #original_hash: 3e2364e
+        500_contact_html: '<a href=%{contact_url} Clique aqui</a> para reportar.'
         #original_hash: b61e305
         400_error: A página que você estava procurando não existe.
-        #original_hash: c8a7d4e
-        400_contact: >-
-          Se você acha que isso é um erro, por favor contate a Equipe de
-          Software e copie o "Request ID" no e-mail
+        #original_hash: c9290b6
+        400_contact_html: >-
+          Se você acha que isso é um erro, por favor <a
+          href=%{contact_url}>clique aqui</a> para reportar.
     doorkeeper:
       applications:
         help:
@@ -1304,8 +1287,6 @@ pt-BR:
       results_sidekiq: Painel Sidekiq
       #original_hash: aee74b8
       new_post: Novo post
-      #original_hash: 0d67445
-      team_leader: Líder de Equipe
       #original_hash: 37b8fdc
       regional_organizations: Organizações Regionais
       #original_hash: 6568fa0
@@ -1367,6 +1348,12 @@ pt-BR:
         de membros da comunidade, não parte do Staff da WCA. Quando há vagas em
         um comitê, equipe ou Conselho, as informações sobre como se candidatar
         são postadas na página principal.
+      #original_hash: b37456c
+      contact_button: Contato
+      #original_hash: ae7928f
+      no_contact_description: >-
+        Os detalhes de contato dessa equipe/comitê não estão disponíveis
+        publicamente.
       groups_name:
         #original_hash: 90a1280
         wat: Equipe de Arquivo da WCA
@@ -1484,6 +1471,73 @@ pt-BR:
           O WAC é responsável por manter feedback e comunicação entre a
           Comunidade e o Staff da WCA. Eles cuidam do Fórum da WCA, realizam
           pesquisas e tentam aumentar o alcance em toda a comunidade mundial.
+    contacts:
+      #original_hash: 4ef2aad
+      title: Formulário de Contato da WCA
+      #original_hash: bddd3ea
+      faq_note_html: >-
+        Antes de fazer uma questão, você pode querer dar uma olhada nas nossas
+        <a href="/faq">Questõs Frequentes</a>! Se você quer contatar um comitê
+        ou equipe específico não listado aqui, você pode ver os detalhes <a
+        href="/teams-committees-councils">nesta página</a>.
+      #original_hash: ea20be0
+      success_message: E-mail enviado - retornaremos em breve.
+      form:
+        user_data:
+          name:
+            #original_hash: 709a232
+            label: Nome
+          email:
+            #original_hash: 84add5b
+            label: E-mail
+        contact_recipient:
+          #original_hash: d31ab65
+          label: Qual destes melhor descreve sua questão?
+          competition:
+            #original_hash: baa2425
+            label: >-
+              Contate organizadores/delegados de uma competição (para questões
+              sobre essa competição específica)
+          wct:
+            #original_hash: b73e465
+            label: >-
+              Contate a WCA para questões gerais (isso pode envolver qualquer
+              assunto como ID/perfil da WCA, organizar competições, regulamento,
+              mídia, etc)
+          wrt:
+            #original_hash: 0f6b96b
+            label: >-
+              Contate a Equipe de Resultados (para qualquer assunto relacionado
+              aos resultados de uma competição)
+          wst:
+            #original_hash: 1d74033
+            label: >-
+              Contate a Equipe de Software (para reportar alguma falha no site
+              ou questões relacionadas à API)
+        competition:
+          competition:
+            #original_hash: 1917f4f
+            label: Competição
+          message:
+            #original_hash: 68f4145
+            label: Mensagem
+        wct:
+          message:
+            #original_hash: 68f4145
+            label: Mensagem
+        wrt:
+          message:
+            #original_hash: 68f4145
+            label: Mensagem
+        wst:
+          message:
+            #original_hash: 68f4145
+            label: Mensagem
+        captcha:
+          #original_hash: 58c1271
+          validation_error: Por favor verifique que você não é um robô.
+        #original_hash: 2dacf65
+        submit_button: Enviar
   homepage:
     #original_hash: 824d76b
     learn_more: Saiba mais
@@ -1785,13 +1839,13 @@ pt-BR:
         Por favor contate a Equipe de Resultados da WCA para te ajudar a alterar
         o ID para uma outra conta.
       cannot_edit:
-        #original_hash: 8bb2def
+        #original_hash: 3d4d222
         msg: >-
           Você não pode alterar seu nome, data de nascimento, gênero ou região.
           Motivo: %{reason}. Entre em contato com a <a
-          href='mailto:results@worldcubeassociation.org' target='_blank'>Equipe
-          de Resultados da WCA</a> ou seu <a href='%{delegate_url}'>Delegado</a>
-          para fazer alguma dessas mudanças.
+          href='%{wrt_contact_path}' target='_blank'>Equipe de Resultados da
+          WCA</a> ou seu <a href='%{delegate_url}'>Delegado</a> para fazer
+          alguma dessas mudanças.
         reason:
           #original_hash: 370ff12
           assigned: você tem uma ID da WCA associada
@@ -1900,21 +1954,21 @@ pt-BR:
         Não temos uma data de nascimento registrada para esta ID da WCA. Por
         favor contate a Equipe de Resultados da WCA usando <a
         href="%{dob_form_path}">este formulário</a>.
-      #original_hash: 51fa5a4
+      #original_hash: f7dde6e
       wca_id_no_gender_html: >-
-        Não existe um gênero registrado para essa ID da WCA. Por favor envie um
-        email para a <a href='mailto:results@worldcubeassociation.org'
-        target='_blank'>Equipe de Resultados da WCA</a> para resolver isto.
-      #original_hash: 87ee245
+        Não existe um gênero registrado para essa ID da WCA. Por favor envie
+        contate a <a href='%{wrt_contact_path}' target='_blank'>Equipe de
+        Resultados da WCA</a> para resolver isto.
+      #original_hash: 11a7f81
       wca_id_no_citizenship_html: >-
         Não existe uma nacionalidade registrada para esta ID da WCA. Por favor
-        envie um email para a <a href='mailto:results@worldcubeassociation.org'
-        target='_blank'>Equipe de Resultados da WCA</a> para resolver isto.
-      #original_hash: c3839bc
+        contate a <a href='%{wrt_contact_path}' target='_blank'>Equipe de
+        Resultados da WCA</a> para resolver isto.
+      #original_hash: 6890de8
       wca_id_no_name_html: >-
-        Não existe um nome registrado para esta ID da WCA. Por favor envie um
-        email para a <a href='mailto:results@worldcubeassociation.org'
-        target='_blank'>Equipe de Resultados da WCA</a> para resolver isto.
+        Não existe um nome registrado para esta ID da WCA. Por favor contate a
+        <a href='%{wrt_contact_path}' target='_blank'>Equipe de Resultados da
+        WCA</a> para resolver isto.
       #original_hash: d02c03b
       avatar_requires_wca_id: é necessário uma ID da WCA vinculada
       #original_hash: 8f785ea
@@ -2339,12 +2393,22 @@ pt-BR:
         not_allowed: Você não pode pagar por esta inscrição
         #original_hash: a073600
         stripe_failed: Por favor verifique a transação do Stripe.
+        #original_hash: d571a4e
+        paypal_failed: Por favor verifique o pedido do PayPal.
+        #original_hash: df1a70e
+        paypal_canceled: >-
+          O PayPal reportou que o pedido foi cancelado manualmente. Por favor
+          tente novamente.
         #original_hash: a32e40f
         stripe_not_found: O Stripe reportou uma ID de transação que não pôde ser encontrada.
         #original_hash: aaa8ab7
         stripe_secret_invalid: >-
           O Stripe retornou uma chave da transação que não coincide com nossos
           registros.
+        #original_hash: f808249
+        stripe_not_an_intent: >-
+          O Stripe retornou um ID de transação que não é uma tentativa de
+          pagamento.
         #original_hash: 8d1a199
         payment_reset: O pagamento foi rejeitado pelo Stripe.
         #original_hash: bcf6a93
@@ -2585,10 +2649,16 @@ pt-BR:
       date: Data
       #original_hash: 4f05cd6
       add_to_calendar: Adicionar ao calendário
+      #original_hash: 709a232
+      name: Nome
+      #original_hash: d219c68
+      location: Localização
       #original_hash: 4271627
       city: Cidade
       #original_hash: 67cd406
       venue: Local
+      #original_hash: 63a1c21
+      location_and_venue: Localização e locais
       #original_hash: d70f93d
       address: Endereço
       #original_hash: dc3decb
@@ -3095,6 +3165,11 @@ pt-BR:
           #original_hash: 6c8e5bf
           force_comment: Exigir que os competidores façam um comentário ao se inscreverem
         event_restrictions:
+          forbid_newcomers:
+            #original_hash: d0a4ce9
+            enabled: Impedir novatos de se inscreverem
+            #original_hash: 40c4b4c
+            reason: Razões e detalhes para não permitir a inscrição de novatos
           early_puzzle_submission:
             #original_hash: 723cad9
             enabled: >-
@@ -3324,6 +3399,13 @@ pt-BR:
           #original_hash: da39a3e
           force_comment: ''
         event_restrictions:
+          forbid_newcomers:
+            #original_hash: da39a3e
+            enabled: ''
+            #original_hash: d75332f
+            reason: >-
+              Por favor elabore aqui porque você não quer permitir a inscrição
+              de novatos para sua competição. Preencha em inglês!
           early_puzzle_submission:
             #original_hash: da39a3e
             enabled: ''
@@ -3440,15 +3522,18 @@ pt-BR:
       requirements:
         #original_hash: 09a428f
         title: Requisitos
-        #original_hash: 695cf86
+        #original_hash: 1255806
         acknowledgement: >-
           Eu li e compreendi todas as informações da aba 'Inscrição', incluindo
-          taxas e política de devolução
-        #original_hash: 270bd63
-        acknowledgment_extra: Eu li e compreendi toda a informação listada acima
+          taxas, política de devolução e quaisquer outros requisitos listados
+          acima.
         #original_hash: 80d2933
         next_step: Continuar para a próxima etapa
       update:
+        #original_hash: c04744e
+        being_updated: Inscrição sendo atualizada
+        #original_hash: 75596b9
+        being_deleted: Inscrição sendo excluída
         #original_hash: 65bbb07
         no_changes: Não há mudanças
         #original_hash: be4e8e2
@@ -3465,7 +3550,13 @@ pt-BR:
         too_many: >-
           Aceitar todas essas inscrições ultrapassaria o limite de competidores
           por %{count}
+        #original_hash: 462376a
+        no_self_update: Contate a Equipe de Organização para atualizar sua inscrição.
       register:
+        #original_hash: dddec0b
+        re-register: Re-inscrever
+        #original_hash: a38d5fa
+        success: 'Você está inscrito para %{comp_name}'
         #original_hash: affea61
         error: 'Inscrição falhou com erro %{error}'
         #original_hash: f5a8630
@@ -3478,11 +3569,19 @@ pt-BR:
         until: 'Você pode atualizar sua inscrição até %{date}'
         #original_hash: fc8bc84
         passed: Você não pode mais atualizar sua inscrição
+        #original_hash: 54d5b77
+        already_paid: 'Você já pagou a inscrição para %{comp_name}'
         #original_hash: 3c8d8b7
         editing_disabled: Encerramento das inscrições está desabilitado para esta competição
         registration_status:
-          #original_hash: f1f32b6
-          header: 'Situação da sua inscrição:'
+          #original_hash: b1e97b8
+          accepted: Sua inscrição foi aceita.
+          #original_hash: 3d7aa97
+          pending: Sua inscrição está pendente de aprovação pelos organizadores.
+          #original_hash: dcc4906
+          cancelled: Sua inscrição foi excluída.
+          #original_hash: c890478
+          waiting_list: Você está na Lista de Espera.
         #original_hash: 2d9f36c
         disclaimer: Envio da inscrição não significa aprovação para competir
         #original_hash: 8fe68a1
@@ -3491,6 +3590,10 @@ pt-BR:
         processing_longer: O processamento está levando mais tempo que o normal. Não saia!
         #original_hash: 79ba42a
         processing_queue: 'Lotes de inscrições sendo processados, %{queueCount} na fila.'
+        #original_hash: ff6550f
+        event_limit: >-
+          Essa competição limita a quantidade de eventos em que você pode se
+          inscrever a %{max_events}.
       errors:
         #original_hash: 3890616
         events: 'Carregar Eventos falhou, por favor tente novamente'
@@ -3722,7 +3825,7 @@ pt-BR:
     #original_hash: 9d473a2
     note_reg_closed_orga_close_reg: 'Nota: as inscrições já estão encerradas.'
     show:
-      #original_hash: b0fe391
+      #original_hash: a1fd58a
       general_info: Informações gerais
       #original_hash: c5497bc
       events: Eventos
@@ -3781,8 +3884,6 @@ pt-BR:
       qualification: Qualificação
     schedule:
       display_as:
-        #original_hash: ec5dd7c
-        label: 'Mostrar o cronograma como:'
         #original_hash: 0424f6e
         table: Tabela
         #original_hash: adab509
@@ -3800,20 +3901,61 @@ pt-BR:
       end: Fim
       #original_hash: 81c0d91
       activity: Atividade
-      #original_hash: 90e2fca
-      room: Sala
+      #original_hash: 15e58c6
+      no_activities: Nenhuma atividade para o local selecionado.
+      #original_hash: 10a56c8
+      all_venues: Todos os locais
+      #original_hash: a0b3266
+      room_or_stage: Sala ou palco
+      #original_hash: f37605b
+      more_details: Mostrar detalhes da rodada
+      #original_hash: a30e720
+      time_zone: Fuso Horário
+      rooms_panel:
+        #original_hash: 3a28d6f
+        title: Salas
+        #original_hash: 6a72085
+        all: Todas
+        #original_hash: 6eef664
+        none: Nenhuma
+        #original_hash: 9b9a6aa
+        show_buttons: Mostrar botões de fuso horário
+        #original_hash: d2ac826
+        use_time_zone: Usar esse fuso horário
       #original_hash: 73acb7f
       room_in_venue: '%{room} in %{venue}'
-      #original_hash: 2896c7a
-      venue_information_html: 'Você está vendo o cronograma do local %{venue_name}.'
-      #original_hash: b97e383
-      timezone_message: 'O cronograma está no fuso horário %{timezone}.'
-      #original_hash: 2ab94a0
-      multiple_venues_available: >-
-        Esta competição tem múltiplos locais; certifique-se de ver o cronograma
-        para os outros locais também!
+      #original_hash: f7fd979
+      venue_selection_html:
+        zero: zero
+        one: um
+        other: outro
+      #original_hash: 8d175ad
+      venue_selection_all: >-
+        Você está vendo o cronograma para todos os %{venueCount} locais de uma
+        vez.
+      #original_hash: 97df911
+      timezone_message: 'O fuso horário para este local é %{timezone}.'
+      #original_hash: 94b2570
+      timezone_setting: 'Você está vendo esse cronograma no seguinte fuso horário:'
+      #original_hash: 75194fd
+      multiple_timezones_available: >-
+        Observe que nem todos os locais estão no mesmo fuso horário - por favor
+        fique atento!
+      #original_hash: d94a371
+      timezone_set_local: Definir para local
+      #original_hash: 17ab650
+      timezone_set_venue: Definir para sala/local
+      #original_hash: 9974a46
+      timezone_follow_venue: Usar automaticamente o fuso horário do local ativo
       #original_hash: 37b1adb
       schedule_for_date: 'Cronograma de %{day_name} (%{full_date})'
+      #original_hash: d58b281
+      schedule_for_full_date: 'Cronograma para %{date}'
+      #original_hash: eb1090e
+      schedule_change_warning: >-
+        Cronogramas estão sujeitos a ajustes, especialmente quando o total de
+        inscrições for conhecido. Competidores inscritos serão notificados por
+        e-mail de qualquer mudança significativa.
     nav:
       menu:
         #original_hash: 612e12d
@@ -4042,8 +4184,8 @@ pt-BR:
       #original_hash: 4d08ec5
       stripe: Stripe
     payment_setup:
-      #original_hash: 69b243c
-      stripe_dashboard: Painel do Stripe
+      #original_hash: 0aa09ee
+      external_dashboard: '%{provider} Painel'
       #original_hash: e621d96
       account_connected: >-
         Você conectou com sucesso sua conta %{provider} e já pode receber
@@ -4073,48 +4215,43 @@ pt-BR:
       accept_payments_header: Aceitar Pagamentos de Inscrição
       #original_hash: 7ebe178
       connect_button: 'Conectar com %{provider}'
-      #original_hash: f3fdb64
-      stripe_payment_info: >-
-        Para poder aceitar pagamentos para esta competição, você precisa
-        conectar sua própria conta Stripe com a conta Stripe da WCA clicando no
-        botão abaixo. Se você ainda não tem sua conta Stripe, você pode clicar
-        no botão e será guiado pelo processo para criar uma.
-      #original_hash: 53adda3
-      stripe_connect_warning: >-
-        Conectar sua conta Stripe permite que o site da WCA gere cobranças e
-        devoluções diretamente na sua conta.
-      #original_hash: 9ea95c2
-      stripe_disconnect_info: >-
-        Esta competição está configurada para aceitar pagamentos pelo Stripe. Se
-        você quiser desconectar sua conta Stripe, você deve primeiro fazer isso
-        no painel Stripe (link abaixo). Observe que isso irá revogar o acesso de
-        todas as competições usando a conta. Antes que uma nova conta Stripe
-        possa ser conectada, o Delegado da competição deve solicitar à WCAT para
-        limpar o campo.
+      connect_account_info:
+        #original_hash: f3fdb64
+        stripe: >-
+          Para aceitar pagamentos para esta competição, você precisa conectar
+          sua própria conta do Stripe com a conta do Stripe da WCA clicando no
+          botão abaixo. Se você ainda não tem sua conta Stripe você mesmo assim
+          pode clicar no botão e ser guiado pelo processo.
+        #original_hash: 30afe4e
+        paypal: >-
+          Uma conta Business do PayPal é necessária para aceitar pagamentos do
+          PayPal por meio da página da competição. Se você ainda não tem uma
+          conta dessa, você pode mesmo assim clicar no botão e ser guiado pelo
+          processo.
+      connect_account_warning:
+        #original_hash: 53adda3
+        stripe: >-
+          Conectar sua conta do Stripe permite que o site da WCA faça cobranças
+          e devoluções diretamente da sua conta.
+        #original_hash: 7cedd12
+        paypal: >-
+          Conectar sua conta do PayPal permite que o site da WCA direcione os
+          pagamentos para você e faça devoluções diretamente de sua conta.
+      #original_hash: ef7e7f6
+      currently_connected_info: >-
+        Essa competição está configurada para para aceitar pagamentos por meio
+        do %{provider}. O(s) Delegado(s) da competição devem contatar a WCAT
+        para fazer mudanças nas contas conectadas.
+      #original_hash: bc14f0f
+      before_disconnect_warning: >-
+        Desconectar nessa página fará nosso site perder a conexão com sua conta
+        do %{provider}. Mas seu painel do %{provider} (veja o link abaixo) pode
+        ainta listar o site da WCA baseado na autorização que você deu antes.
+        Observe que revogar a autorização no painel também irá afetar qualquer
+        outra competição conectada a essa conta!
       #original_hash: d4a360b
-      stripe_disconnect_warning: >-
-        Tenha em mente que desconectar uma conta deve ser feito somente em
-        situações excepcionais, como a conta atual não conseguir receber
-        pagamentos.
-      #original_hash: 0af9795
-      paypal_payment_info: >-
-        Uma conta "businesse" do PayPal é necessária para aceitar pagamentos
-        pela página da competição. Se você ainda não tem uma conta "business",
-        você ainda pode clicar no botão abaixo e será guiado pelo processo para
-        criar uma.
-      #original_hash: d327396
-      paypal_connect_warning: >-
-        Conectar sua conta PayPal permite que o site da WCA direcione pagamentos
-        para você e faça reembolsos diretamente da sua conta.
-      #original_hash: eb05726
-      paypal_disconnect_info: >-
-        Esta competição está configurada para aceitar pagamentos pelo PayPal.
-        Observe que clicar em "desconectar" aqui não irá revogar as permissões
-        que você deu para a WCA - isso deve ser feito diretamente na sua conta
-        do PayPal.
-      #original_hash: c186753
-      paypal_disconnect_warning: >-
-        Tenha em mente que mudanças de conta devem ser feitas apenas em
+      before_disconnect_info: >-
+        Tenha em mente que desconectar uma conta somente deve ser feito em
         situações excepcionais, como a conta atual não poder receber pagamentos.
   persons:
     index:
@@ -4187,34 +4324,6 @@ pt-BR:
       #original_hash: 75d7ff7
       unstick_at_future: deve estar no futuro
   contacts:
-    website:
-      #original_hash: d7707e7
-      faq_note_html: >-
-        Antes de fazer uma pergunta, você pode dar uma olhada em nossas <a
-        href="/faq">Perguntas Frequentes</a>! Se você quer contatar uma equipe
-        ou comitê específico não listado aqui, as informações de contato estão
-        <a href="/teams-committees">nesta página</a>.
-      #original_hash: 4ef2aad
-      title: Formulário de Contato da WCA
-      inquiries:
-        #original_hash: 92ea7e8
-        competition: >-
-          Contatar os Organizadores de uma competição específica (por favor
-          selecione)
-        #original_hash: f0bffb7
-        competitions_in_general: 'Competições em geral (Organização, Regras, etc.)'
-        #original_hash: aabfcf7
-        results_team: Contate a Equipe de Resultados
-        #original_hash: f6ffa78
-        wca_id_or_profile: ID da WCA ou Perfil da WCA
-        #original_hash: 0c77aee
-        media: Mídia
-        #original_hash: 9ad0522
-        software: Software
-        #original_hash: 6e6a6f2
-        different: Outro
-      #original_hash: c70a890
-      submit: Enviar mensagem
     dob:
       #original_hash: 907ac6c
       title: Formulário de Solicitação de Alteração de Data de Nascimento
@@ -4547,10 +4656,6 @@ pt-BR:
         description: >-
           A World Cube Association é conduzida pelo WCA Board (Conselho da WCA),
           que consiste nos seguintes membros:
-      #original_hash: c366473
-      senior_member: Membro Senior
-      #original_hash: e26c936
-      leader: Líder
       users:
         #original_hash: 57bbaad
         profile: 'Perfil de %{user_name}'
@@ -4884,29 +4989,25 @@ pt-BR:
     #original_hash: c72c969
     title: Logotipo da WCA
     paragraphs:
-      #original_hash: 44cfe8d
+      #original_hash: 18fc057
       '1': >-
         O logotipo da WCA foi desenhado por Justin Eastman, num concurso em
-        Janeiro de 2005.<br />Nós gostamos do logotipo por causa do design, as
-        cores e o fato de que não mostra especificamente um cubo 3x3x3.
-      #original_hash: 916e3fc
+        Janeiro de 2005.
+      #original_hash: d7e75b2
       '2': >-
-        Temos quatro versões do logotipo: uma <a
-        href="/files/WCAlogo_XL.jpg">versão grande</a> (46 KB, 1756 px by 1068
-        px), uma <a href="/files/WCAlogo.svg">versão vetorizada</a> , uma <a
-        href="/files/WCAlogo_notext.svg">versão vetorizada sem textos</a> e uma
-        <a href="/files/WCAlogo_monochrome.svg">versão vetorizada
-        monocromática</a>.
-      #original_hash: dcb1ad6
+        Nós gostamos do logo por causa de seu design, das cores, e do fato de
+        que ele não mostra especificamente um cubo 3x3x3.
+      #original_hash: a68dd02
       '3': >-
-        Versão 3D do logotipo, desenhada por Vu Mihn Tan, do Vietnã: <a
-        href="/files/WCALogo3D.png">versão PNG</a> (2,1 MB), uma <a
-        href="/files/WCALogo3Dsmall.png">versão PNG pequena</a> (0,25 MB).
-      #original_hash: e5df1bf
+        Temos três versões do logotipo: uma <a href="/files/WCAlogo.svg">version
+        colorida</a>, uma <a href="/files/WCAlogo_monochrome.svg">versão toda
+        preta</a>, e uma <a href="/files/WCAlogo_monochrome_white.svg">versão
+        toda branca</a>.
+      #original_hash: d0e34b2
       '4': >-
-        O uso do logo da WCA é regulamentado pela Política de Uso do Logo da
-        WCA, que está disponível na página de <a href="/documents">Documentos da
-        WCA</a>.
+        O uso do logo da WCA é regulamentado pela <a
+        href="https://documents.worldcubeassociation.org/documents/policies/external/Logo%20Usage.pdf">Política
+        de Uso do Logo da WCA</a>.
   workbook_assistant:
     #original_hash: e442ea4
     title: Assistente de Planilha da WCA
