@@ -1,23 +1,26 @@
 import React, { useState } from 'react';
 import {
-  Button, Header, Icon, Modal, Table,
+  Button, Icon, Modal, Table,
 } from 'semantic-ui-react';
 import UserBadge from '../../../UserBadge';
 import BanendCompetitorForm from './BannedCompetitorForm';
 
-export default function BannedCompetitors({ bannedCompetitorRoles, sync }) {
+export default function BannedCompetitors({
+  bannedCompetitorRoles,
+  sync,
+  canEditBannedCompetitors,
+}) {
   const [banModalParams, setBanModalParams] = useState(null);
 
   return (
     <>
-      <Header>Banned Competitors</Header>
       <Table>
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell width={5}>User</Table.HeaderCell>
             <Table.HeaderCell width={2}>Start date</Table.HeaderCell>
             <Table.HeaderCell width={2}>End date</Table.HeaderCell>
-            <Table.HeaderCell width={2}>Edit</Table.HeaderCell>
+            {canEditBannedCompetitors && <Table.HeaderCell width={2}>Edit</Table.HeaderCell>}
           </Table.Row>
         </Table.Header>
 
@@ -29,22 +32,25 @@ export default function BannedCompetitors({ bannedCompetitorRoles, sync }) {
                   user={role.user}
                   hideBorder
                   leftAlign
+                  subtexts={role.user.wca_id ? [role.user.wca_id] : []}
                 />
               </Table.Cell>
               <Table.Cell>{role.start_date}</Table.Cell>
               <Table.Cell>{role.end_date}</Table.Cell>
-              <Table.Cell>
-                <Icon
-                  name="edit"
-                  link
-                  onClick={() => setBanModalParams({ action: 'edit', role })}
-                />
-              </Table.Cell>
+              {canEditBannedCompetitors && (
+                <Table.Cell>
+                  <Icon
+                    name="edit"
+                    link
+                    onClick={() => setBanModalParams({ action: 'edit', role })}
+                  />
+                </Table.Cell>
+              )}
             </Table.Row>
           ))}
         </Table.Body>
       </Table>
-      <Button onClick={() => setBanModalParams({ action: 'new' })}>Ban new competitor</Button>
+      {canEditBannedCompetitors && <Button onClick={() => setBanModalParams({ action: 'new' })}>Ban new competitor</Button>}
       <Modal
         open={!!banModalParams}
         onClose={() => setBanModalParams(null)}
