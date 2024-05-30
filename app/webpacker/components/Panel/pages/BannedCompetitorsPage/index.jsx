@@ -25,7 +25,7 @@ export default function BannedCompetitorsPage() {
     isActive: false,
   }));
   const {
-    data: bannedGroup,
+    data: bannedGroups,
     loading: bannedGroupLoading,
     error: bannedGroupError,
   } = useLoadedData(apiV0Urls.userGroups.list(groupTypes.banned_competitors));
@@ -39,7 +39,9 @@ export default function BannedCompetitorsPage() {
     return <Errored />;
   }
 
-  const canEditBannedCompetitors = loggedInUserPermissions.canEditGroup(bannedGroup[0].id);
+  const canEditBannedCompetitors = bannedGroups.some(
+    (bannedGroup) => loggedInUserPermissions.canEditGroup(bannedGroup.id),
+  );
 
   return (
     <>
