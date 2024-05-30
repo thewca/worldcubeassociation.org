@@ -30,6 +30,7 @@ class PanelController < ApplicationController
       "delegate" => {
         "importantLinks" => "important-links",
         "delegateCrashCourse" => "delegate-crash-course",
+        "bannedCompetitors" => "banned-competitors",
       },
       "board" => {
         "seniorDelegatesList" => "senior-delegates-list",
