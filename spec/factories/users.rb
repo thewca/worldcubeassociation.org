@@ -84,7 +84,13 @@ FactoryBot.define do
 
     trait :banned do
       after(:create) do |user|
-        FactoryBot.create(:team_member, team_id: Team.banned.id, user_id: user.id)
+        FactoryBot.create(:banned_competitor_role, user_id: user.id)
+      end
+    end
+
+    trait :formerly_banned do
+      after(:create) do |user|
+        FactoryBot.create(:banned_competitor_role, :inactive, user_id: user.id)
       end
     end
 
