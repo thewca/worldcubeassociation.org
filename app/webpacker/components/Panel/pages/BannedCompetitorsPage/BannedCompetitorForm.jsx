@@ -29,9 +29,7 @@ export default function BanendCompetitorForm({
     }, () => {
       sync();
       closeForm();
-    }, { method: 'POST' }, (error) => {
-      setFormError(error);
-    });
+    }, { method: 'POST' }, setFormError);
   };
 
   const editBannedCompetitor = () => {
@@ -40,9 +38,7 @@ export default function BanendCompetitorForm({
     }, () => {
       sync();
       closeForm();
-    }, { method: 'PATCH' }, (error) => {
-      setFormError(error);
-    });
+    }, { method: 'PATCH' }, setFormError);
   };
 
   const formSubmitHandler = banAction === 'new' ? createNewBannedCompetitor : editBannedCompetitor;

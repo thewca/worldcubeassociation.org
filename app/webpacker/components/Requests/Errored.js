@@ -10,19 +10,19 @@ function Errored({
       <Icon name="warning sign" />
       <Message.Content>
         <Message.Header>Oh no :(</Message.Header>
-        {String(error) || (
-          <>
-            Something went wrong while loading the data
-            {componentName && (
+        <>
+          Something went wrong while loading the data
+          {componentName && (
             <>
               {' '}
               for the component &apos;
               {componentName}
               &apos;
             </>
-            )}
-          </>
-        )}
+          )}
+          {'\n'}
+          {String(error) || ''}
+        </>
         !
       </Message.Content>
     </Message>
