@@ -39,7 +39,7 @@ export default function BannedCompetitorsPage() {
     return <Errored />;
   }
 
-  const canEditBannedCompetitors = loggedInUserPermissions.canEditGroup(bannedGroup.id);
+  const canEditBannedCompetitors = loggedInUserPermissions.canEditGroup(bannedGroup[0].id);
 
   return (
     <>
