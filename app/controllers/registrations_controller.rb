@@ -599,7 +599,7 @@ class RegistrationsController < ApplicationController
 
       if uses_v2
         begin
-          Microservices::Registrations.update_registration_payment(attendee_id, charge.id, ruby_money.cents, ruby_money.currency.iso_code, stripe_intent.status)
+          Microservices::Registrations.update_registration_payment("#{competition_id}-#{registration.user.id}", charge.id, ruby_money.cents, ruby_money.currency.iso_code, stripe_intent.status)
         rescue Faraday::Error
           flash[:error] = t("registrations.payment_form.errors.registration_unreachable")
           return redirect_to competition_register_path(competition_id)
