@@ -1581,7 +1581,7 @@ RSpec.describe Competition do
     end
   end
 
-  context 'validations defined appropriately', :focus do
+  context 'validations defined appropriately' do
     it 'all string column names appear in one of the validation lists' do
       string_columns = Competition.columns.select { |col| col.type == :string }.map(&:name)
       all_listed_columns = Competition::VALIDATE_STRING_LENGTH + Competition::DONT_VALIDATE_STRING_LENGTH
