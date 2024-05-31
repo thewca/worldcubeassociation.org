@@ -88,7 +88,7 @@ export const paymentFinishUrl = (competitionId) => `<%= CGI.unescape(Rails.appli
 
 export const paymentRefundsUrl = (competitionId, userId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.refunds_path) %>?attendee_id=${competitionId}-${userId}`
 
-export const refundPaymentUrl = (paymentId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.registration_payment_refund("${paymentId}")) %>`
+export const refundPaymentUrl = (competitionId, paymentId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.registration_payment_refund("${competitionId}","${paymentId}")) %>`
 
 export const paymentDenominationUrl = (amount, currencyIsoCode) => `<%= Rails.application.routes.url_helpers.registration_payment_denomination_path %>?amount=${amount}&currency_iso=${currencyIsoCode}`
 

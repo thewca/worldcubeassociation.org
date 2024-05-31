@@ -3,11 +3,15 @@ import { paymentRefundsUrl } from '../../../../../lib/requests/routes.js.erb';
 
 export default async function refundPayment({
   competitionId,
-  userId,
   paymentId,
   amount,
 }) {
   return fetchJsonOrError(
-    paymentRefundsUrl(competitionId, userId, paymentId, amount),
+    paymentRefundsUrl(competitionId, paymentId),
+    {
+      payment: {
+        refund_amount: amount,
+      },
+    },
   );
 }

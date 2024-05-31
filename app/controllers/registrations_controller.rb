@@ -678,7 +678,7 @@ class RegistrationsController < ApplicationController
 
   def refund_payment
     competition_id = params[:competition_id]
-    competition = Competition(competition_id)
+    competition = Competition.find(competition_id)
     stripe_integration = competition.payment_account_for(:stripe)
 
     payment = StripeRecord.charge.find(params[:payment_id])
