@@ -31,7 +31,8 @@ class Api::V0::ApiController < ApplicationController
 
   def user_qualification_data
     user = User.includes(person: [:ranksSingle, :ranksAverage]).find(params.require(:user_id))
-    render json: user.person.personal_records.map(&:to_wcif)
+    return render json: user.person.personal_records.map(&:to_wcif) if user.person.present?
+    render json: []
   end
 
   def scramble_program

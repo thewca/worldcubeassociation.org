@@ -482,4 +482,27 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
       expect(json['error']).to eq 'Competition series with ID UnknownSeries1989 not found'
     end
   end
+
+  describe 'GET #user_qualification_data' do
+    it 'returns empty JSON if user has never competed' do
+      user = FactoryBot.create(:user)
+      get :user_qualification_data, params: { user_id: user.id }
+      expect(JSON.parse(response.body)).to eq([])
+    end
+
+    # NOTE: This may change in future if qualification data becomes more complex (eg, including # of cubes in an MBLD attempt)
+    it 'returns personal records json if user has competed' do
+      expected_response = [
+        {"best"=>100, "continentalRanking"=>1, "eventId"=>"333", "nationalRanking"=>1, "type"=>"average", "worldRanking"=>1},
+        {"best"=>100, "continentalRanking"=>1, "eventId"=>"333", "nationalRanking"=>1, "type"=>"single", "worldRanking"=>1}
+      ]
+
+      user = FactoryBot.create(:user_with_wca_id, person: FactoryBot.create(:person))
+      single_rank = FactoryBot.create(:ranks_single, personId: user.wca_id)
+      average_rank = FactoryBot.create(:ranks_average, personId: user.wca_id)
+
+      get :user_qualification_data, params: { user_id: user.id }
+      expect(JSON.parse(response.body)).to eq(expected_response)
+    end
+  end
 end
