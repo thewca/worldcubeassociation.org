@@ -28,14 +28,19 @@ export default function AutonumericField({
     [value, currencyInfo],
   );
 
-  const autoNumericOptions = useMemo(() => ({
-    currencySymbol: currencyInfo.symbol,
-    currencySymbolPlacement: currencyInfo.symbolFirst ? 'p' : 's',
-    decimalPlaces: (currencyInfo.subunitToUnit === 1) ? 0 : 2,
-    modifyValueOnWheel: false,
-    maximumValue: max ? max / currencyInfo.subunitToUnit : undefined,
-    minimumValue: 0,
-  }), [currencyInfo, max]);
+  const autoNumericOptions = useMemo(() => {
+    const options = {
+      currencySymbol: currencyInfo.symbol,
+      currencySymbolPlacement: currencyInfo.symbolFirst ? 'p' : 's',
+      decimalPlaces: (currencyInfo.subunitToUnit === 1) ? 0 : 2,
+      modifyValueOnWheel: false,
+      minimumValue: 0,
+    };
+    if (max) {
+      options.maximumValue = max / currencyInfo.subunitToUnit;
+    }
+    return options;
+  }, [currencyInfo, max]);
 
   const autoNumericRef = useCallback((node) => {
     if (!node?.inputRef) return;
