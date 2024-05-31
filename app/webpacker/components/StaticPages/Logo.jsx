@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Button } from "semantic-ui-react";
 import I18nHTMLTranslate from "../I18nHTMLTranslate";
 import lockupPrimary from "./LogoImages/WCA Lockup Positive Primary.png";
 import lockupNegative from "./LogoImages/WCA Lockup Negative Primary.png";
@@ -153,15 +154,16 @@ function Logo({ title }) {
           />
         </label>
       </div>
-      <button
+      <Button
         disabled={!acceptedGuidelines}
-        onClick={downloadFile}
-        className="btn btn-success"
+        positive
+        as="a"
+        href="/files/WCA Logo Assets.zip"
       >
         <I18nHTMLTranslate
           i18nKey={`logo.headings.download_logo_assets.download_button_text`}
         />
-      </button>
+      </Button>
     </div>
   );
 }
