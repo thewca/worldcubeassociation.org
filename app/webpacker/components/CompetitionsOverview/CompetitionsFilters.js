@@ -82,6 +82,7 @@ export function EventSelector({
   eventList = WCA_EVENT_IDS,
   disabled = false,
   maxEvents = Infinity,
+  shouldErrorOnEmpty = false,
 }) {
   return (
     <>
@@ -100,31 +101,40 @@ export function EventSelector({
         </Popup>
         <Button disabled={disabled} type="button" size="mini" id="clear-all-events" onClick={() => onEventSelection({ type: 'clear_events' })}>{I18n.t('competitions.index.clear')}</Button>
       </label>
-
-      <div id="events">
-        {eventList.map((eventId) => (
-          <React.Fragment key={eventId}>
-            <Button
-              disabled={disabled
+      <Popup
+        open={selectedEvents.length === 0}
+        disabled={!shouldErrorOnEmpty}
+        position="bottom left"
+        style={{ color: '#9f3a38' }}
+        trigger={(
+          <div id="events">
+            {eventList.map((eventId) => (
+              <React.Fragment key={eventId}>
+                <Button
+                  disabled={disabled
                 || (!selectedEvents.includes(eventId) && selectedEvents.length >= maxEvents)}
-              basic
-              icon
-              toggle
-              type="button"
-              size="mini"
-              className="event-checkbox"
-              id={`checkbox-${eventId}`}
-              value={eventId}
-              data-tooltip={I18n.t(`events.${eventId}`)}
-              data-variation="tiny"
-              onClick={() => onEventSelection({ type: 'toggle_event', eventId })}
-              active={selectedEvents.includes(eventId)}
-            >
-              <Icon className={`cubing-icon event-${eventId}`} />
-            </Button>
-          </React.Fragment>
-        ))}
-      </div>
+                  basic
+                  icon
+                  toggle
+                  type="button"
+                  size="mini"
+                  className="event-checkbox"
+                  id={`checkbox-${eventId}`}
+                  value={eventId}
+                  data-tooltip={I18n.t(`events.${eventId}`)}
+                  data-variation="tiny"
+                  onClick={() => onEventSelection({ type: 'toggle_event', eventId })}
+                  active={selectedEvents.includes(eventId)}
+                >
+                  <Icon className={`cubing-icon event-${eventId}`} />
+                </Button>
+              </React.Fragment>
+            ))}
+          </div>
+)}
+      >
+        {I18n.t('registrations.errors.must_register')}
+      </Popup>
     </>
   );
 }
@@ -133,13 +143,19 @@ function RegionSelector({ region, dispatchFilter }) {
   const regionsOptions = [
     { key: 'all', text: I18n.t('common.all_regions'), value: 'all' },
     {
-      key: 'continents_header', value: '', disabled: true, content: <Header content={I18n.t('common.continent')} size="small" style={{ textAlign: 'center' }} />,
+      key: 'continents_header',
+      value: '',
+      disabled: true,
+      content: <Header content={I18n.t('common.continent')} size="small" style={{ textAlign: 'center' }} />,
     },
     ...(Object.values(continents.real).map((continent) => (
       { key: continent.id, text: continent.name, value: continent.id }
     ))),
     {
-      key: 'countries_header', value: '', disabled: true, content: <Header content={I18n.t('common.country')} size="small" style={{ textAlign: 'center' }} />,
+      key: 'countries_header',
+      value: '',
+      disabled: true,
+      content: <Header content={I18n.t('common.country')} size="small" style={{ textAlign: 'center' }} />,
     },
     ...(Object.values(countries.real).map((country) => (
       {
