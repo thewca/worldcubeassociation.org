@@ -33,7 +33,7 @@ export default function AutonumericField({
     currencySymbolPlacement: currencyInfo.symbolFirst ? 'p' : 's',
     decimalPlaces: (currencyInfo.subunitToUnit === 1) ? 0 : 2,
     modifyValueOnWheel: false,
-    maximumValue: max / currencyInfo.subunitToUnit,
+    maximumValue: max ? max / currencyInfo.subunitToUnit : Infinity,
     minimumValue: 0,
   }), [currencyInfo, max]);
 
