@@ -227,7 +227,7 @@ class Competition < ApplicationRecord
   VALIDATE_STRING_LENGTH = %w[
     name cityName venue venueAddress venueDetails external_website cellName contact name_reason external_registration_page forbid_newcomers_reason
   ].freeze
-  DONT_VALIDATE_STRING_LENGTH = %w[countryId connected_stripe_account_id currency_code main_event_id id].freeze #
+  DONT_VALIDATE_STRING_LENGTH = %w[countryId connected_stripe_account_id currency_code main_event_id id].freeze
   columns_hash.each do |column_name, column_info|
     if VALIDATE_STRING_LENGTH.include?(column_name) && column_info.limit
       validates column_name, length: { maximum: column_info.limit }
