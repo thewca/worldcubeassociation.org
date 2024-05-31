@@ -32,7 +32,8 @@ class ConnectedStripeAccount < ApplicationRecord
     # The Stripe API forces the user to provide a return_url when using automated payment methods.
     # In our test suite however, we want to be able to confirm specific payment methods without a return URL
     # because our CI containers are not exposed to the public. So we need this little hack :/
-    enable_automatic_pm = !Rails.env.test?
+    # See also https://docs.stripe.com/upgrades/manage-payment-methods
+    allow_redirects = Rails.env.test? ? 'never' : 'always'
 
     payment_intent_args = {
       amount: stripe_amount,
@@ -42,7 +43,10 @@ class ConnectedStripeAccount < ApplicationRecord
       metadata: registration_metadata,
       # we cannot recycle an existing intent, so we create a new one which needs all possible PaymentMethods enabled.
       # Required as per https://stripe.com/docs/payments/accept-a-payment-deferred?type=payment&client=html#create-intent
-      automatic_payment_methods: { enabled: enable_automatic_pm },
+      automatic_payment_methods: {
+        enabled: true,
+        allow_redirects: allow_redirects,
+      },
     }
 
     # Create the PaymentIntent, overriding the stripe_account for the request
@@ -83,5 +87,42 @@ class ConnectedStripeAccount < ApplicationRecord
     )
 
     StripeRecord.create_from_api(refund, refund_args, self.account_id, charge_record)
+  end
+
+  def self.generate_onboarding_link(competition_id)
+    client = self.oauth_client
+
+    oauth_params = {
+      scope: 'read_write',
+      redirect_uri: Rails.application.routes.url_helpers.competitions_stripe_connect_url(host: EnvConfig.ROOT_URL),
+      state: competition_id,
+    }
+
+    client.auth_code.authorize_url(oauth_params)
+  end
+
+  def self.connect_account(oauth_return_params)
+    client = self.oauth_client
+
+    resp = client.auth_code.get_token(
+      oauth_return_params[:code],
+      params: { scope: 'read_write' },
+    )
+
+    ConnectedStripeAccount.new(
+      account_id: resp.params['stripe_user_id'],
+    )
+  end
+
+  # See https://docs.stripe.com/connect/oauth-reference
+  private_class_method def self.oauth_client
+    options = {
+      site: 'https://connect.stripe.com',
+      authorize_url: '/oauth/authorize',
+      token_url: '/oauth/token',
+      auth_scheme: :request_body,
+    }
+
+    OAuth2::Client.new(AppSecrets.STRIPE_CLIENT_ID, AppSecrets.STRIPE_API_KEY, options)
   end
 end

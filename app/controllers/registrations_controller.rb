@@ -72,9 +72,18 @@ class RegistrationsController < ApplicationController
     @newcomers = @returners = 0
   end
 
+  def waiting_list
+    @competition = competition_from_params
+  end
+
   def edit
     @registration = Registration.find(params[:id])
     @competition = @registration.competition
+  end
+
+  def edit_v2
+    @competition = Competition.find(params[:competition_id])
+    @user = User.find(params[:user_id])
   end
 
   def destroy
@@ -556,7 +565,14 @@ class RegistrationsController < ApplicationController
     intent_id = params[:payment_intent]
     intent_secret = params[:payment_intent_client_secret]
 
+    # We expect that the record here is a top-level PaymentIntent in Stripe's API model
     stored_record = StripeRecord.find_by(stripe_id: intent_id)
+
+    unless stored_record.payment_intent?
+      flash[:error] = t("registrations.payment_form.errors.stripe_not_an_intent")
+      return redirect_to competition_register_path(@competition)
+    end
+
     stored_intent = stored_record.payment_intent
 
     unless stored_intent.client_secret == intent_secret
@@ -588,7 +604,7 @@ class RegistrationsController < ApplicationController
     end
 
     # Payment Intent lifecycle as per https://stripe.com/docs/payments/intents#intent-statuses
-    case stored_record.stripe_status
+    case stored_intent.payment_record.stripe_status
     when 'succeeded'
       flash[:success] = t("registrations.payment_form.payment_successful")
     when 'requires_action'

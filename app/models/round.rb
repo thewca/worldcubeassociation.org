@@ -219,7 +219,7 @@ class Round < ApplicationRecord
       "type" => "object",
       "properties" => {
         "id" => { "type" => "string" },
-        "format" => { "type" => "string", "enum" => Format.pluck(:id) },
+        "format" => { "type" => "string", "enum" => Format.ids },
         "timeLimit" => TimeLimit.wcif_json_schema,
         "cutoff" => Cutoff.wcif_json_schema,
         "advancementCondition" => AdvancementConditions::AdvancementCondition.wcif_json_schema,

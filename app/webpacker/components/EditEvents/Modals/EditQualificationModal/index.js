@@ -146,7 +146,7 @@ export default function EditQualificationModal({
             <Label>{i18n.t('qualification.deadline.description')}</Label>
             <UtcDatePicker
               onChange={setWhenDate}
-              selected={whenDate}
+              isoDate={whenDate}
             />
           </Form.Field>
           <br />

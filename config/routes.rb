@@ -22,8 +22,6 @@ Rails.application.routes.draw do
   unless PaypalInterface.paypal_disabled?
     post 'registration/:id/create-paypal-order' => 'registrations#create_paypal_order', as: :registration_create_paypal_order
     post 'registration/:id/capture-paypal-payment' => 'registrations#capture_paypal_payment', as: :registration_capture_paypal_payment
-    get 'competitions/:id/paypal-return' => 'competitions#paypal_return', as: :competitions_paypal_return
-    post 'competitions/:id/disconnect_paypal' => 'competitions#disconnect_paypal', as: :competition_disconnect_paypal
     post 'registration/:id/paypal_refund/:payment_id' => 'registrations#refund_paypal_payment', as: :paypal_payment_refund
   end
 
@@ -70,6 +68,7 @@ Rails.application.routes.draw do
   get 'competitions/:id/enable_v2' => "competitions#enable_v2", as: :enable_v2
   post 'competitions/bookmark' => 'competitions#bookmark', as: :bookmark
   post 'competitions/unbookmark' => 'competitions#unbookmark', as: :unbookmark
+  get 'competitions/registrations_v2/:competition_id/:user_id/edit' => 'registrations#edit_v2', as: :edit_registration_v2
 
   resources :competitions do
     get 'edit/admin' => 'competitions#admin_edit', as: :admin_edit
@@ -99,6 +98,7 @@ Rails.application.routes.draw do
     get 'registrations/psych-sheet' => 'registrations#psych_sheet', as: :psych_sheet
     get 'registrations/psych-sheet/:event_id' => 'registrations#psych_sheet_event', as: :psych_sheet_event
     resources :registrations, only: [:index, :update, :create, :edit, :destroy], shallow: true
+    get 'waiting' => 'registrations#waiting_list', as: :waiting_list
     get 'edit/registrations' => 'registrations#edit_registrations'
     get 'register' => 'registrations#register'
     resources :competition_tabs, except: [:show], as: :tabs, path: :tabs
@@ -119,21 +119,22 @@ Rails.application.routes.draw do
     delete '/admin/inbox-data' => 'admin#delete_inbox_data', as: :admin_delete_inbox_data
     delete '/admin/results-data' => 'admin#delete_results_data', as: :admin_delete_results_data
     get '/admin/results/:round_id/new' => 'admin/results#new', as: :new_result
+
+    get '/payment_integration/setup' => 'competitions#payment_integration_setup', as: :payment_integration_setup
+    get '/payment_integration/:payment_integration/connect' => 'competitions#connect_payment_integration', as: :connect_payment_integration
+    post '/payment_integration/:payment_integration/disconnect' => 'competitions#disconnect_payment_integration', as: :disconnect_payment_integration
   end
-  unless EnvConfig.WCA_LIVE_SITE?
-    scope :payment do
-      get '/config' => 'payment#payment_config'
-      get '/finish' => 'payment#payment_finish'
-      get '/refunds' => 'payment#available_refunds'
-      get '/refund' => 'payment#payment_refund'
-    end
+  scope :payment do
+    get '/finish' => 'payment#payment_finish'
+    get '/refunds' => 'payment#available_refunds'
+    get '/refund' => 'payment#payment_refund'
   end
 
   get 'competitions/:competition_id/report/edit' => 'delegate_reports#edit', as: :delegate_report_edit
   get 'competitions/:competition_id/report' => 'delegate_reports#show', as: :delegate_report
   patch 'competitions/:competition_id/report' => 'delegate_reports#update'
 
-  get 'competitions/:id/payment_setup' => 'competitions#payment_setup', as: :competitions_payment_setup
+  # Stripe needs this special redirect URL during OAuth, see the linked controller method for details
   get 'stripe-connect' => 'competitions#stripe_connect', as: :competitions_stripe_connect
   get 'competitions/:id/events/edit' => 'competitions#edit_events', as: :edit_events
   get 'competitions/:id/schedule/edit' => 'competitions#edit_schedule', as: :edit_schedule
@@ -179,23 +180,25 @@ Rails.application.routes.draw do
   get 'polls/:id/vote' => 'votes#vote', as: 'polls_vote'
   get 'polls/:id/results' => 'polls#results', as: 'polls_results'
 
-  resources :teams, only: [:index, :update, :edit]
+  resources :teams, only: [:update, :edit]
 
   resources :votes, only: [:create, :update]
 
   post 'competitions/:id/post_results' => 'competitions#post_results', as: :competition_post_results
-  post 'competitions/:id/disconnect_stripe' => 'competitions#disconnect_stripe', as: :competition_disconnect_stripe
 
-  get 'panel' => 'panel#index'
-  get 'panel/delegate-crash-course', to: redirect('https://documents.worldcubeassociation.org/edudoc/delegate-crash-course/delegate_crash_course.pdf', status: 302)
   get 'panel/pending-claims(/:user_id)' => 'panel#pending_claims_for_subordinate_delegates', as: 'pending_claims'
   scope 'panel' do
+    get 'staff' => 'panel#staff', as: :panel_staff
+    get 'delegate' => 'panel#delegate', as: :panel_delegate
     get 'wfc' => 'panel#wfc', as: :panel_wfc
     get 'wrt' => 'panel#wrt', as: :panel_wrt
     get 'wst' => 'panel#wst', as: :panel_wst
     get 'board' => 'panel#board', as: :panel_board
     get 'leader' => 'panel#leader', as: :panel_leader
     get 'senior_delegate' => 'panel#senior_delegate', as: :panel_senior_delegate
+    get 'wdc' => 'panel#wdc', as: :panel_wdc
+    get 'wec' => 'panel#wec', as: :panel_wec
+    get 'weat' => 'panel#weat', as: :panel_weat
   end
   resources :notifications, only: [:index]
 
@@ -241,7 +244,7 @@ Rails.application.routes.draw do
   get 'disciplinary' => 'wdc#root'
 
   get 'contact' => 'contacts#index'
-  post 'contact' => 'contacts#website_create'
+  post 'contact' => 'contacts#contact'
   get 'contact/dob' => 'contacts#dob'
   post 'contact/dob' => 'contacts#dob_create'
 
@@ -384,6 +387,8 @@ Rails.application.routes.draw do
         get '/psych-sheet/:event_id' => 'competitions#event_psych_sheet', as: :event_psych_sheet
         patch '/wcif' => 'competitions#update_wcif', as: :update_wcif
       end
+      
+      post '/registration-data' => 'competitions#registration_data', as: :registration_data
 
       scope 'user_roles' do
         get '/user/:user_id' => 'user_roles#index_for_user', as: :index_for_user
@@ -391,7 +396,7 @@ Rails.application.routes.draw do
         get '/group-type/:group_type' => 'user_roles#index_for_group_type', as: :index_for_group_type
         get '/search' => 'user_roles#search', as: :user_roles_search
       end
-      resources :user_roles, only: [:create, :update, :destroy]
+      resources :user_roles, only: [:show, :create, :update, :destroy]
       resources :user_groups, only: [:index, :create, :update]
       namespace :wrt do
         resources :persons, only: [:update, :destroy] do
@@ -407,4 +412,6 @@ Rails.application.routes.draw do
 
   # Deprecated Links
   get 'teams-committees' => redirect('teams-committees-councils')
+  get 'panel/delegate-crash-course' => redirect('panel/delegate#delegate-crash-course')
+  get 'panel' => redirect('panel/staff')
 end

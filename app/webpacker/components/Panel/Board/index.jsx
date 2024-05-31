@@ -4,11 +4,12 @@ import PanelTemplate from '../PanelTemplate';
 import SeniorDelegatesList from './SeniorDelegatesList';
 import RegionManager from './RegionManager';
 import { PANEL_LIST } from '../../../lib/wca-data.js.erb';
-import GroupsManagerAdmin from './GroupsManagerAdmin';
+import GroupsManagerAdmin from '../pages/GroupsManagerAdmin';
 import OfficersEditor from './OfficersEditor';
 import RegionsAdmin from './RegionsAdmin';
 import LeadersAdminPage from './LeadersAdminPage';
 import BoardEditorPage from './BoardEditorPage';
+import BannedCompetitorsPage from '../pages/BannedCompetitorsPage';
 
 const sections = [
   {
@@ -50,6 +51,11 @@ const sections = [
     id: PANEL_LIST.board.regionsAdmin,
     name: 'Regions Admin',
     component: RegionsAdmin,
+  },
+  {
+    id: PANEL_LIST.board.bannedCompetitors,
+    name: 'Banned Competitors',
+    component: BannedCompetitorsPage,
   },
 ];
 

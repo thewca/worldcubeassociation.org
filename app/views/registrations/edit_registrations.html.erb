@@ -1,64 +1,67 @@
 <% provide(:title, I18n.t('registrations.list.title', comp: @competition.name)) %>
 
 <%= render layout: 'nav' do %>
-  <p>
-    <% if @show_events %>
-      <%= link_to competition_edit_registrations_path(@competition, show_events: "false", show_full_emails: @show_full_emails.to_s, show_birthdays: @show_birthdays.to_s), class: "btn btn-primary" do %>
-        <%= ui_icon("minus") %> Hide Events
+  <% if @competition.uses_new_registration_service? %>
+    <%= react_component('RegistrationsV2/RegistrationAdministration', { competitionInfo: @competition.to_competition_info }) %>
+  <% else %>
+    <p>
+      <% if @show_events %>
+        <%= link_to competition_edit_registrations_path(@competition, show_events: "false", show_full_emails: @show_full_emails.to_s, show_birthdays: @show_birthdays.to_s), class: "btn btn-primary" do %>
+          <%= ui_icon("minus") %> Hide Events
+        <% end %>
+      <% else %>
+        <%= link_to competition_edit_registrations_path(@competition, show_events: "true", show_full_emails: @show_full_emails.to_s, show_birthdays: @show_birthdays.to_s), class: "btn btn-primary" do %>
+          <%= ui_icon("plus") %> Show Events
+        <% end %>
       <% end %>
-    <% else %>
-      <%= link_to competition_edit_registrations_path(@competition, show_events: "true", show_full_emails: @show_full_emails.to_s, show_birthdays: @show_birthdays.to_s), class: "btn btn-primary" do %>
-        <%= ui_icon("plus") %> Show Events
-      <% end %>
-    <% end %>
 
-    <% if @show_full_emails %>
-      <%= link_to competition_edit_registrations_path(@competition, show_events: @show_events.to_s, show_full_emails: "false", show_birthdays: @show_birthdays.to_s), class: "btn btn-primary" do %>
-        <%= ui_icon("minus") %> Hide Emails
+      <% if @show_full_emails %>
+        <%= link_to competition_edit_registrations_path(@competition, show_events: @show_events.to_s, show_full_emails: "false", show_birthdays: @show_birthdays.to_s), class: "btn btn-primary" do %>
+          <%= ui_icon("minus") %> Hide Emails
+        <% end %>
+      <% else %>
+        <%= link_to competition_edit_registrations_path(@competition, show_events: @show_events.to_s, show_full_emails: "true", show_birthdays: @show_birthdays.to_s), class: "btn btn-primary" do %>
+          <%= ui_icon("plus") %> Show Emails
+        <% end %>
       <% end %>
-    <% else %>
-      <%= link_to competition_edit_registrations_path(@competition, show_events: @show_events.to_s, show_full_emails: "true", show_birthdays: @show_birthdays.to_s), class: "btn btn-primary" do %>
-        <%= ui_icon("plus") %> Show Emails
-      <% end %>
-    <% end %>
 
-    <% if @show_birthdays %>
-      <%= link_to competition_edit_registrations_path(@competition, show_events: @show_events.to_s, show_full_emails: @show_full_emails.to_s, show_birthdays: "false"), class: "btn btn-primary" do %>
-        <%= ui_icon("minus") %> Hide Birthdays
+      <% if @show_birthdays %>
+        <%= link_to competition_edit_registrations_path(@competition, show_events: @show_events.to_s, show_full_emails: @show_full_emails.to_s, show_birthdays: "false"), class: "btn btn-primary" do %>
+          <%= ui_icon("minus") %> Hide Birthdays
+        <% end %>
+      <% else %>
+        <%= link_to competition_edit_registrations_path(@competition, show_events: @show_events.to_s, show_full_emails: @show_full_emails.to_s, show_birthdays: "true"), class: "btn btn-primary" do %>
+          <%= ui_icon("plus") %> Show Birthdays
+        <% end %>
       <% end %>
-    <% else %>
-      <%= link_to competition_edit_registrations_path(@competition, show_events: @show_events.to_s, show_full_emails: @show_full_emails.to_s, show_birthdays: "true"), class: "btn btn-primary" do %>
-        <%= ui_icon("plus") %> Show Birthdays
+
+      <% if @competition.part_of_competition_series? %>
+        <%= link_to competition_edit_registrations_path(@competition, show_events: @show_events.to_s, show_full_emails: @show_full_emails.to_s, show_birthdays: @show_birthdays.to_s, run_validations: "true"), class: "btn btn-success" do %>
+          <%= ui_icon("refresh") %> Run validations
+        <% end %>
       <% end %>
-    <% end %>
+    </p>
 
     <% if @competition.part_of_competition_series? %>
-      <%= link_to competition_edit_registrations_path(@competition, show_events: @show_events.to_s, show_full_emails: @show_full_emails.to_s, show_birthdays: @show_birthdays.to_s, run_validations: "true"), class: "btn btn-success" do %>
-        <%= ui_icon("refresh") %> Run validations
-      <% end %>
+      <% format_description = Registration::SERIES_SIBLING_DISPLAY_STATUSES.map { |st| t("simple_form.options.registration.status.#{st}") }.join(" + ") %>
+      <p class="text-right"><%= t 'registrations.list.series_registrations_hint_html', description: format_description %></p>
     <% end %>
-  </p>
 
-  <% if @competition.part_of_competition_series? %>
-    <% format_description = Registration::SERIES_SIBLING_DISPLAY_STATUSES.map { |st| t("simple_form.options.registration.status.#{st}") }.join(" + ") %>
-    <p class="text-right"><%= t 'registrations.list.series_registrations_hint_html', description: format_description %></p>
-  <% end %>
-
-  <%= form_for @competition, url: competition_registrations_do_actions_for_selected_path(@competition), remote: true do |f| %>
-    <% [:pending, :accepted, :deleted, :non_competing].each do |status| %>
-      <% if :pending == status %>
-        <h2><%= t 'registrations.list.waiting_list' %></h2>
-      <% elsif :accepted == status %>
-        <h2><%= t 'registrations.list.approved_registrations' %></h2>
-      <% elsif :deleted == status %>
-        <h2><%= t 'registrations.list.deleted_registrations' %></h2>
-      <% else %>
-        <h2><%= t 'registrations.list.non_competing' %></h2>
-      <% end %>
-      <% registrations = @registrations.public_send(status) %>
-      <%= wca_table table_class: "registrations-table #{status}",
-                    data: { toggle: "table", sort_name: "registration-date", select_item_name: "selected_registrations[]", click_to_select: "true" } do %>
-        <thead>
+    <%= form_for @competition, url: competition_registrations_do_actions_for_selected_path(@competition), remote: true do |f| %>
+      <% [:pending, :accepted, :deleted, :non_competing].each do |status| %>
+        <% if :pending == status %>
+          <h2><%= t 'registrations.list.waiting_list' %></h2>
+        <% elsif :accepted == status %>
+          <h2><%= t 'registrations.list.approved_registrations' %></h2>
+        <% elsif :deleted == status %>
+          <h2><%= t 'registrations.list.deleted_registrations' %></h2>
+        <% else %>
+          <h2><%= t 'registrations.list.non_competing' %></h2>
+        <% end %>
+        <% registrations = @registrations.public_send(status) %>
+        <%= wca_table table_class: "registrations-table #{status}",
+                      data: { toggle: "table", sort_name: "registration-date", select_item_name: "selected_registrations[]", click_to_select: "true" } do %>
+          <thead>
           <tr>
             <th data-checkbox="true"></th>
             <th></th>
@@ -95,9 +98,9 @@
             <!-- Extra column for .table-greedy-last-column -->
             <th></th>
           </tr>
-        </thead>
+          </thead>
 
-        <tbody>
+          <tbody>
           <% registrations.each do |registration| %>
             <tr id="registration-<%= registration.id %>" class="registration-<%= registration.checked_status %>">
               <td></td>
@@ -110,13 +113,13 @@
                 <%= wca_id_link registration.wca_id %>
               </td>
 
-            <td class="name">
-              <%= registration.name %>
+              <td class="name">
+                <%= registration.name %>
 
-              <% if @run_validations && !registration.valid? %>
-                <%= ui_icon('exclamation triangle', data: { toggle: "tooltip", placement: "top" }, title: registration.errors.full_messages.join(" // ")) %>
-              <% end %>
-            </td>
+                <% if @run_validations && !registration.valid? %>
+                  <%= ui_icon('exclamation triangle', data: { toggle: "tooltip", placement: "top" }, title: registration.errors.full_messages.join(" // ")) %>
+                <% end %>
+              </td>
               <td class="countryId"><%= registration.country.name %></td>
               <% if @show_birthdays %>
                 <td class="birthday"><%= registration.birthday %></td>
@@ -163,44 +166,44 @@
                 </td>
               <% end %>
               <td>
-              <% if @show_full_emails %>
-                <%= mail_to registration.email, target: "_blank", class: "hide-new-window-icon" do %>
-                  <%= registration.email %>
+                <% if @show_full_emails %>
+                  <%= mail_to registration.email, target: "_blank", class: "hide-new-window-icon" do %>
+                    <%= registration.email %>
+                  <% end %>
+                <% else %>
+                  <%= mail_to registration.email, target: "_blank", class: "hide-new-window-icon" do %>
+                    <%= ui_icon("envelope") %>
+                  <% end %>
                 <% end %>
-              <% else %>
-                <%= mail_to registration.email, target: "_blank", class: "hide-new-window-icon" do %>
-                  <%= ui_icon("envelope") %>
-                <% end %>
-              <% end %>
               </td>
 
               <!-- Extra column for .table-greedy-last-column -->
               <td></td>
             </tr>
           <% end %>
-        </tbody>
+          </tbody>
 
-        <%= render "edit_registrations_table_footer", registrations: registrations %>
+          <%= render "edit_registrations_table_footer", registrations: registrations %>
+        <% end %>
       <% end %>
+
+      <div id="registrations-actions" class="btn-group" role="group">
+        <button type="submit" class="btn btn-info selected-registrations-actions" name="registrations_action" value="export-selected">
+          <%= ui_icon 'download' %> <%= t('registrations.list.export_csv') %>
+        </button>
+        <a href="#" id="email-selected" target="_blank" class="btn btn-info selected-registrations-actions">
+          <%= ui_icon 'envelope' %> <%= t('registrations.list.email') %>
+        </a>
+        <button type="submit" class="btn btn-success selected-pending-deleted-registrations-actions" name="registrations_action" value="accept-selected">
+          <%= ui_icon 'check' %> <%= t('registrations.list.approve') %>
+        </button>
+        <button type="submit" class="btn btn-warning selected-approved-deleted-registrations-actions" name="registrations_action" value="reject-selected">
+          <%= ui_icon 'times' %> <%= t('registrations.list.reject') %>
+        </button>
+        <button type="submit" class="btn btn-danger selected-pending-approved-registrations-actions" name="registrations_action" value="delete-selected">
+          <%= ui_icon 'trash' %> <%= t('registrations.list.delete') %>
+        </button>
+      </div>
     <% end %>
-
-    <div id="registrations-actions" class="btn-group" role="group">
-      <button type="submit" class="btn btn-info selected-registrations-actions" name="registrations_action" value="export-selected">
-        <%= ui_icon 'download' %> <%= t('registrations.list.export_csv') %>
-      </button>
-      <a href="#" id="email-selected" target="_blank" class="btn btn-info selected-registrations-actions">
-        <%= ui_icon 'envelope' %> <%= t('registrations.list.email') %>
-      </a>
-      <button type="submit" class="btn btn-success selected-pending-deleted-registrations-actions" name="registrations_action" value="accept-selected">
-        <%= ui_icon 'check' %> <%= t('registrations.list.approve') %>
-      </button>
-      <button type="submit" class="btn btn-warning selected-approved-deleted-registrations-actions" name="registrations_action" value="reject-selected">
-        <%= ui_icon 'times' %> <%= t('registrations.list.reject') %>
-      </button>
-      <button type="submit" class="btn btn-danger selected-pending-approved-registrations-actions" name="registrations_action" value="delete-selected">
-        <%= ui_icon 'trash' %> <%= t('registrations.list.delete') %>
-      </button>
-    </div>
   <% end %>
-
 <% end %>

@@ -9,13 +9,12 @@ class SyncMailingListsJob < WcaCronjob
   def perform
     GsuiteMailingLists.sync_group("leaders@worldcubeassociation.org", UserGroup.teams_committees.map(&:lead_user).compact.map(&:email))
     GsuiteMailingLists.sync_group(GroupsMetadataBoard.email, UserGroup.board_group.active_users.map(&:email))
-    GsuiteMailingLists.sync_group("communication-china@worldcubeassociation.org", Team.wct_china.current_members.includes(:user).map(&:user).map(&:email))
-    translator_users = UserGroup.translator_groups.flat_map(&:users)
+    translator_users = UserGroup.translators.flat_map(&:users)
     GsuiteMailingLists.sync_group("translators@worldcubeassociation.org", translator_users.map(&:email))
     User.clear_receive_delegate_reports_if_not_eligible
     GsuiteMailingLists.sync_group("reports@worldcubeassociation.org", User.delegate_reports_receivers_emails)
 
-    UserGroup.teams_committees.each { |team_committee| GsuiteMailingLists.sync_group(team_committee.metadata.email, team_committee.active_users.map(&:email)) }
+    UserGroup.teams_committees.active_groups.each { |team_committee| GsuiteMailingLists.sync_group(team_committee.metadata.email, team_committee.active_users.map(&:email)) }
     UserGroup.councils.each { |council| GsuiteMailingLists.sync_group(council.metadata.email, council.active_users.map(&:email)) }
 
     treasurers = UserGroup.officers.flat_map(&:active_roles).filter { |role| role.metadata.status == RolesMetadataOfficers.statuses[:treasurer] }
@@ -24,12 +23,12 @@ class SyncMailingListsJob < WcaCronjob
     delegate_emails = []
     trainee_emails = []
     senior_emails = []
-    active_root_delegate_regions = UserGroup.delegate_region_groups.where(parent_group_id: nil, is_active: true)
+    active_root_delegate_regions = UserGroup.delegate_regions.where(parent_group_id: nil, is_active: true)
     active_root_delegate_regions.each do |region|
       region_emails = []
-      (region.active_roles + region.active_roles_of_all_child_groups).each do |role|
-        role_email = UserRole.user(role).email
-        role_status = UserRole.status(role)
+      (region.active_roles + region.active_all_child_roles).each do |role|
+        role_email = role.user.email
+        role_status = role.metadata.status
         region_emails << role_email
         if role_status == RolesMetadataDelegateRegions.statuses[:trainee_delegate]
           trainee_emails << role_email

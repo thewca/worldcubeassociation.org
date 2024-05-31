@@ -57,9 +57,3 @@ delegates_metadata_sync:
   class: "DelegatesMetadataSyncJob"
   cron: "0 * * * *"
   queue: wca_jobs
-
-clear_tmp_cache:
-  class: "ClearTmpCache"
-  cron: "0 5 1,3,6 * *"
-  # Queueing on default because this is only a temporary task that we don't need statistics for
-  queue: default

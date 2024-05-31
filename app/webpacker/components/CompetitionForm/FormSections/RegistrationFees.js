@@ -1,16 +1,18 @@
 import React, { useMemo } from 'react';
-import SubSection from './SubSection';
 import {
   InputBoolean,
-  InputCurrencyAmount, InputDate, InputNumber,
+  InputCurrencyAmount,
+  InputDate,
+  InputNumber,
   InputSelect,
-} from '../Inputs/FormInputs';
+} from '../../wca/FormBuilder/input/FormInputs';
 import { currenciesData } from '../../../lib/wca-data.js.erb';
 import I18n from '../../../lib/i18n';
 import { calculateDuesUrl } from '../../../lib/requests/routes.js.erb';
-import { useStore } from '../../../lib/providers/StoreProvider';
 import useLoadedData from '../../../lib/hooks/useLoadedData';
 import ConditionalSection from './ConditionalSection';
+import SubSection from '../../wca/FormBuilder/SubSection';
+import { useFormObject } from '../../wca/FormBuilder/provider/FormObjectProvider';
 
 const currenciesOptions = Object.keys(currenciesData.byIso).map((iso) => ({
   key: iso,
@@ -20,15 +22,13 @@ const currenciesOptions = Object.keys(currenciesData.byIso).map((iso) => ({
 
 export default function RegistrationFees() {
   const {
-    competition: {
-      venue: {
-        countryId: country,
-      },
-      entryFees,
-      competitorLimit,
-      registration,
+    venue: {
+      countryId: country,
     },
-  } = useStore();
+    entryFees,
+    competitorLimit,
+    registration,
+  } = useFormObject();
 
   const currency = entryFees.currencyCode;
 

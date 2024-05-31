@@ -17,7 +17,7 @@ export default function DuesExport() {
         <GridColumn width={8}>
           <UtcDatePicker
             onChange={setFromDate}
-            selected={fromDate}
+            isoDate={fromDate}
           />
         </GridColumn>
       </GridRow>
@@ -26,7 +26,7 @@ export default function DuesExport() {
         <GridColumn width={8}>
           <UtcDatePicker
             onChange={setToDate}
-            selected={toDate}
+            isoDate={toDate}
           />
         </GridColumn>
       </GridRow>

@@ -45,7 +45,7 @@ RSpec.describe RoleChangeMailer, type: :mailer do
     let(:senior_delegate) { FactoryBot.create(:senior_delegate_role) }
     let(:delegate) { FactoryBot.create(:delegate_role, group: senior_delegate.group) }
     let(:role) { FactoryBot.create(:probation_role, user: delegate.user) }
-    let(:mail) { described_class.notify_role_change(role, user_who_made_the_change, 'End Date', 'Empty', '01-01-2024') }
+    let(:mail) { described_class.notify_role_change(role, user_who_made_the_change, [UserRole::UserRoleChange.new(changed_parameter: 'End Date', previous_value: 'Empty', new_value: '01-01-2024')]) }
 
     it 'renders the headers' do
       expect(mail.to).to match_array [user_who_made_the_change.email, GroupsMetadataBoard.email, senior_delegate.user.email].flatten
@@ -65,7 +65,7 @@ RSpec.describe RoleChangeMailer, type: :mailer do
     let(:mail) { described_class.notify_role_end(translator, user_who_made_the_change) }
 
     it 'renders the headers' do
-      expect(mail.to).to match_array [user_who_made_the_change.email, GroupsMetadataBoard.email, Team.weat.email, Team.wfc.email]
+      expect(mail.to).to match_array [user_who_made_the_change.email, GroupsMetadataBoard.email, UserGroup.teams_committees_group_weat.metadata.email, UserGroup.teams_committees_group_wfc.metadata.email]
       expect(mail.reply_to).to match_array [user_who_made_the_change.email]
       expect(mail.subject).to eq "Role removed for #{translator.user.name} in Delegate Regions"
     end

@@ -5,7 +5,7 @@ class Api::V0::UsersController < Api::V0::ApiController
     require_user!
     if stale?(current_user)
       # Also include the users current prs so we can handle qualifications on the Frontend
-      show_user(current_user, show_rankings: true)
+      show_user(current_user, show_rankings: true, private_attributes: ['email'])
     end
   end
 
@@ -36,7 +36,7 @@ class Api::V0::UsersController < Api::V0::ApiController
     require_user!
     return render json: { single: [], average: [] } unless current_user.wca_id.present?
     person = Person.includes(:ranksSingle, :ranksAverage).find_by_wca_id!(current_user.wca_id)
-    render json: { single: person.ranksSingle, average: person.ranksAverage }
+    render json: { single: person.ranksSingle.map(&:to_wcif), average: person.ranksAverage.map(&:to_wcif) }
   end
 
   def preferred_events
@@ -62,9 +62,9 @@ class Api::V0::UsersController < Api::V0::ApiController
 
   private
 
-    def show_user(user, show_rankings: false)
+    def show_user(user, show_rankings: false, private_attributes: [])
       if user
-        json = { user: user }
+        json = { user: user.serializable_hash(private_attributes: private_attributes) }
         if params[:upcoming_competitions]
           json[:upcoming_competitions] = user.accepted_competitions.select(&:upcoming?)
         end

@@ -7,22 +7,16 @@ RSpec.feature "Eligible voters csv" do
   before { Timecop.freeze(Time.utc(2016, 5, 5, 10, 5, 3)) }
   after { Timecop.return }
 
-  let!(:wrc_team_id) { Team.find_by_friendly_id("wrc") }
-
   let!(:user) { FactoryBot.create(:user) }
-  let!(:former_team_leader) {
-    FactoryBot.create(:user, :wrc_member, team_leader: true).tap do |user|
-      user.team_members.find_by_team_id(wrc_team_id).update!(end_date: 1.day.ago)
-    end
-  }
-  let!(:team_leader) { FactoryBot.create(:user, :wrt_member, team_leader: true) }
+  let!(:former_team_leader) { FactoryBot.create(:user, :wrc_leader, end_date: 1.day.ago) }
+  let!(:team_leader) { FactoryBot.create(:user, :wrt_leader) }
   let!(:wac_leader) { FactoryBot.create(:wac_role_leader) }
-  let!(:team_senior_member) { FactoryBot.create(:user, :wrc_member, team_senior_member: true) }
+  let!(:team_senior_member) { FactoryBot.create(:user, :wrc_senior_member) }
   let!(:team_member) { FactoryBot.create(:user, :wrc_member) }
   let!(:senior_delegate_role) { FactoryBot.create(:senior_delegate_role) }
   let!(:junior_delegate) { FactoryBot.create(:junior_delegate_role, group_id: senior_delegate_role.group_id) }
   let!(:delegate) { FactoryBot.create(:delegate_role, group_id: senior_delegate_role.group.id).user }
-  let!(:delegate_who_is_also_team_leader) { FactoryBot.create(:delegate, :wrc_member, team_leader: true) }
+  let!(:delegate_who_is_also_team_leader) { FactoryBot.create(:delegate, :wrc_leader) }
   let!(:board_member) { FactoryBot.create(:user, :board_member) }
   let!(:officer) { FactoryBot.create(:secretary_role) }
 

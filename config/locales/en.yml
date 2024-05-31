@@ -460,12 +460,6 @@ en:
         wca_id: ""
         receive_delegate_reports: "If you are a Trainee Delegate, Junior Delegate, Senior Delegate, or Member of the WRC or the WQAC, you receive Delegate Reports by default. Note: the change may take up to an hour to take effect."
         otp_attempt: "Check your configured mobile application for a one-time password, or input one of your recovery codes."
-      website_contact:
-        inquiry: ""
-        competition_id: ""
-        message: ""
-        name: ""
-        your_email: ""
       dob_contact:
         name: ""
         your_email: ""
@@ -552,8 +546,6 @@ en:
           accepted: "Accepted"
           pending: "Waiting list"
           deleted: "Deleted"
-          cancelled: "Cancelled"
-          waiting_list: "On the Waiting List"
   mail_form:
     #context: This key is used as a label for contact form attributes
     attributes:
@@ -664,9 +656,9 @@ en:
       error_pages:
         #context: The error pages in the case of 500s or 400s
         500_error: "We're sorry, but something went wrong."
-        500_contact: "If you report this error to the Software Team please copy the Request ID into the email"
+        500_contact_html: "<a href=%{contact_url}>Click here</a> to report it."
         400_error: "The page you were looking for doesn't exist."
-        400_contact: "If you think this is a mistake please contact the Software Team and copy the Request ID into the email"
+        400_contact_html: "If you think this is a mistake please <a href=%{contact_url}>click here</a> to report it."
     #context: Key used when an external OAuth app is willing to access a WCA user's data
     doorkeeper:
       applications:
@@ -739,7 +731,6 @@ en:
       #context: "Sidekiq" is the name of a software product
       results_sidekiq: "Sidekiq dashboard"
       new_post: "New post"
-      team_leader: "Team leader"
       regional_organizations: "Regional Organizations"
       manage_regional_organizations: "Manage Regional Organizations"
       new_regional_organization: "New Regional Organization"
@@ -763,6 +754,8 @@ en:
     teams_committees_councils:
       title: "WCA Teams, Committees, and Councils"
       description: "The WCA's teams and committees are an integral part of the organization and perform the day-to-day tasks that are required to keep it functioning. These committees are made up of WCA community members, including WCA Delegates and competitors. Each team has a leader, whose role is to ensure the proper functioning of the team and guide other team members. Councils are a special type of team that serve an advisory role to the WCA Board and are made up of community members, not WCA Staff members. When there are committee, team, or council openings, information about how to apply is posted on the front page."
+      contact_button: "Contact"
+      no_contact_description: "The contact details of this team/committee is not publicly available."
       groups_name:
         wat: "WCA Archive Team"
         wct: "WCA Communication Team"
@@ -793,6 +786,43 @@ en:
         wst: "This team is responsible for managing the WCA's software (website, scramblers, workbooks, admin tools)."
         wsot: "This team has the role to oversee and support the recognition of the WCA as an international sports organization."
         wac: "The WAC is responsible for maintaining feedback and communication between the WCA Community and the WCA Staff. They maintain the WCA Forums and summarize surveys and attempt to increase reach across the worldwide community."
+    contacts:
+      title: "WCA Contact Form"
+      faq_note_html: 'Before making an inquiry, you may wish to take a look at our <a href="/faq">Frequently Asked Questions</a>! If you wish to contact a specific committee or team not listed here, you may check their details on <a href="/teams-committees-councils">this page</a>.'
+      success_message: "Email sent - we'll get back to you soon."
+      form:
+        user_data:
+          name:
+            label: "Name"
+          email:
+            label: "Email"
+        contact_recipient:
+          label: "Which of the following best describes your inquiry?"
+          competition:
+            label: "Contact organizers/delegates of a competition (to ask query regarding that particular competition)"
+          wct:
+            label: "Contact WCA for general queries (this can involve anything like WCA ID/profile, organizing competitions, competition rules, competition media, etc)"
+          wrt:
+            label: "Contact Results Team (for anything related to the results of a competition)"
+          wst:
+            label: "Contact Software Team (to report some bug in website or any API related questions)"
+        competition:
+          competition:
+            label: "Competition"
+          message:
+            label: "Message"
+        wct:
+          message:
+            label: "Message"
+        wrt:
+          message:
+            label: "Message"
+        wst:
+          message:
+            label: "Message"
+        captcha:
+          validation_error: "Please verify that you are not a robot."
+        submit_button: "Submit"
   #context: Key used on the website homepage
   homepage:
     #context: the "Learn more" button
@@ -946,7 +976,7 @@ en:
       account_is_special: "The WCA ID and account are connected to special roles in the WCA (e.g. delegates, organizers, team members) and cannot be removed. Please email the WCA Results Team to help change the WCA ID to a different account."
       #context: used in the error message when a user can't edit some part of their profile
       cannot_edit:
-        msg: "You cannot change your name, birthdate, gender, or region. Reason: %{reason}. Contact the <a href='mailto:results@worldcubeassociation.org' target='_blank'>WCA Results Team</a> or your <a href='%{delegate_url}'>Delegate</a> if you need to change any of these."
+        msg: "You cannot change your name, birthdate, gender, or region. Reason: %{reason}. Contact the <a href='%{wrt_contact_path}' target='_blank'>WCA Results Team</a> or your <a href='%{delegate_url}'>Delegate</a> if you need to change any of these."
         reason:
           assigned: "you have a WCA ID assigned"
           registered: "you have registered for a competition"
@@ -993,9 +1023,9 @@ en:
       must_have_a_change: "The name or the region must be different to update the person."
       already_have_id: "cannot claim a WCA ID because you already have WCA ID %{wca_id}"
       wca_id_no_birthdate_html: "We do not have a birthdate recorded for this WCA ID. Please contact the WCA Results Team using <a href=\"%{dob_form_path}\">this dedicated form</a>."
-      wca_id_no_gender_html: "We do not have a gender recorded for this WCA ID. Please email the <a href='mailto:results@worldcubeassociation.org' target='_blank'>WCA Results Team</a> to resolve this."
-      wca_id_no_citizenship_html: "We do not have a citizenship recorded for this WCA ID. Please email the <a href='mailto:results@worldcubeassociation.org' target='_blank'>WCA Results Team</a> to resolve this."
-      wca_id_no_name_html: "We do not have a name recorded for this WCA ID. Please email the <a href='mailto:results@worldcubeassociation.org' target='_blank'>WCA Results Team</a> to resolve this."
+      wca_id_no_gender_html: "We do not have a gender recorded for this WCA ID. Please contact the <a href='%{wrt_contact_path}' target='_blank'>WCA Results Team</a> to resolve this."
+      wca_id_no_citizenship_html: "We do not have a citizenship recorded for this WCA ID. Please contact the <a href='%{wrt_contact_path}' target='_blank'>WCA Results Team</a> to resolve this."
+      wca_id_no_name_html: "We do not have a name recorded for this WCA ID. Please contact the <a href='%{wrt_contact_path}' target='_blank'>WCA Results Team</a> to resolve this."
       avatar_requires_wca_id: "requires a WCA ID to be assigned"
       email_used_by_locked_account_html: "is already used by another account. It's been created automatically as a result of you registering for a competition via an external service. If you are the owner of this email, you can use the account after resetting your password <a href='/users/password/new'>here</a>."
       must_match_person: "must match person details corresponding to the WCA ID"
@@ -1068,7 +1098,6 @@ en:
       failed: "Could not update registration"
       deleted: "Successfully deleted your registration for %{comp}"
       registered: "Registration form submitted - make sure to follow all instructions from the Registration Requirements below to ensure your registration is complete."
-
       imported: "Successfully imported registrations!"
       added: "Successfully added registration!"
     edit_registration:
@@ -1224,6 +1253,7 @@ en:
         paypal_canceled: "PayPal reported that the order was manually canceled. Please try again."
         stripe_not_found: "Stripe reported back a transaction ID that couldn't be found."
         stripe_secret_invalid: "Stripe reported back a transaction secret that doesn't match our records."
+        stripe_not_an_intent: "Stripe reported back a transaction ID that is not actually a payment intent."
         payment_reset: "The payment was rejected by Stripe."
         payment_pending: "The payment has not been completed yet."
     preferred_events_prompt_html: "To speed up registration in the future, you can set your preferred events %{link}."
@@ -1318,8 +1348,12 @@ en:
         download_html: "Download all the competition's details as PDF %{here}."
       date: "Date"
       add_to_calendar: "Add to calendar"
+      #context: This is shown as a header above the column that shows competition names
+      name: "Name"
+      location: "Location"
       city: "City"
       venue: "Venue"
+      location_and_venue: "Location and venue"
       address: "Address"
       details: "Details"
       website: "Website"
@@ -1571,6 +1605,9 @@ en:
           extra_requirements: "Extra registration requirements"
           force_comment: "Force competitors to make a comment when registering"
         event_restrictions:
+          forbid_newcomers:
+            enabled: "Prevent newcomers from registering"
+            reason: "Reason and details for not allowing newcomers to register"
           early_puzzle_submission:
             enabled: "I would like to require competitors to submit puzzles at a specific time before an event is scheduled to begin"
             reason: "Reason and details for submitting puzzles early"
@@ -1652,6 +1689,9 @@ en:
           extra_requirements: "Please indicate here any extra registration requirements not covered above, like for example directions on how to pay. <br/>Please fill this out <b>in English</b> and whatever other languages your competitors speak; this will be displayed on the competition's information page, as well on the registration page if you are using the WCA website registrations."
           force_comment: ""
         event_restrictions:
+          forbid_newcomers:
+            enabled: ""
+            reason: "Please elaborate here why you would not like newcomers to register for your competition. Please fill this out in English!"
           early_puzzle_submission:
             enabled: ""
             reason: "Please elaborate here why you would like to require competitors to submit puzzles early. Please fill this out in English!"
@@ -1709,10 +1749,11 @@ en:
         unbookmark: "You have removed your bookmark"
       requirements:
         title: "Requirements"
-        acknowledgement: "I have read and acknowledged all information under the 'Register' tab, including entry fees and refund policies"
-        acknowledgment_extra: "I have read and understood all information listed above"
+        acknowledgement: "I have read and acknowledged all information under the 'Register' tab, including entry fees, refund policies and any extra requirements listed above."
         next_step: "Continue to next Step"
       update:
+        being_updated: "Registration is being updated"
+        being_deleted: "Registration is being deleted"
         no_changes: "There are no changes"
         email_send: "Send Email"
         email_copy: "Copy Email"
@@ -1720,19 +1761,27 @@ en:
         move_waiting: "Move to Waiting List"
         cancel: "Cancel Registration"
         too_many: "Accepting all these registrations would go over the competitor limit by %{count}"
+        no_self_update: "Contact the Organization Team to update your registration."
       register:
+        re-register: "Re-Register"
+        success: "You are registered for %{comp_name}"
         error: "Registration failed with error %{error}"
         early_registration: "Registration is not open yet, but you can still register as a competition organizer or Delegate."
         comment: "Additional comments to the organizers"
         until: "You can update your registration until %{date}"
         passed: "You can no longer update your registration"
+        already_paid: "You have already paid for %{comp_name}"
         editing_disabled: "Registration editing is disabled for this competition"
         registration_status:
-          header: "Your Registration Status:"
+          accepted: "Your registration has been accepted."
+          pending: "Your registration is pending approval by the organizers."
+          cancelled: "Your registration has been deleted."
+          waiting_list: "You are on the Waiting List."
         disclaimer: "Submission of Registration does not mean approval to compete"
         processing: "Your registration is processing..."
         processing_longer: "Processing is taking longer than usual, don't go away!"
         processing_queue: "Lots of Registrations being processed, %{queueCount} in the queue."
+        event_limit: "This competition limits the amount of events you can register for to %{max_events}."
       errors:
         events: "Loading Events failed, please try again"
         #context: These are error codes coming from the registration service
@@ -1840,7 +1889,7 @@ en:
     receive_registration_emails: "Notify me by email when someone registers for this competition"
     note_reg_closed_orga_close_reg: "Note: registration is already closed."
     show:
-      general_info: "General info"
+      general_info: "General Info"
       events: "Events"
       schedule: "Schedule"
       no_schedule: "This competition has no schedule, the pdf can't be generated."
@@ -1871,7 +1920,6 @@ en:
     schedule:
       #context: when selecting the kind of schedule to display
       display_as:
-        label: "Display the schedule as:"
         table: "Table"
         calendar: "Calendar"
       #context: when selecting the rooms to display on the schedule
@@ -1883,13 +1931,32 @@ en:
       start: "Start"
       end: "End"
       activity: "Activity"
-      room: "Room"
+      no_activities: "No activities for the selected rooms/events."
+      all_venues: "All Venues"
+      room_or_stage: "Room or Stage"
+      more_details: "Show Round Details"
+      time_zone: "Time Zone"
+      rooms_panel:
+        title: "Rooms"
+        all: "All"
+        none: "None"
+        show_buttons: "Show time zone buttons"
+        use_time_zone: "Use this time zone"
       #context: when displaying the room on the general schedule, we may also display the venue if there are multiple venues
       room_in_venue: "%{room} in %{venue}"
-      venue_information_html: "You are viewing the schedule for the venue %{venue_name}."
-      timezone_message: "The schedule is displayed in the timezone %{timezone}."
-      multiple_venues_available: "This competition has multiple venues, make sure to check out the schedule for the other venues as well!"
+      venue_selection_html:
+        one: "You are viewing the schedule for the venue %{venue_name}, the sole venue for this competition."
+        other: "You are viewing the schedule for the venue %{venue_name}, one of %{count} venues for this competition."
+      venue_selection_all: "You are viewing the schedule for all %{venueCount} venues at once."
+      timezone_message: "The time zone for this venue is %{timezone}."
+      timezone_setting: "You are viewing this schedule in the following timezone setting:"
+      multiple_timezones_available: "Note that not all venues are in the same time zone -- please be careful!"
+      timezone_set_local: "Set to local"
+      timezone_set_venue: "Set to venue"
+      timezone_follow_venue: "Automatically use the active venue's time zone"
       schedule_for_date: "Schedule for %{day_name} (%{full_date})"
+      schedule_for_full_date: "Schedule for %{date}"
+      schedule_change_warning: "Schedules are subject to adjustments, especially once registration totals are known. Registered competitors will be notified by email of any major changes."
     #context: entry of the left navigation menu
     nav:
       menu:
@@ -2023,7 +2090,7 @@ en:
       stripe: 'Stripe'
     #context: Setting up and making payments
     payment_setup:
-      stripe_dashboard: 'Stripe Dashboard'
+      external_dashboard: '%{provider} Dashboard'
       account_connected: "You have successfully connected your %{provider} account and can now receive registration payments for this competition."
       account_disconnected_success: "Sucessfully disconnected your %{provider} account."
       account_disconnected_failure: "There was an error with disconnecting the %{provider} account."
@@ -2035,14 +2102,15 @@ en:
       provider_heading: "%{provider} Payments"
       accept_payments_header: "Accept Registration Payments"
       connect_button: "Connect with %{provider}"
-      stripe_payment_info: "In order to accept payments for this competition, you need to connect your own Stripe account with the WCA Stripe account by clicking the button below. If you don't already have your own Stripe account you can still click on the button below and it will guide you through the process."
-      stripe_connect_warning: "Connecting your Stripe account gives the WCA website the ability to create charges, and issue refunds directly on your Stripe account."
-      stripe_disconnect_info: "This competition is set up to accept payments through Stripe. If you want to disconnect your Stripe account, you should first do so from your Stripe dashboard (link below). Please note it will revoke access for all competitions using the account. Before a new Stripe account can be connected, the competition's Delegate must reach out to WCAT to clear the entry."
-      stripe_disconnect_warning: "Keep in mind that disconnecting an account should only be done in exceptional situations, such as the current account being unable to receive payments."
-      paypal_payment_info: "A PayPal business account is required to accept PayPal payments via the competition page. If you don't already have a PayPal business account, you can still click on the button below and it will guide you through the process."
-      paypal_connect_warning: "Connecting your PayPal account gives the WCA website the ability to route payments to you, and issue refunds directly from your PayPal account."
-      paypal_disconnect_info: "This competition is set up to accept payments through Paypal. Note that clicking disconnecting here will not revoke the permissions you have granted to the WCA - this must be done from your PayPal account."
-      paypal_disconnect_warning: "Keep in mind that these account changes should only be done in exceptional situations, such as the current account being unable to receive payments."
+      connect_account_info:
+        stripe: "In order to accept payments for this competition, you need to connect your own Stripe account with the WCA Stripe account by clicking the button below. If you don't already have your own Stripe account you can still click on the button below and it will guide you through the process."
+        paypal: "A PayPal Business account is required to accept PayPal payments via the competition page. If you don't already have a PayPal business account, you can still click on the button below and it will guide you through the process."
+      connect_account_warning:
+        stripe: "Connecting your Stripe account gives the WCA website the ability to create charges, and issue refunds directly on your Stripe account."
+        paypal: "Connecting your PayPal account gives the WCA website the ability to route payments to you, and issue refunds directly on your PayPal account."
+      currently_connected_info: "This competition is set up to accept payments through %{provider}. The Delegate(s) of the competition should contact WCAT to make any changes to connected accounts."
+      before_disconnect_warning: "Disconnecting on this page will make our website forget the connection to your %{provider} account. But your %{provider} dashboard (see link below) may still list the WCA website based on the authorization that you previously granted. Note that revoking authorization in the %{provider} dashboard will also affect any other competition linked to accept payments through this account!"
+      before_disconnect_info: "Keep in mind that disconnecting an account should only be done in exceptional situations, such as the current account being unable to receive payments."
   persons:
     #context: Person search page
     index:
@@ -2087,18 +2155,6 @@ en:
       unstick_at_future: "must be in the future"
   #context: Contact forms
   contacts:
-    website:
-      faq_note_html: 'Before making an inquiry, you may wish to take a look at our <a href="/faq">Frequently Asked Questions</a>! If you wish to contact a specific committee or team not listed here, you can find their contact information on <a href="/teams-committees">this page</a>.'
-      title: "WCA Contact Form"
-      inquiries:
-        competition: "Contact the Organizers of a Specific Competition (please select below)"
-        competitions_in_general: "Competitions in General (organizing, competition rules, etc.)"
-        results_team: "Contact the Results Team"
-        wca_id_or_profile: "WCA ID or WCA Profile"
-        media: "Media"
-        software: "Software"
-        different: "Other"
-      submit: "Send message"
     dob:
       title: "Birthdate Change Request Form"
       description: "Use this form if your birthdate stored in our database is different from the real one."
@@ -2412,10 +2468,10 @@ en:
   logo:
     title: 'WCA Logo'
     paragraphs:
-      '1': "The WCA logo was designed by Justin Eastman, in a design contest in January 2005.<br />We liked the logo because of its design, the colours, and the fact that it does not specifically show a 3x3x3 cube."
-      '2': 'We have four different versions of the logo: a <a href="/files/WCAlogo_XL.jpg">large version</a> (46 KB, 1756 px by 1068 px), a <a href="/files/WCAlogo.svg">vector version</a>, a <a href="/files/WCAlogo_notext.svg">vector version without text</a> and a <a href="/files/WCAlogo_monochrome.svg">monochrome vector version</a>.'
-      '3': '3D version of the logo, designed by Vu Minh Tan from Vietnam: <a href="/files/WCALogo3D.png">PNG version</a> (2.1 MB), a <a href="/files/WCALogo3Dsmall.png">small PNG version</a> (0.25 MB).'
-      '4': 'Acceptable usage of the WCA logo is outlined by the WCA Logo Usage policy which appears on the <a href="/documents">WCA Documents page</a>.'
+      '1': 'The WCA logo was designed by Justin Eastman, in a design contest in January 2005.'
+      '2': 'We liked the logo because of its design, the colours, and the fact that it does not specifically show a 3x3x3 cube.'
+      '3': 'We have three different versions of the logo: a <a href="/files/WCAlogo.svg">full-color version</a>, an <a href="/files/WCAlogo_monochrome.svg">all-black version</a>, and an <a href="/files/WCAlogo_monochrome_white.svg">all-white version</a>.'
+      '4': 'Acceptable usage of the WCA logo is outlined by the <a href="https://documents.worldcubeassociation.org/documents/policies/external/Logo%20Usage.pdf">WCA Logo Usage Policy</a>.'
   workbook_assistant:
     title: "WCA Workbook Assistant"
     download: "Download WCA Workbook Assistant"

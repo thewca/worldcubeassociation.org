@@ -16,6 +16,7 @@ class TestDbManager
     groups_metadata_board
     groups_metadata_councils
     groups_metadata_teams_committees
+    groups_metadata_translators
   ).freeze
 
   def self.fill_tables

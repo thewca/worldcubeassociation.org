@@ -1,12 +1,11 @@
-import { wcaRegistrationUrl } from '../../../../../lib/requests/routes.js.erb';
+import { getPsychSheetForEventUrl, wcaRegistrationUrl } from '../../../../../lib/requests/routes.js.erb';
 import fetchWithJWTToken from '../../../../../lib/requests/fetchWithJWTToken';
 import { fetchJsonOrError } from '../../../../../lib/requests/fetchWithAuthenticityToken';
 
 const confirmedRegistrationsUrl = (competitionId) => `${wcaRegistrationUrl}/api/v1/registrations/${competitionId}`;
-const getPsychSheetForEventUrl = (competitionId, eventId, sortBy) => `${wcaRegistrationUrl}/api/v1/psych_sheet/${competitionId}/${eventId}?sort_by=${sortBy}`;
 const allRegistrationsUrl = (competitionId) => `${wcaRegistrationUrl}/api/v1/registrations/${competitionId}/admin`;
 const singleRegistrationUrl = (competitionId, userId) => `${wcaRegistrationUrl}/api/v1/register?user_id=${userId}&competition_id=${competitionId}`;
-const waitingCompetitiorsUrl = (competitionId) => `${wcaRegistrationUrl}/api/v1/registrations/${competitionId}/waiting`;
+const waitingCompetitorsUrl = (competitionId) => `${wcaRegistrationUrl}/api/v1/registrations/${competitionId}/waiting`;
 
 export async function getConfirmedRegistrations(
   competitionID,
@@ -51,7 +50,7 @@ export async function getSingleRegistration(
 export async function getWaitingCompetitors(
   competitionId,
 ) {
-  const { data } = await fetchWithJWTToken(waitingCompetitiorsUrl(competitionId));
+  const { data } = await fetchWithJWTToken(waitingCompetitorsUrl(competitionId));
 
   return data;
 }
