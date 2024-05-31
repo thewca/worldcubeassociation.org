@@ -221,9 +221,15 @@ class Competition < ApplicationRecord
   validates :event_restrictions_reason, presence: true, if: :event_restrictions?
   validates_inclusion_of :main_event_id, in: ->(comp) { [nil].concat(comp.persisted_events_id) }
 
-  # Ensure that no string fields exceed the varchar limit in the database
+  # Validations are used to show form errors to the user. If string columns aren't validated for length, it produces an unexplained error for the user
+  # VALIDATED_COLUMNS: All columns which appear in the competition form and are editable by users
+  # DONT_VALIDATE_STRING_LENGTH: String columns not exposed to users in the cmopetition form
+  VALIDATE_STRING_LENGTH = %w[
+    name cityName venue venueAddress venueDetails external_website cellName contact name_reason external_registration_page forbid_newcomers_reason
+  ].freeze
+  DONT_VALIDATE_STRING_LENGTH = %w[countryId connected_stripe_account_id currency_code main_event_id id].freeze #
   columns_hash.each do |column_name, column_info|
-    if column_info.type == :string && column_info.limit
+    if VALIDATE_STRING_LENGTH.include?(column_name) && column_info.limit
       validates column_name, length: { maximum: column_info.limit }
     end
   end
