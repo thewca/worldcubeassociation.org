@@ -286,7 +286,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     else
       return render status: :unprocessable_entity, json: { error: "Invalid group type" }
     end
-    RoleChangeMailer.notify_role_change(role, current_user, changes).deliver_later
+    RoleChangeMailer.notify_role_change(role, current_user, changes.to_json).deliver_later
     render json: { success: true }
   end
 
