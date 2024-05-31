@@ -83,7 +83,7 @@ RSpec.describe Registration do
 
   it "requires at least one event" do
     registration.registration_competition_events = []
-    expect(registration).to be_invalid_with_errors(registration_competition_events: ["must register for at least one event"])
+    expect(registration).to be_invalid_with_errors(registration_competition_events: [I18n.t('registrations.errors.must_register')])
   end
 
   it "allows zero events for non competing staff" do

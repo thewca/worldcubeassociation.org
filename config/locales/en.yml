@@ -1062,7 +1062,7 @@ en:
       must_register: "You must register for at least one event."
       exceeds_event_limit:
         one: "You must register in exactly 1 event."
-        other: "You must register for between 1 and %{event_limit} events."
+        other: "You must register for between 1 and %{count} events."
       banned_html: "You are banned. If you believe this is an error, please contact the <a href='mailto:disciplinary@worldcubeassociation.org' target='_blank'>WDC</a>."
       undelete_banned: "is a banned competitor and cannot be undeleted"
       series_more_than_one_accepted: "You can only be accepted for one Series competition at a time."

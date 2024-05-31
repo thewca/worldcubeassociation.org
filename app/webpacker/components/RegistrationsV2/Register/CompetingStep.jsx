@@ -135,7 +135,7 @@ export default function CompetingStep({
             : 'registrations.errors.exceeds_event_limit.other',
           'negative',
           {
-            event_limit: maxEvents,
+            count: maxEvents,
           },
         ));
       } else {
