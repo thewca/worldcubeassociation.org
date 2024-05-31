@@ -86,4 +86,20 @@ RSpec.describe "API Persons" do
       expect(json[0]["id"]).to eq result.id
     end
   end
+
+  describe 'GET #personal_records', :focus do
+    it 'returns personal records json' do
+      expected_response = [
+        {"best"=>100, "continentalRanking"=>1, "eventId"=>"333", "nationalRanking"=>1, "type"=>"average", "worldRanking"=>1},
+        {"best"=>100, "continentalRanking"=>1, "eventId"=>"333", "nationalRanking"=>1, "type"=>"single", "worldRanking"=>1}
+      ]
+
+      user = FactoryBot.create(:user_with_wca_id, person: FactoryBot.create(:person))
+      single_rank = FactoryBot.create(:ranks_single, personId: user.wca_id)
+      average_rank = FactoryBot.create(:ranks_average, personId: user.wca_id)
+
+      get api_v0_personal_records_path(user.wca_id)
+      expect(JSON.parse(response.body)).to eq(expected_response)
+    end
+  end
 end

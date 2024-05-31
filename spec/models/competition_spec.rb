@@ -235,10 +235,6 @@ RSpec.describe Competition do
     expect(competition.name).to eq "Alexander and the Terrible Horrible No Good 2015"
     expect(competition.cellName).to eq "Alexander and the Terrib... 2015"
   end
-Re-testing the Register page changes: Should I re-test while it's in PR?
-Pro: Identify much faster if something isn't fixed. tightens our whole dev cycle
-Con: Stuff needs to be re-tested if changes to the PR happen
-Based on where we're at, I'm inclined to say that testing when the PR is ready for review, and testing again when it's merged (to check for regressions) would be the best way to go? We are wanting to get these pages out for user feedback soon, and an unresolved issue getting merged can delay us a few days due to the dev/review cycle time, even if the actual # hours spent to fix it are very few
 
   it "saves without losing data" do
     competition = FactoryBot.create :competition
