@@ -185,14 +185,8 @@ class UserGroup < ApplicationRecord
     parent_group_id.nil?
   end
 
-  def self.roles_of_group_type(group_type, current_user: nil, params: {}, includes_params: [])
-    roles = UserRole.includes(includes_params + [:group]).where(group: { group_type: group_type })
-    roles = UserRole.filter_roles(roles, current_user, params)
-    if params[:sort]
-      UserRole.sort_roles(roles, params[:sort])
-    else
-      roles
-    end
+  def self.roles_of_group_type(group_type, includes_params: [])
+    UserRole.includes(:group).includes(includes_params).where(group: { group_type: group_type })
   end
 
   # rubocop:disable Metrics/CyclomaticComplexity

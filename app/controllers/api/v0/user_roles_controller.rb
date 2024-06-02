@@ -40,7 +40,12 @@ class Api::V0::UserRolesController < Api::V0::ApiController
   # Returns a list of roles primarily based on groupType.
   def index_for_group_type
     group_type = params.require(:group_type)
-    roles = UserGroup.roles_of_group_type(group_type, current_user, params)
+    roles = UserGroup.roles_of_group_type(group_type)
+
+    # Filter & Sort roles
+    roles = UserRole.filter_roles(roles, current_user, params)
+    roles = UserRole.sort_roles(roles, params[:sort])
+
     render json: roles
   end
 
