@@ -2345,14 +2345,14 @@ en:
       wst_admin:
         name: "Software admins"
       delegates_html: "<p><strong>WCA Delegate</strong> is a role defined in the WCA Motions and depicted in the WCA Regulations. The primary duty of a Delegate is to oversee competitions on behalf of the WCA. A WCA Delegate is responsible for making sure that all WCA Competitions are run according to the Mission, Spirit, and Regulations of the WCA. The WCA distinguishes between <strong>Senior Delegates</strong>, <strong>Regional Delegates</strong>, <strong>Full Delegates</strong>, <strong>Junior Delegates</strong>, and <strong>Trainee Delegates</strong>%{see_link}.</p>
-<p>In addition to the duties of a WCA Delegate, a Senior Delegate or Regional Delegate is responsible for managing the WCA Delegates in their area and can also be contacted by the community for regional matters.</p>
-<p>New Delegates are listed as Junior Delegates at first; afterwards they are requested to show proficiency managing WCA Competitions before being promoted to WCA Delegates.</p>
-<p>Trainee Delegates are being trained for the position of WCA Delegate and can only oversee competitions in which a WCA Delegate is present.</p>"
+       <p>In addition to the duties of a WCA Delegate, a Senior Delegate or Regional Delegate is responsible for managing the WCA Delegates in their area and can also be contacted by the community for regional matters.</p>
+       <p>New Delegates are listed as Junior Delegates at first; afterwards they are requested to show proficiency managing WCA Competitions before being promoted to WCA Delegates.</p>
+       <p>Trainee Delegates are being trained for the position of WCA Delegate and can only oversee competitions in which a WCA Delegate is present.</p>"
       see_link_html: " (see %{link})"
-      members_html: "All competitors automatically become <strong>members</strong> of the WCA in their first WCA competition."
-  speedcubing_history:
+members_html: "All competitors automatically become <strong>members</strong> of the WCA in their first WCA competition."
+speedcubing_history:
     title: "History‌ ‌of‌ ‌the‌ ‌Speedcubing‌ ‌Community‌ ‌&‌ ‌WCA‌"
-  documents:
+documents:
     title: "Documents"
     #context: The letter from the US Internal Revenue Service confirming that we are exempt from federal income tax
     determination_letter: "IRS Determination Letter"
@@ -2364,7 +2364,7 @@ en:
     codeofconduct: "Code of Conduct"
     finances: "Finances"
     vision_and_strategy: "Vision and Strategy"
-  education:
+education:
     title: "WCA Educational Resources"
     description: "The WQAC has published several documents for the community, you can download them below."
     competitor_tutorial: "Competitor tutorial"
@@ -2372,8 +2372,8 @@ en:
     competition_templates: "Competition templates"
     certificates: "WCT's certificate templates"
     orga_guidelines: "Organizer guidelines"
-  #context: Delegates page
-  delegates_page:
+#context: Delegates page
+delegates_page:
     title: "WCA Delegates"
     acknowledges: "The WCA acknowledges the following WCA Delegates:"
     regions: "Regions"
@@ -2386,7 +2386,7 @@ en:
       last_delegated: "Last Delegated"
       total_delegated: "Total Delegated"
       history: "History"
-  regional_organizations:
+regional_organizations:
     title: "Regional Organizations"
     content: "The WCA acknowledges the following Regional Organizations:"
     empty: "No Regional Organizations are currently acknowledged by the WCA."
@@ -2416,8 +2416,8 @@ en:
       create_success: "Application successfully submitted! Please check your email, and wait for the WCA Board of Directors to review it"
     delete:
       confirm_delete: "Are you sure you want to delete this Regional Organization request?"
-  #context: On the page describing software tools for WCA competitions
-  score_tools:
+#context: On the page describing software tools for WCA competitions
+score_tools:
     title: "Software tools for WCA competitions"
     wca_icon_text: "Developed and maintained by the WST"
     intro:
@@ -2465,14 +2465,14 @@ en:
       groups:
         title: "Competition groups"
         description: "View competition groups of any ongoing competition"
-  logo:
+logo:
     title: 'WCA Logo'
     paragraphs:
       '1': 'The WCA logo was designed by Justin Eastman, in a design contest in January 2005.'
       '2': 'We liked the logo because of its design, the colours, and the fact that it does not specifically show a 3x3x3 cube.'
       '3': 'We have three different versions of the logo: a <a href="/files/WCAlogo.svg">full-color version</a>, an <a href="/files/WCAlogo_monochrome.svg">all-black version</a>, and an <a href="/files/WCAlogo_monochrome_white.svg">all-white version</a>.'
       '4': 'Acceptable usage of the WCA logo is outlined by the <a href="https://documents.worldcubeassociation.org/documents/policies/external/Logo%20Usage.pdf">WCA Logo Usage Policy</a>.'
-  search_results:
+search_results:
     index:
       competitions: "Competitions"
       people: "People"
@@ -2490,13 +2490,13 @@ en:
         posts: "No posts found for"
         incidents: "No incidents found for"
         regulations_and_guidelines: "No Regulations or Guidelines found for"
-  #context: Incident log
-  incidents_log:
+#context: Incident log
+incidents_log:
     #context: disclaimer displayed to inform incidents are only in English
     i18n_disclaimer: "Please note the incidents section is only available in English, the content below is not translated."
     incident: "Incident:"
-  #context: About the regulations
-  about_regulations:
+#context: About the regulations
+about_regulations:
     title: "About the Regulations"
     panel1:
       title: "Regulations"
@@ -2514,8 +2514,8 @@ en:
       title: "Organizer Guidelines"
       content1_html: 'If you are interested in organizing a competition or already planning to organize one, please read our <a href="/organizer-guidelines">Organizer Guidelines</a>.'
       content2_html: 'This document contains important information and should be read by every competition organizer.'
-  #context: Translations of the regulations
-  regulations_translations:
+#context: Translations of the regulations
+regulations_translations:
     title: 'WCA Regulations and Guidelines: Translations'
     paragraph1: 'If you speak a language other than English, you may find these translations useful.'
     paragraph2: 'Please note that translations do not have any official status, even though they are provided on the WCA website: they do not come with any guarantees. If there is a difference between a translation and the (current official) English version, the English version must be used.'
@@ -2527,9 +2527,9 @@ en:
       language: 'Language'
     translating: 'Translating the Regulations'
     paragraph3_html: 'If you are interested in adding/updating a translation, please view <a href="https://github.com/thewca/wca-regulations-translations#translation-instructions">the instructions on the GitHub repository for translations</a>.'
-  #context: Organizer Guidelines
-  full_organizer_guidelines:
-    description: "Welcome to the WQAC’s collection of Organizer Guidelines. If you’re considering being an organizer then it is highly recommended that you read these documents. They have been divided into essential and highly recommended documents. Make sure you are familiar with the information given as this will allow you to run a high-quality and enjoyable competition!"
+#context: Organizer Guidelines
+full_organizer_guidelines:
+    description: "Welcome to the WQAC's collection of Organizer Guidelines. If you're considering being an organizer then it is highly recommended that you read these documents. They have been divided into essential and highly recommended documents. Make sure you are familiar with the information given as this will allow you to run a high-quality and enjoyable competition!"
     disclaimer_html: "<strong>Disclaimer</strong>: The WCA does not organize competitions. As an organizer of a WCA sanctioned competition you <strong>must not</strong> sign anything on behalf of the WCA. You should try reaching out to a relevant regional or national cubing association who do organize or assist with organizing competitions."
     essential:
       description: "Essential documents"
@@ -2549,23 +2549,23 @@ en:
       new-competitors: "Attitude to new competitors"
       enhancing-experience: "Enhancing competitor and staff experience"
       reflection: "Organizer reflection"
-  organizer_guidelines:
+organizer_guidelines:
     title: "WCA Competition Organizer Guidelines"
     paragraph0:
       title: "Short version"
       content: "Below you can find a short summary of key points for getting an idea of how to organize a competition. If you think this is something for you, please take a look at the documents above!"
-    paragraph1:
+paragraph1:
       title: "How to organize a competition"
       content: "All WCA competitions must be attended and overseen by a WCA Delegate. If you are interested in organizing your own competition, please contact your nearest WCA Delegate. They will be able to give you more information on the local practices and can
-      help you with finding a suitable date as they know if there are any other competitions planned in the same time frame. If there is no WCA Delegate near your area, please get in touch with the Senior Delegate for your region."
-    paragraph2:
+                help you with finding a suitable date as they know if there are any other competitions planned in the same time frame. If there is no WCA Delegate near your area, please get in touch with the Senior Delegate for your region."
+paragraph2:
       title: "Expected expenses for organizing a competition"
       content: "The expected expenses differ greatly from country to country and are determined by several factors like the size of the venue and other general conditions. Recouping all expenses with registration fees is possible. However, to keep these as low as possible,
-      it is highly recommended to search for sponsors. Although WCA Delegates are volunteers and do not receive a salary for their work, organizers should consider paying compensation for their travel expenses."
-    paragraph3:
+                it is highly recommended to search for sponsors. Although WCA Delegates are volunteers and do not receive a salary for their work, organizers should consider paying compensation for their travel expenses."
+paragraph3:
       title: "Deadlines for the announcement of the competition"
       content_html: "The competition must be announced at least 28 days before the start of the competition (see <a href='https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>Competition Requirements</a>). However, this is rarely enough time. You should consider everything that will go into organizing your competition, and give yourself enough time to prepare. Also, the WCAT will need time to review your competition before it is announced. Consult with your delegate if you are unsure about how much time will be needed."
-    paragraph4:
+paragraph4:
       title: "Proximity policy"
       content1: "WCA competitions will be accepted if they are at least 10 km or 5 days away from any other competition. The WCAT should particularly review a proposed competition if there is another competition for which the distance between them is less than 10 km and the time between them is less than 5 days. A Delegate requesting approval for such a competition must provide further information on why the competition should still be accepted. Possible arguments that support such a competition being accepted include:"
       olist1:
@@ -2576,37 +2576,37 @@ en:
         '1':
           content1: "3x3x3 Fewest Moves simultaneous competitions cannot be part of any other regular competition."
           alist1:
-            '1a': "Time frames when both are celebrated can’t overlap."
+            '1a': "Time frames when both are celebrated can't overlap."
         '2':
           content1: "If any location of such competitions is closer than 10 km to any other regular competition, then"
           alist1:
             '2a': "both competitions should be at least 5 days apart, or"
             '2b': "the other competition must not have the 3x3x3 Fewest Moves event."
-    paragraph-events:
+paragraph-events:
       title: "Announcing events"
       content: 'All events that are going to be held at the competition must be specified by the Delegate when requesting the competition approval. Further additions must be approved by the WCAT.'
-    paragraph5:
+paragraph5:
       title: "Competitor limits"
       content_html: "The number of competitors may be limited per event or per competition (see <a href='https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>Competition Requirements</a>). The Delegate of the competition must get an approval of the competitor limit by the WCAT. Competitor limits should be
         chosen wisely and in accordance with the expected competitor interest. The limit should not set to a lower number for minor reasons. The intended limit should already be taken into consideration when searching for a suitable venue. The competitors
         limit must be clearly stated on the competition page on the WCA website."
-    paragraph6:
+paragraph6:
       title: "Handling registrations"
       content: "Registrations must be processed on a first come first served basis, which means that the earliest complete registration must be treated first. If registration fees are prepaid, a registration is considered complete when the registration fee has been paid. This
-      should be clearly stated in the paying instructions on the competition website."
-    paragraph7:
+                should be clearly stated in the paying instructions on the competition website."
+paragraph7:
       title: "Managing the waiting list"
       content1: "Once the competitor limit for a competition is reached, a waiting list should be opened. When registered and approved competitors cancel their registration, they can be replaced with the next competitors on the waiting list."
       content2: "If competition registration fees are prepaid, it is an efficient approach to offer the free spot to the next competitor on the waiting list and set a deadline until when the registration fee should be paid to complete the registration (e.g. 48 hours). In case the payment is not
-      received in time or the competitor denies, the free spot should be offered to the next person on the waiting list. This process should be continued until the free spots are filled. There are no exceptions for competitors to bypass the waiting list."
+                 received in time or the competitor denies, the free spot should be offered to the next person on the waiting list. This process should be continued until the free spots are filled. There are no exceptions for competitors to bypass the waiting list."
       content3: "If competitors did not go through the regular registration process but competed, their results will be removed retroactively (assuming the competitors limit existed and was reached)."
-    paragraph8:
+paragraph8:
       title: "Tasks before the competition"
       list:
         '1': "Before announcing the competition, a schedule is required to be published on the competition website. This schedule can be adjusted later."
         '2': "Competitors should be split into groups, score sheets must be printed and should be split according to the groups' distribution. It is also recommended to plan who will scramble for every group of every event, at least for the first rounds.
-        Scramblers should be reliable."
-    paragraph9:
+              Scramblers should be reliable."
+paragraph9:
       title: "Tasks during the competition"
       content: "The tasks an organizer has to do during a competition should be discussed with the WCA Delegate. The typical tasks are (they can be delegated to other reliable people):"
       list:
@@ -2616,8 +2616,8 @@ en:
         '4': "Score-taking and printing results"
         '5': "Looking for scramblers and judges"
         '6': "Dealing with all organizational issues regarding the venue (e.g. keys or WiFi)"
-  #context: Media pages
-  media:
+#context: Media pages
+media:
     common:
       view_media_page: View all media
       confirm_delete: Are you sure you want to delete this media?
@@ -2645,7 +2645,7 @@ en:
       accept: Accept
       confirm_accept: Are you sure you want to accept this media?
       edit: Edit
-  media_and_instagram:
+media_and_instagram:
     page_title: Media and Instagram submission
     general_media_submission:
       title: General media submission
@@ -2673,11 +2673,11 @@ en:
     other_suggestions:
       title: Other suggestions?
       body_html: 'Do you have other suggestions for Instagram or other social media content? <a href="https://www.worldcubeassociation.org/contact/website">Let us know</a>!'
-  footer:
+footer:
     privacy: Privacy
     disclaimer: Disclaimer
-  #context: Key used when describing the API
-  api:
+#context: Key used when describing the API
+api:
     manage_oauth_html: 'Go to %{oauth_link} to manage your OAuth applications.'
     token_request_intro: 'Here is an example, using curl, of obtaining an access token using an Application ID, Client Secret, your WCA email, and your password:'
     user_email_placeholder: 'YOUR_EMAIL'
@@ -2685,13 +2685,13 @@ en:
     user_info_request_intro: 'An OAuth access token can be used, until it expires, to make authorized API requests. For example, to access information about your account:'
     legal_tnoodle_api_header: 'Legal TNoodle version'
     login_message: 'Please log in'
-  merch:
+merch:
       title: 'WCA Merchandise'
       paragraphs:
         '1': 'The WCA has exclusive merchandise available to purchase! From T-Shirts, Hoodies, Stickers, Stackmats, Backpacks, and more! Our designs are constantly updated including the classic WCA logo, official World Championship merchandise, and World Record designs.'
         '2': 'Buying WCA Merch through our stores is one of the best ways for you to support the WCA - a non-profit, volunteer run organization. We use all profits from the merchandise to further fund championships, equipment and other WCA related activities.'
         '3': 'You can buy our merchandise all over the world -- with direct stores in Europe, America and India and more to come soon!'
-  database:
+database:
     results_export:
       heading: "WCA Results Export"
       description: "On this page we offer the WCA results for download in several formats so you can use/analyze them at large. We will usually update after each competition weekend when the results are finalized. The files are numbered and dated so you can see whether you have the newest version already."
