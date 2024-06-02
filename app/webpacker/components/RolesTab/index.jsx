@@ -13,19 +13,17 @@ export default function RolesTab({ userId }) {
     data: activeRoles,
     loading: activeRolesLoading,
     error: activeRolesError,
-  } = useLoadedData(apiV0Urls.userRoles.listOfUser(
-    userId,
+  } = useLoadedData(apiV0Urls.userRoles.list(
+    { isActive: true, isGroupHidden: false, userId },
     sortParams,
-    { isActive: true, isGroupHidden: false },
   ));
   const {
     data: pastRoles,
     loading: pastRolesLoading,
     error: pastRolesError,
-  } = useLoadedData(apiV0Urls.userRoles.listOfUser(
-    userId,
+  } = useLoadedData(apiV0Urls.userRoles.list(
+    { isActive: false, isGroupHidden: false, userId },
     sortParams,
-    { isActive: false, isGroupHidden: false },
   ));
 
   const hasNoRoles = activeRoles?.length === 0 && pastRoles?.length === 0;
