@@ -158,7 +158,7 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
           This person registered with an account. You can edit their
           personal information
           {' '}
-          <a href={editPersonUrl(competitor.id)}>here.</a>
+          <a href={editPersonUrl(competitor.id)}>here</a>.
         </Message>
         )}
         <Header>{competitor.name}</Header>
