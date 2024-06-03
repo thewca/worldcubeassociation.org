@@ -101,7 +101,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     end
 
     return render status: :unprocessable_entity, json: { error: "Invalid group type" } unless create_supported_groups.include?(group.group_type)
-    return head :unauthorized unless current_user.has_permission?(:can_edit_groups, group_id)
+    return head :unauthorized unless current_user.has_permission?(:can_edit_groups, group_id.to_i)
 
     role_to_end = nil
     new_role = nil
