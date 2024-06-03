@@ -67,7 +67,7 @@ class Round < ApplicationRecord
     # Note there is a subtle difference between using '||=' and 'key?'.
     # We do want to allow specifying a 'nil' value for the :time_limit attribute.
     attributes[:time_limit] = TimeLimit.new unless attributes.key?(:time_limit)
-    super(attributes)
+    super
   end
 
   # Compute a round type id from round information

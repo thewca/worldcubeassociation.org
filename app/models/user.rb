@@ -1137,7 +1137,7 @@ class User < ApplicationRecord
     # Preempt the values for avatar and teams, they have a special treatment.
     include_avatar = options[:include]&.delete("avatar")
     include_teams = options[:include]&.delete("teams")
-    json = super(options)
+    json = super
 
     # We override some attributes manually because it's unconvenient to
     # put them in DEFAULT_SERIALIZE_OPTIONS (eg: "teams" doesn't have a default
