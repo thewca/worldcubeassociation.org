@@ -676,6 +676,20 @@ class RegistrationsController < ApplicationController
     render json: { client_secret: intent.client_secret }
   end
 
+  # TODO This can be removed after deployment, this is so we don't have any users error out if they click on pay/refund
+  # while the deployment happens
+  def refund_payment_legacy
+    registration = Registration.find(params[:id])
+    payment = RegistrationPayment.find(params[:payment_id])
+    redirect_to :refund_payment, competition_id: registration.competition.id, payment_id: payment.receipt.id, params: params
+  end
+
+  def payment_completion_legacy
+    registration = Registration.find(params[:id])
+    payment = RegistrationPayment.find(params[:payment_id])
+    redirect_to :payment_completion, competition_id: registration.competition.id, payment_id: payment.receipt.id, params: params
+  end
+
   def refund_payment
     competition_id = params[:competition_id]
     competition = Competition.find(competition_id)
