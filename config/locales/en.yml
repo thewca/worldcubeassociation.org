@@ -2466,12 +2466,31 @@ en:
         title: "Competition groups"
         description: "View competition groups of any ongoing competition"
   logo:
-    title: 'WCA Logo'
-    paragraphs:
-      '1': 'The WCA logo was designed by Justin Eastman, in a design contest in January 2005.'
-      '2': 'We liked the logo because of its design, the colours, and the fact that it does not specifically show a 3x3x3 cube.'
-      '3': 'We have three different versions of the logo: a <a href="/files/WCAlogo.svg">full-color version</a>, an <a href="/files/WCAlogo_monochrome.svg">all-black version</a>, and an <a href="/files/WCAlogo_monochrome_white.svg">all-white version</a>.'
-      '4': 'Acceptable usage of the WCA logo is outlined by the <a href="https://documents.worldcubeassociation.org/documents/policies/external/Logo%20Usage.pdf">WCA Logo Usage Policy</a>.'
+    title: "WCA Logo"
+    intro: "The WCA logo was designed by Justin Eastman, in a design contest in January 2005. We liked the logo because of its design, the colours, and the fact that it does not specifically show a 3x3x3 cube."
+    headings:
+      usage_guidelines:
+        title: "Usage Guidelines"
+        paragraph:
+          acceptable_usage: 'Acceptable usage of the WCA logo is outlined in the <a href="https://documents.worldcubeassociation.org/documents/policies/external/Logo%20Usage.pdf">WCA Logo Usage Policy</a>. Please read this document before using the WCA logo in your own projects. Send any additional questions regarding WCA logo usage to the <a href="mailto:marketing@worldcubeassociation.org">WCA Marketing Team</a>.'
+          see_below: "Below are additional style guidelines for correct usage of the WCA logo."
+        color:
+          title: "Color"
+          paragraph: "The WCA logo exists in four color variations. The correct color variant should be used depending on the background color of the medium where the logo is placed."
+          primary:
+            title: "Primary"
+            paragraph: "Use the primary variant whenever possible."
+          mono:
+            title: "Mono"
+            paragraph: "Only use the mono variant when the primary variant is not suitable."
+        logo_only:
+          title: "Logo Only"
+          paragraph: The WCA logo may be used without the logotype, following the same color guidelines above. 
+      download_logo_assets:
+        title: "Download Logo Assets"
+        paragraph: "High resolution PNGs and vector versions of the WCA logo are available for download."
+        accept_terms_and_conditions: 'I have read and accept the <a href="https://documents.worldcubeassociation.org/documents/policies/external/Logo%20Usage.pdf">WCA Logo Usage Policy</a>.'
+        download_button_text: "Download Logo Assets"
   workbook_assistant:
     title: "WCA Workbook Assistant"
     download: "Download WCA Workbook Assistant"
