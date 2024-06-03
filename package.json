@@ -46,7 +46,7 @@
     "css-loader": "^7.1.2",
     "css-minimizer-webpack-plugin": "^7.0.0",
     "date-fns": "^3.6.0",
-    "dompurify": "^3.1.2",
+    "dompurify": "^3.1.5",
     "easymde": "^2.18.0",
     "expose-loader": "^5.0.0",
     "file-loader": "^6.2.0",
