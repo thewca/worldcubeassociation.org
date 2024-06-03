@@ -681,9 +681,9 @@ class RegistrationsController < ApplicationController
     competition = Competition.find(competition_id)
     stripe_integration = competition.payment_account_for(:stripe)
 
-    payment = StripeRecord.charge.find(params[:payment_id])
+    charge = StripeRecord.charge.find(params[:payment_id])
 
-    registration = payment.holder
+    registration = charge.root_record.payment_intent.holder
     uses_v2 = registration.is_a? MicroserviceRegistration
 
     unless stripe_integration.present?
@@ -704,12 +704,7 @@ class RegistrationsController < ApplicationController
       return redirect_to edit_registration_path(registration)
     end
 
-    # Backwards compatibility: We may at some point try to record a refund for a payment that was
-    #   - created before the introduction of receipts
-    #   - but refunded after the new receipts feature was introduced. Fall back to the old stripe_charge_id if that happens.
-    charge_id = payment.receipt&.stripe_id || payment.stripe_charge_id
-
-    refund_receipt = stripe_integration.issue_refund(charge_id, refund_amount)
+    refund_receipt = stripe_integration.issue_refund(charge.stripe_id, refund_amount)
 
     # Should be the same as `refund_amount`, but by double-converting from the Stripe object
     # we can also double-check that they're on the same page as we are (to be _really_ sure!)
