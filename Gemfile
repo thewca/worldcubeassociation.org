@@ -117,7 +117,7 @@ group :development, :test do
   gem 'capybara-screenshot'
 
   gem 'byebug'
-  gem 'i18n-tasks', github: 'glebm/i18n-tasks'
+  gem 'i18n-tasks'
   gem 'i18n-spec'
 
   # We may be able to remove this when a future version of bundler comes out.
