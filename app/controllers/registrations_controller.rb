@@ -694,7 +694,7 @@ class RegistrationsController < ApplicationController
     refund_amount_param = params.require(:payment).require(:refund_amount)
     refund_amount = refund_amount_param.to_i
 
-    if refund_amount > payment.amount_available_for_refund
+    if refund_amount > charge.amount_available_for_refund
       flash[:danger] = "You are not allowed to refund more than the competitor has paid."
       return redirect_to edit_registration_path(registration)
     end
@@ -722,7 +722,7 @@ class RegistrationsController < ApplicationController
         ruby_money.cents,
         ruby_money.currency.iso_code,
         refund_receipt,
-        payment.id,
+        charge.registration_payment.id,
         current_user.id,
       )
     end
