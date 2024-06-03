@@ -76,7 +76,7 @@ class Incident < ApplicationRecord
       options = DEFAULT_PUBLIC_SERIALIZE_OPTIONS.merge(options || {})
     end
 
-    json = super(options)
+    json = super
     json.merge!(
       class: self.class.to_s.downcase,
     )
