@@ -438,7 +438,7 @@ GEM
       rails
     kgio (2.11.4)
     language_server-protocol (3.17.0.3)
-    launchy (3.0.0)
+    launchy (3.0.1)
       addressable (~> 2.8)
       childprocess (~> 5.0)
     listen (3.6.0)
