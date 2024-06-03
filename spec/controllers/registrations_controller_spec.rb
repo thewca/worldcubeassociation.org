@@ -858,7 +858,7 @@ RSpec.describe RegistrationsController, clean_db_with_truncation: true do
             stripe_account: competition.payment_account_for(:stripe).account_id,
           )
           get :payment_completion, params: {
-            id: registration.id,
+            competition_id: competition.id,
             payment_intent: payment_intent.payment_record.stripe_id,
             payment_intent_client_secret: payment_intent.client_secret,
           }
