@@ -464,7 +464,7 @@ GEM
     mime-types-data (3.2021.0704)
     mini_magick (4.12.0)
     mini_mime (1.1.5)
-    mini_portile2 (2.8.6)
+    mini_portile2 (2.8.7)
     minitest (5.23.1)
     monetize (1.11.0)
       money (~> 6.12)
@@ -599,7 +599,7 @@ GEM
       ffi (~> 1.0)
     rdoc (6.7.0)
       psych (>= 4.0.0)
-    react-rails (3.2.0)
+    react-rails (3.2.1)
       babel-transpiler (>= 0.7.0)
       connection_pool
       execjs
