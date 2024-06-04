@@ -17,10 +17,7 @@ class PaymentController < ApplicationController
 
       charges = intents.flat_map { |intent|
         intent.payment_record.child_records.charge.map { |record|
-          paid_amount = record.amount_stripe_denomination
-          already_refunded = record.child_records.refund.sum(:amount_stripe_denomination)
-
-          available_amount = paid_amount - already_refunded
+          available_amount = record.amount_available_for_refund
 
           {
             payment_id: record.id,
