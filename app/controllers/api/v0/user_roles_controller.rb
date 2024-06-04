@@ -11,7 +11,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     User.where(delegate_to_handle_wca_id_claim: user.id).update_all(delegate_id_to_handle_wca_id_claim: nil, unconfirmed_wca_id: nil)
   end
 
-  def pre_filtered_user_roles_active_record
+  private def pre_filtered_user_roles
     active_record = UserRole
     is_active = params.key?(:isActive) ? ActiveRecord::Type::Boolean.new.cast(params.require(:isActive)) : nil
     group_type = params[:groupType]
@@ -33,7 +33,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
 
   # Returns a list of roles based on the parameters.
   def index
-    roles = pre_filtered_user_roles_active_record.all
+    roles = pre_filtered_user_roles
 
     # Filter & Sort roles.
     roles = UserRole.filter_roles(roles, current_user, params)

@@ -25,6 +25,12 @@ RSpec.describe Api::V0::UserRolesController do
       end
 
       it 'fetches list of roles of a user' do
+        get :index, params: { userId: user_whose_delegate_status_changes.id }
+
+        expect(response.body).to eq(user_whose_delegate_status_changes.active_roles.to_json)
+      end
+
+      it 'fetches list of roles of a user using index_for_user' do
         get :index_for_user, params: { user_id: user_whose_delegate_status_changes.id }
 
         expect(response.body).to eq(user_whose_delegate_status_changes.active_roles.to_json)
