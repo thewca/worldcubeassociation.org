@@ -14,6 +14,7 @@ class UserGroup < ApplicationRecord
     translators: "translators",
     board: "board",
     officers: "officers",
+    banned_competitors: "banned_competitors",
   }
 
   # There are few associations/methods here that are used only for testing. They are to make sure
@@ -148,6 +149,10 @@ class UserGroup < ApplicationRecord
     GroupsMetadataTeamsCommittees.find_by(friendly_id: 'wsot').user_group
   end
 
+  def self.banned_competitors_group
+    UserGroup.banned_competitors.first
+  end
+
   def senior_delegate
     if parent_group_id.nil?
       self.lead_user
@@ -178,6 +183,10 @@ class UserGroup < ApplicationRecord
 
   def is_root_group?
     parent_group_id.nil?
+  end
+
+  def self.roles_of_group_type(group_type, includes_params: [])
+    UserRole.includes(:group).includes(includes_params).where(group: { group_type: group_type })
   end
 
   # rubocop:disable Metrics/CyclomaticComplexity

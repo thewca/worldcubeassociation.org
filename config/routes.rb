@@ -183,8 +183,6 @@ Rails.application.routes.draw do
   get 'polls/:id/vote' => 'votes#vote', as: 'polls_vote'
   get 'polls/:id/results' => 'polls#results', as: 'polls_results'
 
-  resources :teams, only: [:update, :edit]
-
   resources :votes, only: [:create, :update]
 
   post 'competitions/:id/post_results' => 'competitions#post_results', as: :competition_post_results
@@ -199,6 +197,9 @@ Rails.application.routes.draw do
     get 'board' => 'panel#board', as: :panel_board
     get 'leader' => 'panel#leader', as: :panel_leader
     get 'senior_delegate' => 'panel#senior_delegate', as: :panel_senior_delegate
+    get 'wdc' => 'panel#wdc', as: :panel_wdc
+    get 'wec' => 'panel#wec', as: :panel_wec
+    get 'weat' => 'panel#weat', as: :panel_weat
   end
   resources :notifications, only: [:index]
 
@@ -392,7 +393,7 @@ Rails.application.routes.draw do
         get '/group-type/:group_type' => 'user_roles#index_for_group_type', as: :index_for_group_type
         get '/search' => 'user_roles#search', as: :user_roles_search
       end
-      resources :user_roles, only: [:show, :create, :update, :destroy]
+      resources :user_roles, only: [:index, :show, :create, :update, :destroy]
       resources :user_groups, only: [:index, :create, :update]
       namespace :wrt do
         resources :persons, only: [:update, :destroy] do
