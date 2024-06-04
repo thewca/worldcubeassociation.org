@@ -100,7 +100,12 @@ RSpec.configure do |config|
 
   # run retry on features that have JS enabled
   config.around :each, :js do |ex|
-    ex.run_with_retry retry: 3
+    # hard-coding the number 3 directly unfortunately overrides any individual retry count
+    # on single/grouped specs because the library authors used `merge` instead of `reverse_merge`.
+    # So we hack around this limitation by reading any potential custom retry count ourselves!
+    retry_count = ex.metadata[:retry] || 3
+
+    ex.run_with_retry retry: retry_count
   end
 
   # clean up the Capybara cache between reruns
