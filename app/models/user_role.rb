@@ -10,7 +10,8 @@ class UserRole < ApplicationRecord
 
   delegate :group_type, to: :group
 
-  scope :active, -> { where(end_date: nil).or(where.not(end_date: ..Date.today)) }
+  scope :active, -> { where(end_date: nil).or(inactive.invert_where) }
+  scope :inactive, -> { where(end_date: ..Date.today) }
 
   UserRoleChange = Struct.new(
     :changed_parameter,
@@ -141,8 +142,8 @@ class UserRole < ApplicationRecord
   def can_user_read?(user)
     # A user can view a role if:
     # 1. the role belongs to a non-hidden group, or
-    # 2. the user has edit-access to that group.
-    !group.is_hidden || user&.has_permission?(:can_edit_groups, group.id)
+    # 2. the user has read-access to that group.
+    !group.is_hidden || user&.has_permission?(:can_read_groups, group.id)
   end
 
   def self.filter_roles_for_logged_in_user(roles, current_user)

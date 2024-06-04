@@ -34,6 +34,7 @@ PreCommit:
       - '**/*.ico'
       - '**/*.jar'
       - '**/*.svg'
+      - '**/*.zip'
 
   EsLint:
     required_executable: 'bin/yarn'

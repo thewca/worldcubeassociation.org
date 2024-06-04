@@ -998,6 +998,13 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_20_170239) do
     t.index ["competition_id", "user_id"], name: "index_registrations_on_competition_id_and_user_id", unique: true
   end
 
+  create_table "roles_metadata_banned_competitors", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "ban_reason"
+    t.string "scope"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "roles_metadata_councils", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "status"
     t.datetime "created_at", null: false
