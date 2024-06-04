@@ -1116,8 +1116,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_23_104316) do
     t.string "account_id"
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
-    t.index ["parent_record_id"], name: "fk_rails_6ad225b020"
     t.bigint "parent_record_id"
+    t.index ["parent_record_id"], name: "fk_rails_6ad225b020"
     t.index ["stripe_status"], name: "index_stripe_records_on_stripe_status"
   end
 
