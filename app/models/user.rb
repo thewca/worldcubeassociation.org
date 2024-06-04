@@ -587,7 +587,7 @@ class User < ApplicationRecord
 
   private def groups_with_read_access_for_current
     return "*" if can_edit_any_groups?
-    groups = groups_with_edit_access
+    groups = groups_with_read_access_for_past
 
     if can_view_current_banned_competitors?
       groups += UserGroup.banned_competitors.ids
