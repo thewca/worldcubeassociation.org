@@ -2284,66 +2284,11 @@ en:
     structure:
       title: "Structure"
       board:
-        name: "WCA Board of Directors"
         description: "The WCA Board is responsible for leading the organization as a whole, and fulfilling any duties not fulfilled by other Teams,  Committees, and Councils"
       users:
         profile: "%{user_name}'s profile"
-      #context: WDC
-      wdc:
-        name: "WCA Disciplinary Committee"
-      #context: WDPC
-      wdpc:
-        name: "WCA Data Protection Committee"
-      #context: WRC
-      wrc:
-        name: "WCA Regulations Committee"
-      #context: WRT
-      wrt:
-        name: "WCA Results Team"
-      #context: WST
-      wst:
-        name: "WCA Software Team"
-      #context: WCT
-      wct:
-        name: "WCA Communication Team"
-      #context: WFC
-      wfc:
-        name: "WCA Financial Committee"
-      #context: WEC
-      wec:
-        name: "WCA Ethics Committee"
-      #context: WEAT
-      weat:
-        name: "WCA Executive Assistants Team"
-      #context: WQAC
-      wqac:
-        name: "WCA Quality Assurance Committee"
-      #context: WCAT
-      wcat:
-        name: "WCA Competition Announcement Team"
-      #context: WMT
-      wmt:
-        name: "WCA Marketing Team"
-      #context: WAC
-      wac:
-        name: "WCA Advisory Council"
-      #context: WSOT
-      wsot:
-        name: "WCA Sports Organization Team"
-      #context: WAT
-      wat:
-        name: "WCA Archive Team"
-      #context: Hidden team for list of banned competitors
-      banned:
-        name: "Banned Competitors"
-      #context: Hidden team for WCT China members
-      wct_china:
-        name: "WCT China"
       operations_html: "The day to day operations are run by the WCA's %{committees_and_teams}."
       teams_committees: "Teams and Committees"
-      #context: Hidden team for Software administrators
-      wst_admin:
-        name: "Software admins"
       delegates_html: "<p><strong>WCA Delegate</strong> is a role defined in the WCA Motions and depicted in the WCA Regulations. The primary duty of a Delegate is to oversee competitions on behalf of the WCA. A WCA Delegate is responsible for making sure that all WCA Competitions are run according to the Mission, Spirit, and Regulations of the WCA. The WCA distinguishes between <strong>Senior Delegates</strong>, <strong>Regional Delegates</strong>, <strong>Full Delegates</strong>, <strong>Junior Delegates</strong>, and <strong>Trainee Delegates</strong>%{see_link}.</p>
 <p>In addition to the duties of a WCA Delegate, a Senior Delegate or Regional Delegate is responsible for managing the WCA Delegates in their area and can also be contacted by the community for regional matters.</p>
 <p>New Delegates are listed as Junior Delegates at first; afterwards they are requested to show proficiency managing WCA Competitions before being promoted to WCA Delegates.</p>

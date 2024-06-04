@@ -72,9 +72,6 @@ class ReassignWcaId
     end
 
     ActiveRecord::Base.transaction do
-      # Update Team Positions
-      TeamMember.where(user_id: account1_user.id).update_all(user_id: account2_user.id)
-
       # Update Organized Competitions
       CompetitionOrganizer.where(organizer_id: account1_user.id).update_all(organizer_id: account2_user.id)
 

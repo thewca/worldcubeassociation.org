@@ -50,7 +50,6 @@ RSpec.describe ReassignWcaId do
   end
 
   it "can actually reassign wca id" do
-    team_member = FactoryBot.create(:team_member, user_id: account1.id)
     delegated_competition = FactoryBot.create(:competition)
     delegated_competition.delegates << account1
     organized_competition = FactoryBot.create(:competition)
@@ -65,7 +64,6 @@ RSpec.describe ReassignWcaId do
     expect(account2.reload.wca_id).to eq wca_id
     expect(account1.reload.delegate_status).to eq nil
     expect(account2.reload.delegate_status).to eq delegate_status
-    expect(team_member.reload.user_id).to eq account2.id
     expect(organized_competition.reload.organizers[0].id).to eq account2.id
     expect(delegated_competition.reload.delegates[0].id).to eq account2.id
     expect(posted_competition.reload.announced_by).to eq account2.id
