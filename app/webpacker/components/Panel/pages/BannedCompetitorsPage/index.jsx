@@ -43,16 +43,28 @@ export default function BannedCompetitorsPage() {
     (bannedGroup) => loggedInUserPermissions.canEditGroup(bannedGroup.id),
   );
 
+  if (bannedCompetitorRoles.length === 0 && pastBannedCompetitorRoles.length === 0) {
+    return 'No data to show.';
+  }
+
   return (
     <>
-      <Header>Banned Competitors</Header>
-      <BannedCompetitors
-        bannedCompetitorRoles={bannedCompetitorRoles}
-        sync={sync}
-        canEditBannedCompetitors={canEditBannedCompetitors}
-      />
-      <Header>Past Banned Competitors</Header>
-      <BannedCompetitors bannedCompetitorRoles={pastBannedCompetitorRoles} />
+      {bannedCompetitorRoles.length > 0 && (
+        <>
+          <Header>Banned Competitors</Header>
+          <BannedCompetitors
+            bannedCompetitorRoles={bannedCompetitorRoles}
+            sync={sync}
+            canEditBannedCompetitors={canEditBannedCompetitors}
+          />
+        </>
+      )}
+      {pastBannedCompetitorRoles.length > 0 && (
+        <>
+          <Header>Past Banned Competitors</Header>
+          <BannedCompetitors bannedCompetitorRoles={pastBannedCompetitorRoles} />
+        </>
+      )}
     </>
   );
 }
