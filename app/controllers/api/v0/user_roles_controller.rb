@@ -69,15 +69,10 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     render json: roles
   end
 
-  private def roles_of_group_type(group_type)
-    group_ids = UserGroup.where(group_type: group_type).pluck(:id)
-    UserRole.where(group_id: group_ids)
-  end
-
   # Returns a list of roles primarily based on groupType.
   def index_for_group_type
     group_type = params.require(:group_type)
-    roles = roles_of_group_type(group_type)
+    roles = UserGroup.roles_of_group_type(group_type)
 
     # Filter & Sort roles
     roles = UserRole.filter_roles(roles, current_user, params)
@@ -341,7 +336,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
   def search
     query = params.require(:query)
     group_type = params.require(:groupType)
-    roles = roles_of_group_type(group_type)
+    roles = UserGroup.roles_of_group_type(group_type)
     active_roles = roles.select { |role| role.is_active? }
 
     query.split.each do |part|
