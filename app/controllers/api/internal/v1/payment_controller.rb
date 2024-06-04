@@ -10,7 +10,9 @@ class Api::Internal::V1::PaymentController < Api::Internal::V1::ApiController
 
     paying_user_id = params.require(:current_user)
     paying_user = User.find(paying_user_id)
+
     render json: { error: "Paying user not found" }, status: :not_found unless paying_user.present?
+    render json: { error: "This user can't pay for this registration" }, status: :forbidden unless paying_user_id == registering_user_id
 
     competition = Competition.find(competition_id)
     render json: { error: "Competition not found" }, status: :not_found unless competition.present?

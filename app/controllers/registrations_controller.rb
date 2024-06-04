@@ -581,11 +581,6 @@ class RegistrationsController < ApplicationController
     registration = stored_intent.holder
     uses_v2 = registration.is_a? MicroserviceRegistration
 
-    if registration.user.id != current_user.id
-      flash[:error] = t("registrations.payment_form.errors.not_allowed")
-      return redirect_to competition_register_path(competition_id)
-    end
-
     unless stored_intent.client_secret == intent_secret
       flash[:error] = t("registrations.payment_form.errors.stripe_secret_invalid")
       return redirect_to competition_register_path(competition_id)
