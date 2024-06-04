@@ -578,7 +578,7 @@ class User < ApplicationRecord
   end
 
   private def can_view_current_banned_competitors?
-    wdc_team? || ethics_committee? || board_member? || staff_delegate? || weat_team? || results_team? || admin?
+    can_view_past_banned_competitors? || staff_delegate?
   end
 
   private def can_view_past_banned_competitors?
