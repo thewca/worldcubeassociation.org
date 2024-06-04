@@ -577,11 +577,30 @@ class User < ApplicationRecord
     delegate_roles.select { |role| role.metadata.status == RolesMetadataDelegateRegions.statuses[:senior_delegate] }
   end
 
-  private def groups_with_read_access
+  private def can_view_current_banned_competitors?
+    can_view_past_banned_competitors? || staff_delegate?
+  end
+
+  private def can_view_past_banned_competitors?
+    wdc_team? || ethics_committee? || board_member? || weat_team? || results_team? || admin?
+  end
+
+  private def groups_with_read_access_for_current
+    return "*" if can_edit_any_groups?
+    groups = groups_with_read_access_for_past
+
+    if can_view_current_banned_competitors?
+      groups += UserGroup.banned_competitors.ids
+    end
+
+    groups
+  end
+
+  private def groups_with_read_access_for_past
     return "*" if can_edit_any_groups?
     groups = groups_with_edit_access
 
-    if can_view_banned_competitors?
+    if can_view_past_banned_competitors?
       groups += UserGroup.banned_competitors.ids
     end
 
@@ -638,8 +657,11 @@ class User < ApplicationRecord
       can_create_groups: {
         scope: groups_with_create_access,
       },
-      can_read_groups: {
-        scope: groups_with_read_access,
+      can_read_groups_current: {
+        scope: groups_with_read_access_for_current,
+      },
+      can_read_groups_past: {
+        scope: groups_with_read_access_for_past,
       },
       can_edit_groups: {
         scope: groups_with_edit_access,
@@ -683,10 +705,6 @@ class User < ApplicationRecord
 
   def can_admin_finances?
     admin? || financial_committee?
-  end
-
-  def can_view_banned_competitors?
-    admin? || staff?
   end
 
   def can_edit_banned_competitors?
