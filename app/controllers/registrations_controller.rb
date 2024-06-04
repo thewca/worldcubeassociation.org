@@ -681,13 +681,13 @@ class RegistrationsController < ApplicationController
   def refund_payment_legacy
     registration = Registration.find(params[:id])
     payment = RegistrationPayment.find(params[:payment_id])
-    redirect_to :refund_payment, competition_id: registration.competition.id, payment_id: payment.receipt.id, params: params
+    redirect_to :refund_payment, competition_id: registration.competition_id, payment_id: payment.receipt_id, params: params
   end
 
   def payment_completion_legacy
     registration = Registration.find(params[:id])
     payment = RegistrationPayment.find(params[:payment_id])
-    redirect_to :payment_completion, competition_id: registration.competition.id, payment_id: payment.receipt.id, params: params
+    redirect_to :payment_completion, competition_id: registration.competition_id, payment_id: payment.receipt_id, params: params
   end
 
   def refund_payment
