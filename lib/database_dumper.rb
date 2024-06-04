@@ -609,34 +609,6 @@ module DatabaseDumper
     "schema_migrations" => :skip_all_rows, # This is populated when loading our schema dump
     "starburst_announcement_views" => :skip_all_rows,
     "starburst_announcements" => :skip_all_rows,
-    "team_members" => {
-      where_clause: "JOIN teams ON teams.id=team_id WHERE NOT teams.hidden",
-      column_sanitizers: actions_to_column_sanitizers(
-        copy: %w(
-          id
-          created_at
-          end_date
-          start_date
-          team_id
-          team_leader
-          updated_at
-          user_id
-          team_senior_member
-        ),
-      ),
-    }.freeze,
-    "teams" => {
-      column_sanitizers: actions_to_column_sanitizers(
-        copy: %w(
-          id
-          created_at
-          friendly_id
-          email
-          hidden
-          updated_at
-        ),
-      ),
-    }.freeze,
     "user_preferred_events" => {
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
@@ -921,6 +893,7 @@ module DatabaseDumper
         ),
       ),
     }.freeze,
+    "roles_metadata_banned_competitors" => :skip_all_rows,
     "jwt_denylist" => :skip_all_rows,
     "wfc_xero_users" => :skip_all_rows,
     "wfc_dues_redirects" => :skip_all_rows,

@@ -78,13 +78,20 @@ class ApplicationController < ActionController::Base
     super
   end
 
+  # This method is called by devise after a successful logout to know the redirect path
+  # We override it to do some action after signing out, but we want to use the original path
+  protected def after_sign_out_path_for(resource_or_scope)
+    session[:should_reset_jwt] = true
+    super
+  end
+
   # Starburst announcements, see https://github.com/starburstgem/starburst#installation
   helper Starburst::AnnouncementsHelper
 
   private
 
-    def redirect_to_root_unless_user(action, *args)
-      redirecting = !current_user&.send(action, *args)
+    def redirect_to_root_unless_user(action, *)
+      redirecting = !current_user&.send(action, *)
       if redirecting
         flash[:danger] = "You are not allowed to #{action.to_s.sub(/^can_/, '').chomp('?').humanize.downcase}"
         redirect_to root_url

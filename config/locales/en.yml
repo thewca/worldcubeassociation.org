@@ -1059,15 +1059,15 @@ en:
       need_dob: "Need a birthdate"
       need_country: "Need a region"
       cannot_be_deleted_and_accepted: "A registration cannot be deleted and accepted at the same time."
-      must_register: "must register for at least one event"
+      must_register: "You must register for at least one event."
       exceeds_event_limit:
-        one: "you must register in exactly 1 event"
-        other: "you must register in less than or equal to %{count} events"
+        one: "You must register in exactly 1 event."
+        other: "You must register for between 1 and %{count} events."
       banned_html: "You are banned. If you believe this is an error, please contact the <a href='mailto:disciplinary@worldcubeassociation.org' target='_blank'>WDC</a>."
       undelete_banned: "is a banned competitor and cannot be undeleted"
       series_more_than_one_accepted: "You can only be accepted for one Series competition at a time."
       can_only_register_for_qualified_events: "You cannot register for events you are not qualified for."
-      cannot_register_without_comment: "You must make a comment. Make sure to read the registration requirements what has to be included (e.g. in a FM simultaneous competition, which location you will compete at)."
+      cannot_register_without_comment: "You must make a comment. Please read the Registration Requirements above to see what must be included (e.g. in an FMC simultaneous competition, which location you will compete at)."
     registration_info_people:
       #context: pluralization of "x first-timer(s)"
       newcomer:
@@ -1256,6 +1256,7 @@ en:
         stripe_not_an_intent: "Stripe reported back a transaction ID that is not actually a payment intent."
         payment_reset: "The payment was rejected by Stripe."
         payment_pending: "The payment has not been completed yet."
+        registration_unreachable: "There was a problem reaching the registration service, please contact the Software Team."
     preferred_events_prompt_html: "To speed up registration in the future, you can set your preferred events %{link}."
     preferred_events_populated_html: "We autopopulated this with your preferred events, which you can edit %{link}."
     registration_requirements: "Registration requirements for the competition:"
@@ -1763,10 +1764,9 @@ en:
         too_many: "Accepting all these registrations would go over the competitor limit by %{count}"
         no_self_update: "Contact the Organization Team to update your registration."
       register:
-        re-register: "Re-Register"
         success: "You are registered for %{comp_name}"
         error: "Registration failed with error %{error}"
-        early_registration: "Registration is not open yet, but you can still register as a competition organizer or Delegate."
+        early_registration: "Registration is not open yet - you are pre-registering as an organizer/delegate"
         comment: "Additional comments to the organizers"
         until: "You can update your registration until %{date}"
         passed: "You can no longer update your registration"
@@ -2284,66 +2284,11 @@ en:
     structure:
       title: "Structure"
       board:
-        name: "WCA Board of Directors"
         description: "The WCA Board is responsible for leading the organization as a whole, and fulfilling any duties not fulfilled by other Teams,  Committees, and Councils"
       users:
         profile: "%{user_name}'s profile"
-      #context: WDC
-      wdc:
-        name: "WCA Disciplinary Committee"
-      #context: WDPC
-      wdpc:
-        name: "WCA Data Protection Committee"
-      #context: WRC
-      wrc:
-        name: "WCA Regulations Committee"
-      #context: WRT
-      wrt:
-        name: "WCA Results Team"
-      #context: WST
-      wst:
-        name: "WCA Software Team"
-      #context: WCT
-      wct:
-        name: "WCA Communication Team"
-      #context: WFC
-      wfc:
-        name: "WCA Financial Committee"
-      #context: WEC
-      wec:
-        name: "WCA Ethics Committee"
-      #context: WEAT
-      weat:
-        name: "WCA Executive Assistants Team"
-      #context: WQAC
-      wqac:
-        name: "WCA Quality Assurance Committee"
-      #context: WCAT
-      wcat:
-        name: "WCA Competition Announcement Team"
-      #context: WMT
-      wmt:
-        name: "WCA Marketing Team"
-      #context: WAC
-      wac:
-        name: "WCA Advisory Council"
-      #context: WSOT
-      wsot:
-        name: "WCA Sports Organization Team"
-      #context: WAT
-      wat:
-        name: "WCA Archive Team"
-      #context: Hidden team for list of banned competitors
-      banned:
-        name: "Banned Competitors"
-      #context: Hidden team for WCT China members
-      wct_china:
-        name: "WCT China"
       operations_html: "The day to day operations are run by the WCA's %{committees_and_teams}."
       teams_committees: "Teams and Committees"
-      #context: Hidden team for Software administrators
-      wst_admin:
-        name: "Software admins"
       delegates_html: "<p><strong>WCA Delegate</strong> is a role defined in the WCA Motions and depicted in the WCA Regulations. The primary duty of a Delegate is to oversee competitions on behalf of the WCA. A WCA Delegate is responsible for making sure that all WCA Competitions are run according to the Mission, Spirit, and Regulations of the WCA. The WCA distinguishes between <strong>Senior Delegates</strong>, <strong>Regional Delegates</strong>, <strong>Full Delegates</strong>, <strong>Junior Delegates</strong>, and <strong>Trainee Delegates</strong>%{see_link}.</p>
 <p>In addition to the duties of a WCA Delegate, a Senior Delegate or Regional Delegate is responsible for managing the WCA Delegates in their area and can also be contacted by the community for regional matters.</p>
 <p>New Delegates are listed as Junior Delegates at first; afterwards they are requested to show proficiency managing WCA Competitions before being promoted to WCA Delegates.</p>
@@ -2466,12 +2411,31 @@ en:
         title: "Competition groups"
         description: "View competition groups of any ongoing competition"
   logo:
-    title: 'WCA Logo'
-    paragraphs:
-      '1': 'The WCA logo was designed by Justin Eastman, in a design contest in January 2005.'
-      '2': 'We liked the logo because of its design, the colours, and the fact that it does not specifically show a 3x3x3 cube.'
-      '3': 'We have three different versions of the logo: a <a href="/files/WCAlogo.svg">full-color version</a>, an <a href="/files/WCAlogo_monochrome.svg">all-black version</a>, and an <a href="/files/WCAlogo_monochrome_white.svg">all-white version</a>.'
-      '4': 'Acceptable usage of the WCA logo is outlined by the <a href="https://documents.worldcubeassociation.org/documents/policies/external/Logo%20Usage.pdf">WCA Logo Usage Policy</a>.'
+    title: "WCA Logo"
+    intro: "The WCA logo was designed by Justin Eastman, in a design contest in January 2005. We liked the logo because of its design, the colours, and the fact that it does not specifically show a 3x3x3 cube."
+    headings:
+      usage_guidelines:
+        title: "Usage Guidelines"
+        paragraph:
+          acceptable_usage: 'Acceptable usage of the WCA logo is outlined in the <a href="https://documents.worldcubeassociation.org/documents/policies/external/Logo%20Usage.pdf">WCA Logo Usage Policy</a>. Please read this document before using the WCA logo in your own projects. Send any additional questions regarding WCA logo usage to the <a href="mailto:marketing@worldcubeassociation.org">WCA Marketing Team</a>.'
+          see_below: "Below are additional style guidelines for correct usage of the WCA logo."
+        color:
+          title: "Color"
+          paragraph: "The WCA logo exists in four color variations. The correct color variant should be used depending on the background color of the medium where the logo is placed."
+          primary:
+            title: "Primary"
+            paragraph: "Use the primary variant whenever possible."
+          mono:
+            title: "Mono"
+            paragraph: "Only use the mono variant when the primary variant is not suitable."
+        logo_only:
+          title: "Logo Only"
+          paragraph: The WCA logo may be used without the logotype, following the same color guidelines above. 
+      download_logo_assets:
+        title: "Download Logo Assets"
+        paragraph: "High resolution PNGs and vector versions of the WCA logo are available for download."
+        accept_terms_and_conditions: 'I have read and accept the <a href="https://documents.worldcubeassociation.org/documents/policies/external/Logo%20Usage.pdf">WCA Logo Usage Policy</a>.'
+        download_button_text: "Download Logo Assets"
   workbook_assistant:
     title: "WCA Workbook Assistant"
     download: "Download WCA Workbook Assistant"

@@ -3,6 +3,7 @@ import React, { useMemo, useReducer, useRef } from 'react';
 import {
   Checkbox, Flag, Form, Header, Icon, Popup, Sticky, Table,
 } from 'semantic-ui-react';
+import { DateTime } from 'luxon';
 import { getAllRegistrations } from '../api/registration/get/get_registrations';
 import { getShortDateString, getShortTimeString } from '../../../lib/utils/dates';
 import createSortReducer from '../reducers/sortReducer';
@@ -124,7 +125,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
   const [state, dispatchSort] = useReducer(sortReducer, {
     sortColumn: competitionInfo['using_payment_integrations?']
       ? 'paid_on'
-      : 'registered_on',
+      : 'paid_on_with_registered_on_fallback',
     sortDirection: undefined,
   });
   const { sortColumn, sortDirection } = state;
@@ -177,11 +178,23 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
           case 'comment':
             return a.competing.comment.localeCompare(b.competing.comment);
           case 'registered_on':
-            return a.competing.registered_on.localeCompare(
-              b.competing.registered_on,
-            );
-          case 'paid_on':
-            return a.payment.updated_at.localeCompare(b.payment.updated_at);
+            return DateTime.fromISO(a.competing.registered_on).toMillis()
+              - DateTime.fromISO(b.competing.registered_on).toMillis();
+          case 'paid_on_with_registered_on_fallback':
+          {
+            if (a.payment && b.payment) {
+              return DateTime.fromISO(a.payment.updated_at).toMillis()
+                - DateTime.fromISO(b.payment.updated_at).toMillis();
+            }
+            if (a.payment && !b.payment) {
+              return 1;
+            }
+            if (!a.payment && b.payment) {
+              return -1;
+            }
+            return DateTime.fromISO(a.competing.registered_on).toMillis()
+              - DateTime.fromISO(b.competing.registered_on).toMillis();
+          }
           default:
             return 0;
         }
@@ -481,8 +494,8 @@ function TableHeader({
           <>
             <Table.HeaderCell>Payment Status</Table.HeaderCell>
             <Table.HeaderCell
-              sorted={sortColumn === 'paid_on' ? sortDirection : undefined}
-              onClick={() => changeSortColumn('paid_on')}
+              sorted={sortColumn === 'paid_on_with_registered_on_fallback' ? sortDirection : undefined}
+              onClick={() => changeSortColumn('paid_on_with_registered_on_fallback')}
             >
               {i18n.t('registrations.list.registered.with_stripe')}
             </Table.HeaderCell>

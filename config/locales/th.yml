@@ -1429,6 +1429,8 @@ th:
         หากคุณต้องการติดต่อคณะกรรมการหรือทีมใดโดยเฉพาะที่ไม่ได้ระบุไว้ที่นี่
         คุณสามารถดูข้อมูลติดต่อได้ที่<a
         href="/teams-committees-councils">หน้านี้</a>
+      #original_hash: ea20be0
+      success_message: ส่งอีเมลแล้ว - เราจะติดต่อกลับโดยเร็วที่สุด
       form:
         user_data:
           name:
@@ -1764,12 +1766,12 @@ th:
         delegate, ผู้จัดการแข่งขัน, สมาชิกทีม) และไม่สามารถลบได้ กรุณาส่ง email
         มาที่ WCA Result Team เพื่อช่วยเปลี่ยน WCA ID ไปยังบัญชีผู้ใช้อื่น
       cannot_edit:
-        #original_hash: 8bb2def
+        #original_hash: 3d4d222
         msg: >-
           คุณไม่สามารถแก้ไขชื่อ วันเกิด เพศ หรือภูมิภาคได้ เนื่องจาก %{reason}
-          กรุณาติดต่อ <a href='mailto:results@worldcubeassociation.org'
-          target='_blank'>WCA Results Team</a> หรือ <a
-          href='%{delegate_url}'>Delegate</a> ถ้าคุณต้องการแก้ไข
+          กรุณาติดต่อ <a href='%{wrt_contact_path}' target='_blank'>WCA Results
+          Team</a> หรือ <a href='%{delegate_url}'>Delegate</a>
+          ถ้าคุณต้องการแก้ไข
         reason:
           #original_hash: 370ff12
           assigned: คุณได้รับ WCA ID แล้ว
@@ -1873,21 +1875,21 @@ th:
       wca_id_no_birthdate_html: >-
         เราไม่มีวันเกิดบันทึกไว้สำหรับ WCA ID นี้ กรุณาติดต่อ WCA ด้วย<a
         href="%{dob_form_path}">แบบฟอร์มเฉพาะนี้</a>
-      #original_hash: 51fa5a4
+      #original_hash: f7dde6e
       wca_id_no_gender_html: >-
-        เราไม่มีเพศบันทึกไว้สำหรับ WCA ID นี้ กรุณา email ไปที่ <a
-        href='mailto:results@worldcubeassociation.org' target='_blank'>WCA
-        Results Team</a> เพื่อแก้ปัญหา
-      #original_hash: 87ee245
+        เราไม่มีเพศบันทึกไว้สำหรับ WCA ID นี้ กรุณาติดต่อ <a
+        href='%{wrt_contact_path}' target='_blank'>WCA Results Team</a>
+        เพื่อแก้ปัญหา
+      #original_hash: 11a7f81
       wca_id_no_citizenship_html: >-
-        เราไม่มีสถานะพลเมืองบันทึกไว้สำหรับ WCA ID นี้ กรุณา email ไปที่ <a
-        href='mailto:results@worldcubeassociation.org' target='_blank'>WCA
-        Results Team</a> เพื่อแก้ปัญหา
-      #original_hash: c3839bc
+        เราไม่มีสถานะพลเมืองบันทึกไว้สำหรับ WCA ID นี้ กรุณาติดต่อ <a
+        href='%{wrt_contact_path}' target='_blank'>WCA Results Team</a>
+        เพื่อแก้ปัญหา
+      #original_hash: 6890de8
       wca_id_no_name_html: >-
-        เราไม่มีชื่อบันทึกไว้สำหรับ WCA ID นี้ กรุณา email ไปที่ <a
-        href='mailto:results@worldcubeassociation.org' target='_blank'>WCA
-        Results Team</a> เพื่อแก้ปัญหา
+        เราไม่มีชื่อบันทึกไว้สำหรับ WCA ID นี้ กรุณาติดต่อ <a
+        href='%{wrt_contact_path}' target='_blank'>WCA Results Team</a>
+        เพื่อแก้ปัญหา
       #original_hash: d02c03b
       avatar_requires_wca_id: ต้องการ WCA ID
       #original_hash: 8f785ea
@@ -2508,10 +2510,16 @@ th:
       date: วันที่
       #original_hash: 4f05cd6
       add_to_calendar: เพิ่มลงในปฎิทิน
+      #original_hash: 709a232
+      name: ชื่อการแข่งขัน
+      #original_hash: d219c68
+      location: สถานที่
       #original_hash: 4271627
       city: เมือง
       #original_hash: 67cd406
       venue: สถานที่
+      #original_hash: 63a1c21
+      location_and_venue: ที่ตั้งและสถานที่การแข่งขัน
       #original_hash: d70f93d
       address: ที่อยู่
       #original_hash: dc3decb
@@ -3356,6 +3364,8 @@ th:
         too_many: >-
           การยอมรับการลงทะเบียนทั้งหมดเหล่านี้จะเกินขีดจำกัดของผู้เข้าแข่งขันที่
           %{count} คน
+        #original_hash: 462376a
+        no_self_update: ติดต่อผู้จัดการแข่งขันเพื่อแก้ไขการสมัครของคุณ
       register:
         #original_hash: dddec0b
         re-register: สมัครการแข่งขันใหม่อีกครั้ง
@@ -3373,6 +3383,8 @@ th:
         until: 'คุณสามารถแก้ไขการสมัครของคุณได้จนถึง %{date}'
         #original_hash: fc8bc84
         passed: คุณไม่สามารถอัปเดตการลงสมัครของคุณได้อีกต่อไป
+        #original_hash: 54d5b77
+        already_paid: 'คุณได้ชำระเงินสำหรับ %{comp_name} แล้ว'
         #original_hash: 3c8d8b7
         editing_disabled: การแก้ไขการสมัครถูกปิดใช้งานสำหรับการแข่งขันครั้งนี้
         registration_status:
@@ -3392,6 +3404,10 @@ th:
         processing_longer: การประมวลผลใช้เวลานานกว่าปกติ อย่าพึ่งปิดหน้าจอ
         #original_hash: 79ba42a
         processing_queue: 'การสมัครจำนวนมากกำลังดำเนินการอยู่ ซึ่งมี %{queueCount} อยู่ในคิว'
+        #original_hash: ff6550f
+        event_limit: >-
+          การแข่งขันนี้จำกัดจำนวนประเภทการแข่งขันที่คุณสามารถสมัครได้ไว้ที่
+          %{max_events} ประเภท
       errors:
         #original_hash: 3890616
         events: การโหลดประเภทการแข่งขันล้มเหลว โปรดลองอีกครั้ง
@@ -3663,8 +3679,6 @@ th:
       qualification: การคัดเลือก
     schedule:
       display_as:
-        #original_hash: ec5dd7c
-        label: 'รูปแบบตารางการแข่งขัน:'
         #original_hash: 0424f6e
         table: ตาราง
         #original_hash: adab509
@@ -3682,20 +3696,62 @@ th:
       end: สิ้นสุด
       #original_hash: 81c0d91
       activity: กิจกรรม
-      #original_hash: 90e2fca
-      room: ห้อง
+      #original_hash: 15e58c6
+      no_activities: ไม่มีกิจกรรมสำหรับ ห้อง/ประเภท ที่เลือก
+      #original_hash: 10a56c8
+      all_venues: สถานที่ทั้งหมด
+      #original_hash: a0b3266
+      room_or_stage: ห้องหรือเวที
+      #original_hash: f37605b
+      more_details: แสดงรายละเอียดของรอบ
+      #original_hash: a30e720
+      time_zone: Time Zone
+      rooms_panel:
+        #original_hash: 3a28d6f
+        title: ห้อง
+        #original_hash: 6a72085
+        all: ทั้งหมด
+        #original_hash: 6eef664
+        none: ไม่มี
+        #original_hash: 9b9a6aa
+        show_buttons: แสดงปุ่ม time zone
+        #original_hash: d2ac826
+        use_time_zone: ใช้ time zone นี้
       #original_hash: 73acb7f
       room_in_venue: '%{room} ที่ %{venue}'
-      #original_hash: 2896c7a
-      venue_information_html: 'คุณกำลังดูตารางการแข่งขันของสถานที่ %{venue_name}'
-      #original_hash: b97e383
-      timezone_message: 'ตารางการแข่งขันแสดงในเวลา %{timezone}'
-      #original_hash: 2ab94a0
-      multiple_venues_available: >-
-        การแข่งขันนี้มีหลายสถานที่
-        กรุณาตรวจสอบตารางการแข่งขันสำหรับสถานที่อื่นด้วย
+      #original_hash: f7fd979
+      venue_selection_html:
+        zero: >-
+          คุณกำลังดูตารางการแข่งขันของสถานที่ %{venue_name}
+          ซึ่งเป็นสถานที่แห่งเดียวสำหรับการแข่งขันครั้งนี้
+        other: >-
+          คุณกำลังดูตารางการแข่งขันของสถานที่ %{venue_name} ซึ่งเป็นหนึ่งใน
+          %{count} แห่งสำหรับการแข่งขันครั้งนี้
+      #original_hash: 8d175ad
+      venue_selection_all: 'คุณกำลังดูตารางการแข่งขันสำหรับสถานที่ทั้ง %{venueCount} แห่งพร้อมกัน'
+      #original_hash: 97df911
+      timezone_message: 'ตารางการแข่งขันของสถานที่นี้แสดงในเวลา %{timezone}'
+      #original_hash: 94b2570
+      timezone_setting: 'คุณกำลังดูตารางการแข่งขันนี้ในการตั้ง timezone ต่อไปนี้:'
+      #original_hash: 75194fd
+      multiple_timezones_available: >-
+        โปรดทราบว่าสถานที่จัดการแข่งขันบางแห่งอาจไม่อยู่ใน time zone เดียวกัน --
+        โปรดใช้ความระมัดระวัง!
+      #original_hash: d94a371
+      timezone_set_local: ตั้งเป็นเวลาท้องถิ่น
+      #original_hash: 17ab650
+      timezone_set_venue: ตั้งเป็นสถานที่การแข่งขัน
+      #original_hash: 9974a46
+      timezone_follow_venue: ใช้ time zone ของสถานที่ที่ใช้งานอยู่โดยอัตโนมัติ
       #original_hash: 37b1adb
       schedule_for_date: 'ตารางการแข่งขันสำหรับ %{day_name} (%{full_date})'
+      #original_hash: d58b281
+      schedule_for_full_date: 'ตารางการแข่งขันสำหรับ %{date}'
+      #original_hash: eb1090e
+      schedule_change_warning: >-
+        ตารางการแข่งขันอาจมีการปรับเปลี่ยน
+        โดยเฉพาะอย่างยิ่งเมื่อทราบจำนวนผู้สมัครทั้งหมดแล้วแล้ว
+        ผู้เข้าแข่งขันที่สมัครการแข่งขันไว้จะได้รับแจ้งทางอีเมลเกี่ยวกับการเปลี่ยนแปลงที่สำคัญ
     nav:
       menu:
         #original_hash: 612e12d
@@ -3919,8 +3975,8 @@ th:
       #original_hash: 4d08ec5
       stripe: Stripe
     payment_setup:
-      #original_hash: 69b243c
-      stripe_dashboard: Stripe Dashboard
+      #original_hash: 0aa09ee
+      external_dashboard: '%{provider} Dashboard'
       #original_hash: e621d96
       account_connected: >-
         คุณได้เชื่อมต่อบัญชี %{provider} ของคุณสำเร็จแล้ว
@@ -3950,47 +4006,44 @@ th:
       accept_payments_header: Accept Registration Payments
       #original_hash: 7ebe178
       connect_button: 'เชื่อมต่อกับ %{provider}'
-      #original_hash: f3fdb64
-      stripe_payment_info: >-
-        เพื่อที่จะยอมรับการชำระเงินสำหรับการแข่งขันนี้ คุณต้องเชื่อมต่อบัญชี
-        Stripe ของคุณกับบัญชี WCA Stripe โดยคลิกที่ปุ่มด้านล่าง
-        หากคุณยังไม่มีบัญชี Stripe ของคุณเอง
-        คุณยังคงสามารถคลิกที่ปุ่มด้านล่างได้ และมันจะแนะนำคุณตลอดกระบวนการ
-      #original_hash: 53adda3
-      stripe_connect_warning: >-
-        การเชื่อมต่อบัญชี Stripe ของคุณทำให้เว็บไซต์ WCA
-        สามารถสร้างการเรียกเก็บเงินและออกเงินคืนได้โดยตรงในบัญชี Stripe ของคุณ
-      #original_hash: 9ea95c2
-      stripe_disconnect_info: >-
-        การแข่งขันครั้งนี้จัดขึ้นเพื่อให้รับการชำระเงินผ่าน Stripe ได้
-        หากคุณต้องการยกเลิกการเชื่อมต่อบัญชี Stripe ของคุณ
-        คุณควรดำเนินการดังกล่าวจากแดชบอร์ด Stripe ของคุณก่อน (ลิงก์ด้านล่าง)
-        โปรดทราบว่ามันจะเพิกถอนการเข้าถึงสำหรับการแข่งขันทั้งหมดโดยใช้บัญชี
-        ก่อนที่จะสามารถเชื่อมต่อบัญชี Stripe ใหม่ได้ Delegate
-        ของการแข่งขันจะต้องติดต่อ WCAT เพื่อเคลียร์รายการ
+      connect_account_info:
+        #original_hash: f3fdb64
+        stripe: >-
+          เพื่อที่จะยอมรับการชำระเงินสำหรับการแข่งขันนี้ คุณต้องเชื่อมต่อบัญชี
+          Stripe ของคุณกับบัญชี WCA Stripe โดยคลิกที่ปุ่มด้านล่าง
+          หากคุณยังไม่มีบัญชี Stripe ของคุณเอง
+          คุณยังคงสามารถคลิกที่ปุ่มด้านล่างได้ และมันจะแนะนำคุณตลอดกระบวนการ
+        #original_hash: 30afe4e
+        paypal: >-
+          จำเป็นต้องมีบัญชี PayPal Business เพื่อรับการชำระเงินผ่าน PayPal
+          ผ่านหน้าการแข่งขัน หากคุณยังไม่มีบัญชี PayPal Business
+          คุณยังคงคลิกปุ่มด้านล่างได้ ระบบจะแนะนำคุณตลอดขั้นตอน
+      connect_account_warning:
+        #original_hash: 53adda3
+        stripe: >-
+          การเชื่อมต่อบัญชี Stripe ของคุณทำให้เว็บไซต์ WCA
+          สามารถสร้างการเรียกเก็บเงินและคืนเงินได้โดยตรงในบัญชี Stripe ของคุณ
+        #original_hash: 7cedd12
+        paypal: >-
+          การเชื่อมต่อบัญชี PayPal ของคุณทำให้เว็บไซต์ WCA
+          สามารถกำหนดเส้นทางการชำระเงินให้กับคุณ และคืนเงืนได้โดยตรงในบัญชี
+          PayPal ของคุณ
+      #original_hash: ef7e7f6
+      currently_connected_info: >-
+        การแข่งขันนี้จัดทำขึ้นเพื่อรับการชำระเงินผ่าน %{provider} Delegate
+        ของการแข่งขันควรติดต่อ WCAT เพื่อเปลี่ยนแปลงบัญชีที่เชื่อมโยงกัน
+      #original_hash: bc14f0f
+      before_disconnect_warning: >-
+        การยกเลิกการเชื่อมต่อบนหน้านี้จะทำให้เว็บไซต์ของเราลืมการเชื่อมต่อกับบัญชี
+        %{provider} ของคุณ แต่แดชบอร์ด %{provider} ของคุณ (ดูลิงก์ด้านล่าง)
+        อาจยังคงแสดงรายการเว็บไซต์ WCA ตามการอนุญาตที่คุณให้ไว้ก่อนหน้านี้
+        โปรดทราบว่าการเพิกถอนการอนุญาตในแดชบอร์ด %{provider}
+        จะส่งผลต่อการแข่งขันอื่นๆ
+        ที่เชื่อมโยงกับการรับการชำระเงินผ่านบัญชีนี้ด้วย!
       #original_hash: d4a360b
-      stripe_disconnect_warning: >-
+      before_disconnect_info: >-
         โปรดทราบว่าการยกเลิกการเชื่อมต่อบัญชีควรทำเฉพาะในสถานการณ์พิเศษเท่านั้น
-        เช่น บัญชีกระแสรายวันไม่สามารถรับการชำระเงินได้
-      #original_hash: 0af9795
-      paypal_payment_info: >-
-        บัญชีธุรกิจของ PayPal จะต้องยอมรับการชำระเงินผ่าน PayPal
-        ผ่านหน้าการแข่งขัน หากคุณยังไม่มีบัญชีธุรกิจ PayPal
-        คุณยังคงคลิกปุ่มด้านล่างได้ ระบบจะแนะนำคุณตลอดขั้นตอน
-      #original_hash: d327396
-      paypal_connect_warning: >-
-        การเชื่อมต่อบัญชี PayPal ของคุณทำให้เว็บไซต์ WCA
-        สามารถกำหนดเส้นทางการชำระเงินให้กับคุณ และออกเงินคืนได้โดยตรงจากบัญชี
-        PayPal ของคุณ
-      #original_hash: eb05726
-      paypal_disconnect_info: >-
-        การแข่งขันครั้งนี้จัดขึ้นเพื่อให้รับการชำระเงินผ่าน Paypal ได้
-        โปรดทราบว่าการคลิกยกเลิกการเชื่อมต่อที่นี่จะไม่เพิกถอนสิทธิ์ที่คุณให้กับ
-        WCA - จะต้องดำเนินการจากบัญชี PayPal ของคุณ
-      #original_hash: c186753
-      paypal_disconnect_warning: >-
-        โปรดทราบว่าการเปลี่ยนแปลงบัญชีเหล่านี้ควรทำเฉพาะในสถานการณ์พิเศษเท่านั้น
-        เช่น บัญชีกระแสรายวันไม่สามารถรับการชำระเงินได้
+        เช่น บัญชีปัจจุบันไม่สามารถรับการชำระเงินได้
   persons:
     index:
       #original_hash: 5934b4c
@@ -4705,27 +4758,22 @@ th:
     #original_hash: c72c969
     title: WCA Logo
     paragraphs:
-      #original_hash: 44cfe8d
+      #original_hash: 18fc057
       '1': >-
         โลโก้ WCA ได้รับการออกแบบโดย Justin Eastman
-        ในการประกวดออกแบบในเดือนมกราคม 2005 <br />
-        เราชอบโลโก้เนื่องจากการออกแบบ, สี, และมันไม่ได้แสดงลูกบาศก์ 3x3x3
-        โดยเฉพาะ
-      #original_hash: 916e3fc
-      '2': >-
-        เรามีโลโก้สี่รูปแบบ: <a href="/files/WCAlogo_XL.jpg">ขนาดใหญ่</a> (46
-        KB, 1756 px by 1068 px), <a href="/files/WCAlogo.svg">vector</a>, <a
-        href="/files/WCAlogo_notext.svg">vector ที่ไม่มีตัวอักษร</a> และ <a
-        href="/files/WCAlogo_monochrome.svg">monochrome vector</a>.
-      #original_hash: dcb1ad6
+        ในการประกวดออกแบบในเดือนมกราคม 2005
+      #original_hash: d7e75b2
+      '2': เราชอบโลโก้นี้เพราะการออกแบบ สี และมันไม่ได้แสดงถึง 3x3x3 อย่างเดียว
+      #original_hash: a68dd02
       '3': >-
-        โลโก้ 3 มิติออกแบบโดย Vu Minh Tan จากเวียดนาม: <a
-        href="/files/WCALogo3D.png">PNG version</a> (2.1 MB), a <a
-        href="/files/WCALogo3Dsmall.png">small PNG version</a> (0.25 MB).
-      #original_hash: e5df1bf
+        เรามีโลโก้นี้ 3 แบบ: <a href="/files/WCAlogo.svg">แบบสี</a>, <a
+        href="/files/WCAlogo_monochrome.svg">แบบสีดำ</a>, และ <a
+        href="/files/WCAlogo_monochrome_white.svg">แบบสีขาว</a>.
+      #original_hash: d0e34b2
       '4': >-
-        การใช้โลโก้ WCA ที่ยอมรับได้นั้นเป็นไปตามนโยบายการใช้โลโก้ WCA
-        ที่ปรากฏใน <a href="/documents">WCA Documents page</a>.
+        การใช้โลโก้ WCA ที่ยอมรับได้นั้นกำหนดโดย <a
+        href="https://documents.worldcubeassociation.org/documents/policies/external/Logo%20Usage.pdf">WCA
+        Logo Usage Policy</a>.
   workbook_assistant:
     #original_hash: e442ea4
     title: WCA Workbook Assistant

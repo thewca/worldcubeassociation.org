@@ -10,7 +10,6 @@ class TestDbManager
     cronjob_statistics
     preferred_formats
     RoundTypes
-    teams
     user_groups
     groups_metadata_delegate_regions
     groups_metadata_board
