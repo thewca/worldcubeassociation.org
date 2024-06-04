@@ -566,6 +566,11 @@ class RegistrationsController < ApplicationController
     # We expect that the record here is a top-level PaymentIntent in Stripe's API model
     stored_record = StripeRecord.find_by(stripe_id: intent_id)
 
+    unless stored_record.present?
+      flash[:error] = t("registrations.payment_form.errors.stripe_not_found")
+      return redirect_to competition_register_path(competition_id)
+    end
+
     unless stored_record.payment_intent?
       flash[:error] = t("registrations.payment_form.errors.stripe_not_an_intent")
       return redirect_to competition_register_path(competition_id)
@@ -678,16 +683,15 @@ class RegistrationsController < ApplicationController
 
   # TODO: This can be removed after deployment, this is so we don't have any users error out if they click on pay/refund
   # while the deployment happens
-  def refund_payment_legacy
+  def payment_refund_legacy
     registration = Registration.find(params[:id])
     payment = RegistrationPayment.find(params[:payment_id])
-    redirect_to :refund_payment, competition_id: registration.competition_id, payment_id: payment.receipt_id, params: params
+    redirect_to action: :refund_payment, competition_id: registration.competition_id, payment_id: payment.receipt_id, params: params.permit(:payment)
   end
 
   def payment_completion_legacy
     registration = Registration.find(params[:id])
-    payment = RegistrationPayment.find(params[:payment_id])
-    redirect_to :payment_completion, competition_id: registration.competition_id, payment_id: payment.receipt_id, params: params
+    redirect_to action: :payment_completion, competition_id: registration.competition_id, params: params.permit(:payment_intent, :payment_intent_client_secret)
   end
 
   def refund_payment

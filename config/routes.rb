@@ -43,7 +43,7 @@ Rails.application.routes.draw do
   end
   # TODO: This can be removed after deployment, this is so we don't have any users error out if they click on pay/refund
   # while the deployment happens
-  post 'registration/:id/refund/:payment_id' => 'registrations#legacy_refund_payment', as: :registration_payment_refund_legacy
+  post 'registration/:id/refund/:payment_id' => 'registrations#payment_refund_legacy', as: :registration_payment_refund_legacy
   get 'registration/:id/payment-completion' => 'registrations#payment_completion_legacy', as: :registration_payment_completion_legacy
 
   post 'registration/:id/load-payment-intent' => 'registrations#load_payment_intent', as: :registration_payment_intent
