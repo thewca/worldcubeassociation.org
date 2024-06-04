@@ -129,7 +129,7 @@ class StripeRecord < ApplicationRecord
     paid_amount = amount_stripe_denomination
     already_refunded = child_records.refund.sum(:amount_stripe_denomination)
 
-    self.amount_to_ruby(paid_amount - already_refunded, self.currency_code)
+    StripeRecord.amount_to_ruby(paid_amount - already_refunded, self.currency_code)
   end
 
   # sub-hundred units special cases per https://stripe.com/docs/currencies#special-cases
