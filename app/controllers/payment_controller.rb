@@ -17,11 +17,11 @@ class PaymentController < ApplicationController
 
       charges = intents.flat_map { |intent|
         intent.payment_record.child_records.charge.map { |record|
-          available_amount = record.amount_available_for_refund
+          available_amount = record.ruby_amount_available_for_refund
 
           {
             payment_id: record.id,
-            amount: StripeRecord.amount_to_ruby(available_amount, record.currency_code),
+            amount: available_amount,
           }
         }
       }
