@@ -156,11 +156,7 @@ class Api::V0::ApiController < ApplicationController
   end
 
   def delegates
-    delegate_users = UserGroup.roles_of_group_type(
-      UserGroup.group_types[:delegate_regions],
-      includes_params: [:group, { user: [:delegate_roles, :delegate_role_metadata, :active_roles] }],
-    ).flat_map(&:user)
-    paginate json: delegate_users
+    paginate json: UserGroup.delegate_regions.flat_map(&:active_users)
   end
 
   def delegates_search_index
