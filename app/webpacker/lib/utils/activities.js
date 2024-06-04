@@ -123,3 +123,5 @@ export const localizeActivityName = (activity, wcifEvents) => {
 
   return localizeActivityCode(activity.activityCode, activityRound, activityEvent);
 };
+
+export const isOrphanedActivity = (activity, wcifEvents) => getActivityEventId(activity) !== 'other' && findActivityEvent(activity, wcifEvents) === undefined;

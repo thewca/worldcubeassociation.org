@@ -9,7 +9,9 @@ import {
   earliestWithLongestTieBreaker,
   getActivityEventId,
   getActivityRoundId,
-  groupActivities, localizeActivityName,
+  groupActivities,
+  isOrphanedActivity,
+  localizeActivityName,
 } from '../../lib/utils/activities';
 import { getSimpleTimeString } from '../../lib/utils/dates';
 import { toDegrees } from '../../lib/utils/edit-schedule';
@@ -42,8 +44,10 @@ export default function TableView({
     .flatMap((room) => room.activities)
     .toSorted(earliestWithLongestTieBreaker);
 
-  const eventIds = activeEvents.map(({ id }) => id);
-  const visibleActivities = sortedActivities.filter((activity) => ['other', ...eventIds].includes(getActivityEventId(activity)));
+  const activeEventIds = activeEvents.map(({ id }) => id);
+  const visibleActivities = sortedActivities
+    .filter((activity) => ['other', ...activeEventIds].includes(getActivityEventId(activity)))
+    .filter((activity) => !isOrphanedActivity(activity, wcifEvents));
 
   return (
     <>
