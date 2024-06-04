@@ -2,5 +2,5 @@
 <p>The change has been executed by <%= @user_who_made_the_change.name %>.</p>
 <p>Change made:</p>
 <% @changes.each do |change| %>
-  <p><%= change[:changed_parameter] %>: <%= change[:previous_value] %> -> <%= change[:new_value] %></p>
+  <p><%= change['changed_parameter'] %>: <%= change['previous_value'] %> -> <%= change['new_value'] %></p>
 <% end %>

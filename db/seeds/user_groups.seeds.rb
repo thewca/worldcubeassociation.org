@@ -278,4 +278,12 @@ after :groups_metadata_board, :groups_metadata_councils, :groups_metadata_teams_
     is_active: true,
     is_hidden: true,
   )
+
+  # Banned Competitors
+  UserGroup.create!(
+    name: 'Banned Competitors',
+    group_type: :banned_competitors,
+    is_active: true,
+    is_hidden: true,
+  )
 end

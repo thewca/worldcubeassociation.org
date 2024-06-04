@@ -11,6 +11,16 @@ class CompetitionPaymentIntegration < ApplicationRecord
     stripe: 'ConnectedStripeAccount',
   }.freeze
 
+  INTEGRATION_DASHBOARD_URLS = {
+    paypal: "https://www.paypal.com/listing/customers",
+    stripe: "https://dashboard.stripe.com/account/applications",
+  }.freeze
+
+  INTEGRATION_CURRENCY_INFORMATION = {
+    paypal: "https://developer.paypal.com/docs/reports/reference/paypal-supported-currencies/",
+    stripe: "https://docs.stripe.com/currencies#supportedcurrencies",
+  }.freeze
+
   scope :paypal, -> { where(connected_account_type: AVAILABLE_INTEGRATIONS[:paypal]) }
   scope :stripe, -> { where(connected_account_type: AVAILABLE_INTEGRATIONS[:stripe]) }
 

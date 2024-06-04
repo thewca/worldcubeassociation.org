@@ -1348,8 +1348,12 @@ en:
         download_html: "Download all the competition's details as PDF %{here}."
       date: "Date"
       add_to_calendar: "Add to calendar"
+      #context: This is shown as a header above the column that shows competition names
+      name: "Name"
+      location: "Location"
       city: "City"
       venue: "Venue"
+      location_and_venue: "Location and venue"
       address: "Address"
       details: "Details"
       website: "Website"
@@ -1940,10 +1944,10 @@ en:
         use_time_zone: "Use this time zone"
       #context: when displaying the room on the general schedule, we may also display the venue if there are multiple venues
       room_in_venue: "%{room} in %{venue}"
-      venue_information_html:
+      venue_selection_html:
         one: "You are viewing the schedule for the venue %{venue_name}, the sole venue for this competition."
         other: "You are viewing the schedule for the venue %{venue_name}, one of %{count} venues for this competition."
-      venue_information_all: "You are viewing the schedule for all %{venueCount} venues at once."
+      venue_selection_all: "You are viewing the schedule for all %{venueCount} venues at once."
       timezone_message: "The time zone for this venue is %{timezone}."
       timezone_setting: "You are viewing this schedule in the following timezone setting:"
       multiple_timezones_available: "Note that not all venues are in the same time zone -- please be careful!"
@@ -2086,7 +2090,7 @@ en:
       stripe: 'Stripe'
     #context: Setting up and making payments
     payment_setup:
-      stripe_dashboard: 'Stripe Dashboard'
+      external_dashboard: '%{provider} Dashboard'
       account_connected: "You have successfully connected your %{provider} account and can now receive registration payments for this competition."
       account_disconnected_success: "Sucessfully disconnected your %{provider} account."
       account_disconnected_failure: "There was an error with disconnecting the %{provider} account."
@@ -2098,14 +2102,15 @@ en:
       provider_heading: "%{provider} Payments"
       accept_payments_header: "Accept Registration Payments"
       connect_button: "Connect with %{provider}"
-      stripe_payment_info: "In order to accept payments for this competition, you need to connect your own Stripe account with the WCA Stripe account by clicking the button below. If you don't already have your own Stripe account you can still click on the button below and it will guide you through the process."
-      stripe_connect_warning: "Connecting your Stripe account gives the WCA website the ability to create charges, and issue refunds directly on your Stripe account."
-      stripe_disconnect_info: "This competition is set up to accept payments through Stripe. If you want to disconnect your Stripe account, you should first do so from your Stripe dashboard (link below). Please note it will revoke access for all competitions using the account. Before a new Stripe account can be connected, the competition's Delegate must reach out to WCAT to clear the entry."
-      stripe_disconnect_warning: "Keep in mind that disconnecting an account should only be done in exceptional situations, such as the current account being unable to receive payments."
-      paypal_payment_info: "A PayPal business account is required to accept PayPal payments via the competition page. If you don't already have a PayPal business account, you can still click on the button below and it will guide you through the process."
-      paypal_connect_warning: "Connecting your PayPal account gives the WCA website the ability to route payments to you, and issue refunds directly from your PayPal account."
-      paypal_disconnect_info: "This competition is set up to accept payments through Paypal. Note that clicking disconnecting here will not revoke the permissions you have granted to the WCA - this must be done from your PayPal account."
-      paypal_disconnect_warning: "Keep in mind that these account changes should only be done in exceptional situations, such as the current account being unable to receive payments."
+      connect_account_info:
+        stripe: "In order to accept payments for this competition, you need to connect your own Stripe account with the WCA Stripe account by clicking the button below. If you don't already have your own Stripe account you can still click on the button below and it will guide you through the process."
+        paypal: "A PayPal Business account is required to accept PayPal payments via the competition page. If you don't already have a PayPal business account, you can still click on the button below and it will guide you through the process."
+      connect_account_warning:
+        stripe: "Connecting your Stripe account gives the WCA website the ability to create charges, and issue refunds directly on your Stripe account."
+        paypal: "Connecting your PayPal account gives the WCA website the ability to route payments to you, and issue refunds directly on your PayPal account."
+      currently_connected_info: "This competition is set up to accept payments through %{provider}. The Delegate(s) of the competition should contact WCAT to make any changes to connected accounts."
+      before_disconnect_warning: "Disconnecting on this page will make our website forget the connection to your %{provider} account. But your %{provider} dashboard (see link below) may still list the WCA website based on the authorization that you previously granted. Note that revoking authorization in the %{provider} dashboard will also affect any other competition linked to accept payments through this account!"
+      before_disconnect_info: "Keep in mind that disconnecting an account should only be done in exceptional situations, such as the current account being unable to receive payments."
   persons:
     #context: Person search page
     index:
@@ -2461,12 +2466,31 @@ en:
         title: "Competition groups"
         description: "View competition groups of any ongoing competition"
   logo:
-    title: 'WCA Logo'
-    paragraphs:
-      '1': 'The WCA logo was designed by Justin Eastman, in a design contest in January 2005.'
-      '2': 'We liked the logo because of its design, the colours, and the fact that it does not specifically show a 3x3x3 cube.'
-      '3': 'We have three different versions of the logo: a <a href="/files/WCAlogo.svg">full-color version</a>, an <a href="/files/WCAlogo_monochrome.svg">all-black version</a>, and an <a href="/files/WCAlogo_monochrome_white.svg">all-white version</a>.'
-      '4': 'Acceptable usage of the WCA logo is outlined by the <a href="https://documents.worldcubeassociation.org/documents/policies/external/Logo%20Usage.pdf">WCA Logo Usage Policy</a>.'
+    title: "WCA Logo"
+    intro: "The WCA logo was designed by Justin Eastman, in a design contest in January 2005. We liked the logo because of its design, the colours, and the fact that it does not specifically show a 3x3x3 cube."
+    headings:
+      usage_guidelines:
+        title: "Usage Guidelines"
+        paragraph:
+          acceptable_usage: 'Acceptable usage of the WCA logo is outlined in the <a href="https://documents.worldcubeassociation.org/documents/policies/external/Logo%20Usage.pdf">WCA Logo Usage Policy</a>. Please read this document before using the WCA logo in your own projects. Send any additional questions regarding WCA logo usage to the <a href="mailto:marketing@worldcubeassociation.org">WCA Marketing Team</a>.'
+          see_below: "Below are additional style guidelines for correct usage of the WCA logo."
+        color:
+          title: "Color"
+          paragraph: "The WCA logo exists in four color variations. The correct color variant should be used depending on the background color of the medium where the logo is placed."
+          primary:
+            title: "Primary"
+            paragraph: "Use the primary variant whenever possible."
+          mono:
+            title: "Mono"
+            paragraph: "Only use the mono variant when the primary variant is not suitable."
+        logo_only:
+          title: "Logo Only"
+          paragraph: The WCA logo may be used without the logotype, following the same color guidelines above. 
+      download_logo_assets:
+        title: "Download Logo Assets"
+        paragraph: "High resolution PNGs and vector versions of the WCA logo are available for download."
+        accept_terms_and_conditions: 'I have read and accept the <a href="https://documents.worldcubeassociation.org/documents/policies/external/Logo%20Usage.pdf">WCA Logo Usage Policy</a>.'
+        download_button_text: "Download Logo Assets"
   workbook_assistant:
     title: "WCA Workbook Assistant"
     download: "Download WCA Workbook Assistant"

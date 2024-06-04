@@ -3,6 +3,7 @@ import PanelTemplate from '../PanelTemplate';
 import LeaderForms from './LeaderForms';
 import GroupsManager from './GroupsManager';
 import { PANEL_LIST } from '../../../lib/wca-data.js.erb';
+import BannedCompetitorsPage from '../pages/BannedCompetitorsPage';
 
 const sections = [
   {
@@ -14,6 +15,11 @@ const sections = [
     id: PANEL_LIST.leader.groupsManager,
     name: 'Groups Manager',
     component: GroupsManager,
+  },
+  {
+    id: PANEL_LIST.leader.bannedCompetitors,
+    name: 'Banned Competitors',
+    component: BannedCompetitorsPage,
   },
 ];
 

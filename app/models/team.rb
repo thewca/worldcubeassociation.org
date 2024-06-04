@@ -69,6 +69,6 @@ class Team < ApplicationRecord
     # of the freezed variables (which would leak PII)!
     default_options = DEFAULT_SERIALIZE_OPTIONS.deep_dup
     options = default_options.merge(options || {})
-    super(options)
+    super
   end
 end
