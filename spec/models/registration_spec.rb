@@ -192,7 +192,7 @@ RSpec.describe Registration do
 
       it "blocks registrations when zero events are selected" do
         registration = FactoryBot.build(:registration, competition: competition, events: [])
-        expect(registration).to be_invalid_with_errors(registration_competition_events: [I18n.t('registrations.errors.exceeds_event_limit', count: event_limit)])
+        expect(registration).to be_invalid_with_errors(registration_competition_events: [I18n.t('registrations.errors.must_register')])
       end
 
       it "allows registration when all events are selected" do
