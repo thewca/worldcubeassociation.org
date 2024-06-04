@@ -10,7 +10,8 @@ class UserRole < ApplicationRecord
 
   delegate :group_type, to: :group
 
-  scope :active, -> { where(end_date: nil).or(where.not(end_date: ..Date.today)) }
+  scope :active, -> { where(end_date: nil).or(inactive.invert_where) }
+  scope :inactive, -> { where(end_date: ..Date.today) }
 
   UserRoleChange = Struct.new(
     :changed_parameter,

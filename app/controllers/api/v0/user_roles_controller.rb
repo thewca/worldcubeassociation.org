@@ -11,6 +11,38 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     User.where(delegate_to_handle_wca_id_claim: user.id).update_all(delegate_id_to_handle_wca_id_claim: nil, unconfirmed_wca_id: nil)
   end
 
+  private def pre_filtered_user_roles
+    active_record = UserRole
+    is_active = params.key?(:isActive) ? ActiveRecord::Type::Boolean.new.cast(params.require(:isActive)) : nil
+    group_type = params[:groupType]
+    user_id = params[:userId]
+
+    # In next few lines, instead of foo.present? we are using !foo.nil? because foo.present? returns
+    # false if foo is a boolean false but we need to actually check if the boolean is present or not.
+    if !is_active.nil?
+      active_record = is_active ? active_record.active : active_record.inactive
+    end
+    if group_type.present?
+      active_record = active_record.includes(:group).where(group: { group_type: group_type })
+    end
+    if user_id.present?
+      active_record = active_record.where(user_id: user_id)
+    end
+    active_record
+  end
+
+  # Returns a list of roles based on the parameters.
+  def index
+    roles = pre_filtered_user_roles
+
+    # Filter & Sort roles.
+    roles = UserRole.filter_roles(roles, current_user, params)
+    roles = UserRole.sort_roles(roles, params[:sort])
+
+    # Limiting to first 100 elements of roles array to avoid serializing of large array.
+    render json: roles.first(100)
+  end
+
   # Returns a list of roles primarily based on userId.
   def index_for_user
     user_id = params.require(:user_id)
