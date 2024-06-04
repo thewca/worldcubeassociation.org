@@ -69,7 +69,6 @@ export default function TableView({
             date={date}
             timeZone={timeZone}
             groupedActivities={groupedActivitiesForDay}
-            events={activeEvents}
             rounds={activeRounds}
             rooms={activeRooms}
             isExpanded={isExpanded}
@@ -87,7 +86,6 @@ function SingleDayTable({
   date,
   timeZone,
   groupedActivities,
-  events,
   rounds,
   rooms,
   isExpanded,
@@ -137,7 +135,6 @@ function SingleDayTable({
                 key={representativeActivity.id}
                 isExpanded={isExpanded}
                 activityGroup={activityGroup}
-                events={events}
                 round={activityRound}
                 rooms={rooms}
                 timeZone={timeZone}
@@ -179,7 +176,6 @@ function HeaderRow({ isExpanded }) {
 function ActivityRow({
   isExpanded,
   activityGroup,
-  events,
   round,
   rooms,
   timeZone,
@@ -188,7 +184,7 @@ function ActivityRow({
   const representativeActivity = activityGroup[0];
   const { startTime, endTime } = representativeActivity;
 
-  const name = representativeActivity.activityCode.startsWith('other') ? representativeActivity.name : localizeActivityName(representativeActivity, events);
+  const name = representativeActivity.activityCode.startsWith('other') ? representativeActivity.name : localizeActivityName(representativeActivity, wcifEvents);
   const eventId = representativeActivity.activityCode.startsWith('other') ? 'other' : parseActivityCode(representativeActivity.activityCode).eventId;
 
   const activityIds = activityGroup.map((activity) => activity.id);
