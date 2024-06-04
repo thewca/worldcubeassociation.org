@@ -41,7 +41,7 @@ Rails.application.routes.draw do
     post 'users/authenticate-sensitive' => 'users#authenticate_user_for_sensitive_edit'
     delete 'users/sign-out-other' => 'sessions#destroy_other', as: :destroy_other_user_sessions
   end
-  # TODO This can be removed after deployment, this is so we don't have any users error out if they click on pay/refund
+  # TODO: This can be removed after deployment, this is so we don't have any users error out if they click on pay/refund
   # while the deployment happens
   post 'registration/:id/refund/:payment_id' => 'registrations#legacy_refund_payment', as: :registration_payment_refund_legacy
   get 'registration/:id/payment-completion' => 'registrations#payment_completion_legacy', as: :registration_payment_completion_legacy

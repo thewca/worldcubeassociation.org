@@ -676,7 +676,7 @@ class RegistrationsController < ApplicationController
     render json: { client_secret: intent.client_secret }
   end
 
-  # TODO This can be removed after deployment, this is so we don't have any users error out if they click on pay/refund
+  # TODO: This can be removed after deployment, this is so we don't have any users error out if they click on pay/refund
   # while the deployment happens
   def refund_payment_legacy
     registration = Registration.find(params[:id])
