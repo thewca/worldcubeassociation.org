@@ -14,6 +14,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
   private def pre_filtered_user_roles
     active_record = UserRole
     is_active = params.key?(:isActive) ? ActiveRecord::Type::Boolean.new.cast(params.require(:isActive)) : nil
+    is_group_hidden = params.key?(:isGroupHidden) ? ActiveRecord::Type::Boolean.new.cast(params.require(:isGroupHidden)) : nil
     group_type = params[:groupType]
     user_id = params[:userId]
 
@@ -21,6 +22,9 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     # false if foo is a boolean false but we need to actually check if the boolean is present or not.
     if !is_active.nil?
       active_record = is_active ? active_record.active : active_record.inactive
+    end
+    if !is_group_hidden.nil?
+      active_record = active_record.includes(:group).where(group: { is_hidden: is_group_hidden })
     end
     if group_type.present?
       active_record = active_record.includes(:group).where(group: { group_type: group_type })

@@ -153,7 +153,6 @@ class UserRole < ApplicationRecord
   def self.filter_roles_for_parameters(roles, params)
     status = params[:status]
     is_active = params.key?(:isActive) ? ActiveRecord::Type::Boolean.new.cast(params.require(:isActive)) : nil
-    is_group_hidden = params.key?(:isGroupHidden) ? ActiveRecord::Type::Boolean.new.cast(params.require(:isGroupHidden)) : nil
     group_type = params[:groupType]
     is_lead = params.key?(:isLead) ? ActiveRecord::Type::Boolean.new.cast(params.require(:isLead)) : nil
 
@@ -163,7 +162,6 @@ class UserRole < ApplicationRecord
       (
         (!status.nil? && status != role.metadata&.status) ||
         (!is_active.nil? && is_active != role.is_active?) ||
-        (!is_group_hidden.nil? && is_group_hidden != role.group.is_hidden) ||
         (!group_type.nil? && group_type != role.group_type) ||
         (!is_lead.nil? && is_lead != role.is_lead?)
       )

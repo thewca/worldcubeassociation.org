@@ -38,15 +38,15 @@ export default function Regions({ loggedInUserId }) {
   const {
     data: seniorDelegateRoles,
     loading, error,
-  } = useLoadedData(apiV0Urls.userRoles.listOfUser(
-    loggedInUserId,
-    'groupName', // Sort params
+  } = useLoadedData(apiV0Urls.userRoles.list(
     {
+      userId: loggedInUserId,
       isActive: true,
       isGroupHidden: false,
       status: delegateRegionsStatus.senior_delegate,
       groupType: groupTypes.delegate_region,
     },
+    'groupName', // Sort params
   ));
 
   if (loading) return <Loading />;
