@@ -1059,15 +1059,15 @@ en:
       need_dob: "Need a birthdate"
       need_country: "Need a region"
       cannot_be_deleted_and_accepted: "A registration cannot be deleted and accepted at the same time."
-      must_register: "must register for at least one event"
+      must_register: "You must register for at least one event."
       exceeds_event_limit:
-        one: "you must register in exactly 1 event"
-        other: "you must register in less than or equal to %{count} events"
+        one: "You must register in exactly 1 event."
+        other: "You must register for between 1 and %{count} events."
       banned_html: "You are banned. If you believe this is an error, please contact the <a href='mailto:disciplinary@worldcubeassociation.org' target='_blank'>WDC</a>."
       undelete_banned: "is a banned competitor and cannot be undeleted"
       series_more_than_one_accepted: "You can only be accepted for one Series competition at a time."
       can_only_register_for_qualified_events: "You cannot register for events you are not qualified for."
-      cannot_register_without_comment: "You must make a comment. Make sure to read the registration requirements what has to be included (e.g. in a FM simultaneous competition, which location you will compete at)."
+      cannot_register_without_comment: "You must make a comment. Please read the Registration Requirements above to see what must be included (e.g. in an FMC simultaneous competition, which location you will compete at)."
     registration_info_people:
       #context: pluralization of "x first-timer(s)"
       newcomer:
@@ -1764,10 +1764,9 @@ en:
         too_many: "Accepting all these registrations would go over the competitor limit by %{count}"
         no_self_update: "Contact the Organization Team to update your registration."
       register:
-        re-register: "Re-Register"
         success: "You are registered for %{comp_name}"
         error: "Registration failed with error %{error}"
-        early_registration: "Registration is not open yet, but you can still register as a competition organizer or Delegate."
+        early_registration: "Registration is not open yet - you are pre-registering as an organizer/delegate"
         comment: "Additional comments to the organizers"
         until: "You can update your registration until %{date}"
         passed: "You can no longer update your registration"
