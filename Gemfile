@@ -13,6 +13,7 @@ gem 'rails-i18n'
 gem 'i18n-js'
 gem 'activerecord-import'
 gem 'sass-rails'
+gem "sassc-embedded"
 gem 'terser'
 gem 'faraday'
 gem 'faraday-retry'
