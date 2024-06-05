@@ -89,6 +89,14 @@ class ConnectedStripeAccount < ApplicationRecord
     StripeRecord.create_from_api(refund, refund_args, self.account_id, charge_record)
   end
 
+  def account_details
+    stripe_acct = Stripe::Account.retrieve(self.account_id)
+
+    stripe_acct.as_json.slice("email", "country").merge({
+                                                          "business_name" => stripe_acct.business_profile.name,
+                                                        })
+  end
+
   def self.generate_onboarding_link(competition_id)
     client = self.oauth_client
 
