@@ -34,7 +34,7 @@ Rails.application.routes.draw do
     post 'users/authenticate-sensitive' => 'users#authenticate_user_for_sensitive_edit'
     delete 'users/sign-out-other' => 'sessions#destroy_other', as: :destroy_other_user_sessions
   end
-  post 'competitions/:competition_id/refund/:payment_id' => 'registrations#refund_payment', as: :registration_payment_refund
+  post 'competitions/:competition_id/refund/:payment_integration/:payment_id' => 'registrations#refund_payment', as: :registration_payment_refund
   post 'registration/:id/payment-intent/:payment_integration' => 'registrations#load_payment_intent', as: :registration_payment_intent
   get 'competitions/:competition_id/payment-completion/stripe' => 'registrations#payment_completion_stripe', as: :registration_payment_completion_stripe
   post 'competitions/:competition_id/payment-completion/paypal' => 'registrations#payment_completion_paypal', as: :registration_payment_completion_paypal

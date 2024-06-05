@@ -50,6 +50,10 @@ class ConnectedPaypalAccount < ApplicationRecord
     end
   end
 
+  def find_payment_record(record_id)
+    PaypalRecord.capture.find(record_id)
+  end
+
   def issue_refund(capture_record, amount_iso)
     req_payload, refund = PaypalInterface.issue_refund(
       self.paypal_merchant_id,

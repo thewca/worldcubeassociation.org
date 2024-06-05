@@ -745,17 +745,18 @@ class RegistrationsController < ApplicationController
     competition_id = params[:competition_id]
     competition = Competition.find(competition_id)
 
-    payment_account = competition.payment_account_for(:stripe)
-
-    charge = StripeRecord.charge.find(params[:payment_id])
-
-    registration = charge.root_record.payment_intent.holder
-    uses_v2 = registration.is_a? MicroserviceRegistration
+    payment_integration = params[:payment_integration].to_sym
+    payment_account = competition.payment_account_for(payment_integration)
 
     unless payment_account.present?
       flash[:danger] = "You cannot emit refund for this competition anymore. Please use the integration's dashboard to do so."
-      return redirect_to edit_registration_path(registration)
+      return redirect_to competition_registrations_path(competition)
     end
+
+    charge = payment_account.find_payment_record(params[:payment_id])
+
+    registration = charge.root_record.payment_intent.holder
+    uses_v2 = registration.is_a? MicroserviceRegistration
 
     refund_amount_param = params.require(:payment).require(:refund_amount)
     refund_amount = refund_amount_param.to_i

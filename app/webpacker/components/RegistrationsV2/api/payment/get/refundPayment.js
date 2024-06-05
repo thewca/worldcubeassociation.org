@@ -7,7 +7,7 @@ export default async function refundPayment({
   amount,
 }) {
   return fetchJsonOrError(
-    refundPaymentUrl(competitionId, paymentId),
+    refundPaymentUrl(competitionId, 'stripe', paymentId),
     {
       payment: {
         refund_amount: amount,
