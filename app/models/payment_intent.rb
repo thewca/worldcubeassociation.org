@@ -29,7 +29,7 @@ class PaymentIntent < ApplicationRecord
     canceled: 'canceled', # Completion state - the user has indicated that they will no longer attempt to complete payment
   }
 
-  def update_status_and_charges(payment_account, api_intent, action_source, source_datetime = DateTime.current)
+  def update_status_and_payments(payment_account, api_intent, action_source, source_datetime = DateTime.current)
     self.with_lock do
       self.update_status(api_intent)
       self.payment_record.update_status(api_intent)
@@ -49,12 +49,12 @@ class PaymentIntent < ApplicationRecord
           )
         end
 
-        payment_account.capture_charges(self) do |charge|
+        payment_account.retrieve_payments(self) do |payment|
           # Only trigger outer update blocks for charges that are actually successful. This is reasonable
           # because we only ever trigger this block for PIs that are marked "successful" in the first place
-          charge_successful = charge.determine_wca_status == :succeeded
+          charge_successful = payment.determine_wca_status == :succeeded
 
-          yield charge if block_given? && charge_successful
+          yield payment if block_given? && charge_successful
         end
       when :canceled
         # Canceled by the gateway

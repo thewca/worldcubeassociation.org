@@ -98,10 +98,32 @@ module PaypalInterface
     response.body
   end
 
+  def self.retrieve_capture(merchant_id, capture_id)
+    url = "/v2/payments/captures/#{capture_id}"
+
+    response = paypal_connection.get(url) do |req|
+      req.headers['PayPal-Partner-Attribution-Id'] = AppSecrets.PAYPAL_ATTRIBUTION_CODE
+      req.headers['PayPal-Auth-Assertion'] = paypal_auth_assertion(merchant_id)
+    end
+
+    response.body
+  end
+
   def self.capture_payment(merchant_id, order_id)
     url = "/v2/checkout/orders/#{order_id}/capture"
 
     response = paypal_connection.post(url) do |req|
+      req.headers['PayPal-Partner-Attribution-Id'] = AppSecrets.PAYPAL_ATTRIBUTION_CODE
+      req.headers['PayPal-Auth-Assertion'] = paypal_auth_assertion(merchant_id)
+    end
+
+    response.body
+  end
+
+  def self.retrieve_refund(merchant_id, refund_id)
+    url = "/v2/payments/refunds/#{refund_id}"
+
+    response = paypal_connection.get(url) do |req|
       req.headers['PayPal-Partner-Attribution-Id'] = AppSecrets.PAYPAL_ATTRIBUTION_CODE
       req.headers['PayPal-Auth-Assertion'] = paypal_auth_assertion(merchant_id)
     end

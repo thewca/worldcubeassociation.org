@@ -69,6 +69,19 @@ class PaypalRecord < ApplicationRecord
     )
   end
 
+  def retrieve_paypal
+    case self.paypal_record_type
+    when 'paypal_order'
+      PaypalInterface.retrieve_order(self.merchant_id, self.paypal_id)
+    when 'capture'
+      PaypalInterface.retrieve_capture(self.merchant_id, self.paypal_id)
+    when 'refund'
+      PaypalInterface.retrieve_refund(self.merchant_id, self.paypal_id)
+    end
+  end
+
+  alias_method :retrieve_remote, :retrieve_paypal
+
   def determine_wca_status
     result = WCA_TO_PAYPAL_STATUS_MAP.find { |key, values| values.include?(self.paypal_status) }
     result&.first || raise("No associated wca_status for paypal_status: #{self.paypal_status} - our tests should prevent this from happening!")

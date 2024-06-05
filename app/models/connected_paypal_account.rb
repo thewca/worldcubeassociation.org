@@ -25,8 +25,8 @@ class ConnectedPaypalAccount < ApplicationRecord
     )
   end
 
-  def capture_charges(payment_intent)
-    captured_order = PaypalInterface.capture_payment(self.paypal_merchant_id, payment_intent.payment_record.paypal_id)
+  def retrieve_payments(payment_intent)
+    captured_order = PaypalInterface.retrieve_order(self.paypal_merchant_id, payment_intent.payment_record.paypal_id)
     raw_captures = captured_order['purchase_units'].first['payments']['captures']
 
     raw_captures.map do |capture|

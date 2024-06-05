@@ -1252,6 +1252,7 @@ en:
         paypal_failed: "Please check the PayPal order."
         paypal_canceled: "PayPal reported that the order was manually canceled. Please try again."
         stripe_not_found: "Stripe reported back a transaction ID that couldn't be found."
+        stripe_intent_not_found: "Stripe reported back a transaction ID for which we don't have an attempted payment on file."
         stripe_secret_invalid: "Stripe reported back a transaction secret that doesn't match our records."
         stripe_not_an_intent: "Stripe reported back a transaction ID that is not actually a payment intent."
         payment_reset: "The payment was rejected by Stripe."
@@ -2456,7 +2457,7 @@ en:
             paragraph: "Only use the mono variant when the primary variant is not suitable."
         logo_only:
           title: "Logo Only"
-          paragraph: The WCA logo may be used without the logotype, following the same color guidelines above. 
+          paragraph: The WCA logo may be used without the logotype, following the same color guidelines above.
       download_logo_assets:
         title: "Download Logo Assets"
         paragraph: "High resolution PNGs and vector versions of the WCA logo are available for download."
