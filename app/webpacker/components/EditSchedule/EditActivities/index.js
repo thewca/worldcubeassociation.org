@@ -46,7 +46,7 @@ import { friendlyTimezoneName } from '../../../lib/wca-data.js.erb';
 import {
   activityToFcTitle,
   buildPartialActivityFromCode,
-  defaultDurationFromActivityCode,
+  defaultDurationFromActivityCode, FC_ACTIVITY_ATTACHMENT,
   fcEventToActivityAndDates,
   luxonToWcifIso,
 } from '../../../lib/utils/edit-schedule';
@@ -114,7 +114,7 @@ function EditActivities({
         start: activity.startTime,
         end: activity.endTime,
         extendedProps: {
-          activity,
+          [FC_ACTIVITY_ATTACHMENT]: activity,
           matchCount,
         },
       };
@@ -139,7 +139,7 @@ function EditActivities({
           title: activityToFcTitle(partialActivity),
           duration: `00:${defaultDuration.toString().padStart(2, '0')}:00`,
           extendedProps: {
-            activity: partialActivity,
+            [FC_ACTIVITY_ATTACHMENT]: partialActivity,
           },
         };
       },
@@ -150,6 +150,9 @@ function EditActivities({
 
   const removeIfOverDropzone = ({ event: fcEvent, jsEvent }) => {
     if (!dropToDeleteRef.current) return;
+
+    // Don't bother trying to delete an activity that hasn't even been added yet
+    if (!fcEvent.extendedProps[FC_ACTIVITY_ATTACHMENT]?.id) return;
 
     const elem = dropToDeleteRef.current;
     const rect = elem.getBoundingClientRect();
@@ -166,7 +169,7 @@ function EditActivities({
         && jsEvent.pageY <= bottom
     ) {
       const {
-        activity: {
+        [FC_ACTIVITY_ATTACHMENT]: {
           id: activityId,
           name: activityName,
         },
@@ -174,6 +177,7 @@ function EditActivities({
       } = fcEvent.extendedProps;
 
       const matchText = `all ${matchCount + 1} copies of `;
+
       confirm({
         content: `Are you sure you want to delete ${shouldUpdateMatches && matchCount > 1 ? matchText : ''}the event ${activityName}? THIS ACTION CANNOT BE UNDONE!`,
       }).then(() => {
@@ -193,7 +197,7 @@ function EditActivities({
     delta,
     view: { calendar },
   }) => {
-    const { activity: { id: activityId } } = fcEvent.extendedProps;
+    const { [FC_ACTIVITY_ATTACHMENT]: { id: activityId } } = fcEvent.extendedProps;
 
     const duration = toLuxonDuration(delta, calendar);
     const deltaIso = duration.toISO();
@@ -207,7 +211,7 @@ function EditActivities({
     endDelta,
     view: { calendar },
   }) => {
-    const { activity: { id: activityId } } = fcEvent.extendedProps;
+    const { [FC_ACTIVITY_ATTACHMENT]: { id: activityId } } = fcEvent.extendedProps;
 
     const startScaleDuration = toLuxonDuration(startDelta, calendar);
     const startScaleIso = startScaleDuration.toISO();

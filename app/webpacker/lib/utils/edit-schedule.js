@@ -150,6 +150,8 @@ export const buildPartialActivityFromCode = (
   };
 };
 
+export const FC_ACTIVITY_ATTACHMENT = 'activityAttachment';
+
 export function fcEventToActivityAndDates(fcEvent, calendar) {
   const eventStartLuxon = toLuxonDateTime(fcEvent.start, calendar);
   const eventEndLuxon = toLuxonDateTime(fcEvent.end, calendar);
@@ -157,7 +159,7 @@ export function fcEventToActivityAndDates(fcEvent, calendar) {
   const utcStartIso = luxonToWcifIso(eventStartLuxon);
   const utcEndIso = luxonToWcifIso(eventEndLuxon);
 
-  const { activity: attachedActivity } = fcEvent.extendedProps;
+  const { [FC_ACTIVITY_ATTACHMENT]: attachedActivity } = fcEvent.extendedProps;
   const partialActivity = buildPartialActivityFromCode(attachedActivity.activityCode);
 
   const activity = {
