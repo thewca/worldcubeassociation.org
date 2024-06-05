@@ -20,8 +20,8 @@ class RegistrationsController < ApplicationController
   end
 
   before_action -> { redirect_to_root_unless_user(:can_manage_competition?, competition_from_params) },
-                except: [:create, :index, :psych_sheet, :psych_sheet_event, :register, :update, :destroy,
-                         :payment_completion_stripe, :payment_completion_paypal, :load_payment_intent, :stripe_webhook, :payment_denomination]
+                except: [:create, :index, :psych_sheet, :psych_sheet_event, :register, :update, :destroy, :payment_denomination,
+                         :payment_completion_stripe, :payment_completion_paypal, :load_payment_intent, :stripe_webhook, :paypal_payment_capture]
 
   before_action :competition_must_be_using_wca_registration!, except: [:import, :do_import, :add, :do_add, :index, :psych_sheet, :psych_sheet_event, :stripe_webhook, :payment_denomination]
   private def competition_must_be_using_wca_registration!
@@ -567,6 +567,17 @@ class RegistrationsController < ApplicationController
     head :ok
   end
 
+  def paypal_payment_capture
+    return head :forbidden if PaypalInterface.paypal_disabled?
+
+    paypal_account = competition_from_params.payment_account_for(:paypal)
+
+    order_id = params.require(:orderID)
+    raw_capture = PaypalInterface.capture_payment(paypal_account.paypal_merchant_id, order_id)
+
+    render json: raw_capture
+  end
+
   def payment_completion_stripe
     competition_id = params.require(:competition_id)
 
@@ -597,18 +608,17 @@ class RegistrationsController < ApplicationController
 
     competition_id = params.require(:competition_id)
 
-    # Provided by PayPal as part of the payload in the success hook of their JS SDK
-    order_id = params.require(:orderID)
+    order_id = params.require(:order_id)
     stored_record = PaypalRecord.find_by(paypal_id: order_id)
 
     unless stored_record.paypal_order?
       flash[:error] = t("registrations.payment_form.errors.paypal.not_an_order")
-      return render json: { redirect: competition_register_url(competition_id) }
+      return redirect_to competition_register_path(competition_id)
     end
 
     handle_payment_completion(stored_record)
 
-    render json: { redirect: competition_register_url(competition_id) }
+    redirect_to competition_register_path(competition_id)
   end
 
   private def handle_payment_completion(stored_record)
@@ -617,7 +627,7 @@ class RegistrationsController < ApplicationController
     competition_id = params[:competition_id]
     competition = Competition.find(competition_id)
 
-    payment_provider = CompetitionPaymentIntegration::INTEGRATION_RECORD_TYPES.invert[stored_record.class]
+    payment_provider = CompetitionPaymentIntegration::INTEGRATION_RECORD_TYPES.invert[stored_record.class.name]
     payment_account = competition.payment_account_for(payment_provider.to_sym)
 
     stored_intent = stored_record.payment_intent

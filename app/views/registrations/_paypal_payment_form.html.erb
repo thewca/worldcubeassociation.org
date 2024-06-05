@@ -115,17 +115,18 @@
         // Finalize the transaction on the server after payer approval
         onApprove: (data, actions) => {
           return wrapAjaxPromise('capture-paypal-order', {
-            url: '<%= registration_payment_completion_paypal_path(@registration) %>',
+            url: '<%= registration_paypal_payment_capture_path(@competition) %>',
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             data: JSON.stringify(data),
-        })
-          .then((orderData) => {
-            toggleSaving(false);
-
-            actions.redirect(orderData.redirect);
           })
-          .catch(handleAjaxError);
+            .then(({ id: orderId }) => {
+              toggleSaving(false);
+
+              const paymentCompletionUrl = `<%= CGI.unescape(registration_payment_completion_paypal_url(@competition, order_id: "${orderId}")) %>`
+              actions.redirect(paymentCompletionUrl);
+            })
+            .catch(handleAjaxError);
         },
 
         onError: (err) => handlePaypalError(err, false),
