@@ -26,10 +26,6 @@ class User < ApplicationRecord
   has_many :active_roles, -> { active }, class_name: "UserRole"
   has_many :delegate_role_metadata, through: :active_roles, source: :metadata, source_type: "RolesMetadataDelegateRegions"
   has_many :delegate_roles, -> { includes(:group, :metadata) }, through: :delegate_role_metadata, source: :user_role, class_name: "UserRole"
-  has_many :team_members, dependent: :destroy
-  has_many :teams, -> { distinct }, through: :team_members
-  has_many :current_team_members, -> { current }, class_name: "TeamMember"
-  has_many :current_teams, -> { distinct }, through: :current_team_members, source: :team
   has_many :confirmed_users_claiming_wca_id, -> { confirmed_email }, foreign_key: "delegate_id_to_handle_wca_id_claim", class_name: "User"
   has_many :oauth_applications, class_name: 'Doorkeeper::Application', as: :owner
   has_many :oauth_access_grants, class_name: 'Doorkeeper::AccessGrant', foreign_key: :resource_owner_id
@@ -1279,8 +1275,7 @@ class User < ApplicationRecord
   # These includes any teams, organizers, delegates
   # Note: Someone can Delegate a competition without ever being a Delegate.
   def is_special_account?
-    self.teams.any? ||
-      self.roles.any? ||
+    self.roles.any? ||
       !self.organized_competitions.empty? ||
       !delegated_competitions.empty? ||
       !competitions_announced.empty? ||

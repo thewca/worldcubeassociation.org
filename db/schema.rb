@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_05_20_170239) do
+ActiveRecord::Schema[7.1].define(version: 2024_06_04_023859) do
   create_table "Competitions", id: { type: :string, limit: 32, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", limit: 50, default: "", null: false
     t.string "cityName", limit: 50, default: "", null: false
@@ -1138,26 +1138,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_20_170239) do
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
     t.index ["stripe_record_id"], name: "index_stripe_webhook_events_on_stripe_record_id"
-  end
-
-  create_table "team_members", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
-    t.integer "team_id", null: false
-    t.integer "user_id", null: false
-    t.date "start_date", null: false
-    t.date "end_date"
-    t.boolean "team_leader", default: false, null: false
-    t.datetime "created_at", precision: nil, null: false
-    t.datetime "updated_at", precision: nil, null: false
-    t.boolean "team_senior_member", default: false, null: false
-  end
-
-  create_table "teams", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
-    t.string "friendly_id"
-    t.datetime "created_at", precision: nil, null: false
-    t.datetime "updated_at", precision: nil, null: false
-    t.string "email"
-    t.boolean "hidden", default: false, null: false
-    t.index ["friendly_id"], name: "index_teams_on_friendly_id"
   end
 
   create_table "uploaded_jsons", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|

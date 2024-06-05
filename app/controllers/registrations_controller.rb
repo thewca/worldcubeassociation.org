@@ -558,26 +558,32 @@ class RegistrationsController < ApplicationController
   end
 
   def payment_completion
-    registration = Registration.includes(:competition).find(params[:id])
-    @competition = registration.competition
-
     # Provided by Stripe upon redirect when the "PaymentElement" workflow is completed
     intent_id = params[:payment_intent]
     intent_secret = params[:payment_intent_client_secret]
+    competition_id = params[:competition_id]
 
     # We expect that the record here is a top-level PaymentIntent in Stripe's API model
     stored_record = StripeRecord.find_by(stripe_id: intent_id)
 
+    unless stored_record.present?
+      flash[:error] = t("registrations.payment_form.errors.stripe_not_found")
+      return redirect_to competition_register_path(competition_id)
+    end
+
     unless stored_record.payment_intent?
       flash[:error] = t("registrations.payment_form.errors.stripe_not_an_intent")
-      return redirect_to competition_register_path(@competition)
+      return redirect_to competition_register_path(competition_id)
     end
 
     stored_intent = stored_record.payment_intent
 
+    registration = stored_intent.holder
+    uses_v2 = registration.is_a? MicroserviceRegistration
+
     unless stored_intent.client_secret == intent_secret
       flash[:error] = t("registrations.payment_form.errors.stripe_secret_invalid")
-      return redirect_to competition_register_path(@competition)
+      return redirect_to competition_register_path(competition_id)
     end
 
     # No need to create a new intent here. We can just query the stored intent from Stripe directly.
@@ -585,18 +591,27 @@ class RegistrationsController < ApplicationController
 
     unless stripe_intent.present?
       flash[:error] = t("registrations.payment_form.errors.stripe_not_found")
-      return redirect_to competition_register_path(@competition)
+      return redirect_to competition_register_path(competition_id)
     end
 
     stored_intent.update_status_and_charges(stripe_intent, current_user) do |charge_transaction|
       ruby_money = charge_transaction.money_amount
 
-      registration.record_payment(
-        ruby_money.cents,
-        ruby_money.currency.iso_code,
-        charge_transaction,
-        current_user.id,
-      )
+      if uses_v2
+        begin
+          Microservices::Registrations.update_registration_payment("#{competition_id}-#{registration.user.id}", charge_transaction.id, ruby_money.cents, ruby_money.currency.iso_code, stripe_intent.status)
+        rescue Faraday::Error
+          flash[:error] = t("registrations.payment_form.errors.registration_unreachable")
+          return redirect_to competition_register_path(competition_id)
+        end
+      else
+        registration.record_payment(
+          ruby_money.cents,
+          ruby_money.currency.iso_code,
+          charge_transaction,
+          current_user.id,
+        )
+      end
 
       # Running in sync mode, so if the code reaches this point we're reasonably confident that the time the Stripe payment
       #   succeeded matches the time that the information reached our database. There are cases for async webhooks where
@@ -623,7 +638,7 @@ class RegistrationsController < ApplicationController
       flash[:error] = "Invalid PaymentIntent status"
     end
 
-    redirect_to competition_register_path(@competition)
+    redirect_to competition_register_path(competition_id)
   end
 
   # This method implements the PaymentElements workflow described at:
@@ -661,21 +676,38 @@ class RegistrationsController < ApplicationController
     render json: { client_secret: intent.client_secret }
   end
 
-  def refund_payment
+  # TODO: This can be removed after deployment, this is so we don't have any users error out if they click on pay/refund
+  # while the deployment happens
+  def payment_refund_legacy
     registration = Registration.find(params[:id])
-    stripe_integration = registration.competition.payment_account_for(:stripe)
+    payment = RegistrationPayment.find(params[:payment_id])
+    redirect_to action: :refund_payment, competition_id: registration.competition_id, payment_id: payment.receipt_id, params: params.permit(:payment)
+  end
+
+  def payment_completion_legacy
+    registration = Registration.find(params[:id])
+    redirect_to action: :payment_completion, competition_id: registration.competition_id, params: params.permit(:payment_intent, :payment_intent_client_secret)
+  end
+
+  def refund_payment
+    competition_id = params[:competition_id]
+    competition = Competition.find(competition_id)
+    stripe_integration = competition.payment_account_for(:stripe)
+
+    charge = StripeRecord.charge.find(params[:payment_id])
+
+    registration = charge.root_record.payment_intent.holder
+    uses_v2 = registration.is_a? MicroserviceRegistration
 
     unless stripe_integration.present?
       flash[:danger] = "You cannot emit refund for this competition anymore. Please use your Stripe dashboard to do so."
       return redirect_to edit_registration_path(registration)
     end
 
-    payment = RegistrationPayment.find(params[:payment_id])
-
     refund_amount_param = params.require(:payment).require(:refund_amount)
     refund_amount = refund_amount_param.to_i
 
-    if refund_amount > payment.amount_available_for_refund
+    if refund_amount > charge.ruby_amount_available_for_refund
       flash[:danger] = "You are not allowed to refund more than the competitor has paid."
       return redirect_to edit_registration_path(registration)
     end
@@ -685,25 +717,28 @@ class RegistrationsController < ApplicationController
       return redirect_to edit_registration_path(registration)
     end
 
-    # Backwards compatibility: We may at some point try to record a refund for a payment that was
-    #   - created before the introduction of receipts
-    #   - but refunded after the new receipts feature was introduced. Fall back to the old stripe_charge_id if that happens.
-    charge_id = payment.receipt&.stripe_id || payment.stripe_charge_id
-
-    refund_receipt = stripe_integration.issue_refund(charge_id, refund_amount)
+    refund_receipt = stripe_integration.issue_refund(charge.stripe_id, refund_amount)
 
     # Should be the same as `refund_amount`, but by double-converting from the Stripe object
     # we can also double-check that they're on the same page as we are (to be _really_ sure!)
     # FIXME: This method only exists because we silently assume it's Stripe
     ruby_money = refund_receipt.money_amount
 
-    registration.record_refund(
-      ruby_money.cents,
-      ruby_money.currency.iso_code,
-      refund_receipt,
-      payment.id,
-      current_user.id,
-    )
+    if uses_v2
+      begin
+        Microservices::Registrations.update_registration_payment(attendee_id, refund_receipt.id, refund_amount, currency_iso, "refund")
+      rescue Faraday::Error
+        flash[:error] = 'Registration Service is not reachable'
+      end
+    else
+      registration.record_refund(
+        ruby_money.cents,
+        ruby_money.currency.iso_code,
+        refund_receipt,
+        charge.registration_payment.id,
+        current_user.id,
+      )
+    end
 
     flash[:success] = 'Payment was refunded'
     redirect_to edit_registration_path(registration)

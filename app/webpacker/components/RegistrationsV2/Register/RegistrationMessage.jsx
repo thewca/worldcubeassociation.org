@@ -11,12 +11,19 @@ export const setMessage = (key, type, params) => ({
   },
 });
 
+export const clearMessage = () => ({
+  payload: {
+    message: null,
+  },
+});
+
 export default function RegistrationMessage({ parentRef }) {
   const { message } = useStore();
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (message?.key) {
+    // Don't clear negative Messages automatically
+    if (message?.key && message.type !== 'negative') {
       setTimeout(() => {
         dispatch({ payload: { message: null } });
       }, 4000);
