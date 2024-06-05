@@ -699,9 +699,11 @@ class RegistrationsController < ApplicationController
     registration = charge.root_record.payment_intent.holder
     uses_v2 = registration.is_a? MicroserviceRegistration
 
+    redirect_path = uses_v2 ? edit_registration_v2_path(competition_id, registration.user_id) : edit_registration_path(registration)
+
     unless stripe_integration.present?
       flash[:danger] = "You cannot emit refund for this competition anymore. Please use your Stripe dashboard to do so."
-      return redirect_to edit_registration_path(registration)
+      return redirect_to redirect_path
     end
 
     refund_amount_param = params.require(:payment).require(:refund_amount)
@@ -709,12 +711,12 @@ class RegistrationsController < ApplicationController
 
     if refund_amount > charge.ruby_amount_available_for_refund
       flash[:danger] = "You are not allowed to refund more than the competitor has paid."
-      return redirect_to edit_registration_path(registration)
+      return redirect_to redirect_path
     end
 
     if refund_amount < 0
       flash[:danger] = "The refund amount must be greater than zero."
-      return redirect_to edit_registration_path(registration)
+      return redirect_to redirect_path
     end
 
     refund_receipt = stripe_integration.issue_refund(charge.stripe_id, refund_amount)
@@ -741,7 +743,7 @@ class RegistrationsController < ApplicationController
     end
 
     flash[:success] = 'Payment was refunded'
-    redirect_to edit_registration_path(registration)
+    redirect_to redirect_path
   end
 
   def create
