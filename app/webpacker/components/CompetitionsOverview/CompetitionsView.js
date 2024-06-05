@@ -43,10 +43,7 @@ function CompetitionsView({ canViewAdminDetails = false }) {
   );
 
   // Need to make sure that people don't "hijack" admin mode by manipulating the URL
-  const shouldShowAdminDetails = useMemo(
-    () => canViewAdminDetails && filterState.shouldShowAdminDetails,
-    [canViewAdminDetails, filterState.shouldShowAdminDetails],
-  );
+  const shouldShowAdminDetails = canViewAdminDetails && filterState.shouldShowAdminDetails;
 
   useEffect(
     () => updateSearchParams(searchParams, filterState, displayMode),

@@ -12,10 +12,7 @@ export function calculateQueryKey(filterState, canViewAdminDetails = false) {
     timeKey = `start${filterState.customStartDate}-end${filterState.customEndDate}`;
   }
 
-  let adminStatus = filterState?.adminStatus;
-  if (!canViewAdminDetails) {
-    adminStatus = null;
-  }
+  const adminStatus = canViewAdminDetails ? filterState?.adminStatus : null
 
   return {
     timeOrder: filterState?.timeOrder,
