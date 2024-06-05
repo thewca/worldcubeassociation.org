@@ -21,6 +21,8 @@ function CompetitionsFilters({
   setDisplayMode,
   shouldShowRegStatus,
   setShouldShowRegStatus,
+  shouldShowAdminDetails,
+  canViewAdminDetails,
 }) {
   return (
     <Form className="competition-select" id="competition-query-form" acceptCharset="UTF-8">
@@ -58,9 +60,19 @@ function CompetitionsFilters({
           dispatchFilter={dispatchFilter}
           shouldShowRegStatus={shouldShowRegStatus}
           setShouldShowRegStatus={setShouldShowRegStatus}
+          shouldShowAdminDetails={shouldShowAdminDetails}
+          canViewAdminDetails={canViewAdminDetails}
           displayMode={displayMode}
         />
       </Form.Group>
+
+      {canViewAdminDetails && shouldShowAdminDetails && (
+        <Form.Group>
+          <Form.Field>
+            <AdminStatusButtonGroup filterState={filterState} dispatchFilter={dispatchFilter} />
+          </Form.Field>
+        </Form.Group>
+      )}
 
       <Form.Group>
         <ResetFilters dispatchFilter={dispatchFilter} />
@@ -286,6 +298,53 @@ function TimeOrderButtonGroup({ filterState, dispatchFilter }) {
   );
 }
 
+function AdminStatusButtonGroup({ filterState, dispatchFilter }) {
+  return (
+    <>
+      <label htmlFor="admin-status">{I18n.t('competitions.index.admin_status')}</label>
+      <Button.Group id="admin-status">
+
+        <Button
+          primary
+          type="button"
+          name="admin-status"
+          id="all"
+          value="all"
+          onClick={() => dispatchFilter({ adminStatus: 'all' })}
+          active={filterState.adminStatus === 'all'}
+        >
+          <span className="caption">{I18n.t('competitions.index.status_flags.all')}</span>
+        </Button>
+
+        <Button
+          color="yellow"
+          type="button"
+          name="admin-status"
+          id="warning"
+          value="warning"
+          onClick={() => dispatchFilter({ adminStatus: 'warning' })}
+          active={filterState.adminStatus === 'warning'}
+        >
+          <span className="caption">{I18n.t('competitions.index.status_flags.warning')}</span>
+        </Button>
+
+        <Button
+          negative
+          type="button"
+          name="admin-status"
+          id="danger"
+          value="danger"
+          onClick={() => dispatchFilter({ adminStatus: 'danger' })}
+          active={filterState.adminStatus === 'danger'}
+        >
+          <span className="caption">{I18n.t('competitions.index.status_flags.danger')}</span>
+        </Button>
+
+      </Button.Group>
+    </>
+  );
+}
+
 function PastCompYearSelector({ filterState, dispatchFilter }) {
   return (
     <Button
@@ -391,6 +450,8 @@ function CompDisplayCheckboxes({
   dispatchFilter,
   shouldShowRegStatus,
   setShouldShowRegStatus,
+  shouldShowAdminDetails,
+  canViewAdminDetails,
   displayMode,
 }) {
   return (
@@ -408,17 +469,32 @@ function CompDisplayCheckboxes({
       </div>
 
       {
-        displayMode === 'list'
-        && (
-          <div id="registration-status" className="registration-status-selector">
-            <Form.Checkbox
-              label={I18n.t('competitions.index.show_registration_status')}
-              name="show_registration_status"
-              id="show_registration_status"
-              checked={shouldShowRegStatus}
-              onChange={() => setShouldShowRegStatus(!shouldShowRegStatus)}
-            />
-          </div>
+        displayMode === 'list' && (
+          <>
+            <div id="registration-status" className="registration-status-selector">
+              <Form.Checkbox
+                label={I18n.t('competitions.index.show_registration_status')}
+                name="show_registration_status"
+                id="show_registration_status"
+                checked={shouldShowRegStatus}
+                onChange={() => setShouldShowRegStatus(!shouldShowRegStatus)}
+              />
+            </div>
+            {canViewAdminDetails && (
+              <div id="admin-data" className="admin-data-selector">
+                <Form.Checkbox
+                  toggle
+                  label={I18n.t('competitions.index.use_admin_view')}
+                  name="show_admin_data"
+                  id="show_admin_data"
+                  checked={shouldShowAdminDetails}
+                  onChange={() => dispatchFilter(
+                    { shouldShowAdminDetails: !shouldShowAdminDetails },
+                  )}
+                />
+              </div>
+            )}
+          </>
         )
       }
     </>

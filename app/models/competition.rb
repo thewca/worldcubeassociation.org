@@ -53,6 +53,7 @@ class Competition < ApplicationRecord
   scope :not_visible, -> { where(showAtAll: false) }
   scope :over, -> { where("results_posted_at IS NOT NULL OR end_date < ?", Date.today) }
   scope :not_over, -> { where("results_posted_at IS NULL AND end_date >= ?", Date.today) }
+  scope :end_date_passed_since, lambda { |num_days| where(end_date: ...(num_days.days.ago)) }
   scope :belongs_to_region, lambda { |region_id|
     joins(:country).where(
       "countryId = :region_id OR Countries.continentId = :region_id", region_id: region_id
@@ -84,6 +85,7 @@ class Competition < ApplicationRecord
   scope :confirmed, -> { where.not(confirmed_at: nil) }
   scope :not_confirmed, -> { where(confirmed_at: nil) }
   scope :pending_posting, -> { where.not(results_submitted_at: nil).where(results_posted_at: nil) }
+  scope :pending_report_or_results_posting, -> { includes(:delegate_report).where(delegate_report: { posted_at: nil }).or(where(results_posted_at: nil)) }
 
   enum guest_entry_status: {
     unclear: 0,
@@ -1113,8 +1115,8 @@ class Competition < ApplicationRecord
     confirmed? && created_at.present? && created_at > Date.new(2018, 10, 20)
   end
 
-  def pending_results_or_report(days)
-    self.end_date < (Date.today - days) && (self.delegate_report.posted_at.nil? || results_posted_at.nil?)
+  def pending_results_or_report(num_days)
+    self.end_date < num_days.days.ago && (self.delegate_report.posted_at.nil? || results_posted_at.nil?)
   end
 
   # does the competition have this field (regardless of whether it's a date or blank)
@@ -1740,6 +1742,21 @@ class Competition < ApplicationRecord
         raise WcaExceptions::BadApiParameter.new("Invalid announced date: '#{params[:announced_after]}'")
       end
       competitions = competitions.where("announced_at > ?", announced_date)
+    end
+
+    if params[:admin_status].present?
+      admin_status = params[:admin_status].to_s
+
+      unless ["danger", "warning"].include?(admin_status)
+        raise WcaExceptions::BadApiParameter.new("Invalid admin status: '#{params[:admin_status]}'")
+      end
+
+      num_days = {
+        warning: Competition::REPORT_AND_RESULTS_DAYS_WARNING,
+        danger: Competition::REPORT_AND_RESULTS_DAYS_DANGER,
+      }[admin_status.to_sym]
+
+      competitions = competitions.end_date_passed_since(num_days).pending_report_or_results_posting
     end
 
     query&.split&.each do |part|

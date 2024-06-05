@@ -1358,6 +1358,16 @@ en:
       address: "Address"
       details: "Details"
       website: "Website"
+      name_and_location: "Name and location"
+      delegates: "Delegate(s)"
+      announced: "Announced"
+      report_posted: "Report posted"
+      results_submitted: "Results submitted"
+      relative_days:
+        before: "%{amount_of_days} before"
+        after: "%{amount_of_days} after"
+      pending: "Pending"
+      submitted_by_other: "Submitted by other"
       #context: Used to display an explicit tag when the competition is cancelled
       display_name: "[Cancelled] %{name}"
       #context: Pluralization of the "Organizer" label for a competition form
@@ -1460,6 +1470,11 @@ en:
       custom: "Custom"
       by_announcement: "By announcement"
       sort_by_announcement: "Sort by announcement"
+      admin_status: "Admin status"
+      status_flags:
+        all: "All"
+        warning: "Warning"
+        danger: "Danger"
       from_date: "From"
       to_date: "To"
       reset_filters: "Reset Filters"
@@ -1471,6 +1486,7 @@ en:
       no_delegates_found: "No Delegates found."
       show_cancelled: "Show cancelled competitions"
       show_registration_status: "Show registration status icon"
+      use_admin_view: "Use admin view"
       #context: titles for the competitions list
       titles:
         in_progress: "Competitions in progress"
@@ -1479,6 +1495,7 @@ en:
         past_all: "Past competitions from all years"
         recent: "Recent competitions (last %{count} days)"
         upcoming: "Upcoming competitions"
+        ongoing_and_upcoming: "Ongoing and upcoming competitions"
         custom: "Competitions in the selected period of time"
         by_announcement: "Competitions sorted by announcement date, newest on top"
       no_access: "You don't have access to this page!"
