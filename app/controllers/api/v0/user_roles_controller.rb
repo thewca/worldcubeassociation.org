@@ -16,6 +16,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     is_active = params.key?(:isActive) ? ActiveRecord::Type::Boolean.new.cast(params.require(:isActive)) : nil
     is_group_hidden = params.key?(:isGroupHidden) ? ActiveRecord::Type::Boolean.new.cast(params.require(:isGroupHidden)) : nil
     group_type = params[:groupType]
+    group_id = params[:groupId]
     user_id = params[:userId]
 
     # In next few lines, instead of foo.present? we are using !foo.nil? because foo.present? returns
@@ -28,6 +29,9 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     end
     if group_type.present?
       active_record = active_record.includes(:group).where(group: { group_type: group_type })
+    end
+    if group_id.present?
+      active_record = active_record.where(group_id: group_id)
     end
     if user_id.present?
       active_record = active_record.where(user_id: user_id)

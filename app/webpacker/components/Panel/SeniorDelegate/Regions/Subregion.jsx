@@ -49,13 +49,13 @@ const canDemote = (role) => (
 export default function Subregion({ title, groupId }) {
   const {
     data: delegates, loading, error: delegatesFetchError, sync,
-  } = useLoadedData(apiV0Urls.userRoles.listOfGroup(
-    groupId,
-    'location,name',
+  } = useLoadedData(apiV0Urls.userRoles.list(
     {
+      groupId,
       isActive: true,
       isLead: false,
     },
+    'location,name',
   ));
   const [openModalType, setOpenModalType] = useState(null);
   const [delegateToChange, setDelegateToChange] = useState(null);
