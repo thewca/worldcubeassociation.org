@@ -225,8 +225,8 @@ module ApplicationHelper
     "#{humanized_money_with_symbol(money)} (#{money.currency.name})"
   end
 
-  def stripe_to_human_readable(stripe_amount, currency_code)
-    format_money(Money.new(StripeRecord.amount_to_ruby(stripe_amount, currency_code), currency_code))
+  def ruby_money_to_human_readable(ruby_amount, currency_code)
+    format_money(Money.new(ruby_amount, currency_code))
   end
 
   def embedded_map_url(query)
