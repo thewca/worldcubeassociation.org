@@ -634,7 +634,7 @@ class RegistrationsController < ApplicationController
     return flash[:error] = t("registrations.payment_form.errors.generic.intent_not_found", provider: t("payments.payment_providers.#{payment_provider}")) unless stored_intent.present?
 
     remote_intent = stored_intent.retrieve_remote
-    return flash[:error] = t("registrations.payment_form.errors.generic.remote_not_found", provider: t("payments.payment_providers.#{payment_provider}"))  unless remote_intent.present?
+    return flash[:error] = t("registrations.payment_form.errors.generic.remote_not_found", provider: t("payments.payment_providers.#{payment_provider}")) unless remote_intent.present?
 
     registration = stored_intent.holder
     uses_v2 = registration.is_a? MicroserviceRegistration
