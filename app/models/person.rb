@@ -275,7 +275,7 @@ class Person < ApplicationRecord
   }.freeze
 
   def personal_records
-    [self&.ranksAverage, self&.ranksSingle].compact.flatten
+    [self.ranksAverage, self.ranksSingle].compact.flatten
   end
 
   def serializable_hash(options = nil)

@@ -1191,7 +1191,7 @@ class User < ApplicationRecord
       },
       "roles" => roles,
       "assignments" => registration&.assignments&.map(&:to_wcif) || [],
-      "personalBests" => person.personal_records.map(&:to_wcif),
+      "personalBests" => person&.personal_records&.map(&:to_wcif) || [],
       "extensions" => registration&.wcif_extensions&.map(&:to_wcif) || [],
     }.merge(authorized ? authorized_fields : {})
   end
