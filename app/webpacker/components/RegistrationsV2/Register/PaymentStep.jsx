@@ -67,7 +67,7 @@ export default function PaymentStep({
       elements,
       clientSecret,
       confirmParams: {
-        return_url: paymentFinishUrl(competitionInfo.id, user.id),
+        return_url: paymentFinishUrl(competitionInfo.id),
       },
     });
 

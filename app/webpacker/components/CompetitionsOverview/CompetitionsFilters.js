@@ -12,7 +12,7 @@ import {
 import useDelegatesData from './useDelegatesData';
 import UtcDatePicker from '../wca/UtcDatePicker';
 
-const WCA_EVENT_IDS = Object.values(events.official).map((e) => e.id);
+export const WCA_EVENT_IDS = Object.values(events.official).map((e) => e.id);
 
 function CompetitionsFilters({
   filterState,
@@ -21,6 +21,8 @@ function CompetitionsFilters({
   setDisplayMode,
   shouldShowRegStatus,
   setShouldShowRegStatus,
+  shouldShowAdminDetails,
+  canViewAdminDetails,
 }) {
   return (
     <Form className="competition-select" id="competition-query-form" acceptCharset="UTF-8">
@@ -58,9 +60,19 @@ function CompetitionsFilters({
           dispatchFilter={dispatchFilter}
           shouldShowRegStatus={shouldShowRegStatus}
           setShouldShowRegStatus={setShouldShowRegStatus}
+          shouldShowAdminDetails={shouldShowAdminDetails}
+          canViewAdminDetails={canViewAdminDetails}
           displayMode={displayMode}
         />
       </Form.Group>
+
+      {canViewAdminDetails && shouldShowAdminDetails && (
+        <Form.Group>
+          <Form.Field>
+            <AdminStatusButtonGroup filterState={filterState} dispatchFilter={dispatchFilter} />
+          </Form.Field>
+        </Form.Group>
+      )}
 
       <Form.Group>
         <ResetFilters dispatchFilter={dispatchFilter} />
@@ -82,40 +94,59 @@ export function EventSelector({
   eventList = WCA_EVENT_IDS,
   disabled = false,
   maxEvents = Infinity,
+  shouldErrorOnEmpty = false,
 }) {
   return (
     <>
       <label htmlFor="events">
         {`${I18n.t('competitions.competition_form.events')}`}
         <br />
-        <Button disabled={disabled || eventList.length >= maxEvents} primary type="button" size="mini" id="select-all-events" onClick={() => onEventSelection({ type: 'select_all_events' })}>{I18n.t('competitions.index.all_events')}</Button>
+        <Popup
+          disabled={!Number.isFinite(maxEvents)}
+          trigger={
+            <span><Button disabled={disabled || eventList.length >= maxEvents} primary type="button" size="mini" id="select-all-events" onClick={() => onEventSelection({ type: 'select_all_events' })}>{I18n.t('competitions.index.all_events')}</Button></span>
+        }
+        >
+          {I18n.t('competitions.registration_v2.register.event_limit', {
+            max_events: maxEvents,
+          })}
+        </Popup>
         <Button disabled={disabled} type="button" size="mini" id="clear-all-events" onClick={() => onEventSelection({ type: 'clear_events' })}>{I18n.t('competitions.index.clear')}</Button>
       </label>
-
-      <div id="events">
-        {eventList.map((eventId) => (
-          <React.Fragment key={eventId}>
-            <Button
-              disabled={disabled
+      <Popup
+        open={selectedEvents.length === 0}
+        disabled={!shouldErrorOnEmpty}
+        position="bottom left"
+        style={{ color: '#9f3a38' }}
+        trigger={(
+          <div id="events">
+            {eventList.map((eventId) => (
+              <React.Fragment key={eventId}>
+                <Button
+                  disabled={disabled
                 || (!selectedEvents.includes(eventId) && selectedEvents.length >= maxEvents)}
-              basic
-              icon
-              toggle
-              type="button"
-              size="mini"
-              className="event-checkbox"
-              id={`checkbox-${eventId}`}
-              value={eventId}
-              data-tooltip={I18n.t(`events.${eventId}`)}
-              data-variation="tiny"
-              onClick={() => onEventSelection({ type: 'toggle_event', eventId })}
-              active={selectedEvents.includes(eventId)}
-            >
-              <Icon className={`cubing-icon event-${eventId}`} />
-            </Button>
-          </React.Fragment>
-        ))}
-      </div>
+                  basic
+                  icon
+                  toggle
+                  type="button"
+                  size="mini"
+                  className="event-checkbox"
+                  id={`checkbox-${eventId}`}
+                  value={eventId}
+                  data-tooltip={I18n.t(`events.${eventId}`)}
+                  data-variation="tiny"
+                  onClick={() => onEventSelection({ type: 'toggle_event', eventId })}
+                  active={selectedEvents.includes(eventId)}
+                >
+                  <Icon className={`cubing-icon event-${eventId}`} />
+                </Button>
+              </React.Fragment>
+            ))}
+          </div>
+)}
+      >
+        {I18n.t('registrations.errors.must_register')}
+      </Popup>
     </>
   );
 }
@@ -124,16 +155,24 @@ function RegionSelector({ region, dispatchFilter }) {
   const regionsOptions = [
     { key: 'all', text: I18n.t('common.all_regions'), value: 'all' },
     {
-      key: 'continents_header', value: '', disabled: true, content: <Header content={I18n.t('common.continent')} size="small" style={{ textAlign: 'center' }} />,
+      key: 'continents_header',
+      value: '',
+      disabled: true,
+      content: <Header content={I18n.t('common.continent')} size="small" style={{ textAlign: 'center' }} />,
     },
     ...(Object.values(continents.real).map((continent) => (
       { key: continent.id, text: continent.name, value: continent.id }
     ))),
     {
-      key: 'countries_header', value: '', disabled: true, content: <Header content={I18n.t('common.country')} size="small" style={{ textAlign: 'center' }} />,
+      key: 'countries_header',
+      value: '',
+      disabled: true,
+      content: <Header content={I18n.t('common.country')} size="small" style={{ textAlign: 'center' }} />,
     },
     ...(Object.values(countries.real).map((country) => (
-      { key: country.id, text: country.name, value: country.iso2 }
+      {
+        key: country.id, text: country.name, value: country.iso2, flag: country.iso2.toLowerCase(),
+      }
     ))),
   ];
 
@@ -143,6 +182,7 @@ function RegionSelector({ region, dispatchFilter }) {
       <Dropdown
         search
         selection
+        clearable
         value={region}
         options={regionsOptions}
         onChange={(_, data) => dispatchFilter({ region: data.value })}
@@ -258,6 +298,53 @@ function TimeOrderButtonGroup({ filterState, dispatchFilter }) {
   );
 }
 
+function AdminStatusButtonGroup({ filterState, dispatchFilter }) {
+  return (
+    <>
+      <label htmlFor="admin-status">{I18n.t('competitions.index.admin_status')}</label>
+      <Button.Group id="admin-status">
+
+        <Button
+          primary
+          type="button"
+          name="admin-status"
+          id="all"
+          value="all"
+          onClick={() => dispatchFilter({ adminStatus: 'all' })}
+          active={filterState.adminStatus === 'all'}
+        >
+          <span className="caption">{I18n.t('competitions.index.status_flags.all')}</span>
+        </Button>
+
+        <Button
+          color="yellow"
+          type="button"
+          name="admin-status"
+          id="warning"
+          value="warning"
+          onClick={() => dispatchFilter({ adminStatus: 'warning' })}
+          active={filterState.adminStatus === 'warning'}
+        >
+          <span className="caption">{I18n.t('competitions.index.status_flags.warning')}</span>
+        </Button>
+
+        <Button
+          negative
+          type="button"
+          name="admin-status"
+          id="danger"
+          value="danger"
+          onClick={() => dispatchFilter({ adminStatus: 'danger' })}
+          active={filterState.adminStatus === 'danger'}
+        >
+          <span className="caption">{I18n.t('competitions.index.status_flags.danger')}</span>
+        </Button>
+
+      </Button.Group>
+    </>
+  );
+}
+
 function PastCompYearSelector({ filterState, dispatchFilter }) {
   return (
     <Button
@@ -363,6 +450,8 @@ function CompDisplayCheckboxes({
   dispatchFilter,
   shouldShowRegStatus,
   setShouldShowRegStatus,
+  shouldShowAdminDetails,
+  canViewAdminDetails,
   displayMode,
 }) {
   return (
@@ -380,17 +469,32 @@ function CompDisplayCheckboxes({
       </div>
 
       {
-        displayMode === 'list'
-        && (
-          <div id="registration-status" className="registration-status-selector">
-            <Form.Checkbox
-              label={I18n.t('competitions.index.show_registration_status')}
-              name="show_registration_status"
-              id="show_registration_status"
-              checked={shouldShowRegStatus}
-              onChange={() => setShouldShowRegStatus(!shouldShowRegStatus)}
-            />
-          </div>
+        displayMode === 'list' && (
+          <>
+            <div id="registration-status" className="registration-status-selector">
+              <Form.Checkbox
+                label={I18n.t('competitions.index.show_registration_status')}
+                name="show_registration_status"
+                id="show_registration_status"
+                checked={shouldShowRegStatus}
+                onChange={() => setShouldShowRegStatus(!shouldShowRegStatus)}
+              />
+            </div>
+            {canViewAdminDetails && (
+              <div id="admin-data" className="admin-data-selector">
+                <Form.Checkbox
+                  toggle
+                  label={I18n.t('competitions.index.use_admin_view')}
+                  name="show_admin_data"
+                  id="show_admin_data"
+                  checked={shouldShowAdminDetails}
+                  onChange={() => dispatchFilter(
+                    { shouldShowAdminDetails: !shouldShowAdminDetails },
+                  )}
+                />
+              </div>
+            )}
+          </>
         )
       }
     </>

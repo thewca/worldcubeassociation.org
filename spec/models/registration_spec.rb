@@ -83,7 +83,7 @@ RSpec.describe Registration do
 
   it "requires at least one event" do
     registration.registration_competition_events = []
-    expect(registration).to be_invalid_with_errors(registration_competition_events: ["must register for at least one event"])
+    expect(registration).to be_invalid_with_errors(registration_competition_events: [I18n.t('registrations.errors.must_register')])
   end
 
   it "allows zero events for non competing staff" do
@@ -163,7 +163,7 @@ RSpec.describe Registration do
 
       it "blocks registrations when zero events are selected" do
         registration = FactoryBot.build(:registration, competition: competition, events: [])
-        expect(registration).to be_invalid_with_errors(registration_competition_events: ["must register for at least one event"])
+        expect(registration).to be_invalid_with_errors(registration_competition_events: [I18n.t('registrations.errors.must_register')])
       end
 
       it "allows registration when just one is event selected" do
@@ -183,7 +183,7 @@ RSpec.describe Registration do
 
       it "blocks registration when number of events selected is greater than limit" do
         registration = FactoryBot.build(:registration, competition: competition, events: competition.events)
-        expect(registration).to be_invalid_with_errors(registration_competition_events: ["you must register in less than or equal to #{event_limit} events"])
+        expect(registration).to be_invalid_with_errors(registration_competition_events: [I18n.t('registrations.errors.exceeds_event_limit', count: event_limit)])
       end
     end
 
@@ -192,7 +192,7 @@ RSpec.describe Registration do
 
       it "blocks registrations when zero events are selected" do
         registration = FactoryBot.build(:registration, competition: competition, events: [])
-        expect(registration).to be_invalid_with_errors(registration_competition_events: ["must register for at least one event"])
+        expect(registration).to be_invalid_with_errors(registration_competition_events: [I18n.t('registrations.errors.must_register')])
       end
 
       it "allows registration when all events are selected" do

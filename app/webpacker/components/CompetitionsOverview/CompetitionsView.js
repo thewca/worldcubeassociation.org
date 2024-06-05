@@ -2,7 +2,7 @@ import React, {
   useEffect, useMemo, useReducer, useState,
 } from 'react';
 import { keepPreviousData, useInfiniteQuery, useQuery } from '@tanstack/react-query';
-import { Container } from 'semantic-ui-react';
+import { Container, Header } from 'semantic-ui-react';
 
 import I18n from '../../lib/i18n';
 import { apiV0Urls, WCA_API_PAGINATION } from '../../lib/requests/routes.js.erb';
@@ -23,7 +23,7 @@ import { isCancelled, isInProgress, isProbablyOver } from '../../lib/utils/compe
 
 const DEBOUNCE_MS = 600;
 
-function CompetitionsView() {
+function CompetitionsView({ canViewAdminDetails = false }) {
   const searchParams = useMemo(
     () => new URLSearchParams(window.location.search),
     [],
@@ -38,9 +38,12 @@ function CompetitionsView() {
   const [displayMode, setDisplayMode] = useState(() => getDisplayMode(searchParams));
   const [shouldShowRegStatus, setShouldShowRegStatus] = useState(false);
   const competitionQueryKey = useMemo(
-    () => calculateQueryKey(debouncedFilterState),
-    [debouncedFilterState],
+    () => calculateQueryKey(debouncedFilterState, canViewAdminDetails),
+    [debouncedFilterState, canViewAdminDetails],
   );
+
+  // Need to make sure that people don't "hijack" admin mode by manipulating the URL
+  const shouldShowAdminDetails = canViewAdminDetails && filterState.shouldShowAdminDetails;
 
   useEffect(
     () => updateSearchParams(searchParams, filterState, displayMode),
@@ -55,7 +58,12 @@ function CompetitionsView() {
   } = useInfiniteQuery({
     queryKey: ['competitions', competitionQueryKey],
     queryFn: ({ pageParam = 1 }) => {
-      const querySearchParams = createSearchParams(debouncedFilterState, pageParam);
+      const querySearchParams = createSearchParams(
+        debouncedFilterState,
+        pageParam,
+        canViewAdminDetails,
+      );
+
       return fetchJsonOrError(`${apiV0Urls.competitions.list}?${querySearchParams}`);
     },
     getNextPageParam: (previousPage, allPages) => {
@@ -88,7 +96,7 @@ function CompetitionsView() {
       body: JSON.stringify({ ids: compIds }),
     }),
     queryKey: ['registration-info', ...compIds],
-    enabled: shouldShowRegStatus,
+    enabled: shouldShowRegStatus && compIds.length > 0,
     // This is where the magic happens: Using `keepPreviousData` makes it so that
     //   all previously loaded indicators are held in-cache while the fetcher for the next
     //   batch is running in the background. (Adding comment here because it's not in the docs)
@@ -97,7 +105,7 @@ function CompetitionsView() {
   });
 
   const competitions = useMemo(() => (shouldShowRegStatus ? (
-    baseCompetitions.map((comp) => {
+    baseCompetitions?.map((comp) => {
       const regData = compRegistrationData?.find((reg) => reg.id === comp.id);
       return regData ? { ...comp, ...regData } : comp;
     })
@@ -105,7 +113,7 @@ function CompetitionsView() {
 
   return (
     <Container>
-      <h2>{I18n.t('competitions.index.title')}</h2>
+      <Header as="h2">{I18n.t('competitions.index.title')}</Header>
       <CompetitionsFilters
         filterState={filterState}
         dispatchFilter={dispatchFilter}
@@ -113,9 +121,11 @@ function CompetitionsView() {
         setDisplayMode={setDisplayMode}
         shouldShowRegStatus={shouldShowRegStatus}
         setShouldShowRegStatus={setShouldShowRegStatus}
+        shouldShowAdminDetails={shouldShowAdminDetails}
+        canViewAdminDetails={canViewAdminDetails}
       />
 
-      <Container id="search-results" className="row competitions-list">
+      <Container fluid>
         {
           displayMode === 'list'
           && (
@@ -123,6 +133,7 @@ function CompetitionsView() {
               competitions={competitions}
               filterState={debouncedFilterState}
               shouldShowRegStatus={shouldShowRegStatus}
+              shouldShowAdminDetails={shouldShowAdminDetails}
               isLoading={competitionsIsFetching}
               regStatusLoading={regDataIsPending}
               fetchMoreCompetitions={competitionsFetchNextPage}

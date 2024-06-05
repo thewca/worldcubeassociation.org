@@ -1,31 +1,44 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import _ from 'lodash';
 import React, {
-  useCallback, useEffect, useState,
+  useCallback, useEffect, useMemo, useState,
 } from 'react';
 import {
   Button,
   ButtonGroup,
-  ButtonOr, Divider,
+  ButtonOr,
   Form,
   Icon,
-  Input,
-  Label,
   Message,
   Popup,
   Segment,
-  TextArea,
 } from 'semantic-ui-react';
 import updateRegistration from '../api/registration/patch/update_registration';
 import submitEventRegistration from '../api/registration/post/submit_registration';
 import Processing from './Processing';
 import { userPreferencesRoute } from '../../../lib/requests/routes.js.erb';
-import { EventSelector } from '../../CompetitionsOverview/CompetitionsFilters';
+import { EventSelector, EventSelectorForm } from '../../CompetitionsOverview/CompetitionsFilters';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { setMessage } from './RegistrationMessage';
 import i18n from '../../../lib/i18n';
+import I18nHTMLTranslate from '../../I18nHTMLTranslate';
 
 const maxCommentLength = 240;
+
+const potentialWarnings = (competitionInfo) => {
+  const warnings = [];
+  // Organizer Pre Registration
+  if (!competitionInfo['registration_opened?']) {
+    warnings.push(i18n.t('competitions.registration_v2.register.early_registration'));
+  }
+  // Favourites Competition
+  if (competitionInfo.events_per_registration_limit) {
+    warnings.push(i18n.t('competitions.registration_v2.register.event_limit', {
+      max_events: competitionInfo.events_per_registration_limit,
+    }));
+  }
+  return warnings;
+};
 
 export default function CompetingStep({
   nextStep,
@@ -122,7 +135,7 @@ export default function CompetingStep({
             : 'registrations.errors.exceeds_event_limit.other',
           'negative',
           {
-            count: selectedEvents.length,
+            count: maxEvents,
           },
         ));
       } else {
@@ -226,6 +239,8 @@ export default function CompetingStep({
     shouldShowUpdateButton,
   ]);
 
+  const formWarnings = useMemo(() => potentialWarnings(competitionInfo), [competitionInfo]);
+
   return (
     <Segment basic>
       {processing && (
@@ -245,50 +260,47 @@ export default function CompetingStep({
       )}
 
       <>
-        {!competitionInfo['registration_opened?'] && (
-          <Message warning>
-            {i18n.t('competitions.registration_v2.register.early_registration')}
-          </Message>
-        )}
-
         {hasPaid && (
           <Message success>
             {i18n.t('competitions.registration_v2.register.already_paid', { comp_name: competitionInfo.name })}
           </Message>
         )}
 
-        <Form onSubmit={handleSubmit}>
-          <Form.Field required>
+        <Form onSubmit={handleSubmit} warning={formWarnings.length > 0} size="large">
+          <Message
+            warning
+            list={formWarnings}
+          />
+          <Form.Field required error={selectedEvents.length === 0}>
             <EventSelector
               onEventSelection={handleEventSelection}
               eventList={competitionInfo.event_ids}
               selectedEvents={selectedEvents}
               id="event-selection"
               maxEvents={maxEvents}
+              shouldErrorOnEmpty
             />
-            <p
-              dangerouslySetInnerHTML={{
-                __html: i18n.t(!competitionInfo.events_per_registration_limit ? 'registrations.preferred_events_prompt_html' : 'competitions.registration_v2.register.event_limit', {
-                  link: `<a href="${userPreferencesRoute}">here</a>`,
-                  max_events: competitionInfo.events_per_registration_limit,
-                }),
-              }}
-            />
+            {!competitionInfo.events_per_registration_limit
+              && (
+                <I18nHTMLTranslate
+                  options={{
+                    link: `<a href="${userPreferencesRoute}">here</a>`,
+                  }}
+                  i18nKey="registrations.preferred_events_prompt_html"
+                />
+              )}
           </Form.Field>
           <Form.Field required={Boolean(competitionInfo.force_comment_in_registration)}>
             <label htmlFor="comment">
               {i18n.t('competitions.registration_v2.register.comment')}
             </label>
-            <TextArea
+            <Form.TextArea
+              required={Boolean(competitionInfo.force_comment_in_registration)}
               maxLength={maxCommentLength}
               onChange={(event, data) => setComment(data.value)}
               value={comment}
-              placeholder={
-                competitionInfo.force_comment_in_registration
-                  ? i18n.t('registrations.errors.cannot_register_without_comment')
-                  : ''
-              }
               id="comment"
+              error={competitionInfo.force_comment_in_registration && comment.trim().length === 0 && i18n.t('registrations.errors.cannot_register_without_comment')}
             />
             <p>
               {comment.length}
@@ -297,7 +309,8 @@ export default function CompetingStep({
             </p>
           </Form.Field>
           <Form.Field>
-            <Input
+            <label>{i18n.t('activerecord.attributes.registration.guests')}</label>
+            <Form.Input
               id="guest-dropdown"
               type="number"
               value={guests}
@@ -305,81 +318,47 @@ export default function CompetingStep({
                 setGuests(Number.parseInt(data.value, 10));
               }}
               min="0"
-              label={<Label>{i18n.t('activerecord.attributes.registration.guests')}</Label>}
               max={competitionInfo.guests_per_registration_limit}
+              error={guests > competitionInfo.guests_per_registration_limit && i18n.t('competitions.competition_info.guest_limit', { count: competitionInfo.guests_per_registration_limit })}
             />
           </Form.Field>
           {isRegistered ? (
-            <>
-              <Message warning icon>
-                <Popup
-                  trigger={<Icon name="circle info" />}
-                  position="top center"
-                  content={
-                    canUpdateRegistration
-                      ? i18n.t('competitions.registration_v2.register.until', {
-                        date: getMediumDateString(
-                          competitionInfo.event_change_deadline_date
-                          ?? competitionInfo.start_date,
-                        ),
-                      })
-                      : i18n.t('competitions.registration_v2.register.passed')
-                  }
-                />
-                <Message.Content>
-                  <Message.Header>
-                    {i18n.t(
-                      `competitions.registration_v2.register.registration_status.${registration.competing.registration_status}`,
-                    )}
-                  </Message.Header>
-                  {/* eslint-disable-next-line no-nested-ternary */}
-                  {canUpdateRegistration
-                    ? i18n.t('registrations.update')
-                    : hasRegistrationEditDeadlinePassed
-                      ? i18n.t('competitions.registration_v2.errors.-4001')
-                      : i18n.t(
-                        'competitions.registration_v2.register.editing_disabled',
-                      )}
-                </Message.Content>
-              </Message>
-
-              <ButtonGroup widths={2}>
-                {shouldShowUpdateButton && (
-                  <>
-                    <Button
-                      primary
-                      disabled={
-                        isUpdating || !canUpdateRegistration || !hasChanges
+            <ButtonGroup widths={2}>
+              {shouldShowUpdateButton && (
+              <>
+                <Button
+                  primary
+                  disabled={
+                        isUpdating || !hasChanges
                       }
-                      type="submit"
-                    >
-                      {i18n.t('registrations.update')}
-                    </Button>
-                    <ButtonOr />
-                  </>
-                )}
+                  type="submit"
+                >
+                  {i18n.t('registrations.update')}
+                </Button>
+                <ButtonOr />
+              </>
+              )}
 
-                {shouldShowReRegisterButton && (
-                  <Button
-                    secondary
-                    disabled={isUpdating}
-                    type="submit"
-                  >
-                    {i18n.t('competitions.registration_v2.register.re-register')}
-                  </Button>
-                )}
+              {shouldShowReRegisterButton && (
+              <Button
+                secondary
+                disabled={isUpdating}
+                type="submit"
+              >
+                {i18n.t('registrations.register')}
+              </Button>
+              )}
 
-                {shouldShowDeleteButton && (
-                  <Button
-                    disabled={isUpdating}
-                    negative
-                    onClick={() => attemptAction(actionDeleteRegistration)}
-                  >
-                    {i18n.t('registrations.delete_registration')}
-                  </Button>
-                )}
-              </ButtonGroup>
-            </>
+              {shouldShowDeleteButton && (
+              <Button
+                disabled={isUpdating}
+                negative
+                onClick={() => attemptAction(actionDeleteRegistration)}
+              >
+                {i18n.t('registrations.delete_registration')}
+              </Button>
+              )}
+            </ButtonGroup>
           ) : (
             <>
               <Message info icon floating>

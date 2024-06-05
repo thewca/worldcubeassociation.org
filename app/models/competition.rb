@@ -53,6 +53,7 @@ class Competition < ApplicationRecord
   scope :not_visible, -> { where(showAtAll: false) }
   scope :over, -> { where("results_posted_at IS NOT NULL OR end_date < ?", Date.today) }
   scope :not_over, -> { where("results_posted_at IS NULL AND end_date >= ?", Date.today) }
+  scope :end_date_passed_since, lambda { |num_days| where(end_date: ...(num_days.days.ago)) }
   scope :belongs_to_region, lambda { |region_id|
     joins(:country).where(
       "countryId = :region_id OR Countries.continentId = :region_id", region_id: region_id
@@ -84,6 +85,7 @@ class Competition < ApplicationRecord
   scope :confirmed, -> { where.not(confirmed_at: nil) }
   scope :not_confirmed, -> { where(confirmed_at: nil) }
   scope :pending_posting, -> { where.not(results_submitted_at: nil).where(results_posted_at: nil) }
+  scope :pending_report_or_results_posting, -> { includes(:delegate_report).where(delegate_report: { posted_at: nil }).or(where(results_posted_at: nil)) }
 
   enum guest_entry_status: {
     unclear: 0,
@@ -220,6 +222,19 @@ class Competition < ApplicationRecord
   validates :qualification_results_reason, presence: true, if: :persisted_uses_qualification?
   validates :event_restrictions_reason, presence: true, if: :event_restrictions?
   validates_inclusion_of :main_event_id, in: ->(comp) { [nil].concat(comp.persisted_events_id) }
+
+  # Validations are used to show form errors to the user. If string columns aren't validated for length, it produces an unexplained error for the user
+  # VALIDATED_COLUMNS: All columns which appear in the competition form and are editable by users
+  # DONT_VALIDATE_STRING_LENGTH: String columns not exposed to users in the cmopetition form
+  VALIDATE_STRING_LENGTH = %w[
+    name cityName venue venueAddress venueDetails external_website cellName contact name_reason external_registration_page forbid_newcomers_reason
+  ].freeze
+  DONT_VALIDATE_STRING_LENGTH = %w[countryId connected_stripe_account_id currency_code main_event_id id].freeze
+  columns_hash.each do |column_name, column_info|
+    if VALIDATE_STRING_LENGTH.include?(column_name) && column_info.limit
+      validates column_name, length: { maximum: column_info.limit }
+    end
+  end
 
   # Dirty old trick to deal with competition id changes (see other methods using
   # 'with_old_id' for more details).
@@ -402,7 +417,8 @@ class Competition < ApplicationRecord
   end
 
   def registration_full?
-    competitor_limit_enabled? && registrations.accepted_and_paid_pending_count >= competitor_limit
+    competitor_count = uses_new_registration_service? ? Microservices::Registrations.competitor_count_by_competition(id) : registrations.accepted_and_paid_pending_count
+    competitor_limit_enabled? && competitor_count >= competitor_limit
   end
 
   def number_of_bookmarks
@@ -1099,8 +1115,8 @@ class Competition < ApplicationRecord
     confirmed? && created_at.present? && created_at > Date.new(2018, 10, 20)
   end
 
-  def pending_results_or_report(days)
-    self.end_date < (Date.today - days) && (self.delegate_report.posted_at.nil? || results_posted_at.nil?)
+  def pending_results_or_report(num_days)
+    self.end_date < num_days.days.ago && (self.delegate_report.posted_at.nil? || results_posted_at.nil?)
   end
 
   # does the competition have this field (regardless of whether it's a date or blank)
@@ -1726,6 +1742,21 @@ class Competition < ApplicationRecord
         raise WcaExceptions::BadApiParameter.new("Invalid announced date: '#{params[:announced_after]}'")
       end
       competitions = competitions.where("announced_at > ?", announced_date)
+    end
+
+    if params[:admin_status].present?
+      admin_status = params[:admin_status].to_s
+
+      unless ["danger", "warning"].include?(admin_status)
+        raise WcaExceptions::BadApiParameter.new("Invalid admin status: '#{params[:admin_status]}'")
+      end
+
+      num_days = {
+        warning: Competition::REPORT_AND_RESULTS_DAYS_WARNING,
+        danger: Competition::REPORT_AND_RESULTS_DAYS_DANGER,
+      }[admin_status.to_sym]
+
+      competitions = competitions.end_date_passed_since(num_days).pending_report_or_results_posting
     end
 
     query&.split&.each do |part|

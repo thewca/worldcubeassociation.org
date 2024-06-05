@@ -10,6 +10,11 @@
     <p>
       <%= t("payments.payment_setup.currently_connected_info", provider: t("payments.payment_providers.#{type}")) %>
     </p>
+    <ul>
+      <% cpi.connected_account.account_details.each do |key, value| %>
+        <li><b><%= t("payments.payment_setup.account_details.#{type}.#{key}") %></b>: <%= value || t('payments.payment_setup.account_details.fallback_not_applicable') %></li>
+      <% end %>
+    </ul>
     <p>
       <b><%= t("payments.payment_setup.before_disconnect_warning", provider: t("payments.payment_providers.#{type}")) %></b>
     </p>

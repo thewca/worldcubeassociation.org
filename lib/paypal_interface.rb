@@ -47,6 +47,19 @@ module PaypalInterface
     end
   end
 
+  def self.account_details(merchant_id)
+    # FIXME: This API is officially deprecated but ironically there is no replacement in the newer V2.
+    #   Shout if you find an endpoint that is better suited!
+    url = "/v1/customer/partners/#{merchant_id}"
+
+    response = paypal_connection.get(url) do |req|
+      req.headers['PayPal-Partner-Attribution-Id'] = AppSecrets.PAYPAL_ATTRIBUTION_CODE
+      req.headers['PayPal-Auth-Assertion'] = paypal_auth_assertion(merchant_id)
+    end
+
+    response.body
+  end
+
   def self.create_order(merchant_id, amount_iso, currency_code)
     url = "/v2/checkout/orders"
 

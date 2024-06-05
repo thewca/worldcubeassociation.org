@@ -27,6 +27,10 @@ module Microservices
       "/api/internal/v1/#{competition_id}/registrations"
     end
 
+    def self.get_competitor_count_path(competition_id)
+      "/api/v1/#{competition_id}/count"
+    end
+
     def self.registration_connection
       base_url = if Rails.env.development?
                    EnvConfig.WCA_REGISTRATIONS_BACKEND_URL
@@ -61,6 +65,12 @@ module Microservices
 
       # If we ever need the response body
       response.body
+    end
+
+    def self.competitor_count_by_competition(competition_id)
+      response = self.registration_connection.get(self.get_competitor_count_path(competition_id))
+
+      response.body["count"]
     end
 
     def self.registrations_by_competition(competition_id, status = nil, event_id = nil, cache: true)

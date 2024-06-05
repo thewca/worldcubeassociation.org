@@ -859,7 +859,7 @@ RSpec.describe RegistrationsController, clean_db_with_truncation: true do
             stripe_account: competition.payment_account_for(:stripe).account_id,
           )
           get :payment_completion_stripe, params: {
-            id: registration.id,
+            competition_id: competition.id,
             payment_intent: payment_intent.payment_record.stripe_id,
             payment_intent_client_secret: payment_intent.client_secret,
           }
@@ -867,7 +867,7 @@ RSpec.describe RegistrationsController, clean_db_with_truncation: true do
         end
 
         it 'issues a full refund' do
-          post :refund_payment, params: { id: registration.id, payment_id: @payment.id, payment: { refund_amount: competition.base_entry_fee.cents } }
+          post :refund_payment, params: { competition_id: competition.id, payment_id: @payment.receipt.id, payment: { refund_amount: competition.base_entry_fee.cents } }
           expect(response).to redirect_to edit_registration_path(registration)
           refund = registration.reload.registration_payments.last.receipt.retrieve_stripe
           expect(competition.base_entry_fee).to be > 0
@@ -881,7 +881,7 @@ RSpec.describe RegistrationsController, clean_db_with_truncation: true do
 
         it 'issues a 50% refund' do
           refund_amount = competition.base_entry_fee.cents / 2
-          post :refund_payment, params: { id: registration.id, payment_id: @payment.id, payment: { refund_amount: refund_amount } }
+          post :refund_payment, params: { competition_id: competition.id, payment_id: @payment.receipt.id, payment: { refund_amount: refund_amount } }
           expect(response).to redirect_to edit_registration_path(registration)
           refund = registration.reload.registration_payments.last.receipt.retrieve_stripe
           expect(competition.base_entry_fee).to be > 0
@@ -893,7 +893,7 @@ RSpec.describe RegistrationsController, clean_db_with_truncation: true do
 
         it 'disallows negative refund' do
           refund_amount = -1
-          post :refund_payment, params: { id: registration.id, payment_id: @payment.id, payment: { refund_amount: refund_amount } }
+          post :refund_payment, params: { competition_id: competition.id, payment_id: @payment.receipt.id, payment: { refund_amount: refund_amount } }
           expect(response).to redirect_to edit_registration_path(registration)
           expect(competition.base_entry_fee).to be > 0
           expect(registration.outstanding_entry_fees).to eq 0
@@ -903,7 +903,7 @@ RSpec.describe RegistrationsController, clean_db_with_truncation: true do
 
         it 'disallows a refund more than the payment' do
           refund_amount = competition.base_entry_fee.cents * 2
-          post :refund_payment, params: { id: registration.id, payment_id: @payment.id, payment: { refund_amount: refund_amount } }
+          post :refund_payment, params: { competition_id: competition.id, payment_id: @payment.receipt.id, payment: { refund_amount: refund_amount } }
           expect(response).to redirect_to edit_registration_path(registration)
           expect(competition.base_entry_fee).to be > 0
           expect(registration.outstanding_entry_fees).to eq 0
@@ -913,7 +913,7 @@ RSpec.describe RegistrationsController, clean_db_with_truncation: true do
 
         it "disallows a refund after clearing the Stripe account id" do
           ClearConnectedPaymentIntegrations.perform_now
-          post :refund_payment, params: { id: registration.id, payment_id: @payment.id, payment: { refund_amount: competition.base_entry_fee.cents } }
+          post :refund_payment, params: { competition_id: competition.id, payment_id: @payment.receipt.id, payment: { refund_amount: competition.base_entry_fee.cents } }
           expect(response).to redirect_to edit_registration_path(registration)
           expect(flash[:danger]).to eq "You cannot emit refund for this competition anymore. Please use the integration's dashboard to do so."
           expect(@payment.reload.amount_available_for_refund).to eq competition.base_entry_fee.cents
