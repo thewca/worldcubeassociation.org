@@ -415,7 +415,8 @@ class Competition < ApplicationRecord
   end
 
   def registration_full?
-    competitor_limit_enabled? && registrations.accepted_and_paid_pending_count >= competitor_limit
+    competitor_count = uses_new_registration_service? ? Microservices::Registrations.competitor_count_by_competition(id) : registrations.accepted_and_paid_pending_count
+    competitor_limit_enabled? && competitor_count >= competitor_limit
   end
 
   def number_of_bookmarks
