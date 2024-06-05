@@ -708,8 +708,9 @@ class RegistrationsController < ApplicationController
 
     refund_amount_param = params.require(:payment).require(:refund_amount)
     refund_amount = refund_amount_param.to_i
+    amount_left = charge.ruby_amount_available_for_refund - refund_amount
 
-    if refund_amount > charge.ruby_amount_available_for_refund
+    if amount_left < 0
       flash[:danger] = "You are not allowed to refund more than the competitor has paid."
       return redirect_to redirect_path
     end
@@ -728,7 +729,7 @@ class RegistrationsController < ApplicationController
 
     if uses_v2
       begin
-        Microservices::Registrations.update_registration_payment("#{competition_id}-#{registration.user.id}", refund_receipt.id, refund_amount, ruby_money.currency.iso_code, "refund", { type: "user", id: current_user.id })
+        Microservices::Registrations.update_registration_payment("#{competition_id}-#{registration.user.id}", refund_receipt.id, amount_left, ruby_money.currency.iso_code, "refund", { type: "user", id: current_user.id })
       rescue Faraday::Error
         flash[:error] = 'Registration Service is not reachable'
       end

@@ -5,16 +5,12 @@ import {
 } from 'semantic-ui-react';
 import getAvailableRefunds from '../api/payment/get/getAvailableRefunds';
 import refundPayment from '../api/payment/get/refundPayment';
-import { useDispatch } from '../../../lib/providers/StoreProvider';
-import { setMessage } from '../Register/RegistrationMessage';
 import Loading from '../../Requests/Loading';
 import AutonumericField from '../../wca/FormBuilder/input/AutonumericField';
 
 export default function Refunds({
   onSuccess, userId, competitionId,
 }) {
-  const dispatch = useDispatch();
-
   const {
     data: refunds,
     isLoading: refundsLoading,
@@ -26,7 +22,7 @@ export default function Refunds({
     refetchOnReconnect: false,
     staleTime: Infinity,
     refetchOnMount: 'always',
-    select: (data) => data.charges.filter((r) => r.ruby_amount !== 0),
+    select: (data) => data.charges.filter((r) => r.ruby_amount_refundable !== 0),
   });
   const { mutate: refundMutation, isPending: isMutating } = useMutation({
     mutationFn: refundPayment,
