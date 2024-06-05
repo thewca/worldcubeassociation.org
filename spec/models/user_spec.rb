@@ -455,11 +455,22 @@ RSpec.describe User, type: :model do
     end
   end
 
-  it 'former banned users are not considered current members of Team.banned' do
+  it 'banned? returns true for users who are actively banned' do
     banned_user = FactoryBot.create :user, :banned
-    banned_user.team_members.first.update!(end_date: 1.day.ago)
 
-    expect(banned_user.reload.banned?).to eq false
+    expect(banned_user.banned?).to eq true
+  end
+
+  it 'banned? returns false for users who are banned in past' do
+    formerly_banned_user = FactoryBot.create :user, :formerly_banned
+
+    expect(formerly_banned_user.banned?).to eq false
+  end
+
+  it 'current_ban returns data of current banned role' do
+    banned_user = FactoryBot.create :user, :banned
+
+    expect(banned_user.current_ban.group.group_type).to eq UserGroup.group_types[:banned_competitors]
   end
 
   it "removes whitespace around names" do

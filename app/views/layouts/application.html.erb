@@ -20,6 +20,12 @@
     };
   </script>
 
+  <% if session.delete(:should_reset_jwt) %>
+    <script>
+      localStorage.removeItem("jwt");
+    </script>
+  <% end %>
+
   <%#
     Our sprockets assets. Loaded first, because our js packs below contains the
     css overriding stuff imported in sprockets!

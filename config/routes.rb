@@ -41,9 +41,14 @@ Rails.application.routes.draw do
     post 'users/authenticate-sensitive' => 'users#authenticate_user_for_sensitive_edit'
     delete 'users/sign-out-other' => 'sessions#destroy_other', as: :destroy_other_user_sessions
   end
-  post 'registration/:id/refund/:payment_id' => 'registrations#refund_payment', as: :registration_payment_refund
+  # TODO: This can be removed after deployment, this is so we don't have any users error out if they click on pay/refund
+  # while the deployment happens
+  post 'registration/:id/refund/:payment_id' => 'registrations#payment_refund_legacy', as: :registration_payment_refund_legacy
+  get 'registration/:id/payment-completion' => 'registrations#payment_completion_legacy', as: :registration_payment_completion_legacy
+
   post 'registration/:id/load-payment-intent' => 'registrations#load_payment_intent', as: :registration_payment_intent
-  get 'registration/:id/payment-completion' => 'registrations#payment_completion', as: :registration_payment_completion
+  post 'competitions/:competition_id/refund/:payment_id' => 'registrations#refund_payment', as: :registration_payment_refund
+  get 'competitions/:competition_id/payment-completion' => 'registrations#payment_completion', as: :registration_payment_completion
   post 'registration/stripe-webhook' => 'registrations#stripe_webhook', as: :registration_stripe_webhook
   get 'registration/payment-denomination' => 'registrations#payment_denomination', as: :registration_payment_denomination
   resources :users, only: [:index, :edit, :update]
@@ -125,9 +130,7 @@ Rails.application.routes.draw do
     post '/payment_integration/:payment_integration/disconnect' => 'competitions#disconnect_payment_integration', as: :disconnect_payment_integration
   end
   scope :payment do
-    get '/finish' => 'payment#payment_finish'
     get '/refunds' => 'payment#available_refunds'
-    get '/refund' => 'payment#payment_refund'
   end
 
   get 'competitions/:competition_id/report/edit' => 'delegate_reports#edit', as: :delegate_report_edit
@@ -180,8 +183,6 @@ Rails.application.routes.draw do
   get 'polls/:id/vote' => 'votes#vote', as: 'polls_vote'
   get 'polls/:id/results' => 'polls#results', as: 'polls_results'
 
-  resources :teams, only: [:update, :edit]
-
   resources :votes, only: [:create, :update]
 
   post 'competitions/:id/post_results' => 'competitions#post_results', as: :competition_post_results
@@ -196,6 +197,9 @@ Rails.application.routes.draw do
     get 'board' => 'panel#board', as: :panel_board
     get 'leader' => 'panel#leader', as: :panel_leader
     get 'senior_delegate' => 'panel#senior_delegate', as: :panel_senior_delegate
+    get 'wdc' => 'panel#wdc', as: :panel_wdc
+    get 'wec' => 'panel#wec', as: :panel_wec
+    get 'weat' => 'panel#weat', as: :panel_weat
   end
   resources :notifications, only: [:index]
 
@@ -389,7 +393,7 @@ Rails.application.routes.draw do
         get '/group-type/:group_type' => 'user_roles#index_for_group_type', as: :index_for_group_type
         get '/search' => 'user_roles#search', as: :user_roles_search
       end
-      resources :user_roles, only: [:show, :create, :update, :destroy]
+      resources :user_roles, only: [:index, :show, :create, :update, :destroy]
       resources :user_groups, only: [:index, :create, :update]
       namespace :wrt do
         resources :persons, only: [:update, :destroy] do
