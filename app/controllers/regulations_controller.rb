@@ -21,7 +21,7 @@ class RegulationsController < ApplicationController
     end
   end
 
-  private def render_regulations(route, version_file = REGULATIONS_VERSION_FILE)
+  def render_regulations(route, version_file = REGULATIONS_VERSION_FILE)
     erb_file = RegulationsS3Helper.fetch_regulations_from_s3(route, version_file)
     render inline: erb_file, layout: "application"
   end
