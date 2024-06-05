@@ -1,7 +1,6 @@
 import React from 'react';
 import { DateTime, Interval } from 'luxon';
 import I18n from '../i18n';
-import { defaultFallbackInView } from 'react-intersection-observer';
 
 function parseDateString(yyyymmddDateString) {
   return DateTime.fromFormat(yyyymmddDateString, 'yyyy-MM-dd');
@@ -97,10 +96,10 @@ function lookupStatus(numOfDays, statusMap, compareFn, defaultStatus = null) {
   }
 
   const entries = Object.entries(statusMap)
-    .toSorted(([k1, v1], [k2, v2]) => (compareFn(v1, v2) ? 1 : -1));
+    .toSorted(([, v1], [, v2]) => (compareFn(v1, v2) ? 1 : -1));
 
-  const deadlines = entries.map(([k, v]) => v);
-  const statusClasses = entries.map(([k, v]) => k);
+  const deadlines = entries.map(([, v]) => v);
+  const statusClasses = entries.map(([k]) => k);
 
   const numOfMissedDeadlines = deadlines.filter((dl) => compareFn(numOfDays, dl)).length;
 

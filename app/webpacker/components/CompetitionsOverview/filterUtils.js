@@ -23,7 +23,7 @@ const SELECTED_EVENTS = 'event_ids[]';
 const INCLUDE_CANCELLED = 'show_cancelled';
 const SHOW_ADMIN_DETAILS = 'show_admin_details';
 const ADMIN_STATUS = 'admin_status';
-const _LEGACY_ADMIN_STATUS = 'status';
+const LEGACY_ADMIN_STATUS = 'status';
 
 const DEFAULT_DISPLAY_MODE = 'list';
 const DEFAULT_TIME_ORDER = 'present';
@@ -36,7 +36,7 @@ const DEFAULT_SEARCH = '';
 const DEFAULT_ADMIN_STATUS = 'all';
 const INCLUDE_CANCELLED_TRUE = 'on';
 const SHOW_ADMIN_DETAILS_TRUE = 'yes';
-const _LEGACY_DISPLAY_MODE_ADMIN = 'admin';
+const LEGACY_DISPLAY_MODE_ADMIN = 'admin';
 
 // search param sanitizers
 
@@ -111,10 +111,10 @@ export const createFilterState = (searchParams) => ({
     sanitizeEvents(searchParams.getAll(SELECTED_EVENTS)),
   shouldIncludeCancelled: searchParams.get(INCLUDE_CANCELLED) === INCLUDE_CANCELLED_TRUE,
   shouldShowAdminDetails: searchParams.get(SHOW_ADMIN_DETAILS) === SHOW_ADMIN_DETAILS_TRUE
-    || searchParams.get(DISPLAY_MODE) === _LEGACY_DISPLAY_MODE_ADMIN,
+    || searchParams.get(DISPLAY_MODE) === LEGACY_DISPLAY_MODE_ADMIN,
   adminStatus: sanitizeAdminStatus(
     searchParams.get(ADMIN_STATUS)
-    || searchParams.get(_LEGACY_ADMIN_STATUS),
+    || searchParams.get(LEGACY_ADMIN_STATUS),
   ),
 });
 
@@ -137,14 +137,14 @@ export const updateSearchParams = (searchParams, filterState, displayMode) => {
   searchParams.set(DISPLAY_MODE, displayMode);
   searchParams.delete(DISPLAY_MODE, DEFAULT_DISPLAY_MODE);
   // also delete deprecated parameters (we set admin_details in a separate flag below)
-  searchParams.delete(DISPLAY_MODE, _LEGACY_DISPLAY_MODE_ADMIN);
+  searchParams.delete(DISPLAY_MODE, LEGACY_DISPLAY_MODE_ADMIN);
 
   searchParams.set(TIME_ORDER, timeOrder);
   searchParams.delete(TIME_ORDER, DEFAULT_TIME_ORDER);
 
   searchParams.set(ADMIN_STATUS, adminStatus);
   searchParams.delete(ADMIN_STATUS, DEFAULT_ADMIN_STATUS);
-  searchParams.delete(_LEGACY_ADMIN_STATUS);
+  searchParams.delete(LEGACY_ADMIN_STATUS);
 
   searchParams.set(YEAR, selectedYear);
   searchParams.delete(YEAR, DEFAULT_YEAR);
