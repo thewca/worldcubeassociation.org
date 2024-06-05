@@ -705,16 +705,7 @@ class RegistrationsController < ApplicationController
     return head :forbidden if payment_integration == :paypal && PaypalInterface.paypal_disabled?
 
     payment_account = competition.payment_account_for(payment_integration)
-
-    unless payment_account.present?
-      # TODO: Bit unsure what to do here, this should have been caught _way_ before any user even reaches this point
-      #   (i.e. the JS panels requesting PI data are only rendered when our code already concluded that the CPI is valid)
-      return render json: { error: { message: "CPI not found!" } }
-    end
-
-    currency_iso = competition.currency_code
-
-    intent = payment_account.prepare_intent(registration, amount, currency_iso, current_user)
+    intent = payment_account.prepare_intent(registration, amount, competition.currency_code, current_user)
 
     render json: { client_secret: intent.client_secret }
   end
@@ -727,7 +718,7 @@ class RegistrationsController < ApplicationController
     payment_account = competition.payment_account_for(payment_integration)
 
     unless payment_account.present?
-      flash[:danger] = "You cannot emit refund for this competition anymore. Please use the integration's dashboard to do so."
+      flash[:danger] = "You cannot issue a refund for this competition anymore. Please use your payment provider's dashboard to do so."
       return redirect_to competition_registrations_path(competition)
     end
 
@@ -757,7 +748,13 @@ class RegistrationsController < ApplicationController
 
     if uses_v2
       begin
-        Microservices::Registrations.update_registration_payment(attendee_id, refund_receipt.id, refund_amount, currency_iso, "refund")
+        Microservices::Registrations.update_registration_payment(
+          registration.attendee_id,
+          refund_receipt.id,
+          ruby_money.cents,
+          ruby_money.currency.iso_code,
+          "refund",
+        )
       rescue Faraday::Error
         flash[:error] = 'Registration Service is not reachable'
       end
