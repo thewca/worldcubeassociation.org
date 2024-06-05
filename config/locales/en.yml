@@ -1248,14 +1248,18 @@ en:
       errors:
         already_paid: "The charge was not placed because the registration fees are already paid."
         not_allowed: "You can't pay for that registration."
-        stripe_failed: "Please check the Stripe transaction."
-        paypal_failed: "Please check the PayPal order."
-        paypal_canceled: "PayPal reported that the order was manually canceled. Please try again."
-        stripe_not_found: "Stripe reported back a transaction ID that couldn't be found."
-        stripe_intent_not_found: "Stripe reported back a transaction ID for which we don't have an attempted payment on file."
-        stripe_secret_invalid: "Stripe reported back a transaction secret that doesn't match our records."
-        stripe_not_an_intent: "Stripe reported back a transaction ID that is not actually a payment intent."
-        payment_reset: "The payment was rejected by Stripe."
+        generic:
+          failed: "Please check the %{provider} transaction."
+          not_found: "%{provider} reported back a transaction ID that couldn't be found."
+          intent_not_found: "%{provider} reported back a transaction ID for which we don't have an attempted payment on file."
+          remote_not_found: "%{provider} failed to provide API details for the transaction ID that it reported."
+        stripe:
+          not_an_intent: "Stripe reported back a transaction ID that is not actually a Payment Intent."
+          secret_invalid: "Stripe reported back a transaction secret that doesn't match our records."
+        paypal:
+          not_an_order: "PayPal reported back a transaction ID that is not actually an Order entity."
+          canceled: "PayPal reported that the order was manually canceled. Please try again."
+        payment_reset: "The payment was rejected by the external payment provider."
         payment_pending: "The payment has not been completed yet."
         registration_unreachable: "There was a problem reaching the registration service, please contact the Software Team."
     preferred_events_prompt_html: "To speed up registration in the future, you can set your preferred events %{link}."
@@ -2106,6 +2110,7 @@ en:
     payment_providers:
       paypal: 'PayPal'
       stripe: 'Stripe'
+      generic_fallback: 'The payment provider'
     #context: Setting up and making payments
     payment_setup:
       external_dashboard: '%{provider} Dashboard'

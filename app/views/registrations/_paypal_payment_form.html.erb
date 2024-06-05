@@ -155,11 +155,11 @@
       const $paypalErrorDiv = $('#paypal-sdk-error');
 
       if (isManualCancel) {
-        $paypalErrorDiv.text('<%= t("registrations.payment_form.errors.paypal_canceled") %>');
+        $paypalErrorDiv.text('<%= t("registrations.payment_form.errors.paypal.canceled") %>');
       } else {
         // Quote from the PayPal documentation: (see https://developer.paypal.com/sdk/js/reference/#onerror)
         // Note: This error handler is a catch-all. Errors at this point aren't expected to be handled beyond showing a generic error message or page.
-        $paypalErrorDiv.text('<%= t("registrations.payment_form.errors.paypal_failed") %>');
+        $paypalErrorDiv.text('<%= t("registrations.payment_form.errors.generic.failed", provider: t("payments.payment_providers.paypal")) %>');
       }
 
       $paymentElementRow.addClass("has-error");

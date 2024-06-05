@@ -568,60 +568,75 @@ class RegistrationsController < ApplicationController
   end
 
   def payment_completion_stripe
+    competition_id = params.require(:competition_id)
+
     # Provided by Stripe upon redirect when the "PaymentElement" workflow is completed
     intent_id = params[:payment_intent]
     intent_secret = params[:payment_intent_client_secret]
 
-    competition_id = params[:competition_id]
-    competition = Competition.find(competition_id)
-
-    connected_account = competition.payment_account_for(:stripe)
-
     # We expect that the record here is a top-level PaymentIntent in Stripe's API model
     stored_record = StripeRecord.find_by(stripe_id: intent_id)
 
-    unless stored_record.present?
-      flash[:error] = t("registrations.payment_form.errors.stripe_not_found")
-      return redirect_to competition_register_path(competition)
+    unless stored_record.payment_intent?
+      flash[:error] = t("registrations.payment_form.errors.stripe.not_an_intent")
+      return redirect_to competition_register_path(competition_id)
     end
 
-    unless stored_record.payment_intent?
-      flash[:error] = t("registrations.payment_form.errors.stripe_not_an_intent")
-      return redirect_to competition_register_path(competition)
+    unless stored_record.payment_intent&.client_secret == intent_secret
+      flash[:error] = t("registrations.payment_form.errors.stripe.secret_invalid")
+      return redirect_to competition_register_path(competition_id)
     end
+
+    handle_payment_completion(stored_record)
+
+    redirect_to competition_register_path(competition_id)
+  end
+
+  def payment_completion_paypal
+    return head :forbidden if PaypalInterface.paypal_disabled?
+
+    competition_id = params.require(:competition_id)
+
+    # Provided by PayPal as part of the payload in the success hook of their JS SDK
+    order_id = params.require(:orderID)
+    stored_record = PaypalRecord.find_by(paypal_id: order_id)
+
+    unless stored_record.paypal_order?
+      flash[:error] = t("registrations.payment_form.errors.paypal.not_an_order")
+      return render json: { redirect: competition_register_url(competition_id) }
+    end
+
+    handle_payment_completion(stored_record)
+
+    render json: { redirect: competition_register_url(competition_id) }
+  end
+
+  private def handle_payment_completion(stored_record)
+    return flash[:error] = t("registrations.payment_form.errors.generic.not_found", provider: t("payments.payment_providers.generic_fallback")) unless stored_record.present?
+
+    competition_id = params[:competition_id]
+    competition = Competition.find(competition_id)
+
+    payment_provider = CompetitionPaymentIntegration::INTEGRATION_RECORD_TYPES.invert[stored_record.class]
+    payment_account = competition.payment_account_for(payment_provider.to_sym)
 
     stored_intent = stored_record.payment_intent
+    return flash[:error] = t("registrations.payment_form.errors.generic.intent_not_found", provider: t("payments.payment_providers.#{payment_provider}")) unless stored_intent.present?
+
+    remote_intent = stored_intent.retrieve_remote
+    return flash[:error] = t("registrations.payment_form.errors.generic.remote_not_found", provider: t("payments.payment_providers.#{payment_provider}"))  unless remote_intent.present?
 
     registration = stored_intent.holder
     uses_v2 = registration.is_a? MicroserviceRegistration
 
-    unless stored_intent.present?
-      flash[:error] = t("registrations.payment_form.errors.stripe_intent_not_found")
-      return render json: { redirect: competition_register_url(competition) }
-    end
-
-    unless stored_intent.client_secret == intent_secret
-      flash[:error] = t("registrations.payment_form.errors.stripe_secret_invalid")
-      return redirect_to competition_register_path(competition)
-    end
-
-    # No need to create a new intent here. We can just query the stored intent from Stripe directly.
-    stripe_intent = stored_intent.retrieve_remote
-
-    unless stripe_intent.present?
-      flash[:error] = t("registrations.payment_form.errors.stripe_not_found")
-      return redirect_to competition_register_path(competition)
-    end
-
-    stored_intent.update_status_and_payments(connected_account, stripe_intent, current_user) do |payment_transaction|
+    stored_intent.update_status_and_payments(payment_account, remote_intent, current_user) do |payment_transaction|
       ruby_money = payment_transaction.money_amount
 
       if uses_v2
         begin
-          Microservices::Registrations.update_registration_payment("#{competition_id}-#{registration.user.id}", payment_transaction.id, ruby_money.cents, ruby_money.currency.iso_code, stripe_intent.status)
+          Microservices::Registrations.update_registration_payment(registration.attendee_id, payment_transaction.id, ruby_money.cents, ruby_money.currency.iso_code, payment_transaction.determine_wca_status)
         rescue Faraday::Error
-          flash[:error] = t("registrations.payment_form.errors.registration_unreachable")
-          return redirect_to competition_register_path(competition_id)
+          return flash[:error] = t("registrations.payment_form.errors.registration_unreachable")
         end
       else
         registration.record_payment(
@@ -637,15 +652,14 @@ class RegistrationsController < ApplicationController
       #   this behavior differs and we overwrite created_at manually, see #stripe_webhook above.
     end
 
-    # Payment Intent lifecycle as per https://stripe.com/docs/payments/intents#intent-statuses
-    case stored_intent.payment_record.stripe_status
+    case stored_intent.wca_status
     when 'succeeded'
       flash[:success] = t("registrations.payment_form.payment_successful")
-    when 'requires_action'
+    when 'pending'
       # Customer did not complete the payment
       # For example, 3DSecure could still be pending.
       flash[:warning] = t("registrations.payment_form.errors.payment_pending")
-    when 'requires_payment_method'
+    when 'created'
       # Payment failed. If a payment fails, it is "reset" by Stripe,
       # so from our end it looks like it never even started (i.e. the customer didn't choose a payment method yet)
       flash[:error] = t("registrations.payment_form.errors.payment_reset")
@@ -656,73 +670,6 @@ class RegistrationsController < ApplicationController
       # Invalid status
       flash[:error] = "Invalid PaymentIntent status"
     end
-
-    redirect_to competition_register_path(competition_id)
-  end
-
-  def payment_completion_paypal
-    return head :forbidden if PaypalInterface.paypal_disabled?
-
-    # Provided by PayPal as part of the payload in the success hook of their JS SDK
-    order_id = params.require(:orderID)
-
-    competition_id = params[:competition_id]
-    competition = Competition.find(competition_id)
-
-    connected_account = competition.payment_account_for(:paypal)
-
-    stored_record = PaypalRecord.find_by(paypal_id: order_id)
-
-    unless stored_record.present?
-      flash[:error] = "PayPal order with ID #{order_id} not found"
-      return render json: { redirect: competition_register_url(competition) }
-    end
-
-    unless stored_record.paypal_order?
-      flash[:error] = "PayPal record with ID #{order_id} is not an actual Order entity"
-      return render json: { redirect: competition_register_url(competition) }
-    end
-
-    stored_intent = stored_record.payment_intent
-
-    registration = stored_intent.holder
-    uses_v2 = registration.is_a? MicroserviceRegistration
-
-    unless stored_intent.present?
-      flash[:error] = "We don't have an attempted payment for #{order_id} on file"
-      return render json: { redirect: competition_register_url(competition) }
-    end
-
-    paypal_order = stored_intent.retrieve_remote
-
-    unless paypal_order.present?
-      flash[:error] = "PayPal reported back a transaction ID that couldn't be found."
-      return render json: { redirect: competition_register_url(competition) }
-    end
-
-    stored_intent.update_status_and_payments(connected_account, paypal_order, current_user) do |payment_transaction|
-      ruby_money = payment_transaction.money_amount
-
-      if uses_v2
-        begin
-          Microservices::Registrations.update_registration_payment("#{competition_id}-#{registration.user.id}", payment_transaction.id, ruby_money.cents, ruby_money.currency.iso_code, paypal_order['status'])
-        rescue Faraday::Error
-          flash[:error] = t("registrations.payment_form.errors.registration_unreachable")
-          return redirect_to competition_register_path(competition_id)
-        end
-      else
-        registration.record_payment(
-          ruby_money.cents,
-          ruby_money.currency.iso_code,
-          payment_transaction,
-          current_user.id,
-        )
-      end
-
-      # TODO: we _could_ access PayPal's "create_time" here, although that is potentially unfair compared to Stripe?!
-    end
-
-    render json: { redirect: competition_register_url(competition) }
   end
 
   def load_payment_intent

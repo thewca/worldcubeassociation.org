@@ -29,7 +29,7 @@ class PaymentIntent < ApplicationRecord
     canceled: 'canceled', # Completion state - the user has indicated that they will no longer attempt to complete payment
   }
 
-  def update_status_and_payments(payment_account, api_intent, action_source, source_datetime = DateTime.current)
+  def update_status_and_payments(payment_account, api_intent, update_source, source_datetime = DateTime.current)
     self.with_lock do
       self.update_status(api_intent)
       self.payment_record.update_status(api_intent)
@@ -44,7 +44,7 @@ class PaymentIntent < ApplicationRecord
         unless self.succeeded?
           self.update!(
             confirmed_at: source_datetime,
-            confirmation_source: action_source,
+            confirmation_source: update_source,
             wca_status: new_wca_status,
           )
         end
@@ -60,7 +60,7 @@ class PaymentIntent < ApplicationRecord
         # Canceled by the gateway
         self.update!(
           canceled_at: source_datetime,
-          cancellation_source: action_source,
+          cancellation_source: update_source,
           wca_status: new_wca_status,
         )
       when :created
