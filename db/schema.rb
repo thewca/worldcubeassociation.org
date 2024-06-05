@@ -17,8 +17,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_04_023859) do
     t.string "countryId", limit: 50, default: "", null: false
     t.text "information", size: :medium
     t.string "venue", limit: 240, default: "", null: false
-    t.string "venueAddress", limit: 120
-    t.string "venueDetails", limit: 120
+    t.string "venueAddress"
+    t.string "venueDetails"
     t.string "external_website", limit: 200
     t.string "cellName", limit: 45, default: "", null: false
     t.boolean "showAtAll", default: false, null: false
