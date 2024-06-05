@@ -726,7 +726,7 @@ class RegistrationsController < ApplicationController
 
     if uses_v2
       begin
-        Microservices::Registrations.update_registration_payment(attendee_id, refund_receipt.id, refund_amount, currency_iso, "refund", { type: "user", id: current_user.id })
+        Microservices::Registrations.update_registration_payment("#{competition_id}-#{registration.user.id}", refund_receipt.id, refund_amount, ruby_money.currency.iso_code, "refund", { type: "user", id: current_user.id })
       rescue Faraday::Error
         flash[:error] = 'Registration Service is not reachable'
       end

@@ -9,9 +9,16 @@ export default async function refundPayment({
   return fetchJsonOrError(
     refundPaymentUrl(competitionId, paymentId),
     {
-      payment: {
-        refund_amount: amount,
+      body:
+        JSON.stringify({
+          payment: {
+            refund_amount: amount,
+          },
+        }),
+      headers: {
+        'Content-Type': 'application/json',
       },
+      method: 'POST',
     },
   );
 }

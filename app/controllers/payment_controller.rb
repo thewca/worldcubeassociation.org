@@ -20,12 +20,12 @@ class PaymentController < ApplicationController
           available_amount = record.ruby_amount_available_for_refund
 
           human_amount_refundable = helpers.ruby_money_to_human_readable(available_amount, record.currency_code)
-          human_amount_payment = helpers.ruby_money_to_human_readable(StripeRecord.amount_to_ruby(record.amount_striped_denomination, record.currency_code), record.currency_code)
+          human_amount_payment = helpers.ruby_money_to_human_readable(record.amount_stripe_denomination, record.currency_code)
 
           {
             payment_id: record.id,
-            full_amount: paid_amount,
-            ruby_amount_refundable: ruby_amount_refundable,
+            full_amount: record.amount_stripe_denomination,
+            ruby_amount_refundable: available_amount,
             human_amount_refundable: human_amount_refundable,
             human_amount_payment: human_amount_payment,
             currency_code: record.currency_code,
