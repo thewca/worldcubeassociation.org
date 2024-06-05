@@ -824,11 +824,16 @@ RSpec.describe RegistrationsController, clean_db_with_truncation: true do
       let!(:user) { FactoryBot.create(:user, :wca_id) }
       let!(:registration) { FactoryBot.create(:registration, competition: competition, user: user) }
 
-      it 'does not allow access and generates a URL error' do
+      it 'does not allow access and redirects to root_url' do
         sign_in user
-        expect {
-          post :refund_payment, params: { id: registration.id }
-        }.to raise_error(ActionController::UrlGenerationError)
+
+        post :refund_payment, params: {
+          competition_id: competition.id,
+          payment_integration: :stripe,
+          payment_id: registration.id,
+        }
+
+        expect(response).to redirect_to root_url
       end
     end
 
@@ -867,7 +872,7 @@ RSpec.describe RegistrationsController, clean_db_with_truncation: true do
         end
 
         it 'issues a full refund' do
-          post :refund_payment, params: { competition_id: competition.id, payment_id: @payment.receipt.id, payment: { refund_amount: competition.base_entry_fee.cents } }
+          post :refund_payment, params: { competition_id: competition.id, payment_integration: :stripe, payment_id: @payment.receipt.id, payment: { refund_amount: competition.base_entry_fee.cents } }
           expect(response).to redirect_to edit_registration_path(registration)
           refund = registration.reload.registration_payments.last.receipt.retrieve_stripe
           expect(competition.base_entry_fee).to be > 0
@@ -881,7 +886,7 @@ RSpec.describe RegistrationsController, clean_db_with_truncation: true do
 
         it 'issues a 50% refund' do
           refund_amount = competition.base_entry_fee.cents / 2
-          post :refund_payment, params: { competition_id: competition.id, payment_id: @payment.receipt.id, payment: { refund_amount: refund_amount } }
+          post :refund_payment, params: { competition_id: competition.id, payment_integration: :stripe, payment_id: @payment.receipt.id, payment: { refund_amount: refund_amount } }
           expect(response).to redirect_to edit_registration_path(registration)
           refund = registration.reload.registration_payments.last.receipt.retrieve_stripe
           expect(competition.base_entry_fee).to be > 0
@@ -893,7 +898,7 @@ RSpec.describe RegistrationsController, clean_db_with_truncation: true do
 
         it 'disallows negative refund' do
           refund_amount = -1
-          post :refund_payment, params: { competition_id: competition.id, payment_id: @payment.receipt.id, payment: { refund_amount: refund_amount } }
+          post :refund_payment, params: { competition_id: competition.id, payment_integration: :stripe, payment_id: @payment.receipt.id, payment: { refund_amount: refund_amount } }
           expect(response).to redirect_to edit_registration_path(registration)
           expect(competition.base_entry_fee).to be > 0
           expect(registration.outstanding_entry_fees).to eq 0
@@ -903,7 +908,7 @@ RSpec.describe RegistrationsController, clean_db_with_truncation: true do
 
         it 'disallows a refund more than the payment' do
           refund_amount = competition.base_entry_fee.cents * 2
-          post :refund_payment, params: { competition_id: competition.id, payment_id: @payment.receipt.id, payment: { refund_amount: refund_amount } }
+          post :refund_payment, params: { competition_id: competition.id, payment_integration: :stripe, payment_id: @payment.receipt.id, payment: { refund_amount: refund_amount } }
           expect(response).to redirect_to edit_registration_path(registration)
           expect(competition.base_entry_fee).to be > 0
           expect(registration.outstanding_entry_fees).to eq 0
@@ -913,9 +918,9 @@ RSpec.describe RegistrationsController, clean_db_with_truncation: true do
 
         it "disallows a refund after clearing the Stripe account id" do
           ClearConnectedPaymentIntegrations.perform_now
-          post :refund_payment, params: { competition_id: competition.id, payment_id: @payment.receipt.id, payment: { refund_amount: competition.base_entry_fee.cents } }
-          expect(response).to redirect_to edit_registration_path(registration)
-          expect(flash[:danger]).to eq "You cannot emit refund for this competition anymore. Please use the integration's dashboard to do so."
+          post :refund_payment, params: { competition_id: competition.id, payment_integration: :stripe, payment_id: @payment.receipt.id, payment: { refund_amount: competition.base_entry_fee.cents } }
+          expect(response).to redirect_to competition_registrations_path(competition)
+          expect(flash[:danger]).to eq "You cannot issue a refund for this competition anymore. Please use your payment provider's dashboard to do so."
           expect(@payment.reload.amount_available_for_refund).to eq competition.base_entry_fee.cents
         end
       end
