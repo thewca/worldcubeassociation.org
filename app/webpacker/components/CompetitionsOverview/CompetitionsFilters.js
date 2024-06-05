@@ -54,14 +54,6 @@ function CompetitionsFilters({
         </Form.Field>
       </Form.Group>
 
-      {canViewAdminDetails && shouldShowAdminDetails && (
-        <Form.Group>
-          <Form.Field>
-            <AdminStatusButtonGroup filterState={filterState} dispatchFilter={dispatchFilter} />
-          </Form.Field>
-        </Form.Group>
-      )}
-
       <Form.Group inline>
         <CompDisplayCheckboxes
           shouldIncludeCancelled={filterState.shouldIncludeCancelled}
@@ -73,6 +65,14 @@ function CompetitionsFilters({
           displayMode={displayMode}
         />
       </Form.Group>
+
+      {canViewAdminDetails && shouldShowAdminDetails && (
+        <Form.Group>
+          <Form.Field>
+            <AdminStatusButtonGroup filterState={filterState} dispatchFilter={dispatchFilter} />
+          </Form.Field>
+        </Form.Group>
+      )}
 
       <Form.Group>
         <ResetFilters dispatchFilter={dispatchFilter} />
@@ -444,33 +444,34 @@ function CompDisplayCheckboxes({
       </div>
 
       {
-        displayMode === 'list'
-        && (
-          <div id="registration-status" className="registration-status-selector">
-            <Form.Checkbox
-              label={I18n.t('competitions.index.show_registration_status')}
-              name="show_registration_status"
-              id="show_registration_status"
-              checked={shouldShowRegStatus}
-              onChange={() => setShouldShowRegStatus(!shouldShowRegStatus)}
-            />
-          </div>
+        displayMode === 'list' && (
+          <>
+            <div id="registration-status" className="registration-status-selector">
+              <Form.Checkbox
+                label={I18n.t('competitions.index.show_registration_status')}
+                name="show_registration_status"
+                id="show_registration_status"
+                checked={shouldShowRegStatus}
+                onChange={() => setShouldShowRegStatus(!shouldShowRegStatus)}
+              />
+            </div>
+            {canViewAdminDetails && (
+              <div id="admin-data" className="admin-data-selector">
+                <Form.Checkbox
+                  toggle
+                  label={I18n.t('competitions.index.use_admin_view')}
+                  name="show_admin_data"
+                  id="show_admin_data"
+                  checked={shouldShowAdminDetails}
+                  onChange={() => dispatchFilter(
+                    { shouldShowAdminDetails: !shouldShowAdminDetails },
+                  )}
+                />
+              </div>
+            )}
+          </>
         )
       }
-
-      {canViewAdminDetails && (
-        <div id="admin-data" className="admin-data-selector">
-          <Form.Checkbox
-            label={I18n.t('competitions.index.show_admin_data')}
-            name="show_admin_data"
-            id="show_admin_data"
-            checked={shouldShowAdminDetails}
-            onChange={() => dispatchFilter(
-              { shouldShowAdminDetails: !shouldShowAdminDetails },
-            )}
-          />
-        </div>
-      )}
     </>
   );
 }
