@@ -69,6 +69,10 @@ class PaypalRecord < ApplicationRecord
     )
   end
 
+  def root_record
+    parent_record&.root_record || self
+  end
+
   def retrieve_paypal
     case self.paypal_record_type
     when 'paypal_order'
@@ -94,6 +98,16 @@ class PaypalRecord < ApplicationRecord
     )
 
     Money.new(ruby_amount, self.currency_code)
+  end
+
+  def ruby_amount_available_for_refund
+    # PayPal communicates amounts as strings, so we need to first convert to Ruby amount
+    #   (which uses integers) and THEN add/subtract
+    paid_amount = self.money_amount
+    already_refunded = child_records.refund.map(&:money_amount).sum
+
+    # `cents` is the "lowest denomination" method in RubyMoney
+    (paid_amount - already_refunded).cents
   end
 
   # Paypal expects a decimal value in the format of a string, so we return a string from this function
