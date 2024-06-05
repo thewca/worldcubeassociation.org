@@ -538,7 +538,7 @@ class RegistrationsController < ApplicationController
         elsif stored_intent.holder.is_a? MicroserviceRegistration
           ruby_money = charge_transaction.money_amount
           begin
-            Microservices::Registrations.update_registration_payment(stripe_intent.holder.attendee_id, stored_intent.id, ruby_money.cents, ruby_money.currency.iso_code, stored_intent.status, { type: "webhook", id: "stripe" })
+            Microservices::Registrations.update_registration_payment(stripe_intent.holder.attendee_id, stored_intent.id, ruby_money.cents, ruby_money.currency.iso_code, stored_intent.status, { type: "stripe_webhook", id: audit_event.id })
           rescue Faraday::Error => e
             logger.error "Couldn't update Microservice: #{e.message}, at #{e.backtrace}"
             return head :internal_server_error
@@ -599,7 +599,7 @@ class RegistrationsController < ApplicationController
 
       if uses_v2
         begin
-          Microservices::Registrations.update_registration_payment("#{competition_id}-#{registration.user.id}", charge_transaction.id, ruby_money.cents, ruby_money.currency.iso_code, stripe_intent.status)
+          Microservices::Registrations.update_registration_payment("#{competition_id}-#{registration.user.id}", charge_transaction.id, ruby_money.cents, ruby_money.currency.iso_code, stripe_intent.status, { type: "user", id: current_user.id })
         rescue Faraday::Error
           flash[:error] = t("registrations.payment_form.errors.registration_unreachable")
           return redirect_to competition_register_path(competition_id)
@@ -726,7 +726,7 @@ class RegistrationsController < ApplicationController
 
     if uses_v2
       begin
-        Microservices::Registrations.update_registration_payment(attendee_id, refund_receipt.id, refund_amount, currency_iso, "refund")
+        Microservices::Registrations.update_registration_payment(attendee_id, refund_receipt.id, refund_amount, currency_iso, "refund", { type: "user", id: current_user.id })
       rescue Faraday::Error
         flash[:error] = 'Registration Service is not reachable'
       end

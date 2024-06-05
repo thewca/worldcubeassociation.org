@@ -19,9 +19,8 @@ class PaymentController < ApplicationController
         intent.payment_record.child_records.charge.map { |record|
           available_amount = record.ruby_amount_available_for_refund
 
-          ruby_amount_refundable = StripeRecord.amount_to_ruby(available_amount, record.currency_code)
-          human_amount_refundable = helpers.stripe_to_human_readable(available_amount, record.currency_code)
-          human_amount_payment = helpers.stripe_to_human_readable(paid_amount, record.currency_code)
+          human_amount_refundable = helpers.ruby_money_to_human_readable(available_amount, record.currency_code)
+          human_amount_payment = helpers.ruby_money_to_human_readable(StripeRecord.amount_to_ruby(record.amount_striped_denomination, record.currency_code), record.currency_code)
 
           {
             payment_id: record.id,
