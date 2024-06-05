@@ -56,7 +56,7 @@
           %>
           <% if @competition.using_payment_integrations? && payment.amount_available_for_refund > 0 %>
             <% refund_provider = CompetitionPaymentIntegration::INTEGRATION_RECORD_TYPES.invert[payment.receipt_type] %>
-            <%= horizontal_simple_form_for :payment, url: registration_payment_refund_path(@competition, refund_provider, payment.receipt_id), html: { id: :form_refund } do |f| %>
+            <%= horizontal_simple_form_for :payment, url: registration_payment_refund_path(@competition, refund_provider, payment.receipt_id), html: { id: "form_refund_#{payment.id}" } do |f| %>
               <%= f.input :refund_amount, as: :money_amount, currency: payment.amount.currency.iso_code, value: payment.amount_available_for_refund, label: t('registrations.refund_form.labels.refund_amount'), hint: t('registrations.refund_form.hints.refund_amount') %>
               <%= submit_tag t('registrations.refund'), class: "btn btn-warning", data: { confirm: t('registrations.refund_confirmation') } %>
             <% end %>
