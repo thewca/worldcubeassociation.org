@@ -1,4 +1,4 @@
-import { fetchJsonOrError, fetchWithAuthenticityToken } from '../../../../../lib/requests/fetchWithAuthenticityToken';
+import { fetchWithAuthenticityToken } from '../../../../../lib/requests/fetchWithAuthenticityToken';
 import { refundPaymentUrl } from '../../../../../lib/requests/routes.js.erb';
 
 export default async function refundPayment({
