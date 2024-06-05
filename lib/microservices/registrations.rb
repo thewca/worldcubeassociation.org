@@ -70,7 +70,6 @@ module Microservices
     def self.competitor_count_by_competition(competition_id)
       response = self.registration_connection.get(self.get_competitor_count_path(competition_id))
 
-      # If we ever need the response body
       response.body["count"]
     end
 
