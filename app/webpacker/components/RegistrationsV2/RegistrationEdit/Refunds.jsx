@@ -38,7 +38,7 @@ export default function Refunds({
   }
 
   if (refunds.length === 0) {
-    return <Message success>All charges have been refunded</Message>;
+    return <Message warning>All charges have been refunded</Message>;
   }
 
   return (
