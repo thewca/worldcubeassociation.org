@@ -18,13 +18,14 @@ class PaymentController < ApplicationController
       charges = intents.flat_map { |intent|
         intent.payment_record.child_records.charge.map { |record|
           available_amount = record.ruby_amount_available_for_refund
+          full_amount_ruby = StripeRecord.amount_to_ruby(record.amount_stripe_denomination, record.currency_code)
 
           human_amount_refundable = helpers.ruby_money_to_human_readable(available_amount, record.currency_code)
-          human_amount_payment = helpers.ruby_money_to_human_readable(record.amount_stripe_denomination, record.currency_code)
+          human_amount_payment = helpers.ruby_money_to_human_readable(full_amount_ruby, record.currency_code)
 
           {
             payment_id: record.id,
-            full_amount: record.amount_stripe_denomination,
+            full_amount: full_amount_ruby,
             ruby_amount_refundable: available_amount,
             human_amount_refundable: human_amount_refundable,
             human_amount_payment: human_amount_payment,
