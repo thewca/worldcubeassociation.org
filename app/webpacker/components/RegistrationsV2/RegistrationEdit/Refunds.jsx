@@ -26,11 +26,8 @@ export default function Refunds({
   });
   const { mutate: refundMutation, isPending: isMutating } = useMutation({
     mutationFn: refundPayment,
-    onError: () => {
-      // The Backend will set a flash error
-    },
+    // The Backend will set a flash error on success or error
     onSuccess: () => {
-      // The Frontend will set a flash message
       refetch();
       onSuccess();
     },
