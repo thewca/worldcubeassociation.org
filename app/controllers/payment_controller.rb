@@ -25,7 +25,6 @@ class PaymentController < ApplicationController
 
           {
             payment_id: record.id,
-            full_amount: full_amount_ruby,
             ruby_amount_refundable: available_amount,
             human_amount_refundable: human_amount_refundable,
             human_amount_payment: human_amount_payment,
