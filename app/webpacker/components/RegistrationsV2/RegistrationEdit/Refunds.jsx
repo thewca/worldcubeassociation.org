@@ -7,6 +7,7 @@ import getAvailableRefunds from '../api/payment/get/getAvailableRefunds';
 import refundPayment from '../api/payment/get/refundPayment';
 import Loading from '../../Requests/Loading';
 import AutonumericField from '../../wca/FormBuilder/input/AutonumericField';
+import useInputState from '../../../lib/hooks/useInputState';
 
 export default function Refunds({
   onSuccess, userId, competitionId,
@@ -73,7 +74,7 @@ export default function Refunds({
 function RefundRow({
   refund, refundMutation, isMutating, userId, competitionId,
 }) {
-  const [amountToRefund, setAmountToRefund] = useState(refund.ruby_amount_refundable);
+  const [amountToRefund, setAmountToRefund] = useInputState(refund.ruby_amount_refundable);
 
   return (
     <Table.Row>
@@ -87,7 +88,7 @@ function RefundRow({
         <AutonumericField
           currency={refund.currency_code.toUpperCase()}
           value={amountToRefund}
-          onChange={(event, { value }) => setAmountToRefund(value)}
+          onChange={setAmountToRefund}
           max={refund.ruby_amount_refundable}
         />
       </Table.Cell>
