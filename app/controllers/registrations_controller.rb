@@ -710,12 +710,12 @@ class RegistrationsController < ApplicationController
     refund_amount = refund_amount_param.to_i
     amount_left = charge.ruby_amount_available_for_refund - refund_amount
 
-    if amount_left < 0
+    if amount_left.negative?
       flash[:danger] = "You are not allowed to refund more than the competitor has paid."
       return redirect_to redirect_path
     end
 
-    if refund_amount < 0
+    if refund_amount.negative?
       flash[:danger] = "The refund amount must be greater than zero."
       return redirect_to redirect_path
     end
