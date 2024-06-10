@@ -13,6 +13,7 @@ gem 'rails-i18n'
 gem 'i18n-js'
 gem 'activerecord-import'
 gem 'sass-rails'
+gem "sassc-embedded"
 gem 'terser'
 gem 'faraday'
 gem 'faraday-retry'
@@ -88,7 +89,7 @@ gem 'i18n-country-translations', github: 'thewca/i18n-country-translations'
 gem 'http_accept_language'
 gem 'twitter_cldr'
 # version explicitly specified because Shakapacker wants to keep Gemfile and package.json in sync
-gem 'shakapacker', '7.2.3'
+gem 'shakapacker', '8.0.0'
 gem 'json-schema'
 gem 'translighterate'
 gem 'enum_help'
@@ -117,7 +118,7 @@ group :development, :test do
   gem 'capybara-screenshot'
 
   gem 'byebug'
-  gem 'i18n-tasks', github: 'glebm/i18n-tasks'
+  gem 'i18n-tasks'
   gem 'i18n-spec'
 
   # We may be able to remove this when a future version of bundler comes out.

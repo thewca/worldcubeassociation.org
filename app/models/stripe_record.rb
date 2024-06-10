@@ -125,6 +125,13 @@ class StripeRecord < ApplicationRecord
     Money.new(ruby_amount, self.currency_code)
   end
 
+  def ruby_amount_available_for_refund
+    paid_amount = amount_stripe_denomination
+    already_refunded = child_records.refund.sum(:amount_stripe_denomination)
+
+    StripeRecord.amount_to_ruby(paid_amount - already_refunded, self.currency_code)
+  end
+
   # sub-hundred units special cases per https://stripe.com/docs/currencies#special-cases
   # that are not compatible with the subunits from our RubyMoney gem.
   # In other words, `Money::Currency.find(iso_code).subunit_to_unit`

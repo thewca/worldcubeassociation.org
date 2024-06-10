@@ -25,6 +25,12 @@ RSpec.describe Api::V0::UserRolesController do
       end
 
       it 'fetches list of roles of a user' do
+        get :index, params: { userId: user_whose_delegate_status_changes.id }
+
+        expect(response.body).to eq(user_whose_delegate_status_changes.active_roles.to_json)
+      end
+
+      it 'fetches list of roles of a user using index_for_user' do
         get :index_for_user, params: { user_id: user_whose_delegate_status_changes.id }
 
         expect(response.body).to eq(user_whose_delegate_status_changes.active_roles.to_json)
@@ -76,11 +82,12 @@ RSpec.describe Api::V0::UserRolesController do
   describe 'POST #create' do
     let!(:user_to_be_banned_with_past_comps) { FactoryBot.create(:user, :with_past_competitions) }
     let!(:user_to_be_banned_with_future_comps) { FactoryBot.create(:user, :with_future_competitions) }
+    let!(:user_to_be_banned_with_deleted_registration_in_future_comps) { FactoryBot.create(:user, :with_deleted_registration_in_future_comps) }
 
-    context 'when a competitor is banned' do
+    context 'when signed in as a WDC Leader' do
       sign_in { FactoryBot.create(:user, :wdc_leader) }
 
-      it 'successful if the user does not have any upcoming competitions' do
+      it 'can ban a user if the user does not have any upcoming competitions' do
         post :create, params: {
           userId: user_to_be_banned_with_past_comps.id,
           groupType: UserGroup.group_types[:banned_competitors],
@@ -88,7 +95,7 @@ RSpec.describe Api::V0::UserRolesController do
         expect(response).to be_successful
       end
 
-      it 'fails if the user have any upcoming competitions' do
+      it 'cannot ban a user if the user have any upcoming competitions' do
         post :create, params: {
           userId: user_to_be_banned_with_future_comps.id,
           groupType: UserGroup.group_types[:banned_competitors],
@@ -97,6 +104,38 @@ RSpec.describe Api::V0::UserRolesController do
         expect(response).to have_http_status(422)
         response_json = JSON.parse(response.body)
         expect(response_json["error"]).to eq "The user has upcoming competitions: #{upcoming_comps_for_user.join(', ')}. Before banning the user, make sure their registrations are deleted."
+      end
+
+      it 'can ban a user if the user have a deleted registration in an upcoming competitions' do
+        post :create, params: {
+          userId: user_to_be_banned_with_deleted_registration_in_future_comps.id,
+          groupType: UserGroup.group_types[:banned_competitors],
+        }
+        expect(response).to be_successful
+      end
+
+      it 'can add a member to WDC' do
+        user = FactoryBot.create(:user)
+
+        expect(user.wdc_team?).to be false
+        post :create, params: {
+          userId: user.id,
+          groupId: UserGroup.teams_committees_group_wdc.id,
+          status: RolesMetadataTeamsCommittees.statuses[:member],
+        }
+        expect(response).to be_successful
+        expect(user.reload.wdc_team?).to be true
+      end
+
+      it 'can remove a member from WDC' do
+        wdc_role = FactoryBot.create(:wdc_member_role, :active)
+
+        expect(wdc_role.user.wdc_team?).to be true
+        post :destroy, params: {
+          id: wdc_role.id,
+        }
+        expect(response).to be_successful
+        expect(wdc_role.user.reload.wdc_team?).to be false
       end
     end
   end

@@ -25,11 +25,7 @@ class User < ApplicationRecord
   has_many :roles, class_name: "UserRole"
   has_many :active_roles, -> { active }, class_name: "UserRole"
   has_many :delegate_role_metadata, through: :active_roles, source: :metadata, source_type: "RolesMetadataDelegateRegions"
-  has_many :delegate_roles, through: :delegate_role_metadata, source: :user_role, class_name: "UserRole"
-  has_many :team_members, dependent: :destroy
-  has_many :teams, -> { distinct }, through: :team_members
-  has_many :current_team_members, -> { current }, class_name: "TeamMember"
-  has_many :current_teams, -> { distinct }, through: :current_team_members, source: :team
+  has_many :delegate_roles, -> { includes(:group, :metadata) }, through: :delegate_role_metadata, source: :user_role, class_name: "UserRole"
   has_many :confirmed_users_claiming_wca_id, -> { confirmed_email }, foreign_key: "delegate_id_to_handle_wca_id_claim", class_name: "User"
   has_many :oauth_applications, class_name: 'Doorkeeper::Application', as: :owner
   has_many :oauth_access_grants, class_name: 'Doorkeeper::AccessGrant', foreign_key: :resource_owner_id
@@ -577,11 +573,30 @@ class User < ApplicationRecord
     delegate_roles.select { |role| role.metadata.status == RolesMetadataDelegateRegions.statuses[:senior_delegate] }
   end
 
-  private def groups_with_read_access
+  private def can_view_current_banned_competitors?
+    can_view_past_banned_competitors? || staff_delegate?
+  end
+
+  private def can_view_past_banned_competitors?
+    wdc_team? || ethics_committee? || board_member? || weat_team? || results_team? || admin?
+  end
+
+  private def groups_with_read_access_for_current
+    return "*" if can_edit_any_groups?
+    groups = groups_with_read_access_for_past
+
+    if can_view_current_banned_competitors?
+      groups += UserGroup.banned_competitors.ids
+    end
+
+    groups
+  end
+
+  private def groups_with_read_access_for_past
     return "*" if can_edit_any_groups?
     groups = groups_with_edit_access
 
-    if can_view_banned_competitors?
+    if can_view_past_banned_competitors?
       groups += UserGroup.banned_competitors.ids
     end
 
@@ -638,8 +653,11 @@ class User < ApplicationRecord
       can_create_groups: {
         scope: groups_with_create_access,
       },
-      can_read_groups: {
-        scope: groups_with_read_access,
+      can_read_groups_current: {
+        scope: groups_with_read_access_for_current,
+      },
+      can_read_groups_past: {
+        scope: groups_with_read_access_for_past,
       },
       can_edit_groups: {
         scope: groups_with_edit_access,
@@ -683,10 +701,6 @@ class User < ApplicationRecord
 
   def can_admin_finances?
     admin? || financial_committee?
-  end
-
-  def can_view_banned_competitors?
-    admin? || staff?
   end
 
   def can_edit_banned_competitors?
@@ -1106,6 +1120,7 @@ class User < ApplicationRecord
 
   private def deprecated_team_roles
     active_roles
+      .includes(:metadata, group: [:metadata])
       .select { |role|
         [
           UserGroup.group_types[:teams_committees],
@@ -1137,7 +1152,7 @@ class User < ApplicationRecord
     # Preempt the values for avatar and teams, they have a special treatment.
     include_avatar = options[:include]&.delete("avatar")
     include_teams = options[:include]&.delete("teams")
-    json = super(options)
+    json = super
 
     # We override some attributes manually because it's unconvenient to
     # put them in DEFAULT_SERIALIZE_OPTIONS (eg: "teams" doesn't have a default
@@ -1259,8 +1274,7 @@ class User < ApplicationRecord
   # These includes any teams, organizers, delegates
   # Note: Someone can Delegate a competition without ever being a Delegate.
   def is_special_account?
-    self.teams.any? ||
-      self.roles.any? ||
+    self.roles.any? ||
       !self.organized_competitions.empty? ||
       !delegated_competitions.empty? ||
       !competitions_announced.empty? ||

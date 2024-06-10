@@ -11,6 +11,46 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     User.where(delegate_to_handle_wca_id_claim: user.id).update_all(delegate_id_to_handle_wca_id_claim: nil, unconfirmed_wca_id: nil)
   end
 
+  private def pre_filtered_user_roles
+    active_record = UserRole
+    is_active = params.key?(:isActive) ? ActiveRecord::Type::Boolean.new.cast(params.require(:isActive)) : nil
+    is_group_hidden = params.key?(:isGroupHidden) ? ActiveRecord::Type::Boolean.new.cast(params.require(:isGroupHidden)) : nil
+    group_type = params[:groupType]
+    group_id = params[:groupId]
+    user_id = params[:userId]
+
+    # In next few lines, instead of foo.present? we are using !foo.nil? because foo.present? returns
+    # false if foo is a boolean false but we need to actually check if the boolean is present or not.
+    if !is_active.nil?
+      active_record = is_active ? active_record.active : active_record.inactive
+    end
+    if !is_group_hidden.nil?
+      active_record = active_record.includes(:group).where(group: { is_hidden: is_group_hidden })
+    end
+    if group_type.present?
+      active_record = active_record.includes(:group).where(group: { group_type: group_type })
+    end
+    if group_id.present?
+      active_record = active_record.where(group_id: group_id)
+    end
+    if user_id.present?
+      active_record = active_record.where(user_id: user_id)
+    end
+    active_record
+  end
+
+  # Returns a list of roles based on the parameters.
+  def index
+    roles = pre_filtered_user_roles
+
+    # Filter & Sort roles.
+    roles = UserRole.filter_roles(roles, current_user, params)
+    roles = UserRole.sort_roles(roles, params[:sort])
+
+    # Limiting to first 100 elements of roles array to avoid serializing of large array.
+    render json: roles.first(100)
+  end
+
   # Returns a list of roles primarily based on userId.
   def index_for_user
     user_id = params.require(:user_id)
@@ -37,15 +77,10 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     render json: roles
   end
 
-  private def roles_of_group_type(group_type)
-    group_ids = UserGroup.where(group_type: group_type).pluck(:id)
-    UserRole.where(group_id: group_ids)
-  end
-
   # Returns a list of roles primarily based on groupType.
   def index_for_group_type
     group_type = params.require(:group_type)
-    roles = roles_of_group_type(group_type)
+    roles = UserGroup.roles_of_group_type(group_type)
 
     # Filter & Sort roles
     roles = UserRole.filter_roles(roles, current_user, params)
@@ -101,7 +136,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     end
 
     return render status: :unprocessable_entity, json: { error: "Invalid group type" } unless create_supported_groups.include?(group.group_type)
-    return head :unauthorized unless current_user.has_permission?(:can_edit_groups, group_id)
+    return head :unauthorized unless current_user.has_permission?(:can_edit_groups, group_id.to_i)
 
     role_to_end = nil
     new_role = nil
@@ -286,7 +321,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     else
       return render status: :unprocessable_entity, json: { error: "Invalid group type" }
     end
-    RoleChangeMailer.notify_role_change(role, current_user, changes).deliver_later
+    RoleChangeMailer.notify_role_change(role, current_user, changes.to_json).deliver_later
     render json: { success: true }
   end
 
@@ -309,7 +344,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
   def search
     query = params.require(:query)
     group_type = params.require(:groupType)
-    roles = roles_of_group_type(group_type)
+    roles = UserGroup.roles_of_group_type(group_type)
     active_roles = roles.select { |role| role.is_active? }
 
     query.split.each do |part|

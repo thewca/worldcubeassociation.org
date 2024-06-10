@@ -2,6 +2,11 @@
 
 require "rails_helper"
 
+# This part of our React suite is particularly slow in the CI
+#   so until we find a more modern browser engine to run our test
+#   we counter-steer by setting the wait time ludicrously high
+SLUGGISH_WAIT_TIME = 5
+
 def find_modal(&)
   all(:css, '.modal.visible', &).last
 end
@@ -46,14 +51,15 @@ RSpec.feature "Competition management", js: true, retry: 10 do
 
         click_button "Create Competition"
 
-        expect(page).to have_current_path(edit_competition_path("MyCompetition2015"))
+        # Force Capybara to wait until the page finishes updating
+        expect(page).to have_current_path(edit_competition_path("MyCompetition2015"), wait: SLUGGISH_WAIT_TIME)
       end
 
       scenario "with validation errors" do
         visit new_competition_path
         click_button "Create Competition"
 
-        expect(page).to have_text("must end with a year")
+        expect(page).to have_text("must end with a year", wait: SLUGGISH_WAIT_TIME)
       end
     end
 
@@ -66,7 +72,9 @@ RSpec.feature "Competition management", js: true, retry: 10 do
         fill_in "Start date", with: "2016-11-30"
         fill_in "End date", with: "2016-11-30"
         click_button "Create Competition"
-        expect(page).to have_current_path edit_competition_path("Pedro2016")
+
+        # Force Capybara to wait until the page finishes updating
+        expect(page).to have_current_path(edit_competition_path("Pedro2016"), wait: SLUGGISH_WAIT_TIME)
       end
 
       scenario "with validation errors" do
@@ -77,7 +85,8 @@ RSpec.feature "Competition management", js: true, retry: 10 do
         fill_in "Start date", with: "2016-11-30"
         fill_in "End date", with: "2016-11-30"
         click_button "Create Competition"
-        expect(page).to have_text("must end with a year")
+
+        expect(page).to have_text("must end with a year", wait: SLUGGISH_WAIT_TIME)
       end
     end
 
@@ -90,7 +99,7 @@ RSpec.feature "Competition management", js: true, retry: 10 do
         click_button "Yes"
       end
 
-      expect(page).to have_text("You've confirmed this competition")
+      expect(page).to have_text("You've confirmed this competition", wait: SLUGGISH_WAIT_TIME)
     end
 
     scenario "change competition id of long name" do
@@ -100,10 +109,12 @@ RSpec.feature "Competition management", js: true, retry: 10 do
       fill_in "ID", with: "NewId2016"
       click_button "Update Competition"
 
-      expect(page).to have_current_path(edit_competition_path("NewId2016"))
-      expect(page).to have_text("This competition is not visible to the public.")
+      # Force Capybara to wait until the page finishes updating
+      expect(page).to have_current_path(edit_competition_path("NewId2016"), wait: SLUGGISH_WAIT_TIME)
 
+      expect(page).to have_text("This competition is not visible to the public.")
       expect(page).not_to have_text("You have unsaved changes")
+
       expect(Competition.find("NewId2016")).not_to be_nil
     end
 
@@ -115,7 +126,7 @@ RSpec.feature "Competition management", js: true, retry: 10 do
 
       # When an invalid ID is specified, we silently ignore it. This behavior will
       # get nicer once we have proper immutable ids for competitions.
-      expect(page).to have_current_path edit_competition_path("OldId2016")
+      expect(page).to have_current_path(edit_competition_path("OldId2016"), wait: SLUGGISH_WAIT_TIME)
 
       expect(Competition.find("OldId2016")).not_to be_nil
       expect(Competition.find_by_id("NewId With Spaces")).to be_nil
@@ -128,17 +139,13 @@ RSpec.feature "Competition management", js: true, retry: 10 do
       fill_in "Name", with: "Name that does not end in a year but is long"
       click_button "Update Competition"
 
-      # double-saving to make sure the error _really_ appears (GitHub CI needs this)
-      expect(page).to have_button("save your changes!")
-      click_button "save your changes!"
-
-      expect(page).to have_button("save your changes!")
-      expect(page).to have_text("must end with a year")
+      expect(page).to have_button("save your changes!", wait: SLUGGISH_WAIT_TIME)
+      expect(page).to have_text("must end with a year", wait: SLUGGISH_WAIT_TIME)
 
       fill_in "Name", with: "Name that is long and does end in year 2016"
       click_button "Update Competition"
 
-      expect(page).to have_current_path edit_competition_path("NewId2016")
+      expect(page).to have_current_path(edit_competition_path("NewId2016"), wait: SLUGGISH_WAIT_TIME)
 
       c = Competition.find("NewId2016")
       expect(c).not_to be_nil
@@ -151,7 +158,7 @@ RSpec.feature "Competition management", js: true, retry: 10 do
       click_button "Update Competition"
 
       # Force Capybara to wait until the page finishes updating
-      expect(page).to have_current_path edit_competition_path("OldId2016")
+      expect(page).to have_current_path(edit_competition_path("OldId2016"), wait: SLUGGISH_WAIT_TIME)
 
       c = Competition.find("OldId2016")
       expect(c).not_to be_nil
@@ -164,7 +171,7 @@ RSpec.feature "Competition management", js: true, retry: 10 do
       click_button "Update Competition"
 
       # Force Capybara to wait until the page finishes updating
-      expect(page).to have_current_path competition_admin_edit_path("NewId2016")
+      expect(page).to have_current_path(competition_admin_edit_path("NewId2016"), wait: SLUGGISH_WAIT_TIME)
 
       c = Competition.find("NewId2016")
       expect(c).not_to be_nil
@@ -232,7 +239,8 @@ RSpec.feature "Competition management", js: true, retry: 10 do
       fill_in "The reason for the competitor limit", with: 'Because it is required'
       click_button "Create Competition"
 
-      expect(page).to have_current_path(edit_competition_path("NewComp2015")) # wait for request to complete
+      # Force Capybara to wait until the page finishes updating
+      expect(page).to have_current_path(edit_competition_path("NewComp2015"), wait: SLUGGISH_WAIT_TIME)
 
       expect(Competition.all.length).to eq 1
       new_competition = Competition.find("NewComp2015")
@@ -248,7 +256,7 @@ RSpec.feature "Competition management", js: true, retry: 10 do
       click_button "Update Competition"
 
       # Force Capybara to wait until the page finishes updating
-      expect(page).to have_current_path edit_competition_path("NewId2016")
+      expect(page).to have_current_path(edit_competition_path("NewId2016"), wait: SLUGGISH_WAIT_TIME)
 
       c = Competition.find("NewId2016")
       expect(c).not_to be_nil
@@ -271,8 +279,8 @@ RSpec.feature "Competition management", js: true, retry: 10 do
       expect(page).to have_button('Create Competition')
       click_button "Create Competition"
 
-      # wait for request to complete
-      expect(page).to have_current_path edit_competition_path("NewComp2015")
+      # Force Capybara to wait until the page finishes updating
+      expect(page).to have_current_path(edit_competition_path("NewComp2015"), wait: SLUGGISH_WAIT_TIME)
 
       expect(Competition.all.length).to eq 2
       new_competition = Competition.find("NewComp2015")

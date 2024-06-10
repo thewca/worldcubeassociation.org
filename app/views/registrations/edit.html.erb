@@ -56,7 +56,7 @@
           %>
           <% if @competition.using_payment_integrations? && payment.amount_available_for_refund > 0 %>
             <% if @competition.stripe_connected? %>
-              <% refund_url = registration_payment_refund_path(@registration, payment) %>
+              <% refund_url = registration_payment_refund_path(@competition, payment.receipt_id) %>
             <% else %>
               <% refund_url = paypal_payment_refund_path(@registration, payment) %>
             <% end %>

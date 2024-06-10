@@ -54,8 +54,8 @@ class CompetitionsController < ApplicationController
     }
   end
 
-  private def require_user_permission(action, *args, is_message: false)
-    permission_result = current_user&.send(action, *args)
+  private def require_user_permission(action, *, is_message: false)
+    permission_result = current_user&.send(action, *)
 
     if is_message && permission_result
       return render status: :forbidden, json: { error: permission_result }
