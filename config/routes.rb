@@ -388,7 +388,7 @@ Rails.application.routes.draw do
         get '/psych-sheet/:event_id' => 'competitions#event_psych_sheet', as: :event_psych_sheet
         patch '/wcif' => 'competitions#update_wcif', as: :update_wcif
       end
-      
+
       post '/registration-data' => 'competitions#registration_data', as: :registration_data
 
       scope 'user_roles' do
