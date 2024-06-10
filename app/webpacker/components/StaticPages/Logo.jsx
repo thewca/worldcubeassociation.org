@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import { Button } from "semantic-ui-react";
 import I18nHTMLTranslate from "../I18nHTMLTranslate";
-import lockupPrimary from "./LogoImages/WCA Lockup Positive Primary.png";
-import lockupNegative from "./LogoImages/WCA Lockup Negative Primary.png";
-import lockupMonoBlack from "./LogoImages/WCA Lockup Mono Black.png";
-import lockupMonoWhite from "./LogoImages/WCA Lockup Mono White.png";
-import logoOnlyPrimary from "./LogoImages/WCA Logo Only Positive Primary.png";
-import logoOnlyNegative from "./LogoImages/WCA Logo Only Negative Primary.png";
-import logoOnlyMonoBlack from "./LogoImages/WCA Logo Only Mono Black.png";
-import logoOnlyMonoWhite from "./LogoImages/WCA Logo Only Mono White.png";
+import lockupPrimary from "./LogoImages/WCA Lockup Positive Primary.svg";
+import lockupNegative from "./LogoImages/WCA Lockup Negative Primary.svg";
+import lockupMonoBlack from "./LogoImages/WCA Lockup Mono Black.svg";
+import lockupMonoWhite from "./LogoImages/WCA Lockup Mono White.svg";
+import logoOnlyPrimary from "./LogoImages/WCA Logo Only Positive Primary.svg";
+import logoOnlyNegative from "./LogoImages/WCA Logo Only Negative Primary.svg";
+import logoOnlyMonoBlack from "./LogoImages/WCA Logo Only Mono Black.svg";
+import logoOnlyMonoWhite from "./LogoImages/WCA Logo Only Mono White.svg";
 
 const lockupStyle = {
   width: "100%",
