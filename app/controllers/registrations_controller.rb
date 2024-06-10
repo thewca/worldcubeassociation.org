@@ -538,7 +538,7 @@ class RegistrationsController < ApplicationController
         elsif stored_intent.holder.is_a? MicroserviceRegistration
           ruby_money = charge_transaction.money_amount
           begin
-            Microservices::Registrations.update_registration_payment(stripe_intent.holder.attendee_id, stored_intent.id, ruby_money.cents, ruby_money.currency.iso_code, stored_intent.status)
+            Microservices::Registrations.update_registration_payment(stripe_intent.holder.attendee_id, stored_intent.id, ruby_money.cents, ruby_money.currency.iso_code, stored_intent.status, { type: "stripe_webhook", id: audit_event.id })
           rescue Faraday::Error => e
             logger.error "Couldn't update Microservice: #{e.message}, at #{e.backtrace}"
             return head :internal_server_error
@@ -599,7 +599,7 @@ class RegistrationsController < ApplicationController
 
       if uses_v2
         begin
-          Microservices::Registrations.update_registration_payment("#{competition_id}-#{registration.user.id}", charge_transaction.id, ruby_money.cents, ruby_money.currency.iso_code, stripe_intent.status)
+          Microservices::Registrations.update_registration_payment("#{competition_id}-#{registration.user.id}", charge_transaction.id, ruby_money.cents, ruby_money.currency.iso_code, stripe_intent.status, { type: "user", id: current_user.id })
         rescue Faraday::Error
           flash[:error] = t("registrations.payment_form.errors.registration_unreachable")
           return redirect_to competition_register_path(competition_id)
@@ -699,22 +699,25 @@ class RegistrationsController < ApplicationController
     registration = charge.root_record.payment_intent.holder
     uses_v2 = registration.is_a? MicroserviceRegistration
 
+    redirect_path = uses_v2 ? edit_registration_v2_path(competition_id, registration.user_id) : edit_registration_path(registration)
+
     unless stripe_integration.present?
       flash[:danger] = "You cannot emit refund for this competition anymore. Please use your Stripe dashboard to do so."
-      return redirect_to edit_registration_path(registration)
+      return redirect_to redirect_path
     end
 
     refund_amount_param = params.require(:payment).require(:refund_amount)
     refund_amount = refund_amount_param.to_i
+    amount_left = charge.ruby_amount_available_for_refund - refund_amount
 
-    if refund_amount > charge.ruby_amount_available_for_refund
+    if amount_left.negative?
       flash[:danger] = "You are not allowed to refund more than the competitor has paid."
-      return redirect_to edit_registration_path(registration)
+      return redirect_to redirect_path
     end
 
-    if refund_amount < 0
+    if refund_amount.negative?
       flash[:danger] = "The refund amount must be greater than zero."
-      return redirect_to edit_registration_path(registration)
+      return redirect_to redirect_path
     end
 
     refund_receipt = stripe_integration.issue_refund(charge.stripe_id, refund_amount)
@@ -726,7 +729,7 @@ class RegistrationsController < ApplicationController
 
     if uses_v2
       begin
-        Microservices::Registrations.update_registration_payment(attendee_id, refund_receipt.id, refund_amount, currency_iso, "refund")
+        Microservices::Registrations.update_registration_payment("#{competition_id}-#{registration.user.id}", refund_receipt.id, amount_left, ruby_money.currency.iso_code, "refund", { type: "user", id: current_user.id })
       rescue Faraday::Error
         flash[:error] = 'Registration Service is not reachable'
       end
@@ -741,7 +744,7 @@ class RegistrationsController < ApplicationController
     end
 
     flash[:success] = 'Payment was refunded'
-    redirect_to edit_registration_path(registration)
+    redirect_to redirect_path
   end
 
   def create
