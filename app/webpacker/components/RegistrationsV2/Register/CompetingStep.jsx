@@ -341,7 +341,7 @@ export default function CompetingStep({
 
               {shouldShowReRegisterButton && (
               <Button
-                secondary
+                primary
                 disabled={isUpdating}
                 type="submit"
               >
