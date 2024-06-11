@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Button, Form, FormField, Header, Message, Segment, TransitionGroup,
+  Button, Form, FormField, Header, Message, Segment,
 } from 'semantic-ui-react';
 import i18n from '../../../lib/i18n';
 import EventIcon from '../../wca/EventIcon';
@@ -31,6 +31,11 @@ export default function RegistrationOverview({
       <Message info>
         {i18n.t(updateRegistrationKey(editsAllowed, hasRegistrationEditDeadlinePassed))}
       </Message>
+      )}
+      { !competitionInfo['using_payment_integrations?'] && registration.competing.registration_status === 'pending' && competitionInfo.base_entry_fee_lowest_denomination && (
+        <Message info>
+          {i18n.t('registrations.wont_pay_here')}
+        </Message>
       )}
       <Segment>
         <Header>{i18n.t('competitions.nav.menu.registration')}</Header>
