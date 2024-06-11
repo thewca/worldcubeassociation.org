@@ -25,11 +25,11 @@ export default function WaitingList({ competitionInfo }) {
     <Loading />
   )
     : (
-      <Table>
+      <Table collapsing>
         <Table.Header>
           <Table.Row>
-            <Table.HeaderCell>Name</Table.HeaderCell>
             <Table.HeaderCell>Position</Table.HeaderCell>
+            <Table.HeaderCell>Name</Table.HeaderCell>
           </Table.Row>
         </Table.Header>
         <Table.Body>
@@ -40,10 +40,10 @@ export default function WaitingList({ competitionInfo }) {
               ) // We just care about the order of the waitlisted competitors
               .map((w, i) => (
                 <Table.Row key={w.user_id}>
-                  <Table.Cell>{w.user.name}</Table.Cell>
                   <Table.Cell>
                     {w.waiting_list_position === 0 ? 'Not yet assigned' : i + 1}
                   </Table.Cell>
+                  <Table.Cell>{w.user.name}</Table.Cell>
                 </Table.Row>
               ))
           ) : (
