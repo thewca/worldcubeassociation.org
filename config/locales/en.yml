@@ -1772,8 +1772,8 @@ en:
         acknowledgement: "I have read and acknowledged all information under the 'Register' tab, including entry fees, refund policies and any extra requirements listed above."
         next_step: "Continue to next Step"
       update:
-        being_updated: "Registration is being updated"
-        being_deleted: "Registration is being deleted"
+        being_updated: "Registration is being updated..."
+        being_deleted: "Registration is being deleted..."
         no_changes: "There are no changes"
         email_send: "Send Email"
         email_copy: "Copy Email"
@@ -2458,7 +2458,7 @@ en:
             paragraph: "Only use the mono variant when the primary variant is not suitable."
         logo_only:
           title: "Logo Only"
-          paragraph: The WCA logo may be used without the logotype, following the same color guidelines above. 
+          paragraph: The WCA logo may be used without the logotype, following the same color guidelines above.
       download_logo_assets:
         title: "Download Logo Assets"
         paragraph: "High resolution PNGs and vector versions of the WCA logo are available for download."
