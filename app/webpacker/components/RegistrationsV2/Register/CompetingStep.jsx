@@ -17,7 +17,7 @@ import updateRegistration from '../api/registration/patch/update_registration';
 import submitEventRegistration from '../api/registration/post/submit_registration';
 import Processing from './Processing';
 import { userPreferencesRoute } from '../../../lib/requests/routes.js.erb';
-import { EventSelector, EventSelectorForm } from '../../CompetitionsOverview/CompetitionsFilters';
+import { EventSelector } from '../../CompetitionsOverview/CompetitionsFilters';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { setMessage } from './RegistrationMessage';
 import i18n from '../../../lib/i18n';
@@ -54,10 +54,13 @@ export default function CompetingStep({
   const dispatch = useDispatch();
 
   const [comment, setComment] = useState('');
+  const initialSelectedEvents = competitionInfo.events_per_registration_limit ? [] : preferredEvents
+    .filter((event) => competitionInfo.event_ids.includes(event));
   const [selectedEvents, setSelectedEvents] = useState(
-    competitionInfo.events_per_registration_limit ? [] : preferredEvents
-      .filter((event) => competitionInfo.event_ids.includes(event)),
+    initialSelectedEvents,
   );
+  // Don't set an error state before the user has interacted with the eventPicker
+  const [hasInteracted, setHasInteracted] = useState(false);
   const [guests, setGuests] = useState(0);
 
   const [processing, setProcessing] = useState(false);
@@ -208,6 +211,7 @@ export default function CompetingStep({
         setSelectedEvents(selectedEvents.toSpliced(index, 1));
       }
     }
+    setHasInteracted(true);
   };
 
   const shouldShowUpdateButton = isRegistered
@@ -271,14 +275,15 @@ export default function CompetingStep({
             warning
             list={formWarnings}
           />
-          <Form.Field required error={selectedEvents.length === 0}>
+          <Form.Field required error={hasInteracted && selectedEvents.length === 0}>
             <EventSelector
               onEventSelection={handleEventSelection}
               eventList={competitionInfo.event_ids}
               selectedEvents={selectedEvents}
               id="event-selection"
               maxEvents={maxEvents}
-              shouldErrorOnEmpty
+              // Don't error if the user hasn't interacted with the form yet
+              shouldErrorOnEmpty={hasInteracted}
             />
             {!competitionInfo.events_per_registration_limit
               && (
