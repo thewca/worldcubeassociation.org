@@ -262,7 +262,7 @@ export default function CompetingStep({
       <>
         {hasPaid && (
           <Message success>
-            {i18n.t('competitions.registration_v2.register.already_paid', { comp_name: competitionInfo.name })}
+            {i18n.t('registrations.entry_fees_fully_paid', { paid: registration?.payment.payment_amount_human_readable })}
           </Message>
         )}
 
@@ -319,7 +319,7 @@ export default function CompetingStep({
               }}
               min="0"
               max={competitionInfo.guests_per_registration_limit}
-              error={competitionInfo.guests_per_registration_limit && guests > competitionInfo.guests_per_registration_limit && i18n.t('competitions.competition_info.guest_limit', { count: competitionInfo.guests_per_registration_limit })}
+              error={Number.isInteger(competitionInfo.guests_per_registration_limit) && guests > competitionInfo.guests_per_registration_limit && i18n.t('competitions.competition_info.guest_limit', { count: competitionInfo.guests_per_registration_limit })}
             />
           </Form.Field>
           {isRegistered ? (
