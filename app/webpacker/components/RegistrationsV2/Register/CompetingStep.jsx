@@ -319,7 +319,7 @@ export default function CompetingStep({
               }}
               min="0"
               max={competitionInfo.guests_per_registration_limit}
-              error={guests > competitionInfo.guests_per_registration_limit && i18n.t('competitions.competition_info.guest_limit', { count: competitionInfo.guests_per_registration_limit })}
+              error={competitionInfo.guests_per_registration_limit && guests > competitionInfo.guests_per_registration_limit && i18n.t('competitions.competition_info.guest_limit', { count: competitionInfo.guests_per_registration_limit })}
             />
           </Form.Field>
           {isRegistered ? (
