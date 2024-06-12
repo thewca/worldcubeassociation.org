@@ -124,4 +124,16 @@ export const localizeActivityName = (activity, wcifEvents) => {
   return localizeActivityCode(activity.activityCode, activityRound, activityEvent);
 };
 
-export const isOrphanedActivity = (activity, wcifEvents) => getActivityEventId(activity) !== 'other' && findActivityEvent(activity, wcifEvents) === undefined;
+export const isOrphanedActivity = (activity, wcifEvents) => {
+  if (getActivityEventId(activity) === 'other') {
+    // 'other' activities are never matched to an event because by definition,
+    //   they are not a standard WCA event.
+    return false;
+  }
+
+  const activityEvent = findActivityEvent(activity, wcifEvents);
+
+  return (
+    activityEvent === undefined || findActivityRound(activity, activityEvent.rounds) === undefined
+  );
+};
