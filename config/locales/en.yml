@@ -1763,7 +1763,7 @@ en:
       info:
         download: "Download all of the competitions details."
       list:
-        empty: "No matching Records found"
+        empty: "None"
         spots_remaining: "%{spots} spot(s) remaining"
       bookmark:
         unbookmark: "You have removed your bookmark"
@@ -2458,7 +2458,7 @@ en:
             paragraph: "Only use the mono variant when the primary variant is not suitable."
         logo_only:
           title: "Logo Only"
-          paragraph: The WCA logo may be used without the logotype, following the same color guidelines above. 
+          paragraph: The WCA logo may be used without the logotype, following the same color guidelines above.
       download_logo_assets:
         title: "Download Logo Assets"
         paragraph: "High resolution PNGs and vector versions of the WCA logo are available for download."
