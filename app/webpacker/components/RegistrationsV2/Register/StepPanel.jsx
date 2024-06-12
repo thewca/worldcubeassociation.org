@@ -48,7 +48,7 @@ export default function StepPanel({
   stripePublishableKey,
   connectedAccountId,
 }) {
-  const isRegistered = Boolean(registration);
+  const isRegistered = Boolean(registration) && registration.competing.registration_status !== 'cancelled';
   const hasPaid = registration?.payment.payment_status === 'succeeded';
   const registrationFinished = hasPaid || (isRegistered && !competitionInfo['using_payment_integrations?']);
 
@@ -113,7 +113,13 @@ export default function StepPanel({
         stripePublishableKey={stripePublishableKey}
         connectedAccountId={connectedAccountId}
         nextStep={
-          () => setActiveIndex((oldActiveIndex) => {
+          (overwrites = {}) => setActiveIndex((oldActiveIndex) => {
+            if (overwrites?.refresh) {
+              return oldActiveIndex;
+            }
+            if (overwrites?.toStart) {
+              return 0;
+            }
             if (oldActiveIndex === steps.length - 1) {
               return registrationOverviewConfig.index;
             }
