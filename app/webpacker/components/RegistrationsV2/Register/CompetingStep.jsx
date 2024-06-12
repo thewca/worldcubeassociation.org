@@ -186,7 +186,6 @@ export default function CompetingStep({
   };
 
   const actionReRegister = () => {
-    dispatch(setMessage('competitions.registration_v2.update.being_updated', 'basic'));
     updateRegistrationMutation({
       user_id: registration.user_id,
       competition_id: competitionInfo.id,
@@ -200,7 +199,6 @@ export default function CompetingStep({
   };
 
   const actionDeleteRegistration = () => {
-    dispatch(setMessage('competitions.registration_v2.update.being_deleted', 'basic'));
     updateRegistrationMutation({
       user_id: registration.user_id,
       competition_id: competitionInfo.id,
@@ -239,13 +237,13 @@ export default function CompetingStep({
 
   const handleSubmit = useCallback((event) => {
     event.preventDefault();
-    if (shouldShowUpdateButton) {
-      attemptAction(actionUpdateRegistration, { checkForChanges: true });
-    } else if (shouldShowReRegisterButton) {
-      attemptAction(actionReRegister);
-    } else {
-      attemptAction(actionCreateRegistration);
+    if (shouldShowReRegisterButton) {
+      return attemptAction(actionReRegister);
     }
+    if (shouldShowUpdateButton) {
+      return attemptAction(actionUpdateRegistration, { checkForChanges: true });
+    }
+    attemptAction(actionCreateRegistration);
   }, [
     actionCreateRegistration,
     actionReRegister,
