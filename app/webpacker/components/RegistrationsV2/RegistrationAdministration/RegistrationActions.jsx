@@ -1,7 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
 import React from 'react';
 import { Button, Icon } from 'semantic-ui-react';
-import updateRegistration from '../api/registration/patch/update_registration';
+import { bulkUpdateRegistrations } from '../api/registration/patch/update_registration';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { setMessage } from '../Register/RegistrationMessage';
 import i18n from '../../../lib/i18n';
@@ -53,7 +53,7 @@ export default function RegistrationActions({
     .join(',');
 
   const { mutate: updateRegistrationMutation } = useMutation({
-    mutationFn: updateRegistration,
+    mutationFn: bulkUpdateRegistrations,
     onError: (data) => {
       const { error } = data.json;
       dispatch(setMessage(
@@ -66,23 +66,18 @@ export default function RegistrationActions({
   });
 
   const changeStatus = (attendees, status) => {
-    attendees.forEach(async (attendee) => {
-      await updateRegistrationMutation(
-        {
-          user_id: attendee,
-          competing: {
-            status,
-          },
-          competition_id: competitionInfo.id,
+    updateRegistrationMutation(
+      {
+        requests: attendees.map((attendee) => ({ user_id: attendee, competing: { status } })),
+        competition_id: competitionInfo.id,
+      },
+      {
+        onSuccess: () => {
+          dispatch(setMessage('registrations.flash.updated', 'positive'));
+          refresh();
         },
-        {
-          onSuccess: () => {
-            dispatch(setMessage('registrations.flash.updated', 'positive'));
-            refresh();
-          },
-        },
-      );
-    });
+      },
+    );
   };
 
   const attemptToApprove = () => {
