@@ -14,7 +14,6 @@ import { GeoSearchControl } from 'leaflet-geosearch';
 import iconMarker2x from 'leaflet/dist/images/marker-icon-2x.png';
 import iconMarker from 'leaflet/dist/images/marker-icon.png';
 import iconShadow from 'leaflet/dist/images/marker-shadow.png';
-import { railsEnv } from '../wca-data.js.erb';
 import { redMarker, blueMarker } from './markers';
 import { searchProvider, userTileProvider } from './providers';
 
@@ -79,7 +78,7 @@ window.wca.createCompetitionsMapLeaflet = (elementId, center = [0, 0], iframeTri
   });
   // To avoid timeout issue on *.tile.openstreetmap.org during tests,
   // we don't add the actual tile layer in that environment.
-  if (railsEnv !== 'test') layer.addTo(map);
+  if (window.wca.env !== 'test') layer.addTo(map);
   if (iframeTrick) {
     // We create an invisible iframe that triggers an invalidate size when
     // resized (which includes bootstrap's collapse/hide/show events).
