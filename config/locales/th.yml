@@ -211,6 +211,8 @@ th:
   round:
     #original_hash: 236c41d
     name: '%{event_name} %{round_name}'
+    #original_hash: 747df5a
+    round_number: '%{round_number} รอบ'
   advancement_condition:
     short:
       #original_hash: 6100c20
@@ -2528,6 +2530,25 @@ th:
       details: รายละเอียด
       #original_hash: 2e8a57c
       website: Website
+      #original_hash: f825aff
+      name_and_location: ชื่อและสถานที่
+      #original_hash: adc24b7
+      delegates: Delegate(s)
+      #original_hash: 51290be
+      announced: Announced
+      #original_hash: 614bc93
+      report_posted: Report posted
+      #original_hash: f59042e
+      results_submitted: Results submitted
+      relative_days:
+        #original_hash: 021deef
+        before: 'ก่อน %{amount_of_days} วัน'
+        #original_hash: 417f8df
+        after: 'หลังจาก %{amount_of_days} วัน'
+      #original_hash: 96f608c
+      pending: รอดำเนินการ
+      #original_hash: b8bf8b6
+      submitted_by_other: ส่งแล้วโดยผู้อื่น
       #original_hash: 2260929
       display_name: '[Cancelled] %{name}'
       #original_hash: 680567f
@@ -2740,6 +2761,15 @@ th:
       by_announcement: By announcement
       #original_hash: b3946b2
       sort_by_announcement: เรียงตามการประกาศ
+      #original_hash: e63dc91
+      admin_status: Admin status
+      status_flags:
+        #original_hash: 6a72085
+        all: ทั้งหมด
+        #original_hash: e9c4556
+        warning: Warning
+        #original_hash: 58d1758
+        danger: Danger
       #original_hash: 3f66052
       from_date: จาก
       #original_hash: ae79ea1
@@ -2760,6 +2790,8 @@ th:
       show_cancelled: แสดงการแข่งขันที่ถูกยกเลิก
       #original_hash: 0eda967
       show_registration_status: แสดงไอคอนสถานะการลงทะเบียน
+      #original_hash: c61cc50
+      use_admin_view: ใช้มุมมองผู้ดูแลระบบ
       titles:
         #original_hash: 69447c9
         in_progress: การแข่งขันที่กำลังดำเนินอยู่
@@ -2771,6 +2803,8 @@ th:
         recent: 'การแข่งขันเร็ว ๆ นี้ (ย้อนหลัง %{count} วัน)'
         #original_hash: 914742f
         upcoming: การแข่งขันที่จะเกิดขึ้น
+        #original_hash: 534071e
+        ongoing_and_upcoming: การแข่งขันที่กำลังเกิดขึ้นและที่กำลังจะเกิดขึ้น
         #original_hash: 8b57693
         custom: การแข่งขันในช่วงเวลาที่เลือก
         #original_hash: 0933739
@@ -4044,6 +4078,21 @@ th:
       before_disconnect_info: >-
         โปรดทราบว่าการยกเลิกการเชื่อมต่อบัญชีควรทำเฉพาะในสถานการณ์พิเศษเท่านั้น
         เช่น บัญชีปัจจุบันไม่สามารถรับการชำระเงินได้
+      account_details:
+        stripe:
+          #original_hash: 84add5b
+          email: Email
+          #original_hash: d523ebb
+          country: ประเทศ
+          #original_hash: a8e3901
+          business_name: Business name
+        paypal:
+          #original_hash: 709a232
+          display_name: ชื่อ
+          #original_hash: 84add5b
+          primary_email: Email
+        #original_hash: 08d2e98
+        fallback_not_applicable: N/A
   persons:
     index:
       #original_hash: 5934b4c
