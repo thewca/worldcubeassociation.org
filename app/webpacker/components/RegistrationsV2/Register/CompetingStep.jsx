@@ -66,7 +66,7 @@ export default function CompetingStep({
   const [processing, setProcessing] = useState(false);
 
   useEffect(() => {
-    if (isRegistered) {
+    if (isRegistered && registration.competing.registration_status !== 'cancelled') {
       setComment(registration.competing.comment ?? '');
       setSelectedEvents(registration.competing.event_ids);
       setGuests(registration.guests);
@@ -86,7 +86,6 @@ export default function CompetingStep({
       ));
     },
     onSuccess: (data) => {
-      dispatch(setMessage('registrations.flash.updated', 'positive'));
       queryClient.setQueryData(
         ['registration', competitionInfo.id, user.id],
         {
@@ -94,7 +93,20 @@ export default function CompetingStep({
           payment: registration.payment,
         },
       );
-      nextStep();
+      // Going from pending -> Cancelled
+      if (data.registration.competing.registration_status === 'cancelled') {
+        dispatch(setMessage('competitions.registration_v2.register.registration_status.cancelled', 'positive'));
+        nextStep({ toStart: true });
+      } else {
+        // Going from cancelled -> pending
+        if (registration.competing.registration_status === 'cancelled') {
+          dispatch(setMessage('registrations.flash.registered', 'positive'));
+          // Not changing status
+        } else {
+          dispatch(setMessage('registrations.flash.updated', 'positive'));
+        }
+        nextStep();
+      }
     },
   });
 
@@ -180,10 +192,10 @@ export default function CompetingStep({
       competition_id: competitionInfo.id,
       competing: {
         comment,
-        guests,
         event_ids: selectedEvents,
         status: 'pending',
       },
+      guests,
     });
   };
 
