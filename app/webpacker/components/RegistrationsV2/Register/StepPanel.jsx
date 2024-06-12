@@ -113,7 +113,13 @@ export default function StepPanel({
         stripePublishableKey={stripePublishableKey}
         connectedAccountId={connectedAccountId}
         nextStep={
-          () => setActiveIndex((oldActiveIndex) => {
+          (overwrites = {}) => setActiveIndex((oldActiveIndex) => {
+            if (overwrites?.refresh) {
+              return oldActiveIndex;
+            }
+            if (overwrites?.toStart) {
+              return 0;
+            }
             if (oldActiveIndex === steps.length - 1) {
               return registrationOverviewConfig.index;
             }
