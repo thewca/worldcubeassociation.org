@@ -5,7 +5,10 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <title>Map</title>
   <script>
-    window.wca = {};
+    window.wca = {
+      currentLocale: '<%= I18n.locale %>',
+      railsEnv: '<%= Rails.env %>',
+    };
   </script>
   <%= javascript_pack_tag 'wca_maps', defer: false %>
   <%= stylesheet_pack_tag 'wca_maps' %>
