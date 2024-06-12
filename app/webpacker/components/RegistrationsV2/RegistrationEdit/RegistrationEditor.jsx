@@ -34,7 +34,6 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
   const [comment, setComment] = useState('');
   const [adminComment, setAdminComment] = useState('');
   const [status, setStatus] = useState('');
-  const [waitingListPosition, setWaitingListPosition] = useState(0);
   const [guests, setGuests] = useState(0);
   const [selectedEvents, setSelectedEvents] = useState([]);
   const [registration, setRegistration] = useState({});
@@ -83,9 +82,6 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
       setStatus(serverRegistration.competing.registration_status);
       setSelectedEvents(serverRegistration.competing.event_ids);
       setAdminComment(serverRegistration.competing.admin_comment ?? '');
-      setWaitingListPosition(
-        serverRegistration.competing.waiting_list_position ?? 0,
-      );
       setGuests(serverRegistration.guests ?? 0);
     }
   }, [serverRegistration]);
@@ -131,7 +127,6 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
           event_ids: selectedEvents,
           comment,
           admin_comment: adminComment,
-          waiting_list_position: waitingListPosition,
         },
         competition_id: competitionInfo.id,
       });
@@ -141,10 +136,25 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
     eventsAreValid, dispatch, maxEvents,
     updateRegistrationMutation, competitor,
     status, selectedEvents, comment,
-    adminComment, waitingListPosition, competitionInfo.id]);
+    adminComment, competitionInfo.id]);
 
   const registrationEditDeadlinePassed = Boolean(competitionInfo.event_change_deadline_date)
     && hasPassed(competitionInfo.event_change_deadline_date);
+
+  const handleEventSelection = ({ type, eventId }) => {
+    if (type === 'select_all_events') {
+      setSelectedEvents(competitionInfo.event_ids);
+    } else if (type === 'clear_events') {
+      setSelectedEvents([]);
+    } else if (type === 'toggle_event') {
+      const index = selectedEvents.indexOf(eventId);
+      if (index === -1) {
+        setSelectedEvents([...selectedEvents, eventId]);
+      } else {
+        setSelectedEvents(selectedEvents.toSpliced(index, 1));
+      }
+    }
+  };
 
   if (isLoading || isRegistrationLoading) {
     return <Loading />;
@@ -158,12 +168,13 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
           This person registered with an account. You can edit their
           personal information
           {' '}
-          <a href={editPersonUrl(competitor.id)}>here</a>.
+          <a href={editPersonUrl(competitor.id)}>here</a>
+          .
         </Message>
         )}
         <Header>{competitor.name}</Header>
         <EventSelector
-          onEventSelection={setSelectedEvents}
+          onEventSelection={handleEventSelection}
           selectedEvents={selectedEvents}
           disabled={registrationEditDeadlinePassed}
           eventList={competitionInfo.event_ids}
