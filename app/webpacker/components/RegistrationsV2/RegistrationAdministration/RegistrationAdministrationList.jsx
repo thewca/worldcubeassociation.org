@@ -326,7 +326,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
         />
 
         <Header>
-          {i18n.t('simple_form.options.registration.status.waiting_list')}
+          {i18n.t('registrations.list.waiting_list')}
           {' '}
           (
           {waiting.length}
@@ -347,7 +347,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
         />
 
         <Header>
-          {i18n.t('simple_form.options.registration.status.cancelled')}
+          {i18n.t('registrations.list.deleted_registrations')}
           {' '}
           (
           {cancelled.length}
