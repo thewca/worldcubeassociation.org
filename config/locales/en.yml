@@ -145,6 +145,8 @@ en:
   round:
     #context: e.g. event_name can be "3x3x3 Cube", and round_name can be "Cutoff First round"
     name: "%{event_name} %{round_name}"
+    #context: round_number will be a numeral like 1,2,3 and NOT a written word like "First", "Second" or "Third".
+    round_number: "Round %{round_number}"
   #context: Words used to describe the requirement to advance to the next round
   advancement_condition:
     short:
@@ -1775,8 +1777,8 @@ en:
         acknowledgement: "I have read and acknowledged all information under the 'Register' tab, including entry fees, refund policies and any extra requirements listed above."
         next_step: "Continue to next Step"
       update:
-        being_updated: "Registration is being updated"
-        being_deleted: "Registration is being deleted"
+        being_updated: "Registration is being updated..."
+        being_deleted: "Registration is being deleted..."
         no_changes: "There are no changes"
         email_send: "Send Email"
         email_copy: "Copy Email"
@@ -1792,7 +1794,6 @@ en:
         comment: "Additional comments to the organizers"
         until: "You can update your registration until %{date}"
         passed: "You can no longer update your registration"
-        already_paid: "You have already paid for %{comp_name}"
         editing_disabled: "Registration editing is disabled for this competition"
         registration_status:
           accepted: "Your registration has been accepted."

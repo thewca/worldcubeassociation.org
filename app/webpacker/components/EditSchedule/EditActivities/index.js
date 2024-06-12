@@ -26,7 +26,11 @@ import { useDispatch, useStore } from '../../../lib/providers/StoreProvider';
 import { useConfirm } from '../../../lib/providers/ConfirmProvider';
 import useInputState from '../../../lib/hooks/useInputState';
 import ActivityPicker from './ActivityPicker';
-import { getMatchingActivities, roomWcifFromId, venueWcifFromRoomId } from '../../../lib/utils/wcif';
+import {
+  getMatchingActivities,
+  roomWcifFromId,
+  venueWcifFromRoomId,
+} from '../../../lib/utils/wcif';
 import { getTextColor } from '../../../lib/utils/calendar';
 import useCheckboxState from '../../../lib/hooks/useCheckboxState';
 
@@ -40,7 +44,9 @@ import {
 
 import { friendlyTimezoneName } from '../../../lib/wca-data.js.erb';
 import {
-  defaultDurationFromActivityCode,
+  activityToFcTitle,
+  buildPartialActivityFromCode,
+  defaultDurationFromActivityCode, FC_ACTIVITY_ATTACHMENT,
   fcEventToActivityAndDates,
   luxonToWcifIso,
 } from '../../../lib/utils/edit-schedule';
@@ -101,15 +107,14 @@ function EditActivities({
       const matchCount = getMatchingActivities(wcifSchedule, activity).length - 1;
       const matchesText = ` (${matchCount} matching activit${matchCount === 1 ? 'y' : 'ies'})`;
 
+      const fcTitle = activityToFcTitle(activity) + (shouldUpdateMatches && matchCount > 0 ? matchesText : '');
+
       return {
-        title: activity.name + (shouldUpdateMatches && matchCount > 0 ? matchesText : ''),
+        title: fcTitle,
         start: activity.startTime,
         end: activity.endTime,
         extendedProps: {
-          activityId: activity.id,
-          activityCode: activity.activityCode,
-          activityName: activity.name,
-          childActivities: activity.childActivities,
+          [FC_ACTIVITY_ATTACHMENT]: activity,
           matchCount,
         },
       };
@@ -126,15 +131,15 @@ function EditActivities({
       itemSelector: '.fc-draggable',
       eventData: (eventEl) => {
         const activityCode = eventEl.getAttribute('wcif-ac');
-        const activityName = eventEl.getAttribute('wcif-title');
+
+        const partialActivity = buildPartialActivityFromCode(activityCode);
         const defaultDuration = defaultDurationFromActivityCode(activityCode);
 
         return {
-          title: activityName,
+          title: activityToFcTitle(partialActivity),
           duration: `00:${defaultDuration.toString().padStart(2, '0')}:00`,
           extendedProps: {
-            activityCode,
-            activityName,
+            [FC_ACTIVITY_ATTACHMENT]: partialActivity,
           },
         };
       },
@@ -145,6 +150,9 @@ function EditActivities({
 
   const removeIfOverDropzone = ({ event: fcEvent, jsEvent }) => {
     if (!dropToDeleteRef.current) return;
+
+    // Don't bother trying to delete an activity that hasn't even been added yet
+    if (!fcEvent.extendedProps[FC_ACTIVITY_ATTACHMENT]?.id) return;
 
     const elem = dropToDeleteRef.current;
     const rect = elem.getBoundingClientRect();
@@ -160,8 +168,16 @@ function EditActivities({
         && jsEvent.pageY >= top
         && jsEvent.pageY <= bottom
     ) {
-      const { activityId, activityName, matchCount } = fcEvent.extendedProps;
+      const {
+        [FC_ACTIVITY_ATTACHMENT]: {
+          id: activityId,
+          name: activityName,
+        },
+        matchCount,
+      } = fcEvent.extendedProps;
+
       const matchText = `all ${matchCount + 1} copies of `;
+
       confirm({
         content: `Are you sure you want to delete ${shouldUpdateMatches && matchCount > 1 ? matchText : ''}the event ${activityName}? THIS ACTION CANNOT BE UNDONE!`,
       }).then(() => {
@@ -181,7 +197,7 @@ function EditActivities({
     delta,
     view: { calendar },
   }) => {
-    const { activityId } = fcEvent.extendedProps;
+    const { [FC_ACTIVITY_ATTACHMENT]: { id: activityId } } = fcEvent.extendedProps;
 
     const duration = toLuxonDuration(delta, calendar);
     const deltaIso = duration.toISO();
@@ -195,7 +211,7 @@ function EditActivities({
     endDelta,
     view: { calendar },
   }) => {
-    const { activityId } = fcEvent.extendedProps;
+    const { [FC_ACTIVITY_ATTACHMENT]: { id: activityId } } = fcEvent.extendedProps;
 
     const startScaleDuration = toLuxonDuration(startDelta, calendar);
     const startScaleIso = startScaleDuration.toISO();

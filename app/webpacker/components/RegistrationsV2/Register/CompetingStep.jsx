@@ -17,7 +17,7 @@ import updateRegistration from '../api/registration/patch/update_registration';
 import submitEventRegistration from '../api/registration/post/submit_registration';
 import Processing from './Processing';
 import { userPreferencesRoute } from '../../../lib/requests/routes.js.erb';
-import { EventSelector, EventSelectorForm } from '../../CompetitionsOverview/CompetitionsFilters';
+import { EventSelector } from '../../CompetitionsOverview/CompetitionsFilters';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { setMessage } from './RegistrationMessage';
 import i18n from '../../../lib/i18n';
@@ -54,16 +54,19 @@ export default function CompetingStep({
   const dispatch = useDispatch();
 
   const [comment, setComment] = useState('');
+  const initialSelectedEvents = competitionInfo.events_per_registration_limit ? [] : preferredEvents
+    .filter((event) => competitionInfo.event_ids.includes(event));
   const [selectedEvents, setSelectedEvents] = useState(
-    competitionInfo.events_per_registration_limit ? [] : preferredEvents
-      .filter((event) => competitionInfo.event_ids.includes(event)),
+    initialSelectedEvents,
   );
+  // Don't set an error state before the user has interacted with the eventPicker
+  const [hasInteracted, setHasInteracted] = useState(false);
   const [guests, setGuests] = useState(0);
 
   const [processing, setProcessing] = useState(false);
 
   useEffect(() => {
-    if (isRegistered) {
+    if (isRegistered && registration.competing.registration_status !== 'cancelled') {
       setComment(registration.competing.comment ?? '');
       setSelectedEvents(registration.competing.event_ids);
       setGuests(registration.guests);
@@ -83,7 +86,6 @@ export default function CompetingStep({
       ));
     },
     onSuccess: (data) => {
-      dispatch(setMessage('registrations.flash.updated', 'positive'));
       queryClient.setQueryData(
         ['registration', competitionInfo.id, user.id],
         {
@@ -91,6 +93,18 @@ export default function CompetingStep({
           payment: registration.payment,
         },
       );
+      // Going from pending -> Cancelled
+      if (data.registration.competing.registration_status === 'cancelled') {
+        dispatch(setMessage('competitions.registration_v2.register.registration_status.cancelled', 'positive'));
+        return nextStep({ toStart: true });
+      }
+      // Going from cancelled -> pending
+      if (registration.competing.registration_status === 'cancelled') {
+        dispatch(setMessage('registrations.flash.registered', 'positive'));
+        // Not changing status
+      } else {
+        dispatch(setMessage('registrations.flash.updated', 'positive'));
+      }
       nextStep();
     },
   });
@@ -171,21 +185,19 @@ export default function CompetingStep({
   };
 
   const actionReRegister = () => {
-    dispatch(setMessage('competitions.registration_v2.update.being_updated', 'basic'));
     updateRegistrationMutation({
       user_id: registration.user_id,
       competition_id: competitionInfo.id,
       competing: {
         comment,
-        guests,
         event_ids: selectedEvents,
         status: 'pending',
       },
+      guests,
     });
   };
 
   const actionDeleteRegistration = () => {
-    dispatch(setMessage('competitions.registration_v2.update.being_deleted', 'basic'));
     updateRegistrationMutation({
       user_id: registration.user_id,
       competition_id: competitionInfo.id,
@@ -208,6 +220,7 @@ export default function CompetingStep({
         setSelectedEvents(selectedEvents.toSpliced(index, 1));
       }
     }
+    setHasInteracted(true);
   };
 
   const shouldShowUpdateButton = isRegistered
@@ -223,13 +236,13 @@ export default function CompetingStep({
 
   const handleSubmit = useCallback((event) => {
     event.preventDefault();
-    if (shouldShowUpdateButton) {
-      attemptAction(actionUpdateRegistration, { checkForChanges: true });
-    } else if (shouldShowReRegisterButton) {
-      attemptAction(actionReRegister);
-    } else {
-      attemptAction(actionCreateRegistration);
+    if (shouldShowReRegisterButton) {
+      return attemptAction(actionReRegister);
     }
+    if (shouldShowUpdateButton) {
+      return attemptAction(actionUpdateRegistration, { checkForChanges: true });
+    }
+    attemptAction(actionCreateRegistration);
   }, [
     actionCreateRegistration,
     actionReRegister,
@@ -262,7 +275,7 @@ export default function CompetingStep({
       <>
         {hasPaid && (
           <Message success>
-            {i18n.t('competitions.registration_v2.register.already_paid', { comp_name: competitionInfo.name })}
+            {i18n.t('registrations.entry_fees_fully_paid', { paid: registration?.payment.payment_amount_human_readable })}
           </Message>
         )}
 
@@ -271,14 +284,15 @@ export default function CompetingStep({
             warning
             list={formWarnings}
           />
-          <Form.Field required error={selectedEvents.length === 0}>
+          <Form.Field required error={hasInteracted && selectedEvents.length === 0}>
             <EventSelector
               onEventSelection={handleEventSelection}
               eventList={competitionInfo.event_ids}
               selectedEvents={selectedEvents}
               id="event-selection"
               maxEvents={maxEvents}
-              shouldErrorOnEmpty
+              // Don't error if the user hasn't interacted with the form yet
+              shouldErrorOnEmpty={hasInteracted}
             />
             {!competitionInfo.events_per_registration_limit
               && (
@@ -319,7 +333,7 @@ export default function CompetingStep({
               }}
               min="0"
               max={competitionInfo.guests_per_registration_limit}
-              error={guests > competitionInfo.guests_per_registration_limit && i18n.t('competitions.competition_info.guest_limit', { count: competitionInfo.guests_per_registration_limit })}
+              error={Number.isInteger(competitionInfo.guests_per_registration_limit) && guests > competitionInfo.guests_per_registration_limit && i18n.t('competitions.competition_info.guest_limit', { count: competitionInfo.guests_per_registration_limit })}
             />
           </Form.Field>
           {isRegistered ? (
@@ -341,7 +355,7 @@ export default function CompetingStep({
 
               {shouldShowReRegisterButton && (
               <Button
-                secondary
+                primary
                 disabled={isUpdating}
                 type="submit"
               >

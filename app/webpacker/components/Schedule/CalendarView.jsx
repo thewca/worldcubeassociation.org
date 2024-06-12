@@ -6,6 +6,7 @@ import React from 'react';
 import {
   earliestTimeOfDayWithBuffer,
   getActivityEventId,
+  isOrphanedActivity,
   latestTimeOfDayWithBuffer,
   localizeActivityName,
 } from '../../lib/utils/activities';
@@ -31,14 +32,15 @@ export default function CalendarView({
   timeZone,
   activeVenues,
   activeRooms,
-  activeEvents,
+  activeEventIds,
   calendarLocale,
+  wcifEvents,
 }) {
-  const activeEventIds = activeEvents.map(({ id }) => id);
   const fcActivities = activeRooms.flatMap((room) => room.activities
     .filter((activity) => ['other', ...activeEventIds].includes(getActivityEventId(activity)))
+    .filter((activity) => !isOrphanedActivity(activity, wcifEvents))
     .map((activity) => {
-      const eventName = activity.activityCode.startsWith('other') ? activity.name : localizeActivityName(activity, activeEvents);
+      const eventName = activity.activityCode.startsWith('other') ? activity.name : localizeActivityName(activity, wcifEvents);
       const eventColor = activity.activityCode.startsWith('other') ? ACTIVITY_OTHER_GREY : room.color;
 
       return ({

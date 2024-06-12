@@ -58,14 +58,16 @@ module Microservices
       cache ? self.cache_and_return(response.body) : response.body
     end
 
-    def self.update_registration_payment(attendee_id, payment_id, iso_amount, currency_iso, status)
+    # rubocop:disable Metrics/ParameterLists
+    def self.update_registration_payment(attendee_id, payment_id, iso_amount, currency_iso, status, actor)
       response = self.registration_connection.post(self.update_payment_status_path) do |req|
-        req.body = { attendee_id: attendee_id, payment_id: payment_id, iso_amount: iso_amount, currency_iso: currency_iso, payment_status: status }.to_json
+        req.body = { attendee_id: attendee_id, payment_id: payment_id, iso_amount: iso_amount, currency_iso: currency_iso, payment_status: status, acting_type: actor[:type], acting_id: actor[:id] }.to_json
       end
 
       # If we ever need the response body
       response.body
     end
+    # rubocop:enable Metrics/ParameterLists
 
     def self.competitor_count_by_competition(competition_id)
       response = self.registration_connection.get(self.get_competitor_count_path(competition_id))

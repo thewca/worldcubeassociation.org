@@ -1,4 +1,4 @@
-import { fetchJsonOrError } from '../../../../../lib/requests/fetchWithAuthenticityToken';
+import { fetchWithAuthenticityToken } from '../../../../../lib/requests/fetchWithAuthenticityToken';
 import { refundPaymentUrl } from '../../../../../lib/requests/routes.js.erb';
 
 export default async function refundPayment({
@@ -6,12 +6,19 @@ export default async function refundPayment({
   paymentId,
   amount,
 }) {
-  return fetchJsonOrError(
+  return fetchWithAuthenticityToken(
     refundPaymentUrl(competitionId, 'stripe', paymentId),
     {
-      payment: {
-        refund_amount: amount,
+      body:
+        JSON.stringify({
+          payment: {
+            refund_amount: amount,
+          },
+        }),
+      headers: {
+        'Content-Type': 'application/json',
       },
+      method: 'POST',
     },
   );
 }
