@@ -209,6 +209,8 @@ sv:
   round:
     #original_hash: 236c41d
     name: '%{event_name} %{round_name}'
+    #original_hash: 747df5a
+    round_number: 'Omgång %{round_number}'
   advancement_condition:
     short:
       #original_hash: 6100c20
@@ -927,10 +929,6 @@ sv:
           pending: Väntelista
           #original_hash: 441bda6
           deleted: Raderad
-          #original_hash: a1bf92e
-          cancelled: Raderad
-          #original_hash: 8cf6f9c
-          waiting_list: På väntelistan
   mail_form:
     attributes:
       contact_form:
@@ -1141,16 +1139,14 @@ sv:
       error_pages:
         #original_hash: 1042478
         500_error: 'Vi ber om ursäkt, något gick fel.'
-        #original_hash: d656a11
-        500_contact: >-
-          Om du rapporterar detta fel till WCA Software Team, var vänlig kopiera
-          in anrops-ID:t i detta mejl.
+        #original_hash: 3e2364e
+        500_contact_html: '<a href=%{contact_url}>Klicka här</a> för att rapportera det.'
         #original_hash: b61e305
         400_error: Sidan du letade efter existerar inte.
-        #original_hash: c8a7d4e
-        400_contact: >-
-          Om du tror detta är ett misstag, var vänlig kontakta WCA Software
-          Team, och inkludera anrops-ID:t
+        #original_hash: c9290b6
+        400_contact_html: >-
+          Om du tror att detta är ett misstag, vänligen <a
+          href=%{contact_url}>klicka här</a> för att rapportera det.
     doorkeeper:
       applications:
         help:
@@ -1348,6 +1344,12 @@ sv:
         community-medlemmar, inte WCA:s personal. När det finns lediga platser i
         kommittéer, team eller råd publiceras information om hur man ansöker på
         förstasidan.
+      #original_hash: b37456c
+      contact_button: Kontakt
+      #original_hash: ae7928f
+      no_contact_description: >-
+        Kontaktuppgifterna till detta team/kommitté är inte offentligt
+        tillgängliga.
       groups_name:
         #original_hash: 90a1280
         wat: WCA Archive Team
@@ -1467,12 +1469,14 @@ sv:
     contacts:
       #original_hash: 4ef2aad
       title: Kontaktformulär
-      #original_hash: c343cae
+      #original_hash: bddd3ea
       faq_note_html: >-
         Innan du ställer en fråga, titta gärna på våra <a href=”/faq”>Vanliga
         Frågor</a>! Om du vill kontakta en specifik kommitté eller ett team som
-        inte finns med här, hittar du deras kontaktuppgifter på <a
+        inte finns med här, hittar du deras detaljer på <a
         href=”/teams-committees-councils”>den här sidan</a>.
+      #original_hash: ea20be0
+      success_message: Mejl skickat - vi återkommer till dig inom kort.
       form:
         user_data:
           name:
@@ -1489,16 +1493,16 @@ sv:
             label: >-
               Kontakta arrangörer/delegater för en tävling (för att ställa
               frågor om den specifika tävlingen)
-          communications_team:
+          wct:
             #original_hash: b73e465
             label: >-
               Kontakta WCA för allmänna frågor (detta kan gälla vad som helst,
-              som WCA ID/profil, arrangering av tävlingar, tävlingsregler, media
-              etc.)
-          results_team:
+              som WCA ID/profil, arrangering av tävlingar, tävlingsregler,
+              tävlingsmedia etc.)
+          wrt:
             #original_hash: 0f6b96b
             label: Kontakta Results Team (för allt som rör resultaten av en tävling)
-          software:
+          wst:
             #original_hash: 1d74033
             label: >-
               Kontakta Software Team (för att rapportera något fel på
@@ -1510,7 +1514,15 @@ sv:
           message:
             #original_hash: 68f4145
             label: Meddelande
-        communications_team:
+        wct:
+          message:
+            #original_hash: 68f4145
+            label: Meddelande
+        wrt:
+          message:
+            #original_hash: 68f4145
+            label: Meddelande
+        wst:
           message:
             #original_hash: 68f4145
             label: Meddelande
@@ -1809,12 +1821,12 @@ sv:
         delegater, arrangörer, teammedlemmar) och kan inte tas bort. Vänligen
         maila WCA Results Team för att ändra WCA-ID till ett annat konto.
       cannot_edit:
-        #original_hash: 8bb2def
+        #original_hash: 3d4d222
         msg: >-
           Du kan inte ändra namn, födelsedatum, kön eller region. Orsak:
-          %{reason}. Kontakta <a href='mailto:results@worldcubeassociation.org'
-          target='_blank'>WCA Results Team</a> eller din <a
-          href='%{delegate_url}'>delegat</a> om du behöver ändra något av dessa.
+          %{reason}. Kontakta <a href='%{wrt_contact_path}' target='_blank'>WCA
+          Results Team</a> eller din <a href='%{delegate_url}'>delegat</a> om du
+          behöver ändra något av dessa.
         reason:
           #original_hash: 370ff12
           assigned: du har ett WCA-ID
@@ -1935,21 +1947,21 @@ sv:
         Vi har inte registrerat ett födelsedatum för detta WCA-ID. Kontakta WCA
         Results Team genom <a href=\"%{dob_form_path}\">detta dedikerade
         formulär</a>.
-      #original_hash: 51fa5a4
+      #original_hash: f7dde6e
       wca_id_no_gender_html: >-
         Vi har inget kön registrerat för detta WCA-ID. Vänligen maila <a
-        href='mailto:results@worldcubeassociation.org' target='_blank'>WCA
-        Results Team</a> för att lösa detta.
-      #original_hash: 87ee245
+        href='%{wrt_contact_path}' target='_blank'>WCA Results Team</a> för att
+        lösa detta.
+      #original_hash: 11a7f81
       wca_id_no_citizenship_html: >-
         Vi har inte registrerat något medborgarskap för detta WCA-ID. Vänligen
-        maila <a href='mailto:results@worldcubeassociation.org'
-        target='_blank'>WCA Results Team</a> för att lösa detta.
-      #original_hash: c3839bc
+        kontakta <a href='%{wrt_contact_path}' target='_blank'>WCA Results
+        Team</a> för att lösa detta.
+      #original_hash: 6890de8
       wca_id_no_name_html: >-
-        Vi har inte registrerat ett namn för detta WCA-ID. Vänligen maila <a
-        href='mailto:results@worldcubeassociation.org' target='_blank'>WCA
-        Results Team</a> för att lösa detta.
+        Vi har inte registrerat ett namn för detta WCA-ID. Vänligen kontakta <a
+        href='%{wrt_contact_path}' target='_blank'>WCA Results Team</a> för att
+        lösa detta.
       #original_hash: d02c03b
       avatar_requires_wca_id: kräver att ett WCA-ID tilldelas
       #original_hash: 8f785ea
@@ -2020,13 +2032,13 @@ sv:
       need_country: Behöver en region
       #original_hash: e0bb243
       cannot_be_deleted_and_accepted: En anmälan kan inte raderas och godkännas samtidigt.
-      #original_hash: a38d024
-      must_register: måste anmäla till minst en gren
-      #original_hash: abdc718
+      #original_hash: 820bcf7
+      must_register: Du måste anmäla dig till minst en gren.
+      #original_hash: ef9b4ad
       exceeds_event_limit:
-        zero: 'Du måste anmäla dig till %{count} grenar eller färre'
-        one: du måste anmäla dig till exakt 1 gren
-        other: 'Du måste anmäla dig till %{count} grenar eller färre'
+        zero: 'Du måste anmäla dig till %{count} grenar.'
+        one: Du måste anmäla dig till exakt 1 gren.
+        other: 'Du måste anmäla dig till mellan 1 och %{count} grenar.'
       #original_hash: e78eec3
       banned_html: >-
         Du är avstängd. Om du tror att detta är ett fel, kontakta <a
@@ -2038,11 +2050,12 @@ sv:
       series_more_than_one_accepted: Du kan bara vara anmäld till en tävling i tävlingsserien.
       #original_hash: 13bfcd6
       can_only_register_for_qualified_events: Du kan inte anmäla dig till grenar du inte kvalificerat dig för.
-      #original_hash: 22ca413
+      #original_hash: 4025877
       cannot_register_without_comment: >-
-        Du måste lämna en kommentar. Se anmälningskraven för information om vad
-        som måste anges (t.ex. kan det vara vilken plats du ska att tävla på i
-        en Fewest Moves-tävling som äger rum på flera platser samtidigt).
+        Du måste lämna en kommentar. Vänligen läs anmälningskraven ovan för
+        information om vad som måste anges (t.ex. kan det vara vilken plats du
+        ska att tävla på i en Fewest Moves-tävling som äger rum på flera platser
+        samtidigt).
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
@@ -2389,6 +2402,10 @@ sv:
         payment_reset: Betalningen avvisades av Stripe.
         #original_hash: bcf6a93
         payment_pending: Betalningen har inte genomförts ännu.
+        #original_hash: c3f8d65
+        registration_unreachable: >-
+          Det uppstod ett problem med anmälningstjänsten, vänligen kontakta
+          Software Team.
     #original_hash: 4cf01a2
     preferred_events_prompt_html: >-
       För att göra anmälan snabbare i framtiden kan du välja dina favoritgrenar
@@ -2613,16 +2630,41 @@ sv:
       date: Datum
       #original_hash: 4f05cd6
       add_to_calendar: Lägg till i kalender
+      #original_hash: 709a232
+      name: Namn
+      #original_hash: d219c68
+      location: Plats
       #original_hash: 4271627
       city: Stad
       #original_hash: 67cd406
       venue: Lokal
+      #original_hash: 63a1c21
+      location_and_venue: Plats och lokal
       #original_hash: d70f93d
       address: Adress
       #original_hash: dc3decb
       details: Detaljer
       #original_hash: 2e8a57c
       website: Hemsida
+      #original_hash: f825aff
+      name_and_location: Namn och plats
+      #original_hash: adc24b7
+      delegates: Delegat(er)
+      #original_hash: 51290be
+      announced: Publicerad
+      #original_hash: 614bc93
+      report_posted: Rapport inskickad
+      #original_hash: f59042e
+      results_submitted: Resultat inskickade
+      relative_days:
+        #original_hash: 021deef
+        before: '%{amount_of_days} före'
+        #original_hash: 417f8df
+        after: '%{amount_of_days} efter'
+      #original_hash: 96f608c
+      pending: Väntande
+      #original_hash: b8bf8b6
+      submitted_by_other: Inskickad av annan
       #original_hash: 2260929
       display_name: '[Inställd] %{name}'
       #original_hash: 680567f
@@ -2837,6 +2879,15 @@ sv:
       by_announcement: Efter publicerande
       #original_hash: b3946b2
       sort_by_announcement: Sortera efter publicerande
+      #original_hash: e63dc91
+      admin_status: Admin-status
+      status_flags:
+        #original_hash: 6a72085
+        all: Alla
+        #original_hash: e9c4556
+        warning: Varning
+        #original_hash: 58d1758
+        danger: Fara
       #original_hash: 3f66052
       from_date: Från
       #original_hash: ae79ea1
@@ -2857,6 +2908,8 @@ sv:
       show_cancelled: Visa inställda tävlingar
       #original_hash: 0eda967
       show_registration_status: Visa ikon för anmälningsstatus
+      #original_hash: c61cc50
+      use_admin_view: Använd admin-vyn
       titles:
         #original_hash: 69447c9
         in_progress: Tävlingar som pågår
@@ -2868,6 +2921,8 @@ sv:
         recent: 'Nyligen hållna tävlingar (senaste %{count} dagarna)'
         #original_hash: 914742f
         upcoming: Kommande tävlingar
+        #original_hash: 534071e
+        ongoing_and_upcoming: Pågående och kommande tävlingar
         #original_hash: 8b57693
         custom: Tävlingar under det valda tidsintervallet
         #original_hash: 0933739
@@ -3116,6 +3171,13 @@ sv:
           #original_hash: 6c8e5bf
           force_comment: Tvinga tävlande att lämna en kommentar vid anmälan
         event_restrictions:
+          forbid_newcomers:
+            #original_hash: d0a4ce9
+            enabled: Förhindra nykomlingar från att anmäla sig.
+            #original_hash: 40c4b4c
+            reason: >-
+              Anledning och detaljer för att inte tillåta nykomlingar att anmäla
+              sig
           early_puzzle_submission:
             #original_hash: 723cad9
             enabled: >-
@@ -3339,6 +3401,13 @@ sv:
           #original_hash: da39a3e
           force_comment: ''
         event_restrictions:
+          forbid_newcomers:
+            #original_hash: da39a3e
+            enabled: ''
+            #original_hash: d75332f
+            reason: >-
+              Vänligen förklara här varför du inte vill att nykomlingar ska
+              anmäla sig till din tävling. Vänligen fyll i detta på engelska!
           early_puzzle_submission:
             #original_hash: da39a3e
             enabled: ''
@@ -3443,15 +3512,18 @@ sv:
       requirements:
         #original_hash: 09a428f
         title: Krav
-        #original_hash: 695cf86
+        #original_hash: 1255806
         acknowledgement: >-
           Jag har läst och bekräftat all information under fliken "Anmälan",
-          inklusive anmälningsavgifter och återbetalningspolicy
-        #original_hash: 270bd63
-        acknowledgment_extra: Jag har läst och förstått all information som anges ovan
+          inklusive anmälningsavgifter, återbetalningspolicy, och eventuella
+          extra anmälningskrav listade ovan.
         #original_hash: 80d2933
         next_step: Fortsätt till nästa steg
       update:
+        #original_hash: ebf417d
+        being_updated: Anmälan uppdateras...
+        #original_hash: 2d0325e
+        being_deleted: Anmälan raderas...
         #original_hash: 65bbb07
         no_changes: Det finns inga ändringar
         #original_hash: be4e8e2
@@ -3468,13 +3540,17 @@ sv:
         too_many: >-
           Att acceptera alla dessa registreringar skulle överskrida
           deltagargränsen med %{count}
+        #original_hash: 462376a
+        no_self_update: Kontakta arrangörsteamet för att uppdatera din anmälan.
       register:
+        #original_hash: a38d5fa
+        success: 'Du är anmäld till %{comp_name}'
         #original_hash: affea61
         error: 'Anmälan misslyckades med error %{error}'
-        #original_hash: f5a8630
+        #original_hash: c3e4e89
         early_registration: >-
-          Anmälan är inte öppen ännu, men du kan ändå anmäla dig som
-          tävlingsarrangör eller delegat.
+          Anmälan är inte öppen ännu - du kan föranmäla dig som tävlingsarrangör
+          eller delegat.
         #original_hash: 6b76fab
         comment: Ytterligare kommentarer till arrangörerna
         #original_hash: 8eae30c
@@ -3484,8 +3560,14 @@ sv:
         #original_hash: 3c8d8b7
         editing_disabled: Det går inte att redigera anmälningar till den här tävlingen.
         registration_status:
-          #original_hash: f1f32b6
-          header: 'Din anmälningsstatus:'
+          #original_hash: b1e97b8
+          accepted: Din anmälan har godkänts.
+          #original_hash: 3d7aa97
+          pending: Din anmälan väntar på godkännande från arrangörsteamet.
+          #original_hash: dcc4906
+          cancelled: Din anmälan har raderats.
+          #original_hash: c890478
+          waiting_list: Du är på väntelistan.
         #original_hash: 2d9f36c
         disclaimer: Inskickande av anmälan innebär inte godkännande att tävla
         #original_hash: 8fe68a1
@@ -3494,6 +3576,10 @@ sv:
         processing_longer: 'Hanteringen tar längre tid än vanligt, lämna inte sidan!'
         #original_hash: 79ba42a
         processing_queue: 'Många anmälningar hanteras just nu, %{queueCount} i kö.'
+        #original_hash: ff6550f
+        event_limit: >-
+          Denna tävling begränsar antalet evenemang som du kan anmäla dig till
+          till %{max_events}.
       errors:
         #original_hash: 3890616
         events: 'Misslyckades med att ladda grenar, vänligen försök igen'
@@ -3772,8 +3858,6 @@ sv:
       qualification: Kvalificering
     schedule:
       display_as:
-        #original_hash: ec5dd7c
-        label: 'Visa schemat som:'
         #original_hash: 0424f6e
         table: Tabell
         #original_hash: adab509
@@ -3791,20 +3875,65 @@ sv:
       end: Slut
       #original_hash: 81c0d91
       activity: Aktivitet
-      #original_hash: 90e2fca
-      room: Rum
+      #original_hash: 15e58c6
+      no_activities: Inga aktiviteter för de valda rummen/grenarna.
+      #original_hash: 10a56c8
+      all_venues: Alla lokaler
+      #original_hash: a0b3266
+      room_or_stage: Rum eller stage
+      #original_hash: f37605b
+      more_details: Visa detaljer för omgången
+      #original_hash: a30e720
+      time_zone: Tidszon
+      rooms_panel:
+        #original_hash: 3a28d6f
+        title: Rum
+        #original_hash: 6a72085
+        all: Alla
+        #original_hash: 6eef664
+        none: Inga
+        #original_hash: 9b9a6aa
+        show_buttons: Visa knappar för tidszon
+        #original_hash: d2ac826
+        use_time_zone: Använd denna tidszon
       #original_hash: 73acb7f
       room_in_venue: '%{room} i %{venue}'
-      #original_hash: 2896c7a
-      venue_information_html: 'Du ser schemat för lokalen %{venue_name}.'
-      #original_hash: b97e383
-      timezone_message: 'Schemat visas i tidszonen %{timezone}.'
-      #original_hash: 2ab94a0
-      multiple_venues_available: >-
-        Tävlingen har flera lokaler, se till att kolla schemat för de andra
-        lokalerna också!
+      #original_hash: f7fd979
+      venue_selection_html:
+        zero: >-
+          Du tittar på schemat för lokalen %{venue_name}, som är den enda
+          lokalen för denna tävling.
+        one: >-
+          Du tittar på schemat för lokalen %{venue_name}, som är den enda
+          lokalen för denna tävling.
+        other: >-
+          Du tittar på schemat för lokalen %{venue_name}, en av %{count} lokaler
+          för denna tävling.
+      #original_hash: 8d175ad
+      venue_selection_all: 'Du tittar på schemat för alla %{venueCount} lokaler samtidigt.'
+      #original_hash: 97df911
+      timezone_message: 'Tidszonen för den här lokalen är %{timezone}.'
+      #original_hash: 94b2570
+      timezone_setting: 'Du tittar på schemat för följande tidszon:'
+      #original_hash: 75194fd
+      multiple_timezones_available: >-
+        Observera att alla lokaler inte befinner sig i samma tidszon -- var
+        försiktig!
+      #original_hash: d94a371
+      timezone_set_local: Sätt till lokal tidszon.
+      #original_hash: 17ab650
+      timezone_set_venue: Sätt till lokalens tidszon
+      #original_hash: 9974a46
+      timezone_follow_venue: Använd automatiskt den aktiva lokalens tidszon
       #original_hash: 37b1adb
       schedule_for_date: 'Schema för %{day_name} (%{full_date})'
+      #original_hash: d58b281
+      schedule_for_full_date: 'Schema för %{date}'
+      #original_hash: eb1090e
+      schedule_change_warning: >-
+        Scheman kan komma att justeras, särskilt när antalet anmälda blir känt.
+        Anmälda deltagare kommer att meddelas via e-post om eventuella större
+        förändringar.
     nav:
       menu:
         #original_hash: 612e12d
@@ -4033,8 +4162,8 @@ sv:
       #original_hash: 4d08ec5
       stripe: Stripe
     payment_setup:
-      #original_hash: 69b243c
-      stripe_dashboard: Stripe Dashboard
+      #original_hash: 0aa09ee
+      external_dashboard: '%{provider} Dashboard'
       #original_hash: e621d96
       account_connected: >-
         Du har anslutit ditt %{provider}-konto och kan nu ta emot
@@ -4066,50 +4195,62 @@ sv:
       accept_payments_header: Anmälningsavgifter för godkända anmälningar
       #original_hash: 7ebe178
       connect_button: 'Anslut till %{provider}'
-      #original_hash: f3fdb64
-      stripe_payment_info: >-
-        För att kunna ta emot betalningar för denna tävling måste du ansluta
-        ditt eget Stripe-konto till WCA:s Stripe-konto genom att klicka på
-        knappen nedan. Om du inte redan har ett eget Stripe-konto kan du ändå
-        klicka på knappen nedan så kommer den att guida dig genom processen.
-      #original_hash: 53adda3
-      stripe_connect_warning: >-
-        Genom att ansluta ditt Stripe-konto får WCA:s webbplats möjlighet att
-        skapa debiteringar och utfärda återbetalningar direkt på ditt
-        Stripe-konto.
-      #original_hash: 9ea95c2
-      stripe_disconnect_info: >-
-        Denna tävling är konfigurerad för att ta emot betalningar via Stripe. Om
-        du vill koppla bort ditt Stripe-konto ska du först göra det från din
-        Stripe dashboard (länk nedan). Observera att det kommer att återkalla
-        åtkomsten för alla tävlingar som använder kontot. Innan ett nytt
-        Stripe-konto kan anslutas måste tävlingens delegat kontakta WCAT för att
-        ta bort anslutningen.
+      connect_account_info:
+        #original_hash: f3fdb64
+        stripe: >-
+          För att kunna ta emot betalningar för denna tävling måste du ansluta
+          ditt eget Stripe-konto till WCA:s Stripe-konto genom att klicka på
+          knappen nedan. Om du inte redan har ett eget Stripe-konto kan du ändå
+          klicka på knappen nedan så kommer den att guida dig genom processen.
+        #original_hash: 30afe4e
+        paypal: >-
+          Ett PayPal Business-konto krävs för att acceptera PayPal-betalningar
+          via tävlingssidan. Om du inte redan har ett PayPal Business-konto kan
+          du ändå klicka på knappen nedan så kommer den att guida dig genom
+          processen.
+      connect_account_warning:
+        #original_hash: 53adda3
+        stripe: >-
+          Genom att ansluta ditt Stripe-konto får WCA:s webbplats möjlighet att
+          dra avgifter och utfärda återbetalningar direkt på ditt Stripe-konto.
+        #original_hash: 7cedd12
+        paypal: >-
+          Genom att ansluta ditt PayPal-konto får WCA:s webbplats möjlighet att
+          dirigera betalningar till dig och utfärda återbetalningar direkt på
+          ditt PayPal-konto.
+      #original_hash: ef7e7f6
+      currently_connected_info: >-
+        Denna tävling är inställd på att acceptera betalningar via %{provider}.
+        Tävlingens delegat(er) bör kontakta WCAT för att göra eventuella
+        ändringar i anslutna konton.
+      #original_hash: bc14f0f
+      before_disconnect_warning: >-
+        Om du kopplar från på den här sidan kommer vår webbplats att glömma
+        anslutningen till ditt %{provider}-konto. Men din dashboard för
+        %{provider} (se länk nedan) kan fortfarande lista WCA:s webbplats på
+        grund av den auktorisation som du tidigare beviljade. Observera att
+        återkallande av auktorisering i %{provider}s dashboard också kommer att
+        påverka alla andra tävlingar som är kopplade till att acceptera
+        betalningar via detta konto!
       #original_hash: d4a360b
-      stripe_disconnect_warning: >-
-        Tänk på att frånkoppling av ett konto endast bör göras i undantagsfall,
-        t.ex. om det aktuella kontot inte kan ta emot betalningar.
-      #original_hash: 0af9795
-      paypal_payment_info: >-
-        Ett PayPal-företagskonto krävs för att ta emot PayPal-betalningar via
-        tävlingssidan. Om du inte redan har ett PayPal-företagskonto kan du
-        fortfarande klicka på knappen nedan så kommer den att vägleda dig genom
-        processen.
-      #original_hash: d327396
-      paypal_connect_warning: >-
-        Genom att ansluta ditt PayPal-konto får WCA:s webbplats möjlighet att
-        vidarebefordra betalningar till dig och utfärda återbetalningar direkt
-        från ditt PayPal-konto.
-      #original_hash: eb05726
-      paypal_disconnect_info: >-
-        Denna tävling är konfigurerad för att ta emot betalningar via PayPal.
-        Observera att du inte kan återkalla de behörigheter du har gett till WCA
-        genom att klicka på "koppla från" här - detta måste göras från ditt
-        PayPal-konto.
-      #original_hash: c186753
-      paypal_disconnect_warning: >-
-        Tänk på att dessa kontoändringar endast bör göras i undantagsfall, t.ex.
-        om det aktuella kontot inte kan ta emot betalningar.
+      before_disconnect_info: >-
+        Tänk på att frånkoppling av ett konto endast ska göras i undantagsfall,
+        till exempel om det aktuella kontot inte kan ta emot betalningar.
+      account_details:
+        stripe:
+          #original_hash: 84add5b
+          email: E-post
+          #original_hash: d523ebb
+          country: Land
+          #original_hash: a8e3901
+          business_name: Företagsnamn
+        paypal:
+          #original_hash: 709a232
+          display_name: Namn
+          #original_hash: 84add5b
+          primary_email: E-post
+        #original_hash: 08d2e98
+        fallback_not_applicable: N/A
   persons:
     index:
       #original_hash: 5934b4c
@@ -4502,8 +4643,6 @@ sv:
       #original_hash: 9482c5d
       title: Struktur
       board:
-        #original_hash: abd2828
-        name: 'WCA:s styrelse'
         #original_hash: e0d37a2
         description: >-
           WCA-styrelsen är ansvarig för att leda organisationen som helhet, och
@@ -4512,64 +4651,10 @@ sv:
       users:
         #original_hash: 57bbaad
         profile: '%{user_name}s profil'
-      wdc:
-        #original_hash: c97077a
-        name: WCA Disciplinary Committee
-      wdpc:
-        #original_hash: 70539cd
-        name: WCA Data Protection Committee
-      wrc:
-        #original_hash: 3da1e85
-        name: WCA Regulations Committee
-      wrt:
-        #original_hash: 67be768
-        name: WCA Results Team
-      wst:
-        #original_hash: a14bc62
-        name: WCA Software Team
-      wct:
-        #original_hash: 63a2388
-        name: WCA Communication Team
-      wfc:
-        #original_hash: 9cb13de
-        name: WCA Financial Committee
-      wec:
-        #original_hash: 83bd1d0
-        name: WCA Ethics Committee
-      weat:
-        #original_hash: d1dbb86
-        name: WCA Executive Assistants Team
-      wqac:
-        #original_hash: 8f32116
-        name: WCA Quality Assurance Committee
-      wcat:
-        #original_hash: 2b81984
-        name: WCA Competition Announcement Team
-      wmt:
-        #original_hash: 2035811
-        name: WCA Marketing Team
-      wac:
-        #original_hash: 1ce7604
-        name: WCA Advisory Council
-      wsot:
-        #original_hash: 58765c7
-        name: WCA Sports Organization Team
-      wat:
-        #original_hash: 90a1280
-        name: WCA Archive Team
-      banned:
-        #original_hash: d30e2e5
-        name: Avstängda Tävlande
-      wct_china:
-        #original_hash: ed5b65a
-        name: WCT China
       #original_hash: f8c3f3c
       operations_html: 'Den dagliga verksamheten drivs av WCA:s %{committees_and_teams}.'
       #original_hash: 0e7a036
       teams_committees: Team och Kommittéer
-      wst_admin:
-        #original_hash: d4112d2
-        name: Mjukvaruadministratörer
       #original_hash: 7e849d2
       delegates_html: >-
         <p><strong>WCA-delegat</strong> är en roll som definieras i WCA:s
@@ -4733,6 +4818,7 @@ sv:
     title: Mjukvaruverktyg för WCA-tävlingar
     #original_hash: 6d2fe37
     wca_icon_text: Utvecklas och underhålls av WST
+    #original_hash: 6520873
     intro:
       #original_hash: 0c5fab5
       desc: >-
@@ -4840,28 +4926,69 @@ sv:
   logo:
     #original_hash: c72c969
     title: 'WCA:s Logotyp'
-    paragraphs:
-      #original_hash: 44cfe8d
-      '1': >-
-        WCA:s logotyp designades av Justin Eastman i en designtävling i januari
-        2005. <br/> Vi gillade logotypen på grund av dess design, färger och det
-        faktum att den inte specifikt visar en 3x3x3-kub.
-      #original_hash: 916e3fc
-      '2': >-
-        Vi har fyra olika versioner av logotypen: en <a
-        href="/files/WCAlogo_XL.jpg">stor version</a> (46 KB, 1756 px gånger
-        1068 px), en <a href = "/ files / WCAlogo .svg ">vektorversion</a>, en
-        <a href="/files/WCAlogo_notext.svg">vektorversion utan text</a> och en
-        <a href="/files/WCAlogo_monochrome.svg">svartvit vektorversion</a>.
-      #original_hash: dcb1ad6
-      '3': >-
-        3D-version av logotypen, designad av Vu Minh Tan från Vietnam: <a
-        href="/files/WCALogo3D.png">PNG-version</a> (2,1 MB), en <a href =
-        "/files/WCALogo3Dsmall.png ">liten PNG-version</a> (0,25 MB).
-      #original_hash: e5df1bf
-      '4': >-
-        Acceptabel användning av WCA-logotypen beskrivs av WCA Logo Usage policy
-        som visas på sidan <a href="/documents">WCA-Dokument</a>.
+    intro: >-
+      WCA:s logotyp ritades av Justin Eastman i en designtävling i januari 2005.
+      Vi gillade logotypen på grund av dess design, färgerna, och det faktum att
+      den inte specifikt visar en 3x3x3-kub.
+    headings:
+      usage_guidelines:
+        #original_hash: d5b47da
+        title: Riktlinjer för användning
+        paragraph:
+          #original_hash: 4f84c70
+          acceptable_usage: >-
+            Acceptabel användning av WCA:s logotyp beskrivs i <a
+            href="https://documents.worldcubeassociation.org/documents/policies/external/Logo%20Usage.pdf">WCA
+            Logo Usage Policy</a>. Vänligen läs detta dokument innan du använder
+            WCA-logotypen i dina egna projekt. Skicka eventuella ytterligare
+            frågor om användning av WCA:s logotyp till <a
+            href="mailto:marketing@worldcubeassociation.org"> WCA Marketing
+            Team</a>.
+          #original_hash: ff13c4a
+          see_below: >-
+            Nedan finns ytterligare riktlinjer för korrekt användning av WCA:s
+            logotyp.
+        color:
+          #original_hash: 1d0c830
+          title: Färg
+          #original_hash: 1959555
+          paragraph: >-
+            WCA:s logotyp finns i fyra färgvarianter. Rätt färgvariant ska
+            användas beroende på bakgrundsfärgen på det medium där logotypen
+            placeras.
+          primary:
+            #original_hash: a9a96ec
+            title: Primär
+            #original_hash: f31882f
+            paragraph: Använd den primära varianten när det är möjligt.
+          mono:
+            #original_hash: c5c5533
+            title: Mono
+            #original_hash: 612044c
+            paragraph: >-
+              Använd endast mono-varianten när primära varianten inte är
+              lämplig.
+        logo_only:
+          #original_hash: 9271574
+          title: Enbart logotyp
+          #original_hash: 4dfab95
+          paragraph: >-
+            WCA:s logotyp kan användas utan logotypen, enligt samma
+            färgriktlinjer som ovan.
+      download_logo_assets:
+        #original_hash: ebc85b2
+        title: Ladda ner logotypmaterial
+        #original_hash: 9aa098d
+        paragraph: >-
+          Högupplösta PNG- och vektorversioner av WCA:s logotyp finns
+          tillgängliga för nedladdning.
+        #original_hash: 9de7d59
+        accept_terms_and_conditions: >-
+          Jag har läst och accepterat <a
+          href="https://documents.worldcubeassociation.org/documents/policies/external/Logo%20Usage.pdf">WCA
+          Logo Usage Policy</a>.
+        #original_hash: ebc85b2
+        download_button_text: Ladda ner logotypmaterial
   workbook_assistant:
     #original_hash: e442ea4
     title: WCA Workbook Assistant
