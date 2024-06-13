@@ -3,6 +3,27 @@
 class ConnectedPaypalAccount < ApplicationRecord
   has_one :competition_payment_integration, as: :connected_account
 
+  def find_payment_record(record_id)
+    PaypalRecord.capture.find(record_id)
+  end
+
+  def issue_refund(capture_record, amount_iso)
+    req_payload, refund = PaypalInterface.issue_refund(
+      self.paypal_merchant_id,
+      capture_record.paypal_id,
+      amount_iso,
+      capture_record.currency_code,
+    )
+
+    PaypalRecord.create_from_api(
+      refund,
+      :refund,
+      req_payload,
+      self.paypal_merchant_id,
+      capture_record,
+    )
+  end
+
   def account_details
     PaypalInterface.account_details(self.paypal_merchant_id)
                    .slice("display_name", "primary_email")

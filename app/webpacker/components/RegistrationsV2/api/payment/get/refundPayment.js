@@ -7,7 +7,7 @@ export default async function refundPayment({
   amount,
 }) {
   return fetchWithAuthenticityToken(
-    refundPaymentUrl(competitionId, paymentId),
+    refundPaymentUrl(competitionId, 'stripe', paymentId),
     {
       body:
         JSON.stringify({

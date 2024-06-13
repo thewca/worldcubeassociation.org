@@ -70,14 +70,16 @@ class ConnectedStripeAccount < ApplicationRecord
     )
   end
 
-  def issue_refund(charge_id, amount_iso)
-    charge_record = StripeRecord.charge.find_by!(stripe_id: charge_id)
+  def find_payment_record(record_id)
+    StripeRecord.charge.find(record_id)
+  end
 
+  def issue_refund(charge_record, amount_iso)
     currency_iso = charge_record.currency_code
     stripe_amount = StripeRecord.amount_to_stripe(amount_iso, currency_iso)
 
     refund_args = {
-      charge: charge_id,
+      charge: charge_record.stripe_id,
       amount: stripe_amount,
     }
 
