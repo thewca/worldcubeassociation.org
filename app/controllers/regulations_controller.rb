@@ -34,7 +34,7 @@ class RegulationsController < ApplicationController
     render_regulations("index.html.erb")
   end
 
-  def merged
+  def full
     render_regulations("full.html.erb")
   end
 
