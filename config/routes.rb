@@ -20,7 +20,6 @@ Rails.application.routes.draw do
 
   # Don't expose Paypal routes in production until we're reading to launch
   unless PaypalInterface.paypal_disabled?
-    post 'registration/:id/create-paypal-order' => 'registrations#create_paypal_order', as: :registration_create_paypal_order
     post 'registration/:id/capture-paypal-payment' => 'registrations#capture_paypal_payment', as: :registration_capture_paypal_payment
     post 'registration/:id/paypal_refund/:payment_id' => 'registrations#refund_paypal_payment', as: :paypal_payment_refund
   end
@@ -46,7 +45,7 @@ Rails.application.routes.draw do
   post 'registration/:id/refund/:payment_id' => 'registrations#payment_refund_legacy', as: :registration_payment_refund_legacy
   get 'registration/:id/payment-completion' => 'registrations#payment_completion_legacy', as: :registration_payment_completion_legacy
 
-  post 'registration/:id/load-payment-intent' => 'registrations#load_payment_intent', as: :registration_payment_intent
+  post 'registration/:id/load-payment-intent/:payment_integration' => 'registrations#load_payment_intent', as: :registration_payment_intent
   post 'competitions/:competition_id/refund/:payment_id' => 'registrations#refund_payment', as: :registration_payment_refund
   get 'competitions/:competition_id/payment-completion' => 'registrations#payment_completion', as: :registration_payment_completion
   post 'registration/stripe-webhook' => 'registrations#stripe_webhook', as: :registration_stripe_webhook

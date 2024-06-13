@@ -19,6 +19,13 @@ class ConnectedStripeAccount < ApplicationRecord
     self.create_intent(registration, amount_iso, currency_iso, paying_user)
   end
 
+  # This method implements the PaymentElements workflow described at:
+  # - https://stripe.com/docs/payments/quickstart
+  # - https://stripe.com/docs/payments/accept-a-payment
+  # - https://stripe.com/docs/payments/accept-a-payment?ui=elements
+  # It essentially creates a PaymentIntent for the current user-specified amount.
+  # Everything after the creation of the intent is handled by Stripe through their JS integration.
+  # At the very end, when the process is finished, it redirects the user to a return URL that we specified.
   private def create_intent(registration, amount_iso, currency_iso, paying_user)
     stripe_amount = StripeRecord.amount_to_stripe(amount_iso, currency_iso)
 
