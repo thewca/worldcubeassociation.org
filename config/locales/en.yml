@@ -1773,8 +1773,8 @@ en:
         acknowledgement: "I have read and acknowledged all information under the 'Register' tab, including entry fees, refund policies and any extra requirements listed above."
         next_step: "Continue to next Step"
       update:
-        being_updated: "Registration is being updated"
-        being_deleted: "Registration is being deleted"
+        being_updated: "Registration is being updated..."
+        being_deleted: "Registration is being deleted..."
         no_changes: "There are no changes"
         email_send: "Send Email"
         email_copy: "Copy Email"
@@ -1790,7 +1790,6 @@ en:
         comment: "Additional comments to the organizers"
         until: "You can update your registration until %{date}"
         passed: "You can no longer update your registration"
-        already_paid: "You have already paid for %{comp_name}"
         editing_disabled: "Registration editing is disabled for this competition"
         registration_status:
           accepted: "Your registration has been accepted."

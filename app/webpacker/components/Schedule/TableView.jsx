@@ -9,7 +9,9 @@ import {
   earliestWithLongestTieBreaker,
   getActivityEventId,
   getActivityRoundId,
-  groupActivities, localizeActivityName,
+  groupActivities,
+  isOrphanedActivity,
+  localizeActivityName,
 } from '../../lib/utils/activities';
 import { getSimpleTimeString } from '../../lib/utils/dates';
 import { toDegrees } from '../../lib/utils/edit-schedule';
@@ -42,8 +44,10 @@ export default function TableView({
     .flatMap((room) => room.activities)
     .toSorted(earliestWithLongestTieBreaker);
 
-  const eventIds = activeEvents.map(({ id }) => id);
-  const visibleActivities = sortedActivities.filter((activity) => ['other', ...eventIds].includes(getActivityEventId(activity)));
+  const activeEventIds = activeEvents.map(({ id }) => id);
+  const visibleActivities = sortedActivities
+    .filter((activity) => ['other', ...activeEventIds].includes(getActivityEventId(activity)))
+    .filter((activity) => !isOrphanedActivity(activity, wcifEvents));
 
   return (
     <>
@@ -69,7 +73,6 @@ export default function TableView({
             date={date}
             timeZone={timeZone}
             groupedActivities={groupedActivitiesForDay}
-            events={activeEvents}
             rounds={activeRounds}
             rooms={activeRooms}
             isExpanded={isExpanded}
@@ -87,7 +90,6 @@ function SingleDayTable({
   date,
   timeZone,
   groupedActivities,
-  events,
   rounds,
   rooms,
   isExpanded,
@@ -137,7 +139,6 @@ function SingleDayTable({
                 key={representativeActivity.id}
                 isExpanded={isExpanded}
                 activityGroup={activityGroup}
-                events={events}
                 round={activityRound}
                 rooms={rooms}
                 timeZone={timeZone}
@@ -179,7 +180,6 @@ function HeaderRow({ isExpanded }) {
 function ActivityRow({
   isExpanded,
   activityGroup,
-  events,
   round,
   rooms,
   timeZone,
@@ -188,7 +188,7 @@ function ActivityRow({
   const representativeActivity = activityGroup[0];
   const { startTime, endTime } = representativeActivity;
 
-  const name = representativeActivity.activityCode.startsWith('other') ? representativeActivity.name : localizeActivityName(representativeActivity, events);
+  const name = representativeActivity.activityCode.startsWith('other') ? representativeActivity.name : localizeActivityName(representativeActivity, wcifEvents);
   const eventId = representativeActivity.activityCode.startsWith('other') ? 'other' : parseActivityCode(representativeActivity.activityCode).eventId;
 
   const activityIds = activityGroup.map((activity) => activity.id);
