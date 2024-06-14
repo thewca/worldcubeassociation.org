@@ -56,14 +56,14 @@ function SimpleRegistrationStatus({ registration }) {
 }
 
 export default function RegistrationStatus({ registration }) {
-  const [simpleToggle, setSimpleToggle] = useCheckboxState(true);
+  const [alternativeToggle, setAlternativeToggle] = useCheckboxState(false);
 
   return (
     <>
-      <Checkbox toggle defaultChecked value={simpleToggle} onChange={setSimpleToggle} label="Simple Registration Status" />
-      { simpleToggle
-        ? <SimpleRegistrationStatus registration={registration} />
-        : <HumanFriendlyRegistrationStatus registration={registration} /> }
+      <Checkbox toggle value={alternativeToggle} onChange={setAlternativeToggle} label="Alternative Registration Status" />
+      { alternativeToggle
+        ? <HumanFriendlyRegistrationStatus registration={registration} />
+        : <SimpleRegistrationStatus registration={registration} /> }
     </>
   );
 }
