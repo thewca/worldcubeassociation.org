@@ -1,0 +1,69 @@
+#profile .ui.card.card-flat {
+    box-shadow: none;
+}
+
+#profile .ui.card.small-card {
+    max-width: 150px;
+}
+
+#profile .ui.card.large-card {
+    max-width: 450px;
+}
+
+#profile .ui.card.max-card {
+    max-width: 778px;
+}
+
+#profile .max-card-content {
+    width: 100%;
+    overflow-y: auto;
+}
+
+#profile .avatar {
+    max-height: 300px;
+    max-width: 100%;
+    padding-bottom: 10px;
+}
+
+#profile .collapsing-card-container {
+    max-width: 900px;
+    margin: auto;
+}
+
+@media only screen and (max-width: 800px) {
+    #profile .collapsing-card-container {
+        max-width: 600px;
+        margin: auto ;
+    }
+}
+
+#profile .card-container {
+    max-width: 900px;
+    margin: auto;
+}
+
+#profile .stat-grid {
+    padding: 3px;
+    margin-top: auto;
+    color: red;
+}
+
+#profile .stat {
+    padding: 3px;
+}
+
+#profile .count-stat {
+    margin: auto;
+}
+
+#profile .tab-container {
+    max-width: 778px;
+    margin: auto;
+}
+
+#profile .cubing-icon {
+    font-size: 1em;
+    &::before {
+        vertical-align: -7.5%;
+    }
+}
