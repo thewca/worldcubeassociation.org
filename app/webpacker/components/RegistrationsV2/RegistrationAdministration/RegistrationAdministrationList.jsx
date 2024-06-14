@@ -326,7 +326,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
         />
 
         <Header>
-          {i18n.t('simple_form.options.registration.status.waiting_list')}
+          {i18n.t('registrations.list.waiting_list')}
           {' '}
           (
           {waiting.length}
@@ -347,7 +347,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
         />
 
         <Header>
-          {i18n.t('simple_form.options.registration.status.cancelled')}
+          {i18n.t('registrations.list.deleted_registrations')}
           {' '}
           (
           {cancelled.length}
@@ -390,50 +390,48 @@ function RegistrationAdministrationTable({
   };
 
   return (
-    <div>
-      <Table sortable striped textAlign="left">
-        <TableHeader
-          columnsExpanded={columnsExpanded}
-          showCheckbox={registrations.length > 0}
-          isChecked={registrations.length === selected.length}
-          onCheckboxChanged={handleHeaderCheck}
-          sortDirection={sortDirection}
-          sortColumn={sortColumn}
-          changeSortColumn={changeSortColumn}
-          competitionInfo={competitionInfo}
-        />
+    <Table sortable striped textAlign="left">
+      <TableHeader
+        columnsExpanded={columnsExpanded}
+        showCheckbox={registrations.length > 0}
+        isChecked={registrations.length === selected.length}
+        onCheckboxChanged={handleHeaderCheck}
+        sortDirection={sortDirection}
+        sortColumn={sortColumn}
+        changeSortColumn={changeSortColumn}
+        competitionInfo={competitionInfo}
+      />
 
-        <Table.Body>
-          {registrations.length > 0 ? (
-            registrations.map((registration) => {
-              const { id } = registration.user;
-              return (
-                <TableRow
-                  key={id}
-                  competitionInfo={competitionInfo}
-                  columnsExpanded={columnsExpanded}
-                  registration={registration}
-                  isSelected={selected.includes(id)}
-                  onCheckboxChange={(_, data) => {
-                    if (data.checked) {
-                      select([id]);
-                    } else {
-                      unselect([id]);
-                    }
-                  }}
-                />
-              );
-            })
-          ) : (
-            <Table.Row>
-              <Table.Cell colSpan={6}>
-                {i18n.t('competitions.registration_v2.list.empty')}
-              </Table.Cell>
-            </Table.Row>
-          )}
-        </Table.Body>
-      </Table>
-    </div>
+      <Table.Body>
+        {registrations.length > 0 ? (
+          registrations.map((registration) => {
+            const { id } = registration.user;
+            return (
+              <TableRow
+                key={id}
+                competitionInfo={competitionInfo}
+                columnsExpanded={columnsExpanded}
+                registration={registration}
+                isSelected={selected.includes(id)}
+                onCheckboxChange={(_, data) => {
+                  if (data.checked) {
+                    select([id]);
+                  } else {
+                    unselect([id]);
+                  }
+                }}
+              />
+            );
+          })
+        ) : (
+          <Table.Row>
+            <Table.Cell colSpan={6}>
+              {i18n.t('competitions.registration_v2.list.empty')}
+            </Table.Cell>
+          </Table.Row>
+        )}
+      </Table.Body>
+    </Table>
   );
 }
 

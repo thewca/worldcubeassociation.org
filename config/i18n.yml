@@ -69,3 +69,4 @@ translations:
       - "*.rounds.*"
       - "*.attempts.*"
       - "*.time_limit.*"
+      - "*.users.edit.*"
