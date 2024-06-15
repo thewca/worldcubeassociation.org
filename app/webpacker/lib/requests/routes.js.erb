@@ -196,7 +196,6 @@ export const apiV0Urls = {
   },
   userRoles: {
     list: ({isActive, isGroupHidden, userId, groupId, status, groupType, isLead} = {}, sort) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_user_roles_path) %>?${jsonToQueryString({ sort, isActive, isGroupHidden, userId, groupId, status, groupType, isLead })}`,
-    listOfUser: (userId, sort, {isActive, status, groupType} = {}) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_index_for_user_path('${userId}')) %>?${jsonToQueryString({ sort, isActive, status, groupType })}`,
     listOfGroup: (groupId, sort, {isActive, status, isLead} = {}) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_index_for_group_path('${groupId}')) %>?${jsonToQueryString({ sort, isActive, status, isLead })}`,
     listOfGroupType: (groupType, sort, {status, isActive} = {}) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_index_for_group_type_path('${groupType}')) %>?${jsonToQueryString({ sort, status, isActive })}`,
     create: () => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_user_roles_path) %>`,
