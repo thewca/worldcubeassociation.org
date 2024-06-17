@@ -1790,6 +1790,7 @@ en:
         comment: "Additional comments to the organizers"
         until: "You can update your registration until %{date}"
         passed: "You can no longer update your registration"
+        view_registration: "View Registration"
         editing_disabled: "Registration editing is disabled for this competition"
         registration_status:
           accepted: "Your registration has been accepted."

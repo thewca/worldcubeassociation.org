@@ -4,11 +4,10 @@ import React, {
   useCallback, useEffect, useMemo, useState,
 } from 'react';
 import {
-  Button,
-  ButtonGroup,
-  ButtonOr, Dimmer,
+  Button, ButtonGroup,
+  ButtonOr,
   Form,
-  Icon, Loader,
+  Icon,
   Message,
   Popup,
   Segment,
@@ -320,7 +319,7 @@ export default function CompetingStep({
             />
           </Form.Field>
           {isRegistered ? (
-            <>
+            <ButtonGroup widths={2}>
               {shouldShowUpdateButton && (
               <>
                 <Button
@@ -334,6 +333,9 @@ export default function CompetingStep({
                   {i18n.t('registrations.update')}
                 </Button>
                 <ButtonOr />
+                <Button secondary fluid onClick={() => nextStep()}>
+                  {i18n.t('competitions.registration_v2.register.view_registration')}
+                </Button>
               </>
               )}
 
@@ -347,7 +349,7 @@ export default function CompetingStep({
                 {i18n.t('registrations.register')}
               </Button>
               )}
-            </>
+            </ButtonGroup>
           ) : (
             <>
               <Message info icon floating>
