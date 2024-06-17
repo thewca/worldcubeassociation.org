@@ -48,7 +48,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     roles = UserRole.sort_roles(roles, params[:sort])
 
     # Paginating the list by sending only first 100 elements unless mentioned in the API.
-    paginate json: roles, per_page: params[:perPage] || 100
+    paginate json: roles
   end
 
   # Returns a list of roles primarily based on groupType.
