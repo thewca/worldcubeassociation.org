@@ -2192,6 +2192,11 @@ th:
       จำกัดจำนวนผู้เข้าแข่งขันของการแข่งขันครั้งนี้คือ %{competitor_limit} คน
       และมันได้ถึงจำนวนแล้ว ถ้าคุณสมัครการแข่งขัน
       การสมัครของคุณจะอยู่ในรายชื่อรอ ซึ่งจะไม่ได้รับการยืนยันจนกว่าจะมีที่ว่าง
+    #original_hash: 2f11b7a
+    registration_full_v2_html: >-
+      จำนวนจำกัดของผู้เข้าแข่งขันของการแข่งขันครั้งนี้คือ %{competitor_limit} คน
+      และมันถึงจำนวนจำกัดแล้ว หากคุณสมัครการแข่งขัน การสมัครของคุณจะอยู่ใน
+      waiting list ซึ่งคุณสามารถตรวจสอบได้ %{here}
     #original_hash: cf29e85
     registration_full_include_waiting_list: >-
       จำกัดผู้เข้าแข่งขันของการแข่งขันครั้งนี้คือ %{competitor_limit} คน
@@ -3362,8 +3367,8 @@ th:
         #original_hash: eade5c7
         download: โหลดรายละเอียดการแข่งขันทั้งหมด
       list:
-        #original_hash: 8fab566
-        empty: ไม่พบรายชื่อที่ตรงกัน
+        #original_hash: 6eef664
+        empty: ไม่พบ
         #original_hash: 713f805
         spots_remaining: 'ผู้สมัครเหลืออีก %{spots} คน'
       bookmark:
@@ -3380,10 +3385,10 @@ th:
         #original_hash: 80d2933
         next_step: ดำเนินการต่อไปยังขั้นตอนถัดไป
       update:
-        #original_hash: c04744e
-        being_updated: กำลังอัปเดตการสมัคร
-        #original_hash: 75596b9
-        being_deleted: การสมัครกำลังถูกลบ
+        #original_hash: ebf417d
+        being_updated: กำลังอัปเดตการสมัคร...
+        #original_hash: 2d0325e
+        being_deleted: การสมัครกำลังถูกลบ...
         #original_hash: 65bbb07
         no_changes: ไม่มีการเปลี่ยนแปลง
         #original_hash: be4e8e2
@@ -3417,8 +3422,6 @@ th:
         until: 'คุณสามารถแก้ไขการสมัครของคุณได้จนถึง %{date}'
         #original_hash: fc8bc84
         passed: คุณไม่สามารถอัปเดตการลงสมัครของคุณได้อีกต่อไป
-        #original_hash: 54d5b77
-        already_paid: 'คุณได้ชำระเงินสำหรับ %{comp_name} แล้ว'
         #original_hash: 3c8d8b7
         editing_disabled: การแก้ไขการสมัครถูกปิดใช้งานสำหรับการแข่งขันครั้งนี้
         registration_status:
