@@ -75,8 +75,16 @@
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
+      window.wca.gtag = gtag;
       gtag('js', new Date());
       gtag('config', 'G-QB1H9R123K', { 'anonymize_ip': true });
+      const consentValue = '<%= current_user&.cookies_acknowledged? ? 'granted' : 'denied' %>';
+      gtag('consent', 'default', {
+        'ad_storage': consentValue,
+        'ad_user_data': consentValue,
+        'ad_personalization': consentValue,
+        'analytics_storage': consentValue,
+      });
     </script>
   <% end %>
 </head>

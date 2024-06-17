@@ -12,4 +12,13 @@ document.addEventListener('cookies-eu-acknowledged', async () => {
   if (!response.ok) {
     throw new Error(`${response.status}: ${response.statusText}\n${json.error}`);
   }
+
+  if (window.wca.gtag) {
+    window.wca.gtag('consent', 'update', {
+      ad_user_data: 'granted',
+      ad_personalization: 'granted',
+      ad_storage: 'granted',
+      analytics_storage: 'granted',
+    });
+  }
 });
