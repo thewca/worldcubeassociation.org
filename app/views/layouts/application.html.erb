@@ -78,6 +78,8 @@
       window.wca.gtag = gtag;
       gtag('js', new Date());
       gtag('config', 'G-QB1H9R123K', { 'anonymize_ip': true });
+      // as per https://developers.google.com/tag-platform/security/guides/consent?consentmode=advanced
+      //   this is being overridden by the `cookies-eu-acknowledged` event listener of our cookie banner
       const consentValue = '<%= current_user&.cookies_acknowledged? ? 'granted' : 'denied' %>';
       gtag('consent', 'default', {
         'ad_storage': consentValue,
