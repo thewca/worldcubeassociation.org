@@ -5,6 +5,7 @@ import {
 import i18n from '../../../lib/i18n';
 import EventIcon from '../../wca/EventIcon';
 import { hasPassed } from '../../../lib/utils/dates';
+import { events } from '../../../lib/wca-data.js.erb';
 
 function updateRegistrationKey(editsAllowed, deadlinePassed) {
   if (!editsAllowed && !deadlinePassed) {
@@ -45,7 +46,8 @@ export default function RegistrationOverview({
               {i18n.t('activerecord.attributes.registration.registration_competition_events')}
               :
             </label>
-            {registration.competing.event_ids.map((id) => (<EventIcon key={id} id={id} style={{ cursor: 'unset' }} />))}
+            { /* Make sure to keep WCA Event order */}
+            {events.official.flatMap((e) => (registration.competing.event_ids.includes(e.id) ? <EventIcon key={e.id} id={e.id} style={{ cursor: 'unset' }} /> : []))}
           </FormField>
           <FormField />
           <FormField>
