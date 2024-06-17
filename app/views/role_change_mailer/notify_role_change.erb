@@ -4,3 +4,7 @@
 <% @changes.each do |change| %>
   <p><%= change['changed_parameter'] %>: <%= change['previous_value'] %> -> <%= change['new_value'] %></p>
 <% end %>
+<p>Messages to recipients:</p>
+<% @to_list.each do |recipient| %>
+  <li><%= recipient.name %>: <%= recipient.message %></li>
+<% end %>
