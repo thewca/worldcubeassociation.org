@@ -74,7 +74,7 @@ export default function CompetingStep({
   }, [isRegistered, registration]);
 
   const queryClient = useQueryClient();
-  const { mutate: updateRegistrationMutation, isLoading: isUpdating } = useMutation({
+  const { mutate: updateRegistrationMutation, isPending: isUpdating } = useMutation({
     mutationFn: updateRegistration,
     onError: (data) => {
       const { error } = data.json;
