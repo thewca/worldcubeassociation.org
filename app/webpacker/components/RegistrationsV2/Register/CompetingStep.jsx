@@ -4,7 +4,8 @@ import React, {
   useCallback, useEffect, useMemo, useState,
 } from 'react';
 import {
-  Button, ButtonGroup,
+  Button,
+  ButtonGroup,
   ButtonOr,
   Form,
   Icon,
@@ -331,13 +332,12 @@ export default function CompetingStep({
                   disabled={
                         isUpdating || !hasChanges
                       }
-                  fluid
                   type="submit"
                 >
                   {i18n.t('registrations.update')}
                 </Button>
                 <ButtonOr />
-                <Button secondary fluid onClick={() => nextStep()}>
+                <Button secondary onClick={() => nextStep()}>
                   {i18n.t('competitions.registration_v2.register.view_registration')}
                 </Button>
               </>
@@ -348,7 +348,6 @@ export default function CompetingStep({
                 primary
                 disabled={isUpdating}
                 type="submit"
-                fluid
               >
                 {i18n.t('registrations.register')}
               </Button>
