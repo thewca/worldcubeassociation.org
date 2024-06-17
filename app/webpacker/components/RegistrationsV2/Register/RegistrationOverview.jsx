@@ -71,7 +71,7 @@ export default function RegistrationOverview({
 
   const deleteRegistration = (event) => {
     event.preventDefault();
-    confirm().then(() => deleteRegistrationMutation()).catch(() => nextStep({ refresh: true }));
+    confirm({ content: i18n.t('registrations.delete_confirm') }).then(() => deleteRegistrationMutation()).catch(() => nextStep({ refresh: true }));
   };
 
   return (

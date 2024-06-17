@@ -21,6 +21,7 @@ import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { setMessage } from './RegistrationMessage';
 import i18n from '../../../lib/i18n';
 import I18nHTMLTranslate from '../../I18nHTMLTranslate';
+import { useConfirm } from '../../../lib/providers/ConfirmProvider';
 
 const maxCommentLength = 240;
 
@@ -51,6 +52,8 @@ export default function CompetingStep({
   const isRegistered = Boolean(registration);
   const hasPaid = registration?.payment.payment_status === 'succeeded';
   const dispatch = useDispatch();
+
+  const confirm = useConfirm();
 
   const [comment, setComment] = useState('');
   const initialSelectedEvents = competitionInfo.events_per_registration_limit ? [] : preferredEvents
@@ -166,15 +169,21 @@ export default function CompetingStep({
   };
 
   const actionUpdateRegistration = () => {
-    dispatch(setMessage('competitions.registration_v2.update.being_updated', 'basic'));
-    updateRegistrationMutation({
-      user_id: registration.user_id,
-      competition_id: competitionInfo.id,
-      competing: {
-        comment: hasCommentChanged ? comment : undefined,
-        event_ids: hasEventsChanged ? selectedEvents : undefined,
-      },
-      guests,
+    confirm({
+      content: i18n.t('competitions.registration_v2.update.update_confirm'),
+    }).then(() => {
+      dispatch(setMessage('competitions.registration_v2.update.being_updated', 'basic'));
+      updateRegistrationMutation({
+        user_id: registration.user_id,
+        competition_id: competitionInfo.id,
+        competing: {
+          comment: hasCommentChanged ? comment : undefined,
+          event_ids: hasEventsChanged ? selectedEvents : undefined,
+        },
+        guests,
+      });
+    }).catch(() => {
+      nextStep();
     });
   };
 
