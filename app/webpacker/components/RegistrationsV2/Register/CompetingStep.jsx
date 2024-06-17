@@ -197,16 +197,6 @@ export default function CompetingStep({
     });
   };
 
-  const actionDeleteRegistration = () => {
-    updateRegistrationMutation({
-      user_id: registration.user_id,
-      competition_id: competitionInfo.id,
-      competing: {
-        status: 'cancelled',
-      },
-    });
-  };
-
   const handleEventSelection = ({ type, eventId }) => {
     if (type === 'select_all_events') {
       setSelectedEvents(competitionInfo.event_ids);
@@ -227,12 +217,6 @@ export default function CompetingStep({
     && registration.competing.registration_status !== 'cancelled';
 
   const shouldShowReRegisterButton = registration?.competing?.registration_status === 'cancelled';
-
-  const shouldShowDeleteButton = isRegistered
-    && registration.competing.registration_status !== 'cancelled'
-    && (registration.competing.registration_status !== 'accepted'
-      || competitionInfo.allow_registration_self_delete_after_acceptance)
-    && competitionInfo['registration_opened?'];
 
   const handleSubmit = useCallback((event) => {
     event.preventDefault();
@@ -336,7 +320,7 @@ export default function CompetingStep({
             />
           </Form.Field>
           {isRegistered ? (
-            <ButtonGroup widths={2}>
+            <>
               {shouldShowUpdateButton && (
               <>
                 <Button
@@ -344,6 +328,7 @@ export default function CompetingStep({
                   disabled={
                         isUpdating || !hasChanges
                       }
+                  fluid
                   type="submit"
                 >
                   {i18n.t('registrations.update')}
@@ -357,21 +342,12 @@ export default function CompetingStep({
                 primary
                 disabled={isUpdating}
                 type="submit"
+                fluid
               >
                 {i18n.t('registrations.register')}
               </Button>
               )}
-
-              {shouldShowDeleteButton && (
-              <Button
-                disabled={isUpdating}
-                negative
-                onClick={() => attemptAction(actionDeleteRegistration)}
-              >
-                {i18n.t('registrations.delete_registration')}
-              </Button>
-              )}
-            </ButtonGroup>
+            </>
           ) : (
             <>
               <Message info icon floating>

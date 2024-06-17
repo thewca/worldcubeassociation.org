@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Button, Form, FormField, Header, Message, Segment,
+  Button, ButtonGroup, Form, FormField, Header, Message, Segment,
 } from 'semantic-ui-react';
 import i18n from '../../../lib/i18n';
 import EventIcon from '../../wca/EventIcon';
@@ -25,6 +25,9 @@ export default function RegistrationOverview({
   );
   const editsAllowed = competitionInfo.allow_registration_edits
     && !hasRegistrationEditDeadlinePassed;
+
+  const deleteAllowed = (registration.competing.registration_status !== 'accepted'
+      || competitionInfo.allow_registration_self_delete_after_acceptance);
 
   return (
     <>
@@ -65,15 +68,24 @@ export default function RegistrationOverview({
             </label>
             {registration.guests}
           </FormField>
-          { editsAllowed && (
+          <ButtonGroup widths={2}>
+            { editsAllowed && (
             <Button
               primary
-              fluid
               type="submit"
             >
               {i18n.t('registrations.update')}
             </Button>
-          )}
+            )}
+            { deleteAllowed && (
+            <Button
+              negative
+              type="submit"
+            >
+              {i18n.t('registrations.delete_registration')}
+            </Button>
+            )}
+          </ButtonGroup>
         </Form>
       </Segment>
     </>
