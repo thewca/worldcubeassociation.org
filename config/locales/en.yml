@@ -1775,7 +1775,7 @@ en:
       update:
         being_updated: "Registration is being updated..."
         being_deleted: "Registration is being deleted..."
-        update_confirm: "Are you sure you want to update your Registration?"
+        update_confirm: "Are you sure you want to update your registration?"
         no_changes: "There are no changes"
         email_send: "Send Email"
         email_copy: "Copy Email"
