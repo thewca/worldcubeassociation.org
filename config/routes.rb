@@ -388,7 +388,6 @@ Rails.application.routes.draw do
       post '/registration-data' => 'competitions#registration_data', as: :registration_data
 
       scope 'user_roles' do
-        get '/user/:user_id' => 'user_roles#index_for_user', as: :index_for_user
         get '/group/:group_id' => 'user_roles#index_for_group', as: :index_for_group
         get '/group-type/:group_type' => 'user_roles#index_for_group_type', as: :index_for_group_type
         get '/search' => 'user_roles#search', as: :user_roles_search

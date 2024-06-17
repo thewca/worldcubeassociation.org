@@ -155,10 +155,9 @@ export function GroupsManagerForGroups({ groups }) {
 }
 
 export default function GroupsManager({ loggedInUserId }) {
-  const { data: roles, loading, error } = useLoadedData(apiV0Urls.userRoles.listOfUser(
-    loggedInUserId,
+  const { data: roles, loading, error } = useLoadedData(apiV0Urls.userRoles.list(
+    { isActive: true, status: 'leader', userId: loggedInUserId },
     'groupName', // Sort params
-    { isActive: true, status: 'leader' },
   ));
 
   if (loading) return <Loading />;
