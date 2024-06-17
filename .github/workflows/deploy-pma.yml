@@ -27,3 +27,6 @@ jobs:
             ${{ steps.login-ecr.outputs.registry }}/wca-on-rails:pma
           cache-from: type=gha
           cache-to: type=gha,mode=max
+      - name: Deploy new PMA Image
+        run: |
+          aws ecs update-service --cluster wca-on-rails --service wca-on-rails-prod-auxiliary-services --force-new-deployment
