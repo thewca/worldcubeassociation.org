@@ -6,9 +6,9 @@ import React, {
 import {
   Button,
   ButtonGroup,
-  ButtonOr,
+  ButtonOr, Dimmer,
   Form,
-  Icon,
+  Icon, Loader,
   Message,
   Popup,
   Segment,
@@ -253,9 +253,8 @@ export default function CompetingStep({
   ]);
 
   const formWarnings = useMemo(() => potentialWarnings(competitionInfo), [competitionInfo]);
-
   return (
-    <Segment basic>
+    <Segment basic loading={isUpdating}>
       {processing && (
         <Processing
           competitionInfo={competitionInfo}
