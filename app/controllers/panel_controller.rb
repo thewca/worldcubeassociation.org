@@ -17,6 +17,7 @@ class PanelController < ApplicationController
   before_action -> { redirect_to_root_unless_user(:can_access_wdc_panel?) }, only: [:wdc]
   before_action -> { redirect_to_root_unless_user(:can_access_wec_panel?) }, only: [:wec]
   before_action -> { redirect_to_root_unless_user(:can_access_weat_panel?) }, only: [:weat]
+  before_action -> { redirect_to_root_unless_user(:can_access_admin_panel?) }, only: [:admin]
 
   def pending_claims_for_subordinate_delegates
     # Show pending claims for a given user, or the current user, if they can see them
