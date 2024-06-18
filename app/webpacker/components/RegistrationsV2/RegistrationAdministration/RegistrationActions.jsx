@@ -59,7 +59,7 @@ export default function RegistrationActions({
       const { error } = data.json;
       dispatch(setMessage(
         error
-          ? `competitions.registration_v2.errors.${error}`
+          ? error.errors.map((err) => `competitions.registration_v2.errors.${err}`)
           : 'registrations.flash.failed',
         'negative',
       ));
