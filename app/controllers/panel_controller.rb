@@ -89,6 +89,7 @@ class PanelController < ApplicationController
       "regionsManager" => "regions-manager",
       "groupsManagerAdmin" => "groups-manager-admin",
       "bannedCompetitors" => "banned-competitors",
+      "translators" => "translators",
     }
   end
 end

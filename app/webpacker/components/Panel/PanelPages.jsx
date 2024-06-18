@@ -4,6 +4,7 @@ import RegionManager from './Board/RegionManager';
 import EditPerson from './Wrt/EditPerson';
 import BannedCompetitorsPage from './pages/BannedCompetitorsPage';
 import GroupsManagerAdmin from './pages/GroupsManagerAdmin';
+import Translators from './pages/Translators';
 
 export default {
   [PANEL_PAGES.postingDashboard]: {
@@ -25,5 +26,9 @@ export default {
   [PANEL_PAGES.bannedCompetitors]: {
     name: 'Banned Competitors',
     component: BannedCompetitorsPage,
+  },
+  [PANEL_PAGES.translators]: {
+    name: 'Translators',
+    component: Translators,
   },
 };
