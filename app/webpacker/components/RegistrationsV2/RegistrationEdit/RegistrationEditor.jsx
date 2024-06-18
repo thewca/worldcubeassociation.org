@@ -215,12 +215,17 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
         </Message>
         )}
         <Header>{competitor.name}</Header>
-        <EventSelector
-          onEventSelection={handleEventSelection}
-          selectedEvents={selectedEvents}
-          disabled={registrationEditDeadlinePassed}
-          eventList={competitionInfo.event_ids}
-        />
+        <Form.Field required error={selectedEvents.length === 0}>
+          <EventSelector
+            onEventSelection={handleEventSelection}
+            eventList={competitionInfo.event_ids}
+            selectedEvents={selectedEvents}
+            id="event-selection"
+            maxEvents={maxEvents}
+            shouldErrorOnEmpty
+          />
+        </Form.Field>
+
         <label>Comment</label>
         <Form.TextArea
           id="competitor-comment"
@@ -315,7 +320,10 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
           )}
         </>
       )}
-      <RegistrationHistory history={registration.history} competitorsInfo={competitorsInfo} />
+      <RegistrationHistory
+        history={registration.history.toReversed()}
+        competitorsInfo={competitorsInfo}
+      />
     </Segment>
   );
 }
