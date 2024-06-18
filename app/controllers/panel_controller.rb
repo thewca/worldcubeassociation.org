@@ -53,7 +53,6 @@ class PanelController < ApplicationController
       "leader" => {
         "leaderForms" => "leader-forms",
         "groupsManager" => "groups-manager",
-        "bannedCompetitors" => "banned-competitors",
       },
       "wfc" => {
         "duesExport" => "dues-export",
