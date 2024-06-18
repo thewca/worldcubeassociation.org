@@ -20,6 +20,12 @@ class UserRole < ApplicationRecord
     keyword_init: true,
   )
 
+  UserRoleEmailRecipient = Struct.new(
+    :name,
+    :email,
+    :message,
+  )
+
   STATUS_RANK = {
     UserGroup.group_types[:delegate_regions].to_sym => [
       RolesMetadataDelegateRegions.statuses[:trainee_delegate],
