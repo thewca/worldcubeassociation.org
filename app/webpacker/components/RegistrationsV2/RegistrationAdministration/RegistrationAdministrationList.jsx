@@ -1,7 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
-import React, { useMemo, useReducer, useRef } from 'react';
+import React, {
+  useMemo, useReducer, useRef, useState,
+} from 'react';
 import {
-  Checkbox, Flag, Form, Header, Icon, Popup, Sticky, Table,
+  Checkbox, Flag, Form, Header, Icon, Popup, Segment, Sticky, Table,
 } from 'semantic-ui-react';
 import { DateTime } from 'luxon';
 import { getAllRegistrations } from '../api/registration/get/get_registrations';
@@ -83,7 +85,7 @@ const partitionRegistrations = (registrations) => registrations.reduce(
 
 const expandableColumns = {
   dob: 'Date of Birth',
-  region: 'Region',
+  region: 'Region Name',
   events: 'Events',
   comments: 'Comment & Note',
   email: 'Email',
@@ -130,6 +132,8 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
   });
   const { sortColumn, sortDirection } = state;
   const changeSortColumn = (name) => dispatchSort({ type: 'CHANGE_SORT', sortColumn: name });
+
+  const [isMutating, setIsMutating] = useState(false);
 
   const {
     isLoading: isRegistrationsLoading,
@@ -249,7 +253,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
   return isRegistrationsLoading || infoLoading ? (
     <Loading />
   ) : (
-    <>
+    <Segment loading={isMutating}>
       <Form>
         <Form.Group widths="equal">
           {Object.entries(expandableColumns).map(([id, name]) => (
@@ -278,6 +282,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
             spotsRemaining={spotsRemaining}
             userEmailMap={userEmailMap}
             competitionInfo={competitionInfo}
+            setIsMutating={setIsMutating}
           />
         </Sticky>
 
@@ -366,7 +371,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
           competitionInfo={competitionInfo}
         />
       </div>
-    </>
+    </Segment>
   );
 }
 

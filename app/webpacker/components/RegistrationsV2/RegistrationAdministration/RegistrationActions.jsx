@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Button, Icon } from 'semantic-ui-react';
 import { bulkUpdateRegistrations } from '../api/registration/patch/update_registration';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
@@ -32,6 +32,7 @@ export default function RegistrationActions({
   registrations,
   spotsRemaining,
   competitionInfo,
+  setIsMutating,
 }) {
   const dispatch = useDispatch();
   const selectedCount = Object.values(partitionedSelected).reduce(
@@ -52,7 +53,7 @@ export default function RegistrationActions({
     .map((userId) => userEmailMap[userId])
     .join(',');
 
-  const { mutate: updateRegistrationMutation } = useMutation({
+  const { mutate: updateRegistrationMutation, isPending } = useMutation({
     mutationFn: bulkUpdateRegistrations,
     onError: (data) => {
       const { error } = data.json;
@@ -64,6 +65,10 @@ export default function RegistrationActions({
       ));
     },
   });
+
+  useEffect(() => {
+    setIsMutating(isPending);
+  }, [isPending, setIsMutating]);
 
   const changeStatus = (attendees, status) => {
     updateRegistrationMutation(
