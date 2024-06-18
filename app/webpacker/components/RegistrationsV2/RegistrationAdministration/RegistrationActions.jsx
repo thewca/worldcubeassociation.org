@@ -102,7 +102,7 @@ export default function RegistrationActions({
 
   const copyEmails = (emails) => {
     navigator.clipboard.writeText(emails);
-    dispatch(setMessage('Copied to clipboard. Remember to use bcc!', 'positive'));
+    dispatch(setMessage('competitions.registration_v2.update.email_message', 'positive'));
   };
 
   return (
