@@ -12,7 +12,7 @@ import UserBadge from '../UserBadge';
 export default function Translators() {
   const {
     data: translators, loading, error,
-  } = useLoadedData(apiV0Urls.userRoles.listOfGroupType(groupTypes.translators));
+  } = useLoadedData(apiV0Urls.userRoles.list({ groupType: groupTypes.translators }));
   const groupedTranslators = useMemo(
     () => _.groupBy((translators || []), (role) => role.group.id),
     [translators],
