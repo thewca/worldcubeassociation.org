@@ -253,7 +253,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
   return isRegistrationsLoading || infoLoading ? (
     <Loading />
   ) : (
-    <Segment loading={isMutating}>
+    <Segment loading={isMutating} style={{ overflowX: 'scroll' }}>
       <Form>
         <Form.Group widths="equal">
           {Object.entries(expandableColumns).map(([id, name]) => (
@@ -639,7 +639,7 @@ function TableRow({
         competitionInfo.event_ids.map((eventId) => (
           <Table.Cell key={`event-${eventId}`}>
             {eventIds.includes(eventId) && (
-              <EventIcon id={eventId} size="1x" selected />
+              <EventIcon id={eventId} selected />
             )}
           </Table.Cell>
         ))

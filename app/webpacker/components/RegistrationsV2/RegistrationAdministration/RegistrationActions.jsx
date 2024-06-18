@@ -11,7 +11,7 @@ function csvExport(selected, registrations) {
   csvContent
     += 'user_id,guests,competing.event_ids,competing.registration_status,competing.registered_on,competing.comment,competing.admin_comment\n';
   registrations
-    .filter((r) => selected.length === 0 || selected.includes(r.user.id))
+    .filter((r) => selected.length === 0 || selected.includes(r.user_id))
     .forEach((registration) => {
       csvContent += `${registration.user_id},${
         registration.guests
