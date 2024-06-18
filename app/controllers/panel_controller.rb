@@ -82,4 +82,14 @@ class PanelController < ApplicationController
       },
     }
   end
+
+  def self.panel_pages
+    {
+      "postingDashboard" => "posting-dashboard",
+      "editPerson" => "edit-person",
+      "regionsManager" => "regions-manager",
+      "groupsManagerAdmin" => "groups-manager-admin",
+      "bannedCompetitors" => "banned-competitors",
+    }
+  end
 end
