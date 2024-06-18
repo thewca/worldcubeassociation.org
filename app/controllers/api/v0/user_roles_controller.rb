@@ -47,8 +47,8 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     roles = UserRole.filter_roles(roles, current_user, params)
     roles = UserRole.sort_roles(roles, params[:sort])
 
-    # Limiting to first 100 elements of roles array to avoid serializing of large array.
-    render json: roles.first(100)
+    # Paginating the list by sending only first 100 elements unless mentioned in the API.
+    paginate json: roles
   end
 
   # Returns a list of roles primarily based on groupType.
