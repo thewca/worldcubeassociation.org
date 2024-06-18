@@ -27,10 +27,9 @@ const canDemote = (role) => (
 function GroupTable({ group }) {
   const {
     data: roles, loading, error, sync,
-  } = useLoadedData(apiV0Urls.userRoles.listOfGroup(
-    group.id,
+  } = useLoadedData(apiV0Urls.userRoles.list(
+    { isActive: true, groupId: group.id },
     'status:desc,startDate,name', // Sort params
-    { isActive: true },
   ));
   const confirm = useConfirm();
   const { save, saving } = useSaveAction();
