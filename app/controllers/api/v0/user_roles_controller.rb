@@ -19,6 +19,9 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     group_id = params[:groupId]
     user_id = params[:userId]
 
+    # For post filtering, user & group is needed.
+    active_record = active_record.includes([:user, :group])
+
     # In next few lines, instead of foo.present? we are using !foo.nil? because foo.present? returns
     # false if foo is a boolean false but we need to actually check if the boolean is present or not.
     if !is_active.nil?
