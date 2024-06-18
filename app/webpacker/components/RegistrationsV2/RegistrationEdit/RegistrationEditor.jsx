@@ -55,7 +55,7 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
     enabled: Boolean(serverRegistration),
   });
 
-  const { mutate: updateRegistrationMutation, isLoading: isUpdating } = useMutation({
+  const { mutate: updateRegistrationMutation, isPending: isUpdating } = useMutation({
     mutationFn: updateRegistration,
     onError: (data) => {
       const { errorCode } = data;
@@ -67,11 +67,17 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
       ));
     },
     onSuccess: (data) => {
-      setMessage(setMessage('Registration update succeeded', 'positive'));
       queryClient.setQueryData(
         ['registration', competitionInfo.id, competitor.id],
         data,
       );
+      // Going from cancelled -> pending
+      if (registration.competing.registration_status === 'cancelled') {
+        dispatch(setMessage('registrations.flash.registered', 'positive'));
+        // Not changing status
+      } else {
+        dispatch(setMessage('registrations.flash.updated', 'positive'));
+      }
     },
   });
 
@@ -94,7 +100,7 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
     && adminComment !== (serverRegistration.competing.admin_comment ?? '');
   const hasStatusChanged = serverRegistration
     && status !== serverRegistration.competing.registration_status;
-  const hasGuestsChanged = false;
+  const hasGuestsChanged = serverRegistration && guests !== serverRegistration.guests;
 
   const hasChanges = hasEventsChanged
     || hasCommentChanged
@@ -108,35 +114,60 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
 
   const handleRegisterClick = useCallback(() => {
     if (!hasChanges) {
-      dispatch(setMessage('There are no changes', 'basic'));
+      dispatch(setMessage('competitions.registration_v2.update.no_changes', 'basic'));
     } else if (!commentIsValid) {
-      dispatch(setMessage('You must include a comment', 'negative'));
+      dispatch(setMessage('registrations.errors.cannot_register_without_comment', 'negative'));
     } else if (!eventsAreValid) {
       dispatch(setMessage(
         maxEvents === Infinity
-          ? 'You must select at least 1 event'
-          : `You must select between 1 and ${maxEvents} events`,
+          ? 'registrations.errors.must_register'
+          : 'registrations.errors.exceeds_event_limit.other',
         'negative',
       ));
     } else {
-      dispatch(setMessage('Updating Registration', 'basic'));
-      updateRegistrationMutation({
+      dispatch(setMessage('competitions.registration_v2.update.being_updated', 'positive'));
+      // Only send changed values
+      const body = {
         user_id: competitor.id,
-        competing: {
-          status,
-          event_ids: selectedEvents,
-          comment,
-          admin_comment: adminComment,
-        },
         competition_id: competitionInfo.id,
-      });
+        competing: {},
+      };
+      if (hasEventsChanged) {
+        body.competing.event_ids = selectedEvents;
+      }
+      if (hasCommentChanged) {
+        body.competing.comment = comment;
+      }
+      if (hasAdminCommentChanged) {
+        body.competing.admin_comment = adminComment;
+      }
+      if (hasStatusChanged) {
+        body.competing.status = status;
+      }
+      if (hasGuestsChanged) {
+        body.guests = guests;
+      }
+
+      updateRegistrationMutation(body);
     }
   }, [hasChanges,
     commentIsValid,
-    eventsAreValid, dispatch, maxEvents,
-    updateRegistrationMutation, competitor,
-    status, selectedEvents, comment,
-    adminComment, competitionInfo.id]);
+    eventsAreValid,
+    dispatch,
+    maxEvents,
+    competitor.id,
+    competitionInfo.id,
+    hasEventsChanged,
+    hasCommentChanged,
+    hasAdminCommentChanged,
+    hasStatusChanged,
+    hasGuestsChanged,
+    updateRegistrationMutation,
+    selectedEvents,
+    comment,
+    adminComment,
+    status,
+    guests]);
 
   const registrationEditDeadlinePassed = Boolean(competitionInfo.event_change_deadline_date)
     && hasPassed(competitionInfo.event_change_deadline_date);
@@ -161,7 +192,7 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
   }
 
   return (
-    <Segment padded attached>
+    <Segment padded attached loading={isUpdating}>
       <Form onSubmit={handleRegisterClick}>
         {!competitor.wca_id && (
         <Message>
@@ -295,24 +326,20 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
                 />
               </Table.Cell>
               <Table.Cell>
-                {!_.isEmpty(entry.changed_attributes) ? (
-                  Object.entries(entry.changed_attributes).map(
-                    ([k, v]) => (
-                      <span key={k}>
-                        Changed
-                        {' '}
-                        {k}
-                        {' '}
-                        to
-                        {' '}
-                        {JSON.stringify(v)}
-                        {' '}
-                        <br />
-                      </span>
-                    ),
-                  )
-                ) : (
-                  <span>Registration Created</span>
+                {Object.entries(entry.changed_attributes).map(
+                  ([k, v]) => (
+                    <span key={k}>
+                      Changed
+                      {' '}
+                      {k}
+                      {' '}
+                      to
+                      {' '}
+                      {JSON.stringify(v)}
+                      {' '}
+                      <br />
+                    </span>
+                  ),
                 )}
               </Table.Cell>
               <Table.Cell>
