@@ -28,6 +28,9 @@ import Loading from '../../Requests/Loading';
 import { EventSelector } from '../../CompetitionsOverview/CompetitionsFilters';
 import Refunds from './Refunds';
 import { editPersonUrl } from '../../../lib/requests/routes.js.erb';
+import { useConfirm } from '../../../lib/providers/ConfirmProvider';
+import i18n from '../../../lib/i18n';
+import RegistrationHistory from './RegistrationHistory';
 
 export default function RegistrationEditor({ competitor, competitionInfo }) {
   const dispatch = useDispatch();
@@ -37,6 +40,7 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
   const [guests, setGuests] = useState(0);
   const [selectedEvents, setSelectedEvents] = useState([]);
   const [registration, setRegistration] = useState({});
+  const confirm = useConfirm();
 
   const queryClient = useQueryClient();
 
@@ -68,8 +72,11 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
     },
     onSuccess: (data) => {
       queryClient.setQueryData(
-        ['registration', competitionInfo.id, competitor.id],
-        data,
+        ['registration-admin', competitionInfo.id, competitor.id],
+        {
+          ...data.registration,
+          payment: serverRegistration.payment,
+        },
       );
       // Going from cancelled -> pending
       if (registration.competing.registration_status === 'cancelled') {
@@ -147,10 +154,14 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
       if (hasGuestsChanged) {
         body.guests = guests;
       }
-
-      updateRegistrationMutation(body);
+      confirm({
+        content: i18n.t('competitions.registration_v2.update.update_confirm'),
+      }).then(() => {
+        updateRegistrationMutation(body);
+      }).catch(() => {});
     }
   }, [hasChanges,
+    confirm,
     commentIsValid,
     eventsAreValid,
     dispatch,
@@ -282,7 +293,7 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
         ) : (
           <Button
             color="blue"
-            disabled={isUpdating}
+            disabled={isUpdating || !hasChanges}
           >
             Update Registration
           </Button>
@@ -304,56 +315,7 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
           )}
         </>
       )}
-      <Header>Registration History</Header>
-      <Table>
-        <Table.Header>
-          <Table.Row>
-            <Table.HeaderCell>Timestamp</Table.HeaderCell>
-            <Table.HeaderCell>Changes</Table.HeaderCell>
-            <Table.HeaderCell>Acting User</Table.HeaderCell>
-            <Table.HeaderCell>Action</Table.HeaderCell>
-          </Table.Row>
-        </Table.Header>
-        <Table.Body>
-          {registration.history.map((entry) => (
-            <Table.Row key={entry.timestamp}>
-              <Table.Cell>
-                <Popup
-                  content={getShortTimeString(entry.timestamp)}
-                  trigger={
-                    <span>{getShortDateString(entry.timestamp)}</span>
-                  }
-                />
-              </Table.Cell>
-              <Table.Cell>
-                {Object.entries(entry.changed_attributes).map(
-                  ([k, v]) => (
-                    <span key={k}>
-                      Changed
-                      {' '}
-                      {k}
-                      {' '}
-                      to
-                      {' '}
-                      {JSON.stringify(v)}
-                      {' '}
-                      <br />
-                    </span>
-                  ),
-                )}
-              </Table.Cell>
-              <Table.Cell>
-                {
-                  competitorsInfo.find(
-                    (c) => c.id === entry.actor_id,
-                  )?.name ?? entry.actor_user_id
-                }
-              </Table.Cell>
-              <Table.Cell>{entry.action}</Table.Cell>
-            </Table.Row>
-          ))}
-        </Table.Body>
-      </Table>
+      <RegistrationHistory history={registration.history} competitorsInfo={competitorsInfo} />
     </Segment>
   );
 }
