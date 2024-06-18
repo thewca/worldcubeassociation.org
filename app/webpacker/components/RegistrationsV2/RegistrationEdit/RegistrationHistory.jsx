@@ -1,6 +1,15 @@
 import React from 'react';
 import { Header, Popup, Table } from 'semantic-ui-react';
 import { getShortDateString, getShortTimeString } from '../../../lib/utils/dates';
+import { events } from '../../../lib/wca-data.js.erb';
+import EventIcon from '../../wca/EventIcon';
+
+const formatHistoryColumn = (key, value) => {
+  if (key === 'event_ids') {
+    return events.official.flatMap((e) => (value.includes(e.id) ? <EventIcon key={e.id} id={e.id} style={{ cursor: 'unset' }} /> : []));
+  }
+  return value;
+};
 
 export default function RegistrationHistory({ history, competitorsInfo }) {
   return (
@@ -36,7 +45,7 @@ export default function RegistrationHistory({ history, competitorsInfo }) {
                       {' '}
                       to
                       {' '}
-                      {JSON.stringify(v)}
+                      {formatHistoryColumn(k, v)}
                       {' '}
                       <br />
                     </span>
