@@ -515,7 +515,7 @@ function TableHeader({
         {events ? (
           competitionInfo.event_ids.map((eventId) => (
             <Table.HeaderCell key={`event-${eventId}`}>
-              <EventIcon id={eventId} className="selected" />
+              <EventIcon id={eventId} size="1em" />
             </Table.HeaderCell>
           ))
         ) : (
@@ -647,19 +647,27 @@ function TableRow({
         competitionInfo.event_ids.map((eventId) => (
           <Table.Cell key={`event-${eventId}`}>
             {eventIds.includes(eventId) && (
-              <EventIcon id={eventId} selected />
+              <EventIcon id={eventId} size="1em" />
             )}
           </Table.Cell>
         ))
       ) : (
-        <Table.Cell>
-          <Popup
-            content={eventIds.map((eventId) => (
-              <EventIcon key={eventId} id={eventId} className="selected" />
-            ))}
-            trigger={<span>{eventIds.length}</span>}
-          />
-        </Table.Cell>
+        <Popup
+          content={eventIds.map((eventId) => (
+            <EventIcon key={eventId} id={eventId} size="1em" />
+          ))}
+          position="top center"
+          trigger={(
+            <Table.Cell>
+              <span>
+                {eventIds.length}
+                {' '}
+                <Icon name="magnify" />
+              </span>
+            </Table.Cell>
+          )}
+        />
+
       )}
 
       <Table.Cell>{registration.guests}</Table.Cell>
