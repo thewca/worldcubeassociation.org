@@ -85,6 +85,9 @@ export default function StepPanel({
           <Message.Header>
             {i18n.t(
               `competitions.registration_v2.register.registration_status.${registration.competing.registration_status}`,
+              {
+                waiting_list_position: registration.competing.waiting_list_position,
+              },
             )}
           </Message.Header>
         </Message.Content>
