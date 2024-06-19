@@ -34,6 +34,10 @@ class RegulationsController < ApplicationController
     render_regulations("index.html.erb")
   end
 
+  def full
+    render_regulations("full.html.erb")
+  end
+
   def historical_guidelines
     render_regulations("history/official/#{params[:id]}/guidelines.html.erb")
   end
