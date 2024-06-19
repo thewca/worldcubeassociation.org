@@ -67,6 +67,13 @@
                            end,
                          }],
             }
+            if @competition.uses_new_registration_service?
+              nav_items << {
+                text: t('registrations.list.waiting_list'),
+                path: competition_waiting_list_path(@competition),
+                icon: "list"
+              }
+            end
           else
             nav_items << {
               text: t('.menu.import_registrations'),
@@ -150,13 +157,6 @@
               path: competition_registrations_path(@competition),
               icon: "users", # Don't add event icons if v2 is used
               tiny_children: event_icons
-            }
-          end
-          if @competition.uses_new_registration_service?
-            nav_items << {
-              text: t('registrations.list.waiting_list'),
-              path: competition_waiting_list_path(@competition),
-              icon: "list"
             }
           end
         end
