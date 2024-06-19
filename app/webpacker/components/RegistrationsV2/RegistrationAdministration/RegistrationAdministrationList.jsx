@@ -394,6 +394,14 @@ function RegistrationAdministrationTable({
     }
   };
 
+  if (registrations.length === 0) {
+    return (
+      <Segment>
+        {i18n.t('competitions.registration_v2.list.empty')}
+      </Segment>
+    );
+  }
+
   return (
     <Table sortable striped textAlign="left">
       <TableHeader
