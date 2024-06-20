@@ -193,8 +193,8 @@ function EditPerson() {
   return (
     <>
       <div>
-        To know the difference between fix and update, refer delegate crash course&apos;s
-        &#34;Requesting changes to person data&#34; section.
+        To know the difference between fix and update, refer to the Delegate Handbook&apos;s
+        &#34;Requesting Changes to Personal Data&#34; section.
       </div>
       {response != null && (
         <Message
