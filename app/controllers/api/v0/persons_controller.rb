@@ -56,4 +56,25 @@ class Api::V0::PersonsController < Api::V0::ApiController
       country_rank: rank.country_rank,
     }
   end
+
+  def can_claim
+    wca_id = params.require(:wca_id)
+    user = User.new
+    user.unconfirmed_wca_id = wca_id
+    if !user.unconfirmed_person
+      render json: { can_claim: false, reason: 'wca_id_not_found' }
+    elsif user.unconfirmed_person.user && !user.unconfirmed_person.user.dummy_account?
+      render json: { can_claim: false, reason: 'wca_id_already_claimed' }
+    elsif !user.unconfirmed_person.dob
+      render json: { can_claim: false, reason: 'dob_not_found' }
+    else
+      render json: { can_claim: true }
+    end
+  end
+
+  def likely_delegates
+    wca_id = params.require(:wca_id)
+    person = Person.current.find_by_wca_id!(wca_id)
+    render json: { likely_delegates: person.likely_delegates }
+  end
 end
