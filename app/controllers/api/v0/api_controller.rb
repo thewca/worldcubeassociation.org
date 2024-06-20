@@ -30,8 +30,38 @@ class Api::V0::ApiController < ApplicationController
   end
 
   def user_qualification_data
-    user = User.includes(person: [:ranksSingle, :ranksAverage]).find(params.require(:user_id))
-    render json: user.person&.personal_records&.map(&:to_wcif) || []
+    cutoff_date = "2024-04-04"
+    event_id = '333'
+    results_before_cutoff = User.find(params.require(:user_id)).person.results.on_or_before(cutoff_date).group_by(&:event_id)
+
+    qualification_results = []
+    results_before_cutoff.each do |event, results|
+      best_single = Result.best_single(results)
+      best_average = Result.best_average(results)
+
+      qualification_results << {
+        eventId: event,
+        type: 'single',
+        best: best_single.best,
+        on_or_before: cutoff_date,
+      }
+
+      qualification_results << {
+        eventId: event,
+        type: 'average',
+        best: best_average.average,
+        on_or_before: cutoff_date,
+      }
+    end
+
+    render json: qualification_results || []
+
+
+      # best_results << {
+      #   eventId: best_single.eventId,
+      #   type: 'single',
+      #   best: best_single.best,
+      #   on_or_before: target_date,
   end
 
   def scramble_program
