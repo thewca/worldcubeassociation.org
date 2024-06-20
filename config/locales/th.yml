@@ -1213,10 +1213,12 @@ th:
       db_dev_export: Developer Export
       #original_hash: 1fa73f3
       regulations: กติกา
+      #original_hash: 3bb8751
+      regulations_full: กติกาและแนวปฏิบัติ
       #original_hash: 6bce1b5
       about_regulations: เกี่ยวกับกติกา
       #original_hash: 141d1d7
-      guidelines: แนวทาง
+      guidelines: แนวปฏิบัติ
       #original_hash: c4622c3
       scrambles: การตั้งโจทย์
       #original_hash: 90ccd64
@@ -1798,7 +1800,7 @@ th:
       #original_hash: 010b0e5
       remove_avatar_reason: โปรดระบุเหตุผลในการลบ
       #original_hash: 141d1d7
-      guidelines: แนวทาง
+      guidelines: แนวปฏิบัติ
       avatar_guidelines:
         #original_hash: 255f28c
         '1': รูปแทนตัวทั้งหมดต้องเป็นบุคคลจริง
@@ -3676,7 +3678,7 @@ th:
         #original_hash: 83d204f
         regulation_link_text: 'กติกา %{number}'
         #original_hash: bd0e4a9
-        guideline_link_text: 'แนวทาง %{number}'
+        guideline_link_text: 'แนวปฏิบัติ %{number}'
         #original_hash: b2a983a
         cumulative_time_limit: จำกัดเวลาสะสม
         #original_hash: d47f11a
@@ -4269,7 +4271,7 @@ th:
           #original_hash: 576c3b8
           '4': >-
             ดูที่ <a target='_blank'
-            href='https://www.worldcubeassociation.org/organizer-guidelines'>แนวทางการเป็นผู้จัดการแข่งขันของ
+            href='https://www.worldcubeassociation.org/organizer-guidelines'>แนวปฏิบัติการเป็นผู้จัดการแข่งขันของ
             WCA</a> สำหรับข้อมูลเพื่มเติม
       '6':
         #original_hash: 8005a61
@@ -4551,7 +4553,7 @@ th:
     #original_hash: 5ca0558
     certificates: แม่แบบประกาศนียบัตรของ WCT
     #original_hash: f580987
-    orga_guidelines: แนวทางการเป็นผู้จัดการแข่งขัน
+    orga_guidelines: แนวปฏิบัติการเป็นผู้จัดการแข่งขัน
   delegates_page:
     #original_hash: d8fd3e4
     title: WCA Delegates
@@ -4932,7 +4934,7 @@ th:
       #original_hash: a0ca0c3
       posts: โพสต์
       #original_hash: 9d7ea9c
-      regulations_and_guidelines: กติกาและแนวทาง
+      regulations_and_guidelines: กติกาและแนวปฏิบัติ
       #original_hash: db683b3
       search_for: 'ผลการค้นหาสำหรับ <b>%{search_string}</b>'
       not_found:
@@ -4947,7 +4949,7 @@ th:
         #original_hash: 3499e7e
         incidents: ไม่มี incidents สำหรับ
         #original_hash: 76a6bf1
-        regulations_and_guidelines: ไม่พบกติกาและแนวทางสำหรับ
+        regulations_and_guidelines: ไม่พบกติกาและแนวปฏิบัติสำหรับ
   incidents_log:
     #original_hash: 61ab89f
     i18n_disclaimer: >-
@@ -4968,7 +4970,7 @@ th:
       #original_hash: 4296902
       content2_html: >-
         กติกาของ WCA มีส่วนเสริมคือ<a
-        href="/regulations/guidelines.html">แนวทางของ WCA</a>
+        href="/regulations/guidelines.html">แนวปฏิบัติของ WCA</a>
         ซึ่งมีคำอธิบายเพิ่มเติม
       #original_hash: c8e1783
       content3_html: >-
@@ -5004,7 +5006,7 @@ th:
       content2_html: เอกสารฉบับนี้รวมข้อมูลที่จำเป็นและผู้จัดการแข่งขันทุกคนควรอ่าน
   regulations_translations:
     #original_hash: 9493b8d
-    title: 'กติกาและแนวทางของ WCA: Translations'
+    title: 'กติกาและแนวปฏิบัติของ WCA: Translations'
     #original_hash: 386ecc1
     paragraph1: หากคุณใช้ภาษาอื่นนอกที่ไม่ใช่ภาษาอังกฤษ คุณสามารถหาการแปลเหล่านี้ได้
     #original_hash: 32b1132
@@ -5267,7 +5269,7 @@ th:
         สื่อทั้งหมดจะได้รับการตรวจสอบก่อนที่จะปรากฏใน<a
         href="/media">หน้าสื่อทั้งหมด</a>.
       #original_hash: 141d1d7
-      guidelines: แนวทาง
+      guidelines: แนวปฏิบัติ
       media_guidelines:
         #original_hash: fd6984b
         '1': เนื้อหาสื่อทั้งหมดจะต้องเกี่ยวข้องกับการแข่งขันที่เลือก
