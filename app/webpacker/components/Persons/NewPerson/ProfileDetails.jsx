@@ -1,6 +1,6 @@
 import React from 'react';
 import { Card, Grid, Header } from 'semantic-ui-react';
-import i18n from "../../../lib/i18n";
+import I18nHTMLTranslate from '../../I18nHTMLTranslate';
 
 function Stat({ children, label, width }) {
   return (
@@ -57,7 +57,7 @@ export default function ProfileDetails({ person }) {
           <Stat label="WCA ID" width={idWidth}>{profile.wcaId}</Stat>
           {profile.gender && (
             <Stat label="Gender" width={otherWidth}>
-              {i18n.t(`enums.user.gender.${profile.gender}`)}
+              <I18nHTMLTranslate i18nKey={`enums.user.gender.${profile.gender}`} />
             </Stat>
           )}
           {profile.solves && <Stat label="Solves" width={otherWidth}>{profile.solves}</Stat>}
