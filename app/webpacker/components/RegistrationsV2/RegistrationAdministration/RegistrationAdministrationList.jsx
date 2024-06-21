@@ -345,6 +345,15 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
           competitionInfo={competitionInfo}
         />
 
+        <Header>
+          {i18n.t('registrations.list.waiting_list')}
+          {' '}
+          (
+          {waiting.length}
+          {competitionInfo.competitor_limit && `; ${spotsRemainingText}`}
+          )
+        </Header>
+
         <WaitingList
           competitionInfo={competitionInfo}
           waiting={waiting}

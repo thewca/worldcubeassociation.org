@@ -59,26 +59,27 @@ export default function WaitingList({ competitionInfo, waiting, updateWaitingLis
       },
     });
   };
+
+  if (waiting.length === 0) {
+    return (
+      <Segment>
+        None
+      </Segment>
+    );
+  }
+
   return (
     <>
-      <Header>{i18n.t('registrations.list.waiting_list')}</Header>
       <Checkbox toggle value={editable} onChange={setEditable} label="Enable Waiting List Edit Mode" />
-      { waiting?.length > 0
-        ? (
-          <Table collapsing>
-            <Table.Header>
-              <Table.Row>
-                <Table.HeaderCell>Position</Table.HeaderCell>
-                <Table.HeaderCell>{i18n.t('delegates_page.table.name')}</Table.HeaderCell>
-              </Table.Row>
-            </Table.Header>
-            <DraggableTable items={waiting} handleOnDragEnd={handleOnDragEnd} editable={editable} />
-          </Table>
-        ) : (
-          <Segment>
-            None
-          </Segment>
-        )}
+      <Table collapsing>
+        <Table.Header>
+          <Table.Row>
+            <Table.HeaderCell>Position</Table.HeaderCell>
+            <Table.HeaderCell>{i18n.t('delegates_page.table.name')}</Table.HeaderCell>
+          </Table.Row>
+        </Table.Header>
+        <DraggableTable items={waiting} handleOnDragEnd={handleOnDragEnd} editable={editable} />
+      </Table>
     </>
   );
 }
