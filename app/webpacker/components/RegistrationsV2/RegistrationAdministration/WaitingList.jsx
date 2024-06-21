@@ -1,13 +1,16 @@
 import React from 'react';
 import {
   Checkbox,
-  Header, Ref, Segment, Table,
+  Ref, Segment, Table,
 } from 'semantic-ui-react';
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-import i18n from '../../../lib/i18n';
+import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import useCheckboxState from '../../../lib/hooks/useCheckboxState';
+import TableHeader from './AdministrationTableHeader';
+import TableRow from './AdministrationTableRow';
 
-function DraggableTable({ items, handleOnDragEnd, editable }) {
+function DraggableTable({
+  items, handleOnDragEnd, editable, selected, select, unselect, columnsExpanded, competitionInfo,
+}) {
   // TODO: use native ref= when we switch to semantic v3
   /* eslint-disable react/jsx-props-no-spreading */
   return (
@@ -17,24 +20,21 @@ function DraggableTable({ items, handleOnDragEnd, editable }) {
           <Ref innerRef={providedDroppable.innerRef}>
             <Table.Body {...providedDroppable.droppableProps}>
               {items.map((w, i) => (
-                <Draggable
-                  key={w.user_id.toString()}
-                  draggableId={w.user_id.toString()}
+                <TableRow
+                  competitionInfo={competitionInfo}
+                  columnsExpanded={columnsExpanded}
+                  registration={w}
+                  onCheckboxChange={(_, data) => {
+                    if (data.checked) {
+                      select([w.user.id]);
+                    } else {
+                      unselect([w.user.id]);
+                    }
+                  }}
                   index={i}
-                  isDragDisabled={!editable}
-                >
-                  {(provided) => (
-                    <Ref innerRef={provided.innerRef}>
-                      <Table.Row
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
-                      >
-                        <Table.Cell>{i + 1}</Table.Cell>
-                        <Table.Cell>{w.user.name}</Table.Cell>
-                      </Table.Row>
-                    </Ref>
-                  )}
-                </Draggable>
+                  draggable={editable}
+                  isSelected={selected.includes(w.user.id)}
+                />
               ))}
               {providedDroppable.placeholder}
             </Table.Body>
@@ -45,7 +45,18 @@ function DraggableTable({ items, handleOnDragEnd, editable }) {
   );
 }
 
-export default function WaitingList({ competitionInfo, waiting, updateWaitingList }) {
+export default function WaitingList({
+  competitionInfo,
+  waiting,
+  updateWaitingList,
+  selected,
+  select,
+  unselect,
+  sortDirection,
+  sortColumn,
+  changeSortColumn,
+  columnsExpanded,
+}) {
   const [editable, setEditable] = useCheckboxState(false);
   const handleOnDragEnd = async (result) => {
     if (!result.destination) return;
@@ -71,14 +82,25 @@ export default function WaitingList({ competitionInfo, waiting, updateWaitingLis
   return (
     <>
       <Checkbox toggle value={editable} onChange={setEditable} label="Enable Waiting List Edit Mode" />
-      <Table collapsing>
-        <Table.Header>
-          <Table.Row>
-            <Table.HeaderCell>Position</Table.HeaderCell>
-            <Table.HeaderCell>{i18n.t('delegates_page.table.name')}</Table.HeaderCell>
-          </Table.Row>
-        </Table.Header>
-        <DraggableTable items={waiting} handleOnDragEnd={handleOnDragEnd} editable={editable} />
+      <Table>
+        <TableHeader
+          columnsExpanded={columnsExpanded}
+          changeSortColumn={changeSortColumn}
+          competitionInfo={competitionInfo}
+          sortColumn={sortColumn}
+          waitingList
+          sortDirection={sortDirection}
+        />
+        <DraggableTable
+          items={waiting}
+          handleOnDragEnd={handleOnDragEnd}
+          editable={editable}
+          selected={selected}
+          select={select}
+          unselect={unselect}
+          competitionInfo={competitionInfo}
+          columnsExpanded={columnsExpanded}
+        />
       </Table>
     </>
   );

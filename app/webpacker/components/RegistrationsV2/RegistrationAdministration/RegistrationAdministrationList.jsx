@@ -349,7 +349,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
 
         <WaitingList
           columnsExpanded={expandedColumns}
-          selected={partitionedSelected.cancelled}
+          selected={partitionedSelected.waiting}
           select={select}
           unselect={unselect}
           competition_id={competitionInfo.id}
