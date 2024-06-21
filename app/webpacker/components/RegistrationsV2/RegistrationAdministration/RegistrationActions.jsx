@@ -32,7 +32,7 @@ export default function RegistrationActions({
   registrations,
   spotsRemaining,
   competitionInfo,
-  setIsMutating,
+  updateRegistrationMutation,
 }) {
   const dispatch = useDispatch();
   const selectedCount = Object.values(partitionedSelected).reduce(
@@ -52,23 +52,6 @@ export default function RegistrationActions({
   const selectedEmails = [...pending, ...accepted, ...cancelled, ...waiting]
     .map((userId) => userEmailMap[userId])
     .join(',');
-
-  const { mutate: updateRegistrationMutation, isPending } = useMutation({
-    mutationFn: bulkUpdateRegistrations,
-    onError: (data) => {
-      const { error } = data.json;
-      dispatch(setMessage(
-        error
-          ? error.errors.map((err) => `competitions.registration_v2.errors.${err}`)
-          : 'registrations.flash.failed',
-        'negative',
-      ));
-    },
-  });
-
-  useEffect(() => {
-    setIsMutating(isPending);
-  }, [isPending, setIsMutating]);
 
   const changeStatus = (attendees, status) => {
     updateRegistrationMutation(

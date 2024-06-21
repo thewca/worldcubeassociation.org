@@ -543,12 +543,7 @@ class Competition < ApplicationRecord
 
   def registration_full_message
     if registration_full? && registrations.accepted.count >= competitor_limit
-      if uses_new_registration_service?
-        I18n.t('registrations.registration_full_v2_html', competitor_limit: competitor_limit,
-                                                          here: "<a href='#{Rails.application.routes.url_helpers.competition_waiting_list_url(self)}'>here</a>").html_safe
-      else
-        I18n.t('registrations.registration_full', competitor_limit: competitor_limit)
-      end
+      I18n.t('registrations.registration_full', competitor_limit: competitor_limit)
     else
       I18n.t('registrations.registration_full_include_waiting_list', competitor_limit: competitor_limit)
     end

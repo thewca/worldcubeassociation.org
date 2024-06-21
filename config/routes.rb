@@ -103,7 +103,6 @@ Rails.application.routes.draw do
     get 'registrations/psych-sheet' => 'registrations#psych_sheet', as: :psych_sheet
     get 'registrations/psych-sheet/:event_id' => 'registrations#psych_sheet_event', as: :psych_sheet_event
     resources :registrations, only: [:index, :update, :create, :edit, :destroy], shallow: true
-    get 'waiting' => 'registrations#waiting_list', as: :waiting_list
     get 'edit/registrations' => 'registrations#edit_registrations'
     get 'register' => 'registrations#register'
     resources :competition_tabs, except: [:show], as: :tabs, path: :tabs

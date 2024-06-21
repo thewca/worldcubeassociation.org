@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import React, {
   useMemo, useReducer, useRef, useState,
 } from 'react';
@@ -17,6 +17,8 @@ import Loading from '../../Requests/Loading';
 import EventIcon from '../../wca/EventIcon';
 import useWithUserData from '../hooks/useWithUserData';
 import { editRegistrationUrl, editPersonUrl, personUrl } from '../../../lib/requests/routes.js.erb';
+import WaitingList from './WaitingList';
+import { bulkUpdateRegistrations } from '../api/registration/patch/update_registration';
 
 const selectedReducer = (state, action) => {
   let newState = [...state];
@@ -133,7 +135,18 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
   const { sortColumn, sortDirection } = state;
   const changeSortColumn = (name) => dispatchSort({ type: 'CHANGE_SORT', sortColumn: name });
 
-  const [isMutating, setIsMutating] = useState(false);
+  const { mutate: updateRegistrationMutation, isPending: isMutating } = useMutation({
+    mutationFn: bulkUpdateRegistrations,
+    onError: (data) => {
+      const { error } = data.json;
+      dispatchStore(setMessage(
+        error
+          ? error.errors.map((err) => `competitions.registration_v2.errors.${err}`)
+          : 'registrations.flash.failed',
+        'negative',
+      ));
+    },
+  });
 
   const {
     isLoading: isRegistrationsLoading,
@@ -199,6 +212,8 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
             return DateTime.fromISO(a.competing.registered_on).toMillis()
               - DateTime.fromISO(b.competing.registered_on).toMillis();
           }
+          case 'waiting_list_position':
+            return a.competing.waiting_list_position - b.competing.waiting_list_position;
           default:
             return 0;
         }
@@ -282,7 +297,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
             spotsRemaining={spotsRemaining}
             userEmailMap={userEmailMap}
             competitionInfo={competitionInfo}
-            setIsMutating={setIsMutating}
+            updateRegistrationMutation={updateRegistrationMutation}
           />
         </Sticky>
 
@@ -330,25 +345,10 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
           competitionInfo={competitionInfo}
         />
 
-        <Header>
-          {i18n.t('registrations.list.waiting_list')}
-          {' '}
-          (
-          {waiting.length}
-          {competitionInfo.competitor_limit && `; ${spotsRemainingText}`}
-          )
-        </Header>
-        <RegistrationAdministrationTable
-          columnsExpanded={expandedColumns}
-          registrations={waiting}
-          selected={partitionedSelected.waiting}
-          select={select}
-          unselect={unselect}
-          competition_id={competitionInfo.id}
-          changeSortColumn={changeSortColumn}
-          sortDirection={sortDirection}
-          sortColumn={sortColumn}
+        <WaitingList
           competitionInfo={competitionInfo}
+          waiting={waiting}
+          updateWaitingList={updateRegistrationMutation}
         />
 
         <Header>

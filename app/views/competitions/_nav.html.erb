@@ -67,13 +67,6 @@
                            end,
                          }],
             }
-            if @competition.uses_new_registration_service?
-              nav_items << {
-                text: t('registrations.list.waiting_list'),
-                path: competition_waiting_list_path(@competition),
-                icon: "list"
-              }
-            end
           else
             nav_items << {
               text: t('.menu.import_registrations'),
