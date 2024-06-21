@@ -30,9 +30,18 @@ class Api::V0::ApiController < ApplicationController
   end
 
   def user_qualification_data
-    cutoff_date = "2024-04-04"
-    event_id = '333'
-    results_before_cutoff = User.find(params.require(:user_id)).person.results.on_or_before(cutoff_date).group_by(&:event_id)
+    user = User.find(params.require(:user_id))
+    begin
+      cutoff_date = date_from_params || Date.current
+    rescue Date::Error
+      return render json: { error: 'Invalid date format. Please provide an iso8601 date string.' }, status: :bad_request
+    end
+
+    return render json: { error: 'You cannot request qualification data for a future date.' }, status: :bad_request if cutoff_date > Date.current
+    cutoff_date = cutoff_date.iso8601
+
+    results_before_cutoff = user.person&.results&.on_or_before(cutoff_date)&.group_by(&:event_id)
+    return render json: [] unless results_before_cutoff.present?
 
     qualification_results = []
     results_before_cutoff.each do |event, results|
@@ -55,13 +64,12 @@ class Api::V0::ApiController < ApplicationController
     end
 
     render json: qualification_results || []
+  end
 
-
-      # best_results << {
-      #   eventId: best_single.eventId,
-      #   type: 'single',
-      #   best: best_single.best,
-      #   on_or_before: target_date,
+  private def date_from_params
+    date = params.permit(:date)[:date]
+    return nil unless date.present?
+    Date.parse(date)
   end
 
   def scramble_program

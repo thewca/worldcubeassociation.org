@@ -87,7 +87,7 @@ RSpec.describe "API Persons" do
     end
   end
 
-  describe 'GET #personal_records', :focus do
+  describe 'GET #personal_records' do
     it 'returns personal records json' do
       expected_response = [
         { "best"=>100, "continentalRanking"=>1, "eventId"=>"333", "nationalRanking"=>1, "type"=>"average", "worldRanking"=>1 },
