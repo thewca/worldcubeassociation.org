@@ -2702,6 +2702,10 @@ th:
       mean: a mean
       #original_hash: 22bee3a
       result_sentence: 'with %{a_win_by_word} of %{result}'
+      #original_hash: 756603f
+      no_winner: >-
+        ประเภทการแข่งขันหลักคือ %{event_name} ไม่มีการประกาศผู้ชนะ
+        เนื่องจากไม่มีผู้แข่งขันคนใดแก้โจทย์ได้สำเร็จในการแข่งขัน
       #original_hash: 6c3b236
       winner: '%{winner} ชนะในการแข่งขัน %{result_sentence} ในประเภท %{event_name}'
       #original_hash: ec7f18a
