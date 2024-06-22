@@ -27,9 +27,10 @@ export default function OfficersEditor() {
   const {
     data: officers, loading: officersLoading, error: officersError, sync,
   } = useLoadedData(
-    apiV0Urls.userRoles.listOfGroupType(groupTypes.officers, 'status:desc', {
+    apiV0Urls.userRoles.list({
+      groupType: groupTypes.officers,
       isActive: true,
-    }),
+    }, 'status:desc'),
   );
   const [openModal, setOpenModal] = useState(false);
   const [newOfficer, setNewOfficer] = useState(initialOfficerValue);

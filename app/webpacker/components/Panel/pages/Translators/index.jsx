@@ -15,7 +15,7 @@ export default function Translators() {
   const {
     data: translators, loading: translatorsLoading, error: translatorsError, sync,
   } = useLoadedData(
-    apiV0Urls.userRoles.listOfGroupType(groupTypes.translators, 'name', { isActive: true }),
+    apiV0Urls.userRoles.list({ groupType: groupTypes.translators, isActive: true }, 'name'),
   );
   const {
     data: locales, loading: loadingLocales, error: errorLocales,
