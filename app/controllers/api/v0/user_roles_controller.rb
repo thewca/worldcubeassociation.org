@@ -12,15 +12,12 @@ class Api::V0::UserRolesController < Api::V0::ApiController
   end
 
   private def pre_filtered_user_roles
-    active_record = UserRole
+    active_record = UserRole.includes(:user, :group) # Including user & group for post filtering.
     is_active = params.key?(:isActive) ? ActiveRecord::Type::Boolean.new.cast(params.require(:isActive)) : nil
     is_group_hidden = params.key?(:isGroupHidden) ? ActiveRecord::Type::Boolean.new.cast(params.require(:isGroupHidden)) : nil
     group_type = params[:groupType]
     group_id = params[:groupId]
     user_id = params[:userId]
-
-    # For post filtering, user & group is needed.
-    active_record = active_record.includes([:user, :group])
 
     # In next few lines, instead of foo.present? we are using !foo.nil? because foo.present? returns
     # false if foo is a boolean false but we need to actually check if the boolean is present or not.
@@ -28,10 +25,10 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       active_record = is_active ? active_record.active : active_record.inactive
     end
     if !is_group_hidden.nil?
-      active_record = active_record.includes(:group).where(group: { is_hidden: is_group_hidden })
+      active_record = active_record.where(group: { is_hidden: is_group_hidden })
     end
     if group_type.present?
-      active_record = active_record.includes(:group).where(group: { group_type: group_type })
+      active_record = active_record.where(group: { group_type: group_type })
     end
     if group_id.present?
       active_record = active_record.where(group_id: group_id)
