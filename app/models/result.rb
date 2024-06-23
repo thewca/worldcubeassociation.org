@@ -71,7 +71,7 @@ class Result < ApplicationRecord
   def self.best_single(results)
     best_single = nil
     results.each do |result|
-      best_single = result if best_single.nil? || (0 < result.best && result.best < best_single.best)
+      best_single = result if (best_single.nil? && result.best > 0) || (0 < result.best && result.best < best_single.best)
     end
     best_single
   end
@@ -79,7 +79,7 @@ class Result < ApplicationRecord
   def self.best_average(results)
     best_average = nil
     results.each do |result|
-      best_average = result if best_average.nil? || (0 < result.average && result.average < best_average.average)
+      best_average = result if (best_average.nil? && result.average > 0) || (0 < result.average && result.average < best_average.average)
     end
     best_average
   end

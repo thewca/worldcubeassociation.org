@@ -53,14 +53,14 @@ class Api::V0::ApiController < ApplicationController
         type: 'single',
         best: best_single.best,
         on_or_before: cutoff_date,
-      }
+      } if best_single.present?
 
       qualification_results << {
         eventId: event,
         type: 'average',
         best: best_average.average,
         on_or_before: cutoff_date,
-      }
+      } if best_average.present?
     end
 
     render json: qualification_results || []
