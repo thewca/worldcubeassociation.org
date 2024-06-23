@@ -20,8 +20,8 @@ export default function BannedCompetitors({
             <Table.HeaderCell width={5}>User</Table.HeaderCell>
             <Table.HeaderCell width={2}>Start date</Table.HeaderCell>
             <Table.HeaderCell width={2}>End date</Table.HeaderCell>
-            <Table.HeaderCell width={2}>Ban reason</Table.HeaderCell>
-            <Table.HeaderCell width={2}>Ban scope</Table.HeaderCell>
+            <Table.HeaderCell width={2}>Reason</Table.HeaderCell>
+            <Table.HeaderCell width={2}>Scope</Table.HeaderCell>
             {canEditBannedCompetitors && <Table.HeaderCell width={2}>Edit</Table.HeaderCell>}
           </Table.Row>
         </Table.Header>
