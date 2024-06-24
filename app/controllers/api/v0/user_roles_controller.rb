@@ -170,19 +170,17 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     changed_value.nil? ? 'None' : changed_value
   end
 
-  private def push_previous_changes_to_changes(previous_changes)
-    changes = []
-    previous_changes&.each do |changed_key, values|
+  private def changes_in_model(previous_changes)
+    previous_changes&.map do |changed_key, values|
       changed_parameter = changed_key_to_human_readable(changed_key)
       if changed_parameter.present?
-        changes << UserRole::UserRoleChange.new(
+        UserRole::UserRoleChange.new(
           changed_parameter: changed_parameter,
           previous_value: changed_value_to_human_readable(values[0]),
           new_value: changed_value_to_human_readable(values[1]),
         )
       end
     end
-    changes
   end
 
   # update method is written in a way that at a time, only one parameter can be changed. If multiple
@@ -312,8 +310,8 @@ class Api::V0::UserRolesController < Api::V0::ApiController
         role.metadata&.save!
         role.save!
       end
-      changes.concat(push_previous_changes_to_changes(role.metadata&.previous_changes))
-      changes.concat(push_previous_changes_to_changes(role.previous_changes))
+      changes.concat(changes_in_model(role.metadata&.previous_changes).compact)
+      changes.concat(changes_in_model(role.previous_changes).compact)
     else
       return render status: :unprocessable_entity, json: { error: "Invalid group type" }
     end
