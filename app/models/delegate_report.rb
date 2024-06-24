@@ -50,6 +50,10 @@ class DelegateReport < ApplicationRecord
     !!posted_at
   end
 
+  def uses_summary_section?
+    competition.end_date && competition.end_date >= Date.new(2024, 6, 24)
+  end
+
   def can_see_submit_button?(current_user)
     !posted? && competition.staff_delegates.include?(current_user)
   end
