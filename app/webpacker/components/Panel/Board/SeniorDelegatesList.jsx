@@ -12,9 +12,10 @@ import Errored from '../../Requests/Errored';
 
 export default function SeniorDelegatesList() {
   const { data: seniorDelegates, loading, error } = useLoadedData(
-    apiV0Urls.userRoles.listOfGroupType(groupTypes.delegate_regions, 'name', {
+    apiV0Urls.userRoles.list({
+      groupType: groupTypes.delegate_regions,
       status: 'senior_delegate',
-    }),
+    }, 'name'),
   );
   if (loading) return <Loading />;
   if (error) return <Errored />;
