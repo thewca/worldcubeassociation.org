@@ -1,7 +1,6 @@
-Gen 3 Pro Timer: 0
-Gen 4 Pro Timer: 0
-Gen 5 Pro Timer: 0
+Gen 3 Timers: 0
+Gen 4 Timers: 0
+Gen 5 Timers: 0
 
-Gen 2 Display: 0
-Gen 3 Display: 0
-QiYi Display: 0
+Speed Stacks Displays: 0
+QiYi Displays: 0

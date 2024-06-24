@@ -15,14 +15,14 @@ class DelegateReport < ApplicationRecord
     self.discussion_url = "https://groups.google.com/a/worldcubeassociation.org/forum/#!topicsearchin/reports/" + URI.encode_www_form_component(competition.name)
   end
 
+  before_create :summary_default
+  def summary_default
+    self.summary = ActionController::Base.new.render_to_string(template: "delegate_reports/_summary_default", formats: :md)
+  end
+
   before_create :equipment_default
   def equipment_default
     self.equipment = ActionController::Base.new.render_to_string(template: "delegate_reports/_equipment_default", formats: :md)
-  end
-
-  before_create :venue_default
-  def venue_default
-    self.venue = ActionController::Base.new.render_to_string(template: "delegate_reports/_venue_default", formats: :md)
   end
 
   before_create :organization_default
