@@ -8,9 +8,10 @@ import Errored from '../Requests/Errored';
 
 export default function DelegatesOfSubregion({ subregion, isAdminMode }) {
   const { data: delegates, loading, error } = useLoadedData(
-    apiV0Urls.userRoles.listOfGroup(subregion.id, 'location,name', {
+    apiV0Urls.userRoles.list({
       isActive: true,
-    }),
+      groupId: subregion.id,
+    }, 'location,name'),
   );
 
   if (loading) return <Loading />;

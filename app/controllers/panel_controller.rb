@@ -17,6 +17,7 @@ class PanelController < ApplicationController
   before_action -> { redirect_to_root_unless_user(:can_access_wdc_panel?) }, only: [:wdc]
   before_action -> { redirect_to_root_unless_user(:can_access_wec_panel?) }, only: [:wec]
   before_action -> { redirect_to_root_unless_user(:can_access_weat_panel?) }, only: [:weat]
+  before_action -> { redirect_to_root_unless_user(:can_access_admin_panel?) }, only: [:admin]
 
   def pending_claims_for_subordinate_delegates
     # Show pending claims for a given user, or the current user, if they can see them
@@ -53,7 +54,6 @@ class PanelController < ApplicationController
       "leader" => {
         "leaderForms" => "leader-forms",
         "groupsManager" => "groups-manager",
-        "bannedCompetitors" => "banned-competitors",
       },
       "wfc" => {
         "duesExport" => "dues-export",
@@ -80,6 +80,17 @@ class PanelController < ApplicationController
       "weat" => {
         "bannedCompetitors" => "banned-competitors",
       },
+    }
+  end
+
+  def self.panel_pages
+    {
+      "postingDashboard" => "posting-dashboard",
+      "editPerson" => "edit-person",
+      "regionsManager" => "regions-manager",
+      "groupsManagerAdmin" => "groups-manager-admin",
+      "bannedCompetitors" => "banned-competitors",
+      "translators" => "translators",
     }
   end
 end

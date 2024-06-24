@@ -3,17 +3,17 @@ import {
   Button, Form, Icon, Item, Message,
 } from 'semantic-ui-react';
 import _ from 'lodash';
-import { adminCheckRecordsUrl, apiV0Urls } from '../../../lib/requests/routes.js.erb';
-import useSaveAction from '../../../lib/hooks/useSaveAction';
-import WcaSearch from '../../SearchWidget/WcaSearch';
-import SEARCH_MODELS from '../../SearchWidget/SearchModel';
-import Loading from '../../Requests/Loading';
-import I18n from '../../../lib/i18n';
-import { genders, countries } from '../../../lib/wca-data.js.erb';
-import useQueryParams from '../../../lib/hooks/useQueryParams';
-import useLoadedData from '../../../lib/hooks/useLoadedData';
-import Errored from '../../Requests/Errored';
-import UtcDatePicker from '../../wca/UtcDatePicker';
+import { adminCheckRecordsUrl, apiV0Urls } from '../../../../lib/requests/routes.js.erb';
+import useSaveAction from '../../../../lib/hooks/useSaveAction';
+import WcaSearch from '../../../SearchWidget/WcaSearch';
+import SEARCH_MODELS from '../../../SearchWidget/SearchModel';
+import Loading from '../../../Requests/Loading';
+import I18n from '../../../../lib/i18n';
+import { genders, countries } from '../../../../lib/wca-data.js.erb';
+import useQueryParams from '../../../../lib/hooks/useQueryParams';
+import useLoadedData from '../../../../lib/hooks/useLoadedData';
+import Errored from '../../../Requests/Errored';
+import UtcDatePicker from '../../../wca/UtcDatePicker';
 
 const genderOptions = _.map(genders.byId, (gender) => ({
   key: gender.id,

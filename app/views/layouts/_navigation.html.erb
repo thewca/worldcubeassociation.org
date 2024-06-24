@@ -82,8 +82,10 @@
         <ul class="dropdown-menu" role="menu">
           <li><a href="/regulations/about"><%= ui_icon('info circle') %> <%= t '.about_regulations' %></a></li>
           <li class="divider"></li>
-          <li><a href="/regulations/"><%= ui_icon('book') %> <%= t '.regulations' %></a></li>
-          <li><a href="/regulations/guidelines.html"><%= ui_icon('sticky note') %> <%= t '.guidelines' %></a></li>
+          <li><a href="/regulations/full"><%= ui_icon('book') %> <%= t '.regulations_full' %></a></li>
+          <li class="divider"></li>
+          <li><a href="/regulations/"><%= ui_icon('file text') %> <%= t '.regulations' %></a></li>
+          <li><a href="/regulations/guidelines.html"><%= ui_icon('plus square') %> <%= t '.guidelines' %></a></li>
           <li><a href="/regulations/scrambles/"><%= ui_icon('random') %> <%= t '.scrambles' %></a></li>
           <li>
             <%= link_to(incidents_path) do %>
@@ -119,11 +121,6 @@
           <li>
             <%= link_to("https://www.twitter.com/theWCAofficial/", target: "_blank", class: "hide-new-window-icon") do %>
               <%= ui_icon("twitter") %> Twitter
-            <% end %>
-          </li>
-          <li>
-            <%= link_to("https://www.reddit.com/r/TheWCAOfficial/", target: "_blank", class: "hide-new-window-icon") do %>
-              <%= ui_icon("reddit") %> Reddit
             <% end %>
           </li>
           <li>
@@ -257,6 +254,9 @@
               <% end %>
               <% if current_user.can_access_weat_panel? %>
                 <li><%= link_to "WEAT panel", panel_weat_path %></li>
+              <% end %>
+              <% if current_user.can_access_admin_panel? %>
+                <li><%= link_to "New Admin panel", panel_admin_path %></li>
               <% end %>
             <% end %>
             <% if current_user.can_view_poll? %>

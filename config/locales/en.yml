@@ -412,6 +412,9 @@ en:
           secretary: "WCA Secretary"
           vice_chair: "WCA Vice-Chair"
           treasurer: "WCA Treasurer"
+      ban_scope:
+        competing_only: "Competing Only"
+        competing_and_attending: "Competing & Attending"
     competition_medium:
       status:
         accepted: "Accepted"
@@ -715,6 +718,7 @@ en:
       db_results_export: "Results Export"
       db_dev_export: "Developer Export"
       regulations: "Regulations"
+      regulations_full: "Regulations & Guidelines"
       about_regulations: "About the Regulations"
       guidelines: "Guidelines"
       scrambles: "Scrambles"
@@ -1437,6 +1441,7 @@ en:
       average: "an average"
       mean: "a mean"
       result_sentence: "with %{a_win_by_word} of %{result}"
+      no_winner: The main event was %{event_name}. No winner was declared, as no competitors achieved successful results in the event.
       winner: "%{winner} won %{result_sentence} in the %{event_name} event."
       first_runner_up: "%{first_runner_up} finished second (%{first_runner_up_result})"
       and: "and"

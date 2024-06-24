@@ -12,14 +12,16 @@ import EmailButton from '../EmailButton';
 
 export default function OfficersAndBoard() {
   const { data: officers, loading: officersLoading, error: officersError } = useLoadedData(
-    apiV0Urls.userRoles.listOfGroupType(groupTypes.officers, 'status:desc', {
+    apiV0Urls.userRoles.list({
       isActive: true,
-    }),
+      groupType: groupTypes.officers,
+    }, 'status:desc'),
   );
   const { data: board, loading: boardLoading, error: boardError } = useLoadedData(
-    apiV0Urls.userRoles.listOfGroupType(groupTypes.board, 'name', {
+    apiV0Urls.userRoles.list({
       isActive: true,
-    }),
+      groupType: groupTypes.board,
+    }, 'name'),
   );
 
   // The same user can hold multiple officer positions, and it won't be good to show same user

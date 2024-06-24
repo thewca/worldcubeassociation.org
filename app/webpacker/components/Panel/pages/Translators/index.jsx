@@ -2,20 +2,20 @@ import React, { useState } from 'react';
 import {
   Button, Form, Header, Modal, Table,
 } from 'semantic-ui-react';
-import useLoadedData from '../../../lib/hooks/useLoadedData';
-import { apiV0Urls } from '../../../lib/requests/routes.js.erb';
-import { groupTypes } from '../../../lib/wca-data.js.erb';
-import Errored from '../../Requests/Errored';
-import Loading from '../../Requests/Loading';
-import useSaveAction from '../../../lib/hooks/useSaveAction';
-import WcaSearch from '../../SearchWidget/WcaSearch';
-import SEARCH_MODELS from '../../SearchWidget/SearchModel';
+import useLoadedData from '../../../../lib/hooks/useLoadedData';
+import { apiV0Urls } from '../../../../lib/requests/routes.js.erb';
+import { groupTypes } from '../../../../lib/wca-data.js.erb';
+import Errored from '../../../Requests/Errored';
+import Loading from '../../../Requests/Loading';
+import useSaveAction from '../../../../lib/hooks/useSaveAction';
+import WcaSearch from '../../../SearchWidget/WcaSearch';
+import SEARCH_MODELS from '../../../SearchWidget/SearchModel';
 
 export default function Translators() {
   const {
     data: translators, loading: translatorsLoading, error: translatorsError, sync,
   } = useLoadedData(
-    apiV0Urls.userRoles.listOfGroupType(groupTypes.translators, 'name', { isActive: true }),
+    apiV0Urls.userRoles.list({ groupType: groupTypes.translators, isActive: true }, 'name'),
   );
   const {
     data: locales, loading: loadingLocales, error: errorLocales,
