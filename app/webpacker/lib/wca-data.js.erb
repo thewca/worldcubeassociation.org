@@ -27,16 +27,11 @@ function extendCountries(country) {
 
 // ----- CONTINENTS -----
 
-export const continents = {
-  real: _.map(<%= Continent.real.to_json.html_safe %>, extendContinents),
-};
+export const continents = <%= Continent.all_sorted_by(I18n.locale).to_json  %>;
 
-function extendContinents(continent){
-  return {
-    ...continent,
-    name: I18n.t(`continents.${continent.name}`),
-  };
-}
+// ----- YEARS -----
+
+export const years = <%= Competition.non_future_years %>;
 
 // ----- CURRENCIES -----
 

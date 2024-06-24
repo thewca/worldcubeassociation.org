@@ -15,7 +15,6 @@ class MediaController < ApplicationController
       "submitterEmail" => current_user.email,
     )
     @medium = CompetitionMedium.new(params)
-
     if @medium.save
       flash[:success] = "Thanks for sending us new media!"
       redirect_to new_medium_path
@@ -33,13 +32,6 @@ class MediaController < ApplicationController
     media = media.belongs_to_region(params[:region]) unless params[:region] == "all"
 
     media
-  end
-
-  def index
-    params[:status] = "accepted"
-    params[:year] ||= Date.today.year
-    @media = get_media
-    render :index
   end
 
   def validate

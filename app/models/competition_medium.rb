@@ -8,7 +8,7 @@ class CompetitionMedium < ApplicationRecord
 
   belongs_to :competition, foreign_key: "competitionId"
 
-  enum status: { accepted: "accepted", pending: "pending" }
+  enum status: { accepted: "accepted", pending: "pending", rejected: "rejected" }
   validates :status, presence: true
 
   enum type: { report: "report", article: "article", multimedia: "multimedia" }
@@ -32,5 +32,13 @@ class CompetitionMedium < ApplicationRecord
     if status_change && status == "accepted"
       self.timestampDecided = Time.now
     end
+  end
+
+  DEFAULT_SERIALIZE_OPTIONS = {
+    include: %w[competition],
+  }.freeze
+
+  def serializable_hash(options = nil)
+    super(DEFAULT_SERIALIZE_OPTIONS.merge(options || {}))
   end
 end
