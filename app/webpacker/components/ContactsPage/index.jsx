@@ -21,7 +21,7 @@ export default function ContactsPage() {
       reducer={contactsReducer}
       initialState={getContactFormInitialState(loggedInUserData, queryParams)}
     >
-      <Container fluid>
+      <Container text>
         <Header as="h2">{I18n.t('page.contacts.title')}</Header>
         <Message visible>
           <I18nHTMLTranslate
