@@ -3,7 +3,7 @@ import React, {
   useMemo, useReducer, useRef,
 } from 'react';
 import {
-  Checkbox, Form, Header, Segment, Sticky, Table,
+  Checkbox, Form, Header, Segment, Sticky,
 } from 'semantic-ui-react';
 import { DateTime } from 'luxon';
 import { getAllRegistrations } from '../api/registration/get/get_registrations';
@@ -14,10 +14,9 @@ import { useDispatch } from '../../../lib/providers/StoreProvider';
 import i18n from '../../../lib/i18n';
 import Loading from '../../Requests/Loading';
 import useWithUserData from '../hooks/useWithUserData';
-import WaitingList from './WaitingList';
 import { bulkUpdateRegistrations } from '../api/registration/patch/update_registration';
-import TableRow from './AdministrationTableRow';
-import TableHeader from './AdministrationTableHeader';
+import RegistrationAdministrationTable from './RegistrationsAdministrationTable';
+import useCheckboxState from '../../../lib/hooks/useCheckboxState';
 
 const selectedReducer = (state, action) => {
   let newState = [...state];
@@ -114,6 +113,8 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
     columnReducer,
     initialExpandedColumns,
   );
+
+  const [editable, setEditable] = useCheckboxState(false);
 
   const dispatchStore = useDispatch();
 
@@ -258,6 +259,19 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
     [registrationsWithUser],
   );
 
+  const handleOnDragEnd = async (result) => {
+    if (!result.destination) return;
+    if (result.destination.index === result.source.index) return;
+
+    await updateRegistrationMutation({
+      competition_id: competitionInfo.id,
+      user_id: waiting[result.source.index].user_id,
+      competing: {
+        waiting_list_position: waiting[result.destination.index].waiting_list_position,
+      },
+    });
+  };
+
   return isRegistrationsLoading || infoLoading ? (
     <Loading />
   ) : (
@@ -347,7 +361,9 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
           )
         </Header>
 
-        <WaitingList
+        <Checkbox toggle value={editable} onChange={setEditable} label="Enable Waiting List Edit Mode" />
+
+        <RegistrationAdministrationTable
           columnsExpanded={expandedColumns}
           selected={partitionedSelected.waiting}
           select={select}
@@ -357,8 +373,9 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
           sortDirection={sortDirection}
           sortColumn={sortColumn}
           competitionInfo={competitionInfo}
-          waiting={waiting}
-          updateWaitingList={updateRegistrationMutation}
+          registrations={waiting}
+          handleOnDragEnd={handleOnDragEnd}
+          draggable={editable}
         />
 
         <Header>
@@ -382,77 +399,5 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
         />
       </div>
     </Segment>
-  );
-}
-
-function RegistrationAdministrationTable({
-  columnsExpanded,
-  registrations,
-  selected,
-  select,
-  unselect,
-  sortDirection,
-  sortColumn,
-  changeSortColumn,
-  competitionInfo,
-}) {
-  const handleHeaderCheck = (_, data) => {
-    if (data.checked) {
-      select(registrations.map(({ user }) => user.id));
-    } else {
-      unselect(registrations.map(({ user }) => user.id));
-    }
-  };
-
-  if (registrations.length === 0) {
-    return (
-      <Segment>
-        {i18n.t('competitions.registration_v2.list.empty')}
-      </Segment>
-    );
-  }
-
-  return (
-    <Table sortable striped textAlign="left">
-      <TableHeader
-        columnsExpanded={columnsExpanded}
-        isChecked={registrations.length === selected.length}
-        onCheckboxChanged={handleHeaderCheck}
-        sortDirection={sortDirection}
-        sortColumn={sortColumn}
-        changeSortColumn={changeSortColumn}
-        competitionInfo={competitionInfo}
-      />
-
-      <Table.Body>
-        {registrations.length > 0 ? (
-          registrations.map((registration) => {
-            const { id } = registration.user;
-            return (
-              <TableRow
-                key={id}
-                competitionInfo={competitionInfo}
-                columnsExpanded={columnsExpanded}
-                registration={registration}
-                isSelected={selected.includes(id)}
-                onCheckboxChange={(_, data) => {
-                  if (data.checked) {
-                    select([id]);
-                  } else {
-                    unselect([id]);
-                  }
-                }}
-              />
-            );
-          })
-        ) : (
-          <Table.Row>
-            <Table.Cell colSpan={6}>
-              {i18n.t('competitions.registration_v2.list.empty')}
-            </Table.Cell>
-          </Table.Row>
-        )}
-      </Table.Body>
-    </Table>
   );
 }
