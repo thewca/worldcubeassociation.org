@@ -67,7 +67,7 @@ class ContactsController < ApplicationController
     contact_params = formValues[contact_recipient.to_sym]
     requestor_details = current_user || formValues[:userData]
 
-    render status: :bad_request, json: { error: "Invalid arguments" } if contact_recipient.nil? || contact_params.nil? || requestor_details.nil?
+    return render status: :bad_request, json: { error: "Invalid arguments" } if contact_recipient.nil? || contact_params.nil? || requestor_details.nil?
 
     case contact_recipient
     when UserGroup.teams_committees_group_wct.metadata.friendly_id
