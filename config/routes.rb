@@ -200,6 +200,7 @@ Rails.application.routes.draw do
     get 'wdc' => 'panel#wdc', as: :panel_wdc
     get 'wec' => 'panel#wec', as: :panel_wec
     get 'weat' => 'panel#weat', as: :panel_weat
+    get 'admin' => 'panel#admin', as: :panel_admin
   end
   resources :notifications, only: [:index]
 

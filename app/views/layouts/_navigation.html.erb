@@ -260,6 +260,9 @@
               <% if current_user.can_access_weat_panel? %>
                 <li><%= link_to "WEAT panel", panel_weat_path %></li>
               <% end %>
+              <% if current_user.can_access_admin_panel? %>
+                <li><%= link_to "New Admin panel", panel_admin_path %></li>
+              <% end %>
             <% end %>
             <% if current_user.can_view_poll? %>
               <li class="divider"></li>

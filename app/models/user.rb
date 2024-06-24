@@ -1352,6 +1352,10 @@ class User < ApplicationRecord
     admin? || weat_team?
   end
 
+  def can_access_admin_panel?
+    admin? || results_team?
+  end
+
   def can_access_panel?
     (
       can_access_wfc_panel? ||
@@ -1364,7 +1368,8 @@ class User < ApplicationRecord
       can_access_staff_panel? ||
       can_access_wdc_panel? ||
       can_access_wec_panel? ||
-      can_access_weat_panel?
+      can_access_weat_panel? ||
+      can_access_admin_panel?
     )
   end
 
