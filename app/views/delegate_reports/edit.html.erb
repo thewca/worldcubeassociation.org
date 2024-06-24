@@ -15,8 +15,13 @@
     <% @competition.delegate_report.schedule_url = link_to_competition_schedule_tab(@competition) if @competition.has_schedule? %>
     <%= f.input :schedule_url, readonly: @competition.has_schedule? %>
 
+    <% if @delegate_report.summary.present? %>
+      <%= f.input :summary, input_html: { class: "markdown-editor markdown-editor-image-upload" } %>
+    <% end %>
     <%= f.input :equipment, input_html: { class: "markdown-editor markdown-editor-image-upload" } %>
-    <%= f.input :venue, input_html: { class: "markdown-editor markdown-editor-image-upload" } %>
+    <% if @delegate_report.venue.present? %>
+      <%= f.input :venue, input_html: { class: "markdown-editor markdown-editor-image-upload" } %>
+    <% end %>
     <%= f.input :organization, input_html: { class: "markdown-editor markdown-editor-image-upload" } %>
     <%= f.input :incidents, input_html: { class: "markdown-editor markdown-editor-image-upload" } %>
     <%= f.input :wrc_feedback_requested, as: :boolean %>
