@@ -35,14 +35,14 @@ class DelegateReport < ApplicationRecord
     self.incidents = ActionController::Base.new.render_to_string(template: "delegate_reports/_incidents_default", formats: :md)
   end
 
-  validates :schedule_url, presence: true, if: :schedule_and_disussion_urls_required?
+  validates :schedule_url, presence: true, if: :schedule_and_discussion_urls_required?
   validates :schedule_url, url: true
-  validates :discussion_url, presence: true, if: :schedule_and_disussion_urls_required?
+  validates :discussion_url, presence: true, if: :schedule_and_discussion_urls_required?
   validates :discussion_url, url: true
   validates :wrc_incidents, presence: true, if: :wrc_feedback_requested
   validates :wic_incidents, presence: true, if: :wic_feedback_requested
 
-  def schedule_and_disussion_urls_required?
+  def schedule_and_discussion_urls_required?
     posted? && created_at > Date.new(2019, 7, 21)
   end
 
