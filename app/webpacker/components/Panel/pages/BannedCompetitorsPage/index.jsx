@@ -64,7 +64,10 @@ export default function BannedCompetitorsPage() {
       {pastBannedCompetitorRoles.length > 0 && (
         <>
           <Header>Past Banned Competitors</Header>
-          <BannedCompetitors bannedCompetitorRoles={pastBannedCompetitorRoles} />
+          <BannedCompetitors
+            bannedCompetitorRoles={pastBannedCompetitorRoles}
+            canEditBannedCompetitors={canEditBannedCompetitors}
+          />
         </>
       )}
     </>

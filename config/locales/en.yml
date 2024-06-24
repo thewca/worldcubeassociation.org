@@ -412,6 +412,9 @@ en:
           secretary: "WCA Secretary"
           vice_chair: "WCA Vice-Chair"
           treasurer: "WCA Treasurer"
+      ban_scope:
+        competing_only: "Competing Only"
+        competing_and_attending: "Competing & Attending"
     competition_medium:
       status:
         accepted: "Accepted"

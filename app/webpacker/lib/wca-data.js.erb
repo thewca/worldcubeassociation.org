@@ -185,6 +185,8 @@ export const delegateRegionsStatus = <%= RolesMetadataDelegateRegions.statuses.t
 
 export const officersStatus = <%= RolesMetadataOfficers.statuses.to_json %>;
 
+export const banScopes = <%= RolesMetadataBannedCompetitors.scopes.to_json %>
+
 // ----- PANEL LIST -----
 
 export const PANEL_LIST = <%= PanelController.panel_list.to_json.html_safe %>;

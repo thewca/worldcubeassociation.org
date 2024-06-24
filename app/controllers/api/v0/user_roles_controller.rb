@@ -145,6 +145,10 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     case changed_key
     when 'end_date'
       'End Date'
+    when 'ban_reason'
+      'Ban reason'
+    when 'scope'
+      'Ban scope'
     else
       nil
     end
@@ -152,6 +156,19 @@ class Api::V0::UserRolesController < Api::V0::ApiController
 
   private def changed_value_to_human_readable(changed_value)
     changed_value.nil? ? 'None' : changed_value
+  end
+
+  private def changes_in_model(previous_changes)
+    previous_changes&.map do |changed_key, values|
+      changed_parameter = changed_key_to_human_readable(changed_key)
+      if changed_parameter.present?
+        UserRole::UserRoleChange.new(
+          changed_parameter: changed_parameter,
+          previous_value: changed_value_to_human_readable(values[0]),
+          new_value: changed_value_to_human_readable(values[1]),
+        )
+      end
+    end
   end
 
   # update method is written in a way that at a time, only one parameter can be changed. If multiple
@@ -269,17 +286,20 @@ class Api::V0::UserRolesController < Api::V0::ApiController
         role.end_date = params.require(:endDate)
       end
 
-      role.save!
-      role.previous_changes.each do |changed_key, values|
-        changed_parameter = changed_key_to_human_readable(changed_key)
-        if changed_parameter.present?
-          changes << UserRole::UserRoleChange.new(
-            changed_parameter: changed_parameter,
-            previous_value: changed_value_to_human_readable(values[0]),
-            new_value: changed_value_to_human_readable(values[1]),
-          )
-        end
+      if params.key?(:banReason)
+        role.metadata.ban_reason = params.require(:banReason)
       end
+
+      if params.key?(:scope)
+        role.metadata.scope = params.require(:scope)
+      end
+
+      ActiveRecord::Base.transaction do
+        role.metadata&.save!
+        role.save!
+      end
+      changes.concat(changes_in_model(role.metadata&.previous_changes).compact)
+      changes.concat(changes_in_model(role.previous_changes).compact)
     else
       return render status: :unprocessable_entity, json: { error: "Invalid group type" }
     end
