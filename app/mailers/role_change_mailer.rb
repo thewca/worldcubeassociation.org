@@ -1,6 +1,14 @@
 # frozen_string_literal: true
 
 class RoleChangeMailer < ApplicationMailer
+  private def wrt_email_recipient
+    UserRole::UserRoleEmailRecipient.new(
+      name: UserGroup.teams_committees_group_wrt.name,
+      email: UserGroup.teams_committees_group_wrt.metadata.email,
+      message: 'Please take action if this role change is inconsistent or accidental.',
+    )
+  end
+
   private def role_metadata(role)
     metadata = {}
     group = role.group
@@ -23,13 +31,7 @@ class RoleChangeMailer < ApplicationMailer
     @user_who_made_the_change = user_who_made_the_change
     @group_type_name = UserGroup.group_type_name[@role.group.group_type.to_sym]
     @metadata = role_metadata(role)
-    @to_list = [
-      UserRole::UserRoleEmailRecipient.new(
-        name: UserGroup.teams_committees_group_wrt.name,
-        email: UserGroup.teams_committees_group_wrt.metadata.email,
-        message: 'Please take action if this role change is inconsistent or accidental.',
-      ),
-    ]
+    @to_list = [wrt_email_recipient]
 
     # Populate the recepient list.
     case role.group.group_type
@@ -129,13 +131,7 @@ class RoleChangeMailer < ApplicationMailer
     @changes = JSON.parse changes
     @group_type_name = UserGroup.group_type_name[role.group_type.to_sym]
     @today_date = Date.today
-    @to_list = [
-      UserRole::UserRoleEmailRecipient.new(
-        name: UserGroup.teams_committees_group_wrt.name,
-        email: UserGroup.teams_committees_group_wrt.metadata.email,
-        message: 'Please take action if this role change is inconsistent or accidental.',
-      ),
-    ]
+    @to_list = [wrt_email_recipient]
 
     # Populate the recepient list.
     case role.group_type
@@ -213,13 +209,7 @@ class RoleChangeMailer < ApplicationMailer
     @user_who_made_the_change = user_who_made_the_change
     @group_type_name = UserGroup.group_type_name[role.group_type.to_sym]
     @metadata = role_metadata(role)
-    @to_list = [
-      UserRole::UserRoleEmailRecipient.new(
-        name: UserGroup.teams_committees_group_wrt.name,
-        email: UserGroup.teams_committees_group_wrt.metadata.email,
-        message: 'Please take action if this role change is inconsistent or accidental.',
-      ),
-    ]
+    @to_list = [wrt_email_recipient]
 
     # Populate the recepient list.
     case role.group_type
