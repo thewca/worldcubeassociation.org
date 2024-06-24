@@ -78,16 +78,14 @@
   <% end %>
 
   <%# The field `summary` is only present in newer, June-2024-style reports. %>
-  <% if delegate_report.summary.present? %>
+  <% if delegate_report.uses_summary_section? %>
     <div>
       <h2>Summary</h2>
       <%=md delegate_report.summary %>
     </div>
-  <% end %>
-
-  <%# The field `venue` is only present in old, pre-June-2024 reports. %>
-  <%# Newer reports use the `summary` field instead. %>
-  <% if delegate_report.venue.present? %>
+  <% else %>
+    <%# The field `venue` is only present in old, pre-June-2024 reports. %>
+    <%# Newer reports use the `summary` field instead. %>
     <div>
       <h2>Venue</h2>
       <%=md delegate_report.venue %>
