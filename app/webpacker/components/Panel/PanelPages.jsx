@@ -1,7 +1,7 @@
 import { PANEL_PAGES } from '../../lib/wca-data.js.erb';
 import PostingCompetitionsTable from '../PostingCompetitions';
 import RegionManager from './Board/RegionManager';
-import EditPerson from './Wrt/EditPerson';
+import EditPerson from './pages/EditPerson';
 import BannedCompetitorsPage from './pages/BannedCompetitorsPage';
 import GroupsManagerAdmin from './pages/GroupsManagerAdmin';
 import Translators from './pages/Translators';
