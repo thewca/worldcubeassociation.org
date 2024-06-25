@@ -18,8 +18,13 @@ class MoneyAmountInput < SimpleForm::Inputs::Base
     # Get the id of the currency selector's selector
     currency_selector = options.delete(:currency_selector)
 
+    # The hidden inputs are targeted via jQuery using their ID as CSS selector.
+    # This means that the ID for the hidden field must be as unique as possible, to avoid
+    # structurally similar, repeated forms firing their AutoNumeric update to the wrong input
+    hidden_id = "#{@builder.id}_#{object_name}_#{attribute_name}"
+
     # This will create the hidden input tag, using SimpleForm's predefined helper
-    actual_field = @builder.hidden_field(attribute_name, value: value)
+    actual_field = @builder.hidden_field(attribute_name, value: value, id: hidden_id)
     input_id = attribute_name.to_s + "_input_field"
 
     # On page load, inputs with this class get their mask setup
@@ -31,7 +36,7 @@ class MoneyAmountInput < SimpleForm::Inputs::Base
                                         id: input_id,
                                         type: "text",
                                         data: {
-                                          target: "##{@builder.object_name}_#{attribute_name}",
+                                          target: "##{hidden_id}",
                                           currency: currency,
                                           'currency-selector': currency_selector,
                                         },
