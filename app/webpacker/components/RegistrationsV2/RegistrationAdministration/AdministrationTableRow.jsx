@@ -6,6 +6,7 @@ import { Draggable } from 'react-beautiful-dnd';
 import { setMessage } from '../Register/RegistrationMessage';
 import i18n from '../../../lib/i18n';
 import {
+  getFullDateTimeString, getRegistrationTimestamp,
   getShortDateString,
   getShortTimeString,
 } from '../../../lib/utils/dates';
@@ -103,7 +104,7 @@ export default function TableRow({
             </Table.Cell>
 
             <Table.Cell>
-              { timestamp ? getShortTimeString(registeredOn) : (
+              { timestamp ? getRegistrationTimestamp(registeredOn) : (
                 <Popup
                   content={getShortTimeString(registeredOn)}
                   trigger={<span>{getShortDateString(registeredOn)}</span>}
@@ -116,7 +117,7 @@ export default function TableRow({
               <Table.Cell>{paymentStatus ?? i18n.t('registrations.list.not_paid')}</Table.Cell>
               <Table.Cell>
                 {updatedAt && (
-                  timestamp ? getShortDateString(updatedAt)
+                  timestamp ? getRegistrationTimestamp(updatedAt)
                     : (
                       <Popup
                         content={getShortTimeString(updatedAt)}
