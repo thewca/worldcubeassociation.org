@@ -4,14 +4,13 @@ import {
   MapContainer, TileLayer, Marker, Popup,
 } from 'react-leaflet';
 
+import { BarLoader } from 'react-spinners';
 import { userTileProvider } from '../../lib/leaflet-wca/providers';
 import { redMarker, blueMarker } from '../../lib/leaflet-wca/markers';
 import ResizeMapIFrame from '../../lib/utils/leaflet-iframe';
 import 'leaflet/dist/leaflet.css';
 import { isProbablyOver } from '../../lib/utils/competition-table';
 import { competitionUrl } from '../../lib/requests/routes.js.erb';
-import { Loader } from 'semantic-ui-react';
-import { BarLoader } from 'react-spinners';
 
 // Limit number of markers on map, especially for "All Past Competitions"
 const MAP_DISPLAY_LIMIT = 500;
