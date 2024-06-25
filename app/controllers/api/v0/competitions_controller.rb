@@ -26,8 +26,10 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
 
     admin_mode = current_user.can_see_admin_competitions?
 
+    competitions = competitions.includes(:delegate_report) if admin_mode
+
     serial_includes["delegates"] = { only: ["id", "name"], include: ["avatar"] } if admin_mode
-    serial_methods |= ["announced_at", "results_submitted_at"] if admin_mode
+    serial_methods |= ["announced_at", "results_submitted_at", "report_posted_at"] if admin_mode
 
     paginate json: competitions,
              only: ["id", "name", "start_date", "end_date", "registration_open", "registration_close", "venue"],
