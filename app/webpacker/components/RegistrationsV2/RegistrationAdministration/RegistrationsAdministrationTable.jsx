@@ -16,6 +16,7 @@ export default function RegistrationAdministrationTable({
   changeSortColumn,
   competitionInfo,
   draggable = false,
+  sortable = true,
   handleOnDragEnd,
 }) {
   const handleHeaderCheck = (_, data) => {
@@ -36,7 +37,7 @@ export default function RegistrationAdministrationTable({
   // TODO: use native ref= when we switch to semantic v3
   /* eslint-disable react/jsx-props-no-spreading */
   return (
-    <Table sortable={!draggable} striped textAlign="left">
+    <Table sortable={sortable} striped textAlign="left">
       <TableHeader
         columnsExpanded={columnsExpanded}
         isChecked={registrations.length === selected.length}

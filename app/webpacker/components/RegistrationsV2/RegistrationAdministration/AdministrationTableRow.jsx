@@ -6,10 +6,8 @@ import { Draggable } from 'react-beautiful-dnd';
 import { setMessage } from '../Register/RegistrationMessage';
 import i18n from '../../../lib/i18n';
 import {
-  getFullDateTimeString, getLongDateString,
-  getMediumDateString,
   getShortDateString,
-  getShortTimeString, getSimpleTimeString,
+  getShortTimeString,
 } from '../../../lib/utils/dates';
 import EventIcon from '../../wca/EventIcon';
 import { editRegistrationUrl, editPersonUrl, personUrl } from '../../../lib/requests/routes.js.erb';

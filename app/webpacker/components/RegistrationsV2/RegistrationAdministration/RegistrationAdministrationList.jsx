@@ -126,9 +126,9 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
 
   const [state, dispatchSort] = useReducer(sortReducer, {
     sortColumn: competitionInfo['using_payment_integrations?']
-      ? 'paid_on'
-      : 'paid_on_with_registered_on_fallback',
-    sortDirection: undefined,
+      ? 'paid_on_with_registered_on_fallback'
+      : 'registered_on',
+    sortDirection: 'descending',
   });
   const { sortColumn, sortDirection } = state;
   const changeSortColumn = (name) => dispatchSort({ type: 'CHANGE_SORT', sortColumn: name });
@@ -396,6 +396,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
           )}
           handleOnDragEnd={handleOnDragEnd}
           draggable={editable}
+          sortable={false}
         />
 
         <Header>
