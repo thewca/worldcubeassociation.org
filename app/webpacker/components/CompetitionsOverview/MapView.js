@@ -16,15 +16,20 @@ const MAP_DISPLAY_LIMIT = 500;
 
 function MapView({
   competitions,
+  isLoading,
   fetchMoreCompetitions,
   hasMoreCompsToLoad,
 }) {
   useEffect(() => {
-    if (hasMoreCompsToLoad && competitions?.length < MAP_DISPLAY_LIMIT) {
+    if (hasMoreCompsToLoad && competitions?.length < MAP_DISPLAY_LIMIT && !isLoading) {
       fetchMoreCompetitions();
     }
-  }, [hasMoreCompsToLoad, competitions,
-    fetchMoreCompetitions]);
+  }, [
+    hasMoreCompsToLoad,
+    competitions,
+    isLoading,
+    fetchMoreCompetitions,
+  ]);
 
   const provider = userTileProvider;
 

@@ -152,6 +152,7 @@ function CompetitionsView({ canViewAdminDetails = false }) {
                   ))
                   : competitions
               }
+              isLoading={competitionsIsFetching}
               fetchMoreCompetitions={competitionsFetchNextPage}
               hasMoreCompsToLoad={hasMoreCompsToLoad}
             />

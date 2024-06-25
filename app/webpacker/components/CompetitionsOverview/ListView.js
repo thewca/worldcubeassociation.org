@@ -21,12 +21,13 @@ function ListView({
   const { ref: bottomRef, inView: bottomInView } = useInView();
 
   useEffect(() => {
-    if (hasMoreCompsToLoad && bottomInView) {
+    if (hasMoreCompsToLoad && bottomInView && !isLoading) {
       fetchMoreCompetitions();
     }
   }, [
-    bottomInView,
     hasMoreCompsToLoad,
+    bottomInView,
+    isLoading,
     fetchMoreCompetitions,
     // The bottom ref can still _stay_ in view even after loading new comps.
     //   In that case, the useEffect will not be triggered, so we introduce this extra dependency.
