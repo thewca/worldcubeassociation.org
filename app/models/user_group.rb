@@ -74,6 +74,7 @@ class UserGroup < ApplicationRecord
       translators: "Translators",
       board: "Board",
       officers: "Officers",
+      banned_competitors: "Banned Competitors",
     }
   end
 
