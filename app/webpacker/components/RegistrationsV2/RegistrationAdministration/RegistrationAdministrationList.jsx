@@ -245,8 +245,8 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
   // than putting this in the table headers which scroll out of sight
   const spotsRemaining = (competitionInfo.competitor_limit ?? Infinity) - accepted.length;
   const spotsRemainingText = i18n.t(
-    'competitions.registration_v2.list.spots_remaining',
-    { spots: spotsRemaining },
+    'competitions.registration_v2.list.spots_remaining_plural',
+    { count: spotsRemaining },
   );
 
   const userEmailMap = useMemo(
@@ -357,7 +357,6 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
           {' '}
           (
           {waiting.length}
-          {competitionInfo.competitor_limit && `; ${spotsRemainingText}`}
           )
         </Header>
 

@@ -1769,7 +1769,9 @@ en:
         download: "Download all of the competitions details."
       list:
         empty: "None"
-        spots_remaining: "%{spots} spot(s) remaining"
+        spots_remaining_plural:
+          one: "%{count} spot remaining"
+          many: "%{count} spots remaining"
       bookmark:
         unbookmark: "You have removed your bookmark"
       requirements:
