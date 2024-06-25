@@ -5,7 +5,12 @@ import React from 'react';
 import { Draggable } from 'react-beautiful-dnd';
 import { setMessage } from '../Register/RegistrationMessage';
 import i18n from '../../../lib/i18n';
-import { getShortDateString, getShortTimeString } from '../../../lib/utils/dates';
+import {
+  getFullDateTimeString, getLongDateString,
+  getMediumDateString,
+  getShortDateString,
+  getShortTimeString, getSimpleTimeString,
+} from '../../../lib/utils/dates';
 import EventIcon from '../../wca/EventIcon';
 import { editRegistrationUrl, editPersonUrl, personUrl } from '../../../lib/requests/routes.js.erb';
 
@@ -25,7 +30,7 @@ export default function TableRow({
   draggable = false,
 }) {
   const {
-    dob, region, events, comments, email,
+    dob, region, events, comments, email, timestamp,
   } = columnsExpanded;
   const {
     id, wca_id: wcaId, name, country,
@@ -100,10 +105,12 @@ export default function TableRow({
             </Table.Cell>
 
             <Table.Cell>
-              <Popup
-                content={getShortTimeString(registeredOn)}
-                trigger={<span>{getShortDateString(registeredOn)}</span>}
-              />
+              { timestamp ? getShortTimeString(registeredOn) : (
+                <Popup
+                  content={getShortTimeString(registeredOn)}
+                  trigger={<span>{getShortDateString(registeredOn)}</span>}
+                />
+              )}
             </Table.Cell>
 
             {competitionInfo['using_payment_integrations?'] && (
@@ -111,10 +118,13 @@ export default function TableRow({
               <Table.Cell>{paymentStatus ?? i18n.t('registrations.list.not_paid')}</Table.Cell>
               <Table.Cell>
                 {updatedAt && (
-                <Popup
-                  content={getShortTimeString(updatedAt)}
-                  trigger={<span>{getShortDateString(updatedAt)}</span>}
-                />
+                  timestamp ? getShortDateString(updatedAt)
+                    : (
+                      <Popup
+                        content={getShortTimeString(updatedAt)}
+                        trigger={<span>{getShortDateString(updatedAt)}</span>}
+                      />
+                    )
                 )}
               </Table.Cell>
             </>

@@ -89,6 +89,7 @@ const expandableColumns = {
   events: 'Events',
   comments: 'Comment & Note',
   email: 'Email',
+  timestamp: 'Timestamp',
 };
 const initialExpandedColumns = {
   dob: false,
@@ -96,6 +97,7 @@ const initialExpandedColumns = {
   events: false,
   comments: true,
   email: false,
+  timestamp: false,
 };
 
 const columnReducer = (state, action) => {
