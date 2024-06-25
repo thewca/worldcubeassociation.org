@@ -24,7 +24,7 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
     serial_methods = ["short_display_name", "city", "country_iso2", "event_ids", "date_range", "latitude_degrees", "longitude_degrees"]
     serial_includes = {}
 
-    admin_mode = current_user.can_see_admin_competitions?
+    admin_mode = current_user&.can_see_admin_competitions?
 
     competitions = competitions.includes(:delegate_report) if admin_mode
 
