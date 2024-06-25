@@ -1,6 +1,14 @@
 # frozen_string_literal: true
 
 class RoleChangeMailer < ApplicationMailer
+  private def wrt_email_recipient
+    UserRole::UserRoleEmailRecipient.new(
+      name: UserGroup.teams_committees_group_wrt.name,
+      email: UserGroup.teams_committees_group_wrt.metadata.email,
+      message: 'Please take action if this role change is inconsistent or accidental.',
+    )
+  end
+
   private def role_metadata(role)
     metadata = {}
     group = role.group
@@ -23,11 +31,12 @@ class RoleChangeMailer < ApplicationMailer
     @user_who_made_the_change = user_who_made_the_change
     @group_type_name = UserGroup.group_type_name[@role.group.group_type.to_sym]
     @metadata = role_metadata(role)
+    @to_list = [wrt_email_recipient]
 
     # Populate the recepient list.
     case role.group.group_type
     when UserGroup.group_types[:delegate_probation]
-      @to_list = [
+      @to_list.push(
         UserRole::UserRoleEmailRecipient.new(
           name: UserGroup.board_group.name,
           email: GroupsMetadataBoard.email,
@@ -38,9 +47,9 @@ class RoleChangeMailer < ApplicationMailer
           email: role.user.senior_delegates.map(&:email),
           message: 'Informing as one of the Delegates under you has been put in probation.',
         ),
-      ]
+      )
     when UserGroup.group_types[:delegate_regions]
-      @to_list = [
+      @to_list.push(
         UserRole::UserRoleEmailRecipient.new(
           name: UserGroup.board_group.name,
           email: GroupsMetadataBoard.email,
@@ -56,17 +65,17 @@ class RoleChangeMailer < ApplicationMailer
           email: UserGroup.teams_committees_group_wfc.metadata.email,
           message: 'Please add the Delegate to xero contacts if necessary.',
         ),
-      ]
+      )
     when UserGroup.group_types[:translators]
-      @to_list = [
+      @to_list.push(
         UserRole::UserRoleEmailRecipient.new(
           name: UserGroup.teams_committees_group_wst.name,
           email: UserGroup.teams_committees_group_wst.metadata.email,
           message: 'Informing as there is a new website translator.',
         ),
-      ]
+      )
     when UserGroup.group_types[:teams_committees], UserGroup.group_types[:councils]
-      @to_list = [
+      @to_list.push(
         UserRole::UserRoleEmailRecipient.new(
           name: UserGroup.board_group.name,
           email: GroupsMetadataBoard.email,
@@ -82,9 +91,9 @@ class RoleChangeMailer < ApplicationMailer
           email: role.group.lead_user.email,
           message: 'Informing as there is a new appointment in your Team/Committee/Council.',
         ),
-      ]
+      )
     when UserGroup.group_types[:board], UserGroup.group_types[:officers]
-      @to_list = [
+      @to_list.push(
         UserRole::UserRoleEmailRecipient.new(
           name: UserGroup.board_group.name,
           email: GroupsMetadataBoard.email,
@@ -95,15 +104,15 @@ class RoleChangeMailer < ApplicationMailer
           email: UserGroup.teams_committees_group_weat.metadata.email,
           message: 'Please add this to monthly digest.',
         ),
-      ]
+      )
     when UserGroup.group_types[:banned_competitors]
-      @to_list = [
+      @to_list.push(
         UserRole::UserRoleEmailRecipient.new(
           name: 'WDC',
           email: UserGroup.teams_committees_group_wdc.metadata.email,
           message: 'Informing as a competitor is newly banned.',
         ),
-      ]
+      )
     else
       raise "Unknown/Unhandled group type: #{role.group.group_type}"
     end
@@ -122,11 +131,12 @@ class RoleChangeMailer < ApplicationMailer
     @changes = JSON.parse changes
     @group_type_name = UserGroup.group_type_name[role.group_type.to_sym]
     @today_date = Date.today
+    @to_list = [wrt_email_recipient]
 
     # Populate the recepient list.
     case role.group_type
     when UserGroup.group_types[:delegate_probation]
-      @to_list = [
+      @to_list.push(
         UserRole::UserRoleEmailRecipient.new(
           name: UserGroup.board_group.name,
           email: GroupsMetadataBoard.email,
@@ -137,9 +147,9 @@ class RoleChangeMailer < ApplicationMailer
           email: role.user.senior_delegates.map(&:email),
           message: 'Informing as there was a change in the probation status for one of the Delegates under you.',
         ),
-      ]
+      )
     when UserGroup.group_types[:delegate_regions]
-      @to_list = [
+      @to_list.push(
         UserRole::UserRoleEmailRecipient.new(
           name: UserGroup.board_group.name,
           email: GroupsMetadataBoard.email,
@@ -155,9 +165,9 @@ class RoleChangeMailer < ApplicationMailer
           email: UserGroup.teams_committees_group_wfc.metadata.email,
           message: 'Please add the Delegate to xero contacts if necessary.',
         ),
-      ]
+      )
     when UserGroup.group_types[:teams_committees], UserGroup.group_types[:councils]
-      @to_list = [
+      @to_list.push(
         UserRole::UserRoleEmailRecipient.new(
           name: UserGroup.board_group.name,
           email: GroupsMetadataBoard.email,
@@ -173,15 +183,15 @@ class RoleChangeMailer < ApplicationMailer
           email: role.group.lead_user.email,
           message: 'Informing as there was a change in your Team/Committee/Council.',
         ),
-      ]
+      )
     when UserGroup.group_types[:banned_competitors]
-      @to_list = [
+      @to_list.push(
         UserRole::UserRoleEmailRecipient.new(
           name: 'WDC',
           email: UserGroup.teams_committees_group_wdc.metadata.email,
           message: 'Informing as there was a change in banned details of a competitor.',
         ),
-      ]
+      )
     else
       raise "Unknown/Unhandled group type: #{role.group_type}"
     end
@@ -199,11 +209,12 @@ class RoleChangeMailer < ApplicationMailer
     @user_who_made_the_change = user_who_made_the_change
     @group_type_name = UserGroup.group_type_name[role.group_type.to_sym]
     @metadata = role_metadata(role)
+    @to_list = [wrt_email_recipient]
 
     # Populate the recepient list.
     case role.group_type
     when UserGroup.group_types[:delegate_regions]
-      @to_list = [
+      @to_list.push(
         UserRole::UserRoleEmailRecipient.new(
           name: UserGroup.board_group.name,
           email: GroupsMetadataBoard.email,
@@ -219,17 +230,17 @@ class RoleChangeMailer < ApplicationMailer
           email: UserGroup.teams_committees_group_wfc.metadata.email,
           message: 'Please take necessary action if there is a pending dues for the Delegate whose role is ended.',
         ),
-      ]
+      )
     when UserGroup.group_types[:translators]
-      @to_list = [
+      @to_list.push(
         UserRole::UserRoleEmailRecipient.new(
           name: UserGroup.teams_committees_group_wst.name,
           email: UserGroup.teams_committees_group_wst.metadata.email,
           message: 'Informing as the role ended for a website translator.',
         ),
-      ]
+      )
     when UserGroup.group_types[:teams_committees], UserGroup.group_types[:councils]
-      @to_list = [
+      @to_list.push(
         UserRole::UserRoleEmailRecipient.new(
           name: UserGroup.board_group.name,
           email: GroupsMetadataBoard.email,
@@ -245,9 +256,9 @@ class RoleChangeMailer < ApplicationMailer
           email: role.group.lead_user.email,
           message: 'Informing as there is a role end in your Team/Committee/Council.',
         ),
-      ]
+      )
     when UserGroup.group_types[:board], UserGroup.group_types[:officers]
-      @to_list = [
+      @to_list.push(
         UserRole::UserRoleEmailRecipient.new(
           name: UserGroup.board_group.name,
           email: GroupsMetadataBoard.email,
@@ -258,7 +269,7 @@ class RoleChangeMailer < ApplicationMailer
           email: UserGroup.teams_committees_group_weat.metadata.email,
           message: 'Please add this to monthly digest.',
         ),
-      ]
+      )
     else
       raise "Unknown/Unhandled group type: #{role.group.group_type}"
     end
