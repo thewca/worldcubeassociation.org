@@ -1772,7 +1772,7 @@ en:
         spots_remaining_plural:
           zero: "no spots remaining"
           one: "%{count} spot remaining"
-          many: "%{count} spots remaining"
+          other: "%{count} spots remaining"
       bookmark:
         unbookmark: "You have removed your bookmark"
       requirements:
