@@ -11,6 +11,7 @@ export default function TableHeader({
   sortColumn,
   changeSortColumn,
   competitionInfo,
+  draggable,
 }) {
   const { dob, events, comments } = columnsExpanded;
 
@@ -18,7 +19,8 @@ export default function TableHeader({
     <Table.Header>
       <Table.Row>
         <Table.HeaderCell>
-          <Checkbox checked={isChecked} onChange={onCheckboxChanged} />
+          { !draggable
+            && <Checkbox checked={isChecked} onChange={onCheckboxChanged} />}
         </Table.HeaderCell>
         <Table.HeaderCell />
         <Table.HeaderCell

@@ -57,7 +57,7 @@ export default function TableRow({
             {...provided.dragHandleProps}
           >
             <Table.Cell>
-              <Checkbox onChange={onCheckboxChange} checked={isSelected} />
+              {draggable ? <Icon name="bars" /> : <Checkbox onChange={onCheckboxChange} checked={isSelected} />}
             </Table.Cell>
 
             <Table.Cell>
