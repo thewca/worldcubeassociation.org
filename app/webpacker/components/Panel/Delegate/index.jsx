@@ -4,7 +4,7 @@ import { PANEL_LIST } from '../../../lib/wca-data.js.erb';
 import ImportantLinks from './ImportantLinks';
 import BannedCompetitorsPage from '../pages/BannedCompetitorsPage';
 
-const delegateCrashCourseLink = 'https://documents.worldcubeassociation.org/edudoc/delegate-crash-course/delegate_crash_course.pdf';
+const delegateHandbookLink = 'https://documents.worldcubeassociation.org/edudoc/delegate-handbook/delegate-handbook.pdf';
 
 const sections = [
   {
@@ -13,9 +13,9 @@ const sections = [
     component: ImportantLinks,
   },
   {
-    id: PANEL_LIST.delegate.delegateCrashCourse,
-    name: 'Delegate Crash Course',
-    link: delegateCrashCourseLink,
+    id: PANEL_LIST.delegate.delegateHandbook,
+    name: 'Delegate Handbook',
+    link: delegateHandbookLink,
   },
   {
     id: PANEL_LIST.delegate.bannedCompetitors,
