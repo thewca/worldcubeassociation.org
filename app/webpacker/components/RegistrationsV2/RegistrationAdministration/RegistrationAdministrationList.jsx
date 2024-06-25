@@ -135,7 +135,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
       const { error } = data.json;
       dispatchStore(setMessage(
         error
-          ? error.errors.map((err) => `competitions.registration_v2.errors.${err}`)
+          ? Object.values(error).map((err) => `competitions.registration_v2.errors.${err}`)
           : 'registrations.flash.failed',
         'negative',
       ));
@@ -373,7 +373,9 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
           sortDirection={sortDirection}
           sortColumn={sortColumn}
           competitionInfo={competitionInfo}
-          registrations={waiting}
+          registrations={waiting.toSorted(
+            (a, b) => a.competing.waiting_list_position - b.competing.waiting_list_position,
+          )}
           handleOnDragEnd={handleOnDragEnd}
           draggable={editable}
         />

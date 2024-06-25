@@ -1831,6 +1831,9 @@ en:
         -4006: "Competitor limit has been reached"
         -4007: "Invalid registration status provided"
         -4008: "Registration has closed"
+        -4009: "Only Organizers can cancel Registrations for this competition"
+        -4010: "The Waiting List Position is not Valid"
+        -4011: "You can only accept the first person on the waiting list"
     #context: and when an error occured
     errors:
       invalid_name_message: "must end with a year and must contain only alphanumeric characters, dashes(-), ampersands(&), periods(.), colons(:), apostrophes('), and spaces( )"
