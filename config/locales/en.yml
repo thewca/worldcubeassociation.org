@@ -1770,6 +1770,7 @@ en:
       list:
         empty: "None"
         spots_remaining_plural:
+          zero: "no spots remaining"
           one: "%{count} spot remaining"
           many: "%{count} spots remaining"
       bookmark:
