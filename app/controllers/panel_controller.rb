@@ -91,6 +91,11 @@ class PanelController < ApplicationController
       "groupsManagerAdmin" => "groups-manager-admin",
       "bannedCompetitors" => "banned-competitors",
       "translators" => "translators",
+      "duesExport" => "dues-export",
+      "countryBands" => "country-bands",
+      "delegateProbations" => "delegate-probations",
+      "xeroUsers" => "xero-users",
+      "duesRedirect" => "dues-redirect",
     }
   end
 end
