@@ -20,7 +20,7 @@ import {
   timeDifferenceBefore,
 } from '../../lib/utils/competition-table';
 import { countries } from '../../lib/wca-data.js.erb';
-import { adminCompetitionUrl } from '../../lib/requests/routes.js.erb';
+import { adminCompetitionUrl, competitionUrl } from '../../lib/requests/routes.js.erb';
 
 function ListViewSection({
   competitions,
@@ -158,7 +158,7 @@ export function CompetitionsTable({
               </Table.Cell>
               <Table.Cell width={6}>
                 <Flag name={comp.country_iso2?.toLowerCase()} />
-                <a href={comp.url}>{comp.short_display_name}</a>
+                <a href={competitionUrl(comp.id)}>{comp.short_display_name}</a>
               </Table.Cell>
               <Table.Cell width={4}>
                 <strong>{countries.byIso2[comp.country_iso2].name}</strong>
@@ -214,7 +214,7 @@ export function CompetitionsTabletTable({
               </Table.Cell>
               <Table.Cell width={6}>
                 <Flag name={comp.country_iso2?.toLowerCase()} />
-                <a href={comp.url}>{comp.short_display_name}</a>
+                <a href={competitionUrl(comp.id)}>{comp.short_display_name}</a>
               </Table.Cell>
               <Table.Cell width={7}>
                 <strong>{countries.byIso2[comp.country_iso2].name}</strong>
@@ -259,7 +259,7 @@ export function CompetitionsMobileTable({
               </Table.Cell>
               <Table.Cell>
                 <Flag name={comp.country_iso2?.toLowerCase()} />
-                <a href={comp.url}>{comp.short_display_name}</a>
+                <a href={competitionUrl(comp.id)}>{comp.short_display_name}</a>
               </Table.Cell>
               <Table.Cell>
                 <strong>{countries.byIso2[comp.country_iso2].name}</strong>
@@ -330,7 +330,7 @@ function AdminCompetitionsTable({
                 </Table.Cell>
                 <Table.Cell width={4}>
                   <Flag name={comp.country_iso2?.toLowerCase()} />
-                  <a href={comp.url}>{comp.short_display_name}</a>
+                  <a href={competitionUrl(comp.id)}>{comp.short_display_name}</a>
                   <br />
                   <strong>{countries.byIso2[comp.country_iso2].name}</strong>
                   {`, ${comp.city}`}

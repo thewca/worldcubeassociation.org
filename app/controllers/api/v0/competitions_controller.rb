@@ -21,7 +21,7 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
     competitions = Competition.includes(:events)
                               .search(params[:q], params: params)
 
-    serial_methods = ["url", "short_name", "short_display_name", "city", "venue_address", "venue_details", "country_iso2", "event_ids", "date_range", "latitude_degrees", "longitude_degrees"]
+    serial_methods = ["short_display_name", "city", "country_iso2", "event_ids", "date_range", "latitude_degrees", "longitude_degrees"]
     serial_includes = {}
 
     admin_mode = current_user.can_see_admin_competitions?

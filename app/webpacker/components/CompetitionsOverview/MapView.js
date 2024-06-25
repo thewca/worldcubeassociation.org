@@ -9,6 +9,7 @@ import { redMarker, blueMarker } from '../../lib/leaflet-wca/markers';
 import ResizeMapIFrame from '../../lib/utils/leaflet-iframe';
 import 'leaflet/dist/leaflet.css';
 import { isProbablyOver } from '../../lib/utils/competition-table';
+import { competitionUrl } from '../../lib/requests/routes.js.erb';
 
 // Limit number of markers on map, especially for "All Past Competitions"
 const MAP_DISPLAY_LIMIT = 500;
@@ -44,7 +45,7 @@ function MapView({
             icon={isProbablyOver(comp) ? blueMarker : redMarker}
           >
             <Popup>
-              <a href={comp.url}>{comp.name}</a>
+              <a href={competitionUrl(comp.id)}>{comp.name}</a>
               <br />
               {`${comp.date_range} - ${comp.city}`}
             </Popup>
