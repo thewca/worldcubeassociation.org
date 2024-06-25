@@ -64,7 +64,7 @@ function ListViewSection({
           isSortedByAnnouncement={isSortedByAnnouncement}
         />
       )}
-      {isLoading && <BarLoader cssOverride={{ width: '100%' }} />}
+      <BarLoader loading={isLoading} cssOverride={{ width: '100%' }} />
     </>
   );
 }
