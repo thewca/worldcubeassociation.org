@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import React, {
   useMemo, useReducer, useRef,
 } from 'react';
@@ -114,6 +114,8 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
     initialExpandedColumns,
   );
 
+  const queryClient = useQueryClient();
+
   const [editable, setEditable] = useCheckboxState(false);
 
   const dispatchStore = useDispatch();
@@ -128,19 +130,6 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
   });
   const { sortColumn, sortDirection } = state;
   const changeSortColumn = (name) => dispatchSort({ type: 'CHANGE_SORT', sortColumn: name });
-
-  const { mutate: updateRegistrationMutation, isPending: isMutating } = useMutation({
-    mutationFn: bulkUpdateRegistrations,
-    onError: (data) => {
-      const { error } = data.json;
-      dispatchStore(setMessage(
-        error
-          ? Object.values(error).map((err) => `competitions.registration_v2.errors.${err}`)
-          : 'registrations.flash.failed',
-        'negative',
-      ));
-    },
-  });
 
   const {
     isLoading: isRegistrationsLoading,
@@ -169,6 +158,28 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
     isLoading: infoLoading,
     data: registrationsWithUser,
   } = useWithUserData(registrations ?? []);
+
+  const { mutate: updateRegistrationMutation, isPending: isMutating } = useMutation({
+    mutationFn: bulkUpdateRegistrations,
+    onError: (data) => {
+      const { error } = data.json;
+      dispatchStore(setMessage(
+        error
+          ? Object.values(error).map((err) => `competitions.registration_v2.errors.${err}`)
+          : 'registrations.flash.failed',
+        'negative',
+      ));
+    },
+    onSuccess: (data) => {
+      const { updated_registrations: updatedRegistrations } = data;
+      const updated = registrations.map(
+        (r) => (updatedRegistrations[r.user_id]
+          ? { ...updatedRegistrations[r.user_id], payment: r.payment }
+          : r),
+      );
+      queryClient.setQueryData(['registrations-admin', competitionInfo.id], updated);
+    },
+  });
 
   const sortedRegistrationsWithUser = useMemo(() => {
     if (registrationsWithUser) {
@@ -263,11 +274,18 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
     if (!result.destination) return;
     if (result.destination.index === result.source.index) return;
 
-    await updateRegistrationMutation({
+    updateRegistrationMutation({
       competition_id: competitionInfo.id,
-      user_id: waiting[result.source.index].user_id,
-      competing: {
-        waiting_list_position: waiting[result.destination.index].waiting_list_position,
+      requests: [{
+        user_id: waiting[result.source.index].user_id,
+        competing: {
+          waiting_list_position: waiting[result.destination.index].competing.waiting_list_position,
+        },
+      }],
+    }, {
+      onSuccess: () => {
+        // We need to get the information for all Competitors if you change the waiting list position
+        refetch();
       },
     });
   };
@@ -296,8 +314,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
         <Sticky context={actionsRef} offset={20}>
           <RegistrationActions
             partitionedSelected={partitionedSelected}
-            refresh={async () => {
-              await refetch();
+            refresh={() => {
               dispatch({ type: 'clear-selected' });
             }}
             registrations={registrations}
