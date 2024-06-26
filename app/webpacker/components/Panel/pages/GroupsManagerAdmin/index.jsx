@@ -1,5 +1,5 @@
 import React from 'react';
-import { GroupsManagerForGroups } from '../../Leader/GroupsManager';
+import { GroupsManagerForGroups } from '../GroupsManager';
 import { apiV0Urls } from '../../../../lib/requests/routes.js.erb';
 import { groupTypes } from '../../../../lib/wca-data.js.erb';
 import useLoadedData from '../../../../lib/hooks/useLoadedData';
