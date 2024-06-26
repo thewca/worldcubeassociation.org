@@ -2,9 +2,9 @@ import React from 'react';
 import {
   Button, Grid, GridColumn, GridRow,
 } from 'semantic-ui-react';
-import { wfcCompetitionsExportUrl } from '../../../lib/requests/routes.js.erb';
+import { wfcCompetitionsExportUrl } from '../../../../lib/requests/routes.js.erb';
 
-import UtcDatePicker from '../../wca/UtcDatePicker';
+import UtcDatePicker from '../../../wca/UtcDatePicker';
 
 export default function DuesExport() {
   const [fromDate, setFromDate] = React.useState(null);
