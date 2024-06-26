@@ -19,6 +19,13 @@ class ConnectedStripeAccount < ApplicationRecord
     self.create_intent(registration, amount_iso, currency_iso, paying_user)
   end
 
+  # This method implements the PaymentElements workflow described at:
+  # - https://stripe.com/docs/payments/quickstart
+  # - https://stripe.com/docs/payments/accept-a-payment
+  # - https://stripe.com/docs/payments/accept-a-payment?ui=elements
+  # It essentially creates a PaymentIntent for the current user-specified amount.
+  # Everything after the creation of the intent is handled by Stripe through their JS integration.
+  # At the very end, when the process is finished, it redirects the user to a return URL that we specified.
   private def create_intent(registration, amount_iso, currency_iso, paying_user)
     stripe_amount = StripeRecord.amount_to_stripe(amount_iso, currency_iso)
 
@@ -70,14 +77,36 @@ class ConnectedStripeAccount < ApplicationRecord
     )
   end
 
-  def issue_refund(charge_id, amount_iso)
-    charge_record = StripeRecord.charge.find_by!(stripe_id: charge_id)
+  def retrieve_payments(payment_intent)
+    intent_charges = Stripe::Charge.list(
+      { payment_intent: payment_intent.payment_record.stripe_id },
+      stripe_account: self.account_id,
+    )
 
+    intent_charges.data.map do |charge|
+      stripe_record = StripeRecord.find_by(stripe_id: charge.id)
+
+      if stripe_record.present?
+        stripe_record.update_status(charge)
+      else
+        stripe_record = StripeRecord.create_from_api(charge, {}, self.account_id, payment_intent.payment_record)
+        yield stripe_record if block_given?
+      end
+
+      stripe_record
+    end
+  end
+
+  def find_payment_record(record_id)
+    StripeRecord.charge.find(record_id)
+  end
+
+  def issue_refund(charge_record, amount_iso)
     currency_iso = charge_record.currency_code
     stripe_amount = StripeRecord.amount_to_stripe(amount_iso, currency_iso)
 
     refund_args = {
-      charge: charge_id,
+      charge: charge_record.stripe_id,
       amount: stripe_amount,
     }
 
