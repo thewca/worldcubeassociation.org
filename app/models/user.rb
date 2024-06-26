@@ -5,6 +5,7 @@ require "fileutils"
 
 class User < ApplicationRecord
   include MicroserviceRegistrationHolder
+  include PanelHelper
 
   has_many :competition_delegates, foreign_key: "delegate_id"
   # This gives all the competitions where the user is marked as a Delegate,
@@ -1308,69 +1309,43 @@ class User < ApplicationRecord
     delegate_roles.map { |role| role.group.lead_user }
   end
 
-  def can_access_wfc_panel?
-    can_admin_finances?
-  end
-
-  def can_access_wrt_panel?
-    can_admin_results?
-  end
-
-  def can_access_wst_panel?
-    software_team?
-  end
-
-  def can_access_board_panel?
-    admin? || board_member?
-  end
-
-  def can_access_leader_panel?
-    admin? || active_roles.any? { |role| role.is_lead? && (role.group.teams_committees? || role.group.councils?) }
-  end
-
   def can_access_senior_delegate_panel?
     admin? || board_member? || senior_delegate?
   end
 
-  def can_access_delegate_panel?
-    admin? || any_kind_of_delegate?
+  def can_access_panel?(panel_id)
+    case panel_id
+    when :admin
+      admin? || results_team?
+    when :staff
+      staff?
+    when :delegate
+      any_kind_of_delegate?
+    when :wfc
+      can_admin_finances?
+    when :wrt
+      can_admin_results?
+    when :wst
+      software_team?
+    when :board
+      board_member?
+    when :leader
+      active_roles.any? { |role| role.is_lead? && (role.group.teams_committees? || role.group.councils?) }
+    when :senior_delegate
+      senior_delegate?
+    when :wdc
+      wdc_team?
+    when :wec
+      ethics_committee?
+    when :weat
+      weat_team?
+    else
+      false
+    end
   end
 
-  def can_access_staff_panel?
-    admin? || staff?
-  end
-
-  def can_access_wdc_panel?
-    admin? || wdc_team?
-  end
-
-  def can_access_wec_panel?
-    admin? || ethics_committee?
-  end
-
-  def can_access_weat_panel?
-    admin? || weat_team?
-  end
-
-  def can_access_admin_panel?
-    admin? || results_team?
-  end
-
-  def can_access_panel?
-    (
-      can_access_wfc_panel? ||
-      can_access_wrt_panel? ||
-      can_access_wst_panel? ||
-      can_access_board_panel? ||
-      can_access_leader_panel? ||
-      can_access_senior_delegate_panel? ||
-      can_access_delegate_panel? ||
-      can_access_staff_panel? ||
-      can_access_wdc_panel? ||
-      can_access_wec_panel? ||
-      can_access_weat_panel? ||
-      can_access_admin_panel?
-    )
+  def can_access_at_least_one_panel?
+    panel_list.any? { |panel| can_access_panel?(panel[:id]) }
   end
 
   def subordinate_delegates

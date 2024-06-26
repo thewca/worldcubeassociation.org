@@ -217,46 +217,15 @@
               <li><%= link_to t('.my_results'), person_path(current_user.wca_id) %></li>
             <% end %>
 
-            <% if current_user.can_access_panel? %>
+            <% if current_user.can_access_at_least_one_panel? %>
               <li class="divider"></li>
               <li role="presentation" class="dropdown-header">
                 <%= t '.panel' %>
               </li>
-              <% if current_user.can_access_staff_panel? %>
-                <li><%= link_to "Staff panel", panel_staff_path %></li>
-              <% end %>
-              <% if current_user.can_access_delegate_panel? %>
-                <li><%= link_to "Delegate panel", panel_delegate_path %></li>
-              <% end %>
-              <% if current_user.can_access_wfc_panel? %>
-                <li><%= link_to "WFC panel", panel_wfc_path %></li>
-              <% end %>
-              <% if current_user.can_access_wrt_panel? %>
-                <li><%= link_to "WRT panel", panel_wrt_path %></li>
-              <% end %>
-              <% if current_user.can_access_wst_panel? %>
-                <li><%= link_to "WST panel", panel_wst_path %></li>
-              <% end %>
-              <% if current_user.can_access_board_panel? %>
-                <li><%= link_to "Board panel", panel_board_path %></li>
-              <% end %>
-              <% if current_user.can_access_leader_panel? %>
-                <li><%= link_to "Leader panel", panel_leader_path %></li>
-              <% end %>
-              <% if current_user.can_access_senior_delegate_panel? %>
-                <li><%= link_to "Senior Delegate panel", panel_senior_delegate_path %></li>
-              <% end %>
-              <% if current_user.can_access_wdc_panel? %>
-                <li><%= link_to "WDC panel", panel_wdc_path %></li>
-              <% end %>
-              <% if current_user.can_access_wec_panel? %>
-                <li><%= link_to "WEC panel", panel_wec_path %></li>
-              <% end %>
-              <% if current_user.can_access_weat_panel? %>
-                <li><%= link_to "WEAT panel", panel_weat_path %></li>
-              <% end %>
-              <% if current_user.can_access_admin_panel? %>
-                <li><%= link_to "New Admin panel", panel_admin_path %></li>
+              <% panel_list.each do |panel| %>
+                <% if current_user.can_access_panel?(panel[:id]) %>
+                  <li><%= link_to panel[:name], panel[:url] %></li>
+                <% end %>
               <% end %>
             <% end %>
             <% if current_user.can_view_poll? %>
