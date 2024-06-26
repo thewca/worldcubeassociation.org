@@ -1,5 +1,9 @@
 import { PANEL_PAGES } from '../../lib/wca-data.js.erb';
-import { countryBandsUrl } from '../../lib/requests/routes.js.erb';
+import {
+  countryBandsUrl,
+  subordinateDelegateClaimsUrl,
+  subordinateUpcomingCompetitionsUrl,
+} from '../../lib/requests/routes.js.erb';
 import PostingCompetitionsTable from '../PostingCompetitions';
 import RegionManager from './Board/RegionManager';
 import EditPerson from './pages/EditPerson';
@@ -10,6 +14,8 @@ import DuesExport from './pages/DuesExport';
 import DelegateProbations from '../DelegateProbations';
 import XeroUsers from './pages/XeroUsers';
 import DuesRedirect from './pages/DuesRedirect';
+import DelegateForms from './pages/DelegateForms';
+import Regions from './pages/Regions';
 
 export default {
   [PANEL_PAGES.postingDashboard]: {
@@ -55,5 +61,21 @@ export default {
   [PANEL_PAGES.duesRedirect]: {
     name: 'Dues Redirect',
     component: DuesRedirect,
+  },
+  [PANEL_PAGES.delegateForms]: {
+    name: 'Delegate Forms',
+    component: DelegateForms,
+  },
+  [PANEL_PAGES.regions]: {
+    name: 'Regions',
+    component: Regions,
+  },
+  [PANEL_PAGES.subordinateDelegateClaims]: {
+    name: 'Subordinate Delegate Claims',
+    link: subordinateDelegateClaimsUrl,
+  },
+  [PANEL_PAGES.subordinateUpcomingCompetitions]: {
+    name: 'Subordinate Upcoming Competitions',
+    link: subordinateUpcomingCompetitionsUrl,
   },
 };
