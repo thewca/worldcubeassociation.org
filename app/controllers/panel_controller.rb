@@ -84,6 +84,10 @@ class PanelController < ApplicationController
       "delegateProbations" => "delegate-probations",
       "xeroUsers" => "xero-users",
       "duesRedirect" => "dues-redirect",
+      "delegateForms" => "delegate-forms",
+      "regions" => "regions",
+      "subordinateDelegateClaims" => "subordinate-delegate-claims",
+      "subordinateUpcomingCompetitions" => "subordinate-upcoming-competitions",
     }
   end
 end
