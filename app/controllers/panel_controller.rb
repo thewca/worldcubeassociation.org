@@ -4,20 +4,8 @@ class PanelController < ApplicationController
   include DocumentsHelper
 
   before_action :authenticate_user!
-  before_action -> { redirect_to_root_unless_user(:can_access_panel?) }
+  before_action -> { redirect_to_root_unless_user(:can_access_panel?, params[:action].to_sym) }, except: [:pending_claims_for_subordinate_delegates]
   before_action -> { redirect_to_root_unless_user(:can_access_senior_delegate_panel?) }, only: [:pending_claims_for_subordinate_delegates]
-  before_action -> { redirect_to_root_unless_user(:can_access_staff_panel?) }, only: [:staff]
-  before_action -> { redirect_to_root_unless_user(:can_access_delegate_panel?) }, only: [:delegate]
-  before_action -> { redirect_to_root_unless_user(:can_access_board_panel?) }, only: [:board]
-  before_action -> { redirect_to_root_unless_user(:can_access_senior_delegate_panel?) }, only: [:senior_delegate]
-  before_action -> { redirect_to_root_unless_user(:can_access_leader_panel?) }, only: [:leader]
-  before_action -> { redirect_to_root_unless_user(:can_access_wfc_panel?) }, only: [:wfc]
-  before_action -> { redirect_to_root_unless_user(:can_access_wrt_panel?) }, only: [:wrt]
-  before_action -> { redirect_to_root_unless_user(:can_access_wst_panel?) }, only: [:wst]
-  before_action -> { redirect_to_root_unless_user(:can_access_wdc_panel?) }, only: [:wdc]
-  before_action -> { redirect_to_root_unless_user(:can_access_wec_panel?) }, only: [:wec]
-  before_action -> { redirect_to_root_unless_user(:can_access_weat_panel?) }, only: [:weat]
-  before_action -> { redirect_to_root_unless_user(:can_access_admin_panel?) }, only: [:admin]
 
   def pending_claims_for_subordinate_delegates
     # Show pending claims for a given user, or the current user, if they can see them
