@@ -493,6 +493,10 @@ class User < ApplicationRecord
     group_member?(UserGroup.teams_committees_group_wrt)
   end
 
+  def senior_results_team?
+    active_roles.any? { |role| role.group == UserGroup.teams_committees_group_wrt && role.metadata.at_least_senior_member? }
+  end
+
   private def software_team?
     group_member?(UserGroup.teams_committees_group_wst)
   end
@@ -1323,7 +1327,7 @@ class User < ApplicationRecord
   def can_access_panel?(panel_id)
     case panel_id
     when :admin
-      admin? || results_team?
+      admin? || senior_results_team?
     when :staff
       staff?
     when :delegate
