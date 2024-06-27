@@ -71,7 +71,7 @@ export default function RegistrationStatus({ registration }) {
 
   return (
     <>
-      <Checkbox toggle value={showAlternativeToggle} onChange={setAlternativeToggle} label="Show alternative status description" />
+      <Checkbox toggle checked={showAlternativeToggle} onChange={setAlternativeToggle} label="Show alternative status description" />
 
       <RegistrationStatusMessage
         registration={registration}
