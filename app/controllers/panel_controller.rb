@@ -90,6 +90,13 @@ class PanelController < ApplicationController
       "subordinateUpcomingCompetitions" => "subordinate-upcoming-competitions",
       "leaderForms" => "leader-forms",
       "groupsManager" => "groups-manager",
+      "importantLinks" => "important-links",
+      "delegateHandbook" => "delegate-handbook",
+      "seniorDelegatesList" => "senior-delegates-list",
+      "leadersAdmin" => "leaders-admin",
+      "boardEditor" => "board-editor",
+      "officersEditor" => "officers-editor",
+      "regionsAdmin" => "regions-admin",
     }
   end
 end
