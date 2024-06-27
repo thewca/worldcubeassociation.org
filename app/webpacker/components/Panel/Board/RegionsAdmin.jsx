@@ -4,7 +4,7 @@ import { apiV0Urls } from '../../../lib/requests/routes.js.erb';
 import { groupTypes } from '../../../lib/wca-data.js.erb';
 import Loading from '../../Requests/Loading';
 import Errored from '../../Requests/Errored';
-import { RegionsDetailView } from '../SeniorDelegate/Regions';
+import { RegionsDetailView } from '../pages/Regions';
 
 export default function RegionsAdmin() {
   const {

@@ -1,5 +1,4 @@
 import React, { useRef } from 'react';
-import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
 import RegistrationAdministrationList from './RegistrationAdministrationList';
 import RegistrationMessage from '../Register/RegistrationMessage';
 import messageReducer from '../reducers/messageReducer';

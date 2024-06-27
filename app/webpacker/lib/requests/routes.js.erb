@@ -195,10 +195,7 @@ export const apiV0Urls = {
     resetClaimCount: (wcaId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_wrt_person_reset_claim_count_path("${wcaId}"))%>`,
   },
   userRoles: {
-    list: ({isActive, isGroupHidden, userId, groupId, status, groupType, isLead} = {}, sort) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_user_roles_path) %>?${jsonToQueryString({ sort, isActive, isGroupHidden, userId, groupId, status, groupType, isLead })}`,
-    listOfUser: (userId, sort, {isActive, status, groupType} = {}) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_index_for_user_path('${userId}')) %>?${jsonToQueryString({ sort, isActive, status, groupType })}`,
-    listOfGroup: (groupId, sort, {isActive, status, isLead} = {}) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_index_for_group_path('${groupId}')) %>?${jsonToQueryString({ sort, isActive, status, isLead })}`,
-    listOfGroupType: (groupType, sort, {status, isActive} = {}) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_index_for_group_type_path('${groupType}')) %>?${jsonToQueryString({ sort, status, isActive })}`,
+    list: ({isActive, isGroupHidden, userId, groupId, status, groupType, isLead} = {}, sort, perPage = 100) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_user_roles_path) %>?${jsonToQueryString({ sort, isActive, isGroupHidden, userId, groupId, status, groupType, isLead, per_page: perPage })}`,
     create: () => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_user_roles_path) %>`,
     update: (roleId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_user_role_path("${roleId}")) %>`,
     delete: (roleId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_user_role_path("${roleId}")) %>`,
@@ -226,9 +223,6 @@ export const panelUrls = {
   },
   wst: {
     translators: `<%= CGI.unescape(Rails.application.routes.url_helpers.panel_wst_path(anchor: PanelController.panel_list['wst']['translators'])) %>`,
-  },
-  wrt: {
-    editPerson: (wcaId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.panel_wrt_path(wcaId: '${wcaId}', anchor: PanelController.panel_list['wrt']['editPerson'])) %>`,
   },
   leader: {
     groupsManager: `<%= CGI.unescape(Rails.application.routes.url_helpers.panel_leader_path(anchor: PanelController.panel_list['leader']['groupsManager'])) %>`,

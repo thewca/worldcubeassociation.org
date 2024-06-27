@@ -62,7 +62,7 @@ export default function StepPanel({
   return (
     <>
       { isRegistered && (
-      <RegistrationStatus registration={registration} />
+        <RegistrationStatus registration={registration} />
       )}
       <Step.Group fluid ordered stackable="tablet">
         {steps.map((stepConfig, index) => (

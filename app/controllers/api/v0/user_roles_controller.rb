@@ -12,7 +12,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
   end
 
   private def pre_filtered_user_roles
-    active_record = UserRole
+    active_record = UserRole.includes(:user, :group) # Including user & group for post filtering.
     is_active = params.key?(:isActive) ? ActiveRecord::Type::Boolean.new.cast(params.require(:isActive)) : nil
     is_group_hidden = params.key?(:isGroupHidden) ? ActiveRecord::Type::Boolean.new.cast(params.require(:isGroupHidden)) : nil
     group_type = params[:groupType]
@@ -25,10 +25,10 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       active_record = is_active ? active_record.active : active_record.inactive
     end
     if !is_group_hidden.nil?
-      active_record = active_record.includes(:group).where(group: { is_hidden: is_group_hidden })
+      active_record = active_record.where(group: { is_hidden: is_group_hidden })
     end
     if group_type.present?
-      active_record = active_record.includes(:group).where(group: { group_type: group_type })
+      active_record = active_record.where(group: { group_type: group_type })
     end
     if group_id.present?
       active_record = active_record.where(group_id: group_id)
@@ -47,46 +47,8 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     roles = UserRole.filter_roles(roles, current_user, params)
     roles = UserRole.sort_roles(roles, params[:sort])
 
-    # Limiting to first 100 elements of roles array to avoid serializing of large array.
-    render json: roles.first(100)
-  end
-
-  # Returns a list of roles primarily based on userId.
-  def index_for_user
-    user_id = params.require(:user_id)
-    user = User.find(user_id)
-    roles = user.roles
-
-    # Filter & Sort roles
-    roles = UserRole.filter_roles(roles, current_user, params)
-    roles = UserRole.sort_roles(roles, params[:sort])
-
-    render json: roles
-  end
-
-  # Returns a list of roles primarily based on groupId.
-  def index_for_group
-    group_id = params.require(:group_id)
-    group = UserGroup.find(group_id)
-    roles = group.roles
-
-    # Filter & Sort roles
-    roles = UserRole.filter_roles(roles, current_user, params)
-    roles = UserRole.sort_roles(roles, params[:sort])
-
-    render json: roles
-  end
-
-  # Returns a list of roles primarily based on groupType.
-  def index_for_group_type
-    group_type = params.require(:group_type)
-    roles = UserGroup.roles_of_group_type(group_type)
-
-    # Filter & Sort roles
-    roles = UserRole.filter_roles(roles, current_user, params)
-    roles = UserRole.sort_roles(roles, params[:sort])
-
-    render json: roles
+    # Paginating the list by sending only first 100 elements unless mentioned in the API.
+    paginate json: roles
   end
 
   def show
@@ -183,6 +145,10 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     case changed_key
     when 'end_date'
       'End Date'
+    when 'ban_reason'
+      'Ban reason'
+    when 'scope'
+      'Ban scope'
     else
       nil
     end
@@ -190,6 +156,19 @@ class Api::V0::UserRolesController < Api::V0::ApiController
 
   private def changed_value_to_human_readable(changed_value)
     changed_value.nil? ? 'None' : changed_value
+  end
+
+  private def changes_in_model(previous_changes)
+    previous_changes&.map do |changed_key, values|
+      changed_parameter = changed_key_to_human_readable(changed_key)
+      if changed_parameter.present?
+        UserRole::UserRoleChange.new(
+          changed_parameter: changed_parameter,
+          previous_value: changed_value_to_human_readable(values[0]),
+          new_value: changed_value_to_human_readable(values[1]),
+        )
+      end
+    end
   end
 
   # update method is written in a way that at a time, only one parameter can be changed. If multiple
@@ -307,17 +286,20 @@ class Api::V0::UserRolesController < Api::V0::ApiController
         role.end_date = params.require(:endDate)
       end
 
-      role.save!
-      role.previous_changes.each do |changed_key, values|
-        changed_parameter = changed_key_to_human_readable(changed_key)
-        if changed_parameter.present?
-          changes << UserRole::UserRoleChange.new(
-            changed_parameter: changed_parameter,
-            previous_value: changed_value_to_human_readable(values[0]),
-            new_value: changed_value_to_human_readable(values[1]),
-          )
-        end
+      if params.key?(:banReason)
+        role.metadata.ban_reason = params.require(:banReason)
       end
+
+      if params.key?(:scope)
+        role.metadata.scope = params.require(:scope)
+      end
+
+      ActiveRecord::Base.transaction do
+        role.metadata&.save!
+        role.save!
+      end
+      changes.concat(changes_in_model(role.metadata&.previous_changes).compact)
+      changes.concat(changes_in_model(role.previous_changes).compact)
     else
       return render status: :unprocessable_entity, json: { error: "Invalid group type" }
     end

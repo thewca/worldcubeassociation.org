@@ -16,6 +16,7 @@ import Wct from './SubForms/Wct';
 import Wrt from './SubForms/Wrt';
 import Wst from './SubForms/Wst';
 import Competition from './SubForms/Competition';
+import Errored from '../Requests/Errored';
 
 const CONTACT_RECIPIENTS = [
   'competition',
@@ -30,6 +31,7 @@ export default function ContactForm({ loggedInUserData }) {
   const { save, saving } = useSaveAction();
   const [captchaValue, setCaptchaValue] = useState();
   const [captchaError, setCaptchaError] = useState(false);
+  const [saveError, setSaveError] = useState();
   const [contactSuccess, setContactSuccess] = useState(false);
   const contactFormState = useStore();
   const dispatch = useDispatch();
@@ -66,6 +68,7 @@ export default function ContactForm({ loggedInUserData }) {
   }, [selectedContactRecipient]);
 
   if (saving) return <Loading />;
+  if (saveError) return <Errored error={saveError} />;
 
   return (
     <>
@@ -85,6 +88,7 @@ export default function ContactForm({ loggedInUserData }) {
               formData,
               contactSuccessHandler,
               { method: 'POST', headers: {}, body: formData },
+              setSaveError,
             );
           }
         }}

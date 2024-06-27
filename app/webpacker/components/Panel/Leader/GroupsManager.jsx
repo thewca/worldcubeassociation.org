@@ -27,10 +27,9 @@ const canDemote = (role) => (
 function GroupTable({ group }) {
   const {
     data: roles, loading, error, sync,
-  } = useLoadedData(apiV0Urls.userRoles.listOfGroup(
-    group.id,
+  } = useLoadedData(apiV0Urls.userRoles.list(
+    { isActive: true, groupId: group.id },
     'status:desc,startDate,name', // Sort params
-    { isActive: true },
   ));
   const confirm = useConfirm();
   const { save, saving } = useSaveAction();
@@ -155,10 +154,9 @@ export function GroupsManagerForGroups({ groups }) {
 }
 
 export default function GroupsManager({ loggedInUserId }) {
-  const { data: roles, loading, error } = useLoadedData(apiV0Urls.userRoles.listOfUser(
-    loggedInUserId,
+  const { data: roles, loading, error } = useLoadedData(apiV0Urls.userRoles.list(
+    { isActive: true, status: 'leader', userId: loggedInUserId },
     'groupName', // Sort params
-    { isActive: true, status: 'leader' },
   ));
 
   if (loading) return <Loading />;

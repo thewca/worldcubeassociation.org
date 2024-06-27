@@ -22,6 +22,7 @@ import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { setMessage } from './RegistrationMessage';
 import i18n from '../../../lib/i18n';
 import I18nHTMLTranslate from '../../I18nHTMLTranslate';
+import { useConfirm } from '../../../lib/providers/ConfirmProvider';
 
 const maxCommentLength = 240;
 
@@ -53,6 +54,8 @@ export default function CompetingStep({
   const hasPaid = registration?.payment.payment_status === 'succeeded';
   const dispatch = useDispatch();
 
+  const confirm = useConfirm();
+
   const [comment, setComment] = useState('');
   const initialSelectedEvents = competitionInfo.events_per_registration_limit ? [] : preferredEvents
     .filter((event) => competitionInfo.event_ids.includes(event));
@@ -74,7 +77,7 @@ export default function CompetingStep({
   }, [isRegistered, registration]);
 
   const queryClient = useQueryClient();
-  const { mutate: updateRegistrationMutation, isLoading: isUpdating } = useMutation({
+  const { mutate: updateRegistrationMutation, isPending: isUpdating } = useMutation({
     mutationFn: updateRegistration,
     onError: (data) => {
       const { error } = data.json;
@@ -93,11 +96,6 @@ export default function CompetingStep({
           payment: registration.payment,
         },
       );
-      // Going from pending -> Cancelled
-      if (data.registration.competing.registration_status === 'cancelled') {
-        dispatch(setMessage('competitions.registration_v2.register.registration_status.cancelled', 'positive'));
-        return nextStep({ toStart: true });
-      }
       // Going from cancelled -> pending
       if (registration.competing.registration_status === 'cancelled') {
         dispatch(setMessage('registrations.flash.registered', 'positive'));
@@ -172,15 +170,21 @@ export default function CompetingStep({
   };
 
   const actionUpdateRegistration = () => {
-    dispatch(setMessage('competitions.registration_v2.update.being_updated', 'basic'));
-    updateRegistrationMutation({
-      user_id: registration.user_id,
-      competition_id: competitionInfo.id,
-      competing: {
-        comment: hasCommentChanged ? comment : undefined,
-        event_ids: hasEventsChanged ? selectedEvents : undefined,
-      },
-      guests,
+    confirm({
+      content: i18n.t('competitions.registration_v2.update.update_confirm'),
+    }).then(() => {
+      dispatch(setMessage('competitions.registration_v2.update.being_updated', 'basic'));
+      updateRegistrationMutation({
+        user_id: registration.user_id,
+        competition_id: competitionInfo.id,
+        competing: {
+          comment: hasCommentChanged ? comment : undefined,
+          event_ids: hasEventsChanged ? selectedEvents : undefined,
+        },
+        guests,
+      });
+    }).catch(() => {
+      nextStep();
     });
   };
 
@@ -194,16 +198,6 @@ export default function CompetingStep({
         status: 'pending',
       },
       guests,
-    });
-  };
-
-  const actionDeleteRegistration = () => {
-    updateRegistrationMutation({
-      user_id: registration.user_id,
-      competition_id: competitionInfo.id,
-      competing: {
-        status: 'cancelled',
-      },
     });
   };
 
@@ -228,12 +222,6 @@ export default function CompetingStep({
 
   const shouldShowReRegisterButton = registration?.competing?.registration_status === 'cancelled';
 
-  const shouldShowDeleteButton = isRegistered
-    && registration.competing.registration_status !== 'cancelled'
-    && (registration.competing.registration_status !== 'accepted'
-      || competitionInfo.allow_registration_self_delete_after_acceptance)
-    && competitionInfo['registration_opened?'];
-
   const handleSubmit = useCallback((event) => {
     event.preventDefault();
     if (shouldShowReRegisterButton) {
@@ -253,9 +241,8 @@ export default function CompetingStep({
   ]);
 
   const formWarnings = useMemo(() => potentialWarnings(competitionInfo), [competitionInfo]);
-
   return (
-    <Segment basic>
+    <Segment basic loading={isUpdating}>
       {processing && (
         <Processing
           competitionInfo={competitionInfo}
@@ -332,7 +319,7 @@ export default function CompetingStep({
                 setGuests(Number.parseInt(data.value, 10));
               }}
               min="0"
-              max={competitionInfo.guests_per_registration_limit}
+              max={competitionInfo.guests_per_registration_limit ?? 99}
               error={Number.isInteger(competitionInfo.guests_per_registration_limit) && guests > competitionInfo.guests_per_registration_limit && i18n.t('competitions.competition_info.guest_limit', { count: competitionInfo.guests_per_registration_limit })}
             />
           </Form.Field>
@@ -350,6 +337,9 @@ export default function CompetingStep({
                   {i18n.t('registrations.update')}
                 </Button>
                 <ButtonOr />
+                <Button secondary onClick={() => nextStep()}>
+                  {i18n.t('competitions.registration_v2.register.view_registration')}
+                </Button>
               </>
               )}
 
@@ -360,16 +350,6 @@ export default function CompetingStep({
                 type="submit"
               >
                 {i18n.t('registrations.register')}
-              </Button>
-              )}
-
-              {shouldShowDeleteButton && (
-              <Button
-                disabled={isUpdating}
-                negative
-                onClick={() => attemptAction(actionDeleteRegistration)}
-              >
-                {i18n.t('registrations.delete_registration')}
               </Button>
               )}
             </ButtonGroup>

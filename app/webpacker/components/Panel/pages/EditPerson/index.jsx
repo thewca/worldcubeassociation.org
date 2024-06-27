@@ -3,17 +3,17 @@ import {
   Button, Form, Icon, Item, Message,
 } from 'semantic-ui-react';
 import _ from 'lodash';
-import { adminCheckRecordsUrl, apiV0Urls } from '../../../lib/requests/routes.js.erb';
-import useSaveAction from '../../../lib/hooks/useSaveAction';
-import WcaSearch from '../../SearchWidget/WcaSearch';
-import SEARCH_MODELS from '../../SearchWidget/SearchModel';
-import Loading from '../../Requests/Loading';
-import I18n from '../../../lib/i18n';
-import { genders, countries } from '../../../lib/wca-data.js.erb';
-import useQueryParams from '../../../lib/hooks/useQueryParams';
-import useLoadedData from '../../../lib/hooks/useLoadedData';
-import Errored from '../../Requests/Errored';
-import UtcDatePicker from '../../wca/UtcDatePicker';
+import { adminCheckRecordsUrl, apiV0Urls } from '../../../../lib/requests/routes.js.erb';
+import useSaveAction from '../../../../lib/hooks/useSaveAction';
+import WcaSearch from '../../../SearchWidget/WcaSearch';
+import SEARCH_MODELS from '../../../SearchWidget/SearchModel';
+import Loading from '../../../Requests/Loading';
+import I18n from '../../../../lib/i18n';
+import { genders, countries } from '../../../../lib/wca-data.js.erb';
+import useQueryParams from '../../../../lib/hooks/useQueryParams';
+import useLoadedData from '../../../../lib/hooks/useLoadedData';
+import Errored from '../../../Requests/Errored';
+import UtcDatePicker from '../../../wca/UtcDatePicker';
 
 const genderOptions = _.map(genders.byId, (gender) => ({
   key: gender.id,
@@ -193,8 +193,8 @@ function EditPerson() {
   return (
     <>
       <div>
-        To know the difference between fix and update, refer delegate crash course&apos;s
-        &#34;Requesting changes to person data&#34; section.
+        To know the difference between fix and update, refer to the Delegate Handbook&apos;s
+        &#34;Requesting Changes to Personal Data&#34; section.
       </div>
       {response != null && (
         <Message

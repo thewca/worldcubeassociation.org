@@ -20,6 +20,8 @@ export default function BannedCompetitors({
             <Table.HeaderCell width={5}>User</Table.HeaderCell>
             <Table.HeaderCell width={2}>Start date</Table.HeaderCell>
             <Table.HeaderCell width={2}>End date</Table.HeaderCell>
+            <Table.HeaderCell width={4}>Reason</Table.HeaderCell>
+            <Table.HeaderCell width={3}>Scope</Table.HeaderCell>
             {canEditBannedCompetitors && <Table.HeaderCell width={2}>Edit</Table.HeaderCell>}
           </Table.Row>
         </Table.Header>
@@ -37,6 +39,8 @@ export default function BannedCompetitors({
               </Table.Cell>
               <Table.Cell>{role.start_date}</Table.Cell>
               <Table.Cell>{role.end_date}</Table.Cell>
+              <Table.Cell>{role.metadata.ban_reason}</Table.Cell>
+              <Table.Cell>{role.metadata.scope}</Table.Cell>
               {canEditBannedCompetitors && (
                 <Table.Cell>
                   <Icon

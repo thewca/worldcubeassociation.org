@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Button, Icon } from 'semantic-ui-react';
 import { bulkUpdateRegistrations } from '../api/registration/patch/update_registration';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
@@ -11,7 +11,7 @@ function csvExport(selected, registrations) {
   csvContent
     += 'user_id,guests,competing.event_ids,competing.registration_status,competing.registered_on,competing.comment,competing.admin_comment\n';
   registrations
-    .filter((r) => selected.length === 0 || selected.includes(r.user.id))
+    .filter((r) => selected.length === 0 || selected.includes(r.user_id))
     .forEach((registration) => {
       csvContent += `${registration.user_id},${
         registration.guests
@@ -32,6 +32,7 @@ export default function RegistrationActions({
   registrations,
   spotsRemaining,
   competitionInfo,
+  updateRegistrationMutation,
 }) {
   const dispatch = useDispatch();
   const selectedCount = Object.values(partitionedSelected).reduce(
@@ -51,19 +52,6 @@ export default function RegistrationActions({
   const selectedEmails = [...pending, ...accepted, ...cancelled, ...waiting]
     .map((userId) => userEmailMap[userId])
     .join(',');
-
-  const { mutate: updateRegistrationMutation } = useMutation({
-    mutationFn: bulkUpdateRegistrations,
-    onError: (data) => {
-      const { error } = data.json;
-      dispatch(setMessage(
-        error
-          ? `competitions.registration_v2.errors.${error}`
-          : 'registrations.flash.failed',
-        'negative',
-      ));
-    },
-  });
 
   const changeStatus = (attendees, status) => {
     updateRegistrationMutation(
@@ -97,7 +85,7 @@ export default function RegistrationActions({
 
   const copyEmails = (emails) => {
     navigator.clipboard.writeText(emails);
-    dispatch(setMessage('Copied to clipboard. Remember to use bcc!', 'positive'));
+    dispatch(setMessage('competitions.registration_v2.update.email_message', 'positive'));
   };
 
   return (

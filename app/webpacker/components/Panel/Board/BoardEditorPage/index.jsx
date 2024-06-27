@@ -10,9 +10,10 @@ export default function BoardEditorPage() {
   const {
     data: boardRoles, loading, error, sync,
   } = useLoadedData(
-    apiV0Urls.userRoles.listOfGroupType(groupTypes.board, 'name', {
+    apiV0Urls.userRoles.list({
+      groupType: groupTypes.board,
       isActive: true,
-    }),
+    }, 'name'),
   );
 
   if (loading) return <Loading />;

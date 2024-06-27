@@ -543,12 +543,7 @@ class Competition < ApplicationRecord
 
   def registration_full_message
     if registration_full? && registrations.accepted.count >= competitor_limit
-      if uses_new_registration_service?
-        I18n.t('registrations.registration_full_v2_html', competitor_limit: competitor_limit,
-                                                          here: "<a href='#{Rails.application.routes.url_helpers.competition_waiting_list_url(self)}'>here</a>").html_safe
-      else
-        I18n.t('registrations.registration_full', competitor_limit: competitor_limit)
-      end
+      I18n.t('registrations.registration_full', competitor_limit: competitor_limit)
     else
       I18n.t('registrations.registration_full_include_waiting_list', competitor_limit: competitor_limit)
     end
@@ -1827,8 +1822,8 @@ class Competition < ApplicationRecord
                force_comment_in_registration use_wca_registration external_registration_page guests_entry_fee_lowest_denomination guest_entry_status
                information events_per_registration_limit],
       methods: %w[url website short_name city venue_address venue_details latitude_degrees longitude_degrees country_iso2 event_ids registration_opened?
-                  main_event_id number_of_bookmarks using_payment_integrations? uses_qualification? uses_cutoff? competition_series_ids],
-      include: %w[delegates organizers tabs],
+                  main_event_id number_of_bookmarks using_payment_integrations? uses_qualification? uses_cutoff? competition_series_ids registration_full?],
+      include: %w[delegates organizers],
     }
     self.as_json(options)
   end

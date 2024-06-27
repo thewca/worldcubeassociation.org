@@ -2,14 +2,14 @@ import React from 'react';
 import {
   Button, Confirm, Form, Icon, Modal, Table,
 } from 'semantic-ui-react';
-import useLoadedData from '../../../lib/hooks/useLoadedData';
-import { wfcDuesRedirectsUrl, wfcXeroUsersUrl } from '../../../lib/requests/routes.js.erb';
-import Errored from '../../Requests/Errored';
-import Loading from '../../Requests/Loading';
-import useSaveAction from '../../../lib/hooks/useSaveAction';
-import CountrySelector from '../../CountrySelector/CountrySelector';
-import WcaSearch from '../../SearchWidget/WcaSearch';
-import SEARCH_MODELS from '../../SearchWidget/SearchModel';
+import useLoadedData from '../../../../lib/hooks/useLoadedData';
+import { wfcDuesRedirectsUrl, wfcXeroUsersUrl } from '../../../../lib/requests/routes.js.erb';
+import Errored from '../../../Requests/Errored';
+import Loading from '../../../Requests/Loading';
+import useSaveAction from '../../../../lib/hooks/useSaveAction';
+import CountrySelector from '../../../CountrySelector/CountrySelector';
+import WcaSearch from '../../../SearchWidget/WcaSearch';
+import SEARCH_MODELS from '../../../SearchWidget/SearchModel';
 
 export default function DuesRedirect() {
   const {

@@ -39,10 +39,9 @@ function SeniorDelegate({ seniorDelegate }) {
 }
 
 export default function DelegatesOfRegion({ activeRegion, delegateSubregions, isAdminMode }) {
-  const { data: delegates, loading, error } = useLoadedData(apiV0Urls.userRoles.listOfGroup(
-    activeRegion.id,
+  const { data: delegates, loading, error } = useLoadedData(apiV0Urls.userRoles.list(
+    { isActive: true, groupId: activeRegion.id },
     'location,name',
-    { isActive: true },
   ));
 
   const getSeniorDelegate = useCallback(
