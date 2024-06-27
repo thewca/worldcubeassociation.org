@@ -29,9 +29,6 @@ function ListView({
     bottomInView,
     isLoading,
     fetchMoreCompetitions,
-    // The bottom ref can still _stay_ in view even after loading new comps.
-    //   In that case, the useEffect will not be triggered, so we introduce this extra dependency.
-    competitions,
   ]);
 
   switch (filterState.timeOrder) {
