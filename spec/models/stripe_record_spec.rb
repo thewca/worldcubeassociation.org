@@ -11,8 +11,7 @@ RSpec.describe StripeRecord do
     end
 
     it 'contains all stripe_statuses' do
-      mapped_statuses = StripeRecord::WCA_TO_STRIPE_STATUS_MAP.values.flatten
-      expect(StripeRecord.stripe_statuses.values.sort).to eq(mapped_statuses.sort)
+      expect(StripeRecord.stripe_statuses.keys.sort).to eq(StripeRecord::WCA_TO_STRIPE_STATUS_MAP.values.flatten.sort)
     end
   end
 

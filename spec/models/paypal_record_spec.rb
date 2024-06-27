@@ -9,8 +9,7 @@ RSpec.describe PaypalRecord do
     end
 
     it 'contains all paypal_statuses' do
-      mapped_statuses = PaypalRecord::WCA_TO_PAYPAL_STATUS_MAP.values.flatten
-      expect(PaypalRecord.paypal_statuses.values.sort).to eq(mapped_statuses.sort)
+      expect(PaypalRecord.paypal_statuses.keys.sort).to eq(PaypalRecord::WCA_TO_PAYPAL_STATUS_MAP.values.flatten.sort)
     end
   end
 
