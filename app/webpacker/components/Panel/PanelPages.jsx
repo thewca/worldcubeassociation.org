@@ -5,7 +5,6 @@ import {
   subordinateUpcomingCompetitionsUrl,
 } from '../../lib/requests/routes.js.erb';
 import PostingCompetitionsTable from '../PostingCompetitions';
-import RegionManager from './Board/RegionManager';
 import EditPerson from './pages/EditPerson';
 import BannedCompetitorsPage from './pages/BannedCompetitorsPage';
 import GroupsManagerAdmin from './pages/GroupsManagerAdmin';
@@ -18,6 +17,15 @@ import DelegateForms from './pages/DelegateForms';
 import Regions from './pages/Regions';
 import LeaderForms from './pages/LeaderForms';
 import GroupsManager from './pages/GroupsManager';
+import ImportantLinks from './pages/ImportantLinks';
+import SeniorDelegatesList from './pages/SeniorDelegatesList';
+import LeadersAdminPage from './pages/LeadersAdminPage';
+import BoardEditorPage from './pages/BoardEditorPage';
+import OfficersEditor from './pages/OfficersEditor';
+import RegionsAdmin from './pages/RegionsAdmin';
+import RegionManager from './pages/RegionManager';
+
+const DELEGATE_HANDBOOK_LINK = 'https://documents.worldcubeassociation.org/edudoc/delegate-handbook/delegate-handbook.pdf';
 
 export default {
   [PANEL_PAGES.postingDashboard]: {
@@ -87,5 +95,33 @@ export default {
   [PANEL_PAGES.groupsManager]: {
     name: 'Groups Manager',
     component: GroupsManager,
+  },
+  [PANEL_PAGES.importantLinks]: {
+    name: 'Important Links',
+    component: ImportantLinks,
+  },
+  [PANEL_PAGES.delegateHandbook]: {
+    name: 'Delegate Handbook',
+    link: DELEGATE_HANDBOOK_LINK,
+  },
+  [PANEL_PAGES.seniorDelegatesList]: {
+    name: 'Senior Delegates List',
+    component: SeniorDelegatesList,
+  },
+  [PANEL_PAGES.leadersAdmin]: {
+    name: 'Leaders Admin',
+    component: LeadersAdminPage,
+  },
+  [PANEL_PAGES.boardEditor]: {
+    name: 'Board Editor',
+    component: BoardEditorPage,
+  },
+  [PANEL_PAGES.officersEditor]: {
+    name: 'Officers Editor',
+    component: OfficersEditor,
+  },
+  [PANEL_PAGES.regionsAdmin]: {
+    name: 'Regions Admin',
+    component: RegionsAdmin,
   },
 };

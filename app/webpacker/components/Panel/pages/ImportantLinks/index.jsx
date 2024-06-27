@@ -1,6 +1,6 @@
 import React from 'react';
 import { Header, List } from 'semantic-ui-react';
-import { allDelegatePageUrl, countryBandsUrl } from '../../../lib/requests/routes.js.erb';
+import { allDelegatePageUrl, countryBandsUrl } from '../../../../lib/requests/routes.js.erb';
 
 const IMPORTANT_LINKS = [
   {

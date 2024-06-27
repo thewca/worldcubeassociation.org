@@ -2,16 +2,16 @@ import React, { useState } from 'react';
 import {
   Button, Form, Header, Modal, Table,
 } from 'semantic-ui-react';
-import useLoadedData from '../../../lib/hooks/useLoadedData';
-import { apiV0Urls } from '../../../lib/requests/routes.js.erb';
-import { groupTypes, officersStatus } from '../../../lib/wca-data.js.erb';
-import Loading from '../../Requests/Loading';
-import Errored from '../../Requests/Errored';
-import I18n from '../../../lib/i18n';
-import useSaveAction from '../../../lib/hooks/useSaveAction';
-import WcaSearch from '../../SearchWidget/WcaSearch';
-import SEARCH_MODELS from '../../SearchWidget/SearchModel';
-import { useConfirm } from '../../../lib/providers/ConfirmProvider';
+import useLoadedData from '../../../../lib/hooks/useLoadedData';
+import { apiV0Urls } from '../../../../lib/requests/routes.js.erb';
+import { groupTypes, officersStatus } from '../../../../lib/wca-data.js.erb';
+import Loading from '../../../Requests/Loading';
+import Errored from '../../../Requests/Errored';
+import I18n from '../../../../lib/i18n';
+import useSaveAction from '../../../../lib/hooks/useSaveAction';
+import WcaSearch from '../../../SearchWidget/WcaSearch';
+import SEARCH_MODELS from '../../../SearchWidget/SearchModel';
+import { useConfirm } from '../../../../lib/providers/ConfirmProvider';
 
 const officersStatusOptions = Object.keys(officersStatus).map((option) => ({
   key: option,

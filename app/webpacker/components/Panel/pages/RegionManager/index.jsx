@@ -2,16 +2,16 @@ import React from 'react';
 import {
   Button, ButtonGroup, Confirm, Form, Header, Icon, List, Modal, Table,
 } from 'semantic-ui-react';
-import useLoadedData from '../../../lib/hooks/useLoadedData';
+import useLoadedData from '../../../../lib/hooks/useLoadedData';
 import {
   fetchUserGroupsUrl, addUserGroupsUrl, userGroupsUpdateUrl, apiV0Urls,
-} from '../../../lib/requests/routes.js.erb';
-import { delegateRegionsStatus } from '../../../lib/wca-data.js.erb';
-import Errored from '../../Requests/Errored';
-import Loading from '../../Requests/Loading';
-import useSaveAction from '../../../lib/hooks/useSaveAction';
-import WcaSearch from '../../SearchWidget/WcaSearch';
-import SEARCH_MODELS from '../../SearchWidget/SearchModel';
+} from '../../../../lib/requests/routes.js.erb';
+import { delegateRegionsStatus } from '../../../../lib/wca-data.js.erb';
+import Errored from '../../../Requests/Errored';
+import Loading from '../../../Requests/Loading';
+import useSaveAction from '../../../../lib/hooks/useSaveAction';
+import WcaSearch from '../../../SearchWidget/WcaSearch';
+import SEARCH_MODELS from '../../../SearchWidget/SearchModel';
 
 const defaultRegion = {
   name: '',
