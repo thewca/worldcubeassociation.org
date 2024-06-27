@@ -11,6 +11,8 @@ function registrationIconByStatus(registrationStatus) {
       return 'checkmark';
     case 'cancelled':
       return 'delete';
+    case 'waiting_list':
+      return 'wait';
     default:
       return 'info circle';
   }
@@ -29,9 +31,9 @@ function canIBookPlaneTickets(registrationStatus) {
     case 'cancelled':
       return 'No, your registration has been deleted and you cannot compete anymore.';
     case 'waiting_list':
-      return 'No, you are on a waiting list because the competitor limit has been reached. You will be contacted when a spot opens up, until then you unfortunately cannot compete.';
+      return 'No, the competition is full. However, you have been placed on a waiting list, and you will receive an email if enough spots open up that your registration becomes accepted.';
     default:
-      return '[Testers: This should not happen. If you reached this message, please contact WST!]';
+      return `[Testers: This should not happen. If you reached this message, please contact WST! Debug: '${registrationStatus}']`;
   }
 }
 
@@ -41,6 +43,7 @@ function HumanFriendlyRegistrationStatus({ registration }) {
       info={registration.competing.registration_status === 'pending'}
       success={registration.competing.registration_status === 'accepted'}
       negative={registration.competing.registration_status === 'cancelled'}
+      warning={registration.competing.registration_status === 'waiting_list'}
       icon
     >
       <Icon name="plane" />
@@ -60,6 +63,7 @@ function SimpleRegistrationStatus({ registration }) {
       info={registration.competing.registration_status === 'pending'}
       success={registration.competing.registration_status === 'accepted'}
       negative={registration.competing.registration_status === 'cancelled'}
+      warning={registration.competing.registration_status === 'waiting_list'}
       icon
     >
       <Icon name={registrationIconByStatus(registration.competing.registration_status)} />
