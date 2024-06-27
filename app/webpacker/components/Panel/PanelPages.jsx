@@ -16,6 +16,8 @@ import XeroUsers from './pages/XeroUsers';
 import DuesRedirect from './pages/DuesRedirect';
 import DelegateForms from './pages/DelegateForms';
 import Regions from './pages/Regions';
+import LeaderForms from './pages/LeaderForms';
+import GroupsManager from './pages/GroupsManager';
 
 export default {
   [PANEL_PAGES.postingDashboard]: {
@@ -77,5 +79,13 @@ export default {
   [PANEL_PAGES.subordinateUpcomingCompetitions]: {
     name: 'Subordinate Upcoming Competitions',
     link: subordinateUpcomingCompetitionsUrl,
+  },
+  [PANEL_PAGES.leaderForms]: {
+    name: 'Leader Forms',
+    component: LeaderForms,
+  },
+  [PANEL_PAGES.groupsManager]: {
+    name: 'Groups Manager',
+    component: GroupsManager,
   },
 };

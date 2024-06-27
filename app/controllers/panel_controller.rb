@@ -88,6 +88,8 @@ class PanelController < ApplicationController
       "regions" => "regions",
       "subordinateDelegateClaims" => "subordinate-delegate-claims",
       "subordinateUpcomingCompetitions" => "subordinate-upcoming-competitions",
+      "leaderForms" => "leader-forms",
+      "groupsManager" => "groups-manager",
     }
   end
 end
