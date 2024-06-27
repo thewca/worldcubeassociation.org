@@ -55,6 +55,7 @@ gem 'eu_central_bank'
 gem 'devise-jwt'
 gem 'jwt'
 gem 'iso', github: 'thewca/ruby-iso'
+gem 'rails_admin'
 
 # Pointing to jfly/selectize-rails which has a workaround for
 #  https://github.com/selectize/selectize.js/issues/953
