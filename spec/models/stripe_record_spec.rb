@@ -7,18 +7,12 @@ require 'rails_helper'
 RSpec.describe StripeRecord do
   describe 'status mappings' do
     it 'contains all wca_statuses' do
-      expect(StripeRecord::WCA_TO_STRIPE_STATUS_MAP.keys.sort.map { |x| x.to_s }).to eq(PaymentIntent.wca_statuses.values.sort)
+      expect(StripeRecord::WCA_TO_STRIPE_STATUS_MAP.keys.sort.map(&:to_s)).to eq(PaymentIntent.wca_statuses.values.sort)
     end
 
     it 'contains all stripe_statuses' do
-      mapped_statuses = []
-      StripeRecord::WCA_TO_STRIPE_STATUS_MAP.each_value do |values_list|
-        values_list.each do |value|
-          mapped_statuses << value
-        end
-      end
-
-      expect(StripeRecord.stripe_statuses.keys.sort).to eq(mapped_statuses.sort)
+      mapped_statuses = StripeRecord::WCA_TO_STRIPE_STATUS_MAP.values.flatten
+      expect(StripeRecord.stripe_statuses.values.sort).to eq(mapped_statuses.sort)
     end
   end
 

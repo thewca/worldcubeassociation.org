@@ -33,6 +33,15 @@ class PaypalRecord < ApplicationRecord
     ],
   }.freeze
 
+  enum paypal_status: {
+    created: "CREATED",
+    payer_action_required: "PAYER_ACTION_REQUIRED",
+    saved: "SAVED",
+    approved: "APPROVED",
+    completed: "COMPLETED",
+    voided: "VOIDED",
+  }
+
   # See https://developer.paypal.com/docs/api/orders/v2/#orders_get!c=200&path=status&t=response
   WCA_TO_PAYPAL_STATUS_MAP = {
     created: %w[CREATED],

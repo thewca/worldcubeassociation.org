@@ -3,6 +3,30 @@
 require 'rails_helper'
 
 RSpec.describe PaypalRecord do
+  describe 'status mappings' do
+    it 'contains all wca_statuses' do
+      expect(PaypalRecord::WCA_TO_PAYPAL_STATUS_MAP.keys.sort.map(&:to_s)).to eq(PaymentIntent.wca_statuses.values.sort)
+    end
+
+    it 'contains all paypal_statuses' do
+      mapped_statuses = PaypalRecord::WCA_TO_PAYPAL_STATUS_MAP.values.flatten
+      expect(PaypalRecord.paypal_statuses.values.sort).to eq(mapped_statuses.sort)
+    end
+  end
+
+  describe 'validates stripe_status' do
+    it 'allows a valid status' do
+      record = PaypalRecord.new(paypal_status: 'SAVED')
+      expect(record).to be_valid
+    end
+
+    it 'does not allow an invalid status' do
+      expect {
+        PaypalRecord.new(paypal_status: 'random_invalid_status')
+      }.to raise_error(ArgumentError)
+    end
+  end
+
   describe "#amount_to_paypal" do
     it 'returns USD as a decimal string' do
       ruby_amount = "1000"
