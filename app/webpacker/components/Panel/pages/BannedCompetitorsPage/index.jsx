@@ -13,7 +13,7 @@ export default function BannedCompetitorsPage() {
     data: bannedCompetitorRoles,
     loading: bannedCompetitorRolesLoading,
     error: bannedCompetitorRolesError,
-    sync,
+    sync: syncBannedCompetitorRoles,
   } = useLoadedData(apiV0Urls.userRoles.list({
     isActive: true,
     groupType: groupTypes.banned_competitors,
@@ -22,6 +22,7 @@ export default function BannedCompetitorsPage() {
     data: pastBannedCompetitorRoles,
     loading: pastBannedCompetitorRolesLoading,
     error: pastBannedCompetitorRolesError,
+    sync: syncPastBannedCompetitorRoles,
   } = useLoadedData(apiV0Urls.userRoles.list({
     isActive: false,
     groupType: groupTypes.banned_competitors,
@@ -56,7 +57,7 @@ export default function BannedCompetitorsPage() {
           <Header>Banned Competitors</Header>
           <BannedCompetitors
             bannedCompetitorRoles={bannedCompetitorRoles}
-            sync={sync}
+            sync={syncBannedCompetitorRoles}
             canEditBannedCompetitors={canEditBannedCompetitors}
           />
         </>
@@ -66,6 +67,7 @@ export default function BannedCompetitorsPage() {
           <Header>Past Banned Competitors</Header>
           <BannedCompetitors
             bannedCompetitorRoles={pastBannedCompetitorRoles}
+            sync={syncPastBannedCompetitorRoles}
             canEditBannedCompetitors={canEditBannedCompetitors}
           />
         </>
