@@ -38,7 +38,9 @@ export default function RegistrationMessage({ parentRef }) {
         positive={message.type === 'positive'}
         negative={message.type === 'negative'}
       >
-        {I18n.t(message.key, message.params)}
+        {Array.isArray(message.key)
+          ? message.key.map((keys) => I18n.t(keys, message.params))
+          : I18n.t(message.key, message.params)}
       </Message>
     </Sticky>
   );

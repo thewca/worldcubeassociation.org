@@ -1211,7 +1211,6 @@ en:
     greeting: "Hi, %{name}!"
     please_fix_profile_html: "In order to register for %{comp}, you must fix the following problems with your %{profile}:"
     registration_full: "The competitor limit for this competition is %{competitor_limit} and it has already been reached. If you register, your registration will be placed on a waiting list. It may not be approved unless a spot frees up."
-    registration_full_v2_html: "The competitor limit for this competition is %{competitor_limit} and it has already been reached. If you register, your registration will be placed on a waiting list which you can check %{here}"
     registration_full_include_waiting_list: "The competitor limit for this competition is %{competitor_limit} and it may be filled. If you register, your registration will be placed on a waiting list. It may not be approved unless a spot frees up."
     can_register: "You can register for %{comp} below."
     check_registration_information: "Please check the information about registration to find out if you need to do something else, like paying a registration fee."
@@ -1770,7 +1769,10 @@ en:
         download: "Download all of the competitions details."
       list:
         empty: "None"
-        spots_remaining: "%{spots} spot(s) remaining"
+        spots_remaining_plural:
+          zero: "no spots remaining"
+          one: "%{count} spot remaining"
+          other: "%{count} spots remaining"
       bookmark:
         unbookmark: "You have removed your bookmark"
       requirements:
@@ -1783,7 +1785,8 @@ en:
         update_confirm: "Are you sure you want to update your registration?"
         no_changes: "There are no changes"
         email_send: "Send Email"
-        email_copy: "Copy Email"
+        email_copy: "Copy Emails"
+        email_message: "Copied to clipboard. Remember to use bcc!"
         move_pending: "Move to Pending"
         move_waiting: "Move to Waiting List"
         cancel: "Cancel Registration"
@@ -1802,7 +1805,7 @@ en:
           accepted: "Your registration has been accepted."
           pending: "Your registration is pending approval by the organizers."
           cancelled: "Your registration has been deleted."
-          waiting_list: "You are on the Waiting List."
+          waiting_list: "You are on the Waiting List at position %{waiting_list_position}."
         disclaimer: "Submission of Registration does not mean approval to compete"
         processing: "Your registration is processing..."
         processing_longer: "Processing is taking longer than usual, don't go away!"
@@ -1831,6 +1834,9 @@ en:
         -4006: "Competitor limit has been reached"
         -4007: "Invalid registration status provided"
         -4008: "Registration has closed"
+        -4009: "Only Organizers can cancel Registrations for this competition"
+        -4010: "The Waiting List Position is not Valid"
+        -4011: "You can only accept the first person on the waiting list"
     #context: and when an error occured
     errors:
       invalid_name_message: "must end with a year and must contain only alphanumeric characters, dashes(-), ampersands(&), periods(.), colons(:), apostrophes('), and spaces( )"

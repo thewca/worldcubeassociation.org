@@ -72,10 +72,6 @@ class RegistrationsController < ApplicationController
     @newcomers = @returners = 0
   end
 
-  def waiting_list
-    @competition = competition_from_params
-  end
-
   def edit
     @registration = Registration.find(params[:id])
     @competition = @registration.competition
