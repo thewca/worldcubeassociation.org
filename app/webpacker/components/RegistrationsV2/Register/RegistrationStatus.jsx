@@ -25,39 +25,19 @@ function registrationIconByStatus(registrationStatus) {
 function canIBookPlaneTickets(registrationStatus) {
   switch (registrationStatus) {
     case 'pending':
-      return 'No, the organizers still have to manually approve your registration. This can take time.';
+      return "Don't book your flights and hotel just yet - the organizers still have to manually approve your registration. This can take time.";
     case 'accepted':
-      return 'Yes, happy competing!';
+      return 'Pack your bags and book your flights - you have a spot at the competition!';
     case 'cancelled':
-      return 'No, your registration has been deleted and you cannot compete anymore.';
+      return 'Your registration has been deleted and you will not be competing.';
     case 'waiting_list':
-      return 'No, the competition is full. However, you have been placed on a waiting list, and you will receive an email if enough spots open up that your registration becomes accepted.';
+      return "Don't book a flight, but don't give up hope either. The competition is full, but you have been placed on a waiting list, and you will receive an email if enough spots open up for you to be able to attend.";
     default:
       return `[Testers: This should not happen. If you reached this message, please contact WST! Debug: '${registrationStatus}']`;
   }
 }
 
-function HumanFriendlyRegistrationStatus({ registration }) {
-  return (
-    <Message
-      info={registration.competing.registration_status === 'pending'}
-      success={registration.competing.registration_status === 'accepted'}
-      negative={registration.competing.registration_status === 'cancelled'}
-      warning={registration.competing.registration_status === 'waiting_list'}
-      icon
-    >
-      <Icon name="plane" />
-      <Message.Content>
-        <Message.Header>
-          Can I pack my bags and book a flight?
-        </Message.Header>
-        {canIBookPlaneTickets(registration.competing.registration_status)}
-      </Message.Content>
-    </Message>
-  );
-}
-
-function SimpleRegistrationStatus({ registration }) {
+function RegistrationStatusMessage({ registration, showAlternativeDescription }) {
   return (
     <Message
       info={registration.competing.registration_status === 'pending'}
@@ -76,20 +56,27 @@ function SimpleRegistrationStatus({ registration }) {
             },
           )}
         </Message.Header>
+        {showAlternativeDescription && (
+          <p>
+            {canIBookPlaneTickets(registration.competing.registration_status)}
+          </p>
+        )}
       </Message.Content>
     </Message>
   );
 }
 
 export default function RegistrationStatus({ registration }) {
-  const [alternativeToggle, setAlternativeToggle] = useCheckboxState(false);
+  const [showAlternativeToggle, setAlternativeToggle] = useCheckboxState(true);
 
   return (
     <>
-      <Checkbox toggle value={alternativeToggle} onChange={setAlternativeToggle} label="Alternative Registration Status" />
-      { alternativeToggle
-        ? <HumanFriendlyRegistrationStatus registration={registration} />
-        : <SimpleRegistrationStatus registration={registration} /> }
+      <Checkbox toggle value={showAlternativeToggle} onChange={setAlternativeToggle} label="Show alternative status description" />
+
+      <RegistrationStatusMessage
+        registration={registration}
+        showAlternativeDescription={showAlternativeToggle}
+      />
     </>
   );
 }
