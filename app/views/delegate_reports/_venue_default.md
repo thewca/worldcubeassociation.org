@@ -1,13 +1,3 @@
-* **Previous Competitions in the same venue?:**
+* **Setup:** [Please include photos or upload a video of the scrambling area and competition setup. You can upload a photo by dragging the file into this text area.]
 
-* **Type:** [conference room, school classroom, organiser’s living room, backyard, other]
-
-* **Space/Size:** [Rough estimates about size. Was it too full/empty? What is the maximum capacity in your opinion?]
-
-* **Light:** [Rate the lighting. Have there been problems/complaints?]
-
-* **Temperature:** [Rate the temperature. Did it change throughout the competition day(s)?]
-
-* **Accessibility:** [How can you reach the venue by public transport / by car? Were there accommodation spots nearby?]
-
-* **Setup:** [Use of graphics / photos is highly encouraged!]
+* **Venue notes** [Type of venue used, were any complaints made about aspects of the venue such as lighting or temperature, was there anything noteworthy or unique about the venue?]
