@@ -3,7 +3,7 @@
 class ConnectedPaypalAccount < ApplicationRecord
   has_one :competition_payment_integration, as: :connected_account
 
-  def find_payment_record(record_id)
+  def find_payment(record_id)
     PaypalRecord.capture.find(record_id)
   end
 

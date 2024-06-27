@@ -695,16 +695,16 @@ class RegistrationsController < ApplicationController
       return redirect_to competition_registrations_path(competition)
     end
 
-    charge = payment_account.find_payment_record(params[:payment_id])
+    payment_record = payment_account.find_payment(params[:payment_id])
 
-    registration = charge.root_record.payment_intent.holder
+    registration = payment_record.root_record.payment_intent.holder
     uses_v2 = registration.is_a? MicroserviceRegistration
 
     redirect_path = uses_v2 ? edit_registration_v2_path(competition_id, registration.user_id) : edit_registration_path(registration)
 
     refund_amount_param = params.require(:payment).require(:refund_amount)
     refund_amount = refund_amount_param.to_i
-    amount_left = charge.ruby_amount_available_for_refund - refund_amount
+    amount_left = payment_record.ruby_amount_available_for_refund - refund_amount
 
     if amount_left.negative?
       flash[:danger] = "You are not allowed to refund more than the competitor has paid."
@@ -716,7 +716,7 @@ class RegistrationsController < ApplicationController
       return redirect_to redirect_path
     end
 
-    refund_receipt = payment_account.issue_refund(charge, refund_amount)
+    refund_receipt = payment_account.issue_refund(payment_record, refund_amount)
 
     # Should be the same as `refund_amount`, but by double-converting from the Payment Gateway object
     # we can also double-check that they're on the same page as we are (to be _really_ sure!)
@@ -740,7 +740,7 @@ class RegistrationsController < ApplicationController
         ruby_money.cents,
         ruby_money.currency.iso_code,
         refund_receipt,
-        charge.registration_payment.id,
+        payment_record.registration_payment.id,
         current_user.id,
       )
     end

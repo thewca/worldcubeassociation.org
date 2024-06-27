@@ -70,7 +70,7 @@ class ConnectedStripeAccount < ApplicationRecord
     )
   end
 
-  def find_payment_record(record_id)
+  def find_payment(record_id)
     StripeRecord.charge.find(record_id)
   end
 
