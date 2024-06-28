@@ -11,7 +11,6 @@ class AdminController < ApplicationController
 
   def compute_navbar_data
     @pending_avatars_count = User.where.not(pending_avatar: nil).count
-    @pending_media_count = CompetitionMedium.pending.count
   end
 
   def index

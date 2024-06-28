@@ -5,6 +5,7 @@ import RegistrationRequirements from './RegistrationRequirements';
 import StripeWrapper from './StripeWrapper';
 import i18n from '../../../lib/i18n';
 import RegistrationOverview from './RegistrationOverview';
+import RegistrationStatus from './RegistrationStatus';
 
 const requirementsStepConfig = {
   key: 'requirements',
@@ -25,19 +26,6 @@ const paymentStepConfig = {
 const registrationOverviewConfig = {
   index: -100,
 };
-
-function registrationIconByStatus(registrationStatus) {
-  switch (registrationStatus) {
-    case 'pending':
-      return 'hourglass';
-    case 'accepted':
-      return 'checkmark';
-    case 'cancelled':
-      return 'delete';
-    default:
-      return 'info circle';
-  }
-}
 
 export default function StepPanel({
   competitionInfo,
@@ -74,21 +62,7 @@ export default function StepPanel({
   return (
     <>
       { isRegistered && (
-      <Message
-        info={registration.competing.registration_status === 'pending'}
-        success={registration.competing.registration_status === 'accepted'}
-        negative={registration.competing.registration_status === 'cancelled'}
-        icon
-      >
-        <Icon name={registrationIconByStatus(registration.competing.registration_status)} />
-        <Message.Content>
-          <Message.Header>
-            {i18n.t(
-              `competitions.registration_v2.register.registration_status.${registration.competing.registration_status}`,
-            )}
-          </Message.Header>
-        </Message.Content>
-      </Message>
+        <RegistrationStatus registration={registration} />
       )}
       <Step.Group fluid ordered stackable="tablet">
         {steps.map((stepConfig, index) => (

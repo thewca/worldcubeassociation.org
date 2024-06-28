@@ -20,7 +20,6 @@ Rails.application.routes.draw do
 
   # Don't expose Paypal routes in production until we're reading to launch
   unless PaypalInterface.paypal_disabled?
-    post 'registration/:id/create-paypal-order' => 'registrations#create_paypal_order', as: :registration_create_paypal_order
     post 'registration/:id/capture-paypal-payment' => 'registrations#capture_paypal_payment', as: :registration_capture_paypal_payment
   end
 
@@ -44,7 +43,7 @@ Rails.application.routes.draw do
   # while the deployment happens
   get 'registration/:id/payment-completion' => 'registrations#payment_completion_legacy', as: :registration_payment_completion_legacy
 
-  post 'registration/:id/load-payment-intent' => 'registrations#load_payment_intent', as: :registration_payment_intent
+  post 'registration/:id/load-payment-intent/:payment_integration' => 'registrations#load_payment_intent', as: :registration_payment_intent
   post 'competitions/:competition_id/refund/:payment_integration/:payment_id' => 'registrations#refund_payment', as: :registration_payment_refund
   get 'competitions/:competition_id/payment-completion' => 'registrations#payment_completion', as: :registration_payment_completion
   post 'registration/stripe-webhook' => 'registrations#stripe_webhook', as: :registration_stripe_webhook
@@ -101,7 +100,6 @@ Rails.application.routes.draw do
     get 'registrations/psych-sheet' => 'registrations#psych_sheet', as: :psych_sheet
     get 'registrations/psych-sheet/:event_id' => 'registrations#psych_sheet_event', as: :psych_sheet_event
     resources :registrations, only: [:index, :update, :create, :edit, :destroy], shallow: true
-    get 'waiting' => 'registrations#waiting_list', as: :waiting_list
     get 'edit/registrations' => 'registrations#edit_registrations'
     get 'register' => 'registrations#register'
     resources :competition_tabs, except: [:show], as: :tabs, path: :tabs
@@ -198,6 +196,7 @@ Rails.application.routes.draw do
     get 'wdc' => 'panel#wdc', as: :panel_wdc
     get 'wec' => 'panel#wec', as: :panel_wec
     get 'weat' => 'panel#weat', as: :panel_weat
+    get 'admin' => 'panel#admin', as: :panel_admin
   end
   resources :notifications, only: [:index]
 
@@ -253,6 +252,7 @@ Rails.application.routes.draw do
   get '/regulations/countries' => 'regulations#countries'
   get '/regulations/scrambles' => 'regulations#scrambles'
   get '/regulations/guidelines' => 'regulations#guidelines'
+  get '/regulations/full' => 'regulations#full'
   get '/regulations/translations' => 'regulations#translations'
   get '/regulations/translations/:language' => 'regulations_translations#translated_regulation'
   get '/regulations/translations/:language/guidelines' => 'regulations_translations#translated_guidelines'
@@ -270,7 +270,6 @@ Rails.application.routes.draw do
   post '/admin/check_results' => 'admin#do_check_results'
   get '/admin/merge_people' => 'admin#merge_people'
   post '/admin/merge_people' => 'admin#do_merge_people'
-  get '/admin/edit_person' => 'admin#edit_person'
   get '/admin/fix_results' => 'admin#fix_results'
   get '/admin/fix_results_selector' => 'admin#fix_results_selector', as: :admin_fix_results_ajax
   get '/admin/person_data' => 'admin#person_data'
@@ -386,9 +385,6 @@ Rails.application.routes.draw do
       post '/registration-data' => 'competitions#registration_data', as: :registration_data
 
       scope 'user_roles' do
-        get '/user/:user_id' => 'user_roles#index_for_user', as: :index_for_user
-        get '/group/:group_id' => 'user_roles#index_for_group', as: :index_for_group
-        get '/group-type/:group_type' => 'user_roles#index_for_group_type', as: :index_for_group_type
         get '/search' => 'user_roles#search', as: :user_roles_search
       end
       resources :user_roles, only: [:index, :show, :create, :update, :destroy]
@@ -407,6 +403,6 @@ Rails.application.routes.draw do
 
   # Deprecated Links
   get 'teams-committees' => redirect('teams-committees-councils')
-  get 'panel/delegate-crash-course' => redirect('panel/delegate#delegate-crash-course')
+  get 'panel/delegate-crash-course' => redirect('panel/delegate#delegate-handbook')
   get 'panel' => redirect('panel/staff')
 end

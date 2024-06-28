@@ -30,14 +30,8 @@ RSpec.describe Api::V0::UserRolesController do
         expect(response.body).to eq(user_whose_delegate_status_changes.active_roles.to_json)
       end
 
-      it 'fetches list of roles of a user using index_for_user' do
-        get :index_for_user, params: { user_id: user_whose_delegate_status_changes.id }
-
-        expect(response.body).to eq(user_whose_delegate_status_changes.active_roles.to_json)
-      end
-
       it 'does not fetches list of banned competitos' do
-        get :index_for_group_type, params: { group_type: UserGroup.group_types[:banned_competitors] }
+        get :index, params: { groupType: UserGroup.group_types[:banned_competitors] }
 
         expect(response.body).to eq([banned_competitor].to_json)
       end
@@ -47,13 +41,13 @@ RSpec.describe Api::V0::UserRolesController do
       sign_in { FactoryBot.create(:user) }
 
       it 'fetches list of roles of a user' do
-        get :index_for_user, params: { user_id: user_whose_delegate_status_changes.id }
+        get :index, params: { userId: user_whose_delegate_status_changes.id }
 
         expect(response.body).to eq(user_whose_delegate_status_changes.active_roles.to_json)
       end
 
       it 'fetches list of banned competitos' do
-        get :index_for_group_type, params: { group_type: UserGroup.group_types[:banned_competitors] }
+        get :index, params: { groupType: UserGroup.group_types[:banned_competitors] }
 
         expect(response.body).to eq([].to_json)
       end
