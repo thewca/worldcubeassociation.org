@@ -105,6 +105,9 @@ class PaymentIntent < ApplicationRecord
       if payment_record_type == 'StripeRecord'
         errors.add(:wca_status, "#{wca_status} is not compatible with StripeRecord status: #{payment_record.stripe_status}") unless
           StripeRecord::WCA_TO_STRIPE_STATUS_MAP[wca_status.to_sym].include?(payment_record.stripe_status)
+      elsif payment_record_type == 'PaypalRecord'
+        errors.add(:wca_status, "#{wca_status} is not compatible with PaypalRecord status: #{payment_record.paypal_status}") unless
+          PaypalRecord::WCA_TO_PAYPAL_STATUS_MAP[wca_status.to_sym].include?(payment_record.paypal_status)
       else
         raise "No status combination validation defined for: #{payment_record_type}"
       end

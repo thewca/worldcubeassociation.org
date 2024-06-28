@@ -3,7 +3,7 @@
 require "csv"
 
 class RegistrationsController < ApplicationController
-  before_action :authenticate_user!, except: [:create, :index, :psych_sheet, :psych_sheet_event, :register, :stripe_webhook, :payment_denomination, :create_paypal_order]
+  before_action :authenticate_user!, except: [:create, :index, :psych_sheet, :psych_sheet_event, :register, :stripe_webhook, :payment_denomination]
   # Stripe has its own authenticity mechanism with Webhook Secrets.
   protect_from_forgery except: [:stripe_webhook]
 
@@ -21,7 +21,7 @@ class RegistrationsController < ApplicationController
 
   before_action -> { redirect_to_root_unless_user(:can_manage_competition?, competition_from_params) },
                 except: [:create, :index, :psych_sheet, :psych_sheet_event, :register, :payment_completion, :load_payment_intent, :stripe_webhook, :payment_denomination, :destroy,
-                         :update, :create_paypal_order, :capture_paypal_payment, :refund_paypal_payment]
+                         :update, :capture_paypal_payment, :refund_paypal_payment]
 
   before_action :competition_must_be_using_wca_registration!, except: [:import, :do_import, :add, :do_add, :index, :psych_sheet, :psych_sheet_event, :stripe_webhook, :payment_denomination]
   private def competition_must_be_using_wca_registration!
@@ -637,37 +637,30 @@ class RegistrationsController < ApplicationController
     redirect_to competition_register_path(competition_id)
   end
 
-  # This method implements the PaymentElements workflow described at:
-  # - https://stripe.com/docs/payments/quickstart
-  # - https://stripe.com/docs/payments/accept-a-payment
-  # - https://stripe.com/docs/payments/accept-a-payment?ui=elements
-  # It essentially creates a PaymentIntent for the current user-specified amount.
-  # Everything after the creation of the intent is handled by Stripe through their JS integration.
-  # At the very end, when the process is finished, it redirects the user to a return URL that we specified.
-  # This return URL handles record keeping and stuff at `payment_completion` above.
   def load_payment_intent
-    registration = Registration.includes(:user, :competition).find(params[:id])
+    registration = Registration.includes(:competition).find(params[:id])
 
     unless registration.user_id == current_user.id
-      return render status: 403, json: { error: { message: t("registrations.payment_form.errors.not_allowed") } }
+      return render status: :forbidden, json: { error: { message: t("registrations.payment_form.errors.not_allowed") } }
     end
 
     amount = params[:amount].to_i
 
     if registration.outstanding_entry_fees.cents <= 0
-      return render json: { error: { message: t("registrations.payment_form.errors.already_paid") } }
+      return render status: :bad_request, json: { error: { message: t("registrations.payment_form.errors.already_paid") } }
     end
 
     if amount < registration.outstanding_entry_fees.cents
-      return render json: { error: { message: t("registrations.payment_form.alerts.amount_too_low") } }
+      return render status: :bad_request, json: { error: { message: t("registrations.payment_form.alerts.amount_too_low") } }
     end
 
     competition = registration.competition
 
-    payment_account = competition.payment_account_for(:stripe)
-    currency_iso = registration.outstanding_entry_fees.currency.iso_code
+    payment_integration = params.require(:payment_integration).to_sym
+    return head :forbidden if payment_integration == :paypal && PaypalInterface.paypal_disabled?
 
-    intent = payment_account.prepare_intent(registration, amount, currency_iso, current_user)
+    payment_account = competition.payment_account_for(payment_integration)
+    intent = payment_account.prepare_intent(registration, amount, competition.currency_code, current_user)
 
     render json: { client_secret: intent.client_secret }
   end
@@ -791,22 +784,6 @@ class RegistrationsController < ApplicationController
   private def registration_from_params
     id = params.require(:id)
     Registration.find(id)
-  end
-
-  def create_paypal_order
-    return head :forbidden if PaypalInterface.paypal_disabled?
-
-    registration = registration_from_params
-    amount = params.require(:amount)
-
-    competition = registration.competition
-    paypal_integration = competition.payment_account_for(:paypal)
-
-    render json: PaypalInterface.create_order(
-      paypal_integration.paypal_merchant_id,
-      amount,
-      competition.currency_code,
-    )
   end
 
   def capture_paypal_payment
