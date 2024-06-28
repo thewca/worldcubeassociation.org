@@ -477,6 +477,8 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
   end
 
   describe 'GET #user_qualification_data', :focus do
+    # Add a case where the user has a DNF result and an actual result
+    # Add a case where the user has a DNS results and an actual result
 
     it 'returns empty JSON if user has never competed' do
       user = FactoryBot.create(:user)

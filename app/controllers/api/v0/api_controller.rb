@@ -48,7 +48,6 @@ class Api::V0::ApiController < ApplicationController
     # Compile singles
     best_singles_by_cutoff = user.person&.best_singles_by(cutoff_date)
     best_singles_by_cutoff.each do |event, time|
-      next unless time > 0
       qualification_results << {
         eventId: event,
         type: 'single',
@@ -60,7 +59,6 @@ class Api::V0::ApiController < ApplicationController
     # Compile averages
     best_averages_by_cutoff = user.person&.best_averages_by(cutoff_date)
     best_averages_by_cutoff.each do |event, time|
-      next unless time > 0
       qualification_results << {
         eventId: event,
         type: 'average',
