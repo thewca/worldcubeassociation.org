@@ -8,41 +8,29 @@ import useHash from '../../lib/hooks/useHash';
 import ConfirmProvider from '../../lib/providers/ConfirmProvider';
 import PanelPages from './PanelPages';
 
-export default function PanelTemplate({
-  heading, sections = [], pages, loggedInUserId,
-}) {
+export default function PanelTemplate({ heading, pages, loggedInUserId }) {
   const [hash, setHash] = useHash();
 
   const SelectedComponent = React.useMemo(() => {
-    let selectedSection;
-    if (pages) {
-      const selectedMenuIndex = pages.findIndex((page) => page === hash);
-      if (selectedMenuIndex === -1) {
-        setHash(pages[0]);
-        return () => null;
-      }
-      selectedSection = PanelPages[hash];
-    } else {
-      const selectedMenuIndex = sections.findIndex((section) => section.id === hash);
-      if (selectedMenuIndex === -1) {
-        setHash(sections[0].id);
-        return () => null;
-      }
-      selectedSection = sections[selectedMenuIndex];
+    const selectedMenuIndex = pages.findIndex((page) => page === hash);
+    if (selectedMenuIndex === -1) {
+      setHash(pages[0]);
+      return () => null;
     }
+    const selectedSection = PanelPages[hash];
     if (selectedSection.component) {
       return selectedSection.component;
     }
     window.open(selectedSection.link);
     return () => null;
-  }, [sections, pages, hash, setHash]);
+  }, [pages, hash, setHash]);
 
-  const menuOptions = React.useMemo(() => (pages ? pages.map(
+  const menuOptions = React.useMemo(() => (pages.map(
     (page) => ({
       id: page,
       ...PanelPages[page],
     }),
-  ) : sections), [pages, sections]);
+  )), [pages]);
 
   return (
     <Container fluid>
@@ -55,7 +43,9 @@ export default function PanelTemplate({
                 key={menuOption.id}
                 name={menuOption.name}
                 active={menuOption.id === hash}
-                onClick={() => setHash(menuOption.id)}
+                onClick={() => (
+                  menuOption.component ? setHash(menuOption.id) : window.open(menuOption.link)
+                )}
               >
                 {!menuOption.component && <Icon name="external alternate" />}
                 {menuOption.name}
