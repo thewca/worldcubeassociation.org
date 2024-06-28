@@ -273,13 +273,6 @@
               <li><%= link_to t('.new_regional_organization'), new_regional_organization_path %></li>
             <% end %>
 
-            <!-- Don't show the link for admins, as they have it in the dedicated admin navigation. -->
-            <% if current_user.can_see_eligible_voters? && !current_user.can_admin_results? %>
-              <li class="divider"></li>
-              <li><%= link_to "WCA Voting Members", eligible_voters_path %></li>
-              <li><%= link_to "WCA Leaders and Seniors", leader_senior_voters_path %></li>
-            <% end %>
-
             <li class="divider"></li>
             <li><%= link_to t('.api'), api_path %></li>
             <li><%= link_to t('.manage_app'), oauth_applications_path %></li>

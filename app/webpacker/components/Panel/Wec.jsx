@@ -8,6 +8,7 @@ export default function Wec() {
       heading="WEC Panel"
       pages={[
         PANEL_PAGES.bannedCompetitors,
+        PANEL_PAGES.downloadVoters,
       ]}
     />
   );

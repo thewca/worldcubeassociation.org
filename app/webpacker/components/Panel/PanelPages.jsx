@@ -24,6 +24,7 @@ import BoardEditorPage from './pages/BoardEditorPage';
 import OfficersEditor from './pages/OfficersEditor';
 import RegionsAdmin from './pages/RegionsAdmin';
 import RegionManager from './pages/RegionManager';
+import DownloadVoters from './pages/DownloadVoters';
 
 const DELEGATE_HANDBOOK_LINK = 'https://documents.worldcubeassociation.org/edudoc/delegate-handbook/delegate-handbook.pdf';
 
@@ -123,5 +124,9 @@ export default {
   [PANEL_PAGES.regionsAdmin]: {
     name: 'Regions Admin',
     component: RegionsAdmin,
+  },
+  [PANEL_PAGES.downloadVoters]: {
+    name: 'Download Voters',
+    component: DownloadVoters,
   },
 };
