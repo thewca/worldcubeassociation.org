@@ -7,10 +7,6 @@ class UsersController < ApplicationController
 
   RECENT_AUTHENTICATION_DURATION = 10.minutes.freeze
 
-  def self.WCA_TEAMS
-    %w(wst wrt wdc wrc wct)
-  end
-
   def index
     params[:order] = params[:order] == "asc" ? "asc" : "desc"
 
