@@ -283,11 +283,11 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       end
     elsif group_type == UserGroup.group_types[:banned_competitors]
       if params.key?(:endDate)
-        role.end_date = params.require(:endDate)
+        role.end_date = params[:endDate]
       end
 
       if params.key?(:banReason)
-        role.metadata.ban_reason = params.require(:banReason)
+        role.metadata.ban_reason = params[:banReason]
       end
 
       if params.key?(:scope)
