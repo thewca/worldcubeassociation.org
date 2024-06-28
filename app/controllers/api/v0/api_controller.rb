@@ -29,6 +29,53 @@ class Api::V0::ApiController < ApplicationController
     render json: { status: "ok" }
   end
 
+  def user_qualification_data
+    user = User.find(params.require(:user_id))
+    begin
+      cutoff_date = date_from_params || Date.current
+    rescue Date::Error
+      return render json: { error: 'Invalid date format. Please provide an iso8601 date string.' }, status: :bad_request
+    end
+
+    return render json: { error: 'You cannot request qualification data for a future date.' }, status: :bad_request if cutoff_date > Date.current
+    cutoff_date = cutoff_date.iso8601
+
+    results_before_cutoff = user.person&.results&.on_or_before(cutoff_date)&.group_by(&:event_id)
+    return render json: [] unless results_before_cutoff.present?
+
+    qualification_results = []
+
+    # Compile singles
+    best_singles_by_cutoff = user.person&.best_singles_by(cutoff_date)
+    best_singles_by_cutoff.each do |event, time|
+      qualification_results << {
+        eventId: event,
+        type: 'single',
+        best: time,
+        on_or_before: cutoff_date,
+      }
+    end
+
+    # Compile averages
+    best_averages_by_cutoff = user.person&.best_averages_by(cutoff_date)
+    best_averages_by_cutoff.each do |event, time|
+      qualification_results << {
+        eventId: event,
+        type: 'average',
+        best: time,
+        on_or_before: cutoff_date,
+      }
+    end
+
+    render json: qualification_results || []
+  end
+
+  private def date_from_params
+    date = params.permit(:date)[:date]
+    return nil unless date.present?
+    Date.parse(date)
+  end
+
   def scramble_program
     begin
       rsa_key = OpenSSL::PKey::RSA.new(AppSecrets.TNOODLE_PUBLIC_KEY)
