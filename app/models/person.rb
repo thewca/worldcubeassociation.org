@@ -278,16 +278,12 @@ class Person < ApplicationRecord
     [self.ranksAverage, self.ranksSingle].compact.flatten
   end
 
-  def best_results_before(target_date)
-    best_results = []
-    Event.all.each do |event|
-      puts ""
-      results = self.results.in_event(event.id).on_or_before(target_date)
+  def best_singles_by(target_date)
+    self.results.on_or_before(target_date).group(:eventId).minimum(:best)
+  end
 
-      best_single = results.best_single(results)
-      best_average = results.min_by(&:average)
-    end
-    best_results.compact.flatten
+  def best_averages_by(target_date)
+    self.results.on_or_before(target_date)&.group(:eventId).minimum(:average)
   end
 
   def serializable_hash(options = nil)

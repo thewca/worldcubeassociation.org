@@ -477,7 +477,6 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
   end
 
   describe 'GET #user_qualification_data', :focus do
-    # Edge cases for day of/after/before
 
     it 'returns empty JSON if user has never competed' do
       user = FactoryBot.create(:user)
@@ -562,7 +561,7 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
         expect(JSON.parse(response.body)).to eq(expected_response)
       end
 
-      it 'includes result achieved before the qualification date', :test do
+      it 'includes result achieved before the qualification date' do
         expected_response = [
           { "best"=>400, "eventId"=>"333oh", "type"=>"single", "on_or_before"=> 2.days.ago.to_date.iso8601 },
           { "best"=>500, "eventId"=>"333oh", "type"=>"average", "on_or_before"=> 2.days.ago.to_date.iso8601 },
@@ -572,7 +571,7 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
         expect(JSON.parse(response.body)).to eq(expected_response)
       end
 
-      it 'includes result achieved on the qualification date', :test do
+      it 'includes result achieved on the qualification date' do
         expected_response = [
           { "best"=>399, "eventId"=>"333oh", "type"=>"single", "on_or_before"=> 1.days.ago.to_date.iso8601 },
           { "best"=>499, "eventId"=>"333oh", "type"=>"average", "on_or_before"=> 1.days.ago.to_date.iso8601 },
@@ -585,7 +584,7 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
         expect(JSON.parse(response.body)).to eq(expected_response)
       end
 
-      it 'does not include result achieved after the qualification date', :test do
+      it 'does not include result achieved after the qualification date' do
         expected_response = [
           { "best"=>400, "eventId"=>"333oh", "type"=>"single", "on_or_before"=> 2.days.ago.to_date.iso8601 },
           { "best"=>500, "eventId"=>"333oh", "type"=>"average", "on_or_before"=> 2.days.ago.to_date.iso8601 },

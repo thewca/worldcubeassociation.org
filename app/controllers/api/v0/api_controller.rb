@@ -44,23 +44,29 @@ class Api::V0::ApiController < ApplicationController
     return render json: [] unless results_before_cutoff.present?
 
     qualification_results = []
-    results_before_cutoff.each do |event, results|
-      best_single = Result.best_single(results)
-      best_average = Result.best_average(results)
 
+    # Compile singles
+    best_singles_by_cutoff = user.person&.best_singles_by(cutoff_date)
+    best_singles_by_cutoff.each do |event, time|
+      next unless time > 0
       qualification_results << {
         eventId: event,
         type: 'single',
-        best: best_single.best,
+        best: time,
         on_or_before: cutoff_date,
-      } if best_single.present?
+      }
+    end
 
+    # Compile averages
+    best_averages_by_cutoff = user.person&.best_averages_by(cutoff_date)
+    best_averages_by_cutoff.each do |event, time|
+      next unless time > 0
       qualification_results << {
         eventId: event,
         type: 'average',
-        best: best_average.average,
+        best: time,
         on_or_before: cutoff_date,
-      } if best_average.present?
+      }
     end
 
     render json: qualification_results || []
