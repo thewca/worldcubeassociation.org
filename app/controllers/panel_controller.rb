@@ -40,6 +40,7 @@ class PanelController < ApplicationController
       "boardEditor" => "board-editor",
       "officersEditor" => "officers-editor",
       "regionsAdmin" => "regions-admin",
+      "downloadVoters" => "download-voters",
     }
   end
 end

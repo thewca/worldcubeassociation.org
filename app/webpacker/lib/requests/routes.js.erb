@@ -238,3 +238,7 @@ export const wcaRegistrationUrl = `<%= CGI.unescape(EnvConfig.WCA_REGISTRATIONS_
 export const getPsychSheetForEventUrl = (competitionId, eventId, sortBy) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_competition_event_psych_sheet_path(competition_id: '${competitionId}', event_id: '${eventId}')) %>?sort_by=${sortBy}`
 
 export const editRegistrationUrl = (userId, competitionId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.edit_registration_v2_path(competition_id: "${competitionId}", user_id: "${userId}"))%>`
+
+export const eligibleVotersUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.eligible_voters_path) %>`;
+
+export const leaderSeniorVotersUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.leader_senior_voters_path) %>`;
