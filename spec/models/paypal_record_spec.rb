@@ -13,7 +13,7 @@ RSpec.describe PaypalRecord do
     end
   end
 
-  describe 'validates stripe_status' do
+  describe 'validates paypal_status' do
     it 'allows a valid status' do
       record = PaypalRecord.new(paypal_status: 'SAVED')
       expect(record).to be_valid
