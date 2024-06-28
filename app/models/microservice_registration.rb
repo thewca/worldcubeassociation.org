@@ -15,6 +15,10 @@ class MicroserviceRegistration < ApplicationRecord
   attr_accessor :ms_registration
   attr_writer :competing_status, :event_ids, :guests, :comments, :administrative_notes
 
+  def attendee_id
+    "#{competition_id}-#{user_id}"
+  end
+
   def load_ms_model(ms_model)
     self.ms_registration = ms_model
 

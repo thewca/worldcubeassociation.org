@@ -70,6 +70,10 @@ class PaypalRecord < ApplicationRecord
   belongs_to :parent_record, class_name: "PaypalRecord", inverse_of: :child_records, optional: true
   has_many :child_records, class_name: "PaypalRecord", inverse_of: :parent_record, foreign_key: :parent_record_id
 
+  def root_record
+    parent_record&.root_record || self
+  end
+
   def determine_wca_status
     result = WCA_TO_PAYPAL_STATUS_MAP.find { |key, values| values.include?(self.paypal_status) }
     result&.first || raise("No associated wca_status for paypal_status: #{self.paypal_status} - our tests should prevent this from happening!")
@@ -82,6 +86,16 @@ class PaypalRecord < ApplicationRecord
     )
 
     Money.new(ruby_amount, self.currency_code)
+  end
+
+  def ruby_amount_available_for_refund
+    # PayPal communicates amounts as strings, so we need to first convert to Ruby amount
+    #   (which uses integers) and THEN add/subtract
+    paid_amount = self.money_amount
+    already_refunded = child_records.refund.map(&:money_amount).sum
+
+    # `cents` is the "lowest denomination" method in RubyMoney
+    (paid_amount - already_refunded).cents
   end
 
   # Paypal expects a decimal value in the format of a string, so we return a string from this function
