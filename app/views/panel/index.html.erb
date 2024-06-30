@@ -1,0 +1,6 @@
+<% provide(:title, @title) %>
+<%= react_component("Panel/PanelTemplate", {
+  loggedInUserId: current_user.id,
+  heading: @title,
+  pages: @pages,
+}) %>
