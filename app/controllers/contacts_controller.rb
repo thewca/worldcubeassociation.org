@@ -41,6 +41,10 @@ class ContactsController < ApplicationController
       ContactWrt.new(
         name: requestor_details[:name],
         your_email: requestor_details[:email],
+        query_type: contact_params[:queryType],
+        profile_data_to_change: contact_params[:profileDataToChange],
+        new_profile_data: contact_params[:newProfileData],
+        edit_profile_reason: contact_params[:editProfileReason],
         message: contact_params[:message],
         request: request,
         logged_in_email: current_user&.email || 'None',
