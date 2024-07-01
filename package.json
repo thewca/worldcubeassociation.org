@@ -78,7 +78,7 @@
     "react-intersection-observer": "^9.10.2",
     "react-leaflet": "^4.2.1",
     "react-simplemde-editor": "^5.2.0",
-    "react-spinners": "^0.13.8",
+    "react-spinners": "^0.14.1",
     "react-textarea-autosize": "^8.5.3",
     "react_ujs": "^3.2.1",
     "regenerator-runtime": "^0.14.1",

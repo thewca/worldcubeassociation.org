@@ -9499,13 +9499,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-spinners@npm:^0.13.8":
-  version: 0.13.8
-  resolution: "react-spinners@npm:0.13.8"
+"react-spinners@npm:^0.14.1":
+  version: 0.14.1
+  resolution: "react-spinners@npm:0.14.1"
   peerDependencies:
     react: ^16.0.0 || ^17.0.0 || ^18.0.0
     react-dom: ^16.0.0 || ^17.0.0 || ^18.0.0
-  checksum: 10c0/59a030ece288f045a443e0b720c94636fc00667bcb8cd5a36ed8342cc2bc52a98106a676875551b3389ae5943bd7c4d4aa2ede0fb914bbde4322211f0f0120a8
+  checksum: 10c0/5b3c101f789716331a0b6afad156293fb9aa05620e65494753001afcdb611788057f379b5979b34d570d527fa978003293266b59db505bf2d243ebab899ceeda
   languageName: node
   linkType: hard
 
@@ -9955,7 +9955,7 @@ __metadata:
     react-intersection-observer: "npm:^9.10.2"
     react-leaflet: "npm:^4.2.1"
     react-simplemde-editor: "npm:^5.2.0"
-    react-spinners: "npm:^0.13.8"
+    react-spinners: "npm:^0.14.1"
     react-textarea-autosize: "npm:^8.5.3"
     react_ujs: "npm:^3.2.1"
     regenerator-runtime: "npm:^0.14.1"
