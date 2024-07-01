@@ -46,7 +46,7 @@ jobs:
           echo "SHORT_SHA=$(git rev-parse --short HEAD)" >> "$GITHUB_ENV"
       - name: Build Sidekiq if triggered
         if: steps.trigger-deployment.outputs.triggered == 'true'
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: .
           push: true
@@ -57,7 +57,7 @@ jobs:
           cache-to: type=gha,mode=max
       - name: Build Rails if triggered
         if: steps.trigger-deployment.outputs.triggered == 'true'
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: .
           push: true
