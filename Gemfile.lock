@@ -148,8 +148,8 @@ GEM
       minitest (>= 5.1)
       mutex_m
       tzinfo (~> 2.0)
-    addressable (2.8.6)
-      public_suffix (>= 2.0.2, < 6.0)
+    addressable (2.8.7)
+      public_suffix (>= 2.0.2, < 7.0)
     after_commit_everywhere (1.4.0)
       activerecord (>= 4.2)
       activesupport
@@ -334,7 +334,7 @@ GEM
     glob (0.4.0)
     globalid (1.2.1)
       activesupport (>= 6.1)
-    google-apis-admin_directory_v1 (0.55.0)
+    google-apis-admin_directory_v1 (0.57.0)
       google-apis-core (>= 0.15.0, < 2.a)
     google-apis-core (0.15.0)
       addressable (~> 2.5, >= 2.5.1)
@@ -538,7 +538,7 @@ GEM
       method_source (~> 1.0)
     psych (5.1.2)
       stringio
-    public_suffix (5.0.5)
+    public_suffix (6.0.0)
     raabro (1.4.0)
     racc (1.8.0)
     rack (2.2.9)
@@ -625,8 +625,8 @@ GEM
       mime-types (>= 1.16, < 4.0)
       netrc (~> 0.8)
     retriable (3.1.2)
-    rexml (3.2.8)
-      strscan (>= 3.0.9)
+    rexml (3.3.1)
+      strscan
     rotp (6.2.0)
     rouge (4.1.2)
     rqrcode (2.2.0)
