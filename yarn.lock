@@ -10369,7 +10369,7 @@ __metadata:
     style-loader: "npm:^4.0.0"
     stylelint: "npm:^16.6.1"
     stylelint-config-recommended-scss: "npm:^14.0.0"
-    stylelint-scss: "npm:^6.3.1"
+    stylelint-scss: "npm:^6.3.2"
     terser-webpack-plugin: "npm:^5.3.10"
     webpack: "npm:^5.92.1"
     webpack-assets-manifest: "npm:^5.2.1"
@@ -11135,7 +11135,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"stylelint-scss@npm:^6.0.0, stylelint-scss@npm:^6.3.1":
+"stylelint-scss@npm:^6.0.0":
   version: 6.3.1
   resolution: "stylelint-scss@npm:6.3.1"
   dependencies:
@@ -11147,6 +11147,21 @@ __metadata:
   peerDependencies:
     stylelint: ^16.0.2
   checksum: 10c0/1747227e7c16df6e6a0fb9ee6d88a13351565c1e2811c7fe39559f2ba76f9258515d14ceb0dd894e06f4d4c4b65e164e6ce79a584594d3047fb9f3b969019fdf
+  languageName: node
+  linkType: hard
+
+"stylelint-scss@npm:^6.3.2":
+  version: 6.3.2
+  resolution: "stylelint-scss@npm:6.3.2"
+  dependencies:
+    known-css-properties: "npm:^0.31.0"
+    postcss-media-query-parser: "npm:^0.2.3"
+    postcss-resolve-nested-selector: "npm:^0.1.1"
+    postcss-selector-parser: "npm:^6.1.0"
+    postcss-value-parser: "npm:^4.2.0"
+  peerDependencies:
+    stylelint: ^16.0.2
+  checksum: 10c0/2023ffa47e38e9b4844efc0d289d28465b7462297c1c17d46422e2169cbff00c917f9f322e11b53f312cba4a41a196daf3073da56857b218dd1bae8839f6f62b
   languageName: node
   linkType: hard
 
