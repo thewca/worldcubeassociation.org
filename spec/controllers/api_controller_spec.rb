@@ -499,7 +499,7 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
       expect(response.body).to include('You cannot request qualification data for a future date.')
     end
 
-    it 'returns only single is the user has no average' do
+    it 'returns only single if the user has no average' do
       expected_response = [
         { "best"=>400, "eventId"=>"333oh", "type"=>"single", "on_or_before"=>Date.current.iso8601 },
       ]

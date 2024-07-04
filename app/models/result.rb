@@ -54,8 +54,6 @@ class Result < ApplicationRecord
   scope :single_better_than, ->(time) { where("best < ? AND best > 0", time) }
   scope :average_better_than, ->(time) { where("average < ? AND average > 0", time) }
   scope :in_event, ->(event_id) { where(eventId: event_id) }
-  scope :best_event_single_by_date, ->(event_id, date) { in_event(event_id).on_or_before(date).where('best > 0').order(best: :asc).limit(1) }
-  # scope :best_average, -> { where('average > 0').order(average: :asc).limit(1) }
 
   alias_attribute :name, :personName
   alias_attribute :wca_id, :personId
@@ -66,22 +64,6 @@ class Result < ApplicationRecord
 
   def country_iso2
     country.iso2
-  end
-
-  def self.best_single(results)
-    best_single = nil
-    results.each do |result|
-      best_single = result if (best_single.nil? && result.best > 0) || (0 < result.best && result.best < best_single.best)
-    end
-    best_single
-  end
-
-  def self.best_average(results)
-    best_average = nil
-    results.each do |result|
-      best_average = result if (best_average.nil? && result.average > 0) || (0 < result.average && result.average < best_average.average)
-    end
-    best_average
   end
 
   DEFAULT_SERIALIZE_OPTIONS = {

@@ -40,13 +40,11 @@ class Api::V0::ApiController < ApplicationController
     return render json: { error: 'You cannot request qualification data for a future date.' }, status: :bad_request if cutoff_date > Date.current
     cutoff_date = cutoff_date.iso8601
 
-    results_before_cutoff = user.person&.results&.on_or_before(cutoff_date)&.group_by(&:event_id)
-    return render json: [] unless results_before_cutoff.present?
-
     qualification_results = []
 
     # Compile singles
     best_singles_by_cutoff = user.person&.best_singles_by(cutoff_date)
+    return render json: [] unless best_singles_by_cutoff.present? # If the user has no best singles, they have no qualification-relevant results
     best_singles_by_cutoff.map do |event, time|
       qualification_results << {
         eventId: event,
@@ -58,6 +56,7 @@ class Api::V0::ApiController < ApplicationController
 
     # Compile averages
     best_averages_by_cutoff = user.person&.best_averages_by(cutoff_date)
+    return render json: qualification_results unless best_averages_by_cutoff.present? # If the user has no best averages, we can just return their singles
     best_averages_by_cutoff.map do |event, time|
       qualification_results << {
         eventId: event,
@@ -67,7 +66,7 @@ class Api::V0::ApiController < ApplicationController
       }
     end
 
-    render json: qualification_results || []
+    render json: qualification_results
   end
 
   private def date_from_params
