@@ -477,9 +477,6 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
   end
 
   describe 'GET #user_qualification_data', :focus do
-    # Add a case where the user has a DNF result and an actual result
-    # Add a case where the user has a DNS results and an actual result
-
     it 'returns empty JSON if user has never competed' do
       user = FactoryBot.create(:user)
       get :user_qualification_data, params: { user_id: user.id }
@@ -515,12 +512,25 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
       expect(JSON.parse(response.body)).to eq(expected_response)
     end
 
-    # NOTE: This may change in future if qualification data becomes more complex (eg, including # of cubes in an MBLD attempt)
+    it 'returns empty array if the user only has a DNF' do
+      @competition = FactoryBot.create(:competition)
+      @result = FactoryBot.create(:result, competition: @competition, best: -1, average: -1)
+      @user = FactoryBot.create(:user_with_wca_id, person: @result.person)
+
+      get :user_qualification_data, params: { user_id: @user.id }
+      expect(JSON.parse(response.body)).to eq([])
+    end
+
     context 'user has competed' do
       before do
         @competition = FactoryBot.create(:competition) # Results will be achieved 1.year.ago - see factory definition
         @result = FactoryBot.create(:result, competition: @competition, best: 400, average: 500)
         @user = FactoryBot.create(:user_with_wca_id, person: @result.person)
+
+        @default_expected_response = [
+          { "best"=>400, "eventId"=>"333oh", "type"=>"single", "on_or_before"=>Date.current.iso8601 },
+          { "best"=>500, "eventId"=>"333oh", "type"=>"average", "on_or_before"=>Date.current.iso8601 },
+        ]
       end
 
       it 'if no date is specified, returns qualification up until the current date' do
@@ -539,14 +549,14 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
           { "best"=>500, "eventId"=>"333oh", "type"=>"average", "on_or_before"=>100.days.ago.to_date.iso8601 },
         ]
 
-        get :user_qualification_data, params: { user_id: @user.id, date: 100.days.ago  }
+        get :user_qualification_data, params: { user_id: @user.id, date: 100.days.ago }
         expect(JSON.parse(response.body)).to eq(expected_response)
       end
 
       it 'returns empty json if user had not competed by the given date' do
         expected_response = []
 
-        get :user_qualification_data, params: { user_id: @user.id, date: 2.years.ago  }
+        get :user_qualification_data, params: { user_id: @user.id, date: 2.years.ago }
         expect(JSON.parse(response.body)).to eq(expected_response)
       end
 
@@ -557,7 +567,7 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
         ]
 
         competition = FactoryBot.create(:competition, starts: 200.days.ago)
-        result = FactoryBot.create(:result, competition: competition, best: 400, average: 500)
+        FactoryBot.create(:result, competition: competition, best: 400, average: 500)
 
         get :user_qualification_data, params: { user_id: @user.id }
         expect(JSON.parse(response.body)).to eq(expected_response)
@@ -580,7 +590,7 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
         ]
 
         competition = FactoryBot.create(:competition, starts: 1.days.ago)
-        result = FactoryBot.create(:result, competition: competition, best: 399, average: 499, person: @result.person)
+        FactoryBot.create(:result, competition: competition, best: 399, average: 499, person: @result.person)
 
         get :user_qualification_data, params: { user_id: @user.id, date: 1.days.ago }
         expect(JSON.parse(response.body)).to eq(expected_response)
@@ -593,11 +603,18 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
         ]
 
         competition = FactoryBot.create(:competition, starts: 1.days.ago)
-        result = FactoryBot.create(:result, competition: competition, best: 399, average: 499, person: @result.person)
+        FactoryBot.create(:result, competition: competition, best: 399, average: 499, person: @result.person)
 
         get :user_qualification_data, params: { user_id: @user.id, date: 2.days.ago }
         expect(JSON.parse(response.body)).to eq(expected_response)
+      end
 
+      it 'still returns PR when user has DNF result' do
+        competition = FactoryBot.create(:competition, starts: 1.days.ago)
+        FactoryBot.create(:result, competition: competition, best: -1, average: -1, person: @result.person)
+
+        get :user_qualification_data, params: { user_id: @user.id }
+        expect(JSON.parse(response.body)).to eq(@default_expected_response)
       end
     end
   end
