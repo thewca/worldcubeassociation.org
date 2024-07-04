@@ -417,7 +417,7 @@ GEM
     json (2.7.2)
     json-schema (4.3.0)
       addressable (>= 2.8)
-    jwt (2.8.1)
+    jwt (2.8.2)
       base64
     kaminari (1.2.2)
       activesupport (>= 4.1.0)
