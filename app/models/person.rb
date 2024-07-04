@@ -279,11 +279,11 @@ class Person < ApplicationRecord
   end
 
   def best_singles_by(target_date)
-    self.results.on_or_before(target_date).succeeded&.group(:eventId)&.minimum(:best)
+    self.results.on_or_before(target_date).succeeded.group(:eventId).minimum(:best)
   end
 
   def best_averages_by(target_date)
-    self.results.on_or_before(target_date)&.average_succeeded&.group(:eventId)&.minimum(:average)
+    self.results.on_or_before(target_date).average_succeeded.group(:eventId).minimum(:average)
   end
 
   def serializable_hash(options = nil)
