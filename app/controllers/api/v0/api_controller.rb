@@ -30,49 +30,44 @@ class Api::V0::ApiController < ApplicationController
   end
 
   def user_qualification_data
+    date = cutoff_date
+    return render json: { error: 'Invalid date format. Please provide an iso8601 date string.' }, status: :bad_request unless date.present?
+    return render json: { error: 'You cannot request qualification data for a future date.' }, status: :bad_request if date > Date.current
+
     user = User.find(params.require(:user_id))
-    begin
-      cutoff_date = date_from_params || Date.current
-    rescue Date::Error
-      return render json: { error: 'Invalid date format. Please provide an iso8601 date string.' }, status: :bad_request
-    end
-
-    return render json: { error: 'You cannot request qualification data for a future date.' }, status: :bad_request if cutoff_date > Date.current
-    cutoff_date = cutoff_date.iso8601
-
-    qualification_results = []
+    return render json: [] unless user.person.present?
 
     # Compile singles
-    best_singles_by_cutoff = user.person&.best_singles_by(cutoff_date)
-    return render json: [] unless best_singles_by_cutoff.present? # If the user has no best singles, they have no qualification-relevant results
-    best_singles_by_cutoff.map do |event, time|
-      qualification_results << {
-        eventId: event,
-        type: 'single',
-        best: time,
-        on_or_before: cutoff_date,
-      }
+    best_singles_by_cutoff = user.person.best_singles_by(date)
+    single_qualifications = best_singles_by_cutoff.map do |event, time|
+      qualification_data(event, :single, time, date)
     end
 
     # Compile averages
-    best_averages_by_cutoff = user.person&.best_averages_by(cutoff_date)
-    return render json: qualification_results unless best_averages_by_cutoff.present? # If the user has no best averages, we can just return their singles
-    best_averages_by_cutoff.map do |event, time|
-      qualification_results << {
-        eventId: event,
-        type: 'average',
-        best: time,
-        on_or_before: cutoff_date,
-      }
+    best_averages_by_cutoff = user.person&.best_averages_by(date)
+    average_qualifications = best_averages_by_cutoff.map do |event, time|
+      qualification_data(event, :average, time, date)
     end
 
-    render json: qualification_results
+    render json: single_qualifications + average_qualifications
   end
 
-  private def date_from_params
-    date = params.permit(:date)[:date]
-    return nil unless date.present?
-    Date.parse(date)
+  private def cutoff_date
+    if params[:date].present?
+      return Date.safe_parse(params[:date])
+    else
+      return Date.current
+    end
+  end
+
+  private def qualification_data(event, type, time, date)
+    raise ArgumentError.new("'type' may only contain the symbols `:single` or `:average`") unless [:single, :average].include?(type)
+    {
+      eventId: event,
+      type: type,
+      best: time,
+      on_or_before: date.iso8601,
+    }
   end
 
   def scramble_program
