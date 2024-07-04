@@ -2808,16 +2808,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@stripe/react-stripe-js@npm:^2.7.1":
-  version: 2.7.1
-  resolution: "@stripe/react-stripe-js@npm:2.7.1"
+"@stripe/react-stripe-js@npm:^2.7.3":
+  version: 2.7.3
+  resolution: "@stripe/react-stripe-js@npm:2.7.3"
   dependencies:
     prop-types: "npm:^15.7.2"
   peerDependencies:
-    "@stripe/stripe-js": ^1.44.1 || ^2.0.0 || ^3.0.0
+    "@stripe/stripe-js": ^1.44.1 || ^2.0.0 || ^3.0.0 || ^4.0.0
     react: ^16.8.0 || ^17.0.0 || ^18.0.0
     react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
-  checksum: 10c0/bd88da4ed1d201e8f69f0cda2345269eed2a487c98b55f0472ec8a34a7afd5082d246677179e296dc2aa265fc129912b3b46b65bc8b3932d8123b19f3ef7227d
+  checksum: 10c0/820923a3abfae68fbe8145efa0f35317634d44f7ada4b8d57f928f10dfa32e768252939ea75f2e166c55aa9035ecaa2d686423216d0bbfb06ba22c3c70fc7771
   languageName: node
   linkType: hard
 
@@ -10362,7 +10362,7 @@ __metadata:
     "@fullcalendar/react": "npm:^6.1.13"
     "@fullcalendar/timegrid": "npm:^6.1.13"
     "@rails/ujs": "npm:^7.1.3"
-    "@stripe/react-stripe-js": "npm:^2.7.1"
+    "@stripe/react-stripe-js": "npm:^2.7.3"
     "@stripe/stripe-js": "npm:^4.1.0"
     "@tanstack/react-query": "npm:^5.40.0"
     "@wca/helpers": "npm:^1.1.5"
