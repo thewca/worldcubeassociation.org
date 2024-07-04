@@ -527,17 +527,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/helper-wrap-function@npm:^7.24.6":
-  version: 7.24.6
-  resolution: "@babel/helper-wrap-function@npm:7.24.6"
-  dependencies:
-    "@babel/helper-function-name": "npm:^7.24.6"
-    "@babel/template": "npm:^7.24.6"
-    "@babel/types": "npm:^7.24.6"
-  checksum: 10c0/d32844275a544a8e7c71c13e9832d34d80656aafce659dc6c23b02e14d1c1179d8045125ded5096da1a99de83299ffb48211183d0403da2c8584ed55dc0ab646
-  languageName: node
-  linkType: hard
-
 "@babel/helper-wrap-function@npm:^7.24.7":
   version: 7.24.7
   resolution: "@babel/helper-wrap-function@npm:7.24.7"
@@ -687,16 +676,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-proposal-function-sent@npm:^7.24.6":
-  version: 7.24.6
-  resolution: "@babel/plugin-proposal-function-sent@npm:7.24.6"
+"@babel/plugin-proposal-function-sent@npm:^7.24.7":
+  version: 7.24.7
+  resolution: "@babel/plugin-proposal-function-sent@npm:7.24.7"
   dependencies:
-    "@babel/helper-plugin-utils": "npm:^7.24.6"
-    "@babel/helper-wrap-function": "npm:^7.24.6"
-    "@babel/plugin-syntax-function-sent": "npm:^7.24.6"
+    "@babel/helper-plugin-utils": "npm:^7.24.7"
+    "@babel/helper-wrap-function": "npm:^7.24.7"
+    "@babel/plugin-syntax-function-sent": "npm:^7.24.7"
   peerDependencies:
     "@babel/core": ^7.0.0-0
-  checksum: 10c0/11a776af3c439a778176ed34bd2c50479f1362ac7ead580847df4b34fcfa6a456a478582e57cbea32081dae1c11cb15a080dd877562752dff89e859b00ee675d
+  checksum: 10c0/3cf30c7f25be374d778ef3177e371d023d38f9df451540a93dc9402c38ddb34f07c00f9d305f6f697446cafea4329eddd6874067027fef920d486f57565cd50f
   languageName: node
   linkType: hard
 
@@ -837,14 +826,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-syntax-function-sent@npm:^7.24.6":
-  version: 7.24.6
-  resolution: "@babel/plugin-syntax-function-sent@npm:7.24.6"
+"@babel/plugin-syntax-function-sent@npm:^7.24.7":
+  version: 7.24.7
+  resolution: "@babel/plugin-syntax-function-sent@npm:7.24.7"
   dependencies:
-    "@babel/helper-plugin-utils": "npm:^7.24.6"
+    "@babel/helper-plugin-utils": "npm:^7.24.7"
   peerDependencies:
     "@babel/core": ^7.0.0-0
-  checksum: 10c0/9bf9cfe25717a5b79bd95dc89a6addf262fe6feb27d745a64e2132ab1e096faf4bdf549e82b6bc3c7a6b485e19584c67cc7b8fd3cc0cfefb1d0f74d97da7f8c1
+  checksum: 10c0/4b657f6092eee8858e82a86dc9af8d253620d4dd0bce55a59c9fa0984bfb6315f63f1dedc8544d5970d4448beb9365a8af16f5636d88b0d3da856a5da63024c7
   languageName: node
   linkType: hard
 
@@ -10291,7 +10280,7 @@ __metadata:
     "@babel/plugin-proposal-class-properties": "npm:^7.17.12"
     "@babel/plugin-proposal-decorators": "npm:^7.24.6"
     "@babel/plugin-proposal-export-namespace-from": "npm:^7.18.9"
-    "@babel/plugin-proposal-function-sent": "npm:^7.24.6"
+    "@babel/plugin-proposal-function-sent": "npm:^7.24.7"
     "@babel/plugin-proposal-json-strings": "npm:^7.14.5"
     "@babel/plugin-proposal-numeric-separator": "npm:^7.14.5"
     "@babel/plugin-proposal-private-methods": "npm:^7.18.6"
