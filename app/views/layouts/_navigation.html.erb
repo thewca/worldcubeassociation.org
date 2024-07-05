@@ -82,8 +82,10 @@
         <ul class="dropdown-menu" role="menu">
           <li><a href="/regulations/about"><%= ui_icon('info circle') %> <%= t '.about_regulations' %></a></li>
           <li class="divider"></li>
-          <li><a href="/regulations/"><%= ui_icon('book') %> <%= t '.regulations' %></a></li>
-          <li><a href="/regulations/guidelines.html"><%= ui_icon('sticky note') %> <%= t '.guidelines' %></a></li>
+          <li><a href="/regulations/full"><%= ui_icon('book') %> <%= t '.regulations_full' %></a></li>
+          <li class="divider"></li>
+          <li><a href="/regulations/"><%= ui_icon('file text') %> <%= t '.regulations' %></a></li>
+          <li><a href="/regulations/guidelines.html"><%= ui_icon('plus square') %> <%= t '.guidelines' %></a></li>
           <li><a href="/regulations/scrambles/"><%= ui_icon('random') %> <%= t '.scrambles' %></a></li>
           <li>
             <%= link_to(incidents_path) do %>
@@ -119,11 +121,6 @@
           <li>
             <%= link_to("https://www.twitter.com/theWCAofficial/", target: "_blank", class: "hide-new-window-icon") do %>
               <%= ui_icon("twitter") %> Twitter
-            <% end %>
-          </li>
-          <li>
-            <%= link_to("https://www.reddit.com/r/TheWCAOfficial/", target: "_blank", class: "hide-new-window-icon") do %>
-              <%= ui_icon("reddit") %> Reddit
             <% end %>
           </li>
           <li>
@@ -220,43 +217,15 @@
               <li><%= link_to t('.my_results'), person_path(current_user.wca_id) %></li>
             <% end %>
 
-            <% if current_user.can_access_panel? %>
+            <% if current_user.can_access_at_least_one_panel? %>
               <li class="divider"></li>
               <li role="presentation" class="dropdown-header">
                 <%= t '.panel' %>
               </li>
-              <% if current_user.can_access_staff_panel? %>
-                <li><%= link_to "Staff panel", panel_staff_path %></li>
-              <% end %>
-              <% if current_user.can_access_delegate_panel? %>
-                <li><%= link_to "Delegate panel", panel_delegate_path %></li>
-              <% end %>
-              <% if current_user.can_access_wfc_panel? %>
-                <li><%= link_to "WFC panel", panel_wfc_path %></li>
-              <% end %>
-              <% if current_user.can_access_wrt_panel? %>
-                <li><%= link_to "WRT panel", panel_wrt_path %></li>
-              <% end %>
-              <% if current_user.can_access_wst_panel? %>
-                <li><%= link_to "WST panel", panel_wst_path %></li>
-              <% end %>
-              <% if current_user.can_access_board_panel? %>
-                <li><%= link_to "Board panel", panel_board_path %></li>
-              <% end %>
-              <% if current_user.can_access_leader_panel? %>
-                <li><%= link_to "Leader panel", panel_leader_path %></li>
-              <% end %>
-              <% if current_user.can_access_senior_delegate_panel? %>
-                <li><%= link_to "Senior Delegate panel", panel_senior_delegate_path %></li>
-              <% end %>
-              <% if current_user.can_access_wdc_panel? %>
-                <li><%= link_to "WDC panel", panel_wdc_path %></li>
-              <% end %>
-              <% if current_user.can_access_wec_panel? %>
-                <li><%= link_to "WEC panel", panel_wec_path %></li>
-              <% end %>
-              <% if current_user.can_access_weat_panel? %>
-                <li><%= link_to "WEAT panel", panel_weat_path %></li>
+              <% panel_list.each do |panel| %>
+                <% if current_user.can_access_panel?(panel[:id]) %>
+                  <li><%= link_to panel[:name], panel[:url] %></li>
+                <% end %>
               <% end %>
             <% end %>
             <% if current_user.can_view_poll? %>
@@ -302,13 +271,6 @@
               </li>
               <li><%= link_to t('.manage_regional_organizations'), admin_regional_organizations_path %></li>
               <li><%= link_to t('.new_regional_organization'), new_regional_organization_path %></li>
-            <% end %>
-
-            <!-- Don't show the link for admins, as they have it in the dedicated admin navigation. -->
-            <% if current_user.can_see_eligible_voters? && !current_user.can_admin_results? %>
-              <li class="divider"></li>
-              <li><%= link_to "WCA Voting Members", eligible_voters_path %></li>
-              <li><%= link_to "WCA Leaders and Seniors", leader_senior_voters_path %></li>
             <% end %>
 
             <li class="divider"></li>

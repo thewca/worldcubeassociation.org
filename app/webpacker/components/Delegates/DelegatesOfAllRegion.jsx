@@ -35,11 +35,16 @@ export default function DelegatesOfAllRegion() {
     data: otherDelegates,
     loading: otherDelegatesLoading,
     error: otherDelegatesError,
-  } = useLoadedData(apiV0Urls.userRoles.list({
-    groupType: groupTypes.delegate_regions,
-    isActive: true,
-    isLead: false,
-  }, 'name'));
+  } = useLoadedData(apiV0Urls.userRoles.list(
+    {
+      groupType: groupTypes.delegate_regions,
+      isActive: true,
+      isLead: false,
+    },
+    'name',
+    1000, // Increasing per page limit to 1000 because there are that many delegates that has to be
+    // shown in the same page.
+  ));
   const otherDelegatesWithExtraData = useMemo(() => otherDelegates?.map((delegate) => ({
     ...delegate,
     status: I18n.t(`enums.user_roles.status.delegate_regions.${delegate.metadata.status}`),

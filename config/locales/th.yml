@@ -211,6 +211,8 @@ th:
   round:
     #original_hash: 236c41d
     name: '%{event_name} %{round_name}'
+    #original_hash: 747df5a
+    round_number: '%{round_number} รอบ'
   advancement_condition:
     short:
       #original_hash: 6100c20
@@ -1211,10 +1213,12 @@ th:
       db_dev_export: Developer Export
       #original_hash: 1fa73f3
       regulations: กติกา
+      #original_hash: 3bb8751
+      regulations_full: กติกาและแนวปฏิบัติ
       #original_hash: 6bce1b5
       about_regulations: เกี่ยวกับกติกา
       #original_hash: 141d1d7
-      guidelines: แนวทาง
+      guidelines: แนวปฏิบัติ
       #original_hash: c4622c3
       scrambles: การตั้งโจทย์
       #original_hash: 90ccd64
@@ -1796,7 +1800,7 @@ th:
       #original_hash: 010b0e5
       remove_avatar_reason: โปรดระบุเหตุผลในการลบ
       #original_hash: 141d1d7
-      guidelines: แนวทาง
+      guidelines: แนวปฏิบัติ
       avatar_guidelines:
         #original_hash: 255f28c
         '1': รูปแทนตัวทั้งหมดต้องเป็นบุคคลจริง
@@ -2190,6 +2194,11 @@ th:
       จำกัดจำนวนผู้เข้าแข่งขันของการแข่งขันครั้งนี้คือ %{competitor_limit} คน
       และมันได้ถึงจำนวนแล้ว ถ้าคุณสมัครการแข่งขัน
       การสมัครของคุณจะอยู่ในรายชื่อรอ ซึ่งจะไม่ได้รับการยืนยันจนกว่าจะมีที่ว่าง
+    #original_hash: 2f11b7a
+    registration_full_v2_html: >-
+      จำนวนจำกัดของผู้เข้าแข่งขันของการแข่งขันครั้งนี้คือ %{competitor_limit} คน
+      และมันถึงจำนวนจำกัดแล้ว หากคุณสมัครการแข่งขัน การสมัครของคุณจะอยู่ใน
+      waiting list ซึ่งคุณสามารถตรวจสอบได้ %{here}
     #original_hash: cf29e85
     registration_full_include_waiting_list: >-
       จำกัดผู้เข้าแข่งขันของการแข่งขันครั้งนี้คือ %{competitor_limit} คน
@@ -2528,6 +2537,25 @@ th:
       details: รายละเอียด
       #original_hash: 2e8a57c
       website: Website
+      #original_hash: f825aff
+      name_and_location: ชื่อและสถานที่
+      #original_hash: adc24b7
+      delegates: Delegate(s)
+      #original_hash: 51290be
+      announced: Announced
+      #original_hash: 614bc93
+      report_posted: Report posted
+      #original_hash: f59042e
+      results_submitted: Results submitted
+      relative_days:
+        #original_hash: 021deef
+        before: 'ก่อน %{amount_of_days} วัน'
+        #original_hash: 417f8df
+        after: 'หลังจาก %{amount_of_days} วัน'
+      #original_hash: 96f608c
+      pending: รอดำเนินการ
+      #original_hash: b8bf8b6
+      submitted_by_other: ส่งแล้วโดยผู้อื่น
       #original_hash: 2260929
       display_name: '[Cancelled] %{name}'
       #original_hash: 680567f
@@ -2674,6 +2702,10 @@ th:
       mean: a mean
       #original_hash: 22bee3a
       result_sentence: 'with %{a_win_by_word} of %{result}'
+      #original_hash: 756603f
+      no_winner: >-
+        ประเภทการแข่งขันหลักคือ %{event_name} ไม่มีการประกาศผู้ชนะ
+        เนื่องจากไม่มีผู้แข่งขันคนใดแก้โจทย์ได้สำเร็จในการแข่งขัน
       #original_hash: 6c3b236
       winner: '%{winner} ชนะในการแข่งขัน %{result_sentence} ในประเภท %{event_name}'
       #original_hash: ec7f18a
@@ -2740,6 +2772,15 @@ th:
       by_announcement: By announcement
       #original_hash: b3946b2
       sort_by_announcement: เรียงตามการประกาศ
+      #original_hash: e63dc91
+      admin_status: Admin status
+      status_flags:
+        #original_hash: 6a72085
+        all: ทั้งหมด
+        #original_hash: e9c4556
+        warning: Warning
+        #original_hash: 58d1758
+        danger: Danger
       #original_hash: 3f66052
       from_date: จาก
       #original_hash: ae79ea1
@@ -2760,6 +2801,8 @@ th:
       show_cancelled: แสดงการแข่งขันที่ถูกยกเลิก
       #original_hash: 0eda967
       show_registration_status: แสดงไอคอนสถานะการลงทะเบียน
+      #original_hash: c61cc50
+      use_admin_view: ใช้มุมมองผู้ดูแลระบบ
       titles:
         #original_hash: 69447c9
         in_progress: การแข่งขันที่กำลังดำเนินอยู่
@@ -2771,6 +2814,8 @@ th:
         recent: 'การแข่งขันเร็ว ๆ นี้ (ย้อนหลัง %{count} วัน)'
         #original_hash: 914742f
         upcoming: การแข่งขันที่จะเกิดขึ้น
+        #original_hash: 534071e
+        ongoing_and_upcoming: การแข่งขันที่กำลังเกิดขึ้นและที่กำลังจะเกิดขึ้น
         #original_hash: 8b57693
         custom: การแข่งขันในช่วงเวลาที่เลือก
         #original_hash: 0933739
@@ -3328,8 +3373,8 @@ th:
         #original_hash: eade5c7
         download: โหลดรายละเอียดการแข่งขันทั้งหมด
       list:
-        #original_hash: 8fab566
-        empty: ไม่พบรายชื่อที่ตรงกัน
+        #original_hash: 6eef664
+        empty: ไม่พบ
         #original_hash: 713f805
         spots_remaining: 'ผู้สมัครเหลืออีก %{spots} คน'
       bookmark:
@@ -3346,10 +3391,10 @@ th:
         #original_hash: 80d2933
         next_step: ดำเนินการต่อไปยังขั้นตอนถัดไป
       update:
-        #original_hash: c04744e
-        being_updated: กำลังอัปเดตการสมัคร
-        #original_hash: 75596b9
-        being_deleted: การสมัครกำลังถูกลบ
+        #original_hash: ebf417d
+        being_updated: กำลังอัปเดตการสมัคร...
+        #original_hash: 2d0325e
+        being_deleted: การสมัครกำลังถูกลบ...
         #original_hash: 65bbb07
         no_changes: ไม่มีการเปลี่ยนแปลง
         #original_hash: be4e8e2
@@ -3383,8 +3428,6 @@ th:
         until: 'คุณสามารถแก้ไขการสมัครของคุณได้จนถึง %{date}'
         #original_hash: fc8bc84
         passed: คุณไม่สามารถอัปเดตการลงสมัครของคุณได้อีกต่อไป
-        #original_hash: 54d5b77
-        already_paid: 'คุณได้ชำระเงินสำหรับ %{comp_name} แล้ว'
         #original_hash: 3c8d8b7
         editing_disabled: การแก้ไขการสมัครถูกปิดใช้งานสำหรับการแข่งขันครั้งนี้
         registration_status:
@@ -3639,7 +3682,7 @@ th:
         #original_hash: 83d204f
         regulation_link_text: 'กติกา %{number}'
         #original_hash: bd0e4a9
-        guideline_link_text: 'แนวทาง %{number}'
+        guideline_link_text: 'แนวปฏิบัติ %{number}'
         #original_hash: b2a983a
         cumulative_time_limit: จำกัดเวลาสะสม
         #original_hash: d47f11a
@@ -4044,6 +4087,21 @@ th:
       before_disconnect_info: >-
         โปรดทราบว่าการยกเลิกการเชื่อมต่อบัญชีควรทำเฉพาะในสถานการณ์พิเศษเท่านั้น
         เช่น บัญชีปัจจุบันไม่สามารถรับการชำระเงินได้
+      account_details:
+        stripe:
+          #original_hash: 84add5b
+          email: Email
+          #original_hash: d523ebb
+          country: ประเทศ
+          #original_hash: a8e3901
+          business_name: Business name
+        paypal:
+          #original_hash: 709a232
+          display_name: ชื่อ
+          #original_hash: 84add5b
+          primary_email: Email
+        #original_hash: 08d2e98
+        fallback_not_applicable: N/A
   persons:
     index:
       #original_hash: 5934b4c
@@ -4217,7 +4275,7 @@ th:
           #original_hash: 576c3b8
           '4': >-
             ดูที่ <a target='_blank'
-            href='https://www.worldcubeassociation.org/organizer-guidelines'>แนวทางการเป็นผู้จัดการแข่งขันของ
+            href='https://www.worldcubeassociation.org/organizer-guidelines'>แนวปฏิบัติการเป็นผู้จัดการแข่งขันของ
             WCA</a> สำหรับข้อมูลเพื่มเติม
       '6':
         #original_hash: 8005a61
@@ -4499,7 +4557,7 @@ th:
     #original_hash: 5ca0558
     certificates: แม่แบบประกาศนียบัตรของ WCT
     #original_hash: f580987
-    orga_guidelines: แนวทางการเป็นผู้จัดการแข่งขัน
+    orga_guidelines: แนวปฏิบัติการเป็นผู้จัดการแข่งขัน
   delegates_page:
     #original_hash: d8fd3e4
     title: WCA Delegates
@@ -4880,7 +4938,7 @@ th:
       #original_hash: a0ca0c3
       posts: โพสต์
       #original_hash: 9d7ea9c
-      regulations_and_guidelines: กติกาและแนวทาง
+      regulations_and_guidelines: กติกาและแนวปฏิบัติ
       #original_hash: db683b3
       search_for: 'ผลการค้นหาสำหรับ <b>%{search_string}</b>'
       not_found:
@@ -4895,7 +4953,7 @@ th:
         #original_hash: 3499e7e
         incidents: ไม่มี incidents สำหรับ
         #original_hash: 76a6bf1
-        regulations_and_guidelines: ไม่พบกติกาและแนวทางสำหรับ
+        regulations_and_guidelines: ไม่พบกติกาและแนวปฏิบัติสำหรับ
   incidents_log:
     #original_hash: 61ab89f
     i18n_disclaimer: >-
@@ -4916,7 +4974,7 @@ th:
       #original_hash: 4296902
       content2_html: >-
         กติกาของ WCA มีส่วนเสริมคือ<a
-        href="/regulations/guidelines.html">แนวทางของ WCA</a>
+        href="/regulations/guidelines.html">แนวปฏิบัติของ WCA</a>
         ซึ่งมีคำอธิบายเพิ่มเติม
       #original_hash: c8e1783
       content3_html: >-
@@ -4952,7 +5010,7 @@ th:
       content2_html: เอกสารฉบับนี้รวมข้อมูลที่จำเป็นและผู้จัดการแข่งขันทุกคนควรอ่าน
   regulations_translations:
     #original_hash: 9493b8d
-    title: 'กติกาและแนวทางของ WCA: Translations'
+    title: 'กติกาและแนวปฏิบัติของ WCA: Translations'
     #original_hash: 386ecc1
     paragraph1: หากคุณใช้ภาษาอื่นนอกที่ไม่ใช่ภาษาอังกฤษ คุณสามารถหาการแปลเหล่านี้ได้
     #original_hash: 32b1132
@@ -5215,7 +5273,7 @@ th:
         สื่อทั้งหมดจะได้รับการตรวจสอบก่อนที่จะปรากฏใน<a
         href="/media">หน้าสื่อทั้งหมด</a>.
       #original_hash: 141d1d7
-      guidelines: แนวทาง
+      guidelines: แนวปฏิบัติ
       media_guidelines:
         #original_hash: fd6984b
         '1': เนื้อหาสื่อทั้งหมดจะต้องเกี่ยวข้องกับการแข่งขันที่เลือก

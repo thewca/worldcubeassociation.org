@@ -27,8 +27,8 @@ ActiveRecord::Schema[7.1].define(version: 0) do
     t.text "wcaDelegate", size: :medium
     t.text "organiser", size: :medium
     t.string "venue", limit: 240, default: "", null: false
-    t.string "venueAddress", limit: 120
-    t.string "venueDetails", limit: 120
+    t.string "venueAddress"
+    t.string "venueDetails"
     t.string "external_website", limit: 200
     t.string "cellName", limit: 45, default: "", null: false
     t.integer "latitude"

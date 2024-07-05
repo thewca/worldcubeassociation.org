@@ -849,6 +849,7 @@ RSpec.describe RegistrationsController, clean_db_with_truncation: true do
           sign_in organizer
           post :load_payment_intent, params: {
             id: registration.id,
+            payment_integration: :stripe,
             amount: registration.outstanding_entry_fees.cents,
           }
           payment_intent = registration.reload.payment_intents.first

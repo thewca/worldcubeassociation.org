@@ -103,12 +103,12 @@
           const amount = getCurrentRubyAmount();
 
           return wrapAjaxPromise('load-payment-intent', {
-            url: '<%= registration_create_paypal_order_path(@registration) %>',
+            url: '<%= registration_payment_intent_path(@registration, :paypal) %>',
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             data: JSON.stringify({ amount: amount }),
           })
-            .then(({ id: orderId }) => orderId)
+            .then(({ client_secret: orderId }) => orderId)
             .catch(handleAjaxError);
         },
 

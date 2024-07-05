@@ -5,6 +5,7 @@ import RegistrationRequirements from './RegistrationRequirements';
 import StripeWrapper from './StripeWrapper';
 import i18n from '../../../lib/i18n';
 import RegistrationOverview from './RegistrationOverview';
+import RegistrationStatus from './RegistrationStatus';
 
 const requirementsStepConfig = {
   key: 'requirements',
@@ -26,19 +27,6 @@ const registrationOverviewConfig = {
   index: -100,
 };
 
-function registrationIconByStatus(registrationStatus) {
-  switch (registrationStatus) {
-    case 'pending':
-      return 'hourglass';
-    case 'accepted':
-      return 'checkmark';
-    case 'cancelled':
-      return 'delete';
-    default:
-      return 'info circle';
-  }
-}
-
 export default function StepPanel({
   competitionInfo,
   preferredEvents,
@@ -48,7 +36,7 @@ export default function StepPanel({
   stripePublishableKey,
   connectedAccountId,
 }) {
-  const isRegistered = Boolean(registration);
+  const isRegistered = Boolean(registration) && registration.competing.registration_status !== 'cancelled';
   const hasPaid = registration?.payment.payment_status === 'succeeded';
   const registrationFinished = hasPaid || (isRegistered && !competitionInfo['using_payment_integrations?']);
 
@@ -74,21 +62,7 @@ export default function StepPanel({
   return (
     <>
       { isRegistered && (
-      <Message
-        info={registration.competing.registration_status === 'pending'}
-        success={registration.competing.registration_status === 'accepted'}
-        negative={registration.competing.registration_status === 'cancelled'}
-        icon
-      >
-        <Icon name={registrationIconByStatus(registration.competing.registration_status)} />
-        <Message.Content>
-          <Message.Header>
-            {i18n.t(
-              `competitions.registration_v2.register.registration_status.${registration.competing.registration_status}`,
-            )}
-          </Message.Header>
-        </Message.Content>
-      </Message>
+        <RegistrationStatus registration={registration} />
       )}
       <Step.Group fluid ordered stackable="tablet">
         {steps.map((stepConfig, index) => (
@@ -113,7 +87,13 @@ export default function StepPanel({
         stripePublishableKey={stripePublishableKey}
         connectedAccountId={connectedAccountId}
         nextStep={
-          () => setActiveIndex((oldActiveIndex) => {
+          (overwrites = {}) => setActiveIndex((oldActiveIndex) => {
+            if (overwrites?.refresh) {
+              return oldActiveIndex;
+            }
+            if (overwrites?.toStart) {
+              return 0;
+            }
             if (oldActiveIndex === steps.length - 1) {
               return registrationOverviewConfig.index;
             }

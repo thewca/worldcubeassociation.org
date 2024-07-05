@@ -145,6 +145,8 @@ en:
   round:
     #context: e.g. event_name can be "3x3x3 Cube", and round_name can be "Cutoff First round"
     name: "%{event_name} %{round_name}"
+    #context: round_number will be a numeral like 1,2,3 and NOT a written word like "First", "Second" or "Third".
+    round_number: "Round %{round_number}"
   #context: Words used to describe the requirement to advance to the next round
   advancement_condition:
     short:
@@ -410,6 +412,9 @@ en:
           secretary: "WCA Secretary"
           vice_chair: "WCA Vice-Chair"
           treasurer: "WCA Treasurer"
+      ban_scope:
+        competing_only: "Competing Only"
+        competing_and_attending: "Competing & Attending"
     competition_medium:
       status:
         accepted: "Accepted"
@@ -713,6 +718,7 @@ en:
       db_results_export: "Results Export"
       db_dev_export: "Developer Export"
       regulations: "Regulations"
+      regulations_full: "Regulations & Guidelines"
       about_regulations: "About the Regulations"
       guidelines: "Guidelines"
       scrambles: "Scrambles"
@@ -1435,6 +1441,7 @@ en:
       average: "an average"
       mean: "a mean"
       result_sentence: "with %{a_win_by_word} of %{result}"
+      no_winner: The main event was %{event_name}. No winner was declared, as no competitors achieved successful results in the event.
       winner: "%{winner} won %{result_sentence} in the %{event_name} event."
       first_runner_up: "%{first_runner_up} finished second (%{first_runner_up_result})"
       and: "and"
@@ -1761,8 +1768,11 @@ en:
       info:
         download: "Download all of the competitions details."
       list:
-        empty: "No matching Records found"
-        spots_remaining: "%{spots} spot(s) remaining"
+        empty: "None"
+        spots_remaining_plural:
+          zero: "no spots remaining"
+          one: "%{count} spot remaining"
+          other: "%{count} spots remaining"
       bookmark:
         unbookmark: "You have removed your bookmark"
       requirements:
@@ -1770,11 +1780,13 @@ en:
         acknowledgement: "I have read and acknowledged all information under the 'Register' tab, including entry fees, refund policies and any extra requirements listed above."
         next_step: "Continue to next Step"
       update:
-        being_updated: "Registration is being updated"
-        being_deleted: "Registration is being deleted"
+        being_updated: "Registration is being updated..."
+        being_deleted: "Registration is being deleted..."
+        update_confirm: "Are you sure you want to update your registration?"
         no_changes: "There are no changes"
         email_send: "Send Email"
-        email_copy: "Copy Email"
+        email_copy: "Copy Emails"
+        email_message: "Copied to clipboard. Remember to use bcc!"
         move_pending: "Move to Pending"
         move_waiting: "Move to Waiting List"
         cancel: "Cancel Registration"
@@ -1787,13 +1799,13 @@ en:
         comment: "Additional comments to the organizers"
         until: "You can update your registration until %{date}"
         passed: "You can no longer update your registration"
-        already_paid: "You have already paid for %{comp_name}"
+        view_registration: "View Registration"
         editing_disabled: "Registration editing is disabled for this competition"
         registration_status:
           accepted: "Your registration has been accepted."
           pending: "Your registration is pending approval by the organizers."
           cancelled: "Your registration has been deleted."
-          waiting_list: "You are on the Waiting List."
+          waiting_list: "You are on the Waiting List at position %{waiting_list_position}."
         disclaimer: "Submission of Registration does not mean approval to compete"
         processing: "Your registration is processing..."
         processing_longer: "Processing is taking longer than usual, don't go away!"
@@ -1822,6 +1834,9 @@ en:
         -4006: "Competitor limit has been reached"
         -4007: "Invalid registration status provided"
         -4008: "Registration has closed"
+        -4009: "Only Organizers can cancel Registrations for this competition"
+        -4010: "The Waiting List Position is not Valid"
+        -4011: "You can only accept the first person on the waiting list"
     #context: and when an error occured
     errors:
       invalid_name_message: "must end with a year and must contain only alphanumeric characters, dashes(-), ampersands(&), periods(.), colons(:), apostrophes('), and spaces( )"
@@ -2456,7 +2471,7 @@ en:
             paragraph: "Only use the mono variant when the primary variant is not suitable."
         logo_only:
           title: "Logo Only"
-          paragraph: The WCA logo may be used without the logotype, following the same color guidelines above. 
+          paragraph: The WCA logo may be used without the logotype, following the same color guidelines above.
       download_logo_assets:
         title: "Download Logo Assets"
         paragraph: "High resolution PNGs and vector versions of the WCA logo are available for download."
