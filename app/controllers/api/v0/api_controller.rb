@@ -54,9 +54,9 @@ class Api::V0::ApiController < ApplicationController
 
   private def cutoff_date
     if params[:date].present?
-      return Date.safe_parse(params[:date])
+      Date.safe_parse(params[:date])
     else
-      return Date.current
+      Date.current
     end
   end
 
