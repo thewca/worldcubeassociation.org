@@ -705,7 +705,7 @@ class User < ApplicationRecord
   end
 
   def can_edit_banned_competitors?
-    can_edit_any_groups? || group_leader?(UserGroup.teams_committees_group_wdc)
+    can_edit_any_groups? || group_leader?(UserGroup.teams_committees_group_wdc) || group_leader?(UserGroup.teams_committees_group_wec)
   end
 
   def can_manage_regional_organizations?
