@@ -295,7 +295,7 @@ class UserGroup < ApplicationRecord
 
     changes_of_last_month = []
     if leader_appointments.count + no_more_leaders.count + promoted_senior_members.count + new_senior_members.count + new_members.count + demoted_senior_members.count + no_more_senior_members.count + no_more_members.count > 0
-      changes_of_last_month.push("<b>Changes in #{self.name}</b>")
+      changes_of_last_month.push("<br><b>Changes in #{self.name}</b>")
       if leader_appointments.count + no_more_leaders.count > 0
         changes_of_last_month.push("<br><b>Leaders</b>")
         if leader_appointments.count > 0
