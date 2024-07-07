@@ -13,7 +13,7 @@ const IMPORTANT_LINKS = [
   },
   {
     title: 'WR Submission Form',
-    link: 'https://docs.google.com/forms/d/e/1FAIpQLSeJwf6b7yGGyWFhU0xfKSF3ki_nITyIKXVFRP86unb9EYRtHQ/viewform',
+    link: 'https://docs.google.com/forms/d/e/1FAIpQLSeLrkLhFnIy1QNGoWoZT4jsOIibNJ_xc9qTd_YKBpcuMIq-LA/viewform',
   },
   {
     title: 'Gear Order Form',
