@@ -10,32 +10,32 @@ module ApplicationHelper
     if page_title.empty?
       base_title
     else
-      page_title + " | " + base_title
+      page_title + ' | ' + base_title
     end
   end
 
   def bootstrap_class_for(flash_type)
     {
-      success: "alert-success",
-      danger: "alert-danger",
-      warning: "alert-warning",
-      info: "alert-info",
+      success: 'alert-success',
+      danger: 'alert-danger',
+      warning: 'alert-warning',
+      info: 'alert-info',
 
       # For devise
-      notice: "alert-success",
-      alert: "alert-danger",
+      notice: 'alert-success',
+      alert: 'alert-danger',
 
-      recaptcha_error: "alert-danger",
+      recaptcha_error: 'alert-danger',
     }[flash_type.to_sym] || flash_type.to_s
   end
 
   def link_to_google_maps_place(text, latitude, longitude)
     url = "https://www.google.com/maps/place/#{latitude},#{longitude}"
-    link_to text, url, target: "_blank"
+    link_to text, url, target: '_blank'
   end
 
   def link_to_competition_schedule_tab(comp)
-    competition_url(comp, anchor: "competition-schedule")
+    competition_url(comp, anchor: 'competition-schedule')
   end
 
   def anchorable(pretty_text, id = nil)
@@ -69,39 +69,39 @@ module ApplicationHelper
 
   def wca_omni_search
     text_field_tag nil, @omni_query, placeholder: I18n.t('common.search_site'),
-                                     class: "form-control wca-autocomplete wca-autocomplete-omni wca-autocomplete-search wca-autocomplete-only_one wca-autocomplete-users_search wca-autocomplete-persons_table"
+                                     class: 'form-control wca-autocomplete wca-autocomplete-omni wca-autocomplete-search wca-autocomplete-only_one wca-autocomplete-users_search wca-autocomplete-persons_table'
   end
 
   def wca_local_time(time)
-    content_tag :span, "", class: "wca-local-time", data: { utc_time: time.in_time_zone.utc.iso8601, locale: I18n.locale }
+    content_tag :span, '', class: 'wca-local-time', data: { utc_time: time.in_time_zone.utc.iso8601, locale: I18n.locale }
   end
 
   def time_format_for_current_locale
-    case I18n.t("common.time_format")
-    when "12h"
-      "%I:%M %p"
+    case I18n.t('common.time_format')
+    when '12h'
+      '%I:%M %p'
     else
-      "%H:%M"
+      '%H:%M'
     end
   end
 
-  def wca_table(responsive: true, hover: true, striped: true, floatThead: true, table_class: "", data: {}, greedy: true, table_id: nil, &block)
+  def wca_table(responsive: true, hover: true, striped: true, floatThead: true, table_class: '', data: {}, greedy: true, table_id: nil, &block)
     data[:locale] = I18n.locale
     table_classes = "table table-condensed #{table_class}"
     if floatThead
-      table_classes += " floatThead"
+      table_classes += ' floatThead'
     end
     if hover
-      table_classes += " table-hover"
+      table_classes += ' table-hover'
     end
     if striped
-      table_classes += " table-striped"
+      table_classes += ' table-striped'
     end
     if greedy
-      table_classes += " table-greedy-last-column"
+      table_classes += ' table-greedy-last-column'
     end
 
-    content_tag :div, class: (responsive ? "table-responsive" : "") do
+    content_tag :div, class: (responsive ? 'table-responsive' : '') do
       content_tag :table, id: table_id, class: table_classes, data: data, &block
     end
   end
@@ -122,20 +122,20 @@ module ApplicationHelper
       options[:separator] = '-'
       date_range(from_date, to_date, **options)
     else
-      t "common.date.no_date"
+      t 'common.date.no_date'
     end
   end
 
   def alert(type, content = nil, note: false, &block)
     content = capture(&block) if block_given?
     if note
-      content = content_tag(:strong, "Note:") + " " + content
+      content = content_tag(:strong, 'Note:') + ' ' + content
     end
     content_tag :div, content, class: "alert alert-#{type}"
   end
 
   def users_to_sentence(users, include_profile: false)
-    "".html_safe + users.sort_by(&:name).map do |user|
+    ''.html_safe + users.sort_by(&:name).map do |user|
       include_profile && user.wca_id ? link_to(ERB::Util.html_escape(user.name), person_path(user.wca_id)) : ERB::Util.html_escape(user.name)
     end.xss_aware_to_sentence
   end
@@ -151,7 +151,7 @@ module ApplicationHelper
       t('common.country') => Country.all_sorted_by(I18n.locale, real: real_only).map { |country| [country.name, country.id] },
     }
 
-    options_for_select((use_world ? [[t('common.world'), "world"]] : [[t('common.all_regions'), "all"]]), selected_id) + grouped_options_for_select(regions, selected_id)
+    options_for_select((use_world ? [[t('common.world'), 'world']] : [[t('common.all_regions'), 'all']]), selected_id) + grouped_options_for_select(regions, selected_id)
   end
 
   def simple_form_for(resource, **options, &block)
@@ -164,8 +164,8 @@ module ApplicationHelper
 
   def horizontal_simple_form_for(resource, **options, &)
     options[:html] ||= {}
-    options[:html][:class] ||= ""
-    options[:html][:class] += " form-horizontal"
+    options[:html][:class] ||= ''
+    options[:html][:class] += ' form-horizontal'
     options[:wrapper] = :horizontal_form
     options[:wrapper_mappings] = {
       check_boxes: :horizontal_radio_and_checkboxes,
@@ -186,7 +186,7 @@ module ApplicationHelper
 
   def wca_id_link(wca_id, **options)
     if wca_id.present?
-      content_tag :span, class: "wca-id" do
+      content_tag :span, class: 'wca-id' do
         link_to wca_id, person_url(wca_id), options
       end
     end
@@ -201,24 +201,24 @@ module ApplicationHelper
   end
 
   def _cubing_icon_tag(icon_id, **html_options)
-    html_options[:class] ||= ""
+    html_options[:class] ||= ''
     # We use 'icon' which is the default Semantic-UI class for icons.
     # It applies fixed-width and inline block on them.
     html_options[:class] += " cubing-icon icon #{icon_id}"
-    content_tag :i, "", html_options
+    content_tag :i, '', html_options
   end
 
   def flag_icon(iso2, **html_options)
-    html_options[:class] ||= ""
+    html_options[:class] ||= ''
     html_options[:class] += " fi fi-#{iso2.downcase}"
-    content_tag :span, "", html_options
+    content_tag :span, '', html_options
   end
 
   def ui_icon(name, **html_options)
     opts = html_options.merge(
       class: "icon #{name} " + html_options[:class].to_s,
     )
-    content_tag(:i, "", opts)
+    content_tag(:i, '', opts)
   end
 
   def format_money(money)
@@ -235,7 +235,7 @@ module ApplicationHelper
 
   def add_to_packs(*names)
     @all_packs = capture do
-      [@all_packs, *names].compact.join(",")
+      [@all_packs, *names].compact.join(',')
     end
   end
 
@@ -245,13 +245,13 @@ module ApplicationHelper
 
   def add_to_css_assets(name)
     @all_css_assets = capture do
-      [@all_css_assets, name].compact.join(",")
+      [@all_css_assets, name].compact.join(',')
     end
   end
 
   def add_to_js_assets(*names)
     @all_js_assets = capture do
-      [@all_js_assets, *names].compact.join(",")
+      [@all_js_assets, *names].compact.join(',')
     end
   end
 end

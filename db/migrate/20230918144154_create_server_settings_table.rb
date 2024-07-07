@@ -7,7 +7,7 @@ class CreateServerSettingsTable < ActiveRecord::Migration[7.0]
       t.string :value
       t.timestamps
 
-      t.index ["name"], unique: true
+      t.index ['name'], unique: true
     end
   end
 end

@@ -2,15 +2,15 @@
 
 FactoryBot.define do
   factory :contact_form do |f|
-    f.name { "Jeremy" }
-    f.your_email { "jeremy@example.com" }
-    f.to_email { "to@example.com" }
-    f.subject { "Subject" }
+    f.name { 'Jeremy' }
+    f.your_email { 'jeremy@example.com' }
+    f.to_email { 'to@example.com' }
+    f.subject { 'Subject' }
   end
 
   factory :contact_competition do
-    name { "Jon" }
-    your_email { "jon@example.com" }
+    name { 'Jon' }
+    your_email { 'jon@example.com' }
 
     transient do
       competition_contact { nil }
@@ -18,7 +18,7 @@ FactoryBot.define do
     end
 
     trait :with_invalid_competition_id do
-      competition_id { "FooBar1900" }
+      competition_id { 'FooBar1900' }
     end
 
     trait :with_competition do
@@ -27,17 +27,17 @@ FactoryBot.define do
   end
 
   factory :contact_wct do
-    name { "Jon" }
-    your_email { "jon@example.com" }
+    name { 'Jon' }
+    your_email { 'jon@example.com' }
   end
 
   factory :contact_wrt do
-    name { "Jon" }
-    your_email { "jon@example.com" }
+    name { 'Jon' }
+    your_email { 'jon@example.com' }
   end
 
   factory :contact_wst do
-    name { "Jon" }
-    your_email { "jon@example.com" }
+    name { 'Jon' }
+    your_email { 'jon@example.com' }
   end
 end

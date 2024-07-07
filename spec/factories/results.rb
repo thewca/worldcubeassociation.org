@@ -3,7 +3,7 @@
 FactoryBot.define do
   resultable_instance_members = ->(*args) {
     transient do
-      competition { FactoryBot.create(:competition, event_ids: ["333oh"]) }
+      competition { FactoryBot.create(:competition, event_ids: ['333oh']) }
       skip_round_creation { false }
     end
 
@@ -21,9 +21,9 @@ FactoryBot.define do
 
     competitionId { competition.id }
     pos { 1 }
-    eventId { "333oh" }
-    roundTypeId { "f" }
-    formatId { "a" }
+    eventId { '333oh' }
+    roundTypeId { 'f' }
+    formatId { 'a' }
     value1 { best }
     value2 { average }
     value3 { average }
@@ -33,8 +33,8 @@ FactoryBot.define do
     average { 5000 }
 
     trait :mbf do
-      eventId { "333mbf" }
-      formatId { "3" }
+      eventId { '333mbf' }
+      formatId { '3' }
       average { 0 }
       # 9 points in 4 minutes
       best { 900_024_000 }
@@ -47,8 +47,8 @@ FactoryBot.define do
     end
 
     trait :fm do
-      eventId { "333fm" }
-      formatId { "m" }
+      eventId { '333fm' }
+      formatId { 'm' }
       average { 3500 }
       best { 35 }
       value1 { best }
@@ -59,7 +59,7 @@ FactoryBot.define do
     end
 
     trait :mo3 do
-      formatId { "m" }
+      formatId { 'm' }
       average { best }
       value1 { best }
       value2 { best }
@@ -70,8 +70,8 @@ FactoryBot.define do
 
     trait :blind_mo3 do
       mo3
-      eventId { "333bf" }
-      formatId { "3" }
+      eventId { '333bf' }
+      formatId { '3' }
     end
 
     trait :blind_dnf_mo3 do
@@ -91,7 +91,7 @@ FactoryBot.define do
       value5 { 0 }
       best { cutoff.attempt_result + 100 }
       average { 0 }
-      roundTypeId { "c" }
+      roundTypeId { 'c' }
     end
   }
 

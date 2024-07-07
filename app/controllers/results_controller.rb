@@ -5,30 +5,30 @@ class ResultsController < ApplicationController
     support_old_links!
 
     # Default params
-    params[:region] ||= "world"
-    params[:years] = "all years" # FIXME: this is disabling years filters for now
-    params[:show] ||= "100 persons"
-    params[:gender] ||= "All"
+    params[:region] ||= 'world'
+    params[:years] = 'all years' # FIXME: this is disabling years filters for now
+    params[:show] ||= '100 persons'
+    params[:gender] ||= 'All'
 
-    params[:show] = params[:show].gsub(/\d+/, "100") # FIXME: this is disabling anything except show 100 for now
+    params[:show] = params[:show].gsub(/\d+/, '100') # FIXME: this is disabling anything except show 100 for now
 
     shared_constants_and_conditions
 
-    @quantities = ["100", "1000"]
+    @quantities = ['100', '1000']
 
     if !@types.include?(params[:type])
-      flash[:danger] = t(".unknown_type")
-      return redirect_to rankings_path(params[:event_id], "single")
+      flash[:danger] = t('.unknown_type')
+      return redirect_to rankings_path(params[:event_id], 'single')
     end
     @is_average = params[:type] == @types[1]
-    value = @is_average ? "average" : "best"
+    value = @is_average ? 'average' : 'best'
     capitalized_type_param = params[:type].capitalize
 
-    @is_by_region = params[:show] == "by region"
+    @is_by_region = params[:show] == 'by region'
     splitted_show_param = params[:show].split
     @show = splitted_show_param[0].to_i
-    @is_persons = splitted_show_param[1] == "persons"
-    @is_results = splitted_show_param[1] == "results"
+    @is_persons = splitted_show_param[1] == 'persons'
+    @is_results = splitted_show_param[1] == 'results'
     limit_condition = "LIMIT #{@show}"
 
     @cache_params = ['rankings', params[:event_id], params[:region], params[:years], params[:show], params[:gender], params[:type]]
@@ -92,7 +92,7 @@ class ResultsController < ApplicationController
             #{limit_condition}
           SQL
         end
-        subquery = "(" + subqueries.join(") UNION ALL (") + ")"
+        subquery = '(' + subqueries.join(') UNION ALL (') + ')'
         @query = <<-SQL
           SELECT *
           FROM (#{subquery}) result
@@ -128,7 +128,7 @@ class ResultsController < ApplicationController
       SQL
 
     else
-      flash[:danger] = t(".unknown_show")
+      flash[:danger] = t('.unknown_show')
       redirect_to rankings_path
     end
   end
@@ -137,13 +137,13 @@ class ResultsController < ApplicationController
     support_old_links!
 
     # Default params
-    params[:event_id] ||= "all events"
-    params[:region] ||= "world"
-    params[:years] = "all years" # FIXME: this is disabling years filters for now
-    params[:show] ||= "mixed"
-    params[:gender] ||= "All"
+    params[:event_id] ||= 'all events'
+    params[:region] ||= 'world'
+    params[:years] = 'all years' # FIXME: this is disabling years filters for now
+    params[:show] ||= 'mixed'
+    params[:gender] ||= 'All'
 
-    @shows = ["mixed", "slim", "separate", "history", "mixed history"]
+    @shows = ['mixed', 'slim', 'separate', 'history', 'mixed history']
     @is_mixed = params[:show] == @shows[0]
     @is_slim = params[:show] == @shows[1]
     @is_separate = params[:show] == @shows[2]
@@ -263,10 +263,10 @@ class ResultsController < ApplicationController
 
   private def shared_constants_and_conditions
     @years = Competition.non_future_years
-    @types = ["single", "average"]
+    @types = ['single', 'average']
 
-    if params[:event_id] == "all events"
-      @event_condition = ""
+    if params[:event_id] == 'all events'
+      @event_condition = ''
     else
       event = Event.c_find!(params[:event_id])
       @event_condition = "AND eventId = '#{event.id}'"
@@ -281,24 +281,24 @@ class ResultsController < ApplicationController
       @region_condition = "AND result.countryId = '#{@country.id}'"
       @region_condition += " AND recordName <> ''" if @is_histories
     else
-      @region_condition = ""
+      @region_condition = ''
       @region_condition += "AND recordName = 'WR'" if @is_histories
     end
 
     @gender = params[:gender]
     case params[:gender]
-    when "Male"
+    when 'Male'
       @gender_condition = "AND gender = 'm'"
-    when "Female"
+    when 'Female'
       @gender_condition = "AND gender = 'f'"
     else
-      @gender_condition = ""
+      @gender_condition = ''
     end
 
-    @is_all_years = params[:years] == "all years"
+    @is_all_years = params[:years] == 'all years'
     splitted_years_param = params[:years].split
-    @is_only = splitted_years_param[0] == "only"
-    @is_until = splitted_years_param[0] == "until"
+    @is_only = splitted_years_param[0] == 'only'
+    @is_until = splitted_years_param[0] == 'until'
     @year = splitted_years_param[1].to_i
 
     if @is_only
@@ -308,26 +308,26 @@ class ResultsController < ApplicationController
       @years_condition_competition = "AND YEAR(competition.start_date) <= #{@year}"
       @years_condition_result = "AND result.year <= #{@year}"
     else
-      @years_condition_competition = ""
-      @years_condition_result = ""
+      @years_condition_competition = ''
+      @years_condition_result = ''
     end
   end
 
   # Normalizes the params so that old links to rankings still work.
   private def support_old_links!
-    params[:event_id]&.gsub!("+", " ")
+    params[:event_id]&.gsub!('+', ' ')
 
-    params[:region]&.gsub!("+", " ")
+    params[:region]&.gsub!('+', ' ')
 
-    params[:years]&.gsub!("+", " ")
-    if params[:years] == "all"
+    params[:years]&.gsub!('+', ' ')
+    if params[:years] == 'all'
       params[:years] = nil
     end
 
-    params[:show]&.gsub!("+", " ")
+    params[:show]&.gsub!('+', ' ')
     params[:show]&.downcase!
     # We are not supporting the all option anymore!
-    if params[:show]&.include?("all")
+    if params[:show]&.include?('all')
       params[:show] = nil
     end
   end

@@ -1,43 +1,43 @@
 # frozen_string_literal: true
 
-require "uri"
-require "fileutils"
+require 'uri'
+require 'fileutils'
 
 class User < ApplicationRecord
   include MicroserviceRegistrationHolder
   include PanelHelper
 
-  has_many :competition_delegates, foreign_key: "delegate_id"
+  has_many :competition_delegates, foreign_key: 'delegate_id'
   # This gives all the competitions where the user is marked as a Delegate,
   # regardless of the competition's status.
-  has_many :delegated_competitions, through: :competition_delegates, source: "competition"
+  has_many :delegated_competitions, through: :competition_delegates, source: 'competition'
   # This gives all the competitions which actually happened and where the user
   # was a Delegate.
-  has_many :actually_delegated_competitions, -> { over.visible.not_cancelled }, through: :competition_delegates, source: "competition"
-  has_many :competition_organizers, foreign_key: "organizer_id"
-  has_many :organized_competitions, through: :competition_organizers, source: "competition"
+  has_many :actually_delegated_competitions, -> { over.visible.not_cancelled }, through: :competition_delegates, source: 'competition'
+  has_many :competition_organizers, foreign_key: 'organizer_id'
+  has_many :organized_competitions, through: :competition_organizers, source: 'competition'
   has_many :votes
   has_many :registrations
-  has_many :competitions_registered_for, through: :registrations, source: "competition"
-  belongs_to :person, -> { where(subId: 1) }, primary_key: "wca_id", foreign_key: "wca_id", optional: true
-  belongs_to :unconfirmed_person, -> { where(subId: 1) }, primary_key: "wca_id", foreign_key: "unconfirmed_wca_id", class_name: "Person", optional: true
-  belongs_to :delegate_to_handle_wca_id_claim, foreign_key: "delegate_id_to_handle_wca_id_claim", class_name: "User", optional: true
-  belongs_to :region, class_name: "UserGroup", optional: true
-  has_many :roles, class_name: "UserRole"
-  has_many :active_roles, -> { active }, class_name: "UserRole"
-  has_many :delegate_role_metadata, through: :active_roles, source: :metadata, source_type: "RolesMetadataDelegateRegions"
-  has_many :delegate_roles, -> { includes(:group, :metadata) }, through: :delegate_role_metadata, source: :user_role, class_name: "UserRole"
-  has_many :confirmed_users_claiming_wca_id, -> { confirmed_email }, foreign_key: "delegate_id_to_handle_wca_id_claim", class_name: "User"
+  has_many :competitions_registered_for, through: :registrations, source: 'competition'
+  belongs_to :person, -> { where(subId: 1) }, primary_key: 'wca_id', foreign_key: 'wca_id', optional: true
+  belongs_to :unconfirmed_person, -> { where(subId: 1) }, primary_key: 'wca_id', foreign_key: 'unconfirmed_wca_id', class_name: 'Person', optional: true
+  belongs_to :delegate_to_handle_wca_id_claim, foreign_key: 'delegate_id_to_handle_wca_id_claim', class_name: 'User', optional: true
+  belongs_to :region, class_name: 'UserGroup', optional: true
+  has_many :roles, class_name: 'UserRole'
+  has_many :active_roles, -> { active }, class_name: 'UserRole'
+  has_many :delegate_role_metadata, through: :active_roles, source: :metadata, source_type: 'RolesMetadataDelegateRegions'
+  has_many :delegate_roles, -> { includes(:group, :metadata) }, through: :delegate_role_metadata, source: :user_role, class_name: 'UserRole'
+  has_many :confirmed_users_claiming_wca_id, -> { confirmed_email }, foreign_key: 'delegate_id_to_handle_wca_id_claim', class_name: 'User'
   has_many :oauth_applications, class_name: 'Doorkeeper::Application', as: :owner
   has_many :oauth_access_grants, class_name: 'Doorkeeper::AccessGrant', foreign_key: :resource_owner_id
   has_many :user_preferred_events, dependent: :destroy
   has_many :preferred_events, through: :user_preferred_events, source: :event
   has_many :bookmarked_competitions, dependent: :destroy
   has_many :competitions_bookmarked, through: :bookmarked_competitions, source: :competition
-  has_many :competitions_announced, foreign_key: "announced_by", class_name: "Competition"
-  has_many :competitions_results_posted, foreign_key: "results_posted_by", class_name: "Competition"
-  has_many :confirmed_payment_intents, class_name: "PaymentIntent", as: :confirmation_source
-  has_many :canceled_payment_intents, class_name: "PaymentIntent", as: :cancellation_source
+  has_many :competitions_announced, foreign_key: 'announced_by', class_name: 'Competition'
+  has_many :competitions_results_posted, foreign_key: 'results_posted_by', class_name: 'Competition'
+  has_many :confirmed_payment_intents, class_name: 'PaymentIntent', as: :confirmation_source
+  has_many :canceled_payment_intents, class_name: 'PaymentIntent', as: :cancellation_source
   has_many :ranksSingle, through: :person
   has_many :ranksAverage, through: :person
   has_one :wfc_dues_redirect, as: :redirect_source
@@ -258,7 +258,7 @@ class User < ApplicationRecord
   scope :not_dummy_account, -> { where(dummy_account: false) }
 
   def locked_account?
-    !dummy_account? && encrypted_password == ""
+    !dummy_account? && encrypted_password == ''
   end
 
   before_validation :copy_data_from_persons
@@ -280,16 +280,16 @@ class User < ApplicationRecord
   private def must_look_like_the_corresponding_person
     if person
       if self.name != person.name
-        errors.add(:name, I18n.t("users.errors.must_match_person"))
+        errors.add(:name, I18n.t('users.errors.must_match_person'))
       end
       if self.country_iso2 != person.country_iso2
-        errors.add(:country_iso2, I18n.t("users.errors.must_match_person"))
+        errors.add(:country_iso2, I18n.t('users.errors.must_match_person'))
       end
       if self.gender != person.gender
-        errors.add(:gender, I18n.t("users.errors.must_match_person"))
+        errors.add(:gender, I18n.t('users.errors.must_match_person'))
       end
       if self.dob != person.dob
-        errors.add(:dob, I18n.t("users.errors.must_match_person"))
+        errors.add(:dob, I18n.t('users.errors.must_match_person'))
       end
     end
   end
@@ -583,7 +583,7 @@ class User < ApplicationRecord
   end
 
   private def groups_with_read_access_for_current
-    return "*" if can_edit_any_groups?
+    return '*' if can_edit_any_groups?
     groups = groups_with_read_access_for_past
 
     if can_view_current_banned_competitors?
@@ -594,7 +594,7 @@ class User < ApplicationRecord
   end
 
   private def groups_with_read_access_for_past
-    return "*" if can_edit_any_groups?
+    return '*' if can_edit_any_groups?
     groups = groups_with_edit_access
 
     if can_view_past_banned_competitors?
@@ -605,7 +605,7 @@ class User < ApplicationRecord
   end
 
   private def groups_with_edit_access
-    return "*" if can_edit_any_groups?
+    return '*' if can_edit_any_groups?
     groups = []
 
     active_roles.select do |role|
@@ -640,16 +640,16 @@ class User < ApplicationRecord
   def permissions
     permissions = {
       can_attend_competitions: {
-        scope: cannot_register_for_competition_reasons.empty? ? "*" : [],
+        scope: cannot_register_for_competition_reasons.empty? ? '*' : [],
       },
       can_organize_competitions: {
-        scope: can_create_competitions? && cannot_organize_competition_reasons.empty? ? "*" : [],
+        scope: can_create_competitions? && cannot_organize_competition_reasons.empty? ? '*' : [],
       },
       can_administer_competitions: {
-        scope: can_admin_competitions? ? "*" : (delegated_competitions + organized_competitions).pluck(:id),
+        scope: can_admin_competitions? ? '*' : (delegated_competitions + organized_competitions).pluck(:id),
       },
       can_view_delegate_admin_page: {
-        scope: can_view_delegate_matters? ? "*" : [],
+        scope: can_view_delegate_matters? ? '*' : [],
       },
       can_create_groups: {
         scope: groups_with_create_access,
@@ -664,7 +664,7 @@ class User < ApplicationRecord
         scope: groups_with_edit_access,
       },
       can_access_wfc_senior_matters: {
-        scope: can_access_wfc_senior_matters? ? "*" : [],
+        scope: can_access_wfc_senior_matters? ? '*' : [],
       },
     }
     if banned?
@@ -676,7 +676,7 @@ class User < ApplicationRecord
 
   def has_permission?(permission_name, scope = nil)
     permission = permissions[permission_name.to_sym]
-    permission.present? && (permission[:scope] == "*" || permission[:scope].include?(scope))
+    permission.present? && (permission[:scope] == '*' || permission[:scope].include?(scope))
   end
 
   def can_view_all_users?
@@ -693,7 +693,7 @@ class User < ApplicationRecord
 
   def organizer_for?(user)
     # If the user is a newcomer, allow organizers of the competition that the user is registered for to edit that user's name.
-    user.competitions_registered_for.not_over.joins(:competition_organizers).pluck("competition_organizers.organizer_id").include?(self.id)
+    user.competitions_registered_for.not_over.joins(:competition_organizers).pluck('competition_organizers.organizer_id').include?(self.id)
   end
 
   def can_admin_results?
@@ -1005,7 +1005,7 @@ class User < ApplicationRecord
   def self.delegate_reports_receivers_emails
     delegate_groups = UserGroup.delegate_regions
     roles = delegate_groups.flat_map(&:active_roles).select do |role|
-      ["trainee_delegate", "junior_delegate"].include?(role.metadata.status)
+      ['trainee_delegate', 'junior_delegate'].include?(role.metadata.status)
     end
     eligible_delegate_users = roles.map { |role| role.user }
     other_staff = User.where(receive_delegate_reports: true)
@@ -1050,7 +1050,7 @@ class User < ApplicationRecord
     conditions = warden_conditions.dup
     login = conditions.delete(:login)
     if login
-      where(conditions).where(["email = :email OR wca_id = :wca_id", { email: login.downcase, wca_id: login.upcase }]).first
+      where(conditions).where(['email = :email OR wca_id = :wca_id', { email: login.downcase, wca_id: login.upcase }]).first
     else
       where(conditions.to_hash).first
     end
@@ -1115,7 +1115,7 @@ class User < ApplicationRecord
     if wca_id
       Rails.application.routes.url_helpers.person_url(wca_id, host: EnvConfig.ROOT_URL)
     else
-      ""
+      ''
     end
   end
 
@@ -1134,10 +1134,10 @@ class User < ApplicationRecord
   end
 
   DEFAULT_SERIALIZE_OPTIONS = {
-    only: ["id", "wca_id", "name", "gender",
-           "country_iso2", "created_at", "updated_at"],
-    methods: ["url", "country", "delegate_status"],
-    include: ["avatar", "teams"],
+    only: ['id', 'wca_id', 'name', 'gender',
+           'country_iso2', 'created_at', 'updated_at'],
+    methods: ['url', 'country', 'delegate_status'],
+    include: ['avatar', 'teams'],
   }.freeze
 
   def serializable_hash(options = nil)
@@ -1146,13 +1146,13 @@ class User < ApplicationRecord
     default_options = DEFAULT_SERIALIZE_OPTIONS.deep_dup
     # Delegates's emails and regions are public information.
     if staff_delegate?
-      default_options[:methods].push("email", "location", "region_id")
+      default_options[:methods].push('email', 'location', 'region_id')
     end
 
     options = default_options.merge(options || {})
     # Preempt the values for avatar and teams, they have a special treatment.
-    include_avatar = options[:include]&.delete("avatar")
-    include_teams = options[:include]&.delete("teams")
+    include_avatar = options[:include]&.delete('avatar')
+    include_teams = options[:include]&.delete('teams')
     json = super
 
     # We override some attributes manually because it's unconvenient to
@@ -1173,11 +1173,11 @@ class User < ApplicationRecord
 
     # Private attributes to include.
     private_attributes = options&.fetch(:private_attributes, []) || []
-    if private_attributes.include?("dob")
+    if private_attributes.include?('dob')
       json[:dob] = self.dob
     end
 
-    if private_attributes.include?("email")
+    if private_attributes.include?('email')
       json[:email] = self.email
     end
 
@@ -1187,56 +1187,56 @@ class User < ApplicationRecord
   def to_wcif(competition, registration = nil, registrant_id = nil, authorized: false)
     person_pb = [person&.ranksAverage, person&.ranksSingle].compact.flatten
     roles = registration&.roles || []
-    roles << "delegate" if competition.staff_delegates.include?(self)
-    roles << "trainee-delegate" if competition.trainee_delegates.include?(self)
-    roles << "organizer" if competition.organizers.include?(self)
+    roles << 'delegate' if competition.staff_delegates.include?(self)
+    roles << 'trainee-delegate' if competition.trainee_delegates.include?(self)
+    roles << 'organizer' if competition.organizers.include?(self)
     authorized_fields = {
-      "birthdate" => dob.to_fs,
-      "email" => email,
+      'birthdate' => dob.to_fs,
+      'email' => email,
     }
     {
-      "name" => name,
-      "wcaUserId" => id,
-      "wcaId" => wca_id,
-      "registrantId" => registrant_id,
-      "countryIso2" => country_iso2,
-      "gender" => gender,
-      "registration" => registration&.to_wcif(authorized: authorized),
-      "avatar" => {
-        "url" => avatar.url,
-        "thumbUrl" => avatar.url(:thumb),
+      'name' => name,
+      'wcaUserId' => id,
+      'wcaId' => wca_id,
+      'registrantId' => registrant_id,
+      'countryIso2' => country_iso2,
+      'gender' => gender,
+      'registration' => registration&.to_wcif(authorized: authorized),
+      'avatar' => {
+        'url' => avatar.url,
+        'thumbUrl' => avatar.url(:thumb),
       },
-      "roles" => roles,
-      "assignments" => registration&.assignments&.map(&:to_wcif) || [],
-      "personalBests" => person_pb.map(&:to_wcif),
-      "extensions" => registration&.wcif_extensions&.map(&:to_wcif) || [],
+      'roles' => roles,
+      'assignments' => registration&.assignments&.map(&:to_wcif) || [],
+      'personalBests' => person_pb.map(&:to_wcif),
+      'extensions' => registration&.wcif_extensions&.map(&:to_wcif) || [],
     }.merge(authorized ? authorized_fields : {})
   end
 
   def self.wcif_json_schema
     {
-      "type" => "object",
-      "properties" => {
-        "registrantId" => { "type" => ["integer", "null"] }, # NOTE: for now registrantId may be null if the person doesn't compete.
-        "name" => { "type" => "string" },
-        "wcaUserId" => { "type" => "integer" },
-        "wcaId" => { "type" => ["string", "null"] },
-        "countryIso2" => { "type" => "string" },
-        "gender" => { "type" => "string", "enum" => %w(m f o) },
-        "birthdate" => { "type" => "string" },
-        "email" => { "type" => "string" },
-        "avatar" => {
-          "type" => ["object", "null"],
-          "properties" => {
-            "url" => { "type" => "string" },
-            "thumbUrl" => { "type" => "string" },
+      'type' => 'object',
+      'properties' => {
+        'registrantId' => { 'type' => ['integer', 'null'] }, # NOTE: for now registrantId may be null if the person doesn't compete.
+        'name' => { 'type' => 'string' },
+        'wcaUserId' => { 'type' => 'integer' },
+        'wcaId' => { 'type' => ['string', 'null'] },
+        'countryIso2' => { 'type' => 'string' },
+        'gender' => { 'type' => 'string', 'enum' => %w(m f o) },
+        'birthdate' => { 'type' => 'string' },
+        'email' => { 'type' => 'string' },
+        'avatar' => {
+          'type' => ['object', 'null'],
+          'properties' => {
+            'url' => { 'type' => 'string' },
+            'thumbUrl' => { 'type' => 'string' },
           },
         },
-        "roles" => { "type" => "array", "items" => { "type" => "string" } },
-        "registration" => Registration.wcif_json_schema,
-        "assignments" => { "type" => "array", "items" => Assignment.wcif_json_schema },
-        "personalBests" => { "type" => "array", "items" => PersonalBest.wcif_json_schema },
-        "extensions" => { "type" => "array", "items" => WcifExtension.wcif_json_schema },
+        'roles' => { 'type' => 'array', 'items' => { 'type' => 'string' } },
+        'registration' => Registration.wcif_json_schema,
+        'assignments' => { 'type' => 'array', 'items' => Assignment.wcif_json_schema },
+        'personalBests' => { 'type' => 'array', 'items' => PersonalBest.wcif_json_schema },
+        'extensions' => { 'type' => 'array', 'items' => WcifExtension.wcif_json_schema },
       },
     }
   end
@@ -1257,7 +1257,7 @@ class User < ApplicationRecord
   # It's impossible to sign into an account with an empty password,
   # so the only way to log into a locked account is to reset its password.
   def self.new_locked_account(**attributes)
-    User.new(attributes.merge(encrypted_password: "")).tap do |user|
+    User.new(attributes.merge(encrypted_password: '')).tap do |user|
       user.define_singleton_method(:password_required?) { false } # More on that: https://stackoverflow.com/a/45589123
       user.skip_confirmation!
     end

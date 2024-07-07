@@ -10,14 +10,14 @@ class ChangeMediaTimestampDecidedToNullable < ActiveRecord::Migration[5.2]
 
     # Due to implementation error, the timestamp may be unset for some accepted media.
     CompetitionMedium
-      .where(status: "accepted").where("timestampDecided = '0000-00-00 00:00:00'")
-      .update_all("timestampDecided = timestampSubmitted")
+      .where(status: 'accepted').where("timestampDecided = '0000-00-00 00:00:00'")
+      .update_all('timestampDecided = timestampSubmitted')
 
     CompetitionMedium
-      .where(status: "pending").where("timestampDecided = '0000-00-00 00:00:00'")
+      .where(status: 'pending').where("timestampDecided = '0000-00-00 00:00:00'")
       .update_all(timestampDecided: nil)
 
-    execute("SET @@SQL_MODE = @OLD_SQL_MODE;")
+    execute('SET @@SQL_MODE = @OLD_SQL_MODE;')
   end
 
   def down
@@ -32,6 +32,6 @@ class ChangeMediaTimestampDecidedToNullable < ActiveRecord::Migration[5.2]
     # We need an explicit query as Rails parses '0000-00-00 00:00:00' as nil.
     execute("ALTER TABLE CompetitionsMedia MODIFY timestampDecided timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'")
 
-    execute("SET @@SQL_MODE = @OLD_SQL_MODE;")
+    execute('SET @@SQL_MODE = @OLD_SQL_MODE;')
   end
 end

@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
 class Person < ApplicationRecord
-  self.table_name = "Persons"
+  self.table_name = 'Persons'
 
-  has_one :user, primary_key: "wca_id", foreign_key: "wca_id"
-  has_many :results, primary_key: "wca_id", foreign_key: "personId"
+  has_one :user, primary_key: 'wca_id', foreign_key: 'wca_id'
+  has_many :results, primary_key: 'wca_id', foreign_key: 'personId'
   has_many :competitions, -> { distinct }, through: :results
-  has_many :ranksAverage, primary_key: "wca_id", foreign_key: "personId", class_name: "RanksAverage"
-  has_many :ranksSingle, primary_key: "wca_id", foreign_key: "personId", class_name: "RanksSingle"
+  has_many :ranksAverage, primary_key: 'wca_id', foreign_key: 'personId', class_name: 'RanksAverage'
+  has_many :ranksSingle, primary_key: 'wca_id', foreign_key: 'personId', class_name: 'RanksSingle'
 
   enum gender: (User::ALLOWABLE_GENDERS.to_h { |g| [g, g.to_s] })
 
@@ -95,7 +95,7 @@ class Person < ApplicationRecord
     end
     old_attributes = self.attributes
     if update(attributes)
-      Person.where(wca_id: wca_id).where.not(subId: 1).order(subId: :desc).update_all("subId = subId + 1")
+      Person.where(wca_id: wca_id).where.not(subId: 1).order(subId: :desc).update_all('subId = subId + 1')
       Person.create(old_attributes.merge!(subId: 2))
       true
     end
@@ -169,7 +169,7 @@ class Person < ApplicationRecord
     results.podium
            .joins(:event, competition: [:championships])
            .where("championships.championship_type = 'world'")
-           .order("YEAR(start_date) DESC, Events.rank")
+           .order('YEAR(start_date) DESC, Events.rank')
            .includes(:competition, :format)
   end
 
@@ -181,7 +181,7 @@ class Person < ApplicationRecord
       yield(results)
         .final
         .succeeded
-        .order("YEAR(start_date) DESC")
+        .order('YEAR(start_date) DESC')
         .includes(:competition)
         .map(&:competition)
         .uniq
@@ -190,7 +190,7 @@ class Person < ApplicationRecord
             .final
             .succeeded
             .joins(:event)
-            .order("Events.rank, pos")
+            .order('Events.rank, pos')
             .includes(:format, :competition)
             .group_by(&:eventId)
             .each_value do |final_results|
@@ -213,18 +213,18 @@ class Person < ApplicationRecord
     {}.tap do |podiums|
       podiums[:world] = world_championship_podiums
       podiums[:continental] = championship_podiums_with_condition do |results|
-        results.joins(:country, competition: [:championships]).where("championships.championship_type = Countries.continentId")
+        results.joins(:country, competition: [:championships]).where('championships.championship_type = Countries.continentId')
       end
       EligibleCountryIso2ForChampionship.championship_types.each do |championship_type|
         podiums[championship_type.to_sym] = championship_podiums_with_condition do |results|
           results
             .joins(:country, competition: { championships: :eligible_country_iso2s_for_championship })
-            .where("eligible_country_iso2s_for_championship.championship_type = ?", championship_type)
-            .where("eligible_country_iso2s_for_championship.eligible_country_iso2 = Countries.iso2")
+            .where('eligible_country_iso2s_for_championship.championship_type = ?', championship_type)
+            .where('eligible_country_iso2s_for_championship.eligible_country_iso2 = Countries.iso2')
         end
       end
       podiums[:national] = championship_podiums_with_condition do |results|
-        results.joins(:country, competition: [:championships]).where("championships.championship_type = Countries.iso2")
+        results.joins(:country, competition: [:championships]).where('championships.championship_type = Countries.iso2')
       end
     end
   end
@@ -242,15 +242,15 @@ class Person < ApplicationRecord
   def records
     records = results.pluck(:regionalSingleRecord, :regionalAverageRecord).flatten.select(&:present?)
     {
-      national: records.count("NR"),
+      national: records.count('NR'),
       continental: records.reject { |record| %w(NR WR).include?(record) }.count,
-      world: records.count("WR"),
+      world: records.count('WR'),
       total: records.count,
     }
   end
 
   def completed_solves_count
-    results.pluck("value1, value2, value3, value4, value5").flatten.count { |value| value > 0 }
+    results.pluck('value1, value2, value3, value4, value5').flatten.count { |value| value > 0 }
   end
 
   def gender_visible?
@@ -260,7 +260,7 @@ class Person < ApplicationRecord
   def self.search(query, params: {})
     persons = Person.current.includes(:user)
     query.split.each do |part|
-      persons = persons.where("name LIKE :part OR wca_id LIKE :part", part: "%#{part}%")
+      persons = persons.where('name LIKE :part OR wca_id LIKE :part', part: "%#{part}%")
     end
     persons.order(:name)
   end
@@ -270,8 +270,8 @@ class Person < ApplicationRecord
   end
 
   DEFAULT_SERIALIZE_OPTIONS = {
-    only: ["wca_id", "name", "gender"],
-    methods: ["url", "country_iso2"],
+    only: ['wca_id', 'name', 'gender'],
+    methods: ['url', 'country_iso2'],
   }.freeze
 
   def serializable_hash(options = nil)
@@ -282,11 +282,11 @@ class Person < ApplicationRecord
     )
 
     private_attributes = options&.fetch(:private_attributes, []) || []
-    if private_attributes.include?("dob")
+    if private_attributes.include?('dob')
       json[:dob] = dob.to_s
     end
 
-    if private_attributes.include?("incorrect_wca_id_claim_count")
+    if private_attributes.include?('incorrect_wca_id_claim_count')
       json[:incorrect_wca_id_claim_count] = incorrect_wca_id_claim_count
     end
 

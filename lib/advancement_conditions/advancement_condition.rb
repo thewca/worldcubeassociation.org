@@ -14,7 +14,7 @@ module AdvancementConditions
     end
 
     def to_wcif
-      { "type" => self.class.wcif_type, "level" => self.level }
+      { 'type' => self.class.wcif_type, 'level' => self.level }
     end
 
     def ==(other)
@@ -45,10 +45,10 @@ module AdvancementConditions
 
     def self.wcif_json_schema
       {
-        "type" => ["object", "null"],
-        "properties" => {
-          "type" => { "type" => "string", "enum" => @@advancement_conditions.map(&:wcif_type) },
-          "level" => { "type" => "integer" },
+        'type' => ['object', 'null'],
+        'properties' => {
+          'type' => { 'type' => 'string', 'enum' => @@advancement_conditions.map(&:wcif_type) },
+          'level' => { 'type' => 'integer' },
         },
       }
     end

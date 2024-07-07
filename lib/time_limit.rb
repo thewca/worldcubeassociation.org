@@ -27,7 +27,7 @@ class TimeLimit
   validates :centiseconds, numericality: { only_integer: true }
   validate do
     unless self.cumulative_round_ids.is_a?(Array) && self.cumulative_round_ids.all? { |id| id.is_a?(String) }
-      errors.add(:cumulative_round_ids, "must be an Array of Strings")
+      errors.add(:cumulative_round_ids, 'must be an Array of Strings')
     end
   end
 
@@ -41,7 +41,7 @@ class TimeLimit
   end
 
   def to_wcif
-    { "centiseconds" => self.centiseconds, "cumulativeRoundIds" => self.cumulative_round_ids }
+    { 'centiseconds' => self.centiseconds, 'cumulativeRoundIds' => self.cumulative_round_ids }
   end
 
   def ==(other)
@@ -72,16 +72,16 @@ class TimeLimit
 
   def self.wcif_json_schema
     {
-      "type" => ["object", "null"],
-      "properties" => {
-        "centiseconds" => { "type" => "integer" },
-        "cumulativeRoundIds" => { "type" => "array", "items" => { "type" => "string" } },
+      'type' => ['object', 'null'],
+      'properties' => {
+        'centiseconds' => { 'type' => 'integer' },
+        'cumulativeRoundIds' => { 'type' => 'array', 'items' => { 'type' => 'string' } },
       },
     }
   end
 
   def to_s(round)
-    return "" if round.has_undef_tl?
+    return '' if round.has_undef_tl?
     time_str = SolveTime.new(round.event.id, :best, self.centiseconds).clock_format
     case self.cumulative_round_ids.length
     when 0
@@ -91,11 +91,11 @@ class TimeLimit
         I18n.t "time_limit.#{round.event.id}"
       end
     when 1
-      I18n.t("time_limit.cumulative.one_round", time: time_str)
+      I18n.t('time_limit.cumulative.one_round', time: time_str)
     else
       all_rounds = round.competition.rounds.to_h { |r| [r.wcif_id, r.name] }
       round_strs = self.cumulative_round_ids.map { |round_id| all_rounds[round_id] }
-      I18n.t("time_limit.cumulative.across_rounds", time: time_str, rounds: round_strs.to_sentence)
+      I18n.t('time_limit.cumulative.across_rounds', time: time_str, rounds: round_strs.to_sentence)
     end
   end
 end

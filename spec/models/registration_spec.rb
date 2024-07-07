@@ -5,53 +5,53 @@ require 'rails_helper'
 RSpec.describe Registration do
   let(:registration) { FactoryBot.create :registration }
 
-  it "defines a valid registration" do
+  it 'defines a valid registration' do
     expect(registration).to be_valid
   end
 
-  it "requires a competition_id" do
+  it 'requires a competition_id' do
     registration.competition_id = nil
     expect(registration).not_to be_valid
-    expect(registration.errors.messages[:competition]).to eq ["must exist"]
+    expect(registration.errors.messages[:competition]).to eq ['must exist']
   end
 
-  it "requires a valid competition_id" do
-    registration.competition_id = "foobar"
+  it 'requires a valid competition_id' do
+    registration.competition_id = 'foobar'
     expect(registration).not_to be_valid
-    expect(registration.errors.messages[:competition]).to eq ["must exist"]
+    expect(registration.errors.messages[:competition]).to eq ['must exist']
   end
 
-  it "allows no user on update" do
+  it 'allows no user on update' do
     registration.user_id = nil
     expect(registration).to be_valid
   end
 
-  describe "on create" do
+  describe 'on create' do
     let(:registration) { FactoryBot.build :registration }
 
-    it "requires user on create" do
+    it 'requires user on create' do
       expect(FactoryBot.build(:registration, user_id: nil)).to be_invalid_with_errors(user: ["can't be blank"])
     end
 
-    it "requires user country" do
+    it 'requires user country' do
       user = FactoryBot.create(:user, country_iso2: nil)
       registration.user = user
-      expect(registration).to be_invalid_with_errors(user_id: ["Need a region"])
+      expect(registration).to be_invalid_with_errors(user_id: ['Need a region'])
     end
 
-    it "requires user gender" do
+    it 'requires user gender' do
       user = FactoryBot.create(:user, gender: nil)
       registration.user = user
-      expect(registration).to be_invalid_with_errors(user_id: ["Need a gender"])
+      expect(registration).to be_invalid_with_errors(user_id: ['Need a gender'])
     end
 
-    it "requires user dob" do
+    it 'requires user dob' do
       user = FactoryBot.create(:user, dob: nil)
       registration.user = user
-      expect(registration).to be_invalid_with_errors(user_id: ["Need a birthdate"])
+      expect(registration).to be_invalid_with_errors(user_id: ['Need a birthdate'])
     end
 
-    it "requires user not banned" do
+    it 'requires user not banned' do
       user = FactoryBot.create(:user, :banned)
       registration.user = user
       expect(registration).to be_invalid_with_errors(user_id: [I18n.t('registrations.errors.banned_html').html_safe])
@@ -64,7 +64,7 @@ RSpec.describe Registration do
     expect(registration).to be_valid
   end
 
-  it "allows deleting a registration of a banned competitor" do
+  it 'allows deleting a registration of a banned competitor' do
     user = FactoryBot.create(:user, :banned)
     registration.user = user
     registration.save!
@@ -81,30 +81,30 @@ RSpec.describe Registration do
     expect(registration).to be_invalid_with_errors(user_id: [I18n.t('registrations.errors.undelete_banned')])
   end
 
-  it "requires at least one event" do
+  it 'requires at least one event' do
     registration.registration_competition_events = []
     expect(registration).to be_invalid_with_errors(registration_competition_events: [I18n.t('registrations.errors.must_register')])
   end
 
-  it "allows zero events for non competing staff" do
+  it 'allows zero events for non competing staff' do
     registration.registration_competition_events = []
     registration.is_competing = false
     expect(registration).to be_valid
   end
 
-  it "requires events be offered by competition" do
+  it 'requires events be offered by competition' do
     registration.registration_competition_events.build(competition_event_id: 1234)
     expect(registration).to be_invalid_with_errors(
-      "registration_competition_events.competition_event" => ["must exist"],
+      'registration_competition_events.competition_event' => ['must exist'],
     )
   end
 
-  it "handles a changing user" do
-    registration.user.update_column(:name, "New Name")
-    expect(registration.name).to eq "New Name"
+  it 'handles a changing user' do
+    registration.user.update_column(:name, 'New Name')
+    expect(registration.name).to eq 'New Name'
   end
 
-  context "upper guest limit enabled" do
+  context 'upper guest limit enabled' do
     guest_limit = 2
     let(:competition) { FactoryBot.create :competition, :with_guest_limit, guests_per_registration_limit: guest_limit }
 
@@ -112,34 +112,34 @@ RSpec.describe Registration do
       registration.competition = competition
     end
 
-    it "allows 0 guests" do
+    it 'allows 0 guests' do
       registration.guests = 0
       expect(registration).to be_valid
     end
 
-    it "allows guests less than guest limit" do
+    it 'allows guests less than guest limit' do
       registration.guests = 1
       expect(registration).to be_valid
     end
 
-    it "allows guests equal to guest limit" do
+    it 'allows guests equal to guest limit' do
       registration.guests = 2
       expect(registration).to be_valid
     end
 
-    it "requires guests less than guest limit" do
+    it 'requires guests less than guest limit' do
       registration.guests = 3
-      expect(registration).to be_invalid_with_errors(guests: ["must be less than or equal to 2"])
+      expect(registration).to be_invalid_with_errors(guests: ['must be less than or equal to 2'])
     end
 
-    it "requires guests greater than 0" do
+    it 'requires guests greater than 0' do
       registration.guests = -5
-      expect(registration).to be_invalid_with_errors(guests: ["must be greater than or equal to 0"])
+      expect(registration).to be_invalid_with_errors(guests: ['must be greater than or equal to 0'])
     end
   end
 
-  context "upper guest limit not enabled" do
-    it "allows guests greater than guest limit" do
+  context 'upper guest limit not enabled' do
+    it 'allows guests greater than guest limit' do
       guest_limit = 1
       competition = FactoryBot.create :competition, guests_per_registration_limit: guest_limit, guest_entry_status: Competition.guest_entry_statuses['free']
       registration.competition = competition
@@ -148,82 +148,82 @@ RSpec.describe Registration do
       expect(registration).to be_valid
     end
 
-    it "requires guests greater than 0" do
+    it 'requires guests greater than 0' do
       registration.guests = -1
-      expect(registration).to be_invalid_with_errors(guests: ["must be greater than or equal to 0"])
+      expect(registration).to be_invalid_with_errors(guests: ['must be greater than or equal to 0'])
     end
   end
 
-  context "number of events selected" do
-    event_ids = ["222", "333", "444", "555", "666", "777"]
+  context 'number of events selected' do
+    event_ids = ['222', '333', '444', '555', '666', '777']
     event_limit = event_ids.length - 2
 
-    context "with event limit" do
+    context 'with event limit' do
       let(:competition) { FactoryBot.create :competition, :with_event_limit, events_per_registration_limit: event_limit, event_ids: event_ids }
 
-      it "blocks registrations when zero events are selected" do
+      it 'blocks registrations when zero events are selected' do
         registration = FactoryBot.build(:registration, competition: competition, events: [])
         expect(registration).to be_invalid_with_errors(registration_competition_events: [I18n.t('registrations.errors.must_register')])
       end
 
-      it "allows registration when just one is event selected" do
+      it 'allows registration when just one is event selected' do
         registration = FactoryBot.build(:registration, competition: competition, events: competition.events.first)
         expect(registration).to be_valid
       end
 
-      it "allows registration when number of events selected is less than limit" do
+      it 'allows registration when number of events selected is less than limit' do
         registration = FactoryBot.build(:registration, competition: competition, events: competition.events.first(event_limit - 1))
         expect(registration).to be_valid
       end
 
-      it "allows registration when number of events selected is equal to limit" do
+      it 'allows registration when number of events selected is equal to limit' do
         registration = FactoryBot.build(:registration, competition: competition, events: competition.events.first(event_limit))
         expect(registration).to be_valid
       end
 
-      it "blocks registration when number of events selected is greater than limit" do
+      it 'blocks registration when number of events selected is greater than limit' do
         registration = FactoryBot.build(:registration, competition: competition, events: competition.events)
         expect(registration).to be_invalid_with_errors(registration_competition_events: [I18n.t('registrations.errors.exceeds_event_limit', count: event_limit)])
       end
     end
 
-    context "without event limit" do
+    context 'without event limit' do
       let(:competition) { FactoryBot.create :competition, event_ids: event_ids }
 
-      it "blocks registrations when zero events are selected" do
+      it 'blocks registrations when zero events are selected' do
         registration = FactoryBot.build(:registration, competition: competition, events: [])
         expect(registration).to be_invalid_with_errors(registration_competition_events: [I18n.t('registrations.errors.must_register')])
       end
 
-      it "allows registration when all events are selected" do
+      it 'allows registration when all events are selected' do
         registration = FactoryBot.build(:registration, competition: competition, events: competition.events)
         expect(registration).to be_valid
       end
     end
   end
 
-  context "when the competition is part of a series" do
-    let!(:series) { FactoryBot.create :competition_series, name: "Registration Test Series 2015" }
+  context 'when the competition is part of a series' do
+    let!(:series) { FactoryBot.create :competition_series, name: 'Registration Test Series 2015' }
 
     let!(:partner_competition) { FactoryBot.create :competition, series_base: registration.competition, competition_series: series }
     let!(:partner_registration) { FactoryBot.create :registration, :pending, competition: partner_competition, user: registration.user }
 
     before { registration.competition.update!(competition_series: series) }
 
-    it "does allow multiple pending registrations for one competitor" do
+    it 'does allow multiple pending registrations for one competitor' do
       expect(registration).to be_valid
       expect(partner_registration).to be_valid
     end
 
-    context "and one registration is accepted" do
+    context 'and one registration is accepted' do
       before { registration.update!(accepted_at: Time.now) }
 
-      it "does allow accepting when the other registration is pending" do
+      it 'does allow accepting when the other registration is pending' do
         expect(registration).to be_valid
         expect(partner_registration).to be_valid
       end
 
-      it "does allow accepting when the other registration is deleted" do
+      it 'does allow accepting when the other registration is deleted' do
         expect(registration).to be_valid
 
         partner_registration.deleted_at = Time.now
@@ -239,7 +239,7 @@ RSpec.describe Registration do
     end
   end
 
-  describe "qualification" do
+  describe 'qualification' do
     let!(:user) { FactoryBot.create(:user_with_wca_id) }
     let!(:previous_competition) {
       FactoryBot.create(
@@ -275,7 +275,7 @@ RSpec.describe Registration do
       )
     }
 
-    it "allows unqualified registration when not required" do
+    it 'allows unqualified registration when not required' do
       input = {
         'resultType' => 'average',
         'type' => 'attemptResult',
@@ -290,7 +290,7 @@ RSpec.describe Registration do
       expect(registration).to be_valid
     end
 
-    it "allows qualified registration" do
+    it 'allows qualified registration' do
       input = {
         'resultType' => 'average',
         'type' => 'attemptResult',
@@ -317,7 +317,7 @@ RSpec.describe Registration do
       competition.allow_registration_without_qualification = false
       competition.save!
       registration.reload
-      expect(registration).to be_invalid_with_errors(registration_competition_events: ["You cannot register for events you are not qualified for."])
+      expect(registration).to be_invalid_with_errors(registration_competition_events: ['You cannot register for events you are not qualified for.'])
     end
   end
 

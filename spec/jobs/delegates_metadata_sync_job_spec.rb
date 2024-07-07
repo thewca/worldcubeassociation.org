@@ -3,12 +3,12 @@
 require 'rails_helper'
 
 RSpec.describe DelegatesMetadataSyncJob, type: :job do
-  describe "delegates metadata sync job" do
+  describe 'delegates metadata sync job' do
     let(:delegate) { FactoryBot.create :delegate_role }
     let(:competition1) { FactoryBot.create :competition, :visible, delegates: [delegate.user], start_date: 4.weeks.ago, end_date: 4.weeks.ago + 2.days }
     let(:competition2) { FactoryBot.create :competition, :past, :visible, delegates: [delegate.user], start_date: 2.weeks.ago, end_date: 2.week.ago + 3.days }
 
-    it "syncs successfully" do
+    it 'syncs successfully' do
       competition1.delegates.reload
       competition2.delegates.reload
       DelegatesMetadataSyncJob.perform_now

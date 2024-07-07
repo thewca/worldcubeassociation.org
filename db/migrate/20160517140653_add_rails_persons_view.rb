@@ -2,7 +2,7 @@
 
 class AddRailsPersonsView < ActiveRecord::Migration
   def change
-    execute "ALTER TABLE Persons DROP PRIMARY KEY;"
+    execute 'ALTER TABLE Persons DROP PRIMARY KEY;'
     add_index :Persons, [:id, :subId], unique: true
     add_column :Persons, :rails_id, :primary_key
 

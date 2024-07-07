@@ -2,9 +2,9 @@
 
 class RolesMetadataTeamsCommittees < ApplicationRecord
   enum :status, {
-    leader: "leader",
-    senior_member: "senior_member",
-    member: "member",
+    leader: 'leader',
+    senior_member: 'senior_member',
+    member: 'member',
   }
 
   has_one :user_role, as: :metadata

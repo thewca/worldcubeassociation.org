@@ -2,7 +2,7 @@
 
 class Post < ApplicationRecord
   include MarkdownHelper
-  belongs_to :author, class_name: "User"
+  belongs_to :author, class_name: 'User'
   has_many :post_tags, autosave: true, dependent: :destroy
   include Taggable
 
@@ -27,7 +27,7 @@ class Post < ApplicationRecord
   BREAK_TAG_RE = /<!--\s*break\s*-->/
 
   def body_full
-    body.sub(BREAK_TAG_RE, "")
+    body.sub(BREAK_TAG_RE, '')
   end
 
   def body_teaser
@@ -43,7 +43,7 @@ class Post < ApplicationRecord
   def self.search(query, params: {})
     posts = Post
     query&.split&.each do |part|
-      posts = posts.where("title LIKE :part OR body LIKE :part", part: "%#{part}%")
+      posts = posts.where('title LIKE :part OR body LIKE :part', part: "%#{part}%")
     end
     posts.order(created_at: :desc)
   end
@@ -53,9 +53,9 @@ class Post < ApplicationRecord
   end
 
   DEFAULT_SERIALIZE_OPTIONS = {
-    only: ["id", "slug", "title", "sticky", "created_at"],
-    methods: ["url"],
-    include: ["author"],
+    only: ['id', 'slug', 'title', 'sticky', 'created_at'],
+    methods: ['url'],
+    include: ['author'],
   }.freeze
 
   def serializable_hash(options = nil)

@@ -2,7 +2,7 @@
 
 class Championship < ApplicationRecord
   include Comparable
-  CHAMPIONSHIP_TYPE_WORLD = "world"
+  CHAMPIONSHIP_TYPE_WORLD = 'world'
   MAJOR_CHAMPIONSHIP_TYPES = [
     CHAMPIONSHIP_TYPE_WORLD,
     *Continent.real.map(&:id),
@@ -14,7 +14,7 @@ class Championship < ApplicationRecord
   ].freeze
 
   belongs_to :competition
-  has_many :eligible_country_iso2s_for_championship, class_name: "EligibleCountryIso2ForChampionship", foreign_key: :championship_type, primary_key: :championship_type
+  has_many :eligible_country_iso2s_for_championship, class_name: 'EligibleCountryIso2ForChampionship', foreign_key: :championship_type, primary_key: :championship_type
   validates :championship_type, uniqueness: { scope: :competition_id, case_sensitive: false },
                                 inclusion: { in: CHAMPIONSHIP_TYPES }
 
@@ -35,7 +35,7 @@ class Championship < ApplicationRecord
   end
 
   def greater_china?
-    championship_type == "greater_china"
+    championship_type == 'greater_china'
   end
 
   def continent
@@ -43,7 +43,7 @@ class Championship < ApplicationRecord
   end
 
   def world?
-    championship_type == "world"
+    championship_type == 'world'
   end
 
   def to_a
@@ -61,10 +61,10 @@ class Championship < ApplicationRecord
 
   def self.grouped_championship_types
     {
-      "planetary" => [CHAMPIONSHIP_TYPE_WORLD],
-      "continental" => Continent.all_sorted_by(I18n.locale, real: true).map(&:id),
-      "multi-national" => EligibleCountryIso2ForChampionship.championship_types,
-      "national" => Country.all_sorted_by(I18n.locale, real: true).map(&:iso2),
+      'planetary' => [CHAMPIONSHIP_TYPE_WORLD],
+      'continental' => Continent.all_sorted_by(I18n.locale, real: true).map(&:id),
+      'multi-national' => EligibleCountryIso2ForChampionship.championship_types,
+      'national' => Country.all_sorted_by(I18n.locale, real: true).map(&:iso2),
     }
   end
 end

@@ -48,7 +48,7 @@ class ConnectedPaypalAccount < ApplicationRecord
 
   def account_details
     PaypalInterface.account_details(self.paypal_merchant_id)
-                   .slice("display_name", "primary_email")
+                   .slice('display_name', 'primary_email')
   end
 
   def self.generate_onboarding_link(competition_id)

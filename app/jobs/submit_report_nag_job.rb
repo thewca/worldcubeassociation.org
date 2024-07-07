@@ -15,7 +15,7 @@ class SubmitReportNagJob < WcaCronjob
       .visible
       .not_cancelled
       .includes(:delegate_report)
-      .where("start_date >= ?", DelegateReport::REPORTS_ENABLED_DATE) # Don't send nag emails for very old competitions without reports.
+      .where('start_date >= ?', DelegateReport::REPORTS_ENABLED_DATE) # Don't send nag emails for very old competitions without reports.
       .where(delegate_reports: { posted_at: nil })
 
     competitions.each do |competition|

@@ -3,7 +3,7 @@
 class RegulationsController < ApplicationController
   before_action :ensure_trailing_slash
 
-  REGULATIONS_VERSION_FILE = "version"
+  REGULATIONS_VERSION_FILE = 'version'
 
   # We need this so the relative links within the regulation HTML work
   private def trailing_slash?(url)
@@ -23,19 +23,19 @@ class RegulationsController < ApplicationController
 
   def render_regulations(route, version_file = REGULATIONS_VERSION_FILE)
     erb_file = RegulationsS3Helper.fetch_regulations_from_s3(route, version_file)
-    render inline: erb_file, layout: "application"
+    render inline: erb_file, layout: 'application'
   end
 
   def guidelines
-    render_regulations("guidelines.html.erb")
+    render_regulations('guidelines.html.erb')
   end
 
   def show
-    render_regulations("index.html.erb")
+    render_regulations('index.html.erb')
   end
 
   def full
-    render_regulations("full.html.erb")
+    render_regulations('full.html.erb')
   end
 
   def historical_guidelines

@@ -17,10 +17,10 @@ RSpec.describe 'I18n' do
 
   I18n.available_locales.each do |locale|
     it "#{locale} defines time_format correctly" do
-      time_format = I18n.translate("common.time_format", locale: locale, default: nil)
+      time_format = I18n.translate('common.time_format', locale: locale, default: nil)
       allowed_values = [
-        "12h",
-        "24h",
+        '12h',
+        '24h',
 
         # It's ok if the translation doesn't define a value for time_format, because
         # we'll fall back to the English setting.
@@ -30,13 +30,13 @@ RSpec.describe 'I18n' do
     end
   end
 
-  it "English country translations, database names, all match the names in wca-states.json" do
-    Country::WCA_STATES["states_lists"].map do |list|
-      list["states"].map do |state|
-        state_id = state["id"] || I18n.transliterate(state["name"]).tr("'", "_")
+  it 'English country translations, database names, all match the names in wca-states.json' do
+    Country::WCA_STATES['states_lists'].map do |list|
+      list['states'].map do |state|
+        state_id = state['id'] || I18n.transliterate(state['name']).tr("'", '_')
         country = Country.c_find(state_id)
         db_name = country.read_attribute(:name)
-        wca_regs_name = state["name"]
+        wca_regs_name = state['name']
         i18n_en_name = country.name
         expect(i18n_en_name).to eq wca_regs_name
         expect(db_name).to eq wca_regs_name

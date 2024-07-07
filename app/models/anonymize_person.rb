@@ -3,9 +3,9 @@
 class AnonymizePerson
   include ActiveModel::Model
 
-  ANONYMIZED_NAME = "Anonymous"
-  STEP_1 = "enter_wca_id"
-  STEP_2 = "request_data_removal"
+  ANONYMIZED_NAME = 'Anonymous'
+  STEP_1 = 'enter_wca_id'
+  STEP_2 = 'request_data_removal'
 
   attr_writer :current_step
   attr_reader :person_wca_id, :person, :account
@@ -44,13 +44,13 @@ class AnonymizePerson
 
   def do_anonymize_person
     unless valid?
-      return { error: "invalid form" }
+      return { error: 'invalid form' }
     end
 
     new_wca_id = generate_new_wca_id
     unless new_wca_id
       wca_id_year = person_wca_id[0..3]
-      return { error: "Error anonymizing: SubIds " + wca_id_year + "ANON00 to " + wca_id_year + "ANON99 are already taken." }
+      return { error: 'Error anonymizing: SubIds ' + wca_id_year + 'ANON00 to ' + wca_id_year + 'ANON99 are already taken.' }
     end
 
     ActiveRecord::Base.transaction do
@@ -62,15 +62,15 @@ class AnonymizePerson
         if account.is_special_account?
           account_to_update.update_all(wca_id: new_wca_id, avatar: nil)
         else
-          account_to_update.update_all(wca_id: nil, country_iso2: "US")
+          account_to_update.update_all(wca_id: nil, country_iso2: 'US')
         end
 
-        account_to_update.update_all(email: account.id.to_s + "@worldcubeassociation.org",
+        account_to_update.update_all(email: account.id.to_s + '@worldcubeassociation.org',
                                      name: ANONYMIZED_NAME,
                                      unconfirmed_wca_id: nil,
                                      delegate_id_to_handle_wca_id_claim: nil,
                                      dob: nil,
-                                     gender: "o",
+                                     gender: 'o',
                                      current_sign_in_ip: nil,
                                      last_sign_in_ip: nil)
       end
@@ -92,14 +92,14 @@ class AnonymizePerson
           else
             current_sub_id += 1
             current_country_id = p.countryId
-            p.update(wca_id: new_wca_id, name: ANONYMIZED_NAME, gender: "o", dob: nil, subId: current_sub_id)
+            p.update(wca_id: new_wca_id, name: ANONYMIZED_NAME, gender: 'o', dob: nil, subId: current_sub_id)
           end
         end
 
       end
 
       # Anonymize person's data in Persons for subid 1
-      person.update(wca_id: new_wca_id, name: ANONYMIZED_NAME, gender: "o", dob: nil)
+      person.update(wca_id: new_wca_id, name: ANONYMIZED_NAME, gender: 'o', dob: nil)
     end
 
     { new_wca_id: new_wca_id }

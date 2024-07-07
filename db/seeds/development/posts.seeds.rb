@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-after "development:users" do
+after 'development:users' do
   wct_users = UserGroup.teams_committees_group_wct.active_users
   100.times do
     sticky = (rand(25) == 0)

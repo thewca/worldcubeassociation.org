@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "rails_helper"
+require 'rails_helper'
 
 RSpec.describe RoleChangeMailer, type: :mailer do
   describe 'notify_role_start for delegate probation' do

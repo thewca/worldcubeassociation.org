@@ -4,11 +4,11 @@ class PaymentController < ApplicationController
   def available_refunds
     if current_user
       attendee_id = params.require(:attendee_id)
-      competition_id, user_id = attendee_id.split("-")
+      competition_id, user_id = attendee_id.split('-')
 
       ms_registration = MicroserviceRegistration.includes(:competition, :payment_intents)
                                                 .find_by(competition_id: competition_id, user_id: user_id)
-      return render status: :bad_request, json: { error: "Registration not found" } unless ms_registration.present?
+      return render status: :bad_request, json: { error: 'Registration not found' } unless ms_registration.present?
 
       competition = ms_registration.competition
       return render status: :unauthorized, json: { error: 'unauthorized' } unless current_user.can_manage_competition?(competition)

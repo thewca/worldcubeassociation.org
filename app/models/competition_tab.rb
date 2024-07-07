@@ -31,12 +31,12 @@ class CompetitionTab < ApplicationRecord
 
   after_destroy :fix_display_order
   private def fix_display_order
-    competition.tabs.where("display_order > ?", display_order).update_all("display_order = display_order - 1")
+    competition.tabs.where('display_order > ?', display_order).update_all('display_order = display_order - 1')
   end
 
   def reorder(direction)
     current_display_order = display_order
-    other_display_order = display_order + (direction.to_s == "up" ? -1 : 1)
+    other_display_order = display_order + (direction.to_s == 'up' ? -1 : 1)
     other_tab = competition.tabs.find_by(display_order: other_display_order)
     if other_tab
       ActiveRecord::Base.transaction do

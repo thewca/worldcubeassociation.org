@@ -16,7 +16,7 @@ module Microservices
     end
 
     def self.update_payment_status_path
-      "/api/internal/v1/update_payment"
+      '/api/internal/v1/update_payment'
     end
 
     def self.registrations_by_user_path(id)
@@ -72,7 +72,7 @@ module Microservices
     def self.competitor_count_by_competition(competition_id)
       response = self.registration_connection.get(self.get_competitor_count_path(competition_id))
 
-      response.body["count"]
+      response.body['count']
     end
 
     def self.registrations_by_competition(competition_id, status = nil, event_id = nil, cache: true)

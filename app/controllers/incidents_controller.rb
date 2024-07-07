@@ -53,7 +53,7 @@ class IncidentsController < ApplicationController
     @incident = Incident.new(incident_params)
 
     if @incident.save
-      flash[:success] = "Incident was successfully created."
+      flash[:success] = 'Incident was successfully created.'
       redirect_to @incident
     else
       render :new
@@ -64,9 +64,9 @@ class IncidentsController < ApplicationController
     @incident = Incident.find(params[:incident_id])
     updated_attrs = {}
     case params[:kind]
-    when "sent"
+    when 'sent'
       updated_attrs[:digest_sent_at] = Time.now
-    when "resolved"
+    when 'resolved'
       updated_attrs[:resolved_at] = Time.now
     else
       flash[:danger] = "Unrecognized action: '#{params[:kind]}'"
@@ -74,7 +74,7 @@ class IncidentsController < ApplicationController
     end
 
     if @incident.update(updated_attrs)
-      flash[:success] = "Successfully updated incident."
+      flash[:success] = 'Successfully updated incident.'
     else
       flash[:danger] = "Couldn't mark the incident as sent."
       @incident.errors.each do |error|
@@ -87,7 +87,7 @@ class IncidentsController < ApplicationController
   def update
     set_incident
     if @incident.update(incident_params)
-      flash[:success] = "Incident was successfully updated."
+      flash[:success] = 'Incident was successfully updated.'
       redirect_to @incident
     else
       render :edit
@@ -97,7 +97,7 @@ class IncidentsController < ApplicationController
   def destroy
     set_incident
     if @incident.destroy
-      flash[:success] = "Incident was successfully destroyed."
+      flash[:success] = 'Incident was successfully destroyed.'
       redirect_to incidents_url
     else
       render :edit

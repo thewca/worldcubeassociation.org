@@ -7,21 +7,21 @@ class UserGroup < ApplicationRecord
   # Councils are recognized by Motions. The corresponding motions related to councils can be found in the following URL:
   # https://www.worldcubeassociation.org/documents
   enum :group_type, {
-    delegate_probation: "delegate_probation",
-    delegate_regions: "delegate_regions",
-    teams_committees: "teams_committees",
-    councils: "councils",
-    translators: "translators",
-    board: "board",
-    officers: "officers",
-    banned_competitors: "banned_competitors",
+    delegate_probation: 'delegate_probation',
+    delegate_regions: 'delegate_regions',
+    teams_committees: 'teams_committees',
+    councils: 'councils',
+    translators: 'translators',
+    board: 'board',
+    officers: 'officers',
+    banned_competitors: 'banned_competitors',
   }
 
   # There are few associations/methods here that are used only for testing. They are to make sure
   # the connections between group and roles are as expected. It's recommended not to remove them.
-  has_many :direct_child_groups, class_name: "UserGroup", inverse_of: :parent_group, foreign_key: "parent_group_id"
-  has_many :roles, foreign_key: "group_id", class_name: "UserRole"
-  has_many :active_roles, -> { active }, foreign_key: "group_id", class_name: "UserRole"
+  has_many :direct_child_groups, class_name: 'UserGroup', inverse_of: :parent_group, foreign_key: 'parent_group_id'
+  has_many :roles, foreign_key: 'group_id', class_name: 'UserRole'
+  has_many :active_roles, -> { active }, foreign_key: 'group_id', class_name: 'UserRole'
   has_many :direct_child_roles, through: :direct_child_groups, source: :roles
   has_many :active_direct_child_roles, -> { active }, through: :direct_child_groups, source: :roles
   has_many :users, through: :roles
@@ -30,7 +30,7 @@ class UserGroup < ApplicationRecord
   has_many :active_direct_child_users, through: :active_direct_child_roles, source: :user
 
   belongs_to :metadata, polymorphic: true, optional: true
-  belongs_to :parent_group, class_name: "UserGroup", optional: true
+  belongs_to :parent_group, class_name: 'UserGroup', optional: true
 
   scope :root_groups, -> { where(parent_group: nil) }
   scope :active_groups, -> { where(is_active: true) }
@@ -67,14 +67,14 @@ class UserGroup < ApplicationRecord
   # Returns human readable name of group type
   def self.group_type_name
     {
-      delegate_probation: "Delegate Probation",
-      delegate_regions: "Delegate Regions",
-      teams_committees: "Teams & Committees",
-      councils: "Councils",
-      translators: "Translators",
-      board: "Board",
-      officers: "Officers",
-      banned_competitors: "Banned Competitors",
+      delegate_probation: 'Delegate Probation',
+      delegate_regions: 'Delegate Regions',
+      teams_committees: 'Teams & Committees',
+      councils: 'Councils',
+      translators: 'Translators',
+      board: 'Board',
+      officers: 'Officers',
+      banned_competitors: 'Banned Competitors',
     }
   end
 
@@ -174,9 +174,9 @@ class UserGroup < ApplicationRecord
   # Unique status means that there can only be one active user with this status in the group.
   def unique_status?(status)
     if self.group_type == UserGroup.group_types[:delegate_regions]
-      ["senior_delegate", "regional_delegate"].include?(status)
+      ['senior_delegate', 'regional_delegate'].include?(status)
     elsif [UserGroup.group_types[:teams_committees], UserGroup.group_types[:councils]].include?(self.group_type)
-      status == "leader"
+      status == 'leader'
     else
       false
     end
@@ -297,12 +297,12 @@ class UserGroup < ApplicationRecord
     if leader_appointments.count + no_more_leaders.count + promoted_senior_members.count + new_senior_members.count + new_members.count + demoted_senior_members.count + no_more_senior_members.count + no_more_members.count > 0
       changes_of_last_month.push("<b>Changes in #{self.name}</b>")
       if leader_appointments.count + no_more_leaders.count > 0
-        changes_of_last_month.push("<br><b>Leaders</b>")
+        changes_of_last_month.push('<br><b>Leaders</b>')
         if leader_appointments.count > 0
-          changes_of_last_month.push(leader_appointments.join("<br>"))
+          changes_of_last_month.push(leader_appointments.join('<br>'))
         end
         if no_more_leaders.count > 0
-          changes_of_last_month.push(no_more_leaders.join("<br>"))
+          changes_of_last_month.push(no_more_leaders.join('<br>'))
         end
       end
       if promoted_senior_members.count > 0
@@ -324,7 +324,7 @@ class UserGroup < ApplicationRecord
         changes_of_last_month.push("<br><b>Resigned/Demoted Members</b><br>#{no_more_members.join("<br>")}")
       end
     end
-    changes_of_last_month.join("<br>")
+    changes_of_last_month.join('<br>')
   end
   # rubocop:enable Metrics/CyclomaticComplexity
   # rubocop:enable Metrics/PerceivedComplexity
@@ -338,9 +338,9 @@ class UserGroup < ApplicationRecord
       end
     end
     if group_changes.empty?
-      group_changes.push("There are no changes to show.")
+      group_changes.push('There are no changes to show.')
     end
-    group_changes.join("<br>")
+    group_changes.join('<br>')
   end
 
   DEFAULT_SERIALIZE_OPTIONS = {

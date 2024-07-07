@@ -3,11 +3,11 @@
 class ContactsController < ApplicationController
   private def maybe_send_contact_email(contact)
     if !contact.valid?
-      render status: :bad_request, json: { error: "Invalid contact object created" }
+      render status: :bad_request, json: { error: 'Invalid contact object created' }
     elsif contact.deliver
-      render status: :ok, json: { message: "Mail sent successfully" }
+      render status: :ok, json: { message: 'Mail sent successfully' }
     else
-      render status: :internal_server_error, json: { error: "Mail delivery failed" }
+      render status: :internal_server_error, json: { error: 'Mail delivery failed' }
     end
   end
 
@@ -67,7 +67,7 @@ class ContactsController < ApplicationController
     contact_params = formValues[contact_recipient.to_sym]
     requestor_details = current_user || formValues[:userData]
 
-    return render status: :bad_request, json: { error: "Invalid arguments" } if contact_recipient.nil? || contact_params.nil? || requestor_details.nil?
+    return render status: :bad_request, json: { error: 'Invalid arguments' } if contact_recipient.nil? || contact_params.nil? || requestor_details.nil?
 
     case contact_recipient
     when UserGroup.teams_committees_group_wct.metadata.friendly_id
@@ -76,10 +76,10 @@ class ContactsController < ApplicationController
       contact_wrt(requestor_details, contact_params)
     when UserGroup.teams_committees_group_wst.metadata.friendly_id
       contact_wst(requestor_details, contact_params)
-    when "competition"
+    when 'competition'
       contact_competition(requestor_details, contact_params)
     else
-      render status: :bad_request, json: { error: "Invalid contact recipient" }
+      render status: :bad_request, json: { error: 'Invalid contact recipient' }
     end
   end
 
@@ -90,7 +90,7 @@ class ContactsController < ApplicationController
   def dob_create
     @contact = DobContact.new(params[:dob_contact])
     @contact.request = request
-    @contact.to_email = "results@worldcubeassociation.org"
+    @contact.to_email = 'results@worldcubeassociation.org'
     @contact.subject = "WCA DOB change request by #{@contact.name}"
     maybe_send_dob_email success_url: contact_dob_url, fail_view: :dob
   end

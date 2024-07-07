@@ -18,14 +18,14 @@ module PersonalBest
 
   def self.wcif_json_schema
     {
-      "type" => "object",
-      "properties" => {
-        "eventId" => { "type" => "string", "enum" => Event.pluck(:id) },
-        "best" => { "type" => "integer" },
-        "worldRanking" => { "type" => "integer" },
-        "continentalRanking" => { "type" => "integer" },
-        "nationalRanking" => { "type" => "integer" },
-        "type" => { "type" => "string", "enum" => %w(single average) },
+      'type' => 'object',
+      'properties' => {
+        'eventId' => { 'type' => 'string', 'enum' => Event.pluck(:id) },
+        'best' => { 'type' => 'integer' },
+        'worldRanking' => { 'type' => 'integer' },
+        'continentalRanking' => { 'type' => 'integer' },
+        'nationalRanking' => { 'type' => 'integer' },
+        'type' => { 'type' => 'string', 'enum' => %w(single average) },
       },
     }
   end

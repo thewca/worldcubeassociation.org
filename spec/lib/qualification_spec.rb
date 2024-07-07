@@ -78,8 +78,8 @@ RSpec.describe Qualification do
     )
   }
 
-  context "Single" do
-    it "requires single" do
+  context 'Single' do
+    it 'requires single' do
       input = {
         'resultType' => 'single',
         'type' => 'ranking',
@@ -89,7 +89,7 @@ RSpec.describe Qualification do
       expect(qualification).to be_invalid
     end
 
-    it "requires date" do
+    it 'requires date' do
       input = {
         'resultType' => 'single',
         'type' => 'ranking',
@@ -99,7 +99,7 @@ RSpec.describe Qualification do
       expect(qualification).to be_invalid
     end
 
-    it "requires type" do
+    it 'requires type' do
       input = {
         'resultType' => 'single',
         'level' => 1000,
@@ -109,7 +109,7 @@ RSpec.describe Qualification do
       expect(qualification).to be_invalid
     end
 
-    it "parses correctly" do
+    it 'parses correctly' do
       input = {
         'resultType' => 'single',
         'type' => 'attemptResult',
@@ -120,7 +120,7 @@ RSpec.describe Qualification do
       expect(qualification).to be_valid
     end
 
-    it "parses anyResult correctly" do
+    it 'parses anyResult correctly' do
       input = {
         'resultType' => 'single',
         'type' => 'anyResult',
@@ -130,7 +130,7 @@ RSpec.describe Qualification do
       expect(qualification).to be_valid
     end
 
-    it "requires a successful time for ranking" do
+    it 'requires a successful time for ranking' do
       input = {
         'resultType' => 'single',
         'type' => 'ranking',
@@ -154,7 +154,7 @@ RSpec.describe Qualification do
       expect(qualification.can_register?(user, '333oh')).to be true
     end
 
-    it "requires a successful time for anyResult" do
+    it 'requires a successful time for anyResult' do
       input = {
         'resultType' => 'single',
         'type' => 'anyResult',
@@ -178,7 +178,7 @@ RSpec.describe Qualification do
       expect(qualification.can_register?(user, '333oh')).to be true
     end
 
-    it "requires strictly less than for attemptResult" do
+    it 'requires strictly less than for attemptResult' do
       input = {
         'resultType' => 'single',
         'type' => 'attemptResult',
@@ -200,7 +200,7 @@ RSpec.describe Qualification do
       expect(qualification.can_register?(user, '333')).to be true
     end
 
-    it "requires end date before" do
+    it 'requires end date before' do
       input = {
         'resultType' => 'single',
         'type' => 'attemptResult',
@@ -223,8 +223,8 @@ RSpec.describe Qualification do
     end
   end
 
-  context "Average" do
-    it "requires average" do
+  context 'Average' do
+    it 'requires average' do
       input = {
         'resultType' => 'average',
         'type' => 'attemptResult',
@@ -234,7 +234,7 @@ RSpec.describe Qualification do
       expect(qualification).to be_invalid
     end
 
-    it "requires date" do
+    it 'requires date' do
       input = {
         'resultType' => 'average',
         'type' => 'attemptResult',
@@ -244,7 +244,7 @@ RSpec.describe Qualification do
       expect(qualification).to be_invalid
     end
 
-    it "requires type" do
+    it 'requires type' do
       input = {
         'resultType' => 'average',
         'level' => 1000,
@@ -254,7 +254,7 @@ RSpec.describe Qualification do
       expect(qualification).to be_invalid
     end
 
-    it "parses correctly" do
+    it 'parses correctly' do
       input = {
         'resultType' => 'average',
         'type' => 'attemptResult',
@@ -265,7 +265,7 @@ RSpec.describe Qualification do
       expect(qualification).to be_valid
     end
 
-    it "requires a successful time for ranking" do
+    it 'requires a successful time for ranking' do
       input = {
         'resultType' => 'average',
         'type' => 'ranking',
@@ -287,7 +287,7 @@ RSpec.describe Qualification do
       expect(qualification.can_register?(user, '444')).to be true
     end
 
-    it "requires a successful time for anyResult" do
+    it 'requires a successful time for anyResult' do
       input = {
         'resultType' => 'average',
         'type' => 'anyResult',
@@ -309,7 +309,7 @@ RSpec.describe Qualification do
       expect(qualification.can_register?(user, '444')).to be true
     end
 
-    it "requires strictly less than for attemptResult" do
+    it 'requires strictly less than for attemptResult' do
       input = {
         'resultType' => 'average',
         'type' => 'attemptResult',
@@ -331,7 +331,7 @@ RSpec.describe Qualification do
       expect(qualification.can_register?(user, '333')).to be true
     end
 
-    it "requires end date before" do
+    it 'requires end date before' do
       input = {
         'resultType' => 'average',
         'type' => 'attemptResult',

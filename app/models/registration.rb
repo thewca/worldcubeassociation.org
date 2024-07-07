@@ -10,8 +10,8 @@ class Registration < ApplicationRecord
 
   belongs_to :competition
   belongs_to :user, optional: true # A user may be deleted later. We only enforce validation directly on creation further down below.
-  belongs_to :accepted_user, foreign_key: "accepted_by", class_name: "User", optional: true
-  belongs_to :deleted_user, foreign_key: "deleted_by", class_name: "User", optional: true
+  belongs_to :accepted_user, foreign_key: 'accepted_by', class_name: 'User', optional: true
+  belongs_to :deleted_user, foreign_key: 'deleted_by', class_name: 'User', optional: true
   has_many :registration_competition_events
   has_many :registration_payments
   has_many :competition_events, through: :registration_competition_events
@@ -208,29 +208,29 @@ class Registration < ApplicationRecord
 
   def to_wcif(authorized: false)
     authorized_fields = {
-      "guests" => guests,
-      "comments" => comments || '',
-      "administrativeNotes" => administrative_notes || '',
+      'guests' => guests,
+      'comments' => comments || '',
+      'administrativeNotes' => administrative_notes || '',
     }
     {
-      "wcaRegistrationId" => id,
-      "eventIds" => events.map(&:id).sort,
-      "status" => wcif_status,
-      "isCompeting" => is_competing?,
+      'wcaRegistrationId' => id,
+      'eventIds' => events.map(&:id).sort,
+      'status' => wcif_status,
+      'isCompeting' => is_competing?,
     }.merge(authorized ? authorized_fields : {})
   end
 
   def self.wcif_json_schema
     {
-      "type" => ["object", "null"], # NOTE: for now there may be WCIF persons without registration.
-      "properties" => {
-        "wcaRegistrationId" => { "type" => "integer" },
-        "eventIds" => { "type" => "array", "items" => { "type" => "string", "enum" => Event.pluck(:id) } },
-        "status" => { "type" => "string", "enum" => %w(accepted deleted pending) },
-        "guests" => { "type" => "integer" },
-        "comments" => { "type" => "string" },
-        "administrativeNotes" => { "type" => "string" },
-        "isCompeting" => { "type" => "boolean" },
+      'type' => ['object', 'null'], # NOTE: for now there may be WCIF persons without registration.
+      'properties' => {
+        'wcaRegistrationId' => { 'type' => 'integer' },
+        'eventIds' => { 'type' => 'array', 'items' => { 'type' => 'string', 'enum' => Event.pluck(:id) } },
+        'status' => { 'type' => 'string', 'enum' => %w(accepted deleted pending) },
+        'guests' => { 'type' => 'integer' },
+        'comments' => { 'type' => 'string' },
+        'administrativeNotes' => { 'type' => 'string' },
+        'isCompeting' => { 'type' => 'boolean' },
       },
     }
   end
@@ -332,12 +332,12 @@ class Registration < ApplicationRecord
   def series_registration_info
     SERIES_SIBLING_DISPLAY_STATUSES.map { |st| series_sibling_registrations(st) }
                                    .map(&:count)
-                                   .join(" + ")
+                                   .join(' + ')
   end
 
   DEFAULT_SERIALIZE_OPTIONS = {
-    only: ["id", "competition_id", "user_id"],
-    methods: ["event_ids"],
+    only: ['id', 'competition_id', 'user_id'],
+    methods: ['event_ids'],
   }.freeze
 
   def serializable_hash(options = nil)

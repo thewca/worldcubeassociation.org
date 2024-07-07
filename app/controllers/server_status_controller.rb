@@ -45,7 +45,7 @@ class JobsCheck < StatusCheck
   include ActionView::Helpers::DateHelper
 
   def label
-    "Jobs"
+    'Jobs'
   end
 
   protected def _status_description
@@ -76,7 +76,7 @@ end
 
 class RegulationsCheck < StatusCheck
   def label
-    "Regulations"
+    'Regulations'
   end
 
   protected def _status_description
@@ -90,21 +90,21 @@ end
 
 class MysqlSettingsCheck < StatusCheck
   EXPECTED_MYSQL_SETTINGS = {
-    "@@innodb_ft_min_token_size" => 2,
-    "@@ft_min_word_len" => 2,
+    '@@innodb_ft_min_token_size' => 2,
+    '@@ft_min_word_len' => 2,
     # The default server character set changed from latin1 to ut8mb4 in mysql 8.0, however our PHP didn't recognize it and failed to connect.
     # We reverted it to latin1. The setting only affects the default charset for CREATE DATABASE statements that have no charset specified.
-    "@@character_set_server" => "latin1",
+    '@@character_set_server' => 'latin1',
   }.freeze
 
   def label
-    "MySQL"
+    'MySQL'
   end
 
   protected def _status_description
     actual_mysql_settings = ActiveRecord::Base.connection.select_one("SELECT #{EXPECTED_MYSQL_SETTINGS.keys.join(", ")};")
     mysql_settings_good = true
-    description = ""
+    description = ''
     EXPECTED_MYSQL_SETTINGS.each do |setting, expected_value|
       actual_value = actual_mysql_settings[setting]
       if actual_value != expected_value

@@ -6,7 +6,7 @@ module PaypalInterface
   end
 
   def self.generate_paypal_onboarding_link(competition_id)
-    url = "/v2/customer/partner-referrals"
+    url = '/v2/customer/partner-referrals'
 
     payload = {
       operations: [
@@ -26,7 +26,7 @@ module PaypalInterface
       products: ['PPCP'], # TODO: Experiment with other payment types
       partner_config_override: {
         return_url: Rails.application.routes.url_helpers.competition_connect_payment_integration_url(competition_id, :paypal, host: EnvConfig.ROOT_URL),
-        return_url_description: "the url to return the WCA after the paypal onboarding process.",
+        return_url_description: 'the url to return the WCA after the paypal onboarding process.',
       },
       legal_consents: [
         {
@@ -41,7 +41,7 @@ module PaypalInterface
     end
 
     response.body['links'].each do |link|
-      if link['rel'] == "action_url"
+      if link['rel'] == 'action_url'
         return link['href']
       end
     end
@@ -61,7 +61,7 @@ module PaypalInterface
   end
 
   def self.create_order(merchant_id, amount_iso, currency_code)
-    url = "/v2/checkout/orders"
+    url = '/v2/checkout/orders'
 
     amount_paypal = PaypalRecord.amount_to_paypal(amount_iso, currency_code)
 
@@ -156,7 +156,7 @@ module PaypalInterface
   end
 
   private_class_method def self.paypal_auth_assertion(merchant_id)
-    payload = { "iss" => AppSecrets.PAYPAL_CLIENT_ID, "payer_id" => merchant_id }
+    payload = { 'iss' => AppSecrets.PAYPAL_CLIENT_ID, 'payer_id' => merchant_id }
     JWT.encode payload, nil, 'none'
   end
 end

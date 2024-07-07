@@ -11,7 +11,7 @@ FactoryBot.define do
     subId { 1 }
     name { Faker::Name.name }
     countryId { Country.real.sample.id }
-    gender { "m" }
+    gender { 'm' }
     dob { '1966-04-04' }
 
     trait :skip_validation do
@@ -23,13 +23,13 @@ FactoryBot.define do
     end
 
     trait :missing_gender do
-      gender { "" }
+      gender { '' }
     end
 
     factory :person_with_multiple_sub_ids do
       after(:create) do |person|
         name = person.name
-        person.update!(name: "old name")
+        person.update!(name: 'old name')
         person.update_using_sub_id!(name: name)
       end
     end

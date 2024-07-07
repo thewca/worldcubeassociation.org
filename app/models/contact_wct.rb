@@ -4,7 +4,7 @@ class ContactWct < ContactForm
   attribute :message, validate: true
 
   def to_email
-    "contact@worldcubeassociation.org"
+    'contact@worldcubeassociation.org'
   end
 
   def subject

@@ -9,10 +9,10 @@ FactoryBot.define do
     # Since id is a varchar, `maximum(:id)` only works up to "9"...
     # Therefore we must do the max logic in RoR's world after casting.
     id { ((InboxPerson.pluck(:id).map(&:to_i).max || 0) + 1) }
-    wcaId { "" }
+    wcaId { '' }
     name { Faker::Name.name }
     countryId { Country.real.sample.iso2 }
-    gender { "m" }
+    gender { 'm' }
     dob { Date.new(1966, 4, 4) }
   end
 end

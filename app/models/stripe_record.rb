@@ -14,33 +14,33 @@ class StripeRecord < ApplicationRecord
   }.freeze
 
   enum stripe_status: {
-    requires_payment_method: "requires_payment_method",
-    requires_confirmation: "requires_confirmation",
-    requires_action: "requires_action",
-    processing: "processing",
-    requires_capture: "requires_capture",
-    canceled: "canceled",
-    succeeded: "succeeded",
-    pending: "pending",
-    failed: "failed",
-    legacy_unknown: "unknown",
-    legacy_payment_intent_registered: "payment_intent_registered",
-    legacy_success: "success",
-    legacy_failure: "failure",
+    requires_payment_method: 'requires_payment_method',
+    requires_confirmation: 'requires_confirmation',
+    requires_action: 'requires_action',
+    processing: 'processing',
+    requires_capture: 'requires_capture',
+    canceled: 'canceled',
+    succeeded: 'succeeded',
+    pending: 'pending',
+    failed: 'failed',
+    legacy_unknown: 'unknown',
+    legacy_payment_intent_registered: 'payment_intent_registered',
+    legacy_success: 'success',
+    legacy_failure: 'failure',
   }
 
   # Actual values are according to Stripe API documentation as of 2023-03-12.
   enum stripe_record_type: {
-    payment_intent: "payment_intent",
-    charge: "charge",
-    refund: "refund",
+    payment_intent: 'payment_intent',
+    charge: 'charge',
+    refund: 'refund',
   }
 
   has_one :registration_payment, as: :receipt
   has_one :payment_intent, as: :payment_record
 
-  belongs_to :parent_record, class_name: "StripeRecord", optional: true
-  has_many :child_records, class_name: "StripeRecord", inverse_of: :parent_record, foreign_key: :parent_record_id
+  belongs_to :parent_record, class_name: 'StripeRecord', optional: true
+  has_many :child_records, class_name: 'StripeRecord', inverse_of: :parent_record, foreign_key: :parent_record_id
 
   has_many :stripe_webhook_events, inverse_of: :stripe_record, dependent: :nullify
 

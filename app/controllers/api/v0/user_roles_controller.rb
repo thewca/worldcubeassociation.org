@@ -54,7 +54,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
   def show
     id = params.require(:id)
     role = UserRole.find(id)
-    return render status: :unauthorized, json: { error: "Cannot access role" } unless role.can_user_read?(current_user)
+    return render status: :unauthorized, json: { error: 'Cannot access role' } unless role.can_user_read?(current_user)
     render json: role
   end
 
@@ -97,7 +97,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       end
     end
 
-    return render status: :unprocessable_entity, json: { error: "Invalid group type" } unless create_supported_groups.include?(group.group_type)
+    return render status: :unprocessable_entity, json: { error: 'Invalid group type' } unless create_supported_groups.include?(group.group_type)
     return head :unauthorized unless current_user.has_permission?(:can_edit_groups, group_id.to_i)
 
     role_to_end = nil
@@ -240,7 +240,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
           )
         end
       else
-        return render status: :unprocessable_entity, json: { error: "Invalid parameter to be changed" }
+        return render status: :unprocessable_entity, json: { error: 'Invalid parameter to be changed' }
       end
     elsif group_type == UserGroup.group_types[:delegate_probation]
       if params.key?(:endDate)
@@ -253,7 +253,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
 
         role.update!(end_date: Date.safe_parse(end_date))
       else
-        return render status: :unprocessable_entity, json: { error: "Invalid parameter to be changed" }
+        return render status: :unprocessable_entity, json: { error: 'Invalid parameter to be changed' }
       end
     elsif [UserGroup.group_types[:teams_committees], UserGroup.group_types[:councils]].include?(group_type)
       if params.key?(:status)
@@ -279,7 +279,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
           )
         end
       else
-        return render status: :unprocessable_entity, json: { error: "Invalid parameter to be changed" }
+        return render status: :unprocessable_entity, json: { error: 'Invalid parameter to be changed' }
       end
     elsif group_type == UserGroup.group_types[:banned_competitors]
       if params.key?(:endDate)
@@ -301,7 +301,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       changes.concat(changes_in_model(role.metadata&.previous_changes).compact)
       changes.concat(changes_in_model(role.previous_changes).compact)
     else
-      return render status: :unprocessable_entity, json: { error: "Invalid group type" }
+      return render status: :unprocessable_entity, json: { error: 'Invalid group type' }
     end
     RoleChangeMailer.notify_role_change(role, current_user, changes.to_json).deliver_later
     render json: { success: true }

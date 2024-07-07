@@ -2,7 +2,7 @@
 
 require 'aws-sdk-s3'
 module DocumentsHelper
-  ARCHIVE_DATE_FILE = "version"
+  ARCHIVE_DATE_FILE = 'version'
   BUCKET_NAME = 'wca-documents'
 
   private def archive_metadata
@@ -11,12 +11,12 @@ module DocumentsHelper
       credentials: Aws::ECSCredentials.new,
     ).bucket(BUCKET_NAME)
 
-    prefix = "documents/"
+    prefix = 'documents/'
     version = bucket.object(ARCHIVE_DATE_FILE).get.body.read.strip
 
     Rails.cache.fetch("document-list-#{version}", expires_in: 7.days) do
       bucket.objects(prefix: prefix).map do |object|
-        { name: File.basename(object.key, ".pdf"), key: object.key }
+        { name: File.basename(object.key, '.pdf'), key: object.key }
       end
     end
   end

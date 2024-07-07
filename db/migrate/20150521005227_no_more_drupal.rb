@@ -8,21 +8,21 @@ class NoMoreDrupal < ActiveRecord::Migration
   end
 
   class Node < ActiveRecord::Base
-    self.table_name = "node"
+    self.table_name = 'node'
     # Drupal has a "type" column that we don't want ActiveRecord to get excited about.
     self.inheritance_column = :_type_disabled
     # Drupal also has "changed" column that conflicts with ActiveRecord.
     ignore_columns :changed
 
-    has_one :field_data_body, -> { where(entity_type: "node") }, primary_key: "nid", foreign_key: "entity_id"
-    belongs_to :author, class_name: "User", primary_key: "uid", foreign_key: "uid"
+    has_one :field_data_body, -> { where(entity_type: 'node') }, primary_key: 'nid', foreign_key: 'entity_id'
+    belongs_to :author, class_name: 'User', primary_key: 'uid', foreign_key: 'uid'
 
     def alias
       urlAlias = UrlAlias.find_by source: "node/#{nid}"
       if !urlAlias
         nil
       elsif urlAlias.alias.start_with? 'posts/'
-        urlAlias.alias.split("/")[1]
+        urlAlias.alias.split('/')[1]
       else
         urlAlias.alias
       end
@@ -30,30 +30,30 @@ class NoMoreDrupal < ActiveRecord::Migration
   end
 
   class UrlAlias < ActiveRecord::Base
-    self.table_name = "url_alias"
+    self.table_name = 'url_alias'
   end
 
   class FieldDataBody < ActiveRecord::Base
-    self.table_name = "field_data_body"
-    belongs_to :node, primary_key: "nid", foreign_key: "entity_id"
+    self.table_name = 'field_data_body'
+    belongs_to :node, primary_key: 'nid', foreign_key: 'entity_id'
   end
 
   class Post < ActiveRecord::Base
-    belongs_to :author, class_name: "DeviseUser"
+    belongs_to :author, class_name: 'DeviseUser'
   end
 
   def change
     add_column :devise_users, :name, :string
 
     create_table(:posts) do |t|
-      t.string "title", null: false, default: ""
+      t.string 'title', null: false, default: ''
 
       # mysql TEXT must default to null
-      t.text "body", null: false, default: nil
+      t.text 'body', null: false, default: nil
 
-      t.string "slug", null: false, default: ""
-      t.boolean "sticky"
-      t.belongs_to :author, class_name: "DeviseUser"
+      t.string 'slug', null: false, default: ''
+      t.boolean 'sticky'
+      t.belongs_to :author, class_name: 'DeviseUser'
       t.timestamps null: false
     end
     add_index :posts, :slug, unique: true

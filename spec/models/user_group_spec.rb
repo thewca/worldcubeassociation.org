@@ -79,35 +79,35 @@ RSpec.describe UserGroup, type: :model do
     FactoryBot.create :wrc_member_role, user_id: users[5].id, start_date: Time.now - 10.months, updated_at: Time.now - 10.months
   end
 
-  it "direct_child_groups has the direct child groups of the user group" do
+  it 'direct_child_groups has the direct child groups of the user group' do
     expect(asia_region.direct_child_groups).to eq([asia_east_region, asia_west_region])
   end
 
-  it "child_groups has the child groups of the user group" do
+  it 'child_groups has the child groups of the user group' do
     expect(asia_region.all_child_groups).to eq([asia_east_region, asia_west_region, india_region])
   end
 
-  it "roles has the roles of the user group" do
+  it 'roles has the roles of the user group' do
     expect(asia_region.roles).to eq(delegate_roles[5..9])
   end
 
-  it "active_roles has the active roles of the user group" do
+  it 'active_roles has the active roles of the user group' do
     expect(asia_region.active_roles).to eq(delegate_roles[5..7])
   end
 
-  it "direct_child_roles has the roles of the direct child groups of the user group" do
+  it 'direct_child_roles has the roles of the direct child groups of the user group' do
     expect(asia_region.direct_child_roles).to eq(delegate_roles[25..34])
   end
 
-  it "all_child_roles has the roles of the child groups of the user group" do
+  it 'all_child_roles has the roles of the child groups of the user group' do
     expect(asia_region.all_child_roles).to eq(delegate_roles[25..38])
   end
 
-  it "active_direct_child_roles has the active roles of the direct child groups of the user group" do
+  it 'active_direct_child_roles has the active roles of the direct child groups of the user group' do
     expect(asia_region.active_direct_child_roles).to eq(delegate_roles[25..27] + delegate_roles[30..32])
   end
 
-  it "active_all_child_roles has the active roles of the child groups of the user group" do
+  it 'active_all_child_roles has the active roles of the child groups of the user group' do
     expect(asia_region.active_all_child_roles).to eq([
       delegate_roles[25..27],
       delegate_roles[30..32],
@@ -115,27 +115,27 @@ RSpec.describe UserGroup, type: :model do
     ].flatten)
   end
 
-  it "users has the users of the user group" do
+  it 'users has the users of the user group' do
     expect(asia_region.users).to eq(delegate_users[5..9])
   end
 
-  it "active_users has the active users of the user group" do
+  it 'active_users has the active users of the user group' do
     expect(asia_region.active_users).to eq(delegate_users[5..7])
   end
 
-  it "direct_child_users has the users of the direct child groups of the user group" do
+  it 'direct_child_users has the users of the direct child groups of the user group' do
     expect(asia_region.direct_child_users).to eq(delegate_users[25..34])
   end
 
-  it "all_child_users has the users of the child groups of the user group" do
+  it 'all_child_users has the users of the child groups of the user group' do
     expect(asia_region.all_child_users).to eq(delegate_users[25..38])
   end
 
-  it "active_direct_child_users has the active users of the direct child groups of the user group" do
+  it 'active_direct_child_users has the active users of the direct child groups of the user group' do
     expect(asia_region.active_direct_child_users).to eq(delegate_users[25..27] + delegate_users[30..32])
   end
 
-  it "active_all_child_users has the active users of the child groups of the user group" do
+  it 'active_all_child_users has the active users of the child groups of the user group' do
     expect(asia_region.active_all_child_users).to eq([
       delegate_users[25..27],
       delegate_users[30..32],
@@ -143,44 +143,44 @@ RSpec.describe UserGroup, type: :model do
     ].flatten)
   end
 
-  it "is_root_group? returns true for root group" do
+  it 'is_root_group? returns true for root group' do
     expect(asia_region.is_root_group?).to eq(true)
   end
 
-  it "is_root_group? returns false for non-root group" do
+  it 'is_root_group? returns false for non-root group' do
     expect(india_region.is_root_group?).to eq(false)
   end
 
-  context "Monthly digest changes" do
-    it "Added 2 new members" do
+  context 'Monthly digest changes' do
+    it 'Added 2 new members' do
       FactoryBot.create :wrc_member_role, user_id: users[6].id, start_date: Time.now - 4.days
       FactoryBot.create :wrc_member_role, user_id: users[7].id, start_date: Time.now - 4.days
 
       expected_output = [
-        "<b>Changes in WCA Regulations Committee</b>",
-        "",
-        "<b>New Members</b>",
+        '<b>Changes in WCA Regulations Committee</b>',
+        '',
+        '<b>New Members</b>',
         *[users[6].name, users[7].name].sort,
-      ].join("<br>")
+      ].join('<br>')
       expect(UserGroup.teams_committees_group_wrc.changes_in_group_for_digest).to eq expected_output
     end
 
-    it "Promoted 1 member" do
+    it 'Promoted 1 member' do
       wrc_group = UserGroup.teams_committees_group_wrc
       team_member = wrc_group.roles[3]
       team_member.update_columns(end_date: Time.now - 5.days, updated_at: Time.now - 5.days)
       FactoryBot.create :wrc_senior_member_role, user_id: team_member.user.id, start_date: Time.now - 5.days
 
       expected_output = [
-        "<b>Changes in WCA Regulations Committee</b>",
-        "",
-        "<b>Promoted Senior Members</b>",
+        '<b>Changes in WCA Regulations Committee</b>',
+        '',
+        '<b>Promoted Senior Members</b>',
         team_member.user.name,
-      ].join("<br>")
+      ].join('<br>')
       expect(UserGroup.teams_committees_group_wrc.changes_in_group_for_digest).to eq expected_output
     end
 
-    it "Leader resigned and another person became leader" do
+    it 'Leader resigned and another person became leader' do
       wrc_group = UserGroup.teams_committees_group_wrc
       cur_leader = wrc_group.roles[0]
       new_leader = wrc_group.roles[1]
@@ -190,12 +190,12 @@ RSpec.describe UserGroup, type: :model do
       FactoryBot.create :wrc_leader_role, user_id: new_leader.user.id, start_date: Time.now - 10.days
 
       expected_output = [
-        "<b>Changes in WCA Regulations Committee</b>",
-        "",
-        "<b>Leaders</b>",
+        '<b>Changes in WCA Regulations Committee</b>',
+        '',
+        '<b>Leaders</b>',
         "#{new_leader.user.name} has been appointed as the new Leader.",
         "#{cur_leader.user.name} is no longer the Leader, but will continue as Senior member.",
-      ].join("<br>")
+      ].join('<br>')
       expect(UserGroup.teams_committees_group_wrc.changes_in_group_for_digest).to eq expected_output
     end
   end

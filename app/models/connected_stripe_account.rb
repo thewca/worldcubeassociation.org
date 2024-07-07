@@ -102,8 +102,8 @@ class ConnectedStripeAccount < ApplicationRecord
   def account_details
     stripe_acct = Stripe::Account.retrieve(self.account_id)
 
-    stripe_acct.as_json.slice("email", "country").merge({
-                                                          "business_name" => stripe_acct.business_profile.name,
+    stripe_acct.as_json.slice('email', 'country').merge({
+                                                          'business_name' => stripe_acct.business_profile.name,
                                                         })
   end
 

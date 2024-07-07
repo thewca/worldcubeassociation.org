@@ -10,168 +10,168 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
       get :competitions_search
       expect(response.status).to eq 400
       json = JSON.parse(response.body)
-      expect(json["error"]).to eq "No query specified"
+      expect(json['error']).to eq 'No query specified'
     end
 
-    it "finds competition" do
-      get :competitions_search, params: { q: "competition" }
+    it 'finds competition' do
+      get :competitions_search, params: { q: 'competition' }
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
-      expect(json["result"].length).to eq 1
+      expect(json['result'].length).to eq 1
     end
 
-    it "works well with multiple parts" do
-      get :competitions_search, params: { q: "Jfly Comp 15" }
+    it 'works well with multiple parts' do
+      get :competitions_search, params: { q: 'Jfly Comp 15' }
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
-      expect(json["result"].length).to eq 1
+      expect(json['result'].length).to eq 1
     end
   end
 
   describe 'GET #posts_search' do
-    let!(:post) { FactoryBot.create(:post, title: "post title", body: "post body") }
+    let!(:post) { FactoryBot.create(:post, title: 'post title', body: 'post body') }
 
     it 'requires query parameter' do
       get :posts_search
       expect(response.status).to eq 400
       json = JSON.parse(response.body)
-      expect(json["error"]).to eq "No query specified"
+      expect(json['error']).to eq 'No query specified'
     end
 
-    it "finds post" do
-      get :posts_search, params: { q: "post title" }
+    it 'finds post' do
+      get :posts_search, params: { q: 'post title' }
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
-      expect(json["result"].length).to eq 1
+      expect(json['result'].length).to eq 1
     end
   end
 
   describe 'GET #users_search' do
-    let(:person) { FactoryBot.create(:person, name: "Jeremy", wca_id: "2005FLEI01") }
-    let!(:user) { FactoryBot.create(:user, person: person, email: "example@email.com") }
+    let(:person) { FactoryBot.create(:person, name: 'Jeremy', wca_id: '2005FLEI01') }
+    let!(:user) { FactoryBot.create(:user, person: person, email: 'example@email.com') }
 
     it 'requires query parameter' do
       get :users_search
       expect(response.status).to eq 400
       json = JSON.parse(response.body)
-      expect(json["error"]).to eq "No query specified"
+      expect(json['error']).to eq 'No query specified'
     end
 
     it 'finds Jeremy' do
-      get :users_search, params: { q: "erem" }
+      get :users_search, params: { q: 'erem' }
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
-      expect(json["result"].select { |u| u["name"] == "Jeremy" }[0]).not_to be_nil
+      expect(json['result'].select { |u| u['name'] == 'Jeremy' }[0]).not_to be_nil
     end
 
     it 'does not find dummy accounts' do
-      FactoryBot.create :dummy_user, name: "Aaron"
-      get :users_search, params: { q: "aaron" }
+      FactoryBot.create :dummy_user, name: 'Aaron'
+      get :users_search, params: { q: 'aaron' }
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
-      expect(json["result"].length).to eq 0
+      expect(json['result'].length).to eq 0
     end
 
     it 'can find dummy accounts' do
-      user.update_column(:encrypted_password, "")
-      get :users_search, params: { q: "erem", include_dummy_accounts: true }
+      user.update_column(:encrypted_password, '')
+      get :users_search, params: { q: 'erem', include_dummy_accounts: true }
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
-      expect(json["result"].length).to eq 1
-      expect(json["result"][0]["id"]).to eq user.id
+      expect(json['result'].length).to eq 1
+      expect(json['result'][0]['id']).to eq user.id
     end
 
     it 'can find by wca_id' do
       get :users_search, params: { q: user.wca_id }
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
-      expect(json["result"].length).to eq 1
-      expect(json["result"][0]["id"]).to eq user.id
+      expect(json['result'].length).to eq 1
+      expect(json['result'][0]['id']).to eq user.id
     end
 
-    it "can find by email" do
-      get :users_search, params: { q: "example", email: true }
+    it 'can find by email' do
+      get :users_search, params: { q: 'example', email: true }
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
-      expect(json["result"].length).to eq 1
-      expect(json["result"][0]["id"]).to eq user.id
+      expect(json['result'].length).to eq 1
+      expect(json['result'][0]['id']).to eq user.id
     end
 
     context 'Person without User' do
-      let!(:userless_person) { FactoryBot.create(:person, name: "Bob") }
+      let!(:userless_person) { FactoryBot.create(:person, name: 'Bob') }
 
-      it "can find by wca_id" do
+      it 'can find by wca_id' do
         get :users_search, params: { q: userless_person.wca_id, persons_table: true }
         expect(response.status).to eq 200
         json = JSON.parse(response.body)
-        expect(json["result"].length).to eq 1
-        expect(json["result"][0]["id"]).to eq userless_person.wca_id
-        expect(json["result"][0]["wca_id"]).to eq userless_person.wca_id
+        expect(json['result'].length).to eq 1
+        expect(json['result'][0]['id']).to eq userless_person.wca_id
+        expect(json['result'][0]['wca_id']).to eq userless_person.wca_id
         expect(json['result'][0]['avatar']['url']).to eq AvatarUploaderBase.missing_avatar_thumb_url
         expect(json['result'][0]['avatar']['thumb_url']).to eq AvatarUploaderBase.missing_avatar_thumb_url
         expect(json['result'][0]['avatar']['is_default']).to eq true
       end
 
-      it "can find by name" do
-        get :users_search, params: { q: "bo", persons_table: true }
+      it 'can find by name' do
+        get :users_search, params: { q: 'bo', persons_table: true }
         expect(response.status).to eq 200
         json = JSON.parse(response.body)
-        expect(json["result"].length).to eq 1
-        expect(json["result"][0]["id"]).to eq userless_person.wca_id
-        expect(json["result"][0]["wca_id"]).to eq userless_person.wca_id
+        expect(json['result'].length).to eq 1
+        expect(json['result'][0]['id']).to eq userless_person.wca_id
+        expect(json['result'][0]['wca_id']).to eq userless_person.wca_id
       end
     end
 
     it 'does not find unconfirmed accounts' do
       user.update_column(:confirmed_at, nil)
-      get :users_search, params: { q: "erem" }
+      get :users_search, params: { q: 'erem' }
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
-      expect(json["result"].length).to eq 0
+      expect(json['result'].length).to eq 0
     end
 
     it 'can only find delegates' do
-      delegate = FactoryBot.create(:delegate, name: "Jeremy")
-      get :users_search, params: { q: "erem", only_staff_delegates: true }
+      delegate = FactoryBot.create(:delegate, name: 'Jeremy')
+      get :users_search, params: { q: 'erem', only_staff_delegates: true }
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
-      expect(json["result"].length).to eq 1
-      expect(json["result"][0]["id"]).to eq delegate.id
+      expect(json['result'].length).to eq 1
+      expect(json['result'][0]['id']).to eq delegate.id
     end
   end
 
   describe 'GET #omni_search' do
-    let!(:user) { FactoryBot.create(:delegate, name: "Jeremy Fleischman") }
+    let!(:user) { FactoryBot.create(:delegate, name: 'Jeremy Fleischman') }
     let!(:comp) { FactoryBot.create(:competition, :confirmed, :visible, name: "jeremy Jfly's Competition 2015", delegates: [user]) }
-    let!(:post) { FactoryBot.create(:post, title: "jeremy post title", body: "post body", author: user) }
+    let!(:post) { FactoryBot.create(:post, title: 'jeremy post title', body: 'post body', author: user) }
     s3 = Aws::S3::Client.new(stub_responses: true)
-    s3.stub_responses(:get_object, ->(_) { { body: "{}" } })
+    s3.stub_responses(:get_object, ->(_) { { body: '{}' } })
     Regulation.reload_regulations(Aws::S3::Resource.new(client: s3))
 
     it 'requires query parameter' do
       get :omni_search
       expect(response.status).to eq 400
       json = JSON.parse(response.body)
-      expect(json["error"]).to eq "No query specified"
+      expect(json['error']).to eq 'No query specified'
     end
 
-    it "finds all the things!" do
-      get :omni_search, params: { q: "jeremy" }
+    it 'finds all the things!' do
+      get :omni_search, params: { q: 'jeremy' }
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
-      expect(json["result"].length).to eq 2
-      expect(json["result"].count { |r| r["class"] == "competition" }).to eq 1
-      expect(json["result"].count { |r| r["class"] == "post" }).to eq 0
-      expect(json["result"].count { |r| r["class"] == "user" }).to eq 0
-      expect(json["result"].count { |r| r["class"] == "person" }).to eq 1
+      expect(json['result'].length).to eq 2
+      expect(json['result'].count { |r| r['class'] == 'competition' }).to eq 1
+      expect(json['result'].count { |r| r['class'] == 'post' }).to eq 0
+      expect(json['result'].count { |r| r['class'] == 'user' }).to eq 0
+      expect(json['result'].count { |r| r['class'] == 'person' }).to eq 1
     end
 
-    it "works well when parts of the name are given" do
-      get :omni_search, params: { q: "Flei Jer" }
+    it 'works well when parts of the name are given' do
+      get :omni_search, params: { q: 'Flei Jer' }
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
-      expect(json["result"].length).to eq 1
-      expect(json["result"][0]["name"]).to include "Jeremy Fleischman"
+      expect(json['result'].length).to eq 1
+      expect(json['result'][0]['name']).to include 'Jeremy Fleischman'
     end
   end
 
@@ -185,10 +185,10 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
       json = JSON.parse(response.body)
       expect(json.length).to eq 2
 
-      delegate_json = json.find { |user| user["id"] == delegate.user.id }
-      expect(delegate_json["email"]).to eq delegate.user.email
-      expect(delegate_json["location"]).to eq delegate.metadata.location
-      expect(delegate_json["region_id"]).to eq senior_delegate.group.id
+      delegate_json = json.find { |user| user['id'] == delegate.user.id }
+      expect(delegate_json['email']).to eq delegate.user.email
+      expect(delegate_json['location']).to eq delegate.metadata.location
+      expect(delegate_json['region_id']).to eq senior_delegate.group.id
     end
   end
 
@@ -197,9 +197,9 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
       get :scramble_program
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
-      expect(json["current"]["name"]).to eq "TNoodle-WCA-1.2.2"
+      expect(json['current']['name']).to eq 'TNoodle-WCA-1.2.2'
       # the actual key resides in regulations-data, so in the test environment it will simply prompt "false"
-      expect(json["publicKeyBytes"]).to eq false
+      expect(json['publicKeyBytes']).to eq false
     end
   end
 
@@ -209,7 +209,7 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
         get :me
         expect(response.status).to eq 401
         json = JSON.parse(response.body)
-        expect(json['error']).to eq("Not authorized")
+        expect(json['error']).to eq('Not authorized')
       end
     end
 
@@ -285,15 +285,15 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
       let(:person) do
         FactoryBot.create(
           :person,
-          countryId: "USA",
-          gender: "m",
+          countryId: 'USA',
+          gender: 'm',
           dob: '1987-12-04',
         )
       end
       let(:user) do
         FactoryBot.create(
           :user,
-          avatar: File.open(Rails.root.join("spec/support/logo.jpg")),
+          avatar: File.open(Rails.root.join('spec/support/logo.jpg')),
           wca_id: person.wca_id,
         )
       end
@@ -312,8 +312,8 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
         # Verify that avatar url is a full url (starts with http(s))
         expect(json['me']['avatar']['url']).to match(/^https?/)
 
-        expect(json['me']['country_iso2']).to eq("US")
-        expect(json['me']['gender']).to eq("m")
+        expect(json['me']['country_iso2']).to eq('US')
+        expect(json['me']['gender']).to eq('m')
 
         expect(json['me']['dob']).to eq(nil)
         expect(json['me']['email']).to eq(nil)
@@ -323,17 +323,17 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
       end
 
       it 'can request dob scope' do
-        scopes.add("dob")
+        scopes.add('dob')
 
         get :me
         expect(response.status).to eq 200
         json = JSON.parse(response.body)
-        expect(json['me']['dob']).to eq("1987-12-04")
+        expect(json['me']['dob']).to eq('1987-12-04')
         expect(json['me']['email']).to eq(nil)
       end
 
       it 'can request email scope' do
-        scopes.add("email")
+        scopes.add('email')
 
         get :me
         expect(response.status).to eq 200
@@ -342,20 +342,20 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
       end
 
       it 'can request email and dob scope' do
-        scopes.add("dob", "email")
+        scopes.add('dob', 'email')
 
         get :me
         expect(response.status).to eq 200
         json = JSON.parse(response.body)
-        expect(json['me']['dob']).to eq("1987-12-04")
+        expect(json['me']['dob']).to eq('1987-12-04')
         expect(json['me']['email']).to eq(user.email)
       end
     end
 
     context 'signed in with invalid wca id' do
       let(:user) do
-        u = FactoryBot.create :user, country_iso2: "US"
-        u.update_column(:wca_id, "fooooo")
+        u = FactoryBot.create :user, country_iso2: 'US'
+        u.update_column(:wca_id, 'fooooo')
         u
       end
       let(:scopes) { Doorkeeper::OAuth::Scopes.new }
@@ -365,7 +365,7 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
       end
 
       it 'works' do
-        scopes.add("dob", "email")
+        scopes.add('dob', 'email')
 
         get :me
         expect(response.status).to eq 200
@@ -377,14 +377,14 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
         expect(json['me']['avatar']['thumb_url']).to eq AvatarUploaderBase.missing_avatar_thumb_url
         expect(json['me']['avatar']['is_default']).to eq true
 
-        expect(json['me']['country_iso2']).to eq "US"
-        expect(json['me']['gender']).to eq "m"
-        expect(json['me']['dob']).to eq user.dob.strftime("%F")
+        expect(json['me']['country_iso2']).to eq 'US'
+        expect(json['me']['gender']).to eq 'm'
+        expect(json['me']['dob']).to eq user.dob.strftime('%F')
       end
     end
 
     context 'signed in without wca id' do
-      let(:user) { FactoryBot.create :user, country_iso2: "US" }
+      let(:user) { FactoryBot.create :user, country_iso2: 'US' }
       let(:scopes) { Doorkeeper::OAuth::Scopes.new }
       let(:token) { double acceptable?: true, resource_owner_id: user.id, scopes: scopes }
       before :each do
@@ -392,7 +392,7 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
       end
 
       it 'works' do
-        scopes.add("dob", "email")
+        scopes.add('dob', 'email')
 
         get :me
         expect(response.status).to eq 200
@@ -404,9 +404,9 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
         expect(json['me']['avatar']['thumb_url']).to eq AvatarUploaderBase.missing_avatar_thumb_url
         expect(json['me']['avatar']['is_default']).to eq true
 
-        expect(json['me']['country_iso2']).to eq "US"
-        expect(json['me']['gender']).to eq "m"
-        expect(json['me']['dob']).to eq user.dob.strftime("%F")
+        expect(json['me']['country_iso2']).to eq 'US'
+        expect(json['me']['gender']).to eq 'm'
+        expect(json['me']['dob']).to eq user.dob.strftime('%F')
       end
     end
   end

@@ -11,7 +11,7 @@ class CityCommaRegionValidator < CountryCityValidator
   end
 
   def reason_why_invalid(city)
-    _city, region = city.split(", ", 2)
+    _city, region = city.split(', ', 2)
     if region.nil?
       "is not of the form 'city, #{@type_of_region}'"
     elsif !@valid_regions.include?(region)

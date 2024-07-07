@@ -3,7 +3,7 @@
 class InboxResult < ApplicationRecord
   include Resultable
 
-  self.table_name = "InboxResults"
+  self.table_name = 'InboxResults'
 
   # see result.rb for explanation of the scope
   belongs_to :inbox_person, ->(ibr) { where(competitionId: ibr.competitionId) }, primary_key: :id, foreign_key: :personId, optional: true

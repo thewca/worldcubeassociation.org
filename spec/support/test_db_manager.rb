@@ -20,6 +20,6 @@ class TestDbManager
 
   def self.fill_tables
     Rails.application.load_tasks
-    Rake::Task["db:seed:common"].invoke
+    Rake::Task['db:seed:common'].invoke
   end
 end

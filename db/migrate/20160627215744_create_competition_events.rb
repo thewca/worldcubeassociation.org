@@ -14,7 +14,7 @@ class CreateCompetitionEvents < ActiveRecord::Migration
       # See https://github.com/thewca/worldcubeassociation.org/issues/95 for
       # what these equal signs are about.
       (competition.eventSpecs || []).split.each do |event_spec|
-        event = Event.find(event_spec.split("=")[0])
+        event = Event.find(event_spec.split('=')[0])
         execute "insert into competition_events (competition_id, event_id) values ('#{competition.id}', '#{event.id}');"
       end
     end

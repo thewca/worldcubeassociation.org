@@ -2,8 +2,8 @@
 
 class Country < ApplicationRecord
   include Cachable
-  WCA_STATES_JSON_PATH = Rails.root.to_s + "/config/wca-states.json"
-  self.table_name = "Countries"
+  WCA_STATES_JSON_PATH = Rails.root.to_s + '/config/wca-states.json'
+  self.table_name = 'Countries'
 
   has_one :wfc_dues_redirect, as: :redirect_source
 
@@ -45,11 +45,11 @@ class Country < ApplicationRecord
   WCA_STATES = JSON.parse(File.read(WCA_STATES_JSON_PATH)).freeze
 
   ALL_STATES = [
-    WCA_STATES["states_lists"].map do |list|
-      list["states"].map do |state|
-        state_id = state["id"] || I18n.transliterate(state["name"]).tr("'", "_")
-        { id: state_id, continentId: state["continent_id"],
-          iso2: state["iso2"], name: state["name"] }
+    WCA_STATES['states_lists'].map do |list|
+      list['states'].map do |state|
+        state_id = state['id'] || I18n.transliterate(state['name']).tr("'", '_')
+        { id: state_id, continentId: state['continent_id'],
+          iso2: state['iso2'], name: state['name'] }
       end
     end,
     MULTIPLE_COUNTRIES,
@@ -58,7 +58,7 @@ class Country < ApplicationRecord
   belongs_to :continent, foreign_key: :continentId
   alias_attribute :continent_id, :continentId
   has_many :competitions, foreign_key: :countryId
-  has_one :band, foreign_key: :iso2, primary_key: :iso2, class_name: "CountryBand"
+  has_one :band, foreign_key: :iso2, primary_key: :iso2, class_name: 'CountryBand'
 
   def continent
     Continent.c_find(self.continentId)

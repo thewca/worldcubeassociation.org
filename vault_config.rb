@@ -1,9 +1,9 @@
 # This file starts with _ because it has to be the first one run
 # frozen_string_literal: true
 
-require "vault"
+require 'vault'
 
-require_relative "env_config"
+require_relative 'env_config'
 
 Vault.configure do |vault|
   # The address of the Vault server, is read as ENV["VAULT_ADDR"]

@@ -5,7 +5,7 @@ class ScheduleActivity < ApplicationRecord
   VALID_ACTIVITY_CODE_BASE = (Event.official.map(&:id) + %w(other)).freeze
   VALID_OTHER_ACTIVITY_CODE = %w(registration checkin multi breakfast lunch dinner awards unofficial misc tutorial).freeze
   belongs_to :holder, polymorphic: true
-  has_many :child_activities, class_name: "ScheduleActivity", as: :holder, dependent: :destroy
+  has_many :child_activities, class_name: 'ScheduleActivity', as: :holder, dependent: :destroy
   has_many :wcif_extensions, as: :extendable, dependent: :delete_all
   has_many :assignments, dependent: :delete_all
 
@@ -28,7 +28,7 @@ class ScheduleActivity < ApplicationRecord
       errors.add(:end_time, "should be before parent's end_time")
     end
     unless start_time <= end_time
-      errors.add(:end_time, "should be after start_time")
+      errors.add(:end_time, 'should be after start_time')
     end
   end
 
@@ -37,9 +37,9 @@ class ScheduleActivity < ApplicationRecord
 
     activity_id = activity_code.split('-').first
     unless VALID_ACTIVITY_CODE_BASE.include?(activity_id)
-      errors.add(:activity_code, "should be a valid activity code")
+      errors.add(:activity_code, 'should be a valid activity code')
     end
-    if activity_id == "other"
+    if activity_id == 'other'
       other_id = activity_code.split('-').second
       unless VALID_OTHER_ACTIVITY_CODE.include?(other_id)
         errors.add(:activity_code, "is an invalid 'other' activity code")
@@ -49,7 +49,7 @@ class ScheduleActivity < ApplicationRecord
     if holder.has_attribute?(:activity_code)
       holder_activity_id = holder.activity_code.split('-').first
       unless activity_id == holder_activity_id
-        errors.add(:activity_code, "should share its base activity id with parent")
+        errors.add(:activity_code, 'should share its base activity id with parent')
       end
     end
   end
@@ -58,7 +58,7 @@ class ScheduleActivity < ApplicationRecord
   # from its activity code (eg: if it's for an event or round).
   def localized_name(rounds_by_wcif_id = {})
     parts = ScheduleActivity.parse_activity_code(activity_code)
-    if parts[:event_id] == "other"
+    if parts[:event_id] == 'other'
       # TODO/NOTE: should we fix the name for event with predefined activity codes? (ie: those below but 'misc' and 'unofficial')
       # VALID_OTHER_ACTIVITY_CODE = %w(registration checkin multi breakfast lunch dinner awards unofficial misc).freeze
       name
@@ -88,19 +88,19 @@ class ScheduleActivity < ApplicationRecord
 
   def to_wcif
     {
-      "id" => wcif_id,
-      "name" => name,
-      "activityCode" => activity_code,
-      "startTime" => start_time.iso8601,
-      "endTime" => end_time.iso8601,
-      "childActivities" => child_activities.map(&:to_wcif),
-      "extensions" => wcif_extensions.map(&:to_wcif),
+      'id' => wcif_id,
+      'name' => name,
+      'activityCode' => activity_code,
+      'startTime' => start_time.iso8601,
+      'endTime' => end_time.iso8601,
+      'childActivities' => child_activities.map(&:to_wcif),
+      'extensions' => wcif_extensions.map(&:to_wcif),
     }
   end
 
   # TODO: not a fan of how it works (= passing round information)
   def to_event(rounds_by_wcif_id = {})
-    raise "#to_event called for nested activity" unless holder.is_a?(VenueRoom)
+    raise '#to_event called for nested activity' unless holder.is_a?(VenueRoom)
     {
       title: localized_name(rounds_by_wcif_id),
       roomId: holder.id,
@@ -115,12 +115,12 @@ class ScheduleActivity < ApplicationRecord
 
   def load_wcif!(wcif)
     update!(ScheduleActivity.wcif_to_attributes(wcif))
-    new_child_activities = wcif["childActivities"].map do |activity_wcif|
-      activity = child_activities.find { |a| a.wcif_id == activity_wcif["id"] } || child_activities.build
+    new_child_activities = wcif['childActivities'].map do |activity_wcif|
+      activity = child_activities.find { |a| a.wcif_id == activity_wcif['id'] } || child_activities.build
       activity.load_wcif!(activity_wcif)
     end
     self.child_activities = new_child_activities
-    WcifExtension.update_wcif_extensions!(self, wcif["extensions"]) if wcif["extensions"]
+    WcifExtension.update_wcif_extensions!(self, wcif['extensions']) if wcif['extensions']
     self
   end
 
@@ -140,33 +140,33 @@ class ScheduleActivity < ApplicationRecord
 
   def self.wcif_json_schema
     {
-      "type" => "object",
-      "id" => "activity",
-      "properties" => {
-        "id" => { "type" => "integer" },
-        "name" => { "type" => "string" },
-        "activityCode" => { "type" => "string" },
-        "startTime" => { "type" => "string" },
-        "endTime" => { "type" => "string" },
-        "childActivities" => { "type" => "array", "items" => { "$ref" => "activity" } },
-        "extensions" => { "type" => "array", "items" => WcifExtension.wcif_json_schema },
+      'type' => 'object',
+      'id' => 'activity',
+      'properties' => {
+        'id' => { 'type' => 'integer' },
+        'name' => { 'type' => 'string' },
+        'activityCode' => { 'type' => 'string' },
+        'startTime' => { 'type' => 'string' },
+        'endTime' => { 'type' => 'string' },
+        'childActivities' => { 'type' => 'array', 'items' => { '$ref' => 'activity' } },
+        'extensions' => { 'type' => 'array', 'items' => WcifExtension.wcif_json_schema },
       },
-      "required" => ["id", "name", "activityCode", "startTime", "endTime", "childActivities"],
+      'required' => ['id', 'name', 'activityCode', 'startTime', 'endTime', 'childActivities'],
     }
   end
 
   def self.wcif_to_attributes(wcif)
     {
-      wcif_id: wcif["id"],
-      name: wcif["name"],
-      activity_code: wcif["activityCode"],
-      start_time: wcif["startTime"],
-      end_time: wcif["endTime"],
+      wcif_id: wcif['id'],
+      name: wcif['name'],
+      activity_code: wcif['activityCode'],
+      start_time: wcif['startTime'],
+      end_time: wcif['endTime'],
     }
   end
 
   def self.parse_activity_code(activity_code)
-    parts = activity_code.split("-")
+    parts = activity_code.split('-')
     parts_hash = {
       event_id: parts.shift,
       round_number: nil,
@@ -176,11 +176,11 @@ class ScheduleActivity < ApplicationRecord
 
     parts.each do |p|
       case p[0]
-      when "a"
+      when 'a'
         parts_hash[:attempt_number] = p[1..].to_i
-      when "g"
+      when 'g'
         parts_hash[:group_number] = p[1..].to_i
-      when "r"
+      when 'r'
         parts_hash[:round_number] = p[1..].to_i
       end
     end

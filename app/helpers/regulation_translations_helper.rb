@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module RegulationTranslationsHelper
-  TRANSLATIONS_FOLDER_PATH = "translations"
+  TRANSLATIONS_FOLDER_PATH = 'translations'
 
   TRANSLATIONS_HASH_FILE = "#{TRANSLATIONS_FOLDER_PATH}/version".freeze
   TRANSLATIONS_DATE_FILE = "#{TRANSLATIONS_FOLDER_PATH}/version-date".freeze
@@ -15,7 +15,7 @@ module RegulationTranslationsHelper
     if @@metadata_cache.empty? || build_hash != @@cached_for_hash
 
       metadata_objects = s3.objects(prefix: TRANSLATIONS_FOLDER_PATH)
-      metadata_index = metadata_objects.filter { |object| File.extname(object.key) == ".json" }
+      metadata_index = metadata_objects.filter { |object| File.extname(object.key) == '.json' }
                                        .index_by { |object| File.basename(File.dirname(object.key)) }
                                        .transform_values { |object| object.get.body.read.strip }
                                        .transform_values { |raw| JSON.parse(raw, symbolize_names: true) }

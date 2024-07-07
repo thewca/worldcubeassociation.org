@@ -10,6 +10,6 @@ class CreateCompetitionOrganizers < ActiveRecord::Migration
     end
     add_index :competition_organizers, :competition_id
     add_index :competition_organizers, :organizer_id
-    add_index :competition_organizers, [:competition_id, :organizer_id], unique: true, name: "idx_competition_organizers_on_competition_id_and_organizer_id"
+    add_index :competition_organizers, [:competition_id, :organizer_id], unique: true, name: 'idx_competition_organizers_on_competition_id_and_organizer_id'
   end
 end
