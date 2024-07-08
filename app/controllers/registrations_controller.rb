@@ -465,7 +465,7 @@ class RegistrationsController < ApplicationController
   # Respond to asynchronous payment updates from Stripe.
   # Code skeleton according to https://stripe.com/docs/webhooks/quickstart
   def stripe_webhook
-    payload = request.body.read
+    payload = request.raw_post
 
     begin
       event = Stripe::Event.construct_from(
