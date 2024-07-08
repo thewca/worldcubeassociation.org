@@ -21,6 +21,11 @@ def region_input
   all(:css, 'div#venue-countryId>input.search').last
 end
 
+def fill_date(selector, with:)
+  fill_in selector, with: with
+  find_field(selector).native.send_keys :tab
+end
+
 # HTML 'checkbox' elements in SemUI are not actual <checkbox> fields.
 # They are a label with a rectangle and a tick mark injected via CSS, so we have to write our custom find method.
 def wca_registration_checkbox
@@ -43,8 +48,8 @@ RSpec.feature "Competition management", js: true, retry: 10 do
         visit new_competition_path
         fill_in "Name", with: "My Competition 2015"
         region_input.fill_in with: "United States"
-        fill_in "Start date", with: '08/11/2015'
-        fill_in "End date", with: '08/11/2015'
+        fill_date "Start date", with: '08/11/2015'
+        fill_date "End date", with: '08/11/2015'
         wca_registration_checkbox.click
         fill_in "Maximum number of competitors", with: '123'
         fill_in "The reason for the competitor limit", with: 'Because it is required'
@@ -69,8 +74,8 @@ RSpec.feature "Competition management", js: true, retry: 10 do
         visit edit_competition_path(competition)
         click_link "Clone"
         fill_in "Name", with: "Pedro 2016"
-        fill_in "Start date", with: "2016-11-30"
-        fill_in "End date", with: "2016-11-30"
+        fill_date "Start date", with: "2016-11-30"
+        fill_date "End date", with: "2016-11-30"
         click_button "Create Competition"
 
         # Force Capybara to wait until the page finishes updating
@@ -82,8 +87,8 @@ RSpec.feature "Competition management", js: true, retry: 10 do
         visit edit_competition_path(competition)
         click_link "Clone"
         # See https://github.com/thewca/worldcubeassociation.org/issues/1016#issuecomment-262573451
-        fill_in "Start date", with: "2016-11-30"
-        fill_in "End date", with: "2016-11-30"
+        fill_date "Start date", with: "2016-11-30"
+        fill_date "End date", with: "2016-11-30"
         click_button "Create Competition"
 
         expect(page).to have_text("must end with a year", wait: SLUGGISH_WAIT_TIME)
@@ -232,8 +237,8 @@ RSpec.feature "Competition management", js: true, retry: 10 do
 
       fill_in "Name", with: "New Comp 2015"
       region_input.fill_in with: "United States"
-      fill_in "Start date", with: '08/11/2015'
-      fill_in "End date", with: '08/11/2015'
+      fill_date "Start date", with: '08/11/2015'
+      fill_date "End date", with: '08/11/2015'
       wca_registration_checkbox.click
       fill_in "Maximum number of competitors", with: '123'
       fill_in "The reason for the competitor limit", with: 'Because it is required'
