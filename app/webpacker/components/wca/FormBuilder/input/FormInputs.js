@@ -243,10 +243,11 @@ export const InputDate = wrapInput((props) => {
       </Input>
       {props.dateTime && (
         <p className="help-block">
-          In your current time zone:{" "}
+          In your current time zone:
+          {' '}
           {props.value && new Date(props.value).toLocaleString(undefined, {
-            dateStyle: "full",
-            timeStyle: "short",
+            dateStyle: 'full',
+            timeStyle: 'short',
           })}
         </p>
       )}
