@@ -9435,9 +9435,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-datepicker@npm:^7.2.0":
-  version: 7.2.0
-  resolution: "react-datepicker@npm:7.2.0"
+"react-datepicker@npm:^7.3.0":
+  version: 7.3.0
+  resolution: "react-datepicker@npm:7.3.0"
   dependencies:
     "@floating-ui/react": "npm:^0.26.2"
     clsx: "npm:^2.1.0"
@@ -9447,7 +9447,7 @@ __metadata:
   peerDependencies:
     react: ^16.9.0 || ^17 || ^18
     react-dom: ^16.9.0 || ^17 || ^18
-  checksum: 10c0/bae1ad21da3643469aab3eda36a6b8f372bf9566ee44c40acfeadc8ede3a9af73e43933435c682e338a64088a2ab621e4edaf15afc8d69a7b7387e6b1cac4b99
+  checksum: 10c0/a926c896fbd827bd6195e5fdbf98bf48fc86a076112bcff38dcbd580da24a98c0c8f5ed1a1dfb2d91076134e41b209e118ccd41cbc3b2036e94c54af25e1788c
   languageName: node
   linkType: hard
 
@@ -10037,7 +10037,7 @@ __metadata:
     react: "npm:^18.3.1"
     react-beautiful-dnd: "npm:^13.1.1"
     react-csv: "npm:^2.2.2"
-    react-datepicker: "npm:^7.2.0"
+    react-datepicker: "npm:^7.3.0"
     react-dom: "npm:^18.3.1"
     react-google-recaptcha: "npm:^3.1.0"
     react-intersection-observer: "npm:^9.10.3"
