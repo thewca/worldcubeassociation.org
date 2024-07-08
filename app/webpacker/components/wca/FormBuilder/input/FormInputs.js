@@ -221,25 +221,36 @@ export const InputDate = wrapInput((props) => {
   }, [props]);
 
   return (
-    <Input
-      id={props.htmlId}
-      name={props.htmlName}
-    >
-      <UtcDatePicker
+    <>
+      <Input
         id={props.htmlId}
-        isoDate={props.value}
-        onChange={onChangeInternal}
-        shouldCloseOnSelect={false}
-        showTimeInput={props.dateTime}
-        style={{ width: 'inherit' }}
-        selectsStart={props.selectsStart}
-        selectsEnd={props.selectsEnd}
-        isoStartDate={props.startDate}
-        isoEndDate={props.endDate}
-        isoMinDate={props.minDate}
-        isoMaxDate={props.maxDate}
-      />
-    </Input>
+        name={props.htmlName}
+      >
+        <UtcDatePicker
+          id={props.htmlId}
+          isoDate={props.value}
+          onChange={onChangeInternal}
+          shouldCloseOnSelect={false}
+          showTimeInput={props.dateTime}
+          style={{ width: 'inherit' }}
+          selectsStart={props.selectsStart}
+          selectsEnd={props.selectsEnd}
+          isoStartDate={props.startDate}
+          isoEndDate={props.endDate}
+          isoMinDate={props.minDate}
+          isoMaxDate={props.maxDate}
+        />
+      </Input>
+      {props.dateTime && (
+        <p className="help-block">
+          In your current time zone:{" "}
+          {props.value && new Date(props.value).toLocaleString(undefined, {
+            dateStyle: "full",
+            timeStyle: "short",
+          })}
+        </p>
+      )}
+    </>
   );
 }, ['dateTime', 'selectsStart', 'selectsEnd', 'startDate', 'endDate', 'minDate', 'maxDate'], '');
 
