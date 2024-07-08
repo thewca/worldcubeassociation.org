@@ -23,6 +23,9 @@ end
 
 def fill_date(selector, with:)
   fill_in selector, with: with
+  # After migrating to react-datepicker v7, you somehow need to tab out of the field (de-focus, aka. blur)
+  #   in order to make the automated tests register that the value has changed. An alternative would be
+  #   to `sleep` for a second, i.e. pause the test. This is not noticeable in production use and likely a glitch in the test drivers.
   find_field(selector).native.send_keys :tab
 end
 
