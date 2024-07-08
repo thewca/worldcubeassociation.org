@@ -266,7 +266,7 @@ GEM
     devise-jwt (0.11.0)
       devise (~> 4.0)
       warden-jwt_auth (~> 0.8)
-    devise-two-factor (5.0.0)
+    devise-two-factor (5.1.0)
       activesupport (~> 7.0)
       devise (~> 4.0)
       railties (~> 7.0)
@@ -627,7 +627,7 @@ GEM
     retriable (3.1.2)
     rexml (3.3.1)
       strscan
-    rotp (6.2.0)
+    rotp (6.3.0)
     rouge (4.1.2)
     rqrcode (2.2.0)
       chunky_png (~> 1.0)
