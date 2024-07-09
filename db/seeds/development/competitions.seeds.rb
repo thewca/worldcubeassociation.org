@@ -29,7 +29,7 @@ after "development:users", "development:user_roles" do
 
   countries = Country.all
 
-  delegate = RolesMetadataDelegateRegions.includes(:user_role).where.not(status: RolesMetadataDelegateRegions.statuses[:trainee_delegate]).select { |role_metadata| role_metadata.user_role.is_active? }.sample.user
+  delegate = RolesMetadataDelegateRegions.joins(:user_role).not_trainee_delegate.merge(UserRole.active).sample.user
 
   users = User.where.not(wca_id: nil).sample(93)
 
