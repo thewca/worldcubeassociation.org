@@ -21,7 +21,7 @@ class RegistrationsController < ApplicationController
 
   before_action -> { redirect_to_root_unless_user(:can_manage_competition?, competition_from_params) },
                 except: [:create, :index, :psych_sheet, :psych_sheet_event, :register, :update, :destroy, :payment_denomination,
-                         :payment_completion_stripe, :payment_completion_paypal, :load_payment_intent, :stripe_webhook, :paypal_payment_capture]
+                         :payment_completion, :load_payment_intent, :stripe_webhook, :paypal_payment_capture]
 
   before_action :competition_must_be_using_wca_registration!, except: [:import, :do_import, :add, :do_add, :index, :psych_sheet, :psych_sheet_event, :stripe_webhook, :payment_denomination]
   private def competition_must_be_using_wca_registration!
@@ -574,63 +574,43 @@ class RegistrationsController < ApplicationController
     render json: raw_capture
   end
 
-  def payment_completion_stripe
-    competition_id = params.require(:competition_id)
-
-    # Provided by Stripe upon redirect when the "PaymentElement" workflow is completed
-    intent_id = params[:payment_intent]
-    intent_secret = params[:payment_intent_client_secret]
-
-    # We expect that the record here is a top-level PaymentIntent in Stripe's API model
-    stored_record = StripeRecord.find_by(stripe_id: intent_id)
-
-    unless stored_record.payment_intent?
-      flash[:error] = t("registrations.payment_form.errors.stripe.not_an_intent")
-      return redirect_to competition_register_path(competition_id)
-    end
-
-    unless stored_record.payment_intent&.client_secret == intent_secret
-      flash[:error] = t("registrations.payment_form.errors.stripe.secret_invalid")
-      return redirect_to competition_register_path(competition_id)
-    end
-
-    handle_payment_completion(stored_record)
-
-    redirect_to competition_register_path(competition_id)
-  end
-
-  def payment_completion_paypal
-    return head :forbidden if PaypalInterface.paypal_disabled?
-
-    competition_id = params.require(:competition_id)
-
-    order_id = params.require(:order_id)
-    stored_record = PaypalRecord.find_by(paypal_id: order_id)
-
-    unless stored_record.paypal_order?
-      flash[:error] = t("registrations.payment_form.errors.paypal.not_an_order")
-      return redirect_to competition_register_path(competition_id)
-    end
-
-    handle_payment_completion(stored_record)
-
-    redirect_to competition_register_path(competition_id)
-  end
-
-  private def handle_payment_completion(stored_record)
-    return flash[:error] = t("registrations.payment_form.errors.generic.not_found", provider: t("payments.payment_providers.generic_fallback")) unless stored_record.present?
-
+  def payment_completion
     competition_id = params[:competition_id]
     competition = Competition.find(competition_id)
 
-    payment_provider = CompetitionPaymentIntegration::INTEGRATION_RECORD_TYPES.invert[stored_record.class.name]
-    payment_account = competition.payment_account_for(payment_provider.to_sym)
+    payment_integration = params[:payment_integration].to_sym
+    payment_account = competition.payment_account_for(payment_integration)
+
+    unless payment_account.present?
+      flash[:danger] = t("registrations.payment_form.errors.cpi_disconnected")
+      return redirect_to competition_register_path(competition)
+    end
+
+    begin
+      stored_record = payment_account.find_payment_from_request(params)
+    rescue StandardError => e
+      flash[:error] = e.message
+      return redirect_to competition_register_path(competition)
+    end
+
+    unless stored_record.present?
+      flash[:error] = t("registrations.payment_form.errors.generic.not_found", provider: t("payments.payment_providers.generic_fallback"))
+      return redirect_to competition_register_path(competition)
+    end
 
     stored_intent = stored_record.payment_intent
-    return flash[:error] = t("registrations.payment_form.errors.generic.intent_not_found", provider: t("payments.payment_providers.#{payment_provider}")) unless stored_intent.present?
+
+    unless stored_intent.present?
+      flash[:error] = t("registrations.payment_form.errors.generic.intent_not_found", provider: t("payments.payment_providers.#{payment_integration}"))
+      return redirect_to competition_register_path(competition)
+    end
 
     remote_intent = stored_intent.retrieve_remote
-    return flash[:error] = t("registrations.payment_form.errors.generic.remote_not_found", provider: t("payments.payment_providers.#{payment_provider}")) unless remote_intent.present?
+
+    unless remote_intent.present?
+      flash[:error] = t("registrations.payment_form.errors.generic.remote_not_found", provider: t("payments.payment_providers.#{payment_integration}"))
+      return redirect_to competition_register_path(competition)
+    end
 
     registration = stored_intent.holder
     uses_v2 = registration.is_a? MicroserviceRegistration
@@ -649,7 +629,8 @@ class RegistrationsController < ApplicationController
             { type: "user", id: current_user.id },
           )
         rescue Faraday::Error
-          return flash[:error] = t("registrations.payment_form.errors.registration_unreachable")
+          flash[:error] = t("registrations.payment_form.errors.registration_unreachable")
+          return redirect_to competition_register_path(competition_id)
         end
       else
         registration.record_payment(
@@ -683,6 +664,8 @@ class RegistrationsController < ApplicationController
       # Invalid status
       flash[:error] = "Invalid PaymentIntent status"
     end
+
+    redirect_to competition_register_path(competition_id)
   end
 
   def load_payment_intent

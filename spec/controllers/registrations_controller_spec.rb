@@ -863,8 +863,9 @@ RSpec.describe RegistrationsController, clean_db_with_truncation: true do
             { payment_method: 'pm_card_visa' },
             stripe_account: competition.payment_account_for(:stripe).account_id,
           )
-          get :payment_completion_stripe, params: {
+          get :payment_completion, params: {
             competition_id: competition.id,
+            payment_integration: :stripe,
             payment_intent: payment_intent.payment_record.stripe_id,
             payment_intent_client_secret: payment_intent.client_secret,
           }

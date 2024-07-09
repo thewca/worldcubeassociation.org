@@ -123,7 +123,7 @@
             .then(({ id: orderId }) => {
               toggleSaving(false);
 
-              const paymentCompletionUrl = `<%= CGI.unescape(registration_payment_completion_paypal_url(@competition, order_id: "${orderId}")) %>`
+              const paymentCompletionUrl = `<%= CGI.unescape(registration_payment_completion_url(@competition, payment_integration: :paypal, order_id: "${orderId}")) %>`
               actions.redirect(paymentCompletionUrl);
             })
             .catch(handleAjaxError);

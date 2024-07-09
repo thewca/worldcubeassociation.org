@@ -54,6 +54,15 @@ class ConnectedPaypalAccount < ApplicationRecord
     PaypalRecord.capture.find(record_id)
   end
 
+  def find_payment_from_request(params)
+    order_id = params.require(:order_id)
+    stored_record = PaypalRecord.find_by(paypal_id: order_id)
+
+    raise t("registrations.payment_form.errors.paypal.not_an_order") unless stored_record&.paypal_order?
+
+    stored_record
+  end
+
   def issue_refund(capture_record, amount_iso)
     req_payload, refund = PaypalInterface.issue_refund(
       self.paypal_merchant_id,

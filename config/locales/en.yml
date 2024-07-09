@@ -1254,6 +1254,7 @@ en:
       errors:
         already_paid: "The charge was not placed because the registration fees are already paid."
         not_allowed: "You can't pay for that registration."
+        cpi_disconnected: "Tried to confirm a payment but the payment integration was disabled. Please contact the organizers of the competition."
         generic:
           failed: "Please check the %{provider} transaction."
           not_found: "%{provider} reported back a transaction ID that couldn't be found."

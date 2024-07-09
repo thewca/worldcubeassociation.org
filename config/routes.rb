@@ -37,8 +37,7 @@ Rails.application.routes.draw do
 
   post 'registration/:id/load-payment-intent/:payment_integration' => 'registrations#load_payment_intent', as: :registration_payment_intent
   post 'competitions/:competition_id/refund/:payment_integration/:payment_id' => 'registrations#refund_payment', as: :registration_payment_refund
-  get 'competitions/:competition_id/payment-completion/stripe' => 'registrations#payment_completion_stripe', as: :registration_payment_completion_stripe
-  get 'competitions/:competition_id/payment-completion/paypal' => 'registrations#payment_completion_paypal', as: :registration_payment_completion_paypal
+  get 'competitions/:competition_id/payment-completion/:payment_integration' => 'registrations#payment_completion', as: :registration_payment_completion
   post 'competitions/:competition_id/paypal-capture' => 'registrations#paypal_payment_capture', as: :registration_paypal_payment_capture
   post 'registration/stripe-webhook' => 'registrations#stripe_webhook', as: :registration_stripe_webhook
   get 'registration/payment-denomination' => 'registrations#payment_denomination', as: :registration_payment_denomination
