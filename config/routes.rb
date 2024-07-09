@@ -34,8 +34,9 @@ Rails.application.routes.draw do
     post 'users/authenticate-sensitive' => 'users#authenticate_user_for_sensitive_edit'
     delete 'users/sign-out-other' => 'sessions#destroy_other', as: :destroy_other_user_sessions
   end
+
+  post 'registration/:id/load-payment-intent/:payment_integration' => 'registrations#load_payment_intent', as: :registration_payment_intent
   post 'competitions/:competition_id/refund/:payment_integration/:payment_id' => 'registrations#refund_payment', as: :registration_payment_refund
-  post 'registration/:id/payment-intent/:payment_integration' => 'registrations#load_payment_intent', as: :registration_payment_intent
   get 'competitions/:competition_id/payment-completion/stripe' => 'registrations#payment_completion_stripe', as: :registration_payment_completion_stripe
   get 'competitions/:competition_id/payment-completion/paypal' => 'registrations#payment_completion_paypal', as: :registration_payment_completion_paypal
   post 'competitions/:competition_id/paypal-capture' => 'registrations#paypal_payment_capture', as: :registration_paypal_payment_capture
@@ -93,7 +94,6 @@ Rails.application.routes.draw do
     get 'registrations/psych-sheet' => 'registrations#psych_sheet', as: :psych_sheet
     get 'registrations/psych-sheet/:event_id' => 'registrations#psych_sheet_event', as: :psych_sheet_event
     resources :registrations, only: [:index, :update, :create, :edit, :destroy], shallow: true
-    get 'waiting' => 'registrations#waiting_list', as: :waiting_list
     get 'edit/registrations' => 'registrations#edit_registrations'
     get 'register' => 'registrations#register'
     resources :competition_tabs, except: [:show], as: :tabs, path: :tabs
@@ -190,6 +190,7 @@ Rails.application.routes.draw do
     get 'wdc' => 'panel#wdc', as: :panel_wdc
     get 'wec' => 'panel#wec', as: :panel_wec
     get 'weat' => 'panel#weat', as: :panel_weat
+    get 'admin' => 'panel#admin', as: :panel_admin
   end
   resources :notifications, only: [:index]
 
@@ -245,6 +246,7 @@ Rails.application.routes.draw do
   get '/regulations/countries' => 'regulations#countries'
   get '/regulations/scrambles' => 'regulations#scrambles'
   get '/regulations/guidelines' => 'regulations#guidelines'
+  get '/regulations/full' => 'regulations#full'
   get '/regulations/translations' => 'regulations#translations'
   get '/regulations/translations/:language' => 'regulations_translations#translated_regulation'
   get '/regulations/translations/:language/guidelines' => 'regulations_translations#translated_guidelines'
@@ -262,7 +264,6 @@ Rails.application.routes.draw do
   post '/admin/check_results' => 'admin#do_check_results'
   get '/admin/merge_people' => 'admin#merge_people'
   post '/admin/merge_people' => 'admin#do_merge_people'
-  get '/admin/edit_person' => 'admin#edit_person'
   get '/admin/fix_results' => 'admin#fix_results'
   get '/admin/fix_results_selector' => 'admin#fix_results_selector', as: :admin_fix_results_ajax
   get '/admin/person_data' => 'admin#person_data'
@@ -378,9 +379,6 @@ Rails.application.routes.draw do
       post '/registration-data' => 'competitions#registration_data', as: :registration_data
 
       scope 'user_roles' do
-        get '/user/:user_id' => 'user_roles#index_for_user', as: :index_for_user
-        get '/group/:group_id' => 'user_roles#index_for_group', as: :index_for_group
-        get '/group-type/:group_type' => 'user_roles#index_for_group_type', as: :index_for_group_type
         get '/search' => 'user_roles#search', as: :user_roles_search
       end
       resources :user_roles, only: [:index, :show, :create, :update, :destroy]
@@ -399,6 +397,6 @@ Rails.application.routes.draw do
 
   # Deprecated Links
   get 'teams-committees' => redirect('teams-committees-councils')
-  get 'panel/delegate-crash-course' => redirect('panel/delegate#delegate-crash-course')
+  get 'panel/delegate-crash-course' => redirect('panel/delegate#delegate-handbook')
   get 'panel' => redirect('panel/staff')
 end

@@ -563,6 +563,7 @@ RSpec.describe "registrations" do
           post registration_payment_intent_path(registration.id, :stripe), params: {
             amount: registration.outstanding_entry_fees.cents,
           }
+
           payment_intent = registration.reload.payment_intents.first
 
           # mimic the user clicking through the interface
@@ -662,6 +663,7 @@ RSpec.describe "registrations" do
 
           payment_intent = registration.reload.payment_intents.first
           expect(payment_intent).to_not be_nil
+
           # Intent should not be confirmed at this stage, because we have never received a receipt charge from Stripe yet
           expect(payment_intent.confirmed_at).to be_nil
           expect(payment_intent.wca_status).not_to eq('succeeded')
@@ -730,6 +732,7 @@ RSpec.describe "registrations" do
 
           payment_intent = registration.reload.payment_intents.first
           expect(payment_intent).to_not be_nil
+
           # Intent should not be confirmed at this stage, because we have never received a receipt charge from Stripe yet
           expect(payment_intent.confirmed_at).to be_nil
 
@@ -739,6 +742,7 @@ RSpec.describe "registrations" do
             { payment_method: 'pm_card_authenticationRequired' },
             stripe_account: competition.payment_account_for(:stripe).account_id,
           )
+
           # mimic the response that Stripe sends to our return_url after completing the checkout UI
           get registration_payment_completion_stripe_path(competition.id), params: {
             payment_intent: payment_intent.payment_record.stripe_id,
@@ -746,6 +750,7 @@ RSpec.describe "registrations" do
           }
 
           stripe_record = payment_intent.reload.payment_record
+
           # Now we should still wait for the confirmation because SCA hasn't been completed yet
           expect(payment_intent.confirmed_at).to be_nil
           expect(stripe_record).to_not be_nil
@@ -762,6 +767,7 @@ RSpec.describe "registrations" do
           post registration_payment_intent_path(registration.id, :stripe), params: {
             amount: registration.outstanding_entry_fees.cents,
           }
+
           payment_intent = registration.reload.payment_intents.first
 
           expect {
@@ -791,6 +797,7 @@ RSpec.describe "registrations" do
           post registration_payment_intent_path(registration.id, :stripe), params: {
             amount: registration.outstanding_entry_fees.cents,
           }
+
           payment_intent = registration.reload.payment_intents.first
 
           expect {
@@ -820,6 +827,7 @@ RSpec.describe "registrations" do
           post registration_payment_intent_path(registration.id, :stripe), params: {
             amount: registration.outstanding_entry_fees.cents,
           }
+
           payment_intent = registration.reload.payment_intents.first
 
           expect {
@@ -849,6 +857,7 @@ RSpec.describe "registrations" do
           post registration_payment_intent_path(registration.id, :stripe), params: {
             amount: registration.outstanding_entry_fees.cents,
           }
+
           payment_intent = registration.reload.payment_intents.first
 
           expect {
@@ -911,6 +920,7 @@ RSpec.describe "registrations" do
 
           payment_intent = registration.reload.payment_intents.first
           expect(payment_intent).to_not be_nil
+
           # Intent should not be confirmed at this stage, because we have never received a receipt charge from Stripe yet
           expect(payment_intent.confirmed_at).to be_nil
 
@@ -949,6 +959,7 @@ RSpec.describe "registrations" do
 
           payment_intent = registration.reload.payment_intents.first
           expect(payment_intent).to_not be_nil
+
           # Intent should not be confirmed at this stage, because we have never received a receipt charge from Stripe yet
           expect(payment_intent.confirmed_at).to be_nil
 
@@ -1200,6 +1211,7 @@ RSpec.describe "registrations" do
       stub_request(:post, create_order_url)
         .to_return(status: 200, body: stubbed_order, headers: { 'Content-Type' => 'application/json' })
 
+      # Create a PaypalOrder
       payload = { amount: competition.base_entry_fee_lowest_denomination }
       post registration_payment_intent_path(registration, :paypal), params: payload
 

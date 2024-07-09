@@ -50,7 +50,7 @@ class ConnectedPaypalAccount < ApplicationRecord
     end
   end
 
-  def find_payment_record(record_id)
+  def find_payment(record_id)
     PaypalRecord.capture.find(record_id)
   end
 

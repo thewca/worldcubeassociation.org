@@ -28,16 +28,19 @@ import Loading from '../../Requests/Loading';
 import { EventSelector } from '../../CompetitionsOverview/CompetitionsFilters';
 import Refunds from './Refunds';
 import { editPersonUrl } from '../../../lib/requests/routes.js.erb';
+import { useConfirm } from '../../../lib/providers/ConfirmProvider';
+import i18n from '../../../lib/i18n';
+import RegistrationHistory from './RegistrationHistory';
 
 export default function RegistrationEditor({ competitor, competitionInfo }) {
   const dispatch = useDispatch();
   const [comment, setComment] = useState('');
   const [adminComment, setAdminComment] = useState('');
   const [status, setStatus] = useState('');
-  const [waitingListPosition, setWaitingListPosition] = useState(0);
   const [guests, setGuests] = useState(0);
   const [selectedEvents, setSelectedEvents] = useState([]);
   const [registration, setRegistration] = useState({});
+  const confirm = useConfirm();
 
   const queryClient = useQueryClient();
 
@@ -56,7 +59,7 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
     enabled: Boolean(serverRegistration),
   });
 
-  const { mutate: updateRegistrationMutation, isLoading: isUpdating } = useMutation({
+  const { mutate: updateRegistrationMutation, isPending: isUpdating } = useMutation({
     mutationFn: updateRegistration,
     onError: (data) => {
       const { errorCode } = data;
@@ -68,11 +71,20 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
       ));
     },
     onSuccess: (data) => {
-      setMessage(setMessage('Registration update succeeded', 'positive'));
       queryClient.setQueryData(
-        ['registration', competitionInfo.id, competitor.id],
-        data,
+        ['registration-admin', competitionInfo.id, competitor.id],
+        {
+          ...data.registration,
+          payment: serverRegistration.payment,
+        },
       );
+      // Going from cancelled -> pending
+      if (registration.competing.registration_status === 'cancelled') {
+        dispatch(setMessage('registrations.flash.registered', 'positive'));
+        // Not changing status
+      } else {
+        dispatch(setMessage('registrations.flash.updated', 'positive'));
+      }
     },
   });
 
@@ -83,9 +95,6 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
       setStatus(serverRegistration.competing.registration_status);
       setSelectedEvents(serverRegistration.competing.event_ids);
       setAdminComment(serverRegistration.competing.admin_comment ?? '');
-      setWaitingListPosition(
-        serverRegistration.competing.waiting_list_position ?? 0,
-      );
       setGuests(serverRegistration.guests ?? 0);
     }
   }, [serverRegistration]);
@@ -98,7 +107,7 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
     && adminComment !== (serverRegistration.competing.admin_comment ?? '');
   const hasStatusChanged = serverRegistration
     && status !== serverRegistration.competing.registration_status;
-  const hasGuestsChanged = false;
+  const hasGuestsChanged = serverRegistration && guests !== serverRegistration.guests;
 
   const hasChanges = hasEventsChanged
     || hasCommentChanged
@@ -112,62 +121,111 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
 
   const handleRegisterClick = useCallback(() => {
     if (!hasChanges) {
-      dispatch(setMessage('There are no changes', 'basic'));
+      dispatch(setMessage('competitions.registration_v2.update.no_changes', 'basic'));
     } else if (!commentIsValid) {
-      dispatch(setMessage('You must include a comment', 'negative'));
+      dispatch(setMessage('registrations.errors.cannot_register_without_comment', 'negative'));
     } else if (!eventsAreValid) {
       dispatch(setMessage(
         maxEvents === Infinity
-          ? 'You must select at least 1 event'
-          : `You must select between 1 and ${maxEvents} events`,
+          ? 'registrations.errors.must_register'
+          : 'registrations.errors.exceeds_event_limit.other',
         'negative',
       ));
     } else {
-      dispatch(setMessage('Updating Registration', 'basic'));
-      updateRegistrationMutation({
+      dispatch(setMessage('competitions.registration_v2.update.being_updated', 'positive'));
+      // Only send changed values
+      const body = {
         user_id: competitor.id,
-        competing: {
-          status,
-          event_ids: selectedEvents,
-          comment,
-          admin_comment: adminComment,
-          waiting_list_position: waitingListPosition,
-        },
         competition_id: competitionInfo.id,
-      });
+        competing: {},
+      };
+      if (hasEventsChanged) {
+        body.competing.event_ids = selectedEvents;
+      }
+      if (hasCommentChanged) {
+        body.competing.comment = comment;
+      }
+      if (hasAdminCommentChanged) {
+        body.competing.admin_comment = adminComment;
+      }
+      if (hasStatusChanged) {
+        body.competing.status = status;
+      }
+      if (hasGuestsChanged) {
+        body.guests = guests;
+      }
+      confirm({
+        content: i18n.t('competitions.registration_v2.update.update_confirm'),
+      }).then(() => {
+        updateRegistrationMutation(body);
+      }).catch(() => {});
     }
   }, [hasChanges,
+    confirm,
     commentIsValid,
-    eventsAreValid, dispatch, maxEvents,
-    updateRegistrationMutation, competitor,
-    status, selectedEvents, comment,
-    adminComment, waitingListPosition, competitionInfo.id]);
+    eventsAreValid,
+    dispatch,
+    maxEvents,
+    competitor.id,
+    competitionInfo.id,
+    hasEventsChanged,
+    hasCommentChanged,
+    hasAdminCommentChanged,
+    hasStatusChanged,
+    hasGuestsChanged,
+    updateRegistrationMutation,
+    selectedEvents,
+    comment,
+    adminComment,
+    status,
+    guests]);
 
   const registrationEditDeadlinePassed = Boolean(competitionInfo.event_change_deadline_date)
     && hasPassed(competitionInfo.event_change_deadline_date);
+
+  const handleEventSelection = ({ type, eventId }) => {
+    if (type === 'select_all_events') {
+      setSelectedEvents(competitionInfo.event_ids);
+    } else if (type === 'clear_events') {
+      setSelectedEvents([]);
+    } else if (type === 'toggle_event') {
+      const index = selectedEvents.indexOf(eventId);
+      if (index === -1) {
+        setSelectedEvents([...selectedEvents, eventId]);
+      } else {
+        setSelectedEvents(selectedEvents.toSpliced(index, 1));
+      }
+    }
+  };
 
   if (isLoading || isRegistrationLoading) {
     return <Loading />;
   }
 
   return (
-    <Segment padded attached>
+    <Segment padded attached loading={isUpdating}>
       <Form onSubmit={handleRegisterClick}>
         {!competitor.wca_id && (
         <Message>
           This person registered with an account. You can edit their
           personal information
           {' '}
-          <a href={editPersonUrl(competitor.id)}>here</a>.
+          <a href={editPersonUrl(competitor.id)}>here</a>
+          .
         </Message>
         )}
         <Header>{competitor.name}</Header>
-        <EventSelector
-          onEventSelection={setSelectedEvents}
-          selectedEvents={selectedEvents}
-          disabled={registrationEditDeadlinePassed}
-          eventList={competitionInfo.event_ids}
-        />
+        <Form.Field required error={selectedEvents.length === 0}>
+          <EventSelector
+            onEventSelection={handleEventSelection}
+            eventList={competitionInfo.event_ids}
+            selectedEvents={selectedEvents}
+            id="event-selection"
+            maxEvents={maxEvents}
+            shouldErrorOnEmpty
+          />
+        </Form.Field>
+
         <label>Comment</label>
         <Form.TextArea
           id="competitor-comment"
@@ -240,7 +298,7 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
         ) : (
           <Button
             color="blue"
-            disabled={isUpdating}
+            disabled={isUpdating || !hasChanges}
           >
             Update Registration
           </Button>
@@ -262,60 +320,10 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
           )}
         </>
       )}
-      <Header>Registration History</Header>
-      <Table>
-        <Table.Header>
-          <Table.Row>
-            <Table.HeaderCell>Timestamp</Table.HeaderCell>
-            <Table.HeaderCell>Changes</Table.HeaderCell>
-            <Table.HeaderCell>Acting User</Table.HeaderCell>
-            <Table.HeaderCell>Action</Table.HeaderCell>
-          </Table.Row>
-        </Table.Header>
-        <Table.Body>
-          {registration.history.map((entry) => (
-            <Table.Row key={entry.timestamp}>
-              <Table.Cell>
-                <Popup
-                  content={getShortTimeString(entry.timestamp)}
-                  trigger={
-                    <span>{getShortDateString(entry.timestamp)}</span>
-                  }
-                />
-              </Table.Cell>
-              <Table.Cell>
-                {!_.isEmpty(entry.changed_attributes) ? (
-                  Object.entries(entry.changed_attributes).map(
-                    ([k, v]) => (
-                      <span key={k}>
-                        Changed
-                        {' '}
-                        {k}
-                        {' '}
-                        to
-                        {' '}
-                        {JSON.stringify(v)}
-                        {' '}
-                        <br />
-                      </span>
-                    ),
-                  )
-                ) : (
-                  <span>Registration Created</span>
-                )}
-              </Table.Cell>
-              <Table.Cell>
-                {
-                  competitorsInfo.find(
-                    (c) => c.id === entry.actor_id,
-                  )?.name ?? entry.actor_user_id
-                }
-              </Table.Cell>
-              <Table.Cell>{entry.action}</Table.Cell>
-            </Table.Row>
-          ))}
-        </Table.Body>
-      </Table>
+      <RegistrationHistory
+        history={registration.history.toReversed()}
+        competitorsInfo={competitorsInfo}
+      />
     </Segment>
   );
 }

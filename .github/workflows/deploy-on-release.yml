@@ -20,7 +20,7 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
       - name: Build and Push Sidekiq image
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           push: true
           file: ./Dockerfile.sidekiq
@@ -31,7 +31,7 @@ jobs:
           cache-to: type=gha,mode=max
         # this will trigger the deployment pipeline for prod
       - name: Build and push Prod Image
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           push: true
           tags: |

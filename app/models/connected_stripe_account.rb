@@ -6,6 +6,7 @@ class ConnectedStripeAccount < ApplicationRecord
   def prepare_intent(registration, amount_iso, currency_iso, paying_user)
     registration.payment_intents
                 .incomplete
+                .stripe
                 .each do |intent|
       if intent.account_id == self.account_id && intent.created?
         # Send the updated parameters to Stripe (maybe the user decided to donate in the meantime,
@@ -97,7 +98,7 @@ class ConnectedStripeAccount < ApplicationRecord
     end
   end
 
-  def find_payment_record(record_id)
+  def find_payment(record_id)
     StripeRecord.charge.find(record_id)
   end
 

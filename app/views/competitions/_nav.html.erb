@@ -152,13 +152,6 @@
               tiny_children: event_icons
             }
           end
-          if @competition.uses_new_registration_service?
-            nav_items << {
-              text: t('registrations.list.waiting_list'),
-              path: competition_waiting_list_path(@competition),
-              icon: "list"
-            }
-          end
         end
         nav_items = process_nav_items(nav_items)
       %>

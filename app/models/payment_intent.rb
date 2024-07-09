@@ -29,6 +29,11 @@ class PaymentIntent < ApplicationRecord
     canceled: 'canceled', # Completion state - the user has indicated that they will no longer attempt to complete payment
   }
 
+  # Normally this would be a case for `enum :payment_record_type`, but Rails does not support enums on polymorphic types :/
+  # See https://github.com/rails/rails/issues/17844 for reference.
+  scope :paypal, -> { where(payment_record_type: 'PaypalRecord') }
+  scope :stripe, -> { where(payment_record_type: 'StripeRecord') }
+
   def update_status_and_payments(payment_account, api_intent, update_source, source_datetime = DateTime.current)
     self.with_lock do
       self.update_status(api_intent)
