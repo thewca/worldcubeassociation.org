@@ -21,7 +21,7 @@ class RegistrationsController < ApplicationController
 
   before_action -> { redirect_to_root_unless_user(:can_manage_competition?, competition_from_params) },
                 except: [:create, :index, :psych_sheet, :psych_sheet_event, :register, :payment_completion, :load_payment_intent, :stripe_webhook, :payment_denomination, :destroy,
-                         :update, :capture_paypal_payment, :refund_paypal_payment]
+                         :update, :capture_paypal_payment]
 
   before_action :competition_must_be_using_wca_registration!, except: [:import, :do_import, :add, :do_add, :index, :psych_sheet, :psych_sheet_event, :stripe_webhook, :payment_denomination]
   private def competition_must_be_using_wca_registration!
@@ -665,14 +665,8 @@ class RegistrationsController < ApplicationController
     render json: { client_secret: intent.client_secret }
   end
 
-  # TODO: This can be removed after deployment, this is so we don't have any users error out if they click on pay/refund
+  # TODO: This can be removed after deployment, this is so we don't have any users error out if they click on pay
   # while the deployment happens
-  def payment_refund_legacy
-    registration = Registration.find(params[:id])
-    payment = RegistrationPayment.find(params[:payment_id])
-    redirect_to action: :refund_payment, competition_id: registration.competition_id, payment_id: payment.receipt_id, params: params.permit(:payment)
-  end
-
   def payment_completion_legacy
     registration = Registration.find(params[:id])
     redirect_to action: :payment_completion, competition_id: registration.competition_id, params: params.permit(:payment_intent, :payment_intent_client_secret)
@@ -681,23 +675,25 @@ class RegistrationsController < ApplicationController
   def refund_payment
     competition_id = params[:competition_id]
     competition = Competition.find(competition_id)
-    stripe_integration = competition.payment_account_for(:stripe)
 
-    charge = StripeRecord.charge.find(params[:payment_id])
+    payment_integration = params[:payment_integration].to_sym
+    payment_account = competition.payment_account_for(payment_integration)
 
-    registration = charge.root_record.payment_intent.holder
+    unless payment_account.present?
+      flash[:danger] = "You cannot issue a refund for this competition anymore. Please use your payment provider's dashboard to do so."
+      return redirect_to competition_registrations_path(competition)
+    end
+
+    payment_record = payment_account.find_payment(params[:payment_id])
+
+    registration = payment_record.root_record.payment_intent.holder
     uses_v2 = registration.is_a? MicroserviceRegistration
 
     redirect_path = uses_v2 ? edit_registration_v2_path(competition_id, registration.user_id) : edit_registration_path(registration)
 
-    unless stripe_integration.present?
-      flash[:danger] = "You cannot emit refund for this competition anymore. Please use your Stripe dashboard to do so."
-      return redirect_to redirect_path
-    end
-
     refund_amount_param = params.require(:payment).require(:refund_amount)
     refund_amount = refund_amount_param.to_i
-    amount_left = charge.ruby_amount_available_for_refund - refund_amount
+    amount_left = payment_record.ruby_amount_available_for_refund - refund_amount
 
     if amount_left.negative?
       flash[:danger] = "You are not allowed to refund more than the competitor has paid."
@@ -709,16 +705,22 @@ class RegistrationsController < ApplicationController
       return redirect_to redirect_path
     end
 
-    refund_receipt = stripe_integration.issue_refund(charge.stripe_id, refund_amount)
+    refund_receipt = payment_account.issue_refund(payment_record, refund_amount)
 
-    # Should be the same as `refund_amount`, but by double-converting from the Stripe object
+    # Should be the same as `refund_amount`, but by double-converting from the Payment Gateway object
     # we can also double-check that they're on the same page as we are (to be _really_ sure!)
-    # FIXME: This method only exists because we silently assume it's Stripe
     ruby_money = refund_receipt.money_amount
 
     if uses_v2
       begin
-        Microservices::Registrations.update_registration_payment("#{competition_id}-#{registration.user.id}", refund_receipt.id, amount_left, ruby_money.currency.iso_code, "refund", { type: "user", id: current_user.id })
+        Microservices::Registrations.update_registration_payment(
+          registration.attendee_id,
+          refund_receipt.id,
+          ruby_money.cents,
+          ruby_money.currency.iso_code,
+          "refund",
+          { type: "user", id: current_user.id },
+        )
       rescue Faraday::Error
         flash[:error] = 'Registration Service is not reachable'
       end
@@ -727,7 +729,7 @@ class RegistrationsController < ApplicationController
         ruby_money.cents,
         ruby_money.currency.iso_code,
         refund_receipt,
-        charge.registration_payment.id,
+        payment_record.registration_payment.id,
         current_user.id,
       )
     end
@@ -830,28 +832,5 @@ class RegistrationsController < ApplicationController
     end
 
     render json: response
-  end
-
-  def refund_paypal_payment
-    registration = registration_from_params
-    paypal_integration = registration.competition.payment_account_for(:paypal)
-
-    registration_payment = RegistrationPayment.find(params[:payment_id])
-    paypal_capture = registration_payment.receipt
-
-    refund = PaypalInterface.issue_refund(
-      paypal_integration.paypal_merchant_id,
-      paypal_capture.paypal_id,
-      registration_payment.amount_lowest_denomination,
-      registration_payment.currency_code,
-    )
-
-    registration.record_refund(
-      registration_payment.amount_lowest_denomination,
-      registration_payment.currency_code,
-      refund,
-      registration_payment.id,
-      current_user.id,
-    )
   end
 end

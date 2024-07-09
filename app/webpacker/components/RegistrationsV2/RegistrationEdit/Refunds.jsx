@@ -98,6 +98,7 @@ function RefundRow({
             competitionId,
             userId,
             paymentId: refund.payment_id,
+            paymentProvider: refund.payment_provider,
             amount: amountToRefund,
           })}
           disabled={isMutating}

@@ -4,10 +4,11 @@ import { refundPaymentUrl } from '../../../../../lib/requests/routes.js.erb';
 export default async function refundPayment({
   competitionId,
   paymentId,
+  paymentProvider,
   amount,
 }) {
   return fetchWithAuthenticityToken(
-    refundPaymentUrl(competitionId, paymentId),
+    refundPaymentUrl(competitionId, paymentProvider, paymentId),
     {
       body:
         JSON.stringify({
