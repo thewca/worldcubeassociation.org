@@ -37,6 +37,7 @@ export default function StepPanel({
   connectedAccountId,
 }) {
   const isRegistered = Boolean(registration) && registration.competing.registration_status !== 'cancelled';
+  const registrationSucceeded = isRegistered && registration.competing.registration_status === 'accepted';
   const hasPaid = registration?.payment.payment_status === 'succeeded';
   const registrationFinished = hasPaid || (isRegistered && !competitionInfo['using_payment_integrations?']);
 
@@ -49,7 +50,8 @@ export default function StepPanel({
   }, [competitionInfo]);
 
   const [activeIndex, setActiveIndex] = useState(() => {
-    if (registrationFinished) {
+    // Don't show payment panel if a user was accepted (for people with waived payment)
+    if (registrationFinished || registrationSucceeded) {
       return registrationOverviewConfig.index;
     }
     // If the user has not paid but refreshes the page, we want to display the paymentStep again
