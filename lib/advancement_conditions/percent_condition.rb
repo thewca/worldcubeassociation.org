@@ -5,7 +5,7 @@ module AdvancementConditions
     alias_method :percent, :level
 
     def self.wcif_type
-      "percent"
+      'percent'
     end
 
     def to_s(round, short: false)

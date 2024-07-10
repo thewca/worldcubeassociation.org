@@ -5,26 +5,26 @@ module ResultsValidators
     # PV: There used to be an error for regulation 9M, but now all results
     # must belong to a round, and rails validations make sure the total
     # number of rounds is <= 4, and that each round number is unique.
-    REGULATION_9M1_ERROR = "Round %{round_id} has 99 or fewer competitors but has more than two subsequent rounds, which is not permitted as per Regulation 9m1."
-    REGULATION_9M2_ERROR = "Round %{round_id} has 15 or fewer competitors but has more than one subsequent round, which is not permitted as per Regulation 9m2."
-    REGULATION_9M3_ERROR = "Round %{round_id} has 7 or fewer competitors but has at least one subsequent round, which is not permitted as per Regulation 9m3."
-    REGULATION_9P1_ERROR = "Round %{round_id}: Fewer than 25%% of competitors were eliminated, which is not permitted as per Regulation 9p1."
-    OLD_REGULATION_9P_ERROR = "Round %{round_id}: There must be at least one competitor eliminated, which is required as per Regulation 9p (competitions before April 2010)."
-    ROUND_9P1_ERROR = "Round %{round_id}: according to the advancement condition (%{condition}), fewer than 25%% of competitors would be eliminated," \
-                      "which is not permitted as per Regulation 9p1. Please update the round information in the manage events page."
-    TOO_MANY_QUALIFIED_WARNING = "Round %{round_id}: more competitors qualified than what the advancement condition planned (%{actual} instead of %{expected}, " \
-                                 "the condition was: %{condition}). Please update the round information in the manage events page."
-    NOT_ENOUGH_QUALIFIED_WARNING = "Round %{round_id}: according to the events data, at most %{expected} could have proceed, but only %{actual} competed in the round. " \
-                                   "Please leave a comment about that (or fix the events data if you applied a different advancement condition)."
-    COMPETED_NOT_QUALIFIED_ERROR = "Round %{round_id}: %{ids} competed but did not meet the attempt result advancement condition (%{condition}). " \
-                                   "Please make sure the advancement condition reflects what was used during the competition, and remove the results if needed."
-    ROUND_NOT_FOUND_ERROR = "Round %{round_id} could not be found. Please make sure that the WCA website Edit Events panel and WCA Live are in sync."
+    REGULATION_9M1_ERROR = 'Round %{round_id} has 99 or fewer competitors but has more than two subsequent rounds, which is not permitted as per Regulation 9m1.'
+    REGULATION_9M2_ERROR = 'Round %{round_id} has 15 or fewer competitors but has more than one subsequent round, which is not permitted as per Regulation 9m2.'
+    REGULATION_9M3_ERROR = 'Round %{round_id} has 7 or fewer competitors but has at least one subsequent round, which is not permitted as per Regulation 9m3.'
+    REGULATION_9P1_ERROR = 'Round %{round_id}: Fewer than 25%% of competitors were eliminated, which is not permitted as per Regulation 9p1.'
+    OLD_REGULATION_9P_ERROR = 'Round %{round_id}: There must be at least one competitor eliminated, which is required as per Regulation 9p (competitions before April 2010).'
+    ROUND_9P1_ERROR = 'Round %{round_id}: according to the advancement condition (%{condition}), fewer than 25%% of competitors would be eliminated,' \
+                      'which is not permitted as per Regulation 9p1. Please update the round information in the manage events page.'
+    TOO_MANY_QUALIFIED_WARNING = 'Round %{round_id}: more competitors qualified than what the advancement condition planned (%{actual} instead of %{expected}, ' \
+                                 'the condition was: %{condition}). Please update the round information in the manage events page.'
+    NOT_ENOUGH_QUALIFIED_WARNING = 'Round %{round_id}: according to the events data, at most %{expected} could have proceed, but only %{actual} competed in the round. ' \
+                                   'Please leave a comment about that (or fix the events data if you applied a different advancement condition).'
+    COMPETED_NOT_QUALIFIED_ERROR = 'Round %{round_id}: %{ids} competed but did not meet the attempt result advancement condition (%{condition}). ' \
+                                   'Please make sure the advancement condition reflects what was used during the competition, and remove the results if needed.'
+    ROUND_NOT_FOUND_ERROR = 'Round %{round_id} could not be found. Please make sure that the WCA website Edit Events panel and WCA Live are in sync.'
 
     # These are the old "(combined) qualification" and "b-final" rounds.
     # They are not taken into account in advancement conditions.
-    IGNORE_ROUND_TYPES = ["0", "h", "b"].freeze
+    IGNORE_ROUND_TYPES = ['0', 'h', 'b'].freeze
 
-    @desc = "This validator checks that advancement between rounds is correct according to the regulations."
+    @desc = 'This validator checks that advancement between rounds is correct according to the regulations.'
 
     def self.has_automated_fix?
       false
@@ -98,14 +98,14 @@ module ResultsValidators
                 if condition.instance_of? AdvancementConditions::AttemptResultCondition
                   current_persons = results_by_round_type_id[round_type_id].map(&:wca_id)
                   people_over_condition = previous_results.filter do |r|
-                    sort_by_column = r.format.sort_by == "single" ? :best : :average
+                    sort_by_column = r.format.sort_by == 'single' ? :best : :average
                     current_persons.include?(r.wca_id) && r.send(sort_by_column) > condition.attempt_result
                   end.map(&:wca_id)
                   if people_over_condition.any?
                     @errors << ValidationError.new(:rounds, competition.id,
                                                    COMPETED_NOT_QUALIFIED_ERROR,
                                                    round_id: round_id,
-                                                   ids: people_over_condition.join(","),
+                                                   ids: people_over_condition.join(','),
                                                    condition: condition.to_s(previous_round))
                   end
                 end

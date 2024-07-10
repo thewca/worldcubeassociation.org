@@ -29,7 +29,7 @@ RSpec.describe StripeRecord do
   end
 
   describe 'currency functions' do
-    it "handles HUF as a special currency" do
+    it 'handles HUF as a special currency' do
       six_thousand_huf = Money.from_amount(6_000, 'HUF')
       expect(six_thousand_huf.cents).to eq(6_000)
 
@@ -41,7 +41,7 @@ RSpec.describe StripeRecord do
       expect(ruby_amount).to eq(six_thousand_huf.cents)
     end
 
-    it "handles UGX as a special currency" do
+    it 'handles UGX as a special currency' do
       sixty_thousand_ugx = Money.from_amount(60_000, 'UGX')
       expect(sixty_thousand_ugx.cents).to eq(60_000)
 
@@ -53,7 +53,7 @@ RSpec.describe StripeRecord do
       expect(ruby_amount).to eq(sixty_thousand_ugx.cents)
     end
 
-    it "handles ISK as a special currency" do
+    it 'handles ISK as a special currency' do
       two_thousand_isk = Money.from_amount(2_000, 'ISK')
       expect(two_thousand_isk.cents).to eq(2_000)
 
@@ -65,7 +65,7 @@ RSpec.describe StripeRecord do
       expect(ruby_amount).to eq(two_thousand_isk.cents)
     end
 
-    it "throws exception when sub-hundred currency not divisible" do
+    it 'throws exception when sub-hundred currency not divisible' do
       expect do
         # Funnily enough, our RubyMoney gem doesn't even support HUF sub-units, but Stripe still insists on
         # *not* charging sub-units in the lowest two decimal places. So we manually insert a fraction to check for the error.
@@ -79,7 +79,7 @@ RSpec.describe StripeRecord do
       end.to raise_error(RuntimeError)
     end
 
-    it "handles USD as a normal currency" do
+    it 'handles USD as a normal currency' do
       fifteen_usd = Money.from_amount(15, 'USD')
       expect(fifteen_usd.cents).to eq(1_500)
 
@@ -91,7 +91,7 @@ RSpec.describe StripeRecord do
       expect(ruby_amount).to eq(fifteen_usd.cents)
     end
 
-    it "handles EUR as a normal currency" do
+    it 'handles EUR as a normal currency' do
       fifteen_eur = Money.from_amount(15, 'EUR')
       expect(fifteen_eur.cents).to eq(1_500)
 
@@ -103,7 +103,7 @@ RSpec.describe StripeRecord do
       expect(ruby_amount).to eq(fifteen_eur.cents)
     end
 
-    it "handles JPY as a normal currency" do
+    it 'handles JPY as a normal currency' do
       two_thousand_yen = Money.from_amount(2_000, 'JPY')
       expect(two_thousand_yen.cents).to eq(2_000)
 
@@ -115,7 +115,7 @@ RSpec.describe StripeRecord do
       expect(ruby_amount).to eq(two_thousand_yen.cents)
     end
 
-    it "handles TWD as a normal currency" do
+    it 'handles TWD as a normal currency' do
       # TWD is one of the fancy-snowflake sub-hundred currecies in the Stripe API
       # but it is also the only one that actually has subunits in the RubyMoney gem so it needs no special treatment.
       five_hundred_twd = Money.from_amount(500, 'TWD')

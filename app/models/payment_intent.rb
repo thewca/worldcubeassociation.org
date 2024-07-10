@@ -78,7 +78,7 @@ class PaymentIntent < ApplicationRecord
 
               # Only trigger outer update blocks for charges that are actually successful. This is reasonable
               # because we only ever trigger this block for PIs that are marked "successful" in the first place
-              charge_successful = fresh_transaction.stripe_status == "succeeded"
+              charge_successful = fresh_transaction.stripe_status == 'succeeded'
 
               yield fresh_transaction if block_given? && charge_successful
             end
@@ -118,13 +118,13 @@ class PaymentIntent < ApplicationRecord
       end
 
       # Succeeded/cancelled statuses require timestamps, and vice-versa
-      errors.add(:confirmed_at, "should only be non-nil if wca_status is `succeeded`") if
+      errors.add(:confirmed_at, 'should only be non-nil if wca_status is `succeeded`') if
         confirmed_at.present? && wca_status != 'succeeded'
-      errors.add(:wca_status, "can only be `succeeded` if confirmed_at is non-nil") if
+      errors.add(:wca_status, 'can only be `succeeded` if confirmed_at is non-nil') if
         confirmed_at.nil? && wca_status == 'succeeded'
-      errors.add(:canceled_at, "should only be non-nil if wca_status is `canceled`") if
+      errors.add(:canceled_at, 'should only be non-nil if wca_status is `canceled`') if
         canceled_at.present? && wca_status != 'canceled'
-      errors.add(:wca_status, "can only be `canceled` if canceled_at is non-nil") if
+      errors.add(:wca_status, 'can only be `canceled` if canceled_at is non-nil') if
         canceled_at.nil? && wca_status == 'canceled'
     end
 end

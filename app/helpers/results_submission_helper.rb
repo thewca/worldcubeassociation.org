@@ -3,11 +3,11 @@
 module ResultsSubmissionHelper
   def class_for_panel(error:, warning:, no_validator: false)
     if error
-      "danger"
+      'danger'
     elsif warning || no_validator
-      "warning"
+      'warning'
     else
-      "success"
+      'success'
     end
   end
 end

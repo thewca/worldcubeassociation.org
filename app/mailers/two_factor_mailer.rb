@@ -6,9 +6,9 @@ class TwoFactorMailer < ApplicationMailer
     @code = user.current_otp
     mail(
       to: @user.email,
-      from: "software@worldcubeassociation.org",
-      reply_to: "software@worldcubeassociation.org",
-      subject: I18n.t("devise.sessions.new.2fa.otp_email.subject"),
+      from: 'software@worldcubeassociation.org',
+      reply_to: 'software@worldcubeassociation.org',
+      subject: I18n.t('devise.sessions.new.2fa.otp_email.subject'),
     )
   end
 end

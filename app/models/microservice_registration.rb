@@ -38,13 +38,13 @@ class MicroserviceRegistration < ApplicationRecord
 
   private def read_ms_data(name_without_at)
     instance_variable_get(:"@#{name_without_at}").tap do
-      raise "Microservice data not loaded!" unless ms_loaded?
+      raise 'Microservice data not loaded!' unless ms_loaded?
     end
   end
 
   def competing_status
     # Treat non-competing registrations as accepted, see also `registration.rb`
-    return "accepted" unless self.is_competing?
+    return 'accepted' unless self.is_competing?
 
     self.read_ms_data :competing_status
   end
@@ -52,8 +52,8 @@ class MicroserviceRegistration < ApplicationRecord
   alias :status :competing_status
 
   def wcif_status
-    return "deleted" if self.deleted?
-    return "pending" if self.pending?
+    return 'deleted' if self.deleted?
+    return 'pending' if self.pending?
 
     self.competing_status
   end
@@ -85,30 +85,30 @@ class MicroserviceRegistration < ApplicationRecord
   end
 
   def accepted?
-    self.status == "accepted"
+    self.status == 'accepted'
   end
 
   def deleted?
-    self.status == "cancelled"
+    self.status == 'cancelled'
   end
 
   def pending?
     # WCIF interprets "pending" as "not approved to compete yet"
     #   which is why these two statuses collapse into one.
-    self.status == "pending" || self.status == "waiting_list"
+    self.status == 'pending' || self.status == 'waiting_list'
   end
 
   def to_wcif(authorized: false)
     authorized_fields = {
-      "guests" => guests,
-      "comments" => comments || '',
-      "administrativeNotes" => administrative_notes || '',
+      'guests' => guests,
+      'comments' => comments || '',
+      'administrativeNotes' => administrative_notes || '',
     }
     {
-      "wcaRegistrationId" => id,
-      "eventIds" => event_ids.sort,
-      "status" => wcif_status,
-      "isCompeting" => is_competing?,
+      'wcaRegistrationId' => id,
+      'eventIds' => event_ids.sort,
+      'status' => wcif_status,
+      'isCompeting' => is_competing?,
     }.merge(authorized ? authorized_fields : {})
   end
 end

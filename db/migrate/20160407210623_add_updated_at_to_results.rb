@@ -2,7 +2,7 @@
 
 class AddUpdatedAtToResults < ActiveRecord::Migration
   def up
-    execute "ALTER TABLE Results ADD updated_at timestamp NOT NULL default now() on update now();"
+    execute 'ALTER TABLE Results ADD updated_at timestamp NOT NULL default now() on update now();'
     add_index :Results, [:competitionId, :updated_at]
 
     Competition.find_each do |c|

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Linking < ApplicationRecord
-  self.primary_key = "wca_id"
+  self.primary_key = 'wca_id'
 
   def wca_ids
     super.split(',')

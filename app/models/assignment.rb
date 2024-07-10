@@ -9,7 +9,7 @@ class Assignment < ApplicationRecord
 
   private def validate_assignment_code
     unless assignment_code.match?(/^(competitor|staff-\w+)$/)
-      errors.add(:activity_code, "should be a valid assignment code")
+      errors.add(:activity_code, 'should be a valid assignment code')
     end
   end
 
@@ -19,19 +19,19 @@ class Assignment < ApplicationRecord
 
   def to_wcif
     {
-      "activityId" => schedule_activity.wcif_id,
-      "stationNumber" => station_number,
-      "assignmentCode" => assignment_code,
+      'activityId' => schedule_activity.wcif_id,
+      'stationNumber' => station_number,
+      'assignmentCode' => assignment_code,
     }
   end
 
   def self.wcif_json_schema
     {
-      "type" => ["object"],
-      "properties" => {
-        "activityId" => { "type" => "integer" },
-        "stationNumber" => { "type" => ["integer", "null"] },
-        "assignmentCode" => { "type" => "string" },
+      'type' => ['object'],
+      'properties' => {
+        'activityId' => { 'type' => 'integer' },
+        'stationNumber' => { 'type' => ['integer', 'null'] },
+        'assignmentCode' => { 'type' => 'string' },
       },
     }
   end

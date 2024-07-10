@@ -163,7 +163,7 @@ module FinishUnfinishedPersons
   end
 
   def self.complete_wca_id(semi_id, used_ids = nil)
-    used_ids ||= Person.where("wca_id LIKE ?", "#{semi_id}%").pluck(:wca_id)
+    used_ids ||= Person.where('wca_id LIKE ?', "#{semi_id}%").pluck(:wca_id)
 
     (1..99).each do |i|
       new_id = semi_id + i.to_s.rjust(2, '0')
@@ -202,7 +202,7 @@ module FinishUnfinishedPersons
     results_scope = Result
 
     if pending_id.present?
-      raise "Must supply a competition ID for updating newcomer results!" unless pending_comp_id.present?
+      raise 'Must supply a competition ID for updating newcomer results!' unless pending_comp_id.present?
 
       results_scope = results_scope.where(
         personId: pending_id,

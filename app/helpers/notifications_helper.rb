@@ -48,13 +48,13 @@ module NotificationsHelper
     user.confirmed_users_claiming_wca_id.each do |user_claiming_wca_id|
       notifications << {
         text: "#{user_claiming_wca_id.email} has claimed WCA ID #{user_claiming_wca_id.unconfirmed_wca_id}",
-        url: edit_user_path(user_claiming_wca_id.id, anchor: "wca_id"),
+        url: edit_user_path(user_claiming_wca_id.id, anchor: 'wca_id'),
       }
     end
 
     unless user.cannot_register_for_competition_reasons.empty?
       notifications << {
-        text: "Your profile is incomplete. You will not be able to register for competitions until you complete it!",
+        text: 'Your profile is incomplete. You will not be able to register for competitions until you complete it!',
         url: profile_edit_path,
       }
     end

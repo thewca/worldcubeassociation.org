@@ -7,7 +7,7 @@ class RegistrationPayment < ApplicationRecord
   belongs_to :receipt, polymorphic: true, optional: true
 
   monetize :amount_lowest_denomination,
-           as: "amount",
+           as: 'amount',
            allow_nil: true,
            with_model_currency: :currency_code
 

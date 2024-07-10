@@ -3,10 +3,10 @@
 module ResultsHelper
   def solve_tds_for_result(result)
     result.solve_times.each_with_index.map do |solve_time, i|
-      classes = ["solve", i.to_s]
-      classes << "trimmed" if result.trimmed_indices.include?(i)
-      classes << "best" if i == result.best_index
-      classes << "worst" if i == result.worst_index
+      classes = ['solve', i.to_s]
+      classes << 'trimmed' if result.trimmed_indices.include?(i)
+      classes << 'best' if i == result.best_index
+      classes << 'worst' if i == result.worst_index
       content_tag :td, solve_time.clock_format, class: classes.join(' ')
     end.reduce(:+)
   end
@@ -33,7 +33,7 @@ module ResultsHelper
     if rows.empty?
       return [[], 0, 0]
     end
-    best_value_of_world = rows.first["value"]
+    best_value_of_world = rows.first['value']
     best_values_of_continents = {}
     best_values_of_countries = {}
     world_rows = []
@@ -41,14 +41,14 @@ module ResultsHelper
     countries_rows = []
     rows.each do |row|
       result = LightResult.new(row)
-      value = row["value"]
+      value = row['value']
 
       world_rows << row if value == best_value_of_world
 
       if best_values_of_continents[result.country.continent.id].nil? || value == best_values_of_continents[result.country.continent.id]
         best_values_of_continents[result.country.continent.id] = value
 
-        if (country.present? && country.continent.id == result.country.continent.id) || (continent.present? && continent.id == result.country.continent.id) || params[:region] == "world"
+        if (country.present? && country.continent.id == result.country.continent.id) || (continent.present? && continent.id == result.country.continent.id) || params[:region] == 'world'
           continents_rows << row
         end
       end
@@ -56,7 +56,7 @@ module ResultsHelper
       if best_values_of_countries[result.country.id].nil? || value == best_values_of_countries[result.country.id]
         best_values_of_countries[result.country.id] = value
 
-        if (country.present? && country.id == result.country.id) || params[:region] == "world"
+        if (country.present? && country.id == result.country.id) || params[:region] == 'world'
           countries_rows << row
         end
       end
@@ -72,9 +72,9 @@ module ResultsHelper
     single_rows = []
     average_rows = []
     rows
-      .group_by { |row| row["eventId"] }
+      .group_by { |row| row['eventId'] }
       .each_value do |event_rows|
-        singles, averages = event_rows.partition { |row| row["type"] == "single" }
+        singles, averages = event_rows.partition { |row| row['type'] == 'single' }
         balance = singles.size - averages.size
         if balance < 0
           singles += Array.new(-balance, nil)

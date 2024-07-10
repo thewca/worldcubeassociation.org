@@ -12,7 +12,7 @@ class ContactCompetition < ContactForm
     if competition.present?
       ValidateEmail.valid?(competition.contact) ? competition.contact : competition.managers.map(&:email)
     else
-      "contact@worldcubeassociation.org"
+      'contact@worldcubeassociation.org'
     end
   end
 

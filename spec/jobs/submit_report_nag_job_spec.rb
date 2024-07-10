@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe SubmitReportNagJob, type: :job do
-  it "schedules report nag email" do
+  it 'schedules report nag email' do
     _unscheduled_competition = FactoryBot.create :competition, starts: nil
     _recent_competition_missing_report = FactoryBot.create :competition, :visible, starts: 3.days.ago
     old_competition_missing_report = FactoryBot.create :competition, :visible, starts: 3.weeks.ago
@@ -28,7 +28,7 @@ RSpec.describe SubmitReportNagJob, type: :job do
     end.to change { ActionMailer::Base.deliveries.length }.by(0)
   end
 
-  it "schedules report reminder email" do
+  it 'schedules report reminder email' do
     _unscheduled_competition = FactoryBot.create :competition, starts: nil
     _recent_competition_missing_report = FactoryBot.create :competition, :visible, starts: 3.days.ago
     old_competition_missing_report = FactoryBot.create :competition, :visible, starts: 6.days.ago

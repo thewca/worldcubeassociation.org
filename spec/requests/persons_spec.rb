@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require "rails_helper"
+require 'rails_helper'
 
-RSpec.describe "persons" do
-  describe "profile page" do
+RSpec.describe 'persons' do
+  describe 'profile page' do
     let!(:person) { FactoryBot.create(:person_who_has_competed_once) }
     # Create person with account, so that there is the default avatar to display.
     let!(:user) { FactoryBot.create(:user, :wca_id, person: person) }

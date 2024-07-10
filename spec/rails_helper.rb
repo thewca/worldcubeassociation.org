@@ -8,7 +8,7 @@ require 'rspec/rails'
 # Add additional requires below this line. Rails is not loaded until this point!
 
 # From http://everydayrails.com/2012/04/24/testing-series-rspec-requests.html
-require "capybara/rspec"
+require 'capybara/rspec'
 require 'capybara-screenshot/rspec'
 require 'capybara/apparition'
 
@@ -50,7 +50,7 @@ RSpec.configure do |config|
   # consistent tests regardless of which driver we may end up using in the future
   config.before(:each) do
     if defined? page.driver.add_header
-      page.driver.add_header("Accept-Language", "en-US", permanent: true)
+      page.driver.add_header('Accept-Language', 'en-US', permanent: true)
     end
   end
 

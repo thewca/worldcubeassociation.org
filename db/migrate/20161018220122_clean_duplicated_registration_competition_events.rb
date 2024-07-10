@@ -15,10 +15,10 @@ class CleanDuplicatedRegistrationCompetitionEvents < ActiveRecord::Migration
     SQL
 
     add_index :registration_competition_events, [:registration_id, :competition_event_id],
-              unique: true, name: "idx_registration_competition_events_on_reg_id_and_comp_event_id"
+              unique: true, name: 'idx_registration_competition_events_on_reg_id_and_comp_event_id'
   end
 
   def down
-    remove_index :registration_competition_events, name: "idx_registration_competition_events_on_reg_id_and_comp_event_id"
+    remove_index :registration_competition_events, name: 'idx_registration_competition_events_on_reg_id_and_comp_event_id'
   end
 end

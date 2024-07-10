@@ -12,13 +12,13 @@ module Admin
         avatars.each do |wca_id, args|
           user = User.find_by_wca_id!(wca_id)
           case args[:action]
-          when "approve"
+          when 'approve'
             user.approve_pending_avatar!
-          when "reject"
+          when 'reject'
             user.remove_pending_avatar = true
             user.save!
             AvatarsMailer.notify_user_of_avatar_rejection(user, args[:rejection_reason]).deliver_later
-          when "defer"
+          when 'defer'
             # do nothing!
           else
             raise "Unrecognized avatar action '#{args[:action]}'"

@@ -10,7 +10,7 @@ class Vote < ApplicationRecord
   validate :poll_id_must_be_valid
   def poll_id_must_be_valid
     if !poll
-      errors.add(:poll_id, "is not valid")
+      errors.add(:poll_id, 'is not valid')
     end
   end
 
@@ -31,21 +31,21 @@ class Vote < ApplicationRecord
   validate :number_of_options_must_match_poll
   def number_of_options_must_match_poll
     if poll && !poll.multiple && poll_options.length > 1
-      errors.add(:poll_options, "you must choose just one option")
+      errors.add(:poll_options, 'you must choose just one option')
     end
   end
 
   validate :poll_must_be_confirmed
   def poll_must_be_confirmed
     if poll && !poll.confirmed?
-      errors.add(:poll_id, "poll is not confirmed")
+      errors.add(:poll_id, 'poll is not confirmed')
     end
   end
 
   validate :poll_must_still_be_open
   def poll_must_still_be_open
     if poll && poll.over?
-      errors.add(:poll_id, "poll is closed")
+      errors.add(:poll_id, 'poll is closed')
     end
   end
 end

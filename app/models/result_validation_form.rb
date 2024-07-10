@@ -7,7 +7,7 @@ class ResultValidationForm
   COMP_VALIDATION_ALL = :all
   COMP_VALIDATION_MANUAL = :manual
 
-  COMP_VALIDATION_MODES = [["Pick competition(s) manually", COMP_VALIDATION_MANUAL], ["Execute for ALL competitions", COMP_VALIDATION_ALL]].freeze
+  COMP_VALIDATION_MODES = [['Pick competition(s) manually', COMP_VALIDATION_MANUAL], ['Execute for ALL competitions', COMP_VALIDATION_ALL]].freeze
 
   ALL_COMPETITIONS_SCOPE = Competition.over.not_cancelled
   ALL_COMPETITIONS_MAX = 500
@@ -34,11 +34,11 @@ class ResultValidationForm
   def competition_range_overlapping
     if competition_selection == COMP_VALIDATION_ALL
       if competition_start_date > competition_end_date
-        errors.add(:competition_start_date, "The start date must be before the end date!")
+        errors.add(:competition_start_date, 'The start date must be before the end date!')
       end
 
       if competition_start_date > Date.today
-        errors.add(:competition_start_date, "The start date must not be in the future!")
+        errors.add(:competition_start_date, 'The start date must not be in the future!')
       end
     end
   end
@@ -49,7 +49,7 @@ class ResultValidationForm
                           .order(:start_date)
                           .ids
     else
-      @competition_ids.split(",").uniq.compact
+      @competition_ids.split(',').uniq.compact
     end
   end
 
@@ -70,7 +70,7 @@ class ResultValidationForm
   end
 
   def validators
-    @validator_classes.split(",").map { |v| ResultsValidators::Utils.validator_class_from_name(v) }.compact
+    @validator_classes.split(',').map { |v| ResultsValidators::Utils.validator_class_from_name(v) }.compact
   end
 
   def apply_fixes

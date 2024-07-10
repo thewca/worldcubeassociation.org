@@ -8,7 +8,7 @@ class ContactWst < ContactForm
     if request_id.present?
       UserGroup.teams_committees_group_wst.metadata.email
     else
-      "contact@worldcubeassociation.org"
+      'contact@worldcubeassociation.org'
     end
   end
 

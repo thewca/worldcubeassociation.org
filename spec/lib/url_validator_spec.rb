@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe UrlValidator do
-  it "validates urls" do
+  it 'validates urls' do
     valid_urls = [
       'http://www.google.com',
       'https://www.google.com',
@@ -15,7 +15,7 @@ RSpec.describe UrlValidator do
       ' http://www.google.com',
       'http://www. google.com',
       'foo.com',
-      "bar",
+      'bar',
     ]
 
     valid_urls.each do |valid_url|
@@ -25,7 +25,7 @@ RSpec.describe UrlValidator do
 
     invalid_urls.each do |invalid_url|
       model = TestModel.new(url: invalid_url)
-      expect(model).to be_invalid_with_errors url: ["must be a valid url starting with http:// or https://"]
+      expect(model).to be_invalid_with_errors url: ['must be a valid url starting with http:// or https://']
     end
   end
 end

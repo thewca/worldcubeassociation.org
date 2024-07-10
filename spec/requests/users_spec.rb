@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require "rails_helper"
+require 'rails_helper'
 
-RSpec.describe "users" do
+RSpec.describe 'users' do
   include Capybara::DSL
 
   it 'can sign up and request confirmation' do
@@ -75,29 +75,29 @@ RSpec.describe "users" do
     person = FactoryBot.create :person
 
     # attempt to sign in
-    post user_session_path, params: { 'user[login]' => person.wca_id, 'user[password]' => "a password" }
+    post user_session_path, params: { 'user[login]' => person.wca_id, 'user[password]' => 'a password' }
     expect(response).to be_successful
-    expect(response.body).to include "It looks like you have not created a WCA website account yet"
+    expect(response.body).to include 'It looks like you have not created a WCA website account yet'
   end
 
   it 'reset password shows conversion message for competitors missing accounts' do
     person = FactoryBot.create :person
 
     # attempt to reset password
-    post user_password_path, params: { 'user[login]' => person.wca_id, 'user[password]' => "a password" }
+    post user_password_path, params: { 'user[login]' => person.wca_id, 'user[password]' => 'a password' }
     expect(response).to be_successful
-    expect(response.body).to include "It looks like you have not created a WCA website account yet"
+    expect(response.body).to include 'It looks like you have not created a WCA website account yet'
   end
 
-  context "user without 2FA" do
+  context 'user without 2FA' do
     let!(:user) { FactoryBot.create(:user) }
     before { sign_in user }
 
-    context "recently authenticated" do
+    context 'recently authenticated' do
       before { post users_authenticate_sensitive_path, params: { 'user[password]': user.password } }
       it 'can enable 2FA' do
         post profile_enable_2fa_path
-        expect(response.body).to include "Successfully enabled two-factor"
+        expect(response.body).to include 'Successfully enabled two-factor'
         expect(user.reload.otp_required_for_login).to be true
       end
 
@@ -106,11 +106,11 @@ RSpec.describe "users" do
           post profile_generate_2fa_backup_path
         }.to_not change { user.otp_backup_codes }
         json = JSON.parse(response.body)
-        expect(json["error"]["message"]).to include "not enabled"
+        expect(json['error']['message']).to include 'not enabled'
       end
     end
 
-    context "not recently authenticated" do
+    context 'not recently authenticated' do
       it 'cannot enable 2FA' do
         post profile_enable_2fa_path
         follow_redirect!
@@ -128,22 +128,22 @@ RSpec.describe "users" do
     end
   end
 
-  context "user with 2FA" do
+  context 'user with 2FA' do
     let!(:user) { FactoryBot.create(:user, :with_2fa) }
     before { sign_in user }
-    context "recently authenticated" do
+    context 'recently authenticated' do
       before { post users_authenticate_sensitive_path, params: { 'user[otp_attempt]': user.current_otp } }
       it 'can reset 2FA' do
         secret_before = user.otp_secret
         post profile_enable_2fa_path
         secret_after = user.reload.otp_secret
-        expect(response.body).to include "Successfully regenerated"
+        expect(response.body).to include 'Successfully regenerated'
         expect(secret_before).to_not eq secret_after
       end
 
       it 'can disable 2FA' do
         post profile_disable_2fa_path
-        expect(response.body).to include "Successfully disabled two-factor"
+        expect(response.body).to include 'Successfully disabled two-factor'
         expect(user.reload.otp_required_for_login).to be false
       end
 
@@ -152,15 +152,15 @@ RSpec.describe "users" do
         post profile_generate_2fa_backup_path
         expect(user.reload.otp_backup_codes).to_not eq nil
         json = JSON.parse(response.body)
-        expect(json["codes"]&.size).to eq User::NUMBER_OF_BACKUP_CODES
+        expect(json['codes']&.size).to eq User::NUMBER_OF_BACKUP_CODES
       end
     end
   end
 
-  context "Discourse SSO" do
+  context 'Discourse SSO' do
     let(:sso) { SingleSignOn.new }
 
-    it "authenticates WAC user and validates user attributes" do
+    it 'authenticates WAC user and validates user attributes' do
       user = FactoryBot.create(:wac_role_member, user: FactoryBot.create(:user_with_wca_id)).user
       sign_in user
       sso.nonce = 1234
@@ -172,12 +172,12 @@ RSpec.describe "users" do
       [:name, :email, :avatar_url].each do |a|
         expect(answer_sso.send(a)).to eq user.send(a)
       end
-      expect(answer_sso.add_groups).to eq "wac"
-      expect(answer_sso.remove_groups).to eq((User.all_discourse_groups - ["wac"]).join(","))
-      expect(answer_sso.custom_fields["wca_id"]).to match user.wca_id
+      expect(answer_sso.add_groups).to eq 'wac'
+      expect(answer_sso.remove_groups).to eq((User.all_discourse_groups - ['wac']).join(','))
+      expect(answer_sso.custom_fields['wca_id']).to match user.wca_id
     end
 
-    it "authenticates regular user" do
+    it 'authenticates regular user' do
       user = FactoryBot.create(:user)
       sign_in user
       sso.nonce = 1234
@@ -186,11 +186,11 @@ RSpec.describe "users" do
       answer_sso = SingleSignOn.parse(query_string_from_location(response.location))
       expect(answer_sso.moderator).to be false
       expect(answer_sso.add_groups).to be_empty
-      expect(answer_sso.remove_groups).to eq User.all_discourse_groups.join(",")
-      expect(answer_sso.custom_fields["wca_id"]).to eq ""
+      expect(answer_sso.remove_groups).to eq User.all_discourse_groups.join(',')
+      expect(answer_sso.custom_fields['wca_id']).to eq ''
     end
 
-    it "authenticates admin delegate" do
+    it 'authenticates admin delegate' do
       user = FactoryBot.create(:delegate, :wst_member)
       sign_in user
       sso.nonce = 1234
@@ -200,8 +200,8 @@ RSpec.describe "users" do
       # WST is not moderator by default, admin status is granted manually in
       # Discourse
       expect(answer_sso.moderator).to be false
-      expect(answer_sso.add_groups).to eq "delegate,wst"
-      expect(answer_sso.remove_groups).to eq((User.all_discourse_groups - ["wst", "delegate"]).join(","))
+      expect(answer_sso.add_groups).to eq 'delegate,wst'
+      expect(answer_sso.remove_groups).to eq((User.all_discourse_groups - ['wst', 'delegate']).join(','))
     end
 
     it "doesn't authenticate unconfirmed user" do
@@ -214,6 +214,6 @@ RSpec.describe "users" do
   end
 
   def query_string_from_location(location)
-    location.sub(SingleSignOn.sso_url, "")
+    location.sub(SingleSignOn.sso_url, '')
   end
 end

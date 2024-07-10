@@ -14,7 +14,7 @@ class Cutoff
   end
 
   def to_wcif
-    { "numberOfAttempts" => self.number_of_attempts, "attemptResult" => self.attempt_result }
+    { 'numberOfAttempts' => self.number_of_attempts, 'attemptResult' => self.attempt_result }
   end
 
   def ==(other)
@@ -43,10 +43,10 @@ class Cutoff
 
   def self.wcif_json_schema
     {
-      "type" => ["object", "null"],
-      "properties" => {
-        "numberOfAttempts" => { "type" => "integer" },
-        "attemptResult" => { "type" => "integer" },
+      'type' => ['object', 'null'],
+      'properties' => {
+        'numberOfAttempts' => { 'type' => 'integer' },
+        'attemptResult' => { 'type' => 'integer' },
       },
     }
   end
@@ -54,13 +54,13 @@ class Cutoff
   def to_s(round, short: false)
     if round.event.timed_event?
       time = SolveTime.centiseconds_to_clock_format(self.attempt_result)
-      short ? time : I18n.t("cutoff.time", count: self.number_of_attempts, time: time)
+      short ? time : I18n.t('cutoff.time', count: self.number_of_attempts, time: time)
     elsif round.event.fewest_moves?
       moves = self.attempt_result
-      short ? moves : I18n.t("cutoff.moves", count: self.number_of_attempts, moves: moves)
+      short ? moves : I18n.t('cutoff.moves', count: self.number_of_attempts, moves: moves)
     elsif round.event.multiple_blindfolded?
       points = SolveTime.multibld_attempt_to_points(self.attempt_result)
-      short ? points : I18n.t("cutoff.points", count: self.number_of_attempts, points: points)
+      short ? points : I18n.t('cutoff.points', count: self.number_of_attempts, points: points)
     else
       raise "Unrecognized event: #{round.event.id}"
     end

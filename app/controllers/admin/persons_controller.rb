@@ -21,7 +21,7 @@ module Admin
           wcaId: wca_id,
         }
         if wca_id.blank?
-          json[:errors] = { wca_id: "could not generate a WCA ID for that semi, try another one" }
+          json[:errors] = { wca_id: 'could not generate a WCA ID for that semi, try another one' }
         end
         render json: json
       else

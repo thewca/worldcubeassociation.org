@@ -5,7 +5,7 @@ include SortHelper # rubocop:disable Style/MixinUsage
 
 class UserRole < ApplicationRecord
   belongs_to :user
-  belongs_to :group, class_name: "UserGroup"
+  belongs_to :group, class_name: 'UserGroup'
   belongs_to :metadata, polymorphic: true, optional: true
 
   delegate :group_type, to: :group
@@ -97,9 +97,9 @@ class UserRole < ApplicationRecord
     status = metadata ? metadata[:status] : nil
     case group_type
     when UserGroup.group_types[:delegate_regions]
-      ["senior_delegate", "regional_delegate"].include?(status)
+      ['senior_delegate', 'regional_delegate'].include?(status)
     when UserGroup.group_types[:teams_committees], UserGroup.group_types[:councils]
-      ["leader"].include?(status)
+      ['leader'].include?(status)
     when UserGroup.group_types[:board], UserGroup.group_types[:officers]
       true # All board members & officers are considered as leads.
     else
@@ -110,7 +110,7 @@ class UserRole < ApplicationRecord
   def is_staff?
     case group_type
     when UserGroup.group_types[:delegate_regions]
-      ["senior_delegate", "regional_delegate", "delegate", "junior_delegate"].include?(metadata.status)
+      ['senior_delegate', 'regional_delegate', 'delegate', 'junior_delegate'].include?(metadata.status)
     when UserGroup.group_types[:board], UserGroup.group_types[:officers], UserGroup.group_types[:teams_committees]
       true
     else
@@ -122,9 +122,9 @@ class UserRole < ApplicationRecord
     status = metadata&.status
     case group_type
     when UserGroup.group_types[:delegate_regions]
-      ["senior_delegate", "regional_delegate", "delegate"].include?(status)
+      ['senior_delegate', 'regional_delegate', 'delegate'].include?(status)
     when UserGroup.group_types[:teams_committees]
-      ["leader", "senior_member"].include?(status)
+      ['leader', 'senior_member'].include?(status)
     when UserGroup.group_types[:board], UserGroup.group_types[:officers]
       true # All board members & officers are considered as eligible voters.
     else
@@ -194,8 +194,8 @@ class UserRole < ApplicationRecord
     {
       id: self.id,
       friendly_id: friendly_id,
-      leader: metadata&.status == "leader",
-      senior_member: metadata&.status == "senior_member",
+      leader: metadata&.status == 'leader',
+      senior_member: metadata&.status == 'senior_member',
       name: user.name,
       wca_id: user.wca_id,
       avatar: user.avatar,

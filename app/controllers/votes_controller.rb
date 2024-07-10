@@ -12,7 +12,7 @@ class VotesController < ApplicationController
   def create
     @vote = current_user.votes.build(vote_params)
     if @vote.save
-      flash[:success] = "Vote saved"
+      flash[:success] = 'Vote saved'
       redirect_to polls_vote_path(@vote.poll.id)
     else
       render :vote
@@ -23,10 +23,10 @@ class VotesController < ApplicationController
     @vote = Vote.find(params[:id])
     @poll = @vote.poll
     if @vote.update(vote_params)
-      flash[:success] = "Vote updated"
+      flash[:success] = 'Vote updated'
       redirect_to polls_vote_path(@vote.poll.id)
     else
-      flash.now[:danger] = "Could not upate your vote"
+      flash.now[:danger] = 'Could not upate your vote'
       render :vote
     end
   end

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class ServerSetting < ApplicationRecord
-  self.primary_key = "name"
+  self.primary_key = 'name'
 
   BASE_LOCALE_HASH = 'en_translation_modification'
 

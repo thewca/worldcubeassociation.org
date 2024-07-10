@@ -9,25 +9,25 @@ class UpdateListOfCountries < ActiveRecord::Migration[5.0]
       # users with iso2 not matching anything in the 'Country' table.
       {
         # Virgin Islands -> United Kingdom
-        "VG" => "GB",
+        'VG' => 'GB',
         # Aruba -> Netherlands
-        "AW" => "NL",
+        'AW' => 'NL',
         # French Guinea -> France
-        "GF" => "FR",
+        'GF' => 'FR',
         # Pitcairn Islands -> United Kingdom
-        "PN" => "GB",
+        'PN' => 'GB',
         # Puerto Rico -> USA
-        "PR" => "US",
+        'PR' => 'US',
         # Isle of Man -> United Kingdom
-        "IM" => "GB",
+        'IM' => 'GB',
         # French Polynesia -> France
-        "PF" => "FR",
+        'PF' => 'FR',
       }.each do |old_iso2, new_iso2|
         User.where(country_iso2: old_iso2).update_all(country_iso2: new_iso2)
       end
       {
-        "Aruba" => "Netherlands",
-        "Puerto Rico" => "USA",
+        'Aruba' => 'Netherlands',
+        'Puerto Rico' => 'USA',
       }.each do |old_id, new_id|
         Person.where(countryId: old_id).update_all(countryId: new_id)
         Result.where(countryId: old_id).update_all(countryId: new_id)

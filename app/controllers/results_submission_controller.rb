@@ -25,7 +25,7 @@ class ResultsSubmissionController < ApplicationController
 
     # This makes sure the json structure is valid!
     if @upload_json.import_to_inbox
-      flash[:success] = "JSON File has been imported."
+      flash[:success] = 'JSON File has been imported.'
       @competition.uploaded_jsons.create(json_str: @upload_json.results_json_str)
       redirect_to competition_submit_results_edit_path
     else
@@ -46,11 +46,11 @@ class ResultsSubmissionController < ApplicationController
     if @results_submission.valid?
       CompetitionsMailer.results_submitted(@competition, @results_submission, current_user).deliver_now
 
-      flash[:success] = "Thank you for submitting the results!"
+      flash[:success] = 'Thank you for submitting the results!'
       @competition.update!(results_submitted_at: Time.now)
       redirect_to competition_path(@competition)
     else
-      flash[:danger] = "Submitted results contain errors."
+      flash[:danger] = 'Submitted results contain errors.'
       @results_validator = @results_submission.results_validator
       render :new
     end

@@ -4,12 +4,12 @@ module RegistrationsHelper
   def fees_hint_and_context(registration)
     if registration.competition.payments_enabled?
       if registration.outstanding_entry_fees <= 0
-        [t('registrations.entry_fees_fully_paid', paid: format_money(registration.paid_entry_fees)), "success"]
+        [t('registrations.entry_fees_fully_paid', paid: format_money(registration.paid_entry_fees)), 'success']
       else
-        [t('registrations.will_pay_here'), "info"]
+        [t('registrations.will_pay_here'), 'info']
       end
     else
-      [t('registrations.wont_pay_here'), "info"]
+      [t('registrations.wont_pay_here'), 'info']
     end
   end
 
@@ -17,7 +17,7 @@ module RegistrationsHelper
     if registration.persisted?
       # If they already registered, don't bother telling them about the
       # preferred events feature.
-      ""
+      ''
     elsif registration.user.preferred_events.empty?
       t('registrations.preferred_events_prompt_html', link: link_to(t('common.here'), profile_edit_path(section: :preferences)))
     else
@@ -29,7 +29,7 @@ module RegistrationsHelper
     sign_in = I18n.t('registrations.sign_in')
     here = I18n.t('common.here')
     args[:sign_in] = link_to(sign_in, new_user_session_path)
-    args[:here] = link_to(here, new_user_registration_path, target: "_blank")
+    args[:here] = link_to(here, new_user_registration_path, target: '_blank')
     raw(I18n.t(message_key, **args))
   end
 
@@ -46,7 +46,7 @@ module RegistrationsHelper
     if registration_payment.user
       link_to(registration_payment.user.name, edit_user_path(registration_payment.user))
     else
-      "<unknown user>"
+      '<unknown user>'
     end
   end
 end

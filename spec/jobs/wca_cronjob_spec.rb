@@ -4,25 +4,25 @@ require 'rails_helper'
 
 class ExampleJob < WcaCronjob
   def perform
-    puts "Doing stuff..."
+    puts 'Doing stuff...'
   end
 end
 
 class ExampleJob2 < WcaCronjob
   def perform
-    puts "Doing other stuff..."
+    puts 'Doing other stuff...'
   end
 end
 
 class SuccessfulJob < WcaCronjob
   def perform
-    puts "Succeeding!"
+    puts 'Succeeding!'
   end
 end
 
 class FailingJob < WcaCronjob
   def perform
-    raise "Failure!"
+    raise 'Failure!'
   end
 end
 
@@ -40,12 +40,12 @@ RSpec.describe WcaCronjob, type: :job do
     expect { FailingJob.perform_later }.to change { enqueued_jobs.size }.by(0)
   end
 
-  it "allows enqueuing multiple jobs of different types at the same time" do
+  it 'allows enqueuing multiple jobs of different types at the same time' do
     expect { ExampleJob.perform_later }.to change { enqueued_jobs.size }.by(1)
     expect { ExampleJob2.perform_later }.to change { enqueued_jobs.size }.by(1)
   end
 
-  it "allows enqueuing the same job again after it has finished" do
+  it 'allows enqueuing the same job again after it has finished' do
     expect { ExampleJob.perform_later }.to change { enqueued_jobs.size }.by(1)
 
     perform_enqueued_jobs
@@ -53,7 +53,7 @@ RSpec.describe WcaCronjob, type: :job do
     expect { ExampleJob.perform_later }.to change { enqueued_jobs.size }.by(1)
   end
 
-  it "stores timestamps in cronjob_statistics table" do
+  it 'stores timestamps in cronjob_statistics table' do
     expect(SuccessfulJob.scheduled?).to eq false
     expect(SuccessfulJob.in_progress?).to eq false
     expect(SuccessfulJob.finished?).to eq false

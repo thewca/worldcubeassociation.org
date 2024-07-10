@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe SubmitResultsNagJob, type: :job do
-  it "schedules results nag email" do
+  it 'schedules results nag email' do
     _unscheduled_competition = FactoryBot.create :competition, starts: nil
     _recent_competition_missing_results = FactoryBot.create :competition, :visible, starts: 3.days.ago
     old_competition_missing_results = FactoryBot.create :competition, :visible, starts: 3.weeks.ago

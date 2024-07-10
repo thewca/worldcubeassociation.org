@@ -7,25 +7,25 @@ class WcifExtension < ApplicationRecord
   validates :spec_url, url: true
 
   def to_wcif
-    { "id" => self.extension_id, "specUrl" => self.spec_url, "data" => self.data }
+    { 'id' => self.extension_id, 'specUrl' => self.spec_url, 'data' => self.data }
   end
 
   def self.wcif_json_schema
     {
-      "type" => ["object"],
-      "properties" => {
-        "id" => { "type" => "string" },
-        "specUrl" => { "type" => "string" },
-        "data" => { "type" => "object" },
+      'type' => ['object'],
+      'properties' => {
+        'id' => { 'type' => 'string' },
+        'specUrl' => { 'type' => 'string' },
+        'data' => { 'type' => 'object' },
       },
     }
   end
 
   def self.wcif_to_attributes(wcif)
     {
-      extension_id: wcif["id"],
-      spec_url: wcif["specUrl"],
-      data: wcif["data"],
+      extension_id: wcif['id'],
+      spec_url: wcif['specUrl'],
+      data: wcif['data'],
     }
   end
 
@@ -37,7 +37,7 @@ class WcifExtension < ApplicationRecord
   def self.update_wcif_extensions!(parent, extension_wcifs)
     updated_extensions = extension_wcifs.map do |extension_wcif|
       extension = parent.wcif_extensions.find do |wcif_extension|
-        wcif_extension.extension_id == extension_wcif["id"]
+        wcif_extension.extension_id == extension_wcif['id']
       end
       (extension || parent.wcif_extensions.build).load_wcif!(extension_wcif)
     end

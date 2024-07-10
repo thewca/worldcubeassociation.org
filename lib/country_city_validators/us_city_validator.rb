@@ -64,11 +64,11 @@ module CountryCityValidators
 
   class UsCityValidator < CityCommaRegionValidator
     def initialize
-      super(type_of_region: "state", valid_regions: (US_STATES | US_TERRITORIES))
+      super(type_of_region: 'state', valid_regions: (US_STATES | US_TERRITORIES))
     end
 
     def self.country_iso_2
-      "US"
+      'US'
     end
   end
 end

@@ -16,11 +16,11 @@ class SessionsController < Devise::SessionsController
 
   def generate_email_otp
     unless session[:otp_user_id] || current_user
-      return render json: { error: { message: I18n.t("devise.sessions.new.2fa.errors.cant_send_email") } }
+      return render json: { error: { message: I18n.t('devise.sessions.new.2fa.errors.cant_send_email') } }
     end
     user = User.find(session[:otp_user_id] || current_user.id)
     TwoFactorMailer.send_otp_to_user(user).deliver_now
-    render json: { status: "ok" }
+    render json: { status: 'ok' }
   end
 
   def create
@@ -37,9 +37,9 @@ class SessionsController < Devise::SessionsController
     # This way we invalidate all other sessions, while maintaining the current one.
     new_token = Devise.friendly_token
     current_user.update_attribute(:session_validity_token, new_token)
-    warden.raw_session["validity_token"] = new_token
+    warden.raw_session['validity_token'] = new_token
 
-    flash[:success] = I18n.t("devise.sessions.destroy_other.success")
+    flash[:success] = I18n.t('devise.sessions.destroy_other.success')
     redirect_to root_url
   end
 
@@ -67,7 +67,7 @@ class SessionsController < Devise::SessionsController
         user.save!
         sign_in(user, event: :authentication)
       else
-        flash[:danger] = I18n.t("devise.sessions.new.2fa.errors.invalid_otp")
+        flash[:danger] = I18n.t('devise.sessions.new.2fa.errors.invalid_otp')
         prompt_for_two_factor(user)
       end
     end

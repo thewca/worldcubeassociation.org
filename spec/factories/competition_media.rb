@@ -3,22 +3,22 @@
 FactoryBot.define do
   factory :competition_medium do
     competition { FactoryBot.create(:competition) }
-    type { "article" }
-    text { "I am an article" }
-    uri { "https://www.example.com/article-42" }
+    type { 'article' }
+    text { 'I am an article' }
+    uri { 'https://www.example.com/article-42' }
     submitterName { Faker::Name.name }
-    submitterComment { "This is a comment" }
+    submitterComment { 'This is a comment' }
     submitterEmail { Faker::Internet.email }
     timestampSubmitted { 2.days.ago }
     timestampDecided { nil }
-    status { "pending" }
+    status { 'pending' }
 
     trait :accepted do
-      status { "accepted" }
+      status { 'accepted' }
     end
 
     trait :pending do
-      status { "pending" }
+      status { 'pending' }
     end
   end
 end

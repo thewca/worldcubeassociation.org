@@ -12,7 +12,7 @@ class DatetimePickerInput < DatePickerInput
   private
 
     def utc_addon
-      template.content_tag :span, "UTC", class: "input-group-addon"
+      template.content_tag :span, 'UTC', class: 'input-group-addon'
     end
 
     def input_placeholder

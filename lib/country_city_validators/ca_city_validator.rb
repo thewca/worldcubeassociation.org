@@ -22,11 +22,11 @@ module CountryCityValidators
 
   class CaCityValidator < CityCommaRegionValidator
     def initialize
-      super(type_of_region: "province", valid_regions: (CA_PROVINCES | CA_TERRITORIES))
+      super(type_of_region: 'province', valid_regions: (CA_PROVINCES | CA_TERRITORIES))
     end
 
     def self.country_iso_2
-      "CA"
+      'CA'
     end
   end
 end

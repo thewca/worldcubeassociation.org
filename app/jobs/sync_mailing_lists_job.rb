@@ -7,18 +7,18 @@ class SyncMailingListsJob < WcaCronjob
   end
 
   def perform
-    GsuiteMailingLists.sync_group("leaders@worldcubeassociation.org", UserGroup.teams_committees.map(&:lead_user).compact.map(&:email))
+    GsuiteMailingLists.sync_group('leaders@worldcubeassociation.org', UserGroup.teams_committees.map(&:lead_user).compact.map(&:email))
     GsuiteMailingLists.sync_group(GroupsMetadataBoard.email, UserGroup.board_group.active_users.map(&:email))
     translator_users = UserGroup.translators.flat_map(&:users)
-    GsuiteMailingLists.sync_group("translators@worldcubeassociation.org", translator_users.map(&:email))
+    GsuiteMailingLists.sync_group('translators@worldcubeassociation.org', translator_users.map(&:email))
     User.clear_receive_delegate_reports_if_not_eligible
-    GsuiteMailingLists.sync_group("reports@worldcubeassociation.org", User.delegate_reports_receivers_emails)
+    GsuiteMailingLists.sync_group('reports@worldcubeassociation.org', User.delegate_reports_receivers_emails)
 
     UserGroup.teams_committees.active_groups.each { |team_committee| GsuiteMailingLists.sync_group(team_committee.metadata.email, team_committee.active_users.map(&:email)) }
     UserGroup.councils.each { |council| GsuiteMailingLists.sync_group(council.metadata.email, council.active_users.map(&:email)) }
 
     treasurers = UserGroup.officers.flat_map(&:active_roles).filter { |role| role.metadata.status == RolesMetadataOfficers.statuses[:treasurer] }
-    GsuiteMailingLists.sync_group("treasurer@worldcubeassociation.org", treasurers.map(&:user).map(&:email))
+    GsuiteMailingLists.sync_group('treasurer@worldcubeassociation.org', treasurers.map(&:user).map(&:email))
 
     delegate_emails = []
     trainee_emails = []
@@ -44,11 +44,11 @@ class SyncMailingListsJob < WcaCronjob
         GsuiteMailingLists.sync_group(region_email_id, region_emails.uniq)
       end
     end
-    GsuiteMailingLists.sync_group("delegates@worldcubeassociation.org", delegate_emails.uniq)
-    GsuiteMailingLists.sync_group("trainees@worldcubeassociation.org", trainee_emails.uniq)
-    GsuiteMailingLists.sync_group("seniors@worldcubeassociation.org", senior_emails.uniq)
+    GsuiteMailingLists.sync_group('delegates@worldcubeassociation.org', delegate_emails.uniq)
+    GsuiteMailingLists.sync_group('trainees@worldcubeassociation.org', trainee_emails.uniq)
+    GsuiteMailingLists.sync_group('seniors@worldcubeassociation.org', senior_emails.uniq)
 
     organizations_emails = [RegionalOrganization.currently_acknowledged.map(&:email), GroupsMetadataBoard.email].flatten
-    GsuiteMailingLists.sync_group("organizations@worldcubeassociation.org", organizations_emails)
+    GsuiteMailingLists.sync_group('organizations@worldcubeassociation.org', organizations_emails)
   end
 end

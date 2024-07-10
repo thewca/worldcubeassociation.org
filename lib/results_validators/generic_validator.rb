@@ -4,7 +4,7 @@ module ResultsValidators
   class GenericValidator
     attr_reader :errors, :warnings, :infos, :apply_fixes
 
-    @desc = "Please override that class variable with a proper description when you inherit the class."
+    @desc = 'Please override that class variable with a proper description when you inherit the class.'
 
     def initialize(apply_fixes: false)
       @apply_fixes = apply_fixes
@@ -102,7 +102,7 @@ module ResultsValidators
         missing_round_ids = round_ids_from_results - rounds_information.keys
         extra_round_ids = rounds_information.keys - round_ids_from_results
         missing_round_ids.each do |round_id|
-          event_id, round_type_id = round_id.split("-")
+          event_id, round_type_id = round_id.split('-')
           equivalent_round_id = "#{event_id}-#{RoundType.toggle_cutoff(round_type_id)}"
           if extra_round_ids.delete(equivalent_round_id)
             equivalent_round = rounds_information[equivalent_round_id]

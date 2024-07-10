@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class EligibleCountryIso2ForChampionship < ApplicationRecord
-  self.table_name = "eligible_country_iso2s_for_championship"
+  self.table_name = 'eligible_country_iso2s_for_championship'
 
   belongs_to :championship, foreign_key: :championship_type, primary_key: :championship_type, optional: true
 

@@ -4,19 +4,19 @@ class DatabaseController < ApplicationController
   RESULTS_README_TEMPLATE = 'database/public_results_readme'
 
   def results_export
-    @sql_path, @sql_filesize = current_results_export("sql")
-    @tsv_path, @tsv_filesize = current_results_export("tsv")
+    @sql_path, @sql_filesize = current_results_export('sql')
+    @tsv_path, @tsv_filesize = current_results_export('tsv')
     @sql_filename = File.basename(@sql_path)
     @tsv_filename = File.basename(@tsv_path)
   end
 
   def sql_permalink
-    url, = current_results_export("sql")
+    url, = current_results_export('sql')
     redirect_to url, status: 301, allow_other_host: true
   end
 
   def tsv_permalink
-    url, = current_results_export("tsv")
+    url, = current_results_export('tsv')
     redirect_to url, status: 301, allow_other_host: true
   end
 

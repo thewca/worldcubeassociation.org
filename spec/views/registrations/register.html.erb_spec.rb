@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require "rails_helper"
+require 'rails_helper'
 
-RSpec.describe "registrations/register" do
-  it "shows waiting list information" do
+RSpec.describe 'registrations/register' do
+  it 'shows waiting list information' do
     competition = FactoryBot.create(:competition, :registration_open)
     FactoryBot.create(:registration, competition: competition)
     registration2 = FactoryBot.create(:registration, competition: competition)
@@ -18,7 +18,7 @@ RSpec.describe "registrations/register" do
     expect(rendered).to match(/Your registration is pending./)
   end
 
-  it "shows message about registration being past" do
+  it 'shows message about registration being past' do
     competition = FactoryBot.create(:competition,
                                     use_wca_registration: true,
                                     registration_open: 1.week.ago,
@@ -32,7 +32,7 @@ RSpec.describe "registrations/register" do
     expect(rendered).to match(/Registration closed <strong>[^>]*<.strong> ago/)
   end
 
-  it "shows message about registration not yet being open" do
+  it 'shows message about registration not yet being open' do
     competition = FactoryBot.create(:competition,
                                     use_wca_registration: true,
                                     registration_open: 1.week.from_now,
@@ -48,7 +48,7 @@ RSpec.describe "registrations/register" do
 
   def setup(payment_status)
     competition = FactoryBot.create(:competition, :stripe_connected, :visible, :registration_open)
-    registration = FactoryBot.create(:registration, payment_status, competition: competition, administrative_notes: "👽")
+    registration = FactoryBot.create(:registration, payment_status, competition: competition, administrative_notes: '👽')
     allow(view).to receive(:current_user) { registration.user }
     assign(:competition, competition)
     assign(:registration, registration)
@@ -56,17 +56,17 @@ RSpec.describe "registrations/register" do
     render
   end
 
-  it "renders paid registrations" do
+  it 'renders paid registrations' do
     setup :paid
     expect(rendered).to match(/which fully covers the registration fees/)
   end
 
-  it "renders unpaid registrations and ask for payment" do
+  it 'renders unpaid registrations and ask for payment' do
     setup :unpaid
     expect(rendered).to match(/Pay now!/)
   end
 
-  it "only shows fields that are editable by a competitor" do
+  it 'only shows fields that are editable by a competitor' do
     setup :paid
     expect(rendered).to match(/Events/)
     expect(rendered).to match(/Guests/)

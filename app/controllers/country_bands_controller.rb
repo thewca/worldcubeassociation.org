@@ -11,7 +11,7 @@ class CountryBandsController < ApplicationController
   def edit
     @number = id_from_params
     unless CountryBand::BANDS.keys.include?(@number)
-      flash[:danger] = "Unknown band number"
+      flash[:danger] = 'Unknown band number'
       return redirect_to country_bands_path
     end
     set_instance_variables
@@ -24,7 +24,7 @@ class CountryBandsController < ApplicationController
     previously_in_band = CountryBand.where(number: @number).pluck(:iso2)
     begin
       ActiveRecord::Base.transaction do
-        iso2s.split(",").each do |iso2|
+        iso2s.split(',').each do |iso2|
           cb = CountryBand.find_or_initialize_by(iso2: iso2)
           cb.number = @number
           has_anything_changed ||= cb.changed?
@@ -37,9 +37,9 @@ class CountryBandsController < ApplicationController
           has_anything_changed = true
         end
         flash[:success] = if has_anything_changed
-                            "Successfully updated band data."
+                            'Successfully updated band data.'
                           else
-                            "No change to band data."
+                            'No change to band data.'
                           end
       end
     rescue ActiveRecord::RecordInvalid => e

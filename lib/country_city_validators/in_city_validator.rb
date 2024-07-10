@@ -42,11 +42,11 @@ module CountryCityValidators
 
   class InCityValidator < CityCommaRegionValidator
     def initialize
-      super(type_of_region: "state", valid_regions: IN_STATES)
+      super(type_of_region: 'state', valid_regions: IN_STATES)
     end
 
     def self.country_iso_2
-      "IN"
+      'IN'
     end
   end
 end

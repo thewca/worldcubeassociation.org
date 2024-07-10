@@ -22,21 +22,21 @@ class MergePeople
   validate :require_different_people
   def require_different_people
     if person1_wca_id == person2_wca_id
-      errors.add(:person2_wca_id, "Cannot merge a person with themself!")
+      errors.add(:person2_wca_id, 'Cannot merge a person with themself!')
     end
   end
 
   validate :require_valid_wca_ids
   def require_valid_wca_ids
     if !person1
-      errors.add(:person1_wca_id, "Not found")
+      errors.add(:person1_wca_id, 'Not found')
     elsif person1.sub_ids.length > 1
-      errors.add(:person1_wca_id, "This person has multiple subIds")
+      errors.add(:person1_wca_id, 'This person has multiple subIds')
     end
     if !person2
-      errors.add(:person2_wca_id, "Not found")
+      errors.add(:person2_wca_id, 'Not found')
     elsif person2.sub_ids.length > 1
-      errors.add(:person2_wca_id, "This person has multiple subIds")
+      errors.add(:person2_wca_id, 'This person has multiple subIds')
     end
   end
 
@@ -61,7 +61,7 @@ class MergePeople
   validate :person2_must_not_have_associated_user
   def person2_must_not_have_associated_user
     if @person2&.user
-      errors.add(:person2_wca_id, "Must not have an account")
+      errors.add(:person2_wca_id, 'Must not have an account')
     end
   end
 

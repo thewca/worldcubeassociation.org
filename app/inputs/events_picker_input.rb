@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 class EventsPickerInput < SimpleForm::Inputs::Base
-  CHECKED_VALUE = "1"
-  UNCHECKED_VALUE = "0"
+  CHECKED_VALUE = '1'
+  UNCHECKED_VALUE = '0'
 
   def input(wrapper_options)
     merged_input_options = merge_wrapper_options(input_html_options, wrapper_options)
@@ -15,14 +15,14 @@ class EventsPickerInput < SimpleForm::Inputs::Base
 
     template.content_tag(:p) do
       if include_all
-        icon = template.unofficial_cubing_icon('miniguild', data: { toggle: "tooltip", placement: "top" }, title: 'All events')
+        icon = template.unofficial_cubing_icon('miniguild', data: { toggle: 'tooltip', placement: 'top' }, title: 'All events')
         selected = selected_events.empty? || (selected_events.length == 1 && selected_events.first == 'all')
 
         add_input_field(only_one, 'all', icon, merged_input_options, selected: selected)
       end
 
       allowed_events.each do |event|
-        icon = template.cubing_icon(event.id, data: { toggle: "tooltip", placement: "top" }, title: event.name)
+        icon = template.cubing_icon(event.id, data: { toggle: 'tooltip', placement: 'top' }, title: event.name)
         selected = selected_events.include?(event.id)
 
         add_input_field(only_one, event.id, icon, merged_input_options, selected: selected)
@@ -31,7 +31,7 @@ class EventsPickerInput < SimpleForm::Inputs::Base
   end
 
   def add_input_field(only_one, id, icon, input_options, selected: false)
-    element_class = only_one ? "event-radio" : "event-checkbox"
+    element_class = only_one ? 'event-radio' : 'event-checkbox'
     checked_options = input_options.merge(checked: selected)
 
     check_box = if only_one
@@ -52,7 +52,7 @@ class EventsPickerInput < SimpleForm::Inputs::Base
           check_box.render + icon,
           for: label_id,
         ),
-        class: element_class + (input_options[:disabled] ? " disabled" : ""),
+        class: element_class + (input_options[:disabled] ? ' disabled' : ''),
       ),
     )
   end

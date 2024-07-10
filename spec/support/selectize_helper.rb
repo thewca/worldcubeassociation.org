@@ -13,7 +13,7 @@ module SelectizeHelper
 
     selectize_input.native.send_key(with)
     # Wait for selectize popup to appear.
-    expect(page).to have_selector("div.selectize-dropdown", visible: true)
+    expect(page).to have_selector('div.selectize-dropdown', visible: true)
     # Select item with selectize.
     selectize_input.native.send_key(:enter)
   end

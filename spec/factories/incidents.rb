@@ -2,13 +2,13 @@
 
 FactoryBot.define do
   factory :incident do
-    title { "Incident title" }
-    private_description { "Some private description" }
-    private_wrc_decision { "Some private decision" }
-    public_summary { "The incident public summary" }
+    title { 'Incident title' }
+    private_description { 'Some private description' }
+    private_wrc_decision { 'Some private decision' }
+    public_summary { 'The incident public summary' }
 
     transient do
-      tags { ["DefaultTag"] }
+      tags { ['DefaultTag'] }
       comps { [] }
     end
 
@@ -29,7 +29,7 @@ FactoryBot.define do
     trait :with_comp do
       after(:create) do |incident|
         comp = FactoryBot.create(:competition)
-        incident.incident_competitions.create!(competition_id: comp.id, comments: "some comment")
+        incident.incident_competitions.create!(competition_id: comp.id, comments: 'some comment')
       end
     end
 

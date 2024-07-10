@@ -5,7 +5,7 @@ module AdvancementConditions
     alias_method :attempt_result, :level
 
     def self.wcif_type
-      "attemptResult"
+      'attemptResult'
     end
 
     def to_s(round, short: false)
@@ -21,7 +21,7 @@ module AdvancementConditions
 
     def max_advancing(results)
       return 0 if results.empty?
-      field = results.first.format.sort_by == "single" ? :best : :average
+      field = results.first.format.sort_by == 'single' ? :best : :average
       results.select do |r|
         r.to_solve_time(field).complete? && r.send(field) < attempt_result
       end.size

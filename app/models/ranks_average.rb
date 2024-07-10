@@ -2,12 +2,12 @@
 
 class RanksAverage < ApplicationRecord
   include PersonalBest
-  self.table_name = "RanksAverage"
+  self.table_name = 'RanksAverage'
 
-  belongs_to :event, foreign_key: "eventId"
+  belongs_to :event, foreign_key: 'eventId'
 
   def to_wcif
-    rank_to_wcif("average")
+    rank_to_wcif('average')
   end
 
   def to_s

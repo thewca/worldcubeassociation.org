@@ -3,13 +3,13 @@
 require 'rails_helper'
 
 RSpec.describe RegistrationReminderJob, type: :job do
-  describe "registration reminder job" do
+  describe 'registration reminder job' do
     let(:user) { FactoryBot.create :user }
     let(:delegate) { FactoryBot.create :delegate }
     let(:organizers) { FactoryBot.create_list :user, 3 }
     let(:competition) { FactoryBot.create :competition, :visible, organizers: organizers, delegates: [delegate] }
 
-    it "does not send more than 24h in advance" do
+    it 'does not send more than 24h in advance' do
       competition.registration_open = 2.days.from_now
 
       expect do
@@ -17,7 +17,7 @@ RSpec.describe RegistrationReminderJob, type: :job do
       end.to change { enqueued_jobs.size }.by(0)
     end
 
-    it "schedules registration reminder emails" do
+    it 'schedules registration reminder emails' do
       BookmarkedCompetition.create(competition: competition, user: user)
       competition.update_column(:registration_open, 12.hours.from_now)
 
@@ -37,7 +37,7 @@ RSpec.describe RegistrationReminderJob, type: :job do
       end.to change { enqueued_jobs.size }.by(0)
     end
 
-    it "resends when registration period changes" do
+    it 'resends when registration period changes' do
       BookmarkedCompetition.create(competition: competition, user: user)
       competition.update_column(:registration_reminder_sent_at, 7.days.ago)
       competition.update_column(:registration_open, 12.hours.from_now)
@@ -53,7 +53,7 @@ RSpec.describe RegistrationReminderJob, type: :job do
       end.to change { enqueued_jobs.size }.by(5)
     end
 
-    it "does not send to registered and accepted users" do
+    it 'does not send to registered and accepted users' do
       BookmarkedCompetition.create(competition: competition, user: user)
       FactoryBot.create(:registration, :accepted, competition: competition, user: user)
       FactoryBot.create(:registration, :pending, competition: competition, user: delegate)

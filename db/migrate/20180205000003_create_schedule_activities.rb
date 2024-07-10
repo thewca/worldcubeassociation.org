@@ -13,6 +13,6 @@ class CreateScheduleActivities < ActiveRecord::Migration[5.1]
 
       t.timestamps
     end
-    add_index :schedule_activities, [:holder_type, :holder_id, :wcif_id], unique: true, name: "index_activities_on_their_id_within_holder"
+    add_index :schedule_activities, [:holder_type, :holder_id, :wcif_id], unique: true, name: 'index_activities_on_their_id_within_holder'
   end
 end

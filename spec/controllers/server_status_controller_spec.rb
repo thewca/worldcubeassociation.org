@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe ServerStatusController, type: :controller do
-  it "is happy" do
+  it 'is happy' do
     allow_any_instance_of(ServerStatusController).to receive(:checks).and_return([HappyCheck.new])
 
     get :index
@@ -11,7 +11,7 @@ RSpec.describe ServerStatusController, type: :controller do
     expect(response).to have_http_status 200
   end
 
-  it "can fail" do
+  it 'can fail' do
     allow_any_instance_of(ServerStatusController).to receive(:checks).and_return([HappyCheck.new, UnhappyCheck.new])
 
     get :index
@@ -28,11 +28,11 @@ end
 
 class UnhappyCheck < StatusCheck
   def _status_description
-    [:danger, "uh oh"]
+    [:danger, 'uh oh']
   end
 end
 
-RSpec.describe "JobsCheck" do
+RSpec.describe 'JobsCheck' do
   let(:check) { JobsCheck.new }
 
   let(:dummy_jobs) { JobUtils::WCA_CRONJOBS.sample(2) }
@@ -41,7 +41,7 @@ RSpec.describe "JobsCheck" do
     CronjobStatistic.update_all(enqueued_at: Time.now)
   end
 
-  it "passes if there are young jobs" do
+  it 'passes if there are young jobs' do
     dummy_jobs.first.cronjob_statistics.update!(enqueued_at: 1.minutes.ago)
 
     status, description = check.status_description
@@ -50,7 +50,7 @@ RSpec.describe "JobsCheck" do
     expect(description).to be_nil
   end
 
-  it "finds the oldest job that has been waiting to run", retry: 3 do
+  it 'finds the oldest job that has been waiting to run', retry: 3 do
     dummy_job, another_job = dummy_jobs
 
     dummy_job.cronjob_statistics.update!(enqueued_at: 10.minutes.ago)
@@ -62,7 +62,7 @@ RSpec.describe "JobsCheck" do
     expect(description).to match(/Job #{another_job.cronjob_statistics.id} was/)
   end
 
-  it "ignores jobs in progress", retry: 3 do
+  it 'ignores jobs in progress', retry: 3 do
     dummy_job, another_job = dummy_jobs
 
     dummy_job.cronjob_statistics.update!(enqueued_at: 10.minutes.ago)
@@ -75,12 +75,12 @@ RSpec.describe "JobsCheck" do
   end
 end
 
-RSpec.describe "RegulationsCheck" do
+RSpec.describe 'RegulationsCheck' do
   let(:check) { RegulationsCheck.new }
   let(:s3) { Aws::S3::Client.new(stub_responses: true) }
 
-  it "passes" do
-    s3.stub_responses(:get_object, ->(_) { { body: "{}" } })
+  it 'passes' do
+    s3.stub_responses(:get_object, ->(_) { { body: '{}' } })
     Regulation.reload_regulations(Aws::S3::Resource.new(client: s3))
 
     status, description = check.status_description
@@ -88,18 +88,18 @@ RSpec.describe "RegulationsCheck" do
     expect(description).to be_nil
   end
 
-  it "warns about missing regulations" do
-    s3.stub_responses(:get_object, ->(_) { "NoSuchKey" })
+  it 'warns about missing regulations' do
+    s3.stub_responses(:get_object, ->(_) { 'NoSuchKey' })
     Regulation.reload_regulations(Aws::S3::Resource.new(client: s3))
 
     status, description = check.status_description
 
     expect(status).to eq :danger
-    expect(description).to eq "Error while loading regulations: stubbed-response-error-message from Aws::S3::Errors::NoSuchKey"
+    expect(description).to eq 'Error while loading regulations: stubbed-response-error-message from Aws::S3::Errors::NoSuchKey'
   end
 
-  it "warns about malformed regulations" do
-    s3.stub_responses(:get_object, ->(_) { { body: "i am definitely not json" } })
+  it 'warns about malformed regulations' do
+    s3.stub_responses(:get_object, ->(_) { { body: 'i am definitely not json' } })
     Regulation.reload_regulations(Aws::S3::Resource.new(client: s3))
 
     status, description = check.status_description

@@ -10,7 +10,7 @@ class RegistrationReminderJob < WcaCronjob
     Competition
       .visible
       .not_cancelled
-      .where("registration_open <= ? AND registration_open >= NOW()", 1.day.from_now)
+      .where('registration_open <= ? AND registration_open >= NOW()', 1.day.from_now)
       .includes(bookmarked_competitions: [:user])
       .select { |c| should_send_reminder(c) }.each do |competition|
         ActiveRecord::Base.transaction do

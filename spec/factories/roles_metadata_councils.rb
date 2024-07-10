@@ -3,7 +3,7 @@
 FactoryBot.define do
   factory :roles_metadata_councils do
     factory :wac_role_metadata do
-      status { "leader" }
+      status { 'leader' }
     end
   end
 end

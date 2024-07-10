@@ -3,7 +3,7 @@
 class Incident < ApplicationRecord
   has_many :incident_tags, autosave: true, dependent: :destroy
   has_many :incident_competitions, dependent: :destroy
-  has_many :competitions, -> { order("Competitions.start_date asc") }, through: :incident_competitions
+  has_many :competitions, -> { order('Competitions.start_date asc') }, through: :incident_competitions
 
   accepts_nested_attributes_for :incident_competitions, allow_destroy: true
 
@@ -46,14 +46,14 @@ class Incident < ApplicationRecord
   def self.search(query, params: {})
     incidents = Incident
     query&.split&.each do |part|
-      like_query = %w(public_summary title).map { |col| "#{col} LIKE :part" }.join(" OR ")
+      like_query = %w(public_summary title).map { |col| "#{col} LIKE :part" }.join(' OR ')
       incidents = incidents.where(like_query, part: "%#{part}%")
     end
     if params[:tags]
-      incidents = incidents.where(incident_tags: IncidentTag.where(tag: params[:tags].split(",")))
+      incidents = incidents.where(incident_tags: IncidentTag.where(tag: params[:tags].split(',')))
     end
     if params[:competitions]
-      incidents = incidents.where(incident_competitions: IncidentCompetition.where(competition_id: params[:competitions].split(",")))
+      incidents = incidents.where(incident_competitions: IncidentCompetition.where(competition_id: params[:competitions].split(',')))
     end
     incidents.order(created_at: :desc)
   end

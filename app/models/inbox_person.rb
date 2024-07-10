@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 class InboxPerson < ApplicationRecord
-  self.table_name = "InboxPersons"
+  self.table_name = 'InboxPersons'
 
-  belongs_to :person, -> { current }, foreign_key: "wcaId", primary_key: "wca_id", optional: true
+  belongs_to :person, -> { current }, foreign_key: 'wcaId', primary_key: 'wca_id', optional: true
 
   alias_attribute :wca_id, :wcaId
   alias_attribute :ref_id, :id
@@ -18,7 +18,7 @@ class InboxPerson < ApplicationRecord
   validate :dob_must_be_in_the_past
   private def dob_must_be_in_the_past
     if dob && dob >= Date.today
-      errors.add(:dob, "must be in the past")
+      errors.add(:dob, 'must be in the past')
     end
   end
 

@@ -12,15 +12,15 @@ module Admin
         format.json do
           @pending_competitions = Competition.pending_posting.order(results_submitted_at: :asc)
           user_attributes = {
-            only: ["id", "name"],
+            only: ['id', 'name'],
             methods: [],
             include: [],
           }
           render json: {
             current_user: current_user.as_json(user_attributes),
             competitions: @pending_competitions.as_json(
-              only: ["id", "name", "results_submitted_at"],
-              methods: ["city", "country_iso2"],
+              only: ['id', 'name', 'results_submitted_at'],
+              methods: ['city', 'country_iso2'],
               include: { posting_user: user_attributes },
             ),
           }
@@ -41,12 +41,12 @@ module Admin
       #   it was a no-op.
       @updated_competitions = Competition.pending_posting.where(posting_user: nil).where(id: params[:competition_ids])
       if @updated_competitions.empty?
-        return render json: { error: "No competitions to lock." }
+        return render json: { error: 'No competitions to lock.' }
       end
 
-      json = { error: "Something went wrong." }
+      json = { error: 'Something went wrong.' }
       if @updated_competitions.update(posting_user: current_user)
-        json = { message: "Competitions successfully locked, go on posting!" }
+        json = { message: 'Competitions successfully locked, go on posting!' }
       end
 
       render json: json
@@ -105,7 +105,7 @@ module Admin
         # correct position.
         validator = ResultsValidators::PositionsValidator.new(apply_fixes: true)
         validator.validate(competition_ids: [result.competitionId])
-        json[:messages] = ["Result inserted!"].concat(validator.infos.map(&:to_s))
+        json[:messages] = ['Result inserted!'].concat(validator.infos.map(&:to_s))
       else
         json[:errors] = result.errors.map(&:full_message)
       end
@@ -123,12 +123,12 @@ module Admin
         validator = ResultsValidators::PositionsValidator.new(apply_fixes: true)
         validator.validate(competition_ids: competitions_to_validate)
         info = if result.saved_changes.empty?
-                 ["It looks like you submitted the exact same result, so no changes were made."]
+                 ['It looks like you submitted the exact same result, so no changes were made.']
                else
-                 ["The result was saved."]
+                 ['The result was saved.']
                end
         if competitions_to_validate.size > 1
-          info << "The results was moved to another competition, make sure to check the competition validators for both of them."
+          info << 'The results was moved to another competition, make sure to check the competition validators for both of them.'
         end
         render json: {
           # Make sure we emit the competition's id next to the info, because we
@@ -152,7 +152,7 @@ module Admin
       validator.validate(competition_ids: [competition_id])
 
       render json: {
-        messages: ["Result deleted!"].concat(validator.infos.map(&:to_s)),
+        messages: ['Result deleted!'].concat(validator.infos.map(&:to_s)),
       }
     end
 

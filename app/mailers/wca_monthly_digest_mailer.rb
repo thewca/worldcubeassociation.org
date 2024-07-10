@@ -5,9 +5,9 @@ class WcaMonthlyDigestMailer < ApplicationMailer
 
   def send_weat_digest_content
     mail(
-      to: ["assistants@worldcubeassociation.org"],
-      reply_to: ["assistants@worldcubeassociation.org"],
-      subject: "WCA Monthly Digest Draft",
+      to: ['assistants@worldcubeassociation.org'],
+      reply_to: ['assistants@worldcubeassociation.org'],
+      subject: 'WCA Monthly Digest Draft',
     )
   end
 end

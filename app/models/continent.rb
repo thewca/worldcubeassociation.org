@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 class Continent < ApplicationRecord
-  self.table_name = "Continents"
+  self.table_name = 'Continents'
   NAME_LOOKUP_ATTRIBUTE = :name
-  FICTIVE_IDS = ["_Multiple Continents"].freeze
+  FICTIVE_IDS = ['_Multiple Continents'].freeze
 
   include Cachable
   include LocalizedSortable

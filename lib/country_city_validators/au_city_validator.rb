@@ -14,11 +14,11 @@ module CountryCityValidators
 
   class AuCityValidator < CityCommaRegionValidator
     def initialize
-      super(type_of_region: "state or territory", valid_regions: AU_STATES)
+      super(type_of_region: 'state or territory', valid_regions: AU_STATES)
     end
 
     def self.country_iso_2
-      "AU"
+      'AU'
     end
   end
 end

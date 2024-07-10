@@ -12,11 +12,11 @@ class UploadJson
       begin
         # Parse the json first
         JSON::Validator.validate!(ResultsValidators::JSONSchemas::RESULT_JSON_SCHEMA, parsed_json)
-        if parsed_json["competitionId"] != competition_id
+        if parsed_json['competitionId'] != competition_id
           errors.add(:results_file, "is not for this competition but for #{parsed_json["competitionId"]}!")
         end
       rescue JSON::ParserError
-        errors.add(:results_file, "must be a JSON file from the Workbook Assistant")
+        errors.add(:results_file, 'must be a JSON file from the Workbook Assistant')
       rescue JSON::Schema::ValidationError => e
         errors.add(:results_file, "has errors: #{e.message}")
       end
@@ -40,38 +40,38 @@ class UploadJson
     if valid?
       competition = Competition.includes(competition_events: [:rounds]).find(competition_id)
       persons_to_import = []
-      parsed_json["persons"].each do |p|
+      parsed_json['persons'].each do |p|
         new_person_attributes = p.merge(competitionId: competition_id)
         # mask uploaded DOB on staging to avoid accidentally importing PII
-        new_person_attributes["dob"] = "1954-12-04" if Rails.env.production? && !EnvConfig.WCA_LIVE_SITE?
+        new_person_attributes['dob'] = '1954-12-04' if Rails.env.production? && !EnvConfig.WCA_LIVE_SITE?
         persons_to_import << InboxPerson.new(new_person_attributes)
       end
       results_to_import = []
       scrambles_to_import = []
-      parsed_json["events"].each do |event|
-        competition_event = competition.competition_events.find { |ce| ce.event_id == event["eventId"] }
-        event["rounds"].each do |round|
+      parsed_json['events'].each do |event|
+        competition_event = competition.competition_events.find { |ce| ce.event_id == event['eventId'] }
+        event['rounds'].each do |round|
           # Find the corresponding competition round and get the actual roundTypeId
           # (in case the incoming one doesn't correspond to cutoff presence).
-          incoming_round_type_id = round["roundId"]
+          incoming_round_type_id = round['roundId']
           competition_round = competition_event.rounds.find do |cr|
             [incoming_round_type_id, RoundType.toggle_cutoff(incoming_round_type_id)].include?(cr.round_type_id)
           end
           round_type_id = competition_round&.round_type_id || incoming_round_type_id
 
           # Import results for round
-          round["results"].each do |result|
-            individual_results = result["results"]
+          round['results'].each do |result|
+            individual_results = result['results']
             # Pad the results with 0 up to 5 results
             individual_results.fill(0, individual_results.length...5)
             new_result_attributes = {
-              personId: result["personId"],
-              pos: result["position"],
-              eventId: event["eventId"],
+              personId: result['personId'],
+              pos: result['position'],
+              eventId: event['eventId'],
               roundTypeId: round_type_id,
-              formatId: round["formatId"],
-              best: result["best"],
-              average: result["average"],
+              formatId: round['formatId'],
+              best: result['best'],
+              average: result['average'],
               value1: individual_results[0],
               value2: individual_results[1],
               value3: individual_results[2],
@@ -87,15 +87,15 @@ class UploadJson
           end
 
           # Import scrambles for round
-          round["groups"].each do |group|
-            ["scrambles", "extraScrambles"].each do |scramble_type|
+          round['groups'].each do |group|
+            ['scrambles', 'extraScrambles'].each do |scramble_type|
               group[scramble_type]&.each_with_index do |scramble, index|
                 new_scramble_attributes = {
                   competitionId: competition_id,
-                  eventId: event["eventId"],
-                  roundTypeId: round["roundId"],
-                  groupId: group["group"],
-                  isExtra: scramble_type == "extraScrambles",
+                  eventId: event['eventId'],
+                  roundTypeId: round['roundId'],
+                  groupId: group['group'],
+                  isExtra: scramble_type == 'extraScrambles',
                   scrambleNum: index+1,
                   scramble: scramble,
                 }
@@ -116,7 +116,7 @@ class UploadJson
         end
         true
       rescue ActiveRecord::RecordNotUnique
-        errors.add(:results_file, "Duplicate record found while uploading results. Maybe there is a duplicate personId in the JSON?")
+        errors.add(:results_file, 'Duplicate record found while uploading results. Maybe there is a duplicate personId in the JSON?')
         false
       rescue ActiveRecord::RecordInvalid => e
         object = e.record

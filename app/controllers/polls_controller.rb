@@ -22,9 +22,9 @@ class PollsController < ApplicationController
     @poll = Poll.new(poll_params)
     @poll.multiple = false
     @poll.deadline = Date.today + 15
-    @poll.comment = ""
+    @poll.comment = ''
     if @poll.save
-      flash[:success] = "Created new poll"
+      flash[:success] = 'Created new poll'
       redirect_to edit_poll_path(@poll)
     else
       render :new
@@ -38,10 +38,10 @@ class PollsController < ApplicationController
   def update
     @poll = Poll.find(params[:id])
     if @poll.update(poll_params)
-      if params[:commit] == "Confirm"
-        flash[:success] = "Poll confirmed and open to voting"
+      if params[:commit] == 'Confirm'
+        flash[:success] = 'Poll confirmed and open to voting'
       else
-        flash[:success] = "Updated poll"
+        flash[:success] = 'Updated poll'
       end
       redirect_to edit_poll_path(@poll)
     else
@@ -53,10 +53,10 @@ class PollsController < ApplicationController
     @poll = Poll.find(params[:id])
 
     if !@poll.confirmed? && @poll.destroy
-      flash[:success] = "Deleted poll"
+      flash[:success] = 'Deleted poll'
       redirect_to polls_path
     else
-      flash[:warning] = "Error deleting poll"
+      flash[:warning] = 'Error deleting poll'
       render :edit
     end
   end
@@ -70,7 +70,7 @@ class PollsController < ApplicationController
       :confirmed_at,
       poll_options_attributes: [:id, :description, :_destroy],
     ).tap do |poll_params|
-      if params[:commit] == "Confirm" && current_user.can_create_poll?
+      if params[:commit] == 'Confirm' && current_user.can_create_poll?
         poll_params[:confirmed_at] = Time.now
       end
     end

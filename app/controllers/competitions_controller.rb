@@ -91,11 +91,11 @@ class CompetitionsController < ApplicationController
   private def support_old_links!
     params[:display].downcase! if params[:display] # 'List' -> 'list', 'Map' -> 'map'
 
-    if params[:years] == "all"
-      params[:state] = "past"
-      params[:year] = "all years"
+    if params[:years] == 'all'
+      params[:state] = 'past'
+      params[:year] = 'all years'
     elsif params[:years].to_i >= Date.today.year # to_i: 'If there is not a valid number at the start of str, 0 is returned.' - RubyDoc
-      params[:state] = "past"
+      params[:state] = 'past'
       params[:year] = params[:years]
     end
     params[:years] = nil
@@ -108,13 +108,13 @@ class CompetitionsController < ApplicationController
 
     # Default params
     params[:event_ids] ||= []
-    params[:region] ||= "all"
+    params[:region] ||= 'all'
     unless %w(past present recent by_announcement custom).include? params[:state]
-      params[:state] = "present"
+      params[:state] = 'present'
     end
-    params[:year] ||= "all years"
-    params[:status] ||= "all"
-    @display = %w(list map admin).include?(params[:display]) ? params[:display] : "list"
+    params[:year] ||= 'all years'
+    params[:status] ||= 'all'
+    @display = %w(list map admin).include?(params[:display]) ? params[:display] : 'list'
 
     # Facebook adds indices to the params automatically when redirecting.
     # See: https://github.com/thewca/worldcubeassociation.org/issues/472
@@ -122,15 +122,15 @@ class CompetitionsController < ApplicationController
       params[:event_ids] = params[:event_ids].values
     end
 
-    @past_selected = params[:state] == "past"
-    @present_selected = params[:state] == "present"
-    @recent_selected = params[:state] == "recent"
-    @by_announcement_selected = params[:state] == "by_announcement"
-    @custom_selected = params[:state] == "custom"
-    @show_cancelled = params[:show_cancelled] == "on"
-    @show_registration_status = params[:show_registration_status] == "on"
+    @past_selected = params[:state] == 'past'
+    @present_selected = params[:state] == 'present'
+    @recent_selected = params[:state] == 'recent'
+    @by_announcement_selected = params[:state] == 'by_announcement'
+    @custom_selected = params[:state] == 'custom'
+    @show_cancelled = params[:show_cancelled] == 'on'
+    @show_registration_status = params[:show_registration_status] == 'on'
 
-    @years = ["all years"] + Competition.non_future_years
+    @years = ['all years'] + Competition.non_future_years
 
     if params[:delegate].present?
       delegate = User.find(params[:delegate])
@@ -153,20 +153,20 @@ class CompetitionsController < ApplicationController
     if @present_selected || @by_announcement_selected
       @competitions = @competitions.not_over
     elsif @recent_selected
-      @competitions = @competitions.where("end_date between ? and ?", (Date.today - Competition::RECENT_DAYS), Date.today).reverse_order
+      @competitions = @competitions.where('end_date between ? and ?', (Date.today - Competition::RECENT_DAYS), Date.today).reverse_order
     elsif @custom_selected
       from_date = Date.safe_parse(params[:from_date])
       to_date = Date.safe_parse(params[:to_date])
       if from_date || to_date
-        @competitions = @competitions.where("start_date <= ?", to_date) if to_date
-        @competitions = @competitions.where("end_date >= ?", from_date) if from_date
+        @competitions = @competitions.where('start_date <= ?', to_date) if to_date
+        @competitions = @competitions.where('end_date >= ?', from_date) if from_date
       else
         @competitions = Competition.none
       end
     else
-      @competitions = @competitions.where("end_date < ?", Date.today).reverse_order
-      unless params[:year] == "all years"
-        @competitions = @competitions.where("YEAR(start_date) = :comp_year", comp_year: params[:year])
+      @competitions = @competitions.where('end_date < ?', Date.today).reverse_order
+      unless params[:year] == 'all years'
+        @competitions = @competitions.where('YEAR(start_date) = :comp_year', comp_year: params[:year])
       end
     end
 
@@ -174,7 +174,7 @@ class CompetitionsController < ApplicationController
       @competitions = @competitions.includes(:delegates, :delegate_report)
     end
 
-    unless params[:region] == "all"
+    unless params[:region] == 'all'
       @competitions = @competitions.belongs_to_region(params[:region])
     end
 
@@ -190,8 +190,8 @@ class CompetitionsController < ApplicationController
       end
     end
 
-    unless params[:status] == "all"
-      days = (params[:status] == "warning" ? Competition::REPORT_AND_RESULTS_DAYS_WARNING : Competition::REPORT_AND_RESULTS_DAYS_DANGER)
+    unless params[:status] == 'all'
+      days = (params[:status] == 'warning' ? Competition::REPORT_AND_RESULTS_DAYS_WARNING : Competition::REPORT_AND_RESULTS_DAYS_DANGER)
       @competitions = @competitions.select { |competition| competition.pending_results_or_report(days) }
     end
 
@@ -204,7 +204,7 @@ class CompetitionsController < ApplicationController
         # So we must prevent a browser from caching the JavaScript response.
         # It's necessary because if the browser caches the response, the user will see a JavaScript response
         # when he clicks browser back/forward buttons.
-        response.headers["Cache-Control"] = "no-cache, no-store"
+        response.headers['Cache-Control'] = 'no-cache, no-store'
         render 'index', locals: { current_path: request.original_fullpath }
       end
     end
@@ -368,7 +368,7 @@ class CompetitionsController < ApplicationController
     competition = competition_from_params
     payment_integration = params.require(:payment_integration)
 
-    if payment_integration == "paypal" && PaypalInterface.paypal_disabled?
+    if payment_integration == 'paypal' && PaypalInterface.paypal_disabled?
       flash[:error] = 'PayPal is not yet available in production environments'
       return redirect_to root_url
     end
@@ -393,7 +393,7 @@ class CompetitionsController < ApplicationController
 
   def competition_form_nearby_json(competition, other_comp)
     if current_user.can_admin_results?
-      comp_link = ActionController::Base.helpers.link_to(other_comp.name, competition_admin_edit_path(other_comp.id), target: "_blank")
+      comp_link = ActionController::Base.helpers.link_to(other_comp.name, competition_admin_edit_path(other_comp.id), target: '_blank')
     else
       comp_link = ActionController::Base.helpers.link_to(other_comp.name, competition_path(other_comp.id))
     end
@@ -422,8 +422,8 @@ class CompetitionsController < ApplicationController
           long: competition.longitude_degrees,
         },
       },
-      limit: other_comp.competitor_limit_enabled ? other_comp.competitor_limit : "",
-      competitors: other_comp.is_probably_over? ? other_comp.results.select('DISTINCT personId').count : "",
+      limit: other_comp.competitor_limit_enabled ? other_comp.competitor_limit : '',
+      competitors: other_comp.is_probably_over? ? other_comp.results.select('DISTINCT personId').count : '',
       events: other_comp.events.map { |event|
         event.id
       },
@@ -456,7 +456,7 @@ class CompetitionsController < ApplicationController
 
   def competition_form_registration_collision_json(competition, other_comp)
     if current_user.can_admin_results?
-      comp_link = ActionController::Base.helpers.link_to(other_comp.name, competition_admin_edit_path(other_comp.id), target: "_blank")
+      comp_link = ActionController::Base.helpers.link_to(other_comp.name, competition_admin_edit_path(other_comp.id), target: '_blank')
     else
       comp_link = ActionController::Base.helpers.link_to(other_comp.name, competition_path(other_comp.id))
     end
@@ -536,13 +536,13 @@ class CompetitionsController < ApplicationController
         begin
           File.open(cached_path) do |f|
             send_data f.read, filename: "#{helpers.pdf_name(@competition)}.pdf",
-                              type: "application/pdf", disposition: "inline"
+                              type: 'application/pdf', disposition: 'inline'
           end
         rescue Errno::ENOENT
           # This exception occurs when the file doesn't exist: let's create it!
           helpers.create_pdfs_directory
-          render pdf: helpers.pdf_name(@competition), orientation: "Landscape",
-                 save_to_file: cached_path, disposition: "inline"
+          render pdf: helpers.pdf_name(@competition), orientation: 'Landscape',
+                 save_to_file: cached_path, disposition: 'inline'
         end
       end
       format.ics do
@@ -613,7 +613,7 @@ class CompetitionsController < ApplicationController
         CompetitionsMailer.notify_organizer_of_addition_to_competition(current_user, competition, organizer).deliver_later
       end
 
-      render json: { status: "ok", message: t('competitions.messages.create_success'), redirect: edit_competition_path(competition) }
+      render json: { status: 'ok', message: t('competitions.messages.create_success'), redirect: edit_competition_path(competition) }
     else
       render status: :bad_request, json: competition.form_errors
     end
@@ -675,7 +675,7 @@ class CompetitionsController < ApplicationController
         # editing the ID text box manually. This will go away once we have proper
         # immutable ids for competitions.
         return render json: {
-          status: "ok",
+          status: 'ok',
           redirect: competition_admin_view ? competition_admin_edit_path(competition) : edit_competition_path(competition),
         }
       end
@@ -691,7 +691,7 @@ class CompetitionsController < ApplicationController
         CompetitionsMailer.notify_organizer_of_removal_from_competition(current_user, competition, removed_organizer).deliver_later
       end
 
-      response_data = { status: "ok", message: t('competitions.update.save_success') }
+      response_data = { status: 'ok', message: t('competitions.update.save_success') }
 
       if persisted_id != competition.id
         response_data[:redirect] = competition_admin_view ? competition_admin_edit_path(competition) : edit_competition_path(competition)
@@ -749,7 +749,7 @@ class CompetitionsController < ApplicationController
     competition = competition_from_params
     competition.destroy
 
-    render json: { status: "ok", message: t('competitions.update.delete_success') }
+    render json: { status: 'ok', message: t('competitions.update.delete_success') }
   end
 
   before_action -> { require_user_permission(:can_confirm_competition?, competition_from_params) }, only: [:confirm]
@@ -766,7 +766,7 @@ class CompetitionsController < ApplicationController
         CompetitionsMailer.notify_organizer_of_confirmed_competition(current_user, competition, organizer).deliver_later
       end
 
-      render json: { status: "ok", message: t('competitions.update.confirm_success') }
+      render json: { status: 'ok', message: t('competitions.update.confirm_success') }
     else
       render status: :bad_request, json: competition.form_errors
     end
@@ -778,7 +778,7 @@ class CompetitionsController < ApplicationController
     competition = competition_from_params
 
     if competition.announced?
-      return render json: { error: "Already announced" }
+      return render json: { error: 'Already announced' }
     end
 
     competition.update!(announced_at: Time.now, announced_by: current_user.id)
@@ -787,7 +787,7 @@ class CompetitionsController < ApplicationController
       CompetitionsMailer.notify_organizer_of_announced_competition(competition, organizer).deliver_later
     end
 
-    render json: { status: "ok", message: t('competitions.messages.announced_success') }
+    render json: { status: 'ok', message: t('competitions.messages.announced_success') }
   end
 
   before_action -> { require_user_permission(:can_admin_competitions?) }, only: [:cancel_or_uncancel]
@@ -801,14 +801,14 @@ class CompetitionsController < ApplicationController
     if undo
       if competition.cancelled?
         competition.update!(cancelled_at: nil, cancelled_by: nil)
-        render json: { status: "ok", message: t('competitions.messages.uncancel_success') }
+        render json: { status: 'ok', message: t('competitions.messages.uncancel_success') }
       else
         render json: { error: t('competitions.messages.uncancel_failure') }, status: :bad_request
       end
     else
       if competition.can_be_cancelled?
         competition.update!(cancelled_at: Time.now, cancelled_by: current_user.id)
-        render json: { status: "ok", message: t('competitions.messages.cancel_success') }
+        render json: { status: 'ok', message: t('competitions.messages.cancel_success') }
       else
         render json: { error: t('competitions.messages.cancel_failure') }, status: :bad_request
       end
@@ -827,7 +827,7 @@ class CompetitionsController < ApplicationController
         registration_close: Time.now,
       )
 
-      render json: { status: "ok", message: t('competitions.messages.orga_closed_reg_success') }
+      render json: { status: 'ok', message: t('competitions.messages.orga_closed_reg_success') }
     else
       render json: { error: t('competitions.messages.orga_closed_reg_failure') }, status: :bad_request
     end
@@ -844,7 +844,7 @@ class CompetitionsController < ApplicationController
     competition.receive_registration_emails = receive_registration_emails
     competition.save!
 
-    render json: { status: "ok" }
+    render json: { status: 'ok' }
   end
 
   def my_competitions
@@ -872,14 +872,14 @@ class CompetitionsController < ApplicationController
       # For example, mailing all competitors about the cancellation.
       # In general ensuring ease of access until it is certain that they won't need to frequently visit the page anymore.
       competitions = Competition.includes(:delegate_report, :delegates)
-                                .where(id: competition_ids.uniq).where("cancelled_at is null or end_date >= curdate()")
+                                .where(id: competition_ids.uniq).where('cancelled_at is null or end_date >= curdate()')
                                 .sort_by { |comp| comp.start_date || (Date.today + 20.year) }.reverse
       @past_competitions, @not_past_competitions = competitions.partition(&:is_probably_over?)
       bookmarked_ids = current_user.competitions_bookmarked.pluck(:competition_id)
       @bookmarked_competitions = Competition.not_over
                                             .where(id: bookmarked_ids.uniq)
                                             .sort_by(&:start_date)
-      @show_registration_status = params[:show_registration_status] == "on"
+      @show_registration_status = params[:show_registration_status] == 'on'
     end
   end
 

@@ -7,11 +7,11 @@ class UpdateRoundIds < ActiveRecord::Migration[5.1]
       next if time_limit.cumulative_round_ids.empty?
 
       time_limit.cumulative_round_ids = time_limit.cumulative_round_ids.map do |round_id|
-        parts = round_id.split("-")
-        raise "Invalid round id" if parts.length != 2
+        parts = round_id.split('-')
+        raise 'Invalid round id' if parts.length != 2
 
         event_id, round_number = parts
-        unless round_number.starts_with?("r")
+        unless round_number.starts_with?('r')
           round_id = "#{event_id}-r#{round_number}"
         end
 

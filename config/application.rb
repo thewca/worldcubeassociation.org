@@ -43,11 +43,11 @@ module WcaOnRails
         controller_specs: true,
         request_specs: true,
       )
-      g.fixture_replacement :factory_girl, dir: "spec/factories"
+      g.fixture_replacement :factory_girl, dir: 'spec/factories'
     end
 
-    config.default_from_address = "notifications@worldcubeassociation.org"
-    config.site_name = "World Cube Association"
+    config.default_from_address = 'notifications@worldcubeassociation.org'
+    config.site_name = 'World Cube Association'
 
     config.middleware.insert_before 0, Rack::Cors, debug: false, logger: (-> { Rails.logger }) do
       allow do

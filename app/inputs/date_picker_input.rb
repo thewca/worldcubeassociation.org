@@ -46,7 +46,7 @@ class DatePickerInput < SimpleForm::Inputs::StringInput
     end
 
     def utc_addon
-      ""
+      ''
     end
 
     def set_html_options

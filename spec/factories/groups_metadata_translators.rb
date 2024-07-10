@@ -3,7 +3,7 @@
 FactoryBot.define do
   factory :groups_metadata_translators do
     factory :translator_ca_role_metadata do
-      locale { "ca" }
+      locale { 'ca' }
     end
   end
 end

@@ -22,12 +22,12 @@ module DuesCalculator
     country_band = CountryBand.find_by(iso2: country_iso2)&.number
 
     DuesCalculator.update_exchange_rates_if_needed
-    input_money_us_dollars = Money.new(base_entry_fee_lowest_denomination, currency_code).exchange_to("USD")
+    input_money_us_dollars = Money.new(base_entry_fee_lowest_denomination, currency_code).exchange_to('USD')
 
     registration_fee_dues_us_dollars = input_money_us_dollars * CountryBand.percent_registration_fee_used_for_due_amount(country_band)
     country_band_dues_us_dollars = country_band.present? && country_band > 0 ? CountryBand::BANDS[country_band][:value] : 0
     # times 100 because Money require lowest currency subunit, which is cents for USD
-    country_band_dues_us_dollars_money = Money.new(country_band_dues_us_dollars * 100, "USD")
+    country_band_dues_us_dollars_money = Money.new(country_band_dues_us_dollars * 100, 'USD')
 
     [registration_fee_dues_us_dollars, country_band_dues_us_dollars_money].max
   rescue Money::Currency::UnknownCurrency, CurrencyUnavailable

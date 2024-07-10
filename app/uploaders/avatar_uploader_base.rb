@@ -43,7 +43,7 @@ class AvatarUploaderBase < CarrierWave::Uploader::Base
   end
 
   def self.missing_avatar_thumb_url
-    @@missing_avatar_thumb_url ||= ActionController::Base.helpers.asset_url("missing_avatar_thumb.png", host: EnvConfig.ROOT_URL).freeze
+    @@missing_avatar_thumb_url ||= ActionController::Base.helpers.asset_url('missing_avatar_thumb.png', host: EnvConfig.ROOT_URL).freeze
   end
 
   # Choose what kind of storage to use for this uploader:

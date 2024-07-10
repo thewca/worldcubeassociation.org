@@ -10,7 +10,7 @@ class AllowNullGender < ActiveRecord::Migration[5.0]
   end
 
   def down
-    change_column_null :Persons, :gender, false, ""
-    change_column_null :InboxPersons, :gender, false, ""
+    change_column_null :Persons, :gender, false, ''
+    change_column_null :InboxPersons, :gender, false, ''
   end
 end

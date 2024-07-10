@@ -44,7 +44,7 @@ Style/SafeNavigation:
 
 Style/StringLiterals:
   # EnforcedStyle: double_quotes
-  Enabled: false
+  Enabled: true
 
 Style/TrailingCommaInArguments:
   # If `comma`, the cop requires a comma after the last argument, but only for

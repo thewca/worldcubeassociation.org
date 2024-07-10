@@ -7,8 +7,8 @@ module Middlewares
     end
 
     def call(env)
-      if env["HTTP_ACCEPT"] == "*/*;"
-        env["HTTP_ACCEPT"] = "*/*"
+      if env['HTTP_ACCEPT'] == '*/*;'
+        env['HTTP_ACCEPT'] = '*/*'
       end
 
       @app.call(env)

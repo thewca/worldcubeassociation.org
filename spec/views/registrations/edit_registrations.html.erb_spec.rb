@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-require "rails_helper"
+require 'rails_helper'
 
-RSpec.describe "registrations/edit_registrations" do
-  it "shows administrative notes when a registration has them" do
+RSpec.describe 'registrations/edit_registrations' do
+  it 'shows administrative notes when a registration has them' do
     competition = FactoryBot.create(:competition, :registration_open)
-    FactoryBot.create(:registration, competition: competition, administrative_notes: "😎")
+    FactoryBot.create(:registration, competition: competition, administrative_notes: '😎')
 
     assign(:competition, competition)
     assign(:registrations, competition.registrations)
@@ -15,7 +15,7 @@ RSpec.describe "registrations/edit_registrations" do
     expect(rendered).to match(/😎/)
   end
 
-  it "hides administrative notes when no registrations have them" do
+  it 'hides administrative notes when no registrations have them' do
     competition = FactoryBot.create(:competition, :registration_open)
     FactoryBot.create(:registration, competition: competition)
 

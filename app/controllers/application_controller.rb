@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "newrelic_rpm"
+require 'newrelic_rpm'
 
 class ApplicationController < ActionController::Base
   include TimeWillTell::Helpers::DateRangeHelper
@@ -51,7 +51,7 @@ class ApplicationController < ActionController::Base
 
   # https://github.com/doorkeeper-gem/doorkeeper/wiki/Customizing-the-response-body-when-unauthorized
   def doorkeeper_unauthorized_render_options(error: nil)
-    { json: { error: "Not authorized" } }
+    { json: { error: 'Not authorized' } }
   end
 
   before_action :configure_permitted_parameters, if: :devise_controller?

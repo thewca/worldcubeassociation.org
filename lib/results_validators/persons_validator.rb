@@ -2,10 +2,10 @@
 
 module ResultsValidators
   class PersonsValidator < GenericValidator
-    PERSON_WITHOUT_RESULTS_ERROR = "There are no results for %{person_name} with person id %{person_id}"
-    RESULTS_WITHOUT_PERSON_ERROR = "There are results for an unknown person with person id %{person_id}"
+    PERSON_WITHOUT_RESULTS_ERROR = 'There are no results for %{person_name} with person id %{person_id}'
+    RESULTS_WITHOUT_PERSON_ERROR = 'There are results for an unknown person with person id %{person_id}'
     WHITESPACE_IN_NAME_ERROR = "Person '%{name}' has leading/trailing whitespaces or double whitespaces."
-    WRONG_WCA_ID_ERROR = "Person %{name} has a WCA ID which does not exist: %{wca_id}."
+    WRONG_WCA_ID_ERROR = 'Person %{name} has a WCA ID which does not exist: %{wca_id}.'
     WRONG_PARENTHESIS_FORMAT_ERROR = "Opening parenthesis in '%{name}' must be preceded by a space."
     DOB_0101_WARNING = "The date of birth of %{name} is on January 1st, please ensure it's correct."
     VERY_YOUNG_PERSON_WARNING = "%{name} seems to be less than 3 years old, please ensure it's correct."
@@ -14,13 +14,13 @@ module ResultsValidators
                                "Please ensure that your '%{name}' is a different person. If not, please assign the correct WCA ID to the user account and regenerate the results JSON."
     NON_MATCHING_DOB_WARNING = "The birthdate '%{dob}' provided for %{name} (%{wca_id}) does not match the current record in the WCA database ('%{expected_dob}'). If this is an error, fix it. Otherwise, leave a comment to the WRT about it."
     NON_MATCHING_GENDER_WARNING = "The gender '%{gender}' provided for %{name} (%{wca_id}) does not match the current record in the WCA database ('%{expected_gender}'). " \
-                                  "If this is an error, fix it. Otherwise, leave a comment to the WRT about it."
+                                  'If this is an error, fix it. Otherwise, leave a comment to the WRT about it.'
     EMPTY_GENDER_WARNING = "The gender for newcomer %{name} is empty. Valid gender values are 'female', 'male' and 'other'. Please leave a comment to the WRT about this."
     NON_MATCHING_NAME_WARNING = "The name '%{name}' provided for %{wca_id} does not match the current record in the WCA database ('%{expected_name}'). "
     NON_MATCHING_COUNTRY_WARNING = "The country '%{country}' provided for %{name} (%{wca_id}) does not match the current record in the WCA database ('%{expected_country}'). " \
-                                   "If this is an error, fix it. Otherwise, leave a comment to the WRT about it."
-    MULTIPLE_NEWCOMERS_WITH_SAME_NAME_WARNING = "There are multiple new competitors with the exact same name: %{name}. Please ensure that all results are correct for these competitors " \
-                                                "and that all results are correctly seperated by their corresponding id."
+                                   'If this is an error, fix it. Otherwise, leave a comment to the WRT about it.'
+    MULTIPLE_NEWCOMERS_WITH_SAME_NAME_WARNING = 'There are multiple new competitors with the exact same name: %{name}. Please ensure that all results are correct for these competitors ' \
+                                                'and that all results are correctly seperated by their corresponding id.'
     WRONG_PARENTHESIS_TYPE_ERROR = "The parenthesis character used in '%{name}' is an irregular character, please replace it with a regular parenthesis '(' or ')' and with appropriate spacing."
     UPPERCASE_NAME_WARNING = "'%{name}' has successive uppercase letters in their name. Please confirm that this is indeed the correct spelling or fix the name."
     LOWERCASE_NAME_WARNING = "'%{name}' has a lowercase name. Please confirm that this is indeed the correct spelling or fix the name."
@@ -29,7 +29,7 @@ module ResultsValidators
     SINGLE_LETTER_FIRST_OR_LAST_NAME_WARNING = "'%{name}' has a single letter as first or last name. Please fix the name or confirm that this is indeed the competitor's correct name according to an official document."
     SINGLE_NAME_WARNING = "'%{name}' has only one name. Please confirm that this is indeed the competitor's full name according to an official document."
 
-    @desc = "This validator checks that Persons data make sense with regard to the competition results and the WCA database."
+    @desc = 'This validator checks that Persons data make sense with regard to the competition results and the WCA database.'
 
     def self.has_automated_fix?
       false
@@ -67,7 +67,7 @@ module ResultsValidators
             @warnings << ValidationWarning.new(:persons, competition.id,
                                                SAME_PERSON_NAME_WARNING,
                                                name: name,
-                                               wca_ids: persons.map(&:wca_id).join(", "))
+                                               wca_ids: persons.map(&:wca_id).join(', '))
           end
         end
         duplicate_newcomer_names = []
@@ -94,7 +94,7 @@ module ResultsValidators
                                                name: p.name)
           end
           # Look for double whitespaces or leading/trailing whitespaces.
-          unless p.name.squeeze(" ").strip == p.name
+          unless p.name.squeeze(' ').strip == p.name
             @errors << ValidationError.new(:persons, competition.id,
                                            WHITESPACE_IN_NAME_ERROR,
                                            name: p.name)
@@ -114,7 +114,7 @@ module ResultsValidators
             duplicate_newcomer_names << p.name
           end
           # Look for obvious person name issues (in roman-readable part)
-          if p.name.include? " ("
+          if p.name.include? ' ('
             roman_readable = p.name[0, p.name.index('(')-1]
           else
             roman_readable = p.name
@@ -147,8 +147,8 @@ module ResultsValidators
                                                name: p.name)
           end
           non_word_after_first_letter = [' ', '.'].include?(roman_readable[1])
-          space_before_last_letter = (roman_readable[-2] == " ") && !['I', 'V'].include?(roman_readable[-1]) # Roman numerals are allowed as suffixes
-          abbreviated_last_name = (roman_readable[-1] == ".") && (roman_readable[-3] == " ")
+          space_before_last_letter = (roman_readable[-2] == ' ') && !['I', 'V'].include?(roman_readable[-1]) # Roman numerals are allowed as suffixes
+          abbreviated_last_name = (roman_readable[-1] == '.') && (roman_readable[-3] == ' ')
           if non_word_after_first_letter || space_before_last_letter || abbreviated_last_name
             @warnings << ValidationWarning.new(:persons, competition.id,
                                                SINGLE_LETTER_FIRST_OR_LAST_NAME_WARNING,

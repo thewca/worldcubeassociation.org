@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe ServerSetting do
-  context "parses timestamps" do
+  context 'parses timestamps' do
     it "doesn't mangle timezone information" do
       test_datetime = DateTime.current
       server_setting = ServerSetting.create!(name: 'some_test_setting', value: test_datetime.to_i)
@@ -13,8 +13,8 @@ RSpec.describe ServerSetting do
     end
   end
 
-  context "parses booleans" do
-    it "casts truthy values into actual boolean" do
+  context 'parses booleans' do
+    it 'casts truthy values into actual boolean' do
       server_setting = ServerSetting.create!(name: 'dummy_true', value: '1')
       expect(server_setting.as_boolean).to eq(true)
 
@@ -25,7 +25,7 @@ RSpec.describe ServerSetting do
       expect(server_setting.as_boolean).to eq(true)
     end
 
-    it "casts false-y values into actual boolean" do
+    it 'casts false-y values into actual boolean' do
       server_setting = ServerSetting.create!(name: 'dummy_true', value: '0')
       expect(server_setting.as_boolean).to eq(false)
 
@@ -36,7 +36,7 @@ RSpec.describe ServerSetting do
       expect(server_setting.as_boolean).to eq(false)
     end
 
-    it "casts false-y values as being truthy" do
+    it 'casts false-y values as being truthy' do
       server_setting = ServerSetting.create!(name: 'dummy_true', value: 'lol')
       expect(server_setting.as_boolean).to eq(true)
     end

@@ -1,18 +1,18 @@
 # frozen_string_literal: true
 
 class RegulationsTranslationsController < RegulationsController
-  REGULATIONS_TRANSLATIONS_VERSION_FILE = "translations/version"
+  REGULATIONS_TRANSLATIONS_VERSION_FILE = 'translations/version'
 
   def render_translated_regulations(route, language)
     render_regulations("translations/#{language}/#{route}", REGULATIONS_TRANSLATIONS_VERSION_FILE)
   end
 
   def translated_regulation
-    render_translated_regulations("index.html.erb", params[:language])
+    render_translated_regulations('index.html.erb', params[:language])
   end
 
   def translated_guidelines
-    render_translated_regulations("guidelines.html.erb", params[:language])
+    render_translated_regulations('guidelines.html.erb', params[:language])
   end
 
   def translated_pdfs

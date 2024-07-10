@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "active_support/core_ext/integer/time"
+require 'active_support/core_ext/integer/time'
 
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
@@ -85,7 +85,7 @@ Rails.application.configure do
     root_url = URI.parse(EnvConfig.ROOT_URL)
 
     config.action_mailer.smtp_settings = {
-      address: "email-smtp.us-west-2.amazonaws.com",
+      address: 'email-smtp.us-west-2.amazonaws.com',
       port: 587,
       enable_starttls_auto: true,
       user_name: AppSecrets.SMTP_USERNAME,
@@ -125,7 +125,7 @@ Rails.application.configure do
   # require "syslog/logger"
   # config.logger = ActiveSupport::TaggedLogging.new(Syslog::Logger.new 'app-name')
 
-  if ENV["RAILS_LOG_TO_STDOUT"].present?
+  if ENV['RAILS_LOG_TO_STDOUT'].present?
     logger           = ActiveSupport::Logger.new($stdout)
     logger.formatter = config.log_formatter
     config.logger    = ActiveSupport::TaggedLogging.new(logger)

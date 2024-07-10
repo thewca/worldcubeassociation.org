@@ -6,9 +6,9 @@ module MarkdownHelper
 
     def table(header, body)
       t = "<table class='table'>\n"
-      t += "<thead>" + header + "</thead>\n" if header
-      t += "<tbody>" + body + "</tbody>\n" if body
-      t += "</table>"
+      t += '<thead>' + header + "</thead>\n" if header
+      t += '<tbody>' + body + "</tbody>\n" if body
+      t += '</table>'
       t
     end
 
@@ -17,7 +17,7 @@ module MarkdownHelper
     # See C code here: https://github.com/vmg/redcarpet/blob/f441dec42a5097530328b20e9d5ed1a025c600f7/ext/redcarpet/html.c#L273-L319
     # Redcarpet issue here: https://github.com/vmg/redcarpet/issues/638.
     def header_anchor(text)
-      Nokogiri::HTML(Redcarpet::Markdown.new(Redcarpet::Render::HTML.new(with_toc_data: true)).render("# #{text}")).css('h1')[0]["id"]
+      Nokogiri::HTML(Redcarpet::Markdown.new(Redcarpet::Render::HTML.new(with_toc_data: true)).render("# #{text}")).css('h1')[0]['id']
     end
 
     def header(text, header_level)
@@ -38,7 +38,7 @@ module MarkdownHelper
       # Support embed YouTube videos
       # Note: the URL in parentheses is turned into an <a></a> tag by the `autolink` extension.
       full_document.gsub!(/youtube\(.*?href="([^)]*)".*?\)/) do
-        embed_url = $1.gsub("watch?v=", "embed/")
+        embed_url = $1.gsub('watch?v=', 'embed/')
         "<iframe width='640' height='390' frameborder='0' src='#{embed_url}'></iframe>"
       end
 
@@ -48,7 +48,7 @@ module MarkdownHelper
 
   def md(content, target_blank: false, toc: false)
     if content.nil?
-      return ""
+      return ''
     end
 
     options = {
@@ -63,10 +63,10 @@ module MarkdownHelper
     }
 
     if target_blank
-      options[:link_attributes] = { target: "_blank" }
+      options[:link_attributes] = { target: '_blank' }
     end
 
-    output = "".html_safe
+    output = ''.html_safe
 
     if toc
       options[:with_toc_data] = true

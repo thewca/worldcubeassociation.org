@@ -10,13 +10,13 @@ module GsuiteMailingLists
   # The Board may be required to act as Senior for multiple regions. Unfortunately, this clashes with assumptions
   # about one Delegate only leading one region in the `users` SQL table. So we realise this feature by hijacking aliases
   # but Google complains when trying to add multiple aliases to seniors@ or delegates@.
-  BOARD_PRIMARY_EMAIL = "board@worldcubeassociation.org"
+  BOARD_PRIMARY_EMAIL = 'board@worldcubeassociation.org'
 
   def self.sync_group(group, desired_emails)
     service = get_service
 
     desired_emails = desired_emails.map do |email|
-      if email.include?("+")
+      if email.include?('+')
         old_email = email
         email = email.gsub(/\+[^@]*/, '')
         puts "Warning: '#{old_email}' contains a plus sign, and google groups seems to not support + signs in email addresses, so we're going to add '#{email}' instead."

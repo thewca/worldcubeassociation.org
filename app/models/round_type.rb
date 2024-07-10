@@ -2,12 +2,12 @@
 
 class RoundType < ApplicationRecord
   include Cachable
-  self.table_name = "RoundTypes"
+  self.table_name = 'RoundTypes'
 
   has_many :results, foreign_key: :roundTypeId
   has_many :scrambles, foreign_key: :roundTypeId
 
-  scope :final_rounds, -> { where("final = 1") }
+  scope :final_rounds, -> { where('final = 1') }
 
   def name
     I18n.t("rounds.#{id}.name")

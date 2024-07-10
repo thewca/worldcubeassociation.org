@@ -19,11 +19,11 @@ module Taggable
     attr_writer :tags
 
     def tags
-      @tags ||= item_tags.pluck(:tag).join(",")
+      @tags ||= item_tags.pluck(:tag).join(',')
     end
 
     def tags_array
-      tags.split(",")
+      tags.split(',')
     end
 
     before_validation do

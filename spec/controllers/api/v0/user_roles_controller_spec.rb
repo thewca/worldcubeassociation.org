@@ -14,7 +14,7 @@ RSpec.describe Api::V0::UserRolesController do
         unconfirmed_wca_id: person.wca_id,
         delegate_id_to_handle_wca_id_claim: user_whose_delegate_status_changes.id,
         claiming_wca_id: true,
-        dob_verification: "1990-01-2",
+        dob_verification: '1990-01-2',
       )
     end
     let!(:banned_competitor) { FactoryBot.create(:banned_competitor_role) }
@@ -97,7 +97,7 @@ RSpec.describe Api::V0::UserRolesController do
         upcoming_comps_for_user = user_to_be_banned_with_future_comps.competitions_registered_for.not_over.merge(Registration.not_deleted).pluck(:id)
         expect(response).to have_http_status(422)
         response_json = JSON.parse(response.body)
-        expect(response_json["error"]).to eq "The user has upcoming competitions: #{upcoming_comps_for_user.join(', ')}. Before banning the user, make sure their registrations are deleted."
+        expect(response_json['error']).to eq "The user has upcoming competitions: #{upcoming_comps_for_user.join(', ')}. Before banning the user, make sure their registrations are deleted."
       end
 
       it 'can ban a user if the user have a deleted registration in an upcoming competitions' do

@@ -10,7 +10,7 @@ class CreateRegistrationEvents < ActiveRecord::Migration
 
     # Move the data to the new table.
     Registration.all.each do |registration|
-      (registration.eventIds || "").split.each do |event_id|
+      (registration.eventIds || '').split.each do |event_id|
         RegistrationEvent.create!(registration_id: registration.id, event_id: event_id)
       end
     end

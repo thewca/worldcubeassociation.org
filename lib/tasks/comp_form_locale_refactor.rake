@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 namespace :comp_form_locales do
-  desc "Read values from the old simple_form parts of the YAML and squeeze them into the new format"
+  desc 'Read values from the old simple_form parts of the YAML and squeeze them into the new format'
   task :refactor do
     Locales::AVAILABLE.each_key do |l|
       trans = YAML.load_file("config/locales/#{l}.yml").deep_symbolize_keys

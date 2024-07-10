@@ -84,11 +84,11 @@ class CompetitionsMailer < ApplicationMailer
     I18n.with_locale :en do
       @competition = competition
       mail(
-        from: "reports@worldcubeassociation.org",
-        to: "reports@worldcubeassociation.org",
+        from: 'reports@worldcubeassociation.org',
+        to: 'reports@worldcubeassociation.org',
         cc: competition.delegates.pluck(:email) +
-          (competition.delegate_report.wrc_feedback_requested ? ["regulations@worldcubeassociation.org"] : []) +
-          (competition.delegate_report.wdc_feedback_requested ? ["disciplinary@worldcubeassociation.org"] : []),
+          (competition.delegate_report.wrc_feedback_requested ? ['regulations@worldcubeassociation.org'] : []) +
+          (competition.delegate_report.wdc_feedback_requested ? ['disciplinary@worldcubeassociation.org'] : []),
         reply_to: competition.delegates.pluck(:email),
         subject: delegate_report_email_subject(competition),
       )
@@ -99,9 +99,9 @@ class CompetitionsMailer < ApplicationMailer
     I18n.with_locale :en do
       @competition = competition
       mail(
-        from: "reports@worldcubeassociation.org",
-        to: "regulations@worldcubeassociation.org",
-        reply_to: "regulations@worldcubeassociation.org",
+        from: 'reports@worldcubeassociation.org',
+        to: 'regulations@worldcubeassociation.org',
+        reply_to: 'regulations@worldcubeassociation.org',
         subject: delegate_report_email_subject(competition),
       )
     end
@@ -112,8 +112,8 @@ class CompetitionsMailer < ApplicationMailer
     mail(
       from: UserGroup.teams_committees_group_weat.metadata.email,
       to: competition.delegates.pluck(:email),
-      cc: ["results@worldcubeassociation.org", "assistants@worldcubeassociation.org"] + delegates_to_senior_delegates_email(competition.delegates),
-      reply_to: "results@worldcubeassociation.org",
+      cc: ['results@worldcubeassociation.org', 'assistants@worldcubeassociation.org'] + delegates_to_senior_delegates_email(competition.delegates),
+      reply_to: 'results@worldcubeassociation.org',
       subject: "#{competition.name} Results",
     )
   end
@@ -123,7 +123,7 @@ class CompetitionsMailer < ApplicationMailer
     mail(
       from: UserGroup.teams_committees_group_weat.metadata.email,
       to: competition.delegates.pluck(:email),
-      cc: ["assistants@worldcubeassociation.org"] + delegates_to_senior_delegates_email(competition.delegates),
+      cc: ['assistants@worldcubeassociation.org'] + delegates_to_senior_delegates_email(competition.delegates),
       reply_to: delegates_to_senior_delegates_email(competition.delegates),
       subject: "#{competition.name} Delegate Report",
     )
@@ -146,13 +146,13 @@ class CompetitionsMailer < ApplicationMailer
     last_uploaded_json = @competition.uploaded_jsons.order(:id).last
     if last_uploaded_json
       attachments["Results for #{@competition.id}.json"] = {
-        mime_type: "application/json",
+        mime_type: 'application/json',
         content: last_uploaded_json.json_str,
       }
     end
     mail(
-      from: "results@worldcubeassociation.org",
-      to: "results@worldcubeassociation.org",
+      from: 'results@worldcubeassociation.org',
+      to: 'results@worldcubeassociation.org',
       cc: competition.delegates.pluck(:email),
       reply_to: competition.delegates.pluck(:email),
       subject: "Results for #{competition.name}",
