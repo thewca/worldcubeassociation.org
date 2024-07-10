@@ -42,7 +42,6 @@ Capybara.register_driver :apparition do |app|
 end
 
 Capybara.javascript_driver = :apparition
-Capybara.server = :webrick
 
 RSpec.configure do |config|
   # enforce consistent locale behaviour across OSes, especially Linux
