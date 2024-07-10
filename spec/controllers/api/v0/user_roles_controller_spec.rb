@@ -51,6 +51,31 @@ RSpec.describe Api::V0::UserRolesController do
 
         expect(response.body).to eq([].to_json)
       end
+
+      it 'fetches list of roles of a region' do
+        group = user_senior_delegate_role.group
+        group_roles = group.roles
+
+        get :index, params: { groupId: group.id }
+
+        expect(response.body).to eq(group_roles.to_json)
+      end
+    end
+
+    context 'when user is logged in as an admin' do
+      sign_in { FactoryBot.create(:wst_admin_role).user }
+
+      it 'does return banned_competitors if isGroupHidden is true' do
+        get :index, params: { userId: banned_competitor.user.id, isGroupHidden: true }
+
+        expect(response.body).to eq([banned_competitor].to_json)
+      end
+
+      it 'does not return banned_competitors if isGroupHidden is false' do
+        get :index, params: { userId: banned_competitor.user.id, isGroupHidden: false }
+
+        expect(response.body).to eq([].to_json)
+      end
     end
   end
 
@@ -130,6 +155,60 @@ RSpec.describe Api::V0::UserRolesController do
         }
         expect(response).to be_successful
         expect(wdc_role.user.reload.wdc_team?).to be false
+      end
+    end
+
+    context 'when signed in as a Senior Delegate' do
+      sign_in { FactoryBot.create(:senior_delegate_role).user }
+
+      it 'can create a new trainee delegate' do
+        user_to_be_made_delegate = FactoryBot.create(:user)
+        senior_delegate_role = FactoryBot.create(:senior_delegate_role)
+
+        post :create, params: {
+          userId: user_to_be_made_delegate.id,
+          groupId: senior_delegate_role.group_id,
+          status: RolesMetadataDelegateRegions.statuses[:trainee_delegate],
+          location: 'USA',
+        }
+
+        expect(user_to_be_made_delegate.any_kind_of_delegate?).to be true
+      end
+    end
+
+    context 'when signed in as a Board member' do
+      sign_in { FactoryBot.create(:user, :board_member) }
+
+      it "creating a new role for leader ends old delegate's role" do
+        current_leader = FactoryBot.create(:wrt_leader_role)
+        new_leader = FactoryBot.create(:user)
+
+        post :create, params: {
+          userId: new_leader.id,
+          groupId: current_leader.group_id,
+          status: RolesMetadataTeamsCommittees.statuses[:leader],
+        }
+
+        expect(current_leader.user.active_roles.count).to eq(0)
+      end
+    end
+  end
+
+  describe 'DELETE #destroy' do
+    context 'when signed in as a Senior Delegate' do
+      sign_in { FactoryBot.create(:senior_delegate_role).user }
+
+      it 'can end role of a junior delegate' do
+        junior_delegate_role = FactoryBot.create(:junior_delegate_role)
+        person = FactoryBot.create(:person)
+        FactoryBot.create(:user, claiming_wca_id: true, dob_verification: person.dob, unconfirmed_wca_id: person.wca_id, delegate_id_to_handle_wca_id_claim: junior_delegate_role.user_id)
+
+        delete :destroy, params: {
+          id: junior_delegate_role.id,
+        }
+
+        expect(response).to be_successful
+        expect(junior_delegate_role.user.any_kind_of_delegate?).to be false
       end
     end
   end
