@@ -7,5 +7,5 @@
 
   <%= render "approval_guidelines" %>
 
-  <%= render "media_table", media: @media, show_edit_buttons: true %>
+  <%= react_component("Media/MediaTable", {isValidate: true}) %>
 </div>
