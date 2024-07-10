@@ -32,7 +32,7 @@
           <% if devise_mapping.rememberable? %>
             <div class="checkbox">
               <label>
-                <%= f.check_box :remember_me, tabindex: "3" %>
+                <%= f.check_box :remember_me, tabindex: "3", include_hidden: false %>
                 <%= f.label :remember_me %>
               </label>
             </div>
