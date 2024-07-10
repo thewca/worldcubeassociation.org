@@ -131,6 +131,7 @@ end
 group :development do
   gem 'overcommit', require: false
   gem 'rubocop', require: false
+  gem 'rubocop-thread_safety', require: false
   gem 'better_errors'
   gem 'binding_of_caller'
   gem 'bullet'
