@@ -489,7 +489,9 @@ class AdminController < ApplicationController
             old_country = inbox_person.countryId
           end
 
-          FinishUnfinishedPersons.insert_person(inbox_person, new_name, new_country, new_id)
+          new_dob = inbox_person&.dob || procedure[:new_dob]
+
+          FinishUnfinishedPersons.insert_person(inbox_person, new_name, new_country, new_id, new_dob)
           FinishUnfinishedPersons.adapt_results(pending_person_id.presence, old_name, old_country, new_id, new_name, new_country, pending_competition_id)
         else
           action, merge_id = procedure[:action].split '-'

@@ -59,7 +59,11 @@
           <td><%= display_string p[:person_name] %></td>
           <td><%= country.name %></td>
           <td><%= link_to "(results)", admin_peek_unfinished_results_path(**p.slice(:person_name, :country_id, :person_id)), target: '_blank' %></td>
-          <td><%= p[:person_dob] %></td>
+          <% if p[:person_dob].present? %>
+            <td><%= p[:person_dob] %></td>
+          <% else %>
+            <td><%= f.input "#{case_id}][new_dob", input_html: { value: p[:person_dob] }, label: false, hint: false %></td>
+          <% end %>
           <td><%= f.input "#{case_id}][new_name", input_html: { value: p[:person_name] }, label: false, hint: false %></td>
           <td><%= f.input "#{case_id}][new_country", collection: Country.all_sorted_by(I18n.locale, real: true), value_method: :id, label_method: :name, selected: p[:country_id], label: false, hint: false %></td>
           <td><%= f.input "#{case_id}][new_semi_id", input_html: { value: p[:computed_semi_id] }, maxlength: 8, label: false, hint: false %></td>
