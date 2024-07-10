@@ -266,7 +266,7 @@ GEM
     devise-jwt (0.11.0)
       devise (~> 4.0)
       warden-jwt_auth (~> 0.8)
-    devise-two-factor (5.1.0)
+    devise-two-factor (5.0.0)
       activesupport (~> 7.0)
       devise (~> 4.0)
       railties (~> 7.0)
@@ -854,7 +854,7 @@ DEPENDENCIES
   devise-bootstrap-views
   devise-i18n
   devise-jwt
-  devise-two-factor
+  devise-two-factor (= 5.0.0)
   doorkeeper
   doorkeeper-i18n
   doorkeeper-openid_connect

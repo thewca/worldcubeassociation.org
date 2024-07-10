@@ -33,7 +33,7 @@ gem 'devise'
 # See https://github.com/hisea/devise-bootstrap-views/issues/55 for more details.
 gem 'devise-i18n'
 gem 'devise-bootstrap-views'
-gem 'devise-two-factor'
+gem 'devise-two-factor', '5.0.0'
 gem 'rqrcode'
 gem 'doorkeeper'
 gem 'doorkeeper-openid_connect'
