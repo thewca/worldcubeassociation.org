@@ -7,20 +7,26 @@ require_relative "env_config"
 SuperConfig::Base.class_eval do
   # The skeleton is stolen from the source code of the `superconfig` gem, file lib/superconfig.rb:104
   #   (method SuperConfig::Base#credential). The inner Vault fetching logic is custom-written :)
-  def vault(secret_name, &block)
-    define_singleton_method(secret_name) do
-      @__cache__[:"_vault_#{secret_name}"] ||= begin
-        value = self.vault_read(secret_name)[:value]
-        block ? block.call(value) : value
+  def vault(secret_name, cache: true)
+    self.property("_vault_#{secret_name}", cache: cache) do
+      value = self.vault_read(secret_name)
+
+      if block_given?
+        yield value
+      else
+        # Vault stores things in a JSON with lots of metadata entries.
+        # The actual secret itself is stored inside that JSON under the key "value"
+        value[:value]
       end
     end
   end
 
-  def vault_file(secret_name, file_path)
-    define_singleton_method(secret_name) do
+  def vault_file(secret_name, file_path, refresh: true)
+    File.delete(file_path) if refresh && File.exist?(file_path)
+
+    self.vault("file_#{secret_name}", cache: true) do |vault_secret|
       unless File.exist? file_path
-        value_raw = self.vault_read secret_name
-        File.write file_path, value_raw.to_json
+        File.write file_path, vault_secret.to_json
       end
 
       File.expand_path file_path
