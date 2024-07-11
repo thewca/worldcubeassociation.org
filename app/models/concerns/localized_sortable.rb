@@ -29,15 +29,17 @@ module LocalizedSortable
     end
 
     def real
-      @real_objects ||= self.uncached_real
+      Rails.cache.fetch(['localized_sortable', self.name.underscore.to_s, 'real_objects']) { self.uncached_real }
     end
 
     def all_sorted_by(locale, real: false)
-      @all_sorted_by_locale ||= I18n.available_locales.to_h do |available_locale|
-        objects = I18nUtils.localized_sort_by!(available_locale, self.c_all_by_id.values) { |object| object.name_in(available_locale) }
-        [available_locale, objects]
-      end.freeze
-      real ? @all_sorted_by_locale[locale].select(&:real?) : @all_sorted_by_locale[locale]
+      all_sorted_by_locale = Rails.cache.fetch(['localized_sortable', self.name.underscore.to_s, 'sorted_by_locale']) {
+        I18n.available_locales.to_h do |available_locale|
+          objects = I18nUtils.localized_sort_by!(available_locale, self.c_all_by_id.values) { |object| object.name_in(available_locale) }
+          [available_locale, objects]
+        end.freeze
+      }
+      real ? all_sorted_by_locale[locale].select(&:real?) : all_sorted_by_locale[locale]
     end
   end
 end

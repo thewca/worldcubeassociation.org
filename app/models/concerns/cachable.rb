@@ -26,8 +26,7 @@ module Cachable
     # on 'class_variable_get' and 'class_variable_set' that will act on the extending
     # class (here Country).
     def c_all_by_id
-      class_variable_set(:@@models_by_id, all.index_by(&:id)) unless class_variable_defined?(:@@models_by_id)
-      class_variable_get(:@@models_by_id)
+      Rails.cache.fetch(['model_cache', self.name.underscore.to_s, 'by_id']) { all.index_by(&:id) }
     end
 
     def c_find(id)
@@ -36,6 +35,14 @@ module Cachable
 
     def c_find!(id)
       self.c_find(id) || raise("id not found: #{id}")
+    end
+  end
+
+  included do
+    after_commit :clear_cache
+
+    def clear_cache
+      Rails.cache.delete(['model_cache', self.name.underscore.to_s, 'by_id'])
     end
   end
 end
