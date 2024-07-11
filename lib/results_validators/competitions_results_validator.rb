@@ -2,7 +2,9 @@
 
 module ResultsValidators
   class CompetitionsResultsValidator < GenericValidator
-    @desc = "This validator is an aggregate of an arbitrary set of other validators, running on an arbitrary set of competitions."
+    def self.description
+      "This validator is an aggregate of an arbitrary set of other validators, running on an arbitrary set of competitions."
+    end
 
     def self.has_automated_fix?
       false
