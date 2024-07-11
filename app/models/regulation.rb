@@ -11,6 +11,8 @@ class Regulation < SimpleDelegator
     self.regulations.index_by { |r| r["id"] }
   end
 
+  RegulationsError = Struct.new(:message, :class, keyword_init: true)
+
   def self.regulations_load_error
     Rails.cache.read('regulations_load_error')
   end
@@ -21,7 +23,8 @@ class Regulation < SimpleDelegator
     regulations_json = JSON.parse(s3.bucket(RegulationTranslationsHelper::BUCKET_NAME).object(REGULATIONS_JSON_PATH).get.body.read).freeze
     Rails.cache.write('regulations', regulations_json)
   rescue StandardError => e
-    Rails.cache.write('regulations_load_error', e)
+    wrapped_error = RegulationsError.new(message: e.message, class: e.class.name)
+    Rails.cache.write('regulations_load_error', wrapped_error)
   end
 
   def self.reset_regulations
