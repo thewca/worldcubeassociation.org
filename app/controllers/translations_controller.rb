@@ -4,7 +4,7 @@ class TranslationsController < ApplicationController
   before_action :authenticate_user!, except: [:index]
 
   def self.bad_i18n_keys
-    @bad_keys ||= begin
+    Rails.cache.fetch([self.name.underscore.to_s, 'bad_i18n_keys']) do
       english = locale_to_translation('en')
       (I18n.available_locales - [:en]).to_h do |locale|
         [locale, locale_to_translation(locale).compare_to(english)]
