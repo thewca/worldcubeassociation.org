@@ -4,7 +4,7 @@ class Regulation < SimpleDelegator
   REGULATIONS_JSON_PATH = "wca-regulations.json"
 
   def self.regulations
-    Rails.cache.read('regulations')
+    Rails.cache.read('regulations') || []
   end
 
   def self.regulations_by_id
@@ -25,7 +25,7 @@ class Regulation < SimpleDelegator
   end
 
   def self.reset_regulations
-    Rails.cache.write('regulations', [])
+    Rails.cache.delete('regulations')
     Rails.cache.delete('regulations_load_error')
   end
 
@@ -34,8 +34,6 @@ class Regulation < SimpleDelegator
                          region: EnvConfig.STORAGE_AWS_REGION,
                          credentials: Aws::ECSCredentials.new,
                        ))
-  else
-    reset_regulations
   end
 
   def limit(number)
