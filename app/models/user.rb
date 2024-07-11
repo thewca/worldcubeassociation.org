@@ -864,7 +864,7 @@ class User < ApplicationRecord
   end
 
   def can_see_eligible_voters?
-    can_admin_results? || group_leader?(UserGroup.teams_committees_group_wec)
+    can_admin_results? || ethics_committee?
   end
 
   def get_cannot_delete_competition_reason(competition)
