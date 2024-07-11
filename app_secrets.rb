@@ -8,7 +8,7 @@ SuperConfig::Base.class_eval do
   # The skeleton is stolen from the source code of the `superconfig` gem, file lib/superconfig.rb:104
   #   (method SuperConfig::Base#credential). The inner Vault fetching logic is custom-written :)
   def vault(secret_name, cache: true)
-    self.property("_vault_#{secret_name}", cache: cache) do
+    self.property(secret_name, cache: cache) do
       value = self.vault_read(secret_name)
 
       if block_given?
@@ -24,7 +24,7 @@ SuperConfig::Base.class_eval do
   def vault_file(secret_name, file_path, refresh: true)
     File.delete(file_path) if refresh && File.exist?(file_path)
 
-    self.vault("file_#{secret_name}", cache: true) do |vault_secret|
+    self.vault(secret_name, cache: true) do |vault_secret|
       unless File.exist? file_path
         File.write file_path, vault_secret.to_json
       end
