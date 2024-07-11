@@ -3,16 +3,16 @@
 class Regulation < SimpleDelegator
   REGULATIONS_JSON_PATH = "wca-regulations.json"
 
-  private def self.regulations
-    Rails.cache.fetch('regulations')
+  def self.regulations
+    Rails.cache.read('regulations')
   end
 
-  private def self.regulations_by_id
+  def self.regulations_by_id
     self.regulations.index_by { |r| r["id"] }
   end
 
-  private def self.regulations_load_error
-    Rails.cache.fetch('regulations_load_error')
+  def self.regulations_load_error
+    Rails.cache.read('regulations_load_error')
   end
 
   def self.reload_regulations(s3)
