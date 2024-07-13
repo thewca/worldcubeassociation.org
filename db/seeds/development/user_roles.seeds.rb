@@ -52,6 +52,21 @@ after :user_groups do
     15.times { FactoryBot.create(:user_role, :inactive, group: group, metadata: FactoryBot.create(:roles_metadata_teams_committees, status: RolesMetadataTeamsCommittees.statuses[:member])) }
   end
 
+  # Councils
+  UserGroup.councils.each do |group|
+    # Current roles
+    FactoryBot.create(:user_role, :active, group: group, metadata: FactoryBot.create(:roles_metadata_councils, status: RolesMetadataCouncils.statuses[:leader]))
+    5.times { FactoryBot.create(:user_role, :active, group: group, metadata: FactoryBot.create(:roles_metadata_councils, status: RolesMetadataCouncils.statuses[:member])) }
+    # Past roles
+    3.times { FactoryBot.create(:user_role, :inactive, group: group, metadata: FactoryBot.create(:roles_metadata_councils, status: RolesMetadataCouncils.statuses[:leader])) }
+    15.times { FactoryBot.create(:user_role, :inactive, group: group, metadata: FactoryBot.create(:roles_metadata_councils, status: RolesMetadataCouncils.statuses[:member])) }
+  end
+
+  # Translators
+  UserGroup.translators.each do |group|
+    2.times { FactoryBot.create(:user_role, :active, group: group) }
+  end
+
   # Board Roles
   past_board_roles = 9.times.collect { |index| FactoryBot.create(:board_role, :inactive) }
   current_board_roles = 4.times.collect { |index| FactoryBot.create(:board_role, :active) }
@@ -74,4 +89,16 @@ after :user_groups do
   FactoryBot.create(:treasurer_role, :inactive, user: past_board_roles[8].user)
   FactoryBot.create(:treasurer_role, :inactive)
   FactoryBot.create(:treasurer_role)
+
+  # Banned competitors
+  5.times {
+    FactoryBot.create(
+      :banned_competitor_role,
+      metadata: FactoryBot.create(
+        :roles_metadata_banned_competitors,
+        ban_reason: 'Cheating',
+        scope: RolesMetadataBannedCompetitors.scopes[:competing_and_attending],
+      ),
+    )
+  }
 end
