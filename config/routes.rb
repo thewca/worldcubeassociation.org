@@ -188,7 +188,6 @@ Rails.application.routes.draw do
     get 'staff' => 'panel#staff', as: :panel_staff
     get 'delegate' => 'panel#delegate', as: :panel_delegate
     get 'wfc' => 'panel#wfc', as: :panel_wfc
-    get 'wrt' => 'panel#wrt', as: :panel_wrt
     get 'wst' => 'panel#wst', as: :panel_wst
     get 'board' => 'panel#board', as: :panel_board
     get 'leader' => 'panel#leader', as: :panel_leader
@@ -196,8 +195,8 @@ Rails.application.routes.draw do
     get 'wdc' => 'panel#wdc', as: :panel_wdc
     get 'wec' => 'panel#wec', as: :panel_wec
     get 'weat' => 'panel#weat', as: :panel_weat
-    get 'admin' => 'panel#admin', as: :panel_admin
   end
+  get 'panel/:panel_id' => 'panel#index', as: :panel_index
   resources :notifications, only: [:index]
 
   root 'posts#homepage'
