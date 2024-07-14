@@ -1,23 +1,14 @@
-import React, { useState } from "react";
-import { Button, Icon, Modal, Table, Segment } from "semantic-ui-react";
-import UserBadge from "../../../UserBadge";
-import BannedCompetitorForm from "./BannedCompetitorForm";
+import React from 'react';
+import { Icon, Table, Segment } from 'semantic-ui-react';
+import UserBadge from '../../../UserBadge';
 
 export default function BannedCompetitors({
   bannedCompetitorRoles,
-  sync,
   canEditBannedCompetitors,
-  isPastBannedCompetitorList,
+  editBannedCompetitor,
 }) {
-  const [banModalParams, setBanModalParams] = useState(null);
-
   return (
     <>
-      {canEditBannedCompetitors && !isPastBannedCompetitorList && (
-        <Button onClick={() => setBanModalParams({ action: "new" })}>
-          Ban new competitor
-        </Button>
-      )}
       {bannedCompetitorRoles.length > 0 ? (
         <Table>
           <Table.Header>
@@ -53,9 +44,7 @@ export default function BannedCompetitors({
                     <Icon
                       name="edit"
                       link
-                      onClick={() =>
-                        setBanModalParams({ action: "edit", role })
-                      }
+                      onClick={() => editBannedCompetitor({ action: "edit", role })}
                     />
                   </Table.Cell>
                 )}
@@ -68,18 +57,6 @@ export default function BannedCompetitors({
           <p>No Data to Show.</p>
         </Segment>
       )}
-
-      <Modal open={!!banModalParams} onClose={() => setBanModalParams(null)}>
-        <Modal.Header>Add/Edit Banned Competitor</Modal.Header>
-        <Modal.Content>
-          <BannedCompetitorForm
-            sync={sync}
-            banAction={banModalParams?.action}
-            banActionRole={banModalParams?.role}
-            closeForm={() => setBanModalParams(null)}
-          />
-        </Modal.Content>
-      </Modal>
     </>
   );
 }
