@@ -803,7 +803,7 @@ en:
           email:
             label: "Email"
         contact_recipient:
-          label: "Whom do you want to contact?"
+          label: "Who do you want to contact?"
           competition:
             label: "Contact organizers/delegates of a competition (to ask query regarding that particular competition)"
           wct:
