@@ -15,36 +15,25 @@ export default function BannedCompetitorsPage() {
     loading: bannedCompetitorRolesLoading,
     error: bannedCompetitorRolesError,
     sync: syncBannedCompetitorRoles,
-  } = useLoadedData(
-    apiV0Urls.userRoles.list(
-      {
-        isActive: true,
-        groupType: groupTypes.banned_competitors,
-      },
-      "startDate"
-    )
-  );
+  } = useLoadedData(apiV0Urls.userRoles.list({
+    isActive: true,
+    groupType: groupTypes.banned_competitors,
+  }, 'startDate'));
   const {
     data: pastBannedCompetitorRoles,
     loading: pastBannedCompetitorRolesLoading,
     error: pastBannedCompetitorRolesError,
     sync: syncPastBannedCompetitorRoles,
-  } = useLoadedData(
-    apiV0Urls.userRoles.list(
-      {
-        isActive: false,
-        groupType: groupTypes.banned_competitors,
-      },
-      "startDate"
-    )
-  );
+  } = useLoadedData(apiV0Urls.userRoles.list({
+    isActive: false,
+    groupType: groupTypes.banned_competitors,
+  }, 'startDate'));
   const {
     data: bannedGroups,
     loading: bannedGroupLoading,
     error: bannedGroupError,
   } = useLoadedData(apiV0Urls.userGroups.list(groupTypes.banned_competitors));
-  const { loggedInUserPermissions, permissionsLoading } =
-    useLoggedInUserPermissions();
+  const { loggedInUserPermissions, permissionsLoading } = useLoggedInUserPermissions();
 
   const [banModalParams, setBanModalParams] = useState(null);
   
