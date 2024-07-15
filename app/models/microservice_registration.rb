@@ -15,8 +15,22 @@ class MicroserviceRegistration < ApplicationRecord
   attr_accessor :ms_registration
   attr_writer :competing_status, :event_ids, :guests, :comments, :administrative_notes
 
+  after_find do |registration|
+    # The `unless` part is necessary because when mass-fetching from `has_many` relations,
+    #   the underlying data is loaded in bulk and we don't want to load it _again_
+    registration.load_ms_model! unless registration.ms_loaded?
+  end
+
   def attendee_id
     "#{competition_id}-#{user_id}"
+  end
+
+  def load_ms_model!
+    ms_data = Microservices::Registrations.registration_by_id(self.competition_id, self.user_id)
+    self.load_ms_model(ms_data)
+
+    # Return self because we're working in-place per Ruby *! conventions
+    self
   end
 
   def load_ms_model(ms_model)
