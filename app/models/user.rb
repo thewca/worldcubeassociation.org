@@ -1423,10 +1423,6 @@ class User < ApplicationRecord
     end
   end
 
-  def can_access_at_least_one_panel?
-    panels_with_access.any?
-  end
-
   def subordinate_delegates
     delegate_roles
       .filter { |role| role.is_lead? }

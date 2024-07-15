@@ -246,6 +246,8 @@ export const panelUrls = {
   },
 }
 
+export const panelRedirectUrl = (panelPage) => `<%= CGI.unescape(Rails.application.routes.url_helpers.panel_redirect_path(panel_page: "${panelPage}")) %>`;
+
 export const actionUrls = {
   tickets: {
     show: (ticketId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.ticket_path("${ticketId}", format: "json")) %>`,
