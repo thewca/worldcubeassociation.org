@@ -7,6 +7,15 @@ module FrontendModel
 
   DEFAULT_EXPORT_FOLDER = Rails.root.join('app/webpacker/rails_data')
 
+  DEFAULT_EXPORT_MODELS = [
+    Country,
+    Continent,
+    Format,
+    Event,
+    RoundType,
+    EligibleCountryIso2ForChampionship,
+  ].freeze
+
   def self.listen(
     export_folder = DEFAULT_EXPORT_FOLDER,
     *models,
@@ -22,16 +31,15 @@ module FrontendModel
 
     models.each { |model| install_listener(model, export_folder) }
 
-    if run_on_start
-      FileUtils.mkdir_p(export_folder)
-      self.export(export_folder, *models)
-    end
+    self.export(export_folder, *models) if run_on_start
   end
 
   def self.export(
     export_folder = DEFAULT_EXPORT_FOLDER,
     *models
   )
+    FileUtils.mkdir_p(export_folder) unless File.directory?(export_folder)
+
     models.each { |model| write_entities(model, export_folder) }
   end
 

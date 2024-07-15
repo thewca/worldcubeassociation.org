@@ -6,12 +6,7 @@ Rails.application.config.after_initialize do
   if Rails.env.development?
     FrontendModel.listen(
       FrontendModel::DEFAULT_EXPORT_FOLDER,
-      Country,
-      Continent,
-      Format,
-      Event,
-      RoundType,
-      EligibleCountryIso2ForChampionship,
+      *FrontendModel::DEFAULT_EXPORT_MODELS,
     )
   end
 end
