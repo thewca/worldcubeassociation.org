@@ -186,15 +186,7 @@ Rails.application.routes.draw do
   get 'panel/pending-claims(/:user_id)' => 'panel#pending_claims_for_subordinate_delegates', as: 'pending_claims'
   scope 'panel' do
     get 'staff' => 'panel#staff', as: :panel_staff
-    get 'delegate' => 'panel#delegate', as: :panel_delegate
     get 'wfc' => 'panel#wfc', as: :panel_wfc
-    get 'wst' => 'panel#wst', as: :panel_wst
-    get 'board' => 'panel#board', as: :panel_board
-    get 'leader' => 'panel#leader', as: :panel_leader
-    get 'senior_delegate' => 'panel#senior_delegate', as: :panel_senior_delegate
-    get 'wdc' => 'panel#wdc', as: :panel_wdc
-    get 'wec' => 'panel#wec', as: :panel_wec
-    get 'weat' => 'panel#weat', as: :panel_weat
   end
   get 'panel/:panel_id' => 'panel#index', as: :panel_index
   resources :notifications, only: [:index]
