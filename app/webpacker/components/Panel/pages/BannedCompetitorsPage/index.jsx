@@ -36,7 +36,7 @@ export default function BannedCompetitorsPage() {
   const { loggedInUserPermissions, permissionsLoading } = useLoggedInUserPermissions();
 
   const [banModalParams, setBanModalParams] = useState(null);
-  
+
   if (
     bannedCompetitorRolesLoading ||
     pastBannedCompetitorRolesLoading ||
