@@ -246,7 +246,8 @@ Rails.application.routes.draw do
   post 'contact/dob' => 'contacts#dob_create'
 
   get '/regulations' => 'regulations#show', id: 'index'
-  get '/regulations/wca-regulations-and-guidelines', to: redirect('https://regulations.worldcubeassociation.org/wca-regulations-and-guidelines.pdf', status: 302)
+  get '/regulations/wca-regulations-appended-guidelines', to: redirect('https://regulations.worldcubeassociation.org/wca-regulations-appended-guidelines.pdf', status: 302)
+  get '/regulations/full/wca-regulations-merged-guidelines', to: redirect('https://regulations.worldcubeassociation.org/wca-regulations-merged-guidelines.pdf', status: 302)
   get '/regulations/about' => 'regulations#about'
   get '/regulations/countries' => 'regulations#countries'
   get '/regulations/scrambles' => 'regulations#scrambles'
