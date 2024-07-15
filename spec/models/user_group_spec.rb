@@ -157,7 +157,7 @@ RSpec.describe UserGroup, type: :model do
       FactoryBot.create :wrc_member_role, user_id: users[7].id, start_date: Time.now - 4.days
 
       expected_output = [
-        "<b>Changes in WCA Regulations Committee</b>",
+        "<br><b>Changes in WCA Regulations Committee</b>",
         "",
         "<b>New Members</b>",
         *[users[6].name, users[7].name].sort,
@@ -172,7 +172,7 @@ RSpec.describe UserGroup, type: :model do
       FactoryBot.create :wrc_senior_member_role, user_id: team_member.user.id, start_date: Time.now - 5.days
 
       expected_output = [
-        "<b>Changes in WCA Regulations Committee</b>",
+        "<br><b>Changes in WCA Regulations Committee</b>",
         "",
         "<b>Promoted Senior Members</b>",
         team_member.user.name,
@@ -190,7 +190,7 @@ RSpec.describe UserGroup, type: :model do
       FactoryBot.create :wrc_leader_role, user_id: new_leader.user.id, start_date: Time.now - 10.days
 
       expected_output = [
-        "<b>Changes in WCA Regulations Committee</b>",
+        "<br><b>Changes in WCA Regulations Committee</b>",
         "",
         "<b>Leaders</b>",
         "#{new_leader.user.name} has been appointed as the new Leader.",

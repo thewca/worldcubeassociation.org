@@ -222,10 +222,10 @@
               <li role="presentation" class="dropdown-header">
                 <%= t '.panel' %>
               </li>
-              <% panel_list.each do |panel| %>
-                <% if current_user.can_access_panel?(panel[:id]) %>
-                  <li><%= link_to panel[:name], panel[:url] %></li>
-                <% end %>
+              <% current_user.panels_with_access.each do |panel_id| %>
+                <% panel_name = panel_list[panel_id][:name] %>
+                <% panel_url = Rails.application.routes.url_helpers.panel_index_path(panel_id: panel_id) %>
+                <li><%= link_to panel_name, panel_url %></li>
               <% end %>
             <% end %>
             <% if current_user.can_view_poll? %>

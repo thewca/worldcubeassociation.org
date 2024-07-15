@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-after "development:users" do
+after "development:users", "development:user_roles" do
   class << self
     def random_events
       official = Event.official
@@ -29,7 +29,7 @@ after "development:users" do
 
   countries = Country.all
 
-  delegate = User.find_by(delegate_status: "delegate")
+  delegate = RolesMetadataDelegateRegions.joins(:user_role).not_trainee_delegate.merge(UserRole.active).sample.user
 
   users = User.where.not(wca_id: nil).sample(93)
 
