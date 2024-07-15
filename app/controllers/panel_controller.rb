@@ -6,7 +6,7 @@ class PanelController < ApplicationController
 
   before_action :authenticate_user!
   before_action -> { redirect_to_root_unless_user(:has_permission?, 'can_access_panels', params[:panel_id].to_sym) }, only: [:index]
-  before_action -> { redirect_to_root_unless_user(:can_access_panel?, params[:action].to_sym) }, except: [:pending_claims_for_subordinate_delegates, :index, :generate_db_token]
+  before_action -> { redirect_to_root_unless_user(:can_access_panel?, params[:action].to_sym) }, except: [:pending_claims_for_subordinate_delegates, :index, :generate_db_token, :redirect]
   before_action -> { redirect_to_root_unless_user(:can_access_senior_delegate_panel?) }, only: [:pending_claims_for_subordinate_delegates]
   before_action -> { redirect_to_root_unless_user(:can_access_panel?, :admin) }, only: [:generate_db_token]
 
@@ -45,6 +45,14 @@ class PanelController < ApplicationController
       main: 1,
       replica: 2,
     }
+  end
+
+  def redirect
+    @panel_page = params.require(:panel_page)
+    panel_with_panel_page = panel_list(current_user).find { |_, panel| panel[:pages].include?(@panel_page) }
+
+    return head :unauthorized if panel_with_panel_page.nil?
+    redirect_to panel_index_path(panel_id: panel_with_panel_page.first, anchor: @panel_page)
   end
 
   def self.panel_pages

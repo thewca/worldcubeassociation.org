@@ -217,13 +217,13 @@
               <li><%= link_to t('.my_results'), person_path(current_user.wca_id) %></li>
             <% end %>
 
-            <% if current_user.can_access_at_least_one_panel? %>
+            <% if panel_list(current_user).any? %>
               <li class="divider"></li>
               <li role="presentation" class="dropdown-header">
                 <%= t '.panel' %>
               </li>
-              <% current_user.panels_with_access.each do |panel_id| %>
-                <% panel_name = panel_list[panel_id][:name] %>
+              <% panel_list(current_user).each do |panel_id, panel| %>
+                <% panel_name = panel[:name] %>
                 <% panel_url = Rails.application.routes.url_helpers.panel_index_path(panel_id: panel_id) %>
                 <li><%= link_to panel_name, panel_url %></li>
               <% end %>
