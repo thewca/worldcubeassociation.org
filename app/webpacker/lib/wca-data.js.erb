@@ -1,6 +1,9 @@
 import _ from 'lodash';
 import I18n from './i18n'
 
+const dataFileContext = require.context('rails_data');
+const dataLookup = (model) => dataFileContext(`./${model}.json`);
+
 /* We bundle all backend data constants in one big file, because the way we currently
  * export the Ruby values to JS is very inefficient (it basically spins up an entire server per file)
  *
@@ -13,12 +16,15 @@ import I18n from './i18n'
 
 // ----- COUNTRIES -----
 
+const countryData = dataLookup('countries');
+
 export const countries = {
-  byIso2: _.mapValues(<%= Country.all.index_by(&:iso2).to_json.html_safe %>, extendCountries),
-  real: _.map(<%= Country.real.to_json.html_safe %>, extendCountries),
+  byIso2: _.mapValues(_.keyBy(countryData, 'iso2'), extendCountries),
+  real: _.map(_.filter(countryData, 'real'), extendCountries),
 };
 
 function extendCountries(country) {
+
   return {
     ...country,
     name: I18n.t(`countries.${country.iso2}`),
@@ -27,8 +33,10 @@ function extendCountries(country) {
 
 // ----- CONTINENTS -----
 
+const continentData = dataLookup('continents');
+
 export const continents = {
-  real: _.map(<%= Continent.real.to_json.html_safe %>, extendContinents),
+  real: _.map(_.filter(continentData, 'real'), extendContinents),
 };
 
 function extendContinents(continent){
@@ -63,8 +71,10 @@ function extendCurrenciesData(rawFormat) {
 
 // ----- FORMATS -----
 
+const formatsData = dataLookup('formats');
+
 export const formats = {
-  byId: _.mapValues(<%= Format.all.index_by(&:id).to_json.html_safe %>, extendFormats),
+  byId: _.mapValues(_.keyBy(formatsData, 'id'), extendFormats),
 };
 
 function extendFormats(rawFormat) {
@@ -78,9 +88,11 @@ function extendFormats(rawFormat) {
 
 // ----- EVENTS -----
 
+const eventsData = dataLookup('events');
+
 export const events = {
-  official: _.map(<%= Event.official.to_json.html_safe %>, extendEvents),
-  byId: _.mapValues(<%= Event.all.index_by(&:id).to_json.html_safe %>, extendEvents),
+  official: _.map(_.filter(eventsData, 'official'), extendEvents),
+  byId: _.mapValues(_.keyBy(eventsData, 'id'), extendEvents),
 };
 
 function extendEvents(rawEvent) {
@@ -112,8 +124,10 @@ function extendGenders(gender) {
 
 // ----- ROUND TYPES -----
 
+const roundTypeData = dataLookup('roundtypes');
+
 export const roundTypes = {
-  byId: _.mapValues(<%= RoundType.all.index_by(&:id).to_json.html_safe %>, extendRoundTypes),
+  byId: _.mapValues(_.keyBy(roundTypeData, 'id'), extendRoundTypes),
 };
 
 function extendRoundTypes(rawFormat) {
@@ -160,7 +174,16 @@ export const competitionMaxShortNameLength = <%= Competition::MAX_CELL_NAME_LENG
 
 // ----- CHAMPIONSHIPS -----
 
-export const groupedChampionshipTypes = <%= Championship.grouped_championship_types.to_json.html_safe %>
+const eligibleCountryForChampionshipData = dataLookup('eligible_country_iso2s_for_championship');
+
+export const championshipTypeWorld = '<%= Championship::CHAMPIONSHIP_TYPE_WORLD %>'
+
+export const groupedChampionshipTypes = {
+  planetary: [championshipTypeWorld],
+  continental: _.map(_.sortBy(continents.real, 'name'), 'id'),
+  "multi-national": _.uniq(_.map(eligibleCountryForChampionshipData, 'championship_type')),
+  national: _.map(_.sortBy(countries.real, 'name'), 'iso2'),
+}
 
 // ----- ROLES & GROUPS -----
 
