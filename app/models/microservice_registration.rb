@@ -26,7 +26,7 @@ class MicroserviceRegistration < ApplicationRecord
   end
 
   def load_ms_model!
-    ms_data = Microservices::Registrations.registration_by_id(self.competition_id, self.user_id)
+    ms_data = Microservices::Registrations.registration_by_id(self.attendee_id)
     self.load_ms_model(ms_data)
 
     # Return self because we're working in-place per Ruby *! conventions
