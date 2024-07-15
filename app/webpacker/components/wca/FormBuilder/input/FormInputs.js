@@ -241,11 +241,11 @@ export const InputDate = wrapInput((props) => {
           isoMaxDate={props.maxDate}
         />
       </Input>
-      {props.dateTime && (
+      {props.dateTime && props.value && (
         <p className="help-block">
           In your current time zone:
           {' '}
-          {props.value && new Date(props.value).toLocaleString(undefined, {
+          {new Date(props.value).toLocaleString(undefined, {
             dateStyle: 'full',
             timeStyle: 'short',
           })}
