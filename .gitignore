@@ -26,6 +26,8 @@ public/assets/**
 
 # Ignore js-specific generated locales (they are rebuilt whenever we compile assets)
 app/webpacker/rails_translations/*.json
+# Same goes for model data JSON files
+app/webpacker/rails_data/*.json
 
 # Environment configuration
 .env*
