@@ -1,9 +1,9 @@
 import React from 'react';
 import { Header, List, Icon } from 'semantic-ui-react';
-import { panelUrls } from '../../lib/requests/routes.js.erb';
+import { panelRedirectUrl } from '../../lib/requests/routes.js.erb';
 import Loading from '../Requests/Loading';
 import useLoggedInUserPermissions from '../../lib/hooks/useLoggedInUserPermissions';
-import { groupTypes, delegateRegionsStatus } from '../../lib/wca-data.js.erb';
+import { groupTypes, delegateRegionsStatus, PANEL_PAGES } from '../../lib/wca-data.js.erb';
 import { getRoleDescription, getRoleSubDescription } from '../../lib/helpers/roles-tab';
 
 function hyperlink(role) {
@@ -12,17 +12,17 @@ function hyperlink(role) {
       delegateRegionsStatus.senior_delegate,
       delegateRegionsStatus.regional_delegate,
     ].includes(role.metadata.status)) {
-      return panelUrls.board.regionsManager;
+      return panelRedirectUrl(PANEL_PAGES.regionsManager);
     }
-    return panelUrls.seniorDelegate.regions;
+    return panelRedirectUrl(PANEL_PAGES.regions);
   }
   if (role.group.group_type === groupTypes.teams_committees) {
     // FIXME: Redirect to correct dropdown in groupsManager. Currently it only goes to the
     // groupsManager page without selecting the group of the user.
-    return panelUrls.leader.groupsManager;
+    return panelRedirectUrl(PANEL_PAGES.groupsManager);
   }
   if (role.group.group_type === groupTypes.translators) {
-    return panelUrls.wst.translators;
+    return panelRedirectUrl(PANEL_PAGES.translators);
   }
   return null;
 }
