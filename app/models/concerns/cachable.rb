@@ -19,22 +19,24 @@ module Cachable
   extend ActiveSupport::Concern
 
   class_methods do
-    # We want to keep the cache in a class variable.
-    # Assuming we have a class like Country < AbstractCachedModel, we want the
-    # class variable within Country, not within AbstractCachedModel.
-    # Using directly @@models_by_id would set it in the latter, so we need to rely
-    # on 'class_variable_get' and 'class_variable_set' that will act on the extending
-    # class (here Country).
     def c_all_by_id
-      Rails.cache.fetch(['model_cache', self.name.underscore.to_s, 'by_id']) { all.index_by(&:id) }
+      Rails.cache.fetch(['model_cache', self.name.underscore.to_s, 'all_by_id']) do
+        self.all.index_by(&:id)
+      end
     end
 
     def c_find(id)
-      c_all_by_id[id]
+      Rails.cache.fetch(['model_cache', self.name.underscore.to_s, 'find', id]) do
+        self.c_all_by_id[id]
+      end
     end
 
     def c_find!(id)
-      self.c_find(id) || raise("id not found: #{id}")
+      self.c_find(id) || raise("Cached model #{self.name.underscore} ID not found: #{id}")
+    end
+
+    def c_values
+      self.c_all_by_id.values
     end
   end
 
@@ -43,6 +45,11 @@ module Cachable
 
     def clear_cache
       Rails.cache.delete(['model_cache', self.name.underscore.to_s, 'by_id'])
+
+      # For some reason, the implementation of combining an array into a valid cache key is private in Rails.
+      # So we have to "break in" to their API using `send`, but in the end all this does is turn an array into a string.
+      model_matcher = Rails.cache.send(:expanded_key, ['model_cache', self.name.underscore.to_s, 'find', '*'])
+      Rails.cache.delete_matched(model_matcher)
     end
   end
 end
