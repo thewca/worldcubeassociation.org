@@ -18,38 +18,31 @@ require 'active_support/concern'
 module Cachable
   extend ActiveSupport::Concern
 
+  included do
+    thread_mattr_accessor :models_by_id
+
+    after_commit :clear_cache
+
+    def clear_cache
+      self.models_by_id = nil
+    end
+  end
+
   class_methods do
     def c_all_by_id
-      Rails.cache.fetch(['model_cache', self.name.underscore.to_s, 'all_by_id']) do
-        self.all.index_by(&:id)
-      end
+      self.models_by_id ||= self.all.index_by(&:id)
     end
 
     def c_find(id)
-      Rails.cache.fetch(['model_cache', self.name.underscore.to_s, 'find', id]) do
-        self.c_all_by_id[id]
-      end
+      self.c_all_by_id[id]
     end
 
     def c_find!(id)
-      self.c_find(id) || raise("Cached model #{self.name.underscore} ID not found: #{id}")
+      self.c_find(id) || raise("Cached model #{self.name} ID not found: #{id}")
     end
 
     def c_values
       self.c_all_by_id.values
-    end
-  end
-
-  included do
-    after_commit :clear_cache
-
-    def clear_cache
-      Rails.cache.delete(['model_cache', self.name.underscore.to_s, 'by_id'])
-
-      # For some reason, the implementation of combining an array into a valid cache key is private in Rails.
-      # So we have to "break in" to their API using `send`, but in the end all this does is turn an array into a string.
-      model_matcher = Rails.cache.send(:expanded_key, ['model_cache', self.name.underscore.to_s, 'find', '*'])
-      Rails.cache.delete_matched(model_matcher)
     end
   end
 end
