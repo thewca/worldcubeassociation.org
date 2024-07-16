@@ -15,6 +15,6 @@ class EligibleCountryIso2ForChampionship < ApplicationRecord
   end
 
   def self.championship_types
-    pluck(:championship_type).uniq
+    raw_static_data.pluck(:championship_type).uniq
   end
 end

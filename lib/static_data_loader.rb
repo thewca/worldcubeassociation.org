@@ -36,7 +36,7 @@ module StaticDataLoader
   end
 
   def self.import_backend(*models)
-    models.each { |model| load_backend(model) }
+    models.each { |model| load_entities(model) }
   end
 
   def self.export_backend(
@@ -81,7 +81,7 @@ module StaticDataLoader
     File.write(output_path, model_data)
   end
 
-  def self.load_backend(model)
+  def self.load_entities(model)
     model.upsert_all(model.raw_static_data)
   end
 end

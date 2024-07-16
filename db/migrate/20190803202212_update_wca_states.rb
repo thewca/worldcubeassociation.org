@@ -3,7 +3,7 @@
 class UpdateWcaStates < ActiveRecord::Migration[5.2]
   def up
     Country.delete_all
-    Country::ALL_STATES.each(&:save!)
+    Country.upsert_all(Country.raw_static_data)
     # Extra changes due to some changes in country names
     models=[Person, Result, Competition]
     models.each do |m|
@@ -14,7 +14,7 @@ class UpdateWcaStates < ActiveRecord::Migration[5.2]
 
   def down
     Country.delete_all
-    Country::ALL_STATES.each(&:save!)
+    Country.upsert_all(Country.raw_static_data)
     models=[Person, Result, Competition]
     models.each do |m|
       m.where(countryId: "North Macedonia").update_all(countryId: "Macedonia")

@@ -37,24 +37,24 @@ class Country < ApplicationRecord
   include LocalizedSortable
 
   REAL_COUNTRY_DATA_PATH = StaticData::DATA_FOLDER.join("#{self.name.pluralize.underscore}.real.json")
-  WCA_STATES = self.parse_json_file(REAL_COUNTRY_DATA_PATH).freeze
+  WCA_STATES_JSON = self.parse_json_file(REAL_COUNTRY_DATA_PATH).freeze
+
+  WCA_COUNTRIES = WCA_STATES_JSON["states_lists"].flat_map do |list|
+    list["states"].map do |state|
+      state_id = state["id"] || I18n.transliterate(state["name"]).tr("'", "_")
+      { id: state_id, continentId: state["continent_id"],
+        iso2: state["iso2"], name: state["name"] }
+    end
+  end
 
   ALL_STATES_RAW = [
-    WCA_STATES["states_lists"].map do |list|
-      list["states"].map do |state|
-        state_id = state["id"] || I18n.transliterate(state["name"]).tr("'", "_")
-        { id: state_id, continentId: state["continent_id"],
-          iso2: state["iso2"], name: state["name"] }
-      end
-    end,
+    WCA_COUNTRIES,
     MULTIPLE_COUNTRIES,
   ].flatten.freeze
 
   def self.raw_static_data
     ALL_STATES_RAW
   end
-
-  ALL_STATES = self.static_data.freeze
 
   belongs_to :continent, foreign_key: :continentId
   alias_attribute :continent_id, :continentId

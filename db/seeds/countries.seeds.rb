@@ -1,3 +1,3 @@
 # frozen_string_literal: true
 
-Country::ALL_STATES.each(&:save!)
+StaticDataLoader.load_entities Country
