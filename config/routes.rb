@@ -184,7 +184,6 @@ Rails.application.routes.draw do
   post 'competitions/:id/post_results' => 'competitions#post_results', as: :competition_post_results
 
   get 'panel/pending-claims(/:user_id)' => 'panel#pending_claims_for_subordinate_delegates', as: 'pending_claims'
-  get 'panel/generate_db_token' => 'panel#generate_db_token'
   scope 'panel' do
     get 'staff' => 'panel#staff', as: :panel_staff
     get 'delegate' => 'panel#delegate', as: :panel_delegate
