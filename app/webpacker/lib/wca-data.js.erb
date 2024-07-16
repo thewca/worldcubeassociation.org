@@ -1,8 +1,14 @@
 import _ from 'lodash';
-import I18n from './i18n'
+import I18n from './i18n';
 
 const dataFileContext = require.context('rails_data');
-const dataLookup = (model) => dataFileContext(`./${model}.json`);
+
+const camelizeKeys = (obj) => _.mapKeys(obj, (v, k) => _.camelCase(k))
+
+const dataLookup = (model) => {
+  const rawEntities = dataFileContext(`./${model}.json`);
+  return _.map(rawEntities, camelizeKeys);
+};
 
 /* We bundle all backend data constants in one big file, because the way we currently
  * export the Ruby values to JS is very inefficient (it basically spins up an entire server per file)
@@ -83,7 +89,6 @@ export const formats = {
 };
 
 function extendFormats(rawFormat) {
-  rawFormat = _.mapKeys(rawFormat, (v, k) => _.camelCase(k));
   return {
     ...rawFormat,
     name: I18n.t(`formats.${rawFormat.id}`),
@@ -96,7 +101,7 @@ function extendFormats(rawFormat) {
 const eventsData = dataLookup('<%= Event.data_file_handle %>');
 
 const preferredFormatsData = dataLookup('<%= PreferredFormat.data_file_handle %>');
-const preferredFormatsLookup = _.keyBy(preferredFormatsData, 'event_id');
+const preferredFormatsLookup = _.keyBy(preferredFormatsData, 'eventId');
 
 export const events = {
   official: _.map(_.filter(eventsData, 'official'), extendEvents),
@@ -104,12 +109,11 @@ export const events = {
 };
 
 function extendEvents(rawEvent) {
-  rawEvent = _.mapKeys(rawEvent, (v, k) => _.camelCase(k));
   return {
     ...rawEvent,
     name: I18n.t(`events.${rawEvent.id}`),
     formats() {
-      return preferredFormatsLookup[rawEvent.id].map((prefFormat) => formats.byId[prefFormat.format_id]);
+      return preferredFormatsLookup[rawEvent.id].map((prefFormat) => formats.byId[prefFormat.formatId]);
     },
     recommendedFormat() {
       return this.formats()[0];
@@ -139,7 +143,8 @@ export const roundTypes = {
 };
 
 function extendRoundTypes(rawFormat) {
-  return _.mapKeys(rawFormat, (v, k) => _.camelCase(k));
+  // Simple identity right now but we may want to add cool stuff in the future
+  return rawFormat;
 }
 
 // ----- TIMEZONES -----
@@ -194,7 +199,7 @@ export const championshipTypeWorld = '<%= Championship::CHAMPIONSHIP_TYPE_WORLD 
 export const groupedChampionshipTypes = {
   planetary: [championshipTypeWorld],
   continental: _.map(_.sortBy(continents.real, 'name'), 'id'),
-  "multi-national": _.uniq(_.map(eligibleCountryForChampionshipData, 'championship_type')),
+  "multi-national": _.uniq(_.map(eligibleCountryForChampionshipData, 'championshipType')),
   national: _.map(_.sortBy(countries.real, 'name'), 'iso2'),
 }
 
