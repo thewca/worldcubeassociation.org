@@ -47,7 +47,7 @@ jobs:
       - name: Pre-compile assets for frontend tests
         env:
           DISABLE_SPRING: 1
-        run: bundle exec i18n export && bundle exec rake assets:precompile
+        run: bundle exec i18n export && bundle exec rake frontend:generate_data && bundle exec rake assets:precompile
       - name: Run tests
         id: rspec
         run: bundle exec rake
