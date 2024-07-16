@@ -3,33 +3,24 @@
 class Regulation < SimpleDelegator
   REGULATIONS_JSON_PATH = "wca-regulations.json"
 
-  def self.regulations
-    Rails.cache.read('regulations') || []
-  end
+  thread_mattr_accessor :regulations, instance_accessor: false, default: []
+  thread_mattr_accessor :regulations_load_error, instance_accessor: false
 
   def self.regulations_by_id
     self.regulations.index_by { |r| r["id"] }
   end
 
-  RegulationsError = Struct.new(:message, :class, keyword_init: true)
-
-  def self.regulations_load_error
-    Rails.cache.read('regulations_load_error')
-  end
-
   def self.reload_regulations(s3)
     reset_regulations
 
-    regulations_json = JSON.parse(s3.bucket(RegulationTranslationsHelper::BUCKET_NAME).object(REGULATIONS_JSON_PATH).get.body.read).freeze
-    Rails.cache.write('regulations', regulations_json)
+    self.regulations = JSON.parse(s3.bucket(RegulationTranslationsHelper::BUCKET_NAME).object(REGULATIONS_JSON_PATH).get.body.read).freeze
   rescue StandardError => e
-    wrapped_error = RegulationsError.new(message: e.message, class: e.class.name)
-    Rails.cache.write('regulations_load_error', wrapped_error)
+    self.regulations_load_error = e
   end
 
   def self.reset_regulations
-    Rails.cache.delete('regulations')
-    Rails.cache.delete('regulations_load_error')
+    self.regulations = []
+    self.regulations_load_error = nil
   end
 
   if Rails.env.production?
