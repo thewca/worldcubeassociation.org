@@ -17,6 +17,11 @@ class Event < ApplicationRecord
 
   default_scope -> { order(:rank) }
 
+  EVENTS_WITHOUT_CUTOFF = %w[333bf 444bf 555bf].freeze
+  MULTIPLE_BLINDFOLDED_EVENTS = %w[333mbf 333mbo].freeze
+  FEWEST_MOVES_EVENTS = %w[333fm].freeze
+  FAST_EVENTS = %w[333 222 444 333oh clock mega pyram skewb sq1].freeze
+
   def name
     I18n.t(id, scope: :events)
   end
@@ -52,11 +57,11 @@ class Event < ApplicationRecord
   end
 
   def fewest_moves?
-    self.id == "333fm"
+    FEWEST_MOVES_EVENTS.include?(self.id)
   end
 
   def multiple_blindfolded?
-    self.id == "333mbf" || self.id == "333mbo"
+    MULTIPLE_BLINDFOLDED_EVENTS.include?(self.id)
   end
 
   def can_change_time_limit?
@@ -64,12 +69,12 @@ class Event < ApplicationRecord
   end
 
   def can_have_cutoff?
-    self.id != "333bf" && self.id != "444bf" && self.id != "555bf"
+    !EVENTS_WITHOUT_CUTOFF.include?(self.id)
   end
 
   # Events that are generally fast enough to never need to go over the default 10 minute time limit
   def fast_event?
-    ['333', '222', '444', '333oh', 'clock', 'mega', 'pyram', 'skewb', 'sq1'].include?(self.id)
+    FAST_EVENTS.include?(self.id)
   end
 
   alias_method :can_change_time_limit, :can_change_time_limit?
