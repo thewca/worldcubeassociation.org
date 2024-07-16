@@ -8,7 +8,7 @@ class EligibleCountryIso2ForChampionship < ApplicationRecord
   belongs_to :championship, foreign_key: :championship_type, primary_key: :championship_type, optional: true
 
   validates :eligible_country_iso2, uniqueness: { scope: :championship_type, case_sensitive: false },
-                                    inclusion: { in: Country.all.map(&:iso2) }
+                                    inclusion: { in: Country::ALL_STATES_RAW.pluck(:iso2) }
 
   def self.data_file_handle
     "championship_eligible_iso2"
