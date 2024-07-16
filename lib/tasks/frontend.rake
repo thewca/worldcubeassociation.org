@@ -2,9 +2,9 @@
 
 namespace :frontend do
   task generate_data: :environment do
-    FrontendModel.export(
-      FrontendModel::DEFAULT_EXPORT_FOLDER,
-      *FrontendModel::DEFAULT_EXPORT_MODELS,
+    StaticDataLoader.export(
+      StaticDataLoader::FRONTEND_EXPORT_FOLDER,
+      *StaticDataLoader::DEFAULT_EXPORT_MODELS,
     )
   end
 end

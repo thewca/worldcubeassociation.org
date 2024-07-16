@@ -75,6 +75,7 @@ class Event < ApplicationRecord
   alias_method :is_timed_event, :timed_event?
   alias_method :is_fewest_moves, :fewest_moves?
   alias_method :is_multiple_blindfolded, :multiple_blindfolded?
+  alias_method :is_official, :official?
 
   DEFAULT_SERIALIZE_OPTIONS = {
     only: ["id"],

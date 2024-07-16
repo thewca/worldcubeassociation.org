@@ -1,23 +1,24 @@
 # frozen_string_literal: true
 
-module FrontendModel
+module StaticDataLoader
   class << self
     attr_accessor :started
   end
-
-  DEFAULT_EXPORT_FOLDER = Rails.root.join('app/webpacker/rails_data')
 
   DEFAULT_EXPORT_MODELS = [
     Country,
     Continent,
     Format,
+    PreferredFormat,
     Event,
     RoundType,
     EligibleCountryIso2ForChampionship,
   ].freeze
 
-  def self.listen(
-    export_folder = DEFAULT_EXPORT_FOLDER,
+  FRONTEND_EXPORT_FOLDER = Rails.root.join('app/webpacker/rails_data')
+
+  def self.listen_frontend(
+    export_folder = FRONTEND_EXPORT_FOLDER,
     *models,
     run_on_start: true
   )
@@ -29,22 +30,18 @@ module FrontendModel
     model_names = models.map { |klass| klass.name.underscore }
     debug("Watching #{model_names.inspect}")
 
-    models.each { |model| install_listener(model, export_folder) }
+    models.each { |model| install_frontend_listener(model, export_folder) }
 
     self.export(export_folder, *models) if run_on_start
   end
 
   def self.export(
-    export_folder = DEFAULT_EXPORT_FOLDER,
+    export_folder = FRONTEND_EXPORT_FOLDER,
     *models
   )
     FileUtils.mkdir_p(export_folder) unless File.directory?(export_folder)
 
-    models.each { |model| write_entities(model, export_folder) }
-  end
-
-  def self.relative_path(path)
-    Pathname.new(path).relative_path_from(Rails.root).to_s
+    models.each { |model| write_frontend(model, model.all.as_json, export_folder) }
   end
 
   def self.debug(message)
@@ -55,24 +52,17 @@ module FrontendModel
     @logger ||= ActiveSupport::TaggedLogging.new(Rails.logger)
   end
 
-  def self.install_listener(model, export_folder)
+  def self.install_frontend_listener(model, export_folder)
     klass = self
 
     model.after_commit do
-      klass.debug("Detected DB commit to #{model}. Exporting to JS data file")
-      klass.write_entities(model, export_folder)
+      klass.debug("Detected DB commit to #{self}. Exporting to JS data file")
+      klass.write_frontend(self, self.all.as_json, export_folder)
     end
   end
 
-  def self.write_entities(model, export_path)
-    base_data = model.all.map do |entity|
-      entity.as_json.tap do |data|
-        data.merge!(real: entity.real?) if model < LocalizedSortable
-        data.merge!(official: entity.official?) if entity.respond_to?(:official?)
-      end
-    end
-
-    model_data = ::JSON.pretty_generate(base_data)
+  def self.write_frontend(model, serialized_entities, export_path)
+    model_data = ::JSON.pretty_generate(serialized_entities)
     file_name = "#{model.table_name.underscore}.json"
 
     output_path = File.join(export_path, file_name)
