@@ -15,7 +15,6 @@ module StaticDataLoader
     EligibleCountryIso2ForChampionship,
   ].freeze
 
-  STATIC_DATA_FOLDER = Rails.root.join('lib/static_data')
   FRONTEND_EXPORT_FOLDER = Rails.root.join('app/webpacker/rails_data')
 
   def self.listen_frontend(
@@ -33,16 +32,20 @@ module StaticDataLoader
 
     models.each { |model| install_frontend_listener(model, export_folder) }
 
-    self.export(export_folder, *models) if run_on_start
+    self.export_frontend(export_folder, *models) if run_on_start
   end
 
-  def self.export(
+  def self.export_frontend(
     export_folder = FRONTEND_EXPORT_FOLDER,
     *models
   )
     FileUtils.mkdir_p(export_folder) unless File.directory?(export_folder)
 
     models.each { |model| write_frontend(model, model.static_data.as_json, export_folder) }
+  end
+
+  def self.export_backend(*models)
+    models.each { |model| load_backend(model) }
   end
 
   def self.debug(message)
@@ -64,7 +67,7 @@ module StaticDataLoader
 
   def self.write_frontend(model, serialized_entities, export_path)
     model_data = ::JSON.pretty_generate(serialized_entities)
-    file_name = "#{model.table_name.underscore}.json"
+    file_name = "#{model.data_file_handle}.json"
 
     output_path = File.join(export_path, file_name)
 
@@ -76,5 +79,9 @@ module StaticDataLoader
 
     debug("Writing JSON data for #{model.name.underscore} to #{output_path}")
     File.write(output_path, model_data)
+  end
+
+  def self.load_backend(model)
+    model.upsert_all(model.raw_static_data)
   end
 end

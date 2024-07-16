@@ -3,6 +3,8 @@
 module StaticData
   extend ActiveSupport::Concern
 
+  DATA_FOLDER = Rails.root.join('lib/static_data')
+
   class_methods do
     def parse_json_file(file_path)
       ::JSON.parse(File.read(file_path))
@@ -10,12 +12,12 @@ module StaticData
   end
 
   included do
-    def self.import_filename
-      "#{self.name.pluralize.underscore}.json"
+    def self.data_file_handle
+      self.name.pluralize.underscore
     end
 
     def self.raw_static_data
-      import_file = StaticDataLoader::STATIC_DATA_FOLDER.join(self.import_filename)
+      import_file = DATA_FOLDER.join("#{self.data_file_handle}.json")
       self.parse_json_file(import_file)
     end
 
