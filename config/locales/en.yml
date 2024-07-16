@@ -1282,7 +1282,7 @@ en:
         email_user_with_different_unconfirmed_wca_id: "There is already a user with email %{email}, but it has unconfirmed WCA ID of %{unconfirmed_wca_id} instead of %{registration_wca_id}."
         email_duplicates: "Email must be unique, found the following duplicates: %{emails}."
         wca_id_duplicates: "WCA ID must be unique, found the following duplicates: %{wca_ids}."
-        wrong_dob_format: "Birthdate must follow the YYYY-mm-dd format (year-month-day, i.e. 1944-07-13 for 'July 13, 1944'), found the following dates which cannot be parsed: %{raw_dobs}."
+        wrong_dob_format: "Birthdate must follow the YYYY-mm-dd format (year-month-day, for example 1944-07-13), found the following dates which cannot be parsed: %{raw_dobs}."
     add:
       title: "Add registration for %{comp}"
       info: "This will create an approved registration. Use this form to add walk-ins during the competition."
