@@ -7,6 +7,7 @@ class Continent < ApplicationRecord
 
   include Cachable
   include LocalizedSortable
+  include StaticData
 
   has_many :countries, foreign_key: :continentId
 

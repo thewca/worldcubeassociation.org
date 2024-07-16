@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class PreferredFormat < ApplicationRecord
+  include StaticData
+
   belongs_to :event
   belongs_to :format
 

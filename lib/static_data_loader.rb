@@ -15,6 +15,7 @@ module StaticDataLoader
     EligibleCountryIso2ForChampionship,
   ].freeze
 
+  STATIC_DATA_FOLDER = Rails.root.join('lib/static_data')
   FRONTEND_EXPORT_FOLDER = Rails.root.join('app/webpacker/rails_data')
 
   def self.listen_frontend(
@@ -41,7 +42,7 @@ module StaticDataLoader
   )
     FileUtils.mkdir_p(export_folder) unless File.directory?(export_folder)
 
-    models.each { |model| write_frontend(model, model.all.as_json, export_folder) }
+    models.each { |model| write_frontend(model, model.static_data.as_json, export_folder) }
   end
 
   def self.debug(message)

@@ -2,6 +2,8 @@
 
 class Event < ApplicationRecord
   include Cachable
+  include StaticData
+
   self.table_name = "Events"
 
   has_many :competition_events
