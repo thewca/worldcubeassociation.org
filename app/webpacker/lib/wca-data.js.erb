@@ -16,15 +16,17 @@ const dataLookup = (model) => dataFileContext(`./${model}.json`);
 
 // ----- COUNTRIES -----
 
-const countryData = dataLookup('countries');
+const countryData = dataLookup('<%= Country.data_file_handle %>');
+
+const fictionalCountryIds = <%= Country.fictive_ids.to_json.html_safe %>;
+const realCountries = countryData.filter((c) => !fictionalCountryIds.includes(c.id));
 
 export const countries = {
   byIso2: _.mapValues(_.keyBy(countryData, 'iso2'), extendCountries),
-  real: _.map(_.filter(countryData, 'real'), extendCountries),
+  real: _.map(realCountries, extendCountries),
 };
 
 function extendCountries(country) {
-
   return {
     ...country,
     name: I18n.t(`countries.${country.iso2}`),
@@ -33,10 +35,13 @@ function extendCountries(country) {
 
 // ----- CONTINENTS -----
 
-const continentData = dataLookup('continents');
+const continentData = dataLookup('<%= Continent.data_file_handle %>');
+
+const fictionalContinentIds = <%= Continent.fictive_ids.to_json.html_safe %>;
+const realContinents = continentData.filter((c) => !fictionalContinentIds.includes(c.id));
 
 export const continents = {
-  real: _.map(_.filter(continentData, 'real'), extendContinents),
+  real: _.map(realContinents, extendContinents),
 };
 
 function extendContinents(continent){
@@ -71,7 +76,7 @@ function extendCurrenciesData(rawFormat) {
 
 // ----- FORMATS -----
 
-const formatsData = dataLookup('formats');
+const formatsData = dataLookup('<%= Format.data_file_handle %>');
 
 export const formats = {
   byId: _.mapValues(_.keyBy(formatsData, 'id'), extendFormats),
@@ -88,7 +93,10 @@ function extendFormats(rawFormat) {
 
 // ----- EVENTS -----
 
-const eventsData = dataLookup('events');
+const eventsData = dataLookup('<%= Event.data_file_handle %>');
+
+const preferredFormatsData = dataLookup('<%= PreferredFormat.data_file_handle %>');
+const preferredFormatsLookup = _.keyBy(preferredFormatsData, 'event_id');
 
 export const events = {
   official: _.map(_.filter(eventsData, 'official'), extendEvents),
@@ -101,7 +109,7 @@ function extendEvents(rawEvent) {
     ...rawEvent,
     name: I18n.t(`events.${rawEvent.id}`),
     formats() {
-      return rawEvent.formatIds.map(formatId => formats.byId[formatId]);
+      return preferredFormatsLookup[rawEvent.id].map((prefFormat) => formats.byId[prefFormat.format_id]);
     },
     recommendedFormat() {
       return this.formats()[0];
@@ -124,7 +132,7 @@ function extendGenders(gender) {
 
 // ----- ROUND TYPES -----
 
-const roundTypeData = dataLookup('roundtypes');
+const roundTypeData = dataLookup('<%= RoundType.data_file_handle %>');
 
 export const roundTypes = {
   byId: _.mapValues(_.keyBy(roundTypeData, 'id'), extendRoundTypes),
@@ -174,7 +182,7 @@ export const competitionMaxShortNameLength = <%= Competition::MAX_CELL_NAME_LENG
 
 // ----- CHAMPIONSHIPS -----
 
-const eligibleCountryForChampionshipData = dataLookup('eligible_country_iso2s_for_championship');
+const eligibleCountryForChampionshipData = dataLookup('<%= EligibleCountryIso2ForChampionship.data_file_handle %>');
 
 export const championshipTypeWorld = '<%= Championship::CHAMPIONSHIP_TYPE_WORLD %>'
 
