@@ -17,7 +17,7 @@ class Api::V0::UsersController < Api::V0::ApiController
   def show_users_by_id
     user_ids = params.require(:ids)
     users = User.where(id: user_ids)
-    render status: :ok, json: { users: users }
+    render status: :ok, json: { users: users.map { |user| user.serializable_hash(include: ["avatar", "teams"]) } }
   end
 
   def show_user_by_wca_id
@@ -64,7 +64,7 @@ class Api::V0::UsersController < Api::V0::ApiController
 
     def show_user(user, show_rankings: false, private_attributes: [])
       if user
-        json = { user: user.serializable_hash(private_attributes: private_attributes) }
+        json = { user: user.serializable_hash(private_attributes: private_attributes, include: ["avatar", "teams"]) }
         if params[:upcoming_competitions]
           json[:upcoming_competitions] = user.accepted_competitions.select(&:upcoming?)
         end

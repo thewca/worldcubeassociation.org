@@ -1154,7 +1154,7 @@ class User < ApplicationRecord
     only: ["id", "wca_id", "name", "gender",
            "country_iso2", "created_at", "updated_at"],
     methods: ["url", "country", "delegate_status"],
-    include: ["avatar", "teams"],
+    include: ["avatar"],
   }.freeze
 
   def serializable_hash(options = nil)
