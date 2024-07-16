@@ -22,9 +22,9 @@ const dataLookup = (modelName) => {
  */
 
 // ----- COUNTRIES -----
-
-const realCountryData = loadRawData('<%= Country.data_file_handle %>.real')['states_list']['states'];
-const fictionalCountryData = dataLookup('<%= Country.data_file_handle %>.fictional');
+const realCountryRawData = loadRawData('<%= Country.data_file_handle %>.real');
+const realCountryData = _.flatMap(realCountryRawData['states_lists'], 'states');
+const fictionalCountryData = dataLookup('<%= Country.data_file_handle %>.fictive');
 
 const countryData = [...realCountryData, ...fictionalCountryData];
 
@@ -105,8 +105,8 @@ function extendFormats(rawFormat) {
 const preferredFormatsData = dataLookup('<%= PreferredFormat.data_file_handle %>');
 
 export const preferredFormats = {
-  byEventId: _.mapValues(_.keyBy(preferredFormatsData, 'eventId'), extendPreferredFormats),
-  byFormatId: _.mapValues(_.keyBy(preferredFormatsData, 'formatId'), extendPreferredFormats),
+  byEventId: _.mapValues(_.groupBy(preferredFormatsData, 'eventId'), extendPreferredFormats),
+  byFormatId: _.mapValues(_.groupBy(preferredFormatsData, 'formatId'), extendPreferredFormats),
 };
 
 function extendPreferredFormats(rawPreferredFormat) {
@@ -141,7 +141,7 @@ function extendEvents(rawEvent) {
     canChangeTimeLimit: !isFewestMoves && !isMultipleBlindfolded,
     isTimedEvent: !isFewestMoves && !isMultipleBlindfolded,
     formats() {
-      return preferredFormats.byEventId[rawEvent.id].map((prefFormat) => formats.byId[prefFormat.formatId]);
+      return preferredFormats.byEventId[this.id].map((prefFormat) => formats.byId[prefFormat.formatId]);
     },
     recommendedFormat() {
       return this.formats()[0];
