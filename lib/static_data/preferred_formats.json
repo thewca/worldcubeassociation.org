@@ -1,0 +1,152 @@
+[
+  {
+    "event_id": "333",
+    "format_id": "a",
+    "ranking": 1
+  },
+  {
+    "event_id": "222",
+    "format_id": "a",
+    "ranking": 1
+  },
+  {
+    "event_id": "444",
+    "format_id": "a",
+    "ranking": 1
+  },
+  {
+    "event_id": "555",
+    "format_id": "a",
+    "ranking": 1
+  },
+  {
+    "event_id": "666",
+    "format_id": "m",
+    "ranking": 1
+  },
+  {
+    "event_id": "777",
+    "format_id": "m",
+    "ranking": 1
+  },
+  {
+    "event_id": "333bf",
+    "format_id": "3",
+    "ranking": 1
+  },
+  {
+    "event_id": "333fm",
+    "format_id": "m",
+    "ranking": 1
+  },
+  {
+    "event_id": "333fm",
+    "format_id": "2",
+    "ranking": 2
+  },
+  {
+    "event_id": "333fm",
+    "format_id": "1",
+    "ranking": 3
+  },
+  {
+    "event_id": "333oh",
+    "format_id": "a",
+    "ranking": 1
+  },
+  {
+    "event_id": "clock",
+    "format_id": "a",
+    "ranking": 1
+  },
+  {
+    "event_id": "minx",
+    "format_id": "a",
+    "ranking": 1
+  },
+  {
+    "event_id": "pyram",
+    "format_id": "a",
+    "ranking": 1
+  },
+  {
+    "event_id": "skewb",
+    "format_id": "a",
+    "ranking": 1
+  },
+  {
+    "event_id": "sq1",
+    "format_id": "a",
+    "ranking": 1
+  },
+  {
+    "event_id": "444bf",
+    "format_id": "3",
+    "ranking": 1
+  },
+  {
+    "event_id": "555bf",
+    "format_id": "3",
+    "ranking": 1
+  },
+  {
+    "event_id": "333mbf",
+    "format_id": "1",
+    "ranking": 1
+  },
+  {
+    "event_id": "333mbf",
+    "format_id": "2",
+    "ranking": 2
+  },
+  {
+    "event_id": "333mbf",
+    "format_id": "3",
+    "ranking": 3
+  },
+  {
+    "event_id": "333ft",
+    "format_id": "a",
+    "ranking": 1
+  },
+  {
+    "event_id": "333ft",
+    "format_id": "3",
+    "ranking": 2
+  },
+  {
+    "event_id": "333ft",
+    "format_id": "2",
+    "ranking": 3
+  },
+  {
+    "event_id": "333ft",
+    "format_id": "1",
+    "ranking": 4
+  },
+  {
+    "event_id": "magic",
+    "format_id": "a",
+    "ranking": 1
+  },
+  {
+    "event_id": "mmagic",
+    "format_id": "a",
+    "ranking": 1
+  },
+  {
+    "event_id": "333mbo",
+    "format_id": "3",
+    "ranking": 1
+  },
+  {
+    "event_id": "333mbo",
+    "format_id": "2",
+    "ranking": 2
+  },
+  {
+    "event_id": "333mbo",
+    "format_id": "1",
+    "ranking": 3
+  }
+]

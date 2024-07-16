@@ -1,0 +1,47 @@
+[
+  {
+    "id": "1",
+    "sort_by": "single",
+    "sort_by_second": "average",
+    "expected_solve_count": 1,
+    "trim_fastest_n": 0,
+    "trim_slowest_n": 0,
+    "name": "Best of 1"
+  },
+  {
+    "id": "2",
+    "sort_by": "single",
+    "sort_by_second": "average",
+    "expected_solve_count": 2,
+    "trim_fastest_n": 0,
+    "trim_slowest_n": 0,
+    "name": "Best of 2"
+  },
+  {
+    "id": "3",
+    "sort_by": "single",
+    "sort_by_second": "average",
+    "expected_solve_count": 3,
+    "trim_fastest_n": 0,
+    "trim_slowest_n": 0,
+    "name": "Best of 3"
+  },
+  {
+    "id": "a",
+    "sort_by": "average",
+    "sort_by_second": "single",
+    "expected_solve_count": 5,
+    "trim_fastest_n": 1,
+    "trim_slowest_n": 1,
+    "name": "Average of 5"
+  },
+  {
+    "id": "m",
+    "sort_by": "average",
+    "sort_by_second": "single",
+    "expected_solve_count": 3,
+    "trim_fastest_n": 0,
+    "trim_slowest_n": 0,
+    "name": "Mean of 3"
+  }
+]
