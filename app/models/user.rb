@@ -506,7 +506,7 @@ class User < ApplicationRecord
   end
 
   def admin?
-    Rails.env.production? && EnvConfig.WCA_LIVE_SITE? ? software_team_admin? : software_team?
+    Rails.env.production? && EnvConfig.WCA_LIVE_SITE? ? software_team_admin? : (software_team? || software_team_admin?)
   end
 
   def any_kind_of_delegate?
@@ -637,6 +637,10 @@ class User < ApplicationRecord
     groups
   end
 
+  def panels_with_access
+    panel_list.keys.select { |panel_id| can_access_panel?(panel_id) }
+  end
+
   def permissions
     permissions = {
       can_attend_competitions: {
@@ -665,6 +669,9 @@ class User < ApplicationRecord
       },
       can_access_wfc_senior_matters: {
         scope: can_access_wfc_senior_matters? ? "*" : [],
+      },
+      can_access_panels: {
+        scope: panels_with_access,
       },
     }
     if banned?
@@ -864,7 +871,7 @@ class User < ApplicationRecord
   end
 
   def can_see_eligible_voters?
-    can_admin_results? || group_leader?(UserGroup.teams_committees_group_wec)
+    can_admin_results? || ethics_committee?
   end
 
   def get_cannot_delete_competition_reason(competition)
@@ -1345,7 +1352,7 @@ class User < ApplicationRecord
   end
 
   def can_access_at_least_one_panel?
-    panel_list.any? { |panel| can_access_panel?(panel[:id]) }
+    panels_with_access.any?
   end
 
   def subordinate_delegates
