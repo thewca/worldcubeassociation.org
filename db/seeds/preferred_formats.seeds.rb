@@ -1,3 +1,3 @@
 # frozen_string_literal: true
 
-StaticDataLoader.load_entities PreferredFormat
+PreferredFormat.load_static

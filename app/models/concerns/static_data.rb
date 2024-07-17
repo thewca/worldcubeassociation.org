@@ -9,9 +9,23 @@ module StaticData
     def parse_json_file(file_path, symbolize_names: true)
       ::JSON.parse(File.read(file_path), symbolize_names: symbolize_names)
     end
+
+    def write_json_file(file_path, hash_data)
+      json_output = ::JSON.pretty_generate(hash_data.as_json)
+
+      # Don't rewrite the file if it already exists and has the same content.
+      # It helps the asset pipeline or webpack understand that file wasn't changed.
+      if File.exist?(file_path) && File.read(file_path) == json_output
+        return
+      end
+
+      File.write(file_path, json_output)
+    end
   end
 
   included do
+    after_commit :write_json_data! if Rails.env.development?
+
     def self.data_file_handle
       self.name.pluralize.underscore
     end
@@ -34,6 +48,15 @@ module StaticData
 
     def self.dump_static
       self.all.as_json
+    end
+
+    def self.load_static
+      self.upsert_all(self.all_raw)
+    end
+
+    def self.write_json_data!
+      export_file = DATA_FOLDER.join("#{self.data_file_handle}.json")
+      self.write_json_file(export_file, self.dump_static)
     end
   end
 end
