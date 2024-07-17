@@ -28,7 +28,7 @@ class Country < ApplicationRecord
     all_tz
   end.freeze
 
-  FICTIVE_COUNTRY_DATA_PATH = StaticData::DATA_FOLDER.join("#{self.name.pluralize.underscore}.fictive.json")
+  FICTIVE_COUNTRY_DATA_PATH = StaticData::DATA_FOLDER.join("#{self.data_file_handle}.fictive.json")
   MULTIPLE_COUNTRIES = self.parse_json_file(FICTIVE_COUNTRY_DATA_PATH).freeze
 
   FICTIVE_IDS = MULTIPLE_COUNTRIES.pluck(:id).freeze
@@ -36,7 +36,7 @@ class Country < ApplicationRecord
 
   include LocalizedSortable
 
-  REAL_COUNTRY_DATA_PATH = StaticData::DATA_FOLDER.join("#{self.name.pluralize.underscore}.real.json")
+  REAL_COUNTRY_DATA_PATH = StaticData::DATA_FOLDER.join("#{self.data_file_handle}.real.json")
   WCA_STATES_JSON = self.parse_json_file(REAL_COUNTRY_DATA_PATH, symbolize_names: false).freeze
 
   WCA_COUNTRIES = WCA_STATES_JSON["states_lists"].flat_map do |list|
@@ -52,8 +52,20 @@ class Country < ApplicationRecord
     MULTIPLE_COUNTRIES,
   ].flatten.freeze
 
-  def self.raw_static_data
+  def self.all_raw
     ALL_STATES_RAW
+  end
+
+  # As of writing this comment, the actual `Countries` data is controlled by WRC
+  # and we only have control over the 'fictive' values. We parse the WRC file above and override
+  # the `all_raw` getter to include the real countries, but they're not part of our static dataset in the stricter sense
+
+  def self.dump_static
+    MULTIPLE_COUNTRIES
+  end
+
+  def self.data_file_handle
+    "#{self.name.pluralize.underscore}.fictive"
   end
 
   belongs_to :continent, foreign_key: :continentId

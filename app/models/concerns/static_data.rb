@@ -30,9 +30,12 @@ module StaticData
       self.name.pluralize.underscore
     end
 
+    def self.data_file_path
+      DATA_FOLDER.join("#{self.data_file_handle}.json")
+    end
+
     def self.static_json_data
-      import_file = DATA_FOLDER.join("#{self.data_file_handle}.json")
-      self.parse_json_file(import_file)
+      self.parse_json_file(self.data_file_path)
     end
 
     def self.all_raw
@@ -55,8 +58,7 @@ module StaticData
     end
 
     def self.write_json_data!
-      export_file = DATA_FOLDER.join("#{self.data_file_handle}.json")
-      self.write_json_file(export_file, self.dump_static)
+      self.write_json_file(self.data_file_path, self.dump_static)
     end
   end
 end
