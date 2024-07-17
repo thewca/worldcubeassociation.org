@@ -16,13 +16,24 @@ module StaticData
       self.name.pluralize.underscore
     end
 
-    def self.raw_static_data
+    def self.static_json_data
       import_file = DATA_FOLDER.join("#{self.data_file_handle}.json")
       self.parse_json_file(import_file)
     end
 
-    def self.static_data
-      self.raw_static_data.map { |attributes| self.new(**attributes) }
+    def self.all_raw
+      self.static_json_data
+    end
+
+    def self.all_static
+      self.all_raw.map do |attributes|
+        column_attributes = attributes.slice(*self.column_names)
+        self.new(**column_attributes)
+      end
+    end
+
+    def self.dump_static
+      self.all.as_json
     end
   end
 end

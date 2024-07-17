@@ -9,15 +9,6 @@ class Format < ApplicationRecord
   has_many :preferred_formats
   has_many :events, through: :preferred_formats
 
-  # see https://www.worldcubeassociation.org/regulations/#9b1
-  ALLOWED_FIRST_PHASE_FORMATS = {
-    "1" => [],
-    "2" => ["1"],
-    "3" => ["1", "2"],
-    "m" => ["1", "2"],
-    "a" => ["2"],
-  }.freeze
-
   def name
     I18n.t("formats.#{id}", default: self[:name])
   end
@@ -27,7 +18,13 @@ class Format < ApplicationRecord
   end
 
   def allowed_first_phase_formats
-    ALLOWED_FIRST_PHASE_FORMATS[self.id]
+    {
+      "1" => [],
+      "2" => ["1"],
+      "3" => ["1", "2"],
+      "m" => ["1", "2"],
+      "a" => ["2"], # https://www.worldcubeassociation.org/regulations/#9b1
+    }[self.id]
   end
 
   DEFAULT_SERIALIZE_OPTIONS = {

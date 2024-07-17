@@ -5,7 +5,7 @@ class Championship < ApplicationRecord
   CHAMPIONSHIP_TYPE_WORLD = "world"
   MAJOR_CHAMPIONSHIP_TYPES = [
     CHAMPIONSHIP_TYPE_WORLD,
-    *Continent::EARTH_CONTINENTS.pluck(:id),
+    *Continent::REAL_CONTINENTS.pluck(:id),
   ].freeze
   CHAMPIONSHIP_TYPES = [
     *MAJOR_CHAMPIONSHIP_TYPES,

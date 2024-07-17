@@ -82,6 +82,6 @@ module StaticDataLoader
   end
 
   def self.load_entities(model)
-    model.upsert_all(model.raw_static_data)
+    model.upsert_all(model.all_raw)
   end
 end

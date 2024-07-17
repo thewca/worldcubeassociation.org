@@ -9,7 +9,7 @@ class Continent < ApplicationRecord
   include LocalizedSortable
   include StaticData
 
-  EARTH_CONTINENTS = self.raw_static_data.select { |c| !FICTIVE_IDS.include?(c[:id]) }.freeze
+  REAL_CONTINENTS = self.all_raw.select { |c| !FICTIVE_IDS.include?(c[:id]) }.freeze
 
   has_many :countries, foreign_key: :continentId
 

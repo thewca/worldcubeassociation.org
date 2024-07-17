@@ -17,14 +17,6 @@ class Event < ApplicationRecord
 
   default_scope -> { order(:rank) }
 
-  EVENTS_WITHOUT_CUTOFF = %w[333bf 444bf 555bf].freeze
-  MULTIPLE_BLINDFOLDED_EVENTS = %w[333mbf 333mbo].freeze
-  FEWEST_MOVES_EVENTS = %w[333fm].freeze
-  FAST_EVENTS = %w[333 222 444 333oh clock mega pyram skewb sq1].freeze
-
-  UNOFFICIAL_RANK = 990
-  MAX_RANK = 999
-
   def name
     I18n.t(id, scope: :events)
   end
@@ -39,19 +31,19 @@ class Event < ApplicationRecord
 
   # Pay special attention to the difference between .. (two dots) and ... (three dots)
   # which map to different operators < and <= in SQL (inclusive VS exclusive range)
-  scope :official, -> { where(rank: ...UNOFFICIAL_RANK) }
-  scope :deprecated, -> { where(rank: UNOFFICIAL_RANK..MAX_RANK) }
+  scope :official, -> { where(rank: ...990) }
+  scope :deprecated, -> { where(rank: 990..999) }
 
   def recommended_format
     preferred_formats.first&.format
   end
 
   def official?
-    rank < UNOFFICIAL_RANK
+    rank < 990
   end
 
   def deprecated?
-    UNOFFICIAL_RANK <= rank && rank <= MAX_RANK
+    990 <= rank && rank < 1000
   end
 
   # See https://www.worldcubeassociation.org/regulations/#9f12
@@ -60,11 +52,11 @@ class Event < ApplicationRecord
   end
 
   def fewest_moves?
-    FEWEST_MOVES_EVENTS.include?(self.id)
+    self.id == "333fm"
   end
 
   def multiple_blindfolded?
-    MULTIPLE_BLINDFOLDED_EVENTS.include?(self.id)
+    self.id == "333mbf" || self.id == "333mbo"
   end
 
   def can_change_time_limit?
@@ -72,12 +64,18 @@ class Event < ApplicationRecord
   end
 
   def can_have_cutoff?
-    !EVENTS_WITHOUT_CUTOFF.include?(self.id)
+    self.id != "333bf" && self.id != "444bf" && self.id != "555bf"
   end
 
   # Events that are generally fast enough to never need to go over the default 10 minute time limit
   def fast_event?
-    FAST_EVENTS.include?(self.id)
+    ['333', '222', '444', '333oh', 'clock', 'mega', 'pyram', 'skewb', 'sq1'].include?(self.id)
+  end
+
+  def self.dump_static
+    self.includes(:preferred_formats, :formats).order(:rank).as_json(
+      only: %w[id rank format],
+    )
   end
 
   alias_method :can_change_time_limit, :can_change_time_limit?
