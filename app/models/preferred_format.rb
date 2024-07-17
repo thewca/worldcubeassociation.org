@@ -11,4 +11,9 @@ class PreferredFormat < ApplicationRecord
   end
 
   default_scope -> { order(:ranking) }
+
+  def self.dump_static
+    # In the ORDER BY call, `rank` comes from Event, `ranking` comes from PreferredFormat.
+    self.unscoped.joins(:event).order(:rank, :ranking).as_json
+  end
 end
