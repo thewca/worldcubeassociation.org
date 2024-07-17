@@ -200,7 +200,6 @@ module DatabaseDumper
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
-          cellName
           format
           name
           rank
@@ -963,11 +962,14 @@ module DatabaseDumper
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
-          cellName
           format
           name
           rank
         ),
+        fake_values: {
+          # Copy over column to keep backwards compatibility
+          "cellName" => "name",
+        },
       ),
     }.freeze,
     "Formats" => {

@@ -25,10 +25,6 @@ class Event < ApplicationRecord
     I18n.t(id, scope: :events, locale: locale)
   end
 
-  def cellName
-    raise "#cellName is deprecated, and will eventually be removed. Use #name instead. See https://github.com/thewca/worldcubeassociation.org/issues/1054."
-  end
-
   # Pay special attention to the difference between .. (two dots) and ... (three dots)
   # which map to different operators < and <= in SQL (inclusive VS exclusive range)
   scope :official, -> { where(rank: ...990) }

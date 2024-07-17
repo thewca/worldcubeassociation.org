@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_07_17_095605) do
+ActiveRecord::Schema[7.1].define(version: 2024_07_17_123410) do
   create_table "Competitions", id: { type: :string, limit: 32, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", limit: 50, default: "", null: false
     t.string "cityName", limit: 50, default: "", null: false
@@ -147,7 +147,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_17_095605) do
     t.string "name", limit: 54, default: "", null: false
     t.integer "rank", default: 0, null: false
     t.string "format", limit: 10, default: "", null: false
-    t.string "cellName", limit: 45, default: "", null: false
   end
 
   create_table "Formats", id: { type: :string, limit: 1, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
