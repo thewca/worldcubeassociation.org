@@ -18,24 +18,31 @@ require 'active_support/concern'
 module Cachable
   extend ActiveSupport::Concern
 
+  included do
+    thread_mattr_accessor :models_by_id
+
+    after_commit :clear_cache
+
+    def clear_cache
+      self.models_by_id = nil
+    end
+  end
+
   class_methods do
-    # We want to keep the cache in a class variable.
-    # Assuming we have a class like Country < AbstractCachedModel, we want the
-    # class variable within Country, not within AbstractCachedModel.
-    # Using directly @@models_by_id would set it in the latter, so we need to rely
-    # on 'class_variable_get' and 'class_variable_set' that will act on the extending
-    # class (here Country).
     def c_all_by_id
-      class_variable_set(:@@models_by_id, all.index_by(&:id)) unless class_variable_defined?(:@@models_by_id)
-      class_variable_get(:@@models_by_id)
+      self.models_by_id ||= self.all.index_by(&:id)
     end
 
     def c_find(id)
-      c_all_by_id[id]
+      self.c_all_by_id[id]
     end
 
     def c_find!(id)
-      self.c_find(id) || raise("id not found: #{id}")
+      self.c_find(id) || raise("Cached model #{self.name} ID not found: #{id}")
+    end
+
+    def c_values
+      self.c_all_by_id.values
     end
   end
 end
