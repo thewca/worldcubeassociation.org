@@ -897,6 +897,7 @@ DEPENDENCIES
   openssl
   overcommit
   premailer-rails
+  rack (~> 2)
   rack-cors
   rails
   rails-controller-testing
