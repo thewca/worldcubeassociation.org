@@ -154,6 +154,8 @@ end
 
 group :production do
   gem 'unicorn'
+  # Unicorn is incompatible with Rack 3, but doesn't specify it explicitly…
+  gem 'rack', '~> 2'
   gem 'newrelic_rpm'
   gem 'wkhtmltopdf-binary-ng'
 end
