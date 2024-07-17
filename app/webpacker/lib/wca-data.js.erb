@@ -1,13 +1,9 @@
 import _ from 'lodash';
 import I18n from './i18n';
 
-const dataFileContext = require.context('rails_data');
-const loadRawData = (modelName) => dataFileContext(`./${modelName}.json`);
-
 const camelizeKeys = (obj) => _.mapKeys(obj, (v, k) => _.camelCase(k))
 
-const dataLookup = (modelName) => {
-  const rawEntities = loadRawData(modelName);
+const loadStaticData = (rawEntities) => {
   return _.map(rawEntities, camelizeKeys);
 };
 
@@ -22,11 +18,10 @@ const dataLookup = (modelName) => {
  */
 
 // ----- COUNTRIES -----
-const realCountryRawData = loadRawData('<%= Country.data_file_handle %>.real');
-const realCountryData = _.flatMap(realCountryRawData['states_lists'], 'states');
-const fictionalCountryData = dataLookup('<%= Country.data_file_handle %>.fictive');
+const fictionalCountryIds = <%= Country::FICTIVE_IDS.to_json.html_safe %>;
 
-const countryData = [...realCountryData, ...fictionalCountryData];
+const countryData = loadStaticData(<%= Country.all_raw.to_json.html_safe %>);
+const realCountryData = countryData.filter((c) => !fictionalCountryIds.includes(c.id));
 
 export const countries = {
   byIso2: _.mapValues(_.keyBy(countryData, 'iso2'), extendCountries),
@@ -42,9 +37,9 @@ function extendCountries(country) {
 
 // ----- CONTINENTS -----
 
-const continentData = dataLookup('<%= Continent.data_file_handle %>');
+const continentData = loadStaticData(<%= Continent.all_raw.to_json.html_safe %>);
 
-const fictionalContinentIds = <%= Continent.fictive_ids.to_json.html_safe %>;
+const fictionalContinentIds = <%= Continent::FICTIVE_IDS.to_json.html_safe %>;
 const realContinents = continentData.filter((c) => !fictionalContinentIds.includes(c.id));
 
 export const continents = {
@@ -83,9 +78,7 @@ function extendCurrenciesData(rawFormat) {
 
 // ----- FORMATS -----
 
-const formatsData = dataLookup('<%= Format.data_file_handle %>');
-
-const allowedFirstPhaseFormats = <%= Format::ALLOWED_FIRST_PHASE_FORMATS.to_json.html_safe %>;
+const formatsData = loadStaticData(<%= Format.all_raw.to_json.html_safe %>);
 
 export const formats = {
   byId: _.mapValues(_.keyBy(formatsData, 'id'), extendFormats),
@@ -96,33 +89,12 @@ function extendFormats(rawFormat) {
     ...rawFormat,
     name: I18n.t(`formats.${rawFormat.id}`),
     shortName: I18n.t(`formats.short.${rawFormat.id}`),
-    allowedFirstPhaseFormats: allowedFirstPhaseFormats[rawFormat.id],
   };
-}
-
-// ----- PREFERRED FORMATS -----
-
-const preferredFormatsData = dataLookup('<%= PreferredFormat.data_file_handle %>');
-
-export const preferredFormats = {
-  byEventId: _.mapValues(_.groupBy(preferredFormatsData, 'eventId'), extendPreferredFormats),
-  byFormatId: _.mapValues(_.groupBy(preferredFormatsData, 'formatId'), extendPreferredFormats),
-};
-
-function extendPreferredFormats(rawPreferredFormat) {
-  // Simple identity right now but we may want to add cool stuff in the future
-  return rawPreferredFormat;
 }
 
 // ----- EVENTS -----
 
-const eventsData = dataLookup('<%= Event.data_file_handle %>');
-
-const eventsWithoutCutoff = <%= Event::EVENTS_WITHOUT_CUTOFF.to_json.html_safe %>;
-const multipleBlindfoldedEvents = <%= Event::MULTIPLE_BLINDFOLDED_EVENTS.to_json.html_safe %>;
-const fewestMovesEvents = <%= Event::FEWEST_MOVES_EVENTS.to_json.html_safe %>;
-
-const eventsUnofficialRank = <%= Event::UNOFFICIAL_RANK.to_json.html_safe %>;
+const eventsData = loadStaticData(<%= Event.all_raw.to_json.html_safe %>);
 
 export const events = {
   official: _.filter(_.map(eventsData, extendEvents), 'isOfficial'),
@@ -130,23 +102,11 @@ export const events = {
 };
 
 function extendEvents(rawEvent) {
-  const canHaveCutoff = eventsWithoutCutoff.includes(rawEvent.id);
-  const isMultipleBlindfolded = multipleBlindfoldedEvents.includes(rawEvent.id);
-  const isFewestMoves = fewestMovesEvents.includes(rawEvent.id);
-
-  const isOfficial = rawEvent.rank < eventsUnofficialRank;
-
   return {
     ...rawEvent,
     name: I18n.t(`events.${rawEvent.id}`),
-    canHaveCutoff,
-    isFewestMoves,
-    isMultipleBlindfolded,
-    canChangeTimeLimit: !isFewestMoves && !isMultipleBlindfolded,
-    isTimedEvent: !isFewestMoves && !isMultipleBlindfolded,
-    isOfficial,
     formats() {
-      return preferredFormats.byEventId[this.id].map((prefFormat) => formats.byId[prefFormat.formatId]);
+      return this.formatIds.map(formatId => formats.byId[formatId]);
     },
     recommendedFormat() {
       return this.formats()[0];
@@ -169,7 +129,7 @@ function extendGenders(gender) {
 
 // ----- ROUND TYPES -----
 
-const roundTypeData = dataLookup('<%= RoundType.data_file_handle %>');
+const roundTypeData = loadStaticData(<%= RoundType.all_raw.to_json.html_safe %>);
 
 export const roundTypes = {
   byId: _.mapValues(_.keyBy(roundTypeData, 'id'), extendRoundTypes),
@@ -225,7 +185,7 @@ export const competitionMaxShortNameLength = <%= Competition::MAX_CELL_NAME_LENG
 
 // ----- CHAMPIONSHIPS -----
 
-const eligibleCountryForChampionshipData = dataLookup('<%= EligibleCountryIso2ForChampionship.data_file_handle %>');
+const eligibleCountryForChampionshipData = loadStaticData(<%= EligibleCountryIso2ForChampionship.all_raw.to_json.html_safe %>);
 
 export const championshipTypeWorld = '<%= Championship::CHAMPIONSHIP_TYPE_WORLD %>'
 
