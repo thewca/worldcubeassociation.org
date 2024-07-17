@@ -1,149 +1,305 @@
 [
   {
     "id": "333",
-    "name": "3x3x3 Cube",
     "rank": 10,
     "format": "time",
-    "cellName": "3x3x3 Cube"
+    "name": "3x3x3 Cube",
+    "can_change_time_limit": true,
+    "can_have_cutoff": true,
+    "is_timed_event": true,
+    "is_fewest_moves": false,
+    "is_multiple_blindfolded": false,
+    "format_ids": [
+      "a"
+    ]
   },
   {
     "id": "222",
-    "name": "2x2x2 Cube",
     "rank": 20,
     "format": "time",
-    "cellName": "2x2x2 Cube"
+    "name": "2x2x2 Cube",
+    "can_change_time_limit": true,
+    "can_have_cutoff": true,
+    "is_timed_event": true,
+    "is_fewest_moves": false,
+    "is_multiple_blindfolded": false,
+    "format_ids": [
+      "a"
+    ]
   },
   {
     "id": "444",
-    "name": "4x4x4 Cube",
     "rank": 30,
     "format": "time",
-    "cellName": "4x4x4 Cube"
+    "name": "4x4x4 Cube",
+    "can_change_time_limit": true,
+    "can_have_cutoff": true,
+    "is_timed_event": true,
+    "is_fewest_moves": false,
+    "is_multiple_blindfolded": false,
+    "format_ids": [
+      "a"
+    ]
   },
   {
     "id": "555",
-    "name": "5x5x5 Cube",
     "rank": 40,
     "format": "time",
-    "cellName": "5x5x5 Cube"
+    "name": "5x5x5 Cube",
+    "can_change_time_limit": true,
+    "can_have_cutoff": true,
+    "is_timed_event": true,
+    "is_fewest_moves": false,
+    "is_multiple_blindfolded": false,
+    "format_ids": [
+      "a"
+    ]
   },
   {
     "id": "666",
-    "name": "6x6x6 Cube",
     "rank": 50,
     "format": "time",
-    "cellName": "6x6x6 Cube"
+    "name": "6x6x6 Cube",
+    "can_change_time_limit": true,
+    "can_have_cutoff": true,
+    "is_timed_event": true,
+    "is_fewest_moves": false,
+    "is_multiple_blindfolded": false,
+    "format_ids": [
+      "m"
+    ]
   },
   {
     "id": "777",
-    "name": "7x7x7 Cube",
     "rank": 60,
     "format": "time",
-    "cellName": "7x7x7 Cube"
+    "name": "7x7x7 Cube",
+    "can_change_time_limit": true,
+    "can_have_cutoff": true,
+    "is_timed_event": true,
+    "is_fewest_moves": false,
+    "is_multiple_blindfolded": false,
+    "format_ids": [
+      "m"
+    ]
   },
   {
     "id": "333bf",
-    "name": "3x3x3 Blindfolded",
     "rank": 70,
     "format": "time",
-    "cellName": "3x3x3 Blindfolded"
+    "name": "3x3x3 Blindfolded",
+    "can_change_time_limit": true,
+    "can_have_cutoff": false,
+    "is_timed_event": true,
+    "is_fewest_moves": false,
+    "is_multiple_blindfolded": false,
+    "format_ids": [
+      "3"
+    ]
   },
   {
     "id": "333fm",
-    "name": "3x3x3 Fewest Moves",
     "rank": 80,
     "format": "number",
-    "cellName": "3x3x3 Fewest Moves"
+    "name": "3x3x3 Fewest Moves",
+    "can_change_time_limit": false,
+    "can_have_cutoff": true,
+    "is_timed_event": false,
+    "is_fewest_moves": true,
+    "is_multiple_blindfolded": false,
+    "format_ids": [
+      "m",
+      "2",
+      "1"
+    ]
   },
   {
     "id": "333oh",
-    "name": "3x3x3 One-Handed",
     "rank": 90,
     "format": "time",
-    "cellName": "3x3x3 One-Handed"
+    "name": "3x3x3 One-Handed",
+    "can_change_time_limit": true,
+    "can_have_cutoff": true,
+    "is_timed_event": true,
+    "is_fewest_moves": false,
+    "is_multiple_blindfolded": false,
+    "format_ids": [
+      "a"
+    ]
   },
   {
     "id": "clock",
-    "name": "Clock",
     "rank": 110,
     "format": "time",
-    "cellName": "Clock"
+    "name": "Clock",
+    "can_change_time_limit": true,
+    "can_have_cutoff": true,
+    "is_timed_event": true,
+    "is_fewest_moves": false,
+    "is_multiple_blindfolded": false,
+    "format_ids": [
+      "a"
+    ]
   },
   {
     "id": "minx",
-    "name": "Megaminx",
     "rank": 120,
     "format": "time",
-    "cellName": "Megaminx"
+    "name": "Megaminx",
+    "can_change_time_limit": true,
+    "can_have_cutoff": true,
+    "is_timed_event": true,
+    "is_fewest_moves": false,
+    "is_multiple_blindfolded": false,
+    "format_ids": [
+      "a"
+    ]
   },
   {
     "id": "pyram",
-    "name": "Pyraminx",
     "rank": 130,
     "format": "time",
-    "cellName": "Pyraminx"
+    "name": "Pyraminx",
+    "can_change_time_limit": true,
+    "can_have_cutoff": true,
+    "is_timed_event": true,
+    "is_fewest_moves": false,
+    "is_multiple_blindfolded": false,
+    "format_ids": [
+      "a"
+    ]
   },
   {
     "id": "skewb",
-    "name": "Skewb",
     "rank": 140,
     "format": "time",
-    "cellName": "Skewb"
+    "name": "Skewb",
+    "can_change_time_limit": true,
+    "can_have_cutoff": true,
+    "is_timed_event": true,
+    "is_fewest_moves": false,
+    "is_multiple_blindfolded": false,
+    "format_ids": [
+      "a"
+    ]
   },
   {
     "id": "sq1",
-    "name": "Square-1",
     "rank": 150,
     "format": "time",
-    "cellName": "Square-1"
+    "name": "Square-1",
+    "can_change_time_limit": true,
+    "can_have_cutoff": true,
+    "is_timed_event": true,
+    "is_fewest_moves": false,
+    "is_multiple_blindfolded": false,
+    "format_ids": [
+      "a"
+    ]
   },
   {
     "id": "444bf",
-    "name": "4x4x4 Blindfolded",
     "rank": 160,
     "format": "time",
-    "cellName": "4x4x4 Blindfolded"
+    "name": "4x4x4 Blindfolded",
+    "can_change_time_limit": true,
+    "can_have_cutoff": false,
+    "is_timed_event": true,
+    "is_fewest_moves": false,
+    "is_multiple_blindfolded": false,
+    "format_ids": [
+      "3"
+    ]
   },
   {
     "id": "555bf",
-    "name": "5x5x5 Blindfolded",
     "rank": 170,
     "format": "time",
-    "cellName": "5x5x5 Blindfolded"
+    "name": "5x5x5 Blindfolded",
+    "can_change_time_limit": true,
+    "can_have_cutoff": false,
+    "is_timed_event": true,
+    "is_fewest_moves": false,
+    "is_multiple_blindfolded": false,
+    "format_ids": [
+      "3"
+    ]
   },
   {
     "id": "333mbf",
-    "name": "3x3x3 Multi-Blind",
     "rank": 180,
     "format": "multi",
-    "cellName": "3x3x3 Multi-Blind"
+    "name": "3x3x3 Multi-Blind",
+    "can_change_time_limit": false,
+    "can_have_cutoff": true,
+    "is_timed_event": false,
+    "is_fewest_moves": false,
+    "is_multiple_blindfolded": true,
+    "format_ids": [
+      "1",
+      "2",
+      "3"
+    ]
   },
   {
     "id": "333ft",
-    "name": "3x3x3 With Feet",
     "rank": 996,
     "format": "time",
-    "cellName": "3x3x3 With Feet"
+    "name": "3x3x3 With Feet",
+    "can_change_time_limit": true,
+    "can_have_cutoff": true,
+    "is_timed_event": true,
+    "is_fewest_moves": false,
+    "is_multiple_blindfolded": false,
+    "format_ids": [
+      "a",
+      "3",
+      "2",
+      "1"
+    ]
   },
   {
     "id": "magic",
-    "name": "Magic",
     "rank": 997,
     "format": "time",
-    "cellName": "Magic"
+    "name": "Magic",
+    "can_change_time_limit": true,
+    "can_have_cutoff": true,
+    "is_timed_event": true,
+    "is_fewest_moves": false,
+    "is_multiple_blindfolded": false,
+    "format_ids": [
+      "a"
+    ]
   },
   {
     "id": "mmagic",
-    "name": "Master Magic",
     "rank": 998,
     "format": "time",
-    "cellName": "Master Magic"
+    "name": "Master Magic",
+    "can_change_time_limit": true,
+    "can_have_cutoff": true,
+    "is_timed_event": true,
+    "is_fewest_moves": false,
+    "is_multiple_blindfolded": false,
+    "format_ids": [
+      "a"
+    ]
   },
   {
     "id": "333mbo",
-    "name": "3x3x3 Multi-Blind Old Style",
     "rank": 999,
     "format": "multi",
-    "cellName": "3x3x3 Multi-Blind Old Style"
+    "name": "3x3x3 Multi-Blind Old Style",
+    "can_change_time_limit": false,
+    "can_have_cutoff": true,
+    "is_timed_event": false,
+    "is_fewest_moves": false,
+    "is_multiple_blindfolded": true,
+    "format_ids": [
+      "3",
+      "2",
+      "1"
+    ]
   }
 ]

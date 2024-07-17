@@ -6,7 +6,11 @@
     "expected_solve_count": 1,
     "trim_fastest_n": 0,
     "trim_slowest_n": 0,
-    "name": "Best of 1"
+    "name": "Best of 1",
+    "short_name": "Bo1",
+    "allowed_first_phase_formats": [
+
+    ]
   },
   {
     "id": "2",
@@ -15,7 +19,11 @@
     "expected_solve_count": 2,
     "trim_fastest_n": 0,
     "trim_slowest_n": 0,
-    "name": "Best of 2"
+    "name": "Best of 2",
+    "short_name": "Bo2",
+    "allowed_first_phase_formats": [
+      "1"
+    ]
   },
   {
     "id": "3",
@@ -24,7 +32,12 @@
     "expected_solve_count": 3,
     "trim_fastest_n": 0,
     "trim_slowest_n": 0,
-    "name": "Best of 3"
+    "name": "Best of 3",
+    "short_name": "Bo3",
+    "allowed_first_phase_formats": [
+      "1",
+      "2"
+    ]
   },
   {
     "id": "a",
@@ -33,7 +46,11 @@
     "expected_solve_count": 5,
     "trim_fastest_n": 1,
     "trim_slowest_n": 1,
-    "name": "Average of 5"
+    "name": "Average of 5",
+    "short_name": "Ao5",
+    "allowed_first_phase_formats": [
+      "2"
+    ]
   },
   {
     "id": "m",
@@ -42,6 +59,11 @@
     "expected_solve_count": 3,
     "trim_fastest_n": 0,
     "trim_slowest_n": 0,
-    "name": "Mean of 3"
+    "name": "Mean of 3",
+    "short_name": "Mo3",
+    "allowed_first_phase_formats": [
+      "1",
+      "2"
+    ]
   }
 ]
