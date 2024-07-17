@@ -84,7 +84,7 @@ class Event < ApplicationRecord
   DEFAULT_SERIALIZE_OPTIONS = {
     only: ["id"],
     methods: ["name", "can_change_time_limit", "can_have_cutoff", "is_timed_event",
-              "is_fewest_moves", "is_multiple_blindfolded", "format_ids"],
+              "is_fewest_moves", "is_multiple_blindfolded", "is_official", "format_ids"],
   }.freeze
 
   def serializable_hash(options = nil)
