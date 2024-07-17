@@ -27,6 +27,10 @@ module Microservices
       "/api/internal/v1/#{competition_id}/registrations"
     end
 
+    def self.get_registration_path(attendee_id)
+      "/api/internal/v1/#{attendee_id}"
+    end
+
     def self.get_competitor_count_path(competition_id)
       "/api/v1/#{competition_id}/count"
     end
@@ -94,6 +98,11 @@ module Microservices
         db_registrations = registrations.map { |reg| reg.slice('competition_id', 'user_id') }
         MicroserviceRegistration.upsert_all(db_registrations)
       end
+    end
+
+    def self.registration_by_id(attendee_id)
+      response = self.registration_connection.get(self.get_registration_path(attendee_id))
+      response.body
     end
   end
 end
