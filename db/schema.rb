@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_07_16_145605) do
+ActiveRecord::Schema[7.1].define(version: 2024_07_17_095605) do
   create_table "Competitions", id: { type: :string, limit: 32, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", limit: 50, default: "", null: false
     t.string "cityName", limit: 50, default: "", null: false
@@ -633,6 +633,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_16_145605) do
     t.string "name", limit: 255
     t.text "content"
     t.integer "display_order"
+    t.index ["competition_id"], name: "index_competition_tabs_on_competition_id"
     t.index ["display_order", "competition_id"], name: "index_competition_tabs_on_display_order_and_competition_id", unique: true
   end
 
@@ -1128,6 +1129,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_16_145605) do
     t.datetime "updated_at", precision: nil, null: false
     t.bigint "parent_record_id"
     t.index ["parent_record_id"], name: "fk_rails_6ad225b020"
+    t.index ["stripe_id"], name: "index_stripe_records_on_stripe_id"
     t.index ["stripe_status"], name: "index_stripe_records_on_stripe_status"
   end
 
