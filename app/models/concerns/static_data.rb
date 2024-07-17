@@ -42,11 +42,13 @@ module StaticData
       self.static_json_data
     end
 
+    def self.all_raw_sanitized
+      column_symbols = self.column_names.map(&:to_sym)
+      self.all_raw.map { |attributes| attributes.slice(*column_symbols) }
+    end
+
     def self.all_static
-      self.all_raw.map do |attributes|
-        column_attributes = attributes.slice(*self.column_names)
-        self.new(**column_attributes)
-      end
+      self.all_raw_sanitized.map { |attributes| self.new(**attributes) }
     end
 
     def self.dump_static
@@ -54,7 +56,7 @@ module StaticData
     end
 
     def self.load_json_data!
-      self.upsert_all(self.all_raw)
+      self.upsert_all(self.all_raw_sanitized)
     end
 
     def self.write_json_data!
