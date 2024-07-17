@@ -1,3 +1,3 @@
 # frozen_string_literal: true
 
-Continent.load_static
+Continent.load_json_data!

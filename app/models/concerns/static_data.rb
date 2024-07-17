@@ -53,7 +53,7 @@ module StaticData
       self.all.as_json
     end
 
-    def self.load_static
+    def self.load_json_data!
       self.upsert_all(self.all_raw)
     end
 
