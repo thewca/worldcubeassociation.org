@@ -31,13 +31,13 @@ class Country < ApplicationRecord
   FICTIVE_COUNTRY_DATA_PATH = StaticData::DATA_FOLDER.join("#{self.name.pluralize.underscore}.fictive.json")
   MULTIPLE_COUNTRIES = self.parse_json_file(FICTIVE_COUNTRY_DATA_PATH).freeze
 
-  FICTIVE_IDS = MULTIPLE_COUNTRIES.map { |c| c['id'] }.freeze
+  FICTIVE_IDS = MULTIPLE_COUNTRIES.pluck(:id).freeze
   NAME_LOOKUP_ATTRIBUTE = :iso2
 
   include LocalizedSortable
 
   REAL_COUNTRY_DATA_PATH = StaticData::DATA_FOLDER.join("#{self.name.pluralize.underscore}.real.json")
-  WCA_STATES_JSON = self.parse_json_file(REAL_COUNTRY_DATA_PATH).freeze
+  WCA_STATES_JSON = self.parse_json_file(REAL_COUNTRY_DATA_PATH, symbolize_names: false).freeze
 
   WCA_COUNTRIES = WCA_STATES_JSON["states_lists"].flat_map do |list|
     list["states"].map do |state|

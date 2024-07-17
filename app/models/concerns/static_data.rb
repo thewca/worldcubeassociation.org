@@ -6,8 +6,8 @@ module StaticData
   DATA_FOLDER = Rails.root.join('lib/static_data')
 
   class_methods do
-    def parse_json_file(file_path)
-      ::JSON.parse(File.read(file_path))
+    def parse_json_file(file_path, symbolize_names: true)
+      ::JSON.parse(File.read(file_path), symbolize_names: symbolize_names)
     end
   end
 
