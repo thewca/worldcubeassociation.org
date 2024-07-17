@@ -108,7 +108,6 @@ gem 'sidekiq'
 gem 'sidekiq-cron'
 gem 'after_commit_everywhere'
 gem 'slack-ruby-client'
-gem 'puma'
 
 group :development, :test do
   gem 'spring'
@@ -155,6 +154,7 @@ group :test do
 end
 
 group :production do
+  gem 'unicorn'
   gem 'newrelic_rpm'
   gem 'wkhtmltopdf-binary-ng'
 end
