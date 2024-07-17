@@ -122,8 +122,10 @@ const eventsWithoutCutoff = <%= Event::EVENTS_WITHOUT_CUTOFF.to_json.html_safe %
 const multipleBlindfoldedEvents = <%= Event::MULTIPLE_BLINDFOLDED_EVENTS.to_json.html_safe %>;
 const fewestMovesEvents = <%= Event::FEWEST_MOVES_EVENTS.to_json.html_safe %>;
 
+const eventsUnofficialRank = <%= Event::UNOFFICIAL_RANK.to_json.html_safe %>;
+
 export const events = {
-  official: _.map(_.filter(eventsData, 'official'), extendEvents),
+  official: _.filter(_.map(eventsData, extendEvents), 'isOfficial'),
   byId: _.mapValues(_.keyBy(eventsData, 'id'), extendEvents),
 };
 
@@ -131,6 +133,8 @@ function extendEvents(rawEvent) {
   const canHaveCutoff = eventsWithoutCutoff.includes(rawEvent.id);
   const isMultipleBlindfolded = multipleBlindfoldedEvents.includes(rawEvent.id);
   const isFewestMoves = fewestMovesEvents.includes(rawEvent.id);
+
+  const isOfficial = rawEvent.rank < eventsUnofficialRank;
 
   return {
     ...rawEvent,
@@ -140,6 +144,7 @@ function extendEvents(rawEvent) {
     isMultipleBlindfolded,
     canChangeTimeLimit: !isFewestMoves && !isMultipleBlindfolded,
     isTimedEvent: !isFewestMoves && !isMultipleBlindfolded,
+    isOfficial,
     formats() {
       return preferredFormats.byEventId[this.id].map((prefFormat) => formats.byId[prefFormat.formatId]);
     },

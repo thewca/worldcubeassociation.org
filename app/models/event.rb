@@ -22,6 +22,9 @@ class Event < ApplicationRecord
   FEWEST_MOVES_EVENTS = %w[333fm].freeze
   FAST_EVENTS = %w[333 222 444 333oh clock mega pyram skewb sq1].freeze
 
+  UNOFFICIAL_RANK = 990
+  MAX_RANK = 999
+
   def name
     I18n.t(id, scope: :events)
   end
@@ -36,19 +39,19 @@ class Event < ApplicationRecord
 
   # Pay special attention to the difference between .. (two dots) and ... (three dots)
   # which map to different operators < and <= in SQL (inclusive VS exclusive range)
-  scope :official, -> { where(rank: ...990) }
-  scope :deprecated, -> { where(rank: 990..999) }
+  scope :official, -> { where(rank: ...UNOFFICIAL_RANK) }
+  scope :deprecated, -> { where(rank: UNOFFICIAL_RANK..MAX_RANK) }
 
   def recommended_format
     preferred_formats.first&.format
   end
 
   def official?
-    rank < 990
+    rank < UNOFFICIAL_RANK
   end
 
   def deprecated?
-    990 <= rank && rank < 1000
+    UNOFFICIAL_RANK <= rank && rank <= MAX_RANK
   end
 
   # See https://www.worldcubeassociation.org/regulations/#9f12
