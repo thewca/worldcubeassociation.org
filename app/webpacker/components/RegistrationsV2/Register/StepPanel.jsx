@@ -24,7 +24,31 @@ const paymentStepConfig = {
 };
 
 const registrationOverviewConfig = {
-  index: -100,
+  index: 100,
+};
+
+const shouldShowCompleted = (isRegistered, hasPaid, key, index) => {
+  if (key === paymentStepConfig.key) {
+    return hasPaid;
+  }
+  if (key === competingStepConfig.key) {
+    return isRegistered;
+  }
+  if (key === requirementsStepConfig.key) {
+    return index > 0;
+  }
+};
+
+const shouldBeDisabled = (isRegistered, key, activeIndex, index) => {
+  if (key === paymentStepConfig.key) {
+    return !isRegistered && index > activeIndex;
+  }
+  if (key === competingStepConfig.key) {
+    return index > activeIndex;
+  }
+  if (key === requirementsStepConfig.key) {
+    return activeIndex !== 0;
+  }
 };
 
 export default function StepPanel({
@@ -71,8 +95,9 @@ export default function StepPanel({
           <Step
             key={stepConfig.key}
             active={activeIndex === index}
-            completed={registrationFinished || activeIndex > index}
-            disabled={!registrationFinished && activeIndex < index}
+            completed={shouldShowCompleted(isRegistered, hasPaid, stepConfig.key, activeIndex)}
+            disabled={shouldBeDisabled(isRegistered, stepConfig.key, activeIndex, index)}
+            onClick={() => setActiveIndex(index)}
           >
             <Step.Content>
               <Step.Title>{i18n.t(stepConfig.i18nKey)}</Step.Title>
