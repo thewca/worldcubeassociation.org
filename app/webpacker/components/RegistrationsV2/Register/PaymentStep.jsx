@@ -18,10 +18,10 @@ import Loading from '../../Requests/Loading';
 import i18n from '../../../lib/i18n';
 import useCheckboxState from '../../../lib/hooks/useCheckboxState';
 import AutonumericField from '../../wca/FormBuilder/input/AutonumericField';
+import RegistrationOverview from './RegistrationOverview';
 
 export default function PaymentStep({
   competitionInfo,
-  user,
   setDonationAmount,
   donationAmount,
   displayAmount,
@@ -85,11 +85,12 @@ export default function PaymentStep({
   };
 
   return (
-    <Segment>
-      <Form id="payment-form" onSubmit={handleSubmit}>
-        <PaymentElement id="payment-element" />
-        <Divider />
-        { competitionInfo.enable_donations && (
+    <>
+      <Segment>
+        <Form id="payment-form" onSubmit={handleSubmit}>
+          <PaymentElement id="payment-element" />
+          <Divider />
+          { competitionInfo.enable_donations && (
           <FormField>
             <Checkbox
               value={isDonationChecked}
@@ -112,23 +113,32 @@ export default function PaymentStep({
             />
             )}
           </FormField>
-        )}
-        { isLoading
-          ? <Loading />
-          : (
-            <>
-              <Header size="small">
-                Subtotal:
-                {' '}
-                {displayAmount}
-              </Header>
-              <Divider hidden />
-              <Button type="submit" primary disabled={isLoading || conversionFetching || !stripe || !elements} id="submit">
-                {i18n.t('registrations.payment_form.button_text')}
-              </Button>
-            </>
           )}
-      </Form>
-    </Segment>
+          { isLoading
+            ? <Loading />
+            : (
+              <>
+                <Header size="small">
+                  Subtotal:
+                  {' '}
+                  {displayAmount}
+                </Header>
+                <Divider hidden />
+                <Button type="submit" primary disabled={isLoading || conversionFetching || !stripe || !elements} id="submit">
+                  {i18n.t('registrations.payment_form.button_text')}
+                </Button>
+              </>
+            )}
+        </Form>
+      </Segment>
+      { registration
+        && (
+        <RegistrationOverview
+          registration={registration}
+          competitionInfo={competitionInfo}
+          nextStep={() => nextStep({ goBack: true })}
+        />
+        ) }
+    </>
   );
 }

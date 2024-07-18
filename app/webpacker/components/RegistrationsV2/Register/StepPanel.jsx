@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { Icon, Message, Step } from 'semantic-ui-react';
+import { Step } from 'semantic-ui-react';
 import CompetingStep from './CompetingStep';
 import RegistrationRequirements from './RegistrationRequirements';
 import StripeWrapper from './StripeWrapper';
@@ -95,6 +95,9 @@ export default function StepPanel({
             }
             if (overwrites?.toStart) {
               return 0;
+            }
+            if (overwrites?.goBack) {
+              return oldActiveIndex - 1;
             }
             if (oldActiveIndex === steps.length - 1) {
               return registrationOverviewConfig.index;
