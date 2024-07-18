@@ -30,7 +30,7 @@ module FinishUnfinishedPersons
     unfinished_persons = []
     available_id_spots = {} # to make sure that all of the newcomer IDs that we're creating in one batch are unique among each other
 
-    persons_cache = Person.select(:id, :wca_id, :name, :dob, :countryId)
+    persons_cache = Person.select(:id, :wca_id, :name, :dob, :countryId).to_a
 
     unfinished_person_results.each do |res|
       next if unfinished_persons.length >= MAX_PER_BATCH
@@ -81,7 +81,7 @@ module FinishUnfinishedPersons
     persons_with_probas = []
 
     # pre-cache probabilities, so that we avoid doing string computations on _every_ comparison
-    persons_cache.find_each do |p|
+    persons_cache.each do |p|
       p_roman_name = self.extract_roman_name(p.name)
 
       name_similarity = self.string_similarity(res_roman_name, p_roman_name)
