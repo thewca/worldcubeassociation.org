@@ -81,7 +81,7 @@ module FinishUnfinishedPersons
     persons_with_probas = []
 
     # pre-cache probabilities, so that we avoid doing string computations on _every_ comparison
-    persons_cache.each do |p|
+    persons_cache.find_each do |p|
       p_roman_name = self.extract_roman_name(p.name)
 
       name_similarity = self.string_similarity(res_roman_name, p_roman_name)
