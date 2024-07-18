@@ -128,7 +128,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
     sortColumn: competitionInfo['using_payment_integrations?']
       ? 'paid_on_with_registered_on_fallback'
       : 'registered_on',
-    sortDirection: 'descending',
+    sortDirection: 'ascending',
   });
   const { sortColumn, sortDirection } = state;
   const changeSortColumn = (name) => dispatchSort({ type: 'CHANGE_SORT', sortColumn: name });
