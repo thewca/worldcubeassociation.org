@@ -1,7 +1,5 @@
-import { useMutation } from '@tanstack/react-query';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Button, Icon } from 'semantic-ui-react';
-import { bulkUpdateRegistrations } from '../api/registration/patch/update_registration';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { setMessage } from '../Register/RegistrationMessage';
 import i18n from '../../../lib/i18n';
@@ -47,7 +45,7 @@ export default function RegistrationActions({
   const anyRejectable = pending.length < selectedCount;
   const anyApprovable = accepted.length < selectedCount;
   const anyCancellable = cancelled.length < selectedCount;
-  const anyWaitlistable = waiting.length < selectedCount;
+  // const anyWaitlistable = waiting.length < selectedCount;
 
   const selectedEmails = [...pending, ...accepted, ...cancelled, ...waiting]
     .map((userId) => userEmailMap[userId])
@@ -142,18 +140,18 @@ export default function RegistrationActions({
               </Button>
             )}
 
-            {anyWaitlistable && (
-              <Button
-                color="yellow"
-                onClick={() => changeStatus(
-                  [...pending, ...cancelled, ...accepted],
-                  'waiting_list',
-                )}
-              >
-                <Icon name="hourglass" />
-                {i18n.t('competitions.registration_v2.update.move_waiting')}
-              </Button>
-            )}
+            {/* {anyWaitlistable && ( */}
+            {/*  <Button */}
+            {/*    color="yellow" */}
+            {/*    onClick={() => changeStatus( */}
+            {/*      [...pending, ...cancelled, ...accepted], */}
+            {/*      'waiting_list', */}
+            {/*    )} */}
+            {/*  > */}
+            {/*    <Icon name="hourglass" /> */}
+            {/*    {i18n.t('competitions.registration_v2.update.move_waiting')} */}
+            {/*  </Button> */}
+            {/* )} */}
 
             {anyCancellable && (
               <Button
