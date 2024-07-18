@@ -34,6 +34,9 @@ module MicroserviceRegistrationHolder
             end
 
             ar_model.load_ms_model(matching_ms_model) if matching_ms_model.present?
+
+            # Give the option to fetch data later, for example when instantiation on the MS side of things is deferred.
+            ar_model.lazy_loading_enabled = !matching_ms_model.present?
           end
         end
       end

@@ -2,13 +2,13 @@
 
 class Api::V0::UserRolesController < Api::V0::ApiController
   # Removes all pending WCA ID claims for the demoted Delegate and notifies the users.
-  private def remove_pending_wca_id_claims(user)
-    region_senior_delegate = user.region.senior_delegate
-    user.confirmed_users_claiming_wca_id.each do |confirmed_user|
-      WcaIdClaimMailer.notify_user_of_delegate_demotion(confirmed_user, user, region_senior_delegate).deliver_later
+  private def remove_pending_wca_id_claims(role)
+    region_senior_delegate = role.group.senior_delegate
+    role.user.confirmed_users_claiming_wca_id.each do |confirmed_user|
+      WcaIdClaimMailer.notify_user_of_delegate_demotion(confirmed_user, role.user, region_senior_delegate).deliver_later
     end
     # Clear all pending WCA IDs claims for the demoted Delegate
-    User.where(delegate_to_handle_wca_id_claim: user.id).update_all(delegate_id_to_handle_wca_id_claim: nil, unconfirmed_wca_id: nil)
+    User.where(delegate_to_handle_wca_id_claim: role.user.id).update_all(delegate_id_to_handle_wca_id_claim: nil, unconfirmed_wca_id: nil)
   end
 
   private def pre_filtered_user_roles
@@ -316,7 +316,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     role.update!(end_date: Date.today)
     RoleChangeMailer.notify_role_end(role, current_user).deliver_later
     if role.group.delegate_regions? && !role.user.any_kind_of_delegate?
-      remove_pending_wca_id_claims(role.user)
+      remove_pending_wca_id_claims(role)
     end
     render json: {
       success: true,

@@ -17,11 +17,11 @@ class CityValidator < ActiveModel::EachValidator
     end
   end
 
-  @validators_by_country_iso2 = CountryCityValidators::Utils::ALL_VALIDATORS
-                                .index_by(&:country_iso_2)
-                                .transform_values(&:new)
-
   def self.get_validator_for_country(country_iso2)
-    @validators_by_country_iso2[country_iso2]
+    validator_for_country = CountryCityValidators::Utils::ALL_VALIDATORS.find do |validator|
+      validator.country_iso_2 == country_iso2
+    end
+
+    validator_for_country&.new
   end
 end

@@ -3,11 +3,14 @@
 class TranslationsController < ApplicationController
   before_action :authenticate_user!, except: [:index]
 
+  thread_mattr_accessor :bad_keys, instance_writer: false
+
   def self.bad_i18n_keys
-    @bad_keys ||= begin
+    self.bad_keys ||= begin
       english = locale_to_translation('en')
-      (I18n.available_locales - [:en]).to_h do |locale|
-        [locale, locale_to_translation(locale).compare_to(english)]
+
+      (I18n.available_locales - [:en]).index_with do |locale|
+        locale_to_translation(locale).compare_to(english)
       end
     end
   end
