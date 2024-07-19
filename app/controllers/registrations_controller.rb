@@ -154,6 +154,11 @@ class RegistrationsController < ApplicationController
     if wca_id_duplicates.any?
       raise I18n.t("registrations.import.errors.wca_id_duplicates", wca_ids: wca_id_duplicates.join(", "))
     end
+    raw_dobs = registration_rows.map { |registration_row| registration_row[:birth_date] }
+    wrong_format_dobs = raw_dobs.select { |raw_dob| Date.safe_parse(raw_dob)&.to_fs != raw_dob }
+    if wrong_format_dobs.any?
+      raise I18n.t("registrations.import.errors.wrong_dob_format", raw_dobs: wrong_format_dobs.join(", "))
+    end
     new_locked_users = []
     ActiveRecord::Base.transaction do
       competition.registrations.accepted.each do |registration|

@@ -98,6 +98,20 @@ RSpec.describe "registrations" do
         expect(response.body).to include "WCA ID must be unique, found the following duplicates: 2019HOLM01."
       end
 
+      it "renders an error when there are invalid DOBs" do
+        file = csv_file [
+          ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
+          ["a", "Sherlock Holmes", "United Kingdom", "2019HOLM01", "01.01.2000", "m", "sherlock@example.com", "1", "0"],
+          ["a", "John Watson", "United Kingdom", "2019WATS01", "2000-01-01", "m", "watson@example.com", "1", "1"],
+          ["a", "James Moriarty", "United Kingdom", "2019MORI01", "Jan 01 2000", "m", "moriarty@example.com", "0", "1"],
+        ]
+        expect {
+          post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
+        }.to_not change { competition.registrations.count }
+        follow_redirect!
+        expect(response.body).to include "Birthdate must follow the YYYY-mm-dd format (year-month-day, for example 1944-07-13), found the following dates which cannot be parsed: 01.01.2000, Jan 01 2000."
+      end
+
       describe "registrations import" do
         context "registrant has WCA ID" do
           it "renders an error if the WCA ID doesn't exist" do
