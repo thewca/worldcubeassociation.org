@@ -10,7 +10,7 @@ import StoreProvider from '../../lib/providers/StoreProvider';
 import contactsReducer, { getContactFormInitialState } from './store/reducer';
 import useQueryParams from '../../lib/hooks/useQueryParams';
 
-export default function ContactsPage() {
+export default function ContactsPage({ recaptchaPublicKey }) {
   const { data: loggedInUserData, loading } = useLoadedData(apiV0Urls.users.me.userDetails);
   const [queryParams] = useQueryParams();
 
@@ -28,7 +28,7 @@ export default function ContactsPage() {
             i18nKey="page.contacts.faq_note_html"
           />
         </Message>
-        <ContactForm loggedInUserData={loggedInUserData} />
+        <ContactForm loggedInUserData={loggedInUserData} recaptchaPublicKey={recaptchaPublicKey} />
       </Container>
     </StoreProvider>
   );
