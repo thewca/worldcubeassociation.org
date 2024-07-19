@@ -539,6 +539,8 @@ GEM
     psych (5.1.2)
       stringio
     public_suffix (6.0.0)
+    puma (6.4.2)
+      nio4r (~> 2.0)
     raabro (1.4.0)
     racc (1.8.0)
     rack (2.2.9)
@@ -899,6 +901,7 @@ DEPENDENCIES
   openssl
   overcommit
   premailer-rails
+  puma
   rack (~> 2)
   rack-cors
   rails
