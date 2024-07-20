@@ -16,7 +16,7 @@ class Competition < ApplicationRecord
   has_many :competitors, -> { distinct }, through: :results, source: :person
   has_many :competitor_users, -> { distinct }, through: :competitors, source: :user
   has_many :competition_delegates, dependent: :delete_all
-  has_many :delegates, -> { includes(:delegate_role_metadata) }, through: :competition_delegates
+  has_many :delegates, -> { includes(:delegate_roles, :delegate_role_metadata) }, through: :competition_delegates
   has_many :competition_organizers, dependent: :delete_all
   has_many :organizers, through: :competition_organizers
   has_many :media, class_name: "CompetitionMedium", foreign_key: "competitionId", dependent: :delete_all
@@ -795,6 +795,10 @@ class Competition < ApplicationRecord
     with_old_id do
       original_delegate_report
     end
+  end
+
+  def report_posted_at
+    delegate_report&.posted_at
   end
 
   # This callback updates all tables having the competition id, when the id changes.
@@ -2158,9 +2162,12 @@ class Competition < ApplicationRecord
     # in the json (eg: specify an empty 'methods' to remove these attributes,
     # or set a custom array in 'only' without getting the default ones), therefore
     # we only use 'merge' here, which doesn't "deeply" merge into the default options.
-    json = super(DEFAULT_SERIALIZE_OPTIONS.merge(options || {}))
-    # Fallback to the default 'serializable_hash' method, but always include our
-    # custom 'class' attribute.
+    options = DEFAULT_SERIALIZE_OPTIONS.merge(options || {}).deep_dup
+
+    # Fallback to the default 'serializable_hash' method BUT...
+    json = super
+
+    # ...always include our custom 'class' attribute.
     # We can't put that in our DEFAULT_SERIALIZE_OPTIONS because the 'class'
     # method already exists, and we definitely don't want to override it, nor do
     # we want to change the existing behavior of our API which returns a string.

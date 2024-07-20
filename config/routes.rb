@@ -358,6 +358,7 @@ Rails.application.routes.draw do
       get '/geocoding/search' => 'geocoding#get_location_from_query', as: :geocoding_search
       get '/countries' => 'api#countries'
       get '/competition_series/:id' => 'api#competition_series'
+      get '/competition_index' => 'competitions#competition_index', as: :competition_index
       resources :competitions, only: [:index, :show] do
         get '/wcif' => 'competitions#show_wcif'
         get '/wcif/public' => 'competitions#show_wcif_public'

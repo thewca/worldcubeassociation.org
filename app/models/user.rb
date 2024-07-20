@@ -1166,7 +1166,7 @@ class User < ApplicationRecord
       default_options[:methods].push("email", "location", "region_id")
     end
 
-    options = default_options.merge(options || {})
+    options = default_options.merge(options || {}).deep_dup
     # Preempt the values for avatar and teams, they have a special treatment.
     include_avatar = options[:include]&.delete("avatar")
     include_teams = options[:include]&.delete("teams")
