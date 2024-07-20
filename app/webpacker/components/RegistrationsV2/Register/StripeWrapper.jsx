@@ -1,7 +1,7 @@
 // Following https://github.com/stripe-samples/accept-a-payment/blob/main/payment-element/client/react-cra/src/Payment.js
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Header } from 'semantic-ui-react';
 import { useQuery } from '@tanstack/react-query';
 import PaymentStep from './PaymentStep';
