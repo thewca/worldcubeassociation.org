@@ -50,6 +50,7 @@ class PanelController < ApplicationController
       officersEditor: "officers-editor",
       regionsAdmin: "regions-admin",
       downloadVoters: "download-voters",
+      generateDbToken: "generate-db-token",
     }
   end
 end

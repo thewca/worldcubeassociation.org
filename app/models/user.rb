@@ -26,7 +26,9 @@ class User < ApplicationRecord
   has_many :roles, class_name: "UserRole"
   has_many :active_roles, -> { active }, class_name: "UserRole"
   has_many :delegate_role_metadata, through: :active_roles, source: :metadata, source_type: "RolesMetadataDelegateRegions"
+  has_many :teams_committees_at_least_senior_role_metadata, -> { at_least_senior_member }, through: :active_roles, source: :metadata, source_type: "RolesMetadataTeamsCommittees"
   has_many :delegate_roles, -> { includes(:group, :metadata) }, through: :delegate_role_metadata, source: :user_role, class_name: "UserRole"
+  has_many :at_least_senior_teams_committees_roles, through: :teams_committees_at_least_senior_role_metadata, source: :user_role, class_name: "UserRole"
   has_many :confirmed_users_claiming_wca_id, -> { confirmed_email }, foreign_key: "delegate_id_to_handle_wca_id_claim", class_name: "User"
   has_many :oauth_applications, class_name: 'Doorkeeper::Application', as: :owner
   has_many :oauth_access_grants, class_name: 'Doorkeeper::AccessGrant', foreign_key: :resource_owner_id
@@ -445,6 +447,10 @@ class User < ApplicationRecord
     active_roles.any? { |role| role.group == group }
   end
 
+  private def at_least_senior_teams_committees_member?(group)
+    at_least_senior_teams_committees_roles.where(group_id: group.id).exists?
+  end
+
   private def group_leader?(group)
     group.lead_user == self
   end
@@ -491,6 +497,10 @@ class User < ApplicationRecord
 
   def results_team?
     group_member?(UserGroup.teams_committees_group_wrt)
+  end
+
+  private def senior_results_team?
+    at_least_senior_teams_committees_member?(UserGroup.teams_committees_group_wrt)
   end
 
   private def software_team?
@@ -1323,7 +1333,7 @@ class User < ApplicationRecord
   def can_access_panel?(panel_id)
     case panel_id
     when :admin
-      admin? || results_team?
+      admin? || senior_results_team?
     when :staff
       staff?
     when :delegate
