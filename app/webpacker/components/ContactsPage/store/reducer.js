@@ -17,6 +17,10 @@ export const getContactFormInitialState = (params) => ({
     wst: {
       requestId: params?.requestId,
     },
+    wrt: {
+      queryType: params?.queryType,
+      profileDataToChange: params?.profileDataToChange,
+    },
   },
   attachments: [],
 });
