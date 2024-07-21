@@ -967,7 +967,7 @@ class User < ApplicationRecord
       )
       fields << { user_preferred_events_attributes: [:id, :event_id, :_destroy] }
       if user.staff_or_any_delegate?
-        fields += %i(receive_delegate_reports)
+        fields += %i(receive_delegate_reports delegate_reports_region)
       end
     end
     fields
