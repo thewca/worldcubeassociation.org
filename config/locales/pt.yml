@@ -1500,8 +1500,8 @@ pt:
             #original_hash: 84add5b
             label: Email
         contact_recipient:
-          #original_hash: d31ab65
-          label: Qual das seguintes opções melhor descreve a sua questão?
+          #original_hash: 54f0036
+          label: Quem quer contactar?
           competition:
             #original_hash: baa2425
             label: >-
@@ -1536,9 +1536,50 @@ pt:
             #original_hash: 68f4145
             label: Mensagem
         wrt:
+          query_type:
+            #original_hash: d31ab65
+            label: Qual das seguintes opções melhor descreve o seu pedido?
+            edit_profile:
+              #original_hash: 322db6c
+              label: >-
+                Editar os dados do meu perfil (nome, país, sexo ou data de
+                nascimento)
+            report_result_issue:
+              #original_hash: 2edbb52
+              label: Reportar um problema num resultado
+            other_query:
+              #original_hash: 7618a0c
+              label: Outra questão
           message:
             #original_hash: 68f4145
             label: Mensagem
+          profile_data_to_change:
+            #original_hash: 25b71ff
+            label: Dados do perfil a alterar
+            options:
+              #original_hash: 709a232
+              name: Nome
+              #original_hash: d523ebb
+              country: País
+              #original_hash: 8a754c6
+              gender: Sexo
+              #original_hash: 293dd60
+              dob: Data de nascimento
+          new_profile_data_name:
+            #original_hash: ddbcd37
+            label: Novo nome
+          new_profile_data_country:
+            #original_hash: e4e355e
+            label: Novo País
+          new_profile_data_gender:
+            #original_hash: 48ce2a3
+            label: Novo Sexo
+          new_profile_data_dob:
+            #original_hash: 9f1c3d2
+            label: Nova Data de Nascimento
+          edit_profile_reason:
+            #original_hash: fdfcccf
+            label: Razão da mudança
         wst:
           message:
             #original_hash: 68f4145
@@ -2489,6 +2530,12 @@ pt:
         wca_id_duplicates: >-
           ID da WCA tem que ser único, encontrados os seguintes duplicados:
           %{wca_ids}.
+        #original_hash: a0fd4c5
+        wrong_dob_format: >-
+          Data de nascimento tem de seguir o formato AAAA-MM-DD (ano-mês-dia,
+          por exemplo, 1944-07-13), Birthdate must follow the YYYY-mm-dd format
+          (year-month-day, for example 1944-07-13), as seguintes datas
+          submetidas não podem ser processadas: %{raw_dobs}.
     add:
       #original_hash: 975275e
       title: 'Adicionar registo para %{comp}'
