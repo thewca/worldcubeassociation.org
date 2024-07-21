@@ -23,6 +23,8 @@ class Competition < ApplicationRecord
   has_many :tabs, -> { order(:display_order) }, dependent: :delete_all, class_name: "CompetitionTab"
   has_one :delegate_report, dependent: :destroy
   has_many :competition_venues, dependent: :destroy
+  has_many :venue_countries, -> { distinct }, through: :competition_venues, source: :country
+  has_many :venue_continents, -> { distinct }, through: :competition_venues, source: :continent
   belongs_to :country, foreign_key: :countryId
   has_one :continent, foreign_key: :continentId, through: :country
   has_many :championships, dependent: :delete_all

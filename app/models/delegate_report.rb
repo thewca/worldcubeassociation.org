@@ -63,4 +63,24 @@ class DelegateReport < ApplicationRecord
     self.posted_at = (new_posted ? Time.now : nil)
     self.posted_by_user_id = current_user&.id
   end
+
+  def self.country_mailing_list(country, continent = country.continent)
+    "reports.#{continent.url_id}.#{country.iso2}@worldcubeassociation.org"
+  end
+
+  def self.continent_mailing_list(continent)
+    "reports.#{continent.url_id}@worldcubeassociation.org"
+  end
+
+  def mailing_lists
+    if competition.continent.real?
+      if competition.country.real?
+        return [DelegateReport.country_mailing_list(competition.country)]
+      end
+
+      return competition.venue_countries.map { |c| DelegateReport.country_mailing_list(c) }
+    end
+
+    competition.venue_continents.map { |c| DelegateReport.continent_mailing_list(c) }
+  end
 end
