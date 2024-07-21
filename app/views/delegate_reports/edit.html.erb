@@ -15,20 +15,14 @@
     <% @competition.delegate_report.schedule_url = link_to_competition_schedule_tab(@competition) if @competition.has_schedule? %>
     <%= f.input :schedule_url, readonly: @competition.has_schedule? %>
 
-    <%# See comment in `_delegate_report.html.erb` about different report formats %>
-    <% if @delegate_report.uses_summary_section? %>
-      <%= f.input :summary, input_html: { class: "markdown-editor markdown-editor-image-upload" } %>
+    <% @delegate_report.sections.each do |section| %>
+      <%= f.input section, input_html: { class: "markdown-editor markdown-editor-image-upload" } %>
     <% end %>
-    <% if @delegate_report.uses_venue_section? %>
-      <%= f.input :venue, input_html: { class: "markdown-editor markdown-editor-image-upload" } %>
-    <% end %>
-    <%= f.input :equipment, input_html: { class: "markdown-editor markdown-editor-image-upload" } %>
-    <%= f.input :organization, input_html: { class: "markdown-editor markdown-editor-image-upload" } %>
-    <%= f.input :incidents, input_html: { class: "markdown-editor markdown-editor-image-upload" } %>
     <%= f.input :wrc_feedback_requested, as: :boolean %>
     <%= f.input :wrc_incidents %>
     <%= f.input :wic_feedback_requested, as: :boolean %>
     <%= f.input :wic_incidents %>
+    <%# 'remarks' is the only Report section without a fixed template, so we include it irrespective of the version %>
     <%= f.input :remarks, input_html: { class: "markdown-editor markdown-editor-image-upload" } %>
 
     <%= f.button :submit, class: "btn-primary" %>

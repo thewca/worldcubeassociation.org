@@ -17,29 +17,14 @@ class DelegateReport < ApplicationRecord
     self.discussion_url = "https://groups.google.com/a/worldcubeassociation.org/forum/#!topicsearchin/reports/" + URI.encode_www_form_component(competition.name)
   end
 
-  before_create :summary_default, if: :uses_summary_section?
-  def summary_default
-    self.summary = ActionController::Base.new.render_to_string(template: "delegate_reports/_summary_default", formats: :md)
+  private def render_section_template(section)
+    ActionController::Base.new.render_to_string(template: "delegate_reports/#{self.version}/_#{section}_default", formats: :md)
   end
 
-  before_create :equipment_default
-  def equipment_default
-    self.equipment = ActionController::Base.new.render_to_string(template: "delegate_reports/_equipment_default", formats: :md)
-  end
-
-  before_create :venue_default, if: :uses_venue_section?
-  def venue_default
-    self.venue = ActionController::Base.new.render_to_string(template: "delegate_reports/_venue_default", formats: :md)
-  end
-
-  before_create :organization_default
-  def organization_default
-    self.organization = ActionController::Base.new.render_to_string(template: "delegate_reports/_organization_default", formats: :md)
-  end
-
-  before_create :incidents_default
-  def incidents_default
-    self.incidents = ActionController::Base.new.render_to_string(template: "delegate_reports/_incidents_default", formats: :md)
+  before_create :md_section_defaults
+  def md_section_defaults
+    rendered_sections = self.md_sections.index_with { |section| render_section_template(section) }
+    self.assign_attributes(**rendered_sections)
   end
 
   validates :schedule_url, presence: true, if: :schedule_and_discussion_urls_required?
@@ -57,12 +42,25 @@ class DelegateReport < ApplicationRecord
     !!posted_at
   end
 
-  def uses_summary_section?
-    self.working_group_2024_version?
+  def uses_section?(section)
+    case section
+    when :summary
+      self.working_group_2024_version?
+    when :venue
+      self.legacy_version?
+    else
+      true
+    end
   end
 
-  def uses_venue_section?
-    self.legacy_version?
+  def md_sections
+    [
+      :summary,
+      :equipment,
+      :venue,
+      :organization,
+      :incidents,
+    ].filter { |section| self.uses_section?(section) }
   end
 
   def can_see_submit_button?(current_user)
