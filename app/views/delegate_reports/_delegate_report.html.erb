@@ -83,7 +83,9 @@
       <h2>Summary</h2>
       <%=md delegate_report.summary %>
     </div>
-  <% else %>
+  <% end %>
+
+  <% if delegate_report.uses_venue_section? %>
     <%# The field `venue` is only present in old, pre-June-2024 reports. %>
     <%# Newer reports use the `summary` field instead. %>
     <div>

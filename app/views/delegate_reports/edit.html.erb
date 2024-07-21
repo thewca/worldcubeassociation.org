@@ -18,7 +18,8 @@
     <%# See comment in `_delegate_report.html.erb` about different report formats %>
     <% if @delegate_report.uses_summary_section? %>
       <%= f.input :summary, input_html: { class: "markdown-editor markdown-editor-image-upload" } %>
-    <% else %>
+    <% end %>
+    <% if @delegate_report.uses_venue_section? %>
       <%= f.input :venue, input_html: { class: "markdown-editor markdown-editor-image-upload" } %>
     <% end %>
     <%= f.input :equipment, input_html: { class: "markdown-editor markdown-editor-image-upload" } %>
