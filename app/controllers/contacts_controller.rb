@@ -36,14 +36,23 @@ class ContactsController < ApplicationController
     )
   end
 
+  private def new_profile_data_key_to_value(new_profile_data, profile_data_to_change)
+    if profile_data_to_change == 'country'
+      Country.find_by(iso2: new_profile_data).name
+    else
+      new_profile_data
+    end
+  end
+
   private def contact_wrt(requestor_details, contact_params)
+    profile_data_to_change = contact_params[:profileDataToChange]
     maybe_send_contact_email(
       ContactWrt.new(
         name: requestor_details[:name],
         your_email: requestor_details[:email],
-        query_type: contact_params[:queryType],
-        profile_data_to_change: contact_params[:profileDataToChange],
-        new_profile_data: contact_params[:newProfileData],
+        query_type: contact_params[:queryType].titleize,
+        profile_data_to_change: profile_data_to_change.titleize,
+        new_profile_data: new_profile_data_key_to_value(contact_params[:newProfileData], profile_data_to_change),
         edit_profile_reason: contact_params[:editProfileReason],
         message: contact_params[:message],
         request: request,
