@@ -2,7 +2,6 @@
 
 class PanelController < ApplicationController
   include DocumentsHelper
-  include PanelHelper
 
   before_action :authenticate_user!
   before_action -> { redirect_to_root_unless_user(:has_permission?, 'can_access_panels', params[:panel_id].to_sym) }, only: [:index]
@@ -19,7 +18,7 @@ class PanelController < ApplicationController
 
   def index
     @panel_id = params.require(:panel_id)
-    panel_details = panel_list(current_user)[@panel_id.to_sym]
+    panel_details = User.panel_list[@panel_id.to_sym]
     @pages = panel_details[:pages]
     @title = panel_details[:name]
   end
