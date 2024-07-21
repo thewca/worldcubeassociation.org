@@ -8,6 +8,8 @@ class DelegateReport < ApplicationRecord
   belongs_to :wrc_primary_user, class_name: "User", optional: true
   belongs_to :wrc_secondary_user, class_name: "User", optional: true
 
+  enum :version, [:legacy, :working_group_2024], suffix: true, default: :working_group_2024
+
   attr_accessor :current_user
 
   before_create :set_discussion_url
@@ -15,7 +17,7 @@ class DelegateReport < ApplicationRecord
     self.discussion_url = "https://groups.google.com/a/worldcubeassociation.org/forum/#!topicsearchin/reports/" + URI.encode_www_form_component(competition.name)
   end
 
-  before_create :summary_default
+  before_create :summary_default, if: :uses_summary_section?
   def summary_default
     self.summary = ActionController::Base.new.render_to_string(template: "delegate_reports/_summary_default", formats: :md)
   end
@@ -23,6 +25,11 @@ class DelegateReport < ApplicationRecord
   before_create :equipment_default
   def equipment_default
     self.equipment = ActionController::Base.new.render_to_string(template: "delegate_reports/_equipment_default", formats: :md)
+  end
+
+  before_create :venue_default, if: :uses_venue_section?
+  def venue_default
+    self.venue = ActionController::Base.new.render_to_string(template: "delegate_reports/_venue_default", formats: :md)
   end
 
   before_create :organization_default
@@ -51,7 +58,11 @@ class DelegateReport < ApplicationRecord
   end
 
   def uses_summary_section?
-    competition.end_date && competition.end_date >= Date.new(2024, 6, 24)
+    self.working_group_2024_version?
+  end
+
+  def uses_venue_section?
+    self.legacy_version?
   end
 
   def can_see_submit_button?(current_user)
