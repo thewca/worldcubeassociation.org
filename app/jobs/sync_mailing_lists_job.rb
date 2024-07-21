@@ -11,8 +11,25 @@ class SyncMailingListsJob < WcaCronjob
     GsuiteMailingLists.sync_group(GroupsMetadataBoard.email, UserGroup.board_group.active_users.map(&:email))
     translator_users = UserGroup.translators.flat_map(&:users)
     GsuiteMailingLists.sync_group("translators@worldcubeassociation.org", translator_users.map(&:email))
+
     User.clear_receive_delegate_reports_if_not_eligible
-    GsuiteMailingLists.sync_group("reports@worldcubeassociation.org", User.delegate_reports_receivers_emails)
+
+    report_users = User.where(receive_delegate_reports: true, delegate_reports_region: [nil, '']).pluck(:email)
+    GsuiteMailingLists.sync_group("reports@worldcubeassociation.org", report_users | User.default_report_receivers)
+
+    Continent.real.each do |continent|
+      continent_mailing = "reports.#{continent.name.downcase}@worldcubeassociation.org"
+      report_users = User.where(receive_delegate_reports: true, delegate_reports_region: continent.id).pluck(:email)
+
+      GsuiteMailingLists.sync_group(continent_mailing, report_users | ["reports@worldcubeassociation.org"])
+
+      continent.countries.real.each do |country|
+        country_mailing = "reports.#{continent.name.downcase}.#{country.iso2}@worldcubeassociation.org"
+        report_users = User.where(receive_delegate_reports: true, delegate_reports_region: country.id).pluck(:email)
+
+        GsuiteMailingLists.sync_group(country_mailing, report_users | [continent_mailing])
+      end
+    end
 
     UserGroup.teams_committees.active_groups.each { |team_committee| GsuiteMailingLists.sync_group(team_committee.metadata.email, team_committee.active_users.map(&:email)) }
     UserGroup.councils.each { |council| GsuiteMailingLists.sync_group(council.metadata.email, council.active_users.map(&:email)) }

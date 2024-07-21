@@ -1026,11 +1026,15 @@ class User < ApplicationRecord
     end
     eligible_delegate_users = roles.map { |role| role.user }
     other_staff = User.where(receive_delegate_reports: true)
-    (%w(
+    (self.default_report_receivers + eligible_delegate_users.map(&:email) + other_staff.map(&:email)).uniq
+  end
+
+  def self.default_report_receivers
+    %w(
       seniors@worldcubeassociation.org
       quality@worldcubeassociation.org
       regulations@worldcubeassociation.org
-    ) + eligible_delegate_users.map(&:email) + other_staff.map(&:email)).uniq
+    )
   end
 
   def notify_of_results_posted(competition)
