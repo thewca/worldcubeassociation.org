@@ -62,7 +62,7 @@ function PostsList({
             <Card.Meta>
               Posted by
               {' '}
-              {post.author_name ? post.author_name : 'Unknown'}
+              {post.author_name ?? 'Unknown'}
               {' '}
               on
               {' '}
