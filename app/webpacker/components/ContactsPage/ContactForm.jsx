@@ -44,7 +44,10 @@ export default function ContactForm({
   );
 
   const contactSuccessHandler = () => {
-    dispatch(clearForm(loggedInUserData));
+    dispatch(clearForm({
+      userName: loggedInUserData?.user?.name,
+      userEmail: loggedInUserData?.user?.email,
+    }));
     setContactSuccess(true);
   };
 
