@@ -19,7 +19,11 @@ export default function ContactsPage({ recaptchaPublicKey }) {
   return (
     <StoreProvider
       reducer={contactsReducer}
-      initialState={getContactFormInitialState(loggedInUserData, queryParams)}
+      initialState={getContactFormInitialState({
+        ...queryParams,
+        userName: loggedInUserData?.user?.name,
+        userEmail: loggedInUserData?.user?.email,
+      })}
     >
       <Container text>
         <Header as="h2">{I18n.t('page.contacts.title')}</Header>

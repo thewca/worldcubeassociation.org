@@ -12,7 +12,7 @@ export const updateContactRecipient = (contactRecipient) => ({
   payload: { contactRecipient },
 });
 
-export const clearForm = (loggedInUserData, queryParams) => ({
+export const clearForm = (params) => ({
   type: ClearForm,
-  payload: { loggedInUserData, queryParams },
+  payload: { params },
 });
