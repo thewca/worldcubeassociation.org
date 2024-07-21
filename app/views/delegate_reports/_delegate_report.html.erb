@@ -56,11 +56,6 @@
   </div>
 
   <div>
-    <strong>Equipment</strong>
-    <%=md delegate_report.equipment %>
-  </div>
-
-  <div>
     <strong>Delegates</strong>
     <%= competition.staff_delegates.pluck(:name).to_sentence %>
   </div>
@@ -77,33 +72,15 @@
     </div>
   <% end %>
 
-  <%# The field `summary` is only present in newer, June-2024-style reports. %>
-  <% if delegate_report.uses_summary_section? %>
+  <% delegate_report.md_sections.each do |section| %>
     <div>
-      <h2>Summary</h2>
-      <%=md delegate_report.summary %>
+      <h2><%= section.capitalize %></h2>
+      <%=md delegate_report.read_attribute(section) %>
     </div>
   <% end %>
 
-  <% if delegate_report.uses_venue_section? %>
-    <%# The field `venue` is only present in old, pre-June-2024 reports. %>
-    <%# Newer reports use the `summary` field instead. %>
-    <div>
-      <h2>Venue</h2>
-      <%=md delegate_report.venue %>
-    </div>
-  <% end %>
-
-  <div>
-    <h2>Organization</h2>
-    <%=md delegate_report.organization %>
-  </div>
-
-  <div>
-    <h2>Incidents</h2>
-    <%=md delegate_report.incidents %>
-  </div>
-
+  <%# Technically, 'remarks' is also a Markdown section but it's the only one that doesn't have a template %>
+  <%# and (as of writing this comment) we always want to include it no matter which Report version. %>
   <div>
     <h2>Remarks</h2>
     <%=md delegate_report.remarks %>
