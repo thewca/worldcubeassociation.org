@@ -718,6 +718,7 @@ module DatabaseDumper
           updated_at
           wca_id
           receive_delegate_reports
+          delegate_reports_region
           dummy_account
         ),
         db_default: %w(
