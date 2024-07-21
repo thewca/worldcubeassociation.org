@@ -106,11 +106,6 @@ RSpec.describe SyncMailingListsJob, type: :job do
     expect(GsuiteMailingLists).to receive(:sync_group).with(
       "reports@worldcubeassociation.org",
       a_collection_containing_exactly("seniors@worldcubeassociation.org", "quality@worldcubeassociation.org", "regulations@worldcubeassociation.org",
-                                      africa_delegate_3.user.email, africa_delegate_4.user.email,
-                                      asia_delegate_3.user.email, asia_delegate_4.user.email,
-                                      europe_delegate_3.user.email, europe_delegate_4.user.email,
-                                      oceania_delegate_3.user.email, oceania_delegate_4.user.email,
-                                      americas_delegate_3.user.email, americas_delegate_4.user.email,
                                       wdc_leader.email, wdc_member.email, wec_member.email),
     )
 
