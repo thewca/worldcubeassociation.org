@@ -35,6 +35,8 @@ class UserGroup < ApplicationRecord
   scope :root_groups, -> { where(parent_group: nil) }
   scope :active_groups, -> { where(is_active: true) }
 
+  validates :active_roles, absence: true, unless: :is_active?
+
   def all_child_groups
     [direct_child_groups, direct_child_groups.map(&:all_child_groups)].flatten
   end
