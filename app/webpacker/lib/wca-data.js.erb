@@ -173,8 +173,6 @@ export const nonFutureCompetitionYears = [1982, ...yearsRange];
 
 export const railsEnv = '<%= Rails.env %>';
 
-export const RECAPTCHA_PUBLIC_KEY = '<%= AppSecrets.RECAPTCHA_PUBLIC_KEY %>';
-
 // ----- COMP RULES -----
 
 export const nearbyCompetitionDistanceWarning = <%= Competition::NEARBY_DISTANCE_KM_WARNING.to_json.html_safe %>

@@ -1,7 +1,11 @@
 # frozen_string_literal: true
 
 class ContactWrt < ContactForm
-  attribute :message, validate: true
+  attribute :query_type
+  attribute :profile_data_to_change
+  attribute :new_profile_data
+  attribute :edit_profile_reason
+  attribute :message
 
   def to_email
     UserGroup.teams_committees_group_wrt.metadata.email

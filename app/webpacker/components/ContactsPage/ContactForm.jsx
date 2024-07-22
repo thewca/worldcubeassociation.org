@@ -7,7 +7,6 @@ import _ from 'lodash';
 import { contactUrl } from '../../lib/requests/routes.js.erb';
 import useSaveAction from '../../lib/hooks/useSaveAction';
 import I18n from '../../lib/i18n';
-import { RECAPTCHA_PUBLIC_KEY } from '../../lib/wca-data.js.erb';
 import UserData from './UserData';
 import Loading from '../Requests/Loading';
 import { useDispatch, useStore } from '../../lib/providers/StoreProvider';
@@ -27,7 +26,10 @@ const CONTACT_RECIPIENTS = [
 
 const CONTACT_RECIPIENTS_MAP = _.keyBy(CONTACT_RECIPIENTS, _.camelCase);
 
-export default function ContactForm({ loggedInUserData }) {
+export default function ContactForm({
+  loggedInUserData,
+  recaptchaPublicKey,
+}) {
   const { save, saving } = useSaveAction();
   const [captchaValue, setCaptchaValue] = useState();
   const [captchaError, setCaptchaError] = useState(false);
@@ -42,7 +44,10 @@ export default function ContactForm({ loggedInUserData }) {
   );
 
   const contactSuccessHandler = () => {
-    dispatch(clearForm(loggedInUserData));
+    dispatch(clearForm({
+      userName: loggedInUserData?.user?.name,
+      userEmail: loggedInUserData?.user?.email,
+    }));
     setContactSuccess(true);
   };
 
@@ -112,7 +117,7 @@ export default function ContactForm({ loggedInUserData }) {
         {SubForm && <SubForm />}
         <FormField>
           <ReCAPTCHA
-            sitekey={RECAPTCHA_PUBLIC_KEY}
+            sitekey={recaptchaPublicKey}
           // onChange is a mandatory parameter for ReCAPTCHA. According to the documentation, this
           // is called when user successfully completes the captcha, hence we are assuming that any
           // existing errors will be cleared when onChange is called.

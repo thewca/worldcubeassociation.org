@@ -47,6 +47,14 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
   end
 
   describe 'GET #users_search' do
+    before :each do
+      # We cache search results, which is a very good thing in production because we have an Omnisearch bar.
+      # But in these tests, we sometimes modify properties of an existing user (make Jeremy a Delegate, turn his account
+      # into a hidden account, etc.) and these spontaneous updates don't reflect in the cache.
+      # So just clear it for these tests.
+      Rails.cache.delete_matched 'search/User*'
+    end
+
     let(:person) { FactoryBot.create(:person, name: "Jeremy", wca_id: "2005FLEI01") }
     let!(:user) { FactoryBot.create(:user, person: person, email: "example@email.com") }
 

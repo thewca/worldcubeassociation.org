@@ -118,7 +118,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
 
   const queryClient = useQueryClient();
 
-  const [editable, setEditable] = useCheckboxState(false);
+  // const [editable, setEditable] = useCheckboxState(false);
 
   const dispatchStore = useDispatch();
 
@@ -128,7 +128,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
     sortColumn: competitionInfo['using_payment_integrations?']
       ? 'paid_on_with_registered_on_fallback'
       : 'registered_on',
-    sortDirection: 'descending',
+    sortDirection: 'ascending',
   });
   const { sortColumn, sortDirection } = state;
   const changeSortColumn = (name) => dispatchSort({ type: 'CHANGE_SORT', sortColumn: name });
@@ -136,7 +136,6 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
   const {
     isLoading: isRegistrationsLoading,
     data: registrations,
-    refetch,
   } = useQuery({
     queryKey: ['registrations-admin', competitionInfo.id],
     queryFn: () => getAllRegistrations(competitionInfo.id),
@@ -272,25 +271,25 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
     [registrationsWithUser],
   );
 
-  const handleOnDragEnd = async (result) => {
-    if (!result.destination) return;
-    if (result.destination.index === result.source.index) return;
-
-    updateRegistrationMutation({
-      competition_id: competitionInfo.id,
-      requests: [{
-        user_id: waiting[result.source.index].user_id,
-        competing: {
-          waiting_list_position: waiting[result.destination.index].competing.waiting_list_position,
-        },
-      }],
-    }, {
-      onSuccess: () => {
-        // We need to get the information for all Competitors if you change the waiting list position
-        refetch();
-      },
-    });
-  };
+  // const handleOnDragEnd = async (result) => {
+  //   if (!result.destination) return;
+  //   if (result.destination.index === result.source.index) return;
+  //
+  //   updateRegistrationMutation({
+  //     competition_id: competitionInfo.id,
+  //     requests: [{
+  //       user_id: waiting[result.source.index].user_id,
+  //       competing: {
+  //         waiting_list_position: waiting[result.destination.index].competing.waiting_list_position,
+  //       },
+  //     }],
+  //   }, {
+  //     onSuccess: () => {
+  //       // We need to get the information for all Competitors if you change the waiting list position
+  //       refetch();
+  //     },
+  //   });
+  // };
 
   return isRegistrationsLoading || infoLoading ? (
     <Loading />
@@ -370,34 +369,34 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
           sortColumn={sortColumn}
           competitionInfo={competitionInfo}
         />
+        {/* Disable Waiting List Administration until we fix moving people around on the waitinglist */}
+        {/* <Header> */}
+        {/*  {i18n.t('registrations.list.waiting_list')} */}
+        {/*  {' '} */}
+        {/*  ( */}
+        {/*  {waiting.length} */}
+        {/*  ) */}
+        {/* </Header> */}
 
-        <Header>
-          {i18n.t('registrations.list.waiting_list')}
-          {' '}
-          (
-          {waiting.length}
-          )
-        </Header>
+        {/* <Checkbox toggle value={editable} onChange={setEditable} label="Enable Waiting List Edit Mode" /> */}
 
-        <Checkbox toggle value={editable} onChange={setEditable} label="Enable Waiting List Edit Mode" />
-
-        <RegistrationAdministrationTable
-          columnsExpanded={expandedColumns}
-          selected={partitionedSelected.waiting}
-          select={select}
-          unselect={unselect}
-          competition_id={competitionInfo.id}
-          changeSortColumn={changeSortColumn}
-          sortDirection={sortDirection}
-          sortColumn={sortColumn}
-          competitionInfo={competitionInfo}
-          registrations={waiting.toSorted(
-            (a, b) => a.competing.waiting_list_position - b.competing.waiting_list_position,
-          )}
-          handleOnDragEnd={handleOnDragEnd}
-          draggable={editable}
-          sortable={false}
-        />
+        {/* <RegistrationAdministrationTable */}
+        {/*  columnsExpanded={expandedColumns} */}
+        {/*  selected={partitionedSelected.waiting} */}
+        {/*  select={select} */}
+        {/*  unselect={unselect} */}
+        {/*  competition_id={competitionInfo.id} */}
+        {/*  changeSortColumn={changeSortColumn} */}
+        {/*  sortDirection={sortDirection} */}
+        {/*  sortColumn={sortColumn} */}
+        {/*  competitionInfo={competitionInfo} */}
+        {/*  registrations={waiting.toSorted( */}
+        {/*    (a, b) => a.competing.waiting_list_position - b.competing.waiting_list_position, */}
+        {/*  )} */}
+        {/*  handleOnDragEnd={handleOnDragEnd} */}
+        {/*  draggable={editable} */}
+        {/*  sortable={false} */}
+        {/* /> */}
 
         <Header>
           {i18n.t('registrations.list.deleted_registrations')}

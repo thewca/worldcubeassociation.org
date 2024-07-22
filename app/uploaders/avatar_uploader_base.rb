@@ -6,7 +6,12 @@ class AvatarUploaderBase < CarrierWave::Uploader::Base
   include CarrierWave::MiniMagick
 
   def self.connection_cache
+    # rubocop:disable ThreadSafety/InstanceVariableInClassMethod
+    #
+    # Worst thing that can happen is that two Puma workers open their own connections when they could have re-used one.
+    # And the avatar upload through this Carrierwave system is deprecated anyways.
     @connection_cache ||= {}
+    # rubocop:enable ThreadSafety/InstanceVariableInClassMethod
   end
 
   def cloudfront_sdk

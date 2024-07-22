@@ -10,16 +10,12 @@ import {
   Form,
   Header,
   Message,
-  Popup,
   Segment,
-  Table,
 } from 'semantic-ui-react';
 import { getSingleRegistration } from '../api/registration/get/get_registrations';
 import updateRegistration from '../api/registration/patch/update_registration';
 import getUsersInfo from '../api/user/post/getUserInfo';
 import {
-  getShortDateString,
-  getShortTimeString,
   hasPassed,
 } from '../../../lib/utils/dates';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
@@ -264,15 +260,15 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
             disabled={registrationEditDeadlinePassed}
             onChange={(event, data) => setStatus(data.value)}
           />
-          <Form.Checkbox
-            radio
-            label="Waiting List"
-            name="checkboxRadioGroup"
-            value="waiting_list"
-            checked={status === 'waiting_list'}
-            disabled={registrationEditDeadlinePassed}
-            onChange={(event, data) => setStatus(data.value)}
-          />
+          {/* <Form.Checkbox */}
+          {/*  radio */}
+          {/*  label="Waiting List" */}
+          {/*  name="checkboxRadioGroup" */}
+          {/*  value="waiting_list" */}
+          {/*  checked={status === 'waiting_list'} */}
+          {/*  disabled={registrationEditDeadlinePassed} */}
+          {/*  onChange={(event, data) => setStatus(data.value)} */}
+          {/* /> */}
           <Form.Checkbox
             radio
             label="Cancelled"

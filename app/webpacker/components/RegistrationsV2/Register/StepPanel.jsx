@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { Icon, Message, Step } from 'semantic-ui-react';
+import { Step } from 'semantic-ui-react';
 import CompetingStep from './CompetingStep';
 import RegistrationRequirements from './RegistrationRequirements';
 import StripeWrapper from './StripeWrapper';
@@ -24,7 +24,31 @@ const paymentStepConfig = {
 };
 
 const registrationOverviewConfig = {
-  index: -100,
+  index: 100,
+};
+
+const shouldShowCompleted = (isRegistered, hasPaid, key, index) => {
+  if (key === paymentStepConfig.key) {
+    return hasPaid;
+  }
+  if (key === competingStepConfig.key) {
+    return isRegistered;
+  }
+  if (key === requirementsStepConfig.key) {
+    return index > 0;
+  }
+};
+
+const shouldBeDisabled = (isRegistered, key, activeIndex, index) => {
+  if (key === paymentStepConfig.key) {
+    return !isRegistered && index > activeIndex;
+  }
+  if (key === competingStepConfig.key) {
+    return index > activeIndex;
+  }
+  if (key === requirementsStepConfig.key) {
+    return activeIndex !== 0;
+  }
 };
 
 export default function StepPanel({
@@ -37,6 +61,7 @@ export default function StepPanel({
   connectedAccountId,
 }) {
   const isRegistered = Boolean(registration) && registration.competing.registration_status !== 'cancelled';
+  const registrationSucceeded = isRegistered && registration.competing.registration_status === 'accepted';
   const hasPaid = registration?.payment.payment_status === 'succeeded';
   const registrationFinished = hasPaid || (isRegistered && !competitionInfo['using_payment_integrations?']);
 
@@ -49,7 +74,8 @@ export default function StepPanel({
   }, [competitionInfo]);
 
   const [activeIndex, setActiveIndex] = useState(() => {
-    if (registrationFinished) {
+    // Don't show payment panel if a user was accepted (for people with waived payment)
+    if (registrationFinished || registrationSucceeded) {
       return registrationOverviewConfig.index;
     }
     // If the user has not paid but refreshes the page, we want to display the paymentStep again
@@ -69,8 +95,9 @@ export default function StepPanel({
           <Step
             key={stepConfig.key}
             active={activeIndex === index}
-            completed={registrationFinished || activeIndex > index}
-            disabled={!registrationFinished && activeIndex < index}
+            completed={shouldShowCompleted(isRegistered, hasPaid, stepConfig.key, activeIndex)}
+            disabled={shouldBeDisabled(isRegistered, stepConfig.key, activeIndex, index)}
+            onClick={() => setActiveIndex(index)}
           >
             <Step.Content>
               <Step.Title>{i18n.t(stepConfig.i18nKey)}</Step.Title>
@@ -93,6 +120,9 @@ export default function StepPanel({
             }
             if (overwrites?.toStart) {
               return 0;
+            }
+            if (overwrites?.goBack) {
+              return oldActiveIndex - 1;
             }
             if (oldActiveIndex === steps.length - 1) {
               return registrationOverviewConfig.index;

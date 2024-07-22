@@ -4,18 +4,18 @@ import {
   UpdateSectionData,
 } from './actions';
 
-export const getContactFormInitialState = (loggedInUserData, queryParams) => ({
+export const getContactFormInitialState = (params) => ({
   formValues: {
     userData: {
-      name: loggedInUserData?.user?.name,
-      email: loggedInUserData?.user?.email,
+      name: params?.userName,
+      email: params?.userEmail,
     },
-    contactRecipient: queryParams?.contactRecipient,
+    contactRecipient: params?.contactRecipient,
     competition: {
-      competitionId: queryParams?.competitionId,
+      competitionId: params?.competitionId,
     },
     wst: {
-      requestId: queryParams?.requestId,
+      requestId: params?.requestId,
     },
   },
   attachments: [],
@@ -42,7 +42,7 @@ const reducers = {
   }),
 
   [ClearForm]: (__, { payload }) => (
-    getContactFormInitialState(payload.loggedInUserData, payload.queryParams)
+    getContactFormInitialState(payload.params)
   ),
 };
 
