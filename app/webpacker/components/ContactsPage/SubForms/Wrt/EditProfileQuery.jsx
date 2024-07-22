@@ -3,7 +3,7 @@ import {
   Form, FormField, FormGroup, Radio,
 } from 'semantic-ui-react';
 import { useDispatch, useStore } from '../../../../lib/providers/StoreProvider';
-import { updateSectionData } from '../../store/actions';
+import { updateSectionData, clearForm } from '../../store/actions';
 import I18n from '../../../../lib/i18n';
 import UtcDatePicker from '../../../wca/UtcDatePicker';
 import { genders, countries } from '../../../../lib/wca-data.js.erb';
@@ -26,12 +26,24 @@ const countryOptions = _.map(countries.byIso2, (country) => ({
 export default function EditProfileQuery() {
   const {
     formValues: {
+      userData: { name: userName, email: userEmail },
+      contactRecipient,
       wrt: { profileDataToChange, newProfileData, editProfileReason },
     },
   } = useStore();
   const dispatch = useDispatch();
   const handleFormChange = (_, { name, value }) => dispatch(
     updateSectionData(SECTION, name, value),
+  );
+
+  const handleProfileDataFieldChange = (_, { value }) => dispatch(
+    clearForm({
+      userName,
+      userEmail,
+      contactRecipient,
+      queryType: 'edit_profile',
+      profileDataToChange: value,
+    }),
   );
 
   return (
@@ -45,7 +57,7 @@ export default function EditProfileQuery() {
               name="profileDataToChange"
               value={profileDataField}
               checked={profileDataToChange === profileDataField}
-              onChange={handleFormChange}
+              onChange={handleProfileDataFieldChange}
             />
           </FormField>
         ))}
