@@ -444,7 +444,7 @@ class User < ApplicationRecord
   end
 
   private def group_member?(group)
-    active_roles.any? { |role| role.group == group }
+    active_roles.any? { |role| role.group_id == group.id }
   end
 
   private def at_least_senior_teams_committees_member?(group)
