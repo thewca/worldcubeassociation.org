@@ -5,12 +5,12 @@ class Championship < ApplicationRecord
   CHAMPIONSHIP_TYPE_WORLD = "world"
   MAJOR_CHAMPIONSHIP_TYPES = [
     CHAMPIONSHIP_TYPE_WORLD,
-    *Continent::REAL_CONTINENTS.pluck(:id),
+    *Continent::REAL_CONTINENT_IDS,
   ].freeze
   CHAMPIONSHIP_TYPES = [
     *MAJOR_CHAMPIONSHIP_TYPES,
-    *Country::WCA_COUNTRIES.pluck(:iso2),
-    *EligibleCountryIso2ForChampionship.championship_types,
+    *Country::WCA_COUNTRY_ISO_CODES,
+    *EligibleCountryIso2ForChampionship::CHAMPIONSHIP_TYPES,
   ].freeze
 
   belongs_to :competition

@@ -45,12 +45,17 @@ class Country < ApplicationRecord
       { id: state_id, continentId: state["continent_id"],
         iso2: state["iso2"], name: state["name"] }
     end
-  end
+  end.freeze
+
+  WCA_COUNTRY_ISO_CODES = WCA_COUNTRIES.pluck(:iso2).freeze
+  WCA_COUNTRY_IDS = WCA_COUNTRIES.pluck(:id).freeze
 
   ALL_STATES_RAW = [
     WCA_COUNTRIES,
     MULTIPLE_COUNTRIES,
   ].flatten.freeze
+
+  ALL_COUNTRY_IDS = ALL_STATES_RAW.pluck(:id).freeze
 
   def self.all_raw
     ALL_STATES_RAW

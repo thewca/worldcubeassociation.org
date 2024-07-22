@@ -10,6 +10,7 @@ class Continent < ApplicationRecord
   include StaticData
 
   REAL_CONTINENTS = self.all_raw.select { |c| !FICTIVE_IDS.include?(c[:id]) }.freeze
+  REAL_CONTINENT_IDS = REAL_CONTINENTS.pluck(:id).freeze
 
   has_many :countries, foreign_key: :continentId
 
