@@ -23,7 +23,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           push: true
-          file: ./Dockerfile.sidekiq
+          target: sidekiq
           tags: |
             ${{ steps.login-ecr.outputs.registry }}/wca-on-rails:sidekiq-production
             ${{ steps.login-ecr.outputs.registry }}/wca-on-rails:sidekiq-staging
@@ -34,6 +34,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           push: true
+          target: monolith
           tags: |
             ${{ steps.login-ecr.outputs.registry }}/wca-on-rails:latest
             ${{ steps.login-ecr.outputs.registry }}/wca-on-rails:staging

@@ -1,4 +1,4 @@
-FROM ruby:3.3.0
+FROM ruby:3.3.0 AS build
 ARG BUILD_TAG=local
 WORKDIR /rails
 
@@ -43,6 +43,53 @@ RUN apt-get update -qq && \
       libyaml-dev \
       tzdata
 
+# Install application gems
+COPY Gemfile Gemfile.lock ./
+RUN gem update --system && gem install bundler
+
+RUN ./bin/bundle install && \
+    rm -rf ~/.bundle/ "${BUNDLE_PATH}"/ruby/*/cache "${BUNDLE_PATH}"/ruby/*/bundler/gems/*/.git
+
+# Install node dependencies
+COPY package.json yarn.lock .yarnrc.yml ./
+RUN ./bin/yarn install --immutable
+
+RUN ./bin/bundle exec i18n export
+RUN ./bin/rake assets:precompile
+
+FROM ruby:3.3.0 AS runtime
+
+# Set production environment
+ENV RAILS_LOG_TO_STDOUT="1" \
+    RAILS_SERVE_STATIC_FILES="true" \
+    RAILS_ENV="production" \
+    BUNDLE_WITHOUT="development:test" \
+    BUNDLE_DEPLOYMENT="1" \
+    BUILD_TAG=$BUILD_TAG
+
+# Copy built artifacts: gems, application
+COPY --from=build . .
+
+# Run and own only the runtime files as a non-root user for security
+RUN useradd rails --create-home --shell /bin/bash && \
+    chown -R rails:rails vendor db log tmp public app pids .yarn
+USER rails:rails
+
+EXPOSE 3000
+
+FROM runtime AS sidekiq
+
+RUN apt-get update -qq && \
+    apt-get install --no-install-recommends -y \
+      zip \
+      python-is-python3
+
+RUN gem install mailcatcher
+
+ENTRYPOINT ["/rails/bin/docker-entrypoint-sidekiq"]
+
+FROM runtime AS monolith
+
 # Install fonts for rendering PDFs (mostly competition summary PDFs)
 # dejavu = Hebrew, Arabic, Greek
 # unfonts-core = Korean
@@ -61,35 +108,7 @@ RUN apt-get update -qq && \
 # per https://dalibornasevic.com/posts/76-figuring-out-missing-fonts-for-wkhtmltopdf
 RUN fc-cache -f -v
 
-# Use the MariaDB package sources via https://mariadb.com/kb/en/mariadb-package-repository-setup-and-usage/
-# because the Ruby base image runs on Debian 12, which provides an older MariaDB version that suffers from a
-# mysqldump bug in conjunction with MySQL 8.0 servers: https://jira.mariadb.org/browse/MDEV-31836
-# (the issue was fixed in 10.11.5 but Debian only provides 10.11.4 so we need to override)
-RUN curl -fsSL https://r.mariadb.com/downloads/mariadb_repo_setup | bash -s -- --mariadb-server-version="mariadb-10.11" && \
-    apt-get install -y mariadb-client && \
-    rm -rf /var/lib/apt/lists /var/cache/apt/archives
-
-# Install application gems
-COPY Gemfile Gemfile.lock ./
-RUN gem update --system && gem install bundler
-RUN bundle install && \
-    rm -rf ~/.bundle/ "${BUNDLE_PATH}"/ruby/*/cache "${BUNDLE_PATH}"/ruby/*/bundler/gems/*/.git
-
-# Install node dependencies
-COPY package.json yarn.lock .yarnrc.yml ./
-RUN yarn install --immutable
-
-# Copy built artifacts: gems, application
-COPY . .
-
-# Run and own only the runtime files as a non-root user for security
-RUN useradd rails --create-home --shell /bin/bash && \
-    chown -R rails:rails vendor db log tmp public app pids .yarn
-USER rails:rails
-
 # Entrypoint prepares database and starts app on 0.0.0.0:3000 by default,
 # but can also take a rails command, like "console" or "runner" to start instead.
 ENTRYPOINT ["/rails/bin/docker-entrypoint"]
-
-EXPOSE 3000
 CMD ["./bin/bundle", "exec", "unicorn", "-c", "/rails/config/unicorn.rb"]
