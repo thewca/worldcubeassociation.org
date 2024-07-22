@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_07_17_095605) do
+ActiveRecord::Schema[7.1].define(version: 2024_07_21_145135) do
   create_table "Competitions", id: { type: :string, limit: 32, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", limit: 50, default: "", null: false
     t.string "cityName", limit: 50, default: "", null: false
@@ -1221,6 +1221,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_17_095605) do
     t.string "preferred_locale", limit: 255
     t.boolean "competition_notifications_enabled"
     t.boolean "receive_delegate_reports", default: false, null: false
+    t.string "delegate_reports_region"
     t.boolean "dummy_account", default: false, null: false
     t.integer "consumed_timestep"
     t.boolean "otp_required_for_login", default: false

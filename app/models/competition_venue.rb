@@ -5,6 +5,11 @@ class CompetitionVenue < ApplicationRecord
   has_many :venue_rooms, dependent: :destroy
   has_many :wcif_extensions, as: :extendable, dependent: :delete_all
 
+  belongs_to :country, foreign_key: :country_iso2, primary_key: :iso2
+  has_one :continent, foreign_key: :continentId, through: :country
+
+  delegate :continent, to: :country, allow_nil: true
+
   VALID_TIMEZONES = TZInfo::Timezone.all_identifiers.freeze
 
   validates_presence_of :name
@@ -12,6 +17,10 @@ class CompetitionVenue < ApplicationRecord
   validates_presence_of :latitude_microdegrees
   validates_presence_of :longitude_microdegrees
   validates_inclusion_of :timezone_id, in: VALID_TIMEZONES
+
+  def country
+    Country.find_by_iso2(self.country_iso2)
+  end
 
   def load_wcif!(wcif)
     update!(CompetitionVenue.wcif_to_attributes(wcif))

@@ -128,6 +128,7 @@
 
         <% if @user.staff_or_any_delegate? && (current_user.can_view_all_users? || current_user == @user) %>
           <%= f.input :receive_delegate_reports, disabled: !editable_fields.include?(:receive_delegate_reports) %>
+          <%= f.input :delegate_reports_region, as: :grouped_select, collection: region_options_hash(real_only: true), group_method: :second, disabled: !editable_fields.include?(:delegate_reports_region) %>
         <% end %>
 
         <%= f.submit t('.save'), class: "btn btn-primary" %>
