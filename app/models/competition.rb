@@ -202,7 +202,7 @@ class Competition < ApplicationRecord
   validates :external_website, format: { with: URL_RE }, allow_blank: true
   validates :external_registration_page, presence: true, format: { with: URL_RE }, if: :external_registration_page_required?
 
-  validates_inclusion_of :countryId, in: Country::ALL_STATES_RAW.pluck(:id).freeze
+  validates_inclusion_of :countryId, in: Country::ALL_COUNTRY_IDS
   validates :currency_code, inclusion: { in: Money::Currency, message: proc { I18n.t('competitions.errors.invalid_currency_code') } }
 
   validates_numericality_of :refund_policy_percent, greater_than_or_equal_to: 0, less_than_or_equal_to: 100, if: :refund_policy_percent_required?

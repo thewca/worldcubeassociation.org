@@ -22,7 +22,7 @@ class Person < ApplicationRecord
   }
 
   validates :name, presence: true
-  validates_inclusion_of :countryId, in: Country.real.map(&:id).freeze
+  validates_inclusion_of :countryId, in: Country::WCA_COUNTRY_IDS
 
   # If creating a brand new person (ie: with subId equal to 1), then the
   # WCA ID must be unique.
@@ -215,7 +215,7 @@ class Person < ApplicationRecord
       podiums[:continental] = championship_podiums_with_condition do |results|
         results.joins(:country, competition: [:championships]).where("championships.championship_type = Countries.continentId")
       end
-      EligibleCountryIso2ForChampionship.championship_types.each do |championship_type|
+      EligibleCountryIso2ForChampionship::CHAMPIONSHIP_TYPES.each do |championship_type|
         podiums[championship_type.to_sym] = championship_podiums_with_condition do |results|
           results
             .joins(:country, competition: { championships: :eligible_country_iso2s_for_championship })

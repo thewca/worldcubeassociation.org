@@ -39,7 +39,7 @@ class CountryBand < ApplicationRecord
   end
 
   belongs_to :country, foreign_key: :iso2, primary_key: :iso2
-  validates_inclusion_of :iso2, in: Country.real.map(&:iso2).freeze
+  validates_inclusion_of :iso2, in: Country::WCA_COUNTRY_ISO_CODES
   validates_inclusion_of :number, in: BANDS.keys.freeze
 
   def country
