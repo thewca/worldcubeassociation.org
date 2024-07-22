@@ -80,7 +80,7 @@ export default function RegionManager() {
   }, [data]);
 
   if (loading || fetchLoading || saving) return <Loading />;
-  if (error || saveError) return <Errored />;
+  if (error || saveError) return <Errored error={error || saveError} />;
 
   return (
     <>
