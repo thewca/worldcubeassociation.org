@@ -7,6 +7,9 @@ class Continent < ApplicationRecord
 
   include Cachable
   include LocalizedSortable
+  include StaticData
+
+  REAL_CONTINENTS = self.all_raw.select { |c| !FICTIVE_IDS.include?(c[:id]) }.freeze
 
   has_many :countries, foreign_key: :continentId
 

@@ -159,7 +159,7 @@ module ResultsValidators
 
       def check_result_after_dns(context, all_solve_times)
         # Now let's try to find a DNS result followed by a non-DNS result
-        first_index = all_solve_times.find_index(SolveTime::DNS)
+        first_index = all_solve_times.find_index(&:dns?)
         # Just use '5' here to get all of them
         if first_index && all_solve_times[first_index, 5].any?(&:complete?)
           competition_id, result, round_id, = context

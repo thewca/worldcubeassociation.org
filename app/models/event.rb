@@ -2,6 +2,8 @@
 
 class Event < ApplicationRecord
   include Cachable
+  include StaticData
+
   self.table_name = "Events"
 
   has_many :competition_events
@@ -21,10 +23,6 @@ class Event < ApplicationRecord
 
   def name_in(locale)
     I18n.t(id, scope: :events, locale: locale)
-  end
-
-  def cellName
-    raise "#cellName is deprecated, and will eventually be removed. Use #name instead. See https://github.com/thewca/worldcubeassociation.org/issues/1054."
   end
 
   # Pay special attention to the difference between .. (two dots) and ... (three dots)
@@ -70,16 +68,23 @@ class Event < ApplicationRecord
     ['333', '222', '444', '333oh', 'clock', 'mega', 'pyram', 'skewb', 'sq1'].include?(self.id)
   end
 
+  def self.dump_static
+    self.includes(:preferred_formats, :formats).order(:rank).as_json(
+      only: %w[id rank format],
+    )
+  end
+
   alias_method :can_change_time_limit, :can_change_time_limit?
   alias_method :can_have_cutoff, :can_have_cutoff?
   alias_method :is_timed_event, :timed_event?
   alias_method :is_fewest_moves, :fewest_moves?
   alias_method :is_multiple_blindfolded, :multiple_blindfolded?
+  alias_method :is_official, :official?
 
   DEFAULT_SERIALIZE_OPTIONS = {
     only: ["id"],
     methods: ["name", "can_change_time_limit", "can_have_cutoff", "is_timed_event",
-              "is_fewest_moves", "is_multiple_blindfolded", "format_ids"],
+              "is_fewest_moves", "is_multiple_blindfolded", "is_official", "format_ids"],
   }.freeze
 
   def serializable_hash(options = nil)

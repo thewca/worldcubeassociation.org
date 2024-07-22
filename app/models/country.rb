@@ -2,7 +2,8 @@
 
 class Country < ApplicationRecord
   include Cachable
-  WCA_STATES_JSON_PATH = Rails.root.to_s + "/config/wca-states.json"
+  include StaticData
+
   self.table_name = "Countries"
 
   has_one :wfc_dues_redirect, as: :redirect_source
@@ -27,33 +28,45 @@ class Country < ApplicationRecord
     all_tz
   end.freeze
 
-  MULTIPLE_COUNTRIES = [
-    { id: 'XF', name: 'Multiple Countries (Africa)', continentId: '_Africa', iso2: 'XF' },
-    { id: 'XM', name: 'Multiple Countries (Americas)', continentId: '_Multiple Continents', iso2: 'XM' },
-    { id: 'XA', name: 'Multiple Countries (Asia)', continentId: '_Asia', iso2: 'XA' },
-    { id: 'XE', name: 'Multiple Countries (Europe)', continentId: '_Europe', iso2: 'XE' },
-    { id: 'XN', name: 'Multiple Countries (North America)', continentId: '_North America', iso2: 'XN' },
-    { id: 'XO', name: 'Multiple Countries (Oceania)', continentId: '_Oceania', iso2: 'XO' },
-    { id: 'XS', name: 'Multiple Countries (South America)', continentId: '_South America', iso2: 'XS' },
-    { id: 'XW', name: 'Multiple Countries (World)', continentId: '_Multiple Continents', iso2: 'XW' },
-  ].freeze
+  FICTIVE_COUNTRY_DATA_PATH = StaticData::DATA_FOLDER.join("#{self.data_file_handle}.fictive.json")
+  MULTIPLE_COUNTRIES = self.parse_json_file(FICTIVE_COUNTRY_DATA_PATH).freeze
 
-  FICTIVE_IDS = MULTIPLE_COUNTRIES.map { |c| c[:id] }.freeze
+  FICTIVE_IDS = MULTIPLE_COUNTRIES.pluck(:id).freeze
   NAME_LOOKUP_ATTRIBUTE = :iso2
+
   include LocalizedSortable
 
-  WCA_STATES = JSON.parse(File.read(WCA_STATES_JSON_PATH)).freeze
+  REAL_COUNTRY_DATA_PATH = StaticData::DATA_FOLDER.join("#{self.data_file_handle}.real.json")
+  WCA_STATES_JSON = self.parse_json_file(REAL_COUNTRY_DATA_PATH, symbolize_names: false).freeze
 
-  ALL_STATES = [
-    WCA_STATES["states_lists"].map do |list|
-      list["states"].map do |state|
-        state_id = state["id"] || I18n.transliterate(state["name"]).tr("'", "_")
-        { id: state_id, continentId: state["continent_id"],
-          iso2: state["iso2"], name: state["name"] }
-      end
-    end,
+  WCA_COUNTRIES = WCA_STATES_JSON["states_lists"].flat_map do |list|
+    list["states"].map do |state|
+      state_id = state["id"] || I18n.transliterate(state["name"]).tr("'", "_")
+      { id: state_id, continentId: state["continent_id"],
+        iso2: state["iso2"], name: state["name"] }
+    end
+  end
+
+  ALL_STATES_RAW = [
+    WCA_COUNTRIES,
     MULTIPLE_COUNTRIES,
-  ].flatten.map { |c| Country.new(c) }.freeze
+  ].flatten.freeze
+
+  def self.all_raw
+    ALL_STATES_RAW
+  end
+
+  # As of writing this comment, the actual `Countries` data is controlled by WRC
+  # and we only have control over the 'fictive' values. We parse the WRC file above and override
+  # the `all_raw` getter to include the real countries, but they're not part of our static dataset in the stricter sense
+
+  def self.dump_static
+    MULTIPLE_COUNTRIES
+  end
+
+  def self.data_file_handle
+    "#{self.name.pluralize.underscore}.fictive"
+  end
 
   belongs_to :continent, foreign_key: :continentId
   alias_attribute :continent_id, :continentId
