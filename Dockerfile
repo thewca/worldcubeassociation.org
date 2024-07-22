@@ -1,4 +1,4 @@
-FROM ruby:3.3.0 AS build
+FROM ruby:3.3.0 AS base
 ARG BUILD_TAG=local
 WORKDIR /rails
 
@@ -19,6 +19,8 @@ RUN apt-get update -qq && \
       ca-certificates \
       curl \
       gnupg
+
+FROM base AS build
 
 ARG NODE_MAJOR=20
 RUN curl -fsSL https://deb.nodesource.com/setup_${NODE_MAJOR}.x | bash && \
@@ -57,15 +59,9 @@ RUN ./bin/yarn install --immutable
 RUN ./bin/bundle exec i18n export
 RUN ./bin/rake assets:precompile
 
-FROM ruby:3.3.0 AS runtime
+RUN rm -rf node_modules
 
-# Set production environment
-ENV RAILS_LOG_TO_STDOUT="1" \
-    RAILS_SERVE_STATIC_FILES="true" \
-    RAILS_ENV="production" \
-    BUNDLE_WITHOUT="development:test" \
-    BUNDLE_DEPLOYMENT="1" \
-    BUILD_TAG=$BUILD_TAG
+FROM base AS runtime
 
 # Copy built artifacts: gems, application
 COPY --from=build . .
