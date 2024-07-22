@@ -2,7 +2,7 @@
 
 require "superconfig"
 
-EnvConfig = SuperConfig.new do
+EnvConfig = SuperConfig.new(raise_exception: !ENV.fetch("ASSETS_COMPILATION", false)) do
   if Rails.env.production?
     mandatory :READ_REPLICA_HOST, :string
     mandatory :CACHE_REDIS_URL, :string
