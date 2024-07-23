@@ -37,6 +37,8 @@ class UserGroup < ApplicationRecord
 
   validates :active_roles, absence: true, unless: :is_active?
 
+  mattr_accessor :board_group, instance_writer: false, instance_reader: false, default: UserGroup.board.first
+
   def all_child_groups
     [direct_child_groups, direct_child_groups.map(&:all_child_groups)].flatten
   end
@@ -78,10 +80,6 @@ class UserGroup < ApplicationRecord
       officers: "Officers",
       banned_competitors: "Banned Competitors",
     }
-  end
-
-  def self.board_group
-    UserGroup.board.first
   end
 
   def self.teams_committees_group_wct
