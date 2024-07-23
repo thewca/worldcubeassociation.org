@@ -45,8 +45,8 @@ SuperConfig::Base.class_eval do
   end
 end
 
-AppSecrets = SuperConfig.new do
-  if Rails.env.production?
+AppSecrets = SuperConfig.new(raise_exception: !ENV.fetch("ASSETS_COMPILATION", false)) do
+  if Rails.env.production? && !ENV.fetch("ASSETS_COMPILATION", false)
     require_relative "vault_config"
 
     vault :DATABASE_PASSWORD
