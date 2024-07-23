@@ -87,6 +87,6 @@ module PanelHelper
           panel_pages[:bannedCompetitors],
         ],
       },
-    }
+    }.select { |panel_id| current_user&.can_access_panel?(panel_id) }
   end
 end

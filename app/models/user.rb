@@ -647,10 +647,6 @@ class User < ApplicationRecord
     groups
   end
 
-  def panels_with_access
-    panel_list.keys.select { |panel_id| can_access_panel?(panel_id) }
-  end
-
   def permissions
     permissions = {
       can_attend_competitions: {
@@ -681,7 +677,7 @@ class User < ApplicationRecord
         scope: can_access_wfc_senior_matters? ? "*" : [],
       },
       can_access_panels: {
-        scope: panels_with_access,
+        scope: panel_list(self).keys,
       },
     }
     if banned?
@@ -1359,10 +1355,6 @@ class User < ApplicationRecord
     else
       false
     end
-  end
-
-  def can_access_at_least_one_panel?
-    panels_with_access.any?
   end
 
   def subordinate_delegates
