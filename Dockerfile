@@ -71,12 +71,11 @@ RUN rm -rf node_modules
 FROM base AS runtime
 
 # Copy built artifacts: gems, application
-COPY --from=build . .
+COPY --from=build /rails .
 
 # Run and own only the runtime files as a non-root user for security
 RUN useradd rails --create-home --shell /bin/bash && \
     chown -R rails:rails vendor db log tmp public app pids
-USER rails:rails
 
 FROM runtime AS sidekiq
 
@@ -84,7 +83,7 @@ RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y \
       zip \
       python-is-python3
-
+USER rails:rails
 RUN gem install mailcatcher
 
 ENTRYPOINT ["/rails/bin/docker-entrypoint-sidekiq"]
@@ -106,7 +105,7 @@ RUN apt-get update -qq && \
       fonts-wqy-microhei \
       fonts-ipafont \
       fonts-lmodern
-
+USER rails:rails
 # Regenerate the font cache so WkHtmltopdf can find them
 # per https://dalibornasevic.com/posts/76-figuring-out-missing-fonts-for-wkhtmltopdf
 RUN fc-cache -f -v
