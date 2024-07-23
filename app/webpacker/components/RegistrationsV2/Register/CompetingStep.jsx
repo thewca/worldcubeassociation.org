@@ -67,10 +67,12 @@ export default function CompetingStep({
   const [hasInteracted, setHasInteracted] = useState(false);
   const [guests, setGuests] = useState(0);
 
-  const [processing, setProcessing] = useStoredState(isRegistered);
+  const [processing, setProcessing] = useStoredState(false);
 
   useEffect(() => {
-    setProcessing(isRegistered);
+    if (isRegistered) {
+      setProcessing(false);
+    }
   }, [isRegistered, setProcessing]);
 
   useEffect(() => {
@@ -254,7 +256,6 @@ export default function CompetingStep({
           user={user}
           onProcessingComplete={async () => {
             setProcessing(false);
-            localStorage.removeItem(`${competitionInfo.id}-processing`);
             await refetchRegistration();
             nextStep();
           }}
