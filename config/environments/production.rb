@@ -99,7 +99,9 @@ Rails.application.configure do
   end
 
   # Setup for ActiveStorage.
-  config.active_storage.service = :amazon
+  unless ENV.fetch("ASSETS_COMPILATION", false)
+    config.active_storage.service = :amazon
+  end
 
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.

@@ -23,7 +23,7 @@ class Regulation < SimpleDelegator
     self.regulations_load_error = nil
   end
 
-  if Rails.env.production?
+  if Rails.env.production? && !ENV.fetch("ASSETS_COMPILATION", false)
     reload_regulations(Aws::S3::Resource.new(
                          region: EnvConfig.STORAGE_AWS_REGION,
                          credentials: Aws::ECSCredentials.new,

@@ -29,6 +29,11 @@ jobs:
             ${{ steps.login-ecr.outputs.registry }}/wca-on-rails:sidekiq-staging
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          build-args: |
+            BUILD_TAG=${{ github.sha }}
+            WCA_REGISTRATIONS_URL=https://registration.worldcubeassociation.org
+            WCA_REGISTRATIONS_POLL_URL=https://1rq8d7dif3.execute-api.us-west-2.amazonaws.com/v1/prod
+            ROOT_URL=https://www.worldcubeassociation.org
         # this will trigger the deployment pipeline for prod
       - name: Build and push Prod Image
         uses: docker/build-push-action@v6
@@ -42,6 +47,9 @@ jobs:
           cache-to: type=gha,mode=max
           build-args: |
             BUILD_TAG=${{ github.sha }}
+            WCA_REGISTRATIONS_URL=https://registration.worldcubeassociation.org
+            WCA_REGISTRATIONS_POLL_URL=https://1rq8d7dif3.execute-api.us-west-2.amazonaws.com/v1/prod
+            ROOT_URL=https://www.worldcubeassociation.org
         # Replace the old sidekiq image with the new one
       - name: Deploy Sidekiq
         run: |

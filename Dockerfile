@@ -1,5 +1,8 @@
 FROM ruby:3.3.0 AS base
 ARG BUILD_TAG=local
+ARG WCA_REGISTRATIONS_URL
+ARG WCA_REGISTRATIONS_POLL_URL
+ARG ROOT_URL
 WORKDIR /rails
 
 ENV DEBIAN_FRONTEND noninteractive
@@ -10,7 +13,10 @@ ENV RAILS_LOG_TO_STDOUT="1" \
     RAILS_ENV="production" \
     BUNDLE_WITHOUT="development:test" \
     BUNDLE_DEPLOYMENT="1" \
-    BUILD_TAG=$BUILD_TAG
+    BUILD_TAG=$BUILD_TAG \
+    WCA_REGISTRATIONS_URL=$WCA_REGISTRATIONS_URL \
+    WCA_REGISTRATIONS_POLL_URL=$WCA_REGISTRATIONS_POLL_URL \
+    ROOT_URL=$ROOT_URL
 
 # Add dependencies necessary to install nodejs.
 # From: https://github.com/nodesource/distributions#debian-and-ubuntu-based-distributions
@@ -57,8 +63,8 @@ RUN ./bin/bundle install && \
 COPY package.json yarn.lock .yarnrc.yml ./
 RUN ./bin/yarn install --immutable
 
-RUN ASSETS_COMPILATION=true ./bin/bundle exec i18n export
-RUN ASSETS_COMPILATION=true ./bin/rake assets:precompile
+RUN ASSETS_COMPILATION=true SECRET_KEY_BASE=1 ./bin/bundle exec i18n export
+RUN ASSETS_COMPILATION=true SECRET_KEY_BASE=1 ./bin/rake assets:precompile
 
 RUN rm -rf node_modules
 
@@ -69,7 +75,7 @@ COPY --from=build . .
 
 # Run and own only the runtime files as a non-root user for security
 RUN useradd rails --create-home --shell /bin/bash && \
-    chown -R rails:rails vendor db log tmp public app pids .yarn
+    chown -R rails:rails vendor db log tmp public app pids
 USER rails:rails
 
 FROM runtime AS sidekiq
