@@ -121,9 +121,6 @@ class RegistrationsController < ApplicationController
 
   def import
     @competition = competition_from_params
-    if @competition.uses_new_registration_service?
-      redirect_to Microservices::Registrations.registration_import_path(@competition.id)
-    end
   end
 
   def do_import
@@ -160,31 +157,65 @@ class RegistrationsController < ApplicationController
       raise I18n.t("registrations.import.errors.wrong_dob_format", raw_dobs: wrong_format_dobs.join(", "))
     end
     new_locked_users = []
-    ActiveRecord::Base.transaction do
-      competition.registrations.accepted.each do |registration|
+    if competition.uses_new_registration_service?
+      registrations = Microservices::Registrations.registrations_by_competition(competition.id)
+      create_params = []
+      update_params = []
+      delete_params = []
+      registrations.filter { |r| r.accepted? }.each do |registration|
         unless emails.include?(registration.user.email)
-          registration.update!(deleted_at: Time.now, deleted_by: current_user.id)
+          delete_params << { attendee_id: registration.attendee_id,  competing_status: "deleted", acting_id: current_user.id, acting_type: "user" }
         end
       end
       registration_rows.each do |registration_row|
         user, locked_account_created = user_for_registration!(registration_row)
         new_locked_users << user if locked_account_created
-        registration = competition.registrations.find_or_initialize_by(user_id: user.id)
-        unless registration.accepted?
-          registration.assign_attributes(accepted_at: Time.now, accepted_by: current_user.id, deleted_at: nil)
-        end
-        registration.registration_competition_events = []
-        competition.competition_events.map do |competition_event|
+        registration = registrations.find { |r| r.user_id == user.id }
+        events = competition.competition_events.each_with_object([]) do |competition_event, signed_up_events|
           value = registration_row[competition_event.event_id.to_sym]
-          if value == "1"
-            registration.registration_competition_events.build(competition_event_id: competition_event.id)
-          elsif value != "0"
-            raise I18n.t("registrations.import.errors.invalid_event_column", value: value, column: competition_event.event_id)
+            if value == "1"
+              signed_up_events >> competition_event.id
+            elsif value != "0"
+              raise I18n.t("registrations.import.errors.invalid_event_column", value: value, column: competition_event.event_id)
+            end
+          end
+        if registration.nil?
+          create_params << { attendee_id: "#{competition.id}-#{user.id}", competing_status: "accepted", acting_id: current_user.id, acting_type: "user" , event_ids: events }
+        else
+          update_params << { attendee_id: registration.attendee_id, competing_status: "accepted", acting_id: current_user.id, acting_type: "user" , event_ids: events }
+        end
+      end
+      import_response = Microservices::Registrations.import_registrations(competition.id, { create: create_params, update: update_params, delete: delete_params })
+      if import_response.errors.any?
+        raise import_response.errors.join(', ')
+      end
+    else
+      ActiveRecord::Base.transaction do
+        competition.registrations.accepted.each do |registration|
+          unless emails.include?(registration.user.email)
+            registration.update!(deleted_at: Time.now, deleted_by: current_user.id)
           end
         end
-        registration.save!
-      rescue StandardError => e
-        raise e.exception(I18n.t("registrations.import.errors.error", registration: registration_row[:name], error: e))
+        registration_rows.each do |registration_row|
+          user, locked_account_created = user_for_registration!(registration_row)
+          new_locked_users << user if locked_account_created
+          registration = competition.registrations.find_or_initialize_by(user_id: user.id)
+          unless registration.accepted?
+            registration.assign_attributes(accepted_at: Time.now, accepted_by: current_user.id, deleted_at: nil)
+          end
+          registration.registration_competition_events = []
+          competition.competition_events.map do |competition_event|
+            value = registration_row[competition_event.event_id.to_sym]
+            if value == "1"
+              registration.registration_competition_events.build(competition_event_id: competition_event.id)
+            elsif value != "0"
+              raise I18n.t("registrations.import.errors.invalid_event_column", value: value, column: competition_event.event_id)
+            end
+          end
+          registration.save!
+        rescue StandardError => e
+          raise e.exception(I18n.t("registrations.import.errors.error", registration: registration_row[:name], error: e))
+        end
       end
     end
     new_locked_users.each do |user|
