@@ -72,8 +72,6 @@ RUN useradd rails --create-home --shell /bin/bash && \
     chown -R rails:rails vendor db log tmp public app pids .yarn
 USER rails:rails
 
-EXPOSE 3000
-
 FROM runtime AS sidekiq
 
 RUN apt-get update -qq && \
@@ -86,6 +84,8 @@ RUN gem install mailcatcher
 ENTRYPOINT ["/rails/bin/docker-entrypoint-sidekiq"]
 
 FROM runtime AS monolith
+
+EXPOSE 3000
 
 # Install fonts for rendering PDFs (mostly competition summary PDFs)
 # dejavu = Hebrew, Arabic, Greek
