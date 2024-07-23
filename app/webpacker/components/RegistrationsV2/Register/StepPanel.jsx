@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Step } from 'semantic-ui-react';
 import CompetingStep from './CompetingStep';
 import RegistrationRequirements from './RegistrationRequirements';
@@ -6,6 +6,7 @@ import StripeWrapper from './StripeWrapper';
 import i18n from '../../../lib/i18n';
 import RegistrationOverview from './RegistrationOverview';
 import RegistrationStatus from './RegistrationStatus';
+import useStoredState from '../../../lib/hooks/useStoredState';
 
 const requirementsStepConfig = {
   key: 'requirements',
@@ -65,6 +66,14 @@ export default function StepPanel({
   const hasPaid = registration?.payment.payment_status === 'succeeded';
   const registrationFinished = hasPaid || (isRegistered && !competitionInfo['using_payment_integrations?']);
 
+  const [processing, setProcessing] = useStoredState(false, `${competitionInfo.id}-processing`);
+
+  useEffect(() => {
+    if (isRegistered) {
+      setProcessing(false);
+    }
+  }, [isRegistered, setProcessing]);
+
   const steps = useMemo(() => {
     if (competitionInfo['using_payment_integrations?']) {
       return [requirementsStepConfig, competingStepConfig, paymentStepConfig];
@@ -77,6 +86,11 @@ export default function StepPanel({
     // Don't show payment panel if a user was accepted (for people with waived payment)
     if (registrationFinished || registrationSucceeded) {
       return registrationOverviewConfig.index;
+    }
+    if (processing) {
+      return steps.findIndex(
+        (step) => step === competingStepConfig,
+      );
     }
     // If the user has not paid but refreshes the page, we want to display the paymentStep again
     return steps.findIndex(
