@@ -23,6 +23,7 @@ import { setMessage } from './RegistrationMessage';
 import i18n from '../../../lib/i18n';
 import I18nHTMLTranslate from '../../I18nHTMLTranslate';
 import { useConfirm } from '../../../lib/providers/ConfirmProvider';
+import useStoredState from '../../../lib/hooks/useStoredState';
 
 const maxCommentLength = 240;
 
@@ -66,7 +67,11 @@ export default function CompetingStep({
   const [hasInteracted, setHasInteracted] = useState(false);
   const [guests, setGuests] = useState(0);
 
-  const [processing, setProcessing] = useState(false);
+  const [processing, setProcessing] = useStoredState(isRegistered);
+
+  useEffect(() => {
+    setProcessing(isRegistered);
+  }, [isRegistered, setProcessing]);
 
   useEffect(() => {
     if (isRegistered && registration.competing.registration_status !== 'cancelled') {
@@ -249,6 +254,7 @@ export default function CompetingStep({
           user={user}
           onProcessingComplete={async () => {
             setProcessing(false);
+            localStorage.removeItem(`${competitionInfo.id}-processing`);
             await refetchRegistration();
             nextStep();
           }}
