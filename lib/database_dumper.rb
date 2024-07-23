@@ -1087,7 +1087,6 @@ module DatabaseDumper
     "eligible_country_iso2s_for_championship" => {
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
-          id
           championship_type
           eligible_country_iso2
         ),
