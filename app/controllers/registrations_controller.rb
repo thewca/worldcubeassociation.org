@@ -164,7 +164,7 @@ class RegistrationsController < ApplicationController
       delete_params = []
       registrations.filter { |r| r.accepted? }.each do |registration|
         unless emails.include?(registration.user.email)
-          delete_params << { attendee_id: registration.attendee_id,  competing_status: "deleted", acting_id: current_user.id, acting_type: "user" }
+          delete_params << { attendee_id: registration.attendee_id, competing_status: "deleted", acting_id: current_user.id, acting_type: "user" }
         end
       end
       registration_rows.each do |registration_row|
@@ -173,16 +173,16 @@ class RegistrationsController < ApplicationController
         registration = registrations.find { |r| r.user_id == user.id }
         events = competition.competition_events.each_with_object([]) do |competition_event, signed_up_events|
           value = registration_row[competition_event.event_id.to_sym]
-            if value == "1"
-              signed_up_events >> competition_event.id
-            elsif value != "0"
-              raise I18n.t("registrations.import.errors.invalid_event_column", value: value, column: competition_event.event_id)
-            end
+          if value == "1"
+            signed_up_events >> competition_event.id
+          elsif value != "0"
+            raise I18n.t("registrations.import.errors.invalid_event_column", value: value, column: competition_event.event_id)
           end
+        end
         if registration.nil?
-          create_params << { attendee_id: "#{competition.id}-#{user.id}", competing_status: "accepted", acting_id: current_user.id, acting_type: "user" , event_ids: events }
+          create_params << { attendee_id: "#{competition.id}-#{user.id}", competing_status: "accepted", acting_id: current_user.id, acting_type: "user", event_ids: events }
         else
-          update_params << { attendee_id: registration.attendee_id, competing_status: "accepted", acting_id: current_user.id, acting_type: "user" , event_ids: events }
+          update_params << { attendee_id: registration.attendee_id, competing_status: "accepted", acting_id: current_user.id, acting_type: "user", event_ids: events }
         end
       end
       import_response = Microservices::Registrations.import_registrations(competition.id, { create: create_params, update: update_params, delete: delete_params })
