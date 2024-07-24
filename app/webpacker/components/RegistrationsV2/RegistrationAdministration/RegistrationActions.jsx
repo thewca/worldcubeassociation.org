@@ -4,20 +4,26 @@ import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { setMessage } from '../Register/RegistrationMessage';
 import i18n from '../../../lib/i18n';
 
-function csvExport(selected, registrations) {
+function csvExport(selected, registrations, competition) {
   let csvContent = 'data:text/csv;charset=utf-8,';
   csvContent
-    += 'user_id,guests,competing.event_ids,competing.registration_status,competing.registered_on,competing.comment,competing.admin_comment\n';
+    += `Status,Name,Country,WCA ID,Birth Date,Gender,${competition.event_ids.join(',')},Email,Guests,Registration Date Time (UTC)\n`;
   registrations
     .filter((r) => selected.length === 0 || selected.includes(r.user_id))
     .forEach((registration) => {
-      csvContent += `${registration.user_id},${
+      csvContent += `${registration.competing.registration_status === 'accepted' ? 'a' : 'p'},${
+        registration.user.name
+      },${registration.user.country.name},${
+        registration.user.wca_id
+      },${registration.dob},${
+        registration.user.gender
+      },${competition.event_ids.map((evt) => (registration.competing.event_ids.includes(evt) ? '1' : '0'))},${
+        registration.email
+      },${
         registration.guests
-      },${registration.competing.event_ids.join(';')},${
-        registration.competing.registration_status
-      },${registration.competing.registered_on},${
-        registration.competing.comment
-      },${registration.competing.admin_comment}\n`;
+      },${
+        registration.competing.registered_on
+      }\n`;
     });
   const encodedUri = encodeURI(csvContent);
   window.open(encodedUri);
@@ -93,6 +99,7 @@ export default function RegistrationActions({
           csvExport(
             [...pending, ...accepted, ...cancelled, ...waiting],
             registrations,
+            competitionInfo,
           );
         }}
       >
