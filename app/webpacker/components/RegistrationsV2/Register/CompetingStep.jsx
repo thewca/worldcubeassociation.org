@@ -23,7 +23,6 @@ import { setMessage } from './RegistrationMessage';
 import i18n from '../../../lib/i18n';
 import I18nHTMLTranslate from '../../I18nHTMLTranslate';
 import { useConfirm } from '../../../lib/providers/ConfirmProvider';
-import useStoredState from '../../../lib/hooks/useStoredState';
 
 const maxCommentLength = 240;
 
@@ -49,6 +48,8 @@ export default function CompetingStep({
   preferredEvents,
   registration,
   refetchRegistration,
+  processing,
+  setProcessing,
 }) {
   const maxEvents = competitionInfo.events_per_registration_limit ?? Infinity;
   const isRegistered = Boolean(registration);
@@ -66,8 +67,6 @@ export default function CompetingStep({
   // Don't set an error state before the user has interacted with the eventPicker
   const [hasInteracted, setHasInteracted] = useState(false);
   const [guests, setGuests] = useState(0);
-
-  const [processing, setProcessing] = useStoredState(false, `${competitionInfo.id}-processing`);
 
   useEffect(() => {
     if (isRegistered && registration.competing.registration_status !== 'cancelled') {

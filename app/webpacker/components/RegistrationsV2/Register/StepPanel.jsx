@@ -66,7 +66,7 @@ export default function StepPanel({
   const hasPaid = registration?.payment.payment_status === 'succeeded';
   const registrationFinished = hasPaid || (isRegistered && !competitionInfo['using_payment_integrations?']);
 
-  const [processing, setProcessing] = useStoredState(false, `${competitionInfo.id}-processing`);
+  const [processing, setProcessing] = useStoredState(false, `${competitionInfo.id}-${user.id}-processing`);
 
   useEffect(() => {
     if (isRegistered) {
@@ -127,6 +127,8 @@ export default function StepPanel({
         user={user}
         stripePublishableKey={stripePublishableKey}
         connectedAccountId={connectedAccountId}
+        processing={processing}
+        setProcessing={setProcessing}
         nextStep={
           (overwrites = {}) => setActiveIndex((oldActiveIndex) => {
             if (overwrites?.refresh) {
