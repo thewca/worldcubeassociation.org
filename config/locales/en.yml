@@ -1834,7 +1834,7 @@ en:
           waiting_list: "You are on the Waiting List at position %{waiting_list_position}."
         disclaimer: "Submission of Registration does not mean approval to compete"
         processing: "Your registration is processing..."
-        processing_longer: "Processing is taking longer than usual, don't go away!"
+        processing_longer: "Your registration has been received, and will be processed soon. Our servers are busy at the moment. You can safely close or refresh this page. (Note: Refreshing won't make anything go faster!)"
         processing_queue: "Lots of Registrations being processed, %{queueCount} in the queue."
         event_limit: "This competition limits the amount of events you can register for to %{max_events}."
       errors:
