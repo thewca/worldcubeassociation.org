@@ -186,8 +186,8 @@ class RegistrationsController < ApplicationController
         end
       end
       import_response = Microservices::Registrations.import_registrations(competition.id, { create: create_params, update: update_params, delete: delete_params })
-      unless import_response[:errors].nil?
-        raise import_response[:errors].join(', ')
+      if import_response["errors"].any?
+        raise import_response["errors"].join(', ')
       end
     else
       ActiveRecord::Base.transaction do
@@ -225,7 +225,6 @@ class RegistrationsController < ApplicationController
     redirect_to competition_registrations_import_url(competition)
   rescue StandardError => e
     flash[:danger] = e.to_s
-    puts e.backtrace
     redirect_to competition_registrations_import_url(competition)
   end
 
