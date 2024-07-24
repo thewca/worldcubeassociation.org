@@ -1,5 +1,5 @@
 <% require 'csv' %>
-<% headers = ["Status", "Name", "Country", "WCA ID", "Birth Date", "Gender" ] + @competition.events.map(&:id) + [ "Email", "Guests", "IP", "Registration Date Time (UTC)" ] %>
+<% headers = ["Status", "Name", "Country", "WCA ID", "Birth Date", "Gender" ] + @competition.events.map(&:id) + [ "Email", "Guests", "Registration Date Time (UTC)" ] %>
 <%= CSV.generate_line(headers).html_safe -%>
 <% @registrations.each do |registration| %>
 <%= CSV.generate_line([
@@ -12,7 +12,6 @@
 ] + @competition.events.map { |e| registration.events.include?(e) ? "1" : "0" } + [
   registration.email,
   registration.guests,
-  registration.ip,
   registration.created_at,
 ]).html_safe -%>
 <% end %>
