@@ -472,7 +472,7 @@ class Competition < ApplicationRecord
         if user.can_admin_results?
           warnings[:results] = I18n.t('competitions.messages.results_not_posted')
         else
-          warnings[:results] = I18n.t('competitions.messages.results_not_posted_non_admins')
+          warnings[:results] = I18n.t('competitions.messages.results_still_processing')
         end
       end
 
