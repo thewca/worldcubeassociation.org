@@ -37,6 +37,8 @@ class User < ApplicationRecord
   has_many :teams_committees_at_least_senior_roles, through: :teams_committees_at_least_senior_role_metadata, source: :user_role, class_name: "UserRole"
   has_many :teams_committees_at_least_senior_groups, through: :teams_committees_at_least_senior_roles, source: :group, class_name: "UserGroup"
   has_many :teams_committees_at_least_senior, through: :teams_committees_at_least_senior_groups, source: :metadata, source_type: "GroupsMetadataTeamsCommittees"
+  has_many :active_groups, through: :active_roles, source: :group, class_name: "UserGroup"
+  has_many :board_metadata, through: :active_groups, source: :metadata, source_type: "GroupsMetadataBoard"
   has_many :confirmed_users_claiming_wca_id, -> { confirmed_email }, foreign_key: "delegate_id_to_handle_wca_id_claim", class_name: "User"
   has_many :oauth_applications, class_name: 'Doorkeeper::Application', as: :owner
   has_many :oauth_access_grants, class_name: 'Doorkeeper::AccessGrant', foreign_key: :resource_owner_id
