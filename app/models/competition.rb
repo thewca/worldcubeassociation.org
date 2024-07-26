@@ -469,7 +469,7 @@ class Competition < ApplicationRecord
       end
 
       if self.results.any? && !self.results_posted?
-        if user.can_admin_results?
+        if user&.can_admin_results?
           warnings[:results] = I18n.t('competitions.messages.results_not_posted')
         else
           warnings[:results] = I18n.t('competitions.messages.results_still_processing')
