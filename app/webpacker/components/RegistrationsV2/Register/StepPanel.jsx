@@ -6,6 +6,7 @@ import StripeWrapper from './StripeWrapper';
 import i18n from '../../../lib/i18n';
 import RegistrationOverview from './RegistrationOverview';
 import RegistrationStatus from './RegistrationStatus';
+import { hasPassed } from '../../../lib/utils/dates';
 
 const requirementsStepConfig = {
   key: 'requirements',
@@ -39,12 +40,18 @@ const shouldShowCompleted = (isRegistered, hasPaid, key, index) => {
   }
 };
 
-const shouldBeDisabled = (isRegistered, key, activeIndex, index) => {
+const shouldBeDisabled = (isRegistered, key, activeIndex, index, competitionInfo) => {
+  const hasRegistrationEditDeadlinePassed = hasPassed(
+    competitionInfo.event_change_deadline_date ?? competitionInfo.start_date,
+  );
+  const editsAllowed = competitionInfo.allow_registration_edits
+    && !hasRegistrationEditDeadlinePassed;
+
   if (key === paymentStepConfig.key) {
     return !isRegistered && index > activeIndex;
   }
   if (key === competingStepConfig.key) {
-    return index > activeIndex;
+    return index > activeIndex && !editsAllowed;
   }
   if (key === requirementsStepConfig.key) {
     return activeIndex !== 0;
@@ -96,7 +103,7 @@ export default function StepPanel({
             key={stepConfig.key}
             active={activeIndex === index}
             completed={shouldShowCompleted(isRegistered, hasPaid, stepConfig.key, activeIndex)}
-            disabled={shouldBeDisabled(isRegistered, stepConfig.key, activeIndex, index)}
+            disabled={shouldBeDisabled(isRegistered, stepConfig.key, activeIndex, index, competitionInfo)}
             onClick={() => setActiveIndex(index)}
           >
             <Step.Content>
