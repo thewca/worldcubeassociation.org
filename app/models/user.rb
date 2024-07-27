@@ -646,8 +646,39 @@ class User < ApplicationRecord
     groups
   end
 
+  def self.panel_pages
+    [
+      :postingDashboard,
+      :editPerson,
+      :regionsManager,
+      :groupsManagerAdmin,
+      :bannedCompetitors,
+      :translators,
+      :duesExport,
+      :countryBands,
+      :delegateProbations,
+      :xeroUsers,
+      :duesRedirect,
+      :delegateForms,
+      :regions,
+      :subordinateDelegateClaims,
+      :subordinateUpcomingCompetitions,
+      :leaderForms,
+      :groupsManager,
+      :importantLinks,
+      :delegateHandbook,
+      :seniorDelegatesList,
+      :leadersAdmin,
+      :boardEditor,
+      :officersEditor,
+      :regionsAdmin,
+      :downloadVoters,
+      :generateDbToken,
+    ].to_h { |panel_page| [panel_page, panel_page.to_s.underscore.dasherize] }
+  end
+
   def self.panel_list
-    panel_pages = PanelController.panel_pages
+    panel_pages = User.panel_pages
     {
       admin: {
         name: 'New Admin panel',
