@@ -99,7 +99,7 @@ export default function RegistrationOverview({
             { /* Make sure to keep WCA Event order */}
             {events.official
               .filter((e) => registration.competing.event_ids.includes(e.id))
-              .map((e) => (<EventIcon key={e.id} id={e.id} style={{ cursor: 'unset' }} />))}
+              .map((e) => (<EventIcon key={e.id} id={e.id} hoverable={false} />))}
           </FormField>
           <FormField />
           <FormField>
