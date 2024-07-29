@@ -119,12 +119,26 @@ export default function StepPanel({
           <Step
             key={stepConfig.key}
             active={activeIndex === index}
-            completed={shouldShowCompleted(isRegistered, hasPaid, isAccepted, stepConfig.key, activeIndex)}
-            disabled={shouldBeDisabled(hasPaid, stepConfig.key, activeIndex, index, competitionInfo)}
+            completed={shouldShowCompleted(
+              isRegistered,
+              hasPaid,
+              isAccepted,
+              stepConfig.key,
+              activeIndex,
+            )}
+            disabled={shouldBeDisabled(
+              hasPaid,
+              stepConfig.key,
+              activeIndex,
+              index,
+              competitionInfo,
+            )}
             onClick={() => setActiveIndex(index)}
           >
-            {/* This otherwise shows double icons when completed */}
-            {!shouldShowCompleted(isRegistered, hasPaid, isAccepted, stepConfig.key, activeIndex) && <Icon name={stepConfig.icon} />}
+            {/* This otherwise shows double icons when completed,
+            definitely a bug also happens when I use the official example */}
+            {!shouldShowCompleted(isRegistered, hasPaid, isAccepted, stepConfig.key, activeIndex)
+              && <Icon name={stepConfig.icon} />}
             <Step.Content>
               <Step.Title>{i18n.t(stepConfig.i18nKey)}</Step.Title>
               <Step.Description>{stepConfig.description}</Step.Description>
