@@ -151,10 +151,10 @@ export default function StepPanel({
             if (overwrites?.goBack) {
               return oldActiveIndex - 1;
             }
-            if (oldActiveIndex === steps.length - 1) {
-              return registrationOverviewConfig.index;
-            }
-            if (oldActiveIndex === registrationOverviewConfig.index) {
+            const registrationOverviewIndex = steps.findIndex(
+              (step) => step === registrationOverviewConfig,
+            );
+            if (oldActiveIndex === registrationOverviewIndex) {
               return steps.findIndex(
                 (step) => step === competingStepConfig,
               );
