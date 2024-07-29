@@ -11,6 +11,7 @@ import updateRegistration from '../api/registration/patch/update_registration';
 import { setMessage } from './RegistrationMessage';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { useConfirm } from '../../../lib/providers/ConfirmProvider';
+import RegistrationStatus from './RegistrationStatus';
 
 function updateRegistrationKey(editsAllowed, deadlinePassed) {
   if (!editsAllowed && !deadlinePassed) {
@@ -76,6 +77,7 @@ export default function RegistrationOverview({
 
   return (
     <>
+      <RegistrationStatus registration={registration} />
       { !editsAllowed && (
       <Message info>
         {i18n.t(updateRegistrationKey(editsAllowed, hasRegistrationEditDeadlinePassed))}

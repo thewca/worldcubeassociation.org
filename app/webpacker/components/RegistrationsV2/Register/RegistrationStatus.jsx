@@ -1,7 +1,6 @@
 import React from 'react';
-import { Checkbox, Icon, Message } from 'semantic-ui-react';
+import { Icon, Message } from 'semantic-ui-react';
 import i18n from '../../../lib/i18n';
-import useCheckboxState from '../../../lib/hooks/useCheckboxState';
 
 function registrationIconByStatus(registrationStatus) {
   switch (registrationStatus) {
@@ -27,7 +26,7 @@ function canIBookPlaneTickets(registrationStatus) {
     case 'pending':
       return "Don't book your flights and hotel just yet - the organizers still have to manually approve your registration. This can take time.";
     case 'accepted':
-      return 'Pack your bags and book your flights - you have a spot at the competition!';
+      return 'Book your flights and pack your bags - you have a spot at the competition!';
     case 'cancelled':
       return 'Your registration has been deleted and you will not be competing.';
     case 'waiting_list':
@@ -37,7 +36,7 @@ function canIBookPlaneTickets(registrationStatus) {
   }
 }
 
-function RegistrationStatusMessage({ registration, showAlternativeDescription }) {
+function RegistrationStatusMessage({ registration }) {
   return (
     <Message
       info={registration.competing.registration_status === 'pending'}
@@ -56,27 +55,18 @@ function RegistrationStatusMessage({ registration, showAlternativeDescription })
             },
           )}
         </Message.Header>
-        {showAlternativeDescription && (
-          <p>
-            {canIBookPlaneTickets(registration.competing.registration_status)}
-          </p>
-        )}
+        <p>
+          {canIBookPlaneTickets(registration.competing.registration_status)}
+        </p>
       </Message.Content>
     </Message>
   );
 }
 
 export default function RegistrationStatus({ registration }) {
-  const [showAlternativeToggle, setAlternativeToggle] = useCheckboxState(true);
-
   return (
-    <>
-      <Checkbox toggle checked={showAlternativeToggle} onChange={setAlternativeToggle} label="Show alternative status description" />
-
-      <RegistrationStatusMessage
-        registration={registration}
-        showAlternativeDescription={showAlternativeToggle}
-      />
-    </>
+    <RegistrationStatusMessage
+      registration={registration}
+    />
   );
 }
