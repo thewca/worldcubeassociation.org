@@ -141,7 +141,8 @@
               icon: "sign in alt"
             }
           end
-          if @competition.registrations.any?
+
+          if @competition.registration_opened?
             event_icons = @competition.events.map do |event|
               { text: event.id, path: competition_psych_sheet_event_path(@competition, event.id), cubing_icon: event.id, title: event.name }
             end unless @competition.uses_new_registration_service?
