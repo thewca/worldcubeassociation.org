@@ -1339,6 +1339,7 @@ en:
       uncancel_success: "Successfully uncancelled competition!"
       uncancel_failure: "Cannot uncancel the competition."
       results_not_posted: "This competition's results are visible but haven't been posted yet."
+      results_still_processing: "We are busy processing this competition's results - they should be available shortly."
       results_already_posted: "The results have already been posted."
       results_posted: "Successfully posted results!"
       results_preview_alert: "You are viewing results that have not been posted yet."

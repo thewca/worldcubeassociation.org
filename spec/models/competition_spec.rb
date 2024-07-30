@@ -473,9 +473,11 @@ RSpec.describe Competition do
     it "warns if competition has results and haven't been posted" do
       competition = FactoryBot.create :competition, :confirmed, :announced, :visible, :past, results_posted_at: nil, results_posted_by: nil
       FactoryBot.create(:result, person: FactoryBot.create(:person), competitionId: competition.id)
+      wrt_member = FactoryBot.create :user, :wrt_member
 
       expect(competition).to be_valid
-      expect(competition.warnings_for(nil)[:results]).to eq "This competition's results are visible but haven't been posted yet."
+      expect(competition.warnings_for(wrt_member)[:results]).to eq "This competition's results are visible but haven't been posted yet."
+      expect(competition.warnings_for(nil)[:results]).to eq "We are busy processing this competition's results - they should be available shortly."
     end
 
     it "does not warn about other different championships" do
