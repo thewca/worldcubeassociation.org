@@ -9,6 +9,7 @@ class SessionsController < Devise::SessionsController
   protect_from_forgery with: :exception, prepend: true
 
   def auto_login
+    return if EnvConfig.WCA_LIVE_SITE?
     user = Person.order("RAND()").first.user
     if user && !EnvConfig.WCA_LIVE_SITE?
       sign_in(user)
