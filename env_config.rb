@@ -78,4 +78,9 @@ EnvConfig = SuperConfig.new do
 
   # For server status
   optional :BUILD_TAG, :string, "local"
+
+  # To allow logging in to staging with your prod account
+  unless ActiveModel::Type::Boolean.new.cast(ENV.fetch("WCA_LIVE_SITE", false))
+    mandatory :STAGING_OAUTH_URL, :string
+  end
 end

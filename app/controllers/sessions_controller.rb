@@ -11,9 +11,9 @@ class SessionsController < Devise::SessionsController
   def staging_oauth_login
     return if EnvConfig.WCA_LIVE_SITE?
 
-    client = OAuth2::Client.new("example-application-id", "example-secret",
-                       :site => "https://staging.worldcubeassociation.org")
-    redirect_uri = "http://localhost:3000/staging_login"
+    client = OAuth2::Client.new(AppSecrets.STAGING_OAUTH_CLIENT, AppSecrets.STAGING_OAUTH_SECRET,
+                       :site => EnvConfig.STAGING_OAUTH_URL)
+    redirect_uri = "#{root_url}/staging_login"
 
     return redirect_to client.auth_code.authorize_url(
       :redirect_uri => redirect_uri), allow_other_host: true unless params[:code].present?
@@ -23,7 +23,7 @@ class SessionsController < Devise::SessionsController
 
     # Get /me to figure out which user we are
     connection = Faraday.new(
-      url: "https://staging.worldcubeassociation.org",
+      url: EnvConfig.STAGING_OAUTH_URL,
       headers: {
         'Authorization' => "Bearer #{access_token}",
         'Content-Type' => 'application/json',
@@ -48,7 +48,7 @@ class SessionsController < Devise::SessionsController
       sign_in(user)
       redirect_to competition_register_path('SpeedySouthport2024'), notice: "Logged in automatically as #{user.wca_id}"
     else
-      redirect_to auto_login_path, alert: "That didn't work - retrying with a different account"
+      redirect_to root_url, alert: "Couldn't find your user"
     end
   end
 
