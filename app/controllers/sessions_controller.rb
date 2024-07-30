@@ -12,14 +12,18 @@ class SessionsController < Devise::SessionsController
     return if EnvConfig.WCA_LIVE_SITE?
 
     client = OAuth2::Client.new(AppSecrets.STAGING_OAUTH_CLIENT, AppSecrets.STAGING_OAUTH_SECRET,
-                       :site => EnvConfig.STAGING_OAUTH_URL)
+                                site: EnvConfig.STAGING_OAUTH_URL)
     redirect_uri = "#{root_url}/staging_login"
 
-    return redirect_to client.auth_code.authorize_url(
-      :redirect_uri => redirect_uri), allow_other_host: true unless params[:code].present?
+    unless params[:code].present?
+      return redirect_to client.auth_code.authorize_url(
+        redirect_uri: redirect_uri,
+      ), allow_other_host: true
+    end
 
     access_token = client.auth_code.get_token(
-      params[:code], :redirect_uri => redirect_uri).token
+      params[:code], redirect_uri: redirect_uri
+    ).token
 
     # Get /me to figure out which user we are
     connection = Faraday.new(

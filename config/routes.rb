@@ -41,7 +41,6 @@ Rails.application.routes.draw do
     delete 'users/sign-out-other' => 'sessions#destroy_other', as: :destroy_other_user_sessions
   end
 
-
   # TODO: This can be removed after deployment, this is so we don't have any users error out if they click on pay
   # while the deployment happens
   get 'registration/:id/payment-completion' => 'registrations#payment_completion_legacy', as: :registration_payment_completion_legacy
