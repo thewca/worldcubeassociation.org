@@ -9,7 +9,6 @@ import { hasPassed } from '../../../lib/utils/dates';
 
 const requirementsStepConfig = {
   key: 'requirements',
-  icon: 'file text',
   description: 'Accept competition terms',
   i18nKey: 'competitions.registration_v2.requirements.title',
   component: RegistrationRequirements,
@@ -18,14 +17,12 @@ const requirementsStepConfig = {
 const competingStepConfig = {
   key: 'competing',
   i18nKey: 'competitions.nav.menu.register',
-  icon: 'pencil',
   description: 'Choose your events',
   component: CompetingStep,
 };
 
 const paymentStepConfig = {
   key: 'payment',
-  icon: 'payment',
   description: 'Enter billing information',
   i18nKey: 'registrations.payment_form.labels.payment_information',
   component: StripeWrapper,
@@ -33,7 +30,6 @@ const paymentStepConfig = {
 
 const registrationOverviewConfig = {
   key: 'approval',
-  icon: 'hourglass',
   description: 'By organization team',
   i18nKey: 'competitions.registration_v2.register.approval',
   component: RegistrationOverview,
@@ -135,10 +131,6 @@ export default function StepPanel({
             )}
             onClick={() => setActiveIndex(index)}
           >
-            {/* This otherwise shows double icons when completed,
-            definitely a bug also happens when I use the official example */}
-            {!shouldShowCompleted(isRegistered, hasPaid, isAccepted, stepConfig.key, activeIndex)
-              && <Icon name={stepConfig.icon} />}
             <Step.Content>
               <Step.Title>{i18n.t(stepConfig.i18nKey)}</Step.Title>
               <Step.Description>{stepConfig.description}</Step.Description>
