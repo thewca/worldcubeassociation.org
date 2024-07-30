@@ -27,7 +27,7 @@ Rails.application.routes.draw do
   #  https://github.com/plataformatec/devise/wiki/How-To:-Disable-user-from-destroying-their-account
   devise_for :users, skip: :registrations, controllers: { sessions: "sessions" }
   devise_scope :user do
-    get 'auto_login', to: 'sessions#auto_login' unless EnvConfig.WCA_LIVE_SITE?
+    get 'staging_login', to: 'sessions#staging_oauth_login' unless EnvConfig.WCA_LIVE_SITE?
     resource :registration,
              only: [:new, :create],
              path: 'users',

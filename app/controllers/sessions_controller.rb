@@ -8,10 +8,43 @@ class SessionsController < Devise::SessionsController
   # Make sure this happens always before any before_action
   protect_from_forgery with: :exception, prepend: true
 
-  def auto_login
+  def staging_oauth_login
     return if EnvConfig.WCA_LIVE_SITE?
-    user = Person.order("RAND()").first.user
-    if user && !EnvConfig.WCA_LIVE_SITE?
+
+    client = OAuth2::Client.new("example-application-id", "example-secret",
+                       :site => "https://staging.worldcubeassociation.org")
+    redirect_uri = "http://localhost:3000/staging_login"
+
+    return redirect_to client.auth_code.authorize_url(
+      :redirect_uri => redirect_uri), allow_other_host: true unless params[:code].present?
+
+    access_token = client.auth_code.get_token(
+      params[:code], :redirect_uri => redirect_uri).token
+
+    # Get /me to figure out which user we are
+    connection = Faraday.new(
+      url: "https://staging.worldcubeassociation.org",
+      headers: {
+        'Authorization' => "Bearer #{access_token}",
+        'Content-Type' => 'application/json',
+      },
+    ) do |builder|
+      # Sets headers and parses jsons automatically
+      builder.request :json
+      builder.response :json
+
+      # Raises an error on 4xx and 5xx responses.
+      builder.response :raise_error
+
+      # Logs requests and responses.
+      # By default, it only logs the request method and URL, and the request/response headers.
+      builder.response :logger, ::Logger.new($stdout), bodies: true if Rails.env.development?
+    end
+
+    results = connection.get("/api/v0/me").body
+
+    user = User.find(results["me"]["id"])
+    if user
       sign_in(user)
       redirect_to competition_register_path('SpeedySouthport2024'), notice: "Logged in automatically as #{user.wca_id}"
     else
