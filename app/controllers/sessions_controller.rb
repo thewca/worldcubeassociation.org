@@ -13,7 +13,7 @@ class SessionsController < Devise::SessionsController
 
     client = OAuth2::Client.new(AppSecrets.STAGING_OAUTH_CLIENT, AppSecrets.STAGING_OAUTH_SECRET,
                                 site: EnvConfig.STAGING_OAUTH_URL)
-    redirect_uri = "#{root_url}/staging_login"
+    redirect_uri = staging_login_url
 
     unless params[:code].present?
       return redirect_to client.auth_code.authorize_url(
@@ -50,7 +50,7 @@ class SessionsController < Devise::SessionsController
     user = User.find(results["me"]["id"])
     if user
       sign_in(user)
-      redirect_to competition_register_path('SpeedySouthport2024'), notice: "Logged in automatically as #{user.wca_id}"
+      redirect_to root_url, notice: "Successfully logged in as #{user.wca_id}"
     else
       redirect_to root_url, alert: "Couldn't find your user"
     end

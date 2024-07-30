@@ -40,6 +40,12 @@
           <%= f.submit t('devise.sessions.new.sign_in'), class: "btn btn-primary", tabindex: "3" %>
           <%= t 'wca.devise.no_account' %> <%= link_to t('devise.shared.links.sign_up'), new_user_registration_path %>!
         <% end %>
+        <% unless EnvConfig.WCA_LIVE_SITE? %>
+          <div>
+            or <br>
+            <button class="ui button primary"><%= link_to 'Sign in through Main WCA Page', staging_login_url, style: "color: white" %></button>
+          </div>
+        <% end %>
       </div>
     </div>
   <% end %>
