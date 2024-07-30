@@ -83,8 +83,8 @@ AppSecrets = SuperConfig.new do
 
     # To allow logging in to staging with your prod account
     unless ActiveModel::Type::Boolean.new.cast(ENV.fetch("WCA_LIVE_SITE", false))
-      vault :STAGING_OAUTH_CLIENT, :string
-      vault :STAGING_OAUTH_SECRET, :string
+      vault :STAGING_OAUTH_CLIENT
+      vault :STAGING_OAUTH_SECRET
     end
   else
     mandatory :DATABASE_PASSWORD, :string
