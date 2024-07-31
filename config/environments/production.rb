@@ -99,7 +99,7 @@ Rails.application.configure do
   end
 
   # Setup for ActiveStorage.
-  unless ENV.fetch("ASSETS_COMPILATION", false)
+  unless EnvConfig.ASSETS_COMPILATION?
     config.active_storage.service = :amazon
   end
 
