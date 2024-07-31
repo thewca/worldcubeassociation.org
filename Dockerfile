@@ -22,11 +22,11 @@ RUN apt-get update -qq && \
       curl \
       gnupg
 
-FROM base AS build
-
 ARG NODE_MAJOR=20
 RUN curl -fsSL https://deb.nodesource.com/setup_${NODE_MAJOR}.x | bash && \
     apt-get install -y nodejs
+
+FROM base AS build
 
 # Enable 'corepack' feature that lets NPM download the package manager on-the-fly as required.
 RUN corepack enable
