@@ -707,7 +707,7 @@ class User < ApplicationRecord
   end
 
   def can_view_all_users?
-    admin? || board_member? || results_team? || communication_team? || wdc_team? || any_kind_of_delegate? || weat_team?
+    admin? || board_member? || results_team? || communication_team? || wdc_team? || any_kind_of_delegate? || weat_team? || wrc_team?
   end
 
   def can_edit_user?(user)
@@ -766,7 +766,6 @@ class User < ApplicationRecord
       can_admin_competitions? ||
       competition.organizers.include?(self) ||
       competition.delegates.include?(self) ||
-      wrc_team? ||
       competition.delegates.flat_map(&:senior_delegates).compact.include?(self) ||
       ethics_committee?
     )
