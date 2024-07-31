@@ -1,8 +1,6 @@
 FROM ruby:3.3.0 AS base
 ARG BUILD_TAG=local
-ARG WCA_REGISTRATIONS_URL
-ARG WCA_REGISTRATIONS_POLL_URL
-ARG ROOT_URL
+ARG WCA_LIVE_SITE
 WORKDIR /rails
 
 ENV DEBIAN_FRONTEND noninteractive
@@ -14,9 +12,7 @@ ENV RAILS_LOG_TO_STDOUT="1" \
     BUNDLE_WITHOUT="development:test" \
     BUNDLE_DEPLOYMENT="1" \
     BUILD_TAG=$BUILD_TAG \
-    WCA_REGISTRATIONS_URL=$WCA_REGISTRATIONS_URL \
-    WCA_REGISTRATIONS_POLL_URL=$WCA_REGISTRATIONS_POLL_URL \
-    ROOT_URL=$ROOT_URL
+    WCA_LIVE_SITE=$WCA_LIVE_SITE
 
 # Add dependencies necessary to install nodejs.
 # From: https://github.com/nodesource/distributions#debian-and-ubuntu-based-distributions

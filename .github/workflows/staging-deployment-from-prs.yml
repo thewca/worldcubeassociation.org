@@ -57,9 +57,7 @@ jobs:
           cache-to: type=gha,mode=max
           build-args: |
             BUILD_TAG=${{ env.SHORT_SHA }}
-            WCA_REGISTRATIONS_URL=https://staging.registration.worldcubeassociation.org
-            WCA_REGISTRATIONS_POLL_URL=https://1rq8d7dif3.execute-api.us-west-2.amazonaws.com/v1/staging
-            ROOT_URL=https://staging.worldcubeassociation.org
+            WCA_LIVE_SITE=false
       - name: Build Rails if triggered
         if: steps.trigger-deployment.outputs.triggered == 'true'
         uses: docker/build-push-action@v6
@@ -73,9 +71,7 @@ jobs:
           cache-to: type=gha,mode=max
           build-args: |
             BUILD_TAG=${{ env.SHORT_SHA }}
-            WCA_REGISTRATIONS_URL=https://staging.registration.worldcubeassociation.org
-            WCA_REGISTRATIONS_POLL_URL=https://1rq8d7dif3.execute-api.us-west-2.amazonaws.com/v1/staging
-            ROOT_URL=https://staging.worldcubeassociation.org
+            WCA_LIVE_SITE=false
       - name: Deploy staging if triggered
         if: steps.trigger-deployment.outputs.triggered == 'true'
         run: |
