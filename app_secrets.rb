@@ -82,7 +82,7 @@ AppSecrets = SuperConfig.new do
     vault :TNOODLE_PUBLIC_KEY
 
     # To allow logging in to staging with your prod account
-    unless ActiveModel::Type::Boolean.new.cast(ENV.fetch("WCA_LIVE_SITE", false))
+    unless EnvConfig.WCA_LIVE_SITE?
       vault :STAGING_OAUTH_CLIENT
       vault :STAGING_OAUTH_SECRET
     end
