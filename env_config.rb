@@ -80,5 +80,5 @@ EnvConfig = SuperConfig.new(raise_exception: !ENV.fetch("ASSETS_COMPILATION", fa
   optional :BUILD_TAG, :string, "local"
 
   # For Asset Compilation
-  optional :ASSETS_COMPILATION, :boolean, false
+  optional :ASSETS_COMPILATION, :bool, false
 end
