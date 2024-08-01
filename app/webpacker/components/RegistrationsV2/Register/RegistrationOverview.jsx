@@ -111,7 +111,7 @@ export default function RegistrationOverview({
               type="submit"
               disabled={hasRegistrationEditDeadlinePassed}
             >
-              {i18n.t('registrations.update')}
+              {i18n.t(hasRegistrationEditDeadlinePassed ? 'competitions.registration_v2.errors.-4001' : 'registrations.update')}
             </Button>
             <Button
               negative
