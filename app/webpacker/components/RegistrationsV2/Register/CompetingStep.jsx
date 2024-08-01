@@ -16,7 +16,7 @@ import {
 import updateRegistration from '../api/registration/patch/update_registration';
 import submitEventRegistration from '../api/registration/post/submit_registration';
 import Processing from './Processing';
-import { userPreferencesRoute } from '../../../lib/requests/routes.js.erb';
+import { contactCompetitionUrl, userPreferencesRoute } from '../../../lib/requests/routes.js.erb';
 import { EventSelector } from '../../CompetitionsOverview/CompetitionsFilters';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { setMessage } from './RegistrationMessage';
@@ -171,18 +171,23 @@ export default function CompetingStep({
 
   const actionUpdateRegistration = () => {
     confirm({
-      content: i18n.t('competitions.registration_v2.update.update_confirm'),
+      content: i18n.t(competitionInfo.allow_registration_edits ? 'competitions.registration_v2.update.update_confirm' : 'competitions.registration_v2.update.update_confirm_contact'),
     }).then(() => {
-      dispatch(setMessage('competitions.registration_v2.update.being_updated', 'basic'));
-      updateRegistrationMutation({
-        user_id: registration.user_id,
-        competition_id: competitionInfo.id,
-        competing: {
-          comment: hasCommentChanged ? comment : undefined,
-          event_ids: hasEventsChanged ? selectedEvents : undefined,
-        },
-        guests,
-      });
+      if (competitionInfo.allow_registration_edits) {
+        dispatch(setMessage('competitions.registration_v2.update.being_updated', 'basic'));
+        updateRegistrationMutation({
+          user_id: registration.user_id,
+          competition_id: competitionInfo.id,
+          competing: {
+            comment: hasCommentChanged ? comment : undefined,
+            event_ids: hasEventsChanged ? selectedEvents : undefined,
+          },
+          guests,
+        });
+      } else {
+        const updateMessage = `${hasCommentChanged ? `Comment to ${comment} ` : ''}${hasEventsChanged ? `Events to ${selectedEvents} ` : ''}${hasGuestsChanged ? `Guests to ${guests}` : ''}`;
+        window.location = contactCompetitionUrl(competitionInfo.id, encodeURIComponent(i18n.t('competitions.registration_v2.update.update_contact_message', { update_params: updateMessage })));
+      }
     }).catch(() => {
       nextStep();
     });

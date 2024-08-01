@@ -51,11 +51,9 @@ const shouldShowCompleted = (isRegistered, hasPaid, isAccepted, key, index) => {
 };
 
 const shouldBeDisabled = (hasPaid, key, activeIndex, index, competitionInfo) => {
-  const hasRegistrationEditDeadlinePassed = hasPassed(
+  const editsAllowed = !hasPassed(
     competitionInfo.event_change_deadline_date ?? competitionInfo.start_date,
   );
-  const editsAllowed = competitionInfo.allow_registration_edits
-    && !hasRegistrationEditDeadlinePassed;
 
   if (key === paymentStepConfig.key) {
     return !hasPaid && index > activeIndex;
