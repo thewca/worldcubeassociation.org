@@ -2182,12 +2182,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fullcalendar/daygrid@npm:~6.1.14":
-  version: 6.1.14
-  resolution: "@fullcalendar/daygrid@npm:6.1.14"
+"@fullcalendar/daygrid@npm:~6.1.15":
+  version: 6.1.15
+  resolution: "@fullcalendar/daygrid@npm:6.1.15"
   peerDependencies:
-    "@fullcalendar/core": ~6.1.14
-  checksum: 10c0/4ef6aea9b08c03ca017ebc82449b3855181bfc4f34299f63f582719eaa8944493d4dabf171c5d28e90c39132c60e6761c6b66c2fd63a0f6d75fcec8c4c2387c8
+    "@fullcalendar/core": ~6.1.15
+  checksum: 10c0/52ba7a479675aa8e2bd36ca6c00c9cc28f11539710cf7a233e8657835b29fe21954e732a23c9b7c7c345c5b6b3c08e3af24ce9125ec28478176cce1b3e7d0da4
   languageName: node
   linkType: hard
 
@@ -2221,14 +2221,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fullcalendar/timegrid@npm:^6.1.14":
-  version: 6.1.14
-  resolution: "@fullcalendar/timegrid@npm:6.1.14"
+"@fullcalendar/timegrid@npm:^6.1.15":
+  version: 6.1.15
+  resolution: "@fullcalendar/timegrid@npm:6.1.15"
   dependencies:
-    "@fullcalendar/daygrid": "npm:~6.1.14"
+    "@fullcalendar/daygrid": "npm:~6.1.15"
   peerDependencies:
-    "@fullcalendar/core": ~6.1.14
-  checksum: 10c0/ee16d1d79021a48fcbb05f98f36da57802bc16178b567bb1e3b17a31ae3ffd81cfcc93cd47f3c8fd9c02dd0f4b2c181913e5e8ac6ee1e894f271de1b7f230675
+    "@fullcalendar/core": ~6.1.15
+  checksum: 10c0/0ad1012fdbd8dbd3b4f71e015186393863d3d7b627ac8306049263c7814137ffd6bab80732071f4750ee63e7e2a97fa935be7fc54970d6edabda14f26a59e076
   languageName: node
   linkType: hard
 
@@ -9934,7 +9934,7 @@ __metadata:
     "@fullcalendar/interaction": "npm:^6.1.14"
     "@fullcalendar/luxon3": "npm:^6.1.14"
     "@fullcalendar/react": "npm:^6.1.14"
-    "@fullcalendar/timegrid": "npm:^6.1.14"
+    "@fullcalendar/timegrid": "npm:^6.1.15"
     "@rails/ujs": "npm:^7.1.3"
     "@stripe/react-stripe-js": "npm:^2.7.3"
     "@stripe/stripe-js": "npm:^4.1.0"
