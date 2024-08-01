@@ -98,6 +98,20 @@ RSpec.describe "registrations" do
         expect(response.body).to include "WCA ID must be unique, found the following duplicates: 2019HOLM01."
       end
 
+      it "renders an error when there are invalid DOBs" do
+        file = csv_file [
+          ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
+          ["a", "Sherlock Holmes", "United Kingdom", "2019HOLM01", "01.01.2000", "m", "sherlock@example.com", "1", "0"],
+          ["a", "John Watson", "United Kingdom", "2019WATS01", "2000-01-01", "m", "watson@example.com", "1", "1"],
+          ["a", "James Moriarty", "United Kingdom", "2019MORI01", "Jan 01 2000", "m", "moriarty@example.com", "0", "1"],
+        ]
+        expect {
+          post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
+        }.to_not change { competition.registrations.count }
+        follow_redirect!
+        expect(response.body).to include "Birthdate must follow the YYYY-mm-dd format (year-month-day, for example 1944-07-13), found the following dates which cannot be parsed: 01.01.2000, Jan 01 2000."
+      end
+
       describe "registrations import" do
         context "registrant has WCA ID" do
           it "renders an error if the WCA ID doesn't exist" do
@@ -1190,6 +1204,7 @@ RSpec.describe "registrations" do
   describe "POST #issue_paypal_refund" do
     let(:competition) { FactoryBot.create(:competition, :paypal_connected, :visible, :registration_open, events: Event.where(id: %w(222 333)), base_entry_fee_lowest_denomination: 1000) }
     let!(:user) { FactoryBot.create(:user, :wca_id) }
+    let!(:admin_user) { FactoryBot.create(:admin) }
     let!(:registration) { FactoryBot.create(:registration, competition: competition, user: user) }
 
     before :each do
@@ -1231,8 +1246,16 @@ RSpec.describe "registrations" do
       stub_request(:post, refund_url)
         .to_return(status: 200, body: stubbed_refund, headers: { 'Content-Type' => 'application/json' })
 
+      # Make sure that we actually have permission to refund
+      sign_in admin_user
+
       # Make the API call to issue the refund
-      post paypal_payment_refund_path(registration.id, registration.registration_payments.first), params: {}
+      registration_payment = registration.registration_payments.first
+      refund_params = { payment: { refund_amount: registration_payment.amount_lowest_denomination } }
+      post registration_payment_refund_path(competition, 'paypal', registration_payment.receipt), params: refund_params
+
+      # make sure every follow-up test gets a hold of the refunds
+      registration.reload
     end
 
     it 'creates a RegistrationPayment with a negative value' do

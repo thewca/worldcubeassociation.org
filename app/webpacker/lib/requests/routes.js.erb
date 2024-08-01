@@ -89,7 +89,7 @@ export const paymentFinishUrl = (competitionId) => `<%= CGI.unescape(Rails.appli
 
 export const availableRefundsUrl = (competitionId, userId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.refunds_path) %>?attendee_id=${competitionId}-${userId}`
 
-export const refundPaymentUrl = (competitionId, paymentId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.registration_payment_refund_path("${competitionId}","${paymentId}")) %>`
+export const refundPaymentUrl = (competitionId, paymentIntegration, paymentId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.registration_payment_refund_path("${competitionId}", "${paymentIntegration}", "${paymentId}")) %>`
 
 export const paymentDenominationUrl = (amount, currencyIsoCode) => `<%= Rails.application.routes.url_helpers.registration_payment_denomination_path %>?amount=${amount}&currency_iso=${currencyIsoCode}`
 
@@ -147,6 +147,7 @@ export const countryBandsUrl = `<%= CGI.unescape(Rails.application.routes.url_he
 export const subordinateDelegateClaimsUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.pending_claims_path) %>`;
 export const subordinateUpcomingCompetitionsUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.competitions_for_senior_path) %>`;
 export const wfcCompetitionsExportUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.wfc_competitions_export_path) %>`;
+export const generateDbTokenUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.panel_generate_db_token_path) %>`
 
 export const wfcXeroUsersUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_wfc_xero_users_path) %>`;
 
@@ -206,6 +207,7 @@ export const apiV0Urls = {
   },
   competitions: {
     list: `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_competitions_path)%>`,
+    listIndex: `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_competition_index_path)%>`,
     info: (compId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_competition_path("${compId}"))%>`,
     registrationData: `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_registration_data_path) %>`
   },
@@ -216,16 +218,16 @@ export const apiV0Urls = {
 
 export const panelUrls = {
   board: {
-    regionsManager: `<%= CGI.unescape(Rails.application.routes.url_helpers.panel_board_path(anchor: PanelController.panel_pages['regionsManager'])) %>`,
+    regionsManager: `<%= CGI.unescape(Rails.application.routes.url_helpers.panel_index_path(panel_id: :board, anchor: PanelController.panel_pages[:regionsManager])) %>`,
   },
   seniorDelegate: {
-    regions: `<%= CGI.unescape(Rails.application.routes.url_helpers.panel_senior_delegate_path(anchor: PanelController.panel_pages['regions'])) %>`,
+    regions: `<%= CGI.unescape(Rails.application.routes.url_helpers.panel_index_path(panel_id: :senior_delegate, anchor: PanelController.panel_pages[:regions])) %>`,
   },
   wst: {
-    translators: `<%= CGI.unescape(Rails.application.routes.url_helpers.panel_wst_path(anchor: PanelController.panel_pages['translators'])) %>`,
+    translators: `<%= CGI.unescape(Rails.application.routes.url_helpers.panel_index_path(panel_id: :wst, anchor: PanelController.panel_pages[:translators])) %>`,
   },
   leader: {
-    groupsManager: `<%= CGI.unescape(Rails.application.routes.url_helpers.panel_leader_path(anchor: PanelController.panel_pages['groupsManager'])) %>`,
+    groupsManager: `<%= CGI.unescape(Rails.application.routes.url_helpers.panel_index_path(panel_id: :leader, anchor: PanelController.panel_pages[:groupsManager])) %>`,
   },
 }
 

@@ -803,7 +803,7 @@ en:
           email:
             label: "Email"
         contact_recipient:
-          label: "Which of the following best describes your inquiry?"
+          label: "Who do you want to contact?"
           competition:
             label: "Contact organizers/delegates of a competition (to ask query regarding that particular competition)"
           wct:
@@ -821,8 +821,33 @@ en:
           message:
             label: "Message"
         wrt:
+          query_type:
+            label: "Which of the following best describes your inquiry?"
+            edit_profile:
+              label: "Edit my profile data (name, country, gender or DOB)"
+            report_result_issue:
+              label: "Report an issue in a result"
+            other_query:
+              label: "Other query"
           message:
             label: "Message"
+          profile_data_to_change:
+            label: "Profile data to change"
+            options:
+              name: "Name"
+              country: "Country"
+              gender: "Gender"
+              dob: "DOB"
+          new_profile_data_name:
+            label: "New Name"
+          new_profile_data_country:
+            label: "New Country"
+          new_profile_data_gender:
+            label: "New Gender"
+          new_profile_data_dob:
+            label: "New DOB"
+          edit_profile_reason:
+            label: "Reason for the change"
         wst:
           message:
             label: "Message"
@@ -1282,6 +1307,7 @@ en:
         email_user_with_different_unconfirmed_wca_id: "There is already a user with email %{email}, but it has unconfirmed WCA ID of %{unconfirmed_wca_id} instead of %{registration_wca_id}."
         email_duplicates: "Email must be unique, found the following duplicates: %{emails}."
         wca_id_duplicates: "WCA ID must be unique, found the following duplicates: %{wca_ids}."
+        wrong_dob_format: "Birthdate must follow the YYYY-mm-dd format (year-month-day, for example 1944-07-13), found the following dates which cannot be parsed: %{raw_dobs}."
     add:
       title: "Add registration for %{comp}"
       info: "This will create an approved registration. Use this form to add walk-ins during the competition."
@@ -1313,6 +1339,7 @@ en:
       uncancel_success: "Successfully uncancelled competition!"
       uncancel_failure: "Cannot uncancel the competition."
       results_not_posted: "This competition's results are visible but haven't been posted yet."
+      results_still_processing: "We are busy processing this competition's results - they should be available shortly."
       results_already_posted: "The results have already been posted."
       results_posted: "Successfully posted results!"
       results_preview_alert: "You are viewing results that have not been posted yet."

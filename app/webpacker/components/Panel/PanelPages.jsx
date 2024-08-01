@@ -3,6 +3,7 @@ import {
   countryBandsUrl,
   subordinateDelegateClaimsUrl,
   subordinateUpcomingCompetitionsUrl,
+  generateDbTokenUrl,
 } from '../../lib/requests/routes.js.erb';
 import PostingCompetitionsTable from '../PostingCompetitions';
 import EditPerson from './pages/EditPerson';
@@ -128,5 +129,9 @@ export default {
   [PANEL_PAGES.downloadVoters]: {
     name: 'Download Voters',
     component: DownloadVoters,
+  },
+  [PANEL_PAGES.generateDbToken]: {
+    name: 'Generate DB Token',
+    link: generateDbTokenUrl,
   },
 };

@@ -1,5 +1,5 @@
-import React from 'react';
-import { Header } from 'semantic-ui-react';
+import React, { useState } from 'react';
+import { Header, Button, Modal } from 'semantic-ui-react';
 import useLoadedData from '../../../../lib/hooks/useLoadedData';
 import { apiV0Urls } from '../../../../lib/requests/routes.js.erb';
 import { groupTypes } from '../../../../lib/wca-data.js.erb';
@@ -7,6 +7,7 @@ import Loading from '../../../Requests/Loading';
 import Errored from '../../../Requests/Errored';
 import BannedCompetitors from './BannedCompetitors';
 import useLoggedInUserPermissions from '../../../../lib/hooks/useLoggedInUserPermissions';
+import BannedCompetitorForm from './BannedCompetitorForm';
 
 export default function BannedCompetitorsPage() {
   const {
@@ -34,44 +35,69 @@ export default function BannedCompetitorsPage() {
   } = useLoadedData(apiV0Urls.userGroups.list(groupTypes.banned_competitors));
   const { loggedInUserPermissions, permissionsLoading } = useLoggedInUserPermissions();
 
-  if (bannedCompetitorRolesLoading || pastBannedCompetitorRolesLoading
-    || bannedGroupLoading || permissionsLoading) {
+  const [banModalParams, setBanModalParams] = useState(null);
+
+  if (
+    bannedCompetitorRolesLoading ||
+    pastBannedCompetitorRolesLoading ||
+    bannedGroupLoading ||
+    permissionsLoading
+  ) {
     return <Loading />;
   }
-  if (bannedCompetitorRolesError || pastBannedCompetitorRolesError || bannedGroupError) {
+  if (
+    bannedCompetitorRolesError ||
+    pastBannedCompetitorRolesError ||
+    bannedGroupError
+  ) {
     return <Errored />;
   }
 
-  const canEditBannedCompetitors = bannedGroups.some(
-    (bannedGroup) => loggedInUserPermissions.canEditGroup(bannedGroup.id),
+  const canEditBannedCompetitors = bannedGroups.some((bannedGroup) =>
+    loggedInUserPermissions.canEditGroup(bannedGroup.id)
   );
-
-  if (bannedCompetitorRoles.length === 0 && pastBannedCompetitorRoles.length === 0) {
-    return 'No data to show.';
-  }
 
   return (
     <>
-      {bannedCompetitorRoles.length > 0 && (
+      {
         <>
           <Header>Banned Competitors</Header>
+          {canEditBannedCompetitors && (
+            <Button onClick={() => setBanModalParams({ action: "new" })}>
+              Ban new competitor
+            </Button>
+          )}
           <BannedCompetitors
             bannedCompetitorRoles={bannedCompetitorRoles}
-            sync={syncBannedCompetitorRoles}
             canEditBannedCompetitors={canEditBannedCompetitors}
+            editBannedCompetitor={setBanModalParams}
           />
         </>
-      )}
-      {pastBannedCompetitorRoles.length > 0 && (
+      }
+      {
         <>
-          <Header>Past Banned Competitors</Header>
-          <BannedCompetitors
-            bannedCompetitorRoles={pastBannedCompetitorRoles}
-            sync={syncPastBannedCompetitorRoles}
-            canEditBannedCompetitors={canEditBannedCompetitors}
+        <Header>Past Banned Competitors</Header>
+        <BannedCompetitors
+          bannedCompetitorRoles={pastBannedCompetitorRoles}
+          canEditBannedCompetitors={canEditBannedCompetitors}
+          editBannedCompetitor={setBanModalParams}
+        />
+      </>
+      }
+      <Modal open={!!banModalParams} onClose={() => setBanModalParams(null)}>
+        <Modal.Header>Add/Edit Banned Competitor</Modal.Header>
+        <Modal.Content>
+          <BannedCompetitorForm
+            sync={() => {
+              syncBannedCompetitorRoles();
+              syncPastBannedCompetitorRoles();
+            }}
+            banAction={banModalParams?.action}
+            banActionRole={banModalParams?.role}
+            closeForm={() => setBanModalParams(null)}
           />
-        </>
-      )}
+        </Modal.Content>
+      </Modal>
     </>
   );
 }

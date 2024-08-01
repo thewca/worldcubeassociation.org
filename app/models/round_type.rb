@@ -2,6 +2,8 @@
 
 class RoundType < ApplicationRecord
   include Cachable
+  include StaticData
+
   self.table_name = "RoundTypes"
 
   has_many :results, foreign_key: :roundTypeId

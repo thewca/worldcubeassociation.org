@@ -35,6 +35,8 @@ class UserGroup < ApplicationRecord
   scope :root_groups, -> { where(parent_group: nil) }
   scope :active_groups, -> { where(is_active: true) }
 
+  validates :active_roles, absence: true, unless: :is_active?
+
   def all_child_groups
     [direct_child_groups, direct_child_groups.map(&:all_child_groups)].flatten
   end
@@ -295,7 +297,7 @@ class UserGroup < ApplicationRecord
 
     changes_of_last_month = []
     if leader_appointments.count + no_more_leaders.count + promoted_senior_members.count + new_senior_members.count + new_members.count + demoted_senior_members.count + no_more_senior_members.count + no_more_members.count > 0
-      changes_of_last_month.push("<b>Changes in #{self.name}</b>")
+      changes_of_last_month.push("<br><b>Changes in #{self.name}</b>")
       if leader_appointments.count + no_more_leaders.count > 0
         changes_of_last_month.push("<br><b>Leaders</b>")
         if leader_appointments.count > 0

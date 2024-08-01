@@ -64,7 +64,7 @@ function CompetitionsView({ canViewAdminDetails = false }) {
         canViewAdminDetails,
       );
 
-      return fetchJsonOrError(`${apiV0Urls.competitions.list}?${querySearchParams}`);
+      return fetchJsonOrError(`${apiV0Urls.competitions.listIndex}?${querySearchParams}`);
     },
     getNextPageParam: (previousPage, allPages) => {
       // Continue until less than a full page of data is fetched,
@@ -152,6 +152,7 @@ function CompetitionsView({ canViewAdminDetails = false }) {
                   ))
                   : competitions
               }
+              isLoading={competitionsIsFetching}
               fetchMoreCompetitions={competitionsFetchNextPage}
               hasMoreCompsToLoad={hasMoreCompsToLoad}
             />

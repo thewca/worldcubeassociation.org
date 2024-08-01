@@ -118,22 +118,7 @@ module PaypalInterface
       req.body = payload
     end
 
-    body = response.body
-
-    refunded_capture = PaypalRecord.find_by(paypal_id: capture_id)
-
-    if body["status"] == "COMPLETED"
-      refund = PaypalRecord.create_from_api(
-        body,
-        :refund,
-        payload,
-        merchant_id,
-        refunded_capture,
-      )
-    end
-
-    # TODO: Add error handling for if we don't get a COMPLETED status, because then this will be undefined
-    refund
+    [payload, response.body]
   end
 
   private_class_method def self.paypal_connection

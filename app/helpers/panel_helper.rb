@@ -1,68 +1,92 @@
 # frozen_string_literal: true
 
 module PanelHelper
-  def panel_list
-    [
-      {
-        id: :admin,
+  def panel_list(current_user = nil)
+    panel_pages = PanelController.panel_pages
+    {
+      admin: {
         name: 'New Admin panel',
-        url: Rails.application.routes.url_helpers.panel_admin_path,
+        pages: panel_pages.values,
       },
-      {
-        id: :staff,
+      staff: {
         name: 'Staff panel',
-        url: Rails.application.routes.url_helpers.panel_staff_path,
+        pages: [],
       },
-      {
-        id: :delegate,
+      delegate: {
         name: 'Delegate panel',
-        url: Rails.application.routes.url_helpers.panel_delegate_path,
+        pages: [
+          panel_pages[:importantLinks],
+          panel_pages[:delegateHandbook],
+          panel_pages[:bannedCompetitors],
+        ],
       },
-      {
-        id: :wfc,
+      wfc: {
         name: 'WFC panel',
-        url: Rails.application.routes.url_helpers.panel_wfc_path,
+        pages: [],
       },
-      {
-        id: :wrt,
+      wrt: {
         name: 'WRT panel',
-        url: Rails.application.routes.url_helpers.panel_wrt_path,
+        pages: [
+          panel_pages[:postingDashboard],
+          panel_pages[:editPerson],
+        ],
       },
-      {
-        id: :wst,
+      wst: {
         name: 'WST panel',
-        url: Rails.application.routes.url_helpers.panel_wst_path,
+        pages: [
+          panel_pages[:translators],
+        ],
       },
-      {
-        id: :board,
+      board: {
         name: 'Board panel',
-        url: Rails.application.routes.url_helpers.panel_board_path,
+        pages: [
+          panel_pages[:seniorDelegatesList],
+          panel_pages[:leadersAdmin],
+          panel_pages[:regionsManager],
+          panel_pages[:delegateProbations],
+          panel_pages[:groupsManagerAdmin],
+          panel_pages[:boardEditor],
+          panel_pages[:officersEditor],
+          panel_pages[:regionsAdmin],
+          panel_pages[:bannedCompetitors],
+        ],
       },
-      {
-        id: :leader,
+      leader: {
         name: 'Leader panel',
-        url: Rails.application.routes.url_helpers.panel_leader_path,
+        pages: [
+          panel_pages[:leaderForms],
+          panel_pages[:groupsManager],
+        ],
       },
-      {
-        id: :senior_delegate,
+      senior_delegate: {
         name: 'Senior Delegate panel',
-        url: Rails.application.routes.url_helpers.panel_senior_delegate_path,
+        pages: [
+          panel_pages[:delegateForms],
+          panel_pages[:regions],
+          panel_pages[:delegateProbations],
+          panel_pages[:subordinateDelegateClaims],
+          panel_pages[:subordinateUpcomingCompetitions],
+        ],
       },
-      {
-        id: :wdc,
+      wdc: {
         name: 'WDC panel',
-        url: Rails.application.routes.url_helpers.panel_wdc_path,
+        pages: [
+          panel_pages[:bannedCompetitors],
+        ],
       },
-      {
-        id: :wec,
+      wec: {
         name: 'WEC panel',
-        url: Rails.application.routes.url_helpers.panel_wec_path,
+        pages: [
+          panel_pages[:bannedCompetitors],
+          panel_pages[:downloadVoters],
+        ],
       },
-      {
-        id: :weat,
+      weat: {
         name: 'WEAT panel',
-        url: Rails.application.routes.url_helpers.panel_weat_path,
+        pages: [
+          panel_pages[:bannedCompetitors],
+        ],
       },
-    ]
+    }
   end
 end

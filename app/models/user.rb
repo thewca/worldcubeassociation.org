@@ -27,6 +27,18 @@ class User < ApplicationRecord
   has_many :active_roles, -> { active }, class_name: "UserRole"
   has_many :delegate_role_metadata, through: :active_roles, source: :metadata, source_type: "RolesMetadataDelegateRegions"
   has_many :delegate_roles, -> { includes(:group, :metadata) }, through: :delegate_role_metadata, source: :user_role, class_name: "UserRole"
+  has_many :delegate_region_groups, through: :delegate_roles, source: :group, class_name: "UserGroup"
+  has_many :delegate_regions, through: :delegate_region_groups, source: :metadata, source_type: "GroupsMetadataDelegateRegions"
+  has_many :teams_committees_role_metadata, through: :active_roles, source: :metadata, source_type: "RolesMetadataTeamsCommittees"
+  has_many :teams_committees_roles, through: :teams_committees_role_metadata, source: :user_role, class_name: "UserRole"
+  has_many :teams_committees_groups, through: :teams_committees_roles, source: :group, class_name: "UserGroup"
+  has_many :teams_committees, through: :teams_committees_groups, source: :metadata, source_type: "GroupsMetadataTeamsCommittees"
+  has_many :teams_committees_at_least_senior_role_metadata, -> { at_least_senior_member }, through: :active_roles, source: :metadata, source_type: "RolesMetadataTeamsCommittees"
+  has_many :teams_committees_at_least_senior_roles, through: :teams_committees_at_least_senior_role_metadata, source: :user_role, class_name: "UserRole"
+  has_many :teams_committees_at_least_senior_groups, through: :teams_committees_at_least_senior_roles, source: :group, class_name: "UserGroup"
+  has_many :teams_committees_at_least_senior, through: :teams_committees_at_least_senior_groups, source: :metadata, source_type: "GroupsMetadataTeamsCommittees"
+  has_many :active_groups, through: :active_roles, source: :group, class_name: "UserGroup"
+  has_many :board_metadata, through: :active_groups, source: :metadata, source_type: "GroupsMetadataBoard"
   has_many :confirmed_users_claiming_wca_id, -> { confirmed_email }, foreign_key: "delegate_id_to_handle_wca_id_claim", class_name: "User"
   has_many :oauth_applications, class_name: 'Doorkeeper::Application', as: :owner
   has_many :oauth_access_grants, class_name: 'Doorkeeper::AccessGrant', foreign_key: :resource_owner_id
@@ -442,7 +454,11 @@ class User < ApplicationRecord
   end
 
   private def group_member?(group)
-    active_roles.any? { |role| role.group == group }
+    active_roles.any? { |role| role.group_id == group.id }
+  end
+
+  private def at_least_senior_teams_committees_member?(group)
+    teams_committees_at_least_senior_roles.where(group_id: group.id).exists?
   end
 
   private def group_leader?(group)
@@ -493,6 +509,10 @@ class User < ApplicationRecord
     group_member?(UserGroup.teams_committees_group_wrt)
   end
 
+  private def senior_results_team?
+    at_least_senior_teams_committees_member?(UserGroup.teams_committees_group_wrt)
+  end
+
   private def software_team?
     group_member?(UserGroup.teams_committees_group_wst)
   end
@@ -506,7 +526,7 @@ class User < ApplicationRecord
   end
 
   def admin?
-    Rails.env.production? && EnvConfig.WCA_LIVE_SITE? ? software_team_admin? : software_team?
+    Rails.env.production? && EnvConfig.WCA_LIVE_SITE? ? software_team_admin? : (software_team? || software_team_admin?)
   end
 
   def any_kind_of_delegate?
@@ -637,6 +657,10 @@ class User < ApplicationRecord
     groups
   end
 
+  def panels_with_access
+    panel_list.keys.select { |panel_id| can_access_panel?(panel_id) }
+  end
+
   def permissions
     permissions = {
       can_attend_competitions: {
@@ -666,6 +690,9 @@ class User < ApplicationRecord
       can_access_wfc_senior_matters: {
         scope: can_access_wfc_senior_matters? ? "*" : [],
       },
+      can_access_panels: {
+        scope: panels_with_access,
+      },
     }
     if banned?
       permissions[:can_attend_competitions][:scope] = []
@@ -680,7 +707,7 @@ class User < ApplicationRecord
   end
 
   def can_view_all_users?
-    admin? || board_member? || results_team? || communication_team? || wdc_team? || any_kind_of_delegate? || weat_team?
+    admin? || board_member? || results_team? || communication_team? || wdc_team? || any_kind_of_delegate? || weat_team? || wrc_team?
   end
 
   def can_edit_user?(user)
@@ -705,7 +732,7 @@ class User < ApplicationRecord
   end
 
   def can_edit_banned_competitors?
-    can_edit_any_groups? || group_leader?(UserGroup.teams_committees_group_wdc)
+    can_edit_any_groups? || group_leader?(UserGroup.teams_committees_group_wdc) || group_leader?(UserGroup.teams_committees_group_wec)
   end
 
   def can_manage_regional_organizations?
@@ -739,7 +766,6 @@ class User < ApplicationRecord
       can_admin_competitions? ||
       competition.organizers.include?(self) ||
       competition.delegates.include?(self) ||
-      wrc_team? ||
       competition.delegates.flat_map(&:senior_delegates).compact.include?(self) ||
       ethics_committee?
     )
@@ -864,7 +890,7 @@ class User < ApplicationRecord
   end
 
   def can_see_eligible_voters?
-    can_admin_results? || group_leader?(UserGroup.teams_committees_group_wec)
+    can_admin_results? || ethics_committee?
   end
 
   def get_cannot_delete_competition_reason(competition)
@@ -1149,7 +1175,7 @@ class User < ApplicationRecord
       default_options[:methods].push("email", "location", "region_id")
     end
 
-    options = default_options.merge(options || {})
+    options = default_options.merge(options || {}).deep_dup
     # Preempt the values for avatar and teams, they have a special treatment.
     include_avatar = options[:include]&.delete("avatar")
     include_teams = options[:include]&.delete("teams")
@@ -1315,7 +1341,7 @@ class User < ApplicationRecord
   def can_access_panel?(panel_id)
     case panel_id
     when :admin
-      admin? || results_team?
+      admin? || senior_results_team?
     when :staff
       staff?
     when :delegate
@@ -1344,7 +1370,7 @@ class User < ApplicationRecord
   end
 
   def can_access_at_least_one_panel?
-    panel_list.any? { |panel| can_access_panel?(panel[:id]) }
+    panels_with_access.any?
   end
 
   def subordinate_delegates

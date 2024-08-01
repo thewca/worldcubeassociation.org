@@ -641,6 +641,11 @@ sv:
           vice_chair: 'WCA:s vice ordförande'
           #original_hash: 75e65d9
           treasurer: 'WCA:s kassör'
+      ban_scope:
+        #original_hash: 80901da
+        competing_only: Enbart tävlande
+        #original_hash: 35a6012
+        competing_and_attending: Tävlande & närvarande
     competition_medium:
       status:
         #original_hash: 61a0572
@@ -1251,6 +1256,8 @@ sv:
       db_dev_export: Utvecklarexport
       #original_hash: 1fa73f3
       regulations: Regler
+      #original_hash: 3bb8751
+      regulations_full: Regler & riktlinjer
       #original_hash: 6bce1b5
       about_regulations: Om reglerna
       #original_hash: 141d1d7
@@ -1486,8 +1493,8 @@ sv:
             #original_hash: 84add5b
             label: Mejl
         contact_recipient:
-          #original_hash: d31ab65
-          label: Vilket alternativ beskriver bäst ditt ärende?
+          #original_hash: 54f0036
+          label: Vem vill du kontakta?
           competition:
             #original_hash: baa2425
             label: >-
@@ -1519,9 +1526,50 @@ sv:
             #original_hash: 68f4145
             label: Meddelande
         wrt:
+          query_type:
+            #original_hash: d31ab65
+            label: Vilket av följande beskriver bäst ditt ärende?
+            edit_profile:
+              #original_hash: 322db6c
+              label: >-
+                Redigera mina profiluppgifter (namn, land, kön, eller
+                födelsedatum)
+            report_result_issue:
+              #original_hash: 2edbb52
+              label: Rapportera ett problem med ett resultat
+            other_query:
+              #original_hash: 7618a0c
+              label: Annan fråga
           message:
             #original_hash: 68f4145
             label: Meddelande
+          profile_data_to_change:
+            #original_hash: 25b71ff
+            label: Profiluppgifter att ändra
+            options:
+              #original_hash: 709a232
+              name: Namn
+              #original_hash: d523ebb
+              country: Land
+              #original_hash: 8a754c6
+              gender: Kön
+              #original_hash: 293dd60
+              dob: Födelsedatum
+          new_profile_data_name:
+            #original_hash: ddbcd37
+            label: Nytt namn
+          new_profile_data_country:
+            #original_hash: e4e355e
+            label: Nytt land
+          new_profile_data_gender:
+            #original_hash: 48ce2a3
+            label: Nytt kön
+          new_profile_data_dob:
+            #original_hash: 9f1c3d2
+            label: Nytt födelsedatum
+          edit_profile_reason:
+            #original_hash: fdfcccf
+            label: Anledning till ändringen
         wst:
           message:
             #original_hash: 68f4145
@@ -2459,6 +2507,10 @@ sv:
           %{emails}.
         #original_hash: bcd8e78
         wca_id_duplicates: 'WCA-ID:n måste vara unika, hittade följande dubbletter: %{wca_ids}.'
+        #original_hash: a0fd4c5
+        wrong_dob_format: >-
+          Födelsedatum måste följa formatet YYYY-mm-dd (år-månad-dag, t.ex.
+          1944-07-13), följande datum gick inte att tolka: %{raw_dobs}.
     add:
       #original_hash: 975275e
       title: 'Lägg till anmälan för %{comp}'
@@ -2813,6 +2865,10 @@ sv:
       mean: ett snitt
       #original_hash: 22bee3a
       result_sentence: 'med %{a_win_by_word} på %{result}'
+      #original_hash: 756603f
+      no_winner: >-
+        Huvudgrenen var %{event_name}. Ingen vinnare utsågs, eftersom inga
+        tävlande uppnådde godkända resultat i grenen.
       #original_hash: 6c3b236
       winner: '%{winner} vann %{result_sentence} i %{event_name}.'
       #original_hash: ec7f18a
@@ -3504,8 +3560,13 @@ sv:
         #original_hash: eade5c7
         download: Ladda ner alla tävlingsdetaljer.
       list:
-        #original_hash: 713f805
-        spots_remaining: '%{spots} plats(er) kvar.'
+        #original_hash: 6eef664
+        empty: Inga
+        #original_hash: 627422a
+        spots_remaining_plural:
+          zero: '%{count} platser kvar'
+          one: '%{count} plats kvar'
+          other: '%{count} platser kvar'
       bookmark:
         #original_hash: 7952a5c
         unbookmark: Du har tagit bort ditt bokmärke.
@@ -3524,12 +3585,16 @@ sv:
         being_updated: Anmälan uppdateras...
         #original_hash: 2d0325e
         being_deleted: Anmälan raderas...
+        #original_hash: cbf13af
+        update_confirm: Är du säker på att du vill uppdatera din anmälan?
         #original_hash: 65bbb07
         no_changes: Det finns inga ändringar
         #original_hash: be4e8e2
         email_send: Skicka mejl
-        #original_hash: d9def5d
-        email_copy: Kopiera mejladress
+        #original_hash: b4bac52
+        email_copy: Kopiera mejladresser
+        #original_hash: b83b663
+        email_message: Kopierad till urklipp. Kom ihåg att använda "hemlig kopia" (bcc)!
         #original_hash: 71327f1
         move_pending: Flytta till väntande
         #original_hash: 9144dd6
@@ -3557,6 +3622,8 @@ sv:
         until: 'Du kan uppdatera din anmälan fram till %{date}'
         #original_hash: fc8bc84
         passed: Du kan inte längre uppdatera din anmälan
+        #original_hash: 05b9f17
+        view_registration: Visa anmälan
         #original_hash: 3c8d8b7
         editing_disabled: Det går inte att redigera anmälningar till den här tävlingen.
         registration_status:
@@ -3566,8 +3633,8 @@ sv:
           pending: Din anmälan väntar på godkännande från arrangörsteamet.
           #original_hash: dcc4906
           cancelled: Din anmälan har raderats.
-          #original_hash: c890478
-          waiting_list: Du är på väntelistan.
+          #original_hash: a02390c
+          waiting_list: 'Du är på väntelistan, på plats %{waiting_list_position}.'
         #original_hash: 2d9f36c
         disclaimer: Inskickande av anmälan innebär inte godkännande att tävla
         #original_hash: 8fe68a1
@@ -3625,6 +3692,12 @@ sv:
         '-4007': Ogiltigt anmälningsstatus
         #original_hash: 020234c
         '-4008': Anmälan har stängt
+        #original_hash: b30e613
+        '-4009': Endast arrangörer kan radera anmälningar för den här tävlingen
+        #original_hash: 3c4cbaa
+        '-4010': Platsen på väntelistan är inte giltig
+        #original_hash: e489908
+        '-4011': Du kan endast acceptera den första personen på väntelistan
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-

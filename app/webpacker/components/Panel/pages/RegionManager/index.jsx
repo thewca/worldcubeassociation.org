@@ -22,7 +22,9 @@ const defaultRegion = {
   friendlyId: '',
 };
 
-function UserGroupVisibility({ userGroup, save, sync }) {
+function UserGroupVisibility({
+  userGroup, save, sync, setSaveError,
+}) {
   const [open, setOpen] = React.useState(false);
   const iconName = userGroup.is_active ? 'eye' : 'eye slash';
   return (
@@ -42,6 +44,8 @@ function UserGroupVisibility({ userGroup, save, sync }) {
             userGroupsUpdateUrl(userGroup.id),
             { is_active: !userGroup.is_active, is_hidden: userGroup.is_hidden },
             sync,
+            {},
+            setSaveError,
           );
         }}
       />
@@ -76,7 +80,7 @@ export default function RegionManager() {
   }, [data]);
 
   if (loading || fetchLoading || saving) return <Loading />;
-  if (error || saveError) return <Errored />;
+  if (error || saveError) return <Errored error={error || saveError} />;
 
   return (
     <>
@@ -123,7 +127,12 @@ export default function RegionManager() {
                 <Table.Cell />
                 <Table.Cell />
                 <Table.Cell>
-                  <UserGroupVisibility userGroup={region} save={save} sync={sync} />
+                  <UserGroupVisibility
+                    userGroup={region}
+                    save={save}
+                    sync={sync}
+                    setSaveError={setSaveError}
+                  />
                 </Table.Cell>
               </Table.Row>
               {subRegions[region.id]?.map((subRegion) => (
@@ -153,7 +162,12 @@ export default function RegionManager() {
                       )}
                   </Table.Cell>
                   <Table.Cell>
-                    <UserGroupVisibility userGroup={subRegion} save={save} sync={sync} />
+                    <UserGroupVisibility
+                      userGroup={subRegion}
+                      save={save}
+                      sync={sync}
+                      setSaveError={setSaveError}
+                    />
                   </Table.Cell>
                 </Table.Row>
               ))}

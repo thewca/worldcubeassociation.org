@@ -117,6 +117,8 @@ group :development, :test do
   gem 'faker'
   gem 'capybara-screenshot'
 
+  gem 'puma'
+
   gem 'byebug'
   gem 'i18n-tasks'
   gem 'i18n-spec'
@@ -130,6 +132,7 @@ end
 group :development do
   gem 'overcommit', require: false
   gem 'rubocop', require: false
+  gem 'rubocop-thread_safety', require: false
   gem 'better_errors'
   gem 'binding_of_caller'
   gem 'bullet'
@@ -154,6 +157,8 @@ end
 
 group :production do
   gem 'unicorn'
+  # Unicorn is incompatible with Rack 3, but doesn't specify it explicitly…
+  gem 'rack', '~> 2'
   gem 'newrelic_rpm'
   gem 'wkhtmltopdf-binary-ng'
 end

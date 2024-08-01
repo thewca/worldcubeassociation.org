@@ -52,10 +52,13 @@ class Post < ApplicationRecord
     Rails.application.routes.url_helpers.post_path(slug)
   end
 
+  def author_name
+    author&.name
+  end
+
   DEFAULT_SERIALIZE_OPTIONS = {
     only: ["id", "slug", "title", "sticky", "created_at"],
-    methods: ["url"],
-    include: ["author"],
+    methods: ["url", "author_name"],
   }.freeze
 
   def serializable_hash(options = nil)

@@ -799,4 +799,15 @@ RSpec.describe User, type: :model do
       expect(senior_delegate.has_permission?(:can_edit_groups, asia_region.id)).to be false
     end
   end
+
+  describe "teams_committees_at_least_senior_roles has_many relation" do
+    it "returns the senior/leader roles for a user" do
+      user = FactoryBot.create(:user)
+      wrt_role = FactoryBot.create(:wrt_member_role, user: user)
+      wsot_leader_role = FactoryBot.create(:wsot_leader_role, user: user)
+      wrc_senior_member_role = FactoryBot.create(:wrc_senior_member_role, user: user)
+      expect(user.teams_committees_at_least_senior_roles).to include(wsot_leader_role, wrc_senior_member_role)
+      expect(user.teams_committees_at_least_senior_roles).not_to include(wrt_role)
+    end
+  end
 end

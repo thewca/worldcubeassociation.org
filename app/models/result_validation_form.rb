@@ -9,7 +9,6 @@ class ResultValidationForm
 
   COMP_VALIDATION_MODES = [["Pick competition(s) manually", COMP_VALIDATION_MANUAL], ["Execute for ALL competitions", COMP_VALIDATION_ALL]].freeze
 
-  ALL_COMPETITIONS_SCOPE = Competition.over.not_cancelled
   ALL_COMPETITIONS_MAX = 500
 
   include ActiveModel::Model
@@ -23,6 +22,10 @@ class ResultValidationForm
   validates :competition_end_date, presence: true, if: -> { self.competition_selection == COMP_VALIDATION_ALL }
 
   validate :competition_count_within_bounds, :competition_range_overlapping
+
+  def self.all_competitions_scope
+    Competition.over.not_cancelled
+  end
 
   def competition_count_within_bounds
     if competition_selection == COMP_VALIDATION_ALL && competition_range_count > ALL_COMPETITIONS_MAX
@@ -90,12 +93,13 @@ class ResultValidationForm
   end
 
   def self.compute_range_end(start_date, count = ALL_COMPETITIONS_MAX)
-    range_end = ALL_COMPETITIONS_SCOPE.where(start_date: start_date..)
-                                      .order(:start_date)
-                                      # Not using `offset` because of the risk to skip into nothingness for newer competitions
-                                      .limit(count)
-                                      .pluck(:start_date)
-                                      .last
+    range_end = self.all_competitions_scope
+                    .where(start_date: start_date..)
+                    .order(:start_date)
+                    # Not using `offset` because of the risk to skip into nothingness for newer competitions
+                    .limit(count)
+                    .pluck(:start_date)
+                    .last
 
     return start_date if range_end.nil?
 
@@ -117,7 +121,8 @@ class ResultValidationForm
   end
 
   def self.competitions_between(range_start, range_end)
-    ALL_COMPETITIONS_SCOPE.where(start_date: range_start..)
-                          .where(start_date: ..range_end)
+    self.all_competitions_scope
+        .where(start_date: range_start..)
+        .where(start_date: ..range_end)
   end
 end

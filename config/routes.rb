@@ -21,7 +21,6 @@ Rails.application.routes.draw do
   # Don't expose Paypal routes in production until we're reading to launch
   unless PaypalInterface.paypal_disabled?
     post 'registration/:id/capture-paypal-payment' => 'registrations#capture_paypal_payment', as: :registration_capture_paypal_payment
-    post 'registration/:id/paypal_refund/:payment_id' => 'registrations#refund_paypal_payment', as: :paypal_payment_refund
   end
 
   # Prevent account deletion, and overrides the sessions controller for 2FA.
@@ -40,13 +39,12 @@ Rails.application.routes.draw do
     post 'users/authenticate-sensitive' => 'users#authenticate_user_for_sensitive_edit'
     delete 'users/sign-out-other' => 'sessions#destroy_other', as: :destroy_other_user_sessions
   end
-  # TODO: This can be removed after deployment, this is so we don't have any users error out if they click on pay/refund
+  # TODO: This can be removed after deployment, this is so we don't have any users error out if they click on pay
   # while the deployment happens
-  post 'registration/:id/refund/:payment_id' => 'registrations#payment_refund_legacy', as: :registration_payment_refund_legacy
   get 'registration/:id/payment-completion' => 'registrations#payment_completion_legacy', as: :registration_payment_completion_legacy
 
   post 'registration/:id/load-payment-intent/:payment_integration' => 'registrations#load_payment_intent', as: :registration_payment_intent
-  post 'competitions/:competition_id/refund/:payment_id' => 'registrations#refund_payment', as: :registration_payment_refund
+  post 'competitions/:competition_id/refund/:payment_integration/:payment_id' => 'registrations#refund_payment', as: :registration_payment_refund
   get 'competitions/:competition_id/payment-completion' => 'registrations#payment_completion', as: :registration_payment_completion
   post 'registration/stripe-webhook' => 'registrations#stripe_webhook', as: :registration_stripe_webhook
   get 'registration/payment-denomination' => 'registrations#payment_denomination', as: :registration_payment_denomination
@@ -188,18 +186,10 @@ Rails.application.routes.draw do
   get 'panel/pending-claims(/:user_id)' => 'panel#pending_claims_for_subordinate_delegates', as: 'pending_claims'
   scope 'panel' do
     get 'staff' => 'panel#staff', as: :panel_staff
-    get 'delegate' => 'panel#delegate', as: :panel_delegate
     get 'wfc' => 'panel#wfc', as: :panel_wfc
-    get 'wrt' => 'panel#wrt', as: :panel_wrt
-    get 'wst' => 'panel#wst', as: :panel_wst
-    get 'board' => 'panel#board', as: :panel_board
-    get 'leader' => 'panel#leader', as: :panel_leader
-    get 'senior_delegate' => 'panel#senior_delegate', as: :panel_senior_delegate
-    get 'wdc' => 'panel#wdc', as: :panel_wdc
-    get 'wec' => 'panel#wec', as: :panel_wec
-    get 'weat' => 'panel#weat', as: :panel_weat
-    get 'admin' => 'panel#admin', as: :panel_admin
+    get 'generate_db_token' => 'panel#generate_db_token', as: :panel_generate_db_token
   end
+  get 'panel/:panel_id' => 'panel#index', as: :panel_index
   resources :notifications, only: [:index]
 
   root 'posts#homepage'
@@ -372,6 +362,7 @@ Rails.application.routes.draw do
       get '/records' => "api#records"
       get '/results/:user_id/qualification_data' => 'api#user_qualification_data', as: :user_qualification_data
       get '/competition_series/:id' => 'api#competition_series'
+      get '/competition_index' => 'competitions#competition_index', as: :competition_index
 
       resources :competitions, only: [:index, :show] do
         get '/wcif' => 'competitions#show_wcif'

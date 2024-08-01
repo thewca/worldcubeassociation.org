@@ -30,7 +30,7 @@ module FinishUnfinishedPersons
     unfinished_persons = []
     available_id_spots = {} # to make sure that all of the newcomer IDs that we're creating in one batch are unique among each other
 
-    @persons_cache = nil
+    persons_cache = Person.select(:id, :wca_id, :name, :dob, :countryId)
 
     unfinished_person_results.each do |res|
       next if unfinished_persons.length >= MAX_PER_BATCH
@@ -42,7 +42,7 @@ module FinishUnfinishedPersons
 
       inbox_dob = res.inbox_person&.dob
 
-      similar_persons = compute_similar_persons(res)
+      similar_persons = compute_similar_persons(res, persons_cache)
 
       unfinished_persons.push({
                                 person_id: res.person_id,
@@ -74,18 +74,14 @@ module FinishUnfinishedPersons
     end.join
   end
 
-  def self.persons_cache
-    @persons_cache ||= Person.select(:id, :wca_id, :name, :dob, :countryId)
-  end
-
-  def self.compute_similar_persons(result, n = 5)
+  def self.compute_similar_persons(result, persons_cache, n = 5)
     res_roman_name = self.extract_roman_name(result.person_name)
 
     only_probas = []
     persons_with_probas = []
 
     # pre-cache probabilities, so that we avoid doing string computations on _every_ comparison
-    self.persons_cache.each do |p|
+    persons_cache.each do |p|
       p_roman_name = self.extract_roman_name(p.name)
 
       name_similarity = self.string_similarity(res_roman_name, p_roman_name)
@@ -103,14 +99,12 @@ module FinishUnfinishedPersons
                       .take(n)
   end
 
-  def self.string_similarity_algorithm
-    # Original PHP implementation uses PHP stdlib `string_similarity` function, which is custom built
-    # and "kinda like" Jaro-Winkler. I felt that the rewrite warrants a standardised matching algorithm.
-    @jaro_winkler ||= FuzzyStringMatch::JaroWinkler.create(:native)
-  end
+  # Original PHP implementation uses PHP stdlib `string_similarity` function, which is custom built
+  # and "kinda like" Jaro-Winkler. I felt that the rewrite warrants a standardised matching algorithm.
+  JARO_WINKLER_ALGO = FuzzyStringMatch::JaroWinkler.create(:native)
 
   def self.string_similarity(a, b)
-    self.string_similarity_algorithm.getDistance(a, b)
+    JARO_WINKLER_ALGO.getDistance(a, b)
   end
 
   def self.compute_semi_id(competition_year, person_name, available_per_semi = {})
