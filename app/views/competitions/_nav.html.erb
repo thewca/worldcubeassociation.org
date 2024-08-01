@@ -133,7 +133,7 @@
             icon: "lightbulb",
           }
         end
-        unless @competition.results_posted?
+        if @competition.announced? && !@competition.results_posted?
           if @competition.use_wca_registration?
             nav_items << {
               text: t('.menu.register'),
@@ -142,7 +142,7 @@
             }
           end
 
-          if !@competition.registration_not_yet_opened?
+          if !@competition.registration_not_yet_opened? && (@competition.registrations.any? || @competition.microservice_registrations.any?)
             event_icons = @competition.events.map do |event|
               { text: event.id, path: competition_psych_sheet_event_path(@competition, event.id), cubing_icon: event.id, title: event.name }
             end unless @competition.uses_new_registration_service?
