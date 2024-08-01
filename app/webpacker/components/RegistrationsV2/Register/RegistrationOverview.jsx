@@ -11,16 +11,7 @@ import updateRegistration from '../api/registration/patch/update_registration';
 import { setMessage } from './RegistrationMessage';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { useConfirm } from '../../../lib/providers/ConfirmProvider';
-
-function updateRegistrationKey(editsAllowed, deadlinePassed) {
-  if (!editsAllowed && !deadlinePassed) {
-    return 'competitions.registration_v2.update.no_self_update';
-  }
-  if (deadlinePassed) {
-    return 'competitions.registration_v2.register.passed';
-  }
-  return 'competitions.registration_v2.register.until';
-}
+import { contactCompetitionUrl } from '../../../lib/requests/routes.js.erb';
 
 export default function RegistrationOverview({
   nextStep, registration, competitionInfo,
@@ -31,8 +22,6 @@ export default function RegistrationOverview({
   const hasRegistrationEditDeadlinePassed = hasPassed(
     competitionInfo.event_change_deadline_date ?? competitionInfo.start_date,
   );
-  const editsAllowed = competitionInfo.allow_registration_edits
-    && !hasRegistrationEditDeadlinePassed;
 
   const deleteAllowed = (registration.competing.registration_status !== 'accepted'
       || competitionInfo.allow_registration_self_delete_after_acceptance);
@@ -71,16 +60,15 @@ export default function RegistrationOverview({
 
   const deleteRegistration = (event) => {
     event.preventDefault();
-    confirm({ content: i18n.t('registrations.delete_confirm') }).then(() => deleteRegistrationMutation()).catch(() => nextStep({ refresh: true }));
+    confirm({ content: i18n.t(deleteAllowed ? 'registrations.delete_confirm' : 'competitions.registration_v2.update.delete_confirm_contact') })
+      .then(() => (deleteAllowed
+        ? deleteRegistrationMutation()
+        : window.location = contactCompetitionUrl(competitionInfo.id, encodeURIComponent(i18n.t('competitions.registration_v2.update.delete_contact_message')))))
+      .catch(() => nextStep({ refresh: true }));
   };
 
   return (
     <>
-      { !editsAllowed && (
-      <Message info>
-        {i18n.t(updateRegistrationKey(editsAllowed, hasRegistrationEditDeadlinePassed))}
-      </Message>
-      )}
       { !competitionInfo['using_payment_integrations?'] && registration.competing.registration_status === 'pending' && competitionInfo.base_entry_fee_lowest_denomination && (
         <Message info>
           {i18n.t('registrations.wont_pay_here')}
@@ -116,22 +104,19 @@ export default function RegistrationOverview({
             {registration.guests}
           </FormField>
           <ButtonGroup widths={2}>
-            { editsAllowed && (
             <Button
               primary
               type="submit"
+              disabled={hasRegistrationEditDeadlinePassed}
             >
               {i18n.t('registrations.update')}
             </Button>
-            )}
-            { deleteAllowed && (
             <Button
               negative
               onClick={deleteRegistration}
             >
               {i18n.t('registrations.delete_registration')}
             </Button>
-            )}
           </ButtonGroup>
         </Form>
       </Segment>

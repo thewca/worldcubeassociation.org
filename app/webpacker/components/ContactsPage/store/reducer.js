@@ -13,6 +13,7 @@ export const getContactFormInitialState = (loggedInUserData, queryParams) => ({
     contactRecipient: queryParams?.contactRecipient,
     competition: {
       competitionId: queryParams?.competitionId,
+      message: queryParams?.message,
     },
     wst: {
       requestId: queryParams?.requestId,

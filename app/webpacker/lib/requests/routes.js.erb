@@ -177,6 +177,8 @@ export const contactUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers
 
 export const contactRecipientUrl = (contactRecipient) => `<%= CGI.unescape(Rails.application.routes.url_helpers.contact_path(contactRecipient: "${contactRecipient}")) %>`
 
+export const contactCompetitionUrl = (competitionId, message) => `<%= CGI.unescape(Rails.application.routes.url_helpers.contact_path(competitionId: "${competitionId}", contactRecipient: "competition", message: "${message}")) %>`
+
 export const apiV0Urls = {
   users: {
     me: {
