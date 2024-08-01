@@ -415,7 +415,7 @@ GEM
     js_cookie_rails (2.2.0)
       railties (>= 3.1)
     json (2.7.2)
-    json-schema (4.3.0)
+    json-schema (4.3.1)
       addressable (>= 2.8)
     jwt (2.8.2)
       base64
@@ -538,7 +538,7 @@ GEM
       method_source (~> 1.0)
     psych (5.1.2)
       stringio
-    public_suffix (6.0.0)
+    public_suffix (6.0.1)
     puma (6.4.2)
       nio4r (~> 2.0)
     raabro (1.4.0)
