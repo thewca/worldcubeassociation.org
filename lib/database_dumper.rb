@@ -200,7 +200,6 @@ module DatabaseDumper
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
-          cellName
           format
           name
           rank
@@ -790,7 +789,6 @@ module DatabaseDumper
     "eligible_country_iso2s_for_championship" => {
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
-          id
           championship_type
           eligible_country_iso2
         ),
@@ -964,11 +962,14 @@ module DatabaseDumper
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
-          cellName
           format
           name
           rank
         ),
+        fake_values: {
+          # Copy over column to keep backwards compatibility
+          "cellName" => "name",
+        },
       ),
     }.freeze,
     "Formats" => {
@@ -1086,7 +1087,6 @@ module DatabaseDumper
     "eligible_country_iso2s_for_championship" => {
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
-          id
           championship_type
           eligible_country_iso2
         ),
@@ -1205,7 +1205,7 @@ module DatabaseDumper
 
   def self.mysqldump(db_name, dest_filename)
     system_pipefail!("mysqldump #{self.mysql_cli_creds} #{db_name} -r #{dest_filename} #{filter_out_mysql_warning}")
-    system_pipefail!("sed -i 's_^/\\*!50013 DEFINER.*__' #{dest_filename}")
+    system_pipefail!("ruby -i -pe '$_.gsub!(%r{^/\\*!50013 DEFINER.*\\n}, \"\")' #{dest_filename}")
   end
 
   def self.filter_out_mysql_warning(dest_filename = nil)

@@ -22,7 +22,7 @@ class Person < ApplicationRecord
   }
 
   validates :name, presence: true
-  validates_inclusion_of :countryId, in: Country.real.map(&:id).freeze
+  validates_inclusion_of :countryId, in: Country::WCA_COUNTRY_IDS
 
   # If creating a brand new person (ie: with subId equal to 1), then the
   # WCA ID must be unique.
@@ -215,7 +215,7 @@ class Person < ApplicationRecord
       podiums[:continental] = championship_podiums_with_condition do |results|
         results.joins(:country, competition: [:championships]).where("championships.championship_type = Countries.continentId")
       end
-      EligibleCountryIso2ForChampionship.championship_types.each do |championship_type|
+      EligibleCountryIso2ForChampionship::CHAMPIONSHIP_TYPES.each do |championship_type|
         podiums[championship_type.to_sym] = championship_podiums_with_condition do |results|
           results
             .joins(:country, competition: { championships: :eligible_country_iso2s_for_championship })
@@ -273,6 +273,18 @@ class Person < ApplicationRecord
     only: ["wca_id", "name", "gender"],
     methods: ["url", "country_iso2"],
   }.freeze
+
+  def personal_records
+    [self.ranksAverage, self.ranksSingle].compact.flatten
+  end
+
+  def best_singles_by(target_date)
+    self.results.on_or_before(target_date).succeeded.group(:eventId).minimum(:best)
+  end
+
+  def best_averages_by(target_date)
+    self.results.on_or_before(target_date).average_succeeded.group(:eventId).minimum(:average)
+  end
 
   def serializable_hash(options = nil)
     json = super(DEFAULT_SERIALIZE_OPTIONS.merge(options || {}))

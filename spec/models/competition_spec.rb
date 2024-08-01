@@ -473,9 +473,11 @@ RSpec.describe Competition do
     it "warns if competition has results and haven't been posted" do
       competition = FactoryBot.create :competition, :confirmed, :announced, :visible, :past, results_posted_at: nil, results_posted_by: nil
       FactoryBot.create(:result, person: FactoryBot.create(:person), competitionId: competition.id)
+      wrt_member = FactoryBot.create :user, :wrt_member
 
       expect(competition).to be_valid
-      expect(competition.warnings_for(nil)[:results]).to eq "This competition's results are visible but haven't been posted yet."
+      expect(competition.warnings_for(wrt_member)[:results]).to eq "This competition's results are visible but haven't been posted yet."
+      expect(competition.warnings_for(nil)[:results]).to eq "We are busy processing this competition's results - they should be available shortly."
     end
 
     it "does not warn about other different championships" do
@@ -1578,22 +1580,6 @@ RSpec.describe Competition do
     it "external website is too long" do
       new_competition.external_website = "201 character external website reeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
       expect(new_competition).not_to be_valid
-    end
-  end
-
-  context 'validations defined appropriately' do
-    it 'all string column names appear in one of the validation lists' do
-      string_columns = Competition.columns.select { |col| col.type == :string }.map(&:name)
-      all_listed_columns = Competition::VALIDATE_STRING_LENGTH + Competition::DONT_VALIDATE_STRING_LENGTH
-
-      string_columns.each do |column|
-        expect(all_listed_columns).to include(column)
-      end
-    end
-
-    it 'no string column name appears in both validation lists' do
-      common_columns = Competition::VALIDATE_STRING_LENGTH & Competition::DONT_VALIDATE_STRING_LENGTH
-      expect(common_columns).to be_empty
     end
   end
 end

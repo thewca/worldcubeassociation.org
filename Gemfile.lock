@@ -201,7 +201,7 @@ GEM
       sassc (>= 2.0.0)
     bootstrap-table-rails (1.11.1.1)
     builder (3.3.0)
-    bullet (7.1.6)
+    bullet (7.2.0)
       activesupport (>= 3.0.0)
       uniform_notifier (~> 1.11)
     byebug (11.1.3)
@@ -263,9 +263,9 @@ GEM
     devise-bootstrap-views (1.1.0)
     devise-i18n (1.12.1)
       devise (>= 4.9.0)
-    devise-jwt (0.11.0)
+    devise-jwt (0.12.1)
       devise (~> 4.0)
-      warden-jwt_auth (~> 0.8)
+      warden-jwt_auth (~> 0.10)
     devise-two-factor (5.1.0)
       activesupport (~> 7.0)
       devise (~> 4.0)
@@ -290,7 +290,7 @@ GEM
     dry-auto_inject (1.0.1)
       dry-core (~> 1.0)
       zeitwerk (~> 2.6)
-    dry-configurable (1.1.0)
+    dry-configurable (1.2.0)
       dry-core (~> 1.0, < 2)
       zeitwerk (~> 2.6)
     dry-core (1.0.1)
@@ -319,7 +319,7 @@ GEM
       hashie
     faraday-multipart (1.0.4)
       multipart-post (~> 2)
-    faraday-net_http (3.1.0)
+    faraday-net_http (3.1.1)
       net-http
     faraday-retry (2.2.1)
       faraday (~> 2.0)
@@ -334,19 +334,19 @@ GEM
     glob (0.4.0)
     globalid (1.2.1)
       activesupport (>= 6.1)
-    google-apis-admin_directory_v1 (0.57.0)
+    google-apis-admin_directory_v1 (0.58.0)
       google-apis-core (>= 0.15.0, < 2.a)
-    google-apis-core (0.15.0)
+    google-apis-core (0.15.1)
       addressable (~> 2.5, >= 2.5.1)
       googleauth (~> 1.9)
-      httpclient (>= 2.8.1, < 3.a)
+      httpclient (>= 2.8.3, < 3.a)
       mini_mime (~> 1.0)
+      mutex_m
       representable (~> 3.0)
       retriable (>= 2.0, < 4.a)
-      rexml
     google-cloud-env (2.1.1)
       faraday (>= 1.0, < 3.a)
-    google-protobuf (4.27.2)
+    google-protobuf (4.27.3)
       bigdecimal
       rake (>= 13)
     googleauth (1.11.0)
@@ -397,9 +397,9 @@ GEM
       rails-i18n
       rainbow (>= 2.2.2, < 4.0)
       terminal-table (>= 1.5.1)
-    icalendar (2.10.1)
+    icalendar (2.10.2)
       ice_cube (~> 0.16)
-    ice_cube (0.16.4)
+    ice_cube (0.17.0)
     image_processing (1.12.2)
       mini_magick (>= 4.9.5, < 5)
       ruby-vips (>= 2.0.17, < 3)
@@ -415,7 +415,7 @@ GEM
     js_cookie_rails (2.2.0)
       railties (>= 3.1)
     json (2.7.2)
-    json-schema (4.3.0)
+    json-schema (4.3.1)
       addressable (>= 2.8)
     jwt (2.8.2)
       base64
@@ -538,9 +538,11 @@ GEM
       method_source (~> 1.0)
     psych (5.1.2)
       stringio
-    public_suffix (6.0.0)
+    public_suffix (6.0.1)
+    puma (6.4.2)
+      nio4r (~> 2.0)
     raabro (1.4.0)
-    racc (1.8.0)
+    racc (1.8.1)
     rack (2.2.9)
     rack-cors (2.0.2)
       rack (>= 2.0.0)
@@ -625,7 +627,7 @@ GEM
       mime-types (>= 1.16, < 4.0)
       netrc (~> 0.8)
     retriable (3.1.2)
-    rexml (3.3.1)
+    rexml (3.3.3)
       strscan
     rotp (6.3.0)
     rouge (4.1.2)
@@ -677,14 +679,14 @@ GEM
     ruby-progressbar (1.13.0)
     ruby-vips (2.2.0)
       ffi (~> 1.12)
-    sass-embedded (1.77.5)
-      google-protobuf (>= 3.25, < 5.0)
+    sass-embedded (1.77.8)
+      google-protobuf (~> 4.26)
       rake (>= 13)
     sass-rails (6.0.0)
       sassc-rails (~> 2.1, >= 2.1.1)
     sassc (2.4.0)
       ffi (~> 1.9)
-    sassc-embedded (1.77.2)
+    sassc-embedded (1.77.8)
       sass-embedded (~> 1.77)
     sassc-rails (2.1.2)
       railties (>= 4.0.0)
@@ -749,7 +751,7 @@ GEM
     sprockets (4.2.1)
       concurrent-ruby (~> 1.0)
       rack (>= 2.2.4, < 4)
-    sprockets-rails (3.5.1)
+    sprockets-rails (3.5.2)
       actionpack (>= 6.1)
       activesupport (>= 6.1)
       sprockets (>= 3.0.0)
@@ -796,7 +798,7 @@ GEM
     version_gem (1.1.1)
     warden (1.2.9)
       rack (>= 2.0.9)
-    warden-jwt_auth (0.8.0)
+    warden-jwt_auth (0.10.0)
       dry-auto_inject (>= 0.8, < 2)
       dry-configurable (>= 0.13, < 2)
       jwt (~> 2.1)
@@ -821,7 +823,7 @@ GEM
     wkhtmltopdf-binary-ng (0.12.6.6)
     xpath (3.2.0)
       nokogiri (~> 1.8)
-    zeitwerk (2.6.16)
+    zeitwerk (2.6.17)
 
 PLATFORMS
   ruby
@@ -899,6 +901,7 @@ DEPENDENCIES
   openssl
   overcommit
   premailer-rails
+  puma
   rack (~> 2)
   rack-cors
   rails

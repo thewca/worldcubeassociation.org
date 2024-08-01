@@ -3,7 +3,7 @@
 class RenameSomeWcaStates < ActiveRecord::Migration[5.2]
   def up
     Country.delete_all
-    Country::ALL_STATES.each(&:save!)
+    Country.load_json_data!
     # This change goes along renaming some WCA States (see https://github.com/thewca/wca-regulations/issues/962).
     models=[Person, Result, Competition]
     models.each do |m|
@@ -14,7 +14,7 @@ class RenameSomeWcaStates < ActiveRecord::Migration[5.2]
 
   def down
     Country.delete_all
-    Country::ALL_STATES.each(&:save!)
+    Country.load_json_data!
     models=[Person, Result, Competition]
     models.each do |m|
       m.where(countryId: "Vatican City").update_all(countryId: "Holy See")

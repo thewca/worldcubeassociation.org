@@ -12,6 +12,7 @@ import { setMessage } from './RegistrationMessage';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { useConfirm } from '../../../lib/providers/ConfirmProvider';
 import { contactCompetitionUrl } from '../../../lib/requests/routes.js.erb';
+import RegistrationStatus from './RegistrationStatus';
 
 export default function RegistrationOverview({
   nextStep, registration, competitionInfo,
@@ -69,6 +70,7 @@ export default function RegistrationOverview({
 
   return (
     <>
+      <RegistrationStatus registration={registration} competitionInfo={competitionInfo} />
       { !competitionInfo['using_payment_integrations?'] && registration.competing.registration_status === 'pending' && competitionInfo.base_entry_fee_lowest_denomination && (
         <Message info>
           {i18n.t('registrations.wont_pay_here')}
@@ -85,7 +87,7 @@ export default function RegistrationOverview({
             { /* Make sure to keep WCA Event order */}
             {events.official
               .filter((e) => registration.competing.event_ids.includes(e.id))
-              .map((e) => (<EventIcon key={e.id} id={e.id} style={{ cursor: 'unset' }} />))}
+              .map((e) => (<EventIcon key={e.id} id={e.id} hoverable={false} />))}
           </FormField>
           <FormField />
           <FormField>

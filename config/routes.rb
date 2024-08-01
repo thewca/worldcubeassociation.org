@@ -186,15 +186,8 @@ Rails.application.routes.draw do
   get 'panel/pending-claims(/:user_id)' => 'panel#pending_claims_for_subordinate_delegates', as: 'pending_claims'
   scope 'panel' do
     get 'staff' => 'panel#staff', as: :panel_staff
-    get 'delegate' => 'panel#delegate', as: :panel_delegate
     get 'wfc' => 'panel#wfc', as: :panel_wfc
-    get 'wst' => 'panel#wst', as: :panel_wst
-    get 'board' => 'panel#board', as: :panel_board
-    get 'leader' => 'panel#leader', as: :panel_leader
-    get 'senior_delegate' => 'panel#senior_delegate', as: :panel_senior_delegate
-    get 'wdc' => 'panel#wdc', as: :panel_wdc
-    get 'wec' => 'panel#wec', as: :panel_wec
-    get 'weat' => 'panel#weat', as: :panel_weat
+    get 'generate_db_token' => 'panel#generate_db_token', as: :panel_generate_db_token
   end
   get 'panel/:panel_id' => 'panel#index', as: :panel_index
   resources :notifications, only: [:index]
@@ -363,9 +356,14 @@ Rails.application.routes.draw do
       get '/persons/:wca_id' => "persons#show", as: :person
       get '/persons/:wca_id/results' => "persons#results", as: :person_results
       get '/persons/:wca_id/competitions' => "persons#competitions", as: :person_competitions
+      get '/persons/:wca_id/personal_records' => "persons#personal_records", as: :personal_records
       get '/geocoding/search' => 'geocoding#get_location_from_query', as: :geocoding_search
       get '/countries' => 'api#countries'
+      get '/records' => "api#records"
+      get '/results/:user_id/qualification_data' => 'api#user_qualification_data', as: :user_qualification_data
       get '/competition_series/:id' => 'api#competition_series'
+      get '/competition_index' => 'competitions#competition_index', as: :competition_index
+
       resources :competitions, only: [:index, :show] do
         get '/wcif' => 'competitions#show_wcif'
         get '/wcif/public' => 'competitions#show_wcif_public'
@@ -380,7 +378,7 @@ Rails.application.routes.draw do
         get '/psych-sheet/:event_id' => 'competitions#event_psych_sheet', as: :event_psych_sheet
         patch '/wcif' => 'competitions#update_wcif', as: :update_wcif
       end
-      get '/records' => "api#records"
+
       post '/registration-data' => 'competitions#registration_data', as: :registration_data
 
       scope 'user_roles' do

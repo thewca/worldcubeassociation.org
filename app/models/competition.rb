@@ -16,7 +16,7 @@ class Competition < ApplicationRecord
   has_many :competitors, -> { distinct }, through: :results, source: :person
   has_many :competitor_users, -> { distinct }, through: :competitors, source: :user
   has_many :competition_delegates, dependent: :delete_all
-  has_many :delegates, -> { includes(:delegate_role_metadata) }, through: :competition_delegates
+  has_many :delegates, -> { includes(:delegate_roles, :delegate_role_metadata) }, through: :competition_delegates
   has_many :competition_organizers, dependent: :delete_all
   has_many :organizers, through: :competition_organizers
   has_many :media, class_name: "CompetitionMedium", foreign_key: "competitionId", dependent: :delete_all
@@ -176,6 +176,11 @@ class Competition < ApplicationRecord
   MAX_ID_LENGTH = 32
   MAX_NAME_LENGTH = 50
   MAX_CELL_NAME_LENGTH = 32
+  MAX_CITY_NAME_LENGTH = 50
+  MAX_VENUE_LENGTH = 240
+  MAX_FREETEXT_LENGTH = 191
+  MAX_URL_LENGTH = 200
+  MAX_MARKDOWN_LENGTH = 255
   MAX_COMPETITOR_LIMIT = 5000
   MAX_GUEST_LIMIT = 100
   validates_inclusion_of :competitor_limit_enabled, in: [true, false], if: :competitor_limit_required?
@@ -197,7 +202,7 @@ class Competition < ApplicationRecord
   validates :external_website, format: { with: URL_RE }, allow_blank: true
   validates :external_registration_page, presence: true, format: { with: URL_RE }, if: :external_registration_page_required?
 
-  validates_inclusion_of :countryId, in: Country.ids.freeze
+  validates_inclusion_of :countryId, in: Country::ALL_COUNTRY_IDS
   validates :currency_code, inclusion: { in: Money::Currency, message: proc { I18n.t('competitions.errors.invalid_currency_code') } }
 
   validates_numericality_of :refund_policy_percent, greater_than_or_equal_to: 0, less_than_or_equal_to: 100, if: :refund_policy_percent_required?
@@ -224,17 +229,13 @@ class Competition < ApplicationRecord
   validates_inclusion_of :main_event_id, in: ->(comp) { [nil].concat(comp.persisted_events_id) }
 
   # Validations are used to show form errors to the user. If string columns aren't validated for length, it produces an unexplained error for the user
-  # VALIDATED_COLUMNS: All columns which appear in the competition form and are editable by users
-  # DONT_VALIDATE_STRING_LENGTH: String columns not exposed to users in the cmopetition form
-  VALIDATE_STRING_LENGTH = %w[
-    name cityName venue venueAddress venueDetails external_website cellName contact name_reason external_registration_page forbid_newcomers_reason
-  ].freeze
-  DONT_VALIDATE_STRING_LENGTH = %w[countryId connected_stripe_account_id currency_code main_event_id id].freeze
-  columns_hash.each do |column_name, column_info|
-    if VALIDATE_STRING_LENGTH.include?(column_name) && column_info.limit
-      validates column_name, length: { maximum: column_info.limit }
-    end
-  end
+  validates :name, length: { maximum: MAX_NAME_LENGTH }
+  validates :cellName, length: { maximum: MAX_CELL_NAME_LENGTH }
+  validates :cityName, length: { maximum: MAX_CITY_NAME_LENGTH }
+  validates :venue, length: { maximum: MAX_VENUE_LENGTH }
+  validates :venueAddress, :venueDetails, :name_reason, :forbid_newcomers_reason, length: { maximum: MAX_FREETEXT_LENGTH }
+  validates :external_website, :external_registration_page, length: { maximum: MAX_URL_LENGTH }
+  validates :contact, length: { maximum: MAX_MARKDOWN_LENGTH }
 
   # Dirty old trick to deal with competition id changes (see other methods using
   # 'with_old_id' for more details).
@@ -468,7 +469,11 @@ class Competition < ApplicationRecord
       end
 
       if self.results.any? && !self.results_posted?
-        warnings[:results] = I18n.t('competitions.messages.results_not_posted')
+        if user&.can_admin_results?
+          warnings[:results] = I18n.t('competitions.messages.results_not_posted')
+        else
+          warnings[:results] = I18n.t('competitions.messages.results_still_processing')
+        end
       end
 
       if self.registration_full? && self.registration_opened?
@@ -795,6 +800,10 @@ class Competition < ApplicationRecord
     with_old_id do
       original_delegate_report
     end
+  end
+
+  def report_posted_at
+    delegate_report&.posted_at
   end
 
   # This callback updates all tables having the competition id, when the id changes.
@@ -2158,9 +2167,12 @@ class Competition < ApplicationRecord
     # in the json (eg: specify an empty 'methods' to remove these attributes,
     # or set a custom array in 'only' without getting the default ones), therefore
     # we only use 'merge' here, which doesn't "deeply" merge into the default options.
-    json = super(DEFAULT_SERIALIZE_OPTIONS.merge(options || {}))
-    # Fallback to the default 'serializable_hash' method, but always include our
-    # custom 'class' attribute.
+    options = DEFAULT_SERIALIZE_OPTIONS.merge(options || {}).deep_dup
+
+    # Fallback to the default 'serializable_hash' method BUT...
+    json = super
+
+    # ...always include our custom 'class' attribute.
     # We can't put that in our DEFAULT_SERIALIZE_OPTIONS because the 'class'
     # method already exists, and we definitely don't want to override it, nor do
     # we want to change the existing behavior of our API which returns a string.

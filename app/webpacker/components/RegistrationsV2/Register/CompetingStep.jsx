@@ -249,12 +249,8 @@ export default function CompetingStep({
           user={user}
           onProcessingComplete={async () => {
             setProcessing(false);
-            if (competitionInfo['using_payment_integrations?']) {
-              nextStep();
-            } else {
-              await refetchRegistration();
-              nextStep();
-            }
+            await refetchRegistration();
+            nextStep();
           }}
         />
       )}

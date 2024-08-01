@@ -117,6 +117,8 @@ group :development, :test do
   gem 'faker'
   gem 'capybara-screenshot'
 
+  gem 'puma'
+
   gem 'byebug'
   gem 'i18n-tasks'
   gem 'i18n-spec'
