@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { Icon, Step } from 'semantic-ui-react';
+import { Step } from 'semantic-ui-react';
 import CompetingStep from './CompetingStep';
 import RegistrationRequirements from './RegistrationRequirements';
 import StripeWrapper from './StripeWrapper';

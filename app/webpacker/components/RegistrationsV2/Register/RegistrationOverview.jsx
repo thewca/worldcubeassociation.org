@@ -77,7 +77,7 @@ export default function RegistrationOverview({
 
   return (
     <>
-      <RegistrationStatus registration={registration} />
+      <RegistrationStatus registration={registration} competitionInfo={competitionInfo} />
       { !editsAllowed && (
       <Message info>
         {i18n.t(updateRegistrationKey(editsAllowed, hasRegistrationEditDeadlinePassed))}
