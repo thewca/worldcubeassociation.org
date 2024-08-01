@@ -19,12 +19,6 @@ class StaticPagesController < ApplicationController
   def logo
   end
 
-  def wca_workbook_assistant
-  end
-
-  def wca_workbook_assistant_versions
-  end
-
   def robots
     respond_to :txt
   end
