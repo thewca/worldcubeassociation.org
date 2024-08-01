@@ -103,7 +103,7 @@
           const amount = getCurrentRubyAmount();
 
           return wrapAjaxPromise('load-payment-intent', {
-            url: '<%= registration_payment_intent_path(@registration, :paypal) %>',
+            url: '<%= registration_payment_intent_path(@registration, payment_integration: :paypal) %>',
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             data: JSON.stringify({ amount: amount }),
@@ -115,25 +115,18 @@
         // Finalize the transaction on the server after payer approval
         onApprove: (data, actions) => {
           return wrapAjaxPromise('capture-paypal-order', {
-            url: '<%= registration_capture_paypal_payment_path(@registration) %>',
+            url: '<%= registration_paypal_payment_capture_path(@competition) %>',
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             data: JSON.stringify(data),
-        })
-          .then((orderData) => {
-            toggleSaving(false);
-
-            // Successful capture! For dev/demo purposes:
-            console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
-            const transaction = orderData.purchase_units[0].payments.captures[0];
-            alert(`Transaction ${transaction.status}: ${transaction.id}\n\nSee console for all available details`);
-
-            // When ready to go live, remove the alert and show a success message within this page. For example:
-            // const element = document.getElementById('paypal-button-container');
-            // element.innerHTML = '<h3>Thank you for your payment!</h3>';
-            // Or go to another URL:  actions.redirect('thank_you.html');
           })
-          .catch(handleAjaxError);
+            .then(({ id: orderId }) => {
+              toggleSaving(false);
+
+              const paymentCompletionUrl = `<%= CGI.unescape(registration_payment_completion_url(@competition, payment_integration: :paypal, order_id: "${orderId}")) %>`
+              actions.redirect(paymentCompletionUrl);
+            })
+            .catch(handleAjaxError);
         },
 
         onError: (err) => handlePaypalError(err, false),
@@ -163,11 +156,11 @@
       const $paypalErrorDiv = $('#paypal-sdk-error');
 
       if (isManualCancel) {
-        $paypalErrorDiv.text('<%= t("registrations.payment_form.errors.paypal_canceled") %>');
+        $paypalErrorDiv.text('<%= t("registrations.payment_form.errors.paypal.canceled") %>');
       } else {
         // Quote from the PayPal documentation: (see https://developer.paypal.com/sdk/js/reference/#onerror)
         // Note: This error handler is a catch-all. Errors at this point aren't expected to be handled beyond showing a generic error message or page.
-        $paypalErrorDiv.text('<%= t("registrations.payment_form.errors.paypal_failed") %>');
+        $paypalErrorDiv.text('<%= t("registrations.payment_form.errors.generic.failed", provider: t("payments.payment_providers.paypal")) %>');
       }
 
       $paymentElementRow.addClass("has-error");

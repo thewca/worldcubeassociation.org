@@ -78,8 +78,42 @@ class ConnectedStripeAccount < ApplicationRecord
     )
   end
 
+  def retrieve_payments(payment_intent)
+    intent_charges = Stripe::Charge.list(
+      { payment_intent: payment_intent.payment_record.stripe_id },
+      stripe_account: self.account_id,
+    )
+
+    intent_charges.data.map do |charge|
+      stripe_record = StripeRecord.find_by(stripe_id: charge.id)
+
+      if stripe_record.present?
+        stripe_record.update_status(charge)
+      else
+        stripe_record = StripeRecord.create_from_api(charge, {}, self.account_id, payment_intent.payment_record)
+        yield stripe_record if block_given?
+      end
+
+      stripe_record
+    end
+  end
+
   def find_payment(record_id)
     StripeRecord.charge.find(record_id)
+  end
+
+  def find_payment_from_request(params)
+    # Provided by Stripe upon redirect when the "PaymentElement" workflow is completed
+    intent_id = params[:payment_intent]
+    intent_secret = params[:payment_intent_client_secret]
+
+    # We expect that the record here is a top-level PaymentIntent in Stripe's API model
+    stored_record = StripeRecord.find_by(stripe_id: intent_id)
+
+    raise t("registrations.payment_form.errors.stripe.not_an_intent") unless stored_record&.payment_intent?
+    raise t("registrations.payment_form.errors.stripe.secret_invalid") unless stored_record.payment_intent&.client_secret == intent_secret
+
+    stored_record
   end
 
   def issue_refund(charge_record, amount_iso)

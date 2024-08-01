@@ -18,11 +18,6 @@ Rails.application.routes.draw do
     mount Sidekiq::Web => '/sidekiq'
   end
 
-  # Don't expose Paypal routes in production until we're reading to launch
-  unless PaypalInterface.paypal_disabled?
-    post 'registration/:id/capture-paypal-payment' => 'registrations#capture_paypal_payment', as: :registration_capture_paypal_payment
-  end
-
   # Prevent account deletion, and overrides the sessions controller for 2FA.
   #  https://github.com/plataformatec/devise/wiki/How-To:-Disable-user-from-destroying-their-account
   devise_for :users, skip: :registrations, controllers: { sessions: "sessions" }
@@ -39,13 +34,11 @@ Rails.application.routes.draw do
     post 'users/authenticate-sensitive' => 'users#authenticate_user_for_sensitive_edit'
     delete 'users/sign-out-other' => 'sessions#destroy_other', as: :destroy_other_user_sessions
   end
-  # TODO: This can be removed after deployment, this is so we don't have any users error out if they click on pay
-  # while the deployment happens
-  get 'registration/:id/payment-completion' => 'registrations#payment_completion_legacy', as: :registration_payment_completion_legacy
 
   post 'registration/:id/load-payment-intent/:payment_integration' => 'registrations#load_payment_intent', as: :registration_payment_intent
   post 'competitions/:competition_id/refund/:payment_integration/:payment_id' => 'registrations#refund_payment', as: :registration_payment_refund
-  get 'competitions/:competition_id/payment-completion' => 'registrations#payment_completion', as: :registration_payment_completion
+  get 'competitions/:competition_id/payment-completion/:payment_integration' => 'registrations#payment_completion', as: :registration_payment_completion
+  post 'competitions/:competition_id/paypal-capture' => 'registrations#paypal_payment_capture', as: :registration_paypal_payment_capture
   post 'registration/stripe-webhook' => 'registrations#stripe_webhook', as: :registration_stripe_webhook
   get 'registration/payment-denomination' => 'registrations#payment_denomination', as: :registration_payment_denomination
   resources :users, only: [:index, :edit, :update]

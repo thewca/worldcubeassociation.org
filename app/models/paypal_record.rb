@@ -70,9 +70,30 @@ class PaypalRecord < ApplicationRecord
   belongs_to :parent_record, class_name: "PaypalRecord", inverse_of: :child_records, optional: true
   has_many :child_records, class_name: "PaypalRecord", inverse_of: :parent_record, foreign_key: :parent_record_id
 
+  def update_status(api_transaction)
+    # TODO: Can we extract error information from a PayPal API Order object?
+
+    self.update!(
+      paypal_status: api_transaction['status'],
+    )
+  end
+
   def root_record
     parent_record&.root_record || self
   end
+
+  def retrieve_paypal
+    case self.paypal_record_type
+    when 'paypal_order'
+      PaypalInterface.retrieve_order(self.merchant_id, self.paypal_id)
+    when 'capture'
+      PaypalInterface.retrieve_capture(self.merchant_id, self.paypal_id)
+    when 'refund'
+      PaypalInterface.retrieve_refund(self.merchant_id, self.paypal_id)
+    end
+  end
+
+  alias_method :retrieve_remote, :retrieve_paypal
 
   def determine_wca_status
     result = WCA_TO_PAYPAL_STATUS_MAP.find { |key, values| values.include?(self.paypal_status) }

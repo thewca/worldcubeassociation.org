@@ -587,7 +587,7 @@ RSpec.describe "registrations" do
             stripe_account: competition.payment_account_for(:stripe).account_id,
           )
           # mimic the response that Stripe sends to our return_url after completing the checkout UI
-          get registration_payment_completion_path(competition.id), params: {
+          get registration_payment_completion_path(competition.id, payment_integration: :stripe), params: {
             payment_intent: payment_intent.payment_record.stripe_id,
             payment_intent_client_secret: payment_intent.client_secret,
           }
@@ -646,6 +646,7 @@ RSpec.describe "registrations" do
           post registration_payment_intent_path(registration.id, :stripe), params: {
             amount: payment_amount,
           }
+
           payment_intent = registration.reload.payment_intents.first
 
           # mimic the user clicking through the interface
@@ -655,7 +656,7 @@ RSpec.describe "registrations" do
             stripe_account: competition.payment_account_for(:stripe).account_id,
           )
           # mimic the response that Stripe sends to our return_url after completing the checkout UI
-          get registration_payment_completion_path(competition.id), params: {
+          get registration_payment_completion_path(competition.id, payment_integration: :stripe), params: {
             payment_intent: payment_intent.payment_record.stripe_id,
             payment_intent_client_secret: payment_intent.client_secret,
           }
@@ -688,7 +689,7 @@ RSpec.describe "registrations" do
             stripe_account: competition.payment_account_for(:stripe).account_id,
           )
           # mimic the response that Stripe sends to our return_url after completing the checkout UI
-          get registration_payment_completion_path(competition.id), params: {
+          get registration_payment_completion_path(competition.id, payment_integration: :stripe), params: {
             payment_intent: payment_intent.payment_record.stripe_id,
             payment_intent_client_secret: payment_intent.client_secret,
           }
@@ -723,7 +724,7 @@ RSpec.describe "registrations" do
               stripe_account: competition.payment_account_for(:stripe).account_id,
             )
             # mimic the response that Stripe sends to our return_url after completing the checkout UI
-            get registration_payment_completion_path(competition.id), params: {
+            get registration_payment_completion_path(competition.id, payment_integration: :stripe), params: {
               payment_intent: payment_intent.payment_record.stripe_id,
               payment_intent_client_secret: payment_intent.client_secret,
             }
@@ -757,7 +758,7 @@ RSpec.describe "registrations" do
           )
 
           # mimic the response that Stripe sends to our return_url after completing the checkout UI
-          get registration_payment_completion_path(competition.id), params: {
+          get registration_payment_completion_path(competition.id, payment_integration: :stripe), params: {
             payment_intent: payment_intent.payment_record.stripe_id,
             payment_intent_client_secret: payment_intent.client_secret,
           }
@@ -794,7 +795,7 @@ RSpec.describe "registrations" do
 
           expect {
             # mimick the response that Stripe sends to our return_url after completing the checkout UI
-            get registration_payment_completion_path(competition.id), params: {
+            get registration_payment_completion_path(competition.id, payment_integration: :stripe), params: {
               payment_intent: payment_intent.payment_record.stripe_id,
               payment_intent_client_secret: payment_intent.client_secret,
             }
@@ -824,7 +825,7 @@ RSpec.describe "registrations" do
 
           expect {
             # mimick the response that Stripe sends to our return_url after completing the checkout UI
-            get registration_payment_completion_path(competition.id), params: {
+            get registration_payment_completion_path(competition.id, payment_integration: :stripe), params: {
               payment_intent: payment_intent.payment_record.stripe_id,
               payment_intent_client_secret: payment_intent.client_secret,
             }
@@ -854,7 +855,7 @@ RSpec.describe "registrations" do
 
           expect {
             # mimick the response that Stripe sends to our return_url after completing the checkout UI
-            get registration_payment_completion_path(competition.id), params: {
+            get registration_payment_completion_path(competition.id, payment_integration: :stripe), params: {
               payment_intent: payment_intent.payment_record.stripe_id,
               payment_intent_client_secret: payment_intent.client_secret,
             }
@@ -884,7 +885,7 @@ RSpec.describe "registrations" do
 
           expect {
             # mimick the response that Stripe sends to our return_url after completing the checkout UI
-            get registration_payment_completion_path(competition.id), params: {
+            get registration_payment_completion_path(competition.id, payment_integration: :stripe), params: {
               payment_intent: payment_intent.payment_record.stripe_id,
               payment_intent_client_secret: payment_intent.client_secret,
             }
@@ -911,7 +912,7 @@ RSpec.describe "registrations" do
               stripe_account: competition.payment_account_for(:stripe).account_id,
             )
             # mimick the response that Stripe sends to our return_url after completing the checkout UI
-            get registration_payment_completion_path(competition.id), params: {
+            get registration_payment_completion_path(competition.id, payment_integration: :stripe), params: {
               payment_intent: payment_intent.payment_record.stripe_id,
               payment_intent_client_secret: payment_intent.client_secret,
             }
@@ -947,7 +948,7 @@ RSpec.describe "registrations" do
           }.to raise_error(Stripe::StripeError, "Your card was declined.")
 
           # mimick the response that Stripe sends to our return_url after completing the checkout UI
-          get registration_payment_completion_path(competition.id), params: {
+          get registration_payment_completion_path(competition.id, payment_integration: :stripe), params: {
             payment_intent: payment_intent.payment_record.stripe_id,
             payment_intent_client_secret: payment_intent.client_secret,
           }
@@ -989,7 +990,7 @@ RSpec.describe "registrations" do
           }.to raise_error(Stripe::StripeError, "Your card was declined.")
 
           # mimick the response that Stripe sends to our return_url after completing the checkout UI
-          get registration_payment_completion_path(competition.id), params: {
+          get registration_payment_completion_path(competition.id, payment_integration: :stripe), params: {
             payment_intent: payment_intent.payment_record.stripe_id,
             payment_intent_client_secret: payment_intent.client_secret,
           }
@@ -1036,7 +1037,7 @@ RSpec.describe "registrations" do
           }.to raise_error(Stripe::StripeError, "Your card was declined.")
 
           # mimick the response that Stripe sends to our return_url after completing the checkout UI
-          get registration_payment_completion_path(competition.id), params: {
+          get registration_payment_completion_path(competition.id, payment_integration: :stripe), params: {
             payment_intent: payment_intent.payment_record.stripe_id,
             payment_intent_client_secret: payment_intent.client_secret,
           }
@@ -1082,7 +1083,7 @@ RSpec.describe "registrations" do
           )
 
           # mimick the response that Stripe sends to our return_url after completing the checkout UI
-          get registration_payment_completion_path(competition.id), params: {
+          get registration_payment_completion_path(competition.id, payment_integration: :stripe), params: {
             payment_intent: payment_intent.payment_record.stripe_id,
             payment_intent_client_secret: payment_intent.client_secret,
           }
@@ -1169,21 +1170,26 @@ RSpec.describe "registrations" do
       @currency_code = competition.currency_code
       @amount = PaypalRecord.amount_to_paypal(competition.base_entry_fee_lowest_denomination, @currency_code)
 
-      url = "#{EnvConfig.PAYPAL_BASE_URL}/v2/checkout/orders/#{@record_id}/capture"
-      stub_request(:post, url)
-        .to_return(status: 200, body: capture_order_response(@record_id, @amount, @currency_code), headers: { 'Content-Type' => 'application/json' })
+      stubbed_capture = capture_order_response(@record_id, @amount, @currency_code)
 
-      # Make the API call to capture the order
-      post registration_capture_paypal_payment_path(registration.id), params: { orderID: @record_id }, as: :json
+      retrieve_order_url = "#{EnvConfig.PAYPAL_BASE_URL}/v2/checkout/orders/#{@record_id}"
+      stub_request(:get, retrieve_order_url)
+        .to_return(status: 200, body: stubbed_capture, headers: { 'Content-Type' => 'application/json' })
+
+      # Make the API call to record the order
+      get registration_payment_completion_path(competition, payment_integration: :paypal), params: { order_id: @record_id }, as: :json
+
+      # make sure every follow-up test gets a hold of the refunds
+      registration.reload
     end
 
     it 'creates a PaypalRecord of type :capture' do
-      capture_id = JSON.parse(response.body)['purchase_units'][0]['payments']['captures'][0]['id']
-      expect(PaypalRecord.find_by(paypal_id: capture_id).paypal_record_type).to eq('capture')
+      capture_record = registration.registration_payments.first.receipt
+      expect(capture_record.paypal_record_type).to eq('capture')
     end
 
     it 'associates PaypalCapture to the PaypalRecord' do
-      paypal_record = PaypalRecord.find_by(paypal_id: JSON.parse(response.body)['id'])
+      paypal_record = registration.payment_intents.first.payment_record
       expect(paypal_record.child_records.count).to eq(1)
     end
 
@@ -1230,15 +1236,16 @@ RSpec.describe "registrations" do
 
       stubbed_capture = capture_order_response(@record_id, @amount, @currency_code)
 
-      capture_url = "#{EnvConfig.PAYPAL_BASE_URL}/v2/checkout/orders/#{@record_id}/capture"
-      stub_request(:post, capture_url)
+      retrieve_order_url = "#{EnvConfig.PAYPAL_BASE_URL}/v2/checkout/orders/#{@record_id}"
+      stub_request(:get, retrieve_order_url)
         .to_return(status: 200, body: stubbed_capture, headers: { 'Content-Type' => 'application/json' })
 
-      # Make the API call to capture the order
-      post registration_capture_paypal_payment_path(registration.id), params: { orderID: @record_id }, as: :json
+      # Make the API call to record the order
+      get registration_payment_completion_path(competition, payment_integration: :paypal), params: { order_id: @record_id }, as: :json
 
       # Mock the refunds endpoint
-      capture_id = JSON.parse(stubbed_capture)['purchase_units'][0]['payments']['captures'][0]['id']
+      registration_payment = registration.registration_payments.reload.first
+      capture_id = registration_payment.receipt.paypal_id
 
       stubbed_refund = refund_response(capture_id, @amount, @currency_code)
 
@@ -1250,7 +1257,6 @@ RSpec.describe "registrations" do
       sign_in admin_user
 
       # Make the API call to issue the refund
-      registration_payment = registration.registration_payments.first
       refund_params = { payment: { refund_amount: registration_payment.amount_lowest_denomination } }
       post registration_payment_refund_path(competition, 'paypal', registration_payment.receipt), params: refund_params
 
