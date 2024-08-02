@@ -23,6 +23,7 @@ import { setMessage } from './RegistrationMessage';
 import i18n from '../../../lib/i18n';
 import I18nHTMLTranslate from '../../I18nHTMLTranslate';
 import { useConfirm } from '../../../lib/providers/ConfirmProvider';
+import { events } from '../../../lib/wca-data.js.erb';
 
 const maxCommentLength = 240;
 
@@ -185,7 +186,7 @@ export default function CompetingStep({
           guests,
         });
       } else {
-        const updateMessage = `${hasCommentChanged ? `Comment to ${comment} ` : ''}${hasEventsChanged ? `Events to ${selectedEvents} ` : ''}${hasGuestsChanged ? `Guests to ${guests}` : ''}`;
+        const updateMessage = `${hasCommentChanged ? `Comment to ${comment} ` : ''}${hasEventsChanged ? `Events to ${selectedEvents.map((eventId) => events.byId[eventId].name).join(', ')} ` : ''}${hasGuestsChanged ? `Guests to ${guests}` : ''}`;
         window.location = contactCompetitionUrl(competitionInfo.id, encodeURIComponent(i18n.t('competitions.registration_v2.update.update_contact_message', { update_params: updateMessage })));
       }
     }).catch(() => {
