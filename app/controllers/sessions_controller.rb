@@ -32,9 +32,7 @@ class SessionsController < Devise::SessionsController
         'Authorization' => "Bearer #{access_token}",
         'Content-Type' => 'application/json',
       },
-    ) do |builder|
-      FaradayHelper.default_connection(builder)
-    end
+    )
 
     results = connection.get("/api/v0/me").body
 
@@ -43,7 +41,7 @@ class SessionsController < Devise::SessionsController
       sign_in(user)
       redirect_to root_url, notice: "Successfully logged in as #{user.wca_id}"
     else
-      redirect_to root_url, alert: "Couldn't find your user"
+      redirect_to root_url, alert: "Your user is not yet imported into our Staging Website, please try again later"
     end
   end
 
