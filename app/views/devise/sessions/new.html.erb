@@ -1,9 +1,9 @@
 <div class="container">
   <%= render layout: "devise/conversion_message", locals: { user: resource } do %>
-    <% if EnvConfig.WCA_LIVE_SITE? %>
-        <%= render 'live_template' %>
-    <% else %>
+    <% if Rails.env.production? && !EnvConfig.WCA_LIVE_SITE? %>
         <%= render 'staging_template' %>
+    <% else %>
+        <%= render 'live_template' %>
     <% end %>
   <% end %>
 </div>
