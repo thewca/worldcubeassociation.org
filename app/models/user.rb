@@ -997,7 +997,7 @@ class User < ApplicationRecord
     if user.wca_id.blank? && organizer_for?(user)
       fields << :name
     end
-    if admin? || any_kind_of_delegate? || results_team? || communication_team?
+    if can_edit_any_user?
       fields += %i(
         unconfirmed_wca_id
       )
