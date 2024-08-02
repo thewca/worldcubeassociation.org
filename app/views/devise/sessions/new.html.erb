@@ -4,9 +4,9 @@
   <% # i18n-tasks-use t('devise.failure.unconfirmed') %>
   <%= render layout: "devise/conversion_message", locals: { user: resource } do %>
     <% if Rails.env.production? && !EnvConfig.WCA_LIVE_SITE? %>
-        <%= render 'staging_template' %>
+        <%= render 'staging_login' %>
     <% else %>
-        <%= render 'live_template' %>
+        <%= render 'live_login' %>
     <% end %>
   <% end %>
 </div>
