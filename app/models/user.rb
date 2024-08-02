@@ -714,6 +714,10 @@ class User < ApplicationRecord
     self == user || can_view_all_users? || organizer_for?(user)
   end
 
+  def can_edit_any_user?
+    admin? || any_kind_of_delegate? || can_admin_results? || communication_team?
+  end
+
   def can_change_users_avatar?(user)
     user.wca_id.present? && self.editable_fields_of_user(user).include?(:remove_avatar)
   end
