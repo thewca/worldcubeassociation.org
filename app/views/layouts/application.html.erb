@@ -90,7 +90,7 @@
     </script>
   <% end %>
 </head>
-<body data-rails-controller-name="<%= controller_name %>" data-rails-controller-action-name="<%= action_name %>">
+<body data-rails-controller-name="<%= controller_name %>" data-rails-controller-action-name="<%= action_name %>" class="<%= "watermark" if Rails.env.production? && !EnvConfig.WCA_LIVE_SITE? %>">
 
   <% hide_wca_navbars = yield(:hide_wca_navbars).present? %>
   <% if !hide_wca_navbars %>
