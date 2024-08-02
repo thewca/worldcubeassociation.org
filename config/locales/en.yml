@@ -1636,6 +1636,8 @@ en:
           uses_wca_registration: "I would like to use the WCA website for registration"
           uses_wca_live: "I will be using WCA Live for scoretaking"
         entry_fees:
+          use_wca_payment: "Use WCA Payment?"
+          payment_information: "Payment information text"
           currency_code: "Currency code"
           base_entry_fee: "Base registration fee"
           on_the_spot_entry_fee: "On the spot base registration fee"
@@ -1720,6 +1722,8 @@ en:
         user_settings:
           receive_registration_emails: ""
         entry_fees:
+          use_wca_payment: "If you want to use the WCA Website to collect payments (You will still need to connect your stripe account separately)"
+          payment_information: "Explanation on how users will pay for the competition.  <br/>Please fill this out <b>in English</b> and whatever other languages your competitors speak; this will be displayed on the competition's information page, as well on the registration page if you are using the WCA website registrations."
           currency_code: "The currency code for fees."
           base_entry_fee: 'The base registration fee for the competition. It will be displayed on the competition information page and the registration page if used. If this is set to 0, a sentence will be displayed saying that registrations will be accepted for free. <br><br><b>DISCLAIMER: The following WCA Dues estimate is solely an approximation based on current exchange rates and is in no way legally binding for the Dues payment.</b>'
           on_the_spot_entry_fee: "If this is set to 0, a sentence will be displayed saying that on the spot registrations will be accepted for free."
@@ -1738,7 +1742,7 @@ en:
           guests_enabled: ""
           guest_entry_status: ""
           guests_per_registration: "The number of guests per registration allowed at this competition. Registration with too many guests will be blocked. Leave blank if there is no limit."
-          extra_requirements: "Please indicate here any extra registration requirements not covered above, like for example directions on how to pay. <br/>Please fill this out <b>in English</b> and whatever other languages your competitors speak; this will be displayed on the competition's information page, as well on the registration page if you are using the WCA website registrations."
+          extra_requirements: "Please indicate here any extra registration requirements not covered above. <br/>Please fill this out <b>in English</b> and whatever other languages your competitors speak; this will be displayed on the competition's information page, as well on the registration page if you are using the WCA website registrations."
           force_comment: ""
         event_restrictions:
           forbid_newcomers:
