@@ -1,40 +1,9 @@
 <div class="container">
   <%= render layout: "devise/conversion_message", locals: { user: resource } do %>
     <% if EnvConfig.WCA_LIVE_SITE? %>
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <h4><%= t('devise.sessions.new.sign_in') %></h4>
-        </div>
-
-        <div class="panel-body">
-            <%= render 'login_form' %>
-        </div>
-      </div>
+        <%= render 'live_template' %>
     <% else %>
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <h4><%= t('RECOMMENDED: Automatic Sign In') %></h4>
-        </div>
-        <div class="panel-body">
-          <div>
-            <button class="btn btn-success"><%= link_to 'Sign in using your WCA Account', staging_login_url, style: "color: white" %></button>
-          </div>
-        </div>
-      </div>
-
-      <div class="panel panel-default">
-        <div class="panel-heading" role="tab" id="dev-sign-in-heading">
-          <p class="panel-title">
-            <a href="#manual-sign-in" aria-controls="manual-sign-in" role="button" data-toggle="collapse">Developers Only: Manual Sign In</a>
-          </p>
-        </div>
-
-        <div role="tabpanel" class="panel-collapse collapse" id="manual-sign-in" aria-labelledby="dev-sign-in-heading">
-          <div class="panel-body">
-            <%= render 'login_form' %>
-          </div>
-        </div>
-      </div>
+        <%= render 'staging_template' %>
     <% end %>
   <% end %>
 </div>
