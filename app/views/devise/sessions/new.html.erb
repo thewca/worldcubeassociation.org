@@ -1,4 +1,7 @@
 <div class="container">
+  <% # i18n-tasks-use t('devise.failure.invalid') %>
+  <% # i18n-tasks-use t('devise.failure.not_found_in_database') %>
+  <% # i18n-tasks-use t('devise.failure.unconfirmed') %>
   <%= render layout: "devise/conversion_message", locals: { user: resource } do %>
     <% if Rails.env.production? && !EnvConfig.WCA_LIVE_SITE? %>
         <%= render 'staging_template' %>
