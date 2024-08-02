@@ -1444,6 +1444,9 @@ en:
       guests_free:
         free: "Any spectator can attend for free."
         restricted: "Spectators are only permitted as companions of competitors."
+      payment_integration:
+        stripe: "You will pay via Stripe as part of the Registration Process"
+        paypal: "You will pay via PayPal as part of the Registration Process"
       guest_limit:
         one: "Competitors may bring at most 1 guest."
         other: "Competitors may bring at most %{count} guests."

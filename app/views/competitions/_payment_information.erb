@@ -1,0 +1,14 @@
+<% if @competition.using_payment_integrations? %>
+  <% if @competition.stripe_connected? %>
+    <%= t 'competitions.competition_info.payment_integration.stripe' %>
+  <% end %>
+  <% if @competition.paypal_connected? %>
+    <%= t 'competitions.competition_info.payment_integration.paypal' %>
+  <% end %>
+<% else %>
+  <% if @competition.payment_information.present? %>
+    <%=md @competition.payment_information %>
+  <% else %>
+    <%= t 'registrations.wont_pay_here' %>
+  <% end %>
+<% end %>
