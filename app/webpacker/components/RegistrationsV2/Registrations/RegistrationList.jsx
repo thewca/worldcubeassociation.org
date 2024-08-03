@@ -180,7 +180,7 @@ export default function RegistrationList({ competitionInfo }) {
                     key={`registration-table-header-${id}`}
                     onClick={() => setPsychSheetEvent(id)}
                   >
-                    <EventIcon id={id} />
+                    <EventIcon id={id} size="1em" />
                   </Table.HeaderCell>
                 ))}
                 <Table.HeaderCell
