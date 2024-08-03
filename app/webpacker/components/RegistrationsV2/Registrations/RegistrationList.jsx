@@ -7,7 +7,7 @@ import React, {
   useState,
 } from 'react';
 import {
-  Flag, Icon, Message, Table,
+  Flag, Icon, Message, Segment, Table,
 } from 'semantic-ui-react';
 import {
   getConfirmedRegistrations,
@@ -157,8 +157,8 @@ export default function RegistrationList({ competitionInfo }) {
   return registrationsLoading || userInfoLoading ? (
     <Loading />
   ) : (
-    <div>
-      <Table sortable textAlign="left">
+    <Segment style={{ overflowX: 'scroll' }}>
+      <Table sortable unstackable singleLine textAlign="left">
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell
@@ -180,7 +180,7 @@ export default function RegistrationList({ competitionInfo }) {
                     key={`registration-table-header-${id}`}
                     onClick={() => setPsychSheetEvent(id)}
                   >
-                    <EventIcon event={id} className="selected" />
+                    <EventIcon id={id} />
                   </Table.HeaderCell>
                 ))}
                 <Table.HeaderCell
@@ -201,7 +201,7 @@ export default function RegistrationList({ competitionInfo }) {
                   Go back
                 </Table.HeaderCell>
                 <Table.HeaderCell>
-                  <EventIcon event={psychSheetEvent} className="selected" />
+                  <EventIcon id={psychSheetEvent} className="selected" size="1em" />
                 </Table.HeaderCell>
                 <Table.HeaderCell>
                   <Icon name="trophy" />
@@ -253,12 +253,12 @@ export default function RegistrationList({ competitionInfo }) {
                   <>
                     {competitionInfo.event_ids.map((id) => (
                       <Table.Cell
-                          key={`registration-table-row-${registration.user.id}-${id}`}
-                        >
-                          {registration.competing.event_ids.includes(id) ? (
-                            <EventIcon event={id} className="selected" />
-                          ) : null}
-                        </Table.Cell>
+                        key={`registration-table-row-${registration.user.id}-${id}`}
+                      >
+                        {registration.competing.event_ids.includes(id) ? (
+                          <EventIcon id={id} size="1em" />
+                        ) : null}
+                      </Table.Cell>
                     ))}
                     <Table.Cell>
                       {registration.competing.event_ids.length}
@@ -268,23 +268,23 @@ export default function RegistrationList({ competitionInfo }) {
                   <>
                     <Table.Cell />
                     <Table.Cell
-                        collapsing
-                        textAlign="right"
-                        disabled={registration.tied_previous}
-                      >
-                        {registration.pos}
-                      </Table.Cell>
+                      collapsing
+                      textAlign="right"
+                      disabled={registration.tied_previous}
+                    >
+                      {registration.pos}
+                    </Table.Cell>
                     <Table.Cell>
-                        {psychSheetSortBy === 'single'
-                          ? registration.single_rank
-                          : registration.average_rank}
-                      </Table.Cell>
+                      {psychSheetSortBy === 'single'
+                        ? registration.single_rank
+                        : registration.average_rank}
+                    </Table.Cell>
                     <Table.Cell>
-                        {formatCentiseconds(registration.single_best)}
-                      </Table.Cell>
+                      {formatCentiseconds(registration.single_best)}
+                    </Table.Cell>
                     <Table.Cell>
-                        {formatCentiseconds(registration.average_best)}
-                      </Table.Cell>
+                      {formatCentiseconds(registration.average_best)}
+                    </Table.Cell>
                   </>
                 )}
               </Table.Row>
@@ -315,6 +315,6 @@ export default function RegistrationList({ competitionInfo }) {
           />
         </Table.Footer>
       </Table>
-    </div>
+    </Segment>
   );
 }
