@@ -2,7 +2,7 @@
 
 module FaradayDefaultOptions
   def new_builder(block)
-    super.tap do | builder |
+    super.tap do |builder|
       # Sets headers and parses jsons automatically
       builder.request :json
       builder.response :json
