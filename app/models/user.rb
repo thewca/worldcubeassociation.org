@@ -715,7 +715,7 @@ class User < ApplicationRecord
   end
 
   def can_edit_any_user?
-    admin? || any_kind_of_delegate? || can_admin_results? || communication_team?
+    admin? || any_kind_of_delegate? || results_team? || communication_team?
   end
 
   def can_change_users_avatar?(user)
