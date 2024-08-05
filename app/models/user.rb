@@ -26,9 +26,19 @@ class User < ApplicationRecord
   has_many :roles, class_name: "UserRole"
   has_many :active_roles, -> { active }, class_name: "UserRole"
   has_many :delegate_role_metadata, through: :active_roles, source: :metadata, source_type: "RolesMetadataDelegateRegions"
-  has_many :teams_committees_at_least_senior_role_metadata, -> { at_least_senior_member }, through: :active_roles, source: :metadata, source_type: "RolesMetadataTeamsCommittees"
   has_many :delegate_roles, -> { includes(:group, :metadata) }, through: :delegate_role_metadata, source: :user_role, class_name: "UserRole"
-  has_many :at_least_senior_teams_committees_roles, through: :teams_committees_at_least_senior_role_metadata, source: :user_role, class_name: "UserRole"
+  has_many :delegate_region_groups, through: :delegate_roles, source: :group, class_name: "UserGroup"
+  has_many :delegate_regions, through: :delegate_region_groups, source: :metadata, source_type: "GroupsMetadataDelegateRegions"
+  has_many :teams_committees_role_metadata, through: :active_roles, source: :metadata, source_type: "RolesMetadataTeamsCommittees"
+  has_many :teams_committees_roles, through: :teams_committees_role_metadata, source: :user_role, class_name: "UserRole"
+  has_many :teams_committees_groups, through: :teams_committees_roles, source: :group, class_name: "UserGroup"
+  has_many :teams_committees, through: :teams_committees_groups, source: :metadata, source_type: "GroupsMetadataTeamsCommittees"
+  has_many :teams_committees_at_least_senior_role_metadata, -> { at_least_senior_member }, through: :active_roles, source: :metadata, source_type: "RolesMetadataTeamsCommittees"
+  has_many :teams_committees_at_least_senior_roles, through: :teams_committees_at_least_senior_role_metadata, source: :user_role, class_name: "UserRole"
+  has_many :teams_committees_at_least_senior_groups, through: :teams_committees_at_least_senior_roles, source: :group, class_name: "UserGroup"
+  has_many :teams_committees_at_least_senior, through: :teams_committees_at_least_senior_groups, source: :metadata, source_type: "GroupsMetadataTeamsCommittees"
+  has_many :active_groups, through: :active_roles, source: :group, class_name: "UserGroup"
+  has_many :board_metadata, through: :active_groups, source: :metadata, source_type: "GroupsMetadataBoard"
   has_many :confirmed_users_claiming_wca_id, -> { confirmed_email }, foreign_key: "delegate_id_to_handle_wca_id_claim", class_name: "User"
   has_many :oauth_applications, class_name: 'Doorkeeper::Application', as: :owner
   has_many :oauth_access_grants, class_name: 'Doorkeeper::AccessGrant', foreign_key: :resource_owner_id
@@ -448,7 +458,7 @@ class User < ApplicationRecord
   end
 
   private def at_least_senior_teams_committees_member?(group)
-    at_least_senior_teams_committees_roles.where(group_id: group.id).exists?
+    teams_committees_at_least_senior_roles.where(group_id: group.id).exists?
   end
 
   private def group_leader?(group)
@@ -697,7 +707,7 @@ class User < ApplicationRecord
   end
 
   def can_view_all_users?
-    admin? || board_member? || results_team? || communication_team? || wdc_team? || any_kind_of_delegate? || weat_team?
+    admin? || board_member? || results_team? || communication_team? || wdc_team? || any_kind_of_delegate? || weat_team? || wrc_team?
   end
 
   def can_edit_user?(user)
@@ -756,7 +766,6 @@ class User < ApplicationRecord
       can_admin_competitions? ||
       competition.organizers.include?(self) ||
       competition.delegates.include?(self) ||
-      wrc_team? ||
       competition.delegates.flat_map(&:senior_delegates).compact.include?(self) ||
       ethics_committee?
     )
@@ -1202,7 +1211,6 @@ class User < ApplicationRecord
   end
 
   def to_wcif(competition, registration = nil, registrant_id = nil, authorized: false)
-    person_pb = [person&.ranksAverage, person&.ranksSingle].compact.flatten
     roles = registration&.roles || []
     roles << "delegate" if competition.staff_delegates.include?(self)
     roles << "trainee-delegate" if competition.trainee_delegates.include?(self)
@@ -1225,7 +1233,7 @@ class User < ApplicationRecord
       },
       "roles" => roles,
       "assignments" => registration&.assignments&.map(&:to_wcif) || [],
-      "personalBests" => person_pb.map(&:to_wcif),
+      "personalBests" => person&.personal_records&.map(&:to_wcif) || [],
       "extensions" => registration&.wcif_extensions&.map(&:to_wcif) || [],
     }.merge(authorized ? authorized_fields : {})
   end

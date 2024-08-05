@@ -11,6 +11,7 @@ import updateRegistration from '../api/registration/patch/update_registration';
 import { setMessage } from './RegistrationMessage';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { useConfirm } from '../../../lib/providers/ConfirmProvider';
+import RegistrationStatus from './RegistrationStatus';
 
 function updateRegistrationKey(editsAllowed, deadlinePassed) {
   if (!editsAllowed && !deadlinePassed) {
@@ -76,6 +77,7 @@ export default function RegistrationOverview({
 
   return (
     <>
+      <RegistrationStatus registration={registration} competitionInfo={competitionInfo} />
       { !editsAllowed && (
       <Message info>
         {i18n.t(updateRegistrationKey(editsAllowed, hasRegistrationEditDeadlinePassed))}
@@ -97,7 +99,7 @@ export default function RegistrationOverview({
             { /* Make sure to keep WCA Event order */}
             {events.official
               .filter((e) => registration.competing.event_ids.includes(e.id))
-              .map((e) => (<EventIcon key={e.id} id={e.id} style={{ cursor: 'unset' }} />))}
+              .map((e) => (<EventIcon key={e.id} id={e.id} hoverable={false} />))}
           </FormField>
           <FormField />
           <FormField>

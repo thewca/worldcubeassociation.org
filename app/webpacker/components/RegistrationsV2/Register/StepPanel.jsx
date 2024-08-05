@@ -5,30 +5,38 @@ import RegistrationRequirements from './RegistrationRequirements';
 import StripeWrapper from './StripeWrapper';
 import i18n from '../../../lib/i18n';
 import RegistrationOverview from './RegistrationOverview';
-import RegistrationStatus from './RegistrationStatus';
 import useStoredState from '../../../lib/hooks/useStoredState';
+import { hasPassed } from '../../../lib/utils/dates';
 
 const requirementsStepConfig = {
   key: 'requirements',
+  description: 'Accept competition terms',
   i18nKey: 'competitions.registration_v2.requirements.title',
   component: RegistrationRequirements,
 };
+
 const competingStepConfig = {
   key: 'competing',
   i18nKey: 'competitions.nav.menu.register',
+  description: 'Choose your events',
   component: CompetingStep,
 };
+
 const paymentStepConfig = {
   key: 'payment',
+  description: 'Enter billing information',
   i18nKey: 'registrations.payment_form.labels.payment_information',
   component: StripeWrapper,
 };
 
 const registrationOverviewConfig = {
-  index: 100,
+  key: 'approval',
+  description: 'By organization team',
+  i18nKey: 'competitions.registration_v2.register.approval',
+  component: RegistrationOverview,
 };
 
-const shouldShowCompleted = (isRegistered, hasPaid, key, index) => {
+const shouldShowCompleted = (isRegistered, hasPaid, isAccepted, key, index) => {
   if (key === paymentStepConfig.key) {
     return hasPaid;
   }
@@ -38,14 +46,23 @@ const shouldShowCompleted = (isRegistered, hasPaid, key, index) => {
   if (key === requirementsStepConfig.key) {
     return index > 0;
   }
+  if (key === registrationOverviewConfig.key) {
+    return isAccepted;
+  }
 };
 
-const shouldBeDisabled = (isRegistered, key, activeIndex, index) => {
+const shouldBeDisabled = (hasPaid, key, activeIndex, index, competitionInfo) => {
+  const hasRegistrationEditDeadlinePassed = hasPassed(
+    competitionInfo.event_change_deadline_date ?? competitionInfo.start_date,
+  );
+  const editsAllowed = competitionInfo.allow_registration_edits
+    && !hasRegistrationEditDeadlinePassed;
+
   if (key === paymentStepConfig.key) {
-    return !isRegistered && index > activeIndex;
+    return !hasPaid && index > activeIndex;
   }
   if (key === competingStepConfig.key) {
-    return index > activeIndex;
+    return index > activeIndex || !editsAllowed;
   }
   if (key === requirementsStepConfig.key) {
     return activeIndex !== 0;
@@ -62,7 +79,7 @@ export default function StepPanel({
   connectedAccountId,
 }) {
   const isRegistered = Boolean(registration) && registration.competing.registration_status !== 'cancelled';
-  const registrationSucceeded = isRegistered && registration.competing.registration_status === 'accepted';
+  const isAccepted = isRegistered && registration.competing.registration_status === 'accepted';
   const hasPaid = registration?.payment.payment_status === 'succeeded';
   const registrationFinished = hasPaid || (isRegistered && !competitionInfo['using_payment_integrations?']);
 
@@ -75,17 +92,23 @@ export default function StepPanel({
   }, [isRegistered, setProcessing]);
 
   const steps = useMemo(() => {
+    const stepList = [requirementsStepConfig, competingStepConfig];
     if (competitionInfo['using_payment_integrations?']) {
-      return [requirementsStepConfig, competingStepConfig, paymentStepConfig];
+      stepList.push(paymentStepConfig);
     }
 
-    return [requirementsStepConfig, competingStepConfig];
-  }, [competitionInfo]);
+    if (isRegistered) {
+      stepList.push(registrationOverviewConfig);
+    }
+    return stepList;
+  }, [competitionInfo, isRegistered]);
 
   const [activeIndex, setActiveIndex] = useState(() => {
     // Don't show payment panel if a user was accepted (for people with waived payment)
-    if (registrationFinished || registrationSucceeded) {
-      return registrationOverviewConfig.index;
+    if (registrationFinished || isAccepted) {
+      return steps.findIndex(
+        (step) => step === (registrationOverviewConfig),
+      );
     }
     if (processing) {
       return steps.findIndex(
@@ -97,24 +120,33 @@ export default function StepPanel({
       (step) => step === (isRegistered ? paymentStepConfig : requirementsStepConfig),
     );
   });
-  const CurrentStepPanel = activeIndex === registrationOverviewConfig.index
-    ? RegistrationOverview : steps[activeIndex].component;
+  const CurrentStepPanel = steps[activeIndex].component;
   return (
     <>
-      { isRegistered && (
-        <RegistrationStatus registration={registration} />
-      )}
       <Step.Group fluid ordered stackable="tablet">
         {steps.map((stepConfig, index) => (
           <Step
             key={stepConfig.key}
             active={activeIndex === index}
-            completed={shouldShowCompleted(isRegistered, hasPaid, stepConfig.key, activeIndex)}
-            disabled={shouldBeDisabled(isRegistered, stepConfig.key, activeIndex, index)}
+            completed={shouldShowCompleted(
+              isRegistered,
+              hasPaid,
+              isAccepted,
+              stepConfig.key,
+              activeIndex,
+            )}
+            disabled={shouldBeDisabled(
+              hasPaid,
+              stepConfig.key,
+              activeIndex,
+              index,
+              competitionInfo,
+            )}
             onClick={() => setActiveIndex(index)}
           >
             <Step.Content>
               <Step.Title>{i18n.t(stepConfig.i18nKey)}</Step.Title>
+              <Step.Description>{stepConfig.description}</Step.Description>
             </Step.Content>
           </Step>
         ))}
@@ -140,10 +172,10 @@ export default function StepPanel({
             if (overwrites?.goBack) {
               return oldActiveIndex - 1;
             }
-            if (oldActiveIndex === steps.length - 1) {
-              return registrationOverviewConfig.index;
-            }
-            if (oldActiveIndex === registrationOverviewConfig.index) {
+            const registrationOverviewIndex = steps.findIndex(
+              (step) => step === registrationOverviewConfig,
+            );
+            if (oldActiveIndex === registrationOverviewIndex) {
               return steps.findIndex(
                 (step) => step === competingStepConfig,
               );

@@ -234,7 +234,7 @@
 
     </div>
     <div id="competition-data">
-      <h3 style="<%= @competition.uses_new_registration_service? ? "display:none" : ""  %>">
+      <h3>
         <% if current_user && @competition.upcoming? %>
           <span class="bookmark-icon" id="not-bookmarked" data-toggle="tooltip" data-placement="bottom" title="<%= I18n.t('competitions.competition_info.bookmark') %>" <% if current_user.is_bookmarked?(@competition) %>style="display: none;"<% end %>>
             <%= ui_icon('bookmark') %>
@@ -250,7 +250,7 @@
         <% end %>
         <%= @competition.display_name %>
       </h3>
-      <hr style="<%= @competition.uses_new_registration_service? ? "display:none" : ""  %>" />
+      <hr/>
 
       <% if @competition.cancelled? %>
         <%= alert :danger, note: true do %>

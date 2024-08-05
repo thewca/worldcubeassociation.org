@@ -1,7 +1,6 @@
 import React from 'react';
-import { Checkbox, Icon, Message } from 'semantic-ui-react';
+import { Icon, Message } from 'semantic-ui-react';
 import i18n from '../../../lib/i18n';
-import useCheckboxState from '../../../lib/hooks/useCheckboxState';
 
 function registrationIconByStatus(registrationStatus) {
   switch (registrationStatus) {
@@ -22,12 +21,15 @@ function registrationIconByStatus(registrationStatus) {
 // If we add these strings to en.yml immediately, translators will get a notification asking them
 //   to translate these strings during our test mode deployment. But we aren't even sure whether
 //   we want to keep these strings. So we hard-code them "for now" (when did that ever go wrong?)
-function canIBookPlaneTickets(registrationStatus) {
+function canIBookPlaneTickets(registrationStatus, paymentStatus, competitionInfo) {
   switch (registrationStatus) {
     case 'pending':
-      return "Don't book your flights and hotel just yet - the organizers still have to manually approve your registration. This can take time.";
+      if (competitionInfo['using_payment_integrations?'] && paymentStatus !== 'succeeded') {
+        return 'Your registration will not be approved until you pay for your registration, unless you have a special arrangement with the organizers or you paid through an alternative method.';
+      }
+      return "Don't book your flights or hotel just yet - the organizers still have to manually approve your registration. This can take time.";
     case 'accepted':
-      return 'Pack your bags and book your flights - you have a spot at the competition!';
+      return 'Book your flights and pack your bags - you have a spot at the competition!';
     case 'cancelled':
       return 'Your registration has been deleted and you will not be competing.';
     case 'waiting_list':
@@ -37,7 +39,7 @@ function canIBookPlaneTickets(registrationStatus) {
   }
 }
 
-function RegistrationStatusMessage({ registration, showAlternativeDescription }) {
+function RegistrationStatusMessage({ registration, competitionInfo }) {
   return (
     <Message
       info={registration.competing.registration_status === 'pending'}
@@ -56,27 +58,23 @@ function RegistrationStatusMessage({ registration, showAlternativeDescription })
             },
           )}
         </Message.Header>
-        {showAlternativeDescription && (
-          <p>
-            {canIBookPlaneTickets(registration.competing.registration_status)}
-          </p>
-        )}
+        <p>
+          {canIBookPlaneTickets(
+            registration.competing.registration_status,
+            registration.payment?.payment_status,
+            competitionInfo,
+          )}
+        </p>
       </Message.Content>
     </Message>
   );
 }
 
-export default function RegistrationStatus({ registration }) {
-  const [showAlternativeToggle, setAlternativeToggle] = useCheckboxState(true);
-
+export default function RegistrationStatus({ registration, competitionInfo }) {
   return (
-    <>
-      <Checkbox toggle checked={showAlternativeToggle} onChange={setAlternativeToggle} label="Show alternative status description" />
-
-      <RegistrationStatusMessage
-        registration={registration}
-        showAlternativeDescription={showAlternativeToggle}
-      />
-    </>
+    <RegistrationStatusMessage
+      registration={registration}
+      competitionInfo={competitionInfo}
+    />
   );
 }

@@ -87,7 +87,7 @@ export default function RegistrationActions({
   };
 
   return (
-    <Button.Group>
+    <Button.Group className="stackable">
       <Button
         onClick={() => {
           csvExport(
@@ -108,7 +108,6 @@ export default function RegistrationActions({
               href={`mailto:?bcc=${selectedEmails}`}
               id="email-selected"
               target="_blank"
-              className="btn btn-info selected-registrations-actions"
               rel="noreferrer"
             >
               <Icon name="envelope" />
