@@ -13,10 +13,16 @@ module AuxiliaryDataComputation
       %w(average ConciseAverageResults),
     ].each do |field, table_name|
       ActiveRecord::Base.transaction do
-        ActiveRecord::Base.connection.execute "DELETE FROM #{table_name}"
-        ActiveRecord::Base.connection.execute "ALTER TABLE #{table_name} AUTO_INCREMENT = 1"
+        temp_table_name = "#{table_name}_temp"
+
+        # Drop the temporary table if it exists
+        ActiveRecord::Base.connection.execute("DROP TABLE IF EXISTS #{temp_table_name}")
+
+        # Create a copy of the original table structure
+        ActiveRecord::Base.connection.execute("CREATE TABLE #{temp_table_name} LIKE #{table_name}")
+
         ActiveRecord::Base.connection.execute <<-SQL
-          INSERT INTO #{table_name} (id, #{field}, valueAndId, personId, eventId, countryId, continentId, year, month, day)
+          INSERT INTO #{temp_table_name} (id, #{field}, valueAndId, personId, eventId, countryId, continentId, year, month, day)
           SELECT
             result.id,
             #{field},
@@ -40,6 +46,12 @@ module AuxiliaryDataComputation
             JOIN Countries country ON country.id = result.countryId
             JOIN Events event ON event.id = eventId
         SQL
+
+        # Atomically swap the tables
+        ActiveRecord::Base.connection.execute("RENAME TABLE #{table_name} TO #{table_name}_old, #{temp_table_name} TO #{table_name}")
+
+        # Drop the old table
+        ActiveRecord::Base.connection.execute("DROP TABLE #{table_name}_old")
       end
     end
   end
