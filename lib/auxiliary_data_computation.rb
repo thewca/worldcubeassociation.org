@@ -12,15 +12,10 @@ module AuxiliaryDataComputation
       %w(best ConciseSingleResults),
       %w(average ConciseAverageResults),
     ].each do |field, table_name|
-      ActiveRecord::Base.transaction do
+      begin
         temp_table_name = "#{table_name}_temp"
-
-        # Drop the temporary table if it exists
-        ActiveRecord::Base.connection.execute("DROP TABLE IF EXISTS #{temp_table_name}")
-
-        # Create a copy of the original table structure
         ActiveRecord::Base.connection.execute("CREATE TABLE #{temp_table_name} LIKE #{table_name}")
-
+        ActiveRecord::Base.connection.execute("ALTER TABLE #{temp_table_name} AUTO_INCREMENT = 1")
         ActiveRecord::Base.connection.execute <<-SQL
           INSERT INTO #{temp_table_name} (id, #{field}, valueAndId, personId, eventId, countryId, continentId, year, month, day)
           SELECT
@@ -52,6 +47,8 @@ module AuxiliaryDataComputation
 
         # Drop the old table
         ActiveRecord::Base.connection.execute("DROP TABLE #{table_name}_old")
+      ensure
+        ActiveRecord::Base.connection.execute("DROP TABLE IF EXISTS #{temp_table_name}")
       end
     end
   end
