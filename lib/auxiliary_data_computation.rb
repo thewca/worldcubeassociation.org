@@ -12,11 +12,10 @@ module AuxiliaryDataComputation
       %w(best ConciseSingleResults),
       %w(average ConciseAverageResults),
     ].each do |field, table_name|
-      begin
-        temp_table_name = "#{table_name}_temp"
-        ActiveRecord::Base.connection.execute("CREATE TABLE #{temp_table_name} LIKE #{table_name}")
-        ActiveRecord::Base.connection.execute("ALTER TABLE #{temp_table_name} AUTO_INCREMENT = 1")
-        ActiveRecord::Base.connection.execute <<-SQL
+      temp_table_name = "#{table_name}_temp"
+      ActiveRecord::Base.connection.execute("CREATE TABLE #{temp_table_name} LIKE #{table_name}")
+      ActiveRecord::Base.connection.execute("ALTER TABLE #{temp_table_name} AUTO_INCREMENT = 1")
+      ActiveRecord::Base.connection.execute <<-SQL
           INSERT INTO #{temp_table_name} (id, #{field}, valueAndId, personId, eventId, countryId, continentId, year, month, day)
           SELECT
             result.id,
@@ -40,16 +39,15 @@ module AuxiliaryDataComputation
             JOIN Competitions competition ON competition.id = competitionId
             JOIN Countries country ON country.id = result.countryId
             JOIN Events event ON event.id = eventId
-        SQL
+      SQL
 
-        # Atomically swap the tables
-        ActiveRecord::Base.connection.execute("RENAME TABLE #{table_name} TO #{table_name}_old, #{temp_table_name} TO #{table_name}")
+      # Atomically swap the tables
+      ActiveRecord::Base.connection.execute("RENAME TABLE #{table_name} TO #{table_name}_old, #{temp_table_name} TO #{table_name}")
 
-        # Drop the old table
-        ActiveRecord::Base.connection.execute("DROP TABLE #{table_name}_old")
-      ensure
-        ActiveRecord::Base.connection.execute("DROP TABLE IF EXISTS #{temp_table_name}")
-      end
+      # Drop the old table
+      ActiveRecord::Base.connection.execute("DROP TABLE #{table_name}_old")
+    ensure
+      ActiveRecord::Base.connection.execute("DROP TABLE IF EXISTS #{temp_table_name}")
     end
   end
 
