@@ -950,6 +950,10 @@ class Competition < ApplicationRecord
   end
 
   def registration_opened?
+    use_wca_registration? && !cancelled? && !registration_not_yet_opened?
+  end
+
+  def registration_is_open?
     use_wca_registration? && !cancelled? && !registration_not_yet_opened? && !registration_past?
   end
 
