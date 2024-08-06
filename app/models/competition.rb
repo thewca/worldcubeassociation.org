@@ -975,9 +975,9 @@ class Competition < ApplicationRecord
 
   def has_any_regisrations?
     if uses_new_registration_service?
-      return self.registrations.any?
+      self.registrations.any?
     else
-     return self.microservice_registrations.any?
+      self.microservice_registrations.any?
     end
   end
 
