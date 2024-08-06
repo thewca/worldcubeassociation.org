@@ -48,6 +48,8 @@ export default function CompetingStep({
   preferredEvents,
   registration,
   refetchRegistration,
+  processing,
+  setProcessing,
 }) {
   const maxEvents = competitionInfo.events_per_registration_limit ?? Infinity;
   const isRegistered = Boolean(registration);
@@ -65,8 +67,6 @@ export default function CompetingStep({
   // Don't set an error state before the user has interacted with the eventPicker
   const [hasInteracted, setHasInteracted] = useState(false);
   const [guests, setGuests] = useState(0);
-
-  const [processing, setProcessing] = useState(false);
 
   useEffect(() => {
     if (isRegistered && registration.competing.registration_status !== 'cancelled') {
