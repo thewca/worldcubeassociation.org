@@ -848,7 +848,7 @@ class CompetitionsController < ApplicationController
   end
 
   def my_competitions
-    if Rails.env.production? && !EnvConfig.WCA_LIVE_SITE?
+    if Rails.env.production?
       registrations_v2 = current_user.microservice_registrations
     else
       registrations_v2 = []
