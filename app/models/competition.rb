@@ -973,11 +973,11 @@ class Competition < ApplicationRecord
     end
   end
 
-  def has_any_regisrations?
+  def has_any_registrations?
     if uses_new_registration_service?
-      self.registrations.any?
-    else
       self.microservice_registrations.any?
+    else
+      self.registrations.any?
     end
   end
 
