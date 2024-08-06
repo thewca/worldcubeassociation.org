@@ -57,9 +57,11 @@ module AuxiliaryDataComputation
       %w(best RanksSingle ConciseSingleResults),
       %w(average RanksAverage ConciseAverageResults),
     ].each do |field, table_name, concise_table_name|
-      ActiveRecord::Base.transaction do
-        ActiveRecord::Base.connection.execute "DELETE FROM #{table_name}"
-        ActiveRecord::Base.connection.execute "ALTER TABLE #{table_name} AUTO_INCREMENT = 1"
+      begin
+        temp_table_name = "#{table_name}_temp"
+        ActiveRecord::Base.connection.execute("CREATE TABLE #{temp_table_name} LIKE #{table_name}")
+        ActiveRecord::Base.connection.execute("ALTER TABLE #{temp_table_name} AUTO_INCREMENT = 1")
+
         current_country_by_wca_id = Person.current.pluck(:wca_id, :countryId).to_h
         # Get all personal records (note: people that changed their country appear once for each country).
         personal_records_with_event = ActiveRecord::Base.connection.execute <<-SQL
@@ -107,11 +109,19 @@ module AuxiliaryDataComputation
           # Insert 500 rows at once to avoid running into too long query.
           values.each_slice(500) do |values_subset|
             ActiveRecord::Base.connection.execute <<-SQL
-              INSERT INTO #{table_name} (personId, eventId, best, worldRank, continentRank, countryRank) VALUES
+              INSERT INTO #{temp_table_name} (personId, eventId, best, worldRank, continentRank, countryRank) VALUES
               #{values_subset.join(",\n")}
             SQL
           end
         end
+
+        # Atomically swap the tables
+        ActiveRecord::Base.connection.execute("RENAME TABLE #{table_name} TO #{table_name}_old, #{temp_table_name} TO #{table_name}")
+
+        # Drop the old table
+        ActiveRecord::Base.connection.execute("DROP TABLE #{table_name}_old")
+      ensure
+        ActiveRecord::Base.connection.execute("DROP TABLE IF EXISTS #{temp_table_name}")
       end
     end
   end
