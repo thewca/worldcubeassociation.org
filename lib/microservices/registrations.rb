@@ -2,19 +2,6 @@
 
 module Microservices
   module Registrations
-    # Because these routes don't live in the monolith anymore we need some helper functions
-    def self.competition_register_path(competition_id, stripe_status = nil)
-      "#{EnvConfig.ROOT_URL}/competitions/v2/#{competition_id}/register?&stripe_status=#{stripe_status}"
-    end
-
-    def self.registration_import_path(competition_id)
-      "#{EnvConfig.ROOT_URL}/competitions/v2/#{competition_id}/import"
-    end
-
-    def self.edit_registration_path(competition_id, user_id, stripe_error = nil)
-      "#{EnvConfig.ROOT_URL}/competitions/v2/#{competition_id}/#{user_id}/edit?&stripe_error=#{stripe_error}"
-    end
-
     def self.update_payment_status_path
       "/api/internal/v1/update_payment"
     end
@@ -25,6 +12,10 @@ module Microservices
 
     def self.get_registrations_path(competition_id)
       "/api/internal/v1/#{competition_id}/registrations"
+    end
+
+    def self.import_registrations_path(competition_id)
+      "/api/internal/v1/#{competition_id}/registrations/import"
     end
 
     def self.get_registration_path(attendee_id)
@@ -72,6 +63,15 @@ module Microservices
       response.body
     end
     # rubocop:enable Metrics/ParameterLists
+
+    def self.import_registrations(competition_id, import_params)
+      response = self.registration_connection.post(self.import_registrations_path(competition_id)) do |req|
+        req.body = import_params.to_json
+      end
+
+      # If we ever need the response body
+      response.body
+    end
 
     def self.competitor_count_by_competition(competition_id)
       response = self.registration_connection.get(self.get_competitor_count_path(competition_id))

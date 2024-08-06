@@ -318,7 +318,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
             refresh={() => {
               dispatch({ type: 'clear-selected' });
             }}
-            registrations={registrations}
+            registrations={registrationsWithUser}
             spotsRemaining={spotsRemaining}
             userEmailMap={userEmailMap}
             competitionInfo={competitionInfo}
