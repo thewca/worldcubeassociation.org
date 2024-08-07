@@ -1580,6 +1580,9 @@ pt:
           edit_profile_reason:
             #original_hash: fdfcccf
             label: Razão da mudança
+          edit_profile_proof_attach:
+            #original_hash: a9645b1
+            label: Anexar comprovativo
         wst:
           message:
             #original_hash: 68f4145
@@ -2623,7 +2626,7 @@ pt:
         publicados.
       #original_hash: 5c24cd8
       results_still_processing: >-
-        Estamos trabalhar no processamento dos resultados desta competição -
+        Estamos a trabalhar no processamento dos resultados desta competição -
         deverão estar disponíveis em breve.
       #original_hash: e205d73
       results_already_posted: Os resultados já foram publicados.
