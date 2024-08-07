@@ -37,12 +37,6 @@ class UserGroup < ApplicationRecord
 
   validates :active_roles, absence: true, unless: :is_active?
 
-  # rubocop:disable ThreadSafety/ClassAndModuleAttributes
-  #
-  # This is for caching Board group to avoid DB querying everytime it's referenced.
-  mattr_accessor :board_group, instance_writer: false, instance_reader: false, default: UserGroup.board.first
-  # rubocop:enable ThreadSafety/ClassAndModuleAttributes
-
   # This is important because we generally access "semantic" UserGroups
   # (ie T/Cs, DelegateRegions, Translators) etc. by metadata. This metadata usually has an `user_group`
   # association defined, and Rails uses caching on that. So if the server after booting loads all T/Cs once,
@@ -175,6 +169,10 @@ class UserGroup < ApplicationRecord
 
   def self.banned_competitors_group
     UserGroup.banned_competitors.first
+  end
+
+  def self.board_group
+    GroupsMetadataBoard.singleton_metadata.user_group
   end
 
   def senior_delegate
