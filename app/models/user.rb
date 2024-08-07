@@ -714,6 +714,10 @@ class User < ApplicationRecord
     self == user || can_view_all_users? || organizer_for?(user)
   end
 
+  def can_edit_any_user?
+    admin? || any_kind_of_delegate? || results_team? || communication_team?
+  end
+
   def can_change_users_avatar?(user)
     user.wca_id.present? && self.editable_fields_of_user(user).include?(:remove_avatar)
   end
@@ -984,7 +988,7 @@ class User < ApplicationRecord
 
   private def editable_competitor_info_fields(user)
     fields = Set.new
-    if user == self || admin? || any_kind_of_delegate? || results_team? || communication_team?
+    if user == self || can_edit_any_user?
       unless cannot_edit_data_reason_html(user)
         fields += %i(name dob gender country_iso2)
       end
@@ -993,7 +997,7 @@ class User < ApplicationRecord
     if user.wca_id.blank? && organizer_for?(user)
       fields << :name
     end
-    if admin? || any_kind_of_delegate? || results_team? || communication_team?
+    if can_edit_any_user?
       fields += %i(
         unconfirmed_wca_id
       )
