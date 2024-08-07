@@ -469,7 +469,11 @@ class Competition < ApplicationRecord
       end
 
       if self.results.any? && !self.results_posted?
-        warnings[:results] = I18n.t('competitions.messages.results_not_posted')
+        if user&.can_admin_results?
+          warnings[:results] = I18n.t('competitions.messages.results_not_posted')
+        else
+          warnings[:results] = I18n.t('competitions.messages.results_still_processing')
+        end
       end
 
       if self.registration_full? && self.registration_is_open?
@@ -977,7 +981,7 @@ class Competition < ApplicationRecord
     end
   end
 
-  def has_any_registrations?
+  def any_registrations?
     if uses_new_registration_service?
       self.microservice_registrations.any?
     else
