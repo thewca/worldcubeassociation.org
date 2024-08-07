@@ -609,13 +609,13 @@ fi:
           #original_hash: 621101a
           trainee_delegate: Delegaattiharjoittelija
           #original_hash: 9b97968
-          junior_delegate: Delegaattikokelas
+          junior_delegate: Junior-delegaatti
           #original_hash: 12ab214
           delegate: Delegaatti
           #original_hash: 45c2317
           regional_delegate: Alueellinen delegaatti
           #original_hash: d463c23
-          senior_delegate: Vastaava delegaatti
+          senior_delegate: Senior-delegaatti
         teams_committees:
           #original_hash: 6853c98
           member: Jäsen
@@ -1242,7 +1242,7 @@ fi:
       #original_hash: 82dabd0
       multimedia: Multimedia
       #original_hash: cfde9db
-      db_results_export: Vie tulokset
+      db_results_export: Vie tulostietokanta
       #original_hash: 7533c29
       db_dev_export: Vie ohjelmistokehittäjän tietokanta
       #original_hash: 1fa73f3
@@ -1554,6 +1554,9 @@ fi:
           edit_profile_reason:
             #original_hash: fdfcccf
             label: Muutoksen syy
+          edit_profile_proof_attach:
+            #original_hash: a9645b1
+            label: Liitä todiste
         wst:
           message:
             #original_hash: 68f4145
@@ -2048,7 +2051,7 @@ fi:
       #original_hash: d79bd00
       officers: WCA Officers
       #original_hash: 959d354
-      translators: Kääntäjät
+      translators: Kääntäjä
   registrations:
     errors:
       #original_hash: 44ab952
@@ -4726,14 +4729,15 @@ fi:
         joka määritellään tarkemmin WCA Motionsissa. Delegaattien pääasiallinen
         tehtävä on valvoa kilpailuja WCA:n edustajana. Heidän vastuullaan on
         varmistaa, että kaikki WCA-kilpailut sujuvat WCA:n päämäärien, sääntöjen
-        ja hengen mukaan. WCA erottelee toisistaan <strong>vastaavat
-        delegaatit</strong>, <strong>alueelliset delegaatit</strong>,
-        <strong>delegaatit</strong>, <strong>delegaattikokelaat</strong> ja
+        ja hengen mukaan. WCA erottelee toisistaan
+        <strong>senior-delegaatit</strong>, <strong>alueelliset
+        delegaatit</strong>, <strong>delegaatit</strong>,
+        <strong>junior-delegaatit</strong> ja
         <strong>delegaattiharjoittelijat</strong> %{see_link}.</p> <p>Delegaatin
-        tehtävien lisäksi vastaavat delegaatit ja alueelliset delegaatit ovat
+        tehtävien lisäksi senior-delegaatit ja alueelliset delegaatit ovat
         vastuussa alueensa muista delegaateista, ja yhteisön jäsenet voivat
         ottaa heihin yhteyttä alueellisissa seikoissa.</p> <p>Uudet delegaatit
-        nimetään aluksi delegaattikokelaiksi, ja heidän tulee osoittaa olevansa
+        nimetään aluksi junior-delegaateiksi, ja heidän tulee osoittaa olevansa
         päteviä hallitsemaan kilpailuja onnistuneesti ennen WCA-delegaatiksi
         nimeämistä.</p> <p>Delegaattiharjoittelijoita koulutetaan delegaatin
         asemaan, ja he voivat valvoa vain kilpailuja, joissa on myös
@@ -5651,9 +5655,9 @@ fi:
         yhteyttä</a>!
   footer:
     #original_hash: cf01481
-    privacy: Yksityisyys
+    privacy: Tietosuoja
     #original_hash: 4c4a2e8
-    disclaimer: Vastuuvapautus
+    disclaimer: Vastuuvapautuslauseke
   api:
     #original_hash: 4ab4ae5
     manage_oauth_html: 'Go to %{oauth_link} to manage your OAuth applications.'
