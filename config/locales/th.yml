@@ -1524,6 +1524,9 @@ th:
           edit_profile_reason:
             #original_hash: fdfcccf
             label: สาเหตุของการเปลี่ยน
+          edit_profile_proof_attach:
+            #original_hash: a9645b1
+            label: แนบหลักฐาน
         wst:
           message:
             #original_hash: 68f4145
@@ -2478,6 +2481,8 @@ th:
       uncancel_failure: ไม่สามารถยกเลิกการยกเลิกการแข่งขันได้
       #original_hash: 8ad5e67
       results_not_posted: ผลของการแข่งขันนี้สามารถมองเห็นได้ แต่ยังไม่ได้ถูกโพสต์
+      #original_hash: 5c24cd8
+      results_still_processing: เรากำลังการประมวลผลการแข่งขันของการแข่งขันนี้ ซึ่งน่าจะทราบผลเร็ว ๆ นี้
       #original_hash: e205d73
       results_already_posted: ผลการแข่งขันได้รับการโพสต์แล้ว
       #original_hash: 376f461
@@ -3477,6 +3482,8 @@ th:
         until: 'คุณสามารถแก้ไขการสมัครของคุณได้จนถึง %{date}'
         #original_hash: fc8bc84
         passed: คุณไม่สามารถอัปเดตการลงสมัครของคุณได้อีกต่อไป
+        #original_hash: 8cc047a
+        approval: การอนุมัติ
         #original_hash: 05b9f17
         view_registration: ดูการสมัครการแข่งขัน
         #original_hash: 3c8d8b7
