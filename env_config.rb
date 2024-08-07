@@ -2,7 +2,9 @@
 
 require "superconfig"
 
-EnvConfig = SuperConfig.new do
+is_compiling_assets = ENV.fetch("ASSETS_COMPILATION", false)
+
+EnvConfig = SuperConfig.new(raise_exception: !is_compiling_assets) do
   if Rails.env.production?
     mandatory :READ_REPLICA_HOST, :string
     mandatory :CACHE_REDIS_URL, :string
@@ -78,4 +80,13 @@ EnvConfig = SuperConfig.new do
 
   # For server status
   optional :BUILD_TAG, :string, "local"
+
+  # For Asset Compilation
+  optional :ASSETS_COMPILATION, :bool, false
+end
+
+# Require Asset Specific ENV variables
+if EnvConfig.ASSETS_COMPILATION?
+  require 'dotenv'
+  Dotenv.load(EnvConfig.WCA_LIVE_SITE? ? '.env.assets.production' : '.env.assets.staging')
 end

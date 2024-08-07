@@ -23,17 +23,21 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           push: true
-          file: ./Dockerfile.sidekiq
+          target: sidekiq
           tags: |
             ${{ steps.login-ecr.outputs.registry }}/wca-on-rails:sidekiq-production
             ${{ steps.login-ecr.outputs.registry }}/wca-on-rails:sidekiq-staging
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          build-args: |
+            BUILD_TAG=${{ github.sha }}
+            WCA_LIVE_SITE=true
         # this will trigger the deployment pipeline for prod
       - name: Build and push Prod Image
         uses: docker/build-push-action@v6
         with:
           push: true
+          target: monolith
           tags: |
             ${{ steps.login-ecr.outputs.registry }}/wca-on-rails:latest
             ${{ steps.login-ecr.outputs.registry }}/wca-on-rails:staging
@@ -41,6 +45,7 @@ jobs:
           cache-to: type=gha,mode=max
           build-args: |
             BUILD_TAG=${{ github.sha }}
+            WCA_LIVE_SITE=true
         # Replace the old sidekiq image with the new one
       - name: Deploy Sidekiq
         run: |
