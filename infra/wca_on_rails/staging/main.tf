@@ -21,6 +21,10 @@ locals {
       value = "https://1rq8d7dif3.execute-api.us-west-2.amazonaws.com/v1/staging"
     },
     {
+      name  = "ASSET_HOST"
+      value = "https://assets-staging.worldcubeassociation.org"
+    },
+    {
       name = "READ_REPLICA_HOST"
       value = "readonly-staging-worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com"
     },
