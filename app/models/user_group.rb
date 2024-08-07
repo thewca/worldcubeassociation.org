@@ -39,6 +39,25 @@ class UserGroup < ApplicationRecord
 
   mattr_accessor :board_group, instance_writer: false, instance_reader: false, default: UserGroup.board.first
 
+  # This is important because we generally access "semantic" UserGroups
+  # (ie T/Cs, DelegateRegions, Translators) etc. by metadata. This metadata usually has an `user_group`
+  # association defined, and Rails uses caching on that. So if the server after booting loads all T/Cs once,
+  # then during server runtime somebody adds a new member to one particular team, the cached instance from boot time
+  # still holds the old `user_group` and thus the old memberships.
+  #
+  # This commit hook makes it so that whenever a change happens, we reset the metadata
+  # so that it finds the newest changes even in cache mode (reset_* methods are provided by Rails magically.)
+  after_commit :reset_metadata
+
+  private def reset_metadata
+    metadata_cachable = self.metadata.class < Cachable
+    metadata_has_assoc = self.metadata.class.reflect_on_association(:user_group).present?
+
+    if metadata_cachable && metadata_has_assoc
+      self.metadata&.as_cached&.reset_user_group
+    end
+  end
+
   def all_child_groups
     [direct_child_groups, direct_child_groups.map(&:all_child_groups)].flatten
   end

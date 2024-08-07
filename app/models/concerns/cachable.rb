@@ -33,6 +33,10 @@ module Cachable
     def cachable_id
       self.id
     end
+
+    def as_cached
+      self.class.c_find(self.cachable_id)
+    end
   end
 
   class_methods do
