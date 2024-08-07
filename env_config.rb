@@ -83,7 +83,7 @@ EnvConfig = SuperConfig.new(raise_exception: !is_compiling_assets) do
 
   # To allow logging in to staging with your prod account
   optional :STAGING_OAUTH_URL, :string, ""
-  
+
   # For Asset Compilation
   optional :ASSETS_COMPILATION, :bool, false
 end
