@@ -5,7 +5,12 @@ include SortHelper # rubocop:disable Style/MixinUsage
 
 class UserRole < ApplicationRecord
   belongs_to :user
-  belongs_to :group, class_name: "UserGroup"
+  # The `touch` flag is necessary so that whenever a role is updated,
+  #   the associated UserGroup is notified and a small hook is triggered which makes sure
+  #   that the cached parts of our code get a hold of the most recent changes
+  #
+  # (briefly put: Propagate all changes made to this role to the after_commit hook in user_group.rb)
+  belongs_to :group, class_name: "UserGroup", touch: true
   belongs_to :metadata, polymorphic: true, optional: true
 
   delegate :group_type, to: :group
