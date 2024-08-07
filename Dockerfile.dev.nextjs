@@ -1,0 +1,10 @@
+# Builds a nodejs docker image for use in nextjs project
+
+FROM node:18-alpine as builder
+
+WORKDIR /app
+
+COPY ./next-frontend/package.json ./next-frontend/yarn.lock ./
+RUN yarn install --immutable
+
+COPY ./next-frontend .

@@ -45,9 +45,21 @@ services:
       start_period: 15m
     depends_on:
       wca_db:
-        condition: 'service_healthy'
+        condition: "service_healthy"
       wca_redis:
-        condition: 'service_started'
+        condition: "service_started"
+      wca_nextjs:
+        condition: "service_healthy"
+
+  wca_nextjs:
+    build:
+      dockerfile: Dockerfile.dev.nextjs
+    container_name: "nextjs"
+    ports:
+      - "3001:3000"
+    command: yarn dev
+    networks:
+      - wca-main
 
   wca_webpacker:
     <<: *app
@@ -62,11 +74,11 @@ services:
       bin/shakapacker-dev-server'
     depends_on:
       wca_db:
-        condition: 'service_healthy'
+        condition: "service_healthy"
       wca_on_rails:
         # We need to make sure that the database is populated because our frontend code
         # pulls stuff like WCA Events and Round formats from the DB when compiling assets
-        condition: 'service_healthy'
+        condition: "service_healthy"
 
   wca_mailcatcher:
     <<: *app
@@ -81,7 +93,7 @@ services:
 
   wca_sidekiq:
     <<: *app
-    container_name: 'sidekiq'
+    container_name: "sidekiq"
     environment:
       RAILS_ENV: development
       DATABASE_HOST: wca_db
@@ -95,11 +107,11 @@ services:
       bundle exec sidekiq'
     depends_on:
       wca_on_rails:
-        condition: 'service_healthy'
+        condition: "service_healthy"
       wca_redis:
-        condition: 'service_started'
+        condition: "service_started"
       wca_db:
-        condition: 'service_healthy'
+        condition: "service_healthy"
 
   wca_db:
     image: mysql:8.0
@@ -118,7 +130,7 @@ services:
     networks:
       - wca-main
     healthcheck:
-      test: [ "CMD", "mysql", "-u", "root", "-e", "SELECT 1;" ]
+      test: ["CMD", "mysql", "-u", "root", "-e", "SELECT 1;"]
       interval: 5s
       timeout: 5s
       retries: 20
@@ -142,6 +154,8 @@ volumes:
   yarn_volume:
     driver: local
   cache_volume:
+    driver: local
+  next_yarn_volume:
     driver: local
 
 networks:
