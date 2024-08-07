@@ -707,11 +707,15 @@ class User < ApplicationRecord
   end
 
   def can_view_all_users?
-    admin? || board_member? || results_team? || communication_team? || wdc_team? || any_kind_of_delegate? || weat_team?
+    admin? || board_member? || results_team? || communication_team? || wdc_team? || any_kind_of_delegate? || weat_team? || wrc_team?
   end
 
   def can_edit_user?(user)
     self == user || can_view_all_users? || organizer_for?(user)
+  end
+
+  def can_edit_any_user?
+    admin? || any_kind_of_delegate? || results_team? || communication_team?
   end
 
   def can_change_users_avatar?(user)
@@ -766,7 +770,6 @@ class User < ApplicationRecord
       can_admin_competitions? ||
       competition.organizers.include?(self) ||
       competition.delegates.include?(self) ||
-      wrc_team? ||
       competition.delegates.flat_map(&:senior_delegates).compact.include?(self) ||
       ethics_committee?
     )
@@ -985,7 +988,7 @@ class User < ApplicationRecord
 
   private def editable_competitor_info_fields(user)
     fields = Set.new
-    if user == self || admin? || any_kind_of_delegate? || results_team? || communication_team?
+    if user == self || can_edit_any_user?
       unless cannot_edit_data_reason_html(user)
         fields += %i(name dob gender country_iso2)
       end
@@ -994,7 +997,7 @@ class User < ApplicationRecord
     if user.wca_id.blank? && organizer_for?(user)
       fields << :name
     end
-    if admin? || any_kind_of_delegate? || results_team? || communication_team?
+    if can_edit_any_user?
       fields += %i(
         unconfirmed_wca_id
       )
@@ -1212,7 +1215,6 @@ class User < ApplicationRecord
   end
 
   def to_wcif(competition, registration = nil, registrant_id = nil, authorized: false)
-    person_pb = [person&.ranksAverage, person&.ranksSingle].compact.flatten
     roles = registration&.roles || []
     roles << "delegate" if competition.staff_delegates.include?(self)
     roles << "trainee-delegate" if competition.trainee_delegates.include?(self)
@@ -1235,7 +1237,7 @@ class User < ApplicationRecord
       },
       "roles" => roles,
       "assignments" => registration&.assignments&.map(&:to_wcif) || [],
-      "personalBests" => person_pb.map(&:to_wcif),
+      "personalBests" => person&.personal_records&.map(&:to_wcif) || [],
       "extensions" => registration&.wcif_extensions&.map(&:to_wcif) || [],
     }.merge(authorized ? authorized_fields : {})
   end
@@ -1340,7 +1342,7 @@ class User < ApplicationRecord
     admin? || board_member? || senior_delegate?
   end
 
-  def can_access_panel?(panel_id)
+  private def can_access_panel?(panel_id)
     case panel_id
     when :admin
       admin? || senior_results_team?

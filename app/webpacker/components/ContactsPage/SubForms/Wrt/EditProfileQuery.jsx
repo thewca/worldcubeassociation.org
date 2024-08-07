@@ -3,7 +3,7 @@ import {
   Form, FormField, FormGroup, Radio,
 } from 'semantic-ui-react';
 import { useDispatch, useStore } from '../../../../lib/providers/StoreProvider';
-import { updateSectionData, clearForm } from '../../store/actions';
+import { updateSectionData, clearForm, uploadProfileChangeProof } from '../../store/actions';
 import I18n from '../../../../lib/i18n';
 import UtcDatePicker from '../../../wca/UtcDatePicker';
 import { genders, countries } from '../../../../lib/wca-data.js.erb';
@@ -44,6 +44,10 @@ export default function EditProfileQuery() {
       queryType: 'edit_profile',
       profileDataToChange: value,
     }),
+  );
+
+  const handleFileUpload = (event) => dispatch(
+    uploadProfileChangeProof(event.target.files[0]),
   );
 
   return (
@@ -111,6 +115,11 @@ export default function EditProfileQuery() {
             name="editProfileReason"
             value={editProfileReason}
             onChange={handleFormChange}
+          />
+          <Form.Input
+            label={I18n.t('page.contacts.form.wrt.edit_profile_proof_attach.label')}
+            type="file"
+            onChange={handleFileUpload}
           />
         </>
       )}

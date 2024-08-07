@@ -88,6 +88,7 @@ export default function ContactForm({
           if (isFormValid) {
             const formData = new FormData();
             formData.append('formValues', JSON.stringify(contactFormState.formValues));
+            formData.append('attachment', contactFormState.attachments[0]);
             save(
               contactUrl,
               formData,
