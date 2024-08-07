@@ -56,11 +56,9 @@ module Cachable
       self.c_all_by_id.values
     end
 
-    # It is vitally important that this caching declaration happens before any `enum` calls
-    # because otherwise Rails throws an error. Probably their fault, we should consider filing a bug. (GB 2024-08-07)
     def cached_entity(*ids)
       ids.each do |id|
-        self.mattr_reader(id, instance_accessor: false) { self.c_find(id) }
+        self.define_singleton_method(id) { self.c_find(id) }
       end
     end
   end
