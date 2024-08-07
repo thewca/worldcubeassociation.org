@@ -6,9 +6,10 @@ class PanelController < ApplicationController
 
   before_action :authenticate_user!
   before_action -> { redirect_to_root_unless_user(:has_permission?, 'can_access_panels', params[:panel_id].to_sym) }, only: [:index]
-  before_action -> { redirect_to_root_unless_user(:can_access_panel?, params[:action].to_sym) }, except: [:pending_claims_for_subordinate_delegates, :index, :generate_db_token]
+  before_action -> { redirect_to_root_unless_user(:has_permission?, 'can_access_panels', :wfc) }, only: [:wfc]
+  before_action -> { redirect_to_root_unless_user(:has_permission?, 'can_access_panels', :staff) }, only: [:staff]
+  before_action -> { redirect_to_root_unless_user(:has_permission?, 'can_access_panels', :admin) }, only: [:generate_db_token]
   before_action -> { redirect_to_root_unless_user(:can_access_senior_delegate_panel?) }, only: [:pending_claims_for_subordinate_delegates]
-  before_action -> { redirect_to_root_unless_user(:can_access_panel?, :admin) }, only: [:generate_db_token]
 
   def pending_claims_for_subordinate_delegates
     # Show pending claims for a given user, or the current user, if they can see them

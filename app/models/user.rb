@@ -1338,7 +1338,7 @@ class User < ApplicationRecord
     admin? || board_member? || senior_delegate?
   end
 
-  def can_access_panel?(panel_id)
+  private def can_access_panel?(panel_id)
     case panel_id
     when :admin
       admin? || senior_results_team?
