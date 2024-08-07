@@ -977,6 +977,14 @@ class Competition < ApplicationRecord
     end
   end
 
+  def any_registrations?
+    if uses_new_registration_service?
+      self.microservice_registrations.any?
+    else
+      self.registrations.any?
+    end
+  end
+
   def registration_range_specified?
     registration_open.present? && registration_close.present?
   end
