@@ -1181,7 +1181,7 @@ class Competition < ApplicationRecord
     end
 
     if registration_period_required? && registration_open.present? && registration_close.present? &&
-      (registration_open >= start_date || registration_close >= start_date)
+       (registration_open >= start_date || registration_close >= start_date)
       errors.add(:registration_close, I18n.t('competitions.errors.registration_period_after_start'))
     end
   end
