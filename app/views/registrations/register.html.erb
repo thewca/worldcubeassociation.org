@@ -53,7 +53,7 @@
           <%= t 'registrations.contact_organizer' %>
         <% end %>
         <hr/>
-      <% elsif @competition.registration_open? %>
+      <% elsif @competition.registration_currently_open? %>
         <% unless user_may_register %>
           <%= alert :danger do %>
             <%= t 'registrations.please_fix_profile_html', comp: @competition.name,
