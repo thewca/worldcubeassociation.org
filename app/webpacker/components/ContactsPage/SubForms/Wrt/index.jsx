@@ -1,10 +1,10 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import {
   FormField, FormGroup, Radio,
 } from 'semantic-ui-react';
 import I18n from '../../../../lib/i18n';
 import { useDispatch, useStore } from '../../../../lib/providers/StoreProvider';
-import { updateSectionData } from '../../store/actions';
+import { setSubFormValidity, updateSectionData } from '../../store/actions';
 import EditProfileQuery from './EditProfileQuery';
 import OtherQuery from './OtherQuery';
 
@@ -29,6 +29,17 @@ export default function Wrt() {
         return OtherQuery;
     }
   }, [selectedQueryType]);
+
+  useEffect(() => {
+    const isWrtFormValid = () => {
+      if (selectedQueryType === QUERY_TYPES_MAP.editProfile) {
+        return wrt?.profileDataToChange && wrt?.newProfileData && wrt?.editProfileReason;
+      }
+      return wrt?.message;
+    };
+
+    dispatch(setSubFormValidity(SECTION, isWrtFormValid()));
+  }, [dispatch, selectedQueryType, wrt]);
 
   return (
     <>
