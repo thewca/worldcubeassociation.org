@@ -45,14 +45,13 @@ class UserGroup < ApplicationRecord
   #
   # This commit hook makes it so that whenever a change happens, we reset the metadata
   # so that it finds the newest changes even in cache mode (reset_* methods are provided by Rails magically.)
-  after_commit :reset_metadata
+  after_commit :reset_metadata, on: [:update, :destroy]
 
   private def reset_metadata
-    metadata_persisted = self.metadata.persisted?
     metadata_cachable = self.metadata.class < Cachable
     metadata_has_assoc = self.metadata.class.reflect_on_association(:user_group).present?
 
-    if metadata_persisted && metadata_cachable && metadata_has_assoc
+    if metadata_cachable && metadata_has_assoc
       self.metadata&.as_cached&.reset_user_group
     end
   end

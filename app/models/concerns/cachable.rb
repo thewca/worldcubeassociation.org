@@ -35,7 +35,7 @@ module Cachable
     end
 
     def as_cached
-      self.class.try(self.cachable_id) || self.class.c_find(self.cachable_id)
+      self.class.try(self.cachable_id.to_s) || self.class.c_find(self.cachable_id)
     end
   end
 
