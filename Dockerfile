@@ -100,7 +100,8 @@ RUN apt-get update -qq && \
       fonts-unfonts-core \
       fonts-wqy-microhei \
       fonts-ipafont \
-      fonts-lmodern
+      fonts-lmodern \
+      mariadb-client
 USER rails:rails
 # Regenerate the font cache so WkHtmltopdf can find them
 # per https://dalibornasevic.com/posts/76-figuring-out-missing-fonts-for-wkhtmltopdf
