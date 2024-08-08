@@ -13,7 +13,7 @@ class Api::Internal::V1::ApiController < ApplicationController
     # Renew our token if it has expired or is close to expiring
     Vault.auth_token.renew_self if vault_token_data[:ttl] < 300
 
-    client = Faraday.new(url: EnvConfig.VAULT_ADDR)
+    client = Faraday.new(url: EnvConfig.VAULT_ADDR, &FaradayConfig)
 
     # Make the POST request to the introspect endpoint
     response = client.post do |req|
