@@ -8,6 +8,43 @@ class SessionsController < Devise::SessionsController
   # Make sure this happens always before any before_action
   protect_from_forgery with: :exception, prepend: true
 
+  def staging_oauth_login
+    return if EnvConfig.WCA_LIVE_SITE?
+
+    client = OAuth2::Client.new(AppSecrets.STAGING_OAUTH_CLIENT, AppSecrets.STAGING_OAUTH_SECRET,
+                                site: EnvConfig.STAGING_OAUTH_URL)
+    redirect_uri = staging_login_url
+
+    unless params[:code].present?
+      return redirect_to client.auth_code.authorize_url(
+        redirect_uri: redirect_uri,
+      ), allow_other_host: true
+    end
+
+    access_token = client.auth_code.get_token(
+      params[:code], redirect_uri: redirect_uri
+    ).token
+
+    # Get /me to figure out which user we are
+    connection = Faraday.new(
+      url: EnvConfig.STAGING_OAUTH_URL,
+      headers: {
+        'Authorization' => "Bearer #{access_token}",
+        'Content-Type' => 'application/json',
+      },
+    )
+
+    results = connection.get("/api/v0/me").body
+
+    user = User.find(results["me"]["id"])
+    if user
+      sign_in(user)
+      redirect_to root_url, notice: "Successfully logged in as #{user.wca_id}"
+    else
+      redirect_to root_url, alert: "Your user is not yet imported into our Staging Website, please try again later"
+    end
+  end
+
   def new
     super
     # Remove any lingering user data from previous login attempt

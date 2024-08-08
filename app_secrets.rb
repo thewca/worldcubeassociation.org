@@ -80,6 +80,12 @@ AppSecrets = SuperConfig.new(raise_exception: !EnvConfig.ASSETS_COMPILATION?) do
     vault :OIDC_SECRET_KEY
     vault :SLACK_WST_BOT_TOKEN
     vault :TNOODLE_PUBLIC_KEY
+
+    # To allow logging in to staging with your prod account
+    unless EnvConfig.WCA_LIVE_SITE?
+      vault :STAGING_OAUTH_CLIENT
+      vault :STAGING_OAUTH_SECRET
+    end
   else
     mandatory :DATABASE_PASSWORD, :string
     mandatory :GOOGLE_MAPS_API_KEY, :string
@@ -96,6 +102,8 @@ AppSecrets = SuperConfig.new(raise_exception: !EnvConfig.ASSETS_COMPILATION?) do
     mandatory :STRIPE_PUBLISHABLE_KEY, :string
     mandatory :JWT_KEY, :string
     mandatory :OIDC_SECRET_KEY, :string
+    mandatory :STAGING_OAUTH_CLIENT, :string
+    mandatory :STAGING_OAUTH_SECRET, :string
 
     optional :AWS_ACCESS_KEY_ID, :string, ''
     optional :AWS_SECRET_ACCESS_KEY, :string, ''
