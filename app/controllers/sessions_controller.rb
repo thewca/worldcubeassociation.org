@@ -32,6 +32,7 @@ class SessionsController < Devise::SessionsController
         'Authorization' => "Bearer #{access_token}",
         'Content-Type' => 'application/json',
       },
+      &FaradayConfig
     )
 
     results = connection.get("/api/v0/me").body
