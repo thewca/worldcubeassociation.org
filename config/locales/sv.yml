@@ -1570,6 +1570,9 @@ sv:
           edit_profile_reason:
             #original_hash: fdfcccf
             label: Anledning till ändringen
+          edit_profile_proof_attach:
+            #original_hash: a9645b1
+            label: Bifoga intyg
         wst:
           message:
             #original_hash: 68f4145
@@ -2590,6 +2593,10 @@ sv:
       uncancel_failure: Det går inte att återkalla inställandet av tävlingen.
       #original_hash: 8ad5e67
       results_not_posted: Tävlingens resultat är synliga men har inte publicerats ännu.
+      #original_hash: 5c24cd8
+      results_still_processing: >-
+        Vi håller på att bearbeta resultaten från den här tävlingen - de kommer
+        att finnas tillgängliga inom kort.
       #original_hash: e205d73
       results_already_posted: Resultaten har redan publicerats.
       #original_hash: 376f461
