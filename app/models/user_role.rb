@@ -18,6 +18,9 @@ class UserRole < ApplicationRecord
   scope :active, -> { where(end_date: nil).or(inactive.invert_where) }
   scope :inactive, -> { where(end_date: ..Date.today) }
 
+  # We need this for creating new roles that would otherwise be instantiated with an out-of-date group reference
+  after_commit :reset_group, on: :create
+
   UserRoleChange = Struct.new(
     :changed_parameter,
     :previous_value,
