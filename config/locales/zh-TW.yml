@@ -1305,8 +1305,8 @@ zh-TW:
             #original_hash: 84add5b
             label: 電子郵件
         contact_recipient:
-          #original_hash: d31ab65
-          label: 以下哪一個最能描述您的問題？
+          #original_hash: 54f0036
+          label: 您想要聯絡誰？
           competition:
             #original_hash: baa2425
             label: 聯絡比賽的主辦團隊/WCA代表(詢問關於某場比賽的內容)
@@ -1331,9 +1331,51 @@ zh-TW:
             #original_hash: 68f4145
             label: 訊息
         wrt:
+          query_type:
+            #original_hash: d31ab65
+            label: 以下哪一個最能形容您的提問內容？
+            edit_profile:
+              #original_hash: 322db6c
+              label: 修改我的個人資料（姓名、區域、性別或生日）
+            report_result_issue:
+              #original_hash: 2edbb52
+              label: 成績中的問題
+            other_query:
+              #original_hash: 7618a0c
+              label: 其他
           message:
             #original_hash: 68f4145
             label: 訊息
+          profile_data_to_change:
+            #original_hash: 25b71ff
+            label: 更改個人資料
+            options:
+              #original_hash: 709a232
+              name: 姓名
+              #original_hash: d523ebb
+              country: 區域
+              #original_hash: 8a754c6
+              gender: 性別
+              #original_hash: 293dd60
+              dob: 生日
+          new_profile_data_name:
+            #original_hash: ddbcd37
+            label: 新的姓名
+          new_profile_data_country:
+            #original_hash: e4e355e
+            label: 新的區域
+          new_profile_data_gender:
+            #original_hash: 48ce2a3
+            label: 新的性別
+          new_profile_data_dob:
+            #original_hash: 9f1c3d2
+            label: 新的生日
+          edit_profile_reason:
+            #original_hash: fdfcccf
+            label: 修改理由
+          edit_profile_proof_attach:
+            #original_hash: a9645b1
+            label: 附上證明
         wst:
           message:
             #original_hash: 68f4145
@@ -1942,8 +1984,6 @@ zh-TW:
     #original_hash: f22ef22
     registration_full: >-
       這場比賽人數上限為%{competitor_limit}且已經額滿。若您仍報名，您的報名會被放置在候補名單。您的報名不會自動批准通過，除非有名額釋出。
-    #original_hash: 2f11b7a
-    registration_full_v2_html: '這場比賽的已達參賽者人數上限的%{competitor_limit}人。如果您現在報名，您的報名會排進候補名單裡，可以在這裡%{here}確認。'
     #original_hash: cf29e85
     registration_full_include_waiting_list: >-
       這場比賽的參賽者人數上限是%{competitor_limit}人，且可能已經額滿。如果您現在報名，您會被排在候補名單中。如果沒有名額釋出，您的報名可能不會被核准。
@@ -2079,6 +2119,8 @@ zh-TW:
         email_duplicates: '一個電子郵件必須只能被用一次，以下為重複的電子郵件：%{emails}'
         #original_hash: bcd8e78
         wca_id_duplicates: '一個WCA ID必須只能被用一次，以下為重複的WCA ID：%{wca_ids}。'
+        #original_hash: a0fd4c5
+        wrong_dob_format: '生日必須要依照 YYYY-mm-dd 的格式（年-月-日，例如 1944-07-13），以下日期無法使用：%{raw_dobs}。'
     add:
       #original_hash: 975275e
       title: '新增%{comp}的報名資料'
@@ -2134,6 +2176,8 @@ zh-TW:
       uncancel_failure: 無法恢復比賽。
       #original_hash: 8ad5e67
       results_not_posted: 這場比賽的成績已公開，但尚未公告。
+      #original_hash: 5c24cd8
+      results_still_processing: 我們正忙著處理這場比賽的成績，應該不久後就能查看。
       #original_hash: e205d73
       results_already_posted: 成績已被公告。
       #original_hash: 376f461
@@ -2934,8 +2978,10 @@ zh-TW:
       list:
         #original_hash: 6eef664
         empty: 無
-        #original_hash: 713f805
-        spots_remaining: '剩下%{spots}個名額'
+        #original_hash: 627422a
+        spots_remaining_plural:
+          zero: 已無報名名額
+          other: '還剩%{count}個報名名額'
       bookmark:
         #original_hash: 7952a5c
         unbookmark: 您已經移除您的書籤
@@ -2957,8 +3003,10 @@ zh-TW:
         no_changes: 沒有變化
         #original_hash: be4e8e2
         email_send: 送出郵件
-        #original_hash: d9def5d
+        #original_hash: b4bac52
         email_copy: 複製郵件
+        #original_hash: b83b663
+        email_message: 已複製到剪貼簿。記得要使用BCC密件副本！
         #original_hash: 71327f1
         move_pending: 移到待審核
         #original_hash: 9144dd6
@@ -2982,6 +3030,8 @@ zh-TW:
         until: '您可以在%{date}以前更新您的報名'
         #original_hash: fc8bc84
         passed: 您無法再更新您的報名內容
+        #original_hash: 8cc047a
+        approval: 許可
         #original_hash: 05b9f17
         view_registration: 查看報名
         #original_hash: 3c8d8b7
@@ -2993,8 +3043,8 @@ zh-TW:
           pending: 您的報名正在等待比賽團隊的核准。
           #original_hash: dcc4906
           cancelled: 您的報名已被刪除。
-          #original_hash: c890478
-          waiting_list: 您在候補名單中。
+          #original_hash: a02390c
+          waiting_list: '您在候補名單中第%{waiting_list_position}位。'
         #original_hash: 2d9f36c
         disclaimer: 送出報名資訊不代表已批准能參賽
         #original_hash: 8fe68a1
@@ -3048,6 +3098,12 @@ zh-TW:
         '-4007': 提供了無效的報名狀態
         #original_hash: 020234c
         '-4008': 報名已截止
+        #original_hash: b30e613
+        '-4009': 只有主辦團隊可以取消這場比賽的報名
+        #original_hash: 3c4cbaa
+        '-4010': 這個候補名單位置無效
+        #original_hash: e489908
+        '-4011': 您只能受理候補名單上的第一位
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: '必須以年份為結尾且只能包含字母與數字，破折號(-)、&符號(&)、句號(.)、冒號(:)、撇號('')和空白( )'
