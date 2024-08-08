@@ -48,11 +48,13 @@ class UserGroup < ApplicationRecord
   after_commit :reset_metadata, on: [:update, :destroy]
 
   private def reset_metadata
+    return unless self.metadata.present?
+
     metadata_cachable = self.metadata.class < Cachable
     metadata_has_assoc = self.metadata.class.reflect_on_association(:user_group).present?
 
     if metadata_cachable && metadata_has_assoc
-      self.metadata&.as_cached&.reset_user_group
+      self.metadata.as_cached.reset_user_group
     end
   end
 
