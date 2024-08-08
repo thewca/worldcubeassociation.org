@@ -66,6 +66,12 @@ RUN rm -rf node_modules
 
 FROM base AS runtime
 
+RUN apt-get update -qq && \
+    apt-get install --no-install-recommends -y \
+      mariadb-client \
+      zip \
+      python-is-python3
+
 # Copy built artifacts: gems, application
 COPY --from=build /rails .
 
@@ -75,10 +81,6 @@ RUN useradd rails --create-home --shell /bin/bash && \
 
 FROM runtime AS sidekiq
 
-RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y \
-      zip \
-      python-is-python3
 USER rails:rails
 RUN gem install mailcatcher
 
@@ -100,8 +102,7 @@ RUN apt-get update -qq && \
       fonts-unfonts-core \
       fonts-wqy-microhei \
       fonts-ipafont \
-      fonts-lmodern \
-      mariadb-client
+      fonts-lmodern
 USER rails:rails
 # Regenerate the font cache so WkHtmltopdf can find them
 # per https://dalibornasevic.com/posts/76-figuring-out-missing-fonts-for-wkhtmltopdf
