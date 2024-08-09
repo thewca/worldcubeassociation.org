@@ -3,8 +3,8 @@
 class Regulation < SimpleDelegator
   REGULATIONS_JSON_PATH = "wca-regulations.json"
 
-  thread_mattr_accessor :regulations, instance_accessor: false, default: []
-  thread_mattr_accessor :regulations_load_error, instance_accessor: false
+  mattr_accessor :regulations, instance_accessor: false, default: []
+  mattr_accessor :regulations_load_error, instance_accessor: false
 
   def self.regulations_by_id
     self.regulations.index_by { |r| r["id"] }
