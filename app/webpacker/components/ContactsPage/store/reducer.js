@@ -1,5 +1,6 @@
 import {
   ClearForm,
+  SetSubFormValidity,
   UpdateContactRecipient,
   UpdateSectionData,
   UploadProfileChangeProof,
@@ -24,6 +25,7 @@ export const getContactFormInitialState = (params) => ({
     },
   },
   attachments: [],
+  validSubForm: {},
 });
 
 const reducers = {
@@ -53,6 +55,14 @@ const reducers = {
   [UploadProfileChangeProof]: (state, { payload }) => ({
     ...state,
     attachments: [payload.file],
+  }),
+
+  [SetSubFormValidity]: (state, { payload }) => ({
+    ...state,
+    validSubForm: {
+      ...state.validSubForm,
+      [payload.section]: payload.isValid,
+    },
   }),
 };
 
