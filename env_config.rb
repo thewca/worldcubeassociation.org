@@ -27,6 +27,7 @@ EnvConfig = SuperConfig.new(raise_exception: !is_compiling_assets) do
     mandatory :TASK_ROLE, :string
     mandatory :WCA_REGISTRATIONS_URL, :string
     mandatory :WCA_REGISTRATIONS_POLL_URL, :string
+    mandatory :ASSET_HOST, :string
   else
     optional :READ_REPLICA_HOST, :string, ''
     optional :CACHE_REDIS_URL, :string, ''
