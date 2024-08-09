@@ -17,10 +17,10 @@ class TranslationsController < ApplicationController
     WcaI18n::Translation.new(locale, File.read(filename))
   end
 
-  mattr_reader :bad_i18n_keys, default: self.compute_bad_i18n_keys
+  BAD_I18N_KEYS = self.compute_bad_i18n_keys
 
   def index
-    @bad_i18n_keys = self.bad_i18n_keys
+    @bad_i18n_keys = TranslationsController::BAD_I18N_KEYS
     bad_keys = @bad_i18n_keys.values.map(&:values).flatten
     @all_translations_perfect = bad_keys.empty?
   end
