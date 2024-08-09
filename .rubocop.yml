@@ -234,3 +234,12 @@ Naming/BlockForwarding:
 
 Style/ArgumentsForwarding:
   RedundantBlockArgumentNames: []
+
+# These are files where we accept in-memory caching as a trade-off
+# for thread safety. At the time of writing this comment, WST is confident that these three
+# implementations are either thread safe or don't suffer any problems from concurrent access.
+ThreadSafety/ClassAndModuleAttributes:
+  Exclude:
+    - 'app/models/concerns/cachable.rb'
+    - 'app/models/concerns/localized_sortable.rb'
+    - 'app/models/concerns/regulation.rb'
