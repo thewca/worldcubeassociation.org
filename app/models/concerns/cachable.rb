@@ -40,6 +40,8 @@ module Cachable
     #   it from truly parallel code execution. Every thread that potentially enters the `c_all_by_id` loading mechanism
     #   below is inherently thread-safe by virtue of the fact that the interpreter locks the code execution.
     #
+    # Interesting reading: https://thoughtbot.com/blog/untangling-ruby-threads
+    #
     # (Sidenote: Our previous approach had been based on our own custom @@cache variable,
     #   which is exactly what mattr_accessor does internally. And that one worked for literally many years.)
     mattr_accessor :models_by_id, instance_accessor: false

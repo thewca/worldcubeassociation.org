@@ -22,7 +22,9 @@ module LocalizedSortable
   included do
     scope :uncached_real, -> { where.not(id: fictive_ids) }
 
-    thread_mattr_accessor :real_objects, :all_sorted_by_locale, instance_accessor: false
+    # Read up on why we're NOT using thread_mattr_accessor here (despite multi-threaded Rails app servers)
+    #   in the code comments of the `cachable.rb` module.
+    mattr_accessor :real_objects, :all_sorted_by_locale, instance_accessor: false
   end
 
   class_methods do
