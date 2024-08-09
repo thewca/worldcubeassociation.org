@@ -17,7 +17,7 @@ class TranslationsController < ApplicationController
     WcaI18n::Translation.new(locale, File.read(filename))
   end
 
-  mattr_accessor :bad_i18n_keys, instance_writer: false, default: self.compute_bad_i18n_keys
+  mattr_reader :bad_i18n_keys, default: self.compute_bad_i18n_keys
 
   def index
     @bad_i18n_keys = self.bad_i18n_keys
