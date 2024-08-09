@@ -179,6 +179,12 @@
           <%= render "registration_requirements", show_links_to_register_page: true %>
         </div>
       </dd>
+      <dt><%= t 'registrations.payment_form.labels.payment_information' %></dt>
+      <dd>
+        <div class="<%= collapse ? "collapse" : "" %>" id="payment_information_text">
+          <%= render "payment_information" %>
+        </div>
+      </dd>
       <% if competition.user_can_view_results?(current_user) %>
         <% records = records(competition) %>
         <% if main_event.present? || records.present? %>

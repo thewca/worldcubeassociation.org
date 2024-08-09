@@ -83,11 +83,6 @@ export default function RegistrationOverview({
         {i18n.t(updateRegistrationKey(editsAllowed, hasRegistrationEditDeadlinePassed))}
       </Message>
       )}
-      { !competitionInfo['using_payment_integrations?'] && registration.competing.registration_status === 'pending' && competitionInfo.base_entry_fee_lowest_denomination && (
-        <Message info>
-          {i18n.t('registrations.wont_pay_here')}
-        </Message>
-      )}
       <Segment loading={isDeleting}>
         <Header>{i18n.t('competitions.nav.menu.registration')}</Header>
         <Form onSubmit={nextStep} size="large">

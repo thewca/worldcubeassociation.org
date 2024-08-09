@@ -6,6 +6,7 @@ import StripeWrapper from './StripeWrapper';
 import i18n from '../../../lib/i18n';
 import RegistrationOverview from './RegistrationOverview';
 import { hasPassed } from '../../../lib/utils/dates';
+import ExternalPaymentStep from './ExternalPaymentStep';
 
 const requirementsStepConfig = {
   key: 'requirements',
@@ -21,7 +22,14 @@ const competingStepConfig = {
   component: CompetingStep,
 };
 
-const paymentStepConfig = {
+const externalPaymentStepConfig = {
+  key: 'payment',
+  description: 'External Payment',
+  i18nKey: 'registrations.payment_form.labels.payment_information',
+  component: ExternalPaymentStep,
+};
+
+const wcaPaymentStepConfig = {
   key: 'payment',
   description: 'Enter billing information',
   i18nKey: 'registrations.payment_form.labels.payment_information',
@@ -36,17 +44,25 @@ const registrationOverviewConfig = {
 };
 
 const shouldShowCompleted = (isRegistered, hasPaid, isAccepted, key, index) => {
-  if (key === paymentStepConfig.key) {
-    return hasPaid;
-  }
-  if (key === competingStepConfig.key) {
-    return isRegistered;
-  }
-  if (key === requirementsStepConfig.key) {
-    return index > 0;
-  }
-  if (key === registrationOverviewConfig.key) {
-    return isAccepted;
+  switch (key) {
+    case externalPaymentStepConfig.key: {
+      return false;
+    }
+    case wcaPaymentStepConfig.key: {
+      return hasPaid;
+    }
+    case competingStepConfig.key: {
+      return isRegistered;
+    }
+    case requirementsStepConfig.key: {
+      return index > 0;
+    }
+    case registrationOverviewConfig.key: {
+      return isAccepted;
+    }
+    default: {
+      return false;
+    }
   }
 };
 
@@ -57,14 +73,25 @@ const shouldBeDisabled = (hasPaid, key, activeIndex, index, competitionInfo) => 
   const editsAllowed = competitionInfo.allow_registration_edits
     && !hasRegistrationEditDeadlinePassed;
 
-  if (key === paymentStepConfig.key) {
-    return !hasPaid && index > activeIndex;
-  }
-  if (key === competingStepConfig.key) {
-    return index > activeIndex || !editsAllowed;
-  }
-  if (key === requirementsStepConfig.key) {
-    return activeIndex !== 0;
+  switch (key) {
+    case externalPaymentStepConfig.key: {
+      return true;
+    }
+    case wcaPaymentStepConfig.key: {
+      return !hasPaid && index > activeIndex;
+    }
+    case competingStepConfig.key: {
+      return index > activeIndex || !editsAllowed;
+    }
+    case requirementsStepConfig.key: {
+      return activeIndex !== 0;
+    }
+    case registrationOverviewConfig.key: {
+      return false;
+    }
+    default: {
+      return true;
+    }
   }
 };
 
@@ -80,12 +107,13 @@ export default function StepPanel({
   const isRegistered = Boolean(registration) && registration.competing.registration_status !== 'cancelled';
   const isAccepted = isRegistered && registration.competing.registration_status === 'accepted';
   const hasPaid = registration?.payment.payment_status === 'succeeded';
-  const registrationFinished = hasPaid || (isRegistered && !competitionInfo['using_payment_integrations?']);
 
   const steps = useMemo(() => {
     const stepList = [requirementsStepConfig, competingStepConfig];
     if (competitionInfo['using_payment_integrations?']) {
-      stepList.push(paymentStepConfig);
+      stepList.push(wcaPaymentStepConfig);
+    } else if (competitionInfo.base_entry_fee_lowest_denomination) {
+      stepList.push(externalPaymentStepConfig);
     }
 
     if (isRegistered) {
@@ -96,15 +124,19 @@ export default function StepPanel({
 
   const [activeIndex, setActiveIndex] = useState(() => {
     // Don't show payment panel if a user was accepted (for people with waived payment)
-    if (registrationFinished || isAccepted) {
+    if (isAccepted || hasPaid) {
       return steps.findIndex(
         (step) => step === (registrationOverviewConfig),
       );
     }
     // If the user has not paid but refreshes the page, we want to display the paymentStep again
-    return steps.findIndex(
-      (step) => step === (isRegistered ? paymentStepConfig : requirementsStepConfig),
-    );
+    if (isRegistered) {
+      return steps.findIndex(
+        (step) => step === (competitionInfo['using_payment_integrations?'] ? wcaPaymentStepConfig : externalPaymentStepConfig),
+      );
+    }
+
+    return 0;
   });
   const CurrentStepPanel = activeIndex === registrationOverviewConfig.index
     ? RegistrationOverview : steps[activeIndex].component;
