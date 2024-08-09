@@ -3,8 +3,6 @@
 class TranslationsController < ApplicationController
   before_action :authenticate_user!, except: [:index]
 
-  mattr_accessor :bad_i18n_keys, instance_writer: false, default: self.compute_bad_i18n_keys
-
   def self.compute_bad_i18n_keys
     english = locale_to_translation('en')
 
@@ -18,6 +16,8 @@ class TranslationsController < ApplicationController
     filename = Rails.root.join('config', 'locales', "#{locale}.yml")
     WcaI18n::Translation.new(locale, File.read(filename))
   end
+
+  mattr_accessor :bad_i18n_keys, instance_writer: false, default: self.compute_bad_i18n_keys
 
   def index
     @bad_i18n_keys = self.bad_i18n_keys
