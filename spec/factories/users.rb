@@ -196,6 +196,12 @@ FactoryBot.define do
       end
     end
 
+    trait :wapc_member do
+      after(:create) do |user|
+        FactoryBot.create(:wapc_member_role, user_id: user.id)
+      end
+    end
+
     trait :wca_id do
       transient do
         person { FactoryBot.create(:person, name: name, countryId: Country.find_by_iso2(country_iso2).id, gender: gender, dob: dob.strftime("%F")) }

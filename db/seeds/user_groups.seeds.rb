@@ -240,6 +240,13 @@ after :groups_metadata_board, :groups_metadata_councils, :groups_metadata_teams_
     is_hidden: false,
     metadata: GroupsMetadataTeamsCommittees.find_by!(friendly_id: 'wdpc'),
   )
+  UserGroup.create!(
+    name: 'WCA Appeals Committee',
+    group_type: :teams_committees,
+    is_active: true,
+    is_hidden: false,
+    metadata: GroupsMetadataTeamsCommittees.find_by!(friendly_id: 'wapc'),
+  )
 
   # Translators
   UserGroup.create!(

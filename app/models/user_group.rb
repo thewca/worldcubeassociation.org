@@ -165,6 +165,10 @@ class UserGroup < ApplicationRecord
     GroupsMetadataTeamsCommittees.wsot.user_group
   end
 
+  def self.teams_committees_group_wapc
+    GroupsMetadataTeamsCommittees.wapc.user_group
+  end
+
   def self.banned_competitors_group
     UserGroup.banned_competitors.first
   end

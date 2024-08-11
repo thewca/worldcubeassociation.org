@@ -504,6 +504,10 @@ class User < ApplicationRecord
     group_member?(UserGroup.teams_committees_group_wrt)
   end
 
+  def appeals_committee?
+    group_member?(UserGroup.teams_committees_group_wapc)
+  end
+
   private def senior_results_team?
     at_least_senior_teams_committees_member?(UserGroup.teams_committees_group_wrt)
   end
