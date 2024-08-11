@@ -103,8 +103,8 @@ class RoleChangeMailer < ApplicationMailer
     when UserGroup.group_types[:banned_competitors]
       @to_list.push(
         UserRole::UserRoleEmailRecipient.new(
-          name: 'WDC',
-          email: UserGroup.teams_committees_group_wdc.metadata.email,
+          name: 'WIC',
+          email: UserGroup.teams_committees_group_wic.metadata.email,
           message: 'Informing as a competitor is newly banned.',
         ),
       )
@@ -177,8 +177,8 @@ class RoleChangeMailer < ApplicationMailer
     when UserGroup.group_types[:banned_competitors]
       @to_list.push(
         UserRole::UserRoleEmailRecipient.new(
-          name: 'WDC',
-          email: UserGroup.teams_committees_group_wdc.metadata.email,
+          name: 'WIC',
+          email: UserGroup.teams_committees_group_wic.metadata.email,
           message: 'Informing as there was a change in banned details of a competitor.',
         ),
       )

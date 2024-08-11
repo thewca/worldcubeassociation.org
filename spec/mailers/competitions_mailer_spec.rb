@@ -198,42 +198,42 @@ RSpec.describe CompetitionsMailer, type: :mailer do
       CompetitionsMailer.notify_of_delegate_report_submission(competition)
     end
 
-    context "wrc & wdc feedback requested" do
+    context "wrc & wic feedback requested" do
       before(:each) do
-        competition.delegate_report.update!(wrc_feedback_requested: true, wrc_incidents: "1, 2, 3", wdc_feedback_requested: true, wdc_incidents: "4, 5, 6")
+        competition.delegate_report.update!(wrc_feedback_requested: true, wrc_incidents: "1, 2, 3", wic_feedback_requested: true, wic_incidents: "4, 5, 6")
       end
 
       it "renders the headers" do
         expect(mail.subject).to eq "[wca-report] [Oceania] Comp of the Future 2016"
         expect(mail.to).to eq ["reports@worldcubeassociation.org"]
-        expect(mail.cc).to match_array competition.delegates.pluck(:email) + ["regulations@worldcubeassociation.org"] + ["disciplinary@worldcubeassociation.org"]
+        expect(mail.cc).to match_array competition.delegates.pluck(:email) + ["regulations@worldcubeassociation.org"] + ["integrity@worldcubeassociation.org"]
         expect(mail.from).to eq ["reports@worldcubeassociation.org"]
         expect(mail.reply_to).to match_array competition.delegates.pluck(:email)
       end
 
       it "renders the body" do
         expect(mail.body.encoded).to match(/@WRC: Feedback requested on incidents: 1, 2, 3/)
-        expect(mail.body.encoded).to match(/@WDC: Feedback requested on incidents: 4, 5, 6/)
+        expect(mail.body.encoded).to match(/@WIC: Feedback requested on incidents: 4, 5, 6/)
         expect(mail.body.encoded).to match(/This was a great competition/)
       end
     end
 
-    context "wdc feedback requested" do
+    context "wic feedback requested" do
       before(:each) do
-        competition.delegate_report.update!(wdc_feedback_requested: true, wdc_incidents: "4, 5, 6")
+        competition.delegate_report.update!(wic_feedback_requested: true, wic_incidents: "4, 5, 6")
       end
 
       it "renders the headers" do
         expect(mail.subject).to eq "[wca-report] [Oceania] Comp of the Future 2016"
         expect(mail.to).to eq ["reports@worldcubeassociation.org"]
-        expect(mail.cc).to match_array competition.delegates.pluck(:email) + ["disciplinary@worldcubeassociation.org"]
+        expect(mail.cc).to match_array competition.delegates.pluck(:email) + ["integrity@worldcubeassociation.org"]
         expect(mail.from).to eq ["reports@worldcubeassociation.org"]
         expect(mail.reply_to).to match_array competition.delegates.pluck(:email)
       end
 
       it "renders the body" do
         expect(mail.body.encoded).not_to match(/@WRC/)
-        expect(mail.body.encoded).to match(/@WDC: Feedback requested on incidents: 4, 5, 6/)
+        expect(mail.body.encoded).to match(/@WIC: Feedback requested on incidents: 4, 5, 6/)
         expect(mail.body.encoded).to match(/This was a great competition/)
       end
     end
@@ -253,12 +253,12 @@ RSpec.describe CompetitionsMailer, type: :mailer do
 
       it "renders the body" do
         expect(mail.body.encoded).to match(/@WRC: Feedback requested on incidents: 1, 2, 3/)
-        expect(mail.body.encoded).not_to match(/@WDC/)
+        expect(mail.body.encoded).not_to match(/@WIC/)
         expect(mail.body.encoded).to match(/This was a great competition/)
       end
     end
 
-    context "no wrc nor wdc feedback" do
+    context "no wrc nor wic feedback" do
       it "renders the headers" do
         expect(mail.subject).to eq "[wca-report] [Oceania] Comp of the Future 2016"
         expect(mail.to).to eq ["reports@worldcubeassociation.org"]
@@ -269,7 +269,7 @@ RSpec.describe CompetitionsMailer, type: :mailer do
 
       it "renders the body" do
         expect(mail.body.encoded).not_to match(/@WRC/)
-        expect(mail.body.encoded).not_to match(/@WDC/)
+        expect(mail.body.encoded).not_to match(/@WIC/)
         expect(mail.body.encoded).to match(/This was a great competition/)
       end
     end

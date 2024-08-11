@@ -10,7 +10,7 @@ class GroupsMetadataTeamsCommittees < ApplicationRecord
     self.friendly_id
   end
 
-  cached_entity :wct, :wcat, :wdc, :wdpc, :wec, :weat, :wfc, :wmt, :wqac, :wrc, :wrt, :wst, :wst_admin, :wct_china, :wat, :wsot
+  cached_entity :wct, :wcat, :wic, :wdpc, :wec, :weat, :wfc, :wmt, :wqac, :wrc, :wrt, :wst, :wst_admin, :wct_china, :wat, :wsot
 
   enum :preferred_contact_mode, {
     no_contact: "no_contact",

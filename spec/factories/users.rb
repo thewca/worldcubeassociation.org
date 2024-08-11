@@ -70,15 +70,15 @@ FactoryBot.define do
       end
     end
 
-    trait :wdc_member do
+    trait :wic_member do
       after(:create) do |user|
-        FactoryBot.create(:wdc_member_role, user_id: user.id)
+        FactoryBot.create(:wic_member_role, user_id: user.id)
       end
     end
 
-    trait :wdc_leader do
+    trait :wic_leader do
       after(:create) do |user|
-        FactoryBot.create(:wdc_leader_role, user_id: user.id)
+        FactoryBot.create(:wic_leader_role, user_id: user.id)
       end
     end
 

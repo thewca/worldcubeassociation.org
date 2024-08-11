@@ -109,8 +109,8 @@ class UserGroup < ApplicationRecord
     GroupsMetadataTeamsCommittees.wcat.user_group
   end
 
-  def self.teams_committees_group_wdc
-    GroupsMetadataTeamsCommittees.wdc.user_group
+  def self.teams_committees_group_wic
+    GroupsMetadataTeamsCommittees.wic.user_group
   end
 
   def self.teams_committees_group_wdpc

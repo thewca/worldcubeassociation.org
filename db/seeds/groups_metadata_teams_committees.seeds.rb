@@ -6,7 +6,7 @@ GroupsMetadataTeamsCommittees.create!(friendly_id: 'wst', email: 'software@world
 GroupsMetadataTeamsCommittees.create!(friendly_id: 'weat', email: 'assistants@worldcubeassociation.org')
 GroupsMetadataTeamsCommittees.create!(friendly_id: 'wfc', email: 'finance@worldcubeassociation.org')
 GroupsMetadataTeamsCommittees.create!(friendly_id: 'wcat', email: 'competitions@worldcubeassociation.org')
-GroupsMetadataTeamsCommittees.create!(friendly_id: 'wdc', email: 'disciplinary@worldcubeassociation.org')
+GroupsMetadataTeamsCommittees.create!(friendly_id: 'wic', email: 'integrity@worldcubeassociation.org')
 GroupsMetadataTeamsCommittees.create!(friendly_id: 'wec', email: 'ethics@worldcubeassociation.org')
 GroupsMetadataTeamsCommittees.create!(friendly_id: 'wmt', email: 'marketing@worldcubeassociation.org')
 GroupsMetadataTeamsCommittees.create!(friendly_id: 'wqac', email: 'quality@worldcubeassociation.org')
