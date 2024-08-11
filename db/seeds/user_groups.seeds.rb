@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-after :groups_metadata_board, :groups_metadata_councils, :groups_metadata_teams_committees, :groups_metadata_delegate_regions do
+after :groups_metadata_board, :groups_metadata_teams_committees, :groups_metadata_delegate_regions do
   # Delegate Regions
   UserGroup.create!(
     name: 'Africa',
@@ -123,15 +123,6 @@ after :groups_metadata_board, :groups_metadata_councils, :groups_metadata_teams_
     group_type: :officers,
     is_active: true,
     is_hidden: false,
-  )
-
-  # Councils
-  UserGroup.create!(
-    name: 'WCA Advisory Council',
-    group_type: :councils,
-    is_active: true,
-    is_hidden: false,
-    metadata: GroupsMetadataCouncils.find_by!(friendly_id: 'wac'),
   )
 
   # Teams/Committees

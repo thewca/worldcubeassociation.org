@@ -141,10 +141,6 @@ class UserGroup < ApplicationRecord
     GroupsMetadataTeamsCommittees.wrt.user_group
   end
 
-  def self.council_group_wac
-    GroupsMetadataCouncils.find_by(friendly_id: 'wac').user_group
-  end
-
   def self.teams_committees_group_wst
     GroupsMetadataTeamsCommittees.wst.user_group
   end
