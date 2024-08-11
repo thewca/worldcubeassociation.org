@@ -320,8 +320,8 @@ en:
         incidents: "Incidents"
         wrc_feedback_requested: "I would like feedback from the WRC on some of the incidents above."
         wrc_incidents: "Incidents Needing WRC Feedback"
-        wdc_feedback_requested: "I would like feedback from the WDC on some of the incidents above."
-        wdc_incidents: "Incidents Needing WDC Feedback"
+        wdc_feedback_requested: "I would like feedback from the WIC on some of the incidents above."
+        wdc_incidents: "Incidents Needing WIC Feedback"
         remarks: "Remarks"
       #context: a person
       person:
