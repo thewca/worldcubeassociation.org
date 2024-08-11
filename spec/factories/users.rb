@@ -136,12 +136,6 @@ FactoryBot.define do
       end
     end
 
-    trait :wec_member do
-      after(:create) do |user|
-        FactoryBot.create(:wec_member_role, user_id: user.id)
-      end
-    end
-
     trait :weat_member do
       after(:create) do |user|
         FactoryBot.create(:weat_member_role, user_id: user.id)

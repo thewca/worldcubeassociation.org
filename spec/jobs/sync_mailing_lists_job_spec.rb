@@ -61,7 +61,6 @@ RSpec.describe SyncMailingListsJob, type: :job do
     wcat_member = FactoryBot.create :user, :wcat_member
     wic_leader = FactoryBot.create :user, :wic_leader, receive_delegate_reports: true
     wic_member = FactoryBot.create :user, :wic_member, receive_delegate_reports: true
-    wec_member = FactoryBot.create :user, :wec_member, receive_delegate_reports: true
     weat_member = FactoryBot.create :user, :weat_member
     wfc_member = FactoryBot.create :user, :wfc_member
     wfc_leader = FactoryBot.create :user, :wfc_leader
@@ -111,7 +110,7 @@ RSpec.describe SyncMailingListsJob, type: :job do
                                       europe_delegate_3.user.email, europe_delegate_4.user.email,
                                       oceania_delegate_3.user.email, oceania_delegate_4.user.email,
                                       americas_delegate_3.user.email, americas_delegate_4.user.email,
-                                      wic_leader.email, wic_member.email, wec_member.email),
+                                      wic_leader.email, wic_member.email),
     )
 
     # communication@ mailing list
@@ -130,12 +129,6 @@ RSpec.describe SyncMailingListsJob, type: :job do
     expect(GsuiteMailingLists).to receive(:sync_group).with(
       "integrity@worldcubeassociation.org",
       a_collection_containing_exactly(wic_leader.email, wic_member.email),
-    )
-
-    # ethics@ mailing list
-    expect(GsuiteMailingLists).to receive(:sync_group).with(
-      "ethics@worldcubeassociation.org",
-      a_collection_containing_exactly(wec_member.email),
     )
 
     # assistants@ mailing list

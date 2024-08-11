@@ -185,13 +185,6 @@ after :groups_metadata_board, :groups_metadata_councils, :groups_metadata_teams_
     metadata: GroupsMetadataTeamsCommittees.find_by!(friendly_id: 'wic'),
   )
   UserGroup.create!(
-    name: 'WCA Ethics Committee',
-    group_type: :teams_committees,
-    is_active: true,
-    is_hidden: false,
-    metadata: GroupsMetadataTeamsCommittees.find_by!(friendly_id: 'wec'),
-  )
-  UserGroup.create!(
     name: 'WCA Marketing Team',
     group_type: :teams_committees,
     is_active: true,

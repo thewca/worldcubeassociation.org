@@ -480,10 +480,6 @@ class User < ApplicationRecord
     group_member?(UserGroup.teams_committees_group_wic)
   end
 
-  def ethics_committee?
-    group_member?(UserGroup.teams_committees_group_wec)
-  end
-
   def weat_team?
     group_member?(UserGroup.teams_committees_group_weat)
   end
@@ -598,7 +594,7 @@ class User < ApplicationRecord
   end
 
   private def can_view_past_banned_competitors?
-    wic_team? || ethics_committee? || board_member? || weat_team? || results_team? || admin?
+    wic_team? || board_member? || weat_team? || results_team? || admin?
   end
 
   private def groups_with_read_access_for_current
@@ -758,12 +754,6 @@ class User < ApplicationRecord
         name: 'WIC panel',
         pages: [
           panel_pages[:bannedCompetitors],
-        ],
-      },
-      wec: {
-        name: 'WEC panel',
-        pages: [
-          panel_pages[:bannedCompetitors],
           panel_pages[:downloadVoters],
         ],
       },
@@ -855,7 +845,7 @@ class User < ApplicationRecord
   end
 
   def can_edit_banned_competitors?
-    can_edit_any_groups? || group_leader?(UserGroup.teams_committees_group_wic) || group_leader?(UserGroup.teams_committees_group_wec)
+    can_edit_any_groups? || group_leader?(UserGroup.teams_committees_group_wic)
   end
 
   def can_manage_regional_organizations?
@@ -890,7 +880,7 @@ class User < ApplicationRecord
       competition.organizers.include?(self) ||
       competition.delegates.include?(self) ||
       competition.delegates.flat_map(&:senior_delegates).compact.include?(self) ||
-      ethics_committee?
+      wic_team?
     )
   end
 
@@ -963,7 +953,7 @@ class User < ApplicationRecord
   end
 
   def can_view_delegate_matters?
-    any_kind_of_delegate? || can_admin_results? || wrc_team? || wic_team? || quality_assurance_committee? || competition_announcement_team? || weat_team? || communication_team? || ethics_committee? || financial_committee?
+    any_kind_of_delegate? || can_admin_results? || wrc_team? || wic_team? || quality_assurance_committee? || competition_announcement_team? || weat_team? || communication_team? || financial_committee?
   end
 
   def can_manage_incidents?
@@ -982,7 +972,7 @@ class User < ApplicationRecord
     if delegate_report.posted?
       can_view_delegate_matters?
     else
-      can_edit_delegate_report?(delegate_report) || ethics_committee?
+      can_edit_delegate_report?(delegate_report) || wic_team?
     end
   end
 
@@ -1013,7 +1003,7 @@ class User < ApplicationRecord
   end
 
   def can_see_eligible_voters?
-    can_admin_results? || ethics_committee?
+    can_admin_results? || wic_team?
   end
 
   def get_cannot_delete_competition_reason(competition)
@@ -1483,8 +1473,6 @@ class User < ApplicationRecord
       senior_delegate?
     when :wic
       wic_team?
-    when :wec
-      ethics_committee?
     when :weat
       weat_team?
     else

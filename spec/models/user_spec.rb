@@ -619,7 +619,7 @@ RSpec.describe User, type: :model do
   end
 
   describe "receive_delegate_reports field" do
-    let!(:staff_member1) { FactoryBot.create :user, :wec_member, receive_delegate_reports: true }
+    let!(:staff_member1) { FactoryBot.create :user, :wic_member, receive_delegate_reports: true }
     let!(:staff_member2) { FactoryBot.create :user, :wrt_member, receive_delegate_reports: false }
 
     it "gets cleared if user is not eligible anymore" do

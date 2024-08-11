@@ -117,10 +117,6 @@ class UserGroup < ApplicationRecord
     GroupsMetadataTeamsCommittees.wdpc.user_group
   end
 
-  def self.teams_committees_group_wec
-    GroupsMetadataTeamsCommittees.wec.user_group
-  end
-
   def self.teams_committees_group_weat
     GroupsMetadataTeamsCommittees.weat.user_group
   end

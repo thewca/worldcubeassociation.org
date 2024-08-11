@@ -154,11 +154,6 @@ FactoryBot.define do
       metadata { FactoryBot.create(:wic_leader_metadata) }
     end
 
-    trait :wec_member do
-      group { UserGroup.teams_committees_group_wec }
-      metadata { FactoryBot.create(:wec_member_metadata) }
-    end
-
     trait :wfc_member do
       group { UserGroup.teams_committees_group_wfc }
       metadata { FactoryBot.create(:wfc_member_metadata) }
@@ -231,7 +226,6 @@ FactoryBot.define do
     factory :wcat_member_role, traits: [:wcat_member, :active]
     factory :wic_member_role, traits: [:wic_member, :active]
     factory :wic_leader_role, traits: [:wic_leader, :active]
-    factory :wec_member_role, traits: [:wec_member, :active]
     factory :wfc_member_role, traits: [:wfc_member, :active]
     factory :wfc_leader_role, traits: [:wfc_leader, :active]
     factory :wmt_member_role, traits: [:wmt_member, :active]
