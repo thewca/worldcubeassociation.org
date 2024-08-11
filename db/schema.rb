@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_07_17_142240) do
+ActiveRecord::Schema[7.1].define(version: 2024_08_11_100821) do
   create_table "Competitions", id: { type: :string, limit: 32, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", limit: 50, default: "", null: false
     t.string "cityName", limit: 50, default: "", null: false
@@ -700,8 +700,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_17_142240) do
     t.datetime "nag_sent_at", precision: nil
     t.boolean "wrc_feedback_requested", default: false, null: false
     t.string "wrc_incidents"
-    t.boolean "wdc_feedback_requested", default: false, null: false
-    t.string "wdc_incidents"
+    t.boolean "wic_feedback_requested", default: false, null: false
+    t.string "wic_incidents"
     t.integer "wrc_primary_user_id"
     t.integer "wrc_secondary_user_id"
     t.datetime "reminder_sent_at", precision: nil
