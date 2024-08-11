@@ -5,7 +5,7 @@ class August24MotionChangesWapc < ActiveRecord::Migration[7.1]
     wapc_metadata = GroupsMetadataTeamsCommittees.create(
       email: 'appeals@worldcubeassociation.org',
       friendly_id: 'wapc',
-      preferred_contact_mode: 'email'
+      preferred_contact_mode: 'email',
     )
 
     UserGroup.create!(

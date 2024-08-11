@@ -200,7 +200,7 @@ RSpec.describe SyncMailingListsJob, type: :job do
     expect(GsuiteMailingLists).to receive(:sync_group).with(
       "appeals@worldcubeassociation.org",
       a_collection_containing_exactly(wapc_member.email),
-      )
+    )
 
     # treasurer@ mailing list
     expect(GsuiteMailingLists).to receive(:sync_group).with(
