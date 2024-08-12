@@ -41,6 +41,7 @@ Rails.application.configure do
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
   config.asset_host = EnvConfig.ASSET_HOST
+  config.assets.prefix = "/assets/#{EnvConfig.BUILD_TAG}"
 
   # Asset digests allow you to set far-future HTTP expiration dates on all assets,
   # yet still be able to expire them through the digest params.

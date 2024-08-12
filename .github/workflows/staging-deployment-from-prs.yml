@@ -48,10 +48,9 @@ jobs:
         run: |
           ./bin/bundle install
           ./bin/yarn install --immutable
-          WCA_LIVE_SITE=false ASSETS_COMPILATION=true SECRET_KEY_BASE=1 ./bin/bundle exec i18n export
-          WCA_LIVE_SITE=false ASSETS_COMPILATION=true SECRET_KEY_BASE=1 ./bin/rake assets:precompile
-          aws s3 rm s3://assets-staging.worldcubeassociation.org/public/ --recursive
-          aws s3 sync ./public s3://assets-staging.worldcubeassociation.org/public/
+          RAILS_ENV=production WCA_LIVE_SITE=false ASSETS_COMPILATION=true SECRET_KEY_BASE=1 ./bin/bundle exec i18n export
+          RAILS_ENV=production WCA_LIVE_SITE=false ASSETS_COMPILATION=true SECRET_KEY_BASE=1 ./bin/rake assets:precompile
+          aws s3 sync ./public "s3://assets-staging.worldcubeassociation.org/assets/${{ env.SHORT_SHA }}"
       - name: Build Sidekiq if triggered
         if: steps.trigger-deployment.outputs.triggered == 'true'
         uses: docker/build-push-action@v6
