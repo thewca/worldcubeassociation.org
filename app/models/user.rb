@@ -355,13 +355,6 @@ class User < ApplicationRecord
     avatar.url
   end
 
-  validate :avatar_requires_wca_id
-  def avatar_requires_wca_id
-    if (!avatar.blank? || !pending_avatar.blank?) && wca_id.blank?
-      errors.add(:avatar, I18n.t('users.errors.avatar_requires_wca_id'))
-    end
-  end
-
   # This method was copied and overridden from https://github.com/plataformatec/devise/blob/master/lib/devise/models/confirmable.rb#L182
   # to enable separate emails for sign-up and email reconfirmation
   def send_on_create_confirmation_instructions
