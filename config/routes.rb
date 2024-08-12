@@ -224,8 +224,6 @@ Rails.application.routes.draw do
   get 'speedcubing-history' => 'static_pages#speedcubing_history'
   get 'teams-committees-councils' => 'static_pages#teams_committees_councils'
   get 'tutorial' => redirect('/education', status: 302)
-  get 'wca-workbook-assistant' => 'static_pages#wca_workbook_assistant'
-  get 'wca-workbook-assistant-versions' => 'static_pages#wca_workbook_assistant_versions'
   get 'translators' => 'static_pages#translators'
   get 'officers-and-board' => 'static_pages#officers_and_board'
 
