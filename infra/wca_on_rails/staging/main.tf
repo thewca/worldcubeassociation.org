@@ -25,6 +25,10 @@ locals {
       value = "https://assets-staging.worldcubeassociation.org"
     },
     {
+      name  = "SHAKAPACKER_ASSET_HOST"
+      value = "https://assets-staging.worldcubeassociation.org"
+    },
+    {
       name = "READ_REPLICA_HOST"
       value = "readonly-staging-worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com"
     },
