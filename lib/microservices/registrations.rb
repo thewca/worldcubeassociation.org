@@ -44,16 +44,8 @@ module Microservices
       Faraday.new(
         url: base_url,
         headers: { Microservices::Auth::MICROSERVICE_AUTH_HEADER => Microservices::Auth.get_wca_token },
-      ) do |builder|
-        # Sets headers and parses jsons automatically
-        builder.request :json
-        builder.response :json
-        # Raises an error on 4xx and 5xx responses.
-        builder.response :raise_error
-        # Logs requests and responses.
-        # By default, it only logs the request method and URL, and the request/response headers.
-        builder.response :logger
-      end
+        &FaradayConfig
+      )
     end
 
     def self.registrations_by_user(user_id, cache: true)

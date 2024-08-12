@@ -27,6 +27,7 @@ Rails.application.routes.draw do
   #  https://github.com/plataformatec/devise/wiki/How-To:-Disable-user-from-destroying-their-account
   devise_for :users, skip: :registrations, controllers: { sessions: "sessions" }
   devise_scope :user do
+    get 'staging_login', to: 'sessions#staging_oauth_login' unless EnvConfig.WCA_LIVE_SITE?
     resource :registration,
              only: [:new, :create],
              path: 'users',
@@ -39,6 +40,7 @@ Rails.application.routes.draw do
     post 'users/authenticate-sensitive' => 'users#authenticate_user_for_sensitive_edit'
     delete 'users/sign-out-other' => 'sessions#destroy_other', as: :destroy_other_user_sessions
   end
+
   # TODO: This can be removed after deployment, this is so we don't have any users error out if they click on pay
   # while the deployment happens
   get 'registration/:id/payment-completion' => 'registrations#payment_completion_legacy', as: :registration_payment_completion_legacy
@@ -238,6 +240,7 @@ Rails.application.routes.draw do
 
   get '/regulations' => 'regulations#show', id: 'index'
   get '/regulations/wca-regulations-and-guidelines', to: redirect('https://regulations.worldcubeassociation.org/wca-regulations-and-guidelines.pdf', status: 302)
+  get '/regulations/full/wca-regulations-and-guidelines.merged', to: redirect('https://regulations.worldcubeassociation.org/wca-regulations-and-guidelines.merged.pdf', status: 302)
   get '/regulations/about' => 'regulations#about'
   get '/regulations/countries' => 'regulations#countries'
   get '/regulations/scrambles' => 'regulations#scrambles'
@@ -354,10 +357,14 @@ Rails.application.routes.draw do
       get '/persons/:wca_id' => "persons#show", as: :person
       get '/persons/:wca_id/results' => "persons#results", as: :person_results
       get '/persons/:wca_id/competitions' => "persons#competitions", as: :person_competitions
+      get '/persons/:wca_id/personal_records' => "persons#personal_records", as: :personal_records
       get '/geocoding/search' => 'geocoding#get_location_from_query', as: :geocoding_search
       get '/countries' => 'api#countries'
+      get '/records' => "api#records"
+      get '/results/:user_id/qualification_data' => 'api#user_qualification_data', as: :user_qualification_data
       get '/competition_series/:id' => 'api#competition_series'
       get '/competition_index' => 'competitions#competition_index', as: :competition_index
+
       resources :competitions, only: [:index, :show] do
         get '/wcif' => 'competitions#show_wcif'
         get '/wcif/public' => 'competitions#show_wcif_public'
@@ -372,7 +379,7 @@ Rails.application.routes.draw do
         get '/psych-sheet/:event_id' => 'competitions#event_psych_sheet', as: :event_psych_sheet
         patch '/wcif' => 'competitions#update_wcif', as: :update_wcif
       end
-      get '/records' => "api#records"
+
       post '/registration-data' => 'competitions#registration_data', as: :registration_data
 
       scope 'user_roles' do

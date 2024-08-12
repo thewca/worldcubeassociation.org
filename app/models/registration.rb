@@ -144,11 +144,11 @@ class Registration < ApplicationRecord
   end
 
   def show_payment_form?
-    competition.registration_opened? && to_be_paid_through_wca?
+    competition.registration_currently_open? && to_be_paid_through_wca?
   end
 
   def show_details?(user)
-    (competition.registration_opened? || !(new_or_deleted?)) || (competition.user_can_pre_register?(user))
+    (competition.registration_currently_open? || !(new_or_deleted?)) || (competition.user_can_pre_register?(user))
   end
 
   def record_payment(

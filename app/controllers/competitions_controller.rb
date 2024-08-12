@@ -591,7 +591,7 @@ class CompetitionsController < ApplicationController
   # Enables the New Registration Service for a Competition
   def enable_v2
     @competition = competition_from_params
-    if EnvConfig.WCA_LIVE_SITE? || @competition.registration_opened?
+    if EnvConfig.WCA_LIVE_SITE? || @competition.registration_currently_open?
       flash.now[:danger] = t('competitions.messages.cannot_activate_v2')
       return redirect_to competition_path(@competition)
     end

@@ -1580,6 +1580,9 @@ pt:
           edit_profile_reason:
             #original_hash: fdfcccf
             label: Razão da mudança
+          edit_profile_proof_attach:
+            #original_hash: a9645b1
+            label: Anexar comprovativo
         wst:
           message:
             #original_hash: 68f4145
@@ -2621,6 +2624,10 @@ pt:
       results_not_posted: >-
         Os resultados desta competição são visíveis, mas ainda não foram
         publicados.
+      #original_hash: 5c24cd8
+      results_still_processing: >-
+        Estamos a trabalhar no processamento dos resultados desta competição -
+        deverão estar disponíveis em breve.
       #original_hash: e205d73
       results_already_posted: Os resultados já foram publicados.
       #original_hash: 376f461
@@ -3678,6 +3685,8 @@ pt:
         until: 'Pode atualizar o seu registo até %{date}'
         #original_hash: fc8bc84
         passed: Já não pode atualizar o seu registo
+        #original_hash: 8cc047a
+        approval: Aprovação
         #original_hash: 05b9f17
         view_registration: Ver Registo
         #original_hash: 3c8d8b7

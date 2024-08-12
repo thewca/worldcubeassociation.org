@@ -2,6 +2,10 @@
   font-family: monospace;
 }
 
+.watermark {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='100px' width='100px'><text transform='translate(20, 100) rotate(-45)' fill='rgb(0,0,0)' opacity='0.15' font-size='12'>WCA Testing Site</text></svg>");
+}
+
 table.table {
   // From http://stackoverflow.com/a/10688485
   &.table-nonfluid {
