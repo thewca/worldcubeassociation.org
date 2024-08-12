@@ -1,2 +1,2 @@
 <% provide(:title, t('page.contacts.title')) %>
-<%= react_component("ContactsPage") %>
+<%= react_component("ContactsPage", { recaptchaPublicKey: AppSecrets.RECAPTCHA_PUBLIC_KEY }) %>

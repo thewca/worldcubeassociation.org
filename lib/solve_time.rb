@@ -277,9 +277,6 @@ class SolveTime
   end
 
   DNF_VALUE = -1
-  DNF = SolveTime.new('333', nil, DNF_VALUE)
   DNS_VALUE = -2
-  DNS = SolveTime.new('333', nil, DNS_VALUE)
   SKIPPED_VALUE = 0
-  SKIPPED = SolveTime.new('333', nil, SKIPPED_VALUE)
 end

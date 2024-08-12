@@ -29,6 +29,11 @@ class PaymentIntent < ApplicationRecord
     canceled: 'canceled', # Completion state - the user has indicated that they will no longer attempt to complete payment
   }
 
+  # Normally this would be a case for `enum :payment_record_type`, but Rails does not support enums on polymorphic types :/
+  # See https://github.com/rails/rails/issues/17844 for reference.
+  scope :paypal, -> { where(payment_record_type: 'PaypalRecord') }
+  scope :stripe, -> { where(payment_record_type: 'StripeRecord') }
+
   def update_status_and_charges(api_intent, action_source, source_datetime = DateTime.current, &block)
     if payment_record_type == 'StripeRecord'
       update_stripe_status_and_charges(api_intent, action_source, source_datetime, &block)
@@ -105,6 +110,9 @@ class PaymentIntent < ApplicationRecord
       if payment_record_type == 'StripeRecord'
         errors.add(:wca_status, "#{wca_status} is not compatible with StripeRecord status: #{payment_record.stripe_status}") unless
           StripeRecord::WCA_TO_STRIPE_STATUS_MAP[wca_status.to_sym].include?(payment_record.stripe_status)
+      elsif payment_record_type == 'PaypalRecord'
+        errors.add(:wca_status, "#{wca_status} is not compatible with PaypalRecord status: #{payment_record.paypal_status}") unless
+          PaypalRecord::WCA_TO_PAYPAL_STATUS_MAP[wca_status.to_sym].include?(payment_record.paypal_status)
       else
         raise "No status combination validation defined for: #{payment_record_type}"
       end

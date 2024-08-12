@@ -14,6 +14,7 @@ export default function AutonumericField({
   onChange,
   currency,
   label,
+  max,
 }) {
   const [autoNumeric, setAutoNumeric] = useState(null);
 
@@ -27,12 +28,19 @@ export default function AutonumericField({
     [value, currencyInfo],
   );
 
-  const autoNumericCurrency = useMemo(() => ({
-    currencySymbol: currencyInfo.symbol,
-    currencySymbolPlacement: currencyInfo.symbolFirst ? 'p' : 's',
-    decimalPlaces: (currencyInfo.subunitToUnit === 1) ? 0 : 2,
-    modifyValueOnWheel: false,
-  }), [currencyInfo]);
+  const autoNumericOptions = useMemo(() => {
+    const options = {
+      currencySymbol: currencyInfo.symbol,
+      currencySymbolPlacement: currencyInfo.symbolFirst ? 'p' : 's',
+      decimalPlaces: (currencyInfo.subunitToUnit === 1) ? 0 : 2,
+      modifyValueOnWheel: false,
+      minimumValue: 0,
+    };
+    if (max) {
+      options.maximumValue = max / currencyInfo.subunitToUnit;
+    }
+    return options;
+  }, [currencyInfo, max]);
 
   const autoNumericRef = useCallback((node) => {
     if (!node?.inputRef) return;
@@ -43,11 +51,11 @@ export default function AutonumericField({
     const newAutoNumeric = new AutoNumeric(
       node.inputRef.current,
       autoNumericValue,
-      autoNumericCurrency,
+      autoNumericOptions,
     );
 
     setAutoNumeric(newAutoNumeric);
-  }, [autoNumeric, autoNumericValue, autoNumericCurrency]);
+  }, [autoNumeric, autoNumericValue, autoNumericOptions]);
 
   const getCurrentUiValue = useCallback(() => {
     if (!autoNumeric) return null;
@@ -71,8 +79,8 @@ export default function AutonumericField({
   useEffect(() => {
     if (!autoNumeric) return;
 
-    autoNumeric.update(autoNumericCurrency);
-  }, [autoNumeric, autoNumericCurrency]);
+    autoNumeric.update(autoNumericOptions);
+  }, [autoNumeric, autoNumericOptions]);
 
   const onChangeAutonumeric = (event) => {
     onChange(event, { value: getCurrentUiValue() });

@@ -145,6 +145,8 @@ en:
   round:
     #context: e.g. event_name can be "3x3x3 Cube", and round_name can be "Cutoff First round"
     name: "%{event_name} %{round_name}"
+    #context: round_number will be a numeral like 1,2,3 and NOT a written word like "First", "Second" or "Third".
+    round_number: "Round %{round_number}"
   #context: Words used to describe the requirement to advance to the next round
   advancement_condition:
     short:
@@ -410,6 +412,9 @@ en:
           secretary: "WCA Secretary"
           vice_chair: "WCA Vice-Chair"
           treasurer: "WCA Treasurer"
+      ban_scope:
+        competing_only: "Competing Only"
+        competing_and_attending: "Competing & Attending"
     competition_medium:
       status:
         accepted: "Accepted"
@@ -713,6 +718,7 @@ en:
       db_results_export: "Results Export"
       db_dev_export: "Developer Export"
       regulations: "Regulations"
+      regulations_full: "Regulations & Guidelines"
       about_regulations: "About the Regulations"
       guidelines: "Guidelines"
       scrambles: "Scrambles"
@@ -797,7 +803,7 @@ en:
           email:
             label: "Email"
         contact_recipient:
-          label: "Which of the following best describes your inquiry?"
+          label: "Who do you want to contact?"
           competition:
             label: "Contact organizers/delegates of a competition (to ask query regarding that particular competition)"
           wct:
@@ -815,8 +821,35 @@ en:
           message:
             label: "Message"
         wrt:
+          query_type:
+            label: "Which of the following best describes your inquiry?"
+            edit_profile:
+              label: "Edit my profile data (name, country, gender or DOB)"
+            report_result_issue:
+              label: "Report an issue in a result"
+            other_query:
+              label: "Other query"
           message:
             label: "Message"
+          profile_data_to_change:
+            label: "Profile data to change"
+            options:
+              name: "Name"
+              country: "Country"
+              gender: "Gender"
+              dob: "DOB"
+          new_profile_data_name:
+            label: "New Name"
+          new_profile_data_country:
+            label: "New Country"
+          new_profile_data_gender:
+            label: "New Gender"
+          new_profile_data_dob:
+            label: "New DOB"
+          edit_profile_reason:
+            label: "Reason for the change"
+          edit_profile_proof_attach:
+            label: "Attach proof"
         wst:
           message:
             label: "Message"
@@ -1058,15 +1091,15 @@ en:
       need_dob: "Need a birthdate"
       need_country: "Need a region"
       cannot_be_deleted_and_accepted: "A registration cannot be deleted and accepted at the same time."
-      must_register: "must register for at least one event"
+      must_register: "You must register for at least one event."
       exceeds_event_limit:
-        one: "you must register in exactly 1 event"
-        other: "you must register in less than or equal to %{count} events"
+        one: "You must register in exactly 1 event."
+        other: "You must register for between 1 and %{count} events."
       banned_html: "You are banned. If you believe this is an error, please contact the <a href='mailto:disciplinary@worldcubeassociation.org' target='_blank'>WDC</a>."
       undelete_banned: "is a banned competitor and cannot be undeleted"
       series_more_than_one_accepted: "You can only be accepted for one Series competition at a time."
       can_only_register_for_qualified_events: "You cannot register for events you are not qualified for."
-      cannot_register_without_comment: "You must make a comment. Make sure to read the registration requirements what has to be included (e.g. in a FM simultaneous competition, which location you will compete at)."
+      cannot_register_without_comment: "You must make a comment. Please read the Registration Requirements above to see what must be included (e.g. in an FMC simultaneous competition, which location you will compete at)."
     registration_info_people:
       #context: pluralization of "x first-timer(s)"
       newcomer:
@@ -1255,6 +1288,7 @@ en:
         stripe_not_an_intent: "Stripe reported back a transaction ID that is not actually a payment intent."
         payment_reset: "The payment was rejected by Stripe."
         payment_pending: "The payment has not been completed yet."
+        registration_unreachable: "There was a problem reaching the registration service, please contact the Software Team."
     preferred_events_prompt_html: "To speed up registration in the future, you can set your preferred events %{link}."
     preferred_events_populated_html: "We autopopulated this with your preferred events, which you can edit %{link}."
     registration_requirements: "Registration requirements for the competition:"
@@ -1274,6 +1308,7 @@ en:
         email_user_with_different_unconfirmed_wca_id: "There is already a user with email %{email}, but it has unconfirmed WCA ID of %{unconfirmed_wca_id} instead of %{registration_wca_id}."
         email_duplicates: "Email must be unique, found the following duplicates: %{emails}."
         wca_id_duplicates: "WCA ID must be unique, found the following duplicates: %{wca_ids}."
+        wrong_dob_format: "Birthdate must follow the YYYY-mm-dd format (year-month-day, for example 1944-07-13), found the following dates which cannot be parsed: %{raw_dobs}."
     add:
       title: "Add registration for %{comp}"
       info: "This will create an approved registration. Use this form to add walk-ins during the competition."
@@ -1305,6 +1340,7 @@ en:
       uncancel_success: "Successfully uncancelled competition!"
       uncancel_failure: "Cannot uncancel the competition."
       results_not_posted: "This competition's results are visible but haven't been posted yet."
+      results_still_processing: "We are busy processing this competition's results - they should be available shortly."
       results_already_posted: "The results have already been posted."
       results_posted: "Successfully posted results!"
       results_preview_alert: "You are viewing results that have not been posted yet."
@@ -1356,6 +1392,16 @@ en:
       address: "Address"
       details: "Details"
       website: "Website"
+      name_and_location: "Name and location"
+      delegates: "Delegate(s)"
+      announced: "Announced"
+      report_posted: "Report posted"
+      results_submitted: "Results submitted"
+      relative_days:
+        before: "%{amount_of_days} before"
+        after: "%{amount_of_days} after"
+      pending: "Pending"
+      submitted_by_other: "Submitted by other"
       #context: Used to display an explicit tag when the competition is cancelled
       display_name: "[Cancelled] %{name}"
       #context: Pluralization of the "Organizer" label for a competition form
@@ -1423,6 +1469,7 @@ en:
       average: "an average"
       mean: "a mean"
       result_sentence: "with %{a_win_by_word} of %{result}"
+      no_winner: The main event was %{event_name}. No winner was declared, as no competitors achieved successful results in the event.
       winner: "%{winner} won %{result_sentence} in the %{event_name} event."
       first_runner_up: "%{first_runner_up} finished second (%{first_runner_up_result})"
       and: "and"
@@ -1458,6 +1505,11 @@ en:
       custom: "Custom"
       by_announcement: "By announcement"
       sort_by_announcement: "Sort by announcement"
+      admin_status: "Admin status"
+      status_flags:
+        all: "All"
+        warning: "Warning"
+        danger: "Danger"
       from_date: "From"
       to_date: "To"
       reset_filters: "Reset Filters"
@@ -1469,6 +1521,7 @@ en:
       no_delegates_found: "No Delegates found."
       show_cancelled: "Show cancelled competitions"
       show_registration_status: "Show registration status icon"
+      use_admin_view: "Use admin view"
       #context: titles for the competitions list
       titles:
         in_progress: "Competitions in progress"
@@ -1477,6 +1530,7 @@ en:
         past_all: "Past competitions from all years"
         recent: "Recent competitions (last %{count} days)"
         upcoming: "Upcoming competitions"
+        ongoing_and_upcoming: "Ongoing and upcoming competitions"
         custom: "Competitions in the selected period of time"
         by_announcement: "Competitions sorted by announcement date, newest on top"
       no_access: "You don't have access to this page!"
@@ -1742,8 +1796,11 @@ en:
       info:
         download: "Download all of the competitions details."
       list:
-        empty: "No matching Records found"
-        spots_remaining: "%{spots} spot(s) remaining"
+        empty: "None"
+        spots_remaining_plural:
+          zero: "no spots remaining"
+          one: "%{count} spot remaining"
+          other: "%{count} spots remaining"
       bookmark:
         unbookmark: "You have removed your bookmark"
       requirements:
@@ -1751,31 +1808,33 @@ en:
         acknowledgement: "I have read and acknowledged all information under the 'Register' tab, including entry fees, refund policies and any extra requirements listed above."
         next_step: "Continue to next Step"
       update:
-        being_updated: "Registration is being updated"
-        being_deleted: "Registration is being deleted"
+        being_updated: "Registration is being updated..."
+        being_deleted: "Registration is being deleted..."
+        update_confirm: "Are you sure you want to update your registration?"
         no_changes: "There are no changes"
         email_send: "Send Email"
-        email_copy: "Copy Email"
+        email_copy: "Copy Emails"
+        email_message: "Copied to clipboard. Remember to use bcc!"
         move_pending: "Move to Pending"
         move_waiting: "Move to Waiting List"
         cancel: "Cancel Registration"
         too_many: "Accepting all these registrations would go over the competitor limit by %{count}"
         no_self_update: "Contact the Organization Team to update your registration."
       register:
-        re-register: "Re-Register"
         success: "You are registered for %{comp_name}"
         error: "Registration failed with error %{error}"
-        early_registration: "Registration is not open yet, but you can still register as a competition organizer or Delegate."
+        early_registration: "Registration is not open yet - you are pre-registering as an organizer/delegate"
         comment: "Additional comments to the organizers"
         until: "You can update your registration until %{date}"
         passed: "You can no longer update your registration"
-        already_paid: "You have already paid for %{comp_name}"
+        approval: "Approval"
+        view_registration: "View Registration"
         editing_disabled: "Registration editing is disabled for this competition"
         registration_status:
           accepted: "Your registration has been accepted."
           pending: "Your registration is pending approval by the organizers."
           cancelled: "Your registration has been deleted."
-          waiting_list: "You are on the Waiting List."
+          waiting_list: "You are on the Waiting List at position %{waiting_list_position}."
         disclaimer: "Submission of Registration does not mean approval to compete"
         processing: "Your registration is processing..."
         processing_longer: "Processing is taking longer than usual, don't go away!"
@@ -1804,6 +1863,9 @@ en:
         -4006: "Competitor limit has been reached"
         -4007: "Invalid registration status provided"
         -4008: "Registration has closed"
+        -4009: "Only Organizers can cancel Registrations for this competition"
+        -4010: "The Waiting List Position is not Valid"
+        -4011: "You can only accept the first person on the waiting list"
     #context: and when an error occured
     errors:
       invalid_name_message: "must end with a year and must contain only alphanumeric characters, dashes(-), ampersands(&), periods(.), colons(:), apostrophes('), and spaces( )"
@@ -2110,6 +2172,15 @@ en:
       currently_connected_info: "This competition is set up to accept payments through %{provider}. The Delegate(s) of the competition should contact WCAT to make any changes to connected accounts."
       before_disconnect_warning: "Disconnecting on this page will make our website forget the connection to your %{provider} account. But your %{provider} dashboard (see link below) may still list the WCA website based on the authorization that you previously granted. Note that revoking authorization in the %{provider} dashboard will also affect any other competition linked to accept payments through this account!"
       before_disconnect_info: "Keep in mind that disconnecting an account should only be done in exceptional situations, such as the current account being unable to receive payments."
+      account_details:
+        stripe:
+          email: "Email"
+          country: "Country"
+          business_name: "Business name"
+        paypal:
+          display_name: "Name"
+          primary_email: "Email"
+        fallback_not_applicable: "N/A"
   persons:
     #context: Person search page
     index:
@@ -2283,66 +2354,11 @@ en:
     structure:
       title: "Structure"
       board:
-        name: "WCA Board of Directors"
         description: "The WCA Board is responsible for leading the organization as a whole, and fulfilling any duties not fulfilled by other Teams,  Committees, and Councils"
       users:
         profile: "%{user_name}'s profile"
-      #context: WDC
-      wdc:
-        name: "WCA Disciplinary Committee"
-      #context: WDPC
-      wdpc:
-        name: "WCA Data Protection Committee"
-      #context: WRC
-      wrc:
-        name: "WCA Regulations Committee"
-      #context: WRT
-      wrt:
-        name: "WCA Results Team"
-      #context: WST
-      wst:
-        name: "WCA Software Team"
-      #context: WCT
-      wct:
-        name: "WCA Communication Team"
-      #context: WFC
-      wfc:
-        name: "WCA Financial Committee"
-      #context: WEC
-      wec:
-        name: "WCA Ethics Committee"
-      #context: WEAT
-      weat:
-        name: "WCA Executive Assistants Team"
-      #context: WQAC
-      wqac:
-        name: "WCA Quality Assurance Committee"
-      #context: WCAT
-      wcat:
-        name: "WCA Competition Announcement Team"
-      #context: WMT
-      wmt:
-        name: "WCA Marketing Team"
-      #context: WAC
-      wac:
-        name: "WCA Advisory Council"
-      #context: WSOT
-      wsot:
-        name: "WCA Sports Organization Team"
-      #context: WAT
-      wat:
-        name: "WCA Archive Team"
-      #context: Hidden team for list of banned competitors
-      banned:
-        name: "Banned Competitors"
-      #context: Hidden team for WCT China members
-      wct_china:
-        name: "WCT China"
       operations_html: "The day to day operations are run by the WCA's %{committees_and_teams}."
       teams_committees: "Teams and Committees"
-      #context: Hidden team for Software administrators
-      wst_admin:
-        name: "Software admins"
       delegates_html: "<p><strong>WCA Delegate</strong> is a role defined in the WCA Motions and depicted in the WCA Regulations. The primary duty of a Delegate is to oversee competitions on behalf of the WCA. A WCA Delegate is responsible for making sure that all WCA Competitions are run according to the Mission, Spirit, and Regulations of the WCA. The WCA distinguishes between <strong>Senior Delegates</strong>, <strong>Regional Delegates</strong>, <strong>Full Delegates</strong>, <strong>Junior Delegates</strong>, and <strong>Trainee Delegates</strong>%{see_link}.</p>
 <p>In addition to the duties of a WCA Delegate, a Senior Delegate or Regional Delegate is responsible for managing the WCA Delegates in their area and can also be contacted by the community for regional matters.</p>
 <p>New Delegates are listed as Junior Delegates at first; afterwards they are requested to show proficiency managing WCA Competitions before being promoted to WCA Delegates.</p>
@@ -2465,49 +2481,31 @@ en:
         title: "Competition groups"
         description: "View competition groups of any ongoing competition"
   logo:
-    title: 'WCA Logo'
-    paragraphs:
-      '1': 'The WCA logo was designed by Justin Eastman, in a design contest in January 2005.'
-      '2': 'We liked the logo because of its design, the colours, and the fact that it does not specifically show a 3x3x3 cube.'
-      '3': 'We have three different versions of the logo: a <a href="/files/WCAlogo.svg">full-color version</a>, an <a href="/files/WCAlogo_monochrome.svg">all-black version</a>, and an <a href="/files/WCAlogo_monochrome_white.svg">all-white version</a>.'
-      '4': 'Acceptable usage of the WCA logo is outlined by the <a href="https://documents.worldcubeassociation.org/documents/policies/external/Logo%20Usage.pdf">WCA Logo Usage Policy</a>.'
-  workbook_assistant:
-    title: "WCA Workbook Assistant"
-    download: "Download WCA Workbook Assistant"
-    last_update: "Last update"
-    version_history: "version history"
-    header: "How to process results and scrambles before submitting them to the WCA"
-    step1:
-      title: "Step 1: Open the workbook with the results"
-      content_html: "Open the workbook using the <em>Open...</em> button or by dragging the workbook file and dropping it on the application window."
-    step2:
-      title: "Step 2: Add the TNoodle scrambles"
-      content_html: "Add the TNoodle scrambles using the <em>Add...</em> button or by dragging the TNoodle file and dropping it on the application window. Make sure you use either the .zip file  or the .json file generated by TNoodle."
-      content2_html: "You can add multiple scramble files in case the scrambles where generated in parts or extra scrambles had to be generated during the competition."
-    step3:
-      title: "Step 3: Match the scrambles with the results"
-      content_html: "The WCA Workbook Assistant automatically links the scrambles with the rounds that were held. In some cases, like when multiple scramble files were generated, the selection needs to be done manually because there are several possible options."
-      content2_html: "Manually selecting scrambles can be done by double clicking the <em>Scrambles</em> cell in the sheet overview panel."
-      content3_html: "It is only possible to select one round from the scramble files for each round for which there are results. If a situation arises where scrambles for a single round were generated as separate rounds in TNoodle, you can use the <em>Edit groups...</em> button to edit the groups in the scramble files and move them from one round to another or delete them."
-      content4_html: "In this example, an extra set scrambles was generated to have two groups for the first round of skewb instead of one group."
-      content5_html: "The scrambles for the additional group can be dragged and dropped on the round that was generated originally. This moves the two groups together in one round."
-    step4:
-      title: "Step 4: Fix any errors reported by the application"
-      content_html: "The results are checked for data entry mistakes. Rounds that have errors will be marked with a red icon in the sheet overview panel."
-      content2_html: "When selecting a sheet with errors in the sheet overview panel, the application will list the details in the validation errors panel on the bottom left."
-      content3_html: "Mistakes can be fixed by opening the workbook in a spreadsheet application and editing and saving it from there. The updated workbook can then be loaded again in the WCA Workbook Assistant by pressing the <em>Refresh</em> button. This will only reload the results but will leave all the other changes you made intact, like the scrambles that were added."
-    step5:
-      title: "Step 5: Select the competition ID"
-      content_html: "Select the correct competition ID by clicking the <em>Select...</em> button next to the <em>Competition ID</em> field."
-      content2_html: "A dialog will show up with a list of competitions to choose from."
-      content3_html: "You can filter the list by typing a part of the name of the competition or the WCA Delegate."
-      content4_html: "To start off with, only competitions that took place less than one week ago or that will take place less than one week in the future will be shown. If you need to select a competition outside of this time window, deselect <em>Only show current competitions</em>."
-    step6:
-      title: "Step 6: Export the results data to JSON"
-      content_html: "Save the results data to a JSON file using the <em>Export results JSON...</em> button on the bottom right."
-    step7:
-      title: "Step 7: Send the results JSON to the WCA"
-      content_html: 'E-mail the JSON file exported by the WCA Workbook Assistant to <a href="mailto:results@worldcubeassociation.org">results@worldcubeassociation.org</a>'
+    title: "WCA Logo"
+    intro: "The WCA logo was designed by Justin Eastman, in a design contest in January 2005. We liked the logo because of its design, the colours, and the fact that it does not specifically show a 3x3x3 cube."
+    headings:
+      usage_guidelines:
+        title: "Usage Guidelines"
+        paragraph:
+          acceptable_usage: 'Acceptable usage of the WCA logo is outlined in the <a href="https://documents.worldcubeassociation.org/documents/policies/external/Logo%20Usage.pdf">WCA Logo Usage Policy</a>. Please read this document before using the WCA logo in your own projects. Send any additional questions regarding WCA logo usage to the <a href="mailto:marketing@worldcubeassociation.org">WCA Marketing Team</a>.'
+          see_below: "Below are additional style guidelines for correct usage of the WCA logo."
+        color:
+          title: "Color"
+          paragraph: "The WCA logo exists in four color variations. The correct color variant should be used depending on the background color of the medium where the logo is placed."
+          primary:
+            title: "Primary"
+            paragraph: "Use the primary variant whenever possible."
+          mono:
+            title: "Mono"
+            paragraph: "Only use the mono variant when the primary variant is not suitable."
+        logo_only:
+          title: "Logo Only"
+          paragraph: The WCA logo may be used without the logotype, following the same color guidelines above.
+      download_logo_assets:
+        title: "Download Logo Assets"
+        paragraph: "High resolution PNGs and vector versions of the WCA logo are available for download."
+        accept_terms_and_conditions: 'I have read and accept the <a href="https://documents.worldcubeassociation.org/documents/policies/external/Logo%20Usage.pdf">WCA Logo Usage Policy</a>.'
+        download_button_text: "Download Logo Assets"
   search_results:
     index:
       competitions: "Competitions"

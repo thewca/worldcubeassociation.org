@@ -103,6 +103,34 @@ export const localizeActivityCode = (activityCode, wcifRound, wcifEvent) => {
   return roundName;
 };
 
+export const humanizeActivityCode = (activityCode) => {
+  const { eventId, roundNumber, attempt } = parseActivityCode(activityCode);
+
+  const eventName = I18n.t(`events.${eventId}`);
+  const roundName = I18n.t('round.round_number', { round_number: roundNumber });
+
+  const tooltipText = `${eventName}, ${roundName}`;
+
+  if (attempt) {
+    const attemptName = I18n.t('attempts.attempt_name', { number: attempt });
+    return `${tooltipText}, ${attemptName}`;
+  }
+
+  return tooltipText;
+};
+
+export const shortLabelForActivityCode = (activityCode) => {
+  const { roundNumber, attempt } = parseActivityCode(activityCode);
+
+  const labelText = `R${roundNumber}`;
+
+  if (attempt) {
+    return `${labelText}A${attempt}`;
+  }
+
+  return labelText;
+};
+
 export function timeLimitToString(wcifRound, wcifEvents) {
   const wcifTimeLimit = wcifRound.timeLimit;
   const { eventId } = parseActivityCode(wcifRound.id);

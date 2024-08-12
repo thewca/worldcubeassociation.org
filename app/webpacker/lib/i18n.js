@@ -5,7 +5,7 @@ import { registerLocale, setDefaultLocale } from 'react-datepicker';
 
 const i18nFileContext = require.context('rails_translations');
 
-const DEFAULT_LOCALE = 'en';
+export const DEFAULT_LOCALE = 'en';
 
 /**
  * Use when I18n.t should return an array.
@@ -65,6 +65,17 @@ window.I18n.tArray = tArray;
  * }}
  */
 export default window.I18n;
+
+export function withLocale(overrideLocale, fn) {
+  const actualLocale = window.I18n.locale;
+
+  try {
+    window.I18n.locale = overrideLocale;
+    return fn();
+  } finally {
+    window.I18n.locale = actualLocale;
+  }
+}
 
 function loadTranslations(i18n, locale) {
   const translations = i18nFileContext(`./${locale}.json`);

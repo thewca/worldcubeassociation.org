@@ -7,6 +7,7 @@ import RegistrationMessage, { setMessage } from './RegistrationMessage';
 import StoreProvider, { useDispatch } from '../../../lib/providers/StoreProvider';
 import messageReducer from '../reducers/messageReducer';
 import WCAQueryClientProvider from '../../../lib/providers/WCAQueryClientProvider';
+import ConfirmProvider from '../../../lib/providers/ConfirmProvider';
 
 export default function Index({
   competitionInfo, userInfo, preferredEvents,
@@ -16,13 +17,15 @@ export default function Index({
   return (
     <WCAQueryClientProvider>
       <StoreProvider reducer={messageReducer} initialState={{ message: null }}>
-        <Register
-          competitionInfo={competitionInfo}
-          userInfo={userInfo}
-          preferredEvents={preferredEvents}
-          stripePublishableKey={stripePublishableKey}
-          connectedAccountId={connectedAccountId}
-        />
+        <ConfirmProvider>
+          <Register
+            competitionInfo={competitionInfo}
+            userInfo={userInfo}
+            preferredEvents={preferredEvents}
+            stripePublishableKey={stripePublishableKey}
+            connectedAccountId={connectedAccountId}
+          />
+        </ConfirmProvider>
       </StoreProvider>
     </WCAQueryClientProvider>
   );

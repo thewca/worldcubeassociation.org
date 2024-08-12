@@ -473,9 +473,11 @@ RSpec.describe Competition do
     it "warns if competition has results and haven't been posted" do
       competition = FactoryBot.create :competition, :confirmed, :announced, :visible, :past, results_posted_at: nil, results_posted_by: nil
       FactoryBot.create(:result, person: FactoryBot.create(:person), competitionId: competition.id)
+      wrt_member = FactoryBot.create :user, :wrt_member
 
       expect(competition).to be_valid
-      expect(competition.warnings_for(nil)[:results]).to eq "This competition's results are visible but haven't been posted yet."
+      expect(competition.warnings_for(wrt_member)[:results]).to eq "This competition's results are visible but haven't been posted yet."
+      expect(competition.warnings_for(nil)[:results]).to eq "We are busy processing this competition's results - they should be available shortly."
     end
 
     it "does not warn about other different championships" do
@@ -624,7 +626,7 @@ RSpec.describe Competition do
     expect(competition.longitude).to eq 4.6*1e6
   end
 
-  it "ensures all attributes are defined as either cloneable or uncloneable", :focus do
+  it "ensures all attributes are defined as either cloneable or uncloneable" do
     expect(Competition.column_names).to match_array(Competition::CLONEABLE_ATTRIBUTES + Competition::UNCLONEABLE_ATTRIBUTES)
   end
 
@@ -1554,6 +1556,30 @@ RSpec.describe Competition do
 
         expect { competition.disconnect_all_payment_integrations }.not_to raise_error
       end
+    end
+  end
+
+  context "new competition is invalid when" do
+    let!(:new_competition) { FactoryBot.build(:competition, :with_delegate, :future, :visible, :with_valid_schedule) }
+
+    it "nameReason is too long" do
+      new_competition.name_reason = "Veeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeery long name reason"
+      expect(new_competition).not_to be_valid
+    end
+
+    it "venue details is too long" do
+      new_competition.venueAddress = "192 character venue details reeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+      expect(new_competition).not_to be_valid
+    end
+
+    it "venue address is too long" do
+      new_competition.venueDetails = "192 character venue address reeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+      expect(new_competition).not_to be_valid
+    end
+
+    it "external website is too long" do
+      new_competition.external_website = "201 character external website reeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+      expect(new_competition).not_to be_valid
     end
   end
 end

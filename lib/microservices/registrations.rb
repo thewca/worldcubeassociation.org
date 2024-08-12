@@ -27,6 +27,14 @@ module Microservices
       "/api/internal/v1/#{competition_id}/registrations"
     end
 
+    def self.get_registration_path(attendee_id)
+      "/api/internal/v1/#{attendee_id}"
+    end
+
+    def self.get_competitor_count_path(competition_id)
+      "/api/v1/#{competition_id}/count"
+    end
+
     def self.registration_connection
       base_url = if Rails.env.development?
                    EnvConfig.WCA_REGISTRATIONS_BACKEND_URL
@@ -36,16 +44,8 @@ module Microservices
       Faraday.new(
         url: base_url,
         headers: { Microservices::Auth::MICROSERVICE_AUTH_HEADER => Microservices::Auth.get_wca_token },
-      ) do |builder|
-        # Sets headers and parses jsons automatically
-        builder.request :json
-        builder.response :json
-        # Raises an error on 4xx and 5xx responses.
-        builder.response :raise_error
-        # Logs requests and responses.
-        # By default, it only logs the request method and URL, and the request/response headers.
-        builder.response :logger
-      end
+        &FaradayConfig
+      )
     end
 
     def self.registrations_by_user(user_id, cache: true)
@@ -54,13 +54,21 @@ module Microservices
       cache ? self.cache_and_return(response.body) : response.body
     end
 
-    def self.update_registration_payment(attendee_id, payment_id, iso_amount, currency_iso, status)
+    # rubocop:disable Metrics/ParameterLists
+    def self.update_registration_payment(attendee_id, payment_id, iso_amount, currency_iso, status, actor)
       response = self.registration_connection.post(self.update_payment_status_path) do |req|
-        req.body = { attendee_id: attendee_id, payment_id: payment_id, iso_amount: iso_amount, currency_iso: currency_iso, payment_status: status }.to_json
+        req.body = { attendee_id: attendee_id, payment_id: payment_id, iso_amount: iso_amount, currency_iso: currency_iso, payment_status: status, acting_type: actor[:type], acting_id: actor[:id] }.to_json
       end
 
       # If we ever need the response body
       response.body
+    end
+    # rubocop:enable Metrics/ParameterLists
+
+    def self.competitor_count_by_competition(competition_id)
+      response = self.registration_connection.get(self.get_competitor_count_path(competition_id))
+
+      response.body["count"]
     end
 
     def self.registrations_by_competition(competition_id, status = nil, event_id = nil, cache: true)
@@ -82,6 +90,11 @@ module Microservices
         db_registrations = registrations.map { |reg| reg.slice('competition_id', 'user_id') }
         MicroserviceRegistration.upsert_all(db_registrations)
       end
+    end
+
+    def self.registration_by_id(attendee_id)
+      response = self.registration_connection.get(self.get_registration_path(attendee_id))
+      response.body
     end
   end
 end

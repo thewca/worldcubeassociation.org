@@ -47,6 +47,19 @@ module PaypalInterface
     end
   end
 
+  def self.account_details(merchant_id)
+    # FIXME: This API is officially deprecated but ironically there is no replacement in the newer V2.
+    #   Shout if you find an endpoint that is better suited!
+    url = "/v1/customer/partners/#{merchant_id}"
+
+    response = paypal_connection.get(url) do |req|
+      req.headers['PayPal-Partner-Attribution-Id'] = AppSecrets.PAYPAL_ATTRIBUTION_CODE
+      req.headers['PayPal-Auth-Assertion'] = paypal_auth_assertion(merchant_id)
+    end
+
+    response.body
+  end
+
   def self.create_order(merchant_id, amount_iso, currency_code)
     url = "/v2/checkout/orders"
 
@@ -71,16 +84,7 @@ module PaypalInterface
       req.body = payload
     end
 
-    body = response.body
-
-    PaypalRecord.create_from_api(
-      body,
-      :paypal_order,
-      payload,
-      merchant_id,
-    )
-
-    body
+    [payload, response.body]
   end
 
   # TODO: Update the status of the PaypalRecord object?
@@ -114,22 +118,7 @@ module PaypalInterface
       req.body = payload
     end
 
-    body = response.body
-
-    refunded_capture = PaypalRecord.find_by(paypal_id: capture_id)
-
-    if body["status"] == "COMPLETED"
-      refund = PaypalRecord.create_from_api(
-        body,
-        :refund,
-        payload,
-        merchant_id,
-        refunded_capture,
-      )
-    end
-
-    # TODO: Add error handling for if we don't get a COMPLETED status, because then this will be undefined
-    refund
+    [payload, response.body]
   end
 
   private_class_method def self.paypal_connection
@@ -140,18 +129,8 @@ module PaypalInterface
         'Content-Type' => 'application/json',
         'Prefer' => 'return=representation', # forces PayPal to return everything they known on every request
       },
-    ) do |builder|
-      # Sets headers and parses jsons automatically
-      builder.request :json
-      builder.response :json
-
-      # Raises an error on 4xx and 5xx responses.
-      builder.response :raise_error
-
-      # Logs requests and responses.
-      # By default, it only logs the request method and URL, and the request/response headers.
-      builder.response :logger, ::Logger.new($stdout), bodies: true if Rails.env.development?
-    end
+      &FaradayConfig
+    )
   end
 
   private_class_method def self.generate_access_token

@@ -47,6 +47,14 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
   end
 
   describe 'GET #users_search' do
+    before :each do
+      # We cache search results, which is a very good thing in production because we have an Omnisearch bar.
+      # But in these tests, we sometimes modify properties of an existing user (make Jeremy a Delegate, turn his account
+      # into a hidden account, etc.) and these spontaneous updates don't reflect in the cache.
+      # So just clear it for these tests.
+      Rails.cache.delete_matched 'search/User*'
+    end
+
     let(:person) { FactoryBot.create(:person, name: "Jeremy", wca_id: "2005FLEI01") }
     let!(:user) { FactoryBot.create(:user, person: person, email: "example@email.com") }
 
@@ -470,6 +478,149 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
       expect(response.status).to eq 404
       json = JSON.parse(response.body)
       expect(json['error']).to eq 'Competition series with ID UnknownSeries1989 not found'
+    end
+  end
+
+  describe 'GET #user_qualification_data', :focus do
+    it 'returns empty JSON if user has never competed' do
+      user = FactoryBot.create(:user)
+      get :user_qualification_data, params: { user_id: user.id }
+      expect(JSON.parse(response.body)).to eq([])
+    end
+
+    it 'returns error if date is not iso8601 formatted' do
+      user = FactoryBot.create(:user)
+      get :user_qualification_data, params: { user_id: user.id, date: 'bad data' }
+
+      expect(response).to have_http_status(:bad_request)
+      expect(response.body).to include('Invalid date format. Please provide an iso8601 date string.')
+    end
+
+    it 'fails if date is in the future' do
+      user = FactoryBot.create(:user)
+      get :user_qualification_data, params: { user_id: user.id, date: 1.day.from_now }
+
+      expect(response).to have_http_status(:bad_request)
+      expect(response.body).to include('You cannot request qualification data for a future date.')
+    end
+
+    it 'returns only single if the user has no average' do
+      expected_response = [
+        { "best"=>400, "eventId"=>"333oh", "type"=>"single", "on_or_before"=>Date.current.iso8601 },
+      ]
+
+      @competition = FactoryBot.create(:competition) # Results will be achieved 1.year.ago - see factory definition
+      @result = FactoryBot.create(:result, competition: @competition, best: 400, average: -1)
+      @user = FactoryBot.create(:user_with_wca_id, person: @result.person)
+
+      get :user_qualification_data, params: { user_id: @user.id }
+      expect(JSON.parse(response.body)).to eq(expected_response)
+    end
+
+    it 'returns empty array if the user only has a DNF' do
+      @competition = FactoryBot.create(:competition)
+      @result = FactoryBot.create(:result, competition: @competition, best: -1, average: -1)
+      @user = FactoryBot.create(:user_with_wca_id, person: @result.person)
+
+      get :user_qualification_data, params: { user_id: @user.id }
+      expect(JSON.parse(response.body)).to eq([])
+    end
+
+    context 'user has competed' do
+      before do
+        @competition = FactoryBot.create(:competition) # Results will be achieved 1.year.ago - see factory definition
+        @result = FactoryBot.create(:result, competition: @competition, best: 400, average: 500)
+        @user = FactoryBot.create(:user_with_wca_id, person: @result.person)
+
+        @default_expected_response = [
+          { "best"=>400, "eventId"=>"333oh", "type"=>"single", "on_or_before"=>Date.current.iso8601 },
+          { "best"=>500, "eventId"=>"333oh", "type"=>"average", "on_or_before"=>Date.current.iso8601 },
+        ]
+      end
+
+      it 'if no date is specified, returns qualification up until the current date' do
+        expected_response = [
+          { "best"=>400, "eventId"=>"333oh", "type"=>"single", "on_or_before"=>Date.current.iso8601 },
+          { "best"=>500, "eventId"=>"333oh", "type"=>"average", "on_or_before"=>Date.current.iso8601 },
+        ]
+
+        get :user_qualification_data, params: { user_id: @user.id }
+        expect(JSON.parse(response.body)).to eq(expected_response)
+      end
+
+      it 'returns qualification up to and including the given date' do
+        expected_response = [
+          { "best"=>400, "eventId"=>"333oh", "type"=>"single", "on_or_before"=>100.days.ago.to_date.iso8601 },
+          { "best"=>500, "eventId"=>"333oh", "type"=>"average", "on_or_before"=>100.days.ago.to_date.iso8601 },
+        ]
+
+        get :user_qualification_data, params: { user_id: @user.id, date: 100.days.ago }
+        expect(JSON.parse(response.body)).to eq(expected_response)
+      end
+
+      it 'returns empty json if user had not competed by the given date' do
+        expected_response = []
+
+        get :user_qualification_data, params: { user_id: @user.id, date: 2.years.ago }
+        expect(JSON.parse(response.body)).to eq(expected_response)
+      end
+
+      it 'works as expected when the user has 2 identical PRs' do
+        expected_response = [
+          { "best"=>400, "eventId"=>"333oh", "type"=>"single", "on_or_before"=>Date.current.iso8601 },
+          { "best"=>500, "eventId"=>"333oh", "type"=>"average", "on_or_before"=>Date.current.iso8601 },
+        ]
+
+        competition = FactoryBot.create(:competition, starts: 200.days.ago)
+        FactoryBot.create(:result, competition: competition, best: 400, average: 500)
+
+        get :user_qualification_data, params: { user_id: @user.id }
+        expect(JSON.parse(response.body)).to eq(expected_response)
+      end
+
+      it 'includes result achieved before the qualification date' do
+        expected_response = [
+          { "best"=>400, "eventId"=>"333oh", "type"=>"single", "on_or_before"=> 2.days.ago.to_date.iso8601 },
+          { "best"=>500, "eventId"=>"333oh", "type"=>"average", "on_or_before"=> 2.days.ago.to_date.iso8601 },
+        ]
+
+        get :user_qualification_data, params: { user_id: @user.id, date: 2.days.ago }
+        expect(JSON.parse(response.body)).to eq(expected_response)
+      end
+
+      it 'includes result achieved on the qualification date' do
+        expected_response = [
+          { "best"=>399, "eventId"=>"333oh", "type"=>"single", "on_or_before"=> 1.days.ago.to_date.iso8601 },
+          { "best"=>499, "eventId"=>"333oh", "type"=>"average", "on_or_before"=> 1.days.ago.to_date.iso8601 },
+        ]
+
+        competition = FactoryBot.create(:competition, starts: 1.days.ago)
+        FactoryBot.create(:result, competition: competition, best: 399, average: 499, person: @result.person)
+
+        get :user_qualification_data, params: { user_id: @user.id, date: 1.days.ago }
+        expect(JSON.parse(response.body)).to eq(expected_response)
+      end
+
+      it 'does not include result achieved after the qualification date' do
+        expected_response = [
+          { "best"=>400, "eventId"=>"333oh", "type"=>"single", "on_or_before"=> 2.days.ago.to_date.iso8601 },
+          { "best"=>500, "eventId"=>"333oh", "type"=>"average", "on_or_before"=> 2.days.ago.to_date.iso8601 },
+        ]
+
+        competition = FactoryBot.create(:competition, starts: 1.days.ago)
+        FactoryBot.create(:result, competition: competition, best: 399, average: 499, person: @result.person)
+
+        get :user_qualification_data, params: { user_id: @user.id, date: 2.days.ago }
+        expect(JSON.parse(response.body)).to eq(expected_response)
+      end
+
+      it 'still returns PR when user has DNF result' do
+        competition = FactoryBot.create(:competition, starts: 1.days.ago)
+        FactoryBot.create(:result, competition: competition, best: -1, average: -1, person: @result.person)
+
+        get :user_qualification_data, params: { user_id: @user.id }
+        expect(JSON.parse(response.body)).to eq(@default_expected_response)
+      end
     end
   end
 end

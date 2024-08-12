@@ -49,8 +49,8 @@ class StripeRecord < ApplicationRecord
   serialize :parameters, coder: JSON
 
   def determine_wca_status
-    result = WCA_TO_STRIPE_STATUS_MAP.find { |key, values| values.include?(stripe_status) }
-    result&.first || raise("No associated wca_status for stripe_status: #{stripe_status} - our tests should prevent this from happening!")
+    result = WCA_TO_STRIPE_STATUS_MAP.find { |key, values| values.include?(self.stripe_status) }
+    result&.first || raise("No associated wca_status for stripe_status: #{self.stripe_status} - our tests should prevent this from happening!")
   end
 
   def account_id
@@ -123,6 +123,13 @@ class StripeRecord < ApplicationRecord
     )
 
     Money.new(ruby_amount, self.currency_code)
+  end
+
+  def ruby_amount_available_for_refund
+    paid_amount = amount_stripe_denomination
+    already_refunded = child_records.refund.sum(:amount_stripe_denomination)
+
+    StripeRecord.amount_to_ruby(paid_amount - already_refunded, self.currency_code)
   end
 
   # sub-hundred units special cases per https://stripe.com/docs/currencies#special-cases

@@ -157,7 +157,7 @@
           if (confirmedAmount) {
             // Fetches a payment intent and captures the client secret
             window.wca.cancelPendingAjaxAndAjax('load-payment-intent', {
-              url: '<%= registration_payment_intent_path(@registration) %>',
+              url: '<%= registration_payment_intent_path(@registration, :stripe) %>',
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               data: JSON.stringify({ amount: amount }),
@@ -178,7 +178,7 @@
         elements,
         clientSecret,
         confirmParams: {
-          return_url: '<%= registration_payment_completion_url(@registration, host: EnvConfig.ROOT_URL) %>',
+          return_url: '<%= registration_payment_completion_url(@competition, host: EnvConfig.ROOT_URL) %>',
         }
       });
 

@@ -6,23 +6,16 @@ import React, {
   useState,
 } from 'react';
 import {
-  Accordion,
   Button,
-  Checkbox,
+  Form,
   Header,
-  Input,
   Message,
-  Popup,
   Segment,
-  Table,
-  TextArea,
 } from 'semantic-ui-react';
 import { getSingleRegistration } from '../api/registration/get/get_registrations';
 import updateRegistration from '../api/registration/patch/update_registration';
 import getUsersInfo from '../api/user/post/getUserInfo';
 import {
-  getShortDateString,
-  getShortTimeString,
   hasPassed,
 } from '../../../lib/utils/dates';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
@@ -31,22 +24,23 @@ import Loading from '../../Requests/Loading';
 import { EventSelector } from '../../CompetitionsOverview/CompetitionsFilters';
 import Refunds from './Refunds';
 import { editPersonUrl } from '../../../lib/requests/routes.js.erb';
+import { useConfirm } from '../../../lib/providers/ConfirmProvider';
+import i18n from '../../../lib/i18n';
+import RegistrationHistory from './RegistrationHistory';
 
 export default function RegistrationEditor({ competitor, competitionInfo }) {
   const dispatch = useDispatch();
   const [comment, setComment] = useState('');
   const [adminComment, setAdminComment] = useState('');
   const [status, setStatus] = useState('');
-  const [waitingListPosition, setWaitingListPosition] = useState(0);
   const [guests, setGuests] = useState(0);
   const [selectedEvents, setSelectedEvents] = useState([]);
   const [registration, setRegistration] = useState({});
-  const [isCheckingRefunds, setIsCheckingRefunds] = useState(false);
-  const [isHistoryCollapsed, setIsHistoryCollapsed] = useState(true);
+  const confirm = useConfirm();
 
   const queryClient = useQueryClient();
 
-  const { data: serverRegistration } = useQuery({
+  const { isLoading: isRegistrationLoading, data: serverRegistration, refetch } = useQuery({
     queryKey: ['registration-admin', competitionInfo.id, competitor.id],
     queryFn: () => getSingleRegistration(competitor.id, competitionInfo.id),
     refetchOnWindowFocus: false,
@@ -56,16 +50,12 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
   });
 
   const { isLoading, data: competitorsInfo } = useQuery({
-    queryKey: ['history-user', serverRegistration.history],
-    queryFn: () => getUsersInfo([
-      ...new Set([
-        ...serverRegistration.history.map((e) => e.actor_user_id),
-      ]),
-    ]),
+    queryKey: ['history-user', serverRegistration?.history],
+    queryFn: () => getUsersInfo(_.uniq(serverRegistration.history.flatMap((e) => (e.actor_type === 'user' ? e.actor_id : [])))),
     enabled: Boolean(serverRegistration),
   });
 
-  const { mutate: updateRegistrationMutation, isLoading: isUpdating } = useMutation({
+  const { mutate: updateRegistrationMutation, isPending: isUpdating } = useMutation({
     mutationFn: updateRegistration,
     onError: (data) => {
       const { errorCode } = data;
@@ -77,11 +67,20 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
       ));
     },
     onSuccess: (data) => {
-      setMessage(setMessage('Registration update succeeded', 'positive'));
       queryClient.setQueryData(
-        ['registration', competitionInfo.id, competitor.id],
-        data,
+        ['registration-admin', competitionInfo.id, competitor.id],
+        {
+          ...data.registration,
+          payment: serverRegistration.payment,
+        },
       );
+      // Going from cancelled -> pending
+      if (registration.competing.registration_status === 'cancelled') {
+        dispatch(setMessage('registrations.flash.registered', 'positive'));
+        // Not changing status
+      } else {
+        dispatch(setMessage('registrations.flash.updated', 'positive'));
+      }
     },
   });
 
@@ -92,9 +91,6 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
       setStatus(serverRegistration.competing.registration_status);
       setSelectedEvents(serverRegistration.competing.event_ids);
       setAdminComment(serverRegistration.competing.admin_comment ?? '');
-      setWaitingListPosition(
-        serverRegistration.competing.waiting_list_position ?? 0,
-      );
       setGuests(serverRegistration.guests ?? 0);
     }
   }, [serverRegistration]);
@@ -107,7 +103,7 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
     && adminComment !== (serverRegistration.competing.admin_comment ?? '');
   const hasStatusChanged = serverRegistration
     && status !== serverRegistration.competing.registration_status;
-  const hasGuestsChanged = false;
+  const hasGuestsChanged = serverRegistration && guests !== serverRegistration.guests;
 
   const hasChanges = hasEventsChanged
     || hasCommentChanged
@@ -121,234 +117,209 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
 
   const handleRegisterClick = useCallback(() => {
     if (!hasChanges) {
-      dispatch(setMessage('There are no changes', 'basic'));
+      dispatch(setMessage('competitions.registration_v2.update.no_changes', 'basic'));
     } else if (!commentIsValid) {
-      dispatch(setMessage('You must include a comment', 'negative'));
+      dispatch(setMessage('registrations.errors.cannot_register_without_comment', 'negative'));
     } else if (!eventsAreValid) {
       dispatch(setMessage(
         maxEvents === Infinity
-          ? 'You must select at least 1 event'
-          : `You must select between 1 and ${maxEvents} events`,
+          ? 'registrations.errors.must_register'
+          : 'registrations.errors.exceeds_event_limit.other',
         'negative',
       ));
     } else {
-      dispatch(setMessage('Updating Registration', 'basic'));
-      updateRegistrationMutation({
+      dispatch(setMessage('competitions.registration_v2.update.being_updated', 'positive'));
+      // Only send changed values
+      const body = {
         user_id: competitor.id,
-        competing: {
-          status,
-          event_ids: selectedEvents,
-          comment,
-          admin_comment: adminComment,
-          waiting_list_position: waitingListPosition,
-        },
         competition_id: competitionInfo.id,
-      });
+        competing: {},
+      };
+      if (hasEventsChanged) {
+        body.competing.event_ids = selectedEvents;
+      }
+      if (hasCommentChanged) {
+        body.competing.comment = comment;
+      }
+      if (hasAdminCommentChanged) {
+        body.competing.admin_comment = adminComment;
+      }
+      if (hasStatusChanged) {
+        body.competing.status = status;
+      }
+      if (hasGuestsChanged) {
+        body.guests = guests;
+      }
+      confirm({
+        content: i18n.t('competitions.registration_v2.update.update_confirm'),
+      }).then(() => {
+        updateRegistrationMutation(body);
+      }).catch(() => {});
     }
   }, [hasChanges,
+    confirm,
     commentIsValid,
-    eventsAreValid, dispatch, maxEvents,
-    updateRegistrationMutation, competitor,
-    status, selectedEvents, comment,
-    adminComment, waitingListPosition, competitionInfo.id]);
+    eventsAreValid,
+    dispatch,
+    maxEvents,
+    competitor.id,
+    competitionInfo.id,
+    hasEventsChanged,
+    hasCommentChanged,
+    hasAdminCommentChanged,
+    hasStatusChanged,
+    hasGuestsChanged,
+    updateRegistrationMutation,
+    selectedEvents,
+    comment,
+    adminComment,
+    status,
+    guests]);
 
   const registrationEditDeadlinePassed = Boolean(competitionInfo.event_change_deadline_date)
     && hasPassed(competitionInfo.event_change_deadline_date);
 
+  const handleEventSelection = ({ type, eventId }) => {
+    if (type === 'select_all_events') {
+      setSelectedEvents(competitionInfo.event_ids);
+    } else if (type === 'clear_events') {
+      setSelectedEvents([]);
+    } else if (type === 'toggle_event') {
+      const index = selectedEvents.indexOf(eventId);
+      if (index === -1) {
+        setSelectedEvents([...selectedEvents, eventId]);
+      } else {
+        setSelectedEvents(selectedEvents.toSpliced(index, 1));
+      }
+    }
+  };
+
+  if (isLoading || isRegistrationLoading) {
+    return <Loading />;
+  }
+
   return (
-    <Segment padded attached>
-      {!registration?.competing?.registration_status || isLoading ? (
-        <Loading />
-      ) : (
-        <div>
-          {competitor.wca_id && (
-            <Message>
-              This person registered with an account. You can edit their
-              personal information
-              {' '}
-              <a href={editPersonUrl(competitor.id)}>here.</a>
-            </Message>
-          )}
-          <Header>{competitor.name}</Header>
+    <Segment padded attached loading={isUpdating}>
+      <Form onSubmit={handleRegisterClick}>
+        {!competitor.wca_id && (
+        <Message>
+          This person registered with an account. You can edit their
+          personal information
+          {' '}
+          <a href={editPersonUrl(competitor.id)}>here</a>
+          .
+        </Message>
+        )}
+        <Header>{competitor.name}</Header>
+        <Form.Field required error={selectedEvents.length === 0}>
           <EventSelector
-            handleEventSelection={setSelectedEvents}
-            selected={selectedEvents}
-            disabled={registrationEditDeadlinePassed}
+            onEventSelection={handleEventSelection}
             eventList={competitionInfo.event_ids}
+            selectedEvents={selectedEvents}
+            id="event-selection"
+            maxEvents={maxEvents}
+            shouldErrorOnEmpty
           />
+        </Form.Field>
 
-          <Header>Comment</Header>
-          <TextArea
-            id="competitor-comment"
-            maxLength={240}
-            value={comment}
+        <label>Comment</label>
+        <Form.TextArea
+          id="competitor-comment"
+          maxLength={240}
+          value={comment}
+          disabled={registrationEditDeadlinePassed}
+          onChange={(event, data) => setComment(data.value)}
+        />
+
+        <label>Administrative Notes</label>
+        <Form.TextArea
+          id="admin-comment"
+          maxLength={240}
+          value={adminComment}
+          disabled={registrationEditDeadlinePassed}
+          onChange={(event, data) => setAdminComment(data.value)}
+        />
+
+        <Form.Group inline>
+          <label>Status</label>
+          <Form.Checkbox
+            radio
+            label="Pending"
+            name="checkboxRadioGroup"
+            value="pending"
+            checked={status === 'pending'}
             disabled={registrationEditDeadlinePassed}
-            onChange={(_, data) => {
-              setComment(data.value);
-            }}
+            onChange={(event, data) => setStatus(data.value)}
           />
-
-          <Header>Administrative Notes</Header>
-          <TextArea
-            id="admin-comment"
-            maxLength={240}
-            value={adminComment}
+          <Form.Checkbox
+            radio
+            label="Accepted"
+            name="checkboxRadioGroup"
+            value="accepted"
+            checked={status === 'accepted'}
             disabled={registrationEditDeadlinePassed}
-            onChange={(_, data) => {
-              setAdminComment(data.value);
-            }}
+            onChange={(event, data) => setStatus(data.value)}
           />
+          {/* <Form.Checkbox */}
+          {/*  radio */}
+          {/*  label="Waiting List" */}
+          {/*  name="checkboxRadioGroup" */}
+          {/*  value="waiting_list" */}
+          {/*  checked={status === 'waiting_list'} */}
+          {/*  disabled={registrationEditDeadlinePassed} */}
+          {/*  onChange={(event, data) => setStatus(data.value)} */}
+          {/* /> */}
+          <Form.Checkbox
+            radio
+            label="Cancelled"
+            name="checkboxRadioGroup"
+            value="cancelled"
+            disabled={registrationEditDeadlinePassed}
+            checked={status === 'cancelled'}
+            onChange={(event, data) => setStatus(data.value)}
+          />
+        </Form.Group>
+        <label>Guests</label>
+        <Form.Input
+          disabled={registrationEditDeadlinePassed}
+          type="number"
+          min={0}
+          max={99}
+          value={guests}
+          onChange={(event, data) => setGuests(data.value)}
+        />
 
-          <Header>Status</Header>
-          <div>
-            <Checkbox
-              radio
-              label="Pending"
-              name="checkboxRadioGroup"
-              value="pending"
-              checked={status === 'pending'}
-              disabled={registrationEditDeadlinePassed}
-              onChange={(_, data) => setStatus(data.value)}
+        {registrationEditDeadlinePassed ? (
+          <Message negative>Registration edit deadline has passed.</Message>
+        ) : (
+          <Button
+            color="blue"
+            disabled={isUpdating || !hasChanges}
+          >
+            Update Registration
+          </Button>
+        )}
+      </Form>
+      {competitionInfo['using_payment_integrations?'] && (
+        <>
+          <Header>
+            Payment status:
+            {' '}
+            {registration.payment.payment_status}
+          </Header>
+          {(registration.payment.payment_status === 'succeeded' || registration.payment.payment_status === 'refund') && (
+            <Refunds
+              competitionId={competitionInfo.id}
+              userId={competitor.id}
+              onSuccess={refetch}
             />
-            <br />
-            <Checkbox
-              radio
-              label="Accepted"
-              name="checkboxRadioGroup"
-              value="accepted"
-              checked={status === 'accepted'}
-              disabled={registrationEditDeadlinePassed}
-              onChange={(_, data) => setStatus(data.value)}
-            />
-            <br />
-            <Checkbox
-              radio
-              label="Waiting List"
-              name="checkboxRadioGroup"
-              value="waiting_list"
-              checked={status === 'waiting_list'}
-              disabled={registrationEditDeadlinePassed}
-              onChange={(_, data) => setStatus(data.value)}
-            />
-            <br />
-            <Checkbox
-              radio
-              label="Cancelled"
-              name="checkboxRadioGroup"
-              value="cancelled"
-              disabled={registrationEditDeadlinePassed}
-              checked={status === 'cancelled'}
-              onChange={(_, data) => setStatus(data.value)}
-            />
-            <br />
-            <Header>Guests</Header>
-            <Input
-              disabled={registrationEditDeadlinePassed}
-              type="number"
-              min={0}
-              max={99}
-              value={guests}
-              onChange={(_, data) => setGuests(data.value)}
-            />
-          </div>
-
-          {registrationEditDeadlinePassed ? (
-            <Message negative>Registration edit deadline has passed.</Message>
-          ) : (
-            <Button
-              color="blue"
-              onClick={handleRegisterClick}
-              disabled={isUpdating}
-            >
-              Update Registration
-            </Button>
           )}
-
-          {competitionInfo['using_payment_integrations?'] && (
-            <>
-              <Header>
-                Payment status:
-                {' '}
-                {registration.payment.payment_status}
-              </Header>
-              {registration.payment.payment_status === 'succeeded' && (
-                <Button onClick={() => setIsCheckingRefunds(true)}>
-                  Show Available Refunds
-                </Button>
-              )}
-              <Refunds
-                competitionId={competitionInfo.id}
-                userId={competitor}
-                open={isCheckingRefunds}
-                onExit={() => setIsCheckingRefunds(false)}
-              />
-            </>
-          )}
-          <Accordion>
-            <Accordion.Title
-              active={isHistoryCollapsed}
-              onClick={() => setIsHistoryCollapsed(!isHistoryCollapsed)}
-            >
-              Registration History
-            </Accordion.Title>
-            <Accordion.Content active={isHistoryCollapsed}>
-              <Table>
-                <Table.Header>
-                  <Table.Row>
-                    <Table.HeaderCell>Timestamp</Table.HeaderCell>
-                    <Table.HeaderCell>Changes</Table.HeaderCell>
-                    <Table.HeaderCell>Acting User</Table.HeaderCell>
-                    <Table.HeaderCell>Action</Table.HeaderCell>
-                  </Table.Row>
-                </Table.Header>
-                <Table.Body>
-                  {registration.history.map((entry) => (
-                    <Table.Row key={entry.timestamp}>
-                      <Table.Cell>
-                        <Popup
-                          content={getShortTimeString(entry.timestamp)}
-                          trigger={
-                            <span>{getShortDateString(entry.timestamp)}</span>
-                          }
-                        />
-                      </Table.Cell>
-                      <Table.Cell>
-                        {!_.isEmpty(entry.changed_attributes) ? (
-                          Object.entries(entry.changed_attributes).map(
-                            ([k, v]) => (
-                              <span key={k}>
-                                Changed
-                                {' '}
-                                {k}
-                                {' '}
-                                to
-                                {' '}
-                                {JSON.stringify(v)}
-                                {' '}
-                                <br />
-                              </span>
-                            ),
-                          )
-                        ) : (
-                          <span>Registration Created</span>
-                        )}
-                      </Table.Cell>
-                      <Table.Cell>
-                        {
-                          competitorsInfo.find(
-                            (c) => c.id === entry.actor_user_id,
-                          ).name
-                        }
-                      </Table.Cell>
-                      <Table.Cell>{entry.action}</Table.Cell>
-                    </Table.Row>
-                  ))}
-                </Table.Body>
-              </Table>
-            </Accordion.Content>
-          </Accordion>
-        </div>
+        </>
       )}
+      <RegistrationHistory
+        history={registration.history.toReversed()}
+        competitorsInfo={competitorsInfo}
+      />
     </Segment>
   );
 }

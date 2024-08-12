@@ -7,7 +7,6 @@ import _ from 'lodash';
 import { contactUrl } from '../../lib/requests/routes.js.erb';
 import useSaveAction from '../../lib/hooks/useSaveAction';
 import I18n from '../../lib/i18n';
-import { RECAPTCHA_PUBLIC_KEY } from '../../lib/wca-data.js.erb';
 import UserData from './UserData';
 import Loading from '../Requests/Loading';
 import { useDispatch, useStore } from '../../lib/providers/StoreProvider';
@@ -16,6 +15,7 @@ import Wct from './SubForms/Wct';
 import Wrt from './SubForms/Wrt';
 import Wst from './SubForms/Wst';
 import Competition from './SubForms/Competition';
+import Errored from '../Requests/Errored';
 
 const CONTACT_RECIPIENTS = [
   'competition',
@@ -26,10 +26,14 @@ const CONTACT_RECIPIENTS = [
 
 const CONTACT_RECIPIENTS_MAP = _.keyBy(CONTACT_RECIPIENTS, _.camelCase);
 
-export default function ContactForm({ loggedInUserData }) {
+export default function ContactForm({
+  loggedInUserData,
+  recaptchaPublicKey,
+}) {
   const { save, saving } = useSaveAction();
   const [captchaValue, setCaptchaValue] = useState();
   const [captchaError, setCaptchaError] = useState(false);
+  const [saveError, setSaveError] = useState();
   const [contactSuccess, setContactSuccess] = useState(false);
   const contactFormState = useStore();
   const dispatch = useDispatch();
@@ -40,7 +44,10 @@ export default function ContactForm({ loggedInUserData }) {
   );
 
   const contactSuccessHandler = () => {
-    dispatch(clearForm(loggedInUserData));
+    dispatch(clearForm({
+      userName: loggedInUserData?.user?.name,
+      userEmail: loggedInUserData?.user?.email,
+    }));
     setContactSuccess(true);
   };
 
@@ -66,6 +73,7 @@ export default function ContactForm({ loggedInUserData }) {
   }, [selectedContactRecipient]);
 
   if (saving) return <Loading />;
+  if (saveError) return <Errored error={saveError} />;
 
   return (
     <>
@@ -80,11 +88,13 @@ export default function ContactForm({ loggedInUserData }) {
           if (isFormValid) {
             const formData = new FormData();
             formData.append('formValues', JSON.stringify(contactFormState.formValues));
+            formData.append('attachment', contactFormState.attachments[0]);
             save(
               contactUrl,
               formData,
               contactSuccessHandler,
               { method: 'POST', headers: {}, body: formData },
+              setSaveError,
             );
           }
         }}
@@ -108,7 +118,7 @@ export default function ContactForm({ loggedInUserData }) {
         {SubForm && <SubForm />}
         <FormField>
           <ReCAPTCHA
-            sitekey={RECAPTCHA_PUBLIC_KEY}
+            sitekey={recaptchaPublicKey}
           // onChange is a mandatory parameter for ReCAPTCHA. According to the documentation, this
           // is called when user successfully completes the captcha, hence we are assuming that any
           // existing errors will be cleared when onChange is called.

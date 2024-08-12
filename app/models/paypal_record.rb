@@ -33,6 +33,26 @@ class PaypalRecord < ApplicationRecord
     ],
   }.freeze
 
+  # See https://developer.paypal.com/docs/api/orders/v2/#orders_get!c=200&path=status&t=response
+  enum paypal_status: {
+    created: "CREATED",
+    payer_action_required: "PAYER_ACTION_REQUIRED",
+    saved: "SAVED",
+    approved: "APPROVED",
+    completed: "COMPLETED",
+    voided: "VOIDED",
+  }
+
+  WCA_TO_PAYPAL_STATUS_MAP = {
+    created: %w[created],
+    pending: %w[payer_action_required],
+    processing: %w[saved],
+    partial: %w[],
+    failed: %w[],
+    succeeded: %w[approved completed], # TODO: In PayPal, WE are the ones who have to make the payment succeed, by "capturing" an already approved payment
+    canceled: %w[voided],
+  }.freeze
+
   enum paypal_record_type: {
     # We cannot call this "order" because that's a reserved keyword in SQL and Rails AR
     paypal_order: "paypal_order",
@@ -50,6 +70,15 @@ class PaypalRecord < ApplicationRecord
   belongs_to :parent_record, class_name: "PaypalRecord", inverse_of: :child_records, optional: true
   has_many :child_records, class_name: "PaypalRecord", inverse_of: :parent_record, foreign_key: :parent_record_id
 
+  def root_record
+    parent_record&.root_record || self
+  end
+
+  def determine_wca_status
+    result = WCA_TO_PAYPAL_STATUS_MAP.find { |key, values| values.include?(self.paypal_status) }
+    result&.first || raise("No associated wca_status for paypal_status: #{self.paypal_status} - our tests should prevent this from happening!")
+  end
+
   def money_amount
     ruby_amount = PaypalRecord.amount_to_ruby(
       self.amount_paypal_denomination,
@@ -57,6 +86,16 @@ class PaypalRecord < ApplicationRecord
     )
 
     Money.new(ruby_amount, self.currency_code)
+  end
+
+  def ruby_amount_available_for_refund
+    # PayPal communicates amounts as strings, so we need to first convert to Ruby amount
+    #   (which uses integers) and THEN add/subtract
+    paid_amount = self.money_amount
+    already_refunded = child_records.refund.map(&:money_amount).sum
+
+    # `cents` is the "lowest denomination" method in RubyMoney
+    (paid_amount - already_refunded).cents
   end
 
   # Paypal expects a decimal value in the format of a string, so we return a string from this function

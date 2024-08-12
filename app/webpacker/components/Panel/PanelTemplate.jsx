@@ -6,23 +6,31 @@ import {
 } from 'semantic-ui-react';
 import useHash from '../../lib/hooks/useHash';
 import ConfirmProvider from '../../lib/providers/ConfirmProvider';
+import PanelPages from './PanelPages';
 
-export default function PanelTemplate({ heading, sections, loggedInUserId }) {
+export default function PanelTemplate({ heading, pages, loggedInUserId }) {
   const [hash, setHash] = useHash();
 
   const SelectedComponent = React.useMemo(() => {
-    const selectedMenuIndex = sections.findIndex((section) => section.id === hash);
+    const selectedMenuIndex = pages.findIndex((page) => page === hash);
     if (selectedMenuIndex === -1) {
-      setHash(sections[0].id);
+      setHash(pages[0]);
       return () => null;
     }
-    const selectedSection = sections[selectedMenuIndex];
+    const selectedSection = PanelPages[hash];
     if (selectedSection.component) {
       return selectedSection.component;
     }
     window.open(selectedSection.link);
     return () => null;
-  }, [sections, hash, setHash]);
+  }, [pages, hash, setHash]);
+
+  const menuOptions = React.useMemo(() => (pages.map(
+    (page) => ({
+      id: page,
+      ...PanelPages[page],
+    }),
+  )), [pages]);
 
   return (
     <Container fluid>
@@ -30,15 +38,17 @@ export default function PanelTemplate({ heading, sections, loggedInUserId }) {
       <Grid>
         <Grid.Column only="computer" computer={4}>
           <Menu vertical fluid>
-            {sections.map((section) => (
+            {menuOptions.map((menuOption) => (
               <Menu.Item
-                key={section.id}
-                name={section.name}
-                active={section.id === hash}
-                onClick={() => setHash(section.id)}
+                key={menuOption.id}
+                name={menuOption.name}
+                active={menuOption.id === hash}
+                onClick={() => (
+                  menuOption.component ? setHash(menuOption.id) : window.open(menuOption.link)
+                )}
               >
-                {!section.component && <Icon name="external alternate" />}
-                {section.name}
+                {!menuOption.component && <Icon name="external alternate" />}
+                {menuOption.name}
               </Menu.Item>
             ))}
           </Menu>
@@ -50,11 +60,11 @@ export default function PanelTemplate({ heading, sections, loggedInUserId }) {
               <Grid.Row only="tablet mobile">
                 <Dropdown
                   inline
-                  options={sections.map((section) => ({
-                    key: section.id,
-                    text: section.name,
-                    value: section.id,
-                    icon: !section.component && 'external alternate',
+                  options={menuOptions.map((menuOption) => ({
+                    key: menuOption.id,
+                    text: menuOption.name,
+                    value: menuOption.id,
+                    icon: !menuOption.component && 'external alternate',
                   }))}
                   value={hash}
                   onChange={(_, { value }) => setHash(value)}

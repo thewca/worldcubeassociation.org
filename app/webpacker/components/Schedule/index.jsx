@@ -167,8 +167,9 @@ export default function Schedule({
           timeZone={activeTimeZone}
           activeVenues={activeVenues}
           activeRooms={activeRooms}
-          activeEvents={activeEvents}
+          activeEventIds={activeEventIds}
           calendarLocale={calendarLocale}
+          wcifEvents={wcifEvents}
         />
       ) : (
         <TableView

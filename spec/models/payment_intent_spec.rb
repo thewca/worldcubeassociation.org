@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe PaymentIntent do
   describe 'scopes' do
-    before(:all) do
+    before(:each) do
       FactoryBot.create_list(:payment_intent, 5)
       FactoryBot.create_list(:payment_intent, 2, :canceled)
       FactoryBot.create_list(:payment_intent, 3, :confirmed)

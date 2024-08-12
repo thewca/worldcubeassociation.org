@@ -84,7 +84,13 @@ FactoryBot.define do
 
     trait :banned do
       after(:create) do |user|
-        FactoryBot.create(:team_member, team_id: Team.banned.id, user_id: user.id)
+        FactoryBot.create(:banned_competitor_role, user_id: user.id)
+      end
+    end
+
+    trait :formerly_banned do
+      after(:create) do |user|
+        FactoryBot.create(:banned_competitor_role, :inactive, user_id: user.id)
       end
     end
 
@@ -216,6 +222,27 @@ FactoryBot.define do
     trait :with_pending_avatar do
       after(:create) do |user|
         FactoryBot.create(:user_avatar, :pending, user: user)
+      end
+    end
+
+    trait :with_past_competitions do
+      after(:create) do |user|
+        competition = FactoryBot.create(:competition, :past)
+        FactoryBot.create(:registration, :accepted, user: user, competition: competition, events: %w(333))
+      end
+    end
+
+    trait :with_future_competitions do
+      after(:create) do |user|
+        competition = FactoryBot.create(:competition, :future)
+        FactoryBot.create(:registration, :accepted, user: user, competition: competition, events: %w(333))
+      end
+    end
+
+    trait :with_deleted_registration_in_future_comps do
+      after(:create) do |user|
+        competition = FactoryBot.create(:competition, :future)
+        FactoryBot.create(:registration, :deleted, user: user, competition: competition, events: %w(333))
       end
     end
 

@@ -200,7 +200,6 @@ module DatabaseDumper
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
-          cellName
           format
           name
           rank
@@ -588,20 +587,7 @@ module DatabaseDumper
         },
       ),
     }.freeze,
-    "microservice_registrations" => {
-      where_clause: JOIN_WHERE_VISIBLE_COMP,
-      column_sanitizers: actions_to_column_sanitizers(
-        copy: %w(
-          id
-          competition_id
-          user_id
-          roles
-          is_competing
-          created_at
-          updated_at
-        ),
-      ),
-    }.freeze,
+    "microservice_registrations" => :skip_all_rows,
     "sanity_checks" => :skip_all_rows,
     "sanity_check_categories" => :skip_all_rows,
     "sanity_check_exclusions" => :skip_all_rows,
@@ -609,34 +595,6 @@ module DatabaseDumper
     "schema_migrations" => :skip_all_rows, # This is populated when loading our schema dump
     "starburst_announcement_views" => :skip_all_rows,
     "starburst_announcements" => :skip_all_rows,
-    "team_members" => {
-      where_clause: "JOIN teams ON teams.id=team_id WHERE NOT teams.hidden",
-      column_sanitizers: actions_to_column_sanitizers(
-        copy: %w(
-          id
-          created_at
-          end_date
-          start_date
-          team_id
-          team_leader
-          updated_at
-          user_id
-          team_senior_member
-        ),
-      ),
-    }.freeze,
-    "teams" => {
-      column_sanitizers: actions_to_column_sanitizers(
-        copy: %w(
-          id
-          created_at
-          friendly_id
-          email
-          hidden
-          updated_at
-        ),
-      ),
-    }.freeze,
     "user_preferred_events" => {
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
@@ -835,7 +793,6 @@ module DatabaseDumper
     "eligible_country_iso2s_for_championship" => {
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
-          id
           championship_type
           eligible_country_iso2
         ),
@@ -938,6 +895,7 @@ module DatabaseDumper
         ),
       ),
     }.freeze,
+    "roles_metadata_banned_competitors" => :skip_all_rows,
     "jwt_denylist" => :skip_all_rows,
     "wfc_xero_users" => :skip_all_rows,
     "wfc_dues_redirects" => :skip_all_rows,
@@ -1008,11 +966,14 @@ module DatabaseDumper
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
-          cellName
           format
           name
           rank
         ),
+        fake_values: {
+          # Copy over column to keep backwards compatibility
+          "cellName" => "name",
+        },
       ),
     }.freeze,
     "Formats" => {
@@ -1130,7 +1091,6 @@ module DatabaseDumper
     "eligible_country_iso2s_for_championship" => {
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
-          id
           championship_type
           eligible_country_iso2
         ),
@@ -1249,7 +1209,7 @@ module DatabaseDumper
 
   def self.mysqldump(db_name, dest_filename)
     system_pipefail!("mysqldump #{self.mysql_cli_creds} #{db_name} -r #{dest_filename} #{filter_out_mysql_warning}")
-    system_pipefail!("sed -i 's_^/\\*!50013 DEFINER.*__' #{dest_filename}")
+    system_pipefail!("ruby -i -pe '$_.gsub!(%r{^/\\*!50013 DEFINER.*\\n}, \"\")' #{dest_filename}")
   end
 
   def self.filter_out_mysql_warning(dest_filename = nil)

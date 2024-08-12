@@ -1,5 +1,11 @@
 import _ from 'lodash';
-import I18n from './i18n'
+import I18n from './i18n';
+
+const camelizeKeys = (obj) => _.mapKeys(obj, (v, k) => _.camelCase(k))
+
+const loadStaticData = (rawEntities) => {
+  return _.map(rawEntities, camelizeKeys);
+};
 
 /* We bundle all backend data constants in one big file, because the way we currently
  * export the Ruby values to JS is very inefficient (it basically spins up an entire server per file)
@@ -12,10 +18,14 @@ import I18n from './i18n'
  */
 
 // ----- COUNTRIES -----
+const fictionalCountryIds = <%= Country::FICTIVE_IDS.to_json.html_safe %>;
+
+const countryData = loadStaticData(<%= Country.all_raw.to_json.html_safe %>);
+const realCountryData = countryData.filter((c) => !fictionalCountryIds.includes(c.id));
 
 export const countries = {
-  byIso2: _.mapValues(<%= Country.all.index_by(&:iso2).to_json.html_safe %>, extendCountries),
-  real: _.map(<%= Country.real.to_json.html_safe %>, extendCountries),
+  byIso2: _.mapValues(_.keyBy(countryData, 'iso2'), extendCountries),
+  real: _.map(realCountryData, extendCountries),
 };
 
 function extendCountries(country) {
@@ -27,8 +37,13 @@ function extendCountries(country) {
 
 // ----- CONTINENTS -----
 
+const continentData = loadStaticData(<%= Continent.all_raw.to_json.html_safe %>);
+
+const fictionalContinentIds = <%= Continent::FICTIVE_IDS.to_json.html_safe %>;
+const realContinents = continentData.filter((c) => !fictionalContinentIds.includes(c.id));
+
 export const continents = {
-  real: _.map(<%= Continent.real.to_json.html_safe %>, extendContinents),
+  real: _.map(realContinents, extendContinents),
 };
 
 function extendContinents(continent){
@@ -63,12 +78,13 @@ function extendCurrenciesData(rawFormat) {
 
 // ----- FORMATS -----
 
+const formatsData = loadStaticData(<%= Format.all_raw.to_json.html_safe %>);
+
 export const formats = {
-  byId: _.mapValues(<%= Format.all.index_by(&:id).to_json.html_safe %>, extendFormats),
+  byId: _.mapValues(_.keyBy(formatsData, 'id'), extendFormats),
 };
 
 function extendFormats(rawFormat) {
-  rawFormat = _.mapKeys(rawFormat, (v, k) => _.camelCase(k));
   return {
     ...rawFormat,
     name: I18n.t(`formats.${rawFormat.id}`),
@@ -78,18 +94,19 @@ function extendFormats(rawFormat) {
 
 // ----- EVENTS -----
 
+const eventsData = loadStaticData(<%= Event.all_raw.to_json.html_safe %>);
+
 export const events = {
-  official: _.map(<%= Event.official.to_json.html_safe %>, extendEvents),
-  byId: _.mapValues(<%= Event.all.index_by(&:id).to_json.html_safe %>, extendEvents),
+  official: _.map(_.filter(eventsData, 'isOfficial'), extendEvents),
+  byId: _.mapValues(_.keyBy(eventsData, 'id'), extendEvents),
 };
 
 function extendEvents(rawEvent) {
-  rawEvent = _.mapKeys(rawEvent, (v, k) => _.camelCase(k));
   return {
     ...rawEvent,
     name: I18n.t(`events.${rawEvent.id}`),
     formats() {
-      return rawEvent.formatIds.map(formatId => formats.byId[formatId]);
+      return this.formatIds.map(formatId => formats.byId[formatId]);
     },
     recommendedFormat() {
       return this.formats()[0];
@@ -112,12 +129,15 @@ function extendGenders(gender) {
 
 // ----- ROUND TYPES -----
 
+const roundTypeData = loadStaticData(<%= RoundType.all_raw.to_json.html_safe %>);
+
 export const roundTypes = {
-  byId: _.mapValues(<%= RoundType.all.index_by(&:id).to_json.html_safe %>, extendRoundTypes),
+  byId: _.mapValues(_.keyBy(roundTypeData, 'id'), extendRoundTypes),
 };
 
 function extendRoundTypes(rawFormat) {
-  return _.mapKeys(rawFormat, (v, k) => _.camelCase(k));
+  // Simple identity right now but we may want to add cool stuff in the future
+  return rawFormat;
 }
 
 // ----- TIMEZONES -----
@@ -142,13 +162,16 @@ export const competitionConstants = {
   competitionRecentDays: <%= Competition::RECENT_DAYS %>,
 };
 
-export const nonFutureCompetitionYears = <%= Competition.non_future_years.to_json %>
+const currentYear = (new Date()).getFullYear();
+const yearsRange = _.range(2003, currentYear, 1); // range end is exclusive
+
+// Calling Ruby's `Competition.non_future_years` triggers a DB call, which we don't want.
+// So we "fake" values by accepting that there was one competition in 1982 and then comps started in 2003 again.
+export const nonFutureCompetitionYears = [1982, ...yearsRange];
 
 // ----- RAILS ENV -----
 
 export const railsEnv = '<%= Rails.env %>';
-
-export const RECAPTCHA_PUBLIC_KEY = '<%= AppSecrets.RECAPTCHA_PUBLIC_KEY %>';
 
 // ----- COMP RULES -----
 
@@ -160,7 +183,16 @@ export const competitionMaxShortNameLength = <%= Competition::MAX_CELL_NAME_LENG
 
 // ----- CHAMPIONSHIPS -----
 
-export const groupedChampionshipTypes = <%= Championship.grouped_championship_types.to_json.html_safe %>
+const eligibleCountryForChampionshipData = loadStaticData(<%= EligibleCountryIso2ForChampionship.all_raw.to_json.html_safe %>);
+
+export const championshipTypeWorld = '<%= Championship::CHAMPIONSHIP_TYPE_WORLD %>'
+
+export const groupedChampionshipTypes = {
+  planetary: [championshipTypeWorld],
+  continental: _.map(_.sortBy(continents.real, 'name'), 'id'),
+  "multi-national": _.uniq(_.map(eligibleCountryForChampionshipData, 'championshipType')),
+  national: _.map(_.sortBy(countries.real, 'name'), 'iso2'),
+}
 
 // ----- ROLES & GROUPS -----
 
@@ -185,6 +217,7 @@ export const delegateRegionsStatus = <%= RolesMetadataDelegateRegions.statuses.t
 
 export const officersStatus = <%= RolesMetadataOfficers.statuses.to_json %>;
 
-// ----- PANEL LIST -----
+export const banScopes = <%= RolesMetadataBannedCompetitors.scopes.to_json %>
 
-export const PANEL_LIST = <%= PanelController.panel_list.to_json.html_safe %>;
+// ----- PANEL PAGES -----
+export const PANEL_PAGES = <%= User.panel_pages.to_json.html_safe %>;

@@ -36,12 +36,26 @@ class ContactsController < ApplicationController
     )
   end
 
-  private def contact_wrt(requestor_details, contact_params)
+  private def new_profile_data_key_to_value(new_profile_data, profile_data_to_change)
+    if profile_data_to_change == 'country'
+      Country.find_by(iso2: new_profile_data).name
+    else
+      new_profile_data
+    end
+  end
+
+  private def contact_wrt(requestor_details, contact_params, attachment)
+    profile_data_to_change = contact_params[:profileDataToChange]
     maybe_send_contact_email(
       ContactWrt.new(
         name: requestor_details[:name],
         your_email: requestor_details[:email],
+        query_type: contact_params[:queryType].titleize,
+        profile_data_to_change: profile_data_to_change.titleize,
+        new_profile_data: new_profile_data_key_to_value(contact_params[:newProfileData], profile_data_to_change),
+        edit_profile_reason: contact_params[:editProfileReason],
         message: contact_params[:message],
+        document: attachment,
         request: request,
         logged_in_email: current_user&.email || 'None',
       ),
@@ -64,16 +78,17 @@ class ContactsController < ApplicationController
   def contact
     formValues = JSON.parse(params.require(:formValues), symbolize_names: true)
     contact_recipient = formValues[:contactRecipient]
+    attachment = params[:attachment]
     contact_params = formValues[contact_recipient.to_sym]
     requestor_details = current_user || formValues[:userData]
 
-    render status: :bad_request, json: { error: "Invalid arguments" } if contact_recipient.nil? || contact_params.nil? || requestor_details.nil?
+    return render status: :bad_request, json: { error: "Invalid arguments" } if contact_recipient.nil? || contact_params.nil? || requestor_details.nil?
 
     case contact_recipient
     when UserGroup.teams_committees_group_wct.metadata.friendly_id
       contact_wct(requestor_details, contact_params)
     when UserGroup.teams_committees_group_wrt.metadata.friendly_id
-      contact_wrt(requestor_details, contact_params)
+      contact_wrt(requestor_details, contact_params, attachment)
     when UserGroup.teams_committees_group_wst.metadata.friendly_id
       contact_wst(requestor_details, contact_params)
     when "competition"

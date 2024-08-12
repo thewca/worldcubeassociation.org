@@ -1,25 +1,33 @@
 import React from 'react';
 import {
-  Icon, Popup, Loader, Table, Flag, Label, Header, Container, Grid,
+  Icon, Popup, Loader, Table, Flag, Label, Header, Container, Grid, List, Image, Button,
 } from 'semantic-ui-react';
 
 import { BarLoader } from 'react-spinners';
 import I18n from '../../lib/i18n';
 import {
+  computeAnnouncementStatus,
+  computeReportsAndResultsStatus,
   dayDifferenceFromToday,
   hasResultsPosted,
   isCancelled,
   isInProgress,
   isProbablyOver,
   PseudoLinkMarkdown,
+  reportAdminCellContent,
   startYear,
+  timeDifferenceAfter,
+  timeDifferenceBefore,
 } from '../../lib/utils/competition-table';
 import { countries } from '../../lib/wca-data.js.erb';
+import { adminCompetitionUrl, competitionUrl } from '../../lib/requests/routes.js.erb';
 
 function ListViewSection({
   competitions,
   title,
   shouldShowRegStatus,
+  shouldShowAdminDetails,
+  selectedDelegate,
   isLoading,
   regStatusLoading,
   hasMoreCompsToLoad,
@@ -36,15 +44,27 @@ function ListViewSection({
           </Label>
         )}
       </Header>
-      <ResponsiveCompetitionsTables
-        competitions={competitions}
-        isLoading={isLoading}
-        hasMoreCompsToLoad={hasMoreCompsToLoad}
-        shouldShowRegStatus={shouldShowRegStatus}
-        regStatusLoading={regStatusLoading}
-        isSortedByAnnouncement={isSortedByAnnouncement}
-      />
-      {isLoading && <BarLoader cssOverride={{ width: '100%' }} />}
+      {shouldShowAdminDetails ? (
+        <AdminCompetitionsTable
+          competitions={competitions}
+          isLoading={isLoading}
+          hasMoreCompsToLoad={hasMoreCompsToLoad}
+          shouldShowRegStatus={shouldShowRegStatus}
+          selectedDelegate={selectedDelegate}
+          regStatusLoading={regStatusLoading}
+          isSortedByAnnouncement={isSortedByAnnouncement}
+        />
+      ) : (
+        <ResponsiveCompetitionsTables
+          competitions={competitions}
+          isLoading={isLoading}
+          hasMoreCompsToLoad={hasMoreCompsToLoad}
+          shouldShowRegStatus={shouldShowRegStatus}
+          regStatusLoading={regStatusLoading}
+          isSortedByAnnouncement={isSortedByAnnouncement}
+        />
+      )}
+      <BarLoader loading={isLoading} cssOverride={{ width: '100%' }} />
     </>
   );
 }
@@ -138,7 +158,7 @@ export function CompetitionsTable({
               </Table.Cell>
               <Table.Cell width={6}>
                 <Flag name={comp.country_iso2?.toLowerCase()} />
-                <a href={comp.url}>{comp.short_display_name}</a>
+                <a href={competitionUrl(comp.id)}>{comp.short_display_name}</a>
               </Table.Cell>
               <Table.Cell width={4}>
                 <strong>{countries.byIso2[comp.country_iso2].name}</strong>
@@ -194,7 +214,7 @@ export function CompetitionsTabletTable({
               </Table.Cell>
               <Table.Cell width={6}>
                 <Flag name={comp.country_iso2?.toLowerCase()} />
-                <a href={comp.url}>{comp.short_display_name}</a>
+                <a href={competitionUrl(comp.id)}>{comp.short_display_name}</a>
               </Table.Cell>
               <Table.Cell width={7}>
                 <strong>{countries.byIso2[comp.country_iso2].name}</strong>
@@ -239,7 +259,7 @@ export function CompetitionsMobileTable({
               </Table.Cell>
               <Table.Cell>
                 <Flag name={comp.country_iso2?.toLowerCase()} />
-                <a href={comp.url}>{comp.short_display_name}</a>
+                <a href={competitionUrl(comp.id)}>{comp.short_display_name}</a>
               </Table.Cell>
               <Table.Cell>
                 <strong>{countries.byIso2[comp.country_iso2].name}</strong>
@@ -249,6 +269,137 @@ export function CompetitionsMobileTable({
             </Table.Row>
           </React.Fragment>
         ))}
+      </Table.Body>
+    </Table>
+  );
+}
+
+function AdminCompetitionsTable({
+  competitions,
+  isLoading,
+  hasMoreCompsToLoad,
+  shouldShowRegStatus,
+  selectedDelegate,
+  regStatusLoading,
+  isSortedByAnnouncement,
+}) {
+  const noCompetitons = !competitions || competitions.length === 0;
+
+  if (noCompetitons && !isLoading && !hasMoreCompsToLoad) {
+    return (
+      <Container text textAlign="center">{I18n.t('competitions.index.no_comp_found')}</Container>
+    );
+  }
+
+  return (
+    <Table striped compact basic="very" size="small" unstackable>
+      <Table.Header fullWidth>
+        <Table.Row>
+          <Table.HeaderCell />
+          <Table.HeaderCell>{I18n.t('competitions.competition_info.name_and_location')}</Table.HeaderCell>
+          <Table.HeaderCell>{I18n.t('competitions.competition_info.delegates')}</Table.HeaderCell>
+          <Table.HeaderCell textAlign="center">{I18n.t('competitions.competition_info.date')}</Table.HeaderCell>
+          <Table.HeaderCell textAlign="center">{I18n.t('competitions.competition_info.announced')}</Table.HeaderCell>
+          <Table.HeaderCell textAlign="center">{I18n.t('competitions.competition_info.report_posted')}</Table.HeaderCell>
+          <Table.HeaderCell textAlign="center">{I18n.t('competitions.competition_info.results_submitted')}</Table.HeaderCell>
+          <Table.HeaderCell />
+        </Table.Row>
+      </Table.Header>
+      <Table.Body>
+        {competitions?.map((comp, index) => {
+          const announcementStatus = computeAnnouncementStatus(comp);
+          const reportPostedStatus = computeReportsAndResultsStatus(comp, comp.report_posted_at);
+          const resultsPostedStatus = computeReportsAndResultsStatus(comp, comp.results_posted_at);
+
+          return (
+            <React.Fragment key={comp.id}>
+              <ConditionalYearHeader
+                competitions={competitions}
+                index={index}
+                isSortedByAnnouncement={isSortedByAnnouncement}
+                colSpan={8}
+              />
+              <Table.Row error={isCancelled(comp)} className="competition-info">
+                <Table.Cell collapsing>
+                  <StatusIcon
+                    comp={comp}
+                    shouldShowRegStatus={shouldShowRegStatus}
+                    isSortedByAnnouncement={isSortedByAnnouncement}
+                    regStatusLoading={regStatusLoading}
+                  />
+                </Table.Cell>
+                <Table.Cell width={4}>
+                  <Flag name={comp.country_iso2?.toLowerCase()} />
+                  <a href={competitionUrl(comp.id)}>{comp.short_display_name}</a>
+                  <br />
+                  <strong>{countries.byIso2[comp.country_iso2].name}</strong>
+                  {`, ${comp.city}`}
+                </Table.Cell>
+                <Table.Cell width={3}>
+                  <List verticalAlign="middle" link>
+                    {comp.delegates.map((delegate) => (
+                      <List.Item
+                        key={delegate.id}
+                        active={!selectedDelegate || delegate.id === selectedDelegate}
+                        disabled
+                      >
+                        <Image avatar src={delegate.avatar.thumb_url} />
+                        <List.Content as="a">{delegate.name}</List.Content>
+                      </List.Item>
+                    ))}
+                  </List>
+                </Table.Cell>
+                <Table.Cell textAlign="center" width={3}>
+                  {comp.date_range}
+                </Table.Cell>
+                <Table.Cell
+                  textAlign="center"
+                  width={2}
+                  positive={announcementStatus === 'ok'}
+                  warning={announcementStatus === 'warning'}
+                  error={announcementStatus === 'danger'}
+                >
+                  {comp.announced_at && timeDifferenceBefore(comp, comp.announced_at)}
+                </Table.Cell>
+                <Table.Cell
+                  textAlign="center"
+                  width={2}
+                  positive={reportPostedStatus === 'ok'}
+                  warning={reportPostedStatus === 'warning'}
+                  error={reportPostedStatus === 'danger'}
+                >
+                  {reportAdminCellContent(comp)}
+                </Table.Cell>
+                <Table.Cell
+                  textAlign="center"
+                  width={2}
+                  positive={resultsPostedStatus === 'ok' || resultsPostedStatus === 'semi_ok'}
+                  disabled={resultsPostedStatus === 'semi_ok'}
+                  warning={resultsPostedStatus === 'warning'}
+                  error={resultsPostedStatus === 'danger'}
+                >
+                  {
+                    comp.results_posted_at
+                      ? timeDifferenceAfter(comp, comp.results_posted_at)
+                      : (isProbablyOver(comp) && I18n.t('competitions.competition_info.pending'))
+                  }
+                </Table.Cell>
+                <Table.Cell collapsing>
+                  <Button
+                    compact
+                    size="tiny"
+                    secondary
+                    as="a"
+                    href={adminCompetitionUrl(comp.id)}
+                    target="_blank"
+                  >
+                    Edit
+                  </Button>
+                </Table.Cell>
+              </Table.Row>
+            </React.Fragment>
+          );
+        })}
       </Table.Body>
     </Table>
   );

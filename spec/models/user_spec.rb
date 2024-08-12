@@ -391,11 +391,22 @@ RSpec.describe User, type: :model do
     end
   end
 
-  it 'former banned users are not considered current members of Team.banned' do
+  it 'banned? returns true for users who are actively banned' do
     banned_user = FactoryBot.create :user, :banned
-    banned_user.team_members.first.update!(end_date: 1.day.ago)
 
-    expect(banned_user.reload.banned?).to eq false
+    expect(banned_user.banned?).to eq true
+  end
+
+  it 'banned? returns false for users who are banned in past' do
+    formerly_banned_user = FactoryBot.create :user, :formerly_banned
+
+    expect(formerly_banned_user.banned?).to eq false
+  end
+
+  it 'current_ban returns data of current banned role' do
+    banned_user = FactoryBot.create :user, :banned
+
+    expect(banned_user.current_ban.group.group_type).to eq UserGroup.group_types[:banned_competitors]
   end
 
   it "removes whitespace around names" do
@@ -722,6 +733,17 @@ RSpec.describe User, type: :model do
       asia_region = GroupsMetadataDelegateRegions.find_by!(friendly_id: 'asia').user_group
       senior_delegate = FactoryBot.create(:senior_delegate_role).user
       expect(senior_delegate.has_permission?(:can_edit_groups, asia_region.id)).to be false
+    end
+  end
+
+  describe "teams_committees_at_least_senior_roles has_many relation" do
+    it "returns the senior/leader roles for a user" do
+      user = FactoryBot.create(:user)
+      wrt_role = FactoryBot.create(:wrt_member_role, user: user)
+      wsot_leader_role = FactoryBot.create(:wsot_leader_role, user: user)
+      wrc_senior_member_role = FactoryBot.create(:wrc_senior_member_role, user: user)
+      expect(user.teams_committees_at_least_senior_roles).to include(wsot_leader_role, wrc_senior_member_role)
+      expect(user.teams_committees_at_least_senior_roles).not_to include(wrt_role)
     end
   end
 end

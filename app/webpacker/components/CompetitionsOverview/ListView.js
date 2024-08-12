@@ -12,6 +12,7 @@ function ListView({
   competitions,
   filterState,
   shouldShowRegStatus,
+  shouldShowAdminDetails,
   isLoading,
   regStatusLoading,
   fetchMoreCompetitions,
@@ -20,20 +21,41 @@ function ListView({
   const { ref: bottomRef, inView: bottomInView } = useInView();
 
   useEffect(() => {
-    if (hasMoreCompsToLoad && bottomInView) {
+    if (hasMoreCompsToLoad && bottomInView && !isLoading) {
       fetchMoreCompetitions();
     }
   }, [
-    bottomInView,
     hasMoreCompsToLoad,
+    bottomInView,
+    isLoading,
     fetchMoreCompetitions,
-    // The bottom ref can still _stay_ in view even after loading new comps.
-    //   In that case, the useEffect will not be triggered, so we introduce this extra dependency.
-    competitions,
   ]);
 
   switch (filterState.timeOrder) {
     case 'present': {
+      if (shouldShowAdminDetails) {
+        return (
+          <>
+            <ListViewSection
+              competitions={competitions}
+              title={I18n.t('competitions.index.titles.ongoing_and_upcoming')}
+              shouldShowRegStatus={shouldShowRegStatus}
+              shouldShowAdminDetails={shouldShowAdminDetails}
+              selectedDelegate={filterState.delegate}
+              regStatusLoading={regStatusLoading}
+              isLoading={isLoading}
+              hasMoreCompsToLoad={hasMoreCompsToLoad}
+            />
+            <ListViewFooter
+              isLoading={isLoading}
+              hasMoreCompsToLoad={hasMoreCompsToLoad}
+              numCompetitions={competitions?.length}
+              bottomRef={bottomRef}
+            />
+          </>
+        );
+      }
+
       const inProgressComps = competitions?.filter((comp) => isInProgress(comp));
 
       const upcomingComps = competitions?.filter((comp) => (
@@ -46,6 +68,7 @@ function ListView({
             competitions={inProgressComps}
             title={I18n.t('competitions.index.titles.in_progress')}
             shouldShowRegStatus={shouldShowRegStatus}
+            selectedDelegate={filterState.delegate}
             regStatusLoading={regStatusLoading}
             isLoading={isLoading && !upcomingComps?.length}
             hasMoreCompsToLoad={hasMoreCompsToLoad && !upcomingComps?.length}
@@ -54,6 +77,7 @@ function ListView({
             competitions={upcomingComps}
             title={I18n.t('competitions.index.titles.upcoming')}
             shouldShowRegStatus={shouldShowRegStatus}
+            selectedDelegate={filterState.delegate}
             regStatusLoading={regStatusLoading}
             isLoading={isLoading}
             hasMoreCompsToLoad={hasMoreCompsToLoad}
@@ -74,6 +98,8 @@ function ListView({
             competitions={competitions}
             title={I18n.t('competitions.index.titles.recent', { count: competitionConstants.competitionRecentDays })}
             shouldShowRegStatus={shouldShowRegStatus}
+            shouldShowAdminDetails={shouldShowAdminDetails}
+            selectedDelegate={filterState.delegate}
             isLoading={isLoading}
             regStatusLoading={regStatusLoading}
             hasMoreCompsToLoad={hasMoreCompsToLoad}
@@ -93,6 +119,8 @@ function ListView({
             competitions={competitions}
             title={filterState.selectedYear === 'all_years' ? I18n.t('competitions.index.titles.past_all') : I18n.t('competitions.index.titles.past', { year: filterState.selectedYear })}
             shouldShowRegStatus={shouldShowRegStatus}
+            shouldShowAdminDetails={shouldShowAdminDetails}
+            selectedDelegate={filterState.delegate}
             isLoading={isLoading}
             regStatusLoading={regStatusLoading}
             hasMoreCompsToLoad={hasMoreCompsToLoad}
@@ -112,6 +140,8 @@ function ListView({
             competitions={competitions}
             title={I18n.t('competitions.index.titles.by_announcement')}
             shouldShowRegStatus={shouldShowRegStatus}
+            shouldShowAdminDetails={shouldShowAdminDetails}
+            selectedDelegate={filterState.delegate}
             isLoading={isLoading}
             regStatusLoading={regStatusLoading}
             hasMoreCompsToLoad={hasMoreCompsToLoad}
@@ -132,6 +162,8 @@ function ListView({
             competitions={competitions}
             title={I18n.t('competitions.index.titles.custom')}
             shouldShowRegStatus={shouldShowRegStatus}
+            shouldShowAdminDetails={shouldShowAdminDetails}
+            selectedDelegate={filterState.delegate}
             isLoading={isLoading}
             regStatusLoading={regStatusLoading}
             hasMoreCompsToLoad={hasMoreCompsToLoad}

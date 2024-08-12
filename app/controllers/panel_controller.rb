@@ -4,16 +4,11 @@ class PanelController < ApplicationController
   include DocumentsHelper
 
   before_action :authenticate_user!
-  before_action -> { redirect_to_root_unless_user(:can_access_panel?) }
+  before_action -> { redirect_to_root_unless_user(:has_permission?, 'can_access_panels', params[:panel_id].to_sym) }, only: [:index]
+  before_action -> { redirect_to_root_unless_user(:has_permission?, 'can_access_panels', :wfc) }, only: [:wfc]
+  before_action -> { redirect_to_root_unless_user(:has_permission?, 'can_access_panels', :staff) }, only: [:staff]
+  before_action -> { redirect_to_root_unless_user(:has_permission?, 'can_access_panels', :admin) }, only: [:generate_db_token]
   before_action -> { redirect_to_root_unless_user(:can_access_senior_delegate_panel?) }, only: [:pending_claims_for_subordinate_delegates]
-  before_action -> { redirect_to_root_unless_user(:can_access_staff_panel?) }, only: [:staff]
-  before_action -> { redirect_to_root_unless_user(:can_access_delegate_panel?) }, only: [:delegate]
-  before_action -> { redirect_to_root_unless_user(:can_access_board_panel?) }, only: [:board]
-  before_action -> { redirect_to_root_unless_user(:can_access_senior_delegate_panel?) }, only: [:senior_delegate]
-  before_action -> { redirect_to_root_unless_user(:can_access_leader_panel?) }, only: [:leader]
-  before_action -> { redirect_to_root_unless_user(:can_access_wfc_panel?) }, only: [:wfc]
-  before_action -> { redirect_to_root_unless_user(:can_access_wrt_panel?) }, only: [:wrt]
-  before_action -> { redirect_to_root_unless_user(:can_access_wst_panel?) }, only: [:wst]
 
   def pending_claims_for_subordinate_delegates
     # Show pending claims for a given user, or the current user, if they can see them
@@ -22,48 +17,33 @@ class PanelController < ApplicationController
     @subordinate_delegates = @user.subordinate_delegates.to_a.push(@user)
   end
 
-  def self.panel_list
-    {
-      "delegate" => {
-        "importantLinks" => "important-links",
-        "delegateCrashCourse" => "delegate-crash-course",
-      },
-      "board" => {
-        "seniorDelegatesList" => "senior-delegates-list",
-        "leadersAdmin" => "leaders-admin",
-        "regionsManager" => "regions-manager",
-        "delegateProbations" => "delegate-probations",
-        "groupsManagerAdmin" => "groups-manager-admin",
-        "boardEditor" => "board-editor",
-        "officersEditor" => "officers-editor",
-        "regionsAdmin" => "regions-admin",
-      },
-      "seniorDelegate" => {
-        "delegateForms" => "delegate-forms",
-        "regions" => "regions",
-        "delegateProbations" => "delegate-probations",
-        "subordinateDelegateClaims" => "subordinate-delegate-claims",
-        "subordinateUpcomingCompetitions" => "subordinate-upcoming-competitions",
-      },
-      "leader" => {
-        "leaderForms" => "leader-forms",
-        "groupsManager" => "groups-manager",
-      },
-      "wfc" => {
-        "duesExport" => "dues-export",
-        "countryBands" => "country-bands",
-        "delegateProbations" => "delegate-probations",
-        "xeroUsers" => "xero-users",
-        "duesRedirect" => "dues-redirect",
-      },
-      "wrt" => {
-        "postingDashboard" => "posting-dashboard",
-        "editPerson" => "edit-person",
-        "regionsManager" => "regions-manager",
-      },
-      "wst" => {
-        "translators" => "translators",
-      },
+  def index
+    @panel_id = params.require(:panel_id)
+    panel_details = User.panel_list[@panel_id.to_sym]
+    @pages = panel_details[:pages]
+    @title = panel_details[:name]
+  end
+
+  def generate_db_token
+    @db_endpoints = {
+      main: EnvConfig.DATABASE_HOST,
+      replica: EnvConfig.READ_REPLICA_HOST,
+    }
+
+    role_credentials = Aws::ECSCredentials.new
+    token_generator = Aws::RDS::AuthTokenGenerator.new credentials: role_credentials
+
+    @db_tokens = @db_endpoints.transform_values do |url|
+      token_generator.auth_token({
+                                   region: EnvConfig.DATABASE_AWS_REGION,
+                                   endpoint: "#{url}:3306",
+                                   user_name: EnvConfig.DATABASE_WRT_USER,
+                                 })
+    end
+
+    @db_server_indices = {
+      main: 1,
+      replica: 2,
     }
   end
 end

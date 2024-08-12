@@ -1,7 +1,5 @@
-import { useMutation } from '@tanstack/react-query';
 import React from 'react';
 import { Button, Icon } from 'semantic-ui-react';
-import updateRegistration from '../api/registration/patch/update_registration';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { setMessage } from '../Register/RegistrationMessage';
 import i18n from '../../../lib/i18n';
@@ -11,7 +9,7 @@ function csvExport(selected, registrations) {
   csvContent
     += 'user_id,guests,competing.event_ids,competing.registration_status,competing.registered_on,competing.comment,competing.admin_comment\n';
   registrations
-    .filter((r) => selected.length === 0 || selected.includes(r.user.id))
+    .filter((r) => selected.length === 0 || selected.includes(r.user_id))
     .forEach((registration) => {
       csvContent += `${registration.user_id},${
         registration.guests
@@ -32,6 +30,7 @@ export default function RegistrationActions({
   registrations,
   spotsRemaining,
   competitionInfo,
+  updateRegistrationMutation,
 }) {
   const dispatch = useDispatch();
   const selectedCount = Object.values(partitionedSelected).reduce(
@@ -46,43 +45,25 @@ export default function RegistrationActions({
   const anyRejectable = pending.length < selectedCount;
   const anyApprovable = accepted.length < selectedCount;
   const anyCancellable = cancelled.length < selectedCount;
-  const anyWaitlistable = waiting.length < selectedCount;
+  // const anyWaitlistable = waiting.length < selectedCount;
 
   const selectedEmails = [...pending, ...accepted, ...cancelled, ...waiting]
     .map((userId) => userEmailMap[userId])
     .join(',');
 
-  const { mutate: updateRegistrationMutation } = useMutation({
-    mutationFn: updateRegistration,
-    onError: (data) => {
-      const { error } = data.json;
-      dispatch(setMessage(
-        error
-          ? `competitions.registration_v2.errors.${error}`
-          : 'registrations.flash.failed',
-        'negative',
-      ));
-    },
-  });
-
   const changeStatus = (attendees, status) => {
-    attendees.forEach(async (attendee) => {
-      await updateRegistrationMutation(
-        {
-          user_id: attendee,
-          competing: {
-            status,
-          },
-          competition_id: competitionInfo.id,
+    updateRegistrationMutation(
+      {
+        requests: attendees.map((attendee) => ({ user_id: attendee, competing: { status } })),
+        competition_id: competitionInfo.id,
+      },
+      {
+        onSuccess: () => {
+          dispatch(setMessage('registrations.flash.updated', 'positive'));
+          refresh();
         },
-        {
-          onSuccess: () => {
-            dispatch(setMessage('registrations.flash.updated', 'positive'));
-            refresh();
-          },
-        },
-      );
-    });
+      },
+    );
   };
 
   const attemptToApprove = () => {
@@ -102,11 +83,11 @@ export default function RegistrationActions({
 
   const copyEmails = (emails) => {
     navigator.clipboard.writeText(emails);
-    dispatch(setMessage('Copied to clipboard. Remember to use bcc!', 'positive'));
+    dispatch(setMessage('competitions.registration_v2.update.email_message', 'positive'));
   };
 
   return (
-    <Button.Group>
+    <Button.Group className="stackable">
       <Button
         onClick={() => {
           csvExport(
@@ -127,7 +108,6 @@ export default function RegistrationActions({
               href={`mailto:?bcc=${selectedEmails}`}
               id="email-selected"
               target="_blank"
-              className="btn btn-info selected-registrations-actions"
               rel="noreferrer"
             >
               <Icon name="envelope" />
@@ -159,18 +139,18 @@ export default function RegistrationActions({
               </Button>
             )}
 
-            {anyWaitlistable && (
-              <Button
-                color="yellow"
-                onClick={() => changeStatus(
-                  [...pending, ...cancelled, ...accepted],
-                  'waiting_list',
-                )}
-              >
-                <Icon name="hourglass" />
-                {i18n.t('competitions.registration_v2.update.move_waiting')}
-              </Button>
-            )}
+            {/* {anyWaitlistable && ( */}
+            {/*  <Button */}
+            {/*    color="yellow" */}
+            {/*    onClick={() => changeStatus( */}
+            {/*      [...pending, ...cancelled, ...accepted], */}
+            {/*      'waiting_list', */}
+            {/*    )} */}
+            {/*  > */}
+            {/*    <Icon name="hourglass" /> */}
+            {/*    {i18n.t('competitions.registration_v2.update.move_waiting')} */}
+            {/*  </Button> */}
+            {/* )} */}
 
             {anyCancellable && (
               <Button

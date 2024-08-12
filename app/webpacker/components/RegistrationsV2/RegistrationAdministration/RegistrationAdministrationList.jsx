@@ -1,19 +1,22 @@
-import { useQuery } from '@tanstack/react-query';
-import React, { useMemo, useReducer, useRef } from 'react';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import React, {
+  useMemo, useReducer, useRef,
+} from 'react';
 import {
-  Checkbox, Flag, Form, Header, Icon, Popup, Sticky, Table,
+  Checkbox, Form, Header, Segment, Sticky,
 } from 'semantic-ui-react';
+import { DateTime } from 'luxon';
 import { getAllRegistrations } from '../api/registration/get/get_registrations';
-import { getShortDateString, getShortTimeString } from '../../../lib/utils/dates';
 import createSortReducer from '../reducers/sortReducer';
 import RegistrationActions from './RegistrationActions';
 import { setMessage } from '../Register/RegistrationMessage';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
 import i18n from '../../../lib/i18n';
 import Loading from '../../Requests/Loading';
-import EventIcon from '../../wca/EventIcon';
 import useWithUserData from '../hooks/useWithUserData';
-import { editRegistrationUrl, editPersonUrl, personUrl } from '../../../lib/requests/routes.js.erb';
+import { bulkUpdateRegistrations } from '../api/registration/patch/update_registration';
+import RegistrationAdministrationTable from './RegistrationsAdministrationTable';
+import useCheckboxState from '../../../lib/hooks/useCheckboxState';
 
 const selectedReducer = (state, action) => {
   let newState = [...state];
@@ -82,10 +85,11 @@ const partitionRegistrations = (registrations) => registrations.reduce(
 
 const expandableColumns = {
   dob: 'Date of Birth',
-  region: 'Region',
+  region: 'Region Name',
   events: 'Events',
   comments: 'Comment & Note',
   email: 'Email',
+  timestamp: 'Timestamp',
 };
 const initialExpandedColumns = {
   dob: false,
@@ -93,6 +97,7 @@ const initialExpandedColumns = {
   events: false,
   comments: true,
   email: false,
+  timestamp: false,
 };
 
 const columnReducer = (state, action) => {
@@ -105,17 +110,15 @@ const columnReducer = (state, action) => {
   return state;
 };
 
-// Semantic Table only allows truncating _all_ columns in a table in
-// single line fixed mode. As we only want to truncate the comment/admin notes
-// this function is used to manually truncate the columns.
-// TODO: We could fix this by building our own table component here
-const truncateComment = (comment) => (comment?.length > 12 ? `${comment.slice(0, 12)}...` : comment);
-
 export default function RegistrationAdministrationList({ competitionInfo }) {
   const [expandedColumns, dispatchColumns] = useReducer(
     columnReducer,
     initialExpandedColumns,
   );
+
+  const queryClient = useQueryClient();
+
+  // const [editable, setEditable] = useCheckboxState(false);
 
   const dispatchStore = useDispatch();
 
@@ -123,9 +126,9 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
 
   const [state, dispatchSort] = useReducer(sortReducer, {
     sortColumn: competitionInfo['using_payment_integrations?']
-      ? 'paid_on'
+      ? 'paid_on_with_registered_on_fallback'
       : 'registered_on',
-    sortDirection: undefined,
+    sortDirection: 'ascending',
   });
   const { sortColumn, sortDirection } = state;
   const changeSortColumn = (name) => dispatchSort({ type: 'CHANGE_SORT', sortColumn: name });
@@ -133,7 +136,6 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
   const {
     isLoading: isRegistrationsLoading,
     data: registrations,
-    refetch,
   } = useQuery({
     queryKey: ['registrations-admin', competitionInfo.id],
     queryFn: () => getAllRegistrations(competitionInfo.id),
@@ -158,6 +160,28 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
     data: registrationsWithUser,
   } = useWithUserData(registrations ?? []);
 
+  const { mutate: updateRegistrationMutation, isPending: isMutating } = useMutation({
+    mutationFn: bulkUpdateRegistrations,
+    onError: (data) => {
+      const { error } = data.json;
+      dispatchStore(setMessage(
+        error
+          ? Object.values(error).map((err) => `competitions.registration_v2.errors.${err}`)
+          : 'registrations.flash.failed',
+        'negative',
+      ));
+    },
+    onSuccess: (data) => {
+      const { updated_registrations: updatedRegistrations } = data;
+      const updated = registrations.map(
+        (r) => (updatedRegistrations[r.user_id]
+          ? { ...updatedRegistrations[r.user_id], payment: r.payment }
+          : r),
+      );
+      queryClient.setQueryData(['registrations-admin', competitionInfo.id], updated);
+    },
+  });
+
   const sortedRegistrationsWithUser = useMemo(() => {
     if (registrationsWithUser) {
       const sorted = registrationsWithUser.toSorted((a, b) => {
@@ -177,11 +201,25 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
           case 'comment':
             return a.competing.comment.localeCompare(b.competing.comment);
           case 'registered_on':
-            return a.competing.registered_on.localeCompare(
-              b.competing.registered_on,
-            );
-          case 'paid_on':
-            return a.payment.updated_at.localeCompare(b.payment.updated_at);
+            return DateTime.fromISO(a.competing.registered_on).toMillis()
+              - DateTime.fromISO(b.competing.registered_on).toMillis();
+          case 'paid_on_with_registered_on_fallback':
+          {
+            if (a.payment && b.payment) {
+              return DateTime.fromISO(a.payment.updated_at).toMillis()
+                - DateTime.fromISO(b.payment.updated_at).toMillis();
+            }
+            if (a.payment && !b.payment) {
+              return 1;
+            }
+            if (!a.payment && b.payment) {
+              return -1;
+            }
+            return DateTime.fromISO(a.competing.registered_on).toMillis()
+              - DateTime.fromISO(b.competing.registered_on).toMillis();
+          }
+          case 'waiting_list_position':
+            return a.competing.waiting_list_position - b.competing.waiting_list_position;
           default:
             return 0;
         }
@@ -219,8 +257,8 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
   // than putting this in the table headers which scroll out of sight
   const spotsRemaining = (competitionInfo.competitor_limit ?? Infinity) - accepted.length;
   const spotsRemainingText = i18n.t(
-    'competitions.registration_v2.list.spots_remaining',
-    { spots: spotsRemaining },
+    'competitions.registration_v2.list.spots_remaining_plural',
+    { count: spotsRemaining },
   );
 
   const userEmailMap = useMemo(
@@ -233,10 +271,30 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
     [registrationsWithUser],
   );
 
+  // const handleOnDragEnd = async (result) => {
+  //   if (!result.destination) return;
+  //   if (result.destination.index === result.source.index) return;
+  //
+  //   updateRegistrationMutation({
+  //     competition_id: competitionInfo.id,
+  //     requests: [{
+  //       user_id: waiting[result.source.index].user_id,
+  //       competing: {
+  //         waiting_list_position: waiting[result.destination.index].competing.waiting_list_position,
+  //       },
+  //     }],
+  //   }, {
+  //     onSuccess: () => {
+  //       // We need to get the information for all Competitors if you change the waiting list position
+  //       refetch();
+  //     },
+  //   });
+  // };
+
   return isRegistrationsLoading || infoLoading ? (
     <Loading />
   ) : (
-    <>
+    <Segment loading={isMutating} style={{ overflowX: 'scroll' }}>
       <Form>
         <Form.Group widths="equal">
           {Object.entries(expandableColumns).map(([id, name]) => (
@@ -257,14 +315,14 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
         <Sticky context={actionsRef} offset={20}>
           <RegistrationActions
             partitionedSelected={partitionedSelected}
-            refresh={async () => {
-              await refetch();
+            refresh={() => {
               dispatch({ type: 'clear-selected' });
             }}
             registrations={registrations}
             spotsRemaining={spotsRemaining}
             userEmailMap={userEmailMap}
             competitionInfo={competitionInfo}
+            updateRegistrationMutation={updateRegistrationMutation}
           />
         </Sticky>
 
@@ -311,30 +369,37 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
           sortColumn={sortColumn}
           competitionInfo={competitionInfo}
         />
+        {/* Disable Waiting List Administration until we fix moving people around on the waitinglist */}
+        {/* <Header> */}
+        {/*  {i18n.t('registrations.list.waiting_list')} */}
+        {/*  {' '} */}
+        {/*  ( */}
+        {/*  {waiting.length} */}
+        {/*  ) */}
+        {/* </Header> */}
+
+        {/* <Checkbox toggle value={editable} onChange={setEditable} label="Enable Waiting List Edit Mode" /> */}
+
+        {/* <RegistrationAdministrationTable */}
+        {/*  columnsExpanded={expandedColumns} */}
+        {/*  selected={partitionedSelected.waiting} */}
+        {/*  select={select} */}
+        {/*  unselect={unselect} */}
+        {/*  competition_id={competitionInfo.id} */}
+        {/*  changeSortColumn={changeSortColumn} */}
+        {/*  sortDirection={sortDirection} */}
+        {/*  sortColumn={sortColumn} */}
+        {/*  competitionInfo={competitionInfo} */}
+        {/*  registrations={waiting.toSorted( */}
+        {/*    (a, b) => a.competing.waiting_list_position - b.competing.waiting_list_position, */}
+        {/*  )} */}
+        {/*  handleOnDragEnd={handleOnDragEnd} */}
+        {/*  draggable={editable} */}
+        {/*  sortable={false} */}
+        {/* /> */}
 
         <Header>
-          {i18n.t('simple_form.options.registration.status.waiting_list')}
-          {' '}
-          (
-          {waiting.length}
-          {competitionInfo.competitor_limit && `; ${spotsRemainingText}`}
-          )
-        </Header>
-        <RegistrationAdministrationTable
-          columnsExpanded={expandedColumns}
-          registrations={waiting}
-          selected={partitionedSelected.waiting}
-          select={select}
-          unselect={unselect}
-          competition_id={competitionInfo.id}
-          changeSortColumn={changeSortColumn}
-          sortDirection={sortDirection}
-          sortColumn={sortColumn}
-          competitionInfo={competitionInfo}
-        />
-
-        <Header>
-          {i18n.t('simple_form.options.registration.status.cancelled')}
+          {i18n.t('registrations.list.deleted_registrations')}
           {' '}
           (
           {cancelled.length}
@@ -353,329 +418,6 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
           competitionInfo={competitionInfo}
         />
       </div>
-    </>
-  );
-}
-
-function RegistrationAdministrationTable({
-  columnsExpanded,
-  registrations,
-  selected,
-  select,
-  unselect,
-  sortDirection,
-  sortColumn,
-  changeSortColumn,
-  competitionInfo,
-}) {
-  const handleHeaderCheck = (_, data) => {
-    if (data.checked) {
-      select(registrations.map(({ user }) => user.id));
-    } else {
-      unselect(registrations.map(({ user }) => user.id));
-    }
-  };
-
-  return (
-    <div>
-      <Table sortable striped textAlign="left">
-        <TableHeader
-          columnsExpanded={columnsExpanded}
-          showCheckbox={registrations.length > 0}
-          isChecked={registrations.length === selected.length}
-          onCheckboxChanged={handleHeaderCheck}
-          sortDirection={sortDirection}
-          sortColumn={sortColumn}
-          changeSortColumn={changeSortColumn}
-          competitionInfo={competitionInfo}
-        />
-
-        <Table.Body>
-          {registrations.length > 0 ? (
-            registrations.map((registration) => {
-              const { id } = registration.user;
-              return (
-                <TableRow
-                  key={id}
-                  competitionInfo={competitionInfo}
-                  columnsExpanded={columnsExpanded}
-                  registration={registration}
-                  isSelected={selected.includes(id)}
-                  onCheckboxChange={(_, data) => {
-                    if (data.checked) {
-                      select([id]);
-                    } else {
-                      unselect([id]);
-                    }
-                  }}
-                />
-              );
-            })
-          ) : (
-            <Table.Row>
-              <Table.Cell colSpan={6}>
-                {i18n.t('competitions.registration_v2.list.empty')}
-              </Table.Cell>
-            </Table.Row>
-          )}
-        </Table.Body>
-      </Table>
-    </div>
-  );
-}
-
-function TableHeader({
-  columnsExpanded,
-  showCheckbox,
-  isChecked,
-  onCheckboxChanged,
-  sortDirection,
-  sortColumn,
-  changeSortColumn,
-  competitionInfo,
-}) {
-  const { dob, events, comments } = columnsExpanded;
-
-  return (
-    <Table.Header>
-      <Table.Row>
-        <Table.HeaderCell>
-          {showCheckbox && (
-            <Checkbox checked={isChecked} onChange={onCheckboxChanged} />
-          )}
-        </Table.HeaderCell>
-        <Table.HeaderCell />
-        <Table.HeaderCell
-          sorted={sortColumn === 'wca_id' ? sortDirection : undefined}
-          onClick={() => changeSortColumn('wca_id')}
-        >
-          {i18n.t('common.user.wca_id')}
-        </Table.HeaderCell>
-        <Table.HeaderCell
-          sorted={sortColumn === 'name' ? sortDirection : undefined}
-          onClick={() => changeSortColumn('name')}
-        >
-          {i18n.t('delegates_page.table.name')}
-        </Table.HeaderCell>
-        {dob && (
-          <Table.HeaderCell
-            sorted={sortColumn === 'dob' ? sortDirection : undefined}
-            onClick={() => changeSortColumn('dob')}
-          >
-            {i18n.t('activerecord.attributes.user.dob')}
-          </Table.HeaderCell>
-        )}
-        <Table.HeaderCell
-          sorted={sortColumn === 'country' ? sortDirection : undefined}
-          onClick={() => changeSortColumn('country')}
-        >
-          {i18n.t('common.user.representing')}
-        </Table.HeaderCell>
-        <Table.HeaderCell
-          sorted={sortColumn === 'registered_on' ? sortDirection : undefined}
-          onClick={() => changeSortColumn('registered_on')}
-        >
-          {i18n.t('registrations.list.registered.without_stripe')}
-        </Table.HeaderCell>
-        {competitionInfo['using_payment_integrations?'] && (
-          <>
-            <Table.HeaderCell>Payment Status</Table.HeaderCell>
-            <Table.HeaderCell
-              sorted={sortColumn === 'paid_on' ? sortDirection : undefined}
-              onClick={() => changeSortColumn('paid_on')}
-            >
-              {i18n.t('registrations.list.registered.with_stripe')}
-            </Table.HeaderCell>
-          </>
-        )}
-        {events ? (
-          competitionInfo.event_ids.map((eventId) => (
-            <Table.HeaderCell key={`event-${eventId}`}>
-              <EventIcon id={eventId} className="selected" />
-            </Table.HeaderCell>
-          ))
-        ) : (
-          <Table.HeaderCell
-            sorted={sortColumn === 'events' ? sortDirection : undefined}
-            onClick={() => changeSortColumn('events')}
-          >
-            {i18n.t('competitions.competition_info.events')}
-          </Table.HeaderCell>
-        )}
-        <Table.HeaderCell
-          sorted={sortColumn === 'guests' ? sortDirection : undefined}
-          onClick={() => changeSortColumn('guests')}
-        >
-          {i18n.t(
-            'competitions.competition_form.labels.registration.guests_enabled',
-          )}
-        </Table.HeaderCell>
-        {comments && (
-          <>
-            <Table.HeaderCell
-              sorted={sortColumn === 'comment' ? sortDirection : undefined}
-              onClick={() => changeSortColumn('comment')}
-            >
-              {i18n.t('activerecord.attributes.registration.comments')}
-            </Table.HeaderCell>
-            <Table.HeaderCell>
-              {i18n.t('activerecord.attributes.registration.administrative_notes')}
-            </Table.HeaderCell>
-          </>
-        )}
-        <Table.HeaderCell>{i18n.t('registrations.list.email')}</Table.HeaderCell>
-      </Table.Row>
-    </Table.Header>
-  );
-}
-
-function TableRow({
-  columnsExpanded,
-  registration,
-  isSelected,
-  onCheckboxChange,
-  competitionInfo,
-}) {
-  const {
-    dob, region, events, comments, email,
-  } = columnsExpanded;
-  const {
-    id, wca_id: wcaId, name, country,
-  } = registration.user;
-  const {
-    registered_on: registeredOn, event_ids: eventIds, comment, admin_comment: adminComment,
-  } = registration.competing;
-  const { dob: dateOfBirth, email: emailAddress } = registration;
-  const { payment_status: paymentStatus, updated_at: updatedAt } = registration.payment;
-
-  const copyEmail = () => {
-    navigator.clipboard.writeText(emailAddress);
-    setMessage('Copied email address to clipboard.', 'positive');
-  };
-
-  return (
-    <Table.Row key={id} active={isSelected}>
-      <Table.Cell>
-        <Checkbox onChange={onCheckboxChange} checked={isSelected} />
-      </Table.Cell>
-
-      <Table.Cell>
-        <a href={editRegistrationUrl(id, competitionInfo.id)}>
-          {i18n.t('registrations.list.edit')}
-        </a>
-      </Table.Cell>
-
-      <Table.Cell>
-        {wcaId ? (
-          <a href={personUrl(wcaId)}>{wcaId}</a>
-        ) : (
-          <a href={editPersonUrl(id)}>
-            <Icon name="edit" />
-            {i18n.t('users.edit.profile')}
-          </a>
-        )}
-      </Table.Cell>
-
-      <Table.Cell>{name}</Table.Cell>
-
-      {dob && <Table.Cell>{dateOfBirth}</Table.Cell>}
-
-      <Table.Cell>
-        {region ? (
-          <>
-            <Flag name={country.iso2.toLowerCase()} />
-            {region && country.name}
-          </>
-        ) : (
-          <Popup
-            content={country.name}
-            trigger={(
-              <span>
-                <Flag name={country.iso2.toLowerCase()} />
-              </span>
-            )}
-          />
-        )}
-      </Table.Cell>
-
-      <Table.Cell>
-        <Popup
-          content={getShortTimeString(registeredOn)}
-          trigger={<span>{getShortDateString(registeredOn)}</span>}
-        />
-      </Table.Cell>
-
-      {competitionInfo['using_payment_integrations?'] && (
-        <>
-          <Table.Cell>{paymentStatus ?? i18n.t('registrations.list.not_paid')}</Table.Cell>
-          <Table.Cell>
-            {updatedAt && (
-              <Popup
-                content={getShortTimeString(updatedAt)}
-                trigger={<span>{getShortDateString(updatedAt)}</span>}
-              />
-            )}
-          </Table.Cell>
-        </>
-      )}
-
-      {events ? (
-        competitionInfo.event_ids.map((eventId) => (
-          <Table.Cell key={`event-${eventId}`}>
-            {eventIds.includes(eventId) && (
-              <EventIcon id={eventId} size="1x" selected />
-            )}
-          </Table.Cell>
-        ))
-      ) : (
-        <Table.Cell>
-          <Popup
-            content={eventIds.map((eventId) => (
-              <EventIcon key={eventId} id={eventId} className="selected" />
-            ))}
-            trigger={<span>{eventIds.length}</span>}
-          />
-        </Table.Cell>
-      )}
-
-      <Table.Cell>{registration.guests}</Table.Cell>
-
-      {comments && (
-        <>
-          <Table.Cell>
-            <Popup
-              content={comment}
-              trigger={<span>{truncateComment(comment)}</span>}
-            />
-          </Table.Cell>
-
-          <Table.Cell>
-            <Popup
-              content={adminComment}
-              trigger={<span>{truncateComment(adminComment)}</span>}
-            />
-          </Table.Cell>
-        </>
-      )}
-
-      <Table.Cell>
-        <a href={`mailto:${emailAddress}`}>
-          {email ? (
-            emailAddress
-          ) : (
-            <Popup
-              content={emailAddress}
-              trigger={(
-                <span>
-                  <Icon name="mail" />
-                </span>
-              )}
-            />
-          )}
-        </a>
-        {' '}
-        <Icon link onClick={copyEmail} name="copy" title={i18n.t('competitions.registration_v2.update.email_copy')} />
-      </Table.Cell>
-    </Table.Row>
+    </Segment>
   );
 }

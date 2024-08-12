@@ -5,18 +5,33 @@ include SortHelper # rubocop:disable Style/MixinUsage
 
 class UserRole < ApplicationRecord
   belongs_to :user
-  belongs_to :group, class_name: "UserGroup"
+  # The `touch` flag is necessary so that whenever a role is updated,
+  #   the associated UserGroup is notified and a small hook is triggered which makes sure
+  #   that the cached parts of our code get a hold of the most recent changes
+  #
+  # (briefly put: Propagate all changes made to this role to the after_commit hook in user_group.rb)
+  belongs_to :group, class_name: "UserGroup", touch: true
   belongs_to :metadata, polymorphic: true, optional: true
 
   delegate :group_type, to: :group
 
-  scope :active, -> { where(end_date: nil).or(where.not(end_date: ..Date.today)) }
+  scope :active, -> { where(end_date: nil).or(inactive.invert_where) }
+  scope :inactive, -> { where(end_date: ..Date.today) }
+
+  # We need this for creating new roles that would otherwise be instantiated with an out-of-date group reference
+  after_commit :reset_group, on: :create
 
   UserRoleChange = Struct.new(
     :changed_parameter,
     :previous_value,
     :new_value,
     keyword_init: true,
+  )
+
+  UserRoleEmailRecipient = Struct.new(
+    :name,
+    :email,
+    :message,
   )
 
   STATUS_RANK = {
@@ -139,10 +154,10 @@ class UserRole < ApplicationRecord
   end
 
   def can_user_read?(user)
-    # A user can view a role if:
-    # 1. the role belongs to a non-hidden group, or
-    # 2. the user has edit-access to that group.
-    !group.is_hidden || user&.has_permission?(:can_edit_groups, group.id)
+    return true unless group.is_hidden # Roles of non-hidden groups are public
+    return false if user.nil? # Roles of hidden groups are visible only to a set of users based on permisssions.
+    role_permission = is_active? ? :can_read_groups_current : :can_read_groups_past
+    user.has_permission?(role_permission, group.id)
   end
 
   def self.filter_roles_for_logged_in_user(roles, current_user)
@@ -152,7 +167,6 @@ class UserRole < ApplicationRecord
   def self.filter_roles_for_parameters(roles, params)
     status = params[:status]
     is_active = params.key?(:isActive) ? ActiveRecord::Type::Boolean.new.cast(params.require(:isActive)) : nil
-    is_group_hidden = params.key?(:isGroupHidden) ? ActiveRecord::Type::Boolean.new.cast(params.require(:isGroupHidden)) : nil
     group_type = params[:groupType]
     is_lead = params.key?(:isLead) ? ActiveRecord::Type::Boolean.new.cast(params.require(:isLead)) : nil
 
@@ -162,7 +176,6 @@ class UserRole < ApplicationRecord
       (
         (!status.nil? && status != role.metadata&.status) ||
         (!is_active.nil? && is_active != role.is_active?) ||
-        (!is_group_hidden.nil? && is_group_hidden != role.group.is_hidden) ||
         (!group_type.nil? && group_type != role.group_type) ||
         (!is_lead.nil? && is_lead != role.is_lead?)
       )

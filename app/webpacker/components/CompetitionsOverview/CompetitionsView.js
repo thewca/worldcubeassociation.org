@@ -23,7 +23,7 @@ import { isCancelled, isInProgress, isProbablyOver } from '../../lib/utils/compe
 
 const DEBOUNCE_MS = 600;
 
-function CompetitionsView() {
+function CompetitionsView({ canViewAdminDetails = false }) {
   const searchParams = useMemo(
     () => new URLSearchParams(window.location.search),
     [],
@@ -38,9 +38,12 @@ function CompetitionsView() {
   const [displayMode, setDisplayMode] = useState(() => getDisplayMode(searchParams));
   const [shouldShowRegStatus, setShouldShowRegStatus] = useState(false);
   const competitionQueryKey = useMemo(
-    () => calculateQueryKey(debouncedFilterState),
-    [debouncedFilterState],
+    () => calculateQueryKey(debouncedFilterState, canViewAdminDetails),
+    [debouncedFilterState, canViewAdminDetails],
   );
+
+  // Need to make sure that people don't "hijack" admin mode by manipulating the URL
+  const shouldShowAdminDetails = canViewAdminDetails && filterState.shouldShowAdminDetails;
 
   useEffect(
     () => updateSearchParams(searchParams, filterState, displayMode),
@@ -55,8 +58,13 @@ function CompetitionsView() {
   } = useInfiniteQuery({
     queryKey: ['competitions', competitionQueryKey],
     queryFn: ({ pageParam = 1 }) => {
-      const querySearchParams = createSearchParams(debouncedFilterState, pageParam);
-      return fetchJsonOrError(`${apiV0Urls.competitions.list}?${querySearchParams}`);
+      const querySearchParams = createSearchParams(
+        debouncedFilterState,
+        pageParam,
+        canViewAdminDetails,
+      );
+
+      return fetchJsonOrError(`${apiV0Urls.competitions.listIndex}?${querySearchParams}`);
     },
     getNextPageParam: (previousPage, allPages) => {
       // Continue until less than a full page of data is fetched,
@@ -113,6 +121,8 @@ function CompetitionsView() {
         setDisplayMode={setDisplayMode}
         shouldShowRegStatus={shouldShowRegStatus}
         setShouldShowRegStatus={setShouldShowRegStatus}
+        shouldShowAdminDetails={shouldShowAdminDetails}
+        canViewAdminDetails={canViewAdminDetails}
       />
 
       <Container fluid>
@@ -123,6 +133,7 @@ function CompetitionsView() {
               competitions={competitions}
               filterState={debouncedFilterState}
               shouldShowRegStatus={shouldShowRegStatus}
+              shouldShowAdminDetails={shouldShowAdminDetails}
               isLoading={competitionsIsFetching}
               regStatusLoading={regDataIsPending}
               fetchMoreCompetitions={competitionsFetchNextPage}
@@ -141,6 +152,7 @@ function CompetitionsView() {
                   ))
                   : competitions
               }
+              isLoading={competitionsIsFetching}
               fetchMoreCompetitions={competitionsFetchNextPage}
               hasMoreCompsToLoad={hasMoreCompsToLoad}
             />

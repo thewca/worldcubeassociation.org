@@ -86,7 +86,7 @@ export default function DelegateProbations() {
 
   const {
     data: probationRoles, loading, error, sync,
-  } = useLoadedData(apiV0Urls.userRoles.listOfGroupType(groupTypes.delegate_probation));
+  } = useLoadedData(apiV0Urls.userRoles.list({ groupType: groupTypes.delegate_probation }));
   const { save, saving } = useSaveAction();
 
   if (loading || saving) return 'Loading...'; // No i18n because this page is used only by WCA Staff.

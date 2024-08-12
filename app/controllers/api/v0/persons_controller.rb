@@ -33,6 +33,12 @@ class Api::V0::PersonsController < Api::V0::ApiController
     render json: person.competitions
   end
 
+  def personal_records
+    person = Person.find_by(wca_id: params.require(:wca_id))
+
+    render json: person.personal_records.map(&:to_wcif)
+  end
+
   private def person_to_json(person, private_attributes = [])
     {
       person: person.serializable_hash(only: [:wca_id, :name, :url, :gender, :country_iso2, :delegate_status, :teams, :avatar], private_attributes: private_attributes),

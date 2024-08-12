@@ -6,6 +6,7 @@ class ConnectedStripeAccount < ApplicationRecord
   def prepare_intent(registration, amount_iso, currency_iso, paying_user)
     registration.payment_intents
                 .incomplete
+                .stripe
                 .each do |intent|
       if intent.account_id == self.account_id && intent.created?
         # Send the updated parameters to Stripe (maybe the user decided to donate in the meantime,
@@ -19,6 +20,13 @@ class ConnectedStripeAccount < ApplicationRecord
     self.create_intent(registration, amount_iso, currency_iso, paying_user)
   end
 
+  # This method implements the PaymentElements workflow described at:
+  # - https://stripe.com/docs/payments/quickstart
+  # - https://stripe.com/docs/payments/accept-a-payment
+  # - https://stripe.com/docs/payments/accept-a-payment?ui=elements
+  # It essentially creates a PaymentIntent for the current user-specified amount.
+  # Everything after the creation of the intent is handled by Stripe through their JS integration.
+  # At the very end, when the process is finished, it redirects the user to a return URL that we specified.
   private def create_intent(registration, amount_iso, currency_iso, paying_user)
     stripe_amount = StripeRecord.amount_to_stripe(amount_iso, currency_iso)
 
@@ -70,14 +78,16 @@ class ConnectedStripeAccount < ApplicationRecord
     )
   end
 
-  def issue_refund(charge_id, amount_iso)
-    charge_record = StripeRecord.charge.find_by!(stripe_id: charge_id)
+  def find_payment(record_id)
+    StripeRecord.charge.find(record_id)
+  end
 
+  def issue_refund(charge_record, amount_iso)
     currency_iso = charge_record.currency_code
     stripe_amount = StripeRecord.amount_to_stripe(amount_iso, currency_iso)
 
     refund_args = {
-      charge: charge_id,
+      charge: charge_record.stripe_id,
       amount: stripe_amount,
     }
 
@@ -87,6 +97,14 @@ class ConnectedStripeAccount < ApplicationRecord
     )
 
     StripeRecord.create_from_api(refund, refund_args, self.account_id, charge_record)
+  end
+
+  def account_details
+    stripe_acct = Stripe::Account.retrieve(self.account_id)
+
+    stripe_acct.as_json.slice("email", "country").merge({
+                                                          "business_name" => stripe_acct.business_profile.name,
+                                                        })
   end
 
   def self.generate_onboarding_link(competition_id)

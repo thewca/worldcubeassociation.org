@@ -21,6 +21,11 @@ class CompetitionPaymentIntegration < ApplicationRecord
     stripe: "https://docs.stripe.com/currencies#supportedcurrencies",
   }.freeze
 
+  INTEGRATION_RECORD_TYPES = {
+    paypal: 'PaypalRecord',
+    stripe: 'StripeRecord',
+  }.freeze
+
   scope :paypal, -> { where(connected_account_type: AVAILABLE_INTEGRATIONS[:paypal]) }
   scope :stripe, -> { where(connected_account_type: AVAILABLE_INTEGRATIONS[:stripe]) }
 

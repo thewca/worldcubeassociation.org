@@ -17,6 +17,26 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
     paginate json: competitions
   end
 
+  def competition_index
+    competitions = Competition.includes(:events)
+                              .search(params[:q], params: params)
+
+    serial_methods = ["short_display_name", "city", "country_iso2", "event_ids", "date_range", "latitude_degrees", "longitude_degrees"]
+    serial_includes = {}
+
+    admin_mode = current_user&.can_see_admin_competitions?
+
+    competitions = competitions.includes(:delegate_report) if admin_mode
+
+    serial_includes["delegates"] = { only: ["id", "name"], include: ["avatar"] } if admin_mode
+    serial_methods |= ["announced_at", "results_submitted_at", "report_posted_at"] if admin_mode
+
+    paginate json: competitions,
+             only: ["id", "name", "start_date", "end_date", "registration_open", "registration_close", "venue"],
+             methods: serial_methods,
+             include: serial_includes
+  end
+
   def show
     competition = competition_from_params
 
@@ -29,7 +49,7 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
                  allow_registration_without_qualification refund_policy_percent use_wca_registration guests_per_registration_limit venue contact
                  force_comment_in_registration use_wca_registration external_registration_page guests_entry_fee_lowest_denomination guest_entry_status
                  information events_per_registration_limit],
-        methods: %w[url website short_name city venue_address venue_details latitude_degrees longitude_degrees country_iso2 event_ids registration_opened?
+        methods: %w[url website short_name city venue_address venue_details latitude_degrees longitude_degrees country_iso2 event_ids registration_currently_open?
                     main_event_id number_of_bookmarks using_payment_integrations? uses_qualification? uses_cutoff? competition_series_ids],
         include: %w[delegates organizers tabs],
       }

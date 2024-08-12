@@ -11,12 +11,19 @@ export const setMessage = (key, type, params) => ({
   },
 });
 
+export const clearMessage = () => ({
+  payload: {
+    message: null,
+  },
+});
+
 export default function RegistrationMessage({ parentRef }) {
   const { message } = useStore();
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (message?.key) {
+    // Don't clear negative Messages automatically
+    if (message?.key && message.type !== 'negative') {
       setTimeout(() => {
         dispatch({ payload: { message: null } });
       }, 4000);
@@ -31,7 +38,9 @@ export default function RegistrationMessage({ parentRef }) {
         positive={message.type === 'positive'}
         negative={message.type === 'negative'}
       >
-        {I18n.t(message.key, message.params)}
+        {Array.isArray(message.key)
+          ? message.key.map((keys) => I18n.t(keys, message.params))
+          : I18n.t(message.key, message.params)}
       </Message>
     </Sticky>
   );
