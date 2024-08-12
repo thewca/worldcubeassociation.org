@@ -45,11 +45,17 @@ jobs:
         run: |
           echo "SHORT_SHA=$(git rev-parse --short HEAD)" >> "$GITHUB_ENV"
       - name: Build Assets and push to S3
+        env:
+          RAILS_ENV: production
+          WCA_LIVE_SITE: false
+          ASSETS_COMPILATION: true
+          SECRET_KEY_BASE: 1
+          SHAKAPACKER_ASSET_HOST: "assets-staging.worldcubeassociation.org"
         run: |
           ./bin/bundle install
           ./bin/yarn install --immutable
-          RAILS_ENV=production WCA_LIVE_SITE=false ASSETS_COMPILATION=true SECRET_KEY_BASE=1 ./bin/bundle exec i18n export
-          RAILS_ENV=production WCA_LIVE_SITE=false ASSETS_COMPILATION=true SECRET_KEY_BASE=1 ./bin/rake assets:precompile
+          ./bin/bundle exec i18n export
+          ./bin/rake assets:precompile
           aws s3 sync ./public "s3://assets-staging.worldcubeassociation.org/assets/${{ env.SHORT_SHA }}"
       - name: Build Sidekiq if triggered
         if: steps.trigger-deployment.outputs.triggered == 'true'
