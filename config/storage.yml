@@ -23,5 +23,5 @@ s3_avatars_public:
 
 s3_avatars_private:
   <<: *s3_default
-  bucket: <%= EnvConfig.S3_AVATARS_BUCKET %>
+  bucket: <%= EnvConfig.S3_AVATARS_PRIVATE_BUCKET %>
   region: <%= EnvConfig.S3_AVATARS_REGION %>

@@ -9,8 +9,8 @@ class UserAvatar < ApplicationRecord
   belongs_to :approved_by_user, class_name: "User", foreign_key: :approved_by, optional: true
   belongs_to :revoked_by_user, class_name: "User", foreign_key: :revoked_by, optional: true
 
-  has_one_attached :public_image, service: :s3_avatars_public
-  has_one_attached :private_image, service: :s3_avatars_private
+  has_one_attached :public_image, service: EnvConfig.AVATARS_PUBLIC_STORAGE
+  has_one_attached :private_image, service: EnvConfig.AVATARS_PRIVATE_STORAGE
 
   default_scope { with_attached_public_image }
 
