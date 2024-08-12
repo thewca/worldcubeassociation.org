@@ -87,25 +87,6 @@ class UserAvatar < ApplicationRecord
     self.filename == DEFAULT_AVATAR_FILE && self.backend == UserAvatar.backends[:local]
   end
 
-  after_save :move_image_if_approved,
-             if: [:active_storage?, :status_previously_changed?],
-             # ActiveStorage takes care of purging attachments from destroyed records
-             unless: :destroyed?
-
-  private def move_image_if_approved
-    old_status, new_status = self.status_previous_change
-
-    if new_status == UserAvatar.statuses[:approved]
-      # We approved a new avatar! Take the previously private file and upload it to public storage.
-      self.public_image.attach(self.private_image.blob)
-      self.private_image.purge_later
-    elsif old_status == UserAvatar.statuses[:approved]
-      # We un-approved (deleted OR rejected) an old avatar. Take the previously public file and make it private.
-      self.private_image.attach(self.public_image.blob)
-      self.public_image.purge_later
-    end
-  end
-
   after_save :add_user_associations,
              if: :user_previously_changed?,
              unless: :destroyed?
@@ -118,7 +99,7 @@ class UserAvatar < ApplicationRecord
     end
   end
 
-  after_save :move_user_associations,
+  after_save :move_user_associations, :register_status_timestamps, :move_image_if_approved,
              if: :status_previously_changed?,
              unless: :destroyed?
 
@@ -138,15 +119,30 @@ class UserAvatar < ApplicationRecord
     end
   end
 
-  after_save :register_status_timestamps,
-             if: :status_previously_changed?,
-             unless: :destroyed?
-
   def register_status_timestamps
     if self.status == UserAvatar.statuses[:approved]
       self.touch :approved_at
     elsif self.status == UserAvatar.statuses[:rejected] || self.status == UserAvatar.statuses[:deleted]
       self.touch :revoked_at
+    end
+  end
+
+  def move_image_if_approved
+    # In the long run, this check should disappear.
+    #   The local-fs enum entry is only used for the dummy avatar, and that one is never deleted.
+    #   The s3-legacy-cdn will be replaced/migrated in the future.
+    return unless self.active_storage?
+
+    old_status, new_status = self.status_previous_change
+
+    if new_status == UserAvatar.statuses[:approved]
+      # We approved a new avatar! Take the previously private file and upload it to public storage.
+      self.public_image.attach(self.private_image.blob)
+      self.private_image.purge_later
+    elsif old_status == UserAvatar.statuses[:approved]
+      # We un-approved (deleted OR rejected) an old avatar. Take the previously public file and make it private.
+      self.private_image.attach(self.public_image.blob)
+      self.public_image.purge_later
     end
   end
 
