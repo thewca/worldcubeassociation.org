@@ -5,7 +5,6 @@ require "fileutils"
 
 class User < ApplicationRecord
   include MicroserviceRegistrationHolder
-  include PanelHelper
 
   has_many :competition_delegates, foreign_key: "delegate_id"
   # This gives all the competitions where the user is marked as a Delegate,
@@ -657,8 +656,128 @@ class User < ApplicationRecord
     groups
   end
 
+  def self.panel_pages
+    [
+      :postingDashboard,
+      :editPerson,
+      :regionsManager,
+      :groupsManagerAdmin,
+      :bannedCompetitors,
+      :translators,
+      :duesExport,
+      :countryBands,
+      :delegateProbations,
+      :xeroUsers,
+      :duesRedirect,
+      :delegateForms,
+      :regions,
+      :subordinateDelegateClaims,
+      :subordinateUpcomingCompetitions,
+      :leaderForms,
+      :groupsManager,
+      :importantLinks,
+      :delegateHandbook,
+      :seniorDelegatesList,
+      :leadersAdmin,
+      :boardEditor,
+      :officersEditor,
+      :regionsAdmin,
+      :downloadVoters,
+      :generateDbToken,
+    ].index_with { |panel_page| panel_page.to_s.underscore.dasherize }
+  end
+
+  def self.panel_list
+    panel_pages = User.panel_pages
+    {
+      admin: {
+        name: 'New Admin panel',
+        pages: panel_pages.values,
+      },
+      staff: {
+        name: 'Staff panel',
+        pages: [],
+      },
+      delegate: {
+        name: 'Delegate panel',
+        pages: [
+          panel_pages[:importantLinks],
+          panel_pages[:delegateHandbook],
+          panel_pages[:bannedCompetitors],
+        ],
+      },
+      wfc: {
+        name: 'WFC panel',
+        pages: [],
+      },
+      wrt: {
+        name: 'WRT panel',
+        pages: [
+          panel_pages[:postingDashboard],
+          panel_pages[:editPerson],
+        ],
+      },
+      wst: {
+        name: 'WST panel',
+        pages: [
+          panel_pages[:translators],
+        ],
+      },
+      board: {
+        name: 'Board panel',
+        pages: [
+          panel_pages[:seniorDelegatesList],
+          panel_pages[:leadersAdmin],
+          panel_pages[:regionsManager],
+          panel_pages[:delegateProbations],
+          panel_pages[:groupsManagerAdmin],
+          panel_pages[:boardEditor],
+          panel_pages[:officersEditor],
+          panel_pages[:regionsAdmin],
+          panel_pages[:bannedCompetitors],
+        ],
+      },
+      leader: {
+        name: 'Leader panel',
+        pages: [
+          panel_pages[:leaderForms],
+          panel_pages[:groupsManager],
+        ],
+      },
+      senior_delegate: {
+        name: 'Senior Delegate panel',
+        pages: [
+          panel_pages[:delegateForms],
+          panel_pages[:regions],
+          panel_pages[:delegateProbations],
+          panel_pages[:subordinateDelegateClaims],
+          panel_pages[:subordinateUpcomingCompetitions],
+        ],
+      },
+      wdc: {
+        name: 'WDC panel',
+        pages: [
+          panel_pages[:bannedCompetitors],
+        ],
+      },
+      wec: {
+        name: 'WEC panel',
+        pages: [
+          panel_pages[:bannedCompetitors],
+          panel_pages[:downloadVoters],
+        ],
+      },
+      weat: {
+        name: 'WEAT panel',
+        pages: [
+          panel_pages[:bannedCompetitors],
+        ],
+      },
+    }
+  end
+
   def panels_with_access
-    panel_list.keys.select { |panel_id| can_access_panel?(panel_id) }
+    User.panel_list.keys.select { |panel_id| can_access_panel?(panel_id) }
   end
 
   def permissions
