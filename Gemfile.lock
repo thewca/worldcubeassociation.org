@@ -919,7 +919,7 @@ DEPENDENCIES
   rubocop
   rubocop-thread_safety
   sass-rails
-  sassc-embedded
+  sassc-embedded (~> 1)
   sdoc
   seedbank
   selectize-rails!
