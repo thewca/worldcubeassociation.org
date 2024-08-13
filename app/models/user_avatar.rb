@@ -114,7 +114,11 @@ class UserAvatar < ApplicationRecord
     end
 
     if self.status == UserAvatar.statuses[:approved]
-      user.current_avatar.update!(status: UserAvatar.statuses[:deprecated])
+      # Mark the previous avatar as 'deprecated', so that its public file gets removed.
+      #   The most common use-case is for users to upload new avatars (which are then pending approval)
+      #   without explicitly deleting the old one. By using this status change,
+      #   we can make sure that the then-old avatar (after approval) gets moved to the private file instead.
+      user.current_avatar&.update!(status: UserAvatar.statuses[:deprecated])
 
       user.update_attribute(:current_avatar, self)
     elsif user.current_avatar_id == self.id
@@ -143,6 +147,8 @@ class UserAvatar < ApplicationRecord
     end
   end
 
+  # It is crucial to trigger this hook last. Even though the `.touch` method in itself doesn't
+  #   trigger any subsequent *_save hooks, it "ruins" the other two save hooks' `previous_change` attribute reading.
   after_save :register_status_timestamps,
              if: :status_previously_changed?,
              unless: :destroyed?
