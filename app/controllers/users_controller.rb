@@ -203,7 +203,7 @@ class UsersController < ApplicationController
   end
 
   private def sso_moderator?(user)
-    UserGroup.council_group_wac.active_users.include?(user)
+    user.communication_team?
   end
 
   def sso_discourse

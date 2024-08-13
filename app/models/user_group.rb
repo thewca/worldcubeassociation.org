@@ -109,16 +109,12 @@ class UserGroup < ApplicationRecord
     GroupsMetadataTeamsCommittees.wcat.user_group
   end
 
-  def self.teams_committees_group_wdc
-    GroupsMetadataTeamsCommittees.wdc.user_group
+  def self.teams_committees_group_wic
+    GroupsMetadataTeamsCommittees.wic.user_group
   end
 
   def self.teams_committees_group_wdpc
     GroupsMetadataTeamsCommittees.wdpc.user_group
-  end
-
-  def self.teams_committees_group_wec
-    GroupsMetadataTeamsCommittees.wec.user_group
   end
 
   def self.teams_committees_group_weat
@@ -145,10 +141,6 @@ class UserGroup < ApplicationRecord
     GroupsMetadataTeamsCommittees.wrt.user_group
   end
 
-  def self.council_group_wac
-    GroupsMetadataCouncils.find_by(friendly_id: 'wac').user_group
-  end
-
   def self.teams_committees_group_wst
     GroupsMetadataTeamsCommittees.wst.user_group
   end
@@ -167,6 +159,10 @@ class UserGroup < ApplicationRecord
 
   def self.teams_committees_group_wsot
     GroupsMetadataTeamsCommittees.wsot.user_group
+  end
+
+  def self.teams_committees_group_wapc
+    GroupsMetadataTeamsCommittees.wapc.user_group
   end
 
   def self.banned_competitors_group

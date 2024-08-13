@@ -476,8 +476,8 @@ module DatabaseDumper
           nag_sent_at
           wrc_feedback_requested
           wrc_incidents
-          wdc_feedback_requested
-          wdc_incidents
+          wic_feedback_requested
+          wic_incidents
           wrc_primary_user_id
           wrc_secondary_user_id
           reminder_sent_at
