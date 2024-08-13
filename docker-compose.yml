@@ -57,6 +57,7 @@ services:
     environment:
       DATABASE_HOST: wca_db
       SHAKAPACKER_DEV_SERVER_HOST: 0.0.0.0
+      NODE_ENV: development
     command: >
       bash -c 'bundle install && yarn install &&
       bin/shakapacker-dev-server'
