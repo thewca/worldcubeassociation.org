@@ -2493,10 +2493,6 @@ class Competition < ApplicationRecord
   def set_form_data(form_data, current_user)
     JSON::Validator.validate!(Competition.form_data_json_schema, form_data)
 
-    if self.confirmed? && !current_user.can_admin_competitions?
-      raise WcaExceptions::BadApiParameter.new("Cannot change announced competition")
-    end
-
     ActiveRecord::Base.transaction do
       self.editing_user_id = current_user.id
 
