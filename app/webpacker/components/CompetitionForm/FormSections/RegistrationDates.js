@@ -1,10 +1,10 @@
-import React, {useMemo} from 'react';
+import React, { useMemo } from 'react';
 import { Form } from 'semantic-ui-react';
+import { DateTime } from 'luxon';
 import { InputDate } from '../../wca/FormBuilder/input/FormInputs';
 import RegistrationCollisions from '../Tables/RegistrationCollisions';
 import SubSection from '../../wca/FormBuilder/SubSection';
 import { useFormObject } from '../../wca/FormBuilder/provider/FormObjectProvider';
-import {DateTime} from "luxon";
 
 export default function RegistrationDates() {
   const {
