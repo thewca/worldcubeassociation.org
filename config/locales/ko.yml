@@ -240,7 +240,7 @@ ko:
     #original_hash: 52249b5
     datetime_placeholder: '년-월-일 시간 (YYYY-MM-DD HH:MM)'
     #original_hash: 7136e3b
-    time_format: 12기준
+    time_format: 12h
   oauth:
     applications:
       #original_hash: 0c4ea38
