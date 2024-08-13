@@ -697,7 +697,7 @@ en:
       translators: "Translators"
       faq: "Frequently Asked Questions"
       forum: "Forum"
-      teams: "Teams, Committees, and Councils"
+      teams: "Teams and Committees"
       education: "Educational resources"
       wca_live: "WCA Live"
       contact: "Contact"
@@ -758,7 +758,7 @@ en:
       officers_description: "The officers of the WCA handle tasks relating to the non-profit status of the WCA. These officers are elected by the WCA Board. The Executive Director is the Chief Executive Officer of the WCA, the Chair presides over all Board meetings, the Secretary maintains the organization's documents, and the Treasurer manages financial matters of the WCA."
       board_description: "The WCA Board is responsible for leading the organization as a whole, and fulfilling any duties not fulfilled by other Teams,  Committees, and Councils"
     teams_committees_councils:
-      title: "WCA Teams, Committees, and Councils"
+      title: "WCA Teams and Committees"
       description: "The WCA's teams and committees are an integral part of the organization and perform the day-to-day tasks that are required to keep it functioning. These committees are made up of WCA community members, including WCA Delegates and competitors. Each team has a leader, whose role is to ensure the proper functioning of the team and guide other team members. Councils are a special type of team that serve an advisory role to the WCA Board and are made up of community members, not WCA Staff members. When there are committee, team, or council openings, information about how to apply is posted on the front page."
       contact_button: "Contact"
       no_contact_description: "The contact details of this team/committee is not publicly available."
