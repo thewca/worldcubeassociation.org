@@ -70,13 +70,13 @@ class UserAvatar < ApplicationRecord
 
   def thumbnail_image
     self.image.variant(
-      resize_and_pad: [100, 100],
       crop: [
         self.thumbnail_crop_x,
         self.thumbnail_crop_y,
         self.thumbnail_crop_w,
         self.thumbnail_crop_h,
       ],
+      resize_and_pad: [100, 100],
     )
   end
 
