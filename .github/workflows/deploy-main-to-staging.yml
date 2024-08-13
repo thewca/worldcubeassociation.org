@@ -1,7 +1,5 @@
-name: Deploy Image on GitHub Release
+name: Deploy Main to Staging Manually
 on:
-  release:
-    types: [created]
   workflow_dispatch:
 jobs:
   build:
@@ -25,26 +23,25 @@ jobs:
           push: true
           target: sidekiq
           tags: |
-            ${{ steps.login-ecr.outputs.registry }}/wca-on-rails:sidekiq-production
+            ${{ steps.login-ecr.outputs.registry }}/wca-on-rails:sidekiq-staging
           cache-from: type=gha
           cache-to: type=gha,mode=max
           build-args: |
             BUILD_TAG=${{ github.sha }}
-            WCA_LIVE_SITE=true
-        # this will trigger the deployment pipeline for prod
-      - name: Build and push Prod Image
+            WCA_LIVE_SITE=false
+      - name: Build and push Staging Image
         uses: docker/build-push-action@v6
         with:
           push: true
           target: monolith
           tags: |
-            ${{ steps.login-ecr.outputs.registry }}/wca-on-rails:latest
+            ${{ steps.login-ecr.outputs.registry }}/wca-on-rails:staging
           cache-from: type=gha
           cache-to: type=gha,mode=max
           build-args: |
             BUILD_TAG=${{ github.sha }}
-            WCA_LIVE_SITE=true
-        # Replace the old sidekiq image with the new one
-      - name: Deploy Sidekiq
+            WCA_LIVE_SITE=false
+        # There is no pipeline for staging so we manually force to update the image
+      - name: Deploy staging
         run: |
-          aws ecs update-service --cluster wca-on-rails --service wca-on-rails-prod-auxiliary-services --force-new-deployment
+          aws ecs update-service --cluster wca-on-rails --service wca-on-rails-staging --force-new-deployment
