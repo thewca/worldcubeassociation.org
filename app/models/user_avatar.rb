@@ -19,6 +19,7 @@ class UserAvatar < ApplicationRecord
     approved: 'approved',
     rejected: 'rejected',
     deleted: 'deleted',
+    deprecated: 'deprecated',
   }, default: :pending
 
   enum :backend, {
@@ -113,6 +114,8 @@ class UserAvatar < ApplicationRecord
     end
 
     if self.status == UserAvatar.statuses[:approved]
+      user.current_avatar.update!(status: UserAvatar.statuses[:deprecated])
+
       user.update_attribute(:current_avatar, self)
     elsif user.current_avatar_id == self.id
       user.update_attribute(:current_avatar, nil)
