@@ -2835,10 +2835,12 @@ class Competition < ApplicationRecord
   def self.delegate_edits_json_schema
     {
       "type" => "object",
+      "additionalProperties" => false,
       "properties" => {
         "information" => { "type" => ["string", "null"] },
         "staff" => {
           "type" => "object",
+          "additionalProperties" => false,
           "properties" => {
             "staffDelegateIds" => {
               "type" => "array",
@@ -2860,6 +2862,7 @@ class Competition < ApplicationRecord
         },
         "website" => {
           "type" => "object",
+          "additionalProperties" => false,
           "properties" => {
             "generateWebsite" => { "type" => ["boolean", "null"] },
             "externalWebsite" => { "type" => ["string", "null"] },
@@ -2870,12 +2873,14 @@ class Competition < ApplicationRecord
         },
         "userSettings" => {
           "type" => "object",
+          "additionalProperties" => false,
           "properties" => {
             "receiveRegistrationEmails" => { "type" => "boolean" },
           },
         },
         "entryFees" => {
           "type" => "object",
+          "additionalProperties" => false,
           "properties" => {
             "currencyCode" => { "type" => "string" },
             "baseEntryFee" => { "type" => ["integer", "null"] },
@@ -2888,6 +2893,7 @@ class Competition < ApplicationRecord
         },
         "registration" => {
           "type" => "object",
+          "additionalProperties" => false,
           "properties" => {
             "closingDateTime" => date_json_schema("date-time"),
             "allowOnTheSpot" => { "type" => ["boolean", "null"] },
@@ -2897,6 +2903,7 @@ class Competition < ApplicationRecord
         },
         "eventRestrictions" => {
           "type" => "object",
+          "additionalProperties" => false,
           "properties" => {
             "mainEventId" => { "type" => ["string", "null"] },
           },
