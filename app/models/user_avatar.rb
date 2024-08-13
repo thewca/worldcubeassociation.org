@@ -49,9 +49,9 @@ class UserAvatar < ApplicationRecord
     case self.backend
     when 'active_storage'
       if self.approved?
-        Rails.application.routes.url_helpers.rails_storage_proxy_url(self.image)
+        Rails.application.routes.url_helpers.rails_storage_proxy_url(self.thumbnail_image)
       else
-        Rails.application.routes.url_helpers.rails_representation_url(self.image)
+        Rails.application.routes.url_helpers.rails_representation_url(self.thumbnail_image)
       end
     else
       # Only get the thumbnail if AR does the image processing for us
@@ -99,7 +99,7 @@ class UserAvatar < ApplicationRecord
     end
   end
 
-  after_save :move_user_associations, :register_status_timestamps, :move_image_if_approved,
+  after_save :move_user_associations,
              if: :status_previously_changed?,
              unless: :destroyed?
 
@@ -119,13 +119,9 @@ class UserAvatar < ApplicationRecord
     end
   end
 
-  def register_status_timestamps
-    if self.status == UserAvatar.statuses[:approved]
-      self.touch :approved_at
-    elsif self.status == UserAvatar.statuses[:rejected] || self.status == UserAvatar.statuses[:deleted]
-      self.touch :revoked_at
-    end
-  end
+  after_save :move_image_if_approved,
+             if: :status_previously_changed?,
+             unless: :destroyed?
 
   def move_image_if_approved
     # In the long run, this check should disappear.
@@ -143,6 +139,18 @@ class UserAvatar < ApplicationRecord
       # We un-approved (deleted OR rejected) an old avatar. Take the previously public file and make it private.
       self.private_image.attach(self.public_image.blob)
       self.public_image.purge_later
+    end
+  end
+
+  after_save :register_status_timestamps,
+             if: :status_previously_changed?,
+             unless: :destroyed?
+
+  def register_status_timestamps
+    if self.status == UserAvatar.statuses[:approved]
+      self.touch :approved_at
+    elsif self.status == UserAvatar.statuses[:rejected] || self.status == UserAvatar.statuses[:deleted]
+      self.touch :revoked_at
     end
   end
 
