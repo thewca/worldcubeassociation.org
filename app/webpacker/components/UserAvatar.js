@@ -11,7 +11,7 @@ function UserAvatar({
   size = 'medium',
   disableHover = false,
 }) {
-  const { url } = avatar;
+  const { url, thumbnail_url: thumbUrl } = avatar;
 
   if (!['tiny', 'small', 'medium', 'large'].includes(size)) {
     throw new Error(`Invalid size: ${size} must be one of 'small', 'medium', or 'large'`);
@@ -25,15 +25,23 @@ function UserAvatar({
     unit: 'px',
   };
 
+  const backgroundStyle = thumbUrl && {
+    backgroundImage: `url(${thumbUrl})`,
+    backgroundSize: 'cover',
+  };
+
   const image = (
     <div
       className={`user-avatar-image-${size} ${avatarClass}`}
       title={title}
+      style={backgroundStyle}
     >
-      <CroppedImage
-        crop={cropAbs}
-        src={url}
-      />
+      {!thumbUrl && (
+        <CroppedImage
+          crop={cropAbs}
+          src={url}
+        />
+      )}
     </div>
   );
 

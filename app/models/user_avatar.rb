@@ -221,7 +221,7 @@ class UserAvatar < ApplicationRecord
 
   DEFAULT_SERIALIZE_OPTIONS = {
     only: ["id", "status", "thumbnail_crop_x", "thumbnail_crop_y", "thumbnail_crop_w", "thumbnail_crop_h"],
-    methods: ["url", "is_default?"],
+    methods: ["url", "thumbnail_url", "is_default?"],
   }.freeze
 
   def serializable_hash(options = nil)
