@@ -413,6 +413,13 @@ class Competition < ApplicationRecord
     end
   end
 
+  validate :must_have_at_least_one_organizer, if: :confirmed_or_visible?
+  def must_have_at_least_one_organizer
+    if organizer_ids.empty?
+      errors.add(:organizer_ids, I18n.t('competitions.errors.must_contain_organizer'))
+    end
+  end
+
   def confirmed_or_visible?
     self.confirmed? || self.showAtAll
   end
