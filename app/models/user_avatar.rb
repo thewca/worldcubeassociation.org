@@ -48,6 +48,15 @@ class UserAvatar < ApplicationRecord
 
   def thumbnail_url
     case self.backend
+    when 's3_legacy_cdn'
+      host = EnvConfig.S3_AVATARS_ASSET_HOST.delete_prefix('https://')
+
+      actual_filename, file_ending = self.filename.split('.')
+      thumb_filename = "#{actual_filename}_thumb.#{file_ending}"
+
+      path = "/uploads/user/avatar/#{user.wca_id}/#{thumb_filename}"
+
+      URI::HTTPS.build(host: host, path: path).to_s
     when 'active_storage'
       if self.approved?
         Rails.application.routes.url_helpers.rails_storage_proxy_url(self.thumbnail_image)
@@ -165,6 +174,7 @@ class UserAvatar < ApplicationRecord
     {
       "id" => self.id,
       "url" => self.url,
+      "thumbUrl" => self.thumbnail_url,
       "thumbnail" => {
         "x" => self.thumbnail_crop_x,
         "y" => self.thumbnail_crop_y,
@@ -180,6 +190,7 @@ class UserAvatar < ApplicationRecord
       "properties" => {
         "id" => { "type" => "integer" },
         "url" => { "type" => "string" },
+        "thumbUrl" => { "type" => "string" },
         "thumbnail" => {
           "type" => "object",
           "properties" => {
