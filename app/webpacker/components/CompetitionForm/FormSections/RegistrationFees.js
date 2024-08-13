@@ -25,12 +25,13 @@ export default function RegistrationFees() {
     venue: {
       countryId: country,
     },
-    entryFees,
+    entryFees: {
+      baseEntryFee,
+      currencyCode: currency,
+    },
     competitorLimit,
     registration,
   } = useFormObject();
-
-  const currency = entryFees.currencyCode;
 
   const canRegOnSite = registration && registration.allowOnTheSpot;
 
@@ -39,12 +40,12 @@ export default function RegistrationFees() {
 
     params.append('competitor_limit_enabled', competitorLimit.enabled);
     params.append('competitor_limit', competitorLimit.count);
-    params.append('currency_code', entryFees.currencyCode);
-    params.append('base_entry_fee_lowest_denomination', entryFees.baseEntryFee);
+    params.append('currency_code', currency);
+    params.append('base_entry_fee_lowest_denomination', baseEntryFee);
     params.append('country_id', country);
 
     return params;
-  }, [competitorLimit, country, entryFees]);
+  }, [competitorLimit, country, baseEntryFee, currency]);
 
   const entryFeeDuesUrl = useMemo(
     () => `${calculateDuesUrl}?${savedParams.toString()}`,
@@ -83,7 +84,7 @@ export default function RegistrationFees() {
         </b>
       </p>
       <ConditionalSection showIf={canRegOnSite}>
-        <InputCurrencyAmount id="onTheSpotEntryFee" currency={currency} required={canRegOnSite} />
+        <InputCurrencyAmount id="onTheSpotEntryFee" currency={currency} required={canRegOnSite} overrideEnabled />
       </ConditionalSection>
       <InputCurrencyAmount id="guestEntryFee" currency={currency} />
       <InputBoolean id="donationsEnabled" overrideEnabled />

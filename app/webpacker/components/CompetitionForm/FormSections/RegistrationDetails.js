@@ -34,7 +34,7 @@ export default function RegistrationDetails() {
     <SubSection section="registration">
       <InputDate id="waitingListDeadlineDate" dateTime required />
       <InputDate id="eventChangeDeadlineDate" dateTime required />
-      <InputBooleanSelect id="allowOnTheSpot" required />
+      <InputBooleanSelect id="allowOnTheSpot" required overrideEnabled />
       <InputBooleanSelect id="allowSelfDeleteAfterAcceptance" required />
       <InputBooleanSelect id="allowSelfEdits" required overrideEnabled />
       <InputRadio id="guestsEnabled" options={guestsEnabledOptions} />
