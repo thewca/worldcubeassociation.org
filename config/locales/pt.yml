@@ -486,10 +486,12 @@ pt:
         wrc_feedback_requested: Quero obter feedback do WRC em alguns dos incidentes anteriores.
         #original_hash: 0c7191d
         wrc_incidents: Incidentes a necessitar feedback do WRC
-        #original_hash: 5a92b25
-        wdc_feedback_requested: Gostaria de obter feedback do WDC em alguns dos incidentes acima.
-        #original_hash: 06a0568
-        wdc_incidents: Incidentes a necessitar de feedback pelo WDC
+        #original_hash: 1a54a79
+        wic_feedback_requested: >-
+          Gostaria de receber feedback do WIC sobre alguns dos incidentes acima
+          referidos.
+        #original_hash: 000153c
+        wic_incidents: Incidentes que necessitam de feedback do WIC
         #original_hash: d7020f4
         remarks: Observações
       person:
@@ -817,11 +819,11 @@ pt:
           Lista de números referenciando qualquer incidente que gostaria de
           obter feedback pelo WRC.
         #original_hash: da39a3e
-        wdc_feedback_requested: ''
-        #original_hash: 38a95e5
-        wdc_incidents: >-
-          Lista de números referenciando qualquer incidente que gostaria de
-          obter feedback pelo WDC.
+        wic_feedback_requested: ''
+        #original_hash: 0aca3b0
+        wic_incidents: >-
+          Lista de números que fazem referência a quaisquer incidentes sobre os
+          quais gostaria de receber feedback do WIC.
         #original_hash: f30abdc
         remarks: >-
           Fale sobre qualquer outro detalhe que gostaria de partilhar (p. ex.
@@ -1367,10 +1369,8 @@ pt:
         wct: Equipa de Comunicação da WCA
         #original_hash: 2b81984
         wcat: Equipa de Anúncio de Competições da WCA
-        #original_hash: c97077a
-        wdc: Comité Disciplinar da WCA
-        #original_hash: 83bd1d0
-        wec: Comité de Ética da WCA
+        #original_hash: 94c2e42
+        wic: Comité de Integridade da WCA
         #original_hash: d1dbb86
         weat: Equipa de Assistentes Executivos da WCA
         #original_hash: 9cb13de
@@ -1387,8 +1387,8 @@ pt:
         wst: Equipa de Software da WCA
         #original_hash: 58765c7
         wsot: Equipa de Organização Desportiva da WCA
-        #original_hash: 1ce7604
-        wac: Conselho Consultivo da WCA
+        #original_hash: 78949a7
+        wapc: Comité de Apelos da WCA
       groups_description:
         #original_hash: 5b1aade
         wat: >-
@@ -1413,23 +1413,13 @@ pt:
           submissão de competições a partir de documentos como a Política de
           Requisitos de Competição da WCA. A WCAT NÃO é responsável pela
           organização e delegação de competições individuais.
-        #original_hash: 41eb6fd
-        wdc: >-
-          O Comité Disciplinar da WCA (WDC) realiza investigações independentes
-          sobre Speedcubers Registrados e incidentes durante Competições da WCA
-          ou em plataformas oficiais online da WCA. Estes incidentes são
-          alegadas violações do Espírito, do Código de Conduta e/ou dos
-          Regulamentos da WCA.
-        #original_hash: 6cdac80
-        wec: >-
-          O papel deste comité é garantir que todos os procedimentos seguidos
-          pelo staff da WCA cumpram o Código de Ética e realizar investigações
-          independentes se a conduta de qualquer um destes membros não estiver
-          em conformidade com o Código. O WEC é um confidente dos Speedcubers
-          Registrados que podem relatar preocupações e solicitar uma
-          investigação. Este comité também funciona como conselho de recurso se
-          alguém envolvido discordar de uma decisão tomada pelo Comité
-          Disciplinar da WCA.
+        #original_hash: 5007698
+        wic: >-
+          O Comité de Integridade da WCA (WIC) realiza investigações
+          independentes relativos a membros da comunidade WCA e incidentes
+          durante as Competições da WCA ou nas plataformas oficiais online da
+          WCA. Estes incidentes são alegadas violações do Espírito, Código de
+          Conduta, Código de Ética e/ou Regulamentos da WCA.
         #original_hash: 889dd90
         weat: >-
           Esta equipa é responsável pela execução das tarefas administrativas do
@@ -1474,11 +1464,13 @@ pt:
         wsot: >-
           Esta equipa tem a função de supervisionar e apoiar o reconhecimento da
           WCA enquanto organização desportiva internacional.
-        #original_hash: 73d8df4
-        wac: >-
-          O WAC é responsável por manter o feedback e a comunicação entre a
-          Comunidade WCA e o Staff da WCA. Mantêm os Fóruns da WCA e tratam
-          inquéritos e tentam aumentar o alcance em toda a comunidade mundial.
+        #original_hash: 9f45bfa
+        wapc: >-
+          O Comité de Apelos da WCA (WAC) é responsável por rever e resolver os
+          apelos relativos a decisões tomadas por outros membros de staff da
+          WCA. A WAC fornece um processo de revisão independente e imparcial
+          para garantir que as decisões são justas, razoáveis ​​e de acordo com
+          as políticas e regulamentos da WCA.
     contacts:
       #original_hash: 4ef2aad
       title: Formulário de Contacto WCA
@@ -2106,11 +2098,11 @@ pt:
         zero: Tem que se registar em exatamente 0 eventos
         one: Tem que se registar em exatamente 1 evento
         other: 'Tem que se registar em de 1 a %{count} eventos.'
-      #original_hash: e78eec3
+      #original_hash: 87f7c12
       banned_html: >-
         Está banido. Se acreditar que se trata de um erro, por favor contacte o
-        <a href='mailto:disciplinary@worldcubeassociation.org'
-        target='_blank'>WDC</a>.
+        <a href='mailto:integrity@worldcubeassociation.org'
+        target='_blank'>WIC</a>.
       #original_hash: 8d07e7f
       undelete_banned: é um competidor banido e não pode ser recuperado
       #original_hash: 3de7c86
