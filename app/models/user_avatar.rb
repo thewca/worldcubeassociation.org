@@ -123,15 +123,13 @@ class UserAvatar < ApplicationRecord
   end
 
   after_save :move_image_if_approved,
-             if: :status_previously_changed?,
+             # In the long run, the active_storage? check should disappear.
+             #   The local-fs enum entry is only used for the dummy avatar, and that one is never deleted.
+             #   The s3-legacy-cdn will be replaced/migrated in the future.
+             if: [:active_storage?, :status_previously_changed?],
              unless: :destroyed?
 
   def move_image_if_approved
-    # In the long run, this check should disappear.
-    #   The local-fs enum entry is only used for the dummy avatar, and that one is never deleted.
-    #   The s3-legacy-cdn will be replaced/migrated in the future.
-    return unless self.active_storage?
-
     old_status, new_status = self.status_previous_change
 
     if new_status == UserAvatar.statuses[:approved]
