@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import {
   InputBoolean,
   InputCurrencyAmount,
@@ -12,7 +12,8 @@ import { calculateDuesUrl } from '../../../lib/requests/routes.js.erb';
 import useLoadedData from '../../../lib/hooks/useLoadedData';
 import ConditionalSection from './ConditionalSection';
 import SubSection from '../../wca/FormBuilder/SubSection';
-import { useFormObject } from '../../wca/FormBuilder/provider/FormObjectProvider';
+import { useFormInitialObject, useFormObject } from '../../wca/FormBuilder/provider/FormObjectProvider';
+import { useFormUpdateAction } from '../../wca/FormBuilder/EditForm';
 
 const currenciesOptions = Object.keys(currenciesData.byIso).map((iso) => ({
   key: iso,
@@ -33,7 +34,16 @@ export default function RegistrationFees() {
     registration,
   } = useFormObject();
 
+  const { registration: originalRegistration } = useFormInitialObject();
+
+  const updateFormValue = useFormUpdateAction();
+
+  const setOtsRegistrationFee = useCallback((otsFee) => {
+    updateFormValue('onTheSpotEntryFee', otsFee, ['entryFees']);
+  }, [updateFormValue]);
+
   const canRegOnSite = registration && registration.allowOnTheSpot;
+  const initialCanRegOnSite = originalRegistration && originalRegistration.allowOnTheSpot;
 
   const savedParams = useMemo(() => {
     const params = new URLSearchParams();
@@ -73,6 +83,12 @@ export default function RegistrationFees() {
       estimate: duesJson?.dues_value,
     })} (${currency})`;
   }, [competitorLimit, currency, duesJson, error]);
+
+  useEffect(() => {
+    if (canRegOnSite && !initialCanRegOnSite) {
+      setOtsRegistrationFee(baseEntryFee);
+    }
+  }, [baseEntryFee, canRegOnSite, initialCanRegOnSite, setOtsRegistrationFee]);
 
   return (
     <SubSection section="entryFees">
