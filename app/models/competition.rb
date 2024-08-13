@@ -2493,6 +2493,16 @@ class Competition < ApplicationRecord
   def set_form_data(form_data, current_user)
     JSON::Validator.validate!(Competition.form_data_json_schema, form_data)
 
+    if self.confirmed? && !current_user.can_admin_competitions?
+      current_state_form = self.to_form_data
+      changed_form_data = HashDiff.right_diff(current_state_form, form_data)
+
+      # This is a much "stricter" version of the general schema above.
+      #    If the Delegate submits fields that they are not allowed to edit,
+      #    then these fields will not be included in the schema and validation will fail.
+      JSON::Validator.validate!(Competition.delegate_edits_json_schema, changed_form_data)
+    end
+
     ActiveRecord::Base.transaction do
       self.editing_user_id = current_user.id
 
@@ -2814,6 +2824,81 @@ class Competition < ApplicationRecord
           "properties" => {
             "fromId" => { "type" => ["string", "null"] },
             "cloneTabs" => { "type" => "boolean" },
+          },
+        },
+      },
+    }
+  end
+
+  # Stuff that Delegates are allowed to edit even after the competition is announced,
+  #   see also https://docs.google.com/document/d/1-GwE5OXurBUnR7EVBRTGIN_dGj3AaU7vvan_6RjOW7Q/edit
+  def self.delegate_edits_json_schema
+    {
+      "type" => "object",
+      "properties" => {
+        "information" => { "type" => ["string", "null"] },
+        "staff" => {
+          "type" => "object",
+          "properties" => {
+            "staffDelegateIds" => {
+              "type" => "array",
+              "items" => { "type" => "integer" },
+              "uniqueItems" => true,
+            },
+            "traineeDelegateIds" => {
+              "type" => "array",
+              "items" => { "type" => "integer" },
+              "uniqueItems" => true,
+            },
+            "organizerIds" => {
+              "type" => "array",
+              "items" => { "type" => "integer" },
+              "uniqueItems" => true,
+            },
+            "contact" => { "type" => ["string", "null"] },
+          },
+        },
+        "website" => {
+          "type" => "object",
+          "properties" => {
+            "generateWebsite" => { "type" => ["boolean", "null"] },
+            "externalWebsite" => { "type" => ["string", "null"] },
+            "externalRegistrationPage" => { "type" => ["string", "null"] },
+            "usesWcaRegistration" => { "type" => "boolean" },
+            "usesWcaLive" => { "type" => "boolean" },
+          },
+        },
+        "userSettings" => {
+          "type" => "object",
+          "properties" => {
+            "receiveRegistrationEmails" => { "type" => "boolean" },
+          },
+        },
+        "entryFees" => {
+          "type" => "object",
+          "properties" => {
+            "currencyCode" => { "type" => "string" },
+            "baseEntryFee" => { "type" => ["integer", "null"] },
+            "onTheSpotEntryFee" => { "type" => ["integer", "null"] },
+            "guestEntryFee" => { "type" => ["integer", "null"] },
+            "donationsEnabled" => { "type" => ["boolean", "null"] },
+            "refundPolicyPercent" => { "type" => ["integer", "null"] },
+            "refundPolicyLimitDate" => date_json_schema("date-time"),
+          },
+        },
+        "registration" => {
+          "type" => "object",
+          "properties" => {
+            "closingDateTime" => date_json_schema("date-time"),
+            "allowOnTheSpot" => { "type" => ["boolean", "null"] },
+            "allowSelfEdits" => { "type" => "boolean" },
+            "forceComment" => { "type" => ["boolean", "null"] },
+          },
+        },
+        "eventRestrictions" => {
+          "type" => "object",
+          "properties" => {
+            "mainEventId" => { "type" => ["string", "null"] },
           },
         },
       },
