@@ -31,6 +31,10 @@ module WcaOnRails
 
     config.load_defaults 7.1
 
+    # Force belongs_to validations even on empty/unset keys.
+    #   This is potentially a Rails bug (?!?) and will be reported to their upstream repository
+    config.active_record.belongs_to_required_validates_foreign_key = true
+
     config.active_job.queue_adapter = :sidekiq
 
     config.generators do |g|
