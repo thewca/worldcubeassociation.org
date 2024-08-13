@@ -14,13 +14,13 @@ export default function Website() {
     <SubSection section="website">
       <InputBoolean id="generateWebsite" />
       <ConditionalSection showIf={usingExternalWebsite}>
-        <InputString id="externalWebsite" required={usingExternalWebsite} />
+        <InputString id="externalWebsite" required={usingExternalWebsite} overrideEnabled />
       </ConditionalSection>
       <InputBoolean id="usesWcaRegistration" />
       <ConditionalSection showIf={usingExternalRegistration}>
         <InputString id="externalRegistrationPage" />
       </ConditionalSection>
-      <InputBoolean id="usesWcaLive" />
+      <InputBoolean id="usesWcaLive" overrideEnabled />
     </SubSection>
   );
 }

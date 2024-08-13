@@ -44,7 +44,7 @@ function CompetitionForm() {
 
       <RegistrationDates />
 
-      <InputMarkdown id="information" required />
+      <InputMarkdown id="information" required overrideEnabled />
 
       <CompetitorLimit />
       <Staff />

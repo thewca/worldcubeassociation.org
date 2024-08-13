@@ -4,7 +4,7 @@ import SubSection from '../../wca/FormBuilder/SubSection';
 
 export default function Staff() {
   return (
-    <SubSection section="staff">
+    <SubSection section="staff" overrideEnabled>
       <InputUsers id="staffDelegateIds" delegateOnly required />
       <InputUsers id="traineeDelegateIds" traineeOnly />
       <InputUsers id="organizerIds" required />

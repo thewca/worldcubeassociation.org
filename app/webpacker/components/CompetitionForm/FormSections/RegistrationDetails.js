@@ -36,7 +36,7 @@ export default function RegistrationDetails() {
       <InputDate id="eventChangeDeadlineDate" dateTime required />
       <InputBooleanSelect id="allowOnTheSpot" required />
       <InputBooleanSelect id="allowSelfDeleteAfterAcceptance" required />
-      <InputBooleanSelect id="allowSelfEdits" required />
+      <InputBooleanSelect id="allowSelfEdits" required overrideEnabled />
       <InputRadio id="guestsEnabled" options={guestsEnabledOptions} />
       <ConditionalSection showIf={guestsGoFree}>
         <InputSelect id="guestEntryStatus" options={guestMessageOptions} required={guestsGoFree} />
@@ -45,7 +45,7 @@ export default function RegistrationDetails() {
         <InputNumber id="guestsPerRegistration" required={guestsRestricted} />
       </ConditionalSection>
       <InputMarkdown id="extraRequirements" />
-      <InputBoolean id="forceComment" />
+      <InputBoolean id="forceComment" overrideEnabled />
     </SubSection>
   );
 }
