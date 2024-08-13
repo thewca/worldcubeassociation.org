@@ -370,6 +370,7 @@ GEM
       guard (~> 2.1)
       guard-compat (~> 1.1)
       rspec (>= 2.99.0, < 4.0)
+    hash_diff (1.1.1)
     hashdiff (1.1.0)
     hashie (5.0.0)
     highline (3.0.1)
@@ -872,6 +873,7 @@ DEPENDENCIES
   fuzzy-string-match
   google-apis-admin_directory_v1
   guard-rspec
+  hash_diff
   hiredis
   http_accept_language
   i18n-country-translations!
