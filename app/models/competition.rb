@@ -712,15 +712,15 @@ class Competition < ApplicationRecord
 
   attr_writer :staff_delegate_ids, :organizer_ids, :trainee_delegate_ids
   def staff_delegate_ids
-    @staff_delegate_ids || staff_delegates.pluck(:id).join(",")
+    @staff_delegate_ids || staff_delegates.map(&:id).join(",")
   end
 
   def organizer_ids
-    @organizer_ids || organizers.pluck(:id).join(",")
+    @organizer_ids || organizers.map(&:id).join(",")
   end
 
   def trainee_delegate_ids
-    @trainee_delegate_ids || trainee_delegates.pluck(:id).join(",")
+    @trainee_delegate_ids || trainee_delegates.map(&:id).join(",")
   end
 
   def enable_v2_registrations!
