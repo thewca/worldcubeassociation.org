@@ -19,10 +19,10 @@ function RoundResultsTable({ round, competitionId, adminMode }) {
     <>
       <h2>{round.name}</h2>
       {adminMode && (
-      <Button positive as="a" href={newResultUrl(competitionId, round.id)} size="tiny">
-        <Icon name="plus" />
-        Add a result to this round
-      </Button>
+        <Button positive as="a" href={newResultUrl(competitionId, round.id)} size="tiny">
+          <Icon name="plus" />
+          Add a result to this round
+        </Button>
       )}
       <Table striped>
         <Table.Header>
@@ -88,7 +88,7 @@ function CompetitionResults({ competitionId, canAdminResults }) {
       <EventNavigation
         eventIds={data.event_ids}
         selected={selectedEvent}
-        onSelect={(eventId) => setSelectedEvent(eventId)}
+        onSelect={setSelectedEvent}
       />
       {canAdminResults && (
         <Checkbox
@@ -115,7 +115,7 @@ function CompetitionResults({ competitionId, canAdminResults }) {
       <EventNavigation
         eventIds={data.event_ids}
         selected={selectedEvent}
-        onSelect={(eventId) => setSelectedEvent(eventId)}
+        onSelect={setSelectedEvent}
       />
     </div>
   );
