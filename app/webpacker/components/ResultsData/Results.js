@@ -2,17 +2,17 @@ import React, { useState, useEffect } from 'react';
 import {
   Button, Checkbox, Icon, Table,
 } from 'semantic-ui-react';
-import useLoadedData from '../lib/hooks/useLoadedData';
-import Loading from './Requests/Loading';
-import Errored from './Requests/Errored';
-import '../stylesheets/competition_results.scss';
+import useLoadedData from '../../lib/hooks/useLoadedData';
+import Loading from '../Requests/Loading';
+import Errored from '../Requests/Errored';
+import '../../stylesheets/competition_results.scss';
 import EventNavigation from './EventNavigation';
-import ResultRow from './CompetitionResults/ResultRow';
-import ResultRowHeader from './CompetitionResults/ResultRowHeader';
-import { getUrlParams, setUrlParams } from '../lib/utils/wca';
+import ResultRow from '../CompetitionResults/ResultRow';
+import ResultRowHeader from '../CompetitionResults/ResultRowHeader';
+import { getUrlParams, setUrlParams } from '../../lib/utils/wca';
 import {
   newResultUrl, competitionApiUrl, competitionEventResultsApiUrl,
-} from '../lib/requests/routes.js.erb';
+} from '../../lib/requests/routes.js.erb';
 
 function RoundResultsTable({ round, competitionId, adminMode }) {
   return (

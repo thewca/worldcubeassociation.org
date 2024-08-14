@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Table } from 'semantic-ui-react';
 import _ from 'lodash';
-import useLoadedData from '../lib/hooks/useLoadedData';
-import Loading from './Requests/Loading';
-import Errored from './Requests/Errored';
-import '../stylesheets/competition_scrambles.scss';
+import useLoadedData from '../../lib/hooks/useLoadedData';
+import Loading from '../Requests/Loading';
+import Errored from '../Requests/Errored';
+import '../../stylesheets/competition_scrambles.scss';
 import EventNavigation from './EventNavigation';
-import { getUrlParams, setUrlParams } from '../lib/utils/wca';
-import { competitionApiUrl, competitionEventScramblesApiUrl } from '../lib/requests/routes.js.erb';
-import I18n from '../lib/i18n';
+import { getUrlParams, setUrlParams } from '../../lib/utils/wca';
+import { competitionApiUrl, competitionEventScramblesApiUrl } from '../../lib/requests/routes.js.erb';
+import I18n from '../../lib/i18n';
 
 function RoundScramblesTable({ round, eventName }) {
   const scramblesByGroupId = Object.values(_.groupBy(round.scrambles, 'groupId'));
