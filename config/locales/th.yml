@@ -483,10 +483,10 @@ th:
         wrc_feedback_requested: ฉันต้องการการตอบกลับจาก WRC สำหรับ incidents ข้างต้น
         #original_hash: 0c7191d
         wrc_incidents: Incidents ที่ต้องการการตอบกลับจาก WRC
-        #original_hash: 5a92b25
-        wdc_feedback_requested: ฉันต้องการการตอบกลับจาก WDC สำหรับบาง incidents ข้างต้น
-        #original_hash: 06a0568
-        wdc_incidents: Incidents ที่ต้องการการตอบกลับจาก WDC
+        #original_hash: 1a54a79
+        wic_feedback_requested: ฉันต้องการการตอบกลับจาก WIC เกี่ยวกับ incidents ด้านบน
+        #original_hash: 000153c
+        wic_incidents: Incidents ที่ต้องการคำแนะนำจาก WIC
         #original_hash: d7020f4
         remarks: หมายเหตุ
       person:
@@ -806,9 +806,9 @@ th:
         #original_hash: 98bb5cd
         wrc_incidents: หมายเลขของ incident ที่ต้องการข้อเสนอแนะจาก WRC
         #original_hash: da39a3e
-        wdc_feedback_requested: ''
-        #original_hash: 38a95e5
-        wdc_incidents: หมายเลขของ incident ที่ต้องการให้ WDC เสนอแนะ
+        wic_feedback_requested: ''
+        #original_hash: 0aca3b0
+        wic_incidents: รายการถึง incidents ที่คุณต้องการให้ WIC ตอบกลับ
         #original_hash: f30abdc
         remarks: >-
           พูดเกี่ยวกับรายละเอียดอย่างอื่นที่คุณต้องการแบ่งปัน (เช่น
@@ -1323,10 +1323,8 @@ th:
         wct: WCA Communication Team
         #original_hash: 2b81984
         wcat: WCA Competition Announcement Team
-        #original_hash: c97077a
-        wdc: WCA Disciplinary Committee
-        #original_hash: 83bd1d0
-        wec: WCA Ethics Committee
+        #original_hash: 94c2e42
+        wic: WCA Integrity Committee
         #original_hash: d1dbb86
         weat: WCA Executive Assistants Team
         #original_hash: 9cb13de
@@ -1343,8 +1341,8 @@ th:
         wst: WCA Software Team
         #original_hash: 58765c7
         wsot: WCA Sports Organization Team
-        #original_hash: 1ce7604
-        wac: WCA Advisory Council
+        #original_hash: 78949a7
+        wapc: WCA Appeals Committee
       groups_description:
         #original_hash: 5b1aade
         wat: >-
@@ -1368,22 +1366,13 @@ th:
           ทีมนี้ยังรับผิดชอบในการรักษาระเบียบการส่งการแข่งขันที่เหมาะสมจากเอกสารต่างๆ
           เช่น นโยบายข้อกำหนดการแข่งขัน WCA WCAT
           จะไม่รับผิดชอบต่อการจัดองค์กรและการมอบหมายการแข่งขันรายบุคคล
-        #original_hash: 41eb6fd
-        wdc: >-
-          WCA Disciplinary Committee (WDC) ดำเนินการสอบสวนอย่างอิสระเกี่ยวกับ
-          Speedcubers ที่ลงทะเบียนแข่งขันและเหตุการณ์ต่างๆ
-          ในระหว่างการแข่งขันอย่างเป็นทางการของ WCA หรือบนแพลตฟอร์ม WCA ออนไลน์
-          เหตุการณ์เหล่านี้ถือเป็นการละเมิดจิตวิญญาณ หลักจรรยาบรรณ
-          และ/หรือข้อบังคับของ WCA
-        #original_hash: 6cdac80
-        wec: >-
-          บทบาทของคณะกรรมการนี้คือเพื่อให้แน่ใจว่าขั้นตอนทั้งหมดที่เจ้าหน้าที่
-          WCA ปฏิบัติตามปฏิบัติตามหลักจรรยาบรรณ และดำเนินการสอบสวนอย่างเป็นอิสระ
-          หากการดำเนินการของสมาชิกคนใดคนหนึ่งไม่สอดคล้องกับหลักจรรยาบรรณ WEC
-          เป็นที่ไว้ใจได้สำหรับ Speedcubers ที่ลงทะเบียนแข่งขัน
-          ซึ่งอาจรายงานข้อกังวลและขอให้มีการสอบสวน
-          คณะกรรมการนี้ยังทำหน้าที่เป็นคณะกรรมการอุทธรณ์หากใครก็ตามที่เกี่ยวข้องไม่เห็นด้วยกับคำตัดสินของ
-          WCA Disciplinary Committee
+        #original_hash: 5007698
+        wic: >-
+          WCA Integrity Committee (WIC) ดำเนินการสอบสวนอิสระเกี่ยวกับสมาชิกใน
+          WCA และ incident ที่เกิดขึ้นระหว่างการแข่งขัน WCA
+          หรือบนแพลตฟอร์มออนไลน์อย่างเป็นทางการของ WCA. Incidents
+          เหล่านี้ถือเป็นการละเมิดเจตนารมณ์ จรรยาบรรณ จรรยาบรรณ
+          และ/หรือระเบียบของ WCA
         #original_hash: 889dd90
         weat: ทีมนี้มีหน้าที่รับผิดชอบในการดำเนินงานด้านธุรการของคณะกรรมการ WCA
         #original_hash: 43e4e33
@@ -1423,11 +1412,13 @@ th:
           scramblers, workbooks, admin tools)
         #original_hash: 8f888d6
         wsot: ทีมงานนี้มีหน้าที่ดูแลและสนับสนุนให้ WCA เป็นองค์กรกีฬาระดับนานาชาติ
-        #original_hash: 73d8df4
-        wac: >-
-          WAC มีหน้าที่รับผิดชอบในการรักษาความคิดเห็นและการสื่อสารระหว่างชุมชน
-          WCA และเจ้าหน้าที่ WCA พวกเขาดูแลฟอรัม WCA
-          และสรุปแบบสำรวจและพยายามเพิ่มการเข้าถึงทั่วทั้งชุมชนทั่วโลก
+        #original_hash: 9f45bfa
+        wapc: >-
+          The WCA Appeals Committee (WAC)
+          มีหน้าที่รับผิดชอบในการตรวจสอบและแก้ไขคำอุทธรณ์เกี่ยวกับการตัดสินใจของเจ้าหน้าที่
+          WCA คนอื่น ๆ. WAC
+          จัดให้มีกระบวนการตรวจสอบที่เป็นอิสระและเป็นกลางเพื่อให้แน่ใจว่าการตัดสินใจนั้นยุติธรรม
+          สมเหตุสมผล และเป็นไปตามนโยบายและระเบียบข้อบังคับของ WCA
     contacts:
       #original_hash: 4ef2aad
       title: WCA Contact Form
@@ -2013,11 +2004,10 @@ th:
         other: >-
           คุณต้องสมัครการแข่งขันโดยมีประเภทการแข่งขันระหว่าง 1 ถึง %{count}
           ประเภท
-      #original_hash: e78eec3
+      #original_hash: 87f7c12
       banned_html: >-
         คุณถูกแบน ถ้าคุณเชื่อว่านี่คือข้อผิดพลาด กรุณาติดต่อ <a
-        href='mailto:disciplinary@worldcubeassociation.org'
-        target='_blank'>WDC</a>
+        href='mailto:integrity@worldcubeassociation.org' target='_blank'>WIC</a>
       #original_hash: 8d07e7f
       undelete_banned: เป็นผู้เข้าแข่งขันที่ถูกแบนและไม่สามารถยกเลิกการลบได้
       #original_hash: 3de7c86
