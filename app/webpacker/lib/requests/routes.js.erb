@@ -104,6 +104,7 @@ export const personSearchApiUrl = (query) => `<%= Rails.application.routes.url_h
 export const userSearchApiUrl = (query) => `<%= Rails.application.routes.url_helpers.api_v0_search_users_path %>?q=${query}`;
 
 export const geocodingApiUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_geocoding_search_path) %>`;
+export const geocodingTimeZoneUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_geocoding_time_zone_path) %>`;
 
 export const competitionAnnouncementDataUrl = (competitionId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.competition_announcement_data_path("${competitionId}")) %>`
 export const competitionUserPreferencesUrl = (competitionId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.competition_user_preferences_path("${competitionId}")) %>`

@@ -17,9 +17,9 @@ class Api::V0::GeocodingController < Api::V0::ApiController
     lat_microdegrees = params.require(:lat).to_i
     lng_microdegrees = params.require(:lng).to_i
 
-    guessed_zone = TZF.tz_name(lat_microdegrees / 1e6, lng_microdegrees / 1e6)
+    guessed_zones = TZF.tz_names(lat_microdegrees / 1e6, lng_microdegrees / 1e6)
 
-    render json: guessed_zone
+    render json: guessed_zones
   end
 
   private def raise_if_invalid
