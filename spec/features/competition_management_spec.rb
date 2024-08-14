@@ -226,7 +226,7 @@ RSpec.feature "Competition management", js: true, retry: 10 do
   context "when signed in as delegate" do
     let!(:delegate) { FactoryBot.create(:delegate) }
     let(:cloned_delegate) { FactoryBot.create(:delegate) }
-    let(:competition_to_clone) { FactoryBot.create :competition, cityName: 'Melbourne, Victoria', countryId: "Australia", delegates: [cloned_delegate], showAtAll: true }
+    let(:competition_to_clone) { FactoryBot.create :competition, :visible, cityName: 'Melbourne, Victoria', countryId: "Australia", delegates: [cloned_delegate] }
 
     let(:threes) { Event.find("333") }
     let(:fours) { Event.find("444") }

@@ -16,12 +16,11 @@ RSpec.describe Api::V0::CompetitionsController do
     let(:competition) {
       FactoryBot.create(
         :competition,
-        :with_delegate,
+        :visible,
         id: "TestComp2014",
         start_date: "2014-02-03",
         end_date: "2014-02-05",
         external_website: "http://example.com",
-        showAtAll: true,
       )
     }
 

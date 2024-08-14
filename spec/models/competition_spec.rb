@@ -783,7 +783,7 @@ RSpec.describe Competition do
   end
 
   describe "when confirming or making visible" do
-    let(:competition_with_delegate) { FactoryBot.build :competition, :with_delegate, generate_website: false }
+    let(:competition_with_delegate) { FactoryBot.build :competition, :with_delegate, :with_organizer, generate_website: false }
     let(:competition_without_delegate) { FactoryBot.build :competition }
 
     [:confirmed, :showAtAll].each do |action|
@@ -816,7 +816,7 @@ RSpec.describe Competition do
     end
 
     it "sets confirmed_at when setting confirmed true" do
-      competition = FactoryBot.create :competition, :future, :with_delegate, :with_valid_schedule
+      competition = FactoryBot.create :competition, :future, :with_delegate, :with_organizer, :with_valid_schedule
       expect(competition.confirmed_at).to be_nil
 
       now = Time.at(Time.now.to_i)
@@ -1085,16 +1085,17 @@ RSpec.describe Competition do
     let(:delegate2) { FactoryBot.create(:delegate) }
     let(:organizer1) { FactoryBot.create(:user) }
     let(:organizer2) { FactoryBot.create(:user) }
+    let(:organizer3) { FactoryBot.create(:user) }
     let!(:competition) {
       FactoryBot.create(:competition, :confirmed, delegates: [delegate1, delegate2], organizers: [organizer1, organizer2])
     }
-    let!(:competition_without_organizers) {
-      FactoryBot.create(:competition, :confirmed, delegates: [delegate1, delegate2], organizers: [])
+    let!(:competition_with_different_organizers) {
+      FactoryBot.create(:competition, :confirmed, delegates: [delegate1, delegate2], organizers: [organizer3])
     }
     let!(:other_comp) { FactoryBot.create(:competition) }
 
     it "finds comps by delegate" do
-      expect(Competition.managed_by(delegate1.id)).to match_array [competition, competition_without_organizers]
+      expect(Competition.managed_by(delegate1.id)).to match_array [competition, competition_with_different_organizers]
     end
 
     it "finds comps by organizer" do

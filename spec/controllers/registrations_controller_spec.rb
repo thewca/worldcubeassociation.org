@@ -261,8 +261,8 @@ RSpec.describe RegistrationsController, clean_db_with_truncation: true do
     let!(:delegate) { FactoryBot.create(:delegate) }
     let!(:other_delegate) { FactoryBot.create(:delegate) }
 
-    let!(:competition) { FactoryBot.create(:competition, :registration_open, delegates: [delegate], showAtAll: true) }
-    let!(:other_competition) { FactoryBot.create(:competition, :registration_open, delegates: [other_delegate], showAtAll: true) }
+    let!(:competition) { FactoryBot.create(:competition, :registration_open, :visible, delegates: [delegate]) }
+    let!(:other_competition) { FactoryBot.create(:competition, :registration_open, :visible, delegates: [other_delegate]) }
 
     before :each do
       sign_in delegate
