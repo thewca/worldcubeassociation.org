@@ -16,8 +16,11 @@ module Admin
             user.approve_pending_avatar!
           when "reject"
             user.remove_pending_avatar = true
+            rejection_guidelines = args[:rejection_guidelines] || []
+            additional_reason = args[:rejection_reason].presence
+            combined_reasons = (rejection_guidelines + [additional_reason]).compact.join(" ")
             user.save!
-            AvatarsMailer.notify_user_of_avatar_rejection(user, args[:rejection_reason]).deliver_later
+            AvatarsMailer.notify_user_of_avatar_rejection(user, args[:combined_reasons]).deliver_later
           when "defer"
             # do nothing!
           else
