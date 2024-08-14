@@ -20,7 +20,7 @@ import {
   removeVenue,
 } from '../store/actions';
 import { toDegrees, toMicrodegrees } from '../../../lib/utils/edit-schedule';
-import { getTimeZoneDropdownLabel } from '../../../lib/utils/timezone';
+import { getTimeZoneDropdownLabel, sortByOffset } from '../../../lib/utils/timezone';
 
 const countryOptions = countries.real.map((country) => ({
   key: country.iso2,
@@ -74,14 +74,17 @@ function VenuePanel({
     const otherZoneIds = _.difference(backendTimezones, competitionZoneIds);
 
     // Both merged together, with the countryZone entries listed first.
-    const sortedKeys = _.union(competitionZoneIds.sort(), otherZoneIds.sort());
+    const sortedKeys = _.union(
+      sortByOffset(competitionZoneIds, referenceTime),
+      sortByOffset(otherZoneIds, referenceTime),
+    );
 
     return sortedKeys.map((key) => ({
       key,
       text: getVenueTzDropdownLabel(key),
       value: key,
     }));
-  }, [countryZones, getVenueTzDropdownLabel]);
+  }, [countryZones, referenceTime, getVenueTzDropdownLabel]);
 
   return (
     <Card fluid raised>
