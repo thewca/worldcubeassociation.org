@@ -10,8 +10,7 @@ ENV RAILS_LOG_TO_STDOUT="1" \
     RAILS_ENV="production" \
     BUNDLE_WITHOUT="development:test" \
     BUNDLE_DEPLOYMENT="1" \
-    BUILD_TAG=$BUILD_TAG \
-    WCA_LIVE_SITE=$WCA_LIVE_SITE
+    BUILD_TAG=$BUILD_TAG
 
 # Add dependencies necessary to install nodejs.
 # From: https://github.com/nodesource/distributions#debian-and-ubuntu-based-distributions
