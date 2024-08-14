@@ -13,7 +13,9 @@ gem 'rails-i18n'
 gem 'i18n-js'
 gem 'activerecord-import'
 gem 'sass-rails'
-gem "sassc-embedded"
+# Some of our very old Sprockets asset code relies on gem-bundled Bootstrap 3 (grrr...)
+#   which uses SCSS features incompatible with Dart SASS 2.
+gem "sassc-embedded", '~> 1'
 gem 'terser'
 gem 'faraday'
 gem 'faraday-retry'

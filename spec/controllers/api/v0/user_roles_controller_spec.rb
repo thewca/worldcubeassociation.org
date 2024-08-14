@@ -103,8 +103,8 @@ RSpec.describe Api::V0::UserRolesController do
     let!(:user_to_be_banned_with_future_comps) { FactoryBot.create(:user, :with_future_competitions) }
     let!(:user_to_be_banned_with_deleted_registration_in_future_comps) { FactoryBot.create(:user, :with_deleted_registration_in_future_comps) }
 
-    context 'when signed in as a WDC Leader' do
-      sign_in { FactoryBot.create(:user, :wdc_leader) }
+    context 'when signed in as a WIC Leader' do
+      sign_in { FactoryBot.create(:user, :wic_leader) }
 
       it 'can ban a user if the user does not have any upcoming competitions' do
         post :create, params: {
@@ -133,28 +133,28 @@ RSpec.describe Api::V0::UserRolesController do
         expect(response).to be_successful
       end
 
-      it 'can add a member to WDC' do
+      it 'can add a member to WIC' do
         user = FactoryBot.create(:user)
 
-        expect(user.wdc_team?).to be false
+        expect(user.wic_team?).to be false
         post :create, params: {
           userId: user.id,
-          groupId: UserGroup.teams_committees_group_wdc.id,
+          groupId: UserGroup.teams_committees_group_wic.id,
           status: RolesMetadataTeamsCommittees.statuses[:member],
         }
         expect(response).to be_successful
-        expect(user.reload.wdc_team?).to be true
+        expect(user.reload.wic_team?).to be true
       end
 
-      it 'can remove a member from WDC' do
-        wdc_role = FactoryBot.create(:wdc_member_role, :active)
+      it 'can remove a member from WIC' do
+        wic_role = FactoryBot.create(:wic_member_role, :active)
 
-        expect(wdc_role.user.wdc_team?).to be true
+        expect(wic_role.user.wic_team?).to be true
         post :destroy, params: {
-          id: wdc_role.id,
+          id: wic_role.id,
         }
         expect(response).to be_successful
-        expect(wdc_role.user.reload.wdc_team?).to be false
+        expect(wic_role.user.reload.wic_team?).to be false
       end
     end
 

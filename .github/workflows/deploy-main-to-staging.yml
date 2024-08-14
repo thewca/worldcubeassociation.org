@@ -1,0 +1,47 @@
+name: Deploy Main to Staging Manually
+on:
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.CI_CD_AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.CI_CD_AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+      - name: Build and Push Sidekiq image
+        uses: docker/build-push-action@v6
+        with:
+          push: true
+          target: sidekiq
+          tags: |
+            ${{ steps.login-ecr.outputs.registry }}/wca-on-rails:sidekiq-staging
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          build-args: |
+            BUILD_TAG=${{ github.sha }}
+            WCA_LIVE_SITE=false
+      - name: Build and push Staging Image
+        uses: docker/build-push-action@v6
+        with:
+          push: true
+          target: monolith
+          tags: |
+            ${{ steps.login-ecr.outputs.registry }}/wca-on-rails:staging
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          build-args: |
+            BUILD_TAG=${{ github.sha }}
+            WCA_LIVE_SITE=false
+        # There is no pipeline for staging so we manually force to update the image
+      - name: Deploy staging
+        run: |
+          aws ecs update-service --cluster wca-on-rails --service wca-on-rails-staging --force-new-deployment
