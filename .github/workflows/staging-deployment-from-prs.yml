@@ -51,7 +51,7 @@ jobs:
           ASSETS_COMPILATION: true
           SECRET_KEY_BASE: 1
           BUILD_TAG: ${{ env.SHORT_SHA }}
-          SHAKAPACKER_ASSET_HOST: "assets-staging.worldcubeassociation.org"
+          SHAKAPACKER_ASSET_HOST: "https://assets-staging.worldcubeassociation.org/"
         run: |
           ./bin/bundle install
           ./bin/yarn install --immutable
