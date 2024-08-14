@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import {
   Button,
   Card,
@@ -9,6 +9,7 @@ import {
 } from 'semantic-ui-react';
 import _ from 'lodash';
 
+import { DateTime } from 'luxon';
 import VenueLocationMap from './VenueLocationMap';
 import { countries, timezoneData } from '../../../lib/wca-data.js.erb';
 import RoomPanel from './RoomPanel';
@@ -31,6 +32,7 @@ const countryOptions = countries.real.map((country) => ({
 function VenuePanel({
   venue,
   countryZones,
+  referenceTime,
 }) {
   const dispatch = useDispatch();
   const confirm = useConfirm();
@@ -53,6 +55,30 @@ function VenuePanel({
     dispatch(addRoom(venue.id));
   };
 
+  const getTimeZoneIntlPart = useCallback((tzId, tzFormat) => {
+    const formatter = new Intl.DateTimeFormat('en-US', { timeZone: tzId, timeZoneName: tzFormat });
+
+    const luxonDate = DateTime.fromISO(referenceTime);
+    const parts = formatter.formatToParts(luxonDate.toJSDate());
+
+    return parts.find((part) => part.type === 'timeZoneName').value;
+  }, [referenceTime]);
+
+  const getTimeZoneName = useCallback(
+    (tzId) => getTimeZoneIntlPart(tzId, 'long'),
+    [getTimeZoneIntlPart],
+  );
+
+  const getTimeZoneOffset = useCallback(
+    (tzId) => getTimeZoneIntlPart(tzId, 'shortOffset').replace('GMT', 'UTC'),
+    [getTimeZoneIntlPart],
+  );
+
+  const getTimeZoneDropdownLabel = useCallback(
+    (tzId) => `${getTimeZoneName(tzId)} (${tzId}, ${getTimeZoneOffset(tzId)})`,
+    [getTimeZoneName, getTimeZoneOffset],
+  );
+
   // Instead of giving *all* TZInfo, use uniq-fied rails "meaningful" subset
   // We'll add the "country_zones" to that, because some of our competitions
   // use TZs not included in this subset.
@@ -60,17 +86,20 @@ function VenuePanel({
   // In the end the array should look like that:
   //   - country_zone_a, country_zone_b, [...], other_tz_a, other_tz_b, [...]
   const timezoneOptions = useMemo(() => {
-    const competitionZonesKeys = Object.keys(countryZones);
+    // Stuff that is recommended based on the country list
+    const competitionZoneIds = Object.values(countryZones);
+    // Stuff that is listed in our `timezoneData` support map but not in the preferred country list
+    const otherZoneIds = _.difference(Object.values(timezoneData), competitionZoneIds);
 
-    const selectKeys = _.difference(Object.keys(timezoneData), competitionZonesKeys);
-    const sortedKeys = _.union(competitionZonesKeys.sort(), selectKeys.sort());
+    // Both merged together, with the countryZone entries listed first.
+    const sortedKeys = _.union(competitionZoneIds.sort(), otherZoneIds.sort());
 
     return sortedKeys.map((key) => ({
       key,
-      text: key,
-      value: timezoneData[key] || key,
+      text: getTimeZoneDropdownLabel(key),
+      value: key,
     }));
-  }, [countryZones]);
+  }, [countryZones, getTimeZoneDropdownLabel]);
 
   return (
     <Card fluid raised>
