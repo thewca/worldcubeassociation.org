@@ -99,7 +99,7 @@ module DbDumpHelper
         region: EnvConfig.STORAGE_AWS_REGION,
         credentials: Aws::ECSCredentials.new,
       ).bucket(BUCKET_NAME)
-      bucket.object(s3_path).upload_file(zip_filename, { acl: "public-read" })
+      bucket.object(s3_path).upload_file(zip_filename)
 
       # Delete the zipfile now that it's uploaded
       FileUtils.rm zip_filename
