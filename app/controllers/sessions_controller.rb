@@ -40,7 +40,7 @@ class SessionsController < Devise::SessionsController
     user = User.find(results["me"]["id"])
     if user
       sign_in(user)
-      redirect_to root_url, notice: "Successfully logged in as #{user.wca_id}"
+      redirect_to stored_location_for(user), notice: "Successfully logged in as #{user.wca_id}"
     else
       redirect_to root_url, alert: "Your user is not yet imported into our Staging Website, please try again later"
     end
