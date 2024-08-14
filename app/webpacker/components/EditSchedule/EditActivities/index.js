@@ -42,7 +42,6 @@ import {
   scaleActivity,
 } from '../store/actions';
 
-import { friendlyTimezoneName } from '../../../lib/wca-data.js.erb';
 import {
   activityToFcTitle,
   buildPartialActivityFromCode,
@@ -52,6 +51,8 @@ import {
 } from '../../../lib/utils/edit-schedule';
 import EditActivityModal from './EditActivityModal';
 import ActionsHeader from './ActionsHeader';
+import { getTimeZoneDropdownLabel } from '../../../lib/utils/timezone';
+import { earliestTimeOfDayWithBuffer } from '../../../lib/utils/activities';
 
 function EditActivities({
   wcifEvents,
@@ -100,6 +101,15 @@ function EditActivities({
   const wcifRoom = useMemo(
     () => roomWcifFromId(wcifSchedule, selectedRoomId),
     [selectedRoomId, wcifSchedule],
+  );
+
+  const earliestActivity = useMemo(
+    () => (
+      (wcifRoom && wcifVenue)
+        ? earliestTimeOfDayWithBuffer(wcifRoom.activities, wcifVenue.timezone)
+        : undefined
+    ),
+    [wcifRoom, wcifVenue],
   );
 
   const fcActivities = useMemo(() => (
@@ -357,7 +367,7 @@ function EditActivities({
                 <Container text textAlign="center">
                   The timezone for this room is
                   {' '}
-                  <b>{friendlyTimezoneName(wcifVenue.timezone)}</b>
+                  <b>{getTimeZoneDropdownLabel(wcifVenue.timezone, earliestActivity, calendarLocale)}</b>
                 </Container>
                 <Container fluid>
                   <Grid textAlign="center" verticalAlign="middle">
