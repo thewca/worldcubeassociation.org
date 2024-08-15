@@ -2,19 +2,19 @@ import React, { useState, useEffect } from 'react';
 import {
   Button, Checkbox, Icon, Table,
 } from 'semantic-ui-react';
-import _ from 'lodash';
-import useLoadedData from '../../lib/hooks/useLoadedData';
-import Loading from '../Requests/Loading';
-import Errored from '../Requests/Errored';
-import '../../stylesheets/competition_scrambles.scss';
-import EventNavigation from './EventNavigation';
-import { getUrlParams, setUrlParams } from '../../lib/utils/wca';
-import { competitionApiUrl, competitionEventScramblesApiUrl } from '../../lib/requests/routes.js.erb';
-import I18n from '../../lib/i18n';
+import useLoadedData from '../../../lib/hooks/useLoadedData';
+import Loading from '../../Requests/Loading';
+import Errored from '../../Requests/Errored';
+import '../../../stylesheets/competition_scrambles.scss';
+import EventNavigation from '../EventNavigation';
+import ScrambleRowHeader from './ScrambleRowHeader';
+import ScrambleRowBody from './ScrambleRowBody';
+import { getUrlParams, setUrlParams } from '../../../lib/utils/wca';
+import {
+  newScrambleUrl, competitionApiUrl, competitionEventScramblesApiUrl,
+} from '../../../lib/requests/routes.js.erb';
 
 function RoundScramblesTable({ round, competitionId, adminMode }) {
-  const scramblesByGroupId = Object.values(_.groupBy(round.scrambles, 'groupId'));
-
   return (
     <>
       <h2>{round.name}</h2>
@@ -26,32 +26,10 @@ function RoundScramblesTable({ round, competitionId, adminMode }) {
       )}
       <Table striped>
         <Table.Header>
-          <Table.Row>
-            <Table.HeaderCell width={1} textAlign="center">
-              {I18n.t('competitions.scrambles_table.group')}
-            </Table.HeaderCell>
-            <Table.HeaderCell width={1}>#</Table.HeaderCell>
-            <Table.HeaderCell>
-              {I18n.t('competitions.scrambles_table.scramble')}
-            </Table.HeaderCell>
-          </Table.Row>
+          <ScrambleRowHeader />
         </Table.Header>
         <Table.Body>
-          {scramblesByGroupId.map((group) => (
-            group.map(({
-              scrambleId, isExtra, groupId, scrambleNum, scramble,
-            }) => (
-              <Table.Row key={scrambleId}>
-                {scrambleNum === 1 && !isExtra
-                    && <Table.Cell textAlign="center" rowSpan={group.length}>{groupId}</Table.Cell>}
-                <Table.Cell>
-                  {isExtra ? 'Extra ' : ''}
-                  {scrambleNum}
-                </Table.Cell>
-                <Table.Cell className="prewrap">{scramble}</Table.Cell>
-              </Table.Row>
-            ))
-          ))}
+          <ScrambleRowBody scrambles={round.scrambles} adminMode={adminMode} />
         </Table.Body>
       </Table>
     </>

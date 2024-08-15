@@ -20,9 +20,9 @@ function ResultRow({
       <Table.Cell className={cn({ 'text-muted': index > 0 && results[index - 1].pos === result.pos })}>
         {result.pos}
         {adminMode && (
-        <a href={editResultUrl(result.id)} aria-label="Edit" role="menuitem" className="edit-link">
-          <Icon name="pencil" />
-        </a>
+          <a href={editResultUrl(result.id)} aria-label="Edit" role="menuitem" className="edit-link">
+            <Icon name="pencil" />
+          </a>
         )}
       </Table.Cell>
       <Table.Cell>

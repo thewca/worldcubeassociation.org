@@ -7,8 +7,8 @@ import Loading from '../../Requests/Loading';
 import Errored from '../../Requests/Errored';
 import '../../../stylesheets/competition_results.scss';
 import EventNavigation from '../EventNavigation';
-import ResultRow from './ResultRow';
 import ResultRowHeader from './ResultRowHeader';
+import ResultRowBody from './ResultRowBody';
 import { getUrlParams, setUrlParams } from '../../../lib/utils/wca';
 import {
   newResultUrl, competitionApiUrl, competitionEventResultsApiUrl,
@@ -29,15 +29,7 @@ function RoundResultsTable({ round, competitionId, adminMode }) {
           <ResultRowHeader />
         </Table.Header>
         <Table.Body>
-          {round.results.map((result, index, results) => (
-            <ResultRow
-              key={result.id}
-              result={result}
-              results={results}
-              index={index}
-              adminMode={adminMode}
-            />
-          ))}
+          <ResultRowBody results={round.results} adminMode={adminMode} />
         </Table.Body>
       </Table>
     </>
