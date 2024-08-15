@@ -486,10 +486,10 @@ fi:
         wrc_feedback_requested: I would like feedback from the WRC on some of the incidents above.
         #original_hash: 0c7191d
         wrc_incidents: Incidents Needing WRC Feedback
-        #original_hash: 5a92b25
-        wdc_feedback_requested: I would like feedback from the WDC on some of the incidents above.
-        #original_hash: 06a0568
-        wdc_incidents: Incidents Needing WDC Feedback
+        #original_hash: 1a54a79
+        wic_feedback_requested: I would like feedback from the WIC on some of the incidents above.
+        #original_hash: 000153c
+        wic_incidents: Incidents Needing WIC Feedback
         #original_hash: d7020f4
         remarks: Huomautukset
       person:
@@ -814,11 +814,11 @@ fi:
           List of numbers referencing any incidents that you would like the
           WRC's feedback on.
         #original_hash: da39a3e
-        wdc_feedback_requested: ''
-        #original_hash: 38a95e5
-        wdc_incidents: >-
+        wic_feedback_requested: ''
+        #original_hash: 0aca3b0
+        wic_incidents: >-
           List of numbers referencing any incidents that you would like the
-          WDC's feedback on.
+          WIC's feedback on.
         #original_hash: f30abdc
         remarks: >-
           Kerro muista yksityiskohdista, jotka haluat jakaa (esim.
@@ -1206,7 +1206,7 @@ fi:
       #original_hash: cf1d2c9
       forum: Foorumi
       #original_hash: 3ad28c0
-      teams: Toimikunnat ja neuvostot
+      teams: Toimikunnat
       #original_hash: 7981fb3
       education: Koulutusmateriaalit
       #original_hash: c66444f
@@ -1326,22 +1326,19 @@ fi:
       #original_hash: e0d37a2
       board_description: >-
         WCA:n hallitus on viime kädessä vastuussa järjestön johtamisesta, ja
-        hoitaa toimikuntien ja neuvostojen vastuualueiden ulkopuolelle jääviä
-        tehtäviä.
+        hoitaa toimikuntien vastuualueiden ulkopuolelle jääviä tehtäviä.
     teams_committees_councils:
       #original_hash: 0d62207
       title: 'WCA:n tiimit ja toimikunnat'
       #original_hash: d54d953
       description: >-
-        WCA:n toimikunnat ja neuvostot ovat keskeinen järjestön osa, ja ne
-        hoitavat päivittäisiä tehtäviä, joita vaaditaan järjestön toiminnan
+        WCA:n toimikunnat ovat keskeinen järjestön osa, ja ne hoitavat
+        päivittäisiä tehtäviä, joita vaaditaan järjestön toiminnan
         pyörittämiseen. Toimikunnat koostuvat WCA-yhteisön jäsenistä, eli
         WCA-delegaateista ja kilpailijoista. Jokaisella toimikunnalla on
         vastaava, jonka rooliin kuuluu varmistaa toimikunnan toiminnot ja
-        kouluttaa sen jäsenet. Neuvostot ovat erityislaatuisia tiimejä, joilla
-        on hallitukselle neuvoa-antava rooli, eivätkä neuvoston jäsenet kuulu
-        WCA:n henkilöstöön. Kun toimikuntaan tai neuvostoon haetaan uusia
-        jäseniä, hakuilmoitus julkaistaan WCA-sivuston etusivulla.
+        kouluttaa sen jäsenet. Kun toimikuntaan haetaan uusia jäseniä,
+        hakuilmoitus julkaistaan WCA-sivuston etusivulla.
       #original_hash: b37456c
       contact_button: Ota yhteyttä
       #original_hash: ae7928f
@@ -1353,10 +1350,8 @@ fi:
         wct: WCA Communication Team (Viestintätoimikunta)
         #original_hash: 2b81984
         wcat: WCA Competition Announcement Team (Kilpailuilmoitustoimikunta)
-        #original_hash: c97077a
-        wdc: WCA Disciplinary Committee (Kurinpitotoimikunta)
-        #original_hash: 83bd1d0
-        wec: WCA Ethics Committee (Eettinen toimikunta)
+        #original_hash: 94c2e42
+        wic: WCA Integrity Committee (Eheystoimikunta)
         #original_hash: d1dbb86
         weat: WCA Executive Assistants Team (Hallintotoimikunta)
         #original_hash: 9cb13de
@@ -1373,8 +1368,8 @@ fi:
         wst: WCA Software Team (Ohjelmistotoimikunta)
         #original_hash: 58765c7
         wsot: WCA Sports Organization Team (Lajiliittotoimikunta)
-        #original_hash: 1ce7604
-        wac: WCA Advisory Council (Neuvosto)
+        #original_hash: 78949a7
+        wapc: WCA Appeals Committee (Muutoksenhakutoimikunta)
       groups_description:
         #original_hash: 5b1aade
         wat: >-
@@ -1395,20 +1390,12 @@ fi:
           kilpailujen hakemiseen liittyviä toimintatapoja esimerkiksi
           kilpailujen vaatimuksia koskevin käytännöin. WCAT ei ole vastuussa
           yksittäisten kilpailujen järjestämisestä tai delegoinnista.
-        #original_hash: 41eb6fd
-        wdc: >-
-          WCA Disciplinary Committee (WDC) tekee tutkintoja kilpailijoista ja
-          WCA-kilpailuissa tai WCA:n internet-alustoilla tapahtuneista
-          sattumuksista. Tutkinnan alaiset sattumukset ovat epäiltyjä sääntö-
-          tai käytösrikkeitä.
-        #original_hash: 6cdac80
-        wec: >-
-          Tämän toimikunnan tehtävänä on varmistaa, että WCA:n henkilöstö toimii
-          eettisten säännösten (Code of Ethics) mukaan, ja se voi käynnistää
-          tutkintoja säännösten vastaisesta toiminnasta. WEC:lle voi ilmoittaa
-          luottamuksellisesti näihin säännöksiin liittyviä huolenaiheita ja
-          siltä voi pyytää tutkinnan aloittamista. Tämä toimikunta käsittelee
-          myös kurinpitotoimikunnan päätöksiin liittyviä valituksia.
+        #original_hash: 5007698
+        wic: >-
+          WCA Integrity Committee (WIC) tekee riippumattomia tutkintoja
+          kilpailijoista ja WCA-kilpailuissa tai WCA:n internet-alustoilla
+          tapahtuneista sattumuksista. Tutkinnan alaiset sattumukset ovat
+          epäiltyjä sääntö- tai käytösrikkeitä.
         #original_hash: 889dd90
         weat: >-
           Tämä toimikunta on vastuussa hallinnollisten tehtävien
@@ -1451,12 +1438,13 @@ fi:
         wsot: >-
           Tämä toimikunta edistää ja tukee WCA:n tunnustamista kansainvälisenä
           lajiliittona.
-        #original_hash: 73d8df4
-        wac: >-
-          WAC käsittelee palautteita ja vastaa viestinnästä WCA-yhteisön ja
-          henkilöstön välillä. Neuvosto ylläpitää myös WCA Forumia, tekee
-          yhteenvetoja kyselyistä ja pyrkii siihen, että WCA saavuttaa
-          maailmanlaajuisen yhteisön.
+        #original_hash: 9f45bfa
+        wapc: >-
+          WCA Appeals Committee (WAC) on vastuussa muun WCA-henkilöstön tekemiin
+          päätöksiin liittyvien valitusten käsittelystä. WAC suorittaa
+          itsenäisen ja puolueettoman katsauksen, jolla varmistetaan, että
+          päätökset ovat reiluja, sopivia ja WCA:n käytäntöjen ja sääntöjen
+          mukaisia.
     contacts:
       #original_hash: 4ef2aad
       title: 'WCA:n yhteydenottolomake'
@@ -2071,11 +2059,11 @@ fi:
         zero: 'Saat rekisteröityä enintään %{count} lajiin.'
         one: Sinun täytyy rekisteröityä täsmälleen yhteen (1) lajiin.
         other: 'Saat rekisteröityä enintään %{count} lajiin.'
-      #original_hash: e78eec3
+      #original_hash: 87f7c12
       banned_html: >-
         You are banned. If you believe this is an error, please contact the <a
-        href='mailto:disciplinary@worldcubeassociation.org'
-        target='_blank'>WDC</a>.
+        href='mailto:integrity@worldcubeassociation.org'
+        target='_blank'>WIC</a>.
       #original_hash: 8d07e7f
       undelete_banned: on saanut bänät eikä häntä voi lisätä takaisin
       #original_hash: 3de7c86
@@ -4714,8 +4702,7 @@ fi:
         #original_hash: e0d37a2
         description: >-
           WCA:n hallituksella on vastuu järjestön johtamisesta ja se toimittaa
-          muiden toimikuntien ja neuvostojen toimialueiden ulkopuolella olevia
-          tehtäviä.
+          muiden toimikuntien toimialueiden ulkopuolella olevia tehtäviä.
       users:
         #original_hash: 57bbaad
         profile: 'Käyttäjän %{user_name} profiili'
