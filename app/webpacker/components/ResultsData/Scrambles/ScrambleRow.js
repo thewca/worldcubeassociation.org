@@ -1,8 +1,6 @@
 import React from 'react';
 import { Icon, Table } from 'semantic-ui-react';
 
-import { editScrambleUrl } from '../../../lib/requests/routes.js.erb';
-
 import '../../../stylesheets/competition_results.scss';
 
 function ScrambleRow({
@@ -20,7 +18,7 @@ function ScrambleRow({
         {isExtra ? 'Extra ' : ''}
         {scrambleNum}
         {adminMode && (
-          <a href={editScrambleUrl(scrambleId)} aria-label="Edit" role="menuitem" className="edit-link">
+          <a href={`TODO:${scrambleId}`} aria-label="Edit" role="menuitem" className="edit-link">
             <Icon name="pencil" />
           </a>
         )}

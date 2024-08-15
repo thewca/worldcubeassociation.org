@@ -1,7 +1,7 @@
 import React from 'react';
 import ScrambleRowHeader from './ScrambleRowHeader';
 import ScrambleRowBody from './ScrambleRowBody';
-import { competitionEventScramblesApiUrl, newScrambleUrl } from '../../../lib/requests/routes.js.erb';
+import { competitionEventScramblesApiUrl } from '../../../lib/requests/routes.js.erb';
 import ViewData from '../ViewData';
 
 function CompetitionScrambles({ competitionId, canAdminResults }) {
@@ -10,7 +10,7 @@ function CompetitionScrambles({ competitionId, canAdminResults }) {
       competitionId={competitionId}
       canAdminResults={canAdminResults}
       dataUrlFn={competitionEventScramblesApiUrl}
-      newEntryUrlFn={newScrambleUrl}
+      newEntryUrlFn={() => 'TODO'}
       DataRowHeader={ScrambleRowHeader}
       DataRowBody={ScrambleRowBody}
     />
