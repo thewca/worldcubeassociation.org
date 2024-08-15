@@ -20,7 +20,7 @@ module Admin
             additional_reason = args[:rejection_reason].presence
             combined_reasons = (rejection_guidelines + [additional_reason]).compact.join(" ")
             user.save!
-            AvatarsMailer.notify_user_of_avatar_rejection(user, args[:combined_reasons]).deliver_later
+            AvatarsMailer.notify_user_of_avatar_rejection(user, combined_reasons).deliver_later
           when "defer"
             # do nothing!
           else
