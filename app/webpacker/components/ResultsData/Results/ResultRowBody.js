@@ -1,10 +1,10 @@
 import React from 'react';
 import ResultRow from './ResultRow';
 
-function ResultRowBody({ results, adminMode }) {
+function ResultRowBody({ round, adminMode }) {
   return (
     <>
-      {results.map((result, index, iterResults) => (
+      {round.results.map((result, index, iterResults) => (
         <ResultRow
           key={result.id}
           result={result}

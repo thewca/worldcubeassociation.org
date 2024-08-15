@@ -1,115 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import {
-  Button, Checkbox, Icon, Table,
-} from 'semantic-ui-react';
-import useLoadedData from '../../../lib/hooks/useLoadedData';
-import Loading from '../../Requests/Loading';
-import Errored from '../../Requests/Errored';
-import '../../../stylesheets/competition_scrambles.scss';
-import EventNavigation from '../EventNavigation';
+import React from 'react';
 import ScrambleRowHeader from './ScrambleRowHeader';
 import ScrambleRowBody from './ScrambleRowBody';
-import { getUrlParams, setUrlParams } from '../../../lib/utils/wca';
-import {
-  newScrambleUrl, competitionApiUrl, competitionEventScramblesApiUrl,
-} from '../../../lib/requests/routes.js.erb';
-
-function RoundScramblesTable({ round, competitionId, adminMode }) {
-  return (
-    <>
-      <h2>{round.name}</h2>
-      {adminMode && (
-        <Button positive as="a" href={newScrambleUrl(competitionId, round.id)} size="tiny">
-          <Icon name="plus" />
-          Add a scramble to this round
-        </Button>
-      )}
-      <Table striped>
-        <Table.Header>
-          <ScrambleRowHeader />
-        </Table.Header>
-        <Table.Body>
-          <ScrambleRowBody scrambles={round.scrambles} adminMode={adminMode} />
-        </Table.Body>
-      </Table>
-    </>
-  );
-}
-
-function EventScrambles({ competitionId, eventId, adminMode }) {
-  const { loading, error, data } = useLoadedData(
-    competitionEventScramblesApiUrl(competitionId, eventId),
-  );
-
-  if (loading) return <Loading />;
-  if (error) return <Errored />;
-  return (
-    <div className="event-scrambles">
-      {data.rounds.map((round) => (
-        <RoundScramblesTable
-          key={round.id}
-          round={round}
-          competitionId={competitionId}
-          adminMode={adminMode}
-        />
-      ))}
-    </div>
-  );
-}
+import { competitionEventScramblesApiUrl, newScrambleUrl } from '../../../lib/requests/routes.js.erb';
+import ViewData from '../ViewData';
 
 function CompetitionScrambles({ competitionId, canAdminResults }) {
-  const { loading, error, data } = useLoadedData(competitionApiUrl(competitionId));
-  const [selectedEvent, setSelectedEvent] = useState(null);
-  const [adminMode, setAdminMode] = useState(false);
-  useEffect(() => {
-    if (data) {
-      const params = getUrlParams();
-      const event = params.event || data.event_ids[0];
-      setSelectedEvent(event);
-    }
-  }, [data]);
-  useEffect(() => {
-    if (selectedEvent) {
-      setUrlParams({ event: selectedEvent });
-    }
-  }, [selectedEvent]);
-  if (loading || !selectedEvent) return <Loading />;
-  if (error) return <Errored />;
   return (
-    <div className="competition-scrambles">
-      <EventNavigation
-        eventIds={data.event_ids}
-        selected={selectedEvent}
-        onSelect={setSelectedEvent}
-      />
-      {canAdminResults && (
-        <Checkbox
-          label="Enable admin mode"
-          toggle
-          checked={adminMode}
-          onChange={(_, { checked }) => setAdminMode(checked)}
-        />
-      )}
-      {selectedEvent === 'all'
-        ? (
-          <>
-            {data.event_ids.map((eventId) => (
-              <EventScrambles key={eventId} competitionId={competitionId} eventId={eventId} />))}
-          </>
-        )
-        : (
-          <EventScrambles
-            competitionId={competitionId}
-            eventId={selectedEvent}
-            adminMode={adminMode}
-          />
-        )}
-      <EventNavigation
-        eventIds={data.event_ids}
-        selected={selectedEvent}
-        onSelect={setSelectedEvent}
-      />
-    </div>
+    <ViewData
+      competitionId={competitionId}
+      canAdminResults={canAdminResults}
+      dataUrlFn={competitionEventScramblesApiUrl}
+      newEntryUrlFn={newScrambleUrl}
+      DataRowHeader={ScrambleRowHeader}
+      DataRowBody={ScrambleRowBody}
+    />
   );
 }
 
