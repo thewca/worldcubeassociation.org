@@ -77,6 +77,10 @@ locals {
       value = "ELNTWW0SE1ZJ"
     },
     {
+      name = "CDN_ASSETS_DISTRIBUTION_ID"
+      value = "E27W5ACWLMQE3C"
+    },
+    {
       name = "WCA_REGISTRATIONS_URL"
       value = var.WCA_REGISTRATIONS_URL
     },

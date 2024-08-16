@@ -103,6 +103,20 @@ module DbDumpHelper
 
       # Delete the zipfile now that it's uploaded
       FileUtils.rm zip_filename
+
+      # Invalidate Export Route in Prod
+      if EnvConfig.WCA_LIVE_SITE?
+        Aws::CloudFront::Client.new.create_invalidation({
+                                                          distribution_id: EnvConfig.CDN_ASSETS_DISTRIBUTION_ID,
+                                                          invalidation_batch: {
+                                                            paths: {
+                                                              quantity: 1,
+                                                              items: ["/#{s3_path}"], # AWS SDK throws an error if the path doesn't start with "/"
+                                                            },
+                                                            caller_reference: "DB Dump invalidation",
+                                                          },
+                                                        })
+      end
     end
   end
 
