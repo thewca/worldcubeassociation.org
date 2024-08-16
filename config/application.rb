@@ -29,7 +29,15 @@ module WcaOnRails
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
 
-    config.load_defaults 7.0
+    config.load_defaults 7.1
+
+    # Force belongs_to validations even on empty/unset keys.
+    #   This is potentially a Rails bug (?!?) and has been reported at https://github.com/rails/rails/issues/52614
+    config.active_record.belongs_to_required_validates_foreign_key = true
+
+    # Make sure we can decrypt data that was encrypted before Rails 7.1
+    #   God only knows why Rails decided to make the backwards-INCOMPATIBLE `false` their upgrade default
+    config.active_record.encryption.support_sha1_for_non_deterministic_encryption = true
 
     config.active_job.queue_adapter = :sidekiq
 
@@ -95,7 +103,5 @@ module WcaOnRails
     config.active_record.encryption.primary_key = AppSecrets.ACTIVERECORD_PRIMARY_KEY
     config.active_record.encryption.deterministic_key = AppSecrets.ACTIVERECORD_DETERMINISTIC_KEY
     config.active_record.encryption.key_derivation_salt = AppSecrets.ACTIVERECORD_KEY_DERIVATION_SALT
-
-    config.active_record.encryption.hash_digest_class = OpenSSL::Digest::SHA256
   end
 end
