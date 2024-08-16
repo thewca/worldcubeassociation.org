@@ -25,7 +25,7 @@ function FooterContent({
 
   const moneyCount = _.sum(registrations.filter(
     (r) => r.payment.payment,
-  ).map((r) => r.payment.payment));
+  ).map((r) => r.payment.payment_amount));
 
   const moneyCountHumanReadable = moneyCount
     / currenciesData.byIso[competitionInfo.currency_code].subunitToUnit;
