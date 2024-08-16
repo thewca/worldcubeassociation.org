@@ -61,7 +61,8 @@ export default function TableRow({
             {...provided.dragHandleProps}
           >
             <Table.Cell>
-              {draggable ? <Icon name="bars" /> : <Checkbox onChange={onCheckboxChange} checked={isSelected} />}
+              { /* We manually set the margin to 0 here to fix the table row height */}
+              {draggable ? <Icon name="bars" /> : <Checkbox onChange={onCheckboxChange} checked={isSelected} style={{ margin: 0 }} />}
             </Table.Cell>
 
             <Table.Cell>
