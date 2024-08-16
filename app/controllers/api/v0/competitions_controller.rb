@@ -120,10 +120,15 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
                                     .group_by(&:round_type)
                                     .sort_by { |round_type, _| -round_type.rank }
     rounds = scrambles_by_round.map do |round_type, scrambles|
+      # I think all competitions now have round data, but let's be cautious
+      # and assume they may not.
+      # round data.
+      round = competition.find_round_for(event.id, round_type.id)
       {
-        id: round_type,
+        id: round&.id,
+        roundTypeId: round_type.id,
         # Also include the (localized) name here, we don't have i18n in js yet.
-        name: round_type.name,
+        name: round&.name || "#{event.name} #{round_type.name}",
         scrambles: scrambles,
       }
     end
