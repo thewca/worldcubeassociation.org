@@ -2896,6 +2896,8 @@ class Competition < ApplicationRecord
           "additionalProperties" => false,
           "properties" => {
             "closingDateTime" => date_json_schema("date-time"),
+            "waitingListDeadlineDate" => date_json_schema("date-time"),
+            "eventChangeDeadlineDate" => date_json_schema("date-time"),
             "allowOnTheSpot" => { "type" => ["boolean", "null"] },
             "allowSelfEdits" => { "type" => "boolean" },
             "forceComment" => { "type" => ["boolean", "null"] },

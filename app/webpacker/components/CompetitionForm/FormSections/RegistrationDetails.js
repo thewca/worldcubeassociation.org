@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import {
   InputBoolean,
   InputBooleanSelect,
@@ -12,6 +12,8 @@ import ConditionalSection from './ConditionalSection';
 import I18n from '../../../lib/i18n';
 import SubSection from '../../wca/FormBuilder/SubSection';
 import { useFormObject } from '../../wca/FormBuilder/provider/FormObjectProvider';
+import { useFormObjectSection } from '../../wca/FormBuilder/EditForm';
+import { hasNotPassed } from '../../../lib/utils/dates';
 
 const guestsEnabledOptions = [true, false].map((bool) => ({
   value: bool,
@@ -27,13 +29,28 @@ const guestMessageOptions = ['unclear', 'free', 'restricted'].map((status) => ({
 export default function RegistrationDetails() {
   const { entryFees, registration } = useFormObject();
 
+  const {
+    waitingListDeadlineDate,
+    eventChangeDeadlineDate,
+  } = useFormObjectSection();
+
   const guestsGoFree = entryFees?.guestEntryFee === 0;
   const guestsRestricted = guestsGoFree && registration?.guestEntryStatus === 'restricted';
 
+  const waitingListNotYetPast = useMemo(
+    () => hasNotPassed(waitingListDeadlineDate, 'UTC'),
+    [waitingListDeadlineDate],
+  );
+
+  const eventChangeNotYetPast = useMemo(
+    () => hasNotPassed(eventChangeDeadlineDate, 'UTC'),
+    [eventChangeDeadlineDate],
+  );
+
   return (
     <SubSection section="registration">
-      <InputDate id="waitingListDeadlineDate" dateTime required />
-      <InputDate id="eventChangeDeadlineDate" dateTime required />
+      <InputDate id="waitingListDeadlineDate" dateTime required overrideEnabled={waitingListNotYetPast} />
+      <InputDate id="eventChangeDeadlineDate" dateTime required overrideEnabled={eventChangeNotYetPast} />
       <InputBooleanSelect id="allowOnTheSpot" required overrideEnabled />
       <InputBooleanSelect id="allowSelfDeleteAfterAcceptance" required />
       <InputBooleanSelect id="allowSelfEdits" required overrideEnabled />
