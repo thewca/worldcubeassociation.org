@@ -19,6 +19,30 @@ import { editRegistrationUrl, editPersonUrl, personUrl } from '../../../lib/requ
 // TODO: We could fix this by building our own table component here
 const truncateComment = (comment) => (comment?.length > 12 ? `${comment.slice(0, 12)}...` : comment);
 
+function RegistrationTime({
+  timestamp, registeredOn, paidOn, usesPaymentIntegration,
+}) {
+  if (timestamp) {
+    return getRegistrationTimestamp(registeredOn);
+  }
+
+  if (usesPaymentIntegration && !paidOn) {
+    return (
+      <Popup
+        content={i18n.t('registrations.list.payment_requested_on', { date: getRegistrationTimestamp(registeredOn) })}
+        trigger={<span>{i18n.t('registrations.list.not_paid')}</span>}
+      />
+    );
+  }
+
+  return (
+    <Popup
+      content={getShortTimeString(paidOn ?? registeredOn)}
+      trigger={<span>{getShortDateString(paidOn ?? registeredOn)}</span>}
+    />
+  );
+}
+
 export default function TableRow({
   columnsExpanded,
   registration,
@@ -38,7 +62,10 @@ export default function TableRow({
     registered_on: registeredOn, event_ids: eventIds, comment, admin_comment: adminComment,
   } = registration.competing;
   const { dob: dateOfBirth, email: emailAddress } = registration;
-  const { payment_status: paymentStatus, updated_at: updatedAt } = registration.payment;
+  const {
+    payment_amount_human_readable: paymentAmount,
+    updated_at: updatedAt,
+  } = registration.payment;
 
   const copyEmail = () => {
     navigator.clipboard.writeText(emailAddress);
@@ -105,29 +132,16 @@ export default function TableRow({
             </Table.Cell>
 
             <Table.Cell>
-              { timestamp ? getRegistrationTimestamp(registeredOn) : (
-                <Popup
-                  content={getShortTimeString(registeredOn)}
-                  trigger={<span>{getShortDateString(registeredOn)}</span>}
-                />
-              )}
+              <RegistrationTime
+                timestamp={timestamp}
+                paidOn={updatedAt}
+                registeredOn={registeredOn}
+                usesPaymentIntegration={competitionInfo['using_payment_integrations?']}
+              />
             </Table.Cell>
 
             {competitionInfo['using_payment_integrations?'] && (
-            <>
-              <Table.Cell>{paymentStatus ?? i18n.t('registrations.list.not_paid')}</Table.Cell>
-              <Table.Cell>
-                {updatedAt && (
-                  timestamp ? getRegistrationTimestamp(updatedAt)
-                    : (
-                      <Popup
-                        content={getShortTimeString(updatedAt)}
-                        trigger={<span>{getShortDateString(updatedAt)}</span>}
-                      />
-                    )
-                )}
-              </Table.Cell>
-            </>
+            <Table.Cell>{paymentAmount ?? ''}</Table.Cell>
             )}
 
             {events ? (
