@@ -15,6 +15,10 @@ class SyncMailingListsJob < WcaCronjob
     GsuiteMailingLists.sync_group("reports@worldcubeassociation.org", User.delegate_reports_receivers_emails)
 
     UserGroup.teams_committees.active_groups.each { |team_committee| GsuiteMailingLists.sync_group(team_committee.metadata.email, team_committee.active_users.map(&:email)) }
+    # Special case: WIC is the first committee in our (recent) history that "absorbed" another team's duties:
+    #   They are now a "mix" of WDC and WEC. The structures have been mapped so that WIC reuses WDC's groups,
+    #   so they get WDC access "for free". But they _also_ need to be synced to ethics@ to view old conversations from there.
+    GsuiteMailingLists.sync_group("ethics@worldcubeassociation.org", GroupsMetadataTeamsCommittees.wic.user_group.active_users.map(&:email))
 
     treasurers = UserGroup.officers.flat_map(&:active_roles).filter { |role| role.metadata.status == RolesMetadataOfficers.statuses[:treasurer] }
     GsuiteMailingLists.sync_group("treasurer@worldcubeassociation.org", treasurers.map(&:user).map(&:email))
