@@ -343,6 +343,44 @@ RSpec.describe "competitions" do
           expect(competition.reload.championships.count).to eq 0
         end
 
+        it 'cannot set deadlines if already past' do
+          competition.update!(waiting_list_deadline_date: Date.yesterday)
+
+          expect(competition.confirmed?).to be true
+
+          update_params = competition.to_form_data.merge({ registration: { waitingListDeadlineDate: Date.tomorrow.to_fs } })
+          patch competition_path(competition), params: update_params, as: :json
+
+          expect(response).to be_successful
+
+          expect(competition.reload.waiting_list_deadline_date).to eq Date.yesterday
+        end
+
+        it 'can set deadlines if not yet past' do
+          competition.update!(waiting_list_deadline_date: Date.tomorrow)
+
+          expect(competition.confirmed?).to be true
+          next_month = Date.today.advance(months: 1)
+
+          update_params = competition.to_form_data.merge({ registration: { waitingListDeadlineDate: next_month.to_fs } })
+          patch competition_path(competition), params: update_params, as: :json
+
+          expect(response).to be_successful
+
+          expect(competition.reload.waiting_list_deadline_date).to eq next_month
+        end
+
+        it 'can set generic competition information' do
+          expect(competition.confirmed?).to be true
+
+          update_params = competition.to_form_data.merge({ information: 'New amazing information' })
+          patch competition_path(competition), params: update_params, as: :json
+
+          expect(response).to be_successful
+
+          expect(competition.reload.waiting_list_deadline_date).to eq next_month
+        end
+
         context "when handling Series competitions" do
           let!(:series) { FactoryBot.create(:competition_series) }
           let!(:partner_competition) {
