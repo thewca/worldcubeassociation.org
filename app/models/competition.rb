@@ -2864,10 +2864,7 @@ class Competition < ApplicationRecord
           "type" => "object",
           "additionalProperties" => false,
           "properties" => {
-            "generateWebsite" => { "type" => ["boolean", "null"] },
             "externalWebsite" => { "type" => ["string", "null"] },
-            "externalRegistrationPage" => { "type" => ["string", "null"] },
-            "usesWcaRegistration" => { "type" => "boolean" },
             "usesWcaLive" => { "type" => "boolean" },
           },
         },
@@ -2882,13 +2879,8 @@ class Competition < ApplicationRecord
           "type" => "object",
           "additionalProperties" => false,
           "properties" => {
-            "currencyCode" => { "type" => "string" },
-            "baseEntryFee" => { "type" => ["integer", "null"] },
             "onTheSpotEntryFee" => { "type" => ["integer", "null"] },
-            "guestEntryFee" => { "type" => ["integer", "null"] },
             "donationsEnabled" => { "type" => ["boolean", "null"] },
-            "refundPolicyPercent" => { "type" => ["integer", "null"] },
-            "refundPolicyLimitDate" => date_json_schema("date-time"),
           },
         },
         "registration" => {
