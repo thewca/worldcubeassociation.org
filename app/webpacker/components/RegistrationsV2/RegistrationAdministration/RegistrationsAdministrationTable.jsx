@@ -3,6 +3,7 @@ import {
 } from 'semantic-ui-react';
 import React from 'react';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
+import _ from 'lodash';
 import i18n from '../../../lib/i18n';
 import TableHeader from './AdministrationTableHeader';
 import TableRow from './AdministrationTableRow';
@@ -39,8 +40,6 @@ function FooterContent({
     }),
   );
 
-  const eventsSum = _.sum(Object.values(eventCounts));
-
   return (
     <Table.Row>
       <Table.Cell colSpan={4}>
@@ -55,7 +54,7 @@ function FooterContent({
         <Table.Cell key={`footer-count-${evt}`}>
           {eventCounts[evt]}
         </Table.Cell>
-      )) : <Table.Cell>{eventsSum}</Table.Cell>}
+      )) : <Table.Cell />}
       <Table.Cell>{guestCount}</Table.Cell>
       <Table.Cell />
       <Table.Cell />
@@ -138,7 +137,11 @@ export default function RegistrationAdministrationTable({
         </Droppable>
       </DragDropContext>
       <TableFooter>
-        <FooterContent registrations={registrations} competitionInfo={competitionInfo} eventsToggled={columnsExpanded.events} />
+        <FooterContent
+          registrations={registrations}
+          competitionInfo={competitionInfo}
+          eventsToggled={columnsExpanded.events}
+        />
       </TableFooter>
     </Table>
   );
