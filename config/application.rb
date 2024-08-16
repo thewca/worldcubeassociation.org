@@ -29,11 +29,7 @@ module WcaOnRails
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
 
-    config.load_defaults 7.1
-
-    # Force belongs_to validations even on empty/unset keys.
-    #   This is potentially a Rails bug (?!?) and has been reported at https://github.com/rails/rails/issues/52614
-    config.active_record.belongs_to_required_validates_foreign_key = true
+    config.load_defaults 7.0
 
     config.active_job.queue_adapter = :sidekiq
 
