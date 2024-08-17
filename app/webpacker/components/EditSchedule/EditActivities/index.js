@@ -367,7 +367,13 @@ function EditActivities({
                 <Container text textAlign="center">
                   The timezone for this room is
                   {' '}
-                  <b>{getTimeZoneDropdownLabel(wcifVenue.timezone, earliestActivity, calendarLocale)}</b>
+                  <b>
+                    {getTimeZoneDropdownLabel(
+                      wcifVenue.timezone,
+                      earliestActivity,
+                      calendarLocale,
+                    )}
+                  </b>
                 </Container>
                 <Container fluid>
                   <Grid textAlign="center" verticalAlign="middle">
