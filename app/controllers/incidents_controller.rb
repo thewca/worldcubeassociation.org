@@ -37,7 +37,7 @@ class IncidentsController < ApplicationController
   def show
     set_incident
     unless @incident.resolved?
-      redirect_to_root_unless_user(:can_view_delegate_matters?)
+      redirect_to_root_unless_user(:can_manage_incidents?)
     end
   end
 
