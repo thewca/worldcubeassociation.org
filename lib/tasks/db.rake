@@ -164,10 +164,9 @@ namespace :db do
 
           # RENAME Database has been removed, that's why we need to swap tables
           LogTask.log_task "Swapping tables between databases" do
+            ActiveRecord::Base.connection.execute("CREATE DATABASE #{database_name}_old")
             # Re-establish the connection to the old database so we can swap
             ActiveRecord::Base.establish_connection(config)
-            # We have to re set this because we re-established the connection
-            DatabaseDumper.mysql("SET foreign_key_checks=0", database_name)
             # Get the list of tables from the current database using ActiveRecord
             current_tables = ActiveRecord::Base.connection.execute("SHOW TABLES").map { |row| row[0] }
 
@@ -177,7 +176,7 @@ namespace :db do
             # Swap tables between the databases
             temp_tables.each do |table|
               if current_tables.include?(table)
-                rename_sql = "RENAME TABLE #{database_name}.#{table} TO #{temp_db_name}.#{table}_old, #{temp_db_name}.#{table} TO #{database_name}.#{table};"
+                rename_sql = "RENAME TABLE #{database_name}.#{table} TO #{database_name}_old.#{table}, #{temp_db_name}.#{table} TO #{database_name}.#{table};"
               else
                 rename_sql = "RENAME TABLE #{temp_db_name}.#{table} TO #{database_name}.#{table};"
               end
