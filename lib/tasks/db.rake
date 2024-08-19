@@ -82,7 +82,6 @@ namespace :db do
 
             DatabaseDumper.mysql("SOURCE #{DbDumpHelper::DEVELOPER_EXPORT_SQL}", config.database)
 
-
             DatabaseDumper.mysql("SET unique_checks=1", config.database)
             DatabaseDumper.mysql("SET foreign_key_checks=1", config.database)
             DatabaseDumper.mysql("SET autocommit=1", config.database)
@@ -139,11 +138,12 @@ namespace :db do
 
           config = ActiveRecord::Base.connection_db_config.configuration_hash
           database_name = config[:database]
-          temp_db_name = "#{database_name}_temp_#{rand(1_000)}"
+          temp_db_name = "#{database_name}_temp"
 
           LogTask.log_task "Creating and loading temporary database '#{temp_db_name}'" do
             # Create the temporary database
             ActiveRecord::Base.establish_connection(config.merge(database: nil))
+            ActiveRecord::Base.connection.execute("DROP DATABASE IF EXISTS #{temp_db_name} ")
             ActiveRecord::Base.connection.execute("CREATE DATABASE #{temp_db_name}")
 
             # Disable certain checks for faster loading
@@ -167,7 +167,7 @@ namespace :db do
             # Re-establish the connection to the old database so we can swap
             ActiveRecord::Base.establish_connection(config)
             # We have to re set this because we re-established the connection
-            DatabaseDumper.mysql("SET foreign_key_checks=0", temp_db_name)
+            DatabaseDumper.mysql("SET foreign_key_checks=0", database_name)
             # Get the list of tables from the current database using ActiveRecord
             current_tables = ActiveRecord::Base.connection.execute("SHOW TABLES").map { |row| row[0] }
 
@@ -214,7 +214,7 @@ namespace :db do
               scopes: Doorkeeper.configuration.scopes.to_s,
               owner_id: User.find_by_wca_id!("2005FLEI01").id,
               owner_type: "User",
-              )
+            )
           end
         end
       end
