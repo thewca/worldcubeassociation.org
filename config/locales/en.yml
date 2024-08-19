@@ -1817,6 +1817,7 @@ en:
         move_pending: "Move to Pending"
         move_waiting: "Move to Waiting List"
         cancel: "Cancel Registration"
+        amount: "Amount"
         too_many: "Accepting all these registrations would go over the competitor limit by %{count}"
         no_self_update: "Contact the Organization Team to update your registration."
       register:
