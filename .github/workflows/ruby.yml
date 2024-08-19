@@ -12,7 +12,6 @@ jobs:
     env:
       RACK_ENV: test
       RAILS_ENV: test
-      NODE_ENV: test
     steps:
       - uses: actions/checkout@v4
       - uses: fregante/setup-git-user@v2 # set up dummy user.name and user.email in git so that Overcommit doesn't explode

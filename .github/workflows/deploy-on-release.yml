@@ -19,24 +19,6 @@ jobs:
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
-      - name: Get the SHA of the current branch/fork
-        shell: bash
-        run: |
-          echo "SHORT_SHA=$(git rev-parse --short HEAD)" >> "$GITHUB_ENV"
-      - name: Build Assets and push to S3
-        env:
-          RAILS_ENV: production
-          WCA_LIVE_SITE: true
-          ASSETS_COMPILATION: true
-          SECRET_KEY_BASE: 1
-          BUILD_TAG: ${{ env.SHORT_SHA }}
-          SHAKAPACKER_ASSET_HOST: "https://assets.worldcubeassociation.org"
-        run: |
-          ./bin/bundle install
-          ./bin/yarn install --immutable
-          ./bin/bundle exec i18n export
-          ./bin/rake assets:precompile
-          aws s3 sync ./public "s3://assets.worldcubeassociation.org/assets/${{ env.SHORT_SHA }}"
       - name: Build and Push Sidekiq image
         uses: docker/build-push-action@v6
         with:
@@ -47,7 +29,8 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
           build-args: |
-            BUILD_TAG=${{ env.SHORT_SHA }}
+            BUILD_TAG=${{ github.sha }}
+            WCA_LIVE_SITE=true
         # this will trigger the deployment pipeline for prod
       - name: Build and push Prod Image
         uses: docker/build-push-action@v6
@@ -59,7 +42,8 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
           build-args: |
-            BUILD_TAG=${{ env.SHORT_SHA }}
+            BUILD_TAG=${{ github.sha }}
+            WCA_LIVE_SITE=true
         # Replace the old sidekiq image with the new one
       - name: Deploy Sidekiq
         run: |
