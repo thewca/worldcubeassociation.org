@@ -170,6 +170,8 @@ namespace :db do
 
           # RENAME Database has been removed, that's why we need to swap tables
           LogTask.log_task "Swapping tables between databases" do
+            # Re-establish the connection to the old database so we can swap
+            ActiveRecord::Base.establish_connection(config)
             # Get the list of tables from the current database using ActiveRecord
             current_tables = ActiveRecord::Base.connection.execute("SHOW TABLES").map { |row| row[0] }
 
