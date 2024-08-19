@@ -452,8 +452,8 @@ class User < ApplicationRecord
     preferred_locale || I18n.default_locale
   end
 
-  private def group_member?(group)
-    active_roles.any? { |role| role.group_id == group.id }
+  private def group_member?(group_id)
+    active_roles.any? { |role| role.group_id == group_id }
   end
 
   private def at_least_senior_teams_committees_member?(group)
@@ -465,47 +465,47 @@ class User < ApplicationRecord
   end
 
   def board_member?
-    group_member?(UserGroup.board_group)
+    group_member?(UserGroup.board_group.id)
   end
 
   def communication_team?
-    group_member?(UserGroup.teams_committees_group_wct)
+    group_member?(GroupsMetadataTeamsCommittees.wct.user_group.id)
   end
 
   def competition_announcement_team?
-    group_member?(UserGroup.teams_committees_group_wcat)
+    group_member?(GroupsMetadataTeamsCommittees.wcat.user_group.id)
   end
 
   def wic_team?
-    group_member?(UserGroup.teams_committees_group_wic)
+    group_member?(GroupsMetadataTeamsCommittees.wic.user_group.id)
   end
 
   def weat_team?
-    group_member?(UserGroup.teams_committees_group_weat)
+    group_member?(GroupsMetadataTeamsCommittees.weat.user_group.id)
   end
 
   def financial_committee?
-    group_member?(UserGroup.teams_committees_group_wfc)
+    group_member?(GroupsMetadataTeamsCommittees.wfc.user_group.id)
   end
 
   def marketing_team?
-    group_member?(UserGroup.teams_committees_group_wmt)
+    group_member?(GroupsMetadataTeamsCommittees.wmt.user_group.id)
   end
 
   def quality_assurance_committee?
-    group_member?(UserGroup.teams_committees_group_wqac)
+    group_member?(GroupsMetadataTeamsCommittees.wqac.user_group.id)
   end
 
   def wrc_team?
-    group_member?(UserGroup.teams_committees_group_wrc)
+    group_member?(GroupsMetadataTeamsCommittees.wrc.user_group.id)
   end
 
   def results_team?
-    group_member?(UserGroup.teams_committees_group_wrt)
+    group_member?(GroupsMetadataTeamsCommittees.wrt.user_group.id)
   end
 
   def appeals_committee?
-    group_member?(UserGroup.teams_committees_group_wapc)
+    group_member?(GroupsMetadataTeamsCommittees.wapc.user_group.id)
   end
 
   private def senior_results_team?
@@ -513,7 +513,7 @@ class User < ApplicationRecord
   end
 
   private def software_team?
-    group_member?(UserGroup.teams_committees_group_wst)
+    group_member?(GroupsMetadataTeamsCommittees.wst.user_group.id)
   end
 
   private def software_team_admin?
@@ -561,7 +561,7 @@ class User < ApplicationRecord
   end
 
   def banned?
-    group_member?(UserGroup.banned_competitors.first)
+    group_member?(UserGroup.banned_competitors.first.id)
   end
 
   def current_ban
