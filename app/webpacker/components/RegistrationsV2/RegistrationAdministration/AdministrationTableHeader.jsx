@@ -58,7 +58,7 @@ export default function TableHeader({
               >
                 {i18n.t('registrations.list.registered.with_stripe')}
               </Table.HeaderCell>
-              <Table.HeaderCell>{i18n.t('activerecord.attributes.registration.paid_entry_fees')}</Table.HeaderCell>
+              <Table.HeaderCell>{i18n.t('competitions.registration_v2.update.amount')}</Table.HeaderCell>
             </>
           ) : (
             <Table.HeaderCell
