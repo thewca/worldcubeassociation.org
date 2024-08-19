@@ -70,10 +70,10 @@ namespace :db do
             ActiveRecord::Tasks::DatabaseTasks.drop config
             ActiveRecord::Tasks::DatabaseTasks.create config
 
+            DatabaseDumper.mysql("SET unique_checks=0", config.database)
+            DatabaseDumper.mysql("SET foreign_key_checks=0", config.database)
+            DatabaseDumper.mysql("SET autocommit=0", config.database)
             if Rails.env.development?
-              DatabaseDumper.mysql("SET unique_checks=0", config.database)
-              DatabaseDumper.mysql("SET foreign_key_checks=0", config.database)
-              DatabaseDumper.mysql("SET autocommit=0", config.database)
               DatabaseDumper.mysql("SET GLOBAL innodb_flush_log_at_trx_commit=0", config.database)
             end
 
@@ -82,10 +82,11 @@ namespace :db do
 
             DatabaseDumper.mysql("SOURCE #{DbDumpHelper::DEVELOPER_EXPORT_SQL}", config.database)
 
+
+            DatabaseDumper.mysql("SET unique_checks=1", config.database)
+            DatabaseDumper.mysql("SET foreign_key_checks=1", config.database)
+            DatabaseDumper.mysql("SET autocommit=1", config.database)
             if Rails.env.development?
-              DatabaseDumper.mysql("SET unique_checks=1", config.database)
-              DatabaseDumper.mysql("SET foreign_key_checks=1", config.database)
-              DatabaseDumper.mysql("SET autocommit=1", config.database)
               DatabaseDumper.mysql("SET GLOBAL innodb_flush_log_at_trx_commit=1", config.database)
             end
 
@@ -146,23 +147,16 @@ namespace :db do
             ActiveRecord::Base.connection.execute("CREATE DATABASE #{temp_db_name}")
 
             # Disable certain checks for faster loading
+            DatabaseDumper.mysql("SET unique_checks=0", temp_db_name)
+            DatabaseDumper.mysql("SET foreign_key_checks=0", temp_db_name)
+            DatabaseDumper.mysql("SET autocommit=0", temp_db_name)
+
             if Rails.env.development?
-              DatabaseDumper.mysql("SET unique_checks=0", temp_db_name)
-              DatabaseDumper.mysql("SET foreign_key_checks=0", temp_db_name)
-              DatabaseDumper.mysql("SET autocommit=0", temp_db_name)
               DatabaseDumper.mysql("SET GLOBAL innodb_flush_log_at_trx_commit=0", temp_db_name)
             end
 
             # Load the dump into the temporary database
             DatabaseDumper.mysql("SOURCE #{DbDumpHelper::DEVELOPER_EXPORT_SQL}", temp_db_name)
-
-            # Re-enable checks
-            if Rails.env.development?
-              DatabaseDumper.mysql("SET unique_checks=1", temp_db_name)
-              DatabaseDumper.mysql("SET foreign_key_checks=1", temp_db_name)
-              DatabaseDumper.mysql("SET autocommit=1", temp_db_name)
-              DatabaseDumper.mysql("SET GLOBAL innodb_flush_log_at_trx_commit=1", temp_db_name)
-            end
 
             # Commit any pending transactions
             DatabaseDumper.mysql("COMMIT", temp_db_name)
@@ -172,6 +166,8 @@ namespace :db do
           LogTask.log_task "Swapping tables between databases" do
             # Re-establish the connection to the old database so we can swap
             ActiveRecord::Base.establish_connection(config)
+            # We have to re set this because we re-established the connection
+            DatabaseDumper.mysql("SET foreign_key_checks=0", temp_db_name)
             # Get the list of tables from the current database using ActiveRecord
             current_tables = ActiveRecord::Base.connection.execute("SHOW TABLES").map { |row| row[0] }
 
@@ -195,7 +191,12 @@ namespace :db do
             ActiveRecord::Base.connection.execute("DROP DATABASE #{database_name}_old")
           end
 
-          # Re-establish the connection to the new database
+          # Re-enable checks
+          if Rails.env.development?
+            DatabaseDumper.mysql("SET GLOBAL innodb_flush_log_at_trx_commit=1", temp_db_name)
+          end
+
+          # Re-establish the connection to the new database (which also re-enables local checks)
           ActiveRecord::Base.establish_connection(config)
 
           # Update passwords and other configurations in the new database
