@@ -12,6 +12,7 @@ import {
 } from '../../../lib/utils/dates';
 import EventIcon from '../../wca/EventIcon';
 import { editRegistrationUrl, editPersonUrl, personUrl } from '../../../lib/requests/routes.js.erb';
+import { isoMoneyToHumanReadable } from '../../../lib/helpers/money';
 
 // Semantic Table only allows truncating _all_ columns in a table in
 // single line fixed mode. As we only want to truncate the comment/admin notes
@@ -63,7 +64,7 @@ export default function TableRow({
   } = registration.competing;
   const { dob: dateOfBirth, email: emailAddress } = registration;
   const {
-    payment_amount_human_readable: paymentAmount,
+    payment_amount_iso: paymentAmount,
     updated_at: updatedAt,
   } = registration.payment;
 
@@ -141,7 +142,7 @@ export default function TableRow({
             </Table.Cell>
 
             {competitionInfo['using_payment_integrations?'] && (
-            <Table.Cell>{paymentAmount ?? ''}</Table.Cell>
+            <Table.Cell>{isoMoneyToHumanReadable(paymentAmount, competitionInfo.currency_code) ?? ''}</Table.Cell>
             )}
 
             {events ? (

@@ -7,7 +7,7 @@ import _ from 'lodash';
 import i18n from '../../../lib/i18n';
 import TableHeader from './AdministrationTableHeader';
 import TableRow from './AdministrationTableRow';
-import { currenciesData } from '../../../lib/wca-data.js.erb';
+import { isoMoneyToHumanReadable } from '../../../lib/helpers/money';
 
 function FooterContent({
   registrations, competitionInfo,
@@ -24,11 +24,13 @@ function FooterContent({
   const guestCount = _.sum(registrations.map((r) => r.guests));
 
   const moneyCount = _.sum(registrations.filter(
-    (r) => r.payment.payment,
+    (r) => r.payment.payment_amount_iso,
   ).map((r) => r.payment.payment_amount_iso));
 
-  const moneyCountHumanReadable = moneyCount
-    / currenciesData.byIso[competitionInfo.currency_code].subunitToUnit;
+  const moneyCountHumanReadable = isoMoneyToHumanReadable(
+    moneyCount,
+    competitionInfo.currency_code,
+  );
 
   const eventCounts = Object.fromEntries(
     competitionInfo.event_ids.map((evt) => {
@@ -49,7 +51,7 @@ function FooterContent({
       </Table.Cell>
       <Table.Cell>{`${countryCount}  Countries`}</Table.Cell>
       <Table.Cell />
-      <Table.Cell>{`${currenciesData.byIso[competitionInfo.currency_code].symbol}${moneyCountHumanReadable} (${currenciesData.byIso[competitionInfo.currency_code].name})`}</Table.Cell>
+      <Table.Cell>{moneyCountHumanReadable}</Table.Cell>
       { eventsToggled ? competitionInfo.event_ids.map((evt) => (
         <Table.Cell key={`footer-count-${evt}`}>
           {eventCounts[evt]}
