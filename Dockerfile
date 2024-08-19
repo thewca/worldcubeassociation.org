@@ -12,7 +12,7 @@ ENV RAILS_LOG_TO_STDOUT="1" \
     BUNDLE_WITHOUT="development:test" \
     BUNDLE_DEPLOYMENT="1" \
     BUILD_TAG=$BUILD_TAG \
-    WCA_LIVE_SITE=$WCA_LIVE_SITE
+    WCA_LIVE_SITE=$WCA_LIVE_SITE \
     SHAKAPACKER_ASSET_HOST=$SHAKAPACKER_ASSET_HOST
 
 # Add dependencies necessary to install nodejs.
