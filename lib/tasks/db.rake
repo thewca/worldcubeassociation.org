@@ -187,6 +187,7 @@ namespace :db do
           # Clean up the old database
           LogTask.log_task "Dropping old database" do
             ActiveRecord::Base.establish_connection(config.merge(database: nil))
+            ActiveRecord::Base.connection.execute("DROP DATABASE #{temp_db_name}")
             ActiveRecord::Base.connection.execute("DROP DATABASE #{database_name}_old")
           end
 
