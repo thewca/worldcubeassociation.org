@@ -27,6 +27,8 @@ EnvConfig = SuperConfig.new(raise_exception: !is_compiling_assets) do
     mandatory :TASK_ROLE, :string
     mandatory :WCA_REGISTRATIONS_URL, :string
     mandatory :WCA_REGISTRATIONS_POLL_URL, :string
+    mandatory :ASSET_HOST, :string
+    mandatory :CDN_ASSETS_DISTRIBUTION_ID, :string
   else
     optional :READ_REPLICA_HOST, :string, ''
     optional :CACHE_REDIS_URL, :string, ''
@@ -47,6 +49,7 @@ EnvConfig = SuperConfig.new(raise_exception: !is_compiling_assets) do
     # Local-specific stuff
     optional :DISABLE_BULLET, :bool, false
     optional :MAILCATCHER_SMTP_HOST, :string, ''
+    optional :ASSET_HOST, :string, ''
     mandatory :WCA_REGISTRATIONS_BACKEND_URL, :string
   end
 

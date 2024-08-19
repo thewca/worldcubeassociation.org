@@ -1,18 +1,15 @@
 FROM ruby:3.3.0 AS base
 ARG BUILD_TAG=local
-ARG WCA_LIVE_SITE
 WORKDIR /rails
 
 ENV DEBIAN_FRONTEND noninteractive
 
 # Set production environment
 ENV RAILS_LOG_TO_STDOUT="1" \
-    RAILS_SERVE_STATIC_FILES="true" \
     RAILS_ENV="production" \
     BUNDLE_WITHOUT="development:test" \
     BUNDLE_DEPLOYMENT="1" \
-    BUILD_TAG=$BUILD_TAG \
-    WCA_LIVE_SITE=$WCA_LIVE_SITE
+    BUILD_TAG=$BUILD_TAG
 
 # Add dependencies necessary to install nodejs.
 # From: https://github.com/nodesource/distributions#debian-and-ubuntu-based-distributions
@@ -27,9 +24,6 @@ RUN curl -fsSL https://deb.nodesource.com/setup_${NODE_MAJOR}.x | bash && \
     apt-get install -y nodejs
 
 FROM base AS build
-
-# Enable 'corepack' feature that lets NPM download the package manager on-the-fly as required.
-RUN corepack enable
 
 # Install native dependencies for Ruby:
 # libvips = image processing for Rails ActiveStorage attachments
@@ -54,15 +48,6 @@ RUN gem update --system && gem install bundler
 COPY . .
 RUN ./bin/bundle install && \
     rm -rf ~/.bundle/ "${BUNDLE_PATH}"/ruby/*/cache "${BUNDLE_PATH}"/ruby/*/bundler/gems/*/.git
-
-# Install node dependencies
-COPY package.json yarn.lock .yarnrc.yml ./
-RUN ./bin/yarn install --immutable
-
-RUN ASSETS_COMPILATION=true SECRET_KEY_BASE=1 ./bin/bundle exec i18n export
-RUN ASSETS_COMPILATION=true SECRET_KEY_BASE=1 ./bin/rake assets:precompile
-
-RUN rm -rf node_modules
 
 FROM base AS runtime
 
