@@ -3,6 +3,7 @@ version: "3.8"
 x-app: &app
   build:
     dockerfile: Dockerfile.dev
+    context: .
   working_dir: /app
   volumes:
     - .:/app

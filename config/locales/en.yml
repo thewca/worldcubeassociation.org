@@ -320,8 +320,8 @@ en:
         incidents: "Incidents"
         wrc_feedback_requested: "I would like feedback from the WRC on some of the incidents above."
         wrc_incidents: "Incidents Needing WRC Feedback"
-        wdc_feedback_requested: "I would like feedback from the WDC on some of the incidents above."
-        wdc_incidents: "Incidents Needing WDC Feedback"
+        wic_feedback_requested: "I would like feedback from the WIC on some of the incidents above."
+        wic_incidents: "Incidents Needing WIC Feedback"
         remarks: "Remarks"
       #context: a person
       person:
@@ -488,8 +488,8 @@ en:
         incidents: "Please report all incidents which are non-standard cases. Number the incidents starting from 1., so that other Delegates can comment referring to them by their numbers. Even if everything seemed generic, just list at least the most noteworthy cases. Please check off the appropriate boxes below if you are actively seeking feedback."
         wrc_feedback_requested: ""
         wrc_incidents: "List of numbers referencing any incidents that you would like the WRC's feedback on."
-        wdc_feedback_requested: ""
-        wdc_incidents: "List of numbers referencing any incidents that you would like the WDC's feedback on."
+        wic_feedback_requested: ""
+        wic_incidents: "List of numbers referencing any incidents that you would like the WIC's feedback on."
         remarks: "Talk about any other detail that you'd like to share (e.g., improvement/regression within the community, future plans for this region). If for the sake of conciseness you left something unsaid in the previous sections, feel free to comment them here."
         discussion_url: ""
       #context: for a competition tab
@@ -766,8 +766,7 @@ en:
         wat: "WCA Archive Team"
         wct: "WCA Communication Team"
         wcat: "WCA Competition Announcement Team"
-        wdc: "WCA Disciplinary Committee"
-        wec: "WCA Ethics Committee"
+        wic: "WCA Integrity Committee"
         weat: "WCA Executive Assistants Team"
         wfc: "WCA Financial Committee"
         wmt: "WCA Marketing Team"
@@ -776,13 +775,12 @@ en:
         wrt: "WCA Results Team"
         wst: "WCA Software Team"
         wsot: "WCA Sports Organization Team"
-        wac: "WCA Advisory Council"
+        wapc: "WCA Appeals Committee"
       groups_description:
         wat: "The WAT is responsible for managing the development and maintenance of the WCA's historical archive. They document key speedcubing events and notable WCA milestones to be presented as part of a broader WCA timeline, to preserve the legacy of the WCA in speedcubing."
         wct: "The WCA Communication Team (WCT) has the role to oversee and support communications of the WCA with the Community and the general public. The communication of the WCA should contribute to the Objectives of the WCA and support a general positive culture of friendliness, transparency, inclusiveness, openness, and responsiveness."
         wcat: "The WCA Competition Announcement Team (WCAT) has the role to approve and announce WCA Competitions submitted by delegates, and ensure such announcements adhere to WCA quality standards. This team is also responsible for maintaining proper competition submission protocol from documents such as the WCA Competition Requirements Policy. WCAT is NOT responsible for the organization and delegation of individual competitions."
-        wdc: "The WCA Disciplinary Committee (WDC) performs independent investigations regarding Registered Speedcubers and incidents during WCA Competitions or on official, online WCA platforms. These incidents are alleged violations of the Spirit, Code of Conduct, and/or Regulations of the WCA."
-        wec: "This committee's role is to ensure that all the procedures followed by the WCA Staff abide by the Code of Ethics, and to perform independent investigations if the conduct of any of these members is not compliant with the Code. The WEC is a confidant for Registered Speedcubers who may report concerns and request an investigation. This committee also functions as the board of appeal if anyone involved disagrees with a decision made by the WCA Disciplinary Committee."
+        wic: "The WCA Integrity Committee (WIC) performs independent investigations regarding WCA community members and incidents during WCA Competitions or on official, online WCA platforms. These incidents are alleged violations of the Spirit, Code of Conduct, Code of Ethics and/or Regulations of the WCA."
         weat: "This team is responsible for carrying out the administrative tasks of the WCA Board of Directors."
         wfc: "This committee is responsible for managing the overall finances of the WCA, including budgeting, reporting, analysis, bookkeeping, and tax filings. They also manage the WCA's largest source of income, the WCA Dues System, along with various funding programs that provide support to local communities at different stages of development, including Travel Funding, Equipment Funding, and Regional Organization Support."
         wmt: "This team is responsible for developing and managing the WCA Brand, seeking sponsorships, supporting the distribution of WCA Competition Gear, and marketing WCA Merchandise."
@@ -791,7 +789,7 @@ en:
         wrt: "The WRT is responsible for managing all data in the databases of the WCA, most importantly competition results and persons data."
         wst: "This team is responsible for managing the WCA's software (website, scramblers, workbooks, admin tools)."
         wsot: "This team has the role to oversee and support the recognition of the WCA as an international sports organization."
-        wac: "The WAC is responsible for maintaining feedback and communication between the WCA Community and the WCA Staff. They maintain the WCA Forums and summarize surveys and attempt to increase reach across the worldwide community."
+        wapc: "The WCA Appeals Committee (WAC) is responsible for reviewing and resolving appeals regarding decisions made by other WCA Staff. The WAC provides an independent and impartial review process to ensure that decisions are fair, reasonable, and in accordance with WCA policies and regulations."
     contacts:
       title: "WCA Contact Form"
       faq_note_html: 'Before making an inquiry, you may wish to take a look at our <a href="/faq">Frequently Asked Questions</a>! If you wish to contact a specific committee or team not listed here, you may check their details on <a href="/teams-committees-councils">this page</a>.'
@@ -848,6 +846,8 @@ en:
             label: "New DOB"
           edit_profile_reason:
             label: "Reason for the change"
+          edit_profile_proof_attach:
+            label: "Attach proof"
         wst:
           message:
             label: "Message"
@@ -1094,7 +1094,7 @@ en:
       exceeds_event_limit:
         one: "You must register in exactly 1 event."
         other: "You must register for between 1 and %{count} events."
-      banned_html: "You are banned. If you believe this is an error, please contact the <a href='mailto:disciplinary@worldcubeassociation.org' target='_blank'>WDC</a>."
+      banned_html: "You are banned. If you believe this is an error, please contact the <a href='mailto:integrity@worldcubeassociation.org' target='_blank'>WIC</a>."
       undelete_banned: "is a banned competitor and cannot be undeleted"
       series_more_than_one_accepted: "You can only be accepted for one Series competition at a time."
       can_only_register_for_qualified_events: "You cannot register for events you are not qualified for."
@@ -1339,6 +1339,7 @@ en:
       uncancel_success: "Successfully uncancelled competition!"
       uncancel_failure: "Cannot uncancel the competition."
       results_not_posted: "This competition's results are visible but haven't been posted yet."
+      results_still_processing: "We are busy processing this competition's results - they should be available shortly."
       results_already_posted: "The results have already been posted."
       results_posted: "Successfully posted results!"
       results_preview_alert: "You are viewing results that have not been posted yet."
@@ -1816,6 +1817,7 @@ en:
         move_pending: "Move to Pending"
         move_waiting: "Move to Waiting List"
         cancel: "Cancel Registration"
+        amount: "Amount"
         too_many: "Accepting all these registrations would go over the competitor limit by %{count}"
         no_self_update: "Contact the Organization Team to update your registration."
       register:
@@ -1825,6 +1827,7 @@ en:
         comment: "Additional comments to the organizers"
         until: "You can update your registration until %{date}"
         passed: "You can no longer update your registration"
+        approval: "Approval"
         view_registration: "View Registration"
         editing_disabled: "Registration editing is disabled for this competition"
         registration_status:
@@ -2503,43 +2506,6 @@ en:
         paragraph: "High resolution PNGs and vector versions of the WCA logo are available for download."
         accept_terms_and_conditions: 'I have read and accept the <a href="https://documents.worldcubeassociation.org/documents/policies/external/Logo%20Usage.pdf">WCA Logo Usage Policy</a>.'
         download_button_text: "Download Logo Assets"
-  workbook_assistant:
-    title: "WCA Workbook Assistant"
-    download: "Download WCA Workbook Assistant"
-    last_update: "Last update"
-    version_history: "version history"
-    header: "How to process results and scrambles before submitting them to the WCA"
-    step1:
-      title: "Step 1: Open the workbook with the results"
-      content_html: "Open the workbook using the <em>Open...</em> button or by dragging the workbook file and dropping it on the application window."
-    step2:
-      title: "Step 2: Add the TNoodle scrambles"
-      content_html: "Add the TNoodle scrambles using the <em>Add...</em> button or by dragging the TNoodle file and dropping it on the application window. Make sure you use either the .zip file  or the .json file generated by TNoodle."
-      content2_html: "You can add multiple scramble files in case the scrambles where generated in parts or extra scrambles had to be generated during the competition."
-    step3:
-      title: "Step 3: Match the scrambles with the results"
-      content_html: "The WCA Workbook Assistant automatically links the scrambles with the rounds that were held. In some cases, like when multiple scramble files were generated, the selection needs to be done manually because there are several possible options."
-      content2_html: "Manually selecting scrambles can be done by double clicking the <em>Scrambles</em> cell in the sheet overview panel."
-      content3_html: "It is only possible to select one round from the scramble files for each round for which there are results. If a situation arises where scrambles for a single round were generated as separate rounds in TNoodle, you can use the <em>Edit groups...</em> button to edit the groups in the scramble files and move them from one round to another or delete them."
-      content4_html: "In this example, an extra set scrambles was generated to have two groups for the first round of skewb instead of one group."
-      content5_html: "The scrambles for the additional group can be dragged and dropped on the round that was generated originally. This moves the two groups together in one round."
-    step4:
-      title: "Step 4: Fix any errors reported by the application"
-      content_html: "The results are checked for data entry mistakes. Rounds that have errors will be marked with a red icon in the sheet overview panel."
-      content2_html: "When selecting a sheet with errors in the sheet overview panel, the application will list the details in the validation errors panel on the bottom left."
-      content3_html: "Mistakes can be fixed by opening the workbook in a spreadsheet application and editing and saving it from there. The updated workbook can then be loaded again in the WCA Workbook Assistant by pressing the <em>Refresh</em> button. This will only reload the results but will leave all the other changes you made intact, like the scrambles that were added."
-    step5:
-      title: "Step 5: Select the competition ID"
-      content_html: "Select the correct competition ID by clicking the <em>Select...</em> button next to the <em>Competition ID</em> field."
-      content2_html: "A dialog will show up with a list of competitions to choose from."
-      content3_html: "You can filter the list by typing a part of the name of the competition or the WCA Delegate."
-      content4_html: "To start off with, only competitions that took place less than one week ago or that will take place less than one week in the future will be shown. If you need to select a competition outside of this time window, deselect <em>Only show current competitions</em>."
-    step6:
-      title: "Step 6: Export the results data to JSON"
-      content_html: "Save the results data to a JSON file using the <em>Export results JSON...</em> button on the bottom right."
-    step7:
-      title: "Step 7: Send the results JSON to the WCA"
-      content_html: 'E-mail the JSON file exported by the WCA Workbook Assistant to <a href="mailto:results@worldcubeassociation.org">results@worldcubeassociation.org</a>'
   search_results:
     index:
       competitions: "Competitions"

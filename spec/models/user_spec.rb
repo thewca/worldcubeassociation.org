@@ -619,7 +619,7 @@ RSpec.describe User, type: :model do
   end
 
   describe "receive_delegate_reports field" do
-    let!(:staff_member1) { FactoryBot.create :user, :wec_member, receive_delegate_reports: true }
+    let!(:staff_member1) { FactoryBot.create :user, :wic_member, receive_delegate_reports: true }
     let!(:staff_member2) { FactoryBot.create :user, :wrt_member, receive_delegate_reports: false }
 
     it "gets cleared if user is not eligible anymore" do
@@ -800,14 +800,14 @@ RSpec.describe User, type: :model do
     end
   end
 
-  describe "at_least_senior_teams_committees_roles has_many relation" do
+  describe "teams_committees_at_least_senior_roles has_many relation" do
     it "returns the senior/leader roles for a user" do
       user = FactoryBot.create(:user)
       wrt_role = FactoryBot.create(:wrt_member_role, user: user)
       wsot_leader_role = FactoryBot.create(:wsot_leader_role, user: user)
       wrc_senior_member_role = FactoryBot.create(:wrc_senior_member_role, user: user)
-      expect(user.at_least_senior_teams_committees_roles).to include(wsot_leader_role, wrc_senior_member_role)
-      expect(user.at_least_senior_teams_committees_roles).not_to include(wrt_role)
+      expect(user.teams_committees_at_least_senior_roles).to include(wsot_leader_role, wrc_senior_member_role)
+      expect(user.teams_committees_at_least_senior_roles).not_to include(wrt_role)
     end
   end
 end

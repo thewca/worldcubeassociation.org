@@ -483,10 +483,10 @@ th:
         wrc_feedback_requested: ฉันต้องการการตอบกลับจาก WRC สำหรับ incidents ข้างต้น
         #original_hash: 0c7191d
         wrc_incidents: Incidents ที่ต้องการการตอบกลับจาก WRC
-        #original_hash: 5a92b25
-        wdc_feedback_requested: ฉันต้องการการตอบกลับจาก WDC สำหรับบาง incidents ข้างต้น
-        #original_hash: 06a0568
-        wdc_incidents: Incidents ที่ต้องการการตอบกลับจาก WDC
+        #original_hash: 1a54a79
+        wic_feedback_requested: ฉันต้องการการตอบกลับจาก WIC เกี่ยวกับ incidents ด้านบน
+        #original_hash: 000153c
+        wic_incidents: Incidents ที่ต้องการคำแนะนำจาก WIC
         #original_hash: d7020f4
         remarks: หมายเหตุ
       person:
@@ -638,6 +638,11 @@ th:
           vice_chair: WCA Vice-Chair
           #original_hash: 75e65d9
           treasurer: WCA Treasurer
+      ban_scope:
+        #original_hash: 80901da
+        competing_only: เฉพาะการแข่งขัน
+        #original_hash: 35a6012
+        competing_and_attending: การแข่งขันและการเข้าร่วม
     competition_medium:
       status:
         #original_hash: 61a0572
@@ -801,9 +806,9 @@ th:
         #original_hash: 98bb5cd
         wrc_incidents: หมายเลขของ incident ที่ต้องการข้อเสนอแนะจาก WRC
         #original_hash: da39a3e
-        wdc_feedback_requested: ''
-        #original_hash: 38a95e5
-        wdc_incidents: หมายเลขของ incident ที่ต้องการให้ WDC เสนอแนะ
+        wic_feedback_requested: ''
+        #original_hash: 0aca3b0
+        wic_incidents: รายการถึง incidents ที่คุณต้องการให้ WIC ตอบกลับ
         #original_hash: f30abdc
         remarks: >-
           พูดเกี่ยวกับรายละเอียดอย่างอื่นที่คุณต้องการแบ่งปัน (เช่น
@@ -1318,10 +1323,8 @@ th:
         wct: WCA Communication Team
         #original_hash: 2b81984
         wcat: WCA Competition Announcement Team
-        #original_hash: c97077a
-        wdc: WCA Disciplinary Committee
-        #original_hash: 83bd1d0
-        wec: WCA Ethics Committee
+        #original_hash: 94c2e42
+        wic: WCA Integrity Committee
         #original_hash: d1dbb86
         weat: WCA Executive Assistants Team
         #original_hash: 9cb13de
@@ -1338,8 +1341,8 @@ th:
         wst: WCA Software Team
         #original_hash: 58765c7
         wsot: WCA Sports Organization Team
-        #original_hash: 1ce7604
-        wac: WCA Advisory Council
+        #original_hash: 78949a7
+        wapc: WCA Appeals Committee
       groups_description:
         #original_hash: 5b1aade
         wat: >-
@@ -1363,22 +1366,13 @@ th:
           ทีมนี้ยังรับผิดชอบในการรักษาระเบียบการส่งการแข่งขันที่เหมาะสมจากเอกสารต่างๆ
           เช่น นโยบายข้อกำหนดการแข่งขัน WCA WCAT
           จะไม่รับผิดชอบต่อการจัดองค์กรและการมอบหมายการแข่งขันรายบุคคล
-        #original_hash: 41eb6fd
-        wdc: >-
-          WCA Disciplinary Committee (WDC) ดำเนินการสอบสวนอย่างอิสระเกี่ยวกับ
-          Speedcubers ที่ลงทะเบียนแข่งขันและเหตุการณ์ต่างๆ
-          ในระหว่างการแข่งขันอย่างเป็นทางการของ WCA หรือบนแพลตฟอร์ม WCA ออนไลน์
-          เหตุการณ์เหล่านี้ถือเป็นการละเมิดจิตวิญญาณ หลักจรรยาบรรณ
-          และ/หรือข้อบังคับของ WCA
-        #original_hash: 6cdac80
-        wec: >-
-          บทบาทของคณะกรรมการนี้คือเพื่อให้แน่ใจว่าขั้นตอนทั้งหมดที่เจ้าหน้าที่
-          WCA ปฏิบัติตามปฏิบัติตามหลักจรรยาบรรณ และดำเนินการสอบสวนอย่างเป็นอิสระ
-          หากการดำเนินการของสมาชิกคนใดคนหนึ่งไม่สอดคล้องกับหลักจรรยาบรรณ WEC
-          เป็นที่ไว้ใจได้สำหรับ Speedcubers ที่ลงทะเบียนแข่งขัน
-          ซึ่งอาจรายงานข้อกังวลและขอให้มีการสอบสวน
-          คณะกรรมการนี้ยังทำหน้าที่เป็นคณะกรรมการอุทธรณ์หากใครก็ตามที่เกี่ยวข้องไม่เห็นด้วยกับคำตัดสินของ
-          WCA Disciplinary Committee
+        #original_hash: 5007698
+        wic: >-
+          WCA Integrity Committee (WIC) ดำเนินการสอบสวนอิสระเกี่ยวกับสมาชิกใน
+          WCA และ incident ที่เกิดขึ้นระหว่างการแข่งขัน WCA
+          หรือบนแพลตฟอร์มออนไลน์อย่างเป็นทางการของ WCA. Incidents
+          เหล่านี้ถือเป็นการละเมิดเจตนารมณ์ จรรยาบรรณ จรรยาบรรณ
+          และ/หรือระเบียบของ WCA
         #original_hash: 889dd90
         weat: ทีมนี้มีหน้าที่รับผิดชอบในการดำเนินงานด้านธุรการของคณะกรรมการ WCA
         #original_hash: 43e4e33
@@ -1418,11 +1412,13 @@ th:
           scramblers, workbooks, admin tools)
         #original_hash: 8f888d6
         wsot: ทีมงานนี้มีหน้าที่ดูแลและสนับสนุนให้ WCA เป็นองค์กรกีฬาระดับนานาชาติ
-        #original_hash: 73d8df4
-        wac: >-
-          WAC มีหน้าที่รับผิดชอบในการรักษาความคิดเห็นและการสื่อสารระหว่างชุมชน
-          WCA และเจ้าหน้าที่ WCA พวกเขาดูแลฟอรัม WCA
-          และสรุปแบบสำรวจและพยายามเพิ่มการเข้าถึงทั่วทั้งชุมชนทั่วโลก
+        #original_hash: 9f45bfa
+        wapc: >-
+          The WCA Appeals Committee (WAC)
+          มีหน้าที่รับผิดชอบในการตรวจสอบและแก้ไขคำอุทธรณ์เกี่ยวกับการตัดสินใจของเจ้าหน้าที่
+          WCA คนอื่น ๆ. WAC
+          จัดให้มีกระบวนการตรวจสอบที่เป็นอิสระและเป็นกลางเพื่อให้แน่ใจว่าการตัดสินใจนั้นยุติธรรม
+          สมเหตุสมผล และเป็นไปตามนโยบายและระเบียบข้อบังคับของ WCA
     contacts:
       #original_hash: 4ef2aad
       title: WCA Contact Form
@@ -1444,8 +1440,8 @@ th:
             #original_hash: 84add5b
             label: Email
         contact_recipient:
-          #original_hash: d31ab65
-          label: ข้อใดต่อไปนี้ตรงกับคำถามของคุณมากที่สุด
+          #original_hash: 54f0036
+          label: คุณต้องการติดต่อใคร?
           competition:
             #original_hash: baa2425
             label: >-
@@ -1477,9 +1473,51 @@ th:
             #original_hash: 68f4145
             label: ข้อความ
         wrt:
+          query_type:
+            #original_hash: d31ab65
+            label: ข้อใดต่อไปนี้ตรงกับคำถามของคุณมากที่สุด
+            edit_profile:
+              #original_hash: 322db6c
+              label: 'แก้ไขข้อมูลส่วนตัว (ชื่อ, ประเทศ, เพศ หรือ วันเกิด)'
+            report_result_issue:
+              #original_hash: 2edbb52
+              label: แจ้งปัญหาเกี่ยวกับผลการแข่งขัน
+            other_query:
+              #original_hash: 7618a0c
+              label: ปัญหาอื่น ๆ
           message:
             #original_hash: 68f4145
             label: ข้อความ
+          profile_data_to_change:
+            #original_hash: 25b71ff
+            label: ข้อมูลส่วนตัวที่ต้องการแก้ไข
+            options:
+              #original_hash: 709a232
+              name: ชื่อ
+              #original_hash: d523ebb
+              country: ประเทศ
+              #original_hash: 8a754c6
+              gender: เพศ
+              #original_hash: 293dd60
+              dob: วัน เดือน ปี เกิด
+          new_profile_data_name:
+            #original_hash: ddbcd37
+            label: ชื่อใหม่
+          new_profile_data_country:
+            #original_hash: e4e355e
+            label: ประเทศใหม่
+          new_profile_data_gender:
+            #original_hash: 48ce2a3
+            label: เพศใหม่
+          new_profile_data_dob:
+            #original_hash: 9f1c3d2
+            label: วัน เดือน ปี เกิด ใหม่
+          edit_profile_reason:
+            #original_hash: fdfcccf
+            label: สาเหตุของการเปลี่ยน
+          edit_profile_proof_attach:
+            #original_hash: a9645b1
+            label: แนบหลักฐาน
         wst:
           message:
             #original_hash: 68f4145
@@ -1966,11 +2004,10 @@ th:
         other: >-
           คุณต้องสมัครการแข่งขันโดยมีประเภทการแข่งขันระหว่าง 1 ถึง %{count}
           ประเภท
-      #original_hash: e78eec3
+      #original_hash: 87f7c12
       banned_html: >-
         คุณถูกแบน ถ้าคุณเชื่อว่านี่คือข้อผิดพลาด กรุณาติดต่อ <a
-        href='mailto:disciplinary@worldcubeassociation.org'
-        target='_blank'>WDC</a>
+        href='mailto:integrity@worldcubeassociation.org' target='_blank'>WIC</a>
       #original_hash: 8d07e7f
       undelete_banned: เป็นผู้เข้าแข่งขันที่ถูกแบนและไม่สามารถยกเลิกการลบได้
       #original_hash: 3de7c86
@@ -2194,11 +2231,6 @@ th:
       จำกัดจำนวนผู้เข้าแข่งขันของการแข่งขันครั้งนี้คือ %{competitor_limit} คน
       และมันได้ถึงจำนวนแล้ว ถ้าคุณสมัครการแข่งขัน
       การสมัครของคุณจะอยู่ในรายชื่อรอ ซึ่งจะไม่ได้รับการยืนยันจนกว่าจะมีที่ว่าง
-    #original_hash: 2f11b7a
-    registration_full_v2_html: >-
-      จำนวนจำกัดของผู้เข้าแข่งขันของการแข่งขันครั้งนี้คือ %{competitor_limit} คน
-      และมันถึงจำนวนจำกัดแล้ว หากคุณสมัครการแข่งขัน การสมัครของคุณจะอยู่ใน
-      waiting list ซึ่งคุณสามารถตรวจสอบได้ %{here}
     #original_hash: cf29e85
     registration_full_include_waiting_list: >-
       จำกัดผู้เข้าแข่งขันของการแข่งขันครั้งนี้คือ %{competitor_limit} คน
@@ -2356,6 +2388,10 @@ th:
         email_duplicates: 'email ต้องไม่ซ้ำ พบการซ้ำกันของ: %{emails}.'
         #original_hash: bcd8e78
         wca_id_duplicates: 'WCA ID ต้องไม่ซ้ำ พบการซ้ำกันของ: %{wca_ids}.'
+        #original_hash: a0fd4c5
+        wrong_dob_format: >-
+          วันเกิดต้องอยู่ในรูปแบบ YYYY-mm-dd (year-month-day เป็นคริสต์ศักราช,
+          เช่น 1944-07-13), ดูตัวอย่างของวันที่ไม่ถูกต้อง: %{raw_dobs}.
     add:
       #original_hash: 975275e
       title: 'เพิ่มการสมัครของ %{comp}'
@@ -2435,6 +2471,8 @@ th:
       uncancel_failure: ไม่สามารถยกเลิกการยกเลิกการแข่งขันได้
       #original_hash: 8ad5e67
       results_not_posted: ผลของการแข่งขันนี้สามารถมองเห็นได้ แต่ยังไม่ได้ถูกโพสต์
+      #original_hash: 5c24cd8
+      results_still_processing: เรากำลังการประมวลผลการแข่งขันของการแข่งขันนี้ ซึ่งน่าจะทราบผลเร็ว ๆ นี้
       #original_hash: e205d73
       results_already_posted: ผลการแข่งขันได้รับการโพสต์แล้ว
       #original_hash: 376f461
@@ -3375,8 +3413,10 @@ th:
       list:
         #original_hash: 6eef664
         empty: ไม่พบ
-        #original_hash: 713f805
-        spots_remaining: 'ผู้สมัครเหลืออีก %{spots} คน'
+        #original_hash: 627422a
+        spots_remaining_plural:
+          zero: ผู้เข้าแข่งขันเต็มจำนวนแล้ว
+          other: 'เหลืออีก %{count} คน'
       bookmark:
         #original_hash: 7952a5c
         unbookmark: คุณได้ลบบุ๊กมาร์กของคุณแล้ว
@@ -3395,12 +3435,16 @@ th:
         being_updated: กำลังอัปเดตการสมัคร...
         #original_hash: 2d0325e
         being_deleted: การสมัครกำลังถูกลบ...
+        #original_hash: cbf13af
+        update_confirm: คุณแน่ใจหรือไม่ว่าต้องการอัปเดตการสมัครการแข่งขันของคุณ?
         #original_hash: 65bbb07
         no_changes: ไม่มีการเปลี่ยนแปลง
         #original_hash: be4e8e2
         email_send: ส่ง email
-        #original_hash: d9def5d
-        email_copy: Copy Email
+        #original_hash: b4bac52
+        email_copy: Copy Emails
+        #original_hash: b83b663
+        email_message: คัดลอกไปยังคลิปบอร์ดแล้ว อย่าลืมส่งด้วย BCC!
         #original_hash: 71327f1
         move_pending: ย้ายไปรายชื่อรอ
         #original_hash: 9144dd6
@@ -3428,6 +3472,10 @@ th:
         until: 'คุณสามารถแก้ไขการสมัครของคุณได้จนถึง %{date}'
         #original_hash: fc8bc84
         passed: คุณไม่สามารถอัปเดตการลงสมัครของคุณได้อีกต่อไป
+        #original_hash: 8cc047a
+        approval: การอนุมัติ
+        #original_hash: 05b9f17
+        view_registration: ดูการสมัครการแข่งขัน
         #original_hash: 3c8d8b7
         editing_disabled: การแก้ไขการสมัครถูกปิดใช้งานสำหรับการแข่งขันครั้งนี้
         registration_status:
@@ -3437,8 +3485,8 @@ th:
           pending: การสมัครของคุณอยู่ระหว่างการได้รับการยอมรับจากผู้จัดการแข่งขัน
           #original_hash: dcc4906
           cancelled: การสมัครของคุณถูกลบแล้ว
-          #original_hash: c890478
-          waiting_list: คุณอยู่ใน Waiting List
+          #original_hash: a02390c
+          waiting_list: 'คุณอยู่ใน Waiting List ลำดับที่ %{waiting_list_position}'
         #original_hash: 2d9f36c
         disclaimer: การสมัครการแข่งขันไม่ได้หมายถึงว่าจะได้รับอนุมัติให้เข้าแข่งขัน
         #original_hash: 8fe68a1
@@ -3496,6 +3544,13 @@ th:
         '-4007': สถานะการสมัครการแข่งขันไม่ถูกต้อง
         #original_hash: 020234c
         '-4008': การรับสมัครปิดแล้ว
+        #original_hash: b30e613
+        '-4009': >-
+          มีเพียงผู้จัดการแข่งขันเท่านั้นที่สามารถยกเลิกการสมัครการแข่งขันของการแข่งขันนี้ได้
+        #original_hash: 3c4cbaa
+        '-4010': The Waiting List Position is not Valid
+        #original_hash: e489908
+        '-4011': คุณสามารถยอมรับได้เฉพาะคนแรกที่อยู่ใน waiting list เท่านั้น
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-
@@ -4819,112 +4874,6 @@ th:
           WCA</a> แล้ว
         #original_hash: ebc85b2
         download_button_text: ดาวน์โหลด Assets โลโก้
-  workbook_assistant:
-    #original_hash: e442ea4
-    title: WCA Workbook Assistant
-    #original_hash: a7c307f
-    download: Download WCA Workbook Assistant
-    #original_hash: cf1b916
-    last_update: แก้ไขครั้งล่าสุด
-    #original_hash: feece00
-    version_history: ประวัติ
-    #original_hash: 8f3f4c0
-    header: วิธีประมวลผลผลการแข่งขันและโจทย์ก่อนส่งไปยัง WCA
-    step1:
-      #original_hash: c0450b1
-      title: 'ขั้นตอนที่ 1: เปิด workbook และผลการแข่งขัน'
-      #original_hash: 656d70d
-      content_html: >-
-        เปิด workbook โดยใช้ปุ่ม <em>Open...</em> หรือลากไฟล์ workbook
-        และวางมันไปที่หน้าต่างแอปพลิเคชัน
-    step2:
-      #original_hash: 3ad9881
-      title: 'ขั้นตอนที่ 2: เพิ่มโจทย์ TNoodle'
-      #original_hash: 080acc0
-      content_html: >-
-        เพิ่มโจทย์ TNoodle โดยกดปุ่ม <em>Add...</em> หรือลากไฟล์ TNoodle
-        และวางมันในหน้าต่างแอปพลิเคชัน กรุณามั่นใจว่าคุณใช้ไฟล์ .zip หรือ .json
-        ที่ถูกสร้างจาก TNoodle
-      #original_hash: 6cc90b8
-      content2_html: >-
-        คุณสามารเพิ่มไฟล์โจทย์หลายไฟล์ได้ในกรณีที่โจทย์ถูกสร้างเพื่อเป็นโจทย์เพิ่มเติมที่ต้องสร้างในระหว่างการแข่งขัน
-    step3:
-      #original_hash: b2d01b3
-      title: 'ขั้นตอนที่ 3: จับคู่โจทย์กับผลการแข่งขัน'
-      #original_hash: 36383b1
-      content_html: >-
-        WCA Workbook Assistant จะทำการจับคู่โจทย์ของแต่ละรอบโดยอัตโนมัติ
-        ในบางกรณี เช่นมีโจทย์หลายไฟล์
-        การจับคู่ต้องทำด้วยตนเองเนื่องด้วยมีความเป็นไปได้หลายทาง
-      #original_hash: e869c1e
-      content2_html: >-
-        เลือกโจทย์ด้วยตนเองสามารถทำได้โดยคลิกสองทีที่ <em>Scrambles</em>
-        ในส่วนของ overview
-      #original_hash: 8f4fdfd
-      content3_html: >-
-        เป็นไปได้ที่จะเลือกหนึ่งรอบจากไฟล์โจทย์สำหรับแต่ละรอบที่มีผลการแข่งขัน
-        หากสถานการณ์เกิดขึ้นที่สัญญาณรบกวนสำหรับรอบเดียวถูกสร้างเป็นรอบแยกใน
-        TNoodle คุณสามารถใช้ปุ่ม <em>Edit groups...</em>
-        เพื่อแก้ไขกลุ่มของไฟล์โจทย์และเปลี่ยนไปอยู่อีกกลุ่มหนึ่งหรือลบมันทิ้งเสีย
-      #original_hash: 94353f2
-      content4_html: >-
-        ในตัวอย่างนี้ โจทย์เพิ่มเติมถูกสร้างขึ้นเพื่อจะมี Skewb 2
-        กลุ่มแทนที่จะมีกลุ่มเดียว
-      #original_hash: 68c5b18
-      content5_html: >-
-        โจทย์สำหรับกลุ่มที่เพิ่มเข้ามาสามารถลากและปล่อยที่รอบที่ถูกสร้างขึ้นมาได้
-        นี่ทำให้ทั้ง 2 กลุ่มอยู่ในรอบเดียวกัน
-    step4:
-      #original_hash: ed940d2
-      title: 'ขั้นตอนที่ 4: แก้ไขข้อผิดพลาด'
-      #original_hash: df2cf58
-      content_html: >-
-        มีการตรวจสอบผลการแข่งขันเพื่อหาข้อผิดพลาดในการป้อนข้อมูล
-        รอบที่มีข้อผิดพลาดจะถูกทำเครื่องหมายด้วยไอคอนสีแดงในส่วน overview
-      #original_hash: 7fbf6b8
-      content2_html: >-
-        เมื่อเลือกแผ่นงานที่มีข้อผิดพลาดใน overview
-        แอปพลิเคชันจะแสดงรายละเอียดการตรวจสอบข้อผิดพลาดที่ด้านล่างซ้าย
-      #original_hash: 0600502
-      content3_html: >-
-        ข้อผิดพลาดสามารถแก้ไขได้โดยการเปิด workbook และแก้ไขและบันทึก workbook
-        ที่ถูกแก้ไขแล้วสามารถอัพโหลดเข้าไปใน WCA Workbook Assistant
-        อีกครั้งโดยกดปุ่ม <em>Refresh</em> การดำเนินการนี้จะโหลดผลการแข่งขันซ้ำ
-        แต่จะปล่อยให้การเปลี่ยนแปลงอื่น ๆ
-        ทั้งหมดที่คุณทำไว้เหมือนเดิมเช่นโจทย์ที่เพิ่มเข้ามา
-    step5:
-      #original_hash: 536ec4d
-      title: 'ขั้นตอนที่ 5: เลือก competition ID'
-      #original_hash: 5aeb5bd
-      content_html: >-
-        เลือก competition ID โดยกดปุ่ม <em>Select...</em> ถัดจากช่อง
-        <em>Competition ID</em>
-      #original_hash: 3acf7d0
-      content2_html: กล่องจะปรากฏขึ้นพร้อมกับรายการการแข่งขันให้เลือก
-      #original_hash: ceeb6fe
-      content3_html: >-
-        คุณสามารถกรองรายการโดยพิมพ์ส่วนหนึ่งของชื่อของการแข่งขันหรือ WCA
-        Delegate
-      #original_hash: 5ca74eb
-      content4_html: >-
-        ในการเริ่มต้น
-        จะแสดงเพียงการแข่งขันที่เกิดขึ้นน้อยกว่าหนึ่งสัปดาห์ที่ผ่านมาหรือที่จะเกิดขึ้นน้อยกว่าหนึ่งสัปดาห์ในอนาคต.
-        หากคุณต้องการแสดงการแข่งขันนอกเหนือจากนี้ให้ยกเลิก <em>Only show current
-        competitions</em>.
-    step6:
-      #original_hash: 52bb1f6
-      title: 'ขั้นจอนที่ 6: นำออกผลการแข่งขันเป็น JSON'
-      #original_hash: 6bfee23
-      content_html: >-
-        บันทึกผลการแข่งขันเป็นไฟล์ JSON โดยกดปุ่ม <em>Export results
-        JSON...</em> ด้านล่างขวา
-    step7:
-      #original_hash: 09fa37d
-      title: 'ขั้นตอนที่ 7: ส่งผลการแข่งขัน JSON ไปที่ WCA'
-      #original_hash: 9be089f
-      content_html: >-
-        email ไฟล์ JSON ที่ได้จาก WCA Workbook Assistant ไปที่ <a
-        href="mailto:results@worldcubeassociation.org">results@worldcubeassociation.org</a>
   search_results:
     index:
       #original_hash: db98a68

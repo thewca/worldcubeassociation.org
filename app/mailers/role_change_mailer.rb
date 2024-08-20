@@ -60,11 +60,6 @@ class RoleChangeMailer < ApplicationMailer
           email: UserGroup.teams_committees_group_weat.metadata.email,
           message: 'Please add this to monthly digest and if necessary create a GSuite account.',
         ),
-        UserRole::UserRoleEmailRecipient.new(
-          name: UserGroup.teams_committees_group_wfc.name,
-          email: UserGroup.teams_committees_group_wfc.metadata.email,
-          message: 'Please add the Delegate to xero contacts if necessary.',
-        ),
       )
     when UserGroup.group_types[:translators]
       @to_list.push(
@@ -108,8 +103,8 @@ class RoleChangeMailer < ApplicationMailer
     when UserGroup.group_types[:banned_competitors]
       @to_list.push(
         UserRole::UserRoleEmailRecipient.new(
-          name: 'WDC',
-          email: UserGroup.teams_committees_group_wdc.metadata.email,
+          name: 'WIC',
+          email: UserGroup.teams_committees_group_wic.metadata.email,
           message: 'Informing as a competitor is newly banned.',
         ),
       )
@@ -160,11 +155,6 @@ class RoleChangeMailer < ApplicationMailer
           email: UserGroup.teams_committees_group_weat.metadata.email,
           message: 'Please add this to monthly digest and if necessary create a GSuite account.',
         ),
-        UserRole::UserRoleEmailRecipient.new(
-          name: UserGroup.teams_committees_group_wfc.name,
-          email: UserGroup.teams_committees_group_wfc.metadata.email,
-          message: 'Please add the Delegate to xero contacts if necessary.',
-        ),
       )
     when UserGroup.group_types[:teams_committees], UserGroup.group_types[:councils]
       @to_list.push(
@@ -187,8 +177,8 @@ class RoleChangeMailer < ApplicationMailer
     when UserGroup.group_types[:banned_competitors]
       @to_list.push(
         UserRole::UserRoleEmailRecipient.new(
-          name: 'WDC',
-          email: UserGroup.teams_committees_group_wdc.metadata.email,
+          name: 'WIC',
+          email: UserGroup.teams_committees_group_wic.metadata.email,
           message: 'Informing as there was a change in banned details of a competitor.',
         ),
       )

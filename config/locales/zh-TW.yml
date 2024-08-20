@@ -479,10 +479,10 @@ zh-TW:
         wrc_feedback_requested: 我想要WRC對於某些意外事件做意見回饋
         #original_hash: 0c7191d
         wrc_incidents: 需要WRC意見回饋的意外事故
-        #original_hash: 5a92b25
-        wdc_feedback_requested: 我想要WDC對於某些意外事件做意見回饋
-        #original_hash: 06a0568
-        wdc_incidents: 需要WDC意見回饋的意外事故
+        #original_hash: 1a54a79
+        wic_feedback_requested: 我想要WIC對於某些意外事件做意見回饋。
+        #original_hash: 000153c
+        wic_incidents: 需要WIC意見回饋的意外事故
         #original_hash: d7020f4
         remarks: 備註
       person:
@@ -768,9 +768,9 @@ zh-TW:
         #original_hash: 98bb5cd
         wrc_incidents: 列出希望WRC回饋的意外事件編號。
         #original_hash: da39a3e
-        wdc_feedback_requested: ''
-        #original_hash: 38a95e5
-        wdc_incidents: 列出希望WDC回饋的意外事件編號。
+        wic_feedback_requested: ''
+        #original_hash: 0aca3b0
+        wic_incidents: 列出希望WIC回饋的意外事件編號。
         #original_hash: f30abdc
         remarks: 分享任何關於比賽的其他細節(例如：進步/社群/這區域的未來展望)。如果您是為了讓前面章節比較簡潔而沒有提到一些事情，盡情在這邊留下評論。
         #original_hash: da39a3e
@@ -1228,10 +1228,8 @@ zh-TW:
         wct: WCA傳播組 (WCT)
         #original_hash: 2b81984
         wcat: WCA比賽公告組 (WCAT)
-        #original_hash: c97077a
-        wdc: WCA紀律委員會 (WDC)
-        #original_hash: 83bd1d0
-        wec: WCA倫理委員會 (WEC)
+        #original_hash: 94c2e42
+        wic: WCA廉正委員會
         #original_hash: d1dbb86
         weat: WCA董事會助理團隊 (WEAT)
         #original_hash: 9cb13de
@@ -1248,8 +1246,8 @@ zh-TW:
         wst: WCA軟體組 (WST)
         #original_hash: 58765c7
         wsot: WCA競技組織團隊 (WSOT)
-        #original_hash: 1ce7604
-        wac: WCA諮詢理事會 (WAC)
+        #original_hash: 78949a7
+        wapc: WCA申訴委員會
       groups_description:
         #original_hash: 5b1aade
         wat: >-
@@ -1260,12 +1258,9 @@ zh-TW:
         #original_hash: 3e5570f
         wcat: >-
           WCA比賽公告組負責審核和公告由WCA代表所提出的比賽申請，並確保此類公告符合WCA品質標準。這個團隊也負責維持良好的比賽申請用的協定文件，例如「WCA比賽要求政策」。WCA比賽公告組並不負責組織或是監督各個比賽。
-        #original_hash: 41eb6fd
-        wdc: >-
-          WCA紀律委員會負責組成獨立的調查團隊。調查內容為在WCA比賽中已註冊玩家的意外事件或是官方的WCA網路平台。這些意外事件是被指控違反WCA精神、WCA行為準則或/和WCA競賽規則。
-        #original_hash: 6cdac80
-        wec: >-
-          該委員會的職責是確保WCA員工以及外部員工的所有程序皆遵守倫理規範，並且在這些成員的行為不符合該倫理規範的情況下進行獨立調查。這些調查可以由任何已註冊的玩家提出，且他們可以信任WEC。如果有人不同意WCA紀律委員會做出的裁決，此委員會也可以成為上訴單位。
+        #original_hash: 5007698
+        wic: >-
+          WCA廉正委員會（WIC）負責組成獨立的調查團隊。調查內容為在WCA比賽中已註冊玩家、WCA比賽的意外事件或是官方的WCA網路平台。這些意外事件是被指控違反WCA精神、WCA行為準則、WCA倫理規範或/和WCA競賽規則。
         #original_hash: 889dd90
         weat: 該團隊是負責執行處理WCA董事會的行政事務。
         #original_hash: 43e4e33
@@ -1285,8 +1280,9 @@ zh-TW:
         wst: 該團隊負責管理WCA的軟體（網站、轉亂程式、作業工具、管理工具）。
         #original_hash: 8f888d6
         wsot: 這個團隊負責監督和協助WCA成為一個國際認可的競技組織。
-        #original_hash: 73d8df4
-        wac: 該理事會負責建立和維護WCA社群與WCA員工之間的雙邊溝通。他們負責維持WCA論壇和總結問卷調查以及試著拓展到更多全球的方塊社群。
+        #original_hash: 9f45bfa
+        wapc: >-
+          WCA申訴委員會（WAC）負責審視以及解決那些對WCA員工所做出決定的申訴案件。WAC提供獨立和公正的調查過程來確保決定的公平性、合理性和符合WCA政策及競賽規則。
     contacts:
       #original_hash: 4ef2aad
       title: WCA聯絡表
@@ -1305,8 +1301,8 @@ zh-TW:
             #original_hash: 84add5b
             label: 電子郵件
         contact_recipient:
-          #original_hash: d31ab65
-          label: 以下哪一個最能描述您的問題？
+          #original_hash: 54f0036
+          label: 您想要聯絡誰？
           competition:
             #original_hash: baa2425
             label: 聯絡比賽的主辦團隊/WCA代表(詢問關於某場比賽的內容)
@@ -1331,9 +1327,51 @@ zh-TW:
             #original_hash: 68f4145
             label: 訊息
         wrt:
+          query_type:
+            #original_hash: d31ab65
+            label: 以下哪一個最能形容您的提問內容？
+            edit_profile:
+              #original_hash: 322db6c
+              label: 修改我的個人資料（姓名、區域、性別或生日）
+            report_result_issue:
+              #original_hash: 2edbb52
+              label: 成績中的問題
+            other_query:
+              #original_hash: 7618a0c
+              label: 其他
           message:
             #original_hash: 68f4145
             label: 訊息
+          profile_data_to_change:
+            #original_hash: 25b71ff
+            label: 更改個人資料
+            options:
+              #original_hash: 709a232
+              name: 姓名
+              #original_hash: d523ebb
+              country: 區域
+              #original_hash: 8a754c6
+              gender: 性別
+              #original_hash: 293dd60
+              dob: 生日
+          new_profile_data_name:
+            #original_hash: ddbcd37
+            label: 新的姓名
+          new_profile_data_country:
+            #original_hash: e4e355e
+            label: 新的區域
+          new_profile_data_gender:
+            #original_hash: 48ce2a3
+            label: 新的性別
+          new_profile_data_dob:
+            #original_hash: 9f1c3d2
+            label: 新的生日
+          edit_profile_reason:
+            #original_hash: fdfcccf
+            label: 修改理由
+          edit_profile_proof_attach:
+            #original_hash: a9645b1
+            label: 附上證明
         wst:
           message:
             #original_hash: 68f4145
@@ -1745,10 +1783,10 @@ zh-TW:
       exceeds_event_limit:
         zero: 您必須只能報名一個項目。
         other: '您必須報名介於1個到%{count}個項目。'
-      #original_hash: e78eec3
+      #original_hash: 87f7c12
       banned_html: >-
-        您被禁賽了。如果你認為有錯誤，請聯絡<a href='mailto:disciplinary@worldcubeassociation.org'
-        target='_blank'>WCA紀律委員會</a>.
+        您被禁賽了。如果你認為有錯誤，請聯絡<a href='mailto:integrity@worldcubeassociation.org'
+        target='_blank'>WCA廉正委員會</a>.
       #original_hash: 8d07e7f
       undelete_banned: 這位參賽者被禁賽且不能被反刪除。
       #original_hash: 3de7c86
@@ -1942,8 +1980,6 @@ zh-TW:
     #original_hash: f22ef22
     registration_full: >-
       這場比賽人數上限為%{competitor_limit}且已經額滿。若您仍報名，您的報名會被放置在候補名單。您的報名不會自動批准通過，除非有名額釋出。
-    #original_hash: 2f11b7a
-    registration_full_v2_html: '這場比賽的已達參賽者人數上限的%{competitor_limit}人。如果您現在報名，您的報名會排進候補名單裡，可以在這裡%{here}確認。'
     #original_hash: cf29e85
     registration_full_include_waiting_list: >-
       這場比賽的參賽者人數上限是%{competitor_limit}人，且可能已經額滿。如果您現在報名，您會被排在候補名單中。如果沒有名額釋出，您的報名可能不會被核准。
@@ -2079,6 +2115,8 @@ zh-TW:
         email_duplicates: '一個電子郵件必須只能被用一次，以下為重複的電子郵件：%{emails}'
         #original_hash: bcd8e78
         wca_id_duplicates: '一個WCA ID必須只能被用一次，以下為重複的WCA ID：%{wca_ids}。'
+        #original_hash: a0fd4c5
+        wrong_dob_format: '生日必須要依照 YYYY-mm-dd 的格式（年-月-日，例如 1944-07-13），以下日期無法使用：%{raw_dobs}。'
     add:
       #original_hash: 975275e
       title: '新增%{comp}的報名資料'
@@ -2134,6 +2172,8 @@ zh-TW:
       uncancel_failure: 無法恢復比賽。
       #original_hash: 8ad5e67
       results_not_posted: 這場比賽的成績已公開，但尚未公告。
+      #original_hash: 5c24cd8
+      results_still_processing: 我們正忙著處理這場比賽的成績，應該不久後就能查看。
       #original_hash: e205d73
       results_already_posted: 成績已被公告。
       #original_hash: 376f461
@@ -2934,8 +2974,10 @@ zh-TW:
       list:
         #original_hash: 6eef664
         empty: 無
-        #original_hash: 713f805
-        spots_remaining: '剩下%{spots}個名額'
+        #original_hash: 627422a
+        spots_remaining_plural:
+          zero: 已無報名名額
+          other: '還剩%{count}個報名名額'
       bookmark:
         #original_hash: 7952a5c
         unbookmark: 您已經移除您的書籤
@@ -2957,8 +2999,10 @@ zh-TW:
         no_changes: 沒有變化
         #original_hash: be4e8e2
         email_send: 送出郵件
-        #original_hash: d9def5d
+        #original_hash: b4bac52
         email_copy: 複製郵件
+        #original_hash: b83b663
+        email_message: 已複製到剪貼簿。記得要使用BCC密件副本！
         #original_hash: 71327f1
         move_pending: 移到待審核
         #original_hash: 9144dd6
@@ -2982,6 +3026,8 @@ zh-TW:
         until: '您可以在%{date}以前更新您的報名'
         #original_hash: fc8bc84
         passed: 您無法再更新您的報名內容
+        #original_hash: 8cc047a
+        approval: 許可
         #original_hash: 05b9f17
         view_registration: 查看報名
         #original_hash: 3c8d8b7
@@ -2993,8 +3039,8 @@ zh-TW:
           pending: 您的報名正在等待比賽團隊的核准。
           #original_hash: dcc4906
           cancelled: 您的報名已被刪除。
-          #original_hash: c890478
-          waiting_list: 您在候補名單中。
+          #original_hash: a02390c
+          waiting_list: '您在候補名單中第%{waiting_list_position}位。'
         #original_hash: 2d9f36c
         disclaimer: 送出報名資訊不代表已批准能參賽
         #original_hash: 8fe68a1
@@ -3048,6 +3094,12 @@ zh-TW:
         '-4007': 提供了無效的報名狀態
         #original_hash: 020234c
         '-4008': 報名已截止
+        #original_hash: b30e613
+        '-4009': 只有主辦團隊可以取消這場比賽的報名
+        #original_hash: 3c4cbaa
+        '-4010': 這個候補名單位置無效
+        #original_hash: e489908
+        '-4011': 您只能受理候補名單上的第一位
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: '必須以年份為結尾且只能包含字母與數字，破折號(-)、&符號(&)、句號(.)、冒號(:)、撇號('')和空白( )'
@@ -4149,80 +4201,6 @@ zh-TW:
           href="https://documents.worldcubeassociation.org/documents/policies/external/Logo%20Usage.pdf">WCA標誌使用政策</a>。
         #original_hash: ebc85b2
         download_button_text: 下載所有的標誌
-  workbook_assistant:
-    #original_hash: e442ea4
-    title: WCA成績小幫手
-    #original_hash: a7c307f
-    download: 下載WCA成績小幫手
-    #original_hash: cf1b916
-    last_update: 最後更新
-    #original_hash: feece00
-    version_history: 版本歷史
-    #original_hash: 8f3f4c0
-    header: 在向WCA提交成績之前，如何處理成績和轉亂步驟
-    step1:
-      #original_hash: c0450b1
-      title: 步驟1：打開成績小幫手
-      #original_hash: 656d70d
-      content_html: 按下<em>Open...</em>按鈕打開成績小幫手或著直接拖曳成績檔案到程式視窗。
-    step2:
-      #original_hash: 3ad9881
-      title: 步驟2：載入TNoodle轉亂步驟
-      #original_hash: 080acc0
-      content_html: >-
-        按下<em>Add...</em>按鈕以載入TNoodle轉亂步驟或著拖曳TNoodle檔案到程式視窗。請確認您使用的是TNoodle產生的.zip檔或是.json檔。
-      #original_hash: 6cc90b8
-      content2_html: 若轉亂步驟分多次產生，或著在比賽中產生了多的轉亂步驟，您可以載入多個轉亂步驟檔案。
-    step3:
-      #original_hash: b2d01b3
-      title: 步驟3：將轉亂步驟和成績做配對
-      #original_hash: 36383b1
-      content_html: WCA成績小幫手會自動將轉亂步驟和對應的輪次配對。有一些情況下需要手動選擇，例如有多份轉亂步驟時。
-      #original_hash: e869c1e
-      content2_html: 雙擊<em>Scrambles</em>格來手動選擇轉亂步驟。
-      #original_hash: 8f4fdfd
-      content3_html: >-
-        每一輪只能對應一輪的轉亂步驟。如果某一輪的轉亂步驟是透過TNoodle產生多份轉亂步驟，您可以使用<em>Edit
-        groups...</em>按鈕來編輯轉亂步驟的分組，並將它們移到另一組或是刪除。
-      #original_hash: 94353f2
-      content4_html: 這個範例當中，Skewb第一輪產生了額外的一份轉亂步驟，讓第一輪比賽有兩組而非一組。
-      #original_hash: 68c5b18
-      content5_html: 將額外產生的轉亂步驟拖曳並放置在原先產生的該輪，使得兩組合併在同一輪。
-    step4:
-      #original_hash: ed940d2
-      title: 步驟4：修正小幫手出現的任何錯誤
-      #original_hash: df2cf58
-      content_html: 成績若有輸入錯誤將會被檢查出來，出現問題的該輪則會有紅色標誌顯示。
-      #original_hash: 7fbf6b8
-      content2_html: 當選取錯誤清單時，錯誤細節會被列在左下角。
-      #original_hash: 0600502
-      content3_html: >-
-        您可以開啟成績檔案來修正錯誤，編輯之後並且儲存。接著在WCA成績小幫手按下<em>Refresh</em>按鈕以重新載入成績檔案。此操作僅重新讀取成績而不會改變您做的其他修正，例如不影響已經額外載入的轉亂步驟。
-    step5:
-      #original_hash: 536ec4d
-      title: 步驟5：選取比賽ID
-      #original_hash: 5aeb5bd
-      content_html: 點擊<em>Competition ID</em>旁邊的<em>Select...</em>按鈕以選取正確的比賽ID。
-      #original_hash: 3acf7d0
-      content2_html: 比賽列表將會在顯示出來，請從裡面選取比賽。
-      #original_hash: ceeb6fe
-      content3_html: 您可以輸入比賽的部份名稱或是比賽的WCA代表以篩選比賽。
-      #original_hash: 5ca74eb
-      content4_html: >-
-        系統只會顯示過去或是未來一週之內的比賽，如果您需要選擇此時間範圍以外的比賽，請取消勾選<em>Only show current
-        competitions</em>。
-    step6:
-      #original_hash: 52bb1f6
-      title: 步驟6：輸出JSON成績檔
-      #original_hash: 6bfee23
-      content_html: 使用右下角的<em>Export results JSON...</em>按鈕將成績儲存成JSON檔。
-    step7:
-      #original_hash: 09fa37d
-      title: 步驟7：將JSON檔傳送給WCA
-      #original_hash: 9be089f
-      content_html: >-
-        透過電子郵件將WCA成績小幫手產生的JSON檔傳送至<a
-        href="mailto:results@worldcubeassociation.org">results@worldcubeassociation.org</a>。
   search_results:
     index:
       #original_hash: db98a68

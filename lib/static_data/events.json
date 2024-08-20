@@ -1,0 +1,326 @@
+[
+  {
+    "id": "333",
+    "rank": 10,
+    "format": "time",
+    "name": "3x3x3 Cube",
+    "can_change_time_limit": true,
+    "can_have_cutoff": true,
+    "is_timed_event": true,
+    "is_fewest_moves": false,
+    "is_multiple_blindfolded": false,
+    "is_official": true,
+    "format_ids": [
+      "a"
+    ]
+  },
+  {
+    "id": "222",
+    "rank": 20,
+    "format": "time",
+    "name": "2x2x2 Cube",
+    "can_change_time_limit": true,
+    "can_have_cutoff": true,
+    "is_timed_event": true,
+    "is_fewest_moves": false,
+    "is_multiple_blindfolded": false,
+    "is_official": true,
+    "format_ids": [
+      "a"
+    ]
+  },
+  {
+    "id": "444",
+    "rank": 30,
+    "format": "time",
+    "name": "4x4x4 Cube",
+    "can_change_time_limit": true,
+    "can_have_cutoff": true,
+    "is_timed_event": true,
+    "is_fewest_moves": false,
+    "is_multiple_blindfolded": false,
+    "is_official": true,
+    "format_ids": [
+      "a"
+    ]
+  },
+  {
+    "id": "555",
+    "rank": 40,
+    "format": "time",
+    "name": "5x5x5 Cube",
+    "can_change_time_limit": true,
+    "can_have_cutoff": true,
+    "is_timed_event": true,
+    "is_fewest_moves": false,
+    "is_multiple_blindfolded": false,
+    "is_official": true,
+    "format_ids": [
+      "a"
+    ]
+  },
+  {
+    "id": "666",
+    "rank": 50,
+    "format": "time",
+    "name": "6x6x6 Cube",
+    "can_change_time_limit": true,
+    "can_have_cutoff": true,
+    "is_timed_event": true,
+    "is_fewest_moves": false,
+    "is_multiple_blindfolded": false,
+    "is_official": true,
+    "format_ids": [
+      "m"
+    ]
+  },
+  {
+    "id": "777",
+    "rank": 60,
+    "format": "time",
+    "name": "7x7x7 Cube",
+    "can_change_time_limit": true,
+    "can_have_cutoff": true,
+    "is_timed_event": true,
+    "is_fewest_moves": false,
+    "is_multiple_blindfolded": false,
+    "is_official": true,
+    "format_ids": [
+      "m"
+    ]
+  },
+  {
+    "id": "333bf",
+    "rank": 70,
+    "format": "time",
+    "name": "3x3x3 Blindfolded",
+    "can_change_time_limit": true,
+    "can_have_cutoff": false,
+    "is_timed_event": true,
+    "is_fewest_moves": false,
+    "is_multiple_blindfolded": false,
+    "is_official": true,
+    "format_ids": [
+      "3"
+    ]
+  },
+  {
+    "id": "333fm",
+    "rank": 80,
+    "format": "number",
+    "name": "3x3x3 Fewest Moves",
+    "can_change_time_limit": false,
+    "can_have_cutoff": true,
+    "is_timed_event": false,
+    "is_fewest_moves": true,
+    "is_multiple_blindfolded": false,
+    "is_official": true,
+    "format_ids": [
+      "m",
+      "2",
+      "1"
+    ]
+  },
+  {
+    "id": "333oh",
+    "rank": 90,
+    "format": "time",
+    "name": "3x3x3 One-Handed",
+    "can_change_time_limit": true,
+    "can_have_cutoff": true,
+    "is_timed_event": true,
+    "is_fewest_moves": false,
+    "is_multiple_blindfolded": false,
+    "is_official": true,
+    "format_ids": [
+      "a"
+    ]
+  },
+  {
+    "id": "clock",
+    "rank": 110,
+    "format": "time",
+    "name": "Clock",
+    "can_change_time_limit": true,
+    "can_have_cutoff": true,
+    "is_timed_event": true,
+    "is_fewest_moves": false,
+    "is_multiple_blindfolded": false,
+    "is_official": true,
+    "format_ids": [
+      "a"
+    ]
+  },
+  {
+    "id": "minx",
+    "rank": 120,
+    "format": "time",
+    "name": "Megaminx",
+    "can_change_time_limit": true,
+    "can_have_cutoff": true,
+    "is_timed_event": true,
+    "is_fewest_moves": false,
+    "is_multiple_blindfolded": false,
+    "is_official": true,
+    "format_ids": [
+      "a"
+    ]
+  },
+  {
+    "id": "pyram",
+    "rank": 130,
+    "format": "time",
+    "name": "Pyraminx",
+    "can_change_time_limit": true,
+    "can_have_cutoff": true,
+    "is_timed_event": true,
+    "is_fewest_moves": false,
+    "is_multiple_blindfolded": false,
+    "is_official": true,
+    "format_ids": [
+      "a"
+    ]
+  },
+  {
+    "id": "skewb",
+    "rank": 140,
+    "format": "time",
+    "name": "Skewb",
+    "can_change_time_limit": true,
+    "can_have_cutoff": true,
+    "is_timed_event": true,
+    "is_fewest_moves": false,
+    "is_multiple_blindfolded": false,
+    "is_official": true,
+    "format_ids": [
+      "a"
+    ]
+  },
+  {
+    "id": "sq1",
+    "rank": 150,
+    "format": "time",
+    "name": "Square-1",
+    "can_change_time_limit": true,
+    "can_have_cutoff": true,
+    "is_timed_event": true,
+    "is_fewest_moves": false,
+    "is_multiple_blindfolded": false,
+    "is_official": true,
+    "format_ids": [
+      "a"
+    ]
+  },
+  {
+    "id": "444bf",
+    "rank": 160,
+    "format": "time",
+    "name": "4x4x4 Blindfolded",
+    "can_change_time_limit": true,
+    "can_have_cutoff": false,
+    "is_timed_event": true,
+    "is_fewest_moves": false,
+    "is_multiple_blindfolded": false,
+    "is_official": true,
+    "format_ids": [
+      "3"
+    ]
+  },
+  {
+    "id": "555bf",
+    "rank": 170,
+    "format": "time",
+    "name": "5x5x5 Blindfolded",
+    "can_change_time_limit": true,
+    "can_have_cutoff": false,
+    "is_timed_event": true,
+    "is_fewest_moves": false,
+    "is_multiple_blindfolded": false,
+    "is_official": true,
+    "format_ids": [
+      "3"
+    ]
+  },
+  {
+    "id": "333mbf",
+    "rank": 180,
+    "format": "multi",
+    "name": "3x3x3 Multi-Blind",
+    "can_change_time_limit": false,
+    "can_have_cutoff": true,
+    "is_timed_event": false,
+    "is_fewest_moves": false,
+    "is_multiple_blindfolded": true,
+    "is_official": true,
+    "format_ids": [
+      "1",
+      "2",
+      "3"
+    ]
+  },
+  {
+    "id": "333ft",
+    "rank": 996,
+    "format": "time",
+    "name": "3x3x3 With Feet",
+    "can_change_time_limit": true,
+    "can_have_cutoff": true,
+    "is_timed_event": true,
+    "is_fewest_moves": false,
+    "is_multiple_blindfolded": false,
+    "is_official": false,
+    "format_ids": [
+      "a",
+      "3",
+      "2",
+      "1"
+    ]
+  },
+  {
+    "id": "magic",
+    "rank": 997,
+    "format": "time",
+    "name": "Magic",
+    "can_change_time_limit": true,
+    "can_have_cutoff": true,
+    "is_timed_event": true,
+    "is_fewest_moves": false,
+    "is_multiple_blindfolded": false,
+    "is_official": false,
+    "format_ids": [
+      "a"
+    ]
+  },
+  {
+    "id": "mmagic",
+    "rank": 998,
+    "format": "time",
+    "name": "Master Magic",
+    "can_change_time_limit": true,
+    "can_have_cutoff": true,
+    "is_timed_event": true,
+    "is_fewest_moves": false,
+    "is_multiple_blindfolded": false,
+    "is_official": false,
+    "format_ids": [
+      "a"
+    ]
+  },
+  {
+    "id": "333mbo",
+    "rank": 999,
+    "format": "multi",
+    "name": "3x3x3 Multi-Blind Old Style",
+    "can_change_time_limit": false,
+    "can_have_cutoff": true,
+    "is_timed_event": false,
+    "is_fewest_moves": false,
+    "is_multiple_blindfolded": true,
+    "is_official": false,
+    "format_ids": [
+      "3",
+      "2",
+      "1"
+    ]
+  }
+]

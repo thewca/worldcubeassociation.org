@@ -59,9 +59,8 @@ RSpec.describe SyncMailingListsJob, type: :job do
     wct_member = FactoryBot.create :user, :wct_member
     wct_china_member = FactoryBot.create :user, :wct_china_member
     wcat_member = FactoryBot.create :user, :wcat_member
-    wdc_leader = FactoryBot.create :user, :wdc_leader, receive_delegate_reports: true
-    wdc_member = FactoryBot.create :user, :wdc_member, receive_delegate_reports: true
-    wec_member = FactoryBot.create :user, :wec_member, receive_delegate_reports: true
+    wic_leader = FactoryBot.create :user, :wic_leader, receive_delegate_reports: true
+    wic_member = FactoryBot.create :user, :wic_member, receive_delegate_reports: true
     weat_member = FactoryBot.create :user, :weat_member
     wfc_member = FactoryBot.create :user, :wfc_member
     wfc_leader = FactoryBot.create :user, :wfc_leader
@@ -72,12 +71,11 @@ RSpec.describe SyncMailingListsJob, type: :job do
     wrt_member = FactoryBot.create :user, :wrt_member
     wst_member = FactoryBot.create :user, :wst_member
     wst_admin_member = FactoryBot.create :user, :wst_admin_member
-    wac_member = FactoryBot.create :wac_role_member
-    wac_leader = FactoryBot.create :wac_role_leader
     wsot_member = FactoryBot.create :user, :wsot_member
     wsot_leader = FactoryBot.create :user, :wsot_leader
     wat_member = FactoryBot.create :user, :wat_member
     wat_leader = FactoryBot.create :user, :wat_leader
+    wapc_member = FactoryBot.create :user, :wapc_member
     treasurer_role = FactoryBot.create :treasurer_role
 
     # organizations@ mailing list
@@ -87,7 +85,7 @@ RSpec.describe SyncMailingListsJob, type: :job do
 
     expect(GsuiteMailingLists).to receive(:sync_group).with(
       "leaders@worldcubeassociation.org",
-      a_collection_containing_exactly(wrt_leader.email, wdc_leader.email, wfc_leader.email, wsot_leader.email, wat_leader.email),
+      a_collection_containing_exactly(wrt_leader.email, wic_leader.email, wfc_leader.email, wsot_leader.email, wat_leader.email),
     )
 
     # board@ mailing list
@@ -106,7 +104,7 @@ RSpec.describe SyncMailingListsJob, type: :job do
     expect(GsuiteMailingLists).to receive(:sync_group).with(
       "reports@worldcubeassociation.org",
       a_collection_containing_exactly("seniors@worldcubeassociation.org", "quality@worldcubeassociation.org", "regulations@worldcubeassociation.org",
-                                      wdc_leader.email, wdc_member.email, wec_member.email),
+                                      wic_leader.email, wic_member.email),
     )
 
     # communication@ mailing list
@@ -121,16 +119,10 @@ RSpec.describe SyncMailingListsJob, type: :job do
       a_collection_containing_exactly(wcat_member.email),
     )
 
-    # disciplinary@ mailing list
+    # integrity@ mailing list
     expect(GsuiteMailingLists).to receive(:sync_group).with(
-      "disciplinary@worldcubeassociation.org",
-      a_collection_containing_exactly(wdc_leader.email, wdc_member.email),
-    )
-
-    # ethics@ mailing list
-    expect(GsuiteMailingLists).to receive(:sync_group).with(
-      "ethics@worldcubeassociation.org",
-      a_collection_containing_exactly(wec_member.email),
+      "integrity@worldcubeassociation.org",
+      a_collection_containing_exactly(wic_leader.email, wic_member.email),
     )
 
     # assistants@ mailing list
@@ -187,12 +179,6 @@ RSpec.describe SyncMailingListsJob, type: :job do
       a_collection_containing_exactly(translator_1.user.email, translator_2.user.email, translator_3.user.email),
     )
 
-    # advisory@ mailing list
-    expect(GsuiteMailingLists).to receive(:sync_group).with(
-      "advisory@worldcubeassociation.org",
-      a_collection_containing_exactly(wac_leader.user.email, wac_member.user.email),
-    )
-
     # sports@ mailing list
     expect(GsuiteMailingLists).to receive(:sync_group).with(
       "sports@worldcubeassociation.org",
@@ -203,6 +189,18 @@ RSpec.describe SyncMailingListsJob, type: :job do
     expect(GsuiteMailingLists).to receive(:sync_group).with(
       "archive@worldcubeassociation.org",
       a_collection_containing_exactly(wat_leader.email, wat_member.email),
+    )
+
+    # appeals@ mailing list
+    expect(GsuiteMailingLists).to receive(:sync_group).with(
+      "appeals@worldcubeassociation.org",
+      a_collection_containing_exactly(wapc_member.email),
+    )
+
+    # ethics@ mailing list
+    expect(GsuiteMailingLists).to receive(:sync_group).with(
+      "ethics@worldcubeassociation.org",
+      a_collection_containing_exactly(wic_leader.email, wic_member.email),
     )
 
     # treasurer@ mailing list
