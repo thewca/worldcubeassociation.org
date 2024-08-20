@@ -205,7 +205,7 @@ RSpec.describe CompetitionsMailer, type: :mailer do
 
       it "renders the headers" do
         expect(mail.subject).to eq "[wca-report] [Oceania] Comp of the Future 2016"
-        expect(mail.to).to eq ["reports@worldcubeassociation.org"]
+        expect(mail.to).to eq ["reports.oceania.AU@worldcubeassociation.org"]
         expect(mail.cc).to match_array competition.delegates.pluck(:email) + ["regulations@worldcubeassociation.org"] + ["integrity@worldcubeassociation.org"]
         expect(mail.from).to eq ["reports@worldcubeassociation.org"]
         expect(mail.reply_to).to match_array competition.delegates.pluck(:email)
@@ -225,7 +225,7 @@ RSpec.describe CompetitionsMailer, type: :mailer do
 
       it "renders the headers" do
         expect(mail.subject).to eq "[wca-report] [Oceania] Comp of the Future 2016"
-        expect(mail.to).to eq ["reports@worldcubeassociation.org"]
+        expect(mail.to).to eq ["reports.oceania.AU@worldcubeassociation.org"]
         expect(mail.cc).to match_array competition.delegates.pluck(:email) + ["integrity@worldcubeassociation.org"]
         expect(mail.from).to eq ["reports@worldcubeassociation.org"]
         expect(mail.reply_to).to match_array competition.delegates.pluck(:email)
@@ -245,7 +245,7 @@ RSpec.describe CompetitionsMailer, type: :mailer do
 
       it "renders the headers" do
         expect(mail.subject).to eq "[wca-report] [Oceania] Comp of the Future 2016"
-        expect(mail.to).to eq ["reports@worldcubeassociation.org"]
+        expect(mail.to).to eq ["reports.oceania.AU@worldcubeassociation.org"]
         expect(mail.cc).to match_array competition.delegates.pluck(:email) + ["regulations@worldcubeassociation.org"]
         expect(mail.from).to eq ["reports@worldcubeassociation.org"]
         expect(mail.reply_to).to match_array competition.delegates.pluck(:email)
@@ -261,7 +261,7 @@ RSpec.describe CompetitionsMailer, type: :mailer do
     context "no wrc nor wic feedback" do
       it "renders the headers" do
         expect(mail.subject).to eq "[wca-report] [Oceania] Comp of the Future 2016"
-        expect(mail.to).to eq ["reports@worldcubeassociation.org"]
+        expect(mail.to).to eq ["reports.oceania.AU@worldcubeassociation.org"]
         expect(mail.cc).to match_array competition.delegates.pluck(:email)
         expect(mail.from).to eq ["reports@worldcubeassociation.org"]
         expect(mail.reply_to).to match_array competition.delegates.pluck(:email)
