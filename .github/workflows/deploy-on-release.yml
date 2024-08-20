@@ -28,6 +28,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           push: true
+          load: true
           target: sidekiq
           tags: |
             ${{ steps.login-ecr.outputs.registry }}/wca-on-rails:sidekiq-production
