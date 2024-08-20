@@ -40,7 +40,7 @@ class DelegateReport < ApplicationRecord
   validates :discussion_url, presence: true, if: :schedule_and_disussion_urls_required?
   validates :discussion_url, url: true
   validates :wrc_incidents, presence: true, if: :wrc_feedback_requested
-  validates :wdc_incidents, presence: true, if: :wdc_feedback_requested
+  validates :wic_incidents, presence: true, if: :wic_feedback_requested
 
   def schedule_and_disussion_urls_required?
     posted? && created_at > Date.new(2019, 7, 21)

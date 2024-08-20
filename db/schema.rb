@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_07_21_145135) do
+ActiveRecord::Schema[7.1].define(version: 2024_08_11_100821) do
   create_table "Competitions", id: { type: :string, limit: 32, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", limit: 50, default: "", null: false
     t.string "cityName", limit: 50, default: "", null: false
@@ -57,7 +57,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_21_145135) do
     t.boolean "qualification_results"
     t.text "qualification_results_reason"
     t.string "name_reason"
-    t.string "external_registration_page"
+    t.string "external_registration_page", limit: 200
     t.datetime "confirmed_at", precision: nil
     t.boolean "event_restrictions"
     t.text "event_restrictions_reason"
@@ -147,7 +147,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_21_145135) do
     t.string "name", limit: 54, default: "", null: false
     t.integer "rank", default: 0, null: false
     t.string "format", limit: 10, default: "", null: false
-    t.string "cellName", limit: 45, default: "", null: false
   end
 
   create_table "Formats", id: { type: :string, limit: 1, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
@@ -701,15 +700,15 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_21_145135) do
     t.datetime "nag_sent_at", precision: nil
     t.boolean "wrc_feedback_requested", default: false, null: false
     t.string "wrc_incidents"
-    t.boolean "wdc_feedback_requested", default: false, null: false
-    t.string "wdc_incidents"
+    t.boolean "wic_feedback_requested", default: false, null: false
+    t.string "wic_incidents"
     t.integer "wrc_primary_user_id"
     t.integer "wrc_secondary_user_id"
     t.datetime "reminder_sent_at", precision: nil
     t.index ["competition_id"], name: "index_delegate_reports_on_competition_id", unique: true
   end
 
-  create_table "eligible_country_iso2s_for_championship", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+  create_table "eligible_country_iso2s_for_championship", id: false, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "championship_type", null: false
     t.string "eligible_country_iso2", null: false
     t.index ["championship_type", "eligible_country_iso2"], name: "index_eligible_iso2s_for_championship_on_type_and_country_iso2", unique: true

@@ -178,6 +178,11 @@ class Competition < ApplicationRecord
   MAX_ID_LENGTH = 32
   MAX_NAME_LENGTH = 50
   MAX_CELL_NAME_LENGTH = 32
+  MAX_CITY_NAME_LENGTH = 50
+  MAX_VENUE_LENGTH = 240
+  MAX_FREETEXT_LENGTH = 191
+  MAX_URL_LENGTH = 200
+  MAX_MARKDOWN_LENGTH = 255
   MAX_COMPETITOR_LIMIT = 5000
   MAX_GUEST_LIMIT = 100
   validates_inclusion_of :competitor_limit_enabled, in: [true, false], if: :competitor_limit_required?
@@ -199,7 +204,7 @@ class Competition < ApplicationRecord
   validates :external_website, format: { with: URL_RE }, allow_blank: true
   validates :external_registration_page, presence: true, format: { with: URL_RE }, if: :external_registration_page_required?
 
-  validates_inclusion_of :countryId, in: Country.ids.freeze
+  validates_inclusion_of :countryId, in: Country::ALL_COUNTRY_IDS
   validates :currency_code, inclusion: { in: Money::Currency, message: proc { I18n.t('competitions.errors.invalid_currency_code') } }
 
   validates_numericality_of :refund_policy_percent, greater_than_or_equal_to: 0, less_than_or_equal_to: 100, if: :refund_policy_percent_required?
@@ -226,17 +231,13 @@ class Competition < ApplicationRecord
   validates_inclusion_of :main_event_id, in: ->(comp) { [nil].concat(comp.persisted_events_id) }
 
   # Validations are used to show form errors to the user. If string columns aren't validated for length, it produces an unexplained error for the user
-  # VALIDATED_COLUMNS: All columns which appear in the competition form and are editable by users
-  # DONT_VALIDATE_STRING_LENGTH: String columns not exposed to users in the cmopetition form
-  VALIDATE_STRING_LENGTH = %w[
-    name cityName venue venueAddress venueDetails external_website cellName contact name_reason external_registration_page forbid_newcomers_reason
-  ].freeze
-  DONT_VALIDATE_STRING_LENGTH = %w[countryId connected_stripe_account_id currency_code main_event_id id].freeze
-  columns_hash.each do |column_name, column_info|
-    if VALIDATE_STRING_LENGTH.include?(column_name) && column_info.limit
-      validates column_name, length: { maximum: column_info.limit }
-    end
-  end
+  validates :name, length: { maximum: MAX_NAME_LENGTH }
+  validates :cellName, length: { maximum: MAX_CELL_NAME_LENGTH }
+  validates :cityName, length: { maximum: MAX_CITY_NAME_LENGTH }
+  validates :venue, length: { maximum: MAX_VENUE_LENGTH }
+  validates :venueAddress, :venueDetails, :name_reason, :forbid_newcomers_reason, length: { maximum: MAX_FREETEXT_LENGTH }
+  validates :external_website, :external_registration_page, length: { maximum: MAX_URL_LENGTH }
+  validates :contact, length: { maximum: MAX_MARKDOWN_LENGTH }
 
   # Dirty old trick to deal with competition id changes (see other methods using
   # 'with_old_id' for more details).
@@ -470,10 +471,14 @@ class Competition < ApplicationRecord
       end
 
       if self.results.any? && !self.results_posted?
-        warnings[:results] = I18n.t('competitions.messages.results_not_posted')
+        if user&.can_admin_results?
+          warnings[:results] = I18n.t('competitions.messages.results_not_posted')
+        else
+          warnings[:results] = I18n.t('competitions.messages.results_still_processing')
+        end
       end
 
-      if self.registration_full? && self.registration_opened?
+      if self.registration_full? && self.registration_currently_open?
         warnings[:waiting_list] = registration_full_message
       end
 
@@ -722,7 +727,7 @@ class Competition < ApplicationRecord
   end
 
   def should_render_register_v2?(user)
-    uses_new_registration_service? && user.cannot_register_for_competition_reasons(self).empty? && (registration_opened? || user_can_pre_register?(user))
+    uses_new_registration_service? && user.cannot_register_for_competition_reasons(self).empty? && (registration_currently_open? || user_can_pre_register?(user))
   end
 
   before_validation :unpack_delegate_organizer_ids
@@ -950,7 +955,7 @@ class Competition < ApplicationRecord
     true
   end
 
-  def registration_opened?
+  def registration_currently_open?
     use_wca_registration? && !cancelled? && !registration_not_yet_opened? && !registration_past?
   end
 
@@ -971,6 +976,14 @@ class Competition < ApplicationRecord
       :full
     else
       :open
+    end
+  end
+
+  def any_registrations?
+    if uses_new_registration_service?
+      self.microservice_registrations.any?
+    else
+      self.registrations.any?
     end
   end
 
@@ -1169,7 +1182,8 @@ class Competition < ApplicationRecord
       errors.add(:refund_policy_limit_date, I18n.t('competitions.errors.refund_date_after_start'))
     end
 
-    if registration_period_required? && registration_open? && registration_close? && (registration_open >= start_date || registration_close >= start_date)
+    if registration_period_required? && registration_open.present? && registration_close.present? &&
+       (registration_open >= start_date || registration_close >= start_date)
       errors.add(:registration_close, I18n.t('competitions.errors.registration_period_after_start'))
     end
   end
@@ -1361,7 +1375,7 @@ class Competition < ApplicationRecord
   end
 
   def orga_can_close_reg_full_limit?
-    registration_full? && registration_opened?
+    registration_full? && registration_currently_open?
   end
 
   def display_name(short: false)
@@ -1827,7 +1841,7 @@ class Competition < ApplicationRecord
                allow_registration_without_qualification refund_policy_percent use_wca_registration guests_per_registration_limit venue contact
                force_comment_in_registration use_wca_registration external_registration_page guests_entry_fee_lowest_denomination guest_entry_status
                information events_per_registration_limit],
-      methods: %w[url website short_name city venue_address venue_details latitude_degrees longitude_degrees country_iso2 event_ids registration_opened?
+      methods: %w[url website short_name city venue_address venue_details latitude_degrees longitude_degrees country_iso2 event_ids registration_currently_open?
                   main_event_id number_of_bookmarks using_payment_integrations? uses_qualification? uses_cutoff? competition_series_ids registration_full?],
       include: %w[delegates organizers],
     }

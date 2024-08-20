@@ -31,7 +31,7 @@ RSpec.describe 'I18n' do
   end
 
   it "English country translations, database names, all match the names in wca-states.json" do
-    Country::WCA_STATES["states_lists"].map do |list|
+    Country::WCA_STATES_JSON["states_lists"].map do |list|
       list["states"].map do |state|
         state_id = state["id"] || I18n.transliterate(state["name"]).tr("'", "_")
         country = Country.c_find(state_id)

@@ -109,7 +109,7 @@
             </div>
             <div class="col-xs-6">
               <%= f.input :wca_id, as: :wca_id, disabled: !editable_fields.include?(:wca_id)%>
-              <% if current_user.any_kind_of_delegate? && @user.is_special_account? %>
+              <% if current_user.can_edit_any_user? && @user.is_special_account? %>
                 <p class="help-block">
                   <%= t '.account_is_special' %>
                 </p>

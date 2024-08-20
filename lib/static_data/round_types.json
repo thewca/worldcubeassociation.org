@@ -1,0 +1,79 @@
+[
+  {
+    "id": "0",
+    "rank": 19,
+    "name": "Qualification round",
+    "cellName": "Qualification round",
+    "final": false
+  },
+  {
+    "id": "1",
+    "rank": 29,
+    "name": "First round",
+    "cellName": "First round",
+    "final": false
+  },
+  {
+    "id": "2",
+    "rank": 50,
+    "name": "Second round",
+    "cellName": "Second round",
+    "final": false
+  },
+  {
+    "id": "3",
+    "rank": 79,
+    "name": "Semi Final",
+    "cellName": "Semi Final",
+    "final": false
+  },
+  {
+    "id": "b",
+    "rank": 39,
+    "name": "B Final",
+    "cellName": "B Final",
+    "final": false
+  },
+  {
+    "id": "c",
+    "rank": 90,
+    "name": "Final",
+    "cellName": "Final",
+    "final": true
+  },
+  {
+    "id": "d",
+    "rank": 20,
+    "name": "First round",
+    "cellName": "First round",
+    "final": false
+  },
+  {
+    "id": "e",
+    "rank": 59,
+    "name": "Second round",
+    "cellName": "Second round",
+    "final": false
+  },
+  {
+    "id": "f",
+    "rank": 99,
+    "name": "Final",
+    "cellName": "Final",
+    "final": true
+  },
+  {
+    "id": "g",
+    "rank": 70,
+    "name": "Semi Final",
+    "cellName": "Semi Final",
+    "final": false
+  },
+  {
+    "id": "h",
+    "rank": 10,
+    "name": "Qualification round",
+    "cellName": "Qualification round",
+    "final": false
+  }
+]

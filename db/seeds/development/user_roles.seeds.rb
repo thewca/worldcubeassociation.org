@@ -52,16 +52,6 @@ after :user_groups do
     15.times { FactoryBot.create(:user_role, :inactive, group: group, metadata: FactoryBot.create(:roles_metadata_teams_committees, status: RolesMetadataTeamsCommittees.statuses[:member])) }
   end
 
-  # Councils
-  UserGroup.councils.each do |group|
-    # Current roles
-    FactoryBot.create(:user_role, :active, group: group, metadata: FactoryBot.create(:roles_metadata_councils, status: RolesMetadataCouncils.statuses[:leader]))
-    5.times { FactoryBot.create(:user_role, :active, group: group, metadata: FactoryBot.create(:roles_metadata_councils, status: RolesMetadataCouncils.statuses[:member])) }
-    # Past roles
-    3.times { FactoryBot.create(:user_role, :inactive, group: group, metadata: FactoryBot.create(:roles_metadata_councils, status: RolesMetadataCouncils.statuses[:leader])) }
-    15.times { FactoryBot.create(:user_role, :inactive, group: group, metadata: FactoryBot.create(:roles_metadata_councils, status: RolesMetadataCouncils.statuses[:member])) }
-  end
-
   # Translators
   UserGroup.translators.each do |group|
     2.times { FactoryBot.create(:user_role, :active, group: group) }

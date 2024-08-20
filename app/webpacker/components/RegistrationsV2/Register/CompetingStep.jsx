@@ -29,7 +29,7 @@ const maxCommentLength = 240;
 const potentialWarnings = (competitionInfo) => {
   const warnings = [];
   // Organizer Pre Registration
-  if (!competitionInfo['registration_opened?']) {
+  if (!competitionInfo['registration_currently_open?']) {
     warnings.push(i18n.t('competitions.registration_v2.register.early_registration'));
   }
   // Favourites Competition

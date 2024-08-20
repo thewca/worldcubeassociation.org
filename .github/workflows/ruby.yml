@@ -19,38 +19,35 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true # runs 'bundle install' and caches installed gems automatically
+      - name: Install fresh Bundler packages
+        run: bin/bundle install
       - name: Set up Corepack/Yarn
         run: corepack enable # this allows NPM to use its own Yarn. It is crucial that this is run BEFORE the Node setup!
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
-      - uses: actions/cache@v4
-        with:
-          path: '**/node_modules'
-          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-node_modules
-      - uses: actions/cache@v4
-        with:
-          path: '~/.cache/yarn'
-          key: ${{ runner.os }}-yarn
+          cache: 'yarn'
       - name: Install fresh Yarn packages
-        run: bundle exec rake yarn:install
+        run: bin/yarn install
       - name: Run Overcommit commit hooks
-        working-directory: ${{ env.GITHUB_WORKSPACE }}
-        run: bundle exec overcommit --sign && bundle exec overcommit --sign pre-commit && bundle exec overcommit --run
-      - name: Activate MySQL # as per https://github.com/actions/virtual-environments/blob/main/images/linux/Ubuntu2004-README.md#mysql
         run: |
-          sudo systemctl start mysql.service
+          gem install overcommit
+          overcommit --sign
+          overcommit --sign pre-commit
+          overcommit --run
+      - name: Activate MySQL # as per https://github.com/actions/runner-images/blob/main/images/ubuntu/Ubuntu2404-Readme.md
+        run: sudo systemctl start mysql.service
       - name: Populate database with seeds
-        run: bundle exec rake db:reset
+        run: bin/rake db:reset
       - name: Pre-compile assets for frontend tests
         env:
           DISABLE_SPRING: 1
-        run: bundle exec i18n export && bundle exec rake assets:precompile
+        run: |
+          bin/bundle exec i18n export
+          bin/rake assets:precompile
       - name: Run tests
         id: rspec
-        run: bundle exec rake
+        run: bin/rspec
       - name: Push coverage data to Coveralls
         uses: coverallsapp/github-action@v2
         with:

@@ -33,6 +33,10 @@ locals {
       value = "redis://redis-main-staging-001.iebvzt.0001.usw2.cache.amazonaws.com:6379"
     },
     {
+      name = "STAGING_OAUTH_URL"
+      value = "https://www.worldcubeassociation.org"
+    },
+    {
       name = "STORAGE_AWS_BUCKET"
       value = aws_s3_bucket.storage-bucket.id
     },

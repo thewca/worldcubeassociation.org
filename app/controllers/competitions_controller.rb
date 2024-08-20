@@ -195,7 +195,7 @@ class CompetitionsController < ApplicationController
       @competitions = @competitions.select { |competition| competition.pending_results_or_report(days) }
     end
 
-    @enable_react = params[:beta]&.to_s == '0xDbOverload'
+    @enable_react = params[:legacy]&.to_s == 'off'
 
     respond_to do |format|
       format.html {}
@@ -591,7 +591,7 @@ class CompetitionsController < ApplicationController
   # Enables the New Registration Service for a Competition
   def enable_v2
     @competition = competition_from_params
-    if EnvConfig.WCA_LIVE_SITE? || @competition.registration_opened?
+    if EnvConfig.WCA_LIVE_SITE? || @competition.registration_currently_open?
       flash.now[:danger] = t('competitions.messages.cannot_activate_v2')
       return redirect_to competition_path(@competition)
     end
@@ -848,7 +848,7 @@ class CompetitionsController < ApplicationController
   end
 
   def my_competitions
-    if Rails.env.production? && !EnvConfig.WCA_LIVE_SITE?
+    if Rails.env.production?
       registrations_v2 = current_user.microservice_registrations
     else
       registrations_v2 = []

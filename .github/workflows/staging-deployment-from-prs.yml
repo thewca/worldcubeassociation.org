@@ -50,23 +50,28 @@ jobs:
         with:
           context: .
           push: true
-          file: ./Dockerfile.sidekiq
+          target: sidekiq
           tags: |
             ${{ steps.login-ecr.outputs.registry }}/wca-on-rails:sidekiq-staging
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          build-args: |
+            BUILD_TAG=${{ env.SHORT_SHA }}
+            WCA_LIVE_SITE=false
       - name: Build Rails if triggered
         if: steps.trigger-deployment.outputs.triggered == 'true'
         uses: docker/build-push-action@v6
         with:
           context: .
           push: true
+          target: monolith
           tags: |
             ${{ steps.login-ecr.outputs.registry }}/wca-on-rails:staging
           cache-from: type=gha
           cache-to: type=gha,mode=max
           build-args: |
             BUILD_TAG=${{ env.SHORT_SHA }}
+            WCA_LIVE_SITE=false
       - name: Deploy staging if triggered
         if: steps.trigger-deployment.outputs.triggered == 'true'
         run: |

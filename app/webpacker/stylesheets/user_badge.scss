@@ -29,12 +29,6 @@
   }
 
   .user-name {
-    .user-badge-subtext {
-      font-style: oblique;
-      margin-top: 6px;
-      font-size: 0.9em;
-    }
-
     background-color: transparent !important;
     width: 100%;
 
@@ -42,6 +36,12 @@
     align-content: center;
     justify-content: center;
     flex-direction: column;
+
+    .user-badge-subtext {
+      font-style: oblique;
+      margin-top: 6px;
+      font-size: 0.9em;
+    }
   }
 
   .show-border {

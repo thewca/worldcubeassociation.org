@@ -26,9 +26,8 @@ FactoryBot.define do
     factory :wsot_leader_metadata, traits: [:leader]
     factory :weat_member_metadata, traits: [:member]
     factory :wcat_member_metadata, traits: [:member]
-    factory :wdc_member_metadata, traits: [:member]
-    factory :wdc_leader_metadata, traits: [:leader]
-    factory :wec_member_metadata, traits: [:member]
+    factory :wic_member_metadata, traits: [:member]
+    factory :wic_leader_metadata, traits: [:leader]
     factory :wfc_member_metadata, traits: [:member]
     factory :wfc_leader_metadata, traits: [:leader]
     factory :wmt_member_metadata, traits: [:member]
@@ -36,5 +35,6 @@ FactoryBot.define do
     factory :wrc_member_metadata, traits: [:member]
     factory :wrc_senior_member_metadata, traits: [:senior_member]
     factory :wrc_leader_metadata, traits: [:leader]
+    factory :wapc_member_metadata, traits: [:member]
   end
 end
