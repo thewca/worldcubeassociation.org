@@ -33,7 +33,7 @@ jobs:
           build-args: |
             BUILD_TAG=${{ env.SHORT_SHA }}
             WCA_LIVE_SITE=false
-            SHAKAPACKER_ASSET_HOST=https://staging-assets.worldcubeassociation.org
+            SHAKAPACKER_ASSET_HOST=https://assets-staging.worldcubeassociation.org
       - name: Build and push Staging Image
         id: build-staging
         uses: docker/build-push-action@v6
@@ -48,7 +48,7 @@ jobs:
           build-args: |
             BUILD_TAG=${{ env.SHORT_SHA }}
             WCA_LIVE_SITE=false
-            SHAKAPACKER_ASSET_HOST=https://staging-assets.worldcubeassociation.org
+            SHAKAPACKER_ASSET_HOST=https://assets-staging.worldcubeassociation.org
         # We build assets in docker and copy it out so we don't have to install all the dependencies in the GH Action
       - name: Copy assets out of the container and push to S3
         run: |
