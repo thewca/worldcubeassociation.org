@@ -68,6 +68,7 @@ jobs:
           target: monolith
           tags: |
             ${{ steps.login-ecr.outputs.registry }}/wca-on-rails:staging
+            wca-on-rails-staging
           cache-from: type=gha
           cache-to: type=gha,mode=max
           build-args: |
@@ -78,9 +79,9 @@ jobs:
       - name: Copy assets out of the container and push to S3 if triggered
         if: steps.trigger-deployment.outputs.triggered == 'true'
         run: |
-          id=$(docker create ${{ steps.login-ecr.outputs.registry }}/wca-on-rails:staging)
+          id=$(docker create wca-on-rails-staging)
           docker cp $id:/rails/public/ ./assets
-          aws s3 sync ./assets "s3://staging-assets.worldcubeassociation.org/assets/${{ env.SHORT_SHA }}"
+          aws s3 sync ./assets "s3://assets-staging.worldcubeassociation.org/assets/${{ env.SHORT_SHA }}"
       - name: Deploy staging if triggered
         if: steps.trigger-deployment.outputs.triggered == 'true'
         run: |
