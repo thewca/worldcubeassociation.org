@@ -2226,7 +2226,7 @@ pt:
           missing_info: Não submeteu todos os detalhes solicitados
           #original_hash: a700652
           incomplete: >-
-            Não cumpriu os critérios de registro (por exemplo, pagamento de
+            Não cumpriu os critérios de registo (por exemplo, pagamento de
             inscrição adiantado ou tempos mínimos de qualificação)
           #original_hash: 1e225f0
           registrations_full: >-
@@ -3656,6 +3656,8 @@ pt:
         move_waiting: Mover para Lista de Espera
         #original_hash: 284b24f
         cancel: Cancelar Registo
+        #original_hash: 43dc853
+        amount: Montante
         #original_hash: 67b3c7d
         too_many: >-
           Aceitar todos estes registos ultrapassaria o limite de competidores
