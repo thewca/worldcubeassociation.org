@@ -48,11 +48,13 @@ namespace :db do
   end
 
   namespace :load do
-    desc 'Download and import the publicly accessible database dump from the production server'
-    task development: :environment do
+    desc 'Download and import the publicly accessible database dump from the production server, use the reload parameter to replace an already existing DB without downtime'
+    task :development, [:reload] => [:environment] do |_, args|
       if EnvConfig.WCA_LIVE_SITE?
         abort "This actions is disabled for the production server!"
       end
+
+      reload = args[:reload] || false
 
       Dir.mktmpdir do |dir|
         FileUtils.cd dir do
@@ -66,31 +68,77 @@ namespace :db do
           end
 
           config = ActiveRecord::Base.connection_db_config
-          LogTask.log_task "Clobbering contents of '#{config.database}' with #{local_file} " do
-            ActiveRecord::Tasks::DatabaseTasks.drop config
-            ActiveRecord::Tasks::DatabaseTasks.create config
+          config_hash = ActiveRecord::Base.connection_db_config.configuration_hash
+          database_name = config.database
+          temp_db_name = "#{database_name}_temp"
 
-            DatabaseDumper.mysql("SET unique_checks=0", config.database)
-            DatabaseDumper.mysql("SET foreign_key_checks=0", config.database)
-            DatabaseDumper.mysql("SET autocommit=0", config.database)
+          load_description = reload ? "Reloading Database '#{database_name}' from #{local_file}" : "Clobbering contents of '#{database_name}' with #{local_file}"
+
+          LogTask.log_task load_description do
+            # Create new or temporary db
+            working_db = if reload
+              ActiveRecord::Base.establish_connection(config_hash.merge(database: nil))
+              ActiveRecord::Base.connection.execute("DROP DATABASE IF EXISTS #{temp_db_name} ")
+              ActiveRecord::Base.connection.execute("CREATE DATABASE #{temp_db_name}")
+              temp_db_name
+            else
+              ActiveRecord::Tasks::DatabaseTasks.drop config
+              ActiveRecord::Tasks::DatabaseTasks.create config
+              database_name
+            end
+
+            DatabaseDumper.mysql("SET unique_checks=0", working_db)
+            DatabaseDumper.mysql("SET foreign_key_checks=0", working_db)
+            DatabaseDumper.mysql("SET autocommit=0", working_db)
             if Rails.env.development?
-              DatabaseDumper.mysql("SET GLOBAL innodb_flush_log_at_trx_commit=0", config.database)
+              DatabaseDumper.mysql("SET GLOBAL innodb_flush_log_at_trx_commit=0", working_db)
             end
 
             # Explicitly loading the schema is not necessary because the downloaded SQL dump file contains CREATE TABLE
             # definitions, so if we load the schema here the SOURCE command below would overwrite it anyways
 
-            DatabaseDumper.mysql("SOURCE #{DbDumpHelper::DEVELOPER_EXPORT_SQL}", config.database)
+            DatabaseDumper.mysql("SOURCE #{DbDumpHelper::DEVELOPER_EXPORT_SQL}", working_db)
 
-            DatabaseDumper.mysql("SET unique_checks=1", config.database)
-            DatabaseDumper.mysql("SET foreign_key_checks=1", config.database)
-            DatabaseDumper.mysql("SET autocommit=1", config.database)
+            DatabaseDumper.mysql("SET unique_checks=1", working_db)
+            DatabaseDumper.mysql("SET foreign_key_checks=1", working_db)
+            DatabaseDumper.mysql("SET autocommit=1", working_db)
             if Rails.env.development?
-              DatabaseDumper.mysql("SET GLOBAL innodb_flush_log_at_trx_commit=1", config.database)
+              DatabaseDumper.mysql("SET GLOBAL innodb_flush_log_at_trx_commit=1", working_db)
             end
 
-            # We always Commit, even if RDS has autocommit=1, it will act as a No Op
-            DatabaseDumper.mysql("COMMIT", config.database)
+            DatabaseDumper.mysql("COMMIT", working_db)
+          end
+
+          # Achieve no downtime reload by swapping tables
+          if reload
+            LogTask.log_task "Swapping tables between databases" do
+              ActiveRecord::Base.connection.execute("CREATE DATABASE #{database_name}_old")
+              # Re-establish the connection to the old database so we can swap
+              ActiveRecord::Base.establish_connection(config_hash)
+              # Get the list of tables from the current database using ActiveRecord
+              current_tables = ActiveRecord::Base.connection.tables
+
+              # Get the list of tables in the temporary database because there might be new tables
+              temp_tables = ActiveRecord::Base.connection.execute("SHOW TABLES FROM #{temp_db_name}").map { |row| row[0] }
+
+              # Swap tables between the databases
+              temp_tables.each do |table|
+                if current_tables.include?(table)
+                  rename_sql = "RENAME TABLE #{database_name}.#{table} TO #{database_name}_old.#{table}, #{temp_db_name}.#{table} TO #{database_name}.#{table};"
+                else
+                  rename_sql = "RENAME TABLE #{temp_db_name}.#{table} TO #{database_name}.#{table};"
+                end
+                ActiveRecord::Base.connection.execute(rename_sql)
+              end
+            end
+
+            # Clean up the old database
+            LogTask.log_task "Dropping old database" do
+              ActiveRecord::Base.establish_connection(config_hash.merge(database: nil))
+              ActiveRecord::Base.connection.execute("DROP DATABASE #{temp_db_name}")
+              ActiveRecord::Base.connection.execute("DROP DATABASE #{database_name}_old")
+              ActiveRecord::Base.establish_connection(config_hash)
+            end
           end
 
           dummy_password = DbDumpHelper.use_staging_password? ? AppSecrets.STAGING_PASSWORD : DbDumpHelper::DEFAULT_DEV_PASSWORD
@@ -111,111 +159,6 @@ namespace :db do
             owner_id: User.find_by_wca_id!("2005FLEI01").id,
             owner_type: "User",
           )
-        end
-      end
-    end
-  end
-
-  namespace :reload do
-    desc 'Reload the development database with a fresh copy from the production dump without downtime'
-    task development: :environment do
-      if EnvConfig.WCA_LIVE_SITE?
-        abort "This action is disabled for the production server!"
-      end
-
-      Dir.mktmpdir do |dir|
-        FileUtils.cd dir do
-          dev_db_dump_url = DbDumpHelper.public_s3_path(DbDumpHelper::DEVELOPER_EXPORT_SQL_PERMALINK)
-          local_file = "./dump.zip"
-
-          LogTask.log_task("Downloading #{dev_db_dump_url}") do
-            system("curl -o #{local_file} #{dev_db_dump_url}") || raise("Error while running `curl`")
-          end
-
-          LogTask.log_task("Unzipping dump.zip") do
-            system("unzip #{local_file}") || raise("Error while running `unzip`")
-          end
-
-          config = ActiveRecord::Base.connection_db_config.configuration_hash
-          database_name = config[:database]
-          temp_db_name = "#{database_name}_temp"
-
-          LogTask.log_task "Creating and loading temporary database '#{temp_db_name}'" do
-            # Create the temporary database
-            ActiveRecord::Base.establish_connection(config.merge(database: nil))
-            ActiveRecord::Base.connection.execute("DROP DATABASE IF EXISTS #{temp_db_name} ")
-            ActiveRecord::Base.connection.execute("CREATE DATABASE #{temp_db_name}")
-
-            # Disable certain checks for faster loading
-            DatabaseDumper.mysql("SET unique_checks=0", temp_db_name)
-            DatabaseDumper.mysql("SET foreign_key_checks=0", temp_db_name)
-            DatabaseDumper.mysql("SET autocommit=0", temp_db_name)
-
-            if Rails.env.development?
-              DatabaseDumper.mysql("SET GLOBAL innodb_flush_log_at_trx_commit=0", temp_db_name)
-            end
-
-            # Load the dump into the temporary database
-            DatabaseDumper.mysql("SOURCE #{DbDumpHelper::DEVELOPER_EXPORT_SQL}", temp_db_name)
-
-            # Commit any pending transactions
-            DatabaseDumper.mysql("COMMIT", temp_db_name)
-          end
-
-          # RENAME Database has been removed, that's why we need to swap tables
-          LogTask.log_task "Swapping tables between databases" do
-            ActiveRecord::Base.connection.execute("CREATE DATABASE #{database_name}_old")
-            # Re-establish the connection to the old database so we can swap
-            ActiveRecord::Base.establish_connection(config)
-            # Get the list of tables from the current database using ActiveRecord
-            current_tables = ActiveRecord::Base.connection.execute("SHOW TABLES").map { |row| row[0] }
-
-            # Get the list of tables in the temporary database because there might be new tables
-            temp_tables = ActiveRecord::Base.connection.execute("SHOW TABLES FROM #{temp_db_name}").map { |row| row[0] }
-
-            # Swap tables between the databases
-            temp_tables.each do |table|
-              if current_tables.include?(table)
-                rename_sql = "RENAME TABLE #{database_name}.#{table} TO #{database_name}_old.#{table}, #{temp_db_name}.#{table} TO #{database_name}.#{table};"
-              else
-                rename_sql = "RENAME TABLE #{temp_db_name}.#{table} TO #{database_name}.#{table};"
-              end
-              ActiveRecord::Base.connection.execute(rename_sql)
-            end
-          end
-
-          # Clean up the old database
-          LogTask.log_task "Dropping old database" do
-            ActiveRecord::Base.establish_connection(config.merge(database: nil))
-            ActiveRecord::Base.connection.execute("DROP DATABASE #{temp_db_name}")
-            ActiveRecord::Base.connection.execute("DROP DATABASE #{database_name}_old")
-          end
-
-          # Re-enable checks
-          if Rails.env.development?
-            DatabaseDumper.mysql("SET GLOBAL innodb_flush_log_at_trx_commit=1", temp_db_name)
-          end
-
-          # Re-establish the connection to the new database (which also re-enables local checks)
-          ActiveRecord::Base.establish_connection(config)
-
-          # Update passwords and other configurations in the new database
-          LogTask.log_task "Updating user passwords and creating OAuth application" do
-            dummy_password = DbDumpHelper.use_staging_password? ? AppSecrets.STAGING_PASSWORD : DbDumpHelper::DEFAULT_DEV_PASSWORD
-            default_encrypted_password = User.new(password: dummy_password).encrypted_password
-            User.update_all encrypted_password: default_encrypted_password
-
-            Doorkeeper::Application.create!(
-              name: "Example Application for staging",
-              uid: "example-application-id",
-              secret: "example-secret",
-              redirect_uri: "urn:ietf:wg:oauth:2.0:oob",
-              dangerously_allow_any_redirect_uri: true,
-              scopes: Doorkeeper.configuration.scopes.to_s,
-              owner_id: User.find_by_wca_id!("2005FLEI01").id,
-              owner_type: "User",
-            )
-          end
         end
       end
     end
