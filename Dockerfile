@@ -1,18 +1,19 @@
 FROM ruby:3.3.0 AS base
 ARG BUILD_TAG=local
 ARG WCA_LIVE_SITE
+ARG SHAKAPACKER_ASSET_HOST
 WORKDIR /rails
 
 ENV DEBIAN_FRONTEND noninteractive
 
 # Set production environment
 ENV RAILS_LOG_TO_STDOUT="1" \
-    RAILS_SERVE_STATIC_FILES="true" \
     RAILS_ENV="production" \
     BUNDLE_WITHOUT="development:test" \
     BUNDLE_DEPLOYMENT="1" \
     BUILD_TAG=$BUILD_TAG \
-    WCA_LIVE_SITE=$WCA_LIVE_SITE
+    WCA_LIVE_SITE=$WCA_LIVE_SITE \
+    SHAKAPACKER_ASSET_HOST=$SHAKAPACKER_ASSET_HOST
 
 # Add dependencies necessary to install nodejs.
 # From: https://github.com/nodesource/distributions#debian-and-ubuntu-based-distributions
