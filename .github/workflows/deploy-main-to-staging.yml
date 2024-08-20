@@ -46,7 +46,7 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
           build-args: |
-            BUILD_TAG=${{ github.SHORT_SHA }}
+            BUILD_TAG=${{ env.SHORT_SHA }}
             WCA_LIVE_SITE=false
             SHAKAPACKER_ASSET_HOST=https://staging-assets.worldcubeassociation.org
         # We build assets in docker and copy it out so we don't have to install all the dependencies in the GH Action
