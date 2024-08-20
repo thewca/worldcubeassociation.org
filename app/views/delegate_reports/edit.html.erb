@@ -15,7 +15,7 @@
     <% @competition.delegate_report.schedule_url = link_to_competition_schedule_tab(@competition) if @competition.has_schedule? %>
     <%= f.input :schedule_url, readonly: @competition.has_schedule? %>
 
-    <% @delegate_report.sections.each do |section| %>
+    <% @delegate_report.md_sections.each do |section| %>
       <%= f.input section, input_html: { class: "markdown-editor markdown-editor-image-upload" } %>
     <% end %>
     <%= f.input :wrc_feedback_requested, as: :boolean %>
