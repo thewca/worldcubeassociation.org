@@ -77,15 +77,15 @@ namespace :db do
           LogTask.log_task load_description do
             # Create new or temporary db
             working_db = if reload
-              ActiveRecord::Base.establish_connection(config_hash.merge(database: nil))
-              ActiveRecord::Base.connection.execute("DROP DATABASE IF EXISTS #{temp_db_name} ")
-              ActiveRecord::Base.connection.execute("CREATE DATABASE #{temp_db_name}")
-              temp_db_name
-            else
-              ActiveRecord::Tasks::DatabaseTasks.drop config
-              ActiveRecord::Tasks::DatabaseTasks.create config
-              database_name
-            end
+                           ActiveRecord::Base.establish_connection(config_hash.merge(database: nil))
+                           ActiveRecord::Base.connection.execute("DROP DATABASE IF EXISTS #{temp_db_name} ")
+                           ActiveRecord::Base.connection.execute("CREATE DATABASE #{temp_db_name}")
+                           temp_db_name
+                         else
+                           ActiveRecord::Tasks::DatabaseTasks.drop config
+                           ActiveRecord::Tasks::DatabaseTasks.create config
+                           database_name
+                         end
 
             DatabaseDumper.mysql("SET unique_checks=0", working_db)
             DatabaseDumper.mysql("SET foreign_key_checks=0", working_db)
