@@ -35,13 +35,13 @@ jobs:
             WCA_LIVE_SITE=false
             SHAKAPACKER_ASSET_HOST=https://staging-assets.worldcubeassociation.org
       - name: Build and push Staging Image
+        id: build-staging
         uses: docker/build-push-action@v6
         with:
           push: true
           target: monolith
           tags: |
             ${{ steps.login-ecr.outputs.registry }}/wca-on-rails:staging
-            wca-on-rails-staging
           cache-from: type=gha
           cache-to: type=gha,mode=max
           build-args: |
@@ -51,7 +51,7 @@ jobs:
         # We build assets in docker and copy it out so we don't have to install all the dependencies in the GH Action
       - name: Copy assets out of the container and push to S3
         run: |
-          id=$(docker create wca-on-rails-staging)
+          id=$(docker create ${{steps.build-staging.outputs.imageid }})
           docker cp $id:/rails/public/ ./assets
           aws s3 sync ./assets s3://assets-staging.worldcubeassociation.org/assets/${{ env.SHORT_SHA }}
         # There is no pipeline for staging so we manually force to update the image
