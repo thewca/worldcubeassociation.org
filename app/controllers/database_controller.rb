@@ -22,8 +22,22 @@ class DatabaseController < ApplicationController
 
   def current_results_export(file_type)
     export_timestamp = DumpPublicResultsDatabase.start_date
-
     Rails.cache.fetch("database-export-#{export_timestamp}-#{file_type}", expires_in: 1.days) do
+      # If the last last export failed, get the most current file
+      unless DumpPublicResultsDatabase.last_run_successful?
+        s3 = Aws::S3::Client.new(region: EnvConfig.STORAGE_AWS_REGION,
+                                 credentials: Aws::ECSCredentials.new,)
+
+        # List objects in the bucket filtered by the file extension
+        objects = s3.list_objects_v2(bucket: DbDumpHelper::BUCKET_NAME).contents.select do |object|
+          object.key.end_with?(file_type)
+        end
+
+        # Sort objects by last_modified date, descending
+        newest_export = objects.max_by(&:last_modified)
+        return [DbDumpHelper.public_s3_path(newest_export.key), newest_export.content_length]
+      end
+
       base_name = DbDumpHelper.result_export_file_name(file_type, export_timestamp)
       file_name = "#{DbDumpHelper::RESULTS_EXPORT_FOLDER}/#{base_name}"
 
