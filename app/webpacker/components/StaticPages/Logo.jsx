@@ -46,10 +46,6 @@ const sideBySideStyle = {
 function Logo({ title, logoFileUrl }) {
   const [acceptedGuidelines, setAcceptedGuidelines] = useState(false);
 
-  const downloadFile = () => {
-    window.location.href = '/files/WCA Logo Assets.zip';
-  };
-
   return (
     <div className="wca-logo-information">
       <h1>{title}</h1>
