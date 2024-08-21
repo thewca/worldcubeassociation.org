@@ -42,6 +42,17 @@ else
   exit 1;
 fi
 
+# Check if you are connected to the AWS WCA Account
+printf "${COLOR_DEFAULT}aws wca credentials | "
+account=$(aws iam list-account-aliases --query "AccountAliases[0]" --output text )
+if [[ "${account}" = "thewca" ]]; then
+  role=$(aws sts get-caller-identity --query "Arn" --output text )
+  printf "${COLOR_GREEN}OK ${COLOR_DEFAULT} (Logged in as ${role})\n"
+else
+  printf "${COLOR_RED}Missing, make sure you have a AWS CLI profile called 'wca' that is connected to the WCA AWS account\n"
+  exit 1;
+fi
+
 # Parse the environment argument
 environment=""
 while getopts ":e:" opt; do
