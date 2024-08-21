@@ -2086,6 +2086,7 @@ en:
         clone: "Clone"
         orga_view: "Organizer view"
         event_view: "Manage events"
+        venue_view: "Manage venues"
         schedule_view: "Manage schedule"
         payment_view: "Setup payments"
         admin_view: "Admin view"
