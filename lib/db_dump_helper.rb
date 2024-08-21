@@ -115,7 +115,7 @@ module DbDumpHelper
                                                           quantity: 1,
                                                           items: ["/#{s3_path}"], # AWS SDK throws an error if the path doesn't start with "/"
                                                         },
-                                                        caller_reference: "DB Dump invalidation",
+                                                        caller_reference: "DB Dump invalidation #{Time.now.utc}",
                                                       },
                                                     })
       end
