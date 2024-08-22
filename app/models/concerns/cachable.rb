@@ -26,11 +26,22 @@ module Cachable
     def clear_cache
       self.models_by_id = nil
     end
+
+    # Tells the caching mechanism what ID to cache by.
+    # For static objects like Country or Continent, this should be `id` by default.
+    # But for some other objects like T/Cs, we have a separate `friendly_id` column that we want to index by.
+    def cachable_id
+      self.id
+    end
+
+    def as_cached
+      self.class.try(self.cachable_id.to_s) || self.class.c_find(self.cachable_id)
+    end
   end
 
   class_methods do
     def c_all_by_id
-      self.models_by_id ||= self.all.index_by(&:id)
+      self.models_by_id ||= self.all.index_by(&:cachable_id).with_indifferent_access
     end
 
     def c_find(id)
@@ -43,6 +54,12 @@ module Cachable
 
     def c_values
       self.c_all_by_id.values
+    end
+
+    def cached_entity(*ids)
+      ids.each do |id|
+        self.define_singleton_method(id) { self.c_find(id) }
+      end
     end
   end
 end

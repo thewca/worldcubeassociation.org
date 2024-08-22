@@ -3,44 +3,10 @@
   <% # i18n-tasks-use t('devise.failure.not_found_in_database') %>
   <% # i18n-tasks-use t('devise.failure.unconfirmed') %>
   <%= render layout: "devise/conversion_message", locals: { user: resource } do %>
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h4><%= t('devise.sessions.new.sign_in') %></h4>
-      </div>
-      <div class="panel-body">
-        <%= form_for(resource, as: resource_name, url: session_path(resource_name), html: { role: "form" }) do |f| %>
-          <div class="form-group">
-            <%= f.label :login %>
-            <%= f.text_field :login, autofocus: true, class: "form-control", tabindex: "1" %>
-          </div>
-          <div class="form-group">
-            <%= f.label :password %>
-            <%= link_to t("devise.passwords.new.forgot_your_password"), new_user_password_path %><br />
-            <%= f.password_field :password, autocomplete: "off", class: "form-control", tabindex: "2" %>
-            <% if ServerSetting.exists?(DatabaseDumper::DEV_TIMESTAMP_NAME) %>
-              <p class="help-block">
-                Hint! It looks like you are using the
-                <a href="https://github.com/thewca/worldcubeassociation.org/wiki/Developer-database-export" target="_blank">developer export</a>
-                <% unless DbDumpHelper.use_staging_password? %>
-                  , every user's password is "wca"
-                <% end %>
-                . You can find email addresses to log in with over on
-                <%= link_to "the delegates page", delegates_path %>.
-              </p>
-            <% end %>
-          </div>
-          <% if devise_mapping.rememberable? %>
-            <div class="checkbox">
-              <label>
-                <%= f.check_box :remember_me, tabindex: "3" %>
-                <%= f.label :remember_me %>
-              </label>
-            </div>
-            <% end %>
-          <%= f.submit t('devise.sessions.new.sign_in'), class: "btn btn-primary", tabindex: "3" %>
-          <%= t 'wca.devise.no_account' %> <%= link_to t('devise.shared.links.sign_up'), new_user_registration_path %>!
-        <% end %>
-      </div>
-    </div>
+    <% if Rails.env.production? && !EnvConfig.WCA_LIVE_SITE? %>
+        <%= render 'staging_login' %>
+    <% else %>
+        <%= render 'live_login' %>
+    <% end %>
   <% end %>
 </div>

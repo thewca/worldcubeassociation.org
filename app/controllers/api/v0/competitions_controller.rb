@@ -49,7 +49,7 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
                  allow_registration_without_qualification refund_policy_percent use_wca_registration guests_per_registration_limit venue contact
                  force_comment_in_registration use_wca_registration external_registration_page guests_entry_fee_lowest_denomination guest_entry_status
                  information events_per_registration_limit],
-        methods: %w[url website short_name city venue_address venue_details latitude_degrees longitude_degrees country_iso2 event_ids registration_opened?
+        methods: %w[url website short_name city venue_address venue_details latitude_degrees longitude_degrees country_iso2 event_ids registration_currently_open?
                     main_event_id number_of_bookmarks using_payment_integrations? uses_qualification? uses_cutoff? competition_series_ids],
         include: %w[delegates organizers tabs],
       }
@@ -120,10 +120,15 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
                                     .group_by(&:round_type)
                                     .sort_by { |round_type, _| -round_type.rank }
     rounds = scrambles_by_round.map do |round_type, scrambles|
+      # I think all competitions now have round data, but let's be cautious
+      # and assume they may not.
+      # round data.
+      round = competition.find_round_for(event.id, round_type.id)
       {
-        id: round_type,
+        id: round&.id,
+        roundTypeId: round_type.id,
         # Also include the (localized) name here, we don't have i18n in js yet.
-        name: round_type.name,
+        name: round&.name || "#{event.name} #{round_type.name}",
         scrambles: scrambles,
       }
     end

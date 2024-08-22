@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe PostsController do
   let!(:post1) { FactoryBot.create(:post, created_at: 1.hours.ago) }
   let!(:sticky_post) { FactoryBot.create(:post, sticky: true, created_at: 2.hours.ago) }
-  let!(:wdc_post) { FactoryBot.create(:post, created_at: 3.hours.ago, tags: "wdc,othertag", show_on_homepage: false) }
+  let!(:wic_post) { FactoryBot.create(:post, created_at: 3.hours.ago, tags: "wic,othertag", show_on_homepage: false) }
 
   context "not logged in" do
     describe "GET #index" do
@@ -15,20 +15,20 @@ RSpec.describe PostsController do
       end
 
       it "filters by tag" do
-        get :index, params: { tag: "wdc" }, format: :json
-        expect(assigns(:posts)).to eq [wdc_post]
+        get :index, params: { tag: "wic" }, format: :json
+        expect(assigns(:posts)).to eq [wic_post]
       end
     end
 
     describe "GET #rss" do
       it "populates an array of posts ignoring sticky bit" do
         get :rss, format: :xml
-        expect(assigns(:posts).to_a).to eq [post1, sticky_post, wdc_post]
+        expect(assigns(:posts).to_a).to eq [post1, sticky_post, wic_post]
       end
 
       it "filters by tag" do
-        get :rss, format: :xml, params: { tag: "wdc" }
-        expect(assigns(:posts).to_a).to eq [wdc_post]
+        get :rss, format: :xml, params: { tag: "wic" }
+        expect(assigns(:posts).to_a).to eq [wic_post]
       end
     end
 
@@ -88,8 +88,8 @@ RSpec.describe PostsController do
     end
   end
 
-  context "logged in as wdc member" do
-    sign_in { FactoryBot.create :user, :wdc_member }
+  context "logged in as wic member" do
+    sign_in { FactoryBot.create :user, :wic_member }
 
     describe "GET #new" do
       it "returns 200" do
@@ -100,11 +100,11 @@ RSpec.describe PostsController do
 
     describe "POST #create" do
       it "creates a tagged post" do
-        post :create, params: { post: { title: "Title", body: "body", tags: "wdc, notes" } }
+        post :create, params: { post: { title: "Title", body: "body", tags: "wic, notes" } }
         p = Post.find_by_slug("Title")
         expect(p.title).to eq "Title"
         expect(p.body).to eq "body"
-        expect(p.tags_array).to match_array %w(wdc notes)
+        expect(p.tags_array).to match_array %w(wic notes)
       end
     end
   end

@@ -50,23 +50,39 @@ jobs:
         with:
           context: .
           push: true
-          file: ./Dockerfile.sidekiq
+          target: sidekiq
           tags: |
             ${{ steps.login-ecr.outputs.registry }}/wca-on-rails:sidekiq-staging
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          build-args: |
+            BUILD_TAG=${{ env.SHORT_SHA }}
+            WCA_LIVE_SITE=false
+            SHAKAPACKER_ASSET_HOST=https://assets-staging.worldcubeassociation.org
       - name: Build Rails if triggered
         if: steps.trigger-deployment.outputs.triggered == 'true'
+        id: build-staging
         uses: docker/build-push-action@v6
         with:
           context: .
           push: true
+          load: true
+          target: monolith
           tags: |
             ${{ steps.login-ecr.outputs.registry }}/wca-on-rails:staging
           cache-from: type=gha
           cache-to: type=gha,mode=max
           build-args: |
             BUILD_TAG=${{ env.SHORT_SHA }}
+            WCA_LIVE_SITE=false
+            SHAKAPACKER_ASSET_HOST=https://assets-staging.worldcubeassociation.org
+      # We build assets in docker and copy it out so we don't have to install all the dependencies in the GH Action
+      - name: Copy assets out of the container and push to S3 if triggered
+        if: steps.trigger-deployment.outputs.triggered == 'true'
+        run: |
+          id=$(docker create ${{steps.build-staging.outputs.imageid }})
+          docker cp $id:/rails/public/ ./assets
+          aws s3 sync ./assets "s3://assets-staging.worldcubeassociation.org/assets/${{ env.SHORT_SHA }}"
       - name: Deploy staging if triggered
         if: steps.trigger-deployment.outputs.triggered == 'true'
         run: |

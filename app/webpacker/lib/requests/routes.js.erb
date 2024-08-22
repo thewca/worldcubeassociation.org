@@ -218,16 +218,16 @@ export const apiV0Urls = {
 
 export const panelUrls = {
   board: {
-    regionsManager: `<%= CGI.unescape(Rails.application.routes.url_helpers.panel_index_path(panel_id: :board, anchor: PanelController.panel_pages[:regionsManager])) %>`,
+    regionsManager: `<%= CGI.unescape(Rails.application.routes.url_helpers.panel_index_path(panel_id: :board, anchor: User.panel_pages[:regionsManager])) %>`,
   },
   seniorDelegate: {
-    regions: `<%= CGI.unescape(Rails.application.routes.url_helpers.panel_index_path(panel_id: :senior_delegate, anchor: PanelController.panel_pages[:regions])) %>`,
+    regions: `<%= CGI.unescape(Rails.application.routes.url_helpers.panel_index_path(panel_id: :senior_delegate, anchor: User.panel_pages[:regions])) %>`,
   },
   wst: {
-    translators: `<%= CGI.unescape(Rails.application.routes.url_helpers.panel_index_path(panel_id: :wst, anchor: PanelController.panel_pages[:translators])) %>`,
+    translators: `<%= CGI.unescape(Rails.application.routes.url_helpers.panel_index_path(panel_id: :wst, anchor: User.panel_pages[:translators])) %>`,
   },
   leader: {
-    groupsManager: `<%= CGI.unescape(Rails.application.routes.url_helpers.panel_index_path(panel_id: :leader, anchor: PanelController.panel_pages[:groupsManager])) %>`,
+    groupsManager: `<%= CGI.unescape(Rails.application.routes.url_helpers.panel_index_path(panel_id: :leader, anchor: User.panel_pages[:groupsManager])) %>`,
   },
 }
 

@@ -2,7 +2,16 @@
 
 <% if !@enable_react %>
   <div class="container">
-    <h2><%= yield(:title) %></h2>
+
+      <h2>
+        <%= yield(:title) %>
+
+        <% unless EnvConfig.WCA_LIVE_SITE? %>
+          <%= link_to competitions_path(**request.query_parameters.merge(legacy: 'off')), class: "btn btn-success" do %>
+            <%= ui_icon("magic") %> Go to new UI
+          <% end %>
+        <% end %>
+      </h2>
 
     <%= form_tag competitions_path, method: :get, remote: true, class: "competition-select form-inline #{@display}", id: "competition-query-form" do %>
       <%= render 'index_form' %>

@@ -268,7 +268,7 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
 
     context 'signed in as a member of some teams and a leader of others' do
       before :each do
-        user = FactoryBot.create(:user, :wdc_leader, :wrc_member)
+        user = FactoryBot.create(:user, :wic_leader, :wrc_member)
         api_sign_in_as(user)
       end
 

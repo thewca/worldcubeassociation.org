@@ -27,6 +27,7 @@ Rails.application.routes.draw do
   #  https://github.com/plataformatec/devise/wiki/How-To:-Disable-user-from-destroying-their-account
   devise_for :users, skip: :registrations, controllers: { sessions: "sessions" }
   devise_scope :user do
+    get 'staging_login', to: 'sessions#staging_oauth_login' unless EnvConfig.WCA_LIVE_SITE?
     resource :registration,
              only: [:new, :create],
              path: 'users',
@@ -39,6 +40,7 @@ Rails.application.routes.draw do
     post 'users/authenticate-sensitive' => 'users#authenticate_user_for_sensitive_edit'
     delete 'users/sign-out-other' => 'sessions#destroy_other', as: :destroy_other_user_sessions
   end
+
   # TODO: This can be removed after deployment, this is so we don't have any users error out if they click on pay
   # while the deployment happens
   get 'registration/:id/payment-completion' => 'registrations#payment_completion_legacy', as: :registration_payment_completion_legacy
@@ -222,8 +224,6 @@ Rails.application.routes.draw do
   get 'speedcubing-history' => 'static_pages#speedcubing_history'
   get 'teams-committees-councils' => 'static_pages#teams_committees_councils'
   get 'tutorial' => redirect('/education', status: 302)
-  get 'wca-workbook-assistant' => 'static_pages#wca_workbook_assistant'
-  get 'wca-workbook-assistant-versions' => 'static_pages#wca_workbook_assistant_versions'
   get 'translators' => 'static_pages#translators'
   get 'officers-and-board' => 'static_pages#officers_and_board'
 
@@ -231,7 +231,7 @@ Rails.application.routes.draw do
   get 'organizations' => 'regional_organizations#index'
   get 'admin/regional-organizations' => 'regional_organizations#admin'
 
-  get 'disciplinary' => 'wdc#root'
+  get 'disciplinary' => 'wic#root'
 
   get 'contact' => 'contacts#index'
   post 'contact' => 'contacts#contact'
@@ -240,6 +240,7 @@ Rails.application.routes.draw do
 
   get '/regulations' => 'regulations#show', id: 'index'
   get '/regulations/wca-regulations-and-guidelines', to: redirect('https://regulations.worldcubeassociation.org/wca-regulations-and-guidelines.pdf', status: 302)
+  get '/regulations/full/wca-regulations-and-guidelines.merged', to: redirect('https://regulations.worldcubeassociation.org/wca-regulations-and-guidelines.merged.pdf', status: 302)
   get '/regulations/about' => 'regulations#about'
   get '/regulations/countries' => 'regulations#countries'
   get '/regulations/scrambles' => 'regulations#scrambles'
