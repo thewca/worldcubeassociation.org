@@ -1901,6 +1901,7 @@ en:
       series_distance_km: "The competition is located too far away from %{competition}."
       series_distance_days: "The competition is scheduled too many days away from %{competition}."
       must_ask_about_guests_if_specifying_limit: "Must ask about guests if a guest limit is specified."
+      must_specify_payment_info_if_external: "You need to specify payment info when using an external payment system"
     new:
       create_competition: "Create competition"
       note_clone: "To clone an existing competition visit the information page for that competition and click the \"Clone\" link in the menu."
