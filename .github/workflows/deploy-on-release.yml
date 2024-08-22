@@ -23,24 +23,12 @@ jobs:
         shell: bash
         run: |
           echo "SHORT_SHA=$(git rev-parse --short HEAD)" >> "$GITHUB_ENV"
-      - name: Build Assets and push to S3
-        env:
-          RAILS_ENV: production
-          WCA_LIVE_SITE: true
-          ASSETS_COMPILATION: true
-          SECRET_KEY_BASE: 1
-          BUILD_TAG: ${{ env.SHORT_SHA }}
-          SHAKAPACKER_ASSET_HOST: "https://assets.worldcubeassociation.org"
-        run: |
-          ./bin/bundle install
-          ./bin/yarn install --immutable
-          ./bin/bundle exec i18n export
-          ./bin/rake assets:precompile
-          aws s3 sync ./public "s3://assets.worldcubeassociation.org/assets/${{ env.SHORT_SHA }}"
       - name: Build and Push Sidekiq image
+        id: build-prod
         uses: docker/build-push-action@v6
         with:
           push: true
+          load: true
           target: sidekiq
           tags: |
             ${{ steps.login-ecr.outputs.registry }}/wca-on-rails:sidekiq-production
@@ -48,6 +36,14 @@ jobs:
           cache-to: type=gha,mode=max
           build-args: |
             BUILD_TAG=${{ env.SHORT_SHA }}
+            WCA_LIVE_SITE=true
+            SHAKAPACKER_ASSET_HOST=https://assets.worldcubeassociation.org
+      # We build assets in docker and copy it out so we don't have to install all the dependencies in the GH Action
+      - name: Copy assets out of the container and push to S3
+        run: | # Copy from sidekiq so we don't create any race condition with the pipeline, the assets are identical
+          id=$(docker create ${{steps.build-prod.outputs.imageid }})
+          docker cp $id:/rails/public/ ./assets
+          aws s3 sync ./assets "s3://assets.worldcubeassociation.org/assets/${{ env.SHORT_SHA }}"
         # this will trigger the deployment pipeline for prod
       - name: Build and push Prod Image
         uses: docker/build-push-action@v6
@@ -60,6 +56,8 @@ jobs:
           cache-to: type=gha,mode=max
           build-args: |
             BUILD_TAG=${{ env.SHORT_SHA }}
+            WCA_LIVE_SITE=true
+            SHAKAPACKER_ASSET_HOST=https://assets.worldcubeassociation.org
         # Replace the old sidekiq image with the new one
       - name: Deploy Sidekiq
         run: |

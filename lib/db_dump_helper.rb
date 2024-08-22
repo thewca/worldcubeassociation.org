@@ -106,16 +106,18 @@ module DbDumpHelper
 
       # Invalidate Export Route in Prod
       if EnvConfig.WCA_LIVE_SITE?
-        Aws::CloudFront::Client.new.create_invalidation({
-                                                          distribution_id: EnvConfig.CDN_ASSETS_DISTRIBUTION_ID,
-                                                          invalidation_batch: {
-                                                            paths: {
-                                                              quantity: 1,
-                                                              items: ["/#{s3_path}"], # AWS SDK throws an error if the path doesn't start with "/"
-                                                            },
-                                                            caller_reference: "DB Dump invalidation",
-                                                          },
-                                                        })
+        Aws::CloudFront::Client.new(region: EnvConfig.STORAGE_AWS_REGION,
+                                    credentials: Aws::ECSCredentials.new)
+                               .create_invalidation({
+                                                      distribution_id: EnvConfig.CDN_ASSETS_DISTRIBUTION_ID,
+                                                      invalidation_batch: {
+                                                        paths: {
+                                                          quantity: 1,
+                                                          items: ["/#{s3_path}"], # AWS SDK throws an error if the path doesn't start with "/"
+                                                        },
+                                                        caller_reference: "DB Dump invalidation #{Time.now.utc}",
+                                                      },
+                                                    })
       end
     end
   end

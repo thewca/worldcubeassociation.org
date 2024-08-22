@@ -10,7 +10,7 @@ const waitingCompetitorsUrl = (competitionId) => `${wcaRegistrationUrl}/api/v1/r
 export async function getConfirmedRegistrations(
   competitionID,
 ) {
-  const { data } = await fetchWithJWTToken(confirmedRegistrationsUrl(competitionID));
+  const { data } = await fetchJsonOrError(confirmedRegistrationsUrl(competitionID));
   return data;
 }
 

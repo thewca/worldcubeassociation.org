@@ -100,6 +100,7 @@
     "defaults"
   ],
   "devDependencies": {
+    "@pmmmwh/react-refresh-webpack-plugin": "^0.5.15",
     "babel-plugin-transform-react-remove-prop-types": "^0.4.24",
     "eslint": "^8.57.0",
     "eslint-config-airbnb": "^19.0.4",
@@ -108,6 +109,7 @@
     "eslint-plugin-jsx-a11y": "^6.9.0",
     "eslint-plugin-react": "^7.35.0",
     "eslint-plugin-react-hooks": "^4.6.2",
+    "react-refresh": "^0.14.2",
     "stylelint": "^16.6.1",
     "stylelint-config-recommended-scss": "^14.0.0",
     "stylelint-scss": "^6.4.1",
