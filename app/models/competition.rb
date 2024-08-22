@@ -2333,6 +2333,7 @@ class Competition < ApplicationRecord
       "entryFees" => {
         "currencyCode" => currency_code,
         "baseEntryFee" => base_entry_fee_lowest_denomination,
+        "paymentInformation" => payment_information,
         "onTheSpotEntryFee" => on_the_spot_entry_fee_lowest_denomination,
         "guestEntryFee" => guests_entry_fee_lowest_denomination,
         "donationsEnabled" => enable_donations,
