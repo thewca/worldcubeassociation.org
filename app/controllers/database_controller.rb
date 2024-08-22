@@ -43,7 +43,7 @@ class DatabaseController < ApplicationController
       bucket = Aws::S3::Resource.new(
         region: EnvConfig.STORAGE_AWS_REGION,
         credentials: Aws::ECSCredentials.new,
-        ).bucket(DbDumpHelper::BUCKET_NAME)
+      ).bucket(DbDumpHelper::BUCKET_NAME)
       filesize_bytes = bucket.object(file_name).content_length
       [DbDumpHelper.public_s3_path(file_name), filesize_bytes]
     end
