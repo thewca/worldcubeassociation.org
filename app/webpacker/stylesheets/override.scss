@@ -65,6 +65,20 @@ body, html {
     }
   }
 
+  .fi {
+    &.fi-tw {
+      background-color: white;
+      background-image: url("../images/ChineseTaipei.svg");
+    }
+
+    &.fis {
+      &.fi-tw {
+        background-color: white;
+        background-image: url("../images/ChineseTaipeiSquared.svg");
+      }
+    }
+  }
+
   i.flag {
     &.tw::before {
       background-size: contain;
