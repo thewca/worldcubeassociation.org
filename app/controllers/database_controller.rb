@@ -34,7 +34,7 @@ class DatabaseController < ApplicationController
 
                     # List objects in the bucket filtered by the file extension
                     objects = s3.list_objects_v2(bucket: DbDumpHelper::BUCKET_NAME, prefix: "export").contents.select do |object|
-                      object.key.end_with?("sql.zip")
+                      object.key.end_with?("#{file_type}.zip")
                     end
 
                     # Sort objects by last_modified date, descending
