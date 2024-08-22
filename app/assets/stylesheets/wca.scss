@@ -376,13 +376,13 @@ table.wca-results {
   }
   &.fi-tw {
     background-color: white;
-    background-image: url("ChineseTaipei.svg");
+    background-image: asset_url("ChineseTaipei.svg");
   }
 
   &.fis {
     &.fi-tw {
       background-color: white;
-      background-image: url("ChineseTaipeiSquared.svg");
+      background-image: asset_url("ChineseTaipeiSquared.svg");
     }
   }
 }
