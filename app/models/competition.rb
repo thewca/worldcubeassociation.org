@@ -191,7 +191,7 @@ class Competition < ApplicationRecord
   validates_numericality_of :events_per_registration_limit, only_integer: true, greater_than_or_equal_to: 1, less_than_or_equal_to: :number_of_events, allow_blank: true, if: :event_restrictions?
   validates :id, presence: true, uniqueness: { case_sensitive: false }, length: { maximum: MAX_ID_LENGTH },
                  format: { with: VALID_ID_RE }, if: :name_valid_or_updating?
-  validates :payment_information, { presence: true, message: I18n.t('competitions.errors.must_specify_payment_info_if_external')}, if: :needs_payment_information?
+  validates :payment_information, presence: true, acceptance: { accept: true, message: I18n.t('competitions.errors.must_specify_payment_info_if_external')}, if: :needs_payment_information?
   private def needs_payment_information?
     !using_payment_integrations? && base_entry_fee_lowest_denomination > 0
   end
@@ -498,6 +498,10 @@ class Competition < ApplicationRecord
 
       if no_events?
         warnings[:events] = I18n.t('competitions.messages.must_have_events')
+      end
+
+      if needs_payment_information? && payment_information.nil?
+        warnings[:payment_information] = I18n.t('competitions.messages.needs_payment_information')
       end
 
       if !self.waiting_list_deadline_date
