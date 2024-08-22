@@ -2559,6 +2559,7 @@ class Competition < ApplicationRecord
       refund_policy_percent: form_data.dig('entryFees', 'refundPolicyPercent'),
       refund_policy_limit_date: form_data.dig('entryFees', 'refundPolicyLimitDate')&.presence,
       guests_entry_fee_lowest_denomination: form_data.dig('entryFees', 'guestEntryFee'),
+      payment_information: form_data.dig('entryFees', 'paymentInformation')&.presence,
       early_puzzle_submission: form_data.dig('eventRestrictions', 'earlyPuzzleSubmission', 'enabled'),
       early_puzzle_submission_reason: form_data.dig('eventRestrictions', 'earlyPuzzleSubmission', 'reason'),
       forbid_newcomers: form_data.dig('eventRestrictions', 'forbidNewcomers', 'enabled'),
