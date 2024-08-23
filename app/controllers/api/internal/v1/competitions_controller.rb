@@ -2,7 +2,7 @@
 
 class Api::Internal::V1::CompetitionsController < Api::Internal::V1::ApiController
   # We are using our own authentication method with vault
-  protect_from_forgery except: [:show]
+  protect_from_forgery except: [:show, :qualifications]
 
   def show
     competition = competition_from_params
