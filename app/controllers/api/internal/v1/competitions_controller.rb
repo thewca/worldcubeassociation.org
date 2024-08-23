@@ -24,9 +24,21 @@ class Api::Internal::V1::CompetitionsController < Api::Internal::V1::ApiControll
     end
   end
 
-  private def competition_from_params
+  def qualifications
+    competition = competition_from_params(associations: [:competition_events])
+
+    qualifications = competition.competition_events
+                                .where.not(qualification: nil)
+                                .index_by(&:event_id)
+                                .transform_values(&:qualification)
+                                .transform_values(&:to_wcif)
+
+    render json: qualifications
+  end
+
+  private def competition_from_params(associations: {})
     id = params[:competition_id]
-    competition = Competition.find_by_id(id)
+    competition = Competition.includes(associations).find_by_id(id)
 
     raise WcaExceptions::NotFound.new("Competition with id #{id} not found") unless competition
     competition

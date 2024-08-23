@@ -133,7 +133,7 @@
             icon: "lightbulb",
           }
         end
-        if @competition.announced? && !@competition.results_posted?
+        unless @competition.results_posted?
           if @competition.use_wca_registration?
             nav_items << {
               text: t('.menu.register'),
