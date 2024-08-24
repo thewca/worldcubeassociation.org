@@ -3,9 +3,9 @@ import {
 } from 'semantic-ui-react';
 import React from 'react';
 
-function CountStat({ title, data, color }) {
+function CountStat({ title, data }) {
   return (
-    <Card fluid className="small-card" color={color}>
+    <Card fluid className="small-card">
       <Card.Content>
         <Card.Header textAlign="center">
           {title}
@@ -42,7 +42,6 @@ export default function CountStats({ person }) {
       {person.medals.total > 0 && (
         <CountStat
           title="Medals"
-          color="yellow"
           data={[
             {
               label: 'Gold', icon: 'trophy', iconColor: 'yellow', count: person.medals.gold,
@@ -59,16 +58,15 @@ export default function CountStats({ person }) {
       {person.records.total > 0 && (
         <CountStat
           title="Records"
-          color="red"
           data={[
             {
-              label: 'WR', icon: 'globe', iconColor: 'green', count: person.records.world,
+              label: 'World', icon: 'globe', iconColor: 'green', count: person.records.world,
             },
             {
-              label: 'CR', icon: 'map', iconColor: 'teal', count: person.records.continental,
+              label: 'Continental', icon: 'map', iconColor: 'teal', count: person.records.continental,
             },
             {
-              label: 'NR', icon: 'flag', iconColor: 'blue', count: person.records.national,
+              label: 'National', icon: 'flag', iconColor: 'blue', count: person.records.national,
             },
           ]}
         />

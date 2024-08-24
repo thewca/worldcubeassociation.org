@@ -31,7 +31,7 @@ function PreviousDetails({ person }) {
 
 export default function Person({ person }) {
   return (
-    <Container id="profile" fluid textAlign="center">
+    <Container id="profile" textAlign="center">
       <CardGroup centered>
         <Card fluid className="card-flat">
           <Card.Content>
@@ -51,7 +51,7 @@ export default function Person({ person }) {
         <CountStats person={person} />
       </Card.Group>
       <Card.Group centered className="card-container">
-        <Card fluid className="max-card" color="green">
+        <Card fluid className="max-card">
           <Card.Content>
             <Card.Header textAlign="center">
               Current Personal Records
@@ -61,7 +61,7 @@ export default function Person({ person }) {
             </Card.Description>
           </Card.Content>
         </Card>
-        <Card fluid className="max-card" color="orange">
+        <Card fluid className="max-card">
           <Card.Content>
             <Menu pointing secondary size="large">
               <MenuItem

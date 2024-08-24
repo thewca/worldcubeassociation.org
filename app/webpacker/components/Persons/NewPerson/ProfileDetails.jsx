@@ -43,13 +43,13 @@ export default function ProfileDetails({ person }) {
   const otherWidth = 8;
 
   return (
-    <Card fluid className="large-card" color="blue">
+    <Card fluid className="large-card">
       <Card.Content>
         <Card.Header textAlign="center">
           Profile
         </Card.Header>
         <Grid textAlign="center" className="stat-grid">
-          <Stat label="Region" width={regionWidth}>
+          <Stat label="Representing" width={regionWidth}>
             <FlagIcon countryIso2={profile.region.iso2} />
             {' '}
             {profile.region.name}

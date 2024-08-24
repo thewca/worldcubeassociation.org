@@ -3,15 +3,11 @@
 }
 
 #profile .ui.card.small-card {
-    max-width: 150px;
+    max-width: 180px;
 }
 
 #profile .ui.card.large-card {
-    max-width: 450px;
-}
-
-#profile .ui.card.max-card {
-    max-width: 778px;
+    max-width: calc(360px + 1em);
 }
 
 #profile .max-card-content {
@@ -22,23 +18,21 @@
 #profile .avatar {
     max-height: 300px;
     max-width: 100%;
-    padding-bottom: 10px;
 }
 
 #profile .collapsing-card-container {
-    max-width: 900px;
+    max-width: unset;
     margin: auto;
 }
 
-@media only screen and (max-width: 800px) {
+@media only screen and (max-width: 992px) {
     #profile .collapsing-card-container {
-        max-width: 600px;
+        max-width: 500px;
         margin: auto ;
     }
 }
 
 #profile .card-container {
-    max-width: 900px;
     margin: auto;
 }
 
@@ -59,11 +53,4 @@
 #profile .tab-container {
     max-width: 778px;
     margin: auto;
-}
-
-#profile .cubing-icon {
-    font-size: 1em;
-    &::before {
-        vertical-align: -7.5%;
-    }
 }
