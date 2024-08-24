@@ -8,8 +8,9 @@ class ApplicationController < ActionController::Base
 
   protect_from_forgery with: :exception
 
+  prepend_before_action :set_locale
   before_action :store_user_location!, if: :storable_location?
-  before_action :add_new_relic_headers, :set_locale
+  before_action :add_new_relic_headers
   protected def add_new_relic_headers
     ::NewRelic::Agent.add_custom_attributes(user_id: current_user ? current_user.id : nil)
     ::NewRelic::Agent.add_custom_attributes(HTTP_REFERER: request.headers['HTTP_REFERER'])
