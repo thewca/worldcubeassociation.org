@@ -1,0 +1,18 @@
+<p>Hey WRT,</p>
+<p>
+  <%= @resource.wca_id %> requested following change in their profile:
+</p>
+<table>
+  <body>
+    <% @resource.changes_requested.each do |change| %>
+      <tr>
+        <td><%= change[:field] %></td>
+        <td><%= change[:from] %> -> <%= change[:to] %></td>
+      </tr>
+    <% end %>
+    <tr style="height: 1em">
+      <td colspan="2"></td>
+    </tr>
+  </body>
+</table>
+<p>You can edit this person <%= link_to "here", panel_index_url(panel_id: 'wrt', wcaId: @resource.wca_id, anchor: User.panel_pages[:editPerson]) %>.</p>
