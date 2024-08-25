@@ -2145,6 +2145,7 @@ en:
       tabs_introduction_text: "Here you can add and edit tabs which are shown on the competition info page."
     edit:
       edit_tab_title: "Edit %{tab_name} tab"
+    not_full_url_error_message: "You have a relative URL (%{url}) in the content. Please enter full URLs with prefix http:// or https://."
   #context: Key used for results (rankings, records, etc.)
   results:
     #context: On the rankings page
