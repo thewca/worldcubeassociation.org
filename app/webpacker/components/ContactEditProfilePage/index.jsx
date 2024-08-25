@@ -7,7 +7,7 @@ import { apiV0Urls } from '../../lib/requests/routes.js.erb';
 import Loading from '../Requests/Loading';
 import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken';
 import Errored from '../Requests/Errored';
-import EditProfileFormWithWcaId from './EditProfileFormWithWcaId';
+import EditProfileForm from './EditProfileForm';
 
 const CONTACT_EDIT_PROFILE_QUERY_CLIENT = new QueryClient();
 
@@ -42,10 +42,10 @@ export default function ContactEditProfilePage({ loggedInUserId, recaptchaPublic
   return (
     <Container text>
       <Header as="h2">{i18n.t('page.contact_edit_profile.title')}</Header>
-      <EditProfileFormWithWcaId
+      <EditProfileForm
         wcaId={wcaId}
         loggedInUserData={loggedInUserData}
-        setContactSuccess={setContactSuccess}
+        onContactSuccess={() => setContactSuccess(true)}
         recaptchaPublicKey={recaptchaPublicKey}
       />
     </Container>
