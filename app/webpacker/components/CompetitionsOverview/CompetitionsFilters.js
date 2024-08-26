@@ -42,11 +42,13 @@ function CompetitionsFilters({
         </Form.Field>
       </Form.Group>
 
-      <Form.Group>
-        <Form.Field width={8}>
-          <DelegateSelector delegateId={filterState.delegate} dispatchFilter={dispatchFilter} />
-        </Form.Field>
-      </Form.Group>
+      {shouldShowAdminDetails && (
+        <Form.Group>
+          <Form.Field width={8}>
+            <DelegateSelector delegateId={filterState.delegate} dispatchFilter={dispatchFilter} />
+          </Form.Field>
+        </Form.Group>
+      )}
 
       <Form.Group>
         <Form.Field>
