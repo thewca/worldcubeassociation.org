@@ -98,6 +98,10 @@ class ContactsController < ApplicationController
     end
   end
 
+  def gear_order_action
+    puts('DJDJ')
+  end
+
   def dob
     @contact = DobContact.new(your_email: current_user&.email)
   end
