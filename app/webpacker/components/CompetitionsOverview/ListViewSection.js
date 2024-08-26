@@ -77,9 +77,9 @@ function ResponsiveCompetitionsTables({
   regStatusLoading,
   isSortedByAnnouncement,
 }) {
-  const noCompetitons = !competitions || competitions.length === 0;
+  const noCompetitions = !competitions || competitions.length === 0;
 
-  if (noCompetitons && !isLoading && !hasMoreCompsToLoad) {
+  if (noCompetitions && !isLoading && !hasMoreCompsToLoad) {
     return (
       <Container text textAlign="center">{I18n.t('competitions.index.no_comp_found')}</Container>
     );
@@ -283,9 +283,9 @@ function AdminCompetitionsTable({
   regStatusLoading,
   isSortedByAnnouncement,
 }) {
-  const noCompetitons = !competitions || competitions.length === 0;
+  const noCompetitions = !competitions || competitions.length === 0;
 
-  if (noCompetitons && !isLoading && !hasMoreCompsToLoad) {
+  if (noCompetitions && !isLoading && !hasMoreCompsToLoad) {
     return (
       <Container text textAlign="center">{I18n.t('competitions.index.no_comp_found')}</Container>
     );
