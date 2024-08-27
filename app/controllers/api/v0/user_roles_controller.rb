@@ -89,6 +89,8 @@ class Api::V0::UserRolesController < Api::V0::ApiController
 
     if group.banned_competitors?
       user = User.find(user_id)
+      ban_reason = params[:banReason]
+      scope = params[:scope]
       upcoming_comps_for_user = user.competitions_registered_for.not_over.merge(Registration.not_deleted).pluck(:id)
       unless upcoming_comps_for_user.empty?
         return render status: :unprocessable_entity, json: {
@@ -120,7 +122,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       elsif group.group_type == UserGroup.group_types[:councils]
         metadata = RolesMetadataCouncils.create!(status: status)
       elsif group.group_type == UserGroup.group_types[:banned_competitors]
-        metadata = RolesMetadataBannedCompetitors.create!
+        metadata = RolesMetadataBannedCompetitors.create!(ban_reason: ban_reason, scope: scope)
       else
         metadata = nil
       end
