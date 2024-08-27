@@ -9,6 +9,7 @@ import {
   events, continents, countries, competitionConstants, nonFutureCompetitionYears,
 } from '../../lib/wca-data.js.erb';
 
+import { DEFAULT_REGION_ALL } from './filterUtils';
 import useDelegatesData from './useDelegatesData';
 import UtcDatePicker from '../wca/UtcDatePicker';
 
@@ -178,16 +179,18 @@ function RegionSelector({ region, dispatchFilter }) {
     ))),
   ];
 
+  // clearing should revert to the default, which itself should be un-clearable
+  // but semantic ui will call onChange with the empty string
   return (
     <>
       <label htmlFor="region">{I18n.t('competitions.index.region')}</label>
       <Dropdown
         search
         selection
-        clearable
+        clearable={region !== DEFAULT_REGION_ALL}
         value={region}
         options={regionsOptions}
-        onChange={(_, data) => dispatchFilter({ region: data.value })}
+        onChange={(_, data) => dispatchFilter({ region: data.value || DEFAULT_REGION_ALL })}
       />
     </>
   );
