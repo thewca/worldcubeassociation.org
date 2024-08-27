@@ -1800,6 +1800,10 @@ en:
           zero: "no spots remaining"
           one: "%{count} spot remaining"
           other: "%{count} spots remaining"
+        payment:
+         refunded_status: "Refunded"
+         initialized: "Payment process was started on %{date}, but not finished."
+         refunded: "Payment was refunded on %{date}."
       bookmark:
         unbookmark: "You have removed your bookmark"
       requirements:
