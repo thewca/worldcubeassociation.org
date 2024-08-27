@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "@babel/core": "^7.24.7",
+    "@babel/core": "^7.25.2",
     "@babel/plugin-proposal-class-properties": "^7.17.12",
     "@babel/plugin-proposal-decorators": "^7.24.7",
     "@babel/plugin-proposal-export-namespace-from": "^7.18.9",
@@ -83,23 +83,24 @@
     "react_ujs": "^3.2.1",
     "regenerator-runtime": "^0.14.1",
     "resolve-url-loader": "^5.0.0",
-    "sass": "^1.77.6",
+    "sass": "^1.77.8",
     "sass-loader": "^14.2.1",
     "semantic-ui-react": "^2.1.5",
-    "shakapacker": "8.0.0",
+    "shakapacker": "8.0.1",
     "style-loader": "^4.0.0",
     "terser-webpack-plugin": "^5.3.10",
     "webpack": "^5.92.1",
     "webpack-assets-manifest": "^5.2.1",
     "webpack-cli": "^5.1.4",
     "webpack-manifest-plugin": "^5.0.0",
-    "webpack-merge": "^5.10.0",
+    "webpack-merge": "^6.0.1",
     "whatwg-fetch": "^3.6.20"
   },
   "browserslist": [
     "defaults"
   ],
   "devDependencies": {
+    "@pmmmwh/react-refresh-webpack-plugin": "^0.5.15",
     "babel-plugin-transform-react-remove-prop-types": "^0.4.24",
     "eslint": "^8.57.0",
     "eslint-config-airbnb": "^19.0.4",
@@ -108,6 +109,7 @@
     "eslint-plugin-jsx-a11y": "^6.9.0",
     "eslint-plugin-react": "^7.35.0",
     "eslint-plugin-react-hooks": "^4.6.2",
+    "react-refresh": "^0.14.2",
     "stylelint": "^16.6.1",
     "stylelint-config-recommended-scss": "^14.0.0",
     "stylelint-scss": "^6.4.1",
@@ -117,5 +119,5 @@
   "scripts": {
     "webpack:analyze": "mkdir -p public/packs && RACK_ENV=test NODE_ENV=production webpack --config config/webpack/webpack.config.js --profile --json > public/packs/stats.json && webpack-bundle-analyzer public/packs/stats.json"
   },
-  "packageManager": "yarn@4.2.2"
+  "packageManager": "yarn@4.4.0"
 }

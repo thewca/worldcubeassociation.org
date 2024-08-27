@@ -37,6 +37,8 @@ export default function BanendCompetitorForm({
       userId: formValues?.user?.id,
       groupType: groupTypes.banned_competitors,
       endDate: formValues?.endDate,
+      banReason: formValues?.banReason,
+      scope: formValues?.scope,
     }, () => {
       sync();
       closeForm();

@@ -2,6 +2,7 @@ import {
   ClearForm,
   UpdateContactRecipient,
   UpdateSectionData,
+  UploadProfileChangeProof,
 } from './actions';
 
 export const getContactFormInitialState = (params) => ({
@@ -49,6 +50,11 @@ const reducers = {
   [ClearForm]: (__, { payload }) => (
     getContactFormInitialState(payload.params)
   ),
+
+  [UploadProfileChangeProof]: (state, { payload }) => ({
+    ...state,
+    attachments: [payload.file],
+  }),
 };
 
 export default function rootReducer(state, action) {

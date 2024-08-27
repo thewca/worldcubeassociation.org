@@ -12,12 +12,37 @@ import {
 } from '../../../lib/utils/dates';
 import EventIcon from '../../wca/EventIcon';
 import { editRegistrationUrl, editPersonUrl, personUrl } from '../../../lib/requests/routes.js.erb';
+import { isoMoneyToHumanReadable } from '../../../lib/helpers/money';
 
 // Semantic Table only allows truncating _all_ columns in a table in
 // single line fixed mode. As we only want to truncate the comment/admin notes
 // this function is used to manually truncate the columns.
 // TODO: We could fix this by building our own table component here
 const truncateComment = (comment) => (comment?.length > 12 ? `${comment.slice(0, 12)}...` : comment);
+
+function RegistrationTime({
+  timestamp, registeredOn, paidOn, usesPaymentIntegration,
+}) {
+  if (timestamp) {
+    return getRegistrationTimestamp(registeredOn);
+  }
+
+  if (usesPaymentIntegration && !paidOn) {
+    return (
+      <Popup
+        content={i18n.t('registrations.list.payment_requested_on', { date: getRegistrationTimestamp(registeredOn) })}
+        trigger={<span>{i18n.t('registrations.list.not_paid')}</span>}
+      />
+    );
+  }
+
+  return (
+    <Popup
+      content={getShortTimeString(paidOn ?? registeredOn)}
+      trigger={<span>{getShortDateString(paidOn ?? registeredOn)}</span>}
+    />
+  );
+}
 
 export default function TableRow({
   columnsExpanded,
@@ -38,7 +63,10 @@ export default function TableRow({
     registered_on: registeredOn, event_ids: eventIds, comment, admin_comment: adminComment,
   } = registration.competing;
   const { dob: dateOfBirth, email: emailAddress } = registration;
-  const { payment_status: paymentStatus, updated_at: updatedAt } = registration.payment;
+  const {
+    payment_amount_iso: paymentAmount,
+    updated_at: updatedAt,
+  } = registration.payment;
 
   const copyEmail = () => {
     navigator.clipboard.writeText(emailAddress);
@@ -61,7 +89,8 @@ export default function TableRow({
             {...provided.dragHandleProps}
           >
             <Table.Cell>
-              {draggable ? <Icon name="bars" /> : <Checkbox onChange={onCheckboxChange} checked={isSelected} />}
+              { /* We manually set the margin to 0 here to fix the table row height */}
+              {draggable ? <Icon name="bars" /> : <Checkbox onChange={onCheckboxChange} checked={isSelected} style={{ margin: 0 }} />}
             </Table.Cell>
 
             <Table.Cell>
@@ -104,29 +133,16 @@ export default function TableRow({
             </Table.Cell>
 
             <Table.Cell>
-              { timestamp ? getRegistrationTimestamp(registeredOn) : (
-                <Popup
-                  content={getShortTimeString(registeredOn)}
-                  trigger={<span>{getShortDateString(registeredOn)}</span>}
-                />
-              )}
+              <RegistrationTime
+                timestamp={timestamp}
+                paidOn={updatedAt}
+                registeredOn={registeredOn}
+                usesPaymentIntegration={competitionInfo['using_payment_integrations?']}
+              />
             </Table.Cell>
 
             {competitionInfo['using_payment_integrations?'] && (
-            <>
-              <Table.Cell>{paymentStatus ?? i18n.t('registrations.list.not_paid')}</Table.Cell>
-              <Table.Cell>
-                {updatedAt && (
-                  timestamp ? getRegistrationTimestamp(updatedAt)
-                    : (
-                      <Popup
-                        content={getShortTimeString(updatedAt)}
-                        trigger={<span>{getShortDateString(updatedAt)}</span>}
-                      />
-                    )
-                )}
-              </Table.Cell>
-            </>
+            <Table.Cell>{isoMoneyToHumanReadable(paymentAmount, competitionInfo.currency_code) ?? ''}</Table.Cell>
             )}
 
             {events ? (

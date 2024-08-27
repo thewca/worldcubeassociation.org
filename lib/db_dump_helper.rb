@@ -46,7 +46,7 @@ module DbDumpHelper
   end
 
   def self.public_s3_path(file_name)
-    "https://s3.#{EnvConfig.STORAGE_AWS_REGION}.amazonaws.com/#{BUCKET_NAME}/#{file_name}"
+    "#{EnvConfig.ASSET_HOST}/#{file_name}"
   end
 
   def self.dump_results_db(export_timestamp = DateTime.now)
@@ -99,10 +99,26 @@ module DbDumpHelper
         region: EnvConfig.STORAGE_AWS_REGION,
         credentials: Aws::ECSCredentials.new,
       ).bucket(BUCKET_NAME)
-      bucket.object(s3_path).upload_file(zip_filename, { acl: "public-read" })
+      bucket.object(s3_path).upload_file(zip_filename)
 
       # Delete the zipfile now that it's uploaded
       FileUtils.rm zip_filename
+
+      # Invalidate Export Route in Prod
+      if EnvConfig.WCA_LIVE_SITE?
+        Aws::CloudFront::Client.new(region: EnvConfig.STORAGE_AWS_REGION,
+                                    credentials: Aws::ECSCredentials.new)
+                               .create_invalidation({
+                                                      distribution_id: EnvConfig.CDN_ASSETS_DISTRIBUTION_ID,
+                                                      invalidation_batch: {
+                                                        paths: {
+                                                          quantity: 1,
+                                                          items: ["/#{s3_path}"], # AWS SDK throws an error if the path doesn't start with "/"
+                                                        },
+                                                        caller_reference: "DB Dump invalidation #{Time.now.utc}",
+                                                      },
+                                                    })
+      end
     end
   end
 

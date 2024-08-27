@@ -13,17 +13,15 @@ class Api::Internal::V1::ApiController < ApplicationController
     # Renew our token if it has expired or is close to expiring
     Vault.auth_token.renew_self if vault_token_data[:ttl] < 300
 
-    client = Faraday.new(url: EnvConfig.VAULT_ADDR)
+    client = Faraday.new(url: EnvConfig.VAULT_ADDR, &FaradayConfig)
 
     # Make the POST request to the introspect endpoint
-    response = client.post do |req|
-      req.url '/v1/identity/oidc/introspect'
+    response = client.post('/v1/identity/oidc/introspect') do |req|
       req.headers['X-Vault-Token'] = vault_token_data[:id]
-      req.body = { token: service_token }.to_json
+      req.body = { token: service_token }
     end
     if response.success?
-      result = JSON.parse(response.body)
-      render json: { error: "Authentication Expired or Token Invalid" }, status: :forbidden unless result["active"]
+      render json: { error: "Authentication Expired or Token Invalid" }, status: :forbidden unless response.body["active"]
     else
       raise "Introspection failed with the following error: #{response.status}, #{response.body}"
     end

@@ -1,9 +1,13 @@
-import { Ref, Segment, Table } from 'semantic-ui-react';
+import {
+  Ref, Segment, Table, TableFooter,
+} from 'semantic-ui-react';
 import React from 'react';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
+import _ from 'lodash';
 import i18n from '../../../lib/i18n';
 import TableHeader from './AdministrationTableHeader';
 import TableRow from './AdministrationTableRow';
+import RegistrationAdministrationTableFooter from './RegistrationAdministrationTableFooter';
 
 export default function RegistrationAdministrationTable({
   columnsExpanded,
@@ -37,7 +41,7 @@ export default function RegistrationAdministrationTable({
   // TODO: use native ref= when we switch to semantic v3
   /* eslint-disable react/jsx-props-no-spreading */
   return (
-    <Table sortable={sortable} striped textAlign="left">
+    <Table sortable={sortable} striped unstackable singleLine textAlign="left">
       <TableHeader
         columnsExpanded={columnsExpanded}
         isChecked={registrations.length === selected.length}
@@ -77,6 +81,13 @@ export default function RegistrationAdministrationTable({
           )}
         </Droppable>
       </DragDropContext>
+      <TableFooter>
+        <RegistrationAdministrationTableFooter
+          registrations={registrations}
+          competitionInfo={competitionInfo}
+          eventsToggled={columnsExpanded.events}
+        />
+      </TableFooter>
     </Table>
   );
 }

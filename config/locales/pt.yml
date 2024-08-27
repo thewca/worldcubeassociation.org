@@ -486,10 +486,12 @@ pt:
         wrc_feedback_requested: Quero obter feedback do WRC em alguns dos incidentes anteriores.
         #original_hash: 0c7191d
         wrc_incidents: Incidentes a necessitar feedback do WRC
-        #original_hash: 5a92b25
-        wdc_feedback_requested: Gostaria de obter feedback do WDC em alguns dos incidentes acima.
-        #original_hash: 06a0568
-        wdc_incidents: Incidentes a necessitar de feedback pelo WDC
+        #original_hash: 1a54a79
+        wic_feedback_requested: >-
+          Gostaria de receber feedback do WIC sobre alguns dos incidentes acima
+          referidos.
+        #original_hash: 000153c
+        wic_incidents: Incidentes que necessitam de feedback do WIC
         #original_hash: d7020f4
         remarks: Observações
       person:
@@ -817,11 +819,11 @@ pt:
           Lista de números referenciando qualquer incidente que gostaria de
           obter feedback pelo WRC.
         #original_hash: da39a3e
-        wdc_feedback_requested: ''
-        #original_hash: 38a95e5
-        wdc_incidents: >-
-          Lista de números referenciando qualquer incidente que gostaria de
-          obter feedback pelo WDC.
+        wic_feedback_requested: ''
+        #original_hash: 0aca3b0
+        wic_incidents: >-
+          Lista de números que fazem referência a quaisquer incidentes sobre os
+          quais gostaria de receber feedback do WIC.
         #original_hash: f30abdc
         remarks: >-
           Fale sobre qualquer outro detalhe que gostaria de partilhar (p. ex.
@@ -1367,10 +1369,8 @@ pt:
         wct: Equipa de Comunicação da WCA
         #original_hash: 2b81984
         wcat: Equipa de Anúncio de Competições da WCA
-        #original_hash: c97077a
-        wdc: Comité Disciplinar da WCA
-        #original_hash: 83bd1d0
-        wec: Comité de Ética da WCA
+        #original_hash: 94c2e42
+        wic: Comité de Integridade da WCA
         #original_hash: d1dbb86
         weat: Equipa de Assistentes Executivos da WCA
         #original_hash: 9cb13de
@@ -1387,8 +1387,8 @@ pt:
         wst: Equipa de Software da WCA
         #original_hash: 58765c7
         wsot: Equipa de Organização Desportiva da WCA
-        #original_hash: 1ce7604
-        wac: Conselho Consultivo da WCA
+        #original_hash: 78949a7
+        wapc: Comité de Apelos da WCA
       groups_description:
         #original_hash: 5b1aade
         wat: >-
@@ -1413,23 +1413,13 @@ pt:
           submissão de competições a partir de documentos como a Política de
           Requisitos de Competição da WCA. A WCAT NÃO é responsável pela
           organização e delegação de competições individuais.
-        #original_hash: 41eb6fd
-        wdc: >-
-          O Comité Disciplinar da WCA (WDC) realiza investigações independentes
-          sobre Speedcubers Registrados e incidentes durante Competições da WCA
-          ou em plataformas oficiais online da WCA. Estes incidentes são
-          alegadas violações do Espírito, do Código de Conduta e/ou dos
-          Regulamentos da WCA.
-        #original_hash: 6cdac80
-        wec: >-
-          O papel deste comité é garantir que todos os procedimentos seguidos
-          pelo staff da WCA cumpram o Código de Ética e realizar investigações
-          independentes se a conduta de qualquer um destes membros não estiver
-          em conformidade com o Código. O WEC é um confidente dos Speedcubers
-          Registrados que podem relatar preocupações e solicitar uma
-          investigação. Este comité também funciona como conselho de recurso se
-          alguém envolvido discordar de uma decisão tomada pelo Comité
-          Disciplinar da WCA.
+        #original_hash: 5007698
+        wic: >-
+          O Comité de Integridade da WCA (WIC) realiza investigações
+          independentes relativos a membros da comunidade WCA e incidentes
+          durante as Competições da WCA ou nas plataformas oficiais online da
+          WCA. Estes incidentes são alegadas violações do Espírito, Código de
+          Conduta, Código de Ética e/ou Regulamentos da WCA.
         #original_hash: 889dd90
         weat: >-
           Esta equipa é responsável pela execução das tarefas administrativas do
@@ -1474,11 +1464,13 @@ pt:
         wsot: >-
           Esta equipa tem a função de supervisionar e apoiar o reconhecimento da
           WCA enquanto organização desportiva internacional.
-        #original_hash: 73d8df4
-        wac: >-
-          O WAC é responsável por manter o feedback e a comunicação entre a
-          Comunidade WCA e o Staff da WCA. Mantêm os Fóruns da WCA e tratam
-          inquéritos e tentam aumentar o alcance em toda a comunidade mundial.
+        #original_hash: 9f45bfa
+        wapc: >-
+          O Comité de Apelos da WCA (WAC) é responsável por rever e resolver os
+          apelos relativos a decisões tomadas por outros membros de staff da
+          WCA. A WAC fornece um processo de revisão independente e imparcial
+          para garantir que as decisões são justas, razoáveis ​​e de acordo com
+          as políticas e regulamentos da WCA.
     contacts:
       #original_hash: 4ef2aad
       title: Formulário de Contacto WCA
@@ -1580,6 +1572,9 @@ pt:
           edit_profile_reason:
             #original_hash: fdfcccf
             label: Razão da mudança
+          edit_profile_proof_attach:
+            #original_hash: a9645b1
+            label: Anexar comprovativo
         wst:
           message:
             #original_hash: 68f4145
@@ -2103,11 +2098,11 @@ pt:
         zero: Tem que se registar em exatamente 0 eventos
         one: Tem que se registar em exatamente 1 evento
         other: 'Tem que se registar em de 1 a %{count} eventos.'
-      #original_hash: e78eec3
+      #original_hash: 87f7c12
       banned_html: >-
         Está banido. Se acreditar que se trata de um erro, por favor contacte o
-        <a href='mailto:disciplinary@worldcubeassociation.org'
-        target='_blank'>WDC</a>.
+        <a href='mailto:integrity@worldcubeassociation.org'
+        target='_blank'>WIC</a>.
       #original_hash: 8d07e7f
       undelete_banned: é um competidor banido e não pode ser recuperado
       #original_hash: 3de7c86
@@ -2231,7 +2226,7 @@ pt:
           missing_info: Não submeteu todos os detalhes solicitados
           #original_hash: a700652
           incomplete: >-
-            Não cumpriu os critérios de registro (por exemplo, pagamento de
+            Não cumpriu os critérios de registo (por exemplo, pagamento de
             inscrição adiantado ou tempos mínimos de qualificação)
           #original_hash: 1e225f0
           registrations_full: >-
@@ -2621,6 +2616,10 @@ pt:
       results_not_posted: >-
         Os resultados desta competição são visíveis, mas ainda não foram
         publicados.
+      #original_hash: 5c24cd8
+      results_still_processing: >-
+        Estamos a trabalhar no processamento dos resultados desta competição -
+        deverão estar disponíveis em breve.
       #original_hash: e205d73
       results_already_posted: Os resultados já foram publicados.
       #original_hash: 376f461
@@ -3657,6 +3656,8 @@ pt:
         move_waiting: Mover para Lista de Espera
         #original_hash: 284b24f
         cancel: Cancelar Registo
+        #original_hash: 43dc853
+        amount: Montante
         #original_hash: 67b3c7d
         too_many: >-
           Aceitar todos estes registos ultrapassaria o limite de competidores
@@ -3678,6 +3679,8 @@ pt:
         until: 'Pode atualizar o seu registo até %{date}'
         #original_hash: fc8bc84
         passed: Já não pode atualizar o seu registo
+        #original_hash: 8cc047a
+        approval: Aprovação
         #original_hash: 05b9f17
         view_registration: Ver Registo
         #original_hash: 3c8d8b7
@@ -5145,119 +5148,6 @@ pt:
           de uso do logótipo da WCA</a>.
         #original_hash: ebc85b2
         download_button_text: Descarregar Recursos do Logótipo
-  workbook_assistant:
-    #original_hash: e442ea4
-    title: Assistente de Resultados da WCA
-    #original_hash: a7c307f
-    download: Descarregar o Assistente de Resultados
-    #original_hash: cf1b916
-    last_update: Última atualização
-    #original_hash: feece00
-    version_history: histórico de versões
-    #original_hash: 8f3f4c0
-    header: Como processar resultados e embaralhamentos antes de enviá-los para a WCA
-    step1:
-      #original_hash: c0450b1
-      title: 'Passo 1: Abra o documento com os resultados'
-      #original_hash: 656d70d
-      content_html: >-
-        Abra o documento usando o botão <em>Open...</em> ou arrastando o arquivo
-        com os resultados para a janela do programa.
-    step2:
-      #original_hash: 3ad9881
-      title: 'Passo 2: Acrescente os embaralhamentos do TNoodle'
-      #original_hash: 080acc0
-      content_html: >-
-        Acrescente os embaralhamentos usando o botão <em>Add...</em> ou
-        arrastando o ficheiro do TNoodle até a janela do programa. Certifique-se
-        de que usa o ficheiro .zip ou .json gerado pelo TNoodle.
-      #original_hash: 6cc90b8
-      content2_html: >-
-        Pode acrescentar vários ficheiros de embaralhamento caso estes tenham
-        sido gerados em partes, ou embaralhamentos adicionais tiveram que ser
-        gerados durante a competição.
-    step3:
-      #original_hash: b2d01b3
-      title: 'Passo 3: Combine os embaralhamentos e o resultados'
-      #original_hash: 36383b1
-      content_html: >-
-        O Assistente automaticamente liga os embaralhamentos com as rondas que
-        ocorreram na competição. Em alguns casos, como quando vários ficheiros
-        de embaralhamento foram gerados, a seleção precisa ser feita manualmente
-        porque há várias opções possíveis.
-      #original_hash: e869c1e
-      content2_html: >-
-        A seleção manual pode ser feita com um clique duplo na célula
-        <em>Scrambles</em> no painel geral da folha do programa.
-      #original_hash: 8f4fdfd
-      content3_html: >-
-        Só é possível selecionar uma ronda do ficheiro de embaralhamento para
-        cada ronda de resultados. Se acontecer uma situação na qual
-        embaralhamentos para uma única ronda foram gerados como rondas separadas
-        no TNoodle, pode usar o botão <em>Edit groups...</em> para editar os
-        grupos nos ficheiros de embaralhamento e movê-los de uma ronda para
-        outra ou excluí-los.
-      #original_hash: 94353f2
-      content4_html: >-
-        Neste exemplo, um conjunto extra de embaralhamentos foi gerado para se
-        obter dois grupos na primeira ronda do skewb ao invés de apenas um
-        grupo.
-      #original_hash: 68c5b18
-      content5_html: >-
-        Os embaralhamentos do grupo adicional podem ser arrastados para a ronda
-        que foi gerada originalmente. Isso junta os dois grupos numa ronda.
-    step4:
-      #original_hash: ed940d2
-      title: 'Passo 4: Corrigir os erros apontados pelo programa'
-      #original_hash: df2cf58
-      content_html: >-
-        Os resultados são verificados em busca de erros. Rondas que contenham
-        erros são marcadas com um ícone vermelho no painel geral do programa.
-      #original_hash: 7fbf6b8
-      content2_html: >-
-        Ao selecionar uma folha com erros no painel, o programa listará os
-        detalhes no painel de erros de validação, na parte inferior esquerda.
-      #original_hash: 0600502
-      content3_html: >-
-        Os erros podem ser corrigidos abrindo a folha num programa apropriado,
-        editando e salvando. A grelha atualizada pode então ser recarregada no
-        Assistente clicando no botão <em>Refresh</em>. Isso vai só recarregar os
-        resultados, mas vai manter as outras mudanças que tenha feito, como
-        embaralhamentos que foram adicionados.
-    step5:
-      #original_hash: 536ec4d
-      title: 'Passo 5: Selecionando o ID da competição'
-      #original_hash: 5aeb5bd
-      content_html: >-
-        Selecione o ID da competição correta clicando no botão
-        <em>Select...</em> próximo do campo <em>Competition ID</em>.
-      #original_hash: 3acf7d0
-      content2_html: Uma caixa de diálogo mostrará uma lista de competições.
-      #original_hash: ceeb6fe
-      content3_html: >-
-        Pode filtrar a lista escrevendo parte do nome de uma competição ou do
-        Delegado da WCA.
-      #original_hash: 5ca74eb
-      content4_html: >-
-        Inicialmente, só serão mostradas competições que aconteceram há menos de
-        uma semana ou que acontecerão, no prazo de uma semana. Se precisar
-        selecionar uma competição fora desta janela de tempo, desmarque a opção
-        <em>Only show current competitions</em>.
-    step6:
-      #original_hash: 52bb1f6
-      title: 'Passo 6: Exportar os dados dos resultados para JSON'
-      #original_hash: 6bfee23
-      content_html: >-
-        Guarde os dados dos resultados num ficheiro JSON usando o botão
-        <em>Export results JSON...</em> na parte inferior direita.
-    step7:
-      #original_hash: 09fa37d
-      title: 'Passo 7: Enviar o ficheiro JSON dos resultados para a WCA'
-      #original_hash: 9be089f
-      content_html: >-
-        Envie o ficheiro JSON exportado pelo Assistente de Resultados por email
-        para <a
-        href="mailto:results@worldcubeassociation.org">results@worldcubeassociation.org</a>
   search_results:
     index:
       #original_hash: db98a68

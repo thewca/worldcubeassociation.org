@@ -3,6 +3,7 @@ version: "3.8"
 x-app: &app
   build:
     dockerfile: Dockerfile.dev
+    context: .
   working_dir: /app
   volumes:
     - .:/app
@@ -57,6 +58,7 @@ services:
     environment:
       DATABASE_HOST: wca_db
       SHAKAPACKER_DEV_SERVER_HOST: 0.0.0.0
+      NODE_ENV: development
     command: >
       bash -c 'bundle install && yarn install &&
       bin/shakapacker-dev-server'

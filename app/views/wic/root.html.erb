@@ -1,0 +1,7 @@
+<% provide(:title, 'Disciplinary Log') %>
+
+<div class="container">
+  <h1><%= yield(:title) %></h1>
+  <%= render @posts, render_permalink: true, render_teaser: true, render_toc: false %>
+  <%= paginate @posts %>
+</div>
