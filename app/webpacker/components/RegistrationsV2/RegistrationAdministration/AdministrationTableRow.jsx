@@ -6,7 +6,7 @@ import { Draggable } from 'react-beautiful-dnd';
 import { setMessage } from '../Register/RegistrationMessage';
 import i18n from '../../../lib/i18n';
 import {
-  getFullDateTimeString, getRegistrationTimestamp,
+  getRegistrationTimestamp,
   getShortDateString,
   getShortTimeString,
 } from '../../../lib/utils/dates';

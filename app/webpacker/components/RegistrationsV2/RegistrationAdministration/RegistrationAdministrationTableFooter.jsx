@@ -8,7 +8,7 @@ export default function RegistrationAdministrationTableFooter({
   eventsToggled,
 }) {
   const newcomerCount = registrations.filter(
-    (reg) => reg.user.wca_id === undefined,
+    (reg) => !reg.user.wca_id,
   ).length;
 
   const countryCount = new Set(
