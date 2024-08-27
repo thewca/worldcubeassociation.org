@@ -44,6 +44,10 @@ jobs:
           id=$(docker create ${{steps.build-prod.outputs.imageid }})
           docker cp $id:/rails/public/ ./assets
           aws s3 sync ./assets "s3://assets.worldcubeassociation.org/assets/${{ env.SHORT_SHA }}"
+      # We currently don't scale Prod and it has it's own capacity group, so we can hardcode to 2
+      - name: Prescale Autoscaling Group for Faster Deployment
+        run: |
+            aws autoscaling update-auto-scaling-group --auto-scaling-group-name wca-on-rails-m6i-20230927122728529600000003 --desired-capacity 2
         # this will trigger the deployment pipeline for prod
       - name: Build and push Prod Image
         uses: docker/build-push-action@v6

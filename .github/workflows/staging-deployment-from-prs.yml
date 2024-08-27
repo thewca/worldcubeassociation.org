@@ -47,29 +47,14 @@ jobs:
       - name: Build Sidekiq if triggered
         if: steps.trigger-deployment.outputs.triggered == 'true'
         uses: docker/build-push-action@v6
-        with:
-          context: .
-          push: true
-          target: sidekiq
-          tags: |
-            ${{ steps.login-ecr.outputs.registry }}/wca-on-rails:sidekiq-staging
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-          build-args: |
-            BUILD_TAG=${{ env.SHORT_SHA }}
-            WCA_LIVE_SITE=false
-            SHAKAPACKER_ASSET_HOST=https://assets-staging.worldcubeassociation.org
-      - name: Build Rails if triggered
-        if: steps.trigger-deployment.outputs.triggered == 'true'
         id: build-staging
-        uses: docker/build-push-action@v6
         with:
           context: .
           push: true
           load: true
-          target: monolith
+          target: sidekiq
           tags: |
-            ${{ steps.login-ecr.outputs.registry }}/wca-on-rails:staging
+            ${{ steps.login-ecr.outputs.registry }}/wca-on-rails:sidekiq-staging
           cache-from: type=gha
           cache-to: type=gha,mode=max
           build-args: |
@@ -83,6 +68,29 @@ jobs:
           id=$(docker create ${{steps.build-staging.outputs.imageid }})
           docker cp $id:/rails/public/ ./assets
           aws s3 sync ./assets "s3://assets-staging.worldcubeassociation.org/assets/${{ env.SHORT_SHA }}"
+      # There are multiple services using the t3 ASG, so we increase it by one
+      - name: Prescale Autoscaling Group for Faster Deployment
+        run: |
+          CURRENT_CAPACITY=$(aws autoscaling describe-auto-scaling-groups \
+          --auto-scaling-group-name wca-on-rails-t3-20230927122725999000000002 \
+          --query "AutoScalingGroups[0].DesiredCapacity" \
+          --output text)
+          aws autoscaling update-auto-scaling-group --auto-scaling-group-name wca-on-rails-t3-20230927122725999000000002 --desired-capacity $((CURRENT_DESIRED_CAPACITY + 1))
+      - name: Build Rails if triggered
+        if: steps.trigger-deployment.outputs.triggered == 'true'
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          target: monolith
+          tags: |
+            ${{ steps.login-ecr.outputs.registry }}/wca-on-rails:staging
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          build-args: |
+            BUILD_TAG=${{ env.SHORT_SHA }}
+            WCA_LIVE_SITE=false
+            SHAKAPACKER_ASSET_HOST=https://assets-staging.worldcubeassociation.org
       - name: Deploy staging if triggered
         if: steps.trigger-deployment.outputs.triggered == 'true'
         run: |
