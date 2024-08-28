@@ -332,6 +332,7 @@ Rails.application.routes.draw do
     namespace :v0 do
       get '/' => 'api#help'
       get '/me' => 'api#me'
+      get '/healthcheck' => 'api#healthcheck'
       get '/auth/results' => 'api#auth_results'
       get '/export/public' => 'api#export_public'
       get '/scramble-program' => 'api#scramble_program'
