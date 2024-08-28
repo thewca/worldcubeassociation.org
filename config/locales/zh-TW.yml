@@ -1229,7 +1229,7 @@ zh-TW:
         #original_hash: 2b81984
         wcat: WCA比賽公告組 (WCAT)
         #original_hash: 94c2e42
-        wic: WCA廉正委員會
+        wic: WCA廉正委員會 (WIC)
         #original_hash: d1dbb86
         weat: WCA董事會助理團隊 (WEAT)
         #original_hash: 9cb13de
@@ -1245,9 +1245,9 @@ zh-TW:
         #original_hash: a14bc62
         wst: WCA軟體組 (WST)
         #original_hash: 58765c7
-        wsot: WCA競技組織團隊 (WSOT)
+        wsot: WCA競技組織團隊 (WOST)
         #original_hash: 78949a7
-        wapc: WCA申訴委員會
+        wapc: WCA申訴委員會 (WAPC)
       groups_description:
         #original_hash: 5b1aade
         wat: >-
@@ -1282,7 +1282,7 @@ zh-TW:
         wsot: 這個團隊負責監督和協助WCA成為一個國際認可的競技組織。
         #original_hash: 9f45bfa
         wapc: >-
-          WCA申訴委員會（WAC）負責審視以及解決那些對WCA員工所做出決定的申訴案件。WAC提供獨立和公正的調查過程來確保決定的公平性、合理性和符合WCA政策及競賽規則。
+          WCA申訴委員會（WAPC）負責審視以及解決那些對WCA員工所做出決定的申訴案件。WAC提供獨立和公正的調查過程來確保決定的公平性、合理性和符合WCA政策及競賽規則。
     contacts:
       #original_hash: 4ef2aad
       title: WCA聯絡表
@@ -1844,7 +1844,7 @@ zh-TW:
       title: '%{person}的%{comp}'
     mailer:
       #original_hash: 72e2180
-      regards_html: '致上我的問候，%{people}。'
+      regards_html: '祝您有美好的一天，來自 %{people}。'
       new:
         #original_hash: 63591e5
         mail_subject: '等待報名審核：%{comp_name}。'
@@ -2978,6 +2978,13 @@ zh-TW:
         spots_remaining_plural:
           zero: 已無報名名額
           other: '還剩%{count}個報名名額'
+        payment:
+          #original_hash: d6fbc7a
+          refunded_status: 已退款
+          #original_hash: 41248b1
+          initialized: '款項手續已在%{date}開始，但尚未完成。'
+          #original_hash: 3a16c0d
+          refunded: '款項已在%{date}退款。'
       bookmark:
         #original_hash: 7952a5c
         unbookmark: 您已經移除您的書籤
@@ -3009,6 +3016,8 @@ zh-TW:
         move_waiting: 移到候補名單
         #original_hash: 284b24f
         cancel: 取消報名
+        #original_hash: 43dc853
+        amount: 數量
         #original_hash: 67b3c7d
         too_many: '接受這些全部報名會造成參賽者人數超過上限，會多出%{count}人'
         #original_hash: 462376a
