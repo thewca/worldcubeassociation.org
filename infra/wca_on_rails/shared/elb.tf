@@ -129,7 +129,7 @@ resource "aws_lb_target_group" "auxiliary" {
 }
 
 resource "aws_lb_target_group" "rails-staging" {
-  name        = "wca-rails-staging"
+  name        = "wca-rails-staging-rendering"
   port        = 3000
   protocol    = "HTTP"
   vpc_id      = aws_default_vpc.default.id
@@ -324,7 +324,7 @@ resource "aws_lb_listener_rule" "pma_forward_prod" {
 
 resource "aws_lb_listener_rule" "rails_forward_staging" {
   listener_arn = aws_lb_listener.https.arn
-  priority     = 2
+  priority     = 4
 
   action {
     type             = "forward"
@@ -340,7 +340,7 @@ resource "aws_lb_listener_rule" "rails_forward_staging" {
 
 resource "aws_lb_listener_rule" "rails_forward_staging_api" {
   listener_arn = aws_lb_listener.https.arn
-  priority     = 4
+  priority     = 2
 
   action {
     type             = "forward"
