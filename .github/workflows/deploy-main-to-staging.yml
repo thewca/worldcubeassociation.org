@@ -1,6 +1,9 @@
 name: Deploy Main to Staging Manually
 on:
   workflow_dispatch:
+  pull_request:
+    tags:
+      - deploy-staging
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -34,6 +37,19 @@ jobs:
             BUILD_TAG=${{ env.SHORT_SHA }}
             WCA_LIVE_SITE=false
             SHAKAPACKER_ASSET_HOST=https://assets-staging.worldcubeassociation.org
+      - name: Build and push Staging API Image
+        uses: docker/build-push-action@v6
+        with:
+          push: true
+          target: monolith-api
+          tags: |
+            ${{ steps.login-ecr.outputs.registry }}/wca-on-rails:staging
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          build-args: |
+            BUILD_TAG=${{ env.SHORT_SHA }}
+            WCA_LIVE_SITE=false
+            SHAKAPACKER_ASSET_HOST=https://assets-staging.worldcubeassociation.org
       - name: Build and push Staging Image
         id: build-staging
         uses: docker/build-push-action@v6
@@ -49,6 +65,7 @@ jobs:
             BUILD_TAG=${{ env.SHORT_SHA }}
             WCA_LIVE_SITE=false
             SHAKAPACKER_ASSET_HOST=https://assets-staging.worldcubeassociation.org
+
         # We build assets in docker and copy it out so we don't have to install all the dependencies in the GH Action
       - name: Copy assets out of the container and push to S3
         run: |
