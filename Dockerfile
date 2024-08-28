@@ -113,3 +113,13 @@ RUN fc-cache -f -v
 # but can also take a rails command, like "console" or "runner" to start instead.
 ENTRYPOINT ["/rails/bin/docker-entrypoint"]
 CMD ["./bin/bundle", "exec", "unicorn", "-c", "/rails/config/unicorn.rb"]
+
+FROM runtime AS monolith-api
+
+EXPOSE 3001
+
+USER rails:rails
+# Manually install puma (just for testing)
+RUN gem install puma
+
+CMD ["./bin/rails", "server", "-p", "3001"]
