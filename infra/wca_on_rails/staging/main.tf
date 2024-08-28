@@ -200,10 +200,10 @@ resource "aws_ecs_task_definition" "this" {
 
   container_definitions = jsonencode([
     {
-      name              = "rails-staging"
+      name              = "rails-staging-rendering"
       image             = "${var.shared.ecr_repository.repository_url}:staging"
-      cpu    = 1536
-      memory = 5500
+      cpu    = 1024
+      memory = 4789
       portMappings = [
         {
           # The hostPort is automatically set for awsvpc network mode,
@@ -223,9 +223,39 @@ resource "aws_ecs_task_definition" "this" {
       environment = local.rails_environment
       healthCheck       = {
         command            = ["CMD-SHELL", "curl -f http://localhost:3000/ || exit 1"]
-        interval           = 30
+        interval           = 10
         retries            = 3
-        startPeriod        = 300
+        startPeriod        = 60
+        timeout            = 5
+      }
+    },
+    {
+      name              = "rails-staging-api"
+      image             = "${var.shared.ecr_repository.repository_url}:staging-api"
+      cpu    = 512
+      memory = 2048
+      portMappings = [
+        {
+          # The hostPort is automatically set for awsvpc network mode,
+          # see https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_PortMapping.html#ECS-Type-PortMapping-hostPort
+          containerPort = 3001
+          protocol      = "tcp"
+        },
+      ]
+      logConfiguration = {
+        logDriver = "awslogs"
+        options = {
+          awslogs-group         = aws_cloudwatch_log_group.this.name
+          awslogs-region        = var.region
+          awslogs-stream-prefix = var.name_prefix
+        }
+      }
+      environment = local.rails_environment
+      healthCheck       = {
+        command            = ["CMD-SHELL", "curl -f http://localhost:3001/ || exit 1"]
+        interval           = 10
+        retries            = 3
+        startPeriod        = 60
         timeout            = 5
       }
     },
@@ -233,7 +263,7 @@ resource "aws_ecs_task_definition" "this" {
       name              = "sidekiq-staging"
       image             = "${var.shared.ecr_repository.repository_url}:sidekiq-staging"
       cpu    = 256
-      memory = 1849
+      memory = 512
       portMappings = [{
         # Mailcatcher
         containerPort = 1080
