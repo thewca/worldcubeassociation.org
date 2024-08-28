@@ -121,5 +121,5 @@ EXPOSE 3001
 USER rails:rails
 # Manually install puma (just for testing)
 RUN gem install puma
-
+ENV API_ONLY="true"
 CMD ["./bin/rails", "server", "-p", "3001"]

@@ -55,7 +55,11 @@ module WcaOnRails
     end
 
     config.default_from_address = "notifications@worldcubeassociation.org"
-    config.site_name = "World Cube Association"
+    config.site_name = if EnvConfig.API_ONLY?
+                         "World Cube Association API"
+                       else
+                         "World Cube Association"
+                       end
 
     config.middleware.insert_before 0, Rack::Cors, debug: false, logger: (-> { Rails.logger }) do
       allow do

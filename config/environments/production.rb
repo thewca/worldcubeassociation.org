@@ -140,6 +140,12 @@ Rails.application.configure do
   config.exceptions_app = ->(env) {
     ErrorsController.action(:show).call(env)
   }
+
+  # Only loads a smaller set of middleware suitable for API only apps.
+  # Middleware like session, flash, cookies can be added back manually.
+  # Skip views, helpers and assets when generating a new resource.
+  config.api_only = EnvConfig.API_ONLY?
+
   # Inserts middleware to perform automatic connection switching.
   # The `database_selector` hash is used to pass options to the DatabaseSelector
   # middleware. The `delay` is used to determine how long to wait after a write
