@@ -415,6 +415,12 @@ resource "aws_ecs_service" "this" {
   }
 
   load_balancer {
+    target_group_arn = var.shared.rails_staging-api.arn
+    container_name   = "rails-staging-api"
+    container_port   = 3001
+  }
+
+  load_balancer {
     target_group_arn = var.shared.pma_staging.arn
     container_name   = "pma-staging"
     container_port   = 80

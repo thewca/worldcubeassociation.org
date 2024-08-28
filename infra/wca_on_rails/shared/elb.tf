@@ -152,6 +152,30 @@ resource "aws_lb_target_group" "rails-staging" {
   }
 }
 
+resource "aws_lb_target_group" "rails-staging-api" {
+  name        = "wca-rails-staging"
+  port        = 3001
+  protocol    = "HTTP"
+  vpc_id      = aws_default_vpc.default.id
+  target_type = "ip"
+
+  deregistration_delay = 10
+  health_check {
+    interval            = 5
+    path                = "/healthcheck"
+    port                = "traffic-port"
+    protocol            = "HTTP"
+    timeout             = 2
+    healthy_threshold   = 2
+    unhealthy_threshold = 5
+    matcher             = 200
+  }
+  tags = {
+    Name = var.name_prefix
+    Env = "staging"
+  }
+}
+
 resource "aws_lb_target_group" "mailcatcher-staging" {
   name        = "wca-staging-mailcatcher"
   port        = 1080
@@ -310,6 +334,28 @@ resource "aws_lb_listener_rule" "rails_forward_staging" {
   condition {
     host_header {
       values = ["staging.worldcubeassociation.org"]
+    }
+  }
+}
+
+resource "aws_lb_listener_rule" "rails_forward_staging_api" {
+  listener_arn = aws_lb_listener.https.arn
+  priority     = 4
+
+  action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.rails-staging-api.arn
+  }
+
+  condition {
+    host_header {
+      values = ["staging.worldcubeassociation.org"]
+    }
+  }
+
+  condition {
+    path_pattern {
+      values = ["/api*"]
     }
   }
 }

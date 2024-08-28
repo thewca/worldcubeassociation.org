@@ -85,6 +85,9 @@ variable "shared" {
     rails_staging: object({
       arn: string
     })
+    rails_staging-api: object({
+      arn: string
+    })
     pma_staging: object({
       arn: string
     })
