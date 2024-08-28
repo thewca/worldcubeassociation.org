@@ -979,7 +979,7 @@ class Competition < ApplicationRecord
 
   def any_registrations?
     if uses_new_registration_service?
-      self.microservice_registrations.any?
+      Microservices::Registrations.competitor_count_by_competition(id) > 0
     else
       self.registrations.any?
     end
