@@ -3622,6 +3622,15 @@ pt:
           zero: Sem vagas disponíveis
           one: '%{count} vaga disponível'
           other: '%{count} vagas disponíveis'
+        payment:
+          #original_hash: d6fbc7a
+          refunded_status: Reembolsado
+          #original_hash: 41248b1
+          initialized: >-
+            O processo de pagamento foi iniciado em %{date}, mas não foi
+            concluído.
+          #original_hash: 3a16c0d
+          refunded: 'Pagamento foi reembolsado em %{date}.'
       bookmark:
         #original_hash: 7952a5c
         unbookmark: Removeu o marcador
