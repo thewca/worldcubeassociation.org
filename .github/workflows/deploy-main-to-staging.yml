@@ -2,10 +2,11 @@ name: Deploy Main to Staging Manually
 on:
   workflow_dispatch:
   pull_request:
-    types: [ labeled ]
+    branches:
+      - main
 jobs:
   build:
-    if: ${{ github.event.label.name == 'deploy-staging' }}
+    if: contains(github.event.pull_request.labels.*.name, 'deploy-staging')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
