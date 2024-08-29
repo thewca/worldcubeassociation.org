@@ -23,4 +23,15 @@ class Api::V0::Wfc::XeroUsersController < Api::V0::ApiController
       render json: wfc_xero_user.errors, status: :unprocessable_entity
     end
   end
+
+  def update
+    id = params.require(:id)
+    wfc_xero_user = WfcXeroUser.find(id)
+    wfc_xero_user.update!(
+      name: params.require(:name),
+      email: params.require(:email),
+      is_combined_invoice: ActiveRecord::Type::Boolean.new.cast(params.require(:is_combined_invoice)),
+    )
+    render json: { success: true }
+  end
 end
