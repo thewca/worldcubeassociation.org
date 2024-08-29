@@ -37,7 +37,7 @@ class UserAvatar < ApplicationRecord
       URI::HTTPS.build(host: host, path: path).to_s
     when 'active_storage'
       if self.approved?
-        Rails.application.routes.url_helpers.rails_storage_proxy_url(self.image)
+        Rails.application.routes.url_helpers.rails_storage_proxy_url(self.image, host: EnvConfig.S3_AVATARS_ASSET_HOST)
       else
         Rails.application.routes.url_helpers.rails_representation_url(self.image)
       end
@@ -59,7 +59,7 @@ class UserAvatar < ApplicationRecord
       URI::HTTPS.build(host: host, path: path).to_s
     when 'active_storage'
       if self.approved?
-        Rails.application.routes.url_helpers.rails_storage_proxy_url(self.thumbnail_image)
+        Rails.application.routes.url_helpers.rails_storage_proxy_url(self.thumbnail_image, host: EnvConfig.S3_AVATARS_ASSET_HOST)
       else
         Rails.application.routes.url_helpers.rails_representation_url(self.thumbnail_image)
       end
