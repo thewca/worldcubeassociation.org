@@ -19,19 +19,31 @@ jobs:
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
+      - name: Get the SHA of the current branch/fork
+        shell: bash
+        run: |
+          echo "SHORT_SHA=$(git rev-parse --short HEAD)" >> "$GITHUB_ENV"
       - name: Build and Push Sidekiq image
+        id: build-prod
         uses: docker/build-push-action@v6
         with:
           push: true
+          load: true
           target: sidekiq
           tags: |
             ${{ steps.login-ecr.outputs.registry }}/wca-on-rails:sidekiq-production
-            ${{ steps.login-ecr.outputs.registry }}/wca-on-rails:sidekiq-staging
           cache-from: type=gha
           cache-to: type=gha,mode=max
           build-args: |
-            BUILD_TAG=${{ github.sha }}
+            BUILD_TAG=${{ env.SHORT_SHA }}
             WCA_LIVE_SITE=true
+            SHAKAPACKER_ASSET_HOST=https://assets.worldcubeassociation.org
+      # We build assets in docker and copy it out so we don't have to install all the dependencies in the GH Action
+      - name: Copy assets out of the container and push to S3
+        run: | # Copy from sidekiq so we don't create any race condition with the pipeline, the assets are identical
+          id=$(docker create ${{steps.build-prod.outputs.imageid }})
+          docker cp $id:/rails/public/ ./assets
+          aws s3 sync ./assets "s3://assets.worldcubeassociation.org/assets/${{ env.SHORT_SHA }}"
         # this will trigger the deployment pipeline for prod
       - name: Build and push Prod Image
         uses: docker/build-push-action@v6
@@ -40,17 +52,13 @@ jobs:
           target: monolith
           tags: |
             ${{ steps.login-ecr.outputs.registry }}/wca-on-rails:latest
-            ${{ steps.login-ecr.outputs.registry }}/wca-on-rails:staging
           cache-from: type=gha
           cache-to: type=gha,mode=max
           build-args: |
-            BUILD_TAG=${{ github.sha }}
+            BUILD_TAG=${{ env.SHORT_SHA }}
             WCA_LIVE_SITE=true
+            SHAKAPACKER_ASSET_HOST=https://assets.worldcubeassociation.org
         # Replace the old sidekiq image with the new one
       - name: Deploy Sidekiq
         run: |
           aws ecs update-service --cluster wca-on-rails --service wca-on-rails-prod-auxiliary-services --force-new-deployment
-        # There is no pipeline for staging so we manually force to update the image
-      - name: Deploy staging
-        run: |
-          aws ecs update-service --cluster wca-on-rails --service wca-on-rails-staging --force-new-deployment

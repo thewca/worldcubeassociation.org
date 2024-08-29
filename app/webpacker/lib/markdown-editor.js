@@ -40,10 +40,10 @@ $(() => {
     $('input#delegate_report_wrc_incidents').prop('disabled', !feedbackRequested);
   }).trigger('change');
 
-  $('input[name="delegate_report[wdc_feedback_requested]"]').on('change', function toggleInput() {
+  $('input[name="delegate_report[wic_feedback_requested]"]').on('change', function toggleInput() {
     const feedbackRequested = this.checked;
-    $('div.delegate_report_wdc_incidents').toggle(feedbackRequested);
-    $('input#delegate_report_wdc_incidents').prop('disabled', !feedbackRequested);
+    $('div.delegate_report_wic_incidents').toggle(feedbackRequested);
+    $('input#delegate_report_wic_incidents').prop('disabled', !feedbackRequested);
   }).trigger('change');
 
   $('.markdown-editor').each(function toggleInput() {

@@ -320,8 +320,8 @@ en:
         incidents: "Incidents"
         wrc_feedback_requested: "I would like feedback from the WRC on some of the incidents above."
         wrc_incidents: "Incidents Needing WRC Feedback"
-        wdc_feedback_requested: "I would like feedback from the WDC on some of the incidents above."
-        wdc_incidents: "Incidents Needing WDC Feedback"
+        wic_feedback_requested: "I would like feedback from the WIC on some of the incidents above."
+        wic_incidents: "Incidents Needing WIC Feedback"
         remarks: "Remarks"
       #context: a person
       person:
@@ -488,8 +488,8 @@ en:
         incidents: "Please report all incidents which are non-standard cases. Number the incidents starting from 1., so that other Delegates can comment referring to them by their numbers. Even if everything seemed generic, just list at least the most noteworthy cases. Please check off the appropriate boxes below if you are actively seeking feedback."
         wrc_feedback_requested: ""
         wrc_incidents: "List of numbers referencing any incidents that you would like the WRC's feedback on."
-        wdc_feedback_requested: ""
-        wdc_incidents: "List of numbers referencing any incidents that you would like the WDC's feedback on."
+        wic_feedback_requested: ""
+        wic_incidents: "List of numbers referencing any incidents that you would like the WIC's feedback on."
         remarks: "Talk about any other detail that you'd like to share (e.g., improvement/regression within the community, future plans for this region). If for the sake of conciseness you left something unsaid in the previous sections, feel free to comment them here."
         discussion_url: ""
       #context: for a competition tab
@@ -766,8 +766,7 @@ en:
         wat: "WCA Archive Team"
         wct: "WCA Communication Team"
         wcat: "WCA Competition Announcement Team"
-        wdc: "WCA Disciplinary Committee"
-        wec: "WCA Ethics Committee"
+        wic: "WCA Integrity Committee"
         weat: "WCA Executive Assistants Team"
         wfc: "WCA Financial Committee"
         wmt: "WCA Marketing Team"
@@ -776,13 +775,12 @@ en:
         wrt: "WCA Results Team"
         wst: "WCA Software Team"
         wsot: "WCA Sports Organization Team"
-        wac: "WCA Advisory Council"
+        wapc: "WCA Appeals Committee"
       groups_description:
         wat: "The WAT is responsible for managing the development and maintenance of the WCA's historical archive. They document key speedcubing events and notable WCA milestones to be presented as part of a broader WCA timeline, to preserve the legacy of the WCA in speedcubing."
         wct: "The WCA Communication Team (WCT) has the role to oversee and support communications of the WCA with the Community and the general public. The communication of the WCA should contribute to the Objectives of the WCA and support a general positive culture of friendliness, transparency, inclusiveness, openness, and responsiveness."
         wcat: "The WCA Competition Announcement Team (WCAT) has the role to approve and announce WCA Competitions submitted by delegates, and ensure such announcements adhere to WCA quality standards. This team is also responsible for maintaining proper competition submission protocol from documents such as the WCA Competition Requirements Policy. WCAT is NOT responsible for the organization and delegation of individual competitions."
-        wdc: "The WCA Disciplinary Committee (WDC) performs independent investigations regarding Registered Speedcubers and incidents during WCA Competitions or on official, online WCA platforms. These incidents are alleged violations of the Spirit, Code of Conduct, and/or Regulations of the WCA."
-        wec: "This committee's role is to ensure that all the procedures followed by the WCA Staff abide by the Code of Ethics, and to perform independent investigations if the conduct of any of these members is not compliant with the Code. The WEC is a confidant for Registered Speedcubers who may report concerns and request an investigation. This committee also functions as the board of appeal if anyone involved disagrees with a decision made by the WCA Disciplinary Committee."
+        wic: "The WCA Integrity Committee (WIC) performs independent investigations regarding WCA community members and incidents during WCA Competitions or on official, online WCA platforms. These incidents are alleged violations of the Spirit, Code of Conduct, Code of Ethics and/or Regulations of the WCA."
         weat: "This team is responsible for carrying out the administrative tasks of the WCA Board of Directors."
         wfc: "This committee is responsible for managing the overall finances of the WCA, including budgeting, reporting, analysis, bookkeeping, and tax filings. They also manage the WCA's largest source of income, the WCA Dues System, along with various funding programs that provide support to local communities at different stages of development, including Travel Funding, Equipment Funding, and Regional Organization Support."
         wmt: "This team is responsible for developing and managing the WCA Brand, seeking sponsorships, supporting the distribution of WCA Competition Gear, and marketing WCA Merchandise."
@@ -791,7 +789,7 @@ en:
         wrt: "The WRT is responsible for managing all data in the databases of the WCA, most importantly competition results and persons data."
         wst: "This team is responsible for managing the WCA's software (website, scramblers, workbooks, admin tools)."
         wsot: "This team has the role to oversee and support the recognition of the WCA as an international sports organization."
-        wac: "The WAC is responsible for maintaining feedback and communication between the WCA Community and the WCA Staff. They maintain the WCA Forums and summarize surveys and attempt to increase reach across the worldwide community."
+        wapc: "The WCA Appeals Committee (WAC) is responsible for reviewing and resolving appeals regarding decisions made by other WCA Staff. The WAC provides an independent and impartial review process to ensure that decisions are fair, reasonable, and in accordance with WCA policies and regulations."
     contacts:
       title: "WCA Contact Form"
       faq_note_html: 'Before making an inquiry, you may wish to take a look at our <a href="/faq">Frequently Asked Questions</a>! If you wish to contact a specific committee or team not listed here, you may check their details on <a href="/teams-committees-councils">this page</a>.'
@@ -1095,7 +1093,7 @@ en:
       exceeds_event_limit:
         one: "You must register in exactly 1 event."
         other: "You must register for between 1 and %{count} events."
-      banned_html: "You are banned. If you believe this is an error, please contact the <a href='mailto:disciplinary@worldcubeassociation.org' target='_blank'>WDC</a>."
+      banned_html: "You are banned. If you believe this is an error, please contact the <a href='mailto:integrity@worldcubeassociation.org' target='_blank'>WIC</a>."
       undelete_banned: "is a banned competitor and cannot be undeleted"
       series_more_than_one_accepted: "You can only be accepted for one Series competition at a time."
       can_only_register_for_qualified_events: "You cannot register for events you are not qualified for."
@@ -1801,6 +1799,10 @@ en:
           zero: "no spots remaining"
           one: "%{count} spot remaining"
           other: "%{count} spots remaining"
+        payment:
+         refunded_status: "Refunded"
+         initialized: "Payment process was started on %{date}, but not finished."
+         refunded: "Payment was refunded on %{date}."
       bookmark:
         unbookmark: "You have removed your bookmark"
       requirements:
@@ -1818,6 +1820,7 @@ en:
         move_pending: "Move to Pending"
         move_waiting: "Move to Waiting List"
         cancel: "Cancel Registration"
+        amount: "Amount"
         too_many: "Accepting all these registrations would go over the competitor limit by %{count}"
         no_self_update: "Contact the Organization Team to update your registration."
       register:

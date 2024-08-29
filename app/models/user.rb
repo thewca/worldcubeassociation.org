@@ -408,12 +408,8 @@ class User < ApplicationRecord
     group_member?(UserGroup.teams_committees_group_wcat)
   end
 
-  def wdc_team?
-    group_member?(UserGroup.teams_committees_group_wdc)
-  end
-
-  def ethics_committee?
-    group_member?(UserGroup.teams_committees_group_wec)
+  def wic_team?
+    group_member?(UserGroup.teams_committees_group_wic)
   end
 
   def weat_team?
@@ -438,6 +434,10 @@ class User < ApplicationRecord
 
   def results_team?
     group_member?(UserGroup.teams_committees_group_wrt)
+  end
+
+  def appeals_committee?
+    group_member?(UserGroup.teams_committees_group_wapc)
   end
 
   private def senior_results_team?
@@ -530,7 +530,7 @@ class User < ApplicationRecord
   end
 
   private def can_view_past_banned_competitors?
-    wdc_team? || ethics_committee? || board_member? || weat_team? || results_team? || admin?
+    wic_team? || board_member? || weat_team? || results_team? || admin?
   end
 
   private def groups_with_read_access_for_current
@@ -686,14 +686,8 @@ class User < ApplicationRecord
           panel_pages[:subordinateUpcomingCompetitions],
         ],
       },
-      wdc: {
-        name: 'WDC panel',
-        pages: [
-          panel_pages[:bannedCompetitors],
-        ],
-      },
-      wec: {
-        name: 'WEC panel',
+      wic: {
+        name: 'WIC panel',
         pages: [
           panel_pages[:bannedCompetitors],
           panel_pages[:downloadVoters],
@@ -758,7 +752,7 @@ class User < ApplicationRecord
   end
 
   def can_view_all_users?
-    admin? || board_member? || results_team? || communication_team? || wdc_team? || any_kind_of_delegate? || weat_team? || wrc_team?
+    admin? || board_member? || results_team? || communication_team? || wic_team? || any_kind_of_delegate? || weat_team? || wrc_team?
   end
 
   def can_edit_user?(user)
@@ -787,7 +781,7 @@ class User < ApplicationRecord
   end
 
   def can_edit_banned_competitors?
-    can_edit_any_groups? || group_leader?(UserGroup.teams_committees_group_wdc) || group_leader?(UserGroup.teams_committees_group_wec)
+    can_edit_any_groups? || group_leader?(UserGroup.teams_committees_group_wic)
   end
 
   def can_manage_regional_organizations?
@@ -799,7 +793,7 @@ class User < ApplicationRecord
   end
 
   def can_create_posts?
-    wdc_team? || wrc_team? || communication_team? || can_announce_competitions?
+    wic_team? || wrc_team? || communication_team? || can_announce_competitions?
   end
 
   def can_upload_images?
@@ -822,7 +816,7 @@ class User < ApplicationRecord
       competition.organizers.include?(self) ||
       competition.delegates.include?(self) ||
       competition.delegates.flat_map(&:senior_delegates).compact.include?(self) ||
-      ethics_committee?
+      wic_team?
     )
   end
 
@@ -883,7 +877,7 @@ class User < ApplicationRecord
   end
 
   def can_create_poll?
-    admin? || board_member? || wrc_team? || wdc_team? || quality_assurance_committee?
+    admin? || board_member? || wrc_team? || wic_team? || quality_assurance_committee?
   end
 
   def can_vote_in_poll?
@@ -895,7 +889,7 @@ class User < ApplicationRecord
   end
 
   def can_view_delegate_matters?
-    any_kind_of_delegate? || can_admin_results? || wrc_team? || wdc_team? || quality_assurance_committee? || competition_announcement_team? || weat_team? || communication_team? || ethics_committee? || financial_committee?
+    any_kind_of_delegate? || can_admin_results? || wrc_team? || wic_team? || quality_assurance_committee? || competition_announcement_team? || weat_team? || communication_team? || financial_committee?
   end
 
   def can_manage_incidents?
@@ -914,7 +908,7 @@ class User < ApplicationRecord
     if delegate_report.posted?
       can_view_delegate_matters?
     else
-      can_edit_delegate_report?(delegate_report) || ethics_committee?
+      can_edit_delegate_report?(delegate_report) || wic_team?
     end
   end
 
@@ -945,7 +939,7 @@ class User < ApplicationRecord
   end
 
   def can_see_eligible_voters?
-    can_admin_results? || ethics_committee?
+    can_admin_results? || wic_team?
   end
 
   def get_cannot_delete_competition_reason(competition)
@@ -1383,10 +1377,8 @@ class User < ApplicationRecord
       active_roles.any? { |role| role.is_lead? && (role.group.teams_committees? || role.group.councils?) }
     when :senior_delegate
       senior_delegate?
-    when :wdc
-      wdc_team?
-    when :wec
-      ethics_committee?
+    when :wic
+      wic_team?
     when :weat
       weat_team?
     else

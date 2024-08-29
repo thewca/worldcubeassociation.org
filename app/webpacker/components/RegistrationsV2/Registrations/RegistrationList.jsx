@@ -1,5 +1,4 @@
 import { useQuery } from '@tanstack/react-query';
-import { formatCentiseconds } from '@wca/helpers';
 import React, {
   useEffect,
   useMemo,
@@ -7,7 +6,7 @@ import React, {
   useState,
 } from 'react';
 import {
-  Flag, Icon, Message, Segment, Table,
+  Flag, Icon, Segment, Table,
 } from 'semantic-ui-react';
 import {
   getConfirmedRegistrations,
@@ -19,6 +18,7 @@ import Loading from '../../Requests/Loading';
 import EventIcon from '../../wca/EventIcon';
 import { personUrl } from '../../../lib/requests/routes.js.erb';
 import Errored from '../../Requests/Errored';
+import { formatAttemptResult } from '../../../lib/wca-live/attempts';
 
 const sortReducer = createSortReducer(['name', 'country', 'total']);
 
@@ -28,7 +28,7 @@ function FooterContent({
   if (!dataWithUser || !registrations) return null;
 
   const newcomerCount = dataWithUser.filter(
-    (reg) => reg.user.wca_id === undefined,
+    (reg) => !reg.user.wca_id,
   ).length;
 
   const countryCount = new Set(
@@ -180,7 +180,7 @@ export default function RegistrationList({ competitionInfo }) {
                     key={`registration-table-header-${id}`}
                     onClick={() => setPsychSheetEvent(id)}
                   >
-                    <EventIcon id={id} size="1em" />
+                    <EventIcon id={id} size="1em" className="selected" />
                   </Table.HeaderCell>
                 ))}
                 <Table.HeaderCell
@@ -256,7 +256,7 @@ export default function RegistrationList({ competitionInfo }) {
                         key={`registration-table-row-${registration.user.id}-${id}`}
                       >
                         {registration.competing.event_ids.includes(id) ? (
-                          <EventIcon id={id} size="1em" />
+                          <EventIcon id={id} size="1em" hoverable={false} />
                         ) : null}
                       </Table.Cell>
                     ))}
@@ -280,10 +280,10 @@ export default function RegistrationList({ competitionInfo }) {
                         : registration.average_rank}
                     </Table.Cell>
                     <Table.Cell>
-                      {formatCentiseconds(registration.single_best)}
+                      {formatAttemptResult(registration.single_best, psychSheetEvent)}
                     </Table.Cell>
                     <Table.Cell>
-                      {formatCentiseconds(registration.average_best)}
+                      {formatAttemptResult(registration.average_best, psychSheetEvent)}
                     </Table.Cell>
                   </>
                 )}

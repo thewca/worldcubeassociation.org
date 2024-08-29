@@ -50,6 +50,7 @@ const sortReducer = createSortReducer([
   'name',
   'wca_id',
   'country',
+  'paid_on_with_registered_on_fallback',
   'registered_on',
   'events',
   'guests',
@@ -205,15 +206,18 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
               - DateTime.fromISO(b.competing.registered_on).toMillis();
           case 'paid_on_with_registered_on_fallback':
           {
-            if (a.payment && b.payment) {
+            const hasAPaid = a.payment.payment_status === 'succeeded';
+            const hasBPaid = b.payment.payment_status === 'succeeded';
+
+            if (hasAPaid && hasBPaid) {
               return DateTime.fromISO(a.payment.updated_at).toMillis()
                 - DateTime.fromISO(b.payment.updated_at).toMillis();
             }
-            if (a.payment && !b.payment) {
-              return 1;
-            }
-            if (!a.payment && b.payment) {
+            if (hasAPaid && !hasBPaid) {
               return -1;
+            }
+            if (!hasAPaid && hasBPaid) {
+              return 1;
             }
             return DateTime.fromISO(a.competing.registered_on).toMillis()
               - DateTime.fromISO(b.competing.registered_on).toMillis();

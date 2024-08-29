@@ -9,8 +9,8 @@ import ButtonActivatedModal from '../ButtonActivatedModal';
 import CutoffFormatField from './CutoffFormatInput';
 import { useDispatch } from '../../../../lib/providers/StoreProvider';
 import { updateCutoff } from '../../store/actions';
-import AttemptResultField from '../../../Results/WCALive/AttemptResultField/AttemptResultField';
-import MbldPointsField from '../../../Results/WCALive/AttemptResultField/MbldPointsField';
+import AttemptResultField from '../../../EditResult/WCALive/AttemptResultField/AttemptResultField';
+import MbldPointsField from '../../../EditResult/WCALive/AttemptResultField/MbldPointsField';
 
 /**
  * Developer notes: "cutoffFormat" and "NumberOfAttempts" is used interchangeably

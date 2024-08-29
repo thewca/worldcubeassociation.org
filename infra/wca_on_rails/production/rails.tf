@@ -13,6 +13,14 @@ locals {
       value = var.ROOT_URL
     },
     {
+      name  = "ASSET_HOST"
+      value = "https://assets.worldcubeassociation.org"
+    },
+    {
+      name  = "SHAKAPACKER_ASSET_HOST"
+      value = "https://assets.worldcubeassociation.org"
+    },
+    {
       name = "WCA_REGISTRATIONS_POLL_URL"
       value = "https://1rq8d7dif3.execute-api.us-west-2.amazonaws.com/v1/prod"
     },
@@ -79,6 +87,10 @@ locals {
     {
       name = "CDN_AVATARS_DISTRIBUTION_ID"
       value = "ELNTWW0SE1ZJ"
+    },
+    {
+      name = "CDN_ASSETS_DISTRIBUTION_ID"
+      value = "E27W5ACWLMQE3C"
     },
     {
       name = "WCA_REGISTRATIONS_URL"

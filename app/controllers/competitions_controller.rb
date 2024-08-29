@@ -195,7 +195,7 @@ class CompetitionsController < ApplicationController
       @competitions = @competitions.select { |competition| competition.pending_results_or_report(days) }
     end
 
-    @enable_react = params[:beta]&.to_s == '0xDbOverload'
+    @enable_react = params[:legacy]&.to_s == 'off'
 
     respond_to do |format|
       format.html {}
@@ -848,7 +848,7 @@ class CompetitionsController < ApplicationController
   end
 
   def my_competitions
-    if Rails.env.production? && !EnvConfig.WCA_LIVE_SITE?
+    if Rails.env.production?
       registrations_v2 = current_user.microservice_registrations
     else
       registrations_v2 = []

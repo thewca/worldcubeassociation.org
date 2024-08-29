@@ -479,10 +479,10 @@ zh-TW:
         wrc_feedback_requested: 我想要WRC對於某些意外事件做意見回饋
         #original_hash: 0c7191d
         wrc_incidents: 需要WRC意見回饋的意外事故
-        #original_hash: 5a92b25
-        wdc_feedback_requested: 我想要WDC對於某些意外事件做意見回饋
-        #original_hash: 06a0568
-        wdc_incidents: 需要WDC意見回饋的意外事故
+        #original_hash: 1a54a79
+        wic_feedback_requested: 我想要WIC對於某些意外事件做意見回饋。
+        #original_hash: 000153c
+        wic_incidents: 需要WIC意見回饋的意外事故
         #original_hash: d7020f4
         remarks: 備註
       person:
@@ -768,9 +768,9 @@ zh-TW:
         #original_hash: 98bb5cd
         wrc_incidents: 列出希望WRC回饋的意外事件編號。
         #original_hash: da39a3e
-        wdc_feedback_requested: ''
-        #original_hash: 38a95e5
-        wdc_incidents: 列出希望WDC回饋的意外事件編號。
+        wic_feedback_requested: ''
+        #original_hash: 0aca3b0
+        wic_incidents: 列出希望WIC回饋的意外事件編號。
         #original_hash: f30abdc
         remarks: 分享任何關於比賽的其他細節(例如：進步/社群/這區域的未來展望)。如果您是為了讓前面章節比較簡潔而沒有提到一些事情，盡情在這邊留下評論。
         #original_hash: da39a3e
@@ -1228,10 +1228,8 @@ zh-TW:
         wct: WCA傳播組 (WCT)
         #original_hash: 2b81984
         wcat: WCA比賽公告組 (WCAT)
-        #original_hash: c97077a
-        wdc: WCA紀律委員會 (WDC)
-        #original_hash: 83bd1d0
-        wec: WCA倫理委員會 (WEC)
+        #original_hash: 94c2e42
+        wic: WCA廉正委員會 (WIC)
         #original_hash: d1dbb86
         weat: WCA董事會助理團隊 (WEAT)
         #original_hash: 9cb13de
@@ -1247,9 +1245,9 @@ zh-TW:
         #original_hash: a14bc62
         wst: WCA軟體組 (WST)
         #original_hash: 58765c7
-        wsot: WCA競技組織團隊 (WSOT)
-        #original_hash: 1ce7604
-        wac: WCA諮詢理事會 (WAC)
+        wsot: WCA競技組織團隊 (WOST)
+        #original_hash: 78949a7
+        wapc: WCA申訴委員會 (WAPC)
       groups_description:
         #original_hash: 5b1aade
         wat: >-
@@ -1260,12 +1258,9 @@ zh-TW:
         #original_hash: 3e5570f
         wcat: >-
           WCA比賽公告組負責審核和公告由WCA代表所提出的比賽申請，並確保此類公告符合WCA品質標準。這個團隊也負責維持良好的比賽申請用的協定文件，例如「WCA比賽要求政策」。WCA比賽公告組並不負責組織或是監督各個比賽。
-        #original_hash: 41eb6fd
-        wdc: >-
-          WCA紀律委員會負責組成獨立的調查團隊。調查內容為在WCA比賽中已註冊玩家的意外事件或是官方的WCA網路平台。這些意外事件是被指控違反WCA精神、WCA行為準則或/和WCA競賽規則。
-        #original_hash: 6cdac80
-        wec: >-
-          該委員會的職責是確保WCA員工以及外部員工的所有程序皆遵守倫理規範，並且在這些成員的行為不符合該倫理規範的情況下進行獨立調查。這些調查可以由任何已註冊的玩家提出，且他們可以信任WEC。如果有人不同意WCA紀律委員會做出的裁決，此委員會也可以成為上訴單位。
+        #original_hash: 5007698
+        wic: >-
+          WCA廉正委員會（WIC）負責組成獨立的調查團隊。調查內容為在WCA比賽中已註冊玩家、WCA比賽的意外事件或是官方的WCA網路平台。這些意外事件是被指控違反WCA精神、WCA行為準則、WCA倫理規範或/和WCA競賽規則。
         #original_hash: 889dd90
         weat: 該團隊是負責執行處理WCA董事會的行政事務。
         #original_hash: 43e4e33
@@ -1285,8 +1280,9 @@ zh-TW:
         wst: 該團隊負責管理WCA的軟體（網站、轉亂程式、作業工具、管理工具）。
         #original_hash: 8f888d6
         wsot: 這個團隊負責監督和協助WCA成為一個國際認可的競技組織。
-        #original_hash: 73d8df4
-        wac: 該理事會負責建立和維護WCA社群與WCA員工之間的雙邊溝通。他們負責維持WCA論壇和總結問卷調查以及試著拓展到更多全球的方塊社群。
+        #original_hash: 9f45bfa
+        wapc: >-
+          WCA申訴委員會（WAPC）負責審視以及解決那些對WCA員工所做出決定的申訴案件。WAC提供獨立和公正的調查過程來確保決定的公平性、合理性和符合WCA政策及競賽規則。
     contacts:
       #original_hash: 4ef2aad
       title: WCA聯絡表
@@ -1787,10 +1783,10 @@ zh-TW:
       exceeds_event_limit:
         zero: 您必須只能報名一個項目。
         other: '您必須報名介於1個到%{count}個項目。'
-      #original_hash: e78eec3
+      #original_hash: 87f7c12
       banned_html: >-
-        您被禁賽了。如果你認為有錯誤，請聯絡<a href='mailto:disciplinary@worldcubeassociation.org'
-        target='_blank'>WCA紀律委員會</a>.
+        您被禁賽了。如果你認為有錯誤，請聯絡<a href='mailto:integrity@worldcubeassociation.org'
+        target='_blank'>WCA廉正委員會</a>.
       #original_hash: 8d07e7f
       undelete_banned: 這位參賽者被禁賽且不能被反刪除。
       #original_hash: 3de7c86
@@ -1848,7 +1844,7 @@ zh-TW:
       title: '%{person}的%{comp}'
     mailer:
       #original_hash: 72e2180
-      regards_html: '致上我的問候，%{people}。'
+      regards_html: '祝您有美好的一天，來自 %{people}。'
       new:
         #original_hash: 63591e5
         mail_subject: '等待報名審核：%{comp_name}。'
@@ -2982,6 +2978,13 @@ zh-TW:
         spots_remaining_plural:
           zero: 已無報名名額
           other: '還剩%{count}個報名名額'
+        payment:
+          #original_hash: d6fbc7a
+          refunded_status: 已退款
+          #original_hash: 41248b1
+          initialized: '款項手續已在%{date}開始，但尚未完成。'
+          #original_hash: 3a16c0d
+          refunded: '款項已在%{date}退款。'
       bookmark:
         #original_hash: 7952a5c
         unbookmark: 您已經移除您的書籤
@@ -3013,6 +3016,8 @@ zh-TW:
         move_waiting: 移到候補名單
         #original_hash: 284b24f
         cancel: 取消報名
+        #original_hash: 43dc853
+        amount: 數量
         #original_hash: 67b3c7d
         too_many: '接受這些全部報名會造成參賽者人數超過上限，會多出%{count}人'
         #original_hash: 462376a
