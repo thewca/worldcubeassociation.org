@@ -102,18 +102,6 @@ class UserAvatar < ApplicationRecord
     self.filename == DEFAULT_AVATAR_FILE && self.backend == UserAvatar.backends[:local]
   end
 
-  after_save :add_user_associations,
-             if: :user_previously_changed?,
-             unless: :destroyed?
-
-  def add_user_associations
-    if self.status == UserAvatar.statuses[:pending]
-      user.update_attribute(:pending_avatar, self)
-    elsif self.status == UserAvatar.statuses[:approved]
-      user.update_attribute(:current_avatar, self)
-    end
-  end
-
   after_save :move_user_associations,
              if: :status_previously_changed?,
              unless: :destroyed?
@@ -128,11 +116,13 @@ class UserAvatar < ApplicationRecord
     end
 
     if self.status == UserAvatar.statuses[:approved]
-      # Mark the previous avatar as 'deprecated', so that its public file gets removed.
-      #   The most common use-case is for users to upload new avatars (which are then pending approval)
-      #   without explicitly deleting the old one. By using this status change,
-      #   we can make sure that the then-old avatar (after approval) gets moved to the private file instead.
-      user.current_avatar&.update!(status: UserAvatar.statuses[:deprecated])
+      if user.current_avatar_id != self.id
+        # Mark the previous avatar as 'deprecated', so that its public file gets removed.
+        #   The most common use-case is for users to upload new avatars (which are then pending approval)
+        #   without explicitly deleting the old one. By using this status change,
+        #   we can make sure that the then-old avatar (after approval) gets moved to the private file instead.
+        user.current_avatar&.update!(status: UserAvatar.statuses[:deprecated])
+      end
 
       user.update_attribute(:current_avatar, self)
     elsif user.current_avatar_id == self.id
@@ -149,6 +139,10 @@ class UserAvatar < ApplicationRecord
 
   def move_image_if_approved
     old_status, new_status = self.status_previous_change
+
+    # If there is no old_status, it means we just inserted the record.
+    # In that case, there is nothing to reattach.
+    return unless old_status.present?
 
     if new_status == UserAvatar.statuses[:approved]
       # We approved a new avatar! Take the previously private file and upload it to public storage.
