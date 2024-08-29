@@ -129,7 +129,7 @@ resource "aws_lb_target_group" "auxiliary" {
 }
 
 resource "aws_lb_target_group" "rails-staging" {
-  name        = "wca-rails-staging-rendering"
+  name        = "wca-rails-staging"
   port        = 3000
   protocol    = "HTTP"
   vpc_id      = aws_default_vpc.default.id
@@ -153,8 +153,8 @@ resource "aws_lb_target_group" "rails-staging" {
 }
 
 resource "aws_lb_target_group" "rails-staging-api" {
-  name        = "wca-rails-staging"
-  port        = 3001
+  name        = "wca-rails-staging-api"
+  port        = 3000
   protocol    = "HTTP"
   vpc_id      = aws_default_vpc.default.id
   target_type = "ip"
@@ -418,6 +418,10 @@ output "rails-production" {
 
 output "rails_staging"{
   value = aws_lb_target_group.rails-staging
+}
+
+output "rails_staging-api"{
+  value = aws_lb_target_group.rails-staging-api
 }
 
 output "pma_production"{

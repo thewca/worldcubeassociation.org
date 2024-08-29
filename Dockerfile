@@ -116,10 +116,10 @@ CMD ["./bin/bundle", "exec", "unicorn", "-c", "/rails/config/unicorn.rb"]
 
 FROM runtime AS monolith-api
 
-EXPOSE 3001
+EXPOSE 3000
 
 USER rails:rails
 # Manually install puma (just for testing)
 RUN gem install puma
 ENV API_ONLY="true"
-CMD ["./bin/rails", "server", "-p", "3001"]
+CMD ["./bin/rails", "server", "-p", "3000"]
