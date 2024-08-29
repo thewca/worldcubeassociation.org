@@ -222,6 +222,49 @@ RSpec.describe User, type: :model do
     expect(user.pending_avatar).to be_nil
   end
 
+  it "approving pending avatar triggers a removal job" do
+    user = FactoryBot.create :user_with_wca_id, :with_pending_avatar
+    avatar = user.pending_avatar
+
+    perform_enqueued_jobs do
+      avatar.update!(status: 'approved')
+    end
+
+    assert_performed_jobs 1, only: ActiveStorage::PurgeJob
+  end
+
+  it "approving pending avatar moves file from private to public" do
+    user = FactoryBot.create :user_with_wca_id, :with_pending_avatar
+    avatar = user.pending_avatar
+
+    expect(avatar.public_image.attached?).to be false
+    expect(avatar.private_image.attached?).to be true
+
+    avatar.update!(status: 'approved')
+
+    # Make sure we actually purge the file
+    perform_enqueued_jobs
+
+    expect(avatar.public_image.attached?).to be true
+    expect(avatar.private_image.attached?).to be false
+  end
+
+  it "deprecating approved avatar moves file from public to private" do
+    user = FactoryBot.create :user_with_wca_id, :with_avatar
+    avatar = user.current_avatar
+
+    expect(avatar.public_image.attached?).to be true
+    expect(avatar.private_image.attached?).to be false
+
+    avatar.update!(status: 'deprecated')
+
+    # Make sure we actually purge the file
+    perform_enqueued_jobs
+
+    expect(avatar.public_image.attached?).to be false
+    expect(avatar.private_image.attached?).to be true
+  end
+
   describe "#delegated_competitions" do
     let(:delegate) { FactoryBot.create :delegate }
     let(:other_delegate) { FactoryBot.create :delegate }

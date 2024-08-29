@@ -15,5 +15,20 @@ FactoryBot.define do
     trait :pending do
       status { 'pending' }
     end
+
+    transient do
+      upload_file { false }
+    end
+
+    after(:create) do |avatar, evaluator|
+      if evaluator.upload_file
+        default_io = File.open(Rails.root.join('app', 'assets', 'images', UserAvatar::DEFAULT_AVATAR_FILE), 'rb')
+
+        avatar.attach_image(
+          io: default_io,
+          filename: UserAvatar::DEFAULT_AVATAR_FILE,
+        )
+      end
+    end
   end
 end

@@ -215,13 +215,13 @@ FactoryBot.define do
 
     trait :with_avatar do
       after(:create) do |user|
-        FactoryBot.create(:user_avatar, user: user)
+        FactoryBot.create(:user_avatar, user: user, backend: 'active-storage', upload_file: true)
       end
     end
 
     trait :with_pending_avatar do
       after(:create) do |user|
-        FactoryBot.create(:user_avatar, :pending, user: user)
+        FactoryBot.create(:user_avatar, :pending, user: user, backend: 'active-storage', upload_file: true)
       end
     end
 
