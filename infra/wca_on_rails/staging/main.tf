@@ -253,7 +253,7 @@ resource "aws_ecs_task_definition" "this" {
 
   # This is shared with the API Server
   cpu = "1536"
-  memory = "7861"
+  memory = "5813"
 
   container_definitions = jsonencode([
     {

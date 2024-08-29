@@ -138,7 +138,11 @@ Rails.application.configure do
 
   # Error pages for production
   config.exceptions_app = ->(env) {
-    ErrorsController.action(:show).call(env)
+    if EnvConfig.API_ONLY?
+      ApiErrorsController.action(:show).call(env)
+    else
+      ErrorsController.action(:show).call(env)
+    end
   }
 
   # Only loads a smaller set of middleware suitable for API only apps.
