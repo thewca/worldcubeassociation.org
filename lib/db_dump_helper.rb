@@ -46,7 +46,7 @@ module DbDumpHelper
   end
 
   def self.public_s3_path(file_name)
-    "#{EnvConfig.ASSET_HOST}/#{file_name}"
+    "#{EnvConfig.DUMP_HOST}/#{file_name}"
   end
 
   def self.dump_results_db(export_timestamp = DateTime.now)
