@@ -136,9 +136,6 @@ class Api::V0::ApiController < ApplicationController
     }
   end
 
-  def help
-  end
-
   def search(*models)
     query = params[:q]&.slice(0...SearchResultsController::SEARCH_QUERY_LIMIT)
 
