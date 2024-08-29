@@ -3417,6 +3417,13 @@ th:
         spots_remaining_plural:
           zero: ผู้เข้าแข่งขันเต็มจำนวนแล้ว
           other: 'เหลืออีก %{count} คน'
+        payment:
+          #original_hash: d6fbc7a
+          refunded_status: คืนค่าสมัครแล้ว
+          #original_hash: 41248b1
+          initialized: 'กระบวนการชำระเงินเริ่มต้นเมื่อ %{date} แต่ยังไม่เสร็จสมบูรณ์'
+          #original_hash: 3a16c0d
+          refunded: 'การชำระค่าสมัครได้ทำการคืนเงินแล้วเมื่อวันที่ %{date}'
       bookmark:
         #original_hash: 7952a5c
         unbookmark: คุณได้ลบบุ๊กมาร์กของคุณแล้ว
@@ -3451,6 +3458,8 @@ th:
         move_waiting: ย้ายไป waiting list
         #original_hash: 284b24f
         cancel: ยกเลิกการสมัคร
+        #original_hash: 43dc853
+        amount: Amount
         #original_hash: 67b3c7d
         too_many: >-
           การยอมรับการลงทะเบียนทั้งหมดเหล่านี้จะเกินขีดจำกัดของผู้เข้าแข่งขันที่
