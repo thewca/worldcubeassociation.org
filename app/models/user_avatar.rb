@@ -192,8 +192,7 @@ class UserAvatar < ApplicationRecord
       secret_access_key: AppSecrets.AWS_SECRET_ACCESS_KEY
     )
 
-    store_path = Rails.application.routes.url_helpers.rails_storage_proxy_path(self.thumbnail_image)
-                      .delete_prefix('/')
+    store_path = self.thumbnail_image.processed.key.delete_prefix('/')
 
     # the hash keys and structure are per Amazon AWS' documentation
     # https://docs.aws.amazon.com/sdk-for-ruby/v3/api/Aws/CloudFront/Client.html#create_invalidation-instance_method
