@@ -195,8 +195,14 @@ class Api::V0::UserRolesController < Api::V0::ApiController
 
         ActiveRecord::Base.transaction do
           role.update!(end_date: Date.today)
-          metadata = RolesMetadataDelegateRegions.create!(status: status, location: role.metadata.location)
-          UserRole.create!(
+          metadata = RolesMetadataDelegateRegions.create!(
+            status: status,
+            location: role.metadata.location,
+            first_delegated: role.metadata.first_delegated,
+            last_delegated: role.metadata.last_delegated,
+            total_delegated: role.metadata.total_delegated,
+          )
+          role = UserRole.create!(
             user_id: role.user.id,
             group_id: role.group.id,
             start_date: Date.today,
@@ -215,8 +221,14 @@ class Api::V0::UserRolesController < Api::V0::ApiController
 
         ActiveRecord::Base.transaction do
           role.update!(end_date: Date.today)
-          metadata = RolesMetadataDelegateRegions.create!(status: role.metadata.status, location: role.metadata.location)
-          UserRole.create!(
+          metadata = RolesMetadataDelegateRegions.create!(
+            status: role.metadata.status,
+            location: role.metadata.location,
+            first_delegated: role.metadata.first_delegated,
+            last_delegated: role.metadata.last_delegated,
+            total_delegated: role.metadata.total_delegated,
+          )
+          role = UserRole.create!(
             user_id: role.user.id,
             group_id: group_id,
             start_date: Date.today,
@@ -233,8 +245,14 @@ class Api::V0::UserRolesController < Api::V0::ApiController
 
         ActiveRecord::Base.transaction do
           role.update!(end_date: Date.today)
-          metadata = RolesMetadataDelegateRegions.create!(status: role.metadata.status, location: location)
-          UserRole.create!(
+          metadata = RolesMetadataDelegateRegions.create!(
+            status: role.metadata.status,
+            location: location,
+            first_delegated: role.metadata.first_delegated,
+            last_delegated: role.metadata.last_delegated,
+            total_delegated: role.metadata.total_delegated,
+          )
+          role = UserRole.create!(
             user_id: role.user.id,
             group_id: role.group.id,
             start_date: Date.today,
@@ -273,7 +291,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
           elsif group_type == UserGroup.group_types[:councils]
             metadata = RolesMetadataCouncils.create!(status: status)
           end
-          UserRole.create!(
+          role = UserRole.create!(
             user_id: role.user.id,
             group_id: role.group.id,
             start_date: Date.today,

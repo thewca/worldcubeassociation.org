@@ -1077,6 +1077,8 @@ en:
         region_name: "Region Name"
         status: "Status"
         locale: "Locale"
+        group_name: "Team/Committee Name"
+        delegated_competitions_count: "Number of Delegated Competitions"
   user_groups:
     group_types:
       board: "WCA Board of Directors"
