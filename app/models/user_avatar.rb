@@ -152,13 +152,31 @@ class UserAvatar < ApplicationRecord
 
     if new_status == UserAvatar.statuses[:approved]
       # We approved a new avatar! Take the previously private file and upload it to public storage.
-      self.public_image.attach(self.private_image.blob)
-      self.private_image.purge_later
+      self.reattach_image(
+        self.private_image,
+        self.public_image,
+      )
     elsif old_status == UserAvatar.statuses[:approved]
       # We un-approved (deleted OR rejected) an old avatar. Take the previously public file and make it private.
-      self.private_image.attach(self.public_image.blob)
-      self.public_image.purge_later
+      self.reattach_image(
+        self.public_image,
+        self.private_image,
+      )
     end
+  end
+
+  private def reattach_image(from_file, to_file)
+    # ActiveStorage is a bit inconvenient when moving files around.
+    #   Simply writing `to_file.attach(from_file.blob)` makes the code execute successfully,
+    #   but under the hood the file is not actually moved because AS thinks that it's already uploaded :/
+    # Thus, we have to download the whole thing and re-upload again…
+    to_file.attach(
+      io: StringIO.new(from_file.download),
+      filename: from_file.filename,
+      content_type: from_file.content_type,
+    )
+
+    from_file.purge_later
   end
 
   after_save :invalidate_thumbnail_if_approved,
