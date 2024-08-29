@@ -44,7 +44,7 @@ jobs:
           push: true
           target: monolith-api
           tags: |
-            ${{ steps.login-ecr.outputs.registry }}/wca-on-rails:staging
+            ${{ steps.login-ecr.outputs.registry }}/wca-on-rails:staging-api
           cache-from: type=gha
           cache-to: type=gha,mode=max
           build-args: |
@@ -77,3 +77,4 @@ jobs:
       - name: Deploy staging
         run: |
           aws ecs update-service --cluster wca-on-rails --service wca-on-rails-staging --force-new-deployment
+          aws ecs update-service --cluster wca-on-rails --service wca-on-rails-staging-API --force-new-deployment
