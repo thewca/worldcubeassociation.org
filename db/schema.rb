@@ -686,8 +686,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_11_100821) do
 
   create_table "delegate_reports", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "competition_id"
-    t.integer "version", default: 0, null: false
-    t.text "summary"
     t.text "equipment"
     t.text "venue"
     t.text "organization"
@@ -1223,18 +1221,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_11_100821) do
     t.datetime "updated_at", precision: nil
     t.string "name", limit: 255
     t.string "wca_id"
-    t.string "legacy_avatar", limit: 255
     t.bigint "current_avatar_id"
     t.bigint "pending_avatar_id"
-    t.string "legacy_pending_avatar", limit: 255
-    t.integer "saved_avatar_crop_x"
-    t.integer "saved_avatar_crop_y"
-    t.integer "saved_avatar_crop_w"
-    t.integer "saved_avatar_crop_h"
-    t.integer "saved_pending_avatar_crop_x"
-    t.integer "saved_pending_avatar_crop_y"
-    t.integer "saved_pending_avatar_crop_w"
-    t.integer "saved_pending_avatar_crop_h"
     t.string "unconfirmed_wca_id", limit: 255
     t.integer "delegate_id_to_handle_wca_id_claim"
     t.date "dob"
@@ -1244,7 +1232,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_11_100821) do
     t.string "preferred_locale", limit: 255
     t.boolean "competition_notifications_enabled"
     t.boolean "receive_delegate_reports", default: false, null: false
-    t.string "delegate_reports_region"
     t.boolean "dummy_account", default: false, null: false
     t.integer "consumed_timestep"
     t.boolean "otp_required_for_login", default: false
