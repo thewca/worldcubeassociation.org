@@ -156,6 +156,34 @@ class UserAvatar < ApplicationRecord
     end
   end
 
+  after_save :invalidate_thumbnail_if_approved,
+             if: [:active_storage?, :approved?],
+             unless: :destroyed?
+
+  def invalidate_thumbnail_if_approved
+    cloudfront_sdk = ::Aws::CloudFront::Client.new(
+      region: EnvConfig.S3_AVATARS_REGION,
+      access_key_id: AppSecrets.AWS_ACCESS_KEY_ID,
+      secret_access_key: AppSecrets.AWS_SECRET_ACCESS_KEY
+    )
+
+    store_path = Rails.application.routes.url_helpers.rails_storage_proxy_path(self.thumbnail_image)
+                      .delete_prefix('/')
+
+    # the hash keys and structure are per Amazon AWS' documentation
+    # https://docs.aws.amazon.com/sdk-for-ruby/v3/api/Aws/CloudFront/Client.html#create_invalidation-instance_method
+    cloudfront_sdk.create_invalidation({
+                                         distribution_id: AppSecrets.CDN_AVATARS_DISTRIBUTION_ID,
+                                         invalidation_batch: {
+                                           paths: {
+                                             quantity: 1,
+                                             items: ["/#{store_path}"], # AWS SDK throws an error if the path doesn't start with "/"
+                                           },
+                                           caller_reference: "avatar-thumbnail-#{self.id}",
+                                         },
+                                       })
+  end
+
   # It is crucial to trigger this hook last. Even though the `.touch` method in itself doesn't
   #   trigger any subsequent *_save hooks, it "ruins" the other two save hooks' `previous_change` attribute reading.
   after_save :register_status_timestamps,
