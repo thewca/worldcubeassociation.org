@@ -36,8 +36,8 @@ class UserAvatar < ApplicationRecord
 
       URI::HTTPS.build(host: host, path: path).to_s
     when 'active_storage'
-      if self.approved?
-        Rails.application.routes.url_helpers.rails_storage_proxy_url(self.image, host: EnvConfig.S3_AVATARS_ASSET_HOST)
+      if self.using_cdn?
+        URI.join(EnvConfig.S3_AVATARS_ASSET_HOST, self.image.key).to_s
       else
         Rails.application.routes.url_helpers.rails_representation_url(self.image)
       end
@@ -58,8 +58,8 @@ class UserAvatar < ApplicationRecord
 
       URI::HTTPS.build(host: host, path: path).to_s
     when 'active_storage'
-      if self.approved?
-        Rails.application.routes.url_helpers.rails_storage_proxy_url(self.thumbnail_image, host: EnvConfig.S3_AVATARS_ASSET_HOST)
+      if self.using_cdn?
+        URI.join(EnvConfig.S3_AVATARS_ASSET_HOST, self.thumbnail_image.processed.key).to_s
       else
         Rails.application.routes.url_helpers.rails_representation_url(self.thumbnail_image)
       end
@@ -67,6 +67,11 @@ class UserAvatar < ApplicationRecord
       # Only get the thumbnail if AR does the image processing for us
       nil
     end
+  end
+
+  def using_cdn?
+    # Approved avatars are actively being used and should therefor be served by our CDN
+    self.approved?
   end
 
   def filename
