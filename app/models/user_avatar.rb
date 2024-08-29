@@ -161,6 +161,8 @@ class UserAvatar < ApplicationRecord
              unless: :destroyed?
 
   def invalidate_thumbnail_if_approved
+    return unless AppSecrets.CDN_AVATARS_DISTRIBUTION_ID.present?
+
     cloudfront_sdk = ::Aws::CloudFront::Client.new(
       region: EnvConfig.S3_AVATARS_REGION,
       access_key_id: AppSecrets.AWS_ACCESS_KEY_ID,
