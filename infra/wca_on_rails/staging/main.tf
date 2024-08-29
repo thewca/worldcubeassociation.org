@@ -188,7 +188,7 @@ resource "aws_iam_role_policy" "task_policy" {
 }
 
 resource "aws_ecs_task_definition" "api" {
-  family = var.name_prefix
+  family = "${var.name_prefix}-api"
 
   network_mode             = "awsvpc"
   requires_compatibilities = ["EC2"]
@@ -226,7 +226,7 @@ resource "aws_ecs_task_definition" "api" {
       }
       environment = local.rails_environment
       healthCheck       = {
-        command            = ["CMD-SHELL", "curl -f http://localhost:3001/ || exit 1"]
+        command            = ["CMD-SHELL", "curl -f http://localhost:3000/api/v0/healthcheck || exit 1"]
         interval           = 10
         retries            = 3
         startPeriod        = 60
@@ -251,8 +251,8 @@ resource "aws_ecs_task_definition" "this" {
   execution_role_arn = aws_iam_role.task_execution_role.arn
   task_role_arn      = aws_iam_role.task_role.arn
 
-  # This is what our current staging instance is using
-  cpu = "2048"
+  # This is shared with the API Server
+  cpu = "1536"
   memory = "7861"
 
   container_definitions = jsonencode([
@@ -260,7 +260,7 @@ resource "aws_ecs_task_definition" "this" {
       name              = "rails-staging"
       image             = "${var.shared.ecr_repository.repository_url}:staging"
       cpu    = 1024
-      memory = 4789
+      memory = 4901
       portMappings = [
         {
           # The hostPort is automatically set for awsvpc network mode,
@@ -317,7 +317,7 @@ resource "aws_ecs_task_definition" "this" {
       name              = "pma-staging"
       image             = "${var.shared.ecr_repository.repository_url}:pma"
       cpu    = 256
-      memory = 512
+      memory = 400
       portMappings = [{
         # The hostPort is automatically set for awsvpc network mode,
         # see https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_PortMapping.html#ECS-Type-PortMapping-hostPort
@@ -352,6 +352,10 @@ resource "aws_ecs_task_definition" "this" {
 
 data "aws_ecs_task_definition" "this" {
   task_definition = aws_ecs_task_definition.this.family
+}
+
+data "aws_ecs_task_definition" "api" {
+  task_definition = aws_ecs_task_definition.api.family
 }
 
 resource "aws_ecs_task_definition" "db-reset" {
@@ -474,8 +478,8 @@ resource "aws_ecs_service" "api" {
   # During deployment a new task revision is created with modified
   # container image, so we want use data.aws_ecs_task_definition to
   # always point to the active task definition
-  task_definition                    = data.aws_ecs_task_definition.this.arn
-  desired_count                      = 0
+  task_definition                    = data.aws_ecs_task_definition.api.arn
+  desired_count                      = 1
   scheduling_strategy                = "REPLICA"
   deployment_maximum_percent         = 200
   deployment_minimum_healthy_percent = 50

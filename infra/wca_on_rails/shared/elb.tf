@@ -162,7 +162,7 @@ resource "aws_lb_target_group" "rails-staging-api" {
   deregistration_delay = 10
   health_check {
     interval            = 5
-    path                = "/healthcheck"
+    path                = "/api/v0/healthcheck"
     port                = "traffic-port"
     protocol            = "HTTP"
     timeout             = 2
