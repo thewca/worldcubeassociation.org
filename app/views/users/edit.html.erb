@@ -176,6 +176,7 @@
           userId: @user.id,
           uploadDisabled: !editable_fields.include?(:pending_avatar),
           canRemoveAvatar: @user.current_avatar.present? && editable_fields.include?(:current_avatar),
+          canAdminAvatars: current_user.can_admin_results?,
         }) %>
       </div>
     <% end %>

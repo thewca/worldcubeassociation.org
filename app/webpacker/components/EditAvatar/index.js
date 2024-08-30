@@ -16,7 +16,7 @@ import ImageUpload from './ImageUpload';
 import 'react-image-crop/dist/ReactCrop.css';
 import ThumbnailEditor from './ThumbnailEditor';
 import useLoadedData from '../../lib/hooks/useLoadedData';
-import { userAvatarDataUrl } from '../../lib/requests/routes.js.erb';
+import { userAvatarDataUrl, adminAvatarsUrl } from '../../lib/requests/routes.js.erb';
 import Errored from '../Requests/Errored';
 import useSaveAction from '../../lib/hooks/useSaveAction';
 import UserAvatar from '../UserAvatar';
@@ -26,6 +26,7 @@ function EditAvatar({
   userId,
   uploadDisabled,
   canRemoveAvatar,
+  canAdminAvatars,
 }) {
   const avatarDataUrl = useMemo(() => userAvatarDataUrl(userId), [userId]);
 
@@ -132,7 +133,7 @@ function EditAvatar({
             onChange={setIsEditingPending}
           />
           {isEditingPending && <b>{I18n.t('users.edit.pending_avatar_edit_warning')}</b>}
-          {/* TODO: Path to admin if permission */}
+          {canAdminAvatars && <a href={adminAvatarsUrl}>{I18n.t('users.edit.manage_pending')}</a>}
         </Message>
       )}
       <Dimmer.Dimmable as={Grid}>
