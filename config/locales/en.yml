@@ -998,6 +998,8 @@ en:
       confirm_new_email: "Changing your email will require confirming the new email before being effective."
       pending_mail_confirmation: "This account is pending confirmation of new email address %{email}."
       pending_avatar_confirmation: "This account is pending confirmation of a new avatar."
+      pending_avatar_edit_action: "Click here if you want to edit it instead:"
+      pending_avatar_edit_warning: "Editing pending avatar!"
       pending_claim_confirmation_html: "This account is waiting for %{delegate} to confirm their claimed WCA ID %{wca_id}."
       pending_claim_mail_confirmation_html: "This user has claimed WCA ID %{wca_id}. Their Delegate %{delegate} will be notified of this request as soon as this account's email address is confirmed."
       your_thumbnail: "Your account thumbnail:"

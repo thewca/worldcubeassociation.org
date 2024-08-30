@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import {
   Button,
-  Container,
-  Form,
+  Container, Divider,
+  Form, Header,
   Icon,
 } from 'semantic-ui-react';
 import I18n from '../../lib/i18n';
@@ -84,6 +84,7 @@ function ImageUpload({
             onChange={setIsConsenting}
             error={checkboxError}
           />
+          <p>{I18n.t('users.edit.confirm_guidelines')}</p>
           <Form.Button
             floated="left"
             primary
@@ -106,6 +107,8 @@ function ImageUpload({
       </Container>
       {isRemoving && (
         <Container>
+          <Divider />
+          <Header>{I18n.t('users.edit.remove_avatar_confirm')}</Header>
           <Form onSubmit={removeAvatar}>
             <Form.TextArea
               required

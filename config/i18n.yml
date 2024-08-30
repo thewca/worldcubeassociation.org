@@ -53,6 +53,7 @@ translations:
       - "*.user_roles.*"
       - "*.user_groups.*"
       - "*.simple_form.hints.competition.*"
+      - "*.simple_form.hints.user.*"
       - "*.simple_form.options.competition.*"
       - "*.simple_form.options.registration.status.*"
       - "*.activerecord.attributes.competition.*"

@@ -120,18 +120,18 @@ function EditAvatar({
       {error && <Errored />}
       {pendingAvatar && (
         <Message warning>
-          There is a pending avatar for your user:
+          {I18n.t('users.edit.pending_avatar_confirmation')}
           <UserAvatar
             avatar={pendingAvatar}
             size="medium"
           />
-          Click here if you want to edit its thumbnail instead:
+          {I18n.t('users.edit.pending_avatar_edit_action')}
           <Checkbox
             toggle
             checked={isEditingPending}
             onChange={setIsEditingPending}
           />
-          {isEditingPending && <b>Editing pending avatar!</b>}
+          {isEditingPending && <b>{I18n.t('users.edit.pending_avatar_edit_warning')}</b>}
           {/* TODO: Path to admin if permission */}
         </Message>
       )}
