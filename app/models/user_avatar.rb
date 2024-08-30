@@ -109,6 +109,14 @@ class UserAvatar < ApplicationRecord
 
   alias_method :is_default, :default_avatar?
 
+  def can_edit_thumbnail?
+    # Only freshly uploaded pictures using the new ActiveStorage backend can affect their thumbnail.
+    #   This is a temporary patch while the backwards-compatible s3-legacy-cdn still exists.
+    self.active_storage?
+  end
+
+  alias_method :can_edit_thumbnail, :can_edit_thumbnail?
+
   after_save :move_user_associations,
              if: :status_previously_changed?,
              unless: :destroyed?
@@ -274,7 +282,7 @@ class UserAvatar < ApplicationRecord
 
   DEFAULT_SERIALIZE_OPTIONS = {
     only: ["id", "status", "thumbnail_crop_x", "thumbnail_crop_y", "thumbnail_crop_w", "thumbnail_crop_h"],
-    methods: ["url", "thumb_url", "is_default"],
+    methods: ["url", "thumb_url", "is_default", "can_edit_thumbnail"],
   }.freeze
 
   def serializable_hash(options = nil)

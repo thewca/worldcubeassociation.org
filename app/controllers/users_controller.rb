@@ -149,15 +149,9 @@ class UsersController < ApplicationController
   def avatar_data
     user = user_to_edit
 
-    user_data = {
-      showStaffGuidelines: user.staff_or_any_delegate?,
-      isDefaultAvatar: !user.current_avatar.present?,
-    }
-
     avatar_data = {
-      avatar: user.avatar.to_wcif,
-      pendingAvatar: user.pending_avatar&.to_wcif,
-      userData: user_data,
+      avatar: user.avatar,
+      pendingAvatar: user.pending_avatar,
     }
 
     render json: avatar_data

@@ -24,6 +24,7 @@ import useCheckboxState from '../../lib/hooks/useCheckboxState';
 
 function EditAvatar({
   userId,
+  showStaffGuidelines,
   uploadDisabled,
   canRemoveAvatar,
   canAdminAvatars,
@@ -57,7 +58,13 @@ function EditAvatar({
     return workingAvatar?.url;
   }, [workingAvatar, userUploadedImage]);
 
-  const workingThumbnail = useMemo(() => workingAvatar?.thumbnail, [workingAvatar]);
+  const workingThumbnail = useMemo(() => ({
+    x: workingAvatar?.thumbnail_crop_x,
+    y: workingAvatar?.thumbnail_crop_y,
+    width: workingAvatar?.thumbnail_crop_w,
+    height: workingAvatar?.thumbnail_crop_h,
+    unit: 'px',
+  }), [workingAvatar]);
 
   const [userCropAbs, setUserCropAbs] = useState();
 
@@ -66,10 +73,7 @@ function EditAvatar({
       return userCropAbs;
     }
 
-    return {
-      ...workingThumbnail,
-      unit: 'px',
-    };
+    return workingThumbnail;
   }, [workingThumbnail, userCropAbs, userUploadedImage]);
 
   const uploadUserImage = (img) => {
@@ -154,7 +158,7 @@ function EditAvatar({
                   <Message.Item key={idx}>{guideline}</Message.Item>
                 ))}
               </Message.List>
-              {data?.userData?.showStaffGuidelines && (
+              {showStaffGuidelines && (
                 <>
                   <Divider />
                   <Message.Header>{I18n.t('users.edit.staff_avatar_guidelines.title')}</Message.Header>
@@ -179,7 +183,7 @@ function EditAvatar({
               imageSrc={imageURL}
               thumbnail={cropAbs}
               onThumbnailSaved={saveAvatarThumbnail}
-              editsDisabled={!userUploadedImage && data?.userData?.isDefaultAvatar}
+              editsDisabled={!userUploadedImage && !workingAvatar?.can_edit_thumbnail}
             />
           </Grid.Column>
         </Grid.Row>
