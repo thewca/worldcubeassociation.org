@@ -115,7 +115,9 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
         expect(json["result"].length).to eq 1
         expect(json["result"][0]["id"]).to eq userless_person.wca_id
         expect(json["result"][0]["wca_id"]).to eq userless_person.wca_id
-        expect(json['result'][0]['avatar']['url']).to eq UserAvatar::DEFAULT_AVATAR_FILE
+        default_avatar = UserAvatar.default_avatar(nil)
+        expect(json['result'][0]['avatar']['url']).to eq default_avatar.url
+        expect(json['result'][0]['avatar']['thumbUrl']).to eq default_avatar.thumbnail_url
         expect(json['result'][0]['avatar']['is_default?']).to eq true
       end
 
@@ -380,7 +382,9 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
         expect(json['me']['wca_id']).to eq(user.wca_id)
         expect(json['me']['name']).to eq(user.name)
         expect(json['me']['email']).to eq(user.email)
-        expect(json['me']['avatar']['url']).to eq UserAvatar::DEFAULT_AVATAR_FILE
+        default_avatar = UserAvatar.default_avatar(user)
+        expect(json['me']['avatar']['url']).to eq default_avatar.url
+        expect(json['me']['avatar']['thumbUrl']).to eq default_avatar.thumbnail_url
         expect(json['me']['avatar']['is_default?']).to eq true
 
         expect(json['me']['country_iso2']).to eq "US"
@@ -406,7 +410,9 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
         expect(json['me']['wca_id']).to eq(user.wca_id)
         expect(json['me']['name']).to eq(user.name)
         expect(json['me']['email']).to eq(user.email)
-        expect(json['me']['avatar']['url']).to eq UserAvatar::DEFAULT_AVATAR_FILE
+        default_avatar = UserAvatar.default_avatar(user)
+        expect(json['me']['avatar']['url']).to eq default_avatar.url
+        expect(json['me']['avatar']['thumbUrl']).to eq default_avatar.thumbnail_url
         expect(json['me']['avatar']['is_default?']).to eq true
 
         expect(json['me']['country_iso2']).to eq "US"

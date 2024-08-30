@@ -333,11 +333,16 @@ class User < ApplicationRecord
     if wca_id_change && wca_id.present?
       dummy_user = User.find_by(wca_id: wca_id, dummy_account: true)
       if dummy_user
+        # Transfer current and pending avatar associations
+        self.current_avatar = dummy_user.current_avatar
+        self.pending_avatar = dummy_user.pending_avatar
+
+        # Transfer historic avatars
         self.user_avatars = dummy_user.user_avatars
+
         # The `reload` is necessary because otherwise, the old pre-reload `user_avatars`
         # association on `dummy_user` would pull the avatars to the grave.
-        dummy_user.user_avatars.reload
-        dummy_user.destroy!
+        dummy_user.reload.destroy!
       end
     end
   end
@@ -1195,8 +1200,8 @@ class User < ApplicationRecord
   DEFAULT_SERIALIZE_OPTIONS = {
     only: ["id", "wca_id", "name", "gender",
            "country_iso2", "created_at", "updated_at"],
-    methods: ["url", "country", "delegate_status", "avatar"],
-    include: ["teams"],
+    methods: ["url", "country", "delegate_status"],
+    include: ["avatar", "teams"],
   }.freeze
 
   def serializable_hash(options = nil)
@@ -1255,7 +1260,7 @@ class User < ApplicationRecord
       "countryIso2" => country_iso2,
       "gender" => gender,
       "registration" => registration&.to_wcif(authorized: authorized),
-      "avatar" => avatar&.to_wcif,
+      "avatar" => current_avatar&.to_wcif,
       "roles" => roles,
       "assignments" => registration&.assignments&.map(&:to_wcif) || [],
       "personalBests" => person&.personal_records&.map(&:to_wcif) || [],

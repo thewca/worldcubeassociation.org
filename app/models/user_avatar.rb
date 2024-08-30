@@ -64,6 +64,9 @@ class UserAvatar < ApplicationRecord
         Rails.application.routes.url_helpers.rails_representation_url(self.thumbnail_image)
       end
     else
+      # The default Avatar is its own thumbnail
+      return self.url if self.is_default?
+
       # Only get the thumbnail if AR does the image processing for us
       nil
     end
