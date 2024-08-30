@@ -145,19 +145,6 @@ Rails.application.configure do
     end
   }
 
-  # Only loads a smaller set of middleware suitable for API only apps.
-  # Middleware like session, flash, cookies can be added back manually.
-  # Skip views, helpers and assets when generating a new resource.
-  if EnvConfig.API_ONLY?
-    config.api_only = EnvConfig.API_ONLY?
-    # Manually enable sessions again
-    config.middleware.use ActionDispatch::Cookies
-    config.session_store :cookie_store, key: '_WcaOnRails_session',
-                         secure: true,
-                         same_site: :lax
-    config.middleware.use config.session_store, config.session_options
-  end
-
   # Inserts middleware to perform automatic connection switching.
   # The `database_selector` hash is used to pass options to the DatabaseSelector
   # middleware. The `delay` is used to determine how long to wait after a write
