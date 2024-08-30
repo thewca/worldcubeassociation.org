@@ -3,12 +3,12 @@
 FactoryBot.define do
   factory :user_avatar do
     filename { 'logo.jpg' }
-    status { 'approved' }
+    status { UserAvatar.statuses[:approved] }
     thumbnail_crop_x { 0 }
     thumbnail_crop_y { 0 }
     thumbnail_crop_w { 100 }
     thumbnail_crop_h { 100 }
-    backend { 'local' }
+    backend { UserAvatar.backends[:local] }
 
     user { FactoryBot.create(:user) }
 

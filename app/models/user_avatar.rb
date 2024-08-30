@@ -65,12 +65,14 @@ class UserAvatar < ApplicationRecord
       end
     else
       # The default Avatar is its own thumbnail
-      return self.url if self.is_default?
+      return self.url if self.default_avatar?
 
       # Only get the thumbnail if AR does the image processing for us
       nil
     end
   end
+
+  alias_method :thumb_url, :thumbnail_url
 
   def using_cdn?
     # Approved avatars are actively being used and should therefor be served by our CDN
@@ -101,9 +103,11 @@ class UserAvatar < ApplicationRecord
     self.image.attach(file)
   end
 
-  def is_default?
-    self.filename == DEFAULT_AVATAR_FILE && self.backend == UserAvatar.backends[:local]
+  def default_avatar?
+    self.filename == DEFAULT_AVATAR_FILE && self.local?
   end
+
+  alias_method :is_default, :default_avatar?
 
   after_save :move_user_associations,
              if: :status_previously_changed?,
@@ -270,7 +274,7 @@ class UserAvatar < ApplicationRecord
 
   DEFAULT_SERIALIZE_OPTIONS = {
     only: ["id", "status", "thumbnail_crop_x", "thumbnail_crop_y", "thumbnail_crop_w", "thumbnail_crop_h"],
-    methods: ["url", "thumbnail_url", "is_default?"],
+    methods: ["url", "thumb_url", "is_default"],
   }.freeze
 
   def serializable_hash(options = nil)

@@ -11,7 +11,7 @@ function UserAvatar({
   size = 'medium',
   disableHover = false,
 }) {
-  const { url, thumbnail_url: thumbUrl } = avatar;
+  const { url, thumb_url: thumbUrl } = avatar;
 
   if (!['tiny', 'small', 'medium', 'large'].includes(size)) {
     throw new Error(`Invalid size: ${size} must be one of 'small', 'medium', or 'large'`);
