@@ -1,10 +1,12 @@
 import React, { useMemo, useState } from 'react';
 import {
-  Button, Container,
-  Form, Grid,
+  Button,
+  Container,
+  Form,
+  Grid,
   Header,
-  Icon,
-  Image, Message,
+  Image,
+  Message,
   Popup,
 } from 'semantic-ui-react';
 import ReactCrop, {
