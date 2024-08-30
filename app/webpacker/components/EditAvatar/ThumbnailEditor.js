@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import {
   Button, Container,
-  Form,
+  Form, Grid,
   Header,
   Icon,
   Image,
@@ -106,42 +106,65 @@ function ThumbnailEditor({
           style={{ width: '100%', height: 'auto' }}
         />
       </ReactCrop>
-      <Form onSubmit={saveThumbnail}>
-        {isEditingThumbnail && (
-          <Button.Group icon floated="right">
-            <Form.Button
-              type="submit"
-              primary
-              disabled={!uiCropRel}
-            >
-              <Icon name="save" />
-            </Form.Button>
-            <Form.Button
-              negative
-              onClick={resetThumbnail}
-              disabled={!uiCropRel}
-            >
-              <Icon name="cancel" />
-            </Form.Button>
-          </Button.Group>
-        )}
-      </Form>
-      {!editsDisabled && (
-        <Container textAlign="center">
-          <Header>{I18n.t('users.edit.your_thumbnail')}</Header>
-          <Popup
-            content={I18n.t('users.edit.edit_thumbnail')}
-            trigger={(
-              <div className="user-avatar-image-large">
-                <CroppedImage
-                  crop={uiCropRel || storedCropRel}
-                  src={imageSrc}
-                  onClick={enableThumbnailCrop}
+      {isEditingThumbnail ? (
+        <Grid centered columns={3}>
+          <Grid.Column textAlign="center">
+            <Header>{I18n.t('users.edit_avatar_thumbnail.current')}</Header>
+            <div className="user-avatar-image-large">
+              <CroppedImage
+                crop={storedCropRel}
+                src={imageSrc}
+              />
+            </div>
+          </Grid.Column>
+          <Grid.Column textAlign="center">
+            <Header>{I18n.t('users.edit_avatar_thumbnail.new')}</Header>
+            <div className="user-avatar-image-large">
+              <CroppedImage
+                crop={uiCropRel}
+                src={imageSrc}
+              />
+            </div>
+          </Grid.Column>
+          <Grid.Column textAlign="center" floated="right">
+            <Form onSubmit={saveThumbnail}>
+              <Button.Group icon vertical>
+                <Form.Button
+                  type="submit"
+                  primary
+                  disabled={!uiCropRel}
+                  icon="save"
+                  content={I18n.t('users.edit_avatar_thumbnail.save')}
                 />
-              </div>
-            )}
-          />
-        </Container>
+                <Form.Button
+                  negative
+                  onClick={resetThumbnail}
+                  disabled={!uiCropRel}
+                  icon="cancel"
+                  content={I18n.t('users.edit_avatar_thumbnail.reset')}
+                />
+              </Button.Group>
+            </Form>
+          </Grid.Column>
+        </Grid>
+      ) : (
+        !editsDisabled && (
+          <Container textAlign="center">
+            <Header>{I18n.t('users.edit.your_thumbnail')}</Header>
+            <Popup
+              content={I18n.t('users.edit.edit_thumbnail')}
+              trigger={(
+                <div className="user-avatar-image-large">
+                  <CroppedImage
+                    crop={uiCropRel || storedCropRel}
+                    src={imageSrc}
+                    onClick={enableThumbnailCrop}
+                  />
+                </div>
+              )}
+            />
+          </Container>
+        )
       )}
     </>
   );

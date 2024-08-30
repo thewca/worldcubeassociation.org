@@ -984,6 +984,7 @@ en:
       current: "Current thumbnail:"
       new: "New thumbnail:"
       save: "Save"
+      reset: "Reset"
     edit:
       general: "General"
       email: "Email"
