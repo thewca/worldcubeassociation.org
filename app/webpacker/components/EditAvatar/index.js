@@ -21,6 +21,7 @@ import Errored from '../Requests/Errored';
 import useSaveAction from '../../lib/hooks/useSaveAction';
 import UserAvatar from '../UserAvatar';
 import useCheckboxState from '../../lib/hooks/useCheckboxState';
+import _ from "lodash";
 
 function EditAvatar({
   userId,
@@ -37,11 +38,13 @@ function EditAvatar({
   } = useLoadedData(avatarDataUrl);
 
   const [isEditingPending, setIsEditingPending] = useCheckboxState(false);
+
+  const currentAvatar = useMemo(() => data?.avatar, [data]);
   const pendingAvatar = useMemo(() => data?.pendingAvatar, [data]);
 
   const workingAvatar = useMemo(
-    () => (isEditingPending ? pendingAvatar : data?.avatar),
-    [data, pendingAvatar, isEditingPending],
+    () => (isEditingPending ? pendingAvatar : currentAvatar),
+    [currentAvatar, pendingAvatar, isEditingPending],
   );
 
   const [userUploadedImage, setUserUploadedImage] = useState();
@@ -54,6 +57,8 @@ function EditAvatar({
     return workingAvatar?.url;
   }, [workingAvatar, userUploadedImage]);
 
+  const workingThumbnail = useMemo(() => workingAvatar?.thumbnail, [workingAvatar]);
+
   const [userCropAbs, setUserCropAbs] = useState();
 
   const cropAbs = useMemo(() => {
@@ -62,10 +67,15 @@ function EditAvatar({
     }
 
     return {
-      ...workingAvatar?.thumbnail,
+      ...workingThumbnail,
       unit: 'px',
     };
-  }, [workingAvatar, userCropAbs, userUploadedImage]);
+  }, [workingThumbnail, userCropAbs, userUploadedImage]);
+
+  const hasChangedThumbnail = useMemo(
+    () => _.isEqual(cropAbs, workingThumbnail),
+    [cropAbs, workingThumbnail],
+  );
 
   const uploadUserImage = (img) => {
     // It is important to reset the crop first, so that
@@ -131,6 +141,13 @@ function EditAvatar({
           {/* TODO: Path to admin if permission */}
         </Message>
       )}
+      {hasChangedThumbnail && (
+        <Message
+          warning
+          header={I18n.t('users.edit_avatar_thumbnail.cdn_warning')}
+          content={I18n.t('users.edit_avatar_thumbnail.cdn_explanation')}
+        />
+      )}
       <Dimmer.Dimmable as={Grid}>
         <Dimmer active={loading} inverted>
           <Loader content="Loading" />
@@ -172,9 +189,9 @@ function EditAvatar({
           <Grid.Column>
             <ThumbnailEditor
               imageSrc={imageURL}
-              storedCropAbs={cropAbs}
-              editsDisabled={!userUploadedImage && data?.userData?.isDefaultAvatar}
+              thumbnail={cropAbs}
               onThumbnailSaved={saveAvatarThumbnail}
+              editsDisabled={!userUploadedImage && data?.userData?.isDefaultAvatar}
             />
           </Grid.Column>
         </Grid.Row>

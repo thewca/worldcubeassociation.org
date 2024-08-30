@@ -21,9 +21,9 @@ const SUGGESTED_IMG_RATIO = 33;
 
 function ThumbnailEditor({
   imageSrc,
-  storedCropAbs,
-  editsDisabled,
+  thumbnail,
   onThumbnailSaved,
+  editsDisabled,
 }) {
   const [uiCropRel, setUiCropRel] = useState();
 
@@ -31,12 +31,12 @@ function ThumbnailEditor({
   const [naturalHeight, setNaturalHeight] = useState();
 
   const storedCropRel = useMemo(() => {
-    if (storedCropAbs) {
-      return convertToPercentCrop(storedCropAbs, naturalWidth, naturalHeight);
+    if (thumbnail) {
+      return convertToPercentCrop(thumbnail, naturalWidth, naturalHeight);
     }
 
     return undefined;
-  }, [storedCropAbs, naturalWidth, naturalHeight]);
+  }, [thumbnail, naturalWidth, naturalHeight]);
 
   const enableThumbnailCrop = () => setUiCropRel(storedCropRel);
   const disableThumbnailCrop = () => setUiCropRel(undefined);
@@ -68,7 +68,7 @@ function ThumbnailEditor({
 
     disableThumbnailCrop();
 
-    if (!storedCropAbs) {
+    if (!thumbnail) {
       const aspectCrop = makeAspectCrop(
         {
           unit: '%',
@@ -110,6 +110,7 @@ function ThumbnailEditor({
         {isEditingThumbnail && (
           <Button.Group icon floated="right">
             <Form.Button
+              type="submit"
               primary
               disabled={!uiCropRel}
             >
