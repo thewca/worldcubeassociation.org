@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-MASTER_PREFIX = 'uploads/user/avatar/'.freeze
-PREFIX_REGEX = /\/([1-9][[:digit:]]{3}[[:upper:]]{4}[[:digit:]]{2})\/.*\/([[:alnum:]]+\.[[:alnum:]]+)/.freeze
+MASTER_PREFIX = 'uploads/user/avatar/'
+PREFIX_REGEX = %r{/([1-9][[:digit:]]{3}[[:upper:]]{4}[[:digit:]]{2})/.*/([[:alnum:]]+\.[[:alnum:]]+)}
 
 def s3_active_storage
   ActiveStorage::Blob.services.fetch(EnvConfig.AVATARS_PUBLIC_STORAGE)
@@ -18,11 +18,11 @@ end
 
 namespace :user_avatars do
   desc "Migrate old, deleted S3 avatars"
-  task :migrate_deleted => :environment do
+  task migrate_deleted: :environment do
     user_cache = {}
 
     list_avatar_files.each do |f|
-      return if f.key == MASTER_PREFIX
+      next if f.key == MASTER_PREFIX
 
       PREFIX_REGEX.match(f.key) do |match|
         wca_id = match[1]
@@ -34,7 +34,7 @@ namespace :user_avatars do
         avatar_filename = user.current_avatar&.filename
         pending_avatar_filename = user.pending_avatar&.filename
 
-        return if filename == avatar_filename || filename == pending_avatar_filename
+        break if filename == avatar_filename || filename == pending_avatar_filename
 
         is_rejected = f.key.include?('/rejected/')
         is_thumbnail = f.key.include?('_thumb')
@@ -59,11 +59,11 @@ namespace :user_avatars do
   end
 
   desc "Migrate current avatars"
-  task :migrate_current => :environment do
+  task migrate_current: :environment do
     user_cache = {}
 
     list_avatar_files.each do |f|
-      return if f.key == MASTER_PREFIX
+      next if f.key == MASTER_PREFIX
 
       PREFIX_REGEX.match(f.key) do |match|
         wca_id = match[1]
@@ -81,7 +81,7 @@ namespace :user_avatars do
           matching_avatar = user.pending_avatar
         end
 
-        return unless matching_avatar.present?
+        break unless matching_avatar.present?
 
         downloaded_image = StringIO.new(s3_active_storage.download(f.key))
 

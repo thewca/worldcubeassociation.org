@@ -183,7 +183,7 @@ class UserAvatar < ApplicationRecord
     cloudfront_sdk = ::Aws::CloudFront::Client.new(
       region: EnvConfig.S3_AVATARS_REGION,
       access_key_id: AppSecrets.AWS_ACCESS_KEY_ID,
-      secret_access_key: AppSecrets.AWS_SECRET_ACCESS_KEY
+      secret_access_key: AppSecrets.AWS_SECRET_ACCESS_KEY,
     )
 
     store_path = self.thumbnail_image.processed.key.delete_prefix('/')
