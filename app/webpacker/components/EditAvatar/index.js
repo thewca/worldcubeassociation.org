@@ -21,7 +21,6 @@ import Errored from '../Requests/Errored';
 import useSaveAction from '../../lib/hooks/useSaveAction';
 import UserAvatar from '../UserAvatar';
 import useCheckboxState from '../../lib/hooks/useCheckboxState';
-import _ from "lodash";
 
 function EditAvatar({
   userId,
@@ -71,11 +70,6 @@ function EditAvatar({
       unit: 'px',
     };
   }, [workingThumbnail, userCropAbs, userUploadedImage]);
-
-  const hasChangedThumbnail = useMemo(
-    () => _.isEqual(cropAbs, workingThumbnail),
-    [cropAbs, workingThumbnail],
-  );
 
   const uploadUserImage = (img) => {
     // It is important to reset the crop first, so that
@@ -140,13 +134,6 @@ function EditAvatar({
           {isEditingPending && <b>Editing pending avatar!</b>}
           {/* TODO: Path to admin if permission */}
         </Message>
-      )}
-      {hasChangedThumbnail && (
-        <Message
-          warning
-          header={I18n.t('users.edit_avatar_thumbnail.cdn_warning')}
-          content={I18n.t('users.edit_avatar_thumbnail.cdn_explanation')}
-        />
       )}
       <Dimmer.Dimmable as={Grid}>
         <Dimmer active={loading} inverted>

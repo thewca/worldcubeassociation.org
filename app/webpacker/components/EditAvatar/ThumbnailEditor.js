@@ -4,7 +4,7 @@ import {
   Form, Grid,
   Header,
   Icon,
-  Image,
+  Image, Message,
   Popup,
 } from 'semantic-ui-react';
 import ReactCrop, {
@@ -107,46 +107,53 @@ function ThumbnailEditor({
         />
       </ReactCrop>
       {isEditingThumbnail ? (
-        <Grid centered columns={3}>
-          <Grid.Column textAlign="center">
-            <Header>{I18n.t('users.edit_avatar_thumbnail.current')}</Header>
-            <div className="user-avatar-image-large">
-              <CroppedImage
-                crop={storedCropRel}
-                src={imageSrc}
-              />
-            </div>
-          </Grid.Column>
-          <Grid.Column textAlign="center">
-            <Header>{I18n.t('users.edit_avatar_thumbnail.new')}</Header>
-            <div className="user-avatar-image-large">
-              <CroppedImage
-                crop={uiCropRel}
-                src={imageSrc}
-              />
-            </div>
-          </Grid.Column>
-          <Grid.Column textAlign="center" floated="right">
-            <Form onSubmit={saveThumbnail}>
-              <Button.Group icon vertical>
-                <Form.Button
-                  type="submit"
-                  primary
-                  disabled={!uiCropRel}
-                  icon="save"
-                  content={I18n.t('users.edit_avatar_thumbnail.save')}
+        <>
+          <Message
+            warning
+            header={I18n.t('users.edit_avatar_thumbnail.cdn_warning')}
+            content={I18n.t('users.edit_avatar_thumbnail.cdn_explanation')}
+          />
+          <Grid centered columns={3}>
+            <Grid.Column textAlign="center">
+              <Header>{I18n.t('users.edit_avatar_thumbnail.current')}</Header>
+              <div className="user-avatar-image-large">
+                <CroppedImage
+                  crop={storedCropRel}
+                  src={imageSrc}
                 />
-                <Form.Button
-                  negative
-                  onClick={resetThumbnail}
-                  disabled={!uiCropRel}
-                  icon="cancel"
-                  content={I18n.t('users.edit_avatar_thumbnail.reset')}
+              </div>
+            </Grid.Column>
+            <Grid.Column textAlign="center">
+              <Header>{I18n.t('users.edit_avatar_thumbnail.new')}</Header>
+              <div className="user-avatar-image-large">
+                <CroppedImage
+                  crop={uiCropRel}
+                  src={imageSrc}
                 />
-              </Button.Group>
-            </Form>
-          </Grid.Column>
-        </Grid>
+              </div>
+            </Grid.Column>
+            <Grid.Column textAlign="center" floated="right">
+              <Form onSubmit={saveThumbnail}>
+                <Button.Group icon vertical>
+                  <Form.Button
+                    type="submit"
+                    primary
+                    disabled={!uiCropRel}
+                    icon="save"
+                    content={I18n.t('users.edit_avatar_thumbnail.save')}
+                  />
+                  <Form.Button
+                    negative
+                    onClick={resetThumbnail}
+                    disabled={!uiCropRel}
+                    icon="cancel"
+                    content={I18n.t('users.edit_avatar_thumbnail.reset')}
+                  />
+                </Button.Group>
+              </Form>
+            </Grid.Column>
+          </Grid>
+        </>
       ) : (
         !editsDisabled && (
           <Container textAlign="center">
