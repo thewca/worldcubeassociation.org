@@ -1245,7 +1245,7 @@ zh-TW:
         #original_hash: a14bc62
         wst: WCA軟體組 (WST)
         #original_hash: 58765c7
-        wsot: WCA競技組織團隊 (WOST)
+        wsot: WCA競技組織團隊 (WSOT)
         #original_hash: 78949a7
         wapc: WCA申訴委員會 (WAPC)
       groups_description:
@@ -1282,7 +1282,7 @@ zh-TW:
         wsot: 這個團隊負責監督和協助WCA成為一個國際認可的競技組織。
         #original_hash: 9f45bfa
         wapc: >-
-          WCA申訴委員會（WAPC）負責審視以及解決那些對WCA員工所做出決定的申訴案件。WAC提供獨立和公正的調查過程來確保決定的公平性、合理性和符合WCA政策及競賽規則。
+          WCA申訴委員會（WAPC）負責審視以及解決那些對WCA員工所做出決定的申訴案件。WAPC提供獨立和公正的調查過程來確保決定的公平性、合理性和符合WCA政策及競賽規則。
     contacts:
       #original_hash: 4ef2aad
       title: WCA聯絡表
@@ -1757,6 +1757,10 @@ zh-TW:
         status: 狀態
         #original_hash: 8970f0e
         locale: 地區設定
+        #original_hash: 5d99dee
+        group_name: 團隊/委員會名稱
+        #original_hash: 55e4f86
+        delegated_competitions_count: 擔任代表的比賽場數
   user_groups:
     group_types:
       #original_hash: abd2828
