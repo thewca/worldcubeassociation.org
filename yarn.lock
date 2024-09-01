@@ -1008,17 +1008,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-transform-destructuring@npm:^7.24.7":
-  version: 7.24.7
-  resolution: "@babel/plugin-transform-destructuring@npm:7.24.7"
-  dependencies:
-    "@babel/helper-plugin-utils": "npm:^7.24.7"
-  peerDependencies:
-    "@babel/core": ^7.0.0-0
-  checksum: 10c0/929f07a807fb62230bfbf881cfcedf187ac5daf2f1b01da94a75c7a0f6f72400268cf4bcfee534479e43260af8193e42c31ee03c8b0278ba77d0036ed6709c27
-  languageName: node
-  linkType: hard
-
 "@babel/plugin-transform-destructuring@npm:^7.24.8":
   version: 7.24.8
   resolution: "@babel/plugin-transform-destructuring@npm:7.24.8"
@@ -10383,7 +10372,7 @@ __metadata:
     sass: "npm:^1.77.8"
     sass-loader: "npm:^14.2.1"
     semantic-ui-react: "npm:^2.1.5"
-    shakapacker: "npm:8.0.1"
+    shakapacker: "npm:8.0.2"
     style-loader: "npm:^4.0.0"
     stylelint: "npm:^16.9.0"
     stylelint-config-recommended-scss: "npm:^14.0.0"
@@ -10689,9 +10678,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"shakapacker@npm:8.0.1":
-  version: 8.0.1
-  resolution: "shakapacker@npm:8.0.1"
+"shakapacker@npm:8.0.2":
+  version: 8.0.2
+  resolution: "shakapacker@npm:8.0.2"
   dependencies:
     js-yaml: "npm:^4.1.0"
     path-complete-extname: "npm:^1.0.0"
@@ -10715,7 +10704,7 @@ __metadata:
       optional: true
     "@types/webpack":
       optional: true
-  checksum: 10c0/ccf2cea9c89e0ac37b7c893dc62147b672af1dd9ccfd7043fb056377345c7ec309a5de60b6d10720fb1aba16cbac927f0063e26675cdec5195a7cecee4844a18
+  checksum: 10c0/428552a61276fb6d7dacb850ebc583147636e46a3310077dd53c0b505fe5f0fb2a308f29ed6f2ddb25690f7c53024380ff27ed13a2af81055b3ad90750f3c86f
   languageName: node
   linkType: hard
 
