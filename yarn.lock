@@ -2434,14 +2434,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fullcalendar/react@npm:^6.1.14":
-  version: 6.1.14
-  resolution: "@fullcalendar/react@npm:6.1.14"
+"@fullcalendar/react@npm:^6.1.15":
+  version: 6.1.15
+  resolution: "@fullcalendar/react@npm:6.1.15"
   peerDependencies:
-    "@fullcalendar/core": ~6.1.14
+    "@fullcalendar/core": ~6.1.15
     react: ^16.7.0 || ^17 || ^18 || ^19
     react-dom: ^16.7.0 || ^17 || ^18 || ^19
-  checksum: 10c0/8e3ad0b79de7ea88e63ae80104670774934700056657311cada730964926b55986a622247274bda8252be332e0779c3abb11911d46a62a13ccbd9c99032015da
+  checksum: 10c0/8185159c2fa02b31012b84c19f340b835383858d04079bcfb5ccbd1967116d862dbdb863762d99c374433a5364873727fc6f9d7356b2b1d1866ae5d50819ff6e
   languageName: node
   linkType: hard
 
@@ -10288,7 +10288,7 @@ __metadata:
     "@fullcalendar/core": "npm:^6.1.15"
     "@fullcalendar/interaction": "npm:^6.1.14"
     "@fullcalendar/luxon3": "npm:^6.1.14"
-    "@fullcalendar/react": "npm:^6.1.14"
+    "@fullcalendar/react": "npm:^6.1.15"
     "@fullcalendar/timegrid": "npm:^6.1.15"
     "@pmmmwh/react-refresh-webpack-plugin": "npm:^0.5.15"
     "@rails/ujs": "npm:^7.1.400"
