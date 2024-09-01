@@ -330,7 +330,7 @@ GEM
       raabro (~> 1.4)
     fuzzy-string-match (1.0.1)
       RubyInline (>= 3.8.6)
-    gli (2.21.1)
+    gli (2.21.5)
     glob (0.4.0)
     globalid (1.2.1)
       activesupport (>= 6.1)
@@ -476,7 +476,7 @@ GEM
       railties (>= 3.0)
     multi_json (1.15.0)
     multi_xml (0.6.0)
-    multipart-post (2.3.0)
+    multipart-post (2.4.1)
     mutex_m (0.2.0)
     mysql2 (0.5.6)
     nenv (0.3.0)
@@ -736,7 +736,7 @@ GEM
     simplecov_json_formatter (0.1.4)
     simpleidn (0.2.1)
       unf (~> 0.1.4)
-    slack-ruby-client (2.3.0)
+    slack-ruby-client (2.4.0)
       faraday (>= 2.0)
       faraday-mashify
       faraday-multipart
@@ -788,7 +788,7 @@ GEM
       kgio (~> 2.6)
       raindrops (~> 0.7)
     uniform_notifier (1.16.0)
-    uri (0.13.0)
+    uri (0.13.1)
     valid_email (0.2.1)
       activemodel
       mail (>= 2.6.1)
