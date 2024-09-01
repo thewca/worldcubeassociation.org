@@ -9782,16 +9782,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-intersection-observer@npm:^9.10.3":
-  version: 9.10.3
-  resolution: "react-intersection-observer@npm:9.10.3"
+"react-intersection-observer@npm:^9.13.0":
+  version: 9.13.0
+  resolution: "react-intersection-observer@npm:9.13.0"
   peerDependencies:
     react: ^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
     react-dom: ^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
   peerDependenciesMeta:
     react-dom:
       optional: true
-  checksum: 10c0/a62f34f5a20ef42ac63782b59b25dc1b40f9c29cb58d7fde5aa24771661fc64f98be70cc8d8c5d301b5d26b4b0a3b88012a2d7d3e43caf198641938d697b2675
+  checksum: 10c0/7e446b763edc0d9e5642c03c0a151fa6e25fd91c7d004b8af918b0ec9a01f0c252909c13c6fbf95d331e7064bbe1d5668ed788610acab400ce38063d82f9e1b3
   languageName: node
   linkType: hard
 
@@ -10348,7 +10348,7 @@ __metadata:
     react-datepicker: "npm:^7.3.0"
     react-dom: "npm:^18.3.1"
     react-google-recaptcha: "npm:^3.1.0"
-    react-intersection-observer: "npm:^9.10.3"
+    react-intersection-observer: "npm:^9.13.0"
     react-leaflet: "npm:^4.2.1"
     react-refresh: "npm:^0.14.2"
     react-simplemde-editor: "npm:^5.2.0"
