@@ -23,7 +23,7 @@
     "@fullcalendar/core": "^6.1.15",
     "@fullcalendar/interaction": "^6.1.15",
     "@fullcalendar/luxon3": "^6.1.14",
-    "@fullcalendar/react": "^6.1.14",
+    "@fullcalendar/react": "^6.1.15",
     "@fullcalendar/timegrid": "^6.1.15",
     "@rails/ujs": "^7.1.400",
     "@stripe/react-stripe-js": "^2.8.0",
