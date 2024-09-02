@@ -13,6 +13,10 @@ Bundler.require(*Rails.groups)
 require_relative '../env_config'
 require_relative '../app_secrets'
 
+# Production default for configuring Rails cryptographic base key,
+# which is necessary because `config.secret_key_base=` only works in local environments.
+ENV["SECRET_KEY_BASE"] ||= AppSecrets.SECRET_KEY_BASE
+
 module WcaOnRails
   BOOTED_AT = Time.now
 
@@ -28,6 +32,11 @@ module WcaOnRails
     # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
+
+    # secret_key_base is an important cryptographic key that lots of other Rails procedures (cookies, signatures, etc.)
+    # are based on. Rails desperately wants you to set it through `credentials.yml.enc` but GB desperately doesn't want
+    # to check in credentials to git (no matter whether their encryption is strong or not)
+    config.secret_key_base = AppSecrets.SECRET_KEY_BASE
 
     config.load_defaults 7.1
 
