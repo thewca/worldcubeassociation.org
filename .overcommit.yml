@@ -60,12 +60,12 @@ PreCommit:
       # Others are handled by EsLint
       'app/assets'
     required_executable: 'bin/yarn'
-    command: ['bin/yarn', '--silent', 'run', 'jshint', '--verbose']
+    command: ['bin/yarn', '--silent', 'run', 'jshint']
 
   Stylelint:
     enabled: true
     required_executable: 'bin/yarn'
-    command: ['bin/yarn', '--silent', 'run', 'stylelint', '-f', 'compact']
+    command: ['bin/yarn', '--silent', 'run', 'stylelint']
 
   TrailingWhitespace:
     enabled: true
