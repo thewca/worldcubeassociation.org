@@ -275,17 +275,16 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
     ),
     [registrationsWithUser],
   );
-
-  const handleOnDragEnd = async (result) => {
+  const handleOnDragEnd = useMemo(() => async (result) => {
     if (!result.destination) return;
     if (result.destination.index === result.source.index) return;
-
+    const waitingSorted = waiting.toSorted((a, b) => a.competing.waiting_list_position - b.competing.waiting_list_position);
     updateRegistrationMutation({
       competition_id: competitionInfo.id,
       requests: [{
-        user_id: waiting[result.source.index].user_id,
+        user_id: waitingSorted[result.source.index].user_id,
         competing: {
-          waiting_list_position: waiting[result.destination.index].competing.waiting_list_position,
+          waiting_list_position: waitingSorted[result.destination.index].competing.waiting_list_position,
         },
       }],
     }, {
@@ -294,7 +293,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
         refetch();
       },
     });
-  };
+  }, [competitionInfo.id, refetch, updateRegistrationMutation, waiting]);
 
   return isRegistrationsLoading || infoLoading ? (
     <Loading />
