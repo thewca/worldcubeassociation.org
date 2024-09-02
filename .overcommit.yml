@@ -37,18 +37,17 @@ PreCommit:
       - '**/*.zip'
 
   EsLint:
-    required_executable: 'bin/yarn'
     enabled: true
     include:
       - 'app/webpacker/**/*.js'
     exclude:
       # Semantic UI stuff, we need to re-exclude that here.
       - 'app/webpacker/stylesheets/semantic/**/*'
-    command: ['bin/yarn', '--silent', 'run', 'eslint', '-c', '.eslintrc.json', '-f', 'compact']
+    required_executable: 'bin/yarn'
+    command: ['bin/yarn', '--silent', 'run', 'eslint', '-c', '.eslintrc.json']
 
   RuboCop:
     enabled: true
-    command: ['bundle', 'exec', 'rubocop', '--config', './.rubocop.yml']
     on_warn: fail # Treat all warnings as failures
 
   IllegalStrings:
@@ -58,7 +57,7 @@ PreCommit:
     enabled: true
     include:
       # Others are handled by EsLint
-      'app/assets'
+      'app/assets/**/*.js'
     required_executable: 'bin/yarn'
     command: ['bin/yarn', '--silent', 'run', 'jshint']
 
