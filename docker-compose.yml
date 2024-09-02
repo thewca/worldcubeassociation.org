@@ -32,7 +32,7 @@ services:
     command: >
       bash -c 'corepack install &&
       rm -f .db-inited &&
-      bin/rails setup &&
+      bin/setup &&
       touch .db-inited &&
       bin/rails server -b 0.0.0.0'
     healthcheck:
