@@ -58,7 +58,7 @@ PreCommit:
     enabled: true
     include:
       # Others are handled by EsLint
-      'app/assets'
+      'app/assets/**/*.js'
     required_executable: 'bin/yarn'
     command: ['bin/yarn', '--silent', 'run', 'jshint']
 

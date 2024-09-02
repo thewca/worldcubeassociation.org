@@ -109,6 +109,7 @@
     "eslint-plugin-jsx-a11y": "^6.9.0",
     "eslint-plugin-react": "^7.35.0",
     "eslint-plugin-react-hooks": "^4.6.2",
+    "jshint": "^2.13.6",
     "react-refresh": "^0.14.2",
     "stylelint": "^16.9.0",
     "stylelint-config-recommended-scss": "^14.1.0",
