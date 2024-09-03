@@ -112,4 +112,4 @@ RUN fc-cache -f -v
 # Entrypoint prepares database and starts app on 0.0.0.0:3000 by default,
 # but can also take a rails command, like "console" or "runner" to start instead.
 ENTRYPOINT ["/rails/bin/docker-entrypoint"]
-CMD ["./bin/bundle", "exec", "unicorn", "-c", "/rails/config/unicorn.rb"]
+CMD ["./bin/rails", "server"]

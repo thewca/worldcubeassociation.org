@@ -111,6 +111,7 @@ gem 'sidekiq'
 gem 'sidekiq-cron'
 gem 'after_commit_everywhere'
 gem 'slack-ruby-client'
+gem 'puma'
 
 group :development, :test do
   gem 'spring'
@@ -119,8 +120,6 @@ group :development, :test do
   gem 'factory_bot_rails'
   gem 'faker'
   gem 'capybara-screenshot'
-
-  gem 'puma'
 
   gem 'byebug'
   gem 'i18n-tasks'
@@ -159,9 +158,7 @@ group :test do
 end
 
 group :production do
-  gem 'unicorn'
-  # Unicorn is incompatible with Rack 3, but doesn't specify it explicitly…
-  gem 'rack', '~> 2'
+  gem 'rack'
   gem 'newrelic_rpm'
   gem 'wkhtmltopdf-binary-ng'
 end
