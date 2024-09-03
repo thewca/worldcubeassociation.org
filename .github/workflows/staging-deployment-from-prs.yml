@@ -12,7 +12,7 @@ jobs:
     steps:
       - name: Trigger deployment on comment
         id: trigger-deployment
-        uses: shanegenschaw/pull-request-comment-trigger@v2.1.0
+        uses: shanegenschaw/pull-request-comment-trigger@v3.0.0
         with:
           trigger: '@thewca-bot deploy staging'
           reaction: rocket

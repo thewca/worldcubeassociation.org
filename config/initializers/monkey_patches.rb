@@ -88,4 +88,18 @@ Rails.configuration.to_prepare do
       sort_by.with_index { |x, idx| [yield(x), -idx] }.reverse
     end
   end
+
+  if Rails.env.test?
+    DatabaseCleaner::ActiveRecord::Base.class_eval do
+      def self.migration_table_name
+        if Gem::Version.new("7.2.0") <= ActiveRecord.version
+          ActiveRecord::Base.connection_pool.schema_migration.table_name
+        elsif Gem::Version.new("6.0.0") <= ActiveRecord.version
+          ActiveRecord::Base.connection.schema_migration.table_name
+        else
+          ActiveRecord::SchemaMigration.table_name
+        end
+      end
+    end
+  end
 end

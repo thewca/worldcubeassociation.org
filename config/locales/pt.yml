@@ -2071,6 +2071,10 @@ pt:
         status: Estado
         #original_hash: 8970f0e
         locale: Locale
+        #original_hash: 5d99dee
+        group_name: Nome da Equipa/Comité
+        #original_hash: 55e4f86
+        delegated_competitions_count: Número de Competições como Delegado
   user_groups:
     group_types:
       #original_hash: abd2828
