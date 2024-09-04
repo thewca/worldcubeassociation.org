@@ -44,7 +44,7 @@ fi
 # Check if you are connected to the AWS WCA Account
 printf "${COLOR_DEFAULT}aws wca credentials | "
 account=$(aws iam list-account-aliases --query "AccountAliases[0]" --output text )
-if [[ "${account}" = "thewca" ]]; then
+if [[ "${account}" == "thewca" ]]; then
   role=$(aws sts get-caller-identity --query "Arn" --output text )
   printf "${COLOR_GREEN}OK ${COLOR_DEFAULT} (Logged in as ${role})\n"
 else
