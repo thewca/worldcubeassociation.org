@@ -1857,6 +1857,7 @@ en:
         -2001: "You are banned from competing at WCA Competitions"
         -2002: "Your profile is incomplete"
         -2003: "You don't have the permissions to complete this action"
+        -2004: "You are not allowed to register, as the organizers have rejected your registration. Please contact them if you think there has been a mistake."
         -3000: "Registration does not exist"
         -3001: "You have already registered for another Competition in the series"
         -4000: "The Request contains invalid data"
