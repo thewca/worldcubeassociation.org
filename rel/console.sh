@@ -32,8 +32,7 @@ fi
 
 # Check whether the Session Manager plugin exists
 printf "${COLOR_DEFAULT}Session Manager Plugin | "
-command -v session-manager-plugin >/dev/null 2>&1 && status="$?" || status="$?"
-if [[ "${status}" = 0 ]]; then
+if command -v session-manager-plugin >/dev/null 2>&1; then
   smpVersion=$(session-manager-plugin --version)
   printf "${COLOR_GREEN}OK ${COLOR_DEFAULT}(${smpVersion})\n"
 else
