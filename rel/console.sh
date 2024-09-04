@@ -76,18 +76,22 @@ if [ -z "$environment" ]; then
   usage
 fi
 
-if [[ "$environment" != "production" && "$environment" != "staging" ]]; then
-  printf "${COLOR_RED}Invalid environment: $environment. Must be 'production' or 'staging'.\n"
-  usage
-fi
+case "$environment" in
+  "production")
+    service_name="wca-on-rails-prod"
+    container_name="rails-production"
+  ;;
+  
+  "staging")
+    service_name="wca-on-rails-prod"
+    container_name="rails-production"
+  ;;
 
-# Set container name based on environment
-service_name="wca-on-rails-staging"
-container_name="rails-staging"
-if [ "$environment" = "production" ]; then
-  service_name="wca-on-rails-prod"
-  container_name="rails-production"
-fi
+  *)
+    printf "${COLOR_RED}Invalid environment: $environment. Must be 'production' or 'staging'.\n"
+    usage
+  ;;
+esac
 
 task_arn="$(
   aws ecs list-tasks \
