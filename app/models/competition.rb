@@ -1854,6 +1854,15 @@ class Competition < ApplicationRecord
     competition_series&.competition_ids&.split(',') || []
   end
 
+  def qualification_wcif
+    return {} unless uses_qualification?
+    competition_events
+      .where.not(qualification: nil)
+      .index_by(&:event_id)
+      .transform_values(&:qualification)
+      .transform_values(&:to_wcif)
+  end
+
   def persons_wcif(authorized: false)
     managers = self.managers
     includes_associations = [

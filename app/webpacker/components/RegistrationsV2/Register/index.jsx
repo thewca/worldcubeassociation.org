@@ -32,7 +32,7 @@ export default function Index({
 }
 
 function Register({
-  competitionInfo, userInfo, preferredEvents, connectedAccountId, stripePublishableKey,
+  competitionInfo, qualifications, userInfo, preferredEvents, connectedAccountId, stripePublishableKey,
 }) {
   const dispatch = useDispatch();
   const ref = useRef();
@@ -69,6 +69,7 @@ function Register({
             refetchRegistration={refetch}
             connectedAccountId={connectedAccountId}
             stripePublishableKey={stripePublishableKey}
+            qualifications={qualifications}
           />
         </>
       )

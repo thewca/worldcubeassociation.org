@@ -48,6 +48,7 @@ export default function CompetingStep({
   preferredEvents,
   registration,
   refetchRegistration,
+  qualificationWCIF,
 }) {
   const maxEvents = competitionInfo.events_per_registration_limit ?? Infinity;
   const isRegistered = Boolean(registration);
