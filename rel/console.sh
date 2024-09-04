@@ -22,8 +22,7 @@ usage() {
 
 # Check if AWS CLI is installed
 printf "${COLOR_DEFAULT}AWS CLI | "
-command -v aws >/dev/null 2>&1 && status="$?" || status="$?"
-if [[ "${status}" = 0 ]]; then
+if command -v aws >/dev/null 2>&1; then
   cliVersion=$(aws --version)
   printf "${COLOR_GREEN}OK ${COLOR_DEFAULT}(${cliVersion})\n"
 else
