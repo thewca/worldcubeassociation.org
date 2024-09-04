@@ -260,15 +260,15 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
             disabled={registrationEditDeadlinePassed}
             onChange={(event, data) => setStatus(data.value)}
           />
-          {/* <Form.Checkbox */}
-          {/*  radio */}
-          {/*  label="Waiting List" */}
-          {/*  name="checkboxRadioGroup" */}
-          {/*  value="waiting_list" */}
-          {/*  checked={status === 'waiting_list'} */}
-          {/*  disabled={registrationEditDeadlinePassed} */}
-          {/*  onChange={(event, data) => setStatus(data.value)} */}
-          {/* /> */}
+          <Form.Checkbox
+            radio
+            label="Waiting List"
+            name="checkboxRadioGroup"
+            value="waiting_list"
+            checked={status === 'waiting_list'}
+            disabled={registrationEditDeadlinePassed}
+            onChange={(event, data) => setStatus(data.value)}
+          />
           <Form.Checkbox
             radio
             label="Cancelled"
