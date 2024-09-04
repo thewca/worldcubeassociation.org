@@ -3670,10 +3670,6 @@ sv:
         '-2003': Du har inte behörighet att slutföra denna åtgärd
         #original_hash: cb4093a
         '-3000': Anmälan existerar inte
-        #original_hash: 0df821f
-        '-3001': WCA-betalning är inte aktiverat för den här tävlingen
-        #original_hash: 092da51
-        '-3002': Du måste slutföra din anmälan innan du kan betala
         #original_hash: bc53fb6
         '-4000': Anropet innehåller ogiltig data.
         #original_hash: 35fddf4
@@ -3698,6 +3694,10 @@ sv:
         '-4010': Platsen på väntelistan är inte giltig
         #original_hash: e489908
         '-4011': Du kan endast acceptera den första personen på väntelistan
+        #original_hash: 0df821f
+        '-6001': WCA-betalning är inte aktiverat för den här tävlingen
+        #original_hash: 092da51
+        '-6002': Du måste slutföra din anmälan innan du kan betala
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-

@@ -1858,8 +1858,7 @@ en:
         -2002: "Your profile is incomplete"
         -2003: "You don't have the permissions to complete this action"
         -3000: "Registration does not exist"
-        -3001: "WCA Payment is not enabled for this competition"
-        -3002: "You need to finish your registration before you can pay"
+        -3001: "You have already registered for another Competition in the series"
         -4000: "The Request contains invalid data"
         -4001: "The event edit deadline has passed"
         -4002: "The number of guests are over the allowed limit"
@@ -1872,6 +1871,9 @@ en:
         -4009: "Only Organizers can cancel Registrations for this competition"
         -4010: "The Waiting List Position is not Valid"
         -4011: "You can only accept the first person on the waiting list"
+        -4012: "You are not qualified to compete in the selected events"
+        -6001: "WCA Payment is not enabled for this competition"
+        -6002: "You need to finish your registration before you can pay"
     #context: and when an error occured
     errors:
       invalid_name_message: "must end with a year and must contain only alphanumeric characters, dashes(-), ampersands(&), periods(.), colons(:), apostrophes('), and spaces( )"
