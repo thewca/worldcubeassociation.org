@@ -81,10 +81,10 @@ case "$environment" in
     service_name="wca-on-rails-prod"
     container_name="rails-production"
   ;;
-  
+
   "staging")
-    service_name="wca-on-rails-prod"
-    container_name="rails-production"
+    service_name="wca-on-rails-staging"
+    container_name="rails-staging"
   ;;
 
   *)
