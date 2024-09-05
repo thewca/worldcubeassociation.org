@@ -124,6 +124,7 @@ export function EventSelector({
             {eventList.map((eventId) => (
               <Popup
                 key={eventId}
+                disabled={selectedEvents.length === 0}
                 trigger={(
                   <span>
                     {/* Wrap in span so hover works on disabled buttons */}
