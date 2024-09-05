@@ -122,26 +122,37 @@ export function EventSelector({
         trigger={(
           <div id="events">
             {eventList.map((eventId) => (
-              <React.Fragment key={eventId}>
-                <Button
-                  disabled={disabled
-                || (!selectedEvents.includes(eventId) && selectedEvents.length >= maxEvents) || eventsDisabled.includes(eventId)}
-                  basic
-                  icon
-                  toggle
-                  type="button"
-                  size="mini"
-                  className="event-checkbox"
-                  id={`checkbox-${eventId}`}
-                  value={eventId}
-                  data-tooltip={I18n.t(`events.${eventId}`)}
-                  data-variation="tiny"
-                  onClick={() => onEventSelection({ type: 'toggle_event', eventId })}
-                  active={selectedEvents.includes(eventId)}
-                >
-                  <Icon className={`cubing-icon event-${eventId}`} style={eventsDisabled.includes(eventId) ? { color: '#FFBBBB' } : {}} />
-                </Button>
-              </React.Fragment>
+              <Popup
+                key={eventId}
+                trigger={(
+                  <span>
+                    {/* Wrap in span so hover works on disabled buttons */}
+                    <Button
+                      key={eventId}
+                      disabled={
+                      disabled
+                        || (!selectedEvents.includes(eventId) && selectedEvents.length >= maxEvents)
+                        || eventsDisabled.includes(eventId)
+                    }
+                      basic
+                      icon
+                      toggle
+                      type="button"
+                      size="mini"
+                      className="event-checkbox"
+                      id={`checkbox-${eventId}`}
+                      value={eventId}
+                      data-variation="tiny"
+                      onClick={() => onEventSelection({ type: 'toggle_event', eventId })}
+                      active={selectedEvents.includes(eventId)}
+                    >
+                      <Icon className={`cubing-icon event-${eventId}`} style={eventsDisabled.includes(eventId) ? { color: '#FFBBBB' } : {}} />
+                    </Button>
+                  </span>
+)}
+              >
+                {I18n.t(eventsDisabled.includes(eventId) ? 'registrations.not_qualified' : `events.${eventId}`)}
+              </Popup>
             ))}
           </div>
 )}
