@@ -278,6 +278,15 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
             checked={status === 'cancelled'}
             onChange={(event, data) => setStatus(data.value)}
           />
+          <Form.Checkbox
+            radio
+            label="Rejected"
+            name="checkboxRadioGroup"
+            value="cancelled"
+            disabled={registrationEditDeadlinePassed}
+            checked={status === 'rejected'}
+            onChange={(event, data) => setStatus(data.value)}
+          />
         </Form.Group>
         <label>Guests</label>
         <Form.Input
