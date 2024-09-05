@@ -11,6 +11,7 @@ import ConfirmProvider from '../../../lib/providers/ConfirmProvider';
 
 export default function Index({
   competitionInfo, userInfo, preferredEvents,
+  qualifications,
   stripePublishableKey = '',
   connectedAccountId = '',
 }) {
@@ -24,6 +25,7 @@ export default function Index({
             preferredEvents={preferredEvents}
             stripePublishableKey={stripePublishableKey}
             connectedAccountId={connectedAccountId}
+            qualifications={qualifications}
           />
         </ConfirmProvider>
       </StoreProvider>

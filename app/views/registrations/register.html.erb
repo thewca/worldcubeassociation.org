@@ -40,7 +40,7 @@
                                                         connectedAccountId: @competition.payment_account_for(:stripe)&.account_id,
                                                         qualifications: {
                                                           wcif: @competition.qualification_wcif,
-                                                          personal_records: { single: current_user.person.ranksSingle.map(&:to_wcif), average: current_user.person.ranksAverage.map(&:to_wcif) }
+                                                          personalRecords: { single: current_user.person.ranksSingle.map(&:to_wcif), average: current_user.person.ranksAverage.map(&:to_wcif) }
                                                         }
                                                         }) %>
     <% else %>

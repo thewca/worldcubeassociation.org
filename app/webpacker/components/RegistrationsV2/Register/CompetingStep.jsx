@@ -23,6 +23,7 @@ import { setMessage } from './RegistrationMessage';
 import i18n from '../../../lib/i18n';
 import I18nHTMLTranslate from '../../I18nHTMLTranslate';
 import { useConfirm } from '../../../lib/providers/ConfirmProvider';
+import { eventsNotQualifiedFor, isQualifiedForEvent } from '../../../lib/helpers/qualifications';
 
 const maxCommentLength = 240;
 
@@ -48,7 +49,7 @@ export default function CompetingStep({
   preferredEvents,
   registration,
   refetchRegistration,
-  qualificationWCIF,
+  qualifications,
 }) {
   const maxEvents = competitionInfo.events_per_registration_limit ?? Infinity;
   const isRegistered = Boolean(registration);
@@ -59,7 +60,13 @@ export default function CompetingStep({
 
   const [comment, setComment] = useState('');
   const initialSelectedEvents = competitionInfo.events_per_registration_limit ? [] : preferredEvents
-    .filter((event) => competitionInfo.event_ids.includes(event));
+    .filter((event) => {
+      const preferredEventHeld = competitionInfo.event_ids.includes(event);
+      if (competitionInfo['uses_qualification?']) {
+        return preferredEventHeld && isQualifiedForEvent(event, qualifications.wcif, qualifications.personalRecords);
+      }
+      return preferredEventHeld;
+    });
   const [selectedEvents, setSelectedEvents] = useState(
     initialSelectedEvents,
   );
@@ -275,6 +282,7 @@ export default function CompetingStep({
               selectedEvents={selectedEvents}
               id="event-selection"
               maxEvents={maxEvents}
+              eventsDisabled={eventsNotQualifiedFor(competitionInfo.event_ids, qualifications.wcif, qualifications.personalRecords)}
               // Don't error if the user hasn't interacted with the form yet
               shouldErrorOnEmpty={hasInteracted}
             />

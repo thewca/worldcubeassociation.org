@@ -95,6 +95,7 @@ export function EventSelector({
   disabled = false,
   maxEvents = Infinity,
   shouldErrorOnEmpty = false,
+  eventsDisabled = [],
 }) {
   return (
     <>
@@ -124,7 +125,7 @@ export function EventSelector({
               <React.Fragment key={eventId}>
                 <Button
                   disabled={disabled
-                || (!selectedEvents.includes(eventId) && selectedEvents.length >= maxEvents)}
+                || (!selectedEvents.includes(eventId) && selectedEvents.length >= maxEvents) || eventsDisabled.includes(eventId)}
                   basic
                   icon
                   toggle
@@ -138,7 +139,7 @@ export function EventSelector({
                   onClick={() => onEventSelection({ type: 'toggle_event', eventId })}
                   active={selectedEvents.includes(eventId)}
                 >
-                  <Icon className={`cubing-icon event-${eventId}`} />
+                  <Icon className={`cubing-icon event-${eventId}`} style={eventsDisabled.includes(eventId) ? { color: '#FFBBBB' } : {}} />
                 </Button>
               </React.Fragment>
             ))}
