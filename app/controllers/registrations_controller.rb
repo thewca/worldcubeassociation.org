@@ -446,7 +446,7 @@ class RegistrationsController < ApplicationController
     @competition = competition_from_params
     @registration = nil
     @selected_events = []
-    if current_user && !@competition.uses_new_registration_service?
+    if current_user
       @registration = @competition.registrations.find_or_initialize_by(user_id: current_user.id, competition_id: @competition.id)
       @selected_events = @registration.saved_and_unsaved_events.empty? ? @registration.user.preferred_events : @registration.saved_and_unsaved_events
     end
