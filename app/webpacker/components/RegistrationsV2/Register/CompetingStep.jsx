@@ -24,6 +24,7 @@ import i18n from '../../../lib/i18n';
 import I18nHTMLTranslate from '../../I18nHTMLTranslate';
 import { useConfirm } from '../../../lib/providers/ConfirmProvider';
 import { eventsNotQualifiedFor, isQualifiedForEvent } from '../../../lib/helpers/qualifications';
+import { eventQualificationToString } from '../../../lib/utils/wcif';
 
 const maxCommentLength = 240;
 
@@ -63,7 +64,8 @@ export default function CompetingStep({
     .filter((event) => {
       const preferredEventHeld = competitionInfo.event_ids.includes(event);
       if (competitionInfo['uses_qualification?']) {
-        return preferredEventHeld && isQualifiedForEvent(event, qualifications.wcif, qualifications.personalRecords);
+        return preferredEventHeld
+          && isQualifiedForEvent(event, qualifications.wcif, qualifications.personalRecords);
       }
       return preferredEventHeld;
     });
@@ -282,7 +284,16 @@ export default function CompetingStep({
               selectedEvents={selectedEvents}
               id="event-selection"
               maxEvents={maxEvents}
-              eventsDisabled={eventsNotQualifiedFor(competitionInfo.event_ids, qualifications.wcif, qualifications.personalRecords)}
+              eventsDisabled={eventsNotQualifiedFor(
+                competitionInfo.event_ids,
+                qualifications.wcif,
+                qualifications.personalRecords,
+              )}
+              disabledText={(event) => eventQualificationToString(
+                { id: event },
+                qualifications.wcif[event],
+                { short: true },
+              )}
               // Don't error if the user hasn't interacted with the form yet
               shouldErrorOnEmpty={hasInteracted}
             />

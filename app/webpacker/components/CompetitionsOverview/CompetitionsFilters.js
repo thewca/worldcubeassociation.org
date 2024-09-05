@@ -96,6 +96,7 @@ export function EventSelector({
   maxEvents = Infinity,
   shouldErrorOnEmpty = false,
   eventsDisabled = [],
+  disabledText = (event) => {},
 }) {
   return (
     <>
@@ -152,7 +153,7 @@ export function EventSelector({
                   </span>
 )}
               >
-                {I18n.t(eventsDisabled.includes(eventId) ? 'registrations.not_qualified' : `events.${eventId}`)}
+                {eventsDisabled.includes(eventId) ? disabledText(eventId) : I18n.t(`events.${eventId}`)}
               </Popup>
             ))}
           </div>
