@@ -17,7 +17,7 @@ export const clearMessage = () => ({
   },
 });
 
-export default function RegistrationMessage({ parentRef }) {
+export default function RegistrationMessage() {
   const { message } = useStore();
   const dispatch = useDispatch();
 
@@ -26,22 +26,30 @@ export default function RegistrationMessage({ parentRef }) {
     if (message?.key && message.type !== 'negative') {
       setTimeout(() => {
         dispatch({ payload: { message: null } });
-      }, 4000);
+      }, 40000);
     }
   }, [dispatch, message]);
 
   if (!message?.key) return null;
 
-  return (
-    <Sticky active context={parentRef}>
+  if (Array.isArray(message.key)) {
+    return message.key.map((key) => (
       <Message
         positive={message.type === 'positive'}
         negative={message.type === 'negative'}
       >
-        {Array.isArray(message.key)
-          ? message.key.map((keys) => I18n.t(keys, message.params))
-          : I18n.t(message.key, message.params)}
+        {I18n.t(key, message.params)}
       </Message>
-    </Sticky>
+    ));
+  }
+
+  return (
+    <Message
+      style={{ margin: 0 }}
+      positive={message.type === 'positive'}
+      negative={message.type === 'negative'}
+    >
+      {I18n.t(message.key, message.params)}
+    </Message>
   );
 }
