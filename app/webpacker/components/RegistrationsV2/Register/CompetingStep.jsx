@@ -213,7 +213,17 @@ export default function CompetingStep({
 
   const handleEventSelection = ({ type, eventId }) => {
     if (type === 'select_all_events') {
-      setSelectedEvents(competitionInfo.event_ids);
+      if (competitionInfo['uses_qualification?']) {
+        setSelectedEvents(
+          competitionInfo.event_ids.filter((e) => isQualifiedForEvent(
+            e,
+            qualifications.wcif,
+            qualifications.personalRecords,
+          )),
+        );
+      } else {
+        setSelectedEvents(competitionInfo.event_ids);
+      }
     } else if (type === 'clear_events') {
       setSelectedEvents([]);
     } else if (type === 'toggle_event') {
