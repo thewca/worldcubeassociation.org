@@ -155,7 +155,7 @@ export default function RegistrationActions({
 
             {anyCancellable && (
               <Button
-                negative
+                color="orange"
                 onClick={() => changeStatus(
                   [...pending, ...accepted, ...waiting, ...rejected],
                   'cancelled',
@@ -168,7 +168,7 @@ export default function RegistrationActions({
 
             {anyRejectable && (
               <Button
-                color="orange"
+                negative
                 onClick={() => changeStatus(
                   [...pending, ...accepted, ...waiting, ...cancelled],
                   'rejected',
