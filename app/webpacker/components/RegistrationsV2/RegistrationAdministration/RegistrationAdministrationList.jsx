@@ -190,8 +190,20 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
         switch (sortColumn) {
           case 'name':
             return a.user.name.localeCompare(b.user.name);
-          case 'wca_id':
+          case 'wca_id': {
+            const aHasAccount = a.user.wca_id !== null;
+            const bHasAccount = b.user.wca_id !== null;
+            if (aHasAccount && !bHasAccount) {
+              return 1;
+            }
+            if (!aHasAccount && bHasAccount) {
+              return -1;
+            }
+            if (!aHasAccount && !bHasAccount) {
+              return a.user.name.localeCompare(b.user.name);
+            }
             return a.user.wca_id.localeCompare(b.user.wca_id);
+          }
           case 'country':
             return a.user.country.name.localeCompare(b.user.country.name);
           case 'events':
