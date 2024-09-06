@@ -173,21 +173,12 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
         'negative',
       ));
     },
-    onSuccess: async (data, update) => {
-      // If we move someone to or off the waiting list we need to refetch the competitor list,
-      // because it affects everyone else on the waiting list
-      if (update.requests.some((r) => r.competing.status === 'waiting_list')
-        || registrations.some((r) => r.competing.registration_status === 'waiting_list' && update.requests.some((u) => u.user_id === r.user_id))) {
-        await refetch();
-      } else {
-        const { updated_registrations: updatedRegistrations } = data;
-        const updated = registrations.map(
-          (r) => (updatedRegistrations[r.user_id]
-            ? { ...updatedRegistrations[r.user_id], payment: r.payment }
-            : r),
-        );
-        queryClient.setQueryData(['registrations-admin', competitionInfo.id], updated);
-      }
+    onSuccess: async () => {
+      // If multiple organizers approve people at the same time,
+      // or if registrations are still coming in while organizers approve them
+      // we want the data to be refreshed. Optimal solution would be subscribing to changes
+      // via graphql/websockets, but we aren't there yet
+      await refetch();
     },
   });
 
