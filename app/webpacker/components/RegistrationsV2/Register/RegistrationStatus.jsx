@@ -33,7 +33,7 @@ function canIBookPlaneTickets(registrationStatus, paymentStatus, competitionInfo
     case 'cancelled':
       return 'Your registration has been deleted and you will not be competing, but you can sign up again';
     case 'rejected':
-      return "Your registration has been rejected by the organizers, you can't sign up again";
+      return 'Your registration has been rejected by the organizers. Please contact the organizing team if you believe this was a mistake.';
     case 'waiting_list':
       return "Don't book a flight, but don't give up hope either. The competition is full, but you have been placed on a waiting list, and you will receive an email if enough spots open up for you to be able to attend.";
     default:
