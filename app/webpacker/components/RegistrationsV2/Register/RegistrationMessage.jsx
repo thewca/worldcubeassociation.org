@@ -26,7 +26,7 @@ export default function RegistrationMessage() {
     if (message?.key && message.type !== 'negative') {
       setTimeout(() => {
         dispatch({ payload: { message: null } });
-      }, 40000);
+      }, 4000);
     }
   }, [dispatch, message]);
 

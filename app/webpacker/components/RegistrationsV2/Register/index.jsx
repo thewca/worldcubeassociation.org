@@ -35,7 +35,6 @@ function Register({
   competitionInfo, userInfo, preferredEvents, connectedAccountId, stripePublishableKey,
 }) {
   const dispatch = useDispatch();
-  const ref = useRef();
   const {
     data: registration,
     isFetching,
@@ -58,9 +57,7 @@ function Register({
     isFetching ? <Loading />
       : (
         <>
-          <div ref={ref}>
-            <RegistrationMessage parentRef={ref} />
-          </div>
+          <RegistrationMessage />
           <StepPanel
             user={userInfo}
             preferredEvents={preferredEvents}
