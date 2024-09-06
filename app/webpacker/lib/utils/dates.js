@@ -70,7 +70,7 @@ export const getLongDateString = (dateTime, timeZone = 'local') => DateTime.from
 
 export const getRegistrationTimestamp = (datetime, timeZone = 'local') => DateTime.fromISO(datetime)
   .setZone(timeZone)
-  .toFormat('yyyy-LL-dd TTT');
+  .toFormat('D TT.u ZZZZ');
 
 export const getFullDateTimeString = (dateTime, timeZone = 'local') => DateTime.fromISO(dateTime)
   .setZone(timeZone)

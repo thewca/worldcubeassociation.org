@@ -8,7 +8,6 @@ import i18n from '../../../lib/i18n';
 import {
   getRegistrationTimestamp,
   getShortDateString,
-  getShortTimeString,
 } from '../../../lib/utils/dates';
 import EventIcon from '../../wca/EventIcon';
 import { editRegistrationUrl, editPersonUrl, personUrl } from '../../../lib/requests/routes.js.erb';
@@ -50,7 +49,7 @@ function RegistrationTime({
 
   return (
     <Popup
-      content={getShortTimeString(paidOn ?? registeredOn)}
+      content={getRegistrationTimestamp(paidOn ?? registeredOn)}
       trigger={<span>{getShortDateString(paidOn ?? registeredOn)}</span>}
     />
   );
