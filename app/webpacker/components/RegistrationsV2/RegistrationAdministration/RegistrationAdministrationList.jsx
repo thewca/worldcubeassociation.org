@@ -199,6 +199,9 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
             if (!aHasAccount && bHasAccount) {
               return -1;
             }
+            if (!aHasAccount && !bHasAccount) {
+              return a.user.name.localeCompare(b.user.name);
+            }
             return a.user.wca_id.localeCompare(b.user.wca_id);
           }
           case 'country':
