@@ -2,6 +2,7 @@
 export const INVALID_TOKEN = -1;
 export const EXPIRED_TOKEN = -2;
 export const MISSING_AUTHENTICATION = -3;
+export const INTERNAL_SERVER_ERROR = -4;
 export const COMPETITION_NOT_FOUND = -1000;
 export const COMPETITION_API_5XX = -1001;
 export const USER_CANNOT_COMPETE = -2001;

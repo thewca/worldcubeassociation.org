@@ -1852,6 +1852,7 @@ en:
         -1: "You have sent an invalid token, please refresh the page. If this issue persists contact WST"
         -2: "Authentication Expired, please refresh the page"
         -3: "Missing Authentication, please log in"
+        -4: "The registration service encountered an internal error. If this issue persists contact WST"
         -1000: "Competition does not exist"
         -1001: "Error fetching Competition details, please try again later"
         -2001: "You are banned from competing at WCA Competitions"

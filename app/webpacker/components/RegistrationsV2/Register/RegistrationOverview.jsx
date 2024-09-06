@@ -51,9 +51,7 @@ export default function RegistrationOverview({
     onError: (data) => {
       const { error } = data.json;
       dispatch(setMessage(
-        error
-          ? `competitions.registration_v2.errors.${error}`
-          : 'registrations.flash.failed',
+        `competitions.registration_v2.errors.${error}`,
         'negative',
       ));
     },

@@ -58,11 +58,9 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
   const { mutate: updateRegistrationMutation, isPending: isUpdating } = useMutation({
     mutationFn: updateRegistration,
     onError: (data) => {
-      const { errorCode } = data;
+      const { error } = data.json;
       dispatch(setMessage(
-        errorCode
-          ? `competitions.registration_v2.errors.${errorCode}`
-          : 'registrations.flash.failed',
+        `competitions.registration_v2.errors.${error}`,
         'negative',
       ));
     },

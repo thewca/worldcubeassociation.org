@@ -167,9 +167,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
     onError: (data) => {
       const { error } = data.json;
       dispatchStore(setMessage(
-        error
-          ? Object.values(error).map((err) => `competitions.registration_v2.errors.${err}`)
-          : 'registrations.flash.failed',
+        Object.values(error).map((err) => `competitions.registration_v2.errors.${err}`),
         'negative',
       ));
     },
