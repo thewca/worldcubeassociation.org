@@ -50,8 +50,9 @@ class ContactsController < ApplicationController
       ContactWrt.new(
         name: requestor_details[:name],
         your_email: requestor_details[:email],
+        wca_id: User.find_by(email: requestor_details[:email])&.wca_id || 'None',
         query_type: contact_params[:queryType].titleize,
-        profile_data_to_change: profile_data_to_change.titleize,
+        profile_data_to_change: profile_data_to_change&.titleize,
         new_profile_data: new_profile_data_key_to_value(contact_params[:newProfileData], profile_data_to_change),
         edit_profile_reason: contact_params[:editProfileReason],
         message: contact_params[:message],
