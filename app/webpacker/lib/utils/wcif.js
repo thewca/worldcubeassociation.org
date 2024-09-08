@@ -5,7 +5,18 @@ import I18n from '../i18n';
 import { attemptResultToString, attemptResultToMbPoints } from './edit-events';
 import useSaveAction from '../hooks/useSaveAction';
 import { centisecondsToClockFormat } from '../wca-live/attempts';
-import { commonActivityCodes } from './activities';
+
+export const commonActivityCodes = {
+  'other-registration': 'On-site registration',
+  'other-checkin': 'Check-in',
+  'other-tutorial': 'Tutorial for new competitors',
+  'other-multi': 'Cube submission for 3x3x3 Multi-Blind',
+  'other-breakfast': 'Breakfast',
+  'other-lunch': 'Lunch',
+  'other-dinner': 'Dinner',
+  'other-awards': 'Awards',
+  'other-misc': 'Other',
+};
 
 export function useSaveWcifAction() {
   const { save, saving } = useSaveAction();

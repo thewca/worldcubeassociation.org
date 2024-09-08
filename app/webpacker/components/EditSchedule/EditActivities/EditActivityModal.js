@@ -7,7 +7,7 @@ import {
 } from 'semantic-ui-react';
 import { DateTime } from 'luxon';
 import useInputState from '../../../lib/hooks/useInputState';
-import { commonActivityCodes } from '../../../lib/utils/activities';
+import { commonActivityCodes } from '../../../lib/utils/wcif';
 
 const otherActivityCodeOptions = Object.entries(commonActivityCodes)
   .map(([activityCode, description]) => ({

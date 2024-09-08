@@ -8,18 +8,6 @@ import {
 } from './dates';
 import { localizeActivityCode } from './wcif';
 
-export const commonActivityCodes = {
-  'other-registration': 'On-site registration',
-  'other-checkin': 'Check-in',
-  'other-tutorial': 'Tutorial for new competitors',
-  'other-multi': 'Cube submission for 3x3x3 Multi-Blind',
-  'other-breakfast': 'Breakfast',
-  'other-lunch': 'Lunch',
-  'other-dinner': 'Dinner',
-  'other-awards': 'Awards',
-  'other-misc': 'Other',
-};
-
 export const earliestWithLongestTieBreaker = (a, b) => {
   if (a.startTime < b.startTime) {
     return -1;
