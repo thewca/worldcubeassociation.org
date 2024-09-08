@@ -57,6 +57,7 @@ gem 'eu_central_bank'
 gem 'devise-jwt'
 gem 'jwt'
 gem 'iso', github: 'thewca/ruby-iso'
+gem 'csv'
 
 # Pointing to jfly/selectize-rails which has a workaround for
 #  https://github.com/selectize/selectize.js/issues/953
@@ -91,7 +92,7 @@ gem 'i18n-country-translations', github: 'thewca/i18n-country-translations'
 gem 'http_accept_language'
 gem 'twitter_cldr'
 # version explicitly specified because Shakapacker wants to keep Gemfile and package.json in sync
-gem 'shakapacker', '8.0.1'
+gem 'shakapacker', '8.0.2'
 gem 'json-schema'
 gem 'translighterate'
 gem 'enum_help'

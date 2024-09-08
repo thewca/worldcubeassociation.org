@@ -40,7 +40,7 @@ export default function LeaderChangeForm({
   };
 
   const addBackOldLeaderIfNeeded = () => {
-    if (formValues.oldLeaderStatus === OLD_LEADER_STATUS.RESIGN) {
+    if (formValues.oldLeaderStatus === OLD_LEADER_STATUS.RESIGN || !oldLeader) {
       endLeaderChangeAction();
     } else {
       save(

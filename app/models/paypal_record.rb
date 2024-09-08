@@ -34,7 +34,7 @@ class PaypalRecord < ApplicationRecord
   }.freeze
 
   # See https://developer.paypal.com/docs/api/orders/v2/#orders_get!c=200&path=status&t=response
-  enum paypal_status: {
+  enum :paypal_status, {
     created: "CREATED",
     payer_action_required: "PAYER_ACTION_REQUIRED",
     saved: "SAVED",
@@ -53,7 +53,7 @@ class PaypalRecord < ApplicationRecord
     canceled: %w[voided],
   }.freeze
 
-  enum paypal_record_type: {
+  enum :paypal_record_type, {
     # We cannot call this "order" because that's a reserved keyword in SQL and Rails AR
     paypal_order: "paypal_order",
     capture: "capture",

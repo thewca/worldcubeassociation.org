@@ -2071,6 +2071,10 @@ pt:
         status: Estado
         #original_hash: 8970f0e
         locale: Locale
+        #original_hash: 5d99dee
+        group_name: Nome da Equipa/Comité
+        #original_hash: 55e4f86
+        delegated_competitions_count: Número de Competições como Delegado
   user_groups:
     group_types:
       #original_hash: abd2828
@@ -2226,7 +2230,7 @@ pt:
           missing_info: Não submeteu todos os detalhes solicitados
           #original_hash: a700652
           incomplete: >-
-            Não cumpriu os critérios de registro (por exemplo, pagamento de
+            Não cumpriu os critérios de registo (por exemplo, pagamento de
             inscrição adiantado ou tempos mínimos de qualificação)
           #original_hash: 1e225f0
           registrations_full: >-
@@ -3622,6 +3626,15 @@ pt:
           zero: Sem vagas disponíveis
           one: '%{count} vaga disponível'
           other: '%{count} vagas disponíveis'
+        payment:
+          #original_hash: d6fbc7a
+          refunded_status: Reembolsado
+          #original_hash: 41248b1
+          initialized: >-
+            O processo de pagamento foi iniciado em %{date}, mas não foi
+            concluído.
+          #original_hash: 3a16c0d
+          refunded: 'Pagamento foi reembolsado em %{date}.'
       bookmark:
         #original_hash: 7952a5c
         unbookmark: Removeu o marcador
@@ -3656,6 +3669,8 @@ pt:
         move_waiting: Mover para Lista de Espera
         #original_hash: 284b24f
         cancel: Cancelar Registo
+        #original_hash: 43dc853
+        amount: Montante
         #original_hash: 67b3c7d
         too_many: >-
           Aceitar todos estes registos ultrapassaria o limite de competidores
@@ -4419,7 +4434,7 @@ pt:
         deve-se a uma mudança de região. Resultados da região anterior não são
         levados em conta para o ranking da região atual.
       #original_hash: a91508f
-      championship_podiums: Pódios em Competições
+      championship_podiums: Pódios em Campeonatos
       championship_podium_levels:
         #original_hash: 3746f3b
         world: Pódios em Campeonatos do Mundo

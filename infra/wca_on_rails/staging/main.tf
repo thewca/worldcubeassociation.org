@@ -21,6 +21,18 @@ locals {
       value = "https://1rq8d7dif3.execute-api.us-west-2.amazonaws.com/v1/staging"
     },
     {
+      name  = "ASSET_HOST"
+      value = "https://assets-staging.worldcubeassociation.org"
+    },
+    {
+      name  = "DUMP_HOST"
+      value = "https://assets.worldcubeassociation.org"
+    },
+    {
+      name  = "SHAKAPACKER_ASSET_HOST"
+      value = "https://assets-staging.worldcubeassociation.org"
+    },
+    {
       name = "READ_REPLICA_HOST"
       value = "readonly-staging-worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com"
     },
@@ -71,6 +83,10 @@ locals {
     {
       name = "CDN_AVATARS_DISTRIBUTION_ID"
       value = "ELNTWW0SE1ZJ"
+    },
+    {
+      name = "CDN_ASSETS_DISTRIBUTION_ID"
+      value = "E3AXWQVI864TGL"
     },
     {
       name = "DATABASE_WRT_USER"

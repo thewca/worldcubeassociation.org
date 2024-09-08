@@ -18,10 +18,12 @@ class RoleChangeMailer < ApplicationMailer
     when UserGroup.group_types[:delegate_regions]
       metadata[:region_name] = group.name
       metadata[:status] = I18n.t("enums.user_roles.status.delegate_regions.#{role.metadata.status}")
+      metadata[:delegated_competitions_count] = role.metadata.total_delegated
     when UserGroup.group_types[:translators]
       metadata[:locale] = group.metadata.locale
     when UserGroup.group_types[:teams_committees], UserGroup.group_types[:councils], UserGroup.group_types[:officers]
       metadata[:status] = I18n.t("enums.user_roles.status.#{group.group_type}.#{role.metadata.status}")
+      metadata[:group_name] = group.name
     end
     metadata
   end
@@ -125,6 +127,7 @@ class RoleChangeMailer < ApplicationMailer
     @user_who_made_the_change = user_who_made_the_change
     @changes = JSON.parse changes
     @group_type_name = UserGroup.group_type_name[role.group_type.to_sym]
+    @metadata = role_metadata(role)
     @today_date = Date.today
     @to_list = [wrt_email_recipient]
 

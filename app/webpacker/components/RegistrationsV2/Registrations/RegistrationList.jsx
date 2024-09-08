@@ -28,7 +28,7 @@ function FooterContent({
   if (!dataWithUser || !registrations) return null;
 
   const newcomerCount = dataWithUser.filter(
-    (reg) => reg.user.wca_id === undefined,
+    (reg) => !reg.user.wca_id,
   ).length;
 
   const countryCount = new Set(
@@ -180,7 +180,7 @@ export default function RegistrationList({ competitionInfo }) {
                     key={`registration-table-header-${id}`}
                     onClick={() => setPsychSheetEvent(id)}
                   >
-                    <EventIcon id={id} size="1em" />
+                    <EventIcon id={id} size="1em" className="selected" />
                   </Table.HeaderCell>
                 ))}
                 <Table.HeaderCell
@@ -256,7 +256,7 @@ export default function RegistrationList({ competitionInfo }) {
                         key={`registration-table-row-${registration.user.id}-${id}`}
                       >
                         {registration.competing.event_ids.includes(id) ? (
-                          <EventIcon id={id} size="1em" />
+                          <EventIcon id={id} size="1em" hoverable={false} />
                         ) : null}
                       </Table.Cell>
                     ))}

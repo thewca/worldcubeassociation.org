@@ -38,6 +38,10 @@
                                                         preferredEvents: @current_user.preferred_events.pluck(:id),
                                                         stripePublishableKey: AppSecrets.STRIPE_PUBLISHABLE_KEY,
                                                         connectedAccountId: @competition.payment_account_for(:stripe)&.account_id,
+                                                        qualifications: {
+                                                          wcif: @competition.qualification_wcif,
+                                                          personalRecords: { single: current_user.person.ranksSingle.map(&:to_wcif), average: current_user.person.ranksAverage.map(&:to_wcif) }
+                                                        }
                                                         }) %>
     <% else %>
       <% if @registration.show_details?(current_user) %>
