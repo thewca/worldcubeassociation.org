@@ -5,6 +5,7 @@ import I18n from '../i18n';
 import { attemptResultToString, attemptResultToMbPoints } from './edit-events';
 import useSaveAction from '../hooks/useSaveAction';
 import { centisecondsToClockFormat } from '../wca-live/attempts';
+import { commonActivityCodes } from './activities';
 
 export function useSaveWcifAction() {
   const { save, saving } = useSaveAction();
@@ -104,6 +105,10 @@ export const localizeActivityCode = (activityCode, wcifRound, wcifEvent) => {
 };
 
 export const humanizeActivityCode = (activityCode) => {
+  if (activityCode.startsWith('other-')) {
+    return commonActivityCodes[activityCode] ?? '';
+  }
+
   const { eventId, roundNumber, attempt } = parseActivityCode(activityCode);
 
   const eventName = I18n.t(`events.${eventId}`);
