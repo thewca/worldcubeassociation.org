@@ -3,6 +3,7 @@ import {
   Button,
   Card,
   Container,
+  DropdownHeader,
   Form,
   Icon,
   Image,
@@ -61,6 +62,12 @@ function VenuePanel({
     [referenceTime],
   );
 
+  const makeTimeZoneOption = useCallback((key) => ({
+    key,
+    text: getVenueTzDropdownLabel(key),
+    value: key,
+  }), [getVenueTzDropdownLabel]);
+
   // Instead of giving *all* TZInfo, use uniq-fied rails "meaningful" subset
   // We'll add the "country_zones" to that, because some of our competitions
   // use TZs not included in this subset.
@@ -69,22 +76,31 @@ function VenuePanel({
   //   - country_zone_a, country_zone_b, [...], other_tz_a, other_tz_b, [...]
   const timezoneOptions = useMemo(() => {
     // Stuff that is recommended based on the country list
-    const competitionZoneIds = Object.values(countryZones);
+    const competitionZoneIds = _.uniq(Object.values(countryZones));
+    const sortedCompetitionZones = sortByOffset(competitionZoneIds, referenceTime);
+
     // Stuff that is listed in our `backendTimezones` list but not in the preferred country list
     const otherZoneIds = _.difference(backendTimezones, competitionZoneIds);
+    const sortedOtherZones = sortByOffset(otherZoneIds, referenceTime);
 
     // Both merged together, with the countryZone entries listed first.
-    const sortedKeys = _.union(
-      sortByOffset(competitionZoneIds, referenceTime),
-      sortByOffset(otherZoneIds, referenceTime),
-    );
-
-    return sortedKeys.map((key) => ({
-      key,
-      text: getVenueTzDropdownLabel(key),
-      value: key,
-    }));
-  }, [countryZones, referenceTime, getVenueTzDropdownLabel]);
+    return [
+      {
+        as: DropdownHeader,
+        key: 'local-zones-header',
+        text: 'Local time zones',
+        disabled: true,
+      },
+      ...sortedCompetitionZones.map(makeTimeZoneOption),
+      {
+        as: DropdownHeader,
+        key: 'other-zones-header',
+        text: 'Other time zones',
+        disabled: true,
+      },
+      ...sortedOtherZones.map(makeTimeZoneOption),
+    ];
+  }, [countryZones, referenceTime, makeTimeZoneOption]);
 
   return (
     <Card fluid raised>
