@@ -199,15 +199,15 @@ resource "aws_ecs_task_definition" "this" {
   task_role_arn      = aws_iam_role.task_role.arn
 
   # This is what our current staging instance is using
-  cpu = "2048"
-  memory = "7861"
+  cpu = "1024"
+  memory = "3930"
 
   container_definitions = jsonencode([
     {
       name              = "rails-staging"
       image             = "${var.shared.ecr_repository.repository_url}:staging"
-      cpu    = 1536
-      memory = 5500
+      cpu    = 1024
+      memory = 3930
       portMappings = [
         {
           # The hostPort is automatically set for awsvpc network mode,
@@ -230,61 +230,6 @@ resource "aws_ecs_task_definition" "this" {
         interval           = 30
         retries            = 3
         startPeriod        = 300
-        timeout            = 5
-      }
-    },
-    {
-      name              = "sidekiq-staging"
-      image             = "${var.shared.ecr_repository.repository_url}:sidekiq-staging"
-      cpu    = 256
-      memory = 1849
-      portMappings = [{
-        # Mailcatcher
-        containerPort = 1080
-        protocol      = "tcp"
-      }]
-      logConfiguration = {
-        logDriver = "awslogs"
-        options = {
-          awslogs-group         = aws_cloudwatch_log_group.this.name
-          awslogs-region        = var.region
-          awslogs-stream-prefix = var.name_prefix
-        }
-      }
-      environment = local.rails_environment
-      healthCheck       = {
-        command            = ["CMD-SHELL", "pgrep ruby || exit 1"]
-        interval           = 30
-        retries            = 3
-        startPeriod        = 60
-        timeout            = 5
-      }
-    },
-    {
-      name              = "pma-staging"
-      image             = "${var.shared.ecr_repository.repository_url}:pma"
-      cpu    = 256
-      memory = 512
-      portMappings = [{
-        # The hostPort is automatically set for awsvpc network mode,
-        # see https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_PortMapping.html#ECS-Type-PortMapping-hostPort
-        containerPort = 80
-        protocol      = "tcp"
-      }]
-      logConfiguration = {
-        logDriver = "awslogs"
-        options = {
-          awslogs-group         = aws_cloudwatch_log_group.this.name
-          awslogs-region        = var.region
-          awslogs-stream-prefix = var.name_prefix
-        }
-      }
-      environment = local.pma_environment
-      healthCheck       = {
-        command            = ["CMD-SHELL", "curl -f http://localhost/LICENSE || exit 1"]
-        interval           = 30
-        retries            = 3
-        startPeriod        = 60
         timeout            = 5
       }
     }
