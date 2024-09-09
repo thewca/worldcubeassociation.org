@@ -44,7 +44,7 @@ PreCommit:
       # Semantic UI stuff, we need to re-exclude that here.
       - 'app/webpacker/stylesheets/semantic/**/*'
     required_executable: 'bin/yarn'
-    command: ['bin/yarn', '--silent', 'run', 'eslint', '-c', '.eslintrc.json']
+    command: ['bin/yarn', '--silent', 'run', 'eslint', '-c', 'eslint.config.mjs']
 
   RuboCop:
     enabled: true
