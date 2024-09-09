@@ -95,6 +95,10 @@ export function EventSelector({
   disabled = false,
   maxEvents = Infinity,
   shouldErrorOnEmpty = false,
+  eventsDisabled = [],
+  // Listing event as an argument here to indicate to developers that it's needed
+  // eslint-disable-next-line no-unused-vars
+  disabledText = (event) => {},
 }) {
   return (
     <>
@@ -121,26 +125,38 @@ export function EventSelector({
         trigger={(
           <div id="events">
             {eventList.map((eventId) => (
-              <React.Fragment key={eventId}>
-                <Button
-                  disabled={disabled
-                || (!selectedEvents.includes(eventId) && selectedEvents.length >= maxEvents)}
-                  basic
-                  icon
-                  toggle
-                  type="button"
-                  size="mini"
-                  className="event-checkbox"
-                  id={`checkbox-${eventId}`}
-                  value={eventId}
-                  data-tooltip={I18n.t(`events.${eventId}`)}
-                  data-variation="tiny"
-                  onClick={() => onEventSelection({ type: 'toggle_event', eventId })}
-                  active={selectedEvents.includes(eventId)}
-                >
-                  <Icon className={`cubing-icon event-${eventId}`} />
-                </Button>
-              </React.Fragment>
+              <Popup
+                key={eventId}
+                disabled={selectedEvents.length === 0}
+                trigger={(
+                  <span>
+                    {/* Wrap in span so hover works on disabled buttons */}
+                    <Button
+                      key={eventId}
+                      disabled={
+                      disabled
+                        || (!selectedEvents.includes(eventId) && selectedEvents.length >= maxEvents)
+                        || eventsDisabled.includes(eventId)
+                    }
+                      basic
+                      icon
+                      toggle
+                      type="button"
+                      size="mini"
+                      className="event-checkbox"
+                      id={`checkbox-${eventId}`}
+                      value={eventId}
+                      data-variation="tiny"
+                      onClick={() => onEventSelection({ type: 'toggle_event', eventId })}
+                      active={selectedEvents.includes(eventId)}
+                    >
+                      <Icon className={`cubing-icon event-${eventId}`} style={eventsDisabled.includes(eventId) ? { color: '#FFBBBB' } : {}} />
+                    </Button>
+                  </span>
+)}
+              >
+                {eventsDisabled.includes(eventId) ? disabledText(eventId) : I18n.t(`events.${eventId}`)}
+              </Popup>
             ))}
           </div>
 )}
