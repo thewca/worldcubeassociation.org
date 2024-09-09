@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon';
 
-// Hijacks the JS `Intl` formatting code, which is nornally used to localize whole dates
+// Hijacks the JS `Intl` formatting code, which is normally used to localize whole dates
 //   along the lines of "Wednesday, 08 Aug 2025 01:23:45.67890T+01:00".
 // However, we are only interested in the parts of this localization that references the timezone,
 //   so we extract only the `timeZoneName` part and depending on whether we picked "long" or "short"
