@@ -3744,10 +3744,6 @@ pt:
         '-2003': Não tem permissões para completar esta ação
         #original_hash: cb4093a
         '-3000': Registo não existe
-        #original_hash: 0df821f
-        '-3001': Pagamento WCA não está ativado para esta competição
-        #original_hash: 092da51
-        '-3002': Precisa de finalizar o seu registo antes de poder pagar
         #original_hash: bc53fb6
         '-4000': O Pedido contém dados inválidos
         #original_hash: 35fddf4
@@ -3772,6 +3768,10 @@ pt:
         '-4010': A posição na lista de espera não é válida
         #original_hash: e489908
         '-4011': Só pode aceitar a primeira pessoa da lista de espera
+        #original_hash: 0df821f
+        '-6001': Pagamento WCA não está ativado para esta competição
+        #original_hash: 092da51
+        '-6002': Precisa de finalizar o seu registo antes de poder pagar
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-

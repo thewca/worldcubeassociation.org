@@ -3085,10 +3085,6 @@ zh-TW:
         '-2003': 您不被允許完成這個動作
         #original_hash: cb4093a
         '-3000': 報名不存在
-        #original_hash: 0df821f
-        '-3001': 這場比賽沒有啟用WCA付款方式
-        #original_hash: 092da51
-        '-3002': 您需要先完成報名才能付款
         #original_hash: bc53fb6
         '-4000': 請求中包含無效資料
         #original_hash: 35fddf4
@@ -3113,6 +3109,10 @@ zh-TW:
         '-4010': 這個候補名單位置無效
         #original_hash: e489908
         '-4011': 您只能受理候補名單上的第一位
+        #original_hash: 0df821f
+        '-6001': 這場比賽沒有啟用WCA付款方式
+        #original_hash: 092da51
+        '-6002': 您需要先完成報名才能付款
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: '必須以年份為結尾且只能包含字母與數字，破折號(-)、&符號(&)、句號(.)、冒號(:)、撇號('')和空白( )'
