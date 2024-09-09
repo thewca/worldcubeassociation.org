@@ -115,9 +115,16 @@ resource "aws_ecs_service" "auxiliary" {
   }
 
   load_balancer {
-    target_group_arn = var.shared.pma_production.arn
+    target_group_arn = var.shared.pma_staging.arn
     container_name   = "pma-staging"
     container_port   = 80
+  }
+
+  load_balancer {
+    target_group_arn = var.shared.mailcatcher.arn
+    # This is mailcatcher running on the sidekiq container
+    container_name   = "sidekiq-staging"
+    container_port   = 1080
   }
 
   network_configuration {
