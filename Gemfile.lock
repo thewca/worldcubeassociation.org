@@ -433,7 +433,6 @@ GEM
     kaminari-i18n (0.5.0)
       kaminari
       rails
-    kgio (2.11.4)
     language_server-protocol (3.17.0.3)
     launchy (3.0.1)
       addressable (~> 2.8)
@@ -591,7 +590,6 @@ GEM
       thor (~> 1.0, >= 1.2.2)
       zeitwerk (~> 2.6)
     rainbow (3.1.1)
-    raindrops (0.20.0)
     rake (13.2.1)
     rb-fsevent (0.11.0)
     rb-inotify (0.10.1)
@@ -784,9 +782,6 @@ GEM
       unf_ext
     unf_ext (0.0.9.1)
     unicode-display_width (2.5.0)
-    unicorn (6.1.0)
-      kgio (~> 2.6)
-      raindrops (~> 0.7)
     uniform_notifier (1.16.0)
     uri (0.13.1)
     useragent (0.16.10)
@@ -904,7 +899,7 @@ DEPENDENCIES
   overcommit
   premailer-rails
   puma
-  rack (~> 2)
+  rack
   rack-cors
   rails
   rails-controller-testing
@@ -944,7 +939,6 @@ DEPENDENCIES
   timecop
   translighterate
   twitter_cldr
-  unicorn
   valid_email
   vault
   wca_i18n
