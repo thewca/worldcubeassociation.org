@@ -123,7 +123,7 @@ GEM
       activemodel (= 7.2.1)
       activesupport (= 7.2.1)
       timeout (>= 0.4.0)
-    activerecord-import (1.8.0)
+    activerecord-import (1.8.1)
       activerecord (>= 4.2)
     activestorage (7.2.1)
       actionpack (= 7.2.1)
