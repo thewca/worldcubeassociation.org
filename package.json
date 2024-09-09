@@ -28,7 +28,7 @@
     "@rails/ujs": "^7.1.400",
     "@stripe/react-stripe-js": "^2.8.0",
     "@stripe/stripe-js": "^4.4.0",
-    "@tanstack/react-query": "^5.53.2",
+    "@tanstack/react-query": "^5.55.2",
     "@wca/helpers": "^1.1.5",
     "autonumeric": "^4.10.5",
     "autoprefixer": "^10.4.20",
