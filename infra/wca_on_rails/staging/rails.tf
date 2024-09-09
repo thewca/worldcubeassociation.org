@@ -246,60 +246,14 @@ data "aws_ecs_task_definition" "this" {
   task_definition = aws_ecs_task_definition.this.family
 }
 
-resource "aws_ecs_task_definition" "db-reset" {
-  family = "${var.name_prefix}-db-reset"
-
-  network_mode             = "awsvpc"
-  requires_compatibilities = ["EC2"]
-
-  # We configure the roles to allow `aws ecs execute-command` into a task,
-  # as in https://aws.amazon.com/blogs/containers/new-using-amazon-ecs-exec-access-your-containers-fargate-ec2
-  execution_role_arn = aws_iam_role.task_execution_role.arn
-  task_role_arn      = aws_iam_role.task_role.arn
-
-  # This is what our current staging instance is using
-  cpu = "2048"
-  memory = "7861"
-
-  container_definitions = jsonencode([
-    {
-      name              = "rails-staging-db-reset"
-      image             = "${var.shared.ecr_repository.repository_url}:staging"
-      cpu    = 2048
-      memory = 7861
-      command = ["./bin/rake","db:load:development"]
-      portMappings = []
-      logConfiguration = {
-        logDriver = "awslogs"
-        options = {
-          awslogs-group         = aws_cloudwatch_log_group.this.name
-          awslogs-region        = var.region
-          awslogs-stream-prefix = var.name_prefix
-        }
-      }
-      environment = local.rails_environment
-    }
-  ])
-
-  tags = {
-    Name = "${var.name_prefix}-db-reset"
-  }
-}
-
-
-
-data "aws_ecs_task_definition" "db-reset" {
-  task_definition = aws_ecs_task_definition.this.family
-}
-
-resource "aws_ecs_service" "this" {
+resource "aws_ecs_service" "rails" {
   name                               = var.name_prefix
   cluster                            = var.shared.ecs_cluster.id
   # During deployment a new task revision is created with modified
   # container image, so we want use data.aws_ecs_task_definition to
   # always point to the active task definition
   task_definition                    = data.aws_ecs_task_definition.this.arn
-  desired_count                      = 1
+  desired_count                      = 2
   scheduling_strategy                = "REPLICA"
   deployment_maximum_percent         = 200
   deployment_minimum_healthy_percent = 50
@@ -331,18 +285,6 @@ resource "aws_ecs_service" "this" {
     target_group_arn = var.shared.rails_staging.arn
     container_name   = "rails-staging"
     container_port   = 3000
-  }
-
-  load_balancer {
-    target_group_arn = var.shared.pma_staging.arn
-    container_name   = "pma-staging"
-    container_port   = 80
-  }
-
-  load_balancer {
-    target_group_arn = var.shared.mailcatcher.arn
-    container_name   = "sidekiq-staging"
-    container_port   = 1080
   }
 
   network_configuration {
