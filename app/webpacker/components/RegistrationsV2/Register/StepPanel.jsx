@@ -76,6 +76,7 @@ export default function StepPanel({
   refetchRegistration,
   stripePublishableKey,
   connectedAccountId,
+  qualifications,
 }) {
   const isRegistered = Boolean(registration) && registration.competing.registration_status !== 'cancelled';
   const isAccepted = isRegistered && registration.competing.registration_status === 'accepted';
@@ -146,6 +147,7 @@ export default function StepPanel({
         user={user}
         stripePublishableKey={stripePublishableKey}
         connectedAccountId={connectedAccountId}
+        qualifications={qualifications}
         nextStep={
           (overwrites = {}) => setActiveIndex((oldActiveIndex) => {
             if (overwrites?.refresh) {

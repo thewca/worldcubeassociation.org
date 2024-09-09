@@ -2054,6 +2054,10 @@ sv:
         status: Status
         #original_hash: 8970f0e
         locale: Språk
+        #original_hash: 5d99dee
+        group_name: Team-/Kommitténamn
+        #original_hash: 55e4f86
+        delegated_competitions_count: Antal delegerade tävlingar
   user_groups:
     group_types:
       #original_hash: abd2828
@@ -3565,6 +3569,13 @@ sv:
           zero: '%{count} platser kvar'
           one: '%{count} plats kvar'
           other: '%{count} platser kvar'
+        payment:
+          #original_hash: d6fbc7a
+          refunded_status: Återbetalad
+          #original_hash: 41248b1
+          initialized: 'Betalningsprocessen startades den %{date}, men avslutades inte.'
+          #original_hash: 3a16c0d
+          refunded: 'Betalningen återbetalades den %{date}.'
       bookmark:
         #original_hash: 7952a5c
         unbookmark: Du har tagit bort ditt bokmärke.

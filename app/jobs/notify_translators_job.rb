@@ -1,10 +1,12 @@
 # frozen_string_literal: true
 
-# We only want to attempt to send email when the server is starting up.
-# We don't want to send emails as a side effect of some rake script.
-# See https://github.com/thewca/worldcubeassociation.org/issues/2085.
-if Rails.env.production? && ENV.fetch('RAILS_RACKING', nil)
-  Rails.configuration.after_initialize do
+class NotifyTranslatorsJob < WcaCronjob
+  before_enqueue do
+    # NOTE: we want to only do this on the actual "production" server, as we need the real users' emails.
+    throw :abort unless EnvConfig.WCA_LIVE_SITE?
+  end
+
+  def perform
     modification_hash = ServerSetting.find_or_create_by!(name: ServerSetting::BASE_LOCALE_HASH)
 
     translation_base_file = "#{Rails.root}/config/locales/en.yml"

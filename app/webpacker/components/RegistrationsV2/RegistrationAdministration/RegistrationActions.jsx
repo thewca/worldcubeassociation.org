@@ -45,7 +45,7 @@ export default function RegistrationActions({
   const anyRejectable = pending.length < selectedCount;
   const anyApprovable = accepted.length < selectedCount;
   const anyCancellable = cancelled.length < selectedCount;
-  // const anyWaitlistable = waiting.length < selectedCount;
+  const anyWaitlistable = waiting.length < selectedCount;
 
   const selectedEmails = [...pending, ...accepted, ...cancelled, ...waiting]
     .map((userId) => userEmailMap[userId])
@@ -139,18 +139,18 @@ export default function RegistrationActions({
               </Button>
             )}
 
-            {/* {anyWaitlistable && ( */}
-            {/*  <Button */}
-            {/*    color="yellow" */}
-            {/*    onClick={() => changeStatus( */}
-            {/*      [...pending, ...cancelled, ...accepted], */}
-            {/*      'waiting_list', */}
-            {/*    )} */}
-            {/*  > */}
-            {/*    <Icon name="hourglass" /> */}
-            {/*    {i18n.t('competitions.registration_v2.update.move_waiting')} */}
-            {/*  </Button> */}
-            {/* )} */}
+            {anyWaitlistable && (
+            <Button
+              color="yellow"
+              onClick={() => changeStatus(
+                [...pending, ...cancelled, ...accepted],
+                'waiting_list',
+              )}
+            >
+              <Icon name="hourglass" />
+              {i18n.t('competitions.registration_v2.update.move_waiting')}
+            </Button>
+            )}
 
             {anyCancellable && (
               <Button

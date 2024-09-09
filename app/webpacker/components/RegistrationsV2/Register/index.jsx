@@ -11,6 +11,7 @@ import ConfirmProvider from '../../../lib/providers/ConfirmProvider';
 
 export default function Index({
   competitionInfo, userInfo, preferredEvents,
+  qualifications,
   stripePublishableKey = '',
   connectedAccountId = '',
 }) {
@@ -24,6 +25,7 @@ export default function Index({
             preferredEvents={preferredEvents}
             stripePublishableKey={stripePublishableKey}
             connectedAccountId={connectedAccountId}
+            qualifications={qualifications}
           />
         </ConfirmProvider>
       </StoreProvider>
@@ -32,7 +34,7 @@ export default function Index({
 }
 
 function Register({
-  competitionInfo, userInfo, preferredEvents, connectedAccountId, stripePublishableKey,
+  competitionInfo, qualifications, userInfo, preferredEvents, connectedAccountId, stripePublishableKey,
 }) {
   const dispatch = useDispatch();
   const ref = useRef();
@@ -69,6 +71,7 @@ function Register({
             refetchRegistration={refetch}
             connectedAccountId={connectedAccountId}
             stripePublishableKey={stripePublishableKey}
+            qualifications={qualifications}
           />
         </>
       )

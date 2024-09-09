@@ -4434,7 +4434,7 @@ pt:
         deve-se a uma mudança de região. Resultados da região anterior não são
         levados em conta para o ranking da região atual.
       #original_hash: a91508f
-      championship_podiums: Pódios em Competições
+      championship_podiums: Pódios em Campeonatos
       championship_podium_levels:
         #original_hash: 3746f3b
         world: Pódios em Campeonatos do Mundo
