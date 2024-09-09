@@ -74,13 +74,16 @@ const partitionRegistrations = (registrations) => registrations.reduce(
       case 'cancelled':
         result.cancelled.push(registration);
         break;
+      case 'rejected':
+        result.rejected.push(registration);
+        break;
       default:
         break;
     }
     return result;
   },
   {
-    pending: [], waiting: [], accepted: [], cancelled: [],
+    pending: [], waiting: [], accepted: [], cancelled: [], rejected: [],
   },
 );
 
@@ -246,7 +249,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
   }, [registrationsWithUser, sortColumn, sortDirection]);
 
   const {
-    waiting, accepted, cancelled, pending,
+    waiting, accepted, cancelled, pending, rejected,
   } = useMemo(
     () => partitionRegistrations(sortedRegistrationsWithUser ?? []),
     [sortedRegistrationsWithUser],
@@ -259,8 +262,9 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
       waiting: selected.filter((id) => waiting.some((reg) => id === reg.user.id)),
       accepted: selected.filter((id) => accepted.some((reg) => id === reg.user.id)),
       cancelled: selected.filter((id) => cancelled.some((reg) => id === reg.user.id)),
+      rejected: selected.filter((id) => rejected.some((reg) => id === reg.user.id)),
     }),
-    [selected, pending, waiting, accepted, cancelled],
+    [selected, pending, waiting, accepted, cancelled, rejected],
   );
 
   const select = (attendees) => dispatch({ type: 'add', attendees });
@@ -410,16 +414,42 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
         />
 
         <Header>
-          {i18n.t('registrations.list.deleted_registrations')}
+          {i18n.t('competitions.registration_v2.list.cancelled.title')}
           {' '}
           (
           {cancelled.length}
           )
         </Header>
+        <Header.Subheader>
+          {i18n.t('competitions.registration_v2.list.cancelled.information')}
+        </Header.Subheader>
         <RegistrationAdministrationTable
           columnsExpanded={expandedColumns}
           registrations={cancelled}
           selected={partitionedSelected.cancelled}
+          select={select}
+          unselect={unselect}
+          competition_id={competitionInfo.id}
+          changeSortColumn={changeSortColumn}
+          sortDirection={sortDirection}
+          sortColumn={sortColumn}
+          competitionInfo={competitionInfo}
+        />
+
+        <Header>
+          {i18n.t('competitions.registration_v2.list.rejected.title')}
+          {' '}
+          (
+          {rejected.length}
+          )
+        </Header>
+        <Header.Subheader>
+          {i18n.t('competitions.registration_v2.list.rejected.information')}
+        </Header.Subheader>
+        <RegistrationAdministrationTable
+          columnsExpanded={expandedColumns}
+          registrations={rejected}
+          selected={partitionedSelected.rejected}
           select={select}
           unselect={unselect}
           competition_id={competitionInfo.id}

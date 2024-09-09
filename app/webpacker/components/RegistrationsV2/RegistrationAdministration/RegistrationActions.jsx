@@ -40,12 +40,13 @@ export default function RegistrationActions({
   const anySelected = selectedCount > 0;
 
   const {
-    pending, accepted, cancelled, waiting,
+    pending, accepted, cancelled, waiting, rejected,
   } = partitionedSelected;
-  const anyRejectable = pending.length < selectedCount;
+  const anyPending = pending.length < selectedCount;
   const anyApprovable = accepted.length < selectedCount;
   const anyCancellable = cancelled.length < selectedCount;
   const anyWaitlistable = waiting.length < selectedCount;
+  const anyRejectable = rejected.length < selectedCount;
 
   const selectedEmails = [...pending, ...accepted, ...cancelled, ...waiting]
     .map((userId) => userEmailMap[userId])
@@ -67,7 +68,7 @@ export default function RegistrationActions({
   };
 
   const attemptToApprove = () => {
-    const idsToAccept = [...pending, ...cancelled, ...waiting];
+    const idsToAccept = [...pending, ...cancelled, ...waiting, ...rejected];
     if (idsToAccept.length > spotsRemaining) {
       dispatch(setMessage(
         'competitions.registration_v2.update.too_many',
@@ -91,7 +92,7 @@ export default function RegistrationActions({
       <Button
         onClick={() => {
           csvExport(
-            [...pending, ...accepted, ...cancelled, ...waiting],
+            [...pending, ...accepted, ...cancelled, ...waiting, ...rejected],
             registrations,
           );
         }}
@@ -127,10 +128,10 @@ export default function RegistrationActions({
               </Button>
             )}
 
-            {anyRejectable && (
+            {anyPending && (
               <Button
                 onClick={() => changeStatus(
-                  [...accepted, ...cancelled, ...waiting],
+                  [...accepted, ...cancelled, ...waiting, ...rejected],
                   'pending',
                 )}
               >
@@ -143,7 +144,7 @@ export default function RegistrationActions({
             <Button
               color="yellow"
               onClick={() => changeStatus(
-                [...pending, ...cancelled, ...accepted],
+                [...pending, ...cancelled, ...accepted, ...rejected],
                 'waiting_list',
               )}
             >
@@ -154,14 +155,27 @@ export default function RegistrationActions({
 
             {anyCancellable && (
               <Button
-                negative
+                color="orange"
                 onClick={() => changeStatus(
-                  [...pending, ...accepted, ...waiting],
+                  [...pending, ...accepted, ...waiting, ...rejected],
                   'cancelled',
                 )}
               >
                 <Icon name="trash" />
                 {i18n.t('competitions.registration_v2.update.cancel')}
+              </Button>
+            )}
+
+            {anyRejectable && (
+              <Button
+                negative
+                onClick={() => changeStatus(
+                  [...pending, ...accepted, ...waiting, ...cancelled],
+                  'rejected',
+                )}
+              >
+                <Icon name="delete" />
+                {i18n.t('competitions.registration_v2.update.reject')}
               </Button>
             )}
           </>
