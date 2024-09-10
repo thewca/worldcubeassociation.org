@@ -3626,6 +3626,16 @@ pt:
           zero: Sem vagas disponíveis
           one: '%{count} vaga disponível'
           other: '%{count} vagas disponíveis'
+        cancelled:
+          #original_hash: e9c5a55
+          title: Registos cancelados
+          #original_hash: bb5b570
+          information: Competidores cancelados podem registar-se novamente.
+        rejected:
+          #original_hash: 199b7c5
+          title: Registos rejeitados
+          #original_hash: 3fd2e0c
+          information: Competidores rejeitados não se podem registar novamente.
         payment:
           #original_hash: d6fbc7a
           refunded_status: Reembolsado
@@ -3669,6 +3679,8 @@ pt:
         move_waiting: Mover para Lista de Espera
         #original_hash: 284b24f
         cancel: Cancelar Registo
+        #original_hash: df40450
+        reject: Rejeitar Registo
         #original_hash: 43dc853
         amount: Montante
         #original_hash: 67b3c7d
@@ -3705,6 +3717,8 @@ pt:
           pending: O seu registo está pendente de aprovação pelos organizadores.
           #original_hash: dcc4906
           cancelled: O seu registo foi eliminado.
+          #original_hash: 92dab83
+          rejected: O seu registo foi rejeitado.
           #original_hash: a02390c
           waiting_list: 'Está em Lista de Espera na posição %{waiting_list_position}.'
         #original_hash: 2d9f36c
