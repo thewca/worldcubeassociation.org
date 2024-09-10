@@ -198,15 +198,14 @@ resource "aws_ecs_task_definition" "api" {
   execution_role_arn = aws_iam_role.task_execution_role.arn
   task_role_arn      = aws_iam_role.task_role.arn
 
-  # This is what our current staging instance is using
-  cpu = "512"
-  memory = "2048"
+  cpu = "1024"
+  memory = "3930"
 
   container_definitions = jsonencode([
     {
       name              = "rails-staging-api"
       image             = "${var.shared.ecr_repository.repository_url}:staging-api"
-      cpu    = 512
+      cpu    = 1024
       memory = 2048
       portMappings = [
         {
@@ -251,7 +250,6 @@ resource "aws_ecs_task_definition" "this" {
   execution_role_arn = aws_iam_role.task_execution_role.arn
   task_role_arn      = aws_iam_role.task_role.arn
 
-  # This is shared with the API Server
   cpu = "1024"
   memory = "3930"
 
@@ -311,7 +309,7 @@ resource "aws_ecs_service" "rails" {
   # container image, so we want use data.aws_ecs_task_definition to
   # always point to the active task definition
   task_definition                    = data.aws_ecs_task_definition.this.arn
-  desired_count                      = 2
+  desired_count                      = 1
   scheduling_strategy                = "REPLICA"
   deployment_maximum_percent         = 200
   deployment_minimum_healthy_percent = 50
