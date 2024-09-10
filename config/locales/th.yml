@@ -993,7 +993,7 @@ th:
             #original_hash: f82488f
             2fa_attempt: >-
               คุณกำลังเข้าระบบของ WCA, คุณได้เปิดการใช้งานการยืนยันตัวตน 2
-              ขั้นตอน และคุณเพิ่งจะขอให้ส่ง one-time password ด้วย email
+              ขั้นตอน และคุณเพิ่งจะขอให้ส่ง one-time password ด้วย email 
               กรุณาดูด้านล่าง
             #original_hash: e27e540
             disclaimer: >-
@@ -1804,7 +1804,7 @@ th:
       have_wca_id_html: 'WCA ID ของคุณคือ %{link_id}'
       #original_hash: bf654e1
       account_is_special: >-
-        WCA ID และบัญชีผู้ใช้ได้เชื่อมต่อกันแล้วด้วยตำแหน่งพิเศษ (เช่น
+        WCA ID และบัญชีผู้ใช้ได้เชื่อมต่อกันแล้วด้วยตำแหน่งพิเศษ (เช่น 
         delegate, ผู้จัดการแข่งขัน, สมาชิกทีม) และไม่สามารถลบได้ กรุณาส่ง email
         มาที่ WCA Result Team เพื่อช่วยเปลี่ยน WCA ID ไปยังบัญชีผู้ใช้อื่น
       cannot_edit:
@@ -1976,6 +1976,10 @@ th:
         status: สถานะ
         #original_hash: 8970f0e
         locale: สถานที่
+        #original_hash: 5d99dee
+        group_name: Team/Committee Name
+        #original_hash: 55e4f86
+        delegated_competitions_count: จำนวนครั้งที่ Delegate การแข่งขัน
   user_groups:
     group_types:
       #original_hash: abd2828
@@ -3417,6 +3421,17 @@ th:
         spots_remaining_plural:
           zero: ผู้เข้าแข่งขันเต็มจำนวนแล้ว
           other: 'เหลืออีก %{count} คน'
+        cancelled:
+          #original_hash: e9c5a55
+          title: การสมัครที่ถูกยกเลิก
+          #original_hash: bb5b570
+          information: ผู้เข้าแข่งขันที่การสมัครถูกยกเลิกสามารถสมัครการแข่งขันได้อีกครั้ง
+        rejected:
+          #original_hash: 199b7c5
+          title: การสมัครที่ถูกปฎิเสธ
+          #original_hash: 3fd2e0c
+          information: >-
+            ผู้เข้าแข่งขันที่ถูกปฎิเสธการสมัครไม่สามารถสมัครการแข่งขันอีกครั้งได้
         payment:
           #original_hash: d6fbc7a
           refunded_status: คืนค่าสมัครแล้ว
@@ -3458,6 +3473,8 @@ th:
         move_waiting: ย้ายไป waiting list
         #original_hash: 284b24f
         cancel: ยกเลิกการสมัคร
+        #original_hash: df40450
+        reject: ปฎิเสธการสมัคร
         #original_hash: 43dc853
         amount: Amount
         #original_hash: 67b3c7d
@@ -3494,6 +3511,8 @@ th:
           pending: การสมัครของคุณอยู่ระหว่างการได้รับการยอมรับจากผู้จัดการแข่งขัน
           #original_hash: dcc4906
           cancelled: การสมัครของคุณถูกลบแล้ว
+          #original_hash: 92dab83
+          rejected: การสมัครของคุณถูกปฎิเสธ
           #original_hash: a02390c
           waiting_list: 'คุณอยู่ใน Waiting List ลำดับที่ %{waiting_list_position}'
         #original_hash: 2d9f36c
@@ -3519,6 +3538,8 @@ th:
         '-2': Authentication หมดอายุ โปรดรีเฟรชหน้านี้
         #original_hash: 2d63156
         '-3': ไม่มี Authentication กรุณาเข้าสู่ระบบ
+        #original_hash: e631d99
+        '-4': พบข้อผิดพลาดของระบบการสมัครการแข่งขัน กรุณาติดต่อ WST
         #original_hash: e0b69a9
         '-1000': ไม่มีการแข่งขัน
         #original_hash: 2aa4aa1
@@ -3529,8 +3550,14 @@ th:
         '-2002': Profile ของคุณไม่สมบูรณ์
         #original_hash: 4dd79f2
         '-2003': คุณไม่มีสิทธิ์ดำเนินการนี้ให้เสร็จสิ้น
+        #original_hash: 374e1c7
+        '-2004': >-
+          คุณไม่สามารถสมัครการแข่งขันได้เนื่องจากผู้จัดการแข่งขันได้ปฏิเสธการสมัครของคุณ
+          โปรดติดต่อพวกเขาหากคุณคิดว่ามีข้อผิดพลาดเกิดขึ้น
         #original_hash: cb4093a
         '-3000': ไม่มีการสมัคร
+        #original_hash: 9bbefa9
+        '-3001': คุณได้สมัครการแข่งขันอื่นในซีรียส์นี้ไปแล้ว
         #original_hash: bc53fb6
         '-4000': คำขอมีข้อมูลที่ไม่ถูกต้อง
         #original_hash: 35fddf4
@@ -3556,6 +3583,8 @@ th:
         '-4010': The Waiting List Position is not Valid
         #original_hash: e489908
         '-4011': คุณสามารถยอมรับได้เฉพาะคนแรกที่อยู่ใน waiting list เท่านั้น
+        #original_hash: 8d089d6
+        '-4012': คุณไม่มีคุณสมบัติเข้าแข่งขันในประเภทที่เลือก
         #original_hash: 0df821f
         '-6001': WCA Payment ไม่ได้เปิดใช้งานสำหรับการแข่งขันครั้งนี้
         #original_hash: 092da51
