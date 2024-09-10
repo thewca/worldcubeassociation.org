@@ -3730,6 +3730,10 @@ pt:
         '-2': 'Autenticação expirou, atualize a página'
         #original_hash: 2d63156
         '-3': 'Autenticação em falta, por favor autentique-se'
+        #original_hash: e631d99
+        '-4': >-
+          O serviço de registo encontrou um erro interno. Se este problema
+          persistir, contacte o WST
         #original_hash: e0b69a9
         '-1000': Competição não existe
         #original_hash: 2aa4aa1
@@ -3742,8 +3746,14 @@ pt:
         '-2002': O seu perfil está incompleto
         #original_hash: 4dd79f2
         '-2003': Não tem permissões para completar esta ação
+        #original_hash: 374e1c7
+        '-2004': >-
+          Não está autorizado a registar-se, pois os organizadores rejeitaram o
+          seu registo. Entre em contacto com eles se achar que houve um erro.
         #original_hash: cb4093a
         '-3000': Registo não existe
+        #original_hash: 9bbefa9
+        '-3001': Já se registou para outra Competição na série
         #original_hash: bc53fb6
         '-4000': O Pedido contém dados inválidos
         #original_hash: 35fddf4
@@ -3768,10 +3778,12 @@ pt:
         '-4010': A posição na lista de espera não é válida
         #original_hash: e489908
         '-4011': Só pode aceitar a primeira pessoa da lista de espera
+        #original_hash: 8d089d6
+        '-4012': Não está qualificado para competir nos eventos selecionados
         #original_hash: 0df821f
         '-6001': Pagamento WCA não está ativado para esta competição
         #original_hash: 092da51
-        '-6002': Precisa de finalizar o seu registo antes de poder pagar
+        '-6002': Precisa de terminar a sua inscrição antes de poder pagar
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-
