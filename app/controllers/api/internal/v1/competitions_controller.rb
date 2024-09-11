@@ -15,13 +15,7 @@ class Api::Internal::V1::CompetitionsController < Api::Internal::V1::ApiControll
   def qualifications
     competition = competition_from_params(associations: [:competition_events])
 
-    qualifications = competition.competition_events
-                                .where.not(qualification: nil)
-                                .index_by(&:event_id)
-                                .transform_values(&:qualification)
-                                .transform_values(&:to_wcif)
-
-    render json: qualifications
+    render json: competition.qualification_wcif
   end
 
   private def competition_from_params(associations: {})
