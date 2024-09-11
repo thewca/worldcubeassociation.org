@@ -1824,7 +1824,7 @@ en:
         update_confirm: "Are you sure you want to update your registration?"
         update_confirm_contact: "You need to contact the organizers to update your registration, click Yes to be taken to the contact form."
         delete_confirm_contact: "You need to contact the organizers to delete your registration, click Yes to be taken to the contact form."
-        update_contact_message: "I want to update my registration. I want to change %{update_params}"
+        update_contact_message: "I would like to update my registration details as follows: %{update_params}"
         delete_contact_message: "I want to delete my registration"
         no_changes: "There are no changes"
         email_send: "Send Email"

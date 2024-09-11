@@ -192,7 +192,7 @@ export default function CompetingStep({
           guests,
         });
       } else {
-        const updateMessage = `${hasCommentChanged ? `Comment to ${comment} ` : ''}${hasEventsChanged ? `Events to ${selectedEvents.map((eventId) => events.byId[eventId].name).join(', ')} ` : ''}${hasGuestsChanged ? `Guests to ${guests}` : ''}`;
+        const updateMessage = `\n${hasCommentChanged ? `Comment: ${comment}\n` : ''}${hasEventsChanged ? `Events: ${selectedEvents.map((eventId) => events.byId[eventId].name).join(', ')}\n` : ''}${hasGuestsChanged ? `Guests: ${guests}\n` : ''}`;
         window.location = contactCompetitionUrl(competitionInfo.id, encodeURIComponent(i18n.t('competitions.registration_v2.update.update_contact_message', { update_params: updateMessage })));
       }
     }).catch(() => {
