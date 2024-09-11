@@ -239,14 +239,17 @@ zh-TW:
     #original_hash: cf458e7
     time:
       zero: '%{count}次還原 < %{time}'
+      one: '%{count}次還原 < %{time}'
       other: '%{count}次還原 < %{time}'
     #original_hash: b49d930
     moves:
       zero: '%{count}次還原 < %{moves} 步'
+      one: '%{count}次還原 < %{moves} 步'
       other: '%{count}次還原 < %{moves} 步'
     #original_hash: eba1b97
     points:
       zero: '%{count}次還原 > %{points} 點'
+      one: '%{count}次還原 > %{points} 點'
       other: '%{count}次還原 > %{points} 點'
   time_limit:
     cumulative:
