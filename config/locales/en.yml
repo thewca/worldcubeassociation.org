@@ -794,6 +794,7 @@ en:
       title: "WCA Contact Form"
       faq_note_html: 'Before making an inquiry, you may wish to take a look at our <a href="/faq">Frequently Asked Questions</a>! If you wish to contact a specific committee or team not listed here, you may check their details on <a href="/teams-committees-councils">this page</a>.'
       success_message: "Email sent - we'll get back to you soon."
+      prefilled: "To update your registration, you need to contact the organizers of the competition. We have prefilled the contact form with your requested changes - please submit the form."
       form:
         user_data:
           name:

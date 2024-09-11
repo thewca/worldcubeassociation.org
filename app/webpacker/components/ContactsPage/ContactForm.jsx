@@ -74,9 +74,14 @@ export default function ContactForm({
 
   if (saving) return <Loading />;
   if (saveError) return <Errored error={saveError} />;
-
   return (
     <>
+      { contactFormState.formValues?.competition?.message && (
+      <Message
+        warning
+        content={I18n.t('page.contacts.prefilled')}
+      />
+      )}
       {contactSuccess && (
         <Message
           success
