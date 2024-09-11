@@ -31,7 +31,9 @@ function canIBookPlaneTickets(registrationStatus, paymentStatus, competitionInfo
     case 'accepted':
       return 'Book your flights and pack your bags - you have a spot at the competition!';
     case 'cancelled':
-      return 'Your registration has been deleted and you will not be competing.';
+      return 'Your registration has been cancelled and you will not be competing, but you can sign up again';
+    case 'rejected':
+      return 'Your registration has been rejected by the organizers. Please contact the organizing team if you believe this was a mistake.';
     case 'waiting_list':
       return "Don't book a flight, but don't give up hope either. The competition is full, but you have been placed on a waiting list, and you will receive an email if enough spots open up for you to be able to attend.";
     default:
@@ -44,7 +46,8 @@ function RegistrationStatusMessage({ registration, competitionInfo }) {
     <Message
       info={registration.competing.registration_status === 'pending'}
       success={registration.competing.registration_status === 'accepted'}
-      negative={registration.competing.registration_status === 'cancelled'}
+      negative={registration.competing.registration_status === 'cancelled'
+        || registration.competing.registration_status === 'rejected'}
       warning={registration.competing.registration_status === 'waiting_list'}
       icon
     >

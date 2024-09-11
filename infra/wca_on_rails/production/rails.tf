@@ -17,6 +17,10 @@ locals {
       value = "https://assets.worldcubeassociation.org"
     },
     {
+      name  = "DUMP_HOST"
+      value = "https://assets.worldcubeassociation.org"
+    },
+    {
       name  = "SHAKAPACKER_ASSET_HOST"
       value = "https://assets.worldcubeassociation.org"
     },
@@ -202,14 +206,14 @@ resource "aws_ecs_task_definition" "this" {
   task_role_arn      = aws_iam_role.task_role.arn
 
   cpu = "8192"
-  memory = "30000"
+  memory = "31634"
 
   container_definitions = jsonencode([
     {
       name              = "rails-production"
       image             = "${var.shared.ecr_repository.repository_url}:latest"
       cpu    = 8192
-      memory = 30000
+      memory = 31634
       portMappings = [
         {
           # The hostPort is automatically set for awsvpc network mode,

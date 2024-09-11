@@ -12,7 +12,7 @@ jobs:
     steps:
       - name: Trigger deployment on comment
         id: trigger-deployment
-        uses: shanegenschaw/pull-request-comment-trigger@v2.1.0
+        uses: shanegenschaw/pull-request-comment-trigger@v3.0.0
         with:
           trigger: '@thewca-bot deploy staging'
           reaction: rocket
@@ -59,6 +59,20 @@ jobs:
             BUILD_TAG=${{ env.SHORT_SHA }}
             WCA_LIVE_SITE=false
             SHAKAPACKER_ASSET_HOST=https://assets-staging.worldcubeassociation.org
+      - name: Build and push Staging API Image if triggered
+        if: steps.trigger-deployment.outputs.triggered == 'true'
+        uses: docker/build-push-action@v6
+        with:
+          push: true
+          target: monolith-api
+          tags: |
+            ${{ steps.login-ecr.outputs.registry }}/wca-on-rails:staging-api
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          build-args: |
+            BUILD_TAG=${{ env.SHORT_SHA }}
+            WCA_LIVE_SITE=false
+            SHAKAPACKER_ASSET_HOST=https://assets-staging.worldcubeassociation.org
       - name: Build Rails if triggered
         if: steps.trigger-deployment.outputs.triggered == 'true'
         id: build-staging
@@ -87,3 +101,4 @@ jobs:
         if: steps.trigger-deployment.outputs.triggered == 'true'
         run: |
           aws ecs update-service --cluster wca-on-rails --service wca-on-rails-staging --force-new-deployment
+          aws ecs update-service --cluster wca-on-rails --service wca-on-rails-staging-API --force-new-deployment

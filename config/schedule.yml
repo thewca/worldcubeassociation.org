@@ -43,6 +43,11 @@ sync_mailing_lists:
   cron: "0 * * * *"
   queue: wca_jobs
 
+notify_translators:
+  class: "NotifyTranslatorsJob"
+  cron: "0 12 * * *"
+  queue: wca_jobs
+
 wst_chores:
   class: "GenerateChore"
   cron: "0 8 23 * *"

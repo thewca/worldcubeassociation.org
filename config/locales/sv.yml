@@ -2054,6 +2054,10 @@ sv:
         status: Status
         #original_hash: 8970f0e
         locale: Språk
+        #original_hash: 5d99dee
+        group_name: Team-/Kommitténamn
+        #original_hash: 55e4f86
+        delegated_competitions_count: Antal delegerade tävlingar
   user_groups:
     group_types:
       #original_hash: abd2828
@@ -3565,6 +3569,13 @@ sv:
           zero: '%{count} platser kvar'
           one: '%{count} plats kvar'
           other: '%{count} platser kvar'
+        payment:
+          #original_hash: d6fbc7a
+          refunded_status: Återbetalad
+          #original_hash: 41248b1
+          initialized: 'Betalningsprocessen startades den %{date}, men avslutades inte.'
+          #original_hash: 3a16c0d
+          refunded: 'Betalningen återbetalades den %{date}.'
       bookmark:
         #original_hash: 7952a5c
         unbookmark: Du har tagit bort ditt bokmärke.
@@ -3670,10 +3681,6 @@ sv:
         '-2003': Du har inte behörighet att slutföra denna åtgärd
         #original_hash: cb4093a
         '-3000': Anmälan existerar inte
-        #original_hash: 0df821f
-        '-3001': WCA-betalning är inte aktiverat för den här tävlingen
-        #original_hash: 092da51
-        '-3002': Du måste slutföra din anmälan innan du kan betala
         #original_hash: bc53fb6
         '-4000': Anropet innehåller ogiltig data.
         #original_hash: 35fddf4
@@ -3698,6 +3705,10 @@ sv:
         '-4010': Platsen på väntelistan är inte giltig
         #original_hash: e489908
         '-4011': Du kan endast acceptera den första personen på väntelistan
+        #original_hash: 0df821f
+        '-6001': WCA-betalning är inte aktiverat för den här tävlingen
+        #original_hash: 092da51
+        '-6002': Du måste slutföra din anmälan innan du kan betala
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-
