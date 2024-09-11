@@ -10,6 +10,7 @@ import {
 } from 'semantic-ui-react';
 import _ from 'lodash';
 
+import { useQuery } from '@tanstack/react-query';
 import VenueLocationMap from './VenueLocationMap';
 import { countries, backendTimezones } from '../../../lib/wca-data.js.erb';
 import RoomPanel from './RoomPanel';
@@ -104,19 +105,30 @@ function VenuePanel({
     ];
   }, [countryZones, referenceTime, makeTimeZoneOption]);
 
-  const handleDetectTimezone = async (evt) => {
+  const fetchSuggestedTimeZones = useCallback(async () => {
     const url = `${geocodingTimeZoneUrl}?${new URLSearchParams({
       lat: venue.latitudeMicrodegrees,
       lng: venue.longitudeMicrodegrees,
     }).toString()}`;
 
     const response = await fetchWithAuthenticityToken(url);
-    const possibleTimeZones = await response.json();
+    return response.json();
+  }, [venue.latitudeMicrodegrees, venue.longitudeMicrodegrees]);
 
-    const bestMatch = possibleTimeZones.find(
-      (tz) => timezoneOptions.some((tzOpt) => tzOpt.key === tz),
-    );
+  const {
+    data: suggestedTimeZones,
+    isLoading: timeZonesLoading,
+    isError: timeZonesError,
+  } = useQuery({
+    queryFn: fetchSuggestedTimeZones,
+    queryKey: ['suggested-tz', venue.id, venue.latitudeMicrodegrees, venue.longitudeMicrodegrees],
+  });
 
+  const bestMatch = useMemo(() => suggestedTimeZones?.find(
+    (tz) => timezoneOptions.some((tzOpt) => tzOpt.key === tz),
+  ), [suggestedTimeZones, timezoneOptions]);
+
+  const handleDetectTimezone = async (evt) => {
     if (bestMatch) {
       handleVenueChange(evt, { name: 'timezone', value: bestMatch });
     }
@@ -168,9 +180,19 @@ function VenuePanel({
               value={venue.countryIso2}
               onChange={handleVenueChange}
             />
-            <Button floated="right" compact icon labelPosition="left" primary onClick={handleDetectTimezone}>
+            <Button
+              floated="right"
+              compact
+              icon
+              labelPosition="left"
+              primary
+              negative={timeZonesError}
+              disabled={timeZonesLoading}
+              onClick={handleDetectTimezone}
+            >
               <Icon name="target" />
-              Detect timezone
+              Use coordinate timezone
+              <div>{bestMatch || '(not found)'}</div>
             </Button>
             <Form.Select
               label="Timezone"

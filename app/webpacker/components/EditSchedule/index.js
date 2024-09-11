@@ -21,6 +21,7 @@ import Store, { useDispatch, useStore } from '../../lib/providers/StoreProvider'
 import ConfirmProvider from '../../lib/providers/ConfirmProvider';
 import EditVenues from './EditVenues';
 import EditActivities from './EditActivities';
+import WCAQueryClientProvider from "../../lib/providers/WCAQueryClientProvider";
 
 function EditSchedule({
   wcifEvents,
@@ -175,12 +176,14 @@ export default function Wrapper({
       }}
     >
       <ConfirmProvider>
-        <EditSchedule
-          wcifEvents={wcifEvents}
-          countryZones={countryZones}
-          referenceTime={referenceTime}
-          calendarLocale={calendarLocale}
-        />
+        <WCAQueryClientProvider>
+          <EditSchedule
+            wcifEvents={wcifEvents}
+            countryZones={countryZones}
+            referenceTime={referenceTime}
+            calendarLocale={calendarLocale}
+          />
+        </WCAQueryClientProvider>
       </ConfirmProvider>
     </Store>
   );
