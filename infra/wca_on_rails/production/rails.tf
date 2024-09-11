@@ -303,8 +303,6 @@ resource "aws_ecs_service" "this" {
 
   lifecycle {
     ignore_changes = [
-      # The desired count is modified by Application Auto Scaling
-      desired_count,
       # The target group changes during Blue/Green deployment
       load_balancer,
       # The Task definition will be set by Code Deploy
