@@ -486,10 +486,10 @@ fi:
         wrc_feedback_requested: I would like feedback from the WRC on some of the incidents above.
         #original_hash: 0c7191d
         wrc_incidents: Incidents Needing WRC Feedback
-        #original_hash: 5a92b25
-        wdc_feedback_requested: I would like feedback from the WDC on some of the incidents above.
-        #original_hash: 06a0568
-        wdc_incidents: Incidents Needing WDC Feedback
+        #original_hash: 1a54a79
+        wic_feedback_requested: I would like feedback from the WIC on some of the incidents above.
+        #original_hash: 000153c
+        wic_incidents: Incidents Needing WIC Feedback
         #original_hash: d7020f4
         remarks: Huomautukset
       person:
@@ -609,13 +609,13 @@ fi:
           #original_hash: 621101a
           trainee_delegate: Delegaattiharjoittelija
           #original_hash: 9b97968
-          junior_delegate: Delegaattikokelas
+          junior_delegate: Junior-delegaatti
           #original_hash: 12ab214
           delegate: Delegaatti
           #original_hash: 45c2317
           regional_delegate: Alueellinen delegaatti
           #original_hash: d463c23
-          senior_delegate: Vastaava delegaatti
+          senior_delegate: Senior-delegaatti
         teams_committees:
           #original_hash: 6853c98
           member: Jäsen
@@ -814,11 +814,11 @@ fi:
           List of numbers referencing any incidents that you would like the
           WRC's feedback on.
         #original_hash: da39a3e
-        wdc_feedback_requested: ''
-        #original_hash: 38a95e5
-        wdc_incidents: >-
+        wic_feedback_requested: ''
+        #original_hash: 0aca3b0
+        wic_incidents: >-
           List of numbers referencing any incidents that you would like the
-          WDC's feedback on.
+          WIC's feedback on.
         #original_hash: f30abdc
         remarks: >-
           Kerro muista yksityiskohdista, jotka haluat jakaa (esim.
@@ -1206,7 +1206,7 @@ fi:
       #original_hash: cf1d2c9
       forum: Foorumi
       #original_hash: 3ad28c0
-      teams: Toimikunnat ja neuvostot
+      teams: Toimikunnat
       #original_hash: 7981fb3
       education: Koulutusmateriaalit
       #original_hash: c66444f
@@ -1242,7 +1242,7 @@ fi:
       #original_hash: 82dabd0
       multimedia: Multimedia
       #original_hash: cfde9db
-      db_results_export: Vie tulokset
+      db_results_export: Vie tulostietokanta
       #original_hash: 7533c29
       db_dev_export: Vie ohjelmistokehittäjän tietokanta
       #original_hash: 1fa73f3
@@ -1326,22 +1326,19 @@ fi:
       #original_hash: e0d37a2
       board_description: >-
         WCA:n hallitus on viime kädessä vastuussa järjestön johtamisesta, ja
-        hoitaa toimikuntien ja neuvostojen vastuualueiden ulkopuolelle jääviä
-        tehtäviä.
+        hoitaa toimikuntien vastuualueiden ulkopuolelle jääviä tehtäviä.
     teams_committees_councils:
       #original_hash: 0d62207
       title: 'WCA:n tiimit ja toimikunnat'
       #original_hash: d54d953
       description: >-
-        WCA:n toimikunnat ja neuvostot ovat keskeinen järjestön osa, ja ne
-        hoitavat päivittäisiä tehtäviä, joita vaaditaan järjestön toiminnan
+        WCA:n toimikunnat ovat keskeinen järjestön osa, ja ne hoitavat
+        päivittäisiä tehtäviä, joita vaaditaan järjestön toiminnan
         pyörittämiseen. Toimikunnat koostuvat WCA-yhteisön jäsenistä, eli
         WCA-delegaateista ja kilpailijoista. Jokaisella toimikunnalla on
         vastaava, jonka rooliin kuuluu varmistaa toimikunnan toiminnot ja
-        kouluttaa sen jäsenet. Neuvostot ovat erityislaatuisia tiimejä, joilla
-        on hallitukselle neuvoa-antava rooli, eivätkä neuvoston jäsenet kuulu
-        WCA:n henkilöstöön. Kun toimikuntaan tai neuvostoon haetaan uusia
-        jäseniä, hakuilmoitus julkaistaan WCA-sivuston etusivulla.
+        kouluttaa sen jäsenet. Kun toimikuntaan haetaan uusia jäseniä,
+        hakuilmoitus julkaistaan WCA-sivuston etusivulla.
       #original_hash: b37456c
       contact_button: Ota yhteyttä
       #original_hash: ae7928f
@@ -1353,10 +1350,8 @@ fi:
         wct: WCA Communication Team (Viestintätoimikunta)
         #original_hash: 2b81984
         wcat: WCA Competition Announcement Team (Kilpailuilmoitustoimikunta)
-        #original_hash: c97077a
-        wdc: WCA Disciplinary Committee (Kurinpitotoimikunta)
-        #original_hash: 83bd1d0
-        wec: WCA Ethics Committee (Eettinen toimikunta)
+        #original_hash: 94c2e42
+        wic: WCA Integrity Committee (Eheystoimikunta)
         #original_hash: d1dbb86
         weat: WCA Executive Assistants Team (Hallintotoimikunta)
         #original_hash: 9cb13de
@@ -1373,8 +1368,8 @@ fi:
         wst: WCA Software Team (Ohjelmistotoimikunta)
         #original_hash: 58765c7
         wsot: WCA Sports Organization Team (Lajiliittotoimikunta)
-        #original_hash: 1ce7604
-        wac: WCA Advisory Council (Neuvosto)
+        #original_hash: 78949a7
+        wapc: WCA Appeals Committee (Muutoksenhakutoimikunta)
       groups_description:
         #original_hash: 5b1aade
         wat: >-
@@ -1395,20 +1390,12 @@ fi:
           kilpailujen hakemiseen liittyviä toimintatapoja esimerkiksi
           kilpailujen vaatimuksia koskevin käytännöin. WCAT ei ole vastuussa
           yksittäisten kilpailujen järjestämisestä tai delegoinnista.
-        #original_hash: 41eb6fd
-        wdc: >-
-          WCA Disciplinary Committee (WDC) tekee tutkintoja kilpailijoista ja
-          WCA-kilpailuissa tai WCA:n internet-alustoilla tapahtuneista
-          sattumuksista. Tutkinnan alaiset sattumukset ovat epäiltyjä sääntö-
-          tai käytösrikkeitä.
-        #original_hash: 6cdac80
-        wec: >-
-          Tämän toimikunnan tehtävänä on varmistaa, että WCA:n henkilöstö toimii
-          eettisten säännösten (Code of Ethics) mukaan, ja se voi käynnistää
-          tutkintoja säännösten vastaisesta toiminnasta. WEC:lle voi ilmoittaa
-          luottamuksellisesti näihin säännöksiin liittyviä huolenaiheita ja
-          siltä voi pyytää tutkinnan aloittamista. Tämä toimikunta käsittelee
-          myös kurinpitotoimikunnan päätöksiin liittyviä valituksia.
+        #original_hash: 5007698
+        wic: >-
+          WCA Integrity Committee (WIC) tekee riippumattomia tutkintoja
+          kilpailijoista ja WCA-kilpailuissa tai WCA:n internet-alustoilla
+          tapahtuneista sattumuksista. Tutkinnan alaiset sattumukset ovat
+          epäiltyjä sääntö- tai käytösrikkeitä.
         #original_hash: 889dd90
         weat: >-
           Tämä toimikunta on vastuussa hallinnollisten tehtävien
@@ -1451,12 +1438,13 @@ fi:
         wsot: >-
           Tämä toimikunta edistää ja tukee WCA:n tunnustamista kansainvälisenä
           lajiliittona.
-        #original_hash: 73d8df4
-        wac: >-
-          WAC käsittelee palautteita ja vastaa viestinnästä WCA-yhteisön ja
-          henkilöstön välillä. Neuvosto ylläpitää myös WCA Forumia, tekee
-          yhteenvetoja kyselyistä ja pyrkii siihen, että WCA saavuttaa
-          maailmanlaajuisen yhteisön.
+        #original_hash: 9f45bfa
+        wapc: >-
+          WCA Appeals Committee (WAC) on vastuussa muun WCA-henkilöstön tekemiin
+          päätöksiin liittyvien valitusten käsittelystä. WAC suorittaa
+          itsenäisen ja puolueettoman katsauksen, jolla varmistetaan, että
+          päätökset ovat reiluja, sopivia ja WCA:n käytäntöjen ja sääntöjen
+          mukaisia.
     contacts:
       #original_hash: 4ef2aad
       title: 'WCA:n yhteydenottolomake'
@@ -1554,6 +1542,9 @@ fi:
           edit_profile_reason:
             #original_hash: fdfcccf
             label: Muutoksen syy
+          edit_profile_proof_attach:
+            #original_hash: a9645b1
+            label: Liitä todiste
         wst:
           message:
             #original_hash: 68f4145
@@ -2048,7 +2039,7 @@ fi:
       #original_hash: d79bd00
       officers: WCA Officers
       #original_hash: 959d354
-      translators: Kääntäjät
+      translators: Kääntäjä
   registrations:
     errors:
       #original_hash: 44ab952
@@ -2068,11 +2059,11 @@ fi:
         zero: 'Saat rekisteröityä enintään %{count} lajiin.'
         one: Sinun täytyy rekisteröityä täsmälleen yhteen (1) lajiin.
         other: 'Saat rekisteröityä enintään %{count} lajiin.'
-      #original_hash: e78eec3
+      #original_hash: 87f7c12
       banned_html: >-
         You are banned. If you believe this is an error, please contact the <a
-        href='mailto:disciplinary@worldcubeassociation.org'
-        target='_blank'>WDC</a>.
+        href='mailto:integrity@worldcubeassociation.org'
+        target='_blank'>WIC</a>.
       #original_hash: 8d07e7f
       undelete_banned: on saanut bänät eikä häntä voi lisätä takaisin
       #original_hash: 3de7c86
@@ -3674,10 +3665,6 @@ fi:
         '-2003': You don't have the permissions to complete this action
         #original_hash: cb4093a
         '-3000': Rekisteröitymistä ei ole olemassa
-        #original_hash: 0df821f
-        '-3001': WCA Payment is not enabled for this competition
-        #original_hash: 092da51
-        '-3002': Sinun täytyy rekisteröityä loppuun ennen maksamista
         #original_hash: bc53fb6
         '-4000': The Request contains invalid data
         #original_hash: 35fddf4
@@ -3702,6 +3689,10 @@ fi:
         '-4010': Jonotuslistasija ei ole kelvollinen
         #original_hash: e489908
         '-4011': Voit hyväksyä vain jonotuslistan ensimmäisen kilpailijan
+        #original_hash: 0df821f
+        '-6001': WCA Payment is not enabled for this competition
+        #original_hash: 092da51
+        '-6002': Sinun täytyy rekisteröityä loppuun ennen maksamista
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-
@@ -4711,8 +4702,7 @@ fi:
         #original_hash: e0d37a2
         description: >-
           WCA:n hallituksella on vastuu järjestön johtamisesta ja se toimittaa
-          muiden toimikuntien ja neuvostojen toimialueiden ulkopuolella olevia
-          tehtäviä.
+          muiden toimikuntien toimialueiden ulkopuolella olevia tehtäviä.
       users:
         #original_hash: 57bbaad
         profile: 'Käyttäjän %{user_name} profiili'
@@ -4726,14 +4716,15 @@ fi:
         joka määritellään tarkemmin WCA Motionsissa. Delegaattien pääasiallinen
         tehtävä on valvoa kilpailuja WCA:n edustajana. Heidän vastuullaan on
         varmistaa, että kaikki WCA-kilpailut sujuvat WCA:n päämäärien, sääntöjen
-        ja hengen mukaan. WCA erottelee toisistaan <strong>vastaavat
-        delegaatit</strong>, <strong>alueelliset delegaatit</strong>,
-        <strong>delegaatit</strong>, <strong>delegaattikokelaat</strong> ja
+        ja hengen mukaan. WCA erottelee toisistaan
+        <strong>senior-delegaatit</strong>, <strong>alueelliset
+        delegaatit</strong>, <strong>delegaatit</strong>,
+        <strong>junior-delegaatit</strong> ja
         <strong>delegaattiharjoittelijat</strong> %{see_link}.</p> <p>Delegaatin
-        tehtävien lisäksi vastaavat delegaatit ja alueelliset delegaatit ovat
+        tehtävien lisäksi senior-delegaatit ja alueelliset delegaatit ovat
         vastuussa alueensa muista delegaateista, ja yhteisön jäsenet voivat
         ottaa heihin yhteyttä alueellisissa seikoissa.</p> <p>Uudet delegaatit
-        nimetään aluksi delegaattikokelaiksi, ja heidän tulee osoittaa olevansa
+        nimetään aluksi junior-delegaateiksi, ja heidän tulee osoittaa olevansa
         päteviä hallitsemaan kilpailuja onnistuneesti ennen WCA-delegaatiksi
         nimeämistä.</p> <p>Delegaattiharjoittelijoita koulutetaan delegaatin
         asemaan, ja he voivat valvoa vain kilpailuja, joissa on myös
@@ -5046,121 +5037,6 @@ fi:
           käyttösäännökset</a>.
         #original_hash: ebc85b2
         download_button_text: Lataa logotiedostot
-  workbook_assistant:
-    #original_hash: e442ea4
-    title: WCA Workbook Assistant
-    #original_hash: a7c307f
-    download: Lataa WCA Workbook Assistant
-    #original_hash: cf1b916
-    last_update: Viimeksi päivitetty
-    #original_hash: feece00
-    version_history: versiohistoria
-    #original_hash: 8f3f4c0
-    header: >-
-      Kuinka käsitellä tulokset ja sekoitussarjat ennen niiden WCA:lle
-      lähettämistä
-    step1:
-      #original_hash: c0450b1
-      title: 'Vaihe 1: Avaa tulokset sisältävä työkirja'
-      #original_hash: 656d70d
-      content_html: >-
-        Avaa työkirja <em>Open...</em>-painikkeella tai raahaamalla tiedosto
-        sovellusikkunaan.
-    step2:
-      #original_hash: 3ad9881
-      title: 'Vaihe 2: Lisää TNoodle-sekoitussarjat'
-      #original_hash: 080acc0
-      content_html: >-
-        Lisää TNoodle-sekoitussarjat <em>Add...</em>-painikkeella tai
-        raahaamalla TNoodle-tiedosto sovellusikkunaan. Varmista, että käytät
-        TNoodlen generoimaa .zip tai .json -tiedostoa.
-      #original_hash: 6cc90b8
-      content2_html: >-
-        Voit lisätä useita tiedostoja siltä varalta, että sekoitussarjat
-        generoitiin useassa osassa tai että kilpailun aikana täytyi generoida
-        lisää sekoitussarjoja.
-    step3:
-      #original_hash: b2d01b3
-      title: 'Vaihe 3: Yhdistä sekoitussarjat ja tulokset'
-      #original_hash: 36383b1
-      content_html: >-
-        WCA Workbook Assistant yhdistää sekoitussarjat pidettyihin kierroksiin
-        automaattisesti. Joissakin tapauksissa (esim. jos tiedostoja on useita)
-        valinta täytyy tehdä manuaalisesti, sillä mahdollisia vaihtoehtoja on
-        useita.
-      #original_hash: e869c1e
-      content2_html: >-
-        Sekoitussarjojen manuaalinen valinta tehdään kaksoisklikkaamalla
-        <em>Scrambles</em>-sarakkeen solua taulukon yleiskatsauspaneelissa.
-      #original_hash: 8f4fdfd
-      content3_html: >-
-        Jokaiselle tuloksia sisältävälle kierrokselle voidaan valita vain yksi
-        sekoitussarjatiedoston kierros. Jos ilmenee tilanne, jossa kierroksen
-        sekoitussarjat luotiin TNoodlessa eri kierroksina, voit käyttää <em>Edit
-        groups...</em>-painiketta muokataksesi sekoitussarjatiedostojen ryhmiä
-        (siirtää sekoitussarjoja kierrokselta toiselle tai poistaa niitä).
-      #original_hash: 94353f2
-      content4_html: >-
-        Tässä esimerkissä generoitiin ylimääräinen sekoitussarjojen joukko,
-        jotta Skewbin ensimmäiselle kierrokselle saatiin kaksi ryhmää yhden
-        sijasta.
-      #original_hash: 68c5b18
-      content5_html: >-
-        Ylimääräisen ryhmän sekoitussarjat voi raahata alunperin luodun
-        kierroksen päälle. Tämä siirtää ryhmät yhdelle ja samalle kierrokselle.
-    step4:
-      #original_hash: ed940d2
-      title: 'Vaihe 4: Korjaa kaikki sovelluksen ilmoittamat virheet'
-      #original_hash: df2cf58
-      content_html: >-
-        Tulokset tarkistetaan tietojen syöttövirheiden varalta. Virheitä
-        sisältävät kierrokset on merkitty punaisella kuvakkeella taulukon
-        yleiskatsauspaneelissa.
-      #original_hash: 7fbf6b8
-      content2_html: >-
-        Kun taulukossa valitaan virheitä sisältävä rivi, sovellus luettelee
-        yksityiskohdat <em>validation errors</em> -paneelissa alavasemmalla.
-      #original_hash: 0600502
-      content3_html: >-
-        Virheet voi korjata avamaalla työkirja taulukkolaskentasovelluksessa ja
-        muokkaamalla ja tallentamalla siellä. Päivitetyn työkirjan voi ladata
-        uudestaan WCA Workbook Assistantiin <em>Refresh</em>-painikkeella. Tämä
-        lataa vain tulokset uudestaan, mutta jättää kaikki muut tekemäsi
-        muutokset (kuten lisätyt sekoitussarjat) koskemattomaksi.
-    step5:
-      #original_hash: 536ec4d
-      title: 'Vaihe 5: Valitse kilpailun ID'
-      #original_hash: 5aeb5bd
-      content_html: >-
-        Valitse oikea kilpailu <em>Competition ID</em>-kentän vierestä
-        löytyvällä <em>Select...</em>-painikkeella.
-      #original_hash: 3acf7d0
-      content2_html: Kilpailu valitaan avautuvasta kilpailuluettelosta.
-      #original_hash: ceeb6fe
-      content3_html: >-
-        Voit suodattaa listaa kirjoittamalla hakukenttään osan kilpailun tai sen
-        WCA-delegaatin nimestä.
-      #original_hash: 5ca74eb
-      content4_html: >-
-        Aluksi näytetään vain kilpailut, jotka järjestettiin alle viikko sitten
-        tai järjestetään alle viikon päästä. Jos sinun täytyy valita kilpailu
-        tämän aikavälin ulkopuolelta, poista valinta ruudusta <em>Only show
-        current competitions</em>.
-    step6:
-      #original_hash: 52bb1f6
-      title: 'Vaihe 6: Vie tulosdata JSON-tiedostona'
-      #original_hash: 6bfee23
-      content_html: >-
-        Tallenna tulosdata JSON-tiedostona alaoikealta löytyvällä <em>Export
-        results JSON...</em> -painikkeella.
-    step7:
-      #original_hash: 09fa37d
-      title: 'Vaihe 7: Lähetä tiedosto WCA:lle'
-      #original_hash: 9be089f
-      content_html: >-
-        Lähetä WCA Workbook Assistantista tallentamasi JSON-tiedosto
-        sähköpostitse osoitteeseen <a
-        href="mailto:results@worldcubeassociation.org">results@worldcubeassociation.org</a>
   search_results:
     index:
       #original_hash: db98a68
@@ -5651,9 +5527,9 @@ fi:
         yhteyttä</a>!
   footer:
     #original_hash: cf01481
-    privacy: Yksityisyys
+    privacy: Tietosuoja
     #original_hash: 4c4a2e8
-    disclaimer: Vastuuvapautus
+    disclaimer: Vastuuvapautuslauseke
   api:
     #original_hash: 4ab4ae5
     manage_oauth_html: 'Go to %{oauth_link} to manage your OAuth applications.'

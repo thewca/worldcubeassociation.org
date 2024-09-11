@@ -38,6 +38,13 @@
                                                         preferredEvents: @current_user.preferred_events.pluck(:id),
                                                         stripePublishableKey: AppSecrets.STRIPE_PUBLISHABLE_KEY,
                                                         connectedAccountId: @competition.payment_account_for(:stripe)&.account_id,
+                                                        qualifications: {
+                                                          wcif: @competition.qualification_wcif,
+                                                          personalRecords: {
+                                                            single: current_user.person&.ranksSingle&.map(&:to_wcif) || [],
+                                                            average: current_user.person&.ranksAverage&.map(&:to_wcif) || [],
+                                                          }
+                                                        }
                                                         }) %>
     <% else %>
       <% if @registration.show_details?(current_user) %>
@@ -53,7 +60,7 @@
           <%= t 'registrations.contact_organizer' %>
         <% end %>
         <hr/>
-      <% elsif @competition.registration_opened? %>
+      <% elsif @competition.registration_currently_open? %>
         <% unless user_may_register %>
           <%= alert :danger do %>
             <%= t 'registrations.please_fix_profile_html', comp: @competition.name,

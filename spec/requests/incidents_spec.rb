@@ -47,8 +47,8 @@ RSpec.describe "Incidents management", type: :request do
       end
     end
 
-    context "when logged in as a WDC member" do
-      sign_in { FactoryBot.create(:user, :wdc_member) }
+    context "when logged in as a WIC member" do
+      sign_in { FactoryBot.create(:user, :wic_member) }
       it "shows a pending incident" do
         get incident_path(pending_incident)
         expect(response).to be_successful

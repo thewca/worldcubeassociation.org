@@ -87,11 +87,11 @@ class Competition < ApplicationRecord
   scope :pending_posting, -> { where.not(results_submitted_at: nil).where(results_posted_at: nil) }
   scope :pending_report_or_results_posting, -> { includes(:delegate_report).where(delegate_report: { posted_at: nil }).or(where(results_posted_at: nil)) }
 
-  enum guest_entry_status: {
+  enum :guest_entry_status, {
     unclear: 0,
     free: 1,
     restricted: 2,
-  }, _prefix: true
+  }, prefix: true
 
   CLONEABLE_ATTRIBUTES = %w(
     cityName
@@ -476,7 +476,7 @@ class Competition < ApplicationRecord
         end
       end
 
-      if self.registration_full? && self.registration_opened?
+      if self.registration_full? && self.registration_currently_open?
         warnings[:waiting_list] = registration_full_message
       end
 
@@ -725,7 +725,7 @@ class Competition < ApplicationRecord
   end
 
   def should_render_register_v2?(user)
-    uses_new_registration_service? && user.cannot_register_for_competition_reasons(self).empty? && (registration_opened? || user_can_pre_register?(user))
+    uses_new_registration_service? && user.cannot_register_for_competition_reasons(self).empty? && (registration_currently_open? || user_can_pre_register?(user))
   end
 
   before_validation :unpack_delegate_organizer_ids
@@ -953,7 +953,7 @@ class Competition < ApplicationRecord
     true
   end
 
-  def registration_opened?
+  def registration_currently_open?
     use_wca_registration? && !cancelled? && !registration_not_yet_opened? && !registration_past?
   end
 
@@ -974,6 +974,14 @@ class Competition < ApplicationRecord
       :full
     else
       :open
+    end
+  end
+
+  def any_registrations?
+    if uses_new_registration_service?
+      Microservices::Registrations.competitor_count_by_competition(id) > 0
+    else
+      self.registrations.any?
     end
   end
 
@@ -1172,7 +1180,8 @@ class Competition < ApplicationRecord
       errors.add(:refund_policy_limit_date, I18n.t('competitions.errors.refund_date_after_start'))
     end
 
-    if registration_period_required? && registration_open? && registration_close? && (registration_open >= start_date || registration_close >= start_date)
+    if registration_period_required? && registration_open.present? && registration_close.present? &&
+       (registration_open >= start_date || registration_close >= start_date)
       errors.add(:registration_close, I18n.t('competitions.errors.registration_period_after_start'))
     end
   end
@@ -1364,7 +1373,7 @@ class Competition < ApplicationRecord
   end
 
   def orga_can_close_reg_full_limit?
-    registration_full? && registration_opened?
+    registration_full? && registration_currently_open?
   end
 
   def display_name(short: false)
@@ -1830,7 +1839,7 @@ class Competition < ApplicationRecord
                allow_registration_without_qualification refund_policy_percent use_wca_registration guests_per_registration_limit venue contact
                force_comment_in_registration use_wca_registration external_registration_page guests_entry_fee_lowest_denomination guest_entry_status
                information events_per_registration_limit],
-      methods: %w[url website short_name city venue_address venue_details latitude_degrees longitude_degrees country_iso2 event_ids registration_opened?
+      methods: %w[url website short_name city venue_address venue_details latitude_degrees longitude_degrees country_iso2 event_ids registration_currently_open?
                   main_event_id number_of_bookmarks using_payment_integrations? uses_qualification? uses_cutoff? competition_series_ids registration_full?],
       include: %w[delegates organizers],
     }
@@ -1843,6 +1852,15 @@ class Competition < ApplicationRecord
 
   def competition_series_ids
     competition_series&.competition_ids&.split(',') || []
+  end
+
+  def qualification_wcif
+    return {} unless uses_qualification?
+    competition_events
+      .where.not(qualification: nil)
+      .index_by(&:event_id)
+      .transform_values(&:qualification)
+      .transform_values(&:to_wcif)
   end
 
   def persons_wcif(authorized: false)

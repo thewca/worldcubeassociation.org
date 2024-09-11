@@ -3568,35 +3568,6 @@ ja:
         WCA 公式大会の主催者は WCA ロゴを WCA 公式大会に限り、ウェブサイト、衣類、ギフト、装飾に使用することができます。<br
         />その他の方やその他の目的で WCA ロゴを使用する場合は、<a
         href="mailto:board@worldcubeassociation.org">WCA 理事</a>の承認が必要です。
-  workbook_assistant:
-    #original_hash: e442ea4
-    title: WCA Workbook Assistant
-    #original_hash: a7c307f
-    download: WCA Workbook Assistant をダウンロードする
-    #original_hash: 8f3f4c0
-    header: WCA 送信前の結果・スクランブルの処理のしかた
-    step3:
-      #original_hash: 36383b1
-      content_html: >-
-        WCA Workbook Assistant
-        は開催されたラウンドのスクランブルを自動的に紐付けます。複数のスクランブルファイルが生成された場合など、手動での選別が必要なことがあります。
-    step4:
-      #original_hash: 0600502
-      content3_html: >-
-        誤りは、Workbook を表計算ソフトで開いて編集・保存することで修正できます。修正済みの Workbook は、 WCA Workbook
-        Assistant 上で <em>Refresh</em>
-        ボタンを押すことで読み込むことができます。これは競技結果のみを再読み込みし、追加されたスクランブルなど他の変更は保持されます。
-    step5:
-      #original_hash: ceeb6fe
-      content3_html: 大会名または WCA 代理人の名前の一部を入力することでフィルターできます。
-    step7:
-      #original_hash: 09fa37d
-      title: 'Step 7 : 大会結果 JSON ファイルを WCA に送信する'
-      #original_hash: 9be089f
-      content_html: >-
-        WCA Workbook Assistant によって出力された大会結果 JSON ファイルを <a
-        href="mailto:results@worldcubeassociation.org">results@worldcubeassociation.org</a>
-        に送信してください
   search_results:
     index:
       #original_hash: db98a68

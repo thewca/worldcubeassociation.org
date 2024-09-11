@@ -74,16 +74,6 @@ FactoryBot.define do
       metadata { FactoryBot.create(:treasurer_role_metadata) }
     end
 
-    trait :councils_leader do
-      group { UserGroup.council_group_wac }
-      metadata { FactoryBot.create(:wac_role_metadata, status: RolesMetadataCouncils.statuses[:leader]) }
-    end
-
-    trait :councils_member do
-      group { UserGroup.council_group_wac }
-      metadata { FactoryBot.create(:wac_role_metadata, status: RolesMetadataCouncils.statuses[:member]) }
-    end
-
     trait :wst_admin_member do
       group { UserGroup.teams_committees_group_wst_admin }
       metadata { FactoryBot.create(:wst_admin_metadata, status: RolesMetadataTeamsCommittees.statuses[:member]) }
@@ -144,19 +134,14 @@ FactoryBot.define do
       metadata { FactoryBot.create(:wcat_member_metadata) }
     end
 
-    trait :wdc_member do
-      group { UserGroup.teams_committees_group_wdc }
-      metadata { FactoryBot.create(:wdc_member_metadata) }
+    trait :wic_member do
+      group { UserGroup.teams_committees_group_wic }
+      metadata { FactoryBot.create(:wic_member_metadata) }
     end
 
-    trait :wdc_leader do
-      group { UserGroup.teams_committees_group_wdc }
-      metadata { FactoryBot.create(:wdc_leader_metadata) }
-    end
-
-    trait :wec_member do
-      group { UserGroup.teams_committees_group_wec }
-      metadata { FactoryBot.create(:wec_member_metadata) }
+    trait :wic_leader do
+      group { UserGroup.teams_committees_group_wic }
+      metadata { FactoryBot.create(:wic_leader_metadata) }
     end
 
     trait :wfc_member do
@@ -194,6 +179,11 @@ FactoryBot.define do
       metadata { FactoryBot.create(:wrc_leader_metadata) }
     end
 
+    trait :wapc_member do
+      group { UserGroup.teams_committees_group_wapc }
+      metadata { FactoryBot.create(:wapc_member_metadata) }
+    end
+
     trait :board do
       group_id { UserGroup.board_group.id }
     end
@@ -215,8 +205,6 @@ FactoryBot.define do
     factory :vice_chair_role, traits: [:officers, :officers_vice_chair, :active]
     factory :secretary_role, traits: [:officers, :officers_secretary, :active]
     factory :treasurer_role, traits: [:officers, :officers_treasurer, :active]
-    factory :wac_role_leader, traits: [:councils_leader, :active]
-    factory :wac_role_member, traits: [:councils_member, :active]
     factory :wst_admin_role, traits: [:wst_admin_member, :active]
     factory :wct_china_role, traits: [:wct_china_member, :active]
     factory :wrt_member_role, traits: [:wrt_member, :active]
@@ -229,9 +217,8 @@ FactoryBot.define do
     factory :wsot_leader_role, traits: [:wsot_leader, :active]
     factory :weat_member_role, traits: [:weat_member, :active]
     factory :wcat_member_role, traits: [:wcat_member, :active]
-    factory :wdc_member_role, traits: [:wdc_member, :active]
-    factory :wdc_leader_role, traits: [:wdc_leader, :active]
-    factory :wec_member_role, traits: [:wec_member, :active]
+    factory :wic_member_role, traits: [:wic_member, :active]
+    factory :wic_leader_role, traits: [:wic_leader, :active]
     factory :wfc_member_role, traits: [:wfc_member, :active]
     factory :wfc_leader_role, traits: [:wfc_leader, :active]
     factory :wmt_member_role, traits: [:wmt_member, :active]
@@ -239,6 +226,7 @@ FactoryBot.define do
     factory :wrc_member_role, traits: [:wrc_member, :active]
     factory :wrc_senior_member_role, traits: [:wrc_senior_member, :active]
     factory :wrc_leader_role, traits: [:wrc_leader, :active]
+    factory :wapc_member_role, traits: [:wapc_member, :active]
     factory :board_role, traits: [:board, :active]
     factory :banned_competitor_role, traits: [:banned_competitor, :active]
   end

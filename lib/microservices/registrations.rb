@@ -44,16 +44,8 @@ module Microservices
       Faraday.new(
         url: base_url,
         headers: { Microservices::Auth::MICROSERVICE_AUTH_HEADER => Microservices::Auth.get_wca_token },
-      ) do |builder|
-        # Sets headers and parses jsons automatically
-        builder.request :json
-        builder.response :json
-        # Raises an error on 4xx and 5xx responses.
-        builder.response :raise_error
-        # Logs requests and responses.
-        # By default, it only logs the request method and URL, and the request/response headers.
-        builder.response :logger
-      end
+        &FaradayConfig
+      )
     end
 
     def self.registrations_by_user(user_id, cache: true)
@@ -74,8 +66,10 @@ module Microservices
     # rubocop:enable Metrics/ParameterLists
 
     def self.competitor_count_by_competition(competition_id)
-      response = self.registration_connection.get(self.get_competitor_count_path(competition_id))
-
+      # Cache for 5 seconds so we don't do multiple requests per route (we can safely be a few seconds off)
+      response = Rails.cache.fetch("#{competition_id}-microservice-competitor-count", expires_in: 5.second) do
+        self.registration_connection.get(self.get_competitor_count_path(competition_id))
+      end
       response.body["count"]
     end
 

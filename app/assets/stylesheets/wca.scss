@@ -2,6 +2,10 @@
   font-family: monospace;
 }
 
+.watermark {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='100px' width='100px'><text transform='translate(20, 100) rotate(-45)' fill='rgb(0,0,0)' opacity='0.15' font-size='12'>WCA Testing Site</text></svg>");
+}
+
 table.table {
   // From http://stackoverflow.com/a/10688485
   &.table-nonfluid {
@@ -369,17 +373,6 @@ table.wca-results {
   &.fi-xw {
     border: 1px solid;
     border-image: linear-gradient(to right, red, blue) 1;
-  }
-  &.fi-tw {
-    background-color: white;
-    background-image: url("ChineseTaipei.svg");
-  }
-
-  &.fis {
-    &.fi-tw {
-      background-color: white;
-      background-image: url("ChineseTaipeiSquared.svg");
-    }
   }
 }
 
