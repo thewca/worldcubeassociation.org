@@ -198,15 +198,14 @@ resource "aws_ecs_task_definition" "api" {
   execution_role_arn = aws_iam_role.task_execution_role.arn
   task_role_arn      = aws_iam_role.task_role.arn
 
-  # This is what our current staging instance is using
-  cpu = "512"
-  memory = "2048"
+  cpu = "1024"
+  memory = "3930"
 
   container_definitions = jsonencode([
     {
       name              = "rails-staging-api"
       image             = "${var.shared.ecr_repository.repository_url}:staging-api"
-      cpu    = 512
+      cpu    = 1024
       memory = 2048
       portMappings = [
         {
@@ -251,16 +250,16 @@ resource "aws_ecs_task_definition" "this" {
   execution_role_arn = aws_iam_role.task_execution_role.arn
   task_role_arn      = aws_iam_role.task_role.arn
 
-  # This is shared with the API Server
-  cpu = "1536"
-  memory = "5813"
+  cpu = "1024"
+  memory = "3930"
 
   container_definitions = jsonencode([
     {
       name              = "rails-staging"
       image             = "${var.shared.ecr_repository.repository_url}:staging"
       cpu    = 1024
-      memory = 4901
+      memory = 3930
+
       portMappings = [
         {
           # The hostPort is automatically set for awsvpc network mode,
@@ -286,61 +285,6 @@ resource "aws_ecs_task_definition" "this" {
         timeout            = 5
       }
     },
-    {
-      name              = "sidekiq-staging"
-      image             = "${var.shared.ecr_repository.repository_url}:sidekiq-staging"
-      cpu    = 256
-      memory = 512
-      portMappings = [{
-        # Mailcatcher
-        containerPort = 1080
-        protocol      = "tcp"
-      }]
-      logConfiguration = {
-        logDriver = "awslogs"
-        options = {
-          awslogs-group         = aws_cloudwatch_log_group.this.name
-          awslogs-region        = var.region
-          awslogs-stream-prefix = var.name_prefix
-        }
-      }
-      environment = local.rails_environment
-      healthCheck       = {
-        command            = ["CMD-SHELL", "pgrep ruby || exit 1"]
-        interval           = 30
-        retries            = 3
-        startPeriod        = 60
-        timeout            = 5
-      }
-    },
-    {
-      name              = "pma-staging"
-      image             = "${var.shared.ecr_repository.repository_url}:pma"
-      cpu    = 256
-      memory = 400
-      portMappings = [{
-        # The hostPort is automatically set for awsvpc network mode,
-        # see https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_PortMapping.html#ECS-Type-PortMapping-hostPort
-        containerPort = 80
-        protocol      = "tcp"
-      }]
-      logConfiguration = {
-        logDriver = "awslogs"
-        options = {
-          awslogs-group         = aws_cloudwatch_log_group.this.name
-          awslogs-region        = var.region
-          awslogs-stream-prefix = var.name_prefix
-        }
-      }
-      environment = local.pma_environment
-      healthCheck       = {
-        command            = ["CMD-SHELL", "curl -f http://localhost/LICENSE || exit 1"]
-        interval           = 30
-        retries            = 3
-        startPeriod        = 60
-        timeout            = 5
-      }
-    }
     ])
 
   tags = {
@@ -358,53 +302,7 @@ data "aws_ecs_task_definition" "api" {
   task_definition = aws_ecs_task_definition.api.family
 }
 
-resource "aws_ecs_task_definition" "db-reset" {
-  family = "${var.name_prefix}-db-reset"
-
-  network_mode             = "awsvpc"
-  requires_compatibilities = ["EC2"]
-
-  # We configure the roles to allow `aws ecs execute-command` into a task,
-  # as in https://aws.amazon.com/blogs/containers/new-using-amazon-ecs-exec-access-your-containers-fargate-ec2
-  execution_role_arn = aws_iam_role.task_execution_role.arn
-  task_role_arn      = aws_iam_role.task_role.arn
-
-  # This is what our current staging instance is using
-  cpu = "2048"
-  memory = "7861"
-
-  container_definitions = jsonencode([
-    {
-      name              = "rails-staging-db-reset"
-      image             = "${var.shared.ecr_repository.repository_url}:staging"
-      cpu    = 2048
-      memory = 7861
-      command = ["./bin/rake","db:load:development"]
-      portMappings = []
-      logConfiguration = {
-        logDriver = "awslogs"
-        options = {
-          awslogs-group         = aws_cloudwatch_log_group.this.name
-          awslogs-region        = var.region
-          awslogs-stream-prefix = var.name_prefix
-        }
-      }
-      environment = local.rails_environment
-    }
-  ])
-
-  tags = {
-    Name = "${var.name_prefix}-db-reset"
-  }
-}
-
-
-
-data "aws_ecs_task_definition" "db-reset" {
-  task_definition = aws_ecs_task_definition.this.family
-}
-
-resource "aws_ecs_service" "this" {
+resource "aws_ecs_service" "rails" {
   name                               = var.name_prefix
   cluster                            = var.shared.ecs_cluster.id
   # During deployment a new task revision is created with modified
@@ -443,18 +341,6 @@ resource "aws_ecs_service" "this" {
     target_group_arn = var.shared.rails_staging.arn
     container_name   = "rails-staging"
     container_port   = 3000
-  }
-
-  load_balancer {
-    target_group_arn = var.shared.pma_staging.arn
-    container_name   = "pma-staging"
-    container_port   = 80
-  }
-
-  load_balancer {
-    target_group_arn = var.shared.mailcatcher.arn
-    container_name   = "sidekiq-staging"
-    container_port   = 1080
   }
 
   network_configuration {
