@@ -202,6 +202,8 @@ Rails.application.routes.draw do
 
   get 'robots' => 'static_pages#robots'
 
+  get 'help/api' => 'static_pages#api_help'
+
   get 'server-status' => 'server_status#index'
 
   get 'translations', to: redirect('translations/status', status: 302)
@@ -320,7 +322,7 @@ Rails.application.routes.draw do
   end
 
   namespace :api do
-    get '/', to: redirect('/api/v0', status: 302)
+    get '/', to: redirect('/help/api', status: 302)
     namespace :internal do
       namespace :v1 do
         get '/users/:id/permissions' => 'permissions#index'
@@ -330,8 +332,9 @@ Rails.application.routes.draw do
       end
     end
     namespace :v0 do
-      get '/' => 'api#help'
+      get '/', to: redirect('/help/api', status: 302)
       get '/me' => 'api#me'
+      get '/healthcheck' => 'api#healthcheck'
       get '/auth/results' => 'api#auth_results'
       get '/export/public' => 'api#export_public'
       get '/scramble-program' => 'api#scramble_program'

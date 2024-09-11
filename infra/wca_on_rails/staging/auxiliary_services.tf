@@ -13,16 +13,21 @@ resource "aws_ecs_task_definition" "auxiliary" {
   execution_role_arn = aws_iam_role.task_execution_role.arn
   task_role_arn      = aws_iam_role.task_role.arn
 
-  cpu = "1536"
-  memory = "6325"
+  cpu = "512"
+  memory = "1536"
 
   container_definitions = jsonencode([
+
     {
-      name              = "sidekiq-main"
-      image             = "${var.shared.ecr_repository.repository_url}:sidekiq-production"
-      cpu    = 1024
-      memory = 5813
-      portMappings = []
+      name              = "sidekiq-staging"
+      image             = "${var.shared.ecr_repository.repository_url}:sidekiq-staging"
+      cpu    = 256
+      memory = 1024
+      portMappings = [{
+        # Mailcatcher
+        containerPort = 1080
+        protocol      = "tcp"
+      }]
       logConfiguration = {
         logDriver = "awslogs"
         options = {
@@ -41,9 +46,9 @@ resource "aws_ecs_task_definition" "auxiliary" {
       }
     },
     {
-      name              = "pma-production"
+      name              = "pma-staging"
       image             = "${var.shared.ecr_repository.repository_url}:pma"
-      cpu    = 512
+      cpu    = 256
       memory = 512
       portMappings = [{
         # The hostPort is automatically set for awsvpc network mode,
@@ -68,7 +73,7 @@ resource "aws_ecs_task_definition" "auxiliary" {
         timeout            = 5
       }
     }
-    ])
+  ])
 
   tags = {
     Name = var.name_prefix
@@ -110,9 +115,16 @@ resource "aws_ecs_service" "auxiliary" {
   }
 
   load_balancer {
-    target_group_arn = var.shared.pma_production.arn
-    container_name   = "pma-production"
+    target_group_arn = var.shared.pma_staging.arn
+    container_name   = "pma-staging"
     container_port   = 80
+  }
+
+  load_balancer {
+    target_group_arn = var.shared.mailcatcher.arn
+    # This is mailcatcher running on the sidekiq container
+    container_name   = "sidekiq-staging"
+    container_port   = 1080
   }
 
   network_configuration {

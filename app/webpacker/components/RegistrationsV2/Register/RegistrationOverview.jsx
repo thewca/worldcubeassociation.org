@@ -24,6 +24,8 @@ export default function RegistrationOverview({
     competitionInfo.event_change_deadline_date ?? competitionInfo.start_date,
   );
 
+  const isRejected = registration.competing.registration_status === 'rejected';
+
   const deleteAllowed = (registration.competing.registration_status !== 'accepted'
       || competitionInfo.allow_registration_self_delete_after_acceptance);
 
@@ -40,13 +42,12 @@ export default function RegistrationOverview({
     onError: (data) => {
       const { error } = data.json;
       dispatch(setMessage(
-        error
-          ? `competitions.registration_v2.errors.${error}`
-          : 'registrations.flash.failed',
+        `competitions.registration_v2.errors.${error}`,
         'negative',
       ));
     },
     onSuccess: (data) => {
+      nextStep({ toStart: true });
       queryClient.setQueryData(
         ['registration', competitionInfo.id, registration.user_id],
         {
@@ -55,7 +56,6 @@ export default function RegistrationOverview({
         },
       );
       dispatch(setMessage('competitions.registration_v2.register.registration_status.cancelled', 'positive'));
-      nextStep({ toStart: true });
     },
   });
 
@@ -67,6 +67,10 @@ export default function RegistrationOverview({
         : window.location = contactCompetitionUrl(competitionInfo.id, encodeURIComponent(i18n.t('competitions.registration_v2.update.delete_contact_message')))))
       .catch(() => nextStep({ refresh: true }));
   };
+
+  if (isRejected) {
+    return <RegistrationStatus registration={registration} competitionInfo={competitionInfo} />;
+  }
 
   return (
     <>

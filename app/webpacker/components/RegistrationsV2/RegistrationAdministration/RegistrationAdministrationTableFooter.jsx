@@ -8,7 +8,7 @@ export default function RegistrationAdministrationTableFooter({
   eventsToggled,
 }) {
   const newcomerCount = registrations.filter(
-    (reg) => reg.user.wca_id === undefined,
+    (reg) => !reg.user.wca_id,
   ).length;
 
   const countryCount = new Set(
@@ -18,7 +18,7 @@ export default function RegistrationAdministrationTableFooter({
   const guestCount = _.sum(registrations.map((r) => r.guests));
 
   const moneyCount = _.sum(registrations.filter(
-    (r) => r.payment.payment_amount_iso,
+    (r) => r.payment.payment_status === 'succeeded',
   ).map((r) => r.payment.payment_amount_iso));
 
   const moneyCountHumanReadable = isoMoneyToHumanReadable(
@@ -52,7 +52,6 @@ export default function RegistrationAdministrationTableFooter({
         </Table.Cell>
       )) : <Table.Cell />}
       <Table.Cell>{guestCount}</Table.Cell>
-      <Table.Cell />
       <Table.Cell />
       <Table.Cell />
       <Table.Cell />

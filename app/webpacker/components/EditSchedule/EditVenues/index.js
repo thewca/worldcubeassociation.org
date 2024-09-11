@@ -12,6 +12,7 @@ import { addVenue } from '../store/actions';
 
 function EditVenues({
   countryZones,
+  referenceTime,
 }) {
   const { wcifSchedule } = useStore();
 
@@ -38,6 +39,7 @@ function EditVenues({
               key={venue.id}
               venue={venue}
               countryZones={countryZones}
+              referenceTime={referenceTime}
             />
           ))}
         </Card.Group>

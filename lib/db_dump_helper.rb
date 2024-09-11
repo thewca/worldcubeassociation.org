@@ -27,8 +27,8 @@ module DbDumpHelper
         #   However, this glob is _relative_ to the Rails root. Due to our chdir into a temporary directory (where we can
         #   write files to our heart's desire) the glob returns an empty list. So we symlink the migrations into our tmp
         #   working directory to make sure that Rails can find them when loading/dumping the schema.
-        primary_connection = ActiveRecord::Base.connection
-        migration_paths = primary_connection.migration_context.migrations_paths
+        primary_connection_pool = ActiveRecord::Base.connection_pool
+        migration_paths = primary_connection_pool.migration_context.migrations_paths
 
         migration_paths.each do |migration_path|
           FileUtils.mkpath(File.dirname(migration_path))
@@ -46,7 +46,7 @@ module DbDumpHelper
   end
 
   def self.public_s3_path(file_name)
-    "#{EnvConfig.ASSET_HOST}/#{file_name}"
+    "#{EnvConfig.DUMP_HOST}/#{file_name}"
   end
 
   def self.dump_results_db(export_timestamp = DateTime.now)

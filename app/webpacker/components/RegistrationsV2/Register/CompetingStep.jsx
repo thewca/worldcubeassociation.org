@@ -24,6 +24,8 @@ import i18n from '../../../lib/i18n';
 import I18nHTMLTranslate from '../../I18nHTMLTranslate';
 import { useConfirm } from '../../../lib/providers/ConfirmProvider';
 import { events } from '../../../lib/wca-data.js.erb';
+import { eventsNotQualifiedFor, isQualifiedForEvent } from '../../../lib/helpers/qualifications';
+import { eventQualificationToString } from '../../../lib/utils/wcif';
 
 const maxCommentLength = 240;
 
@@ -49,6 +51,7 @@ export default function CompetingStep({
   preferredEvents,
   registration,
   refetchRegistration,
+  qualifications,
 }) {
   const maxEvents = competitionInfo.events_per_registration_limit ?? Infinity;
   const isRegistered = Boolean(registration);
@@ -59,7 +62,14 @@ export default function CompetingStep({
 
   const [comment, setComment] = useState('');
   const initialSelectedEvents = competitionInfo.events_per_registration_limit ? [] : preferredEvents
-    .filter((event) => competitionInfo.event_ids.includes(event));
+    .filter((event) => {
+      const preferredEventHeld = competitionInfo.event_ids.includes(event);
+      if (competitionInfo['uses_qualification?']) {
+        return preferredEventHeld
+          && isQualifiedForEvent(event, qualifications.wcif, qualifications.personalRecords);
+      }
+      return preferredEventHeld;
+    });
   const [selectedEvents, setSelectedEvents] = useState(
     initialSelectedEvents,
   );
@@ -83,9 +93,7 @@ export default function CompetingStep({
     onError: (data) => {
       const { error } = data.json;
       dispatch(setMessage(
-        error
-          ? `competitions.registration_v2.errors.${error}`
-          : 'registrations.flash.failed',
+        `competitions.registration_v2.errors.${error}`,
         'negative',
       ));
     },
@@ -113,9 +121,7 @@ export default function CompetingStep({
     onError: (data) => {
       const { error } = data.json;
       dispatch(setMessage(
-        error
-          ? `competitions.registration_v2.errors.${error}`
-          : 'registrations.flash.failed',
+        `competitions.registration_v2.errors.${error}`,
         'negative',
       ));
     },
@@ -209,7 +215,17 @@ export default function CompetingStep({
 
   const handleEventSelection = ({ type, eventId }) => {
     if (type === 'select_all_events') {
-      setSelectedEvents(competitionInfo.event_ids);
+      if (competitionInfo['uses_qualification?']) {
+        setSelectedEvents(
+          competitionInfo.event_ids.filter((e) => isQualifiedForEvent(
+            e,
+            qualifications.wcif,
+            qualifications.personalRecords,
+          )),
+        );
+      } else {
+        setSelectedEvents(competitionInfo.event_ids);
+      }
     } else if (type === 'clear_events') {
       setSelectedEvents([]);
     } else if (type === 'toggle_event') {
@@ -280,6 +296,16 @@ export default function CompetingStep({
               selectedEvents={selectedEvents}
               id="event-selection"
               maxEvents={maxEvents}
+              eventsDisabled={eventsNotQualifiedFor(
+                competitionInfo.event_ids,
+                qualifications.wcif,
+                qualifications.personalRecords,
+              )}
+              disabledText={(event) => eventQualificationToString(
+                { id: event },
+                qualifications.wcif[event],
+                { short: true },
+              )}
               // Don't error if the user hasn't interacted with the form yet
               shouldErrorOnEmpty={hasInteracted}
             />
