@@ -1,5 +1,3 @@
-version: "3.8"
-
 x-app: &app
   build:
     dockerfile: Dockerfile.dev
@@ -7,8 +5,6 @@ x-app: &app
   working_dir: /app
   volumes:
     - .:/app
-    - gems_volume:/usr/local/bundle
-    - yarn_volume:/app/node_modules
   networks:
     - wca-main
 
@@ -136,10 +132,6 @@ services:
 
 volumes:
   wca_db_volume:
-    driver: local
-  gems_volume:
-    driver: local
-  yarn_volume:
     driver: local
   cache_volume:
     driver: local
