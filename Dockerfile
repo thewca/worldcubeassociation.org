@@ -1,18 +1,19 @@
-FROM ruby:3.3.0 AS base
+FROM ruby:3.3.5 AS base
 ARG BUILD_TAG=local
 ARG WCA_LIVE_SITE
+ARG SHAKAPACKER_ASSET_HOST
 WORKDIR /rails
 
 ENV DEBIAN_FRONTEND noninteractive
 
 # Set production environment
 ENV RAILS_LOG_TO_STDOUT="1" \
-    RAILS_SERVE_STATIC_FILES="true" \
     RAILS_ENV="production" \
     BUNDLE_WITHOUT="development:test" \
     BUNDLE_DEPLOYMENT="1" \
     BUILD_TAG=$BUILD_TAG \
-    WCA_LIVE_SITE=$WCA_LIVE_SITE
+    WCA_LIVE_SITE=$WCA_LIVE_SITE \
+    SHAKAPACKER_ASSET_HOST=$SHAKAPACKER_ASSET_HOST
 
 # Add dependencies necessary to install nodejs.
 # From: https://github.com/nodesource/distributions#debian-and-ubuntu-based-distributions
@@ -111,5 +112,15 @@ RUN fc-cache -f -v
 
 # Entrypoint prepares database and starts app on 0.0.0.0:3000 by default,
 # but can also take a rails command, like "console" or "runner" to start instead.
+ENV PIDFILE="/rails/pids/puma.pid"
+
 ENTRYPOINT ["/rails/bin/docker-entrypoint"]
-CMD ["./bin/bundle", "exec", "unicorn", "-c", "/rails/config/unicorn.rb"]
+CMD ["./bin/rails", "server"]
+
+FROM runtime AS monolith-api
+
+EXPOSE 3000
+
+USER rails:rails
+ENV API_ONLY="true"
+CMD ["./bin/rails", "server"]
