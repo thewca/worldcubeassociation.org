@@ -1077,6 +1077,8 @@ en:
         region_name: "Region Name"
         status: "Status"
         locale: "Locale"
+        group_name: "Team/Committee Name"
+        delegated_competitions_count: "Number of Delegated Competitions"
   user_groups:
     group_types:
       board: "WCA Board of Directors"
@@ -1808,6 +1810,16 @@ en:
           zero: "no spots remaining"
           one: "%{count} spot remaining"
           other: "%{count} spots remaining"
+        cancelled:
+          title: "Cancelled registrations"
+          information: "Cancelled competitors are allowed to register again."
+        rejected:
+          title: "Rejected registrations"
+          information: "Rejected competitors cannot re-register."
+        payment:
+         refunded_status: "Refunded"
+         initialized: "Payment process was started on %{date}, but not finished."
+         refunded: "Payment was refunded on %{date}."
       bookmark:
         unbookmark: "You have removed your bookmark"
       requirements:
@@ -1825,6 +1837,7 @@ en:
         move_pending: "Move to Pending"
         move_waiting: "Move to Waiting List"
         cancel: "Cancel Registration"
+        reject: "Reject Registration"
         amount: "Amount"
         too_many: "Accepting all these registrations would go over the competitor limit by %{count}"
         no_self_update: "Contact the Organization Team to update your registration."
@@ -1842,6 +1855,7 @@ en:
           accepted: "Your registration has been accepted."
           pending: "Your registration is pending approval by the organizers."
           cancelled: "Your registration has been deleted."
+          rejected: "Your registration has been rejected."
           waiting_list: "You are on the Waiting List at position %{waiting_list_position}."
         disclaimer: "Submission of Registration does not mean approval to compete"
         processing: "Your registration is processing..."
@@ -1854,14 +1868,15 @@ en:
         -1: "You have sent an invalid token, please refresh the page. If this issue persists contact WST"
         -2: "Authentication Expired, please refresh the page"
         -3: "Missing Authentication, please log in"
+        -4: "The registration service encountered an internal error. If this issue persists contact WST"
         -1000: "Competition does not exist"
         -1001: "Error fetching Competition details, please try again later"
         -2001: "You are banned from competing at WCA Competitions"
         -2002: "Your profile is incomplete"
         -2003: "You don't have the permissions to complete this action"
+        -2004: "You are not allowed to register, as the organizers have rejected your registration. Please contact them if you think there has been a mistake."
         -3000: "Registration does not exist"
-        -3001: "WCA Payment is not enabled for this competition"
-        -3002: "You need to finish your registration before you can pay"
+        -3001: "You have already registered for another Competition in the series"
         -4000: "The Request contains invalid data"
         -4001: "The event edit deadline has passed"
         -4002: "The number of guests are over the allowed limit"
@@ -1874,6 +1889,9 @@ en:
         -4009: "Only Organizers can cancel Registrations for this competition"
         -4010: "The Waiting List Position is not Valid"
         -4011: "You can only accept the first person on the waiting list"
+        -4012: "You are not qualified to compete in the selected events"
+        -6001: "WCA Payment is not enabled for this competition"
+        -6002: "You need to finish your registration before you can pay"
     #context: and when an error occured
     errors:
       invalid_name_message: "must end with a year and must contain only alphanumeric characters, dashes(-), ampersands(&), periods(.), colons(:), apostrophes('), and spaces( )"

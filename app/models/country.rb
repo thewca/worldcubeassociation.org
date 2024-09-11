@@ -8,25 +8,7 @@ class Country < ApplicationRecord
 
   has_one :wfc_dues_redirect, as: :redirect_source
 
-  ALL_TIMEZONES_MAPPING = begin
-    all_tz = ActiveSupport::TimeZone::MAPPING
-    grouped_tz = all_tz.group_by { |k, v| v }
-    duplicates = grouped_tz.select { |k, v| v.size > 1 }
-    duplicates.each do |tz_id, tz_entries|
-      selected_name = tz_id
-      # Try to be smarter here, and find the closest matching name
-      # rubocop:disable Style/HashEachMethods
-      tz_entries.each do |tz_name, _|
-        if tz_id.include?(tz_name.tr(' ', '_'))
-          selected_name = tz_name
-        end
-        all_tz.delete(tz_name)
-      end
-      # rubocop:enable Style/HashEachMethods
-      all_tz[selected_name] = tz_id
-    end
-    all_tz
-  end.freeze
+  SUPPORTED_TIMEZONES = ActiveSupport::TimeZone::MAPPING.values.uniq.freeze
 
   FICTIVE_COUNTRY_DATA_PATH = StaticData::DATA_FOLDER.join("#{self.data_file_handle}.fictive.json")
   MULTIPLE_COUNTRIES = self.parse_json_file(FICTIVE_COUNTRY_DATA_PATH).freeze

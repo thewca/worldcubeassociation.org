@@ -66,7 +66,7 @@ const shouldShowCompleted = (isRegistered, hasPaid, isAccepted, key, index) => {
   }
 };
 
-const shouldBeDisabled = (hasPaid, key, activeIndex, index, competitionInfo) => {
+const shouldBeDisabled = (hasPaid, key, activeIndex, index, competitionInfo, isRejected) => {
   const hasRegistrationEditDeadlinePassed = hasPassed(
     competitionInfo.event_change_deadline_date ?? competitionInfo.start_date,
   );
@@ -74,6 +74,9 @@ const shouldBeDisabled = (hasPaid, key, activeIndex, index, competitionInfo) => 
     && !hasRegistrationEditDeadlinePassed;
 
   switch (key) {
+    case isRejected: {
+      return true;
+    }
     case externalPaymentStepConfig.key: {
       return true;
     }
@@ -94,7 +97,6 @@ const shouldBeDisabled = (hasPaid, key, activeIndex, index, competitionInfo) => 
     }
   }
 };
-
 export default function StepPanel({
   competitionInfo,
   preferredEvents,
@@ -103,9 +105,11 @@ export default function StepPanel({
   refetchRegistration,
   stripePublishableKey,
   connectedAccountId,
+  qualifications,
 }) {
   const isRegistered = Boolean(registration) && registration.competing.registration_status !== 'cancelled';
   const isAccepted = isRegistered && registration.competing.registration_status === 'accepted';
+  const isRejected = isRegistered && registration.competing.registration_status === 'rejected';
   const hasPaid = registration?.payment.payment_status === 'succeeded';
 
   const steps = useMemo(() => {
@@ -124,7 +128,7 @@ export default function StepPanel({
 
   const [activeIndex, setActiveIndex] = useState(() => {
     // Don't show payment panel if a user was accepted (for people with waived payment)
-    if (isAccepted || hasPaid) {
+    if (hasPaid || isAccepted || isRejected) {
       return steps.findIndex(
         (step) => step === (registrationOverviewConfig),
       );
@@ -160,6 +164,7 @@ export default function StepPanel({
               activeIndex,
               index,
               competitionInfo,
+              isRejected,
             )}
             onClick={() => setActiveIndex(index)}
           >
@@ -178,6 +183,7 @@ export default function StepPanel({
         user={user}
         stripePublishableKey={stripePublishableKey}
         connectedAccountId={connectedAccountId}
+        qualifications={qualifications}
         nextStep={
           (overwrites = {}) => setActiveIndex((oldActiveIndex) => {
             if (overwrites?.refresh) {

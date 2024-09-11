@@ -6,9 +6,8 @@ import { Draggable } from 'react-beautiful-dnd';
 import { setMessage } from '../Register/RegistrationMessage';
 import i18n from '../../../lib/i18n';
 import {
-  getFullDateTimeString, getRegistrationTimestamp,
+  getRegistrationTimestamp,
   getShortDateString,
-  getShortTimeString,
 } from '../../../lib/utils/dates';
 import EventIcon from '../../wca/EventIcon';
 import { editRegistrationUrl, editPersonUrl, personUrl } from '../../../lib/requests/routes.js.erb';
@@ -21,24 +20,36 @@ import { isoMoneyToHumanReadable } from '../../../lib/helpers/money';
 const truncateComment = (comment) => (comment?.length > 12 ? `${comment.slice(0, 12)}...` : comment);
 
 function RegistrationTime({
-  timestamp, registeredOn, paidOn, usesPaymentIntegration,
+  timestamp, registeredOn, paymentStatus, paidOn, usesPaymentIntegration,
 }) {
   if (timestamp) {
-    return getRegistrationTimestamp(registeredOn);
+    return getRegistrationTimestamp(paidOn ?? registeredOn);
   }
 
-  if (usesPaymentIntegration && !paidOn) {
+  if (usesPaymentIntegration && paymentStatus !== 'succeeded') {
+    let content = i18n.t('registrations.list.payment_requested_on', { date: getRegistrationTimestamp(registeredOn) });
+    let trigger = <span>{i18n.t('registrations.list.not_paid')}</span>;
+
+    if (paymentStatus === 'initialized') {
+      content = i18n.t('competitions.registration_v2.list.payment.initialized', { date: getRegistrationTimestamp(paidOn) });
+    }
+
+    if (paymentStatus === 'refund') {
+      content = i18n.t('competitions.registration_v2.list.payment.refunded', { date: getRegistrationTimestamp(paidOn) });
+      trigger = <span>{i18n.t('competitions.registration_v2.list.payment.refunded_status')}</span>;
+    }
+
     return (
       <Popup
-        content={i18n.t('registrations.list.payment_requested_on', { date: getRegistrationTimestamp(registeredOn) })}
-        trigger={<span>{i18n.t('registrations.list.not_paid')}</span>}
+        content={content}
+        trigger={trigger}
       />
     );
   }
 
   return (
     <Popup
-      content={getShortTimeString(paidOn ?? registeredOn)}
+      content={getRegistrationTimestamp(paidOn ?? registeredOn)}
       trigger={<span>{getShortDateString(paidOn ?? registeredOn)}</span>}
     />
   );
@@ -66,6 +77,7 @@ export default function TableRow({
   const {
     payment_amount_iso: paymentAmount,
     updated_at: updatedAt,
+    payment_status: paymentStatus,
   } = registration.payment;
 
   const copyEmail = () => {
@@ -137,12 +149,17 @@ export default function TableRow({
                 timestamp={timestamp}
                 paidOn={updatedAt}
                 registeredOn={registeredOn}
+                paymentStatus={paymentStatus}
                 usesPaymentIntegration={competitionInfo['using_payment_integrations?']}
               />
             </Table.Cell>
 
             {competitionInfo['using_payment_integrations?'] && (
-            <Table.Cell>{isoMoneyToHumanReadable(paymentAmount, competitionInfo.currency_code) ?? ''}</Table.Cell>
+            <Table.Cell>
+              {paymentStatus === 'succeeded'
+                ? isoMoneyToHumanReadable(paymentAmount, competitionInfo.currency_code)
+                : ''}
+            </Table.Cell>
             )}
 
             {events ? (
