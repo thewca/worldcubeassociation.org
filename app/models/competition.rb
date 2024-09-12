@@ -117,6 +117,7 @@ class Competition < ApplicationRecord
     guests_per_registration_limit
     base_entry_fee_lowest_denomination
     currency_code
+    payment_information
     enable_donations
     extra_registration_requirements
     on_the_spot_registration
