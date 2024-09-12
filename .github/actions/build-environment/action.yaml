@@ -1,5 +1,5 @@
-name: 'Build and Push Docker Image'
-description: 'A custom action to build and push our Docker images with environment-specific configurations.'
+name: 'Builds a whole environment of docker images'
+description: 'A custom action to build and push all Docker images of an environment.'
 inputs:
   environment:
     description: 'Deployment environment (e.g., staging, production)'
