@@ -1820,6 +1820,8 @@ en:
          refunded_status: "Refunded"
          initialized: "Payment process was started on %{date}, but not finished."
          refunded: "Payment was refunded on %{date}."
+         external: "External Payment"
+         external_acknowledgement: "I have read the external payment requirements and have paid for my entry to the competition."
       bookmark:
         unbookmark: "You have removed your bookmark"
       requirements:

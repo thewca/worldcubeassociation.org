@@ -24,7 +24,7 @@ const competingStepConfig = {
 
 const externalPaymentStepConfig = {
   key: 'payment',
-  description: 'External Payment',
+  description: i18n.t('competitions.registration_v2.list.payment.external'),
   i18nKey: 'registrations.payment_form.labels.payment_information',
   component: ExternalPaymentStep,
 };
