@@ -188,6 +188,8 @@ FactoryBot.define do
       transient do
         paypal_merchant_id { '95XC2UKUP2CFW' }
       end
+
+      payment_information { nil }
     end
 
     trait :accepts_donations do
