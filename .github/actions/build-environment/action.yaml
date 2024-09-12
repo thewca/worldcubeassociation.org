@@ -1,0 +1,59 @@
+name: 'Build and Push Docker Image'
+description: 'A custom action to build and push our Docker images with environment-specific configurations.'
+inputs:
+  environment:
+    description: 'Deployment environment (e.g., staging, production)'
+    required: true
+  build_tag:
+    description: 'The build tag of the current code state'
+    required: true
+  registry:
+    description: 'Docker registry to push the image to'
+    required: true
+runs:
+  using: 'composite'
+  steps:
+    - name: Set environment variables
+      shell: bash
+      run: |
+        if [ "${{ inputs.environment }}" == "staging" ]; then
+          echo "ASSET_BUCKET=assets-staging.worldcubeassociation.org" >> $GITHUB_ENV
+          echo "SIDEKIQ_TAG=sidekiq-staging" >> $GITHUB_ENV
+          echo "MONOLITH_TAG=staging" >> $GITHUB_ENV
+          echo "MONOLITH_API_TAG=staging-api" >> $GITHUB_ENV
+        elif [ "${{ inputs.environment }}" == "production" ]; then
+          echo "ASSET_BUCKET=assets.worldcubeassociation.org" >> $GITHUB_ENV
+          echo "SIDEKIQ_TAG=sidekiq-production" >> $GITHUB_ENV
+          echo "MONOLITH_TAG=latest" >> $GITHUB_ENV
+          echo "MONOLITH_API_TAG=production-api" >> $GITHUB_ENV
+        fi
+    - name: Build and Push Sidekiq image
+      uses: ./.github/actions/build-image
+      id: build
+      with:
+        target: sidekiq
+        registry: ${{ inputs.registry }}
+        tag: ${{ env.SIDEKIQ_TAG }}
+        build_tag: ${{ inputs.build_tag }}
+        environment: ${{ inputs.environment }}
+    - name: Copy assets out of the container and push to S3
+      run: | # We do this once the first image is build so it will be definitely available
+        id=$(docker create ${{ steps.build.outputs.imageid }})
+        docker cp $id:/rails/public/ ./assets
+        aws s3 sync ./assets s3://${{ env.ASSET_BUCKET }}/assets/${{ inputs.build_tag }}
+    - name: Build and push API Image
+      uses: ./.github/actions/build-image
+      with:
+        target: monolith-api
+        registry: ${{ inputs.registry }}
+        tag: ${{ env.MONOLITH_API_TAG }}
+        build_tag: ${{ inputs.build_tag }}
+        environment: ${{ inputs.environment }}
+    - name: Build and push Image
+      uses: ./.github/actions/build-image
+      with:
+        target: monolith
+        registry: ${{ inputs.build_tag }}
+        tag: ${{ env.MONOLITH_TAG }}
+        build_tag: ${{ inputs.build_tag }}
+        environment: ${{ inputs.environment }}
