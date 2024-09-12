@@ -193,7 +193,7 @@ class Competition < ApplicationRecord
                  format: { with: VALID_ID_RE }, if: :name_valid_or_updating?
   validates :payment_information, presence: { message: I18n.t('competitions.errors.must_specify_payment_info_if_external') }, if: :needs_payment_information?
   private def needs_payment_information?
-    !using_payment_integrations? && base_entry_fee_lowest_denomination > 0
+    !using_payment_integrations? && has_fees?
   end
 
   private def name_valid_or_updating?
