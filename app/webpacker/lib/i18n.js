@@ -82,6 +82,11 @@ function loadTranslations(i18n, locale) {
   const translations = i18nFileContext(`./${locale}.json`);
   i18n.store(translations);
 
+  const dateFnsLocale = Locales[locale];
+
+  registerLocale(locale, dateFnsLocale);
+  setDefaultLocale(window.wca.currentLocale);
+
   const baseLocale = window.wca.currentLocale.split('-')[0];
   const pluralizer = Pluralizers[baseLocale];
 
@@ -92,8 +97,3 @@ function loadTranslations(i18n, locale) {
 // store the actual translations.
 loadTranslations(window.I18n, DEFAULT_LOCALE);
 loadTranslations(window.I18n, window.wca.currentLocale);
-
-const dateFnsLocale = Locales[window.wca.currentLocale];
-
-registerLocale(window.wca.currentLocale, dateFnsLocale);
-setDefaultLocale(window.wca.currentLocale);
