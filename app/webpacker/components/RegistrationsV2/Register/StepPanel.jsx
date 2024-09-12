@@ -136,7 +136,7 @@ export default function StepPanel({
     // If the user has not paid but refreshes the page, we want to display the paymentStep again
     if (isRegistered) {
       return steps.findIndex(
-        (step) => step === (competitionInfo['using_payment_integrations?'] ? wcaPaymentStepConfig : externalPaymentStepConfig),
+        (step) => step === (competitionInfo['using_payment_integrations?'] ? wcaPaymentStepConfig : registrationOverviewConfig),
       );
     }
 
