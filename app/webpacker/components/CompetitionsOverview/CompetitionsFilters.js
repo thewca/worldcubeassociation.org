@@ -6,14 +6,12 @@ import PulseLoader from 'react-spinners/PulseLoader';
 
 import I18n from '../../lib/i18n';
 import {
-  events, continents, countries, competitionConstants, nonFutureCompetitionYears,
+  continents, countries, competitionConstants, nonFutureCompetitionYears,
 } from '../../lib/wca-data.js.erb';
 
-import { DEFAULT_REGION_ALL } from './filterUtils';
+import { DEFAULT_REGION_ALL, WCA_EVENT_IDS } from './filterUtils';
 import useDelegatesData from './useDelegatesData';
 import UtcDatePicker from '../wca/UtcDatePicker';
-
-export const WCA_EVENT_IDS = Object.values(events.official).map((e) => e.id);
 
 function CompetitionsFilters({
   filterState,
