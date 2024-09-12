@@ -18,14 +18,10 @@ runs:
       run: |
         if [ "${{ inputs.environment }}" == "staging" ]; then
           echo "ASSET_BUCKET=assets-staging.worldcubeassociation.org" >> $GITHUB_ENV
-          echo "SIDEKIQ_TAG=sidekiq-staging" >> $GITHUB_ENV
           echo "MONOLITH_TAG=staging" >> $GITHUB_ENV
-          echo "MONOLITH_API_TAG=staging-api" >> $GITHUB_ENV
         elif [ "${{ inputs.environment }}" == "production" ]; then
           echo "ASSET_BUCKET=assets.worldcubeassociation.org" >> $GITHUB_ENV
-          echo "SIDEKIQ_TAG=sidekiq-production" >> $GITHUB_ENV
           echo "MONOLITH_TAG=latest" >> $GITHUB_ENV
-          echo "MONOLITH_API_TAG=production-api" >> $GITHUB_ENV
         fi
     - name: Build and Push Sidekiq image
       uses: ./.github/actions/build-image
@@ -33,7 +29,7 @@ runs:
       with:
         target: sidekiq
         registry: ${{ inputs.registry }}
-        tag: ${{ env.SIDEKIQ_TAG }}
+        tag: sidekiq-${{inputs.environment}}
         build_tag: ${{ inputs.build_tag }}
         environment: ${{ inputs.environment }}
     - name: Copy assets out of the container and push to S3
@@ -46,7 +42,7 @@ runs:
       with:
         target: monolith-api
         registry: ${{ inputs.registry }}
-        tag: ${{ env.MONOLITH_API_TAG }}
+        tag: ${{inputs.environment}}-api
         build_tag: ${{ inputs.build_tag }}
         environment: ${{ inputs.environment }}
     - name: Build and push Image
