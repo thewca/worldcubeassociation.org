@@ -117,7 +117,7 @@ export const localizeActivityCode = (activityCode, wcifRound, wcifEvent) => {
 
 export const humanizeActivityCode = (activityCode) => {
   if (activityCode.startsWith('other-')) {
-    return commonActivityCodes[activityCode] ?? '';
+    return I18n.t(`activity.${activityCode.substring(6)}`);
   }
 
   const { eventId, roundNumber, attempt } = parseActivityCode(activityCode);
