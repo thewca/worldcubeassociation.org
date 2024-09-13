@@ -19,9 +19,11 @@ runs:
         if [ "${{ inputs.environment }}" == "staging" ]; then
           echo "ASSET_BUCKET=assets-staging.worldcubeassociation.org" >> $GITHUB_ENV
           echo "MONOLITH_TAG=staging" >> $GITHUB_ENV
+          echo "ASG_ID=wca-on-rails-t3-20230927122725999000000002" >> $GITHUB_ENV
         elif [ "${{ inputs.environment }}" == "production" ]; then
           echo "ASSET_BUCKET=assets.worldcubeassociation.org" >> $GITHUB_ENV
           echo "MONOLITH_TAG=latest" >> $GITHUB_ENV
+          echo "ASG_ID=wca-on-rails-m6i-20230927122728529600000003" >> $GITHUB_ENV
         fi
     - name: Build and Push Sidekiq image
       uses: ./.github/actions/build-image
@@ -46,6 +48,13 @@ runs:
         tag: ${{inputs.environment}}-api
         build_tag: ${{ inputs.build_tag }}
         environment: ${{ inputs.environment }}
+    - name: Prescale Autoscaling Group for Faster Deployment
+      run: |
+        CURRENT_CAPACITY=$(aws autoscaling describe-auto-scaling-groups \
+        --auto-scaling-group-name ${{ env.ASG_ID }} \
+        --query "AutoScalingGroups[0].DesiredCapacity" \
+        --output text)
+        aws autoscaling update-auto-scaling-group --auto-scaling-group-name ${{ env.ASG_ID }} --desired-capacity $((CURRENT_DESIRED_CAPACITY + 1))
     - name: Build and push Image
       uses: ./.github/actions/build-image
       with:
