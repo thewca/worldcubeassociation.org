@@ -85,9 +85,9 @@ function loadTranslations(i18n, locale) {
   const dateFnsLocale = Locales[locale];
 
   registerLocale(locale, dateFnsLocale);
-  setDefaultLocale(window.wca.currentLocale);
+  setDefaultLocale(locale);
 
-  const baseLocale = window.wca.currentLocale.split('-')[0];
+  const baseLocale = locale.split('-')[0];
   const pluralizer = Pluralizers[baseLocale];
 
   // eslint-disable-next-line react-hooks/rules-of-hooks
