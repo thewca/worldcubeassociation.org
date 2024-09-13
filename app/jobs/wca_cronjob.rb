@@ -103,5 +103,9 @@ class WcaCronjob < ApplicationJob
     def end_date
       self.cronjob_statistics.run_end
     end
+
+    def successful_start_date
+      self.cronjob_statistics.successful_run_start
+    end
   end
 end
