@@ -398,7 +398,7 @@ Rails.application.routes.draw do
         end
       end
       namespace :wfc do
-        resources :xero_users, only: [:index, :create]
+        resources :xero_users, only: [:index, :create, :update]
         resources :dues_redirects, only: [:index, :create, :destroy]
       end
     end
