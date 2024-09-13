@@ -21,7 +21,6 @@ jobs:
         shell: bash
         run: |
           echo "SHORT_SHA=$(git rev-parse --short HEAD)" >> "$GITHUB_ENV"
-        # There is no pipeline for staging so we manually force to update the image
       - name: Build staging images
         uses: ./.github/actions/build-environment
         with:
