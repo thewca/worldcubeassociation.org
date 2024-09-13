@@ -34,3 +34,4 @@ jobs:
         run: |
           aws ecs update-service --cluster wca-on-rails --service wca-on-rails-staging --force-new-deployment
           aws ecs update-service --cluster wca-on-rails --service wca-on-rails-staging-API --force-new-deployment
+          aws ecs update-service --cluster wca-on-rails --service wca-on-rails-staging-auxiliary-services --force-new-deployment
