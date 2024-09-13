@@ -33,6 +33,7 @@ runs:
         build_tag: ${{ inputs.build_tag }}
         environment: ${{ inputs.environment }}
     - name: Copy assets out of the container and push to S3
+      shell: bash
       run: | # We do this once the first image is build so it will be definitely available
         id=$(docker create ${{ steps.build.outputs.imageid }})
         docker cp $id:/rails/public/ ./assets
