@@ -50,7 +50,7 @@ runs:
       uses: ./.github/actions/build-image
       with:
         target: monolith
-        registry: ${{ inputs.build_tag }}
+        registry: ${{ inputs.registry }}
         tag: ${{ env.MONOLITH_TAG }}
         build_tag: ${{ inputs.build_tag }}
         environment: ${{ inputs.environment }}
