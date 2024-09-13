@@ -58,11 +58,9 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
   const { mutate: updateRegistrationMutation, isPending: isUpdating } = useMutation({
     mutationFn: updateRegistration,
     onError: (data) => {
-      const { errorCode } = data;
+      const { error } = data.json;
       dispatch(setMessage(
-        errorCode
-          ? `competitions.registration_v2.errors.${errorCode}`
-          : 'registrations.flash.failed',
+        `competitions.registration_v2.errors.${error}`,
         'negative',
       ));
     },
@@ -260,15 +258,15 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
             disabled={registrationEditDeadlinePassed}
             onChange={(event, data) => setStatus(data.value)}
           />
-          {/* <Form.Checkbox */}
-          {/*  radio */}
-          {/*  label="Waiting List" */}
-          {/*  name="checkboxRadioGroup" */}
-          {/*  value="waiting_list" */}
-          {/*  checked={status === 'waiting_list'} */}
-          {/*  disabled={registrationEditDeadlinePassed} */}
-          {/*  onChange={(event, data) => setStatus(data.value)} */}
-          {/* /> */}
+          <Form.Checkbox
+            radio
+            label="Waiting List"
+            name="checkboxRadioGroup"
+            value="waiting_list"
+            checked={status === 'waiting_list'}
+            disabled={registrationEditDeadlinePassed}
+            onChange={(event, data) => setStatus(data.value)}
+          />
           <Form.Checkbox
             radio
             label="Cancelled"
@@ -276,6 +274,15 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
             value="cancelled"
             disabled={registrationEditDeadlinePassed}
             checked={status === 'cancelled'}
+            onChange={(event, data) => setStatus(data.value)}
+          />
+          <Form.Checkbox
+            radio
+            label="Rejected"
+            name="checkboxRadioGroup"
+            value="cancelled"
+            disabled={registrationEditDeadlinePassed}
+            checked={status === 'rejected'}
             onChange={(event, data) => setStatus(data.value)}
           />
         </Form.Group>

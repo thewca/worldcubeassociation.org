@@ -12,7 +12,7 @@ jobs:
     steps:
       - name: Trigger deployment on comment
         id: trigger-deployment
-        uses: shanegenschaw/pull-request-comment-trigger@v2.1.0
+        uses: shanegenschaw/pull-request-comment-trigger@v3.0.0
         with:
           trigger: '@thewca-bot deploy staging'
           reaction: rocket
@@ -44,54 +44,16 @@ jobs:
         shell: bash
         run: |
           echo "SHORT_SHA=$(git rev-parse --short HEAD)" >> "$GITHUB_ENV"
-      - name: Build Sidekiq if triggered
+      - name: Build staging images
         if: steps.trigger-deployment.outputs.triggered == 'true'
-        uses: docker/build-push-action@v6
-        id: build-staging
+        uses: ./.github/actions/build-environment
         with:
-          context: .
-          push: true
-          load: true
-          target: sidekiq
-          tags: |
-            ${{ steps.login-ecr.outputs.registry }}/wca-on-rails:sidekiq-staging
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-          build-args: |
-            BUILD_TAG=${{ env.SHORT_SHA }}
-            WCA_LIVE_SITE=false
-            SHAKAPACKER_ASSET_HOST=https://assets-staging.worldcubeassociation.org
-      # We build assets in docker and copy it out so we don't have to install all the dependencies in the GH Action
-      - name: Copy assets out of the container and push to S3 if triggered
-        if: steps.trigger-deployment.outputs.triggered == 'true'
-        run: |
-          id=$(docker create ${{steps.build-staging.outputs.imageid }})
-          docker cp $id:/rails/public/ ./assets
-          aws s3 sync ./assets "s3://assets-staging.worldcubeassociation.org/assets/${{ env.SHORT_SHA }}"
-      # There are multiple services using the t3 ASG, so we increase it by one
-      - name: Prescale Autoscaling Group for Faster Deployment
-        run: |
-          CURRENT_CAPACITY=$(aws autoscaling describe-auto-scaling-groups \
-          --auto-scaling-group-name wca-on-rails-t3-20230927122725999000000002 \
-          --query "AutoScalingGroups[0].DesiredCapacity" \
-          --output text)
-          aws autoscaling update-auto-scaling-group --auto-scaling-group-name wca-on-rails-t3-20230927122725999000000002 --desired-capacity $((CURRENT_DESIRED_CAPACITY + 1))
-      - name: Build Rails if triggered
-        if: steps.trigger-deployment.outputs.triggered == 'true'
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          push: true
-          target: monolith
-          tags: |
-            ${{ steps.login-ecr.outputs.registry }}/wca-on-rails:staging
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-          build-args: |
-            BUILD_TAG=${{ env.SHORT_SHA }}
-            WCA_LIVE_SITE=false
-            SHAKAPACKER_ASSET_HOST=https://assets-staging.worldcubeassociation.org
+          environment: staging
+          build_tag: ${{ env.SHORT_SHA }}
+          registry: ${{ steps.login-ecr.outputs.registry }}/wca-on-rails
       - name: Deploy staging if triggered
         if: steps.trigger-deployment.outputs.triggered == 'true'
         run: |
           aws ecs update-service --cluster wca-on-rails --service wca-on-rails-staging --force-new-deployment
+          aws ecs update-service --cluster wca-on-rails --service wca-on-rails-staging-API --force-new-deployment
+          aws ecs update-service --cluster wca-on-rails --service wca-on-rails-staging-auxiliary-services --force-new-deployment

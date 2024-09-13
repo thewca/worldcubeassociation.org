@@ -126,7 +126,7 @@ class UsersController < ApplicationController
     params[:section] ||= "general"
 
     @user = user_to_edit
-    nil if redirect_if_cannot_edit_user(@user)
+    return if redirect_if_cannot_edit_user(@user)
     @current_user = current_user
   end
 

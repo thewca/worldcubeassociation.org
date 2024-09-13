@@ -1,4 +1,4 @@
-<% if f.object&.errors&.any? %>
+<% if f.object.presence&.errors&.any? %>
   <div id="error_explanation">
     <%= alert :danger do %>
       <%= t 'wca.errors.messages.form_error', count: f.object.errors.count %>
