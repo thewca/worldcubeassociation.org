@@ -56,11 +56,11 @@ RSpec.describe Api::V0::CompetitionsController do
         :competition,
         :with_delegate,
         :with_valid_schedule,
+        :visible,
         id: "TestComp2014",
         start_date: "2014-02-03",
         end_date: "2014-02-05",
         external_website: "http://example.com",
-        showAtAll: true,
       )
     }
 
@@ -263,12 +263,12 @@ RSpec.describe Api::V0::CompetitionsController do
       FactoryBot.create(
         :competition,
         :with_delegate,
+        :visible,
         id: "TestComp2014",
         name: "Test Comp 2014",
         start_date: "2014-02-03",
         end_date: "2014-02-05",
         external_website: "http://example.com",
-        showAtAll: true,
         event_ids: %w(333 444),
         latitude: 43_641_740,
         longitude: -79_376_902,

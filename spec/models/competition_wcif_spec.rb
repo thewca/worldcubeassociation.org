@@ -40,6 +40,7 @@ RSpec.describe "Competition WCIF" do
     )
   }
   let(:delegate) { competition.delegates.first }
+  let(:organizer) { competition.organizers.first }
   let(:sixty_second_2_attempt_cutoff) { Cutoff.new(number_of_attempts: 2, attempt_result: 1.minute.in_centiseconds) }
   let(:top_16_advance) { AdvancementConditions::RankingCondition.new(16) }
   let!(:round333_1) { FactoryBot.create(:round, competition: competition, event_id: "333", number: 1, cutoff: sixty_second_2_attempt_cutoff, advancement_condition: top_16_advance, scramble_set_count: 16, total_number_of_rounds: 2) }
@@ -66,7 +67,7 @@ RSpec.describe "Competition WCIF" do
           "shortName" => "Spectacular 2014",
           "competitionIds" => %w[TestComp2014 PartnerComp2014],
         },
-        "persons" => [delegate.to_wcif(competition)],
+        "persons" => [delegate.to_wcif(competition), organizer.to_wcif(competition)],
         "events" => [
           {
             "id" => "333",

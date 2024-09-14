@@ -26,27 +26,27 @@ RSpec.describe ContactCompetition do
 
     it "sends competition inquires to competition managers when nothing is provided for contact" do
       form = FactoryBot.build(:contact_competition, :with_competition, competition_delegates: delegates, competition_organizers: organizers)
-      expect(form.to_email).to contain_exactly(delegates.map(&:email) | organizers.map(&:email))
+      expect(form.to_email).to match_array(delegates.map(&:email) | organizers.map(&:email))
     end
 
     it "sends competition inquires to competition managers when an invalid email address is provided for contact" do
       form = FactoryBot.build(:contact_competition, :with_competition, competition_delegates: delegates, competition_organizers: organizers, competition_contact: "not an em@il address")
-      expect(form.to_email).to contain_exactly(delegates.map(&:email) | organizers.map(&:email))
+      expect(form.to_email).to match_array(delegates.map(&:email) | organizers.map(&:email))
     end
 
     it "sends competition inquires to competition managers when a markdown email address is provided for contact" do
       form = FactoryBot.build(:contact_competition, :with_competition, competition_delegates: delegates, competition_organizers: organizers, competition_contact: "[Speedcubing Canada](mailto:unit-test@speedcubingcanada.org)")
-      expect(form.to_email).to contain_exactly(delegates.map(&:email) | organizers.map(&:email))
+      expect(form.to_email).to match_array(delegates.map(&:email) | organizers.map(&:email))
     end
 
     it "sends competition inquires to competition managers when a markdown website is provided for contact" do
       form = FactoryBot.build(:contact_competition, :with_competition, competition_delegates: delegates, competition_organizers: organizers, competition_contact: "[Speedcubing Canada](unit-test.speedcubingcanada.org)")
-      expect(form.to_email).to contain_exactly(delegates.map(&:email) | organizers.map(&:email))
+      expect(form.to_email).to match_array(delegates.map(&:email) | organizers.map(&:email))
     end
 
     it "sends competition inquires to competition managers when a website is provided for contact" do
       form = FactoryBot.build(:contact_competition, :with_competition, competition_delegates: delegates, competition_organizers: organizers, competition_contact: "unit-test.speedcubingcanada.org")
-      expect(form.to_email).to contain_exactly(delegates.map(&:email) | organizers.map(&:email))
+      expect(form.to_email).to match_array(delegates.map(&:email) | organizers.map(&:email))
     end
   end
 
