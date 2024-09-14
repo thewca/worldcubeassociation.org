@@ -21,7 +21,7 @@ import Store, { useDispatch, useStore } from '../../lib/providers/StoreProvider'
 import ConfirmProvider from '../../lib/providers/ConfirmProvider';
 import EditVenues from './EditVenues';
 import EditActivities from './EditActivities';
-import WCAQueryClientProvider from "../../lib/providers/WCAQueryClientProvider";
+import WCAQueryClientProvider from '../../lib/providers/WCAQueryClientProvider';
 
 function EditSchedule({
   wcifEvents,

@@ -180,20 +180,22 @@ function VenuePanel({
               value={venue.countryIso2}
               onChange={handleVenueChange}
             />
-            <Button
-              floated="right"
-              compact
-              icon
-              labelPosition="left"
-              primary
-              negative={timeZonesError}
-              disabled={timeZonesLoading}
-              onClick={handleDetectTimezone}
-            >
-              <Icon name="target" />
-              Use coordinate timezone
-              <div>{bestMatch || '(not found)'}</div>
-            </Button>
+            {bestMatch && (
+              <Button
+                floated="right"
+                compact
+                icon
+                labelPosition="left"
+                primary
+                negative={timeZonesError}
+                disabled={timeZonesLoading}
+                onClick={handleDetectTimezone}
+              >
+                <Icon name="target" />
+                Use coordinate timezone
+                <div>{bestMatch}</div>
+              </Button>
+            )}
             <Form.Select
               label="Timezone"
               name="timezone"
