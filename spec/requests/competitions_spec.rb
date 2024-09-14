@@ -344,11 +344,12 @@ RSpec.describe "competitions" do
         end
 
         it 'cannot set deadlines if already past' do
-          competition.update!(waiting_list_deadline_date: Date.yesterday)
+          competition.update!(waiting_list_deadline_date: competition.registration_close + 1.day)
 
           expect(competition.confirmed?).to be true
 
-          update_params = competition.to_form_data.merge({ registration: { waitingListDeadlineDate: Date.tomorrow.to_fs } })
+          new_deadline_date = competition.registration_close + 3.days
+          update_params = competition.to_form_data.merge({ registration: { waitingListDeadlineDate: new_deadline_date.iso8601 } })
           patch competition_path(competition), params: update_params, as: :json
 
           expect(response).to be_successful

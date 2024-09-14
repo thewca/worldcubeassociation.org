@@ -758,7 +758,7 @@ RSpec.describe CompetitionsController do
       end
 
       it "can change general information field even after competition is confirmed" do
-        comp = FactoryBot.create(:competition, :confirmed, delegates: [delegate], information: "Old information")
+        comp = FactoryBot.create(:competition, :confirmed, :registration_open, delegates: [delegate], information: "Old information")
         new_information = "New information"
         update_params = build_competition_update(comp, information: new_information)
         patch :update, params: update_params, as: :json
