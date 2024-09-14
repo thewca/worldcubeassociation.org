@@ -57,6 +57,8 @@ gem 'eu_central_bank'
 gem 'devise-jwt'
 gem 'jwt'
 gem 'iso', github: 'thewca/ruby-iso'
+gem 'csv'
+gem 'ostruct'
 
 # Pointing to jfly/selectize-rails which has a workaround for
 #  https://github.com/selectize/selectize.js/issues/953
@@ -91,7 +93,7 @@ gem 'i18n-country-translations', github: 'thewca/i18n-country-translations'
 gem 'http_accept_language'
 gem 'twitter_cldr'
 # version explicitly specified because Shakapacker wants to keep Gemfile and package.json in sync
-gem 'shakapacker', '8.0.1'
+gem 'shakapacker', '8.0.2'
 gem 'json-schema'
 gem 'translighterate'
 gem 'enum_help'
@@ -110,6 +112,7 @@ gem 'sidekiq'
 gem 'sidekiq-cron'
 gem 'after_commit_everywhere'
 gem 'slack-ruby-client'
+gem 'puma'
 gem 'hash_diff'
 
 group :development, :test do
@@ -119,8 +122,6 @@ group :development, :test do
   gem 'factory_bot_rails'
   gem 'faker'
   gem 'capybara-screenshot'
-
-  gem 'puma'
 
   gem 'byebug'
   gem 'i18n-tasks'
@@ -159,9 +160,7 @@ group :test do
 end
 
 group :production do
-  gem 'unicorn'
-  # Unicorn is incompatible with Rack 3, but doesn't specify it explicitly…
-  gem 'rack', '~> 2'
+  gem 'rack'
   gem 'newrelic_rpm'
   gem 'wkhtmltopdf-binary-ng'
 end

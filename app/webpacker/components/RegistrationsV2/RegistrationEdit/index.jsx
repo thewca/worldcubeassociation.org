@@ -1,4 +1,5 @@
 import React, { useRef } from 'react';
+import { Sticky } from 'semantic-ui-react';
 import RegistrationEditor from './RegistrationEditor';
 import RegistrationMessage from '../Register/RegistrationMessage';
 import messageReducer from '../reducers/messageReducer';
@@ -9,15 +10,17 @@ import ConfirmProvider from '../../../lib/providers/ConfirmProvider';
 export default function RegistrationEdit({ competitionInfo, user }) {
   const ref = useRef();
   return (
-    <WCAQueryClientProvider>
-      <StoreProvider reducer={messageReducer} initialState={{ message: null }}>
-        <ConfirmProvider>
-          <div ref={ref}>
-            <RegistrationMessage parentRef={ref} />
-          </div>
-          <RegistrationEditor competitionInfo={competitionInfo} competitor={user} />
-        </ConfirmProvider>
-      </StoreProvider>
-    </WCAQueryClientProvider>
+    <div ref={ref}>
+      <WCAQueryClientProvider>
+        <StoreProvider reducer={messageReducer} initialState={{ message: null }}>
+          <ConfirmProvider>
+            <Sticky context={ref}>
+              <RegistrationMessage />
+            </Sticky>
+            <RegistrationEditor competitionInfo={competitionInfo} competitor={user} />
+          </ConfirmProvider>
+        </StoreProvider>
+      </WCAQueryClientProvider>
+    </div>
   );
 }

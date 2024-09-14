@@ -2,62 +2,69 @@ import React, { useState, useEffect } from 'react';
 import {
   Button, Checkbox, Icon, Table,
 } from 'semantic-ui-react';
-import useLoadedData from '../lib/hooks/useLoadedData';
-import Loading from './Requests/Loading';
-import Errored from './Requests/Errored';
-import '../stylesheets/competition_results.scss';
+import useLoadedData from '../../lib/hooks/useLoadedData';
+import Loading from '../Requests/Loading';
+import Errored from '../Requests/Errored';
+import '../../stylesheets/competition_results.scss';
 import EventNavigation from './EventNavigation';
-import ResultRow from './CompetitionResults/ResultRow';
-import ResultRowHeader from './CompetitionResults/ResultRowHeader';
-import { getUrlParams, setUrlParams } from '../lib/utils/wca';
-import {
-  newResultUrl, competitionApiUrl, competitionEventResultsApiUrl,
-} from '../lib/requests/routes.js.erb';
+import { getUrlParams, setUrlParams } from '../../lib/utils/wca';
+import { competitionApiUrl } from '../../lib/requests/routes.js.erb';
 
-function RoundResultsTable({ round, competitionId, adminMode }) {
+function RoundResultsTable({
+  competitionId,
+  round,
+  newEntryUrlFn,
+  DataRowHeader,
+  DataRowBody,
+  adminMode,
+}) {
   return (
     <>
       <h2>{round.name}</h2>
       {adminMode && (
-      <Button positive as="a" href={newResultUrl(competitionId, round.id)} size="tiny">
-        <Icon name="plus" />
-        Add a result to this round
-      </Button>
+        <Button positive as="a" href={newEntryUrlFn(competitionId, round.id)} size="tiny">
+          <Icon name="plus" />
+          Add an entry to this round
+        </Button>
       )}
       <Table striped>
         <Table.Header>
-          <ResultRowHeader />
+          <DataRowHeader />
         </Table.Header>
         <Table.Body>
-          {round.results.map((result, index, results) => (
-            <ResultRow
-              key={result.id}
-              result={result}
-              results={results}
-              index={index}
-              adminMode={adminMode}
-            />
-          ))}
+          <DataRowBody round={round} adminMode={adminMode} />
         </Table.Body>
       </Table>
     </>
   );
 }
 
-function EventResults({ competitionId, eventId, adminMode }) {
+function ResultsView({
+  competitionId,
+  eventId,
+  dataUrlFn,
+  newEntryUrlFn,
+  DataRowHeader,
+  DataRowBody,
+  adminMode,
+}) {
   const { loading, error, data } = useLoadedData(
-    competitionEventResultsApiUrl(competitionId, eventId),
+    dataUrlFn(competitionId, eventId),
   );
 
   if (loading) return <Loading />;
   if (error) return <Errored />;
+
   return (
-    <div className="event-results">
+    <div className="results-data">
       {data.rounds.map((round) => (
         <RoundResultsTable
           key={round.id}
-          round={round}
           competitionId={competitionId}
+          round={round}
+          newEntryUrlFn={newEntryUrlFn}
+          DataRowHeader={DataRowHeader}
+          DataRowBody={DataRowBody}
           adminMode={adminMode}
         />
       ))}
@@ -65,10 +72,19 @@ function EventResults({ competitionId, eventId, adminMode }) {
   );
 }
 
-function CompetitionResults({ competitionId, canAdminResults }) {
+function ViewData({
+  competitionId,
+  canAdminResults,
+  dataUrlFn,
+  newEntryUrlFn,
+  DataRowHeader,
+  DataRowBody,
+}) {
   const { loading, error, data } = useLoadedData(competitionApiUrl(competitionId));
+
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [adminMode, setAdminMode] = useState(false);
+
   useEffect(() => {
     if (data) {
       const params = getUrlParams();
@@ -76,19 +92,22 @@ function CompetitionResults({ competitionId, canAdminResults }) {
       setSelectedEvent(event);
     }
   }, [data]);
+
   useEffect(() => {
     if (selectedEvent) {
       setUrlParams({ event: selectedEvent });
     }
   }, [selectedEvent]);
+
   if (loading || !selectedEvent) return <Loading />;
   if (error) return <Errored />;
+
   return (
     <div className="competition-results">
       <EventNavigation
         eventIds={data.event_ids}
         selected={selectedEvent}
-        onSelect={(eventId) => setSelectedEvent(eventId)}
+        onSelect={setSelectedEvent}
       />
       {canAdminResults && (
         <Checkbox
@@ -102,23 +121,37 @@ function CompetitionResults({ competitionId, canAdminResults }) {
         ? (
           <>
             {data.event_ids.map((eventId) => (
-              <EventResults key={eventId} competitionId={competitionId} eventId={eventId} />))}
+              <ResultsView
+                key={eventId}
+                competitionId={competitionId}
+                eventId={eventId}
+                dataUrlFn={dataUrlFn}
+                newEntryUrlFn={newEntryUrlFn}
+                DataRowHeader={DataRowHeader}
+                DataRowBody={DataRowBody}
+                adminMode={false}
+              />
+            ))}
           </>
         )
         : (
-          <EventResults
+          <ResultsView
             competitionId={competitionId}
             eventId={selectedEvent}
+            dataUrlFn={dataUrlFn}
+            newEntryUrlFn={newEntryUrlFn}
+            DataRowHeader={DataRowHeader}
+            DataRowBody={DataRowBody}
             adminMode={adminMode}
           />
         )}
       <EventNavigation
         eventIds={data.event_ids}
         selected={selectedEvent}
-        onSelect={(eventId) => setSelectedEvent(eventId)}
+        onSelect={setSelectedEvent}
       />
     </div>
   );
 }
 
-export default CompetitionResults;
+export default ViewData;
