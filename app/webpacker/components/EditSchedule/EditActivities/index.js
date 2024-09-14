@@ -56,6 +56,7 @@ import { earliestTimeOfDayWithBuffer } from '../../../lib/utils/activities';
 
 function EditActivities({
   wcifEvents,
+  referenceTime,
   calendarLocale,
 }) {
   const { wcifSchedule } = useStore();
@@ -370,7 +371,7 @@ function EditActivities({
                   <b>
                     {getTimeZoneDropdownLabel(
                       wcifVenue.timezone,
-                      earliestActivity,
+                      earliestActivity || referenceTime,
                       calendarLocale,
                     )}
                   </b>
