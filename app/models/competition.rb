@@ -2499,12 +2499,20 @@ class Competition < ApplicationRecord
     }
   end
 
+  def self.compute_diff(old_form, new_form)
+    compute_diff = HashDiff.left_diff(old_form, new_form)
+
+    compute_diff.reject_values_recursive do |value|
+      value == HashDiff::NO_VALUE
+    end
+  end
+
   def set_form_data(form_data, current_user)
     JSON::Validator.validate!(Competition.form_data_json_schema, form_data)
 
     if self.confirmed? && !current_user.can_admin_competitions?
       current_state_form = self.to_form_data
-      changed_form_data = HashDiff.right_diff(current_state_form, form_data)
+      changed_form_data = Competition.compute_diff(current_state_form, form_data)
 
       # This is a much "stricter" version of the general schema above.
       #    If the Delegate submits fields that they are not allowed to edit,

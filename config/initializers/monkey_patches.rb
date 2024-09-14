@@ -89,6 +89,20 @@ Rails.configuration.to_prepare do
     end
   end
 
+  Hash.class_eval do
+    def reject_values_recursive(&blk)
+      self.transform_values do |value|
+        if value.is_a?(Hash)
+          value.reject_values_recursive(&blk)
+        else
+          value
+        end
+      end.reject do |_key, value|
+        yield value
+      end
+    end
+  end
+
   if Rails.env.test?
     DatabaseCleaner::ActiveRecord::Base.class_eval do
       def self.migration_table_name
