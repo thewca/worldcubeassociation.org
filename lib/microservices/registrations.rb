@@ -60,7 +60,7 @@ module Microservices
                      event_ids: event_ids,
                      comment: comment,
                      competing_status: competing_status,
-                     current_user: current_user }.to_json
+                     current_user: current_user }
       end
       raise I18n.t("registrations.add.errors.already_registered") unless response.success?
       response.body
