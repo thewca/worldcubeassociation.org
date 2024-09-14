@@ -52,6 +52,7 @@ module Microservices
       )
     end
 
+    # rubocop:disable Metrics/ParameterLists
     def self.add_registration(competition_id, user_id, event_ids, comment, competing_status, current_user)
       response = self.registration_connection.post(self.add_registration_path(competition_id)) do |req|
         req.body = { competition_id: competition_id,
@@ -64,6 +65,7 @@ module Microservices
       raise I18n.t("registrations.add.errors.already_registered") unless response.success?
       response.body
     end
+    # rubocop:enable Metrics/ParameterLists
 
     def self.registrations_by_user(user_id, cache: true)
       response = self.registration_connection.get(self.registrations_by_user_path(user_id))
