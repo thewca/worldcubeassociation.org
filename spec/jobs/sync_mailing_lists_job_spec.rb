@@ -115,7 +115,7 @@ RSpec.describe SyncMailingListsJob, type: :job do
 
       expect(GsuiteMailingLists).to receive(:sync_group).with(
         "reports.#{continent.url_id}@worldcubeassociation.org",
-        a_collection_containing_exactly("reports@worldcubeassociation.org", *continent_users.pluck(:email))
+        a_collection_containing_exactly("reports@worldcubeassociation.org", *continent_users.pluck(:email)),
       )
 
       continent.countries.real.each do |country|
@@ -123,7 +123,7 @@ RSpec.describe SyncMailingListsJob, type: :job do
 
         expect(GsuiteMailingLists).to receive(:sync_group).with(
           "reports.#{continent.url_id}.#{country.iso2}@worldcubeassociation.org",
-          a_collection_containing_exactly("reports.#{continent.url_id}@worldcubeassociation.org", *country_users.pluck(:email))
+          a_collection_containing_exactly("reports.#{continent.url_id}@worldcubeassociation.org", *country_users.pluck(:email)),
         )
       end
     end
