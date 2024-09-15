@@ -100,11 +100,11 @@ function loadDateTimeLocale(locale) {
 }
 
 // prepare the pluralizer rules.
-loadTranslationPluralizer(window.i18n, window.wca.currentLocale);
+loadTranslationPluralizer(window.I18n, window.wca.currentLocale);
 
 // store the actual translations.
-loadTranslations(window.i18n, DEFAULT_LOCALE);
-loadTranslations(window.i18n, window.wca.currentLocale);
+loadTranslations(window.I18n, DEFAULT_LOCALE);
+loadTranslations(window.I18n, window.wca.currentLocale);
 
 // load additional locales for third party code.
 loadDateTimeLocale(window.wca.currentLocale);
