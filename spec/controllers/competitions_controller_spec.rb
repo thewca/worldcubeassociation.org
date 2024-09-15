@@ -898,9 +898,9 @@ RSpec.describe CompetitionsController do
       end
 
       it "cannot change extra registration requirements field after competition is confirmed" do
-        comp = FactoryBot.create(:competition, :confirmed, delegates: [delegate, trainee_delegate], extra_registration_requirements: "Extra requirements")
+        comp = FactoryBot.create(:competition, :confirmed, :registration_open, delegates: [delegate, trainee_delegate], extra_registration_requirements: "Extra requirements")
         new_requirements = "New extra requirements"
-        update_params = build_competition_update(competition, registration: { extraRequirements: new_requirements })
+        update_params = build_competition_update(comp, registration: { extraRequirements: new_requirements })
         patch :update, params: update_params, as: :json
         comp.reload
         expect(comp.extra_registration_requirements).to eq "Extra requirements"
@@ -915,7 +915,7 @@ RSpec.describe CompetitionsController do
       end
 
       it "can change general information field even after competition is confirmed" do
-        comp = FactoryBot.create(:competition, :confirmed, delegates: [delegate], information: "Old information")
+        comp = FactoryBot.create(:competition, :confirmed, :registration_open, delegates: [delegate, trainee_delegate], information: "Old information")
         new_information = "New information"
         update_params = build_competition_update(comp, information: new_information)
         patch :update, params: update_params, as: :json

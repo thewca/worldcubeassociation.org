@@ -37,7 +37,8 @@ RSpec.describe "competitions" do
           it "can add competition to an existing Series" do
             expect(competition.confirmed?).to be false
 
-            update_params = build_competition_update(competition, series: { competitionIds: [competition.id, partner_competition.id] })
+            series_update_params = series.to_form_data.merge({ competitionIds: [competition.id, partner_competition.id] })
+            update_params = build_competition_update(competition, series: series_update_params)
             patch competition_path(competition), params: update_params, as: :json
 
             expect(response).to be_successful
@@ -141,7 +142,8 @@ RSpec.describe "competitions" do
           it "can add competition to an existing Series" do
             expect(competition.confirmed?).to be true
 
-            update_params = build_competition_update(competition, series: { competitionIds: [competition.id, partner_competition.id] })
+            series_update_params = series.to_form_data.merge({ competitionIds: [competition.id, partner_competition.id] })
+            update_params = build_competition_update(competition, series: series_update_params)
             patch competition_path(competition), params: update_params, as: :json
 
             expect(response).to be_successful
@@ -246,7 +248,8 @@ RSpec.describe "competitions" do
           it "can add competition to an existing Series" do
             expect(competition.confirmed?).to be false
 
-            update_params = build_competition_update(competition, series: { competitionIds: [competition.id, partner_competition.id] })
+            series_update_params = series.to_form_data.merge({ competitionIds: [competition.id, partner_competition.id] })
+            update_params = build_competition_update(competition, series: series_update_params)
             patch competition_path(competition), params: update_params, as: :json
 
             expect(response).to be_successful
@@ -344,8 +347,8 @@ RSpec.describe "competitions" do
           competition.update!(waiting_list_deadline_date: competition.registration_close + 1.day)
 
           expect(competition.confirmed?).to be true
-
           new_deadline_date = competition.registration_close + 3.days
+
           update_params = build_competition_update(competition, registration: { waitingListDeadlineDate: new_deadline_date.iso8601 })
           patch competition_path(competition), params: update_params, as: :json
 
@@ -355,17 +358,17 @@ RSpec.describe "competitions" do
         end
 
         it 'can set deadlines if not yet past' do
-          competition.update!(waiting_list_deadline_date: Date.tomorrow)
+          competition.update!(waiting_list_deadline_date: competition.registration_close + 1.day)
 
           expect(competition.confirmed?).to be true
-          next_month = Date.today.advance(months: 1)
+          new_deadline_date = competition.registration_close + 3.days
 
-          update_params = build_competition_update(competition, registration: { waitingListDeadlineDate: next_month.iso8601 })
+          update_params = build_competition_update(competition, registration: { waitingListDeadlineDate: new_deadline_date.iso8601 })
           patch competition_path(competition), params: update_params, as: :json
 
           expect(response).to be_successful
 
-          expect(competition.reload.waiting_list_deadline_date).to eq next_month
+          expect(competition.reload.waiting_list_deadline_date).to eq new_deadline_date
         end
 
         it 'can set generic competition information' do
@@ -376,7 +379,7 @@ RSpec.describe "competitions" do
 
           expect(response).to be_successful
 
-          expect(competition.reload.waiting_list_deadline_date).to eq next_month
+          expect(competition.reload.information).to eq "New amazing information"
         end
 
         context "when handling Series competitions" do
