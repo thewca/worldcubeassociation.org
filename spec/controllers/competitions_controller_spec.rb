@@ -218,6 +218,7 @@ RSpec.describe CompetitionsController do
       it 'cannot see unconfirmed nearby competitions' do
         get :nearby_competitions_json, params: my_competition.serializable_hash
         expect(JSON.parse(response.body)).to eq []
+        other_competition.organizers = [organizer]
         other_competition.confirmed = true
         other_competition.save!
         get :nearby_competitions_json, params: my_competition.serializable_hash

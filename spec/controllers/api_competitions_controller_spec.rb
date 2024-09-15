@@ -356,7 +356,7 @@ RSpec.describe Api::V0::CompetitionsController do
           comp_id += 1
           last_registration = FactoryBot.create(:registration, :accepted, competition: competition, user: user)
         end
-        get_wcif_and_compare_persons_to(competition.id, user_competitor_ids + [[competition.delegates.first.id, nil]])
+        get_wcif_and_compare_persons_to(competition.id, user_competitor_ids + [[competition.organizers.first.id, nil], [competition.delegates.first.id, nil]])
 
         # Move last registration to deleted
         last_registration.touch :deleted_at
@@ -364,7 +364,7 @@ RSpec.describe Api::V0::CompetitionsController do
         user = FactoryBot.create(:user)
         last_registration = FactoryBot.create(:registration, :accepted, competition: competition, user: user)
         user_competitor_ids << [user.id, comp_id]
-        get_wcif_and_compare_persons_to(competition.id, user_competitor_ids + [[competition.delegates.first.id, nil]])
+        get_wcif_and_compare_persons_to(competition.id, user_competitor_ids + [[competition.organizers.first.id, nil], [competition.delegates.first.id, nil]])
       end
 
       it 'gets announced and unannounced series competitions ids' do

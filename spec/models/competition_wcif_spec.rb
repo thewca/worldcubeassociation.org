@@ -67,7 +67,7 @@ RSpec.describe "Competition WCIF" do
           "shortName" => "Spectacular 2014",
           "competitionIds" => %w[TestComp2014 PartnerComp2014],
         },
-        "persons" => [delegate.to_wcif(competition), organizer.to_wcif(competition)],
+        "persons" => [organizer.to_wcif(competition), delegate.to_wcif(competition)],
         "events" => [
           {
             "id" => "333",
