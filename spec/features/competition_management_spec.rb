@@ -99,7 +99,7 @@ RSpec.feature "Competition management", js: true, retry: 10 do
     end
 
     scenario "User confirms a competition" do
-      competition = FactoryBot.create(:competition, :future, :with_delegate, :with_valid_schedule)
+      competition = FactoryBot.create(:competition, :future, :with_delegate, :with_organizer, :with_valid_schedule)
       visit edit_competition_path(competition)
       click_button "Confirm"
 
