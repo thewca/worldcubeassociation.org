@@ -5,12 +5,14 @@
     display: flex;
     justify-content: center;
   }
-  .event-results {
+  .results-data {
     .table-cell-solves {
       word-spacing: 0.5em;
+      vertical-align: middle;
     }
     .table-cell-solves-mbf {
       word-spacing: 2em;
+      vertical-align: middle;
     }
     .WR {
       color : $wr-color;
@@ -24,5 +26,8 @@
     .edit-link {
       margin-left: 1em;
     }
+  }
+  .prewrap {
+    white-space: pre-wrap;
   }
 }

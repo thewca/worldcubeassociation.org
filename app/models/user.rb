@@ -24,6 +24,7 @@ class User < ApplicationRecord
   belongs_to :region, class_name: "UserGroup", optional: true
   has_many :roles, class_name: "UserRole"
   has_many :active_roles, -> { active }, class_name: "UserRole"
+  has_many :past_roles, -> { inactive }, class_name: "UserRole"
   has_many :delegate_role_metadata, through: :active_roles, source: :metadata, source_type: "RolesMetadataDelegateRegions"
   has_many :delegate_roles, -> { includes(:group, :metadata) }, through: :delegate_role_metadata, source: :user_role, class_name: "UserRole"
   has_many :delegate_region_groups, through: :delegate_roles, source: :group, class_name: "UserGroup"
@@ -133,7 +134,7 @@ class User < ApplicationRecord
   attr_accessor :sign_up_panel_to_show
 
   ALLOWABLE_GENDERS = [:m, :f, :o].freeze
-  enum gender: (ALLOWABLE_GENDERS.to_h { |g| [g, g.to_s] })
+  enum :gender, (ALLOWABLE_GENDERS.index_with(&:to_s))
   GENDER_LABEL_METHOD = lambda do |g|
     {
       m: I18n.t('enums.user.gender.m'),
@@ -562,6 +563,10 @@ class User < ApplicationRecord
 
   def banned?
     group_member?(UserGroup.banned_competitors.first)
+  end
+
+  def banned_in_past?
+    past_roles.any? { |role| role.group == UserGroup.banned_competitors.first }
   end
 
   def current_ban

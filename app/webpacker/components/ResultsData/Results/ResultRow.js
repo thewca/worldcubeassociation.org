@@ -2,15 +2,15 @@ import React from 'react';
 import { Icon, Table } from 'semantic-ui-react';
 import cn from 'classnames';
 
-import { personUrl, editResultUrl } from '../../lib/requests/routes.js.erb';
-import CountryFlag from '../wca/CountryFlag';
+import { personUrl, editResultUrl } from '../../../lib/requests/routes.js.erb';
+import CountryFlag from '../../wca/CountryFlag';
 import {
   formatAttemptResult,
   formatAttemptsForResult,
-} from '../../lib/wca-live/attempts';
-import { getRecordClass } from '../../lib/helpers/competition-results';
+} from '../../../lib/wca-live/attempts';
+import { getRecordClass } from '../../../lib/helpers/competition-results';
 
-import '../../stylesheets/competition_results.scss';
+import '../../../stylesheets/competition_results.scss';
 
 function ResultRow({
   result, index, results, adminMode,
@@ -20,9 +20,9 @@ function ResultRow({
       <Table.Cell className={cn({ 'text-muted': index > 0 && results[index - 1].pos === result.pos })}>
         {result.pos}
         {adminMode && (
-        <a href={editResultUrl(result.id)} aria-label="Edit" role="menuitem" className="edit-link">
-          <Icon name="pencil" />
-        </a>
+          <a href={editResultUrl(result.id)} aria-label="Edit" role="menuitem" className="edit-link">
+            <Icon name="pencil" />
+          </a>
         )}
       </Table.Cell>
       <Table.Cell>

@@ -486,10 +486,10 @@ sv:
         wrc_feedback_requested: Jag vill ha feedback från WRC om några av incidenterna ovan.
         #original_hash: 0c7191d
         wrc_incidents: Incidenter som behöver feedback från WRC
-        #original_hash: 5a92b25
-        wdc_feedback_requested: Jag vill ha feedback från WDC om några av incidenterna ovan.
-        #original_hash: 06a0568
-        wdc_incidents: Incidenter som behöver feedback från WDC
+        #original_hash: 1a54a79
+        wic_feedback_requested: Jag vill ha feedback från WIC på några av incidenterna ovan.
+        #original_hash: 000153c
+        wic_incidents: Incidenter som kräver feedback från WIC
         #original_hash: d7020f4
         remarks: Kommentarer
       person:
@@ -818,11 +818,11 @@ sv:
           Lista över nummer på alla incidenter som du vill ha feedback från WRC
           på.
         #original_hash: da39a3e
-        wdc_feedback_requested: ''
-        #original_hash: 38a95e5
-        wdc_incidents: >-
-          Lista över nummer på alla incidenter som du vill ha feedback från WDC
-          på.
+        wic_feedback_requested: ''
+        #original_hash: 0aca3b0
+        wic_incidents: >-
+          Lista med siffror som hänvisar till eventuella incidenter som du vill
+          ha WIC:s feedback på.
         #original_hash: f30abdc
         remarks: >-
           Presentera andra detaljer som du vill dela (t.ex.
@@ -1364,10 +1364,8 @@ sv:
         wct: WCA Communication Team
         #original_hash: 2b81984
         wcat: WCA Competition Announcement Team
-        #original_hash: c97077a
-        wdc: WCA Disciplinary Committee
-        #original_hash: 83bd1d0
-        wec: WCA Ethics Committee
+        #original_hash: 94c2e42
+        wic: WCA Integrity Committee
         #original_hash: d1dbb86
         weat: WCA Executive Assistants Team
         #original_hash: 9cb13de
@@ -1384,8 +1382,8 @@ sv:
         wst: WCA Software Team
         #original_hash: 58765c7
         wsot: WCA Sports Organization Team
-        #original_hash: 1ce7604
-        wac: WCA Advisory Council
+        #original_hash: 78949a7
+        wapc: WCA Appeals Committee
       groups_description:
         #original_hash: 5b1aade
         wat: >-
@@ -1409,21 +1407,13 @@ sv:
           inskickande av tävlingar, från dokument som WCA Competition
           Requirements Policy. WCAT är INTE ansvarig för arrangering och
           delegering av enskilda tävlingar.
-        #original_hash: 41eb6fd
-        wdc: >-
-          WCA Disciplinary Committee (WDC) utför oberoende utredningar avseende
-          registrerade speedcubers och incidenter under WCA-tävlingar eller på
-          officiella WCA-plattformar online. Dessa incidenter är påstådda
-          överträdelser av WCA:s anda, uppförandekod och/eller regler.
-        #original_hash: 6cdac80
-        wec: >-
-          Kommitténs roll är att säkerställa att alla procedurer som följs av
-          WCA-personal följer etikkoden, och att utföra oberoende utredningar om
-          någon av dessa medlemmars beteende inte är förenligt med koden. WEC är
-          en ombudsman för registrerade speedcubers som kan rapportera problem
-          och begära en utredning. Denna kommitté fungerar också som
-          överklagandenämnd om någon inblandad inte håller med om ett beslut som
-          fattats av WCA Disciplinary Committee.
+        #original_hash: 5007698
+        wic: >-
+          WCA Integrity Committee (WIC) utför oberoende utredningar gällande
+          medlemmar i WCA:s community och incidenter under WCA:s tävlingar eller
+          på officiella WCA-plattformar online. Dessa incidenter är påstådda
+          överträdelser av WCA:s Spirit, uppförandekod, etikkod och/eller
+          regler.
         #original_hash: 889dd90
         weat: >-
           Denna grupp ansvarar för att utföra de administrativa uppgifter som
@@ -1467,12 +1457,13 @@ sv:
         wsot: >-
           Denna grupp har till uppgift att övervaka och stödja erkännandet av
           WCA som en internationell idrottsorganisation.
-        #original_hash: 73d8df4
-        wac: >-
-          WAC ansvarar för att upprätthålla feedback och kommunikation mellan
-          WCA-communityt och WCA-personalen. De underhåller WCA-forumen och
-          sammanfattar undersökningar och försöker öka räckvidden i det globala
-          communityt.
+        #original_hash: 9f45bfa
+        wapc: >-
+          WCA Appeals Committee (WAC) är ansvarig för att granska och lösa
+          överklaganden av beslut som fattats av annan WCA-personal. WAC
+          tillhandahåller en oberoende och opartisk granskningsprocess för att
+          säkerställa att besluten är rättvisa, rimliga, och i enlighet med
+          WCA:s policyer och regler.
     contacts:
       #original_hash: 4ef2aad
       title: Kontaktformulär
@@ -2063,6 +2054,10 @@ sv:
         status: Status
         #original_hash: 8970f0e
         locale: Språk
+        #original_hash: 5d99dee
+        group_name: Team-/Kommitténamn
+        #original_hash: 55e4f86
+        delegated_competitions_count: Antal delegerade tävlingar
   user_groups:
     group_types:
       #original_hash: abd2828
@@ -2090,11 +2085,11 @@ sv:
         zero: 'Du måste anmäla dig till %{count} grenar.'
         one: Du måste anmäla dig till exakt 1 gren.
         other: 'Du måste anmäla dig till mellan 1 och %{count} grenar.'
-      #original_hash: e78eec3
+      #original_hash: 87f7c12
       banned_html: >-
         Du är avstängd. Om du tror att detta är ett fel, kontakta <a
-        href='mailto:disciplinary@worldcubeassociation.org'
-        target='_blank'>WDC</a>.
+        href='mailto:integrity@worldcubeassociation.org'
+        target='_blank'>WIC</a>.
       #original_hash: 8d07e7f
       undelete_banned: är en avstängd tävlande och kan inte återställas
       #original_hash: 3de7c86
@@ -3574,6 +3569,13 @@ sv:
           zero: '%{count} platser kvar'
           one: '%{count} plats kvar'
           other: '%{count} platser kvar'
+        payment:
+          #original_hash: d6fbc7a
+          refunded_status: Återbetalad
+          #original_hash: 41248b1
+          initialized: 'Betalningsprocessen startades den %{date}, men avslutades inte.'
+          #original_hash: 3a16c0d
+          refunded: 'Betalningen återbetalades den %{date}.'
       bookmark:
         #original_hash: 7952a5c
         unbookmark: Du har tagit bort ditt bokmärke.
@@ -3629,6 +3631,8 @@ sv:
         until: 'Du kan uppdatera din anmälan fram till %{date}'
         #original_hash: fc8bc84
         passed: Du kan inte längre uppdatera din anmälan
+        #original_hash: 8cc047a
+        approval: Godkännande
         #original_hash: 05b9f17
         view_registration: Visa anmälan
         #original_hash: 3c8d8b7
@@ -3677,10 +3681,6 @@ sv:
         '-2003': Du har inte behörighet att slutföra denna åtgärd
         #original_hash: cb4093a
         '-3000': Anmälan existerar inte
-        #original_hash: 0df821f
-        '-3001': WCA-betalning är inte aktiverat för den här tävlingen
-        #original_hash: 092da51
-        '-3002': Du måste slutföra din anmälan innan du kan betala
         #original_hash: bc53fb6
         '-4000': Anropet innehåller ogiltig data.
         #original_hash: 35fddf4
@@ -3705,6 +3705,10 @@ sv:
         '-4010': Platsen på väntelistan är inte giltig
         #original_hash: e489908
         '-4011': Du kan endast acceptera den första personen på väntelistan
+        #original_hash: 0df821f
+        '-6001': WCA-betalning är inte aktiverat för den här tävlingen
+        #original_hash: 092da51
+        '-6002': Du måste slutföra din anmälan innan du kan betala
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-
@@ -4742,9 +4746,9 @@ sv:
         överse tävlingar på uppdrag av WCA. En WCA-delegat är ansvarig för att
         se till att alla WCA-tävlingar hålls enligt WCA:s verksamhetsmål, anda,
         och regler. WCA skiljer mellan <strong>senior-delegater</strong>,
-        <strong>regionala delegater</strong>,<strong>fulltändiga
+        <strong>regionala delegater</strong>, <strong>fulltsändiga
         delegater</strong>, <strong>junior-delegater</strong>, och
-        <strong>trainee-delegater</strong>%{see_link}.</p> <p> Utöver en
+        <strong>trainee-delegater</strong> %{see_link}.</p> <p>Utöver en
         WCA-delegats uppgifter är en renior-delegat eller regional delegat
         ansvarig för att hantera WCA-delegaterna i deras område och kan också
         kontaktas av communityt för regionala frågor.</p> <p> Nya delegater

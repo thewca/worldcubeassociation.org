@@ -3589,10 +3589,6 @@ id:
         '-2003': Anda tidak memiliki izin untuk menyelesaikan tindakan ini
         #original_hash: cb4093a
         '-3000': Pendaftaran tidak ditemukan
-        #original_hash: 0df821f
-        '-3001': Pembayaran WCA tidak diaktifkan untuk kompetisi ini
-        #original_hash: 092da51
-        '-3002': Anda harus menyelesaikan pendaftaran Anda sebelum Anda dapat membayar
         #original_hash: bc53fb6
         '-4000': Permintaan ini berisi data yang tidak valid
         #original_hash: 35fddf4
@@ -3611,6 +3607,10 @@ id:
         '-4007': Status pendaftaran yang dibuat tidak valid
         #original_hash: 020234c
         '-4008': Pendaftaran telah ditutup
+        #original_hash: 0df821f
+        '-6001': Pembayaran WCA tidak diaktifkan untuk kompetisi ini
+        #original_hash: 092da51
+        '-6002': Anda harus menyelesaikan pendaftaran Anda sebelum Anda dapat membayar
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-

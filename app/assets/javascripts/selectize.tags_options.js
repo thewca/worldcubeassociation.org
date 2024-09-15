@@ -11,4 +11,4 @@ window.wca.defaultSelectizeOptions = function(select_options) {
       };
     },
   };
-}
+};

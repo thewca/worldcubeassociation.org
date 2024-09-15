@@ -195,7 +195,7 @@ class CompetitionsController < ApplicationController
       @competitions = @competitions.select { |competition| competition.pending_results_or_report(days) }
     end
 
-    @enable_react = params[:beta]&.to_s == '0xDbOverload'
+    @enable_react = params[:legacy]&.to_s == 'off'
 
     respond_to do |format|
       format.html {}

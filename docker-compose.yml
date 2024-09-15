@@ -1,13 +1,10 @@
-version: "3.8"
-
 x-app: &app
   build:
     dockerfile: Dockerfile.dev
+    context: .
   working_dir: /app
   volumes:
     - .:/app
-    - gems_volume:/usr/local/bundle
-    - yarn_volume:/app/node_modules
   networks:
     - wca-main
 
@@ -29,11 +26,9 @@ services:
     # Next, load the database if it does not exist yet
     # Start the server and bind to 0.0.0.0 (vs 127.0.0.1) so Docker's port mappings work correctly
     command: >
-      bash -c 'bundle install && corepack install && yarn install &&
+      bash -c 'corepack install &&
       rm -f .db-inited &&
-      if ! [[ "`mysqlshow --user=root --host=wca_db wca_development`" =~ "Tables" ]] ;
-        then echo "Populating development db, this will take a while" && bin/rake db:reset ;
-      fi &&
+      bin/setup &&
       touch .db-inited &&
       bin/rails server -b 0.0.0.0'
     healthcheck:
@@ -57,6 +52,7 @@ services:
     environment:
       DATABASE_HOST: wca_db
       SHAKAPACKER_DEV_SERVER_HOST: 0.0.0.0
+      NODE_ENV: development
     command: >
       bash -c 'bundle install && yarn install &&
       bin/shakapacker-dev-server'
@@ -136,10 +132,6 @@ services:
 
 volumes:
   wca_db_volume:
-    driver: local
-  gems_volume:
-    driver: local
-  yarn_volume:
     driver: local
   cache_volume:
     driver: local

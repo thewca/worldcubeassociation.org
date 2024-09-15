@@ -87,11 +87,11 @@ class Competition < ApplicationRecord
   scope :pending_posting, -> { where.not(results_submitted_at: nil).where(results_posted_at: nil) }
   scope :pending_report_or_results_posting, -> { includes(:delegate_report).where(delegate_report: { posted_at: nil }).or(where(results_posted_at: nil)) }
 
-  enum guest_entry_status: {
+  enum :guest_entry_status, {
     unclear: 0,
     free: 1,
     restricted: 2,
-  }, _prefix: true
+  }, prefix: true
 
   CLONEABLE_ATTRIBUTES = %w(
     cityName
@@ -986,7 +986,7 @@ class Competition < ApplicationRecord
 
   def any_registrations?
     if uses_new_registration_service?
-      self.microservice_registrations.any?
+      Microservices::Registrations.competitor_count_by_competition(id) > 0
     else
       self.registrations.any?
     end
@@ -1859,6 +1859,15 @@ class Competition < ApplicationRecord
 
   def competition_series_ids
     competition_series&.competition_ids&.split(',') || []
+  end
+
+  def qualification_wcif
+    return {} unless uses_qualification?
+    competition_events
+      .where.not(qualification: nil)
+      .index_by(&:event_id)
+      .transform_values(&:qualification)
+      .transform_values(&:to_wcif)
   end
 
   def persons_wcif(authorized: false)

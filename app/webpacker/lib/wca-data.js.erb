@@ -142,11 +142,7 @@ function extendRoundTypes(rawFormat) {
 
 // ----- TIMEZONES -----
 
-export const timezoneData = <%= Country::ALL_TIMEZONES_MAPPING.to_json.html_safe %>;
-
-export function friendlyTimezoneName(id) {
-  return _.findKey(timezoneData, { id }) || id;
-}
+export const backendTimezones = <%= Country::SUPPORTED_TIMEZONES.to_json.html_safe %>;
 
 // ----- REGIONAL MARKERS -----
 
