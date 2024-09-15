@@ -81,19 +81,30 @@ export function withLocale(overrideLocale, fn) {
 function loadTranslations(i18n, locale) {
   const translations = i18nFileContext(`./${locale}.json`);
   i18n.store(translations);
+}
 
+function loadTranslationPluralizer(i18n, locale) {
+  const baseLocale = locale.split('-')[0];
+  const isoPluralizer = Pluralizers[baseLocale];
+
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const i18nPluralizer = useMakePlural({ pluralizer: isoPluralizer });
+  i18n.pluralization.register(locale, i18nPluralizer);
+}
+
+function loadDateTimeLocale(locale) {
   const dateFnsLocale = Locales[locale];
 
   registerLocale(locale, dateFnsLocale);
   setDefaultLocale(locale);
-
-  const baseLocale = locale.split('-')[0];
-  const pluralizer = Pluralizers[baseLocale];
-
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  i18n.pluralization.register(locale, useMakePlural({ pluralizer }));
 }
+
+// prepare the pluralizer rules.
+loadTranslationPluralizer(window.I18n, window.wca.currentLocale);
 
 // store the actual translations.
 loadTranslations(window.I18n, DEFAULT_LOCALE);
 loadTranslations(window.I18n, window.wca.currentLocale);
+
+// load additional locales for third party code.
+loadDateTimeLocale(window.wca.currentLocale);

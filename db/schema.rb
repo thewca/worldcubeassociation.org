@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_08_11_100821) do
+ActiveRecord::Schema[7.1].define(version: 2024_09_13_052148) do
   create_table "Competitions", id: { type: :string, limit: 32, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", limit: 50, default: "", null: false
     t.string "cityName", limit: 50, default: "", null: false
@@ -677,6 +677,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_11_100821) do
     t.datetime "run_end", precision: nil
     t.boolean "last_run_successful", default: false, null: false
     t.text "last_error_message"
+    t.datetime "successful_run_start", precision: nil
     t.datetime "enqueued_at", precision: nil
     t.integer "recently_rejected", default: 0, null: false
     t.integer "recently_errored", default: 0, null: false

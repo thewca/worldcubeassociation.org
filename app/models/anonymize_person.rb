@@ -47,6 +47,10 @@ class AnonymizePerson
       return { error: "invalid form" }
     end
 
+    if account&.banned?
+      return { error: "Error anonymizing: This person is currently banned and cannot be anonymized." }
+    end
+
     new_wca_id = generate_new_wca_id
     unless new_wca_id
       wca_id_year = person_wca_id[0..3]
