@@ -344,7 +344,11 @@ RSpec.describe "competitions" do
         end
 
         it 'cannot set deadlines if already past' do
-          competition.update!(waiting_list_deadline_date: competition.registration_close + 1.day)
+          # In order to allow any deadlines to be in the past, we must also push the registration to the past.
+          competition.update!(registration_open: 21.days.ago, registration_close: 14.days.ago)
+
+          original_deadline_date = competition.registration_close + 1.day
+          competition.update!(waiting_list_deadline_date: original_deadline_date)
 
           expect(competition.confirmed?).to be true
           new_deadline_date = competition.registration_close + 3.days
@@ -352,9 +356,9 @@ RSpec.describe "competitions" do
           update_params = build_competition_update(competition, registration: { waitingListDeadlineDate: new_deadline_date.iso8601 })
           patch competition_path(competition), params: update_params, as: :json
 
-          expect(response).to be_successful
+          expect(response).to have_http_status(:unprocessable_entity)
 
-          expect(competition.reload.waiting_list_deadline_date).to eq Date.yesterday
+          expect(competition.reload.waiting_list_deadline_date).to eq original_deadline_date
         end
 
         it 'can set deadlines if not yet past' do
