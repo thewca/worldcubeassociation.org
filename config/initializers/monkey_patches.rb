@@ -101,6 +101,18 @@ Rails.configuration.to_prepare do
         yield value
       end
     end
+
+    def each_recursive(*prefixes, &blk)
+      self.each do |key, value|
+        next_prefixes = prefixes + [key]
+
+        if value.is_a?(Hash)
+          value.each_recursive(*next_prefixes, &blk)
+        else
+          yield key, value, *prefixes
+        end
+      end
+    end
   end
 
   if Rails.env.test?

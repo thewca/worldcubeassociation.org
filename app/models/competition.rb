@@ -2518,6 +2518,20 @@ class Competition < ApplicationRecord
       #    If the Delegate submits fields that they are not allowed to edit,
       #    then these fields will not be included in the schema and validation will fail.
       JSON::Validator.validate!(Competition.delegate_edits_json_schema, changed_form_data)
+
+      changed_form_data.each_recursive do |key, value, *prefixes|
+        joined_key = (prefixes + [key]).join('.')
+
+        if %w[registration.closingDateTime registration.waitingListDeadlineDate registration.eventChangeDeadlineDate].include?(joined_key)
+          existing_value = current_state_form.dig(*prefixes, key)
+
+          if existing_value.present?
+            date_model = DateTime.parse(existing_value).utc
+
+            raise WcaExceptions::BadApiParameter.new("You're only allowed to change dates for deadlines that have not yet passed. #{joined_key} with value #{value} is not in the past.") unless date_model > DateTime.now.utc
+          end
+        end
+      end
     end
 
     ActiveRecord::Base.transaction do
