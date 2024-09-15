@@ -19,12 +19,13 @@ RSpec.describe SyncMailingListsJob, type: :job do
     americas_senior_delegate = FactoryBot.create :senior_delegate_role, group: americas_region
 
     # Africa delegates
+    reports_region_sample = Country.c_find!('Zimbabwe')
     africa_delegate_1 = FactoryBot.create :delegate_role, group: africa_region
     africa_delegate_1.user.update!(receive_delegate_reports: true)
     africa_delegate_2 = FactoryBot.create :delegate_role, group: africa_region
-    africa_delegate_2.user.update!(receive_delegate_reports: true, delegate_reports_region: '_Africa')
+    africa_delegate_2.user.update!(receive_delegate_reports: true, delegate_reports_region: reports_region_sample.continent)
     africa_delegate_3 = FactoryBot.create :junior_delegate_role, group: africa_region
-    africa_delegate_3.user.update!(receive_delegate_reports: true, delegate_reports_region: 'Zimbabwe')
+    africa_delegate_3.user.update!(receive_delegate_reports: true, delegate_reports_region: reports_region_sample)
     africa_delegate_4 = FactoryBot.create :trainee_delegate_role, group: africa_region
 
     # Asia delegates
@@ -111,7 +112,7 @@ RSpec.describe SyncMailingListsJob, type: :job do
     )
 
     Continent.real.each do |continent|
-      continent_users = continent.id == '_Africa' ? [africa_delegate_2.user] : []
+      continent_users = continent.id == reports_region_sample.continent_id ? [africa_delegate_2.user] : []
 
       expect(GsuiteMailingLists).to receive(:sync_group).with(
         "reports.#{continent.url_id}@worldcubeassociation.org",
@@ -119,7 +120,7 @@ RSpec.describe SyncMailingListsJob, type: :job do
       )
 
       continent.countries.real.each do |country|
-        country_users = country.id == 'Zimbabwe' ? [africa_delegate_3.user] : []
+        country_users = country.id == reports_region_sample.id ? [africa_delegate_3.user] : []
 
         expect(GsuiteMailingLists).to receive(:sync_group).with(
           "reports.#{continent.url_id}.#{country.iso2}@worldcubeassociation.org",

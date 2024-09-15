@@ -53,6 +53,7 @@ class User < ApplicationRecord
   has_many :ranksSingle, through: :person
   has_many :ranksAverage, through: :person
   has_one :wfc_dues_redirect, as: :redirect_source
+  belongs_to :delegate_reports_region, polymorphic: true, optional: true
 
   scope :confirmed_email, -> { where.not(confirmed_at: nil) }
 
