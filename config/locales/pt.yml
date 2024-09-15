@@ -2071,6 +2071,10 @@ pt:
         status: Estado
         #original_hash: 8970f0e
         locale: Locale
+        #original_hash: 5d99dee
+        group_name: Nome da Equipa/Comité
+        #original_hash: 55e4f86
+        delegated_competitions_count: Número de Competições como Delegado
   user_groups:
     group_types:
       #original_hash: abd2828
@@ -2226,7 +2230,7 @@ pt:
           missing_info: Não submeteu todos os detalhes solicitados
           #original_hash: a700652
           incomplete: >-
-            Não cumpriu os critérios de registro (por exemplo, pagamento de
+            Não cumpriu os critérios de registo (por exemplo, pagamento de
             inscrição adiantado ou tempos mínimos de qualificação)
           #original_hash: 1e225f0
           registrations_full: >-
@@ -3622,6 +3626,25 @@ pt:
           zero: Sem vagas disponíveis
           one: '%{count} vaga disponível'
           other: '%{count} vagas disponíveis'
+        cancelled:
+          #original_hash: e9c5a55
+          title: Registos cancelados
+          #original_hash: bb5b570
+          information: Competidores cancelados podem registar-se novamente.
+        rejected:
+          #original_hash: 199b7c5
+          title: Registos rejeitados
+          #original_hash: 3fd2e0c
+          information: Competidores rejeitados não se podem registar novamente.
+        payment:
+          #original_hash: d6fbc7a
+          refunded_status: Reembolsado
+          #original_hash: 41248b1
+          initialized: >-
+            O processo de pagamento foi iniciado em %{date}, mas não foi
+            concluído.
+          #original_hash: 3a16c0d
+          refunded: 'Pagamento foi reembolsado em %{date}.'
       bookmark:
         #original_hash: 7952a5c
         unbookmark: Removeu o marcador
@@ -3656,6 +3679,10 @@ pt:
         move_waiting: Mover para Lista de Espera
         #original_hash: 284b24f
         cancel: Cancelar Registo
+        #original_hash: df40450
+        reject: Rejeitar Registo
+        #original_hash: 43dc853
+        amount: Montante
         #original_hash: 67b3c7d
         too_many: >-
           Aceitar todos estes registos ultrapassaria o limite de competidores
@@ -3690,6 +3717,8 @@ pt:
           pending: O seu registo está pendente de aprovação pelos organizadores.
           #original_hash: dcc4906
           cancelled: O seu registo foi eliminado.
+          #original_hash: 92dab83
+          rejected: O seu registo foi rejeitado.
           #original_hash: a02390c
           waiting_list: 'Está em Lista de Espera na posição %{waiting_list_position}.'
         #original_hash: 2d9f36c
@@ -3715,6 +3744,10 @@ pt:
         '-2': 'Autenticação expirou, atualize a página'
         #original_hash: 2d63156
         '-3': 'Autenticação em falta, por favor autentique-se'
+        #original_hash: e631d99
+        '-4': >-
+          O serviço de registo encontrou um erro interno. Se este problema
+          persistir, contacte o WST
         #original_hash: e0b69a9
         '-1000': Competição não existe
         #original_hash: 2aa4aa1
@@ -3727,12 +3760,14 @@ pt:
         '-2002': O seu perfil está incompleto
         #original_hash: 4dd79f2
         '-2003': Não tem permissões para completar esta ação
+        #original_hash: 374e1c7
+        '-2004': >-
+          Não está autorizado a registar-se, pois os organizadores rejeitaram o
+          seu registo. Entre em contacto com eles se achar que houve um erro.
         #original_hash: cb4093a
         '-3000': Registo não existe
-        #original_hash: 0df821f
-        '-3001': Pagamento WCA não está ativado para esta competição
-        #original_hash: 092da51
-        '-3002': Precisa de finalizar o seu registo antes de poder pagar
+        #original_hash: 9bbefa9
+        '-3001': Já se registou para outra Competição na série
         #original_hash: bc53fb6
         '-4000': O Pedido contém dados inválidos
         #original_hash: 35fddf4
@@ -3757,6 +3792,12 @@ pt:
         '-4010': A posição na lista de espera não é válida
         #original_hash: e489908
         '-4011': Só pode aceitar a primeira pessoa da lista de espera
+        #original_hash: 8d089d6
+        '-4012': Não está qualificado para competir nos eventos selecionados
+        #original_hash: 0df821f
+        '-6001': Pagamento WCA não está ativado para esta competição
+        #original_hash: 092da51
+        '-6002': Precisa de terminar a sua inscrição antes de poder pagar
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-
@@ -4419,7 +4460,7 @@ pt:
         deve-se a uma mudança de região. Resultados da região anterior não são
         levados em conta para o ranking da região atual.
       #original_hash: a91508f
-      championship_podiums: Pódios em Competições
+      championship_podiums: Pódios em Campeonatos
       championship_podium_levels:
         #original_hash: 3746f3b
         world: Pódios em Campeonatos do Mundo

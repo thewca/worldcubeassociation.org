@@ -17,31 +17,18 @@ jobs:
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
-      - name: Build and Push Sidekiq image
-        uses: docker/build-push-action@v6
+      - name: Get the SHA of the current branch/fork
+        shell: bash
+        run: |
+          echo "SHORT_SHA=$(git rev-parse --short HEAD)" >> "$GITHUB_ENV"
+      - name: Build staging images
+        uses: ./.github/actions/build-environment
         with:
-          push: true
-          target: sidekiq
-          tags: |
-            ${{ steps.login-ecr.outputs.registry }}/wca-on-rails:sidekiq-staging
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-          build-args: |
-            BUILD_TAG=${{ github.sha }}
-            WCA_LIVE_SITE=false
-      - name: Build and push Staging Image
-        uses: docker/build-push-action@v6
-        with:
-          push: true
-          target: monolith
-          tags: |
-            ${{ steps.login-ecr.outputs.registry }}/wca-on-rails:staging
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-          build-args: |
-            BUILD_TAG=${{ github.sha }}
-            WCA_LIVE_SITE=false
-        # There is no pipeline for staging so we manually force to update the image
+          environment: staging
+          build_tag: ${{ env.SHORT_SHA }}
+          registry: ${{ steps.login-ecr.outputs.registry }}/wca-on-rails
       - name: Deploy staging
         run: |
           aws ecs update-service --cluster wca-on-rails --service wca-on-rails-staging --force-new-deployment
+          aws ecs update-service --cluster wca-on-rails --service wca-on-rails-staging-API --force-new-deployment
+          aws ecs update-service --cluster wca-on-rails --service wca-on-rails-staging-auxiliary-services --force-new-deployment

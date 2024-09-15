@@ -50,12 +50,16 @@ const shouldShowCompleted = (isRegistered, hasPaid, isAccepted, key, index) => {
   }
 };
 
-const shouldBeDisabled = (hasPaid, key, activeIndex, index, competitionInfo) => {
+const shouldBeDisabled = (hasPaid, key, activeIndex, index, competitionInfo, isRejected) => {
   const hasRegistrationEditDeadlinePassed = hasPassed(
     competitionInfo.event_change_deadline_date ?? competitionInfo.start_date,
   );
   const editsAllowed = competitionInfo.allow_registration_edits
     && !hasRegistrationEditDeadlinePassed;
+
+  if (isRejected) {
+    return true;
+  }
 
   if (key === paymentStepConfig.key) {
     return !hasPaid && index > activeIndex;
@@ -76,9 +80,11 @@ export default function StepPanel({
   refetchRegistration,
   stripePublishableKey,
   connectedAccountId,
+  qualifications,
 }) {
   const isRegistered = Boolean(registration) && registration.competing.registration_status !== 'cancelled';
   const isAccepted = isRegistered && registration.competing.registration_status === 'accepted';
+  const isRejected = isRegistered && registration.competing.registration_status === 'rejected';
   const hasPaid = registration?.payment.payment_status === 'succeeded';
   const registrationFinished = hasPaid || (isRegistered && !competitionInfo['using_payment_integrations?']);
 
@@ -96,7 +102,7 @@ export default function StepPanel({
 
   const [activeIndex, setActiveIndex] = useState(() => {
     // Don't show payment panel if a user was accepted (for people with waived payment)
-    if (registrationFinished || isAccepted) {
+    if (registrationFinished || isAccepted || isRejected) {
       return steps.findIndex(
         (step) => step === (registrationOverviewConfig),
       );
@@ -128,6 +134,7 @@ export default function StepPanel({
               activeIndex,
               index,
               competitionInfo,
+              isRejected,
             )}
             onClick={() => setActiveIndex(index)}
           >
@@ -146,6 +153,7 @@ export default function StepPanel({
         user={user}
         stripePublishableKey={stripePublishableKey}
         connectedAccountId={connectedAccountId}
+        qualifications={qualifications}
         nextStep={
           (overwrites = {}) => setActiveIndex((oldActiveIndex) => {
             if (overwrites?.refresh) {

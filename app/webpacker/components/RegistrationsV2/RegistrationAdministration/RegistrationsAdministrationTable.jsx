@@ -3,7 +3,6 @@ import {
 } from 'semantic-ui-react';
 import React from 'react';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
-import _ from 'lodash';
 import i18n from '../../../lib/i18n';
 import TableHeader from './AdministrationTableHeader';
 import TableRow from './AdministrationTableRow';

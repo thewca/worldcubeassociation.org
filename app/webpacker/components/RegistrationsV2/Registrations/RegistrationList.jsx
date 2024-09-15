@@ -28,7 +28,7 @@ function FooterContent({
   if (!dataWithUser || !registrations) return null;
 
   const newcomerCount = dataWithUser.filter(
-    (reg) => reg.user.wca_id === undefined,
+    (reg) => !reg.user.wca_id,
   ).length;
 
   const countryCount = new Set(
