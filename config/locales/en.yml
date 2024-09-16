@@ -206,6 +206,17 @@ en:
     deadline:
       description: "Qualification Deadline"
       by_date: "by %{date}"
+  #context: other activities which occur in the schedule
+  activity:
+    registration: "On-site registration"
+    checkin: "Check-in"
+    tutorial: "Tutorial for new competitors"
+    multi: "Cube submission for 3x3x3 Multi-Blind"
+    breakfast: "Breakfast"
+    lunch: "Lunch"
+    dinner: "Dinner"
+    awards: "Awards"
+    misc: "Other"
   #context: Common word used in multiple places on the website
   common:
     world: "World"
