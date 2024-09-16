@@ -79,7 +79,7 @@ function VenuePanel({
   //   - country_zone_a, country_zone_b, [...], other_tz_a, other_tz_b, [...]
   const timezoneOptions = useMemo(() => {
     // Stuff that is recommended based on the country list
-    const competitionZoneIds = _.uniq(Object.values(countryZones));
+    const competitionZoneIds = _.uniq(countryZones);
     const sortedCompetitionZones = sortByOffset(competitionZoneIds, referenceTime);
 
     // Stuff that is listed in our `backendTimezones` list but not in the preferred country list
