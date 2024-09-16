@@ -1893,6 +1893,7 @@ en:
       must_contain_event: "must contain at least one event for this competition"
       schedule_must_match_rounds: "must have at least one round, and all rounds must be included in the schedule."
       must_contain_delegate: "must contain at least one WCA Delegate"
+      must_contain_organizer: "must contain at least one organizer"
       not_all_delegates: "are not all Delegates"
       registration_close_after_open: "registration close must be after registration open"
       registration_already_closed: "registration must not already be closed."
