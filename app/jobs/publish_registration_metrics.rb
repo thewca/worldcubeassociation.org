@@ -12,17 +12,17 @@ class PublishRegistrationMetrics < WcaCronjob
   end
 
   def record_next_60_minutes_bookmarks
-    count = Competition.where('registration_open between ? and ?', Time.now.utc, 60.minutes.from_now).sum(&:number_of_bookmarks)
+    count = Competition.where(registration_open: Time.now.utc..60.minutes.from_now).sum(&:number_of_bookmarks)
     ::NewRelic::Agent.record_metric('Custom/Registrations/next60Minutes-Bookmarks', count)
   end
 
   def record_next_60_minutes_openings
-    count = Competition.where('registration_open between ? and ?', Time.now.utc, 60.minutes.from_now).count
+    count = Competition.where(registration_open: Time.now.utc..60.minutes.from_now).count
     ::NewRelic::Agent.record_metric('Custom/Registrations/next60Minutes-registration-openings', count)
   end
 
   def record_next_60_minutes_competitor_limits
-    total_limit = Competition.where('registration_open between ? and ?', Time.now.utc, 60.minutes.from_now).sum(:competitor_limit)
+    total_limit = Competition.where(registration_open: Time.now.utc..60.minutes.from_now).sum(:competitor_limit)
     ::NewRelic::Agent.record_metric('Custom/Registrations/next60Minutes-limit', total_limit)
   end
 
