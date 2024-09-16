@@ -242,4 +242,4 @@ ThreadSafety/ClassAndModuleAttributes:
   Exclude:
     - 'app/models/concerns/cachable.rb'
     - 'app/models/concerns/localized_sortable.rb'
-    - 'app/models/concerns/regulation.rb'
+    - 'app/models/regulation.rb'
