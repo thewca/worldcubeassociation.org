@@ -7,7 +7,7 @@ class PublishRegistrationMetrics < WcaCronjob
   end
 
   def record_last_60_minutes_registrations
-    count = Registration.where('created_at >= ?', 60.minutes.ago).count
+    count = Registration.where(created_at: 60.minutes.ago..).count
     ::NewRelic::Agent.record_metric('Custom/Registrations/last60Minutes-registrations', count)
   end
 
