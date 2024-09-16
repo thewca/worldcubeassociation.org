@@ -44,9 +44,18 @@ module Cachable
     #
     # (Sidenote: Our previous approach had been based on our own custom @@cache variable,
     #   which is exactly what mattr_accessor does internally. And that one worked for literally many years.)
-    mattr_accessor :models_by_id, instance_accessor: false
+    mattr_accessor :models_by_id
 
-    after_commit :reload_cache
+    # Everything that modifies our knowledge about which cached entities even _exist_,
+    #   needs to flush the whole cache (so that created / deleted entities can be loaded / dropped)
+    after_commit :clear_cache, on: [:create, :destroy]
+
+    def clear_cache
+      self.models_by_id = nil
+    end
+
+    # Everything that changes an entity in-place only needs to reload this one particular entity
+    after_commit :reload_cache, on: :update
 
     def reload_cache
       self.as_cached.reload
