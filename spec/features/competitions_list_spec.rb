@@ -13,7 +13,7 @@ RSpec.feature "Competitions list" do
       let(:delegate) { competition.delegates.first }
 
       before do
-        visit "/competitions?legacy=off"
+        visit "/competitions?legacy=off&show_admin_details=yes"
         within(:css, "#delegate") do
           find(".search").set(delegate.name)
           find(".search").send_keys(:enter)
