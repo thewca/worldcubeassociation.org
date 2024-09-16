@@ -49,11 +49,11 @@ export default function RegistrationDetails() {
 
   return (
     <SubSection section="registration">
-      <InputDate id="waitingListDeadlineDate" dateTime required overrideEnabled={waitingListNotYetPast} />
-      <InputDate id="eventChangeDeadlineDate" dateTime required overrideEnabled={eventChangeNotYetPast} />
-      <InputBooleanSelect id="allowOnTheSpot" required overrideEnabled />
+      <InputDate id="waitingListDeadlineDate" dateTime required ignoreDisabled={waitingListNotYetPast} />
+      <InputDate id="eventChangeDeadlineDate" dateTime required ignoreDisabled={eventChangeNotYetPast} />
+      <InputBooleanSelect id="allowOnTheSpot" required ignoreDisabled />
       <InputBooleanSelect id="allowSelfDeleteAfterAcceptance" required />
-      <InputBooleanSelect id="allowSelfEdits" required overrideEnabled />
+      <InputBooleanSelect id="allowSelfEdits" required ignoreDisabled />
       <InputRadio id="guestsEnabled" options={guestsEnabledOptions} />
       <ConditionalSection showIf={guestsGoFree}>
         <InputSelect id="guestEntryStatus" options={guestMessageOptions} required={guestsGoFree} />
@@ -62,7 +62,7 @@ export default function RegistrationDetails() {
         <InputNumber id="guestsPerRegistration" required={guestsRestricted} />
       </ConditionalSection>
       <InputMarkdown id="extraRequirements" />
-      <InputBoolean id="forceComment" overrideEnabled />
+      <InputBoolean id="forceComment" ignoreDisabled />
     </SubSection>
   );
 }

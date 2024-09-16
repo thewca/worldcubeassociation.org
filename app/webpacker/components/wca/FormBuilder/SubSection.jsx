@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import SectionProvider, { useSectionDisabled, useSections } from './provider/FormSectionProvider';
 
-export default function SubSection({ section, children, overrideEnabled }) {
+export default function SubSection({ section, children, ignoreDisabled }) {
   const sections = useSections();
   const parentDisabled = useSectionDisabled();
 
@@ -13,7 +13,7 @@ export default function SubSection({ section, children, overrideEnabled }) {
   return (
     <SectionProvider
       section={currentSubSection}
-      disabled={parentDisabled && !overrideEnabled}
+      disabled={parentDisabled && !ignoreDisabled}
     >
       {children}
     </SectionProvider>

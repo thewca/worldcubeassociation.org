@@ -38,7 +38,7 @@ export default function RegistrationDates() {
           startDate={openingDateTime}
           endDate={closingDateTime}
           minDate={openingDateTime}
-          overrideEnabled={registrationNotYetPast}
+          ignoreDisabled={registrationNotYetPast}
         />
       </Form.Group>
       <RegistrationCollisions />

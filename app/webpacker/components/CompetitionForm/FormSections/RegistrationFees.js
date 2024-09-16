@@ -100,10 +100,10 @@ export default function RegistrationFees() {
         </b>
       </p>
       <ConditionalSection showIf={canRegOnSite}>
-        <InputCurrencyAmount id="onTheSpotEntryFee" currency={currency} required={canRegOnSite} overrideEnabled />
+        <InputCurrencyAmount id="onTheSpotEntryFee" currency={currency} required={canRegOnSite} ignoreDisabled />
       </ConditionalSection>
       <InputCurrencyAmount id="guestEntryFee" currency={currency} />
-      <InputBoolean id="donationsEnabled" overrideEnabled />
+      <InputBoolean id="donationsEnabled" ignoreDisabled />
       <InputNumber id="refundPolicyPercent" min={0} max={100} step={1} defaultValue={0} required />
       <InputDate id="refundPolicyLimitDate" dateTime required />
     </SubSection>

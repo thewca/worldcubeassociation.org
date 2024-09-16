@@ -139,7 +139,7 @@ const wrapInput = (
 
   const noLabel = passDownLabel ? 'ignore' : props.noLabel;
 
-  const globallyDisabled = sectionDisabled && !props.overrideEnabled;
+  const globallyDisabled = sectionDisabled && !props.ignoreDisabled;
   const disabled = globallyDisabled || props.disabled;
 
   const passDownDisabled = additionalPropNames.includes('disabled');
