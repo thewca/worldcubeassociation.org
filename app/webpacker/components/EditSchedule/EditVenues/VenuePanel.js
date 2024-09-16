@@ -10,7 +10,7 @@ import {
 } from 'semantic-ui-react';
 import _ from 'lodash';
 
-import { useQuery } from '@tanstack/react-query';
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import VenueLocationMap from './VenueLocationMap';
 import { countries, backendTimezones } from '../../../lib/wca-data.js.erb';
 import RoomPanel from './RoomPanel';
@@ -121,7 +121,9 @@ function VenuePanel({
     isError: timeZonesError,
   } = useQuery({
     queryFn: fetchSuggestedTimeZones,
-    queryKey: ['suggested-tz', venue.id, venue.latitudeMicrodegrees, venue.longitudeMicrodegrees],
+    queryKey: ['suggested-tz', venue.latitudeMicrodegrees, venue.longitudeMicrodegrees],
+    enabled: Boolean(venue.latitudeMicrodegrees && venue.longitudeMicrodegrees),
+    placeholderData: keepPreviousData,
   });
 
   const bestMatch = useMemo(() => suggestedTimeZones?.find(
