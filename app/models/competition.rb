@@ -1025,13 +1025,11 @@ class Competition < ApplicationRecord
   end
 
   def country_zones
-    ActiveSupport::TimeZone.country_zones(country.iso2).to_h { |tz| [tz.name, tz.tzinfo.name] }
+    TZInfo::Country.get(country.iso2.upcase).zone_identifiers
   rescue TZInfo::InvalidCountryCode
     # This can occur for non real country *and* XK!
     # FIXME what to provide for XA, XE, XM, XS?
-    {
-      "London" => "Europe/London",
-    }
+    ["Europe/London"]
   end
 
   private def compute_coordinates
