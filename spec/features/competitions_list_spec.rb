@@ -25,7 +25,7 @@ RSpec.feature "Competitions list" do
       end
 
       it "only competitions delegated by the given delegate are shown", js: true do
-        expect(page).to have_selector("#competitions-list .competition-info", count: 1)
+        expect(page).to have_selector("#competition-info", count: 1)
       end
     end
 
