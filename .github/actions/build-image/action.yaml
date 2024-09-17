@@ -33,15 +33,13 @@ runs:
           echo "SHAKAPACKER_ASSET_HOST=https://assets.worldcubeassociation.org" >> $GITHUB_ENV
           echo "WCA_LIVE_SITE=true" >> $GITHUB_ENV
         fi
-    - name: Checkout correct code
-      shell: bash
-      run: git checkout ${{inputs.build_tag}}
     - name: Build and push Docker image
       uses: docker/build-push-action@v6
       id: build-image
       with:
         push: true
         load: true
+        context: .
         target: ${{ inputs.target }}
         tags: |
           ${{ inputs.registry }}:${{ inputs.tag }}
