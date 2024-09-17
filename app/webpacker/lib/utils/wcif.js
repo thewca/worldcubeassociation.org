@@ -104,19 +104,23 @@ export const localizeActivityCode = (activityCode, wcifRound, wcifEvent) => {
 };
 
 export const humanizeActivityCode = (activityCode) => {
+  if (activityCode.startsWith('other-')) {
+    return I18n.t(`activity.${activityCode.substring(6)}`);
+  }
+
   const { eventId, roundNumber, attempt } = parseActivityCode(activityCode);
 
   const eventName = I18n.t(`events.${eventId}`);
   const roundName = I18n.t('round.round_number', { round_number: roundNumber });
 
-  const tooltipText = `${eventName}, ${roundName}`;
+  const eventAndRoundName = `${eventName}, ${roundName}`;
 
   if (attempt) {
     const attemptName = I18n.t('attempts.attempt_name', { number: attempt });
-    return `${tooltipText}, ${attemptName}`;
+    return `${eventAndRoundName}, ${attemptName}`;
   }
 
-  return tooltipText;
+  return eventAndRoundName;
 };
 
 export const shortLabelForActivityCode = (activityCode) => {

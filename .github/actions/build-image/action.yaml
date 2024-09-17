@@ -39,6 +39,7 @@ runs:
       with:
         push: true
         load: true
+        context: .
         target: ${{ inputs.target }}
         tags: |
           ${{ inputs.registry }}:${{ inputs.tag }}

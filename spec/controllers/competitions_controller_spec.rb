@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe CompetitionsController do
-  let(:competition) { FactoryBot.create(:competition, :with_delegate, :registration_open, :with_valid_schedule, :with_guest_limit, :with_event_limit, name: "my long competition name above 32 chars 2023") }
+  let(:competition) { FactoryBot.create(:competition, :with_delegate, :with_organizer, :registration_open, :with_valid_schedule, :with_guest_limit, :with_event_limit, name: "my long competition name above 32 chars 2023") }
   let(:future_competition) { FactoryBot.create(:competition, :with_delegate, :ongoing) }
 
   describe 'GET #index' do
@@ -218,6 +218,7 @@ RSpec.describe CompetitionsController do
       it 'cannot see unconfirmed nearby competitions' do
         get :nearby_competitions_json, params: my_competition.serializable_hash
         expect(JSON.parse(response.body)).to eq []
+        other_competition.organizers = [organizer]
         other_competition.confirmed = true
         other_competition.save!
         get :nearby_competitions_json, params: my_competition.serializable_hash
@@ -363,7 +364,7 @@ RSpec.describe CompetitionsController do
         expect(new_comp.id).to eq ""
 
         # Cloning a competition should clone its organizers.
-        expect(new_comp.organizers.sort_by(&:id)).to eq []
+        expect(new_comp.organizers.sort_by(&:id)).to eq competition.organizers.sort_by(&:id)
         # When a delegate clones a competition, it should clone its organizers, and add
         # the delegate doing the cloning.
         expect(new_comp.delegates.sort_by(&:id)).to eq [delegate]
@@ -481,16 +482,17 @@ RSpec.describe CompetitionsController do
       end
 
       it "organizer cannot demote oneself" do
+        original_organizer = competition.organizers.first
         # Attempt to remove ourself as an organizer. This should not be allowed, because
         # we would not be allowed to access the page anymore.
-        update_params = build_competition_update(competition, staff: { organizerIds: [] })
+        update_params = build_competition_update(competition, staff: { organizerIds: [original_organizer.id] })
         patch :update, params: update_params, as: :json
         expect(response).to have_http_status(:bad_request)
         errors = JSON.parse(response.body)
         expect(errors['staff']['staffDelegateIds']).to eq ["You cannot demote yourself"]
         expect(errors['staff']['traineeDelegateIds']).to eq ["You cannot demote yourself"]
         expect(errors['staff']['organizerIds']).to eq ["You cannot demote yourself"]
-        expect(competition.reload.organizers).to eq [organizer]
+        expect(competition.reload.organizers).to eq [original_organizer, organizer]
       end
 
       it "can update the registration fees when there is no payment" do
@@ -563,7 +565,6 @@ RSpec.describe CompetitionsController do
       end
 
       it "adds another organizer and expects him to receive a notification email" do
-        competition.organizers << organizer1
         new_organizer = FactoryBot.create :user
         expect(CompetitionsMailer).to receive(:notify_organizer_of_addition_to_competition).with(competition.delegates.last, competition, new_organizer).and_call_original
         organizers = [competition.organizers.first, new_organizer]
@@ -575,7 +576,7 @@ RSpec.describe CompetitionsController do
 
       it "notifies organizers correctly when id changes" do
         new_organizer = FactoryBot.create :user
-        update_params = build_competition_update(competition, competitionId: "NewId2018", staff: { organizerIds: [new_organizer.id] })
+        update_params = build_competition_update(competition, competitionId: "NewId2018", staff: { organizerIds: [competition.organizers.last.id, new_organizer.id] })
         competition.id = "NewId2018"
         expect(CompetitionsMailer).to receive(:notify_organizer_of_addition_to_competition).with(competition.delegates.last, competition, new_organizer).and_call_original
         expect do
@@ -586,16 +587,15 @@ RSpec.describe CompetitionsController do
       it "removes an organizer and expects him to receive a notification email" do
         competition.organizers << [organizer1, organizer2]
         expect(CompetitionsMailer).to receive(:notify_organizer_of_removal_from_competition).with(competition.delegates.last, competition, organizer2).and_call_original
-        update_params = build_competition_update(competition, staff: { organizerIds: [organizer1.id] })
+        update_params = build_competition_update(competition, staff: { organizerIds: [competition.organizers.first.id, organizer1.id] })
         expect do
           patch :update, params: update_params, as: :json
         end.to change { enqueued_jobs.size }.by(1)
       end
 
       it "can confirm a competition and expects wcat and organizers to receive a notification email" do
-        competition.organizers << organizer1
         competition.update(start_date: 5.week.from_now, end_date: 5.week.from_now)
-        expect(CompetitionsMailer).to receive(:notify_organizer_of_confirmed_competition).with(competition.delegates.last, competition, organizer1).and_call_original
+        expect(CompetitionsMailer).to receive(:notify_organizer_of_confirmed_competition).with(competition.delegates.last, competition, competition.organizers.last).and_call_original
         expect(CompetitionsMailer).to receive(:notify_wcat_of_confirmed_competition).with(competition.delegates.last, competition).and_call_original
         expect do
           put :confirm, params: { competition_id: competition }
@@ -779,7 +779,6 @@ RSpec.describe CompetitionsController do
       end
 
       it "adds another organizer and expects him to receive a notification email" do
-        competition.organizers << organizer1
         new_organizer = FactoryBot.create :user
         expect(CompetitionsMailer).to receive(:notify_organizer_of_addition_to_competition).with(competition.trainee_delegates.last, competition, new_organizer).and_call_original
         organizers = [competition.organizers.first, new_organizer]
@@ -791,7 +790,7 @@ RSpec.describe CompetitionsController do
 
       it "notifies organizers correctly when id changes" do
         new_organizer = FactoryBot.create :user
-        update_params = build_competition_update(competition, competitionId: "NewId2018", staff: { organizerIds: [new_organizer.id] })
+        update_params = build_competition_update(competition, competitionId: "NewId2018", staff: { organizerIds: [competition.organizers.last.id, new_organizer.id] })
         competition.id = "NewId2018"
         expect(CompetitionsMailer).to receive(:notify_organizer_of_addition_to_competition).with(competition.trainee_delegates.last, competition, new_organizer).and_call_original
         expect do
@@ -801,8 +800,9 @@ RSpec.describe CompetitionsController do
 
       it "removes an organizer and expects him to receive a notification email" do
         competition.organizers << [organizer1, organizer2]
+        puts competition.organizers.count
         expect(CompetitionsMailer).to receive(:notify_organizer_of_removal_from_competition).with(competition.trainee_delegates.last, competition, organizer2).and_call_original
-        update_params = build_competition_update(competition, staff: { organizerIds: [organizer1.id] })
+        update_params = build_competition_update(competition, staff: { organizerIds: [competition.organizers.first.id, organizer1.id] })
         expect do
           patch :update, params: update_params, as: :json
         end.to change { enqueued_jobs.size }.by(1)
@@ -947,11 +947,9 @@ RSpec.describe CompetitionsController do
       it 'announces and expects organizers to receive a notification email' do
         sign_in wcat_member
         competition.update(start_date: "2011-12-04", end_date: "2011-12-05")
-        organizer = FactoryBot.create :user
-        competition.organizers << organizer
         expect(competition.announced_at).to be nil
         expect(competition.announced_by).to be nil
-        expect(CompetitionsMailer).to receive(:notify_organizer_of_announced_competition).with(competition, organizer).and_call_original
+        expect(CompetitionsMailer).to receive(:notify_organizer_of_announced_competition).with(competition, competition.organizers.last).and_call_original
         expect do
           put :announce, params: { competition_id: competition }
         end.to change { enqueued_jobs.size }.by(1)

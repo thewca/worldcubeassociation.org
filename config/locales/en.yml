@@ -206,6 +206,17 @@ en:
     deadline:
       description: "Qualification Deadline"
       by_date: "by %{date}"
+  #context: other activities which occur in the schedule
+  activity:
+    registration: "On-site registration"
+    checkin: "Check-in"
+    tutorial: "Tutorial for new competitors"
+    multi: "Cube submission for 3x3x3 Multi-Blind"
+    breakfast: "Breakfast"
+    lunch: "Lunch"
+    dinner: "Dinner"
+    awards: "Awards"
+    misc: "Other"
   #context: Common word used in multiple places on the website
   common:
     world: "World"
@@ -1322,7 +1333,7 @@ en:
     messages:
       not_visible: "This competition is not visible to the public."
       name_too_long: "The competition name is longer than 32 characters. Please edit the competition ID and short name appropriately."
-      id_starts_with_lowercase: "The competition id starts with a lowercase letter. We prefer to have it start with an uppercase."
+      id_starts_with_lowercase: "The competition ID starts with a lowercase letter. We prefer to have it start with an uppercase."
       must_have_events: "Please add at least one event before confirming the competition."
       schedule_must_match_rounds: "Please make sure the competition has at least one round per event and that the schedule you created includes all the rounds you declared before confirming the competition."
       advancement_condition_must_be_present_for_all_non_final_rounds: "Please make sure that all non final rounds have advancement condition specified."
@@ -1893,6 +1904,7 @@ en:
       must_contain_event: "must contain at least one event for this competition"
       schedule_must_match_rounds: "must have at least one round, and all rounds must be included in the schedule."
       must_contain_delegate: "must contain at least one WCA Delegate"
+      must_contain_organizer: "must contain at least one organizer"
       not_all_delegates: "are not all Delegates"
       registration_close_after_open: "registration close must be after registration open"
       registration_already_closed: "registration must not already be closed."

@@ -2539,21 +2539,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tanstack/query-core@npm:5.55.2":
-  version: 5.55.2
-  resolution: "@tanstack/query-core@npm:5.55.2"
-  checksum: 10c0/158e8a2daec231fb83220cbfbed73c82ea35952eeae2191fa880fd50b3a85212cc94b38d6da61eee9fcb66cb294745ea4446e5613c4280d64c4eab97bfefd4eb
+"@tanstack/query-core@npm:5.56.2":
+  version: 5.56.2
+  resolution: "@tanstack/query-core@npm:5.56.2"
+  checksum: 10c0/54ff55f02b01f6ba089f4965bfd46f430c18ce7e11d874de04c4d58cc8f698598b41e1c017ba029d08ae75e321e546b26f1ea7f788474db265eeba46e780f2f6
   languageName: node
   linkType: hard
 
-"@tanstack/react-query@npm:^5.55.2":
-  version: 5.55.2
-  resolution: "@tanstack/react-query@npm:5.55.2"
+"@tanstack/react-query@npm:^5.56.2":
+  version: 5.56.2
+  resolution: "@tanstack/react-query@npm:5.56.2"
   dependencies:
-    "@tanstack/query-core": "npm:5.55.2"
+    "@tanstack/query-core": "npm:5.56.2"
   peerDependencies:
     react: ^18 || ^19
-  checksum: 10c0/0ff8de2b62f49a1734e6aa968c255aaf6c2951cb9db78718560603887db7a3b0a39670001fcbfcff7422e5d1f8ae16302521c630aef5f2ea8cb9a8e0a4dffa23
+  checksum: 10c0/6e883b4ca1948f990215b7bce194251faf13a79c6ecf3f3c660af6c6788ed113ab629cefdafb496dfb04866f12dd48d7314e936b75c881b6749127b6496ac8fd
   languageName: node
   linkType: hard
 
@@ -4401,10 +4401,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cssdb@npm:^8.1.0":
-  version: 8.1.0
-  resolution: "cssdb@npm:8.1.0"
-  checksum: 10c0/1fa1f1566c7e9964f5c71e443583eaba16a90933a3ef6803815c4281d084b75da948c415bade33d7085894fe0929c082fcb3135bf4400048cfff40d227ebd5dd
+"cssdb@npm:^8.1.1":
+  version: 8.1.1
+  resolution: "cssdb@npm:8.1.1"
+  checksum: 10c0/d60facfad3bca70e21100fc35b9205cb9d3d0ac642f44f0a687e54bf787f21c43d28ce2d17fcd405f67950fb4709516108fe1f3cb15df570eff1007b5fbbc787
   languageName: node
   linkType: hard
 
@@ -4594,10 +4594,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"date-fns@npm:^3.3.1, date-fns@npm:^3.6.0":
+"date-fns@npm:^3.3.1":
   version: 3.6.0
   resolution: "date-fns@npm:3.6.0"
   checksum: 10c0/0b5fb981590ef2f8e5a3ba6cd6d77faece0ea7f7158948f2eaae7bbb7c80a8f63ae30b01236c2923cf89bb3719c33aeb150c715ea4fe4e86e37dcf06bed42fb6
+  languageName: node
+  linkType: hard
+
+"date-fns@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "date-fns@npm:4.0.0"
+  checksum: 10c0/c706d29f05c28fdaea939068d688489bbc3096ef2486d1fe4a56d209c3a061ba99febae943b9562bb8ac08fe61257cf11fe74adad164adb7ba6df994e09cb99b
   languageName: node
   linkType: hard
 
@@ -5344,9 +5351,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-react@npm:^7.35.2":
-  version: 7.35.2
-  resolution: "eslint-plugin-react@npm:7.35.2"
+"eslint-plugin-react@npm:^7.36.1":
+  version: 7.36.1
+  resolution: "eslint-plugin-react@npm:7.36.1"
   dependencies:
     array-includes: "npm:^3.1.8"
     array.prototype.findlast: "npm:^1.2.5"
@@ -5368,7 +5375,7 @@ __metadata:
     string.prototype.repeat: "npm:^1.0.0"
   peerDependencies:
     eslint: ^3 || ^4 || ^5 || ^6 || ^7 || ^8 || ^9.7
-  checksum: 10c0/5f891f5a77e902a0ca8d10b23d0b800e90a09400187febe5986c5078d6277baa4b974d6acdbba25baae065dbcf12eb9241b5f5782527d0780314c2ee5006a8af
+  checksum: 10c0/8cb37f7fb351213bc44263580ff77627e14e27870fd81dae593e3de2826340b9bd8bbac7ae00fd5de69751a0660b2e51bd26760596f4ae85548f6b1bd76706e6
   languageName: node
   linkType: hard
 
@@ -8228,6 +8235,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"picocolors@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "picocolors@npm:1.1.0"
+  checksum: 10c0/86946f6032148801ef09c051c6fb13b5cf942eaf147e30ea79edb91dd32d700934edebe782a1078ff859fb2b816792e97ef4dab03d7f0b804f6b01a0df35e023
+  languageName: node
+  linkType: hard
+
 "picomatch@npm:^2.0.4, picomatch@npm:^2.2.1, picomatch@npm:^2.2.3, picomatch@npm:^2.3.1":
   version: 2.3.1
   resolution: "picomatch@npm:2.3.1"
@@ -9089,12 +9103,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss-opacity-percentage@npm:^2.0.0":
-  version: 2.0.0
-  resolution: "postcss-opacity-percentage@npm:2.0.0"
+"postcss-opacity-percentage@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "postcss-opacity-percentage@npm:3.0.0"
   peerDependencies:
-    postcss: ^8.2
-  checksum: 10c0/f031f3281060c4c0ede8f9a5832f65a3d8c2a1896ff324c41de42016e092635f0e0abee07545b01db93dc430a9741674a1d09c377c6c01cd8c2f4be65f889161
+    postcss: ^8.4
+  checksum: 10c0/15c7d66036fa966d265c8737196646b3f93deb83d4eea0b17ed5033460599afc31d3a989345e4d7c472963b2a2bb75c83d06979d5d30d6a60fcc7f74cb6d8d40
   languageName: node
   linkType: hard
 
@@ -9153,9 +9167,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss-preset-env@npm:^10.0.2":
-  version: 10.0.2
-  resolution: "postcss-preset-env@npm:10.0.2"
+"postcss-preset-env@npm:^10.0.3":
+  version: 10.0.3
+  resolution: "postcss-preset-env@npm:10.0.3"
   dependencies:
     "@csstools/postcss-cascade-layers": "npm:^5.0.0"
     "@csstools/postcss-color-function": "npm:^4.0.2"
@@ -9192,7 +9206,7 @@ __metadata:
     css-blank-pseudo: "npm:^7.0.0"
     css-has-pseudo: "npm:^7.0.0"
     css-prefers-color-scheme: "npm:^10.0.0"
-    cssdb: "npm:^8.1.0"
+    cssdb: "npm:^8.1.1"
     postcss-attribute-case-insensitive: "npm:^7.0.0"
     postcss-clamp: "npm:^4.1.0"
     postcss-color-functional-notation: "npm:^7.0.2"
@@ -9211,7 +9225,7 @@ __metadata:
     postcss-lab-function: "npm:^7.0.2"
     postcss-logical: "npm:^8.0.0"
     postcss-nesting: "npm:^13.0.0"
-    postcss-opacity-percentage: "npm:^2.0.0"
+    postcss-opacity-percentage: "npm:^3.0.0"
     postcss-overflow-shorthand: "npm:^6.0.0"
     postcss-page-break: "npm:^3.0.4"
     postcss-place: "npm:^10.0.0"
@@ -9220,7 +9234,7 @@ __metadata:
     postcss-selector-not: "npm:^8.0.0"
   peerDependencies:
     postcss: ^8.4
-  checksum: 10c0/51eb19994dfdbb041e87082833bedf8976053c182ae8dafab6b3ee1bf2cfd309ab9c186644ed032518011e44fbcc9f0552083bc431535779a80a919bbe78d10d
+  checksum: 10c0/da42caa2aab4d825fddfde00ebe2416d338c7b9a6f79a68840297888a8384f85991991c3fa10cf2d359fb230c885375f5cebd7bd63972725cd2a596d218f8b6a
   languageName: node
   linkType: hard
 
@@ -9389,7 +9403,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss@npm:^8.2.14, postcss@npm:^8.4.24, postcss@npm:^8.4.33, postcss@npm:^8.4.38, postcss@npm:^8.4.41, postcss@npm:^8.4.45":
+"postcss@npm:^8.2.14, postcss@npm:^8.4.24, postcss@npm:^8.4.33, postcss@npm:^8.4.38, postcss@npm:^8.4.41":
   version: 8.4.45
   resolution: "postcss@npm:8.4.45"
   dependencies:
@@ -9397,6 +9411,17 @@ __metadata:
     picocolors: "npm:^1.0.1"
     source-map-js: "npm:^1.2.0"
   checksum: 10c0/ad6f8b9b1157d678560373696109745ab97a947d449f8a997acac41c7f1e4c0f3ca4b092d6df1387f430f2c9a319987b1780dbdc27e35800a88cde9b606c1e8f
+  languageName: node
+  linkType: hard
+
+"postcss@npm:^8.4.47":
+  version: 8.4.47
+  resolution: "postcss@npm:8.4.47"
+  dependencies:
+    nanoid: "npm:^3.3.7"
+    picocolors: "npm:^1.1.0"
+    source-map-js: "npm:^1.2.1"
+  checksum: 10c0/929f68b5081b7202709456532cee2a145c1843d391508c5a09de2517e8c4791638f71dd63b1898dba6712f8839d7a6da046c72a5e44c162e908f5911f57b5f44
   languageName: node
   linkType: hard
 
@@ -10135,7 +10160,7 @@ __metadata:
     "@rails/ujs": "npm:^7.1.400"
     "@stripe/react-stripe-js": "npm:^2.8.0"
     "@stripe/stripe-js": "npm:^4.4.0"
-    "@tanstack/react-query": "npm:^5.55.2"
+    "@tanstack/react-query": "npm:^5.56.2"
     "@wca/helpers": "npm:^1.1.5"
     autonumeric: "npm:^4.10.5"
     autoprefixer: "npm:^10.4.20"
@@ -10152,7 +10177,7 @@ __metadata:
     core-js: "npm:^3.38.1"
     css-loader: "npm:^7.1.2"
     css-minimizer-webpack-plugin: "npm:^7.0.0"
-    date-fns: "npm:^3.6.0"
+    date-fns: "npm:^4.0.0"
     dompurify: "npm:^3.1.6"
     easymde: "npm:^2.18.0"
     eslint: "npm:^8.57.0"
@@ -10160,7 +10185,7 @@ __metadata:
     eslint-plugin-import: "npm:^2.30.0"
     eslint-plugin-jquery: "npm:^1.5.1"
     eslint-plugin-jsx-a11y: "npm:^6.10.0"
-    eslint-plugin-react: "npm:^7.35.2"
+    eslint-plugin-react: "npm:^7.36.1"
     eslint-plugin-react-hooks: "npm:^4.6.2"
     expose-loader: "npm:^5.0.0"
     file-loader: "npm:^6.2.0"
@@ -10178,11 +10203,11 @@ __metadata:
     mini-css-extract-plugin: "npm:^2.9.1"
     path-complete-extname: "npm:^1.0.0"
     pnp-webpack-plugin: "npm:^1.7.0"
-    postcss: "npm:^8.4.45"
+    postcss: "npm:^8.4.47"
     postcss-flexbugs-fixes: "npm:^5.0.2"
     postcss-import: "npm:^16.1.0"
     postcss-loader: "npm:^8.1.1"
-    postcss-preset-env: "npm:^10.0.2"
+    postcss-preset-env: "npm:^10.0.3"
     prop-types: "npm:^15.8.1"
     rails-erb-loader: "npm:^5.5.2"
     react: "npm:^18.3.1"
@@ -10207,7 +10232,7 @@ __metadata:
     style-loader: "npm:^4.0.0"
     stylelint: "npm:^16.9.0"
     stylelint-config-recommended-scss: "npm:^14.1.0"
-    stylelint-scss: "npm:^6.5.1"
+    stylelint-scss: "npm:^6.6.0"
     terser-webpack-plugin: "npm:^5.3.10"
     webpack: "npm:^5.94.0"
     webpack-assets-manifest: "npm:^5.2.1"
@@ -10707,6 +10732,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"source-map-js@npm:^1.2.1":
+  version: 1.2.1
+  resolution: "source-map-js@npm:1.2.1"
+  checksum: 10c0/7bda1fc4c197e3c6ff17de1b8b2c20e60af81b63a52cb32ec5a5d67a20a7d42651e2cb34ebe93833c5a2a084377e17455854fee3e21e7925c64a51b6a52b0faf
+  languageName: node
+  linkType: hard
+
 "source-map-support@npm:~0.5.20":
   version: 0.5.21
   resolution: "source-map-support@npm:0.5.21"
@@ -11027,7 +11059,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"stylelint-scss@npm:^6.4.0, stylelint-scss@npm:^6.5.1":
+"stylelint-scss@npm:^6.4.0":
   version: 6.5.1
   resolution: "stylelint-scss@npm:6.5.1"
   dependencies:
@@ -11041,6 +11073,23 @@ __metadata:
   peerDependencies:
     stylelint: ^16.0.2
   checksum: 10c0/72712633eb5cd358667b814d5cc9fdd8f90729e34b4260cce69c3daa0bd91d6732fcd7abad424f3e2adfa60b7784bf8e98b1396ecce6e628b13540e110978357
+  languageName: node
+  linkType: hard
+
+"stylelint-scss@npm:^6.6.0":
+  version: 6.6.0
+  resolution: "stylelint-scss@npm:6.6.0"
+  dependencies:
+    css-tree: "npm:2.3.1"
+    is-plain-object: "npm:5.0.0"
+    known-css-properties: "npm:^0.34.0"
+    postcss-media-query-parser: "npm:^0.2.3"
+    postcss-resolve-nested-selector: "npm:^0.1.6"
+    postcss-selector-parser: "npm:^6.1.2"
+    postcss-value-parser: "npm:^4.2.0"
+  peerDependencies:
+    stylelint: ^16.0.2
+  checksum: 10c0/bd9dc0e93973a63ee6ea4edfeef2f4123cafb4d2d99a923b94fac22e6b12aa7bfe246d6536aec681055f934d0af0e3a19f83bad95024cc099a87e15d58a8f2d2
   languageName: node
   linkType: hard
 
