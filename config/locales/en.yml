@@ -1333,7 +1333,7 @@ en:
     messages:
       not_visible: "This competition is not visible to the public."
       name_too_long: "The competition name is longer than 32 characters. Please edit the competition ID and short name appropriately."
-      id_starts_with_lowercase: "The competition id starts with a lowercase letter. We prefer to have it start with an uppercase."
+      id_starts_with_lowercase: "The competition ID starts with a lowercase letter. We prefer to have it start with an uppercase."
       must_have_events: "Please add at least one event before confirming the competition."
       schedule_must_match_rounds: "Please make sure the competition has at least one round per event and that the schedule you created includes all the rounds you declared before confirming the competition."
       advancement_condition_must_be_present_for_all_non_final_rounds: "Please make sure that all non final rounds have advancement condition specified."
