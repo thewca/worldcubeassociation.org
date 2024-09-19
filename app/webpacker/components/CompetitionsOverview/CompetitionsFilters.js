@@ -377,8 +377,11 @@ function PastCompYearSelector({ filterState, dispatchFilter }) {
     >
       <span className="caption">
         {
-          filterState.selectedYear === 'all_years' ? I18n.t('competitions.index.past_all')
-            : I18n.t('competitions.index.past_from', { year: filterState.selectedYear })
+          // eslint-disable-next-line no-nested-ternary
+          filterState.timeOrder === 'past' ? (
+            filterState.selectedYear === 'all_years' ? I18n.t('competitions.index.past_all')
+              : I18n.t('competitions.index.past_from', { year: filterState.selectedYear })
+          ) : I18n.t('competitions.index.past')
         }
       </span>
       <Dropdown
