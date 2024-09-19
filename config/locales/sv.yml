@@ -306,6 +306,25 @@ sv:
       description: Kvalificeringsdeadline
       #original_hash: bed8220
       by_date: 'före %{date}'
+  activity:
+    #original_hash: ad38ae8
+    registration: Anmälan på plats
+    #original_hash: 48431e7
+    checkin: Incheckning
+    #original_hash: 40ba6a3
+    tutorial: Genomgång för nya tävlande
+    #original_hash: ceab6ea
+    multi: Kubinlämning för 3x3x3 Multi-Blind
+    #original_hash: 364653c
+    breakfast: Frukost
+    #original_hash: 585ecb7
+    lunch: Lunch
+    #original_hash: 8cf98a5
+    dinner: Kvällsmat
+    #original_hash: 75226d7
+    awards: Prisutdelning
+    #original_hash: 6e6a6f2
+    misc: Övrigt
   common:
     #original_hash: 70c07ec
     world: Värld
@@ -2529,7 +2548,7 @@ sv:
       name_too_long: >-
         Tävlingsnamnet är längre än 32 tecken. Vänligen redigera tävlingens ID
         och korta namn på lämpligt sätt.
-      #original_hash: af27396
+      #original_hash: 5882e05
       id_starts_with_lowercase: >-
         Tävlings-ID:t startar med en liten bokstav. Vi skulle föredra att det
         börjar med en stor bokstav.
@@ -3569,6 +3588,16 @@ sv:
           zero: '%{count} platser kvar'
           one: '%{count} plats kvar'
           other: '%{count} platser kvar'
+        cancelled:
+          #original_hash: e9c5a55
+          title: Borttagna anmälningar
+          #original_hash: bb5b570
+          information: Tävlande med borttagna anmälningar kan anmäla sig igen.
+        rejected:
+          #original_hash: 199b7c5
+          title: Avslagna anmälningar
+          #original_hash: 3fd2e0c
+          information: Tävlande med avslagna anmälningar kan inte anmäla sig igen.
         payment:
           #original_hash: d6fbc7a
           refunded_status: Återbetalad
@@ -3609,7 +3638,9 @@ sv:
         #original_hash: 9144dd6
         move_waiting: Flytta till väntelista
         #original_hash: 284b24f
-        cancel: Radera anmälan
+        cancel: Ta bort anmälan
+        #original_hash: df40450
+        reject: Avslå anmälan
         #original_hash: 67b3c7d
         too_many: >-
           Att acceptera alla dessa registreringar skulle överskrida
@@ -3644,6 +3675,8 @@ sv:
           pending: Din anmälan väntar på godkännande från arrangörsteamet.
           #original_hash: dcc4906
           cancelled: Din anmälan har raderats.
+          #original_hash: 92dab83
+          rejected: Din anmälan har avslagits.
           #original_hash: a02390c
           waiting_list: 'Du är på väntelistan, på plats %{waiting_list_position}.'
         #original_hash: 2d9f36c
@@ -3669,6 +3702,10 @@ sv:
         '-2': 'Autentiseringen har löpt ut, vänligen uppdatera sidan'
         #original_hash: 2d63156
         '-3': 'Saknar autentisering, vänligen logga in'
+        #original_hash: e631d99
+        '-4': >-
+          Anmälningstjänsten stötte på ett internt fel. Om detta problem
+          fortsätter kontakta WST
         #original_hash: e0b69a9
         '-1000': Tävlingen existerar inte
         #original_hash: 2aa4aa1
@@ -3679,8 +3716,15 @@ sv:
         '-2002': Din profil är ofullständig
         #original_hash: 4dd79f2
         '-2003': Du har inte behörighet att slutföra denna åtgärd
+        #original_hash: 374e1c7
+        '-2004': >-
+          Du kan inte registrera dig eftersom arrangörerna har avslagit din
+          anmälan. Vänligen kontakta dem om du tror att det har skett ett
+          misstag.
         #original_hash: cb4093a
         '-3000': Anmälan existerar inte
+        #original_hash: 9bbefa9
+        '-3001': Du har redan anmält dig till en tävling i denna tävlingsserie
         #original_hash: bc53fb6
         '-4000': Anropet innehåller ogiltig data.
         #original_hash: 35fddf4
@@ -3700,13 +3744,15 @@ sv:
         #original_hash: 020234c
         '-4008': Anmälan har stängt
         #original_hash: b30e613
-        '-4009': Endast arrangörer kan radera anmälningar för den här tävlingen
+        '-4009': Endast arrangörer kan ta bort anmälningar för den här tävlingen
         #original_hash: 3c4cbaa
         '-4010': Platsen på väntelistan är inte giltig
         #original_hash: e489908
         '-4011': Du kan endast acceptera den första personen på väntelistan
+        #original_hash: 8d089d6
+        '-4012': Du är inte kvalificerad att delta i de valda grenarna
         #original_hash: 0df821f
-        '-6001': WCA-betalning är inte aktiverat för den här tävlingen
+        '-6001': WCA-betalning är inte aktiverad för denna tävling
         #original_hash: 092da51
         '-6002': Du måste slutföra din anmälan innan du kan betala
     errors:
@@ -3727,6 +3773,8 @@ sv:
       schedule_must_match_rounds: 'måste ha minst en omgång, och alla omgångar måste ingå i schemat.'
       #original_hash: 6e228b7
       must_contain_delegate: måste ha minst en WCA-delegat
+      #original_hash: b5677c2
+      must_contain_organizer: måste innehålla minst en arrangör
       #original_hash: 8131fc2
       not_all_delegates: är inte alla delegater
       #original_hash: 43a23c2
