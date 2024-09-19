@@ -81,15 +81,7 @@ export function getRoundTypeId(roundNumber, totalNumberOfRounds, cutoff = false)
   return cutoff ? 'g' : '3';
 }
 
-export const localizeActivityCode = (activityCode, wcifRound, wcifEvent) => {
-  const { eventId, roundNumber, attempt } = parseActivityCode(activityCode);
-
-  const roundTypeId = getRoundTypeId(
-    roundNumber,
-    wcifEvent.rounds.length,
-    Boolean(wcifRound.cutoff),
-  );
-
+export const localizeRoundInformation = (eventId, roundTypeId, attempt = null) => {
   const eventName = I18n.t(`events.${eventId}`);
   const roundTypeName = I18n.t(`rounds.${roundTypeId}.name`);
 
@@ -101,6 +93,18 @@ export const localizeActivityCode = (activityCode, wcifRound, wcifEvent) => {
   }
 
   return roundName;
+};
+
+export const localizeActivityCode = (activityCode, wcifRound, wcifEvent) => {
+  const { eventId, roundNumber, attempt } = parseActivityCode(activityCode);
+
+  const roundTypeId = getRoundTypeId(
+    roundNumber,
+    wcifEvent.rounds.length,
+    Boolean(wcifRound.cutoff),
+  );
+
+  return localizeRoundInformation(eventId, roundTypeId, attempt);
 };
 
 export const humanizeActivityCode = (activityCode) => {
