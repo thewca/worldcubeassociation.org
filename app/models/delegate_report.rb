@@ -63,4 +63,19 @@ class DelegateReport < ApplicationRecord
     self.posted_at = (new_posted ? Time.now : nil)
     self.posted_by_user_id = current_user&.id
   end
+
+  def feedback_requests
+    {
+      competitionName: competition.name,
+      competitionId: competition.id,
+      feedbackRequests: {
+        WRC: self.wrc_incidents,
+        WIC: self.wic_incidents,
+      },
+      contents: {
+        incidents: self.incidents
+      }
+    }
+
+  end
 end

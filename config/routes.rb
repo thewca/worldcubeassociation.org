@@ -369,6 +369,7 @@ Rails.application.routes.draw do
       get '/competition_index' => 'competitions#competition_index', as: :competition_index
 
       resources :competitions, only: [:index, :show] do
+        get '/wrc' => 'competitions#wrc'
         get '/wcif' => 'competitions#show_wcif'
         get '/wcif/public' => 'competitions#show_wcif_public'
         get '/results' => 'competitions#results', as: :results

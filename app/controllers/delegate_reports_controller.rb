@@ -51,6 +51,13 @@ class DelegateReportsController < ApplicationController
         if @competition.end_date >= DelegateReport::REPORTS_ENABLED_DATE
           CompetitionsMailer.notify_of_delegate_report_submission(@competition).deliver_later
           CompetitionsMailer.wrc_delegate_report_followup(@competition).deliver_later
+
+          Faraday.post(EnvConfig.WRC_WEBHOOK_URL) do |req|
+            req.headers['Content-Type'] = 'application/json'
+            req.basic_auth(EnvConfig.WRC_WEBHOOK_USERNAME, EnvConfig.WRC_WEBHOOK_PASSWORD)
+            req.body = @delegate_report.feedback_requests.to_json
+          end
+
           flash[:info] = "Your report has been posted and emailed!"
         else
           flash[:info] = "Your report has been posted but not emailed because it is for a pre June 2016 competition."

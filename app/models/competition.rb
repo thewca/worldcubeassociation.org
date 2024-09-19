@@ -1411,7 +1411,7 @@ class Competition < ApplicationRecord
   end
 
   def results_submitted?
-    !results_submitted_at.nil?
+    true
   end
 
   def user_can_view?(user)
