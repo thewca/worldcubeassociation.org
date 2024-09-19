@@ -2574,7 +2574,7 @@ pt:
       name_too_long: >-
         O nome da competição tem mais de 32 caracteres. Por favor edite o ID da
         competição e nome curto de forma apropriada.
-      #original_hash: af27396
+      #original_hash: 5882e05
       id_starts_with_lowercase: >-
         O Identificador da competição começa com letra minúscula. Preferimos que
         comece com uma letra maiúscula.
