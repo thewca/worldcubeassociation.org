@@ -6,13 +6,12 @@ import PulseLoader from 'react-spinners/PulseLoader';
 
 import I18n from '../../lib/i18n';
 import {
-  events, continents, countries, competitionConstants, nonFutureCompetitionYears,
+  continents, countries, competitionConstants, nonFutureCompetitionYears,
 } from '../../lib/wca-data.js.erb';
 
+import { DEFAULT_REGION_ALL, WCA_EVENT_IDS } from './filterUtils';
 import useDelegatesData from './useDelegatesData';
 import UtcDatePicker from '../wca/UtcDatePicker';
-
-export const WCA_EVENT_IDS = Object.values(events.official).map((e) => e.id);
 
 function CompetitionsFilters({
   filterState,
@@ -42,11 +41,13 @@ function CompetitionsFilters({
         </Form.Field>
       </Form.Group>
 
-      <Form.Group>
-        <Form.Field width={8}>
-          <DelegateSelector delegateId={filterState.delegate} dispatchFilter={dispatchFilter} />
-        </Form.Field>
-      </Form.Group>
+      {shouldShowAdminDetails && (
+        <Form.Group>
+          <Form.Field width={8}>
+            <DelegateSelector delegateId={filterState.delegate} dispatchFilter={dispatchFilter} />
+          </Form.Field>
+        </Form.Group>
+      )}
 
       <Form.Group>
         <Form.Field>
@@ -192,16 +193,18 @@ function RegionSelector({ region, dispatchFilter }) {
     ))),
   ];
 
+  // clearing should revert to the default, which itself should be un-clearable
+  // but semantic ui will call onChange with the empty string
   return (
     <>
       <label htmlFor="region">{I18n.t('competitions.index.region')}</label>
       <Dropdown
         search
         selection
-        clearable
+        clearable={region !== DEFAULT_REGION_ALL}
         value={region}
         options={regionsOptions}
-        onChange={(_, data) => dispatchFilter({ region: data.value })}
+        onChange={(_, data) => dispatchFilter({ region: data.value || DEFAULT_REGION_ALL })}
       />
     </>
   );
@@ -393,7 +396,7 @@ function PastCompYearSelector({ filterState, dispatchFilter }) {
           >
             {I18n.t('competitions.index.all_years')}
           </Dropdown.Item>
-          {nonFutureCompetitionYears.map((year) => (
+          {nonFutureCompetitionYears.toReversed().map((year) => (
             <Dropdown.Item
               key={`past_select_${year}`}
               onClick={() => dispatchFilter({ timeOrder: 'past', selectedYear: year })}
