@@ -13,6 +13,7 @@ import {
   Popup,
   Segment,
 } from 'semantic-ui-react';
+import { DateTime } from 'luxon';
 import updateRegistration from '../api/registration/patch/update_registration';
 import submitEventRegistration from '../api/registration/post/submit_registration';
 import Processing from './Processing';
@@ -31,7 +32,7 @@ const maxCommentLength = 240;
 const potentialWarnings = (competitionInfo) => {
   const warnings = [];
   // Organizer Pre Registration
-  if (!competitionInfo['registration_currently_open?']) {
+  if (DateTime.fromISO(competitionInfo.registration_open) > DateTime.now()) {
     warnings.push(i18n.t('competitions.registration_v2.register.early_registration'));
   }
   // Favourites Competition

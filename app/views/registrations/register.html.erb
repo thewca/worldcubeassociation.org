@@ -10,7 +10,7 @@
   <% opens_in_days = distance_of_time_in_words_to_now(@competition.registration_open) %>
   <% closes_in_days = distance_of_time_in_words_to_now(@competition.registration_close) %>
 
-  <% if @competition.registration_not_yet_opened? %>
+  <% if !@competition.uses_new_registration_service? && @competition.registration_not_yet_opened? %>
     <%= alert :info, t('registrations.will_open_html', days: opens_in_days, time: wca_local_time(@competition.registration_open)) %>
   <%# Don't show this alert if we're showing the registration's details: this message is included in it! %>
   <% elsif @competition.registration_past? && !@registration&.show_details?(current_user) %>

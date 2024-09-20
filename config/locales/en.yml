@@ -1845,6 +1845,7 @@ en:
         too_many: "Accepting all these registrations would go over the competitor limit by %{count}"
         no_self_update: "Contact the Organization Team to update your registration."
       register:
+        will_open_countdown: "Registration will open in %{minutes} minutes %{seconds} seconds. This page will refresh automatically when registration opens."
         success: "You are registered for %{comp_name}"
         error: "Registration failed with error %{error}"
         early_registration: "Registration is not open yet - you are pre-registering as an organizer/delegate"
