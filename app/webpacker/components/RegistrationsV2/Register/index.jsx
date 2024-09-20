@@ -65,7 +65,6 @@ function Register({
   if (isFetching) {
     return <Loading />;
   }
-  console.log(userInfo, competitionInfo);
 
   if (userCanPreRegister(userInfo, competitionInfo) || competitionInfo['registration_currently_open?'] || timerEnded) {
     return (
