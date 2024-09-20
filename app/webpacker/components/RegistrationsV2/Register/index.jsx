@@ -68,22 +68,19 @@ function Register({
 
   if (userCanPreRegister(userInfo, competitionInfo) || competitionInfo['registration_currently_open?'] || timerEnded) {
     return (
-      isFetching ? <Loading />
-        : (
-          <>
-            <RegistrationMessage />
-            <StepPanel
-              user={userInfo}
-              preferredEvents={preferredEvents}
-              competitionInfo={competitionInfo}
-              registration={registration}
-              refetchRegistration={refetch}
-              connectedAccountId={connectedAccountId}
-              stripePublishableKey={stripePublishableKey}
-              qualifications={qualifications}
-            />
-          </>
-        )
+      <>
+        <RegistrationMessage />
+        <StepPanel
+          user={userInfo}
+          preferredEvents={preferredEvents}
+          competitionInfo={competitionInfo}
+          registration={registration}
+          refetchRegistration={refetch}
+          connectedAccountId={connectedAccountId}
+          stripePublishableKey={stripePublishableKey}
+          qualifications={qualifications}
+        />
+      </>
     );
   }
 
