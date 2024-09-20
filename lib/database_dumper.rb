@@ -153,6 +153,7 @@ module DatabaseDumper
           personId
           valueAndId
           year
+          gender
         ),
       ),
     }.freeze,
@@ -169,6 +170,7 @@ module DatabaseDumper
           personId
           valueAndId
           year
+          gender
         ),
       ),
     }.freeze,
