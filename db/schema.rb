@@ -566,6 +566,14 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_25_161404) do
     t.index ["schedule_activity_id"], name: "index_assignments_on_schedule_activity_id"
   end
 
+  create_table "auxiliary_raw_records", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.integer "result_id", null: false
+    t.string "type", null: false
+    t.integer "value", null: false
+    t.string "record_name", null: false
+    t.index ["result_id"], name: "index_auxiliary_raw_records_on_result_id"
+  end
+
   create_table "auxiliary_result_attempts", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.integer "result_id", null: false
     t.integer "idx", null: false
@@ -1361,6 +1369,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_25_161404) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "auxiliary_raw_records", "Results", column: "result_id"
   add_foreign_key "auxiliary_result_attempts", "Results", column: "result_id"
   add_foreign_key "microservice_registrations", "Competitions", column: "competition_id", on_update: :cascade, on_delete: :cascade
   add_foreign_key "microservice_registrations", "users"
