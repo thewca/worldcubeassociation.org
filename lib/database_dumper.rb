@@ -140,6 +140,8 @@ module DatabaseDumper
         },
       ),
     }.freeze,
+    "auxiliary_raw_records" => :skip_all_rows,
+    "auxiliary_result_attempts" => :skip_all_rows,
     "ConciseAverageResults" => {
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
