@@ -11,11 +11,11 @@ module DbHelper
     raw_connection.abandon_results!
   end
 
-  def self.with_temp_table(table_name)
+  def self.with_temp_table(table_name, template_table = table_name)
     temp_table_name = "#{table_name}_temp"
     old_table_name = "#{table_name}_old"
 
-    ActiveRecord::Base.connection.execute("CREATE TABLE #{temp_table_name} LIKE #{table_name}")
+    ActiveRecord::Base.connection.execute("CREATE TABLE #{temp_table_name} LIKE #{template_table}")
     ActiveRecord::Base.connection.execute("ALTER TABLE #{temp_table_name} AUTO_INCREMENT = 1")
 
     ActiveRecord::Base.transaction do
