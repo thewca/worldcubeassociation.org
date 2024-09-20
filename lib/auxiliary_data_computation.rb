@@ -14,7 +14,7 @@ module AuxiliaryDataComputation
     ].each do |field, table_name|
       DbHelper.with_temp_table(table_name) do |temp_table_name|
         ActiveRecord::Base.connection.execute <<-SQL
-          INSERT INTO #{temp_table_name} (id, #{field}, valueAndId, personId, eventId, countryId, continentId, year, month, day)
+          INSERT INTO #{temp_table_name} (id, #{field}, valueAndId, personId, eventId, countryId, continentId, year, month, day, gender)
           SELECT
             result.id,
             #{field},
@@ -25,7 +25,8 @@ module AuxiliaryDataComputation
             continentId,
             YEAR(start_date),
             MONTH(start_date),
-            DAY(start_date)
+            DAY(start_date),
+            person.gender
           FROM (
               SELECT MIN(#{field} * 1000000000 + result.id) valueAndId
               FROM Results result
@@ -37,6 +38,7 @@ module AuxiliaryDataComputation
             JOIN Competitions competition ON competition.id = competitionId
             JOIN Countries country ON country.id = result.countryId
             JOIN Events event ON event.id = eventId
+            JOIN Persons person ON person.wca_id = result.personId AND person.subId = 1
         SQL
       end
     end
