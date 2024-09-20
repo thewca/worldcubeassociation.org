@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_09_20_111841) do
+ActiveRecord::Schema[7.2].define(version: 2024_09_20_112549) do
   create_table "Competitions", id: { type: :string, limit: 32, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", limit: 50, default: "", null: false
     t.string "cityName", limit: 50, default: "", null: false
@@ -101,8 +101,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_20_111841) do
     t.string "status", limit: 10, default: "", null: false
   end
 
-  create_table "ConciseAverageResults", id: false, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
-    t.integer "id", default: 0, null: false
+  create_table "ConciseAverageResults", id: :integer, default: 0, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.integer "average", default: 0, null: false
     t.bigint "valueAndId"
     t.string "personId", limit: 10, default: "", null: false
@@ -118,8 +117,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_20_111841) do
     t.index ["personId"], name: "index_ConciseAverageResults_on_personId"
   end
 
-  create_table "ConciseSingleResults", id: false, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
-    t.integer "id", default: 0, null: false
+  create_table "ConciseSingleResults", id: :integer, default: 0, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.integer "best", default: 0, null: false
     t.bigint "valueAndId"
     t.string "personId", limit: 10, default: "", null: false
