@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_09_20_110144) do
+ActiveRecord::Schema[7.2].define(version: 2024_09_20_111120) do
   create_table "Competitions", id: { type: :string, limit: 32, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", limit: 50, default: "", null: false
     t.string "cityName", limit: 50, default: "", null: false
@@ -113,6 +113,9 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_20_110144) do
     t.integer "month", limit: 2, default: 0, null: false, unsigned: true
     t.integer "day", limit: 2, default: 0, null: false, unsigned: true
     t.string "gender", limit: 1, default: ""
+    t.index ["countryId"], name: "index_ConciseAverageResults_on_countryId"
+    t.index ["eventId"], name: "index_ConciseAverageResults_on_eventId"
+    t.index ["personId"], name: "index_ConciseAverageResults_on_personId"
   end
 
   create_table "ConciseSingleResults", id: false, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
@@ -127,6 +130,9 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_20_110144) do
     t.integer "month", limit: 2, default: 0, null: false, unsigned: true
     t.integer "day", limit: 2, default: 0, null: false, unsigned: true
     t.string "gender", limit: 1, default: ""
+    t.index ["countryId"], name: "index_ConciseSingleResults_on_countryId"
+    t.index ["eventId"], name: "index_ConciseSingleResults_on_eventId"
+    t.index ["personId"], name: "index_ConciseSingleResults_on_personId"
   end
 
   create_table "Continents", id: { type: :string, limit: 50, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
@@ -251,6 +257,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_20_110144) do
     t.string "regionalSingleRecord", limit: 3
     t.string "regionalAverageRecord", limit: 3
     t.timestamp "updated_at", default: -> { "CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP" }, null: false
+    t.index ["average", "countryId"], name: "index_Results_on_average_and_countryId"
+    t.index ["best", "countryId"], name: "index_Results_on_best_and_countryId"
     t.index ["competitionId", "updated_at"], name: "index_Results_on_competitionId_and_updated_at"
     t.index ["competitionId"], name: "Results_fk_tournament"
     t.index ["countryId"], name: "_tmp_index_Results_on_countryId"
