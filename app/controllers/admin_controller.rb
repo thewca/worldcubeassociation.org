@@ -309,6 +309,11 @@ class AdminController < ApplicationController
     redirect_to admin_compute_auxiliary_data_path
   end
 
+  def do_compute_rankings_records
+    ComputeRankingsRecords.perform_later
+    redirect_to admin_compute_auxiliary_data_path
+  end
+
   def generate_exports
   end
 

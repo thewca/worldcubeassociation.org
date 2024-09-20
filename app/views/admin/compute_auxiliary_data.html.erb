@@ -6,9 +6,19 @@
       <div>
         <h4>This script:</h4>
         <ul class="list-group">
-          <li class="list-group-item">Computes some auxiliary tables in the database (ConciseSingleResults, ConciseAverageResults, RanksSingle and RanksAverage).</li>
+          <li class="list-group-item">Computes the concise results tables (ConciseSingleResults, ConciseAverageResults).</li>
+          <li class="list-group-item">Computes the per-person ranking tables (RanksSingle, RanksAverage).</li>
           <li class="list-group-item">Computes the lookup for assigning record markers</li>
-          <li class="list-group-item">Deletes cached results (so they can be cached again)</li>
+        </ul>
+      </div>
+    <% end %>
+
+    <%= render 'cronjob_status_panel', cronjob: ComputeRankingsRecords, trigger_link: admin_do_compute_rankings_records_path do %>
+      <div>
+        <h4>This script:</h4>
+        <ul class="list-group">
+          <li class="list-group-item">Computes rankings tables.</li>
+          <li class="list-group-item">Computes records tables.</li>
         </ul>
       </div>
     <% end %>
