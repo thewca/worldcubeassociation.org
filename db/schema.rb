@@ -112,6 +112,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_25_161404) do
     t.integer "year", limit: 2, default: 0, null: false, unsigned: true
     t.integer "month", limit: 2, default: 0, null: false, unsigned: true
     t.integer "day", limit: 2, default: 0, null: false, unsigned: true
+    t.string "gender", limit: 1, default: ""
   end
 
   create_table "ConciseSingleResults", id: false, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
@@ -125,6 +126,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_25_161404) do
     t.integer "year", limit: 2, default: 0, null: false, unsigned: true
     t.integer "month", limit: 2, default: 0, null: false, unsigned: true
     t.integer "day", limit: 2, default: 0, null: false, unsigned: true
+    t.string "gender", limit: 1, default: ""
   end
 
   create_table "Continents", id: { type: :string, limit: 50, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
