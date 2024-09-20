@@ -121,7 +121,7 @@ module AuxiliaryDataComputation
         <<-SQL
           SELECT id, #{i} AS idx, value#{i} AS value
           FROM Results
-          WHERE value#{i} IS NOT NULL
+          WHERE value#{i} > 0
         SQL
       end
 
