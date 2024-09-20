@@ -5,6 +5,7 @@ module AuxiliaryDataComputation
     self.compute_concise_results
     self.compute_rank_tables
     self.insert_regional_records_lookup
+    self.unfold_result_attempts
   end
 
   ## Build 'concise results' tables.
@@ -111,6 +112,25 @@ module AuxiliaryDataComputation
   def self.insert_regional_records_lookup
     DbHelper.with_temp_table("regional_records_lookup") do |temp_table_name|
       CheckRegionalRecords.add_to_lookup_table(table_name: temp_table_name)
+    end
+  end
+
+  def self.unfold_result_attempts
+    DbHelper.with_temp_table('auxiliary_result_attempts') do |temp_table_name|
+      subqueries = (1..5).map do |i|
+        <<-SQL
+          SELECT id, #{i} AS idx, value#{i} AS value
+          FROM Results
+          WHERE value#{i} IS NOT NULL
+        SQL
+      end
+
+      subquery = "(" + subqueries.join(") UNION ALL (") + ")"
+
+      ActiveRecord::Base.connection.execute <<-SQL
+        INSERT INTO #{temp_table_name} (result_id, idx, value)
+        #{subquery}
+      SQL
     end
   end
 end
