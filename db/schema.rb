@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_09_20_111120) do
+ActiveRecord::Schema[7.2].define(version: 2024_09_20_111841) do
   create_table "Competitions", id: { type: :string, limit: 32, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", limit: 50, default: "", null: false
     t.string "cityName", limit: 50, default: "", null: false
@@ -566,6 +566,14 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_20_111120) do
     t.string "assignment_code", null: false
     t.index ["registration_id", "registration_type"], name: "index_assignments_on_registration_id_and_registration_type"
     t.index ["schedule_activity_id"], name: "index_assignments_on_schedule_activity_id"
+  end
+
+  create_table "auxiliary_result_attempts", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.integer "result_id", null: false
+    t.integer "idx", null: false
+    t.integer "value", null: false
+    t.index ["result_id"], name: "index_auxiliary_result_attempts_on_result_id"
+    t.index ["value"], name: "index_auxiliary_result_attempts_on_value"
   end
 
   create_table "bookmarked_competitions", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
@@ -1296,6 +1304,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_20_111120) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "auxiliary_result_attempts", "Results", column: "result_id"
   add_foreign_key "microservice_registrations", "Competitions", column: "competition_id"
   add_foreign_key "microservice_registrations", "users"
   add_foreign_key "oauth_openid_requests", "oauth_access_grants", column: "access_grant_id", on_delete: :cascade
