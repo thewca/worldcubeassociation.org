@@ -210,7 +210,7 @@ resource "aws_ecs_capacity_provider" "t3_provider" {
     managed_termination_protection = "ENABLED"
 
     managed_scaling {
-      maximum_scaling_step_size = 1
+      maximum_scaling_step_size = 4
       minimum_scaling_step_size = 1
       status                    = "ENABLED"
       target_capacity           = 100
@@ -226,7 +226,7 @@ resource "aws_ecs_capacity_provider" "m6i_provider" {
     managed_termination_protection = "ENABLED"
 
     managed_scaling {
-      maximum_scaling_step_size = 1
+      maximum_scaling_step_size = 4
       minimum_scaling_step_size = 1
       status                    = "ENABLED"
       target_capacity           = 100
