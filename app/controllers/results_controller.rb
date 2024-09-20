@@ -74,27 +74,19 @@ class ResultsController < ApplicationController
         SQL
 
       else
-        subqueries = (1..5).map do |i|
-          <<-SQL
-            SELECT
-              result.*,
-              value#{i} value
-            FROM Results result
-            #{@gender_condition.present? ? "JOIN Persons persons ON result.personId = persons.wca_id and persons.subId = 1" : ""}
-            #{@years_condition_competition.present? ? "JOIN Competitions competition on competition.id = competitionId" : ""}
-            WHERE value#{i} > 0
-              #{@event_condition}
-              #{@years_condition_competition}
-              #{@region_condition}
-              #{@gender_condition}
-            ORDER BY value
-            #{limit_condition}
-          SQL
-        end
-        subquery = "(" + subqueries.join(") UNION ALL (") + ")"
         @query = <<-SQL
-          SELECT *
-          FROM (#{subquery}) result
+          SELECT
+            result.*,
+            attempt.value value
+          FROM auxiliary_result_attempts attempt
+          JOIN Results result ON result.id = attempt.result_id
+          #{@gender_condition.present? ? "JOIN Persons persons ON result.personId = persons.wca_id and persons.subId = 1" : ""}
+          #{@years_condition_competition.present? ? "JOIN Competitions competition on competition.id = competitionId" : ""}
+          WHERE value > 0
+            #{@event_condition}
+            #{@years_condition_competition}
+            #{@region_condition}
+            #{@gender_condition}
           ORDER BY value, personName, competitionId, roundTypeId
           #{limit_condition}
         SQL
