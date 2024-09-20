@@ -176,16 +176,12 @@ class ResultsController < ApplicationController
         FROM
           (SELECT Results.*, 'single' type, best    value, regionalSingleRecord  recordName FROM Results WHERE regionalSingleRecord<>'' UNION
             SELECT Results.*, 'average' type, average value, regionalAverageRecord recordName FROM Results WHERE regionalAverageRecord<>'') result
-          #{@gender_condition.present? ? "JOIN Persons persons ON result.personId = persons.wca_id and persons.subId = 1," : ","}
-          Events event,
-          RoundTypes roundType,
-          Competitions competition,
-          Countries country
-        WHERE event.id = eventId
-          AND event.`rank` < 1000
-          AND roundType.id = roundTypeId
-          AND competition.id = competitionId
-          AND country.id = result.countryId
+        #{@gender_condition.present? ? "JOIN Persons persons ON result.personId = persons.wca_id and persons.subId = 1" : ""}
+        JOIN Events event ON result.eventId = event.id AND event.`rank` < 1000
+        JOIN RoundTypes roundType ON result.roundTypeId = roundType.id
+        JOIN Competitions competition ON result.competitionId = competition.id
+        JOIN Countries country ON result.countryId = country.id
+        WHERE 1
           #{@region_condition}
           #{@event_condition}
           #{@years_condition_competition}
@@ -229,22 +225,17 @@ class ResultsController < ApplicationController
           #{@region_condition}
           #{@years_condition_result}
           #{@gender_condition}
-          GROUP BY eventId) record,
-        Results result
-        #{@gender_condition.present? ? "JOIN Persons persons ON result.personId = persons.wca_id and persons.subId = 1," : ","}
-        Events event,
-        Countries country,
-        Competitions competition
-      WHERE result.#{value} = value
+          GROUP BY eventId) record
+        JOIN Results result ON result.#{value} = record.value AND result.eventId = record.recordEventId
+        #{@gender_condition.present? ? "JOIN Persons persons ON result.personId = persons.wca_id and persons.subId = 1" : ""}
+        JOIN Events event ON result.eventId = event.id AND event.`rank` < 990
+        JOIN Competitions competition ON result.competitionId = competition.id
+        JOIN Countries country ON result.countryId = country.id
+      WHERE 1
         #{@event_condition}
         #{@region_condition}
         #{@years_condition_competition}
         #{@gender_condition}
-        AND result.eventId = recordEventId
-        AND event.id       = result.eventId
-        AND country.id     = result.countryId
-        AND competition.id = result.competitionId
-        AND event.`rank` < 990
     SQL
   end
 
