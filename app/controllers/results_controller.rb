@@ -158,24 +158,23 @@ class ResultsController < ApplicationController
           YEAR(competition.start_date)  year,
           MONTH(competition.start_date) month,
           DAY(competition.start_date)   day,
-          event.id             eventId,
-          event.name           eventName,
-          result.type          type,
-          result.value         value,
-          result.formatId      formatId,
-          result.roundTypeId   roundTypeId,
-          event.format         valueFormat,
-                               recordName,
-          result.personId      personId,
-          result.personName    personName,
-          result.countryId     countryId,
-          country.name         countryName,
-          competition.id       competitionId,
-          competition.cellName competitionName,
+          event.id                      eventId,
+          event.name                    eventName,
+          rawRecord.type,
+          rawRecord.value,
+          result.formatId               formatId,
+          result.roundTypeId            roundTypeId,
+          event.format                  valueFormat,
+          rawRecord.record_name         recordName,
+          result.personId               personId,
+          result.personName             personName,
+          result.countryId              countryId,
+          country.name                  countryName,
+          competition.id                competitionId,
+          competition.cellName          competitionName,
           value1, value2, value3, value4, value5
-        FROM
-          (SELECT Results.*, 'single' type, best    value, regionalSingleRecord  recordName FROM Results WHERE regionalSingleRecord<>'' UNION
-            SELECT Results.*, 'average' type, average value, regionalAverageRecord recordName FROM Results WHERE regionalAverageRecord<>'') result
+        FROM auxiliary_raw_records rawRecord
+        JOIN Results result ON result.id = rawRecord.result_id
         #{@gender_condition.present? ? "JOIN Persons persons ON result.personId = persons.wca_id and persons.subId = 1" : ""}
         JOIN Events event ON result.eventId = event.id AND event.`rank` < 1000
         JOIN RoundTypes roundType ON result.roundTypeId = roundType.id
@@ -254,13 +253,13 @@ class ResultsController < ApplicationController
     @country = Country.c_find(params[:region])
     if @continent.present?
       @region_condition = "AND result.countryId IN (#{@continent.country_ids.map { |id| "'#{id}'" }.join(',')})"
-      @region_condition += " AND recordName IN ('WR', '#{@continent.recordName}')" if @is_histories
+      @region_condition += " AND record_name IN ('WR', '#{@continent.recordName}')" if @is_histories
     elsif @country.present?
       @region_condition = "AND result.countryId = '#{@country.id}'"
-      @region_condition += " AND recordName <> ''" if @is_histories
+      @region_condition += " AND record_name <> ''" if @is_histories
     else
       @region_condition = ""
-      @region_condition += "AND recordName = 'WR'" if @is_histories
+      @region_condition += "AND record_name = 'WR'" if @is_histories
     end
 
     @gender = params[:gender]
