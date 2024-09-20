@@ -1,6 +1,6 @@
 <% provide(:title, t(".title")) %>
 
-<% record_timestamp = ComputeAuxiliaryData.end_date || Date.current %>
+<% record_timestamp = ComputeRankingsRecords.successful_start_date || Date.current %>
 
 <% @rows = execute_cached_query([*@cache_params, record_timestamp], @query) %>
 

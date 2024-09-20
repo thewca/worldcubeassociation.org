@@ -67,3 +67,8 @@ delegates_metadata_sync:
   class: "DelegatesMetadataSyncJob"
   cron: "0 * * * *"
   queue: wca_jobs
+
+compute_rankings_records:
+  class: "ComputeRankingsRecords"
+  cron: "*/30 * * * *"
+  queue: wca_jobs
