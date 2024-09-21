@@ -7,21 +7,21 @@ export default function RegistrationClosedMessage({
   registrationStart,
   onTimerEnd,
 }) {
-  const [timeLeft, setTimeLeft] = useState({
-    days: 0, hours: 0, minutes: 0, seconds: 0,
-  });
-
   const start = DateTime.fromISO(registrationStart);
+  const [timeLeft, setTimeLeft] = useState(start.diff(DateTime.local(), ['days', 'hours', 'minutes', 'seconds']).toObject());
 
-  // Update the timer every second
+  useEffect(() => {
+    if (timeLeft.days === 0
+      && timeLeft.hours === 0
+      && timeLeft.minutes === 0
+      && timeLeft.seconds === 0) {
+      onTimerEnd();
+    }
+  }, [onTimerEnd, timeLeft.days, timeLeft.hours, timeLeft.minutes, timeLeft.seconds]);
+
   useEffect(() => {
     const updateTimer = () => {
       const now = DateTime.local();
-
-      if (now >= start) {
-        onTimerEnd();
-        return;
-      }
 
       const diff = start.diff(now, ['days', 'hours', 'minutes', 'seconds']).toObject();
       setTimeLeft({
