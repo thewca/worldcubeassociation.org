@@ -78,8 +78,7 @@ function CompetitionsView({ canViewAdminDetails = false }) {
 
   const baseCompetitions = rawCompetitionData?.pages.flatMap((page) => page.data)
     .filter((comp) => (
-      (!isCancelled(comp) || debouncedFilterState.shouldIncludeCancelled)
-      && (debouncedFilterState.selectedEvents.every((event) => comp.event_ids.includes(event)))
+      (debouncedFilterState.selectedEvents.every((event) => comp.event_ids.includes(event)))
     ));
 
   const compIds = baseCompetitions?.map((comp) => comp.id) || [];
