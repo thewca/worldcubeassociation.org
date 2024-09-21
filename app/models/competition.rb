@@ -1713,6 +1713,11 @@ class Competition < ApplicationRecord
       competitions = Competition.visible
     end
 
+    if params[:include_cancelled].present?
+      include_cancelled = ActiveRecord::Type::Boolean.new.cast(params[:include_cancelled])
+      competitions = competitions.not_cancelled unless include_cancelled
+    end
+
     if params[:continent].present?
       continent = Continent.find(params[:continent])
       if !continent

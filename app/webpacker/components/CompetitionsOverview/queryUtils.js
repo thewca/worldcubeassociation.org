@@ -26,7 +26,15 @@ export function calculateQueryKey(filterState, canViewAdminDetails = false) {
 
 export function createSearchParams(filterState, pageParam, canViewAdminDetails = false) {
   const {
-    region, delegate, search, timeOrder, selectedYear, customStartDate, customEndDate, adminStatus,
+    region,
+    delegate,
+    search,
+    timeOrder,
+    selectedYear,
+    customStartDate,
+    customEndDate,
+    adminStatus,
+    shouldIncludeCancelled,
   } = filterState;
 
   const dateNow = DateTime.now();
@@ -45,6 +53,7 @@ export function createSearchParams(filterState, pageParam, canViewAdminDetails =
   if (canViewAdminDetails && adminStatus && adminStatus !== 'all') {
     searchParams.append('admin_status', adminStatus);
   }
+  searchParams.append('include_cancelled', shouldIncludeCancelled);
 
   if (timeOrder === 'present') {
     searchParams.append('sort', 'start_date,end_date,name');
