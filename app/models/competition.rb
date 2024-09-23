@@ -2394,6 +2394,7 @@ class Competition < ApplicationRecord
       "admin" => {
         "isConfirmed" => confirmed?,
         "isVisible" => showAtAll?,
+        "usesV2Registrations" => uses_new_registration_service?,
       },
       "cloning" => {
         "fromId" => being_cloned_from_id,
@@ -2600,6 +2601,7 @@ class Competition < ApplicationRecord
       showAtAll: form_data.dig('admin', 'isVisible'),
       being_cloned_from_id: form_data.dig('cloning', 'fromId'),
       clone_tabs: form_data.dig('cloning', 'cloneTabs'),
+      uses_v2_registrations: form_data.dig('admin', 'usesV2Registrations')
     }
   end
 
@@ -2827,6 +2829,7 @@ class Competition < ApplicationRecord
           "properties" => {
             "isConfirmed" => { "type" => "boolean" },
             "isVisible" => { "type" => "boolean" },
+            "usesV2Registrations" => { "type" => "boolean" },
           },
         },
         "cloning" => {
