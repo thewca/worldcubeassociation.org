@@ -10232,7 +10232,7 @@ __metadata:
     style-loader: "npm:^4.0.0"
     stylelint: "npm:^16.9.0"
     stylelint-config-recommended-scss: "npm:^14.1.0"
-    stylelint-scss: "npm:^6.6.0"
+    stylelint-scss: "npm:^6.7.0"
     terser-webpack-plugin: "npm:^5.3.10"
     webpack: "npm:^5.94.0"
     webpack-assets-manifest: "npm:^5.2.1"
@@ -11076,9 +11076,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"stylelint-scss@npm:^6.6.0":
-  version: 6.6.0
-  resolution: "stylelint-scss@npm:6.6.0"
+"stylelint-scss@npm:^6.7.0":
+  version: 6.7.0
+  resolution: "stylelint-scss@npm:6.7.0"
   dependencies:
     css-tree: "npm:2.3.1"
     is-plain-object: "npm:5.0.0"
@@ -11089,7 +11089,7 @@ __metadata:
     postcss-value-parser: "npm:^4.2.0"
   peerDependencies:
     stylelint: ^16.0.2
-  checksum: 10c0/bd9dc0e93973a63ee6ea4edfeef2f4123cafb4d2d99a923b94fac22e6b12aa7bfe246d6536aec681055f934d0af0e3a19f83bad95024cc099a87e15d58a8f2d2
+  checksum: 10c0/8464f8295109fb562a428111a6d1b8e5f66a9c79543334cf6307c5a85ffc5f5c27d44cb251334aa339d63dfaa544d02671d4d43c3bec3f993d618c8cd103fa47
   languageName: node
   linkType: hard
 
