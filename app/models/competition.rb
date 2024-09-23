@@ -2766,6 +2766,7 @@ class Competition < ApplicationRecord
           "properties" => {
             "currencyCode" => { "type" => "string" },
             "baseEntryFee" => { "type" => ["integer", "null"] },
+            "paymentInformation" => { "type" => ["string", "null"] },
             "onTheSpotEntryFee" => { "type" => ["integer", "null"] },
             "guestEntryFee" => { "type" => ["integer", "null"] },
             "donationsEnabled" => { "type" => ["boolean", "null"] },
