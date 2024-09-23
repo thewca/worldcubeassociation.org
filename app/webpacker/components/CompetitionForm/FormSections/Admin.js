@@ -4,7 +4,7 @@ import { useStore } from '../../../lib/providers/StoreProvider';
 import SubSection from '../../wca/FormBuilder/SubSection';
 
 export default function Admin() {
-  const { isAdminView, isPersisted } = useStore();
+  const { isAdminView, isPersisted, usesV2Registrations } = useStore();
 
   if (!isPersisted || !isAdminView) return null;
 
@@ -12,6 +12,7 @@ export default function Admin() {
     <SubSection section="admin">
       <InputBoolean id="isConfirmed" />
       <InputBoolean id="isVisible" />
+      <InputBoolean id="usesV2Registrations" />
     </SubSection>
   );
 }

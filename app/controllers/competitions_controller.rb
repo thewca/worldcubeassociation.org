@@ -602,7 +602,9 @@ class CompetitionsController < ApplicationController
   before_action -> { require_user_permission(:can_create_competitions?) }, only: [:create]
 
   def create
-    competition = Competition.new
+    competition = Competition.new(
+      uses_v2_registrations: true,
+    )
 
     # we're quite lax about reading params, because set_form_data! below does a comprehensive JSON-Schema check.
     form_data = params.permit!.to_h
