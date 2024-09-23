@@ -2601,7 +2601,7 @@ class Competition < ApplicationRecord
       showAtAll: form_data.dig('admin', 'isVisible'),
       being_cloned_from_id: form_data.dig('cloning', 'fromId'),
       clone_tabs: form_data.dig('cloning', 'cloneTabs'),
-      uses_v2_registrations: form_data.dig('admin', 'usesV2Registrations')
+      uses_v2_registrations: form_data.dig('admin', 'usesV2Registrations'),
     }
   end
 
