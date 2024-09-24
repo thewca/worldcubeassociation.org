@@ -1859,7 +1859,7 @@ en:
           payment:
             title: "Payment information"
             description: "Enter billing information"
-          register:
+          competing:
             title: "Register"
             description: "Choose your events"
           requirements:

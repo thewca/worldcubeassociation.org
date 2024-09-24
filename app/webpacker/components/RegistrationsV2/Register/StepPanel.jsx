@@ -9,14 +9,13 @@ import { hasPassed } from '../../../lib/utils/dates';
 
 const requirementsStepConfig = {
   key: 'requirements',
-  description: 'Accept competition terms',
   i18nKey: 'competitions.registration_v2.register.panel.requirements',
   component: RegistrationRequirements,
 };
 
 const competingStepConfig = {
   key: 'competing',
-  i18nKey: 'competitions.registration_v2.register.panel.register',
+  i18nKey: 'competitions.registration_v2.register.panel.competing',
   component: CompetingStep,
 };
 
