@@ -563,7 +563,7 @@ class Competition < ApplicationRecord
 
   def reg_warnings
     warnings = {}
-    warnings[:uses_v2] = I18n.t('competitions.messages.uses_v2_registrations') if uses_new_registration_service?
+    warnings[:uses_v2_registrations] = I18n.t('competitions.messages.uses_v2_registrations') if uses_new_registration_service?
     if registration_range_specified? && !registration_past?
       if self.announced?
         if (self.registration_open - self.announced_at) < REGISTRATION_OPENING_EARLIEST
