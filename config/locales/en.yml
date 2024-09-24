@@ -1831,6 +1831,9 @@ en:
          refunded: "Payment was refunded on %{date}."
         psychsheets:
           go_back: "Go Back"
+        timestamp: "Timestamp"
+        comment_and_note: "Comment & Note"
+        edit_waiting_list: "Enable Waiting List Edit Mode"
       bookmark:
         unbookmark: "You have removed your bookmark"
       requirements:
