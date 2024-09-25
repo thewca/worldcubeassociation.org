@@ -2664,6 +2664,18 @@ class Competition < ApplicationRecord
     competition_payment_integrations.destroy_all
   end
 
+  def can_change_registration_system?
+    return false unless registration_not_yet_opened?
+
+    if uses_new_registration_service?
+      return true
+    elsif self.registrations.any?
+      return false
+    else
+      return true
+    end
+  end
+
   # Our React date picker unfortunately behaves weirdly in terms of backend data
   def self.date_json_schema(string_format)
     {
