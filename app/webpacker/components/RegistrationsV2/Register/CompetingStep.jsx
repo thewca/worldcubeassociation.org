@@ -111,7 +111,7 @@ export default function CompetingStep({
       } else {
         dispatch(setMessage('registrations.flash.updated', 'positive'));
       }
-      nextStep();
+      nextStep({ toEnd: true });
     },
   });
 
