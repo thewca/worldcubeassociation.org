@@ -361,7 +361,7 @@ export default function CompetingStep({
                   {i18n.t('registrations.update')}
                 </Button>
                 <ButtonOr />
-                <Button secondary onClick={() => nextStep()}>
+                <Button secondary onClick={() => nextStep({ toEnd: true })}>
                   {i18n.t('competitions.registration_v2.register.view_registration')}
                 </Button>
               </>

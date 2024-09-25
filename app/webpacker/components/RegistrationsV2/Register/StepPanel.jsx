@@ -41,7 +41,7 @@ const registrationOverviewConfig = {
 const shouldShowCompleted = (isRegistered, hasPaid, isAccepted, key, index) => {
   switch (key) {
     case externalPaymentStepConfig.key: {
-      return false;
+      return isRegistered;
     }
     case wcaPaymentStepConfig.key: {
       return hasPaid;
