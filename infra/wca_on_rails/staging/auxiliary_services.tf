@@ -104,6 +104,11 @@ resource "aws_ecs_service" "auxiliary" {
 
   enable_execute_command = true
 
+  deployment_circuit_breaker {
+    enable   = true
+    rollback = false
+  }
+
   ordered_placement_strategy {
     type  = "spread"
     field = "attribute:ecs.availability-zone"

@@ -305,6 +305,25 @@ th:
       description: วันที่สิ้นสุดการคัดเลือก
       #original_hash: bed8220
       by_date: 'ภายใน %{date}'
+  activity:
+    #original_hash: ad38ae8
+    registration: การสมัครการแข่งขันหน้างานแข่งขัน
+    #original_hash: 48431e7
+    checkin: Check-in
+    #original_hash: 40ba6a3
+    tutorial: แนะนำผู้เข้าแข่งขันใหม่
+    #original_hash: ceab6ea
+    multi: ส่งลูก 3x3x3 Multi-Blind
+    #original_hash: 364653c
+    breakfast: พักรับประทานอาหารเช้า
+    #original_hash: 585ecb7
+    lunch: พักรับประทานอาหารกลางวัน
+    #original_hash: 8cf98a5
+    dinner: พักรับประทานอาหารเย็น
+    #original_hash: 75226d7
+    awards: มอบรางวัล
+    #original_hash: 6e6a6f2
+    misc: อื่น ๆ
   common:
     #original_hash: 70c07ec
     world: โลก
@@ -3607,6 +3626,8 @@ th:
       schedule_must_match_rounds: ต้องมีอย่างน้อยหนึ่งรอบ และทุกรอบต้องถูกรวมอยู่ในตารางการแข่งขัน
       #original_hash: 6e228b7
       must_contain_delegate: ต้องมี WCA Delegate อย่างน้อย 1 คน
+      #original_hash: b5677c2
+      must_contain_organizer: ต้องมีผู้จัดการแข่งขันอย่างน้อยหนึ่งคน
       #original_hash: 8131fc2
       not_all_delegates: ไม่ Delegates ทั้งหมด
       #original_hash: 43a23c2

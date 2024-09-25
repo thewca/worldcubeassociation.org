@@ -145,6 +145,7 @@ FactoryBot.define do
 
     trait :confirmed do
       with_delegate
+      with_organizer
       with_valid_schedule
       confirmed_at { Time.now }
     end
@@ -155,6 +156,7 @@ FactoryBot.define do
 
     trait :visible do
       with_delegate
+      with_organizer
       showAtAll { true }
     end
 

@@ -15,6 +15,7 @@ FactoryBot.define do
     transient do
       competition_contact { nil }
       competition_delegates { [] }
+      competition_organizers { [] }
     end
 
     trait :with_invalid_competition_id do
@@ -22,7 +23,7 @@ FactoryBot.define do
     end
 
     trait :with_competition do
-      competition_id { FactoryBot.create(:competition, :announced, contact: competition_contact, delegates: competition_delegates).id }
+      competition_id { FactoryBot.create(:competition, :announced, contact: competition_contact, delegates: competition_delegates, organizers: competition_organizers).id }
     end
   end
 

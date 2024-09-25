@@ -306,6 +306,25 @@ pt:
       description: Data limite para Qualificação
       #original_hash: bed8220
       by_date: 'até %{date}'
+  activity:
+    #original_hash: ad38ae8
+    registration: Registo no local da competição
+    #original_hash: 48431e7
+    checkin: Check-in
+    #original_hash: 40ba6a3
+    tutorial: Tutorial para novos competidores
+    #original_hash: ceab6ea
+    multi: Submissão de cubos para 3x3x3 Vários Cubos Vendado
+    #original_hash: 364653c
+    breakfast: Pequeno-almoço
+    #original_hash: 585ecb7
+    lunch: Almoço
+    #original_hash: 8cf98a5
+    dinner: Jantar
+    #original_hash: 75226d7
+    awards: Prémios
+    #original_hash: 6e6a6f2
+    misc: Outro
   common:
     #original_hash: 70c07ec
     world: Mundo
@@ -2555,7 +2574,7 @@ pt:
       name_too_long: >-
         O nome da competição tem mais de 32 caracteres. Por favor edite o ID da
         competição e nome curto de forma apropriada.
-      #original_hash: af27396
+      #original_hash: 5882e05
       id_starts_with_lowercase: >-
         O Identificador da competição começa com letra minúscula. Preferimos que
         comece com uma letra maiúscula.
@@ -3818,6 +3837,8 @@ pt:
         no horário.
       #original_hash: 6e228b7
       must_contain_delegate: deve ter pelo menos um Delegado da WCA
+      #original_hash: b5677c2
+      must_contain_organizer: tem de conter pelo menos um organizador
       #original_hash: 8131fc2
       not_all_delegates: não são todos Delegados da WCA
       #original_hash: 43a23c2

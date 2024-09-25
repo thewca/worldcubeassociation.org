@@ -10,15 +10,13 @@ import ExternalPaymentStep from './ExternalPaymentStep';
 
 const requirementsStepConfig = {
   key: 'requirements',
-  description: 'Accept competition terms',
-  i18nKey: 'competitions.registration_v2.requirements.title',
+  i18nKey: 'competitions.registration_v2.register.panel.requirements',
   component: RegistrationRequirements,
 };
 
 const competingStepConfig = {
   key: 'competing',
-  i18nKey: 'competitions.nav.menu.register',
-  description: 'Choose your events',
+  i18nKey: 'competitions.registration_v2.register.panel.competing',
   component: CompetingStep,
 };
 
@@ -31,15 +29,13 @@ const externalPaymentStepConfig = {
 
 const wcaPaymentStepConfig = {
   key: 'payment',
-  description: 'Enter billing information',
-  i18nKey: 'registrations.payment_form.labels.payment_information',
+  i18nKey: 'competitions.registration_v2.register.panel.payment',
   component: StripeWrapper,
 };
 
 const registrationOverviewConfig = {
   key: 'approval',
-  description: 'By organization team',
-  i18nKey: 'competitions.registration_v2.register.approval',
+  i18nKey: 'competitions.registration_v2.register.panel.approval',
   component: RegistrationOverview,
 };
 
@@ -169,8 +165,8 @@ export default function StepPanel({
             onClick={() => setActiveIndex(index)}
           >
             <Step.Content>
-              <Step.Title>{i18n.t(stepConfig.i18nKey)}</Step.Title>
-              <Step.Description>{stepConfig.description}</Step.Description>
+              <Step.Title>{i18n.t(`${stepConfig.i18nKey}.title`)}</Step.Title>
+              <Step.Description>{i18n.t(`${stepConfig.i18nKey}.description`)}</Step.Description>
             </Step.Content>
           </Step>
         ))}
