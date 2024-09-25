@@ -1807,6 +1807,12 @@ en:
         link: "As a <0>%{pdfLink}</0>"
       info:
         download: "Download all of the competitions details."
+        payment_missing: "Your registration will not be approved until you pay for your registration, unless you have a special arrangement with the organizers or you paid through an alternative method."
+        needs_approval: "Don't book your travel arrangements just yet - the organizers still have to manually approve your registration. This can take time."
+        is_accepted: "Book your travel and pack your bags - you have a spot at the competition!"
+        is_cancelled: "Your registration has been cancelled and you will not be competing, but you can sign up again"
+        is_rejected: "Your registration has been rejected by the organizers. Please contact the organizing team if you believe this was a mistake."
+        is_waitlisted: "Don't book your travel, but don't give up hope either. The competition is full, but you have been placed on a waiting list, and you will receive an email if enough spots open up for you to be able to attend."
       list:
         empty: "None"
         spots_remaining_plural:
@@ -1823,10 +1829,14 @@ en:
          refunded_status: "Refunded"
          initialized: "Payment process was started on %{date}, but not finished."
          refunded: "Payment was refunded on %{date}."
+        psychsheets:
+          go_back: "Go Back"
+        timestamp: "Timestamp"
+        comment_and_note: "Comment & Note"
+        edit_waiting_list: "Enable Waiting List Edit Mode"
       bookmark:
         unbookmark: "You have removed your bookmark"
       requirements:
-        title: "Requirements"
         acknowledgement: "I have read and acknowledged all information under the 'Register' tab, including entry fees, refund policies and any extra requirements listed above."
         next_step: "Continue to next Step"
       update:
@@ -1845,13 +1855,25 @@ en:
         too_many: "Accepting all these registrations would go over the competitor limit by %{count}"
         no_self_update: "Contact the Organization Team to update your registration."
       register:
+        panel:
+          approval:
+            title: "Approval"
+            description: "By organization team"
+          payment:
+            title: "Payment information"
+            description: "Enter billing information"
+          competing:
+            title: "Register"
+            description: "Choose your events"
+          requirements:
+            title: "Requirements"
+            description: "Accept competition terms"
         success: "You are registered for %{comp_name}"
         error: "Registration failed with error %{error}"
         early_registration: "Registration is not open yet - you are pre-registering as an organizer/delegate"
         comment: "Additional comments to the organizers"
         until: "You can update your registration until %{date}"
         passed: "You can no longer update your registration"
-        approval: "Approval"
         view_registration: "View Registration"
         editing_disabled: "Registration editing is disabled for this competition"
         registration_status:
