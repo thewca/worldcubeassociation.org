@@ -107,11 +107,11 @@ export default function CompetingStep({
       // Going from cancelled -> pending
       if (registration.competing.registration_status === 'cancelled') {
         dispatch(setMessage('registrations.flash.registered', 'positive'));
-        // Not changing status
+        nextStep();
       } else {
         dispatch(setMessage('registrations.flash.updated', 'positive'));
+        nextStep({ toEnd: true });
       }
-      nextStep({ toEnd: true });
     },
   });
 
