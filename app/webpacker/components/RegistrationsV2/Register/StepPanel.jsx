@@ -193,6 +193,9 @@ export default function StepPanel({
             const registrationOverviewIndex = steps.findIndex(
               (step) => step === registrationOverviewConfig,
             );
+            if (overwrites.toEnd) {
+              return registrationOverviewIndex;
+            }
             if (oldActiveIndex === registrationOverviewIndex) {
               return steps.findIndex(
                 (step) => step === competingStepConfig,

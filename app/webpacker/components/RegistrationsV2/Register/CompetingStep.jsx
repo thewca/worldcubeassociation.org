@@ -190,7 +190,7 @@ export default function CompetingStep({
         guests,
       });
     }).catch(() => {
-      nextStep();
+      nextStep({ toEnd: true });
     });
   };
 
