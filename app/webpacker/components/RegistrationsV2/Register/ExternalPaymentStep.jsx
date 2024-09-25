@@ -22,7 +22,11 @@ export default function ExternalPaymentStep({
       }}
       >
         <Header> External Payments </Header>
-        <Form.Field>{competitionInfo.payment_information ? <Markdown md={competitionInfo.payment_information} /> : <Header.Subheader>{i18n.t('registrations.wont_pay_here')}</Header.Subheader> }</Form.Field>
+        <Form.Field>
+          {competitionInfo.payment_information
+            ? <Markdown md={competitionInfo.payment_information} id={`${competitionInfo.id}-payment-information`} />
+            : <Header.Subheader>{i18n.t('registrations.wont_pay_here')}</Header.Subheader> }
+        </Form.Field>
         <Message positive>
           <Form.Checkbox
             checked={paymentAcknowledged}
