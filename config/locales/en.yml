@@ -1837,8 +1837,7 @@ en:
          refunded_status: "Refunded"
          initialized: "Payment process was started on %{date}, but not finished."
          refunded: "Payment was refunded on %{date}."
-         external: "External Payment"
-         external_acknowledgement: "I have read the external payment requirements and have paid for my entry to the competition."
+         external_acknowledgement: "I have followed the payment instructions and paid for my entry to the competition."
         psychsheets:
           go_back: "Go Back"
         timestamp: "Timestamp"
@@ -1873,8 +1872,8 @@ en:
             title: "Payment information"
             description: "Enter billing information"
           external_payment:
-            title: "External Payment"
-            description: "Enter billing information"
+            title: "Payment instructions"
+            description: "Pay registration fees"
           competing:
             title: "Register"
             description: "Choose your events"
