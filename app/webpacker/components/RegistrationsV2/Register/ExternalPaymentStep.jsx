@@ -10,11 +10,17 @@ import useCheckboxState from '../../../lib/hooks/useCheckboxState';
 export default function ExternalPaymentStep({
   competitionInfo,
   nextStep,
+  refetchRegistration,
 }) {
   const [paymentAcknowledged, setPaymentAcknowledged] = useCheckboxState(false);
   return (
     <Segment>
-      <Form onSubmit={nextStep}>
+      <Form onSubmit={async () => {
+        // We manually refetch here because we only want to show the external payment panel once
+        await refetchRegistration();
+        nextStep();
+      }}
+      >
         <Header> External Payments </Header>
         <Form.Field>{competitionInfo.payment_information ? <Markdown md={competitionInfo.payment_information} /> : <Header.Subheader>{i18n.t('registrations.wont_pay_here')}</Header.Subheader> }</Form.Field>
         <Message positive>

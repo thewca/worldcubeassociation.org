@@ -1872,6 +1872,9 @@ en:
           payment:
             title: "Payment information"
             description: "Enter billing information"
+          external_payment:
+            title: "External Payment"
+            description: "Enter billing information"
           competing:
             title: "Register"
             description: "Choose your events"

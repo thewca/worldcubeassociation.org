@@ -21,9 +21,8 @@ const competingStepConfig = {
 };
 
 const externalPaymentStepConfig = {
-  key: 'payment',
-  description: i18n.t('competitions.registration_v2.list.payment.external'),
-  i18nKey: 'registrations.payment_form.labels.payment_information',
+  key: 'external_payment',
+  i18nKey: 'competitions.registration_v2.register.panel.external_payment',
   component: ExternalPaymentStep,
 };
 
@@ -74,7 +73,7 @@ const shouldBeDisabled = (hasPaid, key, activeIndex, index, competitionInfo, isR
       return true;
     }
     case externalPaymentStepConfig.key: {
-      return true;
+      return activeIndex !== index;
     }
     case wcaPaymentStepConfig.key: {
       return !hasPaid && index > activeIndex;
