@@ -93,7 +93,7 @@ class V2Registration < ActiveRecord::Base
     end
   end
 
-  def update_competing_lane!(update_params, waiting_list)
+  def update_competing_lane!(update_params)
     ActiveRecord::Base.transaction do
       if update_params[:status].present?
         competing_lane.lane_state = update_params[:status]
@@ -118,8 +118,8 @@ class V2Registration < ActiveRecord::Base
     end
   end
 
-  def add_history_entry(changes, actor_type, actor_id, action, timestamp = Time.now.utc)
-    new_entry = registration_history_entry.create(actor_type: actor_type, actor_id: actor_id, action: action, timestamp: timestamp)
+  def add_history_entry(changes, actor_type, actor_id, action)
+    new_entry = registration_history_entry.create(actor_type: actor_type, actor_id: actor_id, action: action)
     changes.keys.each do |key|
       new_entry.registration_history_change.create(from: changes[key][:from] || '', to: changes[key][:to], key: key.to_s)
     end
