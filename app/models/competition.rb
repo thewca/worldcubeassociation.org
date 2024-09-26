@@ -11,6 +11,7 @@ class Competition < ApplicationRecord
   has_many :rounds, through: :competition_events
   has_many :registrations, dependent: :destroy
   has_many :v2_registrations, dependent: :destroy
+  has_one :waiting_list, dependent: :destroy
   has_many :results, foreign_key: "competitionId"
   has_many :scrambles, -> { order(:groupId, :isExtra, :scrambleNum) }, foreign_key: "competitionId"
   has_many :uploaded_jsons, dependent: :destroy
