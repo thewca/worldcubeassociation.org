@@ -969,6 +969,10 @@ class Competition < ApplicationRecord
     registration_open && Time.now < registration_open
   end
 
+  def after_registration_open?
+    registration_open && Time.now > registration_open
+  end
+
   def registration_past?
     registration_close && registration_close < Time.now
   end
@@ -2665,15 +2669,11 @@ class Competition < ApplicationRecord
   end
 
   def can_change_registration_system?
-    return false unless registration_not_yet_opened?
+    return false if after_registration_open?
 
-    if uses_new_registration_service?
-      return true
-    elsif self.registrations.any?
-      return false
-    else
-      return true
-    end
+    return true if uses_new_registration_service?
+
+    self.registrations.none?
   end
 
   # Our React date picker unfortunately behaves weirdly in terms of backend data
