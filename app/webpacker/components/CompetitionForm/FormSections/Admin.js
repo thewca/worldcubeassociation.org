@@ -12,9 +12,7 @@ export default function Admin() {
     <SubSection section="admin">
       <InputBoolean id="isConfirmed" />
       <InputBoolean id="isVisible" />
-      { canChangeRegistrationSystem && (
-        <InputBoolean id="usesV2Registrations" />
-      )}
+      <InputBoolean id="usesV2Registrations" disabled = {!canChangeRegistrationSystem}/>
     </SubSection>
   );
 }
