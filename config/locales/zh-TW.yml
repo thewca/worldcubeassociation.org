@@ -2994,6 +2994,18 @@ zh-TW:
       info:
         #original_hash: eade5c7
         download: 下載所有比賽細節。
+        #original_hash: 21891e5
+        payment_missing: 在您付款完成後您的報名才會被核准，除非您有跟主辦團隊協調或是使用別的付款方式。
+        #original_hash: b15fddc
+        needs_approval: 請先不要預定您的旅行計畫，主辦團隊還需要手動核准您的報名。會需要一點時間。
+        #original_hash: 6071fd9
+        is_accepted: 可以整理行李並預定您的旅行計畫了! 您已取得比賽中的位子!
+        #original_hash: e29a4d3
+        is_cancelled: 您的報名已被取消所以您沒法比賽，但您可以再次報名
+        #original_hash: 2a88d10
+        is_rejected: 您的報名已被主辦團隊拒絕。如果您覺得有錯誤，請聯絡主辦團隊。
+        #original_hash: 719dea0
+        is_waitlisted: 先別做旅行計畫，但也先別放棄。比賽已額滿，但您已在候補名單中，如果有名單釋出，您會收到電子郵件。
       list:
         #original_hash: 6eef664
         empty: 無
@@ -3018,12 +3030,19 @@ zh-TW:
           initialized: '款項手續已在%{date}開始，但尚未完成。'
           #original_hash: 3a16c0d
           refunded: '款項已在%{date}退款。'
+        psychsheets:
+          #original_hash: f03e2d0
+          go_back: 返回
+        #original_hash: 19eabc9
+        timestamp: 時間戳記
+        #original_hash: 5e0207a
+        comment_and_note: 評論和備註
+        #original_hash: b651ae4
+        edit_waiting_list: 開啟候補名單編輯模式
       bookmark:
         #original_hash: 7952a5c
         unbookmark: 您已經移除您的書籤
       requirements:
-        #original_hash: 09a428f
-        title: 條件
         #original_hash: 1255806
         acknowledgement: 我已閱讀並確認所有在「報名」標籤裡的資訊，包含參加費用、退費政策以及額外的參賽條件。
         #original_hash: 80d2933
@@ -3058,6 +3077,27 @@ zh-TW:
         #original_hash: 462376a
         no_self_update: 聯絡比賽主辦團隊來更新您的報名。
       register:
+        panel:
+          approval:
+            #original_hash: 8cc047a
+            title: 核准
+            #original_hash: 3bdafe5
+            description: 由組織團隊處理
+          payment:
+            #original_hash: 4930c06
+            title: 付款訊息
+            #original_hash: 0d084a5
+            description: 輸入帳單資訊
+          competing:
+            #original_hash: d672995
+            title: 報名
+            #original_hash: af0e6a0
+            description: 選擇您要的比賽項目
+          requirements:
+            #original_hash: 09a428f
+            title: 要求
+            #original_hash: 46f4145
+            description: 接受比賽的條款
         #original_hash: a38d5fa
         success: '您已報名了%{comp_name}'
         #original_hash: affea61
@@ -3070,8 +3110,6 @@ zh-TW:
         until: '您可以在%{date}以前更新您的報名'
         #original_hash: fc8bc84
         passed: 您無法再更新您的報名內容
-        #original_hash: 8cc047a
-        approval: 許可
         #original_hash: 05b9f17
         view_registration: 查看報名
         #original_hash: 3c8d8b7
