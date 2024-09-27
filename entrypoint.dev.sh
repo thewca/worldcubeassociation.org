@@ -9,9 +9,23 @@ BUNDLE_PATH="/usr/local/bundle/${RUBY_VERSION}"
 # Create the versioned directory if it doesn't exist
 mkdir -p "$BUNDLE_PATH"
 
+CURRENT_SYMLINK="/usr/local/bundle/current"
+
+# Check if the 'current' symlink exists
+if [ -L "$CURRENT_SYMLINK" ]; then
+  # Read the target of the 'current' symlink
+  CURRENT_TARGET=$(readlink "$CURRENT_SYMLINK")
+
+  # If the target doesn't match the current Ruby version, remove the old target
+  if [[ "$CURRENT_TARGET" != "$BUNDLE_PATH" ]]; then
+    echo "Removing gems for old Ruby version: $CURRENT_TARGET"
+    rm -rf "$CURRENT_TARGET"
+  fi
+fi
+
 # Symlink the versioned directory to a common 'current' path
-ln -sfn "$BUNDLE_PATH" /usr/local/bundle/current
-BUNDLE_PATH=/usr/local/bundle/current
+ln -sfn "$BUNDLE_PATH" "$CURRENT_SYMLINK"
+BUNDLE_PATH="$CURRENT_SYMLINK"
 
 # Set the BUNDLE_PATH to the symlink for all processes
 export BUNDLE_PATH
