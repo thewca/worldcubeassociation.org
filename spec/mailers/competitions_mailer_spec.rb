@@ -288,8 +288,14 @@ RSpec.describe CompetitionsMailer, type: :mailer do
       }
 
       it "renders the headers" do
+        countries = competition.continent.countries.sample(competition.competition_venues.count)
+
+        competition.competition_venues.each_with_index do |competition_venue, index|
+          competition_venue.update!(country_iso2: countries[index].iso2)
+        end
+
         expect(mail.subject).to eq "[wca-report] [Europe] FMC Europe 2016"
-        expect(mail.to).to eq ["reports.europe@worldcubeassociation.org"]
+        expect(mail.to).to eq countries.map { |c| DelegateReport.country_mailing_list(c) }
         expect(mail.cc).to match_array competition.delegates.pluck(:email)
         expect(mail.from).to eq ["reports@worldcubeassociation.org"]
         expect(mail.reply_to).to match_array competition.delegates.pluck(:email)
@@ -310,8 +316,15 @@ RSpec.describe CompetitionsMailer, type: :mailer do
       }
 
       it "renders the headers" do
+        continents = Continent.real.sample(competition.competition_venues.count)
+
+        competition.competition_venues.each_with_index do |competition_venue, index|
+          country = continents[index].countries.sample
+          competition_venue.update!(country_iso2: country.iso2)
+        end
+
         expect(mail.subject).to eq "[wca-report] [Multiple Continents] FMC World 2016"
-        expect(mail.to).to eq ["reports@worldcubeassociation.org"]
+        expect(mail.to).to eq competition.venue_continents.map { |c| DelegateReport.continent_mailing_list(c) }
         expect(mail.cc).to match_array competition.delegates.pluck(:email)
         expect(mail.from).to eq ["reports@worldcubeassociation.org"]
         expect(mail.reply_to).to match_array competition.delegates.pluck(:email)
