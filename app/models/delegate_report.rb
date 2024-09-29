@@ -73,14 +73,15 @@ class DelegateReport < ApplicationRecord
   end
 
   def mailing_lists
-    if competition.continent.real?
-      if competition.country.real?
-        return [DelegateReport.country_mailing_list(competition.country)]
-      end
-
-      return competition.venue_countries.map { |c| DelegateReport.country_mailing_list(c) }
+    if competition.country.real?
+      # If there is a directly attached country, just use that as the only mailing list
+      [DelegateReport.country_mailing_list(competition.country)]
+    elsif competition.continent.real?
+      # If at least the continent is real (i.e. FMC Europe), then use all available countries' lists
+      competition.venue_countries.map { |c| DelegateReport.country_mailing_list(c) }
+    else
+      # If not even the continent is real (i.e. FMC World), then use all available continents' lists
+      competition.venue_continents.map { |c| DelegateReport.continent_mailing_list(c) }
     end
-
-    competition.venue_continents.map { |c| DelegateReport.continent_mailing_list(c) }
   end
 end
