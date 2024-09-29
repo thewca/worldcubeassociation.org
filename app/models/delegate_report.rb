@@ -2,6 +2,15 @@
 
 class DelegateReport < ApplicationRecord
   REPORTS_ENABLED_DATE = Date.new(2016, 6, 1)
+  # Any potentially available section, regardless of versioning.
+  #   Use with care, some sections may not be available for some versions!
+  AVAILABLE_SECTIONS = [
+    :summary,
+    :equipment,
+    :venue,
+    :organization,
+    :incidents,
+  ].freeze
 
   belongs_to :competition
   belongs_to :posted_by_user, class_name: "User", optional: true
@@ -21,9 +30,16 @@ class DelegateReport < ApplicationRecord
     ActionController::Base.new.render_to_string(template: "delegate_reports/#{self.version}/_#{section}_default", formats: :md)
   end
 
-  before_create :md_section_defaults
-  def md_section_defaults
-    rendered_sections = self.md_sections.index_with { |section| render_section_template(section) }
+  before_create :md_section_defaults!
+  def md_section_defaults!
+    # Make sure that sections which are NOT being used are explicitly set to `nil`
+    #   by initializing an empty default map. Think of this as "default options".
+    empty_sections = AVAILABLE_SECTIONS.index_with(nil)
+
+    rendered_sections = self.md_sections
+                            .index_with { |section| render_section_template(section) }
+                            .reverse_merge(empty_sections)
+
     self.assign_attributes(**rendered_sections)
   end
 
@@ -54,13 +70,7 @@ class DelegateReport < ApplicationRecord
   end
 
   def md_sections
-    [
-      :summary,
-      :equipment,
-      :venue,
-      :organization,
-      :incidents,
-    ].filter { |section| self.uses_section?(section) }
+    AVAILABLE_SECTIONS.filter { |section| self.uses_section?(section) }
   end
 
   def can_see_submit_button?(current_user)
