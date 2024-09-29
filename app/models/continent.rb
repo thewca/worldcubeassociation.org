@@ -17,7 +17,7 @@ class Continent < ApplicationRecord
   alias_attribute :record_name, :recordName
 
   def url_id
-    self.name_attribute.parameterize.underscore.downcase
+    self.name_in(:en).parameterize.underscore.downcase
   end
 
   def self.country_ids(continent_id)
