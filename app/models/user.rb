@@ -95,7 +95,7 @@ class User < ApplicationRecord
          :confirmable
   devise :two_factor_authenticatable,
          otp_secret_encryption_key: AppSecrets.OTP_ENCRYPTION_KEY
-  BACKUP_CODES_LENGTH = 8
+  BACKUP_CODES_LENGTH = 4 # This means 4 bytes of randomness, which results in 8-character alphanumeric strings
   NUMBER_OF_BACKUP_CODES = 10
   devise :two_factor_backupable,
          otp_backup_code_length: BACKUP_CODES_LENGTH,
