@@ -1755,6 +1755,19 @@ class Competition < ApplicationRecord
                                  .where('competition_delegates.delegate_id = ?', delegate_user.id)
     end
 
+    if params[:event_ids].present?
+      event_ids = params[:event_ids].presence
+      unless event_ids.is_a?(Array)
+        raise WcaExceptions::BadApiParameter.new("Invalid event IDs: '#{params[:event_ids]}'")
+      end
+      event_ids.each do |event_id|
+        # This looks completely crazy (why not just pass the array as a whole, to build a `WHERE event_id IN (...)`??)
+        #   but is actually necessary to make sure that the competition holds ALL of the required events
+        #   and not just one or more (ie any) of the requested events.
+        competitions = competitions.has_event(event_id)
+      end
+    end
+
     if params[:start].present?
       start_date = Date.safe_parse(params[:start])
       if !start_date

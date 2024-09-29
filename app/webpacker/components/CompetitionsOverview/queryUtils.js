@@ -17,6 +17,7 @@ export function calculateQueryKey(filterState, canViewAdminDetails = false) {
   return {
     timeOrder: filterState?.timeOrder,
     region: filterState?.region,
+    selectedEvents: filterState?.selectedEvents,
     delegate: filterState?.delegate,
     search: filterState?.search,
     time: timeKey,
@@ -28,6 +29,7 @@ export function calculateQueryKey(filterState, canViewAdminDetails = false) {
 export function createSearchParams(filterState, pageParam, canViewAdminDetails = false) {
   const {
     region,
+    selectedEvents,
     delegate,
     search,
     timeOrder,
@@ -44,6 +46,9 @@ export function createSearchParams(filterState, pageParam, canViewAdminDetails =
   if (region && region !== 'all') {
     const regionParam = isContinent(region) ? 'continent' : 'country_iso2';
     searchParams.append(regionParam, region);
+  }
+  if (selectedEvents && selectedEvents.length > 0) {
+    selectedEvents.forEach((eventId) => searchParams.append('event_ids[]', eventId));
   }
   if (delegate) {
     searchParams.append('delegate', delegate);
