@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_09_13_052148) do
+ActiveRecord::Schema[7.2].define(version: 2024_09_20_121021) do
   create_table "Competitions", id: { type: :string, limit: 32, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", limit: 50, default: "", null: false
     t.string "cityName", limit: 50, default: "", null: false
@@ -101,8 +101,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_09_13_052148) do
     t.string "status", limit: 10, default: "", null: false
   end
 
-  create_table "ConciseAverageResults", id: false, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
-    t.integer "id", default: 0, null: false
+  create_table "ConciseAverageResults", id: :integer, default: 0, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.integer "average", default: 0, null: false
     t.bigint "valueAndId"
     t.string "personId", limit: 10, default: "", null: false
@@ -112,10 +111,13 @@ ActiveRecord::Schema[7.1].define(version: 2024_09_13_052148) do
     t.integer "year", limit: 2, default: 0, null: false, unsigned: true
     t.integer "month", limit: 2, default: 0, null: false, unsigned: true
     t.integer "day", limit: 2, default: 0, null: false, unsigned: true
+    t.string "gender", limit: 1, default: ""
+    t.index ["countryId"], name: "index_ConciseAverageResults_on_countryId"
+    t.index ["eventId"], name: "index_ConciseAverageResults_on_eventId"
+    t.index ["personId"], name: "index_ConciseAverageResults_on_personId"
   end
 
-  create_table "ConciseSingleResults", id: false, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
-    t.integer "id", default: 0, null: false
+  create_table "ConciseSingleResults", id: :integer, default: 0, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.integer "best", default: 0, null: false
     t.bigint "valueAndId"
     t.string "personId", limit: 10, default: "", null: false
@@ -125,6 +127,10 @@ ActiveRecord::Schema[7.1].define(version: 2024_09_13_052148) do
     t.integer "year", limit: 2, default: 0, null: false, unsigned: true
     t.integer "month", limit: 2, default: 0, null: false, unsigned: true
     t.integer "day", limit: 2, default: 0, null: false, unsigned: true
+    t.string "gender", limit: 1, default: ""
+    t.index ["countryId"], name: "index_ConciseSingleResults_on_countryId"
+    t.index ["eventId"], name: "index_ConciseSingleResults_on_eventId"
+    t.index ["personId"], name: "index_ConciseSingleResults_on_personId"
   end
 
   create_table "Continents", id: { type: :string, limit: 50, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
@@ -249,6 +255,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_09_13_052148) do
     t.string "regionalSingleRecord", limit: 3
     t.string "regionalAverageRecord", limit: 3
     t.timestamp "updated_at", default: -> { "CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP" }, null: false
+    t.index ["average", "countryId"], name: "index_Results_on_average_and_countryId"
+    t.index ["best", "countryId"], name: "index_Results_on_best_and_countryId"
     t.index ["competitionId", "updated_at"], name: "index_Results_on_competitionId_and_updated_at"
     t.index ["competitionId"], name: "Results_fk_tournament"
     t.index ["countryId"], name: "_tmp_index_Results_on_countryId"
@@ -556,6 +564,22 @@ ActiveRecord::Schema[7.1].define(version: 2024_09_13_052148) do
     t.string "assignment_code", null: false
     t.index ["registration_id", "registration_type"], name: "index_assignments_on_registration_id_and_registration_type"
     t.index ["schedule_activity_id"], name: "index_assignments_on_schedule_activity_id"
+  end
+
+  create_table "auxiliary_raw_records", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.integer "result_id", null: false
+    t.string "type", null: false
+    t.integer "value", null: false
+    t.string "record_name", null: false
+    t.index ["result_id"], name: "index_auxiliary_raw_records_on_result_id"
+  end
+
+  create_table "auxiliary_result_attempts", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.integer "result_id", null: false
+    t.integer "idx", null: false
+    t.integer "value", null: false
+    t.index ["result_id"], name: "index_auxiliary_result_attempts_on_result_id"
+    t.index ["value"], name: "index_auxiliary_result_attempts_on_value"
   end
 
   create_table "bookmarked_competitions", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
@@ -1286,6 +1310,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_09_13_052148) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "auxiliary_raw_records", "Results", column: "result_id"
+  add_foreign_key "auxiliary_result_attempts", "Results", column: "result_id"
   add_foreign_key "microservice_registrations", "Competitions", column: "competition_id"
   add_foreign_key "microservice_registrations", "users"
   add_foreign_key "oauth_openid_requests", "oauth_access_grants", column: "access_grant_id", on_delete: :cascade

@@ -9,6 +9,7 @@ module JobUtils
     CleanupPdfs,
     ClearConnectedPaymentIntegrations,
     ComputeAuxiliaryData,
+    ComputeRankingsRecords,
     DumpDeveloperDatabase,
     DumpPublicResultsDatabase,
     GenerateChore,
