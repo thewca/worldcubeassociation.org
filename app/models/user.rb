@@ -98,7 +98,9 @@ class User < ApplicationRecord
   BACKUP_CODES_LENGTH = 8
   NUMBER_OF_BACKUP_CODES = 10
   devise :two_factor_backupable,
-         otp_backup_code_length: BACKUP_CODES_LENGTH,
+         # The parameter `otp_backup_code_length` represents the number of random bytes that should be generated.
+         #   In order to achieve alphanumeric strings of length n, we need to generate n/2 random bytes.
+         otp_backup_code_length: (BACKUP_CODES_LENGTH / 2),
          otp_number_of_backup_codes: NUMBER_OF_BACKUP_CODES
   devise :jwt_authenticatable, jwt_revocation_strategy: JwtDenylist
 
