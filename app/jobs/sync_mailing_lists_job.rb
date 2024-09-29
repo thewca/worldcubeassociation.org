@@ -14,20 +14,20 @@ class SyncMailingListsJob < WcaCronjob
 
     User.clear_receive_delegate_reports_if_not_eligible
 
-    report_users = User.where(receive_delegate_reports: true, delegate_reports_region: nil).pluck(:email)
-    GsuiteMailingLists.sync_group("reports@worldcubeassociation.org", report_users | User.default_report_receivers)
+    report_user_emails = User.where(receive_delegate_reports: true, delegate_reports_region: nil).pluck(:email)
+    GsuiteMailingLists.sync_group(DelegateReport::GLOBAL_MAILING_LIST, report_user_emails | User.default_report_receivers)
 
     Continent.real.each do |continent|
-      continent_mailing = DelegateReport.continent_mailing_list(continent)
-      report_users = User.where(receive_delegate_reports: true, delegate_reports_region: continent).pluck(:email)
+      continent_list_address = DelegateReport.continent_mailing_list(continent)
+      report_user_emails = User.where(receive_delegate_reports: true, delegate_reports_region: continent).pluck(:email)
 
-      GsuiteMailingLists.sync_group(continent_mailing, report_users | ["reports@worldcubeassociation.org"])
+      GsuiteMailingLists.sync_group(continent_list_address, report_user_emails | [DelegateReport::GLOBAL_MAILING_LIST])
 
       continent.countries.real.each do |country|
-        country_mailing = DelegateReport.country_mailing_list(country, continent)
-        report_users = User.where(receive_delegate_reports: true, delegate_reports_region: country).pluck(:email)
+        country_list_address = DelegateReport.country_mailing_list(country, continent)
+        report_user_emails = User.where(receive_delegate_reports: true, delegate_reports_region: country).pluck(:email)
 
-        GsuiteMailingLists.sync_group(country_mailing, report_users | [continent_mailing])
+        GsuiteMailingLists.sync_group(country_list_address, report_user_emails | [continent_list_address])
       end
     end
 

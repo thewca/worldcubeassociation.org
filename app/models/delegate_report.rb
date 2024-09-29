@@ -64,6 +64,8 @@ class DelegateReport < ApplicationRecord
     self.posted_by_user_id = current_user&.id
   end
 
+  GLOBAL_MAILING_LIST = "reports@worldcubeassociation.org"
+
   def self.country_mailing_list(country, continent = country.continent)
     "reports.#{continent.url_id}.#{country.iso2}@worldcubeassociation.org"
   end
