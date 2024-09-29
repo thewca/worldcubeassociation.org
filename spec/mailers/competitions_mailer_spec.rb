@@ -274,6 +274,50 @@ RSpec.describe CompetitionsMailer, type: :mailer do
       end
     end
 
+    context "multi-national competition" do
+      let(:competition) {
+        FactoryBot.create(:competition,
+                          :with_delegate_report,
+                          :with_valid_schedule,
+                          countryId: "XE",
+                          cityName: "Multiple Cities",
+                          name: "FMC Europe 2016",
+                          delegates: [delegate.user, trainee_delegate.user],
+                          starts: Date.new(2016, 2, 1),
+                          ends: Date.new(2016, 2, 2))
+      }
+
+      it "renders the headers" do
+        expect(mail.subject).to eq "[wca-report] [Europe] FMC Europe 2016"
+        expect(mail.to).to eq ["reports.europe@worldcubeassociation.org"]
+        expect(mail.cc).to match_array competition.delegates.pluck(:email)
+        expect(mail.from).to eq ["reports@worldcubeassociation.org"]
+        expect(mail.reply_to).to match_array competition.delegates.pluck(:email)
+      end
+    end
+
+    context "multi-continent competition" do
+      let(:competition) {
+        FactoryBot.create(:competition,
+                          :with_delegate_report,
+                          :with_valid_schedule,
+                          countryId: "XW",
+                          cityName: "Multiple Cities",
+                          name: "FMC World 2016",
+                          delegates: [delegate.user, trainee_delegate.user],
+                          starts: Date.new(2016, 2, 1),
+                          ends: Date.new(2016, 2, 2))
+      }
+
+      it "renders the headers" do
+        expect(mail.subject).to eq "[wca-report] [Multiple Continents] FMC World 2016"
+        expect(mail.to).to eq ["reports@worldcubeassociation.org"]
+        expect(mail.cc).to match_array competition.delegates.pluck(:email)
+        expect(mail.from).to eq ["reports@worldcubeassociation.org"]
+        expect(mail.reply_to).to match_array competition.delegates.pluck(:email)
+      end
+    end
+
     it "is sent in English" do
       # Will fail if the date is localized, in French it will be "fév. 1"
       expect(mail.body.encoded).to match(/Feb 1/)
