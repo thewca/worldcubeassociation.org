@@ -490,6 +490,8 @@ th:
         discussion_url: URL ของการอภิปรายใน Google Group
         #original_hash: 65a9b28
         schedule_url: url ตารางการแข่งขัน
+        #original_hash: 12b71c3
+        summary: สรุป
         #original_hash: 36155d4
         equipment: อุปกรณ์
         #original_hash: 67cd406
@@ -748,7 +750,7 @@ th:
         unconfirmed_wca_id: ''
         #original_hash: da39a3e
         wca_id: ''
-        #original_hash: 81a76a3
+        #original_hash: 27c2251
         receive_delegate_reports: >-
           ถ้าคุณเป็น Trainee Delegate, Junior Delegate, Senior Delegate, หรือ
           สมาชิกของ WRC หรือ WQAC คุณจะได้รับ Delegate Reports เป็นค่าตั้งต้น
@@ -804,6 +806,11 @@ th:
         equipment: >-
           จำนวนและประเภทของ timer และ display ที่ใช้ในการแข่งขัน
           โปรดลบบรรทัดของอุปกรณ์ที่คุณไม่ได้ใช้
+        #original_hash: 2822e8d
+        summary: >-
+          ประเด็นที่ระบุไว้ข้างต้นเป็นเพียงแนวทางสำหรับรายงานที่สมบูรณ์เท่านั้น
+          โปรดใช้ตามดุลยพินิจของคุณตามที่คุณเห็นว่าเหมาะสม
+          โปรดลบส่วนที่ไม่ได้ใช้ออก!
         #original_hash: 2822e8d
         venue: >-
           หัวข้อในข้างต้นเป็นแนวทางในการเขียนรายงาน
@@ -2522,6 +2529,10 @@ th:
       reg_opens_too_early: การรับสมัครถูกตั้งค่าให้เริ่มน้อยกว่าที่กำหนด 48 ชั่วโมง
       #original_hash: a25e7a2
       registration_already_closed: กำหนดเวลาในการลงทะเบียนได้ผ่านไปแล้ว โปรดตั้งค่าให้เป็นเวลาในอนาคต
+      #original_hash: 9a07b42
+      uses_v2_registrations: >-
+        การแข่งขันครั้งนี้ใช้ระบบการสมัครแบบใหม่ โปรดติดต่อ WCAT
+        หากคุณคิดว่าการแข่งขันครั้งนี้ควรใช้ระบบเดิมแทน
       #original_hash: 3322400
       tooltip_registered: คุณได้สมัครแล้ว
       #original_hash: f2d092f
@@ -2544,8 +2555,6 @@ th:
       orga_closed_reg_success: ปิดการลงทะเบียนเรียบร้อยแล้ว
       #original_hash: 7f197a0
       orga_closed_reg_failure: ไม่สามารถปิดการลงทะเบียนได้
-      #original_hash: b16bd13
-      cannot_activate_v2: คุณไม่สามารถเปิดใช้งานระบบการสมัครแบบใหม่ได้หากการสมัครเปิดอยู่
       #original_hash: 74caf1a
       no_waiting_list_specified: >-
         การแข่งขันนี้ไม่มีกำหนดเวลาในการรับผู้เข้าแข่งขันใน waiting list
@@ -3013,6 +3022,8 @@ th:
           is_confirmed: ไม่อนุญาติให้ผู้จัดการแข่งขันแก้ไขการแข่งขันนี้
           #original_hash: d493e6a
           is_visible: ทำให้การแข่งขันปรากฏต่อสาธารณะ
+          #original_hash: e7daccb
+          uses_v_2_registrations: ใช้ระบบการสมัครแบบใหม่
         #original_hash: 89f89c0
         competition_id: ID
         #original_hash: 709a232
@@ -3158,6 +3169,11 @@ th:
           is_confirmed: ''
           #original_hash: da39a3e
           is_visible: ''
+          #original_hash: 68d3cc6
+          uses_v_2_registrations: >-
+            หากปิดใช้งาน การเปลี่ยนระบบการลงทะเบียนอาจจะทำให้เกิดปัญหาทางเทคนิค
+            โปรดติดต่อ WST
+            เพื่อขอความช่วยเหลือหากคุณยังต้องเปลี่ยนระบบการสมัครการแข่งขัน
         #original_hash: da39a3e
         competition_id: ''
         #original_hash: 2c812a0
@@ -4002,8 +4018,6 @@ th:
         competitors: ผู้เข้าแข่งขัน
         #original_hash: c4622c3
         scrambles: โจทย์
-        #original_hash: f632da3
-        enable_v2: เปิดใช้บริการการสมัครแบบใหม่
     results_table:
       #original_hash: 3e9a6b5
       wca_profile: WCA profile
