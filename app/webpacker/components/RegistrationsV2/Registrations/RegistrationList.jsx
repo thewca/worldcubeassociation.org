@@ -87,7 +87,7 @@ export default function RegistrationList({ competitionInfo }) {
   });
 
   const [state, dispatch] = useReducer(sortReducer, {
-    sortColumn: '',
+    sortColumn: 'name',
     sortDirection: undefined,
   });
 
