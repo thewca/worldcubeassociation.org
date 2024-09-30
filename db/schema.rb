@@ -687,6 +687,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_09_13_052148) do
 
   create_table "delegate_reports", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "competition_id"
+    t.integer "version", default: 0, null: false
+    t.text "summary"
     t.text "equipment"
     t.text "venue"
     t.text "organization"
