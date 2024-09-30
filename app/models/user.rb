@@ -1153,17 +1153,12 @@ class User < ApplicationRecord
   # The reason why clear_receive_delegate_reports_if_not_eligible is needed is because there's no automatic code that
   # runs once a user is no longer a team member, we just schedule their end date.
   def self.delegate_reports_receivers_emails
-    delegate_groups = UserGroup.delegate_regions
-    roles = delegate_groups.flat_map(&:active_roles).select do |role|
-      ["trainee_delegate", "junior_delegate"].include?(role.metadata.status)
-    end
-    eligible_delegate_users = roles.map { |role| role.user }
-    other_staff = User.where(receive_delegate_reports: true)
+    receives_reports_staff = User.where(receive_delegate_reports: true)
     (%w(
       seniors@worldcubeassociation.org
       quality@worldcubeassociation.org
       regulations@worldcubeassociation.org
-    ) + eligible_delegate_users.map(&:email) + other_staff.map(&:email)).uniq
+    ) + receives_reports_staff.map(&:email)).uniq
   end
 
   def notify_of_results_posted(competition)
