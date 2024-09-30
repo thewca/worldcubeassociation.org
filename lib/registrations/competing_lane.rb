@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 module Registrations
-  module Lanes
-    def self.competing_lane(registration, lane_params, current_user, competition_id)
+  module CompetingLane
+    def self.create!(registration, lane_params, current_user, competition_id)
       registration.comments = lane_params[:comment] || ''
       registration.guests = lane_params[:guests] || 0
       registration.registration_competition_events.build(lane_params[:event_ids].map do |event_id|
