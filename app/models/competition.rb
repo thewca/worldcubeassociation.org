@@ -563,6 +563,7 @@ class Competition < ApplicationRecord
 
   def reg_warnings
     warnings = {}
+    warnings[:uses_v2_registrations] = I18n.t('competitions.messages.uses_v2_registrations') if uses_new_registration_service?
     if registration_range_specified? && !registration_past?
       if self.announced?
         if (self.registration_open - self.announced_at) < REGISTRATION_OPENING_EARLIEST
@@ -2394,6 +2395,7 @@ class Competition < ApplicationRecord
       "admin" => {
         "isConfirmed" => confirmed?,
         "isVisible" => showAtAll?,
+        "usesV2Registrations" => uses_new_registration_service?,
       },
       "cloning" => {
         "fromId" => being_cloned_from_id,
@@ -2600,6 +2602,7 @@ class Competition < ApplicationRecord
       showAtAll: form_data.dig('admin', 'isVisible'),
       being_cloned_from_id: form_data.dig('cloning', 'fromId'),
       clone_tabs: form_data.dig('cloning', 'cloneTabs'),
+      uses_v2_registrations: form_data.dig('admin', 'usesV2Registrations'),
     }
   end
 
@@ -2659,6 +2662,10 @@ class Competition < ApplicationRecord
 
   def disconnect_all_payment_integrations
     competition_payment_integrations.destroy_all
+  end
+
+  def can_change_registration_system?
+    registration_not_yet_opened? && (uses_new_registration_service? || self.registrations.empty?)
   end
 
   # Our React date picker unfortunately behaves weirdly in terms of backend data
@@ -2827,6 +2834,7 @@ class Competition < ApplicationRecord
           "properties" => {
             "isConfirmed" => { "type" => "boolean" },
             "isVisible" => { "type" => "boolean" },
+            "usesV2Registrations" => { "type" => "boolean" },
           },
         },
         "cloning" => {

@@ -1366,6 +1366,7 @@ en:
       in_progress_at_wca_live_html: "This competition is ongoing. You can check the live results <a href='%{link_here}'>here</a>!"
       reg_opens_too_early: "Registration is set to start in less than the required 48 hours."
       registration_already_closed: "The deadline to register has already passed. Please set it to be in the future."
+      uses_v2_registrations: "This competition is using the new Registration System. Please contact WCAT if you believe this competition should use the old system instead."
       tooltip_registered: "You are registered."
       tooltip_waiting_list: "You are currently on the waiting list."
       tooltip_deleted: "Unfortunately your registration has been deleted. Please check your email for details, or contact the organiser(s)."
@@ -1376,7 +1377,6 @@ en:
       championship_exists: "There is already a %{championship_type} in %{year}."
       orga_closed_reg_success: "Sucessfully closed registration."
       orga_closed_reg_failure: "Cannot close registration."
-      cannot_activate_v2: "You cannot activate the new registration system if registration is open."
       no_waiting_list_specified: "This competition does not have a deadline for accepting competitors on the waiting list. If you are using a waiting list, please specify a deadline. If you are not using a waiting list, please remember to specify this in the registration requirements."
     #context: on the "My competitions" page
     my_competitions:
@@ -1615,6 +1615,7 @@ en:
         admin:
           is_confirmed: "Do not let organizers edit this competition"
           is_visible: "Make competition visible to the public"
+          uses_v_2_registrations: "Use the new Registration System"
         competition_id: "ID"
         name: "Name"
         short_name: "Competition short name"
@@ -1695,6 +1696,7 @@ en:
         admin:
           is_confirmed: ""
           is_visible: ""
+          uses_v_2_registrations: "If this is disabled, changing the registration system will cause technical issues. Please contact WST for assistance if you still need to change the registration system."
         competition_id: ""
         name: "The full name of the competition including the year at the end (e.g., Danish Open 2016). Be sure to capitalize. The name must contain only alphanumeric characters, dashes(-), ampersands(&), periods(.), colons(:), apostrophes('), and spaces( )."
         short_name: "A short name for displaying. If the name of the competition is below %{short_name_limit} characters this should not be edited and should be the same as the normal name."
@@ -2095,7 +2097,6 @@ en:
         register: "Register"
         competitors: "Competitors"
         scrambles: "Scrambles"
-        enable_v2: "Enable new Registration Service"
     results_table:
       wca_profile: "WCA profile"
       event: "Event"
