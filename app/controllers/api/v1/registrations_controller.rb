@@ -14,7 +14,6 @@ class RegistrationsController < Api::V1::ApiController
   before_action :validate_list_admin, only: [:list_admin]
   before_action :validate_update_request, only: [:update]
   before_action :validate_bulk_update_request, only: [:bulk_update]
-  before_action :validate_payment_ticket_request, only: [:payment_ticket]
 
   def show
     registration = get_single_registration(@user_id, @competition_id)
@@ -44,7 +43,7 @@ class RegistrationsController < Api::V1::ApiController
   def validate_create_request
     @competition_id = registration_params[:competition_id]
     @user_id = registration_params[:user_id]
-    Registrations::RegistrationChecker.create_registration_allowed!(registration_params, CompetitionApi.find(@competition_id), @current_user)
+    Registrations::RegistrationChecker.create_registration_allowed!(registration_params, Competition.find(@competition_id), @current_user)
   rescue RegistrationError => e
     Rails.logger.debug { "Create was rejected with error #{e.error} at #{e.backtrace[0]}" }
     render_error(e.http_status, e.error, e.data)
@@ -61,10 +60,10 @@ class RegistrationsController < Api::V1::ApiController
 
   def validate_update_request
     @user_id = params[:user_id]
-    @competition_id = params[:competition_id]
-    @competition_info = CompetitionApi.find!(@competition_id)
+    competition_id = params[:competition_id]
+    @competition = Competition.find(competition_id)
 
-    Registrations::RegistrationChecker.update_registration_allowed!(params, @competition_info, @current_user)
+    Registrations::RegistrationChecker.update_registration_allowed!(params, @competition, @current_user)
   rescue RegistrationError => e
     render_error(e.http_status, e.error, e.data)
   end
@@ -87,7 +86,7 @@ class RegistrationsController < Api::V1::ApiController
 
   def validate_bulk_update_request
     @competition_id = params.require('competition_id')
-    @competition_info = CompetitionApi.find!(@competition_id)
+    @competition_info = Competition.find(@competition_id)
     Registrations::RegistrationChecker.bulk_update_allowed!(params, @competition_info, @current_user)
   rescue BulkUpdateError => e
     Rails.logger.debug { "Bulk update was rejected with error #{e.errors} at #{e.backtrace[0]}" }
@@ -143,22 +142,6 @@ class RegistrationsController < Api::V1::ApiController
     }
   end
 
-  def payment_ticket
-    donation = params[:donation_iso].to_i || 0
-    amount, currency_code = @competition.payment_info
-    client_secret, ticket = PaymentApi.get_ticket(@registration[:attendee_id], amount + donation, currency_code, @current_user)
-    @registration.init_payment_lane(amount, currency_code, ticket, donation)
-    render json: { client_secret: client_secret, status: @registration.payment_status }
-  end
-
-  def validate_payment_ticket_request
-    competition_id = params[:competition_id]
-    @competition = CompetitionApi.find!(competition_id)
-    render_error(:forbidden, ErrorCodes::PAYMENT_NOT_ENABLED) unless @competition.using_wca_payment?
-
-    @registration = Registration.find("#{competition_id}-#{@current_user}")
-    render_error(:forbidden, ErrorCodes::PAYMENT_NOT_READY) if @registration.nil? || @registration.competing_status.nil?
-  end
 
   def list
     competition_id = list_params
@@ -174,8 +157,9 @@ class RegistrationsController < Api::V1::ApiController
 
   # To list Registrations in the admin view you need to be able to administer the competition
   def validate_list_admin
-    @competition_id = list_params
-    unless UserApi.can_administer?(@current_user, @competition_id)
+    competition_id = list_params
+    @competition = Competition.find(competition_id)
+    unless @current_user.can_manage_competition?(@competition)
       render_error(:unauthorized, ErrorCodes::USER_INSUFFICIENT_PERMISSIONS)
     end
   end

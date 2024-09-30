@@ -1862,6 +1862,10 @@ class Competition < ApplicationRecord
     competition_series&.competition_ids&.split(',') || []
   end
 
+  def other_series_ids
+    competition_series_ids.reject { |id| id == self.id }
+  end
+
   def qualification_wcif
     return {} unless uses_qualification?
     competition_events

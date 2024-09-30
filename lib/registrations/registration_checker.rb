@@ -3,17 +3,14 @@
 module Registrations
   class RegistrationChecker
     COMMENT_CHARACTER_LIMIT = 240
-    def self.create_registration_allowed!(registration_request, competition_info, requesting_user)
-      @request = registration_request.stringify_keys
-      @competition_info = competition_info
-      @requestee_user_id = @request['user_id']
-      @requester_user_id = requesting_user
+    def self.create_registration_allowed!(registration_request, competition, requester_user)
+      requestee_user = User.find(registration_request['user_id'])
 
-      user_can_create_registration!
-      validate_create_events!
-      validate_qualifications!
-      validate_guests!
-      validate_comment!
+      user_can_create_registration!(registration_request, competition, requester_user, requestee_user)
+      validate_create_events!(registration_request, competition, requester_user, requestee_user)
+      validate_qualifications!(registration_request, competition, requester_user, requestee_user)
+      validate_guests!(registration_request, competition, requester_user, requestee_user)
+      validate_comment!(registration_request, competition, requester_user, requestee_user)
     end
 
     def self.update_registration_allowed!(update_request, competition_info, requesting_user)
@@ -37,15 +34,13 @@ module Registrations
       raise RegistrationError.new(:not_found, ErrorCodes::REGISTRATION_NOT_FOUND)
     end
 
-    def self.bulk_update_allowed!(bulk_update_request, competition_info, requesting_user)
-      @competition_info = competition_info
-
+    def self.bulk_update_allowed!(bulk_update_request, competition, requesting_user)
       raise BulkUpdateError.new(:unauthorized, [ErrorCodes::USER_INSUFFICIENT_PERMISSIONS]) unless
-        UserApi.can_administer?(requesting_user, competition_info.id)
+        requesting_user.can_manage_competition?(competition)
 
       errors = {}
       bulk_update_request['requests'].each do |update_request|
-        update_registration_allowed!(update_request, competition_info, requesting_user)
+        update_registration_allowed!(update_request, competition, requesting_user)
       rescue RegistrationError => e
         Rails.logger.debug { "Bulk update was rejected with error #{e.error} at #{e.backtrace[0]}" }
         errors[update_request['user_id']] = e.error
@@ -55,16 +50,15 @@ module Registrations
     end
 
     class << self
-      def user_can_create_registration!
-        # Only an organizer or the user themselves can create a registration for the user
-        raise RegistrationError.new(:unauthorized, ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless @requester_user_id == @requestee_user_id
+      def user_can_create_registration!(competition, requester_user, requestee_user)
+        # Only the user themselves can create a registration for the user
+        raise RegistrationError.new(:unauthorized, ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless requester_user.id == requestee_user.id
 
         # Only organizers can register when registration is closed, and they can only register for themselves - not for other users
-        raise RegistrationError.new(:forbidden, ErrorCodes::REGISTRATION_CLOSED) unless @competition_info.registration_open? || organizer_modifying_own_registration?
+        raise RegistrationError.new(:forbidden, ErrorCodes::REGISTRATION_CLOSED) unless competition.registration_open? || organizer_modifying_own_registration?(competition, requester_user, requestee_user)
 
         # Users must have the necessary permissions to compete - eg, they cannot be banned or have incomplete profiles
-        can_compete = UserApi.can_compete?(@requestee_user_id, @competition_info.start_date)
-        raise RegistrationError.new(:unauthorized, ErrorCodes::USER_CANNOT_COMPETE) unless can_compete
+        raise RegistrationError.new(:unauthorized, ErrorCodes::USER_CANNOT_COMPETE) unless requestee_user.cannot_register_for_competition_reasons(competition).empty?
 
         # Users cannot sign up for multiple competitions in a series
         raise RegistrationError.new(:forbidden, ErrorCodes::ALREADY_REGISTERED_IN_SERIES) if existing_registration_in_series?
@@ -82,8 +76,8 @@ module Registrations
         @requester_user_id == @requestee_user_id && @registration.competing_status == 'rejected'
       end
 
-      def organizer_modifying_own_registration?
-        @competition_info.is_organizer_or_delegate?(@requester_user_id) && (@requester_user_id == @requestee_user_id)
+      def organizer_modifying_own_registration?(competition, requester_user, requestee_user)
+        requester_user.can_manage_competition(competition) && (requester_user.id == requestee_user.id)
       end
 
       def can_administer_or_current_user?
@@ -210,11 +204,11 @@ module Registrations
         raise RegistrationError.new(:forbidden, ErrorCodes::INVALID_EVENT_SELECTION) if event_limit.present? && event_ids.count > event_limit
       end
 
-      def existing_registration_in_series?
-        return false if @competition_info.other_series_ids.nil?
+      def existing_registration_in_series?(competition, requestee_user)
+        return false if competition.other_series_ids.nil?
 
-        @competition_info.other_series_ids.each do |comp_id|
-          series_reg = Registration.find_by(competition_id: comp_id, user_id: @requestee_user_id)
+        competition.other_series_ids.each do |comp_id|
+          series_reg = Registration.find_by(competition_id: comp_id, user_id: requestee_user.id)
           if series_reg.nil?
             next
           end

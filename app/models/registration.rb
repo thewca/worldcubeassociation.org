@@ -63,6 +63,10 @@ class Registration < ApplicationRecord
     !accepted? && !deleted? && is_competing?
   end
 
+  def might_attend?
+    waitlisted? || pending? || accepted?
+  end
+
   def self.status_from_timestamp(accepted_at, deleted_at)
     if !accepted_at.nil? && deleted_at.nil?
       :accepted
