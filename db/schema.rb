@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_09_13_052148) do
+ActiveRecord::Schema[7.2].define(version: 2024_09_24_132809) do
   create_table "Competitions", id: { type: :string, limit: 32, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", limit: 50, default: "", null: false
     t.string "cityName", limit: 50, default: "", null: false
@@ -965,6 +965,25 @@ ActiveRecord::Schema[7.1].define(version: 2024_09_13_052148) do
     t.index ["registration_id", "competition_event_id"], name: "index_reg_events_reg_id_comp_event_id"
   end
 
+  create_table "registration_history_changes", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.bigint "registration_history_entries_id"
+    t.string "key"
+    t.string "value"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["registration_history_entries_id"], name: "idx_on_registration_history_entries_id_ae573a1574"
+  end
+
+  create_table "registration_history_entries", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.bigint "registrations_id"
+    t.string "actor_type"
+    t.string "actor_id"
+    t.string "action"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["registrations_id"], name: "index_registration_history_entries_on_registrations_id"
+  end
+
   create_table "registration_payments", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.integer "registration_id"
     t.integer "amount_lowest_denomination"
@@ -1258,6 +1277,15 @@ ActiveRecord::Schema[7.1].define(version: 2024_09_13_052148) do
     t.index ["user_id"], name: "index_votes_on_user_id"
   end
 
+  create_table "waiting_lists", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "holder_type"
+    t.bigint "holder_id"
+    t.json "entries"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["holder_type", "holder_id"], name: "index_waiting_lists_on_holder"
+  end
+
   create_table "wcif_extensions", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "extendable_type"
     t.string "extendable_id"
@@ -1291,6 +1319,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_09_13_052148) do
   add_foreign_key "oauth_openid_requests", "oauth_access_grants", column: "access_grant_id", on_delete: :cascade
   add_foreign_key "payment_intents", "users", column: "initiated_by_id"
   add_foreign_key "paypal_records", "paypal_records", column: "parent_record_id"
+  add_foreign_key "registration_history_changes", "registration_history_entries", column: "registration_history_entries_id"
   add_foreign_key "sanity_check_exclusions", "sanity_checks"
   add_foreign_key "sanity_checks", "sanity_check_categories"
   add_foreign_key "stripe_records", "stripe_records", column: "parent_record_id"
