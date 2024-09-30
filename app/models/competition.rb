@@ -653,7 +653,8 @@ class Competition < ApplicationRecord
              'announced_by_user',
              'cancelled_by_user',
              'competition_payment_integrations',
-             'microservice_registrations'
+             'microservice_registrations',
+             'waiting_list'
           # Do nothing as they shouldn't be cloned.
         when 'organizers'
           clone.organizers = organizers
