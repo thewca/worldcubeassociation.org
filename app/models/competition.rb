@@ -393,6 +393,19 @@ class Competition < ApplicationRecord
     Event.c_find(main_event_id)
   end
 
+  def events_held?(event_ids)
+    event_ids != [] && competition_events.pluck(:event_id).to_set.superset?(event_ids.to_set)
+  end
+
+  def enforces_qualifications?
+    uses_qualification? && !allow_registration_without_qualification
+  end
+
+  def guest_limit_exceeded?(guest_count)
+    return false if guests_per_registration_limit.blank?
+    guest_entry_status == 'restricted' && guests_per_registration_limit < guest_count
+  end
+
   def with_old_id
     new_id = self.id
     self.id = id_was
