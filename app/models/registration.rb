@@ -4,6 +4,7 @@ class Registration < ApplicationRecord
   scope :pending, -> { where(accepted_at: nil).where(deleted_at: nil).where(is_competing: true) }
   scope :accepted, -> { where.not(accepted_at: nil).where(deleted_at: nil) }
   scope :deleted, -> { where.not(deleted_at: nil) }
+  scope :rejected, -> { where.not(rejected_at: nil) }
   scope :non_competing, -> { where(is_competing: false) }
   scope :not_deleted, -> { where(deleted_at: nil) }
   scope :with_payments, -> { joins(:registration_payments).distinct }
@@ -48,6 +49,10 @@ class Registration < ApplicationRecord
 
   def deleted?
     !deleted_at.nil?
+  end
+
+  def rejected?
+    !rejected_at.nil?
   end
 
   def accepted?
@@ -188,6 +193,13 @@ class Registration < ApplicationRecord
   # there are any validation issues on the form.
   def saved_and_unsaved_events
     registration_competition_events.reject(&:marked_for_destruction?).map(&:event)
+  end
+
+  def add_history_entry(changes, actor_type, actor_id, action)
+    new_entry = registration_history_entries.create(actor_type: actor_type, actor_id: actor_id, action: action)
+    changes.keys.each do |key|
+      new_entry.registration_history_change.create(value: changes[key])
+    end
   end
 
   def waiting_list_info
