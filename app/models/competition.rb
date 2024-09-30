@@ -168,6 +168,7 @@ class Competition < ApplicationRecord
     event_change_deadline_date
     competition_series_id
     uses_v2_registrations
+    waiting_list
   ).freeze
   VALID_NAME_RE = /\A([-&.:' [:alnum:]]+) (\d{4})\z/
   VALID_ID_RE = /\A[a-zA-Z0-9]+\Z/
