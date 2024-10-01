@@ -157,11 +157,6 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
     registrations = get_registrations(@competition_id)
     registrations_with_pii = add_pii(registrations)
     render json: add_waiting_list(@competition_id, registrations_with_pii)
-  rescue Dynamoid::Errors::Error => e
-    Rails.logger.debug e
-    Metrics.increment('registration_dynamodb_errors_counter')
-    render json: { error: "Error getting registrations #{e}" },
-           status: :internal_server_error
   end
 
   private
