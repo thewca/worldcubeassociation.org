@@ -135,14 +135,8 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
 
   def list
     competition_id = list_params
-    registrations = get_registrations(competition_id, only_attending: true)
-    render json: registrations
-  rescue Dynamoid::Errors::Error => e
-    # Render an error response
-    Rails.logger.debug e
-    Metrics.increment('registration_dynamodb_errors_counter')
-    render json: { error: "Error getting registrations #{e}" },
-           status: :internal_server_error
+    registrations = Registration.where(competition_id: competition_id)
+    render json: registrations.map { |r| r.to_v2_json }
   end
 
   # To list Registrations in the admin view you need to be able to administer the competition
@@ -188,51 +182,5 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
 
     def list_params
       params.require(:competition_id)
-    end
-
-    def add_pii(registrations)
-      registrations.map do |r|
-        user = pii.find { |u| u['id'] == r[:user_id] }
-        r.merge(email: user['email'], dob: user['dob'])
-      end
-    end
-
-    def add_waiting_list(competition_id, registrations)
-      list = []#Competition.find(competition_id).waiting_list.entries
-      return registrations if list.empty?
-      registrations.map do |r|
-        waiting_list_index = list.find_index(r[:user_id])
-        r[:competing][:waiting_list_position] = waiting_list_index + 1 if waiting_list_index.present?
-        r
-      end
-    end
-
-    def get_registrations(competition_id, only_attending: false)
-      if only_attending
-        Registration.where(competition_id: competition_id, competing_status: 'accepted').all.map do |x|
-          { user_id: x['user_id'],
-            competing: {
-              event_ids: x.event_ids,
-            } }
-        end
-      else
-        Registration.where(competition_id: competition_id).all.map do |x|
-          { user_id: x['user_id'],
-            competing: {
-              event_ids: x.event_ids,
-              registration_status: x.competing_status,
-              registered_on: x['created_at'],
-              comment: x.comment,
-              admin_comment: x.administrative_notes,
-            },
-            payment: {
-              # payment_status: x.payment_status,
-              # payment_amount_iso: x.payment_amount,
-              # payment_amount_human_readable: x.payment_amount_human_readable,
-              # updated_at: x.payment_date,
-            },
-            guests: x.guests }
-        end
-      end
     end
 end
