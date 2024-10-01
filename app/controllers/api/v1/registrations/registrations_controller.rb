@@ -4,7 +4,7 @@ require 'securerandom'
 require 'jwt'
 require 'time'
 
-class RegistrationsController < Api::V1::ApiController
+class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
   skip_before_action :validate_jwt_token, only: [:list, :count]
   # The order of the validations is important to not leak any non public info via the API
   # That's why we should always validate a request first, before taking any other before action
@@ -27,10 +27,10 @@ class RegistrationsController < Api::V1::ApiController
   def create
     # Currently we only have one lane
     if params[:competing]
-      competing_params = params[:competing].permit([:comment, :event_ids, :guests])
+      competing_params = params[:competing].permit(:comment, :guests, :event_ids => [])
 
-      message_deduplication_id = "#{step_data[:lane_name]}-#{step_data[:step]}-#{step_data[:attendee_id]}"
-      message_group_id = step_data[:competition_id]
+      message_deduplication_id = "competing-registration-#{@competition_id}-#{@user_id}"
+      message_group_id = @competition_id
 
       AddRegistrationJob.set(message_group_id: message_group_id, message_deduplication_id: message_deduplication_id)
                         .perform_later("competing", @competition_id, @user_id, competing_params)

@@ -13,7 +13,7 @@ class Api::V1::ApiController < ActionController::API
     end
     token = request.headers['Authorization'].split[1]
     begin
-      decoded_token = (JWT.decode token, JwtOptions.secret, true, { algorithm: JwtOptions.algorithm })[0]
+      decoded_token = (JWT.decode token, AppSecrets.JWT_KEY, true, { algorithm: 'HS256' })[0]
       @current_user = User.find(decoded_token['user_id'].to_i)
     rescue JWT::VerificationError, JWT::InvalidJtiError
       render json: { error: Registrations::ErrorCodes::INVALID_TOKEN }, status: :unauthorized
