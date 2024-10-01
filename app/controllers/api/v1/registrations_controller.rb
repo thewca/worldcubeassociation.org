@@ -20,7 +20,7 @@ class RegistrationsController < Api::V1::ApiController
     render json: registration
   rescue ActiveRecord::RecordNotFound
     render json: {}, status: :not_found
-  rescue RegistrationError => e
+  rescue WcaExceptions::RegistrationError => e
     render_error(e.http_status, e.error)
   end
 
@@ -44,18 +44,13 @@ class RegistrationsController < Api::V1::ApiController
     @competition_id = registration_params[:competition_id]
     @user_id = registration_params[:user_id]
     Registrations::RegistrationChecker.create_registration_allowed!(registration_params, Competition.find(@competition_id), @current_user)
-  rescue RegistrationError => e
+  rescue WcaExceptions::RegistrationError => e
     Rails.logger.debug { "Create was rejected with error #{e.error} at #{e.backtrace[0]}" }
     render_error(e.http_status, e.error, e.data)
   end
 
   def update
     render json: { status: 'ok', registration: process_update(params) }
-  rescue Dynamoid::Errors::Error => e
-    Rails.logger.debug e
-    Metrics.increment('registration_dynamodb_errors_counter')
-    render json: { error: "Error Updating Registration: #{e.message}" },
-           status: :internal_server_error
   end
 
   def validate_update_request
@@ -64,7 +59,7 @@ class RegistrationsController < Api::V1::ApiController
     @competition = Competition.find(competition_id)
 
     Registrations::RegistrationChecker.update_registration_allowed!(params, @competition, @current_user)
-  rescue RegistrationError => e
+  rescue WcaExceptions::RegistrationError => e
     render_error(e.http_status, e.error, e.data)
   end
 
@@ -86,8 +81,8 @@ class RegistrationsController < Api::V1::ApiController
 
   def validate_bulk_update_request
     @competition_id = params.require('competition_id')
-    @competition_info = Competition.find(@competition_id)
-    Registrations::RegistrationChecker.bulk_update_allowed!(params, @competition_info, @current_user)
+    competition = Competition.find(@competition_id)
+    Registrations::RegistrationChecker.bulk_update_allowed!(params, competition, @current_user)
   rescue BulkUpdateError => e
     Rails.logger.debug { "Bulk update was rejected with error #{e.errors} at #{e.backtrace[0]}" }
     render_error(e.http_status, e.errors)
@@ -110,18 +105,12 @@ class RegistrationsController < Api::V1::ApiController
     old_status = registration.competing_status
 
     if old_status === "waiting_list" || status === "waiting_list"
-      waiting_list = @competition_info.waiting_list
+      waiting_list = competition.waiting_list
     end
 
     changes = RegistrationHelper.update_changes(update_request['competing'], registration)
     registration.update_competing_lane!({ status: status, comment: comment, event_ids: event_ids, admin_comment: admin_comment, guests: guests, waiting_list_position: waiting_list_position }, waiting_list)
     registration.add_history_entry(changes, 'user', @current_user, action_type(update_request))
-
-    if old_status == 'accepted' && status != 'accepted'
-      Competition.decrement_competitors_count(@competition_id)
-    elsif old_status != 'accepted' && status == 'accepted'
-      Competition.increment_competitors_count(@competition_id)
-    end
 
     # Only send emails when we update the competing status
     if status.present? && old_status != status
@@ -135,7 +124,7 @@ class RegistrationsController < Api::V1::ApiController
         event_ids: registration.registered_event_ids,
         registration_status: registration.competing_status,
         registered_on: registration['created_at'],
-        comment: registration.comment,
+        comment: registration.comments,
         admin_comment: registration.admin_comment,
       },
       history: registration.registration_history_entry.to_a,

@@ -32,4 +32,15 @@ module WcaExceptions
       super(:forbidden, error_str)
     end
   end
+
+  class RegistrationError < ApiException
+    attr_reader :error_code, :error, :data
+
+    def initialize(status, error, data = nil)
+      super(status, I18n.t("competitions.registration_v2.errors.#{error}"))
+      @error_code = error
+      @data = data
+    end
+  end
+
 end
