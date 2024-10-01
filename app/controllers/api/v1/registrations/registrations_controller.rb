@@ -16,8 +16,8 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
   before_action :validate_bulk_update_request, only: [:bulk_update]
 
   def show
-    registration = get_single_registration(@user_id, @competition_id)
-    render json: registration
+    registration = Registration.find_by(user_id: user_id, competition_id: competition_id)
+    render json: registration.to_v2_json(true, true)
   rescue ActiveRecord::RecordNotFound
     render json: {}, status: :not_found
   rescue WcaExceptions::RegistrationError => e
@@ -155,9 +155,8 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
   end
 
   def list_admin
-    registrations = get_registrations(@competition_id)
-    registrations_with_pii = add_pii(registrations)
-    render json: add_waiting_list(@competition_id, registrations_with_pii)
+    registrations = Registration.where(competition: @competition)
+    render json: registrations.map { |r| r.to_v2_json(true, true, true) }
   end
 
   private
@@ -192,10 +191,6 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
     end
 
     def add_pii(registrations)
-      pii = RedisHelper.cache_info_by_ids('pii', registrations.pluck(:user_id)) do |ids|
-        UserApi.get_user_info_pii(ids)
-      end
-
       registrations.map do |r|
         user = pii.find { |u| u['id'] == r[:user_id] }
         r.merge(email: user['email'], dob: user['dob'])
@@ -203,7 +198,7 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
     end
 
     def add_waiting_list(competition_id, registrations)
-      list = [] # WaitingList.find_or_create!(competition_id).entries
+      list = []#Competition.find(competition_id).waiting_list.entries
       return registrations if list.empty?
       registrations.map do |r|
         waiting_list_index = list.find_index(r[:user_id])
@@ -228,45 +223,16 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
               registration_status: x.competing_status,
               registered_on: x['created_at'],
               comment: x.comment,
-              admin_comment: x.admin_comment,
+              admin_comment: x.administrative_notes,
             },
             payment: {
-              payment_status: x.payment_status,
-              payment_amount_iso: x.payment_amount,
-              payment_amount_human_readable: x.payment_amount_human_readable,
-              updated_at: x.payment_date,
+              # payment_status: x.payment_status,
+              # payment_amount_iso: x.payment_amount,
+              # payment_amount_human_readable: x.payment_amount_human_readable,
+              # updated_at: x.payment_date,
             },
             guests: x.guests }
         end
       end
-    end
-
-    def get_single_registration(user_id, competition_id)
-      registration = Registration.find_by(user_id: user_id, competition_id: competition_id)
-      return nil if registration.nil?
-      waiting_list_position = if registration.competing_status == 'waiting_list'
-                                waiting_list = WaitingList.find_or_create!(competition_id)
-                                registration.waiting_list_position(waiting_list)
-                              else
-                                nil
-                              end
-      {
-        user_id: registration['user_id'],
-        guests: registration.guests,
-        competing: {
-          event_ids: registration.event_ids,
-          registration_status: registration.competing_status,
-          registered_on: registration['created_at'],
-          comment: registration.comments,
-          admin_comment: registration.administrative_notes,
-          waiting_list_position: waiting_list_position,
-        },
-        payment: {
-          # payment_status: registration.payment_status,
-          # payment_amount_human_readable: registration.payment_amount_human_readable,
-          # updated_at: registration.payment_date,
-        },
-        history: registration.registration_history,
-      }
     end
 end

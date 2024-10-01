@@ -250,6 +250,47 @@ class Registration < ApplicationRecord
     end
   end
 
+  def to_v2_json(admin = false, history = false, pii = false)
+    base_json = {
+      user_id: user_id,
+      competing: {
+        event_ids: event_ids,
+      }
+    }
+    if admin
+      base_json.merge!({
+                        guests: guests,
+                        competing: {
+                          event_ids: event_ids,
+                          registration_status: competing_status,
+                          registered_on: created_at,
+                          comment: comments,
+                          admin_comment: administrative_notes,
+                        },
+                        payment: {
+                          # payment_status: registration.payment_status,
+                          # payment_amount_human_readable: registration.payment_amount_human_readable,
+                          # updated_at: registration.payment_date,
+                        }
+                      })
+      if competing_status == "waiting_list"
+        base_json[:competing][:waiting_list_position] = competition.waiting_list.entries.find_index(user_id) + 1
+      end
+    end
+    if history
+      base_json.merge({
+                        history: registration_history
+                      })
+    end
+    if pii
+      base_json.merge({
+                        email: user.email,
+                        dob: user.dob,
+                      })
+    end
+    base_json
+  end
+
   def to_wcif(authorized: false)
     authorized_fields = {
       "guests" => guests,
