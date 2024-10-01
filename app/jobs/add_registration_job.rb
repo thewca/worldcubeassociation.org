@@ -10,7 +10,7 @@ class AddRegistrationJob < ApplicationJob
     end
 
     ActiveRecord::Base.transaction do
-      lane.process!(lane_params[:competing], user_id, competition_id)
+      lane.process!(lane_params, user_id, competition_id)
     end
   end
 end
