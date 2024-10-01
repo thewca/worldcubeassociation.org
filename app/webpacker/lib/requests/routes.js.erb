@@ -249,7 +249,7 @@ export const confirmedRegistrationsUrl = (competitionId) => `<%= CGI.unescape(Ra
 
 export const allRegistrationsUrl = (competitionId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v1_registrations_list_admin_path(competition_id: "${competitionId}")) %>`;
 
-export const singleRegistrationUrl = (competitionId, userId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v1_registrations_register_path(competition_id: "${competitionId}", user_id: "${user_id}")) %>`;
+export const singleRegistrationUrl = (competitionId, userId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v1_registrations_register_path(competition_id: "${competitionId}", user_id: "${userId}")) %>`;
 
 export const submitRegistrationUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v1_registrations_register_path) %>`;
 

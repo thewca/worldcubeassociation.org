@@ -66,7 +66,8 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
   # You can either view your own registration or one for a competition you administer
   def validate_show_registration
     @user_id, @competition_id = show_params
-    render_error(:unauthorized, ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless @current_user == @user_id.to_i || UserApi.can_administer?(@current_user, @competition_id)
+    @competition = Competition.find(@competition_id)
+    render_error(:unauthorized, ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless @current_user.id == @user_id.to_i || @current_user.can_manage(@competition)
   end
 
   def bulk_update
@@ -256,14 +257,14 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
           event_ids: registration.event_ids,
           registration_status: registration.competing_status,
           registered_on: registration['created_at'],
-          comment: registration.comment,
-          admin_comment: registration.admin_comment,
+          comment: registration.comments,
+          admin_comment: registration.administrative_notes,
           waiting_list_position: waiting_list_position,
         },
         payment: {
-          payment_status: registration.payment_status,
-          payment_amount_human_readable: registration.payment_amount_human_readable,
-          updated_at: registration.payment_date,
+          # payment_status: registration.payment_status,
+          # payment_amount_human_readable: registration.payment_amount_human_readable,
+          # updated_at: registration.payment_date,
         },
         history: registration.registration_history,
       }

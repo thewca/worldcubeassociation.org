@@ -218,8 +218,35 @@ class Registration < ApplicationRecord
       'accepted'
     elsif deleted?
       'deleted'
+    elsif rejected?
+      'rejected'
+    elsif waitlisted?
+      'waiting_list'
     else
       'pending'
+    end
+  end
+
+  def competing_status
+    wcif_status
+  end
+
+  def registration_history
+    registration_history_entries.map do |r|
+      changed_attributes = r.registration_history_change.each_with_object({}) do |change, attrs|
+        attrs[change.key] = if change.key == 'event_ids'
+                              JSON.parse(change.value) # Assuming 'event_ids' is stored as JSON array in `to`
+                            else
+                              change.value
+                            end
+      end
+      {
+        changed_attributes: changed_attributes,
+        actor_type: r.actor_type,
+        actor_id: r.actor_id,
+        timestamp: r.created_at,
+        action: r.action
+      }
     end
   end
 
