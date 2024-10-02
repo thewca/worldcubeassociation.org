@@ -33,7 +33,7 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
   def create
     # Currently we only have one lane
     if params[:competing]
-      competing_params = params[:competing].permit(:comment, :guests, event_ids: [])
+      competing_params = params.permit(:guests, competing: [:status, :comment, { event_ids: [] }, :admin_comment])
 
       message_deduplication_id = "competing-registration-#{@competition_id}-#{@user_id}"
       message_group_id = @competition_id
