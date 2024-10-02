@@ -55,6 +55,10 @@ class Registration < ApplicationRecord
     !rejected_at.nil?
   end
 
+  def waitlisted?
+    !waitlisted_at.nil?
+  end
+
   def accepted?
     !accepted_at.nil? && !deleted?
   end

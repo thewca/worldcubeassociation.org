@@ -687,6 +687,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_30_132809) do
 
   create_table "delegate_reports", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "competition_id"
+    t.integer "version", default: 0, null: false
+    t.text "summary"
     t.text "equipment"
     t.text "venue"
     t.text "organization"
@@ -1017,6 +1019,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_30_132809) do
     t.boolean "is_competing", default: true
     t.text "administrative_notes"
     t.datetime "rejected_at"
+    t.datetime "waitlisted_at"
     t.index ["competition_id", "user_id"], name: "index_registrations_on_competition_id_and_user_id", unique: true
     t.index ["competition_id"], name: "index_registrations_on_competition_id"
     t.index ["user_id"], name: "index_registrations_on_user_id"
