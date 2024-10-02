@@ -13,7 +13,8 @@ module Registrations
           competition_event = Competition.find(competition_id).competition_events.find { |ce| ce.event_id == event_id }
           { competition_event_id: competition_event.id }
         end)
-
+        changes = registration.changes.transform_values { |change| change[1] }
+        changes[:event_ids] = lane_params[:competing][:event_ids]
         registration.save!
         registration.add_history_entry(lane_params, "worker", user_id, "Worker processed")
       end
@@ -68,7 +69,7 @@ module Registrations
           if event_ids.present?
             changes[:event_ids] = event_ids
             registration.registration_competition_events.each do |registration_competition_event|
-              if event_ids.include?(registration_competition_event.event_id)
+              if event_ids.include?(registration_competition_event.event.id)
                 next
               end
               registration_competition_event.destroy
@@ -77,7 +78,7 @@ module Registrations
               if registration.event_ids.include?(event_id)
                 next
               end
-              competition_event = registration.competition_events.find { |ce| ce.event_id == event_id }
+              competition_event = registration.competition.competition_events.find { |ce| ce.event_id == event_id }
               registration.registration_competition_events.build({ competition_event_id: competition_event.id })
             end
           end
