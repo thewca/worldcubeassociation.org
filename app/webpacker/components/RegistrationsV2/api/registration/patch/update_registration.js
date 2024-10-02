@@ -1,4 +1,4 @@
-import { wcaRegistrationUrl } from '../../../../../lib/requests/routes.js.erb';
+import { updateRegistrationUrl, bulkUpdateRegistrationUrl } from '../../../../../lib/requests/routes.js.erb';
 import fetchWithJWTToken from '../../../../../lib/requests/fetchWithJWTToken';
 
 export default async function updateRegistration(

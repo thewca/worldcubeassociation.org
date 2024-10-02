@@ -15,8 +15,14 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
   before_action :validate_update_request, only: [:update]
   before_action :validate_bulk_update_request, only: [:bulk_update]
 
+  def validate_show_registration
+    @user_id, @competition_id = show_params
+    @competition = Competition.find(@competition_id)
+    render_error(:unauthorized, ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless @current_user.id == @user_id.to_i || @current_user.can_manage(@competition)
+  end
+
   def show
-    registration = Registration.find_by(user_id: user_id, competition_id: competition_id)
+    registration = Registration.find_by(user_id: @user_id, competition_id: @competition_id)
     render json: registration.to_v2_json(true, true)
   rescue ActiveRecord::RecordNotFound
     render json: {}, status: :not_found
@@ -50,7 +56,8 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
   end
 
   def update
-    render json: { status: 'ok', registration: process_update(params) }
+    updated_registration = Registrations::CompetingLane.update!(params, @current_user, @competition)
+    render json: { status: 'ok', registration: updated_registration.to_v2_json(true, true) }, status: :ok
   end
 
   def validate_update_request
@@ -63,12 +70,6 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
     render_error(e.http_status, e.error, e.data)
   end
 
-  # You can either view your own registration or one for a competition you administer
-  def validate_show_registration
-    @user_id, @competition_id = show_params
-    @competition = Competition.find(@competition_id)
-    render_error(:unauthorized, ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless @current_user.id == @user_id.to_i || @current_user.can_manage(@competition)
-  end
 
   def bulk_update
     updated_registrations = {}
@@ -90,46 +91,6 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
   rescue NoMethodError => e
     Rails.logger.debug { "Bulk update was rejected with error #{e.exception} at #{e.backtrace[0]}" }
     render_error(:unprocessable_entity, ErrorCodes::INVALID_REQUEST_DATA)
-  end
-
-  # Shared update logic used by both `update` and `bulk_update`
-  def process_update(update_request)
-    guests = update_request[:guests]
-    status = update_request.dig('competing', 'status')
-    comment = update_request.dig('competing', 'comment')
-    event_ids = update_request.dig('competing', 'event_ids')
-    admin_comment = update_request.dig('competing', 'admin_comment')
-    waiting_list_position = update_request.dig('competing', 'waiting_list_position')
-    user_id = update_request[:user_id]
-
-    registration = Registration.find_by(competition_id: @competition_id, user_id: user_id)
-    old_status = registration.competing_status
-
-    if old_status === "waiting_list" || status === "waiting_list"
-      waiting_list = competition.waiting_list
-    end
-
-    changes = RegistrationHelper.update_changes(update_request['competing'], registration)
-    registration.update_competing_lane!({ status: status, comment: comment, event_ids: event_ids, admin_comment: admin_comment, guests: guests, waiting_list_position: waiting_list_position }, waiting_list)
-    registration.add_history_entry(changes, 'user', @current_user, action_type(update_request))
-
-    # Only send emails when we update the competing status
-    if status.present? && old_status != status
-      # EmailApi.send_update_email(@competition_id, user_id, status, @current_user)
-    end
-
-    {
-      user_id: registration.user_id,
-      guests: registration.guests,
-      competing: {
-        event_ids: registration.registered_event_ids,
-        registration_status: registration.competing_status,
-        registered_on: registration['created_at'],
-        comment: registration.comments,
-        admin_comment: registration.admin_comment,
-      },
-      history: registration.registration_history_entry.to_a,
-    }
   end
 
 

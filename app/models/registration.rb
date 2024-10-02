@@ -278,12 +278,12 @@ class Registration < ApplicationRecord
       end
     end
     if history
-      base_json.merge({
+      base_json.merge!({
                         history: registration_history
                       })
     end
     if pii
-      base_json.merge({
+      base_json.merge!({
                         email: user.email,
                         dob: user.dob,
                       })
