@@ -101,6 +101,7 @@ module Registrations
             end
           else
             # code would have errored out already
+            raise "Unknown registration status, this should not happen"
           end
         end
 

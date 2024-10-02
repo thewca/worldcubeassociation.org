@@ -23,7 +23,7 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
 
   def show
     registration = Registration.find_by(user_id: @user_id, competition_id: @competition_id)
-    render json: registration.to_v2_json(true, true)
+    render json: registration.to_v2_json(admin: true, history: true)
   rescue ActiveRecord::RecordNotFound
     render json: {}, status: :not_found
   rescue WcaExceptions::RegistrationError => e
@@ -58,7 +58,7 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
   def update
     if params[:competing]
       updated_registration = Registrations::Lanes::Competing.update!(params, @current_user, @competition)
-      render json: { status: 'ok', registration: updated_registration.to_v2_json(true, true) }, status: :ok
+      render json: { status: 'ok', registration: updated_registration.to_v2_json(admin: true, history: true) }, status: :ok
     end
     render json: { status: 'bad request', message: 'You need to supply at least one lane' }, status: :bad_request
   end
@@ -112,7 +112,7 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
 
   def list_admin
     registrations = Registration.where(competition: @competition)
-    render json: registrations.map { |r| r.to_v2_json(true, true, true) }
+    render json: registrations.map { |r| r.to_v2_json(admin: true, history: true, pii: true) }
   end
 
   private
