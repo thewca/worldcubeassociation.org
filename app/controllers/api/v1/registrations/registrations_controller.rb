@@ -33,7 +33,7 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
   def create
     # Currently we only have one lane
     if params[:competing]
-      competing_params = params[:competing].permit(:comment, :guests, :event_ids => [])
+      competing_params = params[:competing].permit(:comment, :guests, event_ids: [])
 
       message_deduplication_id = "competing-registration-#{@competition_id}-#{@user_id}"
       message_group_id = @competition_id
@@ -56,8 +56,11 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
   end
 
   def update
-    updated_registration = Registrations::CompetingLane.update!(params, @current_user, @competition)
-    render json: { status: 'ok', registration: updated_registration.to_v2_json(true, true) }, status: :ok
+    if params[:competing]
+      updated_registration = Registrations::Lanes::Competing.update!(params, @current_user, @competition)
+      render json: { status: 'ok', registration: updated_registration.to_v2_json(true, true) }, status: :ok
+    end
+    render json: { status: 'bad request', message: 'You need to supply at least one lane' }, status: :bad_request
   end
 
   def validate_update_request
@@ -69,7 +72,6 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
   rescue WcaExceptions::RegistrationError => e
     render_error(e.http_status, e.error, e.data)
   end
-
 
   def bulk_update
     updated_registrations = {}
@@ -92,7 +94,6 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
     Rails.logger.debug { "Bulk update was rejected with error #{e.exception} at #{e.backtrace[0]}" }
     render_error(:unprocessable_entity, ErrorCodes::INVALID_REQUEST_DATA)
   end
-
 
   def list
     competition_id = list_params

@@ -42,5 +42,4 @@ module WcaExceptions
       @data = data
     end
   end
-
 end
