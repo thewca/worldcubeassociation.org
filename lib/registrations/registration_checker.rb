@@ -74,14 +74,14 @@ module Registrations
       end
 
       def organizer_modifying_own_registration?(competition, requester_user, requestee_user)
-        requester_user.can_manage_competition(competition) && (requester_user.id == requestee_user.id)
+        requester_user.can_manage_competition?(competition) && (requester_user.id == requestee_user.id)
       end
 
       def can_administer_or_current_user?(competition, requester_user, requestee_user)
         # Only an organizer or the user themselves can create a registration for the user
         # One case where organizers need to create registrations for users is if a 3rd-party registration system is being used, and registration data is being
         # passed to the Registration Service from it
-        (requester_user.id == requestee_user.id) || requester_user.can_manage_competition(competition)
+        (requester_user.id == requestee_user.id) || requester_user.can_manage_competition?(competition)
       end
 
       def validate_create_events!(request, competition)
@@ -128,7 +128,7 @@ module Registrations
       def validate_organizer_fields!(request)
         organizer_fields = ['organizer_comment', 'waiting_list_position']
 
-        raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) if contains_organizer_fields?(request, organizer_fields) && !requester_user.can_manage_competition(competition)
+        raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) if contains_organizer_fields?(request, organizer_fields) && !requester_user.can_manage_competition?(competition)
       end
 
       def validate_organizer_comment!(request)

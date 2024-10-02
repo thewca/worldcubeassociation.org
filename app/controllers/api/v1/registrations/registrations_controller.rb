@@ -70,6 +70,7 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
 
     Registrations::RegistrationChecker.update_registration_allowed!(params, @competition, @current_user)
   rescue WcaExceptions::RegistrationError => e
+    Rails.logger.debug { "Update was rejected with error #{e.error} at #{e.backtrace[0]}" }
     render_error(e.http_status, e.error, e.data)
   end
 
@@ -77,16 +78,16 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
     updated_registrations = {}
     update_requests = params[:requests]
     update_requests.each do |update|
-      updated_registrations[update['user_id']] = process_update(update)
+      updated_registrations[update['user_id']] = Registrations::Lanes::Competing.update!(update, @current_user, @competition)
     end
 
     render json: { status: 'ok', updated_registrations: updated_registrations }
   end
 
   def validate_bulk_update_request
-    @competition_id = params.require('competition_id')
-    competition = Competition.find(@competition_id)
-    Registrations::RegistrationChecker.bulk_update_allowed!(params, competition, @current_user)
+    competition_id = params.require('competition_id')
+    @competition = Competition.find(competition_id)
+    Registrations::RegistrationChecker.bulk_update_allowed!(params, @competition, @current_user)
   rescue BulkUpdateError => e
     Rails.logger.debug { "Bulk update was rejected with error #{e.errors} at #{e.backtrace[0]}" }
     render_error(e.http_status, e.errors)
