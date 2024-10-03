@@ -22,6 +22,7 @@ class Competition < ApplicationRecord
   has_many :media, class_name: "CompetitionMedium", foreign_key: "competitionId", dependent: :delete_all
   has_many :tabs, -> { order(:display_order) }, dependent: :delete_all, class_name: "CompetitionTab"
   has_one :delegate_report, dependent: :destroy
+  has_one :waiting_list, dependent: :destroy, as: :holder
   has_many :competition_venues, dependent: :destroy
   belongs_to :country, foreign_key: :countryId
   has_one :continent, foreign_key: :continentId, through: :country
@@ -413,6 +414,13 @@ class Competition < ApplicationRecord
     end
   end
 
+  validate :must_have_at_least_one_organizer, if: :confirmed_or_visible?
+  def must_have_at_least_one_organizer
+    if organizer_ids.empty?
+      errors.add(:organizer_ids, I18n.t('competitions.errors.must_contain_organizer'))
+    end
+  end
+
   def confirmed_or_visible?
     self.confirmed? || self.showAtAll
   end
@@ -556,6 +564,7 @@ class Competition < ApplicationRecord
 
   def reg_warnings
     warnings = {}
+    warnings[:uses_v2_registrations] = I18n.t('competitions.messages.uses_v2_registrations') if uses_new_registration_service?
     if registration_range_specified? && !registration_past?
       if self.announced?
         if (self.registration_open - self.announced_at) < REGISTRATION_OPENING_EARLIEST
@@ -644,7 +653,8 @@ class Competition < ApplicationRecord
              'announced_by_user',
              'cancelled_by_user',
              'competition_payment_integrations',
-             'microservice_registrations'
+             'microservice_registrations',
+             'waiting_list'
           # Do nothing as they shouldn't be cloned.
         when 'organizers'
           clone.organizers = organizers
@@ -705,15 +715,15 @@ class Competition < ApplicationRecord
 
   attr_writer :staff_delegate_ids, :organizer_ids, :trainee_delegate_ids
   def staff_delegate_ids
-    @staff_delegate_ids || staff_delegates.pluck(:id).join(",")
+    @staff_delegate_ids || staff_delegates.map(&:id).join(",")
   end
 
   def organizer_ids
-    @organizer_ids || organizers.pluck(:id).join(",")
+    @organizer_ids || organizers.map(&:id).join(",")
   end
 
   def trainee_delegate_ids
-    @trainee_delegate_ids || trainee_delegates.pluck(:id).join(",")
+    @trainee_delegate_ids || trainee_delegates.map(&:id).join(",")
   end
 
   def enable_v2_registrations!
@@ -2387,6 +2397,7 @@ class Competition < ApplicationRecord
       "admin" => {
         "isConfirmed" => confirmed?,
         "isVisible" => showAtAll?,
+        "usesV2Registrations" => uses_new_registration_service?,
       },
       "cloning" => {
         "fromId" => being_cloned_from_id,
@@ -2593,6 +2604,7 @@ class Competition < ApplicationRecord
       showAtAll: form_data.dig('admin', 'isVisible'),
       being_cloned_from_id: form_data.dig('cloning', 'fromId'),
       clone_tabs: form_data.dig('cloning', 'cloneTabs'),
+      uses_v2_registrations: form_data.dig('admin', 'usesV2Registrations'),
     }
   end
 
@@ -2652,6 +2664,10 @@ class Competition < ApplicationRecord
 
   def disconnect_all_payment_integrations
     competition_payment_integrations.destroy_all
+  end
+
+  def can_change_registration_system?
+    registration_not_yet_opened? && (uses_new_registration_service? || self.registrations.empty?)
   end
 
   # Our React date picker unfortunately behaves weirdly in terms of backend data
@@ -2820,6 +2836,7 @@ class Competition < ApplicationRecord
           "properties" => {
             "isConfirmed" => { "type" => "boolean" },
             "isVisible" => { "type" => "boolean" },
+            "usesV2Registrations" => { "type" => "boolean" },
           },
         },
         "cloning" => {

@@ -106,7 +106,7 @@ resource "aws_launch_configuration" "m6i_launch_config" {
   name_prefix          = "${var.name_prefix}-m6i-"
   image_id             = data.aws_ami.ecs.id
   iam_instance_profile = aws_iam_instance_profile.ecs_instance_profile.name
-  instance_type        = "m6i.2xlarge"
+  instance_type        = "m6i.large"
   security_groups      = [aws_security_group.cluster.id]
   user_data            = templatefile("../templates/user_data.sh.tftpl", { ecs_cluster_name = aws_ecs_cluster.this.name })
 
@@ -161,8 +161,8 @@ resource "aws_autoscaling_group" "t3_group" {
 
 resource "aws_autoscaling_group" "m6i_group" {
   name_prefix               = "${var.name_prefix}-m6i-"
-  min_size                  = 0
-  max_size                  = 2
+  min_size                  = 2
+  max_size                  = 10
   desired_capacity          = 0
   vpc_zone_identifier       = [aws_default_subnet.default_az2.id]
   launch_configuration      = aws_launch_configuration.m6i_launch_config.name
@@ -210,7 +210,7 @@ resource "aws_ecs_capacity_provider" "t3_provider" {
     managed_termination_protection = "ENABLED"
 
     managed_scaling {
-      maximum_scaling_step_size = 1
+      maximum_scaling_step_size = 4
       minimum_scaling_step_size = 1
       status                    = "ENABLED"
       target_capacity           = 100
@@ -226,7 +226,7 @@ resource "aws_ecs_capacity_provider" "m6i_provider" {
     managed_termination_protection = "ENABLED"
 
     managed_scaling {
-      maximum_scaling_step_size = 1
+      maximum_scaling_step_size = 4
       minimum_scaling_step_size = 1
       status                    = "ENABLED"
       target_capacity           = 100

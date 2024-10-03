@@ -205,15 +205,15 @@ resource "aws_ecs_task_definition" "this" {
   execution_role_arn = aws_iam_role.task_execution_role.arn
   task_role_arn      = aws_iam_role.task_role.arn
 
-  cpu = "8192"
-  memory = "31634"
+  cpu = "1024"
+  memory = "3910"
 
   container_definitions = jsonencode([
     {
       name              = "rails-production"
       image             = "${var.shared.ecr_repository.repository_url}:latest"
-      cpu    = 8192
-      memory = 31634
+      cpu    = 1024
+      memory = 3910
       portMappings = [
         {
           # The hostPort is automatically set for awsvpc network mode,
@@ -259,7 +259,7 @@ resource "aws_ecs_service" "this" {
   # container image, so we want use data.aws_ecs_task_definition to
   # always point to the active task definition
   task_definition                    = data.aws_ecs_task_definition.this.arn
-  desired_count                      = 1
+  desired_count                      = 8
   scheduling_strategy                = "REPLICA"
   deployment_maximum_percent         = 200
   deployment_minimum_healthy_percent = 50
@@ -273,13 +273,8 @@ resource "aws_ecs_service" "this" {
   enable_execute_command = true
 
   ordered_placement_strategy {
-    type  = "spread"
-    field = "attribute:ecs.availability-zone"
-  }
-
-  ordered_placement_strategy {
-    type  = "spread"
-    field = "instanceId"
+    type  = "binpack"
+    field = "memory"
   }
 
   load_balancer {
@@ -303,8 +298,6 @@ resource "aws_ecs_service" "this" {
 
   lifecycle {
     ignore_changes = [
-      # The desired count is modified by Application Auto Scaling
-      desired_count,
       # The target group changes during Blue/Green deployment
       load_balancer,
       # The Task definition will be set by Code Deploy
