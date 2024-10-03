@@ -623,6 +623,7 @@ class Competition < ApplicationRecord
   def build_clone
     Competition.new(attributes.slice(*CLONEABLE_ATTRIBUTES)).tap do |clone|
       clone.being_cloned_from_id = id
+      clone.uses_v2_registrations = true
 
       Competition.reflections.each_key do |association_name|
         case association_name
