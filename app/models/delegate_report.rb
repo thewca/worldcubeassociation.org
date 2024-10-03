@@ -68,6 +68,7 @@ class DelegateReport < ApplicationRecord
     {
       competitionName: competition.name,
       competitionId: competition.id,
+      competitionRegion: "TODO",
       feedbackRequests: {
         WRC: self.wrc_incidents,
         WIC: self.wic_incidents,
@@ -76,6 +77,5 @@ class DelegateReport < ApplicationRecord
         incidents: self.incidents
       }
     }
-
   end
 end
