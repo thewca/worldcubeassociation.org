@@ -97,8 +97,8 @@ class DelegateReport < ApplicationRecord
         WIC: self.wic_incidents,
       },
       contents: {
-        incidents: self.incidents
-      }
+        incidents: self.incidents,
+      },
     }
   end
 end
