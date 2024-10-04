@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class SendWrcReportNotification < WcaCronjob
-  include Sidekiq::Worker
-
   def perform(competition)
     delegate_report = competition.delegate_report
 
@@ -13,7 +11,5 @@ class SendWrcReportNotification < WcaCronjob
       )
       req.body = delegate_report.feedback_requests.to_json
     end
-
-    Sidekiq::Logging.logger.info("WRC notification submitted for #{competition.id}. Response: #{response.inspect}")
   end
 end
