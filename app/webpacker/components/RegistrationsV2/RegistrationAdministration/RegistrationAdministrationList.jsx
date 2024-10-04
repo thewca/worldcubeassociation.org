@@ -88,12 +88,12 @@ const partitionRegistrations = (registrations) => registrations.reduce(
 );
 
 const expandableColumns = {
-  dob: 'Date of Birth',
-  region: 'Region Name',
-  events: 'Events',
-  comments: 'Comment & Note',
-  email: 'Email',
-  timestamp: 'Timestamp',
+  dob: i18n.t('activerecord.attributes.user.dob'),
+  region: i18n.t('activerecord.attributes.user.region'),
+  events: i18n.t('competitions.show.events'),
+  comments: i18n.t('competitions.registration_v2.list.comment_and_note'),
+  email: i18n.t('activerecord.attributes.user.email'),
+  timestamp: i18n.t('competitions.registration_v2.list.timestamp'),
 };
 const initialExpandedColumns = {
   dob: false,
@@ -393,7 +393,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
           )
         </Header>
 
-        <Checkbox toggle value={editable} onChange={setEditable} label="Enable Waiting List Edit Mode" />
+        <Checkbox toggle value={editable} onChange={setEditable} label={i18n.t('competitions.registration_v2.list.edit_waiting_list')} />
 
         <RegistrationAdministrationTable
           columnsExpanded={expandedColumns}

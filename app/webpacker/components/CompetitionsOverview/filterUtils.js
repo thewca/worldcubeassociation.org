@@ -1,8 +1,9 @@
 import { DateTime } from 'luxon';
 import {
-  continents, countries, nonFutureCompetitionYears,
+  continents, countries, events, nonFutureCompetitionYears,
 } from '../../lib/wca-data.js.erb';
-import { WCA_EVENT_IDS } from './CompetitionsFilters';
+
+export const WCA_EVENT_IDS = Object.values(events.official).map((e) => e.id);
 
 // note: inconsistencies with previous search params
 // - year value was 'all+years', is now 'all_years'
@@ -29,7 +30,7 @@ const DEFAULT_DISPLAY_MODE = 'list';
 const DEFAULT_TIME_ORDER = 'present';
 const DEFAULT_YEAR = 'all_years';
 const DEFAULT_DATE = null;
-const DEFAULT_REGION_ALL = 'all';
+export const DEFAULT_REGION_ALL = 'all';
 const DEFAULT_REGION = '';
 const DEFAULT_DELEGATE = '';
 const DEFAULT_SEARCH = '';

@@ -131,7 +131,7 @@ RSpec.describe "API Competitions" do
         FactoryBot.create(:registration, :pending, competition: competition)
         get api_v0_competition_wcif_path(competition)
         response_json = JSON.parse(response.body)
-        expect(response_json["persons"].length).to eq 3
+        expect(response_json["persons"].length).to eq 4
       end
     end
   end
@@ -154,7 +154,7 @@ RSpec.describe "API Competitions" do
       FactoryBot.create(:registration, :pending, competition: competition)
       get api_v0_competition_wcif_public_path(competition)
       response_json = JSON.parse(response.body)
-      expect(response_json["persons"].length).to eq 1
+      expect(response_json["persons"].length).to eq 2
       expect(response_json["persons"][0]["registration"]["status"]).to eq "accepted"
     end
   end

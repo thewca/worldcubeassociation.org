@@ -25,7 +25,7 @@ class RoleChangeMailer < ApplicationMailer
       metadata[:status] = I18n.t("enums.user_roles.status.#{group.group_type}.#{role.metadata.status}")
       metadata[:group_name] = group.name
     end
-    metadata
+    metadata.compact
   end
 
   def notify_role_start(role, user_who_made_the_change)
