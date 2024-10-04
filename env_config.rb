@@ -19,7 +19,7 @@ EnvConfig = SuperConfig.new(raise_exception: !is_compiling_assets) do
     mandatory :DATABASE_AWS_REGION, :string
     mandatory :DATABASE_WRT_USER, :string
     optional :PAYPAL_BASE_URL, :string ## TODO: Change to mandatory when launching paypal
-    mandatory :WRC_WEBHOOK_URL, :string, ''
+    mandatory :WRC_WEBHOOK_URL, :string
 
     # Production-specific stuff
     mandatory :VAULT_ADDR, :string
