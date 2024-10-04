@@ -17,11 +17,9 @@
   <% else %>
     <%= react_component("EditVenues", {
       competitionId: @competition.id,
-      wcifEvents: @competition.events_wcif,
       wcifSchedule: @competition.schedule_wcif,
       countryZones: @competition.country_zones,
       referenceTime: @competition.start_date.to_fs,
-      calendarLocale: I18n.locale,
     }, {
       id: 'edit-schedule-area'
     }) %>
