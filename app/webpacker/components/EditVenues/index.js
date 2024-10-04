@@ -17,7 +17,7 @@ import { changesSaved } from './store/actions';
 import wcifScheduleReducer from './store/reducer';
 import Store, { useDispatch, useStore } from '../../lib/providers/StoreProvider';
 import ConfirmProvider from '../../lib/providers/ConfirmProvider';
-import EditVenues from './EditVenues';
+import ManageVenues from './ManageVenues';
 
 function EditSchedule({
   countryZones,
@@ -105,7 +105,7 @@ function EditSchedule({
       {renderIntroductionMessage()}
       <div>
         {unsavedChanges && renderUnsavedChangesAlert()}
-        <EditVenues
+        <ManageVenues
           countryZones={countryZones}
           referenceTime={referenceTime}
         />

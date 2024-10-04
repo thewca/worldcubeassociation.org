@@ -17,7 +17,7 @@ import { changesSaved } from './store/actions';
 import wcifScheduleReducer from './store/reducer';
 import Store, { useDispatch, useStore } from '../../lib/providers/StoreProvider';
 import ConfirmProvider from '../../lib/providers/ConfirmProvider';
-import EditActivities from './EditActivities';
+import ManageActivities from './ManageActivities';
 
 function EditSchedule({
   wcifEvents,
@@ -93,7 +93,7 @@ function EditSchedule({
       {renderIntroductionMessage()}
       <div>
         {unsavedChanges && renderUnsavedChangesAlert()}
-          <EditActivities
+          <ManageActivities
             wcifEvents={wcifEvents}
             referenceTime={referenceTime}
             calendarLocale={calendarLocale}
