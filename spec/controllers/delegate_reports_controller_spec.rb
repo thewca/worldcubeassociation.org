@@ -41,7 +41,7 @@ RSpec.describe DelegateReportsController do
     end
   end
 
-  context "logged in as THE delegate", :tag do
+  context "logged in as THE delegate" do
     let!(:user) { comp.delegates.first }
     before :each do
       sign_in user
