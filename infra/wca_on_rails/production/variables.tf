@@ -108,3 +108,9 @@ variable "shared" {
   })
   description = "The shared resources between Environments"
 }
+
+variable "WRC_WEBHOOK_URL" {
+  description = "The URL to send delegate report webhook notifications for WRC to"
+  type = string
+  default = "https://joba.me/wca/reports_webhook"
+}
