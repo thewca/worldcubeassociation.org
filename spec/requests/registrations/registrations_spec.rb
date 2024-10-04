@@ -7,7 +7,7 @@ RSpec.describe "registrations" do
   let!(:competition) { FactoryBot.create(:competition, :with_delegate, :future, :visible, event_ids: %w(333 444)) }
 
   describe "POST #do_import" do
-    context "when signed in as a normal user" do
+    context "when signed in as a normal user", :tag do
       it "doesn't allow access" do
         sign_in FactoryBot.create(:user)
         post competition_registrations_do_import_path(competition)
