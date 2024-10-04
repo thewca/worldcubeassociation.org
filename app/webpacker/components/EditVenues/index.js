@@ -19,7 +19,7 @@ import Store, { useDispatch, useStore } from '../../lib/providers/StoreProvider'
 import ConfirmProvider from '../../lib/providers/ConfirmProvider';
 import ManageVenues from './ManageVenues';
 
-function EditSchedule({
+function EditVenues({
   countryZones,
   referenceTime,
 }) {
@@ -131,7 +131,7 @@ export default function Wrapper({
       }}
     >
       <ConfirmProvider>
-        <EditSchedule
+        <EditVenues
           countryZones={countryZones}
           referenceTime={referenceTime}
         />
