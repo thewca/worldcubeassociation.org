@@ -29,7 +29,7 @@ function EditVenues({
           <Icon name="add" />
           Add a venue
         </Button>
-        Please add all your venues and rooms below:
+        <h3>Venues</h3>
       </Container>
 
       <Segment basic>
