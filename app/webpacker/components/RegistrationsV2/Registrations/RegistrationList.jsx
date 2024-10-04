@@ -19,6 +19,7 @@ import EventIcon from '../../wca/EventIcon';
 import { personUrl } from '../../../lib/requests/routes.js.erb';
 import Errored from '../../Requests/Errored';
 import { formatAttemptResult } from '../../../lib/wca-live/attempts';
+import i18n from '../../../lib/i18n';
 
 const sortReducer = createSortReducer(['name', 'country', 'total']);
 
@@ -50,11 +51,12 @@ function FooterContent({
   return (
     <Table.Row>
       <Table.Cell>
-        {`${newcomerCount} First-Timers + ${
+        {`${newcomerCount} ${i18n.t('registrations.registration_info_people.newcomer', { count: newcomerCount })} + ${
           dataWithUser.length - newcomerCount
-        } Returners = ${dataWithUser.length} People`}
+        } ${i18n.t('registrations.registration_info_people.returner', { count: dataWithUser.length - newcomerCount })} =
+         ${dataWithUser.length} ${i18n.t('registrations.registration_info_people.person', { count: dataWithUser.length })}`}
       </Table.Cell>
-      <Table.Cell>{`${countryCount}  Countries`}</Table.Cell>
+      <Table.Cell>{`${i18n.t('registrations.list.country_plural', { count: countryCount })}`}</Table.Cell>
       {psychSheetEvent === undefined ? (
         <>
           {competitionInfo.event_ids.map((evt) => (
@@ -85,7 +87,7 @@ export default function RegistrationList({ competitionInfo }) {
   });
 
   const [state, dispatch] = useReducer(sortReducer, {
-    sortColumn: '',
+    sortColumn: 'name',
     sortDirection: undefined,
   });
 
@@ -154,9 +156,15 @@ export default function RegistrationList({ competitionInfo }) {
     );
   }
 
-  return registrationsLoading || userInfoLoading ? (
-    <Loading />
-  ) : (
+  if (registrationsLoading || userInfoLoading || isLoadingPsychSheet) {
+    return (
+      <Segment>
+        <Loading />
+      </Segment>
+    );
+  }
+
+  return (
     <Segment style={{ overflowX: 'scroll' }}>
       <Table sortable unstackable singleLine textAlign="left">
         <Table.Header>
@@ -165,13 +173,13 @@ export default function RegistrationList({ competitionInfo }) {
               sorted={sortColumn === 'name' ? sortDirection : undefined}
               onClick={() => changeSortColumn('name')}
             >
-              Name
+              {i18n.t('activerecord.attributes.registration.name')}
             </Table.HeaderCell>
             <Table.HeaderCell
               sorted={sortColumn === 'country' ? sortDirection : undefined}
               onClick={() => changeSortColumn('country')}
             >
-              Citizen Of
+              {i18n.t('activerecord.attributes.user.country_iso2')}
             </Table.HeaderCell>
             {psychSheetEvent === undefined ? (
               <>
@@ -187,7 +195,7 @@ export default function RegistrationList({ competitionInfo }) {
                   sorted={sortColumn === 'total' ? sortDirection : undefined}
                   onClick={() => changeSortColumn('total')}
                 >
-                  Total
+                  {i18n.t('registrations.list.total')}
                 </Table.HeaderCell>
               </>
             ) : (
@@ -198,7 +206,7 @@ export default function RegistrationList({ competitionInfo }) {
                 >
                   <Icon name="backward" />
                   {' '}
-                  Go back
+                  {i18n.t('competitions.registration_v2.list.psychsheets.go_back')}
                 </Table.HeaderCell>
                 <Table.HeaderCell>
                   <EventIcon id={psychSheetEvent} className="selected" size="1em" />
@@ -214,7 +222,7 @@ export default function RegistrationList({ competitionInfo }) {
                   }
                   onClick={() => setPsychSheetSortBy('single')}
                 >
-                  Single
+                  {i18n.t('common.single')}
                 </Table.HeaderCell>
                 <Table.HeaderCell
                   sorted={
@@ -222,7 +230,7 @@ export default function RegistrationList({ competitionInfo }) {
                   }
                   onClick={() => setPsychSheetSortBy('average')}
                 >
-                  Average
+                  {i18n.t('common.average')}
                 </Table.HeaderCell>
               </>
             )}
@@ -299,9 +307,7 @@ export default function RegistrationList({ competitionInfo }) {
                     : 7
                 }
               >
-                {psychSheetEvent && isLoadingPsychSheet
-                  ? 'Crunching the data, please wait'
-                  : 'No matching records found'}
+                {psychSheetEvent && i18n.t('competitions.registration_v2.list.empty')}
               </Table.Cell>
             </Table.Row>
           )}

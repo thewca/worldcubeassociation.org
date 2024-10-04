@@ -76,15 +76,11 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
       {
         id: round&.id,
         roundTypeId: round_type.id,
-        # Also include the (localized) name here, we don't have i18n in js yet.
-        name: round&.name || "#{event.name} #{round_type.name}",
         results: results.sort_by { |r| [r.pos, r.personName] },
       }
     end
     render json: {
       id: event.id,
-      # Also include the (localized) name here, we don't have i18n in js yet.
-      name: event.name,
       rounds: rounds,
     }
   end
@@ -109,15 +105,11 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
       {
         id: round&.id,
         roundTypeId: round_type.id,
-        # Also include the (localized) name here, we don't have i18n in js yet.
-        name: round&.name || "#{event.name} #{round_type.name}",
         scrambles: scrambles,
       }
     end
     render json: {
       id: event.id,
-      # Also include the (localized) name here, we don't have i18n in js yet.
-      name: event.name,
       rounds: rounds,
     }
   end

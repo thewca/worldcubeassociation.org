@@ -76,6 +76,7 @@ function CompetitionForm() {
 export default function Wrapper({
   competition = null,
   usesV2Registrations = false,
+  canChangeRegistrationSystem = false,
   storedEvents = [],
   isAdminView = false,
   isPersisted = false,
@@ -103,6 +104,7 @@ export default function Wrapper({
       reducer={_.identity}
       initialState={{
         usesV2Registrations,
+        canChangeRegistrationSystem,
         storedEvents,
         isAdminView,
         isPersisted,

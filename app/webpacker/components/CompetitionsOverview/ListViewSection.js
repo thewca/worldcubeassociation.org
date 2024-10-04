@@ -77,9 +77,9 @@ function ResponsiveCompetitionsTables({
   regStatusLoading,
   isSortedByAnnouncement,
 }) {
-  const noCompetitons = !competitions || competitions.length === 0;
+  const noCompetitions = !competitions || competitions.length === 0;
 
-  if (noCompetitons && !isLoading && !hasMoreCompsToLoad) {
+  if (noCompetitions && !isLoading && !hasMoreCompsToLoad) {
     return (
       <Container text textAlign="center">{I18n.t('competitions.index.no_comp_found')}</Container>
     );
@@ -246,20 +246,20 @@ export function CompetitionsMobileTable({
               isSortedByAnnouncement={isSortedByAnnouncement}
               colSpan={3}
             />
-            <Table.Row error={isCancelled(comp)} className="competition-info">
-              <Table.Cell textAlign="right">
-                {comp.date_range}
-                {' '}
-                <StatusIcon
-                  comp={comp}
-                  shouldShowRegStatus={shouldShowRegStatus}
-                  isSortedByAnnouncement={isSortedByAnnouncement}
-                  regStatusLoading={regStatusLoading}
-                />
-              </Table.Cell>
+            <Table.Row error={isCancelled(comp)} className="competition-info mobile-compact">
               <Table.Cell>
+                <Label ribbon="right">
+                  <StatusIcon
+                    comp={comp}
+                    shouldShowRegStatus={shouldShowRegStatus}
+                    isSortedByAnnouncement={isSortedByAnnouncement}
+                    regStatusLoading={regStatusLoading}
+                  />
+                  {comp.date_range}
+                </Label>
                 <Flag name={comp.country_iso2?.toLowerCase()} />
                 <a href={competitionUrl(comp.id)}>{comp.short_display_name}</a>
+                {' '}
               </Table.Cell>
               <Table.Cell>
                 <strong>{countries.byIso2[comp.country_iso2].name}</strong>
@@ -283,9 +283,9 @@ function AdminCompetitionsTable({
   regStatusLoading,
   isSortedByAnnouncement,
 }) {
-  const noCompetitons = !competitions || competitions.length === 0;
+  const noCompetitions = !competitions || competitions.length === 0;
 
-  if (noCompetitons && !isLoading && !hasMoreCompsToLoad) {
+  if (noCompetitions && !isLoading && !hasMoreCompsToLoad) {
     return (
       <Container text textAlign="center">{I18n.t('competitions.index.no_comp_found')}</Container>
     );

@@ -68,16 +68,13 @@ class DelegateReportsController < ApplicationController
     params.require(:delegate_report).permit(
       :discussion_url,
       :schedule_url,
-      :equipment,
-      :venue,
-      :organization,
-      :incidents,
       :remarks,
       :posted,
       :wrc_feedback_requested,
       :wrc_incidents,
       :wic_feedback_requested,
       :wic_incidents,
+      *DelegateReport::AVAILABLE_SECTIONS,
     )
   end
 
