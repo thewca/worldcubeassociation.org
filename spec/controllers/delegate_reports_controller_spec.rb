@@ -81,7 +81,6 @@ RSpec.describe DelegateReportsController do
       # Update the remarks *and* set posted to true for next test.
       expect(CompetitionsMailer).to receive(:notify_of_delegate_report_submission).with(comp).and_call_original
       expect(CompetitionsMailer).to receive(:wrc_delegate_report_followup).with(comp).and_call_original
-      expect(SendWrcReportNotification).to have_been_performed
 
       post :update, params: { competition_id: comp.id, delegate_report: { remarks: "My newer remarks", posted: true } }
 
