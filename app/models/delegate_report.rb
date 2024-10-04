@@ -91,7 +91,7 @@ class DelegateReport < ApplicationRecord
     {
       competitionName: competition.name,
       competitionId: competition.id,
-      competitionRegion: "TODO",
+      competitionRegion: competition.continent.name,
       feedbackRequests: {
         WRC: self.wrc_incidents,
         WIC: self.wic_incidents,
