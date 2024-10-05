@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.feature "Competition events management" do
+RSpec.feature "Competition schedule management" do
   before :each do
     # Enable CSRF protection just for these tests.
     # See https://blog.tomoyukikashiro.me/post/test-csrf-in-feature-test-using-capybara/
