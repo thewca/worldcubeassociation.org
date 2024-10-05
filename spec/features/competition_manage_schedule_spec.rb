@@ -17,8 +17,6 @@ RSpec.feature "Competition schedule management" do
     end
 
     scenario "room calendar is rendered", js: true do
-      find("div", class: 'title', text: 'Edit schedules').click
-
       within(:css, "#schedules-edit-panel-body") do
         # click_link doesn't work because Capybara expects links to always have an href
         find("a", class: 'item', text: "Room 1 for venue 1").click

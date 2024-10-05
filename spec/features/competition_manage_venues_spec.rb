@@ -17,8 +17,6 @@ RSpec.feature "Competition venues management" do
     end
 
     scenario "can add a venue and a room", js: true do
-      find("div", class: 'title', text: 'Edit venues information').click
-
       within(:css, "#venues-edit-panel-body") do
         click_button "Add a venue"
         fill_in("venue-name", with: "Venue")
