@@ -37,7 +37,6 @@ RSpec.feature "Competition venues management" do
       expect(competition.competition_venues.flat_map(&:venue_rooms).map(&:name)).to match_array %w(Youpitralala)
     end
   end
-
 end
 
 def save_venues_react
