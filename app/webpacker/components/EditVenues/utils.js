@@ -1,6 +1,6 @@
 import { changeTimezoneKeepingLocalTime } from '../../lib/utils/edit-schedule';
 
-export const changeActivityTimezone = (activity, oldTimezone, newTimezone) => ({
+const changeActivityTimezone = (activity, oldTimezone, newTimezone) => ({
   ...activity,
   startTime: changeTimezoneKeepingLocalTime(activity.startTime, oldTimezone, newTimezone),
   endTime: changeTimezoneKeepingLocalTime(activity.endTime, oldTimezone, newTimezone),
@@ -12,3 +12,5 @@ export const changeActivityTimezone = (activity, oldTimezone, newTimezone) => ({
     )
   )),
 });
+
+export default changeActivityTimezone;

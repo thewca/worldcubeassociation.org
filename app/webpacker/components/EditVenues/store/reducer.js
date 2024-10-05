@@ -12,7 +12,7 @@ import {
 import {
   copyRoom, copyVenue, nextRoomId, nextVenueId,
 } from '../../../lib/utils/edit-schedule';
-import { changeActivityTimezone } from '../utils';
+import changeActivityTimezone from '../utils';
 import { venueWcifFromRoomId } from '../../../lib/utils/wcif';
 import { defaultRoomColor } from '../../../lib/wca-data.js.erb';
 

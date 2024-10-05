@@ -83,7 +83,8 @@ function EditSchedule({
   const renderIntroductionMessage = () => (
     <Container text>
       <p>
-        To create a schedule, first visit the &quot;Manage venues&quot; panel to add venues and rooms/stages.
+        To create a schedule, first visit the &quot;Manage venues&quot; panel to add venues and
+        rooms/stages.
       </p>
     </Container>
   );
@@ -93,11 +94,11 @@ function EditSchedule({
       {renderIntroductionMessage()}
       <div>
         {unsavedChanges && renderUnsavedChangesAlert()}
-          <ManageActivities
-            wcifEvents={wcifEvents}
-            referenceTime={referenceTime}
-            calendarLocale={calendarLocale}
-          />
+        <ManageActivities
+          wcifEvents={wcifEvents}
+          referenceTime={referenceTime}
+          calendarLocale={calendarLocale}
+        />
         {unsavedChanges && renderUnsavedChangesAlert()}
       </div>
     </>
