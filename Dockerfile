@@ -42,6 +42,7 @@ RUN apt-get update -qq && \
       build-essential \
       software-properties-common \
       git \
+      clang \
       pkg-config \
       libvips \
       libssl-dev \

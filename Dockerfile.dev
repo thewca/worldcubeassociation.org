@@ -22,6 +22,7 @@ RUN corepack enable
 RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y \
       git \
+      clang \
       build-essential \
       mariadb-client \
       libssl-dev \
