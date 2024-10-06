@@ -10,7 +10,7 @@ import { useDispatch, useStore } from '../../../lib/providers/StoreProvider';
 import VenuePanel from './VenuePanel';
 import { addVenue } from '../store/actions';
 
-function EditVenues({
+function ManageVenues({
   countryZones,
   referenceTime,
 }) {
@@ -48,4 +48,4 @@ function EditVenues({
   );
 }
 
-export default EditVenues;
+export default ManageVenues;
