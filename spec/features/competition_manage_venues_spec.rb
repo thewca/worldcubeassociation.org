@@ -13,7 +13,7 @@ RSpec.feature "Competition venues management" do
     let!(:competition) { FactoryBot.create(:competition, :with_delegate, :registration_open, event_ids: ["333", "444"], with_rounds: true) }
     background do
       sign_in competition.delegates.first
-      visit "/competitions/#{competition.id}/schedule/edit"
+      visit "/competitions/#{competition.id}/venues/edit"
     end
 
     scenario "can add a venue and a room", js: true do
