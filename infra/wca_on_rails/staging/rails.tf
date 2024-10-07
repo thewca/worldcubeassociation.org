@@ -93,6 +93,10 @@ locals {
       value = var.DATABASE_WRT_USER
     },
     {
+      name = "WRC_WEBHOOK_URL",
+      value = var.WRC_WEBHOOK_URL
+    },
+    {
       name = "WCA_REGISTRATIONS_URL"
       value = var.WCA_REGISTRATIONS_URL
     },
