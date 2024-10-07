@@ -13,7 +13,6 @@ import {
   Popup,
   Segment,
 } from 'semantic-ui-react';
-import { DateTime } from 'luxon';
 import updateRegistration from '../api/registration/patch/update_registration';
 import submitEventRegistration from '../api/registration/post/submit_registration';
 import Processing from './Processing';
@@ -26,13 +25,14 @@ import I18nHTMLTranslate from '../../I18nHTMLTranslate';
 import { useConfirm } from '../../../lib/providers/ConfirmProvider';
 import { eventsNotQualifiedFor, isQualifiedForEvent } from '../../../lib/helpers/qualifications';
 import { eventQualificationToString } from '../../../lib/utils/wcif';
+import { hasNotPassed } from '../../../lib/utils/dates';
 
 const maxCommentLength = 240;
 
 const potentialWarnings = (competitionInfo) => {
   const warnings = [];
   // Organizer Pre Registration
-  if (DateTime.fromISO(competitionInfo.registration_open) > DateTime.now()) {
+  if (hasNotPassed(competitionInfo.registration_open)) {
     warnings.push(i18n.t('competitions.registration_v2.register.early_registration'));
   }
   // Favourites Competition
