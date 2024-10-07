@@ -87,8 +87,8 @@ class DelegateReport < ApplicationRecord
     self.posted_by_user_id = current_user&.id
   end
 
-  # This generates a summary of delegate report data for use in other contexts. Currently, this is used by WRC as part of a custom Trello integration. 
-  # WST has no involvement besides supplying this data to an endpoint maintained by WRC. For integration advice, contact WRC via the website's contact form.
+  # This generates a summary of delegate report data for use in other contexts. Currently, this is used by WRC as part of a custom Trello integration.
+  # WST has no involvement besides supplying this data to an endpoint maintained by WRC. For integration advice, contact WRC directly.
   def feedback_requests
     {
       competitionName: competition.name,
