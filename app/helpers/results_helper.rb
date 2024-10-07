@@ -110,7 +110,9 @@ module ResultsHelper
     # As we are using the native Rails cache we set the expiry date to 7 days
     # as CAD is ran usually before that
     Rails.cache.fetch(cache_key, expires_in: 7.days) do
-      ActiveRecord::Base.connection.exec_query(sql_query)
+      ActiveRecord::Base.connected_to(role: :read_replica) do
+        ActiveRecord::Base.connection.exec_query(sql_query)
+      end
     end
   end
 end
