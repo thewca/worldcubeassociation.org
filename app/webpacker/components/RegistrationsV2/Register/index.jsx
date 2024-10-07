@@ -10,10 +10,11 @@ import WCAQueryClientProvider from '../../../lib/providers/WCAQueryClientProvide
 import ConfirmProvider from '../../../lib/providers/ConfirmProvider';
 import RegistrationClosedMessage from './RegistrationClosedMessage';
 
-const userCanPreRegister = (user, competitionInfo) => competitionInfo.organizers.some((o) => o.id === user.id);
-
 export default function Index({
-  competitionInfo, userInfo, preferredEvents,
+  competitionInfo,
+  userInfo,
+  userCanPreRegister,
+  preferredEvents,
   qualifications,
   stripePublishableKey = '',
   connectedAccountId = '',
@@ -25,6 +26,7 @@ export default function Index({
           <Register
             competitionInfo={competitionInfo}
             userInfo={userInfo}
+            userCanPreRegister={userCanPreRegister}
             preferredEvents={preferredEvents}
             stripePublishableKey={stripePublishableKey}
             connectedAccountId={connectedAccountId}
@@ -37,7 +39,13 @@ export default function Index({
 }
 
 function Register({
-  competitionInfo, qualifications, userInfo, preferredEvents, connectedAccountId, stripePublishableKey,
+  userCanPreRegister,
+  competitionInfo,
+  qualifications,
+  userInfo,
+  preferredEvents,
+  connectedAccountId,
+  stripePublishableKey,
 }) {
   const [timerEnded, setTimerEnded] = useState(false);
 
@@ -66,7 +74,7 @@ function Register({
     return <Loading />;
   }
 
-  if (userCanPreRegister(userInfo, competitionInfo) || competitionInfo['registration_currently_open?'] || timerEnded) {
+  if (userCanPreRegister || competitionInfo['registration_currently_open?'] || timerEnded) {
     return (
       <>
         <RegistrationMessage />

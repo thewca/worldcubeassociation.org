@@ -35,6 +35,7 @@
     <% if @competition.should_render_register_v2?(current_user) %>
       <%= react_component('RegistrationsV2/Register', { competitionInfo: @competition.to_competition_info ,
                                                         userInfo: @current_user,
+                                                        userCanPreRegister: @competition.user_can_pre_register?(@current_user),
                                                         preferredEvents: @current_user.preferred_events.pluck(:id),
                                                         stripePublishableKey: AppSecrets.STRIPE_PUBLISHABLE_KEY,
                                                         connectedAccountId: @competition.payment_account_for(:stripe)&.account_id,
