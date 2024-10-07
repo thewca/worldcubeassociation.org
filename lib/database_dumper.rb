@@ -460,11 +460,13 @@ module DatabaseDumper
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
+          version
           competition_id
           created_at
           updated_at
         ),
         db_default: %w(
+          summary
           equipment
           venue
           organization
@@ -575,6 +577,8 @@ module DatabaseDumper
           created_at
           deleted_at
           deleted_by
+          rejected_at
+          waitlisted_at
           guests
           updated_at
           user_id
@@ -589,6 +593,9 @@ module DatabaseDumper
       ),
     }.freeze,
     "microservice_registrations" => :skip_all_rows,
+    "registration_history_changes" => :skip_all_rows,
+    "registration_history_entries" => :skip_all_rows,
+    "waiting_lists" => :skip_all_rows,
     "sanity_checks" => :skip_all_rows,
     "sanity_check_categories" => :skip_all_rows,
     "sanity_check_exclusions" => :skip_all_rows,

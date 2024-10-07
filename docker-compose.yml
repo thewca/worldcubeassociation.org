@@ -1,48 +1,67 @@
+x-environment: &env
+  RAILS_ENV: development
+  DATABASE_HOST: wca_db
+
 x-app: &app
   build:
     dockerfile: Dockerfile.dev
     context: .
   working_dir: /app
+  entrypoint: ./entrypoint.dev.sh
+  environment:
+    <<: *env
   volumes:
     - .:/app
+    - gems_volume:/usr/local/bundle
+    - node_modules_volume:/app/node_modules
   networks:
     - wca-main
 
+x-app-environment: &appVars
+  <<: *env
+  SIDEKIQ_REDIS_URL: redis://wca_redis:6379/1
+  MAILCATCHER_SMTP_HOST: wca_mailcatcher
+
 services:
+  wca_environment:
+    <<: *app
+    container_name: "environment"
+    command: >
+      bash -c 'corepack install &&
+      rm -f .db-inited &&
+      bin/setup &&
+      touch .db-inited'
+    healthcheck:
+      test: [ "CMD", "test", "-f", ".db-inited" ]
+      interval: 5s
+      timeout: 2s
+      retries: 20
+      # Give the container some time to populate the database
+      start_period: 15m
+    # Tell Docker that it's okay and expected that this container terminates (with exit code 0)
+    #   after completing the script listed under `command` above
+    restart: no
+    depends_on:
+      wca_db:
+        condition: 'service_healthy'
+      wca_redis:
+        condition: 'service_started'
+
   wca_on_rails:
     <<: *app
     container_name: "rails"
     ports:
       - "3000:3000"
     environment:
-      RAILS_ENV: development
-      DATABASE_HOST: wca_db
+      <<: *appVars
       SHAKAPACKER_DEV_SERVER_HOST: wca_webpacker
       CACHE_REDIS_URL: redis://wca_redis:6379/0
-      SIDEKIQ_REDIS_URL: redis://wca_redis:6379/1
-      MAILCATCHER_SMTP_HOST: wca_mailcatcher
     tty: true
-    # First, install Ruby and Node dependencies
-    # Next, load the database if it does not exist yet
     # Start the server and bind to 0.0.0.0 (vs 127.0.0.1) so Docker's port mappings work correctly
-    command: >
-      bash -c 'corepack install &&
-      rm -f .db-inited &&
-      bin/setup &&
-      touch .db-inited &&
-      bin/rails server -b 0.0.0.0'
-    healthcheck:
-      test: ["CMD", "test", "-f", ".db-inited"]
-      interval: 5s
-      timeout: 2s
-      retries: 20
-      # Give the container some time to populate the database
-      start_period: 15m
+    command: bin/rails server -b 0.0.0.0
     depends_on:
-      wca_db:
-        condition: 'service_healthy'
-      wca_redis:
-        condition: 'service_started'
+      wca_environment:
+        condition: service_completed_successfully
 
   wca_webpacker:
     <<: *app
@@ -50,19 +69,15 @@ services:
     ports:
       - "3035:3035"
     environment:
-      DATABASE_HOST: wca_db
+      <<: *appVars
       SHAKAPACKER_DEV_SERVER_HOST: 0.0.0.0
       NODE_ENV: development
-    command: >
-      bash -c 'bundle install && yarn install &&
-      bin/shakapacker-dev-server'
+    command: bin/shakapacker-dev-server
     depends_on:
-      wca_db:
-        condition: 'service_healthy'
-      wca_on_rails:
+      wca_environment:
         # We need to make sure that the database is populated because our frontend code
         # pulls stuff like WCA Events and Round formats from the DB when compiling assets
-        condition: 'service_healthy'
+        condition: service_completed_successfully
 
   wca_mailcatcher:
     <<: *app
@@ -79,23 +94,14 @@ services:
     <<: *app
     container_name: 'sidekiq'
     environment:
-      RAILS_ENV: development
-      DATABASE_HOST: wca_db
-      SIDEKIQ_REDIS_URL: redis://wca_redis:6379/1
-      MAILCATCHER_SMTP_HOST: wca_mailcatcher
+      <<: *appVars
       # Cronjobs are disabled in development by default. If you wish to run cronjobs,
       # set this env variable to any integer value greater than zero
       # CRONJOB_POLLING_MINUTES: 30
-    command: >
-      bash -c 'bundle install && yarn install &&
-      bundle exec sidekiq'
+    command: bin/bundle exec sidekiq
     depends_on:
-      wca_on_rails:
-        condition: 'service_healthy'
-      wca_redis:
-        condition: 'service_started'
-      wca_db:
-        condition: 'service_healthy'
+      wca_environment:
+        condition: service_completed_successfully
 
   wca_db:
     image: mysql:8.0
@@ -131,6 +137,10 @@ services:
       - wca-main
 
 volumes:
+  gems_volume:
+    driver: local
+  node_modules_volume:
+    driver: local
   wca_db_volume:
     driver: local
   cache_volume:
