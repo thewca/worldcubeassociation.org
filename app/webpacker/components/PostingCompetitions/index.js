@@ -4,6 +4,7 @@ import {
   Button, Checkbox, Header, Segment, Table,
 } from 'semantic-ui-react';
 import _ from 'lodash';
+import { DateTime } from 'luxon';
 import useLoadedData from '../../lib/hooks/useLoadedData';
 import useSaveAction from '../../lib/hooks/useSaveAction';
 import Loading from '../Requests/Loading';
@@ -77,7 +78,7 @@ function PostingCompetitionsIndex({
                 <CountryFlag iso2={c.country_iso2} />
               </Header.Subheader>
               <Header.Subheader>
-                {`Submission Timestamp: ${moment(c.results_submitted_at).fromNow()}`}
+                {`Submission Timestamp: ${DateTime.fromISO(c.results_submitted_at).toRelative()}`}
               </Header.Subheader>
             </Header>
             <Button.Group floated="right">

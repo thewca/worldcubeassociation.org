@@ -1,6 +1,6 @@
 <div class="navbar navbar-default navbar-static-top" role="navigation">
   <div class="brand">
-    <a href="<%= root_path %>" ><%= image_tag "WCA Logo 2020.svg" %></a>
+    <a href="<%= root_path %>" ><%= image_tag "WCA Logo.svg" %></a>
   </div>
   <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
     <span class="icon-bar"></span>
@@ -10,7 +10,7 @@
   <div class="navbar-collapse collapse disabled">
     <ul class="nav navbar-nav">
       <li class="top-nav logo">
-        <a href="<%= root_path %>"><%= image_tag "WCA Logo 2020.svg" %></a>
+        <a href="<%= root_path %>"><%= image_tag "WCA Logo.svg" %></a>
       </li>
       <li class="dropdown <%= (params[:controller] == 'static_pages' && params[:action] != 'homepage') ? 'active' : '' %>">
         <a href="#" class="dropdown-toggle top-nav" data-toggle="dropdown" data-hover="dropdown">
@@ -34,7 +34,7 @@
           <li><a href="<%= disclaimer_path %>"><%= ui_icon('exclamation circle') %> <%= t '.disclaimer' %></a></li>
           <li class="divider"></li>
           <li><a href="<%= score_tools_path %>"><%= ui_icon('wrench') %> <%= t '.tools' %></a></li>
-          <li><a href="<%= logo_path %>"><i><%= image_tag('wca_logo.svg', width: '16px') %></i> <%= t '.logo' %></a></li>
+          <li><a href="<%= logo_path %>"><i><%= image_tag('WCA Logo.svg', width: '16px') %></i> <%= t '.logo' %></a></li>
         </ul>
       </li>
       <li class="dropdown <%= Set['competitions', 'delegate_reports', 'results_submission'].include?(params[:controller]) ? 'active' : '' %>">
@@ -75,15 +75,17 @@
           <li><a href="<%= db_dev_export_path %>"><%= ui_icon('computer') %> <%= t '.db_dev_export' %></a></li>
         </ul>
       </li>
-      <li class="dropdown <%= Set['incidents', 'regulations', 'wdc'].include?(params[:controller]) ? 'active' : '' %>">
+      <li class="dropdown <%= Set['incidents', 'regulations', 'wic'].include?(params[:controller]) ? 'active' : '' %>">
         <a href="#" class="dropdown-toggle top-nav" data-toggle="dropdown" data-hover="dropdown">
           <%= ui_icon('book') %> <span class="hidden-sm hidden-md"><%= t '.regulations' %></span> <span class="caret"></span>
         </a>
         <ul class="dropdown-menu" role="menu">
           <li><a href="/regulations/about"><%= ui_icon('info circle') %> <%= t '.about_regulations' %></a></li>
           <li class="divider"></li>
-          <li><a href="/regulations/"><%= ui_icon('book') %> <%= t '.regulations' %></a></li>
-          <li><a href="/regulations/guidelines.html"><%= ui_icon('sticky note') %> <%= t '.guidelines' %></a></li>
+          <li><a href="/regulations/full"><%= ui_icon('book') %> <%= t '.regulations_full' %></a></li>
+          <li class="divider"></li>
+          <li><a href="/regulations/"><%= ui_icon('file text') %> <%= t '.regulations' %></a></li>
+          <li><a href="/regulations/guidelines.html"><%= ui_icon('plus square') %> <%= t '.guidelines' %></a></li>
           <li><a href="/regulations/scrambles/"><%= ui_icon('random') %> <%= t '.scrambles' %></a></li>
           <li>
             <%= link_to(incidents_path) do %>
@@ -119,11 +121,6 @@
           <li>
             <%= link_to("https://www.twitter.com/theWCAofficial/", target: "_blank", class: "hide-new-window-icon") do %>
               <%= ui_icon("twitter") %> Twitter
-            <% end %>
-          </li>
-          <li>
-            <%= link_to("https://www.reddit.com/r/TheWCAOfficial/", target: "_blank", class: "hide-new-window-icon") do %>
-              <%= ui_icon("reddit") %> Reddit
             <% end %>
           </li>
           <li>
@@ -220,29 +217,15 @@
               <li><%= link_to t('.my_results'), person_path(current_user.wca_id) %></li>
             <% end %>
 
-            <% if current_user.can_access_panel? %>
+            <% if current_user.can_access_at_least_one_panel? %>
               <li class="divider"></li>
               <li role="presentation" class="dropdown-header">
                 <%= t '.panel' %>
               </li>
-              <li><%= link_to t('.panel'), panel_path %></li>
-              <% if current_user.can_access_wfc_panel? %>
-                <li><%= link_to "WFC panel", panel_wfc_path %></li>
-              <% end %>
-              <% if current_user.can_access_wrt_panel? %>
-                <li><%= link_to "WRT panel", panel_wrt_path %></li>
-              <% end %>
-              <% if current_user.can_access_wst_panel? %>
-                <li><%= link_to "WST panel", panel_wst_path %></li>
-              <% end %>
-              <% if current_user.can_access_board_panel? %>
-                <li><%= link_to "Board panel", panel_board_path %></li>
-              <% end %>
-              <% if current_user.can_access_leader_panel? %>
-                <li><%= link_to "Leader panel", panel_leader_path %></li>
-              <% end %>
-              <% if current_user.can_access_senior_delegate_panel? %>
-                <li><%= link_to "Senior Delegate panel", panel_senior_delegate_path %></li>
+              <% current_user.panels_with_access.each do |panel_id| %>
+                <% panel_name = User.panel_list[panel_id][:name] %>
+                <% panel_url = Rails.application.routes.url_helpers.panel_index_path(panel_id: panel_id) %>
+                <li><%= link_to panel_name, panel_url %></li>
               <% end %>
             <% end %>
             <% if current_user.can_view_poll? %>
@@ -281,16 +264,6 @@
               <li><%= link_to t('.new_post'), new_post_path %></li>
             <% end %>
 
-            <% unless current_user.teams_where_is_leader.empty? %>
-              <li class="divider"></li>
-              <li role="presentation" class="dropdown-header">
-                <%= t '.team_leader' %>
-              </li>
-              <% current_user.teams_where_is_leader.each do |team| %>
-                <li><%= link_to team.name, edit_team_path(team) %></li>
-              <% end %>
-            <% end %>
-
             <% if current_user.can_manage_regional_organizations? %>
               <li class="divider"></li>
               <li role="presentation" class="dropdown-header">
@@ -298,13 +271,6 @@
               </li>
               <li><%= link_to t('.manage_regional_organizations'), admin_regional_organizations_path %></li>
               <li><%= link_to t('.new_regional_organization'), new_regional_organization_path %></li>
-            <% end %>
-
-            <!-- Don't show the link for admins, as they have it in the dedicated admin navigation. -->
-            <% if current_user.can_see_eligible_voters? && !current_user.can_admin_results? %>
-              <li class="divider"></li>
-              <li><%= link_to "WCA Voting Members", eligible_voters_path %></li>
-              <li><%= link_to "WCA Leaders and Seniors", leader_senior_voters_path %></li>
             <% end %>
 
             <li class="divider"></li>

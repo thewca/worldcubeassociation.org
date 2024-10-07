@@ -32,8 +32,11 @@ FactoryBot.define do
       name { "Mr. Admin" }
       email { "admin@worldcubeassociation.org" }
       after(:create) do |user|
-        software_admin_team = Rails.env.production? ? Team.wst_admin : Team.wst
-        FactoryBot.create(:team_member, team_id: software_admin_team.id, user_id: user.id, team_leader: true)
+        if Rails.env.production?
+          FactoryBot.create(:wst_admin_role, user: user)
+        else
+          FactoryBot.create(:wst_member_role, user: user)
+        end
       end
     end
 
@@ -45,123 +48,157 @@ FactoryBot.define do
       team_senior_member { false }
     end
 
+    transient do
+      end_date { nil }
+    end
+
     trait :board_member do
-      after(:create) do |user, options|
-        FactoryBot.create(:team_member, team_id: Team.board.id, user_id: user.id, team_senior_member: options.team_senior_member, team_leader: options.team_leader)
+      after(:create) do |user|
+        FactoryBot.create(:board_role, user: user)
       end
     end
 
     trait :wrt_member do
-      after(:create) do |user, options|
-        FactoryBot.create(:team_member, team_id: Team.wrt.id, user_id: user.id, team_senior_member: options.team_senior_member, team_leader: options.team_leader)
-      end
-    end
-
-    trait :wdc_member do
-      after(:create) do |user, options|
-        FactoryBot.create(:team_member, team_id: Team.wdc.id, user_id: user.id, team_senior_member: options.team_senior_member, team_leader: options.team_leader)
-      end
-    end
-
-    trait :wdpc_member do
-      after(:create) do |user, options|
-        FactoryBot.create(:team_member, team_id: Team.wdpc.id, user_id: user.id, team_senior_member: options.team_senior_member, team_leader: options.team_leader)
-      end
-    end
-
-    trait :wdc_leader do
       after(:create) do |user|
-        FactoryBot.create(:team_member, team_id: Team.wdc.id, user_id: user.id, team_leader: true)
+        FactoryBot.create(:wrt_member_role, user_id: user.id)
+      end
+    end
+
+    trait :wrt_leader do
+      after(:create) do |user|
+        FactoryBot.create(:wrt_leader_role, user_id: user.id)
+      end
+    end
+
+    trait :wic_member do
+      after(:create) do |user|
+        FactoryBot.create(:wic_member_role, user_id: user.id)
+      end
+    end
+
+    trait :wic_leader do
+      after(:create) do |user|
+        FactoryBot.create(:wic_leader_role, user_id: user.id)
       end
     end
 
     trait :banned do
       after(:create) do |user|
-        FactoryBot.create(:team_member, team_id: Team.banned.id, user_id: user.id)
+        FactoryBot.create(:banned_competitor_role, user_id: user.id)
+      end
+    end
+
+    trait :formerly_banned do
+      after(:create) do |user|
+        FactoryBot.create(:banned_competitor_role, :inactive, user_id: user.id)
       end
     end
 
     trait :wrc_member do
       after(:create) do |user, options|
-        FactoryBot.create(:team_member, team_id: Team.wrc.id, user_id: user.id, team_senior_member: options.team_senior_member, team_leader: options.team_leader)
+        FactoryBot.create(:wrc_member_role, user_id: user.id)
+      end
+    end
+
+    trait :wrc_senior_member do
+      after(:create) do |user, options|
+        FactoryBot.create(:wrc_senior_member_role, user_id: user.id)
+      end
+    end
+
+    trait :wrc_leader do
+      after(:create) do |user, options|
+        FactoryBot.create(:wrc_leader_role, user_id: user.id, end_date: options.end_date)
       end
     end
 
     trait :wct_member do
       after(:create) do |user, options|
-        FactoryBot.create(:team_member, team_id: Team.wct.id, user_id: user.id, team_senior_member: options.team_senior_member, team_leader: options.team_leader)
+        FactoryBot.create(:wct_member_role, user_id: user.id)
       end
     end
 
     trait :wct_china_member do
       after(:create) do |user, options|
-        FactoryBot.create(:team_member, team_id: Team.wct_china.id, user_id: user.id, team_senior_member: options.team_senior_member, team_leader: options.team_leader)
+        FactoryBot.create(:wct_china_role, user_id: user.id)
       end
     end
 
     trait :wqac_member do
       after(:create) do |user, options|
-        FactoryBot.create(:team_member, team_id: Team.wqac.id, user_id: user.id, team_senior_member: options.team_senior_member, team_leader: options.team_leader)
+        FactoryBot.create(:wqac_member_role, user_id: user.id)
       end
     end
 
     trait :wcat_member do
       after(:create) do |user, options|
-        FactoryBot.create(:team_member, team_id: Team.wcat.id, user_id: user.id, team_senior_member: options.team_senior_member, team_leader: options.team_leader)
-      end
-    end
-
-    trait :wec_member do
-      after(:create) do |user, options|
-        FactoryBot.create(:team_member, team_id: Team.wec.id, user_id: user.id, team_senior_member: options.team_senior_member, team_leader: options.team_leader)
+        FactoryBot.create(:wcat_member_role, user_id: user.id)
       end
     end
 
     trait :weat_member do
-      after(:create) do |user, options|
-        FactoryBot.create(:team_member, team_id: Team.weat.id, user_id: user.id, team_senior_member: options.team_senior_member, team_leader: options.team_leader)
+      after(:create) do |user|
+        FactoryBot.create(:weat_member_role, user_id: user.id)
       end
     end
 
     trait :wfc_member do
-      after(:create) do |user, options|
-        FactoryBot.create(:team_member, team_id: Team.wfc.id, user_id: user.id, team_senior_member: options.team_senior_member, team_leader: options.team_leader)
+      after(:create) do |user|
+        FactoryBot.create(:wfc_member_role, user_id: user.id)
+      end
+    end
+
+    trait :wfc_leader do
+      after(:create) do |user|
+        FactoryBot.create(:wfc_leader_role, user_id: user.id)
       end
     end
 
     trait :wmt_member do
-      after(:create) do |user, options|
-        FactoryBot.create(:team_member, team_id: Team.wmt.id, user_id: user.id, team_senior_member: options.team_senior_member, team_leader: options.team_leader)
+      after(:create) do |user|
+        FactoryBot.create(:wmt_member_role, user_id: user.id)
       end
     end
 
     trait :wst_member do
-      after(:create) do |user, options|
-        FactoryBot.create(:team_member, team_id: Team.wst.id, user_id: user.id, team_senior_member: options.team_senior_member, team_leader: options.team_leader)
+      after(:create) do |user|
+        FactoryBot.create(:wst_member_role, user: user)
       end
     end
 
     trait :wst_admin_member do
-      after(:create) do |user, options|
-        FactoryBot.create(:team_member, team_id: Team.wst_admin.id, user_id: user.id, team_senior_member: options.team_senior_member, team_leader: options.team_leader)
-      end
-    end
-
-    trait :wac_member do
-      after(:create) do |user, options|
-        FactoryBot.create(:team_member, team_id: Team.wac.id, user_id: user.id, team_leader: options.team_leader)
+      after(:create) do |user|
+        FactoryBot.create(:wst_admin_role, user: user)
       end
     end
 
     trait :wsot_member do
-      after(:create) do |user, options|
-        FactoryBot.create(:team_member, team_id: Team.wsot.id, user_id: user.id, team_senior_member: options.team_senior_member, team_leader: options.team_leader)
+      after(:create) do |user|
+        FactoryBot.create(:wsot_member_role, user_id: user.id)
+      end
+    end
+
+    trait :wsot_leader do
+      after(:create) do |user|
+        FactoryBot.create(:wsot_leader_role, user_id: user.id)
       end
     end
 
     trait :wat_member do
-      after(:create) do |user, options|
-        FactoryBot.create(:team_member, team_id: Team.wat.id, user_id: user.id, team_senior_member: options.team_senior_member, team_leader: options.team_leader)
+      after(:create) do |user|
+        FactoryBot.create(:wat_member_role, user_id: user.id)
+      end
+    end
+
+    trait :wat_leader do
+      after(:create) do |user|
+        FactoryBot.create(:wat_leader_role, user_id: user.id)
+      end
+    end
+
+    trait :wapc_member do
+      after(:create) do |user|
+        FactoryBot.create(:wapc_member_role, user_id: user.id)
       end
     end
 
@@ -174,6 +211,27 @@ FactoryBot.define do
     trait :with_2fa do
       otp_required_for_login { true }
       otp_secret { User.generate_otp_secret }
+    end
+
+    trait :with_past_competitions do
+      after(:create) do |user|
+        competition = FactoryBot.create(:competition, :past)
+        FactoryBot.create(:registration, :accepted, user: user, competition: competition, events: %w(333))
+      end
+    end
+
+    trait :with_future_competitions do
+      after(:create) do |user|
+        competition = FactoryBot.create(:competition, :future)
+        FactoryBot.create(:registration, :accepted, user: user, competition: competition, events: %w(333))
+      end
+    end
+
+    trait :with_deleted_registration_in_future_comps do
+      after(:create) do |user|
+        competition = FactoryBot.create(:competition, :future)
+        FactoryBot.create(:registration, :deleted, user: user, competition: competition, events: %w(333))
+      end
     end
 
     wca_id { person&.wca_id }
@@ -196,18 +254,21 @@ FactoryBot.define do
     factory :user_with_wca_id, traits: [:wca_id]
 
     factory :delegate, traits: [:wca_id] do
-      delegate_status { "delegate" }
-      region_id { FactoryBot.create(:africa_region).id }
+      after(:create) do |user|
+        FactoryBot.create(:delegate_role, user: user)
+      end
     end
 
-    factory :candidate_delegate, traits: [:wca_id] do
-      delegate_status { "candidate_delegate" }
-      region_id { FactoryBot.create(:africa_region).id }
+    factory :junior_delegate, traits: [:wca_id] do
+      after(:create) do |user|
+        FactoryBot.create(:junior_delegate_role, user: user)
+      end
     end
 
     factory :trainee_delegate, traits: [:wca_id] do
-      delegate_status { "trainee_delegate" }
-      region_id { FactoryBot.create(:africa_region).id }
+      after(:create) do |user|
+        FactoryBot.create(:trainee_delegate_role, user: user)
+      end
     end
 
     factory :dummy_user, traits: [:wca_id] do

@@ -9,7 +9,7 @@ class Person < ApplicationRecord
   has_many :ranksAverage, primary_key: "wca_id", foreign_key: "personId", class_name: "RanksAverage"
   has_many :ranksSingle, primary_key: "wca_id", foreign_key: "personId", class_name: "RanksSingle"
 
-  enum gender: (User::ALLOWABLE_GENDERS.to_h { |g| [g, g.to_s] })
+  enum :gender, (User::ALLOWABLE_GENDERS.index_with(&:to_s))
 
   alias_attribute :ref_id, :wca_id
 
@@ -22,7 +22,7 @@ class Person < ApplicationRecord
   }
 
   validates :name, presence: true
-  validates_inclusion_of :countryId, in: Country.real.map(&:id).freeze
+  validates_inclusion_of :countryId, in: Country::WCA_COUNTRY_IDS
 
   # If creating a brand new person (ie: with subId equal to 1), then the
   # WCA ID must be unique.
@@ -106,11 +106,12 @@ class Person < ApplicationRecord
   # Note this is very similar to the cannot_register_for_competition_reasons method in user.rb.
   def cannot_be_assigned_to_user_reasons
     dob_form_path = Rails.application.routes.url_helpers.contact_dob_path
+    wrt_contact_path = Rails.application.routes.url_helpers.contact_path(contactRecipient: 'wrt')
     [].tap do |reasons|
-      reasons << I18n.t('users.errors.wca_id_no_name_html').html_safe if name.blank?
-      reasons << I18n.t('users.errors.wca_id_no_gender_html').html_safe if gender.blank?
+      reasons << I18n.t('users.errors.wca_id_no_name_html', wrt_contact_path: wrt_contact_path).html_safe if name.blank?
+      reasons << I18n.t('users.errors.wca_id_no_gender_html', wrt_contact_path: wrt_contact_path).html_safe if gender.blank?
       reasons << I18n.t('users.errors.wca_id_no_birthdate_html', dob_form_path: dob_form_path).html_safe if dob.blank?
-      reasons << I18n.t('users.errors.wca_id_no_citizenship_html').html_safe if country_iso2.blank?
+      reasons << I18n.t('users.errors.wca_id_no_citizenship_html', wrt_contact_path: wrt_contact_path).html_safe if country_iso2.blank?
     end
   end
 
@@ -214,7 +215,7 @@ class Person < ApplicationRecord
       podiums[:continental] = championship_podiums_with_condition do |results|
         results.joins(:country, competition: [:championships]).where("championships.championship_type = Countries.continentId")
       end
-      EligibleCountryIso2ForChampionship.championship_types.each do |championship_type|
+      EligibleCountryIso2ForChampionship::CHAMPIONSHIP_TYPES.each do |championship_type|
         podiums[championship_type.to_sym] = championship_podiums_with_condition do |results|
           results
             .joins(:country, competition: { championships: :eligible_country_iso2s_for_championship })
@@ -272,6 +273,18 @@ class Person < ApplicationRecord
     only: ["wca_id", "name", "gender"],
     methods: ["url", "country_iso2"],
   }.freeze
+
+  def personal_records
+    [self.ranksAverage, self.ranksSingle].compact.flatten
+  end
+
+  def best_singles_by(target_date)
+    self.results.on_or_before(target_date).succeeded.group(:eventId).minimum(:best)
+  end
+
+  def best_averages_by(target_date)
+    self.results.on_or_before(target_date).average_succeeded.group(:eventId).minimum(:average)
+  end
 
   def serializable_hash(options = nil)
     json = super(DEFAULT_SERIALIZE_OPTIONS.merge(options || {}))

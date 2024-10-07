@@ -57,7 +57,7 @@ RSpec.describe Api::V0::UsersController do
       get :show_me
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
-      expect(json["user"]).to eq normal_user.as_json
+      expect(json["user"]).to eq normal_user.serializable_hash(private_attributes: ['email']).as_json
     end
     let!(:id_less_user) { FactoryBot.create(:user, email: "example@email.com") }
 
@@ -66,7 +66,7 @@ RSpec.describe Api::V0::UsersController do
       get :show_me
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
-      expect(json["user"]).to eq id_less_user.as_json
+      expect(json["user"]).to eq id_less_user.serializable_hash(private_attributes: ['email']).as_json
     end
 
     let(:competed_person) { FactoryBot.create(:person_who_has_competed_once, name: "Jeremy", wca_id: "2005FLEI01") }
@@ -77,7 +77,7 @@ RSpec.describe Api::V0::UsersController do
       get :show_me
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
-      expect(json["user"]).to eq competed_user.as_json
+      expect(json["user"]).to eq competed_user.serializable_hash(private_attributes: ['email']).as_json
       expect(json.key?("rankings")).to eq true
     end
   end
@@ -121,7 +121,8 @@ RSpec.describe Api::V0::UsersController do
     end
 
     it 'correctly returns delegate to be able to create competitions' do
-      sign_in FactoryBot.create :user, :delegate, region_id: senior_delegate_role.group.id
+      delegate = FactoryBot.create :delegate_role
+      sign_in delegate.user
       get :permissions
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
@@ -168,7 +169,7 @@ RSpec.describe Api::V0::UsersController do
       expect(json["can_administer_competitions"]["scope"]).to eq "*"
     end
 
-    let!(:delegate_user) { FactoryBot.create :delegate, region_id: senior_delegate_role.group.id }
+    let!(:delegate_user) { (FactoryBot.create :delegate_role, group_id: senior_delegate_role.group.id).user }
     let!(:organizer_user) { FactoryBot.create :user }
     let!(:competition) {
       FactoryBot.create(:competition, :confirmed, delegates: [delegate_user], organizers: [organizer_user])

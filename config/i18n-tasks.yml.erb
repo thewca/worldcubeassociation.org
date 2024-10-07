@@ -107,18 +107,17 @@ ignore_unused:
   - 'users.edit.avatar_guidelines.*'
   - 'users.edit.staff_avatar_guidelines.*'
   - 'faq.answers.*'
-  - 'logo.paragraphs.*'
   - 'score_tools.tools.*'
   - 'wca.doorkeeper.scopes.*'
   - 'contact.*.info'
   - 'organizer_guidelines.*'
   - 'merch.paragraphs.*'
-  # Mark all events/continents/countries/delegate_statuses as used.
+  - 'activity.*'
+  # Mark all events/continents/countries as used.
   # FYI if a language doesn't translate one of them, it will appear in the missing keys, as long as it exists in English
   - 'events.*'
   - 'continents.*'
   - 'countries.*'
-  - 'delegate_statuses.*'
   - 'media.new.media_guidelines.*'
 # - 'simple_form.{placeholders,hints,labels}.*'
   - 'faker.name.*'
@@ -128,11 +127,18 @@ ignore_unused:
   # The keys below are all used on the records page
   - 'results.selector_elements.show_selector.{mixed,slim,separate,history,mixed_history}'
   # These keys are only used in javascript
+  - 'logo.*'
   - 'qualification.*'
   - 'regional_organizations.requirements.list.*'
   - 'competitions.competition_form.*'
   - 'enums.user_roles.status.*'
   - 'page.*'
+  - 'competitions.schedule.*'
+  # These keys are for microservices
+  - 'competitions.registration_v2.*'
+  - 'simple_form.options.registration.status.*'
+  - 'activerecord.attributes.delegate_report.*'
+  - 'simple_form.hints.delegate_report.*'
 
 ## Exclude these keys from the `i18n-tasks eq-base' report:
 # ignore_eq_base:

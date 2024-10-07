@@ -30,7 +30,7 @@ Rails.application.configure do
 
   # Disable serving static files from the `/public` folder by default since
   # Apache or NGINX already handles this.
-  config.public_file_server.enabled = ENV['RAILS_SERVE_STATIC_FILES'].present?
+  config.public_file_server.enabled = false
 
   # Compress JavaScripts and CSS.
   config.assets.js_compressor = :terser
@@ -40,7 +40,7 @@ Rails.application.configure do
   config.assets.compile = false
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
-  # config.asset_host = 'http://assets.example.com'
+  config.asset_host = "#{EnvConfig.ASSET_HOST}/assets/#{EnvConfig.BUILD_TAG}"
 
   # Asset digests allow you to set far-future HTTP expiration dates on all assets,
   # yet still be able to expire them through the digest params.
@@ -50,7 +50,7 @@ Rails.application.configure do
 
   # Specifies the header that your server uses for sending files.
   # config.action_dispatch.x_sendfile_header = 'X-Sendfile' # for Apache
-  config.action_dispatch.x_sendfile_header = 'X-Accel-Redirect' # for NGINX
+  # config.action_dispatch.x_sendfile_header = 'X-Accel-Redirect' # for NGINX
 
   # Mount Action Cable outside main process or domain.
   # config.action_cable.mount_path = nil
@@ -99,7 +99,9 @@ Rails.application.configure do
   end
 
   # Setup for ActiveStorage.
-  config.active_storage.service = :amazon
+  unless EnvConfig.ASSETS_COMPILATION?
+    config.active_storage.service = :amazon
+  end
 
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
@@ -136,8 +138,13 @@ Rails.application.configure do
 
   # Error pages for production
   config.exceptions_app = ->(env) {
-    ErrorsController.action(:show).call(env)
+    if EnvConfig.API_ONLY?
+      ApiErrorsController.action(:show).call(env)
+    else
+      ErrorsController.action(:show).call(env)
+    end
   }
+
   # Inserts middleware to perform automatic connection switching.
   # The `database_selector` hash is used to pass options to the DatabaseSelector
   # middleware. The `delay` is used to determine how long to wait after a write

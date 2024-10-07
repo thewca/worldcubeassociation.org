@@ -10,16 +10,18 @@ import Errored from '../Requests/Errored';
 import UserBadge from '../UserBadge';
 import EmailButton from '../EmailButton';
 
-export default function OfficersAndBoard({ boardEmail }) {
+export default function OfficersAndBoard() {
   const { data: officers, loading: officersLoading, error: officersError } = useLoadedData(
-    apiV0Urls.userRoles.listOfGroupType(groupTypes.officers, 'status', {
+    apiV0Urls.userRoles.list({
       isActive: true,
-    }),
+      groupType: groupTypes.officers,
+    }, 'status:desc'),
   );
   const { data: board, loading: boardLoading, error: boardError } = useLoadedData(
-    apiV0Urls.userRoles.listOfGroupType(groupTypes.board, 'name', {
+    apiV0Urls.userRoles.list({
       isActive: true,
-    }),
+      groupType: groupTypes.board,
+    }, 'name'),
   );
 
   // The same user can hold multiple officer positions, and it won't be good to show same user
@@ -50,7 +52,7 @@ export default function OfficersAndBoard({ boardEmail }) {
       <Header as="h3">
         <span>{I18n.t('user_groups.group_types.board')}</span>
         {' '}
-        <EmailButton email={boardEmail} />
+        <EmailButton email={board[0].group.metadata.email} />
       </Header>
       <p>{I18n.t('page.officers_and_board.board_description')}</p>
       {board.map((boardRole) => (

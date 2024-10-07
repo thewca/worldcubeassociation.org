@@ -8,6 +8,8 @@ class ContactForm < MailForm::Base
   attribute :to_email, validate: :validate_to_email
   attribute :subject, validate: true
 
+  attr_accessor :logged_in_email
+
   def validate_your_email
     errors.add(:your_email, I18n.t('common.errors.invalid')) unless ValidateEmail.valid?(your_email)
   end

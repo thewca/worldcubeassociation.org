@@ -5079,6 +5079,7 @@ fr:
       users:
         #original_hash: 57bbaad
         profile: 'Profil de %{user_name}'
+
       #original_hash: f8c3f3c
       operations_html: >-
         Les tâches quotidiennes de la WCA sont assurées par les

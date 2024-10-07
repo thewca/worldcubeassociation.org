@@ -67,7 +67,7 @@ class Round < ApplicationRecord
     # Note there is a subtle difference between using '||=' and 'key?'.
     # We do want to allow specifying a 'nil' value for the :time_limit attribute.
     attributes[:time_limit] = TimeLimit.new unless attributes.key?(:time_limit)
-    super(attributes)
+    super
   end
 
   # Compute a round type id from round information
@@ -219,7 +219,7 @@ class Round < ApplicationRecord
       "type" => "object",
       "properties" => {
         "id" => { "type" => "string" },
-        "format" => { "type" => "string", "enum" => Format.pluck(:id) },
+        "format" => { "type" => "string", "enum" => Format.ids },
         "timeLimit" => TimeLimit.wcif_json_schema,
         "cutoff" => Cutoff.wcif_json_schema,
         "advancementCondition" => AdvancementConditions::AdvancementCondition.wcif_json_schema,

@@ -38,9 +38,19 @@ registration_reminder:
   cron: "0 * * * *"
   queue: wca_jobs
 
+publish_metrics:
+  class: "PublishRegistrationMetrics"
+  cron: "15 * * * *"
+  queue: wca_jobs
+
 sync_mailing_lists:
   class: "SyncMailingListsJob"
   cron: "0 * * * *"
+  queue: wca_jobs
+
+notify_translators:
+  class: "NotifyTranslatorsJob"
+  cron: "0 12 * * *"
   queue: wca_jobs
 
 wst_chores:
@@ -53,8 +63,7 @@ weat_digest:
   cron: "0 0 1 * *"
   queue: mailers
 
-clear_tmp_cache:
-  class: "ClearTmpCache"
-  cron: "0 5 1,3,6 * *"
-  # Queueing on default because this is only a temporary task that we don't need statistics for
-  queue: default
+delegates_metadata_sync:
+  class: "DelegatesMetadataSyncJob"
+  cron: "0 * * * *"
+  queue: wca_jobs

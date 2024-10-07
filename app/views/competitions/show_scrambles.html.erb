@@ -1,9 +1,10 @@
 <% provide(:title, @competition.name) %>
 
-<%= render layout: 'scrambles_nav' do %>
+<%= render layout: 'results_nav' do %>
   <%= tag :div, id: "selected-event", "data-selected": params[:event] %>
-  <%= react_component("CompetitionScrambles", {
-    competitionId: @competition.id
+  <%= react_component("ResultsData/Scrambles", {
+    competitionId: @competition.id,
+    canAdminResults: current_user&.can_admin_results?,
   }, {
     id: "competition_scrambles",
   }) %>

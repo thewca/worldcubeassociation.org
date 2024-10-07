@@ -2,6 +2,7 @@
 
 class Api::V0::ApiController < ApplicationController
   include Rails::Pagination
+  include NewRelic::Agent::Instrumentation::ControllerInstrumentation if Rails.env.production?
   protect_from_forgery with: :null_session
   before_action :doorkeeper_authorize!, only: [:me]
   rescue_from WcaExceptions::ApiException do |e|
@@ -18,6 +19,10 @@ class Api::V0::ApiController < ApplicationController
     render json: { me: current_api_user }, private_attributes: doorkeeper_token.scopes
   end
 
+  def healthcheck
+    render json: { status: "ok", api_instance: EnvConfig.API_ONLY? }
+  end
+
   def auth_results
     if !current_user
       return render status: :unauthorized, json: { error: "Please log in" }
@@ -27,6 +32,47 @@ class Api::V0::ApiController < ApplicationController
     end
 
     render json: { status: "ok" }
+  end
+
+  def user_qualification_data
+    date = cutoff_date
+    return render json: { error: 'Invalid date format. Please provide an iso8601 date string.' }, status: :bad_request unless date.present?
+    return render json: { error: 'You cannot request qualification data for a future date.' }, status: :bad_request if date > Date.current
+
+    user = User.find(params.require(:user_id))
+    return render json: [] unless user.person.present?
+
+    # Compile singles
+    best_singles_by_cutoff = user.person.best_singles_by(date)
+    single_qualifications = best_singles_by_cutoff.map do |event, time|
+      qualification_data(event, :single, time, date)
+    end
+
+    # Compile averages
+    best_averages_by_cutoff = user.person&.best_averages_by(date)
+    average_qualifications = best_averages_by_cutoff.map do |event, time|
+      qualification_data(event, :average, time, date)
+    end
+
+    render json: single_qualifications + average_qualifications
+  end
+
+  private def cutoff_date
+    if params[:date].present?
+      Date.safe_parse(params[:date])
+    else
+      Date.current
+    end
+  end
+
+  private def qualification_data(event, type, time, date)
+    raise ArgumentError.new("'type' may only contain the symbols `:single` or `:average`") unless [:single, :average].include?(type)
+    {
+      eventId: event,
+      type: type,
+      best: time,
+      on_or_before: date.iso8601,
+    }
   end
 
   def scramble_program
@@ -88,9 +134,6 @@ class Api::V0::ApiController < ApplicationController
         "TNoodle-WCA-1.2.2",
       ],
     }
-  end
-
-  def help
   end
 
   def search(*models)
@@ -156,13 +199,13 @@ class Api::V0::ApiController < ApplicationController
   end
 
   def delegates
-    paginate json: UserGroup.delegate_region_groups.flat_map(&:active_users)
+    paginate json: UserGroup.delegate_regions.flat_map(&:active_users)
   end
 
   def delegates_search_index
     # TODO: There is a `uniq` call at the end which I feel shouldn't be necessary?!
     #   Postponing investigation until the Roles system migration is complete.
-    all_delegates = UserGroup.includes(:delegate_users, user_roles: [:user]).delegate_region_groups.flat_map(&:active_users).uniq
+    all_delegates = UserGroup.includes(:active_users).delegate_regions.flat_map(&:active_users).uniq
 
     search_index = all_delegates.map do |delegate|
       delegate.slice(:id, :name, :wca_id).merge({ thumb_url: delegate.avatar.url(:thumb) })

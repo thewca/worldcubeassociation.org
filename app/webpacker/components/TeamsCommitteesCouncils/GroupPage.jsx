@@ -1,56 +1,55 @@
 import React from 'react';
-import { Table } from 'semantic-ui-react';
+import { Button, Header, Message } from 'semantic-ui-react';
 import EmailButton from '../EmailButton';
-import { apiV0Urls } from '../../lib/requests/routes.js.erb';
+import { apiV0Urls, contactRecipientUrl } from '../../lib/requests/routes.js.erb';
 import I18n from '../../lib/i18n';
 import useLoadedData from '../../lib/hooks/useLoadedData';
 import Loading from '../Requests/Loading';
 import Errored from '../Requests/Errored';
-import UserBadge from '../UserBadge';
+import RolesTable from './RolesTable';
 
-export default function GroupPage({ group }) {
+export default function GroupPage({ group, canViewPastRoles }) {
   const {
-    data: groupMembers,
-    loading: groupMembersLoading,
-    error: groupMembersError,
-  } = useLoadedData(apiV0Urls.userRoles.listOfGroup(group.id, 'status,name', { isActive: true }));
+    data: activeRoles,
+    loading: activeRolesLoading,
+    error: activeRolesError,
+  } = useLoadedData(apiV0Urls.userRoles.list({ isActive: true, groupId: group.id }, 'status:desc,name'));
+  const {
+    data: pastRoles,
+    loading: pastRolesLoading,
+    error: pastRolesError,
+  } = useLoadedData(apiV0Urls.userRoles.list({ isActive: false, groupId: group.id }, 'status:desc,name'));
 
-  if (groupMembersLoading) return <Loading />;
-  if (groupMembersError) return <Errored />;
+  if (activeRolesLoading || pastRolesLoading) return <Loading />;
+  if (activeRolesError || pastRolesError) return <Errored />;
 
   return (
     <>
       <p>{I18n.t(`page.teams_committees_councils.groups_description.${group.metadata.friendly_id}`)}</p>
-      <EmailButton email={group.metadata.email} />
-      <Table unstackable>
-        <Table.Header>
-          <Table.Row>
-            <Table.HeaderCell>
-              {I18n.t('delegates_page.table.name')}
-            </Table.HeaderCell>
-            <Table.HeaderCell>
-              {I18n.t('delegates_page.table.role')}
-            </Table.HeaderCell>
-          </Table.Row>
-        </Table.Header>
-
-        <Table.Body>
-          {groupMembers.map((groupMember) => (
-            <Table.Row key={groupMember.user.id}>
-              <Table.Cell>
-                <UserBadge
-                  user={groupMember.user}
-                  hideBorder
-                  leftAlign
-                />
-              </Table.Cell>
-              <Table.Cell>
-                {I18n.t(`enums.user_roles.status.${groupMember.group.group_type}.${groupMember.metadata.status}`)}
-              </Table.Cell>
-            </Table.Row>
-          ))}
-        </Table.Body>
-      </Table>
+      {
+        (
+          !group.metadata.preferred_contact_mode || group.metadata.preferred_contact_mode === 'email'
+        ) && <EmailButton email={group.metadata.email} />
+      }
+      {
+        group.metadata.preferred_contact_mode === 'contact_form'
+          && (
+          <Button href={contactRecipientUrl(group.metadata.friendly_id)}>
+            {I18n.t('page.teams_committees_councils.contact_button')}
+          </Button>
+          )
+      }
+      {
+        group.metadata.preferred_contact_mode === 'no_contact'
+          && <Message>{I18n.t('page.teams_committees_councils.no_contact_description')}</Message>
+      }
+      <RolesTable roleList={activeRoles} />
+      {canViewPastRoles && (
+        <>
+          <Header>Past Roles</Header>
+          <RolesTable roleList={pastRoles} />
+        </>
+      )}
     </>
   );
 }

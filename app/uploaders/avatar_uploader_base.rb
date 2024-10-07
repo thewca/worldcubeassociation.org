@@ -6,7 +6,12 @@ class AvatarUploaderBase < CarrierWave::Uploader::Base
   include CarrierWave::MiniMagick
 
   def self.connection_cache
+    # rubocop:disable ThreadSafety/InstanceVariableInClassMethod
+    #
+    # Worst thing that can happen is that two Puma workers open their own connections when they could have re-used one.
+    # And the avatar upload through this Carrierwave system is deprecated anyways.
     @connection_cache ||= {}
+    # rubocop:enable ThreadSafety/InstanceVariableInClassMethod
   end
 
   def cloudfront_sdk
@@ -43,7 +48,7 @@ class AvatarUploaderBase < CarrierWave::Uploader::Base
   end
 
   def self.missing_avatar_thumb_url
-    @@missing_avatar_thumb_url ||= ActionController::Base.helpers.asset_url("missing_avatar_thumb.png", host: EnvConfig.ROOT_URL).freeze
+    @@missing_avatar_thumb_url ||= ActionController::Base.helpers.asset_url("missing_avatar_thumb.png").freeze
   end
 
   # Choose what kind of storage to use for this uploader:
@@ -119,7 +124,7 @@ module CarrierWave
   module Uploader
     module Versions
       def full_filename(for_file)
-        parent_name = super(for_file)
+        parent_name = super
         ext = File.extname(parent_name)
         base_name = parent_name.chomp(ext)
         [base_name, version_name].compact.join('_') + ext

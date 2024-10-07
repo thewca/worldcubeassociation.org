@@ -23,7 +23,9 @@ module ResultsValidators
     MISSING_CUMULATIVE_ROUND_ID_ERROR = "[%{original_round_id}] Unable to find the round %{wcif_id} for the cumulative time limit specified in the WCIF. " \
                                         "Please go to the competition's Manage Events page and remove %{wcif_id} from the cumulative time limit for %{original_round_id}. WST knows about this bug (GitHub issue #3254)."
 
-    @desc = "This validator checks that all results respect the format, time limit, and cutoff information if available. It also looks for similar results within the round."
+    def self.description
+      "This validator checks that all results respect the format, time limit, and cutoff information if available. It also looks for similar results within the round."
+    end
 
     def self.has_automated_fix?
       false
@@ -157,7 +159,7 @@ module ResultsValidators
 
       def check_result_after_dns(context, all_solve_times)
         # Now let's try to find a DNS result followed by a non-DNS result
-        first_index = all_solve_times.find_index(SolveTime::DNS)
+        first_index = all_solve_times.find_index(&:dns?)
         # Just use '5' here to get all of them
         if first_index && all_solve_times[first_index, 5].any?(&:complete?)
           competition_id, result, round_id, = context

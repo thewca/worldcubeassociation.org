@@ -1,0 +1,15 @@
+<% provide(:title, 'Staff Panel') %>
+
+<div class="container">
+  <h1><%= yield(:title) %></h1>
+
+  <ul>
+    <%= documents_list("policies/internal") %>
+    <li>
+      <%= link_to "Staff crash course", "https://documents.worldcubeassociation.org/edudoc/staff-crash-course/staff_crash_course.pdf" %>
+    </li>
+    <li>
+      <%= link_to "Merch Order Form (with staff discount)", "https://forms.gle/RAor4LyzNCxs6Mvb8" %>
+    </li>
+  </ul>
+</div>

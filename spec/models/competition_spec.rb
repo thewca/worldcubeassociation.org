@@ -181,7 +181,7 @@ RSpec.describe Competition do
   context "delegates" do
     it "delegates for future comps must be current delegates" do
       competition = FactoryBot.build :competition, :with_delegate, :future
-      competition.delegates.first.update_columns(delegate_status: nil)
+      competition.delegates.first.delegate_roles.first.update!(end_date: Date.today)
 
       expect(competition).to be_invalid_with_errors(staff_delegate_ids: ["are not all Delegates"],
                                                     trainee_delegate_ids: ["are not all Delegates"])
@@ -189,7 +189,7 @@ RSpec.describe Competition do
 
     it "delegates for past comps no longer need to be delegates" do
       competition = FactoryBot.build :competition, :with_delegate, :past
-      competition.delegates.first.update_columns(delegate_status: nil, region_id: nil)
+      competition.delegates.first.delegate_roles.first.update(end_date: Date.today)
 
       expect(competition).to be_valid
     end
@@ -443,7 +443,7 @@ RSpec.describe Competition do
     it "warns if competition name is greater than 32 characters and it's not publicly visible" do
       competition = FactoryBot.build :competition, name: "A really long competition name 2016", showAtAll: false
       expect(competition).to be_valid
-      expect(competition.warnings_for(nil)[:name]).to eq "The competition name is longer than 32 characters. We prefer shorter ones and we will be glad if you change it."
+      expect(competition.warnings_for(nil)[:name]).to eq "The competition name is longer than 32 characters. Please edit the competition ID and short name appropriately."
     end
 
     it "does not warn about name greater than 32 when competition is publicly visible" do
@@ -473,9 +473,11 @@ RSpec.describe Competition do
     it "warns if competition has results and haven't been posted" do
       competition = FactoryBot.create :competition, :confirmed, :announced, :visible, :past, results_posted_at: nil, results_posted_by: nil
       FactoryBot.create(:result, person: FactoryBot.create(:person), competitionId: competition.id)
+      wrt_member = FactoryBot.create :user, :wrt_member
 
       expect(competition).to be_valid
-      expect(competition.warnings_for(nil)[:results]).to eq "This competition's results are visible but haven't been posted yet."
+      expect(competition.warnings_for(wrt_member)[:results]).to eq "This competition's results are visible but haven't been posted yet."
+      expect(competition.warnings_for(nil)[:results]).to eq "We are busy processing this competition's results - they should be available shortly."
     end
 
     it "does not warn about other different championships" do
@@ -781,7 +783,7 @@ RSpec.describe Competition do
   end
 
   describe "when confirming or making visible" do
-    let(:competition_with_delegate) { FactoryBot.build :competition, :with_delegate, generate_website: false }
+    let(:competition_with_delegate) { FactoryBot.build :competition, :with_delegate, :with_organizer, generate_website: false }
     let(:competition_without_delegate) { FactoryBot.build :competition }
 
     [:confirmed, :showAtAll].each do |action|
@@ -814,7 +816,7 @@ RSpec.describe Competition do
     end
 
     it "sets confirmed_at when setting confirmed true" do
-      competition = FactoryBot.create :competition, :future, :with_delegate, :with_valid_schedule
+      competition = FactoryBot.create :competition, :future, :with_delegate, :with_organizer, :with_valid_schedule
       expect(competition.confirmed_at).to be_nil
 
       now = Time.at(Time.now.to_i)
@@ -1083,16 +1085,17 @@ RSpec.describe Competition do
     let(:delegate2) { FactoryBot.create(:delegate) }
     let(:organizer1) { FactoryBot.create(:user) }
     let(:organizer2) { FactoryBot.create(:user) }
+    let(:organizer3) { FactoryBot.create(:user) }
     let!(:competition) {
       FactoryBot.create(:competition, :confirmed, delegates: [delegate1, delegate2], organizers: [organizer1, organizer2])
     }
-    let!(:competition_without_organizers) {
-      FactoryBot.create(:competition, :confirmed, delegates: [delegate1, delegate2], organizers: [])
+    let!(:competition_with_different_organizers) {
+      FactoryBot.create(:competition, :confirmed, delegates: [delegate1, delegate2], organizers: [organizer3])
     }
     let!(:other_comp) { FactoryBot.create(:competition) }
 
     it "finds comps by delegate" do
-      expect(Competition.managed_by(delegate1.id)).to match_array [competition, competition_without_organizers]
+      expect(Competition.managed_by(delegate1.id)).to match_array [competition, competition_with_different_organizers]
     end
 
     it "finds comps by organizer" do
@@ -1554,6 +1557,30 @@ RSpec.describe Competition do
 
         expect { competition.disconnect_all_payment_integrations }.not_to raise_error
       end
+    end
+  end
+
+  context "new competition is invalid when" do
+    let!(:new_competition) { FactoryBot.build(:competition, :with_delegate, :future, :visible, :with_valid_schedule) }
+
+    it "nameReason is too long" do
+      new_competition.name_reason = "Veeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeery long name reason"
+      expect(new_competition).not_to be_valid
+    end
+
+    it "venue details is too long" do
+      new_competition.venueAddress = "192 character venue details reeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+      expect(new_competition).not_to be_valid
+    end
+
+    it "venue address is too long" do
+      new_competition.venueDetails = "192 character venue address reeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+      expect(new_competition).not_to be_valid
+    end
+
+    it "external website is too long" do
+      new_competition.external_website = "201 character external website reeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+      expect(new_competition).not_to be_valid
     end
   end
 end

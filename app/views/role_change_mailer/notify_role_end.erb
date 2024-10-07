@@ -1,4 +1,4 @@
-<p>The role has been removed for <%= UserRole.user(@role).name %> in <%= @group_type_name %> on <%= @role[:end_date] %>.</p>
+<p>The role has been removed for <%= @role.user.name %> in <%= @group_type_name %> on <%= @role[:end_date] %>.</p>
 <p>The change has been executed by <%= @user_who_made_the_change.name %>.</p>
 <% if @metadata.present? %>
   <p>More details of the role were:</p>
@@ -7,4 +7,8 @@
       <li><%= I18n.t("user_roles.email.role_metadata.#{key}" , locale: 'en') %>: <%= value %></li>
     <% end %>
   </ul>
+<% end %>
+<p>Messages to recipients:</p>
+<% @to_list.each do |recipient| %>
+  <li><%= recipient.name %>: <%= recipient.message %></li>
 <% end %>

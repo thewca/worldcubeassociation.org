@@ -61,10 +61,9 @@ class CompetitionsMailerPreview < ActionMailer::Preview
     report = DelegateReport.where.not(posted_at: nil).first
 
     # Copied from `app/controllers/delegate_reports_controller.rb`
-    Team.wrc.reload
-    wrc_primary_team_member, wrc_secondary_team_member = Team.wrc.current_members.sample 2
-    report.wrc_primary_user = wrc_primary_team_member.user
-    report.wrc_secondary_user = wrc_secondary_team_member.user
+    wrc_primary_user, wrc_secondary_user = UserGroup.teams_committees_group_wrc.active_users.sample 2
+    delegate_report.wrc_primary_user = wrc_primary_user
+    delegate_report.wrc_secondary_user = wrc_secondary_user
 
     if !report
       report = Competition.first.delegate_report

@@ -7,28 +7,18 @@ class SyncMailingListsJob < WcaCronjob
   end
 
   def perform
-    GsuiteMailingLists.sync_group("leaders@worldcubeassociation.org", TeamMember.current.in_official_team.leader.map(&:user).map(&:email))
-    GsuiteMailingLists.sync_group("board@worldcubeassociation.org", Team.board.current_members.includes(:user).map(&:user).map(&:email))
-    GsuiteMailingLists.sync_group("communication@worldcubeassociation.org", Team.wct.current_members.includes(:user).map(&:user).map(&:email))
-    GsuiteMailingLists.sync_group("communication-china@worldcubeassociation.org", Team.wct_china.current_members.includes(:user).map(&:user).map(&:email))
-    GsuiteMailingLists.sync_group("competitions@worldcubeassociation.org", Team.wcat.current_members.includes(:user).map(&:user).map(&:email))
-    GsuiteMailingLists.sync_group("disciplinary@worldcubeassociation.org", Team.wdc.current_members.includes(:user).map(&:user).map(&:email))
-    GsuiteMailingLists.sync_group("ethics@worldcubeassociation.org", Team.wec.current_members.includes(:user).map(&:user).map(&:email))
-    GsuiteMailingLists.sync_group("assistants@worldcubeassociation.org", Team.weat.current_members.includes(:user).map(&:user).map(&:email))
-    GsuiteMailingLists.sync_group("finance@worldcubeassociation.org", Team.wfc.current_members.includes(:user).map(&:user).map(&:email))
-    GsuiteMailingLists.sync_group("marketing@worldcubeassociation.org", Team.wmt.current_members.includes(:user).map(&:user).map(&:email))
-    GsuiteMailingLists.sync_group("quality@worldcubeassociation.org", Team.wqac.current_members.includes(:user).map(&:user).map(&:email))
-    GsuiteMailingLists.sync_group("regulations@worldcubeassociation.org", Team.wrc.current_members.includes(:user).map(&:user).map(&:email))
-    GsuiteMailingLists.sync_group("results@worldcubeassociation.org", Team.wrt.current_members.includes(:user).map(&:user).map(&:email))
-    GsuiteMailingLists.sync_group("software@worldcubeassociation.org", Team.wst.current_members.includes(:user).map(&:user).map(&:email))
-    GsuiteMailingLists.sync_group("software-admin@worldcubeassociation.org", Team.wst_admin.current_members.includes(:user).map(&:user).map(&:email))
-    translator_users = UserGroup.translator_groups.flat_map(&:users)
+    GsuiteMailingLists.sync_group("leaders@worldcubeassociation.org", UserGroup.teams_committees.map(&:lead_user).compact.map(&:email))
+    GsuiteMailingLists.sync_group(GroupsMetadataBoard.email, UserGroup.board_group.active_users.map(&:email))
+    translator_users = UserGroup.translators.flat_map(&:users)
     GsuiteMailingLists.sync_group("translators@worldcubeassociation.org", translator_users.map(&:email))
     User.clear_receive_delegate_reports_if_not_eligible
     GsuiteMailingLists.sync_group("reports@worldcubeassociation.org", User.delegate_reports_receivers_emails)
-    GsuiteMailingLists.sync_group("advisory@worldcubeassociation.org", Team.wac.current_members.includes(:user).map(&:user).map(&:email))
-    GsuiteMailingLists.sync_group("sports@worldcubeassociation.org", Team.wsot.current_members.includes(:user).map(&:user).map(&:email))
-    GsuiteMailingLists.sync_group("archive@worldcubeassociation.org", Team.wat.current_members.includes(:user).map(&:user).map(&:email))
+
+    UserGroup.teams_committees.active_groups.each { |team_committee| GsuiteMailingLists.sync_group(team_committee.metadata.email, team_committee.active_users.map(&:email)) }
+    # Special case: WIC is the first committee in our (recent) history that "absorbed" another team's duties:
+    #   They are now a "mix" of WDC and WEC. The structures have been mapped so that WIC reuses WDC's groups,
+    #   so they get WDC access "for free". But they _also_ need to be synced to ethics@ to view old conversations from there.
+    GsuiteMailingLists.sync_group("ethics@worldcubeassociation.org", GroupsMetadataTeamsCommittees.wic.user_group.active_users.map(&:email))
 
     treasurers = UserGroup.officers.flat_map(&:active_roles).filter { |role| role.metadata.status == RolesMetadataOfficers.statuses[:treasurer] }
     GsuiteMailingLists.sync_group("treasurer@worldcubeassociation.org", treasurers.map(&:user).map(&:email))
@@ -36,20 +26,19 @@ class SyncMailingListsJob < WcaCronjob
     delegate_emails = []
     trainee_emails = []
     senior_emails = []
-    active_root_delegate_regions = UserGroup.delegate_region_groups.where(parent_group_id: nil, is_active: true)
+    active_root_delegate_regions = UserGroup.delegate_regions.where(parent_group_id: nil, is_active: true)
     active_root_delegate_regions.each do |region|
       region_emails = []
-      (region.active_roles + region.active_roles_of_all_child_groups).each do |role|
-        is_actual_role = role.is_a?(UserRole)
-        role_email = is_actual_role ? role.user[:email] : role[:user][:email]
-        role_status = is_actual_role ? role.metadata[:status] : role[:metadata][:status]
+      (region.active_roles + region.active_all_child_roles).each do |role|
+        role_email = role.user.email
+        role_status = role.metadata.status
         region_emails << role_email
-        if role_status == "trainee_delegate"
+        if role_status == RolesMetadataDelegateRegions.statuses[:trainee_delegate]
           trainee_emails << role_email
         else
           delegate_emails << role_email
         end
-        if role_status == "senior_delegate"
+        if role_status == RolesMetadataDelegateRegions.statuses[:senior_delegate]
           senior_emails << role_email
         end
       end
@@ -62,7 +51,7 @@ class SyncMailingListsJob < WcaCronjob
     GsuiteMailingLists.sync_group("trainees@worldcubeassociation.org", trainee_emails.uniq)
     GsuiteMailingLists.sync_group("seniors@worldcubeassociation.org", senior_emails.uniq)
 
-    organizations = RegionalOrganization.currently_acknowledged + [Team.board]
-    GsuiteMailingLists.sync_group("organizations@worldcubeassociation.org", organizations.map(&:email))
+    organizations_emails = [RegionalOrganization.currently_acknowledged.map(&:email), GroupsMetadataBoard.email].flatten
+    GsuiteMailingLists.sync_group("organizations@worldcubeassociation.org", organizations_emails)
   end
 end

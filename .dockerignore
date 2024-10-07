@@ -19,3 +19,9 @@ config/credentials/*.key
 !/tmp/pids/.keep
 
 node_modules
+
+# Don't add the .git folder
+/.git
+
+# Don't add the .terraform folder in infra
+/infra/wca_on_rails/.terraform

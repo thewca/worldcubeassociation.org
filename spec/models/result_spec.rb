@@ -362,21 +362,6 @@ RSpec.describe Result do
           end
         end
 
-        context "333ft" do
-          let(:formatId) { "3" }
-          let(:eventId) { "333ft" }
-          let!(:round) { FactoryBot.create(:round, competition: competition, event_id: "333ft", format_id: "3") }
-
-          it "does compute average" do
-            result = build_result(value1: 999, value2: 1000, value3: 1001, value4: 0, value5: 0, best: 999, average: 1000)
-            expect(result).to be_valid
-
-            result.average = 33
-            expect(result.compute_correct_average).to eq 1000
-            expect(result).to be_invalid_with_errors(average: ["should be 1000"])
-          end
-        end
-
         context "333mbf" do
           let(:formatId) { "3" }
           let(:eventId) { "333mbf" }

@@ -4,6 +4,7 @@ require 'rails_helper'
 
 RSpec.describe User, type: :model do
   let(:dob_form_path) { Rails.application.routes.url_helpers.contact_dob_path }
+  let(:wrt_contact_path) { Rails.application.routes.url_helpers.contact_path(contactRecipient: 'wrt') }
 
   it "defines a valid user" do
     user = FactoryBot.create :user
@@ -65,19 +66,6 @@ RSpec.describe User, type: :model do
     user.confirm
   end
 
-  it "requires region_id for a delegate" do
-    delegate = FactoryBot.create :delegate
-    region_id = delegate.region_id
-    user = FactoryBot.create :user
-
-    delegate.region_id = user.region_id
-    expect(delegate).to be_invalid_with_errors(region_id: ["can't be blank"])
-
-    delegate.region_id = region_id
-    user.update(delegate_status: "delegate", region_id: region_id)
-    expect(delegate).to be_valid
-  end
-
   it "doesn't delete a real account when a dummy account's WCA ID is cleared" do
     # Create someone without a password and without a WCA ID. This simulates the kind
     # of accounts we originally created for all delegates without accounts.
@@ -133,7 +121,7 @@ RSpec.describe User, type: :model do
 
     it "does not allow assigning a genderless WCA ID to a user" do
       user.wca_id = genderless_person.wca_id
-      expect(user).to be_invalid_with_errors(wca_id: [I18n.t('users.errors.wca_id_no_gender_html')])
+      expect(user).to be_invalid_with_errors(wca_id: [I18n.t('users.errors.wca_id_no_gender_html', wrt_contact_path: wrt_contact_path)])
     end
 
     it "nullifies empty WCA IDs" do
@@ -336,10 +324,10 @@ RSpec.describe User, type: :model do
 
   describe "unconfirmed_wca_id" do
     let!(:person) { FactoryBot.create :person, dob: '1990-01-02' }
-    let!(:delegate) { FactoryBot.create :delegate, region_id: (FactoryBot.create :delegate_region_americas).id }
+    let!(:delegate_role) { FactoryBot.create :delegate_role }
     let!(:user) do
       FactoryBot.create(:user, unconfirmed_wca_id: person.wca_id,
-                               delegate_id_to_handle_wca_id_claim: delegate.id,
+                               delegate_id_to_handle_wca_id_claim: delegate_role.user.id,
                                claiming_wca_id: true,
                                dob_verification: "1990-01-2")
     end
@@ -393,7 +381,7 @@ RSpec.describe User, type: :model do
     it "does not allow claiming wca id Person without gender" do
       user.unconfirmed_wca_id = person_without_gender.wca_id
       user.dob_verification = "1234-04-03"
-      expect(user).to be_invalid_with_errors(gender: [I18n.t('users.errors.wca_id_no_gender_html')])
+      expect(user).to be_invalid_with_errors(gender: [I18n.t('users.errors.wca_id_no_gender_html', wrt_contact_path: wrt_contact_path)])
     end
 
     it "does not show a message about incorrect dob for people who have already claimed their wca id" do
@@ -442,7 +430,7 @@ RSpec.describe User, type: :model do
 
     it "can match a wca id already claimed by a user" do
       user2 = FactoryBot.create :user
-      user2.delegate_id_to_handle_wca_id_claim = delegate.id
+      user2.delegate_id_to_handle_wca_id_claim = delegate_role.user.id
 
       user2.unconfirmed_wca_id = person.wca_id
       user2.dob_verification = person.dob.strftime("%F")
@@ -456,7 +444,7 @@ RSpec.describe User, type: :model do
     it "cannot have an unconfirmed_wca_id if you already have a wca_id" do
       user_with_wca_id.claiming_wca_id = true
       user_with_wca_id.unconfirmed_wca_id = person.wca_id
-      user_with_wca_id.delegate_id_to_handle_wca_id_claim = delegate.id
+      user_with_wca_id.delegate_id_to_handle_wca_id_claim = delegate_role.user.id
       expect(user_with_wca_id).to be_invalid_with_errors(unconfirmed_wca_id: ["cannot claim a WCA ID because you already have WCA ID #{user_with_wca_id.wca_id}"])
     end
 
@@ -467,34 +455,22 @@ RSpec.describe User, type: :model do
     end
   end
 
-  it "#teams and #current_teams return unique team names" do
-    user = FactoryBot.create(:user)
+  it 'banned? returns true for users who are actively banned' do
+    banned_user = FactoryBot.create :user, :banned
 
-    FactoryBot.create(:team_member, team_id: Team.wrc.id, user_id: user.id, start_date: Date.today - 20, end_date: Date.today - 10)
-    FactoryBot.create(:team_member, team_id: Team.wrt.id, user_id: user.id, start_date: Date.today - 5, end_date: Date.today + 5)
-    FactoryBot.create(:team_member, team_id: Team.wrt.id, user_id: user.id, start_date: Date.today + 6, end_date: Date.today + 10)
-
-    expect(user.teams).to match_array [Team.wrc, Team.wrt]
-    expect(user.current_teams).to match_array [Team.wrt]
+    expect(banned_user.banned?).to eq true
   end
 
-  it 'former members of the results team are not considered current members' do
-    wrt_member = FactoryBot.create :user, :wrt_member
-    team_member = wrt_member.team_members.first
-    team_member.update!(end_date: 1.day.ago)
+  it 'banned? returns false for users who are banned in past' do
+    formerly_banned_user = FactoryBot.create :user, :formerly_banned
 
-    expect(wrt_member.reload.team_member?(Team.wrt)).to eq false
+    expect(formerly_banned_user.banned?).to eq false
   end
 
-  it 'former leaders of the results team are not considered current leaders' do
-    wrt_leader = FactoryBot.create :user, :wrt_member
-    team_member = wrt_leader.team_members.first
-    team_member.update!(team_leader: true)
-    team_member.update!(end_date: 1.day.ago)
+  it 'current_ban returns data of current banned role' do
+    banned_user = FactoryBot.create :user, :banned
 
-    expect(wrt_leader.reload.team_leader?(Team.wrt)).to eq false
-
-    expect(wrt_leader.teams_where_is_leader.count).to eq 0
+    expect(banned_user.current_ban.group.group_type).to eq UserGroup.group_types[:banned_competitors]
   end
 
   it "removes whitespace around names" do
@@ -643,7 +619,7 @@ RSpec.describe User, type: :model do
   end
 
   describe "receive_delegate_reports field" do
-    let!(:staff_member1) { FactoryBot.create :user, :wec_member, receive_delegate_reports: true }
+    let!(:staff_member1) { FactoryBot.create :user, :wic_member, receive_delegate_reports: true }
     let!(:staff_member2) { FactoryBot.create :user, :wrt_member, receive_delegate_reports: false }
 
     it "gets cleared if user is not eligible anymore" do
@@ -746,7 +722,7 @@ RSpec.describe User, type: :model do
     end
 
     it "returns true for non-trainee Delegate roles" do
-      junior_delegate_user = FactoryBot.create(:candidate_delegate)
+      junior_delegate_user = FactoryBot.create(:junior_delegate)
       full_delegate_user = FactoryBot.create(:delegate)
       regional_delegate = FactoryBot.create(:regional_delegate_role)
       senior_delegate = FactoryBot.create(:senior_delegate_role)
@@ -789,19 +765,19 @@ RSpec.describe User, type: :model do
     end
 
     it "returns true for board user for any group" do
-      americas_region = FactoryBot.create(:delegate_region_americas)
+      americas_region = GroupsMetadataDelegateRegions.find_by!(friendly_id: 'americas').user_group
       board_user = FactoryBot.create(:user, :board_member)
       expect(board_user.has_permission?(:can_edit_groups, americas_region.id)).to be true
     end
 
     it "returns true for WRT user for any group" do
-      americas_region = FactoryBot.create(:delegate_region_americas)
+      americas_region = GroupsMetadataDelegateRegions.find_by!(friendly_id: 'americas').user_group
       wrt_user = FactoryBot.create(:user, :wrt_member)
       expect(wrt_user.has_permission?(:can_edit_groups, americas_region.id)).to be true
     end
 
     it "returns true for admin user for any group" do
-      americas_region = FactoryBot.create(:delegate_region_americas)
+      americas_region = GroupsMetadataDelegateRegions.find_by!(friendly_id: 'americas').user_group
       admin_user = FactoryBot.create(:admin)
       expect(admin_user.has_permission?(:can_edit_groups, americas_region.id)).to be true
     end
@@ -812,15 +788,26 @@ RSpec.describe User, type: :model do
     end
 
     it "returns true for senior delegate if scope requested is their subregion" do
-      usa_region = FactoryBot.create(:delegate_region_usa)
-      senior_delegate = FactoryBot.create(:senior_delegate_role, group: usa_region.parent_group).user
-      expect(senior_delegate.has_permission?(:can_edit_groups, usa_region.id)).to be true
+      asia_east_region = GroupsMetadataDelegateRegions.find_by!(friendly_id: 'asia-east').user_group
+      senior_delegate = FactoryBot.create(:senior_delegate_role, group: asia_east_region.parent_group).user
+      expect(senior_delegate.has_permission?(:can_edit_groups, asia_east_region.id)).to be true
     end
 
     it "returns false for senior delegate if scope requested is other's region" do
-      asia_pacific_region = FactoryBot.create(:delegate_region_asia_pacific)
+      asia_region = GroupsMetadataDelegateRegions.find_by!(friendly_id: 'asia').user_group
       senior_delegate = FactoryBot.create(:senior_delegate_role).user
-      expect(senior_delegate.has_permission?(:can_edit_groups, asia_pacific_region.id)).to be false
+      expect(senior_delegate.has_permission?(:can_edit_groups, asia_region.id)).to be false
+    end
+  end
+
+  describe "teams_committees_at_least_senior_roles has_many relation" do
+    it "returns the senior/leader roles for a user" do
+      user = FactoryBot.create(:user)
+      wrt_role = FactoryBot.create(:wrt_member_role, user: user)
+      wsot_leader_role = FactoryBot.create(:wsot_leader_role, user: user)
+      wrc_senior_member_role = FactoryBot.create(:wrc_senior_member_role, user: user)
+      expect(user.teams_committees_at_least_senior_roles).to include(wsot_leader_role, wrc_senior_member_role)
+      expect(user.teams_committees_at_least_senior_roles).not_to include(wrt_role)
     end
   end
 end

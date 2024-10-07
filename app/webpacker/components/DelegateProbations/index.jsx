@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Confirm, Table } from 'semantic-ui-react';
-import DatePicker from 'react-datepicker';
+import { DateTime } from 'luxon';
 import UserBadge from '../UserBadge';
 import useLoadedData from '../../lib/hooks/useLoadedData';
 import { apiV0Urls } from '../../lib/requests/routes.js.erb';
@@ -10,8 +10,7 @@ import WcaSearch from '../SearchWidget/WcaSearch';
 import SEARCH_MODELS from '../SearchWidget/SearchModel';
 import Errored from '../Requests/Errored';
 import useInputState from '../../lib/hooks/useInputState';
-
-const dateFormat = 'YYYY-MM-DD';
+import UtcDatePicker from '../wca/UtcDatePicker';
 
 function ProbationListTable({
   roleList, isActive, save, sync,
@@ -23,6 +22,7 @@ function ProbationListTable({
     save(apiV0Urls.userRoles.update(endProbationParams.probationRoleId), {
       endDate: endProbationParams.endDate,
     }, sync, { method: 'PATCH' });
+
     setConfirmOpen(false);
     setEndProbationParams(null);
   };
@@ -54,15 +54,15 @@ function ProbationListTable({
               <Table.Cell>
                 {
                 isActive ? (
-                  <DatePicker
-                    onChange={(date) => {
+                  <UtcDatePicker
+                    isoDate={probationRole.end_date}
+                    onChange={(isoDate) => {
                       setEndProbationParams({
                         probationRoleId: probationRole.id,
-                        endDate: moment(date).format(dateFormat),
+                        endDate: isoDate,
                       });
                       setConfirmOpen(true);
                     }}
-                    selected={probationRole.end_date ? new Date(probationRole.end_date) : null}
                   />
                 ) : probationRole.end_date
               }
@@ -86,7 +86,7 @@ export default function DelegateProbations() {
 
   const {
     data: probationRoles, loading, error, sync,
-  } = useLoadedData(apiV0Urls.userRoles.listOfGroupType(groupTypes.delegate_probation));
+  } = useLoadedData(apiV0Urls.userRoles.list({ groupType: groupTypes.delegate_probation }));
   const { save, saving } = useSaveAction();
 
   if (loading || saving) return 'Loading...'; // No i18n because this page is used only by WCA Staff.
@@ -105,7 +105,7 @@ export default function DelegateProbations() {
       />
       <Button
         onClick={() => save(apiV0Urls.userRoles.create(), {
-          userId: role.user.id,
+          userId: role.item.user.id,
           groupType: groupTypes.delegate_probation,
         }, () => {
           sync();
@@ -118,7 +118,7 @@ export default function DelegateProbations() {
       <h2>Active Probations</h2>
       <ProbationListTable
         roleList={probationRoles.filter((probationRole) => probationRole.end_date === null
-           || probationRole.end_date > moment().format(dateFormat))}
+           || DateTime.fromISO(probationRole.end_date, { zone: 'UTC' }) > DateTime.now())}
         isActive
         save={save}
         sync={sync}
@@ -126,7 +126,7 @@ export default function DelegateProbations() {
       <h2>Past Probations</h2>
       <ProbationListTable
         roleList={probationRoles.filter((probationRole) => probationRole.end_date !== null
-          && probationRole.end_date <= moment().format(dateFormat))}
+          && DateTime.fromISO(probationRole.end_date, { zone: 'UTC' }) <= DateTime.now())}
         isActive={false}
       />
     </>

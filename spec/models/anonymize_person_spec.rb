@@ -7,7 +7,9 @@ RSpec.describe AnonymizePerson do
   let(:anonymize_person) { AnonymizePerson.new(person_wca_id: person.wca_id) }
 
   let(:user) { FactoryBot.create(:user, :wca_id) }
+  let(:banned_user) { FactoryBot.create(:user, :wca_id, :banned) }
   let(:anonymize_person2) { AnonymizePerson.new(person_wca_id: user.wca_id) }
+  let(:anonymize_person3) { AnonymizePerson.new(person_wca_id: banned_user.wca_id) }
 
   it "is valid" do
     expect(anonymize_person).to be_valid
@@ -16,6 +18,10 @@ RSpec.describe AnonymizePerson do
   it "handles invalid wca_id" do
     anonymize_person.person_wca_id = ""
     expect(anonymize_person).to be_invalid_with_errors(person_wca_id: ["can't be blank"])
+  end
+
+  it "prevents anonymizing banned user" do
+    expect(anonymize_person3.do_anonymize_person).to eq({ error: "Error anonymizing: This person is currently banned and cannot be anonymized." })
   end
 
   it "generates a wca id for ANON with the same year" do

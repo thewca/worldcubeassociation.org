@@ -5,104 +5,87 @@ require 'rails_helper'
 RSpec.describe SyncMailingListsJob, type: :job do
   it "syncs mailing lists" do
     # Regions
-    africa_region = FactoryBot.create :africa_region
-    africa_region.update!(metadata: FactoryBot.create(:groups_metadata_delegate_regions, email: "delegates.africa@worldcubeassociation.org"))
-    asia_region = FactoryBot.create :asia_region
-    asia_region.update!(metadata: FactoryBot.create(:groups_metadata_delegate_regions, email: "delegates.asia@worldcubeassociation.org"))
-    europe_region = FactoryBot.create :europe_region
-    europe_region.update!(metadata: FactoryBot.create(:groups_metadata_delegate_regions, email: "delegates.europe@worldcubeassociation.org"))
-    north_america_region = FactoryBot.create :north_america_region
-    north_america_region.update!(metadata: FactoryBot.create(:groups_metadata_delegate_regions, email: "delegates.north-america@worldcubeassociation.org"))
+    africa_region = GroupsMetadataDelegateRegions.find_by!(friendly_id: 'africa').user_group
+    asia_region = GroupsMetadataDelegateRegions.find_by!(friendly_id: 'asia').user_group
+    europe_region = GroupsMetadataDelegateRegions.find_by!(friendly_id: 'europe').user_group
+    oceania_region = GroupsMetadataDelegateRegions.find_by!(friendly_id: 'oceania').user_group
+    americas_region = GroupsMetadataDelegateRegions.find_by!(friendly_id: 'americas').user_group
 
     # Senior delegates
     africa_senior_delegate = FactoryBot.create :senior_delegate_role, group: africa_region
     asia_senior_delegate = FactoryBot.create :senior_delegate_role, group: asia_region
     europe_senior_delegate = FactoryBot.create :senior_delegate_role, group: europe_region
-    north_america_senior_delegate = FactoryBot.create :senior_delegate_role, group: north_america_region
+    oceania_senior_delegate = FactoryBot.create :senior_delegate_role, group: oceania_region
+    americas_senior_delegate = FactoryBot.create :senior_delegate_role, group: americas_region
 
     # Africa delegates
-    africa_delegate_1 = FactoryBot.create :delegate, region_id: africa_region.id
-    africa_delegate_2 = FactoryBot.create :delegate, region_id: africa_region.id
-    africa_delegate_3 = FactoryBot.create :candidate_delegate, region_id: africa_region.id
-    africa_delegate_4 = FactoryBot.create :trainee_delegate, region_id: africa_region.id
+    africa_delegate_1 = FactoryBot.create :delegate_role, group: africa_region
+    africa_delegate_2 = FactoryBot.create :delegate_role, group: africa_region
+    africa_delegate_3 = FactoryBot.create :junior_delegate_role, group: africa_region
+    africa_delegate_4 = FactoryBot.create :trainee_delegate_role, group: africa_region
 
     # Asia delegates
-    asia_delegate_1 = FactoryBot.create :delegate, region_id: asia_region.id
-    asia_delegate_2 = FactoryBot.create :delegate, region_id: asia_region.id
-    asia_delegate_3 = FactoryBot.create :candidate_delegate, region_id: asia_region.id
-    asia_delegate_4 = FactoryBot.create :trainee_delegate, region_id: asia_region.id
+    asia_delegate_1 = FactoryBot.create :delegate_role, group: asia_region
+    asia_delegate_2 = FactoryBot.create :delegate_role, group: asia_region
+    asia_delegate_3 = FactoryBot.create :junior_delegate_role, group: asia_region
+    asia_delegate_4 = FactoryBot.create :trainee_delegate_role, group: asia_region
 
     # Europe delegates
-    europe_delegate_1 = FactoryBot.create :delegate, region_id: europe_region.id
-    europe_delegate_2 = FactoryBot.create :delegate, region_id: europe_region.id
-    europe_delegate_3 = FactoryBot.create :candidate_delegate, region_id: europe_region.id
-    europe_delegate_4 = FactoryBot.create :trainee_delegate, region_id: europe_region.id
+    europe_delegate_1 = FactoryBot.create :delegate_role, group: europe_region
+    europe_delegate_2 = FactoryBot.create :delegate_role, group: europe_region
+    europe_delegate_3 = FactoryBot.create :junior_delegate_role, group: europe_region
+    europe_delegate_4 = FactoryBot.create :trainee_delegate_role, group: europe_region
 
-    # North America delegates
-    north_america_delegate_1 = FactoryBot.create :delegate, region_id: north_america_region.id
-    north_america_delegate_2 = FactoryBot.create :delegate, region_id: north_america_region.id
-    north_america_delegate_3 = FactoryBot.create :candidate_delegate, region_id: north_america_region.id
-    north_america_delegate_4 = FactoryBot.create :trainee_delegate, region_id: north_america_region.id
+    # Oceania delegates
+    oceania_delegate_1 = FactoryBot.create :delegate_role, group: oceania_region
+    oceania_delegate_2 = FactoryBot.create :delegate_role, group: oceania_region
+    oceania_delegate_3 = FactoryBot.create :junior_delegate_role, group: oceania_region
+    oceania_delegate_4 = FactoryBot.create :trainee_delegate_role, group: oceania_region
+
+    # Americas delegates
+    americas_delegate_1 = FactoryBot.create :delegate_role, group: americas_region
+    americas_delegate_2 = FactoryBot.create :delegate_role, group: americas_region
+    americas_delegate_3 = FactoryBot.create :junior_delegate_role, group: americas_region
+    americas_delegate_4 = FactoryBot.create :trainee_delegate_role, group: americas_region
 
     # Translators
-    translators_group = FactoryBot.create :translators_user_group
+    translators_group = GroupsMetadataTranslators.find_by!(locale: 'ca').user_group
     translator_1 = FactoryBot.create :translator_role, group_id: translators_group.id
     translator_2 = FactoryBot.create :translator_role, group_id: translators_group.id
     translator_3 = FactoryBot.create :translator_role, group_id: translators_group.id
 
-    expect(GsuiteMailingLists).to receive(:sync_group).with(
-      "delegates@worldcubeassociation.org",
-      a_collection_containing_exactly(
-        africa_senior_delegate.user.email, africa_delegate_1.email, africa_delegate_2.email, africa_delegate_3.email,
-        asia_senior_delegate.user.email, asia_delegate_1.email, asia_delegate_2.email, asia_delegate_3.email,
-        europe_senior_delegate.user.email, europe_delegate_1.email, europe_delegate_2.email, europe_delegate_3.email,
-        north_america_senior_delegate.user.email, north_america_delegate_1.email, north_america_delegate_2.email, north_america_delegate_3.email
-      ),
-    )
-
-    expect(GsuiteMailingLists).to receive(:sync_group).with(
-      "trainees@worldcubeassociation.org",
-      a_collection_containing_exactly(
-        africa_delegate_4.email, asia_delegate_4.email, europe_delegate_4.email, north_america_delegate_4.email
-      ),
-    )
-
-    # seniors@ mailing list
-    expect(GsuiteMailingLists).to receive(:sync_group).with(
-      "seniors@worldcubeassociation.org",
-      a_collection_containing_exactly(
-        africa_senior_delegate.user.email, asia_senior_delegate.user.email, europe_senior_delegate.user.email, north_america_senior_delegate.user.email
-      ),
-    )
-
     # leaders@ mailing list
-    board_member = FactoryBot.create :user, :board_member, team_leader: false
-    wct_member = FactoryBot.create :user, :wct_member, team_leader: false
-    wct_china_member = FactoryBot.create :user, :wct_china_member, team_leader: false
-    wcat_member = FactoryBot.create :user, :wcat_member, team_leader: false
-    wdc_leader = FactoryBot.create :user, :wdc_member, team_leader: true, receive_delegate_reports: true
-    wdc_member = FactoryBot.create :user, :wdc_member, team_leader: false, receive_delegate_reports: true
-    wec_member = FactoryBot.create :user, :wec_member, team_leader: false, receive_delegate_reports: true
-    weat_member = FactoryBot.create :user, :weat_member, team_leader: false
-    wfc_member = FactoryBot.create :user, :wfc_member, team_leader: false
-    wfc_leader = FactoryBot.create :user, :wfc_member, team_leader: true
-    wmt_member = FactoryBot.create :user, :wmt_member, team_leader: false
-    wqac_member = FactoryBot.create :user, :wqac_member, team_leader: false
-    wrc_member = FactoryBot.create :user, :wrc_member, team_leader: false
-    wrt_leader = FactoryBot.create :user, :wrt_member, team_leader: true
-    wrt_member = FactoryBot.create :user, :wrt_member, team_leader: false
-    wst_member = FactoryBot.create :user, :wst_member, team_leader: false
-    wst_admin_member = FactoryBot.create :user, :wst_admin_member, team_leader: false
-    wac_member = FactoryBot.create :user, :wac_member, team_leader: false
-    wac_leader = FactoryBot.create :user, :wac_member, team_leader: true
-    wsot_member = FactoryBot.create :user, :wsot_member, team_leader: false
-    wsot_leader = FactoryBot.create :user, :wsot_member, team_leader: true
-    wat_member = FactoryBot.create :user, :wat_member, team_leader: false
-    wat_leader = FactoryBot.create :user, :wat_member, team_leader: true
+    board_member = FactoryBot.create :user, :board_member
+    wct_member = FactoryBot.create :user, :wct_member
+    wct_china_member = FactoryBot.create :user, :wct_china_member
+    wcat_member = FactoryBot.create :user, :wcat_member
+    wic_leader = FactoryBot.create :user, :wic_leader, receive_delegate_reports: true
+    wic_member = FactoryBot.create :user, :wic_member, receive_delegate_reports: true
+    weat_member = FactoryBot.create :user, :weat_member
+    wfc_member = FactoryBot.create :user, :wfc_member
+    wfc_leader = FactoryBot.create :user, :wfc_leader
+    wmt_member = FactoryBot.create :user, :wmt_member
+    wqac_member = FactoryBot.create :user, :wqac_member
+    wrc_member = FactoryBot.create :user, :wrc_member
+    wrt_leader = FactoryBot.create :user, :wrt_leader
+    wrt_member = FactoryBot.create :user, :wrt_member
+    wst_member = FactoryBot.create :user, :wst_member
+    wst_admin_member = FactoryBot.create :user, :wst_admin_member
+    wsot_member = FactoryBot.create :user, :wsot_member
+    wsot_leader = FactoryBot.create :user, :wsot_leader
+    wat_member = FactoryBot.create :user, :wat_member
+    wat_leader = FactoryBot.create :user, :wat_leader
+    wapc_member = FactoryBot.create :user, :wapc_member
     treasurer_role = FactoryBot.create :treasurer_role
+
+    # organizations@ mailing list
+    regional_organization = FactoryBot.create :regional_organization
+    previously_acknowledged_regional_organization = FactoryBot.create :regional_organization
+    previously_acknowledged_regional_organization.update(start_date: 2.days.ago, end_date: 1.days.ago)
+
     expect(GsuiteMailingLists).to receive(:sync_group).with(
       "leaders@worldcubeassociation.org",
-      a_collection_containing_exactly(wrt_leader.email, wdc_leader.email, wfc_leader.email, wsot_leader.email, wat_leader.email),
+      a_collection_containing_exactly(wrt_leader.email, wic_leader.email, wfc_leader.email, wsot_leader.email, wat_leader.email),
     )
 
     # board@ mailing list
@@ -111,16 +94,23 @@ RSpec.describe SyncMailingListsJob, type: :job do
       a_collection_containing_exactly(board_member.email),
     )
 
-    # communication@ mailing list
-    expect(GsuiteMailingLists).to receive(:sync_group).with(
-      "communication@worldcubeassociation.org",
-      a_collection_containing_exactly(wct_member.email),
-    )
-
     # communication-china@ mailing list
     expect(GsuiteMailingLists).to receive(:sync_group).with(
       "communication-china@worldcubeassociation.org",
       a_collection_containing_exactly(wct_china_member.email),
+    )
+
+    # reports@ mailing list
+    expect(GsuiteMailingLists).to receive(:sync_group).with(
+      "reports@worldcubeassociation.org",
+      a_collection_containing_exactly("seniors@worldcubeassociation.org", "quality@worldcubeassociation.org", "regulations@worldcubeassociation.org",
+                                      wic_leader.email, wic_member.email),
+    )
+
+    # communication@ mailing list
+    expect(GsuiteMailingLists).to receive(:sync_group).with(
+      "communication@worldcubeassociation.org",
+      a_collection_containing_exactly(wct_member.email),
     )
 
     # competitions@ mailing list
@@ -129,16 +119,10 @@ RSpec.describe SyncMailingListsJob, type: :job do
       a_collection_containing_exactly(wcat_member.email),
     )
 
-    # disciplinary@ mailing list
+    # integrity@ mailing list
     expect(GsuiteMailingLists).to receive(:sync_group).with(
-      "disciplinary@worldcubeassociation.org",
-      a_collection_containing_exactly(wdc_leader.email, wdc_member.email),
-    )
-
-    # ethics@ mailing list
-    expect(GsuiteMailingLists).to receive(:sync_group).with(
-      "ethics@worldcubeassociation.org",
-      a_collection_containing_exactly(wec_member.email),
+      "integrity@worldcubeassociation.org",
+      a_collection_containing_exactly(wic_leader.email, wic_member.email),
     )
 
     # assistants@ mailing list
@@ -195,23 +179,6 @@ RSpec.describe SyncMailingListsJob, type: :job do
       a_collection_containing_exactly(translator_1.user.email, translator_2.user.email, translator_3.user.email),
     )
 
-    # reports@ mailing list
-    expect(GsuiteMailingLists).to receive(:sync_group).with(
-      "reports@worldcubeassociation.org",
-      a_collection_containing_exactly("seniors@worldcubeassociation.org", "quality@worldcubeassociation.org", "regulations@worldcubeassociation.org",
-                                      africa_delegate_3.email, africa_delegate_4.email,
-                                      asia_delegate_3.email, asia_delegate_4.email,
-                                      europe_delegate_3.email, europe_delegate_4.email,
-                                      north_america_delegate_3.email, north_america_delegate_4.email,
-                                      wdc_leader.email, wdc_member.email, wec_member.email),
-    )
-
-    # advisory@ mailing list
-    expect(GsuiteMailingLists).to receive(:sync_group).with(
-      "advisory@worldcubeassociation.org",
-      a_collection_containing_exactly(wac_leader.email, wac_member.email),
-    )
-
     # sports@ mailing list
     expect(GsuiteMailingLists).to receive(:sync_group).with(
       "sports@worldcubeassociation.org",
@@ -224,6 +191,18 @@ RSpec.describe SyncMailingListsJob, type: :job do
       a_collection_containing_exactly(wat_leader.email, wat_member.email),
     )
 
+    # appeals@ mailing list
+    expect(GsuiteMailingLists).to receive(:sync_group).with(
+      "appeals@worldcubeassociation.org",
+      a_collection_containing_exactly(wapc_member.email),
+    )
+
+    # ethics@ mailing list
+    expect(GsuiteMailingLists).to receive(:sync_group).with(
+      "ethics@worldcubeassociation.org",
+      a_collection_containing_exactly(wic_leader.email, wic_member.email),
+    )
+
     # treasurer@ mailing list
     expect(GsuiteMailingLists).to receive(:sync_group).with(
       "treasurer@worldcubeassociation.org",
@@ -233,35 +212,62 @@ RSpec.describe SyncMailingListsJob, type: :job do
     # delegates.africa@ mailing list
     expect(GsuiteMailingLists).to receive(:sync_group).with(
       "delegates.africa@worldcubeassociation.org",
-      a_collection_containing_exactly(africa_senior_delegate.user.email, africa_delegate_1.email, africa_delegate_2.email, africa_delegate_3.email, africa_delegate_4.email),
+      a_collection_containing_exactly(africa_senior_delegate.user.email, africa_delegate_1.user.email, africa_delegate_2.user.email, africa_delegate_3.user.email, africa_delegate_4.user.email),
     )
 
     # delegates.asia@ mailing list
     expect(GsuiteMailingLists).to receive(:sync_group).with(
       "delegates.asia@worldcubeassociation.org",
-      a_collection_containing_exactly(asia_senior_delegate.user.email, asia_delegate_1.email, asia_delegate_2.email, asia_delegate_3.email, asia_delegate_4.email),
+      a_collection_containing_exactly(asia_senior_delegate.user.email, asia_delegate_1.user.email, asia_delegate_2.user.email, asia_delegate_3.user.email, asia_delegate_4.user.email),
     )
 
     # delegates.europe@ mailing list
     expect(GsuiteMailingLists).to receive(:sync_group).with(
       "delegates.europe@worldcubeassociation.org",
-      a_collection_containing_exactly(europe_senior_delegate.user.email, europe_delegate_1.email, europe_delegate_2.email, europe_delegate_3.email, europe_delegate_4.email),
+      a_collection_containing_exactly(europe_senior_delegate.user.email, europe_delegate_1.user.email, europe_delegate_2.user.email, europe_delegate_3.user.email, europe_delegate_4.user.email),
     )
 
-    # delegates.north-america@ mailing list
+    # delegates.oceania@ mailing list
     expect(GsuiteMailingLists).to receive(:sync_group).with(
-      "delegates.north-america@worldcubeassociation.org",
-      a_collection_containing_exactly(north_america_senior_delegate.user.email, north_america_delegate_1.email, north_america_delegate_2.email, north_america_delegate_3.email, north_america_delegate_4.email),
+      "delegates.oceania@worldcubeassociation.org",
+      a_collection_containing_exactly(oceania_senior_delegate.user.email, oceania_delegate_1.user.email, oceania_delegate_2.user.email, oceania_delegate_3.user.email, oceania_delegate_4.user.email),
     )
 
-    # organizations@ mailing list
-    regional_organization = FactoryBot.create :regional_organization
-    previously_acknowledged_regional_organization = FactoryBot.create :regional_organization
-    previously_acknowledged_regional_organization.update(start_date: 2.days.ago, end_date: 1.days.ago)
+    # delegates.americas@ mailing list
+    expect(GsuiteMailingLists).to receive(:sync_group).with(
+      "delegates.americas@worldcubeassociation.org",
+      a_collection_containing_exactly(americas_senior_delegate.user.email, americas_delegate_1.user.email, americas_delegate_2.user.email, americas_delegate_3.user.email, americas_delegate_4.user.email),
+    )
+
+    expect(GsuiteMailingLists).to receive(:sync_group).with(
+      "delegates@worldcubeassociation.org",
+      a_collection_containing_exactly(
+        africa_senior_delegate.user.email, africa_delegate_1.user.email, africa_delegate_2.user.email, africa_delegate_3.user.email,
+        asia_senior_delegate.user.email, asia_delegate_1.user.email, asia_delegate_2.user.email, asia_delegate_3.user.email,
+        europe_senior_delegate.user.email, europe_delegate_1.user.email, europe_delegate_2.user.email, europe_delegate_3.user.email,
+        oceania_senior_delegate.user.email, oceania_delegate_1.user.email, oceania_delegate_2.user.email, oceania_delegate_3.user.email,
+        americas_senior_delegate.user.email, americas_delegate_1.user.email, americas_delegate_2.user.email, americas_delegate_3.user.email
+      ),
+    )
+
+    expect(GsuiteMailingLists).to receive(:sync_group).with(
+      "trainees@worldcubeassociation.org",
+      a_collection_containing_exactly(
+        africa_delegate_4.user.email, asia_delegate_4.user.email, europe_delegate_4.user.email, oceania_delegate_4.user.email, americas_delegate_4.user.email
+      ),
+    )
+
+    # seniors@ mailing list
+    expect(GsuiteMailingLists).to receive(:sync_group).with(
+      "seniors@worldcubeassociation.org",
+      a_collection_containing_exactly(
+        africa_senior_delegate.user.email, asia_senior_delegate.user.email, europe_senior_delegate.user.email, oceania_senior_delegate.user.email, americas_senior_delegate.user.email
+      ),
+    )
 
     expect(GsuiteMailingLists).to receive(:sync_group).with(
       "organizations@worldcubeassociation.org",
-      a_collection_containing_exactly("board@worldcubeassociation.org", regional_organization.email),
+      a_collection_containing_exactly(GroupsMetadataBoard.email, regional_organization.email),
     )
 
     SyncMailingListsJob.perform_now

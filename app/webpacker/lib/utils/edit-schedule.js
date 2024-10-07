@@ -1,14 +1,23 @@
 import _ from 'lodash';
 import { DateTime, Duration } from 'luxon';
 import { toLuxonDateTime } from '@fullcalendar/luxon3';
-import { parseActivityCode } from './wcif';
+import { humanizeActivityCode, parseActivityCode } from './wcif';
+import { DEFAULT_LOCALE, withLocale } from '../i18n';
 
 export function toMicrodegrees(coord) {
-  return Math.trunc(parseFloat(coord) * 1e6);
+  const result = Math.trunc(parseFloat(coord) * 1e6);
+  if (Number.isNaN(result)) {
+    return 0;
+  }
+  return result;
 }
 
 export function toDegrees(coord) {
-  return coord / 1e6;
+  const result = coord / 1e6;
+  if (Number.isNaN(result)) {
+    return 0;
+  }
+  return result;
 }
 
 function withNestedActivities(activities) {
@@ -92,13 +101,29 @@ export function moveByIsoDuration(isoDateTime, isoDuration) {
   return luxonToWcifIso(movedDateTime);
 }
 
-export function rescaleDuration(isoDuration, scalingFactor) {
+export function rescaleIsoDuration(isoDuration, scalingFactor) {
   const luxonDuration = Duration.fromISO(isoDuration);
 
   const durationMillis = luxonDuration.toMillis();
   const scaledMillis = durationMillis * scalingFactor;
 
   return Duration.fromMillis(scaledMillis).rescale().toISO();
+}
+
+export function millisecondsBetween(isoStart, isoEnd) {
+  const luxonStart = DateTime.fromISO(isoStart);
+  const luxonEnd = DateTime.fromISO(isoEnd);
+
+  const diffDuration = luxonEnd.diff(luxonStart);
+  return Math.abs(diffDuration.toMillis());
+}
+
+export function addIsoDurations(isoDurationA, isoDurationB) {
+  const luxonDurationA = Duration.fromISO(isoDurationA);
+  const luxonDurationB = Duration.fromISO(isoDurationB);
+
+  const durationSum = luxonDurationA.plus(luxonDurationB);
+  return durationSum.rescale().toISO();
 }
 
 export function changeTimezoneKeepingLocalTime(isoDateTime, oldTimezone, newTimezone) {
@@ -110,6 +135,23 @@ export function changeTimezoneKeepingLocalTime(isoDateTime, oldTimezone, newTime
   return luxonToWcifIso(newZoneSameLocalTime);
 }
 
+export const buildPartialActivityFromCode = (
+  activityCode,
+  childActivities = [],
+  extensions = [],
+) => {
+  const humanizedCode = withLocale(DEFAULT_LOCALE, () => humanizeActivityCode(activityCode));
+
+  return {
+    name: humanizedCode,
+    activityCode,
+    childActivities,
+    extensions,
+  };
+};
+
+export const FC_ACTIVITY_ATTACHMENT = 'activityAttachment';
+
 export function fcEventToActivityAndDates(fcEvent, calendar) {
   const eventStartLuxon = toLuxonDateTime(fcEvent.start, calendar);
   const eventEndLuxon = toLuxonDateTime(fcEvent.end, calendar);
@@ -117,20 +159,14 @@ export function fcEventToActivityAndDates(fcEvent, calendar) {
   const utcStartIso = luxonToWcifIso(eventStartLuxon);
   const utcEndIso = luxonToWcifIso(eventEndLuxon);
 
-  const {
-    activityId,
-    activityCode,
-    activityName,
-    childActivities,
-  } = fcEvent.extendedProps;
+  const { [FC_ACTIVITY_ATTACHMENT]: attachedActivity } = fcEvent.extendedProps;
+  const partialActivity = buildPartialActivityFromCode(attachedActivity.activityCode);
 
   const activity = {
-    id: activityId,
-    name: activityName,
-    activityCode,
+    ...partialActivity,
+    ...attachedActivity,
     startTime: utcStartIso,
     endTime: utcEndIso,
-    childActivities: childActivities || [],
   };
 
   return {
@@ -139,3 +175,5 @@ export function fcEventToActivityAndDates(fcEvent, calendar) {
     endLuxon: eventEndLuxon,
   };
 }
+
+export const activityToFcTitle = (activity) => activity.name;

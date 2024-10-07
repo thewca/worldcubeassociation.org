@@ -31,7 +31,9 @@ RSpec.describe "DatabaseDumper" do
     it "defines a sanitizer of table '#{table_name}'" do
       unless table_sanitizer == :skip_all_rows
         where_clause = table_sanitizer[:where_clause]
-        expect(where_clause).to_not be_nil
+        expect(where_clause).to be_nil.or(match(/WHERE/)).or(match(/JOIN/))
+        where_clause = table_sanitizer[:order_by_clause]
+        expect(where_clause).to be_nil.or(match(/ORDER BY/))
         column_sanitizers = table_sanitizer[:column_sanitizers]
         column_names = ActiveRecord::Base.connection.columns(table_name).map(&:name)
         expect(column_sanitizers.keys).to match_array(column_names)
@@ -65,11 +67,11 @@ RSpec.describe "DatabaseDumper" do
       expect(user.reload.dob).to eq Date.new(1954, 12, 4)
       expect(ServerSetting.find_by_name(DatabaseDumper::DEV_TIMESTAMP_NAME).as_datetime).to be >= before_dump
 
-      # It's ok for the public to know about the existence of a hidden team,
-      # but we don't want them to know about the *members* of that hidden team.
-      banned_team = Team.unscoped.find_by_friendly_id!("banned")
-      expect(banned_team).not_to be_nil
-      expect(banned_team.team_members).to be_empty
+      # It's ok for the public to know about the existence of a hidden group,
+      # but we don't want them to know about the *members* of that hidden group.
+      banned_group = UserGroup.banned_competitors_group
+      expect(banned_group).not_to be_nil
+      expect(banned_group.roles).to be_empty
     end
   end
 end

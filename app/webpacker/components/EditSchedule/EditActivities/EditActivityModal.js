@@ -6,24 +6,25 @@ import {
   Modal,
 } from 'semantic-ui-react';
 import { DateTime } from 'luxon';
+import I18n from '../../../lib/i18n';
 import useInputState from '../../../lib/hooks/useInputState';
 
-const commonActivityCodes = {
-  'other-registration': 'On-site registration',
-  'other-checkin': 'Check-in',
-  'other-tutorial': 'Tutorial for new competitors',
-  'other-multi': 'Cube submission for 3x3x3 Multi-Blind',
-  'other-breakfast': 'Breakfast',
-  'other-lunch': 'Lunch',
-  'other-dinner': 'Dinner',
-  'other-awards': 'Awards',
-  'other-misc': 'Other',
-};
+const otherActivityCodes = [
+  'other-registration',
+  'other-checkin',
+  'other-tutorial',
+  'other-multi',
+  'other-breakfast',
+  'other-lunch',
+  'other-dinner',
+  'other-awards',
+  'other-misc',
+];
 
-const otherActivityCodeOptions = Object.entries(commonActivityCodes)
-  .map(([activityCode, description]) => ({
+const otherActivityCodeOptions = otherActivityCodes
+  .map((activityCode) => ({
     key: activityCode,
-    text: description,
+    text: I18n.t(`activity.${activityCode.substring(6)}`),
     value: activityCode,
   }));
 
@@ -44,7 +45,7 @@ function EditActivityModal({
 
     // only if there is no name yet: assign a default name based on the activity code
     if (!activityName && newActivityCode) {
-      setActivityName(commonActivityCodes[newActivityCode]);
+      setActivityName(I18n.t(`activity.${newActivityCode.substring(6)}`));
     }
 
     setActivityCode(evt, data);

@@ -1,7 +1,6 @@
 <% provide(:title, 'Anonymize Person') %>
 
 <div class="container">
-
   <%= render layout: "nav" do %>
     <h1><%= yield(:title) %></h1>
 
@@ -13,10 +12,33 @@
     <p>- This PII includes: name, DOB, email, avatar, gender, and IP addresses).</p>
 
     <%= simple_form_for @anonymize_person, url: admin_anonymize_person_path do |f| %>
-
       <% if @anonymize_person.current_step == AnonymizePerson::STEP_1 %>
         <%= f.input :person_wca_id, as: :user_ids, persons_table: true, only_one: true, label: "Person to Anonymize" %>
       <% elsif @anonymize_person.current_step == AnonymizePerson::STEP_2 %>
+        <% is_currently_banned = @anonymize_person.account&.banned? %>
+        <% banned_in_the_past = @anonymize_person.account&.banned_in_past? %>
+        <% records = @anonymize_person.person.records %>
+        <% championship_podiums = @anonymize_person.person.championship_podiums %>
+        <h4>Important information to consider before proceeding:</h4>
+        <ol>
+          <% if is_currently_banned %>
+            <li>This person is currently banned and cannot be anonymized.</li>
+          <% elsif banned_in_the_past %>
+            <li>This person has been banned in the past, please email WIC and WRT to discuss whether to proceed with the anonymization</li>
+          <% else %>
+            <li>This person has never been banned.</li>
+          <% end %>
+          <% if records[:total] > 0 %>
+            <li>This person has held <%= records[:world] %> World Records, <%= records[:continental] %> Contential Records, and <%= records[:national] %> National Records</li>
+          <% else %>
+            <li>This person has never held any records.</li>
+          <% end %>
+          <% if championship_podiums[:world].any? || championship_podiums[:continental].any? || championship_podiums[:national].any? %>
+            <li>This person has achieved World Championship podium <%= championship_podiums[:world].size %> times, Continental Championship podium <%= championship_podiums[:continental].size %> times, and National Championship podium <%= championship_podiums[:national].size %> times.</li>
+          <% else %>
+            <li>This person has never been on the podium at the World, Continental, or National Championships.</li>
+          <% end %>
+        </ol>
         <h4>Request Data Removal from data processors</h4>
         <ol>
           <li>For recently competed competitions (Past 3 months), verify with the delegates that there is nothing outstanding regarding the competitor's involvement in these WCA competitions:</li>
@@ -63,7 +85,7 @@
           <% if competitions_with_external.any? %>
 
             <% competitions_with_external.each do |c| %>
-              <div><%= link_to c.display_name(short: true), competition_path(c) %> - <%= link_to c.external_website, c.external_website %> - <%= mail_to c.delegates.map(&:email).join(", "), name = c.delegates.map(&:name).join(", "), cc: Team.wrt.email, subject: "Anonymization Request" %></div>
+              <div><%= link_to c.display_name(short: true), competition_path(c) %> - <%= link_to c.external_website, c.external_website %> - <%= mail_to c.delegates.map(&:email).join(", "), name = c.delegates.map(&:name).join(", "), cc: UserGroup.teams_committees_group_wrt.metadata.email, subject: "Anonymization Request" %></div>
             <% end %>
 
           <% else %>
@@ -83,17 +105,16 @@
           <% else %>
             <div>No recent competitions to sync.</div>
           <% end %>
-
         </ol>
-
+        <br>
       <% end %>
-
-      <br>
 
       <div>
         <%= f.submit "Back", :class => "btn btn-primary", :name => "back_button" unless @anonymize_person.first_step? %>
         <%= f.submit "Next Step", :class => "btn btn-primary" unless @anonymize_person.last_step? %>
-        <%= f.submit "Confirm", :class => "btn btn-success", data: { confirm: "Are you sure you want to anonymize this person? All personal data will be removed from WCA once confirmed." } if @anonymize_person.last_step? %>
+        <% unless is_currently_banned %>
+          <%= f.submit "Confirm", :class => "btn btn-success", data: { confirm: "Are you sure you want to anonymize this person? All personal data will be removed from WCA once confirmed." } if @anonymize_person.last_step? %>
+        <% end %>
       </div>
     <% end %>
 

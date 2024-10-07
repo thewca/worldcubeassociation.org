@@ -225,6 +225,10 @@ module ApplicationHelper
     "#{humanized_money_with_symbol(money)} (#{money.currency.name})"
   end
 
+  def ruby_money_to_human_readable(ruby_amount, currency_code)
+    format_money(Money.new(ruby_amount, currency_code))
+  end
+
   def embedded_map_url(query)
     "#{EnvConfig.ROOT_URL}/map?q=#{URI.encode_www_form_component(CGI.unescapeHTML(query))}"
   end
@@ -248,14 +252,6 @@ module ApplicationHelper
   def add_to_js_assets(*names)
     @all_js_assets = capture do
       [@all_js_assets, *names].compact.join(",")
-    end
-  end
-
-  def add_fullcalendar_to_packs
-    add_to_js_assets('fullcalendar/fullcalendar_wca')
-    add_to_css_assets('fullcalendar_wca')
-    if I18n.locale != :en
-      add_to_js_assets("fullcalendar/locales/#{I18n.locale.downcase}.js")
     end
   end
 end

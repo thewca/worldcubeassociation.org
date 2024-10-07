@@ -72,9 +72,6 @@ class ReassignWcaId
     end
 
     ActiveRecord::Base.transaction do
-      # Update Team Positions
-      TeamMember.where(user_id: account1_user.id).update_all(user_id: account2_user.id)
-
       # Update Organized Competitions
       CompetitionOrganizer.where(organizer_id: account1_user.id).update_all(organizer_id: account2_user.id)
 
@@ -87,11 +84,13 @@ class ReassignWcaId
       # Update Competitions Announced By
       Competition.where(announced_by: account1_user.id).update_all(announced_by: account2_user.id)
 
-      # Update WCA ID and Delegate Status (Users table fields)
+      # Update roles
+      UserRole.where(user_id: account1_user.id).update_all(user_id: account2_user.id)
+
+      # Update WCA ID
       wca_id = account1_user.wca_id
-      delegate_status = account1_user.delegate_status
-      User.where(id: account1_user.id).update_all(wca_id: nil, delegate_status: nil) # Must remove WCA ID before adding it as it is unique in the Users table
-      User.where(id: account2_user.id).update_all(wca_id: wca_id, delegate_status: delegate_status)
+      User.where(id: account1_user.id).update_all(wca_id: nil) # Must remove WCA ID before adding it as it is unique in the Users table
+      User.where(id: account2_user.id).update_all(wca_id: wca_id)
     end
 
     true

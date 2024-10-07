@@ -108,6 +108,8 @@ module DatabaseDumper
           use_wca_live_for_scoretaking
           allow_registration_without_qualification
           uses_v2_registrations
+          forbid_newcomers
+          forbid_newcomers_reason
         ),
         db_default: %w(
           connected_stripe_account_id
@@ -117,19 +119,7 @@ module DatabaseDumper
         },
       ),
     }.freeze,
-    "competition_payment_integrations" => {
-      where_clause: "",
-      column_sanitizers: actions_to_column_sanitizers(
-        copy: %w(
-          id
-          connected_account_type
-          competition_id
-          connected_account_id
-          created_at
-          updated_at
-        ),
-      ),
-    }.freeze,
+    "competition_payment_integrations" => :skip_all_rows,
     "CompetitionsMedia" => {
       where_clause: "WHERE status = 'accepted'",
       column_sanitizers: actions_to_column_sanitizers(
@@ -151,7 +141,6 @@ module DatabaseDumper
       ),
     }.freeze,
     "ConciseAverageResults" => {
-      where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           average
@@ -168,7 +157,6 @@ module DatabaseDumper
       ),
     }.freeze,
     "ConciseSingleResults" => {
-      where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           best
@@ -184,38 +172,9 @@ module DatabaseDumper
         ),
       ),
     }.freeze,
-    "connected_paypal_accounts" => {
-      where_clause: "",
-      column_sanitizers: actions_to_column_sanitizers(
-        copy: %w(
-          id
-          account_status
-          consent_status
-          permissions_granted
-          created_at
-          updated_at
-        ),
-        fake_values: {
-          "paypal_merchant_id" => "'abcdefgh'",
-        },
-      ),
-    }.freeze,
-    "connected_stripe_accounts" => {
-      where_clause: "",
-      column_sanitizers: actions_to_column_sanitizers(
-        copy: %w(
-          id
-          created_at
-          updated_at
-        ),
-        fake_values: {
-          "account_id" => "'fake_stripe_account'",
-        },
-      ),
-    }.freeze,
-
+    "connected_paypal_accounts" => :skip_all_rows,
+    "connected_stripe_accounts" => :skip_all_rows,
     "Continents" => {
-      where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
@@ -228,7 +187,6 @@ module DatabaseDumper
       ),
     }.freeze,
     "Countries" => {
-      where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
@@ -239,11 +197,9 @@ module DatabaseDumper
       ),
     }.freeze,
     "Events" => {
-      where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
-          cellName
           format
           name
           rank
@@ -251,7 +207,6 @@ module DatabaseDumper
       ),
     }.freeze,
     "Formats" => {
-      where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
@@ -267,7 +222,6 @@ module DatabaseDumper
     "InboxPersons" => :skip_all_rows,
     "InboxResults" => :skip_all_rows,
     "Persons" => {
-      where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
@@ -288,7 +242,6 @@ module DatabaseDumper
       ),
     }.freeze,
     "RanksAverage" => {
-      where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
@@ -302,7 +255,6 @@ module DatabaseDumper
       ),
     }.freeze,
     "RanksSingle" => {
-      where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
@@ -316,7 +268,6 @@ module DatabaseDumper
       ),
     }.freeze,
     "Results" => {
-      where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
@@ -362,7 +313,6 @@ module DatabaseDumper
       ),
     }.freeze,
     "RoundTypes" => {
-      where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
@@ -374,7 +324,6 @@ module DatabaseDumper
       ),
     }.freeze,
     "Scrambles" => {
-      where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           competitionId
@@ -510,11 +459,13 @@ module DatabaseDumper
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
+          version
           competition_id
           created_at
           updated_at
         ),
         db_default: %w(
+          summary
           equipment
           venue
           organization
@@ -527,8 +478,8 @@ module DatabaseDumper
           nag_sent_at
           wrc_feedback_requested
           wrc_incidents
-          wdc_feedback_requested
-          wdc_incidents
+          wic_feedback_requested
+          wic_incidents
           wrc_primary_user_id
           wrc_secondary_user_id
           reminder_sent_at
@@ -547,7 +498,6 @@ module DatabaseDumper
     "poll_options" => :skip_all_rows,
     "polls" => :skip_all_rows,
     "posts" => {
-      where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
@@ -574,7 +524,6 @@ module DatabaseDumper
       ),
     }.freeze,
     "preferred_formats" => {
-      where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           event_id
@@ -584,7 +533,6 @@ module DatabaseDumper
       ),
     }.freeze,
     "regional_organizations" => {
-      where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
@@ -608,7 +556,6 @@ module DatabaseDumper
       ),
     }.freeze,
     "registration_competition_events" => {
-      where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
@@ -629,6 +576,8 @@ module DatabaseDumper
           created_at
           deleted_at
           deleted_by
+          rejected_at
+          waitlisted_at
           guests
           updated_at
           user_id
@@ -642,20 +591,10 @@ module DatabaseDumper
         },
       ),
     }.freeze,
-    "microservice_registrations" => {
-      where_clause: JOIN_WHERE_VISIBLE_COMP,
-      column_sanitizers: actions_to_column_sanitizers(
-        copy: %w(
-          id
-          competition_id
-          user_id
-          roles
-          is_competing
-          created_at
-          updated_at
-        ),
-      ),
-    }.freeze,
+    "microservice_registrations" => :skip_all_rows,
+    "registration_history_changes" => :skip_all_rows,
+    "registration_history_entries" => :skip_all_rows,
+    "waiting_lists" => :skip_all_rows,
     "sanity_checks" => :skip_all_rows,
     "sanity_check_categories" => :skip_all_rows,
     "sanity_check_exclusions" => :skip_all_rows,
@@ -663,37 +602,7 @@ module DatabaseDumper
     "schema_migrations" => :skip_all_rows, # This is populated when loading our schema dump
     "starburst_announcement_views" => :skip_all_rows,
     "starburst_announcements" => :skip_all_rows,
-    "team_members" => {
-      where_clause: "JOIN teams ON teams.id=team_id WHERE NOT teams.hidden",
-      column_sanitizers: actions_to_column_sanitizers(
-        copy: %w(
-          id
-          created_at
-          end_date
-          start_date
-          team_id
-          team_leader
-          updated_at
-          user_id
-          team_senior_member
-        ),
-      ),
-    }.freeze,
-    "teams" => {
-      where_clause: "",
-      column_sanitizers: actions_to_column_sanitizers(
-        copy: %w(
-          id
-          created_at
-          friendly_id
-          email
-          hidden
-          updated_at
-        ),
-      ),
-    }.freeze,
     "user_preferred_events" => {
-      where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
@@ -703,7 +612,8 @@ module DatabaseDumper
       ),
     }.freeze,
     "user_groups" => {
-      where_clause: "",
+      # groups have a self-referencing foreign key to their parent group, so we need to make sure that root groups are inserted first
+      order_by_clause: "ORDER BY parent_group_id ASC",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
@@ -719,8 +629,17 @@ module DatabaseDumper
         ),
       ),
     }.freeze,
+    "groups_metadata_board" => {
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w(
+          id
+          email
+          created_at
+          updated_at
+        ),
+      ),
+    }.freeze,
     "groups_metadata_delegate_regions" => {
-      where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
@@ -731,8 +650,30 @@ module DatabaseDumper
         ),
       ),
     }.freeze,
+    "groups_metadata_councils" => {
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w(
+          id
+          email
+          friendly_id
+          created_at
+          updated_at
+        ),
+      ),
+    }.freeze,
+    "groups_metadata_teams_committees" => {
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w(
+          id
+          email
+          friendly_id
+          preferred_contact_mode
+          created_at
+          updated_at
+        ),
+      ),
+    }.freeze,
     "groups_metadata_translators" => {
-      where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
@@ -743,7 +684,6 @@ module DatabaseDumper
       ),
     }.freeze,
     "users" => {
-      where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
@@ -754,11 +694,9 @@ module DatabaseDumper
           created_at
           current_sign_in_at
           delegate_id_to_handle_wca_id_claim
-          delegate_status
           gender
           last_sign_in_at
           name
-          location
           registration_notifications_enabled
           results_notifications_enabled
           saved_avatar_crop_h
@@ -770,7 +708,6 @@ module DatabaseDumper
           saved_pending_avatar_crop_x
           saved_pending_avatar_crop_y
           unconfirmed_wca_id
-          region_id
           updated_at
           wca_id
           receive_delegate_reports
@@ -804,21 +741,18 @@ module DatabaseDumper
     }.freeze,
     "locations" => :skip_all_rows,
     "incidents" => {
-      where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(id title public_summary digest_worthy resolved_at digest_sent_at created_at updated_at),
         db_default: %w(private_description private_wrc_decision),
       ),
     }.freeze,
     "incident_competitions" => {
-      where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(id incident_id competition_id),
         db_default: %w(comments),
       ),
     }.freeze,
     "incident_tags" => {
-      where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(id incident_id tag),
       ),
@@ -826,7 +760,6 @@ module DatabaseDumper
     "vote_options" => :skip_all_rows,
     "votes" => :skip_all_rows,
     "server_settings" => {
-      where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           name
@@ -848,10 +781,8 @@ module DatabaseDumper
       ),
     }.freeze,
     "eligible_country_iso2s_for_championship" => {
-      where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
-          id
           championship_type
           eligible_country_iso2
         ),
@@ -859,7 +790,6 @@ module DatabaseDumper
     }.freeze,
     "wcif_extensions" => :skip_all_rows,
     "assignments" => {
-      where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
@@ -873,7 +803,7 @@ module DatabaseDumper
     }.freeze,
     "paypal_records" => :skip_all_rows,
     "stripe_records" => :skip_all_rows,
-    "stripe_payment_intents" => :skip_all_rows,
+    "payment_intents" => :skip_all_rows,
     "stripe_webhook_events" => :skip_all_rows,
     "uploaded_jsons" => :skip_all_rows,
     "bookmarked_competitions" => {
@@ -887,7 +817,6 @@ module DatabaseDumper
       ),
     }.freeze,
     "country_bands" => {
-      where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
@@ -913,7 +842,6 @@ module DatabaseDumper
       ),
     }.freeze,
     "roles_metadata_delegate_regions" => {
-      where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
@@ -928,7 +856,6 @@ module DatabaseDumper
       ),
     }.freeze,
     "roles_metadata_officers" => {
-      where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
@@ -938,15 +865,34 @@ module DatabaseDumper
         ),
       ),
     }.freeze,
+    "roles_metadata_councils" => {
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w(
+          id
+          status
+          created_at
+          updated_at
+        ),
+      ),
+    }.freeze,
+    "roles_metadata_teams_committees" => {
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w(
+          id
+          status
+          created_at
+          updated_at
+        ),
+      ),
+    }.freeze,
+    "roles_metadata_banned_competitors" => :skip_all_rows,
     "jwt_denylist" => :skip_all_rows,
     "wfc_xero_users" => :skip_all_rows,
     "wfc_dues_redirects" => :skip_all_rows,
-    "attendee_payment_requests" => :skip_all_rows,
   }.freeze
 
   RESULTS_SANITIZERS = {
     "Results" => {
-      where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           competitionId
@@ -972,7 +918,6 @@ module DatabaseDumper
       ),
     }.freeze,
     "RanksSingle" => {
-      where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           personId
@@ -985,7 +930,6 @@ module DatabaseDumper
       ),
     }.freeze,
     "RanksAverage" => {
-      where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           personId
@@ -998,7 +942,6 @@ module DatabaseDumper
       ),
     }.freeze,
     "RoundTypes" => {
-      where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
@@ -1010,19 +953,20 @@ module DatabaseDumper
       ),
     }.freeze,
     "Events" => {
-      where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
-          cellName
           format
           name
           rank
         ),
+        fake_values: {
+          # Copy over column to keep backwards compatibility
+          "cellName" => "name",
+        },
       ),
     }.freeze,
     "Formats" => {
-      where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
@@ -1036,7 +980,6 @@ module DatabaseDumper
       ),
     }.freeze,
     "Countries" => {
-      where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
@@ -1047,7 +990,6 @@ module DatabaseDumper
       ),
     }.freeze,
     "Continents" => {
-      where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
@@ -1060,7 +1002,6 @@ module DatabaseDumper
       ),
     }.freeze,
     "Persons" => {
-      where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           subid
@@ -1109,7 +1050,6 @@ module DatabaseDumper
       ),
     }.freeze,
     "Scrambles" => {
-      where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           competitionId
@@ -1139,10 +1079,8 @@ module DatabaseDumper
       ),
     }.freeze,
     "eligible_country_iso2s_for_championship" => {
-      where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
-          id
           championship_type
           eligible_country_iso2
         ),
@@ -1188,8 +1126,11 @@ module DatabaseDumper
         # Some column names like "rank" are reserved keywords starting mysql 8.0 and require quoting.
         quoted_column_list = column_sanitizers.keys.map { |column_name| ActiveRecord::Base.connection.quote_column_name column_name }.join(", ")
 
-        populate_table_sql = "INSERT INTO #{dump_db_name}.#{table_name} (#{quoted_column_list}) SELECT #{column_expressions} FROM #{source_table} #{table_sanitizer[:where_clause]}"
-        ActiveRecord::Base.connection.execute(populate_table_sql)
+        where_clause_sql = table_sanitizer.fetch(:where_clause, "")
+        order_by_clause_sql = table_sanitizer.fetch(:order_by_clause, "")
+
+        populate_table_sql = "INSERT INTO #{dump_db_name}.#{table_name} (#{quoted_column_list}) SELECT #{column_expressions} FROM #{source_table} #{where_clause_sql} #{order_by_clause_sql}"
+        ActiveRecord::Base.connection.execute(populate_table_sql.strip)
       end
 
       if dump_ts_name.present?
@@ -1258,7 +1199,7 @@ module DatabaseDumper
 
   def self.mysqldump(db_name, dest_filename)
     system_pipefail!("mysqldump #{self.mysql_cli_creds} #{db_name} -r #{dest_filename} #{filter_out_mysql_warning}")
-    system_pipefail!("sed -i 's_^/\\*!50013 DEFINER.*__' #{dest_filename}")
+    system_pipefail!("ruby -i -pe '$_.gsub!(%r{^/\\*!50013 DEFINER.*\\n}, \"\")' #{dest_filename}")
   end
 
   def self.filter_out_mysql_warning(dest_filename = nil)

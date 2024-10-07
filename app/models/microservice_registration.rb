@@ -6,13 +6,29 @@ class MicroserviceRegistration < ApplicationRecord
 
   has_many :assignments, as: :registration
   has_many :wcif_extensions, as: :extendable, dependent: :delete_all
+  has_many :payment_intents, as: :holder
 
   serialize :roles, coder: YAML
 
   delegate :name, :email, to: :user
 
-  attr_accessor :ms_registration
+  attr_accessor :ms_registration, :lazy_loading_enabled
   attr_writer :competing_status, :event_ids, :guests, :comments, :administrative_notes
+
+  after_initialize do |registration|
+    # Let the models load their MS data by default, unless someone from the outside world explicitly switches this off.
+    #   See also `microservice_registration_holder.rb` for reference.
+    registration.lazy_loading_enabled = true
+  end
+
+  def attendee_id
+    "#{competition_id}-#{user_id}"
+  end
+
+  def load_ms_model!
+    ms_data = Microservices::Registrations.registration_by_id(self.attendee_id)
+    self.load_ms_model(ms_data)
+  end
 
   def load_ms_model(ms_model)
     self.ms_registration = ms_model
@@ -31,7 +47,14 @@ class MicroserviceRegistration < ApplicationRecord
     self.ms_registration.present?
   end
 
+  private def lazy_load_ms_data?
+    # Performing a boolean comparison here to make sure nobody writes silly stuff into the variable from outside
+    self.lazy_loading_enabled == true
+  end
+
   private def read_ms_data(name_without_at)
+    self.load_ms_model! if !self.ms_loaded? && self.lazy_load_ms_data?
+
     instance_variable_get(:"@#{name_without_at}").tap do
       raise "Microservice data not loaded!" unless ms_loaded?
     end
@@ -84,7 +107,7 @@ class MicroserviceRegistration < ApplicationRecord
   end
 
   def deleted?
-    self.status == "cancelled"
+    self.status == "cancelled" || self.status == "rejected"
   end
 
   def pending?

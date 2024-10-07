@@ -63,6 +63,7 @@ resource "aws_lb" "this" {
   security_groups    = [aws_security_group.lb.id]
   subnets            = [aws_default_subnet.default_az1.id,"subnet-0349cc3938fa60ef5", aws_default_subnet.default_az3.id, aws_default_subnet.default_az4.id]
   ip_address_type    = "ipv4"
+  enable_deletion_protection = true
 
   access_logs {
     prefix = "elb-access-logs/log"
@@ -88,11 +89,11 @@ resource "aws_lb_target_group" "rails-production" {
 
   deregistration_delay = 10
   health_check {
-    interval            = 5
+    interval            = 10
     path                = "/"
     port                = "traffic-port"
     protocol            = "HTTP"
-    timeout             = 2
+    timeout             = 5
     healthy_threshold   = 2
     unhealthy_threshold = 5
     matcher             = 200
@@ -138,6 +139,30 @@ resource "aws_lb_target_group" "rails-staging" {
   health_check {
     interval            = 5
     path                = "/"
+    port                = "traffic-port"
+    protocol            = "HTTP"
+    timeout             = 2
+    healthy_threshold   = 2
+    unhealthy_threshold = 5
+    matcher             = 200
+  }
+  tags = {
+    Name = var.name_prefix
+    Env = "staging"
+  }
+}
+
+resource "aws_lb_target_group" "rails-staging-api" {
+  name        = "wca-rails-staging-api"
+  port        = 3000
+  protocol    = "HTTP"
+  vpc_id      = aws_default_vpc.default.id
+  target_type = "ip"
+
+  deregistration_delay = 10
+  health_check {
+    interval            = 5
+    path                = "/api/v0/healthcheck"
     port                = "traffic-port"
     protocol            = "HTTP"
     timeout             = 2
@@ -261,22 +286,6 @@ resource "aws_lb_listener" "http" {
   }
 }
 
-resource "aws_lb_listener_rule" "www_forward_prod" {
-  listener_arn = aws_lb_listener.https.arn
-  priority     = 10
-
-  action {
-    type             = "forward"
-    target_group_arn = aws_lb_target_group.auxiliary.arn
-  }
-
-  condition {
-    host_header {
-      values = ["www.worldcubeassociation.org"]
-    }
-  }
-}
-
 resource "aws_lb_listener_rule" "pma_forward_prod" {
   listener_arn = aws_lb_listener.https.arn
   priority     = 3
@@ -315,7 +324,7 @@ resource "aws_lb_listener_rule" "pma_forward_prod" {
 
 resource "aws_lb_listener_rule" "rails_forward_staging" {
   listener_arn = aws_lb_listener.https.arn
-  priority     = 2
+  priority     = 4
 
   action {
     type             = "forward"
@@ -325,6 +334,28 @@ resource "aws_lb_listener_rule" "rails_forward_staging" {
   condition {
     host_header {
       values = ["staging.worldcubeassociation.org"]
+    }
+  }
+}
+
+resource "aws_lb_listener_rule" "rails_forward_staging_api" {
+  listener_arn = aws_lb_listener.https.arn
+  priority     = 2
+
+  action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.rails-staging-api.arn
+  }
+
+  condition {
+    host_header {
+      values = ["staging.worldcubeassociation.org"]
+    }
+  }
+
+  condition {
+    path_pattern {
+      values = ["/api*"]
     }
   }
 }
@@ -387,6 +418,10 @@ output "rails-production" {
 
 output "rails_staging"{
   value = aws_lb_target_group.rails-staging
+}
+
+output "rails_staging-api"{
+  value = aws_lb_target_group.rails-staging-api
 }
 
 output "pma_production"{

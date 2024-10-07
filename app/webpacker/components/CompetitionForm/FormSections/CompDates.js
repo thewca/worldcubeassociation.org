@@ -1,10 +1,8 @@
 import React from 'react';
 import { Form } from 'semantic-ui-react';
-import {
-  InputDate,
-} from '../Inputs/FormInputs';
-import { useStore } from '../../../lib/providers/StoreProvider';
+import { InputDate } from '../../wca/FormBuilder/input/FormInputs';
 import I18n from '../../../lib/i18n';
+import { useFormObject } from '../../wca/FormBuilder/provider/FormObjectProvider';
 
 function daysUntil(date) {
   if (!date) return null;
@@ -21,12 +19,26 @@ function daysUntil(date) {
 }
 
 export default function CompDates() {
-  const { competition: { startDate } } = useStore();
+  const { startDate, endDate } = useFormObject();
 
   return (
     <Form.Group widths="equal">
-      <InputDate id="startDate" hint={daysUntil(startDate)} required />
-      <InputDate id="endDate" required />
+      <InputDate
+        id="startDate"
+        hint={daysUntil(startDate)}
+        required
+        selectsStart
+        startDate={startDate}
+        endDate={endDate}
+      />
+      <InputDate
+        id="endDate"
+        required
+        selectsEnd
+        startDate={startDate}
+        endDate={endDate}
+        minDate={startDate}
+      />
     </Form.Group>
   );
 }

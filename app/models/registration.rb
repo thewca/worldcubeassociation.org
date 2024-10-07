@@ -4,6 +4,7 @@ class Registration < ApplicationRecord
   scope :pending, -> { where(accepted_at: nil).where(deleted_at: nil).where(is_competing: true) }
   scope :accepted, -> { where.not(accepted_at: nil).where(deleted_at: nil) }
   scope :deleted, -> { where.not(deleted_at: nil) }
+  scope :rejected, -> { where.not(rejected_at: nil) }
   scope :non_competing, -> { where(is_competing: false) }
   scope :not_deleted, -> { where(deleted_at: nil) }
   scope :with_payments, -> { joins(:registration_payments).distinct }
@@ -12,13 +13,14 @@ class Registration < ApplicationRecord
   belongs_to :user, optional: true # A user may be deleted later. We only enforce validation directly on creation further down below.
   belongs_to :accepted_user, foreign_key: "accepted_by", class_name: "User", optional: true
   belongs_to :deleted_user, foreign_key: "deleted_by", class_name: "User", optional: true
+  has_many :registration_history_entries, dependent: :destroy
   has_many :registration_competition_events
   has_many :registration_payments
   has_many :competition_events, through: :registration_competition_events
   has_many :events, through: :competition_events
   has_many :assignments, as: :registration, dependent: :delete_all
   has_many :wcif_extensions, as: :extendable, dependent: :delete_all
-  has_many :stripe_payment_intents, as: :holder, dependent: :delete_all
+  has_many :payment_intents, as: :holder, dependent: :delete_all
 
   serialize :roles, coder: YAML
 
@@ -47,6 +49,14 @@ class Registration < ApplicationRecord
 
   def deleted?
     !deleted_at.nil?
+  end
+
+  def rejected?
+    !rejected_at.nil?
+  end
+
+  def waitlisted?
+    !waitlisted_at.nil?
   end
 
   def accepted?
@@ -144,11 +154,11 @@ class Registration < ApplicationRecord
   end
 
   def show_payment_form?
-    competition.registration_opened? && to_be_paid_through_wca?
+    competition.registration_currently_open? && to_be_paid_through_wca?
   end
 
   def show_details?(user)
-    (competition.registration_opened? || !(new_or_deleted?)) || (competition.user_can_pre_register?(user))
+    (competition.registration_currently_open? || !(new_or_deleted?)) || (competition.user_can_pre_register?(user))
   end
 
   def record_payment(
@@ -187,6 +197,13 @@ class Registration < ApplicationRecord
   # there are any validation issues on the form.
   def saved_and_unsaved_events
     registration_competition_events.reject(&:marked_for_destruction?).map(&:event)
+  end
+
+  def add_history_entry(changes, actor_type, actor_id, action)
+    new_entry = registration_history_entries.create(actor_type: actor_type, actor_id: actor_id, action: action)
+    changes.each_key do |key|
+      new_entry.registration_history_change.create(value: changes[key])
+    end
   end
 
   def waiting_list_info

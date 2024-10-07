@@ -4,7 +4,7 @@ import { competitionConstants } from '../../lib/wca-data.js.erb';
 
 const isContinent = (region) => region[0] === '_';
 
-export function calculateQueryKey(filterState) {
+export function calculateQueryKey(filterState, canViewAdminDetails = false) {
   let timeKey = '';
   if (filterState?.timeOrder === 'past') {
     timeKey = `${filterState.selectedYear}`;
@@ -12,18 +12,21 @@ export function calculateQueryKey(filterState) {
     timeKey = `start${filterState.customStartDate}-end${filterState.customEndDate}`;
   }
 
+  const adminStatus = canViewAdminDetails ? filterState?.adminStatus : null;
+
   return {
     timeOrder: filterState?.timeOrder,
     region: filterState?.region,
     delegate: filterState?.delegate,
     search: filterState?.search,
     time: timeKey,
+    adminStatus,
   };
 }
 
-export function createSearchParams(filterState, pageParam) {
+export function createSearchParams(filterState, pageParam, canViewAdminDetails = false) {
   const {
-    region, delegate, search, timeOrder, selectedYear, customStartDate, customEndDate,
+    region, delegate, search, timeOrder, selectedYear, customStartDate, customEndDate, adminStatus,
   } = filterState;
 
   const dateNow = DateTime.now();
@@ -39,40 +42,43 @@ export function createSearchParams(filterState, pageParam) {
   if (search) {
     searchParams.append('q', search);
   }
+  if (canViewAdminDetails && adminStatus && adminStatus !== 'all') {
+    searchParams.append('admin_status', adminStatus);
+  }
 
   if (timeOrder === 'present') {
     searchParams.append('sort', 'start_date,end_date,name');
-    searchParams.append('ongoing_and_future', dateNow.toFormat('yyyy-MM-dd'));
+    searchParams.append('ongoing_and_future', dateNow.toISODate());
     searchParams.append('page', pageParam);
   } else if (timeOrder === 'recent') {
     // noinspection JSAnnotator
     const recentDaysAgo = dateNow.minus({ days: competitionConstants.competitionRecentDays });
 
     searchParams.append('sort', '-end_date,-start_date,name');
-    searchParams.append('start', recentDaysAgo.toFormat('yyyy-MM-dd'));
-    searchParams.append('end', dateNow.toFormat('yyyy-MM-dd'));
+    searchParams.append('start', recentDaysAgo.toISODate());
+    searchParams.append('end', dateNow.toISODate());
     searchParams.append('page', pageParam);
   } else if (timeOrder === 'past') {
     if (selectedYear === 'all_years') {
       searchParams.append('sort', '-end_date,-start_date,name');
-      searchParams.append('end', dateNow.toFormat('yyyy-MM-dd'));
+      searchParams.append('end', dateNow.toISODate());
       searchParams.append('page', pageParam);
     } else {
       searchParams.append('sort', '-end_date,-start_date,name');
       searchParams.append('start', `${selectedYear}-1-1`);
-      searchParams.append('end', dateNow.year === selectedYear ? dateNow.toFormat('yyyy-MM-dd') : `${selectedYear}-12-31`);
+      searchParams.append('end', dateNow.year === selectedYear ? dateNow.toISODate() : `${selectedYear}-12-31`);
       searchParams.append('page', pageParam);
     }
   } else if (timeOrder === 'by_announcement') {
     searchParams.append('sort', '-announced_at,name');
     searchParams.append('page', pageParam);
   } else if (timeOrder === 'custom') {
-    const startLuxon = DateTime.fromJSDate(customStartDate);
-    const endLuxon = DateTime.fromJSDate(customEndDate);
+    const startLuxon = DateTime.fromISO(customStartDate, { zone: 'UTC' });
+    const endLuxon = DateTime.fromISO(customEndDate, { zone: 'UTC' });
 
     searchParams.append('sort', 'start_date,end_date,name');
-    searchParams.append('start', startLuxon.isValid ? startLuxon.toFormat('yyyy-MM-dd') : '');
-    searchParams.append('end', endLuxon.isValid ? endLuxon.toFormat('yyyy-MM-dd') : '');
+    searchParams.append('start', startLuxon.isValid ? startLuxon.toISODate() : '');
+    searchParams.append('end', endLuxon.isValid ? endLuxon.toISODate() : '');
     searchParams.append('page', pageParam);
   }
 

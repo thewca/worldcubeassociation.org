@@ -13,6 +13,9 @@ gem 'rails-i18n'
 gem 'i18n-js'
 gem 'activerecord-import'
 gem 'sass-rails'
+# Some of our very old Sprockets asset code relies on gem-bundled Bootstrap 3 (grrr...)
+#   which uses SCSS features incompatible with Dart SASS 2.
+gem "sassc-embedded", '~> 1'
 gem 'terser'
 gem 'faraday'
 gem 'faraday-retry'
@@ -54,6 +57,8 @@ gem 'eu_central_bank'
 gem 'devise-jwt'
 gem 'jwt'
 gem 'iso', github: 'thewca/ruby-iso'
+gem 'csv'
+gem 'ostruct'
 
 # Pointing to jfly/selectize-rails which has a workaround for
 #  https://github.com/selectize/selectize.js/issues/953
@@ -88,7 +93,7 @@ gem 'i18n-country-translations', github: 'thewca/i18n-country-translations'
 gem 'http_accept_language'
 gem 'twitter_cldr'
 # version explicitly specified because Shakapacker wants to keep Gemfile and package.json in sync
-gem 'shakapacker', '7.2.2'
+gem 'shakapacker', '8.0.2'
 gem 'json-schema'
 gem 'translighterate'
 gem 'enum_help'
@@ -107,6 +112,7 @@ gem 'sidekiq'
 gem 'sidekiq-cron'
 gem 'after_commit_everywhere'
 gem 'slack-ruby-client'
+gem 'puma'
 
 group :development, :test do
   gem 'spring'
@@ -117,7 +123,7 @@ group :development, :test do
   gem 'capybara-screenshot'
 
   gem 'byebug'
-  gem 'i18n-tasks', github: 'glebm/i18n-tasks'
+  gem 'i18n-tasks'
   gem 'i18n-spec'
 
   # We may be able to remove this when a future version of bundler comes out.
@@ -129,6 +135,7 @@ end
 group :development do
   gem 'overcommit', require: false
   gem 'rubocop', require: false
+  gem 'rubocop-thread_safety', require: false
   gem 'better_errors'
   gem 'binding_of_caller'
   gem 'bullet'
@@ -152,7 +159,7 @@ group :test do
 end
 
 group :production do
-  gem 'unicorn'
+  gem 'rack'
   gem 'newrelic_rpm'
   gem 'wkhtmltopdf-binary-ng'
 end

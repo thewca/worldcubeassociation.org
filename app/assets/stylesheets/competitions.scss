@@ -258,6 +258,10 @@ $venue-map-wrapper-height: 400px;
         float: left;
         margin-right: 10px;
       }
+      div.loader {
+        float: left;
+        margin-right: 10px;
+      }
     }
 
     .location {
@@ -340,6 +344,19 @@ $venue-map-wrapper-height: 400px;
 
   #hide_registration_requirements, #show_highlights {
     display: none;
+  }
+}
+
+tr.competition-info {
+  &.mobile-compact {
+    padding-top: 0.2em !important;
+    padding-bottom: 0.2em !important;
+
+    .ui.label.ribbon {
+      float: right;
+      left: 1em !important;
+      transform: none !important;
+    }
   }
 }
 

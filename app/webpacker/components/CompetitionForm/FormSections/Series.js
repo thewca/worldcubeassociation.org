@@ -1,26 +1,28 @@
 import React from 'react';
 import { Button } from 'semantic-ui-react';
-import SubSection from './SubSection';
-import { InputCompetitions, InputString } from '../Inputs/FormInputs';
+import { InputCompetitions, InputString } from '../../wca/FormBuilder/input/FormInputs';
 import SeriesComps from '../Tables/SeriesComps';
 import I18n from '../../../lib/i18n';
-import { useDispatch, useStore } from '../../../lib/providers/StoreProvider';
-import { updateFormValue } from '../store/actions';
+import { useStore } from '../../../lib/providers/StoreProvider';
 import { competitionMaxShortNameLength } from '../../../lib/wca-data.js.erb';
+import SubSection from '../../wca/FormBuilder/SubSection';
+import { useFormUpdateAction } from '../../wca/FormBuilder/EditForm';
+import { useFormObject } from '../../wca/FormBuilder/provider/FormObjectProvider';
 
 export default function Series() {
   const {
-    competition: {
-      series,
-      admin: { isConfirmed },
-    },
     isAdminView,
     isSeriesPersisted,
   } = useStore();
 
+  const {
+    series,
+    admin: { isConfirmed },
+  } = useFormObject();
+
   const formDisabled = isConfirmed && !isAdminView;
 
-  const dispatch = useDispatch();
+  const updateFormObject = useFormUpdateAction();
 
   if (!series) return <SeriesComps />;
 
@@ -29,7 +31,7 @@ export default function Series() {
   const nameAlreadyShort = !name || name.length <= competitionMaxShortNameLength;
   const disableIdAndShortName = !isAdminView && nameAlreadyShort;
 
-  const removeFromSeries = () => dispatch(updateFormValue('series', null));
+  const removeFromSeries = () => updateFormObject('series', null);
 
   return (
     <SubSection section="series">

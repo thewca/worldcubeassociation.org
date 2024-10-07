@@ -11,9 +11,9 @@ class CompetitionsMailer < ApplicationMailer
       @competition = competition
       @confirmer = confirmer
       mail(
-        from: Team.wcat.email,
-        to: Team.wcat.email,
-        cc: (competition.delegates.map(&:email) + delegates_to_senior_delegates_email(competition.delegates)).compact.uniq,
+        from: UserGroup.teams_committees_group_wcat.metadata.email,
+        to: UserGroup.teams_committees_group_wcat.metadata.email,
+        cc: (competition.delegates.map(&:email) + delegates_to_senior_delegates_email(competition.delegates) + delegates_to_regional_delegates_email(competition.delegates)).compact.uniq,
         reply_to: confirmer.email,
         subject: "#{competition.name} is confirmed",
       )
@@ -88,7 +88,7 @@ class CompetitionsMailer < ApplicationMailer
         to: "reports@worldcubeassociation.org",
         cc: competition.delegates.pluck(:email) +
           (competition.delegate_report.wrc_feedback_requested ? ["regulations@worldcubeassociation.org"] : []) +
-          (competition.delegate_report.wdc_feedback_requested ? ["disciplinary@worldcubeassociation.org"] : []),
+          (competition.delegate_report.wic_feedback_requested ? ["integrity@worldcubeassociation.org"] : []),
         reply_to: competition.delegates.pluck(:email),
         subject: delegate_report_email_subject(competition),
       )
@@ -110,7 +110,7 @@ class CompetitionsMailer < ApplicationMailer
   def submit_results_nag(competition)
     @competition = competition
     mail(
-      from: Team.weat.email,
+      from: UserGroup.teams_committees_group_weat.metadata.email,
       to: competition.delegates.pluck(:email),
       cc: ["results@worldcubeassociation.org", "assistants@worldcubeassociation.org"] + delegates_to_senior_delegates_email(competition.delegates),
       reply_to: "results@worldcubeassociation.org",
@@ -121,7 +121,7 @@ class CompetitionsMailer < ApplicationMailer
   def submit_report_nag(competition)
     @competition = competition
     mail(
-      from: Team.weat.email,
+      from: UserGroup.teams_committees_group_weat.metadata.email,
       to: competition.delegates.pluck(:email),
       cc: ["assistants@worldcubeassociation.org"] + delegates_to_senior_delegates_email(competition.delegates),
       reply_to: delegates_to_senior_delegates_email(competition.delegates),
@@ -132,7 +132,7 @@ class CompetitionsMailer < ApplicationMailer
   def submit_report_reminder(competition)
     @competition = competition
     mail(
-      from: Team.weat.email,
+      from: UserGroup.teams_committees_group_weat.metadata.email,
       to: competition.delegates.pluck(:email),
       reply_to: delegates_to_senior_delegates_email(competition.delegates),
       subject: "Friendly reminder to submit #{competition.name} Delegate Report",
@@ -173,6 +173,10 @@ class CompetitionsMailer < ApplicationMailer
 
   private def delegates_to_senior_delegates_email(delegates)
     delegates.flat_map { |delegate| delegate.senior_delegates.map(&:email) }.uniq.compact
+  end
+
+  private def delegates_to_regional_delegates_email(delegates)
+    delegates.flat_map { |delegate| delegate.regional_delegates.map(&:email) }.uniq.compact
   end
 
   private def delegate_report_email_subject(competition)

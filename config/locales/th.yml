@@ -211,6 +211,8 @@ th:
   round:
     #original_hash: 236c41d
     name: '%{event_name} %{round_name}'
+    #original_hash: 747df5a
+    round_number: '%{round_number} รอบ'
   advancement_condition:
     short:
       #original_hash: 6100c20
@@ -303,6 +305,25 @@ th:
       description: วันที่สิ้นสุดการคัดเลือก
       #original_hash: bed8220
       by_date: 'ภายใน %{date}'
+  activity:
+    #original_hash: ad38ae8
+    registration: การสมัครการแข่งขันหน้างานแข่งขัน
+    #original_hash: 48431e7
+    checkin: Check-in
+    #original_hash: 40ba6a3
+    tutorial: แนะนำผู้เข้าแข่งขันใหม่
+    #original_hash: ceab6ea
+    multi: ส่งลูก 3x3x3 Multi-Blind
+    #original_hash: 364653c
+    breakfast: พักรับประทานอาหารเช้า
+    #original_hash: 585ecb7
+    lunch: พักรับประทานอาหารกลางวัน
+    #original_hash: 8cf98a5
+    dinner: พักรับประทานอาหารเย็น
+    #original_hash: 75226d7
+    awards: มอบรางวัล
+    #original_hash: 6e6a6f2
+    misc: อื่น ๆ
   common:
     #original_hash: 70c07ec
     world: โลก
@@ -469,6 +490,8 @@ th:
         discussion_url: URL ของการอภิปรายใน Google Group
         #original_hash: 65a9b28
         schedule_url: url ตารางการแข่งขัน
+        #original_hash: 12b71c3
+        summary: สรุป
         #original_hash: 36155d4
         equipment: อุปกรณ์
         #original_hash: 67cd406
@@ -481,10 +504,10 @@ th:
         wrc_feedback_requested: ฉันต้องการการตอบกลับจาก WRC สำหรับ incidents ข้างต้น
         #original_hash: 0c7191d
         wrc_incidents: Incidents ที่ต้องการการตอบกลับจาก WRC
-        #original_hash: 5a92b25
-        wdc_feedback_requested: ฉันต้องการการตอบกลับจาก WDC สำหรับบาง incidents ข้างต้น
-        #original_hash: 06a0568
-        wdc_incidents: Incidents ที่ต้องการการตอบกลับจาก WDC
+        #original_hash: 1a54a79
+        wic_feedback_requested: ฉันต้องการการตอบกลับจาก WIC เกี่ยวกับ incidents ด้านบน
+        #original_hash: 000153c
+        wic_incidents: Incidents ที่ต้องการคำแนะนำจาก WIC
         #original_hash: d7020f4
         remarks: หมายเหตุ
       person:
@@ -604,7 +627,7 @@ th:
           #original_hash: 621101a
           trainee_delegate: Trainee Delegate
           #original_hash: 9b97968
-          candidate_delegate: Junior Delegate
+          junior_delegate: Junior Delegate
           #original_hash: 12ab214
           delegate: Delegate
           #original_hash: 45c2317
@@ -636,6 +659,11 @@ th:
           vice_chair: WCA Vice-Chair
           #original_hash: 75e65d9
           treasurer: WCA Treasurer
+      ban_scope:
+        #original_hash: 80901da
+        competing_only: เฉพาะการแข่งขัน
+        #original_hash: 35a6012
+        competing_and_attending: การแข่งขันและการเข้าร่วม
     competition_medium:
       status:
         #original_hash: 61a0572
@@ -722,7 +750,7 @@ th:
         unconfirmed_wca_id: ''
         #original_hash: da39a3e
         wca_id: ''
-        #original_hash: 81a76a3
+        #original_hash: 27c2251
         receive_delegate_reports: >-
           ถ้าคุณเป็น Trainee Delegate, Junior Delegate, Senior Delegate, หรือ
           สมาชิกของ WRC หรือ WQAC คุณจะได้รับ Delegate Reports เป็นค่าตั้งต้น
@@ -731,17 +759,6 @@ th:
         otp_attempt: >-
           ตรวจสอบโทรศัพท์มือถือของคุณสำหรับ one-time password หรือ ใส่ recovery
           codes
-      website_contact:
-        #original_hash: da39a3e
-        inquiry: ''
-        #original_hash: da39a3e
-        competition_id: ''
-        #original_hash: da39a3e
-        message: ''
-        #original_hash: da39a3e
-        name: ''
-        #original_hash: da39a3e
-        your_email: ''
       dob_contact:
         #original_hash: da39a3e
         name: ''
@@ -790,6 +807,11 @@ th:
           จำนวนและประเภทของ timer และ display ที่ใช้ในการแข่งขัน
           โปรดลบบรรทัดของอุปกรณ์ที่คุณไม่ได้ใช้
         #original_hash: 2822e8d
+        summary: >-
+          ประเด็นที่ระบุไว้ข้างต้นเป็นเพียงแนวทางสำหรับรายงานที่สมบูรณ์เท่านั้น
+          โปรดใช้ตามดุลยพินิจของคุณตามที่คุณเห็นว่าเหมาะสม
+          โปรดลบส่วนที่ไม่ได้ใช้ออก!
+        #original_hash: 2822e8d
         venue: >-
           หัวข้อในข้างต้นเป็นแนวทางในการเขียนรายงาน
           ใช้ดุลยพินิจของคุณสำหรับสิ่งที่คุณเห็นว่าเหมาะสม
@@ -810,9 +832,9 @@ th:
         #original_hash: 98bb5cd
         wrc_incidents: หมายเลขของ incident ที่ต้องการข้อเสนอแนะจาก WRC
         #original_hash: da39a3e
-        wdc_feedback_requested: ''
-        #original_hash: 38a95e5
-        wdc_incidents: หมายเลขของ incident ที่ต้องการให้ WDC เสนอแนะ
+        wic_feedback_requested: ''
+        #original_hash: 0aca3b0
+        wic_incidents: รายการถึง incidents ที่คุณต้องการให้ WIC ตอบกลับ
         #original_hash: f30abdc
         remarks: >-
           พูดเกี่ยวกับรายละเอียดอย่างอื่นที่คุณต้องการแบ่งปัน (เช่น
@@ -1113,14 +1135,14 @@ th:
       error_pages:
         #original_hash: 1042478
         500_error: เราขอโทษ มีบางสิ่งบางอย่างผิดปกติ.
-        #original_hash: d815249
-        500_contact: หากคุณรายงานข้อผิดพลาดนี้กับ Software Team โปรดระบุ Request ID
+        #original_hash: 3e2364e
+        500_contact_html: '<a href=%{contact_url}>Click here</a> เพื่อรายงาน.'
         #original_hash: b61e305
         400_error: ไม่มีหน้าที่คุณกำลังมองหา
-        #original_hash: 8b309f5
-        400_contact: >-
-          หากคุณคิดว่านี่เป็นข้อผิดพลาด โปรดติดต่อ Software Team และระบุ Request
-          ID
+        #original_hash: c9290b6
+        400_contact_html: >-
+          หากคุณคิดว่านี่คือข้อผิดพลาด กรุณา<a
+          href=%{contact_url}>กดที่นี่</a>เพื่อรายงาน
     doorkeeper:
       applications:
         help:
@@ -1222,10 +1244,12 @@ th:
       db_dev_export: Developer Export
       #original_hash: 1fa73f3
       regulations: กติกา
+      #original_hash: 3bb8751
+      regulations_full: กติกาและแนวปฏิบัติ
       #original_hash: 6bce1b5
       about_regulations: เกี่ยวกับกติกา
       #original_hash: 141d1d7
-      guidelines: แนวทาง
+      guidelines: แนวปฏิบัติ
       #original_hash: c4622c3
       scrambles: การตั้งโจทย์
       #original_hash: 90ccd64
@@ -1256,8 +1280,6 @@ th:
       results_sidekiq: Sidekiq dashboard
       #original_hash: aee74b8
       new_post: New post
-      #original_hash: 0d67445
-      team_leader: Team leader
       #original_hash: 37b8fdc
       regional_organizations: องค์กรระดับภูมิภาค
       #original_hash: 6568fa0
@@ -1316,6 +1338,10 @@ th:
         และประกอบด้วยสมาชิกในชุมชน ไม่ใช่สมาชิกเจ้าหน้าที่ WCA
         เมื่อมีการเปิดคณะกรรมการ ทีมงาน หรือสภา
         ข้อมูลเกี่ยวกับวิธีการสมัครจะโพสต์ไว้ที่หน้าแรก
+      #original_hash: b37456c
+      contact_button: ติดต่อ
+      #original_hash: ae7928f
+      no_contact_description: ยังไม่มีข้อมูลการติดต่อทีม / กรรมการนี้
       groups_name:
         #original_hash: 90a1280
         wat: WCA Archive Team
@@ -1323,10 +1349,8 @@ th:
         wct: WCA Communication Team
         #original_hash: 2b81984
         wcat: WCA Competition Announcement Team
-        #original_hash: c97077a
-        wdc: WCA Disciplinary Committee
-        #original_hash: 83bd1d0
-        wec: WCA Ethics Committee
+        #original_hash: 94c2e42
+        wic: WCA Integrity Committee
         #original_hash: d1dbb86
         weat: WCA Executive Assistants Team
         #original_hash: 9cb13de
@@ -1343,8 +1367,8 @@ th:
         wst: WCA Software Team
         #original_hash: 58765c7
         wsot: WCA Sports Organization Team
-        #original_hash: 1ce7604
-        wac: WCA Advisory Council
+        #original_hash: 78949a7
+        wapc: WCA Appeals Committee
       groups_description:
         #original_hash: 5b1aade
         wat: >-
@@ -1368,22 +1392,13 @@ th:
           ทีมนี้ยังรับผิดชอบในการรักษาระเบียบการส่งการแข่งขันที่เหมาะสมจากเอกสารต่างๆ
           เช่น นโยบายข้อกำหนดการแข่งขัน WCA WCAT
           จะไม่รับผิดชอบต่อการจัดองค์กรและการมอบหมายการแข่งขันรายบุคคล
-        #original_hash: 41eb6fd
-        wdc: >-
-          WCA Disciplinary Committee (WDC) ดำเนินการสอบสวนอย่างอิสระเกี่ยวกับ
-          Speedcubers ที่ลงทะเบียนแข่งขันและเหตุการณ์ต่างๆ
-          ในระหว่างการแข่งขันอย่างเป็นทางการของ WCA หรือบนแพลตฟอร์ม WCA ออนไลน์
-          เหตุการณ์เหล่านี้ถือเป็นการละเมิดจิตวิญญาณ หลักจรรยาบรรณ
-          และ/หรือข้อบังคับของ WCA
-        #original_hash: 6cdac80
-        wec: >-
-          บทบาทของคณะกรรมการนี้คือเพื่อให้แน่ใจว่าขั้นตอนทั้งหมดที่เจ้าหน้าที่
-          WCA ปฏิบัติตามปฏิบัติตามหลักจรรยาบรรณ และดำเนินการสอบสวนอย่างเป็นอิสระ
-          หากการดำเนินการของสมาชิกคนใดคนหนึ่งไม่สอดคล้องกับหลักจรรยาบรรณ WEC
-          เป็นที่ไว้ใจได้สำหรับ Speedcubers ที่ลงทะเบียนแข่งขัน
-          ซึ่งอาจรายงานข้อกังวลและขอให้มีการสอบสวน
-          คณะกรรมการนี้ยังทำหน้าที่เป็นคณะกรรมการอุทธรณ์หากใครก็ตามที่เกี่ยวข้องไม่เห็นด้วยกับคำตัดสินของ
-          WCA Disciplinary Committee
+        #original_hash: 5007698
+        wic: >-
+          WCA Integrity Committee (WIC) ดำเนินการสอบสวนอิสระเกี่ยวกับสมาชิกใน
+          WCA และ incident ที่เกิดขึ้นระหว่างการแข่งขัน WCA
+          หรือบนแพลตฟอร์มออนไลน์อย่างเป็นทางการของ WCA. Incidents
+          เหล่านี้ถือเป็นการละเมิดเจตนารมณ์ จรรยาบรรณ จรรยาบรรณ
+          และ/หรือระเบียบของ WCA
         #original_hash: 889dd90
         weat: ทีมนี้มีหน้าที่รับผิดชอบในการดำเนินงานด้านธุรการของคณะกรรมการ WCA
         #original_hash: 43e4e33
@@ -1423,11 +1438,121 @@ th:
           scramblers, workbooks, admin tools)
         #original_hash: 8f888d6
         wsot: ทีมงานนี้มีหน้าที่ดูแลและสนับสนุนให้ WCA เป็นองค์กรกีฬาระดับนานาชาติ
-        #original_hash: 73d8df4
-        wac: >-
-          WAC มีหน้าที่รับผิดชอบในการรักษาความคิดเห็นและการสื่อสารระหว่างชุมชน
-          WCA และเจ้าหน้าที่ WCA พวกเขาดูแลฟอรัม WCA
-          และสรุปแบบสำรวจและพยายามเพิ่มการเข้าถึงทั่วทั้งชุมชนทั่วโลก
+        #original_hash: 9f45bfa
+        wapc: >-
+          The WCA Appeals Committee (WAC)
+          มีหน้าที่รับผิดชอบในการตรวจสอบและแก้ไขคำอุทธรณ์เกี่ยวกับการตัดสินใจของเจ้าหน้าที่
+          WCA คนอื่น ๆ. WAC
+          จัดให้มีกระบวนการตรวจสอบที่เป็นอิสระและเป็นกลางเพื่อให้แน่ใจว่าการตัดสินใจนั้นยุติธรรม
+          สมเหตุสมผล และเป็นไปตามนโยบายและระเบียบข้อบังคับของ WCA
+    contacts:
+      #original_hash: 4ef2aad
+      title: WCA Contact Form
+      #original_hash: bddd3ea
+      faq_note_html: >-
+        ก่อนที่จะทำการสอบถาม คุณอาจต้องการดู <a href="/faq">คำถามที่พบบ่อย</a>
+        ของเรา!
+        หากคุณต้องการติดต่อคณะกรรมการหรือทีมใดโดยเฉพาะที่ไม่ได้ระบุไว้ที่นี่
+        คุณสามารถดูข้อมูลติดต่อได้ที่<a
+        href="/teams-committees-councils">หน้านี้</a>
+      #original_hash: ea20be0
+      success_message: ส่งอีเมลแล้ว - เราจะติดต่อกลับโดยเร็วที่สุด
+      form:
+        user_data:
+          name:
+            #original_hash: 709a232
+            label: ชื่อ
+          email:
+            #original_hash: 84add5b
+            label: Email
+        contact_recipient:
+          #original_hash: 54f0036
+          label: คุณต้องการติดต่อใคร?
+          competition:
+            #original_hash: baa2425
+            label: >-
+              ติดต่อผู้จัดงาน/ผู้แทนการแข่งขัน
+              (เพื่อสอบถามเกี่ยวกับการแข่งขันนั้นๆ)
+          wct:
+            #original_hash: b73e465
+            label: >-
+              ติดต่อ WCA สำหรบปัญหาทั่วไป (ซึ่งอาจเกี่ยวข้องกับอะไรก็ได้ เช่น
+              WCA ID/Profile, การจัดการการแข่งขัน, กติกาการแข่งขัน,
+              สื่อการแข่งขัน ฯลฯ)
+          wrt:
+            #original_hash: 0f6b96b
+            label: ติดต่อ Results Team (สำหรับสิ่งที่เกี่ยวข้องกับผลการแข่งขัน)
+          wst:
+            #original_hash: 1d74033
+            label: >-
+              ติดต่อ Software Team
+              (เพื่อรายงานข้อผิดพลาดในเว็บไซต์หรือคำถามที่เกี่ยวข้องกับ API)
+        competition:
+          competition:
+            #original_hash: 1917f4f
+            label: การแข่งขัน
+          message:
+            #original_hash: 68f4145
+            label: ข้อความ
+        wct:
+          message:
+            #original_hash: 68f4145
+            label: ข้อความ
+        wrt:
+          query_type:
+            #original_hash: d31ab65
+            label: ข้อใดต่อไปนี้ตรงกับคำถามของคุณมากที่สุด
+            edit_profile:
+              #original_hash: 322db6c
+              label: 'แก้ไขข้อมูลส่วนตัว (ชื่อ, ประเทศ, เพศ หรือ วันเกิด)'
+            report_result_issue:
+              #original_hash: 2edbb52
+              label: แจ้งปัญหาเกี่ยวกับผลการแข่งขัน
+            other_query:
+              #original_hash: 7618a0c
+              label: ปัญหาอื่น ๆ
+          message:
+            #original_hash: 68f4145
+            label: ข้อความ
+          profile_data_to_change:
+            #original_hash: 25b71ff
+            label: ข้อมูลส่วนตัวที่ต้องการแก้ไข
+            options:
+              #original_hash: 709a232
+              name: ชื่อ
+              #original_hash: d523ebb
+              country: ประเทศ
+              #original_hash: 8a754c6
+              gender: เพศ
+              #original_hash: 293dd60
+              dob: วัน เดือน ปี เกิด
+          new_profile_data_name:
+            #original_hash: ddbcd37
+            label: ชื่อใหม่
+          new_profile_data_country:
+            #original_hash: e4e355e
+            label: ประเทศใหม่
+          new_profile_data_gender:
+            #original_hash: 48ce2a3
+            label: เพศใหม่
+          new_profile_data_dob:
+            #original_hash: 9f1c3d2
+            label: วัน เดือน ปี เกิด ใหม่
+          edit_profile_reason:
+            #original_hash: fdfcccf
+            label: สาเหตุของการเปลี่ยน
+          edit_profile_proof_attach:
+            #original_hash: a9645b1
+            label: แนบหลักฐาน
+        wst:
+          message:
+            #original_hash: 68f4145
+            label: ข้อความ
+        captcha:
+          #original_hash: 58c1271
+          validation_error: Please verify that you are not a robot.
+        #original_hash: 2dacf65
+        submit_button: ส่ง
   homepage:
     #original_hash: 824d76b
     learn_more: เรียนรู้เพิ่มเติม
@@ -1709,12 +1834,12 @@ th:
         delegate, ผู้จัดการแข่งขัน, สมาชิกทีม) และไม่สามารถลบได้ กรุณาส่ง email
         มาที่ WCA Result Team เพื่อช่วยเปลี่ยน WCA ID ไปยังบัญชีผู้ใช้อื่น
       cannot_edit:
-        #original_hash: 8bb2def
+        #original_hash: 3d4d222
         msg: >-
           คุณไม่สามารถแก้ไขชื่อ วันเกิด เพศ หรือภูมิภาคได้ เนื่องจาก %{reason}
-          กรุณาติดต่อ <a href='mailto:results@worldcubeassociation.org'
-          target='_blank'>WCA Results Team</a> หรือ <a
-          href='%{delegate_url}'>Delegate</a> ถ้าคุณต้องการแก้ไข
+          กรุณาติดต่อ <a href='%{wrt_contact_path}' target='_blank'>WCA Results
+          Team</a> หรือ <a href='%{delegate_url}'>Delegate</a>
+          ถ้าคุณต้องการแก้ไข
         reason:
           #original_hash: 370ff12
           assigned: คุณได้รับ WCA ID แล้ว
@@ -1739,7 +1864,7 @@ th:
       #original_hash: 010b0e5
       remove_avatar_reason: โปรดระบุเหตุผลในการลบ
       #original_hash: 141d1d7
-      guidelines: แนวทาง
+      guidelines: แนวปฏิบัติ
       avatar_guidelines:
         #original_hash: 255f28c
         '1': รูปแทนตัวทั้งหมดต้องเป็นบุคคลจริง
@@ -1818,21 +1943,21 @@ th:
       wca_id_no_birthdate_html: >-
         เราไม่มีวันเกิดบันทึกไว้สำหรับ WCA ID นี้ กรุณาติดต่อ WCA ด้วย<a
         href="%{dob_form_path}">แบบฟอร์มเฉพาะนี้</a>
-      #original_hash: 51fa5a4
+      #original_hash: f7dde6e
       wca_id_no_gender_html: >-
-        เราไม่มีเพศบันทึกไว้สำหรับ WCA ID นี้ กรุณา email ไปที่ <a
-        href='mailto:results@worldcubeassociation.org' target='_blank'>WCA
-        Results Team</a> เพื่อแก้ปัญหา
-      #original_hash: 87ee245
+        เราไม่มีเพศบันทึกไว้สำหรับ WCA ID นี้ กรุณาติดต่อ <a
+        href='%{wrt_contact_path}' target='_blank'>WCA Results Team</a>
+        เพื่อแก้ปัญหา
+      #original_hash: 11a7f81
       wca_id_no_citizenship_html: >-
-        เราไม่มีสถานะพลเมืองบันทึกไว้สำหรับ WCA ID นี้ กรุณา email ไปที่ <a
-        href='mailto:results@worldcubeassociation.org' target='_blank'>WCA
-        Results Team</a> เพื่อแก้ปัญหา
-      #original_hash: c3839bc
+        เราไม่มีสถานะพลเมืองบันทึกไว้สำหรับ WCA ID นี้ กรุณาติดต่อ <a
+        href='%{wrt_contact_path}' target='_blank'>WCA Results Team</a>
+        เพื่อแก้ปัญหา
+      #original_hash: 6890de8
       wca_id_no_name_html: >-
-        เราไม่มีชื่อบันทึกไว้สำหรับ WCA ID นี้ กรุณา email ไปที่ <a
-        href='mailto:results@worldcubeassociation.org' target='_blank'>WCA
-        Results Team</a> เพื่อแก้ปัญหา
+        เราไม่มีชื่อบันทึกไว้สำหรับ WCA ID นี้ กรุณาติดต่อ <a
+        href='%{wrt_contact_path}' target='_blank'>WCA Results Team</a>
+        เพื่อแก้ปัญหา
       #original_hash: d02c03b
       avatar_requires_wca_id: ต้องการ WCA ID
       #original_hash: 8f785ea
@@ -1877,6 +2002,10 @@ th:
         status: สถานะ
         #original_hash: 8970f0e
         locale: สถานที่
+        #original_hash: 5d99dee
+        group_name: Team/Committee Name
+        #original_hash: 55e4f86
+        delegated_competitions_count: จำนวนครั้งที่ Delegate การแข่งขัน
   user_groups:
     group_types:
       #original_hash: abd2828
@@ -1897,29 +2026,28 @@ th:
       need_country: ต้องการภูมิภาค
       #original_hash: e0bb243
       cannot_be_deleted_and_accepted: การสมัครไม่สามารถถูกลบและยืนยันได้ในเวลาเดียวกัน
-      #original_hash: a38d024
-      must_register: ต้องสมัครการแข่งขันอย่างน้อยหนึ่งประเภท
-      #original_hash: abdc718
+      #original_hash: 820bcf7
+      must_register: คุณต้องสมัครการแข่งขันอย่างน้อยหนึ่งประเภท
+      #original_hash: ef9b4ad
       exceeds_event_limit:
         zero: คุณสามารถสมัครการแข่งขันได้แค่ 1 ประเภทเท่านั้น
         other: >-
-          คุณต้องสมัครการแข่งขันโดยมีประเภทการแข่งขันน้อยกว่าหรือเท่ากับ
-          %{count} ประเภท
-      #original_hash: e78eec3
+          คุณต้องสมัครการแข่งขันโดยมีประเภทการแข่งขันระหว่าง 1 ถึง %{count}
+          ประเภท
+      #original_hash: 87f7c12
       banned_html: >-
         คุณถูกแบน ถ้าคุณเชื่อว่านี่คือข้อผิดพลาด กรุณาติดต่อ <a
-        href='mailto:disciplinary@worldcubeassociation.org'
-        target='_blank'>WDC</a>
+        href='mailto:integrity@worldcubeassociation.org' target='_blank'>WIC</a>
       #original_hash: 8d07e7f
       undelete_banned: เป็นผู้เข้าแข่งขันที่ถูกแบนและไม่สามารถยกเลิกการลบได้
       #original_hash: 3de7c86
       series_more_than_one_accepted: คุณสามารถเข้าร่วมการแข่งขันซีรีส์ได้ครั้งละหนึ่งรายการเท่านั้น
       #original_hash: 13bfcd6
       can_only_register_for_qualified_events: คุณไม่สามารถลงทะเบียนประเภทการแข่งขันที่คุณไม่ผ่านการคัดเลือกได้
-      #original_hash: 22ca413
+      #original_hash: 4025877
       cannot_register_without_comment: >-
         คุณจำเป็นต้องใส่ข้อความในช่องอธิบายเพิ่มเติม
-        กรุณาอ่านข้อกำหนดการสมัครการแข่งขันว่าต้องใส่ข้อความอะไร (เช่น
+        กรุณาอ่านข้อกำหนดการสมัครการแข่งขันด้านบนว่าต้องใส่ข้อความอะไร (เช่น
         สถานที่ที่คุณเข้าแข่งขันในการแข่งขัน FMC หลายสถานที่)
     registration_info_people:
       #original_hash: bdf1f11
@@ -2226,14 +2354,22 @@ th:
         not_allowed: คุณไม่สามารถชำระค่าสมัครการแข่งขันนั้นได้
         #original_hash: a073600
         stripe_failed: โปรดตรวจสอบธุรกรรมของ Stripe
+        #original_hash: d571a4e
+        paypal_failed: โปรดตรวจสอบคำสั่งซื้อของ PayPal
+        #original_hash: df1a70e
+        paypal_canceled: PayPal รายงานว่าคำสั่งซื้อถูกยกเลิกด้วยตนเอง กรุณาลองอีกครั้ง.
         #original_hash: a32e40f
         stripe_not_found: Stripe รายงานกลับว่าไม่พบ Transaction ID ดังกล่าว
         #original_hash: aaa8ab7
         stripe_secret_invalid: Stripe รายงานว่า transaction secret ไม่ตรงกับค่าของเรา
+        #original_hash: f808249
+        stripe_not_an_intent: Stripe รายงานรหัสธุรกรรมกลับซึ่งไม่ใช่จุดประสงค์ในการชำระเงินจริงๆ
         #original_hash: 8d1a199
         payment_reset: การชำระเงินถูกปฏิเสธโดย Stripe
         #original_hash: bcf6a93
         payment_pending: การชำระเงินยังไม่เสร็จสมบูรณ์
+        #original_hash: c3f8d65
+        registration_unreachable: เกิดปัญหาในการเข้าถึง service การลงทะเบียน กรุณาติดต่อ Software Team.
     #original_hash: 4cf01a2
     preferred_events_prompt_html: >-
       เพื่อให้การสมัครครั้งต่อไปเร็วขึ้น คุณสามารถเลือกประเภทการแข่งขันที่ชอบได้
@@ -2282,6 +2418,10 @@ th:
         email_duplicates: 'email ต้องไม่ซ้ำ พบการซ้ำกันของ: %{emails}.'
         #original_hash: bcd8e78
         wca_id_duplicates: 'WCA ID ต้องไม่ซ้ำ พบการซ้ำกันของ: %{wca_ids}.'
+        #original_hash: a0fd4c5
+        wrong_dob_format: >-
+          วันเกิดต้องอยู่ในรูปแบบ YYYY-mm-dd (year-month-day เป็นคริสต์ศักราช,
+          เช่น 1944-07-13), ดูตัวอย่างของวันที่ไม่ถูกต้อง: %{raw_dobs}.
     add:
       #original_hash: 975275e
       title: 'เพิ่มการสมัครของ %{comp}'
@@ -2298,13 +2438,13 @@ th:
     messages:
       #original_hash: 7b80062
       not_visible: การแข่งขันนี้ไม่ปรากฏแก่สาธารณะ
-      #original_hash: c1d4926
+      #original_hash: 0398a14
       name_too_long: >-
-        ชื่อการแข่งขันยาวเกิน 32 ตัวอักษร เราแนะนำให้ใช้ชื่อที่สั้นกว่านี้
-        และเรายินดีหากคุณเปลี่ยน
-      #original_hash: af27396
+        ชื่อการแข่งขันยาวเกิน 32 ตัวอักษร โปรดแก้ไข competition ID
+        และชื่อย่อให้เหมาะสม
+      #original_hash: 5882e05
       id_starts_with_lowercase: >-
-        Competition Id ขึ้นต้นด้วยด้วยตัวอักษรตัวเล็ก
+        Competition ID ขึ้นต้นด้วยด้วยตัวอักษรตัวเล็ก
         เราแนะนำให้ขึ้นต้นด้วยตัวอักษรตัวใหญ่
       #original_hash: 1a20fae
       must_have_events: กรุณาเพิ่มประเภทการแข่งขันอย่างน้อย 1 ประเภทก่อนยืนยันการแข่งขัน
@@ -2361,6 +2501,8 @@ th:
       uncancel_failure: ไม่สามารถยกเลิกการยกเลิกการแข่งขันได้
       #original_hash: 8ad5e67
       results_not_posted: ผลของการแข่งขันนี้สามารถมองเห็นได้ แต่ยังไม่ได้ถูกโพสต์
+      #original_hash: 5c24cd8
+      results_still_processing: เรากำลังการประมวลผลการแข่งขันของการแข่งขันนี้ ซึ่งน่าจะทราบผลเร็ว ๆ นี้
       #original_hash: e205d73
       results_already_posted: ผลการแข่งขันได้รับการโพสต์แล้ว
       #original_hash: 376f461
@@ -2387,6 +2529,10 @@ th:
       reg_opens_too_early: การรับสมัครถูกตั้งค่าให้เริ่มน้อยกว่าที่กำหนด 48 ชั่วโมง
       #original_hash: a25e7a2
       registration_already_closed: กำหนดเวลาในการลงทะเบียนได้ผ่านไปแล้ว โปรดตั้งค่าให้เป็นเวลาในอนาคต
+      #original_hash: 9a07b42
+      uses_v2_registrations: >-
+        การแข่งขันครั้งนี้ใช้ระบบการสมัครแบบใหม่ โปรดติดต่อ WCAT
+        หากคุณคิดว่าการแข่งขันครั้งนี้ควรใช้ระบบเดิมแทน
       #original_hash: 3322400
       tooltip_registered: คุณได้สมัครแล้ว
       #original_hash: f2d092f
@@ -2409,8 +2555,6 @@ th:
       orga_closed_reg_success: ปิดการลงทะเบียนเรียบร้อยแล้ว
       #original_hash: 7f197a0
       orga_closed_reg_failure: ไม่สามารถปิดการลงทะเบียนได้
-      #original_hash: b16bd13
-      cannot_activate_v2: คุณไม่สามารถเปิดใช้งานระบบการสมัครแบบใหม่ได้หากการสมัครเปิดอยู่
       #original_hash: 74caf1a
       no_waiting_list_specified: >-
         การแข่งขันนี้ไม่มีกำหนดเวลาในการรับผู้เข้าแข่งขันใน waiting list
@@ -2447,16 +2591,41 @@ th:
       date: วันที่
       #original_hash: 4f05cd6
       add_to_calendar: เพิ่มลงในปฎิทิน
+      #original_hash: 709a232
+      name: ชื่อการแข่งขัน
+      #original_hash: d219c68
+      location: สถานที่
       #original_hash: 4271627
       city: เมือง
       #original_hash: 67cd406
       venue: สถานที่
+      #original_hash: 63a1c21
+      location_and_venue: ที่ตั้งและสถานที่การแข่งขัน
       #original_hash: d70f93d
       address: ที่อยู่
       #original_hash: dc3decb
       details: รายละเอียด
       #original_hash: 2e8a57c
       website: Website
+      #original_hash: f825aff
+      name_and_location: ชื่อและสถานที่
+      #original_hash: adc24b7
+      delegates: Delegate(s)
+      #original_hash: 51290be
+      announced: Announced
+      #original_hash: 614bc93
+      report_posted: Report posted
+      #original_hash: f59042e
+      results_submitted: Results submitted
+      relative_days:
+        #original_hash: 021deef
+        before: 'ก่อน %{amount_of_days} วัน'
+        #original_hash: 417f8df
+        after: 'หลังจาก %{amount_of_days} วัน'
+      #original_hash: 96f608c
+      pending: รอดำเนินการ
+      #original_hash: b8bf8b6
+      submitted_by_other: ส่งแล้วโดยผู้อื่น
       #original_hash: 2260929
       display_name: '[Cancelled] %{name}'
       #original_hash: 680567f
@@ -2603,6 +2772,10 @@ th:
       mean: a mean
       #original_hash: 22bee3a
       result_sentence: 'with %{a_win_by_word} of %{result}'
+      #original_hash: 756603f
+      no_winner: >-
+        ประเภทการแข่งขันหลักคือ %{event_name} ไม่มีการประกาศผู้ชนะ
+        เนื่องจากไม่มีผู้แข่งขันคนใดแก้โจทย์ได้สำเร็จในการแข่งขัน
       #original_hash: 6c3b236
       winner: '%{winner} ชนะในการแข่งขัน %{result_sentence} ในประเภท %{event_name}'
       #original_hash: ec7f18a
@@ -2669,6 +2842,15 @@ th:
       by_announcement: By announcement
       #original_hash: b3946b2
       sort_by_announcement: เรียงตามการประกาศ
+      #original_hash: e63dc91
+      admin_status: Admin status
+      status_flags:
+        #original_hash: 6a72085
+        all: ทั้งหมด
+        #original_hash: e9c4556
+        warning: Warning
+        #original_hash: 58d1758
+        danger: Danger
       #original_hash: 3f66052
       from_date: จาก
       #original_hash: ae79ea1
@@ -2689,6 +2871,8 @@ th:
       show_cancelled: แสดงการแข่งขันที่ถูกยกเลิก
       #original_hash: 0eda967
       show_registration_status: แสดงไอคอนสถานะการลงทะเบียน
+      #original_hash: c61cc50
+      use_admin_view: ใช้มุมมองผู้ดูแลระบบ
       titles:
         #original_hash: 69447c9
         in_progress: การแข่งขันที่กำลังดำเนินอยู่
@@ -2700,6 +2884,8 @@ th:
         recent: 'การแข่งขันเร็ว ๆ นี้ (ย้อนหลัง %{count} วัน)'
         #original_hash: 914742f
         upcoming: การแข่งขันที่จะเกิดขึ้น
+        #original_hash: 534071e
+        ongoing_and_upcoming: การแข่งขันที่กำลังเกิดขึ้นและที่กำลังจะเกิดขึ้น
         #original_hash: 8b57693
         custom: การแข่งขันในช่วงเวลาที่เลือก
         #original_hash: 0933739
@@ -2836,6 +3022,8 @@ th:
           is_confirmed: ไม่อนุญาติให้ผู้จัดการแข่งขันแก้ไขการแข่งขันนี้
           #original_hash: d493e6a
           is_visible: ทำให้การแข่งขันปรากฏต่อสาธารณะ
+          #original_hash: e7daccb
+          uses_v_2_registrations: ใช้ระบบการสมัครแบบใหม่
         #original_hash: 89f89c0
         competition_id: ID
         #original_hash: 709a232
@@ -2942,6 +3130,12 @@ th:
           #original_hash: 6c8e5bf
           force_comment: บังคับให้ผู้เข้าแข่งขันใส่ข้อความในช่องอธิบายเพิ่มเติม
         event_restrictions:
+          forbid_newcomers:
+            #original_hash: d0a4ce9
+            enabled: ไม่อนุญาติไม่ให้ผู้เข้าแข่งขันใหม่สมัครการแข่งขัน
+            #original_hash: 40c4b4c
+            reason: >-
+              เหตุผลและรายละเอียดสำหรับการไม่ให้ผู้เข้าแข่งขันใหม่สมัครการแข่งขัน
           early_puzzle_submission:
             #original_hash: 723cad9
             enabled: ฉันต้องการให้ผู้เข้าแข่งขันส่ง puzzle ก่อนที่การแข่งขันจะเริ่มขึ้น
@@ -2975,6 +3169,11 @@ th:
           is_confirmed: ''
           #original_hash: da39a3e
           is_visible: ''
+          #original_hash: 68d3cc6
+          uses_v_2_registrations: >-
+            หากปิดใช้งาน การเปลี่ยนระบบการลงทะเบียนอาจจะทำให้เกิดปัญหาทางเทคนิค
+            โปรดติดต่อ WST
+            เพื่อขอความช่วยเหลือหากคุณยังต้องเปลี่ยนระบบการสมัครการแข่งขัน
         #original_hash: da39a3e
         competition_id: ''
         #original_hash: 2c812a0
@@ -3145,6 +3344,13 @@ th:
           #original_hash: da39a3e
           force_comment: ''
         event_restrictions:
+          forbid_newcomers:
+            #original_hash: da39a3e
+            enabled: ''
+            #original_hash: d75332f
+            reason: >-
+              โปรดอธิบายรายละเอียดที่นี่ว่าทำไมคุณถึงไม่อยากให้ผู้เข้าแข่งขันใหม่สมัครการแข่งขันของคุณ
+              กรุณากรอกเป็นภาษาอังกฤษ!
           early_puzzle_submission:
             #original_hash: da39a3e
             enabled: ''
@@ -3236,6 +3442,239 @@ th:
               #original_hash: 6509041
               'false': >-
                 ผู้เข้าแข่งขันจะต้องผ่านการคัดเลือกในประเภทการแข่งขันที่ลงทะเบียน
+    registration_v2:
+      pdf:
+        #original_hash: 5c7d60f
+        link: 'เป็น <0>%{pdfLink}</0>'
+      info:
+        #original_hash: eade5c7
+        download: โหลดรายละเอียดการแข่งขันทั้งหมด
+        #original_hash: 21891e5
+        payment_missing: >-
+          การสมัครของคุณจะไม่ได้รับการอนุมัติจนกว่าคุณจะชำระเงินค่าสมัครการแข่งขัน
+          เว้นแต่คุณจะมีข้อตกลงพิเศษกับผู้จัดงานหรือคุณชำระเงินผ่านวิธีการอื่น
+        #original_hash: b15fddc
+        needs_approval: >-
+          อย่าเพิ่งจองการเดินทางของคุณ
+          เพราะผู้จัดการแข่งขันยังต้องอนุมัติการลงทะเบียนของคุณซึ่งอาจต้องใช้เวลา
+        #original_hash: 6071fd9
+        is_accepted: >-
+          จองการเดินทางของคุณและเก็บกระเป๋าได้เลย -
+          คุณมีสิทธิ์เข้าร่วมการแข่งขันแล้ว!
+        #original_hash: e29a4d3
+        is_cancelled: >-
+          การสมัครการแข่งขันของคุณถูกยกเลิกและคุณจะไม่ได้แข่งขันอีกต่อไป
+          แต่คุณสามารถสมัครใหม่อีกครั้งได้
+        #original_hash: 2a88d10
+        is_rejected: >-
+          การสมัครการแข่งขันของคุณถูกปฏิเสธโดยผู้จัดการแข่งขัน
+          โปรดติดต่อทีมจัดการแข่งขันหากคุณเชื่อว่านี่เป็นข้อผิดพลาด
+        #original_hash: 719dea0
+        is_waitlisted: >-
+          อย่าจองการเดินทางของคุณ แต่ก็อย่าหมดหวังเช่นกัน ผู้เข้าแข่งขันเต็มแล้ว
+          แต่คุณถูกจัดให้อยู่ในรายชื่อรอ
+          และคุณจะได้รับอีเมลหากมีที่นั่งว่างเพียงพอให้คุณเข้าร่วมได้
+      list:
+        #original_hash: 6eef664
+        empty: ไม่พบ
+        #original_hash: 627422a
+        spots_remaining_plural:
+          zero: ผู้เข้าแข่งขันเต็มจำนวนแล้ว
+          other: 'เหลืออีก %{count} คน'
+        cancelled:
+          #original_hash: e9c5a55
+          title: การสมัครที่ถูกยกเลิก
+          #original_hash: bb5b570
+          information: ผู้เข้าแข่งขันที่การสมัครถูกยกเลิกสามารถสมัครการแข่งขันได้อีกครั้ง
+        rejected:
+          #original_hash: 199b7c5
+          title: การสมัครที่ถูกปฎิเสธ
+          #original_hash: 3fd2e0c
+          information: >-
+            ผู้เข้าแข่งขันที่ถูกปฎิเสธการสมัครไม่สามารถสมัครการแข่งขันอีกครั้งได้
+        payment:
+          #original_hash: d6fbc7a
+          refunded_status: คืนค่าสมัครแล้ว
+          #original_hash: 41248b1
+          initialized: 'กระบวนการชำระเงินเริ่มต้นเมื่อ %{date} แต่ยังไม่เสร็จสมบูรณ์'
+          #original_hash: 3a16c0d
+          refunded: 'การชำระค่าสมัครได้ทำการคืนเงินแล้วเมื่อวันที่ %{date}'
+        psychsheets:
+          #original_hash: f03e2d0
+          go_back: Go Back
+        #original_hash: 19eabc9
+        timestamp: Timestamp
+        #original_hash: 5e0207a
+        comment_and_note: Comment & Note
+        #original_hash: b651ae4
+        edit_waiting_list: เปิดใช้งานโหมดแก้ไข Waiting List
+      bookmark:
+        #original_hash: 7952a5c
+        unbookmark: คุณได้ลบบุ๊กมาร์กของคุณแล้ว
+      requirements:
+        #original_hash: 1255806
+        acknowledgement: >-
+          ฉันได้อ่านและรับทราบข้อมูลทั้งหมดภายใต้แท็บ 'ลงทะเบียน' แล้ว
+          รวมถึงค่าธรรมเนียมการแข่งขัน, นโยบายการคืนเงิน
+          และเงื่อนไขเพิ่มเติมที่แสดงไว้แล้ว
+        #original_hash: 80d2933
+        next_step: ดำเนินการต่อไปยังขั้นตอนถัดไป
+      update:
+        #original_hash: ebf417d
+        being_updated: กำลังอัปเดตการสมัคร...
+        #original_hash: 2d0325e
+        being_deleted: การสมัครกำลังถูกลบ...
+        #original_hash: cbf13af
+        update_confirm: คุณแน่ใจหรือไม่ว่าต้องการอัปเดตการสมัครการแข่งขันของคุณ?
+        #original_hash: 65bbb07
+        no_changes: ไม่มีการเปลี่ยนแปลง
+        #original_hash: be4e8e2
+        email_send: ส่ง email
+        #original_hash: b4bac52
+        email_copy: Copy Emails
+        #original_hash: b83b663
+        email_message: คัดลอกไปยังคลิปบอร์ดแล้ว อย่าลืมส่งด้วย BCC!
+        #original_hash: 71327f1
+        move_pending: ย้ายไปรายชื่อรอ
+        #original_hash: 9144dd6
+        move_waiting: ย้ายไป waiting list
+        #original_hash: 284b24f
+        cancel: ยกเลิกการสมัคร
+        #original_hash: df40450
+        reject: ปฎิเสธการสมัคร
+        #original_hash: 43dc853
+        amount: Amount
+        #original_hash: 67b3c7d
+        too_many: >-
+          การยอมรับการลงทะเบียนทั้งหมดเหล่านี้จะเกินขีดจำกัดของผู้เข้าแข่งขันที่
+          %{count} คน
+        #original_hash: 462376a
+        no_self_update: ติดต่อผู้จัดการแข่งขันเพื่อแก้ไขการสมัครของคุณ
+      register:
+        panel:
+          approval:
+            #original_hash: 8cc047a
+            title: การอนุมัติ
+            #original_hash: 3bdafe5
+            description: โดยทีมงานผู้จัดการแข่งขัน
+          payment:
+            #original_hash: 4930c06
+            title: ข้อมูลการชำระค่าสมัคร
+            #original_hash: 0d084a5
+            description: กรอกข้อมูลการเรียกเก็บเงิน
+          competing:
+            #original_hash: d672995
+            title: สมัครการแข่งขัน
+            #original_hash: af0e6a0
+            description: เลือกประเภทการแข่งขัน
+          requirements:
+            #original_hash: 09a428f
+            title: Requirements
+            #original_hash: 46f4145
+            description: ยอมรับเงื่อนไขการแข่งขัน
+        #original_hash: a38d5fa
+        success: 'คุณได้สมัครการแข่งขัน %{comp_name} แล้ว'
+        #original_hash: affea61
+        error: 'การสมัครล้มเหลวโดยมีข้อผิดพลาด %{error}'
+        #original_hash: c3e4e89
+        early_registration: >-
+          การรับสมัครยังไม่เปิด -
+          คุณสมัครการแข่งขันล่วงหน้ามในฐานะผู้จัดการแข่งขัน หรือ delegate -
+        #original_hash: 6b76fab
+        comment: ความเห็นเพิ่มเติมถึงผู้จัดการแข่งขัน
+        #original_hash: 8eae30c
+        until: 'คุณสามารถแก้ไขการสมัครของคุณได้จนถึง %{date}'
+        #original_hash: fc8bc84
+        passed: คุณไม่สามารถอัปเดตการลงสมัครของคุณได้อีกต่อไป
+        #original_hash: 05b9f17
+        view_registration: ดูการสมัครการแข่งขัน
+        #original_hash: 3c8d8b7
+        editing_disabled: การแก้ไขการสมัครถูกปิดใช้งานสำหรับการแข่งขันครั้งนี้
+        registration_status:
+          #original_hash: b1e97b8
+          accepted: การสมัครของคุณได้รับการยอมรับแล้ว
+          #original_hash: 3d7aa97
+          pending: การสมัครของคุณอยู่ระหว่างการได้รับการยอมรับจากผู้จัดการแข่งขัน
+          #original_hash: dcc4906
+          cancelled: การสมัครของคุณถูกลบแล้ว
+          #original_hash: 92dab83
+          rejected: การสมัครของคุณถูกปฎิเสธ
+          #original_hash: a02390c
+          waiting_list: 'คุณอยู่ใน Waiting List ลำดับที่ %{waiting_list_position}'
+        #original_hash: 2d9f36c
+        disclaimer: การสมัครการแข่งขันไม่ได้หมายถึงว่าจะได้รับอนุมัติให้เข้าแข่งขัน
+        #original_hash: 8fe68a1
+        processing: การสมัครของคุณอยู่ระหว่างดำเนินการ...
+        #original_hash: 897f272
+        processing_longer: การประมวลผลใช้เวลานานกว่าปกติ อย่าพึ่งปิดหน้าจอ
+        #original_hash: 79ba42a
+        processing_queue: 'การสมัครจำนวนมากกำลังดำเนินการอยู่ ซึ่งมี %{queueCount} อยู่ในคิว'
+        #original_hash: ff6550f
+        event_limit: >-
+          การแข่งขันนี้จำกัดจำนวนประเภทการแข่งขันที่คุณสามารถสมัครได้ไว้ที่
+          %{max_events} ประเภท
+      errors:
+        #original_hash: 3890616
+        events: การโหลดประเภทการแข่งขันล้มเหลว โปรดลองอีกครั้ง
+        #original_hash: 7b78793
+        '-1': >-
+          คุณได้ส่ง Token ที่ไม่ถูกต้อง โปรดรีเฟรชหน้านี้ หากปัญหานี้ยังคงอยู่
+          โปรดติดต่อ WST
+        #original_hash: 44cf123
+        '-2': Authentication หมดอายุ โปรดรีเฟรชหน้านี้
+        #original_hash: 2d63156
+        '-3': ไม่มี Authentication กรุณาเข้าสู่ระบบ
+        #original_hash: e631d99
+        '-4': พบข้อผิดพลาดของระบบการสมัครการแข่งขัน กรุณาติดต่อ WST
+        #original_hash: e0b69a9
+        '-1000': ไม่มีการแข่งขัน
+        #original_hash: 2aa4aa1
+        '-1001': เกิดข้อผิดพลาดในการเรียกรายละเอียดการแข่งขัน โปรดลองอีกครั้งในภายหลัง
+        #original_hash: 25b0063
+        '-2001': คุณถูกแบนจากการแข่งขันในการแข่งขัน WCA
+        #original_hash: 82267b1
+        '-2002': Profile ของคุณไม่สมบูรณ์
+        #original_hash: 4dd79f2
+        '-2003': คุณไม่มีสิทธิ์ดำเนินการนี้ให้เสร็จสิ้น
+        #original_hash: 374e1c7
+        '-2004': >-
+          คุณไม่สามารถสมัครการแข่งขันได้เนื่องจากผู้จัดการแข่งขันได้ปฏิเสธการสมัครของคุณ
+          โปรดติดต่อพวกเขาหากคุณคิดว่ามีข้อผิดพลาดเกิดขึ้น
+        #original_hash: cb4093a
+        '-3000': ไม่มีการสมัคร
+        #original_hash: 9bbefa9
+        '-3001': คุณได้สมัครการแข่งขันอื่นในซีรียส์นี้ไปแล้ว
+        #original_hash: bc53fb6
+        '-4000': คำขอมีข้อมูลที่ไม่ถูกต้อง
+        #original_hash: 35fddf4
+        '-4001': เลยกำหนดเวลาแก้ไขประเภทการแข่งขันแล้ว
+        #original_hash: 097491c
+        '-4002': จำนวนผู้ติดตามเกินจำนวนที่อนุญาต
+        #original_hash: 4a0baa0
+        '-4003': ความคิดเห็นที่ให้ไว้ยาวเกินไป
+        #original_hash: 952daed
+        '-4004': ส่งการเลือกประเภทการแข่งขันไม่ถูกต้อง
+        #original_hash: b8a1526
+        '-4005': การแข่งขันครั้งนี้ต้องการให้ใส่ความคิดเห็น
+        #original_hash: 2087dad
+        '-4006': จำนวนผู้เข้าแข่งขันถึงจำนวนจำกัดแล้ว
+        #original_hash: 6d95124
+        '-4007': สถานะการสมัครการแข่งขันไม่ถูกต้อง
+        #original_hash: 020234c
+        '-4008': การรับสมัครปิดแล้ว
+        #original_hash: b30e613
+        '-4009': >-
+          มีเพียงผู้จัดการแข่งขันเท่านั้นที่สามารถยกเลิกการสมัครการแข่งขันของการแข่งขันนี้ได้
+        #original_hash: 3c4cbaa
+        '-4010': The Waiting List Position is not Valid
+        #original_hash: e489908
+        '-4011': คุณสามารถยอมรับได้เฉพาะคนแรกที่อยู่ใน waiting list เท่านั้น
+        #original_hash: 8d089d6
+        '-4012': คุณไม่มีคุณสมบัติเข้าแข่งขันในประเภทที่เลือก
+        #original_hash: 0df821f
+        '-6001': WCA Payment ไม่ได้เปิดใช้งานสำหรับการแข่งขันครั้งนี้
+        #original_hash: 092da51
+        '-6002': คุณต้องสมัครการแข่งขันให้เสร็จสิ้นก่อนจึงจะสามารถชำระเงินได้
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-
@@ -3254,6 +3693,8 @@ th:
       schedule_must_match_rounds: ต้องมีอย่างน้อยหนึ่งรอบ และทุกรอบต้องถูกรวมอยู่ในตารางการแข่งขัน
       #original_hash: 6e228b7
       must_contain_delegate: ต้องมี WCA Delegate อย่างน้อย 1 คน
+      #original_hash: b5677c2
+      must_contain_organizer: ต้องมีผู้จัดการแข่งขันอย่างน้อยหนึ่งคน
       #original_hash: 8131fc2
       not_all_delegates: ไม่ Delegates ทั้งหมด
       #original_hash: 43a23c2
@@ -3405,7 +3846,7 @@ th:
     #original_hash: 9d473a2
     note_reg_closed_orga_close_reg: 'หมายเหตุ: ปิดการรับสมัครแล้ว'
     show:
-      #original_hash: b0fe391
+      #original_hash: a1fd58a
       general_info: ข้อมูลทั่วไป
       #original_hash: c5497bc
       events: ประเภท
@@ -3422,7 +3863,7 @@ th:
         #original_hash: 83d204f
         regulation_link_text: 'กติกา %{number}'
         #original_hash: bd0e4a9
-        guideline_link_text: 'แนวทาง %{number}'
+        guideline_link_text: 'แนวปฏิบัติ %{number}'
         #original_hash: b2a983a
         cumulative_time_limit: จำกัดเวลาสะสม
         #original_hash: d47f11a
@@ -3462,8 +3903,6 @@ th:
       qualification: การคัดเลือก
     schedule:
       display_as:
-        #original_hash: ec5dd7c
-        label: 'รูปแบบตารางการแข่งขัน:'
         #original_hash: 0424f6e
         table: ตาราง
         #original_hash: adab509
@@ -3481,20 +3920,62 @@ th:
       end: สิ้นสุด
       #original_hash: 81c0d91
       activity: กิจกรรม
-      #original_hash: 90e2fca
-      room: ห้อง
+      #original_hash: 15e58c6
+      no_activities: ไม่มีกิจกรรมสำหรับ ห้อง/ประเภท ที่เลือก
+      #original_hash: 10a56c8
+      all_venues: สถานที่ทั้งหมด
+      #original_hash: a0b3266
+      room_or_stage: ห้องหรือเวที
+      #original_hash: f37605b
+      more_details: แสดงรายละเอียดของรอบ
+      #original_hash: a30e720
+      time_zone: Time Zone
+      rooms_panel:
+        #original_hash: 3a28d6f
+        title: ห้อง
+        #original_hash: 6a72085
+        all: ทั้งหมด
+        #original_hash: 6eef664
+        none: ไม่มี
+        #original_hash: 9b9a6aa
+        show_buttons: แสดงปุ่ม time zone
+        #original_hash: d2ac826
+        use_time_zone: ใช้ time zone นี้
       #original_hash: 73acb7f
       room_in_venue: '%{room} ที่ %{venue}'
-      #original_hash: 2896c7a
-      venue_information_html: 'คุณกำลังดูตารางการแข่งขันของสถานที่ %{venue_name}'
-      #original_hash: b97e383
-      timezone_message: 'ตารางการแข่งขันแสดงในเวลา %{timezone}'
-      #original_hash: 2ab94a0
-      multiple_venues_available: >-
-        การแข่งขันนี้มีหลายสถานที่
-        กรุณาตรวจสอบตารางการแข่งขันสำหรับสถานที่อื่นด้วย
+      #original_hash: f7fd979
+      venue_selection_html:
+        zero: >-
+          คุณกำลังดูตารางการแข่งขันของสถานที่ %{venue_name}
+          ซึ่งเป็นสถานที่แห่งเดียวสำหรับการแข่งขันครั้งนี้
+        other: >-
+          คุณกำลังดูตารางการแข่งขันของสถานที่ %{venue_name} ซึ่งเป็นหนึ่งใน
+          %{count} แห่งสำหรับการแข่งขันครั้งนี้
+      #original_hash: 8d175ad
+      venue_selection_all: 'คุณกำลังดูตารางการแข่งขันสำหรับสถานที่ทั้ง %{venueCount} แห่งพร้อมกัน'
+      #original_hash: 97df911
+      timezone_message: 'ตารางการแข่งขันของสถานที่นี้แสดงในเวลา %{timezone}'
+      #original_hash: 94b2570
+      timezone_setting: 'คุณกำลังดูตารางการแข่งขันนี้ในการตั้ง timezone ต่อไปนี้:'
+      #original_hash: 75194fd
+      multiple_timezones_available: >-
+        โปรดทราบว่าสถานที่จัดการแข่งขันบางแห่งอาจไม่อยู่ใน time zone เดียวกัน --
+        โปรดใช้ความระมัดระวัง!
+      #original_hash: d94a371
+      timezone_set_local: ตั้งเป็นเวลาท้องถิ่น
+      #original_hash: 17ab650
+      timezone_set_venue: ตั้งเป็นสถานที่การแข่งขัน
+      #original_hash: 9974a46
+      timezone_follow_venue: ใช้ time zone ของสถานที่ที่ใช้งานอยู่โดยอัตโนมัติ
       #original_hash: 37b1adb
       schedule_for_date: 'ตารางการแข่งขันสำหรับ %{day_name} (%{full_date})'
+      #original_hash: d58b281
+      schedule_for_full_date: 'ตารางการแข่งขันสำหรับ %{date}'
+      #original_hash: eb1090e
+      schedule_change_warning: >-
+        ตารางการแข่งขันอาจมีการปรับเปลี่ยน
+        โดยเฉพาะอย่างยิ่งเมื่อทราบจำนวนผู้สมัครทั้งหมดแล้วแล้ว
+        ผู้เข้าแข่งขันที่สมัครการแข่งขันไว้จะได้รับแจ้งทางอีเมลเกี่ยวกับการเปลี่ยนแปลงที่สำคัญ
     nav:
       menu:
         #original_hash: 612e12d
@@ -3537,8 +4018,6 @@ th:
         competitors: ผู้เข้าแข่งขัน
         #original_hash: c4622c3
         scrambles: โจทย์
-        #original_hash: f632da3
-        enable_v2: เปิดใช้บริการการสมัครแบบใหม่
     results_table:
       #original_hash: 3e9a6b5
       wca_profile: WCA profile
@@ -3718,8 +4197,8 @@ th:
       #original_hash: 4d08ec5
       stripe: Stripe
     payment_setup:
-      #original_hash: 69b243c
-      stripe_dashboard: Stripe Dashboard
+      #original_hash: 0aa09ee
+      external_dashboard: '%{provider} Dashboard'
       #original_hash: e621d96
       account_connected: >-
         คุณได้เชื่อมต่อบัญชี %{provider} ของคุณสำเร็จแล้ว
@@ -3749,47 +4228,59 @@ th:
       accept_payments_header: Accept Registration Payments
       #original_hash: 7ebe178
       connect_button: 'เชื่อมต่อกับ %{provider}'
-      #original_hash: f3fdb64
-      stripe_payment_info: >-
-        เพื่อที่จะยอมรับการชำระเงินสำหรับการแข่งขันนี้ คุณต้องเชื่อมต่อบัญชี
-        Stripe ของคุณกับบัญชี WCA Stripe โดยคลิกที่ปุ่มด้านล่าง
-        หากคุณยังไม่มีบัญชี Stripe ของคุณเอง
-        คุณยังคงสามารถคลิกที่ปุ่มด้านล่างได้ และมันจะแนะนำคุณตลอดกระบวนการ
-      #original_hash: 53adda3
-      stripe_connect_warning: >-
-        การเชื่อมต่อบัญชี Stripe ของคุณทำให้เว็บไซต์ WCA
-        สามารถสร้างการเรียกเก็บเงินและออกเงินคืนได้โดยตรงในบัญชี Stripe ของคุณ
-      #original_hash: 9ea95c2
-      stripe_disconnect_info: >-
-        การแข่งขันครั้งนี้จัดขึ้นเพื่อให้รับการชำระเงินผ่าน Stripe ได้
-        หากคุณต้องการยกเลิกการเชื่อมต่อบัญชี Stripe ของคุณ
-        คุณควรดำเนินการดังกล่าวจากแดชบอร์ด Stripe ของคุณก่อน (ลิงก์ด้านล่าง)
-        โปรดทราบว่ามันจะเพิกถอนการเข้าถึงสำหรับการแข่งขันทั้งหมดโดยใช้บัญชี
-        ก่อนที่จะสามารถเชื่อมต่อบัญชี Stripe ใหม่ได้ Delegate
-        ของการแข่งขันจะต้องติดต่อ WCAT เพื่อเคลียร์รายการ
+      connect_account_info:
+        #original_hash: f3fdb64
+        stripe: >-
+          เพื่อที่จะยอมรับการชำระเงินสำหรับการแข่งขันนี้ คุณต้องเชื่อมต่อบัญชี
+          Stripe ของคุณกับบัญชี WCA Stripe โดยคลิกที่ปุ่มด้านล่าง
+          หากคุณยังไม่มีบัญชี Stripe ของคุณเอง
+          คุณยังคงสามารถคลิกที่ปุ่มด้านล่างได้ และมันจะแนะนำคุณตลอดกระบวนการ
+        #original_hash: 30afe4e
+        paypal: >-
+          จำเป็นต้องมีบัญชี PayPal Business เพื่อรับการชำระเงินผ่าน PayPal
+          ผ่านหน้าการแข่งขัน หากคุณยังไม่มีบัญชี PayPal Business
+          คุณยังคงคลิกปุ่มด้านล่างได้ ระบบจะแนะนำคุณตลอดขั้นตอน
+      connect_account_warning:
+        #original_hash: 53adda3
+        stripe: >-
+          การเชื่อมต่อบัญชี Stripe ของคุณทำให้เว็บไซต์ WCA
+          สามารถสร้างการเรียกเก็บเงินและคืนเงินได้โดยตรงในบัญชี Stripe ของคุณ
+        #original_hash: 7cedd12
+        paypal: >-
+          การเชื่อมต่อบัญชี PayPal ของคุณทำให้เว็บไซต์ WCA
+          สามารถกำหนดเส้นทางการชำระเงินให้กับคุณ และคืนเงืนได้โดยตรงในบัญชี
+          PayPal ของคุณ
+      #original_hash: ef7e7f6
+      currently_connected_info: >-
+        การแข่งขันนี้จัดทำขึ้นเพื่อรับการชำระเงินผ่าน %{provider} Delegate
+        ของการแข่งขันควรติดต่อ WCAT เพื่อเปลี่ยนแปลงบัญชีที่เชื่อมโยงกัน
+      #original_hash: bc14f0f
+      before_disconnect_warning: >-
+        การยกเลิกการเชื่อมต่อบนหน้านี้จะทำให้เว็บไซต์ของเราลืมการเชื่อมต่อกับบัญชี
+        %{provider} ของคุณ แต่แดชบอร์ด %{provider} ของคุณ (ดูลิงก์ด้านล่าง)
+        อาจยังคงแสดงรายการเว็บไซต์ WCA ตามการอนุญาตที่คุณให้ไว้ก่อนหน้านี้
+        โปรดทราบว่าการเพิกถอนการอนุญาตในแดชบอร์ด %{provider}
+        จะส่งผลต่อการแข่งขันอื่นๆ
+        ที่เชื่อมโยงกับการรับการชำระเงินผ่านบัญชีนี้ด้วย!
       #original_hash: d4a360b
-      stripe_disconnect_warning: >-
+      before_disconnect_info: >-
         โปรดทราบว่าการยกเลิกการเชื่อมต่อบัญชีควรทำเฉพาะในสถานการณ์พิเศษเท่านั้น
-        เช่น บัญชีกระแสรายวันไม่สามารถรับการชำระเงินได้
-      #original_hash: 0af9795
-      paypal_payment_info: >-
-        บัญชีธุรกิจของ PayPal จะต้องยอมรับการชำระเงินผ่าน PayPal
-        ผ่านหน้าการแข่งขัน หากคุณยังไม่มีบัญชีธุรกิจ PayPal
-        คุณยังคงคลิกปุ่มด้านล่างได้ ระบบจะแนะนำคุณตลอดขั้นตอน
-      #original_hash: d327396
-      paypal_connect_warning: >-
-        การเชื่อมต่อบัญชี PayPal ของคุณทำให้เว็บไซต์ WCA
-        สามารถกำหนดเส้นทางการชำระเงินให้กับคุณ และออกเงินคืนได้โดยตรงจากบัญชี
-        PayPal ของคุณ
-      #original_hash: eb05726
-      paypal_disconnect_info: >-
-        การแข่งขันครั้งนี้จัดขึ้นเพื่อให้รับการชำระเงินผ่าน Paypal ได้
-        โปรดทราบว่าการคลิกยกเลิกการเชื่อมต่อที่นี่จะไม่เพิกถอนสิทธิ์ที่คุณให้กับ
-        WCA - จะต้องดำเนินการจากบัญชี PayPal ของคุณ
-      #original_hash: c186753
-      paypal_disconnect_warning: >-
-        โปรดทราบว่าการเปลี่ยนแปลงบัญชีเหล่านี้ควรทำเฉพาะในสถานการณ์พิเศษเท่านั้น
-        เช่น บัญชีกระแสรายวันไม่สามารถรับการชำระเงินได้
+        เช่น บัญชีปัจจุบันไม่สามารถรับการชำระเงินได้
+      account_details:
+        stripe:
+          #original_hash: 84add5b
+          email: Email
+          #original_hash: d523ebb
+          country: ประเทศ
+          #original_hash: a8e3901
+          business_name: Business name
+        paypal:
+          #original_hash: 709a232
+          display_name: ชื่อ
+          #original_hash: 84add5b
+          primary_email: Email
+        #original_hash: 08d2e98
+        fallback_not_applicable: N/A
   persons:
     index:
       #original_hash: 5934b4c
@@ -3860,32 +4351,6 @@ th:
       #original_hash: 75d7ff7
       unstick_at_future: ต้องอยู่ในอนาคต
   contacts:
-    website:
-      #original_hash: d7707e7
-      faq_note_html: >-
-        ก่อนที่จะทำการสอบถามคุณอาจต้องดู <a href="/faq">คำถามที่พบบ่อย</a>!
-        หากคุณต้องการติดต่อคณะกรรมการหรือทีมแบบเฉพาะเจาะจง
-        หรือไม่ได้อยู่ในรายชื่อนี้ คุณสามารถค้นหาข้อมูลติดต่อของพวกเขาได้ที่ <a
-        href="/teams-committees">หน้านี้</a>
-      #original_hash: 4ef2aad
-      title: WCA Contact Form
-      inquiries:
-        #original_hash: 92ea7e8
-        competition: ติดต่อผู้จัดการการแข่งขัน (เลือกได้ที่ด้านล่าง)
-        #original_hash: f0bffb7
-        competitions_in_general: 'การแข่งขันโดยทั่วไป (การจัดการ, กติกาการแข่งขัน อื่น ๆ)'
-        #original_hash: aabfcf7
-        results_team: ติดต่อ Results Team
-        #original_hash: f6ffa78
-        wca_id_or_profile: WCA ID หรือ WCA Profile
-        #original_hash: 0c77aee
-        media: มีเดีย
-        #original_hash: 9ad0522
-        software: Software
-        #original_hash: 6e6a6f2
-        different: อื่น ๆ
-      #original_hash: c70a890
-      submit: ส่งข้อความ
     dob:
       #original_hash: 907ac6c
       title: ฟอร์มการขอเปลี่ยนวันเกิด
@@ -3989,7 +4454,7 @@ th:
           #original_hash: 576c3b8
           '4': >-
             ดูที่ <a target='_blank'
-            href='https://www.worldcubeassociation.org/organizer-guidelines'>แนวทางการเป็นผู้จัดการแข่งขันของ
+            href='https://www.worldcubeassociation.org/organizer-guidelines'>แนวปฏิบัติการเป็นผู้จัดการแข่งขันของ
             WCA</a> สำหรับข้อมูลเพื่มเติม
       '6':
         #original_hash: 8005a61
@@ -4195,78 +4660,18 @@ th:
       #original_hash: 9482c5d
       title: โครงสร้าง
       board:
-        #original_hash: abd2828
-        name: คณะกรรมการ WCA
         #original_hash: e0d37a2
         description: >-
           คณะกรรมการ WCA
           มีหน้าที่รับผิดชอบในการนำองค์กรโดยรวมและปฏิบัติหน้าที่ใด ๆ
           ที่ไม่ได้ปฏิบัติตามโดยทีมงาน, คณะกรรมการและสภา
-      #original_hash: c366473
-      senior_member: สมาชิกอวุโส
-      #original_hash: e26c936
-      leader: หัวหน้า
       users:
         #original_hash: 57bbaad
         profile: 'profile ของ %{user_name}'
-      wdc:
-        #original_hash: c97077a
-        name: WCA Disciplinary Committee
-      wdpc:
-        #original_hash: 70539cd
-        name: WCA Data Protection Committee
-      wrc:
-        #original_hash: 3da1e85
-        name: WCA Regulations Committee
-      wrt:
-        #original_hash: 67be768
-        name: WCA Results Team
-      wst:
-        #original_hash: a14bc62
-        name: WCA Software Team
-      wct:
-        #original_hash: 63a2388
-        name: WCA Communication Team
-      wfc:
-        #original_hash: 9cb13de
-        name: WCA Financial Committee
-      wec:
-        #original_hash: 83bd1d0
-        name: WCA Ethics Committee
-      weat:
-        #original_hash: d1dbb86
-        name: WCA Executive Assistants Team
-      wqac:
-        #original_hash: 8f32116
-        name: WCA Quality Assurance Committee
-      wcat:
-        #original_hash: 2b81984
-        name: WCA Competition Announcement Team
-      wmt:
-        #original_hash: 2035811
-        name: WCA Marketing Team
-      wac:
-        #original_hash: 1ce7604
-        name: WCA Advisory Council
-      wsot:
-        #original_hash: 58765c7
-        name: WCA Sports Organization Team
-      wat:
-        #original_hash: 90a1280
-        name: WCA Archive Team
-      banned:
-        #original_hash: d30e2e5
-        name: Banned Competitors
-      wct_china:
-        #original_hash: ed5b65a
-        name: WCT China
       #original_hash: f8c3f3c
       operations_html: 'การดำเนินงานแบบวันต่อวันดำเนินการโดย %{committees_and_teams} ของ WCA'
       #original_hash: 0e7a036
       teams_committees: ทีมและคณะกรรมการ
-      wst_admin:
-        #original_hash: d4112d2
-        name: ผู้ดูแลระบบซอฟต์แวร์
       #original_hash: 7e849d2
       delegates_html: >-
         <p><strong>WCA Delegate</strong>
@@ -4331,7 +4736,7 @@ th:
     #original_hash: 5ca0558
     certificates: แม่แบบประกาศนียบัตรของ WCT
     #original_hash: f580987
-    orga_guidelines: แนวทางการเป็นผู้จัดการแข่งขัน
+    orga_guidelines: แนวปฏิบัติการเป็นผู้จัดการแข่งขัน
   delegates_page:
     #original_hash: d8fd3e4
     title: WCA Delegates
@@ -4430,6 +4835,7 @@ th:
     title: Software tools สำหรับการแข่งขัน WCA
     #original_hash: 6d2fe37
     wca_icon_text: Developed and maintained by the WST
+    #original_hash: 6520873
     intro:
       #original_hash: 0c5fab5
       desc: >-
@@ -4533,134 +4939,65 @@ th:
   logo:
     #original_hash: c72c969
     title: WCA Logo
-    paragraphs:
-      #original_hash: 44cfe8d
-      '1': >-
-        โลโก้ WCA ได้รับการออกแบบโดย Justin Eastman
-        ในการประกวดออกแบบในเดือนมกราคม 2005 <br />
-        เราชอบโลโก้เนื่องจากการออกแบบ, สี, และมันไม่ได้แสดงลูกบาศก์ 3x3x3
-        โดยเฉพาะ
-      #original_hash: 916e3fc
-      '2': >-
-        เรามีโลโก้สี่รูปแบบ: <a href="/files/WCAlogo_XL.jpg">ขนาดใหญ่</a> (46
-        KB, 1756 px by 1068 px), <a href="/files/WCAlogo.svg">vector</a>, <a
-        href="/files/WCAlogo_notext.svg">vector ที่ไม่มีตัวอักษร</a> และ <a
-        href="/files/WCAlogo_monochrome.svg">monochrome vector</a>.
-      #original_hash: dcb1ad6
-      '3': >-
-        โลโก้ 3 มิติออกแบบโดย Vu Minh Tan จากเวียดนาม: <a
-        href="/files/WCALogo3D.png">PNG version</a> (2.1 MB), a <a
-        href="/files/WCALogo3Dsmall.png">small PNG version</a> (0.25 MB).
-      #original_hash: e5df1bf
-      '4': >-
-        การใช้โลโก้ WCA ที่ยอมรับได้นั้นเป็นไปตามนโยบายการใช้โลโก้ WCA
-        ที่ปรากฏใน <a href="/documents">WCA Documents page</a>.
-  workbook_assistant:
-    #original_hash: e442ea4
-    title: WCA Workbook Assistant
-    #original_hash: a7c307f
-    download: Download WCA Workbook Assistant
-    #original_hash: cf1b916
-    last_update: แก้ไขครั้งล่าสุด
-    #original_hash: feece00
-    version_history: ประวัติ
-    #original_hash: 8f3f4c0
-    header: วิธีประมวลผลผลการแข่งขันและโจทย์ก่อนส่งไปยัง WCA
-    step1:
-      #original_hash: c0450b1
-      title: 'ขั้นตอนที่ 1: เปิด workbook และผลการแข่งขัน'
-      #original_hash: 656d70d
-      content_html: >-
-        เปิด workbook โดยใช้ปุ่ม <em>Open...</em> หรือลากไฟล์ workbook
-        และวางมันไปที่หน้าต่างแอปพลิเคชัน
-    step2:
-      #original_hash: 3ad9881
-      title: 'ขั้นตอนที่ 2: เพิ่มโจทย์ TNoodle'
-      #original_hash: 080acc0
-      content_html: >-
-        เพิ่มโจทย์ TNoodle โดยกดปุ่ม <em>Add...</em> หรือลากไฟล์ TNoodle
-        และวางมันในหน้าต่างแอปพลิเคชัน กรุณามั่นใจว่าคุณใช้ไฟล์ .zip หรือ .json
-        ที่ถูกสร้างจาก TNoodle
-      #original_hash: 6cc90b8
-      content2_html: >-
-        คุณสามารเพิ่มไฟล์โจทย์หลายไฟล์ได้ในกรณีที่โจทย์ถูกสร้างเพื่อเป็นโจทย์เพิ่มเติมที่ต้องสร้างในระหว่างการแข่งขัน
-    step3:
-      #original_hash: b2d01b3
-      title: 'ขั้นตอนที่ 3: จับคู่โจทย์กับผลการแข่งขัน'
-      #original_hash: 36383b1
-      content_html: >-
-        WCA Workbook Assistant จะทำการจับคู่โจทย์ของแต่ละรอบโดยอัตโนมัติ
-        ในบางกรณี เช่นมีโจทย์หลายไฟล์
-        การจับคู่ต้องทำด้วยตนเองเนื่องด้วยมีความเป็นไปได้หลายทาง
-      #original_hash: e869c1e
-      content2_html: >-
-        เลือกโจทย์ด้วยตนเองสามารถทำได้โดยคลิกสองทีที่ <em>Scrambles</em>
-        ในส่วนของ overview
-      #original_hash: 8f4fdfd
-      content3_html: >-
-        เป็นไปได้ที่จะเลือกหนึ่งรอบจากไฟล์โจทย์สำหรับแต่ละรอบที่มีผลการแข่งขัน
-        หากสถานการณ์เกิดขึ้นที่สัญญาณรบกวนสำหรับรอบเดียวถูกสร้างเป็นรอบแยกใน
-        TNoodle คุณสามารถใช้ปุ่ม <em>Edit groups...</em>
-        เพื่อแก้ไขกลุ่มของไฟล์โจทย์และเปลี่ยนไปอยู่อีกกลุ่มหนึ่งหรือลบมันทิ้งเสีย
-      #original_hash: 94353f2
-      content4_html: >-
-        ในตัวอย่างนี้ โจทย์เพิ่มเติมถูกสร้างขึ้นเพื่อจะมี Skewb 2
-        กลุ่มแทนที่จะมีกลุ่มเดียว
-      #original_hash: 68c5b18
-      content5_html: >-
-        โจทย์สำหรับกลุ่มที่เพิ่มเข้ามาสามารถลากและปล่อยที่รอบที่ถูกสร้างขึ้นมาได้
-        นี่ทำให้ทั้ง 2 กลุ่มอยู่ในรอบเดียวกัน
-    step4:
-      #original_hash: ed940d2
-      title: 'ขั้นตอนที่ 4: แก้ไขข้อผิดพลาด'
-      #original_hash: df2cf58
-      content_html: >-
-        มีการตรวจสอบผลการแข่งขันเพื่อหาข้อผิดพลาดในการป้อนข้อมูล
-        รอบที่มีข้อผิดพลาดจะถูกทำเครื่องหมายด้วยไอคอนสีแดงในส่วน overview
-      #original_hash: 7fbf6b8
-      content2_html: >-
-        เมื่อเลือกแผ่นงานที่มีข้อผิดพลาดใน overview
-        แอปพลิเคชันจะแสดงรายละเอียดการตรวจสอบข้อผิดพลาดที่ด้านล่างซ้าย
-      #original_hash: 0600502
-      content3_html: >-
-        ข้อผิดพลาดสามารถแก้ไขได้โดยการเปิด workbook และแก้ไขและบันทึก workbook
-        ที่ถูกแก้ไขแล้วสามารถอัพโหลดเข้าไปใน WCA Workbook Assistant
-        อีกครั้งโดยกดปุ่ม <em>Refresh</em> การดำเนินการนี้จะโหลดผลการแข่งขันซ้ำ
-        แต่จะปล่อยให้การเปลี่ยนแปลงอื่น ๆ
-        ทั้งหมดที่คุณทำไว้เหมือนเดิมเช่นโจทย์ที่เพิ่มเข้ามา
-    step5:
-      #original_hash: 536ec4d
-      title: 'ขั้นตอนที่ 5: เลือก competition ID'
-      #original_hash: 5aeb5bd
-      content_html: >-
-        เลือก competition ID โดยกดปุ่ม <em>Select...</em> ถัดจากช่อง
-        <em>Competition ID</em>
-      #original_hash: 3acf7d0
-      content2_html: กล่องจะปรากฏขึ้นพร้อมกับรายการการแข่งขันให้เลือก
-      #original_hash: ceeb6fe
-      content3_html: >-
-        คุณสามารถกรองรายการโดยพิมพ์ส่วนหนึ่งของชื่อของการแข่งขันหรือ WCA
-        Delegate
-      #original_hash: 5ca74eb
-      content4_html: >-
-        ในการเริ่มต้น
-        จะแสดงเพียงการแข่งขันที่เกิดขึ้นน้อยกว่าหนึ่งสัปดาห์ที่ผ่านมาหรือที่จะเกิดขึ้นน้อยกว่าหนึ่งสัปดาห์ในอนาคต.
-        หากคุณต้องการแสดงการแข่งขันนอกเหนือจากนี้ให้ยกเลิก <em>Only show current
-        competitions</em>.
-    step6:
-      #original_hash: 52bb1f6
-      title: 'ขั้นจอนที่ 6: นำออกผลการแข่งขันเป็น JSON'
-      #original_hash: 6bfee23
-      content_html: >-
-        บันทึกผลการแข่งขันเป็นไฟล์ JSON โดยกดปุ่ม <em>Export results
-        JSON...</em> ด้านล่างขวา
-    step7:
-      #original_hash: 09fa37d
-      title: 'ขั้นตอนที่ 7: ส่งผลการแข่งขัน JSON ไปที่ WCA'
-      #original_hash: 9be089f
-      content_html: >-
-        email ไฟล์ JSON ที่ได้จาก WCA Workbook Assistant ไปที่ <a
-        href="mailto:results@worldcubeassociation.org">results@worldcubeassociation.org</a>
+    intro: >-
+      โลโก้ WCA ได้รับการออกแบบโดย Justin Eastman
+      ในการประกวดการออกแบบในเดือนมกราคม พ.ศ. 2548 เราชอบโลโก้นี้เนื่องจากดีไซน์
+      สีสัน และการที่โลโก้ไม่ได้แสดงลูกบาศก์ขนาด 3x3x3 โดยเฉพาะ
+    headings:
+      usage_guidelines:
+        #original_hash: d5b47da
+        title: แนวทางการใช้งาน
+        paragraph:
+          #original_hash: 4f84c70
+          acceptable_usage: >-
+            การใช้โลโก้ WCA ที่ยอมรับได้มีระบุไว้ใน<a
+            href="https://documents.worldcubeassociation.org/documents/policies/external/Logo%20Usage.pdf">นโยบายการใช้โลโก้
+            WCA</a> โปรดอ่านเอกสารนี้ก่อนที่จะใช้โลโก้ WCA ในโครงการของคุณเอง
+            ส่งคำถามเพิ่มเติมเกี่ยวกับการใช้โลโก้ WCA ไปที่ <a
+            href="mailto:marketing@worldcubeassociation.org">WCA Marketing
+            Team</a>
+          #original_hash: ff13c4a
+          see_below: >-
+            ด้านล่างนี้เป็นแนวทางรูปแบบเพิ่มเติมสำหรับการใช้โลโก้ WCA
+            อย่างถูกต้อง
+        color:
+          #original_hash: 1d0c830
+          title: สี
+          #original_hash: 1959555
+          paragraph: >-
+            โลโก้ WCA มีให้เลือกสี่สี ควรใช้รูปแบบสีที่ถูกต้อง
+            โดยขึ้นอยู่กับสีพื้นหลังของสื่อที่วางโลโก้
+          primary:
+            #original_hash: a9a96ec
+            title: สีหลัก
+            #original_hash: f31882f
+            paragraph: ใข้สีหลักทุกครั้งที่เป็นไปได้
+          mono:
+            #original_hash: c5c5533
+            title: Mono
+            #original_hash: 612044c
+            paragraph: ใช้สี mono ในกรณีที่สีหลักไม่เหมาะสมเท่านั้น
+        logo_only:
+          #original_hash: 9271574
+          title: เฉพาะโลโก้
+          #original_hash: 4dfab95
+          paragraph: >-
+            โลโก้ WCA สามารถใช้ได้โดยไม่ต้องมีรูปแบบโลโก้
+            โดยปฏิบัติตามหลักเกณฑ์การใช้สีเดียวกันข้างต้น
+      download_logo_assets:
+        #original_hash: ebc85b2
+        title: ดาวน์โหลด Assets โลโก้
+        #original_hash: 9aa098d
+        paragraph: >-
+          PNG และเวอร์ชันเวกเตอร์ความละเอียดสูงของโลโก้ WCA
+          พร้อมให้ดาวน์โหลดแล้ว
+        #original_hash: 9de7d59
+        accept_terms_and_conditions: >-
+          ฉันได้อ่านและยอมรับ<a
+          href="https://documents.worldcubeassociation.org/documents/policies/external/Logo%20Usage.pdf">นโยบายการใช้โลโก้
+          WCA</a> แล้ว
+        #original_hash: ebc85b2
+        download_button_text: ดาวน์โหลด Assets โลโก้
   search_results:
     index:
       #original_hash: db98a68
@@ -4674,7 +5011,7 @@ th:
       #original_hash: a0ca0c3
       posts: โพสต์
       #original_hash: 9d7ea9c
-      regulations_and_guidelines: กติกาและแนวทาง
+      regulations_and_guidelines: กติกาและแนวปฏิบัติ
       #original_hash: db683b3
       search_for: 'ผลการค้นหาสำหรับ <b>%{search_string}</b>'
       not_found:
@@ -4689,7 +5026,7 @@ th:
         #original_hash: 3499e7e
         incidents: ไม่มี incidents สำหรับ
         #original_hash: 76a6bf1
-        regulations_and_guidelines: ไม่พบกติกาและแนวทางสำหรับ
+        regulations_and_guidelines: ไม่พบกติกาและแนวปฏิบัติสำหรับ
   incidents_log:
     #original_hash: 61ab89f
     i18n_disclaimer: >-
@@ -4710,7 +5047,7 @@ th:
       #original_hash: 4296902
       content2_html: >-
         กติกาของ WCA มีส่วนเสริมคือ<a
-        href="/regulations/guidelines.html">แนวทางของ WCA</a>
+        href="/regulations/guidelines.html">แนวปฏิบัติของ WCA</a>
         ซึ่งมีคำอธิบายเพิ่มเติม
       #original_hash: c8e1783
       content3_html: >-
@@ -4746,7 +5083,7 @@ th:
       content2_html: เอกสารฉบับนี้รวมข้อมูลที่จำเป็นและผู้จัดการแข่งขันทุกคนควรอ่าน
   regulations_translations:
     #original_hash: 9493b8d
-    title: 'กติกาและแนวทางของ WCA: Translations'
+    title: 'กติกาและแนวปฏิบัติของ WCA: Translations'
     #original_hash: 386ecc1
     paragraph1: หากคุณใช้ภาษาอื่นนอกที่ไม่ใช่ภาษาอังกฤษ คุณสามารถหาการแปลเหล่านี้ได้
     #original_hash: 32b1132
@@ -4994,7 +5331,9 @@ th:
         #original_hash: 7ab2d4c
         '5': จัดสรรกรรมการและผู้ตั้งโจทย์
         #original_hash: 52e8316
-        '6': การจัดการกับปัญหาทั้งหมดเกี่ยวกับสถานที่จัดงาน (เช่นกุญแจหรือ WiFi)
+        '6': >-
+          การจัดการกับปัญหาทั้งหมดเกี่ยวกับสถานที่จัดงาน
+          (เช่นอุปกรณ์ที่สำคัญหรือ WiFi)
   media:
     common:
       #original_hash: f9b7a97
@@ -5009,7 +5348,7 @@ th:
         สื่อทั้งหมดจะได้รับการตรวจสอบก่อนที่จะปรากฏใน<a
         href="/media">หน้าสื่อทั้งหมด</a>.
       #original_hash: 141d1d7
-      guidelines: แนวทาง
+      guidelines: แนวปฏิบัติ
       media_guidelines:
         #original_hash: fd6984b
         '1': เนื้อหาสื่อทั้งหมดจะต้องเกี่ยวข้องกับการแข่งขันที่เลือก

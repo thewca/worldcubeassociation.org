@@ -1,6 +1,11 @@
 onPage('registrations#edit_registrations', function() {
   var $registrationsTable = $('table.registrations-table:not(.floatThead-table)');
 
+  // return early if the new registration V2 React frontend is used
+  if ($registrationsTable.length === 0) {
+    return;
+  }
+
   var showHideActions = function(e) {
     var $selectedRows = $registrationsTable.find("tr.selected");
     $('.selected-registrations-actions').toggle($selectedRows.length > 0);

@@ -2,24 +2,16 @@ import React from 'react';
 import {
   Button, Icon, Form, Dropdown, Popup, List, Input, Header,
 } from 'semantic-ui-react';
-import { DateTime } from 'luxon';
 import PulseLoader from 'react-spinners/PulseLoader';
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
 
 import I18n from '../../lib/i18n';
 import {
-  events, continents, countries, competitionConstants,
+  continents, countries, competitionConstants, nonFutureCompetitionYears,
 } from '../../lib/wca-data.js.erb';
 
+import { DEFAULT_REGION_ALL, WCA_EVENT_IDS } from './filterUtils';
 import useDelegatesData from './useDelegatesData';
-
-const WCA_EVENT_IDS = Object.values(events.official).map((e) => e.id);
-const PAST_YEARS_WITH_COMPETITIONS = [];
-for (let { year } = DateTime.now(); year >= 2003; year -= 1) {
-  PAST_YEARS_WITH_COMPETITIONS.push(year);
-}
-PAST_YEARS_WITH_COMPETITIONS.push(1982);
+import UtcDatePicker from '../wca/UtcDatePicker';
 
 function CompetitionsFilters({
   filterState,
@@ -28,13 +20,15 @@ function CompetitionsFilters({
   setDisplayMode,
   shouldShowRegStatus,
   setShouldShowRegStatus,
+  shouldShowAdminDetails,
+  canViewAdminDetails,
 }) {
   return (
     <Form className="competition-select" id="competition-query-form" acceptCharset="UTF-8">
       <Form.Field>
         <EventSelector
           selectedEvents={filterState.selectedEvents}
-          dispatchFilter={dispatchFilter}
+          onEventSelection={dispatchFilter}
         />
       </Form.Field>
 
@@ -47,11 +41,13 @@ function CompetitionsFilters({
         </Form.Field>
       </Form.Group>
 
-      <Form.Group>
-        <Form.Field width={8}>
-          <DelegateSelector delegateId={filterState.delegate} dispatchFilter={dispatchFilter} />
-        </Form.Field>
-      </Form.Group>
+      {shouldShowAdminDetails && (
+        <Form.Group>
+          <Form.Field width={8}>
+            <DelegateSelector delegateId={filterState.delegate} dispatchFilter={dispatchFilter} />
+          </Form.Field>
+        </Form.Group>
+      )}
 
       <Form.Group>
         <Form.Field>
@@ -65,9 +61,19 @@ function CompetitionsFilters({
           dispatchFilter={dispatchFilter}
           shouldShowRegStatus={shouldShowRegStatus}
           setShouldShowRegStatus={setShouldShowRegStatus}
+          shouldShowAdminDetails={shouldShowAdminDetails}
+          canViewAdminDetails={canViewAdminDetails}
           displayMode={displayMode}
         />
       </Form.Group>
+
+      {canViewAdminDetails && shouldShowAdminDetails && (
+        <Form.Group>
+          <Form.Field>
+            <AdminStatusButtonGroup filterState={filterState} dispatchFilter={dispatchFilter} />
+          </Form.Field>
+        </Form.Group>
+      )}
 
       <Form.Group>
         <ResetFilters dispatchFilter={dispatchFilter} />
@@ -83,38 +89,81 @@ function CompetitionsFilters({
   );
 }
 
-function EventSelector({ selectedEvents, dispatchFilter }) {
+export function EventSelector({
+  selectedEvents,
+  onEventSelection,
+  eventList = WCA_EVENT_IDS,
+  disabled = false,
+  maxEvents = Infinity,
+  shouldErrorOnEmpty = false,
+  eventsDisabled = [],
+  // Listing event as an argument here to indicate to developers that it's needed
+  // eslint-disable-next-line no-unused-vars
+  disabledText = (event) => {},
+}) {
   return (
     <>
       <label htmlFor="events">
         {`${I18n.t('competitions.competition_form.events')}`}
         <br />
-        <Button primary type="button" size="mini" id="select-all-events" onClick={() => dispatchFilter({ type: 'select_all_events' })}>{I18n.t('competitions.index.all_events')}</Button>
-        <Button type="button" size="mini" id="clear-all-events" onClick={() => dispatchFilter({ type: 'clear_events' })}>{I18n.t('competitions.index.clear')}</Button>
+        <Popup
+          disabled={!Number.isFinite(maxEvents)}
+          trigger={
+            <span><Button disabled={disabled || eventList.length >= maxEvents} primary type="button" size="mini" id="select-all-events" onClick={() => onEventSelection({ type: 'select_all_events' })}>{I18n.t('competitions.index.all_events')}</Button></span>
+        }
+        >
+          {I18n.t('competitions.registration_v2.register.event_limit', {
+            max_events: maxEvents,
+          })}
+        </Popup>
+        <Button disabled={disabled} type="button" size="mini" id="clear-all-events" onClick={() => onEventSelection({ type: 'clear_events' })}>{I18n.t('competitions.index.clear')}</Button>
       </label>
-
-      <div id="events">
-        {WCA_EVENT_IDS.map((eventId) => (
-          <React.Fragment key={eventId}>
-            <Button
-              basic
-              icon
-              toggle
-              type="button"
-              size="mini"
-              className="event-checkbox"
-              id={`checkbox-${eventId}`}
-              value={eventId}
-              data-tooltip={I18n.t(`events.${eventId}`)}
-              data-variation="tiny"
-              onClick={() => dispatchFilter({ type: 'toggle_event', eventId })}
-              active={selectedEvents.includes(eventId)}
-            >
-              <Icon className={`cubing-icon event-${eventId}`} />
-            </Button>
-          </React.Fragment>
-        ))}
-      </div>
+      <Popup
+        open={selectedEvents.length === 0}
+        disabled={!shouldErrorOnEmpty}
+        position="bottom left"
+        style={{ color: '#9f3a38' }}
+        trigger={(
+          <div id="events">
+            {eventList.map((eventId) => (
+              <Popup
+                key={eventId}
+                disabled={selectedEvents.length === 0}
+                trigger={(
+                  <span>
+                    {/* Wrap in span so hover works on disabled buttons */}
+                    <Button
+                      key={eventId}
+                      disabled={
+                      disabled
+                        || (!selectedEvents.includes(eventId) && selectedEvents.length >= maxEvents)
+                        || eventsDisabled.includes(eventId)
+                    }
+                      basic
+                      icon
+                      toggle
+                      type="button"
+                      size="mini"
+                      className="event-checkbox"
+                      id={`checkbox-${eventId}`}
+                      value={eventId}
+                      data-variation="tiny"
+                      onClick={() => onEventSelection({ type: 'toggle_event', eventId })}
+                      active={selectedEvents.includes(eventId)}
+                    >
+                      <Icon className={`cubing-icon event-${eventId}`} style={eventsDisabled.includes(eventId) ? { color: '#FFBBBB' } : {}} />
+                    </Button>
+                  </span>
+)}
+              >
+                {eventsDisabled.includes(eventId) ? disabledText(eventId) : I18n.t(`events.${eventId}`)}
+              </Popup>
+            ))}
+          </div>
+)}
+      >
+        {I18n.t('registrations.errors.must_register')}
+      </Popup>
     </>
   );
 }
@@ -123,28 +172,39 @@ function RegionSelector({ region, dispatchFilter }) {
   const regionsOptions = [
     { key: 'all', text: I18n.t('common.all_regions'), value: 'all' },
     {
-      key: 'continents_header', value: '', disabled: true, content: <Header content={I18n.t('common.continent')} size="small" style={{ textAlign: 'center' }} />,
+      key: 'continents_header',
+      value: '',
+      disabled: true,
+      content: <Header content={I18n.t('common.continent')} size="small" style={{ textAlign: 'center' }} />,
     },
     ...(Object.values(continents.real).map((continent) => (
       { key: continent.id, text: continent.name, value: continent.id }
     ))),
     {
-      key: 'countries_header', value: '', disabled: true, content: <Header content={I18n.t('common.country')} size="small" style={{ textAlign: 'center' }} />,
+      key: 'countries_header',
+      value: '',
+      disabled: true,
+      content: <Header content={I18n.t('common.country')} size="small" style={{ textAlign: 'center' }} />,
     },
     ...(Object.values(countries.real).map((country) => (
-      { key: country.id, text: country.name, value: country.iso2 }
+      {
+        key: country.id, text: country.name, value: country.iso2, flag: country.iso2.toLowerCase(),
+      }
     ))),
   ];
 
+  // clearing should revert to the default, which itself should be un-clearable
+  // but semantic ui will call onChange with the empty string
   return (
     <>
       <label htmlFor="region">{I18n.t('competitions.index.region')}</label>
       <Dropdown
         search
         selection
+        clearable={region !== DEFAULT_REGION_ALL}
         value={region}
         options={regionsOptions}
-        onChange={(_, data) => dispatchFilter({ region: data.value })}
+        onChange={(_, data) => dispatchFilter({ region: data.value || DEFAULT_REGION_ALL })}
       />
     </>
   );
@@ -182,12 +242,15 @@ function DelegateSelector({ delegateId, dispatchFilter }) {
         search
         deburr
         selection
+        error={
+          !delegatesLoading && delegateId && delegatesData.every(({ id }) => id !== delegateId)
+        }
         style={{ textAlign: 'center' }}
         options={[{ key: 'None', text: I18n.t('competitions.index.no_delegates'), value: '' }, ...(delegatesData?.filter((item) => item.name !== 'WCA Board').map((delegate) => (
           {
             key: delegate.id,
             text: `${delegate.name} (${delegate.wca_id})`,
-            value: delegate.wca_id,
+            value: delegate.id,
             image: { avatar: true, src: delegate.thumb_url, style: { width: '28px', height: '28px' } },
           }
         )) || [])]}
@@ -203,7 +266,7 @@ function TimeOrderButtonGroup({ filterState, dispatchFilter }) {
   return (
     <>
       <label htmlFor="state">{I18n.t('competitions.index.state')}</label>
-      <Button.Group id="state">
+      <Button.Group id="state" size="small">
 
         <Button
           primary
@@ -254,6 +317,53 @@ function TimeOrderButtonGroup({ filterState, dispatchFilter }) {
   );
 }
 
+function AdminStatusButtonGroup({ filterState, dispatchFilter }) {
+  return (
+    <>
+      <label htmlFor="admin-status">{I18n.t('competitions.index.admin_status')}</label>
+      <Button.Group id="admin-status">
+
+        <Button
+          primary
+          type="button"
+          name="admin-status"
+          id="all"
+          value="all"
+          onClick={() => dispatchFilter({ adminStatus: 'all' })}
+          active={filterState.adminStatus === 'all'}
+        >
+          <span className="caption">{I18n.t('competitions.index.status_flags.all')}</span>
+        </Button>
+
+        <Button
+          color="yellow"
+          type="button"
+          name="admin-status"
+          id="warning"
+          value="warning"
+          onClick={() => dispatchFilter({ adminStatus: 'warning' })}
+          active={filterState.adminStatus === 'warning'}
+        >
+          <span className="caption">{I18n.t('competitions.index.status_flags.warning')}</span>
+        </Button>
+
+        <Button
+          negative
+          type="button"
+          name="admin-status"
+          id="danger"
+          value="danger"
+          onClick={() => dispatchFilter({ adminStatus: 'danger' })}
+          active={filterState.adminStatus === 'danger'}
+        >
+          <span className="caption">{I18n.t('competitions.index.status_flags.danger')}</span>
+        </Button>
+
+      </Button.Group>
+    </>
+  );
+}
+
 function PastCompYearSelector({ filterState, dispatchFilter }) {
   return (
     <Button
@@ -267,8 +377,11 @@ function PastCompYearSelector({ filterState, dispatchFilter }) {
     >
       <span className="caption">
         {
-          filterState.selectedYear === 'all_years' ? I18n.t('competitions.index.past_all')
-            : I18n.t('competitions.index.past_from', { year: filterState.selectedYear })
+          // eslint-disable-next-line no-nested-ternary
+          filterState.timeOrder === 'past' ? (
+            filterState.selectedYear === 'all_years' ? I18n.t('competitions.index.past_all')
+              : I18n.t('competitions.index.past_from', { year: filterState.selectedYear })
+          ) : I18n.t('competitions.index.past')
         }
       </span>
       <Dropdown
@@ -286,7 +399,7 @@ function PastCompYearSelector({ filterState, dispatchFilter }) {
           >
             {I18n.t('competitions.index.all_years')}
           </Dropdown.Item>
-          {PAST_YEARS_WITH_COMPETITIONS.map((year) => (
+          {nonFutureCompetitionYears.toReversed().map((year) => (
             <Dropdown.Item
               key={`past_select_${year}`}
               onClick={() => dispatchFilter({ timeOrder: 'past', selectedYear: year })}
@@ -325,22 +438,27 @@ function CustomDateSelector({ filterState, dispatchFilter }) {
     >
       <List>
         <List.Item>
-          <DatePicker
+          <UtcDatePicker
             name="start-date"
             showIcon
             placeholderText={I18n.t('competitions.index.from_date')}
-            selected={filterState.customStartDate}
+            isoDate={filterState.customStartDate}
             onChange={(date) => dispatchFilter({ customStartDate: date })}
-            maxDate={filterState.customEndDate}
+            selectsStart
+            isoStartDate={filterState.customStartDate}
+            isoEndDate={filterState.customEndDate}
           />
         </List.Item>
         <List.Item>
-          <DatePicker
+          <UtcDatePicker
             name="end-date"
             showIcon
             placeholderText={I18n.t('competitions.index.to_date')}
-            selected={filterState.customEndDate}
+            isoDate={filterState.customEndDate}
             onChange={(date) => dispatchFilter({ customEndDate: date })}
+            selectsEnd
+            isoStartDate={filterState.customStartDate}
+            isoEndDate={filterState.customEndDate}
             minDate={filterState.customStartDate}
           />
         </List.Item>
@@ -354,6 +472,8 @@ function CompDisplayCheckboxes({
   dispatchFilter,
   shouldShowRegStatus,
   setShouldShowRegStatus,
+  shouldShowAdminDetails,
+  canViewAdminDetails,
   displayMode,
 }) {
   return (
@@ -371,18 +491,32 @@ function CompDisplayCheckboxes({
       </div>
 
       {
-        displayMode === 'list'
-        && (
-          <div id="registration-status" className="registration-status-selector">
-            <Form.Checkbox
-              label={I18n.t('competitions.index.show_registration_status')}
-              name="show_registration_status"
-              id="show_registration_status"
-              checked={shouldShowRegStatus}
-              onChange={() => setShouldShowRegStatus(!shouldShowRegStatus)}
-              disabled // FIXME Pending because of too expensive queries
-            />
-          </div>
+        displayMode === 'list' && (
+          <>
+            <div id="registration-status" className="registration-status-selector">
+              <Form.Checkbox
+                label={I18n.t('competitions.index.show_registration_status')}
+                name="show_registration_status"
+                id="show_registration_status"
+                checked={shouldShowRegStatus}
+                onChange={() => setShouldShowRegStatus(!shouldShowRegStatus)}
+              />
+            </div>
+            {canViewAdminDetails && (
+              <div id="admin-data" className="admin-data-selector">
+                <Form.Checkbox
+                  toggle
+                  label={I18n.t('competitions.index.use_admin_view')}
+                  name="show_admin_data"
+                  id="show_admin_data"
+                  checked={shouldShowAdminDetails}
+                  onChange={() => dispatchFilter(
+                    { shouldShowAdminDetails: !shouldShowAdminDetails },
+                  )}
+                />
+              </div>
+            )}
+          </>
         )
       }
     </>

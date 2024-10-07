@@ -13,15 +13,15 @@ resource "aws_ecs_task_definition" "auxiliary" {
   execution_role_arn = aws_iam_role.task_execution_role.arn
   task_role_arn      = aws_iam_role.task_role.arn
 
-  cpu = "2048"
-  memory = "7861"
+  cpu = "1536"
+  memory = "6325"
 
   container_definitions = jsonencode([
     {
       name              = "sidekiq-main"
       image             = "${var.shared.ecr_repository.repository_url}:sidekiq-production"
       cpu    = 1024
-      memory = 6837
+      memory = 5813
       portMappings = []
       logConfiguration = {
         logDriver = "awslogs"
@@ -86,7 +86,7 @@ resource "aws_ecs_service" "auxiliary" {
   # container image, so we want use data.aws_ecs_task_definition to
   # always point to the active task definition
   task_definition                    = data.aws_ecs_task_definition.auxiliary.arn
-  desired_count                      = 0
+  desired_count                      = 1
   scheduling_strategy                = "REPLICA"
   deployment_maximum_percent         = 200
   deployment_minimum_healthy_percent = 50

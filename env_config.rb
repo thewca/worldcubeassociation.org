@@ -2,7 +2,9 @@
 
 require "superconfig"
 
-EnvConfig = SuperConfig.new do
+is_compiling_assets = ENV.fetch("ASSETS_COMPILATION", false)
+
+EnvConfig = SuperConfig.new(raise_exception: !is_compiling_assets) do
   if Rails.env.production?
     mandatory :READ_REPLICA_HOST, :string
     mandatory :CACHE_REDIS_URL, :string
@@ -24,7 +26,9 @@ EnvConfig = SuperConfig.new do
     mandatory :VAULT_AWS_REGION, :string
     mandatory :TASK_ROLE, :string
     mandatory :WCA_REGISTRATIONS_URL, :string
-    mandatory :WCA_REGISTRATIONS_CDN_URL, :string
+    mandatory :WCA_REGISTRATIONS_POLL_URL, :string
+    mandatory :ASSET_HOST, :string
+    mandatory :CDN_ASSETS_DISTRIBUTION_ID, :string
   else
     optional :READ_REPLICA_HOST, :string, ''
     optional :CACHE_REDIS_URL, :string, ''
@@ -39,12 +43,14 @@ EnvConfig = SuperConfig.new do
     optional :DATABASE_AWS_REGION, :string, ''
     optional :DATABASE_WRT_USER, :string, ''
     optional :WCA_REGISTRATIONS_URL, :string, ''
-    optional :WCA_REGISTRATIONS_CDN_URL, :string, ''
+    optional :WCA_REGISTRATIONS_POLL_URL, :string, ''
     optional :PAYPAL_BASE_URL, :string, ''
 
     # Local-specific stuff
-    optional :ENABLE_BULLET, :bool, false
+    optional :DISABLE_BULLET, :bool, false
     optional :MAILCATCHER_SMTP_HOST, :string, ''
+    optional :ASSET_HOST, :string, ''
+    mandatory :WCA_REGISTRATIONS_BACKEND_URL, :string
   end
 
   if Rails.env.test?
@@ -57,6 +63,8 @@ EnvConfig = SuperConfig.new do
   # and allow all on robots.txt.
   mandatory :WCA_LIVE_SITE, :bool
   mandatory :DATABASE_HOST, :string
+
+  mandatory :DUMP_HOST, :string
 
   # ROOT_URL is used when generating full urls (rather than relative urls).
   # Trick to discover the port we're set to run on from
@@ -77,4 +85,19 @@ EnvConfig = SuperConfig.new do
 
   # For server status
   optional :BUILD_TAG, :string, "local"
+
+  # To allow logging in to staging with your prod account
+  optional :STAGING_OAUTH_URL, :string, ""
+
+  # For Asset Compilation
+  optional :ASSETS_COMPILATION, :bool, false
+
+  # For API Only Server
+  optional :API_ONLY, :bool, false
+end
+
+# Require Asset Specific ENV variables
+if EnvConfig.ASSETS_COMPILATION?
+  require 'dotenv'
+  Dotenv.load(EnvConfig.WCA_LIVE_SITE? ? '.env.assets.production' : '.env.assets.staging')
 end

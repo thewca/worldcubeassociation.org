@@ -11,18 +11,18 @@ import Errored from '../Requests/Errored';
 import useHash from '../../lib/hooks/useHash';
 import GroupPage from './GroupPage';
 
-export default function TeamsCommitteesCouncils() {
+export default function TeamsCommitteesCouncils({ canViewPastRoles }) {
   const {
     data: teamsCommittees,
     loading: teamsCommitteesLoading,
     error: teamsCommitteesError,
-  } = useLoadedData(apiV0Urls.userGroups.list(groupTypes.teams_committees));
+  } = useLoadedData(apiV0Urls.userGroups.list(groupTypes.teams_committees, 'name', { isActive: true, isHidden: false }));
 
   const {
     data: councils,
     loading: councilsLoading,
     error: councilsError,
-  } = useLoadedData(apiV0Urls.userGroups.list(groupTypes.councils));
+  } = useLoadedData(apiV0Urls.userGroups.list(groupTypes.councils, 'name', { isActive: true, isHidden: false }));
 
   const [hash, setHash] = useHash();
   const loading = teamsCommitteesLoading || councilsLoading;
@@ -88,12 +88,13 @@ export default function TeamsCommitteesCouncils() {
                       value: option.friendlyId,
                     }))}
                     value={hash}
+                    scrolling
                     onChange={(__, { value }) => setHash(value)}
                   />
                 </Grid.Row>
                 <Grid.Row>
                   <Grid.Column>
-                    <GroupPage group={activeGroup} />
+                    <GroupPage group={activeGroup} canViewPastRoles={canViewPastRoles} />
                   </Grid.Column>
                 </Grid.Row>
               </Grid>

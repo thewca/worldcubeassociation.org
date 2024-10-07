@@ -5,7 +5,7 @@ require "rails_helper"
 RSpec.feature "Registering for a competition" do
   let!(:user) { FactoryBot.create :user }
   let!(:delegate) { FactoryBot.create :delegate }
-  let(:competition) { FactoryBot.create :competition, :registration_open, delegates: [delegate], showAtAll: true }
+  let(:competition) { FactoryBot.create :competition, :registration_open, :visible, delegates: [delegate] }
 
   context "signed in as user" do
     before :each do
@@ -26,7 +26,7 @@ RSpec.feature "Registering for a competition" do
       fill_in "Guests", with: "-1"
       click_button "Register!"
       expect(page).to have_text("Guests must be greater than or equal to 0")
-      expect(page).to have_text("must register for at least one event")
+      expect(page).to have_text(I18n.t('registrations.errors.must_register'))
       registration = competition.registrations.find_by_user_id(user.id)
       expect(registration).to eq nil
     end

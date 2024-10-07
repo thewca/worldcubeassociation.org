@@ -7,10 +7,6 @@ class UsersController < ApplicationController
 
   RECENT_AUTHENTICATION_DURATION = 10.minutes.freeze
 
-  def self.WCA_TEAMS
-    %w(wst wrt wdc wrc wct)
-  end
-
   def index
     params[:order] = params[:order] == "asc" ? "asc" : "desc"
 
@@ -130,7 +126,7 @@ class UsersController < ApplicationController
     params[:section] ||= "general"
 
     @user = user_to_edit
-    nil if redirect_if_cannot_edit_user(@user)
+    return if redirect_if_cannot_edit_user(@user)
     @current_user = current_user
   end
 
@@ -206,6 +202,10 @@ class UsersController < ApplicationController
     end
   end
 
+  private def sso_moderator?(user)
+    user.communication_team?
+  end
+
   def sso_discourse
     # This implements https://meta.discourse.org/t/official-single-sign-on-for-discourse-sso/13045
     # (section "implementing SSO on your site")
@@ -221,17 +221,13 @@ class UsersController < ApplicationController
     all_groups = User.all_discourse_groups
 
     # Get the teams/councils/Delegate status for user
-    user_groups = current_user.current_teams.select(&:official_or_council?).map(&:friendly_id)
-    user_groups.concat(current_user.delegate_roles.map { |delegate_role| UserRole.status(delegate_role) }.uniq)
-    # Board is (expectedly) not included in "current_teams", so we have to add
-    # it manually.
-    user_groups << Team.board.friendly_id if current_user.board_member?
+    user_groups = current_user.active_roles.map { |role| role.discourse_user_group }.uniq.compact.sort
 
     sso.external_id = current_user.id
     sso.name = current_user.name
     sso.email = current_user.email
     sso.avatar_url = current_user.avatar_url
-    sso.moderator = current_user.wac_team?
+    sso.moderator = sso_moderator?(current_user)
     sso.locale = current_user.locale
     sso.locale_force_update = true
     sso.add_groups = user_groups.join(",")

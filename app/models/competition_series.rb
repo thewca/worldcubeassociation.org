@@ -69,7 +69,7 @@ class CompetitionSeries < ApplicationRecord
   def serializable_hash(options = nil)
     options = DEFAULT_SERIALIZE_OPTIONS.merge(options || {})
     include_competitions = options[:include]&.delete("competitions")
-    json = super(options)
+    json = super
     json.merge!(id: wcif_id)
     if include_competitions
       json[:competitions] = competitions.ids

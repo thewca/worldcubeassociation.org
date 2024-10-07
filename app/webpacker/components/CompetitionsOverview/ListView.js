@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
-import BarLoader from 'react-spinners/BarLoader';
 
+import { Container } from 'semantic-ui-react';
 import I18n from '../../lib/i18n';
 import { competitionConstants } from '../../lib/wca-data.js.erb';
 
@@ -12,40 +12,73 @@ function ListView({
   competitions,
   filterState,
   shouldShowRegStatus,
+  shouldShowAdminDetails,
   isLoading,
+  regStatusLoading,
   fetchMoreCompetitions,
   hasMoreCompsToLoad,
 }) {
   const { ref: bottomRef, inView: bottomInView } = useInView();
+
   useEffect(() => {
-    if (hasMoreCompsToLoad && bottomInView) {
+    if (hasMoreCompsToLoad && bottomInView && !isLoading) {
       fetchMoreCompetitions();
     }
-  }, [bottomInView, hasMoreCompsToLoad, fetchMoreCompetitions]);
+  }, [
+    hasMoreCompsToLoad,
+    bottomInView,
+    isLoading,
+    fetchMoreCompetitions,
+  ]);
 
   switch (filterState.timeOrder) {
     case 'present': {
+      if (shouldShowAdminDetails) {
+        return (
+          <>
+            <ListViewSection
+              competitions={competitions}
+              title={I18n.t('competitions.index.titles.ongoing_and_upcoming')}
+              shouldShowRegStatus={shouldShowRegStatus}
+              shouldShowAdminDetails={shouldShowAdminDetails}
+              selectedDelegate={filterState.delegate}
+              regStatusLoading={regStatusLoading}
+              isLoading={isLoading}
+              hasMoreCompsToLoad={hasMoreCompsToLoad}
+            />
+            <ListViewFooter
+              isLoading={isLoading}
+              hasMoreCompsToLoad={hasMoreCompsToLoad}
+              numCompetitions={competitions?.length}
+              bottomRef={bottomRef}
+            />
+          </>
+        );
+      }
+
       const inProgressComps = competitions?.filter((comp) => isInProgress(comp));
+
       const upcomingComps = competitions?.filter((comp) => (
         !isInProgress(comp) && !isProbablyOver(comp)
       ));
+
       return (
-        <div id="competitions-list">
+        <>
           <ListViewSection
             competitions={inProgressComps}
             title={I18n.t('competitions.index.titles.in_progress')}
             shouldShowRegStatus={shouldShowRegStatus}
+            selectedDelegate={filterState.delegate}
+            regStatusLoading={regStatusLoading}
             isLoading={isLoading && !upcomingComps?.length}
             hasMoreCompsToLoad={hasMoreCompsToLoad && !upcomingComps?.length}
           />
-          {
-            inProgressComps?.length === 0
-            && <div style={{ textAlign: 'center' }}>{I18n.t('competitions.index.no_comp_found')}</div>
-          }
           <ListViewSection
             competitions={upcomingComps}
             title={I18n.t('competitions.index.titles.upcoming')}
             shouldShowRegStatus={shouldShowRegStatus}
+            selectedDelegate={filterState.delegate}
+            regStatusLoading={regStatusLoading}
             isLoading={isLoading}
             hasMoreCompsToLoad={hasMoreCompsToLoad}
           />
@@ -55,7 +88,7 @@ function ListView({
             numCompetitions={upcomingComps?.length}
             bottomRef={bottomRef}
           />
-        </div>
+        </>
       );
     }
     case 'recent':
@@ -65,7 +98,10 @@ function ListView({
             competitions={competitions}
             title={I18n.t('competitions.index.titles.recent', { count: competitionConstants.competitionRecentDays })}
             shouldShowRegStatus={shouldShowRegStatus}
+            shouldShowAdminDetails={shouldShowAdminDetails}
+            selectedDelegate={filterState.delegate}
             isLoading={isLoading}
+            regStatusLoading={regStatusLoading}
             hasMoreCompsToLoad={hasMoreCompsToLoad}
           />
           <ListViewFooter
@@ -83,7 +119,10 @@ function ListView({
             competitions={competitions}
             title={filterState.selectedYear === 'all_years' ? I18n.t('competitions.index.titles.past_all') : I18n.t('competitions.index.titles.past', { year: filterState.selectedYear })}
             shouldShowRegStatus={shouldShowRegStatus}
+            shouldShowAdminDetails={shouldShowAdminDetails}
+            selectedDelegate={filterState.delegate}
             isLoading={isLoading}
+            regStatusLoading={regStatusLoading}
             hasMoreCompsToLoad={hasMoreCompsToLoad}
           />
           <ListViewFooter
@@ -101,7 +140,10 @@ function ListView({
             competitions={competitions}
             title={I18n.t('competitions.index.titles.by_announcement')}
             shouldShowRegStatus={shouldShowRegStatus}
+            shouldShowAdminDetails={shouldShowAdminDetails}
+            selectedDelegate={filterState.delegate}
             isLoading={isLoading}
+            regStatusLoading={regStatusLoading}
             hasMoreCompsToLoad={hasMoreCompsToLoad}
             isSortedByAnnouncement
           />
@@ -120,7 +162,10 @@ function ListView({
             competitions={competitions}
             title={I18n.t('competitions.index.titles.custom')}
             shouldShowRegStatus={shouldShowRegStatus}
+            shouldShowAdminDetails={shouldShowAdminDetails}
+            selectedDelegate={filterState.delegate}
             isLoading={isLoading}
+            regStatusLoading={regStatusLoading}
             hasMoreCompsToLoad={hasMoreCompsToLoad}
           />
           <ListViewFooter
@@ -139,15 +184,11 @@ function ListView({
 function ListViewFooter({
   isLoading, hasMoreCompsToLoad, numCompetitions, bottomRef,
 }) {
-  if (isLoading) {
-    return <BarLoader cssOverride={{ width: '100%' }} />;
-  }
-
-  if (!hasMoreCompsToLoad) {
-    return (
-      <div style={{ textAlign: 'center' }}>
-        {numCompetitions > 0 ? I18n.t('competitions.index.no_more_comps') : I18n.t('competitions.index.no_comp_found')}
-      </div>
+  if (!isLoading && !hasMoreCompsToLoad) {
+    return numCompetitions > 0 && (
+      <Container text textAlign="center">
+        {I18n.t('competitions.index.no_more_comps')}
+      </Container>
     );
   }
 

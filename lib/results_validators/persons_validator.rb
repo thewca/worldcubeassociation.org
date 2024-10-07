@@ -29,7 +29,9 @@ module ResultsValidators
     SINGLE_LETTER_FIRST_OR_LAST_NAME_WARNING = "'%{name}' has a single letter as first or last name. Please fix the name or confirm that this is indeed the competitor's correct name according to an official document."
     SINGLE_NAME_WARNING = "'%{name}' has only one name. Please confirm that this is indeed the competitor's full name according to an official document."
 
-    @desc = "This validator checks that Persons data make sense with regard to the competition results and the WCA database."
+    def self.description
+      "This validator checks that Persons data make sense with regard to the competition results and the WCA database."
+    end
 
     def self.has_automated_fix?
       false

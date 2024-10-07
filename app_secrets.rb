@@ -7,20 +7,26 @@ require_relative "env_config"
 SuperConfig::Base.class_eval do
   # The skeleton is stolen from the source code of the `superconfig` gem, file lib/superconfig.rb:104
   #   (method SuperConfig::Base#credential). The inner Vault fetching logic is custom-written :)
-  def vault(secret_name, &block)
-    define_singleton_method(secret_name) do
-      @__cache__[:"_vault_#{secret_name}"] ||= begin
-        value = self.vault_read(secret_name)[:value]
-        block ? block.call(value) : value
+  def vault(secret_name, cache: true)
+    self.property(secret_name, cache: cache) do
+      value = self.vault_read(secret_name)
+
+      if block_given?
+        yield value
+      else
+        # Vault stores things in a JSON with lots of metadata entries.
+        # The actual secret itself is stored inside that JSON under the key "value"
+        value[:value]
       end
     end
   end
 
-  def vault_file(secret_name, file_path)
-    define_singleton_method(secret_name) do
+  def vault_file(secret_name, file_path, refresh: true)
+    File.delete(file_path) if refresh && File.exist?(file_path)
+
+    self.vault(secret_name, cache: true) do |vault_secret|
       unless File.exist? file_path
-        value_raw = self.vault_read secret_name
-        File.write file_path, value_raw.to_json
+        File.write file_path, vault_secret.to_json
       end
 
       File.expand_path file_path
@@ -39,8 +45,8 @@ SuperConfig::Base.class_eval do
   end
 end
 
-AppSecrets = SuperConfig.new do
-  if Rails.env.production?
+AppSecrets = SuperConfig.new(raise_exception: !EnvConfig.ASSETS_COMPILATION?) do
+  if Rails.env.production? && !EnvConfig.ASSETS_COMPILATION?
     require_relative "vault_config"
 
     vault :DATABASE_PASSWORD
@@ -74,6 +80,12 @@ AppSecrets = SuperConfig.new do
     vault :OIDC_SECRET_KEY
     vault :SLACK_WST_BOT_TOKEN
     vault :TNOODLE_PUBLIC_KEY
+
+    # To allow logging in to staging with your prod account
+    unless EnvConfig.WCA_LIVE_SITE?
+      vault :STAGING_OAUTH_CLIENT
+      vault :STAGING_OAUTH_SECRET
+    end
   else
     mandatory :DATABASE_PASSWORD, :string
     mandatory :GOOGLE_MAPS_API_KEY, :string
@@ -90,6 +102,8 @@ AppSecrets = SuperConfig.new do
     mandatory :STRIPE_PUBLISHABLE_KEY, :string
     mandatory :JWT_KEY, :string
     mandatory :OIDC_SECRET_KEY, :string
+    mandatory :STAGING_OAUTH_CLIENT, :string
+    mandatory :STAGING_OAUTH_SECRET, :string
 
     optional :AWS_ACCESS_KEY_ID, :string, ''
     optional :AWS_SECRET_ACCESS_KEY, :string, ''

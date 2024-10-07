@@ -157,7 +157,7 @@
           if (confirmedAmount) {
             // Fetches a payment intent and captures the client secret
             window.wca.cancelPendingAjaxAndAjax('load-payment-intent', {
-              url: '<%= registration_payment_intent_path(@registration) %>',
+              url: '<%= registration_payment_intent_path(@registration, :stripe) %>',
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               data: JSON.stringify({ amount: amount }),
@@ -178,7 +178,7 @@
         elements,
         clientSecret,
         confirmParams: {
-          return_url: '<%= registration_payment_completion_url(@registration, host: EnvConfig.ROOT_URL) %>',
+          return_url: '<%= registration_payment_completion_url(@competition, host: EnvConfig.ROOT_URL) %>',
         }
       });
 
@@ -248,10 +248,10 @@
       $paymentButton.toggleClass("saving", true);
 
       window.wca.cancelPendingAjaxAndAjax('refresh-payment-subtotal', {
-        url: '<%= registration_stripe_denomination_path %>',
+        url: '<%= registration_payment_denomination_path %>',
         data: { amount: amount, currency_iso: currencyIsoCode },
         success: function (data) {
-          const { stripe_amount: stripeAmount, human_amount: humanAmount } = data;
+          const { api_amounts: { stripe: stripeAmount }, human_amount: humanAmount } = data;
 
           if (refreshStripe) {
             elements.update({ amount: stripeAmount });

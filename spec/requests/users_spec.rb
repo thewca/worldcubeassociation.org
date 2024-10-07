@@ -160,8 +160,8 @@ RSpec.describe "users" do
   context "Discourse SSO" do
     let(:sso) { SingleSignOn.new }
 
-    it "authenticates WAC user and validates user attributes" do
-      user = FactoryBot.create(:user, :wac_member, :wca_id)
+    it "authenticates WCT user and validates user attributes" do
+      user = FactoryBot.create(:wct_member_role, user: FactoryBot.create(:user_with_wca_id)).user
       sign_in user
       sso.nonce = 1234
       get "#{sso_discourse_path}?#{sso.payload}"
@@ -172,8 +172,8 @@ RSpec.describe "users" do
       [:name, :email, :avatar_url].each do |a|
         expect(answer_sso.send(a)).to eq user.send(a)
       end
-      expect(answer_sso.add_groups).to eq "wac"
-      expect(answer_sso.remove_groups).to eq((User.all_discourse_groups - ["wac"]).join(","))
+      expect(answer_sso.add_groups).to eq "wct"
+      expect(answer_sso.remove_groups).to eq((User.all_discourse_groups - ["wct"]).join(","))
       expect(answer_sso.custom_fields["wca_id"]).to match user.wca_id
     end
 
@@ -200,7 +200,7 @@ RSpec.describe "users" do
       # WST is not moderator by default, admin status is granted manually in
       # Discourse
       expect(answer_sso.moderator).to be false
-      expect(answer_sso.add_groups).to eq "wst,delegate"
+      expect(answer_sso.add_groups).to eq "delegate,wst"
       expect(answer_sso.remove_groups).to eq((User.all_discourse_groups - ["wst", "delegate"]).join(","))
     end
 

@@ -1,12 +1,9 @@
 import React from 'react';
 import { DateTime, Interval } from 'luxon';
+import I18n from '../i18n';
 
 function parseDateString(yyyymmddDateString) {
   return DateTime.fromFormat(yyyymmddDateString, 'yyyy-MM-dd');
-}
-
-function parseDateTimeString(isoDateTimeString) {
-  return DateTime.fromISO(isoDateTimeString);
 }
 
 export function dayDifferenceFromToday(yyyymmddDateString) {
@@ -28,7 +25,7 @@ export function startYear(competition) {
 export function isProbablyOver(competition) {
   if (!competition.end_date) return false;
 
-  const dateLuxon = parseDateString(competition.end_date);
+  const dateLuxon = parseDateString(competition.end_date).endOf('day');
   return dateLuxon < DateTime.now();
 }
 
@@ -41,26 +38,96 @@ export function hasResultsPosted(competition) {
 }
 
 export function isInProgress(competition) {
-  const startDate = parseDateString(competition.start_date);
-  const endDate = parseDateString(competition.end_date);
+  const startDate = parseDateString(competition.start_date).startOf('day');
+  const endDate = parseDateString(competition.end_date).endOf('day');
 
   const running = Interval.fromDateTimes(startDate, endDate).contains(DateTime.now());
 
   return running && !hasResultsPosted(competition);
 }
 
-export function isRegistrationOpenYet(competition) {
-  if (!competition.registration_open) return false;
+export function numberOfDaysBefore(competition, refDate) {
+  const parsedRefDate = DateTime.fromISO(refDate);
+  const parsedStartDate = parseDateString(competition.start_date).startOf('day');
 
-  const regOpen = parseDateTimeString(competition.registration_open);
-  return DateTime.now() < regOpen;
+  const numberOfDays = parsedStartDate.diff(parsedRefDate, 'days').days;
+
+  return Math.ceil(Math.abs(numberOfDays));
 }
 
-export function isRegistrationClosedAlready(competition) {
-  if (!competition.registration_close) return false;
+export function timeDifferenceBefore(competition, refDate) {
+  const amountOfDays = I18n.t('datetime.distance_in_words.x_days', { count: numberOfDaysBefore(competition, refDate) });
+  return I18n.t('competitions.competition_info.relative_days.before', { amount_of_days: amountOfDays });
+}
 
-  const regClose = parseDateTimeString(competition.registration_close);
-  return regClose < DateTime.now();
+export function numberOfDaysAfter(competition, refDate) {
+  const parsedStartDate = parseDateString(competition.end_date).endOf('day');
+  const parsedRefDate = DateTime.fromISO(refDate);
+
+  const numberOfDays = parsedStartDate.diff(parsedRefDate, 'days').days;
+
+  return Math.ceil(Math.abs(numberOfDays));
+}
+
+export function timeDifferenceAfter(competition, refDate) {
+  const amountOfDays = I18n.t('datetime.distance_in_words.x_days', { count: numberOfDaysAfter(competition, refDate) });
+  return I18n.t('competitions.competition_info.relative_days.after', { amount_of_days: amountOfDays });
+}
+
+export function reportAdminCellContent(comp) {
+  if (comp.report_posted_at) {
+    const delegateIds = comp.delegates.map((delegate) => delegate.id);
+
+    return delegateIds.includes(comp.report_posted_by_user)
+      ? timeDifferenceAfter(comp, comp.report_posted_at)
+      : I18n.t('competitions.competition_info.submitted_by_other');
+  }
+
+  if (isProbablyOver(comp)) {
+    return I18n.t('competitions.competition_info.pending');
+  }
+
+  return null;
+}
+
+function lookupStatus(numOfDays, statusMap, compareFn, defaultStatus = null) {
+  if (!Number.isInteger(numOfDays)) {
+    return defaultStatus;
+  }
+
+  const entries = Object.entries(statusMap)
+    .toSorted(([, v1], [, v2]) => (compareFn(v1, v2) ? 1 : -1));
+
+  const deadlines = entries.map(([, v]) => v);
+  const statusClasses = entries.map(([k]) => k);
+
+  const numOfMissedDeadlines = deadlines.filter((dl) => compareFn(numOfDays, dl)).length;
+
+  return numOfMissedDeadlines === 0 ? defaultStatus : statusClasses[numOfMissedDeadlines - 1];
+}
+
+const announcementStatusLookup = {
+  warning: 28,
+  danger: 21,
+};
+
+export function computeAnnouncementStatus(comp) {
+  const numOfDays = numberOfDaysBefore(comp, comp.announced_at);
+
+  return lookupStatus(numOfDays, announcementStatusLookup, (a, b) => a < b, 'ok');
+}
+
+const reportResultsStatusLookup = {
+  semi_ok: 7,
+  warning: 14,
+  danger: 21,
+};
+
+export function computeReportsAndResultsStatus(comp, refDate) {
+  const numOfDays = numberOfDaysAfter(comp, refDate);
+  const defaultStatus = refDate ? 'ok' : null;
+
+  return lookupStatus(numOfDays, reportResultsStatusLookup, (a, b) => a > b, defaultStatus);
 }
 
 // Currently, the venue attribute of a competition object can be written as markdown,
