@@ -268,18 +268,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/helper-wrap-function@npm:^7.25.0":
-  version: 7.25.0
-  resolution: "@babel/helper-wrap-function@npm:7.25.0"
-  dependencies:
-    "@babel/template": "npm:^7.25.0"
-    "@babel/traverse": "npm:^7.25.0"
-    "@babel/types": "npm:^7.25.0"
-  checksum: 10c0/d54601a98384c191cbc1ff07b03a19e288ef8d5c6bfafe270b2a303d96e7304eb296002921ed464cc1b105a547d1db146eb86b0be617924dee1ba1b379cdc216
-  languageName: node
-  linkType: hard
-
-"@babel/helper-wrap-function@npm:^7.25.7":
+"@babel/helper-wrap-function@npm:^7.25.0, @babel/helper-wrap-function@npm:^7.25.7":
   version: 7.25.7
   resolution: "@babel/helper-wrap-function@npm:7.25.7"
   dependencies:
