@@ -18,7 +18,7 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
   def validate_show_registration
     @user_id, @competition_id = show_params
     @competition = Competition.find(@competition_id)
-    render_error(:unauthorized, ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless @current_user.id == @user_id.to_i || @current_user.can_manage(@competition)
+    render_error(:unauthorized, ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless @current_user.id == @user_id.to_i || @current_user.can_manage_competition?(@competition)
   end
 
   def show
@@ -57,7 +57,7 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
 
   def update
     if params[:competing]
-      updated_registration = Registrations::Lanes::Competing.update!(params, @current_user, @competition)
+      updated_registration = Registrations::Lanes::Competing.update!(params, @current_user.id, @competition)
       return render json: { status: 'ok', registration: updated_registration.to_v2_json(admin: true, history: true) }, status: :ok
     end
     render json: { status: 'bad request', message: 'You need to supply at least one lane' }, status: :bad_request

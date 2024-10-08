@@ -283,7 +283,7 @@ class Registration < ApplicationRecord
     end
     if history
       base_json.merge!({
-                         history: registration_history,
+                         history: registration_history || [],
                        })
     end
     if pii

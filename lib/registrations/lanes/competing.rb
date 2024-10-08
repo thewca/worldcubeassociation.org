@@ -36,25 +36,7 @@ module Registrations
         end
 
         ActiveRecord::Base.transaction do
-          if status.present?
-            registration.accepted_at = nil
-            registration.deleted_at = nil
-            registration.rejected_at = nil
-            registration.waitlisted_at = nil
-            case status
-            when "waiting_list"
-              registration.waitlisted_at = Time.now.utc
-            when "accepted"
-              registration.accepted_at = Time.now.utc
-            when "cancelled"
-              registration.deleted_at = Time.now.utc
-            when "rejected"
-              registration.rejected_at = Time.now.utc
-            else
-              # We already check this in the controller, so this shouldn't happen
-              raise WcaExceptions::RegistrationError.new(:unprocessable_entity, Registrations::ErrorCodes::INVALID_REQUEST_DATA)
-            end
-          end
+          update_status(registration, status)
           registration.comments = comment if comment.present?
           registration.administrative_notes = admin_comment if admin_comment.present?
           registration.guests = guests if guests.present?
@@ -66,47 +48,72 @@ module Registrations
             changes[:waiting_list_position] = waiting_list_position
           end
 
-          if event_ids.present?
-            changes[:event_ids] = event_ids
-            registration.registration_competition_events.each do |registration_competition_event|
-              if event_ids.include?(registration_competition_event.event.id)
-                next
-              end
-              registration_competition_event.destroy
-            end
-            event_ids.each do |event_id|
-              if registration.event_ids.include?(event_id)
-                next
-              end
-              competition_event = registration.competition.competition_events.find { |ce| ce.event_id == event_id }
-              registration.registration_competition_events.build({ competition_event_id: competition_event.id })
-            end
-          end
+          update_event_ids(registration, event_ids)
+          changes[:event_ids] = event_ids if event_ids.present?
 
           registration.save!
           registration.add_history_entry(changes, 'user', current_user_id, Registrations::Helper.action_type(lane_params, current_user_id))
         end
 
-        # Only send emails when we update the competing status
-        if status.present? && old_status != status
-          case status
-          when 'pending'
-            RegistrationsMailer.notify_registrant_of_pending_registration(registration).deliver_later
-          when 'accepted'
-            RegistrationsMailer.notify_registrant_of_accepted_registration(registration).deliver_later
-          when 'rejected', 'cancelled'
-            if user_id == current_user_id
-              RegistrationsMailer.notify_organizers_of_deleted_registration(registration).deliver_later
-            else
-              RegistrationsMailer.notify_registrant_of_deleted_registration(registration).deliver_later
-            end
+        send_status_change_email(registration, status, old_status, user_id, current_user_id)
+
+        registration.reload
+      end
+
+      def self.update_status(registration, status)
+        return unless status.present?
+
+        registration.accepted_at = nil
+        registration.deleted_at = nil
+        registration.rejected_at = nil
+        registration.waitlisted_at = nil
+
+        case status
+        when "waiting_list"
+          registration.waitlisted_at = Time.now.utc
+        when "accepted"
+          registration.accepted_at = Time.now.utc
+        when "cancelled"
+          registration.deleted_at = Time.now.utc
+        when "rejected"
+          registration.rejected_at = Time.now.utc
+        else
+          raise WcaExceptions::RegistrationError.new(:unprocessable_entity, Registrations::ErrorCodes::INVALID_REQUEST_DATA)
+        end
+      end
+
+      def self.send_status_change_email(registration, status, old_status, user_id, current_user_id)
+        return unless status.present? && old_status != status
+
+        case status
+        when 'pending'
+          RegistrationsMailer.notify_registrant_of_pending_registration(registration).deliver_later
+        when 'accepted'
+          RegistrationsMailer.notify_registrant_of_accepted_registration(registration).deliver_later
+        when 'rejected', 'cancelled'
+          if user_id == current_user_id
+            RegistrationsMailer.notify_organizers_of_deleted_registration(registration).deliver_later
           else
-            # code would have errored out already
-            raise "Unknown registration status, this should not happen"
+            RegistrationsMailer.notify_registrant_of_deleted_registration(registration).deliver_later
           end
+        else
+          raise "Unknown registration status, this should not happen"
+        end
+      end
+
+      def self.update_event_ids(registration, event_ids)
+        return unless event_ids.present?
+
+        registration.registration_competition_events.each do |registration_competition_event|
+          registration_competition_event.destroy unless event_ids.include?(registration_competition_event.competition_event.event_id)
         end
 
-        registration
+        event_ids.each do |event_id|
+          unless registration.event_ids.include?(event_id)
+            competition_event = registration.competition.competition_events.find { |ce| ce.event_id == event_id }
+            registration.registration_competition_events.build({ competition_event_id: competition_event.id })
+          end
+        end
       end
     end
   end
