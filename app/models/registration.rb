@@ -262,6 +262,15 @@ class Registration < ApplicationRecord
       },
     }
     if admin
+      if competition.using_payment_integrations?
+        base_json.merge!({
+                           payment: {
+                             payment_status: outstanding_entry_fees == 0 ? 'succeeded' : '',
+                             payment_amount_human_readable: paid_entry_fees,
+                             updated_at: last_payment_date,
+                           }
+                         })
+      end
       base_json.merge!({
                          guests: guests,
                          competing: {
@@ -270,12 +279,7 @@ class Registration < ApplicationRecord
                            registered_on: created_at,
                            comment: comments,
                            admin_comment: administrative_notes,
-                         },
-                         payment: {
-                           # payment_status: registration.payment_status,
-                           # payment_amount_human_readable: registration.payment_amount_human_readable,
-                           # updated_at: registration.payment_date,
-                         },
+                         }
                        })
       if competing_status == "waiting_list"
         base_json[:competing][:waiting_list_position] = competition.waiting_list.entries.find_index(user_id) + 1

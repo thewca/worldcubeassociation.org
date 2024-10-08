@@ -14,6 +14,7 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
   before_action :validate_list_admin, only: [:list_admin]
   before_action :validate_update_request, only: [:update]
   before_action :validate_bulk_update_request, only: [:bulk_update]
+  before_action :validate_payment_ticket_request, only: [:payment_ticket]
 
   def validate_show_registration
     @user_id, @competition_id = show_params
@@ -114,6 +115,24 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
   def list_admin
     registrations = Registration.where(competition: @competition)
     render json: registrations.map { |r| r.to_v2_json(admin: true, history: true, pii: true) }
+  end
+
+  def validate_payment_ticket_request
+    competition_id = params[:competition_id]
+    @competition = Competition.find(competition_id)
+    render_error(:forbidden, ErrorCodes::PAYMENT_NOT_ENABLED) unless @competition.using_payment_integrations?
+
+    @registration = Registration.find_by(user: @current_user, competition: @competition)
+    render_error(:forbidden, ErrorCodes::PAYMENT_NOT_READY) if @registration.nil?
+  end
+
+  def payment_ticket
+    donation = params[:donation_iso].to_i || 0
+    amount_iso = @competition.base_entry_fee_lowest_denomination
+    currency_iso = @competition.currency_code
+    payment_account = @competition.payment_account_for(:stripe)
+    payment_intent = payment_account.prepare_intent(@registration, amount_iso + donation, currency_iso, @current_user)
+    render json: { client_secret: payment_intent.client_secret }
   end
 
   private
