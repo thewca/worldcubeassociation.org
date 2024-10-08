@@ -25,15 +25,17 @@ function canIBookPlaneTickets(registrationStatus, paymentStatus, competitionInfo
   switch (registrationStatus) {
     case 'pending':
       if (competitionInfo['using_payment_integrations?'] && paymentStatus !== 'succeeded') {
-        return 'Your registration will not be approved until you pay for your registration, unless you have a special arrangement with the organizers or you paid through an alternative method.';
+        return i18n.t('competitions.registration_v2.info.payment_missing');
       }
-      return "Don't book your flights or hotel just yet - the organizers still have to manually approve your registration. This can take time.";
+      return i18n.t('competitions.registration_v2.info.needs_approval');
     case 'accepted':
-      return 'Book your flights and pack your bags - you have a spot at the competition!';
+      return i18n.t('competitions.registration_v2.info.is_accepted');
     case 'cancelled':
-      return 'Your registration has been deleted and you will not be competing.';
+      return i18n.t('competitions.registration_v2.info.is_cancelled');
+    case 'rejected':
+      return i18n.t('competitions.registration_v2.info.is_rejected');
     case 'waiting_list':
-      return "Don't book a flight, but don't give up hope either. The competition is full, but you have been placed on a waiting list, and you will receive an email if enough spots open up for you to be able to attend.";
+      return i18n.t('competitions.registration_v2.info.is_waitlisted');
     default:
       return `[Testers: This should not happen. If you reached this message, please contact WST! Debug: '${registrationStatus}']`;
   }
@@ -44,7 +46,8 @@ function RegistrationStatusMessage({ registration, competitionInfo }) {
     <Message
       info={registration.competing.registration_status === 'pending'}
       success={registration.competing.registration_status === 'accepted'}
-      negative={registration.competing.registration_status === 'cancelled'}
+      negative={registration.competing.registration_status === 'cancelled'
+        || registration.competing.registration_status === 'rejected'}
       warning={registration.competing.registration_status === 'waiting_list'}
       icon
     >

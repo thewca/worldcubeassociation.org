@@ -11,6 +11,7 @@ import ConfirmProvider from '../../../lib/providers/ConfirmProvider';
 
 export default function Index({
   competitionInfo, userInfo, preferredEvents,
+  qualifications,
   stripePublishableKey = '',
   connectedAccountId = '',
 }) {
@@ -24,6 +25,7 @@ export default function Index({
             preferredEvents={preferredEvents}
             stripePublishableKey={stripePublishableKey}
             connectedAccountId={connectedAccountId}
+            qualifications={qualifications}
           />
         </ConfirmProvider>
       </StoreProvider>
@@ -32,10 +34,9 @@ export default function Index({
 }
 
 function Register({
-  competitionInfo, userInfo, preferredEvents, connectedAccountId, stripePublishableKey,
+  competitionInfo, qualifications, userInfo, preferredEvents, connectedAccountId, stripePublishableKey,
 }) {
   const dispatch = useDispatch();
-  const ref = useRef();
   const {
     data: registration,
     isFetching,
@@ -46,9 +47,7 @@ function Register({
     onError: (data) => {
       const { error } = data.json;
       dispatch(setMessage(
-        error
-          ? `competitions.registration_v2.errors.${error}`
-          : 'registrations.flash.failed',
+        `competitions.registration_v2.errors.${error}`,
         'negative',
       ));
     },
@@ -58,9 +57,7 @@ function Register({
     isFetching ? <Loading />
       : (
         <>
-          <div ref={ref}>
-            <RegistrationMessage parentRef={ref} />
-          </div>
+          <RegistrationMessage />
           <StepPanel
             user={userInfo}
             preferredEvents={preferredEvents}
@@ -69,6 +66,7 @@ function Register({
             refetchRegistration={refetch}
             connectedAccountId={connectedAccountId}
             stripePublishableKey={stripePublishableKey}
+            qualifications={qualifications}
           />
         </>
       )

@@ -305,6 +305,25 @@ th:
       description: วันที่สิ้นสุดการคัดเลือก
       #original_hash: bed8220
       by_date: 'ภายใน %{date}'
+  activity:
+    #original_hash: ad38ae8
+    registration: การสมัครการแข่งขันหน้างานแข่งขัน
+    #original_hash: 48431e7
+    checkin: Check-in
+    #original_hash: 40ba6a3
+    tutorial: แนะนำผู้เข้าแข่งขันใหม่
+    #original_hash: ceab6ea
+    multi: ส่งลูก 3x3x3 Multi-Blind
+    #original_hash: 364653c
+    breakfast: พักรับประทานอาหารเช้า
+    #original_hash: 585ecb7
+    lunch: พักรับประทานอาหารกลางวัน
+    #original_hash: 8cf98a5
+    dinner: พักรับประทานอาหารเย็น
+    #original_hash: 75226d7
+    awards: มอบรางวัล
+    #original_hash: 6e6a6f2
+    misc: อื่น ๆ
   common:
     #original_hash: 70c07ec
     world: โลก
@@ -471,6 +490,8 @@ th:
         discussion_url: URL ของการอภิปรายใน Google Group
         #original_hash: 65a9b28
         schedule_url: url ตารางการแข่งขัน
+        #original_hash: 12b71c3
+        summary: สรุป
         #original_hash: 36155d4
         equipment: อุปกรณ์
         #original_hash: 67cd406
@@ -729,7 +750,7 @@ th:
         unconfirmed_wca_id: ''
         #original_hash: da39a3e
         wca_id: ''
-        #original_hash: 81a76a3
+        #original_hash: 27c2251
         receive_delegate_reports: >-
           ถ้าคุณเป็น Trainee Delegate, Junior Delegate, Senior Delegate, หรือ
           สมาชิกของ WRC หรือ WQAC คุณจะได้รับ Delegate Reports เป็นค่าตั้งต้น
@@ -785,6 +806,11 @@ th:
         equipment: >-
           จำนวนและประเภทของ timer และ display ที่ใช้ในการแข่งขัน
           โปรดลบบรรทัดของอุปกรณ์ที่คุณไม่ได้ใช้
+        #original_hash: 2822e8d
+        summary: >-
+          ประเด็นที่ระบุไว้ข้างต้นเป็นเพียงแนวทางสำหรับรายงานที่สมบูรณ์เท่านั้น
+          โปรดใช้ตามดุลยพินิจของคุณตามที่คุณเห็นว่าเหมาะสม
+          โปรดลบส่วนที่ไม่ได้ใช้ออก!
         #original_hash: 2822e8d
         venue: >-
           หัวข้อในข้างต้นเป็นแนวทางในการเขียนรายงาน
@@ -1976,6 +2002,10 @@ th:
         status: สถานะ
         #original_hash: 8970f0e
         locale: สถานที่
+        #original_hash: 5d99dee
+        group_name: Team/Committee Name
+        #original_hash: 55e4f86
+        delegated_competitions_count: จำนวนครั้งที่ Delegate การแข่งขัน
   user_groups:
     group_types:
       #original_hash: abd2828
@@ -2412,9 +2442,9 @@ th:
       name_too_long: >-
         ชื่อการแข่งขันยาวเกิน 32 ตัวอักษร โปรดแก้ไข competition ID
         และชื่อย่อให้เหมาะสม
-      #original_hash: af27396
+      #original_hash: 5882e05
       id_starts_with_lowercase: >-
-        Competition Id ขึ้นต้นด้วยด้วยตัวอักษรตัวเล็ก
+        Competition ID ขึ้นต้นด้วยด้วยตัวอักษรตัวเล็ก
         เราแนะนำให้ขึ้นต้นด้วยตัวอักษรตัวใหญ่
       #original_hash: 1a20fae
       must_have_events: กรุณาเพิ่มประเภทการแข่งขันอย่างน้อย 1 ประเภทก่อนยืนยันการแข่งขัน
@@ -2499,6 +2529,10 @@ th:
       reg_opens_too_early: การรับสมัครถูกตั้งค่าให้เริ่มน้อยกว่าที่กำหนด 48 ชั่วโมง
       #original_hash: a25e7a2
       registration_already_closed: กำหนดเวลาในการลงทะเบียนได้ผ่านไปแล้ว โปรดตั้งค่าให้เป็นเวลาในอนาคต
+      #original_hash: 9a07b42
+      uses_v2_registrations: >-
+        การแข่งขันครั้งนี้ใช้ระบบการสมัครแบบใหม่ โปรดติดต่อ WCAT
+        หากคุณคิดว่าการแข่งขันครั้งนี้ควรใช้ระบบเดิมแทน
       #original_hash: 3322400
       tooltip_registered: คุณได้สมัครแล้ว
       #original_hash: f2d092f
@@ -2521,8 +2555,6 @@ th:
       orga_closed_reg_success: ปิดการลงทะเบียนเรียบร้อยแล้ว
       #original_hash: 7f197a0
       orga_closed_reg_failure: ไม่สามารถปิดการลงทะเบียนได้
-      #original_hash: b16bd13
-      cannot_activate_v2: คุณไม่สามารถเปิดใช้งานระบบการสมัครแบบใหม่ได้หากการสมัครเปิดอยู่
       #original_hash: 74caf1a
       no_waiting_list_specified: >-
         การแข่งขันนี้ไม่มีกำหนดเวลาในการรับผู้เข้าแข่งขันใน waiting list
@@ -2990,6 +3022,8 @@ th:
           is_confirmed: ไม่อนุญาติให้ผู้จัดการแข่งขันแก้ไขการแข่งขันนี้
           #original_hash: d493e6a
           is_visible: ทำให้การแข่งขันปรากฏต่อสาธารณะ
+          #original_hash: e7daccb
+          uses_v_2_registrations: ใช้ระบบการสมัครแบบใหม่
         #original_hash: 89f89c0
         competition_id: ID
         #original_hash: 709a232
@@ -3135,6 +3169,11 @@ th:
           is_confirmed: ''
           #original_hash: da39a3e
           is_visible: ''
+          #original_hash: 68d3cc6
+          uses_v_2_registrations: >-
+            หากปิดใช้งาน การเปลี่ยนระบบการลงทะเบียนอาจจะทำให้เกิดปัญหาทางเทคนิค
+            โปรดติดต่อ WST
+            เพื่อขอความช่วยเหลือหากคุณยังต้องเปลี่ยนระบบการสมัครการแข่งขัน
         #original_hash: da39a3e
         competition_id: ''
         #original_hash: 2c812a0
@@ -3410,6 +3449,31 @@ th:
       info:
         #original_hash: eade5c7
         download: โหลดรายละเอียดการแข่งขันทั้งหมด
+        #original_hash: 21891e5
+        payment_missing: >-
+          การสมัครของคุณจะไม่ได้รับการอนุมัติจนกว่าคุณจะชำระเงินค่าสมัครการแข่งขัน
+          เว้นแต่คุณจะมีข้อตกลงพิเศษกับผู้จัดงานหรือคุณชำระเงินผ่านวิธีการอื่น
+        #original_hash: b15fddc
+        needs_approval: >-
+          อย่าเพิ่งจองการเดินทางของคุณ
+          เพราะผู้จัดการแข่งขันยังต้องอนุมัติการลงทะเบียนของคุณซึ่งอาจต้องใช้เวลา
+        #original_hash: 6071fd9
+        is_accepted: >-
+          จองการเดินทางของคุณและเก็บกระเป๋าได้เลย -
+          คุณมีสิทธิ์เข้าร่วมการแข่งขันแล้ว!
+        #original_hash: e29a4d3
+        is_cancelled: >-
+          การสมัครการแข่งขันของคุณถูกยกเลิกและคุณจะไม่ได้แข่งขันอีกต่อไป
+          แต่คุณสามารถสมัครใหม่อีกครั้งได้
+        #original_hash: 2a88d10
+        is_rejected: >-
+          การสมัครการแข่งขันของคุณถูกปฏิเสธโดยผู้จัดการแข่งขัน
+          โปรดติดต่อทีมจัดการแข่งขันหากคุณเชื่อว่านี่เป็นข้อผิดพลาด
+        #original_hash: 719dea0
+        is_waitlisted: >-
+          อย่าจองการเดินทางของคุณ แต่ก็อย่าหมดหวังเช่นกัน ผู้เข้าแข่งขันเต็มแล้ว
+          แต่คุณถูกจัดให้อยู่ในรายชื่อรอ
+          และคุณจะได้รับอีเมลหากมีที่นั่งว่างเพียงพอให้คุณเข้าร่วมได้
       list:
         #original_hash: 6eef664
         empty: ไม่พบ
@@ -3417,6 +3481,17 @@ th:
         spots_remaining_plural:
           zero: ผู้เข้าแข่งขันเต็มจำนวนแล้ว
           other: 'เหลืออีก %{count} คน'
+        cancelled:
+          #original_hash: e9c5a55
+          title: การสมัครที่ถูกยกเลิก
+          #original_hash: bb5b570
+          information: ผู้เข้าแข่งขันที่การสมัครถูกยกเลิกสามารถสมัครการแข่งขันได้อีกครั้ง
+        rejected:
+          #original_hash: 199b7c5
+          title: การสมัครที่ถูกปฎิเสธ
+          #original_hash: 3fd2e0c
+          information: >-
+            ผู้เข้าแข่งขันที่ถูกปฎิเสธการสมัครไม่สามารถสมัครการแข่งขันอีกครั้งได้
         payment:
           #original_hash: d6fbc7a
           refunded_status: คืนค่าสมัครแล้ว
@@ -3424,12 +3499,19 @@ th:
           initialized: 'กระบวนการชำระเงินเริ่มต้นเมื่อ %{date} แต่ยังไม่เสร็จสมบูรณ์'
           #original_hash: 3a16c0d
           refunded: 'การชำระค่าสมัครได้ทำการคืนเงินแล้วเมื่อวันที่ %{date}'
+        psychsheets:
+          #original_hash: f03e2d0
+          go_back: Go Back
+        #original_hash: 19eabc9
+        timestamp: Timestamp
+        #original_hash: 5e0207a
+        comment_and_note: Comment & Note
+        #original_hash: b651ae4
+        edit_waiting_list: เปิดใช้งานโหมดแก้ไข Waiting List
       bookmark:
         #original_hash: 7952a5c
         unbookmark: คุณได้ลบบุ๊กมาร์กของคุณแล้ว
       requirements:
-        #original_hash: 09a428f
-        title: ความต้องการ
         #original_hash: 1255806
         acknowledgement: >-
           ฉันได้อ่านและรับทราบข้อมูลทั้งหมดภายใต้แท็บ 'ลงทะเบียน' แล้ว
@@ -3458,6 +3540,8 @@ th:
         move_waiting: ย้ายไป waiting list
         #original_hash: 284b24f
         cancel: ยกเลิกการสมัคร
+        #original_hash: df40450
+        reject: ปฎิเสธการสมัคร
         #original_hash: 43dc853
         amount: Amount
         #original_hash: 67b3c7d
@@ -3467,6 +3551,27 @@ th:
         #original_hash: 462376a
         no_self_update: ติดต่อผู้จัดการแข่งขันเพื่อแก้ไขการสมัครของคุณ
       register:
+        panel:
+          approval:
+            #original_hash: 8cc047a
+            title: การอนุมัติ
+            #original_hash: 3bdafe5
+            description: โดยทีมงานผู้จัดการแข่งขัน
+          payment:
+            #original_hash: 4930c06
+            title: ข้อมูลการชำระค่าสมัคร
+            #original_hash: 0d084a5
+            description: กรอกข้อมูลการเรียกเก็บเงิน
+          competing:
+            #original_hash: d672995
+            title: สมัครการแข่งขัน
+            #original_hash: af0e6a0
+            description: เลือกประเภทการแข่งขัน
+          requirements:
+            #original_hash: 09a428f
+            title: Requirements
+            #original_hash: 46f4145
+            description: ยอมรับเงื่อนไขการแข่งขัน
         #original_hash: a38d5fa
         success: 'คุณได้สมัครการแข่งขัน %{comp_name} แล้ว'
         #original_hash: affea61
@@ -3481,8 +3586,6 @@ th:
         until: 'คุณสามารถแก้ไขการสมัครของคุณได้จนถึง %{date}'
         #original_hash: fc8bc84
         passed: คุณไม่สามารถอัปเดตการลงสมัครของคุณได้อีกต่อไป
-        #original_hash: 8cc047a
-        approval: การอนุมัติ
         #original_hash: 05b9f17
         view_registration: ดูการสมัครการแข่งขัน
         #original_hash: 3c8d8b7
@@ -3494,6 +3597,8 @@ th:
           pending: การสมัครของคุณอยู่ระหว่างการได้รับการยอมรับจากผู้จัดการแข่งขัน
           #original_hash: dcc4906
           cancelled: การสมัครของคุณถูกลบแล้ว
+          #original_hash: 92dab83
+          rejected: การสมัครของคุณถูกปฎิเสธ
           #original_hash: a02390c
           waiting_list: 'คุณอยู่ใน Waiting List ลำดับที่ %{waiting_list_position}'
         #original_hash: 2d9f36c
@@ -3519,6 +3624,8 @@ th:
         '-2': Authentication หมดอายุ โปรดรีเฟรชหน้านี้
         #original_hash: 2d63156
         '-3': ไม่มี Authentication กรุณาเข้าสู่ระบบ
+        #original_hash: e631d99
+        '-4': พบข้อผิดพลาดของระบบการสมัครการแข่งขัน กรุณาติดต่อ WST
         #original_hash: e0b69a9
         '-1000': ไม่มีการแข่งขัน
         #original_hash: 2aa4aa1
@@ -3529,12 +3636,14 @@ th:
         '-2002': Profile ของคุณไม่สมบูรณ์
         #original_hash: 4dd79f2
         '-2003': คุณไม่มีสิทธิ์ดำเนินการนี้ให้เสร็จสิ้น
+        #original_hash: 374e1c7
+        '-2004': >-
+          คุณไม่สามารถสมัครการแข่งขันได้เนื่องจากผู้จัดการแข่งขันได้ปฏิเสธการสมัครของคุณ
+          โปรดติดต่อพวกเขาหากคุณคิดว่ามีข้อผิดพลาดเกิดขึ้น
         #original_hash: cb4093a
         '-3000': ไม่มีการสมัคร
-        #original_hash: 0df821f
-        '-3001': WCA Payment ไม่ได้เปิดใช้งานสำหรับการแข่งขันครั้งนี้
-        #original_hash: 092da51
-        '-3002': คุณต้องสมัครการแข่งขันให้เสร็จสิ้นก่อนจึงจะสามารถชำระเงินได้
+        #original_hash: 9bbefa9
+        '-3001': คุณได้สมัครการแข่งขันอื่นในซีรียส์นี้ไปแล้ว
         #original_hash: bc53fb6
         '-4000': คำขอมีข้อมูลที่ไม่ถูกต้อง
         #original_hash: 35fddf4
@@ -3560,6 +3669,12 @@ th:
         '-4010': The Waiting List Position is not Valid
         #original_hash: e489908
         '-4011': คุณสามารถยอมรับได้เฉพาะคนแรกที่อยู่ใน waiting list เท่านั้น
+        #original_hash: 8d089d6
+        '-4012': คุณไม่มีคุณสมบัติเข้าแข่งขันในประเภทที่เลือก
+        #original_hash: 0df821f
+        '-6001': WCA Payment ไม่ได้เปิดใช้งานสำหรับการแข่งขันครั้งนี้
+        #original_hash: 092da51
+        '-6002': คุณต้องสมัครการแข่งขันให้เสร็จสิ้นก่อนจึงจะสามารถชำระเงินได้
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-
@@ -3578,6 +3693,8 @@ th:
       schedule_must_match_rounds: ต้องมีอย่างน้อยหนึ่งรอบ และทุกรอบต้องถูกรวมอยู่ในตารางการแข่งขัน
       #original_hash: 6e228b7
       must_contain_delegate: ต้องมี WCA Delegate อย่างน้อย 1 คน
+      #original_hash: b5677c2
+      must_contain_organizer: ต้องมีผู้จัดการแข่งขันอย่างน้อยหนึ่งคน
       #original_hash: 8131fc2
       not_all_delegates: ไม่ Delegates ทั้งหมด
       #original_hash: 43a23c2
@@ -3901,8 +4018,6 @@ th:
         competitors: ผู้เข้าแข่งขัน
         #original_hash: c4622c3
         scrambles: โจทย์
-        #original_hash: f632da3
-        enable_v2: เปิดใช้บริการการสมัครแบบใหม่
     results_table:
       #original_hash: 3e9a6b5
       wca_profile: WCA profile
@@ -5216,7 +5331,9 @@ th:
         #original_hash: 7ab2d4c
         '5': จัดสรรกรรมการและผู้ตั้งโจทย์
         #original_hash: 52e8316
-        '6': การจัดการกับปัญหาทั้งหมดเกี่ยวกับสถานที่จัดงาน (เช่นกุญแจหรือ WiFi)
+        '6': >-
+          การจัดการกับปัญหาทั้งหมดเกี่ยวกับสถานที่จัดงาน
+          (เช่นอุปกรณ์ที่สำคัญหรือ WiFi)
   media:
     common:
       #original_hash: f9b7a97

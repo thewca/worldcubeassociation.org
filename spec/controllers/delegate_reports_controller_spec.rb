@@ -81,9 +81,11 @@ RSpec.describe DelegateReportsController do
       # Update the remarks *and* set posted to true for next test.
       expect(CompetitionsMailer).to receive(:notify_of_delegate_report_submission).with(comp).and_call_original
       expect(CompetitionsMailer).to receive(:wrc_delegate_report_followup).with(comp).and_call_original
+
       post :update, params: { competition_id: comp.id, delegate_report: { remarks: "My newer remarks", posted: true } }
+
       expect(response).to redirect_to(delegate_report_path(comp))
-      assert_enqueued_jobs 2
+      assert_enqueued_jobs 3
       expect(flash[:info]).to eq "Your report has been posted and emailed!"
       comp.reload
       expect(comp.delegate_report.remarks).to eq "My newer remarks"

@@ -22,6 +22,10 @@ body, html {
     }
   }
 
+  .ui.dropdown > .clear.icon:before {
+    content: "\f00d";
+  }
+
   // The FUI's basic style doesn't have the '!important' tag, and hovering
   // an icon doesn't look as good as it should.
   // I suspect this is fixed in more recent version of the stylesheets, as it

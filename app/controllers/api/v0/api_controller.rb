@@ -19,6 +19,10 @@ class Api::V0::ApiController < ApplicationController
     render json: { me: current_api_user }, private_attributes: doorkeeper_token.scopes
   end
 
+  def healthcheck
+    render json: { status: "ok", api_instance: EnvConfig.API_ONLY? }
+  end
+
   def auth_results
     if !current_user
       return render status: :unauthorized, json: { error: "Please log in" }
@@ -130,9 +134,6 @@ class Api::V0::ApiController < ApplicationController
         "TNoodle-WCA-1.2.2",
       ],
     }
-  end
-
-  def help
   end
 
   def search(*models)

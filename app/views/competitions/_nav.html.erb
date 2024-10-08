@@ -126,14 +126,7 @@
             icon: "align left",
           }
         end
-        if !EnvConfig.WCA_LIVE_SITE? && current_user&.can_manage_competition?(@competition) && !@competition.uses_new_registration_service? && !@competition.registration_currently_open?
-          nav_items << {
-            text: t('.menu.enable_v2'),
-            path: enable_v2_path(@competition),
-            icon: "lightbulb",
-          }
-        end
-        if @competition.announced? && !@competition.results_posted?
+        unless @competition.results_posted?
           if @competition.use_wca_registration?
             nav_items << {
               text: t('.menu.register'),
@@ -142,7 +135,7 @@
             }
           end
 
-          if @competition.any_registrations?
+          unless @competition.registration_not_yet_opened?
             event_icons = @competition.events.map do |event|
               { text: event.id, path: competition_psych_sheet_event_path(@competition, event.id), cubing_icon: event.id, title: event.name }
             end unless @competition.uses_new_registration_service?

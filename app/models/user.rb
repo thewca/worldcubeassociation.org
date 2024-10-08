@@ -24,6 +24,7 @@ class User < ApplicationRecord
   belongs_to :region, class_name: "UserGroup", optional: true
   has_many :roles, class_name: "UserRole"
   has_many :active_roles, -> { active }, class_name: "UserRole"
+  has_many :past_roles, -> { inactive }, class_name: "UserRole"
   has_many :delegate_role_metadata, through: :active_roles, source: :metadata, source_type: "RolesMetadataDelegateRegions"
   has_many :delegate_roles, -> { includes(:group, :metadata) }, through: :delegate_role_metadata, source: :user_role, class_name: "UserRole"
   has_many :delegate_region_groups, through: :delegate_roles, source: :group, class_name: "UserGroup"
@@ -100,7 +101,9 @@ class User < ApplicationRecord
   BACKUP_CODES_LENGTH = 8
   NUMBER_OF_BACKUP_CODES = 10
   devise :two_factor_backupable,
-         otp_backup_code_length: BACKUP_CODES_LENGTH,
+         # The parameter `otp_backup_code_length` represents the number of random bytes that should be generated.
+         #   In order to achieve alphanumeric strings of length n, we need to generate n/2 random bytes.
+         otp_backup_code_length: (BACKUP_CODES_LENGTH / 2),
          otp_number_of_backup_codes: NUMBER_OF_BACKUP_CODES
   devise :jwt_authenticatable, jwt_revocation_strategy: JwtDenylist
 
@@ -136,7 +139,7 @@ class User < ApplicationRecord
   attr_accessor :sign_up_panel_to_show
 
   ALLOWABLE_GENDERS = [:m, :f, :o].freeze
-  enum gender: (ALLOWABLE_GENDERS.to_h { |g| [g, g.to_s] })
+  enum :gender, (ALLOWABLE_GENDERS.index_with(&:to_s))
   GENDER_LABEL_METHOD = lambda do |g|
     {
       m: I18n.t('enums.user.gender.m'),
@@ -499,6 +502,10 @@ class User < ApplicationRecord
 
   def banned?
     group_member?(UserGroup.banned_competitors.first)
+  end
+
+  def banned_in_past?
+    past_roles.any? { |role| role.group == UserGroup.banned_competitors.first }
   end
 
   def current_ban
@@ -1078,17 +1085,12 @@ class User < ApplicationRecord
   # The reason why clear_receive_delegate_reports_if_not_eligible is needed is because there's no automatic code that
   # runs once a user is no longer a team member, we just schedule their end date.
   def self.delegate_reports_receivers_emails
-    delegate_groups = UserGroup.delegate_regions
-    roles = delegate_groups.flat_map(&:active_roles).select do |role|
-      ["trainee_delegate", "junior_delegate"].include?(role.metadata.status)
-    end
-    eligible_delegate_users = roles.map { |role| role.user }
-    other_staff = User.where(receive_delegate_reports: true)
+    receives_reports_staff = User.where(receive_delegate_reports: true)
     (%w(
       seniors@worldcubeassociation.org
       quality@worldcubeassociation.org
       regulations@worldcubeassociation.org
-    ) + eligible_delegate_users.map(&:email) + other_staff.map(&:email)).uniq
+    ) + receives_reports_staff.map(&:email)).uniq
   end
 
   def notify_of_results_posted(competition)

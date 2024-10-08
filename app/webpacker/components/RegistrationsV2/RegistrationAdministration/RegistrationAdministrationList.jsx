@@ -74,23 +74,26 @@ const partitionRegistrations = (registrations) => registrations.reduce(
       case 'cancelled':
         result.cancelled.push(registration);
         break;
+      case 'rejected':
+        result.rejected.push(registration);
+        break;
       default:
         break;
     }
     return result;
   },
   {
-    pending: [], waiting: [], accepted: [], cancelled: [],
+    pending: [], waiting: [], accepted: [], cancelled: [], rejected: [],
   },
 );
 
 const expandableColumns = {
-  dob: 'Date of Birth',
-  region: 'Region Name',
-  events: 'Events',
-  comments: 'Comment & Note',
-  email: 'Email',
-  timestamp: 'Timestamp',
+  dob: i18n.t('activerecord.attributes.user.dob'),
+  region: i18n.t('activerecord.attributes.user.region'),
+  events: i18n.t('competitions.show.events'),
+  comments: i18n.t('competitions.registration_v2.list.comment_and_note'),
+  email: i18n.t('activerecord.attributes.user.email'),
+  timestamp: i18n.t('competitions.registration_v2.list.timestamp'),
 };
 const initialExpandedColumns = {
   dob: false,
@@ -119,7 +122,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
 
   const queryClient = useQueryClient();
 
-  // const [editable, setEditable] = useCheckboxState(false);
+  const [editable, setEditable] = useCheckboxState(false);
 
   const dispatchStore = useDispatch();
 
@@ -137,6 +140,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
   const {
     isLoading: isRegistrationsLoading,
     data: registrations,
+    refetch,
   } = useQuery({
     queryKey: ['registrations-admin', competitionInfo.id],
     queryFn: () => getAllRegistrations(competitionInfo.id),
@@ -166,20 +170,16 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
     onError: (data) => {
       const { error } = data.json;
       dispatchStore(setMessage(
-        error
-          ? Object.values(error).map((err) => `competitions.registration_v2.errors.${err}`)
-          : 'registrations.flash.failed',
+        Object.values(error).map((err) => `competitions.registration_v2.errors.${err}`),
         'negative',
       ));
     },
-    onSuccess: (data) => {
-      const { updated_registrations: updatedRegistrations } = data;
-      const updated = registrations.map(
-        (r) => (updatedRegistrations[r.user_id]
-          ? { ...updatedRegistrations[r.user_id], payment: r.payment }
-          : r),
-      );
-      queryClient.setQueryData(['registrations-admin', competitionInfo.id], updated);
+    onSuccess: async () => {
+      // If multiple organizers approve people at the same time,
+      // or if registrations are still coming in while organizers approve them
+      // we want the data to be refreshed. Optimal solution would be subscribing to changes
+      // via graphql/websockets, but we aren't there yet
+      await refetch();
     },
   });
 
@@ -189,8 +189,20 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
         switch (sortColumn) {
           case 'name':
             return a.user.name.localeCompare(b.user.name);
-          case 'wca_id':
+          case 'wca_id': {
+            const aHasAccount = a.user.wca_id !== null;
+            const bHasAccount = b.user.wca_id !== null;
+            if (aHasAccount && !bHasAccount) {
+              return 1;
+            }
+            if (!aHasAccount && bHasAccount) {
+              return -1;
+            }
+            if (!aHasAccount && !bHasAccount) {
+              return a.user.name.localeCompare(b.user.name);
+            }
             return a.user.wca_id.localeCompare(b.user.wca_id);
+          }
           case 'country':
             return a.user.country.name.localeCompare(b.user.country.name);
           case 'events':
@@ -237,7 +249,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
   }, [registrationsWithUser, sortColumn, sortDirection]);
 
   const {
-    waiting, accepted, cancelled, pending,
+    waiting, accepted, cancelled, pending, rejected,
   } = useMemo(
     () => partitionRegistrations(sortedRegistrationsWithUser ?? []),
     [sortedRegistrationsWithUser],
@@ -250,8 +262,9 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
       waiting: selected.filter((id) => waiting.some((reg) => id === reg.user.id)),
       accepted: selected.filter((id) => accepted.some((reg) => id === reg.user.id)),
       cancelled: selected.filter((id) => cancelled.some((reg) => id === reg.user.id)),
+      rejected: selected.filter((id) => rejected.some((reg) => id === reg.user.id)),
     }),
-    [selected, pending, waiting, accepted, cancelled],
+    [selected, pending, waiting, accepted, cancelled, rejected],
   );
 
   const select = (attendees) => dispatch({ type: 'add', attendees });
@@ -274,26 +287,25 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
     ),
     [registrationsWithUser],
   );
-
-  // const handleOnDragEnd = async (result) => {
-  //   if (!result.destination) return;
-  //   if (result.destination.index === result.source.index) return;
-  //
-  //   updateRegistrationMutation({
-  //     competition_id: competitionInfo.id,
-  //     requests: [{
-  //       user_id: waiting[result.source.index].user_id,
-  //       competing: {
-  //         waiting_list_position: waiting[result.destination.index].competing.waiting_list_position,
-  //       },
-  //     }],
-  //   }, {
-  //     onSuccess: () => {
-  //       // We need to get the information for all Competitors if you change the waiting list position
-  //       refetch();
-  //     },
-  //   });
-  // };
+  const handleOnDragEnd = useMemo(() => async (result) => {
+    if (!result.destination) return;
+    if (result.destination.index === result.source.index) return;
+    const waitingSorted = waiting.toSorted((a, b) => a.competing.waiting_list_position - b.competing.waiting_list_position);
+    updateRegistrationMutation({
+      competition_id: competitionInfo.id,
+      requests: [{
+        user_id: waitingSorted[result.source.index].user_id,
+        competing: {
+          waiting_list_position: waitingSorted[result.destination.index].competing.waiting_list_position,
+        },
+      }],
+    }, {
+      onSuccess: () => {
+        // We need to get the information for all Competitors if you change the waiting list position
+        refetch();
+      },
+    });
+  }, [competitionInfo.id, refetch, updateRegistrationMutation, waiting]);
 
   return isRegistrationsLoading || infoLoading ? (
     <Loading />
@@ -373,46 +385,71 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
           sortColumn={sortColumn}
           competitionInfo={competitionInfo}
         />
-        {/* Disable Waiting List Administration until we fix moving people around on the waitinglist */}
-        {/* <Header> */}
-        {/*  {i18n.t('registrations.list.waiting_list')} */}
-        {/*  {' '} */}
-        {/*  ( */}
-        {/*  {waiting.length} */}
-        {/*  ) */}
-        {/* </Header> */}
+        <Header>
+          {i18n.t('registrations.list.waiting_list')}
+          {' '}
+          (
+          {waiting.length}
+          )
+        </Header>
 
-        {/* <Checkbox toggle value={editable} onChange={setEditable} label="Enable Waiting List Edit Mode" /> */}
+        <Checkbox toggle value={editable} onChange={setEditable} label={i18n.t('competitions.registration_v2.list.edit_waiting_list')} />
 
-        {/* <RegistrationAdministrationTable */}
-        {/*  columnsExpanded={expandedColumns} */}
-        {/*  selected={partitionedSelected.waiting} */}
-        {/*  select={select} */}
-        {/*  unselect={unselect} */}
-        {/*  competition_id={competitionInfo.id} */}
-        {/*  changeSortColumn={changeSortColumn} */}
-        {/*  sortDirection={sortDirection} */}
-        {/*  sortColumn={sortColumn} */}
-        {/*  competitionInfo={competitionInfo} */}
-        {/*  registrations={waiting.toSorted( */}
-        {/*    (a, b) => a.competing.waiting_list_position - b.competing.waiting_list_position, */}
-        {/*  )} */}
-        {/*  handleOnDragEnd={handleOnDragEnd} */}
-        {/*  draggable={editable} */}
-        {/*  sortable={false} */}
-        {/* /> */}
+        <RegistrationAdministrationTable
+          columnsExpanded={expandedColumns}
+          selected={partitionedSelected.waiting}
+          select={select}
+          unselect={unselect}
+          competition_id={competitionInfo.id}
+          changeSortColumn={changeSortColumn}
+          sortDirection={sortDirection}
+          sortColumn={sortColumn}
+          competitionInfo={competitionInfo}
+          registrations={waiting.toSorted(
+            (a, b) => a.competing.waiting_list_position - b.competing.waiting_list_position,
+          )}
+          handleOnDragEnd={handleOnDragEnd}
+          draggable={editable}
+          sortable={false}
+        />
 
         <Header>
-          {i18n.t('registrations.list.deleted_registrations')}
+          {i18n.t('competitions.registration_v2.list.cancelled.title')}
           {' '}
           (
           {cancelled.length}
           )
         </Header>
+        <Header.Subheader>
+          {i18n.t('competitions.registration_v2.list.cancelled.information')}
+        </Header.Subheader>
         <RegistrationAdministrationTable
           columnsExpanded={expandedColumns}
           registrations={cancelled}
           selected={partitionedSelected.cancelled}
+          select={select}
+          unselect={unselect}
+          competition_id={competitionInfo.id}
+          changeSortColumn={changeSortColumn}
+          sortDirection={sortDirection}
+          sortColumn={sortColumn}
+          competitionInfo={competitionInfo}
+        />
+
+        <Header>
+          {i18n.t('competitions.registration_v2.list.rejected.title')}
+          {' '}
+          (
+          {rejected.length}
+          )
+        </Header>
+        <Header.Subheader>
+          {i18n.t('competitions.registration_v2.list.rejected.information')}
+        </Header.Subheader>
+        <RegistrationAdministrationTable
+          columnsExpanded={expandedColumns}
+          registrations={rejected}
+          selected={partitionedSelected.rejected}
           select={select}
           unselect={unselect}
           competition_id={competitionInfo.id}

@@ -55,7 +55,6 @@ export default function RegistrationAdministrationTableFooter({
       <Table.Cell />
       <Table.Cell />
       <Table.Cell />
-      <Table.Cell />
     </Table.Row>
   );
 }
