@@ -9,7 +9,7 @@ export default function RegistrationClosedMessage({
   onTimerEnd,
 }) {
   const start = DateTime.fromISO(registrationStart);
-  const [timeLeft, setTimeLeft] = useState(start.diff(DateTime.local(), ['days', 'hours', 'minutes', 'seconds']).toObject());
+  const [timeLeft, setTimeLeft] = useState(fullTimeDiff(start));
 
   useEffect(() => {
     if (timeLeft.days === 0
