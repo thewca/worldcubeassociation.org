@@ -44,8 +44,6 @@ end
 
 Capybara.javascript_driver = :apparition
 
-Capybara.server = :puma, { queue_requests: false } # Added per a suggestion in this thread, seems to have no effect: https://github.com/teamcapybara/capybara/issues/2227
-
 RSpec.configure do |config|
   # enforce consistent locale behaviour across OSes, especially Linux
   # depending on the test driver, this might not be necessary but we want

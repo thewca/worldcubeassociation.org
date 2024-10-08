@@ -1,6 +1,11 @@
 # frozen_string_literal: true
 
 RSpec.configure do |config|
+  config.before(:suite) unless EnvConfig.SKIP_PRETEST_SETUP? do
+    DatabaseCleaner.clean_with :truncation
+    TestDbManager.fill_tables
+  end
+
   config.before(:each) do
     DatabaseCleaner.strategy = :transaction
   end
