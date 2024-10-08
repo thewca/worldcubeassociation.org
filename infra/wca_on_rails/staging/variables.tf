@@ -94,6 +94,10 @@ variable "shared" {
     mailcatcher: object({
       arn: string
     })
+    avatars_private: object({
+      arn: string
+      id: string
+    })
     account_id: string
     private_subnets: any
   })

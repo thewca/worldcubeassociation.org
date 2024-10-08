@@ -78,7 +78,7 @@ locals {
     },
     {
       name = "S3_AVATARS_PRIVATE_BUCKET"
-      value = aws_s3_bucket.avatars_private.id
+      value = var.shared.avatars_private.id
     },
     {
       name = "S3_AVATARS_ASSET_HOST"
@@ -188,7 +188,9 @@ data "aws_iam_policy_document" "task_policy" {
                   aws_s3_bucket.regulations.arn,
                   "${aws_s3_bucket.regulations.arn}/*",
                   aws_s3_bucket.assets.arn,
-                  "${aws_s3_bucket.assets.arn}/*"]
+                  "${aws_s3_bucket.assets.arn}/*",
+                    var.shared.avatars_private.arn,
+                  "${var.shared.avatars_private.arn}/*",]
     }
   statement {
     actions = [
