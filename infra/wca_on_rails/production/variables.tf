@@ -101,10 +101,6 @@ variable "shared" {
     pma_production: object({
       arn: string
     })
-    avatars_private: object({
-      arn: string
-      id: string
-    })
     account_id: string
     # These are booth arrays
     private_subnets: any

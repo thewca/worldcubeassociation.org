@@ -189,8 +189,8 @@ data "aws_iam_policy_document" "task_policy" {
                   "${aws_s3_bucket.regulations.arn}/*",
                   aws_s3_bucket.assets.arn,
                   "${aws_s3_bucket.assets.arn}/*",
-                    var.shared.avatars_private.arn,
-                  "${var.shared.avatars_private.arn}/*",]
+                    aws_s3_bucket.avatars_private.arn,
+                  "${aws_s3_bucket.avatars_private.arn}/*",]
     }
   statement {
     actions = [

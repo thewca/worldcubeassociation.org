@@ -180,18 +180,29 @@ data "aws_iam_policy_document" "task_policy" {
 
     resources = ["*"]
   }
+
   statement {
       actions = [
         "s3:*",
       ]
 
-      resources = [aws_s3_bucket.avatars.arn,
-                "${aws_s3_bucket.avatars.arn}/*",
-                   aws_s3_bucket.storage-bucket.arn,
+      resources = [aws_s3_bucket.storage-bucket.arn,
                 "${aws_s3_bucket.storage-bucket.arn}/*",
-                  var.shared.avatars_private.arn,
-                  "${var.shared.avatars_private.arn}/*"]
+                    aws_s3_bucket.avatars_private.arn,
+                  "${aws_s3_bucket.avatars_private.arn}/*"]
     }
+
+  statement {
+    actions = [
+      "s3:Get*",
+      "s3:List*",
+      "s3:Describe*"
+    ]
+
+    resources = [aws_s3_bucket.avatars.arn,
+      "${aws_s3_bucket.avatars.arn}/*"]
+  }
+
   statement {
     actions = [
       "rds-db:connect",
