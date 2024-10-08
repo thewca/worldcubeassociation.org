@@ -86,4 +86,21 @@ class DelegateReport < ApplicationRecord
     self.posted_at = (new_posted ? Time.now : nil)
     self.posted_by_user_id = current_user&.id
   end
+
+  # This generates a summary of delegate report data for use in other contexts. Currently, this is used by WRC as part of a custom Trello integration.
+  # WST has no involvement besides supplying this data to an endpoint maintained by WRC. For integration advice, contact WRC directly.
+  def feedback_requests
+    {
+      competitionName: competition.name,
+      competitionId: competition.id,
+      competitionRegion: competition.continent.name,
+      feedbackRequests: {
+        WRC: self.wrc_incidents,
+        WIC: self.wic_incidents,
+      },
+      contents: {
+        incidents: self.incidents,
+      },
+    }
+  end
 end

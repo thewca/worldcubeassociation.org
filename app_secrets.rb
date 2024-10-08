@@ -80,6 +80,8 @@ AppSecrets = SuperConfig.new(raise_exception: !EnvConfig.ASSETS_COMPILATION?) do
     vault :OIDC_SECRET_KEY
     vault :SLACK_WST_BOT_TOKEN
     vault :TNOODLE_PUBLIC_KEY
+    vault :WRC_WEBHOOK_USERNAME
+    vault :WRC_WEBHOOK_PASSWORD
 
     # To allow logging in to staging with your prod account
     unless EnvConfig.WCA_LIVE_SITE?
@@ -120,5 +122,7 @@ AppSecrets = SuperConfig.new(raise_exception: !EnvConfig.ASSETS_COMPILATION?) do
     optional :PAYPAL_ATTRIBUTION_CODE, :string
     optional :SLACK_WST_BOT_TOKEN, :string, ''
     optional :TNOODLE_PUBLIC_KEY, :string, ''
+    optional :WRC_WEBHOOK_USERNAME, :string, ''
+    optional :WRC_WEBHOOK_PASSWORD, :string, ''
   end
 end
