@@ -325,6 +325,7 @@ en:
       delegate_report:
         discussion_url: "Discussion's url on the Google Group"
         schedule_url: "Schedule url"
+        summary: "Summary"
         equipment: "Equipment"
         venue: "Venue"
         organization: "Organization"
@@ -474,7 +475,7 @@ en:
         registration_notifications_enabled: "This only applies for competitions you organize or delegate, and can be overridden on a per-competition basis."
         unconfirmed_wca_id: ""
         wca_id: ""
-        receive_delegate_reports: "If you are a Trainee Delegate, Junior Delegate, Senior Delegate, or Member of the WRC or the WQAC, you receive Delegate Reports by default. Note: the change may take up to an hour to take effect."
+        receive_delegate_reports: "If you are a Senior Delegate or Member of the WRC or the WQAC, you receive Delegate Reports by default. Note: the change may take up to an hour to take effect."
         otp_attempt: "Check your configured mobile application for a one-time password, or input one of your recovery codes."
       dob_contact:
         name: ""
@@ -494,6 +495,7 @@ en:
       delegate_report:
         schedule_url: "Full link to the published schedule (e.g., https://www.cubingusa.com/usnationals2016/schedule.php)"
         equipment: "Number and type of timers and displays used in the competition. Please remove the line(s) of equipment which you didn't use."
+        summary: "The listed points above are just for guidance for a complete report. Use them at your discretion for what you see fit. Please remove unused parts!"
         venue: "The listed points above are just for guidance for a complete report. Use them at your discretion for what you see fit. Please remove unused parts!"
         organization: "The listed points above are just for guidance for a complete report. Use them at your discretion for what you see fit. Please remove unused parts!"
         incidents: "Please report all incidents which are non-standard cases. Number the incidents starting from 1., so that other Delegates can comment referring to them by their numbers. Even if everything seemed generic, just list at least the most noteworthy cases. Please check off the appropriate boxes below if you are actively seeking feedback."
@@ -1364,6 +1366,7 @@ en:
       in_progress_at_wca_live_html: "This competition is ongoing. You can check the live results <a href='%{link_here}'>here</a>!"
       reg_opens_too_early: "Registration is set to start in less than the required 48 hours."
       registration_already_closed: "The deadline to register has already passed. Please set it to be in the future."
+      uses_v2_registrations: "This competition is using the new Registration System. Please contact WCAT if you believe this competition should use the old system instead."
       tooltip_registered: "You are registered."
       tooltip_waiting_list: "You are currently on the waiting list."
       tooltip_deleted: "Unfortunately your registration has been deleted. Please check your email for details, or contact the organiser(s)."
@@ -1374,7 +1377,6 @@ en:
       championship_exists: "There is already a %{championship_type} in %{year}."
       orga_closed_reg_success: "Sucessfully closed registration."
       orga_closed_reg_failure: "Cannot close registration."
-      cannot_activate_v2: "You cannot activate the new registration system if registration is open."
       no_waiting_list_specified: "This competition does not have a deadline for accepting competitors on the waiting list. If you are using a waiting list, please specify a deadline. If you are not using a waiting list, please remember to specify this in the registration requirements."
     #context: on the "My competitions" page
     my_competitions:
@@ -1613,6 +1615,7 @@ en:
         admin:
           is_confirmed: "Do not let organizers edit this competition"
           is_visible: "Make competition visible to the public"
+          uses_v_2_registrations: "Use the new Registration System"
         competition_id: "ID"
         name: "Name"
         short_name: "Competition short name"
@@ -1693,6 +1696,7 @@ en:
         admin:
           is_confirmed: ""
           is_visible: ""
+          uses_v_2_registrations: "If this is disabled, changing the registration system will cause technical issues. Please contact WST for assistance if you still need to change the registration system."
         competition_id: ""
         name: "The full name of the competition including the year at the end (e.g., Danish Open 2016). Be sure to capitalize. The name must contain only alphanumeric characters, dashes(-), ampersands(&), periods(.), colons(:), apostrophes('), and spaces( )."
         short_name: "A short name for displaying. If the name of the competition is below %{short_name_limit} characters this should not be edited and should be the same as the normal name."
@@ -1807,6 +1811,12 @@ en:
         link: "As a <0>%{pdfLink}</0>"
       info:
         download: "Download all of the competitions details."
+        payment_missing: "Your registration will not be approved until you pay for your registration, unless you have a special arrangement with the organizers or you paid through an alternative method."
+        needs_approval: "Don't book your travel arrangements just yet - the organizers still have to manually approve your registration. This can take time."
+        is_accepted: "Book your travel and pack your bags - you have a spot at the competition!"
+        is_cancelled: "Your registration has been cancelled and you will not be competing, but you can sign up again"
+        is_rejected: "Your registration has been rejected by the organizers. Please contact the organizing team if you believe this was a mistake."
+        is_waitlisted: "Don't book your travel, but don't give up hope either. The competition is full, but you have been placed on a waiting list, and you will receive an email if enough spots open up for you to be able to attend."
       list:
         empty: "None"
         spots_remaining_plural:
@@ -1823,10 +1833,14 @@ en:
          refunded_status: "Refunded"
          initialized: "Payment process was started on %{date}, but not finished."
          refunded: "Payment was refunded on %{date}."
+        psychsheets:
+          go_back: "Go Back"
+        timestamp: "Timestamp"
+        comment_and_note: "Comment & Note"
+        edit_waiting_list: "Enable Waiting List Edit Mode"
       bookmark:
         unbookmark: "You have removed your bookmark"
       requirements:
-        title: "Requirements"
         acknowledgement: "I have read and acknowledged all information under the 'Register' tab, including entry fees, refund policies and any extra requirements listed above."
         next_step: "Continue to next Step"
       update:
@@ -1846,13 +1860,25 @@ en:
         no_self_update: "Contact the Organization Team to update your registration."
       register:
         will_open_countdown: "Registration will open in %{minutes} minutes %{seconds} seconds. This page will refresh automatically when registration opens."
+        panel:
+          approval:
+            title: "Approval"
+            description: "By organization team"
+          payment:
+            title: "Payment information"
+            description: "Enter billing information"
+          competing:
+            title: "Register"
+            description: "Choose your events"
+          requirements:
+            title: "Requirements"
+            description: "Accept competition terms"
         success: "You are registered for %{comp_name}"
         error: "Registration failed with error %{error}"
         early_registration: "Registration is not open yet - you are pre-registering as an organizer/delegate"
         comment: "Additional comments to the organizers"
         until: "You can update your registration until %{date}"
         passed: "You can no longer update your registration"
-        approval: "Approval"
         view_registration: "View Registration"
         editing_disabled: "Registration editing is disabled for this competition"
         registration_status:
@@ -2072,7 +2098,6 @@ en:
         register: "Register"
         competitors: "Competitors"
         scrambles: "Scrambles"
-        enable_v2: "Enable new Registration Service"
     results_table:
       wca_profile: "WCA profile"
       event: "Event"

@@ -25,6 +25,10 @@ locals {
       value = "https://assets.worldcubeassociation.org"
     },
     {
+      name = "WRC_WEBHOOK_URL",
+      value = var.WRC_WEBHOOK_URL
+    },
+    {
       name = "WCA_REGISTRATIONS_POLL_URL"
       value = "https://1rq8d7dif3.execute-api.us-west-2.amazonaws.com/v1/prod"
     },
@@ -206,14 +210,14 @@ resource "aws_ecs_task_definition" "this" {
   task_role_arn      = aws_iam_role.task_role.arn
 
   cpu = "1024"
-  memory = "3954"
+  memory = "3910"
 
   container_definitions = jsonencode([
     {
       name              = "rails-production"
       image             = "${var.shared.ecr_repository.repository_url}:latest"
       cpu    = 1024
-      memory = 3954
+      memory = 3910
       portMappings = [
         {
           # The hostPort is automatically set for awsvpc network mode,
@@ -273,13 +277,8 @@ resource "aws_ecs_service" "this" {
   enable_execute_command = true
 
   ordered_placement_strategy {
-    type  = "spread"
-    field = "attribute:ecs.availability-zone"
-  }
-
-  ordered_placement_strategy {
-    type  = "spread"
-    field = "instanceId"
+    type  = "binpack"
+    field = "memory"
   }
 
   load_balancer {

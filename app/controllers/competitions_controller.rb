@@ -280,6 +280,7 @@ class CompetitionsController < ApplicationController
       competitor_limit_enabled: true,
       base_entry_fee_lowest_denomination: 0,
       guests_entry_fee_lowest_denomination: 0,
+      uses_v2_registrations: true,
     )
 
     assign_editing_user(@competition)
@@ -588,19 +589,7 @@ class CompetitionsController < ApplicationController
     head :ok
   end
 
-  # Enables the New Registration Service for a Competition
-  def enable_v2
-    @competition = competition_from_params
-    if EnvConfig.WCA_LIVE_SITE? || @competition.registration_currently_open?
-      flash.now[:danger] = t('competitions.messages.cannot_activate_v2')
-      return redirect_to competition_path(@competition)
-    end
-    @competition.enable_v2_registrations!
-    redirect_to competition_path(@competition)
-  end
-
   before_action -> { require_user_permission(:can_create_competitions?) }, only: [:create]
-
   def create
     competition = Competition.new
 

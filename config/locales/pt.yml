@@ -493,6 +493,8 @@ pt:
         discussion_url: Hiperligação para a discussão no Grupo do Google
         #original_hash: 65a9b28
         schedule_url: Hiperligação do horário
+        #original_hash: 12b71c3
+        summary: Resumo
         #original_hash: 36155d4
         equipment: Equipamento
         #original_hash: 67cd406
@@ -757,11 +759,11 @@ pt:
         unconfirmed_wca_id: ''
         #original_hash: da39a3e
         wca_id: ''
-        #original_hash: 81a76a3
+        #original_hash: 27c2251
         receive_delegate_reports: >-
-          Se for Delegado em Treino, Delegado Júnior, Delegado Sénior ou membro
-          do WRC ou do WQAC, recebe Relatórios de Delegados por defeito. Nota: a
-          alteração pode levar até uma hora a tomar efeito.
+          Se for Delegado Sénior ou membro do WRC ou do WQAC, recebe Relatórios
+          de Delegados por defeito. Nota: a alteração pode levar até uma hora a
+          tomar efeito.
         #original_hash: 0627e5c
         otp_attempt: >-
           Verifique a aplicação móvel configurada para uma password ou insira um
@@ -814,6 +816,11 @@ pt:
         equipment: >-
           Número e tipo de timers e displays usados na competição. Remova a(s)
           linha(s) de equipamentos que não foram usados.
+        #original_hash: 2822e8d
+        summary: >-
+          Os pontos acima enumerados são apenas orientação para um relatório
+          completo. Utilize-os a seu critério para o que achar adequado. Remova
+          as partes que não sejam utilizadas!
         #original_hash: 2822e8d
         venue: >-
           Os pontos listados acima são apenas um guia para o relatório completo.
@@ -2673,6 +2680,11 @@ pt:
       registration_already_closed: >-
         A data limite para registos já foi ultrapassada. Por favor, defina-a
         para ser no futuro.
+      #original_hash: 9a07b42
+      uses_v2_registrations: >-
+        Esta competição está a utilizar o novo Sistema de Registo. Entre em
+        contacto com a WCAT se acredita que esta competição deveria utilizar o
+        sistema antigo.
       #original_hash: 3322400
       tooltip_registered: Está registado.
       #original_hash: f2d092f
@@ -2695,8 +2707,6 @@ pt:
       orga_closed_reg_success: Inscrições encerradas com sucesso.
       #original_hash: 7f197a0
       orga_closed_reg_failure: Não pode fechar as inscrições.
-      #original_hash: b16bd13
-      cannot_activate_v2: Não pode ativar o novo sistema de registos se o registo estiver aberto.
       #original_hash: 74caf1a
       no_waiting_list_specified: >-
         Esta competição não tem prazo para a aceitação de competidores em lista
@@ -3176,6 +3186,8 @@ pt:
           is_confirmed: Não permitir que os organizadores editem esta competição
           #original_hash: d493e6a
           is_visible: Tornar a competição visível para o público
+          #original_hash: e7daccb
+          uses_v_2_registrations: Usar o novo Sistema de Registo
         #original_hash: 89f89c0
         competition_id: ID
         #original_hash: 709a232
@@ -3329,6 +3341,11 @@ pt:
           is_confirmed: ''
           #original_hash: da39a3e
           is_visible: ''
+          #original_hash: 68d3cc6
+          uses_v_2_registrations: >-
+            Se isto estiver desativado, a alteração do sistema de registo irá
+            causar problemas técnicos. Contacte a WST para obter assistência se
+            ainda precisar de alterar o sistema de registo.
         #original_hash: da39a3e
         competition_id: ''
         #original_hash: 2c812a0
@@ -3637,6 +3654,31 @@ pt:
       info:
         #original_hash: eade5c7
         download: Descarregue todos os detalhes das competições.
+        #original_hash: 21891e5
+        payment_missing: >-
+          A sua inscrição não será aprovada até que esta seja paga, a menos que
+          tenha um acordo especial com os organizadores ou pague através de um
+          método alternativo.
+        #original_hash: b15fddc
+        needs_approval: >-
+          Não prepare já a sua viagem - os organizadores ainda terão de aprovar
+          manualmente a sua inscrição. Isto pode levar algum tempo.
+        #original_hash: 6071fd9
+        is_accepted: Reserve a sua viagem e faça as malas - tem um lugar na competição!
+        #original_hash: e29a4d3
+        is_cancelled: >-
+          A sua inscrição foi cancelada e não irá competir, mas poderá
+          inscrever-se novamente
+        #original_hash: 2a88d10
+        is_rejected: >-
+          A sua inscrição foi rejeitada pelos organizadores. Entre em contacto
+          com a equipa organizadora se acredita que se tratou de um erro.
+        #original_hash: 719dea0
+        is_waitlisted: >-
+          Não reserve a sua viagem, mas também não perca a esperança. A
+          competição está cheia, mas a sua inscrição foi colocada numa lista de
+          espera e receberá um e-mail se houver vagas suficientes para poder
+          participar.
       list:
         #original_hash: 6eef664
         empty: Nenhum
@@ -3664,12 +3706,19 @@ pt:
             concluído.
           #original_hash: 3a16c0d
           refunded: 'Pagamento foi reembolsado em %{date}.'
+        psychsheets:
+          #original_hash: f03e2d0
+          go_back: Voltar
+        #original_hash: 19eabc9
+        timestamp: Data/Hora
+        #original_hash: 5e0207a
+        comment_and_note: Comentário & Nota
+        #original_hash: b651ae4
+        edit_waiting_list: Ativar Modo de Edição da Lista de Espera
       bookmark:
         #original_hash: 7952a5c
         unbookmark: Removeu o marcador
       requirements:
-        #original_hash: 09a428f
-        title: Requisitos
         #original_hash: 1255806
         acknowledgement: >-
           Li e confirmei todas as informações na guia "Registo", incluindo taxas
@@ -3709,6 +3758,27 @@ pt:
         #original_hash: 462376a
         no_self_update: Contacte a Equipa de Organização para atualizar o seu registo.
       register:
+        panel:
+          approval:
+            #original_hash: 8cc047a
+            title: Aprovação
+            #original_hash: 3bdafe5
+            description: Pela equipa de organização
+          payment:
+            #original_hash: 4930c06
+            title: Informação de pagamento
+            #original_hash: 0d084a5
+            description: Insira informação de faturação
+          competing:
+            #original_hash: d672995
+            title: Registo
+            #original_hash: af0e6a0
+            description: Escolha as suas modalidades
+          requirements:
+            #original_hash: 09a428f
+            title: Requisitos
+            #original_hash: 46f4145
+            description: Aceitar os termos da competição
         #original_hash: a38d5fa
         success: 'Está registado para %{comp_name}'
         #original_hash: affea61
@@ -3723,8 +3793,6 @@ pt:
         until: 'Pode atualizar o seu registo até %{date}'
         #original_hash: fc8bc84
         passed: Já não pode atualizar o seu registo
-        #original_hash: 8cc047a
-        approval: Aprovação
         #original_hash: 05b9f17
         view_registration: Ver Registo
         #original_hash: 3c8d8b7
@@ -4183,8 +4251,6 @@ pt:
         competitors: Competidores
         #original_hash: c4622c3
         scrambles: Embaralhamentos
-        #original_hash: f632da3
-        enable_v2: Ativar o novo Serviço de Registo
     results_table:
       #original_hash: 3e9a6b5
       wca_profile: Perfil da WCA
