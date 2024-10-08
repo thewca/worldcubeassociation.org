@@ -30,6 +30,12 @@ variable "DATABASE_WRT_USER" {
   default     = "phpmyadmin"
 }
 
+variable "WRC_WEBHOOK_URL" {
+  description = "The URL to send delegate report webhook notifications for WRC to"
+  type = string
+  default = "https://joba.me/wca/reports_webhook"
+}
+
 variable "pma_auth_secret" {
   type = string
   description = "The client secret for pma you can get it at https://www.worldcubeassociation.org/oauth/applications/1069"
