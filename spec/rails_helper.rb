@@ -11,6 +11,7 @@ require 'rspec/rails'
 require "capybara/rspec"
 require 'capybara-screenshot/rspec'
 require 'capybara/apparition'
+require 'webdrivers/chromedriver'
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
@@ -42,6 +43,8 @@ Capybara.register_driver :apparition do |app|
 end
 
 Capybara.javascript_driver = :apparition
+
+Capybara.server = :puma, { queue_requests: false } # Added per a suggestion in this thread, seems to have no effect: https://github.com/teamcapybara/capybara/issues/2227
 
 RSpec.configure do |config|
   # enforce consistent locale behaviour across OSes, especially Linux
