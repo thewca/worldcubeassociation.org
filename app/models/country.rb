@@ -8,7 +8,7 @@ class Country < ApplicationRecord
 
   has_one :wfc_dues_redirect, as: :redirect_source
 
-  SUPPORTED_TIMEZONES = ActiveSupport::TimeZone::MAPPING.values.uniq.freeze
+  SUPPORTED_TIMEZONES = TZInfo::Timezone.all_identifiers.uniq.freeze
 
   FICTIVE_COUNTRY_DATA_PATH = StaticData::DATA_FOLDER.join("#{self.data_file_handle}.fictive.json")
   MULTIPLE_COUNTRIES = self.parse_json_file(FICTIVE_COUNTRY_DATA_PATH).freeze

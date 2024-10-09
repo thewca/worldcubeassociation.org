@@ -26,6 +26,18 @@ export const addEndBufferWithinDay = (luxonDate) => {
   return buffered;
 };
 
+export const fullTimeDiff = (luxonDate) => {
+  const now = DateTime.local();
+
+  const diff = luxonDate.diff(now, ['days', 'hours', 'minutes', 'seconds']).toObject();
+  return {
+    days: Math.floor(diff.days),
+    hours: Math.floor(diff.hours),
+    minutes: Math.floor(diff.minutes),
+    seconds: Math.floor(diff.seconds),
+  };
+};
+
 /// / string parameters
 
 export function hasPassed(dateTime, timeZone = null) {
