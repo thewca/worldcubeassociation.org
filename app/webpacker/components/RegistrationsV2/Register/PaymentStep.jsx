@@ -36,7 +36,7 @@ export default function PaymentStep({
 
   useEffect(() => {
     // TODO When we add per Event Payment this logic needs to also check if an additional payment is needed
-    if (registration?.payment?.payment_status === 'succeeded') {
+    if (registration?.payment?.has_paid) {
       nextStep();
     }
   }, [nextStep, registration]);

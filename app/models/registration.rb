@@ -265,8 +265,10 @@ class Registration < ApplicationRecord
       if competition.using_payment_integrations?
         base_json.merge!({
                            payment: {
-                             payment_status: outstanding_entry_fees == 0 ? 'succeeded' : '',
-                             payment_amount_human_readable: paid_entry_fees,
+                             has_paid: outstanding_entry_fees == 0,
+                             payment_status: payment_intents.map(&:wca_status),
+                             payment_amount_iso: paid_entry_fees.cents,
+                             payment_amount_human_readable: "#{paid_entry_fees.format} (#{paid_entry_fees.currency.name})",
                              updated_at: last_payment_date,
                            }
                          })
