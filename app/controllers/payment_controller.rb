@@ -7,7 +7,7 @@ class PaymentController < ApplicationController
       competition_id, user_id = attendee_id.split("-")
 
       registration = Registration.includes(:competition, :payment_intents)
-                                                .find_by(competition_id: competition_id, user_id: user_id)
+                                 .find_by(competition_id: competition_id, user_id: user_id)
       return render status: :bad_request, json: { error: "Registration not found" } unless registration.present?
 
       competition = registration.competition
