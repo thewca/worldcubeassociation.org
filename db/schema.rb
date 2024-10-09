@@ -1318,7 +1318,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_09_111904) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
-  add_foreign_key "microservice_registrations", "Competitions", column: "competition_id", on_update: :cascade
+  add_foreign_key "microservice_registrations", "Competitions", column: "competition_id", on_update: :cascade, on_delete: :cascade
   add_foreign_key "microservice_registrations", "users"
   add_foreign_key "oauth_openid_requests", "oauth_access_grants", column: "access_grant_id", on_delete: :cascade
   add_foreign_key "payment_intents", "users", column: "initiated_by_id"
