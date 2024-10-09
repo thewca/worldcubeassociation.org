@@ -53,7 +53,7 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
     Registrations::RegistrationChecker.create_registration_allowed!(registration_params, Competition.find(@competition_id), @current_user)
   rescue WcaExceptions::RegistrationError => e
     Rails.logger.debug { "Create was rejected with error #{e.error} at #{e.backtrace[0]}" }
-    render_error(e.http_status, e.error, e.data)
+    render_error(e.status, e.error, e.data)
   end
 
   def update

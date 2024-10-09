@@ -8,7 +8,7 @@ module Registrations
 
       user_can_create_registration!(competition, requester_user, requestee_user)
       validate_create_events!(registration_request, competition)
-      validate_qualifications!(registration_request, competition)
+      validate_qualifications!(registration_request, competition, requestee_user)
       validate_guests!(registration_request, competition)
       validate_comment!(registration_request, competition)
     end
@@ -25,7 +25,7 @@ module Registrations
       validate_waiting_list_position!(update_request, competition)
       validate_update_status!(update_request, competition, requester_user, requestee_user, registration)
       validate_update_events!(update_request, competition)
-      validate_qualifications!(update_request, competition)
+      validate_qualifications!(update_request, competition, requestee_user)
     rescue ActiveRecord::RecordNotFound
       # We capture and convert the error so that it can be included in the error array of a bulk update request
       raise WcaExceptions::RegistrationError.new(:not_found, Registrations::ErrorCodes::REGISTRATION_NOT_FOUND)
@@ -93,13 +93,13 @@ module Registrations
         raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::INVALID_EVENT_SELECTION) if event_limit.present? && event_ids.count > event_limit
       end
 
-      def validate_qualifications!(request, competition)
+      def validate_qualifications!(request, competition, requestee_user)
         return unless competition.enforces_qualifications?
         event_ids = request.dig('competing', 'event_ids')
 
         unqualified_events = event_ids.filter_map do |event|
           qualification = competition.qualification_wcif[event]
-          event if qualification.present? && !competitor_qualifies_for_event?(event, qualification)
+          event if qualification.present? && !competitor_qualifies_for_event?(event, qualification, requestee_user)
         end
 
         raise WcaExceptions::RegistrationError.new(:unprocessable_entity, Registrations::ErrorCodes::QUALIFICATION_NOT_MET, unqualified_events) unless unqualified_events.empty?
@@ -214,14 +214,16 @@ module Registrations
       end
 
       def competitor_qualifies_for_event?(event, qualification, requestee_user)
-        competitor_qualification_results = UserApi.qualifications(requestee_user, qualification['whenDate'])
+        target_date = Date.parse(qualification['whenDate']) > Time.now.utc ? Time.now.utc : Date.parse(qualification['whenDate'])
+        competitor_qualification_results = Registrations::Helper.user_qualification_data(requestee_user, target_date)
         result_type = qualification['resultType']
 
-        competitor_pr = competitor_qualification_results.find { |result| result['eventId'] == event && result['type'] == result_type }
+        competitor_pr = competitor_qualification_results.find { |result| result[:eventId] == event && result[:type].to_s == result_type }
+        puts(competitor_qualification_results)
         return false if competitor_pr.blank?
 
         begin
-          pr_date = Date.parse(competitor_pr['on_or_before'])
+          pr_date = Date.parse(competitor_pr[:on_or_before])
           qualification_date = Date.parse(qualification['whenDate'])
         rescue ArgumentError
           return false
@@ -235,7 +237,7 @@ module Registrations
           # Ranking qualifications are enforced when registration closes, so it is effectively an anyResult ranking when registering
           true
         when 'attemptResult'
-          competitor_pr['best'].to_i < qualification['level']
+          competitor_pr[:best].to_i < qualification['level']
         else
           false
         end
