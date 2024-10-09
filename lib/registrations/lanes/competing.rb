@@ -16,7 +16,7 @@ module Registrations
         changes = registration.changes.transform_values { |change| change[1] }
         changes[:event_ids] = lane_params[:competing][:event_ids]
         registration.save!
-        registration.add_history_entry(lane_params, "worker", user_id, "Worker processed")
+        registration.add_history_entry(changes, "worker", user_id, "Worker processed")
       end
 
       def self.update!(lane_params, current_user_id, competition_id)

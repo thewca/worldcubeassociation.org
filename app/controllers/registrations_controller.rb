@@ -748,7 +748,7 @@ class RegistrationsController < ApplicationController
         payment_record.registration_payment.id,
         current_user.id,
       )
-      registration.add_history_entry({ payment_status: "refund", iso_amount: ruby_money.cents }, "user", current_user.id, 'Refund')
+      registration.add_history_entry({ payment_status: "refund", iso_amount: amount_left }, "user", current_user.id, 'Refund')
     end
 
     flash[:success] = 'Payment was refunded'

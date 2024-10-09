@@ -18,7 +18,7 @@ export default function RegistrationAdministrationTableFooter({
   const guestCount = _.sum(registrations.map((r) => r.guests));
 
   const moneyCount = _.sum(registrations.filter(
-    (r) => r.payment.payment_status === 'succeeded',
+    (r) => r.payment.has_paid,
   ).map((r) => r.payment.payment_amount_iso));
 
   const moneyCountHumanReadable = isoMoneyToHumanReadable(
