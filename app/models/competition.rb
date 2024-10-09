@@ -636,6 +636,7 @@ class Competition < ApplicationRecord
   def build_clone
     Competition.new(attributes.slice(*CLONEABLE_ATTRIBUTES)).tap do |clone|
       clone.being_cloned_from_id = id
+      clone.uses_v2_registrations = true
 
       Competition.reflections.each_key do |association_name|
         case association_name
@@ -748,7 +749,7 @@ class Competition < ApplicationRecord
   end
 
   def should_render_register_v2?(user)
-    uses_new_registration_service? && user.cannot_register_for_competition_reasons(self).empty? && (registration_currently_open? || user_can_pre_register?(user))
+    uses_new_registration_service? && user.cannot_register_for_competition_reasons(self).empty?
   end
 
   before_validation :unpack_delegate_organizer_ids
@@ -1037,13 +1038,11 @@ class Competition < ApplicationRecord
   end
 
   def country_zones
-    ActiveSupport::TimeZone.country_zones(country.iso2).to_h { |tz| [tz.name, tz.tzinfo.name] }
+    TZInfo::Country.get(country.iso2.upcase).zone_identifiers
   rescue TZInfo::InvalidCountryCode
     # This can occur for non real country *and* XK!
     # FIXME what to provide for XA, XE, XM, XS?
-    {
-      "London" => "Europe/London",
-    }
+    ["Europe/London"]
   end
 
   private def compute_coordinates
