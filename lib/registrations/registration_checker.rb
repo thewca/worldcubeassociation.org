@@ -214,7 +214,7 @@ module Registrations
       end
 
       def competitor_qualifies_for_event?(event, qualification, requestee_user)
-        target_date = Date.parse(qualification['whenDate']) > Time.now.utc ? Time.now.utc : Date.parse(qualification['whenDate'])
+        target_date = [Date.parse(qualification['whenDate']), Time.now.utc].min
         competitor_qualification_results = Registrations::Helper.user_qualification_data(requestee_user, target_date)
         result_type = qualification['resultType']
 
