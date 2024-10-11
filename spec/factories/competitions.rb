@@ -147,6 +147,13 @@ FactoryBot.define do
       ends { starts }
     end
 
+    trait :registration_not_opened do
+      registration_open { 1.weeks.from_now.change(usec: 0) }
+      registration_close { 4.weeks.from_now.change(usec: 0) }
+      starts { 1.month.from_now }
+      ends { starts }
+    end
+
     trait :editable_registrations do
       allow_registration_edits { true }
       event_change_deadline_date { 2.weeks.from_now.change(usec: 0) }

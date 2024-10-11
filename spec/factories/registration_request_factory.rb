@@ -15,7 +15,7 @@ FactoryBot.define do
     competition_id { 'CubingZANationalChampionship2023' }
     competing { { 'event_ids' => events, 'lane_state' => 'pending' } }
 
-    # jwt_token { fetch_jwt_token(submitted_by) }
+    jwt_token { fetch_jwt_token(submitted_by) }
     guests { 0 }
 
     trait :comment do

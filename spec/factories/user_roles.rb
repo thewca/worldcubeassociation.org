@@ -8,6 +8,11 @@ FactoryBot.define do
       start_date { Date.today }
     end
 
+    trait :ends_soon do
+      start_date { Date.today }
+      end_date { 1.week.from_now }
+    end
+
     trait :inactive do
       start_date { Faker::Date.between(from: 10.years.ago, to: 5.years.ago) }
       end_date { Faker::Date.between(from: 5.years.ago, to: Date.today) }
@@ -229,5 +234,6 @@ FactoryBot.define do
     factory :wapc_member_role, traits: [:wapc_member, :active]
     factory :board_role, traits: [:board, :active]
     factory :banned_competitor_role, traits: [:banned_competitor, :active]
+    factory :briefly_banned_competitor_role, traits: [:banned_competitor, :ends_soon]
   end
 end

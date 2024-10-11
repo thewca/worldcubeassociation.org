@@ -259,7 +259,7 @@ RSpec.describe Registrations::RegistrationChecker do
       end
     end
 
-    describe '#create_registration_allowed!.user_can_create_registration!' do
+    describe '#create_registration_allowed!.user_can_create_registration!', :tag do
       it 'user can create a registration' do
         registration_request = FactoryBot.build(:registration_request, competition_id: default_competition.id, user_id: default_user.id)
 
@@ -298,8 +298,8 @@ RSpec.describe Registrations::RegistrationChecker do
       end
 
       it 'organizers can register before registration opens' do
-        registration_request = FactoryBot.build(:registration_request, :organizer, competition_id: default_competition.id, user_id: default_user.id)
-        competition = CompetitionInfo.new(FactoryBot.build(:competition, :registration_closed))
+        competition = FactoryBot.create(:competition, :registration_not_opened, :with_organizer)
+        registration_request = FactoryBot.build(:registration_request, competition_id: competition.id, user_id: competition.organizers.first.id)
 
         expect {
           Registrations::RegistrationChecker.create_registration_allowed!(
@@ -309,11 +309,14 @@ RSpec.describe Registrations::RegistrationChecker do
       end
 
       it 'organizers cannot create registrations for users' do
-        registration_request = FactoryBot.build(:registration_request, :organizer_submits, competition_id: default_competition.id, user_id: default_user.id)
-        competition = CompetitionInfo.new(FactoryBot.build(:competition))
-        stub_request(:get, UserApi.permissions_path(registration_request['user_id'])).to_return(status: 200, body: FactoryBot.build(:permissions_response).to_json, headers: { content_type: 'application/json' })
-        stub_request(:get, UserApi.permissions_path(User.find(registration_request['submitted_by']))).to_return(status: 200, body: FactoryBot.build(:permissions_response, organized_competitions: [competition.competition_id]).to_json,
-                                                                                                     headers: { content_type: 'application/json' })
+        competition = FactoryBot.create(:competition, :registration_open, :with_organizer)
+        registration_request = FactoryBot.build(
+          :registration_request,
+          :organizer_submits,
+          competition_id: default_competition.id,
+          user_id: default_user.id,
+          submitted_by: competition.organizers.first.id,
+        )
 
         expect {
           Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['submitted_by']))
@@ -324,24 +327,17 @@ RSpec.describe Registrations::RegistrationChecker do
       end
 
       it 'can register if ban ends before competition starts' do
-        registration_request = FactoryBot.build(:registration_request, :unbanned_soon, competition_id: default_competition.id, user_id: default_user.id)
-        competition = CompetitionInfo.new(FactoryBot.build(:competition))
-        stub_request(:get, UserApi.permissions_path(registration_request['user_id'])).to_return(
-          status: 200,
-          body: FactoryBot.build(:permissions_response, :unbanned_soon, ban_end_date: DateTime.parse(competition.start_date)-1).to_json,
-          headers: { content_type: 'application/json' },
-        )
+        briefly_banned_user = FactoryBot.create(:user, :briefly_banned)
+        registration_request = FactoryBot.build(:registration_request, competition_id: default_competition.id, user_id: briefly_banned_user.id)
 
-        expect { Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['submitted_by'])) }
-          .not_to raise_error
+        expect {
+          Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['submitted_by']))
+        }.not_to raise_error
       end
 
       it 'cant register if ban ends after competition starts' do
-        registration_request = FactoryBot.build(:registration_request, :banned, competition_id: default_competition.id, user_id: default_user.id)
-        competition = CompetitionInfo.new(FactoryBot.build(:competition))
-        stub_request(:get, UserApi.permissions_path(registration_request['user_id'])).to_return(
-          status: 200, body: FactoryBot.build(:permissions_response, :banned).to_json, headers: { content_type: 'application/json' },
-        )
+        banned_user = FactoryBot.create(:user, :banned)
+        registration_request = FactoryBot.build(:registration_request, competition_id: default_competition.id, user_id: banned_user.id)
 
         expect {
           Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['submitted_by']))
@@ -352,9 +348,8 @@ RSpec.describe Registrations::RegistrationChecker do
       end
 
       it 'user with incomplete profile cant register' do
-        registration_request = FactoryBot.build(:registration_request, :incomplete, competition_id: default_competition.id, user_id: default_user.id)
-        competition = CompetitionInfo.new(FactoryBot.build(:competition))
-        stub_request(:get, UserApi.permissions_path(registration_request['user_id'])).to_return(status: 200, body: FactoryBot.build(:permissions_response, :banned).to_json, headers: { content_type: 'application/json' })
+        user = FactoryBot.create(:user, :incomplete)
+        registration_request = FactoryBot.build(:registration_request, :incomplete, competition_id: default_competition.id, user_id: user.id)
 
         expect {
           Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['submitted_by']))
@@ -365,9 +360,10 @@ RSpec.describe Registrations::RegistrationChecker do
       end
 
       it 'doesnt leak data if user tries to register for a banned user' do
-        registration_request = FactoryBot.build(:registration_request, :banned, :impersonation, competition_id: default_competition.id, user_id: default_user.id)
-        competition = CompetitionInfo.new(FactoryBot.build(:competition))
-        stub_request(:get, UserApi.permissions_path(User.find(registration_request['submitted_by']))).to_return(status: 200, body: FactoryBot.build(:permissions_response, :banned).to_json, headers: { content_type: 'application/json' })
+        banned_user = FactoryBot.create(:user, :banned)
+        registration_request = FactoryBot.build(
+          :registration_request, :banned, :impersonation, competition_id: default_competition.id, user_id: banned_user.id, submitted_by: default_user.id
+        )
 
         expect {
           Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['submitted_by']))
@@ -378,11 +374,12 @@ RSpec.describe Registrations::RegistrationChecker do
       end
 
       it 'doesnt leak data if organizer tries to register for a banned user' do
-        registration_request = FactoryBot.build(:registration_request, :incomplete, :impersonation, competition_id: default_competition.id, user_id: default_user.id)
-        competition = CompetitionInfo.new(FactoryBot.build(:competition))
-        stub_request(:get, UserApi.permissions_path(registration_request['user_id'])).to_return(status: 200, body: FactoryBot.build(:permissions_response, :banned).to_json, headers: { content_type: 'application/json' })
-        stub_request(:get, UserApi.permissions_path(User.find(registration_request['submitted_by']))).to_return(status: 200, body: FactoryBot.build(:permissions_response, organized_competitions: [competition.competition_id]).to_json,
-                                                                                                     headers: { content_type: 'application/json' })
+        banned_user = FactoryBot.create(:user, :banned)
+        competition = FactoryBot.create(:competition, :registration_open, :with_organizer)
+        organizer_id = competition.organizers.first.id
+        registration_request = FactoryBot.build(
+          :registration_request, :incomplete, :impersonation, competition_id: competition.id, user_id: banned_user.id, submitted_by: organizer_id
+        )
 
         expect {
           Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['submitted_by']))
@@ -392,39 +389,41 @@ RSpec.describe Registrations::RegistrationChecker do
         end
       end
 
-      it 'can register if this is the first registration in a series' do
-        registration_request = FactoryBot.build(:registration_request, competition_id: default_competition.id, user_id: default_user.id)
-        competition = CompetitionInfo.new(FactoryBot.build(:competition, :series))
-        stub_request(:get, UserApi.permissions_path(registration_request['user_id'])).to_return(status: 200, body: FactoryBot.build(:permissions_response).to_json, headers: { content_type: 'application/json' })
+      context 'series' do
+        let(:series) { FactoryBot.create(:competition_series) }
+        let(:competitionA) { FactoryBot.create(:competition, :registration_open, competition_series: series) }
+        let(:competitionB) { FactoryBot.create(:competition, :registration_open, competition_series: series, series_base: competitionA) }
 
-        expect {
-          Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['submitted_by']))
-        }.not_to raise_error
-      end
+        it 'can register if this is the first registration in a series' do
+          registration_request = FactoryBot.build(:registration_request, competition_id: competitionA.id, user_id: default_user.id)
 
-      it 'cant register if already have a non-cancelled registration for another series competition' do
-        registration_request = FactoryBot.build(:registration_request, competition_id: default_competition.id, user_id: default_user.id)
-        FactoryBot.create(:registration, user_id: registration_request['user_id'], registration_status: 'accepted', competition_id: 'CubingZAWarmup2023')
-        competition = CompetitionInfo.new(FactoryBot.build(:competition, :series))
-        stub_request(:get, UserApi.permissions_path(registration_request['user_id'])).to_return(status: 200, body: FactoryBot.build(:permissions_response).to_json, headers: { content_type: 'application/json' })
-
-        expect {
-          Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['submitted_by']))
-        }.to raise_error(WcaExceptions::RegistrationError) do |error|
-          expect(error.error).to eq(Registrations::ErrorCodes::ALREADY_REGISTERED_IN_SERIES)
-          expect(error.status).to eq(:forbidden)
+          expect {
+            Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['submitted_by']))
+          }.not_to raise_error
         end
-      end
 
-      it 'can register if they have a cancelled registration for another series comp' do
-        registration_request = FactoryBot.build(:registration_request, competition_id: default_competition.id, user_id: default_user.id)
-        FactoryBot.create(:registration, user_id: registration_request['user_id'], registration_status: 'cancelled', competition_id: 'CubingZAWarmup2023')
-        competition = CompetitionInfo.new(FactoryBot.build(:competition, :series))
-        stub_request(:get, UserApi.permissions_path(registration_request['user_id'])).to_return(status: 200, body: FactoryBot.build(:permissions_response).to_json, headers: { content_type: 'application/json' })
+        it 'cant register if already have a non-cancelled registration for another series competition' do
+          FactoryBot.create(:registration, :accepted)
+          registration_request = FactoryBot.build(:registration_request, competition_id: default_competition.id, user_id: default_user.id)
 
-        expect {
-          Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['submitted_by']))
-        }.not_to raise_error
+          expect {
+            Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['submitted_by']))
+          }.to raise_error(WcaExceptions::RegistrationError) do |error|
+            expect(error.error).to eq(Registrations::ErrorCodes::ALREADY_REGISTERED_IN_SERIES)
+            expect(error.status).to eq(:forbidden)
+          end
+        end
+
+        it 'can register if they have a cancelled registration for another series comp' do
+          registration_request = FactoryBot.build(:registration_request, competition_id: default_competition.id, user_id: default_user.id)
+          FactoryBot.create(:registration, user_id: registration_request['user_id'], registration_status: 'cancelled', competition_id: 'CubingZAWarmup2023')
+          competition = CompetitionInfo.new(FactoryBot.build(:competition, :series))
+          stub_request(:get, UserApi.permissions_path(registration_request['user_id'])).to_return(status: 200, body: FactoryBot.build(:permissions_response).to_json, headers: { content_type: 'application/json' })
+
+          expect {
+            Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['submitted_by']))
+          }.not_to raise_error
+        end
       end
 
     end
