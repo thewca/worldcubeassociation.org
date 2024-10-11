@@ -162,4 +162,5 @@ group :production do
   gem 'rack'
   gem 'newrelic_rpm'
   gem 'wkhtmltopdf-binary-ng'
+  gem 'shoryuken'
 end

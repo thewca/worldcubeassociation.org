@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class AddRegistrationJob < ApplicationJob
+  self.queue_adapter = :shoryuken unless Rails.env.local?
   def perform(lane_name, competition_id, user_id, lane_params)
     lane_model_name = lane_name.upcase_first
 

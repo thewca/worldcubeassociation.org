@@ -30,6 +30,7 @@ EnvConfig = SuperConfig.new(raise_exception: !is_compiling_assets) do
     mandatory :WCA_REGISTRATIONS_POLL_URL, :string
     mandatory :ASSET_HOST, :string
     mandatory :CDN_ASSETS_DISTRIBUTION_ID, :string
+    mandatory :REGISTRATION_QUEUE, :string
   else
     optional :READ_REPLICA_HOST, :string, ''
     optional :CACHE_REDIS_URL, :string, ''
@@ -47,6 +48,7 @@ EnvConfig = SuperConfig.new(raise_exception: !is_compiling_assets) do
     optional :WCA_REGISTRATIONS_POLL_URL, :string, ''
     optional :PAYPAL_BASE_URL, :string, ''
     optional :WRC_WEBHOOK_URL, :string, ''
+    optional :REGISTRATION_QUEUE, :string, ''
 
     # Local-specific stuff
     optional :DISABLE_BULLET, :bool, false
