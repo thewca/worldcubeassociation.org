@@ -402,6 +402,7 @@ class Competition < ApplicationRecord
   end
 
   def guest_limit_exceeded?(guest_count)
+    return true if guest_count > 0 and !guests_enabled
     return false if guests_per_registration_limit.blank?
     guest_entry_status == 'restricted' && guests_per_registration_limit < guest_count
   end

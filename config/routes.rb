@@ -338,7 +338,7 @@ Rails.application.routes.draw do
       namespace :v1 do
         namespace :registrations do
           get '/register', to: 'registrations#show'
-          post '/register', to: 'registrations#create'
+          post '/register', to: 'registrations#create', as: :create_registration
           patch '/register', to: 'registrations#update'
           patch '/bulk_update', to: 'registrations#bulk_update'
           get '/:competition_id', to: 'registrations#list'

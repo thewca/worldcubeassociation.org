@@ -2,6 +2,19 @@
 
 FactoryBot.define do
   factory :competition do
+    transient do
+      championship_types { [] }
+      with_rounds { false }
+      with_schedule { false }
+      series_base { nil }
+      series_distance_days { 0 }
+      series_distance_km { 0 }
+      distance_direction_deg { rand(360) }
+      starts { 1.year.ago }
+      ends { starts }
+      event_ids { %w(333 333oh) }
+    end
+
     sequence(:name) { |n| "Foo Comp #{n} 2015" }
 
     cityName { "San Francisco, California" }
@@ -13,14 +26,32 @@ FactoryBot.define do
     latitude { rand(-90_000_000..90_000_000) }
     longitude { rand(-180_000_000..180_000_000) }
 
-    transient do
-      starts { 1.year.ago }
-      ends { starts }
-      event_ids { %w(333 333oh) }
-    end
+    use_wca_registration { true }
+    registration_open { 54.weeks.ago.change(usec: 0) }
+    registration_close { 1.weeks.from_now.change(usec: 0) }
 
     start_date { starts.nil? ? nil : starts.strftime("%F") }
     end_date { ends.nil? ? nil : ends.strftime("%F") }
+
+    events { Event.where(id: event_ids) }
+    main_event_id { events.first.id if events.any? }
+
+    venue { "My backyard" }
+    venueAddress { "My backyard street" }
+    external_website { "https://www.worldcubeassociation.org" }
+    showAtAll { false }
+    confirmed_at { nil }
+
+    external_registration_page { "https://www.worldcubeassociation.org" }
+    competitor_limit_enabled { false }
+    guests_enabled { true }
+    on_the_spot_registration { false }
+    refund_policy_percent { 0 }
+    guests_entry_fee_lowest_denomination { 0 }
+
+    trait :has_qualifications do
+
+    end
 
     trait :future do
       starts { 2.weeks.from_now }
@@ -56,22 +87,6 @@ FactoryBot.define do
       competitor_limit_reason { "The hall only fits 100 competitors." }
     end
 
-    events { Event.where(id: event_ids) }
-    main_event_id { events.first.id if events.any? }
-
-    venue { "My backyard" }
-    venueAddress { "My backyard street" }
-    external_website { "https://www.worldcubeassociation.org" }
-    showAtAll { false }
-    confirmed_at { nil }
-
-    external_registration_page { "https://www.worldcubeassociation.org" }
-    competitor_limit_enabled { false }
-    guests_enabled { true }
-    on_the_spot_registration { false }
-    refund_policy_percent { 0 }
-    guests_entry_fee_lowest_denomination { 0 }
-
     trait :with_delegate do
       delegates { [FactoryBot.create(:delegate)] }
     end
@@ -95,20 +110,14 @@ FactoryBot.define do
     end
 
     trait :with_guest_limit do
-      guests_enabled { true }
       guest_entry_status { Competition.guest_entry_statuses['restricted'] }
       guests_per_registration_limit { 10 }
     end
 
     trait :with_event_limit do
-      event_restrictions { true }
       event_restrictions_reason { "this is a favourites competition" }
       events_per_registration_limit { events.length }
     end
-
-    use_wca_registration { false }
-    registration_open { 54.weeks.ago.change(usec: 0) }
-    registration_close { 1.weeks.from_now.change(usec: 0) }
 
     trait :with_valid_submitted_results do
       announced
@@ -127,7 +136,6 @@ FactoryBot.define do
     trait :registration_open do
       starts { 1.month.from_now }
       ends { starts }
-      use_wca_registration { true }
       registration_open { 2.weeks.ago.change(usec: 0) }
       registration_close { 2.weeks.from_now.change(usec: 0) }
     end
@@ -135,6 +143,8 @@ FactoryBot.define do
     trait :registration_closed do
       registration_open { 4.weeks.ago.change(usec: 0) }
       registration_close { 1.weeks.ago.change(usec: 0) }
+      starts { 1.month.from_now }
+      ends { starts }
     end
 
     trait :editable_registrations do
@@ -200,19 +210,6 @@ FactoryBot.define do
 
     trait :world_championship do
       championship_types { ["world"] }
-    end
-
-    transient do
-      championship_types { [] }
-      with_rounds { false }
-      with_schedule { false }
-    end
-
-    transient do
-      series_base { nil }
-      series_distance_days { 0 }
-      series_distance_km { 0 }
-      distance_direction_deg { rand(360) }
     end
 
     after(:build) do |competition, evaluator|
@@ -355,7 +352,7 @@ FactoryBot.define do
       end
     end
 
-    after(:create) do |competition|
+    after(:create) do |competition| # TODO: This can be combined with the above after(:create) block
       competition.delegates.each do |delegate|
         unless delegate.region_id.nil? # There can be cases where the competition delegate is actually not a delegate (temporary delegate)
           if UserGroup.find(delegate.region_id).lead_user.nil? # Allowing to manually create senior delegate for the delegate if needed.

@@ -3,8 +3,9 @@
 module Registrations
   class RegistrationChecker
     COMMENT_CHARACTER_LIMIT = 240
-    def self.create_registration_allowed!(registration_request, competition, requester_user)
+    def self.create_registration_allowed!(registration_request, requester_user)
       requestee_user = User.find(registration_request['user_id'])
+      competition = Competition.find(registration_request['competition_id'])
 
       user_can_create_registration!(competition, requester_user, requestee_user)
       validate_create_events!(registration_request, competition)
@@ -52,7 +53,7 @@ module Registrations
         raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless requester_user.id == requestee_user.id
 
         # Only organizers can register when registration is closed, and they can only register for themselves - not for other users
-        raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::REGISTRATION_CLOSED) unless competition.registration_open? || organizer_modifying_own_registration?(competition, requester_user, requestee_user)
+        raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::REGISTRATION_CLOSED) unless competition.registration_currently_open? || organizer_modifying_own_registration?(competition, requester_user, requestee_user)
 
         # Users must have the necessary permissions to compete - eg, they cannot be banned or have incomplete profiles
         raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::USER_CANNOT_COMPETE) unless requestee_user.cannot_register_for_competition_reasons(competition).empty?

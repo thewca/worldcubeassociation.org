@@ -38,7 +38,7 @@ module WcaExceptions
 
     def initialize(status, error, data = nil)
       super(status, I18n.t("competitions.registration_v2.errors.#{error}"))
-      @error_code = error
+      @error = error
       @data = data
     end
   end

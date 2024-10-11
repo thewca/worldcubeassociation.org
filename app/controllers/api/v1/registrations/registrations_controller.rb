@@ -5,7 +5,9 @@ require 'jwt'
 require 'time'
 
 class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
-  skip_before_action :validate_jwt_token, only: [:list, :count]
+  # TODO: Remove `create` from skip list - only there because of JWT implementation issues
+  # TODO: Add `count` back to the skip list - only there because it doesn't seem to be defined yet? (or it's unnecessary and won't need to be defined)
+  skip_before_action :validate_jwt_token, only: [:list, :create]
   # The order of the validations is important to not leak any non public info via the API
   # That's why we should always validate a request first, before taking any other before action
   # before_actions are triggered in the order they are defined
@@ -48,9 +50,8 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
   end
 
   def validate_create_request
-    @competition_id = registration_params[:competition_id]
-    @user_id = registration_params[:user_id]
-    Registrations::RegistrationChecker.create_registration_allowed!(registration_params, Competition.find(@competition_id), @current_user)
+    @current_user = User.find(registration_params[:submitted_by]) # TODO: Remove this line once JWT is working again
+    Registrations::RegistrationChecker.create_registration_allowed!(registration_params, @current_user)
   rescue WcaExceptions::RegistrationError => e
     Rails.logger.debug { "Create was rejected with error #{e.error} at #{e.backtrace[0]}" }
     render_error(e.status, e.error, e.data)
