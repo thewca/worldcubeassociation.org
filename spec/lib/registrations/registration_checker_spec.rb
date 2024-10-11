@@ -86,41 +86,11 @@ RSpec.describe Registrations::RegistrationChecker do
 
   describe '#create' do
     describe '#create_registration_allowed!' do
-      it 'user must have events selected' do
-        registration_request = FactoryBot.build(
-          :registration_request, events: [], competition_id: default_competition.id, user_id: default_user.id
-        )
-
-        expect {
-          Registrations::RegistrationChecker.create_registration_allowed!(
-            registration_request, User.find(registration_request['submitted_by'])
-          )
-        }.to raise_error(WcaExceptions::RegistrationError) do |error|
-          expect(error.status).to eq(:unprocessable_entity)
-          expect(error.error).to eq(Registrations::ErrorCodes::INVALID_EVENT_SELECTION)
-        end
-      end
-
-      it 'events must be held at the competition' do
-        registration_request = FactoryBot.build(
-          :registration_request, events: ['333', '333fm'], competition_id: default_competition.id, user_id: default_user.id
-        )
-
-        expect {
-          Registrations::RegistrationChecker.create_registration_allowed!(
-            registration_request, User.find(registration_request['submitted_by'])
-          )
-        }.to raise_error(WcaExceptions::RegistrationError) do |error|
-          expect(error.status).to eq(:unprocessable_entity)
-          expect(error.error).to eq(Registrations::ErrorCodes::INVALID_EVENT_SELECTION)
-        end
-      end
-
       it 'guests can equal the maximum allowed' do
         registration_request = FactoryBot.build(
           :registration_request, guests: 10, competition_id: default_competition.id, user_id: default_user.id
         )
-        competition = FactoryBot.create(:competition, :with_guest_limit, :registration_open)
+        FactoryBot.create(:competition, :with_guest_limit, :registration_open)
 
         expect {
           Registrations::RegistrationChecker.create_registration_allowed!(
@@ -134,8 +104,7 @@ RSpec.describe Registrations::RegistrationChecker do
 
         expect {
           Registrations::RegistrationChecker.create_registration_allowed!(
-            registration_request, User.find(registration_request['submitted_by']
-            )
+            registration_request, User.find(registration_request['submitted_by'])
           )
         }.not_to raise_error
       end
@@ -161,7 +130,7 @@ RSpec.describe Registrations::RegistrationChecker do
         expect {
           Registrations::RegistrationChecker.create_registration_allowed!(
             registration_request,
-            User.find(registration_request['submitted_by'])
+            User.find(registration_request['submitted_by']),
           )
         }.to raise_error(WcaExceptions::RegistrationError) do |error|
           expect(error.status).to eq(:unprocessable_entity)
@@ -259,7 +228,7 @@ RSpec.describe Registrations::RegistrationChecker do
       end
     end
 
-    describe '#create_registration_allowed!.user_can_create_registration!', :tag do
+    describe '#create_registration_allowed!.user_can_create_registration!' do
       it 'user can create a registration' do
         registration_request = FactoryBot.build(:registration_request, competition_id: default_competition.id, user_id: default_user.id)
 
@@ -389,53 +358,68 @@ RSpec.describe Registrations::RegistrationChecker do
         end
       end
 
-      context 'series' do
-        let(:series) { FactoryBot.create(:competition_series) }
-        let(:competitionA) { FactoryBot.create(:competition, :registration_open, competition_series: series) }
-        let(:competitionB) { FactoryBot.create(:competition, :registration_open, competition_series: series, series_base: competitionA) }
+      it 'can register if this is the first registration in a series' do
+        series = FactoryBot.create(:competition_series)
+        competitionA = FactoryBot.create(:competition, :registration_open, competition_series: series)
+        FactoryBot.create(:competition, :registration_open, competition_series: series, series_base: competitionA)
 
-        it 'can register if this is the first registration in a series' do
-          registration_request = FactoryBot.build(:registration_request, competition_id: competitionA.id, user_id: default_user.id)
-
-          expect {
-            Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['submitted_by']))
-          }.not_to raise_error
-        end
-
-        it 'cant register if already have a non-cancelled registration for another series competition' do
-          FactoryBot.create(:registration, :accepted)
-          registration_request = FactoryBot.build(:registration_request, competition_id: default_competition.id, user_id: default_user.id)
-
-          expect {
-            Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['submitted_by']))
-          }.to raise_error(WcaExceptions::RegistrationError) do |error|
-            expect(error.error).to eq(Registrations::ErrorCodes::ALREADY_REGISTERED_IN_SERIES)
-            expect(error.status).to eq(:forbidden)
-          end
-        end
-
-        it 'can register if they have a cancelled registration for another series comp' do
-          registration_request = FactoryBot.build(:registration_request, competition_id: default_competition.id, user_id: default_user.id)
-          FactoryBot.create(:registration, user_id: registration_request['user_id'], registration_status: 'cancelled', competition_id: 'CubingZAWarmup2023')
-          competition = CompetitionInfo.new(FactoryBot.build(:competition, :series))
-          stub_request(:get, UserApi.permissions_path(registration_request['user_id'])).to_return(status: 200, body: FactoryBot.build(:permissions_response).to_json, headers: { content_type: 'application/json' })
-
-          expect {
-            Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['submitted_by']))
-          }.not_to raise_error
-        end
-      end
-
-    end
-
-    describe '#create_registration_allowed!.validate_create_events!' do
-      it 'user must have events selected' do
-        registration_request = FactoryBot.build(:registration_request, events: [])
-        competition = CompetitionInfo.new(FactoryBot.build(:competition))
-        stub_request(:get, UserApi.permissions_path(registration_request['user_id'])).to_return(status: 200, body: FactoryBot.build(:permissions_response).to_json, headers: { content_type: 'application/json' })
+        registration_request = FactoryBot.build(:registration_request, competition_id: competitionA.id, user_id: default_user.id)
 
         expect {
           Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['submitted_by']))
+        }.not_to raise_error
+      end
+
+      it 'cant register if already have a non-cancelled registration for another series competition' do
+        registration = FactoryBot.create(:registration, :accepted)
+
+        series = FactoryBot.create(:competition_series)
+        competitionA = registration.competition
+        competitionA.update!(competition_series: series)
+        competitionB = FactoryBot.create(:competition, :registration_open, competition_series: series, series_base: competitionA)
+
+        user = registration.user
+
+        registration_request = FactoryBot.build(:registration_request, competition_id: competitionB.id, user_id: user.id)
+
+        expect {
+          Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['submitted_by']))
+        }.to raise_error(WcaExceptions::RegistrationError) do |error|
+          expect(error.error).to eq(Registrations::ErrorCodes::ALREADY_REGISTERED_IN_SERIES)
+          expect(error.status).to eq(:forbidden)
+        end
+      end
+
+      it 'can register if they have a cancelled registration for another series comp' do
+        registration = FactoryBot.create(:registration, :deleted) # TODO: We need to bring in the new registration statuses
+
+        series = FactoryBot.create(:competition_series)
+        competitionA = registration.competition
+        competitionA.update!(competition_series: series)
+        competitionB = FactoryBot.create(:competition, :registration_open, competition_series: series, series_base: competitionA)
+
+        user = registration.user
+
+        registration_request = FactoryBot.build(:registration_request, competition_id: competitionB.id, user_id: user.id)
+
+        expect {
+          Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['submitted_by']))
+        }.not_to raise_error
+      end
+    end
+
+    describe '#create_registration_allowed!.validate_create_events!', :tag do
+      let(:event_limit_comp) { FactoryBot.create(:competition, :registration_open, events_per_registration_limit: 5) }
+
+      it 'user must have events selected' do
+        registration_request = FactoryBot.build(
+          :registration_request, events: [], competition_id: default_competition.id, user_id: default_user.id
+        )
+
+        expect {
+          Registrations::RegistrationChecker.create_registration_allowed!(
+            registration_request, User.find(registration_request['submitted_by'])
+          )
         }.to raise_error(WcaExceptions::RegistrationError) do |error|
           expect(error.status).to eq(:unprocessable_entity)
           expect(error.error).to eq(Registrations::ErrorCodes::INVALID_EVENT_SELECTION)
@@ -443,12 +427,14 @@ RSpec.describe Registrations::RegistrationChecker do
       end
 
       it 'events must be held at the competition' do
-        registration_request = FactoryBot.build(:registration_request, events: ['333', '333fm'])
-        competition = CompetitionInfo.new(FactoryBot.build(:competition))
-        stub_request(:get, UserApi.permissions_path(registration_request['user_id'])).to_return(status: 200, body: FactoryBot.build(:permissions_response).to_json, headers: { content_type: 'application/json' })
+        registration_request = FactoryBot.build(
+          :registration_request, events: ['333', '333fm'], competition_id: default_competition.id, user_id: default_user.id
+        )
 
         expect {
-          Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['submitted_by']))
+          Registrations::RegistrationChecker.create_registration_allowed!(
+            registration_request, User.find(registration_request['submitted_by'])
+          )
         }.to raise_error(WcaExceptions::RegistrationError) do |error|
           expect(error.status).to eq(:unprocessable_entity)
           expect(error.error).to eq(Registrations::ErrorCodes::INVALID_EVENT_SELECTION)
@@ -456,18 +442,19 @@ RSpec.describe Registrations::RegistrationChecker do
       end
 
       it 'competitor can register up to the events_per_registration_limit limit' do
-        registration_request = FactoryBot.build(:registration_request, events: ['333', '222', '444', '555', '666'])
-        competition = CompetitionInfo.new(FactoryBot.build(:competition, events_per_registration_limit: 5))
-        stub_request(:get, UserApi.permissions_path(registration_request['user_id'])).to_return(status: 200, body: FactoryBot.build(:permissions_response).to_json, headers: { content_type: 'application/json' })
+        registration_request = FactoryBot.build(
+          :registration_request, events: ['333', '222', '444', '555', '666'], competition_id: event_limit_comp.id, user_id: default_user.id
+        )
 
-        expect { Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['submitted_by'])) }
-          .not_to raise_error
+        expect {
+          Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['submitted_by']))
+        }.not_to raise_error
       end
 
       it 'competitor cant register more events than the events_per_registration_limit' do
-        registration_request = FactoryBot.build(:registration_request, events: ['333', '222', '444', '555', '666', '777'])
-        competition = CompetitionInfo.new(FactoryBot.build(:competition, events_per_registration_limit: 5))
-        stub_request(:get, UserApi.permissions_path(registration_request['user_id'])).to_return(status: 200, body: FactoryBot.build(:permissions_response).to_json, headers: { content_type: 'application/json' })
+        registration_request = FactoryBot.build(
+          :registration_request, events: ['333', '222', '444', '555', '666', '777'], competition_id: event_limit_comp.id, user_id: default_user.id
+        )
 
         expect {
           Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['submitted_by']))
@@ -478,10 +465,10 @@ RSpec.describe Registrations::RegistrationChecker do
       end
 
       it 'organizer cant register more events than the events_per_registration_limit' do
-        registration_request = FactoryBot.build(:registration_request, :organizer, events: ['333', '222', '444', '555', '666', '777'])
-        competition = CompetitionInfo.new(FactoryBot.build(:competition, events_per_registration_limit: 5))
-        stub_request(:get, UserApi.permissions_path(registration_request['user_id'])).to_return(status: 200, body: FactoryBot.build(:permissions_response, organized_competitions: [competition.competition_id]).to_json,
-                                                                                                headers: { content_type: 'application/json' })
+        registration_request = FactoryBot.build(
+          :registration_request, :organizer, events: ['333', '222', '444', '555', '666', '777'], competition_id: event_limit_comp.id, user_id: default_user.id
+        )
+
         expect {
           Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['submitted_by']))
         }.to raise_error(WcaExceptions::RegistrationError) do |error|
@@ -498,7 +485,7 @@ RSpec.describe Registrations::RegistrationChecker do
 
         competition = FactoryBot.build(:competition, :has_qualifications)
         stub_json(CompetitionApi.url("#{competition['id']}/qualifications"), 200, competition['qualifications'])
-        competition = CompetitionInfo.new(competition.except('qualifications'))
+        CompetitionInfo.new(competition.except('qualifications'))
 
         registration_request = FactoryBot.build(:registration_request, events: ['222', '333', '555', '555bf', '333mbf', '444', 'pyram', 'minx'])
 
@@ -512,7 +499,7 @@ RSpec.describe Registrations::RegistrationChecker do
 
         competition = FactoryBot.build(:competition, :has_hard_qualifications)
         stub_json(CompetitionApi.url("#{competition['id']}/qualifications"), 200, competition['qualifications'])
-        competition = CompetitionInfo.new(competition.except('qualifications'))
+        CompetitionInfo.new(competition.except('qualifications'))
 
         registration_request = FactoryBot.build(:registration_request, events: ['222', '333', '555', '555bf', '333mbf', '444', 'pyram', 'minx'])
 
@@ -531,7 +518,7 @@ RSpec.describe Registrations::RegistrationChecker do
 
           competition = FactoryBot.build(:competition, :has_qualifications, :qualifications_not_enforced)
           stub_json(CompetitionApi.url("#{competition['id']}/qualifications"), 200, competition['qualifications'])
-          competition = CompetitionInfo.new(competition.except('qualifications'))
+          CompetitionInfo.new(competition.except('qualifications'))
 
           registration_request = FactoryBot.build(:registration_request, events: event_ids)
 
@@ -547,7 +534,7 @@ RSpec.describe Registrations::RegistrationChecker do
 
           competition = FactoryBot.build(:competition, :has_qualifications)
           stub_json(CompetitionApi.url("#{competition['id']}/qualifications"), 200, competition['qualifications'])
-          competition = CompetitionInfo.new(competition.except('qualifications'))
+          CompetitionInfo.new(competition.except('qualifications'))
 
           registration_request = FactoryBot.build(:registration_request, events: event_ids)
 
@@ -561,7 +548,7 @@ RSpec.describe Registrations::RegistrationChecker do
 
           competition = FactoryBot.build(:competition, :has_future_qualifications)
           stub_json(CompetitionApi.url("#{competition['id']}/qualifications"), 200, competition['qualifications'])
-          competition = CompetitionInfo.new(competition.except('qualifications'))
+          CompetitionInfo.new(competition.except('qualifications'))
 
           registration_request = FactoryBot.build(:registration_request, events: event_ids)
 
@@ -577,7 +564,7 @@ RSpec.describe Registrations::RegistrationChecker do
 
           competition = FactoryBot.build(:competition, :has_qualifications, extra_qualifications: extra_qualifications)
           stub_json(CompetitionApi.url("#{competition['id']}/qualifications"), 200, competition['qualifications'])
-          competition = CompetitionInfo.new(competition.except('qualifications'))
+          CompetitionInfo.new(competition.except('qualifications'))
 
           registration_request = FactoryBot.build(:registration_request, events: event_ids)
 
@@ -608,22 +595,22 @@ RSpec.describe Registrations::RegistrationChecker do
         last_year = (Time.now.utc - 365.days).iso8601
 
         it_behaves_like 'fail: qualification enforced', 'no qualifying result for attemptResult-single', ['666'], {
-          '666' => { 'type' => 'attemptResult', 'resultType' => 'single', 'whenDate' => today, 'level' => 10000 },
+          '666' => { 'type' => 'attemptResult', 'resultType' => 'single', 'whenDate' => today, 'level' => 10_000 },
         }
         it_behaves_like 'fail: qualification enforced', 'no qualifying result for attemptResult-average', ['777'], {
-          '777' => { 'type' => 'attemptResult', 'resultType' => 'average', 'whenDate' => today, 'level' => 12000 },
+          '777' => { 'type' => 'attemptResult', 'resultType' => 'average', 'whenDate' => today, 'level' => 12_000 },
         }
         it_behaves_like 'fail: qualification enforced', 'no qualifying result for anyResult-single', ['666'], {
-          '666' => { 'type' => 'anyResult', 'resultType' => 'single', 'whenDate' => today, 'level' => 10000 },
+          '666' => { 'type' => 'anyResult', 'resultType' => 'single', 'whenDate' => today, 'level' => 10_000 },
         }
         it_behaves_like 'fail: qualification enforced', 'no qualifying result for anyResult-average', ['777'], {
-          '777' => { 'type' => 'anyResult', 'resultType' => 'average', 'whenDate' => today, 'level' => 12000 },
+          '777' => { 'type' => 'anyResult', 'resultType' => 'average', 'whenDate' => today, 'level' => 12_000 },
         }
         it_behaves_like 'fail: qualification enforced', 'no qualifying result for ranking-single', ['666'], {
-          '666' => { 'type' => 'ranking', 'resultType' => 'single', 'whenDate' => today, 'level' => 10000 },
+          '666' => { 'type' => 'ranking', 'resultType' => 'single', 'whenDate' => today, 'level' => 10_000 },
         }
         it_behaves_like 'fail: qualification enforced', 'cant register when nil minx for ranking-average', ['777'], {
-          '777' => { 'type' => 'ranking', 'resultType' => 'average', 'whenDate' => today, 'level' => 10000 },
+          '777' => { 'type' => 'ranking', 'resultType' => 'average', 'whenDate' => today, 'level' => 10_000 },
         }
 
         it_behaves_like 'fail: qualification enforced', 'cant register when 333 slower than attemptResult-single', ['333'], {
@@ -683,7 +670,7 @@ RSpec.describe Registrations::RegistrationChecker do
       )
 
       # Stub alternate user permissions
-      stub_request(:get, UserApi.permissions_path(188000)).to_return(
+      stub_request(:get, UserApi.permissions_path(188_000)).to_return(
         status: 200,
         body: FactoryBot.build(:permissions_response).to_json,
         headers: { content_type: 'application/json' },
@@ -838,7 +825,7 @@ RSpec.describe Registrations::RegistrationChecker do
       end
 
       it 'mandatory comment: updates without comments are allowed as long as a comment already exists in the registration' do
-        override_registration = FactoryBot.create(:registration, user_id: 188000, comment: 'this is a test comment')
+        override_registration = FactoryBot.create(:registration, user_id: 188_000, comment: 'this is a test comment')
         override_competition = CompetitionInfo.new(FactoryBot.build(:competition, force_comment_in_registration: true))
         update_request = FactoryBot.build(:update_request, user_id: override_registration[:user_id], competing: { 'status' => 'cancelled' })
 
@@ -853,7 +840,7 @@ RSpec.describe Registrations::RegistrationChecker do
       end
 
       it 'oranizer can change registration state when comment is mandatory' do
-        override_registration = FactoryBot.create(:registration, user_id: 188000, comment: 'this is a test comment')
+        override_registration = FactoryBot.create(:registration, user_id: 188_000, comment: 'this is a test comment')
         override_competition = CompetitionInfo.new(FactoryBot.build(:competition, force_comment_in_registration: true))
         update_request = FactoryBot.build(:update_request, :organizer_for_user, user_id: override_registration[:user_id], competing: { 'status' => 'accepted' })
 
@@ -915,7 +902,7 @@ RSpec.describe Registrations::RegistrationChecker do
       end
 
       it 'organizer can change organizer_comment' do
-        override_registration = FactoryBot.create(:registration, user_id: 188000, organizer_comment: 'old admin comment')
+        override_registration = FactoryBot.create(:registration, user_id: 188_000, organizer_comment: 'old admin comment')
         update_request = FactoryBot.build(:update_request, :organizer_for_user, user_id: override_registration[:user_id], competing: { 'organizer_comment' => 'new admin comment' })
 
         expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, @competition, update_request['submitted_by']) }
@@ -1082,7 +1069,7 @@ RSpec.describe Registrations::RegistrationChecker do
 
     describe '#update_registration_allowed!.validate_update_status!' do
       it 'user cant submit an invalid status' do
-        override_registration = FactoryBot.create(:registration, user_id: 188000, registration_status: 'waiting_list')
+        override_registration = FactoryBot.create(:registration, user_id: 188_000, registration_status: 'waiting_list')
         update_request = FactoryBot.build(:update_request, user_id: override_registration[:user_id], competing: { 'status' => 'random_status' })
 
         expect {
@@ -1094,7 +1081,7 @@ RSpec.describe Registrations::RegistrationChecker do
       end
 
       it 'organizer cant submit an invalid status' do
-        override_registration = FactoryBot.create(:registration, user_id: 188000, registration_status: 'waiting_list')
+        override_registration = FactoryBot.create(:registration, user_id: 188_000, registration_status: 'waiting_list')
         update_request = FactoryBot.build(:update_request, :organizer_as_user, user_id: override_registration[:user_id], competing: { 'status' => 'random_status' })
 
         expect {
@@ -1107,7 +1094,7 @@ RSpec.describe Registrations::RegistrationChecker do
 
       it 'organizer cant accept a user when registration list is full' do
         FactoryBot.create_list(:registration, 3, registration_status: 'accepted')
-        override_registration = FactoryBot.create(:registration, user_id: 188000, registration_status: 'waiting_list')
+        override_registration = FactoryBot.create(:registration, user_id: 188_000, registration_status: 'waiting_list')
         override_competition = CompetitionInfo.new(FactoryBot.build(:competition, competitor_limit: 3))
         update_request = FactoryBot.build(:update_request, :organizer_for_user, user_id: override_registration[:user_id], competing: { 'status' => 'accepted' })
 
@@ -1130,7 +1117,7 @@ RSpec.describe Registrations::RegistrationChecker do
       end
 
       it 'user can change state to cancelled' do
-        override_registration = FactoryBot.create(:registration, user_id: 188000, registration_status: 'waiting_list')
+        override_registration = FactoryBot.create(:registration, user_id: 188_000, registration_status: 'waiting_list')
         update_request = FactoryBot.build(:update_request, user_id: override_registration[:user_id], competing: { 'status' => 'cancelled' })
 
         expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, @competition, update_request['submitted_by']) }
@@ -1138,7 +1125,7 @@ RSpec.describe Registrations::RegistrationChecker do
       end
 
       it 'user cant change events when cancelling' do
-        override_registration = FactoryBot.create(:registration, user_id: 188000, registration_status: 'waiting_list')
+        override_registration = FactoryBot.create(:registration, user_id: 188_000, registration_status: 'waiting_list')
         update_request = FactoryBot.build(
           :update_request, user_id: override_registration[:user_id], competing: { 'status' => 'cancelled', 'event_ids' => ['333'] }
         )
@@ -1152,7 +1139,7 @@ RSpec.describe Registrations::RegistrationChecker do
       end
 
       it 'user can change state from cancelled to pending' do
-        override_registration = FactoryBot.create(:registration, user_id: 188000, registration_status: 'cancelled')
+        override_registration = FactoryBot.create(:registration, user_id: 188_000, registration_status: 'cancelled')
         update_request = FactoryBot.build(:update_request, user_id: override_registration[:user_id], competing: { 'status' => 'pending' })
 
         expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, @competition, update_request['submitted_by']) }
@@ -1189,7 +1176,7 @@ RSpec.describe Registrations::RegistrationChecker do
       end
 
       it 'user cant cancel accepted registration if competition requires organizers to cancel registration' do
-        override_registration = FactoryBot.create(:registration, user_id: 188000, registration_status: 'accepted')
+        override_registration = FactoryBot.create(:registration, user_id: 188_000, registration_status: 'accepted')
         override_competition = CompetitionInfo.new(FactoryBot.build(:competition, allow_registration_self_delete_after_acceptance: false))
         update_request = FactoryBot.build(:update_request, user_id: override_registration[:user_id], competing: { 'status' => 'cancelled' })
 
@@ -1430,7 +1417,7 @@ RSpec.describe Registrations::RegistrationChecker do
         @waiting_list.add(FactoryBot.create(:registration, registration_status: 'waiting_list').user_id)
         @waiting_list.add(FactoryBot.create(:registration, registration_status: 'waiting_list').user_id)
         @waiting_list.add(FactoryBot.create(:registration, registration_status: 'waiting_list').user_id)
-        override_registration = FactoryBot.create(:registration, user_id: 188000, registration_status: 'waiting_list')
+        override_registration = FactoryBot.create(:registration, user_id: 188_000, registration_status: 'waiting_list')
         @waiting_list.add(override_registration.user_id)
 
         update_request = FactoryBot.build(:update_request, :organizer_for_user, user_id: override_registration[:user_id], competing: { 'waiting_list_position' => '0' })
@@ -1444,7 +1431,7 @@ RSpec.describe Registrations::RegistrationChecker do
       end
 
       it 'cannot move to greater than the number of items in the waiting list' do
-        override_registration = FactoryBot.create(:registration, user_id: 188000, registration_status: 'waiting_list')
+        override_registration = FactoryBot.create(:registration, user_id: 188_000, registration_status: 'waiting_list')
         @waiting_list.add(FactoryBot.create(:registration, registration_status: 'waiting_list').user_id)
         @waiting_list.add(FactoryBot.create(:registration, registration_status: 'waiting_list').user_id)
         @waiting_list.add(FactoryBot.create(:registration, registration_status: 'waiting_list').user_id)
@@ -1567,22 +1554,22 @@ RSpec.describe Registrations::RegistrationChecker do
 
       context 'fail: qualification enforced' do
         it_behaves_like 'update fail: qualification enforced', 'no qualifying result for attemptResult-single', ['666'], {
-          '666' => { 'type' => 'attemptResult', 'resultType' => 'single', 'whenDate' => '2023-12-28', 'level' => 10000 },
+          '666' => { 'type' => 'attemptResult', 'resultType' => 'single', 'whenDate' => '2023-12-28', 'level' => 10_000 },
         }
         it_behaves_like 'update fail: qualification enforced', 'no qualifying result for attemptResult-average', ['777'], {
-          '777' => { 'type' => 'attemptResult', 'resultType' => 'average', 'whenDate' => '2023-12-28', 'level' => 12000 },
+          '777' => { 'type' => 'attemptResult', 'resultType' => 'average', 'whenDate' => '2023-12-28', 'level' => 12_000 },
         }
         it_behaves_like 'update fail: qualification enforced', 'no qualifying result for anyResult-single', ['666'], {
-          '666' => { 'type' => 'anyResult', 'resultType' => 'single', 'whenDate' => '2023-12-28', 'level' => 10000 },
+          '666' => { 'type' => 'anyResult', 'resultType' => 'single', 'whenDate' => '2023-12-28', 'level' => 10_000 },
         }
         it_behaves_like 'update fail: qualification enforced', 'no qualifying result for anyResult-average', ['777'], {
-          '777' => { 'type' => 'anyResult', 'resultType' => 'average', 'whenDate' => '2023-12-28', 'level' => 12000 },
+          '777' => { 'type' => 'anyResult', 'resultType' => 'average', 'whenDate' => '2023-12-28', 'level' => 12_000 },
         }
         it_behaves_like 'update fail: qualification enforced', 'no qualifying result for ranking-single', ['666'], {
-          '666' => { 'type' => 'ranking', 'resultType' => 'single', 'whenDate' => '2023-12-28', 'level' => 10000 },
+          '666' => { 'type' => 'ranking', 'resultType' => 'single', 'whenDate' => '2023-12-28', 'level' => 10_000 },
         }
         it_behaves_like 'update fail: qualification enforced', 'cant register when nil minx for ranking-average', ['777'], {
-          '777' => { 'type' => 'ranking', 'resultType' => 'average', 'whenDate' => '2023-12-28', 'level' => 10000 },
+          '777' => { 'type' => 'ranking', 'resultType' => 'average', 'whenDate' => '2023-12-28', 'level' => 10_000 },
         }
 
         it_behaves_like 'update fail: qualification enforced', 'cant register when 333 slower than attemptResult-single', ['333'], {

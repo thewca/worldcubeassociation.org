@@ -50,7 +50,6 @@ FactoryBot.define do
     guests_entry_fee_lowest_denomination { 0 }
 
     trait :has_qualifications do
-
     end
 
     trait :future do

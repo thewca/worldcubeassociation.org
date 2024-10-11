@@ -10,13 +10,13 @@ RSpec.describe 'API Registrations' do
   describe 'POST #create' do
     context 'create a registration' do
       let(:user) { FactoryBot.create :user }
-      let(:competition) { FactoryBot.create :competition, :registration_open}
+      let(:competition) { FactoryBot.create :competition, :registration_open }
       let(:registration_request) { FactoryBot.build(:registration_request, competition_id: competition.id, user_id: user.id) }
       let(:headers) { { 'Authorization' => registration_request['jwt_token'] } }
 
       it 'returns 202' do
         post api_v1_registrations_create_registration_path, params: registration_request, headers: headers
-        expect(response.body).to eq({status:"accepted",message:"Started Registration Process"}.to_json)
+        expect(response.body).to eq({ status: "accepted", message: "Started Registration Process" }.to_json)
         expect(response.status).to eq(202)
       end
 

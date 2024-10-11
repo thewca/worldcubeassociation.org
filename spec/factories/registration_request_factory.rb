@@ -9,8 +9,7 @@ FactoryBot.define do
       raw_comment { nil }
     end
 
-
-    user_id { 158817 }
+    user_id { 158_817 }
     submitted_by { user_id }
     competition_id { 'CubingZANationalChampionship2023' }
     competing { { 'event_ids' => events, 'lane_state' => 'pending' } }
@@ -40,15 +39,15 @@ FactoryBot.define do
     end
 
     trait :banned do
-      user_id { 209943 }
+      user_id { 209_943 }
     end
 
     trait :unbanned_soon do
-      user_id { 209944 }
+      user_id { 209_944 }
     end
 
     trait :incomplete do
-      user_id { 999999 }
+      user_id { 999_999 }
     end
 
     initialize_with { attributes.stringify_keys }
