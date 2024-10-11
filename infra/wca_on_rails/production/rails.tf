@@ -105,6 +105,10 @@ locals {
       value = var.VAULT_ADDR
     },
     {
+      name = "REGISTRATION_QUEUE"
+      value = aws_sqs_queue.this.url
+    },
+    {
       name = "VAULT_APPLICATION"
       value = var.VAULT_APPLICATION
     },

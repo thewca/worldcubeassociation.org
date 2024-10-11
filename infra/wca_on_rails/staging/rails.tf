@@ -53,6 +53,10 @@ locals {
       value = aws_s3_bucket.storage-bucket.id
     },
     {
+      name = "REGISTRATION_QUEUE"
+      value = aws_sqs_queue.this.url
+    },
+    {
       name = "STORAGE_AWS_REGION"
       value = var.region
     },
