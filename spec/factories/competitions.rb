@@ -49,7 +49,26 @@ FactoryBot.define do
     refund_policy_percent { 0 }
     guests_entry_fee_lowest_denomination { 0 }
 
-    trait :has_qualifications do
+    trait :enforces_qualifications do
+      qualification_results { true }
+      qualification_results_reason { 'testing' }
+      event_ids { %w(333 333oh 555 pyram minx 222 555bf) }
+      allow_registration_without_qualification { false }
+
+      today = Time.now.utc.iso8601
+
+      transient do
+        qualifications {
+          {
+            '333' => { 'type' => 'attemptResult', 'resultType' => 'single', 'whenDate' => today, 'level' => 1000 },
+            '555' => { 'type' => 'attemptResult', 'resultType' => 'average', 'whenDate' => today, 'level' => 6000 },
+            'pyram' => { 'type' => 'ranking', 'resultType' => 'single', 'whenDate' => (Time.now.utc-2).iso8601, 'level' => 100 },
+            'minx' => { 'type' => 'ranking', 'resultType' => 'average', 'whenDate' => today, 'level' => 200 },
+            '222' => { 'type' => 'anyResult', 'resultType' => 'single', 'whenDate' => today, 'level' => 0 },
+            '555bf' => { 'type' => 'anyResult', 'resultType' => 'average', 'whenDate' => today, 'level' => 0 },
+          }
+        }
+      end
     end
 
     trait :future do
@@ -254,6 +273,7 @@ FactoryBot.define do
           )
         end
       end
+
       if evaluator.with_schedule
         # room id in wcif for a competition are unique, so we need to have a global counter
         current_room_id = 1
@@ -338,6 +358,19 @@ FactoryBot.define do
             current_activity_id += 1
           end
         end
+      end
+
+      if competition.qualification_results
+        events_wcif = competition.to_wcif['events']
+        qualification_data = evaluator.qualifications
+
+        events_wcif.each do |event|
+          next unless qualification_data.keys.include?(event['id'])
+          event['qualification'] = qualification_data[event['id']]
+        end
+
+        competition.unverified_set_wcif_events!(events_wcif)
+        new_events_wcif = competition.to_wcif['events']
       end
 
       if defined?(evaluator.stripe_account_id)

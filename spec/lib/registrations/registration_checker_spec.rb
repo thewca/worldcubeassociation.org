@@ -408,8 +408,14 @@ RSpec.describe Registrations::RegistrationChecker do
       end
     end
 
-    describe '#create_registration_allowed!.validate_create_events!', :tag do
-      let(:event_limit_comp) { FactoryBot.create(:competition, :registration_open, events_per_registration_limit: 5) }
+    describe '#create_registration_allowed!.validate_create_events!' do
+      let(:event_limit_comp) { FactoryBot.create(
+        :competition,
+        :registration_open,
+        events_per_registration_limit: 5,
+        event_ids: ['333', '333oh', '222', '444', '555', '666', '777'],
+        )
+      }
 
       it 'user must have events selected' do
         registration_request = FactoryBot.build(
@@ -478,17 +484,18 @@ RSpec.describe Registrations::RegistrationChecker do
       end
     end
 
-    # TODO
-    describe '#create_registration_allowed!.validate_qualifications!' do
-      it 'smoketest - succeeds when all qualifications are met' do
-        stub_qualifications
+    describe '#create_registration_allowed!.validate_qualifications!', :tag do
+      let(:comp_with_qualifications) { FactoryBot.create(:competition, :registration_open, :enforces_qualifications) }
 
-        competition = FactoryBot.build(:competition, :has_qualifications)
-        stub_json(CompetitionApi.url("#{competition['id']}/qualifications"), 200, competition['qualifications'])
-        CompetitionInfo.new(competition.except('qualifications'))
+      it 'smoketest - succeeds when all qualifications are met', :only do
+        registration_request = FactoryBot.build(
+          :registration_request,
+          events: ['222', '333oh', '333', '555', '555bf', 'pyram', 'minx'],
+          user_id: default_user.id,
+          competition_id: comp_with_qualifications.id
+        )
 
-        registration_request = FactoryBot.build(:registration_request, events: ['222', '333', '555', '555bf', '333mbf', '444', 'pyram', 'minx'])
-
+        byebug
         expect {
           Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['submitted_by']))
         }.not_to raise_error

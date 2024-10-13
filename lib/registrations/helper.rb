@@ -19,7 +19,7 @@ module Registrations
     end
 
     def self.user_qualification_data(user, date)
-      return render json: [] unless user.person.present?
+      return [] unless user.person.present?
 
       # Compile singles
       best_singles_by_cutoff = user.person.best_singles_by(date)
