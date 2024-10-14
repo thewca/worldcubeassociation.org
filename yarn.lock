@@ -480,15 +480,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-proposal-throw-expressions@npm:^7.24.7":
-  version: 7.24.7
-  resolution: "@babel/plugin-proposal-throw-expressions@npm:7.24.7"
+"@babel/plugin-proposal-throw-expressions@npm:^7.25.8":
+  version: 7.25.8
+  resolution: "@babel/plugin-proposal-throw-expressions@npm:7.25.8"
   dependencies:
-    "@babel/helper-plugin-utils": "npm:^7.24.7"
-    "@babel/plugin-syntax-throw-expressions": "npm:^7.24.7"
+    "@babel/helper-plugin-utils": "npm:^7.25.7"
   peerDependencies:
     "@babel/core": ^7.0.0-0
-  checksum: 10c0/186c374296c90811970f695af954e15afe70f96289f19bfafc00cbb73ec5904a82f7fa7bde155fe206aaa82c873c4f785f9b75f53eab4b310280404710e1d37c
+  checksum: 10c0/63377ef515e21e83f7b23ef88761f59f9eed37c51c51af080c6b039f9368c004037f0b2308f8733e62bca47378636430a20e10e877592d7b29885e6c75bd8edc
   languageName: node
   linkType: hard
 
@@ -698,17 +697,6 @@ __metadata:
   peerDependencies:
     "@babel/core": ^7.0.0-0
   checksum: 10c0/69822772561706c87f0a65bc92d0772cea74d6bc0911537904a676d5ff496a6d3ac4e05a166d8125fce4a16605bace141afc3611074e170a994e66e5397787f3
-  languageName: node
-  linkType: hard
-
-"@babel/plugin-syntax-throw-expressions@npm:^7.24.7":
-  version: 7.24.7
-  resolution: "@babel/plugin-syntax-throw-expressions@npm:7.24.7"
-  dependencies:
-    "@babel/helper-plugin-utils": "npm:^7.24.7"
-  peerDependencies:
-    "@babel/core": ^7.0.0-0
-  checksum: 10c0/5fba882b3911badb48d0a3f2144dc4f8a2d4bd51c5da1c8f254f9648825353f01248293d146a3cb8bfd8600b6b26945532b1c5d6336f0744093fef89f6bdb90a
   languageName: node
   linkType: hard
 
@@ -10112,7 +10100,7 @@ __metadata:
     "@babel/plugin-proposal-numeric-separator": "npm:^7.14.5"
     "@babel/plugin-proposal-private-methods": "npm:^7.18.6"
     "@babel/plugin-proposal-private-property-in-object": "npm:^7.21.11"
-    "@babel/plugin-proposal-throw-expressions": "npm:^7.24.7"
+    "@babel/plugin-proposal-throw-expressions": "npm:^7.25.8"
     "@babel/plugin-syntax-dynamic-import": "npm:^7.8.3"
     "@babel/plugin-syntax-import-meta": "npm:^7.10.4"
     "@babel/plugin-transform-destructuring": "npm:^7.24.8"
