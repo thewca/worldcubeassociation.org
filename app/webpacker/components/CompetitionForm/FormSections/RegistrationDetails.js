@@ -52,7 +52,7 @@ export default function RegistrationDetails() {
       <InputDate id="waitingListDeadlineDate" dateTime required ignoreDisabled={waitingListNotYetPast} />
       <InputDate id="eventChangeDeadlineDate" dateTime required ignoreDisabled={eventChangeNotYetPast} />
       <InputBooleanSelect id="allowOnTheSpot" required ignoreDisabled />
-      <InputBooleanSelect id="allowSelfDeleteAfterAcceptance" required />
+      <InputBooleanSelect id="allowSelfDeleteAfterAcceptance" required ignoreDisabled />
       <InputBooleanSelect id="allowSelfEdits" required ignoreDisabled />
       <InputRadio id="guestsEnabled" options={guestsEnabledOptions} />
       <ConditionalSection showIf={guestsGoFree}>
