@@ -14,9 +14,12 @@ module Registrations
       validate_comment!(registration_request, competition)
     end
 
-    def self.update_registration_allowed!(update_request, competition, requester_user)
+    def self.update_registration_allowed!(update_request, requester_user)
       requestee_user = User.find(update_request['user_id'])
+      competition = Competition.find(update_request['competition_id'])
       registration = Registration.find_by(competition_id: competition.id, user_id: update_request['user_id'])
+
+      raise WcaExceptions::RegistrationError.new(:not_found, Registrations::ErrorCodes::REGISTRATION_NOT_FOUND) unless registration.present?
 
       user_can_modify_registration!(competition, requester_user, requestee_user, registration)
       validate_guests!(update_request, competition)
@@ -27,9 +30,6 @@ module Registrations
       validate_update_status!(update_request, competition, requester_user, requestee_user, registration)
       validate_update_events!(update_request, competition)
       validate_qualifications!(update_request, competition, requestee_user)
-    rescue ActiveRecord::RecordNotFound
-      # We capture and convert the error so that it can be included in the error array of a bulk update request
-      raise WcaExceptions::RegistrationError.new(:not_found, Registrations::ErrorCodes::REGISTRATION_NOT_FOUND)
     end
 
     def self.bulk_update_allowed!(bulk_update_request, competition, requesting_user)
@@ -176,12 +176,12 @@ module Registrations
 
         # User reactivating registration
         if new_status == 'pending'
-          raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless registration.cancelled?
+          raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless registration.deleted?
           return # No further checks needed if status is pending
         end
 
         # Now that we've checked the 'pending' case, raise an error is the status is not cancelled (cancelling is the only valid action remaining)
-        raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) if new_status != 'cancelled'
+        raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) if new_status != 'deleted'
 
         # Raise an error if competition prevents users from cancelling a registration once it is accepted
         raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::ORGANIZER_MUST_CANCEL_REGISTRATION) if

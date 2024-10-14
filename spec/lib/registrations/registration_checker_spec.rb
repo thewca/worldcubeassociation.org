@@ -12,7 +12,7 @@ RSpec.shared_examples 'invalid user status updates' do |old_status, new_status|
     stub_request(:get, UserApi.permissions_path(registration[:user_id])).to_return(status: 200, body: FactoryBot.build(:permissions_response).to_json, headers: { content_type: 'application/json' })
 
     expect {
-      Registrations::RegistrationChecker.update_registration_allowed!(update_request, competition, update_request['submitted_by'])
+      Registrations::RegistrationChecker.update_registration_allowed!(update_request, competition, User.find(update_request['submitted_by']))
     }.to raise_error(WcaExceptions::RegistrationError) do |error|
       expect(error.status).to eq(:unauthorized)
       expect(error.error).to eq(Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS)
@@ -28,7 +28,7 @@ RSpec.shared_examples 'user cant update rejected registration' do |old_status, n
     stub_request(:get, UserApi.permissions_path(registration[:user_id])).to_return(status: 200, body: FactoryBot.build(:permissions_response).to_json, headers: { content_type: 'application/json' })
 
     expect {
-      Registrations::RegistrationChecker.update_registration_allowed!(update_request, competition, update_request['submitted_by'])
+      Registrations::RegistrationChecker.update_registration_allowed!(update_request, competition, User.find(update_request['submitted_by']))
     }.to raise_error(WcaExceptions::RegistrationError) do |error|
       expect(error.status).to eq(:unauthorized)
       expect(error.error).to eq(Registrations::ErrorCodes::REGISTRATION_IS_REJECTED)
@@ -41,13 +41,13 @@ RSpec.shared_examples 'valid organizer status updates' do |old_status, new_statu
     registration = FactoryBot.create(:registration, registration_status: old_status)
     competition = CompetitionInfo.new(FactoryBot.build(:competition))
     update_request = FactoryBot.build(:update_request, :organizer_for_user, user_id: registration[:user_id], competing: { 'status' => new_status })
-    stub_request(:get, UserApi.permissions_path(update_request['submitted_by'])).to_return(
+    stub_request(:get, UserApi.permissions_path(User.find(update_request['submitted_by']))).to_return(
       status: 200,
       body: FactoryBot.build(:permissions_response, organized_competitions: [competition.competition_id]).to_json,
       headers: { content_type: 'application/json' },
     )
 
-    expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, competition, update_request['submitted_by']) }
+    expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, competition, User.find(update_request['submitted_by'])) }
       .not_to raise_error
   end
 
@@ -55,13 +55,13 @@ RSpec.shared_examples 'valid organizer status updates' do |old_status, new_statu
     registration = FactoryBot.create(:registration, registration_status: old_status)
     competition = CompetitionInfo.new(FactoryBot.build(:competition))
     update_request = FactoryBot.build(:update_request, :site_admin, user_id: registration[:user_id], competing: { 'status' => new_status })
-    stub_request(:get, UserApi.permissions_path(update_request['submitted_by'])).to_return(
+    stub_request(:get, UserApi.permissions_path(User.find(update_request['submitted_by']))).to_return(
       status: 200,
       body: FactoryBot.build(:permissions_response, :admin).to_json,
       headers: { content_type: 'application/json' },
     )
 
-    expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, competition, update_request['submitted_by']) }
+    expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, competition, User.find(update_request['submitted_by'])) }
       .not_to raise_error
   end
 
@@ -69,22 +69,22 @@ RSpec.shared_examples 'valid organizer status updates' do |old_status, new_statu
     registration = FactoryBot.create(:registration, registration_status: old_status)
     competition = CompetitionInfo.new(FactoryBot.build(:competition, :closed))
     update_request = FactoryBot.build(:update_request, :organizer_for_user, user_id: registration[:user_id], competing: { 'status' => new_status })
-    stub_request(:get, UserApi.permissions_path(update_request['submitted_by'])).to_return(
+    stub_request(:get, UserApi.permissions_path(User.find(update_request['submitted_by']))).to_return(
       status: 200,
       body: FactoryBot.build(:permissions_response, organized_competitions: [competition.competition_id]).to_json,
       headers: { content_type: 'application/json' },
     )
 
-    expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, competition, update_request['submitted_by']) }
+    expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, competition, User.find(update_request['submitted_by'])) }
       .not_to raise_error
   end
 end
 
 RSpec.describe Registrations::RegistrationChecker do
   let(:default_user) { FactoryBot.create(:user) }
-  let(:default_competition) { FactoryBot.create(:competition, :registration_open) }
+  let(:default_competition) { FactoryBot.create(:competition, :registration_open, :editable_registrations) }
 
-  describe '#create', :tag do
+  describe '#create' do
     describe '#create_registration_allowed!' do
       it 'guests can equal the maximum allowed' do
         registration_request = FactoryBot.build(
@@ -781,51 +781,42 @@ RSpec.describe Registrations::RegistrationChecker do
   end
 
   describe '#update' do
-    before do
-      @registration = FactoryBot.create(:registration)
-      @competition = CompetitionInfo.new(FactoryBot.build(:competition))
+    let(:default_registration) { FactoryBot.create(:registration, competition: default_competition) }
 
-      # Stub admin permissions
-      stub_request(:get, UserApi.permissions_path(1306)).to_return(
-        status: 200,
-        body: FactoryBot.build(:permissions_response, organized_competitions: [@competition.competition_id]).to_json,
-        headers: { content_type: 'application/json' },
-      )
-
-      # Stub alternate user permissions
-      stub_request(:get, UserApi.permissions_path(188_000)).to_return(
-        status: 200,
-        body: FactoryBot.build(:permissions_response).to_json,
-        headers: { content_type: 'application/json' },
-      )
-    end
-
-    describe '#update_registration_allowed!.user_can_modify_registration!' do
+    describe '#update_registration_allowed!.user_can_modify_registration!', :tag do
       it 'raises error if registration doesnt exist' do
-        update_request = FactoryBot.build(:update_request, user_id: (@registration[:user_id] -1))
+        update_request = FactoryBot.build(:update_request, competition_id: default_competition.id, user_id: default_user.id)
 
         expect {
-          Registrations::RegistrationChecker.update_registration_allowed!(update_request, @competition, update_request['submitted_by'])
+          Registrations::RegistrationChecker.update_registration_allowed!(update_request, User.find(update_request['submitted_by']))
         }.to raise_error(WcaExceptions::RegistrationError) do |error|
           expect(error.error).to eq(Registrations::ErrorCodes::REGISTRATION_NOT_FOUND)
           expect(error.status).to eq(:not_found)
         end
       end
 
-      it 'user can change their registration' do
-        update_request = FactoryBot.build(:update_request, user_id: @registration[:user_id])
+      it 'user update payload is accepted' do
+        update_request = FactoryBot.build(
+          :update_request,
+          competition_id: default_registration.competition.id,
+          user_id: default_registration.user_id,
+        )
 
-        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, @competition, update_request['submitted_by']) }
-          .not_to raise_error
+        expect {
+          Registrations::RegistrationChecker.update_registration_allowed!(update_request, User.find(update_request['submitted_by']))
+        }.not_to raise_error
       end
 
       it 'User A cant change User Bs registration' do
-        update_request = FactoryBot.build(:update_request, :for_another_user, user_id: @registration[:user_id])
-
-        stub_request(:get, UserApi.permissions_path(update_request['submitted_by'])).to_return(status: 200, body: FactoryBot.build(:permissions_response).to_json, headers: { content_type: 'application/json' })
+        update_request = FactoryBot.build(
+          :update_request,
+          :for_another_user,
+          competition_id: default_registration.competition.id,
+          user_id: default_registration.user_id,
+        )
 
         expect {
-          Registrations::RegistrationChecker.update_registration_allowed!(update_request, @competition, update_request['submitted_by'])
+          Registrations::RegistrationChecker.update_registration_allowed!(update_request, User.find(update_request['submitted_by']))
         }.to raise_error(WcaExceptions::RegistrationError) do |error|
           expect(error.status).to eq(:unauthorized)
           expect(error.error).to eq(Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS)
@@ -833,16 +824,17 @@ RSpec.describe Registrations::RegistrationChecker do
       end
 
       it 'user cant update registration if registration edits arent allowed' do
-        override_competition = CompetitionInfo.new(FactoryBot.build(:competition, allow_registration_edits: false))
-        update_request = FactoryBot.build(:update_request, user_id: @registration[:user_id])
-        stub_request(:get, UserApi.permissions_path(update_request['submitted_by'])).to_return(
-          status: 200,
-          body: FactoryBot.build(:permissions_response).to_json,
-          headers: { content_type: 'application/json' },
+        edits_not_allowed = FactoryBot.create(:competition, :registration_open)
+        registration = FactoryBot.create(:registration, competition: edits_not_allowed)
+
+        update_request = FactoryBot.build(
+          :update_request,
+          competition_id: registration.competition.id,
+          user_id: registration.user_id,
         )
 
         expect {
-          Registrations::RegistrationChecker.update_registration_allowed!(update_request, override_competition, update_request['submitted_by'])
+          Registrations::RegistrationChecker.update_registration_allowed!(update_request, User.find(update_request['submitted_by']))
         }.to raise_error(WcaExceptions::RegistrationError) do |error|
           expect(error.status).to eq(:forbidden)
           expect(error.error).to eq(Registrations::ErrorCodes::USER_EDITS_NOT_ALLOWED)
@@ -850,16 +842,17 @@ RSpec.describe Registrations::RegistrationChecker do
       end
 
       it 'user cant change events after event change deadline' do
-        override_competition = CompetitionInfo.new(FactoryBot.build(:competition, :event_change_deadline_passed))
-        update_request = FactoryBot.build(:update_request, user_id: @registration[:user_id], competing: { 'event_ids' => ['333', '444', '555'] })
-        stub_request(:get, UserApi.permissions_path(update_request['submitted_by'])).to_return(
-          status: 200,
-          body: FactoryBot.build(:permissions_response).to_json,
-          headers: { content_type: 'application/json' },
+        edit_deadline_passed = FactoryBot.create(:competition, :event_edit_passed)
+        registration = FactoryBot.create(:registration, competition: edit_deadline_passed)
+
+        update_request = FactoryBot.build(
+          :update_request,
+          competition_id: registration.competition.id,
+          user_id: registration.user_id,
         )
 
         expect {
-          Registrations::RegistrationChecker.update_registration_allowed!(update_request, override_competition, update_request['submitted_by'])
+          Registrations::RegistrationChecker.update_registration_allowed!(update_request, User.find(update_request['submitted_by']))
         }.to raise_error(WcaExceptions::RegistrationError) do |error|
           expect(error.status).to eq(:forbidden)
           expect(error.error).to eq(Registrations::ErrorCodes::USER_EDITS_NOT_ALLOWED)
@@ -867,28 +860,57 @@ RSpec.describe Registrations::RegistrationChecker do
       end
 
       it 'organizer can change user registration' do
-        update_request = FactoryBot.build(:update_request, :organizer_for_user, user_id: @registration[:user_id])
+        comp_with_organizer = FactoryBot.create(:competition, :registration_open, :with_organizer)
+        registration = FactoryBot.create(:registration, competition: comp_with_organizer)
 
-        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, @competition, update_request['submitted_by']) }
+        update_request = FactoryBot.build(
+          :update_request,
+          user_id: registration.user_id,
+          competition_id: registration.competition.id,
+          submitted_by: comp_with_organizer.organizers.first.id,
+        )
+
+        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, User.find(update_request['submitted_by'])) }
           .not_to raise_error
       end
 
       it 'organizer can change registration after change deadline' do
-        update_request = FactoryBot.build(:update_request, :organizer_for_user, user_id: @registration[:user_id], competing: { 'comment' => 'this is a new comment' })
+        comp_with_organizer = FactoryBot.create(:competition, :event_edit_passed, :with_organizer)
+        registration = FactoryBot.create(:registration, competition: comp_with_organizer)
 
-        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, @competition, update_request['submitted_by']) }
+        update_request = FactoryBot.build(
+          :update_request,
+          :organizer_for_user,
+          user_id: registration.user_id,
+          competition_id: registration.competition.id,
+          competing: { 'comment' => 'this is a new comment' },
+          submitted_by: comp_with_organizer.organizers.first.id,
+        )
+
+        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, User.find(update_request['submitted_by'])) }
           .not_to raise_error
       end
 
       it 'cant re-register (register after cancelling) if they have a registration for another series comp' do
-        registration = FactoryBot.create(:registration, registration_status: 'cancelled')
-        FactoryBot.create(:registration, user_id: registration['user_id'], registration_status: 'accepted', competition_id: 'CubingZAWarmup2023')
-        update_request = FactoryBot.build(:update_request, user_id: registration[:user_id], competing: { 'status' => 'pending' })
-        competition = CompetitionInfo.new(FactoryBot.build(:competition, :series))
-        stub_request(:get, UserApi.permissions_path(update_request['user_id'])).to_return(status: 200, body: FactoryBot.build(:permissions_response).to_json, headers: { content_type: 'application/json' })
+        registration = FactoryBot.create(:registration, :accepted)
+
+        series = FactoryBot.create(:competition_series)
+        competitionA = registration.competition
+        competitionA.update!(competition_series: series)
+        competitionB = FactoryBot.create(:competition, :registration_open, :editable_registrations, competition_series: series, series_base: competitionA)
+
+        # TODO: Have we deliberately chosen to use `deleted` instead of `cancelled`?
+        registrationB = FactoryBot.create(:registration, :deleted, competition: competitionB, user_id: registration.user.id)
+
+        update_request = FactoryBot.build(
+          :update_request,
+          user_id: registrationB.user.id,
+          competition_id: competitionB.id,
+          competing: { 'status' => 'pending' }
+        )
 
         expect {
-          Registrations::RegistrationChecker.update_registration_allowed!(update_request, competition, update_request['submitted_by'])
+          Registrations::RegistrationChecker.update_registration_allowed!(update_request, User.find(update_request['submitted_by']))
         }.to raise_error(WcaExceptions::RegistrationError) do |error|
           expect(error.error).to eq(Registrations::ErrorCodes::ALREADY_REGISTERED_IN_SERIES)
           expect(error.status).to eq(:forbidden)
@@ -898,9 +920,9 @@ RSpec.describe Registrations::RegistrationChecker do
 
     describe '#update_registration_allowed!.validate_comment!' do
       it 'user can change comment' do
-        update_request = FactoryBot.build(:update_request, user_id: @registration[:user_id], competing: { 'comment' => 'new comment' })
+        update_request = FactoryBot.build(:update_request, user_id: registration.user_id, competing: { 'comment' => 'new comment' })
 
-        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, @competition, update_request['submitted_by']) }
+        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, User.find(update_request['submitted_by'])) }
           .not_to raise_error
       end
 
@@ -908,10 +930,10 @@ RSpec.describe Registrations::RegistrationChecker do
         long_comment = 'comment longer than 240 characterscomment longer than 240 characterscomment longer than 240 characterscomment longer than 240 characterscomment longer than 240 characterscomment longer than 240 characterscomment longer
           than 240 characterscomment longer than 240 characters'
 
-        update_request = FactoryBot.build(:update_request, user_id: @registration[:user_id], competing: { 'comment' => long_comment })
+        update_request = FactoryBot.build(:update_request, user_id: registration.user_id, competing: { 'comment' => long_comment })
 
         expect {
-          Registrations::RegistrationChecker.update_registration_allowed!(update_request, @competition, update_request['submitted_by'])
+          Registrations::RegistrationChecker.update_registration_allowed!(update_request, User.find(update_request['submitted_by']))
         }.to raise_error(WcaExceptions::RegistrationError) do |error|
           expect(error.status).to eq(:unprocessable_entity)
           expect(error.error).to eq(Registrations::ErrorCodes::USER_COMMENT_TOO_LONG)
@@ -922,25 +944,25 @@ RSpec.describe Registrations::RegistrationChecker do
         at_character_limit = 'comment longer than 240 characterscomment longer than 240 characterscomment longer than 240 characterscomment longer than 240 characterscomment longer than 240 characterscomment longer than' \
                              '240 characterscomment longer longer than 240 12345'
 
-        update_request = FactoryBot.build(:update_request, user_id: @registration[:user_id], competing: { 'comment' => at_character_limit })
+        update_request = FactoryBot.build(:update_request, user_id: registration.user_id, competing: { 'comment' => at_character_limit })
 
-        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, @competition, update_request['submitted_by']) }
+        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, User.find(update_request['submitted_by'])) }
           .not_to raise_error
       end
 
       it 'comment can be blank' do
-        update_request = FactoryBot.build(:update_request, user_id: @registration[:user_id], competing: { 'comment' => '' })
+        update_request = FactoryBot.build(:update_request, user_id: registration.user_id, competing: { 'comment' => '' })
 
-        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, @competition, update_request['submitted_by']) }
+        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, User.find(update_request['submitted_by'])) }
           .not_to raise_error
       end
 
       it 'comment cant be blank if required' do
         override_competition = CompetitionInfo.new(FactoryBot.build(:competition, force_comment_in_registration: true))
-        update_request = FactoryBot.build(:update_request, user_id: @registration[:user_id], competing: { 'comment' => '' })
+        update_request = FactoryBot.build(:update_request, user_id: registration.user_id, competing: { 'comment' => '' })
 
         expect {
-          Registrations::RegistrationChecker.update_registration_allowed!(update_request, override_competition, update_request['submitted_by'])
+          Registrations::RegistrationChecker.update_registration_allowed!(update_request, User.find(update_request['submitted_by']))
         }.to raise_error(WcaExceptions::RegistrationError) do |error|
           expect(error.status).to eq(:unprocessable_entity)
           expect(error.error).to eq(Registrations::ErrorCodes::REQUIRED_COMMENT_MISSING)
@@ -952,13 +974,13 @@ RSpec.describe Registrations::RegistrationChecker do
         override_competition = CompetitionInfo.new(FactoryBot.build(:competition, force_comment_in_registration: true))
         update_request = FactoryBot.build(:update_request, user_id: override_registration[:user_id], competing: { 'status' => 'cancelled' })
 
-        stub_request(:get, UserApi.permissions_path(update_request['submitted_by'])).to_return(
+        stub_request(:get, UserApi.permissions_path(User.find(update_request['submitted_by']))).to_return(
           status: 200,
           body: FactoryBot.build(:permissions_response).to_json,
           headers: { content_type: 'application/json' },
         )
 
-        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, override_competition, update_request['submitted_by']) }
+        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, User.find(update_request['submitted_by'])) }
           .not_to raise_error
       end
 
@@ -967,7 +989,7 @@ RSpec.describe Registrations::RegistrationChecker do
         override_competition = CompetitionInfo.new(FactoryBot.build(:competition, force_comment_in_registration: true))
         update_request = FactoryBot.build(:update_request, :organizer_for_user, user_id: override_registration[:user_id], competing: { 'status' => 'accepted' })
 
-        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, override_competition, update_request['submitted_by']) }
+        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, User.find(update_request['submitted_by'])) }
           .not_to raise_error
       end
 
@@ -975,7 +997,7 @@ RSpec.describe Registrations::RegistrationChecker do
         registration = FactoryBot.create(:registration, comment: 'original comment')
         update_request = FactoryBot.build(:update_request, :organizer_for_user, user_id: registration[:user_id], competing: { 'comment' => '' })
 
-        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, @competition, update_request['submitted_by']) }
+        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, User.find(update_request['submitted_by'])) }
           .not_to raise_error
       end
 
@@ -983,10 +1005,10 @@ RSpec.describe Registrations::RegistrationChecker do
         long_comment = 'comment longer than 240 characterscomment longer than 240 characterscomment longer than 240 characterscomment longer than 240 characterscomment longer than 240 characterscomment longer than 240 characterscomment longer
           than 240 characterscomment longer than 240 characters'
 
-        update_request = FactoryBot.build(:update_request, :organizer_for_user, user_id: @registration[:user_id], competing: { 'comment' => long_comment })
+        update_request = FactoryBot.build(:update_request, :organizer_for_user, user_id: registration.user_id, competing: { 'comment' => long_comment })
 
         expect {
-          Registrations::RegistrationChecker.update_registration_allowed!(update_request, @competition, update_request['submitted_by'])
+          Registrations::RegistrationChecker.update_registration_allowed!(update_request, User.find(update_request['submitted_by']))
         }.to raise_error(WcaExceptions::RegistrationError) do |error|
           expect(error.status).to eq(:unprocessable_entity)
           expect(error.error).to eq(Registrations::ErrorCodes::USER_COMMENT_TOO_LONG)
@@ -995,15 +1017,15 @@ RSpec.describe Registrations::RegistrationChecker do
 
       it 'user cant change comment after edit events deadline' do
         override_competition = CompetitionInfo.new(FactoryBot.build(:competition, :event_change_deadline_passed))
-        update_request = FactoryBot.build(:update_request, user_id: @registration[:user_id], competing: { 'comment' => 'this is a new comment' })
-        stub_request(:get, UserApi.permissions_path(update_request['submitted_by'])).to_return(
+        update_request = FactoryBot.build(:update_request, user_id: registration.user_id, competing: { 'comment' => 'this is a new comment' })
+        stub_request(:get, UserApi.permissions_path(User.find(update_request['submitted_by']))).to_return(
           status: 200,
           body: FactoryBot.build(:permissions_response).to_json,
           headers: { content_type: 'application/json' },
         )
 
         expect {
-          Registrations::RegistrationChecker.update_registration_allowed!(update_request, override_competition, update_request['submitted_by'])
+          Registrations::RegistrationChecker.update_registration_allowed!(update_request, User.find(update_request['submitted_by']))
         }.to raise_error(WcaExceptions::RegistrationError) do |error|
           expect(error.status).to eq(:forbidden)
           expect(error.error).to eq(Registrations::ErrorCodes::USER_EDITS_NOT_ALLOWED)
@@ -1016,11 +1038,11 @@ RSpec.describe Registrations::RegistrationChecker do
         update_request = FactoryBot.build(
           :update_request,
           :organizer_for_user,
-          user_id: @registration[:user_id],
+          user_id: registration.user_id,
           competing: { 'organizer_comment' => 'this is an admin comment' },
         )
 
-        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, @competition, update_request['submitted_by']) }
+        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, User.find(update_request['submitted_by'])) }
           .not_to raise_error
       end
 
@@ -1028,19 +1050,19 @@ RSpec.describe Registrations::RegistrationChecker do
         override_registration = FactoryBot.create(:registration, user_id: 188_000, organizer_comment: 'old admin comment')
         update_request = FactoryBot.build(:update_request, :organizer_for_user, user_id: override_registration[:user_id], competing: { 'organizer_comment' => 'new admin comment' })
 
-        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, @competition, update_request['submitted_by']) }
+        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, User.find(update_request['submitted_by'])) }
           .not_to raise_error
       end
 
       it 'user cant submit an organizer comment' do
-        update_request = FactoryBot.build(:update_request, user_id: @registration[:user_id], competing: { 'organizer_comment' => 'new admin comment' })
-        stub_request(:get, UserApi.permissions_path(update_request['submitted_by'])).to_return(
+        update_request = FactoryBot.build(:update_request, user_id: registration.user_id, competing: { 'organizer_comment' => 'new admin comment' })
+        stub_request(:get, UserApi.permissions_path(User.find(update_request['submitted_by']))).to_return(
           status: 200,
           body: FactoryBot.build(:permissions_response).to_json,
           headers: { content_type: 'application/json' },
         )
         expect {
-          Registrations::RegistrationChecker.update_registration_allowed!(update_request, @competition, update_request['submitted_by'])
+          Registrations::RegistrationChecker.update_registration_allowed!(update_request, User.find(update_request['submitted_by']))
         }.to raise_error(WcaExceptions::RegistrationError) do |error|
           expect(error.status).to eq(:unauthorized)
           expect(error.error).to eq(Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS)
@@ -1048,14 +1070,14 @@ RSpec.describe Registrations::RegistrationChecker do
       end
 
       it 'user cant submit waiting_list_position' do
-        update_request = FactoryBot.build(:update_request, user_id: @registration[:user_id], competing: { 'waiting_list_position' => '1' })
-        stub_request(:get, UserApi.permissions_path(update_request['submitted_by'])).to_return(
+        update_request = FactoryBot.build(:update_request, user_id: registration.user_id, competing: { 'waiting_list_position' => '1' })
+        stub_request(:get, UserApi.permissions_path(User.find(update_request['submitted_by']))).to_return(
           status: 200,
           body: FactoryBot.build(:permissions_response).to_json,
           headers: { content_type: 'application/json' },
         )
         expect {
-          Registrations::RegistrationChecker.update_registration_allowed!(update_request, @competition, update_request['submitted_by'])
+          Registrations::RegistrationChecker.update_registration_allowed!(update_request, User.find(update_request['submitted_by']))
         }.to raise_error(WcaExceptions::RegistrationError) do |error|
           expect(error.status).to eq(:unauthorized)
           expect(error.error).to eq(Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS)
@@ -1068,10 +1090,10 @@ RSpec.describe Registrations::RegistrationChecker do
         long_comment = 'comment longer than 240 characterscomment longer than 240 characterscomment longer than 240 characterscomment longer than 240 characterscomment longer than 240 characterscomment longer than 240 characterscomment longer
         than 240 characterscomment longer than 240 characters'
 
-        update_request = FactoryBot.build(:update_request, :organizer_for_user, user_id: @registration[:user_id], competing: { 'organizer_comment' => long_comment })
+        update_request = FactoryBot.build(:update_request, :organizer_for_user, user_id: registration.user_id, competing: { 'organizer_comment' => long_comment })
 
         expect {
-          Registrations::RegistrationChecker.update_registration_allowed!(update_request, @competition, update_request['submitted_by'])
+          Registrations::RegistrationChecker.update_registration_allowed!(update_request, User.find(update_request['submitted_by']))
         }.to raise_error(WcaExceptions::RegistrationError) do |error|
           expect(error.status).to eq(:unprocessable_entity)
           expect(error.error).to eq(Registrations::ErrorCodes::USER_COMMENT_TOO_LONG)
@@ -1082,26 +1104,26 @@ RSpec.describe Registrations::RegistrationChecker do
         at_character_limit = 'comment longer than 240 characterscomment longer than 240 characterscomment longer than 240 characterscomment longer than 240 characterscomment longer than 240 characterscomment longer than' \
                              '240 characterscomment longer longer than 240 12345'
 
-        update_request = FactoryBot.build(:update_request, :organizer_for_user, user_id: @registration[:user_id], competing: { 'organizer_comment' => at_character_limit })
+        update_request = FactoryBot.build(:update_request, :organizer_for_user, user_id: registration.user_id, competing: { 'organizer_comment' => at_character_limit })
 
-        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, @competition, update_request['submitted_by']) }
+        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, User.find(update_request['submitted_by'])) }
           .not_to raise_error
       end
     end
 
     describe '#update_registration_allowed!.validate_guests!' do
       it 'user can change number of guests' do
-        update_request = FactoryBot.build(:update_request, user_id: @registration[:user_id], guests: 2)
+        update_request = FactoryBot.build(:update_request, user_id: registration.user_id, guests: 2)
 
-        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, @competition, update_request['submitted_by']) }
+        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, User.find(update_request['submitted_by'])) }
           .not_to raise_error
       end
 
       it 'guests cant exceed guest limit' do
-        update_request = FactoryBot.build(:update_request, user_id: @registration[:user_id], guests: 3)
+        update_request = FactoryBot.build(:update_request, user_id: registration.user_id, guests: 3)
 
         expect {
-          Registrations::RegistrationChecker.update_registration_allowed!(update_request, @competition, update_request['submitted_by'])
+          Registrations::RegistrationChecker.update_registration_allowed!(update_request, User.find(update_request['submitted_by']))
         }.to raise_error(WcaExceptions::RegistrationError) do |error|
           expect(error.status).to eq(:unprocessable_entity)
           expect(error.error).to eq(Registrations::ErrorCodes::GUEST_LIMIT_EXCEEDED)
@@ -1109,24 +1131,24 @@ RSpec.describe Registrations::RegistrationChecker do
       end
 
       it 'guests can match guest limit' do
-        update_request = FactoryBot.build(:update_request, user_id: @registration[:user_id], guests: 2)
+        update_request = FactoryBot.build(:update_request, user_id: registration.user_id, guests: 2)
 
-        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, @competition, update_request['submitted_by']) }
+        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, User.find(update_request['submitted_by'])) }
           .not_to raise_error
       end
 
       it 'guests can be zero' do
-        update_request = FactoryBot.build(:update_request, user_id: @registration[:user_id], guests: 0)
+        update_request = FactoryBot.build(:update_request, user_id: registration.user_id, guests: 0)
 
-        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, @competition, update_request['submitted_by']) }
+        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, User.find(update_request['submitted_by'])) }
           .not_to raise_error
       end
 
       it 'guests cant be negative' do
-        update_request = FactoryBot.build(:update_request, user_id: @registration[:user_id], guests: -1)
+        update_request = FactoryBot.build(:update_request, user_id: registration.user_id, guests: -1)
 
         expect {
-          Registrations::RegistrationChecker.update_registration_allowed!(update_request, @competition, update_request['submitted_by'])
+          Registrations::RegistrationChecker.update_registration_allowed!(update_request, User.find(update_request['submitted_by']))
         }.to raise_error(WcaExceptions::RegistrationError) do |error|
           expect(error.status).to eq(:unprocessable_entity)
           expect(error.error).to eq(Registrations::ErrorCodes::INVALID_REQUEST_DATA)
@@ -1135,30 +1157,30 @@ RSpec.describe Registrations::RegistrationChecker do
 
       it 'guests have no limit if guest limit not set' do
         override_competition = CompetitionInfo.new(FactoryBot.build(:competition, :no_guest_limit))
-        update_request = FactoryBot.build(:update_request, user_id: @registration[:user_id], guests: 99)
+        update_request = FactoryBot.build(:update_request, user_id: registration.user_id, guests: 99)
 
-        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, override_competition, update_request['submitted_by']) }
+        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, User.find(update_request['submitted_by'])) }
           .not_to raise_error
       end
 
       it 'organizer can change number of guests' do
-        update_request = FactoryBot.build(:update_request, :organizer_for_user, user_id: @registration[:user_id], guests: 2)
+        update_request = FactoryBot.build(:update_request, :organizer_for_user, user_id: registration.user_id, guests: 2)
 
-        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, @competition, update_request['submitted_by']) }
+        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, User.find(update_request['submitted_by'])) }
           .not_to raise_error
       end
 
       it 'User A cant change User Bs guests' do
-        update_request = FactoryBot.build(:update_request, :for_another_user, user_id: @registration[:user_id], guests: 2)
+        update_request = FactoryBot.build(:update_request, :for_another_user, user_id: registration.user_id, guests: 2)
 
-        stub_request(:get, UserApi.permissions_path(update_request['submitted_by'])).to_return(
+        stub_request(:get, UserApi.permissions_path(User.find(update_request['submitted_by']))).to_return(
           status: 200,
           body: FactoryBot.build(:permissions_response).to_json,
           headers: { content_type: 'application/json' },
         )
 
         expect {
-          Registrations::RegistrationChecker.update_registration_allowed!(update_request, @competition, update_request['submitted_by'])
+          Registrations::RegistrationChecker.update_registration_allowed!(update_request, User.find(update_request['submitted_by']))
         }.to raise_error(WcaExceptions::RegistrationError) do |error|
           expect(error.status).to eq(:unauthorized)
           expect(error.error).to eq(Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS)
@@ -1167,14 +1189,14 @@ RSpec.describe Registrations::RegistrationChecker do
 
       it 'user cant change guests after registration change deadline' do
         override_competition = CompetitionInfo.new(FactoryBot.build(:competition, event_change_deadline_date: '2022-06-14T00:00:00.000Z'))
-        update_request = FactoryBot.build(:update_request, user_id: @registration[:user_id], guests: 2)
-        stub_request(:get, UserApi.permissions_path(update_request['submitted_by'])).to_return(
+        update_request = FactoryBot.build(:update_request, user_id: registration.user_id, guests: 2)
+        stub_request(:get, UserApi.permissions_path(User.find(update_request['submitted_by']))).to_return(
           status: 200,
           body: FactoryBot.build(:permissions_response).to_json,
           headers: { content_type: 'application/json' },
         )
         expect {
-          Registrations::RegistrationChecker.update_registration_allowed!(update_request, override_competition, update_request['submitted_by'])
+          Registrations::RegistrationChecker.update_registration_allowed!(update_request, User.find(update_request['submitted_by']))
         }.to raise_error(WcaExceptions::RegistrationError) do |error|
           expect(error.status).to eq(:forbidden)
           expect(error.error).to eq(Registrations::ErrorCodes::USER_EDITS_NOT_ALLOWED)
@@ -1183,9 +1205,9 @@ RSpec.describe Registrations::RegistrationChecker do
 
       it 'organizer can change guests after registration change deadline' do
         override_competition = CompetitionInfo.new(FactoryBot.build(:competition, event_change_deadline_date: '2022-06-14T00:00:00.000Z'))
-        update_request = FactoryBot.build(:update_request, :organizer_for_user, user_id: @registration[:user_id], guests: 2)
+        update_request = FactoryBot.build(:update_request, :organizer_for_user, user_id: registration.user_id, guests: 2)
 
-        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, override_competition, update_request['submitted_by']) }
+        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, User.find(update_request['submitted_by'])) }
           .not_to raise_error
       end
     end
@@ -1196,7 +1218,7 @@ RSpec.describe Registrations::RegistrationChecker do
         update_request = FactoryBot.build(:update_request, user_id: override_registration[:user_id], competing: { 'status' => 'random_status' })
 
         expect {
-          Registrations::RegistrationChecker.update_registration_allowed!(update_request, @competition, update_request['submitted_by'])
+          Registrations::RegistrationChecker.update_registration_allowed!(update_request, User.find(update_request['submitted_by']))
         }.to raise_error(WcaExceptions::RegistrationError) do |error|
           expect(error.status).to eq(:unprocessable_entity)
           expect(error.error).to eq(Registrations::ErrorCodes::INVALID_REQUEST_DATA)
@@ -1208,7 +1230,7 @@ RSpec.describe Registrations::RegistrationChecker do
         update_request = FactoryBot.build(:update_request, :organizer_as_user, user_id: override_registration[:user_id], competing: { 'status' => 'random_status' })
 
         expect {
-          Registrations::RegistrationChecker.update_registration_allowed!(update_request, @competition, update_request['submitted_by'])
+          Registrations::RegistrationChecker.update_registration_allowed!(update_request, User.find(update_request['submitted_by']))
         }.to raise_error(WcaExceptions::RegistrationError) do |error|
           expect(error.status).to eq(:unprocessable_entity)
           expect(error.error).to eq(Registrations::ErrorCodes::INVALID_REQUEST_DATA)
@@ -1222,7 +1244,7 @@ RSpec.describe Registrations::RegistrationChecker do
         update_request = FactoryBot.build(:update_request, :organizer_for_user, user_id: override_registration[:user_id], competing: { 'status' => 'accepted' })
 
         expect {
-          Registrations::RegistrationChecker.update_registration_allowed!(update_request, override_competition, update_request['submitted_by'])
+          Registrations::RegistrationChecker.update_registration_allowed!(update_request, User.find(update_request['submitted_by']))
         }.to raise_error(WcaExceptions::RegistrationError) do |error|
           expect(error.error).to eq(Registrations::ErrorCodes::COMPETITOR_LIMIT_REACHED)
           expect(error.status).to eq(:forbidden)
@@ -1235,7 +1257,7 @@ RSpec.describe Registrations::RegistrationChecker do
         competition = CompetitionInfo.new(FactoryBot.build(:competition, competitor_limit: 3))
         update_request = FactoryBot.build(:update_request, :organizer_for_user, user_id: registration[:user_id], competing: { 'status' => 'accepted' })
 
-        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, competition, update_request['submitted_by']) }
+        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, competition, User.find(update_request['submitted_by'])) }
           .not_to raise_error
       end
 
@@ -1243,7 +1265,7 @@ RSpec.describe Registrations::RegistrationChecker do
         override_registration = FactoryBot.create(:registration, user_id: 188_000, registration_status: 'waiting_list')
         update_request = FactoryBot.build(:update_request, user_id: override_registration[:user_id], competing: { 'status' => 'cancelled' })
 
-        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, @competition, update_request['submitted_by']) }
+        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, User.find(update_request['submitted_by'])) }
           .not_to raise_error
       end
 
@@ -1254,7 +1276,7 @@ RSpec.describe Registrations::RegistrationChecker do
         )
 
         expect {
-          Registrations::RegistrationChecker.update_registration_allowed!(update_request, @competition, update_request['submitted_by'])
+          Registrations::RegistrationChecker.update_registration_allowed!(update_request, User.find(update_request['submitted_by']))
         }.to raise_error(WcaExceptions::RegistrationError) do |error|
           expect(error.status).to eq(:unprocessable_entity)
           expect(error.error).to eq(Registrations::ErrorCodes::INVALID_REQUEST_DATA)
@@ -1265,7 +1287,7 @@ RSpec.describe Registrations::RegistrationChecker do
         override_registration = FactoryBot.create(:registration, user_id: 188_000, registration_status: 'cancelled')
         update_request = FactoryBot.build(:update_request, user_id: override_registration[:user_id], competing: { 'status' => 'pending' })
 
-        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, @competition, update_request['submitted_by']) }
+        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, User.find(update_request['submitted_by'])) }
           .not_to raise_error
       end
 
@@ -1304,7 +1326,7 @@ RSpec.describe Registrations::RegistrationChecker do
         update_request = FactoryBot.build(:update_request, user_id: override_registration[:user_id], competing: { 'status' => 'cancelled' })
 
         expect {
-          Registrations::RegistrationChecker.update_registration_allowed!(update_request, override_competition, update_request['submitted_by'])
+          Registrations::RegistrationChecker.update_registration_allowed!(update_request, User.find(update_request['submitted_by']))
         }.to raise_error(WcaExceptions::RegistrationError) do |error|
           expect(error.status).to eq(:unauthorized)
           expect(error.error).to eq(Registrations::ErrorCodes::ORGANIZER_MUST_CANCEL_REGISTRATION)
@@ -1316,27 +1338,27 @@ RSpec.describe Registrations::RegistrationChecker do
         override_competition = CompetitionInfo.new(FactoryBot.build(:competition, allow_registration_self_delete_after_acceptance: false))
         update_request = FactoryBot.build(:update_request, user_id: override_registration[:user_id], competing: { 'status' => 'cancelled' })
 
-        stub_request(:get, UserApi.permissions_path(update_request['submitted_by'])).to_return(
+        stub_request(:get, UserApi.permissions_path(User.find(update_request['submitted_by']))).to_return(
           status: 200,
           body: FactoryBot.build(:permissions_response).to_json,
           headers: { content_type: 'application/json' },
         )
 
-        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, override_competition, update_request['submitted_by']) }
+        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, User.find(update_request['submitted_by'])) }
           .not_to raise_error
       end
 
       it 'user cant cancel registration after registration ends' do
         override_competition = CompetitionInfo.new(FactoryBot.build(:competition, :closed))
-        update_request = FactoryBot.build(:update_request, user_id: @registration[:user_id], competing: { 'status' => 'cancelled' })
-        stub_request(:get, UserApi.permissions_path(update_request['submitted_by'])).to_return(
+        update_request = FactoryBot.build(:update_request, user_id: registration.user_id, competing: { 'status' => 'cancelled' })
+        stub_request(:get, UserApi.permissions_path(User.find(update_request['submitted_by']))).to_return(
           status: 200,
           body: FactoryBot.build(:permissions_response).to_json,
           headers: { content_type: 'application/json' },
         )
 
         expect {
-          Registrations::RegistrationChecker.update_registration_allowed!(update_request, override_competition, update_request['submitted_by'])
+          Registrations::RegistrationChecker.update_registration_allowed!(update_request, User.find(update_request['submitted_by']))
         }.to raise_error(WcaExceptions::RegistrationError) do |error|
           expect(error.status).to eq(:forbidden)
           expect(error.error).to eq(Registrations::ErrorCodes::USER_EDITS_NOT_ALLOWED)
@@ -1374,9 +1396,9 @@ RSpec.describe Registrations::RegistrationChecker do
 
       it 'organizer can cancel registration after registration ends' do
         override_competition = CompetitionInfo.new(FactoryBot.build(:competition, :closed))
-        update_request = FactoryBot.build(:update_request, :organizer_for_user, user_id: @registration[:user_id], competing: { 'status' => 'cancelled' })
+        update_request = FactoryBot.build(:update_request, :organizer_for_user, user_id: registration.user_id, competing: { 'status' => 'cancelled' })
 
-        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, override_competition, update_request['submitted_by']) }
+        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, User.find(update_request['submitted_by'])) }
           .not_to raise_error
       end
     end
@@ -1384,36 +1406,36 @@ RSpec.describe Registrations::RegistrationChecker do
     describe '#update_registration_allowed!.validate_update_events!' do
       it 'user can add events' do
         update_request = FactoryBot.build(
-          :update_request, user_id: @registration[:user_id], competing: { 'event_ids' => ['333', '444', '555', '333mbf'] }
+          :update_request, user_id: registration.user_id, competing: { 'event_ids' => ['333', '444', '555', '333mbf'] }
         )
 
-        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, @competition, update_request['submitted_by']) }
+        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, User.find(update_request['submitted_by'])) }
           .not_to raise_error
       end
 
       it 'user can remove events' do
         update_request = FactoryBot.build(
-          :update_request, user_id: @registration[:user_id], competing: { 'event_ids' => ['333'] }
+          :update_request, user_id: registration.user_id, competing: { 'event_ids' => ['333'] }
         )
 
-        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, @competition, update_request['submitted_by']) }
+        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, User.find(update_request['submitted_by'])) }
           .not_to raise_error
       end
 
       it 'user can remove all old events and register for new ones' do
         update_request = FactoryBot.build(
-          :update_request, user_id: @registration[:user_id], competing: { 'event_ids' => ['777', '333bf'] }
+          :update_request, user_id: registration.user_id, competing: { 'event_ids' => ['777', '333bf'] }
         )
 
-        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, @competition, update_request['submitted_by']) }
+        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, User.find(update_request['submitted_by'])) }
           .not_to raise_error
       end
 
       it 'events list cant be blank' do
-        update_request = FactoryBot.build(:update_request, user_id: @registration[:user_id], competing: { 'event_ids' => [] })
+        update_request = FactoryBot.build(:update_request, user_id: registration.user_id, competing: { 'event_ids' => [] })
 
         expect {
-          Registrations::RegistrationChecker.update_registration_allowed!(update_request, @competition, update_request['submitted_by'])
+          Registrations::RegistrationChecker.update_registration_allowed!(update_request, User.find(update_request['submitted_by']))
         }.to raise_error(WcaExceptions::RegistrationError) do |error|
           expect(error.status).to eq(:unprocessable_entity)
           expect(error.error).to eq(Registrations::ErrorCodes::INVALID_EVENT_SELECTION)
@@ -1421,10 +1443,10 @@ RSpec.describe Registrations::RegistrationChecker do
       end
 
       it 'events must be held at the competition' do
-        update_request = FactoryBot.build(:update_request, user_id: @registration[:user_id], competing: { 'event_ids' => ['333fm', '333'] })
+        update_request = FactoryBot.build(:update_request, user_id: registration.user_id, competing: { 'event_ids' => ['333fm', '333'] })
 
         expect {
-          Registrations::RegistrationChecker.update_registration_allowed!(update_request, @competition, update_request['submitted_by'])
+          Registrations::RegistrationChecker.update_registration_allowed!(update_request, User.find(update_request['submitted_by']))
         }.to raise_error(WcaExceptions::RegistrationError) do |error|
           expect(error.status).to eq(:unprocessable_entity)
           expect(error.error).to eq(Registrations::ErrorCodes::INVALID_EVENT_SELECTION)
@@ -1432,10 +1454,10 @@ RSpec.describe Registrations::RegistrationChecker do
       end
 
       it 'events must exist' do
-        update_request = FactoryBot.build(:update_request, user_id: @registration[:user_id], competing: { 'event_ids' => ['888', '333'] })
+        update_request = FactoryBot.build(:update_request, user_id: registration.user_id, competing: { 'event_ids' => ['888', '333'] })
 
         expect {
-          Registrations::RegistrationChecker.update_registration_allowed!(update_request, @competition, update_request['submitted_by'])
+          Registrations::RegistrationChecker.update_registration_allowed!(update_request, User.find(update_request['submitted_by']))
         }.to raise_error(WcaExceptions::RegistrationError) do |error|
           expect(error.status).to eq(:unprocessable_entity)
           expect(error.error).to eq(Registrations::ErrorCodes::INVALID_EVENT_SELECTION)
@@ -1444,20 +1466,20 @@ RSpec.describe Registrations::RegistrationChecker do
 
       it 'organizer can change a users events' do
         update_request = FactoryBot.build(
-          :update_request, :organizer_for_user, user_id: @registration[:user_id], competing: { 'event_ids' => ['333', '666'] }
+          :update_request, :organizer_for_user, user_id: registration.user_id, competing: { 'event_ids' => ['333', '666'] }
         )
 
-        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, @competition, update_request['submitted_by']) }
+        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, User.find(update_request['submitted_by'])) }
           .not_to raise_error
       end
 
       it 'organizer cant change users events to events not held at competition' do
         update_request = FactoryBot.build(
-          :update_request, :organizer_for_user, user_id: @registration[:user_id], competing: { 'event_ids' => ['333fm', '333'] }
+          :update_request, :organizer_for_user, user_id: registration.user_id, competing: { 'event_ids' => ['333fm', '333'] }
         )
 
         expect {
-          Registrations::RegistrationChecker.update_registration_allowed!(update_request, @competition, update_request['submitted_by'])
+          Registrations::RegistrationChecker.update_registration_allowed!(update_request, User.find(update_request['submitted_by']))
         }.to raise_error(WcaExceptions::RegistrationError) do |error|
           expect(error.status).to eq(:unprocessable_entity)
           expect(error.error).to eq(Registrations::ErrorCodes::INVALID_EVENT_SELECTION)
@@ -1466,18 +1488,18 @@ RSpec.describe Registrations::RegistrationChecker do
 
       it 'competitor can update registration with events up to the events_per_registration_limit limit' do
         override_competition = CompetitionInfo.new(FactoryBot.build(:competition, events_per_registration_limit: 5))
-        update_request = FactoryBot.build(:update_request, user_id: @registration[:user_id], competing: { 'event_ids' => ['333', '222', '444', '555', '666'] })
+        update_request = FactoryBot.build(:update_request, user_id: registration.user_id, competing: { 'event_ids' => ['333', '222', '444', '555', '666'] })
 
-        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, override_competition, update_request['submitted_by']) }
+        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, User.find(update_request['submitted_by'])) }
           .not_to raise_error
       end
 
       it 'competitor cant update registration to more events than the events_per_registration_limit' do
-        update_request = FactoryBot.build(:update_request, user_id: @registration[:user_id], competing: { 'event_ids' => ['333', '222', '444', '555', '666', '777'] })
+        update_request = FactoryBot.build(:update_request, user_id: registration.user_id, competing: { 'event_ids' => ['333', '222', '444', '555', '666', '777'] })
         override_competition = CompetitionInfo.new(FactoryBot.build(:competition, events_per_registration_limit: 5))
 
         expect {
-          Registrations::RegistrationChecker.update_registration_allowed!(update_request, override_competition, update_request['submitted_by'])
+          Registrations::RegistrationChecker.update_registration_allowed!(update_request, User.find(update_request['submitted_by']))
         }.to raise_error(WcaExceptions::RegistrationError) do |error|
           expect(error.status).to eq(:forbidden)
           expect(error.error).to eq(Registrations::ErrorCodes::INVALID_EVENT_SELECTION)
@@ -1486,12 +1508,12 @@ RSpec.describe Registrations::RegistrationChecker do
 
       it 'organizer cant update their registration with more events than the events_per_registration_limit' do
         update_request = FactoryBot.build(
-          :update_request, user_id: @registration[:user_id], competing: { 'event_ids' => ['333', '222', '444', '555', '666', '777'] }
+          :update_request, user_id: registration.user_id, competing: { 'event_ids' => ['333', '222', '444', '555', '666', '777'] }
         )
         override_competition = CompetitionInfo.new(FactoryBot.build(:competition, events_per_registration_limit: 5))
 
         expect {
-          Registrations::RegistrationChecker.update_registration_allowed!(update_request, override_competition, update_request['submitted_by'])
+          Registrations::RegistrationChecker.update_registration_allowed!(update_request, User.find(update_request['submitted_by']))
         }.to raise_error(WcaExceptions::RegistrationError) do |error|
           expect(error.status).to eq(:forbidden)
           expect(error.error).to eq(Registrations::ErrorCodes::INVALID_EVENT_SELECTION)
@@ -1505,10 +1527,10 @@ RSpec.describe Registrations::RegistrationChecker do
       end
 
       it 'must be an integer, not string' do
-        update_request = FactoryBot.build(:update_request, :organizer_for_user, user_id: @registration[:user_id], competing: { 'waiting_list_position' => 'b' })
+        update_request = FactoryBot.build(:update_request, :organizer_for_user, user_id: registration.user_id, competing: { 'waiting_list_position' => 'b' })
 
         expect {
-          Registrations::RegistrationChecker.update_registration_allowed!(update_request, @competition, update_request['submitted_by'])
+          Registrations::RegistrationChecker.update_registration_allowed!(update_request, User.find(update_request['submitted_by']))
         }.to raise_error(WcaExceptions::RegistrationError) do |error|
           expect(error.status).to eq(:unprocessable_entity)
           expect(error.error).to eq(Registrations::ErrorCodes::INVALID_WAITING_LIST_POSITION)
@@ -1517,18 +1539,18 @@ RSpec.describe Registrations::RegistrationChecker do
 
       it 'can be an integer given as a string' do
         @waiting_list.add(@registration.user_id)
-        update_request = FactoryBot.build(:update_request, :organizer_for_user, user_id: @registration[:user_id], competing: { 'waiting_list_position' => '1' })
+        update_request = FactoryBot.build(:update_request, :organizer_for_user, user_id: registration.user_id, competing: { 'waiting_list_position' => '1' })
 
         expect {
-          Registrations::RegistrationChecker.update_registration_allowed!(update_request, @competition, update_request['submitted_by'])
+          Registrations::RegistrationChecker.update_registration_allowed!(update_request, User.find(update_request['submitted_by']))
         }.not_to raise_error
       end
 
       it 'must be an integer, not float' do
-        update_request = FactoryBot.build(:update_request, :organizer_for_user, user_id: @registration[:user_id], competing: { 'waiting_list_position' => 2.0 })
+        update_request = FactoryBot.build(:update_request, :organizer_for_user, user_id: registration.user_id, competing: { 'waiting_list_position' => 2.0 })
 
         expect {
-          Registrations::RegistrationChecker.update_registration_allowed!(update_request, @competition, update_request['submitted_by'])
+          Registrations::RegistrationChecker.update_registration_allowed!(update_request, User.find(update_request['submitted_by']))
         }.to raise_error(WcaExceptions::RegistrationError) do |error|
           expect(error.status).to eq(:unprocessable_entity)
           expect(error.error).to eq(Registrations::ErrorCodes::INVALID_WAITING_LIST_POSITION)
@@ -1546,7 +1568,7 @@ RSpec.describe Registrations::RegistrationChecker do
         update_request = FactoryBot.build(:update_request, :organizer_for_user, user_id: override_registration[:user_id], competing: { 'waiting_list_position' => '0' })
 
         expect {
-          Registrations::RegistrationChecker.update_registration_allowed!(update_request, @competition, update_request['submitted_by'])
+          Registrations::RegistrationChecker.update_registration_allowed!(update_request, User.find(update_request['submitted_by']))
         }.to raise_error(WcaExceptions::RegistrationError) do |error|
           expect(error.status).to eq(:forbidden)
           expect(error.error).to eq(Registrations::ErrorCodes::INVALID_WAITING_LIST_POSITION)
@@ -1563,7 +1585,7 @@ RSpec.describe Registrations::RegistrationChecker do
         update_request = FactoryBot.build(:update_request, :organizer_for_user, user_id: override_registration[:user_id], competing: { 'waiting_list_position' => '10' })
 
         expect {
-          Registrations::RegistrationChecker.update_registration_allowed!(update_request, @competition, update_request['submitted_by'])
+          Registrations::RegistrationChecker.update_registration_allowed!(update_request, User.find(update_request['submitted_by']))
         }.to raise_error(WcaExceptions::RegistrationError) do |error|
           expect(error.status).to eq(:forbidden)
           expect(error.error).to eq(Registrations::ErrorCodes::INVALID_WAITING_LIST_POSITION)
@@ -1592,7 +1614,7 @@ RSpec.describe Registrations::RegistrationChecker do
         FactoryBot.create(:registration, user_id: update_request['user_id'])
 
         expect {
-          Registrations::RegistrationChecker.update_registration_allowed!(update_request, competition, update_request['submitted_by'])
+          Registrations::RegistrationChecker.update_registration_allowed!(update_request, competition, User.find(update_request['submitted_by']))
         }.not_to raise_error
       end
 
@@ -1606,7 +1628,7 @@ RSpec.describe Registrations::RegistrationChecker do
           FactoryBot.create(:registration, user_id: update_request['user_id'])
 
           expect {
-            Registrations::RegistrationChecker.update_registration_allowed!(update_request, competition, update_request['submitted_by'])
+            Registrations::RegistrationChecker.update_registration_allowed!(update_request, competition, User.find(update_request['submitted_by']))
           }.not_to raise_error
         end
       end
@@ -1622,7 +1644,7 @@ RSpec.describe Registrations::RegistrationChecker do
           FactoryBot.create(:registration, user_id: update_request['user_id'])
 
           expect {
-            Registrations::RegistrationChecker.update_registration_allowed!(update_request, competition, update_request['submitted_by'])
+            Registrations::RegistrationChecker.update_registration_allowed!(update_request, competition, User.find(update_request['submitted_by']))
           }.not_to raise_error
         end
 
@@ -1636,7 +1658,7 @@ RSpec.describe Registrations::RegistrationChecker do
           FactoryBot.create(:registration, user_id: update_request['user_id'])
 
           expect {
-            Registrations::RegistrationChecker.update_registration_allowed!(update_request, competition, update_request['submitted_by'])
+            Registrations::RegistrationChecker.update_registration_allowed!(update_request, competition, User.find(update_request['submitted_by']))
           }.not_to raise_error
         end
       end
@@ -1652,7 +1674,7 @@ RSpec.describe Registrations::RegistrationChecker do
           FactoryBot.create(:registration, user_id: update_request['user_id'])
 
           expect {
-            Registrations::RegistrationChecker.update_registration_allowed!(update_request, competition, update_request['submitted_by'])
+            Registrations::RegistrationChecker.update_registration_allowed!(update_request, competition, User.find(update_request['submitted_by']))
           }.to raise_error(WcaExceptions::RegistrationError) do |error|
             expect(error.error).to eq(Registrations::ErrorCodes::QUALIFICATION_NOT_MET)
             expect(error.status).to eq(:unprocessable_entity)
@@ -1731,7 +1753,7 @@ RSpec.describe Registrations::RegistrationChecker do
         update_request = FactoryBot.build(:update_request, :organizer_for_user, user_id: cancelled_registration[:user_id], competing: { 'status' => 'accepted' })
 
         expect {
-          Registrations::RegistrationChecker.update_registration_allowed!(update_request, series_competition, update_request['submitted_by'])
+          Registrations::RegistrationChecker.update_registration_allowed!(update_request, series_competition, User.find(update_request['submitted_by']))
         }.to raise_error(WcaExceptions::RegistrationError) do |error|
           expect(error.error).to eq(Registrations::ErrorCodes::ALREADY_REGISTERED_IN_SERIES)
           expect(error.status).to eq(:forbidden)
@@ -1752,7 +1774,7 @@ RSpec.describe Registrations::RegistrationChecker do
         )
 
         expect {
-          Registrations::RegistrationChecker.update_registration_allowed!(update_request, series_competition, update_request['submitted_by'])
+          Registrations::RegistrationChecker.update_registration_allowed!(update_request, series_competition, User.find(update_request['submitted_by']))
         }.not_to raise_error
       end
     end
@@ -1781,17 +1803,17 @@ RSpec.describe Registrations::RegistrationChecker do
       end
 
       it 'users cant submit bulk updates' do
-        failed_update = FactoryBot.build(:update_request, user_id: @registration[:user_id])
-        bulk_update_request = FactoryBot.build(:bulk_update_request, requests: [failed_update], submitted_by: @registration[:user_id])
+        failed_update = FactoryBot.build(:update_request, user_id: registration.user_id)
+        bulk_update_request = FactoryBot.build(:bulk_update_request, requests: [failed_update], submitted_by: registration.user_id)
 
-        stub_request(:get, UserApi.permissions_path(bulk_update_request['submitted_by'])).to_return(
+        stub_request(:get, UserApi.permissions_path(bulk_User.find(update_request['submitted_by']))).to_return(
           status: 200,
           body: FactoryBot.build(:permissions_response).to_json,
           headers: { content_type: 'application/json' },
         )
 
         expect {
-          Registrations::RegistrationChecker.bulk_update_allowed!(bulk_update_request, @competition, bulk_update_request['submitted_by'])
+          Registrations::RegistrationChecker.bulk_update_allowed!(bulk_update_request, bulk_User.find(update_request['submitted_by']))
         }.to raise_error(BulkUpdateError) do |error|
           expect(error.errors).to eq([Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS])
           expect(error.status).to eq(:unauthorized)
@@ -1799,48 +1821,48 @@ RSpec.describe Registrations::RegistrationChecker do
       end
 
       it 'doesnt raise an error if all checks pass - single update' do
-        bulk_update_request = FactoryBot.build(:bulk_update_request, user_ids: [@registration[:user_id]])
+        bulk_update_request = FactoryBot.build(:bulk_update_request, user_ids: [registration.user_id])
 
         expect {
-          Registrations::RegistrationChecker.bulk_update_allowed!(bulk_update_request, @competition, bulk_update_request['submitted_by'])
+          Registrations::RegistrationChecker.bulk_update_allowed!(bulk_update_request, bulk_User.find(update_request['submitted_by']))
         }.not_to raise_error
       end
 
       it 'doesnt raise an error if all checks pass - 3 updates' do
-        registrations = [@registration[:user_id], @registration2[:user_id], @registration3[:user_id]]
+        registrations = [registration.user_id, @registration2[:user_id], @registration3[:user_id]]
         bulk_update_request = FactoryBot.build(:bulk_update_request, user_ids: registrations)
 
         expect {
-          Registrations::RegistrationChecker.bulk_update_allowed!(bulk_update_request, @competition, bulk_update_request['submitted_by'])
+          Registrations::RegistrationChecker.bulk_update_allowed!(bulk_update_request, bulk_User.find(update_request['submitted_by']))
         }.not_to raise_error
       end
 
       it 'returns an array user_ids:error codes - 1 failure' do
-        failed_update = FactoryBot.build(:update_request, user_id: @registration[:user_id], competing: { 'event_ids' => [] })
+        failed_update = FactoryBot.build(:update_request, user_id: registration.user_id, competing: { 'event_ids' => [] })
         bulk_update_request = FactoryBot.build(:bulk_update_request, requests: [failed_update])
 
         expect {
-          Registrations::RegistrationChecker.bulk_update_allowed!(bulk_update_request, @competition, bulk_update_request['submitted_by'])
+          Registrations::RegistrationChecker.bulk_update_allowed!(bulk_update_request, bulk_User.find(update_request['submitted_by']))
         }.to raise_error(BulkUpdateError) do |error|
-          expect(error.errors).to eq({ @registration[:user_id] => Registrations::ErrorCodes::INVALID_EVENT_SELECTION })
+          expect(error.errors).to eq({ registration.user_id => Registrations::ErrorCodes::INVALID_EVENT_SELECTION })
           expect(error.status).to eq(:unprocessable_entity)
         end
       end
 
       it 'returns an array user_ids:error codes - 2 validation failures' do
-        failed_update = FactoryBot.build(:update_request, user_id: @registration[:user_id], competing: { 'event_ids' => [] })
+        failed_update = FactoryBot.build(:update_request, user_id: registration.user_id, competing: { 'event_ids' => [] })
         normal_update = FactoryBot.build(:update_request, user_id: @registration2[:user_id], competing: { 'status' => 'accepted' })
         failed_update2 = FactoryBot.build(:update_request, user_id: @registration3[:user_id], competing: { 'status' => 'random_status' })
         updates = [failed_update, normal_update, failed_update2]
         bulk_update_request = FactoryBot.build(:bulk_update_request, requests: updates)
 
         error_json = {
-          @registration[:user_id] => Registrations::ErrorCodes::INVALID_EVENT_SELECTION,
+          registration.user_id => Registrations::ErrorCodes::INVALID_EVENT_SELECTION,
           @registration3[:user_id] => Registrations::ErrorCodes::INVALID_REQUEST_DATA,
         }
 
         expect {
-          Registrations::RegistrationChecker.bulk_update_allowed!(bulk_update_request, @competition, bulk_update_request['submitted_by'])
+          Registrations::RegistrationChecker.bulk_update_allowed!(bulk_update_request, bulk_User.find(update_request['submitted_by']))
         }.to raise_error(BulkUpdateError) do |error|
           expect(error.errors).to eq(error_json)
           expect(error.status).to eq(:unprocessable_entity)
@@ -1848,7 +1870,7 @@ RSpec.describe Registrations::RegistrationChecker do
       end
 
       it 'returns an error if the registration isnt found' do
-        missing_registration_user_id = (@registration[:user_id]-1)
+        missing_registration_user_id = (registration.user_id-1)
         failed_update = FactoryBot.build(:update_request, user_id: missing_registration_user_id)
         bulk_update_request = FactoryBot.build(:bulk_update_request, requests: [failed_update])
 
@@ -1857,7 +1879,7 @@ RSpec.describe Registrations::RegistrationChecker do
         }
 
         expect {
-          Registrations::RegistrationChecker.bulk_update_allowed!(bulk_update_request, @competition, bulk_update_request['submitted_by'])
+          Registrations::RegistrationChecker.bulk_update_allowed!(bulk_update_request, bulk_User.find(update_request['submitted_by']))
         }.to raise_error(BulkUpdateError) do |error|
           expect(error.errors).to eq(error_json)
           expect(error.status).to eq(:unprocessable_entity)
@@ -1865,7 +1887,7 @@ RSpec.describe Registrations::RegistrationChecker do
       end
 
       it 'returns errors array - validation failure and reg not found' do
-        failed_update = FactoryBot.build(:update_request, user_id: @registration[:user_id], competing: { 'event_ids' => [] })
+        failed_update = FactoryBot.build(:update_request, user_id: registration.user_id, competing: { 'event_ids' => [] })
         normal_update = FactoryBot.build(:update_request, user_id: @registration2[:user_id], competing: { 'status' => 'accepted' })
 
         missing_registration_user_id = (@registration3[:user_id].to_i-1)
@@ -1874,12 +1896,12 @@ RSpec.describe Registrations::RegistrationChecker do
         bulk_update_request = FactoryBot.build(:bulk_update_request, requests: updates)
 
         error_json = {
-          @registration[:user_id] => Registrations::ErrorCodes::INVALID_EVENT_SELECTION,
+          registration.user_id => Registrations::ErrorCodes::INVALID_EVENT_SELECTION,
           missing_registration_user_id => Registrations::ErrorCodes::REGISTRATION_NOT_FOUND,
         }
 
         expect {
-          Registrations::RegistrationChecker.bulk_update_allowed!(bulk_update_request, @competition, bulk_update_request['submitted_by'])
+          Registrations::RegistrationChecker.bulk_update_allowed!(bulk_update_request, bulk_User.find(update_request['submitted_by']))
         }.to raise_error(BulkUpdateError) do |error|
           expect(error.errors).to eq(error_json)
           expect(error.status).to eq(:unprocessable_entity)

@@ -275,6 +275,12 @@ FactoryBot.define do
       event_change_deadline_date { 2.weeks.from_now.change(usec: 0) }
     end
 
+    trait :event_edit_passed do
+      registration_closed
+      allow_registration_edits { true }
+      event_change_deadline_date { 1.day.ago }
+    end
+
     trait :confirmed do
       with_delegate
       with_organizer
