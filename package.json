@@ -30,7 +30,7 @@
     "@stripe/stripe-js": "^4.7.0",
     "@tanstack/react-query": "^5.56.2",
     "@wca/helpers": "^1.1.5",
-    "autonumeric": "^4.10.5",
+    "autonumeric": "^4.10.7",
     "autoprefixer": "^10.4.20",
     "autosize": "^6.0.1",
     "babel-loader": "^9.2.1",
