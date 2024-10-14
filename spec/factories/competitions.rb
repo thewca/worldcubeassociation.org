@@ -13,6 +13,55 @@ FactoryBot.define do
       starts { 1.year.ago }
       ends { starts }
       event_ids { %w(333 333oh) }
+
+
+      today { Time.now.utc.iso8601 }
+      next_month { 1.month.from_now.iso8601 }
+      last_year { 1.year.ago.iso8601 }
+
+      hard_qualifications {
+        {
+          '333' => { 'type' => 'attemptResult', 'resultType' => 'single', 'whenDate' => today, 'level' => 1 },
+          '555' => { 'type' => 'attemptResult', 'resultType' => 'average', 'whenDate' => today, 'level' => 6 },
+          'pyram' => { 'type' => 'ranking', 'resultType' => 'single', 'whenDate' => (Time.now.utc-2).iso8601, 'level' => 1 },
+          'minx' => { 'type' => 'ranking', 'resultType' => 'average', 'whenDate' => today, 'level' => 2 },
+          '222' => { 'type' => 'anyResult', 'resultType' => 'single', 'whenDate' => today, 'level' => 0 },
+          '444' => { 'type' => 'anyResult', 'resultType' => 'average', 'whenDate' => today, 'level' => 0 },
+        }
+      }
+
+      easy_qualifications {
+        {
+          '333' => { 'type' => 'attemptResult', 'resultType' => 'single', 'whenDate' => today, 'level' => 1000 },
+          '555' => { 'type' => 'attemptResult', 'resultType' => 'average', 'whenDate' => today, 'level' => 6000 },
+          'pyram' => { 'type' => 'ranking', 'resultType' => 'single', 'whenDate' => (Time.now.utc-2).iso8601, 'level' => 100 },
+          'minx' => { 'type' => 'ranking', 'resultType' => 'average', 'whenDate' => today, 'level' => 200 },
+          '222' => { 'type' => 'anyResult', 'resultType' => 'single', 'whenDate' => today, 'level' => 0 },
+          '444' => { 'type' => 'anyResult', 'resultType' => 'average', 'whenDate' => today, 'level' => 0 },
+        }
+      }
+
+      easy_future_qualifications {
+        {
+          '333' => { 'type' => 'attemptResult', 'resultType' => 'single', 'whenDate' => next_month, 'level' => 1000 },
+          '555' => { 'type' => 'attemptResult', 'resultType' => 'average', 'whenDate' => next_month, 'level' => 6000 },
+          'pyram' => { 'type' => 'ranking', 'resultType' => 'single', 'whenDate' => next_month, 'level' => 100 },
+          'minx' => { 'type' => 'ranking', 'resultType' => 'average', 'whenDate' => next_month, 'level' => 200 },
+          '222' => { 'type' => 'anyResult', 'resultType' => 'single', 'whenDate' => next_month, 'level' => 0 },
+          '444' => { 'type' => 'anyResult', 'resultType' => 'average', 'whenDate' => next_month, 'level' => 0 },
+        }
+      }
+
+      past_qualifications {
+        {
+          '333' => { 'type' => 'attemptResult', 'resultType' => 'single', 'whenDate' => last_year, 'level' => 1000 },
+          '555' => { 'type' => 'attemptResult', 'resultType' => 'average', 'whenDate' => last_year, 'level' => 6000 },
+          'pyram' => { 'type' => 'ranking', 'resultType' => 'single', 'whenDate' => last_year, 'level' => 100 },
+          'minx' => { 'type' => 'ranking', 'resultType' => 'average', 'whenDate' => last_year, 'level' => 200 },
+          '222' => { 'type' => 'anyResult', 'resultType' => 'single', 'whenDate' => last_year, 'level' => 0 },
+          '444' => { 'type' => 'anyResult', 'resultType' => 'average', 'whenDate' => last_year, 'level' => 0 },
+        }
+      }
     end
 
     sequence(:name) { |n| "Foo Comp #{n} 2015" }
@@ -49,26 +98,74 @@ FactoryBot.define do
     refund_policy_percent { 0 }
     guests_entry_fee_lowest_denomination { 0 }
 
-    trait :enforces_qualifications do
+    trait :enforces_easy_qualifications do
       qualification_results { true }
       qualification_results_reason { 'testing' }
-      event_ids { %w(333 333oh 555 pyram minx 222 555bf) }
+      event_ids { %w(333 333oh 555 pyram minx 222 444) }
       allow_registration_without_qualification { false }
 
-      today = Time.now.utc.iso8601
+      transient do
+        qualifications { easy_qualifications }
+      end
+    end
+
+    trait :enforces_past_qualifications do
+      qualification_results { true }
+      qualification_results_reason { 'testing' }
+      event_ids { %w(333 333oh 555 pyram minx 222 444) }
+      allow_registration_without_qualification { false }
 
       transient do
-        qualifications {
-          {
-            '333' => { 'type' => 'attemptResult', 'resultType' => 'single', 'whenDate' => today, 'level' => 1000 },
-            '555' => { 'type' => 'attemptResult', 'resultType' => 'average', 'whenDate' => today, 'level' => 6000 },
-            'pyram' => { 'type' => 'ranking', 'resultType' => 'single', 'whenDate' => (Time.now.utc-2).iso8601, 'level' => 100 },
-            'minx' => { 'type' => 'ranking', 'resultType' => 'average', 'whenDate' => today, 'level' => 200 },
-            '222' => { 'type' => 'anyResult', 'resultType' => 'single', 'whenDate' => today, 'level' => 0 },
-            '555bf' => { 'type' => 'anyResult', 'resultType' => 'average', 'whenDate' => today, 'level' => 0 },
-          }
-        }
+        qualifications { past_qualifications }
       end
+
+    end
+
+    trait :enforces_hard_qualifications do
+      qualification_results { true }
+      qualification_results_reason { 'testing' }
+      event_ids { %w(333 333oh 555 pyram minx 222 444) }
+      allow_registration_without_qualification { false }
+
+      transient do
+        qualifications { hard_qualifications }
+      end
+    end
+
+
+    trait :unenforced_easy_qualifications do
+      qualification_results { true }
+      qualification_results_reason { 'testing' }
+      event_ids { %w(333 333oh 555 pyram minx 222 444) }
+      allow_registration_without_qualification { true }
+
+      transient do
+        qualifications { easy_qualifications }
+      end
+    end
+
+
+    trait :unenforced_hard_qualifications do
+      qualification_results { true }
+      qualification_results_reason { 'testing' }
+      event_ids { %w(333 333oh 555 pyram minx 222 444) }
+      allow_registration_without_qualification { true }
+
+      transient do
+        qualifications { hard_qualifications }
+      end
+    end
+
+    trait :easy_future_qualifications do
+      qualification_results { true }
+      qualification_results_reason { 'testing' }
+      event_ids { %w(333 333oh 555 pyram minx 222 444) }
+      allow_registration_without_qualification { true }
+
+      transient do
+        qualifications { easy_future_qualifications }
+      end
+
     end
 
     trait :future do
@@ -91,6 +188,7 @@ FactoryBot.define do
 
     trait :past do
       starts { 1.week.ago }
+      ends { starts }
       registration_close { 2.weeks.ago.change(usec: 0) }
     end
 

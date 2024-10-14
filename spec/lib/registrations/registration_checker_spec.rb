@@ -84,7 +84,7 @@ RSpec.describe Registrations::RegistrationChecker do
   let(:default_user) { FactoryBot.create(:user) }
   let(:default_competition) { FactoryBot.create(:competition, :registration_open) }
 
-  describe '#create' do
+  describe '#create', :tag do
     describe '#create_registration_allowed!' do
       it 'guests can equal the maximum allowed' do
         registration_request = FactoryBot.build(
@@ -484,80 +484,139 @@ RSpec.describe Registrations::RegistrationChecker do
       end
     end
 
-    describe '#create_registration_allowed!.validate_qualifications!', :tag do
-      let(:comp_with_qualifications) { FactoryBot.create(:competition, :registration_open, :enforces_qualifications) }
+    describe '#create_registration_allowed!.validate_qualifications!' do
+      let(:past_competition) { FactoryBot.create(:competition, :past) }
 
-      it 'smoketest - succeeds when all qualifications are met', :only do
+      let(:unenforced_easy_qualifications) { FactoryBot.create(:competition, :registration_open, :unenforced_easy_qualifications) }
+      let(:unenforced_hard_qualifications) { FactoryBot.create(:competition, :registration_open, :unenforced_hard_qualifications) }
+
+      let(:comp_with_qualifications) { FactoryBot.create(:competition, :registration_open, :enforces_easy_qualifications) }
+      let(:enforced_hard_qualifications) { FactoryBot.create(:competition, :registration_open, :enforces_hard_qualifications) }
+      let(:easy_future_qualifications) { FactoryBot.create(:competition, :registration_open, :easy_future_qualifications) }
+      let(:past_qualifications) { FactoryBot.create(:competition, :registration_open, :enforces_past_qualifications ) }
+
+      let(:user_with_results) { FactoryBot.create(:user, :wca_id) }
+      let(:user_without_results) { FactoryBot.create(:user, :wca_id) }
+      let(:dnfs_only) { FactoryBot.create(:user, :wca_id) }
+
+      before do
+        FactoryBot.create(:result, competition: past_competition, person: user_with_results.person, eventId: '222', best: 400, average: 500)
+        FactoryBot.create(:result, competition: past_competition, person: user_with_results.person, eventId: '333', best: 410, average: 510)
+        FactoryBot.create(:result, competition: past_competition, person: user_with_results.person, eventId: '555', best: 420, average: 520)
+        FactoryBot.create(:result, competition: past_competition, person: user_with_results.person, eventId: '444', best: 430, average: 530)
+        FactoryBot.create(:result, competition: past_competition, person: user_with_results.person, eventId: 'pyram', best: 440, average: 540)
+        FactoryBot.create(:result, competition: past_competition, person: user_with_results.person, eventId: 'minx', best: 450, average: 550)
+
+        FactoryBot.create(:result, competition: past_competition, person: dnfs_only.person, eventId: '222', best: -1, average: -1)
+        FactoryBot.create(:result, competition: past_competition, person: dnfs_only.person, eventId: '333', best: -1, average: -1)
+        FactoryBot.create(:result, competition: past_competition, person: dnfs_only.person, eventId: '555', best: -1, average: -1)
+        FactoryBot.create(:result, competition: past_competition, person: dnfs_only.person, eventId: '444', best: -1, average: -1)
+        FactoryBot.create(:result, competition: past_competition, person: dnfs_only.person, eventId: 'pyram', best: -1, average: -1)
+        FactoryBot.create(:result, competition: past_competition, person: dnfs_only.person, eventId: 'minx', best: -1, average: -1)
+      end
+
+
+      it 'smoketest - succeeds when all qualifications are met' do
         registration_request = FactoryBot.build(
           :registration_request,
-          events: ['222', '333oh', '333', '555', '555bf', 'pyram', 'minx'],
-          user_id: default_user.id,
+          events: ['222', '333oh', '333', '555', '444', 'pyram', 'minx'],
+          user_id: user_with_results.id,
           competition_id: comp_with_qualifications.id
         )
 
-        byebug
         expect {
           Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['submitted_by']))
         }.not_to raise_error
       end
 
       it 'smoketest - all qualifications unmet' do
-        stub_qualifications(nil, (Time.now.utc-1).iso8601)
-
-        competition = FactoryBot.build(:competition, :has_hard_qualifications)
-        stub_json(CompetitionApi.url("#{competition['id']}/qualifications"), 200, competition['qualifications'])
-        CompetitionInfo.new(competition.except('qualifications'))
-
-        registration_request = FactoryBot.build(:registration_request, events: ['222', '333', '555', '555bf', '333mbf', '444', 'pyram', 'minx'])
+        registration_request = FactoryBot.build(
+          :registration_request,
+          events: ['222', '333oh', '333', '555', '444', 'pyram', 'minx'],
+          user_id: default_user.id,
+          competition_id: enforced_hard_qualifications.id
+        )
 
         expect {
           Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['submitted_by']))
         }.to raise_error(WcaExceptions::RegistrationError) do |error|
           expect(error.error).to eq(Registrations::ErrorCodes::QUALIFICATION_NOT_MET)
           expect(error.status).to eq(:unprocessable_entity)
-          expect(error.data.sort).to eq(['333', '222', 'pyram', 'minx', '555', '555bf'].sort)
+          expect(error.data.sort).to eq(['333', '222', 'pyram', 'minx', '555', '444'].sort)
         end
       end
 
-      RSpec.shared_examples 'succeed: qualification not enforced' do |description, event_ids|
-        it "succeeds given #{description}" do
-          stub_qualifications
-
-          competition = FactoryBot.build(:competition, :has_qualifications, :qualifications_not_enforced)
-          stub_json(CompetitionApi.url("#{competition['id']}/qualifications"), 200, competition['qualifications'])
-          CompetitionInfo.new(competition.except('qualifications'))
-
-          registration_request = FactoryBot.build(:registration_request, events: event_ids)
+      RSpec.shared_examples 'succeed: qualification not enforced' do |event_ids|
+        it "user with not good enough results: can register given #{event_ids}" do
+          registration_request = FactoryBot.build(
+            :registration_request,
+            events: event_ids,
+            user_id: user_with_results.id,
+            competition_id: unenforced_hard_qualifications.id,
+          )
 
           expect {
             Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['submitted_by']))
           }.not_to raise_error
         end
+
+        it "user with no results: can register given #{event_ids}" do
+          registration_request = FactoryBot.build(
+            :registration_request,
+            events: event_ids,
+            user_id: user_without_results.id,
+            competition_id: unenforced_hard_qualifications.id,
+          )
+
+          expect {
+            Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['submitted_by']))
+          }.not_to raise_error
+        end
+
+        it "user with good enough results: can register given #{event_ids}" do
+          registration_request = FactoryBot.build(
+            :registration_request,
+            events: event_ids,
+            user_id: user_with_results.id,
+            competition_id: unenforced_easy_qualifications.id,
+          )
+
+          expect {
+            Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['submitted_by']))
+          }.not_to raise_error
+        end
+      end
+
+      context 'succeed: qualification not enforced' do
+        it_behaves_like 'succeed: qualification not enforced', ['333']
+        it_behaves_like 'succeed: qualification not enforced', ['555']
+        it_behaves_like 'succeed: qualification not enforced', ['222']
+        it_behaves_like 'succeed: qualification not enforced', ['444']
+        it_behaves_like 'succeed: qualification not enforced', ['pyram']
+        it_behaves_like 'succeed: qualification not enforced', ['minx']
       end
 
       RSpec.shared_examples 'succeed: qualification enforced' do |description, event_ids|
-        it "succeeds given given #{description}" do
-          stub_qualifications
-
-          competition = FactoryBot.build(:competition, :has_qualifications)
-          stub_json(CompetitionApi.url("#{competition['id']}/qualifications"), 200, competition['qualifications'])
-          CompetitionInfo.new(competition.except('qualifications'))
-
-          registration_request = FactoryBot.build(:registration_request, events: event_ids)
+        it "#{description}" do
+          registration_request = FactoryBot.build(
+            :registration_request,
+            events: event_ids,
+            user_id: user_with_results.id,
+            competition_id: comp_with_qualifications.id,
+          )
 
           expect {
             Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['submitted_by']))
           }.not_to raise_error
         end
 
-        it "succeeds given future qualification and #{description}" do
-          stub_qualifications
-
-          competition = FactoryBot.build(:competition, :has_future_qualifications)
-          stub_json(CompetitionApi.url("#{competition['id']}/qualifications"), 200, competition['qualifications'])
-          CompetitionInfo.new(competition.except('qualifications'))
-
-          registration_request = FactoryBot.build(:registration_request, events: event_ids)
+        it "future qualification date: #{description}" do
+          registration_request = FactoryBot.build(
+            :registration_request,
+            events: event_ids,
+            user_id: user_with_results.id,
+            competition_id: easy_future_qualifications.id,
+          )
 
           expect {
             Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['submitted_by']))
@@ -565,15 +624,57 @@ RSpec.describe Registrations::RegistrationChecker do
         end
       end
 
-      RSpec.shared_examples 'fail: qualification enforced' do |description, event_ids, extra_qualifications|
-        it "fails given #{description}" do
-          stub_qualifications(nil, (Time.now.utc-1).iso8601)
+      context 'succeed: qualification enforced' do
+        it_behaves_like 'succeed: qualification enforced', 'can register when 333 faster than attemptResult-single', ['333']
+        it_behaves_like 'succeed: qualification enforced', 'can register when 555 faster than attemptResult-average', ['555']
+        it_behaves_like 'succeed: qualification enforced', 'can register when 222 single exists for anyResult-single', ['222']
+        it_behaves_like 'succeed: qualification enforced', 'can register when 444 average exists for anyResult-average', ['444']
+        it_behaves_like 'succeed: qualification enforced', 'can register when pyram single exists for ranking-single', ['pyram']
+        it_behaves_like 'succeed: qualification enforced', 'can register when minx average exists for ranking-average', ['minx']
+      end
 
-          competition = FactoryBot.build(:competition, :has_qualifications, extra_qualifications: extra_qualifications)
-          stub_json(CompetitionApi.url("#{competition['id']}/qualifications"), 200, competition['qualifications'])
-          CompetitionInfo.new(competition.except('qualifications'))
+      RSpec.shared_examples 'fail: qualification enforced' do |event_ids|
+        it "cant register for #{event_ids} if result is achieved too late" do
+          registration_request = FactoryBot.build(
+            :registration_request,
+            events: event_ids,
+            user_id: user_with_results.id,
+            competition_id: past_qualifications.id,
+          )
 
-          registration_request = FactoryBot.build(:registration_request, events: event_ids)
+          expect {
+            Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['submitted_by']))
+          }.to raise_error(WcaExceptions::RegistrationError) do |error|
+            expect(error.error).to eq(Registrations::ErrorCodes::QUALIFICATION_NOT_MET)
+            expect(error.status).to eq(:unprocessable_entity)
+            expect(error.data).to eq(event_ids)
+          end
+        end
+
+        it "cant register for #{event_ids} if result is nil" do
+          registration_request = FactoryBot.build(
+            :registration_request,
+            events: event_ids,
+            user_id: user_without_results.id,
+            competition_id: comp_with_qualifications.id,
+          )
+
+          expect {
+            Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['submitted_by']))
+          }.to raise_error(WcaExceptions::RegistrationError) do |error|
+            expect(error.error).to eq(Registrations::ErrorCodes::QUALIFICATION_NOT_MET)
+            expect(error.status).to eq(:unprocessable_entity)
+            expect(error.data).to eq(event_ids)
+          end
+        end
+
+        it "cant register for #{event_ids} if result is DNF" do
+          registration_request = FactoryBot.build(
+            :registration_request,
+            events: event_ids,
+            user_id: dnfs_only.id,
+            competition_id: comp_with_qualifications.id,
+          )
 
           expect {
             Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['submitted_by']))
@@ -585,81 +686,96 @@ RSpec.describe Registrations::RegistrationChecker do
         end
       end
 
-      context 'succeed: qualification not enforced' do
-        it_behaves_like 'succeed: qualification not enforced', 'no error when nil 333 for attemptResult-single', ['333']
-        it_behaves_like 'succeed: qualification not enforced', 'no error when nil 555 for attemptResult-average', ['555']
-        it_behaves_like 'succeed: qualification not enforced', 'no error when nil 222 for anyResult-single', ['222']
-        it_behaves_like 'succeed: qualification not enforced', 'no error when nil 555bf for anyResult-average', ['555bf']
-        it_behaves_like 'succeed: qualification not enforced', 'no error when nil pyram for ranking-single', ['pyram']
-        it_behaves_like 'succeed: qualification not enforced', 'no error when nil minx for ranking-average', ['minx']
-
-        it_behaves_like 'succeed: qualification not enforced', 'no error even though 333 doesnt make quali for attemptResult-single', ['333']
-        it_behaves_like 'succeed: qualification not enforced', 'no error even though 555 doesnt make quali for attemptResult-average', ['555']
-      end
-
       context 'fail: qualification enforced' do
-        today = Time.now.utc.iso8601
-        last_year = (Time.now.utc - 365.days).iso8601
-
-        it_behaves_like 'fail: qualification enforced', 'no qualifying result for attemptResult-single', ['666'], {
-          '666' => { 'type' => 'attemptResult', 'resultType' => 'single', 'whenDate' => today, 'level' => 10_000 },
-        }
-        it_behaves_like 'fail: qualification enforced', 'no qualifying result for attemptResult-average', ['777'], {
-          '777' => { 'type' => 'attemptResult', 'resultType' => 'average', 'whenDate' => today, 'level' => 12_000 },
-        }
-        it_behaves_like 'fail: qualification enforced', 'no qualifying result for anyResult-single', ['666'], {
-          '666' => { 'type' => 'anyResult', 'resultType' => 'single', 'whenDate' => today, 'level' => 10_000 },
-        }
-        it_behaves_like 'fail: qualification enforced', 'no qualifying result for anyResult-average', ['777'], {
-          '777' => { 'type' => 'anyResult', 'resultType' => 'average', 'whenDate' => today, 'level' => 12_000 },
-        }
-        it_behaves_like 'fail: qualification enforced', 'no qualifying result for ranking-single', ['666'], {
-          '666' => { 'type' => 'ranking', 'resultType' => 'single', 'whenDate' => today, 'level' => 10_000 },
-        }
-        it_behaves_like 'fail: qualification enforced', 'cant register when nil minx for ranking-average', ['777'], {
-          '777' => { 'type' => 'ranking', 'resultType' => 'average', 'whenDate' => today, 'level' => 10_000 },
-        }
-
-        it_behaves_like 'fail: qualification enforced', 'cant register when 333 slower than attemptResult-single', ['333'], {
-          '333' => { 'type' => 'attemptResult', 'resultType' => 'single', 'whenDate' => today, 'level' => 800 },
-        }
-        it_behaves_like 'fail: qualification enforced', 'cant register when 333 equal to attemptResult-single', ['333'], {
-          '333' => { 'type' => 'attemptResult', 'resultType' => 'single', 'whenDate' => today, 'level' => 900 },
-        }
-        it_behaves_like 'fail: qualification enforced', 'cant register when 555 slower than attemptResult-average', ['555'], {
-          '555' => { 'type' => 'attemptResult', 'resultType' => 'average', 'whenDate' => today, 'level' => 4000 },
-        }
-        it_behaves_like 'fail: qualification enforced', 'cant register when 555 equal to attemptResult-average', ['555'], {
-          '555' => { 'type' => 'attemptResult', 'resultType' => 'average', 'whenDate' => today, 'level' => 5000 },
-        }
-
-        it_behaves_like 'fail: qualification enforced', '333 attemptResult-single not achieved by whenDate', ['333'], {
-          '333' => { 'type' => 'attemptResult', 'resultType' => 'single', 'whenDate' => last_year, 'level' => 1000 },
-        }
-        it_behaves_like 'fail: qualification enforced', '555 attemptResult-average not achieved by whenDate', ['555'], {
-          '555' => { 'type' => 'attemptResult', 'resultType' => 'average', 'whenDate' => last_year, 'level' => 6000 },
-        }
-        it_behaves_like 'fail: qualification enforced', '222 anyResult-single not achieved by whenDate', ['222'], {
-          '222' => { 'type' => 'anyResult', 'resultType' => 'single', 'whenDate' => last_year, 'level' => 0 },
-        }
-        it_behaves_like 'fail: qualification enforced', '555bf anyResult-average not achieved by whenDate', ['555bf'], {
-          '555bf' => { 'type' => 'anyResult', 'resultType' => 'average', 'whenDate' => last_year, 'level' => 0 },
-        }
-        it_behaves_like 'fail: qualification enforced', 'pyram ranking-single not achieved by whenDate', ['pyram'], {
-          'pyram' => { 'type' => 'ranking', 'resultType' => 'single', 'whenDate' => last_year, 'level' => 100 },
-        }
-        it_behaves_like 'fail: qualification enforced', 'minx ranking-average not achieved by whenDate', ['minx'], {
-          'minx' => { 'type' => 'ranking', 'resultType' => 'average', 'whenDate' => last_year, 'level' => 200 },
-        }
+        it_behaves_like 'fail: qualification enforced', ['333']
+        it_behaves_like 'fail: qualification enforced', ['555']
+        it_behaves_like 'fail: qualification enforced', ['222']
+        it_behaves_like 'fail: qualification enforced', ['444']
+        it_behaves_like 'fail: qualification enforced', ['pyram']
+        it_behaves_like 'fail: qualification enforced', ['minx']
       end
 
-      context 'succeed: qualification enforced' do
-        it_behaves_like 'succeed: qualification enforced', 'can register when 333 faster than attemptResult-single', ['333']
-        it_behaves_like 'succeed: qualification enforced', 'can register when 555 faster than attemptResult-average', ['555']
-        it_behaves_like 'succeed: qualification enforced', 'can register when 222 single exists for anyResult-single', ['222']
-        it_behaves_like 'succeed: qualification enforced', 'can register when 555bf average exists for anyResult-average', ['555bf']
-        it_behaves_like 'succeed: qualification enforced', 'can register when pyram single exists for ranking-single', ['pyram']
-        it_behaves_like 'succeed: qualification enforced', 'can register when minx average exists for ranking-average', ['minx']
+      context 'fail: attemptResult not met' do
+        it 'cant register when slower than attemptResult-single' do
+          slow_single = FactoryBot.create(:user, :wca_id)
+          FactoryBot.create(:result, competition: past_competition, person: slow_single.person, eventId: '333', best: 4000, average: 5000)
+
+          registration_request = FactoryBot.build(
+            :registration_request,
+            events: ['333'],
+            user_id: slow_single.id,
+            competition_id: comp_with_qualifications.id,
+          )
+
+          expect {
+            Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['submitted_by']))
+          }.to raise_error(WcaExceptions::RegistrationError) do |error|
+            expect(error.error).to eq(Registrations::ErrorCodes::QUALIFICATION_NOT_MET)
+            expect(error.status).to eq(:unprocessable_entity)
+            expect(error.data).to eq(['333'])
+          end
+        end
+
+        it 'cant register when equal to attemptResult-single' do
+          slow_single = FactoryBot.create(:user, :wca_id)
+          FactoryBot.create(:result, competition: past_competition, person: slow_single.person, eventId: '333', best: 1000, average: 1500)
+
+          registration_request = FactoryBot.build(
+            :registration_request,
+            events: ['333'],
+            user_id: slow_single.id,
+            competition_id: comp_with_qualifications.id,
+          )
+
+          expect {
+            Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['submitted_by']))
+          }.to raise_error(WcaExceptions::RegistrationError) do |error|
+            expect(error.error).to eq(Registrations::ErrorCodes::QUALIFICATION_NOT_MET)
+            expect(error.status).to eq(:unprocessable_entity)
+            expect(error.data).to eq(['333'])
+          end
+        end
+
+        it 'cant register when 555 slower than attemptResult-average' do
+          slow_single = FactoryBot.create(:user, :wca_id)
+          FactoryBot.create(:result, competition: past_competition, person: slow_single.person, eventId: '555', best: 1000, average: 6001)
+
+          registration_request = FactoryBot.build(
+            :registration_request,
+            events: ['555'],
+            user_id: slow_single.id,
+            competition_id: comp_with_qualifications.id,
+          )
+
+          expect {
+            Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['submitted_by']))
+          }.to raise_error(WcaExceptions::RegistrationError) do |error|
+            expect(error.error).to eq(Registrations::ErrorCodes::QUALIFICATION_NOT_MET)
+            expect(error.status).to eq(:unprocessable_entity)
+            expect(error.data).to eq(['555'])
+          end
+        end
+
+        it 'cant register when 555 equal to attemptResult-average' do
+          slow_single = FactoryBot.create(:user, :wca_id)
+          FactoryBot.create(:result, competition: past_competition, person: slow_single.person, eventId: '555', best: 1000, average: 6000)
+
+          registration_request = FactoryBot.build(
+            :registration_request,
+            events: ['555'],
+            user_id: slow_single.id,
+            competition_id: comp_with_qualifications.id,
+          )
+
+          expect {
+            Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['submitted_by']))
+          }.to raise_error(WcaExceptions::RegistrationError) do |error|
+            expect(error.error).to eq(Registrations::ErrorCodes::QUALIFICATION_NOT_MET)
+            expect(error.status).to eq(:unprocessable_entity)
+            expect(error.data).to eq(['555'])
+          end
+
+        end
       end
     end
   end

@@ -220,7 +220,6 @@ module Registrations
         result_type = qualification['resultType']
 
         competitor_pr = competitor_qualification_results.find { |result| result[:eventId] == event && result[:type].to_s == result_type }
-        puts(competitor_qualification_results)
         return false if competitor_pr.blank?
 
         begin
