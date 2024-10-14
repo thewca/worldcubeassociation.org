@@ -3440,10 +3440,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"autonumeric@npm:^4.10.5":
-  version: 4.10.5
-  resolution: "autonumeric@npm:4.10.5"
-  checksum: 10c0/0eb176c9be239b9fdabac27bdcf6886f1772c7eaed4c41196605025b9f7ea09d78f3b6151ddeba725596f7f141e518194f1af5092fd9512c62f2f9e8432c0e3f
+"autonumeric@npm:^4.10.7":
+  version: 4.10.7
+  resolution: "autonumeric@npm:4.10.7"
+  checksum: 10c0/6f04d167d768255f5f4bb8152ffabbcec575ff77aed824021e4956b4e7ad4d1a38a38fb9805cf5a04ae11a7200867438f1262141b5b6232762b7dcc31d08be47
   languageName: node
   linkType: hard
 
@@ -10134,7 +10134,7 @@ __metadata:
     "@stripe/stripe-js": "npm:^4.7.0"
     "@tanstack/react-query": "npm:^5.56.2"
     "@wca/helpers": "npm:^1.1.5"
-    autonumeric: "npm:^4.10.5"
+    autonumeric: "npm:^4.10.7"
     autoprefixer: "npm:^10.4.20"
     autosize: "npm:^6.0.1"
     babel-loader: "npm:^9.2.1"
