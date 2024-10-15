@@ -51,12 +51,14 @@ runs:
         build_tag: ${{ inputs.build_tag }}
         environment: ${{ inputs.environment }}
     - name: Prescale Autoscaling Group for Faster Deployment
+      shell: bash
       run: |
         CURRENT_CAPACITY=$(aws autoscaling describe-auto-scaling-groups \
         --auto-scaling-group-name ${{ env.ASG_ID }} \
         --query "AutoScalingGroups[0].DesiredCapacity" \
         --output text)
-        aws autoscaling update-auto-scaling-group --auto-scaling-group-name ${{ env.ASG_ID }} --desired-capacity $((CURRENT_DESIRED_CAPACITY + ${{ env.SCALING_AMOUNT }}/))
+        NEW_CAPACITY=$((CURRENT_CAPACITY + ${{ env.SCALING_AMOUNT }}))
+        aws autoscaling update-auto-scaling-group --auto-scaling-group-name ${{ env.ASG_ID }} --desired-capacity $NEW_CAPACITY
     - name: Build and push Image
       uses: ./.github/actions/build-image
       with:
