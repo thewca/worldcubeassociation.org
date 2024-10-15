@@ -1324,10 +1324,14 @@ RSpec.describe Registrations::RegistrationChecker do
       end
     end
 
-    describe '#update_registration_allowed!.validate_update_status!' do
+    describe '#update_registration_allowed!.validate_update_status!', :tag do
       it 'user cant submit an invalid status' do
-        override_registration = FactoryBot.create(:registration, user_id: 188_000, registration_status: 'waiting_list')
-        update_request = FactoryBot.build(:update_request, user_id: override_registration[:user_id], competing: { 'status' => 'random_status' })
+        update_request = FactoryBot.build(
+          :update_request,
+          user_id: default_registration.user_id,
+          competition_id: default_registration.competition.id,
+          competing: { 'status' => 'invalid_status'},
+        )
 
         expect {
           Registrations::RegistrationChecker.update_registration_allowed!(update_request, User.find(update_request['submitted_by']))
@@ -1338,8 +1342,13 @@ RSpec.describe Registrations::RegistrationChecker do
       end
 
       it 'organizer cant submit an invalid status' do
-        override_registration = FactoryBot.create(:registration, user_id: 188_000, registration_status: 'waiting_list')
-        update_request = FactoryBot.build(:update_request, :organizer_as_user, user_id: override_registration[:user_id], competing: { 'status' => 'random_status' })
+        update_request = FactoryBot.build(
+          :update_request,
+          user_id: default_registration.user_id,
+          competition_id: default_registration.competition.id,
+          submitted_by: default_competition.organizers.first.id,
+          competing: { 'status' => 'invalid_status'},
+        )
 
         expect {
           Registrations::RegistrationChecker.update_registration_allowed!(update_request, User.find(update_request['submitted_by']))
@@ -1350,10 +1359,17 @@ RSpec.describe Registrations::RegistrationChecker do
       end
 
       it 'organizer cant accept a user when registration list is full' do
-        FactoryBot.create_list(:registration, 3, registration_status: 'accepted')
-        override_registration = FactoryBot.create(:registration, user_id: 188_000, registration_status: 'waiting_list')
-        CompetitionInfo.new(FactoryBot.build(:competition, competitor_limit: 3))
-        update_request = FactoryBot.build(:update_request, :organizer_for_user, user_id: override_registration[:user_id], competing: { 'status' => 'accepted' })
+        competitor_limit = FactoryBot.create(:competition, :with_competitor_limit, :with_organizer, competitor_limit: 3)
+        limited_reg = FactoryBot.create(:registration, competition: competitor_limit)
+        FactoryBot.create_list(:registration, 3, :accepted, competition: competitor_limit)
+
+        update_request = FactoryBot.build(
+          :update_request,
+          user_id: limited_reg.user_id,
+          competition_id: limited_reg.competition.id,
+          submitted_by: competitor_limit.organizers.first.id,
+          competing: { 'status' => 'accepted'},
+        )
 
         expect {
           Registrations::RegistrationChecker.update_registration_allowed!(update_request, User.find(update_request['submitted_by']))
@@ -1364,27 +1380,40 @@ RSpec.describe Registrations::RegistrationChecker do
       end
 
       it 'organizer can accept registrations up to the limit' do
-        FactoryBot.create_list(:registration, 2, registration_status: 'accepted')
-        registration = FactoryBot.create(:registration, registration_status: 'pending')
-        competition = CompetitionInfo.new(FactoryBot.build(:competition, competitor_limit: 3))
-        update_request = FactoryBot.build(:update_request, :organizer_for_user, user_id: registration[:user_id], competing: { 'status' => 'accepted' })
+        competitor_limit = FactoryBot.create(:competition, :with_competitor_limit, :with_organizer, competitor_limit: 3)
+        limited_reg = FactoryBot.create(:registration, competition: competitor_limit)
+        FactoryBot.create_list(:registration, 2, :accepted, competition: competitor_limit)
 
-        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, competition, User.find(update_request['submitted_by'])) }
-          .not_to raise_error
-      end
-
-      it 'user can change state to cancelled' do
-        override_registration = FactoryBot.create(:registration, user_id: 188_000, registration_status: 'waiting_list')
-        update_request = FactoryBot.build(:update_request, user_id: override_registration[:user_id], competing: { 'status' => 'cancelled' })
+        update_request = FactoryBot.build(
+          :update_request,
+          user_id: limited_reg.user_id,
+          competition_id: limited_reg.competition.id,
+          submitted_by: competitor_limit.organizers.first.id,
+          competing: { 'status' => 'accepted'},
+        )
 
         expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, User.find(update_request['submitted_by'])) }
           .not_to raise_error
       end
 
-      it 'user cant change events when cancelling' do
-        override_registration = FactoryBot.create(:registration, user_id: 188_000, registration_status: 'waiting_list')
+      it 'user can change state to deleted' do
         update_request = FactoryBot.build(
-          :update_request, user_id: override_registration[:user_id], competing: { 'status' => 'cancelled', 'event_ids' => ['333'] }
+          :update_request,
+          user_id: default_registration.user_id,
+          competition_id: default_registration.competition.id,
+          competing: { 'status' => 'deleted' },
+        )
+
+        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, User.find(update_request['submitted_by'])) }
+          .not_to raise_error
+      end
+
+      it 'user cant change events when deleting' do
+        update_request = FactoryBot.build(
+          :update_request,
+          user_id: default_registration.user_id,
+          competition_id: default_registration.competition.id,
+          competing: { 'status' => 'cancelled', 'event_ids' => ['333'] },
         )
 
         expect {
@@ -1396,8 +1425,91 @@ RSpec.describe Registrations::RegistrationChecker do
       end
 
       it 'user can change state from cancelled to pending' do
-        override_registration = FactoryBot.create(:registration, user_id: 188_000, registration_status: 'cancelled')
-        update_request = FactoryBot.build(:update_request, user_id: override_registration[:user_id], competing: { 'status' => 'pending' })
+        deleted_reg = FactoryBot.create(:registration, :deleted, competition: default_competition)
+
+        update_request = FactoryBot.build(
+          :update_request,
+          user_id: deleted_reg.user_id,
+          competition_id: deleted_reg.competition.id,
+          competing: { 'status' => 'pending' },
+        )
+
+        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, User.find(update_request['submitted_by'])) }
+          .not_to raise_error
+      end
+
+      it 'user cant delete accepted registration if competition requires organizers to cancel registration' do
+        cant_cancel = FactoryBot.create(
+          :competition, :registration_closed, :editable_registrations, allow_registration_self_delete_after_acceptance: false
+        )
+        accepted_reg = FactoryBot.create(:registration, :accepted, competition: cant_cancel)
+
+        update_request = FactoryBot.build(
+          :update_request,
+          user_id: accepted_reg.user_id,
+          competition_id: accepted_reg.competition.id,
+          competing: { 'status' => 'deleted' },
+        )
+
+        expect {
+          Registrations::RegistrationChecker.update_registration_allowed!(update_request, User.find(update_request['submitted_by']))
+        }.to raise_error(WcaExceptions::RegistrationError) do |error|
+          expect(error.status).to eq(:unauthorized)
+          expect(error.error).to eq(Registrations::ErrorCodes::ORGANIZER_MUST_CANCEL_REGISTRATION)
+        end
+      end
+
+      it 'user can cancel non-accepted registration if competition requires organizers to cancel registration' do
+        cant_cancel = FactoryBot.create(
+          :competition, :registration_closed, :editable_registrations, allow_registration_self_delete_after_acceptance: false
+        )
+        not_accepted_reg = FactoryBot.create(:registration, competition: cant_cancel)
+
+        update_request = FactoryBot.build(
+          :update_request,
+          user_id: not_accepted_reg.user_id,
+          competition_id: not_accepted_reg.competition.id,
+          competing: { 'status' => 'deleted' },
+        )
+
+        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, User.find(update_request['submitted_by'])) }
+          .not_to raise_error
+      end
+
+      it 'user cant cancel registration after registration ends' do
+        editing_over = FactoryBot.create(
+          :competition, :registration_closed, :event_edit_passed
+        )
+        registration = FactoryBot.create(:registration, competition: editing_over)
+
+        update_request = FactoryBot.build(
+          :update_request,
+          user_id: registration.user_id,
+          competition_id: registration.competition.id,
+          competing: { 'status' => 'deleted' },
+        )
+
+        expect {
+          Registrations::RegistrationChecker.update_registration_allowed!(update_request, User.find(update_request['submitted_by']))
+        }.to raise_error(WcaExceptions::RegistrationError) do |error|
+          expect(error.status).to eq(:forbidden)
+          expect(error.error).to eq(Registrations::ErrorCodes::USER_EDITS_NOT_ALLOWED)
+        end
+      end
+
+      it 'organizer can cancel registration after registration ends' do
+        editing_over = FactoryBot.create(
+          :competition, :registration_closed, :event_edit_passed, :with_organizer
+        )
+        registration = FactoryBot.create(:registration, competition: editing_over)
+
+        update_request = FactoryBot.build(
+          :update_request,
+          user_id: registration.user_id,
+          competition_id: registration.competition.id,
+          submitted_by: editing_over.organizers.first.id,
+          competing: { 'status' => 'deleted' },
+        )
 
         expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, User.find(update_request['submitted_by'])) }
           .not_to raise_error
@@ -1432,51 +1544,6 @@ RSpec.describe Registrations::RegistrationChecker do
         it_behaves_like 'user cant update rejected registration', params[:old_status], params[:new_status]
       end
 
-      it 'user cant cancel accepted registration if competition requires organizers to cancel registration' do
-        override_registration = FactoryBot.create(:registration, user_id: 188_000, registration_status: 'accepted')
-        CompetitionInfo.new(FactoryBot.build(:competition, allow_registration_self_delete_after_acceptance: false))
-        update_request = FactoryBot.build(:update_request, user_id: override_registration[:user_id], competing: { 'status' => 'cancelled' })
-
-        expect {
-          Registrations::RegistrationChecker.update_registration_allowed!(update_request, User.find(update_request['submitted_by']))
-        }.to raise_error(WcaExceptions::RegistrationError) do |error|
-          expect(error.status).to eq(:unauthorized)
-          expect(error.error).to eq(Registrations::ErrorCodes::ORGANIZER_MUST_CANCEL_REGISTRATION)
-        end
-      end
-
-      it 'user can cancel non-accepted registration if competition requires organizers to cancel registration' do
-        override_registration = FactoryBot.create(:registration, registration_status: 'waiting_list')
-        CompetitionInfo.new(FactoryBot.build(:competition, allow_registration_self_delete_after_acceptance: false))
-        update_request = FactoryBot.build(:update_request, user_id: override_registration[:user_id], competing: { 'status' => 'cancelled' })
-
-        stub_request(:get, UserApi.permissions_path(User.find(update_request['submitted_by']))).to_return(
-          status: 200,
-          body: FactoryBot.build(:permissions_response).to_json,
-          headers: { content_type: 'application/json' },
-        )
-
-        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, User.find(update_request['submitted_by'])) }
-          .not_to raise_error
-      end
-
-      it 'user cant cancel registration after registration ends' do
-        CompetitionInfo.new(FactoryBot.build(:competition, :closed))
-        update_request = FactoryBot.build(:update_request, user_id: registration.user_id, competing: { 'status' => 'cancelled' })
-        stub_request(:get, UserApi.permissions_path(User.find(update_request['submitted_by']))).to_return(
-          status: 200,
-          body: FactoryBot.build(:permissions_response).to_json,
-          headers: { content_type: 'application/json' },
-        )
-
-        expect {
-          Registrations::RegistrationChecker.update_registration_allowed!(update_request, User.find(update_request['submitted_by']))
-        }.to raise_error(WcaExceptions::RegistrationError) do |error|
-          expect(error.status).to eq(:forbidden)
-          expect(error.error).to eq(Registrations::ErrorCodes::USER_EDITS_NOT_ALLOWED)
-        end
-      end
-
       [
         { old_status: 'pending', new_status: 'accepted' },
         { old_status: 'pending', new_status: 'waiting_list' },
@@ -1504,14 +1571,6 @@ RSpec.describe Registrations::RegistrationChecker do
         { old_status: 'rejected', new_status: 'cancelled' },
       ].each do |params|
         it_behaves_like 'valid organizer status updates', params[:old_status], params[:new_status]
-      end
-
-      it 'organizer can cancel registration after registration ends' do
-        CompetitionInfo.new(FactoryBot.build(:competition, :closed))
-        update_request = FactoryBot.build(:update_request, :organizer_for_user, user_id: registration.user_id, competing: { 'status' => 'cancelled' })
-
-        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, User.find(update_request['submitted_by'])) }
-          .not_to raise_error
       end
     end
 
