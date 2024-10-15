@@ -10,6 +10,7 @@ FactoryBot.define do
     currency_code { "USD" }
     base_entry_fee_lowest_denomination { 1000 }
     information { "Information!" }
+    payment_information { "This is how you pay!" }
     latitude { rand(-90_000_000..90_000_000) }
     longitude { rand(-180_000_000..180_000_000) }
 

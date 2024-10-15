@@ -118,6 +118,7 @@ class Competition < ApplicationRecord
     guests_per_registration_limit
     base_entry_fee_lowest_denomination
     currency_code
+    payment_information
     enable_donations
     extra_registration_requirements
     on_the_spot_registration
@@ -192,6 +193,13 @@ class Competition < ApplicationRecord
   validates_numericality_of :events_per_registration_limit, only_integer: true, greater_than_or_equal_to: 1, less_than_or_equal_to: :number_of_events, allow_blank: true, if: :event_restrictions?
   validates :id, presence: true, uniqueness: { case_sensitive: false }, length: { maximum: MAX_ID_LENGTH },
                  format: { with: VALID_ID_RE }, if: :name_valid_or_updating?
+  validates :payment_information, presence: { message: I18n.t('competitions.errors.must_specify_payment_info_if_external') }, if: :needs_payment_information?
+  private def needs_payment_information?
+    with_old_id do
+      !using_payment_integrations? && has_fees?
+    end
+  end
+
   private def name_valid_or_updating?
     self.persisted? || (name.length <= MAX_NAME_LENGTH && name =~ VALID_NAME_RE)
   end
@@ -501,6 +509,10 @@ class Competition < ApplicationRecord
 
       if no_events?
         warnings[:events] = I18n.t('competitions.messages.must_have_events')
+      end
+
+      if needs_payment_information? && payment_information.nil?
+        warnings[:payment_information] = I18n.t('competitions.messages.needs_payment_information')
       end
 
       if !self.waiting_list_deadline_date
@@ -1844,7 +1856,7 @@ class Competition < ApplicationRecord
       only: %w[id name website start_date registration_open registration_close announced_at cancelled_at end_date competitor_limit
                extra_registration_requirements enable_donations refund_policy_limit_date event_change_deadline_date waiting_list_deadline_date
                on_the_spot_registration on_the_spot_entry_fee_lowest_denomination qualification_results event_restrictions
-               base_entry_fee_lowest_denomination currency_code allow_registration_edits allow_registration_self_delete_after_acceptance
+               base_entry_fee_lowest_denomination currency_code payment_information allow_registration_edits allow_registration_self_delete_after_acceptance
                allow_registration_without_qualification refund_policy_percent use_wca_registration guests_per_registration_limit venue contact
                force_comment_in_registration use_wca_registration external_registration_page guests_entry_fee_lowest_denomination guest_entry_status
                information events_per_registration_limit],
@@ -2351,6 +2363,7 @@ class Competition < ApplicationRecord
       "entryFees" => {
         "currencyCode" => currency_code,
         "baseEntryFee" => base_entry_fee_lowest_denomination,
+        "paymentInformation" => payment_information,
         "onTheSpotEntryFee" => on_the_spot_entry_fee_lowest_denomination,
         "guestEntryFee" => guests_entry_fee_lowest_denomination,
         "donationsEnabled" => enable_donations,
@@ -2578,6 +2591,7 @@ class Competition < ApplicationRecord
       refund_policy_percent: form_data.dig('entryFees', 'refundPolicyPercent'),
       refund_policy_limit_date: form_data.dig('entryFees', 'refundPolicyLimitDate')&.presence,
       guests_entry_fee_lowest_denomination: form_data.dig('entryFees', 'guestEntryFee'),
+      payment_information: form_data.dig('entryFees', 'paymentInformation')&.presence,
       early_puzzle_submission: form_data.dig('eventRestrictions', 'earlyPuzzleSubmission', 'enabled'),
       early_puzzle_submission_reason: form_data.dig('eventRestrictions', 'earlyPuzzleSubmission', 'reason'),
       forbid_newcomers: form_data.dig('eventRestrictions', 'forbidNewcomers', 'enabled'),
@@ -2769,6 +2783,7 @@ class Competition < ApplicationRecord
           "properties" => {
             "currencyCode" => { "type" => "string" },
             "baseEntryFee" => { "type" => ["integer", "null"] },
+            "paymentInformation" => { "type" => ["string", "null"] },
             "onTheSpotEntryFee" => { "type" => ["integer", "null"] },
             "guestEntryFee" => { "type" => ["integer", "null"] },
             "donationsEnabled" => { "type" => ["boolean", "null"] },

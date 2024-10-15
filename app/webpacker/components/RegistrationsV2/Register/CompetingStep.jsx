@@ -108,11 +108,11 @@ export default function CompetingStep({
       // Going from cancelled -> pending
       if (registration.competing.registration_status === 'cancelled') {
         dispatch(setMessage('registrations.flash.registered', 'positive'));
-        // Not changing status
+        nextStep();
       } else {
         dispatch(setMessage('registrations.flash.updated', 'positive'));
+        nextStep({ toEnd: true });
       }
-      nextStep();
     },
   });
 
@@ -191,7 +191,7 @@ export default function CompetingStep({
         guests,
       });
     }).catch(() => {
-      nextStep();
+      nextStep({ toEnd: true });
     });
   };
 
@@ -266,7 +266,9 @@ export default function CompetingStep({
           user={user}
           onProcessingComplete={async () => {
             setProcessing(false);
-            await refetchRegistration();
+            if (competitionInfo['using_payment_integrations?']) {
+              await refetchRegistration();
+            }
             nextStep();
           }}
         />
@@ -360,7 +362,7 @@ export default function CompetingStep({
                   {i18n.t('registrations.update')}
                 </Button>
                 <ButtonOr />
-                <Button secondary onClick={() => nextStep()}>
+                <Button secondary onClick={() => nextStep({ toEnd: true })}>
                   {i18n.t('competitions.registration_v2.register.view_registration')}
                 </Button>
               </>

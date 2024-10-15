@@ -1260,7 +1260,7 @@ en:
     accepted: "Your registration has been accepted!"
     entry_fees_fully_paid: "You have paid %{paid}, which fully covers the registration fees."
     will_pay_here: "You will pay them here after submitting your registration"
-    wont_pay_here: "Please check competition's information for instruction about how to pay"
+    wont_pay_here: "This competition uses external payments. Please check competition's information for instruction about how to pay"
     not_qualified: "Not qualified"
     refund_form:
       hints:
@@ -1378,6 +1378,7 @@ en:
       orga_closed_reg_success: "Sucessfully closed registration."
       orga_closed_reg_failure: "Cannot close registration."
       no_waiting_list_specified: "This competition does not have a deadline for accepting competitors on the waiting list. If you are using a waiting list, please specify a deadline. If you are not using a waiting list, please remember to specify this in the registration requirements."
+      needs_payment_information: "This competition has registration fees but no Stripe account is linked. If you are using Stripe through the WCA website, please remember to link your Stripe account. If you are using an external payment system, please remember to add all the relevant details in the registration requirements."
     #context: on the "My competitions" page
     my_competitions:
       title: "My competitions"
@@ -1459,6 +1460,9 @@ en:
       guests_free:
         free: "Any spectator can attend for free."
         restricted: "Spectators are only permitted as companions of competitors."
+      payment_integration:
+        stripe: "You will pay via Stripe as part of the Registration Process"
+        paypal: "You will pay via PayPal as part of the Registration Process"
       guest_limit:
         one: "Competitors may bring at most 1 guest."
         other: "Competitors may bring at most %{count} guests."
@@ -1652,6 +1656,8 @@ en:
           uses_wca_registration: "I would like to use the WCA website for registration"
           uses_wca_live: "I will be using WCA Live for scoretaking"
         entry_fees:
+          use_wca_payment: "Use WCA Payment?"
+          payment_information: "Payment information text"
           currency_code: "Currency code"
           base_entry_fee: "Base registration fee"
           on_the_spot_entry_fee: "On the spot base registration fee"
@@ -1737,6 +1743,8 @@ en:
         user_settings:
           receive_registration_emails: ""
         entry_fees:
+          use_wca_payment: "If you want to use the WCA Website to collect payments (You will still need to connect your stripe account separately)"
+          payment_information: "Explanation on how users will pay for the competition.  <br/>Please fill this out <b>in English</b> and whatever other languages your competitors speak; this will be displayed on the competition's information page, as well on the registration page if you are using the WCA website registrations."
           currency_code: "The currency code for fees."
           base_entry_fee: 'The base registration fee for the competition. It will be displayed on the competition information page and the registration page if used. If this is set to 0, a sentence will be displayed saying that registrations will be accepted for free. <br><br><b>DISCLAIMER: The following WCA Dues estimate is solely an approximation based on current exchange rates and is in no way legally binding for the Dues payment.</b>'
           on_the_spot_entry_fee: "If this is set to 0, a sentence will be displayed saying that on the spot registrations will be accepted for free."
@@ -1755,7 +1763,7 @@ en:
           guests_enabled: ""
           guest_entry_status: ""
           guests_per_registration: "The number of guests per registration allowed at this competition. Registration with too many guests will be blocked. Leave blank if there is no limit."
-          extra_requirements: "Please indicate here any extra registration requirements not covered above, like for example directions on how to pay. <br/>Please fill this out <b>in English</b> and whatever other languages your competitors speak; this will be displayed on the competition's information page, as well on the registration page if you are using the WCA website registrations."
+          extra_requirements: "Please indicate here any extra registration requirements not covered above. <br/>Please fill this out <b>in English</b> and whatever other languages your competitors speak; this will be displayed on the competition's information page, as well on the registration page if you are using the WCA website registrations."
           force_comment: ""
         event_restrictions:
           forbid_newcomers:
@@ -1833,6 +1841,7 @@ en:
          refunded_status: "Refunded"
          initialized: "Payment process was started on %{date}, but not finished."
          refunded: "Payment was refunded on %{date}."
+         external_acknowledgement: "I have followed the payment instructions and paid for my entry to the competition."
         psychsheets:
           go_back: "Go Back"
         timestamp: "Timestamp"
@@ -1867,6 +1876,9 @@ en:
           payment:
             title: "Payment information"
             description: "Enter billing information"
+          external_payment:
+            title: "Payment instructions"
+            description: "Pay registration fees"
           competing:
             title: "Register"
             description: "Choose your events"
@@ -1951,6 +1963,7 @@ en:
       series_distance_km: "The competition is located too far away from %{competition}."
       series_distance_days: "The competition is scheduled too many days away from %{competition}."
       must_ask_about_guests_if_specifying_limit: "Must ask about guests if a guest limit is specified."
+      must_specify_payment_info_if_external: "You need to specify payment info when using an external payment system"
     new:
       create_competition: "Create competition"
       note_clone: "To clone an existing competition visit the information page for that competition and click the \"Clone\" link in the menu."

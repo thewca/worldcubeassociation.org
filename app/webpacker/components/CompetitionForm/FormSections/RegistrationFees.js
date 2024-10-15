@@ -1,8 +1,9 @@
 import React, { useMemo } from 'react';
+import { Checkbox } from 'semantic-ui-react';
 import {
   InputBoolean,
   InputCurrencyAmount,
-  InputDate,
+  InputDate, InputMarkdown,
   InputNumber,
   InputSelect,
 } from '../../wca/FormBuilder/input/FormInputs';
@@ -13,6 +14,7 @@ import useLoadedData from '../../../lib/hooks/useLoadedData';
 import ConditionalSection from './ConditionalSection';
 import SubSection from '../../wca/FormBuilder/SubSection';
 import { useFormObject } from '../../wca/FormBuilder/provider/FormObjectProvider';
+import useCheckboxState from '../../../lib/hooks/useCheckboxState';
 
 const currenciesOptions = Object.keys(currenciesData.byIso).map((iso) => ({
   key: iso,
@@ -28,7 +30,10 @@ export default function RegistrationFees() {
     entryFees,
     competitorLimit,
     registration,
+    paymentInformation,
   } = useFormObject();
+
+  const [useWCAPayment, setUseWCAPayment] = useCheckboxState(Boolean(paymentInformation));
 
   const currency = entryFees.currencyCode;
 
@@ -75,6 +80,10 @@ export default function RegistrationFees() {
 
   return (
     <SubSection section="entryFees">
+      <Checkbox id="useWCAPayment" checked={useWCAPayment} onChange={setUseWCAPayment} label={I18n.t('competitions.competition_form.labels.entry_fees.use_wca_payment')} />
+      <ConditionalSection showIf={!useWCAPayment}>
+        <InputMarkdown id="paymentInformation" required={!useWCAPayment} />
+      </ConditionalSection>
       <InputSelect id="currencyCode" options={currenciesOptions} required />
       <InputCurrencyAmount id="baseEntryFee" currency={currency} required />
       <p className="help-block">

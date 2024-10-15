@@ -96,6 +96,7 @@ module DatabaseDumper
           announced_by
           results_posted_by
           posting_by
+          payment_information
           main_event_id
           cancelled_at
           cancelled_by
