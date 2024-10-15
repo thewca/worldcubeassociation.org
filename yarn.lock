@@ -2055,6 +2055,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@eslint/compat@npm:^1.2.0":
+  version: 1.2.0
+  resolution: "@eslint/compat@npm:1.2.0"
+  peerDependencies:
+    eslint: ^9.10.0
+  peerDependenciesMeta:
+    eslint:
+      optional: true
+  checksum: 10c0/ad79bf1ef14462f829288c4e2ca8eeffdf576fa923d3f8a07e752e821bdbe5fd79360fe6254e9ddfe7eada2e4e3d22a7ee09f5d21763e67bc4fbc331efb3c3e9
+  languageName: node
+  linkType: hard
+
 "@eslint/config-array@npm:^0.18.0":
   version: 0.18.0
   resolution: "@eslint/config-array@npm:0.18.0"
@@ -2090,7 +2102,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@eslint/js@npm:9.12.0":
+"@eslint/js@npm:9.12.0, @eslint/js@npm:^9.12.0":
   version: 9.12.0
   resolution: "@eslint/js@npm:9.12.0"
   checksum: 10c0/325650a59a1ce3d97c69441501ebaf415607248bacbe8c8ca35adc7cb73b524f592f266a75772f496b06f3239e3ee1996722a242148085f0ee5fb3dd7065897c
@@ -5310,6 +5322,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"eslint-formatter-compact@npm:^8.40.0":
+  version: 8.40.0
+  resolution: "eslint-formatter-compact@npm:8.40.0"
+  checksum: 10c0/6e7e6b5f86ff5b6fa09b6c88e58d83a611a524dd8d946c98d16b681052ab67007da2bad79e3a5aadead9b3b391f2d38afdcd7c80d2e6309614016ffb13e503f3
+  languageName: node
+  linkType: hard
+
 "eslint-import-resolver-node@npm:^0.3.9":
   version: 0.3.9
   resolution: "eslint-import-resolver-node@npm:0.3.9"
@@ -6138,6 +6157,13 @@ __metadata:
   version: 14.0.0
   resolution: "globals@npm:14.0.0"
   checksum: 10c0/b96ff42620c9231ad468d4c58ff42afee7777ee1c963013ff8aabe095a451d0ceeb8dcd8ef4cbd64d2538cef45f787a78ba3a9574f4a634438963e334471302d
+  languageName: node
+  linkType: hard
+
+"globals@npm:^15.9.0":
+  version: 15.11.0
+  resolution: "globals@npm:15.11.0"
+  checksum: 10c0/861e39bb6bd9bd1b9f355c25c962e5eb4b3f0e1567cf60fa6c06e8c502b0ec8706b1cce055d69d84d0b7b8e028bec5418cf629a54e7047e116538d1c1c1a375c
   languageName: node
   linkType: hard
 
@@ -10156,6 +10182,9 @@ __metadata:
     "@babel/preset-react": "npm:^7.25.7"
     "@babel/runtime": "npm:^7.25.7"
     "@cubing/icons": "npm:^1.1.3"
+    "@eslint/compat": "npm:^1.2.0"
+    "@eslint/eslintrc": "npm:^3.1.0"
+    "@eslint/js": "npm:^9.12.0"
     "@fullcalendar/core": "npm:^6.1.15"
     "@fullcalendar/interaction": "npm:^6.1.15"
     "@fullcalendar/luxon3": "npm:^6.1.15"
@@ -10187,6 +10216,7 @@ __metadata:
     easymde: "npm:^2.18.0"
     eslint: "npm:^9.12.0"
     eslint-config-airbnb: "npm:^19.0.4"
+    eslint-formatter-compact: "npm:^8.40.0"
     eslint-plugin-import: "npm:^2.31.0"
     eslint-plugin-jquery: "npm:^1.5.1"
     eslint-plugin-jsx-a11y: "npm:^6.10.0"
@@ -10196,6 +10226,7 @@ __metadata:
     file-loader: "npm:^6.2.0"
     flag-icons: "npm:^7.2.3"
     glob: "npm:^11.0.0"
+    globals: "npm:^15.9.0"
     i18n-js: "npm:^4.4.3"
     jquery: "npm:3.7.1"
     js-yaml: "npm:^4.1.0"
