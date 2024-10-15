@@ -1,8 +1,9 @@
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import {
   Button,
   Card,
   Container,
+  DropdownHeader,
   Form,
   Icon,
   Image,
@@ -10,7 +11,7 @@ import {
 import _ from 'lodash';
 
 import VenueLocationMap from './VenueLocationMap';
-import { countries, timezoneData } from '../../../lib/wca-data.js.erb';
+import { countries, backendTimezones } from '../../../lib/wca-data.js.erb';
 import RoomPanel from './RoomPanel';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { useConfirm } from '../../../lib/providers/ConfirmProvider';
@@ -20,6 +21,7 @@ import {
   removeVenue,
 } from '../store/actions';
 import { toDegrees, toMicrodegrees } from '../../../lib/utils/edit-schedule';
+import { getTimeZoneDropdownLabel, sortByOffset } from '../../../lib/utils/timezone';
 
 const countryOptions = countries.real.map((country) => ({
   key: country.iso2,
@@ -31,6 +33,7 @@ const countryOptions = countries.real.map((country) => ({
 function VenuePanel({
   venue,
   countryZones,
+  referenceTime,
 }) {
   const dispatch = useDispatch();
   const confirm = useConfirm();
@@ -53,6 +56,18 @@ function VenuePanel({
     dispatch(addRoom(venue.id));
   };
 
+  const getVenueTzDropdownLabel = useCallback(
+    // The whole page is not localized yet, so we just hard-code US English here as well.
+    (tzId) => getTimeZoneDropdownLabel(tzId, referenceTime, 'en-US'),
+    [referenceTime],
+  );
+
+  const makeTimeZoneOption = useCallback((key) => ({
+    key,
+    text: getVenueTzDropdownLabel(key),
+    value: key,
+  }), [getVenueTzDropdownLabel]);
+
   // Instead of giving *all* TZInfo, use uniq-fied rails "meaningful" subset
   // We'll add the "country_zones" to that, because some of our competitions
   // use TZs not included in this subset.
@@ -60,17 +75,32 @@ function VenuePanel({
   // In the end the array should look like that:
   //   - country_zone_a, country_zone_b, [...], other_tz_a, other_tz_b, [...]
   const timezoneOptions = useMemo(() => {
-    const competitionZonesKeys = Object.keys(countryZones);
+    // Stuff that is recommended based on the country list
+    const competitionZoneIds = _.uniq(countryZones);
+    const sortedCompetitionZones = sortByOffset(competitionZoneIds, referenceTime);
 
-    const selectKeys = _.difference(Object.keys(timezoneData), competitionZonesKeys);
-    const sortedKeys = _.union(competitionZonesKeys.sort(), selectKeys.sort());
+    // Stuff that is listed in our `backendTimezones` list but not in the preferred country list
+    const otherZoneIds = _.difference(backendTimezones, competitionZoneIds);
+    const sortedOtherZones = sortByOffset(otherZoneIds, referenceTime);
 
-    return sortedKeys.map((key) => ({
-      key,
-      text: key,
-      value: timezoneData[key] || key,
-    }));
-  }, [countryZones]);
+    // Both merged together, with the countryZone entries listed first.
+    return [
+      {
+        as: DropdownHeader,
+        key: 'local-zones-header',
+        text: 'Local time zones',
+        disabled: true,
+      },
+      ...sortedCompetitionZones.map(makeTimeZoneOption),
+      {
+        as: DropdownHeader,
+        key: 'other-zones-header',
+        text: 'Other time zones',
+        disabled: true,
+      },
+      ...sortedOtherZones.map(makeTimeZoneOption),
+    ];
+  }, [countryZones, referenceTime, makeTimeZoneOption]);
 
   return (
     <Card fluid raised>

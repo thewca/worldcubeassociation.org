@@ -25,13 +25,14 @@ import I18nHTMLTranslate from '../../I18nHTMLTranslate';
 import { useConfirm } from '../../../lib/providers/ConfirmProvider';
 import { eventsNotQualifiedFor, isQualifiedForEvent } from '../../../lib/helpers/qualifications';
 import { eventQualificationToString } from '../../../lib/utils/wcif';
+import { hasNotPassed } from '../../../lib/utils/dates';
 
 const maxCommentLength = 240;
 
 const potentialWarnings = (competitionInfo) => {
   const warnings = [];
   // Organizer Pre Registration
-  if (!competitionInfo['registration_currently_open?']) {
+  if (hasNotPassed(competitionInfo.registration_open)) {
     warnings.push(i18n.t('competitions.registration_v2.register.early_registration'));
   }
   // Favourites Competition

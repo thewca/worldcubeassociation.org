@@ -31,6 +31,10 @@ module Microservices
       "/api/internal/v1/#{attendee_id}"
     end
 
+    def self.add_registration_path(competition_id)
+      "/api/internal/v1/#{competition_id}/add"
+    end
+
     def self.get_competitor_count_path(competition_id)
       "/api/v1/#{competition_id}/count"
     end
@@ -47,6 +51,21 @@ module Microservices
         &FaradayConfig
       )
     end
+
+    # rubocop:disable Metrics/ParameterLists
+    def self.add_registration(competition_id, user_id, event_ids, comment, competing_status, current_user)
+      response = self.registration_connection.post(self.add_registration_path(competition_id)) do |req|
+        req.body = { competition_id: competition_id,
+                     user_id: user_id,
+                     event_ids: event_ids,
+                     comment: comment,
+                     competing_status: competing_status,
+                     current_user: current_user }
+      end
+      raise I18n.t("registrations.add.errors.already_registered") unless response.success?
+      response.body
+    end
+    # rubocop:enable Metrics/ParameterLists
 
     def self.registrations_by_user(user_id, cache: true)
       response = self.registration_connection.get(self.registrations_by_user_path(user_id))

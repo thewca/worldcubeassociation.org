@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import StepPanel from './StepPanel';
 import { getSingleRegistration } from '../api/registration/get/get_registrations';
@@ -8,9 +8,13 @@ import StoreProvider, { useDispatch } from '../../../lib/providers/StoreProvider
 import messageReducer from '../reducers/messageReducer';
 import WCAQueryClientProvider from '../../../lib/providers/WCAQueryClientProvider';
 import ConfirmProvider from '../../../lib/providers/ConfirmProvider';
+import RegistrationClosedMessage from './RegistrationClosedMessage';
 
 export default function Index({
-  competitionInfo, userInfo, preferredEvents,
+  competitionInfo,
+  userInfo,
+  userCanPreRegister,
+  preferredEvents,
   qualifications,
   stripePublishableKey = '',
   connectedAccountId = '',
@@ -22,6 +26,7 @@ export default function Index({
           <Register
             competitionInfo={competitionInfo}
             userInfo={userInfo}
+            userCanPreRegister={userCanPreRegister}
             preferredEvents={preferredEvents}
             stripePublishableKey={stripePublishableKey}
             connectedAccountId={connectedAccountId}
@@ -34,8 +39,16 @@ export default function Index({
 }
 
 function Register({
-  competitionInfo, qualifications, userInfo, preferredEvents, connectedAccountId, stripePublishableKey,
+  userCanPreRegister,
+  competitionInfo,
+  qualifications,
+  userInfo,
+  preferredEvents,
+  connectedAccountId,
+  stripePublishableKey,
 }) {
+  const [timerEnded, setTimerEnded] = useState(false);
+
   const dispatch = useDispatch();
   const {
     data: registration,
@@ -53,22 +66,36 @@ function Register({
     },
   });
 
+  const onTimerEnd = useCallback(() => {
+    setTimerEnded(true);
+  }, [setTimerEnded]);
+
+  if (isFetching) {
+    return <Loading />;
+  }
+
+  if (userCanPreRegister || competitionInfo['registration_currently_open?'] || timerEnded) {
+    return (
+      <>
+        <RegistrationMessage />
+        <StepPanel
+          user={userInfo}
+          preferredEvents={preferredEvents}
+          competitionInfo={competitionInfo}
+          registration={registration}
+          refetchRegistration={refetch}
+          connectedAccountId={connectedAccountId}
+          stripePublishableKey={stripePublishableKey}
+          qualifications={qualifications}
+        />
+      </>
+    );
+  }
+
   return (
-    isFetching ? <Loading />
-      : (
-        <>
-          <RegistrationMessage />
-          <StepPanel
-            user={userInfo}
-            preferredEvents={preferredEvents}
-            competitionInfo={competitionInfo}
-            registration={registration}
-            refetchRegistration={refetch}
-            connectedAccountId={connectedAccountId}
-            stripePublishableKey={stripePublishableKey}
-            qualifications={qualifications}
-          />
-        </>
-      )
+    <RegistrationClosedMessage
+      registrationStart={competitionInfo.registration_open}
+      onTimerEnd={onTimerEnd}
+    />
   );
 }

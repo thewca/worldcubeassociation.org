@@ -6,7 +6,7 @@ RSpec.describe "Competition WCIF" do
   let!(:competition) {
     FactoryBot.create(
       :competition,
-      :with_delegate,
+      :visible,
       :with_competitor_limit,
       id: "TestComp2014",
       name: "Test Comp 2014",
@@ -14,7 +14,6 @@ RSpec.describe "Competition WCIF" do
       start_date: "2014-02-03",
       end_date: "2014-02-05",
       external_website: "http://example.com",
-      showAtAll: true,
       event_ids: %w(333 444 333fm 333mbf),
       with_schedule: true,
       competitor_limit: 50,
@@ -22,7 +21,15 @@ RSpec.describe "Competition WCIF" do
       registration_close: "2013-12-31",
     )
   }
-  let(:partner_competition) { FactoryBot.create(:competition, :with_delegate, id: "PartnerComp2014", series_base: competition, series_distance_days: 3, showAtAll: true) }
+  let(:partner_competition) {
+    FactoryBot.create(
+      :competition,
+      :visible,
+      id: "PartnerComp2014",
+      series_base: competition,
+      series_distance_days: 3,
+    )
+  }
   let!(:competition_series) {
     FactoryBot.create(
       :competition_series,
@@ -33,6 +40,7 @@ RSpec.describe "Competition WCIF" do
     )
   }
   let(:delegate) { competition.delegates.first }
+  let(:organizer) { competition.organizers.first }
   let(:sixty_second_2_attempt_cutoff) { Cutoff.new(number_of_attempts: 2, attempt_result: 1.minute.in_centiseconds) }
   let(:top_16_advance) { AdvancementConditions::RankingCondition.new(16) }
   let!(:round333_1) { FactoryBot.create(:round, competition: competition, event_id: "333", number: 1, cutoff: sixty_second_2_attempt_cutoff, advancement_condition: top_16_advance, scramble_set_count: 16, total_number_of_rounds: 2) }
@@ -59,7 +67,7 @@ RSpec.describe "Competition WCIF" do
           "shortName" => "Spectacular 2014",
           "competitionIds" => %w[TestComp2014 PartnerComp2014],
         },
-        "persons" => [delegate.to_wcif(competition)],
+        "persons" => [organizer.to_wcif(competition), delegate.to_wcif(competition)],
         "events" => [
           {
             "id" => "333",

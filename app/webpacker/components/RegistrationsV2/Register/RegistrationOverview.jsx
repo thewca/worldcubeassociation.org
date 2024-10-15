@@ -59,6 +59,7 @@ export default function RegistrationOverview({
       ));
     },
     onSuccess: (data) => {
+      nextStep({ toStart: true });
       queryClient.setQueryData(
         ['registration', competitionInfo.id, registration.user_id],
         {
@@ -67,7 +68,6 @@ export default function RegistrationOverview({
         },
       );
       dispatch(setMessage('competitions.registration_v2.register.registration_status.cancelled', 'positive'));
-      nextStep({ toStart: true });
     },
   });
 

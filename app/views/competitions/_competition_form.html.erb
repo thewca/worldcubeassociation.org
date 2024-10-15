@@ -3,6 +3,7 @@
 <%= react_component("CompetitionForm", {
   competition: @competition.to_form_data,
   usesV2Registrations: @competition.uses_v2_registrations,
+  canChangeRegistrationSystem: @competition.can_change_registration_system?,
   storedEvents: @competition.events,
   isAdminView: @competition_admin_view,
   isPersisted: @competition.persisted?,

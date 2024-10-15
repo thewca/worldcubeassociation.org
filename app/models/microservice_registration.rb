@@ -107,7 +107,7 @@ class MicroserviceRegistration < ApplicationRecord
   end
 
   def deleted?
-    self.status == "cancelled"
+    self.status == "cancelled" || self.status == "rejected"
   end
 
   def pending?
