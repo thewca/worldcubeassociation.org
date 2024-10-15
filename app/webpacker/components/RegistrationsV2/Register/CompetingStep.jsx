@@ -16,13 +16,14 @@ import {
 import updateRegistration from '../api/registration/patch/update_registration';
 import submitEventRegistration from '../api/registration/post/submit_registration';
 import Processing from './Processing';
-import { userPreferencesRoute } from '../../../lib/requests/routes.js.erb';
+import { contactCompetitionUrl, userPreferencesRoute } from '../../../lib/requests/routes.js.erb';
 import { EventSelector } from '../../CompetitionsOverview/CompetitionsFilters';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { setMessage } from './RegistrationMessage';
 import i18n from '../../../lib/i18n';
 import I18nHTMLTranslate from '../../I18nHTMLTranslate';
 import { useConfirm } from '../../../lib/providers/ConfirmProvider';
+import { events } from '../../../lib/wca-data.js.erb';
 import { eventsNotQualifiedFor, isQualifiedForEvent } from '../../../lib/helpers/qualifications';
 import { eventQualificationToString } from '../../../lib/utils/wcif';
 import { hasNotPassed } from '../../../lib/utils/dates';
@@ -178,18 +179,23 @@ export default function CompetingStep({
 
   const actionUpdateRegistration = () => {
     confirm({
-      content: i18n.t('competitions.registration_v2.update.update_confirm'),
+      content: i18n.t(competitionInfo.allow_registration_edits ? 'competitions.registration_v2.update.update_confirm' : 'competitions.registration_v2.update.update_confirm_contact'),
     }).then(() => {
-      dispatch(setMessage('competitions.registration_v2.update.being_updated', 'basic'));
-      updateRegistrationMutation({
-        user_id: registration.user_id,
-        competition_id: competitionInfo.id,
-        competing: {
-          comment: hasCommentChanged ? comment : undefined,
-          event_ids: hasEventsChanged ? selectedEvents : undefined,
-        },
-        guests,
-      });
+      if (competitionInfo.allow_registration_edits) {
+        dispatch(setMessage('competitions.registration_v2.update.being_updated', 'basic'));
+        updateRegistrationMutation({
+          user_id: registration.user_id,
+          competition_id: competitionInfo.id,
+          competing: {
+            comment: hasCommentChanged ? comment : undefined,
+            event_ids: hasEventsChanged ? selectedEvents : undefined,
+          },
+          guests,
+        });
+      } else {
+        const updateMessage = `\n${hasCommentChanged ? `Comment: ${comment}\n` : ''}${hasEventsChanged ? `Events: ${selectedEvents.map((eventId) => events.byId[eventId].name).join(', ')}\n` : ''}${hasGuestsChanged ? `Guests: ${guests}\n` : ''}`;
+        window.location = contactCompetitionUrl(competitionInfo.id, encodeURIComponent(i18n.t('competitions.registration_v2.update.update_contact_message', { update_params: updateMessage })));
+      }
     }).catch(() => {
       nextStep();
     });
