@@ -78,7 +78,7 @@ locals {
     },
     {
       name = "S3_AVATARS_PRIVATE_BUCKET"
-      value = var.shared.avatars_private.id
+      value = aws_s3_bucket.avatars_private.id
     },
     {
       name = "S3_AVATARS_ASSET_HOST"
