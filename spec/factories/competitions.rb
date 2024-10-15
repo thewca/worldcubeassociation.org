@@ -14,7 +14,6 @@ FactoryBot.define do
       ends { starts }
       event_ids { %w(333 333oh) }
 
-
       today { Time.now.utc.iso8601 }
       next_month { 1.month.from_now.iso8601 }
       last_year { 1.year.ago.iso8601 }
@@ -77,7 +76,7 @@ FactoryBot.define do
 
     use_wca_registration { true }
     registration_open { 54.weeks.ago.change(usec: 0) }
-    registration_close { 1.weeks.from_now.change(usec: 0) }
+    registration_close { 53.weeks.ago.change(usec: 0) }
 
     start_date { starts.nil? ? nil : starts.strftime("%F") }
     end_date { ends.nil? ? nil : ends.strftime("%F") }
@@ -118,7 +117,6 @@ FactoryBot.define do
       transient do
         qualifications { past_qualifications }
       end
-
     end
 
     trait :enforces_hard_qualifications do
@@ -132,7 +130,6 @@ FactoryBot.define do
       end
     end
 
-
     trait :unenforced_easy_qualifications do
       qualification_results { true }
       qualification_results_reason { 'testing' }
@@ -143,7 +140,6 @@ FactoryBot.define do
         qualifications { easy_qualifications }
       end
     end
-
 
     trait :unenforced_hard_qualifications do
       qualification_results { true }
@@ -165,7 +161,6 @@ FactoryBot.define do
       transient do
         qualifications { easy_future_qualifications }
       end
-
     end
 
     trait :future do
@@ -474,7 +469,7 @@ FactoryBot.define do
         end
 
         competition.unverified_set_wcif_events!(events_wcif)
-        new_events_wcif = competition.to_wcif['events']
+        competition.to_wcif['events']
       end
 
       if defined?(evaluator.stripe_account_id)

@@ -24,7 +24,7 @@ module Registrations
       user_can_modify_registration!(competition, requester_user, requestee_user, registration)
       validate_guests!(update_request, competition)
       validate_comment!(update_request, competition, registration)
-      validate_organizer_fields!(update_request)
+      validate_organizer_fields!(update_request, requester_user, competition)
       validate_organizer_comment!(update_request)
       validate_waiting_list_position!(update_request, competition)
       validate_update_status!(update_request, competition, requester_user, requestee_user, registration)
@@ -126,7 +126,7 @@ module Registrations
         end
       end
 
-      def validate_organizer_fields!(request)
+      def validate_organizer_fields!(request, requester_user, competition)
         organizer_fields = ['organizer_comment', 'waiting_list_position']
 
         raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) if contains_organizer_fields?(request, organizer_fields) && !requester_user.can_manage_competition?(competition)
