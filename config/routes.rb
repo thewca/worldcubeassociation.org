@@ -138,6 +138,7 @@ Rails.application.routes.draw do
   # Stripe needs this special redirect URL during OAuth, see the linked controller method for details
   get 'stripe-connect' => 'competitions#stripe_connect', as: :competitions_stripe_connect
   get 'competitions/:id/events/edit' => 'competitions#edit_events', as: :edit_events
+  get 'competitions/:id/venues/edit' => 'competitions#edit_venues', as: :edit_venues
   get 'competitions/:id/schedule/edit' => 'competitions#edit_schedule', as: :edit_schedule
   get 'competitions/edit/nearby_competitions' => 'competitions#nearby_competitions', as: :nearby_competitions
   get 'competitions/edit/series_eligible_competitions' => 'competitions#series_eligible_competitions', as: :series_eligible_competitions
