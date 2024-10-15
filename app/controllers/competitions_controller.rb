@@ -848,7 +848,7 @@ class CompetitionsController < ApplicationController
       competition_ids.concat(current_user.delegated_competitions.pluck(:competition_id))
       registrations = current_user.registrations.includes(:competition).accepted.reject { |r| r.competition.results_posted? }
       registrations.concat(current_user.registrations.includes(:competition).pending.select { |r| r.competition.upcoming? })
-      registrations.concat(registrations_v2.select { | r| (r.accepted? && !r.competition.results_posted?) || (r.pending? && r.competition.upcoming?) })
+      registrations.concat(registrations_v2.select { |r| (r.accepted? && !r.competition.results_posted?) || (r.pending? && r.competition.upcoming?) })
       @registered_for_by_competition_id = registrations.uniq.to_h do |r|
         [r.competition.id, r]
       end
