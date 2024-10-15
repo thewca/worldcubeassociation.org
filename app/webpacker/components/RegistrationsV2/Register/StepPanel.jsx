@@ -1,10 +1,11 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Step } from 'semantic-ui-react';
 import CompetingStep from './CompetingStep';
 import RegistrationRequirements from './RegistrationRequirements';
 import StripeWrapper from './StripeWrapper';
 import i18n from '../../../lib/i18n';
 import RegistrationOverview from './RegistrationOverview';
+import useStoredState from '../../../lib/hooks/useStoredState';
 import { hasPassed } from '../../../lib/utils/dates';
 
 const requirementsStepConfig = {
@@ -84,6 +85,14 @@ export default function StepPanel({
   const hasPaid = registration?.payment.payment_status === 'succeeded';
   const registrationFinished = hasPaid || (isRegistered && !competitionInfo['using_payment_integrations?']);
 
+  const [processing, setProcessing] = useStoredState(false, `${competitionInfo.id}-${user.id}-processing`);
+
+  useEffect(() => {
+    if (isRegistered) {
+      setProcessing(false);
+    }
+  }, [isRegistered, setProcessing]);
+
   const steps = useMemo(() => {
     const stepList = [requirementsStepConfig, competingStepConfig];
     if (competitionInfo['using_payment_integrations?']) {
@@ -103,13 +112,17 @@ export default function StepPanel({
         (step) => step === (registrationOverviewConfig),
       );
     }
+    if (processing) {
+      return steps.findIndex(
+        (step) => step === competingStepConfig,
+      );
+    }
     // If the user has not paid but refreshes the page, we want to display the paymentStep again
     return steps.findIndex(
       (step) => step === (isRegistered ? paymentStepConfig : requirementsStepConfig),
     );
   });
-  const CurrentStepPanel = activeIndex === registrationOverviewConfig.index
-    ? RegistrationOverview : steps[activeIndex].component;
+  const CurrentStepPanel = steps[activeIndex].component;
   return (
     <>
       <Step.Group fluid ordered stackable="tablet">
@@ -149,6 +162,8 @@ export default function StepPanel({
         user={user}
         stripePublishableKey={stripePublishableKey}
         connectedAccountId={connectedAccountId}
+        processing={processing}
+        setProcessing={setProcessing}
         qualifications={qualifications}
         nextStep={
           (overwrites = {}) => setActiveIndex((oldActiveIndex) => {
