@@ -20,7 +20,7 @@ resource "aws_ecs_task_definition" "worker" {
 
     {
       name              = "sqs-worker-staging"
-      image             = "${var.shared.ecr_repository.repository_url}:sqs-worker-production"
+      image             = "${var.shared.ecr_repository.repository_url}:production-sqs-worker"
       cpu    = 256
       memory = 256
       portMappings = []
