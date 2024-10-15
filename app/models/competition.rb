@@ -612,7 +612,7 @@ class Competition < ApplicationRecord
   end
 
   def user_can_pre_register?(user)
-    delegates.include?(user) || trainee_delegates.include?(user) || organizers.include?(user)
+    (delegates.include?(user) || trainee_delegates.include?(user) || organizers.include?(user)) && self.confirmed_or_visible?
   end
 
   attr_accessor :being_cloned_from_id
