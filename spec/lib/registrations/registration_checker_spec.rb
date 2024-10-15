@@ -1330,7 +1330,7 @@ RSpec.describe Registrations::RegistrationChecker do
           :update_request,
           user_id: default_registration.user_id,
           competition_id: default_registration.competition.id,
-          competing: { 'status' => 'invalid_status'},
+          competing: { 'status' => 'invalid_status' },
         )
 
         expect {
@@ -1347,7 +1347,7 @@ RSpec.describe Registrations::RegistrationChecker do
           user_id: default_registration.user_id,
           competition_id: default_registration.competition.id,
           submitted_by: default_competition.organizers.first.id,
-          competing: { 'status' => 'invalid_status'},
+          competing: { 'status' => 'invalid_status' },
         )
 
         expect {
@@ -1368,7 +1368,7 @@ RSpec.describe Registrations::RegistrationChecker do
           user_id: limited_reg.user_id,
           competition_id: limited_reg.competition.id,
           submitted_by: competitor_limit.organizers.first.id,
-          competing: { 'status' => 'accepted'},
+          competing: { 'status' => 'accepted' },
         )
 
         expect {
@@ -1389,7 +1389,7 @@ RSpec.describe Registrations::RegistrationChecker do
           user_id: limited_reg.user_id,
           competition_id: limited_reg.competition.id,
           submitted_by: competitor_limit.organizers.first.id,
-          competing: { 'status' => 'accepted'},
+          competing: { 'status' => 'accepted' },
         )
 
         expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, User.find(update_request['submitted_by'])) }
