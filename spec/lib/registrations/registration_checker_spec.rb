@@ -4,9 +4,6 @@ require 'rails_helper'
 # TODO: Figure out if this is still needed, or if there's a better way now that we're in the monolith
 require_relative '../../support/qualification_results_faker'
 
-
-
-
 RSpec.describe Registrations::RegistrationChecker do
   let(:default_user) { FactoryBot.create(:user) }
   let(:default_competition) { FactoryBot.create(:competition, :registration_open, :editable_registrations, :with_organizer) }
@@ -1442,7 +1439,6 @@ RSpec.describe Registrations::RegistrationChecker do
           .not_to raise_error
       end
 
-
       RSpec.shared_examples 'invalid user status updates' do |initial_status, new_status|
         it "user cant change 'status' => #{initial_status} to: #{new_status}" do
           registration = FactoryBot.create(:registration, initial_status, competition: default_competition)
@@ -1483,7 +1479,6 @@ RSpec.describe Registrations::RegistrationChecker do
         it_behaves_like 'invalid user status updates', params[:initial_status], params[:new_status]
       end
 
-
       RSpec.shared_examples 'user cant update rejected registration' do |initial_status, new_status|
         it "user cant change 'status' => #{initial_status} to: #{new_status}" do
           registration = FactoryBot.create(:registration, initial_status, competition: default_competition)
@@ -1513,7 +1508,6 @@ RSpec.describe Registrations::RegistrationChecker do
         it_behaves_like 'user cant update rejected registration', params[:initial_status], params[:new_status]
       end
 
-
       RSpec.shared_examples 'valid organizer status updates' do |initial_status, new_status|
         it "organizer can change 'status' => #{initial_status} to: #{new_status} before close" do
           registration = FactoryBot.create(:registration, initial_status, competition: default_competition)
@@ -1523,7 +1517,7 @@ RSpec.describe Registrations::RegistrationChecker do
             user_id: registration.user_id,
             competition_id: registration.competition.id,
             competing: { 'status' => new_status },
-            submitted_by: default_competition.organizers.first.id
+            submitted_by: default_competition.organizers.first.id,
           )
 
           expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, User.find(update_request['submitted_by'])) }
@@ -1539,7 +1533,7 @@ RSpec.describe Registrations::RegistrationChecker do
             user_id: registration.user_id,
             competition_id: registration.competition.id,
             competing: { 'status' => new_status },
-            submitted_by: admin.id
+            submitted_by: admin.id,
           )
 
           expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, User.find(update_request['submitted_by'])) }
@@ -1555,7 +1549,7 @@ RSpec.describe Registrations::RegistrationChecker do
             user_id: registration.user_id,
             competition_id: registration.competition.id,
             competing: { 'status' => new_status },
-            submitted_by: competition.organizers.first.id
+            submitted_by: competition.organizers.first.id,
           )
 
           expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, User.find(update_request['submitted_by'])) }
@@ -1593,10 +1587,16 @@ RSpec.describe Registrations::RegistrationChecker do
       end
     end
 
-    describe '#update_registration_allowed!.validate_update_events!' do
+    describe '#update_registration_allowed!.validate_update_events!', :tag do
+      let(:events_limit) { FactoryBot.create(:competition, :with_organizer, :editable_registrations, :registration_open, :with_event_limit) }
+      let(:limited_registration) { FactoryBot.create(:registration, competition: events_limit) }
+
       it 'user can add events' do
         update_request = FactoryBot.build(
-          :update_request, user_id: registration.user_id, competing: { 'event_ids' => ['333', '444', '555', '333mbf'] }
+          :update_request,
+          user_id: default_registration.user_id,
+          competition_id: default_registration.competition.id,
+          competing: { 'event_ids' => ['333', '444', '555', 'minx'] },
         )
 
         expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, User.find(update_request['submitted_by'])) }
@@ -1605,7 +1605,10 @@ RSpec.describe Registrations::RegistrationChecker do
 
       it 'user can remove events' do
         update_request = FactoryBot.build(
-          :update_request, user_id: registration.user_id, competing: { 'event_ids' => ['333'] }
+          :update_request,
+          user_id: default_registration.user_id,
+          competition_id: default_registration.competition.id,
+          competing: { 'event_ids' => ['333'] },
         )
 
         expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, User.find(update_request['submitted_by'])) }
@@ -1614,7 +1617,10 @@ RSpec.describe Registrations::RegistrationChecker do
 
       it 'user can remove all old events and register for new ones' do
         update_request = FactoryBot.build(
-          :update_request, user_id: registration.user_id, competing: { 'event_ids' => ['777', '333bf'] }
+          :update_request,
+          user_id: default_registration.user_id,
+          competition_id: default_registration.competition.id,
+          competing: { 'event_ids' => ['pyram', 'minx'] },
         )
 
         expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, User.find(update_request['submitted_by'])) }
@@ -1622,7 +1628,12 @@ RSpec.describe Registrations::RegistrationChecker do
       end
 
       it 'events list cant be blank' do
-        update_request = FactoryBot.build(:update_request, user_id: registration.user_id, competing: { 'event_ids' => [] })
+        update_request = FactoryBot.build(
+          :update_request,
+          user_id: default_registration.user_id,
+          competition_id: default_registration.competition.id,
+          competing: { 'event_ids' => [] },
+        )
 
         expect {
           Registrations::RegistrationChecker.update_registration_allowed!(update_request, User.find(update_request['submitted_by']))
@@ -1633,7 +1644,12 @@ RSpec.describe Registrations::RegistrationChecker do
       end
 
       it 'events must be held at the competition' do
-        update_request = FactoryBot.build(:update_request, user_id: registration.user_id, competing: { 'event_ids' => ['333fm', '333'] })
+        update_request = FactoryBot.build(
+          :update_request,
+          user_id: default_registration.user_id,
+          competition_id: default_registration.competition.id,
+          competing: { 'event_ids' => ['333', '333fm'] },
+        )
 
         expect {
           Registrations::RegistrationChecker.update_registration_allowed!(update_request, User.find(update_request['submitted_by']))
@@ -1644,7 +1660,12 @@ RSpec.describe Registrations::RegistrationChecker do
       end
 
       it 'events must exist' do
-        update_request = FactoryBot.build(:update_request, user_id: registration.user_id, competing: { 'event_ids' => ['888', '333'] })
+        update_request = FactoryBot.build(
+          :update_request,
+          user_id: default_registration.user_id,
+          competition_id: default_registration.competition.id,
+          competing: { 'event_ids' => ['888', '333'] },
+        )
 
         expect {
           Registrations::RegistrationChecker.update_registration_allowed!(update_request, User.find(update_request['submitted_by']))
@@ -1656,7 +1677,11 @@ RSpec.describe Registrations::RegistrationChecker do
 
       it 'organizer can change a users events' do
         update_request = FactoryBot.build(
-          :update_request, :organizer_for_user, user_id: registration.user_id, competing: { 'event_ids' => ['333', '666'] }
+          :update_request,
+          user_id: default_registration.user_id,
+          competition_id: default_registration.competition.id,
+          submitted_by: default_competition.organizers.first.id,
+          competing: { 'event_ids' => ['333', '555'] },
         )
 
         expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, User.find(update_request['submitted_by'])) }
@@ -1665,7 +1690,11 @@ RSpec.describe Registrations::RegistrationChecker do
 
       it 'organizer cant change users events to events not held at competition' do
         update_request = FactoryBot.build(
-          :update_request, :organizer_for_user, user_id: registration.user_id, competing: { 'event_ids' => ['333fm', '333'] }
+          :update_request,
+          user_id: default_registration.user_id,
+          competition_id: default_registration.competition.id,
+          submitted_by: default_competition.organizers.first.id,
+          competing: { 'event_ids' => ['333', '333fm'] },
         )
 
         expect {
@@ -1677,16 +1706,24 @@ RSpec.describe Registrations::RegistrationChecker do
       end
 
       it 'competitor can update registration with events up to the events_per_registration_limit limit' do
-        CompetitionInfo.new(FactoryBot.build(:competition, events_per_registration_limit: 5))
-        update_request = FactoryBot.build(:update_request, user_id: registration.user_id, competing: { 'event_ids' => ['333', '222', '444', '555', '666'] })
+        update_request = FactoryBot.build(
+          :update_request,
+          user_id: limited_registration.user_id,
+          competition_id: limited_registration.competition.id,
+          competing: { 'event_ids' => ['333', '333oh', '555', 'pyram', 'minx'] },
+        )
 
         expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, User.find(update_request['submitted_by'])) }
           .not_to raise_error
       end
 
       it 'competitor cant update registration to more events than the events_per_registration_limit' do
-        update_request = FactoryBot.build(:update_request, user_id: registration.user_id, competing: { 'event_ids' => ['333', '222', '444', '555', '666', '777'] })
-        CompetitionInfo.new(FactoryBot.build(:competition, events_per_registration_limit: 5))
+        update_request = FactoryBot.build(
+          :update_request,
+          user_id: limited_registration.user_id,
+          competition_id: limited_registration.competition.id,
+          competing: { 'event_ids' => ['333', '333oh', '555', 'pyram', 'minx', '222'] },
+        )
 
         expect {
           Registrations::RegistrationChecker.update_registration_allowed!(update_request, User.find(update_request['submitted_by']))
@@ -1697,10 +1734,14 @@ RSpec.describe Registrations::RegistrationChecker do
       end
 
       it 'organizer cant update their registration with more events than the events_per_registration_limit' do
+        organizer_reg = FactoryBot.create(:registration, user: events_limit.organizers.first, competition: events_limit)
+
         update_request = FactoryBot.build(
-          :update_request, user_id: registration.user_id, competing: { 'event_ids' => ['333', '222', '444', '555', '666', '777'] }
+          :update_request,
+          user_id: organizer_reg.user_id,
+          competition_id: organizer_reg.competition.id,
+          competing: { 'event_ids' => ['333', '333oh', '555', 'pyram', 'minx', '222'] },
         )
-        CompetitionInfo.new(FactoryBot.build(:competition, events_per_registration_limit: 5))
 
         expect {
           Registrations::RegistrationChecker.update_registration_allowed!(update_request, User.find(update_request['submitted_by']))

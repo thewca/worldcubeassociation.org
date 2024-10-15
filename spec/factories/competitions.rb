@@ -12,7 +12,7 @@ FactoryBot.define do
       distance_direction_deg { rand(360) }
       starts { 1.year.ago }
       ends { starts }
-      event_ids { %w(333 333oh) }
+      event_ids { %w(333 333oh 555 pyram minx 222 444) }
 
       today { Time.now.utc.iso8601 }
       next_month { 1.month.from_now.iso8601 }
@@ -227,7 +227,7 @@ FactoryBot.define do
 
     trait :with_event_limit do
       event_restrictions_reason { "this is a favourites competition" }
-      events_per_registration_limit { events.length }
+      events_per_registration_limit { events.length-2 }
     end
 
     trait :with_valid_submitted_results do
