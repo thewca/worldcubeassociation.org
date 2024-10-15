@@ -4,81 +4,8 @@ require 'rails_helper'
 # TODO: Figure out if this is still needed, or if there's a better way now that we're in the monolith
 require_relative '../../support/qualification_results_faker'
 
-RSpec.shared_examples 'invalid user status updates' do |old_status, new_status|
-  it "user cant change 'status' => #{old_status} to: #{new_status}" do
-    registration = FactoryBot.create(:registration, registration_status: old_status)
-    competition = CompetitionInfo.new(FactoryBot.build(:competition))
-    update_request = FactoryBot.build(:update_request, user_id: registration[:user_id], competing: { 'status' => new_status })
-    stub_request(:get, UserApi.permissions_path(registration[:user_id])).to_return(status: 200, body: FactoryBot.build(:permissions_response).to_json, headers: { content_type: 'application/json' })
 
-    expect {
-      Registrations::RegistrationChecker.update_registration_allowed!(update_request, competition, User.find(update_request['submitted_by']))
-    }.to raise_error(WcaExceptions::RegistrationError) do |error|
-      expect(error.status).to eq(:unauthorized)
-      expect(error.error).to eq(Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS)
-    end
-  end
-end
 
-RSpec.shared_examples 'user cant update rejected registration' do |old_status, new_status|
-  it "user cant change 'status' => #{old_status} to: #{new_status}" do
-    registration = FactoryBot.create(:registration, registration_status: old_status)
-    competition = CompetitionInfo.new(FactoryBot.build(:competition))
-    update_request = FactoryBot.build(:update_request, user_id: registration[:user_id], competing: { 'status' => new_status })
-    stub_request(:get, UserApi.permissions_path(registration[:user_id])).to_return(status: 200, body: FactoryBot.build(:permissions_response).to_json, headers: { content_type: 'application/json' })
-
-    expect {
-      Registrations::RegistrationChecker.update_registration_allowed!(update_request, competition, User.find(update_request['submitted_by']))
-    }.to raise_error(WcaExceptions::RegistrationError) do |error|
-      expect(error.status).to eq(:unauthorized)
-      expect(error.error).to eq(Registrations::ErrorCodes::REGISTRATION_IS_REJECTED)
-    end
-  end
-end
-
-RSpec.shared_examples 'valid organizer status updates' do |old_status, new_status|
-  it "organizer can change 'status' => #{old_status} to: #{new_status} before close" do
-    registration = FactoryBot.create(:registration, registration_status: old_status)
-    competition = CompetitionInfo.new(FactoryBot.build(:competition))
-    update_request = FactoryBot.build(:update_request, :organizer_for_user, user_id: registration[:user_id], competing: { 'status' => new_status })
-    stub_request(:get, UserApi.permissions_path(User.find(update_request['submitted_by']))).to_return(
-      status: 200,
-      body: FactoryBot.build(:permissions_response, organized_competitions: [competition.competition_id]).to_json,
-      headers: { content_type: 'application/json' },
-    )
-
-    expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, competition, User.find(update_request['submitted_by'])) }
-      .not_to raise_error
-  end
-
-  it "site admin can change 'status' => #{old_status} to: #{new_status} before close" do
-    registration = FactoryBot.create(:registration, registration_status: old_status)
-    competition = CompetitionInfo.new(FactoryBot.build(:competition))
-    update_request = FactoryBot.build(:update_request, :site_admin, user_id: registration[:user_id], competing: { 'status' => new_status })
-    stub_request(:get, UserApi.permissions_path(User.find(update_request['submitted_by']))).to_return(
-      status: 200,
-      body: FactoryBot.build(:permissions_response, :admin).to_json,
-      headers: { content_type: 'application/json' },
-    )
-
-    expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, competition, User.find(update_request['submitted_by'])) }
-      .not_to raise_error
-  end
-
-  it "after edit deadline/reg close, organizer can change 'status' => #{old_status} to: #{new_status}" do
-    registration = FactoryBot.create(:registration, registration_status: old_status)
-    competition = CompetitionInfo.new(FactoryBot.build(:competition, :closed))
-    update_request = FactoryBot.build(:update_request, :organizer_for_user, user_id: registration[:user_id], competing: { 'status' => new_status })
-    stub_request(:get, UserApi.permissions_path(User.find(update_request['submitted_by']))).to_return(
-      status: 200,
-      body: FactoryBot.build(:permissions_response, organized_competitions: [competition.competition_id]).to_json,
-      headers: { content_type: 'application/json' },
-    )
-
-    expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, competition, User.find(update_request['submitted_by'])) }
-      .not_to raise_error
-  end
-end
 
 RSpec.describe Registrations::RegistrationChecker do
   let(:default_user) { FactoryBot.create(:user) }
@@ -1324,7 +1251,7 @@ RSpec.describe Registrations::RegistrationChecker do
       end
     end
 
-    describe '#update_registration_allowed!.validate_update_status!', :tag do
+    describe '#update_registration_allowed!.validate_update_status!' do
       it 'user cant submit an invalid status' do
         update_request = FactoryBot.build(
           :update_request,
@@ -1515,62 +1442,154 @@ RSpec.describe Registrations::RegistrationChecker do
           .not_to raise_error
       end
 
-      [
-        { old_status: 'pending', new_status: 'accepted' },
-        { old_status: 'pending', new_status: 'waiting_list' },
-        { old_status: 'pending', new_status: 'pending' },
-        { old_status: 'pending', new_status: 'rejected' },
-        { old_status: 'waiting_list', new_status: 'pending' },
-        { old_status: 'waiting_list', new_status: 'waiting_list' },
-        { old_status: 'waiting_list', new_status: 'accepted' },
-        { old_status: 'waiting_list', new_status: 'rejected' },
-        { old_status: 'accepted', new_status: 'pending' },
-        { old_status: 'accepted', new_status: 'waiting_list' },
-        { old_status: 'accepted', new_status: 'accepted' },
-        { old_status: 'accepted', new_status: 'rejected' },
-        { old_status: 'cancelled', new_status: 'accepted' },
-        { old_status: 'cancelled', new_status: 'waiting_list' },
-        { old_status: 'cancelled', new_status: 'rejected' },
-      ].each do |params|
-        it_behaves_like 'invalid user status updates', params[:old_status], params[:new_status]
+
+      RSpec.shared_examples 'invalid user status updates' do |initial_status, new_status|
+        it "user cant change 'status' => #{initial_status} to: #{new_status}" do
+          registration = FactoryBot.create(:registration, initial_status, competition: default_competition)
+
+          update_request = FactoryBot.build(
+            :update_request,
+            user_id: registration.user_id,
+            competition_id: registration.competition.id,
+            competing: { 'status' => new_status },
+          )
+
+          expect {
+            Registrations::RegistrationChecker.update_registration_allowed!(update_request, User.find(update_request['submitted_by']))
+          }.to raise_error(WcaExceptions::RegistrationError) do |error|
+            expect(error.status).to eq(:unauthorized)
+            expect(error.error).to eq(Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS)
+          end
+        end
       end
 
       [
-        { old_status: 'rejected', new_status: 'cancelled' },
-        { old_status: 'rejected', new_status: 'accepted' },
-        { old_status: 'rejected', new_status: 'waiting_list' },
-        { old_status: 'rejected', new_status: 'pending' },
+        { initial_status: :pending, new_status: 'accepted' },
+        { initial_status: :pending, new_status: 'waiting_list' },
+        { initial_status: :pending, new_status: 'pending' },
+        { initial_status: :pending, new_status: 'rejected' },
+        { initial_status: :waiting_list, new_status: 'pending' },
+        { initial_status: :waiting_list, new_status: 'waiting_list' },
+        { initial_status: :waiting_list, new_status: 'accepted' },
+        { initial_status: :waiting_list, new_status: 'rejected' },
+        { initial_status: :accepted, new_status: 'pending' },
+        { initial_status: :accepted, new_status: 'waiting_list' },
+        { initial_status: :accepted, new_status: 'accepted' },
+        { initial_status: :accepted, new_status: 'rejected' },
+        { initial_status: :deleted, new_status: 'accepted' },
+        { initial_status: :deleted, new_status: 'waiting_list' },
+        { initial_status: :deleted, new_status: 'rejected' },
       ].each do |params|
-        it_behaves_like 'user cant update rejected registration', params[:old_status], params[:new_status]
+        it_behaves_like 'invalid user status updates', params[:initial_status], params[:new_status]
+      end
+
+
+      RSpec.shared_examples 'user cant update rejected registration' do |initial_status, new_status|
+        it "user cant change 'status' => #{initial_status} to: #{new_status}" do
+          registration = FactoryBot.create(:registration, initial_status, competition: default_competition)
+
+          update_request = FactoryBot.build(
+            :update_request,
+            user_id: registration.user_id,
+            competition_id: registration.competition.id,
+            competing: { 'status' => new_status },
+          )
+
+          expect {
+            Registrations::RegistrationChecker.update_registration_allowed!(update_request, User.find(update_request['submitted_by']))
+          }.to raise_error(WcaExceptions::RegistrationError) do |error|
+            expect(error.status).to eq(:unauthorized)
+            expect(error.error).to eq(Registrations::ErrorCodes::REGISTRATION_IS_REJECTED)
+          end
+        end
       end
 
       [
-        { old_status: 'pending', new_status: 'accepted' },
-        { old_status: 'pending', new_status: 'waiting_list' },
-        { old_status: 'pending', new_status: 'cancelled' },
-        { old_status: 'pending', new_status: 'pending' },
-        { old_status: 'pending', new_status: 'rejected' },
-        { old_status: 'waiting_list', new_status: 'pending' },
-        { old_status: 'waiting_list', new_status: 'cancelled' },
-        { old_status: 'waiting_list', new_status: 'waiting_list' },
-        { old_status: 'waiting_list', new_status: 'accepted' },
-        { old_status: 'waiting_list', new_status: 'rejected' },
-        { old_status: 'accepted', new_status: 'pending' },
-        { old_status: 'accepted', new_status: 'cancelled' },
-        { old_status: 'accepted', new_status: 'waiting_list' },
-        { old_status: 'accepted', new_status: 'accepted' },
-        { old_status: 'accepted', new_status: 'rejected' },
-        { old_status: 'cancelled', new_status: 'accepted' },
-        { old_status: 'cancelled', new_status: 'pending' },
-        { old_status: 'cancelled', new_status: 'waiting_list' },
-        { old_status: 'cancelled', new_status: 'rejected' },
-        { old_status: 'cancelled', new_status: 'cancelled' },
-        { old_status: 'rejected', new_status: 'accepted' },
-        { old_status: 'rejected', new_status: 'pending' },
-        { old_status: 'rejected', new_status: 'waiting_list' },
-        { old_status: 'rejected', new_status: 'cancelled' },
+        { initial_status: :rejected, new_status: 'deleted' },
+        { initial_status: :rejected, new_status: 'accepted' },
+        { initial_status: :rejected, new_status: 'waiting_list' },
+        { initial_status: :rejected, new_status: 'pending' },
       ].each do |params|
-        it_behaves_like 'valid organizer status updates', params[:old_status], params[:new_status]
+        it_behaves_like 'user cant update rejected registration', params[:initial_status], params[:new_status]
+      end
+
+
+      RSpec.shared_examples 'valid organizer status updates' do |initial_status, new_status|
+        it "organizer can change 'status' => #{initial_status} to: #{new_status} before close" do
+          registration = FactoryBot.create(:registration, initial_status, competition: default_competition)
+
+          update_request = FactoryBot.build(
+            :update_request,
+            user_id: registration.user_id,
+            competition_id: registration.competition.id,
+            competing: { 'status' => new_status },
+            submitted_by: default_competition.organizers.first.id
+          )
+
+          expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, User.find(update_request['submitted_by'])) }
+            .not_to raise_error
+        end
+
+        it "site admin can change 'status' => #{initial_status} to: #{new_status} before close" do
+          admin = FactoryBot.create(:admin)
+          registration = FactoryBot.create(:registration, initial_status, competition: default_competition)
+
+          update_request = FactoryBot.build(
+            :update_request,
+            user_id: registration.user_id,
+            competition_id: registration.competition.id,
+            competing: { 'status' => new_status },
+            submitted_by: admin.id
+          )
+
+          expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, User.find(update_request['submitted_by'])) }
+            .not_to raise_error
+        end
+
+        it "after edit deadline/reg close, organizer can change 'status' => #{initial_status} to: #{new_status}" do
+          competition = FactoryBot.create(:competition, :with_organizer, :event_edit_passed)
+          registration = FactoryBot.create(:registration, initial_status, competition: competition)
+
+          update_request = FactoryBot.build(
+            :update_request,
+            user_id: registration.user_id,
+            competition_id: registration.competition.id,
+            competing: { 'status' => new_status },
+            submitted_by: competition.organizers.first.id
+          )
+
+          expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, User.find(update_request['submitted_by'])) }
+            .not_to raise_error
+        end
+      end
+
+      [
+        { initial_status: :pending, new_status: 'accepted' },
+        { initial_status: :pending, new_status: 'waiting_list' },
+        { initial_status: :pending, new_status: 'deleted' },
+        { initial_status: :pending, new_status: 'pending' },
+        { initial_status: :pending, new_status: 'rejected' },
+        { initial_status: :waiting_list, new_status: 'pending' },
+        { initial_status: :waiting_list, new_status: 'deleted' },
+        { initial_status: :waiting_list, new_status: 'waiting_list' },
+        { initial_status: :waiting_list, new_status: 'accepted' },
+        { initial_status: :waiting_list, new_status: 'rejected' },
+        { initial_status: :accepted, new_status: 'pending' },
+        { initial_status: :accepted, new_status: 'deleted' },
+        { initial_status: :accepted, new_status: 'waiting_list' },
+        { initial_status: :accepted, new_status: 'accepted' },
+        { initial_status: :accepted, new_status: 'rejected' },
+        { initial_status: :deleted, new_status: 'accepted' },
+        { initial_status: :deleted, new_status: 'pending' },
+        { initial_status: :deleted, new_status: 'waiting_list' },
+        { initial_status: :deleted, new_status: 'rejected' },
+        { initial_status: :deleted, new_status: 'deleted' },
+        { initial_status: :rejected, new_status: 'accepted' },
+        { initial_status: :rejected, new_status: 'pending' },
+        { initial_status: :rejected, new_status: 'waiting_list' },
+        { initial_status: :rejected, new_status: 'deleted' },
+      ].each do |params|
+        it_behaves_like 'valid organizer status updates', params[:initial_status], params[:new_status]
       end
     end
 

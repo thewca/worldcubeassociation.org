@@ -218,6 +218,7 @@ class Registration < ApplicationRecord
 
   def wcif_status
     # Non-competing staff are treated as accepted.
+    # TODO: WCIF spec needs to be updated - and possibly versioned - to include new statuses
     if accepted? || !is_competing?
       'accepted'
     elsif deleted?
