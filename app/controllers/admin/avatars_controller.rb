@@ -20,10 +20,14 @@ module Admin
           when "reject"
             avatar.status = UserAvatar.statuses[:rejected]
 
-            avatar.revoked_by_user = current_user
-            avatar.revocation_reason = args[:rejection_reason]
+            rejection_guidelines = args[:rejection_guidelines] || []
+            additional_reason = args[:rejection_reason].presence
+            combined_reasons = (rejection_guidelines + [additional_reason]).compact.join(" ")
 
-            AvatarsMailer.notify_user_of_avatar_rejection(user, args[:rejection_reason]).deliver_later
+            avatar.revoked_by_user = current_user
+            avatar.revocation_reason = combined_reasons
+
+            AvatarsMailer.notify_user_of_avatar_rejection(user, combined_reasons).deliver_later
           when "defer"
             # do nothing!
           else

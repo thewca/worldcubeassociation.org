@@ -93,11 +93,22 @@
                   </div>
                 <% end %>
               </div>
-              <div class="col-sm-6">
+
+              <div class="col-sm-6 rejection-reason">
+                <h4>Select the guidelines that were not followed:</h4>
+                <% avatar_guidelines = t('users.edit.avatar_guidelines').values + (user.staff_or_any_delegate? ? t('users.edit.staff_avatar_guidelines.paragraphs').values : []) %>
+                <% avatar_guidelines.each_with_index do |guideline, index| %>
+                  <div class="checkbox">
+                    <label>
+                      <%= check_box_tag "avatars[#{user.wca_id}][rejection_guidelines][]", guideline, false, id: "guideline_#{user.wca_id}_#{index}" %>
+                      <%= guideline %>
+                    </label>
+                  </div>
+                <% end %>
                 <%= text_area_tag "avatars[#{user.wca_id}][rejection_reason]", "",
-                                  class: "form-control rejection-reason",
-                                  placeholder: "Please provide the reason for rejection" %>
-              </div>
+                      class: "form-control rejection-reason",
+                      placeholder: "Provide additional reasons for rejection" %>
+                </div>
             </div>
           </div>
         </div>
