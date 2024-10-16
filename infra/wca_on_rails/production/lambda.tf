@@ -65,20 +65,20 @@ resource "aws_iam_role_policy" "lambda_policy_attachment" {
 }
 
 resource "aws_api_gateway_resource" "prod" {
-  rest_api_id = var.shared_resources.api_gateway.id
-  parent_id   = var.shared_resources.api_gateway.root_resource_id
+  rest_api_id = var.shared.api_gateway.id
+  parent_id   = var.shared.api_gateway.root_resource_id
   path_part   = "prod"
 }
 
 resource "aws_api_gateway_method" "poll_registration_status_method" {
-  rest_api_id   = var.shared_resources.api_gateway.id
+  rest_api_id   = var.shared.api_gateway.id
   resource_id   = aws_api_gateway_resource.prod.id
   http_method   = "GET"
   authorization = "NONE"
 }
 
 resource "aws_api_gateway_integration" "poll_registration_integration" {
-  rest_api_id = var.shared_resources.api_gateway.id
+  rest_api_id = var.shared.api_gateway.id
   resource_id = aws_api_gateway_resource.prod.id
   http_method = aws_api_gateway_method.poll_registration_status_method.http_method
 
@@ -88,7 +88,7 @@ resource "aws_api_gateway_integration" "poll_registration_integration" {
 }
 
 resource "aws_api_gateway_method_response" "registration_status_method" {
-  rest_api_id = var.shared_resources.api_gateway.id
+  rest_api_id = var.shared.api_gateway.id
   resource_id = aws_api_gateway_resource.prod.id
   http_method = aws_api_gateway_method.poll_registration_status_method.http_method
   status_code = "200"
@@ -100,7 +100,7 @@ resource "aws_api_gateway_method_response" "registration_status_method" {
 }
 
 resource "aws_api_gateway_integration_response" "registration_status_integration_response" {
-  rest_api_id = var.shared_resources.api_gateway.id
+  rest_api_id = var.shared.api_gateway.id
   resource_id = aws_api_gateway_resource.prod.id
   http_method = aws_api_gateway_method.poll_registration_status_method.http_method
   status_code = aws_api_gateway_method_response.registration_status_method.status_code
@@ -119,7 +119,7 @@ resource "aws_api_gateway_integration_response" "registration_status_integration
   depends_on = [aws_api_gateway_resource.prod, aws_api_gateway_method.poll_registration_status_method, aws_api_gateway_method_response.registration_status_method, aws_api_gateway_integration.poll_registration_integration]
 }
 resource "aws_api_gateway_deployment" "this" {
-  rest_api_id = var.shared_resources.api_gateway.id
+  rest_api_id = var.shared.api_gateway.id
 
   lifecycle {
     create_before_destroy = true
