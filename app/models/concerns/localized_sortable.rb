@@ -22,7 +22,18 @@ module LocalizedSortable
   included do
     scope :uncached_real, -> { where.not(id: fictive_ids) }
 
-    thread_mattr_accessor :real_objects, :all_sorted_by_locale, instance_accessor: false
+    # Relevant comments about `thread_mattr_accessor` vs. `mattr_accessor` and about hooks
+    #   can all be found in the code for the `cachable.rb` module.
+    mattr_accessor :real_objects, :all_sorted_by_locale
+
+    # No filter for `:create` or `:update` because we cannot access individual entities here
+    #   so we just flush the whole cache whenever any update happens
+    after_commit :clear_localized_cache
+
+    def clear_localized_cache
+      self.real_objects = nil
+      self.all_sorted_by_locale = nil
+    end
   end
 
   class_methods do
@@ -36,8 +47,9 @@ module LocalizedSortable
 
     def all_sorted_by(locale, real: false)
       self.all_sorted_by_locale ||= I18n.available_locales.index_with do |available_locale|
-        I18nUtils.localized_sort_by!(available_locale, self.c_all_by_id.values) { |object| object.name_in(available_locale) }
+        I18nUtils.localized_sort_by!(available_locale, self.c_values) { |object| object.name_in(available_locale) }
       end.freeze
+
       real ? self.all_sorted_by_locale[locale].select(&:real?) : self.all_sorted_by_locale[locale]
     end
   end

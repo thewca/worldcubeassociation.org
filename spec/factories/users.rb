@@ -213,6 +213,18 @@ FactoryBot.define do
       otp_secret { User.generate_otp_secret }
     end
 
+    trait :with_avatar do
+      after(:create) do |user|
+        FactoryBot.create(:user_avatar, user: user, backend: 'active-storage', upload_file: true)
+      end
+    end
+
+    trait :with_pending_avatar do
+      after(:create) do |user|
+        FactoryBot.create(:user_avatar, :pending, user: user, backend: 'active-storage', upload_file: true)
+      end
+    end
+
     trait :with_past_competitions do
       after(:create) do |user|
         competition = FactoryBot.create(:competition, :past)

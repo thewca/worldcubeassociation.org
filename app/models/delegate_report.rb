@@ -87,6 +87,29 @@ class DelegateReport < ApplicationRecord
     self.posted_by_user_id = current_user&.id
   end
 
+  GLOBAL_MAILING_LIST = "reports@worldcubeassociation.org"
+
+  def self.country_mailing_list(country, continent = country.continent)
+    "reports.#{continent.url_id}.#{country.iso2}@worldcubeassociation.org"
+  end
+
+  def self.continent_mailing_list(continent)
+    "reports.#{continent.url_id}@worldcubeassociation.org"
+  end
+
+  def mailing_lists
+    if competition.country.real?
+      # If there is a directly attached country, just use that as the only mailing list
+      [DelegateReport.country_mailing_list(competition.country)]
+    elsif competition.continent.real?
+      # If at least the continent is real (i.e. FMC Europe), then use all available countries' lists
+      competition.venue_countries.map { |c| DelegateReport.country_mailing_list(c) }
+    else
+      # If not even the continent is real (i.e. FMC World), then use all available continents' lists
+      competition.venue_continents.map { |c| DelegateReport.continent_mailing_list(c) }
+    end
+  end
+
   # This generates a summary of delegate report data for use in other contexts. Currently, this is used by WRC as part of a custom Trello integration.
   # WST has no involvement besides supplying this data to an endpoint maintained by WRC. For integration advice, contact WRC directly.
   def feedback_requests

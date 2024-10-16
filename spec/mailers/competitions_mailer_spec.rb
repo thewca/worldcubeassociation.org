@@ -205,7 +205,7 @@ RSpec.describe CompetitionsMailer, type: :mailer do
 
       it "renders the headers" do
         expect(mail.subject).to eq "[wca-report] [Oceania] Comp of the Future 2016"
-        expect(mail.to).to eq ["reports@worldcubeassociation.org"]
+        expect(mail.to).to eq ["reports.oceania.AU@worldcubeassociation.org"]
         expect(mail.cc).to match_array competition.delegates.pluck(:email) + ["regulations@worldcubeassociation.org"] + ["integrity@worldcubeassociation.org"]
         expect(mail.from).to eq ["reports@worldcubeassociation.org"]
         expect(mail.reply_to).to match_array competition.delegates.pluck(:email)
@@ -225,7 +225,7 @@ RSpec.describe CompetitionsMailer, type: :mailer do
 
       it "renders the headers" do
         expect(mail.subject).to eq "[wca-report] [Oceania] Comp of the Future 2016"
-        expect(mail.to).to eq ["reports@worldcubeassociation.org"]
+        expect(mail.to).to eq ["reports.oceania.AU@worldcubeassociation.org"]
         expect(mail.cc).to match_array competition.delegates.pluck(:email) + ["integrity@worldcubeassociation.org"]
         expect(mail.from).to eq ["reports@worldcubeassociation.org"]
         expect(mail.reply_to).to match_array competition.delegates.pluck(:email)
@@ -245,7 +245,7 @@ RSpec.describe CompetitionsMailer, type: :mailer do
 
       it "renders the headers" do
         expect(mail.subject).to eq "[wca-report] [Oceania] Comp of the Future 2016"
-        expect(mail.to).to eq ["reports@worldcubeassociation.org"]
+        expect(mail.to).to eq ["reports.oceania.AU@worldcubeassociation.org"]
         expect(mail.cc).to match_array competition.delegates.pluck(:email) + ["regulations@worldcubeassociation.org"]
         expect(mail.from).to eq ["reports@worldcubeassociation.org"]
         expect(mail.reply_to).to match_array competition.delegates.pluck(:email)
@@ -261,7 +261,7 @@ RSpec.describe CompetitionsMailer, type: :mailer do
     context "no wrc nor wic feedback" do
       it "renders the headers" do
         expect(mail.subject).to eq "[wca-report] [Oceania] Comp of the Future 2016"
-        expect(mail.to).to eq ["reports@worldcubeassociation.org"]
+        expect(mail.to).to eq ["reports.oceania.AU@worldcubeassociation.org"]
         expect(mail.cc).to match_array competition.delegates.pluck(:email)
         expect(mail.from).to eq ["reports@worldcubeassociation.org"]
         expect(mail.reply_to).to match_array competition.delegates.pluck(:email)
@@ -271,6 +271,63 @@ RSpec.describe CompetitionsMailer, type: :mailer do
         expect(mail.body.encoded).not_to match(/@WRC/)
         expect(mail.body.encoded).not_to match(/@WIC/)
         expect(mail.body.encoded).to match(/This was a great competition/)
+      end
+    end
+
+    context "multi-national competition" do
+      let(:competition) {
+        FactoryBot.create(:competition,
+                          :with_delegate_report,
+                          :with_valid_schedule,
+                          countryId: "XE",
+                          cityName: "Multiple Cities",
+                          name: "FMC Europe 2016",
+                          delegates: [delegate.user, trainee_delegate.user],
+                          starts: Date.new(2016, 2, 1),
+                          ends: Date.new(2016, 2, 2))
+      }
+
+      it "renders the headers" do
+        countries = competition.continent.countries.sample(competition.competition_venues.count)
+
+        competition.competition_venues.each_with_index do |competition_venue, index|
+          competition_venue.update!(country_iso2: countries[index].iso2)
+        end
+
+        expect(mail.subject).to eq "[wca-report] [Europe] FMC Europe 2016"
+        expect(mail.to).to eq countries.map { |c| DelegateReport.country_mailing_list(c) }
+        expect(mail.cc).to match_array competition.delegates.pluck(:email)
+        expect(mail.from).to eq ["reports@worldcubeassociation.org"]
+        expect(mail.reply_to).to match_array competition.delegates.pluck(:email)
+      end
+    end
+
+    context "multi-continent competition" do
+      let(:competition) {
+        FactoryBot.create(:competition,
+                          :with_delegate_report,
+                          :with_valid_schedule,
+                          countryId: "XW",
+                          cityName: "Multiple Cities",
+                          name: "FMC World 2016",
+                          delegates: [delegate.user, trainee_delegate.user],
+                          starts: Date.new(2016, 2, 1),
+                          ends: Date.new(2016, 2, 2))
+      }
+
+      it "renders the headers" do
+        continents = Continent.real.sample(competition.competition_venues.count)
+
+        competition.competition_venues.each_with_index do |competition_venue, index|
+          country = continents[index].countries.sample
+          competition_venue.update!(country_iso2: country.iso2)
+        end
+
+        expect(mail.subject).to eq "[wca-report] [Multiple Continents] FMC World 2016"
+        expect(mail.to).to eq competition.venue_continents.map { |c| DelegateReport.continent_mailing_list(c) }
+        expect(mail.cc).to match_array competition.delegates.pluck(:email)
+        expect(mail.from).to eq ["reports@worldcubeassociation.org"]
+        expect(mail.reply_to).to match_array competition.delegates.pluck(:email)
       end
     end
 

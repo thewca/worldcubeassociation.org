@@ -19,9 +19,13 @@ RSpec.describe SyncMailingListsJob, type: :job do
     americas_senior_delegate = FactoryBot.create :senior_delegate_role, group: americas_region
 
     # Africa delegates
+    reports_region_sample = Country.c_find!('Zimbabwe')
     africa_delegate_1 = FactoryBot.create :delegate_role, group: africa_region
+    africa_delegate_1.user.update!(receive_delegate_reports: true)
     africa_delegate_2 = FactoryBot.create :delegate_role, group: africa_region
+    africa_delegate_2.user.update!(receive_delegate_reports: true, delegate_reports_region: reports_region_sample.continent)
     africa_delegate_3 = FactoryBot.create :junior_delegate_role, group: africa_region
+    africa_delegate_3.user.update!(receive_delegate_reports: true, delegate_reports_region: reports_region_sample)
     africa_delegate_4 = FactoryBot.create :trainee_delegate_role, group: africa_region
 
     # Asia delegates
@@ -104,8 +108,26 @@ RSpec.describe SyncMailingListsJob, type: :job do
     expect(GsuiteMailingLists).to receive(:sync_group).with(
       "reports@worldcubeassociation.org",
       a_collection_containing_exactly("seniors@worldcubeassociation.org", "quality@worldcubeassociation.org", "regulations@worldcubeassociation.org",
-                                      wic_leader.email, wic_member.email),
+                                      africa_delegate_1.user.email, wic_leader.email, wic_member.email),
     )
+
+    Continent.real.each do |continent|
+      continent_users = continent.id == reports_region_sample.continent_id ? [africa_delegate_2.user] : []
+
+      expect(GsuiteMailingLists).to receive(:sync_group).with(
+        "reports.#{continent.url_id}@worldcubeassociation.org",
+        a_collection_containing_exactly("reports@worldcubeassociation.org", *continent_users.pluck(:email)),
+      )
+
+      continent.countries.real.each do |country|
+        country_users = country.id == reports_region_sample.id ? [africa_delegate_3.user] : []
+
+        expect(GsuiteMailingLists).to receive(:sync_group).with(
+          "reports.#{continent.url_id}.#{country.iso2}@worldcubeassociation.org",
+          a_collection_containing_exactly("reports.#{continent.url_id}@worldcubeassociation.org", *country_users.pluck(:email)),
+        )
+      end
+    end
 
     # communication@ mailing list
     expect(GsuiteMailingLists).to receive(:sync_group).with(

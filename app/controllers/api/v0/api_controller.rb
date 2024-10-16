@@ -208,7 +208,7 @@ class Api::V0::ApiController < ApplicationController
     all_delegates = UserGroup.includes(:active_users).delegate_regions.flat_map(&:active_users).uniq
 
     search_index = all_delegates.map do |delegate|
-      delegate.slice(:id, :name, :wca_id).merge({ thumb_url: delegate.avatar.url(:thumb) })
+      delegate.slice(:id, :name, :wca_id).merge({ thumb_url: delegate.avatar.thumbnail_url })
     end
 
     render json: search_index
