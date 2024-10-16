@@ -1077,17 +1077,19 @@ class User < ApplicationRecord
     fields
   end
 
+  # This method is only called in sync_mailing_lists_job.rb, right before the actual sync takes place.
+  #   We need this because otherwise, the syncing code might consider non-current eligible members.
+  #   The reason why clear_receive_delegate_reports_if_not_eligible is needed is because there's no automatic code that
+  #   runs once a user is no longer a team member; we just schedule their end date.
   def self.clear_receive_delegate_reports_if_not_eligible
     User.where(receive_delegate_reports: true).reject(&:staff_or_any_delegate?).map { |u| u.update(receive_delegate_reports: false) }
   end
 
-  # This method is only called in sync_mailing_lists_job.rb, right after clear_receive_delegate_reports_if_not_eligible.
-  # If used without calling clear_receive_delegate_reports_if_not_eligible it might return non-current eligible members.
-  # The reason why clear_receive_delegate_reports_if_not_eligible is needed is because there's no automatic code that
-  # runs once a user is no longer a team member, we just schedule their end date.
-  def self.delegate_reports_receivers_emails
-    receives_reports_staff = User.where(receive_delegate_reports: true)
-    (self.default_report_receivers + receives_reports_staff.map(&:email)).uniq
+  def self.delegate_reports_receivers_emails(report_region = nil)
+    staff_receiver_emails = User.where(receive_delegate_reports: true, delegate_reports_region: report_region).pluck(:email).uniq
+    additional_receiver_emails = report_region.nil? ? self.default_report_receivers : []
+
+    (staff_receiver_emails + additional_receiver_emails).uniq
   end
 
   def self.default_report_receivers

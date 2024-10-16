@@ -600,6 +600,7 @@ RSpec.describe User, type: :model do
   describe "receive_delegate_reports field" do
     let!(:staff_member1) { FactoryBot.create :user, :wic_member, receive_delegate_reports: true }
     let!(:staff_member2) { FactoryBot.create :user, :wrt_member, receive_delegate_reports: false }
+    let!(:staff_member3) { FactoryBot.create :user, :wrc_member, receive_delegate_reports: true, delegate_reports_region: Country.c_find('USA') }
 
     it "gets cleared if user is not eligible anymore" do
       former_staff_member = FactoryBot.create :user, receive_delegate_reports: true
@@ -609,7 +610,8 @@ RSpec.describe User, type: :model do
     end
 
     it "adds to reports@ only current staff members who want to receive reports" do
-      expect(User.delegate_reports_receivers_emails).to eq ["seniors@worldcubeassociation.org", "quality@worldcubeassociation.org", "regulations@worldcubeassociation.org", staff_member1.email]
+      expect(User.delegate_reports_receivers_emails).to match_array ["seniors@worldcubeassociation.org", "quality@worldcubeassociation.org", "regulations@worldcubeassociation.org", staff_member1.email]
+      expect(User.delegate_reports_receivers_emails(Country.c_find('USA'))).to match_array [staff_member3.email]
     end
   end
 
