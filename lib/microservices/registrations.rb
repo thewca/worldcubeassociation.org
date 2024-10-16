@@ -85,6 +85,7 @@ module Microservices
     # rubocop:enable Metrics/ParameterLists
 
     def self.competitor_count_by_competition(competition_id)
+      return 0 if competition_id.nil? || competition_id.empty?
       # Cache for 5 seconds so we don't do multiple requests per route (we can safely be a few seconds off)
       response = Rails.cache.fetch("#{competition_id}-microservice-competitor-count", expires_in: 5.second) do
         self.registration_connection.get(self.get_competitor_count_path(competition_id))
