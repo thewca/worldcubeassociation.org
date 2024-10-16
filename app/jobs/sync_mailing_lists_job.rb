@@ -17,13 +17,13 @@ class SyncMailingListsJob < WcaCronjob
     report_user_emails = User.delegate_reports_receivers_emails
     GsuiteMailingLists.sync_group(DelegateReport::GLOBAL_MAILING_LIST, report_user_emails)
 
-    Continent.real.each do |continent|
+    Continent.uncached_real.each do |continent|
       continent_list_address = DelegateReport.continent_mailing_list(continent)
       report_user_emails = User.delegate_reports_receivers_emails(continent)
 
       GsuiteMailingLists.sync_group(continent_list_address, report_user_emails | [DelegateReport::GLOBAL_MAILING_LIST])
 
-      continent.countries.real.each do |country|
+      continent.countries.uncached_real.each do |country|
         country_list_address = DelegateReport.country_mailing_list(country, continent)
         report_user_emails = User.delegate_reports_receivers_emails(country)
 
