@@ -12,7 +12,7 @@ resource "aws_lambda_function" "registration_status_lambda" {
   timeout = 10
   environment {
     variables = {
-      REDIS_URL = "redis://wca-main-cache.iebvzt.ng.0001.usw2.cache.amazonaws.com:6379"
+      REDIS_URL = "redis://redis-main-staging-001.iebvzt.0001.usw2.cache.amazonaws.com:6379"
       QUEUE_URL = aws_sqs_queue.this.url
       AWS_REGION = var.region
     }
@@ -64,22 +64,22 @@ resource "aws_iam_role_policy" "lambda_policy_attachment" {
   policy = data.aws_iam_policy_document.lambda_policy.json
 }
 
-resource "aws_api_gateway_resource" "prod" {
+resource "aws_api_gateway_resource" "staging" {
   rest_api_id = var.shared.api_gateway.id
   parent_id   = var.shared.api_gateway.root_resource_id
-  path_part   = "prod"
+  path_part   = "staging"
 }
 
 resource "aws_api_gateway_method" "poll_registration_status_method" {
   rest_api_id   = var.shared.api_gateway.id
-  resource_id   = aws_api_gateway_resource.prod.id
+  resource_id   = aws_api_gateway_resource.staging.id
   http_method   = "GET"
   authorization = "NONE"
 }
 
 resource "aws_api_gateway_integration" "poll_registration_integration" {
   rest_api_id = var.shared.api_gateway.id
-  resource_id = aws_api_gateway_resource.prod.id
+  resource_id = aws_api_gateway_resource.staging.id
   http_method = aws_api_gateway_method.poll_registration_status_method.http_method
 
   integration_http_method = "POST"
@@ -89,7 +89,7 @@ resource "aws_api_gateway_integration" "poll_registration_integration" {
 
 resource "aws_api_gateway_method_response" "registration_status_method" {
   rest_api_id = var.shared.api_gateway.id
-  resource_id = aws_api_gateway_resource.prod.id
+  resource_id = aws_api_gateway_resource.staging.id
   http_method = aws_api_gateway_method.poll_registration_status_method.http_method
   status_code = "200"
 
@@ -101,7 +101,7 @@ resource "aws_api_gateway_method_response" "registration_status_method" {
 
 resource "aws_api_gateway_integration_response" "registration_status_integration_response" {
   rest_api_id = var.shared.api_gateway.id
-  resource_id = aws_api_gateway_resource.prod.id
+  resource_id = aws_api_gateway_resource.staging.id
   http_method = aws_api_gateway_method.poll_registration_status_method.http_method
   status_code = aws_api_gateway_method_response.registration_status_method.status_code
 
@@ -116,7 +116,7 @@ resource "aws_api_gateway_integration_response" "registration_status_integration
     "method.response.header.Access-Control-Allow-Origin" = "'*'"
   }
 
-  depends_on = [aws_api_gateway_resource.prod, aws_api_gateway_method.poll_registration_status_method, aws_api_gateway_method_response.registration_status_method, aws_api_gateway_integration.poll_registration_integration]
+  depends_on = [aws_api_gateway_resource.staging, aws_api_gateway_method.poll_registration_status_method, aws_api_gateway_method_response.registration_status_method, aws_api_gateway_integration.poll_registration_integration]
 }
 resource "aws_api_gateway_deployment" "this" {
   rest_api_id = var.shared.api_gateway.id
