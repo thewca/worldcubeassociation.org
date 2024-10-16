@@ -53,6 +53,7 @@ class User < ApplicationRecord
   has_many :ranksSingle, through: :person
   has_many :ranksAverage, through: :person
   has_one :wfc_dues_redirect, as: :redirect_source
+  belongs_to :delegate_reports_region, polymorphic: true, optional: true
   belongs_to :current_avatar, class_name: "UserAvatar", inverse_of: :current_user, optional: true
   belongs_to :pending_avatar, class_name: "UserAvatar", inverse_of: :pending_user, optional: true
   has_many :user_avatars, dependent: :destroy, inverse_of: :user
@@ -1037,7 +1038,7 @@ class User < ApplicationRecord
       )
       fields << { user_preferred_events_attributes: [:id, :event_id, :_destroy] }
       if user.staff_or_any_delegate?
-        fields += %i(receive_delegate_reports)
+        fields += %i(receive_delegate_reports delegate_reports_region)
       end
     end
     fields
@@ -1076,21 +1077,27 @@ class User < ApplicationRecord
     fields
   end
 
+  # This method is only called in sync_mailing_lists_job.rb, right before the actual sync takes place.
+  #   We need this because otherwise, the syncing code might consider non-current eligible members.
+  #   The reason why clear_receive_delegate_reports_if_not_eligible is needed is because there's no automatic code that
+  #   runs once a user is no longer a team member; we just schedule their end date.
   def self.clear_receive_delegate_reports_if_not_eligible
     User.where(receive_delegate_reports: true).reject(&:staff_or_any_delegate?).map { |u| u.update(receive_delegate_reports: false) }
   end
 
-  # This method is only called in sync_mailing_lists_job.rb, right after clear_receive_delegate_reports_if_not_eligible.
-  # If used without calling clear_receive_delegate_reports_if_not_eligible it might return non-current eligible members.
-  # The reason why clear_receive_delegate_reports_if_not_eligible is needed is because there's no automatic code that
-  # runs once a user is no longer a team member, we just schedule their end date.
-  def self.delegate_reports_receivers_emails
-    receives_reports_staff = User.where(receive_delegate_reports: true)
-    (%w(
+  def self.delegate_reports_receivers_emails(report_region = nil)
+    staff_receiver_emails = User.where(receive_delegate_reports: true, delegate_reports_region: report_region).pluck(:email).uniq
+    additional_receiver_emails = report_region.nil? ? self.default_report_receivers : []
+
+    (staff_receiver_emails + additional_receiver_emails).uniq
+  end
+
+  def self.default_report_receivers
+    %w(
       seniors@worldcubeassociation.org
       quality@worldcubeassociation.org
       regulations@worldcubeassociation.org
-    ) + receives_reports_staff.map(&:email)).uniq
+    )
   end
 
   def notify_of_results_posted(competition)

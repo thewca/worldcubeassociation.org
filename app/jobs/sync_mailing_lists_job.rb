@@ -11,8 +11,25 @@ class SyncMailingListsJob < WcaCronjob
     GsuiteMailingLists.sync_group(GroupsMetadataBoard.email, UserGroup.board_group.active_users.map(&:email))
     translator_users = UserGroup.translators.flat_map(&:users)
     GsuiteMailingLists.sync_group("translators@worldcubeassociation.org", translator_users.map(&:email))
+
     User.clear_receive_delegate_reports_if_not_eligible
-    GsuiteMailingLists.sync_group("reports@worldcubeassociation.org", User.delegate_reports_receivers_emails)
+
+    report_user_emails = User.delegate_reports_receivers_emails
+    GsuiteMailingLists.sync_group(DelegateReport::GLOBAL_MAILING_LIST, report_user_emails)
+
+    Continent.real.each do |continent|
+      continent_list_address = DelegateReport.continent_mailing_list(continent)
+      report_user_emails = User.delegate_reports_receivers_emails(continent)
+
+      GsuiteMailingLists.sync_group(continent_list_address, report_user_emails | [DelegateReport::GLOBAL_MAILING_LIST])
+
+      continent.countries.real.each do |country|
+        country_list_address = DelegateReport.country_mailing_list(country, continent)
+        report_user_emails = User.delegate_reports_receivers_emails(country)
+
+        GsuiteMailingLists.sync_group(country_list_address, report_user_emails | [continent_list_address])
+      end
+    end
 
     UserGroup.teams_committees.active_groups.each { |team_committee| GsuiteMailingLists.sync_group(team_committee.metadata.email, team_committee.active_users.map(&:email)) }
     # Special case: WIC is the first committee in our (recent) history that "absorbed" another team's duties:

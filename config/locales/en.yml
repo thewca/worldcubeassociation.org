@@ -303,6 +303,7 @@ en:
         region: "Region"
         subRegion: "Subregion"
         receive_delegate_reports: "I would like to receive Delegate Reports of WCA Competitions by email"
+        delegate_reports_region: "I only want to receive Delegate Reports for the following region"
         user_preferred_events: "Preferred events"
         otp_attempt: "Enter your two-factor authentication code:"
       #context: a registration to a competition
@@ -476,6 +477,7 @@ en:
         unconfirmed_wca_id: ""
         wca_id: ""
         receive_delegate_reports: "If you are a Senior Delegate or Member of the WRC or the WQAC, you receive Delegate Reports by default. Note: the change may take up to an hour to take effect."
+        delegate_reports_region: "If you want to receive all reports, leave this field blank (the dropdown option at the very top). Note: the change may take up to an hour to take effect."
         otp_attempt: "Check your configured mobile application for a one-time password, or input one of your recovery codes."
       dob_contact:
         name: ""

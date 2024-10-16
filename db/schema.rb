@@ -1256,6 +1256,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_09_111904) do
     t.string "preferred_locale", limit: 255
     t.boolean "competition_notifications_enabled"
     t.boolean "receive_delegate_reports", default: false, null: false
+    t.string "delegate_reports_region_id"
+    t.string "delegate_reports_region_type"
     t.boolean "dummy_account", default: false, null: false
     t.integer "consumed_timestep"
     t.boolean "otp_required_for_login", default: false
@@ -1265,6 +1267,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_09_111904) do
     t.boolean "registration_notifications_enabled", default: false
     t.string "otp_secret"
     t.index ["delegate_id_to_handle_wca_id_claim"], name: "index_users_on_delegate_id_to_handle_wca_id_claim"
+    t.index ["delegate_reports_region_type", "delegate_reports_region_id"], name: "index_users_on_delegate_reports_region"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["wca_id"], name: "index_users_on_wca_id", unique: true

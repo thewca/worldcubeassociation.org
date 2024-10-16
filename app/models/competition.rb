@@ -24,6 +24,8 @@ class Competition < ApplicationRecord
   has_one :delegate_report, dependent: :destroy
   has_one :waiting_list, dependent: :destroy, as: :holder
   has_many :competition_venues, dependent: :destroy
+  has_many :venue_countries, -> { distinct }, through: :competition_venues, source: :country
+  has_many :venue_continents, -> { distinct }, through: :competition_venues, source: :continent
   belongs_to :country, foreign_key: :countryId
   has_one :continent, foreign_key: :continentId, through: :country
   has_many :championships, dependent: :delete_all
@@ -655,6 +657,8 @@ class Competition < ApplicationRecord
              'cancelled_by_user',
              'competition_payment_integrations',
              'microservice_registrations',
+             'venue_countries',
+             'venue_continents',
              'waiting_list'
           # Do nothing as they shouldn't be cloned.
         when 'organizers'

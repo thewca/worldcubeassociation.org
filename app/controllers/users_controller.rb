@@ -332,6 +332,17 @@ class UsersController < ApplicationController
       if user_params.key?(:wca_id)
         user_params[:wca_id] = user_params[:wca_id].upcase
       end
+      if user_params.key?(:delegate_reports_region)
+        raw_region = user_params.delete(:delegate_reports_region)
+
+        if raw_region.starts_with?('_')
+          user_params[:delegate_reports_region_type] = 'Continent'
+        else
+          user_params[:delegate_reports_region_type] = 'Country'
+        end
+
+        user_params[:delegate_reports_region_id] = raw_region
+      end
     end
   end
 
