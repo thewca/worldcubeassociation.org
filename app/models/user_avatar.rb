@@ -42,7 +42,7 @@ class UserAvatar < ApplicationRecord
         Rails.application.routes.url_helpers.rails_representation_url(self.image)
       end
     when 'local'
-      ActionController::Base.helpers.asset_url(self.filename, host: EnvConfig.ROOT_URL)
+      ActionController::Base.helpers.asset_url(self.filename)
     end
   end
 
