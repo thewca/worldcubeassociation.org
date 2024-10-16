@@ -1,20 +1,17 @@
 # frozen_string_literal: true
 
 require 'json'
-require 'kredis'
+require 'redis'
 require 'aws-sdk-sqs'
 require 'superconfig'
-
-Dynamoid.configure do |config|
-  config.region = ENV.fetch('AWS_REGION', 'us-west-2')
-  config.namespace = nil
-end
 
 EnvConfig = SuperConfig.new do
   mandatory :REDIS_URL, :string
   mandatory :QUEUE_URL, :string
   mandatory :AWS_REGION, :string
 end
+
+RedisConn = Redis.new(url: EnvConfig.REDIS_URL)
 
 def lambda_handler(event:, context:)
   # Parse the input event
@@ -38,11 +35,11 @@ def lambda_handler(event:, context:)
                                                        })
     message_count = queue_attributes.attributes['ApproximateNumberOfMessages'].to_i
 
-    processing = Kredis.boolean
+    processing = RedisConn.get("#{query['competition_id']}-#{query['user_id']}-processing")
 
     response = {
       statusCode: 200,
-      body: JSON.generate({ status: { competing: competing_status }, queue_count: message_count }),
+      body: JSON.generate({ processing: !processing.nil?, queue_count: message_count }),
       headers: {
         "Access-Control-Allow-Headers" => "*",
         "Access-Control-Allow-Origin" => "*",

@@ -1,10 +1,10 @@
 resource "aws_lambda_function" "registration_status_lambda" {
-  filename         = "./lambda/registration_status.zip"
-  function_name    = "${var.name_prefix}-poller-lambda-prod"
+  filename         = "./lambda/processing_status.zip"
+  function_name    = "${var.name_prefix}-poller-lambda"
   role             = aws_iam_role.lambda_role.arn
-  handler          = "registration_status.lambda_handler"
+  handler          = "processing_status.lambda_handler"
   runtime          = "ruby3.3"
-  source_code_hash = filebase64sha256("./lambda/registration_status.zip")
+  source_code_hash = filebase64sha256("./lambda/processing_status.zip")
   vpc_config {
     security_group_ids = [var.shared.cluster_security.id]
     subnet_ids = [var.shared.private_subnets[*].id]
@@ -13,6 +13,8 @@ resource "aws_lambda_function" "registration_status_lambda" {
   environment {
     variables = {
       REDIS_URL = "redis://wca-main-cache.iebvzt.ng.0001.usw2.cache.amazonaws.com:6379"
+      QUEUE_URL = aws_sqs_queue.this.url
+      AWS_REGION = var.region
     }
   }
 }

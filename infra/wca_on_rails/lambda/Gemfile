@@ -1,0 +1,11 @@
+# frozen_string_literal: true
+
+source 'https://rubygems.org'
+
+ruby '3.3.0'
+
+gem 'dynamoid', '3.8.0'
+gem 'aws-sdk-dynamodb'
+gem 'aws-sdk-sqs'
+gem 'superconfig'
+gem 'zeitwerk'
