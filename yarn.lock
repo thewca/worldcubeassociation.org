@@ -9627,6 +9627,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-image-crop@npm:^11.0.7":
+  version: 11.0.7
+  resolution: "react-image-crop@npm:11.0.7"
+  peerDependencies:
+    react: ">=16.13.1"
+  checksum: 10c0/2adacb940ea51ddbf09671b80fb30bd92e66bad24efaa3ddfe600c588757508ec418da1b9347a2ee121034ba76c6d8b1e37619d06d52baa28854bfe6ef629efa
+  languageName: node
+  linkType: hard
+
 "react-intersection-observer@npm:^9.13.1":
   version: 9.13.1
   resolution: "react-intersection-observer@npm:9.13.1"
@@ -10193,6 +10202,7 @@ __metadata:
     react-datepicker: "npm:^7.4.0"
     react-dom: "npm:^18.3.1"
     react-google-recaptcha: "npm:^3.1.0"
+    react-image-crop: "npm:^11.0.7"
     react-intersection-observer: "npm:^9.13.1"
     react-leaflet: "npm:^4.2.1"
     react-refresh: "npm:^0.14.2"
