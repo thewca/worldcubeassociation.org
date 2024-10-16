@@ -836,6 +836,7 @@ class User < ApplicationRecord
       competition.organizers.include?(self) ||
       competition.delegates.include?(self) ||
       competition.delegates.flat_map(&:senior_delegates).compact.include?(self) ||
+      competition.delegates.flat_map(&:regional_delegates).compact.include?(self) ||
       wic_team?
     )
   end
