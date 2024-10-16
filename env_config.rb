@@ -13,12 +13,16 @@ EnvConfig = SuperConfig.new(raise_exception: !is_compiling_assets) do
     mandatory :STORAGE_AWS_BUCKET, :string
     mandatory :STORAGE_AWS_REGION, :string
     mandatory :S3_AVATARS_BUCKET, :string
+    mandatory :S3_AVATARS_PRIVATE_BUCKET, :string
     mandatory :S3_AVATARS_ASSET_HOST, :string
     mandatory :S3_AVATARS_REGION, :string
+    mandatory :AVATARS_PUBLIC_STORAGE, :string
+    mandatory :AVATARS_PRIVATE_STORAGE, :string
     mandatory :CDN_AVATARS_DISTRIBUTION_ID, :string
     mandatory :DATABASE_AWS_REGION, :string
     mandatory :DATABASE_WRT_USER, :string
     optional :PAYPAL_BASE_URL, :string ## TODO: Change to mandatory when launching paypal
+    mandatory :WRC_WEBHOOK_URL, :string
 
     # Production-specific stuff
     mandatory :VAULT_ADDR, :string
@@ -37,14 +41,18 @@ EnvConfig = SuperConfig.new(raise_exception: !is_compiling_assets) do
     optional :STORAGE_AWS_BUCKET, :string, ''
     optional :STORAGE_AWS_REGION, :string, ''
     optional :S3_AVATARS_BUCKET, :string, ''
+    optional :S3_AVATARS_PRIVATE_BUCKET, :string, ''
     optional :S3_AVATARS_ASSET_HOST, :string, ''
     optional :S3_AVATARS_REGION, :string, ''
+    optional :AVATARS_PUBLIC_STORAGE, :string, ''
+    optional :AVATARS_PRIVATE_STORAGE, :string, ''
     optional :CDN_AVATARS_DISTRIBUTION_ID, :string, ''
     optional :DATABASE_AWS_REGION, :string, ''
     optional :DATABASE_WRT_USER, :string, ''
     optional :WCA_REGISTRATIONS_URL, :string, ''
     optional :WCA_REGISTRATIONS_POLL_URL, :string, ''
     optional :PAYPAL_BASE_URL, :string, ''
+    optional :WRC_WEBHOOK_URL, :string, ''
 
     # Local-specific stuff
     optional :DISABLE_BULLET, :bool, false

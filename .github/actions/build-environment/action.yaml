@@ -32,6 +32,7 @@ runs:
         tag: sidekiq-${{inputs.environment}}
         build_tag: ${{ inputs.build_tag }}
         environment: ${{ inputs.environment }}
+        load: true
     - name: Copy assets out of the container and push to S3
       shell: bash
       run: | # We do this once the first image is build so it will be definitely available

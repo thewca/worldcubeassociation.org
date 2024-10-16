@@ -16,22 +16,6 @@
   <% if @user.unconfirmed_email %>
     <%= alert :warning, t('.pending_mail_confirmation', email: @user.unconfirmed_email) %>
   <% end %>
-  <% if @user.pending_avatar? %>
-    <%= alert :warning do %>
-      <%= t '.pending_avatar_confirmation' %>
-      <%= link_to users_pending_avatar_thumbnail_edit_path(@user) do %>
-        <%= react_component("UserAvatar", {
-          avatar: @user.pending_avatar,
-          size: "small",
-          title: t('.edit_thumbnail'),
-          breakCache: true
-        }, class: 'avatar-thumbnail') %>
-      <% end %>
-      <% if current_user.can_admin_results? %>
-        <%= link_to t('.manage_pending'), admin_avatars_path %>
-      <% end %>
-    <% end %>
-  <% end %>
   <% if @user.dummy_account? %>
     <%= alert :warning do %>
       This account is a dummy account. It serves as a placeholder because the competitor
@@ -189,69 +173,13 @@
 
     <% if current_user.can_change_users_avatar?(@user) %>
       <div class="tab-pane active" id="avatar">
-        <div class="row">
-          <div class="col-sm-6">
-            <%= simple_form_for @user, html: { multipart: true, class: 'are-you-sure', id: "upload-avatar-form" } do |f| %>
-              <%= hidden_field_tag "section", "avatar" %>
-              <div class="well">
-                <h3><%=t '.guidelines' %></h3>
-                <ul>
-                  <% t('.avatar_guidelines').values.each do |guideline| %>
-                    <li><%= guideline %></li>
-                  <% end %>
-                </ul>
-                <% if @user.staff_or_any_delegate? %>
-                  <br /><strong><%= t('.staff_avatar_guidelines.title') %></strong>
-                  <ul>
-                    <% t('.staff_avatar_guidelines.paragraphs').values.each do |guideline| %>
-                      <li><%= guideline %></li>
-                    <% end %>
-                  </ul>
-                <% end %>
-              </div>
-              <%= f.input :pending_avatar, as: :file, disabled: !editable_fields.include?(:pending_avatar) %>
-              <%= f.hidden_field :pending_avatar_cache %>
-              <div>
-                <input type="checkbox" name="guidelines-confirmation" id="guidelines-confirmation" data-alert="<%= t '.confirm_guidelines' %>">
-                <label for="guidelines-confirmation"><%= t '.guidelines_confirmation' %></label>
-              </div>
-              <%= f.submit t('.save'), class: "btn btn-primary" %>
-            <% end %>
-            <% if @user.avatar? && editable_fields.include?(:remove_avatar)  %>
-              <div class="btn btn-default btn-danger remove-avatar">
-                <%= t('.remove_avatar') %>
-              </div>
-
-              <div class="remove-avatar-confirm">
-                <%= form_with model: @user, method: :patch do |f| %>
-                  <%= f.text_area :removal_reason, class: 'form-control',
-                    placeholder: t('.remove_avatar_reason') %>
-
-                  <%= f.hidden_field :remove_avatar, value: true %>
-
-                  <%= f.submit t('.remove_avatar_confirm_button'), class: 'btn btn-danger',
-                    data: { confirm: t('.remove_avatar_confirm') } %>
-                <% end %>
-              </div>
-            <% end %>
-          </div>
-          <div class="col-sm-6 text-center">
-            <div class="image-preview-container" data-input-selector="#user_pending_avatar" data-max-height="400" data-orientation="true">
-              <%= image_tag @user.avatar.url, class: "img-responsive center-block", id: "avatar-img" %>
-            </div>
-            <% if @user.avatar? %>
-              <h4><%= t('.your_thumbnail') %></h4>
-              <%= link_to users_avatar_thumbnail_edit_path(@user) do %>
-                <%= react_component("UserAvatar", {
-                  avatar: @user.avatar,
-                  size: "small",
-                  title: t('.edit_thumbnail'),
-                  breakCache: true
-                }) %>
-              <% end %>
-            <% end %>
-          </div>
-        </div>
+        <%= react_component("EditAvatar", {
+          userId: @user.id,
+          showStaffGuidelines: @user.staff_or_any_delegate?,
+          uploadDisabled: !editable_fields.include?(:pending_avatar),
+          canRemoveAvatar: @user.current_avatar.present? && editable_fields.include?(:current_avatar),
+          canAdminAvatars: current_user.can_admin_results?,
+        }) %>
       </div>
     <% end %>
     <div class="tab-pane" id="roles">

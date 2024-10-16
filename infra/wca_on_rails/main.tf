@@ -36,6 +36,7 @@ module "production" {
   VAULT_ADDR = "http://172.31.63.154:8200"
   DATABASE_WRT_USER = var.DATABASE_WRT_USER
   rails_startup_time = local.rails_startup_time
+  WRC_WEBHOOK_URL = var.WRC_WEBHOOK_URL
 }
 
 module "staging" {
@@ -46,6 +47,7 @@ module "staging" {
   DATABASE_WRT_USER = var.DATABASE_WRT_USER
   shared = module.shared
   rails_startup_time = local.rails_startup_time
+  WRC_WEBHOOK_URL = var.WRC_WEBHOOK_URL
 }
 
 module "shared" {

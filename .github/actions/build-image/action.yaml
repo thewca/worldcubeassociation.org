@@ -16,6 +16,10 @@ inputs:
   environment:
     description: 'Deployment environment (e.g., staging, production)'
     required: true
+  load:
+    description: 'If the docker image should be added to the local docker image context (default false)'
+    required: false
+    default: false
 outputs:
   imageid:
     description: 'The Docker image id build'
@@ -38,7 +42,8 @@ runs:
       id: build-image
       with:
         push: true
-        load: true
+        load: ${{ inputs.load }}
+        context: .
         target: ${{ inputs.target }}
         tags: |
           ${{ inputs.registry }}:${{ inputs.tag }}
