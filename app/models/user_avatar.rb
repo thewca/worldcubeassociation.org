@@ -233,15 +233,8 @@ class UserAvatar < ApplicationRecord
 
   def to_wcif
     {
-      "id" => self.id,
       "url" => self.url,
       "thumbUrl" => self.thumbnail_url,
-      "thumbnail" => {
-        "x" => self.thumbnail_crop_x,
-        "y" => self.thumbnail_crop_y,
-        "width" => self.thumbnail_crop_w,
-        "height" => self.thumbnail_crop_h,
-      },
     }
   end
 
@@ -249,18 +242,8 @@ class UserAvatar < ApplicationRecord
     {
       "type" => ["object", "null"],
       "properties" => {
-        "id" => { "type" => "integer" },
         "url" => { "type" => "string" },
         "thumbUrl" => { "type" => "string" },
-        "thumbnail" => {
-          "type" => "object",
-          "properties" => {
-            "x" => { "type" => "integer" },
-            "y" => { "type" => "integer" },
-            "width" => { "type" => "integer" },
-            "height" => { "type" => "integer" },
-          },
-        },
       },
     }
   end
