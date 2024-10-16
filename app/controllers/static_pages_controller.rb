@@ -19,6 +19,9 @@ class StaticPagesController < ApplicationController
   def logo
   end
 
+  def api_help
+  end
+
   def robots
     respond_to :txt
   end

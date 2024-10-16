@@ -70,15 +70,15 @@ FactoryBot.define do
       end
     end
 
-    trait :wdc_member do
+    trait :wic_member do
       after(:create) do |user|
-        FactoryBot.create(:wdc_member_role, user_id: user.id)
+        FactoryBot.create(:wic_member_role, user_id: user.id)
       end
     end
 
-    trait :wdc_leader do
+    trait :wic_leader do
       after(:create) do |user|
-        FactoryBot.create(:wdc_leader_role, user_id: user.id)
+        FactoryBot.create(:wic_leader_role, user_id: user.id)
       end
     end
 
@@ -133,12 +133,6 @@ FactoryBot.define do
     trait :wcat_member do
       after(:create) do |user, options|
         FactoryBot.create(:wcat_member_role, user_id: user.id)
-      end
-    end
-
-    trait :wec_member do
-      after(:create) do |user|
-        FactoryBot.create(:wec_member_role, user_id: user.id)
       end
     end
 
@@ -202,6 +196,12 @@ FactoryBot.define do
       end
     end
 
+    trait :wapc_member do
+      after(:create) do |user|
+        FactoryBot.create(:wapc_member_role, user_id: user.id)
+      end
+    end
+
     trait :wca_id do
       transient do
         person { FactoryBot.create(:person, name: name, countryId: Country.find_by_iso2(country_iso2).id, gender: gender, dob: dob.strftime("%F")) }
@@ -211,6 +211,18 @@ FactoryBot.define do
     trait :with_2fa do
       otp_required_for_login { true }
       otp_secret { User.generate_otp_secret }
+    end
+
+    trait :with_avatar do
+      after(:create) do |user|
+        FactoryBot.create(:user_avatar, user: user, backend: 'active-storage', upload_file: true)
+      end
+    end
+
+    trait :with_pending_avatar do
+      after(:create) do |user|
+        FactoryBot.create(:user_avatar, :pending, user: user, backend: 'active-storage', upload_file: true)
+      end
     end
 
     trait :with_past_competitions do

@@ -6,10 +6,10 @@ import { roundIdToString } from '../../../../lib/utils/wcif';
 import ButtonActivatedModal from '../ButtonActivatedModal';
 import { useDispatch } from '../../../../lib/providers/StoreProvider';
 import { updateAdvancementCondition } from '../../store/actions';
-import AttemptResultField from '../../../Results/WCALive/AttemptResultField/AttemptResultField';
+import AttemptResultField from '../../../EditResult/WCALive/AttemptResultField/AttemptResultField';
 import { matchResult } from '../../../../lib/utils/edit-events';
 import AdvancementTypeField from './AdvancementTypeInput';
-import MbldPointsField from '../../../Results/WCALive/AttemptResultField/MbldPointsField';
+import MbldPointsField from '../../../EditResult/WCALive/AttemptResultField/MbldPointsField';
 
 const MIN_ADVANCE_PERCENT = 1;
 const MAX_ADVANCE_PERCENT = 75;

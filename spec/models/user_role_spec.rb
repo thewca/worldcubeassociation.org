@@ -12,8 +12,8 @@ RSpec.describe UserRole, type: :model do
         expect(active_banned_competitor_role.can_user_read?(user)).to be true
       end
 
-      it 'returns true when the user is WDC member' do
-        user = FactoryBot.create(:user, :wdc_member)
+      it 'returns true when the user is WIC member' do
+        user = FactoryBot.create(:user, :wic_member)
         expect(active_banned_competitor_role.can_user_read?(user)).to be true
       end
 
@@ -30,8 +30,8 @@ RSpec.describe UserRole, type: :model do
         expect(past_banned_competitor_role.can_user_read?(user)).to be false
       end
 
-      it 'returns true when the user is WDC member' do
-        user = FactoryBot.create(:user, :wdc_member)
+      it 'returns true when the user is WIC member' do
+        user = FactoryBot.create(:user, :wic_member)
         expect(past_banned_competitor_role.can_user_read?(user)).to be true
       end
 

@@ -1,7 +1,8 @@
-import { I18n } from 'i18n-js';
+import { I18n, useMakePlural } from 'i18n-js';
 
 import * as Locales from 'date-fns/locale';
 import { registerLocale, setDefaultLocale } from 'react-datepicker';
+import * as Pluralizers from 'make-plural';
 
 const i18nFileContext = require.context('rails_translations');
 
@@ -82,11 +83,28 @@ function loadTranslations(i18n, locale) {
   i18n.store(translations);
 }
 
+function loadTranslationPluralizer(i18n, locale) {
+  const baseLocale = locale.split('-')[0];
+  const isoPluralizer = Pluralizers[baseLocale];
+
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const i18nPluralizer = useMakePlural({ pluralizer: isoPluralizer });
+  i18n.pluralization.register(locale, i18nPluralizer);
+}
+
+function loadDateTimeLocale(locale) {
+  const dateFnsLocale = Locales[locale];
+
+  registerLocale(locale, dateFnsLocale);
+  setDefaultLocale(locale);
+}
+
+// prepare the pluralizer rules.
+loadTranslationPluralizer(window.I18n, window.wca.currentLocale);
+
 // store the actual translations.
 loadTranslations(window.I18n, DEFAULT_LOCALE);
 loadTranslations(window.I18n, window.wca.currentLocale);
 
-const dateFnsLocale = Locales[window.wca.currentLocale];
-
-registerLocale(window.wca.currentLocale, dateFnsLocale);
-setDefaultLocale(window.wca.currentLocale);
+// load additional locales for third party code.
+loadDateTimeLocale(window.wca.currentLocale);

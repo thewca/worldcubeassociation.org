@@ -13,7 +13,7 @@ class StripeRecord < ApplicationRecord
     canceled: %w[canceled],
   }.freeze
 
-  enum stripe_status: {
+  enum :stripe_status, {
     requires_payment_method: "requires_payment_method",
     requires_confirmation: "requires_confirmation",
     requires_action: "requires_action",
@@ -30,7 +30,7 @@ class StripeRecord < ApplicationRecord
   }
 
   # Actual values are according to Stripe API documentation as of 2023-03-12.
-  enum stripe_record_type: {
+  enum :stripe_record_type, {
     payment_intent: "payment_intent",
     charge: "charge",
     refund: "refund",

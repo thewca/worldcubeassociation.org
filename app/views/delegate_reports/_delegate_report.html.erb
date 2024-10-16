@@ -6,9 +6,9 @@
       @WRC: Feedback requested on incidents: <%= delegate_report.wrc_incidents %>
     </p>
   <% end %>
-  <% if delegate_report.wdc_feedback_requested %>
+  <% if delegate_report.wic_feedback_requested %>
     <p style="color: red; font-weight: bold">
-      @WDC: Feedback requested on incidents: <%= delegate_report.wdc_incidents %>
+      @WIC: Feedback requested on incidents: <%= delegate_report.wic_incidents %>
     </p>
   <% end %>
 
@@ -56,11 +56,6 @@
   </div>
 
   <div>
-    <strong>Equipment</strong>
-    <%=md delegate_report.equipment %>
-  </div>
-
-  <div>
     <strong>Delegates</strong>
     <%= competition.staff_delegates.pluck(:name).to_sentence %>
   </div>
@@ -77,21 +72,15 @@
     </div>
   <% end %>
 
-  <div>
-    <h2>Venue</h2>
-    <%=md delegate_report.venue %>
-  </div>
+  <% delegate_report.md_sections.each do |section| %>
+    <div>
+      <h2><%= section.capitalize %></h2>
+      <%=md delegate_report.read_attribute(section) %>
+    </div>
+  <% end %>
 
-  <div>
-    <h2>Organization</h2>
-    <%=md delegate_report.organization %>
-  </div>
-
-  <div>
-    <h2>Incidents</h2>
-    <%=md delegate_report.incidents %>
-  </div>
-
+  <%# Technically, 'remarks' is also a Markdown section but it's the only one that doesn't have a template %>
+  <%# and (as of writing this comment) we always want to include it no matter which Report version. %>
   <div>
     <h2>Remarks</h2>
     <%=md delegate_report.remarks %>

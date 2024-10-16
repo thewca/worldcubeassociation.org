@@ -3,13 +3,17 @@
 require "rails_helper"
 
 RSpec.feature "Competitions list" do
-  context "list view" do
+  context "admin view" do
+    before :each do
+      sign_in FactoryBot.create(:admin)
+    end
+
     context "when a delegate is set in the params" do
       let(:competition) { FactoryBot.create :competition, :visible, :future }
       let(:delegate) { competition.delegates.first }
 
       before do
-        visit "/competitions?beta=0xDbOverload"
+        visit "/competitions?legacy=off&show_admin_details=yes"
         within(:css, "#delegate") do
           find(".search").set(delegate.name)
           find(".search").send_keys(:enter)
@@ -21,14 +25,8 @@ RSpec.feature "Competitions list" do
       end
 
       it "only competitions delegated by the given delegate are shown", js: true do
-        expect(page).to have_selector("#competitions-list .competition-info", count: 1)
+        expect(page).to have_selector(".competition-info", count: 1)
       end
-    end
-  end
-
-  context "admin view" do
-    before :each do
-      sign_in FactoryBot.create(:admin)
     end
 
     it 'renders finished competition without results' do

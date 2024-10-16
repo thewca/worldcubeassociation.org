@@ -85,6 +85,9 @@ variable "shared" {
     rails_staging: object({
       arn: string
     })
+    rails_staging-api: object({
+      arn: string
+    })
     pma_staging: object({
       arn: string
     })
@@ -100,4 +103,9 @@ variable "shared" {
 variable "name_prefix" {
   type = string
   description = "Prefix for naming resources"
+}
+
+variable "WRC_WEBHOOK_URL" {
+  description = "The URL to send delegate report webhook notifications for WRC to"
+  type = string
 }

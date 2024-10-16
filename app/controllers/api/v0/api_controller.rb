@@ -19,6 +19,10 @@ class Api::V0::ApiController < ApplicationController
     render json: { me: current_api_user }, private_attributes: doorkeeper_token.scopes
   end
 
+  def healthcheck
+    render json: { status: "ok", api_instance: EnvConfig.API_ONLY? }
+  end
+
   def auth_results
     if !current_user
       return render status: :unauthorized, json: { error: "Please log in" }
@@ -132,9 +136,6 @@ class Api::V0::ApiController < ApplicationController
     }
   end
 
-  def help
-  end
-
   def search(*models)
     query = params[:q]&.slice(0...SearchResultsController::SEARCH_QUERY_LIMIT)
 
@@ -207,7 +208,7 @@ class Api::V0::ApiController < ApplicationController
     all_delegates = UserGroup.includes(:active_users).delegate_regions.flat_map(&:active_users).uniq
 
     search_index = all_delegates.map do |delegate|
-      delegate.slice(:id, :name, :wca_id).merge({ thumb_url: delegate.avatar.url(:thumb) })
+      delegate.slice(:id, :name, :wca_id).merge({ thumb_url: delegate.avatar.thumbnail_url })
     end
 
     render json: search_index

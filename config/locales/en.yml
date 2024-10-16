@@ -206,6 +206,17 @@ en:
     deadline:
       description: "Qualification Deadline"
       by_date: "by %{date}"
+  #context: other activities which occur in the schedule
+  activity:
+    registration: "On-site registration"
+    checkin: "Check-in"
+    tutorial: "Tutorial for new competitors"
+    multi: "Cube submission for 3x3x3 Multi-Blind"
+    breakfast: "Breakfast"
+    lunch: "Lunch"
+    dinner: "Dinner"
+    awards: "Awards"
+    misc: "Other"
   #context: Common word used in multiple places on the website
   common:
     world: "World"
@@ -314,14 +325,15 @@ en:
       delegate_report:
         discussion_url: "Discussion's url on the Google Group"
         schedule_url: "Schedule url"
+        summary: "Summary"
         equipment: "Equipment"
         venue: "Venue"
         organization: "Organization"
         incidents: "Incidents"
         wrc_feedback_requested: "I would like feedback from the WRC on some of the incidents above."
         wrc_incidents: "Incidents Needing WRC Feedback"
-        wdc_feedback_requested: "I would like feedback from the WDC on some of the incidents above."
-        wdc_incidents: "Incidents Needing WDC Feedback"
+        wic_feedback_requested: "I would like feedback from the WIC on some of the incidents above."
+        wic_incidents: "Incidents Needing WIC Feedback"
         remarks: "Remarks"
       #context: a person
       person:
@@ -463,7 +475,7 @@ en:
         registration_notifications_enabled: "This only applies for competitions you organize or delegate, and can be overridden on a per-competition basis."
         unconfirmed_wca_id: ""
         wca_id: ""
-        receive_delegate_reports: "If you are a Trainee Delegate, Junior Delegate, Senior Delegate, or Member of the WRC or the WQAC, you receive Delegate Reports by default. Note: the change may take up to an hour to take effect."
+        receive_delegate_reports: "If you are a Senior Delegate or Member of the WRC or the WQAC, you receive Delegate Reports by default. Note: the change may take up to an hour to take effect."
         otp_attempt: "Check your configured mobile application for a one-time password, or input one of your recovery codes."
       dob_contact:
         name: ""
@@ -483,13 +495,14 @@ en:
       delegate_report:
         schedule_url: "Full link to the published schedule (e.g., https://www.cubingusa.com/usnationals2016/schedule.php)"
         equipment: "Number and type of timers and displays used in the competition. Please remove the line(s) of equipment which you didn't use."
+        summary: "The listed points above are just for guidance for a complete report. Use them at your discretion for what you see fit. Please remove unused parts!"
         venue: "The listed points above are just for guidance for a complete report. Use them at your discretion for what you see fit. Please remove unused parts!"
         organization: "The listed points above are just for guidance for a complete report. Use them at your discretion for what you see fit. Please remove unused parts!"
         incidents: "Please report all incidents which are non-standard cases. Number the incidents starting from 1., so that other Delegates can comment referring to them by their numbers. Even if everything seemed generic, just list at least the most noteworthy cases. Please check off the appropriate boxes below if you are actively seeking feedback."
         wrc_feedback_requested: ""
         wrc_incidents: "List of numbers referencing any incidents that you would like the WRC's feedback on."
-        wdc_feedback_requested: ""
-        wdc_incidents: "List of numbers referencing any incidents that you would like the WDC's feedback on."
+        wic_feedback_requested: ""
+        wic_incidents: "List of numbers referencing any incidents that you would like the WIC's feedback on."
         remarks: "Talk about any other detail that you'd like to share (e.g., improvement/regression within the community, future plans for this region). If for the sake of conciseness you left something unsaid in the previous sections, feel free to comment them here."
         discussion_url: ""
       #context: for a competition tab
@@ -766,8 +779,7 @@ en:
         wat: "WCA Archive Team"
         wct: "WCA Communication Team"
         wcat: "WCA Competition Announcement Team"
-        wdc: "WCA Disciplinary Committee"
-        wec: "WCA Ethics Committee"
+        wic: "WCA Integrity Committee"
         weat: "WCA Executive Assistants Team"
         wfc: "WCA Financial Committee"
         wmt: "WCA Marketing Team"
@@ -776,13 +788,12 @@ en:
         wrt: "WCA Results Team"
         wst: "WCA Software Team"
         wsot: "WCA Sports Organization Team"
-        wac: "WCA Advisory Council"
+        wapc: "WCA Appeals Committee"
       groups_description:
         wat: "The WAT is responsible for managing the development and maintenance of the WCA's historical archive. They document key speedcubing events and notable WCA milestones to be presented as part of a broader WCA timeline, to preserve the legacy of the WCA in speedcubing."
         wct: "The WCA Communication Team (WCT) has the role to oversee and support communications of the WCA with the Community and the general public. The communication of the WCA should contribute to the Objectives of the WCA and support a general positive culture of friendliness, transparency, inclusiveness, openness, and responsiveness."
         wcat: "The WCA Competition Announcement Team (WCAT) has the role to approve and announce WCA Competitions submitted by delegates, and ensure such announcements adhere to WCA quality standards. This team is also responsible for maintaining proper competition submission protocol from documents such as the WCA Competition Requirements Policy. WCAT is NOT responsible for the organization and delegation of individual competitions."
-        wdc: "The WCA Disciplinary Committee (WDC) performs independent investigations regarding Registered Speedcubers and incidents during WCA Competitions or on official, online WCA platforms. These incidents are alleged violations of the Spirit, Code of Conduct, and/or Regulations of the WCA."
-        wec: "This committee's role is to ensure that all the procedures followed by the WCA Staff abide by the Code of Ethics, and to perform independent investigations if the conduct of any of these members is not compliant with the Code. The WEC is a confidant for Registered Speedcubers who may report concerns and request an investigation. This committee also functions as the board of appeal if anyone involved disagrees with a decision made by the WCA Disciplinary Committee."
+        wic: "The WCA Integrity Committee (WIC) performs independent investigations regarding WCA community members and incidents during WCA Competitions or on official, online WCA platforms. These incidents are alleged violations of the Spirit, Code of Conduct, Code of Ethics and/or Regulations of the WCA."
         weat: "This team is responsible for carrying out the administrative tasks of the WCA Board of Directors."
         wfc: "This committee is responsible for managing the overall finances of the WCA, including budgeting, reporting, analysis, bookkeeping, and tax filings. They also manage the WCA's largest source of income, the WCA Dues System, along with various funding programs that provide support to local communities at different stages of development, including Travel Funding, Equipment Funding, and Regional Organization Support."
         wmt: "This team is responsible for developing and managing the WCA Brand, seeking sponsorships, supporting the distribution of WCA Competition Gear, and marketing WCA Merchandise."
@@ -791,7 +802,7 @@ en:
         wrt: "The WRT is responsible for managing all data in the databases of the WCA, most importantly competition results and persons data."
         wst: "This team is responsible for managing the WCA's software (website, scramblers, workbooks, admin tools)."
         wsot: "This team has the role to oversee and support the recognition of the WCA as an international sports organization."
-        wac: "The WAC is responsible for maintaining feedback and communication between the WCA Community and the WCA Staff. They maintain the WCA Forums and summarize surveys and attempt to increase reach across the worldwide community."
+        wapc: "The WCA Appeals Committee (WAC) is responsible for reviewing and resolving appeals regarding decisions made by other WCA Staff. The WAC provides an independent and impartial review process to ensure that decisions are fair, reasonable, and in accordance with WCA policies and regulations."
     contacts:
       title: "WCA Contact Form"
       faq_note_html: 'Before making an inquiry, you may wish to take a look at our <a href="/faq">Frequently Asked Questions</a>! If you wish to contact a specific committee or team not listed here, you may check their details on <a href="/teams-committees-councils">this page</a>.'
@@ -986,6 +997,7 @@ en:
       current: "Current thumbnail:"
       new: "New thumbnail:"
       save: "Save"
+      reset: "Reset"
     edit:
       general: "General"
       email: "Email"
@@ -999,6 +1011,8 @@ en:
       confirm_new_email: "Changing your email will require confirming the new email before being effective."
       pending_mail_confirmation: "This account is pending confirmation of new email address %{email}."
       pending_avatar_confirmation: "This account is pending confirmation of a new avatar."
+      pending_avatar_edit_action: "Click here if you want to edit it instead:"
+      pending_avatar_edit_warning: "Editing pending avatar!"
       pending_claim_confirmation_html: "This account is waiting for %{delegate} to confirm their claimed WCA ID %{wca_id}."
       pending_claim_mail_confirmation_html: "This user has claimed WCA ID %{wca_id}. Their Delegate %{delegate} will be notified of this request as soon as this account's email address is confirmed."
       your_thumbnail: "Your account thumbnail:"
@@ -1028,7 +1042,7 @@ en:
         '2': "The person shown must be your current self."
         '3': "If there is more than one person on the avatar, it should be clear who of them is you."
         '4': "Your head, but not necessarily the full face, should be visible."
-        '5': "The avatar should not include overlay texts or unnatural filters, including borders."
+        '5': "The avatar should not include overlay texts, stickers or unnatural filters, including borders."
         '6': "The avatar must be submitted in correct orientation."
         '7': "The avatar must not contain offensive content (e.g. offensive gestures)."
       staff_avatar_guidelines:
@@ -1059,7 +1073,6 @@ en:
       wca_id_no_gender_html: "We do not have a gender recorded for this WCA ID. Please contact the <a href='%{wrt_contact_path}' target='_blank'>WCA Results Team</a> to resolve this."
       wca_id_no_citizenship_html: "We do not have a citizenship recorded for this WCA ID. Please contact the <a href='%{wrt_contact_path}' target='_blank'>WCA Results Team</a> to resolve this."
       wca_id_no_name_html: "We do not have a name recorded for this WCA ID. Please contact the <a href='%{wrt_contact_path}' target='_blank'>WCA Results Team</a> to resolve this."
-      avatar_requires_wca_id: "requires a WCA ID to be assigned"
       email_used_by_locked_account_html: "is already used by another account. It's been created automatically as a result of you registering for a competition via an external service. If you are the owner of this email, you can use the account after resetting your password <a href='/users/password/new'>here</a>."
       must_match_person: "must match person details corresponding to the WCA ID"
     #context: when an action was successful
@@ -1079,6 +1092,8 @@ en:
         region_name: "Region Name"
         status: "Status"
         locale: "Locale"
+        group_name: "Team/Committee Name"
+        delegated_competitions_count: "Number of Delegated Competitions"
   user_groups:
     group_types:
       board: "WCA Board of Directors"
@@ -1096,7 +1111,7 @@ en:
       exceeds_event_limit:
         one: "You must register in exactly 1 event."
         other: "You must register for between 1 and %{count} events."
-      banned_html: "You are banned. If you believe this is an error, please contact the <a href='mailto:disciplinary@worldcubeassociation.org' target='_blank'>WDC</a>."
+      banned_html: "You are banned. If you believe this is an error, please contact the <a href='mailto:integrity@worldcubeassociation.org' target='_blank'>WIC</a>."
       undelete_banned: "is a banned competitor and cannot be undeleted"
       series_more_than_one_accepted: "You can only be accepted for one Series competition at a time."
       can_only_register_for_qualified_events: "You cannot register for events you are not qualified for."
@@ -1322,7 +1337,7 @@ en:
     messages:
       not_visible: "This competition is not visible to the public."
       name_too_long: "The competition name is longer than 32 characters. Please edit the competition ID and short name appropriately."
-      id_starts_with_lowercase: "The competition id starts with a lowercase letter. We prefer to have it start with an uppercase."
+      id_starts_with_lowercase: "The competition ID starts with a lowercase letter. We prefer to have it start with an uppercase."
       must_have_events: "Please add at least one event before confirming the competition."
       schedule_must_match_rounds: "Please make sure the competition has at least one round per event and that the schedule you created includes all the rounds you declared before confirming the competition."
       advancement_condition_must_be_present_for_all_non_final_rounds: "Please make sure that all non final rounds have advancement condition specified."
@@ -1353,6 +1368,7 @@ en:
       in_progress_at_wca_live_html: "This competition is ongoing. You can check the live results <a href='%{link_here}'>here</a>!"
       reg_opens_too_early: "Registration is set to start in less than the required 48 hours."
       registration_already_closed: "The deadline to register has already passed. Please set it to be in the future."
+      uses_v2_registrations: "This competition is using the new Registration System. Please contact WCAT if you believe this competition should use the old system instead."
       tooltip_registered: "You are registered."
       tooltip_waiting_list: "You are currently on the waiting list."
       tooltip_deleted: "Unfortunately your registration has been deleted. Please check your email for details, or contact the organiser(s)."
@@ -1363,7 +1379,6 @@ en:
       championship_exists: "There is already a %{championship_type} in %{year}."
       orga_closed_reg_success: "Sucessfully closed registration."
       orga_closed_reg_failure: "Cannot close registration."
-      cannot_activate_v2: "You cannot activate the new registration system if registration is open."
       no_waiting_list_specified: "This competition does not have a deadline for accepting competitors on the waiting list. If you are using a waiting list, please specify a deadline. If you are not using a waiting list, please remember to specify this in the registration requirements."
     #context: on the "My competitions" page
     my_competitions:
@@ -1602,6 +1617,7 @@ en:
         admin:
           is_confirmed: "Do not let organizers edit this competition"
           is_visible: "Make competition visible to the public"
+          uses_v_2_registrations: "Use the new Registration System"
         competition_id: "ID"
         name: "Name"
         short_name: "Competition short name"
@@ -1682,6 +1698,7 @@ en:
         admin:
           is_confirmed: ""
           is_visible: ""
+          uses_v_2_registrations: "If this is disabled, changing the registration system will cause technical issues. Please contact WST for assistance if you still need to change the registration system."
         competition_id: ""
         name: "The full name of the competition including the year at the end (e.g., Danish Open 2016). Be sure to capitalize. The name must contain only alphanumeric characters, dashes(-), ampersands(&), periods(.), colons(:), apostrophes('), and spaces( )."
         short_name: "A short name for displaying. If the name of the competition is below %{short_name_limit} characters this should not be edited and should be the same as the normal name."
@@ -1796,16 +1813,36 @@ en:
         link: "As a <0>%{pdfLink}</0>"
       info:
         download: "Download all of the competitions details."
+        payment_missing: "Your registration will not be approved until you pay for your registration, unless you have a special arrangement with the organizers or you paid through an alternative method."
+        needs_approval: "Don't book your travel arrangements just yet - the organizers still have to manually approve your registration. This can take time."
+        is_accepted: "Book your travel and pack your bags - you have a spot at the competition!"
+        is_cancelled: "Your registration has been cancelled and you will not be competing, but you can sign up again"
+        is_rejected: "Your registration has been rejected by the organizers. Please contact the organizing team if you believe this was a mistake."
+        is_waitlisted: "Don't book your travel, but don't give up hope either. The competition is full, but you have been placed on a waiting list, and you will receive an email if enough spots open up for you to be able to attend."
       list:
         empty: "None"
         spots_remaining_plural:
           zero: "no spots remaining"
           one: "%{count} spot remaining"
           other: "%{count} spots remaining"
+        cancelled:
+          title: "Cancelled registrations"
+          information: "Cancelled competitors are allowed to register again."
+        rejected:
+          title: "Rejected registrations"
+          information: "Rejected competitors cannot re-register."
+        payment:
+         refunded_status: "Refunded"
+         initialized: "Payment process was started on %{date}, but not finished."
+         refunded: "Payment was refunded on %{date}."
+        psychsheets:
+          go_back: "Go Back"
+        timestamp: "Timestamp"
+        comment_and_note: "Comment & Note"
+        edit_waiting_list: "Enable Waiting List Edit Mode"
       bookmark:
         unbookmark: "You have removed your bookmark"
       requirements:
-        title: "Requirements"
         acknowledgement: "I have read and acknowledged all information under the 'Register' tab, including entry fees, refund policies and any extra requirements listed above."
         next_step: "Continue to next Step"
       update:
@@ -1819,22 +1856,38 @@ en:
         move_pending: "Move to Pending"
         move_waiting: "Move to Waiting List"
         cancel: "Cancel Registration"
+        reject: "Reject Registration"
+        amount: "Amount"
         too_many: "Accepting all these registrations would go over the competitor limit by %{count}"
         no_self_update: "Contact the Organization Team to update your registration."
       register:
+        will_open_countdown: "Registration will open in %{minutes} minutes %{seconds} seconds. This page will refresh automatically when registration opens."
+        panel:
+          approval:
+            title: "Approval"
+            description: "By organization team"
+          payment:
+            title: "Payment information"
+            description: "Enter billing information"
+          competing:
+            title: "Register"
+            description: "Choose your events"
+          requirements:
+            title: "Requirements"
+            description: "Accept competition terms"
         success: "You are registered for %{comp_name}"
         error: "Registration failed with error %{error}"
         early_registration: "Registration is not open yet - you are pre-registering as an organizer/delegate"
         comment: "Additional comments to the organizers"
         until: "You can update your registration until %{date}"
         passed: "You can no longer update your registration"
-        approval: "Approval"
         view_registration: "View Registration"
         editing_disabled: "Registration editing is disabled for this competition"
         registration_status:
           accepted: "Your registration has been accepted."
           pending: "Your registration is pending approval by the organizers."
           cancelled: "Your registration has been deleted."
+          rejected: "Your registration has been rejected."
           waiting_list: "You are on the Waiting List at position %{waiting_list_position}."
         disclaimer: "Submission of Registration does not mean approval to compete"
         processing: "Your registration is processing..."
@@ -1847,14 +1900,15 @@ en:
         -1: "You have sent an invalid token, please refresh the page. If this issue persists contact WST"
         -2: "Authentication Expired, please refresh the page"
         -3: "Missing Authentication, please log in"
+        -4: "The registration service encountered an internal error. If this issue persists contact WST"
         -1000: "Competition does not exist"
         -1001: "Error fetching Competition details, please try again later"
         -2001: "You are banned from competing at WCA Competitions"
         -2002: "Your profile is incomplete"
         -2003: "You don't have the permissions to complete this action"
+        -2004: "You are not allowed to register, as the organizers have rejected your registration. Please contact them if you think there has been a mistake."
         -3000: "Registration does not exist"
-        -3001: "WCA Payment is not enabled for this competition"
-        -3002: "You need to finish your registration before you can pay"
+        -3001: "You have already registered for another Competition in the series"
         -4000: "The Request contains invalid data"
         -4001: "The event edit deadline has passed"
         -4002: "The number of guests are over the allowed limit"
@@ -1867,6 +1921,9 @@ en:
         -4009: "Only Organizers can cancel Registrations for this competition"
         -4010: "The Waiting List Position is not Valid"
         -4011: "You can only accept the first person on the waiting list"
+        -4012: "You are not qualified to compete in the selected events"
+        -6001: "WCA Payment is not enabled for this competition"
+        -6002: "You need to finish your registration before you can pay"
     #context: and when an error occured
     errors:
       invalid_name_message: "must end with a year and must contain only alphanumeric characters, dashes(-), ampersands(&), periods(.), colons(:), apostrophes('), and spaces( )"
@@ -1876,6 +1933,7 @@ en:
       must_contain_event: "must contain at least one event for this competition"
       schedule_must_match_rounds: "must have at least one round, and all rounds must be included in the schedule."
       must_contain_delegate: "must contain at least one WCA Delegate"
+      must_contain_organizer: "must contain at least one organizer"
       not_all_delegates: "are not all Delegates"
       registration_close_after_open: "registration close must be after registration open"
       registration_already_closed: "registration must not already be closed."
@@ -2042,7 +2100,6 @@ en:
         register: "Register"
         competitors: "Competitors"
         scrambles: "Scrambles"
-        enable_v2: "Enable new Registration Service"
     results_table:
       wca_profile: "WCA profile"
       event: "Event"

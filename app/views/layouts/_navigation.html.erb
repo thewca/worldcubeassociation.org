@@ -75,7 +75,7 @@
           <li><a href="<%= db_dev_export_path %>"><%= ui_icon('computer') %> <%= t '.db_dev_export' %></a></li>
         </ul>
       </li>
-      <li class="dropdown <%= Set['incidents', 'regulations', 'wdc'].include?(params[:controller]) ? 'active' : '' %>">
+      <li class="dropdown <%= Set['incidents', 'regulations', 'wic'].include?(params[:controller]) ? 'active' : '' %>">
         <a href="#" class="dropdown-toggle top-nav" data-toggle="dropdown" data-hover="dropdown">
           <%= ui_icon('book') %> <span class="hidden-sm hidden-md"><%= t '.regulations' %></span> <span class="caret"></span>
         </a>
@@ -183,7 +183,7 @@
           <% if current_user %>
             <% notification_count = notifications_for_user(current_user).length %>
             <%= react_component("UserAvatar", {
-              avatar: (current_user || User.new).avatar,
+              avatar: current_user.avatar,
               size: "tiny",
               disableHover: true,
             }, class: 'avatar-thumbnail') %>

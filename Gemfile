@@ -13,7 +13,9 @@ gem 'rails-i18n'
 gem 'i18n-js'
 gem 'activerecord-import'
 gem 'sass-rails'
-gem "sassc-embedded"
+# Some of our very old Sprockets asset code relies on gem-bundled Bootstrap 3 (grrr...)
+#   which uses SCSS features incompatible with Dart SASS 2.
+gem "sassc-embedded", '~> 1'
 gem 'terser'
 gem 'faraday'
 gem 'faraday-retry'
@@ -55,21 +57,16 @@ gem 'eu_central_bank'
 gem 'devise-jwt'
 gem 'jwt'
 gem 'iso', github: 'thewca/ruby-iso'
+gem 'csv'
+gem 'ostruct'
 
 # Pointing to jfly/selectize-rails which has a workaround for
 #  https://github.com/selectize/selectize.js/issues/953
 gem 'selectize-rails', github: 'jfly/selectize-rails'
 
-gem 'carrierwave'
-gem 'carrierwave-aws'
 gem 'aws-sdk-s3'
 gem 'aws-sdk-rds'
 gem 'aws-sdk-cloudfront'
-
-# Pointing to thewca/carrierwave-crop which has a workaround for
-#  https://github.com/kirtithorat/carrierwave-crop/issues/17
-#  and also remove jquery from dependencies (because we add it through webpack)
-gem 'carrierwave-crop', github: 'thewca/carrierwave-crop'
 
 gem 'redis'
 # Faster Redis library
@@ -89,7 +86,7 @@ gem 'i18n-country-translations', github: 'thewca/i18n-country-translations'
 gem 'http_accept_language'
 gem 'twitter_cldr'
 # version explicitly specified because Shakapacker wants to keep Gemfile and package.json in sync
-gem 'shakapacker', '8.0.1'
+gem 'shakapacker', '8.0.2'
 gem 'json-schema'
 gem 'translighterate'
 gem 'enum_help'
@@ -108,6 +105,7 @@ gem 'sidekiq'
 gem 'sidekiq-cron'
 gem 'after_commit_everywhere'
 gem 'slack-ruby-client'
+gem 'puma'
 
 group :development, :test do
   gem 'spring'
@@ -116,8 +114,6 @@ group :development, :test do
   gem 'factory_bot_rails'
   gem 'faker'
   gem 'capybara-screenshot'
-
-  gem 'puma'
 
   gem 'byebug'
   gem 'i18n-tasks'
@@ -156,9 +152,7 @@ group :test do
 end
 
 group :production do
-  gem 'unicorn'
-  # Unicorn is incompatible with Rack 3, but doesn't specify it explicitly…
-  gem 'rack', '~> 2'
+  gem 'rack'
   gem 'newrelic_rpm'
   gem 'wkhtmltopdf-binary-ng'
 end

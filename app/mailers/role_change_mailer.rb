@@ -18,12 +18,14 @@ class RoleChangeMailer < ApplicationMailer
     when UserGroup.group_types[:delegate_regions]
       metadata[:region_name] = group.name
       metadata[:status] = I18n.t("enums.user_roles.status.delegate_regions.#{role.metadata.status}")
+      metadata[:delegated_competitions_count] = role.metadata.total_delegated
     when UserGroup.group_types[:translators]
       metadata[:locale] = group.metadata.locale
     when UserGroup.group_types[:teams_committees], UserGroup.group_types[:councils], UserGroup.group_types[:officers]
       metadata[:status] = I18n.t("enums.user_roles.status.#{group.group_type}.#{role.metadata.status}")
+      metadata[:group_name] = group.name
     end
-    metadata
+    metadata.compact
   end
 
   def notify_role_start(role, user_who_made_the_change)
@@ -103,8 +105,8 @@ class RoleChangeMailer < ApplicationMailer
     when UserGroup.group_types[:banned_competitors]
       @to_list.push(
         UserRole::UserRoleEmailRecipient.new(
-          name: 'WDC',
-          email: UserGroup.teams_committees_group_wdc.metadata.email,
+          name: 'WIC',
+          email: UserGroup.teams_committees_group_wic.metadata.email,
           message: 'Informing as a competitor is newly banned.',
         ),
       )
@@ -125,6 +127,7 @@ class RoleChangeMailer < ApplicationMailer
     @user_who_made_the_change = user_who_made_the_change
     @changes = JSON.parse changes
     @group_type_name = UserGroup.group_type_name[role.group_type.to_sym]
+    @metadata = role_metadata(role)
     @today_date = Date.today
     @to_list = [wrt_email_recipient]
 
@@ -177,8 +180,8 @@ class RoleChangeMailer < ApplicationMailer
     when UserGroup.group_types[:banned_competitors]
       @to_list.push(
         UserRole::UserRoleEmailRecipient.new(
-          name: 'WDC',
-          email: UserGroup.teams_committees_group_wdc.metadata.email,
+          name: 'WIC',
+          email: UserGroup.teams_committees_group_wic.metadata.email,
           message: 'Informing as there was a change in banned details of a competitor.',
         ),
       )

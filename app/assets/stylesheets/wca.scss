@@ -52,16 +52,12 @@ table.table {
 
 .avatar-thumbnail {
   display: inline-block;
+  overflow: hidden;
   vertical-align: middle;
 
   background-size: cover;
   width: 50px;
   height: 50px;
-
-  &.avatar-thumbnail-lg {
-    width: 100px;
-    height: 100px;
-  }
 }
 
 .wca-user {
@@ -373,17 +369,6 @@ table.wca-results {
   &.fi-xw {
     border: 1px solid;
     border-image: linear-gradient(to right, red, blue) 1;
-  }
-  &.fi-tw {
-    background-color: white;
-    background-image: url("ChineseTaipei.svg");
-  }
-
-  &.fis {
-    &.fi-tw {
-      background-color: white;
-      background-image: url("ChineseTaipeiSquared.svg");
-    }
   }
 }
 

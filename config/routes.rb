@@ -60,8 +60,10 @@ Rails.application.routes.draw do
   get 'profile/claim_wca_id' => 'users#claim_wca_id'
   get 'profile/claim_wca_id/select_nearby_delegate' => 'users#select_nearby_delegate'
 
-  get 'users/:id/edit/avatar_thumbnail' => 'users#edit_avatar_thumbnail', as: :users_avatar_thumbnail_edit
-  get 'users/:id/edit/pending_avatar_thumbnail' => 'users#edit_pending_avatar_thumbnail', as: :users_pending_avatar_thumbnail_edit
+  get 'users/:id/avatar' => 'users#avatar_data', as: :users_avatar_data
+  post 'users/:id/avatar' => 'users#upload_avatar'
+  patch 'users/:id/avatar' => 'users#update_avatar'
+  delete 'users/:id/avatar' => 'users#delete_avatar'
   get 'admin/avatars' => 'admin/avatars#index'
   post 'admin/avatars' => 'admin/avatars#update_all'
 
@@ -202,6 +204,8 @@ Rails.application.routes.draw do
 
   get 'robots' => 'static_pages#robots'
 
+  get 'help/api' => 'static_pages#api_help'
+
   get 'server-status' => 'server_status#index'
 
   get 'translations', to: redirect('translations/status', status: 302)
@@ -231,7 +235,7 @@ Rails.application.routes.draw do
   get 'organizations' => 'regional_organizations#index'
   get 'admin/regional-organizations' => 'regional_organizations#admin'
 
-  get 'disciplinary' => 'wdc#root'
+  get 'disciplinary' => 'wic#root'
 
   get 'contact' => 'contacts#index'
   post 'contact' => 'contacts#contact'
@@ -320,18 +324,21 @@ Rails.application.routes.draw do
   end
 
   namespace :api do
-    get '/', to: redirect('/api/v0', status: 302)
+    get '/', to: redirect('/help/api', status: 302)
     namespace :internal do
       namespace :v1 do
         get '/users/:id/permissions' => 'permissions#index'
+        get '/competitions/:competition_id' => 'competitions#show'
+        get '/competitions/:competition_id/qualifications' => 'competitions#qualifications'
         post '/users/competitor-info' => 'users#competitor_info'
         post '/mailers/registration' => 'mailers#registration'
         post '/payment/init_stripe' => 'payment#init_stripe'
       end
     end
     namespace :v0 do
-      get '/' => 'api#help'
+      get '/', to: redirect('/help/api', status: 302)
       get '/me' => 'api#me'
+      get '/healthcheck' => 'api#healthcheck'
       get '/auth/results' => 'api#auth_results'
       get '/export/public' => 'api#export_public'
       get '/scramble-program' => 'api#scramble_program'
@@ -393,7 +400,7 @@ Rails.application.routes.draw do
         end
       end
       namespace :wfc do
-        resources :xero_users, only: [:index, :create]
+        resources :xero_users, only: [:index, :create, :update]
         resources :dues_redirects, only: [:index, :create, :destroy]
       end
     end

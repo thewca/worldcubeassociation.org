@@ -41,32 +41,14 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
     competition = competition_from_params
 
     if stale?(competition)
-      options = {
-        only: %w[id name website start_date registration_open registration_close announced_at cancelled_at end_date competitor_limit
-                 extra_registration_requirements enable_donations refund_policy_limit_date event_change_deadline_date waiting_list_deadline_date
-                 on_the_spot_registration on_the_spot_entry_fee_lowest_denomination qualification_results event_restrictions
-                 base_entry_fee_lowest_denomination currency_code allow_registration_edits allow_registration_self_delete_after_acceptance
-                 allow_registration_without_qualification refund_policy_percent use_wca_registration guests_per_registration_limit venue contact
-                 force_comment_in_registration use_wca_registration external_registration_page guests_entry_fee_lowest_denomination guest_entry_status
-                 information events_per_registration_limit],
-        methods: %w[url website short_name city venue_address venue_details latitude_degrees longitude_degrees country_iso2 event_ids registration_currently_open?
-                    main_event_id number_of_bookmarks using_payment_integrations? uses_qualification? uses_cutoff? competition_series_ids],
-        include: %w[delegates organizers tabs],
-      }
-      render json: competition.as_json(options)
+      render json: competition.to_competition_info
     end
   end
 
   def qualifications
     competition = competition_from_params(associations: [:competition_events])
 
-    qualifications = competition.competition_events
-                                .where.not(qualification: nil)
-                                .index_by(&:event_id)
-                                .transform_values(&:qualification)
-                                .transform_values(&:to_wcif)
-
-    render json: qualifications
+    render json: competition.qualification_wcif
   end
 
   def schedule
@@ -94,15 +76,11 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
       {
         id: round&.id,
         roundTypeId: round_type.id,
-        # Also include the (localized) name here, we don't have i18n in js yet.
-        name: round&.name || "#{event.name} #{round_type.name}",
         results: results.sort_by { |r| [r.pos, r.personName] },
       }
     end
     render json: {
       id: event.id,
-      # Also include the (localized) name here, we don't have i18n in js yet.
-      name: event.name,
       rounds: rounds,
     }
   end
@@ -120,17 +98,18 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
                                     .group_by(&:round_type)
                                     .sort_by { |round_type, _| -round_type.rank }
     rounds = scrambles_by_round.map do |round_type, scrambles|
+      # I think all competitions now have round data, but let's be cautious
+      # and assume they may not.
+      # round data.
+      round = competition.find_round_for(event.id, round_type.id)
       {
-        id: round_type,
-        # Also include the (localized) name here, we don't have i18n in js yet.
-        name: round_type.name,
+        id: round&.id,
+        roundTypeId: round_type.id,
         scrambles: scrambles,
       }
     end
     render json: {
       id: event.id,
-      # Also include the (localized) name here, we don't have i18n in js yet.
-      name: event.name,
       rounds: rounds,
     }
   end
