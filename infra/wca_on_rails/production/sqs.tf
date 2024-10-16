@@ -10,6 +10,6 @@ resource "aws_sqs_queue" "this" {
   receive_wait_time_seconds  = 0
   visibility_timeout_seconds = 60
   tags = {
-    Env = "staging"
+    Env = "Production"
   }
 }
