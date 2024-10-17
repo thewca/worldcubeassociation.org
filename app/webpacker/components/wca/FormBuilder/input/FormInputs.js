@@ -21,7 +21,7 @@ import {
   readValueRecursive,
   useSectionAllowDisabledOverride,
   useSectionDisabled,
-  useSections
+  useSections,
 } from '../provider/FormSectionProvider';
 import { useFormObjectSection, useFormSectionUpdateAction } from '../EditForm';
 import { useFormContext } from '../provider/FormObjectProvider';
