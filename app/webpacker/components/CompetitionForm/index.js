@@ -1,4 +1,4 @@
-import React, {useCallback, useMemo} from 'react';
+import React, { useCallback } from 'react';
 import { Divider } from 'semantic-ui-react';
 import _ from 'lodash';
 import VenueInfo from './FormSections/VenueInfo';
@@ -82,6 +82,7 @@ export default function Wrapper({
   isPersisted = false,
   isSeriesPersisted = false,
   isCloning = false,
+  editingUserId = null,
 }) {
   const backendUrlFn = (comp, initialComp) => {
     if (isPersisted) {
@@ -99,6 +100,13 @@ export default function Wrapper({
     return isConfirmed && !isAdminView;
   }, [isAdminView]);
 
+  const areDisabledOverridesAllowed = useCallback((formState) => {
+    const { staff: { staffDelegateIds, traineeDelegateIds } } = formState;
+    const allDelegates = [...staffDelegateIds, ...traineeDelegateIds];
+
+    return isAdminView || allDelegates.includes(editingUserId);
+  }, [editingUserId, isAdminView]);
+
   return (
     <StoreProvider
       reducer={_.identity}
@@ -110,6 +118,7 @@ export default function Wrapper({
         isPersisted,
         isSeriesPersisted,
         isCloning,
+        editingUserId,
       }}
     >
       <EditForm
@@ -119,6 +128,7 @@ export default function Wrapper({
         CustomHeader={Header}
         CustomFooter={Footer}
         disabledOverrideFn={isDisabled}
+        allowDisableOverridesFn={areDisabledOverridesAllowed}
       >
         <CompetitionForm />
       </EditForm>
