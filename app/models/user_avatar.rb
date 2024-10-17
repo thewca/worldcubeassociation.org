@@ -197,6 +197,13 @@ class UserAvatar < ApplicationRecord
   def invalidate_thumbnail_if_approved
     return unless AppSecrets.CDN_AVATARS_DISTRIBUTION_ID.present?
 
+    thumbnail_changed = self.thumbnail_crop_x_previously_changed? ||
+                        self.thumbnail_crop_y_previously_changed? ||
+                        self.thumbnail_crop_w_previously_changed? ||
+                        self.thumbnail_crop_h_previously_changed?
+
+    return unless thumbnail_changed
+
     cloudfront_sdk = ::Aws::CloudFront::Client.new(
       region: EnvConfig.S3_AVATARS_REGION,
       access_key_id: AppSecrets.AWS_ACCESS_KEY_ID,
