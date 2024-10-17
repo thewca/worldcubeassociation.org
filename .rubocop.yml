@@ -234,3 +234,7 @@ Naming/BlockForwarding:
 
 Style/ArgumentsForwarding:
   RedundantBlockArgumentNames: []
+
+Lint/MissingSuper:
+  Exclude:
+    - 'lib/wca_exceptions.rb'

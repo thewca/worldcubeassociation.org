@@ -205,7 +205,6 @@ RSpec.describe Registrations::RegistrationChecker do
         competition = FactoryBot.create(:competition, :registration_open, :with_organizer)
         registration_request = FactoryBot.build(
           :registration_request,
-          :organizer_submits,
           competition_id: default_competition.id,
           user_id: default_user.id,
           submitted_by: competition.organizers.first.id,
@@ -397,7 +396,7 @@ RSpec.describe Registrations::RegistrationChecker do
 
       it 'organizer cant register more events than the events_per_registration_limit' do
         registration_request = FactoryBot.build(
-          :registration_request, :organizer, events: ['333', '222', '444', '555', '666', '777'], competition_id: event_limit_comp.id, user_id: default_user.id
+          :registration_request, events: ['333', '222', '444', '555', '666', '777'], competition_id: event_limit_comp.id, user_id: default_user.id
         )
 
         expect {
