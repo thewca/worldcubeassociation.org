@@ -18,6 +18,18 @@
     <% @delegate_report.md_sections.each do |section| %>
       <%= f.input section, input_html: { class: "markdown-editor markdown-editor-image-upload" } %>
     <% end %>
+
+    <% if @delegate_report.requires_setup_images? %>
+      <%= f.input :setup_images, input_html: { multiple: true, accept: 'image/*' } %>
+
+      <% if @delegate_report.setup_images.attached? %>
+        <% @delegate_report.setup_images.each do |image| %>
+          <%= image_tag image.variant(resize: '100x100').processed %>
+          <%= link_to 'Delete', delegate_report_delete_image_path(competition_id: @delegate_report.competition_id, image_id: image.id), method: :delete %>
+        <% end %>
+      <% end %>
+    <% end %>
+
     <%= f.input :wrc_feedback_requested, as: :boolean %>
     <%= f.input :wrc_incidents %>
     <%= f.input :wic_feedback_requested, as: :boolean %>
