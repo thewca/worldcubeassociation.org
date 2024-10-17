@@ -3,6 +3,7 @@
   - default
   - wca_jobs
   - mailers
+  - check_records
 development:
   :concurrency: 5
   :verbose: true

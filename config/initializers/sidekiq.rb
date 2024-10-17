@@ -4,7 +4,7 @@ Sidekiq.configure_server do |config|
   config.redis = { url: EnvConfig.SIDEKIQ_REDIS_URL }
 
   # Run all queues except cronjobs in the default runner
-  config.queues = %w[critical default mailers]
+  config.queues = %w[critical default mailers check_records]
   # Three queues, three threads. We don't want to steal too much resources from Rails,
   #   especially regarding the DB connection pool which is limited to 5 resources by default
   config.concurrency = 3
