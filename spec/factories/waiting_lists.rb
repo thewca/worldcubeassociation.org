@@ -5,4 +5,3 @@ FactoryBot.define do
     entries { [] }
   end
 end
-

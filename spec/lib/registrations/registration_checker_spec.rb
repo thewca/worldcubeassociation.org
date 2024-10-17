@@ -810,7 +810,6 @@ RSpec.describe Registrations::RegistrationChecker do
         expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, User.find(update_request['submitted_by'])) }
           .not_to raise_error
       end
-
     end
 
     describe '#update_registration_allowed!.validate_comment!' do
@@ -1728,7 +1727,7 @@ RSpec.describe Registrations::RegistrationChecker do
     end
 
     describe '#update_registration_allowed!.validate_waiting_list_position!' do
-      let(:waiting_list) { FactoryBot.create(:waiting_list, holder: default_competition)}
+      let(:waiting_list) { FactoryBot.create(:waiting_list, holder: default_competition) }
 
       before do
         waiting_list.add(FactoryBot.create(:registration, :waiting_list, competition: default_competition).user_id)
@@ -1737,14 +1736,13 @@ RSpec.describe Registrations::RegistrationChecker do
         waiting_list.add(FactoryBot.create(:registration, :waiting_list, competition: default_competition).user_id)
       end
 
-
       it 'must be an integer, not string' do
         update_request = FactoryBot.build(
           :update_request,
           user_id: default_registration.user_id,
           competition_id: default_registration.competition.id,
           submitted_by: default_competition.organizers.first.id,
-          competing: { 'waiting_list_position' => 'b' }
+          competing: { 'waiting_list_position' => 'b' },
         )
 
         expect {
@@ -1763,7 +1761,7 @@ RSpec.describe Registrations::RegistrationChecker do
           user_id: default_registration.user_id,
           competition_id: default_registration.competition.id,
           submitted_by: default_competition.organizers.first.id,
-          competing: { 'waiting_list_position' => '1' }
+          competing: { 'waiting_list_position' => '1' },
         )
 
         expect {
@@ -1777,7 +1775,7 @@ RSpec.describe Registrations::RegistrationChecker do
           user_id: default_registration.user_id,
           competition_id: default_registration.competition.id,
           submitted_by: default_competition.organizers.first.id,
-          competing: { 'waiting_list_position' => 2.0 }
+          competing: { 'waiting_list_position' => 2.0 },
         )
 
         expect {
@@ -1796,7 +1794,7 @@ RSpec.describe Registrations::RegistrationChecker do
           user_id: default_registration.user_id,
           competition_id: default_registration.competition.id,
           submitted_by: default_competition.organizers.first.id,
-          competing: { 'waiting_list_position' => 0 }
+          competing: { 'waiting_list_position' => 0 },
         )
 
         expect {
@@ -1815,7 +1813,7 @@ RSpec.describe Registrations::RegistrationChecker do
           user_id: default_registration.user_id,
           competition_id: default_registration.competition.id,
           submitted_by: default_competition.organizers.first.id,
-          competing: { 'waiting_list_position' => 6 }
+          competing: { 'waiting_list_position' => 6 },
         )
 
         expect {
@@ -1842,9 +1840,11 @@ RSpec.describe Registrations::RegistrationChecker do
       let(:user_without_results) { FactoryBot.create(:user, :wca_id) }
       let(:dnfs_only) { FactoryBot.create(:user, :wca_id) }
 
-      let(:easy_registration_with_results_reg) { FactoryBot.create(
-        :registration, :skip_validations, user: user_with_results, competition: easy_qualifications
-      )}
+      let(:easy_registration_with_results_reg) {
+        FactoryBot.create(
+          :registration, :skip_validations, user: user_with_results, competition: easy_qualifications
+        )
+      }
 
       before do
         FactoryBot.create(:result, competition: past_competition, person: user_with_results.person, eventId: '222', best: 400, average: 500)
@@ -1867,7 +1867,7 @@ RSpec.describe Registrations::RegistrationChecker do
           :update_request,
           user_id: easy_registration_with_results_reg.user_id,
           competition_id: easy_registration_with_results_reg.competition.id,
-          competing: { 'event_ids' => ['222', '333', '555', '444', 'pyram', 'minx'] }
+          competing: { 'event_ids' => ['222', '333', '555', '444', 'pyram', 'minx'] },
         )
 
         expect {
@@ -1876,24 +1876,30 @@ RSpec.describe Registrations::RegistrationChecker do
       end
 
       RSpec.shared_examples 'update succeed: qualification not enforced' do |event_ids|
-        let(:reg_with_results_for_unenforced_hard_quali) { FactoryBot.create(
-          :registration, :skip_validations, user: user_with_results, competition: unenforced_hard_qualifications
-        )}
+        let(:reg_with_results_for_unenforced_hard_quali) {
+          FactoryBot.create(
+            :registration, :skip_validations, user: user_with_results, competition: unenforced_hard_qualifications
+          )
+        }
 
-        let(:reg_with_no_results_for_unenforced_hard_quali) { FactoryBot.create(
-          :registration, :skip_validations, user: user_without_results, competition: unenforced_hard_qualifications
-        )}
+        let(:reg_with_no_results_for_unenforced_hard_quali) {
+          FactoryBot.create(
+            :registration, :skip_validations, user: user_without_results, competition: unenforced_hard_qualifications
+          )
+        }
 
-        let(:reg_with_results_for_unenforced_easy_quali) { FactoryBot.create(
-          :registration, :skip_validations, user: user_with_results, competition: unenforced_easy_qualifications
-        )}
+        let(:reg_with_results_for_unenforced_easy_quali) {
+          FactoryBot.create(
+            :registration, :skip_validations, user: user_with_results, competition: unenforced_easy_qualifications
+          )
+        }
 
         it "user with not good enough results: can register given #{event_ids}" do
           update_request = FactoryBot.build(
             :update_request,
             user_id: reg_with_results_for_unenforced_hard_quali.user_id,
             competition_id: reg_with_results_for_unenforced_hard_quali.competition.id,
-            competing: { 'event_ids' => event_ids }
+            competing: { 'event_ids' => event_ids },
           )
 
           expect {
@@ -1906,7 +1912,7 @@ RSpec.describe Registrations::RegistrationChecker do
             :update_request,
             user_id: reg_with_no_results_for_unenforced_hard_quali.user_id,
             competition_id: reg_with_no_results_for_unenforced_hard_quali.competition.id,
-            competing: { 'event_ids' => event_ids }
+            competing: { 'event_ids' => event_ids },
           )
 
           expect {
@@ -1919,7 +1925,7 @@ RSpec.describe Registrations::RegistrationChecker do
             :update_request,
             user_id: reg_with_results_for_unenforced_easy_quali.user_id,
             competition_id: reg_with_results_for_unenforced_easy_quali.competition.id,
-            competing: { 'event_ids' => event_ids }
+            competing: { 'event_ids' => event_ids },
           )
 
           expect {
@@ -1938,20 +1944,24 @@ RSpec.describe Registrations::RegistrationChecker do
       end
 
       RSpec.shared_examples 'update succeed: qualification enforced' do |description, event_ids|
-        let(:reg_with_results_easy_quali) { FactoryBot.create(
-          :registration, :skip_validations, user: user_with_results, competition: easy_qualifications
-        )}
+        let(:reg_with_results_easy_quali) {
+          FactoryBot.create(
+            :registration, :skip_validations, user: user_with_results, competition: easy_qualifications
+          )
+        }
 
-        let(:reg_with_results_future_easy_quali) { FactoryBot.create(
-          :registration, :skip_validations, user: user_with_results, competition: easy_future_qualifications
-        )}
+        let(:reg_with_results_future_easy_quali) {
+          FactoryBot.create(
+            :registration, :skip_validations, user: user_with_results, competition: easy_future_qualifications
+          )
+        }
 
         it description.to_s do
           update_request = FactoryBot.build(
             :update_request,
             user_id: reg_with_results_easy_quali.user_id,
             competition_id: reg_with_results_easy_quali.competition.id,
-            competing: { 'event_ids' => event_ids }
+            competing: { 'event_ids' => event_ids },
           )
 
           expect {
@@ -1964,7 +1974,7 @@ RSpec.describe Registrations::RegistrationChecker do
             :update_request,
             user_id: reg_with_results_future_easy_quali.user_id,
             competition_id: reg_with_results_future_easy_quali.competition.id,
-            competing: { 'event_ids' => event_ids }
+            competing: { 'event_ids' => event_ids },
           )
 
           expect {
@@ -1983,24 +1993,30 @@ RSpec.describe Registrations::RegistrationChecker do
       end
 
       RSpec.shared_examples 'update fail: qualification enforced' do |event_ids|
-        let(:user_with_results_registering_for_past) { FactoryBot.create(
-          :registration, :skip_validations, user: user_with_results, competition: past_qualifications
-        )}
+        let(:user_with_results_registering_for_past) {
+          FactoryBot.create(
+            :registration, :skip_validations, user: user_with_results, competition: past_qualifications
+          )
+        }
 
-        let(:user_without_results_easy_quali) { FactoryBot.create(
-          :registration, :skip_validations, user: user_without_results, competition: easy_qualifications
-        )}
+        let(:user_without_results_easy_quali) {
+          FactoryBot.create(
+            :registration, :skip_validations, user: user_without_results, competition: easy_qualifications
+          )
+        }
 
-        let(:user_with_dnfs_easy_quali) { FactoryBot.create(
-          :registration, :skip_validations, user: dnfs_only, competition: easy_qualifications
-        )}
+        let(:user_with_dnfs_easy_quali) {
+          FactoryBot.create(
+            :registration, :skip_validations, user: dnfs_only, competition: easy_qualifications
+          )
+        }
 
         it "cant register for #{event_ids} if result is achieved too late" do
           update_request = FactoryBot.build(
             :update_request,
             user_id: user_with_results_registering_for_past.user_id,
             competition_id: user_with_results_registering_for_past.competition.id,
-            competing: { 'event_ids' => event_ids }
+            competing: { 'event_ids' => event_ids },
           )
 
           expect {
@@ -2017,7 +2033,7 @@ RSpec.describe Registrations::RegistrationChecker do
             :update_request,
             user_id: user_without_results_easy_quali.user_id,
             competition_id: user_without_results_easy_quali.competition.id,
-            competing: { 'event_ids' => event_ids }
+            competing: { 'event_ids' => event_ids },
           )
 
           expect {
@@ -2027,7 +2043,6 @@ RSpec.describe Registrations::RegistrationChecker do
             expect(error.status).to eq(:unprocessable_entity)
             expect(error.data).to eq(event_ids)
           end
-
         end
 
         it "cant register for #{event_ids} if result is DNF" do
@@ -2035,7 +2050,7 @@ RSpec.describe Registrations::RegistrationChecker do
             :update_request,
             user_id: user_with_dnfs_easy_quali.user_id,
             competition_id: user_with_dnfs_easy_quali.competition.id,
-            competing: { 'event_ids' => event_ids }
+            competing: { 'event_ids' => event_ids },
           )
 
           expect {
@@ -2067,7 +2082,7 @@ RSpec.describe Registrations::RegistrationChecker do
             :update_request,
             user_id: slow_single_reg.user_id,
             competition_id: slow_single_reg.competition.id,
-            competing: { 'event_ids' => ['333'] }
+            competing: { 'event_ids' => ['333'] },
           )
 
           expect {
@@ -2088,7 +2103,7 @@ RSpec.describe Registrations::RegistrationChecker do
             :update_request,
             user_id: slow_single_reg.user_id,
             competition_id: slow_single_reg.competition.id,
-            competing: { 'event_ids' => ['333'] }
+            competing: { 'event_ids' => ['333'] },
           )
 
           expect {
@@ -2109,7 +2124,7 @@ RSpec.describe Registrations::RegistrationChecker do
             :update_request,
             user_id: slow_average_reg.user_id,
             competition_id: slow_average_reg.competition.id,
-            competing: { 'event_ids' => ['555'] }
+            competing: { 'event_ids' => ['555'] },
           )
 
           expect {
@@ -2130,7 +2145,7 @@ RSpec.describe Registrations::RegistrationChecker do
             :update_request,
             user_id: slow_average_reg.user_id,
             competition_id: slow_average_reg.competition.id,
-            competing: { 'event_ids' => ['555'] }
+            competing: { 'event_ids' => ['555'] },
           )
 
           expect {
@@ -2140,25 +2155,26 @@ RSpec.describe Registrations::RegistrationChecker do
             expect(error.status).to eq(:unprocessable_entity)
             expect(error.data).to eq(['555'])
           end
-
         end
       end
     end
 
     describe '#update_registration_allowed!.updating series registrations' do
-        let(:registrationA) { FactoryBot.create(:registration, :accepted) }
+      let(:registrationA) { FactoryBot.create(:registration, :accepted) }
 
-        let(:series) { FactoryBot.create(:competition_series) }
-        let(:competitionA) { registrationA.competition }
-        let(:competitionB) { FactoryBot.create(
+      let(:series) { FactoryBot.create(:competition_series) }
+      let(:competitionA) { registrationA.competition }
+      let(:competitionB) {
+        FactoryBot.create(
           :competition, :registration_open, :editable_registrations, :with_organizer, competition_series: series, series_base: competitionA
-        )}
+        )
+      }
 
-        let(:registrationB) { FactoryBot.create(:registration, :deleted, competition: competitionB, user_id: registrationA.user.id) }
+      let(:registrationB) { FactoryBot.create(:registration, :deleted, competition: competitionB, user_id: registrationA.user.id) }
 
-        before do
-          competitionA.update!(competition_series: series)
-        end
+      before do
+        competitionA.update!(competition_series: series)
+      end
 
       it 'cant re-register (register after cancelling) if they have a registration for another series comp' do
         update_request = FactoryBot.build(
@@ -2267,7 +2283,7 @@ RSpec.describe Registrations::RegistrationChecker do
           user_ids: user_ids,
           submitted_by: default_competition.organizers.first.id,
           competition_id: default_competition.id,
-          requests: [failed_update]
+          requests: [failed_update],
         )
 
         expect {

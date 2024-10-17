@@ -43,10 +43,11 @@ module WcaExceptions
     end
   end
 
-  class BulkUpdateError < ApiException
+  class BulkUpdateError < StandardError
     attr_reader :status, :errors
 
     def initialize(status, errors)
+      super
       @status = status
       @errors = errors
     end
