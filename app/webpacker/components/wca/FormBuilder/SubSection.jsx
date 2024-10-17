@@ -1,9 +1,20 @@
 import React, { useMemo } from 'react';
-import SectionProvider, { useSectionDisabled, useSections } from './provider/FormSectionProvider';
+import SectionProvider, {
+  useSectionAllowDisabledOverride,
+  useSectionDisabled,
+  useSections,
+} from './provider/FormSectionProvider';
 
-export default function SubSection({ section, children, ignoreDisabled }) {
+export default function SubSection({
+  section,
+  children,
+  disabled = false,
+  allowDisabledOverride = true,
+}) {
   const sections = useSections();
+
   const parentDisabled = useSectionDisabled();
+  const parentAllowDisabledOverride = useSectionAllowDisabledOverride();
 
   const currentSubSection = useMemo(
     () => sections.concat(section),
@@ -13,7 +24,8 @@ export default function SubSection({ section, children, ignoreDisabled }) {
   return (
     <SectionProvider
       section={currentSubSection}
-      disabled={parentDisabled && !ignoreDisabled}
+      disabled={parentDisabled || disabled}
+      allowDisabledOverride={parentAllowDisabledOverride && allowDisabledOverride}
     >
       {children}
     </SectionProvider>

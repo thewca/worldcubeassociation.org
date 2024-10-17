@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, {useCallback, useMemo} from 'react';
 import { Divider } from 'semantic-ui-react';
 import _ from 'lodash';
 import VenueInfo from './FormSections/VenueInfo';

@@ -4,11 +4,11 @@ import SubSection from '../../wca/FormBuilder/SubSection';
 
 export default function Staff() {
   return (
-    <SubSection section="staff" ignoreDisabled>
-      <InputUsers id="staffDelegateIds" delegateOnly required />
-      <InputUsers id="traineeDelegateIds" traineeOnly />
-      <InputUsers id="organizerIds" required />
-      <InputString id="contact" mdHint />
+    <SubSection section="staff">
+      <InputUsers id="staffDelegateIds" delegateOnly required ignoreDisabled />
+      <InputUsers id="traineeDelegateIds" traineeOnly ignoreDisabled />
+      <InputUsers id="organizerIds" required ignoreDisabled />
+      <InputString id="contact" mdHint ignoreDisabled />
     </SubSection>
   );
 }
