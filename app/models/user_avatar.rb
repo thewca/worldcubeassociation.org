@@ -204,6 +204,7 @@ class UserAvatar < ApplicationRecord
     )
 
     store_path = self.thumbnail_image.processed.key.delete_prefix('/')
+    api_reference = "avatar-thumbnail_#{self.id}_#{Time.now.to_i}"
 
     # the hash keys and structure are per Amazon AWS' documentation
     # https://docs.aws.amazon.com/sdk-for-ruby/v3/api/Aws/CloudFront/Client.html#create_invalidation-instance_method
@@ -214,7 +215,7 @@ class UserAvatar < ApplicationRecord
                                              quantity: 1,
                                              items: ["/#{store_path}"], # AWS SDK throws an error if the path doesn't start with "/"
                                            },
-                                           caller_reference: "avatar-thumbnail-#{self.id}",
+                                           caller_reference: api_reference,
                                          },
                                        })
   end
