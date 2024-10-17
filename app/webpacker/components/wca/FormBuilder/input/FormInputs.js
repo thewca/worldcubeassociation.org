@@ -17,7 +17,12 @@ import { AddChampionshipButton, ChampionshipSelect } from './InputChampionship';
 import UtcDatePicker from '../../UtcDatePicker';
 import { IdWcaSearch } from '../../../SearchWidget/WcaSearch';
 import SEARCH_MODELS from '../../../SearchWidget/SearchModel';
-import { readValueRecursive, useSectionDisabled, useSections } from '../provider/FormSectionProvider';
+import {
+  readValueRecursive,
+  useSectionAllowDisabledOverride,
+  useSectionDisabled,
+  useSections,
+} from '../provider/FormSectionProvider';
 import { useFormObjectSection, useFormSectionUpdateAction } from '../EditForm';
 import { useFormContext } from '../provider/FormObjectProvider';
 
@@ -106,6 +111,7 @@ const wrapInput = (
 
   const section = useSections();
   const sectionDisabled = useSectionDisabled();
+  const sectionAllowDisabledOverride = useSectionAllowDisabledOverride();
 
   const formValues = useFormObjectSection();
   const updateFormValue = useFormSectionUpdateAction();
@@ -139,7 +145,10 @@ const wrapInput = (
 
   const noLabel = passDownLabel ? 'ignore' : props.noLabel;
 
-  const disabled = sectionDisabled || props.disabled;
+  const elementDisabled = sectionDisabled || props.disabled;
+  const elementIgnoreDisabled = sectionAllowDisabledOverride && props.ignoreDisabled;
+
+  const disabled = elementDisabled && !elementIgnoreDisabled;
 
   const passDownDisabled = additionalPropNames.includes('disabled');
   if (passDownDisabled) inputProps.disabled = disabled;
