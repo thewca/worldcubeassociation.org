@@ -19,6 +19,8 @@ class DelegateReport < ApplicationRecord
 
   enum :version, [:legacy, :working_group_2024], suffix: true, default: :working_group_2024
 
+  has_many_attached :setup_images
+
   attr_accessor :current_user
 
   before_create :set_discussion_url
@@ -71,6 +73,10 @@ class DelegateReport < ApplicationRecord
 
   def md_sections
     AVAILABLE_SECTIONS.filter { |section| self.uses_section?(section) }
+  end
+
+  def requires_setup_images?
+    self.version_for_database >= DelegateReport.versions[:working_group_2024]
   end
 
   def can_see_submit_button?(current_user)
