@@ -20,6 +20,7 @@ import { personUrl } from '../../../lib/requests/routes.js.erb';
 import Errored from '../../Requests/Errored';
 import { formatAttemptResult } from '../../../lib/wca-live/attempts';
 import i18n from '../../../lib/i18n';
+import { countries } from "../../../lib/wca-data.js.erb";
 
 const sortReducer = createSortReducer(['name', 'country', 'total']);
 
@@ -135,7 +136,7 @@ export default function RegistrationList({ competitionInfo }) {
           return a.user.name.localeCompare(b.user.name);
         }
         if (sortColumn === 'country') {
-          return a.user.country.name.localeCompare(b.user.country.name);
+          return countries.byIso2[a.user.country.iso2].name.localeCompare(countries.byIso2[b.user.country.iso2].name);
         }
         if (sortColumn === 'total') {
           return a.competing.event_ids.length - b.competing.event_ids.length;
@@ -255,7 +256,7 @@ export default function RegistrationList({ competitionInfo }) {
                   <Flag
                     name={registration.user.country.iso2.toLowerCase()}
                   />
-                  {registration.user.country.name}
+                  {countries.byIso2[registration.user.country.iso2].name}
                 </Table.Cell>
                 {psychSheetEvent === undefined ? (
                   <>
