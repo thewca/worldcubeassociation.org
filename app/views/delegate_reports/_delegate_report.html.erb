@@ -82,9 +82,10 @@
   <% if delegate_report.setup_images.attached? %>
     <div>
       <h2>Setup Images</h2>
+      <p>(Click to get a larger view)</p>
       <div style="display: flex; flex-wrap: wrap; justify-content: space-around; align-items: center">
         <% delegate_report.setup_images.each do |image| %>
-          <%= link_to url_for(image) do %>
+          <%= link_to url_for(image), target: :_blank do %>
             <%= image_tag image.variant(:preview).processed %>
           <% end %>
         <% end %>
