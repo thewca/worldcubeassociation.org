@@ -79,6 +79,11 @@
     </div>
   <% end %>
 
+  <h2>Setup Images</h2>
+  <% delegate_report.setup_images.each do |image| %>
+
+  <% end %>
+
   <%# Technically, 'remarks' is also a Markdown section but it's the only one that doesn't have a template %>
   <%# and (as of writing this comment) we always want to include it no matter which Report version. %>
   <div>
