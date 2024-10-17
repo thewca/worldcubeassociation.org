@@ -460,6 +460,8 @@ pt:
         subRegion: Subregião
         #original_hash: 730db33
         receive_delegate_reports: Quero receber Relatórios de Competições da WCA de Delegados por email
+        #original_hash: 8667157
+        delegate_reports_region: Apenas quero receber Relatórios de Delegados para a seguinte região
         #original_hash: 57eaf24
         user_preferred_events: Eventos preferidos
         #original_hash: e632fbf
@@ -764,6 +766,11 @@ pt:
           Se for Delegado Sénior ou membro do WRC ou do WQAC, recebe Relatórios
           de Delegados por defeito. Nota: a alteração pode levar até uma hora a
           tomar efeito.
+        #original_hash: 364624c
+        delegate_reports_region: >-
+          Se pretender receber todos os relatórios, deixe este campo em branco
+          (a opção pendente no topo). Nota: a alteração pode demorar até uma
+          hora para entrar em vigor.
         #original_hash: 0627e5c
         otp_attempt: >-
           Verifique a aplicação móvel configurada para uma password ou insira um
@@ -1855,6 +1862,8 @@ pt:
       new: 'Nova miniatura:'
       #original_hash: efc007a
       save: Guardar
+      #original_hash: 44c57ab
+      reset: Reiniciar
     edit:
       #original_hash: 9239ee2
       general: Geral
@@ -1886,6 +1895,10 @@ pt:
       pending_mail_confirmation: 'Está pendente a confirmação do novo email (%{email}) para esta conta.'
       #original_hash: 0340b0b
       pending_avatar_confirmation: Está pendente a confirmação do novo avatar para esta conta.
+      #original_hash: 81fa5f9
+      pending_avatar_edit_action: 'Clique aqui se quiser editá-lo:'
+      #original_hash: 73cebb8
+      pending_avatar_edit_warning: A editar avatar pendente!
       #original_hash: 7b06f03
       pending_claim_confirmation_html: >-
         Esta conta está a aguardar que %{delegate} confirme o ID da WCA
@@ -1957,10 +1970,10 @@ pt:
         '3': 'Se há mais de uma pessoa na foto, deve estar claro qual delas você é.'
         #original_hash: 4083c00
         '4': 'A sua cabeça, mas não necessariamente toda a face, deve estar visível.'
-        #original_hash: 7c0aab3
+        #original_hash: fc17fa7
         '5': >-
-          O avatar não deve incluir texto sobreposto ou filtros não naturais,
-          incluindo bordas.
+          O avatar não deve incluir texto sobreposto, autocolantes ou filtros
+          não naturais, incluindo bordas.
         #original_hash: cc5f23a
         '6': O avatar deve ser submetido na orientação correta.
         #original_hash: 1a18831
@@ -2047,8 +2060,6 @@ pt:
         Não temos um nome registado para este ID da WCA. Por favor envie um
         email para a <a href='%{wrt_contact_path}' target='_blank'>Equipa de
         Resultados da WCA</a> para resolver isto.
-      #original_hash: d02c03b
-      avatar_requires_wca_id: necessita um ID da WCA associado
       #original_hash: 8f785ea
       email_used_by_locked_account_html: >-
         já é usado por outra conta. Foi criado automaticamente como resultado de
@@ -3758,6 +3769,11 @@ pt:
         #original_hash: 462376a
         no_self_update: Contacte a Equipa de Organização para atualizar o seu registo.
       register:
+        #original_hash: e8cc296
+        will_open_countdown: >-
+          As inscrições serão abertas em %{minutes} minutos e %{seconds}
+          segundos. Esta página será atualizada automaticamente quando o registo
+          for aberto.
         panel:
           approval:
             #original_hash: 8cc047a
