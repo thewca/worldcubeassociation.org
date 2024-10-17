@@ -87,6 +87,12 @@ RUN gem install mailcatcher
 
 ENTRYPOINT ["/rails/bin/docker-entrypoint-sidekiq"]
 
+FROM runtime AS shoryuken
+
+USER rails:rails
+
+ENTRYPOINT ["/rails/bin/docker-entrypoint-shoryuken"]
+
 FROM runtime AS monolith
 
 EXPOSE 3000
