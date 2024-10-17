@@ -218,8 +218,8 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
               - DateTime.fromISO(b.competing.registered_on).toMillis();
           case 'paid_on_with_registered_on_fallback':
           {
-            const hasAPaid = a.payment.payment_status === 'succeeded';
-            const hasBPaid = b.payment.payment_status === 'succeeded';
+            const hasAPaid = a.payment.has_paid;
+            const hasBPaid = b.payment.has_paid;
 
             if (hasAPaid && hasBPaid) {
               return DateTime.fromISO(a.payment.updated_at).toMillis()
