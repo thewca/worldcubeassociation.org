@@ -54,7 +54,7 @@ class DelegateReport < ApplicationRecord
   validates :wrc_incidents, presence: true, if: :wrc_feedback_requested
   validates :wic_incidents, presence: true, if: :wic_feedback_requested
 
-  validate :setup_image_count
+  validate :setup_image_count, if: :posted?
   private def setup_image_count
     if self.setup_images.count < self.required_setup_images_count
       errors.add(:setup_images, "Needs at least #{self.required_setup_images_count} images")
