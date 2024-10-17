@@ -129,7 +129,7 @@ export default function Wrapper({
         backendOptions={backendOptions}
         CustomHeader={Header}
         CustomFooter={Footer}
-        disabledOverrideFn={isDisabled}
+        disabledFn={isDisabled}
         allowDisableOverridesFn={areDisabledOverridesAllowed}
       >
         <CompetitionForm />
