@@ -77,6 +77,7 @@ export default function Wrapper({
   competition = null,
   usesV2Registrations = false,
   canChangeRegistrationSystem = false,
+  hasAnyRegistrations = false,
   storedEvents = [],
   isAdminView = false,
   isPersisted = false,
@@ -113,6 +114,7 @@ export default function Wrapper({
       initialState={{
         usesV2Registrations,
         canChangeRegistrationSystem,
+        hasAnyRegistrations,
         storedEvents,
         isAdminView,
         isPersisted,

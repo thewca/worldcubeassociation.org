@@ -6,7 +6,7 @@ import { competitionMaxShortNameLength } from '../../../lib/wca-data.js.erb';
 import { useFormObject } from '../../wca/FormBuilder/provider/FormObjectProvider';
 
 export default function NameDetails() {
-  const { isPersisted, isAdminView } = useStore();
+  const { hasAnyRegistrations, isPersisted, isAdminView } = useStore();
 
   const { name } = useFormObject();
 
@@ -15,7 +15,7 @@ export default function NameDetails() {
 
   return (
     <>
-      {isPersisted && <InputString id="competitionId" disabled={disableIdAndShortName} />}
+      {isPersisted && <InputString id="competitionId" disabled={disableIdAndShortName || hasAnyRegistrations} />}
       <InputString id="name" required />
       {isPersisted && (
         <InputString
