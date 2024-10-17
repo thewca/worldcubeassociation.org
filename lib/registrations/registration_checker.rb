@@ -30,21 +30,25 @@ module Registrations
       validate_update_status!(update_request, competition, requester_user, requestee_user, registration)
       validate_update_events!(update_request, competition)
       validate_qualifications!(update_request, competition, requestee_user)
+    rescue ActiveRecord::RecordNotFound
+      raise WcaExceptions::RegistrationError.new(:not_found, Registrations::ErrorCodes::REGISTRATION_NOT_FOUND)
     end
 
-    def self.bulk_update_allowed!(bulk_update_request, competition, requesting_user)
-      raise BulkUpdateError.new(:unauthorized, [Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS]) unless
+    def self.bulk_update_allowed!(bulk_update_request, requesting_user)
+      competition = Competition.find(bulk_update_request['competition_id'])
+
+      raise WcaExceptions::BulkUpdateError.new(:unauthorized, [Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS]) unless
         requesting_user.can_manage_competition?(competition)
 
       errors = {}
       bulk_update_request['requests'].each do |update_request|
-        update_registration_allowed!(update_request, competition, requesting_user)
+        update_registration_allowed!(update_request, requesting_user)
       rescue WcaExceptions::RegistrationError => e
         Rails.logger.debug { "Bulk update was rejected with error #{e.error} at #{e.backtrace[0]}" }
         errors[update_request['user_id']] = e.error
       end
 
-      raise BulkUpdateError.new(:unprocessable_entity, errors) unless errors.empty?
+      raise WcaExceptions::BulkUpdateError.new(:unprocessable_entity, errors) unless errors.empty?
     end
 
     class << self

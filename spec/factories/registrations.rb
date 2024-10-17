@@ -13,6 +13,10 @@ FactoryBot.define do
     end
     competition_events { competition.competition_events.where(event: events) }
 
+    trait :skip_validations do
+      to_create { |instance| instance.save(validate: false) }
+    end
+
     trait :accepted do
       accepted_at { Time.now }
     end

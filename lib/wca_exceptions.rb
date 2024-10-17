@@ -42,4 +42,13 @@ module WcaExceptions
       @data = data
     end
   end
+
+  class BulkUpdateError < ApiException
+    attr_reader :status, :errors
+
+    def initialize(status, errors)
+      @status = status
+      @errors = errors
+    end
+  end
 end

@@ -491,6 +491,8 @@ FactoryBot.define do
     end
 
     after(:create) do |competition| # TODO: This can be combined with the above after(:create) block
+      create(:waiting_list, holder: competition)
+
       competition.delegates.each do |delegate|
         unless delegate.region_id.nil? # There can be cases where the competition delegate is actually not a delegate (temporary delegate)
           if UserGroup.find(delegate.region_id).lead_user.nil? # Allowing to manually create senior delegate for the delegate if needed.

@@ -78,4 +78,22 @@ FactoryBot.define do
       instance['competing'] = evaluator.competing if evaluator.competing
     end
   end
+
+  factory :bulk_update_request, class: Hash do
+    transient do
+      user_ids { [] }
+    end
+
+    submitted_by { nil }
+    competition_id { nil }
+    jwt_token { fetch_jwt_token(submitted_by) }
+
+    requests do
+      user_ids.map do |user_id|
+        FactoryBot.build(:update_request, user_id: user_id, competition_id: competition_id, competing: { 'status' => 'deleted' })
+      end
+    end
+
+    initialize_with { attributes.stringify_keys }
+  end
 end
