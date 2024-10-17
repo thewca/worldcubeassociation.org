@@ -23,8 +23,8 @@ def lambda_handler(event:, context:)
       headers: {
         "Access-Control-Allow-Headers" => "*",
         "Access-Control-Allow-Origin" => "*",
-        "Access-Control-Allow-Methods" => "OPTIONS,POST,GET"
-      }
+        "Access-Control-Allow-Methods" => "OPTIONS,POST,GET",
+      },
     }
   else
     sqs_client = Aws::SQS::Client.new(region: EnvConfig.AWS_REGION)
@@ -43,8 +43,8 @@ def lambda_handler(event:, context:)
       headers: {
         "Access-Control-Allow-Headers" => "*",
         "Access-Control-Allow-Origin" => "*",
-        "Access-Control-Allow-Methods" => "OPTIONS,POST,GET"
-      }
+        "Access-Control-Allow-Methods" => "OPTIONS,POST,GET",
+      },
     }
   end
 
@@ -55,8 +55,8 @@ def lambda_handler(event:, context:)
     headers: {
       "Access-Control-Allow-Headers" => "*",
       "Access-Control-Allow-Origin" => "*",
-      "Access-Control-Allow-Methods" => "OPTIONS,POST,GET"
-    }
+      "Access-Control-Allow-Methods" => "OPTIONS,POST,GET",
+    },
   }
 rescue StandardError => e
   # Handle any errors
@@ -66,7 +66,7 @@ rescue StandardError => e
     headers: {
       "Access-Control-Allow-Headers" => "*",
       "Access-Control-Allow-Origin" => "*",
-      "Access-Control-Allow-Methods" => "OPTIONS,POST,GET"
-    }
+      "Access-Control-Allow-Methods" => "OPTIONS,POST,GET",
+    },
   }
 end
