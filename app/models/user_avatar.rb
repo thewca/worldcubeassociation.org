@@ -14,6 +14,8 @@ class UserAvatar < ApplicationRecord
 
   default_scope { with_attached_public_image }
 
+  delegate :attached?, to: :image
+
   enum :status, {
     pending: 'pending',
     approved: 'approved',
@@ -76,7 +78,7 @@ class UserAvatar < ApplicationRecord
 
   def using_cdn?
     # Approved avatars are actively being used and should therefor be served by our CDN
-    self.approved?
+    self.approved? && self.attached?
   end
 
   def filename
@@ -189,7 +191,7 @@ class UserAvatar < ApplicationRecord
   end
 
   after_save :invalidate_thumbnail_if_approved,
-             if: [:active_storage?, :approved?],
+             if: [:active_storage?, :approved?, :attached?],
              unless: :destroyed?
 
   def invalidate_thumbnail_if_approved
