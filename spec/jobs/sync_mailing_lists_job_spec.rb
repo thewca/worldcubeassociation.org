@@ -111,7 +111,7 @@ RSpec.describe SyncMailingListsJob, type: :job do
                                       africa_delegate_1.user.email, wic_leader.email, wic_member.email),
     )
 
-    Continent.real.each do |continent|
+    Continent.uncached_real.each do |continent|
       continent_users = continent.id == reports_region_sample.continent_id ? [africa_delegate_2.user] : []
 
       expect(GsuiteMailingLists).to receive(:sync_group).with(
@@ -119,7 +119,7 @@ RSpec.describe SyncMailingListsJob, type: :job do
         a_collection_containing_exactly("reports@worldcubeassociation.org", *continent_users.pluck(:email)),
       )
 
-      continent.countries.real.each do |country|
+      continent.countries.uncached_real.each do |country|
         country_users = country.id == reports_region_sample.id ? [africa_delegate_3.user] : []
 
         expect(GsuiteMailingLists).to receive(:sync_group).with(
