@@ -7,7 +7,7 @@ resource "aws_lambda_function" "registration_status_lambda" {
   source_code_hash = filebase64sha256("./lambda/processing_status.zip")
   vpc_config {
     security_group_ids = [var.shared.cluster_security.id]
-    subnet_ids = [var.shared.private_subnets[*].id]
+    subnet_ids = var.shared.private_subnets[*].id
   }
   timeout = 10
   environment {
