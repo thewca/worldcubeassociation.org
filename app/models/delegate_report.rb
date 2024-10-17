@@ -19,7 +19,9 @@ class DelegateReport < ApplicationRecord
 
   enum :version, [:legacy, :working_group_2024], suffix: true, default: :working_group_2024
 
-  has_many_attached :setup_images
+  has_many_attached :setup_images do |attachable|
+    attachable.variant :preview, resize_to_limit: [100, 100]
+  end
 
   attr_accessor :current_user
 

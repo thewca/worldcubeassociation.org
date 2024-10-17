@@ -27,15 +27,15 @@
       <%= f.input :setup_images, multiple: true, input_html: { multiple: true, accept: 'image/*' } %>
 
       <% if @delegate_report.setup_images.attached? %>
-        <div>
+        <div class="row">
           <% @delegate_report.setup_images.each do |image| %>
-            <span>
-              <%= image_tag image.variant(resize: '100x100').processed %>
+            <div class="col-sm-1 thumb">
+              <%= image_tag image.variant(:preview).processed %>
 
               <% if @delegate_report.setup_images.count > @delegate_report.required_setup_images_count %>
                 <%= link_to 'Delete', delegate_report_delete_image_path(competition_id: @delegate_report.competition_id, image_id: image.id), method: :delete %>
               <% end %>
-            </span>
+            </div>
           <% end %>
         </div>
       <% end %>
