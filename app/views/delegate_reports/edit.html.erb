@@ -20,13 +20,24 @@
     <% end %>
 
     <% if @delegate_report.requires_setup_images? %>
-      <%= f.input :setup_images, input_html: { multiple: true, accept: 'image/*' } %>
+      <% @delegate_report.setup_images.each do |image| %>
+        <%= f.hidden_field :setup_images, multiple: true, value: image.signed_id %>
+      <% end %>
+
+      <%= f.input :setup_images, multiple: true, input_html: { multiple: true, accept: 'image/*' } %>
 
       <% if @delegate_report.setup_images.attached? %>
-        <% @delegate_report.setup_images.each do |image| %>
-          <%= image_tag image.variant(resize: '100x100').processed %>
-          <%= link_to 'Delete', delegate_report_delete_image_path(competition_id: @delegate_report.competition_id, image_id: image.id), method: :delete %>
-        <% end %>
+        <div>
+          <% @delegate_report.setup_images.each do |image| %>
+            <span>
+              <%= image_tag image.variant(resize: '100x100').processed %>
+
+              <% if @delegate_report.setup_images.count > @delegate_report.required_setup_images_count %>
+                <%= link_to 'Delete', delegate_report_delete_image_path(competition_id: @delegate_report.competition_id, image_id: image.id), method: :delete %>
+              <% end %>
+            </span>
+          <% end %>
+        </div>
       <% end %>
     <% end %>
 
