@@ -14,6 +14,8 @@ class UserAvatar < ApplicationRecord
 
   default_scope { with_attached_public_image }
 
+  delegate :attached?, to: :image
+
   enum :status, {
     pending: 'pending',
     approved: 'approved',
@@ -42,7 +44,7 @@ class UserAvatar < ApplicationRecord
         Rails.application.routes.url_helpers.rails_representation_url(self.image)
       end
     when 'local'
-      ActionController::Base.helpers.asset_url(self.filename, host: EnvConfig.ROOT_URL)
+      ActionController::Base.helpers.asset_url(self.filename)
     end
   end
 
@@ -76,7 +78,7 @@ class UserAvatar < ApplicationRecord
 
   def using_cdn?
     # Approved avatars are actively being used and should therefor be served by our CDN
-    self.approved?
+    self.approved? && self.attached?
   end
 
   def filename
@@ -189,11 +191,18 @@ class UserAvatar < ApplicationRecord
   end
 
   after_save :invalidate_thumbnail_if_approved,
-             if: [:active_storage?, :approved?],
+             if: [:active_storage?, :approved?, :attached?],
              unless: :destroyed?
 
   def invalidate_thumbnail_if_approved
     return unless AppSecrets.CDN_AVATARS_DISTRIBUTION_ID.present?
+
+    thumbnail_changed = self.thumbnail_crop_x_previously_changed? ||
+                        self.thumbnail_crop_y_previously_changed? ||
+                        self.thumbnail_crop_w_previously_changed? ||
+                        self.thumbnail_crop_h_previously_changed?
+
+    return unless thumbnail_changed
 
     cloudfront_sdk = ::Aws::CloudFront::Client.new(
       region: EnvConfig.S3_AVATARS_REGION,
@@ -202,6 +211,7 @@ class UserAvatar < ApplicationRecord
     )
 
     store_path = self.thumbnail_image.processed.key.delete_prefix('/')
+    api_reference = "avatar-thumbnail_#{self.id}_#{Time.now.to_i}"
 
     # the hash keys and structure are per Amazon AWS' documentation
     # https://docs.aws.amazon.com/sdk-for-ruby/v3/api/Aws/CloudFront/Client.html#create_invalidation-instance_method
@@ -212,7 +222,7 @@ class UserAvatar < ApplicationRecord
                                              quantity: 1,
                                              items: ["/#{store_path}"], # AWS SDK throws an error if the path doesn't start with "/"
                                            },
-                                           caller_reference: "avatar-thumbnail-#{self.id}",
+                                           caller_reference: api_reference,
                                          },
                                        })
   end
@@ -233,15 +243,8 @@ class UserAvatar < ApplicationRecord
 
   def to_wcif
     {
-      "id" => self.id,
       "url" => self.url,
       "thumbUrl" => self.thumbnail_url,
-      "thumbnail" => {
-        "x" => self.thumbnail_crop_x,
-        "y" => self.thumbnail_crop_y,
-        "width" => self.thumbnail_crop_w,
-        "height" => self.thumbnail_crop_h,
-      },
     }
   end
 
@@ -249,18 +252,8 @@ class UserAvatar < ApplicationRecord
     {
       "type" => ["object", "null"],
       "properties" => {
-        "id" => { "type" => "integer" },
         "url" => { "type" => "string" },
         "thumbUrl" => { "type" => "string" },
-        "thumbnail" => {
-          "type" => "object",
-          "properties" => {
-            "x" => { "type" => "integer" },
-            "y" => { "type" => "integer" },
-            "width" => { "type" => "integer" },
-            "height" => { "type" => "integer" },
-          },
-        },
       },
     }
   end
