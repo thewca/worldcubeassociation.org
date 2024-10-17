@@ -79,9 +79,11 @@
     </div>
   <% end %>
 
-  <h2>Setup Images</h2>
-  <% delegate_report.setup_images.each do |image| %>
-
+  <% if delegate_report.setup_images.attached? %>
+    <h2>Setup Images</h2>
+    <% delegate_report.setup_images.each do |image| %>
+      <%= image_tag image %>
+    <% end %>
   <% end %>
 
   <%# Technically, 'remarks' is also a Markdown section but it's the only one that doesn't have a template %>
