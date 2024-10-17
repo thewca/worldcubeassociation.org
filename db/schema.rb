@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_10_09_111904) do
+ActiveRecord::Schema[7.2].define(version: 2024_10_17_124804) do
   create_table "Competitions", id: { type: :string, limit: 32, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", limit: 50, default: "", null: false
     t.string "cityName", limit: 50, default: "", null: false
@@ -576,6 +576,17 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_09_111904) do
     t.string "championship_type", null: false
     t.index ["championship_type"], name: "index_championships_on_championship_type"
     t.index ["competition_id", "championship_type"], name: "index_championships_on_competition_id_and_championship_type", unique: true
+  end
+
+  create_table "check_records_results", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "competition_id"
+    t.string "event_id"
+    t.datetime "run_start"
+    t.datetime "run_end"
+    t.json "results"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["competition_id", "event_id"], name: "index_check_records_results_on_competition_id_and_event_id", unique: true
   end
 
   create_table "competition_delegates", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
