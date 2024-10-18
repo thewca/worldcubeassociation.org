@@ -777,7 +777,10 @@ class User < ApplicationRecord
   end
 
   def can_change_users_avatar?(user)
-    user.wca_id.present? && self.editable_fields_of_user(user).include?(:current_avatar)
+    # We use the ability to `remove_avatar` as a general check for whether edits are allowed.
+    #   Otherwise, checking for competitions of `current_avatar` and `pending_avatar` might be
+    #   too cumbersome depending on the context (ie depending on where this method is being called from)
+    self.editable_fields_of_user(user).include?(:remove_avatar)
   end
 
   def organizer_for?(user)
@@ -1068,11 +1071,12 @@ class User < ApplicationRecord
 
   private def editable_avatar_fields(user)
     fields = Set.new
-    if admin? || results_team?
-      fields += %i(current_avatar)
-    end
     if user == self || admin? || results_team? || is_senior_delegate_for?(user)
-      fields += %i(pending_avatar)
+      fields += %i(pending_avatar avatar_thumbnail remove_avatar)
+
+      if can_admin_results?
+        fields += %i(current_avatar)
+      end
     end
     fields
   end
