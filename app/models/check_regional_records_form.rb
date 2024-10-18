@@ -10,8 +10,6 @@ class CheckRegionalRecordsForm
   end
 
   def run_check
-    ActiveRecord::Base.connected_to(role: :read_replica) do
-      CheckRegionalRecords.check_records(self.check_event_id, self.competition_id)
-    end
+    CheckRecordsJob.perform_later(self.competition_id, self.check_event_id)
   end
 end
