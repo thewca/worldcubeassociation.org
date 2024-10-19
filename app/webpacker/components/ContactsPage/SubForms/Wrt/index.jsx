@@ -1,12 +1,12 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import {
   FormField, FormGroup, Radio,
 } from 'semantic-ui-react';
 import I18n from '../../../../lib/i18n';
 import { useDispatch, useStore } from '../../../../lib/providers/StoreProvider';
-import { updateSectionData } from '../../store/actions';
-import EditProfileQuery from './EditProfileQuery';
+import { setFormRedirection, updateSectionData } from '../../store/actions';
 import OtherQuery from './OtherQuery';
+import { contactEditProfileActionUrl } from '../../../../lib/requests/routes.js.erb';
 
 const SECTION = 'wrt';
 const QUERY_TYPES = ['edit_profile', 'report_result_issue', 'other_query'];
@@ -21,14 +21,17 @@ export default function Wrt() {
   );
 
   const QueryForm = useMemo(() => {
-    if (!selectedQueryType) return null;
-    switch (selectedQueryType) {
-      case QUERY_TYPES_MAP.editProfile:
-        return EditProfileQuery;
-      default:
-        return OtherQuery;
-    }
+    if (!selectedQueryType || selectedQueryType === QUERY_TYPES_MAP.editProfile) return null;
+    return OtherQuery;
   }, [selectedQueryType]);
+
+  useEffect(() => {
+    if (selectedQueryType === QUERY_TYPES_MAP.editProfile) {
+      dispatch(setFormRedirection(SECTION, contactEditProfileActionUrl));
+    } else {
+      dispatch(setFormRedirection(SECTION, null));
+    }
+  }, [dispatch, selectedQueryType]);
 
   return (
     <>
