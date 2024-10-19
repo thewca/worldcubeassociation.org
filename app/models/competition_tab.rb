@@ -34,12 +34,12 @@ class CompetitionTab < ApplicationRecord
     competition.tabs.where("display_order > ?", display_order).update_all("display_order = display_order - 1")
   end
 
-  validate :verify_if_urls_are_full_urls, on: :update
-  private def verify_if_urls_are_full_urls
+  validate :verify_if_full_urls, on: :update
+  private def verify_if_full_urls
     content.scan(/\[(.*?)\]\((.*?)\)/).any? do |match|
       url = match[1]
       unless url.starts_with?('http://', 'https://')
-        errors.add(:content, I18n.t('competition_tabs.not_full_url_error_message', url: url))
+        errors.add(:content, I18n.t('competitions.errors.not_full_url', url: url))
       end
     end
   end
