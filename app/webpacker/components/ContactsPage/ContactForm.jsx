@@ -38,9 +38,10 @@ export default function ContactForm({
   const contactFormState = useStore();
   const dispatch = useDispatch();
   const { formValues: { contactRecipient: selectedContactRecipient, userData } } = contactFormState;
+  const formRedirection = contactFormState.formValues[selectedContactRecipient]?.formRedirection;
 
   const isFormValid = (
-    selectedContactRecipient && userData.name && userData.email && captchaValue
+    selectedContactRecipient && userData.name && userData.email && (captchaValue || formRedirection)
   );
 
   const contactSuccessHandler = () => {
@@ -116,28 +117,39 @@ export default function ContactForm({
           ))}
         </FormGroup>
         {SubForm && <SubForm />}
-        <FormField>
-          <ReCAPTCHA
-            sitekey={recaptchaPublicKey}
-          // onChange is a mandatory parameter for ReCAPTCHA. According to the documentation, this
-          // is called when user successfully completes the captcha, hence we are assuming that any
-          // existing errors will be cleared when onChange is called.
-            onChange={setCaptchaValue}
-            onErrored={setCaptchaError}
-          />
-          {captchaError && (
-          <Message
-            error
-            content={I18n.t('page.contacts.form.captcha.validation_error')}
-          />
-          )}
-        </FormField>
-        <Button
-          disabled={!isFormValid}
-          type="submit"
-        >
-          {I18n.t('page.contacts.form.submit_button')}
-        </Button>
+        {formRedirection ? (
+          <Button
+            disabled={!isFormValid}
+            href={formRedirection}
+          >
+            {I18n.t('page.contacts.form.next_button')}
+          </Button>
+        ) : (
+          <>
+            <FormField>
+              <ReCAPTCHA
+                sitekey={recaptchaPublicKey}
+                // onChange is a mandatory parameter for ReCAPTCHA. According to the documentation,
+                // this is called when user successfully completes the captcha, hence we are
+                // assuming that any existing errors will be cleared when onChange is called.
+                onChange={setCaptchaValue}
+                onErrored={setCaptchaError}
+              />
+              {captchaError && (
+              <Message
+                error
+                content={I18n.t('page.contacts.form.captcha.validation_error')}
+              />
+              )}
+            </FormField>
+            <Button
+              disabled={!isFormValid}
+              type="submit"
+            >
+              {I18n.t('page.contacts.form.submit_button')}
+            </Button>
+          </>
+        )}
       </Form>
     </>
   );

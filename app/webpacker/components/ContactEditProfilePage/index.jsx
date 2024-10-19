@@ -22,6 +22,13 @@ export default function ContactEditProfilePage({ loggedInUserId, recaptchaPublic
 
   if (isLoading) return <Loading />;
   if (isError) return <Errored />;
+  if (!loggedInUserData) {
+    return (
+      <Message error>
+        <I18nHTMLTranslate i18nKey="page.contact_edit_profile.not_logged_in_error" />
+      </Message>
+    );
+  }
   if (loggedInUserData && !wcaId) {
     return (
       <Message error>
@@ -29,7 +36,6 @@ export default function ContactEditProfilePage({ loggedInUserId, recaptchaPublic
       </Message>
     );
   }
-
   if (contactSuccess) {
     return (
       <Message

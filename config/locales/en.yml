@@ -869,6 +869,7 @@ en:
             label: "Message"
         captcha:
           validation_error: "Please verify that you are not a robot."
+        next_button: "Next"
         submit_button: "Submit"
     contact_edit_profile:
       title: "Edit Profile Form"
