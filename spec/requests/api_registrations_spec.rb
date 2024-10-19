@@ -144,6 +144,8 @@ RSpec.describe 'API Registrations' do
     let(:registration3) { FactoryBot.create(:registration, competition: competition, user: user3) }
 
     it 'admin submits a bulk update containing 1 update' do
+      puts Registration.all.count
+
       bulk_update_request = FactoryBot.build(
         :bulk_update_request,
         user_ids: [registration1.user_id],
@@ -308,6 +310,56 @@ RSpec.describe 'API Registrations' do
       expect(Registration.find_by(user_id: update_request1['user_id']).competing_status).to eq('accepted')
       expect(Registration.find_by(user_id: update_request2['user_id']).competing_status).to eq('accepted')
       expect(Registration.find_by(user_id: update_request3['user_id']).competing_status).to eq('accepted')
+    end
+  end
+
+  describe 'GET #list_admin' do
+    let(:competition) { FactoryBot.create :competition, :registration_open, :editable_registrations, :with_organizer }
+
+    let(:user1) { FactoryBot.create :user }
+    let(:user2) { FactoryBot.create :user }
+    let(:user3) { FactoryBot.create :user }
+    let(:user4) { FactoryBot.create :user }
+    let(:user5) { FactoryBot.create :user }
+    let(:user6) { FactoryBot.create :user }
+
+    let!(:registration1) { FactoryBot.create(:registration, :accepted, competition: competition, user: user1) }
+    let!(:registration2) { FactoryBot.create(:registration, :accepted, competition: competition, user: user2) }
+    let!(:registration3) { FactoryBot.create(:registration, :accepted, competition: competition, user: user3) }
+    let!(:registration4) { FactoryBot.create(:registration, :waiting_list, competition: competition, user: user4) }
+    let!(:registration5) { FactoryBot.create(:registration, :waiting_list, competition: competition, user: user5) }
+    let!(:registration6) { FactoryBot.create(:registration, :waiting_list, competition: competition, user: user6) }
+
+    before do
+      FactoryBot.create(:waiting_list, holder: competition)
+      competition.waiting_list.add(registration4.user_id)
+      competition.waiting_list.add(registration5.user_id)
+      competition.waiting_list.add(registration6.user_id)
+    end
+
+    it 'returns multiple registrations' do
+      headers = { 'Authorization' => fetch_jwt_token(competition.organizers.first.id) }
+      get api_v1_registrations_list_registrations_admin_path(competition_id: competition.id), headers: headers
+
+      expect(response.status).to eq(200)
+
+      body = JSON.parse(response.body)
+      expect(body.count).to eq(6)
+
+      user_ids = [user1.id, user2.id, user3.id, user4.id, user5.id, user6.id]
+      body.each do |data|
+        expect(user_ids.include?(data['user_id'])).to eq(true)
+        if data['user_id'] == registration1[:user_id] || data['user_id'] == registration2[:user_id] ||data['user_id'] == registration3[:user_id]
+          expect(data.dig('competing', 'registration_status')).to eq('accepted')
+          expect(data.dig('competing', 'waiting_list_position')).to eq(nil)
+        elsif data['user_id'] == registration4[:user_id]
+          expect(data.dig('competing', 'waiting_list_position')).to eq(1)
+        elsif data['user_id'] == registration5[:user_id]
+          expect(data.dig('competing', 'waiting_list_position')).to eq(2)
+        elsif data['user_id'] == registration6[:user_id]
+          expect(data.dig('competing', 'waiting_list_position')).to eq(3)
+        end
+      end
     end
   end
 end
