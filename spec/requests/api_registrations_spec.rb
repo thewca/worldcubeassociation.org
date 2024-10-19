@@ -87,7 +87,7 @@ RSpec.describe 'API Registrations' do
 
           error_json = {
             error: Registrations::ErrorCodes::QUALIFICATION_NOT_MET,
-            data: events
+            data: events,
           }.to_json
 
           expect(response.body).to eq(error_json)
@@ -110,7 +110,7 @@ RSpec.describe 'API Registrations' do
         user_id: registration.user_id,
         competition_id: registration.competition.id,
         competing: { 'status' => 'deleted' },
-        guests: 3
+        guests: 3,
       )
       headers = { 'Authorization' => update_request['jwt_token'] }
 
@@ -126,8 +126,8 @@ RSpec.describe 'API Registrations' do
 
       history = registration.registration_history
       expect(history.length).to eq(1)
-      expect(history.first[:changed_attributes].dig('guests')).to eq('3')
-      expect(history.first[:changed_attributes].dig('deleted_at')).to be_present
+      expect(history.first[:changed_attributes]['guests']).to eq('3')
+      expect(history.first[:changed_attributes]['deleted_at']).to be_present
       expect(history.first[:action]).to eq('Competitor update')
     end
   end
@@ -162,7 +162,7 @@ RSpec.describe 'API Registrations' do
 
       history = registration.registration_history
       expect(history.length).to eq(1)
-      expect(history.first[:changed_attributes].dig('deleted_at')).to be_present
+      expect(history.first[:changed_attributes]['deleted_at']).to be_present
       expect(history.first[:action]).to eq('Admin update')
     end
 
@@ -195,7 +195,7 @@ RSpec.describe 'API Registrations' do
         user_ids: [registration1.user_id],
         submitted_by: competition.organizers.first.id,
         competition_id: competition.id,
-        requests: [update_request1, update_request2, update_request3]
+        requests: [update_request1, update_request2, update_request3],
       )
 
       headers = { 'Authorization' => bulk_update_request['jwt_token'] }
@@ -238,7 +238,7 @@ RSpec.describe 'API Registrations' do
         user_ids: [registration1.user_id],
         submitted_by: competition.organizers.first.id,
         competition_id: competition.id,
-        requests: [update_request1, update_request2, update_request3]
+        requests: [update_request1, update_request2, update_request3],
       )
 
       headers = { 'Authorization' => bulk_update_request['jwt_token'] }
@@ -297,7 +297,7 @@ RSpec.describe 'API Registrations' do
         user_ids: [registration1.user_id],
         submitted_by: competition.organizers.first.id,
         competition_id: competition.id,
-        requests: [update_request1, update_request2, update_request3]
+        requests: [update_request1, update_request2, update_request3],
       )
 
       headers = { 'Authorization' => bulk_update_request['jwt_token'] }
