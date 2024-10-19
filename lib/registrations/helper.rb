@@ -7,7 +7,7 @@ module Registrations
     MIGHT_ATTEND_STATES = %w[pending waiting_list accepted].freeze
 
     def self.action_type(request, current_user)
-      self_updating = request[:user_id] == current_user
+      self_updating = request[:user_id].to_i == current_user
       status = request.dig('competing', 'status')
       if status == 'cancelled'
         return self_updating ? 'Competitor delete' : 'Admin delete'

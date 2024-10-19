@@ -19,14 +19,15 @@ module Registrations
         registration.add_history_entry(changes, "worker", user_id, "Worker processed")
       end
 
-      def self.update!(lane_params, current_user_id, competition_id)
-        guests = lane_params[:guests]
-        status = lane_params.dig('competing', 'status')
-        comment = lane_params.dig('competing', 'comment')
-        event_ids = lane_params.dig('competing', 'event_ids')
-        admin_comment = lane_params.dig('competing', 'admin_comment')
-        waiting_list_position = lane_params.dig('competing', 'waiting_list_position')
-        user_id = lane_params[:user_id]
+      def self.update!(update_params, current_user_id)
+        guests = update_params[:guests]
+        status = update_params.dig('competing', 'status')
+        comment = update_params.dig('competing', 'comment')
+        event_ids = update_params.dig('competing', 'event_ids')
+        admin_comment = update_params.dig('competing', 'admin_comment')
+        waiting_list_position = update_params.dig('competing', 'waiting_list_position')
+        user_id = update_params[:user_id]
+        competition_id = update_params[:competition_id]
 
         registration = Registration.find_by(competition_id: competition_id, user_id: user_id)
         old_status = registration.competing_status
@@ -52,7 +53,7 @@ module Registrations
           changes[:event_ids] = event_ids if event_ids.present?
 
           registration.save!
-          registration.add_history_entry(changes, 'user', current_user_id, Registrations::Helper.action_type(lane_params, current_user_id))
+          registration.add_history_entry(changes, 'user', current_user_id, Registrations::Helper.action_type(update_params, current_user_id))
         end
 
         send_status_change_email(registration, status, old_status, user_id, current_user_id)
@@ -73,7 +74,7 @@ module Registrations
           registration.waitlisted_at = Time.now.utc
         when "accepted"
           registration.accepted_at = Time.now.utc
-        when "cancelled"
+        when "deleted"
           registration.deleted_at = Time.now.utc
         when "rejected"
           registration.rejected_at = Time.now.utc
@@ -90,7 +91,7 @@ module Registrations
           RegistrationsMailer.notify_registrant_of_pending_registration(registration).deliver_later
         when 'accepted'
           RegistrationsMailer.notify_registrant_of_accepted_registration(registration).deliver_later
-        when 'rejected', 'cancelled'
+        when 'rejected', 'deleted'
           if user_id == current_user_id
             RegistrationsMailer.notify_organizers_of_deleted_registration(registration).deliver_later
           else
