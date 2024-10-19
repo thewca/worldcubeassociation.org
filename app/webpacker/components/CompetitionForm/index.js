@@ -75,7 +75,6 @@ function CompetitionForm() {
 
 export default function Wrapper({
   competition = null,
-  usesV2Registrations = false,
   canChangeRegistrationSystem = false,
   hasAnyRegistrations = false,
   storedEvents = [],
@@ -104,7 +103,6 @@ export default function Wrapper({
     <StoreProvider
       reducer={_.identity}
       initialState={{
-        usesV2Registrations,
         canChangeRegistrationSystem,
         hasAnyRegistrations,
         storedEvents,
