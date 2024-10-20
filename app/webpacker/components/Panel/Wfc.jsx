@@ -17,6 +17,7 @@ export default function Wfc() {
         PANEL_PAGES.countryBands,
         PANEL_PAGES.xeroUsers,
         PANEL_PAGES.duesRedirect,
+        PANEL_PAGES.equipments,
         ...(loggedInUserPermissions.canAccessWfcSeniorMatters
           ? [PANEL_PAGES.delegateProbations] : []),
       ]}

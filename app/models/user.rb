@@ -629,6 +629,7 @@ class User < ApplicationRecord
       :regionsAdmin,
       :downloadVoters,
       :generateDbToken,
+      :equipments,
     ].index_with { |panel_page| panel_page.to_s.underscore.dasherize }
   end
 

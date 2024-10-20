@@ -148,6 +148,7 @@ export const subordinateDelegateClaimsUrl = `<%= CGI.unescape(Rails.application.
 export const subordinateUpcomingCompetitionsUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.competitions_for_senior_path) %>`;
 export const wfcCompetitionsExportUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.wfc_competitions_export_path) %>`;
 export const generateDbTokenUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.panel_generate_db_token_path) %>`
+export const panelWfcEquipmentsUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.panel_wfc_equipments_path) %>`;
 
 export const wfcXeroUsersUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_wfc_xero_users_path) %>`;
 
@@ -180,6 +181,8 @@ export const adminAvatarsUrl = `<%= CGI.unescape(Rails.application.routes.url_he
 export const contactUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.contact_path) %>`
 
 export const contactRecipientUrl = (contactRecipient) => `<%= CGI.unescape(Rails.application.routes.url_helpers.contact_path(contactRecipient: "${contactRecipient}")) %>`
+
+export const contactGearOrderUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.contact_gear_order_action_path) %>`
 
 export const apiV0Urls = {
   users: {

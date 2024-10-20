@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_10_09_111904) do
+ActiveRecord::Schema[7.2].define(version: 2024_10_20_064836) do
   create_table "Competitions", id: { type: :string, limit: 32, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", limit: 50, default: "", null: false
     t.string "cityName", limit: 50, default: "", null: false
@@ -1321,6 +1321,16 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_09_111904) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["redirect_to_id"], name: "index_wfc_dues_redirects_on_redirect_to_id"
+  end
+
+  create_table "wfc_equipments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "description", null: false
+    t.bigint "price_in_usd", null: false
+    t.string "brand", null: false
+    t.boolean "in_stock_for_purchase", default: false, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "wfc_xero_users", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|

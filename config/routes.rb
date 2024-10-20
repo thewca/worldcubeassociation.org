@@ -193,6 +193,7 @@ Rails.application.routes.draw do
     get 'wfc' => 'panel#wfc', as: :panel_wfc
     get 'generate_db_token' => 'panel#generate_db_token', as: :panel_generate_db_token
   end
+  resources :panel_wfc_equipments, only: [:index, :create, :update]
   get 'panel/:panel_id' => 'panel#index', as: :panel_index
   resources :notifications, only: [:index]
 
@@ -239,8 +240,12 @@ Rails.application.routes.draw do
 
   get 'contact' => 'contacts#index'
   post 'contact' => 'contacts#contact'
-  get 'contact/dob' => 'contacts#dob'
-  post 'contact/dob' => 'contacts#dob_create'
+  scope 'contact' do
+    get 'gear_order' => 'contacts#gear_order'
+    post 'gear_order' => 'contacts#gear_order_action', as: :contact_gear_order_action
+    get 'dob' => 'contacts#dob', as: :contact_dob
+    post 'dob' => 'contacts#dob_create'
+  end
 
   get '/regulations' => 'regulations#show', id: 'index'
   get '/regulations/wca-regulations-and-guidelines', to: redirect('https://regulations.worldcubeassociation.org/wca-regulations-and-guidelines.pdf', status: 302)
