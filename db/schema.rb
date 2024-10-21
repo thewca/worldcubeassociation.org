@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_10_09_111904) do
+ActiveRecord::Schema[7.2].define(version: 2024_10_21_145709) do
   create_table "Competitions", id: { type: :string, limit: 32, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", limit: 50, default: "", null: false
     t.string "cityName", limit: 50, default: "", null: false
@@ -256,6 +256,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_09_111904) do
     t.index ["eventId", "best"], name: "Results_eventAndBest"
     t.index ["eventId", "competitionId", "roundTypeId", "countryId", "average"], name: "Results_regionalAverageRecordCheckSpeedup"
     t.index ["eventId", "competitionId", "roundTypeId", "countryId", "best"], name: "Results_regionalSingleRecordCheckSpeedup"
+    t.index ["eventId", "countryId"], name: "index_Results_on_eventId_and_countryId"
     t.index ["eventId", "value1"], name: "index_Results_on_eventId_and_value1"
     t.index ["eventId", "value2"], name: "index_Results_on_eventId_and_value2"
     t.index ["eventId", "value3"], name: "index_Results_on_eventId_and_value3"
