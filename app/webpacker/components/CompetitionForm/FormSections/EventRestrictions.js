@@ -14,7 +14,6 @@ import { useFormObject } from '../../wca/FormBuilder/provider/FormObjectProvider
 
 export default function EventRestrictions() {
   const {
-    usesV2Registrations,
     isCloning,
     isPersisted,
     storedEvents,
@@ -26,6 +25,9 @@ export default function EventRestrictions() {
       earlyPuzzleSubmission,
       qualificationResults,
       eventLimitation,
+    },
+    admin: {
+      usesV2Registrations,
     },
   } = useFormObject();
 

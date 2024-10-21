@@ -614,7 +614,14 @@ class Competition < ApplicationRecord
   end
 
   def user_can_pre_register?(user)
-    (delegates.include?(user) || trainee_delegates.include?(user) || organizers.include?(user)) && self.confirmed_or_visible?
+    # The user has to be either a registered Delegate or organizer of the competition
+    is_competition_manager = delegates.include?(user) || trainee_delegates.include?(user) || organizers.include?(user)
+    # We allow pre-registration at any time for the old registration system (because we have control over the foreign keys there)
+    #   Otherwise, if it's using the new system, we only allow registrations when it's announced
+    #   because the probability of an ID change is pretty low in that case and when it does happen, WST can handle it
+    system_compatible = !uses_new_registration_service? || announced?
+
+    is_competition_manager && system_compatible
   end
 
   attr_accessor :being_cloned_from_id
