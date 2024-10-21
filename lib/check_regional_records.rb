@@ -122,11 +122,11 @@ module CheckRegionalRecords
         model_comp = Competition.includes(:events).find(competition_id)
         event_filter = event_id || model_comp.event_ids
 
-        previous_min_results = Result.select("eventId, countryId, MIN(#{value_column}) AS `value`")
+        previous_min_results = Result.select(:eventId, :countryId, "MIN(#{value_column}) AS `value`")
                                      .where.not(value_column => ..0)
+                                     .where(eventId: event_filter)
                                      .joins(:competition)
                                      .where(competition: { end_date: ...model_comp.start_date })
-                                     .where(event: event_filter)
                                      .group(:eventId, :countryId)
 
         previous_min_results.each do |r|
