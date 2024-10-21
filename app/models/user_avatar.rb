@@ -78,7 +78,7 @@ class UserAvatar < ApplicationRecord
 
   def using_cdn?
     # Approved avatars are actively being used and should therefor be served by our CDN
-    self.approved? && self.attached?
+    self.approved? && self.attached? && !Rails.env.local?
   end
 
   def filename

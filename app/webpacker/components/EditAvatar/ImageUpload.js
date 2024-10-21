@@ -45,7 +45,10 @@ function ImageUpload({
   const removeAvatar = (evt) => {
     evt.preventDefault();
 
-    onAvatarDeleted(reasonForDeletion);
+    onAvatarDeleted(reasonForDeletion, () => {
+      setIsRemoving(false);
+      setReasonForDeletion(null);
+    });
   };
 
   const handleSelectedImage = (evt, { value }) => {

@@ -115,8 +115,13 @@ function EditAvatar({
     });
   };
 
-  const deleteAvatar = (reasonForDeletion) => {
-    save(avatarDataUrl, { avatarId: workingAvatar?.id, reason: reasonForDeletion }, sync);
+  const deleteAvatar = (reasonForDeletion, cleanupFn) => {
+    save(avatarDataUrl, { avatarId: workingAvatar?.id, reason: reasonForDeletion }, () => {
+      sync();
+      cleanupFn();
+    }, {
+      method: 'DELETE',
+    });
   };
 
   /* eslint-disable react/no-array-index-key */
