@@ -4,6 +4,7 @@ require 'rails_helper'
 # TODO: Figure out if this is still needed, or if there's a better way now that we're in the monolith
 require_relative '../../support/qualification_results_faker'
 
+# TODO: Remove this if tests run
 RSpec.describe Registrations::RegistrationChecker do
   let(:default_user) { FactoryBot.create(:user) }
   let(:default_competition) { FactoryBot.create(:competition, :registration_open, :editable_registrations, :with_organizer) }
