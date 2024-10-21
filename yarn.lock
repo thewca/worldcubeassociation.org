@@ -1098,7 +1098,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-transform-object-rest-spread@npm:^7.24.7, @babel/plugin-transform-object-rest-spread@npm:^7.25.7":
+"@babel/plugin-transform-object-rest-spread@npm:^7.24.7":
   version: 7.25.7
   resolution: "@babel/plugin-transform-object-rest-spread@npm:7.25.7"
   dependencies:
@@ -1109,6 +1109,19 @@ __metadata:
   peerDependencies:
     "@babel/core": ^7.0.0-0
   checksum: 10c0/e8b978d9d1020452da0d5d92f80fe57e302761dac20137bb8bf863478a4779fcd63d314db89e796125d9d76da2a38f64f012d6e0c4913815951b3eb3fba2feb6
+  languageName: node
+  linkType: hard
+
+"@babel/plugin-transform-object-rest-spread@npm:^7.25.8":
+  version: 7.25.8
+  resolution: "@babel/plugin-transform-object-rest-spread@npm:7.25.8"
+  dependencies:
+    "@babel/helper-compilation-targets": "npm:^7.25.7"
+    "@babel/helper-plugin-utils": "npm:^7.25.7"
+    "@babel/plugin-transform-parameters": "npm:^7.25.7"
+  peerDependencies:
+    "@babel/core": ^7.0.0-0
+  checksum: 10c0/058d5f5bb61068997fb78855011dd175d441da84717640852bbfd12a5919acf8d8c5a14c1debfe87d230f3f4c47c22fcad3d7fa1acd72e5e48b2fff93b6c1dd9
   languageName: node
   linkType: hard
 
@@ -10311,7 +10324,7 @@ __metadata:
     "@babel/plugin-syntax-dynamic-import": "npm:^7.8.3"
     "@babel/plugin-syntax-import-meta": "npm:^7.10.4"
     "@babel/plugin-transform-destructuring": "npm:^7.25.7"
-    "@babel/plugin-transform-object-rest-spread": "npm:^7.25.7"
+    "@babel/plugin-transform-object-rest-spread": "npm:^7.25.8"
     "@babel/plugin-transform-regenerator": "npm:^7.25.7"
     "@babel/plugin-transform-runtime": "npm:^7.25.7"
     "@babel/preset-env": "npm:^7.25.4"
