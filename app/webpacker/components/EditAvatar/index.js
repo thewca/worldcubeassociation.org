@@ -115,10 +115,10 @@ function EditAvatar({
     });
   };
 
-  const deleteAvatar = (reasonForDeletion) => {
+  const deleteAvatar = (reasonForDeletion, cleanupFn) => {
     save(avatarDataUrl, { avatarId: workingAvatar?.id, reason: reasonForDeletion }, () => {
-      setUserUploadedImage(undefined);
       sync();
+      cleanupFn();
     }, {
       method: 'DELETE',
     });
