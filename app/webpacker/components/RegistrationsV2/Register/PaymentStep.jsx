@@ -18,7 +18,6 @@ import Loading from '../../Requests/Loading';
 import i18n from '../../../lib/i18n';
 import useCheckboxState from '../../../lib/hooks/useCheckboxState';
 import AutonumericField from '../../wca/FormBuilder/input/AutonumericField';
-import RegistrationOverview from './RegistrationOverview';
 
 export default function PaymentStep({
   competitionInfo,
@@ -118,7 +117,8 @@ export default function PaymentStep({
           : (
             <>
               <Header size="small">
-                Subtotal:
+                {i18n.t('registrations.payment_form.labels.subtotal')}
+                :
                 {' '}
                 {displayAmount}
               </Header>
