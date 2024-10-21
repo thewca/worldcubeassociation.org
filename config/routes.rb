@@ -188,6 +188,7 @@ Rails.application.routes.draw do
   scope 'panel' do
     get 'staff' => 'panel#staff', as: :panel_staff
     get 'generate_db_token' => 'panel#generate_db_token', as: :panel_generate_db_token
+    post 'anonymize_user' => 'panel#anonymize_user', as: :panel_anonymize_user
   end
   get 'panel/:panel_id' => 'panel#index', as: :panel_index
   get 'panel-page/:id' => 'panel#panel_page', as: :panel_page

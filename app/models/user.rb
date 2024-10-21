@@ -641,6 +641,7 @@ class User < ApplicationRecord
       :generateDbToken,
       :approveAvatars,
       :editPersonRequests,
+      :anonymizationScript,
     ].index_with { |panel_page| panel_page.to_s.underscore.dasherize }
   end
 
@@ -692,6 +693,7 @@ class User < ApplicationRecord
           panel_pages[:editPersonRequests],
           panel_pages[:editPerson],
           panel_pages[:approveAvatars],
+          panel_pages[:anonymizationScript],
         ],
       },
       wst: {
