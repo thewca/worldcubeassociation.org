@@ -116,7 +116,12 @@ function EditAvatar({
   };
 
   const deleteAvatar = (reasonForDeletion) => {
-    save(avatarDataUrl, { avatarId: workingAvatar?.id, reason: reasonForDeletion }, sync);
+    save(avatarDataUrl, { avatarId: workingAvatar?.id, reason: reasonForDeletion }, () => {
+      setUserUploadedImage(undefined);
+      sync();
+    }, {
+      method: 'DELETE',
+    });
   };
 
   /* eslint-disable react/no-array-index-key */
