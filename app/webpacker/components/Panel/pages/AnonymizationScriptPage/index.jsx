@@ -22,7 +22,7 @@ export default function AnonymizationScriptPage() {
     )
     : (
       <IdWcaSearch
-        label="Enter the user to ban"
+        label="Enter the user to anonymize"
         model={SEARCH_MODELS.user}
         multiple={false}
         value={userId}
