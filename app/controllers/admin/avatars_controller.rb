@@ -8,10 +8,10 @@ module Admin
 
     def update_all
       avatars = params.require(:avatars)
+
       ActiveRecord::Base.transaction do
-        avatars.each do |wca_id, args|
-          user = User.find_by_wca_id!(wca_id)
-          avatar = user.pending_avatar
+        avatars.each do |avatar_id, args|
+          avatar = UserAvatar.pending.find(avatar_id)
 
           case args[:action]
           when "approve"
@@ -27,6 +27,7 @@ module Admin
             avatar.revoked_by_user = current_user
             avatar.revocation_reason = combined_reasons
 
+            user = avatar.pending_user
             AvatarsMailer.notify_user_of_avatar_rejection(user, combined_reasons).deliver_later
           when "defer"
             # do nothing!
