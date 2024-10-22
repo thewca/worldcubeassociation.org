@@ -74,7 +74,7 @@ FactoryBot.define do
     latitude { rand(-90_000_000..90_000_000) }
     longitude { rand(-180_000_000..180_000_000) }
 
-    use_wca_registration { true }
+    use_wca_registration { false }
     registration_open { 54.weeks.ago.change(usec: 0) }
     registration_close { 53.weeks.ago.change(usec: 0) }
 
