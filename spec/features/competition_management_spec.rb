@@ -40,6 +40,12 @@ end
 # Apparition browser engine does not render React state changes properly.
 # We can remove this `retry` count when we migrated to a "proper" browser engine in tests.
 RSpec.feature "Competition management", js: true, retry: 10 do
+  before(:each) do
+    # Stub microservice as an interim solution during our Microservice->Monolith V2 migration
+    #   Can safely be removed once the wca-registrations microservice is gone. (GB 2024-10-15)
+    allow(Microservices::Registrations).to receive(:competitor_count_by_competition).and_return(0)
+  end
+
   context "when signed in as admin" do
     let!(:admin) { FactoryBot.create :admin }
     before :each do

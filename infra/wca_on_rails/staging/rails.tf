@@ -81,8 +81,20 @@ locals {
       value = aws_s3_bucket.avatars.id
     },
     {
+      name = "S3_AVATARS_PRIVATE_BUCKET"
+      value = aws_s3_bucket.avatars_private.id
+    },
+    {
       name = "S3_AVATARS_ASSET_HOST"
       value = "https://avatars.worldcubeassociation.org"
+    },
+    {
+      name = "AVATARS_PUBLIC_STORAGE"
+      value = "s3_avatars_public"
+    },
+    {
+      name = "AVATARS_PRIVATE_STORAGE"
+      value = "s3_avatars_private"
     },
     {
       name = "CDN_AVATARS_DISTRIBUTION_ID"
@@ -172,16 +184,29 @@ data "aws_iam_policy_document" "task_policy" {
 
     resources = ["*"]
   }
+
   statement {
       actions = [
         "s3:*",
       ]
 
-      resources = [aws_s3_bucket.avatars.arn,
-                "${aws_s3_bucket.avatars.arn}/*",
-                   aws_s3_bucket.storage-bucket.arn,
-                "${aws_s3_bucket.storage-bucket.arn}/*"]
+      resources = [aws_s3_bucket.storage-bucket.arn,
+                "${aws_s3_bucket.storage-bucket.arn}/*",
+                    aws_s3_bucket.avatars_private.arn,
+                  "${aws_s3_bucket.avatars_private.arn}/*"]
     }
+
+  statement {
+    actions = [
+      "s3:Get*",
+      "s3:List*",
+      "s3:Describe*"
+    ]
+
+    resources = [aws_s3_bucket.avatars.arn,
+      "${aws_s3_bucket.avatars.arn}/*"]
+  }
+
   statement {
     actions = [
       "rds-db:connect",
