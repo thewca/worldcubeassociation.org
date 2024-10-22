@@ -428,6 +428,7 @@ en:
       ban_scope:
         competing_only: "Competing Only"
         competing_and_attending: "Competing & Attending"
+        competing_and_attending_and_forums: "Competing, Attending & Forums"
     competition_medium:
       status:
         accepted: "Accepted"
