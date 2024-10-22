@@ -1,0 +1,4 @@
+queues:
+  - <%= EnvConfig.REGISTRATION_QUEUE %>
+delay: 1
+concurrency: 2

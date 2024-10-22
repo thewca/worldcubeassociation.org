@@ -47,6 +47,14 @@ runs:
         tag: ${{inputs.environment}}-api
         build_tag: ${{ inputs.build_tag }}
         environment: ${{ inputs.environment }}
+    - name: Build and push SQS Worker
+      uses: ./.github/actions/build-image
+      with:
+        target: shoryuken
+        registry: ${{ inputs.registry }}
+        tag: ${{inputs.environment}}-sqs-worker
+        build_tag: ${{ inputs.build_tag }}
+        environment: ${{ inputs.environment }}
     - name: Build and push Image
       uses: ./.github/actions/build-image
       with:
