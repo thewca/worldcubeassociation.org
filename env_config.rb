@@ -23,7 +23,6 @@ EnvConfig = SuperConfig.new(raise_exception: !is_compiling_assets) do
     mandatory :DATABASE_WRT_USER, :string
     optional :PAYPAL_BASE_URL, :string ## TODO: Change to mandatory when launching paypal
     mandatory :WRC_WEBHOOK_URL, :string
-    mandatory :BANNED_FORUM_USER_IDS, :string
 
     # Production-specific stuff
     mandatory :VAULT_ADDR, :string
@@ -54,7 +53,6 @@ EnvConfig = SuperConfig.new(raise_exception: !is_compiling_assets) do
     optional :WCA_REGISTRATIONS_POLL_URL, :string, ''
     optional :PAYPAL_BASE_URL, :string, ''
     optional :WRC_WEBHOOK_URL, :string, ''
-    optional :BANNED_FORUM_USER_IDS, :string, ''
 
     # Local-specific stuff
     optional :DISABLE_BULLET, :bool, false

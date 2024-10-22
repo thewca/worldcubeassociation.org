@@ -265,8 +265,7 @@ class UsersController < ApplicationController
     # validated their emails).
 
     # If a user is banned form the forums, the sso fails
-    banned_ids = EnvConfig.BANNED_FORUM_USER_IDS.split(',').map(&:to_i)
-    return redirect_to new_user_session_path if banned_ids.include?(current_user.id)
+    return redirect_to new_user_session_path if current_user.forum_banned?
 
     # Use the 'SingleSignOn' lib provided by Discourse. Our secret and URL is
     # already configured there.

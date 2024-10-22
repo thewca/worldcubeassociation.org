@@ -190,6 +190,7 @@ FactoryBot.define do
 
     trait :banned_competitor do
       group_id { UserGroup.banned_competitors.first.id }
+      metadata { FactoryBot.create(:roles_metadata_banned_competitors ) }
     end
 
     factory :probation_role, traits: [:delegate_probation, :active]

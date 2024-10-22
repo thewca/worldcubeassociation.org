@@ -213,10 +213,7 @@ RSpec.describe "users" do
     end
 
     it 'doesnt authenticate user banned from discourse' do
-      # NOTE: Forum banned status is set in environment variables pending a full implementation
-      ENV['BANNED_FORUM_USER_IDS'] = "777777,777778"
-
-      user = FactoryBot.create(:user, id: 777_777)
+      user = FactoryBot.create(:user, :banned)
       sign_in user
       sso.nonce = 1234
       get "#{sso_discourse_path}?#{sso.payload}"
