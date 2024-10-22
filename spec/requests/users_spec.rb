@@ -212,8 +212,10 @@ RSpec.describe "users" do
       expect(response).to redirect_to new_user_session_path
     end
 
-    it 'doesnt authenticate user banned from discourse', :tag do
+    it 'doesnt authenticate user banned from discourse' do
       # NOTE: Forum banned status is set in environment variables pending a full implementation
+      ENV['BANNED_FORUM_USER_IDS'] = "777777,777778"
+
       user = FactoryBot.create(:user, id: 777_777)
       sign_in user
       sso.nonce = 1234
