@@ -37,10 +37,13 @@
       <% end %>
     <% else %>
       <p>All inbox data has been imported. You should consider the following steps next:</p>
-      <ul>
-        <li><%= link_to "Check record markers", admin_override_regional_records_path(check_regional_records_form: { competition_id: @competition.id, event_id: 'all' }), target: '_blank' %></li>
+      <ol>
         <li><%= link_to "Compute auxiliary data", admin_do_compute_auxiliary_data_path, target: '_blank' %></li>
-      </ul>
+        <li>
+          <%= link_to "Check record markers", admin_override_regional_records_path(check_regional_records_form: { competition_id: @competition.id, event_id: 'all' }), target: '_blank' %>
+          <p class="help-block">Note: The record markers script actually relies on CAD being run first</p>
+        </li>
+      </ol>
       <p>
         You can also visit the <%= link_to "public results page", competition_results_all_path(@competition, event: 'all'), target: '_blank' %> as an additional sanity check.
         Once you are sure, you can post the results using the button below:
