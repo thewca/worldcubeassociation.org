@@ -4,6 +4,7 @@ module AuxiliaryDataComputation
   def self.compute_everything
     self.compute_concise_results
     self.compute_rank_tables
+    self.insert_regional_records_lookup
   end
 
   ## Build 'concise results' tables.
@@ -102,6 +103,18 @@ module AuxiliaryDataComputation
           end
         end
       end
+    end
+  end
+
+  def self.insert_regional_records_lookup
+    DbHelper.with_temp_table("regional_records_lookup") do |temp_table_name|
+      ActiveRecord::Base.connection.execute <<-SQL
+        INSERT INTO #{temp_table_name}
+        (countryId, eventId, competitionEndDate, best, average)
+        SELECT Results.countryId, Results.eventId, Competitions.end_date, Results.best, Results.average
+        FROM Results
+        INNER JOIN Competitions ON Results.competitionId = Competitions.id
+      SQL
     end
   end
 end
