@@ -960,6 +960,16 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_25_161404) do
     t.index ["name"], name: "index_regional_organizations_on_name"
   end
 
+  create_table "regional_records_lookup", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "countryId", null: false
+    t.string "eventId", null: false
+    t.date "competitionEndDate", null: false
+    t.integer "best", default: 0, null: false
+    t.integer "average", default: 0, null: false
+    t.index ["eventId", "countryId", "average", "competitionEndDate"], name: "idx_on_eventId_countryId_average_competitionEndDate"
+    t.index ["eventId", "countryId", "best", "competitionEndDate"], name: "idx_on_eventId_countryId_best_competitionEndDate"
+  end
+
   create_table "registration_competition_events", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.integer "registration_id"
     t.integer "competition_event_id"
