@@ -966,8 +966,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_25_161404) do
     t.date "competitionEndDate", null: false
     t.integer "best", default: 0, null: false
     t.integer "average", default: 0, null: false
-    t.index ["eventId", "countryId", "average", "competitionEndDate"], name: "idx_on_eventId_countryId_average_competitionEndDate"
-    t.index ["eventId", "countryId", "best", "competitionEndDate"], name: "idx_on_eventId_countryId_best_competitionEndDate"
+    t.index ["eventId", "countryId", "average", "competitionEndDate"], name: "idx_on_eventId_countryId_average_competitionEndDate_b424c59953"
+    t.index ["eventId", "countryId", "best", "competitionEndDate"], name: "idx_on_eventId_countryId_best_competitionEndDate_4e01b1ae38"
   end
 
   create_table "registration_competition_events", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
