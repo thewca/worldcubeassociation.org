@@ -26,7 +26,6 @@ RSpec.describe 'API Registrations' do
         expect {
           post api_v1_registrations_register_path, params: registration_request, headers: headers
         }.to have_enqueued_job(AddRegistrationJob)
-
       end
       it 'creates a registration when job is worked off' do
         perform_enqueued_jobs do
@@ -46,7 +45,7 @@ RSpec.describe 'API Registrations' do
 
       let(:comp_with_qualifications) { FactoryBot.create(:competition, :registration_open, :enforces_easy_qualifications) }
 
-        let(:user_with_results) { FactoryBot.create(:user, :wca_id) }
+      let(:user_with_results) { FactoryBot.create(:user, :wca_id) }
       let(:user_without_results) { FactoryBot.create(:user, :wca_id) }
 
       before do
