@@ -493,6 +493,10 @@ class User < ApplicationRecord
     senior_delegate_roles.any?
   end
 
+  def regional_delegate?
+    regional_delegate_roles.any?
+  end
+
   def staff_or_any_delegate?
     staff? || any_kind_of_delegate?
   end
@@ -536,6 +540,10 @@ class User < ApplicationRecord
 
   private def senior_delegate_roles
     delegate_roles.select { |role| role.metadata.status == RolesMetadataDelegateRegions.statuses[:senior_delegate] }
+  end
+
+  private def regional_delegate_roles
+    delegate_roles.select { |role| role.metadata.status == RolesMetadataDelegateRegions.statuses[:regional_delegate] }
   end
 
   private def can_view_current_banned_competitors?
@@ -832,6 +840,7 @@ class User < ApplicationRecord
       competition.organizers.include?(self) ||
       competition.delegates.include?(self) ||
       competition.delegates.flat_map(&:senior_delegates).compact.include?(self) ||
+      competition.delegates.flat_map(&:regional_delegates).compact.include?(self) ||
       wic_team?
     )
   end
@@ -943,7 +952,7 @@ class User < ApplicationRecord
   end
 
   def can_see_admin_competitions?
-    can_admin_competitions? || senior_delegate? || quality_assurance_committee? || weat_team?
+    can_admin_competitions? || senior_delegate? || regional_delegate? || quality_assurance_committee? || weat_team?
   end
 
   def can_issue_refunds?(competition)
