@@ -469,7 +469,7 @@ FactoryBot.define do
         end
       end
 
-      if competition.qualification_results && evaluator&.qualifications.present?
+      if competition.qualification_results && evaluator&.qualifications&.present?
         events_wcif = competition.to_wcif['events']
         qualification_data = evaluator.qualifications
 
