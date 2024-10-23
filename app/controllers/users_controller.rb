@@ -264,8 +264,10 @@ class UsersController < ApplicationController
     # Note that we do validate emails (as in: users can't log in until they have
     # validated their emails).
 
-    # If a user is banned form the forums, the sso fails
-    return redirect_to new_user_session_path if current_user.forum_banned?
+    if current_user.forum_banned?
+      flash[:alert] = I18n.t('registrations.errors.banned_html').html_safe
+      return redirect_to new_user_session_path
+    end
 
     # Use the 'SingleSignOn' lib provided by Discourse. Our secret and URL is
     # already configured there.
