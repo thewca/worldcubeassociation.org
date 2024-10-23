@@ -88,7 +88,7 @@
             <th class="guests"><%= t 'activerecord.attributes.registration.guests' %></th>
             <th class="comments" data-sortable="true"><%= t 'activerecord.attributes.registration.comments' %></th>
             <% if @competition.has_administrative_notes? %>
-              <th class="administrative-notes"><%= t 'activerecord.attributes.registration.administrative_notes' %></th>
+              <th class="administrative-notes" data-sortable="true"><%= t 'activerecord.attributes.registration.administrative_notes' %></th>
             <% end %>
             <% if @competition.using_payment_integrations? %>
               <th class="paid"><%= t 'activerecord.attributes.registration.paid_entry_fees' %></th>
