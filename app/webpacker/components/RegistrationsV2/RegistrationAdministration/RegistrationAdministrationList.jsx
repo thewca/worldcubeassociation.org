@@ -17,6 +17,7 @@ import useWithUserData from '../hooks/useWithUserData';
 import { bulkUpdateRegistrations } from '../api/registration/patch/update_registration';
 import RegistrationAdministrationTable from './RegistrationsAdministrationTable';
 import useCheckboxState from '../../../lib/hooks/useCheckboxState';
+import {countries} from "../../../lib/wca-data.js.erb";
 
 const selectedReducer = (state, action) => {
   let newState = [...state];
@@ -204,7 +205,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
             return a.user.wca_id.localeCompare(b.user.wca_id);
           }
           case 'country':
-            return a.user.country.name.localeCompare(b.user.country.name);
+            return countries.byIso2[a.user.country.iso2].name.localeCompare(countries.byIso2[b.user.country.iso2].name);
           case 'events':
             return a.competing.event_ids.length - b.competing.event_ids.length;
           case 'guests':

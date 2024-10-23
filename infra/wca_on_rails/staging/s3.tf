@@ -10,3 +10,10 @@ resource "aws_s3_bucket" "avatars" {
     "Name" = "wca-avatar"
   }
 }
+
+resource "aws_s3_bucket" "avatars_private" {
+  bucket = "wca-avatar-private-staging"
+  tags = {
+    "Name" = "wca-avatar-private-staging"
+  }
+}

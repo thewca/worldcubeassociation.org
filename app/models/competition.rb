@@ -24,6 +24,8 @@ class Competition < ApplicationRecord
   has_one :delegate_report, dependent: :destroy
   has_one :waiting_list, dependent: :destroy, as: :holder
   has_many :competition_venues, dependent: :destroy
+  has_many :venue_countries, -> { distinct }, through: :competition_venues, source: :country
+  has_many :venue_continents, -> { distinct }, through: :competition_venues, source: :continent
   belongs_to :country, foreign_key: :countryId
   has_one :continent, foreign_key: :continentId, through: :country
   has_many :championships, dependent: :delete_all
@@ -626,7 +628,14 @@ class Competition < ApplicationRecord
   end
 
   def user_can_pre_register?(user)
-    delegates.include?(user) || trainee_delegates.include?(user) || organizers.include?(user)
+    # The user has to be either a registered Delegate or organizer of the competition
+    is_competition_manager = delegates.include?(user) || trainee_delegates.include?(user) || organizers.include?(user)
+    # We allow pre-registration at any time for the old registration system (because we have control over the foreign keys there)
+    #   Otherwise, if it's using the new system, we only allow registrations when it's announced
+    #   because the probability of an ID change is pretty low in that case and when it does happen, WST can handle it
+    system_compatible = !uses_new_registration_service? || announced?
+
+    is_competition_manager && system_compatible
   end
 
   attr_accessor :being_cloned_from_id
@@ -669,6 +678,8 @@ class Competition < ApplicationRecord
              'cancelled_by_user',
              'competition_payment_integrations',
              'microservice_registrations',
+             'venue_countries',
+             'venue_continents',
              'waiting_list'
           # Do nothing as they shouldn't be cloned.
         when 'organizers'

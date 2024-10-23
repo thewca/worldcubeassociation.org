@@ -486,6 +486,8 @@ zh-TW:
         discussion_url: Google Group討論串網址
         #original_hash: 65a9b28
         schedule_url: 賽程網址
+        #original_hash: 12b71c3
+        summary: 總結
         #original_hash: 36155d4
         equipment: 器材設備
         #original_hash: 67cd406
@@ -738,8 +740,8 @@ zh-TW:
         unconfirmed_wca_id: ''
         #original_hash: da39a3e
         wca_id: ''
-        #original_hash: 81a76a3
-        receive_delegate_reports: 如果您是實習代表、初級代表、高級代表、WRC或WQAC的成員，您會自動收到比賽報告。備註：此變更可能得花一個小時才生效。
+        #original_hash: 27c2251
+        receive_delegate_reports: 如果您是高級代表、WRC或WQAC的成員，您會自動收到比賽報告。備註：此變更可能得花一個小時才生效。
         #original_hash: 0627e5c
         otp_attempt: 請開啟您的行動裝置上的應用程式來取得一次性的密碼，或是輸入您其中一個備用碼。
       dob_contact:
@@ -775,6 +777,8 @@ zh-TW:
         schedule_url: '公開賽程的完整網址（例如：https://www.cubingusa.com/usnationals2016/schedule.php）'
         #original_hash: 1a68719
         equipment: 這場比賽使用的大顯、計時器數量和款式。請把您沒用到的器材該行刪掉。
+        #original_hash: 2822e8d
+        summary: 以上列出的幾點只是完成報告用的指導內容。請使用您認為適合的內容，並請移除不需要的部分！
         #original_hash: 2822e8d
         venue: 以上列出的例子只是完成報告用的指導內容。您可自由選擇那些適合寫入報告。請移除沒有用到的部分。
         #original_hash: 2822e8d
@@ -2219,6 +2223,8 @@ zh-TW:
       reg_opens_too_early: 開始報名的時間短於規定的48小時。
       #original_hash: a25e7a2
       registration_already_closed: 報名截止日期已超過。請將截止日期設定成未來的日期。
+      #original_hash: 9a07b42
+      uses_v2_registrations: 這場比賽使用新的報名系統。如果您認為這場比賽應該要使用舊的系統，請聯絡WCAT比賽公告組。
       #original_hash: 3322400
       tooltip_registered: 您已經報名了。
       #original_hash: f2d092f
@@ -2239,8 +2245,6 @@ zh-TW:
       orga_closed_reg_success: 已成功關閉報名。
       #original_hash: 7f197a0
       orga_closed_reg_failure: 無法結束報名。
-      #original_hash: b16bd13
-      cannot_activate_v2: 如果是報名期間中，您就無法啟用新的報名系統。
       #original_hash: 74caf1a
       no_waiting_list_specified: 這場比沒有接受候補名單的截止時間。如果您要使用候補名單功能，請指定一個截止日期。如果您沒有要使用候補名單功能，請記得在報名條件中指定。
     my_competitions:
@@ -2648,6 +2652,8 @@ zh-TW:
           is_confirmed: 禁止主辦團隊編輯本場比賽
           #original_hash: d493e6a
           is_visible: 公開比賽
+          #original_hash: e7daccb
+          uses_v_2_registrations: 使用新的報名系統
         #original_hash: 89f89c0
         competition_id: 比賽ID
         #original_hash: 709a232
@@ -2791,6 +2797,8 @@ zh-TW:
           is_confirmed: ''
           #original_hash: da39a3e
           is_visible: ''
+          #original_hash: 68d3cc6
+          uses_v_2_registrations: 如果這個被設為無效，變更報名系統會造成問題。如果您仍然需要變更報名系統，請向WCA軟體組聯絡取得協助。
         #original_hash: da39a3e
         competition_id: ''
         #original_hash: 2c812a0
@@ -3077,6 +3085,8 @@ zh-TW:
         #original_hash: 462376a
         no_self_update: 聯絡比賽主辦團隊來更新您的報名。
       register:
+        #original_hash: e8cc296
+        will_open_countdown: '報名會在 %{minutes} 分 %{seconds} 秒後開始。這一個頁面會在報名開始時自動更新。'
         panel:
           approval:
             #original_hash: 8cc047a
@@ -3502,8 +3512,6 @@ zh-TW:
         competitors: 參賽者
         #original_hash: c4622c3
         scrambles: 轉亂步驟內容
-        #original_hash: f632da3
-        enable_v2: 啟用新的報名服務
     results_table:
       #original_hash: 3e9a6b5
       wca_profile: WCA個人頁面

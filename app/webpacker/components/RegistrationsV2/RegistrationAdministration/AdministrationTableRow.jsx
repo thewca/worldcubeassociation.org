@@ -12,6 +12,7 @@ import {
 import EventIcon from '../../wca/EventIcon';
 import { editRegistrationUrl, editPersonUrl, personUrl } from '../../../lib/requests/routes.js.erb';
 import { isoMoneyToHumanReadable } from '../../../lib/helpers/money';
+import { countries } from "../../../lib/wca-data.js.erb";
 
 // Semantic Table only allows truncating _all_ columns in a table in
 // single line fixed mode. As we only want to truncate the comment/admin notes
@@ -131,11 +132,11 @@ export default function TableRow({
               {region ? (
                 <>
                   <Flag name={country.iso2.toLowerCase()} />
-                  {region && country.name}
+                  {region && countries.byIso2[country.iso2].name}
                 </>
               ) : (
                 <Popup
-                  content={country.name}
+                  content={countries.byIso2[country.iso2].name}
                   trigger={(
                     <span>
                       <Flag name={country.iso2.toLowerCase()} />

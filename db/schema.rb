@@ -1174,6 +1174,26 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_15_131314) do
     t.index ["competition_id"], name: "index_uploaded_jsons_on_competition_id"
   end
 
+  create_table "user_avatars", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.integer "user_id"
+    t.string "filename"
+    t.string "status"
+    t.integer "thumbnail_crop_x"
+    t.integer "thumbnail_crop_y"
+    t.integer "thumbnail_crop_w"
+    t.integer "thumbnail_crop_h"
+    t.string "backend"
+    t.integer "approved_by"
+    t.datetime "approved_at", precision: nil
+    t.integer "revoked_by"
+    t.datetime "revoked_at", precision: nil
+    t.text "revocation_reason"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["status"], name: "index_user_avatars_on_status"
+    t.index ["user_id"], name: "index_user_avatars_on_user_id"
+  end
+
   create_table "user_groups", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "group_type", null: false
@@ -1225,16 +1245,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_15_131314) do
     t.datetime "updated_at", precision: nil
     t.string "name", limit: 255
     t.string "wca_id"
-    t.string "avatar", limit: 255
-    t.string "pending_avatar", limit: 255
-    t.integer "saved_avatar_crop_x"
-    t.integer "saved_avatar_crop_y"
-    t.integer "saved_avatar_crop_w"
-    t.integer "saved_avatar_crop_h"
-    t.integer "saved_pending_avatar_crop_x"
-    t.integer "saved_pending_avatar_crop_y"
-    t.integer "saved_pending_avatar_crop_w"
-    t.integer "saved_pending_avatar_crop_h"
+    t.bigint "current_avatar_id"
+    t.bigint "pending_avatar_id"
     t.string "unconfirmed_wca_id", limit: 255
     t.integer "delegate_id_to_handle_wca_id_claim"
     t.date "dob"
@@ -1244,6 +1256,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_15_131314) do
     t.string "preferred_locale", limit: 255
     t.boolean "competition_notifications_enabled"
     t.boolean "receive_delegate_reports", default: false, null: false
+    t.string "delegate_reports_region_id"
+    t.string "delegate_reports_region_type"
     t.boolean "dummy_account", default: false, null: false
     t.integer "consumed_timestep"
     t.boolean "otp_required_for_login", default: false
@@ -1253,6 +1267,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_15_131314) do
     t.boolean "registration_notifications_enabled", default: false
     t.string "otp_secret"
     t.index ["delegate_id_to_handle_wca_id_claim"], name: "index_users_on_delegate_id_to_handle_wca_id_claim"
+    t.index ["delegate_reports_region_type", "delegate_reports_region_id"], name: "index_users_on_delegate_reports_region"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["wca_id"], name: "index_users_on_wca_id", unique: true
@@ -1328,6 +1343,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_15_131314) do
   add_foreign_key "sanity_checks", "sanity_check_categories"
   add_foreign_key "stripe_records", "stripe_records", column: "parent_record_id"
   add_foreign_key "stripe_webhook_events", "stripe_records"
+  add_foreign_key "user_avatars", "users"
   add_foreign_key "user_groups", "user_groups", column: "parent_group_id"
   add_foreign_key "user_roles", "user_groups", column: "group_id"
   add_foreign_key "user_roles", "users"
