@@ -94,6 +94,10 @@ variable "shared" {
     mailcatcher: object({
       arn: string
     })
+    api_gateway: object({
+      id: string,
+      root_resource_id: string
+    })
     account_id: string
     private_subnets: any
   })
