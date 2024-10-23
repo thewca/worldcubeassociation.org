@@ -10,7 +10,7 @@ import {
   Label,
   Segment,
 } from 'semantic-ui-react';
-import { paymentFinishUrl, wcaRegistrationUrl } from '../../../lib/requests/routes.js.erb';
+import { paymentFinishUrl, paymentTicketUrl } from '../../../lib/requests/routes.js.erb';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { setMessage } from './RegistrationMessage';
 import fetchWithJWTToken from '../../../lib/requests/fetchWithJWTToken';
@@ -18,7 +18,6 @@ import Loading from '../../Requests/Loading';
 import i18n from '../../../lib/i18n';
 import useCheckboxState from '../../../lib/hooks/useCheckboxState';
 import AutonumericField from '../../wca/FormBuilder/input/AutonumericField';
-import RegistrationOverview from './RegistrationOverview';
 
 export default function PaymentStep({
   competitionInfo,
@@ -37,7 +36,7 @@ export default function PaymentStep({
 
   useEffect(() => {
     // TODO When we add per Event Payment this logic needs to also check if an additional payment is needed
-    if (registration?.payment?.payment_status === 'succeeded') {
+    if (registration?.payment?.has_paid) {
       nextStep();
     }
   }, [nextStep, registration]);
@@ -57,7 +56,7 @@ export default function PaymentStep({
     await elements.submit();
 
     // Create the PaymentIntent and obtain clientSecret
-    const { data } = await fetchWithJWTToken(`${wcaRegistrationUrl}/api/v1/${competitionInfo.id}/payment?donation_iso=${donationAmount}`, {
+    const { data } = await fetchWithJWTToken(paymentTicketUrl(competitionInfo.id, donationAmount), {
       method: 'GET',
     });
 

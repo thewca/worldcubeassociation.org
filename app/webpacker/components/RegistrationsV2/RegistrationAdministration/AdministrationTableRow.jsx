@@ -27,15 +27,17 @@ function RegistrationTime({
     return getRegistrationTimestamp(paidOn ?? registeredOn);
   }
 
-  if (usesPaymentIntegration && paymentStatus !== 'succeeded') {
+  const mostRecentPaymentStatus = paymentStatus[0]
+
+  if (usesPaymentIntegration && mostRecentPaymentStatus !== 'succeeded') {
     let content = i18n.t('registrations.list.payment_requested_on', { date: getRegistrationTimestamp(registeredOn) });
     let trigger = <span>{i18n.t('registrations.list.not_paid')}</span>;
 
-    if (paymentStatus === 'initialized') {
+    if (mostRecentPaymentStatus === 'initialized') {
       content = i18n.t('competitions.registration_v2.list.payment.initialized', { date: getRegistrationTimestamp(paidOn) });
     }
 
-    if (paymentStatus === 'refund') {
+    if (mostRecentPaymentStatus === 'refund') {
       content = i18n.t('competitions.registration_v2.list.payment.refunded', { date: getRegistrationTimestamp(paidOn) });
       trigger = <span>{i18n.t('competitions.registration_v2.list.payment.refunded_status')}</span>;
     }
@@ -79,6 +81,7 @@ export default function TableRow({
     payment_amount_iso: paymentAmount,
     updated_at: updatedAt,
     payment_status: paymentStatus,
+    has_paid: hasPaid,
   } = registration.payment;
 
   const copyEmail = () => {
@@ -157,7 +160,7 @@ export default function TableRow({
 
             {competitionInfo['using_payment_integrations?'] && (
             <Table.Cell>
-              {paymentStatus === 'succeeded'
+              {hasPaid
                 ? isoMoneyToHumanReadable(paymentAmount, competitionInfo.currency_code)
                 : ''}
             </Table.Cell>
