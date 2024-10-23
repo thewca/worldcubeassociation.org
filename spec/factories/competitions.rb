@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
+  # TODO: Remove this comment
   factory :competition do
     transient do
       championship_types { [] }
