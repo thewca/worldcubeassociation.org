@@ -226,6 +226,13 @@ FactoryBot.define do
       guests_per_registration_limit { 10 }
     end
 
+    trait :with_low_event_limit do
+      event_ids { %w(333 333oh) }
+      event_restrictions { true }
+      event_restrictions_reason { "this is a favourites competition" }
+      events_per_registration_limit { events.length }
+    end
+
     trait :with_event_limit do
       event_restrictions { true }
       event_restrictions_reason { "this is a favourites competition" }
