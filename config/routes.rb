@@ -340,12 +340,12 @@ Rails.application.routes.draw do
       namespace :v1 do
         namespace :registrations do
           get '/register', to: 'registrations#show'
-          post '/register', to: 'registrations#create'#, as: :create_registration
-          patch '/register', to: 'registrations#update'#, as: :update_registration
-          patch '/bulk_update', to: 'registrations#bulk_update'#, as: :bulk_update_registrations
-          get '/:competition_id', to: 'registrations#list'#, as: :list_registrations
+          post '/register', to: 'registrations#create'
+          patch '/register', to: 'registrations#update'
+          patch '/bulk_update', to: 'registrations#bulk_update'
+          get '/:competition_id', to: 'registrations#list'
           get '/:competition_id/admin', to: 'registrations#list_admin', as: :list_admin
-          get '/:competition_id/payment', to: 'registrations#payment_ticket'#, as: :payment_ticket
+          get '/:competition_id/payment', to: 'registrations#payment_ticket', as: :payment_ticket
         end
       end
     end
