@@ -27,15 +27,15 @@ function RegistrationTime({
     return getRegistrationTimestamp(paidOn ?? registeredOn);
   }
 
-  if (usesPaymentIntegration && paymentStatus[0] !== 'succeeded') {
+  if (usesPaymentIntegration && paymentStatus !== 'succeeded') {
     let content = i18n.t('registrations.list.payment_requested_on', { date: getRegistrationTimestamp(registeredOn) });
     let trigger = <span>{i18n.t('registrations.list.not_paid')}</span>;
 
-    if (paymentStatus[0] === 'initialized') {
+    if (paymentStatus === 'initialized') {
       content = i18n.t('competitions.registration_v2.list.payment.initialized', { date: getRegistrationTimestamp(paidOn) });
     }
 
-    if (paymentStatus[0] === 'refund') {
+    if (paymentStatus === 'refund') {
       content = i18n.t('competitions.registration_v2.list.payment.refunded', { date: getRegistrationTimestamp(paidOn) });
       trigger = <span>{i18n.t('competitions.registration_v2.list.payment.refunded_status')}</span>;
     }
@@ -79,7 +79,6 @@ export default function TableRow({
     payment_amount_iso: paymentAmount,
     updated_at: updatedAt,
     payment_status: paymentStatus,
-    has_paid: hasPaid,
   } = registration.payment;
 
   const copyEmail = () => {
@@ -157,18 +156,18 @@ export default function TableRow({
             </Table.Cell>
 
             {competitionInfo['using_payment_integrations?'] && (
-            <Table.Cell>
-              {hasPaid
-                ? isoMoneyToHumanReadable(paymentAmount, competitionInfo.currency_code)
-                : ''}
-            </Table.Cell>
+              <Table.Cell>
+                {paymentStatus === 'succeeded'
+                  ? isoMoneyToHumanReadable(paymentAmount, competitionInfo.currency_code)
+                  : ''}
+              </Table.Cell>
             )}
 
             {events ? (
               competitionInfo.event_ids.map((eventId) => (
                 <Table.Cell key={`event-${eventId}`}>
                   {eventIds.includes(eventId) && (
-                  <EventIcon id={eventId} size="1em" />
+                    <EventIcon id={eventId} size="1em" />
                   )}
                 </Table.Cell>
               ))

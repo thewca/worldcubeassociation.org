@@ -6,14 +6,14 @@ class PaymentController < ApplicationController
       attendee_id = params.require(:attendee_id)
       competition_id, user_id = attendee_id.split("-")
 
-      registration = Registration.includes(:competition, :payment_intents)
-                                 .find_by(competition_id: competition_id, user_id: user_id)
-      return render status: :bad_request, json: { error: "Registration not found" } unless registration.present?
+      ms_registration = MicroserviceRegistration.includes(:competition, :payment_intents)
+                                                .find_by(competition_id: competition_id, user_id: user_id)
+      return render status: :bad_request, json: { error: "Registration not found" } unless ms_registration.present?
 
-      competition = registration.competition
+      competition = ms_registration.competition
       return render status: :unauthorized, json: { error: 'unauthorized' } unless current_user.can_manage_competition?(competition)
 
-      intents = registration.payment_intents
+      intents = ms_registration.payment_intents
 
       charges = intents.flat_map { |intent|
         payment_provider = CompetitionPaymentIntegration::INTEGRATION_RECORD_TYPES.invert[intent.payment_record_type]

@@ -50,7 +50,11 @@
               ] : [])
           }
           if @competition.use_wca_registration?
-            pending_registrations = @competition.registrations.pending.count
+            pending_registrations = if @competition.uses_new_registration_service?
+                                        Microservices::Registrations.registrations_by_competition(@competition.id, 'pending', cache: true).length
+                                      else
+                                        @competition.registrations.pending.count
+                                      end
             nav_items << {
               text: t('.menu.registration'),
               path: competition_edit_registrations_path(@competition),

@@ -314,7 +314,7 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
             {' '}
             {registration.payment.payment_status}
           </Header>
-          {(registration.payment.payment_status.includes('succeeded') || registration.payment.payment_status.includes('refund')) && (
+          {(registration.payment.payment_status === 'succeeded' || registration.payment.payment_status === 'refund') && (
             <Refunds
               competitionId={competitionInfo.id}
               userId={competitor.id}

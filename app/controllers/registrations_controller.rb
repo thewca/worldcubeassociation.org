@@ -545,7 +545,6 @@ class RegistrationsController < ApplicationController
           #   and Stripe tries again after an exponential backoff. So we (erroneously!) record the creation timestamp
           #   in our DB _after_ the backed-off event has been processed. This can lead to a wrong registration order :(
           stored_payment.update!(created_at: audit_event.created_at_remote)
-          stored_intent.holder.add_history_entry({ payment_status: stored_intent.wca_status, iso_amount: ruby_money.cents }, "stripe_webhook", audit_event.id, 'Payment')
         elsif stored_intent.holder.is_a? MicroserviceRegistration
           ruby_money = charge_transaction.money_amount
           begin
@@ -622,7 +621,6 @@ class RegistrationsController < ApplicationController
           charge_transaction,
           current_user.id,
         )
-        registration.add_history_entry({ payment_status: stored_intent.wca_status, iso_amount: ruby_money.cents }, "user", current_user.id, 'Payment')
       end
 
       # Running in sync mode, so if the code reaches this point we're reasonably confident that the time the Stripe payment
@@ -748,7 +746,6 @@ class RegistrationsController < ApplicationController
         payment_record.registration_payment.id,
         current_user.id,
       )
-      registration.add_history_entry({ payment_status: "refund", iso_amount: amount_left }, "user", current_user.id, 'Refund')
     end
 
     flash[:success] = 'Payment was refunded'
