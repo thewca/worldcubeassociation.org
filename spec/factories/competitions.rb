@@ -227,6 +227,7 @@ FactoryBot.define do
     end
 
     trait :with_event_limit do
+      event_restrictions { true }
       event_restrictions_reason { "this is a favourites competition" }
       events_per_registration_limit { events.length-2 }
     end
