@@ -9,9 +9,13 @@ FactoryBot.define do
     created_at { Time.now }
     administrative_notes { "" }
     transient do
-      events { competition.events }
+      events { competition.events.where(id: ['333', '333oh']) }
     end
     competition_events { competition.competition_events.where(event: events) }
+
+    trait :skip_validations do
+      to_create { |instance| instance.save(validate: false) }
+    end
 
     trait :accepted do
       accepted_at { Time.now }
@@ -23,6 +27,14 @@ FactoryBot.define do
 
     trait :pending do
       accepted_at { nil }
+    end
+
+    trait :waiting_list do
+      waitlisted_at { Time.now }
+    end
+
+    trait :rejected do
+      rejected_at { Time.now }
     end
 
     trait :newcomer do

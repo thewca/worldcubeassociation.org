@@ -395,6 +395,20 @@ class Competition < ApplicationRecord
     Event.c_find(main_event_id)
   end
 
+  def events_held?(event_ids)
+    event_ids != [] && competition_events.pluck(:event_id).to_set.superset?(event_ids.to_set)
+  end
+
+  def enforces_qualifications?
+    uses_qualification? && !allow_registration_without_qualification
+  end
+
+  def guest_limit_exceeded?(guest_count)
+    return true if guest_count > 0 && !guests_enabled
+    return false if guests_per_registration_limit.blank?
+    guest_entry_status == 'restricted' && guests_per_registration_limit < guest_count
+  end
+
   def with_old_id
     new_id = self.id
     self.id = id_was
@@ -1874,6 +1888,10 @@ class Competition < ApplicationRecord
     competition_series&.competition_ids&.split(',') || []
   end
 
+  def other_series_ids
+    competition_series_ids.reject { |id| id == self.id }
+  end
+
   def qualification_wcif
     return {} unless uses_qualification?
     competition_events
@@ -2040,6 +2058,36 @@ class Competition < ApplicationRecord
         end
         competition_events.find { |ce| ce.event_id == wcif_event["id"] }.load_wcif!(wcif_event)
       end
+    end
+
+    reload
+  end
+
+  # NOTE: This is an awkward way of removing the current_user checks. Checking for current user should probably happen in the calling
+  # function, though - we need to discuss a potential code change in the PR/in a meeting. Just using this to get tests passing
+  def unverified_set_wcif_events!(wcif_events)
+    # Remove extra events.
+    competition_events_includes_assotiations = [
+      { rounds: [:competition_event, :wcif_extensions] },
+      :wcif_extensions,
+    ]
+    self.competition_events.includes(competition_events_includes_assotiations).each do |competition_event|
+      wcif_event = wcif_events.find { |e| e["id"] == competition_event.event.id }
+      event_to_be_removed = !wcif_event || !wcif_event["rounds"]
+      competition_event.destroy! if event_to_be_removed
+    end
+
+    # Create missing events.
+    wcif_events.each do |wcif_event|
+      event_found = competition_events.find { |ce| ce.event_id == wcif_event["id"] }
+      event_to_be_added = wcif_event["rounds"]
+      competition_events.create!(event_id: wcif_event["id"]) if !event_found && event_to_be_added
+    end
+
+    # Update all events.
+    wcif_events.each do |wcif_event| # rubocop:disable Style/CombinableLoops
+      event_to_be_updated = wcif_event["rounds"]
+      competition_events.find { |ce| ce.event_id == wcif_event["id"] }.load_wcif!(wcif_event) if event_to_be_updated
     end
 
     reload

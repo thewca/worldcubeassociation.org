@@ -156,18 +156,18 @@ export default function TableRow({
             </Table.Cell>
 
             {competitionInfo['using_payment_integrations?'] && (
-            <Table.Cell>
-              {paymentStatus === 'succeeded'
-                ? isoMoneyToHumanReadable(paymentAmount, competitionInfo.currency_code)
-                : ''}
-            </Table.Cell>
+              <Table.Cell>
+                {paymentStatus === 'succeeded'
+                  ? isoMoneyToHumanReadable(paymentAmount, competitionInfo.currency_code)
+                  : ''}
+              </Table.Cell>
             )}
 
             {events ? (
               competitionInfo.event_ids.map((eventId) => (
                 <Table.Cell key={`event-${eventId}`}>
                   {eventIds.includes(eventId) && (
-                  <EventIcon id={eventId} size="1em" />
+                    <EventIcon id={eventId} size="1em" />
                   )}
                 </Table.Cell>
               ))
