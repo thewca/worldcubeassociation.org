@@ -250,6 +250,7 @@ FactoryBot.define do
       ends { starts }
       registration_open { 2.weeks.ago.change(usec: 0) }
       registration_close { 2.weeks.from_now.change(usec: 0) }
+      use_wca_registration { true }
     end
 
     trait :registration_closed do

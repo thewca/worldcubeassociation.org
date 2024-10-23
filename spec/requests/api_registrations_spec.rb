@@ -16,20 +16,22 @@ RSpec.describe 'API Registrations' do
       let(:registration_request) { FactoryBot.build(:registration_request, competition_id: competition.id, user_id: user.id) }
 
       it 'returns 202' do
-        post api_v1_registrations_create_registration_path, params: registration_request, headers: headers
+        # post api_v1_registrations_register_path, params: registration_request, headers: headers
+        post api_v1_registrations_register_path, params: registration_request, headers: headers
         expect(response.body).to eq({ status: "accepted", message: "Started Registration Process" }.to_json)
         expect(response.status).to eq(202)
       end
 
       it 'enqueues an AddRegistrationJob' do
         expect {
-          post api_v1_registrations_create_registration_path, params: registration_request, headers: headers
+          post api_v1_registrations_register_path, params: registration_request, headers: headers
         }.to have_enqueued_job(AddRegistrationJob)
-      end
 
+      end
       it 'creates a registration when job is worked off' do
         perform_enqueued_jobs do
-          post api_v1_registrations_create_registration_path, params: registration_request, headers: headers
+          post api_v1_registrations_register_path, params: registration_request, headers: headers
+          # post api_v1_registrations_register_path, params: registration_request, headers: headers
 
           registration = Registration.find_by(user_id: user.id)
           expect(registration).to be_present
@@ -44,7 +46,7 @@ RSpec.describe 'API Registrations' do
 
       let(:comp_with_qualifications) { FactoryBot.create(:competition, :registration_open, :enforces_easy_qualifications) }
 
-      let(:user_with_results) { FactoryBot.create(:user, :wca_id) }
+        let(:user_with_results) { FactoryBot.create(:user, :wca_id) }
       let(:user_without_results) { FactoryBot.create(:user, :wca_id) }
 
       before do
@@ -63,7 +65,7 @@ RSpec.describe 'API Registrations' do
         headers = { 'Authorization' => registration_request['jwt_token'] }
 
         perform_enqueued_jobs do
-          post api_v1_registrations_create_registration_path, params: registration_request, headers: headers
+          post api_v1_registrations_register_path, params: registration_request, headers: headers
 
           expect(response.status).to eq(202)
 
@@ -81,7 +83,7 @@ RSpec.describe 'API Registrations' do
         headers = { 'Authorization' => registration_request['jwt_token'] }
 
         perform_enqueued_jobs do
-          post api_v1_registrations_create_registration_path, params: registration_request, headers: headers
+          post api_v1_registrations_register_path, params: registration_request, headers: headers
 
           expect(response.status).to eq(422)
 
@@ -114,8 +116,7 @@ RSpec.describe 'API Registrations' do
       )
       headers = { 'Authorization' => update_request['jwt_token'] }
 
-      puts registration.competing_status
-      patch api_v1_registrations_update_registration_path, params: update_request, headers: headers
+      patch api_v1_registrations_register_path, params: update_request, headers: headers
 
       expect(response.status).to eq(200)
 
@@ -144,8 +145,6 @@ RSpec.describe 'API Registrations' do
     let(:registration3) { FactoryBot.create(:registration, competition: competition, user: user3) }
 
     it 'admin submits a bulk update containing 1 update' do
-      puts Registration.all.count
-
       bulk_update_request = FactoryBot.build(
         :bulk_update_request,
         user_ids: [registration1.user_id],
@@ -154,7 +153,7 @@ RSpec.describe 'API Registrations' do
       )
 
       headers = { 'Authorization' => bulk_update_request['jwt_token'] }
-      patch api_v1_registrations_bulk_update_registrations_path, params: bulk_update_request, headers: headers
+      patch api_v1_registrations_bulk_update_path, params: bulk_update_request, headers: headers
 
       expect(response.status).to eq(200)
 
@@ -201,7 +200,7 @@ RSpec.describe 'API Registrations' do
       )
 
       headers = { 'Authorization' => bulk_update_request['jwt_token'] }
-      patch api_v1_registrations_bulk_update_registrations_path, params: bulk_update_request, headers: headers
+      patch api_v1_registrations_bulk_update_path, params: bulk_update_request, headers: headers
 
       expect(response.status).to eq(200)
 
@@ -244,7 +243,7 @@ RSpec.describe 'API Registrations' do
       )
 
       headers = { 'Authorization' => bulk_update_request['jwt_token'] }
-      patch api_v1_registrations_bulk_update_registrations_path, params: bulk_update_request, headers: headers
+      patch api_v1_registrations_bulk_update_path, params: bulk_update_request, headers: headers
 
       expect(response.status).to eq(422)
 
@@ -262,7 +261,7 @@ RSpec.describe 'API Registrations' do
       )
 
       headers = { 'Authorization' => bulk_update_request['jwt_token'] }
-      patch api_v1_registrations_bulk_update_registrations_path, params: {}, headers: headers
+      patch api_v1_registrations_bulk_update_path, params: {}, headers: headers
 
       expect(response.status).to eq(400)
     end
@@ -303,7 +302,7 @@ RSpec.describe 'API Registrations' do
       )
 
       headers = { 'Authorization' => bulk_update_request['jwt_token'] }
-      patch api_v1_registrations_bulk_update_registrations_path, params: bulk_update_request, headers: headers
+      patch api_v1_registrations_bulk_update_path, params: bulk_update_request, headers: headers
 
       expect(response.status).to eq(200)
 
@@ -339,7 +338,7 @@ RSpec.describe 'API Registrations' do
 
     it 'returns multiple registrations' do
       headers = { 'Authorization' => fetch_jwt_token(competition.organizers.first.id) }
-      get api_v1_registrations_list_registrations_admin_path(competition_id: competition.id), headers: headers
+      get api_v1_registrations_list_admin_path(competition_id: competition.id), headers: headers
 
       expect(response.status).to eq(200)
 
