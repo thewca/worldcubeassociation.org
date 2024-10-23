@@ -211,6 +211,14 @@ RSpec.describe "users" do
       get "#{sso_discourse_path}?#{sso.payload}"
       expect(response).to redirect_to new_user_session_path
     end
+
+    it 'doesnt authenticate user banned from discourse' do
+      user = FactoryBot.create(:user, :banned)
+      sign_in user
+      sso.nonce = 1234
+      get "#{sso_discourse_path}?#{sso.payload}"
+      expect(response).to redirect_to new_user_session_path
+    end
   end
 
   def query_string_from_location(location)

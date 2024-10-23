@@ -505,6 +505,10 @@ class User < ApplicationRecord
     group_member?(UserGroup.banned_competitors.first)
   end
 
+  def forum_banned?
+    current_ban&.metadata&.scope == 'competing_and_attending_and_forums'
+  end
+
   def banned_in_past?
     past_roles.any? { |role| role.group == UserGroup.banned_competitors.first }
   end
