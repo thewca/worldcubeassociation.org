@@ -99,6 +99,18 @@ class ContactsController < ApplicationController
     end
   end
 
+  def gear_order_action
+    maybe_send_contact_email(
+      ContactGearOrder.new(
+        name: current_user[:name],
+        your_email: current_user[:email],
+        form_values: params[:formValues],
+        order_details: params[:orderDetails],
+        request: request,
+      ),
+    )
+  end
+
   def dob
     @contact = DobContact.new(your_email: current_user&.email)
   end

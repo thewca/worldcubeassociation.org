@@ -869,6 +869,8 @@ en:
         captcha:
           validation_error: "Please verify that you are not a robot."
         submit_button: "Submit"
+    contact_gear_order:
+      title: "WCA Gear Order Form"
   #context: Key used on the website homepage
   homepage:
     #context: the "Learn more" button
