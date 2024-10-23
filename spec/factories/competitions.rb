@@ -19,6 +19,8 @@ FactoryBot.define do
       next_month { 1.month.from_now.iso8601 }
       last_year { 1.year.ago.iso8601 }
 
+      qualifications { nil }
+
       hard_qualifications {
         {
           '333' => { 'type' => 'attemptResult', 'resultType' => 'single', 'whenDate' => today, 'level' => 1 },
