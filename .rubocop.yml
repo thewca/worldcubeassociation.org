@@ -238,7 +238,7 @@ Style/ArgumentsForwarding:
 Lint/MissingSuper:
   Exclude:
     - 'lib/wca_exceptions.rb'
-    
+
 # These are files where we accept in-memory caching as a trade-off
 # for thread safety. At the time of writing this comment, WST is confident that these three
 # implementations are either thread safe or don't suffer any problems from concurrent access.
