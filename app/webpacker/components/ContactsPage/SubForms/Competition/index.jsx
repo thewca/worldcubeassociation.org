@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { FormTextArea } from 'semantic-ui-react';
 import { IdWcaSearch } from '../../../SearchWidget/WcaSearch';
 import SEARCH_MODELS from '../../../SearchWidget/SearchModel';
 import I18n from '../../../../lib/i18n';
 import { useDispatch, useStore } from '../../../../lib/providers/StoreProvider';
-import { updateSectionData } from '../../store/actions';
+import { setSubFormValidity, updateSectionData } from '../../store/actions';
 
 const SECTION = 'competition';
 
@@ -14,6 +14,11 @@ export default function Competition() {
   const handleFormChange = (_, { name, value }) => dispatch(
     updateSectionData(SECTION, name, value),
   );
+
+  useEffect(() => {
+    const isValid = competition?.competitionId && competition?.message;
+    dispatch(setSubFormValidity(SECTION, isValid));
+  }, [dispatch, competition]);
 
   return (
     <>

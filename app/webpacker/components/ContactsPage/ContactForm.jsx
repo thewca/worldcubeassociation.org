@@ -37,10 +37,16 @@ export default function ContactForm({
   const [contactSuccess, setContactSuccess] = useState(false);
   const contactFormState = useStore();
   const dispatch = useDispatch();
-  const { formValues: { contactRecipient: selectedContactRecipient, userData } } = contactFormState;
+  const {
+    formValues: { contactRecipient: selectedContactRecipient, userData },
+    validSubForm,
+  } = contactFormState;
 
   const isFormValid = (
-    selectedContactRecipient && userData.name && userData.email && captchaValue
+    userData.name && userData.email
+    && selectedContactRecipient
+    && validSubForm[selectedContactRecipient]
+    && captchaValue
   );
 
   const contactSuccessHandler = () => {
