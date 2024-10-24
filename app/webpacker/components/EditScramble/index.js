@@ -1,7 +1,8 @@
 import React from 'react';
 import EditEntry from '../ResultsData/Panel/EditEntry';
 import { scrambleUrl } from '../../lib/requests/routes.js.erb';
-import ShowSingleScramble from '../ResultsData/Results/ShowSingleResult';
+import ShowSingleScramble from '../ResultsData/Scrambles/ShowSingleScramble';
+import ScrambleForm from './ScrambleForm/ScrambleForm';
 
 export function InlineEditForm({
   dataItem,
@@ -12,7 +13,7 @@ export function InlineEditForm({
   );
 }
 
-function EditResult({
+function EditScramble({
   id,
 }) {
   return (
@@ -21,8 +22,9 @@ function EditResult({
       dataUrlFn={scrambleUrl}
       DisplayTable={ShowSingleScramble}
       EditForm={InlineEditForm}
+      competitionIdKey="competitionId"
     />
   );
 }
 
-export default EditResult;
+export default EditScramble;

@@ -2,66 +2,49 @@ import React, { useState, useEffect, useCallback } from 'react';
 
 import { Button } from 'semantic-ui-react';
 
-import _ from 'lodash';
-import AttemptsForm from './AttemptsForm';
-import PersonForm from './PersonForm';
 import RoundForm from './RoundForm';
-import NewPersonModal from './NewPersonModal';
-import DeleteResultButton from './DeleteResultButton';
+import DeleteScrambleButton from './DeleteScrambleButton';
 import SaveMessage from './SaveMessage';
 import AfterActionMessage from './AfterActionMessage';
 import useSaveAction from '../../../lib/hooks/useSaveAction';
-import { average, best } from '../../../lib/wca-live/attempts';
-import { shouldComputeAverage, getExpectedSolveCount } from '../../../lib/helpers/results';
 import {
-  resultUrl,
-  competitionAllResultsUrl,
-  adminFixResultsUrl,
-  scrambleUrl
+  competitionScramblesUrl,
+  scrambleUrl,
 } from '../../../lib/requests/routes.js.erb';
-import { countries } from '../../../lib/wca-data.js.erb';
-import './ResultForm.scss';
+import './ScrambleForm.scss';
 
-const roundDataFromResult = (result) => ({
-  competitionId: result.competition_id || '',
-  roundTypeId: result.round_type_id || '',
-  formatId: result.format_id || '',
-  eventId: result.event_id || '',
+const roundDataFromScramble = (scramble) => ({
+  competitionId: scramble.competitionId || '',
+  roundTypeId: scramble.roundTypeId || '',
+  eventId: scramble.eventId || '',
 });
 
-const dataToResult = ({
-  eventId, formatId, competitionId, roundTypeId,
-}, person, attemptsData) => {
-  const country = countries.byIso2[person.countryIso2];
-  const result = {
-    personId: person.wcaId,
-    personName: person.name,
-    countryId: country ? country.id : undefined,
-    best: best(attemptsData.attempts),
-    average: average(attemptsData.attempts, eventId, attemptsData.attempts.length),
-    regionalAverageRecord: attemptsData.markerAvg,
-    regionalSingleRecord: attemptsData.markerBest,
-    eventId,
-    formatId,
+const dataToScramble = ({
+  eventId, competitionId, roundTypeId,
+}) => {
+  const scramble = {
     competitionId,
+    eventId,
     roundTypeId,
+    //groupId,
+    //isExtra,
+    //scrambleNum,
+    //scrambleString,
   };
-  // Map individual attempts to valueN...
-  attemptsData.attempts.forEach((a, index) => { result[`value${index + 1}`] = a; });
-  return { result };
+  return { scramble };
 };
 
-function ResultForm({
+function ScrambleForm({
   scramble, save, saving, onCreate, onUpdate, onDelete,
 }) {
   const { scrambleId: id } = scramble;
 
   // Round-related state.
-  const [roundData, setRoundData] = useState(roundDataFromResult(scramble));
+  const [roundData, setRoundData] = useState(roundDataFromScramble(scramble));
 
   // Populate the original states whenever the original result changes.
   useEffect(() => {
-    setRoundData(roundDataFromResult(scramble));
+    setRoundData(roundDataFromScramble(scramble));
   }, [scramble]);
 
   // Use response to store errors and messages.
@@ -93,7 +76,7 @@ function ResultForm({
 
   const saveAction = useCallback((data) => {
     const url = id === undefined ? scrambleUrl('') : scrambleUrl(id);
-    // If 'id' is undefined, then we're creating a new result and it's a POST,
+    // If 'id' is undefined, then we're creating a new scramble and it's a POST,
     // otherwise it's a PATCH.
     const method = id === undefined ? 'POST' : 'PATCH';
     save(
@@ -116,36 +99,18 @@ function ResultForm({
   }, [save, scramble, onDelete, onError]);
 
   return (
-    <div className="result-form">
+    <div className="scramble-form">
       <h3>
         Round data
       </h3>
       <RoundForm roundData={roundData} setRoundData={setRoundData} />
-      <h3>
-        Person data
-      </h3>
-      <NewPersonModal
-        trigger={<Button positive compact size="small">Create new person</Button>}
-        onPersonCreate={onPersonCreate}
-        competitionId={roundData.competitionId}
-      />
-      <PersonForm personData={personData} setPersonData={setPersonData} />
-      <h3>
-        Attempts
-      </h3>
-      <AttemptsForm
-        eventId={result.event_id}
-        state={attemptsState}
-        setState={setAttemptsState}
-        computeAverage={computeAverage}
-      />
       <SaveMessage response={response} />
       <div>
         <Button
           positive
           loading={saving}
           disabled={saving}
-          onClick={() => saveAction(dataToResult(roundData, personData, attemptsState))}
+          onClick={() => saveAction(dataToScramble(roundData))}
         >
           Save
         </Button>
@@ -154,27 +119,13 @@ function ResultForm({
           as="a"
           loading={saving}
           disabled={saving}
-          href={competitionAllResultsUrl(roundData.competitionId, roundData.eventId)}
+          href={competitionScramblesUrl(roundData.competitionId, roundData.eventId)}
         >
-          Go to competition results
-        </Button>
-        <Button
-          secondary
-          as="a"
-          loading={saving}
-          disabled={saving}
-          href={adminFixResultsUrl(
-            personData.wcaId,
-            roundData.competitionId,
-            roundData.eventId,
-            roundData.roundTypeId,
-          )}
-        >
-          Go to Fix results
+          Go to competition scrambles
         </Button>
       </div>
       {id && (
-        <DeleteResultButton deleteAction={deleteAction} />
+        <DeleteScrambleButton deleteAction={deleteAction} />
       )}
     </div>
   );
@@ -182,7 +133,7 @@ function ResultForm({
 
 // This is a simple wrapper to be able to manage request-specific states,
 // and to be able to hide the form upon creation.
-function ResultFormWrapper({ scramble, sync }) {
+function ScrambleFormWrapper({ scramble, sync }) {
   const { save, saving } = useSaveAction();
 
   // This is used to track if we did save something.
@@ -199,9 +150,8 @@ function ResultFormWrapper({ scramble, sync }) {
   if (created) {
     return (
       <AfterActionMessage
-        wcaId={created.scramble.personId}
-        eventId={scramble.event_id}
-        competitionId={scramble.competition_id}
+        eventId={scramble.eventId}
+        competitionId={scramble.competitionId}
         response={created.response}
       />
     );
@@ -210,9 +160,8 @@ function ResultFormWrapper({ scramble, sync }) {
     return (
       <div>
         <AfterActionMessage
-          wcaId={edited.scramble.personId}
-          eventId={scramble.event_id}
-          competitionId={scramble.competition_id}
+          eventId={scramble.eventId}
+          competitionId={scramble.competitionId}
           response={edited.response}
         />
         <Button
@@ -229,16 +178,15 @@ function ResultFormWrapper({ scramble, sync }) {
   if (deleted) {
     return (
       <AfterActionMessage
-        wcaId={deleted.scramble.wca_id}
-        eventId={scramble.event_id}
-        competitionId={scramble.competition_id}
+        eventId={scramble.eventId}
+        competitionId={scramble.competitionId}
         response={deleted.response}
       />
     );
   }
   return (
-    <ResultForm
-      result={scramble}
+    <ScrambleForm
+      scramble={scramble}
       save={save}
       saving={saving}
       onCreate={setCreated}
@@ -248,4 +196,4 @@ function ResultFormWrapper({ scramble, sync }) {
   );
 }
 
-export default ResultFormWrapper;
+export default ScrambleFormWrapper;

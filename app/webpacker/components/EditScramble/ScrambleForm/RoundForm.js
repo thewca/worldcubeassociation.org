@@ -4,7 +4,7 @@ import {
 } from 'semantic-ui-react';
 
 import _ from 'lodash';
-import { formats, events, roundTypes } from '../../../lib/wca-data.js.erb';
+import { events, roundTypes } from '../../../lib/wca-data.js.erb';
 import useNestedInputUpdater from '../../../lib/hooks/useNestedInputUpdater';
 import { competitionEventsDataUrl } from '../../../lib/requests/routes.js.erb';
 import { fetchJsonOrError } from '../../../lib/requests/fetchWithAuthenticityToken';
@@ -29,12 +29,11 @@ const extractFromRoundData = (roundData, eventId, key, items) => {
 
 function RoundForm({ roundData, setRoundData }) {
   const {
-    competitionId, roundTypeId, eventId, formatId,
+    competitionId, roundTypeId, eventId,
   } = roundData;
 
   const setCompetition = useNestedInputUpdater(setRoundData, 'competitionId');
   const setEvent = useNestedInputUpdater(setRoundData, 'eventId');
-  const setFormat = useNestedInputUpdater(setRoundData, 'formatId');
   const setRoundType = useNestedInputUpdater(setRoundData, 'roundTypeId');
 
   const [competitionIdError, setCompetitionIdError] = useState(null);
@@ -43,7 +42,6 @@ function RoundForm({ roundData, setRoundData }) {
 
   const availableEvents = Object.keys(localRoundData).map((k) => itemFromId(k, events));
   const availableRoundTypes = extractFromRoundData(localRoundData, eventId, 'roundTypeId', roundTypes);
-  const availableFormats = extractFromRoundData(localRoundData, eventId, 'formatId', formats);
 
   const fetchDataForCompetition = (id) => {
     setCompetitionIdError(null);
@@ -93,14 +91,6 @@ function RoundForm({ roundData, setRoundData }) {
             value={roundTypeId}
             onChange={setRoundType}
             options={availableRoundTypes}
-          />
-        </Grid.Column>
-        <Grid.Column>
-          <Form.Select
-            label="Format"
-            value={formatId}
-            onChange={setFormat}
-            options={availableFormats}
           />
         </Grid.Column>
       </Grid>

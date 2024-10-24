@@ -3,15 +3,11 @@ import { Message, List } from 'semantic-ui-react';
 
 import {
   adminCheckExistingResultsUrl,
-  adminCheckRegionalRecordsUrl,
-  adminCADUrl,
   competitionAllResultsUrl,
-  personUrl,
-  adminFixResultsUrl,
+  competitionUrl,
 } from '../../../lib/requests/routes.js.erb';
 
 function AfterActionMessage({
-  wcaId,
   eventId,
   competitionId,
   response,
@@ -24,7 +20,7 @@ function AfterActionMessage({
           <>
             Action performed for:
             {' '}
-            <a href={personUrl(wcaId)} target="_blank" rel="noreferrer">{wcaId}</a>
+            <a href={competitionUrl(competitionId)} target="_blank" rel="noreferrer">{competitionId}</a>
           </>
         )}
         list={response.messages}
@@ -42,40 +38,10 @@ function AfterActionMessage({
                 Check Competition Validators
               </a>
             </List.Item>
-            <List.Item>
-              <a
-                href={adminCheckRegionalRecordsUrl(competitionId, eventId)}
-                target="_blank"
-                rel="noreferrer"
-              >
-                Check Records
-              </a>
-            </List.Item>
-            <List.Item>
-              <a
-                href={adminCADUrl}
-                target="_blank"
-                rel="noreferrer"
-              >
-                Run Compute Auxiliary Data
-              </a>
-            </List.Item>
           </List>
           You can also
           {' '}
           <a href={competitionAllResultsUrl(competitionId, eventId)}>go back to the results</a>
-          {' '}
-          or you can
-          {' '}
-          <a
-            href={adminFixResultsUrl(
-              wcaId,
-              competitionId,
-              eventId,
-            )}
-          >
-            go to the Fix Results entry point
-          </a>
           .
         </div>
       </Message>

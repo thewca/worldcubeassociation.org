@@ -11,6 +11,7 @@ function EditEntry({
   dataUrlFn,
   DisplayTable,
   EditForm,
+  competitionIdKey = 'competition_id',
 }) {
   const {
     data, sync, loading, error,
@@ -25,14 +26,14 @@ function EditEntry({
           {!loading && (
             <>
               <h3>
-                Result previously saved in the database
+                Entry previously saved in the database
                 {' '}
                 -
                 {' '}
                 <a
-                  href={competitionUrl(data.competition_id)}
+                  href={competitionUrl(data[competitionIdKey])}
                 >
-                  {data.competition_id}
+                  {data[competitionIdKey]}
                 </a>
               </h3>
               <DisplayTable dataItem={data} />

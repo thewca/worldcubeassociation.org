@@ -2,21 +2,21 @@ import React, { useState, useCallback } from 'react';
 
 import { Button, Checkbox } from 'semantic-ui-react';
 
-function DeleteResultButton({ deleteAction }) {
+function DeleteScrambleButton({ deleteAction }) {
   const [confirmed, setConfirmed] = useState(false);
   const updater = useCallback(() => setConfirmed((prev) => !prev), [setConfirmed]);
   return (
     <div>
       <Button
         negative
-        className="delete-result-button"
+        className="delete-scramble-button"
         disabled={!confirmed}
         onClick={deleteAction}
       >
-        Delete the result
+        Delete the scramble
       </Button>
       <Checkbox
-        label="Yes, I want to delete that result"
+        label="Yes, I want to delete that scramble"
         checked={confirmed}
         onChange={updater}
       />
@@ -24,4 +24,4 @@ function DeleteResultButton({ deleteAction }) {
   );
 }
 
-export default DeleteResultButton;
+export default DeleteScrambleButton;
