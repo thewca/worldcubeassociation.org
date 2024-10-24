@@ -8,7 +8,7 @@ function SingleScrambleRow({
   dataItems,
 }) {
   return (
-    <ScrambleRow scramble={dataItem} scrambles={dataItems} adminMode={false} />
+    <ScrambleRow scramble={dataItem} scrambles={dataItems} adminMode={false} extraOverride />
   );
 }
 
