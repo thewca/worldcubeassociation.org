@@ -3,7 +3,7 @@ import { Message, List } from 'semantic-ui-react';
 
 import {
   adminCheckExistingResultsUrl,
-  competitionAllResultsUrl,
+  competitionScramblesUrl,
   competitionUrl,
 } from '../../../lib/requests/routes.js.erb';
 
@@ -41,7 +41,7 @@ function AfterActionMessage({
           </List>
           You can also
           {' '}
-          <a href={competitionAllResultsUrl(competitionId, eventId)}>go back to the results</a>
+          <a href={competitionScramblesUrl(competitionId, eventId)}>go back to the scrambles</a>
           .
         </div>
       </Message>

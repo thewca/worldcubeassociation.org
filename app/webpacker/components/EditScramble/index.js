@@ -20,6 +20,7 @@ function EditScramble({
     <EditEntry
       id={id}
       dataUrlFn={scrambleUrl}
+      dataType="scramble"
       DisplayTable={ShowSingleScramble}
       EditForm={InlineEditForm}
       competitionIdKey="competitionId"

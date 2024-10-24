@@ -55,7 +55,7 @@ function ScrambleForm({
   // Attempts-related state.
   const [scrambleInfo, setScrambleInfo] = useState(scrambleInfoFromScramble(scramble));
 
-  // Populate the original states whenever the original result changes.
+  // Populate the original states whenever the original scramble changes.
   useEffect(() => {
     setRoundData(roundDataFromScramble(scramble));
     setScrambleInfo(scrambleInfoFromScramble(scramble));

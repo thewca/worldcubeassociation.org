@@ -8,6 +8,7 @@ function NewScramble({
   return (
     <CreateEntry
       initDataItem={scramble}
+      dataType="scramble"
       EditForm={InlineEditForm}
     />
   );

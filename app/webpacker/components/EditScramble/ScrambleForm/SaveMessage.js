@@ -16,7 +16,7 @@ function SaveMessage({ response }) {
       <Message
         error
         list={response.errors}
-        header="Something went wrong when saving the result."
+        header="Something went wrong when saving the scramble."
       />
       )}
     </>

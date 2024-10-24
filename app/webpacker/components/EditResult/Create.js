@@ -8,6 +8,7 @@ function NewResult({
   return (
     <CreateEntry
       initDataItem={result}
+      dataType="result"
       EditForm={InlineEditForm}
     />
   );
