@@ -2,16 +2,16 @@ import React from 'react';
 import CreateEntry from '../ResultsData/Panel/CreateEntry';
 import { InlineEditForm } from './index';
 
-function NewResult({
-  result,
+function NewScramble({
+  scramble,
 }) {
   return (
     <CreateEntry
-      initDataItem={result}
-      dataType="result"
+      initDataItem={scramble}
+      dataType="scramble"
       EditForm={InlineEditForm}
     />
   );
 }
 
-export default NewResult;
+export default NewScramble;

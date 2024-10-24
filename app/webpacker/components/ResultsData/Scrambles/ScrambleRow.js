@@ -1,10 +1,12 @@
 import React from 'react';
 import { Icon, Table } from 'semantic-ui-react';
 
+import { editScrambleUrl } from '../../../lib/requests/routes.js.erb';
+
 import '../../../stylesheets/competition_results.scss';
 
 function ScrambleRow({
-  scramble, scrambles, adminMode,
+  scramble, scrambles, adminMode, singleRowOverride = false,
 }) {
   const {
     scrambleId, isExtra, groupId, scrambleNum, scramble: scrambleString,
@@ -12,13 +14,13 @@ function ScrambleRow({
 
   return (
     <Table.Row>
-      {scrambleNum === 1 && !isExtra
+      {(singleRowOverride || (scrambleNum === 1 && !isExtra))
         && <Table.Cell textAlign="center" rowSpan={scrambles.length}>{groupId}</Table.Cell>}
       <Table.Cell>
         {isExtra ? 'Extra ' : ''}
         {scrambleNum}
         {adminMode && (
-          <a href={`TODO:${scrambleId}`} aria-label="Edit" role="menuitem" className="edit-link">
+          <a href={editScrambleUrl(scrambleId)} aria-label="Edit" role="menuitem" className="edit-link">
             <Icon name="pencil" />
           </a>
         )}
