@@ -13,7 +13,7 @@ function ScrambleInfoForm({
   } = state;
 
   const setGroupId = useNestedInputUpdater(setState, 'groupId');
-  const setIsExtra = useNestedInputUpdater(setState, 'isExtra');
+  const setIsExtra = useNestedInputUpdater(setState, 'isExtra', 'checked');
   const setScrambleNum = useNestedInputUpdater(setState, 'scrambleNum');
   const setScrambleStr = useNestedInputUpdater(setState, 'scrambleStr');
 
@@ -32,7 +32,7 @@ function ScrambleInfoForm({
         <Grid.Column textAlign="center">
           <Form.Checkbox
             label="Is Extra?"
-            value={isExtra}
+            checked={isExtra}
             onChange={setIsExtra}
           />
         </Grid.Column>
