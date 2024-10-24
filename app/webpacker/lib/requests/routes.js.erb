@@ -234,6 +234,8 @@ export const panelUrls = {
   },
 }
 
+export const panelRedirectUrl = (panelPage) => `<%= CGI.unescape(Rails.application.routes.url_helpers.panel_redirect_path(panel_page: "${panelPage}")) %>`;
+
 export const userPreferencesRoute = `<%= CGI.unescape(Rails.application.routes.url_helpers.profile_edit_path)%>?section=preferences`;
 
 export const pollingRoute = (userId, competitionId) => `<%= CGI.unescape(EnvConfig.WCA_REGISTRATIONS_POLL_URL)%>?attendee_id=${competitionId}-${userId}`;
