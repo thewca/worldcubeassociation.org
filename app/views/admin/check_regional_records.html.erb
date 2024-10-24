@@ -29,6 +29,11 @@
       huge).
     </p>
 
+    <%= alert :warning do %>
+      This script relies on auxiliary tables which are computed as part of <%= link_to "running CAD", admin_compute_auxiliary_data_path, target: :_blank %>.
+      <b>It will not deliver accurate results for specific competitions if CAD hasn't been run after the results posting.</b>
+    <% end %>
+
     <hr/>
 
     <%= simple_form_for @check_records_request, url: admin_override_regional_records_path, method: :get do |f| %>

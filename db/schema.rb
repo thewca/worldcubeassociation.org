@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_10_09_111904) do
+ActiveRecord::Schema[7.2].define(version: 2024_10_22_093010) do
   create_table "Competitions", id: { type: :string, limit: 32, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", limit: 50, default: "", null: false
     t.string "cityName", limit: 50, default: "", null: false
@@ -958,6 +958,16 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_09_111904) do
     t.text "extra_information"
     t.index ["country"], name: "index_regional_organizations_on_country"
     t.index ["name"], name: "index_regional_organizations_on_name"
+  end
+
+  create_table "regional_records_lookup", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "countryId", null: false
+    t.string "eventId", null: false
+    t.date "competitionEndDate", null: false
+    t.integer "best", default: 0, null: false
+    t.integer "average", default: 0, null: false
+    t.index ["eventId", "countryId", "average", "competitionEndDate"], name: "idx_on_eventId_countryId_average_competitionEndDate_b424c59953"
+    t.index ["eventId", "countryId", "best", "competitionEndDate"], name: "idx_on_eventId_countryId_best_competitionEndDate_4e01b1ae38"
   end
 
   create_table "registration_competition_events", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
