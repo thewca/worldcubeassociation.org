@@ -11,10 +11,9 @@ module Admin
       # Using Scramble.new wouldn't work here: we have no idea what the country
       # could be and so on, so serialization would fail.
       @scramble = {
-        competition_id: competition.id,
-        round_type_id: round.round_type_id,
-        group_id: 'TODO',
-        event_id: round.event.id,
+        competitionId: competition.id,
+        roundTypeId: round.round_type_id,
+        eventId: round.event.id,
       }
     end
 
