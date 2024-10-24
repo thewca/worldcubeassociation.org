@@ -54,7 +54,7 @@ function RoundForm({ roundData, setRoundData }) {
   // FUI's row and messes up the negative margins... :(
   return (
     <Form>
-      <Grid stackable padded columns={4}>
+      <Grid stackable padded columns={3}>
         <Grid.Column>
           <Form.Input
             label="Competition ID"

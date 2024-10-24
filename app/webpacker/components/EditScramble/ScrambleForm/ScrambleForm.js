@@ -3,6 +3,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Button } from 'semantic-ui-react';
 
 import RoundForm from './RoundForm';
+import ScrambleInfoForm from './ScrambleInfoForm';
 import DeleteScrambleButton from './DeleteScrambleButton';
 import SaveMessage from './SaveMessage';
 import AfterActionMessage from './AfterActionMessage';
@@ -19,17 +20,26 @@ const roundDataFromScramble = (scramble) => ({
   eventId: scramble.eventId || '',
 });
 
+const scrambleInfoFromScramble = (scramble) => ({
+  groupId: scramble.groupId || '',
+  isExtra: scramble.isExtra || false,
+  scrambleNum: scramble.scrambleNum || '',
+  scrambleStr: scramble.scramble || '',
+});
+
 const dataToScramble = ({
   eventId, competitionId, roundTypeId,
+}, {
+  groupId, isExtra, scrambleNum, scrambleStr,
 }) => {
   const scramble = {
     competitionId,
     eventId,
     roundTypeId,
-    //groupId,
-    //isExtra,
-    //scrambleNum,
-    //scrambleString,
+    groupId,
+    isExtra,
+    scrambleNum,
+    scramble: scrambleStr,
   };
   return { scramble };
 };
@@ -42,9 +52,13 @@ function ScrambleForm({
   // Round-related state.
   const [roundData, setRoundData] = useState(roundDataFromScramble(scramble));
 
+  // Attempts-related state.
+  const [scrambleInfo, setScrambleInfo] = useState(scrambleInfoFromScramble(scramble));
+
   // Populate the original states whenever the original result changes.
   useEffect(() => {
     setRoundData(roundDataFromScramble(scramble));
+    setScrambleInfo(scrambleInfoFromScramble(scramble));
   }, [scramble]);
 
   // Use response to store errors and messages.
@@ -104,13 +118,17 @@ function ScrambleForm({
         Round data
       </h3>
       <RoundForm roundData={roundData} setRoundData={setRoundData} />
+      <h3>
+        Scramble data
+      </h3>
+      <ScrambleInfoForm state={scrambleInfo} setState={setScrambleInfo} />
       <SaveMessage response={response} />
       <div>
         <Button
           positive
           loading={saving}
           disabled={saving}
-          onClick={() => saveAction(dataToScramble(roundData))}
+          onClick={() => saveAction(dataToScramble(roundData, scrambleInfo))}
         >
           Save
         </Button>
