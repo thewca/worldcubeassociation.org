@@ -6,7 +6,7 @@ import { editScrambleUrl } from '../../../lib/requests/routes.js.erb';
 import '../../../stylesheets/competition_results.scss';
 
 function ScrambleRow({
-  scramble, scrambles, adminMode, extraOverride = false,
+  scramble, scrambles, adminMode, singleRowOverride = false,
 }) {
   const {
     scrambleId, isExtra, groupId, scrambleNum, scramble: scrambleString,
@@ -14,7 +14,7 @@ function ScrambleRow({
 
   return (
     <Table.Row>
-      {scrambleNum === 1 && (!isExtra || extraOverride)
+      {(singleRowOverride || (scrambleNum === 1 && !isExtra))
         && <Table.Cell textAlign="center" rowSpan={scrambles.length}>{groupId}</Table.Cell>}
       <Table.Cell>
         {isExtra ? 'Extra ' : ''}
