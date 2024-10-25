@@ -17,9 +17,15 @@ class Api::Internal::V1::PaymentController < Api::Internal::V1::ApiController
     competition = Competition.find(competition_id)
     return render json: { error: "Competition not found" }, status: :not_found unless competition.present?
 
-    ms_registration = competition.microservice_registrations
-                                 .includes(:competition, :user)
-                                 .find_by(user_id: registering_user_id)
+    # We attempt to load the registration from the shadow table first,
+    # in almost all cases it will be there, as it's loaded when we trigger sending emails after processing
+    ms_registration = MicroserviceRegistration.find_by(competition: competition, user: paying_user)
+
+    unless ms_registration.present?
+      ms_registration = competition.microservice_registrations
+                                   .includes(:competition, :user)
+                                   .find_by(user_id: registering_user_id)
+    end
 
     return render json: { error: "Registration not found" }, status: :not_found unless ms_registration.present?
 
