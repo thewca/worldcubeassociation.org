@@ -42,4 +42,18 @@ module MicroserviceRegistrationHolder
       end
     end
   end
+
+  private def scoped_find_by(scope, **kwargs)
+    eligible_associations = self.class.reflect_on_all_associations.map(&:name)
+    preload_keys = kwargs.keys & eligible_associations
+
+    own_assoc_key = self.class.model_name.element.to_sym
+
+    scope.includes(own_assoc_key, *preload_keys)
+         .find_by(own_assoc_key => self, **kwargs)
+  end
+
+  def find_ms_registration_by(**)
+    self.scoped_find_by(MicroserviceRegistration, **) || self.scoped_find_by(self.microservice_registrations, **)
+  end
 end
