@@ -2,11 +2,10 @@
 
 class MakeRegistrationVersionAnEnum < ActiveRecord::Migration[7.2]
   def up
-    add_column :Competitions, :registration_version, :string, default: 'v1', null: false
+    add_column :Competitions, :registration_version, :integer, default: 0, null: false
 
     # Update values based on the old boolean column
-    Competition.where(uses_v2_registrations: true).update_all(registration_version: 'v2')
-    Competition.where(uses_v2_registrations: false).update_all(registration_version: 'v1')
+    Competition.where(uses_v2_registrations: true).update_all(registration_version: 1)
 
     # Remove the old column
     remove_column :Competitions, :uses_v2_registrations
@@ -17,7 +16,7 @@ class MakeRegistrationVersionAnEnum < ActiveRecord::Migration[7.2]
     add_column :Competitions, :uses_v2_registrations, :boolean, default: false, null: false
 
     # Map back enum values to the boolean
-    Competition.where(registration_version: 'v2').update_all(uses_v2_registrations: true)
+    Competition.where(registration_version: 1).update_all(uses_v2_registrations: true)
 
     # Remove the enum column and rename the boolean column back
     remove_column :Competitions, :registration_version

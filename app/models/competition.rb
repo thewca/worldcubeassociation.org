@@ -96,7 +96,7 @@ class Competition < ApplicationRecord
     restricted: 2,
   }, prefix: true
 
-  enum :registration_version, { v1: 'v1', v2: 'v2', v3: 'v3' }
+  enum :registration_version, [:v1, :v2, :v3], prefix: true
 
   CLONEABLE_ATTRIBUTES = %w(
     cityName
@@ -745,7 +745,7 @@ class Competition < ApplicationRecord
   end
 
   def uses_new_registration_service?
-    self.registration_version == 'v2'
+    self.registration_version_v2?
   end
 
   def should_render_register_v2?(user)
