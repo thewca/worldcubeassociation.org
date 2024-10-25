@@ -23,4 +23,3 @@ class MakeRegistrationVersionAnEnum < ActiveRecord::Migration[7.2]
     remove_column :Competitions, :registration_version
   end
 end
-
