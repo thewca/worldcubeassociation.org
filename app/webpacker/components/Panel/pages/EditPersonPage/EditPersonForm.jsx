@@ -1,16 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Button, Form, Icon, Item, Message,
+  Button, Form, Icon, Message,
 } from 'semantic-ui-react';
 import _ from 'lodash';
 import { adminCheckRecordsUrl, apiV0Urls } from '../../../../lib/requests/routes.js.erb';
 import useSaveAction from '../../../../lib/hooks/useSaveAction';
-import WcaSearch from '../../../SearchWidget/WcaSearch';
-import SEARCH_MODELS from '../../../SearchWidget/SearchModel';
 import Loading from '../../../Requests/Loading';
 import I18n from '../../../../lib/i18n';
 import { genders, countries } from '../../../../lib/wca-data.js.erb';
-import useQueryParams from '../../../../lib/hooks/useQueryParams';
 import useLoadedData from '../../../../lib/hooks/useLoadedData';
 import Errored from '../../../Requests/Errored';
 import UtcDatePicker from '../../../wca/UtcDatePicker';
@@ -27,7 +24,7 @@ const countryOptions = _.map(countries.byIso2, (country) => ({
   value: country.iso2,
 }));
 
-function EditPersonForm({ wcaId, clearWcaId, setResponse }) {
+export default function EditPersonForm({ wcaId }) {
   const {
     data: personFetchData, loading, error: personError,
   } = useLoadedData(
@@ -37,6 +34,7 @@ function EditPersonForm({ wcaId, clearWcaId, setResponse }) {
   const [editedUserDetails, setEditedUserDetails] = useState();
   const [originalUserDetails, setOriginalUserDetails] = useState();
   const [incorrectClaimCount, setIncorrectClaimCount] = useState(0);
+  const [response, setResponse] = useState();
   const { save, saving } = useSaveAction();
 
   useEffect(() => {
@@ -100,20 +98,32 @@ function EditPersonForm({ wcaId, clearWcaId, setResponse }) {
 
   return (
     <>
-      <Item>
-        <Item.Content>
-          <Item.Header>
-            WCA ID:
-            {' '}
-            {person.wca_id}
-          </Item.Header>
-          <Item.Description>
-            <Button onClick={() => clearWcaId()}>
-              Clear
-            </Button>
-          </Item.Description>
-        </Item.Content>
-      </Item>
+      {response != null && (
+        <Message
+          success={response.success}
+          error={!response.success}
+          content={response.message}
+        >
+          <Message.Content>
+            {response.success && (
+            <>
+              Success!
+              <br />
+            </>
+            )}
+            {response.showCountryChangeWarning && (
+            <>
+              The change you made may have affected national and continental records, be sure to
+              run
+              {' '}
+              <a href={adminCheckRecordsUrl}>check_regional_record_markers</a>
+              .
+            </>
+            )}
+            {!response.success && response.message}
+          </Message.Content>
+        </Message>
+      )}
       <Form>
         <Form.Input
           label={I18n.t('activerecord.attributes.user.name')}
@@ -181,69 +191,3 @@ function EditPersonForm({ wcaId, clearWcaId, setResponse }) {
     </>
   );
 }
-
-function EditPerson() {
-  const [response, setResponse] = useState();
-  const [queryParams, updateQueryParam] = useQueryParams();
-  const [loading, setLoading] = useState(false);
-  const { wcaId } = queryParams;
-
-  if (loading) return <Loading />;
-
-  return (
-    <>
-      <div>
-        To know the difference between fix and update, refer to the Delegate Handbook&apos;s
-        &#34;Requesting Changes to Personal Data&#34; section.
-      </div>
-      {response != null && (
-        <Message
-          success={response.success}
-          error={!response.success}
-          content={response.message}
-        >
-          <Message.Content>
-            {response.success && (
-              <>
-                Success!
-                <br />
-              </>
-            )}
-            {response.showCountryChangeWarning && (
-              <>
-                The change you made may have affected national and continental records, be sure to
-                run
-                {' '}
-                <a href={adminCheckRecordsUrl}>check_regional_record_markers</a>
-                .
-              </>
-            )}
-            {!response.success && response.message}
-          </Message.Content>
-        </Message>
-      )}
-      {wcaId
-        ? (
-          <EditPersonForm
-            wcaId={wcaId}
-            clearWcaId={() => {
-              setLoading(true);
-              updateQueryParam('wcaId', '');
-            }}
-            setResponse={setResponse}
-          />
-        )
-        : (
-          <WcaSearch
-            onChange={(e, { value }) => {
-              setLoading(true);
-              updateQueryParam('wcaId', value.id);
-            }}
-            multiple={false}
-            model={SEARCH_MODELS.person}
-          />
-        )}
-    </>
-  );
-}
-export default EditPerson;
