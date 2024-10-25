@@ -460,6 +460,8 @@ sv:
         subRegion: Subregion
         #original_hash: 730db33
         receive_delegate_reports: Jag vill få delegatrapporter för WCA-tävlingar via e-post
+        #original_hash: 8667157
+        delegate_reports_region: Jag vill bara få delegatrapporter för följande region
         #original_hash: 57eaf24
         user_preferred_events: Favoritgrenar
         #original_hash: e632fbf
@@ -763,6 +765,11 @@ sv:
           Om du är senior-delegat eller medlem i WRC eller WQAC, får du
           delegatrapporter som standard. Obs: ändringen kan ta upp till en timme
           att träda i kraft.
+        #original_hash: 364624c
+        delegate_reports_region: >-
+          Om du vill få alla rapporter lämnar du detta fält tomt (dropdown-menyn
+          längst upp). OBS: det kan ta upp till en timme innan ändringen träder
+          i kraft.
         #original_hash: 0627e5c
         otp_attempt: >-
           Se din konfigurerade mobilapplikation för ett engångslösenord eller
@@ -1835,6 +1842,8 @@ sv:
       new: 'Ny miniatyrbild:'
       #original_hash: efc007a
       save: Spara
+      #original_hash: 44c57ab
+      reset: Återställ
     edit:
       #original_hash: 9239ee2
       general: Allmänt
@@ -1862,6 +1871,10 @@ sv:
       pending_mail_confirmation: 'Detta konto väntar på att den nya e-postadressen %{email} ska bekräftas.'
       #original_hash: 0340b0b
       pending_avatar_confirmation: Detta konto väntar på att en ny profilbild ska bekräftas.
+      #original_hash: 81fa5f9
+      pending_avatar_edit_action: 'Klicka här om du vill redigera istället:'
+      #original_hash: 73cebb8
+      pending_avatar_edit_warning: Redigerar väntande profilbild!
       #original_hash: 7b06f03
       pending_claim_confirmation_html: >-
         Detta konto väntar på att %{delegate} ska bekräfta WCA-ID:t %{wca_id}
@@ -1935,10 +1948,10 @@ sv:
           av dem som är du.
         #original_hash: 4083c00
         '4': 'Ditt huvud, men inte nödvändigtvis hela ansiktet, ska vara synligt.'
-        #original_hash: 7c0aab3
+        #original_hash: fc17fa7
         '5': >-
-          Profilbilden bör inte innehålla tillagda texter eller onaturliga
-          filter, inklusive ramar.
+          Profilbilden bör inte innehålla tillagda texter, infogade bilder,
+          eller onaturliga filter, inklusive ramar.
         #original_hash: cc5f23a
         '6': Profilbilden måste skickas in i rätt orientering.
         #original_hash: 1a18831
@@ -2030,8 +2043,6 @@ sv:
         Vi har inte registrerat ett namn för detta WCA-ID. Vänligen kontakta <a
         href='%{wrt_contact_path}' target='_blank'>WCA Results Team</a> för att
         lösa detta.
-      #original_hash: d02c03b
-      avatar_requires_wca_id: kräver att ett WCA-ID tilldelas
       #original_hash: 8f785ea
       email_used_by_locked_account_html: >-
         används redan av ett annat konto. Det har skapats automatiskt som ett
