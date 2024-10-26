@@ -18,6 +18,7 @@ import Loading from '../../Requests/Loading';
 import i18n from '../../../lib/i18n';
 import useCheckboxState from '../../../lib/hooks/useCheckboxState';
 import AutonumericField from '../../wca/FormBuilder/input/AutonumericField';
+import getPaymentTicket from "../api/payment/get/getPaymentTicket";
 
 export default function PaymentStep({
   competitionInfo,
@@ -56,9 +57,7 @@ export default function PaymentStep({
     await elements.submit();
 
     // Create the PaymentIntent and obtain clientSecret
-    const { data } = await fetchWithJWTToken(paymentTicketUrl(competitionInfo.id, donationAmount), {
-      method: 'GET',
-    });
+    const data = await getPaymentTicket(competitionInfo, donationAmount);
 
     const { client_secret: clientSecret } = data;
 
