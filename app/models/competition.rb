@@ -96,7 +96,7 @@ class Competition < ApplicationRecord
     restricted: 2,
   }, prefix: true
 
-  enum :registration_version, [:v1, :v2, :v3], prefix: true
+  enum :registration_version, [:v1, :v2, :v3], prefix: true, default: :v2
 
   CLONEABLE_ATTRIBUTES = %w(
     cityName
@@ -634,7 +634,7 @@ class Competition < ApplicationRecord
   def build_clone
     Competition.new(attributes.slice(*CLONEABLE_ATTRIBUTES)).tap do |clone|
       clone.being_cloned_from_id = id
-      clone.uses_v2_registrations = true
+      clone.registration_version = :v2
 
       Competition.reflections.each_key do |association_name|
         case association_name
@@ -741,7 +741,7 @@ class Competition < ApplicationRecord
   end
 
   def enable_v2_registrations!
-    update_column :registration_version, 'v2'
+    update_column :registration_version, :v2
   end
 
   def uses_new_registration_service?
