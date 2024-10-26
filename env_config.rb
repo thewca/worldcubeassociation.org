@@ -30,7 +30,6 @@ EnvConfig = SuperConfig.new(raise_exception: !is_compiling_assets) do
     mandatory :VAULT_AWS_REGION, :string
     mandatory :TASK_ROLE, :string
     mandatory :WCA_REGISTRATIONS_URL, :string
-    mandatory :WCA_REGISTRATIONS_POLL_URL, :string
     mandatory :ASSET_HOST, :string
     mandatory :CDN_ASSETS_DISTRIBUTION_ID, :string
   else
@@ -59,6 +58,11 @@ EnvConfig = SuperConfig.new(raise_exception: !is_compiling_assets) do
     optional :MAILCATCHER_SMTP_HOST, :string, ''
     optional :ASSET_HOST, :string, ''
     mandatory :WCA_REGISTRATIONS_BACKEND_URL, :string
+  end
+
+  if is_compiling_assets
+    mandatory :V2_REGISTRATIONS_POLL_URL, :string
+    mandatory :V3_REGISTRATIONS_POLL_URL, :string
   end
 
   if Rails.env.test?

@@ -11,7 +11,7 @@ export default function Processing({ competitionInfo, user, onProcessingComplete
 
   const { data } = useQuery({
     queryKey: ['registration-status-polling', user.id, competitionInfo.id],
-    queryFn: async () => pollRegistrations(user.id, competitionInfo.id),
+    queryFn: async () => pollRegistrations(user.id, competitionInfo),
     refetchInterval: REFETCH_INTERVAL,
     onSuccess: () => {
       setPollCounter(pollCounter + 1);
