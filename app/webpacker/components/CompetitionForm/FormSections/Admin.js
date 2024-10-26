@@ -2,11 +2,11 @@ import React from 'react';
 import { InputBoolean, InputSelect } from '../../wca/FormBuilder/input/FormInputs';
 import { useStore } from '../../../lib/providers/StoreProvider';
 import SubSection from '../../wca/FormBuilder/SubSection';
-import { useFormObject } from "../../wca/FormBuilder/provider/FormObjectProvider";
+import { useFormObject } from '../../wca/FormBuilder/provider/FormObjectProvider';
 
 const registrationVersions = [{
   key: 'v1', value: 'v1', text: 'Version 1',
-},{
+}, {
   key: 'v2', value: 'v2', text: 'Version 2',
 }];
 
