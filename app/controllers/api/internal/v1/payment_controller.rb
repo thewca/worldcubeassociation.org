@@ -17,10 +17,7 @@ class Api::Internal::V1::PaymentController < Api::Internal::V1::ApiController
     competition = Competition.find(competition_id)
     return render json: { error: "Competition not found" }, status: :not_found unless competition.present?
 
-    # We attempt to load the registration from the shadow table first,
-    # in almost all cases it will be there, as it's loaded when we trigger sending emails after processing
-    registering_user = User.find(registering_user_id)
-    ms_registration = competition.find_ms_registration_by(user: registering_user)
+    ms_registration = competition.find_ms_registration_by(user_id: registering_user_id)
 
     return render json: { error: "Registration not found" }, status: :not_found unless ms_registration.present?
 
