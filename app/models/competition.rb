@@ -2409,7 +2409,7 @@ class Competition < ApplicationRecord
       "admin" => {
         "isConfirmed" => confirmed?,
         "isVisible" => showAtAll?,
-        "usesV2Registrations" => uses_new_registration_service?,
+        "registrationVersion" => registration_version.to_s,
       },
       "cloning" => {
         "fromId" => being_cloned_from_id,
@@ -2616,7 +2616,7 @@ class Competition < ApplicationRecord
       showAtAll: form_data.dig('admin', 'isVisible'),
       being_cloned_from_id: form_data.dig('cloning', 'fromId'),
       clone_tabs: form_data.dig('cloning', 'cloneTabs'),
-      uses_v2_registrations: form_data.dig('admin', 'usesV2Registrations'),
+      registration_version: form_data.dig('admin', 'registrationVersion'),
     }
   end
 
