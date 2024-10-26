@@ -1,5 +1,5 @@
 import fetchWithJWTToken from '../../../../../lib/requests/fetchWithJWTToken';
-import {registrationRoutes} from "../../routes";
+import { registrationRoutes } from "../../routes";
 
 export default async function updateRegistration(
   competition,
