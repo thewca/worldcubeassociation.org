@@ -44,8 +44,15 @@ module MicroserviceRegistrationHolder
   end
 
   private def scoped_find_by(scope, **kwargs)
-    eligible_associations = self.class.reflect_on_all_associations.map(&:name)
-    preload_keys = kwargs.keys & eligible_associations
+    eligible_associations = self.class.reflect_on_all_associations.filter { |assoc|
+      # Pick only associations that point to this current model
+      assoc.inverse_of&.plural_name == self.class.model_name.plural
+    }
+
+    preload_keys = eligible_associations.filter { |assoc|
+      # Pick by the name or the foreign key of the association
+      kwargs.keys.include?(assoc.name) || kwargs.keys.include?(assoc.foreign_key)
+    }.map(&:name)
 
     own_assoc_key = self.class.model_name.element.to_sym
 
