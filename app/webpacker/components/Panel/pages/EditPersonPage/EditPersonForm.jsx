@@ -106,19 +106,19 @@ export default function EditPersonForm({ wcaId }) {
         >
           <Message.Content>
             {response.success && (
-            <>
-              Success!
-              <br />
-            </>
+              <>
+                Success!
+                <br />
+              </>
             )}
             {response.showCountryChangeWarning && (
-            <>
-              The change you made may have affected national and continental records, be sure to
-              run
-              {' '}
-              <a href={adminCheckRecordsUrl}>check_regional_record_markers</a>
-              .
-            </>
+              <>
+                The change you made may have affected national and continental records, be sure to
+                run
+                {' '}
+                <a href={adminCheckRecordsUrl}>check_regional_record_markers</a>
+                .
+              </>
             )}
             {!response.success && response.message}
           </Message.Content>
