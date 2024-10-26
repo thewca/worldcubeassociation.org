@@ -1,9 +1,9 @@
 import {
-  getPsychSheetForEventUrl, confirmedRegistrationsUrl, allRegistrationsUrl, singleRegistrationUrl,
+  getPsychSheetForEventUrl,
 } from '../../../../../lib/requests/routes.js.erb';
 import fetchWithJWTToken from '../../../../../lib/requests/fetchWithJWTToken';
 import { fetchJsonOrError } from '../../../../../lib/requests/fetchWithAuthenticityToken';
-import {registrationRoutes} from "../../routes";
+import { registrationRoutes } from "../../routes";
 
 export async function getConfirmedRegistrations(
   competition,
