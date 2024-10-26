@@ -21,13 +21,13 @@ import { countries } from "../../../lib/wca-data.js.erb";
 const truncateComment = (comment) => (comment?.length > 12 ? `${comment.slice(0, 12)}...` : comment);
 
 function RegistrationTime({
-  timestamp, registeredOn, paymentStatus, paidOn, usesPaymentIntegration,
+  timestamp, registeredOn, paymentStatuses, paidOn, usesPaymentIntegration,
 }) {
   if (timestamp) {
     return getRegistrationTimestamp(paidOn ?? registeredOn);
   }
 
-  const mostRecentPaymentStatus = paymentStatus[0]
+  const mostRecentPaymentStatus = paymentStatuses[0]
 
   if (usesPaymentIntegration && mostRecentPaymentStatus !== 'succeeded') {
     let content = i18n.t('registrations.list.payment_requested_on', { date: getRegistrationTimestamp(registeredOn) });
@@ -153,7 +153,7 @@ export default function TableRow({
                 timestamp={timestamp}
                 paidOn={updatedAt}
                 registeredOn={registeredOn}
-                paymentStatus={paymentStatus}
+                paymentStatuses={paymentStatuses}
                 usesPaymentIntegration={competitionInfo['using_payment_integrations?']}
               />
             </Table.Cell>
