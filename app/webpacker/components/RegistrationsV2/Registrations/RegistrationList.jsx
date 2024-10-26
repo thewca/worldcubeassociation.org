@@ -83,7 +83,7 @@ function FooterContent({
 export default function RegistrationList({ competitionInfo }) {
   const { isLoading: registrationsLoading, data: registrations, isError } = useQuery({
     queryKey: ['registrations', competitionInfo.id],
-    queryFn: () => getConfirmedRegistrations(competitionInfo.id),
+    queryFn: () => getConfirmedRegistrations(competitionInfo),
     retry: false,
   });
 

@@ -144,7 +144,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
     refetch,
   } = useQuery({
     queryKey: ['registrations-admin', competitionInfo.id],
-    queryFn: () => getAllRegistrations(competitionInfo.id),
+    queryFn: () => getAllRegistrations(competitionInfo),
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
     staleTime: Infinity,

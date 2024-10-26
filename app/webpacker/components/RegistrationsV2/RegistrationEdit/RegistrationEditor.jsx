@@ -42,7 +42,7 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
 
   const { isLoading: isRegistrationLoading, data: serverRegistration, refetch } = useQuery({
     queryKey: ['registration-admin', competitionInfo.id, competitor.id],
-    queryFn: () => getSingleRegistration(competitor.id, competitionInfo.id),
+    queryFn: () => getSingleRegistration(competitor.id, competitionInfo),
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
     staleTime: Infinity,
@@ -56,7 +56,7 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
   });
 
   const { mutate: updateRegistrationMutation, isPending: isUpdating } = useMutation({
-    mutationFn: updateRegistration,
+    mutationFn: (body) => updateRegistration(competitionInfo, body),
     onError: (data) => {
       const { error } = data.json;
       dispatch(setMessage(
