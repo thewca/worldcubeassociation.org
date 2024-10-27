@@ -96,7 +96,9 @@ class Competition < ApplicationRecord
     restricted: 2,
   }, prefix: true
 
-  enum :registration_version, [:v1, :v2, :v3], prefix: true, default: :v2
+  NEW_REG_SYSTEM_DEFAULT = :v2
+
+  enum :registration_version, [:v1, :v2, :v3], prefix: true, default: NEW_REG_SYSTEM_DEFAULT
 
   CLONEABLE_ATTRIBUTES = %w(
     cityName
@@ -634,7 +636,6 @@ class Competition < ApplicationRecord
   def build_clone
     Competition.new(attributes.slice(*CLONEABLE_ATTRIBUTES)).tap do |clone|
       clone.being_cloned_from_id = id
-      clone.registration_version = :v2
 
       Competition.reflections.each_key do |association_name|
         case association_name
@@ -741,11 +742,11 @@ class Competition < ApplicationRecord
   end
 
   def enable_v2_registrations!
-    update_column :registration_version, :v2
+    update_column :registration_version, NEW_REG_SYSTEM_DEFAULT
   end
 
   def uses_new_registration_service?
-    self.registration_version_v2?
+    self.registration_version_v2? || self.registration_version_v3?
   end
 
   def should_render_register_v2?(user)
@@ -2409,7 +2410,7 @@ class Competition < ApplicationRecord
       "admin" => {
         "isConfirmed" => confirmed?,
         "isVisible" => showAtAll?,
-        "registrationVersion" => registration_version.to_s,
+        "usesNewRegistrationSystem" => uses_new_registration_service?,
       },
       "cloning" => {
         "fromId" => being_cloned_from_id,
@@ -2616,7 +2617,7 @@ class Competition < ApplicationRecord
       showAtAll: form_data.dig('admin', 'isVisible'),
       being_cloned_from_id: form_data.dig('cloning', 'fromId'),
       clone_tabs: form_data.dig('cloning', 'cloneTabs'),
-      registration_version: form_data.dig('admin', 'registrationVersion'),
+      registration_version: form_data.dig('admin', 'usesNewRegistrationSystem') ? NEW_REG_SYSTEM_DEFAULT : :v1,
     }
   end
 
@@ -2848,7 +2849,7 @@ class Competition < ApplicationRecord
           "properties" => {
             "isConfirmed" => { "type" => "boolean" },
             "isVisible" => { "type" => "boolean" },
-            "usesV2Registrations" => { "type" => "boolean" },
+            "usesNewRegistrationSystem" => { "type" => "boolean" },
           },
         },
         "cloning" => {

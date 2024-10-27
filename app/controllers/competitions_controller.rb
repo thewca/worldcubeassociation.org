@@ -280,7 +280,6 @@ class CompetitionsController < ApplicationController
       competitor_limit_enabled: true,
       base_entry_fee_lowest_denomination: 0,
       guests_entry_fee_lowest_denomination: 0,
-      registration_version: :v2,
     )
 
     assign_editing_user(@competition)
