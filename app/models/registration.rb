@@ -221,13 +221,9 @@ class Registration < ApplicationRecord
     # TODO: WCIF spec needs to be updated - and possibly versioned - to include new statuses
     if accepted? || !is_competing?
       'accepted'
-    elsif deleted?
+    elsif deleted? || rejected?
       'deleted'
-    elsif rejected?
-      'rejected'
-    elsif waitlisted?
-      'waiting_list'
-    else
+    elsif pending? || waitlisted?
       'pending'
     end
   end
