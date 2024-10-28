@@ -2548,6 +2548,8 @@ class Competition < ApplicationRecord
       end
 
       assign_attributes(Competition.form_data_to_attributes(form_data))
+
+      self.uses_v2_registrations = false unless form_data.dig('website', 'usesWcaRegistration')
     end
   end
 
