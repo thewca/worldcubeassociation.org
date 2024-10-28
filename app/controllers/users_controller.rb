@@ -335,13 +335,16 @@ class UsersController < ApplicationController
       if user_params.key?(:delegate_reports_region)
         raw_region = user_params.delete(:delegate_reports_region)
 
-        if raw_region.starts_with?('_')
+        if raw_region.blank?
+          # Explicitly reset the region type column when "worldwide" (represented by a blank value) was selected
+          user_params[:delegate_reports_region_type] = nil
+        elsif raw_region.starts_with?('_')
           user_params[:delegate_reports_region_type] = 'Continent'
         else
           user_params[:delegate_reports_region_type] = 'Country'
         end
 
-        user_params[:delegate_reports_region_id] = raw_region
+        user_params[:delegate_reports_region_id] = raw_region.presence
       end
     end
   end
