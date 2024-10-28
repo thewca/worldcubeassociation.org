@@ -27,7 +27,7 @@ export default function EventRestrictions() {
       eventLimitation,
     },
     admin: {
-      usesV2Registrations,
+      usesNewRegistrationSystem,
     },
   } = useFormObject();
 
@@ -52,7 +52,7 @@ export default function EventRestrictions() {
 
   return (
     <SubSection section="eventRestrictions">
-      { usesV2Registrations && (
+      { usesNewRegistrationSystem && (
         <SubSection section="forbidNewcomers">
           <InputBoolean id="enabled" />
           <ConditionalSection showIf={newcomers}>

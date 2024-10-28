@@ -5,14 +5,13 @@ import SubSection from '../../wca/FormBuilder/SubSection';
 
 export default function Admin() {
   const { isAdminView, isPersisted, canChangeRegistrationSystem } = useStore();
-
   if (!isPersisted || !isAdminView) return null;
 
   return (
     <SubSection section="admin">
       <InputBoolean id="isConfirmed" />
       <InputBoolean id="isVisible" />
-      <InputBoolean id="usesV2Registrations" disabled={!canChangeRegistrationSystem} />
+      <InputBoolean id="usesNewRegistrationSystem" disabled={!canChangeRegistrationSystem} />
     </SubSection>
   );
 }

@@ -121,7 +121,7 @@ class RegistrationsController < ApplicationController
 
   def import
     @competition = competition_from_params
-    if @competition.uses_new_registration_service?
+    if @competition.uses_microservice_registrations?
       redirect_to Microservices::Registrations.registration_import_path(@competition.id)
     end
   end
@@ -210,7 +210,7 @@ class RegistrationsController < ApplicationController
     end
     ActiveRecord::Base.transaction do
       user, locked_account_created = user_for_registration!(params[:registration_data])
-      if @competition.uses_new_registration_service?
+      if @competition.uses_microservice_registrations?
         Microservices::Registrations.add_registration(@competition.id,
                                                       user.id,
                                                       params[:registration_data][:event_ids],
