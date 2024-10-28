@@ -166,8 +166,6 @@ RSpec.describe 'API Registrations' do
       expect(history.first[:action]).to eq('Admin update')
     end
 
-    # TODO: Add an assertion that checks for competing status for a given registration in the response payload
-    # // in general, make more assertions against the return payload
     it 'makes all changes in the given payload' do
       update_request1 = FactoryBot.build(
         :update_request,
