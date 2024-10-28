@@ -16,7 +16,7 @@
 
 <p>
   You can approve or delete this registration
-  <%= link_to "here", @registration.competition.uses_new_registration_service? ?
+  <%= link_to "here", @registration.competition.uses_new_registration_system? ?
                         edit_registration_v2_url(competition_id: @registration.competition.id, user_id: @registration.user.id) :
                         edit_registration_url(@registration) %>.
 </p>

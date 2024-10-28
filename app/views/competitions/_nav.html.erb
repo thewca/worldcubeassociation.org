@@ -50,7 +50,7 @@
               ] : [])
           }
           if @competition.use_wca_registration?
-            pending_registrations = if @competition.uses_new_registration_service?
+            pending_registrations = if @competition.uses_microservice_registrations?
                                       Microservices::Registrations.registrations_by_competition(@competition.id, 'pending', cache: true).length
                                       else
                                         @competition.registrations.pending.count
@@ -138,7 +138,7 @@
           unless @competition.registration_not_yet_opened?
             event_icons = @competition.events.map do |event|
               { text: event.id, path: competition_psych_sheet_event_path(@competition, event.id), cubing_icon: event.id, title: event.name }
-            end unless @competition.uses_new_registration_service?
+            end unless @competition.uses_new_registration_system?
             nav_items << {
               text: t('.menu.competitors'),
               path: competition_registrations_path(@competition),
