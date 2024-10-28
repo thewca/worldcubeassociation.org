@@ -17,7 +17,7 @@ import useWithUserData from '../hooks/useWithUserData';
 import { bulkUpdateRegistrations } from '../api/registration/patch/update_registration';
 import RegistrationAdministrationTable from './RegistrationsAdministrationTable';
 import useCheckboxState from '../../../lib/hooks/useCheckboxState';
-import {countries} from "../../../lib/wca-data.js.erb";
+import { countries } from '../../../lib/wca-data.js.erb';
 
 const selectedReducer = (state, action) => {
   let newState = [...state];
@@ -219,8 +219,8 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
               - DateTime.fromISO(b.competing.registered_on).toMillis();
           case 'paid_on_with_registered_on_fallback':
           {
-            const hasAPaid = a.payment?.has_paid === 'succeeded';
-            const hasBPaid = b.payment?.has_paid === 'succeeded';
+            const hasAPaid = a.payment?.has_paid;
+            const hasBPaid = b.payment?.has_paid;
 
             if (hasAPaid && hasBPaid) {
               return DateTime.fromISO(a.payment.updated_at).toMillis()
