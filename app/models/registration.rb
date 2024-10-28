@@ -173,6 +173,7 @@ class Registration < ApplicationRecord
       receipt: receipt,
       user_id: user_id,
     )
+    add_history_entry({ payment_status: receipt.wca_status, iso_amount: amount_lowest_denomination }, "user", user_id, 'Payment')
   end
 
   def record_refund(
@@ -189,6 +190,7 @@ class Registration < ApplicationRecord
       refunded_registration_payment_id: refunded_registration_payment_id,
       user_id: user_id,
     )
+    add_history_entry({ payment_status: "refund", iso_amount: paid_entry_fees.cents - amount_lowest_denomination }, "user", user_id, 'Refund')
   end
 
   # Since Registration.events only includes saved events
