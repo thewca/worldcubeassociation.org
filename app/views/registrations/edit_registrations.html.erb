@@ -1,7 +1,7 @@
 <% provide(:title, I18n.t('registrations.list.title', comp: @competition.name)) %>
 
 <%= render layout: 'nav' do %>
-  <% if @competition.uses_new_registration_service? %>
+  <% if @competition.uses_new_registration_system? %>
     <%= react_component('RegistrationsV2/RegistrationAdministration', { competitionInfo: @competition.to_competition_info }) %>
   <% else %>
     <p>
