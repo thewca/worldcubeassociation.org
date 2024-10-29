@@ -47,7 +47,7 @@ module WcaExceptions
     attr_reader :status, :errors
 
     def initialize(status, errors)
-      super(I18n.t('competitions.registration_v2.errors.bulk_update', count: errors.keys.count))
+      super('Errors detected in bulk update request. See `errors` attribute for more information.')
       @status = status
       @errors = errors
     end

@@ -1899,7 +1899,6 @@ en:
         event_limit: "This competition limits the amount of events you can register for to %{max_events}."
       errors:
         events: "Loading Events failed, please try again"
-        bulk_update: "%{count} errors detected in request. See response payload for more information."
         #context: These are error codes coming from the registration service
         -1: "You have sent an invalid token, please refresh the page. If this issue persists contact WST"
         -2: "Authentication Expired, please refresh the page"
