@@ -123,7 +123,6 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
     render json: { client_secret: payment_intent.client_secret }
   end
 
-
   private
 
     def action_type(request)

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class AddRegistrationJob < ApplicationJob
-
   def self.prepare_task(user_id, competition_id)
     message_deduplication_id = "competing-registration-#{competition_id}-#{user_id}"
     message_group_id = competition_id
