@@ -13,7 +13,7 @@ class Api::Internal::V1::MailersController < Api::Internal::V1::ApiController
     requesting_user = params.require(:current_user)
     registration_competition = params.require(:competition_id)
     user = User.find(registration_user)
-    registration = user.microservice_registrations.find_by(competition_id: registration_competition)
+    registration = user.find_ms_registration_by(competition_id: registration_competition)
 
     if registration_status == 'pending' && registration_action == 'create'
       RegistrationsMailer.notify_organizers_of_new_registration(registration).deliver_later
