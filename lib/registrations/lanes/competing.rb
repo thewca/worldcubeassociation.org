@@ -56,8 +56,9 @@ module Registrations
           registration.add_history_entry(changes, 'user', current_user_id, Registrations::Helper.action_type(update_params, current_user_id))
         end
 
-        send_status_change_email(registration, status, old_status, user_id, current_user_id)
+        send_status_change_email(registration, status, user_id, current_user_id) if status.present? && old_status != status
 
+        # TODO: V3-REG Cleanup Figure out a way to get rid of this reload
         registration.reload
       end
 
@@ -83,9 +84,7 @@ module Registrations
         end
       end
 
-      def self.send_status_change_email(registration, status, old_status, user_id, current_user_id)
-        return unless status.present? && old_status != status
-
+      def self.send_status_change_email(registration, status, user_id, current_user_id)
         # TODO: V3-REG Cleanup, at new waiting list email
         case status
         when Registrations::Helper.STATUS_PENDING
@@ -104,6 +103,7 @@ module Registrations
       end
 
       def self.update_event_ids(registration, event_ids)
+        # TODO: V3-REG Cleanup, this is probably why we need the reload above
         return unless event_ids.present?
 
         registration.registration_competition_events.each do |registration_competition_event|
