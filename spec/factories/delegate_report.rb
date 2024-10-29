@@ -11,6 +11,10 @@ FactoryBot.define do
       upload_files { true }
     end
 
+    trait :with_images do
+      upload_files { true }
+    end
+
     transient do
       upload_files { false }
     end
@@ -19,11 +23,11 @@ FactoryBot.define do
       competition.delegate_report
     end
 
-    after(:create) do |dr, evaluator|
+    after(:build, :create) do |dr, evaluator|
       if evaluator.upload_files
-        default_io = File.open(Rails.root.join('app', 'assets', 'images', 'og-wca_logo.png'), 'rb')
-
         dr.required_setup_images_count.times do |i|
+          default_io = File.open(Rails.root.join('app', 'assets', 'images', 'og-wca_logo.png'), 'rb')
+
           dr.setup_images.attach(
             io: default_io,
             filename: "venue_setup_#{i}.png",
