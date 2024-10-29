@@ -49,7 +49,7 @@ resource "aws_ecs_task_definition" "worker" {
 }
 
 data "aws_ecs_task_definition" "worker" {
-  task_definition = aws_ecs_task_definition.auxiliary.family
+  task_definition = aws_ecs_task_definition.worker.family
 }
 
 resource "aws_ecs_service" "worker" {
