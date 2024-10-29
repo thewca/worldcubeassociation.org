@@ -101,10 +101,15 @@ FactoryBot.define do
 
     registration_version { :v1 }
 
-    trait :enforces_easy_qualifications do
+    trait :enforces_qualifications do
+      with_organizer
       qualification_results { true }
       qualification_results_reason { 'testing' }
       event_ids { %w(333 333oh 555 pyram minx 222 444) }
+    end
+
+    trait :enforces_easy_qualifications do
+      enforces_qualifications
       allow_registration_without_qualification { false }
 
       transient do
@@ -113,9 +118,7 @@ FactoryBot.define do
     end
 
     trait :enforces_past_qualifications do
-      qualification_results { true }
-      qualification_results_reason { 'testing' }
-      event_ids { %w(333 333oh 555 pyram minx 222 444) }
+      enforces_qualifications
       allow_registration_without_qualification { false }
 
       transient do
@@ -124,9 +127,7 @@ FactoryBot.define do
     end
 
     trait :enforces_hard_qualifications do
-      qualification_results { true }
-      qualification_results_reason { 'testing' }
-      event_ids { %w(333 333oh 555 pyram minx 222 444) }
+      enforces_qualifications
       allow_registration_without_qualification { false }
 
       transient do
@@ -135,9 +136,7 @@ FactoryBot.define do
     end
 
     trait :unenforced_easy_qualifications do
-      qualification_results { true }
-      qualification_results_reason { 'testing' }
-      event_ids { %w(333 333oh 555 pyram minx 222 444) }
+      enforces_qualifications
       allow_registration_without_qualification { true }
 
       transient do
@@ -146,9 +145,7 @@ FactoryBot.define do
     end
 
     trait :unenforced_hard_qualifications do
-      qualification_results { true }
-      qualification_results_reason { 'testing' }
-      event_ids { %w(333 333oh 555 pyram minx 222 444) }
+      enforces_qualifications
       allow_registration_without_qualification { true }
 
       transient do
@@ -482,8 +479,7 @@ FactoryBot.define do
           event['qualification'] = qualification_data[event['id']]
         end
 
-        mock_user = FactoryBot.build :admin
-        competition.set_wcif_events!(events_wcif, mock_user)
+        competition.set_wcif_events!(events_wcif, competition.organizers.first)
         competition.to_wcif['events']
       end
 
