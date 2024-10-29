@@ -1892,7 +1892,7 @@ class Competition < ApplicationRecord
   end
 
   def other_series_ids
-    competition_series_ids.reject { |id| id == self.id }
+    series_sibling_competitions.pluck(:id)
   end
 
   def qualification_wcif
