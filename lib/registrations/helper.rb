@@ -10,8 +10,8 @@ module Registrations
     STATUS_REJECTED = "rejected"
 
     REGISTRATION_STATES = [STATUS_ACCEPTED, STATUS_DELETED, STATUS_PENDING, STATUS_ACCEPTED, STATUS_PENDING].freeze # TODO: Change deleted to canceled when v1 is retired
-    ADMIN_ONLY_STATES = [STATUS_PENDING STATUS_PENDING STATUS_ACCEPTED STATUS_ACCEPTED].freeze # Only admins are allowed to change registration state to one of these states
-    MIGHT_ATTEND_STATES = [STATUS_PENDING STATUS_ACCEPTED STATUS_ACCEPTED].freeze
+    ADMIN_ONLY_STATES = [STATUS_PENDING, STATUS_PENDING, STATUS_ACCEPTED, STATUS_ACCEPTED].freeze # Only admins are allowed to change registration state to one of these states
+    MIGHT_ATTEND_STATES = [STATUS_PENDING, STATUS_ACCEPTED, STATUS_ACCEPTED].freeze
 
     def self.action_type(request, current_user)
       self_updating = request[:user_id].to_i == current_user
