@@ -6,11 +6,12 @@ module Registrations
     def self.create_registration_allowed!(registration_request, current_user)
       target_user = User.find(registration_request['user_id'])
       competition = Competition.find(registration_request['competition_id'])
+      guests = registration_request['guests']
 
       user_can_create_registration!(competition, current_user, target_user)
       validate_create_events!(registration_request, competition)
       validate_qualifications!(registration_request, competition, target_user)
-      validate_guests!(registration_request['guests'], competition)
+      validate_guests!(guests.to_i, competition) unless guests.nil?
       validate_comment!(registration_request.dig('competing', 'comment'), competition)
     end
 
