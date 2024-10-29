@@ -73,7 +73,7 @@ class DelegateReport < ApplicationRecord
     case section
     when :summary
       self.working_group_2024_version?
-    when :venue
+    when :equipment
       self.legacy_version?
     else
       true
