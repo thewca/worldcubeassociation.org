@@ -85,7 +85,7 @@ class DelegateReport < ApplicationRecord
   end
 
   def requires_setup_images?
-    self.required_setup_images_count > 0
+    self.uses_section?(:venue) && self.required_setup_images_count > 0
   end
 
   def required_setup_images_count
