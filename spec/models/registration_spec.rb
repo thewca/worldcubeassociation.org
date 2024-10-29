@@ -331,4 +331,41 @@ RSpec.describe Registration do
       expect(described_class.accepted_and_paid_pending_count).to eq(total_count)
     end
   end
+
+  describe '#to_wcif', :tag do
+    it 'deleted state returns deleted status' do
+      registration = FactoryBot.create(:registration, :deleted)
+
+      expect(registration.deleted?).to eq(true)
+      expect(registration.to_wcif['status']).to eq('deleted')
+    end
+
+    it 'rejected state returns deleted status' do
+      registration = FactoryBot.create(:registration, :rejected)
+
+      expect(registration.rejected?).to eq(true)
+      expect(registration.to_wcif['status']).to eq('deleted')
+    end
+
+    it 'accepted state returns accepted status' do
+      registration = FactoryBot.create(:registration, :accepted)
+
+      expect(registration.accepted?).to eq(true)
+      expect(registration.to_wcif['status']).to eq('accepted')
+    end
+
+    it 'pending state returns pending status' do
+      registration = FactoryBot.create(:registration, :pending)
+
+      expect(registration.pending?).to eq(true)
+      expect(registration.to_wcif['status']).to eq('pending')
+    end
+
+    it 'waitlisted state returns pending status' do
+      registration = FactoryBot.create(:registration, :waiting_list)
+
+      expect(registration.waitlisted?).to eq(true)
+      expect(registration.to_wcif['status']).to eq('pending')
+    end
+  end
 end
