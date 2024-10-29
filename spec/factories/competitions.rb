@@ -243,10 +243,6 @@ FactoryBot.define do
       events_per_registration_limit { events.length-2 }
     end
 
-    use_wca_registration { false }
-    registration_open { 54.weeks.ago.change(usec: 0) }
-    registration_close { 1.weeks.from_now.change(usec: 0) }
-
     trait :with_valid_submitted_results do
       announced
       with_rounds { true }
