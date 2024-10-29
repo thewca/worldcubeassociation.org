@@ -32,7 +32,7 @@ module Registrations
         registration = Registration.find_by(competition_id: competition_id, user_id: user_id)
         old_status = registration.competing_status
 
-        if old_status == "waiting_list" || status == "waiting_list"
+        if old_status == Registrations::Helper.STATUS_WAITING_LIST || status == Registrations::Helper.STATUS_WAITING_LIST
           waiting_list = competition.waiting_list || competition.waiting_list.build(entries: [])
         end
 
@@ -70,13 +70,13 @@ module Registrations
         registration.waitlisted_at = nil
 
         case status
-        when "waiting_list"
+        when Registrations::Helper.STATUS_WAITING_LIST
           registration.waitlisted_at = Time.now.utc
-        when "accepted"
+        when Registrations::Helper.STATUS_ACCEPTED
           registration.accepted_at = Time.now.utc
-        when "deleted"
+        when Registrations::Helper.STATUS_DELETED
           registration.deleted_at = Time.now.utc
-        when "rejected"
+        when Registrations::Helper.STATUS_REJECTED
           registration.rejected_at = Time.now.utc
         else
           raise WcaExceptions::RegistrationError.new(:unprocessable_entity, Registrations::ErrorCodes::INVALID_REQUEST_DATA)
@@ -86,12 +86,13 @@ module Registrations
       def self.send_status_change_email(registration, status, old_status, user_id, current_user_id)
         return unless status.present? && old_status != status
 
+        # TODO: V3-REG Cleanup, at new waiting list email
         case status
-        when 'pending'
+        when Registrations::Helper.STATUS_PENDING
           RegistrationsMailer.notify_registrant_of_pending_registration(registration).deliver_later
-        when 'accepted'
+        when Registrations::Helper.STATUS_ACCEPTED
           RegistrationsMailer.notify_registrant_of_accepted_registration(registration).deliver_later
-        when 'rejected', 'deleted'
+        when Registrations::Helper.STATUS_REJECTED, Registrations::Helper.STATUS_DELETED
           if user_id == current_user_id
             RegistrationsMailer.notify_organizers_of_deleted_registration(registration).deliver_later
           else

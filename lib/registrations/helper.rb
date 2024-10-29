@@ -2,17 +2,24 @@
 
 module Registrations
   module Helper
-    REGISTRATION_STATES = %w[pending waiting_list accepted deleted rejected].freeze # TODO: Change deleted to canceled when v1 is retired
-    ADMIN_ONLY_STATES = %w[pending waiting_list accepted rejected].freeze # Only admins are allowed to change registration state to one of these states
-    MIGHT_ATTEND_STATES = %w[pending waiting_list accepted].freeze
+    # TODO: V3-REG Cleanup. Change to symbol when introducing the registration_status enum
+    STATUS_PENDING = "pending"
+    STATUS_WAITING_LIST = "waiting_list"
+    STATUS_ACCEPTED = "accepted"
+    STATUS_DELETED = "deleted"
+    STATUS_REJECTED = "rejected"
+
+    REGISTRATION_STATES = [STATUS_ACCEPTED, STATUS_DELETED, STATUS_PENDING, STATUS_ACCEPTED, STATUS_PENDING].freeze # TODO: Change deleted to canceled when v1 is retired
+    ADMIN_ONLY_STATES = [STATUS_PENDING STATUS_PENDING STATUS_ACCEPTED STATUS_ACCEPTED].freeze # Only admins are allowed to change registration state to one of these states
+    MIGHT_ATTEND_STATES = [STATUS_PENDING STATUS_ACCEPTED STATUS_ACCEPTED].freeze
 
     def self.action_type(request, current_user)
       self_updating = request[:user_id].to_i == current_user
       status = request.dig('competing', 'status')
-      if status == 'cancelled'
+      if status == STATUS_DELETED
         return self_updating ? 'Competitor delete' : 'Admin delete'
       end
-      if status == 'rejected'
+      if status == STATUS_REJECTED
         return 'Admin reject'
       end
       self_updating ? 'Competitor update' : 'Admin update'
