@@ -81,8 +81,6 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
   end
 
   def validate_bulk_update_request
-    competition_id = params.require('competition_id')
-    @competition = Competition.find(competition_id)
     Registrations::RegistrationChecker.bulk_update_allowed!(params, @current_user)
   end
 
@@ -95,6 +93,7 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
   # To list Registrations in the admin view you need to be able to administer the competition
   def validate_list_admin
     competition_id = list_params
+    # TODO: Do we set this as an instance variable here so we can use it below?
     @competition = Competition.find(competition_id)
     unless @current_user.can_manage_competition?(@competition)
       render_error(:unauthorized, ErrorCodes::USER_INSUFFICIENT_PERMISSIONS)
