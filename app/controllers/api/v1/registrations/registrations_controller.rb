@@ -1,9 +1,5 @@
 # frozen_string_literal: true
 
-require 'securerandom'
-require 'jwt'
-require 'time'
-
 class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
   skip_before_action :validate_jwt_token, only: [:list]
   # The order of the validations is important to not leak any non public info via the API
@@ -16,6 +12,21 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
   before_action :validate_bulk_update_request, only: [:bulk_update]
   before_action :validate_payment_ticket_request, only: [:payment_ticket]
 
+  rescue_from ActiveRecord::RecordNotFound do
+    render json: {}, status: :not_found
+  end
+
+  rescue_from WcaExceptions::RegistrationError do |e|
+    # TODO: Figure out what the best way to log errors in development is
+    Rails.logger.debug { "Create was rejected with error #{e.error} at #{e.backtrace[0]}" }
+    render_error(e.status, e.error)
+  end
+
+  rescue_from WcaExceptions::BulkUpdateError do |e|
+    Rails.logger.debug { "Bulk update was rejected with error #{e.errors} at #{e.backtrace[0]}" }
+    render_error(e.status, e.errors)
+  end
+
   def validate_show_registration
     @user_id, @competition_id = show_params
     @competition = Competition.find(@competition_id)
@@ -25,26 +36,17 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
   def show
     registration = Registration.find_by!(user_id: @user_id, competition_id: @competition_id)
     render json: registration.to_v2_json(admin: true, history: true)
-  rescue ActiveRecord::RecordNotFound
-    render json: {}, status: :not_found
-  rescue WcaExceptions::RegistrationError => e
-    render_error(e.status, e.error)
   end
 
   def create
     # Currently we only have one lane
-    # QUESTION: Should we be calling registration_params[:competing]?
     if params[:competing]
-      # QUESTION: Should this not be params[:competing].permit?
       competing_params = params.permit(:guests, competing: [:status, :comment, { event_ids: [] }, :admin_comment])
 
       user_id = registration_params['user_id']
       competition_id = registration_params['competition_id']
 
-      message_deduplication_id = "competing-registration-#{competition_id}-#{user_id}"
-      message_group_id = competition_id
-
-      AddRegistrationJob.set(message_group_id: message_group_id, message_deduplication_id: message_deduplication_id)
+      AddRegistrationJob.prepare_task(user_id, competition_id)
                         .perform_later("competing", competition_id, user_id, competing_params)
       return render json: { status: 'accepted', message: 'Started Registration Process' }, status: :accepted
     end
@@ -54,9 +56,6 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
 
   def validate_create_request
     Registrations::RegistrationChecker.create_registration_allowed!(params, @current_user)
-  rescue WcaExceptions::RegistrationError => e
-    Rails.logger.debug { "Create was rejected with error #{e.error} at #{e.backtrace[0]}" }
-    render_error(e.status, e.error, e.data)
   end
 
   def update
@@ -69,9 +68,6 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
 
   def validate_update_request
     Registrations::RegistrationChecker.update_registration_allowed!(params, @current_user)
-  rescue WcaExceptions::RegistrationError => e
-    Rails.logger.debug { "Update was rejected with error #{e.error} at #{e.backtrace[0]}" }
-    render_error(e.status, e.error, e.data)
   end
 
   def bulk_update
@@ -88,12 +84,6 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
     competition_id = params.require('competition_id')
     @competition = Competition.find(competition_id)
     Registrations::RegistrationChecker.bulk_update_allowed!(params, @current_user)
-  rescue WcaExceptions::BulkUpdateError => e
-    Rails.logger.debug { "Bulk update was rejected with error #{e.errors} at #{e.backtrace[0]}" }
-    render_error(e.status, e.errors)
-  rescue NoMethodError => e
-    Rails.logger.debug { "Bulk update was rejected with error #{e.exception} at #{e.backtrace[0]}" }
-    render_error(:unprocessable_entity, ErrorCodes::INVALID_REQUEST_DATA, e.data)
   end
 
   def list
@@ -133,6 +123,7 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
     payment_intent = payment_account.prepare_intent(@registration, amount_iso + donation, currency_iso, @current_user)
     render json: { client_secret: payment_intent.client_secret }
   end
+
 
   private
 
