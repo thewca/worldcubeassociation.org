@@ -323,12 +323,10 @@ class AdminController < ApplicationController
   end
 
   def check_regional_records
-    refresh_index_param = params[:refresh_index] || nil
-
     @check_records_request = CheckRegionalRecordsForm.new(
       competition_id: params[:competition_id] || nil,
       event_id: params[:event_id] || nil,
-      refresh_index: ActiveRecord::Type::Boolean.new.cast(refresh_index_param) || false,
+      refresh_index: params[:refresh_index] || nil,
     )
 
     @cad_timestamp = ComputeAuxiliaryData.successful_start_date&.to_fs || 'never'
