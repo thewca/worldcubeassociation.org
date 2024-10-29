@@ -169,9 +169,8 @@ class UsersController < ApplicationController
       thumbnail_crop_y: thumbnail[:y],
       thumbnail_crop_w: thumbnail[:width],
       thumbnail_crop_h: thumbnail[:height],
+      private_image: upload_file,
     )
-
-    user_avatar.attach_image(upload_file)
 
     render json: { ok: user_avatar.valid? }
   end
@@ -264,6 +263,11 @@ class UsersController < ApplicationController
     # Note that we do validate emails (as in: users can't log in until they have
     # validated their emails).
 
+    if current_user.forum_banned?
+      flash[:alert] = I18n.t('registrations.errors.banned_html').html_safe
+      return redirect_to new_user_session_path
+    end
+
     # Use the 'SingleSignOn' lib provided by Discourse. Our secret and URL is
     # already configured there.
     sso = SingleSignOn.parse(request.query_string)
@@ -335,13 +339,16 @@ class UsersController < ApplicationController
       if user_params.key?(:delegate_reports_region)
         raw_region = user_params.delete(:delegate_reports_region)
 
-        if raw_region.starts_with?('_')
+        if raw_region.blank?
+          # Explicitly reset the region type column when "worldwide" (represented by a blank value) was selected
+          user_params[:delegate_reports_region_type] = nil
+        elsif raw_region.starts_with?('_')
           user_params[:delegate_reports_region_type] = 'Continent'
         else
           user_params[:delegate_reports_region_type] = 'Country'
         end
 
-        user_params[:delegate_reports_region_id] = raw_region
+        user_params[:delegate_reports_region_id] = raw_region.presence
       end
     end
   end

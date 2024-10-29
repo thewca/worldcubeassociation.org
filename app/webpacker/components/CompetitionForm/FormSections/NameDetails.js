@@ -8,14 +8,14 @@ import { useFormObject } from '../../wca/FormBuilder/provider/FormObjectProvider
 export default function NameDetails() {
   const { hasAnyRegistrations, isPersisted, isAdminView } = useStore();
 
-  const { name, admin: { usesV2Registrations } } = useFormObject();
+  const { name, admin: { usesNewRegistrationSystem } } = useFormObject();
 
   const nameAlreadyShort = !name || name.length <= competitionMaxShortNameLength;
   const disableIdAndShortName = !isAdminView && nameAlreadyShort;
 
   // ID change on V1 is always possible, because we have control over the Foreign Keys.
   // Otherwise, only competitions without registrations can change their ID.
-  const regSystemSupportsIdChange = !usesV2Registrations || !hasAnyRegistrations;
+  const regSystemSupportsIdChange = !usesNewRegistrationSystem || !hasAnyRegistrations;
 
   return (
     <>

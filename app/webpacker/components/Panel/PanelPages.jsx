@@ -6,7 +6,7 @@ import {
   generateDbTokenUrl,
 } from '../../lib/requests/routes.js.erb';
 import PostingCompetitionsTable from '../PostingCompetitions';
-import EditPerson from './pages/EditPerson';
+import EditPersonPage from './pages/EditPersonPage';
 import BannedCompetitorsPage from './pages/BannedCompetitorsPage';
 import GroupsManagerAdmin from './pages/GroupsManagerAdmin';
 import Translators from './pages/Translators';
@@ -36,7 +36,7 @@ export default {
   },
   [PANEL_PAGES.editPerson]: {
     name: 'Edit Person',
-    component: EditPerson,
+    component: EditPersonPage,
   },
   [PANEL_PAGES.regionsManager]: {
     name: 'Regions Manager',

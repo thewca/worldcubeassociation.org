@@ -453,6 +453,8 @@ zh-TW:
         subRegion: 子區域
         #original_hash: 730db33
         receive_delegate_reports: 我希望透過收到電子郵件收到WCA比賽報告
+        #original_hash: 8667157
+        delegate_reports_region: 我只想收到以下區域的比賽報告
         #original_hash: 57eaf24
         user_preferred_events: 喜好項目
         #original_hash: e632fbf
@@ -742,6 +744,8 @@ zh-TW:
         wca_id: ''
         #original_hash: 27c2251
         receive_delegate_reports: 如果您是高級代表、WRC或WQAC的成員，您會自動收到比賽報告。備註：此變更可能得花一個小時才生效。
+        #original_hash: 364624c
+        delegate_reports_region: 如果您想要收到所有的報告，請在這個欄位留白(下拉式選單的最上面)。請注意：這個變更可能需要一個小時才會生效。
         #original_hash: 0627e5c
         otp_attempt: 請開啟您的行動裝置上的應用程式來取得一次性的密碼，或是輸入您其中一個備用碼。
       dob_contact:
@@ -1593,6 +1597,8 @@ zh-TW:
       new: 新的縮圖：
       #original_hash: efc007a
       save: 儲存
+      #original_hash: 44c57ab
+      reset: 重置
     edit:
       #original_hash: 9239ee2
       general: 一般資料
@@ -1618,6 +1624,10 @@ zh-TW:
       pending_mail_confirmation: '這個帳號的新電子郵件%{email}正在等待確認。'
       #original_hash: 0340b0b
       pending_avatar_confirmation: 這個帳號的新頭像正在等待審核。
+      #original_hash: 81fa5f9
+      pending_avatar_edit_action: 按這裡如果您想要編輯：
+      #original_hash: 73cebb8
+      pending_avatar_edit_warning: 編輯待審核的頭像！
       #original_hash: 7b06f03
       pending_claim_confirmation_html: '這個帳號正在等待%{delegate}審核WCA ID %{wca_id}。'
       #original_hash: e7554d8
@@ -1676,8 +1686,8 @@ zh-TW:
         '3': 如果頭像上有超過一個人，應該要能讓人輕易辨認哪一個是您。
         #original_hash: 4083c00
         '4': 必須有本人的頭部出現，但是不需要全臉入鏡。
-        #original_hash: 7c0aab3
-        '5': 頭像包含照片邊界的部分都不應該有重疊的文字，或不自然照片濾鏡效果。
+        #original_hash: fc17fa7
+        '5': 頭像包含照片邊界的部分都不應該有重疊的文字、貼紙或不自然照片濾鏡效果。
         #original_hash: cc5f23a
         '6': 頭像的方向必須正確。
         #original_hash: 1a18831
@@ -1740,8 +1750,6 @@ zh-TW:
       wca_id_no_name_html: >-
         我們沒有此WCA ID的姓名資料。請寄信至<a href='%{wrt_contact_path}'
         target='_blank'>WCA成績組</a>處理。
-      #original_hash: d02c03b
-      avatar_requires_wca_id: 需要對應的WCA ID
       #original_hash: 8f785ea
       email_used_by_locked_account_html: >-
         已經被其他帳號所使用。當您透過外部網站報名比賽時就已經自動被產生了。如果您是這個電子郵件的所有人，重新設定密碼後使用該帳號。您可以在<a
