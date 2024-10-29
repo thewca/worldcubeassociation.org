@@ -1,7 +1,9 @@
-* **Equipment:**
+* **Equipment:** [Please fill in the counts for all corresponding competition gear below]
+
 Gen 3 Timers:
 Gen 4 Timers:
 Gen 5 Timers:
+
 Speed Stacks Displays:
 QiYi Displays:
 

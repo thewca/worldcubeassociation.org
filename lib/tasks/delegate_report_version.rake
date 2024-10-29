@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-DR2024_OLD_EQUIPMENT = "Gen 3 Timers:\nGen 4 Timers:\nGen 5 Timers:\nSpeed Stacks Displays:\nQiYi Displays:\n"
+DR2024_OLD_EQUIPMENT = "Gen 3 Timers:\nGen 4 Timers:\nGen 5 Timers:\n\nSpeed Stacks Displays:\nQiYi Displays:\n"
 
 namespace :delegate_reports do
   desc "Migrate untouched 'legacy' reports to 'dr2024' format"
