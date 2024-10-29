@@ -11,9 +11,10 @@ class Api::V1::ApiController < ActionController::API
     if auth_header.blank?
       return render json: { error: Registrations::ErrorCodes::MISSING_AUTHENTICATION }, status: :unauthorized
     end
-    token = request.headers['Authorization'].split[1]
+    token = auth_header.split[1]
     begin
-      decoded_token = (JWT.decode token, AppSecrets.JWT_KEY, true, { algorithm: 'HS256' })[0]
+      decode_result = JWT.decode token, AppSecrets.JWT_KEY, true, { algorithm: 'HS256' }
+      decoded_token = decode_result[0]
       @current_user = User.find(decoded_token['user_id'].to_i)
     rescue JWT::VerificationError, JWT::InvalidJtiError
       render json: { error: Registrations::ErrorCodes::INVALID_TOKEN }, status: :unauthorized
