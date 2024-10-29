@@ -9,7 +9,8 @@ FactoryBot.define do
     created_at { Time.now }
     administrative_notes { "" }
     transient do
-      events { competition.events.where(id: ['333', '333oh']) }
+      event_ids { ['333', '333oh'] }
+      events { competition.events.where(id: event_ids) }
     end
     competition_events { competition.competition_events.where(event: events) }
 
