@@ -786,9 +786,9 @@ class RegistrationsController < ApplicationController
         :administrative_notes,
       ]
       params[:registration].merge! case params[:registration][:status]
-                                   when Registrations::Helper.STATUS_ACCEPTED
+                                   when Registrations::Helper::STATUS_ACCEPTED
                                      { accepted_at: Time.now, accepted_by: current_user.id, deleted_at: nil }
-                                   when Registrations::Helper.STATUS_DELETED
+                                   when Registrations::Helper::STATUS_DELETED
                                      { deleted_at: Time.now, deleted_by: current_user.id }
                                    else
                                      { accepted_at: nil, deleted_at: nil }

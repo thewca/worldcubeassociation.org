@@ -32,7 +32,7 @@ module Registrations
         registration = Registration.find_by(competition_id: competition_id, user_id: user_id)
         old_status = registration.competing_status
 
-        if old_status == Registrations::Helper.STATUS_WAITING_LIST || status == Registrations::Helper.STATUS_WAITING_LIST
+        if old_status == Registrations::Helper::STATUS_WAITING_LIST || status == Registrations::Helper::STATUS_WAITING_LIST
           waiting_list = competition.waiting_list || competition.waiting_list.build(entries: [])
         end
 
@@ -71,13 +71,13 @@ module Registrations
         registration.waitlisted_at = nil
 
         case status
-        when Registrations::Helper.STATUS_WAITING_LIST
+        when Registrations::Helper::STATUS_WAITING_LIST
           registration.waitlisted_at = Time.now.utc
-        when Registrations::Helper.STATUS_ACCEPTED
+        when Registrations::Helper::STATUS_ACCEPTED
           registration.accepted_at = Time.now.utc
-        when Registrations::Helper.STATUS_DELETED
+        when Registrations::Helpe::STATUS_DELETED
           registration.deleted_at = Time.now.utc
-        when Registrations::Helper.STATUS_REJECTED
+        when Registrations::Helper::STATUS_REJECTED
           registration.rejected_at = Time.now.utc
         else
           raise WcaExceptions::RegistrationError.new(:unprocessable_entity, Registrations::ErrorCodes::INVALID_REQUEST_DATA)
@@ -87,11 +87,11 @@ module Registrations
       def self.send_status_change_email(registration, status, user_id, current_user_id)
         # TODO: V3-REG Cleanup, at new waiting list email
         case status
-        when Registrations::Helper.STATUS_PENDING
+        when Registrations::Helper::STATUS_PENDING
           RegistrationsMailer.notify_registrant_of_pending_registration(registration).deliver_later
-        when Registrations::Helper.STATUS_ACCEPTED
+        when Registrations::Helper::STATUS_ACCEPTED
           RegistrationsMailer.notify_registrant_of_accepted_registration(registration).deliver_later
-        when Registrations::Helper.STATUS_REJECTED, Registrations::Helper.STATUS_DELETED
+        when Registrations::Helper::STATUS_REJECTED, Registrations::Helper::STATUS_DELETED
           if user_id == current_user_id
             RegistrationsMailer.notify_organizers_of_deleted_registration(registration).deliver_later
           else
