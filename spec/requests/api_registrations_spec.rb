@@ -255,7 +255,7 @@ RSpec.describe 'API Registrations' do
         user_ids: [registration1.user_id],
         submitted_by: competition.organizers.first.id,
         competition_id: competition.id,
-        requests: {}
+        requests: {},
       )
 
       headers = { 'Authorization' => bulk_update_request['jwt_token'] }
