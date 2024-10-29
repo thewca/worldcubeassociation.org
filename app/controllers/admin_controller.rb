@@ -323,15 +323,20 @@ class AdminController < ApplicationController
   end
 
   def check_regional_records
+    refresh_index_param = params[:refresh_index] || nil
+
     @check_records_request = CheckRegionalRecordsForm.new(
       competition_id: params[:competition_id] || nil,
       event_id: params[:event_id] || nil,
+      refresh_index: ActiveRecord::Type::Boolean.new.cast(refresh_index_param) || false,
     )
+
+    @cad_timestamp = ComputeAuxiliaryData.successful_start_date&.to_fs || 'never'
   end
 
   def override_regional_records
     action_params = params.require(:check_regional_records_form)
-                          .permit(:competition_id, :event_id)
+                          .permit(:competition_id, :event_id, :refresh_index)
 
     @check_records_request = CheckRegionalRecordsForm.new(action_params)
     @check_results = @check_records_request.run_check
