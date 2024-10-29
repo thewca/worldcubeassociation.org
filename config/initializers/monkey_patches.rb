@@ -105,7 +105,7 @@ Rails.configuration.to_prepare do
   # Temporary fix until https://github.com/ruby-shoryuken/shoryuken/pull/777 or
   # https://github.com/rails/rails/pull/53336 is merged
   if Rails.env.production?
-    ShoryukenAdapter.class_eval do
+    ActiveJob::QueueAdapters::ShoryukenAdapter.class_eval do
       def enqueue_after_transaction_commit?
         true
       end
