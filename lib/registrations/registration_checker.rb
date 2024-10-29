@@ -76,7 +76,7 @@ module Registrations
       end
 
       def organizer_modifying_own_registration?(competition, current_user, target_user)
-        current_user.can_manage_competition?(competition) && (current_user.id == target_user.id)
+        (current_user.id == target_user.id) && current_user.can_manage_competition?(competition)
       end
 
       def can_administer_or_current_user?(competition, current_user, target_user)
