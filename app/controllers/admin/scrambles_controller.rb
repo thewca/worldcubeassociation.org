@@ -8,8 +8,6 @@ module Admin
       competition = Competition.find(params[:competition_id])
       round = Round.find(params[:round_id])
       # Create some basic attributes for that empty scramble.
-      # Using Scramble.new wouldn't work here: we have no idea what the country
-      # could be and so on, so serialization would fail.
       @scramble = {
         competitionId: competition.id,
         roundTypeId: round.round_type_id,
