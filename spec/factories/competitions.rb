@@ -98,9 +98,9 @@ FactoryBot.define do
     on_the_spot_registration { false }
     refund_policy_percent { 0 }
     guests_entry_fee_lowest_denomination { 0 }
-    
+
     registration_version { :v1 }
-    
+
     trait :enforces_easy_qualifications do
       qualification_results { true }
       qualification_results_reason { 'testing' }
