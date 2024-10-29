@@ -1179,6 +1179,47 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_18_145843) do
     t.index ["stripe_record_id"], name: "index_stripe_webhook_events_on_stripe_record_id"
   end
 
+  create_table "ticket_logs", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.bigint "ticket_id", null: false
+    t.string "log", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "ticket_stakeholders", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.bigint "ticket_id", null: false
+    t.bigint "stakeholder_id", null: false
+    t.string "stakeholder_type", null: false
+    t.string "connection", null: false
+    t.boolean "is_active", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "tickets", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "ticket_type", null: false
+    t.bigint "metadata_id", null: false
+    t.string "metadata_type", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "tickets_edit_person", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "status", null: false
+    t.string "wca_id", null: false
+    t.string "previous_name"
+    t.string "new_name"
+    t.date "previous_dob"
+    t.date "new_dob"
+    t.string "previous_country_iso2"
+    t.string "new_country_iso2"
+    t.string "previous_gender"
+    t.string "new_gender"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "uploaded_jsons", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "competition_id"
     t.text "json_str", size: :long

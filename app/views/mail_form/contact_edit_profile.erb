@@ -16,7 +16,7 @@
   </body>
 </table>
 <p>Edit Reason: <%= @resource.edit_profile_reason %></p>
-<p>You can edit this person <%= link_to "here", panel_index_url(panel_id: 'wrt', wcaId: @resource.wca_id, anchor: User.panel_pages[:editPerson]) %>.</p>
+<p>You can edit this person using <%= link_to "this ticket", @resource.ticket.url %>.</p>
 <% if @resource.document.present? %>
   <p>Note: There is a proof attachment to this email.</p>
 <% end %>

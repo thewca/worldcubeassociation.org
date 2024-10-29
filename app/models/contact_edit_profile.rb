@@ -4,6 +4,7 @@ class ContactEditProfile < ContactForm
   attribute :wca_id
   attribute :changes_requested
   attribute :edit_profile_reason
+  attribute :ticket
   attribute :document, attachment: true
 
   EditProfileChange = Struct.new(
