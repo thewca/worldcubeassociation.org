@@ -107,7 +107,7 @@ module DatabaseDumper
           competition_series_id
           use_wca_live_for_scoretaking
           allow_registration_without_qualification
-          uses_v2_registrations
+          registration_version
           forbid_newcomers
           forbid_newcomers_reason
         ),
@@ -555,6 +555,7 @@ module DatabaseDumper
         },
       ),
     }.freeze,
+    "regional_records_lookup" => :skip_all_rows,
     "registration_competition_events" => {
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(

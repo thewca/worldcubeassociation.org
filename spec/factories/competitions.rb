@@ -98,7 +98,9 @@ FactoryBot.define do
     on_the_spot_registration { false }
     refund_policy_percent { 0 }
     guests_entry_fee_lowest_denomination { 0 }
-
+    
+    registration_version { :v1 }
+    
     trait :enforces_easy_qualifications do
       qualification_results { true }
       qualification_results_reason { 'testing' }
@@ -239,6 +241,10 @@ FactoryBot.define do
       event_restrictions_reason { "this is a favourites competition" }
       events_per_registration_limit { events.length-2 }
     end
+
+    use_wca_registration { false }
+    registration_open { 54.weeks.ago.change(usec: 0) }
+    registration_close { 1.weeks.from_now.change(usec: 0) }
 
     trait :with_valid_submitted_results do
       announced
