@@ -10,25 +10,30 @@ module Registrations
       user_can_create_registration!(competition, current_user, target_user)
       validate_create_events!(registration_request, competition)
       validate_qualifications!(registration_request, competition, target_user)
-      validate_guests!(registration_request, competition)
-      validate_comment!(registration_request, competition)
+      validate_guests!(registration_request['guests'], competition)
+      validate_comment!(registration_request.dig('competing', 'comment'), competition)
     end
 
     def self.update_registration_allowed!(update_request, current_user)
       target_user = User.find(update_request['user_id'])
       competition = Competition.find(update_request['competition_id'])
       registration = Registration.find_by(competition_id: competition.id, user_id: update_request['user_id'])
+      waiting_list_position = update_request.dig('competing', 'waiting_list_position')
+      comment = update_request.dig('competing', 'comment')
+      guests = update_request['guests']
+      new_status = update_request.dig('competing', 'status')
+      events = update_request.dig('competing', 'event_ids')
 
       raise WcaExceptions::RegistrationError.new(:not_found, Registrations::ErrorCodes::REGISTRATION_NOT_FOUND) unless registration.present?
 
       user_can_modify_registration!(competition, current_user, target_user, registration)
-      validate_guests!(update_request, competition)
-      validate_comment!(update_request, competition, registration)
+      validate_guests!(guests, competition) unless guests.nil?
+      validate_comment!(comment, competition, registration)
       validate_organizer_fields!(update_request, current_user, competition)
       validate_organizer_comment!(update_request)
-      validate_waiting_list_position!(update_request, competition)
-      validate_update_status!(update_request, competition, current_user, target_user, registration)
-      validate_update_events!(update_request, competition)
+      validate_waiting_list_position!(waiting_list_position, competition) unless waiting_list_position.nil?
+      validate_update_status!(new_status, competition, current_user, target_user, registration) unless new_status.nil?
+      validate_update_events!(events, competition) unless events.nil?
       validate_qualifications!(update_request, competition, target_user)
     end
 
@@ -99,23 +104,21 @@ module Registrations
         return unless competition.enforces_qualifications?
         event_ids = request.dig('competing', 'event_ids')
 
-        unqualified_events = event_ids.filter_map do |event|
+        unqualified_events = event_ids.filter do |event|
           qualification = competition.qualification_wcif[event]
-          event if qualification.present? && !competitor_qualifies_for_event?(event, qualification, target_user)
+          qualification.present? && !competitor_qualifies_for_event?(event, qualification, target_user)
         end
 
         raise WcaExceptions::RegistrationError.new(:unprocessable_entity, Registrations::ErrorCodes::QUALIFICATION_NOT_MET, unqualified_events) unless unqualified_events.empty?
       end
 
-      def validate_guests!(request, competition)
-        return if (guests = request['guests'].to_i).nil?
-
+      def validate_guests!(guests, competition)
         raise WcaExceptions::RegistrationError.new(:unprocessable_entity, ErrorCodes::INVALID_REQUEST_DATA) if guests < 0
         raise WcaExceptions::RegistrationError.new(:unprocessable_entity, ErrorCodes::GUEST_LIMIT_EXCEEDED) if competition.guest_limit_exceeded?(guests)
       end
 
-      def validate_comment!(request, competition, registration = nil)
-        if (comment = request.dig('competing', 'comment')).nil?
+      def validate_comment!(comment, competition, registration = nil)
+        if comment.nil?
           # Return if no comment was supplied in the request but one already exists for the registration
           return if registration.present? && !registration.comments.nil? && !(registration.comments == '')
 
@@ -139,9 +142,7 @@ module Registrations
           !organizer_comment.nil? && organizer_comment.length > COMMENT_CHARACTER_LIMIT
       end
 
-      def validate_waiting_list_position!(request, competition)
-        return if (waiting_list_position = request.dig('competing', 'waiting_list_position')).nil?
-
+      def validate_waiting_list_position!(waiting_list_position, competition)
         # Floats are not allowed
         raise WcaExceptions::RegistrationError.new(:unprocessable_entity, Registrations::ErrorCodes::INVALID_WAITING_LIST_POSITION) if waiting_list_position.is_a? Float
 
@@ -159,9 +160,7 @@ module Registrations
         request['competing']&.keys&.any? { |key| organizer_fields.include?(key) }
       end
 
-      def validate_update_status!(request, competition, current_user, target_user, registration)
-        return if (new_status = request.dig('competing', 'status')).nil?
-
+      def validate_update_status!(new_status, competition, current_user, target_user, registration)
         raise WcaExceptions::RegistrationError.new(:unprocessable_entity, Registrations::ErrorCodes::INVALID_REQUEST_DATA) unless Registrations::Helper::REGISTRATION_STATES.include?(new_status)
         raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::COMPETITOR_LIMIT_REACHED) if
           new_status == 'accepted' && Registration.accepted.count == competition.competitor_limit
@@ -193,8 +192,7 @@ module Registrations
           request['competing'].key?('event_ids') && registration.event_ids != request['competing']['event_ids']
       end
 
-      def validate_update_events!(request, competition)
-        return if (event_ids = request.dig('competing', 'event_ids')).nil?
+      def validate_update_events!(event_ids, competition)
         raise WcaExceptions::RegistrationError.new(:unprocessable_entity, Registrations::ErrorCodes::INVALID_EVENT_SELECTION) unless competition.events_held?(event_ids)
 
         event_limit = competition.events_per_registration_limit
@@ -203,45 +201,15 @@ module Registrations
 
       def existing_registration_in_series?(competition, target_user)
         other_series_ids = competition.other_series_ids
-        return false if other_series_ids.nil?
 
-        other_series_ids.each do |comp_id|
-          series_reg = Registration.find_by(competition_id: comp_id, user_id: target_user.id)
-          if series_reg.nil?
-            next
-          end
-          return series_reg.might_attend?
+        other_series_ids.any? do |comp_id|
+          Registration.find_by(competition_id: comp_id, user_id: target_user.id)&.might_attend?
         end
-        false
       end
 
       def competitor_qualifies_for_event?(event, qualification, target_user)
-        target_date = [Date.parse(qualification['whenDate']), Time.now.utc].min
-        competitor_qualification_results = Registrations::Helper.user_qualification_data(target_user, target_date)
-        result_type = qualification['resultType']
-
-        competitor_pr = competitor_qualification_results.find { |result| result[:eventId] == event && result[:type].to_s == result_type }
-        return false if competitor_pr.blank?
-
-        begin
-          pr_date = Date.parse(competitor_pr[:on_or_before])
-          qualification_date = Date.parse(qualification['whenDate'])
-        rescue ArgumentError
-          return false
-        end
-
-        return false unless pr_date <= qualification_date
-
-        case qualification['type']
-        when 'anyResult', 'ranking'
-          # By this point the user definitely has a result.
-          # Ranking qualifications are enforced when registration closes, so it is effectively an anyResult ranking when registering
-          true
-        when 'attemptResult'
-          competitor_pr[:best].to_i < qualification['level']
-        else
-          false
-        end
+        qualification = Qualification.load(qualification)
+        qualification.can_register?(target_user, event)
       end
     end
   end
