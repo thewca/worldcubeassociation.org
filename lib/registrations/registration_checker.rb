@@ -27,7 +27,7 @@ module Registrations
       raise WcaExceptions::RegistrationError.new(:not_found, Registrations::ErrorCodes::REGISTRATION_NOT_FOUND) unless registration.present?
 
       user_can_modify_registration!(competition, current_user, target_user, registration)
-      validate_guests!(guests, competition) unless guests.nil?
+      validate_guests!(guests.to_i, competition) unless guests.nil?
       validate_comment!(comment, competition, registration)
       validate_organizer_fields!(update_request, current_user, competition)
       validate_organizer_comment!(update_request)
