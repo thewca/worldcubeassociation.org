@@ -2,6 +2,24 @@
 
 module CheckRegionalRecords
   REGION_WORLD = '__World'
+  LOOKUP_TABLE_NAME = 'regional_records_lookup'
+
+  def self.add_to_lookup_table(competition_id = nil, table_name: LOOKUP_TABLE_NAME)
+    ActiveRecord::Base.connection.execute <<-SQL
+      INSERT INTO #{table_name}
+      (resultId, countryId, eventId, competitionEndDate, best, average)
+      SELECT Results.id, Results.countryId, Results.eventId, Competitions.end_date, Results.best, Results.average
+      FROM Results
+      INNER JOIN Competitions ON Results.competitionId = Competitions.id
+      #{competition_id.present? ? "WHERE Results.competition_id = #{competition_id}" : ''}
+      ON DUPLICATE KEY UPDATE
+        countryId = Results.countryId,
+        eventId = Results.eventId,
+        competitionEndDate = Competitions.end_date,
+        best = Results.best,
+        average = Results.average
+    SQL
+  end
 
   def self.compute_record_marker(regional_records, result, wca_value)
     computed_marker = nil
@@ -123,7 +141,7 @@ module CheckRegionalRecords
         event_filter = event_id || model_comp.event_ids
 
         previous_min_results = Result.select("eventId, countryId, MIN(#{value_column}) AS `value`")
-                                     .from("regional_records_lookup AS Results")
+                                     .from("#{LOOKUP_TABLE_NAME} AS Results")
                                      .where.not(value_column => ..0)
                                      .where(competitionEndDate: ...model_comp.start_date)
                                      .where(eventId: event_filter)
