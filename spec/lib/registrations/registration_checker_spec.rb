@@ -1824,7 +1824,7 @@ RSpec.describe Registrations::RegistrationChecker do
       end
     end
 
-    describe '#update_registration_allowed!.validate_qualifications!', :tag do
+    describe '#update_registration_allowed!.validate_qualifications!' do
       let(:past_competition) { FactoryBot.create(:competition, :past) }
 
       let(:unenforced_easy_qualifications) { FactoryBot.create(:competition, :registration_open, :unenforced_easy_qualifications, :editable_registrations) }
@@ -1841,8 +1841,7 @@ RSpec.describe Registrations::RegistrationChecker do
 
       let(:easy_registration_with_results_reg) {
         FactoryBot.create(
-          # :registration, :skip_validations, user: user_with_results, competition: easy_qualifications
-          :registration, user: user_with_results, competition: easy_qualifications
+          :registration, :skip_validations, user: user_with_results, competition: easy_qualifications
         )
       }
 

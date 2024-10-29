@@ -39,6 +39,9 @@ module Registrations
     end
 
     def self.bulk_update_allowed!(bulk_update_request, current_user)
+      raise WcaExceptions::BulkUpdateError.new(:bad_request, [Registrations::ErrorCodes::INVALID_REQUEST_DATA]) unless
+        bulk_update_request['requests'].present?
+
       competition = Competition.find(bulk_update_request['competition_id'])
 
       raise WcaExceptions::BulkUpdateError.new(:unauthorized, [Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS]) unless

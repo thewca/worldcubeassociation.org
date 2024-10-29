@@ -128,7 +128,7 @@ RSpec.describe 'API Registrations' do
       expect(history.length).to eq(1)
       expect(history.first[:changed_attributes]['guests']).to eq('3')
       expect(history.first[:changed_attributes]['deleted_at']).to be_present
-      expect(history.first[:action]).to eq('Competitor update')
+      expect(history.first[:action]).to eq('Competitor delete')
     end
   end
 
@@ -163,7 +163,7 @@ RSpec.describe 'API Registrations' do
       history = registration.registration_history
       expect(history.length).to eq(1)
       expect(history.first[:changed_attributes]['deleted_at']).to be_present
-      expect(history.first[:action]).to eq('Admin update')
+      expect(history.first[:action]).to eq('Admin delete')
     end
 
     it 'makes all changes in the given payload' do
@@ -255,10 +255,11 @@ RSpec.describe 'API Registrations' do
         user_ids: [registration1.user_id],
         submitted_by: competition.organizers.first.id,
         competition_id: competition.id,
+        requests: {}
       )
 
       headers = { 'Authorization' => bulk_update_request['jwt_token'] }
-      patch api_v1_registrations_bulk_update_path, params: {}, headers: headers
+      patch api_v1_registrations_bulk_update_path, params: bulk_update_request, headers: headers
 
       expect(response.status).to eq(400)
     end

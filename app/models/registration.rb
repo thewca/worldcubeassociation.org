@@ -64,7 +64,7 @@ class Registration < ApplicationRecord
   end
 
   def pending?
-    !accepted? && !deleted? && is_competing?
+    !accepted? && !deleted? && !waitlisted? && !rejected? && is_competing?
   end
 
   def might_attend?
@@ -229,7 +229,17 @@ class Registration < ApplicationRecord
   end
 
   def competing_status
-    wcif_status
+    if accepted? || !is_competing?
+      'accepted'
+    elsif deleted?
+      'deleted'
+    elsif rejected?
+      'rejected'
+    elsif pending?
+      'pending'
+    elsif waitlisted?
+      'waiting_list'
+    end
   end
 
   def registration_history

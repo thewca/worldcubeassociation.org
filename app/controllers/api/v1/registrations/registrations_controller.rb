@@ -19,7 +19,7 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
   rescue_from WcaExceptions::RegistrationError do |e|
     # TODO: Figure out what the best way to log errors in development is
     Rails.logger.debug { "Create was rejected with error #{e.error} at #{e.backtrace[0]}" }
-    render_error(e.status, e.error)
+    render_error(e.status, e.error, e.data)
   end
 
   rescue_from WcaExceptions::BulkUpdateError do |e|
