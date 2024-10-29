@@ -2235,6 +2235,7 @@ RSpec.describe Registrations::RegistrationChecker do
         bulk_update_request = FactoryBot.build(
           :bulk_update_request,
           submitted_by: registration_1.user_id,
+          user_ids: user_ids,
           competition_id: default_competition.id,
         )
 

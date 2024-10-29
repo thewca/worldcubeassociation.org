@@ -332,7 +332,7 @@ RSpec.describe Registration do
     end
   end
 
-  describe '#to_wcif', :tag do
+  describe '#to_wcif' do
     it 'deleted state returns deleted status' do
       registration = FactoryBot.create(:registration, :deleted)
 

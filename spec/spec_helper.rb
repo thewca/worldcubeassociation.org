@@ -113,5 +113,5 @@ RSpec.configure do |config|
     Capybara.reset! if ex.metadata[:js]
   end
 
-  config.filter_run_excluding disabled: true
+  config.filter_run_excluding disabled: true if Rails.env.local?
 end
