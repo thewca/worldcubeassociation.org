@@ -486,7 +486,8 @@ FactoryBot.define do
           event['qualification'] = qualification_data[event['id']]
         end
 
-        competition.unverified_set_wcif_events!(events_wcif)
+        mock_user = FactoryBot.build :user, :admin
+        competition.set_wcif_events!(events_wcif, mock_user)
         competition.to_wcif['events']
       end
 
