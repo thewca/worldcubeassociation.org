@@ -229,7 +229,8 @@ FactoryBot.define do
       guests_per_registration_limit { 10 }
     end
 
-    trait :with_low_event_limit do
+    # TODO: Analyze the tests that rely on this, and see if they can be rewritten in a more logical/less awkward way
+    trait :with_meaningless_event_limit do
       event_ids { %w(333 333oh) }
       event_restrictions { true }
       event_restrictions_reason { "this is a favourites competition" }
