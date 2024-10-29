@@ -327,6 +327,8 @@ class AdminController < ApplicationController
       competition_id: params[:competition_id] || nil,
       event_id: params[:event_id] || nil,
     )
+
+    @cad_timestamp = ComputeAuxiliaryData.successful_start_date&.to_fs || 'never'
   end
 
   def override_regional_records

@@ -31,7 +31,10 @@
 
     <%= alert :warning do %>
       This script relies on auxiliary tables which are computed as part of <%= link_to "running CAD", admin_compute_auxiliary_data_path, target: :_blank %>.
-      <b>It will not deliver accurate results for specific competitions if CAD hasn't been run after the results posting.</b>
+      <br/>
+      <b>The detected records will not automatically be up-to-date with the <code>Results</code> table by default.</b>
+      <br/>
+      Instead, they are up to date with CAD (last successful run: <%= @cad_timestamp %>)
     <% end %>
 
     <hr/>
