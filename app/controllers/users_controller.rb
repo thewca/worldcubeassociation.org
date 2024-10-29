@@ -163,15 +163,17 @@ class UsersController < ApplicationController
     thumbnail_json = params.require(:thumbnail)
     thumbnail = JSON.parse(thumbnail_json).symbolize_keys
 
-    user_avatar = UserAvatar.create!(
-      user: user_to_edit,
-      thumbnail_crop_x: thumbnail[:x],
-      thumbnail_crop_y: thumbnail[:y],
-      thumbnail_crop_w: thumbnail[:width],
-      thumbnail_crop_h: thumbnail[:height],
-    )
+    ActiveRecord::Base.transaction do
+      user_avatar = UserAvatar.create!(
+        user: user_to_edit,
+        thumbnail_crop_x: thumbnail[:x],
+        thumbnail_crop_y: thumbnail[:y],
+        thumbnail_crop_w: thumbnail[:width],
+        thumbnail_crop_h: thumbnail[:height],
+      )
 
-    user_avatar.attach_image(upload_file)
+      user_avatar.attach_image(upload_file)
+    end
 
     render json: { ok: user_avatar.valid? }
   end
