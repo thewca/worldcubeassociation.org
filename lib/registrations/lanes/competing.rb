@@ -75,7 +75,7 @@ module Registrations
           registration.waitlisted_at = Time.now.utc
         when Registrations::Helper::STATUS_ACCEPTED
           registration.accepted_at = Time.now.utc
-        when Registrations::Helpe::STATUS_DELETED
+        when Registrations::Helper::STATUS_DELETED
           registration.deleted_at = Time.now.utc
         when Registrations::Helper::STATUS_REJECTED
           registration.rejected_at = Time.now.utc
