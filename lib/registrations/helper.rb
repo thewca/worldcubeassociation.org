@@ -9,7 +9,7 @@ module Registrations
     STATUS_DELETED = "deleted"
     STATUS_REJECTED = "rejected"
 
-    REGISTRATION_STATES = [STATUS_ACCEPTED, STATUS_DELETED, STATUS_PENDING, STATUS_ACCEPTED, STATUS_WAITING_LIST].freeze # TODO: Change deleted to canceled when v1 is retired
+    REGISTRATION_STATES = [STATUS_ACCEPTED, STATUS_DELETED, STATUS_PENDING, STATUS_REJECTED, STATUS_WAITING_LIST].freeze # TODO: Change deleted to canceled when v1 is retired
     ADMIN_ONLY_STATES = [STATUS_PENDING, STATUS_PENDING, STATUS_ACCEPTED, STATUS_ACCEPTED].freeze # Only admins are allowed to change registration state to one of these states
     MIGHT_ATTEND_STATES = [STATUS_PENDING, STATUS_ACCEPTED, STATUS_ACCEPTED].freeze
 

@@ -416,7 +416,7 @@ RSpec.describe Registrations::RegistrationChecker do
 
       let(:comp_with_qualifications) { FactoryBot.create(:competition, :registration_open, :enforces_easy_qualifications) }
       let(:enforced_hard_qualifications) { FactoryBot.create(:competition, :registration_open, :enforces_hard_qualifications) }
-      let(:easy_future_qualifications) { FactoryBot.create(:competition, :registration_open, :easy_future_qualifications) }
+      let(:easy_future_qualifications) { FactoryBot.create(:competition, :registration_open, :easy_future_qualifications, :with_organizer) }
       let(:past_qualifications) { FactoryBot.create(:competition, :registration_open, :enforces_past_qualifications) }
 
       let(:user_with_results) { FactoryBot.create(:user, :wca_id) }
@@ -1832,7 +1832,7 @@ RSpec.describe Registrations::RegistrationChecker do
 
       let(:easy_qualifications) { FactoryBot.create(:competition, :registration_open, :enforces_easy_qualifications, :editable_registrations) }
       let(:hard_qualifications) { FactoryBot.create(:competition, :registration_open, :enforces_hard_qualifications, :editable_registrations) }
-      let(:easy_future_qualifications) { FactoryBot.create(:competition, :registration_open, :easy_future_qualifications, :editable_registrations) }
+      let(:easy_future_qualifications) { FactoryBot.create(:competition, :registration_open, :easy_future_qualifications, :editable_registrations, :with_organizer) }
       let(:past_qualifications) { FactoryBot.create(:competition, :registration_open, :enforces_past_qualifications, :editable_registrations) }
 
       let(:user_with_results) { FactoryBot.create(:user, :wca_id) }

@@ -16,16 +16,16 @@ module Registrations
     end
 
     def self.update_registration_allowed!(update_request, current_user)
+      registration = Registration.find_by(competition_id: update_request['competition_id'], user_id: update_request['user_id'])
+      raise WcaExceptions::RegistrationError.new(:not_found, Registrations::ErrorCodes::REGISTRATION_NOT_FOUND) unless registration.present?
+
       target_user = User.find(update_request['user_id'])
       competition = Competition.find(update_request['competition_id'])
-      registration = Registration.find_by(competition_id: competition.id, user_id: update_request['user_id'])
       waiting_list_position = update_request.dig('competing', 'waiting_list_position')
       comment = update_request.dig('competing', 'comment')
       guests = update_request['guests']
       new_status = update_request.dig('competing', 'status')
       events = update_request.dig('competing', 'event_ids')
-
-      raise WcaExceptions::RegistrationError.new(:not_found, Registrations::ErrorCodes::REGISTRATION_NOT_FOUND) unless registration.present?
 
       user_can_modify_registration!(competition, current_user, target_user, registration)
       validate_guests!(guests.to_i, competition) unless guests.nil?
@@ -189,8 +189,8 @@ module Registrations
           !competition.allow_registration_self_delete_after_acceptance && registration.accepted?
 
         # Users aren't allowed to change events when cancelling
-        raise WcaExceptions::RegistrationError.new(:unprocessable_entity, Registrations::ErrorCodes::INVALID_REQUEST_DATA) if
-          request['competing'].key?('event_ids') && registration.event_ids != request['competing']['event_ids']
+        # raise WcaExceptions::RegistrationError.new(:unprocessable_entity, Registrations::ErrorCodes::INVALID_REQUEST_DATA) if
+        #   request['competing'].key?('event_ids') && registration.event_ids != request['competing']['event_ids']
       end
 
       def validate_update_events!(event_ids, competition)
