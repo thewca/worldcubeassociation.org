@@ -9,6 +9,7 @@ FactoryBot.define do
     created_at { Time.now }
     administrative_notes { "" }
     transient do
+      # TODO: Consider refactoring registration event definitions to be less reliant on hardcoded event IDs?
       event_ids { ['333', '333oh'] }
       events { competition.events.where(id: event_ids) }
     end
