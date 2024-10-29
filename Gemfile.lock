@@ -166,6 +166,9 @@ GEM
       aws-sdk-core (~> 3, >= 3.210.0)
       aws-sdk-kms (~> 1)
       aws-sigv4 (~> 1.5)
+    aws-sdk-sqs (1.87.0)
+      aws-sdk-core (~> 3, >= 3.210.0)
+      aws-sigv4 (~> 1.5)
     aws-sigv4 (1.10.1)
       aws-eventstream (~> 1, >= 1.0.2)
     babel-source (5.8.35)
@@ -819,6 +822,7 @@ DEPENDENCIES
   aws-sdk-cloudfront
   aws-sdk-rds
   aws-sdk-s3
+  aws-sdk-sqs
   better_errors
   binding_of_caller
   blocks
