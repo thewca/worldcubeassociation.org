@@ -28,7 +28,6 @@ class DatabaseController < ApplicationController
       file_name = "#{DbDumpHelper::RESULTS_EXPORT_FOLDER}/#{base_name}"
 
       bucket = Aws::S3::Resource.new(
-        region: EnvConfig.STORAGE_AWS_REGION,
         credentials: Aws::ECSCredentials.new,
       ).bucket(DbDumpHelper::BUCKET_NAME)
 

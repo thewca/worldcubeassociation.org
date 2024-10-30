@@ -210,7 +210,6 @@ class UserAvatar < ApplicationRecord
     return unless thumbnail_changed
 
     cloudfront_sdk = ::Aws::CloudFront::Client.new(
-      region: EnvConfig.S3_AVATARS_REGION,
       access_key_id: AppSecrets.AWS_ACCESS_KEY_ID,
       secret_access_key: AppSecrets.AWS_SECRET_ACCESS_KEY,
     )
