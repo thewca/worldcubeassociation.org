@@ -171,13 +171,13 @@ class Registration < ApplicationRecord
     receipt,
     user_id
   )
+    add_history_entry({ payment_status: receipt.determine_wca_status, iso_amount: amount_lowest_denomination }, "user", user_id, 'Payment')
     registration_payments.create!(
       amount_lowest_denomination: amount_lowest_denomination,
       currency_code: currency_code,
       receipt: receipt,
       user_id: user_id,
     )
-    add_history_entry({ payment_status: receipt.determine_wca_status, iso_amount: amount_lowest_denomination }, "user", user_id, 'Payment')
   end
 
   def record_refund(
@@ -187,6 +187,7 @@ class Registration < ApplicationRecord
     refunded_registration_payment_id,
     user_id
   )
+    add_history_entry({ payment_status: "refund", iso_amount: paid_entry_fees.cents - amount_lowest_denomination }, "user", user_id, 'Refund')
     registration_payments.create!(
       amount_lowest_denomination: amount_lowest_denomination.abs * -1,
       currency_code: currency_code,
@@ -194,7 +195,6 @@ class Registration < ApplicationRecord
       refunded_registration_payment_id: refunded_registration_payment_id,
       user_id: user_id,
     )
-    add_history_entry({ payment_status: "refund", iso_amount: paid_entry_fees.cents - amount_lowest_denomination }, "user", user_id, 'Refund')
   end
 
   # Since Registration.events only includes saved events
