@@ -21,6 +21,7 @@ import Errored from '../Requests/Errored';
 import useSaveAction from '../../lib/hooks/useSaveAction';
 import UserAvatar from '../UserAvatar';
 import useCheckboxState from '../../lib/hooks/useCheckboxState';
+import { avatarImageTypes } from '../../lib/wca-data.js.erb';
 
 function EditAvatar({
   userId,
@@ -57,6 +58,12 @@ function EditAvatar({
 
     return workingAvatar?.url;
   }, [workingAvatar, userUploadedImage]);
+
+  const isValidContentType = useMemo(() => {
+    if (!userUploadedImage) return true;
+
+    return avatarImageTypes.includes(userUploadedImage.type);
+  }, [userUploadedImage]);
 
   const workingThumbnail = useMemo(() => ({
     x: workingAvatar?.thumbnail_crop_x,
@@ -176,7 +183,7 @@ function EditAvatar({
               )}
             </Message>
             <ImageUpload
-              uploadDisabled={uploadDisabled || isEditingPending}
+              uploadDisabled={uploadDisabled || isEditingPending || !isValidContentType}
               removalEnabled={canRemoveAvatar && !isEditingPending}
               onImageUploaded={uploadUserImage}
               onAvatarSaved={saveAvatar}

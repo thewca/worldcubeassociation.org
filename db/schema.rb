@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_10_09_111904) do
+ActiveRecord::Schema[7.2].define(version: 2024_10_25_161404) do
   create_table "Competitions", id: { type: :string, limit: 32, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", limit: 50, default: "", null: false
     t.string "cityName", limit: 50, default: "", null: false
@@ -79,9 +79,9 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_09_111904) do
     t.integer "events_per_registration_limit"
     t.boolean "force_comment_in_registration"
     t.integer "posting_by"
-    t.boolean "uses_v2_registrations", default: false, null: false
     t.boolean "forbid_newcomers", default: false, null: false
     t.string "forbid_newcomers_reason"
+    t.integer "registration_version", default: 0, null: false
     t.index ["cancelled_at"], name: "index_Competitions_on_cancelled_at"
     t.index ["countryId"], name: "index_Competitions_on_countryId"
     t.index ["end_date"], name: "index_Competitions_on_end_date"
@@ -960,6 +960,18 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_09_111904) do
     t.index ["name"], name: "index_regional_organizations_on_name"
   end
 
+  create_table "regional_records_lookup", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.integer "resultId", null: false
+    t.string "countryId", null: false
+    t.string "eventId", null: false
+    t.date "competitionEndDate", null: false
+    t.integer "best", default: 0, null: false
+    t.integer "average", default: 0, null: false
+    t.index ["eventId", "countryId", "average", "competitionEndDate"], name: "idx_on_eventId_countryId_average_competitionEndDate_b424c59953"
+    t.index ["eventId", "countryId", "best", "competitionEndDate"], name: "idx_on_eventId_countryId_best_competitionEndDate_4e01b1ae38"
+    t.index ["resultId"], name: "index_regional_records_lookup_on_resultId"
+  end
+
   create_table "registration_competition_events", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.integer "registration_id"
     t.integer "competition_event_id"
@@ -1298,7 +1310,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_09_111904) do
 
   create_table "waiting_lists", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "holder_type"
-    t.bigint "holder_id"
+    t.string "holder_id"
     t.json "entries"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -1338,6 +1350,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_09_111904) do
   add_foreign_key "oauth_openid_requests", "oauth_access_grants", column: "access_grant_id", on_delete: :cascade
   add_foreign_key "payment_intents", "users", column: "initiated_by_id"
   add_foreign_key "paypal_records", "paypal_records", column: "parent_record_id"
+  add_foreign_key "regional_records_lookup", "Results", column: "resultId"
   add_foreign_key "registration_history_changes", "registration_history_entries"
   add_foreign_key "sanity_check_exclusions", "sanity_checks"
   add_foreign_key "sanity_checks", "sanity_check_categories"
