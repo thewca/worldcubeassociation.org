@@ -399,6 +399,21 @@ class Competition < ApplicationRecord
     Event.c_find(main_event_id)
   end
 
+  def events_held?(desired_event_ids)
+    desired_event_ids.present? && (desired_event_ids & self.event_ids) == desired_event_ids
+  end
+
+  def enforces_qualifications?
+    uses_qualification? && !allow_registration_without_qualification
+  end
+
+  def guest_limit_exceeded?(guest_count)
+    guests_not_allowed_but_coming = !guests_enabled? && guest_count > 0
+    guests_exceeding_limit = guest_entry_status_restricted? && guests_per_registration_limit.present? && guest_count > guests_per_registration_limit
+
+    guests_not_allowed_but_coming || guests_exceeding_limit
+  end
+
   def with_old_id
     new_id = self.id
     self.id = id_was
@@ -1875,6 +1890,10 @@ class Competition < ApplicationRecord
 
   def competition_series_ids
     competition_series&.competition_ids&.split(',') || []
+  end
+
+  def other_series_ids
+    series_sibling_competitions.pluck(:id)
   end
 
   def qualification_wcif

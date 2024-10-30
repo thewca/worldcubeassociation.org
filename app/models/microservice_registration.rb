@@ -62,7 +62,7 @@ class MicroserviceRegistration < ApplicationRecord
 
   def competing_status
     # Treat non-competing registrations as accepted, see also `registration.rb`
-    return "accepted" unless self.is_competing?
+    return Registrations::Helper::STATUS_ACCEPTED unless self.is_competing?
 
     self.read_ms_data :competing_status
   end
@@ -70,8 +70,8 @@ class MicroserviceRegistration < ApplicationRecord
   alias :status :competing_status
 
   def wcif_status
-    return "deleted" if self.deleted?
-    return "pending" if self.pending?
+    return Registrations::Helper::STATUS_DELETED if self.deleted?
+    return Registrations::Helper::STATUS_PENDING if self.pending?
 
     self.competing_status
   end
@@ -103,17 +103,17 @@ class MicroserviceRegistration < ApplicationRecord
   end
 
   def accepted?
-    self.status == "accepted"
+    self.status == Registrations::Helper::STATUS_ACCEPTED
   end
 
   def deleted?
-    self.status == "cancelled" || self.status == "rejected"
+    self.status == Registrations::Helper::STATUS_DELETED || self.status == Registrations::Helper::STATUS_REJECTED
   end
 
   def pending?
     # WCIF interprets "pending" as "not approved to compete yet"
     #   which is why these two statuses collapse into one.
-    self.status == "pending" || self.status == "waiting_list"
+    self.status == Registrations::Helper::STATUS_PENDING || self.status == Registrations::Helper::STATUS_WAITING_LIST
   end
 
   def to_wcif(authorized: false)

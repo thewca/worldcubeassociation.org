@@ -30,6 +30,11 @@ class UserAvatar < ApplicationRecord
     local: 'local-fs',
   }, default: :active_storage, scopes: false
 
+  MAX_UPLOAD_SIZE = 2.megabytes
+
+  validates :public_image, blob: { content_type: :web_image, size_range: 0..MAX_UPLOAD_SIZE }
+  validates :private_image, blob: { content_type: :web_image, size_range: 0..MAX_UPLOAD_SIZE }
+
   def url
     case self.backend
     when 's3_legacy_cdn'

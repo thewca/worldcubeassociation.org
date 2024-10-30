@@ -555,6 +555,7 @@ module DatabaseDumper
         },
       ),
     }.freeze,
+    "regional_records_lookup" => :skip_all_rows,
     "registration_competition_events" => {
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(

@@ -170,7 +170,7 @@ export default function TableRow({
               competitionInfo.event_ids.map((eventId) => (
                 <Table.Cell key={`event-${eventId}`}>
                   {eventIds.includes(eventId) && (
-                  <EventIcon id={eventId} size="1em" />
+                    <EventIcon id={eventId} size="1em" />
                   )}
                 </Table.Cell>
               ))
