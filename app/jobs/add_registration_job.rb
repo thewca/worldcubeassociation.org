@@ -2,8 +2,7 @@
 
 class AddRegistrationJob < ApplicationJob
   before_enqueue do |job|
-    competition_id = job.arguments[1]
-    user_id = job.arguments[2]
+    _, competition_id, user_id = job.arguments
     Rails.cache.write(CacheAccess.registration_processing_cache_key(competition_id, user_id), true)
   end
 
