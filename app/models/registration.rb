@@ -177,7 +177,7 @@ class Registration < ApplicationRecord
       receipt: receipt,
       user_id: user_id,
     )
-    add_history_entry({ payment_status: receipt.wca_status, iso_amount: amount_lowest_denomination }, "user", user_id, 'Payment')
+    add_history_entry({ payment_status: receipt.determine_wca_status, iso_amount: amount_lowest_denomination }, "user", user_id, 'Payment')
   end
 
   def record_refund(
