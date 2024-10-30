@@ -167,7 +167,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
   } = useWithUserData(registrations ?? []);
 
   const { mutate: updateRegistrationMutation, isPending: isMutating } = useMutation({
-    mutationFn: bulkUpdateRegistrations,
+    mutationFn: (body) => bulkUpdateRegistrations(competitionInfo, body),
     onError: (data) => {
       const { error } = data.json;
       dispatchStore(setMessage(

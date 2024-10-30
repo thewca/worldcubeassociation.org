@@ -12,7 +12,7 @@ import {
 import EventIcon from '../../wca/EventIcon';
 import { editRegistrationUrl, editPersonUrl, personUrl } from '../../../lib/requests/routes.js.erb';
 import { isoMoneyToHumanReadable } from '../../../lib/helpers/money';
-import { countries } from "../../../lib/wca-data.js.erb";
+import { countries } from '../../../lib/wca-data.js.erb';
 
 // Semantic Table only allows truncating _all_ columns in a table in
 // single line fixed mode. As we only want to truncate the comment/admin notes
@@ -27,7 +27,7 @@ function RegistrationTime({
     return getRegistrationTimestamp(paidOn ?? registeredOn);
   }
 
-  const mostRecentPaymentStatus = paymentStatuses[0]
+  const mostRecentPaymentStatus = paymentStatuses ? paymentStatuses[0] : 'unpaid';
 
   if (usesPaymentIntegration && mostRecentPaymentStatus !== 'succeeded') {
     let content = i18n.t('registrations.list.payment_requested_on', { date: getRegistrationTimestamp(registeredOn) });
