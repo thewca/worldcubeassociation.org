@@ -42,7 +42,7 @@ class Registration < ApplicationRecord
   after_create :mark_registration_processing_as_done
 
   private def mark_registration_processing_as_done
-    Rails.cache.delete("#{competition_id}-#{user_id}-processing")
+    Rails.cache.delete(CacheAccess.registration_processing_cache_key(competition_id, user_id))
   end
 
   def guest_limit

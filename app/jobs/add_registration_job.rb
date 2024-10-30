@@ -2,7 +2,9 @@
 
 class AddRegistrationJob < ApplicationJob
   before_enqueue do |job|
-    Rails.cache.write("#{job.arguments[1]}-#{job.arguments[2]}-processing", true)
+    competition_id = job.arguments[1]
+    user_id = job.arguments[2]
+    Rails.cache.write(CacheAccess.registration_processing_cache_key(competition_id, user_id), true)
   end
 
   def perform(lane_name, competition_id, user_id, lane_params)
