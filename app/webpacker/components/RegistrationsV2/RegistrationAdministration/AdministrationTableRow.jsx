@@ -82,7 +82,7 @@ export default function TableRow({
     updated_at: updatedAt,
     payment_status: paymentStatuses,
     has_paid: hasPaid,
-  } = registration.payment;
+  } = registration.payment ?? {};
 
   const copyEmail = () => {
     navigator.clipboard.writeText(emailAddress);

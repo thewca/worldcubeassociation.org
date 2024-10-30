@@ -295,6 +295,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
     updateRegistrationMutation({
       competition_id: competitionInfo.id,
       requests: [{
+        competition_id: competitionInfo.id,
         user_id: waitingSorted[result.source.index].user_id,
         competing: {
           waiting_list_position: waitingSorted[result.destination.index].competing.waiting_list_position,

@@ -79,6 +79,8 @@ module Registrations
           registration.deleted_at = Time.now.utc
         when Registrations::Helper::STATUS_REJECTED
           registration.rejected_at = Time.now.utc
+        when Registrations::Helper::STATUS_PENDING
+          # Pending means we set nothing
         else
           raise WcaExceptions::RegistrationError.new(:unprocessable_entity, Registrations::ErrorCodes::INVALID_REQUEST_DATA)
         end
