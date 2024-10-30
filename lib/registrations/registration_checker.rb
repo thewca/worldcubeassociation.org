@@ -197,7 +197,9 @@ module Registrations
       end
 
       def validate_update_events!(event_ids, competition)
-        raise WcaExceptions::RegistrationError.new(:unprocessable_entity, Registrations::ErrorCodes::INVALID_EVENT_SELECTION) unless competition.events_held?(event_ids)
+
+        raise WcaExceptions::RegistrationError.new(:unprocessable_entity, Registrations::ErrorCodes::INVALID_EVENT_SELECTION) unless
+          event_ids.present? && competition.events_held?(event_ids) &&
 
         event_limit = competition.events_per_registration_limit
         raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::INVALID_EVENT_SELECTION) if event_limit.present? && event_ids.count > event_limit
