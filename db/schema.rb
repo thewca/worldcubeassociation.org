@@ -1310,7 +1310,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_25_161404) do
 
   create_table "waiting_lists", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "holder_type"
-    t.bigint "holder_id"
+    t.string "holder_id"
     t.json "entries"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

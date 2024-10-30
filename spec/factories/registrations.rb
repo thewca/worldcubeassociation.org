@@ -9,9 +9,15 @@ FactoryBot.define do
     created_at { Time.now }
     administrative_notes { "" }
     transient do
-      events { competition.events }
+      # TODO: Consider refactoring registration event definitions to be less reliant on hardcoded event IDs?
+      event_ids { ['333', '333oh'] }
+      events { competition.events.where(id: event_ids) }
     end
     competition_events { competition.competition_events.where(event: events) }
+
+    trait :skip_validations do
+      to_create { |instance| instance.save(validate: false) }
+    end
 
     trait :accepted do
       accepted_at { Time.now }
@@ -23,6 +29,14 @@ FactoryBot.define do
 
     trait :pending do
       accepted_at { nil }
+    end
+
+    trait :waiting_list do
+      waitlisted_at { Time.now }
+    end
+
+    trait :rejected do
+      rejected_at { Time.now }
     end
 
     trait :newcomer do
