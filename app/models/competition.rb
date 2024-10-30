@@ -400,8 +400,7 @@ class Competition < ApplicationRecord
   end
 
   def events_held?(desired_event_ids)
-    return false if desired_event_ids == []
-    (desired_event_ids & self.event_ids) == desired_event_ids
+    desired_event_ids.present? && (desired_event_ids & self.event_ids) == desired_event_ids
   end
 
   def enforces_qualifications?
