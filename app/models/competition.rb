@@ -399,8 +399,8 @@ class Competition < ApplicationRecord
     Event.c_find(main_event_id)
   end
 
-  def events_held?(event_ids)
-    event_ids != [] && competition_events.pluck(:event_id).to_set.superset?(event_ids.to_set)
+  def events_held?(desired_event_ids)
+    (desired_event_ids & self.event_ids) == desired_event_ids
   end
 
   def enforces_qualifications?
@@ -408,9 +408,10 @@ class Competition < ApplicationRecord
   end
 
   def guest_limit_exceeded?(guest_count)
-    return true if guest_count > 0 && !guests_enabled
-    return false if guests_per_registration_limit.blank?
-    guest_entry_status == 'restricted' && guests_per_registration_limit < guest_count
+    guests_not_allowed_but_coming = !guests_enabled? && guest_count > 0
+    guests_exceeding_limit = guest_entry_status_restricted? && guests_per_registration_limit.present? && guest_count > guests_per_registration_limit
+
+    guests_not_allowed_but_coming || guests_exceeding_limit
   end
 
   def with_old_id
