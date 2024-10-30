@@ -206,7 +206,10 @@ module Registrations
       def existing_registration_in_series?(competition, target_user)
         return false unless competition.part_of_competition_series?
 
-        Registration.exists?(competition_id: competition.other_series_ids, user_id: target_user.id)
+        other_series_ids = competition.other_series_ids
+        other_series_ids.any? do |comp_id|
+          Registration.find_by(competition_id: comp_id, user_id: target_user.id)&.might_attend?
+        end
       end
 
       def competitor_qualifies_for_event?(event, qualification, target_user)
