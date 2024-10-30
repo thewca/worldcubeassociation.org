@@ -69,7 +69,7 @@ export default function RegistrationActions({
 
   const attemptToApprove = () => {
     const idsToAccept = [...pending, ...cancelled, ...waiting, ...rejected];
-    if (idsToAccept.length > spotsRemaining && competitionInfo.competitor_limit > 0) {
+    if (idsToAccept.length > spotsRemaining) {
       dispatch(setMessage(
         'competitions.registration_v2.update.too_many',
         'negative',
