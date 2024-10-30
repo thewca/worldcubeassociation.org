@@ -20,7 +20,6 @@ module Registrations
       raise WcaExceptions::RegistrationError.new(:not_found, Registrations::ErrorCodes::REGISTRATION_NOT_FOUND) unless registration.present?
 
       target_user = User.find(update_request['user_id'])
-      competition = Competition.find(update_request['competition_id'])
       waiting_list_position = update_request.dig('competing', 'waiting_list_position')
       comment = update_request.dig('competing', 'comment')
       guests = update_request['guests']
