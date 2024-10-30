@@ -71,7 +71,7 @@ FactoryBot.define do
       submitted_by { other_user.id }
     end
 
-    initialize_with { attributes.stringify_keys }
+    initialize_with { attributes.compact.stringify_keys }
 
     after(:build) do |instance, evaluator|
       instance['guests'] = evaluator.guests if evaluator.guests

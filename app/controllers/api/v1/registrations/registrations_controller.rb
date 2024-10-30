@@ -67,7 +67,8 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
   end
 
   def validate_update_request
-    Registrations::RegistrationChecker.update_registration_allowed!(params, @current_user)
+    competition = params[:competition_id]
+    Registrations::RegistrationChecker.update_registration_allowed!(params, competition, @current_user)
   end
 
   def bulk_update

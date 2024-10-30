@@ -15,7 +15,7 @@ module Registrations
       validate_comment!(registration_request.dig('competing', 'comment'), competition)
     end
 
-    def self.update_registration_allowed!(update_request, current_user)
+    def self.update_registration_allowed!(update_request, competition, current_user)
       registration = Registration.find_by(competition_id: update_request['competition_id'], user_id: update_request['user_id'])
       raise WcaExceptions::RegistrationError.new(:not_found, Registrations::ErrorCodes::REGISTRATION_NOT_FOUND) unless registration.present?
 
@@ -49,7 +49,7 @@ module Registrations
 
       errors = {}
       bulk_update_request['requests'].each do |update_request|
-        update_registration_allowed!(update_request, current_user)
+        update_registration_allowed!(update_request, competition, current_user)
       rescue WcaExceptions::RegistrationError => e
         errors[update_request['user_id']] = e.error
       end
@@ -98,7 +98,8 @@ module Registrations
       def validate_create_events!(request, competition)
         event_ids = request['competing']['event_ids']
         # Event submitted must be held at the competition
-        raise WcaExceptions::RegistrationError.new(:unprocessable_entity, Registrations::ErrorCodes::INVALID_EVENT_SELECTION) unless competition.events_held?(event_ids)
+        raise WcaExceptions::RegistrationError.new(:unprocessable_entity, Registrations::ErrorCodes::INVALID_EVENT_SELECTION) unless
+          event_ids.present? && competition.events_held?(event_ids)
 
         event_limit = competition.events_per_registration_limit
         raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::INVALID_EVENT_SELECTION) if event_limit.present? && event_ids.count > event_limit
@@ -197,9 +198,8 @@ module Registrations
       end
 
       def validate_update_events!(event_ids, competition)
-
         raise WcaExceptions::RegistrationError.new(:unprocessable_entity, Registrations::ErrorCodes::INVALID_EVENT_SELECTION) unless
-          event_ids.present? && competition.events_held?(event_ids) &&
+          event_ids.present? && competition.events_held?(event_ids)
 
         event_limit = competition.events_per_registration_limit
         raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::INVALID_EVENT_SELECTION) if event_limit.present? && event_ids.count > event_limit
