@@ -1,10 +1,36 @@
 import React from 'react';
 import { Button, Icon } from 'semantic-ui-react';
+import { DateTime } from 'luxon';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { setMessage } from '../Register/RegistrationMessage';
 import i18n from '../../../lib/i18n';
 
-function csvExport(selected, registrations) {
+function V3csvExport(selected, registrations, competition) {
+  let csvContent = 'data:text/csv;charset=utf-8,';
+  csvContent
+    += `Status,Name,Country,WCA ID,Birth Date,Gender,${competition.event_ids.join(',')},Email,Guests,IP,Registration Date Time (UTC)\n`;
+  registrations
+    .filter((r) => selected.length === 0 || selected.includes(r.user_id))
+    .forEach((registration) => {
+      csvContent += `${registration.competing.registration_status === 'accepted' ? 'a' : 'p'},${
+        registration.user.name
+      },${registration.user.country.name},${
+        registration.user.wca_id
+      },${registration.dob},${
+        registration.user.gender
+      },${competition.event_ids.map((evt) => (registration.competing.event_ids.includes(evt) ? '1' : '0'))},${
+        registration.email
+      },${
+        registration.guests // IP feel always blank
+      },"",${
+        DateTime.fromISO(registration.competing.registered_on).setZone('UTC').toFormat('yyyy-MM-dd HH:mm:ss ZZZZ')
+      }\n`;
+    });
+  const encodedUri = encodeURI(csvContent);
+  window.open(encodedUri);
+}
+
+function V2csvExport(selected, registrations) {
   let csvContent = 'data:text/csv;charset=utf-8,';
   csvContent
     += 'user_id,guests,competing.event_ids,competing.registration_status,competing.registered_on,competing.comment,competing.admin_comment\n';
@@ -21,6 +47,17 @@ function csvExport(selected, registrations) {
     });
   const encodedUri = encodeURI(csvContent);
   window.open(encodedUri);
+}
+
+function csvExport(selected, registrations, competition) {
+  if (competition.registration_version === 'v3') {
+    V3csvExport(selected, registrations.toSorted(
+      (a, b) => DateTime.fromISO(a.competing.registered_on).toMillis()
+      - DateTime.fromISO(b.competing.registered_on).toMillis(),
+    ), competition);
+  } else {
+    V2csvExport(selected, registrations);
+  }
 }
 
 export default function RegistrationActions({
@@ -99,6 +136,7 @@ export default function RegistrationActions({
           csvExport(
             [...pending, ...accepted, ...cancelled, ...waiting, ...rejected],
             registrations,
+            competitionInfo,
           );
         }}
       >
