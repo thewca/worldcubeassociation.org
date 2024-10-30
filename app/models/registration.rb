@@ -230,15 +230,15 @@ class Registration < ApplicationRecord
 
   def competing_status
     if accepted? || !is_competing?
-      'accepted'
+      Registrations::Helper::STATUS_ACCEPTED
     elsif deleted?
-      'deleted'
+      Registrations::Helper::STATUS_DELETED
     elsif rejected?
-      'rejected'
+      Registrations::Helper::STATUS_REJECTED
     elsif pending?
-      'pending'
+      Registrations::Helper::STATUS_PENDING
     elsif waitlisted?
-      'waiting_list'
+      Registrations::Helper::STATUS_WAITING_LIST
     end
   end
 
