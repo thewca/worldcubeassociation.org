@@ -366,7 +366,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
           {' '}
           (
           {accepted.length}
-          {competitionInfo.competitor_limit && (
+          { spotsRemaining !== Infinity && (
             <>
               {`/${competitionInfo.competitor_limit}; `}
               {spotsRemainingText}
