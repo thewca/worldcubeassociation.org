@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_10_25_161404) do
+ActiveRecord::Schema[7.2].define(version: 2024_10_31_120315) do
   create_table "Competitions", id: { type: :string, limit: 32, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", limit: 50, default: "", null: false
     t.string "cityName", limit: 50, default: "", null: false
@@ -1350,7 +1350,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_25_161404) do
   add_foreign_key "oauth_openid_requests", "oauth_access_grants", column: "access_grant_id", on_delete: :cascade
   add_foreign_key "payment_intents", "users", column: "initiated_by_id"
   add_foreign_key "paypal_records", "paypal_records", column: "parent_record_id"
-  add_foreign_key "regional_records_lookup", "Results", column: "resultId"
+  add_foreign_key "regional_records_lookup", "Results", column: "resultId", on_update: :cascade, on_delete: :cascade
   add_foreign_key "registration_history_changes", "registration_history_entries"
   add_foreign_key "sanity_check_exclusions", "sanity_checks"
   add_foreign_key "sanity_checks", "sanity_check_categories"
