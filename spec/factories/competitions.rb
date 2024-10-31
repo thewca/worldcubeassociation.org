@@ -94,7 +94,6 @@ FactoryBot.define do
 
     external_registration_page { "https://www.worldcubeassociation.org" }
     competitor_limit_enabled { false }
-    competitor_limit { 0 }
     guests_enabled { true }
     on_the_spot_registration { false }
     refund_policy_percent { 0 }
