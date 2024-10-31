@@ -1255,10 +1255,31 @@ RSpec.describe Registrations::RegistrationChecker do
         end
       end
 
-      it 'organizer cant accept a user when registration list is full' do
+      it 'organizer cant accept a user when registration list is exactly full' do
         competitor_limit = FactoryBot.create(:competition, :with_competitor_limit, :with_organizer, competitor_limit: 3)
         limited_reg = FactoryBot.create(:registration, competition: competitor_limit)
         FactoryBot.create_list(:registration, 3, :accepted, competition: competitor_limit)
+
+        update_request = FactoryBot.build(
+          :update_request,
+          user_id: limited_reg.user_id,
+          competition_id: limited_reg.competition.id,
+          submitted_by: competitor_limit.organizers.first.id,
+          competing: { 'status' => 'accepted' },
+        )
+
+        expect {
+          Registrations::RegistrationChecker.update_registration_allowed!(update_request, User.find(update_request['submitted_by']))
+        }.to raise_error(WcaExceptions::RegistrationError) do |error|
+          expect(error.error).to eq(Registrations::ErrorCodes::COMPETITOR_LIMIT_REACHED)
+          expect(error.status).to eq(:forbidden)
+        end
+      end
+
+      it 'organizer cant accept a user when registration list is over full' do
+        competitor_limit = FactoryBot.create(:competition, :with_competitor_limit, :with_organizer, competitor_limit: 3)
+        limited_reg = FactoryBot.create(:registration, competition: competitor_limit)
+        FactoryBot.create_list(:registration, 4, :accepted, competition: competitor_limit)
 
         update_request = FactoryBot.build(
           :update_request,
