@@ -1255,6 +1255,22 @@ RSpec.describe Registrations::RegistrationChecker do
         end
       end
 
+      it 'organizer can accept registrations when there is no competitor limit', :tag do
+        no_competitor_limit = FactoryBot.create(:competition, :with_organizer)
+        registration = FactoryBot.create(:registration, competition: competitor_limit)
+
+        update_request = FactoryBot.build(
+          :update_request,
+          user_id: registration.user_id,
+          competition_id: registration.competition.id,
+          submitted_by: no_competitor_limit.organizers.first.id,
+          competing: { 'status' => 'accepted' },
+        )
+
+        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, User.find(update_request['submitted_by'])) }
+          .not_to raise_error
+      end
+
       it 'organizer cant accept a user when registration list is exactly full' do
         competitor_limit = FactoryBot.create(:competition, :with_competitor_limit, :with_organizer, competitor_limit: 3)
         limited_reg = FactoryBot.create(:registration, competition: competitor_limit)
