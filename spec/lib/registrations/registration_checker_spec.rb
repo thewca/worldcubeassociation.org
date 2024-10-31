@@ -1255,9 +1255,9 @@ RSpec.describe Registrations::RegistrationChecker do
         end
       end
 
-      it 'organizer can accept registrations when there is no competitor limit', :tag do
+      it 'organizer can accept registrations when there is no competitor limit' do
         no_competitor_limit = FactoryBot.create(:competition, :with_organizer)
-        registration = FactoryBot.create(:registration, competition: competitor_limit)
+        registration = FactoryBot.create(:registration, competition: no_competitor_limit)
 
         update_request = FactoryBot.build(
           :update_request,
@@ -1267,7 +1267,7 @@ RSpec.describe Registrations::RegistrationChecker do
           competing: { 'status' => 'accepted' },
         )
 
-        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, User.find(update_request['submitted_by'])) }
+        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, Competition.find(update_request['competition_id']), User.find(update_request['submitted_by'])) }
           .not_to raise_error
       end
 
