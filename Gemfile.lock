@@ -12,6 +12,16 @@ GIT
     selectize-rails (0.12.1)
 
 GIT
+  remote: https://github.com/sidekiq-cron/sidekiq-cron.git
+  revision: f0ac4038da7b3c6bc09b2c3ca9f0b9979848a95a
+  specs:
+    sidekiq-cron (2.0.0.rc2)
+      cronex (>= 0.13.0)
+      fugit (~> 1.8, >= 1.11.1)
+      globalid (>= 1.0.1)
+      sidekiq (>= 6.5.0)
+
+GIT
   remote: https://github.com/thewca/i18n-country-translations.git
   revision: e6706abe0eaa65729c1acb698be08b91dd2b6fde
   specs:
@@ -221,6 +231,9 @@ GEM
       bigdecimal
       rexml
     crass (1.0.6)
+    cronex (0.15.0)
+      tzinfo
+      unicode (>= 0.4.4.5)
     css_parser (1.16.0)
       addressable
     csv (3.3.0)
@@ -696,10 +709,6 @@ GEM
       logger
       rack (>= 2.2.4)
       redis-client (>= 0.22.2)
-    sidekiq-cron (1.12.0)
-      fugit (~> 1.8)
-      globalid (>= 1.0.1)
-      sidekiq (>= 6)
     signet (0.19.0)
       addressable (~> 2.8)
       faraday (>= 0.17.5, < 3.a)
@@ -762,6 +771,7 @@ GEM
     unf (0.1.4)
       unf_ext
     unf_ext (0.0.9.1)
+    unicode (0.4.4.5)
     unicode-display_width (2.6.0)
     uniform_notifier (1.16.0)
     uri (0.13.1)
@@ -902,7 +912,7 @@ DEPENDENCIES
   selectize-rails!
   shakapacker (= 8.0.2)
   sidekiq
-  sidekiq-cron
+  sidekiq-cron!
   simple_form
   simplecov
   simplecov-lcov
