@@ -71,7 +71,7 @@ FactoryBot.define do
       submitted_by { other_user.id }
     end
 
-    initialize_with { attributes.stringify_keys }
+    initialize_with { attributes.compact.stringify_keys }
 
     after(:build) do |instance, evaluator|
       instance['guests'] = evaluator.guests if evaluator.guests
@@ -90,7 +90,7 @@ FactoryBot.define do
 
     requests do
       user_ids.map do |user_id|
-        FactoryBot.build(:update_request, user_id: user_id, competition_id: competition_id, competing: { 'status' => 'deleted' })
+        FactoryBot.build(:update_request, user_id: user_id, competing: { 'status' => 'deleted' })
       end
     end
 
