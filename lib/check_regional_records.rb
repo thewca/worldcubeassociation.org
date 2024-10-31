@@ -11,7 +11,7 @@ module CheckRegionalRecords
       SELECT Results.id, Results.countryId, Results.eventId, Competitions.end_date, Results.best, Results.average
       FROM Results
       INNER JOIN Competitions ON Results.competitionId = Competitions.id
-      #{competition_id.present? ? "WHERE Results.competition_id = #{competition_id}" : ''}
+      #{competition_id.present? ? "WHERE Results.competitionId = #{competition_id}" : ''}
       ON DUPLICATE KEY UPDATE
         countryId = Results.countryId,
         eventId = Results.eventId,
