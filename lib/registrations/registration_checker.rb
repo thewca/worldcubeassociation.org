@@ -16,7 +16,7 @@ module Registrations
     end
 
     def self.update_registration_allowed!(update_request, competition, current_user)
-      registration = Registration.find_by(competition_id: update_request['competition_id'], user_id: update_request['user_id'])
+      registration = Registration.find_by(competition_id: competition.id, user_id: update_request['user_id'])
       raise WcaExceptions::RegistrationError.new(:not_found, Registrations::ErrorCodes::REGISTRATION_NOT_FOUND) unless registration.present?
 
       target_user = User.find(update_request['user_id'])
