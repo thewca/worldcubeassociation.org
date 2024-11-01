@@ -3,7 +3,7 @@
 class SubmitResultsNagJob < WcaCronjob
   before_enqueue do
     # We only need to do this in prod
-    throw :abort unless EnvConfig.WCA_LIVE_SITE?
+    throw :abort unless Rails.env.production?
   end
 
   def nag_needed(competition)
