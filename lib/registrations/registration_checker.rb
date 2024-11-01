@@ -167,7 +167,7 @@ module Registrations
       def validate_update_status!(new_status, competition, current_user, target_user, registration)
         raise WcaExceptions::RegistrationError.new(:unprocessable_entity, Registrations::ErrorCodes::INVALID_REQUEST_DATA) unless Registrations::Helper::REGISTRATION_STATES.include?(new_status)
         raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::COMPETITOR_LIMIT_REACHED) if
-          new_status == 'accepted' && competition.competitor_limit > 0 && Registration.accepted.count >= competition.competitor_limit
+          new_status == 'accepted' && competition.competitor_limit_enabled? && Registration.accepted.count >= competition.competitor_limit
         raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::ALREADY_REGISTERED_IN_SERIES) if
           new_status == 'accepted' && existing_registration_in_series?(competition, target_user)
 

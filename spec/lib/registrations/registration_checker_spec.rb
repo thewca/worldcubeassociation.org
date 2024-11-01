@@ -1256,9 +1256,7 @@ RSpec.describe Registrations::RegistrationChecker do
       end
 
       it 'organizer can accept registrations when there is no competitor limit' do
-        # Once created, a competition with no competitor limit will have a competitor_limit of 0 (check in rails console or database)
-        # However, a validation prevents you from creating a comp with a 0 competitor limit
-        no_competitor_limit = FactoryBot.create(:competition, :with_organizer, :skip_validations, competitor_limit: 0)
+        no_competitor_limit = FactoryBot.create(:competition, :with_organizer)
         registration = FactoryBot.create(:registration, competition: no_competitor_limit)
 
         update_request = FactoryBot.build(
