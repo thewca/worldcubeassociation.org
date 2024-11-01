@@ -74,7 +74,7 @@ module Registrations
           registration.waitlisted_at = Time.now.utc
         when Registrations::Helper::STATUS_ACCEPTED
           registration.accepted_at = Time.now.utc
-        when Registrations::Helper::STATUS_DELETED
+        when Registrations::Helper::STATUS_DELETED, Registrations::Helper::STATUS_CANCELLED
           registration.deleted_at = Time.now.utc
         when Registrations::Helper::STATUS_REJECTED
           registration.rejected_at = Time.now.utc
@@ -92,7 +92,7 @@ module Registrations
           RegistrationsMailer.notify_registrant_of_pending_registration(registration).deliver_later
         when Registrations::Helper::STATUS_ACCEPTED
           RegistrationsMailer.notify_registrant_of_accepted_registration(registration).deliver_later
-        when Registrations::Helper::STATUS_REJECTED, Registrations::Helper::STATUS_DELETED
+        when Registrations::Helper::STATUS_REJECTED, Registrations::Helper::STATUS_DELETED, Registrations::Helper::STATUS_CANCELLED
           if user_id == current_user_id
             RegistrationsMailer.notify_organizers_of_deleted_registration(registration).deliver_later
           else

@@ -240,7 +240,7 @@ class Registration < ApplicationRecord
     if accepted? || !is_competing?
       Registrations::Helper::STATUS_ACCEPTED
     elsif deleted?
-      Registrations::Helper::STATUS_DELETED
+      Registrations::Helper::STATUS_CANCELLED
     elsif rejected?
       Registrations::Helper::STATUS_REJECTED
     elsif pending?
