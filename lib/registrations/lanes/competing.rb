@@ -66,12 +66,12 @@ module Registrations
         status = update_params.dig('competing', 'status')
 
         should_add = status == Registrations::Helper::STATUS_WAITING_LIST
-        should_remove = !should_add
         should_move = update_params[:waiting_list_position].present?
+        should_remove = !should_add && !should_move
 
         waiting_list.add(user_id) if should_add
+        waiting_list.move_to_position(user_id, update_params[:waiting_list_position].to_i) if should_move
         waiting_list.remove(user_id) if should_remove
-        waiting_list.move_to_position(update_params[:user_id], update_params[:waiting_list_position].to_i) if should_move
       end
 
       def self.update_status(registration, status)
