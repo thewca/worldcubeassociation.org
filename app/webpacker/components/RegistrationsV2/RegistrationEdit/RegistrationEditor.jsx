@@ -24,6 +24,7 @@ import { editPersonUrl } from '../../../lib/requests/routes.js.erb';
 import { useConfirm } from '../../../lib/providers/ConfirmProvider';
 import i18n from '../../../lib/i18n';
 import RegistrationHistory from './RegistrationHistory';
+import { hasPassed } from '../../../lib/utils/dates';
 
 export default function RegistrationEditor({ competitor, competitionInfo }) {
   const dispatch = useDispatch();
@@ -186,6 +187,9 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
     }
   };
 
+  const registrationEditDeadlinePassed = Boolean(competitionInfo.event_change_deadline_date)
+    && hasPassed(competitionInfo.event_change_deadline_date);
+
   if (isLoading || isRegistrationLoading) {
     return <Loading />;
   }
@@ -201,6 +205,12 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
           <a href={editPersonUrl(competitor.id)}>here</a>
           .
         </Message>
+        )}
+        {registrationEditDeadlinePassed && (
+          <Message>
+            The Registration Edit Deadline has passed!
+            <strong>Changes should only be made in extraordinary circumstances</strong>
+          </Message>
         )}
         <Header>{competitor.name}</Header>
         <Form.Field required error={selectedEvents.length === 0}>
