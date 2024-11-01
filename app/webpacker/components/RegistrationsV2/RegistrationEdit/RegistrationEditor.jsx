@@ -51,7 +51,7 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
 
   const { isLoading, data: competitorsInfo } = useQuery({
     queryKey: ['history-user', serverRegistration?.history],
-    queryFn: () => getUsersInfo(_.uniq(serverRegistration.history.flatMap((e) => (e.actor_type === 'user' ? e.actor_id : [])))),
+    queryFn: () => getUsersInfo(_.uniq(serverRegistration.history.flatMap((e) => (e.actor_type === 'user' ? Number(e.actor_id) : [])))),
     enabled: Boolean(serverRegistration),
   });
 
