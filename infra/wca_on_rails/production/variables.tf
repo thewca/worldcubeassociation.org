@@ -101,6 +101,10 @@ variable "shared" {
     pma_production: object({
       arn: string
     })
+    api_gateway: object({
+      id: string,
+      root_resource_id: string
+    })
     account_id: string
     # These are booth arrays
     private_subnets: any

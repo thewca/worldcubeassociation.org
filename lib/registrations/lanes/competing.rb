@@ -19,7 +19,7 @@ module Registrations
         registration.add_history_entry(changes, "worker", user_id, "Worker processed")
       end
 
-      def self.update!(update_params, current_user_id)
+      def self.update!(update_params, competition, current_user_id)
         guests = update_params[:guests]
         status = update_params.dig('competing', 'status')
         comment = update_params.dig('competing', 'comment')
@@ -27,9 +27,8 @@ module Registrations
         admin_comment = update_params.dig('competing', 'admin_comment')
         waiting_list_position = update_params.dig('competing', 'waiting_list_position')
         user_id = update_params[:user_id]
-        competition_id = update_params[:competition_id]
 
-        registration = Registration.find_by(competition_id: competition_id, user_id: user_id)
+        registration = Registration.find_by(competition_id: competition.id, user_id: user_id)
         old_status = registration.competing_status
 
         if old_status == Registrations::Helper::STATUS_WAITING_LIST || status == Registrations::Helper::STATUS_WAITING_LIST

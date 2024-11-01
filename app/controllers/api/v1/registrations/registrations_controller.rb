@@ -60,21 +60,24 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
 
   def update
     if params[:competing]
-      updated_registration = Registrations::Lanes::Competing.update!(params, @current_user.id)
+      updated_registration = Registrations::Lanes::Competing.update!(params, @competition, @current_user.id)
       return render json: { status: 'ok', registration: updated_registration.to_v2_json(admin: true, history: true) }, status: :ok
     end
     render json: { status: 'bad request', message: 'You need to supply at least one lane' }, status: :bad_request
   end
 
   def validate_update_request
-    Registrations::RegistrationChecker.update_registration_allowed!(params, @current_user)
+    @competition = Competition.find(params[:competition_id])
+    Registrations::RegistrationChecker.update_registration_allowed!(params, @competition, @current_user)
   end
 
   def bulk_update
     updated_registrations = {}
     update_requests = params[:requests]
+    competition = Competition.find(params[:competition_id])
+
     update_requests.each do |update|
-      updated_registrations[update['user_id']] = Registrations::Lanes::Competing.update!(update, @current_user)
+      updated_registrations[update['user_id']] = Registrations::Lanes::Competing.update!(update, competition, @current_user)
     end
 
     render json: { status: 'ok', updated_registrations: updated_registrations }

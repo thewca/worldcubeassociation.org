@@ -400,7 +400,7 @@ class Competition < ApplicationRecord
   end
 
   def events_held?(desired_event_ids)
-    desired_event_ids.present? && (desired_event_ids & self.event_ids) == desired_event_ids
+    (desired_event_ids & self.event_ids) == desired_event_ids
   end
 
   def enforces_qualifications?
@@ -2570,6 +2570,9 @@ class Competition < ApplicationRecord
       end
 
       assign_attributes(Competition.form_data_to_attributes(form_data))
+
+      # TODO: Remove once v3 registrations (monolith integration) are implemented by default
+      self.registration_version = :v1 unless self.use_wca_registration
     end
   end
 
