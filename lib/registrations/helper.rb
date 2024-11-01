@@ -18,7 +18,7 @@ module Registrations
     def self.action_type(request, current_user_id)
       self_updating = request[:user_id].to_i == current_user_id
       status = request.dig('competing', 'status')
-      if status == STATUS_DELETED || status == STATUS_CANCELLED
+      if [STATUS_DELETED, STATUS_CANCELLED].include?(status)
         return self_updating ? 'Competitor delete' : 'Admin delete'
       end
       if status == STATUS_REJECTED

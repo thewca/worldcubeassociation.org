@@ -31,10 +31,6 @@ module Registrations
         registration = Registration.find_by(competition_id: competition.id, user_id: user_id)
         old_status = registration.competing_status
 
-        if old_status == Registrations::Helper::STATUS_WAITING_LIST || status == Registrations::Helper::STATUS_WAITING_LIST
-          waiting_list = competition.waiting_list || competition.waiting_list.build(entries: [])
-        end
-
         ActiveRecord::Base.transaction do
           update_status(registration, status)
           registration.comments = comment if comment.present?
@@ -43,8 +39,12 @@ module Registrations
 
           changes = registration.changes.transform_values { |change| change[1] }
 
+          if old_status == Registrations::Helper::STATUS_WAITING_LIST || status == Registrations::Helper::STATUS_WAITING_LIST
+            waiting_list = competition.waiting_list || competition.create_waiting_list(entries: [])
+            update_waiting_list(update_params, waiting_list)
+          end
+
           if waiting_list_position.present?
-            waiting_list.move_to_position(user_id, waiting_list_position)
             changes[:waiting_list_position] = waiting_list_position
           end
 
@@ -59,6 +59,19 @@ module Registrations
 
         # TODO: V3-REG Cleanup Figure out a way to get rid of this reload
         registration.reload
+      end
+
+      def self.update_waiting_list(update_params, waiting_list)
+        user_id = update_params[:user_id]
+        status = update_params.dig('competing', 'status')
+
+        should_add = status == Registrations::Helper::STATUS_WAITING_LIST
+        should_remove = !should_add
+        should_move = update_params[:waiting_list_position].present?
+
+        waiting_list.add(user_id) if should_add
+        waiting_list.remove(user_id) if should_remove
+        waiting_list.move_to_position(update_params[:user_id], update_params[:waiting_list_position].to_i) if should_move
       end
 
       def self.update_status(registration, status)
@@ -86,8 +99,9 @@ module Registrations
       end
 
       def self.send_status_change_email(registration, status, user_id, current_user_id)
-        # TODO: V3-REG Cleanup, at new waiting list email
         case status
+        when Registrations::Helper::STATUS_WAITING_LIST
+          # TODO: V3-REG Cleanup, at new waiting list email
         when Registrations::Helper::STATUS_PENDING
           RegistrationsMailer.notify_registrant_of_pending_registration(registration).deliver_later
         when Registrations::Helper::STATUS_ACCEPTED
