@@ -15,9 +15,6 @@ import {
 import { getSingleRegistration } from '../api/registration/get/get_registrations';
 import updateRegistration from '../api/registration/patch/update_registration';
 import getUsersInfo from '../api/user/post/getUserInfo';
-import {
-  hasPassed,
-} from '../../../lib/utils/dates';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { setMessage } from '../Register/RegistrationMessage';
 import Loading from '../../Requests/Loading';
@@ -174,9 +171,6 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
     status,
     guests]);
 
-  const registrationEditDeadlinePassed = Boolean(competitionInfo.event_change_deadline_date)
-    && hasPassed(competitionInfo.event_change_deadline_date);
-
   const handleEventSelection = ({ type, eventId }) => {
     if (type === 'select_all_events') {
       setSelectedEvents(competitionInfo.event_ids);
@@ -225,7 +219,6 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
           id="competitor-comment"
           maxLength={240}
           value={comment}
-          disabled={registrationEditDeadlinePassed}
           onChange={(event, data) => setComment(data.value)}
         />
 
@@ -234,7 +227,6 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
           id="admin-comment"
           maxLength={240}
           value={adminComment}
-          disabled={registrationEditDeadlinePassed}
           onChange={(event, data) => setAdminComment(data.value)}
         />
 
@@ -246,7 +238,6 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
             name="checkboxRadioGroup"
             value="pending"
             checked={status === 'pending'}
-            disabled={registrationEditDeadlinePassed}
             onChange={(event, data) => setStatus(data.value)}
           />
           <Form.Checkbox
@@ -255,7 +246,6 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
             name="checkboxRadioGroup"
             value="accepted"
             checked={status === 'accepted'}
-            disabled={registrationEditDeadlinePassed}
             onChange={(event, data) => setStatus(data.value)}
           />
           <Form.Checkbox
@@ -264,7 +254,6 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
             name="checkboxRadioGroup"
             value="waiting_list"
             checked={status === 'waiting_list'}
-            disabled={registrationEditDeadlinePassed}
             onChange={(event, data) => setStatus(data.value)}
           />
           <Form.Checkbox
@@ -272,7 +261,6 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
             label="Cancelled"
             name="checkboxRadioGroup"
             value="cancelled"
-            disabled={registrationEditDeadlinePassed}
             checked={status === 'cancelled'}
             onChange={(event, data) => setStatus(data.value)}
           />
@@ -281,31 +269,24 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
             label="Rejected"
             name="checkboxRadioGroup"
             value="cancelled"
-            disabled={registrationEditDeadlinePassed}
             checked={status === 'rejected'}
             onChange={(event, data) => setStatus(data.value)}
           />
         </Form.Group>
         <label>Guests</label>
         <Form.Input
-          disabled={registrationEditDeadlinePassed}
           type="number"
           min={0}
           max={99}
           value={guests}
           onChange={(event, data) => setGuests(data.value)}
         />
-
-        {registrationEditDeadlinePassed ? (
-          <Message negative>Registration edit deadline has passed.</Message>
-        ) : (
-          <Button
-            color="blue"
-            disabled={isUpdating || !hasChanges}
-          >
-            Update Registration
-          </Button>
-        )}
+        <Button
+          color="blue"
+          disabled={isUpdating || !hasChanges}
+        >
+          Update Registration
+        </Button>
       </Form>
       {competitionInfo['using_payment_integrations?'] && (
         <>
