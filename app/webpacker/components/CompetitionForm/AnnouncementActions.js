@@ -24,6 +24,7 @@ import {
   useFormErrorHandler,
   useFormInitialObject,
 } from '../wca/FormBuilder/provider/FormObjectProvider';
+import { useFormCommitAction, useFormUpdateAction } from '../wca/FormBuilder/EditForm';
 
 function AnnounceAction({
   competitionId,
@@ -39,11 +40,19 @@ function AnnounceAction({
   const { save } = useSaveAction();
   const confirm = useConfirm();
 
+  const updateFormObject = useFormUpdateAction();
+  const commitFormObject = useFormCommitAction();
+
   const postAnnouncement = () => {
     confirm({
       content: I18n.t('competitions.announce_confirm'),
     }).then(() => {
-      save(announceCompetitionUrl(competitionId), null, sync, {
+      save(announceCompetitionUrl(competitionId), null, () => {
+        sync();
+
+        updateFormObject('isVisible', true, ['admin']); // Automatically make the competition visible.
+        commitFormObject();
+      }, {
         body: null,
         method: 'PUT',
       });
