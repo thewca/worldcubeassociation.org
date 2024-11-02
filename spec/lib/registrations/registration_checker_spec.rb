@@ -1310,7 +1310,7 @@ RSpec.describe Registrations::RegistrationChecker do
           :update_request,
           user_id: default_registration.user_id,
           competition_id: default_registration.competition.id,
-          competing: { 'status' => 'cancelled', 'event_ids' => ['333'] },
+          competing: { 'status' => 'deleted', 'event_ids' => ['333'] },
         )
 
         expect {

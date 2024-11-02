@@ -192,8 +192,8 @@ module Registrations
           !competition.allow_registration_self_delete_after_acceptance && registration.accepted?
 
         # Users aren't allowed to change events when cancelling
-        # raise WcaExceptions::RegistrationError.new(:unprocessable_entity, Registrations::ErrorCodes::INVALID_REQUEST_DATA) if
-        #   request['competing'].key?('event_ids') && registration.event_ids != request['competing']['event_ids']
+        raise WcaExceptions::RegistrationError.new(:unprocessable_entity, Registrations::ErrorCodes::INVALID_REQUEST_DATA) if
+          request['competing'].key?('event_ids') && registration.event_ids != request['competing']['event_ids']
       end
 
       def validate_update_events!(event_ids, competition)

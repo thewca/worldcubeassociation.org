@@ -110,7 +110,7 @@ RSpec.describe 'API Registrations' do
         :update_request,
         user_id: registration.user_id,
         competition_id: registration.competition.id,
-        competing: { 'status' => 'cancelled' },
+        competing: { 'status' => 'deleted' },
         guests: 3,
       )
       headers = { 'Authorization' => update_request['jwt_token'] }
