@@ -1306,7 +1306,7 @@ RSpec.describe Registrations::RegistrationChecker do
         )
 
         expect {
-          Registrations::RegistrationChecker.update_registration_allowed!(update_request, User.find(update_request['submitted_by']))
+          Registrations::RegistrationChecker.update_registration_allowed!(update_request, Competition.find(update_request['competition_id']), User.find(update_request['submitted_by']))
         }.to raise_error(WcaExceptions::RegistrationError) do |error|
           expect(error.error).to eq(Registrations::ErrorCodes::COMPETITOR_LIMIT_REACHED)
           expect(error.status).to eq(:forbidden)
