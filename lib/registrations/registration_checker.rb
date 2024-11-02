@@ -32,7 +32,7 @@ module Registrations
       validate_organizer_fields!(update_request, current_user, competition)
       validate_organizer_comment!(update_request)
       validate_waiting_list_position!(waiting_list_position, competition) unless waiting_list_position.nil?
-      validate_update_status!(new_status, competition, current_user, target_user, registration) unless new_status.nil?
+      validate_update_status!(new_status, competition, current_user, target_user, registration, events) unless new_status.nil?
       validate_update_events!(events, competition) unless events.nil?
       validate_qualifications!(update_request, competition, target_user)
     end
@@ -164,7 +164,7 @@ module Registrations
         request['competing']&.keys&.any? { |key| organizer_fields.include?(key) }
       end
 
-      def validate_update_status!(new_status, competition, current_user, target_user, registration)
+      def validate_update_status!(new_status, competition, current_user, target_user, registration, events)
         raise WcaExceptions::RegistrationError.new(:unprocessable_entity, Registrations::ErrorCodes::INVALID_REQUEST_DATA) unless Registrations::Helper::REGISTRATION_STATES.include?(new_status)
         raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::COMPETITOR_LIMIT_REACHED) if
           new_status == 'accepted' && Registration.accepted.count == competition.competitor_limit
@@ -193,7 +193,7 @@ module Registrations
 
         # Users aren't allowed to change events when cancelling
         raise WcaExceptions::RegistrationError.new(:unprocessable_entity, Registrations::ErrorCodes::INVALID_REQUEST_DATA) if
-          request['competing'].key?('event_ids') && registration.event_ids != request['competing']['event_ids']
+          events.present? && registration.event_ids != events
       end
 
       def validate_update_events!(event_ids, competition)
