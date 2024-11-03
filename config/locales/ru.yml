@@ -2107,17 +2107,17 @@ ru:
       #original_hash: 51fa5a4
       wca_id_no_gender_html: >-
         Для этого WCA ID у нас в базе данных не указан пол. Пожалуйста,
-        свяжитесь с <a href='mailto:results@worldcubeassociation.org'
+        свяжитесь с <a href='%{wrt_contact_path}'
         target='_blank'>WCA Results Team</a>.
       #original_hash: 87ee245
       wca_id_no_citizenship_html: >-
         Для этого WCA ID у нас в базе данных не указано гражданство. Пожалуйста,
-        свяжитесь с <a href='mailto:results@worldcubeassociation.org'
+        свяжитесь с <a href='%{wrt_contact_path}'
         target='_blank'>WCA Results Team</a>.
       #original_hash: c3839bc
       wca_id_no_name_html: >-
         Для этого WCA ID у нас в базе данных не указано имя. Пожалуйста,
-        свяжитесь с <a href='mailto:results@worldcubeassociation.org'
+        свяжитесь с <a href='%{wrt_contact_path}'
         target='_blank'>WCA Results Team</a>.
       #original_hash: d02c03b
       avatar_requires_wca_id: требуется привязать WCA ID

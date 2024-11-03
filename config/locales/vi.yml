@@ -1573,17 +1573,17 @@ vi:
       #original_hash: 51fa5a4
       wca_id_no_gender_html: >-
         Chúng tôi không có thông tin giới tính của ID WCA này trong dữ liệu. Vui
-        lòng gửi email đến <a href='mailto:results@worldcubeassociation.org'
+        lòng gửi email đến <a href='%{wrt_contact_path}'
         target='_blank'>Đội ngũ Kết quả của WCA</a> để giải quyết.
       #original_hash: 87ee245
       wca_id_no_citizenship_html: >-
         Chúng tôi không có thông tin về quốc tịch của ID WCA này trong dữ liệu.
-        Vui lòng gửi email đến <a href='mailto:results@worldcubeassociation.org'
+        Vui lòng gửi email đến <a href='%{wrt_contact_path}'
         target='_blank'>Đội ngũ Kết quả của WCA</a> để giải quyết.
       #original_hash: c3839bc
       wca_id_no_name_html: >-
         Chúng tôi không có thông tin họ tên của ID WCA này trong dữ liệu. Vui
-        lòng gửi email đến <a href='mailto:results@worldcubeassociation.org'
+        lòng gửi email đến <a href='%{wrt_contact_path}'
         target='_blank'>Đội ngũ Kết quả của WCA</a> để giải quyết.
       #original_hash: d02c03b
       avatar_requires_wca_id: yêu cầu xác nhận ID WCA
@@ -1620,7 +1620,7 @@ vi:
       missing_dob_html: 'ID WCA %{link_id} không có thông tin ngày sinh.'
       #original_hash: 5be6803
       contact_results_team_html: >-
-        Vui lòng liên hệ <a href='mailto:results@worldcubeassociation.org'
+        Vui lòng liên hệ <a href='%{wrt_contact_path}'
         target='_blank'>Đội ngũ Kết quả của WCA</a> để giải quyết.
       #original_hash: 92aa857
       unknown_wca_id_html: 'ID WCA %{link_id} không tồn tại.'

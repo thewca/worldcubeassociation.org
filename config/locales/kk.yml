@@ -1857,17 +1857,17 @@ kk:
       #original_hash: 51fa5a4
       wca_id_no_gender_html: >-
         Бұл үшін WCA ID бізде деректер базасында жынысы көрсетілмеген. Өтінемін,
-        хабарласыңыз <a href='mailto:results@worldcubeassociation.org'
+        хабарласыңыз <a href='%{wrt_contact_path}'
         target='_blank'>WCA Results Team</a>.
       #original_hash: 87ee245
       wca_id_no_citizenship_html: >-
         Бұл үшін WCA ID біздің дерекқорымызда азаматтығы жоқ. Өтінемін,
-        хабарласыңыз <a href='mailto:results@worldcubeassociation.org'
+        хабарласыңыз <a href='%{wrt_contact_path}'
         target='_blank'>WCA Results Team</a>.
       #original_hash: c3839bc
       wca_id_no_name_html: >-
         Бұл үшін WCA ID біздің дерекқорымызда аты жоқ. Өтінемін, хабарласыңыз <a
-        href='mailto:results@worldcubeassociation.org' target='_blank'>WCA
+        href='%{wrt_contact_path}' target='_blank'>WCA
         Results Team</a>.
       #original_hash: d02c03b
       avatar_requires_wca_id: WCA ID байланыстыру қажет
@@ -1906,7 +1906,7 @@ kk:
       missing_dob_html: 'WCA ID %{link_id} туған күні белгіленбеген.'
       #original_hash: 5be6803
       contact_results_team_html: >-
-        Өтініш, хабарласыңыз <a href='mailto:results@worldcubeassociation.org'
+        Өтініш, хабарласыңыз <a href='%{wrt_contact_path}'
         target='_blank'>WCA Results Team</a>.
       #original_hash: 92aa857
       unknown_wca_id_html: 'WCA ID %{link_id} жоқ.'

@@ -1922,17 +1922,17 @@ da:
       #original_hash: 51fa5a4
       wca_id_no_gender_html: >-
         Vi har ikke et køn tilknyttet til dette WCA ID. Email <a
-        href='mailto:results@worldcubeassociation.org' target='_blank'>WCA's
+        href='%{wrt_contact_path}' target='_blank'>WCA's
         Resultathold</a> for at løse det.
       #original_hash: 87ee245
       wca_id_no_citizenship_html: >-
         Vi har ikke en nationalitet tilknyttet til dette WCA ID. Email <a
-        href='mailto:results@worldcubeassociation.org' target='_blank'>WCA's
+        href='%{wrt_contact_path}' target='_blank'>WCA's
         Resultathold</a> for at løse det.
       #original_hash: c3839bc
       wca_id_no_name_html: >-
         Vi har ikke et navn tilknyttet til dette WCA ID. Email <a
-        href='mailto:results@worldcubeassociation.org' target='_blank'>WCA's
+        href='%{wrt_contact_path}' target='_blank'>WCA's
         Resultathold</a> for at løse det.
       #original_hash: d02c03b
       avatar_requires_wca_id: har brug for et WCA ID tildelt

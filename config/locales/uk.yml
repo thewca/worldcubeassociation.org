@@ -1765,17 +1765,17 @@ uk:
       #original_hash: 51fa5a4
       wca_id_no_gender_html: >-
         В базі даних відсутній гендер для цього WCA ID. Будь ласка, напишіть
-        листа <a href='mailto:results@worldcubeassociation.org'
+        листа <a href='%{wrt_contact_path}'
         target='_blank'>Команді результатів WCA</a>, щоб виправити це.
       #original_hash: 87ee245
       wca_id_no_citizenship_html: >-
         В базі даних відсутнє громадянство для цього WCA ID. Будь ласка,
-        напишіть листа <a href='mailto:results@worldcubeassociation.org'
+        напишіть листа <a href='%{wrt_contact_path}'
         target='_blank'>Команді результатів WCA</a>, щоб виправити це.
       #original_hash: c3839bc
       wca_id_no_name_html: >-
         В базі даних відсутнє ім’я для цього WCA ID. Будь ласка, напишіть листа
-        <a href='mailto:results@worldcubeassociation.org'
+        <a href='%{wrt_contact_path}'
         target='_blank'>Команді результатів WCA</a>, щоб виправити це.
       #original_hash: d02c03b
       avatar_requires_wca_id: щоб додати це необхідний WCA ID
@@ -1816,7 +1816,7 @@ uk:
       #original_hash: 5be6803
       contact_results_team_html: >-
         Будь ласка, зв’яжіться з <a
-        href='mailto:results@worldcubeassociation.org' target='_blank'>Командою
+        href='%{wrt_contact_path}' target='_blank'>Командою
         результатів WCA</a>, щоб виправити це.
       #original_hash: 92aa857
       unknown_wca_id_html: 'WCA ID %{link_id} не існує.'

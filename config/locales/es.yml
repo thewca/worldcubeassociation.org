@@ -2023,7 +2023,7 @@ es:
         msg: >-
           No puedes modificar tu nombre, fecha de nacimiento, sexo ni región.
           Motivo: %{reason}. Ponte en contacto con el <a
-          href='mailto:results@worldcubeassociation.org' target='_blank'>WCA
+          href='%{wrt_contact_path}' target='_blank'>WCA
           Results Team</a> o tu <a href='%{delegate_url}'>Delegado</a> si
           necesitas cambiar alguno de estos campos.
         reason:
@@ -2148,17 +2148,17 @@ es:
       #original_hash: 51fa5a4
       wca_id_no_gender_html: >-
         Este WCA ID no tiene registrado el sexo. Por favor, escribe al <a
-        href='mailto:results@worldcubeassociation.org' target='_blank'>Equipo de
+        href='%{wrt_contact_path}' target='_blank'>Equipo de
         Resultados de la WCA</a> para resolver esto.
       #original_hash: 87ee245
       wca_id_no_citizenship_html: >-
         Este WCA ID no tiene registrada la nacionalidad. Por favor, escribe al
-        <a href='mailto:results@worldcubeassociation.org' target='_blank'>Equipo
+        <a href='%{wrt_contact_path}' target='_blank'>Equipo
         de Resultados de la WCA</a> para resolver esto.
       #original_hash: c3839bc
       wca_id_no_name_html: >-
         Este WCA ID no tiene registrado el nombre. Por favor, escribe al <a
-        href='mailto:results@worldcubeassociation.org' target='_blank'>Equipo de
+        href='%{wrt_contact_path}' target='_blank'>Equipo de
         Resultados de la WCA</a> para resolver esto.
       #original_hash: d02c03b
       avatar_requires_wca_id: requiere que se le asigne un WCA ID
