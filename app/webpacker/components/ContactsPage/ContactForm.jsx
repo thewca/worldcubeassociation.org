@@ -4,7 +4,7 @@ import {
 } from 'semantic-ui-react';
 import ReCAPTCHA from 'react-google-recaptcha';
 import _ from 'lodash';
-import { contactUrl } from '../../lib/requests/routes.js.erb';
+import { contactUrl, contactEditProfileActionUrl } from '../../lib/requests/routes.js.erb';
 import useSaveAction from '../../lib/hooks/useSaveAction';
 import I18n from '../../lib/i18n';
 import UserData from './UserData';
@@ -26,6 +26,15 @@ const CONTACT_RECIPIENTS = [
 
 const CONTACT_RECIPIENTS_MAP = _.keyBy(CONTACT_RECIPIENTS, _.camelCase);
 
+const getFormRedirection = (formValues) => {
+  if (formValues.contactRecipient === CONTACT_RECIPIENTS_MAP.wrt) {
+    if (formValues[CONTACT_RECIPIENTS_MAP.wrt].queryType === 'edit_profile') {
+      return contactEditProfileActionUrl;
+    }
+  }
+  return null;
+}
+
 export default function ContactForm({
   loggedInUserData,
   recaptchaPublicKey,
@@ -38,7 +47,7 @@ export default function ContactForm({
   const contactFormState = useStore();
   const dispatch = useDispatch();
   const { formValues: { contactRecipient: selectedContactRecipient, userData } } = contactFormState;
-  const formRedirection = contactFormState.formValues[selectedContactRecipient]?.formRedirection;
+  const formRedirection = useMemo(() => getFormRedirection(contactFormState.formValues));
 
   const isFormValid = (
     selectedContactRecipient && userData.name && userData.email && (captchaValue || formRedirection)
@@ -136,10 +145,10 @@ export default function ContactForm({
                 onErrored={setCaptchaError}
               />
               {captchaError && (
-              <Message
-                error
-                content={I18n.t('page.contacts.form.captcha.validation_error')}
-              />
+                <Message
+                  error
+                  content={I18n.t('page.contacts.form.captcha.validation_error')}
+                />
               )}
             </FormField>
             <Button

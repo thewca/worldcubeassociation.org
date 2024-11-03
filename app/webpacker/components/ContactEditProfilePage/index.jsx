@@ -50,7 +50,6 @@ export default function ContactEditProfilePage({ loggedInUserId, recaptchaPublic
       <Header as="h2">{i18n.t('page.contact_edit_profile.title')}</Header>
       <EditProfileForm
         wcaId={wcaId}
-        loggedInUserData={loggedInUserData}
         onContactSuccess={() => setContactSuccess(true)}
         recaptchaPublicKey={recaptchaPublicKey}
       />

@@ -1,6 +1,5 @@
 import {
   ClearForm,
-  SetFormRedirection,
   UpdateContactRecipient,
   UpdateSectionData,
   UploadProfileChangeProof,
@@ -22,7 +21,6 @@ export const getContactFormInitialState = (params) => ({
     wrt: {
       queryType: params?.queryType,
       profileDataToChange: params?.profileDataToChange,
-      formRedirection: null,
     },
   },
   attachments: [],
@@ -55,17 +53,6 @@ const reducers = {
   [UploadProfileChangeProof]: (state, { payload }) => ({
     ...state,
     attachments: [payload.file],
-  }),
-
-  [SetFormRedirection]: (state, { payload }) => ({
-    ...state,
-    formValues: {
-      ...state.formValues,
-      [payload.section]: {
-        ...(state.formValues[payload.section] || {}),
-        formRedirection: payload.formRedirection,
-      },
-    },
   }),
 };
 

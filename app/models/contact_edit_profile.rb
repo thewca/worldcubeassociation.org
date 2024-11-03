@@ -6,6 +6,12 @@ class ContactEditProfile < ContactForm
   attribute :edit_profile_reason
   attribute :document, attachment: true
 
+  EditProfileChange = Struct.new(
+    :field,
+    :from,
+    :to,
+  )
+
   def to_email
     UserGroup.teams_committees_group_wrt.metadata.email
   end
