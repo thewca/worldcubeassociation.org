@@ -64,23 +64,7 @@ module Registrations
       def self.update_status(registration, status)
         return unless status.present?
 
-        registration.accepted_at = nil
-        registration.deleted_at = nil
-        registration.rejected_at = nil
-        registration.waitlisted_at = nil
-
-        case status
-        when Registrations::Helper::STATUS_WAITING_LIST
-          registration.waitlisted_at = Time.now.utc
-        when Registrations::Helper::STATUS_ACCEPTED
-          registration.accepted_at = Time.now.utc
-        when Registrations::Helper::STATUS_DELETED
-          registration.deleted_at = Time.now.utc
-        when Registrations::Helper::STATUS_REJECTED
-          registration.rejected_at = Time.now.utc
-        else
-          raise WcaExceptions::RegistrationError.new(:unprocessable_entity, Registrations::ErrorCodes::INVALID_REQUEST_DATA)
-        end
+        registration.competing_status = status
       end
 
       def self.send_status_change_email(registration, status, user_id, current_user_id)
