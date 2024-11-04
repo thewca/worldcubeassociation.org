@@ -7,6 +7,7 @@ module Registrations
     STATUS_WAITING_LIST = "waiting_list"
     STATUS_ACCEPTED = "accepted"
     STATUS_DELETED = "deleted"
+    STATUS_CANCELLED = "cancelled"
     STATUS_REJECTED = "rejected"
 
     REGISTRATION_STATES = [STATUS_ACCEPTED, STATUS_DELETED, STATUS_PENDING, STATUS_REJECTED, STATUS_WAITING_LIST].freeze # TODO: Change deleted to canceled when v1 is retired

@@ -22,6 +22,14 @@ class Registration < ApplicationRecord
   has_many :wcif_extensions, as: :extendable, dependent: :delete_all
   has_many :payment_intents, as: :holder, dependent: :delete_all
 
+  enum :competing_status, {
+    pending: Registrations::Helper::STATUS_PENDING,
+    accepted: Registrations::Helper::STATUS_ACCEPTED,
+    cancelled: Registrations::Helper::STATUS_CANCELLED,
+    rejected: Registrations::Helper::STATUS_REJECTED,
+    waiting_list: Registrations::Helper::STATUS_WAITING_LIST,
+  }, prefix: true
+
   serialize :roles, coder: YAML
 
   accepts_nested_attributes_for :registration_competition_events, allow_destroy: true
@@ -234,11 +242,11 @@ class Registration < ApplicationRecord
     end
   end
 
-  def competing_status
+  def compute_competing_status
     if accepted? || !is_competing?
       Registrations::Helper::STATUS_ACCEPTED
     elsif deleted?
-      Registrations::Helper::STATUS_DELETED
+      Registrations::Helper::STATUS_CANCELLED
     elsif rejected?
       Registrations::Helper::STATUS_REJECTED
     elsif pending?
