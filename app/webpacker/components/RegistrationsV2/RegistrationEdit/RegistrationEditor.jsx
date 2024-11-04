@@ -280,7 +280,7 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
             radio
             label="Rejected"
             name="checkboxRadioGroup"
-            value="cancelled"
+            value="rejected"
             disabled={registrationEditDeadlinePassed}
             checked={status === 'rejected'}
             onChange={(event, data) => setStatus(data.value)}

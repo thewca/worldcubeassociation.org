@@ -400,7 +400,11 @@ class Competition < ApplicationRecord
   end
 
   def events_held?(desired_event_ids)
+    # rubocop:disable Style/BitwisePredicate
+    #   We have to shut up Rubocop here because otherwise it thinks that
+    #   `desired_event_ids` are integers which are being compared to a bit mask
     (desired_event_ids & self.event_ids) == desired_event_ids
+    # rubocop:enable Style/BitwisePredicate
   end
 
   def enforces_qualifications?
@@ -1110,10 +1114,6 @@ class Competition < ApplicationRecord
       # people to leave this blank than to set an incorrect value here.
       country.present? && !country.multiple_countries?
     )
-  end
-
-  def competitor_limit_enabled?
-    competitor_limit_enabled
   end
 
   def competitor_limit_required?
