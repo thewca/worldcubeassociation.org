@@ -169,11 +169,13 @@ module Registrations
 
       # rubocop:disable Metrics/ParameterLists
       def validate_update_status!(new_status, competition, current_user, target_user, registration, events)
-        raise WcaExceptions::RegistrationError.new(:unprocessable_entity, Registrations::ErrorCodes::INVALID_REQUEST_DATA) unless Registrations::Helper::REGISTRATION_STATES.include?(new_status)
+        raise WcaExceptions::RegistrationError.new(:unprocessable_entity, Registrations::ErrorCodes::INVALID_REQUEST_DATA) unless
+          Registrations::Helper::REGISTRATION_STATES.include?(new_status)
         raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::COMPETITOR_LIMIT_REACHED) if
-          new_status == 'accepted' && competition.competitor_limit_enabled? && Registration.accepted.count >= competition.competitor_limit
+          new_status == Registrations::Helper::STATUS_ACCEPTED && competition.competitor_limit_enabled? &&
+          competition.registrations.accepted.count >= competition.competitor_limit
         raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::ALREADY_REGISTERED_IN_SERIES) if
-          new_status == 'accepted' && existing_registration_in_series?(competition, target_user)
+          new_status == Registrations::Helper::STATUS_ACCEPTED && existing_registration_in_series?(competition, target_user)
 
         # Otherwise, organizers can make any status change they want to
         return if current_user.can_manage_competition?(competition)
