@@ -1,10 +1,11 @@
 # frozen_string_literal: true
 
 class Registration < ApplicationRecord
-  scope :pending, -> { where(accepted_at: nil).where(deleted_at: nil).where(is_competing: true) }
+  scope :pending, -> { where(accepted_at: nil).where(deleted_at: nil).where(rejected_at: nil).where(waitlisted_at: nil).where(is_competing: true) }
   scope :accepted, -> { where.not(accepted_at: nil).where(deleted_at: nil) }
   scope :deleted, -> { where.not(deleted_at: nil) }
   scope :rejected, -> { where.not(rejected_at: nil) }
+  scope :waitlisted, -> { where.not(waitlisted_at: nil) }
   scope :non_competing, -> { where(is_competing: false) }
   scope :not_deleted, -> { where(deleted_at: nil) }
   scope :with_payments, -> { joins(:registration_payments).distinct }
