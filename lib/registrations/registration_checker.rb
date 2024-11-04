@@ -187,7 +187,7 @@ module Registrations
 
         # Now that we've checked the 'pending' case, raise an error is the status is not cancelled (cancelling is the only valid action remaining)
         raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless
-          [Registrations::Helper::STATUS_DELETED, Registration::Helper::STATUS_CANCELLED].includes?(new_status)
+          [Registrations::Helper::STATUS_DELETED, Registrations::Helper::STATUS_CANCELLED].includes?(new_status)
 
         # Raise an error if competition prevents users from cancelling a registration once it is accepted
         raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::ORGANIZER_MUST_CANCEL_REGISTRATION) if
