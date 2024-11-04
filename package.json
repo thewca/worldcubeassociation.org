@@ -60,7 +60,7 @@
     "lodash": "^4.17.21",
     "luxon": "^3.5.0",
     "make-plural": "^7.4.0",
-    "mini-css-extract-plugin": "^2.9.1",
+    "mini-css-extract-plugin": "^2.9.2",
     "path-complete-extname": "^1.0.0",
     "pnp-webpack-plugin": "^1.7.0",
     "postcss": "^8.4.47",
