@@ -1,6 +1,11 @@
 # frozen_string_literal: true
 
 class SubmitReportNagJob < WcaCronjob
+  before_enqueue do
+    # We only need to do this in prod
+    throw :abort unless Rails.env.production?
+  end
+
   def nag_needed?(competition)
     (competition.delegate_report.nag_sent_at || competition.end_date) <= 8.days.ago
   end

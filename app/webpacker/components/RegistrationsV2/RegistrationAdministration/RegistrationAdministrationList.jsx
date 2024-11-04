@@ -211,7 +211,8 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
           case 'guests':
             return a.guests - b.guests;
           case 'dob':
-            return a.user.dob - b.user.dob;
+            return DateTime.fromISO(a.user.dob).toMillis()
+              - DateTime.fromISO(b.user.dob).toMillis();
           case 'comment':
             return a.competing.comment.localeCompare(b.competing.comment);
           case 'registered_on':
