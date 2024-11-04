@@ -67,7 +67,7 @@
     "postcss-flexbugs-fixes": "^5.0.2",
     "postcss-import": "^16.1.0",
     "postcss-loader": "^8.1.1",
-    "postcss-preset-env": "^10.0.7",
+    "postcss-preset-env": "^10.0.9",
     "prop-types": "^15.8.1",
     "rails-erb-loader": "^5.5.2",
     "react": "^18.3.1",
