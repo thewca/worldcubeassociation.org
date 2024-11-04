@@ -34,6 +34,10 @@ module CacheAccess
     end
   end
 
+  def self.registration_processing_cache_key(competition_id, user_id)
+    "#{competition_id}-#{user_id}-processing"
+  end
+
   private_class_method def self.hydration_key(prefix, id)
     "#{prefix}-#{id}"
   end

@@ -673,6 +673,8 @@ pt:
         competing_only: Apenas Competir
         #original_hash: 35a6012
         competing_and_attending: Competidor & Estar presente
+        #original_hash: 4f30c10
+        competing_and_attending_and_forums: 'Competir, Participar & Fórums'
     competition_medium:
       status:
         #original_hash: 61a0572
@@ -2352,7 +2354,7 @@ pt:
     #original_hash: b72119a
     delete_confirm: Tem a certeza que quer apagar o seu registo?
     #original_hash: cfc4865
-    delete_registration: Apagar registo.
+    delete_registration: Apagar registo
     #original_hash: e9ddc6e
     will_open_html: 'Inscrições irão abrir em <strong>%{days}</strong> na data/hora: %{time}.'
     #original_hash: 34eb009
@@ -3198,7 +3200,7 @@ pt:
           #original_hash: d493e6a
           is_visible: Tornar a competição visível para o público
           #original_hash: e7daccb
-          uses_v_2_registrations: Usar o novo Sistema de Registo
+          uses_new_registration_system: Usar o novo Sistema de Registo
         #original_hash: 89f89c0
         competition_id: ID
         #original_hash: 709a232
@@ -3353,9 +3355,9 @@ pt:
           #original_hash: da39a3e
           is_visible: ''
           #original_hash: 68d3cc6
-          uses_v_2_registrations: >-
-            Se isto estiver desativado, a alteração do sistema de registo irá
-            causar problemas técnicos. Contacte a WST para obter assistência se
+          uses_new_registration_system: >-
+            Se isto estiver desativado, a alteração do sistema de registo
+            causará problemas técnicos. Contacte a WST para obter assistência se
             ainda precisar de alterar o sistema de registo.
         #original_hash: da39a3e
         competition_id: ''

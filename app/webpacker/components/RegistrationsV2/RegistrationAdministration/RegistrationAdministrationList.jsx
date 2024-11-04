@@ -17,7 +17,7 @@ import useWithUserData from '../hooks/useWithUserData';
 import { bulkUpdateRegistrations } from '../api/registration/patch/update_registration';
 import RegistrationAdministrationTable from './RegistrationsAdministrationTable';
 import useCheckboxState from '../../../lib/hooks/useCheckboxState';
-import {countries} from "../../../lib/wca-data.js.erb";
+import { countries } from '../../../lib/wca-data.js.erb';
 
 const selectedReducer = (state, action) => {
   let newState = [...state];
@@ -211,7 +211,8 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
           case 'guests':
             return a.guests - b.guests;
           case 'dob':
-            return a.user.dob - b.user.dob;
+            return DateTime.fromISO(a.user.dob).toMillis()
+              - DateTime.fromISO(b.user.dob).toMillis();
           case 'comment':
             return a.competing.comment.localeCompare(b.competing.comment);
           case 'registered_on':
@@ -273,7 +274,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
 
   // some sticky/floating bar somewhere with totals/info would be better
   // than putting this in the table headers which scroll out of sight
-  const spotsRemaining = (competitionInfo.competitor_limit ?? Infinity) - accepted.length;
+  const spotsRemaining = (competitionInfo.competitor_limit || Infinity) - accepted.length;
   const spotsRemainingText = i18n.t(
     'competitions.registration_v2.list.spots_remaining_plural',
     { count: spotsRemaining },
@@ -366,7 +367,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
           {' '}
           (
           {accepted.length}
-          {competitionInfo.competitor_limit && (
+          {spotsRemaining !== Infinity && (
             <>
               {`/${competitionInfo.competitor_limit}; `}
               {spotsRemainingText}
