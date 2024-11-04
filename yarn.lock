@@ -2499,10 +2499,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rails/ujs@npm:^7.1.400":
-  version: 7.1.400
-  resolution: "@rails/ujs@npm:7.1.400"
-  checksum: 10c0/181329e731b925788a530dc5bc44eb4a07ae780e20b0309fd9140ebeeca30d9432ed50be0f25ae60f10beb3aa8883f6d662e4b9c6f6cd19a32c1f42ab2505c47
+"@rails/ujs@npm:^7.1.500":
+  version: 7.1.500
+  resolution: "@rails/ujs@npm:7.1.500"
+  checksum: 10c0/365f9a3944454d64c83463de017d9be7064494d6376c1f4d8cbff38c0f278bac7d9ab85f19b31abb70f0e775f30b64ad682fd4545bc27b5d91baef3618642b9f
   languageName: node
   linkType: hard
 
@@ -10220,7 +10220,7 @@ __metadata:
     "@fullcalendar/react": "npm:^6.1.15"
     "@fullcalendar/timegrid": "npm:^6.1.15"
     "@pmmmwh/react-refresh-webpack-plugin": "npm:^0.5.15"
-    "@rails/ujs": "npm:^7.1.400"
+    "@rails/ujs": "npm:^7.1.500"
     "@stripe/react-stripe-js": "npm:^2.8.1"
     "@stripe/stripe-js": "npm:^4.9.0"
     "@tanstack/react-query": "npm:^5.59.19"
