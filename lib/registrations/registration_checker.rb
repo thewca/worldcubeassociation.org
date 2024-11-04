@@ -72,9 +72,12 @@ module Registrations
       end
 
       def user_can_modify_registration!(competition, current_user, target_user, registration)
-        raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless can_administer_or_current_user?(competition, current_user, target_user)
-        raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::USER_EDITS_NOT_ALLOWED) unless competition.registration_edits_allowed? || current_user.can_manage_competition?(competition)
-        raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::REGISTRATION_IS_REJECTED) if user_is_rejected?(current_user, target_user, registration)
+        raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless
+          can_administer_or_current_user?(competition, current_user, target_user)
+        raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::USER_EDITS_NOT_ALLOWED) unless
+          competition.registration_edits_allowed? || current_user.can_manage_competition?(competition)
+        raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::REGISTRATION_IS_REJECTED) if
+          user_is_rejected?(current_user, target_user, registration) && !organizer_modifying_own_registration?(competition, current_user, target_user)
         raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::ALREADY_REGISTERED_IN_SERIES) if
           existing_registration_in_series?(competition, target_user) && !current_user.can_manage_competition?(competition)
       end
@@ -167,7 +170,7 @@ module Registrations
       def validate_update_status!(new_status, competition, current_user, target_user, registration)
         raise WcaExceptions::RegistrationError.new(:unprocessable_entity, Registrations::ErrorCodes::INVALID_REQUEST_DATA) unless Registrations::Helper::REGISTRATION_STATES.include?(new_status)
         raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::COMPETITOR_LIMIT_REACHED) if
-          new_status == 'accepted' && Registration.accepted.count == competition.competitor_limit
+          new_status == 'accepted' && competition.competitor_limit_enabled? && Registration.accepted.count >= competition.competitor_limit
         raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::ALREADY_REGISTERED_IN_SERIES) if
           new_status == 'accepted' && existing_registration_in_series?(competition, target_user)
 

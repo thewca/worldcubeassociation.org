@@ -1116,10 +1116,6 @@ class Competition < ApplicationRecord
     )
   end
 
-  def competitor_limit_enabled?
-    competitor_limit_enabled
-  end
-
   def competitor_limit_required?
     confirmed? && created_at.present? && created_at > Date.new(2018, 9, 1)
   end
