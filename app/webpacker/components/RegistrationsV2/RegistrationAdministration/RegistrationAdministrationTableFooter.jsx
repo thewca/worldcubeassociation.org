@@ -3,6 +3,17 @@ import { Table } from 'semantic-ui-react';
 import React from 'react';
 import { isoMoneyToHumanReadable } from '../../../lib/helpers/money';
 
+const moneyCountHumanReadable = (registrations, competitionInfo) => {
+  const moneyCount = _.sum(registrations.filter(
+    (r) => r.payment.has_paid,
+  ).map((r) => r.payment.payment_amount_iso));
+
+  return isoMoneyToHumanReadable(
+    moneyCount,
+    competitionInfo.currency_code,
+  );
+};
+
 export default function RegistrationAdministrationTableFooter({
   registrations, competitionInfo,
   eventsToggled,
@@ -16,15 +27,6 @@ export default function RegistrationAdministrationTableFooter({
   ).size;
 
   const guestCount = _.sum(registrations.map((r) => r.guests));
-
-  const moneyCount = _.sum(registrations.filter(
-    (r) => r.payment.payment_status === 'succeeded',
-  ).map((r) => r.payment.payment_amount_iso));
-
-  const moneyCountHumanReadable = isoMoneyToHumanReadable(
-    moneyCount,
-    competitionInfo.currency_code,
-  );
 
   const eventCounts = Object.fromEntries(
     competitionInfo.event_ids.map((evt) => {
@@ -45,7 +47,7 @@ export default function RegistrationAdministrationTableFooter({
       </Table.Cell>
       <Table.Cell>{`${countryCount}  Countries`}</Table.Cell>
       <Table.Cell />
-      { competitionInfo['using_payment_integrations?'] && <Table.Cell>{moneyCountHumanReadable}</Table.Cell>}
+      { competitionInfo['using_payment_integrations?'] && <Table.Cell>{moneyCountHumanReadable(registrations, competitionInfo)}</Table.Cell>}
       { eventsToggled ? competitionInfo.event_ids.map((evt) => (
         <Table.Cell key={`footer-count-${evt}`}>
           {eventCounts[evt]}

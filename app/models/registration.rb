@@ -1,10 +1,11 @@
 # frozen_string_literal: true
 
 class Registration < ApplicationRecord
-  scope :pending, -> { where(accepted_at: nil).where(deleted_at: nil).where(is_competing: true) }
+  scope :pending, -> { where(accepted_at: nil).where(deleted_at: nil).where(rejected_at: nil).where(waitlisted_at: nil).where(is_competing: true) }
   scope :accepted, -> { where.not(accepted_at: nil).where(deleted_at: nil) }
   scope :deleted, -> { where.not(deleted_at: nil) }
   scope :rejected, -> { where.not(rejected_at: nil) }
+  scope :waitlisted, -> { where.not(waitlisted_at: nil) }
   scope :non_competing, -> { where(is_competing: false) }
   scope :not_deleted, -> { where(deleted_at: nil) }
   scope :with_payments, -> { joins(:registration_payments).distinct }
@@ -177,6 +178,7 @@ class Registration < ApplicationRecord
     receipt,
     user_id
   )
+    add_history_entry({ payment_status: receipt.determine_wca_status, iso_amount: amount_lowest_denomination }, "user", user_id, 'Payment')
     registration_payments.create!(
       amount_lowest_denomination: amount_lowest_denomination,
       currency_code: currency_code,
@@ -192,6 +194,7 @@ class Registration < ApplicationRecord
     refunded_registration_payment_id,
     user_id
   )
+    add_history_entry({ payment_status: "refund", iso_amount: paid_entry_fees.cents - amount_lowest_denomination }, "user", user_id, 'Refund')
     registration_payments.create!(
       amount_lowest_denomination: amount_lowest_denomination.abs * -1,
       currency_code: currency_code,
@@ -238,7 +241,7 @@ class Registration < ApplicationRecord
     if accepted? || !is_competing?
       Registrations::Helper::STATUS_ACCEPTED
     elsif deleted?
-      Registrations::Helper::STATUS_DELETED
+      Registrations::Helper::STATUS_CANCELLED
     elsif rejected?
       Registrations::Helper::STATUS_REJECTED
     elsif pending?
