@@ -6,10 +6,19 @@ export default async function pollingMock(
 ) {
   // Now that we are doing more things on Registration create we have to poll ourselves
   const registration = await getSingleRegistration(userId, competition);
+
+  if (competition.registration_version === 'v2') {
+    return {
+      status: {
+        competing: registration?.competing.registration_status ?? 'processing',
+      },
+      queue_count: Math.round(Math.random() * 10),
+    };
+  }
+
   return {
     status: {
-      competing: registration?.competing.registration_status ?? 'processing',
-      payment: 'none',
+      processing: !registration,
     },
     queue_count: Math.round(Math.random() * 10),
   };
