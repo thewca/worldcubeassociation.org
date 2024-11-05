@@ -56,7 +56,7 @@ function Register({
     refetch,
   } = useQuery({
     queryKey: ['registration', competitionInfo.id, userInfo.id],
-    queryFn: () => getSingleRegistration(userInfo.id, competitionInfo.id),
+    queryFn: () => getSingleRegistration(userInfo.id, competitionInfo),
     onError: (data) => {
       const { error } = data.json;
       dispatch(setMessage(
