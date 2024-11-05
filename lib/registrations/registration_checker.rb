@@ -170,7 +170,7 @@ module Registrations
       # rubocop:disable Metrics/ParameterLists
       def validate_update_status!(new_status, competition, current_user, target_user, registration, events)
         raise WcaExceptions::RegistrationError.new(:unprocessable_entity, Registrations::ErrorCodes::INVALID_REQUEST_DATA) unless
-          Registrations::Helper::REGISTRATION_STATES.include?(new_status)
+          Registration.competing_statuses.include?(new_status)
         raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::COMPETITOR_LIMIT_REACHED) if
           new_status == Registrations::Helper::STATUS_ACCEPTED && competition.competitor_limit_enabled? &&
           competition.registrations.accepted.count >= competition.competitor_limit
