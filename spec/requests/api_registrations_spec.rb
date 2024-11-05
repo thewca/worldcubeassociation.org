@@ -110,7 +110,7 @@ RSpec.describe 'API Registrations' do
         :update_request,
         user_id: registration.user_id,
         competition_id: registration.competition.id,
-        competing: { 'status' => 'deleted' },
+        competing: { 'status' => 'cancelled' },
         guests: 3,
       )
       headers = { 'Authorization' => update_request['jwt_token'] }
@@ -122,12 +122,12 @@ RSpec.describe 'API Registrations' do
       registration = Registration.find_by(user_id: user.id)
 
       expect(registration.guests).to eq(3)
-      expect(registration.competing_status).to eq('deleted')
+      expect(registration.competing_status).to eq('cancelled')
 
       history = registration.registration_history
       expect(history.length).to eq(1)
       expect(history.first[:changed_attributes]['guests']).to eq('3')
-      expect(history.first[:changed_attributes]['deleted_at']).to be_present
+      expect(history.first[:changed_attributes]['competing_status']).to be_present
       expect(history.first[:action]).to eq('Competitor delete')
     end
   end
@@ -158,11 +158,11 @@ RSpec.describe 'API Registrations' do
 
       registration = Registration.find_by(user_id: user1.id)
 
-      expect(registration.competing_status).to eq('deleted')
+      expect(registration.competing_status).to eq('cancelled')
 
       history = registration.registration_history
       expect(history.length).to eq(1)
-      expect(history.first[:changed_attributes]['deleted_at']).to be_present
+      expect(history.first[:changed_attributes]['competing_status']).to be_present
       expect(history.first[:action]).to eq('Admin delete')
     end
 
@@ -171,7 +171,7 @@ RSpec.describe 'API Registrations' do
         :update_request,
         user_id: registration1.user_id,
         competition_id: registration1.competition.id,
-        competing: { 'status' => 'deleted' },
+        competing: { 'status' => 'cancelled' },
       )
 
       update_request2 = FactoryBot.build(
@@ -204,7 +204,7 @@ RSpec.describe 'API Registrations' do
       body = JSON.parse(response.body)
       expect(body['updated_registrations'].count).to eq(3)
 
-      expect(Registration.find_by(user_id: update_request1['user_id']).competing_status).to eq('deleted')
+      expect(Registration.find_by(user_id: update_request1['user_id']).competing_status).to eq('cancelled')
       expect(Registration.find_by(user_id: update_request2['user_id']).guests).to eq(3)
       expect(Registration.find_by(user_id: update_request3['user_id']).events.pluck(:id)).to eq(['333', '444'])
     end
@@ -214,7 +214,7 @@ RSpec.describe 'API Registrations' do
         :update_request,
         user_id: registration1.user_id,
         competition_id: registration1.competition.id,
-        competing: { 'status' => 'deleted' },
+        competing: { 'status' => 'cancelled' },
       )
 
       update_request2 = FactoryBot.build(
@@ -320,12 +320,12 @@ RSpec.describe 'API Registrations' do
     let(:user5) { FactoryBot.create :user }
     let(:user6) { FactoryBot.create :user }
 
-    let!(:registration1) { FactoryBot.create(:registration, :accepted, competition: competition, user: user1) }
-    let!(:registration2) { FactoryBot.create(:registration, :accepted, competition: competition, user: user2) }
-    let!(:registration3) { FactoryBot.create(:registration, :accepted, competition: competition, user: user3) }
-    let!(:registration4) { FactoryBot.create(:registration, :waiting_list, competition: competition, user: user4) }
-    let!(:registration5) { FactoryBot.create(:registration, :waiting_list, competition: competition, user: user5) }
-    let!(:registration6) { FactoryBot.create(:registration, :waiting_list, competition: competition, user: user6) }
+    let!(:registration1) { FactoryBot.create(:registration, competing_status: 'accepted', competition: competition, user: user1) }
+    let!(:registration2) { FactoryBot.create(:registration, competing_status: 'accepted', competition: competition, user: user2) }
+    let!(:registration3) { FactoryBot.create(:registration, competing_status: 'accepted', competition: competition, user: user3) }
+    let!(:registration4) { FactoryBot.create(:registration, competing_status: 'waiting_list', competition: competition, user: user4) }
+    let!(:registration5) { FactoryBot.create(:registration, competing_status: 'waiting_list', competition: competition, user: user5) }
+    let!(:registration6) { FactoryBot.create(:registration, competing_status: 'waiting_list', competition: competition, user: user6) }
 
     before do
       FactoryBot.create(:waiting_list, holder: competition)

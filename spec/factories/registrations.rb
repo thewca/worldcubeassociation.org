@@ -15,6 +15,8 @@ FactoryBot.define do
     end
     competition_events { competition.competition_events.where(event: events) }
 
+    competing_status { "pending" }
+
     trait :skip_validations do
       to_create { |instance| instance.save(validate: false) }
     end
