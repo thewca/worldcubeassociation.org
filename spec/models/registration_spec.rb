@@ -377,7 +377,7 @@ RSpec.describe Registration do
             admin_comment: 'updated admin comment', comment: 'user comment', status: 'accepted', event_ids: ['333', '555']
           }
         }.with_indifferent_access,
-        registration.user
+        registration.user,
       )
 
       registration.reload
@@ -441,7 +441,7 @@ RSpec.describe Registration do
       RSpec.shared_examples 'update competing status' do |initial_status, input_status|
         it "given #{input_status}, #{initial_status} updates as expected" do
           registration = FactoryBot.create(:registration, initial_status.to_sym)
-          registration.update_lanes!({ user_id: registration.user.id, competing: { status: input_status } }.with_indifferent_access, registration.user )
+          registration.update_lanes!({ user_id: registration.user.id, competing: { status: input_status } }.with_indifferent_access, registration.user)
           registration.reload
           expect(registration.competing_status).to eq(input_status)
         end
@@ -450,11 +450,10 @@ RSpec.describe Registration do
       RSpec.shared_examples 'update competing status: deleted cases' do |initial_status, input_status|
         it "given #{input_status}, #{initial_status} updates as expected" do
           registration = FactoryBot.create(:registration, input_status.to_sym)
-          registration.update_lanes!({ user_id: registration.user.id, competing: { status: input_status } }.with_indifferent_access, registration.user )
+          registration.update_lanes!({ user_id: registration.user.id, competing: { status: input_status } }.with_indifferent_access, registration.user)
           expect(registration.competing_status).to eq(Registrations::Helper::STATUS_CANCELLED)
         end
       end
-
 
       competing_status_updates.each do |params|
         it_behaves_like 'update competing status', params[:initial_status], params[:input_status]

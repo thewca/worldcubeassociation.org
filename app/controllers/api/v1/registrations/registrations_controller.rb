@@ -59,8 +59,6 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
   end
 
   def update
-    puts "====== PARAMS ========="
-    puts params
     if params[:competing]
       updated_registration = Registrations::Lanes::Competing.update!(params, @competition, @current_user.id)
       return render json: { status: 'ok', registration: updated_registration.to_v2_json(admin: true, history: true) }, status: :ok
