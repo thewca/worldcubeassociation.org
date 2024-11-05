@@ -50,6 +50,10 @@ class Registration < ApplicationRecord
     Registrations::Lanes::Competing.update!(params, self.competition, acting_user.id)
   end
 
+  def competing_events
+    events.pluck(:id)
+  end
+
   def guest_limit
     competition.guests_per_registration_limit
   end

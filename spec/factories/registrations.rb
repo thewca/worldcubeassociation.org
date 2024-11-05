@@ -27,7 +27,7 @@ FactoryBot.define do
       deleted_at { Time.now }
     end
 
-    trait :canceled do
+    trait :cancelled do
       deleted_at { Time.now }
     end
 
