@@ -27,6 +27,10 @@ FactoryBot.define do
       deleted_at { Time.now }
     end
 
+    trait :canceled do
+      deleted_at { Time.now }
+    end
+
     trait :pending do
       accepted_at { nil }
     end

@@ -8,7 +8,7 @@ module Registrations
     STATUS_ACCEPTED = "accepted"
     # TODO: V3-REG Cleanup. Remove deleted when we switch to the competing_status enum
     STATUS_DELETED = "deleted"
-    STATUS_CANCELLED = "cancelled"
+    STATUS_CANCELLED = "canceled"
     STATUS_REJECTED = "rejected"
 
     REGISTRATION_STATES = [STATUS_ACCEPTED, STATUS_DELETED, STATUS_CANCELLED, STATUS_PENDING, STATUS_REJECTED, STATUS_WAITING_LIST].freeze # TODO: Change deleted to canceled when v1 is retired
