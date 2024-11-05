@@ -7,7 +7,7 @@ export default async function pollRegistrations(
   competition,
 ) {
   if (process.env.NODE_ENV === 'production') {
-    const route = pollingRoute[competition.registration_version](userId, competition.id);
+    const route = pollingRoute(userId, competition.id)[competition.registration_version];
     const { data } = await fetchJsonOrError(route);
     return data;
   }
