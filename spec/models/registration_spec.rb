@@ -370,7 +370,7 @@ RSpec.describe Registration do
   end
 
   describe '#process_update' do
-    it 'updates multiple properties simultaneously', :tag do
+    it 'updates multiple properties simultaneously' do
       registration.update_lanes!(
         {
           user_id: registration.user.id, guests: 3, competing: {
