@@ -76,7 +76,7 @@ module Registrations
 
       def self.update_status(registration, status)
         return unless status.present?
-        
+
         registration.competing_status = status
       end
 
