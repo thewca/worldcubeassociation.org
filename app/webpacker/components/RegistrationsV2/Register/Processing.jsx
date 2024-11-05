@@ -19,15 +19,13 @@ export default function Processing({ competitionInfo, user, onProcessingComplete
   });
   useEffect(() => {
     if (
-      data
-      && (data.status.payment === 'initialized'
-        || data.status.competing === 'pending')
+      data && (data.status?.competing === 'pending' || !data.processing)
     ) {
       onProcessingComplete();
     }
   }, [data, onProcessingComplete]);
   return (
-    <Modal open={data?.status?.competing !== 'pending'} dimmer="blurring">
+    <Modal open={data?.status?.competing !== 'pending' || !data?.processing} dimmer="blurring">
       <Modal.Header>
         {I18n.t('competitions.registration_v2.register.processing')}
       </Modal.Header>
@@ -37,7 +35,7 @@ export default function Processing({ competitionInfo, user, onProcessingComplete
             {I18n.t('competitions.registration_v2.register.processing_longer')}
           </Message>
         )}
-        {data && data.queueCount > 500 && (
+        {data && data.queueCount > 50 && (
           <Message warning>
             {I18n.t('competitions.registration_v2.register.processing_queue', {
               queueCount: data.queueCount,

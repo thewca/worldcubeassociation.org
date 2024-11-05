@@ -80,7 +80,7 @@ export default function TableRow({
   const {
     payment_amount_iso: paymentAmount,
     updated_at: updatedAt,
-    payment_status: paymentStatuses,
+    payment_statuses: paymentStatuses,
     has_paid: hasPaid,
   } = registration.payment ?? {};
 
