@@ -55,7 +55,7 @@ export default function CompetingStep({
 }) {
   const maxEvents = competitionInfo.events_per_registration_limit ?? Infinity;
   const isRegistered = Boolean(registration);
-  const hasPaid = registration?.payment.payment_status === 'succeeded';
+  const hasPaid = registration?.payment?.payment_status === 'succeeded';
   const dispatch = useDispatch();
 
   const confirm = useConfirm();
