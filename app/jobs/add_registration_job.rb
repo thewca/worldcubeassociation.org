@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class AddRegistrationJob < ApplicationJob
+  self.queue_adapter = :shoryuken unless Rails.env.local?
+
   before_enqueue do |job|
     _, competition_id, user_id = job.arguments
     Rails.cache.write(CacheAccess.registration_processing_cache_key(competition_id, user_id), true)

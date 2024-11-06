@@ -177,6 +177,9 @@ GEM
       aws-sdk-core (~> 3, >= 3.210.0)
       aws-sdk-kms (~> 1)
       aws-sigv4 (~> 1.5)
+    aws-sdk-sqs (1.87.0)
+      aws-sdk-core (~> 3, >= 3.210.0)
+      aws-sigv4 (~> 1.5)
     aws-sigv4 (1.10.1)
       aws-eventstream (~> 1, >= 1.0.2)
     babel-source (5.8.35)
@@ -705,6 +708,10 @@ GEM
       railties (>= 5.2)
       semantic_range (>= 2.3.0)
     shellany (0.0.1)
+    shoryuken (6.2.1)
+      aws-sdk-core (>= 2)
+      concurrent-ruby
+      thor
     sidekiq (7.3.4)
       connection_pool (>= 2.3.0)
       logger
@@ -825,6 +832,7 @@ DEPENDENCIES
   aws-sdk-cloudfront
   aws-sdk-rds
   aws-sdk-s3
+  aws-sdk-sqs
   better_errors
   binding_of_caller
   blocks
@@ -911,6 +919,7 @@ DEPENDENCIES
   seedbank
   selectize-rails!
   shakapacker (= 8.0.2)
+  shoryuken
   sidekiq
   sidekiq-cron!
   simple_form
