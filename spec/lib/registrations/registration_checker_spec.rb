@@ -1354,7 +1354,7 @@ RSpec.describe Registrations::RegistrationChecker do
           :update_request,
           user_id: default_registration.user_id,
           competition_id: default_registration.competition.id,
-          competing: { 'status' => 'deleted' },
+          competing: { 'status' => 'cancelled' },
         )
 
         expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, Competition.find(update_request['competition_id']), User.find(update_request['submitted_by'])) }
@@ -1366,7 +1366,7 @@ RSpec.describe Registrations::RegistrationChecker do
           :update_request,
           user_id: default_registration.user_id,
           competition_id: default_registration.competition.id,
-          competing: { 'status' => 'deleted', 'event_ids' => ['333'] },
+          competing: { 'status' => 'cancelled', 'event_ids' => ['333'] },
         )
 
         expect {
@@ -1401,7 +1401,7 @@ RSpec.describe Registrations::RegistrationChecker do
           :update_request,
           user_id: accepted_reg.user_id,
           competition_id: accepted_reg.competition.id,
-          competing: { 'status' => 'deleted' },
+          competing: { 'status' => 'cancelled' },
         )
 
         expect {
@@ -1422,7 +1422,7 @@ RSpec.describe Registrations::RegistrationChecker do
           :update_request,
           user_id: not_accepted_reg.user_id,
           competition_id: not_accepted_reg.competition.id,
-          competing: { 'status' => 'deleted' },
+          competing: { 'status' => 'cancelled' },
         )
 
         expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, Competition.find(update_request['competition_id']), User.find(update_request['submitted_by'])) }
@@ -1439,7 +1439,7 @@ RSpec.describe Registrations::RegistrationChecker do
           :update_request,
           user_id: registration.user_id,
           competition_id: registration.competition.id,
-          competing: { 'status' => 'deleted' },
+          competing: { 'status' => 'cancelled' },
         )
 
         expect {
@@ -1461,7 +1461,7 @@ RSpec.describe Registrations::RegistrationChecker do
           user_id: registration.user_id,
           competition_id: registration.competition.id,
           submitted_by: editing_over.organizers.first.id,
-          competing: { 'status' => 'deleted' },
+          competing: { 'status' => 'cancelled' },
         )
 
         expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, Competition.find(update_request['competition_id']), User.find(update_request['submitted_by'])) }
@@ -1501,9 +1501,9 @@ RSpec.describe Registrations::RegistrationChecker do
         { initial_status: :accepted, new_status: 'waiting_list' },
         { initial_status: :accepted, new_status: 'accepted' },
         { initial_status: :accepted, new_status: 'rejected' },
-        { initial_status: :deleted, new_status: 'accepted' },
-        { initial_status: :deleted, new_status: 'waiting_list' },
-        { initial_status: :deleted, new_status: 'rejected' },
+        { initial_status: :cancelled, new_status: 'accepted' },
+        { initial_status: :cancelled, new_status: 'waiting_list' },
+        { initial_status: :cancelled, new_status: 'rejected' },
       ].each do |params|
         it_behaves_like 'invalid user status updates', params[:initial_status], params[:new_status]
       end
@@ -1529,7 +1529,7 @@ RSpec.describe Registrations::RegistrationChecker do
       end
 
       [
-        { initial_status: :rejected, new_status: 'deleted' },
+        { initial_status: :rejected, new_status: 'cancelled' },
         { initial_status: :rejected, new_status: 'accepted' },
         { initial_status: :rejected, new_status: 'waiting_list' },
         { initial_status: :rejected, new_status: 'pending' },
@@ -1589,28 +1589,28 @@ RSpec.describe Registrations::RegistrationChecker do
       [
         { initial_status: :pending, new_status: 'accepted' },
         { initial_status: :pending, new_status: 'waiting_list' },
-        { initial_status: :pending, new_status: 'deleted' },
+        { initial_status: :pending, new_status: 'cancelled' },
         { initial_status: :pending, new_status: 'pending' },
         { initial_status: :pending, new_status: 'rejected' },
         { initial_status: :waiting_list, new_status: 'pending' },
-        { initial_status: :waiting_list, new_status: 'deleted' },
+        { initial_status: :waiting_list, new_status: 'cancelled' },
         { initial_status: :waiting_list, new_status: 'waiting_list' },
         { initial_status: :waiting_list, new_status: 'accepted' },
         { initial_status: :waiting_list, new_status: 'rejected' },
         { initial_status: :accepted, new_status: 'pending' },
-        { initial_status: :accepted, new_status: 'deleted' },
+        { initial_status: :accepted, new_status: 'cancelled' },
         { initial_status: :accepted, new_status: 'waiting_list' },
         { initial_status: :accepted, new_status: 'accepted' },
         { initial_status: :accepted, new_status: 'rejected' },
-        { initial_status: :deleted, new_status: 'accepted' },
-        { initial_status: :deleted, new_status: 'pending' },
-        { initial_status: :deleted, new_status: 'waiting_list' },
-        { initial_status: :deleted, new_status: 'rejected' },
-        { initial_status: :deleted, new_status: 'deleted' },
+        { initial_status: :cancelled, new_status: 'accepted' },
+        { initial_status: :cancelled, new_status: 'pending' },
+        { initial_status: :cancelled, new_status: 'waiting_list' },
+        { initial_status: :cancelled, new_status: 'rejected' },
+        { initial_status: :cancelled, new_status: 'cancelled' },
         { initial_status: :rejected, new_status: 'accepted' },
         { initial_status: :rejected, new_status: 'pending' },
         { initial_status: :rejected, new_status: 'waiting_list' },
-        { initial_status: :rejected, new_status: 'deleted' },
+        { initial_status: :rejected, new_status: 'cancelled' },
       ].each do |params|
         it_behaves_like 'valid organizer status updates', params[:initial_status], params[:new_status]
       end
