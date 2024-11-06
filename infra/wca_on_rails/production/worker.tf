@@ -13,16 +13,16 @@ resource "aws_ecs_task_definition" "worker" {
   execution_role_arn = aws_iam_role.task_execution_role.arn
   task_role_arn      = aws_iam_role.task_role.arn
 
-  cpu = "256"
-  memory = "256"
+  cpu = "1024"
+  memory = "3911"
 
   container_definitions = jsonencode([
 
     {
       name              = "sqs-worker-staging"
       image             = "${var.shared.ecr_repository.repository_url}:production-sqs-worker"
-      cpu    = 256
-      memory = 256
+      cpu    = 1024
+      memory = 3911
       portMappings = []
       logConfiguration = {
         logDriver = "awslogs"
@@ -34,7 +34,7 @@ resource "aws_ecs_task_definition" "worker" {
       }
       environment = local.rails_environment
       healthCheck       = {
-        command            = ["CMD-SHELL", "pgrep ruby || exit 1"]
+        command            = ["CMD-SHELL", "pgrep bundle || exit 1"]
         interval           = 30
         retries            = 3
         startPeriod        = 60
@@ -58,7 +58,7 @@ resource "aws_ecs_service" "worker" {
   # During deployment a new task revision is created with modified
   # container image, so we want use data.aws_ecs_task_definition to
   # always point to the active task definition
-  task_definition                    = data.aws_ecs_task_definition.auxiliary.arn
+  task_definition                    = data.aws_ecs_task_definition.worker.arn
   desired_count                      = 0
   scheduling_strategy                = "REPLICA"
   deployment_maximum_percent         = 200
