@@ -336,7 +336,7 @@ Rails.application.routes.draw do
       end
     end
 
-    if Rails.env.local?
+    if EnvConfig.ASSETS_COMPILATION? || !EnvConfig.WCA_LIVE_SITE?
       namespace :v1 do
         namespace :registrations do
           get '/register', to: 'registrations#show'

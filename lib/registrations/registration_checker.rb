@@ -32,7 +32,7 @@ module Registrations
       validate_organizer_fields!(update_request, current_user, competition)
       validate_organizer_comment!(update_request)
       validate_waiting_list_position!(waiting_list_position, competition) unless waiting_list_position.nil?
-      validate_update_status!(new_status, competition, current_user, target_user, registration) unless new_status.nil?
+      validate_update_status!(new_status, competition, current_user, target_user, registration, events) unless new_status.nil?
       validate_update_events!(events, competition) unless events.nil?
       validate_qualifications!(update_request, competition, target_user)
     end
@@ -72,9 +72,12 @@ module Registrations
       end
 
       def user_can_modify_registration!(competition, current_user, target_user, registration)
-        raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless can_administer_or_current_user?(competition, current_user, target_user)
-        raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::USER_EDITS_NOT_ALLOWED) unless competition.registration_edits_allowed? || current_user.can_manage_competition?(competition)
-        raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::REGISTRATION_IS_REJECTED) if user_is_rejected?(current_user, target_user, registration)
+        raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless
+          can_administer_or_current_user?(competition, current_user, target_user)
+        raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::USER_EDITS_NOT_ALLOWED) unless
+          competition.registration_edits_allowed? || current_user.can_manage_competition?(competition)
+        raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::REGISTRATION_IS_REJECTED) if
+          user_is_rejected?(current_user, target_user, registration) && !organizer_modifying_own_registration?(competition, current_user, target_user)
         raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::ALREADY_REGISTERED_IN_SERIES) if
           existing_registration_in_series?(competition, target_user) && !current_user.can_manage_competition?(competition)
       end
@@ -164,12 +167,15 @@ module Registrations
         request['competing']&.keys&.any? { |key| organizer_fields.include?(key) }
       end
 
-      def validate_update_status!(new_status, competition, current_user, target_user, registration)
-        raise WcaExceptions::RegistrationError.new(:unprocessable_entity, Registrations::ErrorCodes::INVALID_REQUEST_DATA) unless Registrations::Helper::REGISTRATION_STATES.include?(new_status)
+      # rubocop:disable Metrics/ParameterLists
+      def validate_update_status!(new_status, competition, current_user, target_user, registration, events)
+        raise WcaExceptions::RegistrationError.new(:unprocessable_entity, Registrations::ErrorCodes::INVALID_REQUEST_DATA) unless
+          Registrations::Helper::REGISTRATION_STATES.include?(new_status)
         raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::COMPETITOR_LIMIT_REACHED) if
-          new_status == 'accepted' && Registration.accepted.count == competition.competitor_limit
+          new_status == Registrations::Helper::STATUS_ACCEPTED && competition.competitor_limit_enabled? &&
+          competition.registrations.accepted.count >= competition.competitor_limit
         raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::ALREADY_REGISTERED_IN_SERIES) if
-          new_status == 'accepted' && existing_registration_in_series?(competition, target_user)
+          new_status == Registrations::Helper::STATUS_ACCEPTED && existing_registration_in_series?(competition, target_user)
 
         # Otherwise, organizers can make any status change they want to
         return if current_user.can_manage_competition?(competition)
@@ -179,22 +185,24 @@ module Registrations
         # 2. Cancel their registration, assuming they are allowed to cancel
 
         # User reactivating registration
-        if new_status == 'pending'
+        if new_status == Registrations::Helper::STATUS_PENDING
           raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless registration.deleted?
           return # No further checks needed if status is pending
         end
 
         # Now that we've checked the 'pending' case, raise an error is the status is not cancelled (cancelling is the only valid action remaining)
-        raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) if new_status != 'deleted'
+        raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless
+          [Registrations::Helper::STATUS_DELETED, Registrations::Helper::STATUS_CANCELLED].include?(new_status)
 
         # Raise an error if competition prevents users from cancelling a registration once it is accepted
         raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::ORGANIZER_MUST_CANCEL_REGISTRATION) if
           !competition.allow_registration_self_delete_after_acceptance && registration.accepted?
 
         # Users aren't allowed to change events when cancelling
-        # raise WcaExceptions::RegistrationError.new(:unprocessable_entity, Registrations::ErrorCodes::INVALID_REQUEST_DATA) if
-        #   request['competing'].key?('event_ids') && registration.event_ids != request['competing']['event_ids']
+        raise WcaExceptions::RegistrationError.new(:unprocessable_entity, Registrations::ErrorCodes::INVALID_REQUEST_DATA) if
+          events.present? && registration.event_ids != events
       end
+      # rubocop:enable Metrics/ParameterLists
 
       def validate_update_events!(event_ids, competition)
         raise WcaExceptions::RegistrationError.new(:unprocessable_entity, Registrations::ErrorCodes::INVALID_EVENT_SELECTION) unless

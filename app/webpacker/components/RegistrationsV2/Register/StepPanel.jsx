@@ -81,8 +81,8 @@ export default function StepPanel({
   const isRegistered = Boolean(registration) && registration.competing.registration_status !== 'cancelled';
   const isAccepted = isRegistered && registration.competing.registration_status === 'accepted';
   const isRejected = isRegistered && registration.competing.registration_status === 'rejected';
-  const hasPaid = registration?.payment.payment_status === 'succeeded';
-  const registrationFinished = hasPaid || (isRegistered && !competitionInfo['using_payment_integrations?']);
+  const hasPaid = registration?.payment?.has_paid;
+  const registrationFinished = (isRegistered && hasPaid) || (isRegistered && !competitionInfo['using_payment_integrations?']);
 
   const steps = useMemo(() => {
     const stepList = [requirementsStepConfig, competingStepConfig];

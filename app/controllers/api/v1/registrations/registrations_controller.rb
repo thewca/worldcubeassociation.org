@@ -77,7 +77,7 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
     competition = Competition.find(params[:competition_id])
 
     update_requests.each do |update|
-      updated_registrations[update['user_id']] = Registrations::Lanes::Competing.update!(update, competition, @current_user)
+      updated_registrations[update['user_id']] = Registrations::Lanes::Competing.update!(update, competition, @current_user.id)
     end
 
     render json: { status: 'ok', updated_registrations: updated_registrations }

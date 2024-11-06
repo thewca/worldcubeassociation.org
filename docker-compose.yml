@@ -1,6 +1,7 @@
 x-environment: &env
   RAILS_ENV: development
   DATABASE_HOST: wca_db
+  BUNDLE_PATH: /usr/local/bundle/current
 
 x-app: &app
   build:

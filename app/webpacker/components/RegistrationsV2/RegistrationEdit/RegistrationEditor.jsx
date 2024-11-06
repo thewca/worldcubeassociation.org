@@ -40,7 +40,7 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
 
   const { isLoading: isRegistrationLoading, data: serverRegistration, refetch } = useQuery({
     queryKey: ['registration-admin', competitionInfo.id, competitor.id],
-    queryFn: () => getSingleRegistration(competitor.id, competitionInfo.id),
+    queryFn: () => getSingleRegistration(competitor.id, competitionInfo),
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
     staleTime: Infinity,
@@ -49,12 +49,12 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
 
   const { isLoading, data: competitorsInfo } = useQuery({
     queryKey: ['history-user', serverRegistration?.history],
-    queryFn: () => getUsersInfo(_.uniq(serverRegistration.history.flatMap((e) => (e.actor_type === 'user' ? e.actor_id : [])))),
+    queryFn: () => getUsersInfo(_.uniq(serverRegistration.history.flatMap((e) => (e.actor_type === 'user' ? Number(e.actor_id) : [])))),
     enabled: Boolean(serverRegistration),
   });
 
   const { mutate: updateRegistrationMutation, isPending: isUpdating } = useMutation({
-    mutationFn: updateRegistration,
+    mutationFn: (body) => updateRegistration(competitionInfo, body),
     onError: (data) => {
       const { error } = data.json;
       dispatch(setMessage(
@@ -278,7 +278,8 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
             radio
             label="Rejected"
             name="checkboxRadioGroup"
-            value="cancelled"
+            value="rejected"
+            disabled={registrationEditDeadlinePassed}
             checked={status === 'rejected'}
             onChange={(event, data) => setStatus(data.value)}
           />
@@ -305,7 +306,7 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
             {' '}
             {registration.payment.payment_status}
           </Header>
-          {(registration.payment.payment_status === 'succeeded' || registration.payment.payment_status === 'refund') && (
+          {(registration.payment.payment_status.includes('succeeded') || registration.payment.payment_status.includes('refund')) && (
             <Refunds
               competitionId={competitionInfo.id}
               userId={competitor.id}
