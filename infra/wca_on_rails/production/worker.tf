@@ -59,7 +59,7 @@ resource "aws_ecs_service" "worker" {
   # container image, so we want use data.aws_ecs_task_definition to
   # always point to the active task definition
   task_definition                    = data.aws_ecs_task_definition.worker.arn
-  desired_count                      = 0
+  desired_count                      = 1
   scheduling_strategy                = "REPLICA"
   deployment_maximum_percent         = 200
   deployment_minimum_healthy_percent = 50
