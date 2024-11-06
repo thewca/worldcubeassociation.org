@@ -385,7 +385,7 @@ RSpec.describe Registration do
       expect(registration.administrative_notes).to eq('updated admin comment')
       expect(registration.guests).to eq(3)
       expect(registration.competing_status).to eq('accepted')
-      expect(registration.competing_events).to eq(['333', '555'])
+      expect(registration.event_ids).to eq(['333', '555'])
     end
 
     describe 'update statuses' do
@@ -486,13 +486,13 @@ RSpec.describe Registration do
     it 'removes events' do
       registration.update_lanes!({ user_id: registration.user.id, competing: { event_ids: ['333'] } }.with_indifferent_access, registration.user)
       registration.reload
-      expect(registration.competing_events).to eq(['333'])
+      expect(registration.event_ids).to eq(['333'])
     end
 
     it 'adds events' do
       registration.update_lanes!({ user_id: registration.user.id, competing: { event_ids: ['333', '444', '555'] } }.with_indifferent_access, registration.user)
       registration.reload
-      expect(registration.competing_events).to eq(['333', '444', '555'])
+      expect(registration.event_ids).to eq(['333', '444', '555'])
     end
   end
 end
