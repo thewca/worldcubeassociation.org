@@ -233,6 +233,10 @@ class Registration < ApplicationRecord
     Hash.new(index: index, length: pending_registrations.length)
   end
 
+  def waiting_list_position
+    competition.waiting_list.position(id)
+  end
+
   def wcif_status
     # Non-competing staff are treated as accepted.
     # TODO: WCIF spec needs to be updated - and possibly versioned - to include new statuses
