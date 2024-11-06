@@ -1,11 +1,12 @@
 # frozen_string_literal: true
 
 class Registration < ApplicationRecord
-  scope :pending, -> { where(accepted_at: nil).where(deleted_at: nil).where(rejected_at: nil).where(waitlisted_at: nil).where(is_competing: true) }
+  scope :pending, -> { where(accepted_at: nil).where(deleted_at: nil).where(is_competing: true).or(competing_status: 'pending') }
   scope :accepted, -> { where.not(accepted_at: nil).where(deleted_at: nil) }
   scope :deleted, -> { where.not(deleted_at: nil) }
-  scope :rejected, -> { where.not(rejected_at: nil) }
-  scope :waitlisted, -> { where.not(waitlisted_at: nil) }
+  scope :cancelled, -> { where(competing_status: 'cancelled') }
+  scope :rejected, -> { where(competing_status: 'rejected') }
+  scope :waitlisted, -> { where(competing_status: 'waiting_list') }
   scope :non_competing, -> { where(is_competing: false) }
   scope :not_deleted, -> { where(deleted_at: nil) }
   scope :with_payments, -> { joins(:registration_payments).distinct }
@@ -67,11 +68,15 @@ class Registration < ApplicationRecord
   end
 
   def rejected?
-    !rejected_at.nil?
+    competing_status_rejected?
+  end
+
+  def cancelled?
+    competing_status_cancelled?
   end
 
   def waitlisted?
-    !waitlisted_at.nil?
+    competing_status_waiting_list?
   end
 
   def accepted?
