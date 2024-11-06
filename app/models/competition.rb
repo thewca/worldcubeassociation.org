@@ -1878,7 +1878,7 @@ class Competition < ApplicationRecord
                force_comment_in_registration use_wca_registration external_registration_page guests_entry_fee_lowest_denomination guest_entry_status
                information events_per_registration_limit],
       methods: %w[url website short_name city venue_address venue_details latitude_degrees longitude_degrees country_iso2 event_ids registration_currently_open?
-                  main_event_id number_of_bookmarks using_payment_integrations? uses_qualification? uses_cutoff? competition_series_ids registration_full?],
+                  main_event_id number_of_bookmarks using_payment_integrations? uses_qualification? uses_cutoff? competition_series_ids registration_full? registration_version],
       include: %w[delegates organizers],
     }
     self.as_json(options)
@@ -2569,10 +2569,31 @@ class Competition < ApplicationRecord
         self.championships = []
       end
 
+      # TODO: V3-Reg Remove this line and method implementation below
+      migration_reg_version = self.form_to_registration_version(form_data)
+
       assign_attributes(Competition.form_data_to_attributes(form_data))
 
-      # TODO: Remove once v3 registrations (monolith integration) are implemented by default
-      self.registration_version = :v1 unless self.use_wca_registration
+      # TODO: V3-Reg Remove once v3 registrations (monolith integration) are implemented by default
+      self.registration_version = self.use_wca_registration? ? migration_reg_version : :v1
+    end
+  end
+
+  private def form_to_registration_version(form_data)
+    form_uses_new_registrations = form_data.dig('admin', 'usesNewRegistrationSystem')
+
+    if !form_uses_new_registrations
+      # If the form explicitly requested the old system, that's what you're gonna get.
+      :v1
+    elsif self.uses_new_registration_system?
+      # If we reached this point, we know that the form did not request the old system
+      #   so that means the form requested the new version. Use whatever new version
+      #   we're already on, to make sure the form doesn't ping-pong between V2 and V3
+      self.registration_version
+    else
+      # The form requested the new system, but we're not on the new system yet.
+      #   Upgrade to whatever system works best
+      NEW_REG_SYSTEM_DEFAULT
     end
   end
 

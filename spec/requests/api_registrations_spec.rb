@@ -122,7 +122,7 @@ RSpec.describe 'API Registrations' do
       registration = Registration.find_by(user_id: user.id)
 
       expect(registration.guests).to eq(3)
-      expect(registration.competing_status).to eq('deleted')
+      expect(registration.competing_status).to eq('cancelled')
 
       history = registration.registration_history
       expect(history.length).to eq(1)
@@ -158,7 +158,7 @@ RSpec.describe 'API Registrations' do
 
       registration = Registration.find_by(user_id: user1.id)
 
-      expect(registration.competing_status).to eq('deleted')
+      expect(registration.competing_status).to eq('cancelled')
 
       history = registration.registration_history
       expect(history.length).to eq(1)
@@ -171,7 +171,7 @@ RSpec.describe 'API Registrations' do
         :update_request,
         user_id: registration1.user_id,
         competition_id: registration1.competition.id,
-        competing: { 'status' => 'deleted' },
+        competing: { 'status' => 'cancelled' },
       )
 
       update_request2 = FactoryBot.build(
@@ -204,7 +204,7 @@ RSpec.describe 'API Registrations' do
       body = JSON.parse(response.body)
       expect(body['updated_registrations'].count).to eq(3)
 
-      expect(Registration.find_by(user_id: update_request1['user_id']).competing_status).to eq('deleted')
+      expect(Registration.find_by(user_id: update_request1['user_id']).competing_status).to eq('cancelled')
       expect(Registration.find_by(user_id: update_request2['user_id']).guests).to eq(3)
       expect(Registration.find_by(user_id: update_request3['user_id']).events.pluck(:id)).to eq(['333', '444'])
     end

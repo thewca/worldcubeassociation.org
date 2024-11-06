@@ -55,8 +55,8 @@ export default function RegistrationHistory({ history, competitorsInfo }) {
               <Table.Cell>
                 {
                   competitorsInfo.find(
-                    (c) => c.id === entry.actor_id,
-                  )?.name ?? entry.actor_user_id
+                    (c) => c.id === Number(entry.actor_id),
+                  )?.name ?? entry.actor_id
                 }
               </Table.Cell>
               <Table.Cell>{entry.action}</Table.Cell>

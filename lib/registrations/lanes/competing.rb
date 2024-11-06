@@ -31,10 +31,6 @@ module Registrations
         registration = Registration.find_by(competition_id: competition.id, user_id: user_id)
         old_status = registration.competing_status
 
-        if old_status == Registrations::Helper::STATUS_WAITING_LIST || status == Registrations::Helper::STATUS_WAITING_LIST
-          waiting_list = competition.waiting_list || competition.waiting_list.build(entries: [])
-        end
-
         ActiveRecord::Base.transaction do
           update_status(registration, status)
           registration.comments = comment if comment.present?
@@ -43,8 +39,12 @@ module Registrations
 
           changes = registration.changes.transform_values { |change| change[1] }
 
+          if old_status == Registrations::Helper::STATUS_WAITING_LIST || status == Registrations::Helper::STATUS_WAITING_LIST
+            waiting_list = competition.waiting_list || competition.create_waiting_list(entries: [])
+            update_waiting_list(update_params, waiting_list)
+          end
+
           if waiting_list_position.present?
-            waiting_list.move_to_position(user_id, waiting_list_position)
             changes[:waiting_list_position] = waiting_list_position
           end
 
@@ -61,6 +61,19 @@ module Registrations
         registration.reload
       end
 
+      def self.update_waiting_list(update_params, waiting_list)
+        user_id = update_params[:user_id]
+        status = update_params.dig('competing', 'status')
+
+        should_add = status == Registrations::Helper::STATUS_WAITING_LIST
+        should_move = update_params[:waiting_list_position].present?
+        should_remove = !should_add && !should_move
+
+        waiting_list.add(user_id) if should_add
+        waiting_list.move_to_position(user_id, update_params[:waiting_list_position].to_i) if should_move
+        waiting_list.remove(user_id) if should_remove
+      end
+
       def self.update_status(registration, status)
         return unless status.present?
 
@@ -74,23 +87,26 @@ module Registrations
           registration.waitlisted_at = Time.now.utc
         when Registrations::Helper::STATUS_ACCEPTED
           registration.accepted_at = Time.now.utc
-        when Registrations::Helper::STATUS_DELETED
+        when Registrations::Helper::STATUS_DELETED, Registrations::Helper::STATUS_CANCELLED
           registration.deleted_at = Time.now.utc
         when Registrations::Helper::STATUS_REJECTED
           registration.rejected_at = Time.now.utc
+        when Registrations::Helper::STATUS_PENDING
+          # Pending means we set nothing
         else
           raise WcaExceptions::RegistrationError.new(:unprocessable_entity, Registrations::ErrorCodes::INVALID_REQUEST_DATA)
         end
       end
 
       def self.send_status_change_email(registration, status, user_id, current_user_id)
-        # TODO: V3-REG Cleanup, at new waiting list email
         case status
+        when Registrations::Helper::STATUS_WAITING_LIST
+          # TODO: V3-REG Cleanup, at new waiting list email
         when Registrations::Helper::STATUS_PENDING
           RegistrationsMailer.notify_registrant_of_pending_registration(registration).deliver_later
         when Registrations::Helper::STATUS_ACCEPTED
           RegistrationsMailer.notify_registrant_of_accepted_registration(registration).deliver_later
-        when Registrations::Helper::STATUS_REJECTED, Registrations::Helper::STATUS_DELETED
+        when Registrations::Helper::STATUS_REJECTED, Registrations::Helper::STATUS_DELETED, Registrations::Helper::STATUS_CANCELLED
           if user_id == current_user_id
             RegistrationsMailer.notify_organizers_of_deleted_registration(registration).deliver_later
           else

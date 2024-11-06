@@ -144,7 +144,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
     refetch,
   } = useQuery({
     queryKey: ['registrations-admin', competitionInfo.id],
-    queryFn: () => getAllRegistrations(competitionInfo.id),
+    queryFn: () => getAllRegistrations(competitionInfo),
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
     staleTime: Infinity,
@@ -167,7 +167,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
   } = useWithUserData(registrations ?? []);
 
   const { mutate: updateRegistrationMutation, isPending: isMutating } = useMutation({
-    mutationFn: bulkUpdateRegistrations,
+    mutationFn: (body) => bulkUpdateRegistrations(competitionInfo, body),
     onError: (data) => {
       const { error } = data.json;
       dispatchStore(setMessage(
@@ -220,8 +220,8 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
               - DateTime.fromISO(b.competing.registered_on).toMillis();
           case 'paid_on_with_registered_on_fallback':
           {
-            const hasAPaid = a.payment.payment_status === 'succeeded';
-            const hasBPaid = b.payment.payment_status === 'succeeded';
+            const hasAPaid = a.payment?.has_paid;
+            const hasBPaid = b.payment?.has_paid;
 
             if (hasAPaid && hasBPaid) {
               return DateTime.fromISO(a.payment.updated_at).toMillis()
@@ -296,6 +296,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
     updateRegistrationMutation({
       competition_id: competitionInfo.id,
       requests: [{
+        competition_id: competitionInfo.id,
         user_id: waitingSorted[result.source.index].user_id,
         competing: {
           waiting_list_position: waitingSorted[result.destination.index].competing.waiting_list_position,
@@ -336,7 +337,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
             refresh={() => {
               dispatch({ type: 'clear-selected' });
             }}
-            registrations={registrations}
+            registrations={registrationsWithUser}
             spotsRemaining={spotsRemaining}
             userEmailMap={userEmailMap}
             competitionInfo={competitionInfo}

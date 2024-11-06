@@ -1271,6 +1271,25 @@ RSpec.describe Registrations::RegistrationChecker do
           .not_to raise_error
       end
 
+      it 'only considers regstrations from current comp when calculating accepted registrations' do
+        competitor_limit = FactoryBot.create(:competition, :with_competitor_limit, :with_organizer, competitor_limit: 3)
+        limited_reg = FactoryBot.create(:registration, competition: competitor_limit)
+        FactoryBot.create_list(:registration, 2, :accepted, competition: competitor_limit)
+        FactoryBot.create_list(:registration, 17, :accepted)
+
+        update_request = FactoryBot.build(
+          :update_request,
+          user_id: limited_reg.user_id,
+          competition_id: limited_reg.competition.id,
+          submitted_by: competitor_limit.organizers.first.id,
+          competing: { 'status' => 'accepted' },
+        )
+
+        expect {
+          Registrations::RegistrationChecker.update_registration_allowed!(update_request, Competition.find(update_request['competition_id']), User.find(update_request['submitted_by']))
+        }.not_to raise_error
+      end
+
       it 'organizer cant accept a user when registration list is exactly full' do
         competitor_limit = FactoryBot.create(:competition, :with_competitor_limit, :with_organizer, competitor_limit: 3)
         limited_reg = FactoryBot.create(:registration, competition: competitor_limit)
@@ -1347,7 +1366,7 @@ RSpec.describe Registrations::RegistrationChecker do
           :update_request,
           user_id: default_registration.user_id,
           competition_id: default_registration.competition.id,
-          competing: { 'status' => 'cancelled', 'event_ids' => ['333'] },
+          competing: { 'status' => 'deleted', 'event_ids' => ['333'] },
         )
 
         expect {
