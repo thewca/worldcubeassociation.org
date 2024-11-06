@@ -93,15 +93,15 @@ RSpec.describe WaitingList do
     end
 
     it 'cant be moved to a position greater than the list length' do
-      expect{ waiting_list.move_to_position(reg3.id, 6) }.to raise_error(ArgumentError, 'Target position out of waiting list range')
+      expect { waiting_list.move_to_position(reg3.id, 6) }.to raise_error(ArgumentError, 'Target position out of waiting list range')
     end
 
     it 'cant be moved to a negative position' do
-      expect{ waiting_list.move_to_position(reg3.id, -1) }.to raise_error(ArgumentError, 'Target position out of waiting list range')
+      expect { waiting_list.move_to_position(reg3.id, -1) }.to raise_error(ArgumentError, 'Target position out of waiting list range')
     end
 
     it 'cant be moved to position 0' do
-      expect{ waiting_list.move_to_position(reg3.id, 0) }.to raise_error(ArgumentError, 'Target position out of waiting list range')
+      expect { waiting_list.move_to_position(reg3.id, 0) }.to raise_error(ArgumentError, 'Target position out of waiting list range')
     end
 
     it 'can remove first item' do
@@ -135,4 +135,3 @@ RSpec.describe WaitingList do
     end
   end
 end
-
