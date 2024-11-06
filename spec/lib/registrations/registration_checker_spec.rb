@@ -1510,7 +1510,7 @@ RSpec.describe Registrations::RegistrationChecker do
 
       RSpec.shared_examples 'user cant update rejected registration' do |initial_status, new_status|
         it "user cant change 'status' => #{initial_status} to: #{new_status}" do
-          registration = FactoryBot.create(:registration, initial_status, competition: default_competition)
+          registration = FactoryBot.create(:registration, competing_status: initial_status.to_s, competition: default_competition)
 
           update_request = FactoryBot.build(
             :update_request,
@@ -1539,7 +1539,7 @@ RSpec.describe Registrations::RegistrationChecker do
 
       RSpec.shared_examples 'valid organizer status updates' do |initial_status, new_status|
         it "organizer can change 'status' => #{initial_status} to: #{new_status} before close" do
-          registration = FactoryBot.create(:registration, initial_status, competition: default_competition)
+          registration = FactoryBot.create(:registration, competing_status: initial_status.to_s, competition: default_competition)
 
           update_request = FactoryBot.build(
             :update_request,

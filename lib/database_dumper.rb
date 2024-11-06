@@ -577,8 +577,6 @@ module DatabaseDumper
           created_at
           deleted_at
           deleted_by
-          rejected_at
-          waitlisted_at
           guests
           updated_at
           user_id

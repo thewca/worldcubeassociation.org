@@ -33,14 +33,6 @@ FactoryBot.define do
       accepted_at { nil }
     end
 
-    trait :waiting_list do
-      waitlisted_at { Time.now }
-    end
-
-    trait :rejected do
-      rejected_at { Time.now }
-    end
-
     trait :newcomer do
       association :user, factory: [:user]
     end
