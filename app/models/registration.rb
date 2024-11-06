@@ -1,10 +1,7 @@
 # frozen_string_literal: true
 
 class Registration < ApplicationRecord
-  scope :pending, -> {
-    where(accepted_at: nil, deleted_at: nil, is_competing: true)
-      .or(where(registration_version: :v3, competing_status: 'pending'))
-  }
+  scope :pending, -> { where(accepted_at: nil, deleted_at: nil, is_competing: true) }
   scope :accepted, -> { where.not(accepted_at: nil).where(deleted_at: nil) }
   scope :deleted, -> { where.not(deleted_at: nil) }
   scope :cancelled, -> { where(competing_status: 'cancelled') }
