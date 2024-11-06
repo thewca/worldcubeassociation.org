@@ -111,6 +111,10 @@ EnvConfig = SuperConfig.new(raise_exception: !is_compiling_assets) do
 
   # For API Only Server
   optional :API_ONLY, :bool, false
+
+  # For cronjob fine-tuning. Default value is recommended by sidekiq-cron.
+  # Setting this value to 0 disables cron jobs altogether (for example, very useful to have on local)
+  optional :CRONJOB_POLLING_SECONDS, :int, 30
 end
 
 # Require Asset Specific ENV variables
