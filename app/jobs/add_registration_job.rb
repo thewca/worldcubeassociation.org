@@ -1,10 +1,14 @@
 # frozen_string_literal: true
 
 class AddRegistrationJob < ApplicationJob
+  self.queue_adapter = :shoryuken unless Rails.env.local?
+
   before_enqueue do |job|
     _, competition_id, user_id = job.arguments
     Rails.cache.write(CacheAccess.registration_processing_cache_key(competition_id, user_id), true)
   end
+
+  queue_as EnvConfig.REGISTRATION_QUEUE
 
   def self.prepare_task(user_id, competition_id)
     message_deduplication_id = "competing-registration-#{competition_id}-#{user_id}"

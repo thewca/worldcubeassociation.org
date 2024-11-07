@@ -32,6 +32,7 @@ EnvConfig = SuperConfig.new(raise_exception: !is_compiling_assets) do
     mandatory :WCA_REGISTRATIONS_URL, :string
     mandatory :ASSET_HOST, :string
     mandatory :CDN_ASSETS_DISTRIBUTION_ID, :string
+    mandatory :REGISTRATION_QUEUE, :string
 
     if is_compiling_assets
       mandatory :V2_REGISTRATIONS_POLL_URL, :string
@@ -57,6 +58,8 @@ EnvConfig = SuperConfig.new(raise_exception: !is_compiling_assets) do
     optional :WCA_REGISTRATIONS_POLL_URL, :string, ''
     optional :PAYPAL_BASE_URL, :string, ''
     optional :WRC_WEBHOOK_URL, :string, ''
+    optional :REGISTRATION_QUEUE, :string, ''
+
     optional :V2_REGISTRATIONS_POLL_URL, :string, ''
     optional :V3_REGISTRATIONS_POLL_URL, :string, ''
 
@@ -108,6 +111,10 @@ EnvConfig = SuperConfig.new(raise_exception: !is_compiling_assets) do
 
   # For API Only Server
   optional :API_ONLY, :bool, false
+
+  # For cronjob fine-tuning. Default value is recommended by sidekiq-cron.
+  # Setting this value to 0 disables cron jobs altogether (for example, very useful to have on local)
+  optional :CRONJOB_POLLING_SECONDS, :int, 30
 end
 
 # Require Asset Specific ENV variables

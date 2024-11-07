@@ -53,6 +53,10 @@ locals {
       value = aws_s3_bucket.storage-bucket.id
     },
     {
+      name = "REGISTRATION_QUEUE"
+      value = aws_sqs_queue.this.url
+    },
+    {
       name = "STORAGE_AWS_REGION"
       value = var.region
     },
@@ -208,6 +212,17 @@ data "aws_iam_policy_document" "task_policy" {
       "rds-db:connect",
     ]
     resources = ["arn:aws:rds-db:${var.region}:${var.shared.account_id}:dbuser:${var.rds_iam_identifier}/${var.DATABASE_WRT_USER}"]
+  }
+  statement {
+    effect = "Allow"
+    actions = [
+      "sqs:SendMessage",
+      "sqs:ReceiveMessage",
+      "sqs:DeleteMessage",
+      "sqs:GetQueueAttributes",
+      "sqs:GetQueueUrl"
+    ]
+    resources = [aws_sqs_queue.this.arn]
   }
 }
 

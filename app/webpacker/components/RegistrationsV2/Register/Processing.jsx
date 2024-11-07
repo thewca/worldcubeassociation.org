@@ -18,12 +18,12 @@ export default function Processing({ competitionInfo, user, onProcessingComplete
     },
   });
   useEffect(() => {
-    if (
-      data && (data.status?.competing === 'pending' || !data.processing)
-    ) {
+    const processingComplete = competitionInfo.registration_version === 'v2' ? data?.status?.competing === 'pending'
+      : data && !data.processing;
+    if (processingComplete) {
       onProcessingComplete();
     }
-  }, [data, onProcessingComplete]);
+  }, [competitionInfo.registration_version, data, onProcessingComplete]);
   return (
     <Modal open={data?.status?.competing !== 'pending' || !data?.processing} dimmer="blurring">
       <Modal.Header>
