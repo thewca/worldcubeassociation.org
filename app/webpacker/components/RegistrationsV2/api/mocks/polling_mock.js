@@ -15,11 +15,8 @@ export default async function pollingMock(
       queue_count: Math.round(Math.random() * 10),
     };
   }
-
   return {
-    status: {
-      processing: !registration,
-    },
+    processing: !registration,
     queue_count: Math.round(Math.random() * 10),
   };
 }
