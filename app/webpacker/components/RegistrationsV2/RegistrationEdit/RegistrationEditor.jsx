@@ -312,9 +312,9 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
           <Header>
             Payment status:
             {' '}
-            {registration.payment.payment_status}
+            {registration.payment.payment_statuses}
           </Header>
-          {(registration.payment.payment_status.includes('succeeded') || registration.payment.payment_status.includes('refund')) && (
+          {(registration.payment.payment_statuses.includes('succeeded') || registration.payment.payment_statuses.includes('refund')) && (
             <Refunds
               competitionId={competitionInfo.id}
               userId={competitor.id}
