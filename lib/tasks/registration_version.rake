@@ -65,7 +65,7 @@ namespace :registration_version do
           if competition.using_payment_integrations?
             payment_intents = registration.payment_intents
             if payment_intents.present?
-              payment_intents.update_all(holder_id: new_registration.id)
+              payment_intents.update_all(holder_id: new_registration.id, holder_type: 'Registration')
             end
           end
 
