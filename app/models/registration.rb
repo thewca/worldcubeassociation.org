@@ -225,10 +225,10 @@ class Registration < ApplicationRecord
     registration_competition_events.reject(&:marked_for_destruction?).map(&:event)
   end
 
-  def add_history_entry(changes, actor_type, actor_id, action)
+  def add_history_entry(changes, actor_type, actor_id, action, timestamp = Time.now.utc)
     new_entry = registration_history_entries.create(actor_type: actor_type, actor_id: actor_id, action: action)
     changes.each_key do |key|
-      new_entry.registration_history_change.create(value: changes[key], key: key)
+      new_entry.registration_history_change.create(value: changes[key], key: key, created_at: timestamp)
     end
   end
 

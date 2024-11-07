@@ -1173,7 +1173,7 @@ class Competition < ApplicationRecord
   def pending_competitors_count
     # TODO: V3-Reg Cleanup, we can go back to use registrations.pending when we are on v3
     if uses_microservice_registrations?
-      Microservices::Registrations.registrations_by_competition(@competition.id, 'pending', cache: true).length
+      Microservices::Registrations.registrations_by_competition(self.id, 'pending', cache: true).length
     elsif registration_version_v3?
       registrations.competing_status_pending.count
     else

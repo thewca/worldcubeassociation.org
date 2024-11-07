@@ -31,6 +31,10 @@ module Microservices
       "/api/internal/v1/#{attendee_id}"
     end
 
+    def self.get_history_path(attendee_id)
+      "/api/internal/v1/#{attendee_id}/history"
+    end
+
     def self.add_registration_path(competition_id)
       "/api/internal/v1/#{competition_id}/add"
     end
@@ -116,6 +120,11 @@ module Microservices
 
     def self.registration_by_id(attendee_id)
       response = self.registration_connection.get(self.get_registration_path(attendee_id))
+      response.body
+    end
+
+    def self.history_by_id(attendee_id)
+      response = self.registration_connection.get(self.get_history_path(attendee_id))
       response.body
     end
   end

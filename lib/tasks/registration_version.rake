@@ -51,16 +51,14 @@ namespace :registration_version do
     LogTask.log_task("Migrating Registrations for Competition #{competition_id}") do
       ActiveRecord::Base.transaction do
         competition.microservice_registrations.each do |registration|
-          # Create new registration
           new_registration = Registration.create(competition_id: competition_id,
                                                  user_id: registration.user_id,
                                                  comments: registration.comments,
                                                  guests: registration.guests,
                                                  competing_status: registration.competing_status,
                                                  administrative_notes: registration.administrative_notes,
-                                                 registration_competition_events: registration.event_ids do |event_id|
-                                                   competition_event = competition.competition_events.find { |ce| ce.event_id == event_id }
-                                                   { competition_event_id: competition_event.id }
+                                                 registration_competition_events: registration.event_ids.map do |event_id|
+                                                   RegistrationCompetitionEvent.create(competition_event: competition.competition_events.find { |ce| ce.event_id == event_id })
                                                  end)
 
           # Point any payments to the new holder
@@ -71,9 +69,12 @@ namespace :registration_version do
             end
           end
 
-          changes = new_registration.changes.transform_values { |change| change[1] }
-          changes[:event_ids] = new_registration.event_ids
-          new_registration.add_history_entry(new_registration.attributes.to_h, "rake task", "WST", "V2 Migration")
+          new_registration.save!
+
+          ms_history = Microservices::Registrations.history_by_id(registration.attendee_id)
+          ms_history['entries'].each do |entry|
+            new_registration.add_history_entry(entry['changed_attributes'], entry['actor_type'], entry['actor_id'], entry['action'], entry['timestamp'])
+          end
         end
 
         competition.update_column :registration_version, :v3
