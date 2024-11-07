@@ -23,10 +23,24 @@ namespace :registration_version do
       ActiveRecord::Base.transaction do
         competition.registrations.each do |registration|
           registration.update_column :competing_status, registration.compute_competing_status
-          registration.add_history_entry(registration.attributes.to_h, "rake task", "WST", "V2 Migration")
+          if registration.accepted_at.present?
+            registration.add_history_entry({ competing_status: 'accepted' }, "user", registration.accepted_by, "V2 Migration", registration.accepted_at)
+          end
+          if registration.deleted_at.present?
+            registration.add_history_entry({ competing_status: 'cancelled' }, "user", registration.deleted_by, "V2 Migration", registration.deleted_at)
+          end
+          registration.add_history_entry({
+                                           competing_status: 'pending',
+                                           event_ids: registration.event_ids,
+                                           comments: registration.comments,
+                                           guests: registration.guests
+                                         },
+                                         "user", registration.user_id,
+                                         "V2 Migration",
+                                         registration.created_at)
         end
 
-        competition.update_column :registration_version, :v3
+        competition.registration_version_v3!
       end
     end
   end
@@ -38,7 +52,7 @@ namespace :registration_version do
       abort "Competition id is required"
     end
 
-    competition = Competition.find(competition_id)
+    competition = Competition.includes(:competition_events).find(competition_id)
 
     if competition.nil?
       abort "Competition #{competition_id} not found"
@@ -50,16 +64,18 @@ namespace :registration_version do
 
     LogTask.log_task("Migrating Registrations for Competition #{competition_id}") do
       ActiveRecord::Base.transaction do
-        competition.microservice_registrations.each do |registration|
+        competition.microservice_registrations.includes(:payment_intents).each do |registration|
+          registration_events = registration.event_ids.map do |event_id|
+            RegistrationCompetitionEvent.create(competition_event: competition.competition_events.find { |ce| ce.event_id == event_id })
+          end
+
           new_registration = Registration.create(competition_id: competition_id,
                                                  user_id: registration.user_id,
                                                  comments: registration.comments,
                                                  guests: registration.guests,
                                                  competing_status: registration.competing_status,
                                                  administrative_notes: registration.administrative_notes,
-                                                 registration_competition_events: registration.event_ids.map do |event_id|
-                                                   RegistrationCompetitionEvent.create(competition_event: competition.competition_events.find { |ce| ce.event_id == event_id })
-                                                 end)
+                                                 registration_competition_events: registration_events)
 
           # Point any payments to the new holder
           if competition.using_payment_integrations?
@@ -96,15 +112,13 @@ namespace :registration_version do
             end
           end
 
-          new_registration.save!
-
           ms_history = Microservices::Registrations.history_by_id(registration.attendee_id)
           ms_history['entries'].each do |entry|
             new_registration.add_history_entry(entry['changed_attributes'], entry['actor_type'], entry['actor_id'], entry['action'], entry['timestamp'])
           end
         end
 
-        competition.update_column :registration_version, :v3
+        competition.registration_version_v3!
       end
     end
   end
