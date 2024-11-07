@@ -64,8 +64,35 @@ namespace :registration_version do
           # Point any payments to the new holder
           if competition.using_payment_integrations?
             payment_intents = registration.payment_intents
-            if payment_intents.present?
-              payment_intents.update_all(holder_id: new_registration.id, holder_type: 'Registration')
+
+            payment_intents.each do |payment_intent|
+              payment_intent.update(holder: new_registration)
+              root_record = payment_intent.payment_record
+
+              # FIXME: This matching is running under the assumption that every record will be a StripeRecord.
+              #   The probability that we launch PayPal before all V2 comps have been backported is non-existent.
+              root_record.child_records.charge.each do |stripe_charge|
+                ruby_money_charge = stripe_charge.money_amount
+
+                reg_payment = new_registration.registration_payments.create(
+                  amount_lowest_denomination: ruby_money_charge.fractional,
+                  currency_code: ruby_money_charge.currency.iso_code,
+                  receipt: stripe_charge,
+                  user_id: payment_intent.initiated_by,
+                )
+
+                stripe_charge.child_records.refund.each do |stripe_refund|
+                  ruby_money_refund = stripe_refund.money_amount
+
+                  new_registration.registration_payments.create(
+                    amount_lowest_denomination: ruby_money_refund.fractional.abs * -1,
+                    currency_code: ruby_money_refund.currency.iso_code,
+                    receipt: stripe_refund,
+                    refunded_registration_payment_id: reg_payment.id,
+                    user_id: payment_intent.initiated_by,
+                  )
+                end
+              end
             end
           end
 
