@@ -33,7 +33,7 @@ namespace :registration_version do
                                            competing_status: 'pending',
                                            event_ids: registration.event_ids,
                                            comments: registration.comments,
-                                           guests: registration.guests
+                                           guests: registration.guests,
                                          },
                                          "user", registration.user_id,
                                          "V2 Migration",
