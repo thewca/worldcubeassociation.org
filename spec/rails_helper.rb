@@ -39,8 +39,15 @@ Capybara.register_driver :apparition_debug do |app|
   Capybara::Apparition::Driver.new(app, inspector: true, debug: true, headless: false)
 end
 
+# Minor headache ahead: We drive our tests using Chromium, which doesn't really like being launched as root.
+# However, the Docker Dev environment that we run uses root just for simplicity, and so we must check whether
+#   to allow Chromium root privileges because Capybara isn't very good at detecting terminated Chromium instances
+#   and just hangs indefinitely without any output.
+# See https://github.com/twalpole/apparition/blob/master/lib/capybara/apparition/browser/launcher/local.rb#L193-L195
+running_root = Process.uid == 0
+
 Capybara.register_driver :apparition do |app|
-  Capybara::Apparition::Driver.new(app, js_errors: true, headless: true)
+  Capybara::Apparition::Driver.new(app, js_errors: true, headless: true, browser_options: { 'no-sandbox' => running_root })
 end
 
 Capybara.javascript_driver = :apparition
