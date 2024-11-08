@@ -112,6 +112,4 @@ RSpec.configure do |config|
   config.retry_callback = proc do |ex|
     Capybara.reset! if ex.metadata[:js]
   end
-
-  config.filter_run_excluding disabled: true if Rails.env.local?
 end

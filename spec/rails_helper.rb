@@ -95,6 +95,8 @@ RSpec.configure do |config|
   else
     WebMock.allow_net_connect! unless EnvConfig.DISABLE_NET_CONNECT_IN_TESTS?
   end
+
+  config.filter_run_excluding disabled: true if Rails.env.local?
 end
 
 # See: https://github.com/rspec/rspec-expectations/issues/664#issuecomment-58134735
