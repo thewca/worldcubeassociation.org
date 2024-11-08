@@ -44,10 +44,16 @@ end
 #   to allow Chromium root privileges because Capybara isn't very good at detecting terminated Chromium instances
 #   and just hangs indefinitely without any output.
 # See https://github.com/twalpole/apparition/blob/master/lib/capybara/apparition/browser/launcher/local.rb#L193-L195
+#   for details on alternative solutions and the complications of adding proper UID/GID for non-root.
+# Unfortunately, Apparition doesn't have a mechanism for setting whether you want this option to be enabled or not.
+#   As soon as it's included in the array, it passes the option along. End of story. So there is no way to pass a
+#   `false` flag depending on whether you're root or not.
 running_root = Process.uid == 0
+# Apparition needs this `nil` format to pass `--no-sandbox` as a CLI flag instead of `no-sandbox=true` or such.
+browser_options = running_root ? { 'no-sandbox' => nil } : {}
 
 Capybara.register_driver :apparition do |app|
-  Capybara::Apparition::Driver.new(app, js_errors: true, headless: true, browser_options: { 'no-sandbox' => running_root })
+  Capybara::Apparition::Driver.new(app, js_errors: true, headless: true, browser_options: browser_options)
 end
 
 Capybara.javascript_driver = :apparition
