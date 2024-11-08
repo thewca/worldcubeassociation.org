@@ -11,14 +11,14 @@ module Registrations
     STATUS_CANCELLED = "cancelled"
     STATUS_REJECTED = "rejected"
 
-    REGISTRATION_STATES = [STATUS_ACCEPTED, STATUS_DELETED, STATUS_CANCELLED, STATUS_PENDING, STATUS_REJECTED, STATUS_WAITING_LIST].freeze # TODO: Change deleted to canceled when v1 is retired
+    REGISTRATION_STATES = [STATUS_ACCEPTED, STATUS_CANCELLED, STATUS_PENDING, STATUS_REJECTED, STATUS_WAITING_LIST].freeze # TODO: Change deleted to canceled when v1 is retired
     ADMIN_ONLY_STATES = [STATUS_PENDING, STATUS_WAITING_LIST, STATUS_ACCEPTED, STATUS_REJECTED].freeze # Only admins are allowed to change registration state to one of these states
     MIGHT_ATTEND_STATES = [STATUS_PENDING, STATUS_WAITING_LIST, STATUS_ACCEPTED].freeze
 
     def self.action_type(request, current_user_id)
       self_updating = request[:user_id].to_i == current_user_id
       status = request.dig('competing', 'status')
-      if [STATUS_DELETED, STATUS_CANCELLED].include?(status)
+      if status == STATUS_CANCELLED
         return self_updating ? 'Competitor delete' : 'Admin delete'
       end
       if status == STATUS_REJECTED
