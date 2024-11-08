@@ -677,7 +677,6 @@ GEM
     ruby-vips (2.2.2)
       ffi (~> 1.12)
       logger
-    rubyzip (2.3.2)
     sass-embedded (1.80.3)
       google-protobuf (~> 4.28)
       rake (>= 13)
@@ -701,10 +700,6 @@ GEM
     securerandom (0.3.1)
     seedbank (0.5.0)
       rake (>= 10.0)
-    selenium-webdriver (4.10.0)
-      rexml (~> 3.2, >= 3.2.5)
-      rubyzip (>= 1.2.2, < 3.0)
-      websocket (~> 1.0)
     semantic_range (3.0.0)
     shakapacker (8.0.2)
       activesupport (>= 5.2)
@@ -810,15 +805,10 @@ GEM
       activemodel (>= 6.0.0)
       bindex (>= 0.4.0)
       railties (>= 6.0.0)
-    webdrivers (5.3.1)
-      nokogiri (~> 1.6)
-      rubyzip (>= 1.3.0)
-      selenium-webdriver (~> 4.0, < 4.11)
     webmock (3.24.0)
       addressable (>= 2.8.0)
       crack (>= 0.3.2)
       hashdiff (>= 0.4.0, < 2.0.0)
-    websocket (1.2.11)
     websocket-driver (0.7.6)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
@@ -952,7 +942,6 @@ DEPENDENCIES
   vault
   wca_i18n
   web-console
-  webdrivers
   webmock
   wicked_pdf
   wkhtmltopdf-binary-ng

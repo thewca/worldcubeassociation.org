@@ -119,7 +119,6 @@ group :development, :test do
   gem 'byebug'
   gem 'i18n-tasks'
   gem 'i18n-spec'
-  gem 'webdrivers', require: false
 
   # We may be able to remove this when a future version of bundler comes out.
   # See https://github.com/bundler/bundler/issues/6929#issuecomment-459151506 and
