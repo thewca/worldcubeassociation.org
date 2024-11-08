@@ -18,7 +18,7 @@ x-app: &app
   networks:
     - wca-main
 
-x-app-environment: &appVars
+x-app-environment: &appEnv
   <<: *env
   SIDEKIQ_REDIS_URL: redis://wca_redis:6379/1
   MAILCATCHER_SMTP_HOST: wca_mailcatcher
@@ -27,6 +27,9 @@ services:
   wca_environment:
     <<: *app
     container_name: "environment"
+    environment:
+      <<: *env
+      DISABLE_SPRING: 1
     command: >
       bash -c 'corepack install &&
       rm -f .db-inited &&
@@ -54,7 +57,7 @@ services:
     ports:
       - "3000:3000"
     environment:
-      <<: *appVars
+      <<: *appEnv
       SHAKAPACKER_DEV_SERVER_HOST: wca_webpacker
       CACHE_REDIS_URL: redis://wca_redis:6379/0
     tty: true
@@ -70,7 +73,7 @@ services:
     ports:
       - "3035:3035"
     environment:
-      <<: *appVars
+      <<: *appEnv
       SHAKAPACKER_DEV_SERVER_HOST: 0.0.0.0
       NODE_ENV: development
     command: bin/shakapacker-dev-server
@@ -95,7 +98,7 @@ services:
     <<: *app
     container_name: 'sidekiq'
     environment:
-      <<: *appVars
+      <<: *appEnv
       # Cronjobs are disabled in development by default. If you wish to run cronjobs,
       # set this env variable to any integer value greater than zero
       # CRONJOB_POLLING_MINUTES: 30
