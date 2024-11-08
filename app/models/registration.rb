@@ -46,6 +46,10 @@ class Registration < ApplicationRecord
     Rails.cache.delete(CacheAccess.registration_processing_cache_key(competition_id, user_id))
   end
 
+  def update_lanes!(params, acting_user)
+    Registrations::Lanes::Competing.update!(params, self.competition, acting_user.id)
+  end
+
   def guest_limit
     competition.guests_per_registration_limit
   end
@@ -223,6 +227,10 @@ class Registration < ApplicationRecord
     pending_registrations = competition.registrations.pending.order(:created_at)
     index = pending_registrations.index(self)
     Hash.new(index: index, length: pending_registrations.length)
+  end
+
+  def waiting_list_position
+    competition.waiting_list.position(id)
   end
 
   def wcif_status
