@@ -8,7 +8,7 @@ import React, {
 import {
   Button,
   Form,
-  Header,
+  Header, List,
   Message,
   Segment,
 } from 'semantic-ui-react';
@@ -198,13 +198,13 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
     <Segment padded attached loading={isUpdating}>
       <Form onSubmit={handleRegisterClick}>
         {!competitor.wca_id && (
-        <Message>
-          This person registered with an account. You can edit their
-          personal information
-          {' '}
-          <a href={editPersonUrl(competitor.id)}>here</a>
-          .
-        </Message>
+          <Message>
+            This person registered with an account. You can edit their
+            personal information
+            {' '}
+            <a href={editPersonUrl(competitor.id)}>here</a>
+            .
+          </Message>
         )}
         {registrationEditDeadlinePassed && (
           <Message>
@@ -301,11 +301,14 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
       </Form>
       {competitionInfo['using_payment_integrations?'] && (
         <>
-          <Header>
-            Payment status:
-            {' '}
-            {registration.payment.payment_statuses}
-          </Header>
+          <List>
+            <List.Header>Payment statuses:</List.Header>
+            {registration.payment.payment_statuses.map((paymentStatus) => (
+              <List.Item key={paymentStatus}>
+                {paymentStatus}
+              </List.Item>
+            ))}
+          </List>
           {(registration.payment.payment_statuses.includes('succeeded') || registration.payment.payment_statuses.includes('refund')) && (
             <Refunds
               competitionId={competitionInfo.id}
