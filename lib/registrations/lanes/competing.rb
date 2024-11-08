@@ -33,6 +33,7 @@ module Registrations
 
         ActiveRecord::Base.transaction do
           update_status(registration, status)
+          update_event_ids(registration, event_ids)
           registration.comments = comment if comment.present?
           registration.administrative_notes = admin_comment if admin_comment.present?
           registration.guests = guests if guests.present?
@@ -48,7 +49,6 @@ module Registrations
             changes[:waiting_list_position] = waiting_list_position
           end
 
-          update_event_ids(registration, event_ids)
           changes[:event_ids] = event_ids if event_ids.present?
 
           registration.save!
