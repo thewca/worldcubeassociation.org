@@ -65,17 +65,15 @@ namespace :registration_version do
     LogTask.log_task("Migrating Registrations for Competition #{competition_id}") do
       ActiveRecord::Base.transaction do
         competition.microservice_registrations.includes(:payment_intents).each do |registration|
-          registration_events = registration.event_ids.map do |event_id|
-            RegistrationCompetitionEvent.create(competition_event: competition.competition_events.find { |ce| ce.event_id == event_id })
-          end
-
-          new_registration = Registration.create(competition_id: competition_id,
-                                                 user_id: registration.user_id,
-                                                 comments: registration.comments,
-                                                 guests: registration.guests,
-                                                 competing_status: registration.competing_status,
-                                                 administrative_notes: registration.administrative_notes,
-                                                 registration_competition_events: registration_events)
+          new_registration = Registration.create!(competition_id: competition_id,
+                                                  user_id: registration.user_id,
+                                                  comments: registration.comments,
+                                                  guests: registration.guests,
+                                                  competing_status: registration.competing_status,
+                                                  administrative_notes: registration.administrative_notes,
+                                                  registration_competition_events: registration.event_ids.map do |event_id|
+                                                    RegistrationCompetitionEvent.build(competition_event: competition.competition_events.find { |ce| ce.event_id == event_id })
+                                                  end)
 
           # Point any payments to the new holder
           if competition.using_payment_integrations?
@@ -90,22 +88,22 @@ namespace :registration_version do
               root_record.child_records.charge.each do |stripe_charge|
                 ruby_money_charge = stripe_charge.money_amount
 
-                reg_payment = new_registration.registration_payments.create(
+                reg_payment = new_registration.registration_payments.create!(
                   amount_lowest_denomination: ruby_money_charge.fractional,
                   currency_code: ruby_money_charge.currency.iso_code,
                   receipt: stripe_charge,
-                  user_id: payment_intent.initiated_by,
+                  user: payment_intent.initiated_by,
                 )
 
                 stripe_charge.child_records.refund.each do |stripe_refund|
                   ruby_money_refund = stripe_refund.money_amount
 
-                  new_registration.registration_payments.create(
+                  new_registration.registration_payments.create!(
                     amount_lowest_denomination: ruby_money_refund.fractional.abs * -1,
                     currency_code: ruby_money_refund.currency.iso_code,
                     receipt: stripe_refund,
                     refunded_registration_payment_id: reg_payment.id,
-                    user_id: payment_intent.initiated_by,
+                    user: payment_intent.initiated_by,
                   )
                 end
               end

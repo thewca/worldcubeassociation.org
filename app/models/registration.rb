@@ -230,9 +230,9 @@ class Registration < ApplicationRecord
   end
 
   def add_history_entry(changes, actor_type, actor_id, action, timestamp = Time.now.utc)
-    new_entry = registration_history_entries.create(actor_type: actor_type, actor_id: actor_id, action: action)
+    new_entry = registration_history_entries.create(actor_type: actor_type, actor_id: actor_id, action: action, created_at: timestamp)
     changes.each_key do |key|
-      new_entry.registration_history_change.create(value: changes[key], key: key, created_at: timestamp)
+      new_entry.registration_history_change.create(value: changes[key], key: key)
     end
   end
 
