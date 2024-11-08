@@ -303,6 +303,7 @@ en:
         region: "Region"
         subRegion: "Subregion"
         receive_delegate_reports: "I would like to receive Delegate Reports of WCA Competitions by email"
+        delegate_reports_region: "I only want to receive Delegate Reports for the following region"
         user_preferred_events: "Preferred events"
         otp_attempt: "Enter your two-factor authentication code:"
       #context: a registration to a competition
@@ -427,6 +428,7 @@ en:
       ban_scope:
         competing_only: "Competing Only"
         competing_and_attending: "Competing & Attending"
+        competing_and_attending_and_forums: "Competing, Attending & Forums"
     competition_medium:
       status:
         accepted: "Accepted"
@@ -476,6 +478,7 @@ en:
         unconfirmed_wca_id: ""
         wca_id: ""
         receive_delegate_reports: "If you are a Senior Delegate or Member of the WRC or the WQAC, you receive Delegate Reports by default. Note: the change may take up to an hour to take effect."
+        delegate_reports_region: "If you want to receive all reports, leave this field blank (the dropdown option at the very top). Note: the change may take up to an hour to take effect."
         otp_attempt: "Check your configured mobile application for a one-time password, or input one of your recovery codes."
       dob_contact:
         name: ""
@@ -997,6 +1000,7 @@ en:
       current: "Current thumbnail:"
       new: "New thumbnail:"
       save: "Save"
+      reset: "Reset"
     edit:
       general: "General"
       email: "Email"
@@ -1010,6 +1014,8 @@ en:
       confirm_new_email: "Changing your email will require confirming the new email before being effective."
       pending_mail_confirmation: "This account is pending confirmation of new email address %{email}."
       pending_avatar_confirmation: "This account is pending confirmation of a new avatar."
+      pending_avatar_edit_action: "Click here if you want to edit it instead:"
+      pending_avatar_edit_warning: "Editing pending avatar!"
       pending_claim_confirmation_html: "This account is waiting for %{delegate} to confirm their claimed WCA ID %{wca_id}."
       pending_claim_mail_confirmation_html: "This user has claimed WCA ID %{wca_id}. Their Delegate %{delegate} will be notified of this request as soon as this account's email address is confirmed."
       your_thumbnail: "Your account thumbnail:"
@@ -1039,7 +1045,7 @@ en:
         '2': "The person shown must be your current self."
         '3': "If there is more than one person on the avatar, it should be clear who of them is you."
         '4': "Your head, but not necessarily the full face, should be visible."
-        '5': "The avatar should not include overlay texts or unnatural filters, including borders."
+        '5': "The avatar should not include overlay texts, stickers or unnatural filters, including borders."
         '6': "The avatar must be submitted in correct orientation."
         '7': "The avatar must not contain offensive content (e.g. offensive gestures)."
       staff_avatar_guidelines:
@@ -1070,7 +1076,6 @@ en:
       wca_id_no_gender_html: "We do not have a gender recorded for this WCA ID. Please contact the <a href='%{wrt_contact_path}' target='_blank'>WCA Results Team</a> to resolve this."
       wca_id_no_citizenship_html: "We do not have a citizenship recorded for this WCA ID. Please contact the <a href='%{wrt_contact_path}' target='_blank'>WCA Results Team</a> to resolve this."
       wca_id_no_name_html: "We do not have a name recorded for this WCA ID. Please contact the <a href='%{wrt_contact_path}' target='_blank'>WCA Results Team</a> to resolve this."
-      avatar_requires_wca_id: "requires a WCA ID to be assigned"
       email_used_by_locked_account_html: "is already used by another account. It's been created automatically as a result of you registering for a competition via an external service. If you are the owner of this email, you can use the account after resetting your password <a href='/users/password/new'>here</a>."
       must_match_person: "must match person details corresponding to the WCA ID"
     #context: when an action was successful
@@ -1615,7 +1620,7 @@ en:
         admin:
           is_confirmed: "Do not let organizers edit this competition"
           is_visible: "Make competition visible to the public"
-          uses_v_2_registrations: "Use the new Registration System"
+          uses_new_registration_system: "Use the new Registration System"
         competition_id: "ID"
         name: "Name"
         short_name: "Competition short name"
@@ -1696,7 +1701,7 @@ en:
         admin:
           is_confirmed: ""
           is_visible: ""
-          uses_v_2_registrations: "If this is disabled, changing the registration system will cause technical issues. Please contact WST for assistance if you still need to change the registration system."
+          uses_new_registration_system: "If this is disabled, changing the registration system will cause technical issues. Please contact WST for assistance if you still need to change the registration system."
         competition_id: ""
         name: "The full name of the competition including the year at the end (e.g., Danish Open 2016). Be sure to capitalize. The name must contain only alphanumeric characters, dashes(-), ampersands(&), periods(.), colons(:), apostrophes('), and spaces( )."
         short_name: "A short name for displaying. If the name of the competition is below %{short_name_limit} characters this should not be edited and should be the same as the normal name."
@@ -1859,6 +1864,7 @@ en:
         too_many: "Accepting all these registrations would go over the competitor limit by %{count}"
         no_self_update: "Contact the Organization Team to update your registration."
       register:
+        will_open_countdown: "Registration will open in %{minutes} minutes %{seconds} seconds. This page will refresh automatically when registration opens."
         panel:
           approval:
             title: "Approval"

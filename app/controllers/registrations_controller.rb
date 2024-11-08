@@ -121,7 +121,7 @@ class RegistrationsController < ApplicationController
 
   def import
     @competition = competition_from_params
-    if @competition.uses_new_registration_service?
+    if @competition.uses_microservice_registrations?
       redirect_to Microservices::Registrations.registration_import_path(@competition.id)
     end
   end
@@ -210,7 +210,7 @@ class RegistrationsController < ApplicationController
     end
     ActiveRecord::Base.transaction do
       user, locked_account_created = user_for_registration!(params[:registration_data])
-      if @competition.uses_new_registration_service?
+      if @competition.uses_microservice_registrations?
         Microservices::Registrations.add_registration(@competition.id,
                                                       user.id,
                                                       params[:registration_data][:event_ids],
@@ -786,9 +786,9 @@ class RegistrationsController < ApplicationController
         :administrative_notes,
       ]
       params[:registration].merge! case params[:registration][:status]
-                                   when "accepted"
+                                   when Registrations::Helper::STATUS_ACCEPTED
                                      { accepted_at: Time.now, accepted_by: current_user.id, deleted_at: nil }
-                                   when "deleted"
+                                   when Registrations::Helper::STATUS_DELETED
                                      { deleted_at: Time.now, deleted_by: current_user.id }
                                    else
                                      { accepted_at: nil, deleted_at: nil }

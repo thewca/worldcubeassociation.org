@@ -53,6 +53,10 @@ class User < ApplicationRecord
   has_many :ranksSingle, through: :person
   has_many :ranksAverage, through: :person
   has_one :wfc_dues_redirect, as: :redirect_source
+  belongs_to :delegate_reports_region, polymorphic: true, optional: true
+  belongs_to :current_avatar, class_name: "UserAvatar", inverse_of: :current_user, optional: true
+  belongs_to :pending_avatar, class_name: "UserAvatar", inverse_of: :pending_user, optional: true
+  has_many :user_avatars, dependent: :destroy, inverse_of: :user
 
   scope :confirmed_email, -> { where.not(confirmed_at: nil) }
 
@@ -333,97 +337,31 @@ class User < ApplicationRecord
     if wca_id_change && wca_id.present?
       dummy_user = User.find_by(wca_id: wca_id, dummy_account: true)
       if dummy_user
-        _mounter(:avatar).uploaders.each do |uploader|
-          uploader.override_column_value = dummy_user.read_attribute :avatar
-        end
-        dummy_user.destroy!
+        # Transfer current and pending avatar associations
+        self.current_avatar = dummy_user.current_avatar
+        self.pending_avatar = dummy_user.pending_avatar
+
+        # Transfer historic avatars
+        self.user_avatars = dummy_user.user_avatars
+
+        # The `reload` is necessary because otherwise, the old pre-reload `user_avatars`
+        # association on `dummy_user` would pull the avatars to the grave.
+        dummy_user.reload.destroy!
       end
     end
   end
 
-  AVATAR_PARAMETERS = {
-    file_size: {
-      maximum: 2.megabytes.to_i,
-    }.freeze,
-  }.freeze
-
-  mount_uploader :pending_avatar, PendingAvatarUploader
-  crop_uploaded :pending_avatar
-  validates :pending_avatar, AVATAR_PARAMETERS
-
-  mount_uploader :avatar, AvatarUploader
-  # Don't delete avatar when this model is destroyed. User models should almost never be
-  # destroyed, except when we're deleting dummy accounts.
-  skip_callback :commit, :after, :remove_avatar!
-  crop_uploaded :avatar
-  validates :avatar, AVATAR_PARAMETERS
-
-  def old_avatar_files
-    # CarrierWave doesn't have a general "list uploaded files" feature
-    # so we have to hijack the class-private storage engine to make direct S3 API calls
-    avatar_storage = avatar.send(:storage)
-    s3_client = avatar_storage.connection
-
-    # query underlying AWS S3 API directly
-    s3_bucket = s3_client.bucket(avatar.aws_bucket)
-
-    files = s3_bucket.objects({ prefix: avatar.store_dir })
-                     .select { |obj| !obj.key.include?('thumb') } # filter out thumbnails
-                     .map { |obj| obj.key.rpartition('/').last } # only take the filename itself, not the folder path
-                     .map { |key| avatar_storage.retrieve!(key) } # read the filename through CarrierWave for convenience
-
-    files.select do |f|
-      (!pending_avatar.url || pending_avatar.url != f.url) && (!avatar.url || avatar.url != f.url)
-    end
+  def avatar
+    self.current_avatar || UserAvatar.default_avatar(self)
   end
 
-  before_save :stash_rejected_avatar
-  def stash_rejected_avatar
-    if ActiveRecord::Type::Boolean.new.cast(remove_pending_avatar) && pending_avatar_was
-      # hijacking internal S3 storage engine, see method `old_avatar_files` above
-      avatar_storage = avatar.send(:storage)
-
-      file = avatar_storage.retrieve!(pending_avatar_was)
-      rejected_filename = "#{avatar.store_dir}/rejected/#{pending_avatar_was}"
-
-      file.move_to rejected_filename
-    end
+  def avatar_history
+    user_avatars.not_pending.order(created_at: :desc)
   end
 
-  before_validation :maybe_save_crop_coordinates
-  def maybe_save_crop_coordinates
-    self.saved_avatar_crop_x = avatar_crop_x if avatar_crop_x
-    self.saved_avatar_crop_y = avatar_crop_y if avatar_crop_y
-    self.saved_avatar_crop_w = avatar_crop_w if avatar_crop_w
-    self.saved_avatar_crop_h = avatar_crop_h if avatar_crop_h
-
-    self.saved_pending_avatar_crop_x = pending_avatar_crop_x if pending_avatar_crop_x
-    self.saved_pending_avatar_crop_y = pending_avatar_crop_y if pending_avatar_crop_y
-    self.saved_pending_avatar_crop_w = pending_avatar_crop_w if pending_avatar_crop_w
-    self.saved_pending_avatar_crop_h = pending_avatar_crop_h if pending_avatar_crop_h
-  end
-
-  before_validation :maybe_clear_crop_coordinates
-  def maybe_clear_crop_coordinates
-    if ActiveRecord::Type::Boolean.new.cast(remove_avatar)
-      self.saved_avatar_crop_x = nil
-      self.saved_avatar_crop_y = nil
-      self.saved_avatar_crop_w = nil
-      self.saved_avatar_crop_h = nil
-    end
-    if ActiveRecord::Type::Boolean.new.cast(remove_pending_avatar)
-      self.saved_pending_avatar_crop_x = nil
-      self.saved_pending_avatar_crop_y = nil
-      self.saved_pending_avatar_crop_w = nil
-      self.saved_pending_avatar_crop_h = nil
-    end
-  end
-
-  validate :avatar_requires_wca_id
-  def avatar_requires_wca_id
-    if (!avatar.blank? || !pending_avatar.blank?) && wca_id.blank?
-      errors.add(:avatar, I18n.t('users.errors.avatar_requires_wca_id'))
-    end
+  # Convenience method for Discord SSO, because we need to maintain backwards compatibility
+  def avatar_url
+    avatar.url
   end
 
   # This method was copied and overridden from https://github.com/plataformatec/devise/blob/master/lib/devise/models/confirmable.rb#L182
@@ -555,6 +493,10 @@ class User < ApplicationRecord
     senior_delegate_roles.any?
   end
 
+  def regional_delegate?
+    regional_delegate_roles.any?
+  end
+
   def staff_or_any_delegate?
     staff? || any_kind_of_delegate?
   end
@@ -565,6 +507,10 @@ class User < ApplicationRecord
 
   def banned?
     group_member?(UserGroup.banned_competitors.first)
+  end
+
+  def forum_banned?
+    current_ban&.metadata&.scope == 'competing_and_attending_and_forums'
   end
 
   def banned_in_past?
@@ -600,8 +546,12 @@ class User < ApplicationRecord
     delegate_roles.select { |role| role.metadata.status == RolesMetadataDelegateRegions.statuses[:senior_delegate] }
   end
 
+  private def regional_delegate_roles
+    delegate_roles.select { |role| role.metadata.status == RolesMetadataDelegateRegions.statuses[:regional_delegate] }
+  end
+
   private def can_view_current_banned_competitors?
-    can_view_past_banned_competitors? || staff_delegate?
+    can_view_past_banned_competitors? || staff_delegate? || appeals_committee?
   end
 
   private def can_view_past_banned_competitors?
@@ -827,7 +777,7 @@ class User < ApplicationRecord
   end
 
   def can_view_all_users?
-    admin? || board_member? || results_team? || communication_team? || wic_team? || any_kind_of_delegate? || weat_team? || wrc_team?
+    admin? || board_member? || results_team? || communication_team? || wic_team? || any_kind_of_delegate? || weat_team? || wrc_team? || appeals_committee?
   end
 
   def can_edit_user?(user)
@@ -839,7 +789,10 @@ class User < ApplicationRecord
   end
 
   def can_change_users_avatar?(user)
-    user.wca_id.present? && self.editable_fields_of_user(user).include?(:remove_avatar)
+    # We use the ability to `remove_avatar` as a general check for whether edits are allowed.
+    #   Otherwise, checking for competitions of `current_avatar` and `pending_avatar` might be
+    #   too cumbersome depending on the context (ie depending on where this method is being called from)
+    self.editable_fields_of_user(user).include?(:remove_avatar)
   end
 
   def organizer_for?(user)
@@ -891,6 +844,7 @@ class User < ApplicationRecord
       competition.organizers.include?(self) ||
       competition.delegates.include?(self) ||
       competition.delegates.flat_map(&:senior_delegates).compact.include?(self) ||
+      competition.delegates.flat_map(&:regional_delegates).compact.include?(self) ||
       wic_team?
     )
   end
@@ -1002,7 +956,7 @@ class User < ApplicationRecord
   end
 
   def can_see_admin_competitions?
-    can_admin_competitions? || senior_delegate? || quality_assurance_committee? || weat_team?
+    can_admin_competitions? || senior_delegate? || regional_delegate? || quality_assurance_committee? || weat_team?
   end
 
   def can_issue_refunds?(competition)
@@ -1100,7 +1054,7 @@ class User < ApplicationRecord
       )
       fields << { user_preferred_events_attributes: [:id, :event_id, :_destroy] }
       if user.staff_or_any_delegate?
-        fields += %i(receive_delegate_reports)
+        fields += %i(receive_delegate_reports delegate_reports_region)
       end
     end
     fields
@@ -1130,35 +1084,37 @@ class User < ApplicationRecord
 
   private def editable_avatar_fields(user)
     fields = Set.new
-    if admin? || results_team?
-      fields += %i(avatar avatar_cache)
-    end
     if user == self || admin? || results_team? || is_senior_delegate_for?(user)
-      fields += %i(
-        pending_avatar pending_avatar_cache remove_pending_avatar
-        avatar_crop_x avatar_crop_y avatar_crop_w avatar_crop_h
-        pending_avatar_crop_x pending_avatar_crop_y pending_avatar_crop_w pending_avatar_crop_h
-        remove_avatar
-      )
+      fields += %i(pending_avatar avatar_thumbnail remove_avatar)
+
+      if can_admin_results?
+        fields += %i(current_avatar)
+      end
     end
     fields
   end
 
+  # This method is only called in sync_mailing_lists_job.rb, right before the actual sync takes place.
+  #   We need this because otherwise, the syncing code might consider non-current eligible members.
+  #   The reason why clear_receive_delegate_reports_if_not_eligible is needed is because there's no automatic code that
+  #   runs once a user is no longer a team member; we just schedule their end date.
   def self.clear_receive_delegate_reports_if_not_eligible
     User.where(receive_delegate_reports: true).reject(&:staff_or_any_delegate?).map { |u| u.update(receive_delegate_reports: false) }
   end
 
-  # This method is only called in sync_mailing_lists_job.rb, right after clear_receive_delegate_reports_if_not_eligible.
-  # If used without calling clear_receive_delegate_reports_if_not_eligible it might return non-current eligible members.
-  # The reason why clear_receive_delegate_reports_if_not_eligible is needed is because there's no automatic code that
-  # runs once a user is no longer a team member, we just schedule their end date.
-  def self.delegate_reports_receivers_emails
-    receives_reports_staff = User.where(receive_delegate_reports: true)
-    (%w(
+  def self.delegate_reports_receivers_emails(report_region = nil)
+    staff_receiver_emails = User.where(receive_delegate_reports: true, delegate_reports_region: report_region).pluck(:email).uniq
+    additional_receiver_emails = report_region.nil? ? self.default_report_receivers : []
+
+    (staff_receiver_emails + additional_receiver_emails).uniq
+  end
+
+  def self.default_report_receivers
+    %w(
       seniors@worldcubeassociation.org
       quality@worldcubeassociation.org
       regulations@worldcubeassociation.org
-    ) + receives_reports_staff.map(&:email)).uniq
+    )
   end
 
   def notify_of_results_posted(competition)
@@ -1199,17 +1155,6 @@ class User < ApplicationRecord
     else
       where(conditions.to_hash).first
     end
-  end
-
-  def approve_pending_avatar!
-    # Bypass the .avatar and .pending_avatar helpers that carrierwave creates
-    # and write directly to the database.
-    self.update_columns(
-      avatar: self.read_attribute(:pending_avatar),
-      saved_avatar_crop_x: self.saved_pending_avatar_crop_x, saved_avatar_crop_y: self.saved_pending_avatar_crop_y, saved_avatar_crop_w: self.saved_pending_avatar_crop_w, saved_avatar_crop_h: self.saved_pending_avatar_crop_h,
-      pending_avatar: nil,
-      saved_pending_avatar_crop_x: nil, saved_pending_avatar_crop_y: nil, saved_pending_avatar_crop_w: nil, saved_pending_avatar_crop_h: nil
-    )
   end
 
   def self.staff_delegate_ids
@@ -1308,12 +1253,7 @@ class User < ApplicationRecord
       json[:teams] = deprecated_team_roles
     end
     if include_avatar
-      json[:avatar] = {
-        url: self.avatar.url,
-        pending_url: self.pending_avatar.url,
-        thumb_url: self.avatar.url(:thumb),
-        is_default: !self.avatar?,
-      }
+      json[:avatar] = self.avatar
     end
 
     # Private attributes to include.
@@ -1346,10 +1286,7 @@ class User < ApplicationRecord
       "countryIso2" => country_iso2,
       "gender" => gender,
       "registration" => registration&.to_wcif(authorized: authorized),
-      "avatar" => {
-        "url" => avatar.url,
-        "thumbUrl" => avatar.url(:thumb),
-      },
+      "avatar" => current_avatar&.to_wcif,
       "roles" => roles,
       "assignments" => registration&.assignments&.map(&:to_wcif) || [],
       "personalBests" => person&.personal_records&.map(&:to_wcif) || [],
@@ -1369,13 +1306,7 @@ class User < ApplicationRecord
         "gender" => { "type" => "string", "enum" => %w(m f o) },
         "birthdate" => { "type" => "string" },
         "email" => { "type" => "string" },
-        "avatar" => {
-          "type" => ["object", "null"],
-          "properties" => {
-            "url" => { "type" => "string" },
-            "thumbUrl" => { "type" => "string" },
-          },
-        },
+        "avatar" => UserAvatar.wcif_json_schema,
         "roles" => { "type" => "array", "items" => { "type" => "string" } },
         "registration" => Registration.wcif_json_schema,
         "assignments" => { "type" => "array", "items" => Assignment.wcif_json_schema },

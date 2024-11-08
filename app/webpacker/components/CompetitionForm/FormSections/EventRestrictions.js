@@ -14,7 +14,6 @@ import { useFormObject } from '../../wca/FormBuilder/provider/FormObjectProvider
 
 export default function EventRestrictions() {
   const {
-    usesV2Registrations,
     isCloning,
     isPersisted,
     storedEvents,
@@ -26,6 +25,9 @@ export default function EventRestrictions() {
       earlyPuzzleSubmission,
       qualificationResults,
       eventLimitation,
+    },
+    admin: {
+      usesNewRegistrationSystem,
     },
   } = useFormObject();
 
@@ -50,7 +52,7 @@ export default function EventRestrictions() {
 
   return (
     <SubSection section="eventRestrictions">
-      { usesV2Registrations && (
+      { usesNewRegistrationSystem && (
         <SubSection section="forbidNewcomers">
           <InputBoolean id="enabled" />
           <ConditionalSection showIf={newcomers}>

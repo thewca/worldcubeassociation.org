@@ -2,9 +2,27 @@ local:
   service: Disk
   root: <%= Rails.root.join("tmp/storage") %>
 
-amazon:
+local_private:
+  service: Disk
+  root: <%= Rails.root.join("tmp/storage-private") %>
+
+s3_default: &s3_default
   service: S3
   access_key_id: <%= AppSecrets.AWS_ACCESS_KEY_ID %>
   secret_access_key: <%= AppSecrets.AWS_SECRET_ACCESS_KEY %>
+
+amazon:
+  <<: *s3_default
   bucket: <%= EnvConfig.STORAGE_AWS_BUCKET %>
   region: <%= EnvConfig.STORAGE_AWS_REGION %>
+
+s3_avatars_public:
+  <<: *s3_default
+  bucket: <%= EnvConfig.S3_AVATARS_BUCKET %>
+  region: <%= EnvConfig.S3_AVATARS_REGION %>
+  public: true
+
+s3_avatars_private:
+  <<: *s3_default
+  bucket: <%= EnvConfig.S3_AVATARS_PRIVATE_BUCKET %>
+  region: <%= EnvConfig.S3_AVATARS_REGION %>

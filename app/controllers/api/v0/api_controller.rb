@@ -40,21 +40,8 @@ class Api::V0::ApiController < ApplicationController
     return render json: { error: 'You cannot request qualification data for a future date.' }, status: :bad_request if date > Date.current
 
     user = User.find(params.require(:user_id))
-    return render json: [] unless user.person.present?
 
-    # Compile singles
-    best_singles_by_cutoff = user.person.best_singles_by(date)
-    single_qualifications = best_singles_by_cutoff.map do |event, time|
-      qualification_data(event, :single, time, date)
-    end
-
-    # Compile averages
-    best_averages_by_cutoff = user.person&.best_averages_by(date)
-    average_qualifications = best_averages_by_cutoff.map do |event, time|
-      qualification_data(event, :average, time, date)
-    end
-
-    render json: single_qualifications + average_qualifications
+    render json: Registrations::Helper.user_qualification_data(user, date)
   end
 
   private def cutoff_date
@@ -63,16 +50,6 @@ class Api::V0::ApiController < ApplicationController
     else
       Date.current
     end
-  end
-
-  private def qualification_data(event, type, time, date)
-    raise ArgumentError.new("'type' may only contain the symbols `:single` or `:average`") unless [:single, :average].include?(type)
-    {
-      eventId: event,
-      type: type,
-      best: time,
-      on_or_before: date.iso8601,
-    }
   end
 
   def scramble_program
@@ -208,7 +185,7 @@ class Api::V0::ApiController < ApplicationController
     all_delegates = UserGroup.includes(:active_users).delegate_regions.flat_map(&:active_users).uniq
 
     search_index = all_delegates.map do |delegate|
-      delegate.slice(:id, :name, :wca_id).merge({ thumb_url: delegate.avatar.url(:thumb) })
+      delegate.slice(:id, :name, :wca_id).merge({ thumb_url: delegate.avatar.thumbnail_url })
     end
 
     render json: search_index

@@ -10,6 +10,12 @@ export default async function getUsersInfo(
     return [];
   }
 
-  const { data } = await fetchJsonOrError(apiV0Urls.users.show(userIds));
+  const { data } = await fetchJsonOrError(apiV0Urls.users.show, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ ids: userIds }),
+  });
   return data.users;
 }

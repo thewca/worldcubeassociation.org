@@ -460,6 +460,8 @@ sv:
         subRegion: Subregion
         #original_hash: 730db33
         receive_delegate_reports: Jag vill få delegatrapporter för WCA-tävlingar via e-post
+        #original_hash: 8667157
+        delegate_reports_region: Jag vill bara få delegatrapporter för följande region
         #original_hash: 57eaf24
         user_preferred_events: Favoritgrenar
         #original_hash: e632fbf
@@ -493,6 +495,8 @@ sv:
         discussion_url: Diskussionens url på Google-gruppen
         #original_hash: 65a9b28
         schedule_url: Schema-url
+        #original_hash: 12b71c3
+        summary: Sammanfattning
         #original_hash: 36155d4
         equipment: Utrustning
         #original_hash: 67cd406
@@ -665,6 +669,8 @@ sv:
         competing_only: Enbart tävlande
         #original_hash: 35a6012
         competing_and_attending: Tävlande & närvarande
+        #original_hash: 4f30c10
+        competing_and_attending_and_forums: 'Tävlande, Närvarande, & Forum'
     competition_medium:
       status:
         #original_hash: 61a0572
@@ -756,11 +762,16 @@ sv:
         unconfirmed_wca_id: ''
         #original_hash: da39a3e
         wca_id: ''
-        #original_hash: 81a76a3
+        #original_hash: 27c2251
         receive_delegate_reports: >-
-          Om du är trainee-delegat, junior-delegat, senior-delegat eller medlem
-          i WRC eller WQAC, får du delegatrapporter som standard. Obs: ändringen
-          kan ta upp till en timme att träda i kraft.
+          Om du är senior-delegat eller medlem i WRC eller WQAC, får du
+          delegatrapporter som standard. Obs: ändringen kan ta upp till en timme
+          att träda i kraft.
+        #original_hash: 364624c
+        delegate_reports_region: >-
+          Om du vill få alla rapporter lämnar du detta fält tomt (dropdown-menyn
+          längst upp). OBS: det kan ta upp till en timme innan ändringen träder
+          i kraft.
         #original_hash: 0627e5c
         otp_attempt: >-
           Se din konfigurerade mobilapplikation för ett engångslösenord eller
@@ -813,6 +824,11 @@ sv:
         equipment: >-
           Antal och typ av timers och displayer som användes på tävlingen. Ta
           bort raden/raderna med utrustning som inte användes.
+        #original_hash: 2822e8d
+        summary: >-
+          De listade punkterna ovan är endast riktlinjer för en fullständig
+          rapport. Använd dem efter eget omdöme för vad du anser lämpligt.
+          Vänligen ta bort oanvända delar!
         #original_hash: 2822e8d
         venue: >-
           Ovanstående punkter är bara för vägledning för en fullständig rapport.
@@ -1828,6 +1844,8 @@ sv:
       new: 'Ny miniatyrbild:'
       #original_hash: efc007a
       save: Spara
+      #original_hash: 44c57ab
+      reset: Återställ
     edit:
       #original_hash: 9239ee2
       general: Allmänt
@@ -1855,6 +1873,10 @@ sv:
       pending_mail_confirmation: 'Detta konto väntar på att den nya e-postadressen %{email} ska bekräftas.'
       #original_hash: 0340b0b
       pending_avatar_confirmation: Detta konto väntar på att en ny profilbild ska bekräftas.
+      #original_hash: 81fa5f9
+      pending_avatar_edit_action: 'Klicka här om du vill redigera istället:'
+      #original_hash: 73cebb8
+      pending_avatar_edit_warning: Redigerar väntande profilbild!
       #original_hash: 7b06f03
       pending_claim_confirmation_html: >-
         Detta konto väntar på att %{delegate} ska bekräfta WCA-ID:t %{wca_id}
@@ -1928,10 +1950,10 @@ sv:
           av dem som är du.
         #original_hash: 4083c00
         '4': 'Ditt huvud, men inte nödvändigtvis hela ansiktet, ska vara synligt.'
-        #original_hash: 7c0aab3
+        #original_hash: fc17fa7
         '5': >-
-          Profilbilden bör inte innehålla tillagda texter eller onaturliga
-          filter, inklusive ramar.
+          Profilbilden bör inte innehålla tillagda texter, infogade bilder,
+          eller onaturliga filter, inklusive ramar.
         #original_hash: cc5f23a
         '6': Profilbilden måste skickas in i rätt orientering.
         #original_hash: 1a18831
@@ -2023,8 +2045,6 @@ sv:
         Vi har inte registrerat ett namn för detta WCA-ID. Vänligen kontakta <a
         href='%{wrt_contact_path}' target='_blank'>WCA Results Team</a> för att
         lösa detta.
-      #original_hash: d02c03b
-      avatar_requires_wca_id: kräver att ett WCA-ID tilldelas
       #original_hash: 8f785ea
       email_used_by_locked_account_html: >-
         används redan av ett annat konto. Det har skapats automatiskt som ett
@@ -2641,6 +2661,11 @@ sv:
       registration_already_closed: >-
         Deadline för anmälan har redan passerat. Vänligen ange en framtida
         tidpunkt.
+      #original_hash: 9a07b42
+      uses_v2_registrations: >-
+        Denna tävling använder det nya anmälningssystemet. Vänligen kontakta
+        WCAT om du vill att den här tävlingen ska använda det gamla systemet
+        istället.
       #original_hash: 3322400
       tooltip_registered: Du är anmäld.
       #original_hash: f2d092f
@@ -2663,8 +2688,6 @@ sv:
       orga_closed_reg_success: Anmälan har stängts.
       #original_hash: 7f197a0
       orga_closed_reg_failure: Kunde inte stänga anmälan.
-      #original_hash: b16bd13
-      cannot_activate_v2: Du kan inte aktivera det nya anmälningssystemet om anmälan är öppen.
       #original_hash: 74caf1a
       no_waiting_list_specified: >-
         Denna tävling har ingen deadline för att acceptera anmälningar från
@@ -3140,6 +3163,8 @@ sv:
           is_confirmed: Låt inte arrangörer redigera den här tävlingen
           #original_hash: d493e6a
           is_visible: Gör tävlingen synlig för allmänheten
+          #original_hash: e7daccb
+          uses_new_registration_system: Använd det nya anmälningssystemet
         #original_hash: 89f89c0
         competition_id: ID
         #original_hash: 709a232
@@ -3291,6 +3316,11 @@ sv:
           is_confirmed: ''
           #original_hash: da39a3e
           is_visible: ''
+          #original_hash: 68d3cc6
+          uses_new_registration_system: >-
+            Om detta är inaktiverat kommer byte av anmälningssystem att orsaka
+            tekniska problem. Kontakta WST för att få hjälp om du fortfarande
+            behöver byta anmälningssystem.
         #original_hash: da39a3e
         competition_id: ''
         #original_hash: 2c812a0
@@ -3680,6 +3710,10 @@ sv:
         #original_hash: 462376a
         no_self_update: Kontakta arrangörsteamet för att uppdatera din anmälan.
       register:
+        #original_hash: e8cc296
+        will_open_countdown: >-
+          Anmälan öppnar om %{minutes} minuter %{seconds} sekunder. Denna sida
+          uppdateras automatiskt när anmälan öppnar.
         panel:
           approval:
             #original_hash: 8cc047a
@@ -4159,8 +4193,6 @@ sv:
         competitors: Tävlande
         #original_hash: c4622c3
         scrambles: Blandningar
-        #original_hash: f632da3
-        enable_v2: Aktivera nya anmälningssystemet
     results_table:
       #original_hash: 3e9a6b5
       wca_profile: WCA-profil

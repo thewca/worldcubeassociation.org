@@ -60,8 +60,10 @@ Rails.application.routes.draw do
   get 'profile/claim_wca_id' => 'users#claim_wca_id'
   get 'profile/claim_wca_id/select_nearby_delegate' => 'users#select_nearby_delegate'
 
-  get 'users/:id/edit/avatar_thumbnail' => 'users#edit_avatar_thumbnail', as: :users_avatar_thumbnail_edit
-  get 'users/:id/edit/pending_avatar_thumbnail' => 'users#edit_pending_avatar_thumbnail', as: :users_pending_avatar_thumbnail_edit
+  get 'users/:id/avatar' => 'users#avatar_data', as: :users_avatar_data
+  post 'users/:id/avatar' => 'users#upload_avatar'
+  patch 'users/:id/avatar' => 'users#update_avatar'
+  delete 'users/:id/avatar' => 'users#delete_avatar'
   get 'admin/avatars' => 'admin/avatars#index'
   post 'admin/avatars' => 'admin/avatars#update_all'
 
@@ -333,6 +335,21 @@ Rails.application.routes.draw do
         post '/payment/init_stripe' => 'payment#init_stripe'
       end
     end
+
+    # While this is the start of a v1 API, this is currently not usable by outside developers as
+    # getting a JWT token requires you to be logged in through the Website
+    namespace :v1 do
+      namespace :registrations do
+        get '/register', to: 'registrations#show'
+        post '/register', to: 'registrations#create'
+        patch '/register', to: 'registrations#update'
+        patch '/bulk_update', to: 'registrations#bulk_update'
+        get '/:competition_id', to: 'registrations#list'
+        get '/:competition_id/admin', to: 'registrations#list_admin', as: :list_admin
+        get '/:competition_id/payment', to: 'registrations#payment_ticket', as: :payment_ticket
+      end
+    end
+
     namespace :v0 do
       get '/', to: redirect('/help/api', status: 302)
       get '/me' => 'api#me'
@@ -348,6 +365,7 @@ Rails.application.routes.draw do
       get '/search/regulations' => 'api#regulations_search'
       get '/search/incidents' => 'api#incidents_search'
       get '/users' => 'users#show_users_by_id'
+      post '/users' => 'users#show_users_by_id'
       get '/users/me' => 'users#show_me'
       get '/users/me/personal_records' => 'users#personal_records'
       get '/users/me/preferred_events' => 'users#preferred_events'

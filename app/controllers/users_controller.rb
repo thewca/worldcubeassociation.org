@@ -146,17 +146,68 @@ class UsersController < ApplicationController
     render partial: 'select_nearby_delegate'
   end
 
-  def edit_avatar_thumbnail
-    @user = user_to_edit
-    redirect_to_root_unless_user(:can_change_users_avatar?, @user)
+  def avatar_data
+    user = user_to_edit
+
+    avatar_data = {
+      avatar: user.avatar,
+      pendingAvatar: user.pending_avatar,
+    }
+
+    render json: avatar_data
   end
 
-  def edit_pending_avatar_thumbnail
-    @user = user_to_edit
-    @pending_avatar = true
-    redirect_to_root_unless_user(:can_change_users_avatar?, @user) && return
+  def upload_avatar
+    upload_file = params.require(:file)
 
-    render :edit_avatar_thumbnail
+    thumbnail_json = params.require(:thumbnail)
+    thumbnail = JSON.parse(thumbnail_json).symbolize_keys
+
+    user_avatar = UserAvatar.create!(
+      user: user_to_edit,
+      thumbnail_crop_x: thumbnail[:x],
+      thumbnail_crop_y: thumbnail[:y],
+      thumbnail_crop_w: thumbnail[:width],
+      thumbnail_crop_h: thumbnail[:height],
+      private_image: upload_file,
+    )
+
+    render json: { ok: user_avatar.valid? }
+  end
+
+  def update_avatar
+    avatar_id = params.require(:avatarId)
+
+    user_avatar = user_to_edit.user_avatars.find(avatar_id)
+    return head :not_found unless user_avatar.present?
+
+    thumbnail = params.require(:thumbnail)
+
+    user_avatar.update!(
+      thumbnail_crop_x: thumbnail[:x],
+      thumbnail_crop_y: thumbnail[:y],
+      thumbnail_crop_w: thumbnail[:width],
+      thumbnail_crop_h: thumbnail[:height],
+    )
+
+    render json: { ok: true }
+  end
+
+  def delete_avatar
+    avatar_id = params.require(:avatarId)
+
+    user_avatar = user_to_edit.user_avatars.find(avatar_id)
+    return head :not_found unless user_avatar.present?
+
+    reason = params.require(:reason)
+
+    user_avatar.update!(
+      status: UserAvatar.statuses[:deleted],
+      revoked_by_user: current_user,
+      revocation_reason: reason,
+    )
+
+    render json: { ok: true }
   end
 
   def update
@@ -211,6 +262,11 @@ class UsersController < ApplicationController
     # (section "implementing SSO on your site")
     # Note that we do validate emails (as in: users can't log in until they have
     # validated their emails).
+
+    if current_user.forum_banned?
+      flash[:alert] = I18n.t('registrations.errors.banned_html').html_safe
+      return redirect_to new_user_session_path
+    end
 
     # Use the 'SingleSignOn' lib provided by Discourse. Our secret and URL is
     # already configured there.
@@ -279,6 +335,20 @@ class UsersController < ApplicationController
     params.require(:user).permit(current_user.editable_fields_of_user(user_to_edit).to_a).tap do |user_params|
       if user_params.key?(:wca_id)
         user_params[:wca_id] = user_params[:wca_id].upcase
+      end
+      if user_params.key?(:delegate_reports_region)
+        raw_region = user_params.delete(:delegate_reports_region)
+
+        if raw_region.blank?
+          # Explicitly reset the region type column when "worldwide" (represented by a blank value) was selected
+          user_params[:delegate_reports_region_type] = nil
+        elsif raw_region.starts_with?('_')
+          user_params[:delegate_reports_region_type] = 'Continent'
+        else
+          user_params[:delegate_reports_region_type] = 'Country'
+        end
+
+        user_params[:delegate_reports_region_id] = raw_region.presence
       end
     end
   end

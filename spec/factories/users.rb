@@ -24,6 +24,7 @@ FactoryBot.define do
     transient do
       confirmed { true }
     end
+
     before(:create) do |user, options|
       user.skip_confirmation! if options.confirmed
     end
@@ -50,6 +51,11 @@ FactoryBot.define do
 
     transient do
       end_date { nil }
+    end
+
+    trait :incomplete do
+      country_iso2 { nil }
+      gender { nil }
     end
 
     trait :board_member do
@@ -85,6 +91,12 @@ FactoryBot.define do
     trait :banned do
       after(:create) do |user|
         FactoryBot.create(:banned_competitor_role, user_id: user.id)
+      end
+    end
+
+    trait :briefly_banned do
+      after(:create) do |user|
+        FactoryBot.create(:briefly_banned_competitor_role, user_id: user.id)
       end
     end
 
@@ -211,6 +223,18 @@ FactoryBot.define do
     trait :with_2fa do
       otp_required_for_login { true }
       otp_secret { User.generate_otp_secret }
+    end
+
+    trait :with_avatar do
+      after(:create) do |user|
+        FactoryBot.create(:user_avatar, user: user, backend: 'active-storage', upload_file: true)
+      end
+    end
+
+    trait :with_pending_avatar do
+      after(:create) do |user|
+        FactoryBot.create(:user_avatar, :pending, user: user, backend: 'active-storage', upload_file: true)
+      end
     end
 
     trait :with_past_competitions do

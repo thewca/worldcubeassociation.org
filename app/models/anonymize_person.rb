@@ -73,7 +73,7 @@ class AnonymizePerson
                                      name: ANONYMIZED_NAME,
                                      unconfirmed_wca_id: nil,
                                      delegate_id_to_handle_wca_id_claim: nil,
-                                     dob: nil,
+                                     dob: '1954-12-04',
                                      gender: "o",
                                      current_sign_in_ip: nil,
                                      last_sign_in_ip: nil)

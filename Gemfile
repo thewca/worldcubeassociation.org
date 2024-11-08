@@ -64,16 +64,10 @@ gem 'ostruct'
 #  https://github.com/selectize/selectize.js/issues/953
 gem 'selectize-rails', github: 'jfly/selectize-rails'
 
-gem 'carrierwave'
-gem 'carrierwave-aws'
 gem 'aws-sdk-s3'
+gem 'aws-sdk-sqs'
 gem 'aws-sdk-rds'
 gem 'aws-sdk-cloudfront'
-
-# Pointing to thewca/carrierwave-crop which has a workaround for
-#  https://github.com/kirtithorat/carrierwave-crop/issues/17
-#  and also remove jquery from dependencies (because we add it through webpack)
-gem 'carrierwave-crop', github: 'thewca/carrierwave-crop'
 
 gem 'redis'
 # Faster Redis library
@@ -109,7 +103,7 @@ gem 'react-rails'
 gem 'sprockets-rails'
 gem 'fuzzy-string-match'
 gem 'sidekiq'
-gem 'sidekiq-cron'
+gem 'sidekiq-cron', github: 'sidekiq-cron'
 gem 'after_commit_everywhere'
 gem 'slack-ruby-client'
 gem 'puma'
@@ -163,4 +157,5 @@ group :production do
   gem 'rack'
   gem 'newrelic_rpm'
   gem 'wkhtmltopdf-binary-ng'
+  gem 'shoryuken'
 end
