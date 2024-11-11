@@ -34,75 +34,67 @@ class PaymentIntent < ApplicationRecord
   scope :paypal, -> { where(payment_record_type: 'PaypalRecord') }
   scope :stripe, -> { where(payment_record_type: 'StripeRecord') }
 
-  def update_status_and_charges(api_intent, action_source, source_datetime = DateTime.current, &block)
-    if payment_record_type == 'StripeRecord'
-      update_stripe_status_and_charges(api_intent, action_source, source_datetime, &block)
-    else
-      raise "Trying to update status and charges for a PaymentIntent with unmatched payment_record_type of: #{payment_record_type}"
+  def update_status_and_charges(api_intent, action_source, source_datetime = DateTime.current)
+    self.with_lock do
+      self.payment_record.update_status(api_intent)
+      self.update_status(api_intent)
+
+      case self.wca_status
+      when 'succeeded'
+        # The payment didn't need any additional actions and is completed!
+
+        # Record the success timestamp if not already done
+        unless self.confirmed_at.present?
+          self.update!(
+            confirmed_at: source_datetime,
+            confirmation_source: action_source,
+          )
+        end
+
+        payment_account.retrieve_payments(self) do |payment|
+          # Only trigger outer update blocks for charges that are actually successful. This is reasonable
+          # because we only ever trigger this block for PIs that are marked "successful" in the first place
+          charge_successful = payment.determine_wca_status == :succeeded
+
+          yield payment if block_given? && charge_successful
+        end
+      when 'canceled'
+        # Canceled by the gateway
+
+        # Record the cancellation timestamp if not already done
+        unless self.canceled_at.present?
+          self.update!(
+            canceled_at: source_datetime,
+            cancellation_source: action_source,
+          )
+        end
+      when 'created'
+      when 'pending'
+        # Reset by the gateway
+        self.update!(
+          confirmed_at: nil,
+          confirmation_source: nil,
+          canceled_at: nil,
+          cancellation_source: nil,
+        )
+      end
     end
   end
 
   private
 
-    def update_stripe_status_and_charges(api_intent, action_source, source_datetime)
-      self.with_lock do
-        self.update!(error_details: api_intent.last_payment_error)
-        self.payment_record.update_status(api_intent)
+    def update_status(api_record)
+      gateway_error = nil
 
-        # Payment Intent lifecycle as per https://stripe.com/docs/payments/intents#intent-statuses
-        case api_intent.status
-        when 'succeeded'
-          # The payment didn't need any additional actions and is completed!
-
-          # Record the success timestamp if not already done
-          unless self.succeeded?
-            self.update!(
-              confirmed_at: source_datetime,
-              confirmation_source: action_source,
-              wca_status: payment_record.determine_wca_status,
-            )
-          end
-
-          intent_charges = Stripe::Charge.list(
-            { payment_intent: self.payment_record.stripe_id },
-            stripe_account: self.account_id,
-          )
-
-          intent_charges.data.each do |charge|
-            recorded_transaction = StripeRecord.find_by(stripe_id: charge.id)
-
-            if recorded_transaction.present?
-              recorded_transaction.update_status(charge)
-            else
-              fresh_transaction = StripeRecord.create_from_api(charge, {}, self.account_id, self.payment_record)
-
-              # Only trigger outer update blocks for charges that are actually successful. This is reasonable
-              # because we only ever trigger this block for PIs that are marked "successful" in the first place
-              charge_successful = fresh_transaction.stripe_status == "succeeded"
-
-              yield fresh_transaction if block_given? && charge_successful
-            end
-          end
-        when 'canceled'
-          # Canceled by Stripe
-          self.update!(
-            canceled_at: source_datetime,
-            cancellation_source: action_source,
-            wca_status: payment_record.determine_wca_status,
-          )
-        when 'requires_payment_method'
-          # Reset by Stripe
-          self.update!(
-            confirmed_at: nil,
-            confirmation_source: nil,
-            canceled_at: nil,
-            cancellation_source: nil,
-            wca_status: payment_record.determine_wca_status,
-          )
-        else
-          self.update!(wca_status: payment_record.determine_wca_status)
-        end
+      case self.payment_record_type
+      when "StripeRecord"
+        gateway_error = api_record.last_payment_error
       end
+
+      self.update!(
+        error_details: gateway_error,
+        wca_status: api_record.determine_wca_status,
+      )
     end
 
     def wca_status_consistency
