@@ -121,7 +121,7 @@ class RegistrationsController < ApplicationController
 
   def import
     @competition = competition_from_params
-    if @competition.uses_new_registration_service?
+    if @competition.uses_microservice_registrations?
       redirect_to Microservices::Registrations.registration_import_path(@competition.id)
     end
   end
@@ -210,7 +210,7 @@ class RegistrationsController < ApplicationController
     end
     ActiveRecord::Base.transaction do
       user, locked_account_created = user_for_registration!(params[:registration_data])
-      if @competition.uses_new_registration_service?
+      if @competition.uses_microservice_registrations?
         Microservices::Registrations.add_registration(@competition.id,
                                                       user.id,
                                                       params[:registration_data][:event_ids],
@@ -530,10 +530,11 @@ class RegistrationsController < ApplicationController
       stored_intent = stored_record.payment_intent
 
       stored_intent.update_status_and_charges(stripe_intent, audit_event, audit_event.created_at_remote) do |charge_transaction|
-        if stored_intent.holder.is_a? Registration
-          ruby_money = charge_transaction.money_amount
+        ruby_money = charge_transaction.money_amount
+        stored_holder = stored_intent.holder
 
-          stored_payment = stored_intent.holder.record_payment(
+        if stored_holder.is_a? Registration
+          stored_payment = stored_holder.record_payment(
             ruby_money.cents,
             ruby_money.currency.iso_code,
             charge_transaction,
@@ -545,10 +546,16 @@ class RegistrationsController < ApplicationController
           #   and Stripe tries again after an exponential backoff. So we (erroneously!) record the creation timestamp
           #   in our DB _after_ the backed-off event has been processed. This can lead to a wrong registration order :(
           stored_payment.update!(created_at: audit_event.created_at_remote)
-        elsif stored_intent.holder.is_a? MicroserviceRegistration
-          ruby_money = charge_transaction.money_amount
+        elsif stored_holder.is_a? MicroserviceRegistration
           begin
-            Microservices::Registrations.update_registration_payment(stripe_intent.holder.attendee_id, stored_intent.id, ruby_money.cents, ruby_money.currency.iso_code, stored_intent.status, { type: "stripe_webhook", id: audit_event.id })
+            Microservices::Registrations.update_registration_payment(
+              stored_holder.attendee_id,
+              charge_transaction.id,
+              ruby_money.cents,
+              ruby_money.currency.iso_code,
+              stripe_intent.status,
+              { type: "stripe_webhook", id: audit_event.id },
+            )
           rescue Faraday::Error => e
             logger.error "Couldn't update Microservice: #{e.message}, at #{e.backtrace}"
             return head :internal_server_error
@@ -609,7 +616,14 @@ class RegistrationsController < ApplicationController
 
       if uses_v2
         begin
-          Microservices::Registrations.update_registration_payment("#{competition_id}-#{registration.user.id}", charge_transaction.id, ruby_money.cents, ruby_money.currency.iso_code, stripe_intent.status, { type: "user", id: current_user.id })
+          Microservices::Registrations.update_registration_payment(
+            registration.attendee_id,
+            charge_transaction.id,
+            ruby_money.cents,
+            ruby_money.currency.iso_code,
+            stripe_intent.status,
+            { type: "user", id: current_user.id },
+          )
         rescue Faraday::Error
           flash[:error] = t("registrations.payment_form.errors.registration_unreachable")
           return redirect_to competition_register_path(competition_id)
@@ -677,13 +691,6 @@ class RegistrationsController < ApplicationController
     intent = payment_account.prepare_intent(registration, amount, competition.currency_code, current_user)
 
     render json: { client_secret: intent.client_secret }
-  end
-
-  # TODO: This can be removed after deployment, this is so we don't have any users error out if they click on pay
-  # while the deployment happens
-  def payment_completion_legacy
-    registration = Registration.find(params[:id])
-    redirect_to action: :payment_completion, competition_id: registration.competition_id, params: params.permit(:payment_intent, :payment_intent_client_secret)
   end
 
   def refund_payment
@@ -786,9 +793,9 @@ class RegistrationsController < ApplicationController
         :administrative_notes,
       ]
       params[:registration].merge! case params[:registration][:status]
-                                   when "accepted"
+                                   when Registrations::Helper::STATUS_ACCEPTED
                                      { accepted_at: Time.now, accepted_by: current_user.id, deleted_at: nil }
-                                   when "deleted"
+                                   when Registrations::Helper::STATUS_DELETED
                                      { deleted_at: Time.now, deleted_by: current_user.id }
                                    else
                                      { accepted_at: nil, deleted_at: nil }

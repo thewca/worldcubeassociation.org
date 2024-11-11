@@ -29,6 +29,12 @@ namespace :user_avatars do
         filename = match[2]
 
         user = user_cache[wca_id] || User.find_by(wca_id: wca_id)
+
+        unless user.present?
+          puts "User #{wca_id} not found. File: #{f.key}"
+          next
+        end
+
         user_cache[wca_id] = user
 
         avatar_filename = user.current_avatar&.filename
@@ -70,6 +76,12 @@ namespace :user_avatars do
         filename = match[2]
 
         user = user_cache[wca_id] || User.find_by(wca_id: wca_id)
+
+        unless user.present?
+          puts "User #{wca_id} not found. File: #{f.key}"
+          next
+        end
+
         user_cache[wca_id] = user
 
         avatar_filename = user.current_avatar&.filename

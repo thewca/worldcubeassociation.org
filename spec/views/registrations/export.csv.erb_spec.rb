@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.describe "registrations/export.csv.erb" do
-  let(:competition) { FactoryBot.create :competition, :registration_open }
+  let(:competition) { FactoryBot.create :competition, :registration_open, event_ids: %w(333 333oh) }
   let!(:user) {
     FactoryBot.create(
       :user,

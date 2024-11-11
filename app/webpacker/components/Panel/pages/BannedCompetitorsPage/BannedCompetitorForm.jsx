@@ -14,6 +14,7 @@ const banScopeOptions = Object.keys(banScopes).map((option) => ({
   key: option,
   // i18n-tasks-use t('enums.user_roles.ban_scope.competing_only')
   // i18n-tasks-use t('enums.user_roles.ban_scope.competing_and_attending')
+  // i18n-tasks-use t('enums.user_roles.ban_scope.competing_and_attending_and_forums')
   text: I18n.t(`enums.user_roles.ban_scope.${option}`),
   value: option,
 }));

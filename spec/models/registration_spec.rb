@@ -331,4 +331,168 @@ RSpec.describe Registration do
       expect(described_class.accepted_and_paid_pending_count).to eq(total_count)
     end
   end
+
+  describe '#to_wcif' do
+    it 'deleted state returns deleted status' do
+      registration = FactoryBot.create(:registration, :deleted)
+
+      expect(registration.deleted?).to eq(true)
+      expect(registration.to_wcif['status']).to eq('deleted')
+    end
+
+    it 'rejected state returns deleted status' do
+      registration = FactoryBot.create(:registration, :rejected)
+
+      expect(registration.rejected?).to eq(true)
+      expect(registration.to_wcif['status']).to eq('deleted')
+    end
+
+    it 'accepted state returns accepted status' do
+      registration = FactoryBot.create(:registration, :accepted)
+
+      expect(registration.accepted?).to eq(true)
+      expect(registration.to_wcif['status']).to eq('accepted')
+    end
+
+    it 'pending state returns pending status' do
+      registration = FactoryBot.create(:registration, :pending)
+
+      expect(registration.pending?).to eq(true)
+      expect(registration.to_wcif['status']).to eq('pending')
+    end
+
+    it 'waitlisted state returns pending status' do
+      registration = FactoryBot.create(:registration, :waiting_list)
+
+      expect(registration.waitlisted?).to eq(true)
+      expect(registration.to_wcif['status']).to eq('pending')
+    end
+  end
+
+  describe '#process_update' do
+    it 'updates multiple properties simultaneously' do
+      registration.update_lanes!(
+        {
+          user_id: registration.user.id, guests: 3, competing: {
+            admin_comment: 'updated admin comment', comment: 'user comment', status: 'accepted', event_ids: ['333', '555']
+          }
+        }.with_indifferent_access,
+        registration.user,
+      )
+
+      registration.reload
+      expect(registration.comments).to eq('user comment')
+      expect(registration.administrative_notes).to eq('updated admin comment')
+      expect(registration.guests).to eq(3)
+      expect(registration.competing_status).to eq('accepted')
+      expect(registration.event_ids).to eq(['333', '555'])
+    end
+
+    describe 'update statuses' do
+      competing_status_updates = [
+        { initial_status: Registrations::Helper::STATUS_PENDING, input_status: Registrations::Helper::STATUS_ACCEPTED },
+        { initial_status: Registrations::Helper::STATUS_PENDING, input_status: Registrations::Helper::STATUS_CANCELLED },
+        { initial_status: Registrations::Helper::STATUS_PENDING, input_status: Registrations::Helper::STATUS_WAITING_LIST },
+        { initial_status: Registrations::Helper::STATUS_PENDING, input_status: Registrations::Helper::STATUS_PENDING },
+        { initial_status: Registrations::Helper::STATUS_PENDING, input_status: Registrations::Helper::STATUS_REJECTED },
+        { initial_status: Registrations::Helper::STATUS_ACCEPTED, input_status: Registrations::Helper::STATUS_CANCELLED },
+        { initial_status: Registrations::Helper::STATUS_ACCEPTED, input_status: Registrations::Helper::STATUS_PENDING },
+        { initial_status: Registrations::Helper::STATUS_ACCEPTED, input_status: Registrations::Helper::STATUS_WAITING_LIST },
+        { initial_status: Registrations::Helper::STATUS_ACCEPTED, input_status: Registrations::Helper::STATUS_ACCEPTED },
+        { initial_status: Registrations::Helper::STATUS_ACCEPTED, input_status: Registrations::Helper::STATUS_REJECTED },
+        { initial_status: Registrations::Helper::STATUS_WAITING_LIST, input_status: Registrations::Helper::STATUS_CANCELLED },
+        { initial_status: Registrations::Helper::STATUS_WAITING_LIST, input_status: Registrations::Helper::STATUS_PENDING },
+        { initial_status: Registrations::Helper::STATUS_WAITING_LIST, input_status: Registrations::Helper::STATUS_WAITING_LIST },
+        { initial_status: Registrations::Helper::STATUS_WAITING_LIST, input_status: Registrations::Helper::STATUS_ACCEPTED },
+        { initial_status: Registrations::Helper::STATUS_WAITING_LIST, input_status: Registrations::Helper::STATUS_REJECTED },
+        { initial_status: Registrations::Helper::STATUS_CANCELLED, input_status: Registrations::Helper::STATUS_CANCELLED },
+        { initial_status: Registrations::Helper::STATUS_CANCELLED, input_status: Registrations::Helper::STATUS_PENDING },
+        { initial_status: Registrations::Helper::STATUS_CANCELLED, input_status: Registrations::Helper::STATUS_WAITING_LIST },
+        { initial_status: Registrations::Helper::STATUS_CANCELLED, input_status: Registrations::Helper::STATUS_ACCEPTED },
+        { initial_status: Registrations::Helper::STATUS_CANCELLED, input_status: Registrations::Helper::STATUS_REJECTED },
+        { initial_status: Registrations::Helper::STATUS_REJECTED, input_status: Registrations::Helper::STATUS_CANCELLED },
+        { initial_status: Registrations::Helper::STATUS_REJECTED, input_status: Registrations::Helper::STATUS_PENDING },
+        { initial_status: Registrations::Helper::STATUS_REJECTED, input_status: Registrations::Helper::STATUS_WAITING_LIST },
+        { initial_status: Registrations::Helper::STATUS_REJECTED, input_status: Registrations::Helper::STATUS_ACCEPTED },
+        { initial_status: Registrations::Helper::STATUS_REJECTED, input_status: Registrations::Helper::STATUS_REJECTED },
+        { initial_status: 'deleted', input_status: Registrations::Helper::STATUS_ACCEPTED },
+        { initial_status: 'deleted', input_status: Registrations::Helper::STATUS_CANCELLED },
+        { initial_status: 'deleted', input_status: Registrations::Helper::STATUS_WAITING_LIST },
+        { initial_status: 'deleted', input_status: Registrations::Helper::STATUS_PENDING },
+        { initial_status: 'deleted', input_status: Registrations::Helper::STATUS_REJECTED },
+      ]
+
+      # TODO: 1. Do we want to have backwards compatibility with 'deleted' status?
+      # 2. If yes, do we want to only support the string, or keep it defined as a constant?
+      deleted_competing_status_updates = [
+        { initial_status: Registrations::Helper::STATUS_PENDING, input_status: 'deleted' },
+        { initial_status: Registrations::Helper::STATUS_ACCEPTED, input_status: 'deleted' },
+        { initial_status: Registrations::Helper::STATUS_WAITING_LIST, input_status: 'deleted' },
+        { initial_status: Registrations::Helper::STATUS_CANCELLED, input_status: 'deleted' },
+        { initial_status: Registrations::Helper::STATUS_REJECTED, input_status: 'deleted' },
+        { initial_status: 'deleted', input_status: 'deleted' },
+      ]
+
+      it 'tests cover all possible status update combinations' do
+        combined_updates = (competing_status_updates << deleted_competing_status_updates).flatten
+        expect(combined_updates).to match_array(REGISTRATION_TRANSITIONS)
+      end
+
+      RSpec.shared_examples 'update competing status' do |initial_status, input_status|
+        it "given #{input_status}, #{initial_status} updates as expected" do
+          registration = FactoryBot.create(:registration, initial_status.to_sym)
+          registration.update_lanes!({ user_id: registration.user.id, competing: { status: input_status } }.with_indifferent_access, registration.user)
+          registration.reload
+          expect(registration.competing_status).to eq(input_status)
+        end
+      end
+
+      RSpec.shared_examples 'update competing status: deleted cases' do |initial_status, input_status|
+        it "given #{input_status}, #{initial_status} updates as expected" do
+          registration = FactoryBot.create(:registration, input_status.to_sym)
+          registration.update_lanes!({ user_id: registration.user.id, competing: { status: input_status } }.with_indifferent_access, registration.user)
+          expect(registration.competing_status).to eq(Registrations::Helper::STATUS_CANCELLED)
+        end
+      end
+
+      competing_status_updates.each do |params|
+        it_behaves_like 'update competing status', params[:initial_status], params[:input_status]
+      end
+
+      deleted_competing_status_updates.each do |params|
+        it_behaves_like 'update competing status: deleted cases', params[:initial_status], params[:input_status]
+      end
+    end
+
+    it 'updates guests' do
+      registration.update_lanes!({ user_id: registration.user.id, guests: 5 }, registration.user)
+      registration.reload
+      expect(registration.guests).to eq(5)
+    end
+
+    # TODO: Should we change "comments" db field to "competing_comments"?
+    it 'updates competing comment' do
+      registration.update_lanes!({ user_id: registration.user.id, competing: { comment: 'test comment' } }.with_indifferent_access, registration.user)
+      registration.reload
+      expect(registration.comments).to eq('test comment')
+    end
+
+    it 'updates admin comment' do
+      registration.update_lanes!({ user_id: registration.user.id, competing: { admin_comment: 'test admin comment' } }.with_indifferent_access, registration.user)
+      registration.reload
+      expect(registration.administrative_notes).to eq('test admin comment')
+    end
+
+    it 'removes events' do
+      registration.update_lanes!({ user_id: registration.user.id, competing: { event_ids: ['333'] } }.with_indifferent_access, registration.user)
+      registration.reload
+      expect(registration.event_ids).to eq(['333'])
+    end
+
+    it 'adds events' do
+      registration.update_lanes!({ user_id: registration.user.id, competing: { event_ids: ['333', '444', '555'] } }.with_indifferent_access, registration.user)
+      registration.reload
+      expect(registration.event_ids).to eq(['333', '444', '555'])
+    end
+  end
 end

@@ -96,6 +96,10 @@ class Competition < ApplicationRecord
     restricted: 2,
   }, prefix: true
 
+  NEW_REG_SYSTEM_DEFAULT = :v2
+
+  enum :registration_version, [:v1, :v2, :v3], prefix: true, default: NEW_REG_SYSTEM_DEFAULT
+
   CLONEABLE_ATTRIBUTES = %w(
     cityName
     countryId
@@ -169,7 +173,7 @@ class Competition < ApplicationRecord
     waiting_list_deadline_date
     event_change_deadline_date
     competition_series_id
-    uses_v2_registrations
+    registration_version
   ).freeze
   VALID_NAME_RE = /\A([-&.:' [:alnum:]]+) (\d{4})\z/
   VALID_ID_RE = /\A[a-zA-Z0-9]+\Z/
@@ -395,6 +399,25 @@ class Competition < ApplicationRecord
     Event.c_find(main_event_id)
   end
 
+  def events_held?(desired_event_ids)
+    # rubocop:disable Style/BitwisePredicate
+    #   We have to shut up Rubocop here because otherwise it thinks that
+    #   `desired_event_ids` are integers which are being compared to a bit mask
+    (desired_event_ids & self.event_ids) == desired_event_ids
+    # rubocop:enable Style/BitwisePredicate
+  end
+
+  def enforces_qualifications?
+    uses_qualification? && !allow_registration_without_qualification
+  end
+
+  def guest_limit_exceeded?(guest_count)
+    guests_not_allowed_but_coming = !guests_enabled? && guest_count > 0
+    guests_exceeding_limit = guest_entry_status_restricted? && guests_per_registration_limit.present? && guest_count > guests_per_registration_limit
+
+    guests_not_allowed_but_coming || guests_exceeding_limit
+  end
+
   def with_old_id
     new_id = self.id
     self.id = id_was
@@ -428,7 +451,7 @@ class Competition < ApplicationRecord
   end
 
   def registration_full?
-    competitor_count = uses_new_registration_service? ? Microservices::Registrations.competitor_count_by_competition(id) : registrations.accepted_and_paid_pending_count
+    competitor_count = uses_microservice_registrations? ? Microservices::Registrations.competitor_count_by_competition(id) : registrations.accepted_and_paid_pending_count
     competitor_limit_enabled? && competitor_count >= competitor_limit
   end
 
@@ -566,7 +589,7 @@ class Competition < ApplicationRecord
 
   def reg_warnings
     warnings = {}
-    warnings[:uses_v2_registrations] = I18n.t('competitions.messages.uses_v2_registrations') if uses_new_registration_service?
+    warnings[:uses_v2_registrations] = I18n.t('competitions.messages.uses_v2_registrations') if uses_new_registration_system?
     if registration_range_specified? && !registration_past?
       if self.announced?
         if (self.registration_open - self.announced_at) < REGISTRATION_OPENING_EARLIEST
@@ -619,7 +642,7 @@ class Competition < ApplicationRecord
     # We allow pre-registration at any time for the old registration system (because we have control over the foreign keys there)
     #   Otherwise, if it's using the new system, we only allow registrations when it's announced
     #   because the probability of an ID change is pretty low in that case and when it does happen, WST can handle it
-    system_compatible = !uses_new_registration_service? || announced?
+    system_compatible = !uses_microservice_registrations? || announced?
 
     is_competition_manager && system_compatible
   end
@@ -632,7 +655,6 @@ class Competition < ApplicationRecord
   def build_clone
     Competition.new(attributes.slice(*CLONEABLE_ATTRIBUTES)).tap do |clone|
       clone.being_cloned_from_id = id
-      clone.uses_v2_registrations = true
 
       Competition.reflections.each_key do |association_name|
         case association_name
@@ -738,16 +760,16 @@ class Competition < ApplicationRecord
     @trainee_delegate_ids || trainee_delegates.map(&:id).join(",")
   end
 
-  def enable_v2_registrations!
-    update_column :uses_v2_registrations, true
+  def uses_microservice_registrations?
+    self.registration_version_v2?
   end
 
-  def uses_new_registration_service?
-    self.uses_v2_registrations
+  def uses_new_registration_system?
+    self.uses_microservice_registrations? || self.registration_version_v3?
   end
 
   def should_render_register_v2?(user)
-    uses_new_registration_service? && user.cannot_register_for_competition_reasons(self).empty?
+    uses_new_registration_system? && user.cannot_register_for_competition_reasons(self).empty?
   end
 
   before_validation :unpack_delegate_organizer_ids
@@ -1000,7 +1022,7 @@ class Competition < ApplicationRecord
   end
 
   def any_registrations?
-    if uses_new_registration_service?
+    if uses_microservice_registrations?
       Microservices::Registrations.competitor_count_by_competition(id) > 0
     else
       self.registrations.any?
@@ -1092,10 +1114,6 @@ class Competition < ApplicationRecord
       # people to leave this blank than to set an incorrect value here.
       country.present? && !country.multiple_countries?
     )
-  end
-
-  def competitor_limit_enabled?
-    competitor_limit_enabled
   end
 
   def competitor_limit_required?
@@ -1602,7 +1620,7 @@ class Competition < ApplicationRecord
         raise "Unknown 'sort_by' in psych sheet computation: #{sort_by}"
       end
 
-      if self.uses_new_registration_service?
+      if self.uses_microservice_registrations?
         # We deliberately don't go through the cached `microservice_registrations` table here, because then we
         # would need to separately check which of the cached registrations are accepted
         # and which of those are registered for the specified event. Querying the MS directly is much more efficient.
@@ -1860,7 +1878,7 @@ class Competition < ApplicationRecord
                force_comment_in_registration use_wca_registration external_registration_page guests_entry_fee_lowest_denomination guest_entry_status
                information events_per_registration_limit],
       methods: %w[url website short_name city venue_address venue_details latitude_degrees longitude_degrees country_iso2 event_ids registration_currently_open?
-                  main_event_id number_of_bookmarks using_payment_integrations? uses_qualification? uses_cutoff? competition_series_ids registration_full?],
+                  main_event_id number_of_bookmarks using_payment_integrations? uses_qualification? uses_cutoff? competition_series_ids registration_full? registration_version],
       include: %w[delegates organizers],
     }
     self.as_json(options)
@@ -1872,6 +1890,10 @@ class Competition < ApplicationRecord
 
   def competition_series_ids
     competition_series&.competition_ids&.split(',') || []
+  end
+
+  def other_series_ids
+    series_sibling_competitions.pluck(:id)
   end
 
   def qualification_wcif
@@ -1893,9 +1915,9 @@ class Competition < ApplicationRecord
       :wcif_extensions,
     ]
     # V2 registrations store the event IDs in the microservice data, not in the monolith
-    includes_associations << :events unless self.uses_new_registration_service?
+    includes_associations << :events unless self.uses_microservice_registrations?
 
-    registrations_relation = self.uses_new_registration_service? ? self.microservice_registrations : self.registrations
+    registrations_relation = self.uses_microservice_registrations? ? self.microservice_registrations : self.registrations
 
     # NOTE: we're including non-competing registrations so that they can have job
     # assignments as well. These registrations don't have accepted?, but they
@@ -2047,13 +2069,13 @@ class Competition < ApplicationRecord
 
   # Takes an array of partial Person WCIF and updates the fields that are not immutable.
   def update_persons_wcif!(wcif_persons, current_user)
-    registrations_relation = self.uses_new_registration_service? ? self.microservice_registrations : self.registrations
+    registrations_relation = self.uses_microservice_registrations? ? self.microservice_registrations : self.registrations
     registration_includes = [
       { assignments: [:schedule_activity] },
       :user,
       :wcif_extensions,
     ]
-    registration_includes << :registration_competition_events unless self.uses_new_registration_service?
+    registration_includes << :registration_competition_events unless self.uses_microservice_registrations?
     registrations = registrations_relation.includes(registration_includes)
     competition_activities = all_activities
     new_assignments = []
@@ -2407,7 +2429,7 @@ class Competition < ApplicationRecord
       "admin" => {
         "isConfirmed" => confirmed?,
         "isVisible" => showAtAll?,
-        "usesV2Registrations" => uses_new_registration_service?,
+        "usesNewRegistrationSystem" => uses_new_registration_system?,
       },
       "cloning" => {
         "fromId" => being_cloned_from_id,
@@ -2547,7 +2569,31 @@ class Competition < ApplicationRecord
         self.championships = []
       end
 
+      # TODO: V3-Reg Remove this line and method implementation below
+      migration_reg_version = self.form_to_registration_version(form_data)
+
       assign_attributes(Competition.form_data_to_attributes(form_data))
+
+      # TODO: V3-Reg Remove once v3 registrations (monolith integration) are implemented by default
+      self.registration_version = self.use_wca_registration? ? migration_reg_version : :v1
+    end
+  end
+
+  private def form_to_registration_version(form_data)
+    form_uses_new_registrations = form_data.dig('admin', 'usesNewRegistrationSystem')
+
+    if !form_uses_new_registrations
+      # If the form explicitly requested the old system, that's what you're gonna get.
+      :v1
+    elsif self.uses_new_registration_system?
+      # If we reached this point, we know that the form did not request the old system
+      #   so that means the form requested the new version. Use whatever new version
+      #   we're already on, to make sure the form doesn't ping-pong between V2 and V3
+      self.registration_version
+    else
+      # The form requested the new system, but we're not on the new system yet.
+      #   Upgrade to whatever system works best
+      NEW_REG_SYSTEM_DEFAULT
     end
   end
 
@@ -2614,7 +2660,7 @@ class Competition < ApplicationRecord
       showAtAll: form_data.dig('admin', 'isVisible'),
       being_cloned_from_id: form_data.dig('cloning', 'fromId'),
       clone_tabs: form_data.dig('cloning', 'cloneTabs'),
-      uses_v2_registrations: form_data.dig('admin', 'usesV2Registrations'),
+      registration_version: form_data.dig('admin', 'usesNewRegistrationSystem') ? NEW_REG_SYSTEM_DEFAULT : :v1,
     }
   end
 
@@ -2677,7 +2723,7 @@ class Competition < ApplicationRecord
   end
 
   def can_change_registration_system?
-    registration_not_yet_opened? && (uses_new_registration_service? || self.registrations.empty?)
+    registration_not_yet_opened? && (uses_microservice_registrations? || self.registrations.empty?)
   end
 
   # Our React date picker unfortunately behaves weirdly in terms of backend data
@@ -2846,7 +2892,7 @@ class Competition < ApplicationRecord
           "properties" => {
             "isConfirmed" => { "type" => "boolean" },
             "isVisible" => { "type" => "boolean" },
-            "usesV2Registrations" => { "type" => "boolean" },
+            "usesNewRegistrationSystem" => { "type" => "boolean" },
           },
         },
         "cloning" => {

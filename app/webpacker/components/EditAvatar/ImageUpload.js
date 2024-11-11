@@ -9,6 +9,7 @@ import I18n from '../../lib/i18n';
 import useCheckboxState from '../../lib/hooks/useCheckboxState';
 import useInputState from '../../lib/hooks/useInputState';
 import useToggleButtonState from '../../lib/hooks/useToggleButtonState';
+import { avatarImageTypes } from '../../lib/wca-data.js.erb';
 
 function ImageUpload({
   uploadDisabled,
@@ -72,9 +73,8 @@ function ImageUpload({
           <Form.Input
             required
             label={I18n.t('activerecord.attributes.user.pending_avatar')}
-            disabled={uploadDisabled}
             type="file"
-            accept="image/*"
+            accept={avatarImageTypes.join(', ')}
             value={selectedFile}
             onChange={handleSelectedImage}
           />

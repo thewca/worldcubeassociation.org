@@ -65,6 +65,7 @@ gem 'ostruct'
 gem 'selectize-rails', github: 'jfly/selectize-rails'
 
 gem 'aws-sdk-s3'
+gem 'aws-sdk-sqs'
 gem 'aws-sdk-rds'
 gem 'aws-sdk-cloudfront'
 
@@ -102,7 +103,7 @@ gem 'react-rails'
 gem 'sprockets-rails'
 gem 'fuzzy-string-match'
 gem 'sidekiq'
-gem 'sidekiq-cron'
+gem 'sidekiq-cron', github: 'sidekiq-cron'
 gem 'after_commit_everywhere'
 gem 'slack-ruby-client'
 gem 'puma'
@@ -155,4 +156,5 @@ group :production do
   gem 'rack'
   gem 'newrelic_rpm'
   gem 'wkhtmltopdf-binary-ng'
+  gem 'shoryuken'
 end

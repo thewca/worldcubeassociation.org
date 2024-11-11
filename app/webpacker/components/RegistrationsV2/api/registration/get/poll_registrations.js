@@ -4,11 +4,12 @@ import { fetchJsonOrError } from '../../../../../lib/requests/fetchWithAuthentic
 
 export default async function pollRegistrations(
   userId,
-  competitionId,
+  competition,
 ) {
   if (process.env.NODE_ENV === 'production') {
-    const { data } = await fetchJsonOrError(pollingRoute(userId, competitionId));
+    const route = pollingRoute(userId, competition.id)[competition.registration_version];
+    const { data } = await fetchJsonOrError(route);
     return data;
   }
-  return pollingMock(userId, competitionId);
+  return pollingMock(userId, competition);
 }
