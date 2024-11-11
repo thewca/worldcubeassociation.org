@@ -25,10 +25,3 @@ fi
 
 # Symlink the versioned directory to a common 'current' path
 ln -sfn "$BUNDLE_PATH" "$CURRENT_SYMLINK"
-BUNDLE_PATH="$CURRENT_SYMLINK"
-
-# Set the BUNDLE_PATH to the symlink for all processes
-export BUNDLE_PATH
-
-# Run the main command (e.g., rails server or sidekiq)
-exec "$@"
