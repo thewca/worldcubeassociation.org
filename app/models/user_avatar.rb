@@ -43,6 +43,8 @@ class UserAvatar < ApplicationRecord
 
       URI::HTTPS.build(host: host, path: path).to_s
     when 'active_storage'
+      return UserAvatar.default_avatar(self.user).url unless self.image.attached?
+
       if self.using_cdn?
         URI.join(EnvConfig.S3_AVATARS_ASSET_HOST, self.image.key).to_s
       else
@@ -65,6 +67,8 @@ class UserAvatar < ApplicationRecord
 
       URI::HTTPS.build(host: host, path: path).to_s
     when 'active_storage'
+      return UserAvatar.default_avatar(self.user).thumbnail_url unless self.image.attached?
+
       if self.using_cdn?
         URI.join(EnvConfig.S3_AVATARS_ASSET_HOST, self.thumbnail_image.processed.key).to_s
       else
@@ -87,7 +91,7 @@ class UserAvatar < ApplicationRecord
   end
 
   def filename
-    self.active_storage? ? self.image.blob.filename.to_s : super
+    self.active_storage? ? self.image.blob&.filename.to_s : super
   end
 
   def image
@@ -111,7 +115,7 @@ class UserAvatar < ApplicationRecord
   end
 
   def default_avatar?
-    self.filename == DEFAULT_AVATAR_FILE && self.local?
+    self.local? && self.filename == DEFAULT_AVATAR_FILE
   end
 
   alias_method :is_default, :default_avatar?
