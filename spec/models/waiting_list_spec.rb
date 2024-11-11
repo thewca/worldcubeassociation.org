@@ -6,7 +6,6 @@ RSpec.describe WaitingList do
   let(:competition) { FactoryBot.create(:competition, :registration_open, :editable_registrations, :with_organizer) }
   let(:waiting_list) { competition.waiting_list }
 
-
   it 'position is nil when registration not on waiting list' do
     registration = FactoryBot.create(:registration)
     expect(registration.waiting_list_position).to eq(nil)
@@ -66,7 +65,6 @@ RSpec.describe WaitingList do
       expect(reg3.waiting_list_position).to eq(2)
       expect(reg4.waiting_list_position).to eq(3)
       expect(reg5.waiting_list_position).to eq(5)
-      byebug
     end
 
     it 'can be moved to the last position in the list' do

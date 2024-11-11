@@ -62,13 +62,13 @@ module Registrations
       end
 
       def self.update_waiting_list(competing_params, registration, waiting_list)
-        status = competing_params.dig('status')
-        waiting_list_position = competing_params.dig('waiting_list_position')
+        status = competing_params['status']
+        waiting_list_position = competing_params['waiting_list_position']
 
         should_add = status == Registrations::Helper::STATUS_WAITING_LIST # TODO: Add case where waiting_list status is present but that matches the old_status
         should_move = waiting_list_position.present? # TODO: Add case where waiting list pos is present but it matches the current position
         should_remove = status.present? && registration.competing_status == Registrations::Helper::STATUS_WAITING_LIST &&
-          status != Registrations::Helper::STATUS_WAITING_LIST # TODO: Consider adding cases for when not all of these are true?
+                        status != Registrations::Helper::STATUS_WAITING_LIST # TODO: Consider adding cases for when not all of these are true?
 
         waiting_list.add(registration.id) if should_add
         waiting_list.move_to_position(registration.id, competing_params[:waiting_list_position].to_i) if should_move
