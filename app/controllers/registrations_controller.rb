@@ -415,15 +415,14 @@ class RegistrationsController < ApplicationController
       #   this behavior differs and we overwrite created_at manually, see #stripe_webhook above.
     end
 
-    # Payment Intent lifecycle as per https://stripe.com/docs/payments/intents#intent-statuses
-    case stored_intent.payment_record.stripe_status
+    case stored_intent.wca_status
     when 'succeeded'
       flash[:success] = t("registrations.payment_form.payment_successful")
-    when 'requires_action'
+    when 'pending'
       # Customer did not complete the payment
       # For example, 3DSecure could still be pending.
       flash[:warning] = t("registrations.payment_form.errors.payment_pending")
-    when 'requires_payment_method'
+    when 'created'
       # Payment failed. If a payment fails, it is "reset" by Stripe,
       # so from our end it looks like it never even started (i.e. the customer didn't choose a payment method yet)
       flash[:error] = t("registrations.payment_form.errors.payment_reset")
