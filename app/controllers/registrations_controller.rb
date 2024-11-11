@@ -429,6 +429,12 @@ class RegistrationsController < ApplicationController
     when 'processing'
       # The payment can be pending, for example bank transfers can take multiple days to be fulfilled.
       flash[:warning] = t("registrations.payment_form.payment_processing")
+    when 'partial'
+      flash[:warning] = t("registrations.payment_form.payment_partial")
+    when 'failed'
+      flash[:error] = t("registrations.payment_form.errors.payment_failed")
+    when 'canceled'
+      flash[:error] = t("registrations.payment_form.errors.payment_canceled")
     else
       # Invalid status
       flash[:error] = "Invalid PaymentIntent status"
