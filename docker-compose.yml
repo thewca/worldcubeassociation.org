@@ -15,6 +15,7 @@ x-app: &app
     - .:/app
     - gems_volume:/usr/local/bundle
     - node_modules_volume:/app/node_modules
+    - usr_volume:/usr
   networks:
     - wca-main
 
@@ -148,6 +149,8 @@ volumes:
   wca_db_volume:
     driver: local
   cache_volume:
+    driver: local
+  usr_volume:
     driver: local
 
 networks:
