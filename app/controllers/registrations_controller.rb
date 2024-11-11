@@ -530,10 +530,11 @@ class RegistrationsController < ApplicationController
       stored_intent = stored_record.payment_intent
 
       stored_intent.update_status_and_charges(stripe_intent, audit_event, audit_event.created_at_remote) do |charge_transaction|
-        if stored_intent.holder.is_a? Registration
-          ruby_money = charge_transaction.money_amount
+        ruby_money = charge_transaction.money_amount
+        stored_holder = stored_intent.holder
 
-          stored_payment = stored_intent.holder.record_payment(
+        if stored_holder.is_a? Registration
+          stored_payment = stored_holder.record_payment(
             ruby_money.cents,
             ruby_money.currency.iso_code,
             charge_transaction,
@@ -545,10 +546,16 @@ class RegistrationsController < ApplicationController
           #   and Stripe tries again after an exponential backoff. So we (erroneously!) record the creation timestamp
           #   in our DB _after_ the backed-off event has been processed. This can lead to a wrong registration order :(
           stored_payment.update!(created_at: audit_event.created_at_remote)
-        elsif stored_intent.holder.is_a? MicroserviceRegistration
-          ruby_money = charge_transaction.money_amount
+        elsif stored_holder.is_a? MicroserviceRegistration
           begin
-            Microservices::Registrations.update_registration_payment(stripe_intent.holder.attendee_id, stored_intent.id, ruby_money.cents, ruby_money.currency.iso_code, stored_intent.status, { type: "stripe_webhook", id: audit_event.id })
+            Microservices::Registrations.update_registration_payment(
+              stored_holder.attendee_id,
+              charge_transaction.id,
+              ruby_money.cents,
+              ruby_money.currency.iso_code,
+              stripe_intent.status,
+              { type: "stripe_webhook", id: audit_event.id },
+            )
           rescue Faraday::Error => e
             logger.error "Couldn't update Microservice: #{e.message}, at #{e.backtrace}"
             return head :internal_server_error
@@ -609,7 +616,14 @@ class RegistrationsController < ApplicationController
 
       if uses_v2
         begin
-          Microservices::Registrations.update_registration_payment("#{competition_id}-#{registration.user.id}", charge_transaction.id, ruby_money.cents, ruby_money.currency.iso_code, stripe_intent.status, { type: "user", id: current_user.id })
+          Microservices::Registrations.update_registration_payment(
+            registration.attendee_id,
+            charge_transaction.id,
+            ruby_money.cents,
+            ruby_money.currency.iso_code,
+            stripe_intent.status,
+            { type: "user", id: current_user.id },
+          )
         rescue Faraday::Error
           flash[:error] = t("registrations.payment_form.errors.registration_unreachable")
           return redirect_to competition_register_path(competition_id)
