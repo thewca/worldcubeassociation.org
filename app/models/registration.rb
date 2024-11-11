@@ -321,7 +321,7 @@ class Registration < ApplicationRecord
                          },
                        })
       if competing_status == "waiting_list"
-        base_json[:competing][:waiting_list_position] = competition.waiting_list.entries.find_index(user_id) + 1
+        base_json[:competing][:waiting_list_position] = waiting_list_position
       end
     end
     if history
