@@ -415,19 +415,16 @@ class RegistrationsController < ApplicationController
       #   this behavior differs and we overwrite created_at manually, see #stripe_webhook above.
     end
 
+    # For details on what the individual statuses mean, please refer to the comments
+    #   of the `enum :wca_status` declared in the `payment_intent.rb` model
     case stored_intent.wca_status
     when 'succeeded'
       flash[:success] = t("registrations.payment_form.payment_successful")
     when 'pending'
-      # Customer did not complete the payment
-      # For example, 3DSecure could still be pending.
       flash[:warning] = t("registrations.payment_form.errors.payment_pending")
     when 'created'
-      # Payment failed. If a payment fails, it is "reset" by Stripe,
-      # so from our end it looks like it never even started (i.e. the customer didn't choose a payment method yet)
       flash[:error] = t("registrations.payment_form.errors.payment_reset")
     when 'processing'
-      # The payment can be pending, for example bank transfers can take multiple days to be fulfilled.
       flash[:warning] = t("registrations.payment_form.payment_processing")
     when 'partial'
       flash[:warning] = t("registrations.payment_form.payment_partial")
