@@ -52,4 +52,7 @@ module WcaExceptions
       @errors = errors
     end
   end
+
+  class PaymentInvalidError < StandardError
+  end
 end

@@ -592,13 +592,13 @@ class RegistrationsController < ApplicationController
 
     begin
       stored_record = payment_account.find_payment_from_request(params)
-    rescue StandardError => e
+    rescue WcaExceptions::PaymentInvalidError => e
       flash[:error] = e.message
       return redirect_to competition_register_path(competition)
     end
 
     unless stored_record.present?
-      flash[:error] = t("registrations.payment_form.errors.generic.not_found", provider: t("payments.payment_providers.generic_fallback"))
+      flash[:error] = t("registrations.payment_form.errors.generic.not_found", provider: t("payments.payment_providers.#{payment_integration}"))
       return redirect_to competition_register_path(competition)
     end
 
