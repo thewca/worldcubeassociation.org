@@ -42,7 +42,7 @@ module Registrations
 
           if old_status == Registrations::Helper::STATUS_WAITING_LIST || status == Registrations::Helper::STATUS_WAITING_LIST
             waiting_list = competition.waiting_list || competition.create_waiting_list(entries: [])
-            update_waiting_list(update_params, waiting_list)
+            update_waiting_list(update_params[:competing], registration, waiting_list)
           end
 
           if waiting_list_position.present?
@@ -61,17 +61,18 @@ module Registrations
         registration.reload
       end
 
-      def self.update_waiting_list(update_params, waiting_list)
-        user_id = update_params[:user_id]
-        status = update_params.dig('competing', 'status')
+      def self.update_waiting_list(competing_params, registration, waiting_list)
+        status = competing_params.dig('status')
+        waiting_list_position = competing_params.dig('waiting_list_position')
 
-        should_add = status == Registrations::Helper::STATUS_WAITING_LIST
-        should_move = update_params[:waiting_list_position].present?
-        should_remove = !should_add && !should_move
+        should_add = status == Registrations::Helper::STATUS_WAITING_LIST # TODO: Add case where waiting_list status is present but that matches the old_status
+        should_move = waiting_list_position.present? # TODO: Add case where waiting list pos is present but it matches the current position
+        should_remove = status.present? && registration.competing_status == Registrations::Helper::STATUS_WAITING_LIST &&
+          status != Registrations::Helper::STATUS_WAITING_LIST # TODO: Consider adding cases for when not all of these are true?
 
-        waiting_list.add(user_id) if should_add
-        waiting_list.move_to_position(user_id, update_params[:waiting_list_position].to_i) if should_move
-        waiting_list.remove(user_id) if should_remove
+        waiting_list.add(registration.id) if should_add
+        waiting_list.move_to_position(registration.id, competing_params[:waiting_list_position].to_i) if should_move
+        waiting_list.remove(registration.id) if should_remove
       end
 
       def self.update_status(registration, status)

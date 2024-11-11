@@ -474,5 +474,64 @@ RSpec.describe Registration do
       registration.reload
       expect(registration.event_ids).to eq(['333', '444', '555'])
     end
+
+    describe 'update waiting list position' do
+      let(:competition) { FactoryBot.create(:competition, :registration_open, :editable_registrations, :with_organizer) }
+      let(:waiting_list) { competition.waiting_list }
+
+      let(:reg1) { FactoryBot.create(:registration, :waiting_list, competition: competition) }
+      let(:reg2) { FactoryBot.create(:registration, :waiting_list, competition: competition) }
+      let(:reg3) { FactoryBot.create(:registration, :waiting_list, competition: competition) }
+      let(:reg4) { FactoryBot.create(:registration, :waiting_list, competition: competition) }
+      let(:reg5) { FactoryBot.create(:registration, :waiting_list, competition: competition) }
+
+      before do
+        waiting_list.add(reg1.id)
+        waiting_list.add(reg2.id)
+        waiting_list.add(reg3.id)
+        waiting_list.add(reg4.id)
+        waiting_list.add(reg5.id)
+      end
+
+      it 'adds to waiting list' do
+        reg = FactoryBot.create(:registration, competition: competition)
+        reg.update_lanes!({ user_id: reg.user.id, competing: { status: 'waiting_list' } }.with_indifferent_access, reg.user)
+        reg.reload
+        expect(reg.waiting_list_position).to eq(6)
+      end
+
+      it 'removes from waiting list' do
+        reg4.update_lanes!({ user_id: reg4.user.id, competing: { status: 'pending' } }.with_indifferent_access, reg4.user)
+        reg4.reload
+        expect(reg4.waiting_list_position).to eq(nil)
+        expect(waiting_list.entries.count).to eq(4)
+      end
+
+      it 'moves backwards in waiting list' do
+        reg2.update_lanes!({ user_id: reg2.user.id, competing: { waiting_list_position: 5 } }.with_indifferent_access, reg2.user)
+        reg2.reload
+
+        expect(reg1.waiting_list_position).to eq(1)
+        expect(reg2.waiting_list_position).to eq(5)
+        expect(reg3.waiting_list_position).to eq(2)
+        expect(reg4.waiting_list_position).to eq(3)
+        expect(reg5.waiting_list_position).to eq(4)
+
+        expect(waiting_list.entries.count).to eq(5)
+      end
+
+      it 'moves forwards in waiting list' do
+        reg5.update_lanes!({ user_id: reg5.user.id, competing: { waiting_list_position: 1 } }.with_indifferent_access, reg5.user)
+        reg5.reload
+
+        expect(reg1.waiting_list_position).to eq(2)
+        expect(reg2.waiting_list_position).to eq(3)
+        expect(reg3.waiting_list_position).to eq(4)
+        expect(reg4.waiting_list_position).to eq(5)
+        expect(reg5.waiting_list_position).to eq(1)
+
+        expect(waiting_list.entries.count).to eq(5)
+      end
+    end
   end
 end

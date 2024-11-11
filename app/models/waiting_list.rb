@@ -25,6 +25,7 @@ class WaitingList < ActiveRecord::Base
   end
 
   def position(entry_id)
+    return nil unless entries.include?(entry_id)
     entries.index(entry_id) + 1
   end
 end
