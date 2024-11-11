@@ -6,6 +6,7 @@ corepack install
 
 # Make sure all sources are up-to-date
 apt-get update -qq
+apt-get upgrade -y
 
 # Install the packages from a line-separated package list,
 #   making sure that one failure doesn't affect the other packages.
