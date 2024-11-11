@@ -210,7 +210,7 @@
       if (error.type === 'card_error' || error.type === 'validation_error') {
         $stripeErrorDiv.text(error.message);
       } else {
-        $stripeErrorDiv.text('<%= t("registrations.payment_form.errors.stripe_failed") %>');
+        $stripeErrorDiv.text('<%= t("registrations.payment_form.errors.generic.failed", provider: t("payments.payment_providers.stripe")) %>');
       }
 
       $paymentElementRow.addClass("has-error");

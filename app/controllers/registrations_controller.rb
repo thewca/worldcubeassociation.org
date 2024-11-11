@@ -603,6 +603,12 @@ class RegistrationsController < ApplicationController
     end
 
     stored_intent = stored_record.payment_intent
+
+    unless stored_intent.present?
+      flash[:error] = t("registrations.payment_form.errors.generic.intent_not_found", provider: t("payments.payment_providers.#{payment_integration}"))
+      return redirect_to competition_register_path(competition)
+    end
+
     remote_intent = stored_intent.retrieve_remote
 
     unless remote_intent.present?
