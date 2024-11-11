@@ -12,7 +12,7 @@ class PaymentIntent < ApplicationRecord
   scope :started, -> { where.not(wca_status: 'created') }
   scope :incomplete, -> { where.not(wca_status: ['succeeded', 'canceled']) }
 
-  delegate :retrieve_remote, :money_amount, :account_id, to: :payment_record
+  delegate :retrieve_remote, :money_amount, :account_id, :determine_wca_status, to: :payment_record
 
   # Stripe secrets are case-sensitive. Make sure that this information is not lost during encryption.
   encrypts :client_secret, downcase: false
@@ -34,13 +34,16 @@ class PaymentIntent < ApplicationRecord
   scope :paypal, -> { where(payment_record_type: 'PaypalRecord') }
   scope :stripe, -> { where(payment_record_type: 'StripeRecord') }
 
-  def update_status_and_charges(api_intent, action_source, source_datetime = DateTime.current)
+  def update_status_and_charges(payment_account, api_intent, action_source, source_datetime = DateTime.current)
     self.with_lock do
+      # The order of operations here is critical:
+      #   1. Update the underlying raw record
+      #   2. Update this current `self` record, so that `wca_status` can be correctly deduced from (1)
       self.payment_record.update_status(api_intent)
       self.update_status(api_intent)
 
       case self.wca_status
-      when 'succeeded'
+      when PaymentIntent.wca_statuses[:succeeded]
         # The payment didn't need any additional actions and is completed!
 
         # Record the success timestamp if not already done
@@ -54,11 +57,11 @@ class PaymentIntent < ApplicationRecord
         payment_account.retrieve_payments(self) do |payment|
           # Only trigger outer update blocks for charges that are actually successful. This is reasonable
           # because we only ever trigger this block for PIs that are marked "successful" in the first place
-          charge_successful = payment.determine_wca_status == :succeeded
+          charge_successful = payment.determine_wca_status == PaymentIntent.wca_statuses[:succeeded]
 
           yield payment if block_given? && charge_successful
         end
-      when 'canceled'
+      when PaymentIntent.wca_statuses[:canceled]
         # Canceled by the gateway
 
         # Record the cancellation timestamp if not already done
@@ -68,8 +71,8 @@ class PaymentIntent < ApplicationRecord
             cancellation_source: action_source,
           )
         end
-      when 'created'
-      when 'pending'
+      when PaymentIntent.wca_statuses[:created]
+      when PaymentIntent.wca_statuses[:pending]
         # Reset by the gateway
         self.update!(
           confirmed_at: nil,
@@ -93,7 +96,7 @@ class PaymentIntent < ApplicationRecord
 
       self.update!(
         error_details: gateway_error,
-        wca_status: api_record.determine_wca_status,
+        wca_status: self.determine_wca_status,
       )
     end
 
