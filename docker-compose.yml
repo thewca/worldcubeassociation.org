@@ -15,6 +15,8 @@ x-app: &app
     - gems_volume:/usr/local/bundle
     - node_modules_volume:/app/node_modules
     - apt_package_volume:/usr
+    - apt_cache_volume:/var/cache/apt
+    - dpkg_cache_volume:/var/lib/dpkg
   networks:
     - wca-main
 
@@ -151,6 +153,10 @@ volumes:
   cache_volume:
     driver: local
   apt_package_volume:
+    driver: local
+  apt_cache_volume:
+    driver: local
+  dpkg_cache_volume:
     driver: local
 
 networks:
