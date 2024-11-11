@@ -302,7 +302,7 @@ class Registration < ApplicationRecord
       if competition.using_payment_integrations?
         base_json.merge!({
                            payment: {
-                             has_paid: outstanding_entry_fees == 0,
+                             has_paid: outstanding_entry_fees <= 0,
                              payment_statuses: registration_payments.sort_by(&:created_at).reverse!.map { |p| p.payment_status },
                              payment_amount_iso: paid_entry_fees.cents,
                              payment_amount_human_readable: "#{paid_entry_fees.format} (#{paid_entry_fees.currency.name})",
