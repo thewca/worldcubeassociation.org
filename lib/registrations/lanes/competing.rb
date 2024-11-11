@@ -32,7 +32,6 @@ module Registrations
         old_status = registration.competing_status
 
         ActiveRecord::Base.transaction do
-          update_status(registration, status)
           update_event_ids(registration, event_ids)
           registration.comments = comment if comment.present?
           registration.administrative_notes = admin_comment if admin_comment.present?
@@ -44,6 +43,8 @@ module Registrations
             waiting_list = competition.waiting_list || competition.create_waiting_list(entries: [])
             update_waiting_list(update_params[:competing], registration, waiting_list)
           end
+
+          update_status(registration, status) # Update status after updating waiting list so that can access the old_status
 
           if waiting_list_position.present?
             changes[:waiting_list_position] = waiting_list_position

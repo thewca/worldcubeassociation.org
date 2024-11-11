@@ -320,12 +320,12 @@ RSpec.describe 'API Registrations' do
     let(:user5) { FactoryBot.create :user }
     let(:user6) { FactoryBot.create :user }
 
-    let!(:registration1) { FactoryBot.create(:registration, competing_status: 'accepted', competition: competition, user: user1) }
-    let!(:registration2) { FactoryBot.create(:registration, competing_status: 'accepted', competition: competition, user: user2) }
-    let!(:registration3) { FactoryBot.create(:registration, competing_status: 'accepted', competition: competition, user: user3) }
-    let!(:registration4) { FactoryBot.create(:registration, competing_status: 'waiting_list', competition: competition, user: user4) }
-    let!(:registration5) { FactoryBot.create(:registration, competing_status: 'waiting_list', competition: competition, user: user5) }
-    let!(:registration6) { FactoryBot.create(:registration, competing_status: 'waiting_list', competition: competition, user: user6) }
+    let!(:registration1) { FactoryBot.create(:registration, :accepted, competition: competition, user: user1) }
+    let!(:registration2) { FactoryBot.create(:registration, :accepted, competition: competition, user: user2) }
+    let!(:registration3) { FactoryBot.create(:registration, :accepted, competition: competition, user: user3) }
+    let!(:registration4) { FactoryBot.create(:registration, :waiting_list, competition: competition, user: user4) }
+    let!(:registration5) { FactoryBot.create(:registration, :waiting_list, competition: competition, user: user5) }
+    let!(:registration6) { FactoryBot.create(:registration, :waiting_list, competition: competition, user: user6) }
 
     before do
       FactoryBot.create(:waiting_list, holder: competition)

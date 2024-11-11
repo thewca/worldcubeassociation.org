@@ -15,7 +15,7 @@ FactoryBot.define do
     end
     competition_events { competition.competition_events.where(event: events) }
 
-    competing_status { "pending" }
+    competing_status { Registrations::Helper::STATUS_PENDING }
 
     trait :skip_validations do
       to_create { |instance| instance.save(validate: false) }
@@ -23,18 +23,27 @@ FactoryBot.define do
 
     trait :accepted do
       accepted_at { Time.now }
+      competing_status { Registrations::Helper::STATUS_ACCEPTED }
     end
 
     trait :deleted do
       deleted_at { Time.now }
+      competing_status { Registrations::Helper::STATUS_DELETED }
     end
 
     trait :cancelled do
       deleted_at { Time.now }
+      competing_status { Registrations::Helper::STATUS_CANCELLED }
     end
 
     trait :pending do
       accepted_at { nil }
+      competing_status { Registrations::Helper::STATUS_PENDING }
+    end
+
+    trait :waiting_list do
+      accepted_at { nil }
+      competing_status { Registrations::Helper::STATUS_WAITING_LIST }
     end
 
     trait :newcomer do
@@ -57,6 +66,10 @@ FactoryBot.define do
     trait :paid_pending do
       accepted_at { nil }
       paid
+    end
+
+    after(:create) do |registration|
+      registration.competition.waiting_list.add(registration.id) if registration.competing_status == Registrations::Helper::STATUS_WAITING_LIST
     end
   end
 end
