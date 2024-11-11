@@ -576,52 +576,53 @@ class RegistrationsController < ApplicationController
 
   def payment_completion
     # Provided by Stripe upon redirect when the "PaymentElement" workflow is completed
-    intent_id = params[:payment_intent]
-    intent_secret = params[:payment_intent_client_secret]
     competition_id = params[:competition_id]
+    competition = Competition.find(competition_id)
 
-    # We expect that the record here is a top-level PaymentIntent in Stripe's API model
-    stored_record = StripeRecord.find_by(stripe_id: intent_id)
+    # Historically, Stripe was our only payment provider and thus is the implicit default here.
+    #   This can be deleted (and the currently optional parameter in `routes.rb` can be changed
+    #   to become a mandatory parameter) a week or so after deployment.
+    payment_integration = params.fetch(:payment_integration, 'stripe')
+    payment_account = competition.payment_account_for(payment_integration.to_sym)
 
-    unless stored_record.present?
-      flash[:error] = t("registrations.payment_form.errors.stripe_not_found")
-      return redirect_to competition_register_path(competition_id)
+    unless payment_account.present?
+      flash[:danger] = t("registrations.payment_form.errors.cpi_disconnected")
+      return redirect_to competition_register_path(competition)
     end
 
-    unless stored_record.payment_intent?
-      flash[:error] = t("registrations.payment_form.errors.stripe_not_an_intent")
-      return redirect_to competition_register_path(competition_id)
+    begin
+      stored_record = payment_account.find_payment_from_request(params)
+    rescue StandardError => e
+      flash[:error] = e.message
+      return redirect_to competition_register_path(competition)
+    end
+
+    unless stored_record.present?
+      flash[:error] = t("registrations.payment_form.errors.generic.not_found", provider: t("payments.payment_providers.generic_fallback"))
+      return redirect_to competition_register_path(competition)
     end
 
     stored_intent = stored_record.payment_intent
+    remote_intent = stored_intent.retrieve_remote
+
+    unless remote_intent.present?
+      flash[:error] = t("registrations.payment_form.errors.generic.remote_not_found", provider: t("payments.payment_providers.#{payment_integration}"))
+      return redirect_to competition_register_path(competition)
+    end
 
     registration = stored_intent.holder
-    uses_v2 = registration.is_a? MicroserviceRegistration
 
-    unless stored_intent.client_secret == intent_secret
-      flash[:error] = t("registrations.payment_form.errors.stripe_secret_invalid")
-      return redirect_to competition_register_path(competition_id)
-    end
-
-    # No need to create a new intent here. We can just query the stored intent from Stripe directly.
-    stripe_intent = stored_intent.retrieve_remote
-
-    unless stripe_intent.present?
-      flash[:error] = t("registrations.payment_form.errors.stripe_not_found")
-      return redirect_to competition_register_path(competition_id)
-    end
-
-    stored_intent.update_status_and_charges(stripe_intent, current_user) do |charge_transaction|
+    stored_intent.update_status_and_charges(remote_intent, current_user) do |charge_transaction|
       ruby_money = charge_transaction.money_amount
 
-      if uses_v2
+      if registration.is_a? MicroserviceRegistration
         begin
           Microservices::Registrations.update_registration_payment(
             registration.attendee_id,
             charge_transaction.id,
             ruby_money.cents,
             ruby_money.currency.iso_code,
-            stripe_intent.status,
+            remote_intent.status,
             { type: "user", id: current_user.id },
           )
         rescue Faraday::Error
