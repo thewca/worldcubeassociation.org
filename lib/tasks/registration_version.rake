@@ -23,8 +23,7 @@ namespace :registration_version do
       ActiveRecord::Base.transaction do
         competition.registrations.includes(:registration_payments, :registration_history_entries).each do |registration|
           registration.update_column :competing_status, registration.compute_competing_status
-
-          if registration.paid_entry_fees > 0 && registration.registration_history_entries.empty?
+          if registration.paid_entry_fees > 0
             registration.registration_payments.each do |payment|
               # If the payments were made after November 6th we already have history entries for it
               if payment.created_at < Time.new(year: 2024, month: 11, day: 6)
