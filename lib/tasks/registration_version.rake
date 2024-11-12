@@ -21,14 +21,26 @@ namespace :registration_version do
 
     LogTask.log_task("Migrating Registrations for Competition #{competition_id}") do
       ActiveRecord::Base.transaction do
-        competition.registrations.each do |registration|
+        competition.registrations.includes(:registration_payments, :registration_history_entries).each do |registration|
           registration.update_column :competing_status, registration.compute_competing_status
+
+          if registration.paid_entry_fees > 0 && registration.registration_history_entries.empty?
+            registration.registration_payments.each do |payment|
+              # If the payments were made after November 6th we already have history entries for it
+              if payment.created_at < Time.new(year: 2024, month: 11, day: 6)
+                registration.add_history_entry({ payment_status: payment.payment_status, payment_amount_iso: payment.amount }, "user", payment.receipt.initiated_by, "V2 Migration", payment.created_at)
+              end
+            end
+          end
+
           if registration.accepted_at.present?
             registration.add_history_entry({ competing_status: 'accepted' }, "user", registration.accepted_by, "V2 Migration", registration.accepted_at)
           end
+
           if registration.deleted_at.present?
             registration.add_history_entry({ competing_status: 'cancelled' }, "user", registration.deleted_by, "V2 Migration", registration.deleted_at)
           end
+
           registration.add_history_entry({
                                            competing_status: 'pending',
                                            event_ids: registration.event_ids,
