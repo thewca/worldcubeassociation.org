@@ -293,6 +293,7 @@ class Registration < ApplicationRecord
 
   def to_v2_json(admin: false, history: false, pii: false)
     base_json = {
+      user: user,
       user_id: user_id,
       competing: {
         event_ids: event_ids,

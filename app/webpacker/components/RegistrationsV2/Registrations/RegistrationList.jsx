@@ -12,7 +12,6 @@ import {
   getConfirmedRegistrations,
   getPsychSheetForEvent,
 } from '../api/registration/get/get_registrations';
-import useWithUserData from '../hooks/useWithUserData';
 import createSortReducer from '../reducers/sortReducer';
 import Loading from '../../Requests/Loading';
 import EventIcon from '../../wca/EventIcon';
@@ -20,7 +19,7 @@ import { personUrl } from '../../../lib/requests/routes.js.erb';
 import Errored from '../../Requests/Errored';
 import { formatAttemptResult } from '../../../lib/wca-live/attempts';
 import i18n from '../../../lib/i18n';
-import { countries } from "../../../lib/wca-data.js.erb";
+import { countries } from '../../../lib/wca-data.js.erb';
 
 const sortReducer = createSortReducer(['name', 'country', 'total']);
 
@@ -120,15 +119,9 @@ export default function RegistrationList({ competitionInfo }) {
     }
   }, [psychSheet]);
 
-  const { isLoading: userInfoLoading, data: dataWithUser } = useWithUserData(
-    (psychSheetEvent !== undefined
-      ? psychSheet?.sorted_rankings
-      : registrations) || [],
-  );
-
   const data = useMemo(() => {
-    if (dataWithUser) {
-      const sorted = dataWithUser.toSorted((a, b) => {
+    if (registrations) {
+      const sorted = registrations.toSorted((a, b) => {
         if (psychSheetEvent !== undefined) {
           return 0; // backend handles the sorting of psych sheets
         }
@@ -149,7 +142,7 @@ export default function RegistrationList({ competitionInfo }) {
       return sorted;
     }
     return [];
-  }, [dataWithUser, sortColumn, sortDirection, psychSheetEvent]);
+  }, [registrations, sortColumn, sortDirection, psychSheetEvent]);
 
   if (isError) {
     return (
@@ -157,7 +150,7 @@ export default function RegistrationList({ competitionInfo }) {
     );
   }
 
-  if (registrationsLoading || userInfoLoading || isLoadingPsychSheet) {
+  if (registrationsLoading || isLoadingPsychSheet) {
     return (
       <Segment>
         <Loading />
