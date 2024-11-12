@@ -25,20 +25,11 @@ RSpec.describe WaitingList do
   end
 
   describe 'with populated waiting list' do
-    let(:reg1) { FactoryBot.create(:registration, :waiting_list, competition: competition) }
-    let(:reg2) { FactoryBot.create(:registration, :waiting_list, competition: competition) }
-    let(:reg3) { FactoryBot.create(:registration, :waiting_list, competition: competition) }
-    let(:reg4) { FactoryBot.create(:registration, :waiting_list, competition: competition) }
-    let(:reg5) { FactoryBot.create(:registration, :waiting_list, competition: competition) }
-
-    before do
-      # If we don't reload the registrations, they don't show up on the waiting list until they're accessed
-      reg1.reload
-      reg2.reload
-      reg3.reload
-      reg4.reload
-      reg5.reload
-    end
+    let!(:reg1) { FactoryBot.create(:registration, :waiting_list, competition: competition) }
+    let!(:reg2) { FactoryBot.create(:registration, :waiting_list, competition: competition) }
+    let!(:reg3) { FactoryBot.create(:registration, :waiting_list, competition: competition) }
+    let!(:reg4) { FactoryBot.create(:registration, :waiting_list, competition: competition) }
+    let!(:reg5) { FactoryBot.create(:registration, :waiting_list, competition: competition) }
 
     it 'waiting list position gives position, not index' do
       registration = FactoryBot.create(:registration, :waiting_list, competition: competition)
