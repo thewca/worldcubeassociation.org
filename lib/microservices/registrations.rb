@@ -27,6 +27,10 @@ module Microservices
       "/api/internal/v1/#{competition_id}/registrations"
     end
 
+    def self.get_waiting_list_path(competition_id)
+      "/api/internal/v1/#{competition_id}/waiting_list"
+    end
+
     def self.get_registration_path(attendee_id)
       "/api/internal/v1/#{attendee_id}"
     end
@@ -125,6 +129,11 @@ module Microservices
 
     def self.history_by_id(attendee_id)
       response = self.registration_connection.get(self.get_history_path(attendee_id))
+      response.body
+    end
+
+    def self.waiting_list_by_id(competition_id)
+      response = self.registration_connection.get(self.get_waiting_list_path(competition_id))
       response.body
     end
   end
