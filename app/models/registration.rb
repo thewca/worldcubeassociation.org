@@ -273,7 +273,7 @@ class Registration < ApplicationRecord
   end
 
   def registration_history
-    registration_history_entries.map do |r|
+    registration_history_entries.includes([:registration_history_change]).map do |r|
       changed_attributes = r.registration_history_change.each_with_object({}) do |change, attrs|
         attrs[change.key] = if change.key == 'event_ids'
                               JSON.parse(change.value) # Assuming 'event_ids' is stored as JSON array in `to`
