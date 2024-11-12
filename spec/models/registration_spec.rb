@@ -522,6 +522,18 @@ RSpec.describe Registration do
 
         expect(waiting_list.entries.count).to eq(5)
       end
+
+      it 'moves to the same position' do
+        reg5.update_lanes!({ user_id: reg5.user.id, competing: { waiting_list_position: 5 } }.with_indifferent_access, reg5.user)
+
+        expect(reg1.waiting_list_position).to eq(1)
+        expect(reg2.waiting_list_position).to eq(2)
+        expect(reg3.waiting_list_position).to eq(3)
+        expect(reg4.waiting_list_position).to eq(4)
+        expect(reg5.waiting_list_position).to eq(5)
+
+        expect(waiting_list.entries.count).to eq(5)
+      end
     end
   end
 end
