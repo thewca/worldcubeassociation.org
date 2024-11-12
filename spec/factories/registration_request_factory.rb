@@ -12,13 +12,13 @@ FactoryBot.define do
     user_id { nil }
     submitted_by { user_id }
     competition_id { nil }
-    competing { { 'event_ids' => events, 'lane_state' => 'pending' } }
+    competing { { 'event_ids' => events, 'competing_status' => 'pending' } }
 
     jwt_token { fetch_jwt_token(submitted_by) }
     guests { 0 }
 
     trait :comment do
-      competing { { 'event_ids' => events, 'comment' => raw_comment, 'lane_state' => 'pending' } }
+      competing { { 'event_ids' => events, 'comment' => raw_comment, 'competing_status' => 'pending' } }
     end
 
     trait :impersonation do
@@ -90,7 +90,7 @@ FactoryBot.define do
 
     requests do
       user_ids.map do |user_id|
-        FactoryBot.build(:update_request, user_id: user_id, competing: { 'status' => 'deleted' })
+        FactoryBot.build(:update_request, user_id: user_id, competing: { 'status' => 'cancelled' })
       end
     end
 

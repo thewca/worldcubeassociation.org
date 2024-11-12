@@ -32,18 +32,19 @@ module Registrations
         old_status = registration.competing_status
 
         ActiveRecord::Base.transaction do
-          update_status(registration, status)
           update_event_ids(registration, event_ids)
           registration.comments = comment if comment.present?
           registration.administrative_notes = admin_comment if admin_comment.present?
           registration.guests = guests if guests.present?
 
-          changes = registration.changes.transform_values { |change| change[1] }
-
           if old_status == Registrations::Helper::STATUS_WAITING_LIST || status == Registrations::Helper::STATUS_WAITING_LIST
             waiting_list = competition.waiting_list || competition.create_waiting_list(entries: [])
-            update_waiting_list(update_params, waiting_list)
+            update_waiting_list(update_params[:competing], registration, waiting_list)
           end
+
+          update_status(registration, status) # Update status after updating waiting list so that can access the old_status
+
+          changes = registration.changes.transform_values { |change| change[1] }
 
           if waiting_list_position.present?
             changes[:waiting_list_position] = waiting_list_position
@@ -61,41 +62,24 @@ module Registrations
         registration.reload
       end
 
-      def self.update_waiting_list(update_params, waiting_list)
-        user_id = update_params[:user_id]
-        status = update_params.dig('competing', 'status')
+      def self.update_waiting_list(competing_params, registration, waiting_list)
+        status = competing_params['status']
+        waiting_list_position = competing_params['waiting_list_position']
 
-        should_add = status == Registrations::Helper::STATUS_WAITING_LIST
-        should_move = update_params[:waiting_list_position].present?
-        should_remove = !should_add && !should_move
+        should_add = status == Registrations::Helper::STATUS_WAITING_LIST # TODO: Add case where waiting_list status is present but that matches the old_status
+        should_move = waiting_list_position.present? # TODO: Add case where waiting list pos is present but it matches the current position
+        should_remove = status.present? && registration.competing_status == Registrations::Helper::STATUS_WAITING_LIST &&
+                        status != Registrations::Helper::STATUS_WAITING_LIST # TODO: Consider adding cases for when not all of these are true?
 
-        waiting_list.add(user_id) if should_add
-        waiting_list.move_to_position(user_id, update_params[:waiting_list_position].to_i) if should_move
-        waiting_list.remove(user_id) if should_remove
+        waiting_list.add(registration.id) if should_add
+        waiting_list.move_to_position(registration.id, competing_params[:waiting_list_position].to_i) if should_move
+        waiting_list.remove(registration.id) if should_remove
       end
 
       def self.update_status(registration, status)
         return unless status.present?
 
-        registration.accepted_at = nil
-        registration.deleted_at = nil
-        registration.rejected_at = nil
-        registration.waitlisted_at = nil
-
-        case status
-        when Registrations::Helper::STATUS_WAITING_LIST
-          registration.waitlisted_at = Time.now.utc
-        when Registrations::Helper::STATUS_ACCEPTED
-          registration.accepted_at = Time.now.utc
-        when Registrations::Helper::STATUS_DELETED, Registrations::Helper::STATUS_CANCELLED
-          registration.deleted_at = Time.now.utc
-        when Registrations::Helper::STATUS_REJECTED
-          registration.rejected_at = Time.now.utc
-        when Registrations::Helper::STATUS_PENDING
-          # Pending means we set nothing
-        else
-          raise WcaExceptions::RegistrationError.new(:unprocessable_entity, Registrations::ErrorCodes::INVALID_REQUEST_DATA)
-        end
+        registration.competing_status = status
       end
 
       def self.send_status_change_email(registration, status, user_id, current_user_id)
