@@ -17,7 +17,6 @@ FactoryBot.define do
 
     competing_status { Registrations::Helper::STATUS_PENDING }
 
-
     trait :skip_validations do
       to_create { |instance| instance.save(validate: false) }
     end
