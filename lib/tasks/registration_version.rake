@@ -120,7 +120,8 @@ namespace :registration_version do
         # Migrate Waiting List
         waitlisted_competitors = competition.registrations.waitlisted
         ms_waiting_list = Microservices::Registrations.waiting_list_by_id(competition_id)
-        competition.create_waiting_list(entries: ms_waiting_list.map { |user_id| waitlisted_competitors.find_by!(user_id: user_id).id })
+        reg_lookup = waitlisted_competitors.pluck(:user_id, :id).to_h
+        competition.create_waiting_list(entries: ms_waiting_list.map { |user_id| reg_lookup[user_id] })
 
         competition.registration_version_v3!
       end
