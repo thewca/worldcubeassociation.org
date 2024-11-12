@@ -318,13 +318,15 @@ export default function CompetingStep({
             <label htmlFor="comment">
               {i18n.t('competitions.registration_v2.register.comment')}
               {' '}
-              (
-              <i>
-                {comment.length}
-                /
-                {maxCommentLength}
-              </i>
-              )
+              <div style={{ float: 'right', fontSize: '0.8em' }}>
+                <i>
+                  (
+                  {comment.length}
+                  /
+                  {maxCommentLength}
+                  )
+                </i>
+              </div>
             </label>
             <Form.TextArea
               required={Boolean(competitionInfo.force_comment_in_registration)}
