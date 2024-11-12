@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class Competition < ApplicationRecord
-  include MicroserviceRegistrationHolder
-
   self.table_name = "Competitions"
 
   # We need this default order, tests rely on it.
