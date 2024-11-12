@@ -453,9 +453,7 @@ class Competition < ApplicationRecord
   def registration_full?
     # TODO: V3-Reg cleanup, move this to registrations.accepted_and_paid_pending_count again
     competitor_count =
-      if uses_microservice_registrations?
-        Microservices::Registrations.competitor_count_by_competition(id)
-      elsif registration_version_v3?
+      if registration_version_v3?
         registrations.competing_status_accepted.count + registrations.competing_status_pending.with_payments.count
       else
         registrations.accepted_and_paid_pending_count
@@ -693,7 +691,6 @@ class Competition < ApplicationRecord
              'announced_by_user',
              'cancelled_by_user',
              'competition_payment_integrations',
-             'microservice_registrations',
              'venue_countries',
              'venue_continents',
              'waiting_list'
@@ -1030,11 +1027,7 @@ class Competition < ApplicationRecord
   end
 
   def any_registrations?
-    if uses_microservice_registrations?
-      Microservices::Registrations.competitor_count_by_competition(id) > 0
-    else
-      self.registrations.any?
-    end
+    self.registrations.any?
   end
 
   def registration_range_specified?
@@ -1172,9 +1165,7 @@ class Competition < ApplicationRecord
 
   def pending_competitors_count
     # TODO: V3-Reg Cleanup, we can go back to use registrations.pending when we are on v3
-    if uses_microservice_registrations?
-      Microservices::Registrations.registrations_by_competition(self.id, 'pending', cache: true).length
-    elsif registration_version_v3?
+    if registration_version_v3?
       registrations.competing_status_pending.count
     else
       registrations.pending.count
@@ -1639,19 +1630,11 @@ class Competition < ApplicationRecord
         raise "Unknown 'sort_by' in psych sheet computation: #{sort_by}"
       end
 
-      if self.uses_microservice_registrations?
-        # We deliberately don't go through the cached `microservice_registrations` table here, because then we
-        # would need to separately check which of the cached registrations are accepted
-        # and which of those are registered for the specified event. Querying the MS directly is much more efficient.
-        accepted_registrations = Microservices::Registrations.registrations_by_competition(self.id, 'accepted', event.id, cache: false)
-        registered_user_ids = accepted_registrations.map { |reg| reg['user_id'] }
-      else
-        registered_user_ids = self.registrations
-                                  .accepted
-                                  .includes(:registration_competition_events)
-                                  .where(registration_competition_events: { competition_event: competition_event })
-                                  .pluck(:user_id)
-      end
+      registered_user_ids = self.registrations
+                                .accepted
+                                .includes(:registration_competition_events)
+                                .where(registration_competition_events: { competition_event: competition_event })
+                                .pluck(:user_id)
 
       concise_results_date = ComputeAuxiliaryData.end_date || Date.current
       results_cache_key = ["psych-sheet", self.id, *registered_user_ids, concise_results_date]
@@ -1933,10 +1916,10 @@ class Competition < ApplicationRecord
       } },
       :wcif_extensions,
     ]
-    # V2 registrations store the event IDs in the microservice data, not in the monolith
-    includes_associations << :events unless self.uses_microservice_registrations?
 
-    registrations_relation = self.uses_microservice_registrations? ? self.microservice_registrations : self.registrations
+    includes_associations << :events
+
+    registrations_relation = self.registrations
 
     # NOTE: we're including non-competing registrations so that they can have job
     # assignments as well. These registrations don't have accepted?, but they
@@ -2088,13 +2071,13 @@ class Competition < ApplicationRecord
 
   # Takes an array of partial Person WCIF and updates the fields that are not immutable.
   def update_persons_wcif!(wcif_persons, current_user)
-    registrations_relation = self.uses_microservice_registrations? ? self.microservice_registrations : self.registrations
+    registrations_relation = self.registrations
     registration_includes = [
       { assignments: [:schedule_activity] },
       :user,
       :wcif_extensions,
     ]
-    registration_includes << :registration_competition_events unless self.uses_microservice_registrations?
+    registration_includes << :registration_competition_events
     registrations = registrations_relation.includes(registration_includes)
     competition_activities = all_activities
     new_assignments = []

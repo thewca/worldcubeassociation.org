@@ -121,9 +121,6 @@ class RegistrationsController < ApplicationController
 
   def import
     @competition = competition_from_params
-    if @competition.uses_microservice_registrations?
-      redirect_to Microservices::Registrations.registration_import_path(@competition.id)
-    end
   end
 
   def do_import
@@ -210,25 +207,16 @@ class RegistrationsController < ApplicationController
     end
     ActiveRecord::Base.transaction do
       user, locked_account_created = user_for_registration!(params[:registration_data])
-      if @competition.uses_microservice_registrations?
-        Microservices::Registrations.add_registration(@competition.id,
-                                                      user.id,
-                                                      params[:registration_data][:event_ids],
-                                                      params[:registration_data][:comments],
-                                                      "accepted",
-                                                      @current_user.id)
-      else
-        registration = @competition.registrations.find_or_initialize_by(user_id: user.id)
-        raise I18n.t("registrations.add.errors.already_registered") unless registration.new_record?
-        registration_comment = params.dig(:registration_data, :comments)
-        registration.assign_attributes(comments: registration_comment) if registration_comment.present?
-        registration.assign_attributes(accepted_at: Time.now, accepted_by: current_user.id)
-        params[:registration_data][:event_ids]&.each do |event_id|
-          competition_event = @competition.competition_events.find { |ce| ce.event_id == event_id }
-          registration.registration_competition_events.build(competition_event_id: competition_event.id)
-        end
-        registration.save!
+      registration = @competition.registrations.find_or_initialize_by(user_id: user.id)
+      raise I18n.t("registrations.add.errors.already_registered") unless registration.new_record?
+      registration_comment = params.dig(:registration_data, :comments)
+      registration.assign_attributes(comments: registration_comment) if registration_comment.present?
+      registration.assign_attributes(accepted_at: Time.now, accepted_by: current_user.id)
+      params[:registration_data][:event_ids]&.each do |event_id|
+        competition_event = @competition.competition_events.find { |ce| ce.event_id == event_id }
+        registration.registration_competition_events.build(competition_event_id: competition_event.id)
       end
+      registration.save!
       if locked_account_created
         RegistrationsMailer.notify_registrant_of_locked_account_creation(user, @competition).deliver_later
       end
