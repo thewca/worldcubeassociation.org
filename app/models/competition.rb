@@ -96,7 +96,7 @@ class Competition < ApplicationRecord
     restricted: 2,
   }, prefix: true
 
-  NEW_REG_SYSTEM_DEFAULT = :v2
+  NEW_REG_SYSTEM_DEFAULT = :v3
 
   enum :registration_version, [:v1, :v2, :v3], prefix: true, default: NEW_REG_SYSTEM_DEFAULT
 
