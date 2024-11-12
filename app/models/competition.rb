@@ -451,7 +451,15 @@ class Competition < ApplicationRecord
   end
 
   def registration_full?
-    competitor_count = uses_microservice_registrations? ? Microservices::Registrations.competitor_count_by_competition(id) : registrations.accepted_and_paid_pending_count
+    # TODO: V3-Reg cleanup, move this to registrations.accepted_and_paid_pending_count again
+    competitor_count =
+      if uses_microservice_registrations?
+        Microservices::Registrations.competitor_count_by_competition(id)
+      elsif registration_version_v3?
+        registrations.competing_status_accepted.count + registrations.competing_status_pending.with_payments.count
+      else
+        registrations.accepted_and_paid_pending_count
+      end
     competitor_limit_enabled? && competitor_count >= competitor_limit
   end
 
@@ -1160,6 +1168,17 @@ class Competition < ApplicationRecord
 
   def some_guests_allowed?
     guest_entry_status_restricted?
+  end
+
+  def pending_competitors_count
+    # TODO: V3-Reg Cleanup, we can go back to use registrations.pending when we are on v3
+    if uses_microservice_registrations?
+      Microservices::Registrations.registrations_by_competition(self.id, 'pending', cache: true).length
+    elsif registration_version_v3?
+      registrations.competing_status_pending.count
+    else
+      registrations.pending.count
+    end
   end
 
   def registration_period_required?
