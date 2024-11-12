@@ -371,7 +371,7 @@ RSpec.describe "registrations" do
 
         context "CSV registrant already in the database, but deleted" do
           it "acceptes the registration again" do
-            registration = FactoryBot.create(:registration, :deleted, competition: competition)
+            registration = FactoryBot.create(:registration, :cancelled, competition: competition)
             user = registration.user
             file = csv_file [
               ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
@@ -387,7 +387,7 @@ RSpec.describe "registrations" do
 
         context "registrant deleted in the database, but not in the CSV file" do
           it "leaves the registration unchanged" do
-            registration = FactoryBot.create(:registration, :deleted, competition: competition)
+            registration = FactoryBot.create(:registration, :cancelled, competition: competition)
             file = csv_file [
               ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
             ]

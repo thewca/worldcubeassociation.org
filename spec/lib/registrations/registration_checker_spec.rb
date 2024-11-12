@@ -314,7 +314,7 @@ RSpec.describe Registrations::RegistrationChecker do
       end
 
       it 'can register if they have a cancelled registration for another series comp' do
-        registration = FactoryBot.create(:registration, :deleted) # TODO: We need to bring in the new registration statuses
+        registration = FactoryBot.create(:registration, :cancelled) # TODO: We need to bring in the new registration statuses
 
         series = FactoryBot.create(:competition_series)
         competitionA = registration.competition
@@ -1378,7 +1378,7 @@ RSpec.describe Registrations::RegistrationChecker do
       end
 
       it 'user can change state from cancelled to pending' do
-        deleted_reg = FactoryBot.create(:registration, :deleted, competition: default_competition)
+        deleted_reg = FactoryBot.create(:registration, :cancelled, competition: default_competition)
 
         update_request = FactoryBot.build(
           :update_request,
@@ -2225,7 +2225,7 @@ RSpec.describe Registrations::RegistrationChecker do
         )
       }
 
-      let(:registrationB) { FactoryBot.create(:registration, :deleted, competition: competitionB, user_id: registrationA.user.id) }
+      let(:registrationB) { FactoryBot.create(:registration, :cancelled, competition: competitionB, user_id: registrationA.user.id) }
 
       before do
         competitionA.update!(competition_series: series)
