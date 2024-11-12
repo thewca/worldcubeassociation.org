@@ -486,11 +486,12 @@ RSpec.describe Registration do
       let(:reg5) { FactoryBot.create(:registration, :waiting_list, competition: competition) }
 
       before do
-        waiting_list.add(reg1.id)
-        waiting_list.add(reg2.id)
-        waiting_list.add(reg3.id)
-        waiting_list.add(reg4.id)
-        waiting_list.add(reg5.id)
+        # If we don't reload they don't show up on the waiting list
+        reg1.reload
+        reg2.reload
+        reg3.reload
+        reg4.reload
+        reg5.reload
       end
 
       it 'adds to waiting list' do
@@ -504,7 +505,7 @@ RSpec.describe Registration do
         reg4.update_lanes!({ user_id: reg4.user.id, competing: { status: 'pending' } }.with_indifferent_access, reg4.user)
         reg4.reload
         expect(reg4.waiting_list_position).to eq(nil)
-        expect(waiting_list.entries.count).to eq(4)
+        expect(waiting_list.reload.entries.count).to eq(4)
       end
 
       it 'moves backwards in waiting list' do

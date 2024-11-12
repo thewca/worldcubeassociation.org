@@ -37,14 +37,14 @@ module Registrations
           registration.administrative_notes = admin_comment if admin_comment.present?
           registration.guests = guests if guests.present?
 
-          changes = registration.changes.transform_values { |change| change[1] }
-
           if old_status == Registrations::Helper::STATUS_WAITING_LIST || status == Registrations::Helper::STATUS_WAITING_LIST
             waiting_list = competition.waiting_list || competition.create_waiting_list(entries: [])
             update_waiting_list(update_params[:competing], registration, waiting_list)
           end
 
           update_status(registration, status) # Update status after updating waiting list so that can access the old_status
+
+          changes = registration.changes.transform_values { |change| change[1] }
 
           if waiting_list_position.present?
             changes[:waiting_list_position] = waiting_list_position

@@ -151,12 +151,14 @@ RSpec.describe 'API Registrations' do
         competition_id: competition.id,
       )
 
+      puts "registration status: #{registration1.competing_status}"
+
       headers = { 'Authorization' => bulk_update_request['jwt_token'] }
       patch api_v1_registrations_bulk_update_path, params: bulk_update_request, headers: headers
 
       expect(response.status).to eq(200)
 
-      registration = Registration.find_by(user_id: user1.id)
+      registration = Registration.find_by(user_id: registration1.user_id)
 
       expect(registration.competing_status).to eq('cancelled')
 
