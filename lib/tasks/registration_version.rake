@@ -26,8 +26,8 @@ namespace :registration_version do
           if registration.paid_entry_fees > 0
             registration.registration_payments.each do |payment|
               # If the payments were made after November 6th we already have history entries for it
-              if payment.created_at < Time.new(year: 2024, month: 11, day: 6)
-                registration.add_history_entry({ payment_status: payment.payment_status, payment_amount_iso: payment.amount }, "user", payment.receipt.initiated_by, "V2 Migration", payment.created_at)
+              if payment.created_at < Time.new(2024, 11, 6)
+                registration.add_history_entry({ payment_status: payment.payment_status, iso_amount: payment.amount }, "user", payment.receipt.initiated_by, "V2 Migration", payment.created_at)
               end
             end
           end
