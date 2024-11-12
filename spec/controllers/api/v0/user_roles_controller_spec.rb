@@ -119,7 +119,7 @@ RSpec.describe Api::V0::UserRolesController do
           userId: user_to_be_banned_with_future_comps.id,
           groupType: UserGroup.group_types[:banned_competitors],
         }
-        upcoming_comps_for_user = user_to_be_banned_with_future_comps.competitions_registered_for.not_over.merge(Registration.not_deleted).pluck(:id)
+        upcoming_comps_for_user = user_to_be_banned_with_future_comps.competitions_registered_for.not_over.merge(Registration.not_cancelled).pluck(:id)
         expect(response).to have_http_status(422)
         response_json = JSON.parse(response.body)
         expect(response_json["error"]).to eq "The user has upcoming competitions: #{upcoming_comps_for_user.join(', ')}. Before banning the user, make sure their registrations are deleted."

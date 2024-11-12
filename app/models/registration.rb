@@ -1,20 +1,18 @@
 # frozen_string_literal: true
 
 class Registration < ApplicationRecord
-  scope :pending, -> { where(accepted_at: nil, deleted_at: nil, is_competing: true) }
-  scope :accepted, -> { where.not(accepted_at: nil).where(deleted_at: nil) }
-  scope :deleted, -> { where.not(deleted_at: nil) }
+  # TODO: Reg-V3 Cleanup: Remove all these and use the competing_status_{status} scopes
+  scope :pending, -> { where(competing_status: 'pending') }
+  scope :accepted, -> { where(competing_status: 'accepted') }
   scope :cancelled, -> { where(competing_status: 'cancelled') }
   scope :rejected, -> { where(competing_status: 'rejected') }
   scope :waitlisted, -> { where(competing_status: 'waiting_list') }
   scope :non_competing, -> { where(is_competing: false) }
-  scope :not_deleted, -> { where(deleted_at: nil) }
+  scope :not_cancelled, -> { where.not(competing_status: 'cancelled') }
   scope :with_payments, -> { joins(:registration_payments).distinct }
 
   belongs_to :competition
   belongs_to :user, optional: true # A user may be deleted later. We only enforce validation directly on creation further down below.
-  belongs_to :accepted_user, foreign_key: "accepted_by", class_name: "User", optional: true
-  belongs_to :deleted_user, foreign_key: "deleted_by", class_name: "User", optional: true
   has_many :registration_history_entries, dependent: :destroy
   has_many :registration_competition_events
   has_many :registration_payments
@@ -42,13 +40,6 @@ class Registration < ApplicationRecord
 
   validates_numericality_of :guests, less_than_or_equal_to: :guest_limit, if: :check_guest_limit?
 
-  validate :registration_cannot_be_deleted_and_accepted_simultaneously
-  private def registration_cannot_be_deleted_and_accepted_simultaneously
-    if deleted? && accepted?
-      errors.add(:registration_competition_events, I18n.t('registrations.errors.cannot_be_deleted_and_accepted'))
-    end
-  end
-
   after_save :mark_registration_processing_as_done
 
   private def mark_registration_processing_as_done
@@ -67,10 +58,6 @@ class Registration < ApplicationRecord
     competition.present? && competition.guests_per_registration_limit_enabled?
   end
 
-  def deleted?
-    !deleted_at.nil?
-  end
-
   def rejected?
     competing_status_rejected?
   end
@@ -84,29 +71,15 @@ class Registration < ApplicationRecord
   end
 
   def accepted?
-    !accepted_at.nil? && !deleted?
+    competing_status_accepted?
   end
 
   def pending?
-    !accepted? && !deleted? && !waitlisted? && !rejected? && is_competing?
+    competing_status_pending?
   end
 
   def might_attend?
     waitlisted? || pending? || accepted?
-  end
-
-  def self.status_from_timestamp(accepted_at, deleted_at)
-    if !accepted_at.nil? && deleted_at.nil?
-      :accepted
-    elsif accepted_at.nil? && deleted_at.nil?
-      :pending
-    else
-      :deleted
-    end
-  end
-
-  def checked_status
-    Registration.status_from_timestamp(accepted_at, deleted_at)
   end
 
   def new_or_deleted?
@@ -236,12 +209,6 @@ class Registration < ApplicationRecord
     end
   end
 
-  def waiting_list_info
-    pending_registrations = competition.registrations.pending.order(:created_at)
-    index = pending_registrations.index(self)
-    Hash.new(index: index, length: pending_registrations.length)
-  end
-
   def waiting_list_position
     competition.waiting_list.position(id)
   end
@@ -251,24 +218,10 @@ class Registration < ApplicationRecord
     # TODO: WCIF spec needs to be updated - and possibly versioned - to include new statuses
     if accepted? || !is_competing?
       'accepted'
-    elsif deleted? || rejected?
+    elsif cancelled? || rejected?
       'deleted'
     elsif pending? || waitlisted?
       'pending'
-    end
-  end
-
-  def compute_competing_status
-    if accepted? || !is_competing?
-      Registrations::Helper::STATUS_ACCEPTED
-    elsif deleted?
-      Registrations::Helper::STATUS_CANCELLED
-    elsif rejected?
-      Registrations::Helper::STATUS_REJECTED
-    elsif pending?
-      Registrations::Helper::STATUS_PENDING
-    elsif waitlisted?
-      Registrations::Helper::STATUS_WAITING_LIST
     end
   end
 
