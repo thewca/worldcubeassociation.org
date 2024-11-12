@@ -14,14 +14,12 @@ RSpec.describe WaitingList do
   describe 'add to waiting list' do
     it 'first competitor in the waiting list gets set to position 1' do
       registration = FactoryBot.create(:registration, :waiting_list, competition: competition)
-      waiting_list.add(registration.id)
       expect(competition.waiting_list.entries[0]).to eq(registration.id)
     end
 
     it 'second competitor gets set to position 2' do
-      waiting_list.add(FactoryBot.create(:registration, :waiting_list, competition: competition).id)
+      FactoryBot.create(:registration, :waiting_list, competition: competition).id
       registration = FactoryBot.create(:registration, :waiting_list, competition: competition)
-      waiting_list.add(registration.id)
       expect(competition.waiting_list.entries[1]).to eq(registration.id)
     end
   end
@@ -34,16 +32,16 @@ RSpec.describe WaitingList do
     let(:reg5) { FactoryBot.create(:registration, :waiting_list, competition: competition) }
 
     before do
-      waiting_list.add(reg1.id)
-      waiting_list.add(reg2.id)
-      waiting_list.add(reg3.id)
-      waiting_list.add(reg4.id)
-      waiting_list.add(reg5.id)
+      # If we don't reload the registrations, they don't show up on the waiting list until they're accessed
+      reg1.reload
+      reg2.reload
+      reg3.reload
+      reg4.reload
+      reg5.reload
     end
 
     it 'waiting list position gives position, not index' do
       registration = FactoryBot.create(:registration, :waiting_list, competition: competition)
-      waiting_list.add(registration.id)
       expect(registration.waiting_list_position).to eq(6)
     end
 

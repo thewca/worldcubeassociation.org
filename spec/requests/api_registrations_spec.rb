@@ -327,13 +327,6 @@ RSpec.describe 'API Registrations' do
     let!(:registration5) { FactoryBot.create(:registration, :waiting_list, competition: competition, user: user5) }
     let!(:registration6) { FactoryBot.create(:registration, :waiting_list, competition: competition, user: user6) }
 
-    before do
-      FactoryBot.create(:waiting_list, holder: competition)
-      competition.waiting_list.add(registration4.user_id)
-      competition.waiting_list.add(registration5.user_id)
-      competition.waiting_list.add(registration6.user_id)
-    end
-
     it 'returns multiple registrations' do
       headers = { 'Authorization' => fetch_jwt_token(competition.organizers.first.id) }
       get api_v1_registrations_list_admin_path(competition_id: competition.id), headers: headers
