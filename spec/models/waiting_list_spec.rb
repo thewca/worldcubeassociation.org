@@ -13,7 +13,8 @@ RSpec.describe WaitingList do
 
   describe 'add to waiting list' do
     it 'first competitor in the waiting list gets set to position 1' do
-      registration = FactoryBot.create(:registration, :waiting_list, competition: competition)
+      registration = FactoryBot.create(:registration, :pending, competition: competition)
+      waiting_list.add(registration.id)
       expect(competition.waiting_list.entries[0]).to eq(registration.id)
     end
 
@@ -21,6 +22,12 @@ RSpec.describe WaitingList do
       FactoryBot.create(:registration, :waiting_list, competition: competition).id
       registration = FactoryBot.create(:registration, :waiting_list, competition: competition)
       expect(competition.waiting_list.entries[1]).to eq(registration.id)
+    end
+
+    it 'doesnt get added if the registration is already on the list' do
+      registration = FactoryBot.create(:registration, :waiting_list, competition: competition)
+      waiting_list.add(registration.id)
+      expect(waiting_list.entries.count).to eq(1)
     end
   end
 

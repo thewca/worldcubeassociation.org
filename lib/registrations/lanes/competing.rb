@@ -66,7 +66,7 @@ module Registrations
         status = competing_params['status']
         waiting_list_position = competing_params['waiting_list_position']
 
-        should_add = status == Registrations::Helper::STATUS_WAITING_LIST # TODO: Add case where waiting_list status is present but that matches the old_status
+        should_add = status == Registrations::Helper::STATUS_WAITING_LIST && registration.waiting_list_position.nil?
         should_move = waiting_list_position.present? # TODO: Add case where waiting list pos is present but it matches the current position
         should_remove = status.present? && registration.competing_status == Registrations::Helper::STATUS_WAITING_LIST &&
                         status != Registrations::Helper::STATUS_WAITING_LIST # TODO: Consider adding cases for when not all of these are true?
