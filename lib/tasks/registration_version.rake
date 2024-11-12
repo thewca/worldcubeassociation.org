@@ -115,12 +115,12 @@ namespace :registration_version do
           ms_history['entries'].each do |entry|
             new_registration.add_history_entry(entry['changed_attributes'], entry['actor_type'], entry['actor_id'], entry['action'], entry['timestamp'])
           end
-
-          # Migrate Waiting List
-          waitlisted_competitors = competition.registrations.waitlisted
-          ms_waiting_list = Microservices::Registrations.waiting_list_by_id(competition_id)
-          competition.create_waiting_list(entries: ms_waiting_list.map { |user_id| waitlisted_competitors.find_by!(user_id: user_id).id })
         end
+
+        # Migrate Waiting List
+        waitlisted_competitors = competition.registrations.waitlisted
+        ms_waiting_list = Microservices::Registrations.waiting_list_by_id(competition_id)
+        competition.create_waiting_list(entries: ms_waiting_list.map { |user_id| waitlisted_competitors.find_by!(user_id: user_id).id })
 
         competition.registration_version_v3!
       end
