@@ -68,7 +68,7 @@ class Registration < ApplicationRecord
   end
 
   def deleted?
-    !deleted_at.nil?
+    competing_status_deleted? || !deleted_at.nil?
   end
 
   def rejected?
@@ -84,7 +84,7 @@ class Registration < ApplicationRecord
   end
 
   def accepted?
-    !accepted_at.nil? && !deleted?
+    competing_status_accepted? || (!accepted_at.nil? && !deleted?)
   end
 
   def pending?
