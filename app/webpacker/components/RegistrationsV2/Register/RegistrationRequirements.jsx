@@ -21,6 +21,7 @@ export default function RegistrationRequirements({ nextStep, competitionInfo }) 
         ) }
         <Message positive>
           <Form.Checkbox
+            id="regRequirementsCheckbox"
             checked={infoAcknowledged}
             onClick={setInfoAcknowledged}
             label={i18n.t('competitions.registration_v2.requirements.acknowledgement')}

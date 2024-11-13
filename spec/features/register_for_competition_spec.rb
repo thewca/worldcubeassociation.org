@@ -2,6 +2,10 @@
 
 require "rails_helper"
 
+def reg_requirements_checkbox
+  all(:css, "label[for='regRequirementsCheckbox']").last
+end
+
 RSpec.feature "Registering for a competition" do
   let!(:user) { FactoryBot.create :user }
   let!(:delegate) { FactoryBot.create :delegate }
@@ -14,21 +18,30 @@ RSpec.feature "Registering for a competition" do
 
     scenario "User registers for a competition" do
       visit competition_register_path(competition)
-      check "registration_competition_events_333"
+      reg_requirements_checkbox.click
+      click_button "Continue to next Step"
+      click_button "checkbox-333"
       click_button "Register!"
-      expect(page).to have_text("Registration form submitted - make sure to follow all instructions from the Registration Requirements below to ensure your registration is complete.")
+      expect(page).to have_text("Your registration is pending approval by the organizers.")
       registration = competition.registrations.find_by_user_id(user.id)
-      expect(registration).not_to eq nil
+      expect(registration).not_to be_nil
     end
 
     scenario "User registers for a competition with invalid guest info" do
       visit competition_register_path(competition)
-      fill_in "Guests", with: "-1"
+      reg_requirements_checkbox.click
+      click_button "Continue to next Step"
+      fill_in "Guests", with: "123"
       click_button "Register!"
-      expect(page).to have_text("Guests must be greater than or equal to 0")
+      # The browser handles the input field validation client-side.
+      #   We check that "some validation happens" by making sure the browser did not let the user register.
+      expect(page).to have_text("Register!")
+      # Now fill in valid guest information, assume that the registration still blocks because of events.
+      fill_in "Guests", with: "2"
+      click_button "Register!"
       expect(page).to have_text(I18n.t('registrations.errors.must_register'))
       registration = competition.registrations.find_by_user_id(user.id)
-      expect(registration).to eq nil
+      expect(registration).to be_nil
     end
 
     scenario "User with preferred events goes to register page" do
@@ -36,9 +49,11 @@ RSpec.feature "Registering for a competition" do
       competition.update_attribute :events, Event.where(id: %w(444 555 666))
 
       visit competition_register_path(competition)
-      expect(find("#registration_competition_events_444")).to be_checked
-      expect(find("#registration_competition_events_555")).to be_checked
-      expect(find("#registration_competition_events_666")).to_not be_checked
+      reg_requirements_checkbox.click
+      click_button "Continue to next Step"
+      expect(find("#checkbox-444")).to match_selector(".active")
+      expect(find("#checkbox-555")).to match_selector(".active")
+      expect(find("#checkbox-666")).to_not match_selector(".active")
     end
 
     context "editing registration" do
