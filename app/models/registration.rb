@@ -68,7 +68,7 @@ class Registration < ApplicationRecord
   end
 
   def deleted?
-    cancelled? || rejected? || !deleted_at.nil?
+    !deleted_at.nil?
   end
 
   def rejected?
@@ -84,7 +84,7 @@ class Registration < ApplicationRecord
   end
 
   def accepted?
-    competing_status_accepted? || (!accepted_at.nil? && !deleted?)
+    !accepted_at.nil? && !deleted?
   end
 
   def pending?
@@ -249,9 +249,9 @@ class Registration < ApplicationRecord
   def wcif_status
     # Non-competing staff are treated as accepted.
     # TODO: WCIF spec needs to be updated - and possibly versioned - to include new statuses
-    if accepted? || !is_competing?
+    if accepted? || competing_status_accepted? || !is_competing?
       'accepted'
-    elsif deleted? || rejected?
+    elsif deleted? || rejected? || cancelled?
       'deleted'
     elsif pending? || waitlisted?
       'pending'
