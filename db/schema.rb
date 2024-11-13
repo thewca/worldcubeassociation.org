@@ -1019,8 +1019,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_12_161111) do
     t.text "roles"
     t.boolean "is_competing", default: true
     t.text "administrative_notes"
-    t.datetime "rejected_at"
-    t.datetime "waitlisted_at"
     t.string "competing_status", default: "pending", null: false
     t.index ["competition_id", "user_id"], name: "index_registrations_on_competition_id_and_user_id", unique: true
     t.index ["competition_id"], name: "index_registrations_on_competition_id"
