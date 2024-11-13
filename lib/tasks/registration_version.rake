@@ -66,12 +66,16 @@ namespace :registration_version do
       ActiveRecord::Base.transaction do
         competition.microservice_registrations.includes(:payment_intents).each do |registration|
           puts "Creating registration for user: #{registration.user_id}"
-          new_registration = Registration.build(competition_id: competition_id,
-                                                user_id: registration.user_id,
-                                                comments: registration.comments,
-                                                guests: registration.guests,
-                                                competing_status: registration.competing_status,
-                                                administrative_notes: registration.administrative_notes) do |reg|
+          new_registration = Registration.build(
+            competition_id: competition_id,
+            user_id: registration.user_id,
+            comments: registration.comments,
+            guests: registration.guests,
+            competing_status: registration.competing_status,
+            administrative_notes: registration.administrative_notes,
+            roles: registration.roles,
+            is_competing: registration.is_competing?,
+          ) do |reg|
             puts "Microservice reports (#{registration.event_ids.count}) event_ids: #{registration.event_ids.inspect}"
 
             registered_events = competition.competition_events.where(event_id: registration.event_ids)
