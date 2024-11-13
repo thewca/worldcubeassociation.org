@@ -65,7 +65,8 @@ namespace :registration_version do
     LogTask.log_task("Migrating Registrations for Competition #{competition_id}") do
       ActiveRecord::Base.transaction do
         competition.microservice_registrations.includes(:payment_intents).each do |registration|
-          new_registration = Registration.create!(competition_id: competition_id,
+          puts "Creating registration for user: #{user_id}"
+          new_registration = Registration.new(competition_id: competition_id,
                                                   user_id: registration.user_id,
                                                   comments: registration.comments,
                                                   guests: registration.guests,
@@ -74,6 +75,10 @@ namespace :registration_version do
                                                   registration_competition_events: registration.event_ids.map do |event_id|
                                                     RegistrationCompetitionEvent.build(competition_event: competition.competition_events.find { |ce| ce.event_id == event_id })
                                                   end)
+
+          puts "Registration built: #{new_registration.inspect}"
+          new_registration.save!
+
 
           # Point any payments to the new holder
           if competition.using_payment_integrations?
