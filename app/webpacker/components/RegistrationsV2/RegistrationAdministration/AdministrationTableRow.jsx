@@ -12,7 +12,7 @@ import {
 import EventIcon from '../../wca/EventIcon';
 import { editRegistrationUrl, editPersonUrl, personUrl } from '../../../lib/requests/routes.js.erb';
 import { isoMoneyToHumanReadable } from '../../../lib/helpers/money';
-import { countries } from "../../../lib/wca-data.js.erb";
+import { countries } from '../../../lib/wca-data.js.erb';
 
 // Semantic Table only allows truncating _all_ columns in a table in
 // single line fixed mode. As we only want to truncate the comment/admin notes
@@ -21,21 +21,23 @@ import { countries } from "../../../lib/wca-data.js.erb";
 const truncateComment = (comment) => (comment?.length > 12 ? `${comment.slice(0, 12)}...` : comment);
 
 function RegistrationTime({
-  timestamp, registeredOn, paymentStatus, paidOn, usesPaymentIntegration,
+  timestamp, registeredOn, paymentStatuses, paidOn, usesPaymentIntegration,
 }) {
   if (timestamp) {
     return getRegistrationTimestamp(paidOn ?? registeredOn);
   }
 
-  if (usesPaymentIntegration && paymentStatus !== 'succeeded') {
+  const mostRecentPaymentStatus = paymentStatuses ? paymentStatuses[0] : 'unpaid';
+
+  if (usesPaymentIntegration && mostRecentPaymentStatus !== 'succeeded') {
     let content = i18n.t('registrations.list.payment_requested_on', { date: getRegistrationTimestamp(registeredOn) });
     let trigger = <span>{i18n.t('registrations.list.not_paid')}</span>;
 
-    if (paymentStatus === 'initialized') {
+    if (mostRecentPaymentStatus === 'initialized') {
       content = i18n.t('competitions.registration_v2.list.payment.initialized', { date: getRegistrationTimestamp(paidOn) });
     }
 
-    if (paymentStatus === 'refund') {
+    if (mostRecentPaymentStatus === 'refund') {
       content = i18n.t('competitions.registration_v2.list.payment.refunded', { date: getRegistrationTimestamp(paidOn) });
       trigger = <span>{i18n.t('competitions.registration_v2.list.payment.refunded_status')}</span>;
     }
@@ -78,8 +80,9 @@ export default function TableRow({
   const {
     payment_amount_iso: paymentAmount,
     updated_at: updatedAt,
-    payment_status: paymentStatus,
-  } = registration.payment;
+    payment_statuses: paymentStatuses,
+    has_paid: hasPaid,
+  } = registration.payment ?? {};
 
   const copyEmail = () => {
     navigator.clipboard.writeText(emailAddress);
@@ -150,17 +153,17 @@ export default function TableRow({
                 timestamp={timestamp}
                 paidOn={updatedAt}
                 registeredOn={registeredOn}
-                paymentStatus={paymentStatus}
+                paymentStatuses={paymentStatuses}
                 usesPaymentIntegration={competitionInfo['using_payment_integrations?']}
               />
             </Table.Cell>
 
             {competitionInfo['using_payment_integrations?'] && (
-              <Table.Cell>
-                {paymentStatus === 'succeeded'
-                  ? isoMoneyToHumanReadable(paymentAmount, competitionInfo.currency_code)
-                  : ''}
-              </Table.Cell>
+            <Table.Cell>
+              {hasPaid
+                ? isoMoneyToHumanReadable(paymentAmount, competitionInfo.currency_code)
+                : ''}
+            </Table.Cell>
             )}
 
             {events ? (

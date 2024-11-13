@@ -41,10 +41,6 @@ Rails.application.routes.draw do
     delete 'users/sign-out-other' => 'sessions#destroy_other', as: :destroy_other_user_sessions
   end
 
-  # TODO: This can be removed after deployment, this is so we don't have any users error out if they click on pay
-  # while the deployment happens
-  get 'registration/:id/payment-completion' => 'registrations#payment_completion_legacy', as: :registration_payment_completion_legacy
-
   post 'registration/:id/load-payment-intent/:payment_integration' => 'registrations#load_payment_intent', as: :registration_payment_intent
   post 'competitions/:competition_id/refund/:payment_integration/:payment_id' => 'registrations#refund_payment', as: :registration_payment_refund
   get 'competitions/:competition_id/payment-completion' => 'registrations#payment_completion', as: :registration_payment_completion
@@ -336,17 +332,17 @@ Rails.application.routes.draw do
       end
     end
 
-    if Rails.env.local?
-      namespace :v1 do
-        namespace :registrations do
-          get '/register', to: 'registrations#show'
-          post '/register', to: 'registrations#create'
-          patch '/register', to: 'registrations#update'
-          patch '/bulk_update', to: 'registrations#bulk_update'
-          get '/:competition_id', to: 'registrations#list'
-          get '/:competition_id/admin', to: 'registrations#list_admin', as: :list_admin
-          get '/:competition_id/payment', to: 'registrations#payment_ticket', as: :payment_ticket
-        end
+    # While this is the start of a v1 API, this is currently not usable by outside developers as
+    # getting a JWT token requires you to be logged in through the Website
+    namespace :v1 do
+      namespace :registrations do
+        get '/register', to: 'registrations#show'
+        post '/register', to: 'registrations#create'
+        patch '/register', to: 'registrations#update'
+        patch '/bulk_update', to: 'registrations#bulk_update'
+        get '/:competition_id', to: 'registrations#list'
+        get '/:competition_id/admin', to: 'registrations#list_admin', as: :list_admin
+        get '/:competition_id/payment', to: 'registrations#payment_ticket', as: :payment_ticket
       end
     end
 
@@ -365,6 +361,7 @@ Rails.application.routes.draw do
       get '/search/regulations' => 'api#regulations_search'
       get '/search/incidents' => 'api#incidents_search'
       get '/users' => 'users#show_users_by_id'
+      post '/users' => 'users#show_users_by_id'
       get '/users/me' => 'users#show_me'
       get '/users/me/personal_records' => 'users#personal_records'
       get '/users/me/preferred_events' => 'users#preferred_events'

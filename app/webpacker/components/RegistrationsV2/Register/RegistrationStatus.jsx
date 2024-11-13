@@ -21,10 +21,10 @@ function registrationIconByStatus(registrationStatus) {
 // If we add these strings to en.yml immediately, translators will get a notification asking them
 //   to translate these strings during our test mode deployment. But we aren't even sure whether
 //   we want to keep these strings. So we hard-code them "for now" (when did that ever go wrong?)
-function canIBookPlaneTickets(registrationStatus, paymentStatus, competitionInfo) {
+function canIBookPlaneTickets(registrationStatus, hasPaid, competitionInfo) {
   switch (registrationStatus) {
     case 'pending':
-      if (competitionInfo['using_payment_integrations?'] && paymentStatus !== 'succeeded') {
+      if (competitionInfo['using_payment_integrations?'] && !hasPaid) {
         return i18n.t('competitions.registration_v2.info.payment_missing');
       }
       return i18n.t('competitions.registration_v2.info.needs_approval');
@@ -64,7 +64,7 @@ function RegistrationStatusMessage({ registration, competitionInfo }) {
         <p>
           {canIBookPlaneTickets(
             registration.competing.registration_status,
-            registration.payment?.payment_status,
+            registration.payment?.has_paid,
             competitionInfo,
           )}
         </p>

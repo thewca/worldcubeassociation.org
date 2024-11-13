@@ -769,7 +769,7 @@ class CompetitionsController < ApplicationController
       return render json: { error: "Already announced" }
     end
 
-    competition.update!(announced_at: Time.now, announced_by: current_user.id)
+    competition.update!(announced_at: Time.now, announced_by: current_user.id, showAtAll: true)
 
     competition.organizers.each do |organizer|
       CompetitionsMailer.notify_organizer_of_announced_competition(competition, organizer).deliver_later

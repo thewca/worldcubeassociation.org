@@ -314,7 +314,7 @@ RSpec.describe Registrations::RegistrationChecker do
       end
 
       it 'can register if they have a cancelled registration for another series comp' do
-        registration = FactoryBot.create(:registration, :deleted) # TODO: We need to bring in the new registration statuses
+        registration = FactoryBot.create(:registration, :cancelled) # TODO: We need to bring in the new registration statuses
 
         series = FactoryBot.create(:competition_series)
         competitionA = registration.competition
@@ -1255,10 +1255,66 @@ RSpec.describe Registrations::RegistrationChecker do
         end
       end
 
-      it 'organizer cant accept a user when registration list is full' do
+      it 'organizer can accept registrations when there is no competitor limit' do
+        no_competitor_limit = FactoryBot.create(:competition, :with_organizer)
+        registration = FactoryBot.create(:registration, competition: no_competitor_limit)
+
+        update_request = FactoryBot.build(
+          :update_request,
+          user_id: registration.user_id,
+          competition_id: registration.competition.id,
+          submitted_by: no_competitor_limit.organizers.first.id,
+          competing: { 'status' => 'accepted' },
+        )
+
+        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, Competition.find(update_request['competition_id']), User.find(update_request['submitted_by'])) }
+          .not_to raise_error
+      end
+
+      it 'only considers regstrations from current comp when calculating accepted registrations' do
+        competitor_limit = FactoryBot.create(:competition, :with_competitor_limit, :with_organizer, competitor_limit: 3)
+        limited_reg = FactoryBot.create(:registration, competition: competitor_limit)
+        FactoryBot.create_list(:registration, 2, :accepted, competition: competitor_limit)
+        FactoryBot.create_list(:registration, 17, :accepted)
+
+        update_request = FactoryBot.build(
+          :update_request,
+          user_id: limited_reg.user_id,
+          competition_id: limited_reg.competition.id,
+          submitted_by: competitor_limit.organizers.first.id,
+          competing: { 'status' => 'accepted' },
+        )
+
+        expect {
+          Registrations::RegistrationChecker.update_registration_allowed!(update_request, Competition.find(update_request['competition_id']), User.find(update_request['submitted_by']))
+        }.not_to raise_error
+      end
+
+      it 'organizer cant accept a user when registration list is exactly full' do
         competitor_limit = FactoryBot.create(:competition, :with_competitor_limit, :with_organizer, competitor_limit: 3)
         limited_reg = FactoryBot.create(:registration, competition: competitor_limit)
         FactoryBot.create_list(:registration, 3, :accepted, competition: competitor_limit)
+
+        update_request = FactoryBot.build(
+          :update_request,
+          user_id: limited_reg.user_id,
+          competition_id: limited_reg.competition.id,
+          submitted_by: competitor_limit.organizers.first.id,
+          competing: { 'status' => 'accepted' },
+        )
+
+        expect {
+          Registrations::RegistrationChecker.update_registration_allowed!(update_request, Competition.find(update_request['competition_id']), User.find(update_request['submitted_by']))
+        }.to raise_error(WcaExceptions::RegistrationError) do |error|
+          expect(error.error).to eq(Registrations::ErrorCodes::COMPETITOR_LIMIT_REACHED)
+          expect(error.status).to eq(:forbidden)
+        end
+      end
+
+      it 'organizer cant accept a user when registration list is over full' do
+        competitor_limit = FactoryBot.create(:competition, :with_competitor_limit, :with_organizer, competitor_limit: 3)
+        limited_reg = FactoryBot.create(:registration, competition: competitor_limit)
+        FactoryBot.create_list(:registration, 4, :accepted, competition: competitor_limit)
 
         update_request = FactoryBot.build(
           :update_request,
@@ -1298,7 +1354,7 @@ RSpec.describe Registrations::RegistrationChecker do
           :update_request,
           user_id: default_registration.user_id,
           competition_id: default_registration.competition.id,
-          competing: { 'status' => 'deleted' },
+          competing: { 'status' => 'cancelled' },
         )
 
         expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, Competition.find(update_request['competition_id']), User.find(update_request['submitted_by'])) }
@@ -1322,7 +1378,7 @@ RSpec.describe Registrations::RegistrationChecker do
       end
 
       it 'user can change state from cancelled to pending' do
-        deleted_reg = FactoryBot.create(:registration, :deleted, competition: default_competition)
+        deleted_reg = FactoryBot.create(:registration, :cancelled, competition: default_competition)
 
         update_request = FactoryBot.build(
           :update_request,
@@ -1345,7 +1401,7 @@ RSpec.describe Registrations::RegistrationChecker do
           :update_request,
           user_id: accepted_reg.user_id,
           competition_id: accepted_reg.competition.id,
-          competing: { 'status' => 'deleted' },
+          competing: { 'status' => 'cancelled' },
         )
 
         expect {
@@ -1366,7 +1422,7 @@ RSpec.describe Registrations::RegistrationChecker do
           :update_request,
           user_id: not_accepted_reg.user_id,
           competition_id: not_accepted_reg.competition.id,
-          competing: { 'status' => 'deleted' },
+          competing: { 'status' => 'cancelled' },
         )
 
         expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, Competition.find(update_request['competition_id']), User.find(update_request['submitted_by'])) }
@@ -1383,7 +1439,7 @@ RSpec.describe Registrations::RegistrationChecker do
           :update_request,
           user_id: registration.user_id,
           competition_id: registration.competition.id,
-          competing: { 'status' => 'deleted' },
+          competing: { 'status' => 'cancelled' },
         )
 
         expect {
@@ -1405,7 +1461,7 @@ RSpec.describe Registrations::RegistrationChecker do
           user_id: registration.user_id,
           competition_id: registration.competition.id,
           submitted_by: editing_over.organizers.first.id,
-          competing: { 'status' => 'deleted' },
+          competing: { 'status' => 'cancelled' },
         )
 
         expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, Competition.find(update_request['competition_id']), User.find(update_request['submitted_by'])) }
@@ -1445,16 +1501,16 @@ RSpec.describe Registrations::RegistrationChecker do
         { initial_status: :accepted, new_status: 'waiting_list' },
         { initial_status: :accepted, new_status: 'accepted' },
         { initial_status: :accepted, new_status: 'rejected' },
-        { initial_status: :deleted, new_status: 'accepted' },
-        { initial_status: :deleted, new_status: 'waiting_list' },
-        { initial_status: :deleted, new_status: 'rejected' },
+        { initial_status: :cancelled, new_status: 'accepted' },
+        { initial_status: :cancelled, new_status: 'waiting_list' },
+        { initial_status: :cancelled, new_status: 'rejected' },
       ].each do |params|
         it_behaves_like 'invalid user status updates', params[:initial_status], params[:new_status]
       end
 
       RSpec.shared_examples 'user cant update rejected registration' do |initial_status, new_status|
         it "user cant change 'status' => #{initial_status} to: #{new_status}" do
-          registration = FactoryBot.create(:registration, initial_status, competition: default_competition)
+          registration = FactoryBot.create(:registration, competing_status: initial_status.to_s, competition: default_competition)
 
           update_request = FactoryBot.build(
             :update_request,
@@ -1473,7 +1529,7 @@ RSpec.describe Registrations::RegistrationChecker do
       end
 
       [
-        { initial_status: :rejected, new_status: 'deleted' },
+        { initial_status: :rejected, new_status: 'cancelled' },
         { initial_status: :rejected, new_status: 'accepted' },
         { initial_status: :rejected, new_status: 'waiting_list' },
         { initial_status: :rejected, new_status: 'pending' },
@@ -1483,7 +1539,7 @@ RSpec.describe Registrations::RegistrationChecker do
 
       RSpec.shared_examples 'valid organizer status updates' do |initial_status, new_status|
         it "organizer can change 'status' => #{initial_status} to: #{new_status} before close" do
-          registration = FactoryBot.create(:registration, initial_status, competition: default_competition)
+          registration = FactoryBot.create(:registration, competing_status: initial_status.to_s, competition: default_competition)
 
           update_request = FactoryBot.build(
             :update_request,
@@ -1533,28 +1589,28 @@ RSpec.describe Registrations::RegistrationChecker do
       [
         { initial_status: :pending, new_status: 'accepted' },
         { initial_status: :pending, new_status: 'waiting_list' },
-        { initial_status: :pending, new_status: 'deleted' },
+        { initial_status: :pending, new_status: 'cancelled' },
         { initial_status: :pending, new_status: 'pending' },
         { initial_status: :pending, new_status: 'rejected' },
         { initial_status: :waiting_list, new_status: 'pending' },
-        { initial_status: :waiting_list, new_status: 'deleted' },
+        { initial_status: :waiting_list, new_status: 'cancelled' },
         { initial_status: :waiting_list, new_status: 'waiting_list' },
         { initial_status: :waiting_list, new_status: 'accepted' },
         { initial_status: :waiting_list, new_status: 'rejected' },
         { initial_status: :accepted, new_status: 'pending' },
-        { initial_status: :accepted, new_status: 'deleted' },
+        { initial_status: :accepted, new_status: 'cancelled' },
         { initial_status: :accepted, new_status: 'waiting_list' },
         { initial_status: :accepted, new_status: 'accepted' },
         { initial_status: :accepted, new_status: 'rejected' },
-        { initial_status: :deleted, new_status: 'accepted' },
-        { initial_status: :deleted, new_status: 'pending' },
-        { initial_status: :deleted, new_status: 'waiting_list' },
-        { initial_status: :deleted, new_status: 'rejected' },
-        { initial_status: :deleted, new_status: 'deleted' },
+        { initial_status: :cancelled, new_status: 'accepted' },
+        { initial_status: :cancelled, new_status: 'pending' },
+        { initial_status: :cancelled, new_status: 'waiting_list' },
+        { initial_status: :cancelled, new_status: 'rejected' },
+        { initial_status: :cancelled, new_status: 'cancelled' },
         { initial_status: :rejected, new_status: 'accepted' },
         { initial_status: :rejected, new_status: 'pending' },
         { initial_status: :rejected, new_status: 'waiting_list' },
-        { initial_status: :rejected, new_status: 'deleted' },
+        { initial_status: :rejected, new_status: 'cancelled' },
       ].each do |params|
         it_behaves_like 'valid organizer status updates', params[:initial_status], params[:new_status]
       end
@@ -2169,7 +2225,7 @@ RSpec.describe Registrations::RegistrationChecker do
         )
       }
 
-      let(:registrationB) { FactoryBot.create(:registration, :deleted, competition: competitionB, user_id: registrationA.user.id) }
+      let(:registrationB) { FactoryBot.create(:registration, :cancelled, competition: competitionB, user_id: registrationA.user.id) }
 
       before do
         competitionA.update!(competition_series: series)

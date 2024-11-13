@@ -55,7 +55,7 @@ export default function CompetingStep({
 }) {
   const maxEvents = competitionInfo.events_per_registration_limit ?? Infinity;
   const isRegistered = Boolean(registration);
-  const hasPaid = registration?.payment.payment_status === 'succeeded';
+  const hasPaid = registration?.payment?.has_paid;
   const dispatch = useDispatch();
 
   const confirm = useConfirm();
@@ -89,7 +89,7 @@ export default function CompetingStep({
 
   const queryClient = useQueryClient();
   const { mutate: updateRegistrationMutation, isPending: isUpdating } = useMutation({
-    mutationFn: updateRegistration,
+    mutationFn: (body) => updateRegistration(competitionInfo, body),
     onError: (data) => {
       const { error } = data.json;
       dispatch(setMessage(
@@ -117,7 +117,7 @@ export default function CompetingStep({
   });
 
   const { mutate: createRegistrationMutation, isLoading: isCreating } = useMutation({
-    mutationFn: submitEventRegistration,
+    mutationFn: (body) => submitEventRegistration(competitionInfo, body),
     onError: (data) => {
       const { error } = data.json;
       dispatch(setMessage(

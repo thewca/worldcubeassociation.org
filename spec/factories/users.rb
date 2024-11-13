@@ -254,7 +254,7 @@ FactoryBot.define do
     trait :with_deleted_registration_in_future_comps do
       after(:create) do |user|
         competition = FactoryBot.create(:competition, :future)
-        FactoryBot.create(:registration, :deleted, user: user, competition: competition, events: %w(333))
+        FactoryBot.create(:registration, :cancelled, user: user, competition: competition, events: %w(333))
       end
     end
 

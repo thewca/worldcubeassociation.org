@@ -551,7 +551,7 @@ class User < ApplicationRecord
   end
 
   private def can_view_current_banned_competitors?
-    can_view_past_banned_competitors? || staff_delegate?
+    can_view_past_banned_competitors? || staff_delegate? || appeals_committee?
   end
 
   private def can_view_past_banned_competitors?
@@ -777,7 +777,7 @@ class User < ApplicationRecord
   end
 
   def can_view_all_users?
-    admin? || board_member? || results_team? || communication_team? || wic_team? || any_kind_of_delegate? || weat_team? || wrc_team?
+    admin? || board_member? || results_team? || communication_team? || wic_team? || any_kind_of_delegate? || weat_team? || wrc_team? || appeals_committee?
   end
 
   def can_edit_user?(user)

@@ -1,16 +1,16 @@
-import { getPsychSheetForEventUrl, wcaRegistrationUrl } from '../../../../../lib/requests/routes.js.erb';
+import {
+  getPsychSheetForEventUrl,
+} from '../../../../../lib/requests/routes.js.erb';
 import fetchWithJWTToken from '../../../../../lib/requests/fetchWithJWTToken';
 import { fetchJsonOrError } from '../../../../../lib/requests/fetchWithAuthenticityToken';
-
-const confirmedRegistrationsUrl = (competitionId) => `${wcaRegistrationUrl}/api/v1/registrations/${competitionId}`;
-const allRegistrationsUrl = (competitionId) => `${wcaRegistrationUrl}/api/v1/registrations/${competitionId}/admin`;
-const singleRegistrationUrl = (competitionId, userId) => `${wcaRegistrationUrl}/api/v1/register?user_id=${userId}&competition_id=${competitionId}`;
-const waitingCompetitorsUrl = (competitionId) => `${wcaRegistrationUrl}/api/v1/registrations/${competitionId}/waiting`;
+import { registrationRoutes } from '../../routes';
 
 export async function getConfirmedRegistrations(
-  competitionID,
+  competition,
 ) {
-  const { data } = await fetchJsonOrError(confirmedRegistrationsUrl(competitionID));
+  const route = registrationRoutes[competition.registration_version]
+    .confirmedRegistrationsUrl(competition.id);
+  const { data } = await fetchJsonOrError(route);
   return data;
 }
 
@@ -24,19 +24,23 @@ export async function getPsychSheetForEvent(
 }
 
 export async function getAllRegistrations(
-  competitionID,
+  competition,
 ) {
-  const { data } = await fetchWithJWTToken(allRegistrationsUrl(competitionID));
+  const route = registrationRoutes[competition.registration_version]
+    .allRegistrationsUrl(competition.id);
+  const { data } = await fetchWithJWTToken(route);
 
   return data;
 }
 
 export async function getSingleRegistration(
   userId,
-  competitionId,
+  competition,
 ) {
+  const route = registrationRoutes[competition.registration_version]
+    .singleRegistrationUrl(competition.id, userId);
   try {
-    const { data } = await fetchWithJWTToken(singleRegistrationUrl(competitionId, userId));
+    const { data } = await fetchWithJWTToken(route);
     return data;
   } catch (e) {
     // 404 means that the registration doesn't exist
@@ -45,12 +49,4 @@ export async function getSingleRegistration(
     }
     throw e;
   }
-}
-
-export async function getWaitingCompetitors(
-  competitionId,
-) {
-  const { data } = await fetchWithJWTToken(waitingCompetitorsUrl(competitionId));
-
-  return data;
 }

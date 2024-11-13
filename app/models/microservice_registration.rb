@@ -107,7 +107,9 @@ class MicroserviceRegistration < ApplicationRecord
   end
 
   def deleted?
-    self.status == Registrations::Helper::STATUS_DELETED || self.status == Registrations::Helper::STATUS_REJECTED
+    self.status == Registrations::Helper::STATUS_DELETED ||
+      self.status == Registrations::Helper::STATUS_REJECTED ||
+      self.status == Registrations::Helper::STATUS_CANCELLED
   end
 
   def pending?

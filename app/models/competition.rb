@@ -96,7 +96,7 @@ class Competition < ApplicationRecord
     restricted: 2,
   }, prefix: true
 
-  NEW_REG_SYSTEM_DEFAULT = :v2
+  NEW_REG_SYSTEM_DEFAULT = :v3
 
   enum :registration_version, [:v1, :v2, :v3], prefix: true, default: NEW_REG_SYSTEM_DEFAULT
 
@@ -400,7 +400,11 @@ class Competition < ApplicationRecord
   end
 
   def events_held?(desired_event_ids)
+    # rubocop:disable Style/BitwisePredicate
+    #   We have to shut up Rubocop here because otherwise it thinks that
+    #   `desired_event_ids` are integers which are being compared to a bit mask
     (desired_event_ids & self.event_ids) == desired_event_ids
+    # rubocop:enable Style/BitwisePredicate
   end
 
   def enforces_qualifications?
@@ -447,7 +451,15 @@ class Competition < ApplicationRecord
   end
 
   def registration_full?
-    competitor_count = uses_microservice_registrations? ? Microservices::Registrations.competitor_count_by_competition(id) : registrations.accepted_and_paid_pending_count
+    # TODO: V3-Reg cleanup, move this to registrations.accepted_and_paid_pending_count again
+    competitor_count =
+      if uses_microservice_registrations?
+        Microservices::Registrations.competitor_count_by_competition(id)
+      elsif registration_version_v3?
+        registrations.competing_status_accepted.count + registrations.competing_status_pending.with_payments.count
+      else
+        registrations.accepted_and_paid_pending_count
+      end
     competitor_limit_enabled? && competitor_count >= competitor_limit
   end
 
@@ -1112,10 +1124,6 @@ class Competition < ApplicationRecord
     )
   end
 
-  def competitor_limit_enabled?
-    competitor_limit_enabled
-  end
-
   def competitor_limit_required?
     confirmed? && created_at.present? && created_at > Date.new(2018, 9, 1)
   end
@@ -1160,6 +1168,17 @@ class Competition < ApplicationRecord
 
   def some_guests_allowed?
     guest_entry_status_restricted?
+  end
+
+  def pending_competitors_count
+    # TODO: V3-Reg Cleanup, we can go back to use registrations.pending when we are on v3
+    if uses_microservice_registrations?
+      Microservices::Registrations.registrations_by_competition(self.id, 'pending', cache: true).length
+    elsif registration_version_v3?
+      registrations.competing_status_pending.count
+    else
+      registrations.pending.count
+    end
   end
 
   def registration_period_required?
@@ -1878,7 +1897,7 @@ class Competition < ApplicationRecord
                force_comment_in_registration use_wca_registration external_registration_page guests_entry_fee_lowest_denomination guest_entry_status
                information events_per_registration_limit],
       methods: %w[url website short_name city venue_address venue_details latitude_degrees longitude_degrees country_iso2 event_ids registration_currently_open?
-                  main_event_id number_of_bookmarks using_payment_integrations? uses_qualification? uses_cutoff? competition_series_ids registration_full?],
+                  main_event_id number_of_bookmarks using_payment_integrations? uses_qualification? uses_cutoff? competition_series_ids registration_full? registration_version],
       include: %w[delegates organizers],
     }
     self.as_json(options)
@@ -2569,10 +2588,31 @@ class Competition < ApplicationRecord
         self.championships = []
       end
 
+      # TODO: V3-Reg Remove this line and method implementation below
+      migration_reg_version = self.form_to_registration_version(form_data)
+
       assign_attributes(Competition.form_data_to_attributes(form_data))
 
-      # TODO: Remove once v3 registrations (monolith integration) are implemented by default
-      self.registration_version = :v1 unless self.use_wca_registration
+      # TODO: V3-Reg Remove once v3 registrations (monolith integration) are implemented by default
+      self.registration_version = self.use_wca_registration? ? migration_reg_version : :v1
+    end
+  end
+
+  private def form_to_registration_version(form_data)
+    form_uses_new_registrations = form_data.dig('admin', 'usesNewRegistrationSystem')
+
+    if !form_uses_new_registrations
+      # If the form explicitly requested the old system, that's what you're gonna get.
+      :v1
+    elsif self.uses_new_registration_system?
+      # If we reached this point, we know that the form did not request the old system
+      #   so that means the form requested the new version. Use whatever new version
+      #   we're already on, to make sure the form doesn't ping-pong between V2 and V3
+      self.registration_version
+    else
+      # The form requested the new system, but we're not on the new system yet.
+      #   Upgrade to whatever system works best
+      NEW_REG_SYSTEM_DEFAULT
     end
   end
 

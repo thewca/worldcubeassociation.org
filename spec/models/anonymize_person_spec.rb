@@ -57,7 +57,7 @@ RSpec.describe AnonymizePerson do
     expect(user.reload.wca_id).to eq nil
     expect(user.reload.email).to eq user.id.to_s + "@worldcubeassociation.org"
     expect(user.reload.name).to eq "Anonymous"
-    expect(user.reload.dob).to eq nil
+    expect(user.reload.dob).to eq Date.new(1954, 12, 4)
     expect(user.reload.gender).to eq "o"
   end
 end
