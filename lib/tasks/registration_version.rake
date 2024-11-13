@@ -72,15 +72,17 @@ namespace :registration_version do
                                                 guests: registration.guests,
                                                 competing_status: registration.competing_status,
                                                 administrative_notes: registration.administrative_notes) do |reg|
+            puts "Microservice reports (#{registration.event_ids.count}) event_ids: #{registration.event_ids.inspect}"
+
             registered_events = competition.competition_events.where(event_id: registration.event_ids)
             rce_init_data = registered_events.map { |ce| { competition_event: ce } }
 
+            puts "Monolith found (#{rce_init_data.count}) matching competition events: #{registered_events.ids.inspect}"
             reg.registration_competition_events.build(rce_init_data)
           end
 
           puts "Registration built: #{new_registration.inspect}"
           new_registration.save!
-
 
           # Point any payments to the new holder
           if competition.using_payment_integrations?
