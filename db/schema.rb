@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_11_04_161404) do
+ActiveRecord::Schema[7.2].define(version: 2024_11_13_150801) do
   create_table "Competitions", id: { type: :string, limit: 32, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", limit: 50, default: "", null: false
     t.string "cityName", limit: 50, default: "", null: false
@@ -1023,10 +1023,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_04_161404) do
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
     t.integer "guests", default: 0, null: false
-    t.datetime "accepted_at", precision: nil
-    t.integer "accepted_by"
-    t.datetime "deleted_at", precision: nil
-    t.integer "deleted_by"
     t.text "roles"
     t.boolean "is_competing", default: true
     t.text "administrative_notes"
