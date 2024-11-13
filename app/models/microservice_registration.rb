@@ -70,7 +70,7 @@ class MicroserviceRegistration < ApplicationRecord
   alias :status :competing_status
 
   def wcif_status
-    return Registrations::Helper::STATUS_DELETED if self.deleted?
+    return Registrations::Helper::STATUS_DELETED if self.cancelled?
     return Registrations::Helper::STATUS_PENDING if self.pending?
 
     self.competing_status

@@ -336,7 +336,7 @@ RSpec.describe Registration do
     it 'deleted state returns deleted status' do
       registration = FactoryBot.create(:registration, :cancelled)
 
-      expect(registration.deleted?).to eq(true)
+      expect(registration.cancelled?).to eq(true)
       expect(registration.to_wcif['status']).to eq('deleted')
     end
 
