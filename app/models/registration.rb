@@ -336,9 +336,10 @@ class Registration < ApplicationRecord
     end
   end
 
-  validate :cannot_be_undeleted_when_banned, if: :deleted_at_changed?
+  # TODO: V3-REG cleanup. I think this is already covered by the registration check so we can delete it?
+  validate :cannot_be_undeleted_when_banned, if: :competing_status_changed?
   private def cannot_be_undeleted_when_banned
-    if user.banned? && deleted_at.nil?
+    if user.banned? && user.might_attend?
       errors.add(:user_id, I18n.t('registrations.errors.undelete_banned'))
     end
   end
