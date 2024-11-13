@@ -591,7 +591,6 @@ module DatabaseDumper
         },
       ),
     }.freeze,
-    "microservice_registrations" => :skip_all_rows,
     "registration_history_changes" => :skip_all_rows,
     "registration_history_entries" => :skip_all_rows,
     "waiting_lists" => :skip_all_rows,
