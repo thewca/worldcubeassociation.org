@@ -90,6 +90,7 @@ export default function PaymentStep({
         { competitionInfo.enable_donations && (
           <FormField>
             <Checkbox
+              id="useDonationCheckbox"
               value={isDonationChecked}
               onChange={(event, data) => {
                 setDonationChecked(event, data);
@@ -99,6 +100,7 @@ export default function PaymentStep({
             />
             { isDonationChecked && (
             <AutonumericField
+              id="donationInputField"
               onChange={(_, { value }) => setDonationAmount(value)}
               currency={competitionInfo.currency_code}
               value={donationAmount}
@@ -115,7 +117,7 @@ export default function PaymentStep({
           ? <Loading />
           : (
             <>
-              <Header size="small">
+              <Header size="small" id="money-subtotal">
                 Subtotal:
                 {' '}
                 {displayAmount}
