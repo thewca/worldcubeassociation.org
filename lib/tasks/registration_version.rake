@@ -92,7 +92,7 @@ namespace :registration_version do
 
           # Point any payments to the new holder
           if competition.using_payment_integrations?
-            payment_intents = registration&.payment_intents
+            payment_intents = registration.payment_intents
 
             payment_intents.each do |payment_intent|
               payment_intent.update(holder: new_registration)
