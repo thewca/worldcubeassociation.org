@@ -618,7 +618,7 @@ en:
           otp_email:
             subject: "Your one-time password for the WCA"
             2fa_attempt: "You are attempting to authenticate on the WCA website. You have two-factor authentication enabled and you just requested to be sent a one-time password by email. Please find it below:"
-            disclaimer: "If you did not request that authentication code, please contact the WST right away by replying to this email: you may have an open session somewhere or your password may be compromized."
+            disclaimer: "If you did not request that authentication code, please contact the WST right away by replying to this email: you may have an open session somewhere or your password may be compromised."
           name: "Two-Factor Authentication (2FA)"
           support_desc_html: "The WCA website supports %{two_factor_link} using a one-time password:"
           #context: describes the 2FA options
