@@ -65,15 +65,24 @@ namespace :registration_version do
     LogTask.log_task("Migrating Registrations for Competition #{competition_id}") do
       ActiveRecord::Base.transaction do
         competition.microservice_registrations.includes(:payment_intents).each do |registration|
-          new_registration = Registration.create!(competition_id: competition_id,
-                                                  user_id: registration.user_id,
-                                                  comments: registration.comments,
-                                                  guests: registration.guests,
-                                                  competing_status: registration.competing_status,
-                                                  administrative_notes: registration.administrative_notes,
-                                                  registration_competition_events: registration.event_ids.map do |event_id|
-                                                    RegistrationCompetitionEvent.build(competition_event: competition.competition_events.find { |ce| ce.event_id == event_id })
-                                                  end)
+          puts "Creating registration for user: #{registration.user_id}"
+          new_registration = Registration.build(competition_id: competition_id,
+                                                user_id: registration.user_id,
+                                                comments: registration.comments,
+                                                guests: registration.guests,
+                                                competing_status: registration.competing_status,
+                                                administrative_notes: registration.administrative_notes) do |reg|
+            puts "Microservice reports (#{registration.event_ids.count}) event_ids: #{registration.event_ids.inspect}"
+
+            registered_events = competition.competition_events.where(event_id: registration.event_ids)
+            rce_init_data = registered_events.map { |ce| { competition_event: ce } }
+
+            puts "Monolith found (#{rce_init_data.count}) matching competition events: #{registered_events.ids.inspect}"
+            reg.registration_competition_events.build(rce_init_data)
+          end
+
+          puts "Registration built: #{new_registration.inspect}"
+          new_registration.save!
 
           # Point any payments to the new holder
           if competition.using_payment_integrations?
