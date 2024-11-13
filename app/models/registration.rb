@@ -83,7 +83,7 @@ class Registration < ApplicationRecord
   end
 
   def new_or_deleted?
-    new_record? || deleted? || !is_competing?
+    new_record? || cancelled? || !is_competing?
   end
 
   def name
