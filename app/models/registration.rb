@@ -336,7 +336,7 @@ class Registration < ApplicationRecord
     end
   end
 
-  # TODO: V3-REG cleanup. I think this is already covered by the registration check so we can delete it?
+  # TODO: V3-REG cleanup. All these Validations can be used instead of the registration_checker checks
   validate :cannot_be_undeleted_when_banned, if: :competing_status_changed?
   private def cannot_be_undeleted_when_banned
     if user.banned? && user.might_attend?
@@ -388,7 +388,7 @@ class Registration < ApplicationRecord
 
   validate :only_one_accepted_per_series
   private def only_one_accepted_per_series
-    if competition&.part_of_competition_series? && checked_status == :accepted
+    if competition&.part_of_competition_series? && competing_status_accepted?
       unless series_sibling_registrations(:accepted).empty?
         errors.add(:competition_id, I18n.t('registrations.errors.series_more_than_one_accepted'))
       end
