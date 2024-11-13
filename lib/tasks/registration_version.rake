@@ -66,15 +66,17 @@ namespace :registration_version do
       ActiveRecord::Base.transaction do
         competition.microservice_registrations.includes(:payment_intents).each do |registration|
           puts "Creating registration for user: #{user_id}"
-          new_registration = Registration.new(competition_id: competition_id,
-                                                  user_id: registration.user_id,
-                                                  comments: registration.comments,
-                                                  guests: registration.guests,
-                                                  competing_status: registration.competing_status,
-                                                  administrative_notes: registration.administrative_notes,
-                                                  registration_competition_events: registration.event_ids.map do |event_id|
-                                                    RegistrationCompetitionEvent.build(competition_event: competition.competition_events.find { |ce| ce.event_id == event_id })
-                                                  end)
+          new_registration = Registration.build(competition_id: competition_id,
+                                                user_id: registration.user_id,
+                                                comments: registration.comments,
+                                                guests: registration.guests,
+                                                competing_status: registration.competing_status,
+                                                administrative_notes: registration.administrative_notes) do |reg|
+            registered_events = competition.competition_events.where(event_id: registration.event_ids)
+            rce_init_data = registered_events.map { |ce| { competition_event: ce } }
+
+            reg.registration_competition_events.build(rce_init_data)
+          end
 
           puts "Registration built: #{new_registration.inspect}"
           new_registration.save!
