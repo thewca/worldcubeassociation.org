@@ -88,6 +88,8 @@ namespace :registration_version do
           puts "Registration built: #{new_registration.inspect}"
           new_registration.save!
 
+          next unless registration.is_competing? # We don't need to migrate history or payments for non-competing registrations
+
           # Point any payments to the new holder
           if competition.using_payment_integrations?
             payment_intents = registration.payment_intents
