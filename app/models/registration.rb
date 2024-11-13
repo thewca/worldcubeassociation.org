@@ -68,7 +68,7 @@ class Registration < ApplicationRecord
   end
 
   def deleted?
-    competing_status_deleted? || !deleted_at.nil?
+    cancelled? || rejected? || !deleted_at.nil?
   end
 
   def rejected?
