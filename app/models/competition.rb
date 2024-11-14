@@ -1941,7 +1941,7 @@ class Competition < ApplicationRecord
     # NOTE: we're including non-competing registrations so that they can have job
     # assignments as well. These registrations don't have accepted?, but they
     # should appear in the WCIF.
-    persons_wcif = registrations_relation.order(:id)
+    persons_wcif = registrations_relation.wcif_ordered
                                          .includes(includes_associations)
                                          .to_enum
                                          .with_index(1)
