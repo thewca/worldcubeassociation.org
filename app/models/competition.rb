@@ -1646,11 +1646,16 @@ class Competition < ApplicationRecord
         accepted_registrations = Microservices::Registrations.registrations_by_competition(self.id, 'accepted', event.id, cache: false)
         registered_user_ids = accepted_registrations.map { |reg| reg['user_id'] }
       else
-        registered_user_ids = self.registrations
-                                  .accepted
-                                  .includes(:registration_competition_events)
-                                  .where(registration_competition_events: { competition_event: competition_event })
-                                  .pluck(:user_id)
+        # TODO: V3-REG Cleanup
+        accepted_registrations = if registration_version_v3?
+                                   self.registrations.competing_status_accepted
+                                 else
+                                   self.registrations.accepted
+                                 end
+        registered_user_ids = accepted_registrations
+                              .includes(:registration_competition_events)
+                              .where(registration_competition_events: { competition_event: competition_event })
+                              .pluck(:user_id)
       end
 
       concise_results_date = ComputeAuxiliaryData.end_date || Date.current
