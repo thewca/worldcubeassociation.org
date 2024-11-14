@@ -75,7 +75,7 @@ namespace :registration_version do
 
     LogTask.log_task("Migrating Registrations for Competition #{competition_id}") do
       ActiveRecord::Base.transaction do
-        competition.microservice_registrations.includes(:payment_intents).each do |registration|
+        competition.microservice_registrations.wcif_ordered.includes(:payment_intents).each do |registration|
           puts "Creating registration for user: #{registration.user_id}"
           new_registration = Registration.build(
             competition_id: competition_id,

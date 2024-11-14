@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class MicroserviceRegistration < ApplicationRecord
+  scope :wcif_ordered, -> { order(:id) }
+
   belongs_to :competition, inverse_of: :microservice_registrations
   belongs_to :user, inverse_of: :microservice_registrations
 
