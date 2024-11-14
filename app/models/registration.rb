@@ -2,7 +2,11 @@
 
 class Registration < ApplicationRecord
   scope :pending, -> { where(accepted_at: nil, deleted_at: nil, is_competing: true) }
-  scope :accepted, -> { where.not(accepted_at: nil).where(deleted_at: nil) }
+  scope :accepted, -> {
+    where.not(accepted_at: nil)
+      .where(deleted_at: nil)
+      .or(where(competing_status: 'accepted'))
+  }
   scope :deleted, -> { where.not(deleted_at: nil) }
   scope :cancelled, -> { where(competing_status: 'cancelled') }
   scope :rejected, -> { where(competing_status: 'rejected') }
