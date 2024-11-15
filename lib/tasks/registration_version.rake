@@ -106,7 +106,7 @@ namespace :registration_version do
             payment_intents = registration.payment_intents
 
             payment_intents.each do |payment_intent|
-              payment_intent.update(holder: new_registration)
+              payment_intent.update!(holder: new_registration)
               root_record = payment_intent.payment_record
 
               # FIXME: This matching is running under the assumption that every record will be a StripeRecord.
@@ -134,6 +134,16 @@ namespace :registration_version do
                 end
               end
             end
+          end
+
+          # Migrate assignments
+          registration.assignments.each do |assignment|
+            assignment.update!(registration: new_registration)
+          end
+
+          # Migrate WCIF extensions
+          registration.wcif_extensions.each do |wcif_extension|
+            wcif_extension.update!(extendable: new_registration)
           end
 
           # Migrate History
