@@ -8,7 +8,7 @@ class WaitingList < ActiveRecord::Base
   end
 
   def add(entry_id)
-    raise ArgumentError, "Registration must have a competing_status of 'waiting_list' to be added to the waiting list" unless
+    raise ArgumentError.new("Registration must have a competing_status of 'waiting_list' to be added to the waiting list") unless
       Registration.find(entry_id).competing_status == Registrations::Helper::STATUS_WAITING_LIST
     return if entries.include?(entry_id)
 
