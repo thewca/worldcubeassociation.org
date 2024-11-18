@@ -105,7 +105,12 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
 
   def list_admin
     registrations = Registration.where(competition: @competition)
-    render json: registrations.includes(:user, :registration_payments).map { |r| r.to_v2_json(admin: true, history: true, pii: true) }
+    render json: registrations.includes(
+      :user,
+      registration_payments: :receipt,
+      registration_competition_events: { competition_event: :competition },
+      registration_history_entries: :registration_history_change,
+    ).map { |r| r.to_v2_json(admin: true, history: true, pii: true) }
   end
 
   def validate_payment_ticket_request
