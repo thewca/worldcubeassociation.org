@@ -12,7 +12,7 @@ def clean_wcif_registrations(wcif)
     p["registration"] = cleaned_reg
   end
 
-  wcif_persons["persons"] = cleaned_registrations
+  wcif_persons = cleaned_registrations
 end
 
 namespace :registration_version do
@@ -189,12 +189,7 @@ namespace :registration_version do
           raise "The WCIF output did not match. Logging debug details: First WCIF is v2, second WCIF is v3"
         end
 
-        puts "WCIF sanity check has completed succesfully. Continue the migration? [y/n]"
-        user_confirm = gets.chomp.downcase
-
-        unless user_confirm
-          raise "Confirmation rejected: '#{user_confirm}'"
-        end
+        puts "WCIF sanity check has completed succesfully. Continuing migration"
       end
     end
   end
