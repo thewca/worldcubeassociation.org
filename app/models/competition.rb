@@ -597,7 +597,6 @@ class Competition < ApplicationRecord
 
   def reg_warnings
     warnings = {}
-    warnings[:uses_v2_registrations] = I18n.t('competitions.messages.uses_v2_registrations') if uses_new_registration_system?
     if registration_range_specified? && !registration_past?
       if self.announced?
         if (self.registration_open - self.announced_at) < REGISTRATION_OPENING_EARLIEST
@@ -2448,7 +2447,6 @@ class Competition < ApplicationRecord
       "admin" => {
         "isConfirmed" => confirmed?,
         "isVisible" => showAtAll?,
-        "usesNewRegistrationSystem" => uses_new_registration_system?,
       },
       "cloning" => {
         "fromId" => being_cloned_from_id,
@@ -2588,31 +2586,7 @@ class Competition < ApplicationRecord
         self.championships = []
       end
 
-      # TODO: V3-Reg Remove this line and method implementation below
-      migration_reg_version = self.form_to_registration_version(form_data)
-
       assign_attributes(Competition.form_data_to_attributes(form_data))
-
-      # TODO: V3-Reg Remove once v3 registrations (monolith integration) are implemented by default
-      self.registration_version = self.use_wca_registration? ? migration_reg_version : :v1
-    end
-  end
-
-  private def form_to_registration_version(form_data)
-    form_uses_new_registrations = form_data.dig('admin', 'usesNewRegistrationSystem')
-
-    if !form_uses_new_registrations
-      # If the form explicitly requested the old system, that's what you're gonna get.
-      :v1
-    elsif self.uses_new_registration_system?
-      # If we reached this point, we know that the form did not request the old system
-      #   so that means the form requested the new version. Use whatever new version
-      #   we're already on, to make sure the form doesn't ping-pong between V2 and V3
-      self.registration_version
-    else
-      # The form requested the new system, but we're not on the new system yet.
-      #   Upgrade to whatever system works best
-      NEW_REG_SYSTEM_DEFAULT
     end
   end
 
@@ -2679,7 +2653,6 @@ class Competition < ApplicationRecord
       showAtAll: form_data.dig('admin', 'isVisible'),
       being_cloned_from_id: form_data.dig('cloning', 'fromId'),
       clone_tabs: form_data.dig('cloning', 'cloneTabs'),
-      registration_version: form_data.dig('admin', 'usesNewRegistrationSystem') ? NEW_REG_SYSTEM_DEFAULT : :v1,
     }
   end
 
@@ -2739,10 +2712,6 @@ class Competition < ApplicationRecord
 
   def disconnect_all_payment_integrations
     competition_payment_integrations.destroy_all
-  end
-
-  def can_change_registration_system?
-    registration_not_yet_opened? && (uses_microservice_registrations? || self.registrations.empty?)
   end
 
   # Our React date picker unfortunately behaves weirdly in terms of backend data
@@ -2911,7 +2880,6 @@ class Competition < ApplicationRecord
           "properties" => {
             "isConfirmed" => { "type" => "boolean" },
             "isVisible" => { "type" => "boolean" },
-            "usesNewRegistrationSystem" => { "type" => "boolean" },
           },
         },
         "cloning" => {
