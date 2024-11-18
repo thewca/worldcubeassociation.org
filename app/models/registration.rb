@@ -10,6 +10,7 @@ class Registration < ApplicationRecord
   scope :non_competing, -> { where(is_competing: false) }
   scope :not_deleted, -> { where(deleted_at: nil) }
   scope :with_payments, -> { joins(:registration_payments).distinct }
+  scope :wcif_ordered, -> { order(:id) }
 
   belongs_to :competition
   belongs_to :user, optional: true # A user may be deleted later. We only enforce validation directly on creation further down below.
@@ -249,9 +250,9 @@ class Registration < ApplicationRecord
   def wcif_status
     # Non-competing staff are treated as accepted.
     # TODO: WCIF spec needs to be updated - and possibly versioned - to include new statuses
-    if accepted? || !is_competing?
+    if accepted? || competing_status_accepted? || !is_competing?
       'accepted'
-    elsif deleted? || rejected?
+    elsif deleted? || rejected? || cancelled?
       'deleted'
     elsif pending? || waitlisted?
       'pending'

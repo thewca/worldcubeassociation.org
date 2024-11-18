@@ -12,16 +12,6 @@ GIT
     selectize-rails (0.12.1)
 
 GIT
-  remote: https://github.com/sidekiq-cron/sidekiq-cron.git
-  revision: f0ac4038da7b3c6bc09b2c3ca9f0b9979848a95a
-  specs:
-    sidekiq-cron (2.0.0.rc2)
-      cronex (>= 0.13.0)
-      fugit (~> 1.8, >= 1.11.1)
-      globalid (>= 1.0.1)
-      sidekiq (>= 6.5.0)
-
-GIT
   remote: https://github.com/thewca/i18n-country-translations.git
   revision: e6706abe0eaa65729c1acb698be08b91dd2b6fde
   specs:
@@ -158,11 +148,11 @@ GEM
     autoprefixer-rails (9.4.7)
       execjs
     aws-eventstream (1.3.0)
-    aws-partitions (1.1003.0)
-    aws-sdk-cloudfront (1.103.0)
+    aws-partitions (1.1009.0)
+    aws-sdk-cloudfront (1.104.0)
       aws-sdk-core (~> 3, >= 3.210.0)
       aws-sigv4 (~> 1.5)
-    aws-sdk-core (3.212.0)
+    aws-sdk-core (3.213.0)
       aws-eventstream (~> 1, >= 1.3.0)
       aws-partitions (~> 1, >= 1.992.0)
       aws-sigv4 (~> 1.9)
@@ -170,10 +160,10 @@ GEM
     aws-sdk-kms (1.95.0)
       aws-sdk-core (~> 3, >= 3.210.0)
       aws-sigv4 (~> 1.5)
-    aws-sdk-rds (1.257.0)
+    aws-sdk-rds (1.258.0)
       aws-sdk-core (~> 3, >= 3.210.0)
       aws-sigv4 (~> 1.5)
-    aws-sdk-s3 (1.170.0)
+    aws-sdk-s3 (1.171.0)
       aws-sdk-core (~> 3, >= 3.210.0)
       aws-sdk-kms (~> 1)
       aws-sigv4 (~> 1.5)
@@ -264,10 +254,10 @@ GEM
     devise-jwt (0.12.1)
       devise (~> 4.0)
       warden-jwt_auth (~> 0.10)
-    devise-two-factor (6.0.0)
-      activesupport (~> 7.0)
+    devise-two-factor (6.1.0)
+      activesupport (>= 7.0, < 8.1)
       devise (~> 4.0)
-      railties (~> 7.0)
+      railties (>= 7.0, < 8.1)
       rotp (~> 6.0)
     diff-lcs (1.5.1)
     docile (1.4.0)
@@ -310,8 +300,8 @@ GEM
       railties (>= 5.0.0)
     faker (3.5.1)
       i18n (>= 1.8.11, < 2)
-    faraday (2.12.0)
-      faraday-net_http (>= 2.0, < 3.4)
+    faraday (2.12.1)
+      faraday-net_http (>= 2.0, < 3.5)
       json
       logger
     faraday-mashify (0.1.1)
@@ -319,8 +309,8 @@ GEM
       hashie
     faraday-multipart (1.0.4)
       multipart-post (~> 2)
-    faraday-net_http (3.3.0)
-      net-http
+    faraday-net_http (3.4.0)
+      net-http (>= 0.5.0)
     faraday-retry (2.2.1)
       faraday (~> 2.0)
     ffi (1.17.0)
@@ -415,7 +405,7 @@ GEM
     jmespath (1.6.2)
     js_cookie_rails (2.2.0)
       railties (>= 3.1)
-    json (2.7.5)
+    json (2.8.2)
     json-schema (5.0.1)
       addressable (~> 2.8)
     jwt (2.9.3)
@@ -463,7 +453,7 @@ GEM
     mime-types-data (3.2021.0704)
     mini_magick (4.13.2)
     mini_mime (1.1.5)
-    mini_portile2 (2.8.7)
+    mini_portile2 (2.8.8)
     minitest (5.25.1)
     monetize (1.11.0)
       money (~> 6.12)
@@ -480,7 +470,7 @@ GEM
     mutex_m (0.2.0)
     mysql2 (0.5.6)
     nenv (0.3.0)
-    net-http (0.4.1)
+    net-http (0.5.0)
       uri
     net-imap (0.5.0)
       date
@@ -553,7 +543,7 @@ GEM
       rack (>= 3.0.0)
     rack-test (2.1.0)
       rack (>= 1.3)
-    rackup (2.2.0)
+    rackup (2.2.1)
       rack (>= 3)
     rails (7.2.2)
       actioncable (= 7.2.2)
@@ -697,7 +687,7 @@ GEM
       faraday (>= 0.17.3, < 3)
     sdoc (2.6.1)
       rdoc (>= 5.0)
-    securerandom (0.3.1)
+    securerandom (0.3.2)
     seedbank (0.5.0)
       rake (>= 10.0)
     semantic_range (3.0.0)
@@ -717,6 +707,11 @@ GEM
       logger
       rack (>= 2.2.4)
       redis-client (>= 0.22.2)
+    sidekiq-cron (2.0.1)
+      cronex (>= 0.13.0)
+      fugit (~> 1.8, >= 1.11.1)
+      globalid (>= 1.0.1)
+      sidekiq (>= 6.5.0)
     signet (0.19.0)
       addressable (~> 2.8)
       faraday (>= 0.17.5, < 3.a)
@@ -782,7 +777,7 @@ GEM
     unicode (0.4.4.5)
     unicode-display_width (2.6.0)
     uniform_notifier (1.16.0)
-    uri (0.13.1)
+    uri (1.0.2)
     useragent (0.16.10)
     valid_email (0.2.1)
       activemodel
@@ -921,7 +916,7 @@ DEPENDENCIES
   shakapacker (= 8.0.2)
   shoryuken
   sidekiq
-  sidekiq-cron!
+  sidekiq-cron
   simple_form
   simplecov
   simplecov-lcov

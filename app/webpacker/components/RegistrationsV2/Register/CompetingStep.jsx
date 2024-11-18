@@ -317,6 +317,16 @@ export default function CompetingStep({
           <Form.Field required={Boolean(competitionInfo.force_comment_in_registration)}>
             <label htmlFor="comment">
               {i18n.t('competitions.registration_v2.register.comment')}
+              {' '}
+              <div style={{ float: 'right', fontSize: '0.8em' }}>
+                <i>
+                  (
+                  {comment.length}
+                  /
+                  {maxCommentLength}
+                  )
+                </i>
+              </div>
             </label>
             <Form.TextArea
               required={Boolean(competitionInfo.force_comment_in_registration)}
@@ -326,11 +336,6 @@ export default function CompetingStep({
               id="comment"
               error={competitionInfo.force_comment_in_registration && comment.trim().length === 0 && i18n.t('registrations.errors.cannot_register_without_comment')}
             />
-            <p>
-              {comment.length}
-              /
-              {maxCommentLength}
-            </p>
           </Form.Field>
           <Form.Field>
             <label>{i18n.t('activerecord.attributes.registration.guests')}</label>

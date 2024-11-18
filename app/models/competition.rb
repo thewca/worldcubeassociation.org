@@ -1909,15 +1909,15 @@ class Competition < ApplicationRecord
     # NOTE: we're including non-competing registrations so that they can have job
     # assignments as well. These registrations don't have accepted?, but they
     # should appear in the WCIF.
-    persons_wcif = self.registrations.order(:id)
-                       .includes(includes_associations)
-                       .to_enum
-                       .with_index(1)
-                       .select { |r, registrant_id| authorized || r.wcif_status == "accepted" }
-                       .map do |r, registrant_id|
-      managers.delete(r.user)
-      r.user.to_wcif(self, r, registrant_id, authorized: authorized)
-    end
+    persons_wcif = registrations_relation.wcif_ordered
+                                         .includes(includes_associations)
+                                         .to_enum
+                                         .with_index(1)
+                                         .select { |r, registrant_id| authorized || r.wcif_status == "accepted" }
+                                         .map do |r, registrant_id|
+                                           managers.delete(r.user)
+                                           r.user.to_wcif(self, r, registrant_id, authorized: authorized)
+                                         end
     # NOTE: unregistered managers may generate N+1 queries on their personal bests,
     # but that's fine because there are very few of them!
     persons_wcif + managers.map { |m| m.to_wcif(self, authorized: authorized) }

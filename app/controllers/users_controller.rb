@@ -163,7 +163,7 @@ class UsersController < ApplicationController
     thumbnail_json = params.require(:thumbnail)
     thumbnail = JSON.parse(thumbnail_json).symbolize_keys
 
-    user_avatar = UserAvatar.create!(
+    user_avatar = UserAvatar.build(
       user: user_to_edit,
       thumbnail_crop_x: thumbnail[:x],
       thumbnail_crop_y: thumbnail[:y],
@@ -172,7 +172,11 @@ class UsersController < ApplicationController
       private_image: upload_file,
     )
 
-    render json: { ok: user_avatar.valid? }
+    if user_avatar.save
+      render json: { ok: true }
+    else
+      render status: :unprocessable_content, json: user_avatar.errors
+    end
   end
 
   def update_avatar
