@@ -869,7 +869,26 @@ en:
             label: "Message"
         captcha:
           validation_error: "Please verify that you are not a robot."
+        next_button: "Next"
         submit_button: "Submit"
+    contact_edit_profile:
+      title: "Edit Profile Form"
+      not_logged_in_error: "Looks like you are not logged in. Please log in to edit your profile. For any other queries, please <a href=\"https://www.worldcubeassociation.org/contact?contactRecipient=wrt\">contact us</a>."
+      no_profile_error: "Looks like you don't have a WCA profile yet because you have not participated in any competitions. For any other queries, please <a href=\"https://www.worldcubeassociation.org/contact?contactRecipient=wrt\">contact us</a>."
+      form:
+        contact_email:
+          label: "Contact Email"
+        wca_id:
+          label: "Enter WCA ID"
+        edit_reason:
+          label: "Reason for the change"
+        proof_attach:
+          label: "Attach proof"
+        submit_edit_request_button:
+          label: "Submit Edit Request"
+        captcha:
+          validation_error: "Please verify that you are not a robot."
+      success_message: "Request submitted - we'll get back to you soon."
   #context: Key used on the website homepage
   homepage:
     #context: the "Learn more" button
@@ -1370,7 +1389,6 @@ en:
       in_progress_at_wca_live_html: "This competition is ongoing. You can check the live results <a href='%{link_here}'>here</a>!"
       reg_opens_too_early: "Registration is set to start in less than the required 48 hours."
       registration_already_closed: "The deadline to register has already passed. Please set it to be in the future."
-      uses_v2_registrations: "This competition is using the new Registration System. Please contact WCAT if you believe this competition should use the old system instead."
       tooltip_registered: "You are registered."
       tooltip_waiting_list: "You are currently on the waiting list."
       tooltip_deleted: "Unfortunately your registration has been deleted. Please check your email for details, or contact the organiser(s)."
@@ -1379,7 +1397,7 @@ en:
       not_confirmed_visible: "This competition is not confirmed but visible."
       not_confirmed_not_visible: "This competition is not confirmed and not visible."
       championship_exists: "There is already a %{championship_type} in %{year}."
-      orga_closed_reg_success: "Sucessfully closed registration."
+      orga_closed_reg_success: "Successfully closed registration."
       orga_closed_reg_failure: "Cannot close registration."
       no_waiting_list_specified: "This competition does not have a deadline for accepting competitors on the waiting list. If you are using a waiting list, please specify a deadline. If you are not using a waiting list, please remember to specify this in the registration requirements."
     #context: on the "My competitions" page
@@ -2213,7 +2231,7 @@ en:
     payment_setup:
       external_dashboard: '%{provider} Dashboard'
       account_connected: "You have successfully connected your %{provider} account and can now receive registration payments for this competition."
-      account_disconnected_success: "Sucessfully disconnected your %{provider} account."
+      account_disconnected_success: "Successfully disconnected your %{provider} account."
       account_disconnected_failure: "There was an error with disconnecting the %{provider} account."
       account_not_connected: "There was a problem and we could not connect your %{provider} account."
       disconnect_account: "Disconnect %{provider} Account"

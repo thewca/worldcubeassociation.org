@@ -235,8 +235,12 @@ Rails.application.routes.draw do
 
   get 'contact' => 'contacts#index'
   post 'contact' => 'contacts#contact'
-  get 'contact/dob' => 'contacts#dob'
-  post 'contact/dob' => 'contacts#dob_create'
+  scope 'contact' do
+    get 'edit_profile' => 'contacts#edit_profile'
+    post 'edit_profile' => 'contacts#edit_profile_action', as: :contact_edit_profile_action
+    get 'dob' => 'contacts#dob', as: :contact_dob
+    post 'dob' => 'contacts#dob_create'
+  end
 
   get '/regulations' => 'regulations#show', id: 'index'
   get '/regulations/wca-regulations-and-guidelines', to: redirect('https://regulations.worldcubeassociation.org/wca-regulations-and-guidelines.pdf', status: 302)

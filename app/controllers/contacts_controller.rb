@@ -37,7 +37,7 @@ class ContactsController < ApplicationController
   end
 
   private def new_profile_data_key_to_value(new_profile_data, profile_data_to_change)
-    if profile_data_to_change == 'country'
+    if profile_data_to_change == 'country_iso2'
       Country.find_by(iso2: new_profile_data).name
     else
       new_profile_data
@@ -97,6 +97,44 @@ class ContactsController < ApplicationController
     else
       render status: :bad_request, json: { error: "Invalid contact recipient" }
     end
+  end
+
+  def edit_profile_action
+    formValues = JSON.parse(params.require(:formValues), symbolize_names: true)
+    edited_profile_details = formValues[:editedProfileDetails]
+    edit_profile_reason = formValues[:editProfileReason]
+    attachment = params[:attachment]
+    wca_id = formValues[:wcaId]
+
+    return render status: :unauthorized, json: { error: "Cannot request profile change without login" } unless current_user.present?
+
+    profile_to_edit = {
+      name: current_user.person.name,
+      country_iso2: current_user.person.country_iso2,
+      gender: current_user.person.gender,
+      dob: current_user.person.dob,
+    }
+    changes_requested = Person.fields_edit_requestable
+                              .reject { |field| profile_to_edit[field].to_s == edited_profile_details[field].to_s }
+                              .map { |field|
+                                ContactEditProfile::EditProfileChange.new(
+                                  field: field.to_s.humanize,
+                                  from: (new_profile_data_key_to_value(profile_to_edit[field], field.to_s) || "Unknown").to_s,
+                                  to: new_profile_data_key_to_value(edited_profile_details[field], field.to_s),
+                                )
+                              }
+
+    maybe_send_contact_email(
+      ContactEditProfile.new(
+        your_email: current_user&.email,
+        name: profile_to_edit[:name],
+        wca_id: wca_id,
+        changes_requested: changes_requested,
+        edit_profile_reason: edit_profile_reason,
+        document: attachment,
+        request: request,
+      ),
+    )
   end
 
   def dob

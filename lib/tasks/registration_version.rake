@@ -1,5 +1,22 @@
 # frozen_string_literal: true
 
+# Quick snippet to remove the "wcaRegistrationId" from the WCIF
+# This field directly points to our internal DB, so of course it will change.
+def clean_wcif_registrations(wcif)
+  clean_persons = wcif["persons"].map do |person|
+    reg = person["registration"]
+    clean_registration = reg&.except("wcaRegistrationId")
+
+    person.merge(
+      "registration" => clean_registration,
+    )
+  end
+
+  wcif.merge(
+    "persons" => clean_persons,
+  )
+end
+
 namespace :registration_version do
   desc "Migrates a Competition from V1 to V3"
   task :migrate_v1_v3, [:competition_id] => [:environment] do |_, args|
@@ -74,6 +91,9 @@ namespace :registration_version do
     end
 
     LogTask.log_task("Migrating Registrations for Competition #{competition_id}") do
+      wcif_v2 = competition.to_wcif(authorized: true)
+      wcif_v2 = clean_wcif_registrations(wcif_v2)
+
       ActiveRecord::Base.transaction do
         competition.microservice_registrations.wcif_ordered.includes(:payment_intents).each do |registration|
           puts "Creating registration for user: #{registration.user_id}"
@@ -160,6 +180,18 @@ namespace :registration_version do
         competition.create_waiting_list(entries: ms_waiting_list.map { |user_id| reg_lookup[user_id] })
 
         competition.registration_version_v3!
+
+        wcif_v3 = competition.reload.to_wcif(authorized: true)
+        wcif_v3 = clean_wcif_registrations(wcif_v3)
+
+        unless wcif_v2 == wcif_v3
+          puts wcif_v2.to_json
+          puts wcif_v3.to_json
+
+          raise "The WCIF output did not match. Logging debug details: First WCIF is v2, second WCIF is v3"
+        end
+
+        puts "WCIF sanity check has completed succesfully. Continuing migration"
       end
     end
   end
