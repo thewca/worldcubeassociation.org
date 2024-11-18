@@ -1801,7 +1801,6 @@ RSpec.describe Registrations::RegistrationChecker do
         expect {
           Registrations::RegistrationChecker.update_registration_allowed!(update_request, Competition.find(update_request['competition_id']), User.find(update_request['submitted_by']))
         }.not_to raise_error
-
       end
 
       it 'must be an integer, not string' do
@@ -1899,9 +1898,8 @@ RSpec.describe Registrations::RegistrationChecker do
           Registrations::RegistrationChecker.update_registration_allowed!(update_request, Competition.find(update_request['competition_id']), User.find(update_request['submitted_by']))
         }.to raise_error(WcaExceptions::RegistrationError) do |error|
           expect(error.status).to eq(:unprocessable_entity)
-          expect(error.error).to eq(Registrations::ErrorCodes::INVALID_REQUEST_DATA )
+          expect(error.error).to eq(Registrations::ErrorCodes::INVALID_REQUEST_DATA)
         end
-
       end
     end
 
