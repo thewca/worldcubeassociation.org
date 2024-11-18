@@ -642,13 +642,7 @@ class Competition < ApplicationRecord
 
   def user_can_pre_register?(user)
     # The user has to be either a registered Delegate or organizer of the competition
-    is_competition_manager = delegates.include?(user) || trainee_delegates.include?(user) || organizers.include?(user)
-    # We allow pre-registration at any time for the old registration system (because we have control over the foreign keys there)
-    #   Otherwise, if it's using the new system, we only allow registrations when it's announced
-    #   because the probability of an ID change is pretty low in that case and when it does happen, WST can handle it
-    system_compatible = !uses_microservice_registrations? || announced?
-
-    is_competition_manager && system_compatible
+    delegates.include?(user) || trainee_delegates.include?(user) || organizers.include?(user)
   end
 
   attr_accessor :being_cloned_from_id
@@ -763,12 +757,8 @@ class Competition < ApplicationRecord
     @trainee_delegate_ids || trainee_delegates.map(&:id).join(",")
   end
 
-  def uses_microservice_registrations?
-    self.registration_version_v2?
-  end
-
   def uses_new_registration_system?
-    self.uses_microservice_registrations? || self.registration_version_v3?
+    self.registration_version_v3?
   end
 
   def should_render_register_v2?(user)
@@ -2723,7 +2713,7 @@ class Competition < ApplicationRecord
   end
 
   def can_change_registration_system?
-    registration_not_yet_opened? && (uses_microservice_registrations? || self.registrations.empty?)
+    registration_not_yet_opened?
   end
 
   # Our React date picker unfortunately behaves weirdly in terms of backend data
