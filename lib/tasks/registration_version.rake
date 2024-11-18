@@ -5,14 +5,12 @@
 def clean_wcif_registrations(wcif)
   wcif_persons = wcif["persons"]
 
-  cleaned_registrations = wcif_persons.map do |p|
+  wcif_persons.map do |p|
     reg = p["registration"]
 
     cleaned_reg = reg&.except("wcaRegistrationId")
     p["registration"] = cleaned_reg
   end
-
-  wcif_persons = cleaned_registrations
 end
 
 namespace :registration_version do
