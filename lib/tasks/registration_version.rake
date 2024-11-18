@@ -74,6 +74,8 @@ namespace :registration_version do
     end
 
     LogTask.log_task("Migrating Registrations for Competition #{competition_id}") do
+      wcif_v2 = competition.to_wcif(authorized: true)
+
       ActiveRecord::Base.transaction do
         competition.microservice_registrations.wcif_ordered.includes(:payment_intents).each do |registration|
           puts "Creating registration for user: #{registration.user_id}"
@@ -160,6 +162,22 @@ namespace :registration_version do
         competition.create_waiting_list(entries: ms_waiting_list.map { |user_id| reg_lookup[user_id] })
 
         competition.registration_version_v3!
+
+        wcif_v3 = competition.reload.to_wcif(authorized: true)
+
+        unless wcif_v2 == wcif_v3
+          puts wcif_v2.to_json
+          puts wcif_v3.to_json
+
+          raise "The WCIF output did not match. Logging debug details: First WCIF is v2, second WCIF is v3"
+        end
+
+        puts "WCIF sanity check has completed succesfully. Continue the migration? [y/n]"
+        user_confirm = gets.chomp.downcase
+
+        unless user_confirm
+          raise "Confirmation rejected: '#{user_confirm}'"
+        end
       end
     end
   end
