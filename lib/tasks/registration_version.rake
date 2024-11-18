@@ -3,14 +3,18 @@
 # Quick snippet to remove the "wcaRegistrationId" from the WCIF
 # This field directly points to our internal DB, so of course it will change.
 def clean_wcif_registrations(wcif)
-  wcif_persons = wcif["persons"]
+  clean_persons = wcif["persons"].map do |person|
+    reg = person["registration"]
+    clean_registration = reg&.except("wcaRegistrationId")
 
-  wcif_persons.map do |p|
-    reg = p["registration"]
-
-    cleaned_reg = reg&.except("wcaRegistrationId")
-    p["registration"] = cleaned_reg
+    person.merge(
+      registration: clean_registration,
+    )
   end
+
+  wcif.merge(
+    persons: clean_persons,
+  )
 end
 
 namespace :registration_version do
