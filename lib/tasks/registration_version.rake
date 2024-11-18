@@ -1,5 +1,20 @@
 # frozen_string_literal: true
 
+# Quick snippet to remove the "wcaRegistrationId" from the WCIF
+# This field directly points to our internal DB, so of course it will change.
+def clean_wcif_registrations(wcif)
+  wcif_persons = wcif["persons"]
+
+  cleaned_registrations = wcif_persons.map do |p|
+    reg = p["registration"]
+
+    cleaned_reg = reg&.except("wcaRegistrationId")
+    p["registration"] = cleaned_reg
+  end
+
+  wcif_persons["persons"] = cleaned_registrations
+end
+
 namespace :registration_version do
   desc "Migrates a Competition from V1 to V3"
   task :migrate_v1_v3, [:competition_id] => [:environment] do |_, args|
@@ -75,6 +90,7 @@ namespace :registration_version do
 
     LogTask.log_task("Migrating Registrations for Competition #{competition_id}") do
       wcif_v2 = competition.to_wcif(authorized: true)
+      wcif_v2 = clean_wcif_registrations(wcif_v2)
 
       ActiveRecord::Base.transaction do
         competition.microservice_registrations.wcif_ordered.includes(:payment_intents).each do |registration|
@@ -164,6 +180,7 @@ namespace :registration_version do
         competition.registration_version_v3!
 
         wcif_v3 = competition.reload.to_wcif(authorized: true)
+        wcif_v3 = clean_wcif_registrations(wcif_v3)
 
         unless wcif_v2 == wcif_v3
           puts wcif_v2.to_json
