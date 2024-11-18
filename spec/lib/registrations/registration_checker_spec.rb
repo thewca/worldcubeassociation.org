@@ -1782,20 +1782,33 @@ RSpec.describe Registrations::RegistrationChecker do
     end
 
     describe '#update_registration_allowed!.validate_waiting_list_position!' do
-      let(:waiting_list) { FactoryBot.create(:waiting_list, holder: default_competition) }
+      let(:waiting_list) { default_competition.waiting_list }
+      let!(:waitlisted_registration) { FactoryBot.create(:registration, :waiting_list, competition: default_competition) }
 
       before do
-        waiting_list.add(FactoryBot.create(:registration, :waiting_list, competition: default_competition).user_id)
-        waiting_list.add(FactoryBot.create(:registration, :waiting_list, competition: default_competition).user_id)
-        waiting_list.add(FactoryBot.create(:registration, :waiting_list, competition: default_competition).user_id)
-        waiting_list.add(FactoryBot.create(:registration, :waiting_list, competition: default_competition).user_id)
+        FactoryBot.create_list(:registration, 4, :waiting_list, competition: default_competition)
+      end
+
+      it 'waiting list position can be updated' do
+        update_request = FactoryBot.build(
+          :update_request,
+          user_id: waitlisted_registration.user_id,
+          competition_id: waitlisted_registration.competition.id,
+          submitted_by: default_competition.organizers.first.id,
+          competing: { 'waiting_list_position' => 3 },
+        )
+
+        expect {
+          Registrations::RegistrationChecker.update_registration_allowed!(update_request, Competition.find(update_request['competition_id']), User.find(update_request['submitted_by']))
+        }.not_to raise_error
+
       end
 
       it 'must be an integer, not string' do
         update_request = FactoryBot.build(
           :update_request,
-          user_id: default_registration.user_id,
-          competition_id: default_registration.competition.id,
+          user_id: waitlisted_registration.user_id,
+          competition_id: waitlisted_registration.competition.id,
           submitted_by: default_competition.organizers.first.id,
           competing: { 'waiting_list_position' => 'b' },
         )
@@ -1809,12 +1822,10 @@ RSpec.describe Registrations::RegistrationChecker do
       end
 
       it 'can be an integer given as a string' do
-        default_competition.waiting_list.add(default_registration.user_id)
-
         update_request = FactoryBot.build(
           :update_request,
-          user_id: default_registration.user_id,
-          competition_id: default_registration.competition.id,
+          user_id: waitlisted_registration.user_id,
+          competition_id: waitlisted_registration.competition.id,
           submitted_by: default_competition.organizers.first.id,
           competing: { 'waiting_list_position' => '1' },
         )
@@ -1827,8 +1838,8 @@ RSpec.describe Registrations::RegistrationChecker do
       it 'must be an integer, not float' do
         update_request = FactoryBot.build(
           :update_request,
-          user_id: default_registration.user_id,
-          competition_id: default_registration.competition.id,
+          user_id: waitlisted_registration.user_id,
+          competition_id: waitlisted_registration.competition.id,
           submitted_by: default_competition.organizers.first.id,
           competing: { 'waiting_list_position' => 2.0 },
         )
@@ -1842,12 +1853,10 @@ RSpec.describe Registrations::RegistrationChecker do
       end
 
       it 'cannot move to less than position 1' do
-        waiting_list.add(default_registration.user_id)
-
         update_request = FactoryBot.build(
           :update_request,
-          user_id: default_registration.user_id,
-          competition_id: default_registration.competition.id,
+          user_id: waitlisted_registration.user_id,
+          competition_id: waitlisted_registration.competition.id,
           submitted_by: default_competition.organizers.first.id,
           competing: { 'waiting_list_position' => 0 },
         )
@@ -1861,12 +1870,10 @@ RSpec.describe Registrations::RegistrationChecker do
       end
 
       it 'cannot move to greater than the number of items in the waiting list' do
-        waiting_list.add(default_registration.user_id)
-
         update_request = FactoryBot.build(
           :update_request,
-          user_id: default_registration.user_id,
-          competition_id: default_registration.competition.id,
+          user_id: waitlisted_registration.user_id,
+          competition_id: waitlisted_registration.competition.id,
           submitted_by: default_competition.organizers.first.id,
           competing: { 'waiting_list_position' => 6 },
         )
@@ -1877,6 +1884,24 @@ RSpec.describe Registrations::RegistrationChecker do
           expect(error.status).to eq(:forbidden)
           expect(error.error).to eq(Registrations::ErrorCodes::INVALID_WAITING_LIST_POSITION)
         end
+      end
+
+      it 'registration must be on the waiting list' do
+        update_request = FactoryBot.build(
+          :update_request,
+          user_id: default_registration.user_id,
+          competition_id: default_registration.competition.id,
+          submitted_by: default_competition.organizers.first.id,
+          competing: { 'waiting_list_position' => 1 },
+        )
+
+        expect {
+          Registrations::RegistrationChecker.update_registration_allowed!(update_request, Competition.find(update_request['competition_id']), User.find(update_request['submitted_by']))
+        }.to raise_error(WcaExceptions::RegistrationError) do |error|
+          expect(error.status).to eq(:unprocessable_entity)
+          expect(error.error).to eq(Registrations::ErrorCodes::INVALID_REQUEST_DATA )
+        end
+
       end
     end
 
