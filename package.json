@@ -81,7 +81,7 @@
     "react-leaflet": "^4.2.1",
     "react-simplemde-editor": "^5.2.0",
     "react-spinners": "^0.14.1",
-    "react-textarea-autosize": "^8.5.4",
+    "react-textarea-autosize": "^8.5.5",
     "react_ujs": "^3.2.1",
     "regenerator-runtime": "^0.14.1",
     "resolve-url-loader": "^5.0.0",
