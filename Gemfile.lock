@@ -13,9 +13,9 @@ GIT
 
 GIT
   remote: https://github.com/sidekiq-cron/sidekiq-cron.git
-  revision: f0ac4038da7b3c6bc09b2c3ca9f0b9979848a95a
+  revision: efee6685f3a976dc836441eb958f2490f249abd1
   specs:
-    sidekiq-cron (2.0.0.rc2)
+    sidekiq-cron (2.0.1)
       cronex (>= 0.13.0)
       fugit (~> 1.8, >= 1.11.1)
       globalid (>= 1.0.1)
@@ -697,7 +697,7 @@ GEM
       faraday (>= 0.17.3, < 3)
     sdoc (2.6.1)
       rdoc (>= 5.0)
-    securerandom (0.3.1)
+    securerandom (0.3.2)
     seedbank (0.5.0)
       rake (>= 10.0)
     semantic_range (3.0.0)
