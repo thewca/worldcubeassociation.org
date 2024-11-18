@@ -8,12 +8,12 @@ def clean_wcif_registrations(wcif)
     clean_registration = reg&.except("wcaRegistrationId")
 
     person.merge(
-      registration: clean_registration,
+      "registration" => clean_registration,
     )
   end
 
   wcif.merge(
-    persons: clean_persons,
+    "persons" => clean_persons,
   )
 end
 
