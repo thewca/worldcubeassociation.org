@@ -869,7 +869,26 @@ en:
             label: "Message"
         captcha:
           validation_error: "Please verify that you are not a robot."
+        next_button: "Next"
         submit_button: "Submit"
+    contact_edit_profile:
+      title: "Edit Profile Form"
+      not_logged_in_error: "Looks like you are not logged in. Please log in to edit your profile. For any other queries, please <a href=\"https://www.worldcubeassociation.org/contact?contactRecipient=wrt\">contact us</a>."
+      no_profile_error: "Looks like you don't have a WCA profile yet because you have not participated in any competitions. For any other queries, please <a href=\"https://www.worldcubeassociation.org/contact?contactRecipient=wrt\">contact us</a>."
+      form:
+        contact_email:
+          label: "Contact Email"
+        wca_id:
+          label: "Enter WCA ID"
+        edit_reason:
+          label: "Reason for the change"
+        proof_attach:
+          label: "Attach proof"
+        submit_edit_request_button:
+          label: "Submit Edit Request"
+        captcha:
+          validation_error: "Please verify that you are not a robot."
+      success_message: "Request submitted - we'll get back to you soon."
   #context: Key used on the website homepage
   homepage:
     #context: the "Learn more" button
