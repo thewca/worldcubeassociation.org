@@ -62,7 +62,6 @@ function csvExport(selected, registrations, competition) {
 
 export default function RegistrationActions({
   partitionedSelected,
-  userEmailMap,
   refresh,
   registrations,
   spotsRemaining,
@@ -86,7 +85,7 @@ export default function RegistrationActions({
   const anyRejectable = rejected.length < selectedCount;
 
   const selectedEmails = [...pending, ...accepted, ...cancelled, ...waiting]
-    .map((userId) => userEmailMap[userId])
+    .map((userId) => registrations.find((r) => userId === r.user_id).user.email)
     .join(',');
 
   const changeStatus = (attendees, status) => {
