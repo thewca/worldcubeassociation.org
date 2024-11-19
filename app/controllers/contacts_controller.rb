@@ -38,7 +38,7 @@ class ContactsController < ApplicationController
 
   private def new_profile_data_key_to_value(new_profile_data, profile_data_to_change)
     if profile_data_to_change == 'country_iso2'
-      Country.find_by(iso2: new_profile_data).name
+      Country.find_by(iso2: new_profile_data).name_in(:en)
     else
       new_profile_data
     end
