@@ -34,8 +34,10 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
   end
 
   def show
-    registration = Registration.find_by!(user_id: @user_id, competition_id: @competition_id)
-    render json: registration.to_v2_json(admin: true, history: true)
+    @registration = Registration.find_by!(user_id: @user_id, competition_id: @competition_id)
+    @admin = true
+    @history = true
+    render "registrations/show", formats: :json
   end
 
   def create
@@ -60,8 +62,10 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
 
   def update
     if params[:competing]
-      updated_registration = Registrations::Lanes::Competing.update!(params, @competition, @current_user.id)
-      return render json: { status: 'ok', registration: updated_registration.to_v2_json(admin: true, history: true) }, status: :ok
+      @registration = Registrations::Lanes::Competing.update!(params, @competition, @current_user.id)
+      @admin = true
+      @history = true
+      return render "registrations/update", formats: :json
     end
     render json: { status: 'bad request', message: 'You need to supply at least one lane' }, status: :bad_request
   end
