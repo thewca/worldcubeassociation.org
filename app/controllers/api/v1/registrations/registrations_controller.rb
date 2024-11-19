@@ -37,6 +37,7 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
     @registration = Registration.find_by!(user_id: @user_id, competition_id: @competition_id)
     @admin = true
     @history = true
+    @payment = @competition.using_payment_integrations?
     render "registrations/show", formats: :json
   end
 
@@ -65,6 +66,7 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
       @registration = Registrations::Lanes::Competing.update!(params, @competition, @current_user.id)
       @admin = true
       @history = true
+      @payment = @competition.using_payment_integrations?
       return render "registrations/update", formats: :json
     end
     render json: { status: 'bad request', message: 'You need to supply at least one lane' }, status: :bad_request
@@ -111,6 +113,7 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
     @registrations = Registration.where(competition: @competition)
     @admin = true
     @pii = true
+    @payment = @competition.using_payment_integrations?
     render "registrations/index", formats: :json
   end
 

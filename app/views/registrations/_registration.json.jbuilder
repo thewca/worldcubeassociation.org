@@ -20,7 +20,7 @@ json.competing do
 end
 
 if @admin
-  if @competition.using_payment_integrations?
+  if @payment
     json.payment do
       json.has_paid registration.outstanding_entry_fees <= 0
       json.payment_statuses registration.registration_payments.sort_by(&:created_at).reverse.map(&:payment_status)
