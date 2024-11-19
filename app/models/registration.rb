@@ -50,6 +50,17 @@ class Registration < ApplicationRecord
     end
   end
 
+  # Automatically compute the competing_status, unless it has been explicitly assigned.
+  #   This is a poor-man's backwards compatibility so that V1 registrations get their competing status
+  #   set to whatever V3 expects, and we can just globally use V3 scopes when querying for "accepted registrations".
+  # TODO V3: Remove this hook once V1 is completely gone.
+  before_save :assign_auto_competing_status, unless: :competing_status_changed?
+
+  private def assign_auto_competing_status
+    comp_using_v3 = self.competition.uses_new_registration_system?
+    self.competing_status = self.compute_competing_status unless comp_using_v3
+  end
+
   after_save :mark_registration_processing_as_done
 
   private def mark_registration_processing_as_done
