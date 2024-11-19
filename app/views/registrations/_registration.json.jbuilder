@@ -1,6 +1,10 @@
-json.cache! ['registration-user', registration, @admin] do
+json.cache! ['registration-user', registration, @pii] do
   json.user do
-    json.extract! registration.user, :id, :wca_id, :name, :gender, :country_iso2, :email, :dob
+    if @pii
+      json.extract! registration.user, :id, :wca_id, :name, :gender, :country_iso2, :email, :dob
+    else
+      json.extract! registration.user, :id, :wca_id, :name, :gender, :country_iso2
+    end
     json.country registration.user.country
   end
 end
