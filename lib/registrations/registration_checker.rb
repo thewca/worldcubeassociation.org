@@ -34,7 +34,7 @@ module Registrations
       validate_waiting_list_position!(waiting_list_position, competition) unless waiting_list_position.nil?
       validate_update_status!(new_status, competition, current_user, target_user, registration, events) unless new_status.nil?
       validate_update_events!(events, competition) unless events.nil?
-      validate_qualifications!(update_request, competition, target_user)
+      validate_qualifications!(update_request, competition, target_user) unless events.nil?
     end
 
     def self.bulk_update_allowed!(bulk_update_request, current_user)
