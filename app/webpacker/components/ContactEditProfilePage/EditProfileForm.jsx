@@ -60,7 +60,9 @@ export default function EditProfileForm({
     formData.append('formValues', JSON.stringify({
       editedProfileDetails, editProfileReason, wcaId,
     }));
-    formData.append('attachment', proofAttachment);
+    if (proofAttachment) {
+      formData.append('attachment', proofAttachment);
+    }
 
     save(
       contactEditProfileActionUrl,
@@ -98,6 +100,7 @@ export default function EditProfileForm({
         name="name"
         value={editedProfileDetails?.name}
         onChange={handleFormChange}
+        required
       />
       <Form.Select
         options={countryOptions}
