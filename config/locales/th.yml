@@ -1561,8 +1561,44 @@ th:
         captcha:
           #original_hash: 58c1271
           validation_error: Please verify that you are not a robot.
+        #original_hash: bc98198
+        next_button: ต่อไป
         #original_hash: 2dacf65
         submit_button: ส่ง
+    contact_edit_profile:
+      #original_hash: 460577c
+      title: แบบฟอร์มแก้ไขโปรไฟล์
+      #original_hash: f01c4c7
+      not_logged_in_error: >-
+        ดูเหมือนว่าคุณไม่ได้เข้าสู่ระบบ โปรดเข้าสู่ระบบเพื่อแก้ไขโปรไฟล์ของคุณ
+        หากมีคำถามอื่นๆ โปรด<a
+        href="https://www.worldcubeassociation.org/contact?contactRecipient=wrt">ติดต่อเรา</a>
+      #original_hash: 0afb595
+      no_profile_error: >-
+        ดูเหมือนว่าคุณยังไม่มีโปรไฟล์ WCA
+        เนื่องจากคุณยังไม่ได้เข้าร่วมการแข่งขัน หากมีคำถามอื่น โปรด<a
+        href="https://www.worldcubeassociation.org/contact?contactRecipient=wrt">ติดต่อเรา</a>
+      form:
+        contact_email:
+          #original_hash: 3142970
+          label: Email สำหรับติดต่อ
+        wca_id:
+          #original_hash: 6344c9e
+          label: กรอก WCA ID
+        edit_reason:
+          #original_hash: fdfcccf
+          label: เหตุผลในการแก้ไข
+        proof_attach:
+          #original_hash: a9645b1
+          label: แนบหลักฐาน
+        submit_edit_request_button:
+          #original_hash: ab529a9
+          label: ส่งคำขอแก้ไข
+        captcha:
+          #original_hash: 58c1271
+          validation_error: กรุณายืนยันว่าคุณไม่ใช่หุ่นยนต์
+      #original_hash: 126541e
+      success_message: ส่งคำขอแล้ว - เราจะติดต่อคุณกลับเร็วๆ นี้
   homepage:
     #original_hash: 824d76b
     learn_more: เรียนรู้เพิ่มเติม
@@ -2547,10 +2583,6 @@ th:
       reg_opens_too_early: การรับสมัครถูกตั้งค่าให้เริ่มน้อยกว่าที่กำหนด 48 ชั่วโมง
       #original_hash: a25e7a2
       registration_already_closed: กำหนดเวลาในการสมัครการแข่งขันได้ผ่านไปแล้ว โปรดตั้งค่าให้เป็นเวลาในอนาคต
-      #original_hash: 9a07b42
-      uses_v2_registrations: >-
-        การแข่งขันครั้งนี้ใช้ระบบการสมัครแบบใหม่ โปรดติดต่อ WCAT
-        หากคุณคิดว่าการแข่งขันครั้งนี้ควรใช้ระบบเดิมแทน
       #original_hash: 3322400
       tooltip_registered: คุณได้สมัครแล้ว
       #original_hash: f2d092f
@@ -2569,7 +2601,7 @@ th:
       not_confirmed_not_visible: การแข่งขันนี้ยังไม่ได้รับการยืนยัน และยังไม่ปรากฎต่อสาธารณะ
       #original_hash: 1b92d16
       championship_exists: 'ได้มีการแข่งขัน %{championship_type} ในปี %{year} ไปแล้ว'
-      #original_hash: 0644bdc
+      #original_hash: e871f03
       orga_closed_reg_success: ปิดการสมัครการแข่งขันเรียบร้อยแล้ว
       #original_hash: 7f197a0
       orga_closed_reg_failure: ไม่สามารถปิดการสมัครการแข่งขันได้
@@ -4222,7 +4254,7 @@ th:
       account_connected: >-
         คุณได้เชื่อมต่อบัญชี %{provider} ของคุณสำเร็จแล้ว
         และตอนนี้สามารถรับการชำระเงินการสมัครการแข่งขันครั้งนี้ได้แล้ว
-      #original_hash: 18d1326
+      #original_hash: b83891e
       account_disconnected_success: 'ยกเลิกการเชื่อมต่อบัญชี %{provider} ของคุณสำเร็จแล้ว'
       #original_hash: 6b934e2
       account_disconnected_failure: 'เกิดข้อผิดพลาดในการยกเลิกการเชื่อมต่อบัญชี %{provider}'
