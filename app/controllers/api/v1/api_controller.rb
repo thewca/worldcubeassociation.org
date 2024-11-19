@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 class Api::V1::ApiController < ActionController::API
+  # https://github.com/rails/jbuilder/pull/575
+  helper_method :combined_fragment_cache_key
+  helper_method :view_cache_dependencies
   prepend_before_action :validate_jwt_token
 
   # Manually include new Relic because we don't derive from ActionController::Base

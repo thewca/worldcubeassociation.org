@@ -44,9 +44,9 @@ class Registration < ApplicationRecord
 
   validate :registration_cannot_be_deleted_and_accepted_simultaneously
   private def registration_cannot_be_deleted_and_accepted_simultaneously
-    # if deleted? && accepted?
-    #   errors.add(:registration_competition_events, I18n.t('registrations.errors.cannot_be_deleted_and_accepted'))
-    # end
+    if deleted? && accepted?
+      errors.add(:registration_competition_events, I18n.t('registrations.errors.cannot_be_deleted_and_accepted'))
+    end
   end
 
   after_save :mark_registration_processing_as_done
@@ -383,7 +383,7 @@ class Registration < ApplicationRecord
     end
   end
 
-  # validate :cannot_be_undeleted_when_banned, if: :deleted_at_changed?
+  validate :cannot_be_undeleted_when_banned, if: :deleted_at_changed?
   private def cannot_be_undeleted_when_banned
     if user.banned? && deleted_at.nil?
       errors.add(:user_id, I18n.t('registrations.errors.undelete_banned'))

@@ -20,7 +20,7 @@ import { personUrl } from '../../../lib/requests/routes.js.erb';
 import Errored from '../../Requests/Errored';
 import { formatAttemptResult } from '../../../lib/wca-live/attempts';
 import i18n from '../../../lib/i18n';
-import { countries } from "../../../lib/wca-data.js.erb";
+import { countries } from '../../../lib/wca-data.js.erb';
 
 const sortReducer = createSortReducer(['name', 'country', 'total']);
 
@@ -317,7 +317,7 @@ export default function RegistrationList({ competitionInfo }) {
           <FooterContent
             registrations={registrations}
             psychSheetEvent={psychSheetEvent}
-            dataWithUser={registrations}
+            dataWithUser={dataWithUser}
             competitionInfo={competitionInfo}
           />
         </Table.Footer>
