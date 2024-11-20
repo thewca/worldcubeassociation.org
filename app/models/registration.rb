@@ -294,6 +294,7 @@ class Registration < ApplicationRecord
 
   def to_v2_json(admin: false, history: false, pii: false)
     base_json = {
+      user: user.as_json(only: %w[id wca_id name gender country_iso2], methods: %w[country]),
       user_id: user_id,
       competing: {
         event_ids: event_ids,
