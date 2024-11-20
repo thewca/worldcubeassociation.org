@@ -14,6 +14,7 @@ import {
 } from 'semantic-ui-react';
 import { getSingleRegistration } from '../api/registration/get/get_registrations';
 import updateRegistration from '../api/registration/patch/update_registration';
+import getUsersInfo from '../api/user/post/getUserInfo';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { setMessage } from '../Register/RegistrationMessage';
 import Loading from '../../Requests/Loading';
@@ -24,7 +25,6 @@ import { useConfirm } from '../../../lib/providers/ConfirmProvider';
 import i18n from '../../../lib/i18n';
 import RegistrationHistory from './RegistrationHistory';
 import { hasPassed } from '../../../lib/utils/dates';
-import getUsersInfo from '../api/user/post/getUserInfo';
 
 export default function RegistrationEditor({ competitor, competitionInfo }) {
   const dispatch = useDispatch();
@@ -54,7 +54,7 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
   });
 
   const { mutate: updateRegistrationMutation, isPending: isUpdating } = useMutation({
-    mutationFn: updateRegistration,
+    mutationFn: (body) => updateRegistration(competitionInfo, body),
     onError: (data) => {
       const { error } = data.json;
       dispatch(setMessage(

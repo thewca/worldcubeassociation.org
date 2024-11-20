@@ -13,6 +13,7 @@ import { setMessage } from '../Register/RegistrationMessage';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
 import i18n from '../../../lib/i18n';
 import Loading from '../../Requests/Loading';
+import useWithUserData from '../hooks/useWithUserData';
 import { bulkUpdateRegistrations } from '../api/registration/patch/update_registration';
 import RegistrationAdministrationTable from './RegistrationsAdministrationTable';
 import useCheckboxState from '../../../lib/hooks/useCheckboxState';
@@ -160,8 +161,13 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
     },
   });
 
+  const {
+    isLoading: infoLoading,
+    data: registrationsWithUser,
+  } = useWithUserData(registrations ?? []);
+
   const { mutate: updateRegistrationMutation, isPending: isMutating } = useMutation({
-    mutationFn: bulkUpdateRegistrations,
+    mutationFn: (body) => bulkUpdateRegistrations(competitionInfo, body),
     onError: (data) => {
       const { error } = data.json;
       dispatchStore(setMessage(
@@ -179,8 +185,8 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
   });
 
   const sortedRegistrationsWithUser = useMemo(() => {
-    if (registrations) {
-      const sorted = registrations.toSorted((a, b) => {
+    if (registrationsWithUser) {
+      const sorted = registrationsWithUser.toSorted((a, b) => {
         switch (sortColumn) {
           case 'name':
             return a.user.name.localeCompare(b.user.name);
@@ -242,7 +248,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
       return sorted;
     }
     return [];
-  }, [registrations, sortColumn, sortDirection]);
+  }, [registrationsWithUser, sortColumn, sortDirection]);
 
   const {
     waiting, accepted, cancelled, pending, rejected,
@@ -276,12 +282,12 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
 
   const userEmailMap = useMemo(
     () => Object.fromEntries(
-      (registrations ?? []).map((registration) => [
+      (registrationsWithUser ?? []).map((registration) => [
         registration.user.id,
         registration.email,
       ]),
     ),
-    [registrations],
+    [registrationsWithUser],
   );
   const handleOnDragEnd = useMemo(() => async (result) => {
     if (!result.destination) return;
@@ -304,7 +310,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
     });
   }, [competitionInfo.id, refetch, updateRegistrationMutation, waiting]);
 
-  return isRegistrationsLoading ? (
+  return isRegistrationsLoading || infoLoading ? (
     <Loading />
   ) : (
     <Segment loading={isMutating} style={{ overflowX: 'scroll' }}>
@@ -331,7 +337,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
             refresh={() => {
               dispatch({ type: 'clear-selected' });
             }}
-            registrations={registrations}
+            registrations={registrationsWithUser}
             spotsRemaining={spotsRemaining}
             userEmailMap={userEmailMap}
             competitionInfo={competitionInfo}
