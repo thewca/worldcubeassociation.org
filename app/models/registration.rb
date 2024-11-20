@@ -50,11 +50,11 @@ class Registration < ApplicationRecord
     end
   end
 
-  # Automatically compute the V1 timestamps, for competitions that just got a new competing_status.
+  # Automatically compute the V1 timestamps, for competitions that already have a competing_status.
   #   This is a poor-man's backwards compatibility so that V3 registrations can be used by the V1 scopes
-  #   for `accepted` and `pending`, which .
+  #   for `accepted` and `pending`, which rely on these timestamps having some non-nil value.
   # TODO V3: Remove this hook once V1 is completely gone.
-  before_save :recompute_timestamps, if: [:competing_status?, :competing_status_changed?]
+  before_save :recompute_timestamps, if: :competing_status?
 
   def recompute_timestamps
     case self.competing_status
