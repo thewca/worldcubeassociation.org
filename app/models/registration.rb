@@ -50,15 +50,25 @@ class Registration < ApplicationRecord
     end
   end
 
-  # Automatically compute the competing_status, unless it has been explicitly assigned.
-  #   This is a poor-man's backwards compatibility so that V1 registrations get their competing status
-  #   set to whatever V3 expects, and we can just globally use V3 scopes when querying for "accepted registrations".
+  # Automatically compute the V1 timestamps, for competitions that just got a new competing_status.
+  #   This is a poor-man's backwards compatibility so that V3 registrations can be used by the V1 scopes
+  #   for `accepted` and `pending`, which .
   # TODO V3: Remove this hook once V1 is completely gone.
-  before_save :assign_auto_competing_status, unless: :competing_status_changed?
+  before_save :recompute_timestamps, if: [:competing_status?, :competing_status_changed?]
 
-  private def assign_auto_competing_status
-    comp_using_v3 = self.competition.uses_new_registration_system?
-    self.competing_status = self.compute_competing_status unless comp_using_v3
+  def recompute_timestamps
+    case self.competing_status
+    when Registrations::Helper::STATUS_PENDING
+      self.accepted_at = nil
+      self.deleted_at = nil
+    when Registrations::Helper::STATUS_ACCEPTED
+      self.accepted_at = DateTime.now
+      self.deleted_at = nil
+    when Registrations::Helper::STATUS_CANCELLED
+    when Registrations::Helper::STATUS_REJECTED
+      self.accepted_at = nil
+      self.deleted_at = DateTime.now
+    end
   end
 
   after_save :mark_registration_processing_as_done
