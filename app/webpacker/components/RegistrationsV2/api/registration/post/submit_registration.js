@@ -1,10 +1,11 @@
 import fetchWithJWTToken from '../../../../../lib/requests/fetchWithJWTToken';
-import { submitRegistrationUrl } from '../../../../../lib/requests/routes.js.erb';
+import { registrationRoutes } from '../../routes';
 
 export default async function submitEventRegistration(
+  competition,
   body,
 ) {
-  const route = submitRegistrationUrl;
+  const route = registrationRoutes[competition.registration_version].submitRegistrationUrl;
   const { data } = await fetchWithJWTToken(route, {
     method: 'POST',
     headers: {

@@ -44,7 +44,7 @@ export default function RegistrationOverview({
   const queryClient = useQueryClient();
 
   const { mutate: deleteRegistrationMutation, isPending: isDeleting } = useMutation({
-    mutationFn: () => updateRegistration({
+    mutationFn: () => updateRegistration(competitionInfo, {
       user_id: registration.user_id,
       competition_id: competitionInfo.id,
       competing: {

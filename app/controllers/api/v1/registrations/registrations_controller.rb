@@ -90,7 +90,7 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
   def list
     competition_id = list_params
     registrations = Registration.where(competition_id: competition_id).competing_status_accepted
-    render json: registrations.includes(:user).map { |r| r.to_v2_json }
+    render json: registrations.map { |r| r.to_v2_json }
   end
 
   # To list Registrations in the admin view you need to be able to administer the competition
@@ -105,12 +105,7 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
 
   def list_admin
     registrations = Registration.where(competition: @competition)
-    render json: registrations.includes(
-      :user,
-      registration_payments: :receipt,
-      registration_competition_events: { competition_event: :competition },
-      registration_history_entries: :registration_history_change,
-    ).map { |r| r.to_v2_json(admin: true, history: true, pii: true) }
+    render json: registrations.map { |r| r.to_v2_json(admin: true, history: true, pii: true) }
   end
 
   def validate_payment_ticket_request
