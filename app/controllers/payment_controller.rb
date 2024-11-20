@@ -7,8 +7,7 @@ class PaymentController < ApplicationController
       competition_id, user_id = attendee_id.split("-")
       competition = Competition.find(competition_id)
 
-      registration_scope = competition.uses_microservice_registrations? ? MicroserviceRegistration : Registration
-      registration = registration_scope.includes(:payment_intents).find_by(competition: competition, user_id: user_id)
+      registration = Registration.includes(:payment_intents).find_by(competition: competition, user_id: user_id)
 
       return render status: :bad_request, json: { error: "Registration not found" } unless registration.present?
 
