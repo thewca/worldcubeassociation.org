@@ -197,16 +197,21 @@ namespace :registration_version do
   end
 
   task backport_timestamps: [:environment] do
+    v3_competitions_ids = Competition.registration_version_v3.pluck(:id).to_set
+
     Registration.includes(:registration_history_entries)
-                .where.not(competing_status: nil)
+                .where(deleted_at: nil)
+                .where(accepted_at: nil)
+                .where(created_at: 2.weeks.ago..)
                 .find_each do |registration|
-      registration.recompute_timestamps
+      if v3_competitions_ids.include?(registration.competition_id)
+        registration.recompute_timestamps
 
-      # Bonus: created_at also needs to be considered for automatically migrated competitions
-      earliest_registration_action = registration.registration_history_entries.minimum(:created_at)
-      registration.created_at = earliest_registration_action
+        earliest_registration_action = registration.registration_history_entries.minimum(:created_at)
+        registration.created_at = earliest_registration_action
 
-      registration.save!
+        registration.save!
+      end
     end
   end
 end
