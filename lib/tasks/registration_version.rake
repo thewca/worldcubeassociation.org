@@ -195,4 +195,18 @@ namespace :registration_version do
       end
     end
   end
+
+  task backport_timestamps: [:environment] do
+    Registration.includes(:registration_history_entries)
+                .where.not(competing_status: nil)
+                .find_each do |registration|
+      registration.recompute_timestamps
+
+      # Bonus: created_at also needs to be considered for automatically migrated competitions
+      earliest_registration_action = registration.registration_history_entries.minimum(:created_at)
+      registration.created_at = earliest_registration_action
+
+      registration.save!
+    end
+  end
 end
