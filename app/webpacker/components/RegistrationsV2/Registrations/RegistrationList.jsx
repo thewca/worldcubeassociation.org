@@ -113,15 +113,20 @@ export default function RegistrationList({ competitionInfo }) {
     enabled: psychSheetEvent !== undefined,
   });
 
-  useEffect(() => {
+  const registrationsWithPsychsheet = useMemo(() => {
     if (psychSheet !== undefined) {
       setPsychSheetSortBy(psychSheet.sort_by);
+      return psychSheet.sorted_rankings.map((p) => {
+        const registrationEntry = registrations.find((r) => p.user_id === r.user_id);
+        return { ...p, ...registrationEntry };
+      });
     }
-  }, [psychSheet]);
+    return registrations;
+  }, [psychSheet, registrations]);
 
   const data = useMemo(() => {
-    if (registrations) {
-      const sorted = registrations.toSorted((a, b) => {
+    if (registrationsWithPsychsheet) {
+      const sorted = registrationsWithPsychsheet.toSorted((a, b) => {
         if (psychSheetEvent !== undefined) {
           return 0; // backend handles the sorting of psych sheets
         }
@@ -142,7 +147,7 @@ export default function RegistrationList({ competitionInfo }) {
       return sorted;
     }
     return [];
-  }, [registrations, sortColumn, sortDirection, psychSheetEvent]);
+  }, [registrationsWithPsychsheet, sortColumn, sortDirection, psychSheetEvent]);
 
   if (isError) {
     return (
