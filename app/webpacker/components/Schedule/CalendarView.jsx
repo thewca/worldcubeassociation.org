@@ -113,14 +113,12 @@ function CalendarEventView({ event, timeText, view }) {
   const style = getEventStyle(lengthInMin);
 
   return (
-    <div className='fc-event-main-frame' style={{ overflow: 'hidden' }}>
-      <div style={style}>
-        <InnerEventContent
-          lengthInMin={lengthInMin}
-          title={event.title}
-          timeText={timeText}
-        />
-      </div>
+    <div className='fc-event-main-frame' style={style}>
+      <InnerEventContent
+        lengthInMin={lengthInMin}
+        title={event.title}
+        timeText={timeText}
+      />
     </div>
   );
 }
@@ -142,14 +140,14 @@ function InnerEventContent({ lengthInMin, timeText, title }) {
 
 function getEventStyle(lengthInMin) {
   if (lengthInMin < 15) {
-    return { whiteSpace: 'nowrap', fontSize: '80%', lineHeight: '1.2em' };
+    return { overflow: 'hidden', whiteSpace: 'nowrap', fontSize: '80%', lineHeight: '1.2em' };
   } else if (lengthInMin < 20) {
-    return { whiteSpace: 'nowrap', fontSize: '90%' };
+    return { overflow: 'hidden', whiteSpace: 'nowrap', fontSize: '90%' };
   } else if (lengthInMin < 25) {
-    return { whiteSpace: 'nowrap' };
+    return { overflow: 'hidden', whiteSpace: 'nowrap' };
   } else if (lengthInMin < 30) {
-    return { lineHeight: '1.4em' };
+    return { overflow: 'hidden', lineHeight: '1.4em' };
   } else {
-    return {};
+    return { overflow: 'hidden' };
   }
 }
