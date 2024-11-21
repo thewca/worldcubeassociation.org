@@ -115,7 +115,7 @@ function CalendarEventView({ event, timeText, view }) {
   return (
     <div className='fc-event-main-frame' style={style}>
       <InnerEventContent
-        lengthInMin={lengthInMin}
+        onlyOneLine={lengthInMin < 25}
         title={event.title}
         timeText={timeText}
       />
@@ -123,8 +123,8 @@ function CalendarEventView({ event, timeText, view }) {
   );
 }
 
-function InnerEventContent({ lengthInMin, timeText, title }) {
-  if (lengthInMin < 25) {
+function InnerEventContent({ onlyOneLine, timeText, title }) {
+  if (onlyOneLine) {
     return (
       <>{timeText} - {title}</>
     );
