@@ -1,7 +1,7 @@
-import luxonPlugin from '@fullcalendar/luxon3';
+import luxonPlugin, { toLuxonDateTime } from '@fullcalendar/luxon3';
 import FullCalendar from '@fullcalendar/react';
 import timeGridPlugin from '@fullcalendar/timegrid';
-import { DateTime } from 'luxon';
+import { DateTime, Interval } from 'luxon';
 import React from 'react';
 import {
   earliestTimeOfDayWithBuffer,
@@ -92,10 +92,54 @@ export default function CalendarView({
         locale={calendarLocale}
         timeZone={timeZone}
         events={fcActivities}
+        // custom rendering of event content
+        eventContent={(args) => (
+          <CalendarEventView {...args} />
+        )}
       />
       {fcActivities.length === 0 && (
         <em>{I18n.t('competitions.schedule.no_activities')}</em>
       )}
     </>
+  );
+}
+
+// TODO: check events crossing midnight
+function CalendarEventView({ event, timeText, view }) {
+  const startLuxon = toLuxonDateTime(event.start, view.calendar);
+  const endLuxon = toLuxonDateTime(event.end, view.calendar);
+  const interval = Interval.fromDateTimes(startLuxon, endLuxon);
+  const lengthInMin = interval.length('minutes');
+
+  return (
+    <div className='fc-event-main-frame' style={{ overflow: 'hidden' }}>
+      {lengthInMin < 15 && (
+        <div style={{ whiteSpace: 'nowrap', fontSize: '70%', lineHeight: '1.2em' }}>
+          {timeText} - {event.title}
+        </div>
+      )}
+      {15 <= lengthInMin && lengthInMin < 20 && (
+        <div style={{ whiteSpace: 'nowrap', fontSize: '90%' }}>
+          {timeText} - {event.title}
+        </div>
+      )}
+      {20 <= lengthInMin && lengthInMin < 25 && (
+        <div style={{ whiteSpace: 'nowrap' }}>
+          {timeText} - {event.title}
+        </div>
+      )}
+      {25 <= lengthInMin && lengthInMin < 30 && (
+        <div style={{ lineHeight: '1.4em' }}>
+          <div style={{ whiteSpace: 'nowrap' }}>{timeText}</div>
+          <div>{event.title}</div>
+        </div>
+      )}
+      {30 <= lengthInMin && (
+        <div>
+          <div style={{ whiteSpace: 'nowrap' }}>{timeText}</div>
+          <div>{event.title}</div>
+        </div>
+      )}
+    </div>
   );
 }
