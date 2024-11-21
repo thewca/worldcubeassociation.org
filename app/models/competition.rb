@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class Competition < ApplicationRecord
-  include MicroserviceRegistrationHolder
-
   self.table_name = "Competitions"
 
   # We need this default order, tests rely on it.
@@ -22,7 +20,10 @@ class Competition < ApplicationRecord
   has_many :media, class_name: "CompetitionMedium", foreign_key: "competitionId", dependent: :delete_all
   has_many :tabs, -> { order(:display_order) }, dependent: :delete_all, class_name: "CompetitionTab"
   has_one :delegate_report, dependent: :destroy
+  has_one :waiting_list, dependent: :destroy, as: :holder
   has_many :competition_venues, dependent: :destroy
+  has_many :venue_countries, -> { distinct }, through: :competition_venues, source: :country
+  has_many :venue_continents, -> { distinct }, through: :competition_venues, source: :continent
   belongs_to :country, foreign_key: :countryId
   has_one :continent, foreign_key: :continentId, through: :country
   has_many :championships, dependent: :delete_all
@@ -87,11 +88,15 @@ class Competition < ApplicationRecord
   scope :pending_posting, -> { where.not(results_submitted_at: nil).where(results_posted_at: nil) }
   scope :pending_report_or_results_posting, -> { includes(:delegate_report).where(delegate_report: { posted_at: nil }).or(where(results_posted_at: nil)) }
 
-  enum guest_entry_status: {
+  enum :guest_entry_status, {
     unclear: 0,
     free: 1,
     restricted: 2,
-  }, _prefix: true
+  }, prefix: true
+
+  NEW_REG_SYSTEM_DEFAULT = :v3
+
+  enum :registration_version, [:v1, :v2, :v3], prefix: true, default: NEW_REG_SYSTEM_DEFAULT
 
   CLONEABLE_ATTRIBUTES = %w(
     cityName
@@ -166,7 +171,7 @@ class Competition < ApplicationRecord
     waiting_list_deadline_date
     event_change_deadline_date
     competition_series_id
-    uses_v2_registrations
+    registration_version
   ).freeze
   VALID_NAME_RE = /\A([-&.:' [:alnum:]]+) (\d{4})\z/
   VALID_ID_RE = /\A[a-zA-Z0-9]+\Z/
@@ -392,6 +397,25 @@ class Competition < ApplicationRecord
     Event.c_find(main_event_id)
   end
 
+  def events_held?(desired_event_ids)
+    # rubocop:disable Style/BitwisePredicate
+    #   We have to shut up Rubocop here because otherwise it thinks that
+    #   `desired_event_ids` are integers which are being compared to a bit mask
+    (desired_event_ids & self.event_ids) == desired_event_ids
+    # rubocop:enable Style/BitwisePredicate
+  end
+
+  def enforces_qualifications?
+    uses_qualification? && !allow_registration_without_qualification
+  end
+
+  def guest_limit_exceeded?(guest_count)
+    guests_not_allowed_but_coming = !guests_enabled? && guest_count > 0
+    guests_exceeding_limit = guest_entry_status_restricted? && guests_per_registration_limit.present? && guest_count > guests_per_registration_limit
+
+    guests_not_allowed_but_coming || guests_exceeding_limit
+  end
+
   def with_old_id
     new_id = self.id
     self.id = id_was
@@ -413,12 +437,25 @@ class Competition < ApplicationRecord
     end
   end
 
+  validate :must_have_at_least_one_organizer, if: :confirmed_or_visible?
+  def must_have_at_least_one_organizer
+    if organizer_ids.empty?
+      errors.add(:organizer_ids, I18n.t('competitions.errors.must_contain_organizer'))
+    end
+  end
+
   def confirmed_or_visible?
     self.confirmed? || self.showAtAll
   end
 
   def registration_full?
-    competitor_count = uses_new_registration_service? ? Microservices::Registrations.competitor_count_by_competition(id) : registrations.accepted_and_paid_pending_count
+    # TODO: V3-Reg cleanup, move this to registrations.accepted_and_paid_pending_count again
+    competitor_count =
+      if registration_version_v3?
+        registrations.competing_status_accepted.count + registrations.competing_status_pending.with_payments.count
+      else
+        registrations.accepted_and_paid_pending_count
+      end
     competitor_limit_enabled? && competitor_count >= competitor_limit
   end
 
@@ -603,6 +640,7 @@ class Competition < ApplicationRecord
   end
 
   def user_can_pre_register?(user)
+    # The user has to be either a registered Delegate or organizer of the competition
     delegates.include?(user) || trainee_delegates.include?(user) || organizers.include?(user)
   end
 
@@ -644,7 +682,9 @@ class Competition < ApplicationRecord
              'announced_by_user',
              'cancelled_by_user',
              'competition_payment_integrations',
-             'microservice_registrations'
+             'venue_countries',
+             'venue_continents',
+             'waiting_list'
           # Do nothing as they shouldn't be cloned.
         when 'organizers'
           clone.organizers = organizers
@@ -705,27 +745,23 @@ class Competition < ApplicationRecord
 
   attr_writer :staff_delegate_ids, :organizer_ids, :trainee_delegate_ids
   def staff_delegate_ids
-    @staff_delegate_ids || staff_delegates.pluck(:id).join(",")
+    @staff_delegate_ids || staff_delegates.map(&:id).join(",")
   end
 
   def organizer_ids
-    @organizer_ids || organizers.pluck(:id).join(",")
+    @organizer_ids || organizers.map(&:id).join(",")
   end
 
   def trainee_delegate_ids
-    @trainee_delegate_ids || trainee_delegates.pluck(:id).join(",")
+    @trainee_delegate_ids || trainee_delegates.map(&:id).join(",")
   end
 
-  def enable_v2_registrations!
-    update_column :uses_v2_registrations, true
-  end
-
-  def uses_new_registration_service?
-    self.uses_v2_registrations
+  def uses_new_registration_system?
+    self.registration_version_v3?
   end
 
   def should_render_register_v2?(user)
-    uses_new_registration_service? && user.cannot_register_for_competition_reasons(self).empty? && (registration_currently_open? || user_can_pre_register?(user))
+    uses_new_registration_system? && user.cannot_register_for_competition_reasons(self).empty?
   end
 
   before_validation :unpack_delegate_organizer_ids
@@ -978,11 +1014,7 @@ class Competition < ApplicationRecord
   end
 
   def any_registrations?
-    if uses_new_registration_service?
-      self.microservice_registrations.any?
-    else
-      self.registrations.any?
-    end
+    self.registrations.any?
   end
 
   def registration_range_specified?
@@ -1014,13 +1046,11 @@ class Competition < ApplicationRecord
   end
 
   def country_zones
-    ActiveSupport::TimeZone.country_zones(country.iso2).to_h { |tz| [tz.name, tz.tzinfo.name] }
+    TZInfo::Country.get(country.iso2.upcase).zone_identifiers
   rescue TZInfo::InvalidCountryCode
     # This can occur for non real country *and* XK!
     # FIXME what to provide for XA, XE, XM, XS?
-    {
-      "London" => "Europe/London",
-    }
+    ["Europe/London"]
   end
 
   private def compute_coordinates
@@ -1074,10 +1104,6 @@ class Competition < ApplicationRecord
     )
   end
 
-  def competitor_limit_enabled?
-    competitor_limit_enabled
-  end
-
   def competitor_limit_required?
     confirmed? && created_at.present? && created_at > Date.new(2018, 9, 1)
   end
@@ -1122,6 +1148,15 @@ class Competition < ApplicationRecord
 
   def some_guests_allowed?
     guest_entry_status_restricted?
+  end
+
+  def pending_competitors_count
+    # TODO: V3-Reg Cleanup, we can go back to use registrations.pending when we are on v3
+    if registration_version_v3?
+      registrations.competing_status_pending.count
+    else
+      registrations.pending.count
+    end
   end
 
   def registration_period_required?
@@ -1582,19 +1617,11 @@ class Competition < ApplicationRecord
         raise "Unknown 'sort_by' in psych sheet computation: #{sort_by}"
       end
 
-      if self.uses_new_registration_service?
-        # We deliberately don't go through the cached `microservice_registrations` table here, because then we
-        # would need to separately check which of the cached registrations are accepted
-        # and which of those are registered for the specified event. Querying the MS directly is much more efficient.
-        accepted_registrations = Microservices::Registrations.registrations_by_competition(self.id, 'accepted', event.id, cache: false)
-        registered_user_ids = accepted_registrations.map { |reg| reg['user_id'] }
-      else
-        registered_user_ids = self.registrations
-                                  .accepted
-                                  .includes(:registration_competition_events)
-                                  .where(registration_competition_events: { competition_event: competition_event })
-                                  .pluck(:user_id)
-      end
+      registered_user_ids = self.registrations
+                                .accepted
+                                .includes(:registration_competition_events)
+                                .where(registration_competition_events: { competition_event: competition_event })
+                                .pluck(:user_id)
 
       concise_results_date = ComputeAuxiliaryData.end_date || Date.current
       results_cache_key = ["psych-sheet", self.id, *registered_user_ids, concise_results_date]
@@ -1840,7 +1867,7 @@ class Competition < ApplicationRecord
                force_comment_in_registration use_wca_registration external_registration_page guests_entry_fee_lowest_denomination guest_entry_status
                information events_per_registration_limit],
       methods: %w[url website short_name city venue_address venue_details latitude_degrees longitude_degrees country_iso2 event_ids registration_currently_open?
-                  main_event_id number_of_bookmarks using_payment_integrations? uses_qualification? uses_cutoff? competition_series_ids registration_full?],
+                  main_event_id number_of_bookmarks using_payment_integrations? uses_qualification? uses_cutoff? competition_series_ids registration_full? registration_version],
       include: %w[delegates organizers],
     }
     self.as_json(options)
@@ -1854,6 +1881,19 @@ class Competition < ApplicationRecord
     competition_series&.competition_ids&.split(',') || []
   end
 
+  def other_series_ids
+    series_sibling_competitions.pluck(:id)
+  end
+
+  def qualification_wcif
+    return {} unless uses_qualification?
+    competition_events
+      .where.not(qualification: nil)
+      .index_by(&:event_id)
+      .transform_values(&:qualification)
+      .transform_values(&:to_wcif)
+  end
+
   def persons_wcif(authorized: false)
     managers = self.managers
     includes_associations = [
@@ -1862,24 +1902,21 @@ class Competition < ApplicationRecord
         person: [:ranksSingle, :ranksAverage],
       } },
       :wcif_extensions,
+      :events,
     ]
-    # V2 registrations store the event IDs in the microservice data, not in the monolith
-    includes_associations << :events unless self.uses_new_registration_service?
-
-    registrations_relation = self.uses_new_registration_service? ? self.microservice_registrations : self.registrations
 
     # NOTE: we're including non-competing registrations so that they can have job
     # assignments as well. These registrations don't have accepted?, but they
     # should appear in the WCIF.
-    persons_wcif = registrations_relation.order(:id)
-                                         .includes(includes_associations)
-                                         .to_enum
-                                         .with_index(1)
-                                         .select { |r, registrant_id| authorized || r.wcif_status == "accepted" }
-                                         .map do |r, registrant_id|
-                                           managers.delete(r.user)
-                                           r.user.to_wcif(self, r, registrant_id, authorized: authorized)
-                                         end
+    persons_wcif = self.registrations.wcif_ordered
+                       .includes(includes_associations)
+                       .to_enum
+                       .with_index(1)
+                       .select { |r, registrant_id| authorized || r.wcif_status == "accepted" }
+                       .map do |r, registrant_id|
+      managers.delete(r.user)
+      r.user.to_wcif(self, r, registrant_id, authorized: authorized)
+    end
     # NOTE: unregistered managers may generate N+1 queries on their personal bests,
     # but that's fine because there are very few of them!
     persons_wcif + managers.map { |m| m.to_wcif(self, authorized: authorized) }
@@ -2018,14 +2055,13 @@ class Competition < ApplicationRecord
 
   # Takes an array of partial Person WCIF and updates the fields that are not immutable.
   def update_persons_wcif!(wcif_persons, current_user)
-    registrations_relation = self.uses_new_registration_service? ? self.microservice_registrations : self.registrations
     registration_includes = [
       { assignments: [:schedule_activity] },
       :user,
       :wcif_extensions,
+      :registration_competition_events,
     ]
-    registration_includes << :registration_competition_events unless self.uses_new_registration_service?
-    registrations = registrations_relation.includes(registration_includes)
+    registrations = self.registrations.includes(registration_includes)
     competition_activities = all_activities
     new_assignments = []
     removed_assignments = []

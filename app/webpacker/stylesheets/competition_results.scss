@@ -1,4 +1,4 @@
-@import "variables";
+@use "variables";
 
 .competition-results {
   .events-list {
@@ -15,13 +15,13 @@
       vertical-align: middle;
     }
     .WR {
-      color : $wr-color;
+      color : variables.$wr-color;
     }
     .CR {
-      color : $cr-color;
+      color : variables.$cr-color;
     }
     .NR {
-      color : $nr-color;
+      color : variables.$nr-color;
     }
     .edit-link {
       margin-left: 1em;

@@ -3665,10 +3665,6 @@ fi:
         '-2003': You don't have the permissions to complete this action
         #original_hash: cb4093a
         '-3000': Rekisteröitymistä ei ole olemassa
-        #original_hash: 0df821f
-        '-3001': WCA Payment is not enabled for this competition
-        #original_hash: 092da51
-        '-3002': Sinun täytyy rekisteröityä loppuun ennen maksamista
         #original_hash: bc53fb6
         '-4000': The Request contains invalid data
         #original_hash: 35fddf4
@@ -3693,6 +3689,10 @@ fi:
         '-4010': Jonotuslistasija ei ole kelvollinen
         #original_hash: e489908
         '-4011': Voit hyväksyä vain jonotuslistan ensimmäisen kilpailijan
+        #original_hash: 0df821f
+        '-6001': WCA Payment is not enabled for this competition
+        #original_hash: 092da51
+        '-6002': Sinun täytyy rekisteröityä loppuun ennen maksamista
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-

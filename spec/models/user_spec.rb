@@ -155,15 +155,13 @@ RSpec.describe User, type: :model do
       dummy_user = FactoryBot.create :dummy_user
       person_for_dummy = dummy_user.person
       expect(dummy_user).to be_valid
-      dummy_user.update!(
-        avatar: File.open(Rails.root.join("spec/support/logo.jpg")),
-        avatar_crop_x: 40,
-        avatar_crop_y: 40,
-        avatar_crop_w: 40,
-        avatar_crop_h: 40,
+      dummy_avatar = FactoryBot.create(
+        :user_avatar,
+        user: dummy_user,
       )
-      avatar = dummy_user.reload.read_attribute(:avatar)
-      expect(dummy_user.avatar.file.path).to eq("uploads/user/avatar/#{dummy_user.wca_id}/#{avatar}")
+      expect(dummy_avatar).to be_valid
+      dummy_user.update!(current_avatar: dummy_avatar)
+      expect(dummy_user.avatar.filename).to eq(dummy_avatar.filename)
 
       # Assigning a WCA ID to user should copy over the name from the Persons table.
       expect(user.name).to eq user.person.name
@@ -173,8 +171,7 @@ RSpec.describe User, type: :model do
 
       # Check that the dummy account was deleted, and we inherited its avatar.
       expect(User.find_by_id(dummy_user.id)).to be_nil
-      expect(user.reload.read_attribute(:avatar)).to eq avatar
-      expect(dummy_user.avatar.file.path).to eq("uploads/user/avatar/#{dummy_user.wca_id}/#{avatar}")
+      expect(user.reload.avatar).to eq dummy_avatar
     end
 
     it "does not allow duplicate WCA IDs" do
@@ -201,89 +198,71 @@ RSpec.describe User, type: :model do
     FactoryBot.create :user, encrypted_password: ""
   end
 
-  it "saves crop coordinates" do
-    user = FactoryBot.create :user_with_wca_id
-
-    user.update!(
-      pending_avatar: File.open(Rails.root.join("spec/support/logo.jpg")),
-    )
-    expect(user.read_attribute(:pending_avatar)).not_to be_nil
-
-    user.update!(
-      pending_avatar_crop_x: 40,
-      pending_avatar_crop_y: 50,
-      pending_avatar_crop_w: 60,
-      pending_avatar_crop_h: 70,
-    )
-    expect(user.saved_pending_avatar_crop_x).to eq 40
-    expect(user.saved_pending_avatar_crop_y).to eq 50
-    expect(user.saved_pending_avatar_crop_w).to eq 60
-    expect(user.saved_pending_avatar_crop_h).to eq 70
-  end
-
   it "can handle missing avatar" do
     user = FactoryBot.create :user
-    user.avatar = nil
-    user.saved_avatar_crop_x = 40
-    user.saved_avatar_crop_y = 40
-    user.saved_avatar_crop_w = 40
-    user.saved_avatar_crop_h = 40
+    user.current_avatar = nil
     user.save!
   end
 
-  it "clearing avatar clears cropping area" do
-    user = FactoryBot.create :user_with_wca_id
-    user.update!(
-      avatar: File.open(Rails.root.join("spec/support/logo.jpg")),
-      avatar_crop_x: 40,
-      avatar_crop_y: 40,
-      avatar_crop_w: 40,
-      avatar_crop_h: 40,
-
-      pending_avatar: File.open(Rails.root.join("spec/support/logo.jpg")),
-      pending_avatar_crop_x: 40,
-      pending_avatar_crop_y: 40,
-      pending_avatar_crop_w: 40,
-      pending_avatar_crop_h: 40,
-    )
-    # Get rid of cached carrierwave-crop stuff by relooking up user
-    user = User.find(user.id)
-    user.remove_avatar = true
-    user.remove_pending_avatar = true
-    user.save!
-    expect(user.read_attribute(:avatar)).to be_nil
-    expect(user.read_attribute(:pending_avatar)).to be_nil
-    expect(user.saved_avatar_crop_x).to be_nil
-    expect(user.saved_avatar_crop_y).to be_nil
-    expect(user.saved_avatar_crop_w).to be_nil
-    expect(user.saved_avatar_crop_h).to be_nil
-    expect(user.saved_pending_avatar_crop_x).to be_nil
-    expect(user.saved_pending_avatar_crop_y).to be_nil
-    expect(user.saved_pending_avatar_crop_w).to be_nil
-    expect(user.saved_pending_avatar_crop_h).to be_nil
+  it "clearing avatar backfills nil on both fields" do
+    user = FactoryBot.create :user_with_wca_id, :with_avatar, :with_pending_avatar
+    expect(user.current_avatar).not_to be_nil
+    user.current_avatar.update!(status: 'deleted')
+    expect(user.current_avatar).to be_nil
+    expect(user.pending_avatar).not_to be_nil
+    user.pending_avatar.update!(status: 'deleted')
+    expect(user.pending_avatar).to be_nil
   end
 
-  it "approving pending avatar moves crop coordinates" do
-    user = FactoryBot.create :user_with_wca_id
-    user.update!(
-      pending_avatar: File.open(Rails.root.join("spec/support/logo.jpg")),
-      pending_avatar_crop_x: 40,
-      pending_avatar_crop_y: 50,
-      pending_avatar_crop_w: 60,
-      pending_avatar_crop_h: 70,
-    )
-    user.approve_pending_avatar!
-    expect(user.read_attribute(:avatar)).not_to be_nil
-    expect(user.saved_avatar_crop_x).to eq 40
-    expect(user.saved_avatar_crop_y).to eq 50
-    expect(user.saved_avatar_crop_w).to eq 60
-    expect(user.saved_avatar_crop_h).to eq 70
+  it "approving pending avatar moves association" do
+    user = FactoryBot.create :user_with_wca_id, :with_pending_avatar
+    user.pending_avatar.update!(status: 'approved')
 
-    expect(user.read_attribute(:pending_avatar)).to be_nil
-    expect(user.saved_pending_avatar_crop_x).to eq nil
-    expect(user.saved_pending_avatar_crop_y).to eq nil
-    expect(user.saved_pending_avatar_crop_w).to eq nil
-    expect(user.saved_pending_avatar_crop_h).to eq nil
+    expect(user.current_avatar).not_to be_nil
+    expect(user.pending_avatar).to be_nil
+  end
+
+  it "approving pending avatar triggers a removal job" do
+    user = FactoryBot.create :user_with_wca_id, :with_pending_avatar
+    avatar = user.pending_avatar
+
+    perform_enqueued_jobs do
+      avatar.update!(status: 'approved')
+    end
+
+    assert_performed_jobs 1, only: ActiveStorage::PurgeJob
+  end
+
+  it "approving pending avatar moves file from private to public" do
+    user = FactoryBot.create :user_with_wca_id, :with_pending_avatar
+    avatar = user.pending_avatar
+
+    expect(avatar.public_image.attached?).to be false
+    expect(avatar.private_image.attached?).to be true
+
+    avatar.update!(status: 'approved')
+
+    # Make sure we actually purge the file
+    perform_enqueued_jobs
+
+    expect(avatar.public_image.attached?).to be true
+    expect(avatar.private_image.attached?).to be false
+  end
+
+  it "deprecating approved avatar moves file from public to private" do
+    user = FactoryBot.create :user_with_wca_id, :with_avatar
+    avatar = user.current_avatar
+
+    expect(avatar.public_image.attached?).to be true
+    expect(avatar.private_image.attached?).to be false
+
+    avatar.update!(status: 'deprecated')
+
+    # Make sure we actually purge the file
+    perform_enqueued_jobs
+
+    expect(avatar.public_image.attached?).to be false
+    expect(avatar.private_image.attached?).to be true
   end
 
   describe "#delegated_competitions" do
@@ -621,6 +600,7 @@ RSpec.describe User, type: :model do
   describe "receive_delegate_reports field" do
     let!(:staff_member1) { FactoryBot.create :user, :wic_member, receive_delegate_reports: true }
     let!(:staff_member2) { FactoryBot.create :user, :wrt_member, receive_delegate_reports: false }
+    let!(:staff_member3) { FactoryBot.create :user, :wrc_member, receive_delegate_reports: true, delegate_reports_region: Country.c_find('USA') }
 
     it "gets cleared if user is not eligible anymore" do
       former_staff_member = FactoryBot.create :user, receive_delegate_reports: true
@@ -630,7 +610,8 @@ RSpec.describe User, type: :model do
     end
 
     it "adds to reports@ only current staff members who want to receive reports" do
-      expect(User.delegate_reports_receivers_emails).to eq ["seniors@worldcubeassociation.org", "quality@worldcubeassociation.org", "regulations@worldcubeassociation.org", staff_member1.email]
+      expect(User.delegate_reports_receivers_emails).to match_array ["seniors@worldcubeassociation.org", "quality@worldcubeassociation.org", "regulations@worldcubeassociation.org", staff_member1.email]
+      expect(User.delegate_reports_receivers_emails(Country.c_find('USA'))).to match_array [staff_member3.email]
     end
   end
 

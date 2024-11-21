@@ -6,18 +6,57 @@ import { Draggable } from 'react-beautiful-dnd';
 import { setMessage } from '../Register/RegistrationMessage';
 import i18n from '../../../lib/i18n';
 import {
-  getFullDateTimeString, getRegistrationTimestamp,
+  getRegistrationTimestamp,
   getShortDateString,
-  getShortTimeString,
 } from '../../../lib/utils/dates';
 import EventIcon from '../../wca/EventIcon';
 import { editRegistrationUrl, editPersonUrl, personUrl } from '../../../lib/requests/routes.js.erb';
+import { isoMoneyToHumanReadable } from '../../../lib/helpers/money';
+import { countries } from '../../../lib/wca-data.js.erb';
 
 // Semantic Table only allows truncating _all_ columns in a table in
 // single line fixed mode. As we only want to truncate the comment/admin notes
 // this function is used to manually truncate the columns.
 // TODO: We could fix this by building our own table component here
 const truncateComment = (comment) => (comment?.length > 12 ? `${comment.slice(0, 12)}...` : comment);
+
+function RegistrationTime({
+  timestamp, registeredOn, paymentStatuses, paidOn, usesPaymentIntegration,
+}) {
+  if (timestamp) {
+    return getRegistrationTimestamp(paidOn ?? registeredOn);
+  }
+
+  const mostRecentPaymentStatus = paymentStatuses ? paymentStatuses[0] : 'unpaid';
+
+  if (usesPaymentIntegration && mostRecentPaymentStatus !== 'succeeded') {
+    let content = i18n.t('registrations.list.payment_requested_on', { date: getRegistrationTimestamp(registeredOn) });
+    let trigger = <span>{i18n.t('registrations.list.not_paid')}</span>;
+
+    if (mostRecentPaymentStatus === 'initialized') {
+      content = i18n.t('competitions.registration_v2.list.payment.initialized', { date: getRegistrationTimestamp(paidOn) });
+    }
+
+    if (mostRecentPaymentStatus === 'refund') {
+      content = i18n.t('competitions.registration_v2.list.payment.refunded', { date: getRegistrationTimestamp(paidOn) });
+      trigger = <span>{i18n.t('competitions.registration_v2.list.payment.refunded_status')}</span>;
+    }
+
+    return (
+      <Popup
+        content={content}
+        trigger={trigger}
+      />
+    );
+  }
+
+  return (
+    <Popup
+      content={getRegistrationTimestamp(paidOn ?? registeredOn)}
+      trigger={<span>{getShortDateString(paidOn ?? registeredOn)}</span>}
+    />
+  );
+}
 
 export default function TableRow({
   columnsExpanded,
@@ -38,7 +77,12 @@ export default function TableRow({
     registered_on: registeredOn, event_ids: eventIds, comment, admin_comment: adminComment,
   } = registration.competing;
   const { dob: dateOfBirth, email: emailAddress } = registration;
-  const { payment_status: paymentStatus, updated_at: updatedAt } = registration.payment;
+  const {
+    payment_amount_iso: paymentAmount,
+    updated_at: updatedAt,
+    payment_statuses: paymentStatuses,
+    has_paid: hasPaid,
+  } = registration.payment ?? {};
 
   const copyEmail = () => {
     navigator.clipboard.writeText(emailAddress);
@@ -61,7 +105,8 @@ export default function TableRow({
             {...provided.dragHandleProps}
           >
             <Table.Cell>
-              {draggable ? <Icon name="bars" /> : <Checkbox onChange={onCheckboxChange} checked={isSelected} />}
+              { /* We manually set the margin to 0 here to fix the table row height */}
+              {draggable ? <Icon name="bars" /> : <Checkbox onChange={onCheckboxChange} checked={isSelected} style={{ margin: 0 }} />}
             </Table.Cell>
 
             <Table.Cell>
@@ -89,11 +134,11 @@ export default function TableRow({
               {region ? (
                 <>
                   <Flag name={country.iso2.toLowerCase()} />
-                  {region && country.name}
+                  {region && countries.byIso2[country.iso2].name}
                 </>
               ) : (
                 <Popup
-                  content={country.name}
+                  content={countries.byIso2[country.iso2].name}
                   trigger={(
                     <span>
                       <Flag name={country.iso2.toLowerCase()} />
@@ -104,36 +149,28 @@ export default function TableRow({
             </Table.Cell>
 
             <Table.Cell>
-              { timestamp ? getRegistrationTimestamp(registeredOn) : (
-                <Popup
-                  content={getShortTimeString(registeredOn)}
-                  trigger={<span>{getShortDateString(registeredOn)}</span>}
-                />
-              )}
+              <RegistrationTime
+                timestamp={timestamp}
+                paidOn={updatedAt}
+                registeredOn={registeredOn}
+                paymentStatuses={paymentStatuses}
+                usesPaymentIntegration={competitionInfo['using_payment_integrations?']}
+              />
             </Table.Cell>
 
             {competitionInfo['using_payment_integrations?'] && (
-            <>
-              <Table.Cell>{paymentStatus ?? i18n.t('registrations.list.not_paid')}</Table.Cell>
-              <Table.Cell>
-                {updatedAt && (
-                  timestamp ? getRegistrationTimestamp(updatedAt)
-                    : (
-                      <Popup
-                        content={getShortTimeString(updatedAt)}
-                        trigger={<span>{getShortDateString(updatedAt)}</span>}
-                      />
-                    )
-                )}
-              </Table.Cell>
-            </>
+            <Table.Cell>
+              {hasPaid
+                ? isoMoneyToHumanReadable(paymentAmount, competitionInfo.currency_code)
+                : ''}
+            </Table.Cell>
             )}
 
             {events ? (
               competitionInfo.event_ids.map((eventId) => (
                 <Table.Cell key={`event-${eventId}`}>
                   {eventIds.includes(eventId) && (
-                  <EventIcon id={eventId} size="1em" />
+                    <EventIcon id={eventId} size="1em" />
                   )}
                 </Table.Cell>
               ))

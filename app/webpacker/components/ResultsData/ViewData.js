@@ -9,9 +9,11 @@ import '../../stylesheets/competition_results.scss';
 import EventNavigation from './EventNavigation';
 import { getUrlParams, setUrlParams } from '../../lib/utils/wca';
 import { competitionApiUrl } from '../../lib/requests/routes.js.erb';
+import { localizeRoundInformation } from '../../lib/utils/wcif';
 
 function RoundResultsTable({
   competitionId,
+  eventId,
   round,
   newEntryUrlFn,
   DataRowHeader,
@@ -20,7 +22,7 @@ function RoundResultsTable({
 }) {
   return (
     <>
-      <h2>{round.name}</h2>
+      <h2>{localizeRoundInformation(eventId, round.roundTypeId)}</h2>
       {adminMode && (
         <Button positive as="a" href={newEntryUrlFn(competitionId, round.id)} size="tiny">
           <Icon name="plus" />
@@ -61,6 +63,7 @@ function ResultsView({
         <RoundResultsTable
           key={round.id}
           competitionId={competitionId}
+          eventId={eventId}
           round={round}
           newEntryUrlFn={newEntryUrlFn}
           DataRowHeader={DataRowHeader}

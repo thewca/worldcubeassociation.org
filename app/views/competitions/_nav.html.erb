@@ -50,11 +50,7 @@
               ] : [])
           }
           if @competition.use_wca_registration?
-            pending_registrations = if @competition.uses_new_registration_service?
-                                      Microservices::Registrations.registrations_by_competition(@competition.id, 'pending', cache: true).length
-                                      else
-                                        @competition.registrations.pending.count
-                                      end
+            pending_registrations = @competition.pending_competitors_count
             nav_items << {
               text: t('.menu.registration'),
               path: competition_edit_registrations_path(@competition),
@@ -126,14 +122,7 @@
             icon: "align left",
           }
         end
-        if !EnvConfig.WCA_LIVE_SITE? && current_user&.can_manage_competition?(@competition) && !@competition.uses_new_registration_service? && !@competition.registration_currently_open?
-          nav_items << {
-            text: t('.menu.enable_v2'),
-            path: enable_v2_path(@competition),
-            icon: "lightbulb",
-          }
-        end
-        if @competition.announced? && !@competition.results_posted?
+        unless @competition.results_posted?
           if @competition.use_wca_registration?
             nav_items << {
               text: t('.menu.register'),
@@ -145,7 +134,7 @@
           if @competition.any_registrations?
             event_icons = @competition.events.map do |event|
               { text: event.id, path: competition_psych_sheet_event_path(@competition, event.id), cubing_icon: event.id, title: event.name }
-            end unless @competition.uses_new_registration_service?
+            end unless @competition.uses_new_registration_system?
             nav_items << {
               text: t('.menu.competitors'),
               path: competition_registrations_path(@competition),

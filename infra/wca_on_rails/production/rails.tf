@@ -13,6 +13,22 @@ locals {
       value = var.ROOT_URL
     },
     {
+      name  = "ASSET_HOST"
+      value = "https://assets.worldcubeassociation.org"
+    },
+    {
+      name  = "DUMP_HOST"
+      value = "https://assets.worldcubeassociation.org"
+    },
+    {
+      name  = "SHAKAPACKER_ASSET_HOST"
+      value = "https://assets.worldcubeassociation.org"
+    },
+    {
+      name = "WRC_WEBHOOK_URL",
+      value = var.WRC_WEBHOOK_URL
+    },
+    {
       name = "WCA_REGISTRATIONS_POLL_URL"
       value = "https://1rq8d7dif3.execute-api.us-west-2.amazonaws.com/v1/prod"
     },
@@ -61,12 +77,28 @@ locals {
       value = aws_s3_bucket.avatars.id
     },
     {
+      name = "S3_AVATARS_PRIVATE_BUCKET"
+      value = aws_s3_bucket.avatars_private.id
+    },
+    {
       name = "S3_AVATARS_ASSET_HOST"
       value = "https://avatars.worldcubeassociation.org"
     },
     {
+      name = "AVATARS_PUBLIC_STORAGE"
+      value = "s3_avatars_public"
+    },
+    {
+      name = "AVATARS_PRIVATE_STORAGE"
+      value = "s3_avatars_private"
+    },
+    {
       name = "CDN_AVATARS_DISTRIBUTION_ID"
       value = "ELNTWW0SE1ZJ"
+    },
+    {
+      name = "CDN_ASSETS_DISTRIBUTION_ID"
+      value = "E27W5ACWLMQE3C"
     },
     {
       name = "WCA_REGISTRATIONS_URL"
@@ -83,6 +115,10 @@ locals {
     {
       name = "VAULT_ADDR"
       value = var.VAULT_ADDR
+    },
+    {
+      name = "REGISTRATION_QUEUE"
+      value = aws_sqs_queue.this.url
     },
     {
       name = "VAULT_APPLICATION"
@@ -156,7 +192,9 @@ data "aws_iam_policy_document" "task_policy" {
                   aws_s3_bucket.regulations.arn,
                   "${aws_s3_bucket.regulations.arn}/*",
                   aws_s3_bucket.assets.arn,
-                  "${aws_s3_bucket.assets.arn}/*"]
+                  "${aws_s3_bucket.assets.arn}/*",
+                    aws_s3_bucket.avatars_private.arn,
+                  "${aws_s3_bucket.avatars_private.arn}/*",]
     }
   statement {
     actions = [
@@ -170,6 +208,17 @@ data "aws_iam_policy_document" "task_policy" {
       "rds-db:connect",
     ]
     resources = ["arn:aws:rds-db:${var.region}:${var.shared.account_id}:dbuser:${var.rds_iam_identifier}/${var.DATABASE_WRT_USER}"]
+  }
+  statement {
+    effect = "Allow"
+    actions = [
+      "sqs:SendMessage",
+      "sqs:ReceiveMessage",
+      "sqs:DeleteMessage",
+      "sqs:GetQueueAttributes",
+      "sqs:GetQueueUrl"
+    ]
+    resources = [aws_sqs_queue.this.arn]
   }
 }
 
@@ -189,15 +238,15 @@ resource "aws_ecs_task_definition" "this" {
   execution_role_arn = aws_iam_role.task_execution_role.arn
   task_role_arn      = aws_iam_role.task_role.arn
 
-  cpu = "8192"
-  memory = "30000"
+  cpu = "1024"
+  memory = "3910"
 
   container_definitions = jsonencode([
     {
       name              = "rails-production"
       image             = "${var.shared.ecr_repository.repository_url}:latest"
-      cpu    = 8192
-      memory = 30000
+      cpu    = 1024
+      memory = 3910
       portMappings = [
         {
           # The hostPort is automatically set for awsvpc network mode,
@@ -243,7 +292,7 @@ resource "aws_ecs_service" "this" {
   # container image, so we want use data.aws_ecs_task_definition to
   # always point to the active task definition
   task_definition                    = data.aws_ecs_task_definition.this.arn
-  desired_count                      = 1
+  desired_count                      = 8
   scheduling_strategy                = "REPLICA"
   deployment_maximum_percent         = 200
   deployment_minimum_healthy_percent = 50
@@ -257,13 +306,8 @@ resource "aws_ecs_service" "this" {
   enable_execute_command = true
 
   ordered_placement_strategy {
-    type  = "spread"
-    field = "attribute:ecs.availability-zone"
-  }
-
-  ordered_placement_strategy {
-    type  = "spread"
-    field = "instanceId"
+    type  = "binpack"
+    field = "memory"
   }
 
   load_balancer {
@@ -287,8 +331,6 @@ resource "aws_ecs_service" "this" {
 
   lifecycle {
     ignore_changes = [
-      # The desired count is modified by Application Auto Scaling
-      desired_count,
       # The target group changes during Blue/Green deployment
       load_balancer,
       # The Task definition will be set by Code Deploy

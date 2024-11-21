@@ -2,6 +2,7 @@
 
 class ContactWrt < ContactForm
   attribute :query_type
+  attribute :wca_id
   attribute :profile_data_to_change
   attribute :new_profile_data
   attribute :edit_profile_reason

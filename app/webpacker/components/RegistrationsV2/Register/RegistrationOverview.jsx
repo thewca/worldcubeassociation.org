@@ -32,6 +32,9 @@ export default function RegistrationOverview({
   const hasRegistrationEditDeadlinePassed = hasPassed(
     competitionInfo.event_change_deadline_date ?? competitionInfo.start_date,
   );
+
+  const isRejected = registration.competing.registration_status === 'rejected';
+
   const editsAllowed = competitionInfo.allow_registration_edits
     && !hasRegistrationEditDeadlinePassed;
 
@@ -51,13 +54,12 @@ export default function RegistrationOverview({
     onError: (data) => {
       const { error } = data.json;
       dispatch(setMessage(
-        error
-          ? `competitions.registration_v2.errors.${error}`
-          : 'registrations.flash.failed',
+        `competitions.registration_v2.errors.${error}`,
         'negative',
       ));
     },
     onSuccess: (data) => {
+      nextStep({ toStart: true });
       queryClient.setQueryData(
         ['registration', competitionInfo.id, registration.user_id],
         {
@@ -66,7 +68,6 @@ export default function RegistrationOverview({
         },
       );
       dispatch(setMessage('competitions.registration_v2.register.registration_status.cancelled', 'positive'));
-      nextStep({ toStart: true });
     },
   });
 
@@ -74,6 +75,10 @@ export default function RegistrationOverview({
     event.preventDefault();
     confirm({ content: i18n.t('registrations.delete_confirm') }).then(() => deleteRegistrationMutation()).catch(() => nextStep({ refresh: true }));
   };
+
+  if (isRejected) {
+    return <RegistrationStatus registration={registration} competitionInfo={competitionInfo} />;
+  }
 
   return (
     <>

@@ -12,13 +12,14 @@ import {
   getConfirmedRegistrations,
   getPsychSheetForEvent,
 } from '../api/registration/get/get_registrations';
-import useWithUserData from '../hooks/useWithUserData';
 import createSortReducer from '../reducers/sortReducer';
 import Loading from '../../Requests/Loading';
 import EventIcon from '../../wca/EventIcon';
 import { personUrl } from '../../../lib/requests/routes.js.erb';
 import Errored from '../../Requests/Errored';
 import { formatAttemptResult } from '../../../lib/wca-live/attempts';
+import i18n from '../../../lib/i18n';
+import { countries } from '../../../lib/wca-data.js.erb';
 
 const sortReducer = createSortReducer(['name', 'country', 'total']);
 
@@ -28,7 +29,7 @@ function FooterContent({
   if (!dataWithUser || !registrations) return null;
 
   const newcomerCount = dataWithUser.filter(
-    (reg) => reg.user.wca_id === undefined,
+    (reg) => !reg.user.wca_id,
   ).length;
 
   const countryCount = new Set(
@@ -50,11 +51,12 @@ function FooterContent({
   return (
     <Table.Row>
       <Table.Cell>
-        {`${newcomerCount} First-Timers + ${
+        {`${newcomerCount} ${i18n.t('registrations.registration_info_people.newcomer', { count: newcomerCount })} + ${
           dataWithUser.length - newcomerCount
-        } Returners = ${dataWithUser.length} People`}
+        } ${i18n.t('registrations.registration_info_people.returner', { count: dataWithUser.length - newcomerCount })} =
+         ${dataWithUser.length} ${i18n.t('registrations.registration_info_people.person', { count: dataWithUser.length })}`}
       </Table.Cell>
-      <Table.Cell>{`${countryCount}  Countries`}</Table.Cell>
+      <Table.Cell>{`${i18n.t('registrations.list.country_plural', { count: countryCount })}`}</Table.Cell>
       {psychSheetEvent === undefined ? (
         <>
           {competitionInfo.event_ids.map((evt) => (
@@ -80,12 +82,12 @@ function FooterContent({
 export default function RegistrationList({ competitionInfo }) {
   const { isLoading: registrationsLoading, data: registrations, isError } = useQuery({
     queryKey: ['registrations', competitionInfo.id],
-    queryFn: () => getConfirmedRegistrations(competitionInfo.id),
+    queryFn: () => getConfirmedRegistrations(competitionInfo),
     retry: false,
   });
 
   const [state, dispatch] = useReducer(sortReducer, {
-    sortColumn: '',
+    sortColumn: 'name',
     sortDirection: undefined,
   });
 
@@ -117,15 +119,9 @@ export default function RegistrationList({ competitionInfo }) {
     }
   }, [psychSheet]);
 
-  const { isLoading: userInfoLoading, data: dataWithUser } = useWithUserData(
-    (psychSheetEvent !== undefined
-      ? psychSheet?.sorted_rankings
-      : registrations) || [],
-  );
-
   const data = useMemo(() => {
-    if (dataWithUser) {
-      const sorted = dataWithUser.toSorted((a, b) => {
+    if (registrations) {
+      const sorted = registrations.toSorted((a, b) => {
         if (psychSheetEvent !== undefined) {
           return 0; // backend handles the sorting of psych sheets
         }
@@ -133,7 +129,7 @@ export default function RegistrationList({ competitionInfo }) {
           return a.user.name.localeCompare(b.user.name);
         }
         if (sortColumn === 'country') {
-          return a.user.country.name.localeCompare(b.user.country.name);
+          return countries.byIso2[a.user.country.iso2].name.localeCompare(countries.byIso2[b.user.country.iso2].name);
         }
         if (sortColumn === 'total') {
           return a.competing.event_ids.length - b.competing.event_ids.length;
@@ -146,7 +142,7 @@ export default function RegistrationList({ competitionInfo }) {
       return sorted;
     }
     return [];
-  }, [dataWithUser, sortColumn, sortDirection, psychSheetEvent]);
+  }, [registrations, sortColumn, sortDirection, psychSheetEvent]);
 
   if (isError) {
     return (
@@ -154,9 +150,15 @@ export default function RegistrationList({ competitionInfo }) {
     );
   }
 
-  return registrationsLoading || userInfoLoading ? (
-    <Loading />
-  ) : (
+  if (registrationsLoading || isLoadingPsychSheet) {
+    return (
+      <Segment>
+        <Loading />
+      </Segment>
+    );
+  }
+
+  return (
     <Segment style={{ overflowX: 'scroll' }}>
       <Table sortable unstackable singleLine textAlign="left">
         <Table.Header>
@@ -165,13 +167,13 @@ export default function RegistrationList({ competitionInfo }) {
               sorted={sortColumn === 'name' ? sortDirection : undefined}
               onClick={() => changeSortColumn('name')}
             >
-              Name
+              {i18n.t('activerecord.attributes.registration.name')}
             </Table.HeaderCell>
             <Table.HeaderCell
               sorted={sortColumn === 'country' ? sortDirection : undefined}
               onClick={() => changeSortColumn('country')}
             >
-              Citizen Of
+              {i18n.t('activerecord.attributes.user.country_iso2')}
             </Table.HeaderCell>
             {psychSheetEvent === undefined ? (
               <>
@@ -180,14 +182,14 @@ export default function RegistrationList({ competitionInfo }) {
                     key={`registration-table-header-${id}`}
                     onClick={() => setPsychSheetEvent(id)}
                   >
-                    <EventIcon id={id} size="1em" />
+                    <EventIcon id={id} size="1em" className="selected" />
                   </Table.HeaderCell>
                 ))}
                 <Table.HeaderCell
                   sorted={sortColumn === 'total' ? sortDirection : undefined}
                   onClick={() => changeSortColumn('total')}
                 >
-                  Total
+                  {i18n.t('registrations.list.total')}
                 </Table.HeaderCell>
               </>
             ) : (
@@ -198,7 +200,7 @@ export default function RegistrationList({ competitionInfo }) {
                 >
                   <Icon name="backward" />
                   {' '}
-                  Go back
+                  {i18n.t('competitions.registration_v2.list.psychsheets.go_back')}
                 </Table.HeaderCell>
                 <Table.HeaderCell>
                   <EventIcon id={psychSheetEvent} className="selected" size="1em" />
@@ -214,7 +216,7 @@ export default function RegistrationList({ competitionInfo }) {
                   }
                   onClick={() => setPsychSheetSortBy('single')}
                 >
-                  Single
+                  {i18n.t('common.single')}
                 </Table.HeaderCell>
                 <Table.HeaderCell
                   sorted={
@@ -222,7 +224,7 @@ export default function RegistrationList({ competitionInfo }) {
                   }
                   onClick={() => setPsychSheetSortBy('average')}
                 >
-                  Average
+                  {i18n.t('common.average')}
                 </Table.HeaderCell>
               </>
             )}
@@ -247,7 +249,7 @@ export default function RegistrationList({ competitionInfo }) {
                   <Flag
                     name={registration.user.country.iso2.toLowerCase()}
                   />
-                  {registration.user.country.name}
+                  {countries.byIso2[registration.user.country.iso2].name}
                 </Table.Cell>
                 {psychSheetEvent === undefined ? (
                   <>
@@ -256,7 +258,7 @@ export default function RegistrationList({ competitionInfo }) {
                         key={`registration-table-row-${registration.user.id}-${id}`}
                       >
                         {registration.competing.event_ids.includes(id) ? (
-                          <EventIcon id={id} size="1em" />
+                          <EventIcon id={id} size="1em" hoverable={false} />
                         ) : null}
                       </Table.Cell>
                     ))}
@@ -299,9 +301,7 @@ export default function RegistrationList({ competitionInfo }) {
                     : 7
                 }
               >
-                {psychSheetEvent && isLoadingPsychSheet
-                  ? 'Crunching the data, please wait'
-                  : 'No matching records found'}
+                {psychSheetEvent && i18n.t('competitions.registration_v2.list.empty')}
               </Table.Cell>
             </Table.Row>
           )}
@@ -310,7 +310,7 @@ export default function RegistrationList({ competitionInfo }) {
           <FooterContent
             registrations={registrations}
             psychSheetEvent={psychSheetEvent}
-            dataWithUser={dataWithUser}
+            dataWithUser={registrations}
             competitionInfo={competitionInfo}
           />
         </Table.Footer>

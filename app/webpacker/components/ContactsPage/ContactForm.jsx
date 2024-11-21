@@ -4,7 +4,7 @@ import {
 } from 'semantic-ui-react';
 import ReCAPTCHA from 'react-google-recaptcha';
 import _ from 'lodash';
-import { contactUrl } from '../../lib/requests/routes.js.erb';
+import { contactUrl, contactEditProfileActionUrl } from '../../lib/requests/routes.js.erb';
 import useSaveAction from '../../lib/hooks/useSaveAction';
 import I18n from '../../lib/i18n';
 import UserData from './UserData';
@@ -26,6 +26,15 @@ const CONTACT_RECIPIENTS = [
 
 const CONTACT_RECIPIENTS_MAP = _.keyBy(CONTACT_RECIPIENTS, _.camelCase);
 
+const getFormRedirection = (formValues) => {
+  if (formValues.contactRecipient === CONTACT_RECIPIENTS_MAP.wrt) {
+    if (formValues[CONTACT_RECIPIENTS_MAP.wrt].queryType === 'edit_profile') {
+      return contactEditProfileActionUrl;
+    }
+  }
+  return null;
+}
+
 export default function ContactForm({
   loggedInUserData,
   recaptchaPublicKey,
@@ -38,9 +47,10 @@ export default function ContactForm({
   const contactFormState = useStore();
   const dispatch = useDispatch();
   const { formValues: { contactRecipient: selectedContactRecipient, userData } } = contactFormState;
+  const formRedirection = useMemo(() => getFormRedirection(contactFormState.formValues));
 
   const isFormValid = (
-    selectedContactRecipient && userData.name && userData.email && captchaValue
+    selectedContactRecipient && userData.name && userData.email && (captchaValue || formRedirection)
   );
 
   const contactSuccessHandler = () => {
@@ -116,28 +126,39 @@ export default function ContactForm({
           ))}
         </FormGroup>
         {SubForm && <SubForm />}
-        <FormField>
-          <ReCAPTCHA
-            sitekey={recaptchaPublicKey}
-          // onChange is a mandatory parameter for ReCAPTCHA. According to the documentation, this
-          // is called when user successfully completes the captcha, hence we are assuming that any
-          // existing errors will be cleared when onChange is called.
-            onChange={setCaptchaValue}
-            onErrored={setCaptchaError}
-          />
-          {captchaError && (
-          <Message
-            error
-            content={I18n.t('page.contacts.form.captcha.validation_error')}
-          />
-          )}
-        </FormField>
-        <Button
-          disabled={!isFormValid}
-          type="submit"
-        >
-          {I18n.t('page.contacts.form.submit_button')}
-        </Button>
+        {formRedirection ? (
+          <Button
+            disabled={!isFormValid}
+            href={formRedirection}
+          >
+            {I18n.t('page.contacts.form.next_button')}
+          </Button>
+        ) : (
+          <>
+            <FormField>
+              <ReCAPTCHA
+                sitekey={recaptchaPublicKey}
+                // onChange is a mandatory parameter for ReCAPTCHA. According to the documentation,
+                // this is called when user successfully completes the captcha, hence we are
+                // assuming that any existing errors will be cleared when onChange is called.
+                onChange={setCaptchaValue}
+                onErrored={setCaptchaError}
+              />
+              {captchaError && (
+                <Message
+                  error
+                  content={I18n.t('page.contacts.form.captcha.validation_error')}
+                />
+              )}
+            </FormField>
+            <Button
+              disabled={!isFormValid}
+              type="submit"
+            >
+              {I18n.t('page.contacts.form.submit_button')}
+            </Button>
+          </>
+        )}
       </Form>
     </>
   );

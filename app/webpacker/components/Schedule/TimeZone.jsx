@@ -8,17 +8,20 @@ import {
 } from 'semantic-ui-react';
 import _ from 'lodash';
 import i18n from '../../lib/i18n';
-import { timezoneData } from '../../lib/wca-data.js.erb';
+import { backendTimezones } from '../../lib/wca-data.js.erb';
+import { sortByOffset } from '../../lib/utils/timezone';
 
 // Timezones that our Ruby backend knows about. They represent values that might be stored
 //   in the 'competition_venues' table.
-const rubyTimeZones = Object.values(timezoneData);
+const rubyTimeZones = Array.from(backendTimezones);
 // Timezones that the user's browser knows about. The 'Set to local' button will use the
 //   browser settings, so we need to make sure all possible values are included in the list.
 const jsTimeZones = Intl.supportedValuesOf('timeZone');
 
-const uniqueTimeZones = _.uniq(rubyTimeZones.concat(jsTimeZones)).toSorted();
-const timeZoneOptions = uniqueTimeZones.map((tz) => ({
+const uniqueTimeZones = _.uniq(rubyTimeZones.concat(jsTimeZones));
+const sortedTimeZones = sortByOffset(uniqueTimeZones, new Date());
+
+const timeZoneOptions = sortedTimeZones.map((tz) => ({
   key: tz,
   text: tz,
   value: tz,

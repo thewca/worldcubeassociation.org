@@ -9,6 +9,9 @@ export function getRoleDescription(role) {
     roleDescription += 'Translator, ';
   }
   roleDescription += role.group.name;
+  if (role.metadata?.location) {
+    roleDescription += ` (${role.metadata.location})`;
+  }
   return roleDescription;
 }
 

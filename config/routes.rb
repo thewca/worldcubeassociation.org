@@ -41,10 +41,6 @@ Rails.application.routes.draw do
     delete 'users/sign-out-other' => 'sessions#destroy_other', as: :destroy_other_user_sessions
   end
 
-  # TODO: This can be removed after deployment, this is so we don't have any users error out if they click on pay
-  # while the deployment happens
-  get 'registration/:id/payment-completion' => 'registrations#payment_completion_legacy', as: :registration_payment_completion_legacy
-
   post 'registration/:id/load-payment-intent/:payment_integration' => 'registrations#load_payment_intent', as: :registration_payment_intent
   post 'competitions/:competition_id/refund/:payment_integration/:payment_id' => 'registrations#refund_payment', as: :registration_payment_refund
   get 'competitions/:competition_id/payment-completion' => 'registrations#payment_completion', as: :registration_payment_completion
@@ -60,8 +56,10 @@ Rails.application.routes.draw do
   get 'profile/claim_wca_id' => 'users#claim_wca_id'
   get 'profile/claim_wca_id/select_nearby_delegate' => 'users#select_nearby_delegate'
 
-  get 'users/:id/edit/avatar_thumbnail' => 'users#edit_avatar_thumbnail', as: :users_avatar_thumbnail_edit
-  get 'users/:id/edit/pending_avatar_thumbnail' => 'users#edit_pending_avatar_thumbnail', as: :users_pending_avatar_thumbnail_edit
+  get 'users/:id/avatar' => 'users#avatar_data', as: :users_avatar_data
+  post 'users/:id/avatar' => 'users#upload_avatar'
+  patch 'users/:id/avatar' => 'users#update_avatar'
+  delete 'users/:id/avatar' => 'users#delete_avatar'
   get 'admin/avatars' => 'admin/avatars#index'
   post 'admin/avatars' => 'admin/avatars#update_all'
 
@@ -202,6 +200,8 @@ Rails.application.routes.draw do
 
   get 'robots' => 'static_pages#robots'
 
+  get 'help/api' => 'static_pages#api_help'
+
   get 'server-status' => 'server_status#index'
 
   get 'translations', to: redirect('translations/status', status: 302)
@@ -235,8 +235,12 @@ Rails.application.routes.draw do
 
   get 'contact' => 'contacts#index'
   post 'contact' => 'contacts#contact'
-  get 'contact/dob' => 'contacts#dob'
-  post 'contact/dob' => 'contacts#dob_create'
+  scope 'contact' do
+    get 'edit_profile' => 'contacts#edit_profile'
+    post 'edit_profile' => 'contacts#edit_profile_action', as: :contact_edit_profile_action
+    get 'dob' => 'contacts#dob', as: :contact_dob
+    post 'dob' => 'contacts#dob_create'
+  end
 
   get '/regulations' => 'regulations#show', id: 'index'
   get '/regulations/wca-regulations-and-guidelines', to: redirect('https://regulations.worldcubeassociation.org/wca-regulations-and-guidelines.pdf', status: 302)
@@ -320,18 +324,36 @@ Rails.application.routes.draw do
   end
 
   namespace :api do
-    get '/', to: redirect('/api/v0', status: 302)
+    get '/', to: redirect('/help/api', status: 302)
     namespace :internal do
       namespace :v1 do
         get '/users/:id/permissions' => 'permissions#index'
+        get '/competitions/:competition_id' => 'competitions#show'
+        get '/competitions/:competition_id/qualifications' => 'competitions#qualifications'
         post '/users/competitor-info' => 'users#competitor_info'
         post '/mailers/registration' => 'mailers#registration'
         post '/payment/init_stripe' => 'payment#init_stripe'
       end
     end
+
+    # While this is the start of a v1 API, this is currently not usable by outside developers as
+    # getting a JWT token requires you to be logged in through the Website
+    namespace :v1 do
+      namespace :registrations do
+        get '/register', to: 'registrations#show'
+        post '/register', to: 'registrations#create'
+        patch '/register', to: 'registrations#update'
+        patch '/bulk_update', to: 'registrations#bulk_update'
+        get '/:competition_id', to: 'registrations#list'
+        get '/:competition_id/admin', to: 'registrations#list_admin', as: :list_admin
+        get '/:competition_id/payment', to: 'registrations#payment_ticket', as: :payment_ticket
+      end
+    end
+
     namespace :v0 do
-      get '/' => 'api#help'
+      get '/', to: redirect('/help/api', status: 302)
       get '/me' => 'api#me'
+      get '/healthcheck' => 'api#healthcheck'
       get '/auth/results' => 'api#auth_results'
       get '/export/public' => 'api#export_public'
       get '/scramble-program' => 'api#scramble_program'
@@ -343,6 +365,7 @@ Rails.application.routes.draw do
       get '/search/regulations' => 'api#regulations_search'
       get '/search/incidents' => 'api#incidents_search'
       get '/users' => 'users#show_users_by_id'
+      post '/users' => 'users#show_users_by_id'
       get '/users/me' => 'users#show_me'
       get '/users/me/personal_records' => 'users#personal_records'
       get '/users/me/preferred_events' => 'users#preferred_events'
@@ -393,7 +416,7 @@ Rails.application.routes.draw do
         end
       end
       namespace :wfc do
-        resources :xero_users, only: [:index, :create]
+        resources :xero_users, only: [:index, :create, :update]
         resources :dues_redirects, only: [:index, :create, :destroy]
       end
     end

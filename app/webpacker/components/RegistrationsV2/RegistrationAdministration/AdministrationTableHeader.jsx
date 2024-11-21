@@ -49,23 +49,25 @@ export default function TableHeader({
         >
           {i18n.t('common.user.representing')}
         </Table.HeaderCell>
-        <Table.HeaderCell
-          sorted={sortColumn === 'registered_on' ? sortDirection : undefined}
-          onClick={() => changeSortColumn('registered_on')}
-        >
-          {i18n.t('registrations.list.registered.without_stripe')}
-        </Table.HeaderCell>
-        {competitionInfo['using_payment_integrations?'] && (
-          <>
-            <Table.HeaderCell>Payment Status</Table.HeaderCell>
+        { competitionInfo['using_payment_integrations?']
+          ? (
+            <>
+              <Table.HeaderCell
+                sorted={sortColumn === 'paid_on_with_registered_on_fallback' ? sortDirection : undefined}
+                onClick={() => changeSortColumn('paid_on_with_registered_on_fallback')}
+              >
+                {i18n.t('registrations.list.registered.with_stripe')}
+              </Table.HeaderCell>
+              <Table.HeaderCell>{i18n.t('competitions.registration_v2.update.amount')}</Table.HeaderCell>
+            </>
+          ) : (
             <Table.HeaderCell
-              sorted={sortColumn === 'paid_on_with_registered_on_fallback' ? sortDirection : undefined}
-              onClick={() => changeSortColumn('paid_on_with_registered_on_fallback')}
+              sorted={sortColumn === 'registered_on' ? sortDirection : undefined}
+              onClick={() => changeSortColumn('registered_on')}
             >
-              {i18n.t('registrations.list.registered.with_stripe')}
+              {i18n.t('registrations.list.registered.without_stripe')}
             </Table.HeaderCell>
-          </>
-        )}
+          )}
         {events ? (
           competitionInfo.event_ids.map((eventId) => (
             <Table.HeaderCell key={`event-${eventId}`}>

@@ -142,7 +142,10 @@ export default function Subregion({ title, groupId }) {
     confirm().then(() => {
       save(apiV0Urls.userRoles.update(delegateToChange.id), {
         location: newLocation,
-      }, sync, { method: 'PATCH' });
+      }, () => {
+        sync();
+        setOpenModalType(null);
+      }, { method: 'PATCH' });
     });
   };
 

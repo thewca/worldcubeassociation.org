@@ -14,6 +14,19 @@ jobs:
           aws-access-key-id: ${{ secrets.CI_CD_AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.CI_CD_AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
-      - name: Execute Task
+      - name: Trigger reload command
         run: |
-          aws ecs run-task --cluster wca-on-rails --capacity-provider-strategy capacityProvider=wca-on-rails-t3 --network-configuration "awsvpcConfiguration={subnets=[subnet-3f288648],securityGroups=[sg-0fff6bb04e7705712]}" --task-definition wca-on-rails-staging-db-reset
+          task_arn="$(
+          aws ecs list-tasks \
+          --region us-west-2 \
+          --cluster wca-on-rails \
+          --service-name wca-on-rails-staging \
+          --query "taskArns[0]" \
+          --output text
+          )"
+          aws ecs execute-command  \
+          --region us-west-2 \
+          --cluster wca-on-rails \
+          --task $task_arn \
+          --container rails-staging \
+          --command "/rails/bin/rake db:load:development[reload]"
