@@ -104,42 +104,52 @@ export default function CalendarView({
   );
 }
 
-// TODO: check events crossing midnight
 function CalendarEventView({ event, timeText, view }) {
   const startLuxon = toLuxonDateTime(event.start, view.calendar);
   const endLuxon = toLuxonDateTime(event.end, view.calendar);
   const interval = Interval.fromDateTimes(startLuxon, endLuxon);
   const lengthInMin = interval.length('minutes');
 
+  const style = getEventStyle(lengthInMin);
+
   return (
     <div className='fc-event-main-frame' style={{ overflow: 'hidden' }}>
-      {lengthInMin < 15 && (
-        <div style={{ whiteSpace: 'nowrap', fontSize: '70%', lineHeight: '1.2em' }}>
-          {timeText} - {event.title}
-        </div>
-      )}
-      {15 <= lengthInMin && lengthInMin < 20 && (
-        <div style={{ whiteSpace: 'nowrap', fontSize: '90%' }}>
-          {timeText} - {event.title}
-        </div>
-      )}
-      {20 <= lengthInMin && lengthInMin < 25 && (
-        <div style={{ whiteSpace: 'nowrap' }}>
-          {timeText} - {event.title}
-        </div>
-      )}
-      {25 <= lengthInMin && lengthInMin < 30 && (
-        <div style={{ lineHeight: '1.4em' }}>
-          <div style={{ whiteSpace: 'nowrap' }}>{timeText}</div>
-          <div>{event.title}</div>
-        </div>
-      )}
-      {30 <= lengthInMin && (
-        <div>
-          <div style={{ whiteSpace: 'nowrap' }}>{timeText}</div>
-          <div>{event.title}</div>
-        </div>
-      )}
+      <div style={style}>
+        <InnerEventContent
+          lengthInMin={lengthInMin}
+          title={event.title}
+          timeText={timeText}
+        />
+      </div>
     </div>
   );
+}
+
+function InnerEventContent({ lengthInMin, timeText, title }) {
+  if (lengthInMin < 25) {
+    return (
+      <>{timeText} - {title}</>
+    );
+  } else {
+    return (
+      <>
+        <div style={{ whiteSpace: 'nowrap' }}>{timeText}</div>
+        <div>{title}</div>
+      </>
+    );
+  }
+}
+
+function getEventStyle(lengthInMin) {
+  if (lengthInMin < 15) {
+    return { whiteSpace: 'nowrap', fontSize: '80%', lineHeight: '1.2em' };
+  } else if (lengthInMin < 20) {
+    return { whiteSpace: 'nowrap', fontSize: '90%' };
+  } else if (lengthInMin < 25) {
+    return { whiteSpace: 'nowrap' };
+  } else if (lengthInMin < 30) {
+    return { lineHeight: '1.4em' };
+  } else {
+    return {};
+  }
 }
