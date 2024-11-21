@@ -140,9 +140,9 @@ function InnerEventContent({ onlyOneLine, timeText, title }) {
 
 function getEventStyle(lengthInMin) {
   if (lengthInMin < 15) {
-    return { overflow: 'hidden', whiteSpace: 'nowrap', fontSize: '80%', lineHeight: '1.2em' };
+    return { overflow: 'hidden', whiteSpace: 'nowrap', lineHeight: '1.2em', fontSize: '80%' };
   } else if (lengthInMin < 20) {
-    return { overflow: 'hidden', whiteSpace: 'nowrap', fontSize: '90%' };
+    return { overflow: 'hidden', whiteSpace: 'nowrap', lineHeight: '1.5em' };
   } else if (lengthInMin < 25) {
     return { overflow: 'hidden', whiteSpace: 'nowrap' };
   } else if (lengthInMin < 30) {
