@@ -294,7 +294,7 @@ class Registration < ApplicationRecord
   end
 
   def registration_history
-    registration_history_entries.includes(:registration_history_changes).map do |r|
+    registration_history_entries.map do |r|
       changed_attributes = r.registration_history_changes.each_with_object({}) do |change, attrs|
         attrs[change.key] = if change.key == 'event_ids'
                               JSON.parse(change.value) # Assuming 'event_ids' is stored as JSON array in `to`
@@ -324,33 +324,33 @@ class Registration < ApplicationRecord
     }
     if admin
       if competition.using_payment_integrations?
-        base_json.merge!({
-                           payment: {
-                             has_paid: outstanding_entry_fees <= 0,
-                             payment_statuses: registration_payments.sort_by(&:created_at).reverse.map(&:payment_status),
-                             payment_amount_iso: paid_entry_fees.cents,
-                             payment_amount_human_readable: "#{paid_entry_fees.format} (#{paid_entry_fees.currency.name})",
-                             updated_at: last_payment_date,
-                           },
-                         })
+        base_json.deep_merge!({
+                                payment: {
+                                  has_paid: outstanding_entry_fees <= 0,
+                                  payment_statuses: registration_payments.sort_by(&:created_at).reverse.map(&:payment_status),
+                                  payment_amount_iso: paid_entry_fees.cents,
+                                  payment_amount_human_readable: "#{paid_entry_fees.format} (#{paid_entry_fees.currency.name})",
+                                  updated_at: last_payment_date,
+                                },
+                              })
       end
-      base_json.merge!({
-                         guests: guests,
-                         competing: {
-                           registration_status: competing_status,
-                           registered_on: created_at,
-                           comment: comments,
-                           admin_comment: administrative_notes,
-                         },
-                       })
+      base_json.deep_merge!({
+                              guests: guests,
+                              competing: {
+                                registration_status: competing_status,
+                                registered_on: created_at,
+                                comment: comments,
+                                admin_comment: administrative_notes,
+                              },
+                            })
       if competing_status == "waiting_list"
         base_json[:competing][:waiting_list_position] = waiting_list_position
       end
     end
     if history
-      base_json.merge!({
-                         history: registration_history,
-                       })
+      base_json.deep_merge!({
+                              history: registration_history,
+                            })
     end
     base_json
   end
