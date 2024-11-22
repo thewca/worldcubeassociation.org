@@ -980,7 +980,7 @@ class Competition < ApplicationRecord
   end
 
   def using_payment_integrations?
-    competition_payment_integrations.exists? && has_fees?
+    competition_payment_integrations.any? && has_fees?
   end
 
   def can_edit_registration_fees?

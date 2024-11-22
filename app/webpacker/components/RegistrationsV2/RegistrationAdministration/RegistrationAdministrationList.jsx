@@ -278,7 +278,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
     () => Object.fromEntries(
       (registrations ?? []).map((registration) => [
         registration.user.id,
-        registration.email,
+        registration.user.email,
       ]),
     ),
     [registrations],
