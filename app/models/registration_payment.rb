@@ -7,7 +7,7 @@ class RegistrationPayment < ApplicationRecord
   belongs_to :receipt, polymorphic: true, optional: true
 
   belongs_to :refunded_registration_payment, class_name: 'RegistrationPayment', optional: true
-  has_many :refunding_registration_payments, class_name: 'RegistrationPayment', inverse_of: :refunded_registration_payment, foreign_key: :refunded_registration_payment_id
+  has_many :refunding_registration_payments, class_name: 'RegistrationPayment', inverse_of: :refunded_registration_payment, foreign_key: :refunded_registration_payment_id, dependent: :destroy
 
   monetize :amount_lowest_denomination,
            as: "amount",

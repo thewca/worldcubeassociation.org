@@ -214,4 +214,21 @@ namespace :registration_version do
       end
     end
   end
+
+  task cleanup_payments: [:environment] do
+    RegistrationPayment.joins(registration: :competition)
+                       .merge(Competition.registration_version_v3)
+                       .find_each do |reg_payment|
+      # Cannot eagerly preload these because of polymorphic association :/
+      receipt = reg_payment.receipt
+      next unless receipt.is_a? StripeRecord
+
+      # The method `succeeded?` is defined through the scope `stripe_status` on the AR model
+      receipt_invalid = !reg_payment.receipt.succeeded?
+
+      # The `destroy` method takes all refunded RegPayments to the grave as well
+      #   through the `dependent: destroy` on the `has_many` association
+      reg_payment.destroy if receipt_invalid
+    end
+  end
 end
