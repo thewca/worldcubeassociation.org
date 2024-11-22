@@ -78,7 +78,11 @@ export default function CompetingStep({
   const [hasInteracted, setHasInteracted] = useState(false);
   const [guests, setGuests] = useState(0);
 
-  const [processing, setProcessing] = useState(isProcessing);
+  const [processing, setProcessing] = useState(false);
+
+  useEffect(() => {
+    setProcessing(isProcessing);
+  }, [isProcessing]);
 
   useEffect(() => {
     if (isRegistered && registration.competing.registration_status !== 'cancelled') {
