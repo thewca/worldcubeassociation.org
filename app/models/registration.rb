@@ -173,10 +173,12 @@ class Registration < ApplicationRecord
   end
 
   def entry_fee
-    # DEPRECATION WARNING: Rails 7.0 has deprecated Enumerable.sum in favor of Ruby's native implementation
-    # available since 2.4. Sum of non-numeric elements requires an initial argument.
-    zero_money = Money.new 0, competition.currency_code
-    competition.base_entry_fee + competition_events.map(&:fee).sum(zero_money)
+    sum_lowest_denomination = competition.base_entry_fee + competition_events.map(&:fee_lowest_denomination).sum
+
+    Money.new(
+      sum_lowest_denomination,
+      competition.currency_code,
+    )
   end
 
   def paid_entry_fees

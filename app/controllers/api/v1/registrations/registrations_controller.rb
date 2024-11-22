@@ -107,6 +107,7 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
     registrations = Registration.where(competition: @competition)
     render json: registrations.includes(
       :events,
+      :competition_events,
       :registration_competition_events,
       competition: :competition_payment_integrations,
       user: :delegate_role_metadata,
