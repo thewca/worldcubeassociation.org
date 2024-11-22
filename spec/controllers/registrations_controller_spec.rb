@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe RegistrationsController, clean_db_with_truncation: true do
   context "signed in as organizer" do
     let!(:organizer) { FactoryBot.create(:user) }
-    let(:competition) { FactoryBot.create(:competition, :registration_open, organizers: [organizer], events: Event.where(id: %w(222 333))) }
+    let(:competition) { FactoryBot.create(:competition, :registration_open, :visible, organizers: [organizer], events: Event.where(id: %w(222 333))) }
     let(:zzyzx_user) { FactoryBot.create :user, name: "Zzyzx" }
     let(:registration) { FactoryBot.create(:registration, competition: competition, user: zzyzx_user) }
 
@@ -162,8 +162,8 @@ RSpec.describe RegistrationsController, clean_db_with_truncation: true do
     it "doesn't allow accepting a banned user" do
       registration.update!(accepted_at: Time.now)
       registration2 = FactoryBot.create(:registration, :pending, competition: competition)
-      deleted_registration = FactoryBot.create(:registration, :deleted, competition: competition)
-      banned_deleted_registration = FactoryBot.create(:registration, :deleted, competition: competition)
+      deleted_registration = FactoryBot.create(:registration, :cancelled, competition: competition)
+      banned_deleted_registration = FactoryBot.create(:registration, :cancelled, competition: competition)
       banned_user = FactoryBot.create(:user, :banned)
       banned_deleted_registration.update!(user: banned_user)
 
@@ -185,8 +185,8 @@ RSpec.describe RegistrationsController, clean_db_with_truncation: true do
     it "doesn't allow rejecting a banned user" do
       registration.update!(accepted_at: Time.now)
       registration2 = FactoryBot.create(:registration, :pending, competition: competition)
-      deleted_registration = FactoryBot.create(:registration, :deleted, competition: competition)
-      banned_deleted_registration = FactoryBot.create(:registration, :deleted, competition: competition)
+      deleted_registration = FactoryBot.create(:registration, :cancelled, competition: competition)
+      banned_deleted_registration = FactoryBot.create(:registration, :cancelled, competition: competition)
       banned_user = FactoryBot.create(:user, :banned)
       banned_deleted_registration.update!(user: banned_user)
 
@@ -261,8 +261,8 @@ RSpec.describe RegistrationsController, clean_db_with_truncation: true do
     let!(:delegate) { FactoryBot.create(:delegate) }
     let!(:other_delegate) { FactoryBot.create(:delegate) }
 
-    let!(:competition) { FactoryBot.create(:competition, :registration_open, delegates: [delegate], showAtAll: true) }
-    let!(:other_competition) { FactoryBot.create(:competition, :registration_open, delegates: [other_delegate], showAtAll: true) }
+    let!(:competition) { FactoryBot.create(:competition, :registration_open, :visible, delegates: [delegate]) }
+    let!(:other_competition) { FactoryBot.create(:competition, :registration_open, :visible, delegates: [other_delegate]) }
 
     before :each do
       sign_in delegate
@@ -317,7 +317,7 @@ RSpec.describe RegistrationsController, clean_db_with_truncation: true do
     end
 
     it "can re-create registration after it was deleted" do
-      registration = FactoryBot.create :registration, :accepted, :deleted, competition: competition, user_id: user.id
+      registration = FactoryBot.create :registration, :accepted, :cancelled, competition: competition, user_id: user.id
       registration_competition_event = registration.registration_competition_events.first
       expect(registration.reload.deleted?).to eq true
 
@@ -364,7 +364,7 @@ RSpec.describe RegistrationsController, clean_db_with_truncation: true do
   context "signed in as competitor" do
     let!(:user) { FactoryBot.create(:user, :wca_id) }
     let!(:delegate) { FactoryBot.create(:delegate) }
-    let!(:competition) { FactoryBot.create(:competition, :registration_open, delegates: [delegate], showAtAll: true) }
+    let!(:competition) { FactoryBot.create(:competition, :visible, :registration_open, delegates: [delegate]) }
     let(:threes_comp_event) { competition.competition_events.find_by(event_id: "333") }
 
     before :each do
@@ -383,7 +383,7 @@ RSpec.describe RegistrationsController, clean_db_with_truncation: true do
     end
 
     it "can re-create registration after it was deleted" do
-      registration = FactoryBot.create :registration, :accepted, :deleted, competition: competition, user_id: user.id
+      registration = FactoryBot.create :registration, :cancelled, competition: competition, user_id: user.id
       registration_competition_event = registration.registration_competition_events.first
       expect(registration.reload.pending?).to eq false
       expect(registration.reload.accepted?).to eq false

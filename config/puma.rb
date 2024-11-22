@@ -35,22 +35,6 @@ port ENV.fetch("PORT", 3000)
 # Allow puma to be restarted by `bin/rails restart` command.
 plugin :tmp_restart
 
-if ENV["RAILS_ENV"] == "production"
-  require "concurrent-ruby"
-  worker_count = Integer(ENV.fetch("WEB_CONCURRENCY") { Concurrent.available_processor_count })
-  workers worker_count if worker_count > 1
-
-  # Use the `preload_app!` method when specifying a `workers` number.
-  # This directive tells Puma to first boot the application and load code
-  # before forking the application. This takes advantage of Copy On Write
-  # process behavior so workers use less memory.
-  preload_app!
-
-  # reconnecting active Record on fork is no longer needed https://github.com/rails/rails/pull/31241
-
-  # queue_requests false # I'm not sure if our AWS Loadbalancer would handle that, I think so?
-end
-
 # Specify the PID file. Defaults to tmp/pids/server.pid in development.
 # In other environments, only set the PID file if requested.
 pidfile ENV["PIDFILE"] if ENV["PIDFILE"]

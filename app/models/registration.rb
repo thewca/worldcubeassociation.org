@@ -1,17 +1,22 @@
 # frozen_string_literal: true
 
 class Registration < ApplicationRecord
-  scope :pending, -> { where(accepted_at: nil).where(deleted_at: nil).where(is_competing: true) }
+  scope :pending, -> { where(accepted_at: nil, deleted_at: nil, is_competing: true) }
   scope :accepted, -> { where.not(accepted_at: nil).where(deleted_at: nil) }
   scope :deleted, -> { where.not(deleted_at: nil) }
+  scope :cancelled, -> { where(competing_status: 'cancelled') }
+  scope :rejected, -> { where(competing_status: 'rejected') }
+  scope :waitlisted, -> { where(competing_status: 'waiting_list') }
   scope :non_competing, -> { where(is_competing: false) }
   scope :not_deleted, -> { where(deleted_at: nil) }
   scope :with_payments, -> { joins(:registration_payments).distinct }
+  scope :wcif_ordered, -> { order(:id) }
 
   belongs_to :competition
   belongs_to :user, optional: true # A user may be deleted later. We only enforce validation directly on creation further down below.
   belongs_to :accepted_user, foreign_key: "accepted_by", class_name: "User", optional: true
   belongs_to :deleted_user, foreign_key: "deleted_by", class_name: "User", optional: true
+  has_many :registration_history_entries, dependent: :destroy
   has_many :registration_competition_events
   has_many :registration_payments
   has_many :competition_events, through: :registration_competition_events
@@ -19,6 +24,14 @@ class Registration < ApplicationRecord
   has_many :assignments, as: :registration, dependent: :delete_all
   has_many :wcif_extensions, as: :extendable, dependent: :delete_all
   has_many :payment_intents, as: :holder, dependent: :delete_all
+
+  enum :competing_status, {
+    pending: Registrations::Helper::STATUS_PENDING,
+    accepted: Registrations::Helper::STATUS_ACCEPTED,
+    cancelled: Registrations::Helper::STATUS_CANCELLED,
+    rejected: Registrations::Helper::STATUS_REJECTED,
+    waiting_list: Registrations::Helper::STATUS_WAITING_LIST,
+  }, prefix: true
 
   serialize :roles, coder: YAML
 
@@ -37,6 +50,36 @@ class Registration < ApplicationRecord
     end
   end
 
+  # Automatically compute the V1 timestamps, for competitions that just changed their competing_status.
+  #   This is a poor-man's backwards compatibility so that V3 registrations can be used by the V1 scopes
+  #   for `accepted` and `pending`, which rely on these timestamps having some non-nil value.
+  # TODO V3: Remove this hook once V1 is completely gone.
+  before_save :recompute_timestamps, if: :competing_status_changed?
+
+  def recompute_timestamps
+    case self.competing_status
+    when Registrations::Helper::STATUS_PENDING
+    when Registrations::Helper::STATUS_WAITING_LIST
+      self.accepted_at = nil
+      self.deleted_at = nil
+    when Registrations::Helper::STATUS_ACCEPTED
+      self.accepted_at = DateTime.now
+    when Registrations::Helper::STATUS_CANCELLED
+    when Registrations::Helper::STATUS_REJECTED
+      self.deleted_at = DateTime.now
+    end
+  end
+
+  after_save :mark_registration_processing_as_done
+
+  private def mark_registration_processing_as_done
+    Rails.cache.delete(CacheAccess.registration_processing_cache_key(competition_id, user_id))
+  end
+
+  def update_lanes!(params, acting_user)
+    Registrations::Lanes::Competing.update!(params, self.competition, acting_user.id)
+  end
+
   def guest_limit
     competition.guests_per_registration_limit
   end
@@ -49,12 +92,28 @@ class Registration < ApplicationRecord
     !deleted_at.nil?
   end
 
+  def rejected?
+    competing_status_rejected?
+  end
+
+  def cancelled?
+    competing_status_cancelled?
+  end
+
+  def waitlisted?
+    competing_status_waiting_list?
+  end
+
   def accepted?
     !accepted_at.nil? && !deleted?
   end
 
   def pending?
-    !accepted? && !deleted? && is_competing?
+    !accepted? && !deleted? && !waitlisted? && !rejected? && is_competing?
+  end
+
+  def might_attend?
+    waitlisted? || pending? || accepted?
   end
 
   def self.status_from_timestamp(accepted_at, deleted_at)
@@ -157,6 +216,7 @@ class Registration < ApplicationRecord
     receipt,
     user_id
   )
+    add_history_entry({ payment_status: receipt.determine_wca_status, iso_amount: amount_lowest_denomination }, "user", user_id, 'Payment')
     registration_payments.create!(
       amount_lowest_denomination: amount_lowest_denomination,
       currency_code: currency_code,
@@ -172,6 +232,7 @@ class Registration < ApplicationRecord
     refunded_registration_payment_id,
     user_id
   )
+    add_history_entry({ payment_status: "refund", iso_amount: paid_entry_fees.cents - amount_lowest_denomination }, "user", user_id, 'Refund')
     registration_payments.create!(
       amount_lowest_denomination: amount_lowest_denomination.abs * -1,
       currency_code: currency_code,
@@ -189,21 +250,114 @@ class Registration < ApplicationRecord
     registration_competition_events.reject(&:marked_for_destruction?).map(&:event)
   end
 
+  def add_history_entry(changes, actor_type, actor_id, action, timestamp = Time.now.utc)
+    new_entry = registration_history_entries.create(actor_type: actor_type, actor_id: actor_id, action: action, created_at: timestamp)
+    changes.each_key do |key|
+      new_entry.registration_history_change.create(value: changes[key], key: key)
+    end
+  end
+
   def waiting_list_info
     pending_registrations = competition.registrations.pending.order(:created_at)
     index = pending_registrations.index(self)
     Hash.new(index: index, length: pending_registrations.length)
   end
 
+  def waiting_list_position
+    competition.waiting_list.position(id)
+  end
+
   def wcif_status
     # Non-competing staff are treated as accepted.
-    if accepted? || !is_competing?
+    # TODO: WCIF spec needs to be updated - and possibly versioned - to include new statuses
+    if accepted? || competing_status_accepted? || !is_competing?
       'accepted'
-    elsif deleted?
+    elsif deleted? || rejected? || cancelled?
       'deleted'
-    else
+    elsif pending? || waitlisted?
       'pending'
     end
+  end
+
+  def compute_competing_status
+    if accepted? || !is_competing?
+      Registrations::Helper::STATUS_ACCEPTED
+    elsif deleted?
+      Registrations::Helper::STATUS_CANCELLED
+    elsif rejected?
+      Registrations::Helper::STATUS_REJECTED
+    elsif pending?
+      Registrations::Helper::STATUS_PENDING
+    elsif waitlisted?
+      Registrations::Helper::STATUS_WAITING_LIST
+    end
+  end
+
+  def registration_history
+    registration_history_entries.includes([:registration_history_change]).map do |r|
+      changed_attributes = r.registration_history_change.each_with_object({}) do |change, attrs|
+        attrs[change.key] = if change.key == 'event_ids'
+                              JSON.parse(change.value) # Assuming 'event_ids' is stored as JSON array in `to`
+                            else
+                              change.value
+                            end
+      end
+      {
+        changed_attributes: changed_attributes,
+        actor_type: r.actor_type,
+        actor_id: r.actor_id,
+        timestamp: r.created_at,
+        action: r.action,
+      }
+    end
+  end
+
+  def to_v2_json(admin: false, history: false, pii: false)
+    base_json = {
+      user: user.as_json(only: %w[id wca_id name gender country_iso2], methods: %w[country]),
+      user_id: user_id,
+      competing: {
+        event_ids: event_ids,
+      },
+    }
+    if admin
+      if competition.using_payment_integrations?
+        base_json.merge!({
+                           payment: {
+                             has_paid: outstanding_entry_fees <= 0,
+                             payment_statuses: registration_payments.sort_by(&:created_at).reverse!.map { |p| p.payment_status },
+                             payment_amount_iso: paid_entry_fees.cents,
+                             payment_amount_human_readable: "#{paid_entry_fees.format} (#{paid_entry_fees.currency.name})",
+                             updated_at: last_payment_date,
+                           },
+                         })
+      end
+      base_json.merge!({
+                         guests: guests,
+                         competing: {
+                           event_ids: event_ids,
+                           registration_status: competing_status,
+                           registered_on: created_at,
+                           comment: comments,
+                           admin_comment: administrative_notes,
+                         },
+                       })
+      if competing_status == "waiting_list"
+        base_json[:competing][:waiting_list_position] = waiting_list_position
+      end
+    end
+    if history
+      base_json.merge!({
+                         history: registration_history || [],
+                       })
+    end
+    if pii
+      base_json.merge!({
+                         email: user.email,
+                         dob: user.dob,
+                       })
+    end
+    base_json
   end
 
   def to_wcif(authorized: false)
@@ -243,7 +397,7 @@ class Registration < ApplicationRecord
   # to invalidate all the corresponding registrations (e.g. if the user gets banned).
   # Instead the validations should be placed such that they ensure that a user
   # change doesn't lead to an invalid state.
-  validate :user_can_register_for_competition, on: :create
+  validate :user_can_register_for_competition, on: :create, unless: :rejected?
   private def user_can_register_for_competition
     cannot_register_reasons = user&.cannot_register_for_competition_reasons(competition, is_competing: self.is_competing?)
     if cannot_register_reasons.present?

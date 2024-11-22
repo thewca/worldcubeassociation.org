@@ -147,6 +147,7 @@ function EditSchedule({
           >
             <EditActivities
               wcifEvents={wcifEvents}
+              referenceTime={referenceTime}
               calendarLocale={calendarLocale}
             />
           </Accordion.Content>

@@ -1,5 +1,10 @@
 export function isQualifiedForEvent(event, qualificationWCIF, personalRecords) {
   const qualificationForEvent = qualificationWCIF[event];
+
+  if (!qualificationForEvent) {
+    return true;
+  }
+
   const personalRecordForEvent = personalRecords[qualificationForEvent.resultType]
     .find((r) => r.eventId === event);
   if (!personalRecordForEvent) {

@@ -25,7 +25,8 @@ RSpec.feature "Competition events management" do
         click_button "Add room"
         fill_in("room-name", with: "Youpitralala")
         within(:css, "div[name='timezone'][role='listbox']>div.menu", visible: :all) do
-          find("div", class: "item", text: "America/Los_Angeles (Pacific Daylight Time, UTC-7)", visible: :all).trigger(:click)
+          # Using a timezone that does not follow Daylight Savings, so that we get consistent results all year round
+          find("div", class: "item", text: "Asia/Tokyo (Japan Standard Time, UTC+9)", visible: :all).trigger(:click)
         end
         within(:css, "div[name='countryIso2'][role='combobox']>div.menu[role='listbox']", visible: :all) do
           find("div", class: "item", text: "United States", visible: :all).trigger(:click)

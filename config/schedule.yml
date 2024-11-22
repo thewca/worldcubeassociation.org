@@ -38,6 +38,11 @@ registration_reminder:
   cron: "0 * * * *"
   queue: wca_jobs
 
+publish_metrics:
+  class: "PublishRegistrationMetrics"
+  cron: "15 * * * *"
+  queue: wca_jobs
+
 sync_mailing_lists:
   class: "SyncMailingListsJob"
   cron: "0 * * * *"

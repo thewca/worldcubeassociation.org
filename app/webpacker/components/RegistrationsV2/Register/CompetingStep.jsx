@@ -25,13 +25,14 @@ import I18nHTMLTranslate from '../../I18nHTMLTranslate';
 import { useConfirm } from '../../../lib/providers/ConfirmProvider';
 import { eventsNotQualifiedFor, isQualifiedForEvent } from '../../../lib/helpers/qualifications';
 import { eventQualificationToString } from '../../../lib/utils/wcif';
+import { hasNotPassed } from '../../../lib/utils/dates';
 
 const maxCommentLength = 240;
 
 const potentialWarnings = (competitionInfo) => {
   const warnings = [];
   // Organizer Pre Registration
-  if (!competitionInfo['registration_currently_open?']) {
+  if (hasNotPassed(competitionInfo.registration_open)) {
     warnings.push(i18n.t('competitions.registration_v2.register.early_registration'));
   }
   // Favourites Competition
@@ -56,7 +57,7 @@ export default function CompetingStep({
 }) {
   const maxEvents = competitionInfo.events_per_registration_limit ?? Infinity;
   const isRegistered = Boolean(registration);
-  const hasPaid = registration?.payment.payment_status === 'succeeded';
+  const hasPaid = registration?.payment?.has_paid;
   const dispatch = useDispatch();
 
   const confirm = useConfirm();
@@ -316,6 +317,16 @@ export default function CompetingStep({
           <Form.Field required={Boolean(competitionInfo.force_comment_in_registration)}>
             <label htmlFor="comment">
               {i18n.t('competitions.registration_v2.register.comment')}
+              {' '}
+              <div style={{ float: 'right', fontSize: '0.8em' }}>
+                <i>
+                  (
+                  {comment.length}
+                  /
+                  {maxCommentLength}
+                  )
+                </i>
+              </div>
             </label>
             <Form.TextArea
               required={Boolean(competitionInfo.force_comment_in_registration)}
@@ -325,11 +336,6 @@ export default function CompetingStep({
               id="comment"
               error={competitionInfo.force_comment_in_registration && comment.trim().length === 0 && i18n.t('registrations.errors.cannot_register_without_comment')}
             />
-            <p>
-              {comment.length}
-              /
-              {maxCommentLength}
-            </p>
           </Form.Field>
           <Form.Field>
             <label>{i18n.t('activerecord.attributes.registration.guests')}</label>

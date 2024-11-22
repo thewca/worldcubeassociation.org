@@ -588,19 +588,7 @@ class CompetitionsController < ApplicationController
     head :ok
   end
 
-  # Enables the New Registration Service for a Competition
-  def enable_v2
-    @competition = competition_from_params
-    if EnvConfig.WCA_LIVE_SITE? || @competition.registration_currently_open?
-      flash.now[:danger] = t('competitions.messages.cannot_activate_v2')
-      return redirect_to competition_path(@competition)
-    end
-    @competition.enable_v2_registrations!
-    redirect_to competition_path(@competition)
-  end
-
   before_action -> { require_user_permission(:can_create_competitions?) }, only: [:create]
-
   def create
     competition = Competition.new
 
@@ -781,7 +769,7 @@ class CompetitionsController < ApplicationController
       return render json: { error: "Already announced" }
     end
 
-    competition.update!(announced_at: Time.now, announced_by: current_user.id)
+    competition.update!(announced_at: Time.now, announced_by: current_user.id, showAtAll: true)
 
     competition.organizers.each do |organizer|
       CompetitionsMailer.notify_organizer_of_announced_competition(competition, organizer).deliver_later
@@ -848,19 +836,11 @@ class CompetitionsController < ApplicationController
   end
 
   def my_competitions
-    if Rails.env.production?
-      registrations_v2 = current_user.microservice_registrations
-    else
-      registrations_v2 = []
-    end
-
     ActiveRecord::Base.connected_to(role: :read_replica) do
       competition_ids = current_user.organized_competitions.pluck(:competition_id)
       competition_ids.concat(current_user.delegated_competitions.pluck(:competition_id))
       registrations = current_user.registrations.includes(:competition).accepted.reject { |r| r.competition.results_posted? }
       registrations.concat(current_user.registrations.includes(:competition).pending.select { |r| r.competition.upcoming? })
-      # TODO: filter like above: accepted only if results not posted, pending only if upcoming
-      registrations.concat(registrations_v2)
       @registered_for_by_competition_id = registrations.uniq.to_h do |r|
         [r.competition.id, r]
       end

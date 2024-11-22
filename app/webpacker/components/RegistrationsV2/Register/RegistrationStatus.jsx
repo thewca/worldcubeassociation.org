@@ -21,21 +21,21 @@ function registrationIconByStatus(registrationStatus) {
 // If we add these strings to en.yml immediately, translators will get a notification asking them
 //   to translate these strings during our test mode deployment. But we aren't even sure whether
 //   we want to keep these strings. So we hard-code them "for now" (when did that ever go wrong?)
-function canIBookPlaneTickets(registrationStatus, paymentStatus, competitionInfo) {
+function canIBookPlaneTickets(registrationStatus, hasPaid, competitionInfo) {
   switch (registrationStatus) {
     case 'pending':
-      if (competitionInfo['using_payment_integrations?'] && paymentStatus !== 'succeeded') {
-        return 'Your registration will not be approved until you pay for your registration, unless you have a special arrangement with the organizers or you paid through an alternative method.';
+      if (competitionInfo['using_payment_integrations?'] && !hasPaid) {
+        return i18n.t('competitions.registration_v2.info.payment_missing');
       }
-      return "Don't book your flights or hotel just yet - the organizers still have to manually approve your registration. This can take time.";
+      return i18n.t('competitions.registration_v2.info.needs_approval');
     case 'accepted':
-      return 'Book your flights and pack your bags - you have a spot at the competition!';
+      return i18n.t('competitions.registration_v2.info.is_accepted');
     case 'cancelled':
-      return 'Your registration has been cancelled and you will not be competing, but you can sign up again';
+      return i18n.t('competitions.registration_v2.info.is_cancelled');
     case 'rejected':
-      return 'Your registration has been rejected by the organizers. Please contact the organizing team if you believe this was a mistake.';
+      return i18n.t('competitions.registration_v2.info.is_rejected');
     case 'waiting_list':
-      return "Don't book a flight, but don't give up hope either. The competition is full, but you have been placed on a waiting list, and you will receive an email if enough spots open up for you to be able to attend.";
+      return i18n.t('competitions.registration_v2.info.is_waitlisted');
     default:
       return `[Testers: This should not happen. If you reached this message, please contact WST! Debug: '${registrationStatus}']`;
   }
@@ -64,7 +64,7 @@ function RegistrationStatusMessage({ registration, competitionInfo }) {
         <p>
           {canIBookPlaneTickets(
             registration.competing.registration_status,
-            registration.payment?.payment_status,
+            registration.payment?.has_paid,
             competitionInfo,
           )}
         </p>
