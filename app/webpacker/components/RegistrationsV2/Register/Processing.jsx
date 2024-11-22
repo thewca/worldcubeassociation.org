@@ -35,7 +35,7 @@ export default function Processing({ competitionInfo, user, onProcessingComplete
             {I18n.t('competitions.registration_v2.register.processing_longer')}
           </Message>
         )}
-        {data && data.queueCount > 50 && (
+        {data && data.queueCount && (
           <Message warning>
             {I18n.t('competitions.registration_v2.register.processing_queue', {
               queueCount: data.queueCount,

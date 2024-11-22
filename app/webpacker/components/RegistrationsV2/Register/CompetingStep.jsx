@@ -52,6 +52,7 @@ export default function CompetingStep({
   registration,
   refetchRegistration,
   qualifications,
+  isProcessing,
 }) {
   const maxEvents = competitionInfo.events_per_registration_limit ?? Infinity;
   const isRegistered = Boolean(registration);
@@ -77,7 +78,7 @@ export default function CompetingStep({
   const [hasInteracted, setHasInteracted] = useState(false);
   const [guests, setGuests] = useState(0);
 
-  const [processing, setProcessing] = useState(false);
+  const [processing, setProcessing] = useState(isProcessing);
 
   useEffect(() => {
     if (isRegistered && registration.competing.registration_status !== 'cancelled') {

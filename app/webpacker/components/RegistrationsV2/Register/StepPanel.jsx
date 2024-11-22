@@ -77,6 +77,7 @@ export default function StepPanel({
   stripePublishableKey,
   connectedAccountId,
   qualifications,
+  isProcessing,
 }) {
   const isRegistered = Boolean(registration) && registration.competing.registration_status !== 'cancelled';
   const isAccepted = isRegistered && registration.competing.registration_status === 'accepted';
@@ -97,6 +98,12 @@ export default function StepPanel({
   }, [competitionInfo, isRegistered]);
 
   const [activeIndex, setActiveIndex] = useState(() => {
+    // skip ahead to competingStep if we are processing
+    if (isProcessing) {
+      return steps.findIndex(
+        (step) => step === competingStepConfig,
+      );
+    }
     // Don't show payment panel if a user was accepted (for people with waived payment)
     if (registrationFinished || isAccepted || isRejected) {
       return steps.findIndex(
@@ -150,6 +157,7 @@ export default function StepPanel({
         stripePublishableKey={stripePublishableKey}
         connectedAccountId={connectedAccountId}
         qualifications={qualifications}
+        isProcessing={isProcessing}
         nextStep={
           (overwrites = {}) => setActiveIndex((oldActiveIndex) => {
             if (overwrites?.refresh) {
