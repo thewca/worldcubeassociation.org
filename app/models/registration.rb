@@ -253,7 +253,7 @@ class Registration < ApplicationRecord
   def add_history_entry(changes, actor_type, actor_id, action, timestamp = Time.now.utc)
     new_entry = registration_history_entries.create(actor_type: actor_type, actor_id: actor_id, action: action, created_at: timestamp)
     changes.each_key do |key|
-      new_entry.registration_history_change.create(value: changes[key], key: key)
+      new_entry.registration_history_changes.create(value: changes[key], key: key)
     end
   end
 
@@ -294,8 +294,8 @@ class Registration < ApplicationRecord
   end
 
   def registration_history
-    registration_history_entries.includes([:registration_history_change]).map do |r|
-      changed_attributes = r.registration_history_change.each_with_object({}) do |change, attrs|
+    registration_history_entries.includes(:registration_history_changes).map do |r|
+      changed_attributes = r.registration_history_changes.each_with_object({}) do |change, attrs|
         attrs[change.key] = if change.key == 'event_ids'
                               JSON.parse(change.value) # Assuming 'event_ids' is stored as JSON array in `to`
                             else
@@ -313,8 +313,10 @@ class Registration < ApplicationRecord
   end
 
   def to_v2_json(admin: false, history: false, pii: false)
+    private_attributes = pii ? %w[dob email] : nil
+
     base_json = {
-      user: user.as_json(only: %w[id wca_id name gender country_iso2], methods: %w[country]),
+      user: user.as_json(only: %w[id wca_id name gender country_iso2], methods: %w[country], include: [], private_attributes: private_attributes),
       user_id: user_id,
       competing: {
         event_ids: event_ids,
@@ -325,7 +327,7 @@ class Registration < ApplicationRecord
         base_json.merge!({
                            payment: {
                              has_paid: outstanding_entry_fees <= 0,
-                             payment_statuses: registration_payments.sort_by(&:created_at).reverse!.map { |p| p.payment_status },
+                             payment_statuses: registration_payments.sort_by(&:created_at).reverse.map(&:payment_status),
                              payment_amount_iso: paid_entry_fees.cents,
                              payment_amount_human_readable: "#{paid_entry_fees.format} (#{paid_entry_fees.currency.name})",
                              updated_at: last_payment_date,
@@ -335,7 +337,6 @@ class Registration < ApplicationRecord
       base_json.merge!({
                          guests: guests,
                          competing: {
-                           event_ids: event_ids,
                            registration_status: competing_status,
                            registered_on: created_at,
                            comment: comments,
@@ -348,13 +349,7 @@ class Registration < ApplicationRecord
     end
     if history
       base_json.merge!({
-                         history: registration_history || [],
-                       })
-    end
-    if pii
-      base_json.merge!({
-                         email: user.email,
-                         dob: user.dob,
+                         history: registration_history,
                        })
     end
     base_json
