@@ -5,7 +5,7 @@ class TicketsController < ApplicationController
     respond_to do |format|
       format.html do
         @ticket_id = params.require(:id)
-        render :index
+        render :show
       end
       format.json do
         ticket = Ticket.find(params.require(:id))
@@ -33,7 +33,6 @@ class TicketsController < ApplicationController
         log: "Ticket status changed to #{ticket_status} by #{current_user.name}.",
       )
     end
-    status_changed = ticket.metadata.update(status: ticket_status)
-    render json: { success: status_changed }
+    render json: { success: true }
   end
 end

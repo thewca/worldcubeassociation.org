@@ -11,26 +11,15 @@ class Ticket < ApplicationRecord
 
   def user_stakeholders(user)
     return [] if user.nil?
-    ticket_stakeholders.select do |stakeholder|
-      if stakeholder.stakeholder_type == :user
-        stakeholder.stakeholder_id == user.id
-      elsif stakeholder.stakeholder_type == TicketStakeholder.stakeholder_types[:user_group]
-        user.active_roles.any? { |role| role.group_id == stakeholder.stakeholder_id }
-      end
+    ticket_stakeholders.select do |ticket_stakeholder|
+      user.active_roles.where(group: ticket_stakeholder.stakeholder).any? || user == ticket_stakeholder.stakeholder
     end
   end
 
   def action_allowed?(action, user)
-    user_stakeholders(user).any? do |stakeholder|
-      (
-        stakeholder.stakeholder_type == TicketStakeholder.stakeholder_types[:user_group] &&
-        metadata.action_user_groups(action).include?(stakeholder.stakeholder_id)
-      )
+    user_stakeholders(user).any? do |ticket_stakeholder|
+      metadata.action_user_groups(action).include?(ticket_stakeholder.stakeholder)
     end
-  end
-
-  def url
-    Rails.application.routes.url_helpers.ticket_url(id)
   end
 
   DEFAULT_SERIALIZE_OPTIONS = {

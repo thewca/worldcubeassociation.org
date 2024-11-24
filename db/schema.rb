@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_11_18_145843) do
+ActiveRecord::Schema[7.2].define(version: 2024_11_24_050607) do
   create_table "Competitions", id: { type: :string, limit: 32, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", limit: 50, default: "", null: false
     t.string "cityName", limit: 50, default: "", null: false
@@ -1197,7 +1197,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_18_145843) do
   end
 
   create_table "tickets", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
-    t.string "name", null: false
     t.string "ticket_type", null: false
     t.bigint "metadata_id", null: false
     t.string "metadata_type", null: false
@@ -1208,14 +1207,15 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_18_145843) do
   create_table "tickets_edit_person", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "status", null: false
     t.string "wca_id", null: false
-    t.string "previous_name"
-    t.string "new_name"
-    t.date "previous_dob"
-    t.date "new_dob"
-    t.string "previous_country_iso2"
-    t.string "new_country_iso2"
-    t.string "previous_gender"
-    t.string "new_gender"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "tickets_edit_person_fields", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.bigint "tickets_edit_person_id", null: false
+    t.string "field_name", null: false
+    t.string "old_value", null: false
+    t.string "new_value", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

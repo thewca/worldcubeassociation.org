@@ -6,15 +6,16 @@ FactoryBot.define do
     wca_id { FactoryBot.create(:user_with_wca_id).wca_id }
 
     trait :edit_name do
-      previous_name { Faker::Name }
-      new_name { Faker::Name }
       after(:create) do |edit_name_ticket|
-        edit_name_ticket.ticket = FactoryBot.create(:ticket, :edit_person, name: "Edit Name", metadata: edit_name_ticket)
+        edit_name_ticket.ticket = FactoryBot.create(:ticket, :edit_person, metadata: edit_name_ticket)
+        FactoryBot.create(
+          :tickets_edit_name_field,
+          tickets_edit_person_id: edit_name_ticket.id,
+        )
         FactoryBot.create(
           :ticket_stakeholder,
           ticket: edit_name_ticket.ticket,
-          stakeholder_id: UserGroup.teams_committees_group_wrt.id,
-          stakeholder_type: :user_group,
+          stakeholder: UserGroup.teams_committees_group_wrt,
           connection: :assigned,
           is_active: true,
         )
