@@ -87,6 +87,27 @@ class ContactsController < ApplicationController
     end
   end
 
+  private def changes_requested_humanized(changes_requested)
+    changes_requested.map do |change|
+      case change[:field]
+      when :country_iso2
+        change_from = Country.find_by(iso2: change[:from]).name_in(:en)
+        change_to = Country.find_by(iso2: change[:to]).name_in(:en)
+      when :gender
+        change_from = User::GENDER_LABEL_METHOD.call(change[:from].to_sym)
+        change_to = User::GENDER_LABEL_METHOD.call(change[:to].to_sym)
+      else
+        change_from = change[:from]
+        change_to = change[:to]
+      end
+      ContactEditProfile::EditProfileChange.new(
+        field: change[:field].to_s.humanize,
+        from: change_from,
+        to: change_to,
+      )
+    end
+  end
+
   def edit_profile_action
     formValues = JSON.parse(params.require(:formValues), symbolize_names: true)
     edited_profile_details = formValues[:editedProfileDetails]
@@ -117,7 +138,7 @@ class ContactsController < ApplicationController
         your_email: current_user&.email,
         name: profile_to_edit[:name],
         wca_id: wca_id,
-        changes_requested: changes_requested,
+        changes_requested: changes_requested_humanized(changes_requested),
         edit_profile_reason: edit_profile_reason,
         document: attachment,
         request: request,

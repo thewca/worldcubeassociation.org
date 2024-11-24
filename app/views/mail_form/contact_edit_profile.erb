@@ -6,15 +6,8 @@
   <body>
     <% @resource.changes_requested.each do |change| %>
       <tr>
-        <td><%= change[:field].to_s.humanize %></td>
-        <% case change[:field] %>
-          <% when :country_iso2 %>
-            <td><%= Country.find_by(iso2: change[:from]).name_in(:en) %> -> <%= Country.find_by(iso2: change[:to]).name_in(:en) %></td>
-          <% when :gender %>
-            <td><%= User::GENDER_LABEL_METHOD.call(change[:from].to_sym) %> -> <%= User::GENDER_LABEL_METHOD.call(change[:to].to_sym) %></td>
-          <% else %>
-            <td><%= change[:from] %> -> <%= change[:to] %></td>
-        <% end %>
+        <td><%= change[:field] %></td>
+        <td><%= change[:from] %> -> <%= change[:to] %></td>
       </tr>
     <% end %>
     <tr style="height: 1em">
