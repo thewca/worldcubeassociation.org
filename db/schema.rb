@@ -1184,24 +1184,28 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_24_050607) do
     t.string "log", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["ticket_id"], name: "index_ticket_logs_on_ticket_id"
   end
 
   create_table "ticket_stakeholders", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "ticket_id", null: false
-    t.bigint "stakeholder_id", null: false
     t.string "stakeholder_type", null: false
+    t.bigint "stakeholder_id", null: false
     t.string "connection", null: false
     t.boolean "is_active", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["stakeholder_type", "stakeholder_id"], name: "index_ticket_stakeholders_on_stakeholder"
+    t.index ["ticket_id"], name: "index_ticket_stakeholders_on_ticket_id"
   end
 
   create_table "tickets", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "ticket_type", null: false
-    t.bigint "metadata_id", null: false
     t.string "metadata_type", null: false
+    t.bigint "metadata_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["metadata_type", "metadata_id"], name: "index_tickets_on_metadata"
   end
 
   create_table "tickets_edit_person", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
@@ -1218,6 +1222,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_24_050607) do
     t.string "new_value", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["tickets_edit_person_id"], name: "index_tickets_edit_person_fields_on_tickets_edit_person_id"
   end
 
   create_table "uploaded_jsons", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|

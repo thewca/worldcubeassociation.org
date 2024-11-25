@@ -221,5 +221,5 @@ export const PANEL_PAGES = <%= User.panel_pages.to_json.html_safe %>;
 // ----- AVATAR CONFIG -----
 export const avatarImageTypes = <%= Rails.application.config.active_storage.web_image_content_types.to_json.html_safe %>;
 
-// Tickets
+// ----- TICKETS -----
 export const ticketTypes = <%= Ticket.ticket_types.to_json %>;

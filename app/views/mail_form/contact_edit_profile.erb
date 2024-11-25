@@ -16,7 +16,7 @@
   </body>
 </table>
 <p>Edit Reason: <%= @resource.edit_profile_reason %></p>
-<p>You can edit this person using <%= link_to "this ticket", Rails.application.routes.url_helpers.ticket_url(@resource.ticket.id) %>.</p>
+<p>You can edit this person using <%= link_to "this ticket", ticket_url(@resource.ticket.id) %>.</p>
 <% if @resource.document.present? %>
   <p>Note: There is a proof attachment to this email.</p>
 <% end %>

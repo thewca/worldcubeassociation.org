@@ -4,8 +4,7 @@ class CreateTickets < ActiveRecord::Migration[7.2]
   def change
     create_table :tickets do |t|
       t.string :ticket_type, null: false
-      t.bigint :metadata_id, null: false
-      t.string :metadata_type, null: false
+      t.references :metadata, polymorphic: true, null: false
       t.timestamps
     end
   end

@@ -5,7 +5,7 @@ import { actionUrls } from '../../lib/requests/routes.js.erb';
 import Loading from '../Requests/Loading';
 import Errored from '../Requests/Errored';
 import TicketHeader from './TicketHeader';
-import TicketPlayground from './TicketPlayground';
+import TicketWorkbench from './TicketWorkbench';
 import TicketLogs from './TicketLogs';
 
 export default function Tickets({ id }) {
@@ -19,7 +19,7 @@ export default function Tickets({ id }) {
   return (
     <Container fluid>
       <TicketHeader ticketDetails={ticketDetails} />
-      <TicketPlayground ticketDetails={ticketDetails} sync={sync} />
+      <TicketWorkbench ticketDetails={ticketDetails} sync={sync} />
       <TicketLogs logs={ticketDetails.ticket.ticket_logs} />
     </Container>
   );

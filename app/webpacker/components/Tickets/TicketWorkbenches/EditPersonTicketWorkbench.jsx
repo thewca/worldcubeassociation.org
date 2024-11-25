@@ -4,7 +4,7 @@ import useSaveAction from '../../../lib/hooks/useSaveAction';
 import { actionUrls } from '../../../lib/requests/routes.js.erb';
 import Loading from '../../Requests/Loading';
 
-function EditPersonTicketPlaygroundForWrt({ ticketDetails, sync }) {
+function EditPersonTicketWorkbenchForWrt({ ticketDetails, sync }) {
   const { ticket } = ticketDetails;
   const { save, saving } = useSaveAction();
 
@@ -27,12 +27,12 @@ function EditPersonTicketPlaygroundForWrt({ ticketDetails, sync }) {
   );
 }
 
-export default function EditPersonTicketPlayground({ ticketDetails, sync }) {
+export default function EditPersonTicketWorkbench({ ticketDetails, sync }) {
   const { requester_stakeholders: requesterStakeholders } = ticketDetails;
 
   return requesterStakeholders.map((requesterStakeholder) => {
     if (requesterStakeholder.stakeholder?.metadata?.friendly_id === 'wrt') {
-      return <EditPersonTicketPlaygroundForWrt ticketDetails={ticketDetails} sync={sync} />;
+      return <EditPersonTicketWorkbenchForWrt ticketDetails={ticketDetails} sync={sync} />;
     }
     return null;
   });
