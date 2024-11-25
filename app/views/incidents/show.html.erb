@@ -24,7 +24,7 @@
   </p>
   <% warning_text = "" %>
   <% unless @incident.resolved_at %>
-    <% warning_text += "This incident is pending, a final ruling and public description may not be available.<br/>" %>
+    <% warning_text += "Note: This log has not been posted yet.<br/>" %>
   <% end %>
   <% if current_user&.can_manage_incidents? %>
     <% if @incident.digest_missing? %>
@@ -65,7 +65,10 @@
       <%= link_to 'Sent in a digest', incident_mark_as_path(@incident.id, "sent"), class: "btn btn-success", method: :patch, data: { confirm: "You are about to mark this incident as sent in a digest, are you sure?" } %>
     <% end %>
     <% unless @incident.resolved_at %>
-      <%= link_to 'Mark as resolved', incident_mark_as_path(@incident.id, "resolved"), class: "btn btn-success", method: :patch, data: { confirm: "You are about to mark this incident as resolved, are you sure?" } %>
+      <%= link_to 'Publish', incident_mark_as_path(@incident.id, "resolved"), class: "btn btn-success", method: :patch, data: { confirm: "You are about to make this incident log public, are you sure?" } %>
+    <% end %>
+    <% if @incident.resolved_at %>
+      <%= link_to 'Unpublish', incident_mark_as_path(@incident.id, "unresolve"), class: "btn btn-warning", method: :patch, data: { confirm: "You are about to unpublish this incident log, are you sure?" } %>
     <% end %>
     <%= link_to 'Edit', edit_incident_path(@incident), class: "btn btn-primary" %>
     <%= link_to 'Destroy', incident_path(@incident), class: "btn btn-danger", method: :delete, data: { confirm: "Are you sure you want to delete this incident?" } %>
