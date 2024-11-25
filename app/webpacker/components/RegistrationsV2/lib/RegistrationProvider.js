@@ -13,7 +13,7 @@ export default function RegistrationProvider({ competitionInfo, userInfo, childr
   const {
     data: registration,
     isFetching,
-    refetchRegistration,
+    refetch: refetchRegistration,
   } = useQuery({
     queryKey: ['registration', competitionInfo.id, userInfo.id],
     queryFn: () => getSingleRegistration(userInfo.id, competitionInfo),

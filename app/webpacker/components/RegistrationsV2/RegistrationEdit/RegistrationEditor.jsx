@@ -57,7 +57,7 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
     },
     onSuccess: (data) => {
       queryClient.setQueryData(
-        ['registration-admin', competitionInfo.id, competitor.id],
+        ['registration', competitionInfo.id, competitor.id],
         {
           ...data.registration,
           payment: serverRegistration.payment,
