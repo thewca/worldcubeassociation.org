@@ -19,8 +19,7 @@ class PaymentController < ApplicationController
       charges = intents.flat_map { |intent|
         payment_provider = CompetitionPaymentIntegration::INTEGRATION_RECORD_TYPES.invert[intent.payment_record_type]
 
-        intent.payment_record.child_records.charge.filter_map { |record|
-          next unless record.determine_wca_status == 'succeeded'
+        intent.payment_record.child_records.charge.map { |record|
           available_amount = record.ruby_amount_available_for_refund
           full_amount_ruby = StripeRecord.amount_to_ruby(record.amount_stripe_denomination, record.currency_code)
 
