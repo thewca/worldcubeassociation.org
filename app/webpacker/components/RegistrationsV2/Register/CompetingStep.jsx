@@ -337,7 +337,6 @@ export default function CompetingStep({
               error={competitionInfo.force_comment_in_registration && comment.trim().length === 0 && i18n.t('registrations.errors.cannot_register_without_comment')}
             />
           </Form.Field>
-          {console.log(competitionInfo.guest_entry_status)}
           {competitionInfo.guests_enabled && (
             <Form.Field>
               <label>{i18n.t('activerecord.attributes.registration.guests')}</label>
