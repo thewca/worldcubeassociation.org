@@ -82,7 +82,7 @@ RSpec.feature "Incident Management", js: true do
     end
 
     feature "shows incidents log" do
-      scenario "shows all incidents" do
+      scenario "shows only resolved incidents" do
         visit "/incidents"
         expect(page).to have_no_content("First incident")
         expect(page).to have_content("Custom title")
