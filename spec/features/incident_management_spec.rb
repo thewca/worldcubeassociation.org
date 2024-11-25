@@ -84,7 +84,7 @@ RSpec.feature "Incident Management", js: true do
     feature "shows incidents log" do
       scenario "shows all incidents" do
         visit "/incidents"
-        expect(page).to have_content("First incident")
+        expect(page).to have_no_content("First incident")
         expect(page).to have_content("Custom title")
         expect(page).to have_content("Second incident")
       end
@@ -100,10 +100,10 @@ RSpec.feature "Incident Management", js: true do
         expect(page).to have_content(incident3.private_wrc_decision)
       end
 
-      scenario "shows only delegate information when pending" do
+      scenario "delegates cant see information from pending incidents" do
         visit incident_path(incident1)
-        expect(page).to have_content(incident3.public_summary)
-        expect(page).to have_content(incident3.private_description)
+        expect(page).to have_no_content(incident3.public_summary)
+        expect(page).to have_no_content(incident3.private_description)
         expect(page).to have_no_content(incident3.private_wrc_decision)
       end
     end
