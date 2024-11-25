@@ -195,4 +195,40 @@ namespace :registration_version do
       end
     end
   end
+
+  task backport_timestamps: [:environment] do
+    v3_competitions_ids = Competition.registration_version_v3.pluck(:id).to_set
+
+    Registration.includes(:registration_history_entries)
+                .where(deleted_at: nil)
+                .where(accepted_at: nil)
+                .where(created_at: 2.weeks.ago..)
+                .find_each do |registration|
+      if v3_competitions_ids.include?(registration.competition_id)
+        registration.recompute_timestamps
+
+        earliest_registration_action = registration.registration_history_entries.minimum(:created_at)
+        registration.created_at = earliest_registration_action
+
+        registration.save!
+      end
+    end
+  end
+
+  task cleanup_payments: [:environment] do
+    RegistrationPayment.joins(registration: :competition)
+                       .merge(Competition.registration_version_v3)
+                       .find_each do |reg_payment|
+      # Cannot eagerly preload these because of polymorphic association :/
+      receipt = reg_payment.receipt
+      next unless receipt.is_a? StripeRecord
+
+      # The method `succeeded?` is defined through the scope `stripe_status` on the AR model
+      receipt_invalid = !reg_payment.receipt.succeeded?
+
+      # The `destroy` method takes all refunded RegPayments to the grave as well
+      #   through the `dependent: destroy` on the `has_many` association
+      reg_payment.destroy if receipt_invalid
+    end
+  end
 end

@@ -89,7 +89,7 @@ export default function CompetingStep({
 
   const queryClient = useQueryClient();
   const { mutate: updateRegistrationMutation, isPending: isUpdating } = useMutation({
-    mutationFn: (body) => updateRegistration(competitionInfo, body),
+    mutationFn: updateRegistration,
     onError: (data) => {
       const { error } = data.json;
       dispatch(setMessage(
@@ -117,7 +117,7 @@ export default function CompetingStep({
   });
 
   const { mutate: createRegistrationMutation, isLoading: isCreating } = useMutation({
-    mutationFn: (body) => submitEventRegistration(competitionInfo, body),
+    mutationFn: submitEventRegistration,
     onError: (data) => {
       const { error } = data.json;
       dispatch(setMessage(
@@ -337,20 +337,22 @@ export default function CompetingStep({
               error={competitionInfo.force_comment_in_registration && comment.trim().length === 0 && i18n.t('registrations.errors.cannot_register_without_comment')}
             />
           </Form.Field>
-          <Form.Field>
-            <label>{i18n.t('activerecord.attributes.registration.guests')}</label>
-            <Form.Input
-              id="guest-dropdown"
-              type="number"
-              value={guests}
-              onChange={(event, data) => {
-                setGuests(Number.parseInt(data.value, 10));
-              }}
-              min="0"
-              max={competitionInfo.guests_per_registration_limit ?? 99}
-              error={Number.isInteger(competitionInfo.guests_per_registration_limit) && guests > competitionInfo.guests_per_registration_limit && i18n.t('competitions.competition_info.guest_limit', { count: competitionInfo.guests_per_registration_limit })}
-            />
-          </Form.Field>
+          {competitionInfo.guests_enabled && (
+            <Form.Field>
+              <label>{i18n.t('activerecord.attributes.registration.guests')}</label>
+              <Form.Input
+                id="guest-dropdown"
+                type="number"
+                value={guests}
+                onChange={(event, data) => {
+                  setGuests(Number.parseInt(data.value, 10));
+                }}
+                min="0"
+                max={competitionInfo.guests_per_registration_limit ?? 99}
+                error={Number.isInteger(competitionInfo.guests_per_registration_limit) && guests > competitionInfo.guests_per_registration_limit && i18n.t('competitions.competition_info.guest_limit', { count: competitionInfo.guests_per_registration_limit })}
+              />
+            </Form.Field>
+          )}
           {isRegistered ? (
             <ButtonGroup widths={2}>
               {shouldShowUpdateButton && (

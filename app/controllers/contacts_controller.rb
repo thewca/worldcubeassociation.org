@@ -36,25 +36,13 @@ class ContactsController < ApplicationController
     )
   end
 
-  private def new_profile_data_key_to_value(new_profile_data, profile_data_to_change)
-    if profile_data_to_change == 'country_iso2'
-      Country.find_by(iso2: new_profile_data).name_in(:en)
-    else
-      new_profile_data
-    end
-  end
-
   private def contact_wrt(requestor_details, contact_params, attachment)
-    profile_data_to_change = contact_params[:profileDataToChange]
     maybe_send_contact_email(
       ContactWrt.new(
         name: requestor_details[:name],
         your_email: requestor_details[:email],
         wca_id: User.find_by(email: requestor_details[:email])&.wca_id || 'None',
         query_type: contact_params[:queryType].titleize,
-        profile_data_to_change: profile_data_to_change&.titleize,
-        new_profile_data: new_profile_data_key_to_value(contact_params[:newProfileData], profile_data_to_change),
-        edit_profile_reason: contact_params[:editProfileReason],
         message: contact_params[:message],
         document: attachment,
         request: request,
@@ -99,6 +87,27 @@ class ContactsController < ApplicationController
     end
   end
 
+  private def value_humanized(value, field)
+    case field
+    when :country_iso2
+      Country.find_by(iso2: value).name_in(:en)
+    when :gender
+      User::GENDER_LABEL_METHOD.call(value.to_sym)
+    else
+      value
+    end
+  end
+
+  private def changes_requested_humanized(changes_requested)
+    changes_requested.map do |change|
+      ContactEditProfile::EditProfileChange.new(
+        field: change[:field].to_s.humanize,
+        from: value_humanized(change[:from], change[:field]),
+        to: value_humanized(change[:to], change[:field]),
+      )
+    end
+  end
+
   def edit_profile_action
     formValues = JSON.parse(params.require(:formValues), symbolize_names: true)
     edited_profile_details = formValues[:editedProfileDetails]
@@ -118,9 +127,9 @@ class ContactsController < ApplicationController
                               .reject { |field| profile_to_edit[field].to_s == edited_profile_details[field].to_s }
                               .map { |field|
                                 ContactEditProfile::EditProfileChange.new(
-                                  field: field.to_s.humanize,
-                                  from: (new_profile_data_key_to_value(profile_to_edit[field], field.to_s) || "Unknown").to_s,
-                                  to: new_profile_data_key_to_value(edited_profile_details[field], field.to_s),
+                                  field: field,
+                                  from: profile_to_edit[field],
+                                  to: edited_profile_details[field],
                                 )
                               }
 
@@ -129,7 +138,7 @@ class ContactsController < ApplicationController
         your_email: current_user&.email,
         name: profile_to_edit[:name],
         wca_id: wca_id,
-        changes_requested: changes_requested,
+        changes_requested: changes_requested_humanized(changes_requested),
         edit_profile_reason: edit_profile_reason,
         document: attachment,
         request: request,

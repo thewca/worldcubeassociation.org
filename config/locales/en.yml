@@ -1326,7 +1326,6 @@ en:
         stripe_not_an_intent: "Stripe reported back a transaction ID that is not actually a payment intent."
         payment_reset: "The payment was rejected by Stripe."
         payment_pending: "The payment has not been completed yet."
-        registration_unreachable: "There was a problem reaching the registration service, please contact the Software Team."
     preferred_events_prompt_html: "To speed up registration in the future, you can set your preferred events %{link}."
     preferred_events_populated_html: "We autopopulated this with your preferred events, which you can edit %{link}."
     registration_requirements: "Registration requirements for the competition:"
@@ -1912,7 +1911,7 @@ en:
           waiting_list: "You are on the Waiting List at position %{waiting_list_position}."
         disclaimer: "Submission of Registration does not mean approval to compete"
         processing: "Your registration is processing..."
-        processing_longer: "Processing is taking longer than usual, don't go away!"
+        processing_longer: "Your registration has been received, and will be processed soon - this can take a moment if our servers are busy."
         processing_queue: "Lots of Registrations being processed, %{queueCount} in the queue."
         event_limit: "This competition limits the amount of events you can register for to %{max_events}."
       errors:

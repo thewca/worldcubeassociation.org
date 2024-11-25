@@ -71,12 +71,11 @@ export default function TableRow({
     dob, region, events, comments, email, timestamp,
   } = columnsExpanded;
   const {
-    id, wca_id: wcaId, name, country,
+    id, wca_id: wcaId, name, country, dob: dateOfBirth, email: emailAddress,
   } = registration.user;
   const {
     registered_on: registeredOn, event_ids: eventIds, comment, admin_comment: adminComment,
   } = registration.competing;
-  const { dob: dateOfBirth, email: emailAddress } = registration;
   const {
     payment_amount_iso: paymentAmount,
     updated_at: updatedAt,
