@@ -6,6 +6,7 @@ import messageReducer from '../reducers/messageReducer';
 import StoreProvider from '../../../lib/providers/StoreProvider';
 import WCAQueryClientProvider from '../../../lib/providers/WCAQueryClientProvider';
 import ConfirmProvider from '../../../lib/providers/ConfirmProvider';
+import RegistrationProvider from '../lib/RegistrationProvider';
 
 export default function RegistrationEdit({ competitionInfo, user }) {
   const ref = useRef();
@@ -14,10 +15,12 @@ export default function RegistrationEdit({ competitionInfo, user }) {
       <WCAQueryClientProvider>
         <StoreProvider reducer={messageReducer} initialState={{ message: null }}>
           <ConfirmProvider>
-            <Sticky context={ref}>
-              <RegistrationMessage />
-            </Sticky>
-            <RegistrationEditor competitionInfo={competitionInfo} competitor={user} />
+            <RegistrationProvider competitionInfo={competitionInfo} userInfo={user}>
+              <Sticky context={ref}>
+                <RegistrationMessage />
+              </Sticky>
+              <RegistrationEditor competitionInfo={competitionInfo} competitor={user} />
+            </RegistrationProvider>
           </ConfirmProvider>
         </StoreProvider>
       </WCAQueryClientProvider>

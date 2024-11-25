@@ -12,6 +12,7 @@ import { setMessage } from './RegistrationMessage';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { useConfirm } from '../../../lib/providers/ConfirmProvider';
 import RegistrationStatus from './RegistrationStatus';
+import { useRegistration } from '../lib/RegistrationProvider';
 
 function updateRegistrationKey(editsAllowed, deadlinePassed) {
   if (!editsAllowed && !deadlinePassed) {
@@ -24,22 +25,21 @@ function updateRegistrationKey(editsAllowed, deadlinePassed) {
 }
 
 export default function RegistrationOverview({
-  nextStep, registration, competitionInfo,
+  nextStep, competitionInfo,
 }) {
   const dispatch = useDispatch();
   const confirm = useConfirm();
+  const { registration, isRejected, isAccepted } = useRegistration();
 
   const hasRegistrationEditDeadlinePassed = hasPassed(
     competitionInfo.event_change_deadline_date ?? competitionInfo.start_date,
   );
 
-  const isRejected = registration.competing.registration_status === 'rejected';
-
   const editsAllowed = competitionInfo.allow_registration_edits
     && !hasRegistrationEditDeadlinePassed;
 
-  const deleteAllowed = (registration.competing.registration_status !== 'accepted'
-      || competitionInfo.allow_registration_self_delete_after_acceptance);
+  const deleteAllowed = (!isAccepted
+|| competitionInfo.allow_registration_self_delete_after_acceptance);
 
   const queryClient = useQueryClient();
 
