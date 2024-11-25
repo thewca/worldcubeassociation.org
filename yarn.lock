@@ -2542,16 +2542,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@stripe/react-stripe-js@npm:^2.9.0":
-  version: 2.9.0
-  resolution: "@stripe/react-stripe-js@npm:2.9.0"
+"@stripe/react-stripe-js@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "@stripe/react-stripe-js@npm:3.0.0"
   dependencies:
     prop-types: "npm:^15.7.2"
   peerDependencies:
-    "@stripe/stripe-js": ^1.44.1 || ^2.0.0 || ^3.0.0 || ^4.0.0
+    "@stripe/stripe-js": ^1.44.1 || ^2.0.0 || ^3.0.0 || ^4.0.0 || ^5.0.0
     react: ^16.8.0 || ^17.0.0 || ^18.0.0
     react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
-  checksum: 10c0/8efb985cb4e46e86ca314d3026318fabffb450d6bfdd385121af4d1730ac791c9f5458618652a27fa92a30d0ccc5cb15fbf9ea7c15c355a0b67df01b45429c3d
+  checksum: 10c0/863b434f28a700432312a12116873f63ff26fa1ed11e025af59cba5eed940f9c8f226768dc05b237b17836fc50d1f956b749124488e8c33146499d08fc9783f9
   languageName: node
   linkType: hard
 
@@ -10129,7 +10129,7 @@ __metadata:
     "@fullcalendar/timegrid": "npm:^6.1.15"
     "@pmmmwh/react-refresh-webpack-plugin": "npm:^0.5.15"
     "@rails/ujs": "npm:^7.1.500"
-    "@stripe/react-stripe-js": "npm:^2.9.0"
+    "@stripe/react-stripe-js": "npm:^3.0.0"
     "@stripe/stripe-js": "npm:^5.2.0"
     "@tanstack/react-query": "npm:^5.61.3"
     "@wca/helpers": "npm:^1.1.5"
