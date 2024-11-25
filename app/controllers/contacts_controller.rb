@@ -87,23 +87,23 @@ class ContactsController < ApplicationController
     end
   end
 
+  private def value_humanized(value, field)
+    case field
+    when :country_iso2
+      Country.find_by(iso2: value).name_in(:en)
+    when :gender
+      User::GENDER_LABEL_METHOD.call(value.to_sym)
+    else
+      value
+    end
+  end
+
   private def changes_requested_humanized(changes_requested)
     changes_requested.map do |change|
-      case change[:field]
-      when :country_iso2
-        change_from = Country.find_by(iso2: change[:from]).name_in(:en)
-        change_to = Country.find_by(iso2: change[:to]).name_in(:en)
-      when :gender
-        change_from = User::GENDER_LABEL_METHOD.call(change[:from].to_sym)
-        change_to = User::GENDER_LABEL_METHOD.call(change[:to].to_sym)
-      else
-        change_from = change[:from]
-        change_to = change[:to]
-      end
       ContactEditProfile::EditProfileChange.new(
         field: change[:field].to_s.humanize,
-        from: change_from,
-        to: change_to,
+        from: value_humanized(change[:from], change[:field]),
+        to: value_humanized(change[:to], change[:field]),
       )
     end
   end
