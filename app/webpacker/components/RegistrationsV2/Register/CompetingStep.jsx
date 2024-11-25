@@ -337,20 +337,23 @@ export default function CompetingStep({
               error={competitionInfo.force_comment_in_registration && comment.trim().length === 0 && i18n.t('registrations.errors.cannot_register_without_comment')}
             />
           </Form.Field>
-          <Form.Field>
-            <label>{i18n.t('activerecord.attributes.registration.guests')}</label>
-            <Form.Input
-              id="guest-dropdown"
-              type="number"
-              value={guests}
-              onChange={(event, data) => {
-                setGuests(Number.parseInt(data.value, 10));
-              }}
-              min="0"
-              max={competitionInfo.guests_per_registration_limit ?? 99}
-              error={Number.isInteger(competitionInfo.guests_per_registration_limit) && guests > competitionInfo.guests_per_registration_limit && i18n.t('competitions.competition_info.guest_limit', { count: competitionInfo.guests_per_registration_limit })}
-            />
-          </Form.Field>
+          {console.log(competitionInfo.guest_entry_status)}
+          {competitionInfo.guests_enabled && (
+            <Form.Field>
+              <label>{i18n.t('activerecord.attributes.registration.guests')}</label>
+              <Form.Input
+                id="guest-dropdown"
+                type="number"
+                value={guests}
+                onChange={(event, data) => {
+                  setGuests(Number.parseInt(data.value, 10));
+                }}
+                min="0"
+                max={competitionInfo.guests_per_registration_limit ?? 99}
+                error={Number.isInteger(competitionInfo.guests_per_registration_limit) && guests > competitionInfo.guests_per_registration_limit && i18n.t('competitions.competition_info.guest_limit', { count: competitionInfo.guests_per_registration_limit })}
+              />
+            </Form.Field>
+          )}
           {isRegistered ? (
             <ButtonGroup widths={2}>
               {shouldShowUpdateButton && (
