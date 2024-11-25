@@ -106,5 +106,5 @@ aws ecs execute-command  \
   --cluster wca-on-rails \
   --task $task_arn \
   --container $container_name \
-  --command "/rails/bin/rails c" \
+  --command "bash" \
   --interactive
