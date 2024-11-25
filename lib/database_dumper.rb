@@ -604,7 +604,8 @@ module DatabaseDumper
           created_at
           updated_at
         ),
-    },
+      ),
+    }.freeze,
     "sanity_checks" => :skip_all_rows,
     "sanity_check_categories" => :skip_all_rows,
     "sanity_check_exclusions" => :skip_all_rows,
