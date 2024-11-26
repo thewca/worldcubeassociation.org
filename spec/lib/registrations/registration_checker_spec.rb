@@ -2278,6 +2278,40 @@ RSpec.describe Registrations::RegistrationChecker do
         }.not_to raise_error
       end
     end
+
+    describe '#update_registration_allowed!.reserved newcomer spots' do
+      it 'organizer cant accept non-newcomer if only reserved newcomer spots remain' do
+        expect(true).to eq(false)
+      end
+
+      it 'organizer can still accept newcomer if all reserved newcomer spots are full' do
+        expect(true).to eq(false)
+      end
+
+      it 'organizer can accept non-newcomer if all reserved newcomer spots are full' do
+        expect(true).to eq(false)
+      end
+
+      it 'organizer can accept newcomer if only reserved newcomer spots remain' do
+        expect(true).to eq(false)
+      end
+
+      it 'organizer cant accept newcomer if competition if full' do
+        expect(true).to eq(false)
+      end
+
+      it 'organizer can accept non-newcomer into a newcomer reserved spot if registration is closed' do
+        expect(true).to eq(false)
+      end
+
+      it 'newcomer includes users with no WCA ID' do
+        expect(true).to eq(false)
+      end
+
+      it 'newcomer includes users with a current-year WCA ID' do
+        expect(true).to eq(false)
+      end
+    end
   end
 
   describe '#bulk_update' do
