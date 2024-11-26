@@ -1597,4 +1597,30 @@ RSpec.describe Competition do
       expect(new_competition).not_to be_valid
     end
   end
+
+  context 'newcomer month competition', :tag do
+    let(:newcomer_month_comp) { FactoryBot.create(:competition, :newcomer_month) }
+    let!(:newcomer_reg) { FactoryBot.create(:registration, :newcomer, competition: newcomer_month_comp) }
+
+    context '#non_newcomers_competing' do
+      before do
+        FactoryBot.create_list(:registration, 2, :accepted, competition: newcomer_month_comp)
+      end
+
+      it 'doesnt include newcomers in count' do
+        expect(newcomer_month_comp.registrations.count).to eq(3)
+        expect(newcomer_month_comp.non_newcomers_competing.count).to eq(2)
+      end
+
+      it 'doesnt include non-newcomers in non-accepted states' do
+        non_newcomer_reg1 = FactoryBot.create(:registration, competition: newcomer_month_comp)
+        non_newcomer_reg1 = FactoryBot.create(:registration, :cancelled, competition: newcomer_month_comp)
+        non_newcomer_reg1 = FactoryBot.create(:registration, :rejected, competition: newcomer_month_comp)
+        non_newcomer_reg1 = FactoryBot.create(:registration, :waiting_list, competition: newcomer_month_comp)
+
+        expect(newcomer_month_comp.registrations.count).to eq(7)
+        expect(newcomer_month_comp.non_newcomers_competing.count).to eq(2)
+      end
+    end
+  end
 end

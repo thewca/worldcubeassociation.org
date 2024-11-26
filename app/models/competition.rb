@@ -260,6 +260,11 @@ class Competition < ApplicationRecord
     end
   end
 
+  # TODO: Make sure this query is optimized
+  def non_newcomers_competing
+    registrations.accepted.where()
+  end
+
   # Dirty old trick to deal with competition id changes (see other methods using
   # 'with_old_id' for more details).
   def persisted_events_id
