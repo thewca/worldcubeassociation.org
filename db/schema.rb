@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_11_18_145843) do
+ActiveRecord::Schema[7.2].define(version: 2024_11_26_084446) do
   create_table "Competitions", id: { type: :string, limit: 32, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", limit: 50, default: "", null: false
     t.string "cityName", limit: 50, default: "", null: false
@@ -82,6 +82,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_18_145843) do
     t.boolean "forbid_newcomers", default: false, null: false
     t.string "forbid_newcomers_reason"
     t.integer "registration_version", default: 0, null: false
+    t.integer "newcomer_reserved_spots", default: 0, null: false
     t.index ["cancelled_at"], name: "index_Competitions_on_cancelled_at"
     t.index ["countryId"], name: "index_Competitions_on_countryId"
     t.index ["end_date"], name: "index_Competitions_on_end_date"

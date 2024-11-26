@@ -188,6 +188,7 @@ class Competition < ApplicationRecord
   MAX_MARKDOWN_LENGTH = 255
   MAX_COMPETITOR_LIMIT = 5000
   MAX_GUEST_LIMIT = 100
+  NEWCOMER_MONTH =
   validates_inclusion_of :competitor_limit_enabled, in: [true, false], if: :competitor_limit_required?
   validates_numericality_of :competitor_limit, greater_than_or_equal_to: 1, less_than_or_equal_to: MAX_COMPETITOR_LIMIT, if: :competitor_limit_enabled?
   validates :competitor_limit_reason, presence: true, if: :competitor_limit_enabled?
