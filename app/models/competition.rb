@@ -189,6 +189,8 @@ class Competition < ApplicationRecord
   MAX_COMPETITOR_LIMIT = 5000
   MAX_GUEST_LIMIT = 100
   NEWCOMER_MONTH_ENABLED = true
+  MAX_NEWCOMER_SPOTS_RESERVED_FRACTION = 0.5
+
   validates_inclusion_of :competitor_limit_enabled, in: [true, false], if: :competitor_limit_required?
   validates_numericality_of :competitor_limit, greater_than_or_equal_to: 1, less_than_or_equal_to: MAX_COMPETITOR_LIMIT, if: :competitor_limit_enabled?
   validates :competitor_limit_reason, presence: true, if: :competitor_limit_enabled?
@@ -248,7 +250,13 @@ class Competition < ApplicationRecord
     if newcomer_reserved_spots > 0 && !NEWCOMER_MONTH_ENABLED
       errors.add(:newcomer_reserved_spots, 'newcomer competitions are not allowed at present')
     end
+
+    max_newcomer_spots = (competitor_limit * MAX_NEWCOMER_SPOTS_RESERVED_FRACTION).to_i
+    if newcomer_reserved_spots > max_newcomer_spots
+      errors.add(:newcomer_reserved_spots, 'cant reserve more than 50% of spots for newcomers')
+    end
   end
+
 
   # Dirty old trick to deal with competition id changes (see other methods using
   # 'with_old_id' for more details).
