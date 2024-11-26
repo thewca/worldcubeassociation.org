@@ -188,7 +188,7 @@ class Competition < ApplicationRecord
   MAX_MARKDOWN_LENGTH = 255
   MAX_COMPETITOR_LIMIT = 5000
   MAX_GUEST_LIMIT = 100
-  NEWCOMER_MONTH =
+  NEWCOMER_MONTH_ENABLED = true
   validates_inclusion_of :competitor_limit_enabled, in: [true, false], if: :competitor_limit_required?
   validates_numericality_of :competitor_limit, greater_than_or_equal_to: 1, less_than_or_equal_to: MAX_COMPETITOR_LIMIT, if: :competitor_limit_enabled?
   validates :competitor_limit_reason, presence: true, if: :competitor_limit_enabled?
@@ -242,6 +242,13 @@ class Competition < ApplicationRecord
   validates :venueAddress, :venueDetails, :name_reason, :forbid_newcomers_reason, length: { maximum: MAX_FREETEXT_LENGTH }
   validates :external_website, :external_registration_page, length: { maximum: MAX_URL_LENGTH }
   validates :contact, length: { maximum: MAX_MARKDOWN_LENGTH }
+
+  validate :validate_newcomer_reserved_spots
+  private def validate_newcomer_reserved_spots
+    if newcomer_reserved_spots > 0 && !NEWCOMER_MONTH_ENABLED
+      errors.add(:newcomer_reserved_spots, 'newcomer competitions are not allowed at present')
+    end
+  end
 
   # Dirty old trick to deal with competition id changes (see other methods using
   # 'with_old_id' for more details).
