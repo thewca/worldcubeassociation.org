@@ -247,6 +247,8 @@ class Competition < ApplicationRecord
 
   validate :validate_newcomer_reserved_spots
   private def validate_newcomer_reserved_spots
+    return unless competitor_limit.present?
+
     if newcomer_reserved_spots > 0 && !NEWCOMER_MONTH_ENABLED
       errors.add(:newcomer_reserved_spots, 'newcomer competitions are not allowed at present')
     end
@@ -2366,6 +2368,7 @@ class Competition < ApplicationRecord
         "enabled" => competitor_limit_enabled,
         "count" => competitor_limit,
         "reason" => competitor_limit_reason,
+        "newcomerReservedSpots" => newcomer_reserved_spots,
       },
       "staff" => {
         "staffDelegateIds" => staff_delegates.to_a.pluck(:id),
@@ -2467,6 +2470,7 @@ class Competition < ApplicationRecord
         "enabled" => errors[:competitor_limit_enabled],
         "count" => errors[:competitor_limit],
         "reason" => errors[:competitor_limit_reason],
+        "newcomer_reserved_spots" => errors[:newcomer_reserved_spots]
       },
       "staff" => {
         "staffDelegateIds" => errors[:staff_delegate_ids],
@@ -2604,6 +2608,7 @@ class Competition < ApplicationRecord
       competitor_limit_enabled: form_data.dig('competitorLimit', 'enabled'),
       competitor_limit: form_data.dig('competitorLimit', 'count'),
       competitor_limit_reason: form_data.dig('competitorLimit', 'reason'),
+      newcomer_reserved_spots: form_data.dig('competitorLimit', 'newcomerReservedSpots'),
       extra_registration_requirements: form_data.dig('registration', 'extraRequirements'),
       on_the_spot_registration: form_data.dig('registration', 'allowOnTheSpot'),
       on_the_spot_entry_fee_lowest_denomination: form_data.dig('entryFees', 'onTheSpotEntryFee'),
@@ -2747,6 +2752,7 @@ class Competition < ApplicationRecord
             "enabled" => { "type" => ["boolean", "null"] },
             "count" => { "type" => ["integer", "null"] },
             "reason" => { "type" => ["string", "null"] },
+            "newcomerReservedSpots" => { "type" => ["integer", "null"]}
           },
         },
         "staff" => {
