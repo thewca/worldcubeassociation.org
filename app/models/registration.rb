@@ -113,7 +113,7 @@ class Registration < ApplicationRecord
   end
 
   def might_attend?
-    waitlisted? || pending? || accepted?
+    accepted? || waitlisted?
   end
 
   def self.status_from_timestamp(accepted_at, deleted_at)
