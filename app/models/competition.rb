@@ -2470,7 +2470,7 @@ class Competition < ApplicationRecord
         "enabled" => errors[:competitor_limit_enabled],
         "count" => errors[:competitor_limit],
         "reason" => errors[:competitor_limit_reason],
-        "newcomer_reserved_spots" => errors[:newcomer_reserved_spots]
+        "newcomer_reserved_spots" => errors[:newcomer_reserved_spots],
       },
       "staff" => {
         "staffDelegateIds" => errors[:staff_delegate_ids],
@@ -2752,7 +2752,7 @@ class Competition < ApplicationRecord
             "enabled" => { "type" => ["boolean", "null"] },
             "count" => { "type" => ["integer", "null"] },
             "reason" => { "type" => ["string", "null"] },
-            "newcomerReservedSpots" => { "type" => ["integer", "null"]}
+            "newcomerReservedSpots" => { "type" => ["integer", "null"] },
           },
         },
         "staff" => {
