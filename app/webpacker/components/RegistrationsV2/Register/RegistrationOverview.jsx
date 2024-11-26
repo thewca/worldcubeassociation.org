@@ -115,13 +115,15 @@ export default function RegistrationOverview({
             {registration.competing.comment.length > 0 ? registration.competing.comment : i18n.t('competitions.schedule.rooms_panel.none')}
           </FormField>
           <FormField />
-          <FormField>
-            <label>
-              {i18n.t('activerecord.attributes.registration.guests')}
-              :
-            </label>
-            {registration.guests}
-          </FormField>
+          {competitionInfo.guests_enabled && (
+            <FormField>
+              <label>
+                {i18n.t('activerecord.attributes.registration.guests')}
+                :
+              </label>
+              {registration.guests}
+            </FormField>
+          )};
           <ButtonGroup widths={2}>
             { editsAllowed && (
             <Button
