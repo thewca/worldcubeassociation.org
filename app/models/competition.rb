@@ -257,7 +257,6 @@ class Competition < ApplicationRecord
     end
   end
 
-
   # Dirty old trick to deal with competition id changes (see other methods using
   # 'with_old_id' for more details).
   def persisted_events_id
