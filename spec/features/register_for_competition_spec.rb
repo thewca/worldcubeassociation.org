@@ -24,12 +24,14 @@ RSpec.feature "Registering for a competition", js: true do
       sign_in user
     end
 
-    scenario "User registers for a competition" do
+    scenario "User registers for a competition normally" do
       visit competition_register_path(competition)
       reg_requirements_checkbox.click
       click_button "Continue to next Step"
       click_button "checkbox-333"
       click_button "Register!"
+      expect(page).to have_text("Your registration is processing...")
+      perform_enqueued_jobs
       expect(page).to have_text("Your registration is pending approval by the organizers.")
       registration = competition.registrations.find_by_user_id(user.id)
       expect(registration).not_to be_nil
