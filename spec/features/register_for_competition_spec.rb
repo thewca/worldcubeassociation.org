@@ -17,7 +17,7 @@ end
 RSpec.feature "Registering for a competition", js: true do
   let!(:user) { FactoryBot.create :user }
   let!(:delegate) { FactoryBot.create :delegate }
-  let(:competition) { FactoryBot.create :competition, :registration_open, :visible, delegates: [delegate] }
+  let(:competition) { FactoryBot.create :competition, :registration_open, :visible, :editable_registrations, delegates: [delegate] }
 
   context "signed in as user" do
     before :each do
@@ -75,7 +75,7 @@ RSpec.feature "Registering for a competition", js: true do
         visit competition_register_path(competition)
         click_button "Update Registration"
 
-        fill_in "Guests", with: "2"
+        fill_in "guest-dropdown", with: "2"
         click_button "Update Registration"
 
         within_modal do
@@ -90,7 +90,7 @@ RSpec.feature "Registering for a competition", js: true do
         visit competition_register_path(competition)
         click_button "Update Registration"
 
-        fill_in "Guests", with: "123"
+        fill_in "guest-dropdown", with: "123"
         click_button "Update Registration"
 
         # The browser shows a validation for numeric inputs client-side.
