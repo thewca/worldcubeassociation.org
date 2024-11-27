@@ -125,7 +125,7 @@ RSpec.feature "Registering for a competition", js: true do
 
     scenario "updating registration" do
       visit edit_registration_v2_path(competition_id: competition.id, user_id: user.id)
-      fill_in "Guests", with: 1
+      fill_in "guest-dropdown", with: 1
       click_button "Update Registration"
       expect(registration.reload.guests).to eq 1
     end
@@ -136,13 +136,17 @@ RSpec.feature "Registering for a competition", js: true do
 
       visit competition_register_path(competition)
 
-      expect(page).to have_text("Your registration has been accepted!")
+      expect(page).to have_text("Your registration has been accepted.")
       click_button "Update Registration"
 
-      fill_in "Guests", with: "2"
+      fill_in "guest-dropdown", with: "2"
       click_button "Update Registration"
 
-      expect(page).to have_text("Your registration has been accepted!")
+      within_modal do
+        click_button "Yes"
+      end
+
+      expect(page).to have_text("Your registration has been accepted.")
       expect(delegate_registration.reload.guests).to eq 2
     end
 
