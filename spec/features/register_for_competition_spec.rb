@@ -101,7 +101,7 @@ RSpec.feature "Registering for a competition", js: true do
   end
 
   context "not signed in" do
-    scenario "following sign in link on register page should redirect back to register page" do
+    scenario "following sign in link on register page should redirect back to register page", js: false do
       visit competition_register_path(competition)
 
       within('#competition-data') do
