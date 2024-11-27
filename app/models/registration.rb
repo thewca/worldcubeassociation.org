@@ -65,8 +65,7 @@ class Registration < ApplicationRecord
     when Registrations::Helper::STATUS_ACCEPTED
       self.accepted_at = DateTime.now
       self.deleted_at = nil
-    when Registrations::Helper::STATUS_CANCELLED
-    when Registrations::Helper::STATUS_REJECTED
+    when Registrations::Helper::STATUS_CANCELLED, Registrations::Helper::STATUS_REJECTED
       self.accepted_at = nil
       self.deleted_at = DateTime.now
     end
