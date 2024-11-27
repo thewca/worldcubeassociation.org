@@ -43,7 +43,7 @@ Capybara.register_driver :apparition do |app|
   Capybara::Apparition::Driver.new(app, js_errors: true, headless: true)
 end
 
-Capybara.javascript_driver = :apparition_debug
+Capybara.javascript_driver = :apparition
 
 RSpec.configure do |config|
   # enforce consistent locale behaviour across OSes, especially Linux
