@@ -30,15 +30,15 @@ export default function Processing({ competitionInfo, user, onProcessingComplete
         {I18n.t('competitions.registration_v2.register.processing')}
       </Modal.Header>
       <Modal.Content>
-        {pollCounter > 3 && (
+        {pollCounter > 1 && (
           <Message warning>
             {I18n.t('competitions.registration_v2.register.processing_longer')}
           </Message>
         )}
-        {data && data.queueCount > 50 && (
+        {data && data.queue_count > 0 && (
           <Message warning>
             {I18n.t('competitions.registration_v2.register.processing_queue', {
-              queueCount: data.queueCount,
+              queueCount: data.queue_count,
             })}
           </Message>
         )}

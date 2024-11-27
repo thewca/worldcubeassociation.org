@@ -16,6 +16,8 @@ module Registrations
         changes = registration.changes.transform_values { |change| change[1] }
         changes[:event_ids] = lane_params[:competing][:event_ids]
         registration.save!
+        RegistrationsMailer.notify_organizers_of_new_registration(registration).deliver_later
+        RegistrationsMailer.notify_registrant_of_new_registration(registration).deliver_later
         registration.add_history_entry(changes, "worker", user_id, "Worker processed")
       end
 

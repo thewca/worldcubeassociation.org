@@ -2040,17 +2040,17 @@ cs:
       #original_hash: 51fa5a4
       wca_id_no_gender_html: >-
         Pro toto WCA ID nemáme zaznamenané pohlaví. Prosíme, pošlete e-mai l<a
-        href='mailto:results@worldcubeassociation.org' target='_blank'>WCA
+        href='%{wrt_contact_path}' target='_blank'>WCA
         Results Teamu</a> pro vyřešení.
       #original_hash: 87ee245
       wca_id_no_citizenship_html: >-
         Pro toto WCA ID nemáme zaznamenanou státní příslušnost. Prosíme, pošlete
-        e-mail <a href='mailto:results@worldcubeassociation.org'
+        e-mail <a href='%{wrt_contact_path}'
         target='_blank'>WCA Results Teamu</a> pro vyřešení.
       #original_hash: c3839bc
       wca_id_no_name_html: >-
         Pro toto WCA ID nemáme zaznamenané jméno. Prosíme, pošlete e-mail <a
-        href='mailto:results@worldcubeassociation.org' target='_blank'>WCA
+        href='%{wrt_contact_path}' target='_blank'>WCA
         Results Týmu</a> pro vyřešení.
       #original_hash: d02c03b
       avatar_requires_wca_id: 'vyžaduje WCA ID, aby mohl být přiřazen'

@@ -131,7 +131,7 @@
             }
           end
 
-          unless @competition.registration_not_yet_opened?
+          if @competition.any_registrations?
             event_icons = @competition.events.map do |event|
               { text: event.id, path: competition_psych_sheet_event_path(@competition, event.id), cubing_icon: event.id, title: event.name }
             end unless @competition.uses_new_registration_system?
