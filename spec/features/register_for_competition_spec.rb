@@ -41,13 +41,13 @@ RSpec.feature "Registering for a competition", js: true do
       visit competition_register_path(competition)
       reg_requirements_checkbox.click
       click_button "Continue to next Step"
-      fill_in "Guests", with: "123"
+      fill_in "guest-dropdown", with: "123"
       click_button "Register!"
       # The browser handles the input field validation client-side.
       #   We check that "some validation happens" by making sure the browser did not let the user register.
       expect(page).to have_text("Register!")
       # Now fill in valid guest information, assume that the registration still blocks because of events.
-      fill_in "Guests", with: "2"
+      fill_in "guest-dropdown", with: "2"
       click_button "Register!"
       expect(page).to have_text(I18n.t('registrations.errors.must_register'))
       registration = competition.registrations.find_by_user_id(user.id)
