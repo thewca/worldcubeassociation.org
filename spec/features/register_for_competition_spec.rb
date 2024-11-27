@@ -117,7 +117,7 @@ RSpec.feature "Registering for a competition", js: true do
   end
 
   context "signed in as delegate" do
-    let(:registration) { FactoryBot.create(:registration, user: user, competition: competition) }
+    let!(:registration) { FactoryBot.create(:registration, user: user, competition: competition) }
     let(:delegate_registration) { FactoryBot.create(:registration, :accepted, user: delegate, competition: competition) }
     before :each do
       sign_in delegate
@@ -125,8 +125,15 @@ RSpec.feature "Registering for a competition", js: true do
 
     scenario "updating registration" do
       visit edit_registration_v2_path(competition_id: competition.id, user_id: user.id)
+
       fill_in "guest-dropdown", with: 1
       click_button "Update Registration"
+
+      within_modal do
+        click_button "Yes"
+      end
+
+      expect(page).to have_text("Updated registration")
       expect(registration.reload.guests).to eq 1
     end
 
@@ -153,9 +160,15 @@ RSpec.feature "Registering for a competition", js: true do
     scenario "deleting registration" do
       visit edit_registration_v2_path(competition_id: competition.id, user_id: user.id)
 
-      choose "Cancelled"
+      # SemUI render the actual radio inputs as `hidden` in CSS, so we have to take a detour via the label
+      find('label[for="radio-status-cancelled"]').click
       click_button "Update Registration"
 
+      within_modal do
+        click_button "Yes"
+      end
+
+      expect(page).to have_text("Updated registration")
       expect(Registration.find_by_id(registration.id).cancelled?).to eq true
     end
   end
