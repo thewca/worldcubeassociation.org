@@ -1467,6 +1467,10 @@ th:
         href="/teams-committees-councils">หน้านี้</a>
       #original_hash: ea20be0
       success_message: ส่งอีเมลแล้ว - เราจะติดต่อกลับโดยเร็วที่สุด
+      #original_hash: 8fa6b95
+      prefilled: >-
+        หากต้องการอัปเดตการสมัครการแข่งขัน คุณต้องติดต่อผู้จัดการแข่งขัน
+        เราได้กรอกแบบฟอร์มติดต่อพร้อมคำขอเปลี่ยนแปลงของคุณแล้ว โปรดส่งแบบฟอร์ม
       form:
         user_data:
           name:
@@ -2420,10 +2424,6 @@ th:
         payment_reset: การชำระเงินถูกปฏิเสธโดย Stripe
         #original_hash: bcf6a93
         payment_pending: การชำระเงินยังไม่เสร็จสมบูรณ์
-        #original_hash: c3f8d65
-        registration_unreachable: >-
-          เกิดปัญหาในการเข้าถึง service การสมัครการแข่งขัน กรุณาติดต่อ Software
-          Team.
     #original_hash: 4cf01a2
     preferred_events_prompt_html: >-
       เพื่อให้การสมัครครั้งต่อไปเร็วขึ้น คุณสามารถเลือกประเภทการแข่งขันที่ชอบได้
@@ -3573,6 +3573,18 @@ th:
         being_deleted: การสมัครกำลังถูกลบ...
         #original_hash: cbf13af
         update_confirm: คุณแน่ใจหรือไม่ว่าต้องการอัปเดตการสมัครการแข่งขันของคุณ?
+        #original_hash: 9b92912
+        update_confirm_contact: >-
+          คุณต้องติดต่อผู้จัดการแข่งัขนเพื่ออัปเดตการสมัครของคุณ คลิก Yes
+          เพื่อไปที่แบบฟอร์มการติดต่อ
+        #original_hash: d54056b
+        delete_confirm_contact: >-
+          คุณต้องติดต่อผู้จัดการแข่งขันเพื่อลบการสมัครของคุณ คลิก Yes
+          เพื่อไปที่แบบฟอร์มการติดต่อ
+        #original_hash: 7fbb20c
+        update_contact_message: 'ฉันต้องการอัปเดตข้อมูลการสมัครของฉันดังต่อไปนี้: %{update_params}'
+        #original_hash: 8bf02a9
+        delete_contact_message: ฉันต้องการลบการสมัครของฉัน
         #original_hash: 65bbb07
         no_changes: ไม่มีการเปลี่ยนแปลง
         #original_hash: be4e8e2
@@ -3656,8 +3668,10 @@ th:
         disclaimer: การสมัครการแข่งขันไม่ได้หมายถึงว่าจะได้รับอนุมัติให้เข้าแข่งขัน
         #original_hash: 8fe68a1
         processing: การสมัครของคุณอยู่ระหว่างดำเนินการ...
-        #original_hash: 897f272
-        processing_longer: การประมวลผลใช้เวลานานกว่าปกติ อย่าพึ่งปิดหน้าจอ
+        #original_hash: c7f124a
+        processing_longer: >-
+          เราได้รับการสมัครของคุณแล้ว และจะดำเนินการในเร็วๆ นี้
+          ซึ่งอาจใช้เวลาสักครู่ถ้าเซิร์ฟเวอร์ของเรามีการใช้งานสูงอยู่
         #original_hash: 79ba42a
         processing_queue: 'การสมัครจำนวนมากกำลังดำเนินการอยู่ ซึ่งมี %{queueCount} อยู่ในคิว'
         #original_hash: ff6550f
