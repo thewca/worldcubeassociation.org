@@ -54,7 +54,7 @@ export default function CompetingStep({
 }) {
   const maxEvents = competitionInfo.events_per_registration_limit ?? Infinity;
   const {
-    registration, isRegistered, hasPaid, refetchRegistration, isProcessing, setIsProcessing,
+    registration, isRegistered, hasPaid, refetchRegistration, isProcessing, startProcessing,
   } = useRegistration();
   const dispatch = useDispatch();
 
@@ -127,7 +127,7 @@ export default function CompetingStep({
       // We can't update the registration yet, because there might be more steps needed
       // And the Registration might still be processing
       dispatch(setMessage('registrations.flash.registered', 'positive'));
-      setIsProcessing(true);
+      startProcessing();
     },
   });
 
@@ -263,7 +263,6 @@ export default function CompetingStep({
           competitionInfo={competitionInfo}
           user={user}
           onProcessingComplete={async () => {
-            setIsProcessing(false);
             await refetchRegistration();
             nextStep();
           }}

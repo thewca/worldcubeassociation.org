@@ -1,31 +1,18 @@
-import { useQuery } from '@tanstack/react-query';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Message, Modal } from 'semantic-ui-react';
 import I18n from '../../../lib/i18n';
-import pollRegistrations from '../api/registration/get/poll_registrations';
+import { useRegistration } from '../lib/RegistrationProvider';
 
-const REFETCH_INTERVAL = 3000;
+export default function Processing({ onProcessingComplete }) {
+  const { isProcessing, pollCounter, queueCount } = useRegistration();
 
-export default function Processing({ competitionInfo, user, onProcessingComplete }) {
-  const [pollCounter, setPollCounter] = useState(0);
-
-  const { data } = useQuery({
-    queryKey: ['registration-status-polling', user.id, competitionInfo.id],
-    queryFn: async () => pollRegistrations(user.id, competitionInfo),
-    refetchInterval: REFETCH_INTERVAL,
-    onSuccess: () => {
-      setPollCounter(pollCounter + 1);
-    },
-  });
   useEffect(() => {
-    const processingComplete = competitionInfo.registration_version === 'v2' ? data?.status?.competing === 'pending'
-      : data && !data.processing;
-    if (processingComplete) {
+    if (!isProcessing) {
       onProcessingComplete();
     }
-  }, [competitionInfo.registration_version, data, onProcessingComplete]);
+  }, [isProcessing]);
   return (
-    <Modal open={data?.status?.competing !== 'pending' || !data?.processing} dimmer="blurring">
+    <Modal open={isProcessing} dimmer="blurring">
       <Modal.Header>
         {I18n.t('competitions.registration_v2.register.processing')}
       </Modal.Header>
@@ -35,10 +22,10 @@ export default function Processing({ competitionInfo, user, onProcessingComplete
             {I18n.t('competitions.registration_v2.register.processing_longer')}
           </Message>
         )}
-        {data && data.queue_count > 0 && (
+        {queueCount > 0 && (
           <Message warning>
             {I18n.t('competitions.registration_v2.register.processing_queue', {
-              queueCount: data.queue_count,
+              queueCount,
             })}
           </Message>
         )}
