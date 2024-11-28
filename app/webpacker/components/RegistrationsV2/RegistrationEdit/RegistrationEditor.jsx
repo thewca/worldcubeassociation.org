@@ -12,7 +12,7 @@ import {
   Message,
   Segment,
 } from 'semantic-ui-react';
-import { getSingleRegistration } from '../api/registration/get/get_registrations';
+import { getSingleRegistrationById } from '../api/registration/get/get_registrations';
 import updateRegistration from '../api/registration/patch/update_registration';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { setMessage } from '../Register/RegistrationMessage';
@@ -26,7 +26,7 @@ import RegistrationHistory from './RegistrationHistory';
 import { hasPassed } from '../../../lib/utils/dates';
 import getUsersInfo from '../api/user/post/getUserInfo';
 
-export default function RegistrationEditor({ competitor, competitionInfo }) {
+export default function RegistrationEditor({ competitor, registrationId, competitionInfo }) {
   const dispatch = useDispatch();
   const [comment, setComment] = useState('');
   const [adminComment, setAdminComment] = useState('');
@@ -39,8 +39,8 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
   const queryClient = useQueryClient();
 
   const { isLoading: isRegistrationLoading, data: serverRegistration, refetch } = useQuery({
-    queryKey: ['registration-admin', competitionInfo.id, competitor.id],
-    queryFn: () => getSingleRegistration(competitor.id, competitionInfo),
+    queryKey: ['registration-admin', registrationId],
+    queryFn: () => getSingleRegistrationById(registrationId),
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
     staleTime: Infinity,

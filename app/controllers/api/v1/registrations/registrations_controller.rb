@@ -6,7 +6,8 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
   # That's why we should always validate a request first, before taking any other before action
   # before_actions are triggered in the order they are defined
   before_action :validate_create_request, only: [:create]
-  before_action :validate_show_registration, only: [:show]
+  before_action :validate_show_by_attendee, only: [:show_by_attendee]
+  before_action :validate_show, only: [:show]
   before_action :validate_list_admin, only: [:list_admin]
   before_action :validate_update_request, only: [:update]
   before_action :validate_bulk_update_request, only: [:bulk_update]
@@ -27,13 +28,22 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
     render_error(e.status, e.errors)
   end
 
-  def validate_show_registration
+  def validate_show_by_attendee
     @user_id, @competition_id = show_params
     @competition = Competition.find(@competition_id)
     render_error(:unauthorized, ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless @current_user.id == @user_id.to_i || @current_user.can_manage_competition?(@competition)
   end
 
+  def validate_show
+    @registration = Registration.find(params.require(:id))
+    render_error(:unauthorized, ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless @current_user.id == @registration.user.id || @current_user.can_manage_competition?(@registration.competition)
+  end
+
   def show
+    render json: @registration.to_v2_json(admin: true, history: true)
+  end
+
+  def show_by_attendee
     registration = Registration.find_by!(user_id: @user_id, competition_id: @competition_id)
     render json: registration.to_v2_json(admin: true, history: true)
   end

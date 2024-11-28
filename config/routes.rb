@@ -340,7 +340,8 @@ Rails.application.routes.draw do
     # getting a JWT token requires you to be logged in through the Website
     namespace :v1 do
       namespace :registrations do
-        get '/register', to: 'registrations#show'
+        get '/:id', to: 'registrations#show', as: :show
+        get '/register', to: 'registrations#show_by_attendee'
         post '/register', to: 'registrations#create'
         patch '/register', to: 'registrations#update'
         patch '/bulk_update', to: 'registrations#bulk_update'
