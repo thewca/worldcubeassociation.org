@@ -33,9 +33,9 @@ function V3csvExport(selected, registrations, competition) {
   const link = document.createElement('a');
   link.setAttribute('href', encodedUri);
   link.setAttribute('download', filename);
-  document.body.appendChild(link); // Required for Firefox
+  document.body.appendChild(link);
   link.click();
-  document.body.removeChild(link); // Clean up
+  document.body.removeChild(link);
 }
 
 function V2csvExport(selected, registrations) {
@@ -60,9 +60,9 @@ function V2csvExport(selected, registrations) {
   const link = document.createElement('a');
   link.setAttribute('href', encodedUri);
   link.setAttribute('download', filename);
-  document.body.appendChild(link); // Required for Firefox
+  document.body.appendChild(link);
   link.click();
-  document.body.removeChild(link); // Clean up
+  document.body.removeChild(link);
 }
 
 function csvExport(selected, registrations, competition) {
