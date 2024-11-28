@@ -58,8 +58,7 @@ class Registration < ApplicationRecord
 
   def recompute_timestamps
     case self.competing_status
-    when Registrations::Helper::STATUS_PENDING
-    when Registrations::Helper::STATUS_WAITING_LIST
+    when Registrations::Helper::STATUS_PENDING, Registrations::Helper::STATUS_WAITING_LIST
       self.accepted_at = nil
       self.deleted_at = nil
     when Registrations::Helper::STATUS_ACCEPTED
