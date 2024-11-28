@@ -26,8 +26,16 @@ function V3csvExport(selected, registrations, competition) {
         DateTime.fromISO(registration.competing.registered_on).setZone('UTC').toFormat('yyyy-MM-dd HH:mm:ss ZZZZ')
       }\n`;
     });
+
+  const filename = `${competition.id}-registrations.csv`;
   const encodedUri = encodeURI(csvContent);
-  window.open(encodedUri);
+
+  const link = document.createElement('a');
+  link.setAttribute('href', encodedUri);
+  link.setAttribute('download', filename);
+  document.body.appendChild(link); // Required for Firefox
+  link.click();
+  document.body.removeChild(link); // Clean up
 }
 
 function V2csvExport(selected, registrations) {
@@ -45,8 +53,16 @@ function V2csvExport(selected, registrations) {
         registration.competing.comment
       },${registration.competing.admin_comment}\n`;
     });
+
+  const filename = `${competition.id}-registrations.csv`;
   const encodedUri = encodeURI(csvContent);
-  window.open(encodedUri);
+
+  const link = document.createElement('a');
+  link.setAttribute('href', encodedUri);
+  link.setAttribute('download', filename);
+  document.body.appendChild(link); // Required for Firefox
+  link.click();
+  document.body.removeChild(link); // Clean up
 }
 
 function csvExport(selected, registrations, competition) {
