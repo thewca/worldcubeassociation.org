@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 class Ticket < ApplicationRecord
-  enum :ticket_type, {
-    edit_person: "edit_person",
-  }
+  TICKET_TYPES = {
+    edit_person: "TicketsEditPerson",
+  }.freeze
 
   has_many :ticket_logs
   has_many :ticket_stakeholders

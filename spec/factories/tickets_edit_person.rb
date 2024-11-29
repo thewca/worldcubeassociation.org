@@ -7,7 +7,7 @@ FactoryBot.define do
 
     trait :edit_name do
       after(:create) do |edit_name_ticket|
-        edit_name_ticket.ticket = FactoryBot.create(:ticket, :edit_person, metadata: edit_name_ticket)
+        edit_name_ticket.ticket = FactoryBot.create(:ticket, metadata: edit_name_ticket)
         FactoryBot.create(
           :tickets_edit_name_field,
           tickets_edit_person_id: edit_name_ticket.id,

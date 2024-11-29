@@ -34,10 +34,7 @@ class TicketsEditPerson < ApplicationRecord
         )
       end
 
-      ticket = Ticket.create!(
-        ticket_type: Ticket.ticket_types[:edit_person],
-        metadata: ticket_metadata,
-      )
+      ticket = Ticket.create!(metadata: ticket_metadata)
 
       TicketStakeholder.create!(
         ticket_id: ticket.id,

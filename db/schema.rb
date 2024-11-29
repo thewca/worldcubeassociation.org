@@ -1200,7 +1200,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_24_050607) do
   end
 
   create_table "tickets", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
-    t.string "ticket_type", null: false
     t.string "metadata_type", null: false
     t.bigint "metadata_id", null: false
     t.datetime "created_at", null: false
@@ -1218,8 +1217,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_24_050607) do
   create_table "tickets_edit_person_fields", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "tickets_edit_person_id", null: false
     t.string "field_name", null: false
-    t.string "old_value", null: false
-    t.string "new_value", null: false
+    t.text "old_value", null: false
+    t.text "new_value", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["tickets_edit_person_id"], name: "index_tickets_edit_person_fields_on_tickets_edit_person_id"
