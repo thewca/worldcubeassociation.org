@@ -24,7 +24,7 @@
   </p>
   <% warning_text = "" %>
   <% unless @incident.resolved_at %>
-    <% warning_text += "Note: This log has not been posted yet.<br/>" %>
+    <% warning_text += "Note: This log has not been resolved yet, so it is not publicly visible.<br/>" %>
   <% end %>
   <% if current_user&.can_manage_incidents? %>
     <% if @incident.digest_missing? %>
