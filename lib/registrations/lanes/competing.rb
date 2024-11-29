@@ -35,6 +35,7 @@ module Registrations
 
         ActiveRecord::Base.transaction do
           update_event_ids(registration, event_ids)
+          byebug
           registration.comments = comment if comment.present?
           registration.administrative_notes = admin_comment if admin_comment.present?
           registration.guests = guests if guests.present?
@@ -108,7 +109,15 @@ module Registrations
         return unless event_ids.present?
 
         registration.registration_competition_events.each do |registration_competition_event|
-          registration_competition_event.destroy unless event_ids.include?(registration_competition_event.competition_event.event_id)
+          puts "considering event: #{registration_competition_event.inspect }"
+          # registration_competition_event.destroy unless event_ids.include?(registration_competition_event.competition_event.event_id)
+          if not event_ids.include?(registration_competition_event.competition_event.event_id)
+            puts "event not included"
+            puts "before count: #{registration.registration_competition_events.count}"
+            registration_competition_event.destroy
+            puts "marked for destruction? #{registration_competition_event.marked_for_destruction?}"
+            puts registration.registration_competition_events.count
+          end
         end
 
         event_ids.each do |event_id|

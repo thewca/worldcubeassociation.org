@@ -277,6 +277,7 @@ FactoryBot.define do
     end
 
     trait :editable_registrations do
+      registration_open
       allow_registration_edits { true }
       event_change_deadline_date { 2.weeks.from_now.change(usec: 0) }
     end
