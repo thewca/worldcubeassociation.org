@@ -5,7 +5,6 @@ import RegistrationRequirements from './RegistrationRequirements';
 import StripeWrapper from './StripeWrapper';
 import i18n from '../../../lib/i18n';
 import RegistrationOverview from './RegistrationOverview';
-import { hasPassed } from '../../../lib/utils/dates';
 import { useRegistration } from '../lib/RegistrationProvider';
 
 const requirementsStepConfig = {
