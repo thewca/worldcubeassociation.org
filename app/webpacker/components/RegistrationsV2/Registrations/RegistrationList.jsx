@@ -129,19 +129,14 @@ export default function RegistrationList({ competitionInfo }) {
       let orderBy = [];
       if (psychSheetEvent === undefined) {
         switch (sortColumn) {
-          case 'name':
-            orderBy = ['user.name'];
-            break;
           case 'country':
             orderBy = [
               (item) => countries.byIso2[item.user.country.iso2].name,
-              'user.name',
             ];
             break;
           case 'total':
             orderBy = [
               (item) => item.competing.event_ids.length,
-              'user.name',
             ];
             break;
           default:
@@ -150,7 +145,7 @@ export default function RegistrationList({ competitionInfo }) {
       }
       const direction = sortDirection === 'descending' ? 'desc' : 'asc';
 
-      return _.orderBy(registrationsWithPsychsheet, orderBy, [direction]);
+      return _.orderBy(registrationsWithPsychsheet, [...orderBy, 'user.name'], [direction]);
     }
     return [];
   }, [registrationsWithPsychsheet, sortColumn, sortDirection, psychSheetEvent]);
