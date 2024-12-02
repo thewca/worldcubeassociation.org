@@ -134,10 +134,24 @@ export default function RegistrationList({ competitionInfo }) {
           return a.user.name.localeCompare(b.user.name);
         }
         if (sortColumn === 'country') {
-          return countries.byIso2[a.user.country.iso2].name.localeCompare(countries.byIso2[b.user.country.iso2].name);
+          const countryA = countries.byIso2[a.user.country.iso2].name;
+          const countryB = a.user.country.iso2[b.user.country.iso2].name;
+
+          if (countryA === countryB) {
+            return a.user.name.localeCompare(b.user.name);
+          }
+
+          return countryA.localeCompare(countryB);
         }
         if (sortColumn === 'total') {
-          return a.competing.event_ids.length - b.competing.event_ids.length;
+          const eventCountA = a.competing.event_ids.length;
+          const eventCountB = b.competing.event_ids.length;
+
+          if (eventCountA === eventCountB) {
+            return a.user.name.localeCompare(b.user.name);
+          }
+
+          return eventCountA - eventCountB;
         }
         return 0;
       });
