@@ -13,28 +13,32 @@ const RegistrationContext = createContext();
 
 export default function RegistrationProvider({ competitionInfo, userInfo, children }) {
   const dispatch = useDispatch();
-  const [isProcessing, setIsProcessing] = useState(false);
+  const [isPolling, setIsPolling] = useState(false);
   const [pollCounter, setPollCounter] = useState(0);
 
-  const startProcessing = useCallback(() => {
-    setIsProcessing(true);
-  }, [setIsProcessing]);
+  const startPolling = useCallback(() => {
+    setIsPolling(true);
+  }, [setIsPolling]);
 
-  const { data: pollingData } = useQuery({
+  const stopPolling = useCallback(() => {
+    setIsPolling(false);
+  }, [setIsPolling]);
+
+  const { data: pollingData, status: pollingStatus } = useQuery({
     queryKey: ['registration-status-polling', userInfo.id, competitionInfo.id],
     queryFn: async () => pollRegistrations(userInfo.id, competitionInfo),
     refetchInterval: REFETCH_INTERVAL,
     onSuccess: () => {
       setPollCounter(pollCounter + 1);
     },
-    enabled: isProcessing,
+    enabled: isPolling,
   });
 
   useEffect(() => {
     if (pollingData && !pollingData.processing) {
-      setIsProcessing(false);
+      stopPolling();
     }
-  }, [pollingData]);
+  }, [pollingData, stopPolling]);
 
   const {
     data: registration,
@@ -66,20 +70,22 @@ export default function RegistrationProvider({ competitionInfo, userInfo, childr
     registration,
     refetchRegistration,
     isFetching,
-    isProcessing,
-    startProcessing,
+    isPolling,
+    startPolling,
+    isProcessing: pollingStatus === 'pending' || pollingData.processing,
     queueCount: pollingData?.queue_count,
   }), [
+    pollingStatus,
     hasPaid,
     isAccepted,
     isFetching,
-    isProcessing,
     isRegistered,
     isRejected,
-    pollingData?.queue_count,
+    isPolling,
     refetchRegistration,
     registration,
-    startProcessing]);
+    pollingData,
+    startPolling]);
 
   return (
     <RegistrationContext.Provider value={value}>
