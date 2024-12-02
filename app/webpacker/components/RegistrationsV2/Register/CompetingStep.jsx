@@ -54,7 +54,7 @@ export default function CompetingStep({
 }) {
   const maxEvents = competitionInfo.events_per_registration_limit ?? Infinity;
   const {
-    registration, isRegistered, hasPaid, refetchRegistration, isProcessing, startProcessing,
+    registration, isRegistered, hasPaid, isPolling, isProcessing, startPolling, refetchRegistration,
   } = useRegistration();
   const dispatch = useDispatch();
 
@@ -84,6 +84,13 @@ export default function CompetingStep({
       setGuests(registration.guests);
     }
   }, [isRegistered, registration]);
+
+  useEffect(() => {
+    if (isPolling && !isProcessing) {
+      refetchRegistration();
+      nextStep();
+    }
+  }, [isPolling, isProcessing, nextStep, refetchRegistration]);
 
   const queryClient = useQueryClient();
   const { mutate: updateRegistrationMutation, isPending: isUpdating } = useMutation({
@@ -127,7 +134,7 @@ export default function CompetingStep({
       // We can't update the registration yet, because there might be more steps needed
       // And the Registration might still be processing
       dispatch(setMessage('registrations.flash.registered', 'positive'));
-      startProcessing();
+      startPolling();
     },
   });
 
@@ -258,14 +265,10 @@ export default function CompetingStep({
   const formWarnings = useMemo(() => potentialWarnings(competitionInfo), [competitionInfo]);
   return (
     <Segment basic loading={isUpdating}>
-      {isProcessing && (
+      {isPolling && (
         <Processing
           competitionInfo={competitionInfo}
           user={user}
-          onProcessingComplete={async () => {
-            await refetchRegistration();
-            nextStep();
-          }}
         />
       )}
 

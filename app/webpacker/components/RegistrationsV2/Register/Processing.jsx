@@ -1,18 +1,13 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Message, Modal } from 'semantic-ui-react';
 import I18n from '../../../lib/i18n';
 import { useRegistration } from '../lib/RegistrationProvider';
 
-export default function Processing({ onProcessingComplete }) {
-  const { isProcessing, pollCounter, queueCount } = useRegistration();
+export default function Processing() {
+  const { pollCounter, queueCount } = useRegistration();
 
-  useEffect(() => {
-    if (!isProcessing) {
-      onProcessingComplete();
-    }
-  }, [isProcessing]);
   return (
-    <Modal open={isProcessing} dimmer="blurring">
+    <Modal dimmer="blurring">
       <Modal.Header>
         {I18n.t('competitions.registration_v2.register.processing')}
       </Modal.Header>
