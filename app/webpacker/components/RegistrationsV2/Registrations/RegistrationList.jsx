@@ -1,6 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
 import React, {
-  useEffect,
   useMemo,
   useReducer,
   useState,
@@ -8,6 +7,7 @@ import React, {
 import {
   Flag, Icon, Segment, Table,
 } from 'semantic-ui-react';
+import _ from 'lodash';
 import {
   getConfirmedRegistrations,
   getPsychSheetForEvent,
@@ -126,39 +126,29 @@ export default function RegistrationList({ competitionInfo }) {
 
   const data = useMemo(() => {
     if (registrationsWithPsychsheet) {
-      const sorted = registrationsWithPsychsheet.toSorted((a, b) => {
-        if (psychSheetEvent !== undefined) {
-          return 0; // backend handles the sorting of psych sheets
+      let orderBy = [];
+      if (psychSheetEvent === undefined) {
+        switch (sortColumn) {
+          case 'name':
+            orderBy = ['user.name'];
+            break;
+          case 'country':
+            orderBy = [
+              (item) => countries.byIso2[item.user.country.iso2].name,
+              'user.name',
+            ];
+            break;
+          case 'total':
+            orderBy = [
+              (item) => item.competing.event_ids.length,
+              'user.name',
+            ];
+            break;
+          default:
+            break;
         }
-        if (sortColumn === 'name') {
-          return a.user.name.localeCompare(b.user.name);
-        }
-        if (sortColumn === 'country') {
-          const countryA = countries.byIso2[a.user.country.iso2].name;
-          const countryB = a.user.country.iso2[b.user.country.iso2].name;
-
-          if (countryA === countryB) {
-            return a.user.name.localeCompare(b.user.name);
-          }
-
-          return countryA.localeCompare(countryB);
-        }
-        if (sortColumn === 'total') {
-          const eventCountA = a.competing.event_ids.length;
-          const eventCountB = b.competing.event_ids.length;
-
-          if (eventCountA === eventCountB) {
-            return a.user.name.localeCompare(b.user.name);
-          }
-
-          return eventCountA - eventCountB;
-        }
-        return 0;
-      });
-      if (sortDirection === 'descending') {
-        return sorted.toReversed();
       }
-      return sorted;
+      return _.orderBy(registrationsWithPsychsheet, orderBy, [sortDirection === 'descending' ? 'desc' : 'asc']);
     }
     return [];
   }, [registrationsWithPsychsheet, sortColumn, sortDirection, psychSheetEvent]);
