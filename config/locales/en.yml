@@ -1032,7 +1032,7 @@ en:
       approve: "Approve"
       unconfirmed_email: "This account's email address (%{email}) is not confirmed."
       confirm_new_email: "Changing your email will require confirming the new email before being effective."
-      pending_mail_confirmation: "This account is pending confirmation of new email address %{email}."
+      pending_mail_confirmation: "This account is pending confirmation of the new email address %{email}."
       pending_avatar_confirmation: "This account is pending confirmation of a new avatar."
       pending_avatar_edit_action: "Click here if you want to edit it instead:"
       pending_avatar_edit_warning: "Editing pending avatar!"
@@ -1051,7 +1051,7 @@ en:
           assigned: "you have a WCA ID assigned"
           registered: "you have registered for a competition"
       guidelines_confirmation: "I confirm that my avatar fulfills all avatar guidelines."
-      confirm_guidelines: "Make sure to read avatar guidelines and submit a valid picture."
+      confirm_guidelines: "Make sure to read the avatar guidelines and submit a valid picture."
       save: "Save"
       actions: "Actions"
       sign_out_of_devices: "Sign out of other devices"
@@ -1063,24 +1063,24 @@ en:
       avatar_guidelines:
         '1': "All avatars should be pictures of real persons."
         '2': "The person shown must be your current self."
-        '3': "If there is more than one person on the avatar, it should be clear who of them is you."
+        '3': "If there is more than one person in the avatar, it should be clear which of them is you."
         '4': "Your head, but not necessarily the full face, should be visible."
-        '5': "The avatar should not include overlay texts, stickers or unnatural filters, including borders."
-        '6': "The avatar must be submitted in correct orientation."
+        '5': "The avatar should not include overlay text, stickers or unnatural filters, including borders."
+        '6': "The avatar must be submitted in the correct orientation."
         '7': "The avatar must not contain offensive content (e.g. offensive gestures)."
       staff_avatar_guidelines:
         title: "Additional guidelines for Staff Members and Trainee Delegates:"
         paragraphs:
           '1': "The avatar must be of your current self, depicted in the same fashion as how you would appear at a competition."
-          '2': "The avatar must be framed, cropped, angled, and lit, so that any competitor or spectator at a competition can use it to unambiguously identify you at a competition venue."
+          '2': "The avatar must be framed, cropped, angled, and lit so that any competitor or spectator at a competition can use it to unambiguously identify you at a competition venue."
           '3': "The thumbnail of the avatar is only a section of the avatar, and it will be used to represent your full avatar. The thumbnail must be adjusted, so you can be recognized from it alone, and it must contain your face."
       #context: used on the tab where the user has to confirm its password/2fa to be able to edit their sensitive data
       sensitive:
-        info: "This section enables you to edit sensitive data, to be able to do so please confirm your identity below."
+        info: "This section enables you to edit sensitive data. To be able to do so, please confirm your identity below."
         success: "Successfully verified your identity"
         failure: "Couldn't verify your identity"
         confirm_proceed: "Confirm and proceed"
-        identity_error: "Cannot edit your data, please confirm your identity below before trying again."
+        identity_error: "Cannot edit your data. Please confirm your identity below before trying again."
     #context: when an error occured during the edition
     errors:
       not_found: "not found"
@@ -1096,7 +1096,7 @@ en:
       wca_id_no_gender_html: "We do not have a gender recorded for this WCA ID. Please contact the <a href='%{wrt_contact_path}' target='_blank'>WCA Results Team</a> to resolve this."
       wca_id_no_citizenship_html: "We do not have a citizenship recorded for this WCA ID. Please contact the <a href='%{wrt_contact_path}' target='_blank'>WCA Results Team</a> to resolve this."
       wca_id_no_name_html: "We do not have a name recorded for this WCA ID. Please contact the <a href='%{wrt_contact_path}' target='_blank'>WCA Results Team</a> to resolve this."
-      email_used_by_locked_account_html: "is already used by another account. It's been created automatically as a result of you registering for a competition via an external service. If you are the owner of this email, you can use the account after resetting your password <a href='/users/password/new'>here</a>."
+      email_used_by_locked_account_html: "is already used by another account. It has been created automatically as a result of you registering for a competition via an external service. If you are the owner of this email, you can use the account after resetting your password <a href='/users/password/new'>here</a>."
       must_match_person: "must match person details corresponding to the WCA ID"
     #context: when an action was successful
     successes:
