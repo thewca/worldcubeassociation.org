@@ -8,5 +8,5 @@
 
 <p>
   <%= t 'users.mailer.competition_submission_email.contact' %>
-  <%= @competition.delegates.distinct.pluck(:email).join(" ") %>
+  <%= @competition.delegates.pluck(:email).join(" ") %>
 </p>
