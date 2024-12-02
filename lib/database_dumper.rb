@@ -594,7 +594,18 @@ module DatabaseDumper
     "microservice_registrations" => :skip_all_rows,
     "registration_history_changes" => :skip_all_rows,
     "registration_history_entries" => :skip_all_rows,
-    "waiting_lists" => :skip_all_rows,
+    "waiting_lists" => {
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w(
+          id
+          holder_type
+          holder_id
+          entries
+          created_at
+          updated_at
+        ),
+      ),
+    }.freeze,
     "sanity_checks" => :skip_all_rows,
     "sanity_check_categories" => :skip_all_rows,
     "sanity_check_exclusions" => :skip_all_rows,

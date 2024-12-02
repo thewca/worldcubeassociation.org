@@ -176,7 +176,9 @@ export const delegatesPageUrl = `<%= CGI.unescape(Rails.application.routes.url_h
 
 export const allDelegatePageUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.delegates_path(anchor: 'all'))%>`;
 
-export const teamsCommitteesCouncilsPageUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.teams_committees_councils_path)%>`;
+export const teamsCommitteesCouncilsPageUrl = (teamFriendlyId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.teams_committees_councils_path(anchor: "${teamFriendlyId}"))%>`;
+
+export const officersAndBoardPageUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.officers_and_board_path)%>`;
 
 export const translatorsPageUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.translators_path)%>`;
 
@@ -185,7 +187,11 @@ export const adminAvatarsUrl = `<%= CGI.unescape(Rails.application.routes.url_he
 
 export const contactUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.contact_path) %>`
 
+export const contactEditProfileActionUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.contact_edit_profile_action_path) %>`
+
 export const contactRecipientUrl = (contactRecipient) => `<%= CGI.unescape(Rails.application.routes.url_helpers.contact_path(contactRecipient: "${contactRecipient}")) %>`
+
+export const contactCompetitionUrl = (competitionId, message) => `<%= CGI.unescape(Rails.application.routes.url_helpers.contact_path(competitionId: "${competitionId}", contactRecipient: "competition", message: "${message}")) %>`
 
 export const apiV0Urls = {
   users: {
@@ -242,10 +248,7 @@ export const panelUrls = {
 
 export const userPreferencesRoute = `<%= CGI.unescape(Rails.application.routes.url_helpers.profile_edit_path)%>?section=preferences`;
 
-export const pollingRoute = (userId, competitionId) => ({
-  v2: `<%= EnvConfig.V2_REGISTRATIONS_POLL_URL %>?attendee_id=${competitionId}-${userId}`,
-  v3: `<%= EnvConfig.V3_REGISTRATIONS_POLL_URL %>?competition_id=${competitionId}&user_id=${userId}`
-});
+export const pollingRoute = (userId, competitionId) => `<%= EnvConfig.V3_REGISTRATIONS_POLL_URL %>?competition_id=${competitionId}&user_id=${userId}`;
 
 export const wcaRegistrationUrl = `<%= CGI.unescape(EnvConfig.WCA_REGISTRATIONS_URL)%>`;
 

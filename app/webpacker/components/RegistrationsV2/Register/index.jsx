@@ -74,7 +74,7 @@ function Register({
     return <Loading />;
   }
 
-  if (userCanPreRegister || competitionInfo['registration_currently_open?'] || timerEnded) {
+  if (registration || userCanPreRegister || competitionInfo['registration_currently_open?'] || timerEnded) {
     return (
       <>
         <RegistrationMessage />

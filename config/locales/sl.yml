@@ -1318,17 +1318,17 @@ sl:
       #original_hash: 51fa5a4
       wca_id_no_gender_html: >-
         Za ta WCA ID nimamo vnesenega spola. Prosimo pošljite E-pošto <a
-        href='mailto:results@worldcubeassociation.org' target='_blank'>WCA ekipi
+        href='%{wrt_contact_path}' target='_blank'>WCA ekipi
         za rezultate</a>, da se razreši težava.
       #original_hash: 87ee245
       wca_id_no_citizenship_html: >-
         Za ta WCA ID nimamo vnesenega državljanstva. Prosimo pošljite E-pošto <a
-        href='mailto:results@worldcubeassociation.org' target='_blank'>WCA ekipi
+        href='%{wrt_contact_path}' target='_blank'>WCA ekipi
         za rezultate</a>, da se razreši težava.
       #original_hash: c3839bc
       wca_id_no_name_html: >-
         Za ta WCA ID nimamo vnesenega imena. Prosimo pošljite E-pošto <a
-        href='mailto:results@worldcubeassociation.org' target='_blank'>WCA ekipi
+        href='%{wrt_contact_path}' target='_blank'>WCA ekipi
         za rezultate</a>, da se razreši težava.
       #original_hash: d02c03b
       avatar_requires_wca_id: zahteva dodelitev WCA ID
@@ -1361,7 +1361,7 @@ sl:
       #original_hash: 5be6803
       contact_results_team_html: >-
         Prosimo, da kontaktirate <a
-        href='mailto:results@worldcubeassociation.org' target='_blank'>WCA ekipo
+        href='%{wrt_contact_path}' target='_blank'>WCA ekipo
         za rezultate</a> za razrešitev težave.
       #original_hash: 92aa857
       unknown_wca_id_html: 'WCA ID %{link_id} ne obstaja.'
