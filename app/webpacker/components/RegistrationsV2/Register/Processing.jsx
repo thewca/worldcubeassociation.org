@@ -7,7 +7,7 @@ export default function Processing() {
   const { pollCounter, queueCount } = useRegistration();
 
   return (
-    <Modal dimmer="blurring">
+    <Modal open dimmer="blurring">
       <Modal.Header>
         {I18n.t('competitions.registration_v2.register.processing')}
       </Modal.Header>

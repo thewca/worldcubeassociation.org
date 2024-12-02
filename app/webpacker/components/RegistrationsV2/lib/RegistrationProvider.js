@@ -72,7 +72,7 @@ export default function RegistrationProvider({ competitionInfo, userInfo, childr
     isFetching,
     isPolling,
     startPolling,
-    isProcessing: pollingStatus === 'pending' || pollingData.processing,
+    isProcessing: pollingStatus !== 'success' || pollingData.processing,
     queueCount: pollingData?.queue_count,
   }), [
     pollingStatus,
