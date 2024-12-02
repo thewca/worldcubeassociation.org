@@ -148,7 +148,9 @@ export default function RegistrationList({ competitionInfo }) {
             break;
         }
       }
-      return _.orderBy(registrationsWithPsychsheet, orderBy, [sortDirection === 'descending' ? 'desc' : 'asc']);
+      const direction = sortDirection === 'descending' ? 'desc' : 'asc';
+
+      return _.orderBy(registrationsWithPsychsheet, orderBy, [direction]);
     }
     return [];
   }, [registrationsWithPsychsheet, sortColumn, sortDirection, psychSheetEvent]);
