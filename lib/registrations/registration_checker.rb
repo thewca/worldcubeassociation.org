@@ -171,11 +171,18 @@ module Registrations
       def validate_update_status!(new_status, competition, current_user, target_user, registration, events)
         raise WcaExceptions::RegistrationError.new(:unprocessable_entity, Registrations::ErrorCodes::INVALID_REQUEST_DATA) unless
           Registration.competing_statuses.include?(new_status)
-        raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::COMPETITOR_LIMIT_REACHED) if
-          new_status == Registrations::Helper::STATUS_ACCEPTED && competition.competitor_limit_enabled? &&
-          competition.registrations.competing_status_accepted.count >= competition.competitor_limit
         raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::ALREADY_REGISTERED_IN_SERIES) if
           new_status == Registrations::Helper::STATUS_ACCEPTED && existing_registration_in_series?(competition, target_user)
+
+        if new_status == Registrations::Helper::STATUS_ACCEPTED && competition.competitor_limit_enabled?
+          raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::COMPETITOR_LIMIT_REACHED) if
+            competition.registrations.competing_status_accepted.count >= competition.competitor_limit
+
+          puts "checking this"
+          non_newcomer_spots_remaining = competition.competitor_limit - competition.newcomer_reserved_spots - competition.non_newcomers_competing
+          raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::NO_UNRESERVED_SPOTS_REMAINING ) if
+            competition.non_newcomers_competing.count >= non_newcomer_spots_remaining
+        end
 
         # Otherwise, organizers can make any status change they want to
         return if current_user.can_manage_competition?(competition)

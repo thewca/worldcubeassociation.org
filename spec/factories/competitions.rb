@@ -99,7 +99,15 @@ FactoryBot.define do
     refund_policy_percent { 0 }
     guests_entry_fee_lowest_denomination { 0 }
 
+    # TODO: This should change to :v3
     registration_version { :v1 }
+
+    trait :newcomer_month do
+      with_organizer
+      with_competitor_limit
+      competitor_limit { 4 }
+      newcomer_reserved_spots { 2 }
+    end
 
     trait :enforces_qualifications do
       with_organizer

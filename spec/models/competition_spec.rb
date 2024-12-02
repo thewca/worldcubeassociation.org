@@ -11,6 +11,20 @@ RSpec.describe Competition do
     expect(competition.cellName).to eq "Foo: Test - 2015"
   end
 
+  it 'can reserve newcomer spots up to 50% of registrations' do
+    expect(FactoryBot.build(:competition, newcomer_reserved_spots: 50, competitor_limit: 100)).to be_valid
+  end
+
+  it 'reserved newcomers spots cant exceed 50% of registrations' do
+    expect(FactoryBot.build(:competition, newcomer_reserved_spots: 51, competitor_limit: 100)).to be_invalid_with_errors(
+      newcomer_reserved_spots: ['cant reserve more than 50% of spots for newcomers'],
+    )
+
+    expect(FactoryBot.build(:competition, newcomer_reserved_spots: 50, competitor_limit: 99)).to be_invalid_with_errors(
+      newcomer_reserved_spots: ['cant reserve more than 50% of spots for newcomers'],
+    )
+  end
+
   it "rejects invalid names" do
     [
       "foo (Test) - 2015",
@@ -1581,6 +1595,32 @@ RSpec.describe Competition do
     it "external website is too long" do
       new_competition.external_website = "201 character external website reeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
       expect(new_competition).not_to be_valid
+    end
+  end
+
+  context 'newcomer month competition', :tag do
+    let(:newcomer_month_comp) { FactoryBot.create(:competition, :newcomer_month) }
+    let!(:newcomer_reg) { FactoryBot.create(:registration, :newcomer, competition: newcomer_month_comp) }
+
+    context '#non_newcomers_competing' do
+      before do
+        FactoryBot.create_list(:registration, 2, :accepted, competition: newcomer_month_comp)
+      end
+
+      it 'doesnt include newcomers in count' do
+        expect(newcomer_month_comp.registrations.count).to eq(3)
+        expect(newcomer_month_comp.non_newcomers_competing.count).to eq(2)
+      end
+
+      it 'doesnt include non-newcomers in non-accepted states' do
+        non_newcomer_reg1 = FactoryBot.create(:registration, competition: newcomer_month_comp)
+        non_newcomer_reg1 = FactoryBot.create(:registration, :cancelled, competition: newcomer_month_comp)
+        non_newcomer_reg1 = FactoryBot.create(:registration, :rejected, competition: newcomer_month_comp)
+        non_newcomer_reg1 = FactoryBot.create(:registration, :waiting_list, competition: newcomer_month_comp)
+
+        expect(newcomer_month_comp.registrations.count).to eq(7)
+        expect(newcomer_month_comp.non_newcomers_competing.count).to eq(2)
+      end
     end
   end
 end

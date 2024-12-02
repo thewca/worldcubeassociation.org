@@ -1662,6 +1662,7 @@ en:
           enabled: "Competitor limit"
           count: "Maximum number of competitors"
           reason: "The reason for the competitor limit"
+          newcomer_reserved_spots: "Number of spots to reserve for newcomers"
         staff:
           staff_delegate_ids: "WCA Delegate(s)"
           trainee_delegate_ids: "WCA Trainee Delegate(s)"
@@ -1746,6 +1747,7 @@ en:
           enabled: "Although it is not required by the Regulations to provide a competitor limit, it's highly recommended to do so."
           count: "The number of competitors allowed in this competition. For now this number is informational only, and does not yet prevent more people from registering. We are working on adding explicit support for this to the registration flow, but it requires some other work first."
           reason: "What is the reason for the limit on competitors? Please fill this out in English!"
+          newcomer_reserved_spots: "Only allowed during Newcomer Month - reserved spots can't be more than half of the Competitor Limit."
         staff:
           staff_delegate_ids: "WCA Delegates for the competition."
           trainee_delegate_ids: "WCA Trainee Delegates for the competition."
