@@ -1181,9 +1181,14 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_24_050607) do
 
   create_table "ticket_logs", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "ticket_id", null: false
-    t.string "log", null: false
+    t.string "action_type", null: false
+    t.string "action_value"
+    t.integer "acting_user_id", null: false
+    t.bigint "acting_stakeholder_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["acting_stakeholder_id"], name: "index_ticket_logs_on_acting_stakeholder_id"
+    t.index ["acting_user_id"], name: "index_ticket_logs_on_acting_user_id"
     t.index ["ticket_id"], name: "index_ticket_logs_on_ticket_id"
   end
 
@@ -1400,6 +1405,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_24_050607) do
   add_foreign_key "sanity_checks", "sanity_check_categories"
   add_foreign_key "stripe_records", "stripe_records", column: "parent_record_id"
   add_foreign_key "stripe_webhook_events", "stripe_records"
+  add_foreign_key "ticket_logs", "ticket_stakeholders", column: "acting_stakeholder_id"
+  add_foreign_key "ticket_logs", "users", column: "acting_user_id"
   add_foreign_key "user_avatars", "users"
   add_foreign_key "user_groups", "user_groups", column: "parent_group_id"
   add_foreign_key "user_roles", "user_groups", column: "group_id"

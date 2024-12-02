@@ -4,14 +4,17 @@ import useSaveAction from '../../../lib/hooks/useSaveAction';
 import { actionUrls } from '../../../lib/requests/routes.js.erb';
 import Loading from '../../Requests/Loading';
 
-function EditPersonTicketWorkbenchForWrt({ ticketDetails, sync }) {
+function EditPersonTicketWorkbenchForWrt({ ticketDetails, actingStakeholderId, sync }) {
   const { ticket } = ticketDetails;
   const { save, saving } = useSaveAction();
 
   const closeTicket = () => {
     save(
       actionUrls.tickets.updateStatus(ticket.id),
-      { ticket_status: 'closed' },
+      {
+        ticket_status: 'closed',
+        acting_stakeholder_id: actingStakeholderId,
+      },
       sync,
       { method: 'POST' },
     );
@@ -32,7 +35,13 @@ export default function EditPersonTicketWorkbench({ ticketDetails, sync }) {
 
   return requesterStakeholders.map((requesterStakeholder) => {
     if (requesterStakeholder.stakeholder?.metadata?.friendly_id === 'wrt') {
-      return <EditPersonTicketWorkbenchForWrt ticketDetails={ticketDetails} sync={sync} />;
+      return (
+        <EditPersonTicketWorkbenchForWrt
+          ticketDetails={ticketDetails}
+          actingStakeholderId={requesterStakeholder.id}
+          sync={sync}
+        />
+      );
     }
     return null;
   });

@@ -42,7 +42,7 @@ class TicketsEditPerson < ApplicationRecord
         connection: TicketStakeholder.connections[:assigned],
         is_active: true,
       )
-      TicketStakeholder.create!(
+      requester_stakeholder = TicketStakeholder.create!(
         ticket_id: ticket.id,
         stakeholder: requester,
         connection: TicketStakeholder.connections[:cc],
@@ -51,7 +51,10 @@ class TicketsEditPerson < ApplicationRecord
 
       TicketLog.create!(
         ticket_id: ticket.id,
-        log: "Ticket created.",
+        action_type: TicketLog.action_types[:status_updated],
+        action_value: TicketsEditPerson.statuses[:open],
+        acting_user_id: requester.id,
+        acting_stakeholder_id: requester_stakeholder.id,
       )
 
       return ticket

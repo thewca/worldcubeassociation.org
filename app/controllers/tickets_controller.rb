@@ -33,14 +33,19 @@ class TicketsController < ApplicationController
   def update_status
     ticket = Ticket.find(params.require(:ticket_id))
     ticket_status = params.require(:ticket_status)
+    acting_stakeholder_id = params.require(:acting_stakeholder_id)
 
     return head :unauthorized unless ticket.action_allowed?(:update_status, current_user)
+    return head :bad_request unless ticket.user_stakeholders(current_user).map(&:id).include?(acting_stakeholder_id)
 
     ActiveRecord::Base.transaction do
       ticket.metadata.update!(status: ticket_status)
       TicketLog.create!(
         ticket_id: ticket.id,
-        log: "Ticket status changed to #{ticket_status} by #{current_user.name}.",
+        action_type: TicketLog.action_types[:status_updated],
+        action_value: ticket_status,
+        acting_user_id: current_user.id,
+        acting_stakeholder_id: acting_stakeholder_id,
       )
     end
     render json: { success: true }
