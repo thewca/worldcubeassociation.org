@@ -513,6 +513,11 @@ class RegistrationsController < ApplicationController
     redirect_to redirect_path
   end
 
+  private def registration_from_params
+    id = params.require(:id)
+    Registration.find(id)
+  end
+
   def capture_paypal_payment
     return head :forbidden if PaypalInterface.paypal_disabled?
 
