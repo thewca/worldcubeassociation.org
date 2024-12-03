@@ -216,7 +216,7 @@ RSpec.describe Registration do
     end
 
     context "and one registration is accepted" do
-      before { registration.update!(accepted_at: Time.now) }
+      before { registration.update!(competing_status: Registrations::Helper::STATUS_ACCEPTED) }
 
       it "does allow accepting when the other registration is pending" do
         expect(registration).to be_valid
@@ -233,7 +233,7 @@ RSpec.describe Registration do
       it "doesn't allow accepting when the other registration is confirmed" do
         expect(registration).to be_valid
 
-        partner_registration.accepted_at = Time.now
+        partner_registration.competing_status = Registrations::Helper::STATUS_ACCEPTED
         expect(partner_registration).to be_invalid_with_errors(competition_id: [I18n.t('registrations.errors.series_more_than_one_accepted')])
       end
     end

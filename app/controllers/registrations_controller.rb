@@ -120,7 +120,7 @@ class RegistrationsController < ApplicationController
         new_locked_users << user if locked_account_created
         registration = competition.registrations.find_or_initialize_by(user_id: user.id)
         unless registration.accepted?
-          registration.assign_attributes(accepted_at: Time.now, accepted_by: current_user.id, deleted_at: nil, competing_status: Registrations::Helper::STATUS_ACCEPTED)
+          registration.assign_attributes(competing_status: Registrations::Helper::STATUS_ACCEPTED)
         end
         registration.registration_competition_events = []
         competition.competition_events.map do |competition_event|
@@ -164,7 +164,7 @@ class RegistrationsController < ApplicationController
       raise I18n.t("registrations.add.errors.already_registered") unless registration.new_record?
       registration_comment = params.dig(:registration_data, :comments)
       registration.assign_attributes(comments: registration_comment) if registration_comment.present?
-      registration.assign_attributes(accepted_at: Time.now, accepted_by: current_user.id, competing_status: Registrations::Helper::STATUS_ACCEPTED)
+      registration.assign_attributes(competing_status: Registrations::Helper::STATUS_ACCEPTED)
       params[:registration_data][:event_ids]&.each do |event_id|
         competition_event = @competition.competition_events.find { |ce| ce.event_id == event_id }
         registration.registration_competition_events.build(competition_event_id: competition_event.id)

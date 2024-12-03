@@ -349,7 +349,7 @@ RSpec.describe "registrations" do
             expect {
               post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
             }.to not_change { competition.registrations.count }
-              .and not_change { registration.reload.accepted_at }
+              .and not_change { registration.reload.competing_status }
           end
         end
 
@@ -364,7 +364,7 @@ RSpec.describe "registrations" do
             expect {
               post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
             }.to not_change { competition.registrations.count }
-              .and not_change { registration.reload.accepted_at }
+              .and not_change { registration.reload.competing_status }
               .and change { registration.reload.events.map(&:id) }.from(%w(333)).to(%w(333 444))
           end
         end
@@ -380,7 +380,7 @@ RSpec.describe "registrations" do
             expect {
               post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
             }.to not_change { competition.registrations.count }
-              .and change { registration.reload.accepted_at }
+              .and change { registration.reload.competing_status }
             expect(registration.reload).to be_accepted
           end
         end

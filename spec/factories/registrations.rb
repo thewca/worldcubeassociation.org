@@ -55,7 +55,7 @@ FactoryBot.define do
     end
 
     trait :paid_pending do
-      accepted_at { nil }
+      competing_status { Registrations::Helper::STATUS_PENDING }
       paid
     end
 
