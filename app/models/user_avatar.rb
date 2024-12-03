@@ -30,6 +30,11 @@ class UserAvatar < ApplicationRecord
     local: 'local-fs',
   }, default: :active_storage, scopes: false
 
+  MAX_UPLOAD_SIZE = 2.megabytes
+
+  validates :public_image, blob: { content_type: :web_image, size_range: 0..MAX_UPLOAD_SIZE }
+  validates :private_image, blob: { content_type: :web_image, size_range: 0..MAX_UPLOAD_SIZE }
+
   def url
     case self.backend
     when 's3_legacy_cdn'
@@ -38,6 +43,8 @@ class UserAvatar < ApplicationRecord
 
       URI::HTTPS.build(host: host, path: path).to_s
     when 'active_storage'
+      return UserAvatar.default_avatar(self.user).url unless self.image.attached?
+
       if self.using_cdn?
         URI.join(EnvConfig.S3_AVATARS_ASSET_HOST, self.image.key).to_s
       else
@@ -60,6 +67,8 @@ class UserAvatar < ApplicationRecord
 
       URI::HTTPS.build(host: host, path: path).to_s
     when 'active_storage'
+      return UserAvatar.default_avatar(self.user).thumbnail_url unless self.image.attached?
+
       if self.using_cdn?
         URI.join(EnvConfig.S3_AVATARS_ASSET_HOST, self.thumbnail_image.processed.key).to_s
       else
@@ -78,11 +87,11 @@ class UserAvatar < ApplicationRecord
 
   def using_cdn?
     # Approved avatars are actively being used and should therefor be served by our CDN
-    self.approved? && self.attached?
+    self.approved? && self.attached? && !Rails.env.local?
   end
 
   def filename
-    self.active_storage? ? self.image.blob.filename.to_s : super
+    self.active_storage? ? self.image.blob&.filename.to_s : super
   end
 
   def image
@@ -106,7 +115,7 @@ class UserAvatar < ApplicationRecord
   end
 
   def default_avatar?
-    self.filename == DEFAULT_AVATAR_FILE && self.local?
+    self.local? && self.filename == DEFAULT_AVATAR_FILE
   end
 
   alias_method :is_default, :default_avatar?

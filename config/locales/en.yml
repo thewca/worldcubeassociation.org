@@ -428,6 +428,7 @@ en:
       ban_scope:
         competing_only: "Competing Only"
         competing_and_attending: "Competing & Attending"
+        competing_and_attending_and_forums: "Competing, Attending & Forums"
     competition_medium:
       status:
         accepted: "Accepted"
@@ -617,7 +618,7 @@ en:
           otp_email:
             subject: "Your one-time password for the WCA"
             2fa_attempt: "You are attempting to authenticate on the WCA website. You have two-factor authentication enabled and you just requested to be sent a one-time password by email. Please find it below:"
-            disclaimer: "If you did not request that authentication code, please contact the WST right away by replying to this email: you may have an open session somewhere or your password may be compromized."
+            disclaimer: "If you did not request that authentication code, please contact the WST right away by replying to this email: you may have an open session somewhere or your password may be compromised."
           name: "Two-Factor Authentication (2FA)"
           support_desc_html: "The WCA website supports %{two_factor_link} using a one-time password:"
           #context: describes the 2FA options
@@ -785,6 +786,7 @@ en:
         weat: "WCA Executive Assistants Team"
         wfc: "WCA Financial Committee"
         wmt: "WCA Marketing Team"
+        wmct: "WCA Major Championships Team"
         wqac: "WCA Quality Assurance Committee"
         wrc: "WCA Regulations Committee"
         wrt: "WCA Results Team"
@@ -799,6 +801,7 @@ en:
         weat: "This team is responsible for carrying out the administrative tasks of the WCA Board of Directors."
         wfc: "This committee is responsible for managing the overall finances of the WCA, including budgeting, reporting, analysis, bookkeeping, and tax filings. They also manage the WCA's largest source of income, the WCA Dues System, along with various funding programs that provide support to local communities at different stages of development, including Travel Funding, Equipment Funding, and Regional Organization Support."
         wmt: "This team is responsible for developing and managing the WCA Brand, seeking sponsorships, supporting the distribution of WCA Competition Gear, and marketing WCA Merchandise."
+        wmct: "This team is responsible for overseeing the organization and development of WCA Continental and World Championships."
         wqac: "This committee has the role to support and promote continuous quality improvement within the WCA, as well as worldwide application of quality standards to ensure consistent high quality of processes, WCA Staff, Regional Organizations, Competition Organizers, and Competition Staff."
         wrc: "The WRC handles all issues which are related to the application, the improvement and the development of the WCA Regulations. They support WCA Delegates on any kind of procedural matters happening at competitions and decide on unresolved and uncovered incidents."
         wrt: "The WRT is responsible for managing all data in the databases of the WCA, most importantly competition results and persons data."
@@ -809,6 +812,7 @@ en:
       title: "WCA Contact Form"
       faq_note_html: 'Before making an inquiry, you may wish to take a look at our <a href="/faq">Frequently Asked Questions</a>! If you wish to contact a specific committee or team not listed here, you may check their details on <a href="/teams-committees-councils">this page</a>.'
       success_message: "Email sent - we'll get back to you soon."
+      prefilled: "To update your registration, you need to contact the organizers of the competition. We have prefilled the contact form with your requested changes - please submit the form."
       form:
         user_data:
           name:
@@ -868,7 +872,26 @@ en:
             label: "Message"
         captcha:
           validation_error: "Please verify that you are not a robot."
+        next_button: "Next"
         submit_button: "Submit"
+    contact_edit_profile:
+      title: "Edit Profile Form"
+      not_logged_in_error: "Looks like you are not logged in. Please log in to edit your profile. For any other queries, please <a href=\"https://www.worldcubeassociation.org/contact?contactRecipient=wrt\">contact us</a>."
+      no_profile_error: "Looks like you don't have a WCA profile yet because you have not participated in any competitions. For any other queries, please <a href=\"https://www.worldcubeassociation.org/contact?contactRecipient=wrt\">contact us</a>."
+      form:
+        contact_email:
+          label: "Contact Email"
+        wca_id:
+          label: "Enter WCA ID"
+        edit_reason:
+          label: "Reason for the change"
+        proof_attach:
+          label: "Attach proof"
+        submit_edit_request_button:
+          label: "Submit Edit Request"
+        captcha:
+          validation_error: "Please verify that you are not a robot."
+      success_message: "Request submitted - we'll get back to you soon."
   #context: Key used on the website homepage
   homepage:
     #context: the "Learn more" button
@@ -1011,7 +1034,7 @@ en:
       approve: "Approve"
       unconfirmed_email: "This account's email address (%{email}) is not confirmed."
       confirm_new_email: "Changing your email will require confirming the new email before being effective."
-      pending_mail_confirmation: "This account is pending confirmation of new email address %{email}."
+      pending_mail_confirmation: "This account is pending confirmation of the new email address %{email}."
       pending_avatar_confirmation: "This account is pending confirmation of a new avatar."
       pending_avatar_edit_action: "Click here if you want to edit it instead:"
       pending_avatar_edit_warning: "Editing pending avatar!"
@@ -1030,7 +1053,7 @@ en:
           assigned: "you have a WCA ID assigned"
           registered: "you have registered for a competition"
       guidelines_confirmation: "I confirm that my avatar fulfills all avatar guidelines."
-      confirm_guidelines: "Make sure to read avatar guidelines and submit a valid picture."
+      confirm_guidelines: "Make sure to read the avatar guidelines and submit a valid picture."
       save: "Save"
       actions: "Actions"
       sign_out_of_devices: "Sign out of other devices"
@@ -1042,24 +1065,24 @@ en:
       avatar_guidelines:
         '1': "All avatars should be pictures of real persons."
         '2': "The person shown must be your current self."
-        '3': "If there is more than one person on the avatar, it should be clear who of them is you."
+        '3': "If there is more than one person in the avatar, it should be clear which of them is you."
         '4': "Your head, but not necessarily the full face, should be visible."
-        '5': "The avatar should not include overlay texts, stickers or unnatural filters, including borders."
-        '6': "The avatar must be submitted in correct orientation."
+        '5': "The avatar should not include overlay text, stickers or unnatural filters, including borders."
+        '6': "The avatar must be submitted in the correct orientation."
         '7': "The avatar must not contain offensive content (e.g. offensive gestures)."
       staff_avatar_guidelines:
         title: "Additional guidelines for Staff Members and Trainee Delegates:"
         paragraphs:
           '1': "The avatar must be of your current self, depicted in the same fashion as how you would appear at a competition."
-          '2': "The avatar must be framed, cropped, angled, and lit, so that any competitor or spectator at a competition can use it to unambiguously identify you at a competition venue."
+          '2': "The avatar must be framed, cropped, angled, and lit so that any competitor or spectator at a competition can use it to unambiguously identify you at a competition venue."
           '3': "The thumbnail of the avatar is only a section of the avatar, and it will be used to represent your full avatar. The thumbnail must be adjusted, so you can be recognized from it alone, and it must contain your face."
       #context: used on the tab where the user has to confirm its password/2fa to be able to edit their sensitive data
       sensitive:
-        info: "This section enables you to edit sensitive data, to be able to do so please confirm your identity below."
+        info: "This section enables you to edit sensitive data. To be able to do so, please confirm your identity below."
         success: "Successfully verified your identity"
         failure: "Couldn't verify your identity"
         confirm_proceed: "Confirm and proceed"
-        identity_error: "Cannot edit your data, please confirm your identity below before trying again."
+        identity_error: "Cannot edit your data. Please confirm your identity below before trying again."
     #context: when an error occured during the edition
     errors:
       not_found: "not found"
@@ -1075,7 +1098,7 @@ en:
       wca_id_no_gender_html: "We do not have a gender recorded for this WCA ID. Please contact the <a href='%{wrt_contact_path}' target='_blank'>WCA Results Team</a> to resolve this."
       wca_id_no_citizenship_html: "We do not have a citizenship recorded for this WCA ID. Please contact the <a href='%{wrt_contact_path}' target='_blank'>WCA Results Team</a> to resolve this."
       wca_id_no_name_html: "We do not have a name recorded for this WCA ID. Please contact the <a href='%{wrt_contact_path}' target='_blank'>WCA Results Team</a> to resolve this."
-      email_used_by_locked_account_html: "is already used by another account. It's been created automatically as a result of you registering for a competition via an external service. If you are the owner of this email, you can use the account after resetting your password <a href='/users/password/new'>here</a>."
+      email_used_by_locked_account_html: "is already used by another account. It has been created automatically as a result of you registering for a competition via an external service. If you are the owner of this email, you can use the account after resetting your password <a href='/users/password/new'>here</a>."
       must_match_person: "must match person details corresponding to the WCA ID"
     #context: when an action was successful
     successes:
@@ -1306,7 +1329,6 @@ en:
         stripe_not_an_intent: "Stripe reported back a transaction ID that is not actually a payment intent."
         payment_reset: "The payment was rejected by Stripe."
         payment_pending: "The payment has not been completed yet."
-        registration_unreachable: "There was a problem reaching the registration service, please contact the Software Team."
     preferred_events_prompt_html: "To speed up registration in the future, you can set your preferred events %{link}."
     preferred_events_populated_html: "We autopopulated this with your preferred events, which you can edit %{link}."
     registration_requirements: "Registration requirements for the competition:"
@@ -1370,7 +1392,6 @@ en:
       in_progress_at_wca_live_html: "This competition is ongoing. You can check the live results <a href='%{link_here}'>here</a>!"
       reg_opens_too_early: "Registration is set to start in less than the required 48 hours."
       registration_already_closed: "The deadline to register has already passed. Please set it to be in the future."
-      uses_v2_registrations: "This competition is using the new Registration System. Please contact WCAT if you believe this competition should use the old system instead."
       tooltip_registered: "You are registered."
       tooltip_waiting_list: "You are currently on the waiting list."
       tooltip_deleted: "Unfortunately your registration has been deleted. Please check your email for details, or contact the organiser(s)."
@@ -1379,7 +1400,7 @@ en:
       not_confirmed_visible: "This competition is not confirmed but visible."
       not_confirmed_not_visible: "This competition is not confirmed and not visible."
       championship_exists: "There is already a %{championship_type} in %{year}."
-      orga_closed_reg_success: "Sucessfully closed registration."
+      orga_closed_reg_success: "Successfully closed registration."
       orga_closed_reg_failure: "Cannot close registration."
       no_waiting_list_specified: "This competition does not have a deadline for accepting competitors on the waiting list. If you are using a waiting list, please specify a deadline. If you are not using a waiting list, please remember to specify this in the registration requirements."
     #context: on the "My competitions" page
@@ -1619,7 +1640,7 @@ en:
         admin:
           is_confirmed: "Do not let organizers edit this competition"
           is_visible: "Make competition visible to the public"
-          uses_v_2_registrations: "Use the new Registration System"
+          uses_new_registration_system: "Use the new Registration System"
         competition_id: "ID"
         name: "Name"
         short_name: "Competition short name"
@@ -1700,7 +1721,7 @@ en:
         admin:
           is_confirmed: ""
           is_visible: ""
-          uses_v_2_registrations: "If this is disabled, changing the registration system will cause technical issues. Please contact WST for assistance if you still need to change the registration system."
+          uses_new_registration_system: "If this is disabled, changing the registration system will cause technical issues. Please contact WST for assistance if you still need to change the registration system."
         competition_id: ""
         name: "The full name of the competition including the year at the end (e.g., Danish Open 2016). Be sure to capitalize. The name must contain only alphanumeric characters, dashes(-), ampersands(&), periods(.), colons(:), apostrophes('), and spaces( )."
         short_name: "A short name for displaying. If the name of the competition is below %{short_name_limit} characters this should not be edited and should be the same as the normal name."
@@ -1851,6 +1872,10 @@ en:
         being_updated: "Registration is being updated..."
         being_deleted: "Registration is being deleted..."
         update_confirm: "Are you sure you want to update your registration?"
+        update_confirm_contact: "You need to contact the organizers to update your registration, click Yes to be taken to the contact form."
+        delete_confirm_contact: "You need to contact the organizers to delete your registration, click Yes to be taken to the contact form."
+        update_contact_message: "I would like to update my registration details as follows: %{update_params}"
+        delete_contact_message: "I want to delete my registration"
         no_changes: "There are no changes"
         email_send: "Send Email"
         email_copy: "Copy Emails"
@@ -1893,7 +1918,7 @@ en:
           waiting_list: "You are on the Waiting List at position %{waiting_list_position}."
         disclaimer: "Submission of Registration does not mean approval to compete"
         processing: "Your registration is processing..."
-        processing_longer: "Processing is taking longer than usual, don't go away!"
+        processing_longer: "Your registration has been received, and will be processed soon - this can take a moment if our servers are busy."
         processing_queue: "Lots of Registrations being processed, %{queueCount} in the queue."
         event_limit: "This competition limits the amount of events you can register for to %{max_events}."
       errors:
@@ -2213,7 +2238,7 @@ en:
     payment_setup:
       external_dashboard: '%{provider} Dashboard'
       account_connected: "You have successfully connected your %{provider} account and can now receive registration payments for this competition."
-      account_disconnected_success: "Sucessfully disconnected your %{provider} account."
+      account_disconnected_success: "Successfully disconnected your %{provider} account."
       account_disconnected_failure: "There was an error with disconnecting the %{provider} account."
       account_not_connected: "There was a problem and we could not connect your %{provider} account."
       disconnect_account: "Disconnect %{provider} Account"
@@ -2392,13 +2417,13 @@ en:
     mission_footer: WCA Mission Statement
     who_we_are_title: Who we are
     who_we_are_content_html: <p>The World Cube Association governs competitions for mechanical puzzles that are operated by twisting groups of pieces, commonly known as 'twisty puzzles'. The most famous of these puzzles is the Rubik's Cube, invented by professor Rubik from Hungary. A selection of these puzzles are chosen as official events of the WCA.</p>
-      <p>As the WCA has evolved over the past decade, over 200,000 people have competed in our competitions. Despite this growth, we remain an organization that is almost entirely run by volunteers, from local organizers to WCA Delegates to even the WCA Board. We are very grateful to everyone who takes time out of their lives to allow the WCA to function. With more financial support, we hope to bring an even greater level of professionalism to our competitions as we continue to sanction more events across the globe.</p>
+      <p>As the WCA has evolved over the past decade, over 245,000 people have competed in our competitions. Despite this growth, we remain an organization that is almost entirely run by volunteers, from local organizers to WCA Delegates to even the WCA Board. We are very grateful to everyone who takes time out of their lives to allow the WCA to function. With more financial support, we hope to bring an even greater level of professionalism to our competitions as we continue to sanction more events across the globe.</p>
     spirit: Our spirit is that people from all over the world have fun together in a friendly atmosphere, help each other and behave sportsmanlike.
     spirit_footer: WCA Spirit
     our_goals_title: Our goals
     our_goals_content_html: <p>The World Cube Association wants to bring opportunities for community membership and leadership to young people around the world through increasing the accessibility of our 'twisty puzzle' competitions. We believe that experiences at competitions and within our community create growth opportunities for the young people involved and that introducing puzzle events to new groups of people allows for our overall community to strengthen. A document containing the Board's Vision and Strategy for the WCA can be found <a href="https://documents.worldcubeassociation.org/documents/WCA_Vision_and_Strategy.pdf">here</a>.</p>
     whats_next_title: What's next for the WCA?
-    whats_next_content_html: <p>The World Cube Association has had over 200,000 unique competitors across 158 different regions and we are not planning on slowing down anytime soon! The cubing community has been growing steadily since our founding in 2004 and we want to encourage this to continue into the future by increasing the accessibility of competitions to new areas. In the future, we hope to support our community even more through collaborations and outreach to those who care about puzzles.</p>
+    whats_next_content_html: <p>The World Cube Association has had over 245,000 unique competitors across 158 different regions and we are not planning on slowing down anytime soon! The cubing community has been growing steadily since our founding in 2004 and we want to encourage this to continue into the future by increasing the accessibility of competitions to new areas. In the future, we hope to support our community even more through collaborations and outreach to those who care about puzzles.</p>
     world_championship_title: World Championship
     world_championship_content_html: <p>Every two years, we sanction the competition that ultimately determines the world champion. These events require extremely careful planning by a number of volunteers, as well as a large financial commitment to reserve the venue and make necessary preparations.</p>
     contributing_title: Making a contribution

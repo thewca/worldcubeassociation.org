@@ -21,6 +21,7 @@ import Errored from '../Requests/Errored';
 import useSaveAction from '../../lib/hooks/useSaveAction';
 import UserAvatar from '../UserAvatar';
 import useCheckboxState from '../../lib/hooks/useCheckboxState';
+import { avatarImageTypes } from '../../lib/wca-data.js.erb';
 
 function EditAvatar({
   userId,
@@ -38,6 +39,7 @@ function EditAvatar({
     sync,
   } = useLoadedData(avatarDataUrl);
 
+  const [uploadedImageErrors, setUploadedImageErrors] = useState();
   const [isEditingPending, setIsEditingPending] = useCheckboxState(false);
 
   const currentAvatar = useMemo(() => data?.avatar, [data]);
@@ -57,6 +59,12 @@ function EditAvatar({
 
     return workingAvatar?.url;
   }, [workingAvatar, userUploadedImage]);
+
+  const isValidContentType = useMemo(() => {
+    if (!userUploadedImage) return true;
+
+    return avatarImageTypes.includes(userUploadedImage.type);
+  }, [userUploadedImage]);
 
   const workingThumbnail = useMemo(() => ({
     x: workingAvatar?.thumbnail_crop_x,
@@ -82,6 +90,7 @@ function EditAvatar({
     setUserCropAbs(undefined);
 
     setUserUploadedImage(img);
+    setUploadedImageErrors(null);
   };
 
   const { save, saving } = useSaveAction();
@@ -104,6 +113,8 @@ function EditAvatar({
 
     save(avatarDataUrl, formData, () => {
       setUserUploadedImage(undefined);
+      setUploadedImageErrors(null);
+
       sync();
     }, {
       method: 'POST',
@@ -112,11 +123,26 @@ function EditAvatar({
       //   application/json header, nor do we want to submit stringified JSON.
       headers: {},
       body: formData,
+    }, (err) => {
+      if (err.json !== null) {
+        // whatever photo is uploaded here, it will end up in `private_image`.
+        // Even admin users don't have permission to write to `public_image` directly.
+        const imageErrors = err.json.private_image;
+        setUploadedImageErrors(imageErrors);
+      } else {
+        // Let the JS console do its thing.
+        throw err;
+      }
     });
   };
 
-  const deleteAvatar = (reasonForDeletion) => {
-    save(avatarDataUrl, { avatarId: workingAvatar?.id, reason: reasonForDeletion }, sync);
+  const deleteAvatar = (reasonForDeletion, cleanupFn) => {
+    save(avatarDataUrl, { avatarId: workingAvatar?.id, reason: reasonForDeletion }, () => {
+      sync();
+      cleanupFn();
+    }, {
+      method: 'DELETE',
+    });
   };
 
   /* eslint-disable react/no-array-index-key */
@@ -138,6 +164,15 @@ function EditAvatar({
           />
           {isEditingPending && <b>{I18n.t('users.edit.pending_avatar_edit_warning')}</b>}
           {canAdminAvatars && <a href={adminAvatarsUrl}>{I18n.t('users.edit.manage_pending')}</a>}
+        </Message>
+      )}
+      {uploadedImageErrors && (
+        <Message error>
+          <Message.List>
+            {uploadedImageErrors.map((errItem) => (
+              <Message.Item key={errItem}>{errItem}</Message.Item>
+            ))}
+          </Message.List>
         </Message>
       )}
       <Dimmer.Dimmable as={Grid}>
@@ -171,7 +206,7 @@ function EditAvatar({
               )}
             </Message>
             <ImageUpload
-              uploadDisabled={uploadDisabled || isEditingPending}
+              uploadDisabled={uploadDisabled || isEditingPending || !isValidContentType}
               removalEnabled={canRemoveAvatar && !isEditingPending}
               onImageUploaded={uploadUserImage}
               onAvatarSaved={saveAvatar}

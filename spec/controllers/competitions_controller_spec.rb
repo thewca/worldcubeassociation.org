@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe CompetitionsController do
-  let(:competition) { FactoryBot.create(:competition, :with_delegate, :with_organizer, :registration_open, :with_valid_schedule, :with_guest_limit, :with_event_limit, name: "my long competition name above 32 chars 2023") }
+  let(:competition) { FactoryBot.create(:competition, :with_delegate, :with_organizer, :registration_open, :with_valid_schedule, :with_guest_limit, :with_meaningless_event_limit, name: "my long competition name above 32 chars 2023") }
   let(:future_competition) { FactoryBot.create(:competition, :with_delegate, :ongoing) }
 
   describe 'GET #index' do
@@ -1199,14 +1199,14 @@ RSpec.describe CompetitionsController do
       end
 
       it 'does not show past competitions they have a rejected registration for' do
-        FactoryBot.create(:registration, :deleted, competition: past_competition2, user: registered_user)
+        FactoryBot.create(:registration, :rejected, competition: past_competition2, user: registered_user)
         get :my_competitions
         expect(assigns(:not_past_competitions)).to eq [future_competition1, future_competition3]
         expect(assigns(:past_competitions)).to eq [past_competition1]
       end
 
       it 'does not show upcoming competitions they have a rejected registration for' do
-        FactoryBot.create(:registration, :deleted, competition: future_competition2, user: registered_user)
+        FactoryBot.create(:registration, :cancelled, competition: future_competition2, user: registered_user)
         get :my_competitions
         expect(assigns(:not_past_competitions)).to eq [future_competition1, future_competition3]
         expect(assigns(:past_competitions)).to eq [past_competition1]

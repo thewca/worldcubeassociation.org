@@ -112,7 +112,7 @@
 
         <% if @user.staff_or_any_delegate? && (current_user.can_view_all_users? || current_user == @user) %>
           <%= f.input :receive_delegate_reports, disabled: !editable_fields.include?(:receive_delegate_reports) %>
-          <%= f.input :delegate_reports_region, as: :grouped_select, collection: region_options_hash(real_only: true), group_method: :second, disabled: !editable_fields.include?(:delegate_reports_region) %>
+          <%= f.input :delegate_reports_region, as: :grouped_select, collection: region_options_hash(real_only: true), group_method: :second, selected: @user.delegate_reports_region_id, disabled: !editable_fields.include?(:delegate_reports_region), include_blank: true %>
         <% end %>
 
         <%= f.submit t('.save'), class: "btn btn-primary" %>
@@ -177,7 +177,7 @@
           userId: @user.id,
           showStaffGuidelines: @user.staff_or_any_delegate?,
           uploadDisabled: !editable_fields.include?(:pending_avatar),
-          canRemoveAvatar: @user.current_avatar.present? && editable_fields.include?(:current_avatar),
+          canRemoveAvatar: editable_fields.include?(:remove_avatar),
           canAdminAvatars: current_user.can_admin_results?,
         }) %>
       </div>

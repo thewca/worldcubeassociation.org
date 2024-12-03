@@ -4,8 +4,6 @@ require "uri"
 require "fileutils"
 
 class User < ApplicationRecord
-  include MicroserviceRegistrationHolder
-
   has_many :competition_delegates, foreign_key: "delegate_id"
   # This gives all the competitions where the user is marked as a Delegate,
   # regardless of the competition's status.
@@ -493,6 +491,10 @@ class User < ApplicationRecord
     senior_delegate_roles.any?
   end
 
+  def regional_delegate?
+    regional_delegate_roles.any?
+  end
+
   def staff_or_any_delegate?
     staff? || any_kind_of_delegate?
   end
@@ -503,6 +505,10 @@ class User < ApplicationRecord
 
   def banned?
     group_member?(UserGroup.banned_competitors.first)
+  end
+
+  def forum_banned?
+    current_ban&.metadata&.scope == 'competing_and_attending_and_forums'
   end
 
   def banned_in_past?
@@ -538,8 +544,12 @@ class User < ApplicationRecord
     delegate_roles.select { |role| role.metadata.status == RolesMetadataDelegateRegions.statuses[:senior_delegate] }
   end
 
+  private def regional_delegate_roles
+    delegate_roles.select { |role| role.metadata.status == RolesMetadataDelegateRegions.statuses[:regional_delegate] }
+  end
+
   private def can_view_current_banned_competitors?
-    can_view_past_banned_competitors? || staff_delegate?
+    can_view_past_banned_competitors? || staff_delegate? || appeals_committee?
   end
 
   private def can_view_past_banned_competitors?
@@ -648,6 +658,12 @@ class User < ApplicationRecord
         pages: [
           panel_pages[:importantLinks],
           panel_pages[:delegateHandbook],
+          panel_pages[:bannedCompetitors],
+        ],
+      },
+      wapc: {
+        name: 'WAC panel',
+        pages: [
           panel_pages[:bannedCompetitors],
         ],
       },
@@ -765,7 +781,7 @@ class User < ApplicationRecord
   end
 
   def can_view_all_users?
-    admin? || board_member? || results_team? || communication_team? || wic_team? || any_kind_of_delegate? || weat_team? || wrc_team?
+    admin? || board_member? || results_team? || communication_team? || wic_team? || any_kind_of_delegate? || weat_team? || wrc_team? || appeals_committee?
   end
 
   def can_edit_user?(user)
@@ -777,7 +793,10 @@ class User < ApplicationRecord
   end
 
   def can_change_users_avatar?(user)
-    user.wca_id.present? && self.editable_fields_of_user(user).include?(:current_avatar)
+    # We use the ability to `remove_avatar` as a general check for whether edits are allowed.
+    #   Otherwise, checking for competitions of `current_avatar` and `pending_avatar` might be
+    #   too cumbersome depending on the context (ie depending on where this method is being called from)
+    self.editable_fields_of_user(user).include?(:remove_avatar)
   end
 
   def organizer_for?(user)
@@ -829,6 +848,7 @@ class User < ApplicationRecord
       competition.organizers.include?(self) ||
       competition.delegates.include?(self) ||
       competition.delegates.flat_map(&:senior_delegates).compact.include?(self) ||
+      competition.delegates.flat_map(&:regional_delegates).compact.include?(self) ||
       wic_team?
     )
   end
@@ -940,7 +960,7 @@ class User < ApplicationRecord
   end
 
   def can_see_admin_competitions?
-    can_admin_competitions? || senior_delegate? || quality_assurance_committee? || weat_team?
+    can_admin_competitions? || senior_delegate? || regional_delegate? || quality_assurance_committee? || weat_team?
   end
 
   def can_issue_refunds?(competition)
@@ -1068,11 +1088,12 @@ class User < ApplicationRecord
 
   private def editable_avatar_fields(user)
     fields = Set.new
-    if admin? || results_team?
-      fields += %i(current_avatar)
-    end
     if user == self || admin? || results_team? || is_senior_delegate_for?(user)
-      fields += %i(pending_avatar)
+      fields += %i(pending_avatar avatar_thumbnail remove_avatar)
+
+      if can_admin_results?
+        fields += %i(current_avatar)
+      end
     end
     fields
   end
@@ -1391,6 +1412,8 @@ class User < ApplicationRecord
       active_roles.any? { |role| role.is_lead? && (role.group.teams_committees? || role.group.councils?) }
     when :senior_delegate
       senior_delegate?
+    when :wapc
+      appeals_committee?
     when :wic
       wic_team?
     when :weat

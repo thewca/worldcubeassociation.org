@@ -107,7 +107,7 @@ module DatabaseDumper
           competition_series_id
           use_wca_live_for_scoretaking
           allow_registration_without_qualification
-          uses_v2_registrations
+          registration_version
           forbid_newcomers
           forbid_newcomers_reason
         ),
@@ -555,6 +555,7 @@ module DatabaseDumper
         },
       ),
     }.freeze,
+    "regional_records_lookup" => :skip_all_rows,
     "registration_competition_events" => {
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
@@ -576,13 +577,12 @@ module DatabaseDumper
           created_at
           deleted_at
           deleted_by
-          rejected_at
-          waitlisted_at
           guests
           updated_at
           user_id
           roles
           is_competing
+          competing_status
         ),
         db_default: %w(ip),
         fake_values: {
@@ -594,7 +594,18 @@ module DatabaseDumper
     "microservice_registrations" => :skip_all_rows,
     "registration_history_changes" => :skip_all_rows,
     "registration_history_entries" => :skip_all_rows,
-    "waiting_lists" => :skip_all_rows,
+    "waiting_lists" => {
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w(
+          id
+          holder_type
+          holder_id
+          entries
+          created_at
+          updated_at
+        ),
+      ),
+    }.freeze,
     "sanity_checks" => :skip_all_rows,
     "sanity_check_categories" => :skip_all_rows,
     "sanity_check_exclusions" => :skip_all_rows,
