@@ -786,6 +786,7 @@ en:
         weat: "WCA Executive Assistants Team"
         wfc: "WCA Financial Committee"
         wmt: "WCA Marketing Team"
+        wmct: "WCA Major Championships Team"
         wqac: "WCA Quality Assurance Committee"
         wrc: "WCA Regulations Committee"
         wrt: "WCA Results Team"
@@ -800,6 +801,7 @@ en:
         weat: "This team is responsible for carrying out the administrative tasks of the WCA Board of Directors."
         wfc: "This committee is responsible for managing the overall finances of the WCA, including budgeting, reporting, analysis, bookkeeping, and tax filings. They also manage the WCA's largest source of income, the WCA Dues System, along with various funding programs that provide support to local communities at different stages of development, including Travel Funding, Equipment Funding, and Regional Organization Support."
         wmt: "This team is responsible for developing and managing the WCA Brand, seeking sponsorships, supporting the distribution of WCA Competition Gear, and marketing WCA Merchandise."
+        wmct: "This team is responsible for overseeing the organization and development of WCA Continental and World Championships."
         wqac: "This committee has the role to support and promote continuous quality improvement within the WCA, as well as worldwide application of quality standards to ensure consistent high quality of processes, WCA Staff, Regional Organizations, Competition Organizers, and Competition Staff."
         wrc: "The WRC handles all issues which are related to the application, the improvement and the development of the WCA Regulations. They support WCA Delegates on any kind of procedural matters happening at competitions and decide on unresolved and uncovered incidents."
         wrt: "The WRT is responsible for managing all data in the databases of the WCA, most importantly competition results and persons data."
@@ -1032,7 +1034,7 @@ en:
       approve: "Approve"
       unconfirmed_email: "This account's email address (%{email}) is not confirmed."
       confirm_new_email: "Changing your email will require confirming the new email before being effective."
-      pending_mail_confirmation: "This account is pending confirmation of new email address %{email}."
+      pending_mail_confirmation: "This account is pending confirmation of the new email address %{email}."
       pending_avatar_confirmation: "This account is pending confirmation of a new avatar."
       pending_avatar_edit_action: "Click here if you want to edit it instead:"
       pending_avatar_edit_warning: "Editing pending avatar!"
@@ -1051,7 +1053,7 @@ en:
           assigned: "you have a WCA ID assigned"
           registered: "you have registered for a competition"
       guidelines_confirmation: "I confirm that my avatar fulfills all avatar guidelines."
-      confirm_guidelines: "Make sure to read avatar guidelines and submit a valid picture."
+      confirm_guidelines: "Make sure to read the avatar guidelines and submit a valid picture."
       save: "Save"
       actions: "Actions"
       sign_out_of_devices: "Sign out of other devices"
@@ -1063,24 +1065,24 @@ en:
       avatar_guidelines:
         '1': "All avatars should be pictures of real persons."
         '2': "The person shown must be your current self."
-        '3': "If there is more than one person on the avatar, it should be clear who of them is you."
+        '3': "If there is more than one person in the avatar, it should be clear which of them is you."
         '4': "Your head, but not necessarily the full face, should be visible."
-        '5': "The avatar should not include overlay texts, stickers or unnatural filters, including borders."
-        '6': "The avatar must be submitted in correct orientation."
+        '5': "The avatar should not include overlay text, stickers or unnatural filters, including borders."
+        '6': "The avatar must be submitted in the correct orientation."
         '7': "The avatar must not contain offensive content (e.g. offensive gestures)."
       staff_avatar_guidelines:
         title: "Additional guidelines for Staff Members and Trainee Delegates:"
         paragraphs:
           '1': "The avatar must be of your current self, depicted in the same fashion as how you would appear at a competition."
-          '2': "The avatar must be framed, cropped, angled, and lit, so that any competitor or spectator at a competition can use it to unambiguously identify you at a competition venue."
+          '2': "The avatar must be framed, cropped, angled, and lit so that any competitor or spectator at a competition can use it to unambiguously identify you at a competition venue."
           '3': "The thumbnail of the avatar is only a section of the avatar, and it will be used to represent your full avatar. The thumbnail must be adjusted, so you can be recognized from it alone, and it must contain your face."
       #context: used on the tab where the user has to confirm its password/2fa to be able to edit their sensitive data
       sensitive:
-        info: "This section enables you to edit sensitive data, to be able to do so please confirm your identity below."
+        info: "This section enables you to edit sensitive data. To be able to do so, please confirm your identity below."
         success: "Successfully verified your identity"
         failure: "Couldn't verify your identity"
         confirm_proceed: "Confirm and proceed"
-        identity_error: "Cannot edit your data, please confirm your identity below before trying again."
+        identity_error: "Cannot edit your data. Please confirm your identity below before trying again."
     #context: when an error occured during the edition
     errors:
       not_found: "not found"
@@ -1096,7 +1098,7 @@ en:
       wca_id_no_gender_html: "We do not have a gender recorded for this WCA ID. Please contact the <a href='%{wrt_contact_path}' target='_blank'>WCA Results Team</a> to resolve this."
       wca_id_no_citizenship_html: "We do not have a citizenship recorded for this WCA ID. Please contact the <a href='%{wrt_contact_path}' target='_blank'>WCA Results Team</a> to resolve this."
       wca_id_no_name_html: "We do not have a name recorded for this WCA ID. Please contact the <a href='%{wrt_contact_path}' target='_blank'>WCA Results Team</a> to resolve this."
-      email_used_by_locked_account_html: "is already used by another account. It's been created automatically as a result of you registering for a competition via an external service. If you are the owner of this email, you can use the account after resetting your password <a href='/users/password/new'>here</a>."
+      email_used_by_locked_account_html: "is already used by another account. It has been created automatically as a result of you registering for a competition via an external service. If you are the owner of this email, you can use the account after resetting your password <a href='/users/password/new'>here</a>."
       must_match_person: "must match person details corresponding to the WCA ID"
     #context: when an action was successful
     successes:
@@ -2415,13 +2417,13 @@ en:
     mission_footer: WCA Mission Statement
     who_we_are_title: Who we are
     who_we_are_content_html: <p>The World Cube Association governs competitions for mechanical puzzles that are operated by twisting groups of pieces, commonly known as 'twisty puzzles'. The most famous of these puzzles is the Rubik's Cube, invented by professor Rubik from Hungary. A selection of these puzzles are chosen as official events of the WCA.</p>
-      <p>As the WCA has evolved over the past decade, over 200,000 people have competed in our competitions. Despite this growth, we remain an organization that is almost entirely run by volunteers, from local organizers to WCA Delegates to even the WCA Board. We are very grateful to everyone who takes time out of their lives to allow the WCA to function. With more financial support, we hope to bring an even greater level of professionalism to our competitions as we continue to sanction more events across the globe.</p>
+      <p>As the WCA has evolved over the past decade, over 245,000 people have competed in our competitions. Despite this growth, we remain an organization that is almost entirely run by volunteers, from local organizers to WCA Delegates to even the WCA Board. We are very grateful to everyone who takes time out of their lives to allow the WCA to function. With more financial support, we hope to bring an even greater level of professionalism to our competitions as we continue to sanction more events across the globe.</p>
     spirit: Our spirit is that people from all over the world have fun together in a friendly atmosphere, help each other and behave sportsmanlike.
     spirit_footer: WCA Spirit
     our_goals_title: Our goals
     our_goals_content_html: <p>The World Cube Association wants to bring opportunities for community membership and leadership to young people around the world through increasing the accessibility of our 'twisty puzzle' competitions. We believe that experiences at competitions and within our community create growth opportunities for the young people involved and that introducing puzzle events to new groups of people allows for our overall community to strengthen. A document containing the Board's Vision and Strategy for the WCA can be found <a href="https://documents.worldcubeassociation.org/documents/WCA_Vision_and_Strategy.pdf">here</a>.</p>
     whats_next_title: What's next for the WCA?
-    whats_next_content_html: <p>The World Cube Association has had over 200,000 unique competitors across 158 different regions and we are not planning on slowing down anytime soon! The cubing community has been growing steadily since our founding in 2004 and we want to encourage this to continue into the future by increasing the accessibility of competitions to new areas. In the future, we hope to support our community even more through collaborations and outreach to those who care about puzzles.</p>
+    whats_next_content_html: <p>The World Cube Association has had over 245,000 unique competitors across 158 different regions and we are not planning on slowing down anytime soon! The cubing community has been growing steadily since our founding in 2004 and we want to encourage this to continue into the future by increasing the accessibility of competitions to new areas. In the future, we hope to support our community even more through collaborations and outreach to those who care about puzzles.</p>
     world_championship_title: World Championship
     world_championship_content_html: <p>Every two years, we sanction the competition that ultimately determines the world champion. These events require extremely careful planning by a number of volunteers, as well as a large financial commitment to reserve the venue and make necessary preparations.</p>
     contributing_title: Making a contribution

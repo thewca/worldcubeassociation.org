@@ -258,7 +258,7 @@ class UsersController < ApplicationController
   end
 
   private def sso_moderator?(user)
-    user.communication_team?
+    user.communication_team? || user.results_team?
   end
 
   def sso_discourse

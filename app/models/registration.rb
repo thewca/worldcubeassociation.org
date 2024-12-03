@@ -58,15 +58,13 @@ class Registration < ApplicationRecord
 
   def recompute_timestamps
     case self.competing_status
-    when Registrations::Helper::STATUS_PENDING
-    when Registrations::Helper::STATUS_WAITING_LIST
+    when Registrations::Helper::STATUS_PENDING, Registrations::Helper::STATUS_WAITING_LIST
       self.accepted_at = nil
       self.deleted_at = nil
     when Registrations::Helper::STATUS_ACCEPTED
       self.accepted_at = DateTime.now
       self.deleted_at = nil
-    when Registrations::Helper::STATUS_CANCELLED
-    when Registrations::Helper::STATUS_REJECTED
+    when Registrations::Helper::STATUS_CANCELLED, Registrations::Helper::STATUS_REJECTED
       self.accepted_at = nil
       self.deleted_at = DateTime.now
     end
@@ -264,7 +262,7 @@ class Registration < ApplicationRecord
   def waiting_list_info
     pending_registrations = competition.registrations.pending.order(:created_at)
     index = pending_registrations.index(self)
-    Hash.new(index: index, length: pending_registrations.length)
+    Hash.new({ index: index, length: pending_registrations.length })
   end
 
   def waiting_list_position

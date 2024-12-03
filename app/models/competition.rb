@@ -14,7 +14,7 @@ class Competition < ApplicationRecord
   has_many :competitors, -> { distinct }, through: :results, source: :person
   has_many :competitor_users, -> { distinct }, through: :competitors, source: :user
   has_many :competition_delegates, dependent: :delete_all
-  has_many :delegates, -> { includes(:delegate_roles, :delegate_role_metadata) }, through: :competition_delegates
+  has_many :delegates, -> { includes(:delegate_roles, :delegate_role_metadata).distinct }, through: :competition_delegates
   has_many :competition_organizers, dependent: :delete_all
   has_many :organizers, through: :competition_organizers
   has_many :media, class_name: "CompetitionMedium", foreign_key: "competitionId", dependent: :delete_all
@@ -449,13 +449,7 @@ class Competition < ApplicationRecord
   end
 
   def registration_full?
-    # TODO: V3-Reg cleanup, move this to registrations.accepted_and_paid_pending_count again
-    competitor_count =
-      if registration_version_v3?
-        registrations.competing_status_accepted.count + registrations.competing_status_pending.with_payments.count
-      else
-        registrations.accepted_and_paid_pending_count
-      end
+    competitor_count = registrations.accepted_and_paid_pending_count
     competitor_limit_enabled? && competitor_count >= competitor_limit
   end
 
@@ -1151,12 +1145,7 @@ class Competition < ApplicationRecord
   end
 
   def pending_competitors_count
-    # TODO: V3-Reg Cleanup, we can go back to use registrations.pending when we are on v3
-    if registration_version_v3?
-      registrations.competing_status_pending.count
-    else
-      registrations.pending.count
-    end
+    registrations.pending.count
   end
 
   def registration_period_required?
