@@ -112,7 +112,7 @@ class RegistrationsController < ApplicationController
     ActiveRecord::Base.transaction do
       competition.registrations.accepted.each do |registration|
         unless emails.include?(registration.user.email)
-          registration.update!(deleted_at: Time.now, deleted_by: current_user.id)
+          registration.update!(competing_status: Registrations::Helper::STATUS_CANCELLED)
         end
       end
       registration_rows.each do |registration_row|

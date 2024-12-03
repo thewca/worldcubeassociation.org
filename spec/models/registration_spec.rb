@@ -68,16 +68,16 @@ RSpec.describe Registration do
     user = FactoryBot.create(:user, :banned)
     registration.user = user
     registration.save!
-    registration.deleted_at = Time.now
+    registration.competing_status = Registrations::Helper::STATUS_CANCELLED
     expect(registration).to be_valid
   end
 
   it "doesn't allow undeleting a registration of a banned competitor" do
     user = FactoryBot.create(:user, :banned)
     registration.user = user
-    registration.deleted_at = Time.now
+    registration.competing_status = Registrations::Helper::STATUS_CANCELLED
     registration.save!
-    registration.deleted_at = nil
+    registration.competing_status = Registrations::Helper::STATUS_ACCEPTED
     expect(registration).to be_invalid_with_errors(user_id: [I18n.t('registrations.errors.undelete_banned')])
   end
 
@@ -226,7 +226,7 @@ RSpec.describe Registration do
       it "does allow accepting when the other registration is deleted" do
         expect(registration).to be_valid
 
-        partner_registration.deleted_at = Time.now
+        partner_registration.competing_status = Registrations::Helper::STATUS_CANCELLED
         expect(partner_registration).to be_valid
       end
 

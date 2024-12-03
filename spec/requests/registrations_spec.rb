@@ -394,7 +394,7 @@ RSpec.describe "registrations" do
             expect {
               post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
             }.to not_change { competition.registrations.count }
-              .and not_change { registration.reload.deleted_at }
+              .and not_change { registration.reload.competing_status }
             expect(registration.reload).to be_deleted
           end
         end
