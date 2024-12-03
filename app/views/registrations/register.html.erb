@@ -45,7 +45,8 @@
                                                             single: current_user.person&.ranksSingle&.map(&:to_wcif) || [],
                                                             average: current_user.person&.ranksAverage&.map(&:to_wcif) || [],
                                                           }
-                                                        }
+                                                        },
+                                                        isProcessing: @is_processing,
                                                         }) %>
     <% else %>
       <% if @registration.show_details?(current_user) %>

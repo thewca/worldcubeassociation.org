@@ -448,6 +448,7 @@ class RegistrationsController < ApplicationController
     if current_user
       @registration = @competition.registrations.find_or_initialize_by(user_id: current_user.id, competition_id: @competition.id)
       @selected_events = @registration.saved_and_unsaved_events.empty? ? @registration.user.preferred_events : @registration.saved_and_unsaved_events
+      @is_processing = Rails.cache.read(CacheAccess.registration_processing_cache_key(@competition.id, current_user.id)) || false
     end
   end
 

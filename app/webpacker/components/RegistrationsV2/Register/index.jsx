@@ -18,6 +18,7 @@ export default function Index({
   qualifications,
   stripePublishableKey = '',
   connectedAccountId = '',
+  isProcessing = false,
 }) {
   return (
     <WCAQueryClientProvider>
@@ -31,6 +32,7 @@ export default function Index({
             stripePublishableKey={stripePublishableKey}
             connectedAccountId={connectedAccountId}
             qualifications={qualifications}
+            isProcessing={isProcessing}
           />
         </ConfirmProvider>
       </StoreProvider>
@@ -46,6 +48,7 @@ function Register({
   preferredEvents,
   connectedAccountId,
   stripePublishableKey,
+  isProcessing,
 }) {
   const [timerEnded, setTimerEnded] = useState(false);
 
@@ -79,6 +82,7 @@ function Register({
       <>
         <RegistrationMessage />
         <StepPanel
+          isProcessing={isProcessing}
           user={userInfo}
           preferredEvents={preferredEvents}
           competitionInfo={competitionInfo}
