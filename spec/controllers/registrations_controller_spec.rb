@@ -335,7 +335,7 @@ RSpec.describe RegistrationsController, clean_db_with_truncation: true do
 
         it 'issues a full refund' do
           post :refund_payment, params: { competition_id: competition.id, payment_integration: :stripe, payment_id: @payment.receipt.id, payment: { refund_amount: competition.base_entry_fee.cents } }
-          expect(response).to redirect_to edit_registration_path(registration)
+          expect(response).to redirect_to edit_registration_v2_path(competition, registration.user)
           refund = registration.reload.registration_payments.last.receipt.retrieve_stripe
           expect(competition.base_entry_fee).to be > 0
           expect(registration.outstanding_entry_fees).to eq competition.base_entry_fee
@@ -349,7 +349,7 @@ RSpec.describe RegistrationsController, clean_db_with_truncation: true do
         it 'issues a 50% refund' do
           refund_amount = competition.base_entry_fee.cents / 2
           post :refund_payment, params: { competition_id: competition.id, payment_integration: :stripe, payment_id: @payment.receipt.id, payment: { refund_amount: refund_amount } }
-          expect(response).to redirect_to edit_registration_path(registration)
+          expect(response).to redirect_to edit_registration_v2_path(competition, registration.user)
           refund = registration.reload.registration_payments.last.receipt.retrieve_stripe
           expect(competition.base_entry_fee).to be > 0
           expect(registration.outstanding_entry_fees).to eq competition.base_entry_fee / 2
@@ -361,7 +361,7 @@ RSpec.describe RegistrationsController, clean_db_with_truncation: true do
         it 'disallows negative refund' do
           refund_amount = -1
           post :refund_payment, params: { competition_id: competition.id, payment_integration: :stripe, payment_id: @payment.receipt.id, payment: { refund_amount: refund_amount } }
-          expect(response).to redirect_to edit_registration_path(registration)
+          expect(response).to redirect_to edit_registration_v2_path(competition, registration.user)
           expect(competition.base_entry_fee).to be > 0
           expect(registration.outstanding_entry_fees).to eq 0
           expect(flash[:danger]).to eq "The refund amount must be greater than zero."
@@ -371,7 +371,7 @@ RSpec.describe RegistrationsController, clean_db_with_truncation: true do
         it 'disallows a refund more than the payment' do
           refund_amount = competition.base_entry_fee.cents * 2
           post :refund_payment, params: { competition_id: competition.id, payment_integration: :stripe, payment_id: @payment.receipt.id, payment: { refund_amount: refund_amount } }
-          expect(response).to redirect_to edit_registration_path(registration)
+          expect(response).to redirect_to edit_registration_v2_path(competition, registration.user)
           expect(competition.base_entry_fee).to be > 0
           expect(registration.outstanding_entry_fees).to eq 0
           expect(flash[:danger]).to eq "You are not allowed to refund more than the competitor has paid."
