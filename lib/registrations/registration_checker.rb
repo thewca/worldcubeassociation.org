@@ -173,7 +173,7 @@ module Registrations
           Registration.competing_statuses.include?(new_status)
         raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::COMPETITOR_LIMIT_REACHED) if
           new_status == Registrations::Helper::STATUS_ACCEPTED && competition.competitor_limit_enabled? &&
-          competition.registrations.competing_status_accepted.count >= competition.competitor_limit
+          competition.registrations.accepted.count >= competition.competitor_limit
         raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::ALREADY_REGISTERED_IN_SERIES) if
           new_status == Registrations::Helper::STATUS_ACCEPTED && existing_registration_in_series?(competition, target_user)
 
