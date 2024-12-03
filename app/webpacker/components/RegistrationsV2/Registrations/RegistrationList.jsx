@@ -142,10 +142,12 @@ export default function RegistrationList({ competitionInfo }) {
           default:
             break;
         }
+        // always sort by user name as a fallback
+        orderBy.push('user.name');
       }
       const direction = sortDirection === 'descending' ? 'desc' : 'asc';
 
-      return _.orderBy(registrationsWithPsychsheet, [...orderBy, 'user.name'], [direction]);
+      return _.orderBy(registrationsWithPsychsheet, orderBy, [direction]);
     }
     return [];
   }, [registrationsWithPsychsheet, sortColumn, sortDirection, psychSheetEvent]);
