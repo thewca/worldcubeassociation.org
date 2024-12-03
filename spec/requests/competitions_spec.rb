@@ -362,7 +362,7 @@ RSpec.describe "competitions" do
         end
 
         it 'can set deadlines if not yet past' do
-          competition.update!(waiting_list_deadline_date: competition.registration_close + 1.day)
+          competition.update!(registration_close: 3.days.from_now, waiting_list_deadline_date: 1.week.from_now)
 
           expect(competition.confirmed?).to be true
           new_deadline_date = competition.registration_close + 3.days
