@@ -73,6 +73,8 @@ export const competitionEventsDataUrl = (id) => `<%= CGI.unescape(Rails.applicat
 
 export const adminCADUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.admin_compute_auxiliary_data_path) %>`;
 
+export const adminAnonymizePersonUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.admin_anonymize_person_path) %>`;
+
 export const adminFixResultsUrl = (personId, competition_id = undefined, event_id = undefined, round_type_id = undefined) => {
   const searchParams = new URLSearchParams(`person_id=${personId}`);
 
@@ -243,6 +245,12 @@ export const panelUrls = {
   },
   leader: {
     groupsManager: `<%= CGI.unescape(Rails.application.routes.url_helpers.panel_index_path(panel_id: :leader, anchor: User.panel_pages[:groupsManager])) %>`,
+  },
+}
+
+export const actionUrls = {
+  panel: {
+    anonymizeUser: `<%= CGI.unescape(Rails.application.routes.url_helpers.panel_anonymize_user_path) %>`,
   },
 }
 

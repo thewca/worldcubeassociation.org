@@ -189,6 +189,7 @@ Rails.application.routes.draw do
     get 'staff' => 'panel#staff', as: :panel_staff
     get 'wfc' => 'panel#wfc', as: :panel_wfc
     get 'generate_db_token' => 'panel#generate_db_token', as: :panel_generate_db_token
+    post 'anonymize_user' => 'panel#anonymize_user', as: :panel_anonymize_user
   end
   get 'panel/:panel_id' => 'panel#index', as: :panel_index
   resources :notifications, only: [:index]

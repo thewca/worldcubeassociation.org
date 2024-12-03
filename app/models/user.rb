@@ -639,6 +639,7 @@ class User < ApplicationRecord
       :regionsAdmin,
       :downloadVoters,
       :generateDbToken,
+      :anonymizationScript,
     ].index_with { |panel_page| panel_page.to_s.underscore.dasherize }
   end
 
@@ -676,6 +677,7 @@ class User < ApplicationRecord
         pages: [
           panel_pages[:postingDashboard],
           panel_pages[:editPerson],
+          panel_pages[:anonymizationScript],
         ],
       },
       wst: {
