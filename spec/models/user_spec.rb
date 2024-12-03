@@ -641,7 +641,7 @@ RSpec.describe User, type: :model do
     end
 
     it "if their registration is pending" do
-      registration.competing_status = Registrations::Helper::STATUS_ACCEPTED
+      registration.competing_status = Registrations::Helper::STATUS_PENDING
       expect(competitor.can_edit_registration?(registration)).to be true
     end
 
@@ -671,7 +671,7 @@ RSpec.describe User, type: :model do
     let!(:registration) { FactoryBot.create :registration, user: competitor, competition: competition }
 
     it "if their registration is pending" do
-      registration.competing_status = Registrations::Helper::STATUS_ACCEPTED
+      registration.competing_status = Registrations::Helper::STATUS_PENDING
       competition.allow_registration_self_delete_after_acceptance = false
       expect(competitor.can_delete_registration?(registration)).to be true
       competition.allow_registration_self_delete_after_acceptance = true
