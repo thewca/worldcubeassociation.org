@@ -23,7 +23,7 @@ RSpec.describe "competitions/my_competitions" do
 
   it "shows you are on the waiting list" do
     render
-    expect(rendered).to match 'You are currently on the waiting list'
+    expect(rendered).to match 'Your registration has not been looked at by the organizers or is incomplete. Please check the competition page for details This competition is not confirmed and not visible.'
     expect(rendered).to match '<i class="icon hourglass half "></i>'
   end
 
