@@ -41,26 +41,6 @@ class Registration < ApplicationRecord
 
   validates_numericality_of :guests, less_than_or_equal_to: :guest_limit, if: :check_guest_limit?
 
-  # Automatically compute the V1 timestamps, for competitions that just changed their competing_status.
-  #   This is a poor-man's backwards compatibility so that V3 registrations can be used by the V1 scopes
-  #   for `accepted` and `pending`, which rely on these timestamps having some non-nil value.
-  # TODO V3: Remove this hook once V1 is completely gone.
-  before_save :recompute_timestamps, if: :competing_status_changed?
-
-  def recompute_timestamps
-    case self.competing_status
-    when Registrations::Helper::STATUS_PENDING, Registrations::Helper::STATUS_WAITING_LIST
-      self.accepted_at = nil
-      self.deleted_at = nil
-    when Registrations::Helper::STATUS_ACCEPTED
-      self.accepted_at = DateTime.now
-      self.deleted_at = nil
-    when Registrations::Helper::STATUS_CANCELLED, Registrations::Helper::STATUS_REJECTED
-      self.accepted_at = nil
-      self.deleted_at = DateTime.now
-    end
-  end
-
   after_save :mark_registration_processing_as_done
 
   private def mark_registration_processing_as_done
