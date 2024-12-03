@@ -223,4 +223,5 @@ export const avatarImageTypes = <%= Rails.application.config.active_storage.web_
 
 // ----- TICKETS -----
 export const ticketTypes = <%= Ticket::TICKET_TYPES.to_json %>;
+export const ticketStatuses = <%= Ticket::TICKET_TYPES.transform_values { |value| value.constantize.statuses }.to_json %>;
 export const ticketLogActionTypes = <%= TicketLog.action_types.to_json %>;

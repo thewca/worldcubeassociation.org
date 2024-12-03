@@ -2,6 +2,7 @@ import React from 'react';
 import EditPersonForm from '../../Panel/pages/EditPersonPage/EditPersonForm';
 import useSaveAction from '../../../lib/hooks/useSaveAction';
 import { actionUrls } from '../../../lib/requests/routes.js.erb';
+import { ticketStatuses } from '../../../lib/wca-data.js.erb';
 import Loading from '../../Requests/Loading';
 
 function EditPersonTicketWorkbenchForWrt({ ticketDetails, actingStakeholderId, sync }) {
@@ -12,7 +13,7 @@ function EditPersonTicketWorkbenchForWrt({ ticketDetails, actingStakeholderId, s
     save(
       actionUrls.tickets.updateStatus(ticket.id),
       {
-        ticket_status: 'closed',
+        ticket_status: ticketStatuses.edit_person.closed,
         acting_stakeholder_id: actingStakeholderId,
       },
       sync,
@@ -31,7 +32,11 @@ function EditPersonTicketWorkbenchForWrt({ ticketDetails, actingStakeholderId, s
 }
 
 export default function EditPersonTicketWorkbench({ ticketDetails, sync }) {
-  const { requester_stakeholders: requesterStakeholders } = ticketDetails;
+  const { requester_stakeholders: requesterStakeholders, ticket } = ticketDetails;
+
+  if (ticket.metadata.status === ticketStatuses.edit_person.closed) {
+    return null;
+  }
 
   return requesterStakeholders.map((requesterStakeholder) => {
     if (requesterStakeholder.stakeholder?.metadata?.friendly_id === 'wrt') {
