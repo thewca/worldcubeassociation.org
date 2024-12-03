@@ -108,6 +108,13 @@ module Registrations
         # TODO: V3-REG Cleanup, this is probably why we need the reload above
         return unless event_ids.present?
 
+        event_ids.each do |event_id|
+          unless registration.event_ids.include?(event_id)
+            competition_event = registration.competition.competition_events.find { |ce| ce.event_id == event_id }
+            registration.registration_competition_events.build({ competition_event_id: competition_event.id })
+          end
+        end
+
         registration.registration_competition_events.each do |registration_competition_event|
           puts "considering event: #{registration_competition_event.inspect }"
           # registration_competition_event.destroy unless event_ids.include?(registration_competition_event.competition_event.event_id)
@@ -117,13 +124,6 @@ module Registrations
             registration_competition_event.destroy
             puts "marked for destruction? #{registration_competition_event.marked_for_destruction?}"
             puts registration.registration_competition_events.count
-          end
-        end
-
-        event_ids.each do |event_id|
-          unless registration.event_ids.include?(event_id)
-            competition_event = registration.competition.competition_events.find { |ce| ce.event_id == event_id }
-            registration.registration_competition_events.build({ competition_event_id: competition_event.id })
           end
         end
       end
