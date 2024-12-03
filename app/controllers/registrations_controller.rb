@@ -3,7 +3,7 @@
 require "csv"
 
 class RegistrationsController < ApplicationController
-  before_action :authenticate_user!, except: [:create, :index, :psych_sheet, :psych_sheet_event, :register, :stripe_webhook, :payment_denomination]
+  before_action :authenticate_user!, except: [:index, :psych_sheet, :psych_sheet_event, :register, :stripe_webhook, :payment_denomination]
   # Stripe has its own authenticity mechanism with Webhook Secrets.
   protect_from_forgery except: [:stripe_webhook]
 
