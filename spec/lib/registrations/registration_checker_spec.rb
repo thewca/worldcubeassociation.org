@@ -314,7 +314,24 @@ RSpec.describe Registrations::RegistrationChecker do
       end
 
       it 'can register if they have a cancelled registration for another series comp' do
-        registration = FactoryBot.create(:registration, :cancelled) # TODO: We need to bring in the new registration statuses
+        registration = FactoryBot.create(:registration, :cancelled)
+
+        series = FactoryBot.create(:competition_series)
+        competitionA = registration.competition
+        competitionA.update!(competition_series: series)
+        competitionB = FactoryBot.create(:competition, :registration_open, competition_series: series, series_base: competitionA)
+
+        user = registration.user
+
+        registration_request = FactoryBot.build(:registration_request, competition_id: competitionB.id, user_id: user.id)
+
+        expect {
+          Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['submitted_by']))
+        }.not_to raise_error
+      end
+
+      it 'can register if they have a pending registration for another series comp' do
+        registration = FactoryBot.create(:registration, :pending)
 
         series = FactoryBot.create(:competition_series)
         competitionA = registration.competition

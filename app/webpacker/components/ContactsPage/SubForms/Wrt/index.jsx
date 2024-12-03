@@ -5,7 +5,6 @@ import {
 import I18n from '../../../../lib/i18n';
 import { useDispatch, useStore } from '../../../../lib/providers/StoreProvider';
 import { updateSectionData } from '../../store/actions';
-import EditProfileQuery from './EditProfileQuery';
 import OtherQuery from './OtherQuery';
 
 const SECTION = 'wrt';
@@ -21,13 +20,8 @@ export default function Wrt() {
   );
 
   const QueryForm = useMemo(() => {
-    if (!selectedQueryType) return null;
-    switch (selectedQueryType) {
-      case QUERY_TYPES_MAP.editProfile:
-        return EditProfileQuery;
-      default:
-        return OtherQuery;
-    }
+    if (!selectedQueryType || selectedQueryType === QUERY_TYPES_MAP.editProfile) return null;
+    return OtherQuery;
   }, [selectedQueryType]);
 
   return (

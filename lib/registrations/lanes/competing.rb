@@ -16,6 +16,8 @@ module Registrations
         changes = registration.changes.transform_values { |change| change[1] }
         changes[:event_ids] = lane_params[:competing][:event_ids]
         registration.save!
+        RegistrationsMailer.notify_organizers_of_new_registration(registration).deliver_later
+        RegistrationsMailer.notify_registrant_of_new_registration(registration).deliver_later
         registration.add_history_entry(changes, "worker", user_id, "Worker processed")
       end
 
@@ -33,8 +35,8 @@ module Registrations
 
         ActiveRecord::Base.transaction do
           update_event_ids(registration, event_ids)
-          registration.comments = comment if comment.present?
-          registration.administrative_notes = admin_comment if admin_comment.present?
+          registration.comments = comment unless comment.nil?
+          registration.administrative_notes = admin_comment unless admin_comment.nil?
           registration.guests = guests if guests.present?
 
           if old_status == Registrations::Helper::STATUS_WAITING_LIST || status == Registrations::Helper::STATUS_WAITING_LIST
