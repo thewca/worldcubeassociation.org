@@ -37,19 +37,37 @@ RSpec.feature "Registering for a competition", js: true do
       expect(registration).not_to be_nil
     end
 
-    scenario "User registers for a competition with invalid guest info" do
+    scenario "User registers for a competition with invalid information" do
       visit competition_register_path(competition)
+
+      # First step: Accept registration requirements
       reg_requirements_checkbox.click
       click_button "Continue to next Step"
+
+      # Leave Events selection empty by simply not interaction with it at all.
+
+      # Also fill in a ludicrously high guest count that is guaranteed to be invalid.
       fill_in "guest-dropdown", with: "123"
       click_button "Register!"
-      # The browser handles the input field validation client-side.
-      #   We check that "some validation happens" by making sure the browser did not let the user register.
+
+      # The browser handles basic input field validations client-side.
+      #   We cannot query these directly, because some browsers might not add them to the DOM and display them as a pop-up instead.
+      # However, we do check that "some frontend validation blocked the next step" by making sure
+      #   that the frontend did not let the user proceed to the next step.
       expect(page).to have_text("Register!")
+
       # Now fill in valid guest information, assume that the registration still blocks because of events.
       fill_in "guest-dropdown", with: "2"
       click_button "Register!"
+
+      # This error text roughly reads "must register for at least one event",
+      #   which is what we expect because we never interacted with the events picker in the first place.
       expect(page).to have_text(I18n.t('registrations.errors.must_register'))
+
+      # Expect there to be no registration. Note that this assumption doesn't care
+      #   _why_ there is no registration found. It's enough to know that the registration wasn't successful
+      perform_enqueued_jobs
+
       registration = competition.registrations.find_by_user_id(user.id)
       expect(registration).to be_nil
     end
