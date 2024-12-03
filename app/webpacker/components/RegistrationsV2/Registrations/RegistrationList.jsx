@@ -3,6 +3,7 @@ import React, {
   useMemo,
   useReducer,
   useState,
+  useEffect
 } from 'react';
 import {
   Flag, Icon, Segment, Table,
@@ -95,7 +96,15 @@ export default function RegistrationList({ competitionInfo }) {
   const changeSortColumn = (name) => dispatch({ type: 'CHANGE_SORT', sortColumn: name });
 
   const [psychSheetEvent, setPsychSheetEvent] = useState();
-  const [psychSheetSortBy, setPsychSheetSortBy] = useState('single');
+  const [psychSheetSortBy, setPsychSheetSortBy] = useState('average');
+
+  useEffect(() => {
+    if (psychSheetEvent === '333mbf') {
+      setPsychSheetSortBy('single');
+    } else {
+      setPsychSheetSortBy('average');
+    }
+  }, [psychSheetEvent]);
 
   const { isLoading: isLoadingPsychSheet, data: psychSheet } = useQuery({
     queryKey: [
