@@ -191,6 +191,9 @@ Rails.application.routes.draw do
     get 'generate_db_token' => 'panel#generate_db_token', as: :panel_generate_db_token
   end
   get 'panel/:panel_id' => 'panel#index', as: :panel_index
+  resources :tickets, only: [:show] do
+    post 'update_status' => 'tickets#update_status', as: :update_status
+  end
   resources :notifications, only: [:index]
 
   root 'posts#homepage'
