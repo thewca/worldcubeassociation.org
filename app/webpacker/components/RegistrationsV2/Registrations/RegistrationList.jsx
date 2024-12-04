@@ -1,6 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
 import React, {
-  useEffect,
   useMemo,
   useReducer,
   useState,
@@ -8,6 +7,7 @@ import React, {
 import {
   Flag, Icon, Segment, Table,
 } from 'semantic-ui-react';
+import _ from 'lodash';
 import {
   getConfirmedRegistrations,
   getPsychSheetForEvent,
@@ -126,25 +126,28 @@ export default function RegistrationList({ competitionInfo }) {
 
   const data = useMemo(() => {
     if (registrationsWithPsychsheet) {
-      const sorted = registrationsWithPsychsheet.toSorted((a, b) => {
-        if (psychSheetEvent !== undefined) {
-          return 0; // backend handles the sorting of psych sheets
+      let orderBy = [];
+      if (psychSheetEvent === undefined) {
+        switch (sortColumn) {
+          case 'country':
+            orderBy = [
+              (item) => countries.byIso2[item.user.country.iso2].name,
+            ];
+            break;
+          case 'total':
+            orderBy = [
+              (item) => item.competing.event_ids.length,
+            ];
+            break;
+          default:
+            break;
         }
-        if (sortColumn === 'name') {
-          return a.user.name.localeCompare(b.user.name);
-        }
-        if (sortColumn === 'country') {
-          return countries.byIso2[a.user.country.iso2].name.localeCompare(countries.byIso2[b.user.country.iso2].name);
-        }
-        if (sortColumn === 'total') {
-          return a.competing.event_ids.length - b.competing.event_ids.length;
-        }
-        return 0;
-      });
-      if (sortDirection === 'descending') {
-        return sorted.toReversed();
+        // always sort by user name as a fallback
+        orderBy.push('user.name');
       }
-      return sorted;
+      const direction = sortDirection === 'descending' ? 'desc' : 'asc';
+
+      return _.orderBy(registrationsWithPsychsheet, orderBy, [direction]);
     }
     return [];
   }, [registrationsWithPsychsheet, sortColumn, sortDirection, psychSheetEvent]);

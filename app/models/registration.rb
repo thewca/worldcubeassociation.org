@@ -16,7 +16,7 @@ class Registration < ApplicationRecord
   belongs_to :user, optional: true # A user may be deleted later. We only enforce validation directly on creation further down below.
   belongs_to :accepted_user, foreign_key: "accepted_by", class_name: "User", optional: true
   belongs_to :deleted_user, foreign_key: "deleted_by", class_name: "User", optional: true
-  has_many :registration_history_entries, dependent: :destroy
+  has_many :registration_history_entries, -> { order(:created_at) }, dependent: :destroy
   has_many :registration_competition_events
   has_many :registration_payments
   has_many :competition_events, through: :registration_competition_events
@@ -262,7 +262,7 @@ class Registration < ApplicationRecord
   def waiting_list_info
     pending_registrations = competition.registrations.pending.order(:created_at)
     index = pending_registrations.index(self)
-    Hash.new(index: index, length: pending_registrations.length)
+    Hash.new({ index: index, length: pending_registrations.length })
   end
 
   def waiting_list_position

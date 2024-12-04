@@ -39,8 +39,8 @@ module Registrations
           update_event_ids(registration, event_ids)
           puts "New event IDs: #{registration.event_ids}"
           byebug
-          registration.comments = comment if comment.present?
-          registration.administrative_notes = admin_comment if admin_comment.present?
+          registration.comments = comment unless comment.nil?
+          registration.administrative_notes = admin_comment unless admin_comment.nil?
           registration.guests = guests if guests.present?
 
           if old_status == Registrations::Helper::STATUS_WAITING_LIST || status == Registrations::Helper::STATUS_WAITING_LIST

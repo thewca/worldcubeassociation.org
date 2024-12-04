@@ -15,6 +15,10 @@ export const newResultUrl = (competitionId, roundId) => `<%= CGI.unescape(Rails.
 export const resultUrl = (id) => `<%= CGI.unescape(Rails.application.routes.url_helpers.result_path("${id}"))%>`;
 export const editResultUrl = (id) => `<%= CGI.unescape(Rails.application.routes.url_helpers.edit_result_path("${id}"))%>`;
 
+export const newScrambleUrl = (competitionId, roundId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.competition_new_scramble_path("${competitionId}", "${roundId}"))%>`;
+export const scrambleUrl = (id) => `<%= CGI.unescape(Rails.application.routes.url_helpers.scramble_path("${id}"))%>`;
+export const editScrambleUrl = (id) => `<%= CGI.unescape(Rails.application.routes.url_helpers.edit_scramble_path("${id}"))%>`;
+
 export const postsUrl = (page, format = 'json') => {
   // In this case id holds the page number ;)
   return `<%= CGI.unescape(Rails.application.routes.url_helpers.posts_path(format: "${format}")) %>?page=${page}`;
@@ -58,6 +62,8 @@ export const omnisearchApiUrl = (query) => `<%= Rails.application.routes.url_hel
 export const competitionSearchApiUrl = (query) => `<%= Rails.application.routes.url_helpers.api_v0_search_competitions_path %>?q=${query}`;
 
 export const competitionEventScramblesApiUrl = (id, eventId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_competition_event_scrambles_path("${id}", "${eventId}")) %>`;
+
+export const competitionScramblesUrl = (id, eventId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.competition_scrambles_path("${id}", event: "${eventId}")) %>`;
 
 export const adminCheckExistingResultsUrl = (competitionId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.competition_admin_check_existing_results_path("${competitionId}")) %>`;
 
@@ -237,6 +243,13 @@ export const panelUrls = {
   },
   leader: {
     groupsManager: `<%= CGI.unescape(Rails.application.routes.url_helpers.panel_index_path(panel_id: :leader, anchor: User.panel_pages[:groupsManager])) %>`,
+  },
+}
+
+export const actionUrls = {
+  tickets: {
+    show: (ticketId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.ticket_path("${ticketId}", format: "json")) %>`,
+    updateStatus: (ticketId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.ticket_update_status_path("${ticketId}")) %>`,
   },
 }
 

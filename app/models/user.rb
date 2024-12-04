@@ -661,6 +661,12 @@ class User < ApplicationRecord
           panel_pages[:bannedCompetitors],
         ],
       },
+      wapc: {
+        name: 'WAC panel',
+        pages: [
+          panel_pages[:bannedCompetitors],
+        ],
+      },
       wfc: {
         name: 'WFC panel',
         pages: [],
@@ -1406,6 +1412,8 @@ class User < ApplicationRecord
       active_roles.any? { |role| role.is_lead? && (role.group.teams_committees? || role.group.councils?) }
     when :senior_delegate
       senior_delegate?
+    when :wapc
+      appeals_committee?
     when :wic
       wic_team?
     when :weat
