@@ -2,9 +2,13 @@
 
 <% options = {
   only: %w[id name website start_date end_date],
-  methods: %w[url city country_iso2 registration_not_yet_opened? registration_full? registration_past? results_posted? visible? confirmed? cancelled? report_posted?],
+  methods: %w[url city country_iso2 registration_not_yet_opened? registration_full? registration_past? results_posted? visible? confirmed? cancelled? report_posted? date_range short_display_name],
   include: %w[],
 } %>
+
+<%
+  puts(@registered_for_by_competition_id)
+%>
 
 <div class="container">
   <%= react_component("MyCompetitions", {
@@ -14,7 +18,7 @@
         pastCompetitions: @past_competitions.as_json(options),
         futureCompetitions: @not_past_competitions.as_json(options),
         bookmarkedCompetitions: @bookmarked_competitions.as_json(options),
-        registrationStatuses: @registered_for_by_competition_id.as_json(options),
+        registrationStatuses: @registered_for_by_competition_id,
       },
       }) %>
 </div>

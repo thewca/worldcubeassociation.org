@@ -3,9 +3,8 @@ import {
 } from 'semantic-ui-react';
 import React from 'react';
 import I18n from '../../lib/i18n';
-import { cityAndCountry } from '../../lib/utils/competition-table';
-import { dateRange } from '../../lib/utils/dates';
 import ReportTableCell from './ReportTableCell';
+import { countries } from '../../lib/wca-data.js.erb';
 
 export default function PastCompetitionsTable({ competitions, permissions }) {
   return (
@@ -31,13 +30,14 @@ export default function PastCompetitionsTable({ competitions, permissions }) {
         {competitions.map((competition) => (
           <Table.Row key={competition.id}>
             <Table.Cell>
-              <a href={competition.url}>{competition.name}</a>
+              <a href={competition.url}>{competition.short_display_name}</a>
             </Table.Cell>
             <Table.Cell>
-              {cityAndCountry(competition)}
+              {countries.byIso2[competition.country_iso2].name}
+              {`, ${competition.city}`}
             </Table.Cell>
             <Table.Cell>
-              {dateRange(competition.start_date, competition.end_date)}
+              {competition.date_range}
             </Table.Cell>
             <Table.Cell>
               {!competition['results_posted?'] && (

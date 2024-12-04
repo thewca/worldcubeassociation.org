@@ -7,16 +7,16 @@ function parseDateString(yyyymmddDateString) {
   return DateTime.fromFormat(yyyymmddDateString, 'yyyy-MM-dd');
 }
 
-export const cityAndCountry = (competition) => [competition.city, countries.byIso2[competition.country_iso2].name].join(', ');
-
 export const competitionStatusText = (competition, registrationStatus) => {
   let statusText = '';
-  if (registrationStatus?.wcif_status === 'pending') {
+  if (registrationStatus?.competing_status === 'waiting_list') {
     statusText += I18n.t('competitions.messages.tooltip_waiting_list');
-  } else if (registrationStatus?.wcif_status === 'accepted') {
+  } else if (registrationStatus?.competing_status === 'accepted') {
     statusText += I18n.t('competitions.messages.tooltip_registered');
-  } else if (registrationStatus?.wcif_status === 'deleted') {
+  } else if (registrationStatus?.competing_status === 'cancelled' || registrationStatus?.competing_status === 'rejected') {
     statusText += I18n.t('competitions.messages.tooltip_deleted');
+  } else if (registrationStatus?.competing_status === 'pending') {
+    statusText += I18n.t('competitions.messages.tooltip_pending');
   }
   if (competition['confirmed?']) {
     statusText += I18n.t('competitions.messages.confirmed_visible');

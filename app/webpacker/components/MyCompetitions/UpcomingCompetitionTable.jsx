@@ -4,10 +4,10 @@ import {
 } from 'semantic-ui-react';
 import React from 'react';
 import I18n from '../../lib/i18n';
-import { cityAndCountry, competitionStatusText } from '../../lib/utils/competition-table';
-import { dateRange } from '../../lib/utils/dates';
+import { competitionStatusText } from '../../lib/utils/competition-table';
 import { competitionRegistrationsUrl, editCompetitionsUrl } from '../../lib/requests/routes.js.erb';
 import ReportTableCell from './ReportTableCell';
+import { countries } from '../../lib/wca-data.js.erb';
 
 const registrationStatusIcon = (registrationStatus) => {
   switch (registrationStatus?.wcif_status) {
@@ -59,23 +59,25 @@ export default function UpcomingCompetitionTable({
       <TableBody>
         {competitions.map((competition) => (
           <Popup
+            key={competition.id}
             position="top center"
             content={competitionStatusText(competition, registrationStatuses[competition.id])}
             trigger={(
-              <Table.Row key={competition.id} positive={competition['confirmed?'] && !competition['cancelled?']}>
+              <Table.Row positive={competition['confirmed?'] && !competition['cancelled?']}>
                 { shouldShowRegistrationStatus && (
                   <Table.Cell>
                     {competitionStatusIcon(competition)}
                   </Table.Cell>
                 )}
                 <Table.Cell>
-                  <a href={competition.url}>{competition.name}</a>
+                  <a href={competition.url}>{competition.short_display_name}</a>
                 </Table.Cell>
                 <Table.Cell>
-                  {cityAndCountry(competition)}
+                  {countries.byIso2[competition.country_iso2].name}
+                  {`, ${competition.city}`}
                 </Table.Cell>
                 <Table.Cell>
-                  {dateRange(competition.start_date, competition.end_date)}
+                  {competition.date_range}
                 </Table.Cell>
                 <Table.Cell>
                   {registrationStatusIcon(registrationStatuses[competition.id])}
