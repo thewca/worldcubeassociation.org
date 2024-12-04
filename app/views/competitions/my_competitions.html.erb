@@ -1,16 +1,20 @@
 <% provide(:title, t('.title')) %>
 
+<% options = {
+  only: %w[id name website start_date end_date],
+  methods: %w[url city country_iso2 registration_not_yet_opened? registration_full? registration_past? results_posted? visible? confirmed? cancelled? report_posted?],
+  include: %w[],
+} %>
+
 <div class="container">
-  <%= react_component("PostsWidget", {
-    titleOnly: true,
-  }, {
-      userInfo: @current_user,
-      permissions: @current_user.permissions,
+  <%= react_component("MyCompetitions", {
+      userInfo: @current_user.as_json,
+      permissions: @current_user.permissions.as_json,
       competitions: {
-        pastCompetitions: @past_competitions,
-        futureCompetitions: @not_past_competitions,
-        bookmarkedCompetitions: @bookmarked_competitions,
-        registrationStatuses: @registered_for_by_competition_id,
+        pastCompetitions: @past_competitions.as_json(options),
+        futureCompetitions: @not_past_competitions.as_json(options),
+        bookmarkedCompetitions: @bookmarked_competitions.as_json(options),
+        registrationStatuses: @registered_for_by_competition_id.as_json(options),
       },
       }) %>
 </div>

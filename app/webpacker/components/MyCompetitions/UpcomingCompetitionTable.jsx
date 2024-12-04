@@ -6,14 +6,29 @@ import React from 'react';
 import I18n from '../../lib/i18n';
 import { cityAndCountry, competitionStatusText } from '../../lib/utils/competition-table';
 import { dateRange } from '../../lib/utils/dates';
+import { competitionRegistrationsUrl, editCompetitionsUrl } from '../../lib/requests/routes.js.erb';
+import ReportTableCell from './ReportTableCell';
 
-export const registrationStatusIcon = (registrationStatus) => {
+const registrationStatusIcon = (registrationStatus) => {
   switch (registrationStatus?.wcif_status) {
     case 'pending': return <Icon name="hourglass" />;
     case 'accepted': return <Icon name="check circle" />;
     case 'deleted': return <Icon name="trash" />;
     default: return <Icon />;
   }
+};
+
+const competitionStatusIcon = (competition) => {
+  if (competition['registration_not_yet_opened?']) {
+    return <Icon name="clock" color="blue" />;
+  }
+  if (competition['registration_past?']) {
+    return <Icon name="user times" color="red" />;
+  }
+  if (competition['registration_full?']) {
+    return <Icon name="user clock" color="orange" />;
+  }
+  return <Icon name="user plus" color="green" />;
 };
 
 export default function UpcomingCompetitionTable({

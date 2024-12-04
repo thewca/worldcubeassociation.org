@@ -1,6 +1,7 @@
 import React from 'react';
 import { DateTime, Interval } from 'luxon';
 import I18n from '../i18n';
+import { countries } from '../wca-data.js.erb';
 
 function parseDateString(yyyymmddDateString) {
   return DateTime.fromFormat(yyyymmddDateString, 'yyyy-MM-dd');
@@ -25,19 +26,6 @@ export const competitionStatusText = (competition, registrationStatus) => {
     statusText += I18n.t('competitions.messages.not_confirmed_not_visible');
   }
   return statusText;
-};
-
-export const competitionStatusIcon = (competition) => {
-  if (competition['registration_not_yet_opened?']) {
-    return <Icon name="clock" color="blue" />;
-  }
-  if (competition['registration_past?']) {
-    return <Icon name="user times" color="red" />;
-  }
-  if (competition['registration_full?']) {
-    return <Icon name="user clock" color="orange" />;
-  }
-  return <Icon name="user plus" color="green" />;
 };
 
 export function dayDifferenceFromToday(yyyymmddDateString) {
