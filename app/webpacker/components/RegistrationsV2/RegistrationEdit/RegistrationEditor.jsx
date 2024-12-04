@@ -21,7 +21,7 @@ import { EventSelector } from '../../CompetitionsOverview/CompetitionsFilters';
 import Refunds from './Refunds';
 import { editPersonUrl } from '../../../lib/requests/routes.js.erb';
 import { useConfirm } from '../../../lib/providers/ConfirmProvider';
-import i18n from '../../../lib/i18n';
+import I18n from '../../../lib/i18n';
 import RegistrationHistory from './RegistrationHistory';
 import { hasPassed } from '../../../lib/utils/dates';
 import getUsersInfo from '../api/user/post/getUserInfo';
@@ -147,7 +147,7 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
         body.guests = guests;
       }
       confirm({
-        content: i18n.t('competitions.registration_v2.update.update_confirm'),
+        content: I18n.t('competitions.registration_v2.update.update_confirm'),
       }).then(() => {
         updateRegistrationMutation(body);
       }).catch(() => {});

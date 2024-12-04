@@ -3,7 +3,7 @@ import { Button, Icon } from 'semantic-ui-react';
 import { DateTime } from 'luxon';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { setMessage } from '../Register/RegistrationMessage';
-import i18n from '../../../lib/i18n';
+import I18n from '../../../lib/i18n';
 
 function V3csvExport(selected, registrations, competition) {
   let csvContent = 'data:text/csv;charset=utf-8,';
@@ -142,7 +142,7 @@ export default function RegistrationActions({
       >
         <Icon name="download" />
         {' '}
-        {i18n.t('registrations.list.export_csv')}
+        {I18n.t('registrations.list.export_csv')}
       </Button>
 
       {anySelected && (
@@ -155,19 +155,19 @@ export default function RegistrationActions({
               rel="noreferrer"
             >
               <Icon name="envelope" />
-              {i18n.t('competitions.registration_v2.update.email_send')}
+              {I18n.t('competitions.registration_v2.update.email_send')}
             </a>
           </Button>
 
           <Button onClick={() => copyEmails(selectedEmails)}>
             <Icon name="copy" />
-            {i18n.t('competitions.registration_v2.update.email_copy')}
+            {I18n.t('competitions.registration_v2.update.email_copy')}
           </Button>
           <>
             {anyApprovable && (
               <Button positive onClick={attemptToApprove}>
                 <Icon name="check" />
-                {i18n.t('registrations.list.approve')}
+                {I18n.t('registrations.list.approve')}
               </Button>
             )}
 
@@ -179,7 +179,7 @@ export default function RegistrationActions({
                 )}
               >
                 <Icon name="times" />
-                {i18n.t('competitions.registration_v2.update.move_pending')}
+                {I18n.t('competitions.registration_v2.update.move_pending')}
               </Button>
             )}
 
@@ -192,7 +192,7 @@ export default function RegistrationActions({
               )}
             >
               <Icon name="hourglass" />
-              {i18n.t('competitions.registration_v2.update.move_waiting')}
+              {I18n.t('competitions.registration_v2.update.move_waiting')}
             </Button>
             )}
 
@@ -205,7 +205,7 @@ export default function RegistrationActions({
                 )}
               >
                 <Icon name="trash" />
-                {i18n.t('competitions.registration_v2.update.cancel')}
+                {I18n.t('competitions.registration_v2.update.cancel')}
               </Button>
             )}
 
@@ -218,7 +218,7 @@ export default function RegistrationActions({
                 )}
               >
                 <Icon name="delete" />
-                {i18n.t('competitions.registration_v2.update.reject')}
+                {I18n.t('competitions.registration_v2.update.reject')}
               </Button>
             )}
           </>
