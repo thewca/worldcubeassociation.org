@@ -9,12 +9,13 @@ module Registrations
                                           comments: lane_params[:competing][:comment] || '',
                                           guests: lane_params[:guests] || 0)
 
-        registration.registration_competition_events.build(lane_params[:competing][:event_ids].map do |event_id|
-          competition_event = Competition.find(competition_id).competition_events.find { |ce| ce.event_id == event_id }
-          { competition_event_id: competition_event.id }
-        end)
+        create_event_ids = lane_params[:competing][:event_ids]
+
+        create_competition_events = registration.competition.competition_events.where(event_id: create_event_ids)
+        registration.competition_events = create_competition_events
+
         changes = registration.changes.transform_values { |change| change[1] }
-        changes[:event_ids] = lane_params[:competing][:event_ids]
+        changes[:event_ids] = create_event_ids
         registration.save!
         RegistrationsMailer.notify_organizers_of_new_registration(registration).deliver_later
         RegistrationsMailer.notify_registrant_of_new_registration(registration).deliver_later
