@@ -146,7 +146,6 @@ RSpec.describe 'API Registrations' do
 
       patch api_v1_registrations_register_path, params: update_request, headers: headers
 
-      byebug
       expect(response.status).to eq(200)
 
       registration = Registration.find_by(user_id: user.id, competition_id: favourites_reg.competition.id)

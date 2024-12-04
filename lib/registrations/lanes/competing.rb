@@ -39,7 +39,6 @@ module Registrations
           puts "Desired events: #{event_ids}"
           update_event_ids(registration, event_ids)
           puts "New event IDs: #{registration.event_ids}"
-          byebug
           registration.comments = comment unless comment.nil?
           registration.administrative_notes = admin_comment unless admin_comment.nil?
           registration.guests = guests if guests.present?
