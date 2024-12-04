@@ -25,6 +25,7 @@ import I18n from '../../../lib/i18n';
 import RegistrationHistory from './RegistrationHistory';
 import { hasPassed } from '../../../lib/utils/dates';
 import getUsersInfo from '../api/user/post/getUserInfo';
+import I18nHTMLTranslate from '../../I18nHTMLTranslate';
 
 export default function RegistrationEditor({ competitor, competitionInfo }) {
   const dispatch = useDispatch();
@@ -202,11 +203,12 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
       <Form onSubmit={handleRegisterClick}>
         {!competitor.wca_id && (
           <Message>
-            This person registered with an account. You can edit their
-            personal information
-            {' '}
-            <a href={editPersonUrl(competitor.id)}>here</a>
-            .
+            <I18nHTMLTranslate
+              i18nKey="registrations.registered_with_account_html"
+              options={{
+                here: `<a href=${editPersonUrl(competitor.id)}>here</a>`,
+              }}
+            />
           </Message>
         )}
         {registrationEditDeadlinePassed && (

@@ -61,6 +61,7 @@ export default function RegistrationOverview({
 
   const deleteRegistration = (event) => {
     event.preventDefault();
+    // i18n-tasks-use t('registrations.delete_confirm')
     confirm({ content: I18n.t(deleteAllowed ? 'registrations.delete_confirm' : 'competitions.registration_v2.update.delete_confirm_contact') })
       .then(() => (deleteAllowed
         ? deleteRegistrationMutation()
