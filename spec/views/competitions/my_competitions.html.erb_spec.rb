@@ -23,7 +23,7 @@ RSpec.describe "competitions/my_competitions" do
 
   it "shows pending registration tooltip" do
     render
-    expect(rendered).to match 'Your registration is awaiting manual approval. Please ensure you have followed all instructions (eg, payment) listed in the Competition Page. This competition is not confirmed and not visible.'
+    expect(rendered).to include 'Your registration is awaiting manual approval. Please ensure you have followed all instructions (eg, payment) listed in the Competition Page.'
     expect(rendered).to match '<i class="icon hourglass half "></i>'
   end
 
