@@ -151,7 +151,8 @@ export default function CompetingStep({
       if (options.checkForChanges && !hasChanges) {
         dispatch(setMessage('competitions.registration_v2.update.no_changes', 'basic'));
       } else if (!eventsAreValid) {
-        // i18n-tasks-use t('registrations.errors.exceeds_event_limit')
+        // i18n-tasks-use t('registrations.errors.exceeds_event_limit.one')
+        // i18n-tasks-use t('registrations.errors.exceeds_event_limit.other')
         dispatch(setMessage(
           maxEvents === Infinity
             ? 'registrations.errors.must_register'
