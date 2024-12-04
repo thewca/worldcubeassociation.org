@@ -1151,6 +1151,7 @@ en:
     flash:
       not_using_wca: "This competition is not using WCA registration"
       updated: "Updated registration"
+      registered: "Registration form submitted - make sure to follow all instructions from the Registration Requirements below to ensure your registration is complete."
       imported: "Successfully imported registrations!"
       added: "Successfully added registration!"
     edit_registration:
@@ -1254,12 +1255,12 @@ en:
     accepted: "Your registration has been accepted!"
     entry_fees_fully_paid: "You have paid %{paid}, which fully covers the registration fees."
     will_pay_here: "You will pay them here after submitting your registration"
-    wont_pay_here: "Please check competition's information for instruction about how to pay"
+    wont_pay_here: "Please check the competition's information for instructions about how to pay"
     not_qualified: "Not qualified"
     #context: on the payment form, when registering to a competition
     payment_form:
       title: "Registration fees"
-      payment_successful: "Your payment was successful, and your registration should show up paid below."
+      payment_successful: "Your payment was successful, and your registration should show up as paid below."
       payment_processing: "Your payment has been confirmed, but the transaction is still pending."
       button_text: "Pay now!"
       hints:
@@ -1278,6 +1279,7 @@ en:
       errors:
         already_paid: "The charge was not placed because the registration fees are already paid."
         not_allowed: "You can't pay for that registration."
+        stripe_failed: "Please check the Stripe transaction."
         paypal_failed: "Please check the PayPal order."
         paypal_canceled: "PayPal reported that the order was manually canceled. Please try again."
         stripe_not_found: "Stripe reported back a transaction ID that couldn't be found."
@@ -1290,7 +1292,7 @@ en:
     registration_requirements: "Registration requirements for the competition:"
     import:
       title: "Import registrations for %{comp}"
-      info: "You can import registrations multiple times, changes will be determined and the database will be updated accordingly."
+      info: "You can import registrations multiple times. Changes will be determined and the database will be updated accordingly."
       registrations_file_label: "Registrations file"
       registrations_file_hint: "CSV file with columns: Status, Name, Region, WCA ID, Birth Date, Gender, Email, and one column for each event."
       import: "Import"
@@ -1319,15 +1321,15 @@ en:
       name_too_long: "The competition name is longer than 32 characters. Please edit the competition ID and short name appropriately."
       id_starts_with_lowercase: "The competition ID starts with a lowercase letter. We prefer to have it start with an uppercase."
       must_have_events: "Please add at least one event before confirming the competition."
-      schedule_must_match_rounds: "Please make sure the competition has at least one round per event and that the schedule you created includes all the rounds you declared before confirming the competition."
-      advancement_condition_must_be_present_for_all_non_final_rounds: "Please make sure that all non final rounds have advancement condition specified."
-      cutoff_is_greater_than_time_limit: "Round %{round_number} in %{event} has a cutoff greater than the time limit, Please make sure the cutoff is not greater than the time limit."
+      schedule_must_match_rounds: "Please make sure the competition has at least one round per event and that the schedule you created includes all rounds you declared before confirming the competition."
+      advancement_condition_must_be_present_for_all_non_final_rounds: "Please make sure that all non-final rounds have an advancement condition specified."
+      cutoff_is_greater_than_time_limit: "Round %{round_number} in %{event} has a cutoff greater than the time limit. Please make sure the cutoff is not greater than the time limit."
       cutoff_is_too_fast: "Round %{round_number} in %{event} has a cutoff less than 5 seconds. Please make sure that it is correct."
       cutoff_is_too_slow: "Round %{round_number} in %{event} has a cutoff more than 10 minutes. Please make sure that it is correct."
       time_limit_is_too_fast: "Round %{round_number} in %{event} has a time limit less than 10 seconds. Please make sure that it is correct."
       time_limit_is_too_slow: "Round %{round_number} in %{event} has a time limit more than 10 minutes in a fast event. Please make sure that it is correct."
       create_success: "Successfully created new competition!"
-      registration_payment_info: "This competition has registration fees but no Stripe account is linked. If you are using Stripe through the WCA website, please remember to link your Stripe account. If you are using an external payment system, please remember to add all the relevant details in the registration requirements."
+      registration_payment_info: "This competition has registration fees but no Stripe account is linked. If you are using Stripe through the WCA website, please remember to link your Stripe account. If you are using an external payment system, please remember to add all the relevant details to the registration requirements."
       not_announced: "This competition is visible to the public but hasn't been announced yet."
       announced_success: "Successfully announced competition!"
       cancelled: "This competition has been cancelled. Please check the information section for more details."

@@ -108,9 +108,11 @@ export default function CompetingStep({
       );
       // Going from cancelled -> pending
       if (registration.competing.registration_status === 'cancelled') {
+        // i18n-tasks-use t('registrations.flash.registered')
         dispatch(setMessage('registrations.flash.registered', 'positive'));
         // Not changing status
       } else {
+        // i18n-tasks-use t('registrations.flash.updated')
         dispatch(setMessage('registrations.flash.updated', 'positive'));
       }
       nextStep();

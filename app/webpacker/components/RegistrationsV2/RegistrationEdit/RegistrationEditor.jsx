@@ -115,8 +115,11 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
     if (!hasChanges) {
       dispatch(setMessage('competitions.registration_v2.update.no_changes', 'basic'));
     } else if (!commentIsValid) {
+      // i18n-tasks-use t('registrations.errors.cannot_register_without_comment')
       dispatch(setMessage('registrations.errors.cannot_register_without_comment', 'negative'));
     } else if (!eventsAreValid) {
+      // i18n-tasks-use t('registrations.errors.must_register')
+      // i18n-tasks-use t('registrations.errors.exceeds_event_limit.other')
       dispatch(setMessage(
         maxEvents === Infinity
           ? 'registrations.errors.must_register'
