@@ -2,8 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import React, {
   useMemo,
   useReducer,
-  useState,
-  useEffect
+  useState
 } from 'react';
 import {
   Flag, Icon, Segment, Table,
