@@ -21,7 +21,7 @@ RSpec.describe "competitions/my_competitions" do
     expect(rendered).to match '<a href="/competitions/MelbourneOpen2016">Melbourne Open 2016</a>'
   end
 
-  it "shows you are on the waiting list" do
+  it "shows pending registration tooltip" do
     render
     expect(rendered).to match 'Your registration is awaiting manual approval. Please ensure you have followed all instructions (eg, payment) listed in the Competition Page.'
     expect(rendered).to match '<i class="icon hourglass half "></i>'
