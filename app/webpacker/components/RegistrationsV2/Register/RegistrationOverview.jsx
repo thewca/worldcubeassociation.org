@@ -111,7 +111,6 @@ export default function RegistrationOverview({
               {registration.guests}
             </FormField>
           )}
-          ;
           <ButtonGroup widths={2}>
             <Button
               primary
