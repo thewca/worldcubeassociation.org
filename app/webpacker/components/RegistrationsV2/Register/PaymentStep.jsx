@@ -18,20 +18,23 @@ import Loading from '../../Requests/Loading';
 import i18n from '../../../lib/i18n';
 import useCheckboxState from '../../../lib/hooks/useCheckboxState';
 import AutonumericField from '../../wca/FormBuilder/input/AutonumericField';
-import getPaymentTicket from "../api/payment/get/getPaymentTicket";
+import getPaymentTicket from '../api/payment/get/getPaymentTicket';
+import { useRegistration } from '../lib/RegistrationProvider';
 
 export default function PaymentStep({
   competitionInfo,
   setDonationAmount,
   donationAmount,
   displayAmount,
-  registration,
   nextStep,
   conversionFetching,
 }) {
   const stripe = useStripe();
   const elements = useElements();
   const dispatch = useDispatch();
+
+  const { registration } = useRegistration();
+
   const [isLoading, setIsLoading] = useState(false);
   const [isDonationChecked, setDonationChecked] = useCheckboxState(false);
 

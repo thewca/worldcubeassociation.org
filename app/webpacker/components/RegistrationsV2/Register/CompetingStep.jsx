@@ -27,6 +27,7 @@ import { events } from '../../../lib/wca-data.js.erb';
 import { eventsNotQualifiedFor, isQualifiedForEvent } from '../../../lib/helpers/qualifications';
 import { eventQualificationToString } from '../../../lib/utils/wcif';
 import { hasNotPassed } from '../../../lib/utils/dates';
+import { useRegistration } from '../lib/RegistrationProvider';
 
 const maxCommentLength = 240;
 
@@ -50,13 +51,12 @@ export default function CompetingStep({
   competitionInfo,
   user,
   preferredEvents,
-  registration,
-  refetchRegistration,
   qualifications,
 }) {
   const maxEvents = competitionInfo.events_per_registration_limit ?? Infinity;
-  const isRegistered = Boolean(registration);
-  const hasPaid = registration?.payment?.has_paid;
+  const {
+    registration, isRegistered, hasPaid, isPolling, isProcessing, startPolling, refetchRegistration,
+  } = useRegistration();
   const dispatch = useDispatch();
 
   const confirm = useConfirm();
@@ -78,8 +78,6 @@ export default function CompetingStep({
   const [hasInteracted, setHasInteracted] = useState(false);
   const [guests, setGuests] = useState(0);
 
-  const [processing, setProcessing] = useState(false);
-
   useEffect(() => {
     if (isRegistered && registration.competing.registration_status !== 'cancelled') {
       setComment(registration.competing.comment ?? '');
@@ -87,6 +85,13 @@ export default function CompetingStep({
       setGuests(registration.guests);
     }
   }, [isRegistered, registration]);
+
+  useEffect(() => {
+    if (isPolling && !isProcessing) {
+      refetchRegistration();
+      nextStep();
+    }
+  }, [isPolling, isProcessing, nextStep, refetchRegistration]);
 
   const queryClient = useQueryClient();
   const { mutate: updateRegistrationMutation, isPending: isUpdating } = useMutation({
@@ -130,7 +135,7 @@ export default function CompetingStep({
       // We can't update the registration yet, because there might be more steps needed
       // And the Registration might still be processing
       dispatch(setMessage('registrations.flash.registered', 'positive'));
-      setProcessing(true);
+      startPolling();
     },
   });
 
@@ -266,15 +271,10 @@ export default function CompetingStep({
   const formWarnings = useMemo(() => potentialWarnings(competitionInfo), [competitionInfo]);
   return (
     <Segment basic loading={isUpdating}>
-      {processing && (
+      {isPolling && (
         <Processing
           competitionInfo={competitionInfo}
           user={user}
-          onProcessingComplete={async () => {
-            setProcessing(false);
-            await refetchRegistration();
-            nextStep();
-          }}
         />
       )}
 
