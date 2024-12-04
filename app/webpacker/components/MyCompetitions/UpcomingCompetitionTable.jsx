@@ -10,10 +10,12 @@ import ReportTableCell from './ReportTableCell';
 import { countries } from '../../lib/wca-data.js.erb';
 
 const registrationStatusIcon = (registrationStatus) => {
-  switch (registrationStatus?.wcif_status) {
+  switch (registrationStatus?.competing_status) {
     case 'pending': return <Icon name="hourglass" />;
+    case 'waiting_list': return <Icon name="hourglass" />;
     case 'accepted': return <Icon name="check circle" />;
-    case 'deleted': return <Icon name="trash" />;
+    case 'cancelled': return <Icon name="trash" />;
+    case 'rejected': return <Icon name="trash" />;
     default: return <Icon />;
   }
 };

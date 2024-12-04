@@ -6,10 +6,6 @@
   include: %w[],
 } %>
 
-<%
-  puts(@registered_for_by_competition_id)
-%>
-
 <div class="container">
   <%= react_component("MyCompetitions", {
       userInfo: @current_user.as_json,
