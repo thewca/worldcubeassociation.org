@@ -39,7 +39,6 @@ export const fullTimeDiff = (luxonDate) => {
 };
 
 /// / string parameters
-
 export function hasPassed(dateTime) {
   return DateTime.fromISO(dateTime) < DateTime.now();
 }
@@ -108,6 +107,20 @@ export const getDatesBetweenInclusive = (
   }
   datesBetween.push(nextDate);
   return datesBetween;
+};
+
+export const dateRange = (startDate, endDate) => {
+  const luxonStart = DateTime.fromISO(startDate);
+  const luxonEnd = DateTime.fromISO(endDate);
+  // One Day competition
+  if (areOnSameDate(luxonStart, luxonEnd)) {
+    return getShortDateString(startDate);
+  }
+  // Same month
+  if (luxonStart.month === luxonEnd.month) {
+    return `${getMediumDateString(startDate)} - ${getMediumDateString(endDate)}`;
+  }
+  return `${getShortDateString(startDate)} - ${getShortDateString(endDate)}`;
 };
 
 // luxon does not support time-only object, so use today's date in utc

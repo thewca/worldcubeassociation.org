@@ -6,6 +6,40 @@ function parseDateString(yyyymmddDateString) {
   return DateTime.fromFormat(yyyymmddDateString, 'yyyy-MM-dd');
 }
 
+export const cityAndCountry = (competition) => [competition.city, countries.byIso2[competition.country_iso2].name].join(', ');
+
+export const competitionStatusText = (competition, registrationStatus) => {
+  let statusText = '';
+  if (registrationStatus?.wcif_status === 'pending') {
+    statusText += I18n.t('competitions.messages.tooltip_waiting_list');
+  } else if (registrationStatus?.wcif_status === 'accepted') {
+    statusText += I18n.t('competitions.messages.tooltip_registered');
+  } else if (registrationStatus?.wcif_status === 'deleted') {
+    statusText += I18n.t('competitions.messages.tooltip_deleted');
+  }
+  if (competition['confirmed?']) {
+    statusText += I18n.t('competitions.messages.confirmed_visible');
+  } else if (competition['visible?']) {
+    statusText += I18n.t('competitions.messages.confirmed_not_visible');
+  } else {
+    statusText += I18n.t('competitions.messages.not_confirmed_not_visible');
+  }
+  return statusText;
+};
+
+export const competitionStatusIcon = (competition) => {
+  if (competition['registration_not_yet_opened?']) {
+    return <Icon name="clock" color="blue" />;
+  }
+  if (competition['registration_past?']) {
+    return <Icon name="user times" color="red" />;
+  }
+  if (competition['registration_full?']) {
+    return <Icon name="user clock" color="orange" />;
+  }
+  return <Icon name="user plus" color="green" />;
+};
+
 export function dayDifferenceFromToday(yyyymmddDateString) {
   const dateLuxon = parseDateString(yyyymmddDateString);
   const exactDaysDiff = dateLuxon.diffNow('days').days;
