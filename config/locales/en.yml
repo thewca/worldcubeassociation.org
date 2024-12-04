@@ -1256,7 +1256,6 @@ en:
     entry_fees_fully_paid: "You have paid %{paid}, which fully covers the registration fees."
     will_pay_here: "You will pay them here after submitting your registration"
     wont_pay_here: "Please check the competition's information for instructions about how to pay"
-    not_qualified: "Not qualified"
     #context: on the payment form, when registering to a competition
     payment_form:
       title: "Registration fees"
