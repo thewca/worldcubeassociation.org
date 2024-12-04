@@ -1393,7 +1393,7 @@ en:
       reg_opens_too_early: "Registration is set to start in less than the required 48 hours."
       registration_already_closed: "The deadline to register has already passed. Please set it to be in the future."
       tooltip_registered: "You are registered."
-      tooltip_pending: "Your registration has not been looked at by the organizers or is incomplete. Please check the competition page for details"
+      tooltip_pending: "Your registration is awaiting manual approval. Please ensure you have followed any payment instructions in the Competition Page."
       tooltip_waiting_list: "You are currently on the waiting list."
       tooltip_deleted: "Unfortunately your registration has been deleted. Please check your email for details, or contact the organiser(s)."
       confirmed_visible: "This competition is confirmed and visible."
