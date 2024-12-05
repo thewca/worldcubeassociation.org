@@ -597,28 +597,12 @@ class RegistrationsController < ApplicationController
     stored_intent.update_status_and_charges(remote_intent, current_user) do |charge_transaction|
       ruby_money = charge_transaction.money_amount
 
-      if registration.is_a? MicroserviceRegistration
-        begin
-          Microservices::Registrations.update_registration_payment(
-            registration.attendee_id,
-            charge_transaction.id,
-            ruby_money.cents,
-            ruby_money.currency.iso_code,
-            remote_intent.status,
-            { type: "user", id: current_user.id },
-          )
-        rescue Faraday::Error
-          flash[:error] = t("registrations.payment_form.errors.registration_unreachable")
-          return redirect_to competition_register_path(competition_id)
-        end
-      else
-        registration.record_payment(
-          ruby_money.cents,
-          ruby_money.currency.iso_code,
-          charge_transaction,
-          current_user.id,
-        )
-      end
+      registration.record_payment(
+        ruby_money.cents,
+        ruby_money.currency.iso_code,
+        charge_transaction,
+        current_user.id,
+      )
 
       # Running in sync mode, so if the code reaches this point we're reasonably confident that the time the Stripe payment
       #   succeeded matches the time that the information reached our database. There are cases for async webhooks where
