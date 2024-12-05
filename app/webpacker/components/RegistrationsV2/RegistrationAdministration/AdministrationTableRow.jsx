@@ -21,7 +21,7 @@ import { countries } from '../../../lib/wca-data.js.erb';
 const truncateComment = (comment) => (comment?.length > 12 ? `${comment.slice(0, 12)}...` : comment);
 
 function RegistrationTime({
-  timestamp, registeredOn, paymentStatuses, paidOn, usesPaymentIntegration,
+  timestamp, registeredOn, paymentStatuses, hasPaid, paidOn, usesPaymentIntegration,
 }) {
   if (timestamp) {
     return getRegistrationTimestamp(paidOn ?? registeredOn);
@@ -29,7 +29,7 @@ function RegistrationTime({
 
   const mostRecentPaymentStatus = paymentStatuses ? paymentStatuses[0] : 'unpaid';
 
-  if (usesPaymentIntegration && mostRecentPaymentStatus !== 'succeeded') {
+  if (usesPaymentIntegration && !hasPaid) {
     let content = i18n.t('registrations.list.payment_requested_on', { date: getRegistrationTimestamp(registeredOn) });
     let trigger = <span>{i18n.t('registrations.list.not_paid')}</span>;
 
@@ -71,12 +71,11 @@ export default function TableRow({
     dob, region, events, comments, email, timestamp,
   } = columnsExpanded;
   const {
-    id, wca_id: wcaId, name, country,
+    id, wca_id: wcaId, name, country, dob: dateOfBirth, email: emailAddress,
   } = registration.user;
   const {
     registered_on: registeredOn, event_ids: eventIds, comment, admin_comment: adminComment,
   } = registration.competing;
-  const { dob: dateOfBirth, email: emailAddress } = registration;
   const {
     payment_amount_iso: paymentAmount,
     updated_at: updatedAt,
@@ -152,6 +151,7 @@ export default function TableRow({
               <RegistrationTime
                 timestamp={timestamp}
                 paidOn={updatedAt}
+                hasPaid={hasPaid}
                 registeredOn={registeredOn}
                 paymentStatuses={paymentStatuses}
                 usesPaymentIntegration={competitionInfo['using_payment_integrations?']}

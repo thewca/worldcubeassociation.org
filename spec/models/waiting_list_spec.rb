@@ -6,39 +6,33 @@ RSpec.describe WaitingList do
   let(:competition) { FactoryBot.create(:competition, :registration_open, :editable_registrations, :with_organizer) }
   let(:waiting_list) { competition.waiting_list }
 
+  it 'position is nil when registration not on waiting list' do
+    registration = FactoryBot.create(:registration)
+    expect(registration.waiting_list_position).to eq(nil)
+  end
+
   describe 'add to waiting list' do
     it 'first competitor in the waiting list gets set to position 1' do
       registration = FactoryBot.create(:registration, :waiting_list, competition: competition)
-      waiting_list.add(registration.id)
       expect(competition.waiting_list.entries[0]).to eq(registration.id)
     end
 
     it 'second competitor gets set to position 2' do
-      waiting_list.add(FactoryBot.create(:registration, :waiting_list, competition: competition).id)
+      FactoryBot.create(:registration, :waiting_list, competition: competition).id
       registration = FactoryBot.create(:registration, :waiting_list, competition: competition)
-      waiting_list.add(registration.id)
       expect(competition.waiting_list.entries[1]).to eq(registration.id)
     end
   end
 
   describe 'with populated waiting list' do
-    let(:reg1) { FactoryBot.create(:registration, :waiting_list, competition: competition) }
-    let(:reg2) { FactoryBot.create(:registration, :waiting_list, competition: competition) }
-    let(:reg3) { FactoryBot.create(:registration, :waiting_list, competition: competition) }
-    let(:reg4) { FactoryBot.create(:registration, :waiting_list, competition: competition) }
-    let(:reg5) { FactoryBot.create(:registration, :waiting_list, competition: competition) }
-
-    before do
-      waiting_list.add(reg1.id)
-      waiting_list.add(reg2.id)
-      waiting_list.add(reg3.id)
-      waiting_list.add(reg4.id)
-      waiting_list.add(reg5.id)
-    end
+    let!(:reg1) { FactoryBot.create(:registration, :waiting_list, competition: competition) }
+    let!(:reg2) { FactoryBot.create(:registration, :waiting_list, competition: competition) }
+    let!(:reg3) { FactoryBot.create(:registration, :waiting_list, competition: competition) }
+    let!(:reg4) { FactoryBot.create(:registration, :waiting_list, competition: competition) }
+    let!(:reg5) { FactoryBot.create(:registration, :waiting_list, competition: competition) }
 
     it 'waiting list position gives position, not index' do
       registration = FactoryBot.create(:registration, :waiting_list, competition: competition)
-      waiting_list.add(registration.id)
       expect(registration.waiting_list_position).to eq(6)
     end
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { sanitize } from 'dompurify';
+import DOMPurify from 'dompurify';
 
 import I18n from '../lib/i18n';
 
@@ -17,7 +17,7 @@ function I18nHTMLTranslate({
     <span
       name="I18nHTMLTranslate"
       // eslint-disable-next-line react/no-danger
-      dangerouslySetInnerHTML={{ __html: sanitize(I18n.t(i18nKey, options)) }}
+      dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(I18n.t(i18nKey, options)) }}
     />
   );
 }

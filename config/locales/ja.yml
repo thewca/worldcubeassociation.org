@@ -1641,17 +1641,17 @@ ja:
       #original_hash: 51fa5a4
       wca_id_no_gender_html: >-
         この WCA ID には性別が登録されていません。<a
-        href='mailto:results@worldcubeassociation.org' target='_blank'>WCA
+        href='%{wrt_contact_path}' target='_blank'>WCA
         競技結果チーム</a> にメールで連絡し，修正してください。
       #original_hash: 87ee245
       wca_id_no_citizenship_html: >-
         この WCA ID には国籍が登録されていません。<a
-        href='mailto:results@worldcubeassociation.org' target='_blank'>WCA
+        href='%{wrt_contact_path}' target='_blank'>WCA
         競技結果チーム</a> にメールで連絡し，修正してください。
       #original_hash: c3839bc
       wca_id_no_name_html: >-
         この WCA ID には名前が登録されていません。<a
-        href='mailto:results@worldcubeassociation.org' target='_blank'>WCA
+        href='%{wrt_contact_path}' target='_blank'>WCA
         競技結果チーム</a> にメールで連絡し，修正してください。
       #original_hash: d02c03b
       avatar_requires_wca_id: WCA ID の連携が必要です

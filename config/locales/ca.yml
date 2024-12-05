@@ -2008,17 +2008,17 @@ ca:
       #original_hash: 51fa5a4
       wca_id_no_gender_html: >-
         No tenim un gènere associat a aquest WCA ID. Si us plau, envia un correu
-        a <a href='mailto:results@worldcubeassociation.org'
+        a <a href='%{wrt_contact_path}'
         target='_blank'>Equip de Resultats de la WCA</a> per resoldre-ho.
       #original_hash: 87ee245
       wca_id_no_citizenship_html: >-
         No tenim una nacionalitat associada a aquest WCA ID. Si us plau, envia
-        un correu a <a href='mailto:results@worldcubeassociation.org'
+        un correu a <a href='%{wrt_contact_path}'
         target='_blank'>Equip de Resultats de la WCA</a> per resoldre-ho.
       #original_hash: c3839bc
       wca_id_no_name_html: >-
         No tenim un nom associat a aquest WCA ID. Si us plau, envia un correu a
-        <a href='mailto:results@worldcubeassociation.org' target='_blank'>Equip
+        <a href='%{wrt_contact_path}' target='_blank'>Equip
         de Resultats de la WCA</a> per resoldre-ho.
       #original_hash: d02c03b
       avatar_requires_wca_id: necessita un WCA ID per ser assignat

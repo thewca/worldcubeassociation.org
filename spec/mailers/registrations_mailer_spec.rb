@@ -68,7 +68,7 @@ RSpec.describe RegistrationsMailer, type: :mailer do
       competition_delegate2.receive_registration_emails = true
       competition_delegate2.save!
 
-      expect(mail.body.encoded).to match(edit_registration_url(registration))
+      expect(mail.body.encoded).to match(edit_registration_v2_url(competition_id: registration.competition_id, user_id: registration.user_id))
     end
 
     it "handles no organizers receiving email" do

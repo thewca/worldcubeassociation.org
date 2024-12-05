@@ -1850,7 +1850,7 @@ id:
         msg: >-
           Anda tidak dapat mengubah nama, tanggal lahir, jenis kelamin, atau
           wilayah perwakilan Anda. Alasan: %{reason}. Kontak <a
-          href='mailto:results@worldcubeassociation.org' target='_blank'>Tim
+          href='%{wrt_contact_path}' target='_blank'>Tim
           Hasil WCA</a> atau <a href='%{delegate_url}'>Delegasi</a> Anda jika
           ingin mengubahnya.
         reason:
@@ -1975,17 +1975,17 @@ id:
       #original_hash: 51fa5a4
       wca_id_no_gender_html: >-
         Kami tidak memiliki catatan jenis kelamin untuk ID WCA ini. Kirim email
-        ke <a href='mailto:results@worldcubeassociation.org' target='_blank'>Tim
+        ke <a href='%{wrt_contact_path}' target='_blank'>Tim
         Hasil WCA</a> untuk memperbaikinya.
       #original_hash: 87ee245
       wca_id_no_citizenship_html: >-
         Kami tidak memiliki catatan kewarganegaraan untuk ID WCA ini. Kirim
-        email ke <a href='mailto:results@worldcubeassociation.org'
+        email ke <a href='%{wrt_contact_path}'
         target='_blank'>Tim Hasil WCA</a> untuk memperbaikinya.
       #original_hash: c3839bc
       wca_id_no_name_html: >-
         Kami tidak memiliki catatan nama untuk ID WCA ini. Kirim email ke <a
-        href='mailto:results@worldcubeassociation.org' target='_blank'>Tim Hasil
+        href='%{wrt_contact_path}' target='_blank'>Tim Hasil
         WCA</a> untuk memperbaikinya.
       #original_hash: d02c03b
       avatar_requires_wca_id: dibutuhkan penghubungan ID WCA

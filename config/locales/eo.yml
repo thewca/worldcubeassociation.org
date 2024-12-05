@@ -2086,17 +2086,17 @@ eo:
       #original_hash: 51fa5a4
       wca_id_no_gender_html: >-
         Ni ne havas registritan genron por tiu WCA-ID. Bonvolu retpoŝti la <a
-        href='mailto:results@worldcubeassociation.org' target='_blank'>Rezultan
+        href='%{wrt_contact_path}' target='_blank'>Rezultan
         Teamon de la WCA</a> por solvi tion.
       #original_hash: 87ee245
       wca_id_no_citizenship_html: >-
         Ni ne havas registritan civitanecon por tiu WCA-ID. Bonvolu retpoŝti la
-        <a href='mailto:results@worldcubeassociation.org'
+        <a href='%{wrt_contact_path}'
         target='_blank'>Rezultan Teamon de la WCA</a> por solvi tion.
       #original_hash: c3839bc
       wca_id_no_name_html: >-
         Ni ne havas registritan nomon por tiu WCA-ID. Bonvolu retpoŝti la <a
-        href='mailto:results@worldcubeassociation.org' target='_blank'>Rezultan
+        href='%{wrt_contact_path}' target='_blank'>Rezultan
         Teamon de la WCA</a> por solvi tion.
       #original_hash: d02c03b
       avatar_requires_wca_id: bezonas WCA-ID-n por esti asignita

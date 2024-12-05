@@ -8,7 +8,19 @@ class Country < ApplicationRecord
 
   has_one :wfc_dues_redirect, as: :redirect_source
 
-  SUPPORTED_TIMEZONES = TZInfo::Timezone.all_identifiers.uniq.freeze
+  # It is surprisingly difficult to retrieve a "clean" list of timezones.
+  #   Recently, a Debian package update to the underlying `tzinfo` software in our container runtime
+  #   caused error because it "sneaked" weird timezones into Ruby that our frontend couldn't render.
+  # Our best effort here is to use `data_zone_identifiers`, which according to the documentation
+  #   are "time zones that are defined by offsets and transitions". We then further filter by zones that
+  #   contain a slash character (`/`) to make sure that quirks like "W-SU" or "Factory" are not included.
+  #   (Yes, god only knows how the string literal "Factory" made its way into a curated ISO list of timezones.)
+  # Signed GB 15-11-2024
+  SUPPORTED_TIMEZONES = TZInfo::Timezone.all_data_zone_identifiers
+                                        .filter { |tz| tz.include?('/') && !tz.match?(/\d+/) }
+                                        .uniq
+                                        .sort
+                                        .freeze
 
   FICTIVE_COUNTRY_DATA_PATH = StaticData::DATA_FOLDER.join("#{self.data_file_handle}.fictive.json")
   MULTIPLE_COUNTRIES = self.parse_json_file(FICTIVE_COUNTRY_DATA_PATH).freeze

@@ -41,25 +41,25 @@ RSpec.describe "Incidents management", type: :request do
 
     context "when logged in as a Delegate" do
       sign_in { FactoryBot.create(:delegate) }
-      it "shows a pending incident" do
+      it "does not show a pending incident" do
         get incident_path(pending_incident)
-        expect(response).to be_successful
+        expect(response).not_to be_successful
       end
     end
 
     context "when logged in as a WIC member" do
       sign_in { FactoryBot.create(:user, :wic_member) }
-      it "shows a pending incident" do
+      it "does not show a pending incident" do
         get incident_path(pending_incident)
-        expect(response).to be_successful
+        expect(response).not_to be_successful
       end
     end
 
     context "when logged in as a WQAC member" do
       sign_in { FactoryBot.create(:user, :wqac_member) }
-      it "shows a pending incident" do
+      it "does not show a pending incident" do
         get incident_path(pending_incident)
-        expect(response).to be_successful
+        expect(response).not_to be_successful
       end
     end
   end

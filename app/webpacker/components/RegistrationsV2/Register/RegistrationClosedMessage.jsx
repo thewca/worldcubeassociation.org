@@ -28,6 +28,10 @@ export default function RegistrationClosedMessage({
     return () => clearInterval(intervalId); // Cleanup interval on unmount
   }, [registrationStart, onTimerEnd, start]);
 
+  if (timeLeft.seconds < 0) {
+    return null;
+  }
+
   return (
     <Message color="blue">
       { timeLeft.days < 1 && timeLeft.hours < 1

@@ -24,7 +24,9 @@ class WaitingList < ActiveRecord::Base
     update_column :entries, entries.insert(new_position-1, entries.delete_at(old_index))
   end
 
+  # This is the position from the user/organizers perspective - ie, we start counting at 1
   def position(entry_id)
+    return nil unless entries.include?(entry_id)
     entries.index(entry_id) + 1
   end
 end
