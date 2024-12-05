@@ -35,10 +35,7 @@ module Registrations
         old_status = registration.competing_status
 
         ActiveRecord::Base.transaction do
-          puts "Old event IDs: #{registration.event_ids}"
-          puts "Desired events: #{event_ids}"
           update_event_ids(registration, event_ids)
-          puts "New event IDs: #{registration.event_ids}"
           registration.comments = comment unless comment.nil?
           registration.administrative_notes = admin_comment unless admin_comment.nil?
           registration.guests = guests if guests.present?
@@ -112,7 +109,6 @@ module Registrations
         return unless event_ids.present?
 
         update_competition_events = registration.competition.competition_events.where(event_id: event_ids)
-        puts "Considering events: #{update_competition_events.inspect}"
         registration.competition_events = update_competition_events
       end
     end

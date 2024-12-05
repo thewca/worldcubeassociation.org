@@ -149,7 +149,7 @@ RSpec.describe 'API Registrations' do
       expect(response.status).to eq(200)
 
       registration = Registration.find_by(user_id: user.id, competition_id: favourites_reg.competition.id)
-      expect(registration.event_ids).to eq(new_event_ids)
+      expect(registration.event_ids.sort).to eq(new_event_ids.sort)
     end
   end
 
@@ -171,8 +171,6 @@ RSpec.describe 'API Registrations' do
         submitted_by: competition.organizers.first.id,
         competition_id: competition.id,
       )
-
-      puts "registration status: #{registration1.competing_status}"
 
       headers = { 'Authorization' => bulk_update_request['jwt_token'] }
       patch api_v1_registrations_bulk_update_path, params: bulk_update_request, headers: headers
