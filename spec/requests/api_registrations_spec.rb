@@ -133,7 +133,7 @@ RSpec.describe 'API Registrations' do
 
     it 'user can change events in a favourites competition', :tag do
       favourites_comp = FactoryBot.create(:competition, :with_event_limit, :editable_registrations)
-      favourites_reg = FactoryBot.create(:registration, competition: favourites_comp, user: user, event_ids:  %w(333 333oh 555 pyram minx) )
+      favourites_reg = FactoryBot.create(:registration, competition: favourites_comp, user: user, event_ids: %w(333 333oh 555 pyram minx))
 
       new_event_ids = %w(333 333oh 555 pyram 444)
       update_request = FactoryBot.build(
