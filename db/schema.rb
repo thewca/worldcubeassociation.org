@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_12_04_012633) do
+ActiveRecord::Schema[7.2].define(version: 2024_11_18_145843) do
   create_table "Competitions", id: { type: :string, limit: 32, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", limit: 50, default: "", null: false
     t.string "cityName", limit: 50, default: "", null: false
@@ -506,7 +506,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_04_012633) do
     t.integer "user_allow_viewonline", limit: 1, default: 1, null: false, unsigned: true
     t.integer "user_allow_viewemail", limit: 1, default: 1, null: false, unsigned: true
     t.integer "user_allow_massemail", limit: 1, default: 1, null: false, unsigned: true
-    t.integer "user_options", default: 230271, null: false, unsigned: true
+    t.integer "user_options", default: 230_271, null: false, unsigned: true
     t.string "user_avatar", limit: 255, default: "", null: false
     t.string "user_avatar_type", limit: 255, default: "", null: false
     t.integer "user_avatar_width", limit: 2, default: 0, null: false, unsigned: true
@@ -777,8 +777,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_04_012633) do
     t.datetime "resolved_at", precision: nil
     t.boolean "digest_worthy", default: false
     t.datetime "digest_sent_at", precision: nil
-    t.integer "visibility", default: 0, null: false
-    t.index ["visibility"], name: "index_incidents_on_visibility"
   end
 
   create_table "jwt_denylist", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|

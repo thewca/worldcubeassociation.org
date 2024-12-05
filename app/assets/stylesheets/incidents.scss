@@ -39,19 +39,3 @@
 #wrc-data {
   @extend #competition-data;
 }
-
-.incident-visibility {
-  margin-bottom: 10px;
-  
-  .text-warning {
-    color: #f0ad4e;  //  warning color
-  }
-  
-  .text-info {
-    color: #5bc0de;  //  info color
-  }
-  
-  .text-success {
-    color: #5cb85c;  //  success color
-  }
-}

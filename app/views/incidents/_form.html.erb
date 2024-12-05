@@ -5,8 +5,11 @@
   <div class="form-inputs">
     <%= f.input :title %>
     <% if current_user.can_manage_incidents? %>
-      <%= f.input :visibility, collection: Incident.visibilities.keys.map { |v| [v.titleize, v] },
-                              include_blank: false %>
+      <%= f.input :visibility, collection: [
+        ['Draft (WRC only)', 'draft'],
+        ['Staff only', 'staff'],
+        ['Public', 'visible']
+      ], include_blank: false, hint: "Select who can view this incident" %>
     <% end %>
     <%= f.input :digest_worthy, disabled: @incident.digest_sent? %>
     <% if @incident.digest_sent? %>

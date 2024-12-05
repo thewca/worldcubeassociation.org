@@ -7,7 +7,7 @@ class Incident < ApplicationRecord
 
   accepts_nested_attributes_for :incident_competitions, allow_destroy: true
 
-  attribute :visibility, :integer, default: 0
+  attribute :visibility, :integer, default: 1
 
   enum visibility: {
     draft: 0,          # Only visible to WRC members
@@ -17,11 +17,10 @@ class Incident < ApplicationRecord
 
   scope :publicly_visible, -> { where(visibility: :visible) }
   scope :staff_visible, -> { where(visibility: [:staff, :visible]) }
-  scope :wrc_visible, -> { all } # WRC can see all incidents
+  scope :wrc_visible, -> { all }
 
   validate :digest_sent_at_consistent
   validates_presence_of :title
-  validate :visibility_transition_valid
 
   include Taggable
 
@@ -110,21 +109,15 @@ class Incident < ApplicationRecord
   def visible_to?(user)
     case visibility
     when "visible"
-      true
+      true # Everyone can see public incidents
     when "staff"
-      user&.staff? || user&.can_manage_incidents?
+      user&.staff? || user&.can_manage_incidents? # Staff and WRC can see staff incidents
     when "draft"
-      user&.can_manage_incidents?
-    else
-      false
+      user&.can_manage_incidents? # Only WRC can see drafts
     end
   end
 
-  def visibility_transition_valid
-    if visibility_changed? && visibility_was.present?
-      if visibility_was == "visible" && visibility != "visible"
-        errors.add(:visibility, "cannot change visibility of a public incident")
-      end
-    end
-  end
+  scope :publicly_visible, -> { where(visibility: :visible) } # Public sees only visible
+  scope :staff_visible, -> { where(visibility: [:staff, :visible]) } # Staff sees staff + visible
+  scope :wrc_visible, -> { all } # WRC sees everything
 end

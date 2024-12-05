@@ -38,8 +38,16 @@ class IncidentsController < ApplicationController
 
   def show
     set_incident
-    unless @incident.visible_to?(current_user)
+
+    # Check visibility and redirect based on user role
+    if @incident.visibility == 'draft' && !current_user&.can_manage_incidents?
       redirect_to_root_unless_user(:can_manage_incidents?)
+      return
+    end
+
+    if @incident.visibility == 'staff' && !current_user&.staff?
+      redirect_to_root_unless_user(:staff?)
+      nil
     end
   end
 
@@ -88,12 +96,6 @@ class IncidentsController < ApplicationController
 
   def update
     set_incident
-    if @incident.update(incident_params)
-      flash[:success] = "Incident was successfully updated."
-      redirect_to @incident
-    else
-      render :edit
-    end
   end
 
   def destroy
