@@ -7,7 +7,7 @@ class Incident < ApplicationRecord
 
   accepts_nested_attributes_for :incident_competitions, allow_destroy: true
 
-  attribute :visibility, :integer, default: 1
+  attribute :visibility, :integer, default: 2
 
   enum visibility: {
     draft: 0,          # Only visible to WRC members
