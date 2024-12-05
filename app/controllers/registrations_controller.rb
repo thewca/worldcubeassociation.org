@@ -121,9 +121,6 @@ class RegistrationsController < ApplicationController
 
   def import
     @competition = competition_from_params
-    if @competition.uses_microservice_registrations?
-      redirect_to Microservices::Registrations.registration_import_path(@competition.id)
-    end
   end
 
   def do_import
@@ -171,7 +168,7 @@ class RegistrationsController < ApplicationController
         new_locked_users << user if locked_account_created
         registration = competition.registrations.find_or_initialize_by(user_id: user.id)
         unless registration.accepted?
-          registration.assign_attributes(accepted_at: Time.now, accepted_by: current_user.id, deleted_at: nil)
+          registration.assign_attributes(accepted_at: Time.now, accepted_by: current_user.id, deleted_at: nil, competing_status: Registrations::Helper::STATUS_ACCEPTED)
         end
         registration.registration_competition_events = []
         competition.competition_events.map do |competition_event|
@@ -183,6 +180,7 @@ class RegistrationsController < ApplicationController
           end
         end
         registration.save!
+        registration.add_history_entry({ event_ids: registration.event_ids }, "user", current_user.id, "CSV Import")
       rescue StandardError => e
         raise e.exception(I18n.t("registrations.import.errors.error", registration: registration_row[:name], error: e))
       end
@@ -210,25 +208,17 @@ class RegistrationsController < ApplicationController
     end
     ActiveRecord::Base.transaction do
       user, locked_account_created = user_for_registration!(params[:registration_data])
-      if @competition.uses_microservice_registrations?
-        Microservices::Registrations.add_registration(@competition.id,
-                                                      user.id,
-                                                      params[:registration_data][:event_ids],
-                                                      params[:registration_data][:comments],
-                                                      "accepted",
-                                                      @current_user.id)
-      else
-        registration = @competition.registrations.find_or_initialize_by(user_id: user.id)
-        raise I18n.t("registrations.add.errors.already_registered") unless registration.new_record?
-        registration_comment = params.dig(:registration_data, :comments)
-        registration.assign_attributes(comments: registration_comment) if registration_comment.present?
-        registration.assign_attributes(accepted_at: Time.now, accepted_by: current_user.id)
-        params[:registration_data][:event_ids]&.each do |event_id|
-          competition_event = @competition.competition_events.find { |ce| ce.event_id == event_id }
-          registration.registration_competition_events.build(competition_event_id: competition_event.id)
-        end
-        registration.save!
+      registration = @competition.registrations.find_or_initialize_by(user_id: user.id)
+      raise I18n.t("registrations.add.errors.already_registered") unless registration.new_record?
+      registration_comment = params.dig(:registration_data, :comments)
+      registration.assign_attributes(comments: registration_comment) if registration_comment.present?
+      registration.assign_attributes(accepted_at: Time.now, accepted_by: current_user.id, competing_status: Registrations::Helper::STATUS_ACCEPTED)
+      params[:registration_data][:event_ids]&.each do |event_id|
+        competition_event = @competition.competition_events.find { |ce| ce.event_id == event_id }
+        registration.registration_competition_events.build(competition_event_id: competition_event.id)
       end
+      registration.save!
+      registration.add_history_entry({ event_ids: registration.event_ids }, "user", current_user.id, "OTS Form")
       if locked_account_created
         RegistrationsMailer.notify_registrant_of_locked_account_creation(user, @competition).deliver_later
       end
@@ -546,20 +536,6 @@ class RegistrationsController < ApplicationController
           #   and Stripe tries again after an exponential backoff. So we (erroneously!) record the creation timestamp
           #   in our DB _after_ the backed-off event has been processed. This can lead to a wrong registration order :(
           stored_payment.update!(created_at: audit_event.created_at_remote)
-        elsif stored_holder.is_a? MicroserviceRegistration
-          begin
-            Microservices::Registrations.update_registration_payment(
-              stored_holder.attendee_id,
-              charge_transaction.id,
-              ruby_money.cents,
-              ruby_money.currency.iso_code,
-              stripe_intent.status,
-              { type: "stripe_webhook", id: audit_event.id },
-            )
-          rescue Faraday::Error => e
-            logger.error "Couldn't update Microservice: #{e.message}, at #{e.backtrace}"
-            return head :internal_server_error
-          end
         end
       end
     when StripeWebhookEvent::PAYMENT_INTENT_CANCELED
@@ -700,13 +676,6 @@ class RegistrationsController < ApplicationController
     render json: { client_secret: intent.client_secret }
   end
 
-  # TODO: This can be removed after deployment, this is so we don't have any users error out if they click on pay
-  # while the deployment happens
-  def payment_completion_legacy
-    registration = Registration.find(params[:id])
-    redirect_to action: :payment_completion, competition_id: registration.competition_id, params: params.permit(:payment_intent, :payment_intent_client_secret)
-  end
-
   def refund_payment
     competition_id = params[:competition_id]
     competition = Competition.find(competition_id)
@@ -722,9 +691,8 @@ class RegistrationsController < ApplicationController
     payment_record = payment_account.find_payment(params[:payment_id])
 
     registration = payment_record.root_record.payment_intent.holder
-    uses_v2 = registration.is_a? MicroserviceRegistration
 
-    redirect_path = uses_v2 ? edit_registration_v2_path(competition_id, registration.user_id) : edit_registration_path(registration)
+    redirect_path = competition.registration_version_v3? ? edit_registration_v2_path(competition_id, registration.user_id) : edit_registration_path(registration)
 
     refund_amount_param = params.require(:payment).require(:refund_amount)
     refund_amount = refund_amount_param.to_i
@@ -746,28 +714,13 @@ class RegistrationsController < ApplicationController
     # we can also double-check that they're on the same page as we are (to be _really_ sure!)
     ruby_money = refund_receipt.money_amount
 
-    if uses_v2
-      begin
-        Microservices::Registrations.update_registration_payment(
-          registration.attendee_id,
-          refund_receipt.id,
-          ruby_money.cents,
-          ruby_money.currency.iso_code,
-          "refund",
-          { type: "user", id: current_user.id },
-        )
-      rescue Faraday::Error
-        flash[:error] = 'Registration Service is not reachable'
-      end
-    else
-      registration.record_refund(
-        ruby_money.cents,
-        ruby_money.currency.iso_code,
-        refund_receipt,
-        payment_record.registration_payment.id,
-        current_user.id,
-      )
-    end
+    registration.record_refund(
+      ruby_money.cents,
+      ruby_money.currency.iso_code,
+      refund_receipt,
+      payment_record.registration_payment.id,
+      current_user.id,
+    )
 
     flash[:success] = 'Payment was refunded'
     redirect_to redirect_path

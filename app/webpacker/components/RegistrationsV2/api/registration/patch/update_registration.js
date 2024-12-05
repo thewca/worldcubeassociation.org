@@ -1,11 +1,10 @@
 import fetchWithJWTToken from '../../../../../lib/requests/fetchWithJWTToken';
-import { registrationRoutes } from '../../routes';
+import { bulkUpdateRegistrationUrl, updateRegistrationUrl } from '../../../../../lib/requests/routes.js.erb';
 
 export default async function updateRegistration(
-  competition,
   body,
 ) {
-  const route = registrationRoutes[competition.registration_version].updateRegistrationUrl;
+  const route = updateRegistrationUrl;
   const { data } = await fetchWithJWTToken(route, {
     method: 'PATCH',
     headers: {
@@ -18,10 +17,9 @@ export default async function updateRegistration(
 
 // Bulk Update Route
 export async function bulkUpdateRegistrations(
-  competition,
   body,
 ) {
-  const route = registrationRoutes[competition.registration_version].bulkUpdateRegistrationUrl;
+  const route = bulkUpdateRegistrationUrl;
   const { data } = await fetchWithJWTToken(route, {
     method: 'PATCH',
     headers: {

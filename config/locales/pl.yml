@@ -1995,19 +1995,19 @@ pl:
       #original_hash: 51fa5a4
       wca_id_no_gender_html: >-
         Nie mamy zapisanej płci dla tego WCA ID. Prosimy o skontaktowanie się z
-        <a href='mailto:results@worldcubeassociation.org'
+        <a href='%{wrt_contact_path}'
         target='_blank'>Zespołem do spraw wyników</a> w celu rozwiązania tego
         problemu.
       #original_hash: 87ee245
       wca_id_no_citizenship_html: >-
         Nie mamy zapisanej narodowości dla tego WCA ID. Prosimy o skontaktowanie
-        się z <a href='mailto:results@worldcubeassociation.org'
+        się z <a href='%{wrt_contact_path}'
         target='_blank'>Zespołem do spraw wyników</a> w celu rozwiązania tego
         problemu.
       #original_hash: c3839bc
       wca_id_no_name_html: >-
         Nie mamy zapisanego imienia dla tego WCA ID. Prosimy o skontaktowanie
-        się z <a href='mailto:results@worldcubeassociation.org'
+        się z <a href='%{wrt_contact_path}'
         target='_blank'>Zespołem do spraw wyników</a> w celu rozwiązania tego
         problemu.
       #original_hash: d02c03b

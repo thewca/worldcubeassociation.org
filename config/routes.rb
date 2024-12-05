@@ -41,10 +41,6 @@ Rails.application.routes.draw do
     delete 'users/sign-out-other' => 'sessions#destroy_other', as: :destroy_other_user_sessions
   end
 
-  # TODO: This can be removed after deployment, this is so we don't have any users error out if they click on pay
-  # while the deployment happens
-  get 'registration/:id/payment-completion' => 'registrations#payment_completion_legacy', as: :registration_payment_completion_legacy
-
   post 'registration/:id/load-payment-intent/:payment_integration' => 'registrations#load_payment_intent', as: :registration_payment_intent
   post 'competitions/:competition_id/refund/:payment_integration/:payment_id' => 'registrations#refund_payment', as: :registration_payment_refund
   get 'competitions/:competition_id/payment-completion(/:payment_integration)' => 'registrations#payment_completion', as: :registration_payment_completion
@@ -124,6 +120,7 @@ Rails.application.routes.draw do
     delete '/admin/inbox-data' => 'admin#delete_inbox_data', as: :admin_delete_inbox_data
     delete '/admin/results-data' => 'admin#delete_results_data', as: :admin_delete_results_data
     get '/admin/results/:round_id/new' => 'admin/results#new', as: :new_result
+    get '/admin/scrambles/:round_id/new' => 'admin/scrambles#new', as: :new_scramble
 
     get '/payment_integration/setup' => 'competitions#payment_integration_setup', as: :payment_integration_setup
     get '/payment_integration/:payment_integration/connect' => 'competitions#connect_payment_integration', as: :connect_payment_integration
@@ -160,7 +157,7 @@ Rails.application.routes.draw do
 
   scope '/admin' do
     resources :results, except: [:index, :new], controller: 'admin/results'
-    post 'results' => 'admin/results#create'
+    resources :scrambles, except: [:index, :new], controller: 'admin/scrambles'
     get 'events_data/:competition_id' => 'admin/results#show_events_data', as: :competition_events_data
   end
 
@@ -194,6 +191,9 @@ Rails.application.routes.draw do
     get 'generate_db_token' => 'panel#generate_db_token', as: :panel_generate_db_token
   end
   get 'panel/:panel_id' => 'panel#index', as: :panel_index
+  resources :tickets, only: [:show] do
+    post 'update_status' => 'tickets#update_status', as: :update_status
+  end
   resources :notifications, only: [:index]
 
   root 'posts#homepage'
@@ -239,8 +239,12 @@ Rails.application.routes.draw do
 
   get 'contact' => 'contacts#index'
   post 'contact' => 'contacts#contact'
-  get 'contact/dob' => 'contacts#dob'
-  post 'contact/dob' => 'contacts#dob_create'
+  scope 'contact' do
+    get 'edit_profile' => 'contacts#edit_profile'
+    post 'edit_profile' => 'contacts#edit_profile_action', as: :contact_edit_profile_action
+    get 'dob' => 'contacts#dob', as: :contact_dob
+    post 'dob' => 'contacts#dob_create'
+  end
 
   get '/regulations' => 'regulations#show', id: 'index'
   get '/regulations/wca-regulations-and-guidelines', to: redirect('https://regulations.worldcubeassociation.org/wca-regulations-and-guidelines.pdf', status: 302)

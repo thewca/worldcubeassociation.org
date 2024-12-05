@@ -19,7 +19,7 @@ resource "aws_ecs_task_definition" "worker" {
   container_definitions = jsonencode([
 
     {
-      name              = "sqs-worker-staging"
+      name              = "sqs-worker-production"
       image             = "${var.shared.ecr_repository.repository_url}:production-sqs-worker"
       cpu    = 1024
       memory = 3911
