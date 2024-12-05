@@ -13,7 +13,7 @@ class IncidentsController < ApplicationController
 
   def index
     base_model = Incident.includes(:competitions, :incident_tags)
-    if current_user&.can_view_delegate_matters?
+    if current_user&.can_manage_incidents?
       @incidents = base_model.all
     else
       @incidents = base_model.resolved
@@ -37,7 +37,7 @@ class IncidentsController < ApplicationController
   def show
     set_incident
     unless @incident.resolved?
-      redirect_to_root_unless_user(:can_view_delegate_matters?)
+      redirect_to_root_unless_user(:can_manage_incidents?)
     end
   end
 
@@ -68,6 +68,8 @@ class IncidentsController < ApplicationController
       updated_attrs[:digest_sent_at] = Time.now
     when "resolved"
       updated_attrs[:resolved_at] = Time.now
+    when "unresolve"
+      updated_attrs[:resolved_at] = nil
     else
       flash[:danger] = "Unrecognized action: '#{params[:kind]}'"
       return redirect_to @incident

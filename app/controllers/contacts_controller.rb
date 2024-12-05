@@ -133,6 +133,8 @@ class ContactsController < ApplicationController
                                 )
                               }
 
+    ticket = TicketsEditPerson.create_ticket(wca_id, changes_requested, current_user)
+
     maybe_send_contact_email(
       ContactEditProfile.new(
         your_email: current_user&.email,
@@ -140,6 +142,7 @@ class ContactsController < ApplicationController
         wca_id: wca_id,
         changes_requested: changes_requested_humanized(changes_requested),
         edit_profile_reason: edit_profile_reason,
+        ticket: ticket,
         document: attachment,
         request: request,
       ),
