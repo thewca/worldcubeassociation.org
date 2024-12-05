@@ -13,8 +13,8 @@ import _ from 'lodash';
 // setMyProp('my val');
 // Or passed as the 'onChange' callback of a react-semantic-ui input.
 
-const useNestedInputUpdater = (updater, path) => useCallback((ev, data = undefined) => {
-  const value = data ? data.value : ev;
+const useNestedInputUpdater = (updater, path, dataKey = 'value') => useCallback((ev, data = undefined) => {
+  const value = data ? data[dataKey] : ev;
   // updater is assumed to come from useState or similar, so we can pass it a
   // function that act based on the previous state.
   updater((prevState) => {
@@ -24,6 +24,6 @@ const useNestedInputUpdater = (updater, path) => useCallback((ev, data = undefin
     _.set(newState, path, value);
     return newState;
   });
-}, [updater, path]);
+}, [updater, path, dataKey]);
 
 export default useNestedInputUpdater;

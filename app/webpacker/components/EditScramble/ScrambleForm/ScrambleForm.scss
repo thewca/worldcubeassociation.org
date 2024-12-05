@@ -1,0 +1,10 @@
+.scramble-form {
+  margin-top: 1em;
+  input[readonly] {
+    opacity: 0.7;
+  }
+  .delete-scramble-button {
+    margin-top: 1em;
+    margin-right: 1em;
+  }
+}

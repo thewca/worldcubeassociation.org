@@ -6,20 +6,16 @@ import { competitionMaxShortNameLength } from '../../../lib/wca-data.js.erb';
 import { useFormObject } from '../../wca/FormBuilder/provider/FormObjectProvider';
 
 export default function NameDetails() {
-  const { hasAnyRegistrations, isPersisted, isAdminView } = useStore();
+  const { isPersisted, isAdminView } = useStore();
 
-  const { name, admin: { usesNewRegistrationSystem } } = useFormObject();
+  const { name } = useFormObject();
 
   const nameAlreadyShort = !name || name.length <= competitionMaxShortNameLength;
   const disableIdAndShortName = !isAdminView && nameAlreadyShort;
 
-  // ID change on V1 is always possible, because we have control over the Foreign Keys.
-  // Otherwise, only competitions without registrations can change their ID.
-  const regSystemSupportsIdChange = !usesNewRegistrationSystem || !hasAnyRegistrations;
-
   return (
     <>
-      {isPersisted && <InputString id="competitionId" disabled={disableIdAndShortName || !regSystemSupportsIdChange} />}
+      {isPersisted && <InputString id="competitionId" disabled={disableIdAndShortName} />}
       <InputString id="name" required />
       {isPersisted && (
         <InputString

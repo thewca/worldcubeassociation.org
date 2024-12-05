@@ -1051,7 +1051,7 @@ pt:
               Está a tentar autenticar-se no site da WCA. Tem a autenticação de
               dois fatores ativada e solicitou apenas o envio de uma senha de
               utilização única por email. Encontre-o abaixo:
-            #original_hash: e27e540
+            #original_hash: 8aeccbf
             disclaimer: >-
               Se não solicitou este código de autenticação, entre em contacto
               imediatamente com o WST, respondendo a este email: pode ter uma
@@ -1412,6 +1412,8 @@ pt:
         wfc: Comité Financeiro da WCA
         #original_hash: 2035811
         wmt: Equipa de Marketing da WCA
+        #original_hash: c90653c
+        wmct: Equipa de Grandes Campeonatos da WCA
         #original_hash: 8f32116
         wqac: Comité de Garantia de Qualidade da WCA
         #original_hash: 3da1e85
@@ -1473,6 +1475,10 @@ pt:
           Esta equipa é responsável por desenvolver e gerir a marca WCA,
           procurar patrocínios, apoiar a distribuição de equipamentos de
           competição WCA e comercializar mercadoria WCA.
+        #original_hash: ff6f008
+        wmct: >-
+          Esta equipa é responsável por supervisionar a organização e o
+          desenvolvimento dos Campeonatos Continentais e Mundiais da WCA.
         #original_hash: 0171b3b
         wqac: >-
           Este comité tem a função de apoiar e promover a melhoria contínua da
@@ -1518,6 +1524,11 @@ pt:
         página</a>.
       #original_hash: ea20be0
       success_message: Email enviado - entraremos em contacto em breve.
+      #original_hash: 8fa6b95
+      prefilled: >-
+        Para atualizar a sua inscrição, precisa de entrar em contacto os
+        organizadores da competição. Preenchemos previamente o formulário de
+        contacto com as alterações solicitadas - por favor envie o formulário.
       form:
         user_data:
           name:
@@ -1617,8 +1628,44 @@ pt:
         captcha:
           #original_hash: 58c1271
           validation_error: Por favor verifique que não é um robot.
+        #original_hash: bc98198
+        next_button: Próximo
         #original_hash: 2dacf65
         submit_button: Submeter
+    contact_edit_profile:
+      #original_hash: 460577c
+      title: Formulário de Edição de Perfil
+      #original_hash: f01c4c7
+      not_logged_in_error: >-
+        Parece que não está autenticado. Por favor autentique-se para editar o
+        seu perfil. Para qualquer outra questão, por favor <a
+        href="https://www.worldcubeassociation.org/contact?contactRecipient=wrt">contacte-nos</a>.
+      #original_hash: 0afb595
+      no_profile_error: >-
+        Parece que ainda não tem um perfil WCA porque não participou em nenhuma
+        competição. Para qualquer outra questão, por favor <a
+        href="https://www.worldcubeassociation.org/contact?contactRecipient=wrt">contacte-nos</a>.
+      form:
+        contact_email:
+          #original_hash: 3142970
+          label: Email de Contacto
+        wca_id:
+          #original_hash: 6344c9e
+          label: Introduza o ID da WCA
+        edit_reason:
+          #original_hash: fdfcccf
+          label: Motivo para a alteração
+        proof_attach:
+          #original_hash: a9645b1
+          label: Anexar prova
+        submit_edit_request_button:
+          #original_hash: ab529a9
+          label: Submeter Pedido de Edição
+        captcha:
+          #original_hash: 58c1271
+          validation_error: Por favor verifique que não é um robô.
+      #original_hash: 126541e
+      success_message: Pedido enviado - entraremos em contacto em breve.
   homepage:
     #original_hash: 824d76b
     learn_more: Saber mais
@@ -1893,7 +1940,7 @@ pt:
       confirm_new_email: >-
         Mudar de email requer a confirmação do novo email antes de se tornar
         efetivo.
-      #original_hash: 8a770cf
+      #original_hash: ff43ee2
       pending_mail_confirmation: 'Está pendente a confirmação do novo email (%{email}) para esta conta.'
       #original_hash: 0340b0b
       pending_avatar_confirmation: Está pendente a confirmação do novo avatar para esta conta.
@@ -1943,7 +1990,7 @@ pt:
           registered: inscreveu-se numa competição
       #original_hash: fe7122d
       guidelines_confirmation: Confirmo que o meu avatar cumpre todas as indicações para avatares.
-      #original_hash: d677ceb
+      #original_hash: 9a85f5e
       confirm_guidelines: >-
         Verifique que leu as indicações para avatares e submeteu uma foto
         válida.
@@ -1968,15 +2015,17 @@ pt:
         '1': Os avatares devem ser fotos de pessoas reais.
         #original_hash: b12d293
         '2': A pessoa apresentada deve ser você atualmente.
-        #original_hash: de9b742
-        '3': 'Se há mais de uma pessoa na foto, deve estar claro qual delas você é.'
+        #original_hash: 8165cf0
+        '3': >-
+          Se existir mais de uma pessoa na foto, deve estar claro qual delas
+          você é.
         #original_hash: 4083c00
         '4': 'A sua cabeça, mas não necessariamente toda a face, deve estar visível.'
-        #original_hash: fc17fa7
+        #original_hash: e2d2fe8
         '5': >-
           O avatar não deve incluir texto sobreposto, autocolantes ou filtros
           não naturais, incluindo bordas.
-        #original_hash: cc5f23a
+        #original_hash: 7f9c9c6
         '6': O avatar deve ser submetido na orientação correta.
         #original_hash: 1a18831
         '7': O avatar não pode apresentar conteúdo ofensivo (ex. gestos ofensivos).
@@ -1988,7 +2037,7 @@ pt:
           '1': >-
             O avatar deve ser de si atualmente, representado da mesma forma que
             apareceria numa competição.
-          #original_hash: 64ded69
+          #original_hash: f1f3854
           '2': >-
             O avatar deve ser ajustado, cortado, inclinado e iluminado, para que
             qualquer competidor ou espectador de uma competição possa usá-lo
@@ -2000,19 +2049,19 @@ pt:
             ajustada, para que possa ser reconhecido somente com ela e deve
             conter o seu rosto.
       sensitive:
-        #original_hash: 267ac87
+        #original_hash: 3f0a787
         info: >-
-          Esta secção permite editar informação sensível, para poder fazê-lo por
-          favor confirme a sua identidade abaixo.
+          Esta secção permite editar informação sensível. Para poder fazê-lo,
+          por favor confirme a sua identidade abaixo.
         #original_hash: f19af51
         success: Verificação de identidade realizada com sucesso
         #original_hash: 52ebf9c
         failure: Não foi possível verificar a sua identidade
         #original_hash: 4324c73
         confirm_proceed: Confirmar e prosseguir
-        #original_hash: d395f1f
+        #original_hash: 10a90b7
         identity_error: >-
-          Não é possível editar os seus dados, por favor confirme a sua
+          Não é possível editar os seus dados. Por favor confirme a sua
           identidade antes de tentar de novo.
     errors:
       #original_hash: 094b763
@@ -2062,7 +2111,7 @@ pt:
         Não temos um nome registado para este ID da WCA. Por favor envie um
         email para a <a href='%{wrt_contact_path}' target='_blank'>Equipa de
         Resultados da WCA</a> para resolver isto.
-      #original_hash: 8f785ea
+      #original_hash: d2f4856
       email_used_by_locked_account_html: >-
         já é usado por outra conta. Foi criado automaticamente como resultado de
         se ter registado para uma competição usando um serviço externo. Se for o
@@ -2508,10 +2557,6 @@ pt:
         payment_reset: O pagamento foi rejeitado pelo Stripe.
         #original_hash: bcf6a93
         payment_pending: O pagamento ainda não foi concluído.
-        #original_hash: c3f8d65
-        registration_unreachable: >-
-          Ocorreu um problema ao aceder ao serviço de registo. Entre em contacto
-          com a Equipa de Software.
     #original_hash: 4cf01a2
     preferred_events_prompt_html: >-
       Para agilizar a inscrição no futuro, pode escolher os seus eventos
@@ -2693,11 +2738,6 @@ pt:
       registration_already_closed: >-
         A data limite para registos já foi ultrapassada. Por favor, defina-a
         para ser no futuro.
-      #original_hash: 9a07b42
-      uses_v2_registrations: >-
-        Esta competição está a utilizar o novo Sistema de Registo. Entre em
-        contacto com a WCAT se acredita que esta competição deveria utilizar o
-        sistema antigo.
       #original_hash: 3322400
       tooltip_registered: Está registado.
       #original_hash: f2d092f
@@ -2716,7 +2756,7 @@ pt:
       not_confirmed_not_visible: Esta competição não está confirmada nem visível
       #original_hash: 1b92d16
       championship_exists: 'Já existe um %{championship_type} em %{year}'
-      #original_hash: 0644bdc
+      #original_hash: e871f03
       orga_closed_reg_success: Inscrições encerradas com sucesso.
       #original_hash: 7f197a0
       orga_closed_reg_failure: Não pode fechar as inscrições.
@@ -3746,6 +3786,22 @@ pt:
         being_deleted: Registo está a ser apagado...
         #original_hash: cbf13af
         update_confirm: Tem a certeza de que quer atualizar o seu registo?
+        #original_hash: 9b92912
+        update_confirm_contact: >-
+          Tem de entrar em contacto com os organizadores para atualizar o seu
+          registo. Clique em Sim para ser direcionado para o formulário de
+          contacto.
+        #original_hash: d54056b
+        delete_confirm_contact: >-
+          Tem de entrar em contacto com os organizadores para eliminar a sua
+          inscrição. Clique em Sim para ser direcionado para o formulário de
+          contacto.
+        #original_hash: 7fbb20c
+        update_contact_message: >-
+          Gostaria de atualizar os meus dados de registo da seguinte forma:
+          %{update_params}
+        #original_hash: 8bf02a9
+        delete_contact_message: Quero apagar o meu registo
         #original_hash: 65bbb07
         no_changes: Não há alterações
         #original_hash: be4e8e2
@@ -3830,8 +3886,10 @@ pt:
         disclaimer: A submissão do registo não significa aprovação para competir
         #original_hash: 8fe68a1
         processing: O seu registo está em processamento...
-        #original_hash: 897f272
-        processing_longer: 'O processamento está a demorar mais que o habitual, por favor aguarde!'
+        #original_hash: c7f124a
+        processing_longer: >-
+          O seu registo foi recebido e será processado em breve - isto pode
+          demorar um pouco se os nossos servidores estiverem muito ocupados.
         #original_hash: 79ba42a
         processing_queue: 'Muitos registos a serem processados, %{queueCount} na fila.'
         #original_hash: ff6550f
@@ -4459,7 +4517,7 @@ pt:
       account_connected: >-
         Conectou com sucesso a sua conta %{provider} e pode agora receber
         pagamentos de inscrições para esta competição.
-      #original_hash: 18d1326
+      #original_hash: b83891e
       account_disconnected_success: 'A sua conta %{provider} foi desconectada com sucesso.'
       #original_hash: 6b934e2
       account_disconnected_failure: 'Ocorreu um erro ao desconectar a conta %{provider}.'
@@ -4854,14 +4912,14 @@ pt:
     mission_footer: Declaração da Missão da WCA
     #original_hash: cdab446
     who_we_are_title: Quem somos
-    #original_hash: c0d9a3e
+    #original_hash: 303f17a
     who_we_are_content_html: >-
       <p> A World Cube Association rege as competições de puzzles mecânicos que
       são operados por rotação de grupos de peças, geralmente conhecidos como
       'twisty puzzles'. O mais famoso desses quebra-cabeças é o Cubo de Rubik,
       inventado pelo professor Rubik, da Hungria. Uma seleção desses
       quebra-cabeças é escolhida como eventos oficiais da WCA.</p> <p>Como a WCA
-      evoluiu na última década, mais de 200.000 pessoas competiram nas nossas
+      evoluiu na última década, mais de 245.000 pessoas competiram nas nossas
       competições. Apesar desse crescimento, continuamos a ser uma organização
       que é quase inteiramente gerida por voluntários, de organizadores locais a
       delegados da WCA e até mesmo ao Conselho da WCA. Somos muito gratos a
@@ -4891,9 +4949,9 @@ pt:
       href="https://documents.worldcubeassociation.org/documents/WCA_Vision_and_Strategy.pdf">aqui</a>.</p>
     #original_hash: f64ccc7
     whats_next_title: O que vem a seguir para a WCA?
-    #original_hash: 487c6a1
+    #original_hash: 3312277
     whats_next_content_html: >-
-      <p> A World Cube Association teve mais de 200.000 competidores únicos de
+      <p> A World Cube Association teve mais de 245.000 competidores únicos de
       158 regiões diferentes e não estamos a planear abrandar tão cedo! A
       comunidade de cubing tem crescido constantemente desde a nossa fundação em
       2004 e queremos encorajá-la a continuar no futuro aumentando a

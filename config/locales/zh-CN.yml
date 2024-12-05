@@ -1244,7 +1244,7 @@ zh-CN:
           该委员会对WCA比赛期间或WCA官方线上平台上的选手和事件进行独立调查。这些事件涉嫌可能违反了WCA的精神、行为守则、条例。
         #original_hash: 6cdac80
         wec: >-
-          该委员会的作用是确保WCA工作人员遵循的所有程序都遵守道德守则，如果这些成员的行为不符合守则，则进行独立调查。WEC是选手的知己，他们可能会报告担忧并要求调查。如果任何参与者不同意WCA纪律委员会的决定，该委员会也充当上诉委员会。  
+          该委员会的作用是确保WCA工作人员遵循的所有程序都遵守道德守则，如果这些成员的行为不符合守则，则进行独立调查。WEC是选手的知己，他们可能会报告担忧并要求调查。如果任何参与者不同意WCA纪律委员会的决定，该委员会也充当上诉委员会。
         #original_hash: 889dd90
         weat: 该团队是负责执行处理WCA董事会的行政事务。
         #original_hash: 43e4e33
@@ -1551,15 +1551,15 @@ zh-CN:
       wca_id_no_birthdate_html: '我们当前没有该 WCA ID 的生日信息。请联系使用<a href="%{dob_form_path}">专用表单</a>联系 WCA 成绩组。'
       #original_hash: 51fa5a4
       wca_id_no_gender_html: >-
-        该 WCA ID 没有性别记录。请联系 <a href='mailto:results@worldcubeassociation.org'
+        该 WCA ID 没有性别记录。请联系 <a href='%{wrt_contact_path}'
         target='_blank'>WCA 成绩组</a>解决此问题。
       #original_hash: 87ee245
       wca_id_no_citizenship_html: >-
-        该 WCA ID 没有地区记录。请联系 <a href='mailto:results@worldcubeassociation.org'
+        该 WCA ID 没有地区记录。请联系 <a href='%{wrt_contact_path}'
         target='_blank'>WCA 成绩组</a>解决此问题。
       #original_hash: c3839bc
       wca_id_no_name_html: >-
-        该 WCA ID 没有姓名记录。请联系 <a href='mailto:results@worldcubeassociation.org'
+        该 WCA ID 没有姓名记录。请联系 <a href='%{wrt_contact_path}'
         target='_blank'>WCA 成绩组</a>解决此问题。
       #original_hash: d02c03b
       avatar_requires_wca_id: 需要关联一个 WCA ID

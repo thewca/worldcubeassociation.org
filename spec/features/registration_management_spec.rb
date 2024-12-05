@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.feature "Registration management" do
+RSpec.feature "Registration management", js: true do
   let!(:delegate) { FactoryBot.create :delegate }
   let(:competition) { FactoryBot.create :competition, :registration_open, delegates: [delegate] }
 

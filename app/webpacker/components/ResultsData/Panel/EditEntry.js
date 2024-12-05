@@ -1,5 +1,6 @@
 import React from 'react';
 
+import _ from 'lodash';
 import useLoadedData from '../../../lib/hooks/useLoadedData';
 import { competitionUrl } from '../../../lib/requests/routes.js.erb';
 
@@ -9,8 +10,10 @@ import Errored from '../../Requests/Errored';
 function EditEntry({
   id,
   dataUrlFn,
+  dataType,
   DisplayTable,
   EditForm,
+  competitionIdKey = 'competition_id',
 }) {
   const {
     data, sync, loading, error,
@@ -25,14 +28,16 @@ function EditEntry({
           {!loading && (
             <>
               <h3>
-                Result previously saved in the database
+                {_.upperFirst(dataType)}
+                {' '}
+                previously saved in the database
                 {' '}
                 -
                 {' '}
                 <a
-                  href={competitionUrl(data.competition_id)}
+                  href={competitionUrl(data[competitionIdKey])}
                 >
-                  {data.competition_id}
+                  {data[competitionIdKey]}
                 </a>
               </h3>
               <DisplayTable dataItem={data} />

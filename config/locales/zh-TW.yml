@@ -662,6 +662,8 @@ zh-TW:
         competing_only: 只有參賽
         #original_hash: 35a6012
         competing_and_attending: 參賽及前往比賽會場
+        #original_hash: 4f30c10
+        competing_and_attending_and_forums: 競賽、前往會場和討論區
     competition_medium:
       status:
         #original_hash: 61a0572
@@ -2661,7 +2663,7 @@ zh-TW:
           #original_hash: d493e6a
           is_visible: 公開比賽
           #original_hash: e7daccb
-          uses_v_2_registrations: 使用新的報名系統
+          uses_new_registration_system: 使用新的報名系統
         #original_hash: 89f89c0
         competition_id: 比賽ID
         #original_hash: 709a232
@@ -2806,7 +2808,7 @@ zh-TW:
           #original_hash: da39a3e
           is_visible: ''
           #original_hash: 68d3cc6
-          uses_v_2_registrations: 如果這個被設為無效，變更報名系統會造成問題。如果您仍然需要變更報名系統，請向WCA軟體組聯絡取得協助。
+          uses_new_registration_system: 如果停用這功能，更改註冊系統會產生技術問題。如果您仍要更改註冊系統請聯絡WCA軟體組來取得協助。
         #original_hash: da39a3e
         competition_id: ''
         #original_hash: 2c812a0

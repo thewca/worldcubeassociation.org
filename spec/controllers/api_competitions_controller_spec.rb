@@ -359,7 +359,7 @@ RSpec.describe Api::V0::CompetitionsController do
         get_wcif_and_compare_persons_to(competition.id, user_competitor_ids + [[competition.organizers.first.id, nil], [competition.delegates.first.id, nil]])
 
         # Move last registration to deleted
-        last_registration.touch :deleted_at
+        last_registration.competing_status = Registrations::Helper::STATUS_CANCELLED
         # Create and register one new user
         user = FactoryBot.create(:user)
         last_registration = FactoryBot.create(:registration, :accepted, competition: competition, user: user)

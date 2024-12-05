@@ -14,7 +14,6 @@ import {
 } from 'semantic-ui-react';
 import { getSingleRegistration } from '../api/registration/get/get_registrations';
 import updateRegistration from '../api/registration/patch/update_registration';
-import getUsersInfo from '../api/user/post/getUserInfo';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { setMessage } from '../Register/RegistrationMessage';
 import Loading from '../../Requests/Loading';
@@ -25,6 +24,7 @@ import { useConfirm } from '../../../lib/providers/ConfirmProvider';
 import i18n from '../../../lib/i18n';
 import RegistrationHistory from './RegistrationHistory';
 import { hasPassed } from '../../../lib/utils/dates';
+import getUsersInfo from '../api/user/post/getUserInfo';
 
 export default function RegistrationEditor({ competitor, competitionInfo }) {
   const dispatch = useDispatch();
@@ -54,7 +54,7 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
   });
 
   const { mutate: updateRegistrationMutation, isPending: isUpdating } = useMutation({
-    mutationFn: (body) => updateRegistration(competitionInfo, body),
+    mutationFn: updateRegistration,
     onError: (data) => {
       const { error } = data.json;
       dispatch(setMessage(
@@ -242,42 +242,42 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
 
         <Form.Group inline>
           <label>Status</label>
-          <Form.Checkbox
-            radio
+          <Form.Radio
+            id="radio-status-pending"
             label="Pending"
-            name="checkboxRadioGroup"
+            name="regStatusRadioGroup"
             value="pending"
             checked={status === 'pending'}
             onChange={(event, data) => setStatus(data.value)}
           />
-          <Form.Checkbox
-            radio
+          <Form.Radio
+            id="radio-status-accepted"
             label="Accepted"
-            name="checkboxRadioGroup"
+            name="regStatusRadioGroup"
             value="accepted"
             checked={status === 'accepted'}
             onChange={(event, data) => setStatus(data.value)}
           />
-          <Form.Checkbox
-            radio
+          <Form.Radio
+            id="radio-status-waiting-list"
             label="Waiting List"
-            name="checkboxRadioGroup"
+            name="regStatusRadioGroup"
             value="waiting_list"
             checked={status === 'waiting_list'}
             onChange={(event, data) => setStatus(data.value)}
           />
-          <Form.Checkbox
-            radio
+          <Form.Radio
+            id="radio-status-cancelled"
             label="Cancelled"
-            name="checkboxRadioGroup"
+            name="regStatusRadioGroup"
             value="cancelled"
             checked={status === 'cancelled'}
             onChange={(event, data) => setStatus(data.value)}
           />
-          <Form.Checkbox
-            radio
+          <Form.Radio
+            id="radio-status-rejected"
             label="Rejected"
-            name="checkboxRadioGroup"
+            name="regStatusRadioGroup"
             value="rejected"
             disabled={registrationEditDeadlinePassed}
             checked={status === 'rejected'}
@@ -286,6 +286,7 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
         </Form.Group>
         <label>Guests</label>
         <Form.Input
+          id="guest-dropdown"
           type="number"
           min={0}
           max={99}

@@ -14,12 +14,12 @@ function V3csvExport(selected, registrations, competition) {
     .forEach((registration) => {
       csvContent += `${registration.competing.registration_status === 'accepted' ? 'a' : 'p'},${
         registration.user.name
-      },${registration.user.country.name},${
+      },"${registration.user.country.name}",${
         registration.user.wca_id
-      },${registration.dob},${
+      },${registration.user.dob},${
         registration.user.gender
       },${competition.event_ids.map((evt) => (registration.competing.event_ids.includes(evt) ? '1' : '0'))},${
-        registration.email
+        registration.user.email
       },${
         registration.guests // IP feel always blank
       },"",${

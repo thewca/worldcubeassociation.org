@@ -457,6 +457,8 @@ th:
         subRegion: ภูมิภาคย่อย
         #original_hash: 730db33
         receive_delegate_reports: ฉันต้องการรับ email รายงานการแข่งขันของ WCA
+        #original_hash: 8667157
+        delegate_reports_region: ฉันต้องการรับ Delegate Reports สำหรับภูมิภาคต่อไปนี้เท่านั้น
         #original_hash: 57eaf24
         user_preferred_events: ประเภทการแข่งขันที่ชอบ
         #original_hash: e632fbf
@@ -664,6 +666,8 @@ th:
         competing_only: เฉพาะการแข่งขัน
         #original_hash: 35a6012
         competing_and_attending: การแข่งขันและการเข้าร่วม
+        #original_hash: 4f30c10
+        competing_and_attending_and_forums: การแข่งขัน การเข้าร่วม และ Forums
     competition_medium:
       status:
         #original_hash: 61a0572
@@ -755,6 +759,11 @@ th:
           ถ้าคุณเป็น Trainee Delegate, Junior Delegate, Senior Delegate, หรือ
           สมาชิกของ WRC หรือ WQAC คุณจะได้รับ Delegate Reports เป็นค่าตั้งต้น
           หมายเหตุ: การแก้ไขอาจใช้เวลาประมาณ 1 ชั่วโมงเพื่อให้มีผล
+        #original_hash: 364624c
+        delegate_reports_region: >-
+          หากคุณต้องการรับ reports ทั้งหมด ให้เว้นช่องนี้ว่างไว้
+          (ตัวเลือกแบบดร็อปดาวน์ที่ด้านบนสุด) หมายเหตุ:
+          การเปลี่ยนแปลงอาจใช้เวลานานถึงหนึ่งชั่วโมงจึงจะมีผล
         #original_hash: 0627e5c
         otp_attempt: >-
           ตรวจสอบโทรศัพท์มือถือของคุณสำหรับ one-time password หรือ ใส่ recovery
@@ -1021,10 +1030,11 @@ th:
               คุณกำลังเข้าระบบของ WCA, คุณได้เปิดการใช้งานการยืนยันตัวตน 2
               ขั้นตอน และคุณเพิ่งจะขอให้ส่ง one-time password ด้วย email 
               กรุณาดูด้านล่าง
-            #original_hash: e27e540
+            #original_hash: 8aeccbf
             disclaimer: >-
-              ถ้าคุณไม่ได้ขอรหัสยืนยันตัวตน กรุณาติดต่อ WST ด้วยการตอบกลับ email
-              นี้ คุณอาจจะเปิดเซสชั่นที่ไหนสักแห่งหรือรหัสผ่านของคุณอาจถูกบุกรุก
+              ถ้าคุณไม่ได้ขอรหัสยืนยันตัวตน กรุณาติดต่อ WST ทันที ด้วยการตอบกลับ
+              email นี้
+              คุณอาจจะเปิดเซสชั่นที่ไหนสักแห่งหรือรหัสผ่านของคุณอาจถูกบุกรุก
           #original_hash: 8c13694
           name: การยืนยันตัวตนสองขั้นตอน (2FA)
           #original_hash: d28c3b6
@@ -1357,6 +1367,8 @@ th:
         wfc: WCA Financial Committee
         #original_hash: 2035811
         wmt: WCA Marketing Team
+        #original_hash: c90653c
+        wmct: WCA Major Championships Team
         #original_hash: 8f32116
         wqac: WCA Quality Assurance Committee
         #original_hash: 3da1e85
@@ -1415,6 +1427,10 @@ th:
           ทีมนี้มีหน้าที่รับผิดชอบในการพัฒนาและจัดการแบรนด์ WCA,
           ค้นหาผู้สนับสนุน, สนับสนุนการจัดจำหน่ายอุปกรณ์การแข่งขัน WCA
           และทำการตลาดสินค้า WCA
+        #original_hash: ff6f008
+        wmct: >-
+          ทีมนี้มีหน้าที่รับผิดชอบในการดูแลการจัดและการพัฒนาการแข่งขัน WCA
+          Continental และ World Championships
         #original_hash: 0171b3b
         wqac: >-
           คณะกรรมการชุดนี้มีบทบาทในการสนับสนุนและส่งเสริมการปรับปรุงคุณภาพอย่างต่อเนื่องภายใน
@@ -1457,6 +1473,10 @@ th:
         href="/teams-committees-councils">หน้านี้</a>
       #original_hash: ea20be0
       success_message: ส่งอีเมลแล้ว - เราจะติดต่อกลับโดยเร็วที่สุด
+      #original_hash: 8fa6b95
+      prefilled: >-
+        หากต้องการอัปเดตการสมัครการแข่งขัน คุณต้องติดต่อผู้จัดการแข่งขัน
+        เราได้กรอกแบบฟอร์มติดต่อพร้อมคำขอเปลี่ยนแปลงของคุณแล้ว โปรดส่งแบบฟอร์ม
       form:
         user_data:
           name:
@@ -1551,8 +1571,44 @@ th:
         captcha:
           #original_hash: 58c1271
           validation_error: Please verify that you are not a robot.
+        #original_hash: bc98198
+        next_button: ต่อไป
         #original_hash: 2dacf65
         submit_button: ส่ง
+    contact_edit_profile:
+      #original_hash: 460577c
+      title: แบบฟอร์มแก้ไขโปรไฟล์
+      #original_hash: f01c4c7
+      not_logged_in_error: >-
+        ดูเหมือนว่าคุณไม่ได้เข้าสู่ระบบ โปรดเข้าสู่ระบบเพื่อแก้ไขโปรไฟล์ของคุณ
+        หากมีคำถามอื่นๆ โปรด<a
+        href="https://www.worldcubeassociation.org/contact?contactRecipient=wrt">ติดต่อเรา</a>
+      #original_hash: 0afb595
+      no_profile_error: >-
+        ดูเหมือนว่าคุณยังไม่มีโปรไฟล์ WCA
+        เนื่องจากคุณยังไม่ได้เข้าร่วมการแข่งขัน หากมีคำถามอื่น โปรด<a
+        href="https://www.worldcubeassociation.org/contact?contactRecipient=wrt">ติดต่อเรา</a>
+      form:
+        contact_email:
+          #original_hash: 3142970
+          label: Email สำหรับติดต่อ
+        wca_id:
+          #original_hash: 6344c9e
+          label: กรอก WCA ID
+        edit_reason:
+          #original_hash: fdfcccf
+          label: เหตุผลในการแก้ไข
+        proof_attach:
+          #original_hash: a9645b1
+          label: แนบหลักฐาน
+        submit_edit_request_button:
+          #original_hash: ab529a9
+          label: ส่งคำขอแก้ไข
+        captcha:
+          #original_hash: 58c1271
+          validation_error: กรุณายืนยันว่าคุณไม่ใช่หุ่นยนต์
+      #original_hash: 126541e
+      success_message: ส่งคำขอแล้ว - เราจะติดต่อคุณกลับเร็วๆ นี้
   homepage:
     #original_hash: 824d76b
     learn_more: เรียนรู้เพิ่มเติม
@@ -1783,6 +1839,8 @@ th:
       new: ภาพย่อใหม่
       #original_hash: efc007a
       save: บันทึก
+      #original_hash: 44c57ab
+      reset: Reset
     edit:
       #original_hash: 9239ee2
       general: ทั่วไป
@@ -1806,10 +1864,14 @@ th:
       confirm_new_email: >-
         การเปลี่ยน email ของคุณจะต้องยืนยัน email ใหม่
         เพื่อให้การเปลี่ยนแปลงมีผล
-      #original_hash: 8a770cf
+      #original_hash: ff43ee2
       pending_mail_confirmation: 'account นี้รอการยืนยัน email ใหม่ %{email}'
       #original_hash: 0340b0b
       pending_avatar_confirmation: account นี้รอการยืนยันรูปประจำตัวใหม่
+      #original_hash: 81fa5f9
+      pending_avatar_edit_action: 'คลิกที่นี่หากคุณต้องการแก้ไขแทน:'
+      #original_hash: 73cebb8
+      pending_avatar_edit_warning: กำลังแก้ไขอวาตาร์ที่รออยู่!
       #original_hash: 7b06f03
       pending_claim_confirmation_html: 'account นี้รอ %{delegate} เพื่อยืนยันการขอรับ WCA ID %{wca_id}'
       #original_hash: e7554d8
@@ -1847,7 +1909,7 @@ th:
           registered: คุณได้สมัครการแข่งขันแล้ว
       #original_hash: fe7122d
       guidelines_confirmation: ฉันยืนยันว่ารูปแทนตัวของฉันปฏิบัติตามแนวทางของรูปแทนตัวทั้งหมด
-      #original_hash: d677ceb
+      #original_hash: 9a85f5e
       confirm_guidelines: กรุณาอ่านแนวทางของรูปแทนตัวและส่งรูปภาพที่ถูกต้อง
       #original_hash: efc007a
       save: บันทึก
@@ -1870,16 +1932,18 @@ th:
         '1': รูปแทนตัวทั้งหมดต้องเป็นบุคคลจริง
         #original_hash: b12d293
         '2': บุคคลที่ในภาพต้องเป็นคุณ
-        #original_hash: de9b742
+        #original_hash: 8165cf0
         '3': >-
           ถ้ามีบุคคลมากกว่า 1 คนในรูปแทนตัว
           ต้องสามารถแยกแยะได้ชัดเจนว่าคนไหนคือคุณ
         #original_hash: 4083c00
         '4': หัวของคุณต้องเห็นชัดเจน แต่หน้าไม่จำเป็นต้องเต็มใบหน้า
-        #original_hash: 7c0aab3
-        '5': รุปแทนตัวของคุณต้องไม่มีตัวอักษรนอกเหนือจากที่ปรากฎในภาพพื้นหลัง
-        #original_hash: cc5f23a
-        '6': รูปแทนตัวจะต้องหันในทิศทางที่ถูกต้อง
+        #original_hash: e2d2fe8
+        '5': >-
+          รุปแทนตัวของคุณต้องไม่มีตัวอักษร, sticker, หรือ filter
+          ที่ไม่เป็นธรรมชาติ รวมไปถึงขอบภาพด้วย
+        #original_hash: 7f9c9c6
+        '6': รูปแทนตัวจะต้องหันในด้านที่ถูกต้อง
         #original_hash: 1a18831
         '7': รูปแทนตัวจะต้องไม่มีเนื้อหาที่ไม่เหมาะสม (เช่น ท่าทางที่ไม่เหมาะสม)
       staff_avatar_guidelines:
@@ -1890,7 +1954,7 @@ th:
           '1': >-
             รูปแทนตัวต้องเป็นรูปปัจจุบันของคุณ
             แสดงถึงการแต่งกายของคุณที่จะเห็นได้ในการแข่งขัน
-          #original_hash: 64ded69
+          #original_hash: f1f3854
           '2': >-
             รูปแทนตัวต้องมีกรอบ ตัด ทำมุม และเห็นได้ชัดเจน
             เพื่อที่ผู้เข้าแข่งขันหรือผู้เข้าชมที่การแข่งขันสามารถใช้เพื่อระบุตัวตนของคุณได้
@@ -1900,7 +1964,7 @@ th:
             และใช้เพื่อแทนรูปแทนตัวฉบับเต็ม รูปย่อต้องปรับแต่ง
             เพิ่อที่จะแสดงคุณเพียงคนเดียวและต้องมีใบหน้าของคุณ
       sensitive:
-        #original_hash: 267ac87
+        #original_hash: 3f0a787
         info: >-
           ส่วนนี้ช่วยให้คุณสามารถแก้ไขข้อมูลที่ละเอียดอ่อนได้.
           โปรดยืนยันตัวตนของคุณด้านล่างเพื่อทำการแก้ไข
@@ -1910,7 +1974,7 @@ th:
         failure: ไม่สามารถยืนยันตัวตนของคุณได้
         #original_hash: 4324c73
         confirm_proceed: ยืนยันและดำเนินการต่อ
-        #original_hash: d395f1f
+        #original_hash: 10a90b7
         identity_error: >-
           ไม่สามารถแก้ไขข้อมูลของคุณได้
           โปรดยืนยันตัวตนของคุณด้านล่างเพื่อลองอีกครั้ง
@@ -1958,9 +2022,7 @@ th:
         เราไม่มีชื่อบันทึกไว้สำหรับ WCA ID นี้ กรุณาติดต่อ <a
         href='%{wrt_contact_path}' target='_blank'>WCA Results Team</a>
         เพื่อแก้ปัญหา
-      #original_hash: d02c03b
-      avatar_requires_wca_id: ต้องการ WCA ID
-      #original_hash: 8f785ea
+      #original_hash: d2f4856
       email_used_by_locked_account_html: >-
         ได้ถูกใช้ไปแล้วโดยอีก account หนึ่ง
         มันถูกสร้างขึ้นโดยอัตโนมัติหลังจากที่ผลการแข่งขันของคุณที่สมัครการแข่งขันจากภายนอก
@@ -2368,10 +2430,6 @@ th:
         payment_reset: การชำระเงินถูกปฏิเสธโดย Stripe
         #original_hash: bcf6a93
         payment_pending: การชำระเงินยังไม่เสร็จสมบูรณ์
-        #original_hash: c3f8d65
-        registration_unreachable: >-
-          เกิดปัญหาในการเข้าถึง service การสมัครการแข่งขัน กรุณาติดต่อ Software
-          Team.
     #original_hash: 4cf01a2
     preferred_events_prompt_html: >-
       เพื่อให้การสมัครครั้งต่อไปเร็วขึ้น คุณสามารถเลือกประเภทการแข่งขันที่ชอบได้
@@ -2531,10 +2589,6 @@ th:
       reg_opens_too_early: การรับสมัครถูกตั้งค่าให้เริ่มน้อยกว่าที่กำหนด 48 ชั่วโมง
       #original_hash: a25e7a2
       registration_already_closed: กำหนดเวลาในการสมัครการแข่งขันได้ผ่านไปแล้ว โปรดตั้งค่าให้เป็นเวลาในอนาคต
-      #original_hash: 9a07b42
-      uses_v2_registrations: >-
-        การแข่งขันครั้งนี้ใช้ระบบการสมัครแบบใหม่ โปรดติดต่อ WCAT
-        หากคุณคิดว่าการแข่งขันครั้งนี้ควรใช้ระบบเดิมแทน
       #original_hash: 3322400
       tooltip_registered: คุณได้สมัครแล้ว
       #original_hash: f2d092f
@@ -2553,7 +2607,7 @@ th:
       not_confirmed_not_visible: การแข่งขันนี้ยังไม่ได้รับการยืนยัน และยังไม่ปรากฎต่อสาธารณะ
       #original_hash: 1b92d16
       championship_exists: 'ได้มีการแข่งขัน %{championship_type} ในปี %{year} ไปแล้ว'
-      #original_hash: 0644bdc
+      #original_hash: e871f03
       orga_closed_reg_success: ปิดการสมัครการแข่งขันเรียบร้อยแล้ว
       #original_hash: 7f197a0
       orga_closed_reg_failure: ไม่สามารถปิดการสมัครการแข่งขันได้
@@ -3025,7 +3079,7 @@ th:
           #original_hash: d493e6a
           is_visible: ทำให้การแข่งขันปรากฏต่อสาธารณะ
           #original_hash: e7daccb
-          uses_v_2_registrations: ใช้ระบบการสมัครแบบใหม่
+          uses_new_registration_system: ใช้ระบบการสมัครแบบใหม่
         #original_hash: 89f89c0
         competition_id: ID
         #original_hash: 709a232
@@ -3172,11 +3226,9 @@ th:
           #original_hash: da39a3e
           is_visible: ''
           #original_hash: 68d3cc6
-          uses_v_2_registrations: >-
-            หากปิดใช้งาน
-            การเปลี่ยนระบบการลงสมัครการแข่งขันอาจจะทำให้เกิดปัญหาทางเทคนิค
-            โปรดติดต่อ WST
-            เพื่อขอความช่วยเหลือหากคุณยังต้องเปลี่ยนระบบการสมัครการแข่งขัน
+          uses_new_registration_system: >-
+            หากปิดใช้งาน การเปลี่ยนระบบการสมัครนจะทำให้เกิดปัญหาทางเทคนิค
+            โปรดติดต่อ WST เพื่อขอความช่วยเหลือหากคุณยังต้องเปลี่ยนระบบการสมัคร
         #original_hash: da39a3e
         competition_id: ''
         #original_hash: 2c812a0
@@ -3527,6 +3579,18 @@ th:
         being_deleted: การสมัครกำลังถูกลบ...
         #original_hash: cbf13af
         update_confirm: คุณแน่ใจหรือไม่ว่าต้องการอัปเดตการสมัครการแข่งขันของคุณ?
+        #original_hash: 9b92912
+        update_confirm_contact: >-
+          คุณต้องติดต่อผู้จัดการแข่งัขนเพื่ออัปเดตการสมัครของคุณ คลิก Yes
+          เพื่อไปที่แบบฟอร์มการติดต่อ
+        #original_hash: d54056b
+        delete_confirm_contact: >-
+          คุณต้องติดต่อผู้จัดการแข่งขันเพื่อลบการสมัครของคุณ คลิก Yes
+          เพื่อไปที่แบบฟอร์มการติดต่อ
+        #original_hash: 7fbb20c
+        update_contact_message: 'ฉันต้องการอัปเดตข้อมูลการสมัครของฉันดังต่อไปนี้: %{update_params}'
+        #original_hash: 8bf02a9
+        delete_contact_message: ฉันต้องการลบการสมัครของฉัน
         #original_hash: 65bbb07
         no_changes: ไม่มีการเปลี่ยนแปลง
         #original_hash: be4e8e2
@@ -3610,8 +3674,10 @@ th:
         disclaimer: การสมัครการแข่งขันไม่ได้หมายถึงว่าจะได้รับอนุมัติให้เข้าแข่งขัน
         #original_hash: 8fe68a1
         processing: การสมัครของคุณอยู่ระหว่างดำเนินการ...
-        #original_hash: 897f272
-        processing_longer: การประมวลผลใช้เวลานานกว่าปกติ อย่าพึ่งปิดหน้าจอ
+        #original_hash: c7f124a
+        processing_longer: >-
+          เราได้รับการสมัครของคุณแล้ว และจะดำเนินการในเร็วๆ นี้
+          ซึ่งอาจใช้เวลาสักครู่ถ้าเซิร์ฟเวอร์ของเรามีการใช้งานสูงอยู่
         #original_hash: 79ba42a
         processing_queue: 'การสมัครจำนวนมากกำลังดำเนินการอยู่ ซึ่งมี %{queueCount} อยู่ในคิว'
         #original_hash: ff6550f
@@ -4208,7 +4274,7 @@ th:
       account_connected: >-
         คุณได้เชื่อมต่อบัญชี %{provider} ของคุณสำเร็จแล้ว
         และตอนนี้สามารถรับการชำระเงินการสมัครการแข่งขันครั้งนี้ได้แล้ว
-      #original_hash: 18d1326
+      #original_hash: b83891e
       account_disconnected_success: 'ยกเลิกการเชื่อมต่อบัญชี %{provider} ของคุณสำเร็จแล้ว'
       #original_hash: 6b934e2
       account_disconnected_failure: 'เกิดข้อผิดพลาดในการยกเลิกการเชื่อมต่อบัญชี %{provider}'
@@ -4584,7 +4650,7 @@ th:
     mission_footer: พันธกิจของ WCA
     #original_hash: cdab446
     who_we_are_title: เราคือใคร
-    #original_hash: c0d9a3e
+    #original_hash: 303f17a
     who_we_are_content_html: >-
       <p>สมาคมลูกบากศ์โลกควบคุมการแข่งขันสำหรับ puzzle
       เชิงกลที่บิดชิ้นส่วนหรือที่รู้จักกันทั่วไปว่า 'twisty puzzles' Puzzle
@@ -4592,7 +4658,7 @@ th:
       ที่ถูกคิดค้นขึ้นโดยศาสตราจารย์รูบิคจากประเทศฮังการี Puzzle
       ที่ถูกเลือกจะเป็นการแข่งขันอย่างเป็นทางการของ WCA</p> <p>WCA
       พัฒนาขึ้นมากในช่วงทศวรรษที่ผ่านมา มีผู้เข้าร่วมการแข่งขันของเรามากกว่า
-      200,000 คน แม้จะมีการเติบโตอย่างรวดเร็ว
+      245,000 คน แม้จะมีการเติบโตอย่างรวดเร็ว
       แต่เรายังคงเป็นองค์กรที่ดำเนินการโดยอาสาสมัครทั้งหมดตั้งแต่ผู้จัดงานในท้องถิ่นไปจนถึง
       WCA Delegates หรือแม้แต่ WCA Board เราขอขอบคุณทุกคนที่สละเวลาเพื่อทำงานให้
       WCA
@@ -4618,9 +4684,9 @@ th:
       ที่นี่ </a></p>
     #original_hash: f64ccc7
     whats_next_title: ก้าวต่อไปของ WCA
-    #original_hash: 487c6a1
+    #original_hash: 3312277
     whats_next_content_html: >-
-      <p>สมาคมลูกบากศ์โลกมีผู้เข้าแข่งขันกว่า 200,000 รายใน 158
+      <p>สมาคมลูกบากศ์โลกมีผู้เข้าแข่งขันกว่า 245,000 รายใน 158
       ภูมิภาคและยังเพิ่มขึ้นอย่างต่อเนื่อง! ชุมชน cubing
       มีการเติบโตอย่างต่อเนื่องตั้งแต่ก่อตั้งขึ้นในปี 2004
       และเราต้องการที่จะสนับสนุนให้สิ่งนี้ดำเนินต่อไปในอนาคต

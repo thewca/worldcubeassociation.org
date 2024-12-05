@@ -4,8 +4,6 @@ require "uri"
 require "fileutils"
 
 class User < ApplicationRecord
-  include MicroserviceRegistrationHolder
-
   has_many :competition_delegates, foreign_key: "delegate_id"
   # This gives all the competitions where the user is marked as a Delegate,
   # regardless of the competition's status.
@@ -660,6 +658,12 @@ class User < ApplicationRecord
         pages: [
           panel_pages[:importantLinks],
           panel_pages[:delegateHandbook],
+          panel_pages[:bannedCompetitors],
+        ],
+      },
+      wapc: {
+        name: 'WAC panel',
+        pages: [
           panel_pages[:bannedCompetitors],
         ],
       },
@@ -1408,6 +1412,8 @@ class User < ApplicationRecord
       active_roles.any? { |role| role.is_lead? && (role.group.teams_committees? || role.group.councils?) }
     when :senior_delegate
       senior_delegate?
+    when :wapc
+      appeals_committee?
     when :wic
       wic_team?
     when :weat

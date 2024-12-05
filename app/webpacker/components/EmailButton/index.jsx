@@ -4,9 +4,13 @@ import {
 } from 'semantic-ui-react';
 
 export default function EmailButton({ email }) {
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText(email);
+  };
+
   return (
     <Button as="div" labelPosition="right">
-      <Button animated="vertical">
+      <Button animated="vertical" onClick={copyToClipboard}>
         <ButtonContent hidden>
           <Icon name="copy" />
         </ButtonContent>

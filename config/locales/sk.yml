@@ -1129,17 +1129,17 @@ sk:
       #original_hash: 51fa5a4
       wca_id_no_gender_html: >-
         Nemáme zaznamenané vaše pohlavie pre toto WCA ID. Prosím, pošlite email
-        na <a href='mailto:results@worldcubeassociation.org' target='_blank'>WCA
+        na <a href='%{wrt_contact_path}' target='_blank'>WCA
         Výsledkový Tím</a>  pre riešenie problému.
       #original_hash: 87ee245
       wca_id_no_citizenship_html: >-
         Nemáme zaznamenané vaše občianstvo pre toto WCA ID. Prosím, pošlite
-        email na <a href='mailto:results@worldcubeassociation.org'
+        email na <a href='%{wrt_contact_path}'
         target='_blank'>WCA Výsledkový Tím</a>  pre riešenie problému.
       #original_hash: c3839bc
       wca_id_no_name_html: >-
         Nemáme zaznamenané vaše meno pre toto WCA ID. Prosím, pošlite email na
-        <a href='mailto:results@worldcubeassociation.org' target='_blank'>WCA
+        <a href='%{wrt_contact_path}' target='_blank'>WCA
         Výsledkový Tím</a>  pre riešenie problému.
       #original_hash: d02c03b
       avatar_requires_wca_id: potrebuje mať pridelené WCA ID
@@ -1171,7 +1171,7 @@ sk:
       missing_dob_html: 'WCA ID %{link_id} nemá priradený dátum narodenia.'
       #original_hash: 5be6803
       contact_results_team_html: >-
-        Prosím kontaktujte <a href='mailto:results@worldcubeassociation.org'
+        Prosím kontaktujte <a href='%{wrt_contact_path}'
         target='_blank'>WCA Výsledkový Tím</a>  pre riešenie problému.
       #original_hash: 92aa857
       unknown_wca_id_html: 'WCA ID %{link_id} neexistuje.'

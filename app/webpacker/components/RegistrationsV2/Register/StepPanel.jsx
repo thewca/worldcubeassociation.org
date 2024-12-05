@@ -5,7 +5,6 @@ import RegistrationRequirements from './RegistrationRequirements';
 import StripeWrapper from './StripeWrapper';
 import i18n from '../../../lib/i18n';
 import RegistrationOverview from './RegistrationOverview';
-import { hasPassed } from '../../../lib/utils/dates';
 
 const requirementsStepConfig = {
   key: 'requirements',
@@ -47,12 +46,6 @@ const shouldShowCompleted = (isRegistered, hasPaid, isAccepted, key, index) => {
 };
 
 const shouldBeDisabled = (hasPaid, key, activeIndex, index, competitionInfo, isRejected) => {
-  const hasRegistrationEditDeadlinePassed = hasPassed(
-    competitionInfo.event_change_deadline_date ?? competitionInfo.start_date,
-  );
-  const editsAllowed = competitionInfo.allow_registration_edits
-    && !hasRegistrationEditDeadlinePassed;
-
   if (isRejected) {
     return true;
   }
@@ -61,7 +54,7 @@ const shouldBeDisabled = (hasPaid, key, activeIndex, index, competitionInfo, isR
     return !hasPaid && index > activeIndex;
   }
   if (key === competingStepConfig.key) {
-    return index > activeIndex || !editsAllowed;
+    return index > activeIndex;
   }
   if (key === requirementsStepConfig.key) {
     return activeIndex !== 0;

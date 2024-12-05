@@ -334,7 +334,7 @@ RSpec.describe Registration do
 
   describe '#to_wcif' do
     it 'deleted state returns deleted status' do
-      registration = FactoryBot.create(:registration, :deleted)
+      registration = FactoryBot.create(:registration, :cancelled)
 
       expect(registration.deleted?).to eq(true)
       expect(registration.to_wcif['status']).to eq('deleted')
@@ -415,26 +415,10 @@ RSpec.describe Registration do
         { initial_status: Registrations::Helper::STATUS_REJECTED, input_status: Registrations::Helper::STATUS_WAITING_LIST },
         { initial_status: Registrations::Helper::STATUS_REJECTED, input_status: Registrations::Helper::STATUS_ACCEPTED },
         { initial_status: Registrations::Helper::STATUS_REJECTED, input_status: Registrations::Helper::STATUS_REJECTED },
-        { initial_status: 'deleted', input_status: Registrations::Helper::STATUS_ACCEPTED },
-        { initial_status: 'deleted', input_status: Registrations::Helper::STATUS_CANCELLED },
-        { initial_status: 'deleted', input_status: Registrations::Helper::STATUS_WAITING_LIST },
-        { initial_status: 'deleted', input_status: Registrations::Helper::STATUS_PENDING },
-        { initial_status: 'deleted', input_status: Registrations::Helper::STATUS_REJECTED },
-      ]
-
-      # TODO: 1. Do we want to have backwards compatibility with 'deleted' status?
-      # 2. If yes, do we want to only support the string, or keep it defined as a constant?
-      deleted_competing_status_updates = [
-        { initial_status: Registrations::Helper::STATUS_PENDING, input_status: 'deleted' },
-        { initial_status: Registrations::Helper::STATUS_ACCEPTED, input_status: 'deleted' },
-        { initial_status: Registrations::Helper::STATUS_WAITING_LIST, input_status: 'deleted' },
-        { initial_status: Registrations::Helper::STATUS_CANCELLED, input_status: 'deleted' },
-        { initial_status: Registrations::Helper::STATUS_REJECTED, input_status: 'deleted' },
-        { initial_status: 'deleted', input_status: 'deleted' },
       ]
 
       it 'tests cover all possible status update combinations' do
-        combined_updates = (competing_status_updates << deleted_competing_status_updates).flatten
+        combined_updates = (competing_status_updates).flatten
         expect(combined_updates).to match_array(REGISTRATION_TRANSITIONS)
       end
 
@@ -457,10 +441,6 @@ RSpec.describe Registration do
 
       competing_status_updates.each do |params|
         it_behaves_like 'update competing status', params[:initial_status], params[:input_status]
-      end
-
-      deleted_competing_status_updates.each do |params|
-        it_behaves_like 'update competing status: deleted cases', params[:initial_status], params[:input_status]
       end
     end
 
@@ -493,6 +473,55 @@ RSpec.describe Registration do
       registration.update_lanes!({ user_id: registration.user.id, competing: { event_ids: ['333', '444', '555'] } }.with_indifferent_access, registration.user)
       registration.reload
       expect(registration.event_ids).to eq(['333', '444', '555'])
+    end
+
+    describe 'update waiting list position' do
+      let(:competition) { FactoryBot.create(:competition, :registration_open, :editable_registrations, :with_organizer) }
+      let(:waiting_list) { competition.waiting_list }
+
+      let!(:reg1) { FactoryBot.create(:registration, :waiting_list, competition: competition) }
+      let!(:reg2) { FactoryBot.create(:registration, :waiting_list, competition: competition) }
+      let!(:reg3) { FactoryBot.create(:registration, :waiting_list, competition: competition) }
+      let!(:reg4) { FactoryBot.create(:registration, :waiting_list, competition: competition) }
+      let!(:reg5) { FactoryBot.create(:registration, :waiting_list, competition: competition) }
+
+      it 'adds to waiting list' do
+        reg = FactoryBot.create(:registration, competition: competition)
+        reg.update_lanes!({ user_id: reg.user.id, competing: { status: 'waiting_list' } }.with_indifferent_access, reg.user)
+
+        expect(reg.waiting_list_position).to eq(6)
+      end
+
+      it 'removes from waiting list' do
+        reg4.update_lanes!({ user_id: reg4.user.id, competing: { status: 'pending' } }.with_indifferent_access, reg4.user)
+
+        expect(reg4.waiting_list_position).to eq(nil)
+        expect(waiting_list.entries.count).to eq(4)
+      end
+
+      it 'moves backwards in waiting list' do
+        reg2.update_lanes!({ user_id: reg2.user.id, competing: { waiting_list_position: 5 } }.with_indifferent_access, reg2.user)
+
+        expect(reg1.waiting_list_position).to eq(1)
+        expect(reg2.waiting_list_position).to eq(5)
+        expect(reg3.waiting_list_position).to eq(2)
+        expect(reg4.waiting_list_position).to eq(3)
+        expect(reg5.waiting_list_position).to eq(4)
+
+        expect(waiting_list.entries.count).to eq(5)
+      end
+
+      it 'moves forwards in waiting list' do
+        reg5.update_lanes!({ user_id: reg5.user.id, competing: { waiting_list_position: 1 } }.with_indifferent_access, reg5.user)
+
+        expect(reg1.waiting_list_position).to eq(2)
+        expect(reg2.waiting_list_position).to eq(3)
+        expect(reg3.waiting_list_position).to eq(4)
+        expect(reg4.waiting_list_position).to eq(5)
+        expect(reg5.waiting_list_position).to eq(1)
+
+        expect(waiting_list.entries.count).to eq(5)
+      end
     end
   end
 end

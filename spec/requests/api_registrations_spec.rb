@@ -110,7 +110,7 @@ RSpec.describe 'API Registrations' do
         :update_request,
         user_id: registration.user_id,
         competition_id: registration.competition.id,
-        competing: { 'status' => 'deleted' },
+        competing: { 'status' => 'cancelled' },
         guests: 3,
       )
       headers = { 'Authorization' => update_request['jwt_token'] }
@@ -127,7 +127,7 @@ RSpec.describe 'API Registrations' do
       history = registration.registration_history
       expect(history.length).to eq(1)
       expect(history.first[:changed_attributes]['guests']).to eq('3')
-      expect(history.first[:changed_attributes]['deleted_at']).to be_present
+      expect(history.first[:changed_attributes]['competing_status']).to be_present
       expect(history.first[:action]).to eq('Competitor delete')
     end
   end
@@ -151,18 +151,20 @@ RSpec.describe 'API Registrations' do
         competition_id: competition.id,
       )
 
+      puts "registration status: #{registration1.competing_status}"
+
       headers = { 'Authorization' => bulk_update_request['jwt_token'] }
       patch api_v1_registrations_bulk_update_path, params: bulk_update_request, headers: headers
 
       expect(response.status).to eq(200)
 
-      registration = Registration.find_by(user_id: user1.id)
+      registration = Registration.find_by(user_id: registration1.user_id)
 
       expect(registration.competing_status).to eq('cancelled')
 
       history = registration.registration_history
       expect(history.length).to eq(1)
-      expect(history.first[:changed_attributes]['deleted_at']).to be_present
+      expect(history.first[:changed_attributes]['competing_status']).to be_present
       expect(history.first[:action]).to eq('Admin delete')
     end
 
@@ -214,7 +216,7 @@ RSpec.describe 'API Registrations' do
         :update_request,
         user_id: registration1.user_id,
         competition_id: registration1.competition.id,
-        competing: { 'status' => 'deleted' },
+        competing: { 'status' => 'cancelled' },
       )
 
       update_request2 = FactoryBot.build(
@@ -326,13 +328,6 @@ RSpec.describe 'API Registrations' do
     let!(:registration4) { FactoryBot.create(:registration, :waiting_list, competition: competition, user: user4) }
     let!(:registration5) { FactoryBot.create(:registration, :waiting_list, competition: competition, user: user5) }
     let!(:registration6) { FactoryBot.create(:registration, :waiting_list, competition: competition, user: user6) }
-
-    before do
-      FactoryBot.create(:waiting_list, holder: competition)
-      competition.waiting_list.add(registration4.user_id)
-      competition.waiting_list.add(registration5.user_id)
-      competition.waiting_list.add(registration6.user_id)
-    end
 
     it 'returns multiple registrations' do
       headers = { 'Authorization' => fetch_jwt_token(competition.organizers.first.id) }

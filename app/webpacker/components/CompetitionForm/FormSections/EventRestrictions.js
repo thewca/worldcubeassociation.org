@@ -26,9 +26,6 @@ export default function EventRestrictions() {
       qualificationResults,
       eventLimitation,
     },
-    admin: {
-      usesNewRegistrationSystem,
-    },
   } = useFormObject();
 
   const mainEventOptions = useMemo(() => {
@@ -52,14 +49,12 @@ export default function EventRestrictions() {
 
   return (
     <SubSection section="eventRestrictions">
-      { usesNewRegistrationSystem && (
-        <SubSection section="forbidNewcomers">
-          <InputBoolean id="enabled" />
-          <ConditionalSection showIf={newcomers}>
-            <InputTextArea id="reason" />
-          </ConditionalSection>
-        </SubSection>
-      )}
+      <SubSection section="forbidNewcomers">
+        <InputBoolean id="enabled" />
+        <ConditionalSection showIf={newcomers}>
+          <InputTextArea id="reason" />
+        </ConditionalSection>
+      </SubSection>
       <SubSection section="earlyPuzzleSubmission">
         <InputBoolean id="enabled" />
         <ConditionalSection showIf={earlySubmission}>
