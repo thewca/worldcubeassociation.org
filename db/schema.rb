@@ -506,7 +506,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_18_145843) do
     t.integer "user_allow_viewonline", limit: 1, default: 1, null: false, unsigned: true
     t.integer "user_allow_viewemail", limit: 1, default: 1, null: false, unsigned: true
     t.integer "user_allow_massemail", limit: 1, default: 1, null: false, unsigned: true
-    t.integer "user_options", default: 230_271, null: false, unsigned: true
+    t.integer "user_options", default: 230271, null: false, unsigned: true
     t.string "user_avatar", limit: 255, default: "", null: false
     t.string "user_avatar_type", limit: 255, default: "", null: false
     t.integer "user_avatar_width", limit: 2, default: 0, null: false, unsigned: true
