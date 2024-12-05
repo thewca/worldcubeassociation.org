@@ -1332,7 +1332,6 @@ en:
         payment_pending: "The payment has not been completed yet."
         payment_failed: "The payment was not successful. Please check your payment details and try again."
         payment_canceled: "The payment was canceled and will not be completed."
-        registration_unreachable: "There was a problem reaching the registration service, please contact the Software Team."
     preferred_events_prompt_html: "To speed up registration in the future, you can set your preferred events %{link}."
     preferred_events_populated_html: "We autopopulated this with your preferred events, which you can edit %{link}."
     registration_requirements: "Registration requirements for the competition:"
