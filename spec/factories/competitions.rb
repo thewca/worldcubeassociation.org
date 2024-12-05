@@ -99,7 +99,7 @@ FactoryBot.define do
     refund_policy_percent { 0 }
     guests_entry_fee_lowest_denomination { 0 }
 
-    registration_version { :v1 }
+    registration_version { :v3 }
 
     trait :enforces_qualifications do
       with_organizer
@@ -277,6 +277,7 @@ FactoryBot.define do
     end
 
     trait :editable_registrations do
+      registration_open
       allow_registration_edits { true }
       event_change_deadline_date { 2.weeks.from_now.change(usec: 0) }
     end

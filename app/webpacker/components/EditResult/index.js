@@ -20,6 +20,7 @@ function EditResult({
     <EditEntry
       id={id}
       dataUrlFn={resultUrl}
+      dataType="result"
       DisplayTable={ShowSingleResult}
       EditForm={InlineEditForm}
     />

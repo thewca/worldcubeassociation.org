@@ -49,6 +49,10 @@ class IncidentsController < ApplicationController
       redirect_to_root_unless_user(:staff?)
       nil
     end
+
+    unless @incident.resolved?
+      redirect_to_root_unless_user(:can_manage_incidents?)
+    end
   end
 
   def new
@@ -78,6 +82,8 @@ class IncidentsController < ApplicationController
       updated_attrs[:digest_sent_at] = Time.now
     when "resolved"
       updated_attrs[:resolved_at] = Time.now
+    when "unresolve"
+      updated_attrs[:resolved_at] = nil
     else
       flash[:danger] = "Unrecognized action: '#{params[:kind]}'"
       return redirect_to @incident
