@@ -4,6 +4,10 @@
 
   <div class="form-inputs">
     <%= f.input :title %>
+    <% if current_user.can_manage_incidents? %>
+      <%= f.input :visibility, collection: Incident.visibilities.keys.map { |v| [v.titleize, v] },
+                              include_blank: false %>
+    <% end %>
     <%= f.input :digest_worthy, disabled: @incident.digest_sent? %>
     <% if @incident.digest_sent? %>
       <div class="form-group"><div class="col-sm-10 col-sm-offset-2">Digest marked as sent on <%= wca_local_time(@incident.digest_sent_at) %></div></div>

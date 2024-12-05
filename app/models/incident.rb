@@ -7,10 +7,21 @@ class Incident < ApplicationRecord
 
   accepts_nested_attributes_for :incident_competitions, allow_destroy: true
 
-  scope :resolved, -> { where.not(resolved_at: nil) }
+  attribute :visibility, :integer, default: 0
+
+  enum visibility: {
+    draft: 0,          # Only visible to WRC members
+    staff: 1,          # Visible to WCA staff members only
+    visible: 2, # Visible to everyone
+  }
+
+  scope :publicly_visible, -> { where(visibility: :visible) }
+  scope :staff_visible, -> { where(visibility: [:staff, :visible]) }
+  scope :wrc_visible, -> { all } # WRC can see all incidents
 
   validate :digest_sent_at_consistent
   validates_presence_of :title
+  validate :visibility_transition_valid
 
   include Taggable
 
@@ -34,8 +45,8 @@ class Incident < ApplicationRecord
     if digest_sent_at && !digest_worthy
       errors.add(:digest_sent_at, "can't be set if digest_worthy is false.")
     end
-    if digest_sent_at && !resolved_at
-      errors.add(:digest_sent_at, "can't be set if incident is not resolved.")
+    if digest_sent_at && !visible?
+      errors.add(:digest_sent_at, "can't be set if incident is not public.")
     end
   end
 
@@ -94,5 +105,26 @@ class Incident < ApplicationRecord
     }
 
     json
+  end
+
+  def visible_to?(user)
+    case visibility
+    when "visible"
+      true
+    when "staff"
+      user&.staff? || user&.can_manage_incidents?
+    when "draft"
+      user&.can_manage_incidents?
+    else
+      false
+    end
+  end
+
+  def visibility_transition_valid
+    if visibility_changed? && visibility_was.present?
+      if visibility_was == "visible" && visibility != "visible"
+        errors.add(:visibility, "cannot change visibility of a public incident")
+      end
+    end
   end
 end

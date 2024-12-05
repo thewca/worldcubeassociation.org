@@ -12,6 +12,20 @@
     <% end %>
   </div>
 
+  <% if current_user&.can_manage_incidents? %>
+    <div>
+      <strong>Visibility:</strong>
+      <% case @incident.visibility %>
+      <% when "draft" %>
+        <span class="text-warning">Draft (WRC only)</span>
+      <% when "staff" %>
+        <span class="text-info">Staff only</span>
+      <% when "visible" %>
+        <span class="text-success">Public</span>
+      <% end %>
+    </div>
+  <% end %>
+
   <p>
     <% @incident.tags_array.each do |t| %>
       <%= render "incident_tag", tag: t %>
