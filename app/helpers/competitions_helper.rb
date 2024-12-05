@@ -327,10 +327,12 @@ module CompetitionsHelper
 
       if registration_status.accepted?
         t('competitions.messages.tooltip_registered')
-      elsif registration_status.deleted?
+      elsif registration_status.cancelled? || registration_status.rejected?
         t('competitions.messages.tooltip_deleted')
-      else # If not deleted or accepted, assume user is on the waiting list
+      elsif registration_status.waitlisted?
         t('competitions.messages.tooltip_waiting_list')
+      else
+        t('competitions.messages.tooltip_pending')
       end
     end
 
