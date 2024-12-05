@@ -12,15 +12,9 @@ import {
 import UpcomingCompetitionTable from './UpcomingCompetitionTable';
 import PastCompetitionsTable from './PastCompetitionTable';
 
-const defaultPermissions = {
-  can_attend_competitions: { scope: [] },
-  can_organize_competitions: { scope: [] },
-  can_administer_competitions: { scope: [] },
-};
-
 export default function MyCompetitions({ permissions, competitions, userInfo }) {
   const [isAccordionOpen, setIsAccordionOpen] = useState(false);
-  const [shouldShowRegistrationStatus, setShouldShowRegistrationStatus] = useState(false);
+  const [shouldShowRegistrationStatus, setshouldShowRegistrationStatus] = useState(false);
 
   return (
     <>
@@ -31,9 +25,9 @@ export default function MyCompetitions({ permissions, competitions, userInfo }) 
         {I18n.t('competitions.my_competitions.disclaimer')}
       </p>
       <UpcomingCompetitionTable
-        competitions={competitions.futureCompetitions ?? []}
-        permissions={permissions ?? defaultPermissions}
-        registrationStatuses={competitions.registrationStatuses ?? {}}
+        competitions={competitions.futureCompetitions}
+        permissions={permissions}
+        registrationStatuses={competitions.registrationStatuses}
       />
       <Accordion fluid styled>
         <Accordion.Title
@@ -45,7 +39,7 @@ export default function MyCompetitions({ permissions, competitions, userInfo }) 
         <Accordion.Content active={isAccordionOpen}>
           <PastCompetitionsTable
             permissions={permissions}
-            competitions={competitions.pastCompetitions ?? []}
+            competitions={competitions.pastCompetitions}
           />
         </Accordion.Content>
       </Accordion>
@@ -60,11 +54,11 @@ export default function MyCompetitions({ permissions, competitions, userInfo }) 
       <Checkbox
         checked={shouldShowRegistrationStatus}
         label={I18n.t('competitions.index.show_registration_status')}
-        onChange={() => setShouldShowRegistrationStatus(!shouldShowRegistrationStatus)}
+        onChange={() => setshouldShowRegistrationStatus(!shouldShowRegistrationStatus)}
       />
       <UpcomingCompetitionTable
-        competitions={competitions.bookmarkedCompetitions ?? []}
-        registrationStatuses={competitions.registrationStatuses ?? {}}
+        competitions={competitions.bookmarkedCompetitions}
+        registrationStatuses={competitions.registrationStatuses}
         shouldShowRegistrationStatus={shouldShowRegistrationStatus}
         permissions={permissions}
       />
