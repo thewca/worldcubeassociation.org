@@ -43,7 +43,7 @@ Rails.application.routes.draw do
 
   post 'registration/:id/load-payment-intent/:payment_integration' => 'registrations#load_payment_intent', as: :registration_payment_intent
   post 'competitions/:competition_id/refund/:payment_integration/:payment_id' => 'registrations#refund_payment', as: :registration_payment_refund
-  get 'competitions/:competition_id/payment-completion' => 'registrations#payment_completion', as: :registration_payment_completion
+  get 'competitions/:competition_id/payment-completion(/:payment_integration)' => 'registrations#payment_completion', as: :registration_payment_completion
   post 'registration/stripe-webhook' => 'registrations#stripe_webhook', as: :registration_stripe_webhook
   get 'registration/payment-denomination' => 'registrations#payment_denomination', as: :registration_payment_denomination
   resources :users, only: [:index, :edit, :update]

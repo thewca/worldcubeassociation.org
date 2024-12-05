@@ -19,6 +19,7 @@ import i18n from '../../../lib/i18n';
 import useCheckboxState from '../../../lib/hooks/useCheckboxState';
 import AutonumericField from '../../wca/FormBuilder/input/AutonumericField';
 import getPaymentTicket from "../api/payment/get/getPaymentTicket";
+import I18n from "../../../lib/i18n";
 
 export default function PaymentStep({
   competitionInfo,
@@ -75,7 +76,10 @@ export default function PaymentStep({
     // be redirected to an intermediate site first to authorize the payment, then
     // redirected to the `return_url`.
     if (error) {
-      dispatch(setMessage('registrations.payment_form.errors.stripe_failed', 'error'));
+      dispatch(setMessage('registrations.payment_form.errors.stripe_failed', 'error', {
+        provider: I18n.t('payments.payment_providers.stripe'),
+      }));
+
       console.error(error);
     }
 
