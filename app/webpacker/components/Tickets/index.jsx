@@ -37,6 +37,20 @@ function SkateholderSelector({ stakeholderList, setUserSelectedStakeholder }) {
   );
 }
 
+function TicketContent({ ticketDetails, currentStakeholder, sync }) {
+  return (
+    <>
+      <TicketHeader ticketDetails={ticketDetails} />
+      <TicketWorkbench
+        ticketDetails={ticketDetails}
+        sync={sync}
+        currentStakeholder={currentStakeholder}
+      />
+      <TicketLogs logs={ticketDetails.ticket.ticket_logs} />
+    </>
+  );
+}
+
 export default function Tickets({ id }) {
   const {
     data: ticketDetails, sync, loading, error,
@@ -56,16 +70,21 @@ export default function Tickets({ id }) {
       <Container fluid>
         {userSelectedStakeholder && (
           <Message>
-            {`You are currently viewing the ticket as stakeholder "${userSelectedStakeholder.stakeholder.name}". If you wish to change, please refresh the page.`}
+            {`You are currently viewing the ticket as stakeholder "${userSelectedStakeholder.stakeholder.name}".`}
+            <Button
+              onClick={() => setUserSelectedStakeholder(false)}
+            >
+              Click here to change
+            </Button>
           </Message>
         )}
-        <TicketHeader ticketDetails={ticketDetails} />
-        <TicketWorkbench
-          ticketDetails={ticketDetails}
-          sync={sync}
-          currentStakeholder={currentStakeholder}
-        />
-        <TicketLogs logs={ticketDetails.ticket.ticket_logs} />
+        {!shouldUserSelectStakeholder && (
+          <TicketContent
+            ticketDetails={ticketDetails}
+            currentStakeholder={currentStakeholder}
+            sync={sync}
+          />
+        )}
       </Container>
       <Modal open={shouldUserSelectStakeholder}>
         <Modal.Header>Select stakeholder</Modal.Header>
