@@ -39,6 +39,7 @@ function UtcDatePicker({
   isoMaxDate = null,
   dateFormatOverride = null,
   timeFormatOverride = null,
+  required = false,
 }) {
   const date = useIsoDate(isoDate);
 
@@ -89,6 +90,7 @@ function UtcDatePicker({
       endDate={endDate}
       minDate={minDate}
       maxDate={maxDate}
+      required={required}
     />
   );
 }
