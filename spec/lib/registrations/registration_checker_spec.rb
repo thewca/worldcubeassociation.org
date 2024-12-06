@@ -2279,7 +2279,7 @@ RSpec.describe Registrations::RegistrationChecker do
       end
     end
 
-    describe '#update_registration_allowed!.reserved newcomer spots', :tag do
+    describe '#update_registration_allowed!.reserved newcomer spots' do
       let(:newcomer_month_comp) { FactoryBot.create(:competition, :newcomer_month) }
       let(:non_newcomer_reg) { FactoryBot.create(:registration, competition: newcomer_month_comp) }
       let(:newcomer_reg) { FactoryBot.create(:registration, :newcomer, competition: newcomer_month_comp) }
