@@ -3,13 +3,13 @@ import {
   Popup, Table, TableBody, TableHeader,
 } from 'semantic-ui-react';
 import React from 'react';
+import { DateTime } from 'luxon';
 import I18n from '../../lib/i18n';
-import { competitionStatusText } from '../../lib/utils/competition-table';
+import { competitionStatusText, numberOfDaysBefore } from '../../lib/utils/competition-table';
 import { competitionRegistrationsUrl, editCompetitionsUrl } from '../../lib/requests/routes.js.erb';
-import TableCells, {
+import {
   DateTableCell, LocationTableCell, NameTableCell, ReportTableCell,
 } from './TableCells';
-import { countries } from '../../lib/wca-data.js.erb';
 
 const registrationStatusIcon = (registrationStatus) => {
   switch (registrationStatus?.competing_status) {
@@ -20,6 +20,19 @@ const registrationStatusIcon = (registrationStatus) => {
     case 'rejected': return <Icon name="trash" />;
     default: return <Icon />;
   }
+};
+
+const competitionStatusIconText = (competition) => {
+  if (competition['registration_not_yet_opened?']) {
+    return I18n.t('competitions.index.tooltips.registration.opens_in', { duration: DateTime.fromISO(competition.registration_open).toRelative() });
+  }
+  if (competition['registration_past?']) {
+    return I18n.t('competitions.index.tooltips.registration.closed', { days: DateTime.fromISO(competition.start_date).toRelative() });
+  }
+  if (competition['registration_full?']) {
+    return I18n.t('competitions.index.tooltips.registration.full');
+  }
+  return I18n.t('competitions.index.tooltips.registration.open');
 };
 
 const competitionStatusIcon = (competition) => {
@@ -67,11 +80,17 @@ export default function UpcomingCompetitionTable({
             position="top center"
             content={competitionStatusText(competition, registrationStatuses[competition.id])}
             trigger={(
-              <Table.Row positive={competition['confirmed?'] && !competition['cancelled?']}>
+              <Table.Row positive={competition['confirmed?'] && !competition['cancelled?']} negative={!competition['visible?']}>
                 { shouldShowRegistrationStatus && (
-                  <Table.Cell>
-                    {competitionStatusIcon(competition)}
-                  </Table.Cell>
+                  <Popup
+                    position="top left"
+                    content={competitionStatusIconText(competition)}
+                    trigger={(
+                      <Table.Cell>
+                        {competitionStatusIcon(competition)}
+                      </Table.Cell>
+                  )}
+                  />
                 )}
                 <NameTableCell competition={competition} />
                 <LocationTableCell competition={competition} />
