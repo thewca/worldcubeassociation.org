@@ -5,6 +5,17 @@ import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { setMessage } from '../Register/RegistrationMessage';
 import i18n from '../../../lib/i18n';
 
+function generateCSV(csvContent, filename){
+  const encodedUri = encodeURI(csvContent);
+
+  const link = document.createElement('a');
+  link.setAttribute('href', encodedUri);
+  link.setAttribute('download', filename);
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+
 function V3csvExport(selected, registrations, competition) {
   let csvContent = 'data:text/csv;charset=utf-8,';
   csvContent
@@ -26,8 +37,9 @@ function V3csvExport(selected, registrations, competition) {
         DateTime.fromISO(registration.competing.registered_on).setZone('UTC').toFormat('yyyy-MM-dd HH:mm:ss ZZZZ')
       }\n`;
     });
-  const encodedUri = encodeURI(csvContent);
-  window.open(encodedUri);
+
+  const filename = `${competition.id}-registrations.csv`;
+  generateCSV(csvContent, filename);
 }
 
 function V2csvExport(selected, registrations) {
@@ -45,8 +57,9 @@ function V2csvExport(selected, registrations) {
         registration.competing.comment
       },${registration.competing.admin_comment}\n`;
     });
-  const encodedUri = encodeURI(csvContent);
-  window.open(encodedUri);
+
+  const filename = `${competition.id}-registrations.csv`;
+  generateCSV(csvContent, filename);
 }
 
 function csvExport(selected, registrations, competition) {
