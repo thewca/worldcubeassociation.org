@@ -42,6 +42,10 @@ const potentialWarnings = (competitionInfo) => {
       max_events: competitionInfo.events_per_registration_limit,
     }));
   }
+  // Series Competition
+  if (competitionInfo['part_of_competition_series?']) {
+    warnings.push(I18n.t('competitions.competition_info.part_of_a_series'));
+  }
   return warnings;
 };
 
@@ -151,8 +155,7 @@ export default function CompetingStep({
       if (options.checkForChanges && !hasChanges) {
         dispatch(setMessage('competitions.registration_v2.update.no_changes', 'basic'));
       } else if (!eventsAreValid) {
-        // i18n-tasks-use t('registrations.errors.exceeds_event_limit.one')
-        // i18n-tasks-use t('registrations.errors.exceeds_event_limit.other')
+        // i18n-tasks-use t('registrations.errors.exceeds_event_limit')
         dispatch(setMessage(
           maxEvents === Infinity
             ? 'registrations.errors.must_register'

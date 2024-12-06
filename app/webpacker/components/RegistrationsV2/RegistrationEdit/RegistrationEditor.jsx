@@ -120,7 +120,6 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
       dispatch(setMessage('registrations.errors.cannot_register_without_comment', 'negative'));
     } else if (!eventsAreValid) {
       // i18n-tasks-use t('registrations.errors.must_register')
-      // i18n-tasks-use t('registrations.errors.exceeds_event_limit.other')
       dispatch(setMessage(
         maxEvents === Infinity
           ? 'registrations.errors.must_register'
@@ -204,6 +203,7 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
         {!competitor.wca_id && (
           <Message>
             <I18nHTMLTranslate
+              // i18n-tasks-use t('registrations.registered_with_account_html')
               i18nKey="registrations.registered_with_account_html"
               options={{
                 here: `<a href=${editPersonUrl(competitor.id)}>here</a>`,
