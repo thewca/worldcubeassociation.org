@@ -1855,6 +1855,8 @@ en:
         rejected:
           title: "Rejected registrations"
           information: "Rejected competitors cannot re-register."
+        pending:
+          information: "Pending Registrations are not yet worked off or incomplete, waitlisted competitors should be moved to the waiting list"
         payment:
          refunded_status: "Refunded"
          initialized: "Payment process was started on %{date}, but not finished."
