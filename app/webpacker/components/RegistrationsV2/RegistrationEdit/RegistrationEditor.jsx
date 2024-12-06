@@ -305,6 +305,10 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
           Update Registration
         </Button>
       </Form>
+
+      {/* TODO: Add information about Series Registration here */}
+      {/* i18n-tasks-use t('registrations.list.series_registrations') */}
+
       {competitionInfo['using_payment_integrations?'] && (
         <>
           <List>

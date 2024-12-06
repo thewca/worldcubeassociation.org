@@ -455,6 +455,8 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
           sortColumn={sortColumn}
           competitionInfo={competitionInfo}
         />
+        {/* TODO: Either add non competing registrations here on in a separate staff tab */}
+        {/* i18n-tasks-use t('registrations.list.non_competing') */}
       </div>
     </Segment>
   );
