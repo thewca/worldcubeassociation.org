@@ -397,6 +397,14 @@ class Competition < ApplicationRecord
     Event.c_find(main_event_id)
   end
 
+  def report_posted?
+    delegate_report.posted?
+  end
+
+  def visible?
+    self.showAtAll
+  end
+
   def events_held?(desired_event_ids)
     # rubocop:disable Style/BitwisePredicate
     #   We have to shut up Rubocop here because otherwise it thinks that
