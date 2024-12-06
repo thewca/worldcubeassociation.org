@@ -89,8 +89,6 @@ function RefundRow({
       paymentProvider: refund.payment_provider,
       amount: amountToRefund,
     });
-  }).catch(() => {
-
   });
 
   return (
