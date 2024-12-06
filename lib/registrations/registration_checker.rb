@@ -26,7 +26,7 @@ module Registrations
       new_status = update_request.dig('competing', 'status')
       events = update_request.dig('competing', 'event_ids')
 
-      user_can_modify_registration!(competition, current_user, target_user, registration)
+      user_can_modify_registration!(competition, current_user, target_user, registration, new_status)
       validate_guests!(guests.to_i, competition) unless guests.nil?
       validate_comment!(comment, competition, registration)
       validate_organizer_fields!(update_request, current_user, competition)
@@ -71,15 +71,19 @@ module Registrations
         raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::ALREADY_REGISTERED_IN_SERIES) if existing_registration_in_series?(competition, target_user)
       end
 
-      def user_can_modify_registration!(competition, current_user, target_user, registration)
+      def user_can_modify_registration!(competition, current_user, target_user, registration, new_status)
         raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless
           can_administer_or_current_user?(competition, current_user, target_user)
         raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::USER_EDITS_NOT_ALLOWED) unless
-          competition.registration_edits_allowed? || current_user.can_manage_competition?(competition)
+          competition.registration_edits_allowed? || current_user.can_manage_competition?(competition) || user_uncancelling_registration?(registration, new_status)
         raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::REGISTRATION_IS_REJECTED) if
           user_is_rejected?(current_user, target_user, registration) && !organizer_modifying_own_registration?(competition, current_user, target_user)
         raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::ALREADY_REGISTERED_IN_SERIES) if
           existing_registration_in_series?(competition, target_user) && !current_user.can_manage_competition?(competition)
+      end
+
+      def user_uncancelling_registration?(registration, new_status)
+        registration.competing_status_cancelled? && new_status == Registrations::Helper::STATUS_PENDING
       end
 
       def user_is_rejected?(current_user, target_user, registration)
