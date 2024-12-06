@@ -59,13 +59,13 @@ export default function UpcomingCompetitionTable({
         <Table.Row>
           { shouldShowRegistrationStatus && <Table.HeaderCell /> }
           <Table.HeaderCell>
-            {I18n.t('competitions.adjacent_competitions.name')}
+            {I18n.t('competitions.competition_info.name')}
           </Table.HeaderCell>
           <Table.HeaderCell>
-            {I18n.t('competitions.adjacent_competitions.location')}
+            {I18n.t('competitions.competition_info.location')}
           </Table.HeaderCell>
           <Table.HeaderCell>
-            {I18n.t('competitions.adjacent_competitions.date')}
+            {I18n.t('competitions.competition_info.date')}
           </Table.HeaderCell>
           <Table.HeaderCell />
           {canAdminCompetitions
