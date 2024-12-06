@@ -7,7 +7,17 @@ class Incident < ApplicationRecord
 
   accepts_nested_attributes_for :incident_competitions, allow_destroy: true
 
-  scope :resolved, -> { where.not(resolved_at: nil) }
+  attribute :visibility, :integer, default: :visible
+
+  enum visibility: {
+    draft: 0,          # Only visible to WRC members
+    staff: 1,          # Visible to WCA staff members only
+    visible: 2,        # Visible to everyone
+  }
+
+  scope :publicly_visible, -> { where(visibility: :visible) }
+  scope :staff_visible, -> { where(visibility: [:staff, :visible]) }
+  scope :wrc_visible, -> { all }
 
   validate :digest_sent_at_consistent
   validates_presence_of :title
@@ -34,8 +44,8 @@ class Incident < ApplicationRecord
     if digest_sent_at && !digest_worthy
       errors.add(:digest_sent_at, "can't be set if digest_worthy is false.")
     end
-    if digest_sent_at && !resolved_at
-      errors.add(:digest_sent_at, "can't be set if incident is not resolved.")
+    if digest_sent_at && !visible?
+      errors.add(:digest_sent_at, "can't be set if incident is not public.")
     end
   end
 
@@ -95,4 +105,19 @@ class Incident < ApplicationRecord
 
     json
   end
+
+  def visible_to?(user)
+    case visibility
+    when "visible"
+      true # Everyone can see public incidents
+    when "staff"
+      user&.staff? || user&.can_manage_incidents? # Staff and WRC can see staff incidents
+    when "draft"
+      user&.can_manage_incidents? # Only WRC can see drafts
+    end
+  end
+
+  scope :publicly_visible, -> { where(visibility: :visible) } # Public sees only visible
+  scope :staff_visible, -> { where(visibility: [:staff, :visible]) } # Staff sees staff + visible
+  scope :wrc_visible, -> { all } # WRC sees everything
 end
