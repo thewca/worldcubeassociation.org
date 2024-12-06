@@ -10,6 +10,7 @@ import Errored from '../Requests/Errored';
 import useSaveAction from '../../lib/hooks/useSaveAction';
 import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken';
 import UtcDatePicker from '../wca/UtcDatePicker';
+import CountrySelector from '../CountrySelector/CountrySelector';
 
 const CONTACT_EDIT_PROFILE_FORM_QUERY_CLIENT = new QueryClient();
 
@@ -17,12 +18,6 @@ const genderOptions = _.map(genders.byId, (gender) => ({
   key: gender.id,
   text: gender.name,
   value: gender.id,
-}));
-
-const countryOptions = _.map(countries.byIso2, (country) => ({
-  key: country.iso2,
-  text: country.name,
-  value: country.iso2,
 }));
 
 export default function EditProfileForm({
@@ -82,7 +77,10 @@ export default function EditProfileForm({
   };
 
   const handleFormChange = (e, { name: formName, value }) => {
-    setEditedProfileDetails((prev) => ({ ...prev, [formName]: value }));
+    setEditedProfileDetails((prev) => {
+      const newState = { ...prev, [formName]: value };
+      return newState;
+    });
   };
 
   const handleDobChange = (date) => handleFormChange(null, {
@@ -102,13 +100,10 @@ export default function EditProfileForm({
         onChange={handleFormChange}
         required
       />
-      <Form.Select
-        options={countryOptions}
+      <CountrySelector
         label={i18n.t('activerecord.attributes.user.country_iso2')}
-        name="country_iso2"
-        search
-        value={editedProfileDetails?.country_iso2}
-        onChange={handleFormChange}
+        selected={editedProfileDetails?.country_iso2}
+        onChange={(event, data) => handleFormChange(null, { name: 'country_iso2', value: data.value })}
       />
       <Form.Select
         options={genderOptions}
