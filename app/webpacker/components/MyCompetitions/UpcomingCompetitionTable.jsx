@@ -6,7 +6,9 @@ import React from 'react';
 import I18n from '../../lib/i18n';
 import { competitionStatusText } from '../../lib/utils/competition-table';
 import { competitionRegistrationsUrl, editCompetitionsUrl } from '../../lib/requests/routes.js.erb';
-import ReportTableCell from './ReportTableCell';
+import TableCells, {
+  DateTableCell, LocationTableCell, NameTableCell, ReportTableCell,
+} from './TableCells';
 import { countries } from '../../lib/wca-data.js.erb';
 
 const registrationStatusIcon = (registrationStatus) => {
@@ -71,16 +73,9 @@ export default function UpcomingCompetitionTable({
                     {competitionStatusIcon(competition)}
                   </Table.Cell>
                 )}
-                <Table.Cell>
-                  <a href={competition.url}>{competition.short_display_name}</a>
-                </Table.Cell>
-                <Table.Cell>
-                  {countries.byIso2[competition.country_iso2].name}
-                  {`, ${competition.city}`}
-                </Table.Cell>
-                <Table.Cell>
-                  {competition.date_range}
-                </Table.Cell>
+                <NameTableCell competition={competition} />
+                <LocationTableCell competition={competition} />
+                <DateTableCell competition={competition} />
                 <Table.Cell>
                   {registrationStatusIcon(registrationStatuses[competition.id])}
                 </Table.Cell>
