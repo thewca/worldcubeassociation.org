@@ -1598,7 +1598,7 @@ RSpec.describe Competition do
     end
   end
 
-  context 'newcomer month competition', :tag do
+  context 'newcomer month competition' do
     let(:newcomer_month_comp) { FactoryBot.create(:competition, :newcomer_month) }
     let!(:newcomer_reg) { FactoryBot.create(:registration, :newcomer, competition: newcomer_month_comp) }
 
