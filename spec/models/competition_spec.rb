@@ -1613,10 +1613,10 @@ RSpec.describe Competition do
       end
 
       it 'doesnt include non-newcomers in non-accepted states' do
-        non_newcomer_reg1 = FactoryBot.create(:registration, competition: newcomer_month_comp)
-        non_newcomer_reg1 = FactoryBot.create(:registration, :cancelled, competition: newcomer_month_comp)
-        non_newcomer_reg1 = FactoryBot.create(:registration, :rejected, competition: newcomer_month_comp)
-        non_newcomer_reg1 = FactoryBot.create(:registration, :waiting_list, competition: newcomer_month_comp)
+        FactoryBot.create(:registration, competition: newcomer_month_comp)
+        FactoryBot.create(:registration, :cancelled, competition: newcomer_month_comp)
+        FactoryBot.create(:registration, :rejected, competition: newcomer_month_comp)
+        FactoryBot.create(:registration, :waiting_list, competition: newcomer_month_comp)
 
         expect(newcomer_month_comp.registrations.count).to eq(7)
         expect(newcomer_month_comp.non_newcomers_competing.count).to eq(2)

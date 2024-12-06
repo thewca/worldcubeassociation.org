@@ -261,8 +261,13 @@ class Competition < ApplicationRecord
   end
 
   # TODO: Make sure this query is optimized
-  def non_newcomers_competing
-    registrations.accepted.where()
+  def newcomers_competing
+    registrations.competing_status_accepted.includes(:user).select { |registration| registration.user.newcomer? }
+  end
+
+  # TODO: What if there are no newcomer reserved spots? Is this represented as nil or 0 in the db?
+  def newcomer_reserved_spots_remaining
+    newcomer_reserved_spots - newcomers_competing.count
   end
 
   # Dirty old trick to deal with competition id changes (see other methods using

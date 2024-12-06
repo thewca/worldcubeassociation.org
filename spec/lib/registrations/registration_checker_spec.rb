@@ -2279,14 +2279,15 @@ RSpec.describe Registrations::RegistrationChecker do
       end
     end
 
-    describe '#update_registration_allowed!.reserved newcomer spots', :tag do
+    describe '#update_registration_allowed!.reserved newcomer spots' do
       let(:newcomer_month_comp) { FactoryBot.create(:competition, :newcomer_month) }
       let(:non_newcomer_reg) { FactoryBot.create(:registration, competition: newcomer_month_comp) }
       let(:newcomer_reg) { FactoryBot.create(:registration, :newcomer, competition: newcomer_month_comp) }
+      let(:first_timer_reg) { FactoryBot.create(:registration, :first_timer, competition: newcomer_month_comp) }
 
-      describe 'only newcomer spots remain', :only do
+      describe 'only newcomer spots remain' do
         before do
-         FactoryBot.create_list(:registration, 2, :accepted, competition: newcomer_month_comp)
+          FactoryBot.create_list(:registration, 2, :accepted, competition: newcomer_month_comp)
         end
 
         it 'organizer cant accept non-newcomer if only reserved newcomer spots remain' do
@@ -2295,44 +2296,118 @@ RSpec.describe Registrations::RegistrationChecker do
             user_id: non_newcomer_reg.user.id,
             competition_id: non_newcomer_reg.competition.id,
             submitted_by: newcomer_month_comp.organizers.first.id,
-            competing: { 'status' => 'accepted'},
+            competing: { 'status' => 'accepted' },
           )
 
           expect {
             Registrations::RegistrationChecker.update_registration_allowed!(update_request, Competition.find(update_request['competition_id']), User.find(update_request['submitted_by']))
           }.to raise_error(WcaExceptions::RegistrationError) do |error|
-            expect(error.error).to eq(Registrations::ErrorCodes::NO_UNRESERVED_SPOTS_REMAINING )
+            expect(error.error).to eq(Registrations::ErrorCodes::NO_UNRESERVED_SPOTS_REMAINING)
             expect(error.status).to eq(:forbidden)
           end
         end
 
         it 'organizer can accept first-timer' do
-          expect(true).to eq(false)
+          update_request = FactoryBot.build(
+            :update_request,
+            user_id: first_timer_reg.user.id,
+            competition_id: first_timer_reg.competition.id,
+            submitted_by: newcomer_month_comp.organizers.first.id,
+            competing: { 'status' => 'accepted' },
+          )
+
+          expect {
+            Registrations::RegistrationChecker.update_registration_allowed!(update_request, Competition.find(update_request['competition_id']), User.find(update_request['submitted_by']))
+          }.not_to raise_error
         end
 
-        it 'organizer can accept newcomer who started competing this year)' do
-          expect(true).to eq(false)
+        it 'organizer can accept newcomer who started competing this year' do
+          update_request = FactoryBot.build(
+            :update_request,
+            user_id: newcomer_reg.user.id,
+            competition_id: newcomer_reg.competition.id,
+            submitted_by: newcomer_month_comp.organizers.first.id,
+            competing: { 'status' => 'accepted' },
+          )
+
+          expect {
+            Registrations::RegistrationChecker.update_registration_allowed!(update_request, Competition.find(update_request['competition_id']), User.find(update_request['submitted_by']))
+          }.not_to raise_error
         end
       end
 
-      describe 'reserved newcomer spots are full'
+      describe 'reserved newcomer spots are full' do
+        before do
+          FactoryBot.create_list(:registration, 2, :newcomer, :accepted, competition: newcomer_month_comp)
+        end
+
         it 'organizer can still accept newcomers if all reserved newcomer spots are full' do
-          expect(true).to eq(false)
+          update_request = FactoryBot.build(
+            :update_request,
+            user_id: newcomer_reg.user.id,
+            competition_id: newcomer_reg.competition.id,
+            submitted_by: newcomer_month_comp.organizers.first.id,
+            competing: { 'status' => 'accepted' },
+          )
+
+          expect {
+            Registrations::RegistrationChecker.update_registration_allowed!(update_request, Competition.find(update_request['competition_id']), User.find(update_request['submitted_by']))
+          }.not_to raise_error
         end
 
         it 'organizer can accept non-newcomer if all reserved newcomer spots are full' do
-          expect(true).to eq(false)
+          update_request = FactoryBot.build(
+            :update_request,
+            user_id: non_newcomer_reg.user.id,
+            competition_id: non_newcomer_reg.competition.id,
+            submitted_by: newcomer_month_comp.organizers.first.id,
+            competing: { 'status' => 'accepted' },
+          )
+
+          expect {
+            Registrations::RegistrationChecker.update_registration_allowed!(update_request, Competition.find(update_request['competition_id']), User.find(update_request['submitted_by']))
+          }.not_to raise_error
         end
       end
 
       it 'organizer cant accept newcomer if competition is full' do
-        expect(true).to eq(false)
+        FactoryBot.create_list(:registration, 4, :newcomer, :accepted, competition: newcomer_month_comp)
+
+        update_request = FactoryBot.build(
+          :update_request,
+          user_id: newcomer_reg.user.id,
+          competition_id: newcomer_reg.competition.id,
+          submitted_by: newcomer_month_comp.organizers.first.id,
+          competing: { 'status' => 'accepted' },
+        )
+
+        expect {
+          Registrations::RegistrationChecker.update_registration_allowed!(update_request, Competition.find(update_request['competition_id']), User.find(update_request['submitted_by']))
+        }.to raise_error(WcaExceptions::RegistrationError) do |error|
+          expect(error.error).to eq(Registrations::ErrorCodes::COMPETITOR_LIMIT_REACHED)
+          expect(error.status).to eq(:forbidden)
+        end
       end
 
       it 'organizer can accept non-newcomer into a newcomer reserved spot if registration is closed' do
-        expect(true).to eq(false)
+        closed_newcomer_comp = FactoryBot.create(:competition, :newcomer_month, :registration_closed)
+        normal_reg = FactoryBot.create(:registration, competition: closed_newcomer_comp)
+        FactoryBot.create_list(:registration, 2, :accepted, competition: closed_newcomer_comp)
+
+        update_request = FactoryBot.build(
+          :update_request,
+          user_id: normal_reg.user.id,
+          competition_id: normal_reg.competition.id,
+          submitted_by: closed_newcomer_comp.organizers.first.id,
+          competing: { 'status' => 'accepted' },
+        )
+
+        expect {
+          Registrations::RegistrationChecker.update_registration_allowed!(update_request, Competition.find(update_request['competition_id']), User.find(update_request['submitted_by']))
+        }.not_to raise_error
       end
     end
+  end
 
   describe '#bulk_update' do
     describe '#bulk_update_allowed!' do

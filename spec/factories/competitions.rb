@@ -103,6 +103,7 @@ FactoryBot.define do
     registration_version { :v1 }
 
     trait :newcomer_month do
+      registration_open
       with_organizer
       with_competitor_limit
       competitor_limit { 4 }

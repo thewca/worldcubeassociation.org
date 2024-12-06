@@ -178,10 +178,12 @@ module Registrations
           raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::COMPETITOR_LIMIT_REACHED) if
             competition.registrations.competing_status_accepted.count >= competition.competitor_limit
 
-          puts "checking this"
-          non_newcomer_spots_remaining = competition.competitor_limit - competition.newcomer_reserved_spots - competition.non_newcomers_competing
-          raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::NO_UNRESERVED_SPOTS_REMAINING ) if
-            competition.non_newcomers_competing.count >= non_newcomer_spots_remaining
+          if !target_user.newcomer? && competition.newcomer_reserved_spots > 0
+            non_newcomers_competing = competition.registrations.competing_status_accepted.count - competition.newcomers_competing.count
+            non_newcomer_spots_remaining = competition.competitor_limit - competition.newcomer_reserved_spots_remaining - non_newcomers_competing
+            raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::NO_UNRESERVED_SPOTS_REMAINING) if
+              (non_newcomers_competing >= non_newcomer_spots_remaining) && competition.registration_currently_open?
+          end
         end
 
         # Otherwise, organizers can make any status change they want to

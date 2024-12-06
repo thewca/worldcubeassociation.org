@@ -41,8 +41,12 @@ FactoryBot.define do
       competing_status { Registrations::Helper::STATUS_WAITING_LIST }
     end
 
-    trait :newcomer do
+    trait :first_timer do
       association :user, factory: [:user]
+    end
+
+    trait :newcomer do
+      association :user, factory: [:user, :current_year_wca_id]
     end
 
     trait :paid do
