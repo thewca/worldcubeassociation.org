@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import {
   Button, Container, Dropdown, Message, Modal,
 } from 'semantic-ui-react';
@@ -9,9 +9,10 @@ import Errored from '../Requests/Errored';
 import TicketHeader from './TicketHeader';
 import TicketWorkbench from './TicketWorkbench';
 import TicketLogs from './TicketLogs';
+import useInputState from '../../lib/hooks/useInputState';
 
 function SkateholderSelector({ stakeholderList, setUserSelectedStakeholder }) {
-  const [selectedOption, setSelectedOption] = useState(stakeholderList[0]);
+  const [selectedOption, setSelectedOption] = useInputState(stakeholderList[0]);
   return (
     <>
       <p>
@@ -25,7 +26,7 @@ function SkateholderSelector({ stakeholderList, setUserSelectedStakeholder }) {
           value: requesterStakeholder,
         }))}
         value={selectedOption}
-        onChange={(__, { value }) => setSelectedOption(value)}
+        onChange={setSelectedOption}
       />
       <Button
         disabled={!selectedOption}
@@ -56,11 +57,15 @@ export default function Tickets({ id }) {
     data: ticketDetails, sync, loading, error,
   } = useLoadedData(actionUrls.tickets.show(id));
 
-  const [userSelectedStakeholder, setUserSelectedStakeholder] = useState();
-  const currentStakeholder = userSelectedStakeholder || ticketDetails?.requester_stakeholders[0];
-  const shouldUserSelectStakeholder = (
-    !userSelectedStakeholder
-    && ticketDetails?.requester_stakeholders?.length > 1);
+  const [userSelectedStakeholder, setUserSelectedStakeholder] = useInputState();
+  const currentStakeholder = useMemo(() => {
+    if (userSelectedStakeholder) {
+      return userSelectedStakeholder;
+    } if (ticketDetails?.requester_stakeholders.length === 1) {
+      return ticketDetails?.requester_stakeholders[0];
+    }
+    return null;
+  }, [ticketDetails?.requester_stakeholders, userSelectedStakeholder]);
 
   if (loading) return <Loading />;
   if (error) return <Errored />;
@@ -78,7 +83,7 @@ export default function Tickets({ id }) {
             </Button>
           </Message>
         )}
-        {!shouldUserSelectStakeholder && (
+        {currentStakeholder && (
           <TicketContent
             ticketDetails={ticketDetails}
             currentStakeholder={currentStakeholder}
@@ -86,7 +91,11 @@ export default function Tickets({ id }) {
           />
         )}
       </Container>
-      <Modal open={shouldUserSelectStakeholder}>
+      <Modal
+        open={!currentStakeholder}
+        closeOnEscape={false}
+        closeOnDimmerClick={false}
+      >
         <Modal.Header>Select stakeholder</Modal.Header>
         <Modal.Content>
           <SkateholderSelector
