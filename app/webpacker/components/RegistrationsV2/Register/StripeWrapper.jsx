@@ -49,8 +49,7 @@ export default function StripeWrapper({
       <Message positive>
         {I18n.t('registrations.payment_form.hints.payment_button')}
       </Message>
-      { data?.api_amounts.stripe > 2 * initialAmount
-      && (
+      { donationAmount > initialAmount && (
       <Message warning>
         {I18n.t('registrations.payment_form.alerts.amount_rather_high')}
       </Message>
