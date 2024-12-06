@@ -15,8 +15,8 @@ export function NameTableCell({ competition }) {
 export function LocationTableCell({ competition }) {
   return (
     <Table.Cell>
-      {countries.byIso2[competition.country_iso2].name}
-      {`, ${competition.city}`}
+      {competition.city}
+      {`, ${countries.byIso2[competition.country_iso2].name}`}
     </Table.Cell>
   );
 }

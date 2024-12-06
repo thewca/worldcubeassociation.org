@@ -14,7 +14,7 @@ import PastCompetitionsTable from './PastCompetitionTable';
 
 export default function MyCompetitions({ permissions, competitions, userInfo }) {
   const [isAccordionOpen, setIsAccordionOpen] = useState(false);
-  const [shouldShowRegistrationStatus, setshouldShowRegistrationStatus] = useState(false);
+  const [shouldShowRegistrationStatus, setShouldShowRegistrationStatus] = useState(false);
 
   return (
     <>
@@ -54,7 +54,7 @@ export default function MyCompetitions({ permissions, competitions, userInfo }) 
       <Checkbox
         checked={shouldShowRegistrationStatus}
         label={I18n.t('competitions.index.show_registration_status')}
-        onChange={() => setshouldShowRegistrationStatus(!shouldShowRegistrationStatus)}
+        onChange={() => setShouldShowRegistrationStatus(!shouldShowRegistrationStatus)}
       />
       <UpcomingCompetitionTable
         competitions={competitions.bookmarkedCompetitions}
