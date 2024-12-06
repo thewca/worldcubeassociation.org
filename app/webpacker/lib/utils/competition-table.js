@@ -1,31 +1,31 @@
 import React from 'react';
 import { DateTime, Interval } from 'luxon';
 import I18n from '../i18n';
-import { countries } from '../wca-data.js.erb';
 
 function parseDateString(yyyymmddDateString) {
   return DateTime.fromFormat(yyyymmddDateString, 'yyyy-MM-dd');
 }
 
 export const competitionStatusText = (competition, registrationStatus) => {
-  let statusText = '';
+  let registrationStatusHint = '';
   if (registrationStatus?.competing_status === 'waiting_list') {
-    statusText += I18n.t('competitions.messages.tooltip_waiting_list');
+    registrationStatusHint += I18n.t('competitions.messages.tooltip_waiting_list');
   } else if (registrationStatus?.competing_status === 'accepted') {
-    statusText += I18n.t('competitions.messages.tooltip_registered');
+    registrationStatusHint += I18n.t('competitions.messages.tooltip_registered');
   } else if (registrationStatus?.competing_status === 'cancelled' || registrationStatus?.competing_status === 'rejected') {
-    statusText += I18n.t('competitions.messages.tooltip_deleted');
+    registrationStatusHint += I18n.t('competitions.messages.tooltip_deleted');
   } else if (registrationStatus?.competing_status === 'pending') {
-    statusText += I18n.t('competitions.messages.tooltip_pending');
+    registrationStatusHint += I18n.t('competitions.messages.tooltip_pending');
   }
+  let competitionStatusHint = '';
   if (competition['confirmed?']) {
-    statusText += I18n.t('competitions.messages.confirmed_visible');
+    competitionStatusHint += I18n.t('competitions.messages.confirmed_visible');
   } else if (competition['visible?']) {
-    statusText += I18n.t('competitions.messages.confirmed_not_visible');
+    competitionStatusHint += I18n.t('competitions.messages.confirmed_not_visible');
   } else {
-    statusText += I18n.t('competitions.messages.not_confirmed_not_visible');
+    competitionStatusHint += I18n.t('competitions.messages.not_confirmed_not_visible');
   }
-  return statusText;
+  return `${registrationStatusHint} ${competitionStatusHint}`;
 };
 
 export function dayDifferenceFromToday(yyyymmddDateString) {
