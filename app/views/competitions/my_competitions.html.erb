@@ -8,8 +8,8 @@
 
 <div class="container">
   <%= react_component("MyCompetitions", {
-      userInfo: @current_user.as_json,
-      permissions: @current_user.permissions.as_json,
+      userInfo: current_user.as_json,
+      permissions: current_user.permissions.as_json,
       competitions: {
         pastCompetitions: @past_competitions.as_json(options),
         futureCompetitions: @not_past_competitions.as_json(options),
