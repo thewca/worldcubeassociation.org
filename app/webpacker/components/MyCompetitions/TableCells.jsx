@@ -29,10 +29,12 @@ export function DateTableCell({ competition }) {
   );
 }
 
-export function ReportTableCell({ permissions, competitionId, isReportPosted }) {
-  return (
-    <Table.Cell>
-      {(permissions.can_administer_competitions.scope === '*' || permissions.can_administer_competitions.scope.includes(competitionId)) && (
+export function ReportTableCell({
+  permissions, competitionId, isReportPosted, canAdminCompetitions,
+}) {
+  if (permissions.can_administer_competitions.scope === '*' || permissions.can_administer_competitions.scope.includes(competitionId)) {
+    return (
+      <Table.Cell>
         <>
           <Popup
             content={I18n.t('competitions.my_competitions_table.report')}
@@ -40,7 +42,7 @@ export function ReportTableCell({ permissions, competitionId, isReportPosted }) 
               <a href={competitionReportUrl(competitionId)}>
                 <Icon name="file alternate" />
               </a>
-            )}
+          )}
           />
           <Popup
             content={I18n.t('competitions.my_competitions_table.edit_report')}
@@ -48,19 +50,25 @@ export function ReportTableCell({ permissions, competitionId, isReportPosted }) 
               <a href={competitionReportEditUrl(competitionId)}>
                 <Icon name="edit" />
               </a>
-            )}
+          )}
           />
           { !isReportPosted
-            && permissions.can_administer_competitions.scope.includes(competitionId) && (
-              <Popup
-                content={I18n.t('competitions.my_competitions_table.missing_report')}
-                trigger={(
-                  <Icon name="warning" />
-                )}
-              />
+          && permissions.can_administer_competitions.scope.includes(competitionId) && (
+            <Popup
+              content={I18n.t('competitions.my_competitions_table.missing_report')}
+              trigger={(
+                <Icon name="warning" />
+              )}
+            />
           )}
         </>
-      )}
-    </Table.Cell>
-  );
+      </Table.Cell>
+    );
+  }
+
+  // A user might be able to see only certain reports in the list, so we return an empty cell
+
+  if (canAdminCompetitions) {
+    return <Table.Cell />;
+  }
 }
