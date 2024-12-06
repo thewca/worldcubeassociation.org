@@ -49,7 +49,7 @@ class PanelController < ApplicationController
 
   def redirect
     @panel_page = params.require(:panel_page)
-    panel_with_panel_page = current_user&.panels_with_access&.find { |panel| User.panel_list[panel][:pages].include?(@panel_page) }
+    panel_with_panel_page = current_user.panels_with_access&.find { |panel| User.panel_list[panel][:pages].include?(@panel_page) }
 
     return head :unauthorized if panel_with_panel_page.nil?
     redirect_to panel_index_path(panel_id: panel_with_panel_page, anchor: @panel_page)
