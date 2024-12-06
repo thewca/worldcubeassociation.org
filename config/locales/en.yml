@@ -1266,6 +1266,7 @@ en:
       button_text: "Pay now!"
       hints:
         donation: "Optional donation that will go only to the organization team"
+        payment_button: "Your payment information never reaches the WCA website. It is securely sent to Stripe, which handles the payment process and gets back to us."
       labels:
         fees_paid: "Paid"
         fees_remaining: "Remaining"
@@ -1277,6 +1278,7 @@ en:
         subtotal: "Subtotal"
       alerts:
         amount_too_low: "The total amount must be at least the registration fees to be paid."
+        amount_rather_high: "You are about to pay at least double the required amount for your registration to proceed."
       errors:
         already_paid: "The charge was not placed because the registration fees are already paid."
         not_allowed: "You can't pay for that registration."
