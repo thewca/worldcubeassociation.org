@@ -126,6 +126,7 @@ export default function EditProfileForm({
         dropdownMode="select"
         isoDate={editedProfileDetails?.dob}
         onChange={handleDobChange}
+        required
       />
       <Form.TextArea
         label={i18n.t('page.contact_edit_profile.form.edit_reason.label')}
