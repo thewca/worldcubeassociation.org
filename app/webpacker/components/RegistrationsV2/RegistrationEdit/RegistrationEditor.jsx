@@ -21,10 +21,11 @@ import { EventSelector } from '../../CompetitionsOverview/CompetitionsFilters';
 import Refunds from './Refunds';
 import { editPersonUrl } from '../../../lib/requests/routes.js.erb';
 import { useConfirm } from '../../../lib/providers/ConfirmProvider';
-import i18n from '../../../lib/i18n';
+import I18n from '../../../lib/i18n';
 import RegistrationHistory from './RegistrationHistory';
 import { hasPassed } from '../../../lib/utils/dates';
 import getUsersInfo from '../api/user/post/getUserInfo';
+import I18nHTMLTranslate from '../../I18nHTMLTranslate';
 
 export default function RegistrationEditor({ competitor, competitionInfo }) {
   const dispatch = useDispatch();
@@ -115,8 +116,10 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
     if (!hasChanges) {
       dispatch(setMessage('competitions.registration_v2.update.no_changes', 'basic'));
     } else if (!commentIsValid) {
+      // i18n-tasks-use t('registrations.errors.cannot_register_without_comment')
       dispatch(setMessage('registrations.errors.cannot_register_without_comment', 'negative'));
     } else if (!eventsAreValid) {
+      // i18n-tasks-use t('registrations.errors.must_register')
       dispatch(setMessage(
         maxEvents === Infinity
           ? 'registrations.errors.must_register'
@@ -147,7 +150,7 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
         body.guests = guests;
       }
       confirm({
-        content: i18n.t('competitions.registration_v2.update.update_confirm'),
+        content: I18n.t('competitions.registration_v2.update.update_confirm'),
       }).then(() => {
         updateRegistrationMutation(body);
       }).catch(() => {});
@@ -199,11 +202,13 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
       <Form onSubmit={handleRegisterClick}>
         {!competitor.wca_id && (
           <Message>
-            This person registered with an account. You can edit their
-            personal information
-            {' '}
-            <a href={editPersonUrl(competitor.id)}>here</a>
-            .
+            <I18nHTMLTranslate
+              // i18n-tasks-use t('registrations.registered_with_account_html')
+              i18nKey="registrations.registered_with_account_html"
+              options={{
+                here: `<a href=${editPersonUrl(competitor.id)}>here</a>`,
+              }}
+            />
           </Message>
         )}
         {registrationEditDeadlinePassed && (
@@ -300,6 +305,10 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
           Update Registration
         </Button>
       </Form>
+
+      {/* TODO: Add information about Series Registration here */}
+      {/* i18n-tasks-use t('registrations.list.series_registrations') */}
+
       {competitionInfo['using_payment_integrations?'] && (
         <>
           <List>

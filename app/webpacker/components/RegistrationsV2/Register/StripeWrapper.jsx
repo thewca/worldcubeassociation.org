@@ -2,8 +2,9 @@
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import React, { useEffect, useState } from 'react';
-import { Header } from 'semantic-ui-react';
+import { Header, Message } from 'semantic-ui-react';
 import { useQuery } from '@tanstack/react-query';
+import I18n from '../../../lib/i18n';
 import PaymentStep from './PaymentStep';
 import { fetchJsonOrError } from '../../../lib/requests/fetchWithAuthenticityToken';
 import { paymentDenominationUrl } from '../../../lib/requests/routes.js.erb';
@@ -45,6 +46,14 @@ export default function StripeWrapper({
   return (
     <>
       <Header>Payment</Header>
+      <Message positive>
+        {I18n.t('registrations.payment_form.hints.payment_button')}
+      </Message>
+      { donationAmount > initialAmount && (
+      <Message warning>
+        {I18n.t('registrations.payment_form.alerts.amount_rather_high')}
+      </Message>
+      )}
       { stripePromise && (
         <Elements
           stripe={stripePromise}

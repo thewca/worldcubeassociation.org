@@ -571,12 +571,8 @@ module DatabaseDumper
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
-          accepted_at
-          accepted_by
           competition_id
           created_at
-          deleted_at
-          deleted_by
           guests
           updated_at
           user_id
