@@ -2279,7 +2279,7 @@ RSpec.describe Registrations::RegistrationChecker do
       end
     end
 
-    describe '#update_registration_allowed!.reserved newcomer spots' do
+    describe '#update_registration_allowed!.reserved newcomer spots', :tag do
       let(:newcomer_month_comp) { FactoryBot.create(:competition, :newcomer_month) }
       let(:non_newcomer_reg) { FactoryBot.create(:registration, competition: newcomer_month_comp) }
       let(:newcomer_reg) { FactoryBot.create(:registration, :newcomer, competition: newcomer_month_comp) }
@@ -2405,6 +2405,26 @@ RSpec.describe Registrations::RegistrationChecker do
         expect {
           Registrations::RegistrationChecker.update_registration_allowed!(update_request, Competition.find(update_request['competition_id']), User.find(update_request['submitted_by']))
         }.not_to raise_error
+      end
+
+      it 'takes newcomer registrations into account when calculating spots remaining' do
+        FactoryBot.create_list(:registration, 2, :accepted, competition: newcomer_month_comp)
+        FactoryBot.create(:registration, :accepted, :newcomer, competition: newcomer_month_comp)
+
+        update_request = FactoryBot.build(
+          :update_request,
+          user_id: non_newcomer_reg.user.id,
+          competition_id: non_newcomer_reg.competition.id,
+          submitted_by: newcomer_month_comp.organizers.first.id,
+          competing: { 'status' => 'accepted' },
+        )
+
+        expect {
+          Registrations::RegistrationChecker.update_registration_allowed!(update_request, Competition.find(update_request['competition_id']), User.find(update_request['submitted_by']))
+        }.to raise_error(WcaExceptions::RegistrationError) do |error|
+          expect(error.error).to eq(Registrations::ErrorCodes::NO_UNRESERVED_SPOTS_REMAINING)
+          expect(error.status).to eq(:forbidden)
+        end
       end
     end
   end
