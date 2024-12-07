@@ -1485,6 +1485,25 @@ RSpec.describe Registrations::RegistrationChecker do
           .not_to raise_error
       end
 
+      it 'cancelled user cant re-register if registration is closed' do
+        closed_comp = FactoryBot.create(:competition, :registration_closed, :editable_registrations)
+        cancelled_reg = FactoryBot.create(:registration, :cancelled, competition: closed_comp)
+
+        update_request = FactoryBot.build(
+          :update_request,
+          user_id: cancelled_reg.user_id,
+          competition_id: cancelled_reg.competition.id,
+          competing: { 'status' => 'pending' },
+        )
+
+        expect {
+          Registrations::RegistrationChecker.update_registration_allowed!(update_request, Competition.find(update_request['competition_id']), User.find(update_request['submitted_by']))
+        }.to raise_error(WcaExceptions::RegistrationError) do |error|
+          expect(error.status).to eq(:forbidden)
+          expect(error.error).to eq(Registrations::ErrorCodes::REGISTRATION_CLOSED)
+        end
+      end
+
       RSpec.shared_examples 'invalid user status updates' do |initial_status, new_status|
         it "user cant change 'status' => #{initial_status} to: #{new_status}" do
           registration = FactoryBot.create(:registration, initial_status, competition: default_competition)
