@@ -98,6 +98,10 @@ RSpec.describe 'API Registrations' do
         end
       end
     end
+
+    it 'automatically accepts a registration upon payment' do
+      expect(true).to eq(false)
+    end
   end
 
   describe 'PATCH #update' do
