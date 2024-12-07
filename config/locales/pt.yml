@@ -1475,10 +1475,13 @@ pt:
           Esta equipa é responsável por desenvolver e gerir a marca WCA,
           procurar patrocínios, apoiar a distribuição de equipamentos de
           competição WCA e comercializar mercadoria WCA.
-        #original_hash: ff6f008
+        #original_hash: e0dbf86
         wmct: >-
-          Esta equipa é responsável por supervisionar a organização e o
-          desenvolvimento dos Campeonatos Continentais e Mundiais da WCA.
+          A Equipa de Grandes Campeonatos da WCA supervisiona a coordenação e o
+          avanço dos Campeonatos Continentais e Mundiais da WCA, desenvolvendo
+          orientações e planos estratégicos, gerindo a seleção da cidade
+          anfitriã, apoiando as equipas organizadoras e garantindo experiências
+          de campeonatos consistentes.
         #original_hash: 0171b3b
         wqac: >-
           Este comité tem a função de apoiar e promover a melhoria contínua da
@@ -2021,7 +2024,7 @@ pt:
           você é.
         #original_hash: 4083c00
         '4': 'A sua cabeça, mas não necessariamente toda a face, deve estar visível.'
-        #original_hash: e2d2fe8
+        #original_hash: 14c72b2
         '5': >-
           O avatar não deve incluir texto sobreposto, autocolantes ou filtros
           não naturais, incluindo bordas.
@@ -2402,8 +2405,8 @@ pt:
     delete: Apagar
     #original_hash: b72119a
     delete_confirm: Tem a certeza que quer apagar o seu registo?
-    #original_hash: cfc4865
-    delete_registration: Apagar registo
+    #original_hash: bbcc3dc
+    delete_registration: Apagar Registo
     #original_hash: e9ddc6e
     will_open_html: 'Inscrições irão abrir em <strong>%{days}</strong> na data/hora: %{time}.'
     #original_hash: 34eb009
@@ -2464,7 +2467,7 @@ pt:
     entry_fees_fully_paid: 'Pagou %{paid}, que cobre na totalidade a taxa de registo.'
     #original_hash: 2e5d1b9
     will_pay_here: Irá efetuar o pagamento aqui após submeter o registo
-    #original_hash: b7ef562
+    #original_hash: 86877d4
     wont_pay_here: >-
       Por favor verifique a informação da competição para instruções de como
       pagar
@@ -2472,9 +2475,9 @@ pt:
     not_qualified: Não qualificado
     refund_form:
       hints:
-        #original_hash: d97186d
+        #original_hash: 38c904c
         refund_amount: >-
-          A quantia a devolver ao competidor, pode ser qualquer valor até ao
+          A quantia a devolver ao competidor. Pode ser qualquer valor até ao
           valor já pago.
       labels:
         #original_hash: 1cc5991
@@ -2482,7 +2485,7 @@ pt:
     payment_form:
       #original_hash: 4de825f
       title: Taxa de registo
-      #original_hash: d1569e6
+      #original_hash: 8897f02
       payment_successful: >-
         O pagamento foi bem sucedido e no registo, abaixo, deverá constar como
         pago.
@@ -2493,7 +2496,7 @@ pt:
       hints:
         #original_hash: bf3a39e
         donation: Donativo opcional que irá apenas para a equipa de organização
-        #original_hash: f7fa263
+        #original_hash: 737c228
         payment_button: >-
           As suas informações de pagamento nunca chegam ao site da WCA. São
           enviadas de forma segura para o Stripe, que trata do processo de
@@ -2570,9 +2573,9 @@ pt:
     import:
       #original_hash: 5a394f3
       title: 'Importar registos para %{comp}'
-      #original_hash: ccda564
+      #original_hash: 620f5ce
       info: >-
-        Pode importar registos várias vezes, as alterações serão determinadas e
+        Pode importar registos várias vezes. As alterações serão determinadas e
         a base de dados atualizada de acordo.
       #original_hash: 779b272
       registrations_file_label: Ficheiro de registos
@@ -2645,16 +2648,16 @@ pt:
         comece com uma letra maiúscula.
       #original_hash: 1a20fae
       must_have_events: Por favor adicione pelo menos um evento antes de confirmar a competição.
-      #original_hash: a3aea56
+      #original_hash: fd91320
       schedule_must_match_rounds: >-
         Por favor garanta que a competição tem pelo menos uma ronda por evento e
         que o horário que criou inclui todas as rondas que declarou antes de
         confirmar a competição.
-      #original_hash: aeb5f2a
+      #original_hash: 4fe4dee
       advancement_condition_must_be_present_for_all_non_final_rounds: >-
-        Por favor garanta que todas as rondas não finais têm regras de avanço
-        especificadas.
-      #original_hash: f50ffd8
+        Por favor garanta que todas as rondas não finais têm uma regra de avanço
+        especificada.
+      #original_hash: a00f441
       cutoff_is_greater_than_time_limit: >-
         Ronda %{round_number} de %{event} tem tempo de corte superior ao tempo
         limite. Faça alterações de forma a que o tempo de corte não seja
@@ -2677,13 +2680,13 @@ pt:
         num evento rápido. Verifique se isto está correto.
       #original_hash: e390250
       create_success: Competição criada com sucesso!
-      #original_hash: bc3e673
+      #original_hash: 5e1ea86
       registration_payment_info: >-
         Esta competição tem taxas de inscrição, mas não tem nenhuma conta Stripe
         vinculada. Se você estiver a usar o Stripe através do site da WCA,
         lembre-se de vincular a sua conta do Stripe. Se estiver a usar um
         sistema de pagamento externo, lembre-se de adicionar todos os detalhes
-        relevantes nos requisitos de registo.
+        relevantes aos requisitos de registo.
       #original_hash: ba067f0
       not_announced: 'Esta competição é visível para o público, mas ainda não foi anunciada.'
       #original_hash: ab61991
@@ -2740,6 +2743,11 @@ pt:
         para ser no futuro.
       #original_hash: 3322400
       tooltip_registered: Está registado.
+      #original_hash: b10c8d6
+      tooltip_pending: >-
+        O seu registo está a aguardar aprovação manual. Certifique-se de que
+        seguiu todas as instruções (ex: pagamento) listadas na Página da
+        Competição.
       #original_hash: f2d092f
       tooltip_waiting_list: Está na lista de espera.
       #original_hash: f97246a
