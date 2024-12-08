@@ -94,8 +94,10 @@ export default function RegistrationList({ competitionInfo }) {
   const { sortColumn, sortDirection } = state;
   const changeSortColumn = (name) => dispatch({ type: 'CHANGE_SORT', sortColumn: name });
 
+  const blindFoldedEvents = ['333mbf', '333bf', '444bf', '555bf'];
+
   const [psychSheetEvent, setPsychSheetEvent] = useState();
-  const [psychSheetSortBy, setPsychSheetSortBy] = useState('single');
+  const psychSheetSortBy = useMemo(() => (blindFoldedEvents.includes(psychSheetEvent) ? 'single' : 'average'), [psychSheetEvent]);
 
   const { isLoading: isLoadingPsychSheet, data: psychSheet } = useQuery({
     queryKey: [
@@ -115,7 +117,6 @@ export default function RegistrationList({ competitionInfo }) {
 
   const registrationsWithPsychsheet = useMemo(() => {
     if (psychSheet !== undefined) {
-      setPsychSheetSortBy(psychSheet.sort_by);
       return psychSheet.sorted_rankings.map((p) => {
         const registrationEntry = registrations.find((r) => p.user_id === r.user_id);
         return { ...p, ...registrationEntry };
