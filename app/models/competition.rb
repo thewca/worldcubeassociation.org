@@ -172,6 +172,8 @@ class Competition < ApplicationRecord
     event_change_deadline_date
     competition_series_id
     registration_version
+    auto_accept_registrations
+    auto_accept_disable_threshold
   ).freeze
   VALID_NAME_RE = /\A([-&.:' [:alnum:]]+) (\d{4})\z/
   VALID_ID_RE = /\A[a-zA-Z0-9]+\Z/
@@ -351,6 +353,15 @@ class Competition < ApplicationRecord
         errors.add(:registration_close, I18n.t('competitions.errors.registration_already_closed'))
       end
     end
+  end
+
+  validate :auto_accept_validations
+  private def auto_accept_validations
+    errors.add(:auto_accept_registrations, I18n.t('competitions.errors.must_use_wca_registration')) if
+      auto_accept_registrations && !use_wca_registration
+
+    errors.add((:auto_accept_registrations), I18n.t('competitions.errors.auto_accept_limit')) if
+      auto_accept_disable_threshold > 0 && competitor_limit.present? && auto_accept_disable_threshold >= competitor_limit
   end
 
   def has_any_round_per_event?

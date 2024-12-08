@@ -1583,4 +1583,38 @@ RSpec.describe Competition do
       expect(new_competition).not_to be_valid
     end
   end
+
+  describe "validate auto accept fields", :tag do
+    let(:auto_accept_comp) { FactoryBot.build(:competition, :auto_accept) }
+
+    it 'cant enable auto-accept if not using WCA registration' do
+      auto_accept_comp.use_wca_registration = false
+      expect(auto_accept_comp).not_to be_valid
+      expect(auto_accept_comp.errors[:auto_accept_registrations]).to include("Auto-accept can only be used if you are using the WCA website for registrations")
+    end
+
+    it 'disable threshold cant exceed competitor limit' do
+      auto_accept_comp.competitor_limit = 100
+      auto_accept_comp.auto_accept_disable_threshold = 101
+      expect(auto_accept_comp).not_to be_valid
+      expect(auto_accept_comp.errors[:auto_accept_registrations]).to include("Limit for auto-accepted registrations must be less than the competitor limit")
+    end
+
+    it 'disable threshld must be less than competitor limit' do
+      auto_accept_comp.competitor_limit = 100
+      auto_accept_comp.auto_accept_disable_threshold = 100
+      expect(auto_accept_comp).not_to be_valid
+      expect(auto_accept_comp.errors[:auto_accept_registrations]).to include("Limit for auto-accepted registrations must be less than the competitor limit")
+    end
+
+    it 'disable threshold may be 0' do
+      auto_accept_comp.auto_accept_disable_threshold = 0
+      expect(auto_accept_comp).to be_valid
+    end
+
+    it 'disable threshold may not be be less than 0' do
+      auto_accept_comp.auto_accept_registrations = -1
+      expect(auto_accept_comp).to be_valid
+    end
+  end
 end

@@ -1954,6 +1954,9 @@ en:
         -6002: "You need to finish your registration before you can pay"
     #context: and when an error occured
     errors:
+      must_use_wca_registration: "Auto-accept can only be used if you are using the WCA website for registrations"
+      auto_accept_limit: "Limit for auto-accepted registrations must be less than the competitor limit"
+      auto_accept_not_negative: "Limit for auto-accepted registrations cannot be less than 0."
       invalid_name_message: "must end with a year and must contain only alphanumeric characters, dashes(-), ampersands(&), periods(.), colons(:), apostrophes('), and spaces( )"
       cannot_manage: "Cannot manage competition."
       cannot_delete_public: "Cannot delete a competition that is publicly visible."
