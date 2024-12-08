@@ -77,6 +77,20 @@
       <h2><%= section.capitalize %></h2>
       <%=md delegate_report.read_attribute(section) %>
     </div>
+
+    <% if section == :venue && delegate_report.setup_images.attached? %>
+      <div>
+        <h2>Setup Images</h2>
+        <p>(Click to get a larger view)</p>
+        <div style="display: flex; flex-wrap: wrap; justify-content: space-around; align-items: center">
+          <% delegate_report.setup_images.each do |image| %>
+            <%= link_to url_for(image), target: :_blank do %>
+              <%= image_tag image.variant(:preview).processed %>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
   <% end %>
 
   <%# Technically, 'remarks' is also a Markdown section but it's the only one that doesn't have a template %>

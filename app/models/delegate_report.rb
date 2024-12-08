@@ -19,6 +19,10 @@ class DelegateReport < ApplicationRecord
 
   enum :version, [:legacy, :working_group_2024], suffix: true, default: :working_group_2024
 
+  has_many_attached :setup_images do |attachable|
+    attachable.variant :preview, resize_to_limit: [100, 100]
+  end
+
   attr_accessor :current_user
 
   before_create :set_discussion_url
@@ -50,6 +54,13 @@ class DelegateReport < ApplicationRecord
   validates :wrc_incidents, presence: true, if: :wrc_feedback_requested
   validates :wic_incidents, presence: true, if: :wic_feedback_requested
 
+  validate :setup_image_count, if: [:posted?, :requires_setup_images?]
+  private def setup_image_count
+    if self.setup_images.count < self.required_setup_images_count
+      errors.add(:setup_images, "Needs at least #{self.required_setup_images_count} images")
+    end
+  end
+
   def schedule_and_discussion_urls_required?
     posted? && created_at > Date.new(2019, 7, 21)
   end
@@ -62,7 +73,7 @@ class DelegateReport < ApplicationRecord
     case section
     when :summary
       self.working_group_2024_version?
-    when :venue
+    when :equipment
       self.legacy_version?
     else
       true
@@ -71,6 +82,14 @@ class DelegateReport < ApplicationRecord
 
   def md_sections
     AVAILABLE_SECTIONS.filter { |section| self.uses_section?(section) }
+  end
+
+  def requires_setup_images?
+    self.uses_section?(:venue) && self.required_setup_images_count > 0
+  end
+
+  def required_setup_images_count
+    self.working_group_2024_version? ? 2 : 0
   end
 
   def can_see_submit_button?(current_user)
