@@ -2810,7 +2810,7 @@ class Competition < ApplicationRecord
             "extraRequirements" => { "type" => ["string", "null"] },
             "forceComment" => { "type" => ["boolean", "null"] },
             "autoAcceptEnabled" => { "type" => ["boolean", "null"] },
-            "autoAcceptDisableThreshold"  => { "type" => ["integer", "null"] },
+            "autoAcceptDisableThreshold" => { "type" => ["integer", "null"] },
           },
         },
         "eventRestrictions" => {
