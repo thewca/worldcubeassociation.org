@@ -110,6 +110,8 @@ module DatabaseDumper
           registration_version
           forbid_newcomers
           forbid_newcomers_reason
+          auto_accept_registrations
+          auto_accept_disable_threshold
         ),
         db_default: %w(
           connected_stripe_account_id

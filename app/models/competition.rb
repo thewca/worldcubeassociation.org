@@ -1865,7 +1865,7 @@ class Competition < ApplicationRecord
                base_entry_fee_lowest_denomination currency_code allow_registration_edits allow_registration_self_delete_after_acceptance
                allow_registration_without_qualification refund_policy_percent use_wca_registration guests_per_registration_limit venue contact
                force_comment_in_registration use_wca_registration external_registration_page guests_entry_fee_lowest_denomination guest_entry_status
-               information events_per_registration_limit guests_enabled],
+               information events_per_registration_limit guests_enabled auto_accept_registration auto_accept_disable_threshold],
       methods: %w[url website short_name city venue_address venue_details latitude_degrees longitude_degrees country_iso2 event_ids registration_currently_open?
                   main_event_id number_of_bookmarks using_payment_integrations? uses_qualification? uses_cutoff? competition_series_ids registration_full? registration_version],
       include: %w[delegates organizers],
@@ -2388,6 +2388,8 @@ class Competition < ApplicationRecord
         "guestsPerRegistration" => guests_per_registration_limit,
         "extraRequirements" => extra_registration_requirements,
         "forceComment" => force_comment_in_registration,
+        "autoAcceptEnabled" => auto_accept_registrations,
+        "autoAcceptDisableThreshold" => auto_accept_disable_threshold,
       },
       "eventRestrictions" => {
         "forbidNewcomers" => {
@@ -2489,6 +2491,8 @@ class Competition < ApplicationRecord
         "guestsPerRegistration" => errors[:guests_per_registration_limit],
         "extraRequirements" => errors[:extra_registration_requirements],
         "forceComment" => errors[:force_comment_in_registration],
+        "autoAcceptEnabled" => errors[:auto_accept_registrations],
+        "autoAcceptDisableThreshold" => errors[:auto_accept_disable_threshold],
       },
       "eventRestrictions" => {
         "forbidNewcomers" => {
@@ -2620,6 +2624,8 @@ class Competition < ApplicationRecord
       showAtAll: form_data.dig('admin', 'isVisible'),
       being_cloned_from_id: form_data.dig('cloning', 'fromId'),
       clone_tabs: form_data.dig('cloning', 'cloneTabs'),
+      auto_accept_registrations: form_data.dig('registration', 'autoAcceptEnabled'),
+      auto_accept_disable_threshold: form_data.dig('registration', 'autoAcceptDisableThreshold'),
     }
   end
 
