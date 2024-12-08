@@ -1584,7 +1584,7 @@ RSpec.describe Competition do
     end
   end
 
-  describe "validate auto accept fields", :tag do
+  describe "validate auto accept fields" do
     let(:auto_accept_comp) { FactoryBot.build(:competition, :auto_accept) }
 
     it 'cant enable auto-accept if not using WCA registration' do
