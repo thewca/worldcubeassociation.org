@@ -494,4 +494,9 @@ class Registration < ApplicationRecord
   def serializable_hash(options = nil)
     super(DEFAULT_SERIALIZE_OPTIONS.merge(options || {}))
   end
+
+  def auto_accept
+    puts "auto accepting"
+    update(competing_status: Registrations::Helper::STATUS_ACCEPTED)
+  end
 end

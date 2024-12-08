@@ -524,4 +524,17 @@ RSpec.describe Registration do
       end
     end
   end
+
+  describe '#auto_accept', :tag do
+    let(:auto_accept_comp) { FactoryBot.create(:competition, :auto_accept, :registration_open) }
+    let(:reg) { FactoryBot.create(:registration, competition: auto_accept_comp) }
+
+    it 'auto accepts a competitor who pays for their pending registration' do
+      expect(reg.competing_status).to eq('pending')
+
+      FactoryBot.create(:registration_payment, registration: reg, competition: auto_accept_comp)
+
+      expect(reg.reload.competing_status).to eq('accepted')
+    end
+  end
 end
