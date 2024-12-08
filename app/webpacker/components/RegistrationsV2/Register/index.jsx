@@ -74,12 +74,7 @@ function Register({
     return <Loading />;
   }
 
-  if (
-    (registration && registration.competing.registration_status != `cancelled`) ||
-    userCanPreRegister ||
-    competitionInfo['registration_currently_open?'] ||
-    timerEnded
-  ) {
+  if (registration || userCanPreRegister || competitionInfo['registration_currently_open?'] || timerEnded) {
     return (
       <>
         <RegistrationMessage />
