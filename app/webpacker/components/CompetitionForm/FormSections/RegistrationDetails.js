@@ -32,6 +32,10 @@ export default function RegistrationDetails() {
 
   return (
     <SubSection section="registration">
+      <InputBooleanSelect id="autoAcceptEnabled" required />
+      <ConditionalSection showIf={registration.autoAcceptEnabled}>
+        <InputNumber id="autoAcceptDisableThreshold" />
+      </ConditionalSection>
       <InputDate id="waitingListDeadlineDate" dateTime required />
       <InputDate id="eventChangeDeadlineDate" dateTime required />
       <InputBooleanSelect id="allowOnTheSpot" required />

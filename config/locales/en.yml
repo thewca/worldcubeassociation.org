@@ -1686,6 +1686,8 @@ en:
           refund_policy_percent: "Percent to be refunded"
           refund_policy_limit_date: "Limit date for refunds"
         registration:
+          auto_accept_enabled: "Automatic registration acceptance"
+          auto_accept_disable_threshold: "Limit for automatically accepting registrations"
           opening_date_time: "Registration open"
           closing_date_time: "Registration close"
           waiting_list_deadline_date: "Deadline for accepting competitors from the waiting list"
@@ -1771,6 +1773,8 @@ en:
           refund_policy_percent: "For now this number is informational only, refunds will have to be issued manually. If this is set to 0, a sentence will be displayed saying that registration fees won't be refunded under any circumstance."
           refund_policy_limit_date: "Date after which no more refunds will be issued."
         registration:
+          auto_accept_enabled: "This will automatically accept any user who registers and pays. Use at your own risk, and set a disable threshold to have control over the final registrations which get accepted."
+          auto_accept_disable_threshold: "When this number of accepted registrations is reached, auto-accept will disable itself - allowing organizers to manually approve the final registrations. Must be less than the competitor limit."
           opening_date_time: "Note: Registration open and close are in UTC time"
           closing_date_time: ""
           waiting_list_deadline_date: "The date when waitlisted registrants will no longer be accepted. If you have a deadline for refunds, the deadline for being accepted should not be before the deadline for refunds."
@@ -1812,6 +1816,9 @@ en:
             "true": "I want to specify a competitor limit"
             "false": "I DON'T WANT to specify a competitor limit"
         registration:
+          auto_accept_enabled:
+            "true": "Automatically accept users once they have paid"
+            "false": "Do not auto-accept users - registrations must be manually accepted"
           allow_on_the_spot:
             "true": "On the spot registrations will be accepted"
             "false": "On the spot registrations WILL NOT be accepted"
