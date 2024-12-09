@@ -1,37 +1,5 @@
 <% provide(:title, 'Users') %>
 
 <div class="container">
-  <h2><%= yield(:title) %></h2>
-
-  <div id="users-query-fields" class="form-inline bs-table-query-fields">
-    <div class="form-group">
-      <%= select_tag(:region, region_option_tags(selected_id: params[:region], real_only: true), class: "form-control") %>
-    </div>
-    <div id="search-box" class="form-group">
-      <div class="input-group">
-        <%= content_tag :span, ui_icon("search"), class: "input-group-addon",
-                               data: { toggle: "tooltip", placement: "top" },
-                               title: "Type name, WCA ID, or email. Use a space to separate them." %>
-        <%= text_field_tag :search, params[:search], class: "form-control" %>
-      </div>
-    </div>
-  </div>
-
-  <%= wca_table table_class: "users-table",
-                data: { toggle: "table", pagination: "true", side_pagination: "server", url: users_url,
-                        query_params: "usersTableAjax.queryParams", ajax: "usersTableAjax.doAjax",
-                        sort_name: "name", undefined_text: "" } do %>
-    <thead>
-      <tr>
-        <th class="wca-id" data-field="wca_id" data-sortable="true">WCA ID</th>
-        <th class="name" data-field="name" data-sortable="true">Name</th>
-        <th class="country" data-field="country" data-sortable="true">Country</th>
-        <th class="email" data-field="email" data-sortable="true">Email</th>
-        <th class="edit" data-field="edit"></th>
-
-        <!-- Extra column for .table-greedy-last-column -->
-        <th></th>
-      </tr>
-    </thead>
-  <% end %>
+  <%= react_component("Users/List") %>
 </div>

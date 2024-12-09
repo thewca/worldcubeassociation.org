@@ -10,6 +10,7 @@ export const editPersonUrl = (userId) => `<%= CGI.unescape(Rails.application.rou
 export const personUrl = (wcaId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.person_path("${wcaId}"))%>`;
 
 export const personsUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.persons_path) %>`;
+export const usersUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.users_path) %>`;
 
 export const newResultUrl = (competitionId, roundId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.competition_new_result_path("${competitionId}", "${roundId}"))%>`;
 export const resultUrl = (id) => `<%= CGI.unescape(Rails.application.routes.url_helpers.result_path("${id}"))%>`;

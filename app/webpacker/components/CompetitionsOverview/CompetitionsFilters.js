@@ -168,7 +168,7 @@ export function EventSelector({
   );
 }
 
-function RegionSelector({ region, dispatchFilter }) {
+export function RegionSelector({ region, dispatchFilter }) {
   const regionsOptions = [
     { key: 'all', text: I18n.t('common.all_regions'), value: 'all' },
     {

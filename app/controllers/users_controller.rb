@@ -33,12 +33,12 @@ class UsersController < ApplicationController
           total: @users.size,
           rows: @users.limit(params[:limit]).offset(params[:offset]).map do |user|
             {
-              wca_id: user.wca_id ? view_context.link_to(user.wca_id, person_path(user.wca_id)) : "",
+              wca_id: user.wca_id,
               name: ERB::Util.html_escape(user.name),
               # Users don't have to provide a country upon registration
-              country: user.country&.id,
+              country: user.country&.iso2,
               email: ERB::Util.html_escape(user.email),
-              edit: view_context.link_to("Edit", edit_user_path(user)),
+              user_id: user.id,
             }
           end,
         }
