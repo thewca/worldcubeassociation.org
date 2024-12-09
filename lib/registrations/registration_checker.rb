@@ -190,7 +190,7 @@ module Registrations
 
         # User reactivating registration
         if new_status == Registrations::Helper::STATUS_PENDING
-          raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless registration.deleted?
+          raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless registration.cancelled?
           return # No further checks needed if status is pending
         end
 

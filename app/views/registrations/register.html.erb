@@ -7,13 +7,10 @@
   <%= render "competitions/registration_requirements", show_links_to_register_page: false %>
   <hr/>
 
-  <% opens_in_days = distance_of_time_in_words_to_now(@competition.registration_open) %>
   <% closes_in_days = distance_of_time_in_words_to_now(@competition.registration_close) %>
 
-  <% if !@competition.uses_new_registration_system? && @competition.registration_not_yet_opened? %>
-    <%= alert :info, t('registrations.will_open_html', days: opens_in_days, time: wca_local_time(@competition.registration_open)) %>
   <%# Don't show this alert if we're showing the registration's details: this message is included in it! %>
-  <% elsif @competition.registration_past? && !@registration&.show_details?(current_user) %>
+  <% if @competition.registration_past? && !@registration&.show_details?(current_user) %>
     <%= alert :danger, t('registrations.closed_html', days: closes_in_days, time: wca_local_time(@competition.registration_close)) %>
   <% end %>
 
