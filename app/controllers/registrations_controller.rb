@@ -479,7 +479,7 @@ class RegistrationsController < ApplicationController
 
     registration = payment_record.root_record.payment_intent.holder
 
-    redirect_path = competition.registration_version_v3? ? edit_registration_v2_path(competition_id, registration.user_id) : edit_registration_path(registration)
+    redirect_path = edit_registration_v2_path(competition_id, registration.user_id)
 
     refund_amount_param = params.require(:payment).require(:refund_amount)
     refund_amount = refund_amount_param.to_i
