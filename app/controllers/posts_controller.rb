@@ -66,7 +66,7 @@ class PostsController < ApplicationController
     @post.author = current_user
     if @post.save
       flash[:success] = "Created new post"
-      redirect_to post_path(@post.slug)
+      render json: { status: 'ok', post: @post }
     else
       render 'new'
     end

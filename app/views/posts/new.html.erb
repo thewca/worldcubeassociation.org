@@ -1,10 +1,10 @@
 <% provide(:title, 'New post') %>
 
-<% options = all_to_options(PostTag) %>
-
 <div class="container">
-  <%= react_component("Posts/PostForm", {
-    header: yield(:title),
-    allTags: options.as_json,
+  <%= react_component("Posts/CreatePost", {
+    allTags: PostTag.distinct.pluck(:tag).map { |tag| { value: tag, text: tag, key: tag } }.as_json,
+    post: @post.as_json({
+
+                        }),
   }) %>
 </div>
