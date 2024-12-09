@@ -11,5 +11,9 @@ FactoryBot.define do
     user_id { registration.user_id }
     amount_lowest_denomination { competition.base_entry_fee_lowest_denomination }
     currency_code { competition.currency_code }
+
+    trait :refund do
+      amount_lowest_denomination { -competition.base_entry_fee_lowest_denomination }
+    end
   end
 end

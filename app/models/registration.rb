@@ -496,7 +496,6 @@ class Registration < ApplicationRecord
   end
 
   def auto_accept
-    puts "auto accepting"
-    update(competing_status: Registrations::Helper::STATUS_ACCEPTED)
+    update(competing_status: Registrations::Helper::STATUS_ACCEPTED) if outstanding_entry_fees <= 0
   end
 end
