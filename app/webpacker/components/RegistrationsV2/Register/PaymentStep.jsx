@@ -119,7 +119,8 @@ export default function PaymentStep({
           : (
             <>
               <Header size="small" id="money-subtotal">
-                Subtotal:
+                {I18n.t('registrations.payment_form.labels.subtotal')}
+                :
                 {' '}
                 {displayAmount}
               </Header>
