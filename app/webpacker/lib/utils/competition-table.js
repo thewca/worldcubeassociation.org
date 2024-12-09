@@ -6,6 +6,28 @@ function parseDateString(yyyymmddDateString) {
   return DateTime.fromFormat(yyyymmddDateString, 'yyyy-MM-dd');
 }
 
+export const competitionStatusText = (competition, registrationStatus) => {
+  let registrationStatusHint = '';
+  if (registrationStatus?.competing_status === 'waiting_list') {
+    registrationStatusHint += I18n.t('competitions.messages.tooltip_waiting_list');
+  } else if (registrationStatus?.competing_status === 'accepted') {
+    registrationStatusHint += I18n.t('competitions.messages.tooltip_registered');
+  } else if (registrationStatus?.competing_status === 'cancelled' || registrationStatus?.competing_status === 'rejected') {
+    registrationStatusHint += I18n.t('competitions.messages.tooltip_deleted');
+  } else if (registrationStatus?.competing_status === 'pending') {
+    registrationStatusHint += I18n.t('competitions.messages.tooltip_pending');
+  }
+  let competitionStatusHint = '';
+  if (competition['confirmed?']) {
+    competitionStatusHint += I18n.t('competitions.messages.confirmed_visible');
+  } else if (competition['visible?']) {
+    competitionStatusHint += I18n.t('competitions.messages.confirmed_not_visible');
+  } else {
+    competitionStatusHint += I18n.t('competitions.messages.not_confirmed_not_visible');
+  }
+  return `${registrationStatusHint} ${competitionStatusHint}`;
+};
+
 export function dayDifferenceFromToday(yyyymmddDateString) {
   const dateLuxon = parseDateString(yyyymmddDateString);
   const exactDaysDiff = dateLuxon.diffNow('days').days;
