@@ -99,8 +99,6 @@ FactoryBot.define do
     refund_policy_percent { 0 }
     guests_entry_fee_lowest_denomination { 0 }
 
-    registration_version { :v3 }
-
     trait :enforces_qualifications do
       with_organizer
       qualification_results { true }
