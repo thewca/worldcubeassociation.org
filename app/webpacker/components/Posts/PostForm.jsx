@@ -14,9 +14,9 @@ export default function PostForm({
   console.log(post);
   const [formTitle, setFormTitle] = useInputState(post?.title ?? '');
   const [formBody, setFormBody] = useInputState(post?.body ?? '');
-  const [formTags, setFormTags] = useState(post?.tags ?? []);
+  const [formTags, setFormTags] = useState(post?.tags_array ?? []);
   const [formIsStickied, setFormIsStickied] = useCheckboxState(post?.sticky ?? false);
-  const [formShowOnHomePage, setFormShowOnHomePage] = useCheckboxState(post?.world_readable ?? true);
+  const [formShowOnHomePage, setFormShowOnHomePage] = useCheckboxState(post?.show_on_homepage ?? true);
 
   const { mutate } = useMutation({
     mutationFn: createOrEditPost,
@@ -32,8 +32,9 @@ export default function PostForm({
       body: formBody,
       tags: formTags,
       sticky: formIsStickied,
+      show_on_homepage: formShowOnHomePage,
     });
-  }, [formBody, formIsStickied, formTags, formTitle, mutate, post.id]);
+  }, [formBody, formIsStickied, formShowOnHomePage, formTags, formTitle, mutate, post.slug]);
 
   return (
     <>
@@ -53,13 +54,15 @@ export default function PostForm({
           <Form.Select options={allTags} onChange={(_, data) => { setFormTags(data.value); }} value={formTags} multiple />
         </FormField>
         <FormField>
-          <Form.Checkbox label="Sticky" onChange={setFormIsStickied} value={formIsStickied} />
+          <Form.Checkbox label="Sticky" onChange={setFormIsStickied} checked={formIsStickied} />
         </FormField>
         <FormField>
-          <Form.Checkbox label="Show on Homepage" onChange={setFormShowOnHomePage} value={formShowOnHomePage} />
+          <Form.Checkbox label="Show on Homepage" onChange={setFormShowOnHomePage} checked={formShowOnHomePage} />
           <p>Careful! This is not secure for private data. This is only to prevent cluttering the homepage. Posts that are not shown on the homepage are still accessible to the public via permalink or through tags.</p>
         </FormField>
-        <Button type="submit">Create Post</Button>
+        <Button type="submit" primary>{ post ? 'Update Post' : 'Create Post'}</Button>
+        { post
+        && <Button negative>Delete Post</Button> }
       </Form>
     </>
   );

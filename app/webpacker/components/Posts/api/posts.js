@@ -3,8 +3,9 @@ import { postUrl, submitPostUrl } from '../../../lib/requests/routes.js.erb';
 
 export const createOrEditPost = (post) => {
   const url = post.id ? postUrl(post.id) : submitPostUrl;
+  const method = post.id ? 'PATCH' : 'POST';
   return fetchJsonOrError(url, {
-    method: 'POST',
+    method,
     headers: {
       'Content-Type': 'application/json',
     },

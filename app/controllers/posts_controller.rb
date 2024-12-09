@@ -80,7 +80,7 @@ class PostsController < ApplicationController
     @post = find_post
     if @post.update(post_params)
       flash[:success] = "Updated post"
-      redirect_to post_path(@post.slug)
+      render json: { status: 'ok', post: @post }
     else
       render 'edit'
     end
