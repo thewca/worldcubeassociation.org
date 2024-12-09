@@ -14,9 +14,9 @@ class PersonsController < ApplicationController
           total: persons.count,
           rows: persons.limit(params[:limit]).offset(params[:offset]).map do |person|
             {
-              name: view_context.link_to(person.name, person_path(person.wca_id)),
+              name: person.name,
               wca_id: person.wca_id,
-              country: person.country.name,
+              country: person.country.iso2,
               competitions_count: person.competitions.count,
               podiums_count: person.results.podium.count,
             }
