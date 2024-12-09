@@ -3,11 +3,11 @@ import WCAQueryClientProvider from '../../lib/providers/WCAQueryClientProvider';
 import PostForm from './PostForm';
 
 export default function Wrapper({
-  allTags,
+  allTags, post,
 }) {
   return (
     <WCAQueryClientProvider>
-      <PostForm allTags={allTags} header="New Post" />
+      <PostForm post={post} allTags={allTags} header="Edit Post" />
     </WCAQueryClientProvider>
   );
 }

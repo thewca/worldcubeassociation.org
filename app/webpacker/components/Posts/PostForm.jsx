@@ -15,8 +15,8 @@ export default function PostForm({
   const [formTitle, setFormTitle] = useInputState(post?.title ?? '');
   const [formBody, setFormBody] = useInputState(post?.body ?? '');
   const [formTags, setFormTags] = useState(post?.tags ?? []);
-  const [formIsStickied, setFormIsStickied] = useCheckboxState(post?.isStickied ?? false);
-  const [formShowOnHomePage, setFormShowOnHomePage] = useCheckboxState(post?.showOnHomePage ?? true);
+  const [formIsStickied, setFormIsStickied] = useCheckboxState(post?.sticky ?? false);
+  const [formShowOnHomePage, setFormShowOnHomePage] = useCheckboxState(post?.world_readable ?? true);
 
   const { mutate } = useMutation({
     mutationFn: createOrEditPost,

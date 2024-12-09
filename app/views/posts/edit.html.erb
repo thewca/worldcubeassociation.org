@@ -1,7 +1,10 @@
 <% provide(:title, 'Edit post') %>
 
 <div class="container">
-  <h1><%= yield(:title) %></h1>
-
-  <%= render "posts/post_form" %>
+  <%= react_component("Posts/EditPost", {
+    allTags: PostTag.distinct.pluck(:tag).map { |tag| { value: tag, text: tag, key: tag } }.as_json,
+    post: @post.as_json({
+                          only: %w[title sticky tags world_readable],
+                        }),
+  }) %>
 </div>
