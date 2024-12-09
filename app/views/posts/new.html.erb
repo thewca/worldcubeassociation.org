@@ -1,7 +1,10 @@
 <% provide(:title, 'New post') %>
 
-<div class="container">
-  <h1><%= yield(:title) %></h1>
+<% options = all_to_options(PostTag) %>
 
-  <%= render "posts/post_form" %>
+<div class="container">
+  <%= react_component("Posts/PostForm", {
+    header: yield(:title),
+    allTags: options.as_json,
+  }) %>
 </div>
