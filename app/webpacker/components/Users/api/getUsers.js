@@ -6,9 +6,7 @@ export async function getPersons(page, region, query) {
     `${usersUrl}?search=${query}&sort=name&order=asc&offset=${(page - 1) * 10}&limit=10&region=${region ?? 'all'}`,
     {
       headers: {
-        Accept: 'application/json, text/javascript, */*; q=0.01',
-        'Content-Type': 'application/json',
-        'X-Requested-With': 'XMLHttpRequest',
+        Accept: 'application/json',
       },
     },
   );
