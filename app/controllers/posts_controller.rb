@@ -90,7 +90,7 @@ class PostsController < ApplicationController
     @post = find_post
     @post.destroy
     flash[:success] = "Deleted post"
-    redirect_to root_url
+    render json: { status: 'ok' }
   end
 
   private def editable_post_fields

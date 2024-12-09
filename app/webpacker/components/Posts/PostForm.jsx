@@ -6,35 +6,81 @@ import { useMutation } from '@tanstack/react-query';
 import useInputState from '../../lib/hooks/useInputState';
 import useCheckboxState from '../../lib/hooks/useCheckboxState';
 import MarkdownEditor from '../wca/FormBuilder/input/MarkdownEditor';
-import { createOrEditPost } from './api/posts';
+import { createPost, deletePost, editPost } from './api/posts';
+import { useConfirm } from '../../lib/providers/ConfirmProvider';
 
 export default function PostForm({
   header, allTags, post,
 }) {
-  console.log(post);
   const [formTitle, setFormTitle] = useInputState(post?.title ?? '');
   const [formBody, setFormBody] = useInputState(post?.body ?? '');
   const [formTags, setFormTags] = useState(post?.tags_array ?? []);
   const [formIsStickied, setFormIsStickied] = useCheckboxState(post?.sticky ?? false);
   const [formShowOnHomePage, setFormShowOnHomePage] = useCheckboxState(post?.show_on_homepage ?? true);
 
-  const { mutate } = useMutation({
-    mutationFn: createOrEditPost,
+  const confirm = useConfirm();
+
+  const { mutate: createMutation } = useMutation({
+    mutationFn: createPost,
     onSuccess: ({ data }) => {
       window.location = data.post.url;
     },
   });
 
+  const { mutate: editMutation } = useMutation({
+    mutationFn: editPost,
+    onSuccess: ({ data }) => {
+      window.location = data.post.url;
+    },
+  });
+
+  const { mutate: deleteMutation } = useMutation({
+    mutationFn: deletePost,
+    onSuccess: () => {
+      window.location = '/posts';
+    },
+  });
+
   const onSubmit = useCallback(() => {
-    mutate({
-      id: post.id,
-      title: formTitle,
-      body: formBody,
-      tags: formTags,
-      sticky: formIsStickied,
-      show_on_homepage: formShowOnHomePage,
+    if (post.id) {
+      editMutation({
+        id: post.id,
+        title: formTitle,
+        body: formBody,
+        tags: formTags,
+        sticky: formIsStickied,
+        show_on_homepage: formShowOnHomePage,
+      });
+    } else {
+      createMutation({
+        title: formTitle,
+        body: formBody,
+        tags: formTags,
+        sticky: formIsStickied,
+        show_on_homepage: formShowOnHomePage,
+      });
+    }
+  }, [
+    createMutation,
+    editMutation,
+    formBody,
+    formIsStickied,
+    formShowOnHomePage,
+    formTags,
+    formTitle,
+    post.id,
+  ]);
+
+  const deletePostAttempt = useCallback((event) => {
+    event.preventDefault();
+    confirm({
+      content: 'Do you want to delete this post?',
+    }).then(() => {
+      deleteMutation({
+        id: post.id,
+      });
     });
-  }, [formBody, formIsStickied, formShowOnHomePage, formTags, formTitle, mutate, post.slug]);
+  });
 
   return (
     <>
@@ -62,7 +108,7 @@ export default function PostForm({
         </FormField>
         <Button type="submit" primary>{ post ? 'Update Post' : 'Create Post'}</Button>
         { post
-        && <Button negative>Delete Post</Button> }
+        && <Button negative onClick={deletePostAttempt}>Delete Post</Button> }
       </Form>
     </>
   );
