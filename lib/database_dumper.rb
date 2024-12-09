@@ -107,7 +107,6 @@ module DatabaseDumper
           competition_series_id
           use_wca_live_for_scoretaking
           allow_registration_without_qualification
-          registration_version
           forbid_newcomers
           forbid_newcomers_reason
         ),
@@ -571,12 +570,8 @@ module DatabaseDumper
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
-          accepted_at
-          accepted_by
           competition_id
           created_at
-          deleted_at
-          deleted_by
           guests
           updated_at
           user_id
@@ -591,7 +586,6 @@ module DatabaseDumper
         },
       ),
     }.freeze,
-    "microservice_registrations" => :skip_all_rows,
     "registration_history_changes" => :skip_all_rows,
     "registration_history_entries" => :skip_all_rows,
     "waiting_lists" => {
