@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Container, Header, Message } from 'semantic-ui-react';
 import { QueryClient, useQuery } from '@tanstack/react-query';
-import i18n from '../../lib/i18n';
+import I18n from '../../lib/i18n';
 import I18nHTMLTranslate from '../I18nHTMLTranslate';
 import { apiV0Urls } from '../../lib/requests/routes.js.erb';
 import Loading from '../Requests/Loading';
@@ -40,14 +40,14 @@ export default function ContactEditProfilePage({ loggedInUserId, recaptchaPublic
     return (
       <Message
         success
-        content={i18n.t('page.contact_edit_profile.success_message')}
+        content={I18n.t('page.contact_edit_profile.success_message')}
       />
     );
   }
 
   return (
     <Container text>
-      <Header as="h2">{i18n.t('page.contact_edit_profile.title')}</Header>
+      <Header as="h2">{I18n.t('page.contact_edit_profile.title')}</Header>
       <EditProfileForm
         wcaId={wcaId}
         onContactSuccess={() => setContactSuccess(true)}
