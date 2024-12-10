@@ -1826,6 +1826,8 @@ en:
         rejected:
           title: "Rejected registrations"
           information: "Rejected competitors cannot re-register."
+        pending:
+          information: "Pending should only be used for incomplete (eg, unpaid) registrations - please use the Waiting List if your competition is too full to accept new comeptitors."
         payment:
          refunded_status: "Refunded"
          initialized: "Payment process was started on %{date}, but not finished."
