@@ -506,11 +506,6 @@ class Competition < ApplicationRecord
           warnings[:results] = I18n.t('competitions.messages.results_still_processing')
         end
       end
-
-      if self.registration_full? && self.registration_currently_open?
-        warnings[:waiting_list] = registration_full_message
-      end
-
     else
       warnings[:invisible] = I18n.t('competitions.messages.not_visible')
 
