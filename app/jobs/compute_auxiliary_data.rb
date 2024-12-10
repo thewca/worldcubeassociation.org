@@ -10,4 +10,10 @@ class ComputeAuxiliaryData < WcaCronjob
   def perform
     AuxiliaryDataComputation.compute_everything
   end
+
+  def recompute_popular_rankings
+    Event::OFFICIAL_IDS.each do |event_id|
+
+    end
+  end
 end
