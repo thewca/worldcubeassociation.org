@@ -193,7 +193,7 @@ module Registrations
           raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless registration.cancelled?
           raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::REGISTRATION_CLOSED) if
             registration.cancelled? && !competition.registration_currently_open?
-          
+
           return # No further checks needed if status is pending
         end
 
