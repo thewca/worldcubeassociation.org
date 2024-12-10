@@ -886,17 +886,6 @@ pt:
         multiple: ''
         #original_hash: da39a3e
         question: ''
-      registration:
-        #original_hash: da39a3e
-        comments: ''
-        #original_hash: da39a3e
-        guests: ''
-        #original_hash: da39a3e
-        status: ''
-        #original_hash: 34ef763
-        administrative_notes: >-
-          Notas adicionais mantidas como parte da gestão deste registo. Estas
-          não são visíveis para o competidor.
       vote:
         #original_hash: da39a3e
         comment: ''
@@ -2184,8 +2173,6 @@ pt:
       need_dob: Necessita ter uma data de nascimento
       #original_hash: aab7355
       need_country: Necessita ter uma região
-      #original_hash: e0bb243
-      cannot_be_deleted_and_accepted: Uma inscrição não pode estar aceite e excluída ao mesmo tempo.
       #original_hash: 820bcf7
       must_register: Deve inscrever-se em pelo menos um evento
       #original_hash: ef9b4ad
@@ -2228,31 +2215,8 @@ pt:
     flash:
       #original_hash: da7ec53
       not_using_wca: Esta competição não está a usar o sistema de inscrição da WCA
-      #original_hash: d528030
-      accepted_and_mailed:
-        zero: Nenhuma inscrição aceite!
-        one: Inscrição aceite! Email de notificação enviado.
-        other: Inscrições aceites! Emails de notificação enviados.
-      #original_hash: 42ea8de
-      rejected_and_mailed:
-        zero: Nenhuma inscrição movida para a lista de espera
-        one: Inscrição movida para a lista de espera
-        other: Inscrições movidas para a lista de espera
-      #original_hash: a360b31
-      deleted_and_mailed:
-        zero: Nenhuma inscrição apagada
-        one: Inscrição apagada
-        other: Inscrições apagadas
-      #original_hash: c3aa289
-      single_deletion_and_mail: 'Inscrição excluída e email enviado para %{mail}'
-      #original_hash: d8f067f
-      cannot_delete: Não pode excluir a sua inscrição.
       #original_hash: 82b3899
       updated: Inscrição atualizada
-      #original_hash: 856484a
-      failed: Não foi possível atualizar a inscrição
-      #original_hash: 016b4ae
-      deleted: 'Sua inscrição em %{comp} foi excluída com sucesso'
       #original_hash: 7707307
       registered: >-
         Formulário de inscrição submetido - certifique-se de que segue todas as
@@ -2347,16 +2311,10 @@ pt:
       email: Email
       #original_hash: 7b2c7f1
       approve: Aprovar
-      #original_hash: 2b03b59
-      reject: Rejeitar
-      #original_hash: f6fdbe4
-      delete: Apagar
       #original_hash: 92d40dc
       waiting_list: Lista de Espera
       #original_hash: 06f7d1a
       approved_registrations: Inscrições aprovadas
-      #original_hash: bff04e8
-      deleted_registrations: Inscrições apagadas
       #original_hash: e86b1e1
       non_competing: Inscrições de não-competidores
       #original_hash: ac5d958
@@ -2372,14 +2330,8 @@ pt:
       payment_completed_on: 'Pagamento completo a: %{date}'
       #original_hash: 3141a14
       series_registrations: Registos da Série
-      #original_hash: 845bb47
-      series_registrations_hint_html: >-
-        Dica: Registos da Série estão a ser apresentados como
-        <i>%{description}</i>
       #original_hash: b25928c
       total: Total
-      #original_hash: df036fe
-      n_events: Número de eventos
     new_registration:
       #original_hash: 8b9f726
       title: 'Inscrever em %{comp}'
@@ -2401,8 +2353,6 @@ pt:
     refund_confirmation: Tem a certeza que quer devolver este pagamento?
     #original_hash: a9af643
     update: Atualizar Registo
-    #original_hash: f6fdbe4
-    delete: Apagar
     #original_hash: b72119a
     delete_confirm: Tem a certeza que quer apagar o seu registo?
     #original_hash: bbcc3dc
@@ -2471,8 +2421,6 @@ pt:
     wont_pay_here: >-
       Por favor verifique a informação da competição para instruções de como
       pagar
-    #original_hash: be4b39d
-    not_qualified: Não qualificado
     refund_form:
       hints:
         #original_hash: 38c904c
@@ -2502,8 +2450,6 @@ pt:
           enviadas de forma segura para o Stripe, que trata do processo de
           pagamento e nos reporta depois.
       labels:
-        #original_hash: 4de825f
-        entry_fees: Taxas de registo
         #original_hash: dc9d458
         fees_paid: Pago
         #original_hash: cc632b5
@@ -2516,8 +2462,6 @@ pt:
           equipa de organização
         #original_hash: 4930c06
         payment_information: Informação de pagamento
-        #original_hash: de0fc95
-        payment_button: Pague as taxas com Stripe
         #original_hash: f94d00f
         ajax_error: Erro do servidor WCA
         #original_hash: d9185e8
@@ -2525,14 +2469,12 @@ pt:
         #original_hash: 97f7359
         subtotal: Subtotal
       alerts:
-        #original_hash: a34940e
-        not_a_number: Por favor introduza um montante válido.
         #original_hash: 707b9ca
         amount_too_low: O montante total deve ser pelo menos o montante da taxa de registo.
-        #original_hash: 5cf6ce2
+        #original_hash: b245028
         amount_rather_high: >-
           Está prestes a pagar pelo menos o dobro do valor necessário para que
-          seu registo prossiga. Por favor, confirme o pagamento pressionando OK.
+          seu registo prossiga.
       errors:
         #original_hash: 166d48c
         already_paid: O pagamento não foi realizado porque a taxa de registo já foi paga.

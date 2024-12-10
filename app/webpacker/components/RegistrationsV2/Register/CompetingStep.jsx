@@ -20,7 +20,7 @@ import { contactCompetitionUrl, userPreferencesRoute } from '../../../lib/reques
 import { EventSelector } from '../../CompetitionsOverview/CompetitionsFilters';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { setMessage } from './RegistrationMessage';
-import i18n from '../../../lib/i18n';
+import I18n from '../../../lib/i18n';
 import I18nHTMLTranslate from '../../I18nHTMLTranslate';
 import { useConfirm } from '../../../lib/providers/ConfirmProvider';
 import { events } from '../../../lib/wca-data.js.erb';
@@ -34,13 +34,17 @@ const potentialWarnings = (competitionInfo) => {
   const warnings = [];
   // Organizer Pre Registration
   if (hasNotPassed(competitionInfo.registration_open)) {
-    warnings.push(i18n.t('competitions.registration_v2.register.early_registration'));
+    warnings.push(I18n.t('competitions.registration_v2.register.early_registration'));
   }
   // Favourites Competition
   if (competitionInfo.events_per_registration_limit) {
-    warnings.push(i18n.t('competitions.registration_v2.register.event_limit', {
+    warnings.push(I18n.t('competitions.registration_v2.register.event_limit', {
       max_events: competitionInfo.events_per_registration_limit,
     }));
+  }
+  // Series Competition
+  if (competitionInfo['part_of_competition_series?']) {
+    warnings.push(I18n.t('competitions.competition_info.part_of_a_series'));
   }
   return warnings;
 };
@@ -108,9 +112,11 @@ export default function CompetingStep({
       );
       // Going from cancelled -> pending
       if (registration.competing.registration_status === 'cancelled') {
+        // i18n-tasks-use t('registrations.flash.registered')
         dispatch(setMessage('registrations.flash.registered', 'positive'));
         // Not changing status
       } else {
+        // i18n-tasks-use t('registrations.flash.updated')
         dispatch(setMessage('registrations.flash.updated', 'positive'));
       }
       nextStep();
@@ -149,6 +155,7 @@ export default function CompetingStep({
       if (options.checkForChanges && !hasChanges) {
         dispatch(setMessage('competitions.registration_v2.update.no_changes', 'basic'));
       } else if (!eventsAreValid) {
+        // i18n-tasks-use t('registrations.errors.exceeds_event_limit')
         dispatch(setMessage(
           maxEvents === Infinity
             ? 'registrations.errors.must_register'
@@ -179,7 +186,7 @@ export default function CompetingStep({
 
   const actionUpdateRegistration = () => {
     confirm({
-      content: i18n.t(competitionInfo.allow_registration_edits ? 'competitions.registration_v2.update.update_confirm' : 'competitions.registration_v2.update.update_confirm_contact'),
+      content: I18n.t(competitionInfo.allow_registration_edits ? 'competitions.registration_v2.update.update_confirm' : 'competitions.registration_v2.update.update_confirm_contact'),
     }).then(() => {
       if (competitionInfo.allow_registration_edits) {
         dispatch(setMessage('competitions.registration_v2.update.being_updated', 'basic'));
@@ -194,7 +201,7 @@ export default function CompetingStep({
         });
       } else {
         const updateMessage = `\n${hasCommentChanged ? `Comment: ${comment}\n` : ''}${hasEventsChanged ? `Events: ${selectedEvents.map((eventId) => events.byId[eventId].name).join(', ')}\n` : ''}${hasGuestsChanged ? `Guests: ${guests}\n` : ''}`;
-        window.location = contactCompetitionUrl(competitionInfo.id, encodeURIComponent(i18n.t('competitions.registration_v2.update.update_contact_message', { update_params: updateMessage })));
+        window.location = contactCompetitionUrl(competitionInfo.id, encodeURIComponent(I18n.t('competitions.registration_v2.update.update_contact_message', { update_params: updateMessage })));
       }
     }).catch(() => {
       nextStep();
@@ -281,7 +288,7 @@ export default function CompetingStep({
       <>
         {hasPaid && (
           <Message success>
-            {i18n.t('registrations.entry_fees_fully_paid', { paid: registration?.payment.payment_amount_human_readable })}
+            {I18n.t('registrations.entry_fees_fully_paid', { paid: registration?.payment.payment_amount_human_readable })}
           </Message>
         )}
 
@@ -322,7 +329,7 @@ export default function CompetingStep({
           </Form.Field>
           <Form.Field required={Boolean(competitionInfo.force_comment_in_registration)}>
             <label htmlFor="comment">
-              {i18n.t('competitions.registration_v2.register.comment')}
+              {I18n.t('competitions.registration_v2.register.comment')}
               {' '}
               <div style={{ float: 'right', fontSize: '0.8em' }}>
                 <i>
@@ -340,12 +347,12 @@ export default function CompetingStep({
               onChange={(event, data) => setComment(data.value)}
               value={comment}
               id="comment"
-              error={competitionInfo.force_comment_in_registration && comment.trim().length === 0 && i18n.t('registrations.errors.cannot_register_without_comment')}
+              error={competitionInfo.force_comment_in_registration && comment.trim().length === 0 && I18n.t('registrations.errors.cannot_register_without_comment')}
             />
           </Form.Field>
           {competitionInfo.guests_enabled && (
             <Form.Field>
-              <label>{i18n.t('activerecord.attributes.registration.guests')}</label>
+              <label>{I18n.t('activerecord.attributes.registration.guests')}</label>
               <Form.Input
                 id="guest-dropdown"
                 type="number"
@@ -355,7 +362,7 @@ export default function CompetingStep({
                 }}
                 min="0"
                 max={competitionInfo.guests_per_registration_limit ?? 99}
-                error={Number.isInteger(competitionInfo.guests_per_registration_limit) && guests > competitionInfo.guests_per_registration_limit && i18n.t('competitions.competition_info.guest_limit', { count: competitionInfo.guests_per_registration_limit })}
+                error={Number.isInteger(competitionInfo.guests_per_registration_limit) && guests > competitionInfo.guests_per_registration_limit && I18n.t('competitions.competition_info.guest_limit', { count: competitionInfo.guests_per_registration_limit })}
               />
             </Form.Field>
           )}
@@ -370,11 +377,11 @@ export default function CompetingStep({
                       }
                   type="submit"
                 >
-                  {i18n.t('registrations.update')}
+                  {I18n.t('registrations.update')}
                 </Button>
                 <ButtonOr />
                 <Button secondary onClick={() => nextStep()}>
-                  {i18n.t('competitions.registration_v2.register.view_registration')}
+                  {I18n.t('competitions.registration_v2.register.view_registration')}
                 </Button>
               </>
               )}
@@ -385,7 +392,7 @@ export default function CompetingStep({
                 disabled={isUpdating}
                 type="submit"
               >
-                {i18n.t('registrations.register')}
+                {I18n.t('registrations.register')}
               </Button>
               )}
             </ButtonGroup>
@@ -393,12 +400,12 @@ export default function CompetingStep({
             <>
               <Message info icon floating>
                 <Popup
-                  content={i18n.t('registrations.mailer.new.awaits_approval')}
+                  content={I18n.t('registrations.mailer.new.awaits_approval')}
                   position="top left"
                   trigger={<Icon name="circle info" />}
                 />
                 <Message.Content>
-                  {i18n.t('competitions.registration_v2.register.disclaimer')}
+                  {I18n.t('competitions.registration_v2.register.disclaimer')}
                 </Message.Content>
               </Message>
               <Button
@@ -410,7 +417,7 @@ export default function CompetingStep({
                 disabled={isCreating}
               >
                 <Icon name="paper plane" />
-                {i18n.t('registrations.register')}
+                {I18n.t('registrations.register')}
               </Button>
             </>
           )}
