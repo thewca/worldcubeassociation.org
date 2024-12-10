@@ -1331,7 +1331,7 @@ RSpec.describe Registrations::RegistrationChecker do
       it 'organizer cant accept a user when registration list is over full' do
         competitor_limit = FactoryBot.create(:competition, :with_competitor_limit, :with_organizer, competitor_limit: 3)
         limited_reg = FactoryBot.create(:registration, competition: competitor_limit)
-        FactoryBot.create_list(:registration, 4, :accepted, competition: competitor_limit)
+        FactoryBot.create_list(:registration, 4, :accepted, :skip_validations, competition: competitor_limit)
 
         update_request = FactoryBot.build(
           :update_request,

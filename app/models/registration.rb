@@ -337,7 +337,7 @@ class Registration < ApplicationRecord
 
   validate :does_not_exceed_competitor_limit
   private def does_not_exceed_competitor_limit
-    return unless competition.competitor_limit.present?
+    return unless competition&.competitor_limit.present?
     errors.add(:competitor_limit, I18n.t('registrations.errors.competitor_limit_reached')) if
       competition.registrations.competing_status_accepted.count >= competition.competitor_limit
   end

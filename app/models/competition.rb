@@ -360,8 +360,10 @@ class Competition < ApplicationRecord
     errors.add(:auto_accept_registrations, I18n.t('competitions.errors.must_use_wca_registration')) if
       auto_accept_registrations && !use_wca_registration
 
-    errors.add((:auto_accept_registrations), I18n.t('competitions.errors.auto_accept_limit')) if
+    errors.add(:auto_accept_registrations, I18n.t('competitions.errors.auto_accept_limit')) if
       auto_accept_disable_threshold > 0 && competitor_limit.present? && auto_accept_disable_threshold >= competitor_limit
+
+    errors.add(:auto_accept_registrations, I18n.t('competitions.errors.auto_accept_not_negative')) if auto_accept_disable_threshold < 0
   end
 
   def has_any_round_per_event?

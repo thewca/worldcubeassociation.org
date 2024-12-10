@@ -1613,8 +1613,9 @@ RSpec.describe Competition do
     end
 
     it 'disable threshold may not be be less than 0' do
-      auto_accept_comp.auto_accept_registrations = -1
-      expect(auto_accept_comp).to be_valid
+      auto_accept_comp.auto_accept_disable_threshold = -1
+      expect(auto_accept_comp).not_to be_valid
+      expect(auto_accept_comp.errors[:auto_accept_registrations]).to include("Limit for auto-accepted registrations cannot be less than 0.")
     end
   end
 end
