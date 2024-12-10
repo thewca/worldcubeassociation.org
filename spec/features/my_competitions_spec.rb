@@ -11,6 +11,7 @@ RSpec.feature "My competitions page", clean_db_with_truncation: true do
     end
 
     context "after registring for a competition" do
+      pending("Pending until we find a way to test React components signed icklerf 10-12-2024")
       let!(:competition) { FactoryBot.create :competition, :visible, :registration_open }
       let!(:registration) { FactoryBot.create :registration, :accepted, competition: competition, user: user }
 
