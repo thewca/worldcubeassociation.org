@@ -575,8 +575,42 @@ RSpec.describe Registration do
       expect(reg.reload.competing_status).to eq('accepted')
     end
 
+
     context 'auto-accept isnt triggered' do
-      it 'if registration is in non-pending state' do
+      it 'if status is cancelled' do
+        FactoryBot.create(:registration_payment, :skip_create_hook, registration: reg, competition: auto_accept_comp)
+
+        reg.update(competing_status: 'cancelled')
+
+        reg.auto_accept
+        expect(reg.reload.competing_status).to eq('cancelled')
+        expect(Rails.logger).to have_received(:error).with('Can only auto-accept pending registrations')
+      end
+
+      it 'if status is rejected' do
+        FactoryBot.create(:registration_payment, :skip_create_hook, registration: reg, competition: auto_accept_comp)
+        reg.update(competing_status: 'rejected')
+
+        reg.auto_accept
+        expect(reg.reload.competing_status).to eq('rejected')
+        expect(Rails.logger).to have_received(:error).with('Can only auto-accept pending registrations')
+      end
+
+      it 'if status is accepted' do
+        FactoryBot.create(:registration_payment, :skip_create_hook, registration: reg, competition: auto_accept_comp)
+        reg.update(competing_status: 'accepted')
+
+        reg.auto_accept
+        expect(Rails.logger).to have_received(:error).with('Can only auto-accept pending registrations')
+      end
+
+      it 'if status is waiting_list' do
+        FactoryBot.create(:registration_payment, :skip_create_hook, registration: reg, competition: auto_accept_comp)
+        reg.update(competing_status: 'waiting_list')
+
+        reg.auto_accept
+        expect(reg.reload.competing_status).to eq('waiting_list')
+        expect(Rails.logger).to have_received(:error).with('Can only auto-accept pending registrations')
       end
 
       it 'before registration has opened' do

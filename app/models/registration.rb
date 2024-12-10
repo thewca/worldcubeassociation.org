@@ -442,6 +442,11 @@ class Registration < ApplicationRecord
       return
     end
 
+    unless competing_status_pending?
+      Rails.logger.error('Can only auto-accept pending registrations')
+      return
+    end
+
     if (competition.auto_accept_disable_threshold > 0) && (competition.auto_accept_disable_threshold <= competition.registrations.competing_status_accepted.count)
       Rails.logger.error("Competition has reached auto_accept_disable_threshold of #{competition.auto_accept_disable_threshold} registrations")
       return
