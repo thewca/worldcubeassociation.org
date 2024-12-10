@@ -673,7 +673,19 @@ RSpec.describe Registration do
       end
 
       it 'if registration is part of a series with an already-accepted registration' do
-        expect(true).to eq(false)
+        registration = FactoryBot.create(:registration, :accepted)
+
+        series = FactoryBot.create(:competition_series)
+        competitionA = registration.competition
+        competitionA.update!(competition_series: series)
+        competitionB = FactoryBot.create(:competition, :registration_open, :auto_accept, competition_series: series, series_base: competitionA)
+        regB = FactoryBot.create(:registration, user: registration.user, competition: competitionB)
+
+        FactoryBot.create(:registration_payment, :skip_create_hook, registration: regB, competition: competitionB)
+
+        regB.auto_accept
+        expect(regB.errors[:competition_id]).to include('You can only be accepted for one Series competition at a time.')
+        expect(regB.reload.competing_status).to eq('pending')
       end
     end
   end
