@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import {
-  Button, Form, FormField, Header,
+  Button, Form, FormField, Header, Message,
 } from 'semantic-ui-react';
 import { useMutation } from '@tanstack/react-query';
 import I18n from '../../lib/i18n';
@@ -15,28 +15,32 @@ import I18nHTMLTranslate from '../I18nHTMLTranslate';
 export default function PostForm({
   header, allTags, post,
 }) {
-  const [formTitle, setFormTitle] = useInputState(post?.title ?? '');
-  const [formBody, setFormBody] = useInputState(post?.body ?? '');
-  const [formTags, setFormTags] = useState(post?.tags_array ?? []);
-  const [formIsStickied, setFormIsStickied] = useCheckboxState(post?.sticky ?? false);
-  const [formShowOnHomePage, setFormShowOnHomePage] = useCheckboxState(post?.show_on_homepage ?? true);
-  const [unstickAt, setUnstickAt] = useState(post.unstick_at ?? null);
+  const [formPost, setFormPost] = useState(post);
+  const [formTitle, setFormTitle] = useInputState(formPost?.title ?? '');
+  const [formBody, setFormBody] = useInputState(formPost?.body ?? '');
+  const [formTags, setFormTags] = useState(formPost?.tags_array ?? []);
+  const [formIsStickied, setFormIsStickied] = useCheckboxState(formPost?.sticky ?? false);
+  const [formShowOnHomePage, setFormShowOnHomePage] = useCheckboxState(formPost?.show_on_homepage ?? true);
+  const [unstickAt, setUnstickAt] = useState(formPost?.unstick_at ?? null);
 
   const confirm = useConfirm();
 
-  const { mutate: createMutation } = useMutation({
+  const { mutate: createMutation, isSuccess: postCreated, error: createError } = useMutation({
     mutationFn: createPost,
     onSuccess: ({ data }) => {
-      window.location = data.post.url;
+      setFormPost(data.post);
+      window.history.replaceState({}, '', `${data.post.url}/edit`);
     },
   });
 
-  const { mutate: editMutation } = useMutation({
+  const { mutate: editMutation, error: editError, isSuccess: postUpdated } = useMutation({
     mutationFn: editPost,
     onSuccess: ({ data }) => {
-      window.location = data.post.url;
+      setFormPost(data.post);
     },
   });
+
+  const { errors } = (createError?.json || editError?.json || {});
 
   const { mutate: deleteMutation } = useMutation({
     mutationFn: deletePost,
@@ -46,9 +50,9 @@ export default function PostForm({
   });
 
   const onSubmit = useCallback(() => {
-    if (post.id) {
+    if (formPost?.id) {
       editMutation({
-        id: post.id,
+        id: formPost.id,
         title: formTitle,
         body: formBody,
         tags: formTags,
@@ -75,7 +79,7 @@ export default function PostForm({
     formTags,
     formTitle,
     unstickAt,
-    post.id,
+    formPost?.id,
   ]);
 
   const deletePostAttempt = useCallback((event) => {
@@ -84,10 +88,10 @@ export default function PostForm({
       content: 'Do you want to delete this post?',
     }).then(() => {
       deleteMutation({
-        id: post.id,
+        id: formPost.id,
       });
     });
-  }, [confirm, deleteMutation, post.id]);
+  }, [confirm, deleteMutation, formPost?.id]);
 
   return (
     <>
@@ -122,8 +126,36 @@ export default function PostForm({
           <Form.Checkbox label={I18n.t('activerecord.attributes.post.show_on_homepage')} onChange={setFormShowOnHomePage} checked={formShowOnHomePage} />
           <p>{I18n.t('simple_form.hints.post.show_on_homepage')}</p>
         </FormField>
-        <Button type="submit" primary>{ post ? 'Update Post' : 'Create Post'}</Button>
-        { post
+        { errors && (
+          <Message negative>
+            <Message.Header>Request Failed:</Message.Header>
+            <Message.List>
+              {(Object.keys(errors).map((err) => (
+                <Message.Item>
+                  {err}
+                  {' '}
+                  {errors[err].join(',')}
+                </Message.Item>
+              )))}
+            </Message.List>
+          </Message>
+        )}
+        { postCreated && (
+        <Message positive>
+          Post successfully created. View it
+          {' '}
+          <a href={formPost.url}>here</a>
+        </Message>
+        )}
+        { postUpdated && (
+          <Message positive>
+            Post successfully updated. View it
+            {' '}
+            <a href={formPost.url}>here</a>
+          </Message>
+        )}
+        <Button type="submit" primary>{ formPost ? 'Update Post' : 'Create Post'}</Button>
+        { formPost
         && <Button negative onClick={deletePostAttempt}>Delete Post</Button> }
       </Form>
     </>

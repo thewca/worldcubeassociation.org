@@ -68,7 +68,7 @@ class PostsController < ApplicationController
       flash[:success] = "Created new post"
       render json: { status: 'ok', post: @post }
     else
-      render 'new'
+      render json: { status: 'validation failed', errors: @post.errors }, status: :bad_request
     end
   end
 
@@ -82,7 +82,7 @@ class PostsController < ApplicationController
       flash[:success] = "Updated post"
       render json: { status: 'ok', post: @post }
     else
-      render 'edit'
+      render json: { status: 'validation failed', errors: @post.errors }, status: :bad_request
     end
   end
 
