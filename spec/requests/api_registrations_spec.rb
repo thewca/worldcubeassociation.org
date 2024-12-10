@@ -131,8 +131,8 @@ RSpec.describe 'API Registrations' do
       expect(history.first[:action]).to eq('Competitor delete')
     end
 
-    it 'user can change events in a favourites competition', :tag do
-      favourites_comp = FactoryBot.create(:competition, :with_event_limit, :editable_registrations)
+    it 'user can change events in a favourites competition' do
+      favourites_comp = FactoryBot.create(:competition, :with_event_limit, :editable_registrations, :registration_open)
       favourites_reg = FactoryBot.create(:registration, competition: favourites_comp, user: user, event_ids: %w(333 333oh 555 pyram minx))
 
       new_event_ids = %w(333 333oh 555 pyram 444)
