@@ -575,7 +575,6 @@ RSpec.describe Registration do
       expect(reg.reload.competing_status).to eq('accepted')
     end
 
-
     context 'auto-accept isnt triggered' do
       it 'if status is cancelled' do
         FactoryBot.create(:registration_payment, :skip_create_hook, registration: reg, competition: auto_accept_comp)

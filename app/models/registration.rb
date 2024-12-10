@@ -437,31 +437,18 @@ class Registration < ApplicationRecord
   end
 
   def auto_accept
-    unless competition.auto_accept_registrations
-      Rails.logger.error('Auto-accept is not enabled for this competition.')
-      return
-    end
-
-    unless competing_status_pending?
-      Rails.logger.error('Can only auto-accept pending registrations')
-      return
-    end
-
-    if (competition.auto_accept_disable_threshold > 0) && (competition.auto_accept_disable_threshold <= competition.registrations.competing_status_accepted.count)
-      Rails.logger.error("Competition has reached auto_accept_disable_threshold of #{competition.auto_accept_disable_threshold} registrations")
-      return
-    end
-
-    if outstanding_entry_fees > 0
-      Rails.logger.error('Competitor still has outstanding registration fees')
-      return
-    end
-
-    if !competition.registration_currently_open?
-      Rails.logger.error('Cant auto-accept while registration is not open')
-      return
-    end
+    return log_error('Auto-accept is not enabled for this competition.') unless competition.auto_accept_registrations
+    return log_error('Can only auto-accept pending registrations') unless competing_status_pending?
+    return log_error("Competition has reached auto_accept_disable_threshold of #{competition.auto_accept_disable_threshold} registrations") if
+      competition.auto_accept_threshold_reached?
+    return log_error('Competitor still has outstanding registration fees') if outstanding_entry_fees > 0
+    return log_error('Cant auto-accept while registration is not open') if !competition.registration_currently_open?
 
     update(competing_status: Registrations::Helper::STATUS_ACCEPTED)
+  end
+
+  private def log_error(error)
+    Rails.logger.error(error)
+    false
   end
 end
