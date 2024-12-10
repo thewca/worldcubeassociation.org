@@ -345,7 +345,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
           )
         </Header>
         <Header.Subheader>
-          {i18n.t('competitions.registration_v2.list.pending.information')}
+          {I18n.t('competitions.registration_v2.list.pending.information')}
         </Header.Subheader>
         <RegistrationAdministrationTable
           columnsExpanded={expandedColumns}
