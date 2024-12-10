@@ -54,7 +54,7 @@ import ActionsHeader from './ActionsHeader';
 import { getTimeZoneDropdownLabel } from '../../../lib/utils/timezone';
 import { earliestTimeOfDayWithBuffer } from '../../../lib/utils/activities';
 
-function EditActivities({
+function ManageActivities({
   wcifEvents,
   referenceTime,
   calendarLocale,
@@ -504,4 +504,4 @@ function EditActivities({
   );
 }
 
-export default EditActivities;
+export default ManageActivities;
