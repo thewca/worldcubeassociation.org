@@ -44,24 +44,24 @@ export default function Index({
 }
 
 function Panel({
-  registration,
-  refetch,
-  competitionInfo,
-  qualifications,
-  userInfo,
+  user,
   preferredEvents,
+  competitionInfo,
+  registration,
+  refetchRegistration,
   connectedAccountId,
   stripePublishableKey,
+  qualifications,
 }) {
   return (
     <>
       <RegistrationMessage />
       <StepPanel
-        user={userInfo}
+        user={user}
         preferredEvents={preferredEvents}
         competitionInfo={competitionInfo}
         registration={registration}
-        refetchRegistration={refetch}
+        refetchRegistration={refetchRegistration}
         connectedAccountId={connectedAccountId}
         stripePublishableKey={stripePublishableKey}
         qualifications={qualifications}
@@ -161,7 +161,7 @@ function Register({
   // If registration is closed:
   // only render panel if competing status is not cancelled
 
-  if (registration && registration.competing_status !== 'cancelled') {
+  if (registration && registration.competing.registration_status !== 'cancelled') {
     return (
       <Panel
         user={userInfo}
