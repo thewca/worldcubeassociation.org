@@ -521,11 +521,6 @@ en:
         comment: ""
         multiple: ""
         question: ""
-      registration:
-        comments: ""
-        guests: ""
-        status: ""
-        administrative_notes: "Additional notes kept as part of managing this registration. These can't be viewed by the competitor."
       vote:
         comment: ""
       competition_medium:
@@ -1132,7 +1127,6 @@ en:
       need_gender: "Need a gender"
       need_dob: "Need a birthdate"
       need_country: "Need a region"
-      cannot_be_deleted_and_accepted: "A registration cannot be deleted and accepted at the same time."
       must_register: "You must register for at least one event."
       exceeds_event_limit:
         one: "You must register in exactly 1 event."
@@ -1157,20 +1151,7 @@ en:
         other: "people"
     flash:
       not_using_wca: "This competition is not using WCA registration"
-      accepted_and_mailed:
-        one: "Registration accepted! Email notification sent."
-        other: "Registrations accepted! Email notifications sent."
-      rejected_and_mailed:
-        one: "Registration moved to waiting list"
-        other: "Registrations moved to waiting list"
-      deleted_and_mailed:
-        one: "Registration deleted"
-        other: "Registrations deleted"
-      single_deletion_and_mail: "Deleted registration and emailed %{mail}"
-      cannot_delete: "You cannot delete your registration."
       updated: "Updated registration"
-      failed: "Could not update registration"
-      deleted: "Successfully deleted your registration for %{comp}"
       registered: "Registration form submitted - make sure to follow all instructions from the Registration Requirements below to ensure your registration is complete."
       imported: "Successfully imported registrations!"
       added: "Successfully added registration!"
@@ -1239,11 +1220,8 @@ en:
       export_csv: "Export to CSV"
       email: "Email"
       approve: "Approve"
-      reject: "Reject"
-      delete: "Delete"
       waiting_list: "Waiting List"
       approved_registrations: "Approved registrations"
-      deleted_registrations: "Deleted registrations"
       non_competing: "Non-competing registrations"
       not_paid: "Not paid"
       registered:
@@ -1254,9 +1232,7 @@ en:
       payment_completed_on: "Payment completed on: %{date}"
       #context: Counts how many parallel registrations in the same Series there are. Will display a number behind this label.
       series_registrations: "Series registrations"
-      series_registrations_hint_html: "Hint: Series registrations are being displayed as <i>%{description}</i>"
       total: "Total"
-      n_events: "Number of events"
     new_registration:
       title: "Register for %{comp}"
     registered_with_account_html: "This person registered with an account. You can edit their personal information %{here}."
@@ -1267,7 +1243,6 @@ en:
     refund: "Refund Payment"
     refund_confirmation: "Are you sure you want to refund this payment?"
     update: "Update Registration"
-    delete: "Delete"
     delete_confirm: "Are you sure you want to delete your registration?"
     delete_registration: "Delete Registration"
     will_open_html: "Registration will open in <strong>%{days}</strong> on %{time}."
@@ -1289,7 +1264,6 @@ en:
     entry_fees_fully_paid: "You have paid %{paid}, which fully covers the registration fees."
     will_pay_here: "You will pay them here after submitting your registration"
     wont_pay_here: "Please check the competition's information for instructions about how to pay"
-    not_qualified: "Not qualified"
     refund_form:
       hints:
         refund_amount: "The amount to refund to the competitor. Can be any value up to the amount already paid."
@@ -1305,20 +1279,17 @@ en:
         donation: "Optional donation that will go only to the organization team"
         payment_button: "Your payment information never reaches the WCA website. It is securely sent to Stripe, which handles the payment process and gets back to us."
       labels:
-        entry_fees: "Registration fees"
         fees_paid: "Paid"
         fees_remaining: "Remaining"
         donation: "Donation"
         show_donation: "I would like to make an additional optional donation that will go only to the organization team"
         payment_information: "Payment information"
-        payment_button: "Pay your fees with Stripe"
         ajax_error: "WCA server error"
         payment_service_error: "Payment service error"
         subtotal: "Subtotal"
       alerts:
-        not_a_number: "Please enter a valid amount."
         amount_too_low: "The total amount must be at least the registration fees to be paid."
-        amount_rather_high: "You are about to pay at least double the required amount for your registration to proceed. Please confirm the payment by pressing OK."
+        amount_rather_high: "You are about to pay at least double the required amount for your registration to proceed."
       errors:
         already_paid: "The charge was not placed because the registration fees are already paid."
         not_allowed: "You can't pay for that registration."
