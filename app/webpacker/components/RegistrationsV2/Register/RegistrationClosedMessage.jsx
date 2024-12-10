@@ -1,43 +1,13 @@
 import { DateTime } from 'luxon';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Message } from 'semantic-ui-react';
 import I18nHTMLTranslate from '../../I18nHTMLTranslate';
-import { fullTimeDiff } from '../../../lib/utils/dates';
 
-export default function RegistrationClosedMessage({
-  registrationStart,
-  onTimerEnd,
-}) {
-  const start = DateTime.fromISO(registrationStart);
-  const [timeLeft, setTimeLeft] = useState(fullTimeDiff(start));
-
-  useEffect(() => {
-    if (timeLeft.days === 0
-      && timeLeft.hours === 0
-      && timeLeft.minutes === 0
-      && timeLeft.seconds === 0) {
-      onTimerEnd();
-    }
-  }, [onTimerEnd, timeLeft]);
-
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      setTimeLeft(fullTimeDiff(start));
-    }, 1000); // Update every second
-
-    return () => clearInterval(intervalId); // Cleanup interval on unmount
-  }, [registrationStart, onTimerEnd, start]);
-
-  if (timeLeft.seconds < 0) {
-    return null;
-  }
-
+export default function RegistrationClosedMessage({ registrationEnd }) {
+  const end = DateTime.fromISO(registrationEnd);
   return (
-    <Message color="blue">
-      { timeLeft.days < 1 && timeLeft.hours < 1
-        ? <I18nHTMLTranslate i18nKey="competitions.registration_v2.register.will_open_countdown" options={{ minutes: timeLeft.minutes, seconds: timeLeft.seconds }} />
-        // i18n-tasks-use t('registrations.will_open_html')
-        : <I18nHTMLTranslate i18nKey="registrations.will_open_html" options={{ days: start.toRelative(), time: start.toLocaleString(DateTime.DATETIME_FULL) }} />}
+    <Message negative>
+      <I18nHTMLTranslate i18nKey="registrations.closed_html" options={{ days: end.toRelative(), time: end.toLocaleString(DateTime.DATETIME_FULL) }} />
     </Message>
   );
 }
