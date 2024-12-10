@@ -25,7 +25,7 @@ function PersonList() {
   const [page, setPage] = useState(1);
   const [region, setRegion] = useState('all');
 
-  const debouncedSearch = useDebounce(query, 1000);
+  const debouncedSearch = useDebounce(query, 600);
 
   const { data, isLoading } = useQuery({
     queryKey: ['persons', debouncedSearch, region, page],
