@@ -527,7 +527,7 @@ RSpec.describe Registration do
 
   describe '#auto_accept' do
     let(:auto_accept_comp) { FactoryBot.create(:competition, :auto_accept, :registration_open) }
-    let(:reg) { FactoryBot.create(:registration, competition: auto_accept_comp) }
+    let!(:reg) { FactoryBot.create(:registration, competition: auto_accept_comp) }
 
     before do
       allow(Rails.logger).to receive(:error)
@@ -537,6 +537,15 @@ RSpec.describe Registration do
       expect(reg.competing_status).to eq('pending')
 
       FactoryBot.create(:registration_payment, :skip_create_hook, registration: reg, competition: auto_accept_comp)
+
+      reg.auto_accept
+      expect(reg.reload.competing_status).to eq('accepted')
+    end
+
+    it 'auto accepts a competitor who included a donation in their payment' do
+      expect(reg.competing_status).to eq('pending')
+
+      FactoryBot.create(:registration_payment, :skip_create_hook, :with_donation, registration: reg, competition: auto_accept_comp)
 
       reg.auto_accept
       expect(reg.reload.competing_status).to eq('accepted')
@@ -567,6 +576,9 @@ RSpec.describe Registration do
     end
 
     context 'auto-accept isnt triggered' do
+      it 'if registration is in non-pending state' do
+      end
+
       it 'before registration has opened' do
         unopened_comp = FactoryBot.create(:competition, :auto_accept, :registration_not_opened)
         unopened_reg = FactoryBot.create(:registration, competition: unopened_comp)
@@ -632,6 +644,36 @@ RSpec.describe Registration do
         expect(Rails.logger).to have_received(:error).with(
           'Competition has reached auto_accept_disable_threshold of 5 registrations'
         )
+      end
+    end
+
+    context 'auto accept is prevented by validations' do
+      it 'if competitor limit is reached' do
+        auto_accept_comp.competitor_limit = 5
+        FactoryBot.create_list(:registration, 5, :accepted, competition: auto_accept_comp)
+        expect(reg.competing_status).to eq('pending')
+
+        FactoryBot.create(:registration_payment, :skip_create_hook, registration: reg, competition: auto_accept_comp)
+
+        reg.auto_accept
+        expect(reg.errors[:competitor_limit]).to include('The competition is full.')
+        expect(reg.reload.competing_status).to eq('pending')
+      end
+
+      it 'if competitor limit is exceeded' do
+        auto_accept_comp.competitor_limit = 5
+        FactoryBot.create_list(:registration, 6, :accepted, :skip_validations, competition: auto_accept_comp)
+        expect(reg.competing_status).to eq('pending')
+
+        FactoryBot.create(:registration_payment, :skip_create_hook, registration: reg, competition: auto_accept_comp)
+
+        reg.auto_accept
+        expect(reg.errors[:competitor_limit]).to include('The competition is full.')
+        expect(reg.reload.competing_status).to eq('pending')
+      end
+
+      it 'if registration is part of a series with an already-accepted registration' do
+        expect(true).to eq(false)
       end
     end
   end

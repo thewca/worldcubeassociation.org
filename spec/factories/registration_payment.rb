@@ -16,6 +16,10 @@ FactoryBot.define do
       amount_lowest_denomination { -competition.base_entry_fee_lowest_denomination }
     end
 
+    trait :with_donation do
+      amount_lowest_denomination { competition.base_entry_fee_lowest_denomination*2 }
+    end
+
     trait :skip_create_hook do
       after(:build) { |payment| payment.class.skip_callback(:create, :after, :attempt_auto_accept) }
       after(:create) { |payment| payment.class.set_callback(:create, :after, :attempt_auto_accept) }

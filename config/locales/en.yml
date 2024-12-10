@@ -1127,6 +1127,7 @@ en:
   registrations:
     #context: and when an error is found
     errors:
+      competitor_limit_reached: "The competition is full."
       need_name: "Need a name"
       need_gender: "Need a gender"
       need_dob: "Need a birthdate"
