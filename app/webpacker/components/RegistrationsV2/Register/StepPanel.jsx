@@ -3,7 +3,7 @@ import { Step } from 'semantic-ui-react';
 import CompetingStep from './CompetingStep';
 import RegistrationRequirements from './RegistrationRequirements';
 import StripeWrapper from './StripeWrapper';
-import i18n from '../../../lib/i18n';
+import I18n from '../../../lib/i18n';
 import RegistrationOverview from './RegistrationOverview';
 
 const requirementsStepConfig = {
@@ -128,8 +128,8 @@ export default function StepPanel({
             onClick={() => setActiveIndex(index)}
           >
             <Step.Content>
-              <Step.Title>{i18n.t(`${stepConfig.i18nKey}.title`)}</Step.Title>
-              <Step.Description>{i18n.t(`${stepConfig.i18nKey}.description`)}</Step.Description>
+              <Step.Title>{I18n.t(`${stepConfig.i18nKey}.title`)}</Step.Title>
+              <Step.Description>{I18n.t(`${stepConfig.i18nKey}.description`)}</Step.Description>
             </Step.Content>
           </Step>
         ))}

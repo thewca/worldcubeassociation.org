@@ -750,12 +750,8 @@ class Competition < ApplicationRecord
     @trainee_delegate_ids || trainee_delegates.map(&:id).join(",")
   end
 
-  def uses_new_registration_system?
-    self.registration_version_v3?
-  end
-
   def should_render_register_v2?(user)
-    uses_new_registration_system? && user.cannot_register_for_competition_reasons(self).empty?
+    user.cannot_register_for_competition_reasons(self).empty?
   end
 
   before_validation :unpack_delegate_organizer_ids
@@ -1856,7 +1852,8 @@ class Competition < ApplicationRecord
                force_comment_in_registration use_wca_registration external_registration_page guests_entry_fee_lowest_denomination guest_entry_status
                information events_per_registration_limit guests_enabled],
       methods: %w[url website short_name city venue_address venue_details latitude_degrees longitude_degrees country_iso2 event_ids registration_currently_open?
-                  main_event_id number_of_bookmarks using_payment_integrations? uses_qualification? uses_cutoff? competition_series_ids registration_full? registration_version],
+                  main_event_id number_of_bookmarks using_payment_integrations? uses_qualification? uses_cutoff? competition_series_ids registration_full?
+                  part_of_competition_series?],
       include: %w[delegates organizers],
     }
     self.as_json(options)
