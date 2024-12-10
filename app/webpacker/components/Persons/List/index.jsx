@@ -64,7 +64,11 @@ function PersonList() {
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {data.rows.map((row) => (
+          {data.rows.length === 0 ? (
+            <Table.Row>
+              <Table.Cell>{I18n.t('persons.index.no_persons_found')}</Table.Cell>
+            </Table.Row>
+          ) : data.rows.map((row) => (
             <Table.Row key={row.wca_id}>
               <Table.Cell>
                 <a href={personUrl(row.wca_id)}>{row.name}</a>
