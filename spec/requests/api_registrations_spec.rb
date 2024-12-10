@@ -13,7 +13,6 @@ RSpec.describe 'API Registrations' do
       let(:user) { FactoryBot.create :user }
       let(:competition) { FactoryBot.create :competition, :registration_open }
       let(:headers) { { 'Authorization' => registration_request['jwt_token'] } }
-      let(:registration_request) { FactoryBot.build(:registration_request, competition_id: competition.id, user_id: user.id) }
 
       it 'returns 202' do
         # post api_v1_registrations_register_path, params: registration_request, headers: headers
@@ -100,7 +99,14 @@ RSpec.describe 'API Registrations' do
     end
 
     it 'automatically accepts a registration upon payment' do
-      expect(true).to eq(false)
+      auto_accept_comp = FactoryBot.create(:competition, :auto_accept, :registration_open)
+      reg = FactoryBot.create(:registration, competition: auto_accept_comp)
+      registration_request = FactoryBot.build(:registration_request, competition_id: auto_accept_comp.id, user_id: reg.user.id)
+
+      post api_v1_registrations_register_path, params: registration_request, headers: headers
+      FactoryBot.create(:registration_payment, registration: reg, competition: auto_accept_comp)
+
+      expect(Registration.find_by(user_id: reg.user.id).competing_status).to eq('accepted')
     end
   end
 
