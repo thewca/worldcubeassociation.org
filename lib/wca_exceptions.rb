@@ -52,4 +52,10 @@ module WcaExceptions
       @errors = errors
     end
   end
+
+  class AutoAcceptError < StandardError
+    def initialize(error_str)
+      super(error_str)
+    end
+  end
 end
