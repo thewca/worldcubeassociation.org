@@ -628,7 +628,7 @@ RSpec.describe Registration do
         reg.auto_accept
         expect(reg.reload.competing_status).to eq('pending')
         expect(Rails.logger).to have_received(:error).with(
-          'Competition has reached auto_accept_disable_threshold of 5 registrations'
+          'Competition has reached auto_accept_disable_threshold of 5 registrations',
         )
       end
 
@@ -642,7 +642,7 @@ RSpec.describe Registration do
         reg.auto_accept
         expect(reg.reload.competing_status).to eq('pending')
         expect(Rails.logger).to have_received(:error).with(
-          'Competition has reached auto_accept_disable_threshold of 5 registrations'
+          'Competition has reached auto_accept_disable_threshold of 5 registrations',
         )
       end
     end
