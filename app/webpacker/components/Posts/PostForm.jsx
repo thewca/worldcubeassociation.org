@@ -3,13 +3,14 @@ import {
   Button, Form, FormField, Header,
 } from 'semantic-ui-react';
 import { useMutation } from '@tanstack/react-query';
-import DatePicker from 'react-datepicker';
+import I18n from '../../lib/i18n';
 import useInputState from '../../lib/hooks/useInputState';
 import useCheckboxState from '../../lib/hooks/useCheckboxState';
 import MarkdownEditor from '../wca/FormBuilder/input/MarkdownEditor';
 import { createPost, deletePost, editPost } from './api/posts';
 import { useConfirm } from '../../lib/providers/ConfirmProvider';
 import UtcDatePicker from '../wca/UtcDatePicker';
+import I18nHTMLTranslate from '../I18nHTMLTranslate';
 
 export default function PostForm({
   header, allTags, post,
@@ -95,29 +96,31 @@ export default function PostForm({
       </Header>
       <Form onSubmit={onSubmit}>
         <FormField>
-          <Form.Input label="Title" onChange={setFormTitle} value={formTitle} />
+          <Form.Input label={I18n.t('activerecord.attributes.post.title')} onChange={setFormTitle} value={formTitle} />
         </FormField>
         <FormField>
-          <label>Body</label>
+          <label>{I18n.t('activerecord.attributes.post.body')}</label>
           <MarkdownEditor onChange={setFormBody} value={formBody} />
+          {/* i18n-tasks-use t('simple_form.hints.post.body') */}
+          <I18nHTMLTranslate i18nKey="simple_form.hints.post.body" />
         </FormField>
         <FormField>
-          <label>Tags</label>
-          <Form.Select options={allTags} onChange={(_, data) => { setFormTags(data.value); }} value={formTags} multiple />
+          <Form.Select label={I18n.t('activerecord.attributes.post.tags')} options={allTags} onChange={(_, data) => { setFormTags(data.value); }} value={formTags} multiple />
         </FormField>
         <FormField>
-          <Form.Checkbox label="Sticky" onChange={setFormIsStickied} checked={formIsStickied} />
+          <Form.Checkbox label={I18n.t('activerecord.attributes.post.sticky')} onChange={setFormIsStickied} checked={formIsStickied} />
           { formIsStickied
             && (
             <UtcDatePicker
+              placeholderText={I18n.t('activerecord.attributes.post.unstick_at')}
               isoDate={unstickAt}
               onChange={(date) => setUnstickAt(date)}
             />
             ) }
         </FormField>
         <FormField>
-          <Form.Checkbox label="Show on Homepage" onChange={setFormShowOnHomePage} checked={formShowOnHomePage} />
-          <p>Careful! This is not secure for private data. This is only to prevent cluttering the homepage. Posts that are not shown on the homepage are still accessible to the public via permalink or through tags.</p>
+          <Form.Checkbox label={I18n.t('activerecord.attributes.post.show_on_homepage')} onChange={setFormShowOnHomePage} checked={formShowOnHomePage} />
+          <p>{I18n.t('simple_form.hints.post.show_on_homepage')}</p>
         </FormField>
         <Button type="submit" primary>{ post ? 'Update Post' : 'Create Post'}</Button>
         { post
