@@ -7,7 +7,11 @@ import { countries } from '../../lib/wca-data.js.erb';
 export function NameTableCell({ competition }) {
   return (
     <Table.Cell>
-      <a href={competition.url}>{competition.short_display_name}</a>
+      <a href={competition.url}>
+        {competition.short_display_name}
+        {' '}
+        { competition.championships?.length > 0 && <Icon name="trophy" /> }
+      </a>
     </Table.Cell>
   );
 }
