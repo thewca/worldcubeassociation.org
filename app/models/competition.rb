@@ -401,10 +401,6 @@ class Competition < ApplicationRecord
     delegate_report.posted?
   end
 
-  def visible?
-    self.showAtAll
-  end
-
   def events_held?(desired_event_ids)
     # rubocop:disable Style/BitwisePredicate
     #   We have to shut up Rubocop here because otherwise it thinks that
@@ -721,6 +717,7 @@ class Competition < ApplicationRecord
 
   validate :dates_must_be_valid
 
+  alias_attribute :visible, :showAtAll
   alias_attribute :latitude_microdegrees, :latitude
   alias_attribute :longitude_microdegrees, :longitude
   before_validation :compute_coordinates
