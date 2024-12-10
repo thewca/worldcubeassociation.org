@@ -524,4 +524,47 @@ RSpec.describe Registration do
       end
     end
   end
+
+  describe '#auto_accept', :tag do
+    let(:auto_accept_comp) { FactoryBot.create(:competition, :auto_accept, :registration_open) }
+    let(:reg) { FactoryBot.create(:registration, competition: auto_accept_comp) }
+
+    it 'auto accepts a competitor who pays for their pending registration' do
+      expect(reg.competing_status).to eq('pending')
+
+      FactoryBot.create(:registration_payment, registration: reg, competition: auto_accept_comp)
+
+      expect(reg.reload.competing_status).to eq('accepted')
+    end
+
+    it 'doesnt auto accept a competitor who gets refunded' do
+      expect(reg.competing_status).to eq('pending')
+
+      FactoryBot.create(:registration_payment, :refund, registration: reg, competition: auto_accept_comp)
+
+      expect(reg.reload.competing_status).to eq('pending')
+    end
+
+    it 'accepts the last competitor on the auto-accept disable threshold' do
+      expect(true).to eq(false)
+    end
+
+    context 'auto-accept isnt triggered' do
+      it 'before registration has opened' do
+        expect(true).to eq(false)
+      end
+
+      it 'after registration has closed' do
+        expect(true).to eq(false)
+      end
+
+      it 'unless auto-accept is enabled' do
+        expect(true).to eq(false)
+      end
+
+      it 'when over the auto-accept disable threshold' do
+        expect(true).to eq(false)
+      end
+    end
+  end
 end

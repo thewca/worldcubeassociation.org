@@ -428,4 +428,8 @@ class Registration < ApplicationRecord
   def serializable_hash(options = nil)
     super(DEFAULT_SERIALIZE_OPTIONS.merge(options || {}))
   end
+
+  def auto_accept
+    update(competing_status: Registrations::Helper::STATUS_ACCEPTED) if outstanding_entry_fees <= 0
+  end
 end
