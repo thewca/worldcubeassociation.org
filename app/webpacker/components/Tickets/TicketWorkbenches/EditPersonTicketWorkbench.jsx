@@ -31,23 +31,19 @@ function EditPersonTicketWorkbenchForWrt({ ticketDetails, actingStakeholderId, s
   );
 }
 
-export default function EditPersonTicketWorkbench({ ticketDetails, sync }) {
-  const { requester_stakeholders: requesterStakeholders, ticket } = ticketDetails;
-
-  if (ticket.metadata.status === ticketStatuses.edit_person.closed) {
+export default function EditPersonTicketWorkbench({ ticketDetails, sync, currentStakeholder }) {
+  if (ticketDetails.ticket.metadata.status === ticketStatuses.edit_person.closed) {
     return null;
   }
 
-  return requesterStakeholders.map((requesterStakeholder) => {
-    if (requesterStakeholder.stakeholder?.metadata?.friendly_id === 'wrt') {
-      return (
-        <EditPersonTicketWorkbenchForWrt
-          ticketDetails={ticketDetails}
-          actingStakeholderId={requesterStakeholder.id}
-          sync={sync}
-        />
-      );
-    }
-    return null;
-  });
+  if (currentStakeholder.stakeholder?.metadata?.friendly_id === 'wrt') {
+    return (
+      <EditPersonTicketWorkbenchForWrt
+        ticketDetails={ticketDetails}
+        actingStakeholderId={currentStakeholder.id}
+        sync={sync}
+      />
+    );
+  }
+  return null;
 }
