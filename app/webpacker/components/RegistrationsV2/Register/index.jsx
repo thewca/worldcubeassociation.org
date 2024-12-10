@@ -43,6 +43,33 @@ export default function Index({
   );
 }
 
+function Panel({
+  registration,
+  refetch,
+  competitionInfo,
+  qualifications,
+  userInfo,
+  preferredEvents,
+  connectedAccountId,
+  stripePublishableKey,
+}) {
+  return (
+    <>
+      <RegistrationMessage />
+      <StepPanel
+        user={userInfo}
+        preferredEvents={preferredEvents}
+        competitionInfo={competitionInfo}
+        registration={registration}
+        refetchRegistration={refetch}
+        connectedAccountId={connectedAccountId}
+        stripePublishableKey={stripePublishableKey}
+        qualifications={qualifications}
+      />
+    </>
+  );
+}
+
 function Register({
   userCanPreRegister,
   competitionInfo,
@@ -80,22 +107,6 @@ function Register({
     return <Loading />;
   }
 
-  const Panel = (
-    <>
-      <RegistrationMessage />
-      <StepPanel
-        user={userInfo}
-        preferredEvents={preferredEvents}
-        competitionInfo={competitionInfo}
-        registration={registration}
-        refetchRegistration={refetch}
-        connectedAccountId={connectedAccountId}
-        stripePublishableKey={stripePublishableKey}
-        qualifications={qualifications}
-      />
-    </>
-  );
-
   const registrationNotYetOpen = hasNotPassed(competitionInfo.registration_open);
 
   // User can't register
@@ -110,7 +121,16 @@ function Register({
   if (registrationNotYetOpen) {
     if (userCanPreRegister || timerEnded) {
       return (
-        <Panel />
+        <Panel
+          user={userInfo}
+          preferredEvents={preferredEvents}
+          competitionInfo={competitionInfo}
+          registration={registration}
+          refetchRegistration={refetch}
+          connectedAccountId={connectedAccountId}
+          stripePublishableKey={stripePublishableKey}
+          qualifications={qualifications}
+        />
       );
     }
     return (
@@ -125,7 +145,16 @@ function Register({
   // always render Panel
   if (competitionInfo['registration_currently_open?']) {
     return (
-      <Panel />
+      <Panel
+        user={userInfo}
+        preferredEvents={preferredEvents}
+        competitionInfo={competitionInfo}
+        registration={registration}
+        refetchRegistration={refetch}
+        connectedAccountId={connectedAccountId}
+        stripePublishableKey={stripePublishableKey}
+        qualifications={qualifications}
+      />
     );
   }
 
@@ -134,7 +163,16 @@ function Register({
 
   if (registration && registration.competing_status !== 'cancelled') {
     return (
-      <Panel />
+      <Panel
+        user={userInfo}
+        preferredEvents={preferredEvents}
+        competitionInfo={competitionInfo}
+        registration={registration}
+        refetchRegistration={refetch}
+        connectedAccountId={connectedAccountId}
+        stripePublishableKey={stripePublishableKey}
+        qualifications={qualifications}
+      />
     );
   }
 
