@@ -130,6 +130,27 @@ RSpec.describe 'API Registrations' do
       expect(history.first[:changed_attributes]['competing_status']).to be_present
       expect(history.first[:action]).to eq('Competitor delete')
     end
+
+    it 'user can change events in a favourites competition' do
+      favourites_comp = FactoryBot.create(:competition, :with_event_limit, :editable_registrations, :registration_open)
+      favourites_reg = FactoryBot.create(:registration, competition: favourites_comp, user: user, event_ids: %w(333 333oh 555 pyram minx))
+
+      new_event_ids = %w(333 333oh 555 pyram 444)
+      update_request = FactoryBot.build(
+        :update_request,
+        user_id: favourites_reg.user_id,
+        competition_id: favourites_reg.competition.id,
+        competing: { 'event_ids' => new_event_ids },
+      )
+      headers = { 'Authorization' => update_request['jwt_token'] }
+
+      patch api_v1_registrations_register_path, params: update_request, headers: headers
+
+      expect(response.status).to eq(200)
+
+      registration = Registration.find_by(user_id: user.id, competition_id: favourites_reg.competition.id)
+      expect(registration.event_ids.sort).to eq(new_event_ids.sort)
+    end
   end
 
   describe 'PATCH #bulk_update' do
@@ -150,8 +171,6 @@ RSpec.describe 'API Registrations' do
         submitted_by: competition.organizers.first.id,
         competition_id: competition.id,
       )
-
-      puts "registration status: #{registration1.competing_status}"
 
       headers = { 'Authorization' => bulk_update_request['jwt_token'] }
       patch api_v1_registrations_bulk_update_path, params: bulk_update_request, headers: headers

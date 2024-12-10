@@ -8,7 +8,7 @@ import {
   Segment,
 } from 'semantic-ui-react';
 import cn from 'classnames';
-import i18n from '../../../lib/i18n';
+import I18n from '../../../lib/i18n';
 import { events } from '../../../lib/wca-data.js.erb';
 import { pluralize } from '../../../lib/utils/edit-events';
 import RoundsTable from './RoundsTable';
@@ -144,7 +144,7 @@ export default function EventPanel({
             />
           </Card.Content>
           <Card.Content>
-            {i18n.t('competitions.events.qualification')}
+            {I18n.t('competitions.events.qualification')}
             :
             {' '}
             {/* Qualifications cannot be edited after the competition has been announced, */}

@@ -1395,12 +1395,13 @@ RSpec.describe Registrations::RegistrationChecker do
       end
 
       it 'user can change state from cancelled to pending' do
-        deleted_reg = FactoryBot.create(:registration, :cancelled, competition: default_competition)
+        no_edits_comp = FactoryBot.create(:competition, :registration_open)
+        cancelled_reg = FactoryBot.create(:registration, :cancelled, competition: no_edits_comp)
 
         update_request = FactoryBot.build(
           :update_request,
-          user_id: deleted_reg.user_id,
-          competition_id: deleted_reg.competition.id,
+          user_id: cancelled_reg.user_id,
+          competition_id: cancelled_reg.competition.id,
           competing: { 'status' => 'pending' },
         )
 
@@ -1483,6 +1484,25 @@ RSpec.describe Registrations::RegistrationChecker do
 
         expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, Competition.find(update_request['competition_id']), User.find(update_request['submitted_by'])) }
           .not_to raise_error
+      end
+
+      it 'cancelled user cant re-register if registration is closed' do
+        closed_comp = FactoryBot.create(:competition, :registration_closed, :editable_registrations)
+        cancelled_reg = FactoryBot.create(:registration, :cancelled, competition: closed_comp)
+
+        update_request = FactoryBot.build(
+          :update_request,
+          user_id: cancelled_reg.user_id,
+          competition_id: cancelled_reg.competition.id,
+          competing: { 'status' => 'pending' },
+        )
+
+        expect {
+          Registrations::RegistrationChecker.update_registration_allowed!(update_request, Competition.find(update_request['competition_id']), User.find(update_request['submitted_by']))
+        }.to raise_error(WcaExceptions::RegistrationError) do |error|
+          expect(error.status).to eq(:forbidden)
+          expect(error.error).to eq(Registrations::ErrorCodes::REGISTRATION_CLOSED)
+        end
       end
 
       RSpec.shared_examples 'invalid user status updates' do |initial_status, new_status|
