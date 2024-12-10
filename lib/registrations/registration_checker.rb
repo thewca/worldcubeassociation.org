@@ -59,7 +59,7 @@ module Registrations
     class << self
       def user_can_create_registration!(competition, current_user, target_user)
         raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::REGISTRATION_ALREADY_EXISTS) if
-          Registration.where(competition_id: competition.id, user_id: target_user.id).exists?
+          Registration.exists?(competition_id: competition.id, user_id: target_user.id)
 
         # Only the user themselves can create a registration for the user
         raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless current_user.id == target_user.id
