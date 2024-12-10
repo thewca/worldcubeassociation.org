@@ -10,6 +10,23 @@ RSpec.describe Registrations::RegistrationChecker do
 
   describe '#create' do
     describe '#create_registration_allowed!' do
+      it 'user cant create a duplicate registration' do
+        existing_reg = FactoryBot.create(:registration, competition: default_competition)
+
+        registration_request = FactoryBot.build(
+          :registration_request, guests: 10, competition_id: default_competition.id, user_id: existing_reg.user_id
+        )
+
+        expect {
+          Registrations::RegistrationChecker.create_registration_allowed!(
+            registration_request, User.find(registration_request['submitted_by'])
+          )
+        }.to raise_error(WcaExceptions::RegistrationError) do |error|
+          expect(error.status).to eq(:forbidden)
+          expect(error.error).to eq(Registrations::ErrorCodes::REGISTRATION_ALREADY_EXISTS)
+        end
+      end
+
       it 'guests can equal the maximum allowed' do
         registration_request = FactoryBot.build(
           :registration_request, guests: 10, competition_id: default_competition.id, user_id: default_user.id
@@ -1484,6 +1501,25 @@ RSpec.describe Registrations::RegistrationChecker do
 
         expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, Competition.find(update_request['competition_id']), User.find(update_request['submitted_by'])) }
           .not_to raise_error
+      end
+
+      it 'cancelled user cant re-register if registration is closed' do
+        closed_comp = FactoryBot.create(:competition, :registration_closed, :editable_registrations)
+        cancelled_reg = FactoryBot.create(:registration, :cancelled, competition: closed_comp)
+
+        update_request = FactoryBot.build(
+          :update_request,
+          user_id: cancelled_reg.user_id,
+          competition_id: cancelled_reg.competition.id,
+          competing: { 'status' => 'pending' },
+        )
+
+        expect {
+          Registrations::RegistrationChecker.update_registration_allowed!(update_request, Competition.find(update_request['competition_id']), User.find(update_request['submitted_by']))
+        }.to raise_error(WcaExceptions::RegistrationError) do |error|
+          expect(error.status).to eq(:forbidden)
+          expect(error.error).to eq(Registrations::ErrorCodes::REGISTRATION_CLOSED)
+        end
       end
 
       RSpec.shared_examples 'invalid user status updates' do |initial_status, new_status|

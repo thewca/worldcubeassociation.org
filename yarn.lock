@@ -1347,23 +1347,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/preset-react@npm:^7.22.5":
-  version: 7.25.9
-  resolution: "@babel/preset-react@npm:7.25.9"
-  dependencies:
-    "@babel/helper-plugin-utils": "npm:^7.25.9"
-    "@babel/helper-validator-option": "npm:^7.25.9"
-    "@babel/plugin-transform-react-display-name": "npm:^7.25.9"
-    "@babel/plugin-transform-react-jsx": "npm:^7.25.9"
-    "@babel/plugin-transform-react-jsx-development": "npm:^7.25.9"
-    "@babel/plugin-transform-react-pure-annotations": "npm:^7.25.9"
-  peerDependencies:
-    "@babel/core": ^7.0.0-0
-  checksum: 10c0/c294b475ee741f01f63ea0d828862811c453fabc6023f01814ce983bc316388e9d73290164d2b1384c2684db9c330803a3d4d2170285b105dcbacd483329eb93
-  languageName: node
-  linkType: hard
-
-"@babel/preset-react@npm:^7.26.3":
+"@babel/preset-react@npm:^7.22.5, @babel/preset-react@npm:^7.26.3":
   version: 7.26.3
   resolution: "@babel/preset-react@npm:7.26.3"
   dependencies:
@@ -4857,15 +4841,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dompurify@npm:^3.2.2":
-  version: 3.2.2
-  resolution: "dompurify@npm:3.2.2"
+"dompurify@npm:^3.2.3":
+  version: 3.2.3
+  resolution: "dompurify@npm:3.2.3"
   dependencies:
     "@types/trusted-types": "npm:^2.0.7"
   dependenciesMeta:
     "@types/trusted-types":
       optional: true
-  checksum: 10c0/04fa1509a75c6c1dfc1f00c579253bd4781e291836176578927f5cb683dc904175c4fb71f9c40438b0b4b13fc306f79922d220200f3bd01eabe12727588afd1f
+  checksum: 10c0/0ce5cb89b76f396d800751bcb48e0d137792891d350ccc049f1bc9a5eca7332cc69030c25007ff4962e0824a5696904d4d74264df9277b5ad955642dfb6f313f
   languageName: node
   linkType: hard
 
@@ -9290,7 +9274,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss-selector-parser@npm:^6.0.11, postcss-selector-parser@npm:^6.0.15, postcss-selector-parser@npm:^6.0.16, postcss-selector-parser@npm:^6.0.2, postcss-selector-parser@npm:^6.0.4, postcss-selector-parser@npm:^6.1.2":
+"postcss-selector-parser@npm:^6.0.11, postcss-selector-parser@npm:^6.0.15, postcss-selector-parser@npm:^6.0.16, postcss-selector-parser@npm:^6.0.2, postcss-selector-parser@npm:^6.0.4":
   version: 6.1.2
   resolution: "postcss-selector-parser@npm:6.1.2"
   dependencies:
@@ -9716,16 +9700,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-textarea-autosize@npm:^8.5.5":
-  version: 8.5.5
-  resolution: "react-textarea-autosize@npm:8.5.5"
+"react-textarea-autosize@npm:^8.5.6":
+  version: 8.5.6
+  resolution: "react-textarea-autosize@npm:8.5.6"
   dependencies:
     "@babel/runtime": "npm:^7.20.13"
     use-composed-ref: "npm:^1.3.0"
     use-latest: "npm:^1.2.1"
   peerDependencies:
-    react: ^16.8.0 || ^17.0.0 || ^18.0.0
-  checksum: 10c0/d708a31b39a409d0246cd8afbd956ce51db58ce0b6411b9d4e1dc876ce93c329d20875933ce5d337662fdcd3699596966dc630149236fee2835d74e302404c98
+    react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+  checksum: 10c0/652d290d316c55a253507ecf65ca27f2162801dace10c715f2241203e81d82e9de6d282095b758b26c6bc9e1af9ca552cab5c3a361b230e5fcf25bec31e1bd25
   languageName: node
   linkType: hard
 
@@ -10139,7 +10123,7 @@ __metadata:
     css-loader: "npm:^7.1.2"
     css-minimizer-webpack-plugin: "npm:^7.0.0"
     date-fns: "npm:^4.1.0"
-    dompurify: "npm:^3.2.2"
+    dompurify: "npm:^3.2.3"
     easymde: "npm:^2.18.0"
     eslint: "npm:^8.57.0"
     eslint-config-airbnb: "npm:^19.0.4"
@@ -10183,7 +10167,7 @@ __metadata:
     react-refresh: "npm:^0.16.0"
     react-simplemde-editor: "npm:^5.2.0"
     react-spinners: "npm:^0.15.0"
-    react-textarea-autosize: "npm:^8.5.5"
+    react-textarea-autosize: "npm:^8.5.6"
     react_ujs: "npm:^3.2.1"
     regenerator-runtime: "npm:^0.14.1"
     resolve-url-loader: "npm:^5.0.0"
@@ -11010,7 +10994,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"stylelint-scss@npm:^6.10.0":
+"stylelint-scss@npm:^6.10.0, stylelint-scss@npm:^6.4.0":
   version: 6.10.0
   resolution: "stylelint-scss@npm:6.10.0"
   dependencies:
@@ -11025,24 +11009,6 @@ __metadata:
   peerDependencies:
     stylelint: ^16.0.2
   checksum: 10c0/9086109bc36b46ea5e62aef5c1793debbd973aaecb28ba65cadaaf6761a295db1e52f94e1a6bae7ee884e440fc36463e9686941fc652a5ce79045ee58cae5308
-  languageName: node
-  linkType: hard
-
-"stylelint-scss@npm:^6.4.0":
-  version: 6.9.0
-  resolution: "stylelint-scss@npm:6.9.0"
-  dependencies:
-    css-tree: "npm:^3.0.1"
-    is-plain-object: "npm:^5.0.0"
-    known-css-properties: "npm:^0.35.0"
-    mdn-data: "npm:^2.12.2"
-    postcss-media-query-parser: "npm:^0.2.3"
-    postcss-resolve-nested-selector: "npm:^0.1.6"
-    postcss-selector-parser: "npm:^6.1.2"
-    postcss-value-parser: "npm:^4.2.0"
-  peerDependencies:
-    stylelint: ^16.0.2
-  checksum: 10c0/2b0a882589b2be252e730b933e0b9839a7734cd0c5fae8255511835d3d0c5eede171e750dc8ec35229f22a0a3f6e46279adb9dd655544e2fbed1f9fc25bf470a
   languageName: node
   linkType: hard
 

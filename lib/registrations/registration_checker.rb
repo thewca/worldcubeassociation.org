@@ -58,6 +58,9 @@ module Registrations
 
     class << self
       def user_can_create_registration!(competition, current_user, target_user)
+        raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::REGISTRATION_ALREADY_EXISTS) if
+          Registration.exists?(competition_id: competition.id, user_id: target_user.id)
+
         # Only the user themselves can create a registration for the user
         raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless current_user.id == target_user.id
 
@@ -191,6 +194,9 @@ module Registrations
         # User reactivating registration
         if new_status == Registrations::Helper::STATUS_PENDING
           raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless registration.cancelled?
+          raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::REGISTRATION_CLOSED) if
+            registration.cancelled? && !competition.registration_currently_open?
+
           return # No further checks needed if status is pending
         end
 
