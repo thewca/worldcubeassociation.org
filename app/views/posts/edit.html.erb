@@ -4,7 +4,7 @@
   <%= react_component("Posts/EditPost", {
     allTags: PostTag.distinct.pluck(:tag).map { |tag| { value: tag, text: tag, key: tag } }.as_json,
     post: @post.as_json({
-                          only: ["id", "title", "sticky", "show_on_homepage"],
+                          only: ["id", "title", "sticky", "show_on_homepage", "unstick_at"],
                           methods: ["tags_array"],
                         }),
   }) %>

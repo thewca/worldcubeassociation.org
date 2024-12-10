@@ -3,11 +3,13 @@ import {
   Button, Form, FormField, Header,
 } from 'semantic-ui-react';
 import { useMutation } from '@tanstack/react-query';
+import DatePicker from 'react-datepicker';
 import useInputState from '../../lib/hooks/useInputState';
 import useCheckboxState from '../../lib/hooks/useCheckboxState';
 import MarkdownEditor from '../wca/FormBuilder/input/MarkdownEditor';
 import { createPost, deletePost, editPost } from './api/posts';
 import { useConfirm } from '../../lib/providers/ConfirmProvider';
+import UtcDatePicker from '../wca/UtcDatePicker';
 
 export default function PostForm({
   header, allTags, post,
@@ -17,6 +19,7 @@ export default function PostForm({
   const [formTags, setFormTags] = useState(post?.tags_array ?? []);
   const [formIsStickied, setFormIsStickied] = useCheckboxState(post?.sticky ?? false);
   const [formShowOnHomePage, setFormShowOnHomePage] = useCheckboxState(post?.show_on_homepage ?? true);
+  const [unstickAt, setUnstickAt] = useState(post.unstick_at ?? null);
 
   const confirm = useConfirm();
 
@@ -48,6 +51,7 @@ export default function PostForm({
         title: formTitle,
         body: formBody,
         tags: formTags,
+        unstick_at: formIsStickied ? unstickAt : null,
         sticky: formIsStickied,
         show_on_homepage: formShowOnHomePage,
       });
@@ -57,6 +61,7 @@ export default function PostForm({
         body: formBody,
         tags: formTags,
         sticky: formIsStickied,
+        unstick_at: formIsStickied ? unstickAt : null,
         show_on_homepage: formShowOnHomePage,
       });
     }
@@ -68,6 +73,7 @@ export default function PostForm({
     formShowOnHomePage,
     formTags,
     formTitle,
+    unstickAt,
     post.id,
   ]);
 
@@ -80,7 +86,7 @@ export default function PostForm({
         id: post.id,
       });
     });
-  });
+  }, [confirm, deleteMutation, post.id]);
 
   return (
     <>
@@ -101,6 +107,13 @@ export default function PostForm({
         </FormField>
         <FormField>
           <Form.Checkbox label="Sticky" onChange={setFormIsStickied} checked={formIsStickied} />
+          { formIsStickied
+            && (
+            <UtcDatePicker
+              isoDate={unstickAt}
+              onChange={(date) => setUnstickAt(date)}
+            />
+            ) }
         </FormField>
         <FormField>
           <Form.Checkbox label="Show on Homepage" onChange={setFormShowOnHomePage} checked={formShowOnHomePage} />
