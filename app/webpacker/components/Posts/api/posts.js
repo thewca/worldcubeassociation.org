@@ -16,7 +16,3 @@ export const editPost = (post) => fetchJsonOrError(postUrl(post.id), {
   },
   body: JSON.stringify({ post }),
 });
-
-export const deletePost = (post) => fetchJsonOrError(postUrl(post.id), {
-  method: 'DELETE',
-});

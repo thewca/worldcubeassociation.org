@@ -23,8 +23,6 @@ export default function PostForm({
   const [formShowOnHomePage, setFormShowOnHomePage] = useCheckboxState(formPost?.show_on_homepage ?? true);
   const [unstickAt, setUnstickAt] = useState(formPost?.unstick_at ?? null);
 
-  const confirm = useConfirm();
-
   const { mutate: createMutation, isSuccess: postCreated, error: createError } = useMutation({
     mutationFn: createPost,
     onSuccess: ({ data }) => {
@@ -41,13 +39,6 @@ export default function PostForm({
   });
 
   const { errors } = (createError?.json || editError?.json || {});
-
-  const { mutate: deleteMutation } = useMutation({
-    mutationFn: deletePost,
-    onSuccess: () => {
-      window.location = '/posts';
-    },
-  });
 
   const onSubmit = useCallback(() => {
     if (formPost?.id) {
@@ -81,17 +72,6 @@ export default function PostForm({
     unstickAt,
     formPost?.id,
   ]);
-
-  const deletePostAttempt = useCallback((event) => {
-    event.preventDefault();
-    confirm({
-      content: 'Do you want to delete this post?',
-    }).then(() => {
-      deleteMutation({
-        id: formPost.id,
-      });
-    });
-  }, [confirm, deleteMutation, formPost?.id]);
 
   return (
     <>
@@ -155,8 +135,6 @@ export default function PostForm({
           </Message>
         )}
         <Button type="submit" primary>{ formPost ? 'Update Post' : 'Create Post'}</Button>
-        { formPost
-        && <Button negative onClick={deletePostAttempt}>Delete Post</Button> }
       </Form>
     </>
   );
