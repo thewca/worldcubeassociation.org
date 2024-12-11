@@ -261,9 +261,8 @@ class RegistrationsController < ApplicationController
 
   def register
     @competition = competition_from_params
-    if current_user
-      @registration = @competition.registrations.find_or_initialize_by(user_id: current_user.id, competition_id: @competition.id)
-    end
+    # This page is in react so we don't want to show the warnings twice
+    @show_warnings = false
   end
 
   def payment_denomination

@@ -267,7 +267,7 @@
         <% end %>
       <% end %>
 
-      <% @competition.warnings_for(current_user).each do |field, message| %>
+      <% @competition.warnings_for(current_user, @show_warnings).each do |field, message| %>
         <%= alert :warning, message, note: true %>
       <% end %>
 
