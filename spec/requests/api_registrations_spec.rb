@@ -13,6 +13,7 @@ RSpec.describe 'API Registrations' do
       let(:user) { FactoryBot.create :user }
       let(:competition) { FactoryBot.create :competition, :registration_open }
       let(:headers) { { 'Authorization' => registration_request['jwt_token'] } }
+      let(:registration_request) { FactoryBot.build(:registration_request, competition_id: competition.id, user_id: user.id) }
 
       it 'returns 202' do
         # post api_v1_registrations_register_path, params: registration_request, headers: headers
