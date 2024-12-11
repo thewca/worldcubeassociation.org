@@ -8,10 +8,10 @@ import WCAQueryClientProvider from '../../lib/providers/WCAQueryClientProvider';
 import './style.css';
 
 export default function Wrapper({
-  tabs, competition, wcifEvents, wcifSchedule, locale,
+  tabs, competition, wcifEvents, wcifSchedule, locale, userInfo,
 }) {
   const panes = useMemo(() => {
-    const p = [{ menuItem: 'General Info', render: () => <GeneralInfoTab competition={competition} /> }];
+    const p = [{ menuItem: 'General Info', render: () => <GeneralInfoTab competition={competition} userInfo={userInfo} /> }];
     if (competition['has_rounds?']) {
       p.push({
         menuItem: 'Events',
