@@ -1,6 +1,6 @@
 import React from 'react';
 import { Menu } from 'semantic-ui-react';
-import I18n from '../../lib/i18n';
+import I18n from '../../../lib/i18n';
 
 const views = ['calendar', 'table'];
 

@@ -9,9 +9,9 @@ import {
   isOrphanedActivity,
   latestTimeOfDayWithBuffer,
   localizeActivityName,
-} from '../../lib/utils/activities';
-import { ACTIVITY_OTHER_GREY, getTextColor } from '../../lib/utils/calendar';
-import I18n from '../../lib/i18n';
+} from '../../../lib/utils/activities';
+import { ACTIVITY_OTHER_GREY, getTextColor } from '../../../lib/utils/calendar';
+import I18n from '../../../lib/i18n';
 
 // We can render custom content for the individual fullcalendar events, by
 // passing in a render function as the `eventContent` param to the `FullCalendar`

@@ -12,20 +12,20 @@ import {
   groupActivities,
   isOrphanedActivity,
   localizeActivityName,
-} from '../../lib/utils/activities';
-import { getSimpleTimeString } from '../../lib/utils/dates';
-import { toDegrees } from '../../lib/utils/edit-schedule';
+} from '../../../lib/utils/activities';
+import { getSimpleTimeString } from '../../../lib/utils/dates';
+import { toDegrees } from '../../../lib/utils/edit-schedule';
 import AddToCalendar from './AddToCalendar';
-import useStoredState from '../../lib/hooks/useStoredState';
-import I18n from '../../lib/i18n';
-import { formats } from '../../lib/wca-data.js.erb';
+import useStoredState from '../../../lib/hooks/useStoredState';
+import I18n from '../../../lib/i18n';
+import { formats } from '../../../lib/wca-data.js.erb';
 import {
   parseActivityCode,
   timeLimitToString,
   advancementConditionToString,
   cutoffToString,
-} from '../../lib/utils/wcif';
-import '../../stylesheets/schedule_events.scss';
+} from '../../../lib/utils/wcif';
+import '../../../stylesheets/schedule_events.scss';
 
 export default function TableView({
   dates,
