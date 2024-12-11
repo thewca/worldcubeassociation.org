@@ -30,6 +30,7 @@ class ComputeAuxiliaryData < WcaCronjob
           rankings_cache_key,
           predicted_timestamp,
           rankings_query,
+          db_role: :writing,
         )
       end
 
@@ -42,6 +43,7 @@ class ComputeAuxiliaryData < WcaCronjob
         records_cache_key,
         predicted_timestamp,
         records_query,
+        db_role: :writing,
       )
     end
 
@@ -54,6 +56,7 @@ class ComputeAuxiliaryData < WcaCronjob
       all_records_cache_key,
       predicted_timestamp,
       all_records_query,
+      db_role: :writing,
     )
   end
 
