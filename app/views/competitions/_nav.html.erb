@@ -296,32 +296,5 @@
         },
       },
     });
-
-    $('#not-bookmarked').click(function() {
-      window.wca.cancelPendingAjaxAndAjax('bookmark', {
-        url: '<%= bookmark_path %>',
-        method: 'POST',
-        data: {
-          'id': <%= @competition.id.to_json.html_safe %>,
-        },
-        success: function(data) {
-          $('#not-bookmarked').toggle();
-          $('#bookmarked').toggle();
-        }
-      });
-    });
-    $('#bookmarked').click(function() {
-      window.wca.cancelPendingAjaxAndAjax('bookmark', {
-        url: '<%= unbookmark_path %>',
-        method: 'POST',
-        data: {
-          'id': <%= @competition.id.to_json.html_safe %>,
-        },
-        success: function(data) {
-          $('#not-bookmarked').toggle();
-          $('#bookmarked').toggle();
-        }
-      });
-    });
   })();
 </script>

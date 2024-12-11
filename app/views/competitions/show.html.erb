@@ -1,45 +1,10 @@
 <% provide(:title, @competition.display_name) %>
 <%# We use this to hide the 'Events' information for competition which didn't declared rounds %>
 <%= render layout: 'nav' do %>
-  <ul class="nav nav-tabs">
-    <li><a href="#general-info" data-toggle="tab"><%=t 'competitions.show.general_info' %></a></li>
-    <% if @competition.has_rounds? %>
-      <li><a href="#competition-events" data-toggle="tab"><%=t 'competitions.show.events' %></a></li>
-    <% end %>
-    <% if @competition.has_schedule? %>
-      <li><a href="#competition-schedule" data-toggle="tab"><%=t 'competitions.show.schedule' %></a></li>
-    <% end %>
-    <% @competition.tabs.each do |tab| %>
-      <li><a href="#<%= tab.slug %>" data-toggle="tab"><%= tab.name %></a></li>
-    <% end %>
-  </ul>
-
-  <div class="tab-content" id="competition-tabs">
-    <div class="tab-pane" id="general-info">
-      <%= render layout: 'results_nav', locals: { layout_nav: false } do %>
-        <%= render "results_table", results: @competition.winning_results, hide_pos: true, hide_round: true %>
-      <% end %>
-    </div>
-    <% if @competition.has_rounds? %>
-      <div class="tab-pane" id="competition-events">
-        <%= render "events_tab" %>
-      </div>
-    <% end %>
-    <% if @competition.has_schedule? %>
-      <div class="tab-pane" id="competition-schedule">
-        <%= render "competition_schedule_tab", competition: @competition %>
-      </div>
-    <% end %>
-    <% @competition.tabs.each do |tab| %>
-      <div class="tab-pane" id="<%= tab.slug %>">
-        <%=md tab.content %>
-        <% if current_user&.can_manage_competition?(@competition) %>
-          <%= link_to edit_competition_tab_path(@competition, tab), class: "btn btn-primary" do %>
-            <%= ui_icon("edit") %> Edit
-          <% end %>
-        <% end %>
-      </div>
-    <% end %>
+  <%= react_component("CompetitionTabs", {
+    tabs: @competition.tabs.as_json,
+    competition: @competition.as_json({ only: %w[name], methods: %w[has_rounds? has_schedule?]}),
+    wcifEvents: @competition.events_wcif, wcifSchedule: @competition.schedule_wcif, locale: I18n.locale,
+  }) %>
     <%= render "time_limit_cutoff_format_info", competition: @competition %>
-  </div>
 <% end %>
