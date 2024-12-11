@@ -335,6 +335,13 @@ class Registration < ApplicationRecord
     end
   end
 
+  validate :does_not_exceed_competitor_limit
+  private def does_not_exceed_competitor_limit
+    return unless competition&.competitor_limit.present?
+    errors.add(:competitor_limit, I18n.t('registrations.errors.competitor_limit_reached')) if
+      competition.registrations.competing_status_accepted.count >= competition.competitor_limit
+  end
+
   # TODO: V3-REG cleanup. All these Validations can be used instead of the registration_checker checks
   validate :cannot_be_undeleted_when_banned, if: :competing_status_changed?
   private def cannot_be_undeleted_when_banned
@@ -427,5 +434,21 @@ class Registration < ApplicationRecord
 
   def serializable_hash(options = nil)
     super(DEFAULT_SERIALIZE_OPTIONS.merge(options || {}))
+  end
+
+  def auto_accept
+    return log_error('Auto-accept is not enabled for this competition.') unless competition.auto_accept_registrations
+    return log_error('Can only auto-accept pending registrations') unless competing_status_pending?
+    return log_error("Competition has reached auto_accept_disable_threshold of #{competition.auto_accept_disable_threshold} registrations") if
+      competition.auto_accept_threshold_reached?
+    return log_error('Competitor still has outstanding registration fees') if outstanding_entry_fees > 0
+    return log_error('Cant auto-accept while registration is not open') if !competition.registration_currently_open?
+
+    update(competing_status: Registrations::Helper::STATUS_ACCEPTED)
+  end
+
+  private def log_error(error)
+    Rails.logger.error(error)
+    false
   end
 end
