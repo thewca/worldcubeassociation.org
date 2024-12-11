@@ -33,7 +33,6 @@ export default function RegistrationDetails() {
   return (
     <SubSection section="registration">
       <InputBooleanSelect id="autoAcceptEnabled" required />
-      {/* Comment to create a diff */}
       <ConditionalSection showIf={registration.autoAcceptEnabled}>
         <InputNumber id="autoAcceptDisableThreshold" />
       </ConditionalSection>
