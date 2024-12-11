@@ -8,8 +8,11 @@ class ResultsController < ApplicationController
   GENDER_ALL = "All"
   EVENTS_ALL = "all events"
 
+  MODE_RANKINGS = "rankings"
+  MODE_RECORDS = "records"
+
   def self.compute_cache_key(
-    table,
+    mode,
     event_id: EVENTS_ALL,
     region: REGION_WORLD,
     years: YEARS_ALL,
@@ -18,7 +21,7 @@ class ResultsController < ApplicationController
     type: nil
   )
     # The specific order of the entries is determined by backwards compatibility with historical code.
-    [table, event_id, region, years, show, gender, type].compact
+    [mode, event_id, region, years, show, gender, type].compact
   end
 
   private def params_for_cache
@@ -55,7 +58,7 @@ class ResultsController < ApplicationController
     @is_results = splitted_show_param[1] == "results"
     limit_condition = "LIMIT #{@show}"
 
-    @cache_params = ResultsController.compute_cache_key('rankings', **params_for_cache)
+    @cache_params = ResultsController.compute_cache_key(MODE_RANKINGS, **params_for_cache)
 
     if @is_persons
       @query = <<-SQL
@@ -177,7 +180,7 @@ class ResultsController < ApplicationController
 
     shared_constants_and_conditions
 
-    @cache_params = ResultsController.compute_cache_key('records', **params_for_cache)
+    @cache_params = ResultsController.compute_cache_key(MODE_RECORDS, **params_for_cache)
 
     if @is_histories
       if @is_history
