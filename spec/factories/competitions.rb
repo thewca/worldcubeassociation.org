@@ -106,6 +106,10 @@ FactoryBot.define do
       auto_accept_registrations { true }
     end
 
+    trait :allow_self_delete do
+      allow_registration_self_delete_after_acceptance { true }
+    end
+
     trait :enforces_qualifications do
       with_organizer
       qualification_results { true }

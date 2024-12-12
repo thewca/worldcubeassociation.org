@@ -43,6 +43,8 @@ class Registration < ApplicationRecord
 
   after_save :mark_registration_processing_as_done
 
+  after_update :waiting_list_auto_accept_check
+
   private def mark_registration_processing_as_done
     Rails.cache.delete(CacheAccess.registration_processing_cache_key(competition_id, user_id))
   end
@@ -338,6 +340,7 @@ class Registration < ApplicationRecord
   validate :does_not_exceed_competitor_limit
   private def does_not_exceed_competitor_limit
     return unless competition&.competitor_limit.present?
+    return unless competing_status == Registrations::Helper::STATUS_ACCEPTED
     errors.add(:competitor_limit, I18n.t('registrations.errors.competitor_limit_reached')) if
       competition.registrations.competing_status_accepted.count >= competition.competitor_limit
   end
@@ -438,7 +441,8 @@ class Registration < ApplicationRecord
 
   def auto_accept
     return log_error('Auto-accept is not enabled for this competition.') unless competition.auto_accept_registrations
-    return log_error('Can only auto-accept pending registrations') unless competing_status_pending?
+    return log_error('Can only auto-accept pending registrations or first position on waiting list') unless
+      competing_status_pending? || competing_status_waiting_list? && waiting_list_position == 1
     return log_error("Competition has reached auto_accept_disable_threshold of #{competition.auto_accept_disable_threshold} registrations") if
       competition.auto_accept_threshold_reached?
     return log_error('Competitor still has outstanding registration fees') if outstanding_entry_fees > 0
@@ -450,5 +454,14 @@ class Registration < ApplicationRecord
   private def log_error(error)
     Rails.logger.error(error)
     false
+  end
+
+  private def waiting_list_auto_accept_check
+    changed_from_accepted = saved_change_to_competing_status? && saved_change_to_competing_status.first == Registrations::Helper::STATUS_ACCEPTED
+    waiting_list_leader_id = competition.waiting_list.entries.first
+
+    if changed_from_accepted && waiting_list_leader_id.present?
+      Registration.find(waiting_list_leader_id).auto_accept
+    end
   end
 end

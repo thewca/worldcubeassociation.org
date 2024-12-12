@@ -575,7 +575,28 @@ RSpec.describe Registration do
       expect(reg.reload.competing_status).to eq('accepted')
     end
 
+    it 'can auto-accept the first user on the waiting list' do
+      waiting_list_reg = FactoryBot.create(:registration, :waiting_list, competition: auto_accept_comp)
+
+      FactoryBot.create(:registration_payment, :skip_create_hook, registration: waiting_list_reg, competition: auto_accept_comp)
+
+      waiting_list_reg.auto_accept
+      expect(waiting_list_reg.reload.competing_status).to eq('accepted')
+    end
+
     context 'auto-accept isnt triggered' do
+      it 'if a waitlisted registration is not first in the waiting list' do
+        FactoryBot.create_list(:registration, 3, :waiting_list, competition: auto_accept_comp)
+        waiting_list_reg = FactoryBot.create(:registration, :waiting_list, competition: auto_accept_comp)
+        expect(waiting_list_reg.waiting_list_position).to eq(4)
+
+        FactoryBot.create(:registration_payment, :skip_create_hook, registration: reg, competition: auto_accept_comp)
+
+        waiting_list_reg.auto_accept
+        expect(waiting_list_reg.reload.competing_status).to eq('waiting_list')
+        expect(Rails.logger).to have_received(:error).with('Can only auto-accept pending registrations or first position on waiting list')
+      end
+
       it 'if status is cancelled' do
         FactoryBot.create(:registration_payment, :skip_create_hook, registration: reg, competition: auto_accept_comp)
 
@@ -583,7 +604,7 @@ RSpec.describe Registration do
 
         reg.auto_accept
         expect(reg.reload.competing_status).to eq('cancelled')
-        expect(Rails.logger).to have_received(:error).with('Can only auto-accept pending registrations')
+        expect(Rails.logger).to have_received(:error).with('Can only auto-accept pending registrations or first position on waiting list')
       end
 
       it 'if status is rejected' do
@@ -592,7 +613,7 @@ RSpec.describe Registration do
 
         reg.auto_accept
         expect(reg.reload.competing_status).to eq('rejected')
-        expect(Rails.logger).to have_received(:error).with('Can only auto-accept pending registrations')
+        expect(Rails.logger).to have_received(:error).with('Can only auto-accept pending registrations or first position on waiting list')
       end
 
       it 'if status is accepted' do
@@ -600,16 +621,18 @@ RSpec.describe Registration do
         reg.update(competing_status: 'accepted')
 
         reg.auto_accept
-        expect(Rails.logger).to have_received(:error).with('Can only auto-accept pending registrations')
+        expect(Rails.logger).to have_received(:error).with('Can only auto-accept pending registrations or first position on waiting list')
       end
 
-      it 'if status is waiting_list' do
+      it 'if status is waiting_list and position isnt first' do
+        FactoryBot.create(:registration, :waiting_list, competition: auto_accept_comp)
         FactoryBot.create(:registration_payment, :skip_create_hook, registration: reg, competition: auto_accept_comp)
         reg.update(competing_status: 'waiting_list')
+        auto_accept_comp.waiting_list.add(reg.id)
 
         reg.auto_accept
         expect(reg.reload.competing_status).to eq('waiting_list')
-        expect(Rails.logger).to have_received(:error).with('Can only auto-accept pending registrations')
+        expect(Rails.logger).to have_received(:error).with('Can only auto-accept pending registrations or first position on waiting list')
       end
 
       it 'before registration has opened' do
@@ -720,6 +743,12 @@ RSpec.describe Registration do
         expect(regB.errors[:competition_id]).to include('You can only be accepted for one Series competition at a time.')
         expect(regB.reload.competing_status).to eq('pending')
       end
+    end
+
+    it 'can still create non-accepted registrations if the competitor list is full' do
+      auto_accept_comp.competitor_limit = 5
+      FactoryBot.create_list(:registration, 5, :accepted, competition: auto_accept_comp)
+      expect(FactoryBot.create(:registration, :waiting_list, competition: auto_accept_comp)).to be_valid
     end
   end
 end

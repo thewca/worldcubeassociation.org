@@ -109,6 +109,17 @@ RSpec.describe 'API Registrations' do
 
       expect(Registration.find_by(user_id: reg.user.id).competing_status).to eq('accepted')
     end
+
+    it 'automatically accepts from the waiting list if a spot opens up on the Accepted list' do
+      auto_accept_comp = FactoryBot.create(:competition, :auto_accept, :registration_open)
+      reg = FactoryBot.create(:registration, competition: auto_accept_comp)
+      registration_request = FactoryBot.build(:registration_request, competition_id: auto_accept_comp.id, user_id: reg.user.id)
+
+      post api_v1_registrations_register_path, params: registration_request, headers: headers
+      FactoryBot.create(:registration_payment, registration: reg, competition: auto_accept_comp)
+
+      expect(Registration.find_by(user_id: reg.user.id).competing_status).to eq('accepted')
+    end
   end
 
   describe 'PATCH #update' do
@@ -161,6 +172,32 @@ RSpec.describe 'API Registrations' do
 
       registration = Registration.find_by(user_id: user.id, competition_id: favourites_reg.competition.id)
       expect(registration.event_ids.sort).to eq(new_event_ids.sort)
+    end
+
+    it 'auto-accept from Waiting List triggers if a user is moved off the Accepted list' do
+      auto_accept_comp = FactoryBot.create(
+        :competition, :auto_accept, :registration_open, :editable_registrations, :allow_self_delete, competitor_limit: 5
+      )
+      FactoryBot.create_list(:registration, 5, :accepted, competition: auto_accept_comp)
+      waitlist_reg = FactoryBot.create(:registration, :waiting_list, :paid, competition: auto_accept_comp)
+
+      # Add more entries to waiting list to check that the correct one is auto-accepted
+      FactoryBot.create_list(:registration, 3, :waiting_list, :paid, competition: auto_accept_comp)
+
+      update_request = FactoryBot.build(
+        :update_request,
+        user_id: auto_accept_comp.registrations.first.user_id,
+        competition_id: auto_accept_comp.id,
+        competing: { 'status' => 'cancelled' },
+      )
+      headers = { 'Authorization' => update_request['jwt_token'] }
+
+      patch api_v1_registrations_register_path, params: update_request, headers: headers
+
+      expect(response.status).to eq(200)
+
+      expect(auto_accept_comp.registrations.competing_status_accepted.count).to eq(5)
+      expect(waitlist_reg.reload.competing_status).to eq('accepted')
     end
   end
 
