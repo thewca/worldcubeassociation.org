@@ -2,6 +2,7 @@ import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import DOMPurify from 'dompurify';
 import Loading from './Requests/Loading';
+import renderMarkdownFetch from '../lib/utils/markdown';
 
 /*
   @md: The markdown text as plain text
@@ -13,7 +14,7 @@ export default function Markdown({ md, id = crypto.randomUUID() }) {
     isLoading,
   } = useQuery({
     queryKey: ['markdown', id],
-    queryFn: () => window.wca.renderMarkdownRequest(md),
+    queryFn: () => renderMarkdownFetch(md),
     staleTime: Infinity,
   });
 
