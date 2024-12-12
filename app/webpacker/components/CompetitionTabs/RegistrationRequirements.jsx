@@ -93,7 +93,7 @@ export default function RegistrationRequirements({ competition, userInfo, showLi
           <p>
             {competition.base_entry_fee_lowest_denomination
               ? I18n.t('competitions.competition_info.entry_fee_is', {
-                base_entry_fee: formatMoney(competition.base_entry_fee),
+                base_entry_fee: formatMoney(competition.base_entry_fee_lowest_denomination),
               })
               : I18n.t('competitions.competition_info.no_entry_fee')}
           </p>
@@ -107,18 +107,14 @@ export default function RegistrationRequirements({ competition, userInfo, showLi
       )}
 
       {competition['using_payment_integrations?'] && (
-        <p
-          dangerouslySetInnerHTML={{
-            __html: I18n.t(
-              showLinksToRegisterPage
-                ? 'competitions.competition_info.use_stripe_link_html'
-                : 'competitions.competition_info.use_stripe_below_html',
-              {
-                here: `<a href='/competitions/${competition.id}/register'>${t(
-                  'common.here',
-                )}</a>`,
-              },
-            ),
+        <I18nHTMLTranslate
+          i18nKey={showLinksToRegisterPage
+            ? 'competitions.competition_info.use_stripe_link_html'
+            : 'competitions.competition_info.use_stripe_below_html'}
+          options={{
+            here: `<a href='/competitions/${competition.id}/register'>${I18n.t(
+              'common.here',
+            )}</a>`,
           }}
         />
       )}
