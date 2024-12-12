@@ -7,7 +7,7 @@ import { countries } from '../../lib/wca-data.js.erb';
 import { competitionUrl, personUrl } from '../../lib/requests/routes.js.erb';
 import EventIcon from '../wca/EventIcon';
 import Markdown from '../Markdown';
-import RegistrationRequirements from './RegistrationRequirements';
+import RegistrationRequirements from './Requirements';
 import I18nHTMLTranslate from '../I18nHTMLTranslate';
 import { getFullDateTimeString } from '../../lib/utils/dates';
 
