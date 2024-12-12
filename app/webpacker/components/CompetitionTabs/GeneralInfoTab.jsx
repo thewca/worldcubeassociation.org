@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
 
 import { Button, Icon } from 'semantic-ui-react';
+import { DateTime } from 'luxon';
 import I18n from '../../lib/i18n';
 import { countries } from '../../lib/wca-data.js.erb';
-import { competitionUrl } from '../../lib/requests/routes.js.erb';
+import { competitionUrl, personUrl } from '../../lib/requests/routes.js.erb';
 import EventIcon from '../wca/EventIcon';
 import Markdown from '../Markdown';
 import RegistrationRequirements from './RegistrationRequirements';
+import I18nHTMLTranslate from '../I18nHTMLTranslate';
+import { getFullDateTimeString } from '../../lib/utils/dates';
 
 const linkToGoogleMapsPlace = (latitude, longitude) => `https://www.google.com/maps/place/${latitude},${longitude}`;
-const usersToSentence = () => '';
 
 export default function GeneralInfoTab({
   competition,
@@ -26,7 +28,7 @@ export default function GeneralInfoTab({
           <dd>
             {competition.date_range}
             <a
-              href={competitionUrl(competition, 'ics')}
+              href={competitionUrl(competition.id, 'ics')}
               title={I18n.t('competitions.competition_info.add_to_calendar')}
               data-toggle="tooltip"
               data-placement="top"
@@ -92,30 +94,48 @@ export default function GeneralInfoTab({
           {competition.organizers.length > 0 && (
             <>
               <dt>{I18n.t('competitions.competition_info.organizer_plural', { count: competition.organizers.length })}</dt>
-              <dd>{usersToSentence(competition.organizers, true)}</dd>
+              <dd>
+                {competition.organizers.map((user, i) => (user.wca_id ? (
+                  <a href={personUrl(user.wca_id)}>
+                    {user.name}
+                    {i !== competition.organizers.length - 1 && ', '}
+                  </a>
+                ) : `${user.name} `))}
+              </dd>
             </>
           )}
 
           <dt>{I18n.t('competitions.competition_info.delegate', { count: competition.delegates.length })}</dt>
-          <dd>{usersToSentence(competition.delegates, true)}</dd>
+          <dd>
+            {competition.delegates.map((user, i) => (user.wca_id ? (
+              <a href={personUrl(user.wca_id)}>
+                {user.name}
+                {i !== competition.delegates.length - 1 && ', '}
+              </a>
+            ) : `${user.name} `))}
+          </dd>
         </dl>
 
         {competition['has_schedule?'] && (
           <dl className="dl-horizontal">
             <dt><Icon name="print" /></dt>
             <dd>
-              {I18n.t('competitions.competition_info.pdf.download_html', {
-                here: (
-                  <a
-                    href={competitionUrl(competition, 'pdf')}
-                    target="_blank"
-                    className="hide-new-window-icon"
-                    rel="noreferrer"
-                  >
-                    {I18n.t('common.here')}
-                  </a>
-                ),
-              })}
+              <I18nHTMLTranslate
+                i18nKey="competitions.competition_info.pdf.download_html"
+                options={
+                {
+                  here: (
+                    `<a
+                      href=${competitionUrl(competition.id, 'pdf')}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      ${I18n.t('common.here')}
+                    </a>`
+                  ),
+                }
+              }
+              />
             </dd>
           </dl>
         )}
@@ -208,19 +228,26 @@ export default function GeneralInfoTab({
             <dt>{I18n.t('competitions.competition_info.registration_period.label')}</dt>
             <dd>
               <p>
+                {/* eslint-disable-next-line no-nested-ternary */}
                 {competition['registration_not_yet_opened?']
                   ? I18n.t('competitions.competition_info.registration_period.range_future_html', {
-                    startDateAndTime: competition.registration_open,
-                    endDateAndTime: competition.registration_close,
+                    start_date_and_time:
+                      getFullDateTimeString(DateTime.fromISO(competition.registration_open)),
+                    end_date_and_time:
+                      getFullDateTimeString(DateTime.fromISO(competition.registration_close)),
                   })
                   : competition['registration_past?']
                     ? I18n.t('competitions.competition_info.registration_period.range_past_html', {
-                      startDateAndTime: competition.registration_open,
-                      endDateAndTime: competition.registration_close,
+                      start_date_and_time:
+                        getFullDateTimeString(DateTime.fromISO(competition.registration_open)),
+                      end_date_and_time:
+                        getFullDateTimeString(DateTime.fromISO(competition.registration_close)),
                     })
                     : I18n.t('competitions.competition_info.registration_period.range_ongoing_html', {
-                      startDateAndTime: competition.registration_open,
-                      endDateAndTime: competition.registration_close,
+                      start_date_and_time:
+                        getFullDateTimeString(DateTime.fromISO(competition.registration_open)),
+                      end_date_and_time:
+                        getFullDateTimeString(DateTime.fromISO(competition.registration_close)),
                     })}
               </p>
             </dd>
@@ -234,7 +261,11 @@ export default function GeneralInfoTab({
               {showRegistrationRequirements ? (
                 <>
                   <div>
-                    <RegistrationRequirements competition={competition} userInfo={userInfo} showLinksToRegisterPage={false} />
+                    <RegistrationRequirements
+                      competition={competition}
+                      userInfo={userInfo}
+                      showLinksToRegisterPage={false}
+                    />
                   </div>
                   <Button onClick={() => setShowRegistrationRequirements(false)}>
                     {I18n.t('competitions.competition_info.hide_requirements')}
@@ -249,7 +280,7 @@ export default function GeneralInfoTab({
           </dd>
         </dl>
 
-        {competition.userCanViewResults && (competition.mainEvent || records) && (
+        {competition.userCanViewResults && (competition.main_event_id || records) && (
           <dl className="dl-horizontal">
             <dt>{I18n.t('competitions.competition_info.highlights')}</dt>
             <dd>
