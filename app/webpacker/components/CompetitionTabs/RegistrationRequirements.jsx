@@ -1,12 +1,12 @@
 import React from 'react';
+import { DateTime } from 'luxon';
 import I18n from '../../lib/i18n';
 import I18nHTMLTranslate from '../I18nHTMLTranslate';
 import Markdown from '../Markdown';
+import { isoMoneyToHumanReadable } from '../../lib/helpers/money';
+import { getFullDateTimeString } from '../../lib/utils/dates';
 
 export default function RegistrationRequirements({ competition, userInfo, showLinksToRegisterPage = false }) {
-  const formatMoney = (amount) => `$${(amount / 100).toFixed(2)}`; // Example formatting, adjust as needed
-  const wcaLocalTime = (time) => new Date(time).toLocaleString(); // Example formatting, adjust as needed
-
   return (
     <div>
       {competition.use_wca_registration && (
@@ -93,14 +93,14 @@ export default function RegistrationRequirements({ competition, userInfo, showLi
           <p>
             {competition.base_entry_fee_lowest_denomination
               ? I18n.t('competitions.competition_info.entry_fee_is', {
-                base_entry_fee: formatMoney(competition.base_entry_fee_lowest_denomination),
+                base_entry_fee: isoMoneyToHumanReadable(competition.base_entry_fee_lowest_denomination, competition.currency_code),
               })
               : I18n.t('competitions.competition_info.no_entry_fee')}
           </p>
           {competition.competition_events.map((event) => (event['has_fee?'] ? (
             <dl key={event.id}>
               <dt>{event.event.name}</dt>
-              <dd>{formatMoney(event.fee)}</dd>
+              <dd>{isoMoneyToHumanReadable(event.fee)}</dd>
             </dl>
           ) : null))}
         </div>
@@ -118,7 +118,104 @@ export default function RegistrationRequirements({ competition, userInfo, showLi
           }}
         />
       )}
+      <br />
+      {competition.refund_policy_percent || !competition['has_fees?']
+        ? I18n.t('competitions.competition_info.refund_policy_html', {
+          refund_policy_percent: `${competition.refund_policy_percent}%`,
+          limit_date_and_time:
+            getFullDateTimeString(DateTime.fromISO(competition.refund_policy_limit_date)),
+        })
+        : I18n.t('competitions.competition_info.no_refunds')}
+      <br />
+      {competition.waiting_list_deadline_date
+        && (
+          <>
+            {I18n.t(
+              'competitions.competition_info.waiting_list_deadline_html',
+              {
+                waiting_list_deadline:
+                  getFullDateTimeString(DateTime.fromISO(competition.waiting_list_deadline_date)),
+              },
+            )}
+            <br />
+          </>
+        )}
+      {competition.competition_events.length > 1 && competition.has_event_change_deadline_date && (
+        competition.event_change_deadline_date ? (
+          competition['allow_registration_edits?'] ? I18n.t('competitions.competition_info.event_change_deadline_edits_allowed_html', {
+            event_change_deadline:
+                  getFullDateTimeString(DateTime.fromISO(competition.event_change_deadline_date)),
+            register: `<a href='/competitions/${competition.id}/register'>${I18n.t('competitions.nav.menu.register')}</a>`,
+          })
+            : I18n.t('competitions.competition_info.event_change_deadline_html', {
+              event_change_deadline:
+                  getFullDateTimeString(DateTime.fromISO(competition.event_change_deadline_date)),
+            })
+        )
+          : I18n.t('competitions.competition_info.event_change_deadline_default_html')
 
+      )}
+      <br />
+
+      {competition['on_the_spot_registration?'] ? (
+        competition.on_the_spot_entry_fee_lowest_denomination ? (
+          I18n.t('competitions.competition_info.on_the_spot_registration_fee_html', {
+            on_the_spot_base_entry_fee:
+                  isoMoneyToHumanReadable(
+                    competition.on_the_spot_base_entry_fee,
+                    competition.currency_code,
+                  ),
+          })
+        )
+          : I18n.t('competitions.competition_info.on_the_spot_registration_free')
+
+      )
+        : I18n.t('competitions.competition_info.no_on_the_spot_registration')}
+      <br />
+      {competition.guests_entry_fee_lowest_denomination ? (
+        <>
+          {I18n.t('competitions.competition_info.guests_pay', {
+            guests_base_fee:
+              isoMoneyToHumanReadable(
+                competition.guests_entry_fee_lowest_denomination,
+                competition.currency_code,
+              ),
+          })}
+          <br />
+        </>
+      ) : (
+        <>
+          {competition['all_guests_allowed?'] ? (
+            I18n.t('competitions.competition_info.guests_free.free')
+          ) : competition['some_guests_allowed?'] ? (
+            I18n.t('competitions.competition_info.guests_free.restricted')
+          ) : null}
+          <br />
+        </>
+      )}
+
+      {competition['guests_per_registration_limit_enabled?'] && (
+        <>
+          {I18n.t('competitions.competition_info.guest_limit', { count: competition.guests_per_registration_limit })}
+          <br />
+        </>
+      )}
+
+      {competition['uses_qualification?'] && !competition.allow_registration_without_qualification && (
+        <>
+          {I18n.t('competitions.competition_info.require_qualification')}
+          <br />
+        </>
+      )}
+
+      {competition['events_per_registration_limit_enabled?'] && (
+        <>
+          {I18n.t('competitions.competition_info.event_limit', { count: competition.events_per_registration_limit })}
+          )
+          <br />
+        </>
+      )}
+      <br />
       {competition.extra_registration_requirements && (
         <Markdown md={competition.extra_registration_requirements} id="competition-info-extra-requirements" />
       )}

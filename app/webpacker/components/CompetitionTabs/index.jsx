@@ -39,7 +39,7 @@ export default function Wrapper({
     }
     tabs.map((tab) => p.push({ menuItem: tab.name, render: () => <CompetitionTab tab={tab} /> }));
     return p;
-  }, [competition, locale, tabs, wcifEvents, wcifSchedule]);
+  }, [competition, locale, tabs, userInfo, wcifEvents, wcifSchedule]);
   return (
     <WCAQueryClientProvider>
       <Tab panes={panes} menu={{ pointing: true, className: 'tab-wrapped' }} />

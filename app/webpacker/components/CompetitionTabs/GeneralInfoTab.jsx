@@ -264,7 +264,7 @@ export default function GeneralInfoTab({
                     <RegistrationRequirements
                       competition={competition}
                       userInfo={userInfo}
-                      showLinksToRegisterPage={false}
+                      showLinksToRegisterPage
                     />
                   </div>
                   <Button onClick={() => setShowRegistrationRequirements(false)}>

@@ -1,8 +1,18 @@
 <% provide(:title, @competition.display_name) %>
+<% options = { methods: %w[city has_event_change_deadline_date? allow_registration_edits? event_change_deadline_date
+ refund_policy_percent refund_policy_limit_date currency_code waiting_list_deadline_date organizers delegates
+ base_entry_fee_lowest_denomination registration_open registration_close extra_registration_requirements has_fees?
+ competition_events base_entry_fee using_payment_integrations? series_sibling_competitions main_event_id has_rounds?
+ external_registration_page part_of_competition_series? contact use_wca_registration is_probably_over?
+ registration_not_yet_opened? registration_past? competitor_limit competitor_limit_enabled venue_details
+ external_website venue_address latitude_degrees longitude_degrees website has_schedule? country_iso2 events
+ media number_of_bookmarks date_range information on_the_spot_registration? on_the_spot_entry_fee_lowest_denomination
+ guests_per_registration_limit_enabled? guests_per_registration_limit uses_qualification? allow_registration_without_qualification
+ events_per_registration_limit_enabled? events_per_registration_limit guests_entry_fee_lowest_denomination all_guests_allowed?]} %>
 <%= render layout: 'nav' do %>
   <%= react_component("CompetitionTabs", {
     tabs: @competition.tabs.as_json,
-    competition: @competition.as_json({ methods: %w[city organizers delegates base_entry_fee_lowest_denomination registration_open registration_close extra_registration_requirements has_fees? competition_events base_entry_fee using_payment_integrations? series_sibling_competitions main_event_id has_rounds? external_registration_page part_of_competition_series? contact use_wca_registration is_probably_over? registration_not_yet_opened? registration_past? competitor_limit competitor_limit_enabled venue_details external_website venue_address latitude_degrees longitude_degrees website has_schedule? country_iso2 events media number_of_bookmarks date_range information]}),
+    competition: @competition.as_json(options),
     wcifEvents: @competition.events_wcif, wcifSchedule: @competition.schedule_wcif, locale: I18n.locale,
     userInfo: current_user.as_json({
                                      only: %w[wca_id unconfirmed_wca_id],
