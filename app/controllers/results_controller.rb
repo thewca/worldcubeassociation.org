@@ -25,7 +25,7 @@ class ResultsController < ApplicationController
   end
 
   private def params_for_cache
-    params.permit(:event_id, :region, :years, :show, :gender, :type)
+    params.permit(:event_id, :region, :years, :show, :gender, :type).to_h.symbolize_keys
   end
 
   def rankings
