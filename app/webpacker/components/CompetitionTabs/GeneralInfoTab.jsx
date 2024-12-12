@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import {
-  Button, Grid, GridColumn, GridRow, Icon,
+  Button, Grid, GridColumn, GridRow, Header, Icon,
 } from 'semantic-ui-react';
 import { DateTime } from 'luxon';
 import I18n from '../../lib/i18n';
@@ -26,122 +26,181 @@ export default function GeneralInfoTab({
     <Grid>
       <GridRow>
         <GridColumn width={8}>
-          <dl className="dl-horizontal compact">
-            <dt>{I18n.t('competitions.competition_info.date')}</dt>
-            <dd>
-              {competition.date_range}
-              <a
-                href={competitionUrl(competition.id, 'ics')}
-                title={I18n.t('competitions.competition_info.add_to_calendar')}
-                data-toggle="tooltip"
-                data-placement="top"
-                data-container="body"
-              >
-                <Icon name="calendar plus" />
-              </a>
-            </dd>
+          <Grid>
+            <Grid.Row verticalAlign="middle" style={{ paddingBottom: '0em' }}>
+              <Grid.Column width={4} textAlign="right">
+                <Header as="h5">{I18n.t('competitions.competition_info.date')}</Header>
+              </Grid.Column>
+              <Grid.Column width={12}>
+                {competition.date_range}
+                <a
+                  href={competitionUrl(competition.id, 'ics')}
+                  title={I18n.t('competitions.competition_info.add_to_calendar')}
+                >
+                  <Icon name="calendar plus" />
+                </a>
+              </Grid.Column>
+            </Grid.Row>
 
-            <dt>{I18n.t('competitions.competition_info.city')}</dt>
-            <dd>
-              {competition.city}
-              {`, ${countries.byIso2[competition.country_iso2].name}`}
-            </dd>
+            <Grid.Row verticalAlign="middle" style={{ padding: '0em' }}>
+              <Grid.Column width={4} textAlign="right">
+                <Header as="h5">{I18n.t('competitions.competition_info.city')}</Header>
+              </Grid.Column>
+              <Grid.Column width={12}>
+                {competition.city}
+                {`, ${countries.byIso2[competition.country_iso2].name}`}
+              </Grid.Column>
+            </Grid.Row>
 
-            <dt>{I18n.t('competitions.competition_info.venue')}</dt>
-            <dd><Markdown md={competition.venue} id="competition-info-venue" /></dd>
+            <Grid.Row verticalAlign="middle" style={{ padding: '0em' }}>
+              <Grid.Column width={4} textAlign="right">
+                <Header as="h5">{I18n.t('competitions.competition_info.venue')}</Header>
+              </Grid.Column>
+              <Grid.Column width={12}>
+                <Markdown md={competition.venue} id="competition-info-venue" />
+              </Grid.Column>
+            </Grid.Row>
 
-            <dt className="text-muted">{I18n.t('competitions.competition_info.address')}</dt>
-            <dd>
-              <a href={linkToGoogleMapsPlace(
-                competition.latitude_degrees,
-                competition.longitude_degrees,
-              )}
-              >
-                {competition.venue_address}
-              </a>
-            </dd>
+            <Grid.Row verticalAlign="middle" style={{ padding: '0em' }}>
+              <Grid.Column width={4} textAlign="right">
+                <Header as="h5" className="text-muted">
+                  {I18n.t('competitions.competition_info.address')}
+                </Header>
+              </Grid.Column>
+              <Grid.Column width={12}>
+                <a
+                  href={linkToGoogleMapsPlace(
+                    competition.latitude_degrees,
+                    competition.longitude_degrees,
+                  )}
+                >
+                  {competition.venue_address}
+                </a>
+              </Grid.Column>
+            </Grid.Row>
 
             {competition.venue_details && (
-            <>
-              <dt className="text-muted">{I18n.t('competitions.competition_info.details')}</dt>
-              <dd>{competition.venue_details}</dd>
-            </>
+              <Grid.Row verticalAlign="middle" style={{ padding: '0em' }}>
+                <Grid.Column width={4} textAlign="right">
+                  <Header as="h5" className="text-muted">
+                    {I18n.t('competitions.competition_info.details')}
+                  </Header>
+                </Grid.Column>
+                <Grid.Column width={12}>{competition.venue_details}</Grid.Column>
+              </Grid.Row>
             )}
 
             {competition.external_website && (
-            <>
-              <dt>{I18n.t('competitions.competition_info.website')}</dt>
-              <dd>
-                <a href={competition.website} target="_blank" rel="noopener noreferrer">
-                  {`${competition.name} website`}
-                </a>
-              </dd>
-            </>
+              <Grid.Row verticalAlign="middle" style={{ paddingBottom: '0em' }}>
+                <Grid.Column width={4} textAlign="right">
+                  <Header as="h5">
+                    {I18n.t('competitions.competition_info.website')}
+                  </Header>
+                </Grid.Column>
+                <Grid.Column width={12}>
+                  <a
+                    href={competition.external_website}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {`${competition.name} website`}
+                  </a>
+                </Grid.Column>
+              </Grid.Row>
             )}
 
-            <dt>{I18n.t('competitions.competition_info.contact')}</dt>
-            <dd>
-              {competition.contact ? (
-                <Markdown md={competition.contact} id="competition-info-contact" />
-              ) : (
-                <a
-                  href={
-                  `/contact?contactRecipient=competition&competitionId=${competition.id}`
-                }
-                >
-                  {I18n.t('competitions.competition_info.organization_team')}
-                </a>
-              )}
-            </dd>
+            <Grid.Row style={{ padding: '0em' }}>
+              <Grid.Column width={4} textAlign="right">
+                <Header as="h5">
+                  {I18n.t('competitions.competition_info.contact')}
+                </Header>
+              </Grid.Column>
+              <Grid.Column width={12}>
+                {competition.contact ? (
+                  <Markdown md={competition.contact} id="competition-info-contact" />
+                ) : (
+                  <a
+                    href={`/contact?contactRecipient=competition&competitionId=${competition.id}`}
+                  >
+                    {I18n.t('competitions.competition_info.organization_team')}
+                  </a>
+                )}
+              </Grid.Column>
+            </Grid.Row>
 
             {competition.organizers.length > 0 && (
-            <>
-              <dt>{I18n.t('competitions.competition_info.organizer_plural', { count: competition.organizers.length })}</dt>
-              <dd>
-                {competition.organizers.map((user, i) => (user.wca_id ? (
-                  <a href={personUrl(user.wca_id)}>
-                    {user.name}
-                    {i !== competition.organizers.length - 1 && ', '}
-                  </a>
-                ) : `${user.name} `))}
-              </dd>
-            </>
+              <Grid.Row style={{ padding: '0em' }}>
+                <Grid.Column width={4} textAlign="right">
+                  <Header as="h5">
+                    {I18n.t('competitions.competition_info.organizer_plural', {
+                      count: competition.organizers.length,
+                    })}
+                  </Header>
+                </Grid.Column>
+                <Grid.Column width={12}>
+                  {competition.organizers.map((user, i) => (
+                    <React.Fragment key={user.id || i}>
+                      {user.wca_id ? (
+                        <a href={personUrl(user.wca_id)}>{user.name}</a>
+                      ) : (
+                        user.name
+                      )}
+                      {i !== competition.organizers.length - 1 && ', '}
+                    </React.Fragment>
+                  ))}
+                </Grid.Column>
+              </Grid.Row>
             )}
 
-            <dt>{I18n.t('competitions.competition_info.delegate', { count: competition.delegates.length })}</dt>
-            <dd>
-              {competition.delegates.map((user, i) => (user.wca_id ? (
-                <a href={personUrl(user.wca_id)}>
-                  {user.name}
-                  {i !== competition.delegates.length - 1 && ', '}
-                </a>
-              ) : `${user.name} `))}
-            </dd>
-          </dl>
-
-          {competition['has_schedule?'] && (
-          <dl className="dl-horizontal">
-            <dt><Icon name="print" /></dt>
-            <dd>
-              <I18nHTMLTranslate
-                i18nKey="competitions.competition_info.pdf.download_html"
-                options={
-                {
-                  here: (
-                    `<a
+            <Grid.Row style={{ padding: '0em' }}>
+              <Grid.Column width={4} textAlign="right">
+                <Header as="h5">
+                  {I18n.t('competitions.competition_info.delegate', {
+                    count: competition.delegates.length,
+                  })}
+                </Header>
+              </Grid.Column>
+              <Grid.Column width={12}>
+                {competition.delegates.map((user, i) => (
+                  <React.Fragment key={user.id || i}>
+                    {user.wca_id ? (
+                      <a href={personUrl(user.wca_id)}>{user.name}</a>
+                    ) : (
+                      user.name
+                    )}
+                    {i !== competition.delegates.length - 1 && ', '}
+                  </React.Fragment>
+                ))}
+              </Grid.Column>
+            </Grid.Row>
+            {competition['has_schedule?'] && (
+              <Grid.Row>
+                <Grid.Column width={4} textAlign="right">
+                  <Header as="h5">
+                    <Icon name="print" />
+                  </Header>
+                </Grid.Column>
+                <GridColumn width={12}>
+                  <I18nHTMLTranslate
+                    i18nKey="competitions.competition_info.pdf.download_html"
+                    options={
+                      {
+                        here: (
+                          `<a
                       href=${competitionUrl(competition.id, 'pdf')}
                       target="_blank"
                       rel="noreferrer"
                     >
                       ${I18n.t('common.here')}
                     </a>`
-                  ),
-                }
-              }
-              />
-            </dd>
-          </dl>
-          )}
+                        ),
+                      }
+                    }
+                  />
+                </GridColumn>
+              </Grid.Row>
+            )}
+          </Grid>
         </GridColumn>
 
         <GridColumn width={8}>
