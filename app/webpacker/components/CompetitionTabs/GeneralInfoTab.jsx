@@ -204,143 +204,160 @@ export default function GeneralInfoTab({
         </GridColumn>
 
         <GridColumn width={8}>
-          <dl className="dl-horizontal">
-            <dt>{I18n.t('competitions.competition_info.information')}</dt>
-            <dd>
-              <Markdown md={competition.information} id="competition-info-information" />
-            </dd>
-          </dl>
+          <Grid>
+            <Grid.Row verticalAlign="top">
+              <Grid.Column width={4} textAlign="right">
+                <Header as="h5">{I18n.t('competitions.competition_info.information')}</Header>
+              </Grid.Column>
+              <Grid.Column width={12} verticalAlign="top">
+                <Markdown md={competition.information} id="competition-info-information" />
+              </Grid.Column>
+            </Grid.Row>
 
-          <dl className="dl-horizontal">
-            <dt>{I18n.t('competitions.competition_info.events')}</dt>
-            <dd className="competition-events-list">
-              {competition.events.map((event) => (
-                <React.Fragment key={event.id}>
-                  <EventIcon id={event.id} />
-                </React.Fragment>
-              ))}
-            </dd>
+            <Grid.Row verticalAlign="middle">
+              <Grid.Column width={4} textAlign="right">
+                <Header as="h5">{I18n.t('competitions.competition_info.events')}</Header>
+              </Grid.Column>
+              <Grid.Column width={12} className="competition-events-list">
+                {competition.events.map((event) => (
+                  <React.Fragment key={event.id}>
+                    <EventIcon id={event.id} size="1.5em" />
+                  </React.Fragment>
+                ))}
+              </Grid.Column>
+            </Grid.Row>
 
             {competition.main_event_id && (
-            <>
-              <dt>{I18n.t('competitions.competition_info.main_event')}</dt>
-              <dd className="competition-events-list">
-                <EventIcon id={competition.main_event_id} />
-              </dd>
-            </>
+              <Grid.Row verticalAlign="middle">
+                <Grid.Column width={4} textAlign="right">
+                  <Header as="h5">{I18n.t('competitions.competition_info.main_event')}</Header>
+                </Grid.Column>
+                <Grid.Column width={12} className="competition-events-list">
+                  <EventIcon id={competition.main_event_id} />
+                </Grid.Column>
+              </Grid.Row>
             )}
 
             {competition['results_posted?'] && (
-            <>
-              <dt>{I18n.t('competitions.nav.menu.competitors')}</dt>
-              <dd>{competition.competitors.length}</dd>
-            </>
+              <Grid.Row verticalAlign="middle">
+                <Grid.Column width={4} textAlign="right">
+                  <Header as="h5">{I18n.t('competitions.nav.menu.competitors')}</Header>
+                </Grid.Column>
+                <Grid.Column width={12}>{competition.competitors.length}</Grid.Column>
+              </Grid.Row>
             )}
-          </dl>
-
-          {(competition.media.accepted ?? []).map((mediaType) => (
-            <div className="panel panel-default" key={mediaType.type}>
-              <div className="panel-heading">
-                <h4 className="panel-title">
-                  <a
-                    data-toggle="collapse"
-                    href={`#collapse-${mediaType.type}`}
-                    className="collapsed"
-                  >
-                    {`${mediaType.type}s (${mediaType.items.length})`}
-                  </a>
-                </h4>
-              </div>
-              <div id={`collapse-${mediaType.type}`} className="panel-collapse collapse">
-                <ul className="list-group">
-                  {mediaType.items.map((item) => (
+            {(competition.media.accepted ?? []).map((mediaType) => (
+              <div className="panel panel-default" key={mediaType.type}>
+                <div className="panel-heading">
+                  <h4 className="panel-title">
                     <a
-                      href={item.uri}
-                      className="list-group-item"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      key={item.text}
+                      data-toggle="collapse"
+                      href={`#collapse-${mediaType.type}`}
+                      className="collapsed"
                     >
-                      {item.text}
+                      {`${mediaType.type}s (${mediaType.items.length})`}
                     </a>
-                  ))}
-                </ul>
+                  </h4>
+                </div>
+                <div id={`collapse-${mediaType.type}`} className="panel-collapse collapse">
+                  <ul className="list-group">
+                    {mediaType.items.map((item) => (
+                      <a
+                        href={item.uri}
+                        className="list-group-item"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        key={item.text}
+                      >
+                        {item.text}
+                      </a>
+                    ))}
+                  </ul>
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
 
-          {!competition['results_posted?'] && competition.competitor_limit_enabled && (
-          <dl className="dl-horizontal">
-            <dt>{I18n.t('competitions.competition_info.competitor_limit')}</dt>
-            <dd>{competition.competitor_limit}</dd>
-          </dl>
-          )}
+            {!competition['results_posted?'] && competition.competitor_limit_enabled && (
+              <Grid.Row verticalAlign="middle">
+                <Grid.Column width={4} textAlign="right">
+                  <Header as="h5">{I18n.t('competitions.competition_info.competitor_limit')}</Header>
+                </Grid.Column>
+                <Grid.Column width={12}>
+                  {competition.competitor_limit}
+                </Grid.Column>
+              </Grid.Row>
+            )}
 
-          {!competition['results_posted?'] && (
-          <dl className="dl-horizontal">
-            <dt>{I18n.t('competitions.competition_info.number_of_bookmarks')}</dt>
-            <dd>{competition.number_of_bookmarks}</dd>
-          </dl>
-          )}
+            {!competition['results_posted?'] && (
+              <Grid.Row verticalAlign="middle">
+                <Grid.Column width={4} textAlign="right">
+                  <Header as="h5">{I18n.t('competitions.competition_info.number_of_bookmarks')}</Header>
+                </Grid.Column>
+                <Grid.Column width={12}>
+                  {competition.number_of_bookmarks}
+                </Grid.Column>
+              </Grid.Row>
+            )}
+          </Grid>
+
         </GridColumn>
 
         <GridColumn width={16}>
-          {competition.registration_open && competition.registration_close && (
-          <dl className="dl-horizontal">
-            <dt>{I18n.t('competitions.competition_info.registration_period.label')}</dt>
-            <dd>
-              <p>
-                {/* eslint-disable-next-line no-nested-ternary */}
-                {competition['registration_not_yet_opened?']
-                  ? I18n.t('competitions.competition_info.registration_period.range_future_html', {
-                    start_date_and_time:
-                      getFullDateTimeString(DateTime.fromISO(competition.registration_open)),
-                    end_date_and_time:
-                      getFullDateTimeString(DateTime.fromISO(competition.registration_close)),
-                  })
-                  : competition['registration_past?']
-                    ? I18n.t('competitions.competition_info.registration_period.range_past_html', {
-                      start_date_and_time:
-                        getFullDateTimeString(DateTime.fromISO(competition.registration_open)),
-                      end_date_and_time:
-                        getFullDateTimeString(DateTime.fromISO(competition.registration_close)),
-                    })
-                    : I18n.t('competitions.competition_info.registration_period.range_ongoing_html', {
-                      start_date_and_time:
-                        getFullDateTimeString(DateTime.fromISO(competition.registration_open)),
-                      end_date_and_time:
-                        getFullDateTimeString(DateTime.fromISO(competition.registration_close)),
-                    })}
-              </p>
-            </dd>
-          </dl>
-          )}
+          <Grid>
+            {competition.registration_open && competition.registration_close && (
+              <Grid.Row>
+                <Grid.Column width={2} textAlign="right">
+                  <Header as="h5">{I18n.t('competitions.competition_info.registration_period.label')}</Header>
+                </Grid.Column>
+                <Grid.Column width={14}>
+                  <p>
+                    {competition['registration_not_yet_opened?']
+                      ? I18n.t('competitions.competition_info.registration_period.range_future_html', {
+                        start_date_and_time: getFullDateTimeString(DateTime.fromISO(competition.registration_open)),
+                        end_date_and_time: getFullDateTimeString(DateTime.fromISO(competition.registration_close)),
+                      })
+                      : competition['registration_past?']
+                        ? I18n.t('competitions.competition_info.registration_period.range_past_html', {
+                          start_date_and_time: getFullDateTimeString(DateTime.fromISO(competition.registration_open)),
+                          end_date_and_time: getFullDateTimeString(DateTime.fromISO(competition.registration_close)),
+                        })
+                        : I18n.t('competitions.competition_info.registration_period.range_ongoing_html', {
+                          start_date_and_time: getFullDateTimeString(DateTime.fromISO(competition.registration_open)),
+                          end_date_and_time: getFullDateTimeString(DateTime.fromISO(competition.registration_close)),
+                        })}
+                  </p>
+                </Grid.Column>
+              </Grid.Row>
+            )}
 
-          <dl className="dl-horizontal">
-            <dt>{I18n.t('competitions.competition_info.registration_requirements')}</dt>
-            <dd>
-              <div>
-                {showRegistrationRequirements ? (
-                  <>
-                    <div>
-                      <RegistrationRequirements
-                        competition={competition}
-                        userInfo={userInfo}
-                        showLinksToRegisterPage
-                      />
-                    </div>
-                    <Button onClick={() => setShowRegistrationRequirements(false)}>
-                      {I18n.t('competitions.competition_info.hide_requirements')}
+            <Grid.Row>
+              <Grid.Column width={2} textAlign="right">
+                <Header as="h5">{I18n.t('competitions.competition_info.registration_requirements')}</Header>
+              </Grid.Column>
+              <Grid.Column width={14}>
+                <div>
+                  {showRegistrationRequirements ? (
+                    <>
+                      <div>
+                        <RegistrationRequirements
+                          competition={competition}
+                          userInfo={userInfo}
+                          showLinksToRegisterPage
+                        />
+                      </div>
+                      <Button onClick={() => setShowRegistrationRequirements(false)}>
+                        {I18n.t('competitions.competition_info.hide_requirements')}
+                      </Button>
+                    </>
+                  ) : (
+                    <Button onClick={() => setShowRegistrationRequirements(true)}>
+                      {I18n.t('competitions.competition_info.click_to_display_requirements_html')}
                     </Button>
-                  </>
-                ) : (
-                  <Button onClick={() => setShowRegistrationRequirements(true)}>
-                    {I18n.t('competitions.competition_info.click_to_display_requirements_html')}
-                  </Button>
-                )}
-              </div>
-            </dd>
-          </dl>
+                  )}
+                </div>
+              </Grid.Column>
+            </Grid.Row>
+          </Grid>
 
           {competition.userCanViewResults && (competition.main_event_id || records) && (
           <dl className="dl-horizontal">
