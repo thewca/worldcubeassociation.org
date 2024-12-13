@@ -28,10 +28,21 @@ const tabIndexFromSlug = (panes) => {
 };
 
 export default function Wrapper({
-  tabs, competition, wcifEvents, wcifSchedule, locale, userInfo,
+  tabs, competition, wcifEvents, wcifSchedule, locale, userInfo, records, winners,
 }) {
   const panes = useMemo(() => {
-    const p = [{ slug: 'general-info', menuItem: 'General Info', render: () => <GeneralInfoTab competition={competition} userInfo={userInfo} /> }];
+    const p = [{
+      slug: 'general-info',
+      menuItem: 'General Info',
+      render: () => (
+        <GeneralInfoTab
+          competition={competition}
+          userInfo={userInfo}
+          records={records}
+          winners={winners}
+        />
+      ),
+    }];
     if (competition['has_rounds?']) {
       p.push({
         slug: 'competition-events',

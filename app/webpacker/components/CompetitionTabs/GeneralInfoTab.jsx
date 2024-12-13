@@ -18,9 +18,11 @@ const linkToGoogleMapsPlace = (latitude, longitude) => `https://www.google.com/m
 export default function GeneralInfoTab({
   competition,
   userInfo,
+  records,
+  winners,
 }) {
   const [showRegistrationRequirements, setShowRegistrationRequirements] = useState(!competition['is_probably_over?']);
-  const [showHighlights, setShowHighlights] = useState(false);
+  const [showHighlights, setShowHighlights] = useState(true);
 
   return (
     <Grid>
@@ -243,7 +245,7 @@ export default function GeneralInfoTab({
                 <Grid.Column width={4} textAlign="right">
                   <Header as="h5">{I18n.t('competitions.nav.menu.competitors')}</Header>
                 </Grid.Column>
-                <Grid.Column width={12}>{competition.competitors.length}</Grid.Column>
+                <Grid.Column width={12}>{competition.competitor_count}</Grid.Column>
               </Grid.Row>
             )}
             {(competition.media.accepted ?? []).map((mediaType) => (
@@ -360,32 +362,36 @@ export default function GeneralInfoTab({
                 </div>
               </Grid.Column>
             </Grid.Row>
+            {competition['results_posted?'] && (competition.main_event_id || records) && (
+              <Grid.Row>
+                <Grid.Column width={2} textAlign="right">
+                  <Header as="h5">{I18n.t('competitions.competition_info.highlights')}</Header>
+                </Grid.Column>
+                <Grid.Column width={14}>
+                  <div>
+                    {showHighlights ? (
+                      <>
+                        <Button onClick={() => setShowHighlights(false)}>
+                          {I18n.t('competitions.competition_info.hide_highlights')}
+                        </Button>
+                        <div>
+                          {competition.main_event_id && <Markdown md={winners} id="competition-info-winners" /> }
+                          <br />
+                          {records && <Markdown md={records} id="competition-info-records" />}
+                        </div>
+                      </>
+                    ) : (
+                      <Button onClick={() => setShowHighlights(true)}>
+                        {I18n.t('competitions.competition_info.click_to_display_highlights_html', {
+                          link_here: I18n.t('common.here'),
+                        })}
+                      </Button>
+                    )}
+                  </div>
+                </Grid.Column>
+              </Grid.Row>
+            )}
           </Grid>
-
-          {competition.userCanViewResults && (competition.main_event_id || records) && (
-          <dl className="dl-horizontal">
-            <dt>{I18n.t('competitions.competition_info.highlights')}</dt>
-            <dd>
-              <div>
-                {showHighlights ? (
-                  <>
-                    <Button onClick={() => setShowHighlights(false)}>
-                      {I18n.t('competitions.competition_info.hide_highlights')}
-                    </Button>
-                    <div>
-                      {competition.main_event_id && <p>{winners(competition, competition.mainEvent)}</p>}
-                      {records && <p>{records}</p>}
-                    </div>
-                  </>
-                ) : (
-                  <button onClick={() => setShowHighlights(true)}>
-                    {I18n.t('competitions.competition_info.click_to_display_highlights_html')}
-                  </button>
-                )}
-              </div>
-            </dd>
-          </dl>
-          )}
         </GridColumn>
       </GridRow>
     </Grid>

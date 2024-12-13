@@ -2212,6 +2212,10 @@ class Competition < ApplicationRecord
     )
   end
 
+  def competitor_count
+    competitors.count
+  end
+
   def to_ics
     cal = Icalendar::Calendar.new
     wcif_ids = rounds.to_h { |r| [r.wcif_id, r.to_string_map] }
