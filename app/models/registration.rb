@@ -448,7 +448,12 @@ class Registration < ApplicationRecord
     return log_error('Competitor still has outstanding registration fees') if outstanding_entry_fees > 0
     return log_error('Cant auto-accept while registration is not open') if !competition.registration_currently_open?
 
-    update(competing_status: Registrations::Helper::STATUS_ACCEPTED)
+    if competition.accepted_full?
+      update(competing_status: Registrations::Helper::STATUS_WAITING_LIST)
+      competition.waiting_list.add(id)
+    else
+      update(competing_status: Registrations::Helper::STATUS_ACCEPTED)
+    end
   end
 
   private def log_error(error)

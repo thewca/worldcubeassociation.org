@@ -461,9 +461,14 @@ class Competition < ApplicationRecord
     self.confirmed? || self.showAtAll
   end
 
+  # TODO: Consider refactoring this once auto-accept is implemented
   def registration_full?
     competitor_count = registrations.accepted_and_paid_pending_count
     competitor_limit_enabled? && competitor_count >= competitor_limit
+  end
+
+  def accepted_full?
+    competitor_limit_enabled? && registrations.competing_status_accepted.count >= competitor_limit
   end
 
   def number_of_bookmarks

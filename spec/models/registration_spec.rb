@@ -525,7 +525,7 @@ RSpec.describe Registration do
     end
   end
 
-  describe '#auto_accept' do
+  describe '#auto_accept', :tag do
     let(:auto_accept_comp) { FactoryBot.create(:competition, :auto_accept, :registration_open) }
     let!(:reg) { FactoryBot.create(:registration, competition: auto_accept_comp) }
 
@@ -745,10 +745,38 @@ RSpec.describe Registration do
       end
     end
 
-    it 'can still create non-accepted registrations if the competitor list is full' do
-      auto_accept_comp.competitor_limit = 5
-      FactoryBot.create_list(:registration, 5, :accepted, competition: auto_accept_comp)
-      expect(FactoryBot.create(:registration, :waiting_list, competition: auto_accept_comp)).to be_valid
+    context 'auto accept onto waiting list' do
+      it 'works with no auto_accept_disable_threshold' do
+        auto_accept_comp.competitor_limit_enabled = true
+        auto_accept_comp.competitor_limit = 5
+        FactoryBot.create_list(:registration, 5, :accepted, competition: auto_accept_comp)
+
+        FactoryBot.create(:registration_payment, :skip_create_hook, registration: reg, competition: auto_accept_comp)
+
+        reg.auto_accept
+        expect(reg.reload.competing_status).to eq('waiting_list')
+        expect(reg.waiting_list_position).to eq(1)
+      end
+
+      it 'gets prevented by auto-accept threshold' do
+        auto_accept_comp.competitor_limit_enabled = true
+        auto_accept_comp.competitor_limit = 5
+        auto_accept_comp.auto_accept_disable_threshold = 4
+        FactoryBot.create_list(:registration, 5, :accepted, competition: auto_accept_comp)
+
+        FactoryBot.create(:registration_payment, :skip_create_hook, registration: reg, competition: auto_accept_comp)
+
+        reg.auto_accept
+        expect(reg.reload.competing_status).to eq('pending')
+        expect(reg.waiting_list_position).to eq(nil)
+
+      end
     end
+  end
+
+  it 'can still create non-accepted registrations if the competitor list is full' do
+    auto_accept_comp.competitor_limit = 5
+    FactoryBot.create_list(:registration, 5, :accepted, competition: auto_accept_comp)
+    expect(FactoryBot.create(:registration, :waiting_list, competition: auto_accept_comp)).to be_valid
   end
 end
