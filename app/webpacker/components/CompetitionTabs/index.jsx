@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import { Tab, TabPane } from 'semantic-ui-react';
 import GeneralInfoTab from './GeneralInfoTab';
 import CompetitionTab from './CompetitionTab';
@@ -6,6 +6,7 @@ import EventsTable from './EventsTable';
 import Schedule from './Schedule';
 import WCAQueryClientProvider from '../../lib/providers/WCAQueryClientProvider';
 import './style.css';
+import TimeLimitCutoffInfo from './TimeLimitCutoffInfo';
 
 const updatePath = (tabSlug) => {
   window.history.replaceState({}, '', `${window.location.pathname}#${tabSlug}`);
@@ -38,6 +39,8 @@ export default function Wrapper({
         render: () => (
           <TabPane>
             <EventsTable competitionInfo={competition} wcifEvents={wcifEvents} />
+            <br />
+            <TimeLimitCutoffInfo competition={competition} />
           </TabPane>
         ),
       });
@@ -54,6 +57,8 @@ export default function Wrapper({
               calendarLocale={locale}
               competitionName={competition.name}
             />
+            <br />
+            <TimeLimitCutoffInfo competition={competition} />
           </TabPane>
         ),
       });

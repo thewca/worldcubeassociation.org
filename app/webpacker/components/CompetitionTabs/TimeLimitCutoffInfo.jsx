@@ -1,92 +1,135 @@
 import React from 'react';
 
+import { Header } from 'semantic-ui-react';
 import I18n from '../../lib/i18n';
 import I18nHTMLTranslate from '../I18nHTMLTranslate';
+import { regulationsUrl } from '../../lib/requests/routes.js.erb';
 
 export default function TimeLimitCutoffInfo({ competition }) {
-  // const showCumulativeOneRound = competition['uses_cumulative?'];
-  // const showCumulativeAcrossRounds = competition['uses_cumulative_across_rounds?'];
-  // const showCutoff = competition['uses_cutoff?'];
-  // const showQualifications = competition['uses_qualification?'];
-  //
-  // return (
-  //   <div class="time-limit-information">
-  //     <h4 id="time-limit">
-  //       { I18n.t("competitions.events.time_limit") }
-  //     </h4>
-  //     <p>
-  //       <I18nHTMLTranslate i18nKey={"competitions.events.time_limit_information.time_limit_html"} options={{
-  //         regulation_link: `<a href=${regulationsUrl("#A1a4")} target="_blank">${I18n.t("competitions.events.time_limit_information.regulation_link_text", { number: "A1a4" })}')}</a>`}
-  //       }
-  //         { showCumulativeOneRound && }
-  //       <% if show_cumulative_one_round %>
-  //       <br/>
-  //       <% cumulative_one_round = content_tag :strong,
-  //       t("competitions.events.time_limit_information.cumulative_time_limit"), id: "cumulative-time-limit" %>
-  //       <%= t("competitions.events.time_limit_information.cumulative_one_round_html",
-  //       cumulative_time_limit: cumulative_one_round,
-  //       regulation_link: link_to(t("competitions.events.time_limit_information.regulation_link_text", number: "A1a2"),
-  //       regulations_path + "#A1a2", target: "_blank")) %>
-  //       <% end %>
-  //       <% if show_cumulative_across_rounds %>
-  //       <br/>
-  //       <
-  //       % cumulative_across_rounds = content_tag :strong,
-  //       t("competitions.events.time_limit_information.cumulative_time_limit"), id: "cumulative-across-rounds-time-limit"
-  //       %>
-  //       <%= t("competitions.events.time_limit_information.cumulative_across_rounds_html",
-  //       cumulative_time_limit: cumulative_across_rounds,
-  //       guideline_link: link_to(t("competitions.events.time_limit_information.guideline_link_text", number: "A1a2++"),
-  //       regulations_path + "/guidelines.html#A1a2++", target: "_blank")) %>
-  //       <% end %>
-  //     </p>
-  //
-  //     <
-  //     % if show_cutoff %>
-  //     <h4 id="cutoff">
-  //       <
-  //       %= t("competitions.events.cutoff") %></h4>
-  //     <p>
-  //       <
-  //       %= t("competitions.events.time_limit_information.cutoff_html",
-  //       regulation_link: link_to(t("competitions.events.time_limit_information.regulation_link_text", number: "9g"),
-  //       regulations_path + "#9g", target: "_blank")) %>
-  //     </p>
-  //     <
-  //     % end %>
-  //     <h4 id="format">
-  //       <
-  //       %= t("competitions.events.format") %></h4>
-  //     <p>
-  //       <
-  //       %= t("competitions.events.time_limit_information.format_html",
-  //       link_to_9b: link_to(t("competitions.events.time_limit_information.regulation_link_text", number: "9b"),
-  //       regulations_path + "#9b", target: "_blank"),
-  //       link_to_9f: link_to(t("competitions.events.time_limit_information.regulation_link_text", number: "9f"),
-  //       regulations_path + "#9f", target: "_blank")) %>
-  //     </p>
-  //
-  //     <
-  //     % if show_qualifications %>
-  //     <h4 id="qualification">
-  //       <
-  //       %= t("competitions.events.qualification") %></h4>
-  //     <p>
-  //       <
-  //       %= t("competitions.events.time_limit_information.qualification_html") %>
-  //       <% date_to_events = competition.qualification_date_to_events %>
-  //       <% if (date_to_events.length() > 1) %>
-  //       <% date_to_events.each do |date, events| %>
-  //       <%= t("competitions.events.time_limit_information.qualification_some_events_html",
-  //       date: wca_date_range(date, date), events: events.map{|e| e.event.name}.join(", ")) %>
-  //       <% end %>
-  //       <% else %>
-  //       <%= t("competitions.events.time_limit_information.qualification_all_events_html",
-  //       date: wca_date_range(date_to_events.keys.first, date_to_events.keys.first)) %>
-  //       <% end %>
-  //     </p>
-  //     <
-  //     % end %>
-  //   </div>
-  // )
+  const showCumulativeOneRound = competition['uses_cumulative?'];
+  const showCumulativeAcrossRounds = competition['uses_cumulative_across_rounds?'];
+  const showCutoff = competition['uses_cutoff?'];
+  const showQualifications = competition['uses_qualification?'];
+  const dateToEvents = competition.qualification_date_to_events;
+
+  return (
+    <div>
+      <Header>{I18n.t('competitions.events.time_limit')}</Header>
+      <p>
+        <I18nHTMLTranslate
+          i18nKey="competitions.events.time_limit_information.time_limit_html"
+          options={{
+            regulation_link: `<a href="${regulationsUrl('#A1a4')}" target="_blank">${I18n.t(
+              'competitions.events.time_limit_information.regulation_link_text',
+              { number: 'A1a4' },
+            )}</a>`,
+          }}
+        />
+
+        {showCumulativeOneRound && (
+          <>
+            <br />
+            <I18nHTMLTranslate
+              i18nKey="competitions.events.time_limit_information.cumulative_one_round_html"
+              options={{
+                cumulative_time_limit: `<strong id="cumulative-time-limit">${I18n.t(
+                  'competitions.events.time_limit_information.cumulative_time_limit',
+                )}</strong>`,
+                regulation_link: `<a href="${regulationsUrl('#A1a2')}" target="_blank">${I18n.t(
+                  'competitions.events.time_limit_information.regulation_link_text',
+                  { number: 'A1a2' },
+                )}</a>`,
+              }}
+            />
+          </>
+        )}
+
+        {showCumulativeAcrossRounds && (
+          <>
+            <br />
+            <I18nHTMLTranslate
+              i18nKey="competitions.events.time_limit_information.cumulative_across_rounds_html"
+              options={{
+                cumulative_time_limit: `<strong id="cumulative-across-rounds-time-limit">${I18n.t(
+                  'competitions.events.time_limit_information.cumulative_time_limit',
+                )}</strong>`,
+                guideline_link: `<a href="${regulationsUrl(
+                  '/guidelines.html#A1a2++',
+                )}" target="_blank">${I18n.t(
+                  'competitions.events.time_limit_information.guideline_link_text',
+                  { number: 'A1a2++' },
+                )}</a>`,
+              }}
+            />
+          </>
+        )}
+      </p>
+
+      {showCutoff && (
+        <>
+          <Header>{I18n.t('competitions.events.cutoff')}</Header>
+          <p>
+            <I18nHTMLTranslate
+              i18nKey="competitions.events.time_limit_information.cutoff_html"
+              options={{
+                regulation_link: `<a href="${regulationsUrl('#9g')}" target="_blank">${I18n.t(
+                  'competitions.events.time_limit_information.regulation_link_text',
+                  { number: '9g' },
+                )}</a>`,
+              }}
+            />
+          </p>
+        </>
+      )}
+
+      <Header id="format">{I18n.t('competitions.events.format')}</Header>
+      <p>
+        <I18nHTMLTranslate
+          i18nKey="competitions.events.time_limit_information.format_html"
+          options={{
+            link_to_9b: `<a href="${regulationsUrl('#9b')}" target="_blank">${I18n.t(
+              'competitions.events.time_limit_information.regulation_link_text',
+              { number: '9b' },
+            )}</a>`,
+            link_to_9f: `<a href="${regulationsUrl('#9f')}" target="_blank">${I18n.t(
+              'competitions.events.time_limit_information.regulation_link_text',
+              { number: '9f' },
+            )}</a>`,
+          }}
+        />
+      </p>
+
+      {showQualifications && (
+        <>
+          <Header>{I18n.t('competitions.events.qualification')}</Header>
+          <p>
+            {I18n.t('competitions.events.time_limit_information.qualification_html')}
+            {dateToEvents.length > 1
+              ? Object.entries(dateToEvents).map(([date, events]) => (
+                <span key={date}>
+                  <I18nHTMLTranslate
+                    i18nKey="competitions.events.time_limit_information.qualification_some_events_html"
+                    options={{
+                      date: wcaDateRange(date, date),
+                      events: events.map((e) => e.event.name).join(', '),
+                    }}
+                  />
+                </span>
+              ))
+              : (
+                <I18nHTMLTranslate
+                  i18nKey="competitions.events.time_limit_information.qualification_all_events_html"
+                  options={{
+                    date: wcaDateRange(
+                      Object.keys(dateToEvents)[0],
+                      Object.keys(dateToEvents)[0],
+                    ),
+                  }}
+                />
+              )}
+          </p>
+        </>
+      )}
+    </div>
+  );
 }
