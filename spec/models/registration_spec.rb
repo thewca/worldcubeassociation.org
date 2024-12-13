@@ -525,7 +525,7 @@ RSpec.describe Registration do
     end
   end
 
-  describe '#auto_accept', :tag do
+  describe '#auto_accept' do
     let(:auto_accept_comp) { FactoryBot.create(:competition, :auto_accept, :registration_open) }
     let!(:reg) { FactoryBot.create(:registration, competition: auto_accept_comp) }
 
@@ -771,6 +771,102 @@ RSpec.describe Registration do
         expect(reg.waiting_list_position).to eq(nil)
 
       end
+    end
+  end
+
+  describe '#bulk_auto_accept' do
+
+    describe 'when competitor limit' do
+      let(:auto_accept_comp) { FactoryBot.create(:competition, :auto_accept, :registration_open, :with_competitor_limit, competitor_limit: 10) }
+
+      before do
+        FactoryBot.create_list(:registration, 5, :accepted, competition: auto_accept_comp)
+      end
+
+      it 'accepts paid-pending registrations', :tag do
+        # TODO: order the registration payments so that the last created registration is paid first
+        pending_registrations = FactoryBot.create_list(:registration, 9, :pending, competition: auto_accept_comp)
+        pending_registrations.reverse_each do |r|
+          FactoryBot.create(:registration_payment, :skip_create_hook, registration: r, competition: auto_accept_comp)
+          sleep 0.1
+        end
+        auto_accept_comp.registrations.competing_status_pending.each { |r| puts r.registration_payments.first.updated_at }
+        pending_registrations = FactoryBot.create_list(:registration, 5, :pending, competition: auto_accept_comp)
+
+        initial_order = auto_accept_comp.waiting_list.entries
+        expected_accepted = initial_order[..5]
+        still_waiting = initial_order[5..]
+
+        Registration.bulk_auto_accept(auto_accept_comp)
+        puts "after auto accept"
+        auto_accept_comp.registrations.competing_status_waiting_list.each { |r| puts r.registration_payments.first.updated_at }
+        expect(auto_accept_comp.registrations.competing_status_accepted.count).to eq(10)
+        expect(auto_accept_comp.registrations.competing_status_waiting_list.count).to eq(4)
+        expect(auto_accept_comp.registrations.competing_status_pending.count).to eq(5)
+
+        accepted_registrations = auto_accept_comp.registrations.competing_status_accepted
+
+        accepted_timestamps = accepted_registrations.map { |r| r.registration_payments.first&.updated_at }.compact
+        earliest_accepted_timestamp = accepted_timestamps.min
+
+
+        auto_accept_comp.registrations.competing_status_waiting_list.each do |waitlisted_registration|
+          expect(waitlisted_registration.registration_payments.first.updated_at).to be >= earliest_accepted_timestamp
+        end
+      end
+
+      it 'accepts waitlisted registrations' do
+        FactoryBot.create_list(:registration, 9, :paid, :waiting_list, competition: auto_accept_comp)
+        initial_order = auto_accept_comp.waiting_list.entries
+        expected_accepted = initial_order[..5]
+        expect(true).to eq(false)
+      end
+
+      it 'accepts a combination of registrations' do
+        expect(true).to eq(false)
+      end
+    end
+
+    describe 'when disable_threshold' do
+      let(:threshold_auto_accept_comp) {
+        FactoryBot.create(:competition, :auto_accept, :registration_open, auto_accept_disable_threshold: 9)
+      }
+
+      it 'accepts paid-pending registrations' do
+        expect(true).to eq(false)
+      end
+
+      it 'accepts waitlisted registrations' do
+        expect(true).to eq(false)
+      end
+
+      it 'accepts a combination of registrations' do
+        expect(true).to eq(false)
+      end
+    end
+
+    describe 'no limit' do
+      let(:auto_accept_comp) { FactoryBot.create(:competition, :auto_accept, :registration_open) }
+
+      it 'accepts paid-pending registrations' do
+        expect(true).to eq(false)
+      end
+
+      it 'accepts waitlisted registrations' do
+        expect(true).to eq(false)
+      end
+
+      it 'accepts a combination of registrations' do
+        expect(true).to eq(false)
+      end
+
+      it 'leaves registrations in other statuses untouched' do
+        expect(true).to eq(false)
+      end
+    end
+
+    it 'accepts in the correct order even if one reg has multiple registration payments' do
+      expect(true).to eq(false)
     end
   end
 

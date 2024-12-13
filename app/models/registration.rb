@@ -439,6 +439,16 @@ class Registration < ApplicationRecord
     super(DEFAULT_SERIALIZE_OPTIONS.merge(options || {}))
   end
 
+  def self.bulk_auto_accept(competition)
+    sorted_pending_registrations = competition
+      .registrations
+      .competing_status_pending
+      .with_payments
+      .sort_by { |registration| registration.registration_payments.first.updated_at }
+
+    sorted_pending_registrations.each { |r| r.auto_accept }
+  end
+
   def auto_accept
     return log_error('Auto-accept is not enabled for this competition.') unless competition.auto_accept_registrations
     return log_error('Can only auto-accept pending registrations or first position on waiting list') unless
