@@ -345,13 +345,16 @@ export default function GeneralInfoTab({
                           showLinksToRegisterPage
                         />
                       </div>
-                      <Button onClick={() => setShowRegistrationRequirements(false)}>
-                        {I18n.t('competitions.competition_info.hide_requirements')}
-                      </Button>
+                      { competition['is_probably_over?']
+                        && (
+                        <Button onClick={() => setShowRegistrationRequirements(false)}>
+                          {I18n.t('competitions.competition_info.hide_requirements')}
+                        </Button>
+                        )}
                     </>
                   ) : (
                     <Button onClick={() => setShowRegistrationRequirements(true)}>
-                      {I18n.t('competitions.competition_info.click_to_display_requirements_html')}
+                      {I18n.t('competitions.competition_info.click_to_display_requirements_html', { link_here: I18n.t('common.here') })}
                     </Button>
                   )}
                 </div>
