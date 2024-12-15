@@ -6,9 +6,9 @@ RSpec.describe DelegateReportsController do
   let(:delegate) { FactoryBot.create :delegate }
   let(:trainee_delegate) { FactoryBot.create :trainee_delegate }
   let(:comp) { FactoryBot.create(:competition, delegates: [delegate, trainee_delegate], starts: 2.days.ago) }
-  let!(:delegate_report1) { FactoryBot.create :delegate_report, competition: comp, schedule_url: "http://example.com" }
+  let!(:delegate_report1) { FactoryBot.create :delegate_report, :with_images, competition: comp, schedule_url: "http://example.com" }
   let(:pre_delegate_reports_form_comp) { FactoryBot.create(:competition, delegates: [delegate], starts: Date.new(2015, 1, 1)) }
-  let!(:delegate_report2) { FactoryBot.create :delegate_report, competition: pre_delegate_reports_form_comp, schedule_url: "http://example.com" }
+  let!(:delegate_report2) { FactoryBot.create :delegate_report, :with_images, competition: pre_delegate_reports_form_comp, schedule_url: "http://example.com" }
   let!(:wrc_members) { FactoryBot.create_list :user, 3, :wrc_member }
 
   context "not logged in" do
@@ -85,7 +85,8 @@ RSpec.describe DelegateReportsController do
       post :update, params: { competition_id: comp.id, delegate_report: { remarks: "My newer remarks", posted: true } }
 
       expect(response).to redirect_to(delegate_report_path(comp))
-      assert_enqueued_jobs 3
+      assert_enqueued_jobs 2, queue: :mailers
+      assert_enqueued_jobs 1, only: SendWrcReportNotification
       expect(flash[:info]).to eq "Your report has been posted and emailed!"
       comp.reload
       expect(comp.delegate_report.remarks).to eq "My newer remarks"
@@ -114,7 +115,8 @@ RSpec.describe DelegateReportsController do
       post :update, params: { competition_id: pre_delegate_reports_form_comp.id, delegate_report: { remarks: "My newer remarks", posted: true } }
       expect(response).to redirect_to(delegate_report_path(pre_delegate_reports_form_comp))
       expect(flash[:info]).to eq "Your report has been posted but not emailed because it is for a pre June 2016 competition."
-      assert_enqueued_jobs 0
+      assert_enqueued_jobs 0, queue: :mailers
+      assert_enqueued_jobs 0, only: SendWrcReportNotification
     end
   end
 
