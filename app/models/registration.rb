@@ -338,7 +338,7 @@ class Registration < ApplicationRecord
   # TODO: V3-REG cleanup. All these Validations can be used instead of the registration_checker checks
   validate :cannot_be_undeleted_when_banned, if: :competing_status_changed?
   private def cannot_be_undeleted_when_banned
-    if user.banned? && might_attend?
+    if user.banned_at_date?(competition.start_date) && might_attend?
       errors.add(:user_id, I18n.t('registrations.errors.undelete_banned'))
     end
   end
