@@ -2536,10 +2536,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@stripe/stripe-js@npm:^5.2.0":
-  version: 5.2.0
-  resolution: "@stripe/stripe-js@npm:5.2.0"
-  checksum: 10c0/1afcf68a3a37f0337f26c3180dae4ea12f957c386a70395ace3d453d7687258d1abed0e1131e9875665ad8c796646e0bbd7af390d683ad60516f2a128ff9c484
+"@stripe/stripe-js@npm:^5.3.0":
+  version: 5.3.0
+  resolution: "@stripe/stripe-js@npm:5.3.0"
+  checksum: 10c0/75bae9f24e658108f9020459a4ef0c18f96b108a8f569e5d952becbf2c84a0ae9f9a9f66034d5a2e4054f23e83b4ea35309734be6335d2a232aaf0fc50cd7947
   languageName: node
   linkType: hard
 
@@ -10104,7 +10104,7 @@ __metadata:
     "@pmmmwh/react-refresh-webpack-plugin": "npm:^0.5.15"
     "@rails/ujs": "npm:^7.1.500"
     "@stripe/react-stripe-js": "npm:^3.1.1"
-    "@stripe/stripe-js": "npm:^5.2.0"
+    "@stripe/stripe-js": "npm:^5.3.0"
     "@tanstack/react-query": "npm:^5.62.3"
     "@wca/helpers": "npm:^1.1.5"
     autonumeric: "npm:^4.10.7"
