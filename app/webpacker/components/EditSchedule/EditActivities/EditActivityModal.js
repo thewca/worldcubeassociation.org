@@ -17,6 +17,8 @@ const commonActivityCodes = {
   'other-lunch': 'Lunch',
   'other-dinner': 'Dinner',
   'other-awards': 'Awards',
+  'other-setup': 'Setup',
+  'other-teardown': 'Teardown',
   'other-misc': 'Other',
 };
 
