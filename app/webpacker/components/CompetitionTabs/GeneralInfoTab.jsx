@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 
 import {
   Accordion,
-  Button, Grid, GridColumn, GridRow, Header, Icon, List,
+  Button, Grid, GridColumn, GridRow, Header, Icon, List, Table,
 } from 'semantic-ui-react';
 import { DateTime } from 'luxon';
+import _ from 'lodash';
 import I18n from '../../lib/i18n';
 import { countries } from '../../lib/wca-data.js.erb';
 import { competitionUrl, personUrl } from '../../lib/requests/routes.js.erb';
@@ -13,6 +14,7 @@ import Markdown from '../Markdown';
 import RegistrationRequirements from './Requirements';
 import I18nHTMLTranslate from '../I18nHTMLTranslate';
 import { getFullDateTimeString } from '../../lib/utils/dates';
+import WinnerTable from './WinnerTable';
 
 const linkToGoogleMapsPlace = (latitude, longitude) => `https://www.google.com/maps/place/${latitude},${longitude}`;
 
@@ -410,6 +412,14 @@ export default function GeneralInfoTab({
           </Grid>
         </GridColumn>
       </GridRow>
+      { competition['results_posted?']
+        && (
+        <Grid.Row>
+          <GridColumn width={16}>
+            <WinnerTable results={competition.winning_results} competition={competition} />
+          </GridColumn>
+        </Grid.Row>
+        )}
     </Grid>
   );
 }
