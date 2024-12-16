@@ -11,36 +11,33 @@ export default function Processing({ competitionInfo, user, onProcessingComplete
 
   const { data } = useQuery({
     queryKey: ['registration-status-polling', user.id, competitionInfo.id],
-    queryFn: async () => pollRegistrations(user.id, competitionInfo.id),
+    queryFn: async () => pollRegistrations(user.id, competitionInfo),
     refetchInterval: REFETCH_INTERVAL,
     onSuccess: () => {
       setPollCounter(pollCounter + 1);
     },
   });
   useEffect(() => {
-    if (
-      data
-      && (data.status.payment === 'initialized'
-        || data.status.competing === 'pending')
-    ) {
+    const processingComplete = data && !data.processing;
+    if (processingComplete) {
       onProcessingComplete();
     }
   }, [data, onProcessingComplete]);
   return (
-    <Modal open={data?.status?.competing !== 'pending'} dimmer="blurring">
+    <Modal open={data?.status?.competing !== 'pending' || !data?.processing} dimmer="blurring">
       <Modal.Header>
         {I18n.t('competitions.registration_v2.register.processing')}
       </Modal.Header>
       <Modal.Content>
-        {pollCounter > 3 && (
+        {pollCounter > 1 && (
           <Message warning>
             {I18n.t('competitions.registration_v2.register.processing_longer')}
           </Message>
         )}
-        {data && data.queueCount > 500 && (
+        {data && data.queue_count > 0 && (
           <Message warning>
             {I18n.t('competitions.registration_v2.register.processing_queue', {
-              queueCount: data.queueCount,
+              queueCount: data.queue_count,
             })}
           </Message>
         )}

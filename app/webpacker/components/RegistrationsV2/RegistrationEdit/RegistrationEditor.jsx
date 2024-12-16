@@ -8,16 +8,12 @@ import React, {
 import {
   Button,
   Form,
-  Header,
+  Header, List,
   Message,
   Segment,
 } from 'semantic-ui-react';
 import { getSingleRegistration } from '../api/registration/get/get_registrations';
 import updateRegistration from '../api/registration/patch/update_registration';
-import getUsersInfo from '../api/user/post/getUserInfo';
-import {
-  hasPassed,
-} from '../../../lib/utils/dates';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { setMessage } from '../Register/RegistrationMessage';
 import Loading from '../../Requests/Loading';
@@ -25,8 +21,11 @@ import { EventSelector } from '../../CompetitionsOverview/CompetitionsFilters';
 import Refunds from './Refunds';
 import { editPersonUrl } from '../../../lib/requests/routes.js.erb';
 import { useConfirm } from '../../../lib/providers/ConfirmProvider';
-import i18n from '../../../lib/i18n';
+import I18n from '../../../lib/i18n';
 import RegistrationHistory from './RegistrationHistory';
+import { hasPassed } from '../../../lib/utils/dates';
+import getUsersInfo from '../api/user/post/getUserInfo';
+import I18nHTMLTranslate from '../../I18nHTMLTranslate';
 
 export default function RegistrationEditor({ competitor, competitionInfo }) {
   const dispatch = useDispatch();
@@ -42,7 +41,7 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
 
   const { isLoading: isRegistrationLoading, data: serverRegistration, refetch } = useQuery({
     queryKey: ['registration-admin', competitionInfo.id, competitor.id],
-    queryFn: () => getSingleRegistration(competitor.id, competitionInfo.id),
+    queryFn: () => getSingleRegistration(competitor.id, competitionInfo),
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
     staleTime: Infinity,
@@ -51,18 +50,16 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
 
   const { isLoading, data: competitorsInfo } = useQuery({
     queryKey: ['history-user', serverRegistration?.history],
-    queryFn: () => getUsersInfo(_.uniq(serverRegistration.history.flatMap((e) => (e.actor_type === 'user' ? e.actor_id : [])))),
+    queryFn: () => getUsersInfo(_.uniq(serverRegistration.history.flatMap((e) => (e.actor_type === 'user' ? Number(e.actor_id) : [])))),
     enabled: Boolean(serverRegistration),
   });
 
   const { mutate: updateRegistrationMutation, isPending: isUpdating } = useMutation({
     mutationFn: updateRegistration,
     onError: (data) => {
-      const { errorCode } = data;
+      const { error } = data.json;
       dispatch(setMessage(
-        errorCode
-          ? `competitions.registration_v2.errors.${errorCode}`
-          : 'registrations.flash.failed',
+        `competitions.registration_v2.errors.${error}`,
         'negative',
       ));
     },
@@ -119,8 +116,10 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
     if (!hasChanges) {
       dispatch(setMessage('competitions.registration_v2.update.no_changes', 'basic'));
     } else if (!commentIsValid) {
+      // i18n-tasks-use t('registrations.errors.cannot_register_without_comment')
       dispatch(setMessage('registrations.errors.cannot_register_without_comment', 'negative'));
     } else if (!eventsAreValid) {
+      // i18n-tasks-use t('registrations.errors.must_register')
       dispatch(setMessage(
         maxEvents === Infinity
           ? 'registrations.errors.must_register'
@@ -151,7 +150,7 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
         body.guests = guests;
       }
       confirm({
-        content: i18n.t('competitions.registration_v2.update.update_confirm'),
+        content: I18n.t('competitions.registration_v2.update.update_confirm'),
       }).then(() => {
         updateRegistrationMutation(body);
       }).catch(() => {});
@@ -176,9 +175,6 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
     status,
     guests]);
 
-  const registrationEditDeadlinePassed = Boolean(competitionInfo.event_change_deadline_date)
-    && hasPassed(competitionInfo.event_change_deadline_date);
-
   const handleEventSelection = ({ type, eventId }) => {
     if (type === 'select_all_events') {
       setSelectedEvents(competitionInfo.event_ids);
@@ -194,6 +190,9 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
     }
   };
 
+  const registrationEditDeadlinePassed = Boolean(competitionInfo.event_change_deadline_date)
+    && hasPassed(competitionInfo.event_change_deadline_date);
+
   if (isLoading || isRegistrationLoading) {
     return <Loading />;
   }
@@ -202,13 +201,21 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
     <Segment padded attached loading={isUpdating}>
       <Form onSubmit={handleRegisterClick}>
         {!competitor.wca_id && (
-        <Message>
-          This person registered with an account. You can edit their
-          personal information
-          {' '}
-          <a href={editPersonUrl(competitor.id)}>here</a>
-          .
-        </Message>
+          <Message>
+            <I18nHTMLTranslate
+              // i18n-tasks-use t('registrations.registered_with_account_html')
+              i18nKey="registrations.registered_with_account_html"
+              options={{
+                here: `<a href=${editPersonUrl(competitor.id)}>here</a>`,
+              }}
+            />
+          </Message>
+        )}
+        {registrationEditDeadlinePassed && (
+          <Message>
+            The Registration Edit Deadline has passed!
+            <strong>Changes should only be made in extraordinary circumstances</strong>
+          </Message>
         )}
         <Header>{competitor.name}</Header>
         <Form.Field required error={selectedEvents.length === 0}>
@@ -227,7 +234,6 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
           id="competitor-comment"
           maxLength={240}
           value={comment}
-          disabled={registrationEditDeadlinePassed}
           onChange={(event, data) => setComment(data.value)}
         />
 
@@ -236,78 +242,84 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
           id="admin-comment"
           maxLength={240}
           value={adminComment}
-          disabled={registrationEditDeadlinePassed}
           onChange={(event, data) => setAdminComment(data.value)}
         />
 
         <Form.Group inline>
           <label>Status</label>
-          <Form.Checkbox
-            radio
+          <Form.Radio
+            id="radio-status-pending"
             label="Pending"
-            name="checkboxRadioGroup"
+            name="regStatusRadioGroup"
             value="pending"
             checked={status === 'pending'}
-            disabled={registrationEditDeadlinePassed}
             onChange={(event, data) => setStatus(data.value)}
           />
-          <Form.Checkbox
-            radio
+          <Form.Radio
+            id="radio-status-accepted"
             label="Accepted"
-            name="checkboxRadioGroup"
+            name="regStatusRadioGroup"
             value="accepted"
             checked={status === 'accepted'}
-            disabled={registrationEditDeadlinePassed}
             onChange={(event, data) => setStatus(data.value)}
           />
-          {/* <Form.Checkbox */}
-          {/*  radio */}
-          {/*  label="Waiting List" */}
-          {/*  name="checkboxRadioGroup" */}
-          {/*  value="waiting_list" */}
-          {/*  checked={status === 'waiting_list'} */}
-          {/*  disabled={registrationEditDeadlinePassed} */}
-          {/*  onChange={(event, data) => setStatus(data.value)} */}
-          {/* /> */}
-          <Form.Checkbox
-            radio
+          <Form.Radio
+            id="radio-status-waiting-list"
+            label="Waiting List"
+            name="regStatusRadioGroup"
+            value="waiting_list"
+            checked={status === 'waiting_list'}
+            onChange={(event, data) => setStatus(data.value)}
+          />
+          <Form.Radio
+            id="radio-status-cancelled"
             label="Cancelled"
-            name="checkboxRadioGroup"
+            name="regStatusRadioGroup"
             value="cancelled"
-            disabled={registrationEditDeadlinePassed}
             checked={status === 'cancelled'}
+            onChange={(event, data) => setStatus(data.value)}
+          />
+          <Form.Radio
+            id="radio-status-rejected"
+            label="Rejected"
+            name="regStatusRadioGroup"
+            value="rejected"
+            disabled={registrationEditDeadlinePassed}
+            checked={status === 'rejected'}
             onChange={(event, data) => setStatus(data.value)}
           />
         </Form.Group>
         <label>Guests</label>
         <Form.Input
-          disabled={registrationEditDeadlinePassed}
+          id="guest-dropdown"
           type="number"
           min={0}
           max={99}
           value={guests}
           onChange={(event, data) => setGuests(data.value)}
         />
-
-        {registrationEditDeadlinePassed ? (
-          <Message negative>Registration edit deadline has passed.</Message>
-        ) : (
-          <Button
-            color="blue"
-            disabled={isUpdating || !hasChanges}
-          >
-            Update Registration
-          </Button>
-        )}
+        <Button
+          color="blue"
+          disabled={isUpdating || !hasChanges}
+        >
+          Update Registration
+        </Button>
       </Form>
+
+      {/* TODO: Add information about Series Registration here */}
+      {/* i18n-tasks-use t('registrations.list.series_registrations') */}
+
       {competitionInfo['using_payment_integrations?'] && (
         <>
-          <Header>
-            Payment status:
-            {' '}
-            {registration.payment.payment_status}
-          </Header>
-          {(registration.payment.payment_status === 'succeeded' || registration.payment.payment_status === 'refund') && (
+          <List>
+            <List.Header>Payment statuses:</List.Header>
+            {registration.payment.payment_statuses.map((paymentStatus) => (
+              <List.Item key={paymentStatus}>
+                {paymentStatus}
+              </List.Item>
+            ))}
+          </List>
+          {(registration.payment.payment_statuses.includes('succeeded') || registration.payment.payment_statuses.includes('refund')) && (
             <Refunds
               competitionId={competitionInfo.id}
               userId={competitor.id}

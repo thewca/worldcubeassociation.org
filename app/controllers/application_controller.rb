@@ -8,7 +8,7 @@ class ApplicationController < ActionController::Base
 
   protect_from_forgery with: :exception
 
-  prepend_before_action :set_locale
+  prepend_before_action :set_locale, unless: :is_api_request?
   before_action :store_user_location!, if: :storable_location?
   before_action :add_new_relic_headers
   protected def add_new_relic_headers

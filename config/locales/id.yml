@@ -1850,7 +1850,7 @@ id:
         msg: >-
           Anda tidak dapat mengubah nama, tanggal lahir, jenis kelamin, atau
           wilayah perwakilan Anda. Alasan: %{reason}. Kontak <a
-          href='mailto:results@worldcubeassociation.org' target='_blank'>Tim
+          href='%{wrt_contact_path}' target='_blank'>Tim
           Hasil WCA</a> atau <a href='%{delegate_url}'>Delegasi</a> Anda jika
           ingin mengubahnya.
         reason:
@@ -1975,17 +1975,17 @@ id:
       #original_hash: 51fa5a4
       wca_id_no_gender_html: >-
         Kami tidak memiliki catatan jenis kelamin untuk ID WCA ini. Kirim email
-        ke <a href='mailto:results@worldcubeassociation.org' target='_blank'>Tim
+        ke <a href='%{wrt_contact_path}' target='_blank'>Tim
         Hasil WCA</a> untuk memperbaikinya.
       #original_hash: 87ee245
       wca_id_no_citizenship_html: >-
         Kami tidak memiliki catatan kewarganegaraan untuk ID WCA ini. Kirim
-        email ke <a href='mailto:results@worldcubeassociation.org'
+        email ke <a href='%{wrt_contact_path}'
         target='_blank'>Tim Hasil WCA</a> untuk memperbaikinya.
       #original_hash: c3839bc
       wca_id_no_name_html: >-
         Kami tidak memiliki catatan nama untuk ID WCA ini. Kirim email ke <a
-        href='mailto:results@worldcubeassociation.org' target='_blank'>Tim Hasil
+        href='%{wrt_contact_path}' target='_blank'>Tim Hasil
         WCA</a> untuk memperbaikinya.
       #original_hash: d02c03b
       avatar_requires_wca_id: dibutuhkan penghubungan ID WCA
@@ -3589,10 +3589,6 @@ id:
         '-2003': Anda tidak memiliki izin untuk menyelesaikan tindakan ini
         #original_hash: cb4093a
         '-3000': Pendaftaran tidak ditemukan
-        #original_hash: 0df821f
-        '-3001': Pembayaran WCA tidak diaktifkan untuk kompetisi ini
-        #original_hash: 092da51
-        '-3002': Anda harus menyelesaikan pendaftaran Anda sebelum Anda dapat membayar
         #original_hash: bc53fb6
         '-4000': Permintaan ini berisi data yang tidak valid
         #original_hash: 35fddf4
@@ -3611,6 +3607,10 @@ id:
         '-4007': Status pendaftaran yang dibuat tidak valid
         #original_hash: 020234c
         '-4008': Pendaftaran telah ditutup
+        #original_hash: 0df821f
+        '-6001': Pembayaran WCA tidak diaktifkan untuk kompetisi ini
+        #original_hash: 092da51
+        '-6002': Anda harus menyelesaikan pendaftaran Anda sebelum Anda dapat membayar
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-

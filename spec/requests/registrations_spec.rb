@@ -349,7 +349,7 @@ RSpec.describe "registrations" do
             expect {
               post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
             }.to not_change { competition.registrations.count }
-              .and not_change { registration.reload.accepted_at }
+              .and not_change { registration.reload.competing_status }
           end
         end
 
@@ -364,14 +364,14 @@ RSpec.describe "registrations" do
             expect {
               post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
             }.to not_change { competition.registrations.count }
-              .and not_change { registration.reload.accepted_at }
+              .and not_change { registration.reload.competing_status }
               .and change { registration.reload.events.map(&:id) }.from(%w(333)).to(%w(333 444))
           end
         end
 
         context "CSV registrant already in the database, but deleted" do
           it "acceptes the registration again" do
-            registration = FactoryBot.create(:registration, :deleted, competition: competition)
+            registration = FactoryBot.create(:registration, :cancelled, competition: competition)
             user = registration.user
             file = csv_file [
               ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
@@ -380,22 +380,22 @@ RSpec.describe "registrations" do
             expect {
               post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
             }.to not_change { competition.registrations.count }
-              .and change { registration.reload.accepted_at }
+              .and change { registration.reload.competing_status }
             expect(registration.reload).to be_accepted
           end
         end
 
         context "registrant deleted in the database, but not in the CSV file" do
           it "leaves the registration unchanged" do
-            registration = FactoryBot.create(:registration, :deleted, competition: competition)
+            registration = FactoryBot.create(:registration, :cancelled, competition: competition)
             file = csv_file [
               ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
             ]
             expect {
               post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
             }.to not_change { competition.registrations.count }
-              .and not_change { registration.reload.deleted_at }
-            expect(registration.reload).to be_deleted
+              .and not_change { registration.reload.competing_status }
+            expect(registration.reload).to be_cancelled
           end
         end
 
@@ -410,7 +410,7 @@ RSpec.describe "registrations" do
             }.to not_change { User.count }
               .and not_change { competition.registrations.count }
               .and change { competition.registrations.accepted.count }.by(-1)
-            expect(registration.reload).to be_deleted
+            expect(registration.reload).to be_cancelled
           end
         end
 

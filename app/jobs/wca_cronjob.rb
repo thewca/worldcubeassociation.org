@@ -70,6 +70,10 @@ class WcaCronjob < ApplicationJob
       if run_successful
         statistics.increment :times_completed
 
+        # Record that this run was successful. In the event of a crash, we record that the CJ started and then crashed
+        #   but there are use cases where we want to know when it started AND completed successfully.
+        statistics.successful_run_start = statistics.run_start
+
         runtime = (statistics.run_end - statistics.run_start).in_milliseconds
 
         current_average = statistics.average_runtime || 0
@@ -98,6 +102,10 @@ class WcaCronjob < ApplicationJob
 
     def end_date
       self.cronjob_statistics.run_end
+    end
+
+    def successful_start_date
+      self.cronjob_statistics.successful_run_start
     end
   end
 end

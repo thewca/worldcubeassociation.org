@@ -9,7 +9,7 @@ class Person < ApplicationRecord
   has_many :ranksAverage, primary_key: "wca_id", foreign_key: "personId", class_name: "RanksAverage"
   has_many :ranksSingle, primary_key: "wca_id", foreign_key: "personId", class_name: "RanksSingle"
 
-  enum gender: (User::ALLOWABLE_GENDERS.to_h { |g| [g, g.to_s] })
+  enum :gender, (User::ALLOWABLE_GENDERS.index_with(&:to_s))
 
   alias_attribute :ref_id, :wca_id
 
@@ -267,6 +267,10 @@ class Person < ApplicationRecord
 
   def url
     Rails.application.routes.url_helpers.person_url(wca_id, host: EnvConfig.ROOT_URL)
+  end
+
+  def self.fields_edit_requestable
+    [:name, :country_iso2, :gender, :dob].freeze
   end
 
   DEFAULT_SERIALIZE_OPTIONS = {

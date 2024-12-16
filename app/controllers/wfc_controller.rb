@@ -19,10 +19,10 @@ class WfcController < ApplicationController
     response.headers["Content-Disposition"] = "attachment; filename=\"wfc-competitions-export-#{from}-#{to}.tsv\""
     @competitions = Competition
                     .select(select_attributes)
-                    .includes(:delegates, :championships, :organizers, :events)
+                    .includes(:delegates, :championships, :organizers, :events, organizers: [:wfc_dues_redirect])
                     .left_joins(:competitors)
-                    .group("Competitions.id")
-                    .where("results_posted_at >= ? and results_posted_at <= ?", from, to)
+                    .group(:id)
+                    .where(results_posted_at: from..to)
                     .order(:results_posted_at, :name)
   end
 end

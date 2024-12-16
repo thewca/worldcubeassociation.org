@@ -107,7 +107,7 @@ module DatabaseDumper
           competition_series_id
           use_wca_live_for_scoretaking
           allow_registration_without_qualification
-          uses_v2_registrations
+          registration_version
           forbid_newcomers
           forbid_newcomers_reason
         ),
@@ -459,11 +459,13 @@ module DatabaseDumper
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
+          version
           competition_id
           created_at
           updated_at
         ),
         db_default: %w(
+          summary
           equipment
           venue
           organization
@@ -553,6 +555,7 @@ module DatabaseDumper
         },
       ),
     }.freeze,
+    "regional_records_lookup" => :skip_all_rows,
     "registration_competition_events" => {
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
@@ -579,6 +582,7 @@ module DatabaseDumper
           user_id
           roles
           is_competing
+          competing_status
         ),
         db_default: %w(ip),
         fake_values: {
@@ -588,6 +592,20 @@ module DatabaseDumper
       ),
     }.freeze,
     "microservice_registrations" => :skip_all_rows,
+    "registration_history_changes" => :skip_all_rows,
+    "registration_history_entries" => :skip_all_rows,
+    "waiting_lists" => {
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w(
+          id
+          holder_type
+          holder_id
+          entries
+          created_at
+          updated_at
+        ),
+      ),
+    }.freeze,
     "sanity_checks" => :skip_all_rows,
     "sanity_check_categories" => :skip_all_rows,
     "sanity_check_exclusions" => :skip_all_rows,
@@ -680,7 +698,7 @@ module DatabaseDumper
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
-          avatar
+          current_avatar_id
           competition_notifications_enabled
           confirmed_at
           country_iso2
@@ -692,18 +710,12 @@ module DatabaseDumper
           name
           registration_notifications_enabled
           results_notifications_enabled
-          saved_avatar_crop_h
-          saved_avatar_crop_w
-          saved_avatar_crop_x
-          saved_avatar_crop_y
-          saved_pending_avatar_crop_h
-          saved_pending_avatar_crop_w
-          saved_pending_avatar_crop_x
-          saved_pending_avatar_crop_y
           unconfirmed_wca_id
           updated_at
           wca_id
           receive_delegate_reports
+          delegate_reports_region_id
+          delegate_reports_region_type
           dummy_account
         ),
         db_default: %w(
@@ -716,7 +728,7 @@ module DatabaseDumper
           last_sign_in_ip
           otp_backup_codes
           otp_required_for_login
-          pending_avatar
+          pending_avatar_id
           preferred_locale
           remember_created_at
           reset_password_sent_at
@@ -732,6 +744,31 @@ module DatabaseDumper
         },
       ),
     }.freeze,
+    "user_avatars" => {
+      where_clause: "WHERE status = 'approved'",
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w(
+          id
+          user_id
+          filename
+          status
+          thumbnail_crop_x
+          thumbnail_crop_y
+          thumbnail_crop_w
+          thumbnail_crop_h
+          backend
+          approved_at
+          revoked_at
+          created_at
+          updated_at
+        ),
+        db_default: %w(
+          approved_by
+          revoked_by
+          revocation_reason
+        ),
+      ),
+    },
     "locations" => :skip_all_rows,
     "incidents" => {
       column_sanitizers: actions_to_column_sanitizers(
@@ -882,6 +919,11 @@ module DatabaseDumper
     "jwt_denylist" => :skip_all_rows,
     "wfc_xero_users" => :skip_all_rows,
     "wfc_dues_redirects" => :skip_all_rows,
+    "ticket_logs" => :skip_all_rows,
+    "ticket_stakeholders" => :skip_all_rows,
+    "tickets" => :skip_all_rows,
+    "tickets_edit_person" => :skip_all_rows,
+    "tickets_edit_person_fields" => :skip_all_rows,
   }.freeze
 
   RESULTS_SANITIZERS = {

@@ -1,11 +1,11 @@
-import { wcaRegistrationUrl } from '../../../../../lib/requests/routes.js.erb';
 import fetchWithJWTToken from '../../../../../lib/requests/fetchWithJWTToken';
+import { submitRegistrationUrl } from '../../../../../lib/requests/routes.js.erb';
 
-const submitRegistrationUrl = `${wcaRegistrationUrl}/api/v1/register`;
 export default async function submitEventRegistration(
   body,
 ) {
-  const { data } = await fetchWithJWTToken(submitRegistrationUrl, {
+  const route = submitRegistrationUrl;
+  const { data } = await fetchWithJWTToken(route, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

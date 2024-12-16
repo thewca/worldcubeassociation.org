@@ -197,9 +197,9 @@ after "development:users", "development:user_roles" do
     # Create registrations for some competitions taking place far in the future
     next if i < 480
     users.each_with_index do |user, j|
-      accepted_at = j % 4 == 0 ? Time.now : nil
+      competing_status = j % 4 == 0 ? Registrations::Helper::STATUS_ACCEPTED : Registrations::Helper::STATUS_PENDING
       registration_competition_events = competition.competition_events.sample(rand(1..competition.competition_events.count))
-      FactoryBot.create(:registration, user: user, competition: competition, accepted_at: accepted_at, competition_events: registration_competition_events)
+      FactoryBot.create(:registration, user: user, competition: competition, competing_status: competing_status, competition_events: registration_competition_events)
     end
   end
 end

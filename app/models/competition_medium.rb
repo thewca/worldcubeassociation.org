@@ -8,10 +8,10 @@ class CompetitionMedium < ApplicationRecord
 
   belongs_to :competition, foreign_key: "competitionId"
 
-  enum status: { accepted: "accepted", pending: "pending" }
+  enum :status, { accepted: "accepted", pending: "pending" }
   validates :status, presence: true
 
-  enum type: { report: "report", article: "article", multimedia: "multimedia" }
+  enum :type, { report: "report", article: "article", multimedia: "multimedia" }
   validates :type, presence: true
   # TODO: This is a port of the useful *_i18n method from
   # https://github.com/zmbacker/enum_help.

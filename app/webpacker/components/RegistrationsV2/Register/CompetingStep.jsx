@@ -16,27 +16,35 @@ import {
 import updateRegistration from '../api/registration/patch/update_registration';
 import submitEventRegistration from '../api/registration/post/submit_registration';
 import Processing from './Processing';
-import { userPreferencesRoute } from '../../../lib/requests/routes.js.erb';
+import { contactCompetitionUrl, userPreferencesRoute } from '../../../lib/requests/routes.js.erb';
 import { EventSelector } from '../../CompetitionsOverview/CompetitionsFilters';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { setMessage } from './RegistrationMessage';
-import i18n from '../../../lib/i18n';
+import I18n from '../../../lib/i18n';
 import I18nHTMLTranslate from '../../I18nHTMLTranslate';
 import { useConfirm } from '../../../lib/providers/ConfirmProvider';
+import { events } from '../../../lib/wca-data.js.erb';
+import { eventsNotQualifiedFor, isQualifiedForEvent } from '../../../lib/helpers/qualifications';
+import { eventQualificationToString } from '../../../lib/utils/wcif';
+import { hasNotPassed } from '../../../lib/utils/dates';
 
 const maxCommentLength = 240;
 
 const potentialWarnings = (competitionInfo) => {
   const warnings = [];
   // Organizer Pre Registration
-  if (!competitionInfo['registration_currently_open?']) {
-    warnings.push(i18n.t('competitions.registration_v2.register.early_registration'));
+  if (hasNotPassed(competitionInfo.registration_open)) {
+    warnings.push(I18n.t('competitions.registration_v2.register.early_registration'));
   }
   // Favourites Competition
   if (competitionInfo.events_per_registration_limit) {
-    warnings.push(i18n.t('competitions.registration_v2.register.event_limit', {
+    warnings.push(I18n.t('competitions.registration_v2.register.event_limit', {
       max_events: competitionInfo.events_per_registration_limit,
     }));
+  }
+  // Series Competition
+  if (competitionInfo['part_of_competition_series?']) {
+    warnings.push(I18n.t('competitions.competition_info.part_of_a_series'));
   }
   return warnings;
 };
@@ -48,17 +56,25 @@ export default function CompetingStep({
   preferredEvents,
   registration,
   refetchRegistration,
+  qualifications,
 }) {
   const maxEvents = competitionInfo.events_per_registration_limit ?? Infinity;
   const isRegistered = Boolean(registration);
-  const hasPaid = registration?.payment.payment_status === 'succeeded';
+  const hasPaid = registration?.payment?.has_paid;
   const dispatch = useDispatch();
 
   const confirm = useConfirm();
 
   const [comment, setComment] = useState('');
   const initialSelectedEvents = competitionInfo.events_per_registration_limit ? [] : preferredEvents
-    .filter((event) => competitionInfo.event_ids.includes(event));
+    .filter((event) => {
+      const preferredEventHeld = competitionInfo.event_ids.includes(event);
+      if (competitionInfo['uses_qualification?']) {
+        return preferredEventHeld
+          && isQualifiedForEvent(event, qualifications.wcif, qualifications.personalRecords);
+      }
+      return preferredEventHeld;
+    });
   const [selectedEvents, setSelectedEvents] = useState(
     initialSelectedEvents,
   );
@@ -82,9 +98,7 @@ export default function CompetingStep({
     onError: (data) => {
       const { error } = data.json;
       dispatch(setMessage(
-        error
-          ? `competitions.registration_v2.errors.${error}`
-          : 'registrations.flash.failed',
+        `competitions.registration_v2.errors.${error}`,
         'negative',
       ));
     },
@@ -98,9 +112,11 @@ export default function CompetingStep({
       );
       // Going from cancelled -> pending
       if (registration.competing.registration_status === 'cancelled') {
+        // i18n-tasks-use t('registrations.flash.registered')
         dispatch(setMessage('registrations.flash.registered', 'positive'));
         // Not changing status
       } else {
+        // i18n-tasks-use t('registrations.flash.updated')
         dispatch(setMessage('registrations.flash.updated', 'positive'));
       }
       nextStep();
@@ -112,9 +128,7 @@ export default function CompetingStep({
     onError: (data) => {
       const { error } = data.json;
       dispatch(setMessage(
-        error
-          ? `competitions.registration_v2.errors.${error}`
-          : 'registrations.flash.failed',
+        `competitions.registration_v2.errors.${error}`,
         'negative',
       ));
     },
@@ -141,6 +155,7 @@ export default function CompetingStep({
       if (options.checkForChanges && !hasChanges) {
         dispatch(setMessage('competitions.registration_v2.update.no_changes', 'basic'));
       } else if (!eventsAreValid) {
+        // i18n-tasks-use t('registrations.errors.exceeds_event_limit')
         dispatch(setMessage(
           maxEvents === Infinity
             ? 'registrations.errors.must_register'
@@ -171,18 +186,23 @@ export default function CompetingStep({
 
   const actionUpdateRegistration = () => {
     confirm({
-      content: i18n.t('competitions.registration_v2.update.update_confirm'),
+      content: I18n.t(competitionInfo.allow_registration_edits ? 'competitions.registration_v2.update.update_confirm' : 'competitions.registration_v2.update.update_confirm_contact'),
     }).then(() => {
-      dispatch(setMessage('competitions.registration_v2.update.being_updated', 'basic'));
-      updateRegistrationMutation({
-        user_id: registration.user_id,
-        competition_id: competitionInfo.id,
-        competing: {
-          comment: hasCommentChanged ? comment : undefined,
-          event_ids: hasEventsChanged ? selectedEvents : undefined,
-        },
-        guests,
-      });
+      if (competitionInfo.allow_registration_edits) {
+        dispatch(setMessage('competitions.registration_v2.update.being_updated', 'basic'));
+        updateRegistrationMutation({
+          user_id: registration.user_id,
+          competition_id: competitionInfo.id,
+          competing: {
+            comment: hasCommentChanged ? comment : undefined,
+            event_ids: hasEventsChanged ? selectedEvents : undefined,
+          },
+          guests,
+        });
+      } else {
+        const updateMessage = `\n${hasCommentChanged ? `Comment: ${comment}\n` : ''}${hasEventsChanged ? `Events: ${selectedEvents.map((eventId) => events.byId[eventId].name).join(', ')}\n` : ''}${hasGuestsChanged ? `Guests: ${guests}\n` : ''}`;
+        window.location = contactCompetitionUrl(competitionInfo.id, encodeURIComponent(I18n.t('competitions.registration_v2.update.update_contact_message', { update_params: updateMessage })));
+      }
     }).catch(() => {
       nextStep();
     });
@@ -203,7 +223,17 @@ export default function CompetingStep({
 
   const handleEventSelection = ({ type, eventId }) => {
     if (type === 'select_all_events') {
-      setSelectedEvents(competitionInfo.event_ids);
+      if (competitionInfo['uses_qualification?']) {
+        setSelectedEvents(
+          competitionInfo.event_ids.filter((e) => isQualifiedForEvent(
+            e,
+            qualifications.wcif,
+            qualifications.personalRecords,
+          )),
+        );
+      } else {
+        setSelectedEvents(competitionInfo.event_ids);
+      }
     } else if (type === 'clear_events') {
       setSelectedEvents([]);
     } else if (type === 'toggle_event') {
@@ -258,7 +288,7 @@ export default function CompetingStep({
       <>
         {hasPaid && (
           <Message success>
-            {i18n.t('registrations.entry_fees_fully_paid', { paid: registration?.payment.payment_amount_human_readable })}
+            {I18n.t('registrations.entry_fees_fully_paid', { paid: registration?.payment.payment_amount_human_readable })}
           </Message>
         )}
 
@@ -274,6 +304,16 @@ export default function CompetingStep({
               selectedEvents={selectedEvents}
               id="event-selection"
               maxEvents={maxEvents}
+              eventsDisabled={eventsNotQualifiedFor(
+                competitionInfo.event_ids,
+                qualifications.wcif,
+                qualifications.personalRecords,
+              )}
+              disabledText={(event) => eventQualificationToString(
+                { id: event },
+                qualifications.wcif[event],
+                { short: true },
+              )}
               // Don't error if the user hasn't interacted with the form yet
               shouldErrorOnEmpty={hasInteracted}
             />
@@ -289,7 +329,17 @@ export default function CompetingStep({
           </Form.Field>
           <Form.Field required={Boolean(competitionInfo.force_comment_in_registration)}>
             <label htmlFor="comment">
-              {i18n.t('competitions.registration_v2.register.comment')}
+              {I18n.t('competitions.registration_v2.register.comment')}
+              {' '}
+              <div style={{ float: 'right', fontSize: '0.8em' }}>
+                <i>
+                  (
+                  {comment.length}
+                  /
+                  {maxCommentLength}
+                  )
+                </i>
+              </div>
             </label>
             <Form.TextArea
               required={Boolean(competitionInfo.force_comment_in_registration)}
@@ -297,28 +347,25 @@ export default function CompetingStep({
               onChange={(event, data) => setComment(data.value)}
               value={comment}
               id="comment"
-              error={competitionInfo.force_comment_in_registration && comment.trim().length === 0 && i18n.t('registrations.errors.cannot_register_without_comment')}
-            />
-            <p>
-              {comment.length}
-              /
-              {maxCommentLength}
-            </p>
-          </Form.Field>
-          <Form.Field>
-            <label>{i18n.t('activerecord.attributes.registration.guests')}</label>
-            <Form.Input
-              id="guest-dropdown"
-              type="number"
-              value={guests}
-              onChange={(event, data) => {
-                setGuests(Number.parseInt(data.value, 10));
-              }}
-              min="0"
-              max={competitionInfo.guests_per_registration_limit ?? 99}
-              error={Number.isInteger(competitionInfo.guests_per_registration_limit) && guests > competitionInfo.guests_per_registration_limit && i18n.t('competitions.competition_info.guest_limit', { count: competitionInfo.guests_per_registration_limit })}
+              error={competitionInfo.force_comment_in_registration && comment.trim().length === 0 && I18n.t('registrations.errors.cannot_register_without_comment')}
             />
           </Form.Field>
+          {competitionInfo.guests_enabled && (
+            <Form.Field>
+              <label>{I18n.t('activerecord.attributes.registration.guests')}</label>
+              <Form.Input
+                id="guest-dropdown"
+                type="number"
+                value={guests}
+                onChange={(event, data) => {
+                  setGuests(Number.parseInt(data.value, 10));
+                }}
+                min="0"
+                max={competitionInfo.guests_per_registration_limit ?? 99}
+                error={Number.isInteger(competitionInfo.guests_per_registration_limit) && guests > competitionInfo.guests_per_registration_limit && I18n.t('competitions.competition_info.guest_limit', { count: competitionInfo.guests_per_registration_limit })}
+              />
+            </Form.Field>
+          )}
           {isRegistered ? (
             <ButtonGroup widths={2}>
               {shouldShowUpdateButton && (
@@ -330,11 +377,11 @@ export default function CompetingStep({
                       }
                   type="submit"
                 >
-                  {i18n.t('registrations.update')}
+                  {I18n.t('registrations.update')}
                 </Button>
                 <ButtonOr />
                 <Button secondary onClick={() => nextStep()}>
-                  {i18n.t('competitions.registration_v2.register.view_registration')}
+                  {I18n.t('competitions.registration_v2.register.view_registration')}
                 </Button>
               </>
               )}
@@ -345,7 +392,7 @@ export default function CompetingStep({
                 disabled={isUpdating}
                 type="submit"
               >
-                {i18n.t('registrations.register')}
+                {I18n.t('registrations.register')}
               </Button>
               )}
             </ButtonGroup>
@@ -353,12 +400,12 @@ export default function CompetingStep({
             <>
               <Message info icon floating>
                 <Popup
-                  content={i18n.t('registrations.mailer.new.awaits_approval')}
+                  content={I18n.t('registrations.mailer.new.awaits_approval')}
                   position="top left"
                   trigger={<Icon name="circle info" />}
                 />
                 <Message.Content>
-                  {i18n.t('competitions.registration_v2.register.disclaimer')}
+                  {I18n.t('competitions.registration_v2.register.disclaimer')}
                 </Message.Content>
               </Message>
               <Button
@@ -370,7 +417,7 @@ export default function CompetingStep({
                 disabled={isCreating}
               >
                 <Icon name="paper plane" />
-                {i18n.t('registrations.register')}
+                {I18n.t('registrations.register')}
               </Button>
             </>
           )}

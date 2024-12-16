@@ -1,6 +1,6 @@
 import React from 'react';
 import { Icon, Message } from 'semantic-ui-react';
-import i18n from '../../../lib/i18n';
+import I18n from '../../../lib/i18n';
 
 function registrationIconByStatus(registrationStatus) {
   switch (registrationStatus) {
@@ -21,19 +21,21 @@ function registrationIconByStatus(registrationStatus) {
 // If we add these strings to en.yml immediately, translators will get a notification asking them
 //   to translate these strings during our test mode deployment. But we aren't even sure whether
 //   we want to keep these strings. So we hard-code them "for now" (when did that ever go wrong?)
-function canIBookPlaneTickets(registrationStatus, paymentStatus, competitionInfo) {
+function canIBookPlaneTickets(registrationStatus, hasPaid, competitionInfo) {
   switch (registrationStatus) {
     case 'pending':
-      if (competitionInfo['using_payment_integrations?'] && paymentStatus !== 'succeeded') {
-        return 'Your registration will not be approved until you pay for your registration, unless you have a special arrangement with the organizers or you paid through an alternative method.';
+      if (competitionInfo['using_payment_integrations?'] && !hasPaid) {
+        return I18n.t('competitions.registration_v2.info.payment_missing');
       }
-      return "Don't book your flights or hotel just yet - the organizers still have to manually approve your registration. This can take time.";
+      return I18n.t('competitions.registration_v2.info.needs_approval');
     case 'accepted':
-      return 'Book your flights and pack your bags - you have a spot at the competition!';
+      return I18n.t('competitions.registration_v2.info.is_accepted');
     case 'cancelled':
-      return 'Your registration has been deleted and you will not be competing.';
+      return I18n.t('competitions.registration_v2.info.is_cancelled');
+    case 'rejected':
+      return I18n.t('competitions.registration_v2.info.is_rejected');
     case 'waiting_list':
-      return "Don't book a flight, but don't give up hope either. The competition is full, but you have been placed on a waiting list, and you will receive an email if enough spots open up for you to be able to attend.";
+      return I18n.t('competitions.registration_v2.info.is_waitlisted');
     default:
       return `[Testers: This should not happen. If you reached this message, please contact WST! Debug: '${registrationStatus}']`;
   }
@@ -44,14 +46,15 @@ function RegistrationStatusMessage({ registration, competitionInfo }) {
     <Message
       info={registration.competing.registration_status === 'pending'}
       success={registration.competing.registration_status === 'accepted'}
-      negative={registration.competing.registration_status === 'cancelled'}
+      negative={registration.competing.registration_status === 'cancelled'
+        || registration.competing.registration_status === 'rejected'}
       warning={registration.competing.registration_status === 'waiting_list'}
       icon
     >
       <Icon name={registrationIconByStatus(registration.competing.registration_status)} />
       <Message.Content>
         <Message.Header>
-          {i18n.t(
+          {I18n.t(
             `competitions.registration_v2.register.registration_status.${registration.competing.registration_status}`,
             {
               waiting_list_position: registration.competing.waiting_list_position,
@@ -61,7 +64,7 @@ function RegistrationStatusMessage({ registration, competitionInfo }) {
         <p>
           {canIBookPlaneTickets(
             registration.competing.registration_status,
-            registration.payment?.payment_status,
+            registration.payment?.has_paid,
             competitionInfo,
           )}
         </p>

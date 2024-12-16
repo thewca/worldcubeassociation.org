@@ -19,7 +19,7 @@ class PaymentIntent < ApplicationRecord
 
   serialize :error_details, coder: JSON
 
-  enum wca_status: {
+  enum :wca_status, {
     created: 'created', # A record has been created on the payment provider's system (no payment action yet initiated by the user)
     pending: 'pending', # The user is now attempting to pay, but has not reached a completion state yet
     partial: 'partial', # Some but not all funds have been paid (eg, if the user has selected an instalment-based payment option)
