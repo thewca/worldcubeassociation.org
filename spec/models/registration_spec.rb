@@ -98,7 +98,6 @@ RSpec.describe Registration do
     expect(registration.errors[:user_id]).not_to include(I18n.t('registrations.errors.undelete_banned'))
   end
 
-
   it "requires at least one event" do
     registration.registration_competition_events = []
     expect(registration).to be_invalid_with_errors(registration_competition_events: [I18n.t('registrations.errors.must_register')])
