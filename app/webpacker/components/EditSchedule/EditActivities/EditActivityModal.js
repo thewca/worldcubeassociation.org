@@ -18,6 +18,8 @@ const otherActivityCodes = [
   'other-lunch',
   'other-dinner',
   'other-awards',
+  'other-setup',
+  'other-teardown',
   'other-misc',
 ];
 
