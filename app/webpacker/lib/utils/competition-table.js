@@ -6,27 +6,33 @@ function parseDateString(yyyymmddDateString) {
   return DateTime.fromFormat(yyyymmddDateString, 'yyyy-MM-dd');
 }
 
-export const competitionStatusText = (competition, registrationStatus) => {
-  let registrationStatusHint = '';
-  if (registrationStatus?.competing_status === 'waiting_list') {
-    registrationStatusHint += I18n.t('competitions.messages.tooltip_waiting_list');
-  } else if (registrationStatus?.competing_status === 'accepted') {
-    registrationStatusHint += I18n.t('competitions.messages.tooltip_registered');
-  } else if (registrationStatus?.competing_status === 'cancelled' || registrationStatus?.competing_status === 'rejected') {
-    registrationStatusHint += I18n.t('competitions.messages.tooltip_deleted');
-  } else if (registrationStatus?.competing_status === 'pending') {
-    registrationStatusHint += I18n.t('competitions.messages.tooltip_pending');
+const registrationStatusHint = (competingStatus) => {
+  if (competingStatus === 'waiting_list') {
+    return I18n.t('competitions.messages.tooltip_waiting_list');
+  } if (competingStatus === 'accepted') {
+    return I18n.t('competitions.messages.tooltip_registered');
+  } if (competingStatus === 'cancelled' || competingStatus === 'rejected') {
+    return I18n.t('competitions.messages.tooltip_deleted');
+  } if (competingStatus === 'pending') {
+    return I18n.t('competitions.messages.tooltip_pending');
   }
-  let competitionStatusHint = '';
-  if (competition['confirmed?']) {
-    competitionStatusHint += I18n.t('competitions.messages.confirmed_visible');
-  } else if (competition['visible?']) {
-    competitionStatusHint += I18n.t('competitions.messages.confirmed_not_visible');
-  } else {
-    competitionStatusHint += I18n.t('competitions.messages.not_confirmed_not_visible');
-  }
-  return `${registrationStatusHint} ${competitionStatusHint}`;
+  return '';
 };
+
+const competitionStatusHint = (competition) => {
+  let text = '';
+  if (competition['confirmed?']) {
+    text += I18n.t('competitions.messages.confirmed_visible');
+  } else if (competition['visible?']) {
+    text += I18n.t('competitions.messages.confirmed_not_visible');
+  } else {
+    text += I18n.t('competitions.messages.not_confirmed_not_visible');
+  }
+
+  return text;
+};
+
+export const competitionStatusText = (competition, registrationStatus) => `${registrationStatusHint(registrationStatus?.competing_status)} ${competitionStatusHint(competition)}`;
 
 export function dayDifferenceFromToday(yyyymmddDateString) {
   const dateLuxon = parseDateString(yyyymmddDateString);

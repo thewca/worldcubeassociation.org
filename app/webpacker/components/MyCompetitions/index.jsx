@@ -13,7 +13,7 @@ import UpcomingCompetitionTable from './UpcomingCompetitionTable';
 import PastCompetitionsTable from './PastCompetitionTable';
 import useCheckboxState from '../../lib/hooks/useCheckboxState';
 
-export default function MyCompetitions({ permissions, competitions, userInfo }) {
+export default function MyCompetitions({ permissions, competitions, wcaId }) {
   const [isAccordionOpen, setIsAccordionOpen] = useState(false);
   const [shouldShowRegistrationStatus, setShouldShowRegistrationStatus] = useCheckboxState(false);
 
@@ -45,7 +45,7 @@ export default function MyCompetitions({ permissions, competitions, userInfo }) 
         </Accordion.Content>
       </Accordion>
       <Segment>
-        <a href={personUrl(userInfo.wca_id)}>{I18n.t('layouts.navigation.my_results')}</a>
+        <a href={personUrl(wcaId)}>{I18n.t('layouts.navigation.my_results')}</a>
       </Segment>
       <Header>
         <Icon name="bookmark" />

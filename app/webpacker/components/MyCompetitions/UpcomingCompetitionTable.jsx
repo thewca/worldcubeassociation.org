@@ -18,7 +18,7 @@ const registrationStatusIcon = (registrationStatus) => {
     case 'accepted': return <Icon name="check circle" />;
     case 'cancelled': return <Icon name="trash" />;
     case 'rejected': return <Icon name="trash" />;
-    default: return <Icon />;
+    default: return null;
   }
 };
 
