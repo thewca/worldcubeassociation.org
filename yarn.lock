@@ -9588,16 +9588,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-intersection-observer@npm:^9.13.1":
-  version: 9.13.1
-  resolution: "react-intersection-observer@npm:9.13.1"
+"react-intersection-observer@npm:^9.14.0":
+  version: 9.14.0
+  resolution: "react-intersection-observer@npm:9.14.0"
   peerDependencies:
-    react: ^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
-    react-dom: ^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+    react: ^17.0.0 || ^18.0.0 || ^19.0.0
+    react-dom: ^17.0.0 || ^18.0.0 || ^19.0.0
   peerDependenciesMeta:
     react-dom:
       optional: true
-  checksum: 10c0/c64722db407e0ca83945bf97621ab4618fa74f3a70b528ff43988818d46feee8962bd12e70203d2d92b31030889a1f813d00e0aa3d781a7bc39fb293c277ee04
+  checksum: 10c0/a91785984525997d01afdeac12538649b8929d6ca44b5e070f02dbf352628f49cce5930a5eaf32fbbecafb0f9577fc1996dcd3328d20b375d3cef54eea028f0e
   languageName: node
   linkType: hard
 
@@ -10162,7 +10162,7 @@ __metadata:
     react-dom: "npm:^18.3.1"
     react-google-recaptcha: "npm:^3.1.0"
     react-image-crop: "npm:^11.0.7"
-    react-intersection-observer: "npm:^9.13.1"
+    react-intersection-observer: "npm:^9.14.0"
     react-leaflet: "npm:^4.2.1"
     react-refresh: "npm:^0.16.0"
     react-simplemde-editor: "npm:^5.2.0"
