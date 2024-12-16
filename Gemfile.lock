@@ -231,7 +231,7 @@ GEM
       unicode (>= 0.4.4.5)
     css_parser (1.16.0)
       addressable
-    csv (3.3.0)
+    csv (3.3.1)
     daemons (1.4.1)
     database_cleaner (2.1.0)
       database_cleaner-active_record (>= 2, < 3)
