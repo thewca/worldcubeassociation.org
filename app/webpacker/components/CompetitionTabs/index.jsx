@@ -28,7 +28,7 @@ const tabIndexFromSlug = (panes) => {
 };
 
 export default function Wrapper({
-  tabs, competition, wcifEvents, wcifSchedule, locale, userInfo, records, winners,
+  tabs, competition, wcifEvents, wcifSchedule, locale, userInfo, records, winners, media,
 }) {
   const panes = useMemo(() => {
     const p = [{
@@ -40,6 +40,7 @@ export default function Wrapper({
           userInfo={userInfo}
           records={records}
           winners={winners}
+          media={media}
         />
       ),
     }];

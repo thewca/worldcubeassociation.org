@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 
 import {
-  Button, Grid, GridColumn, GridRow, Header, Icon,
+  Accordion,
+  Button, Grid, GridColumn, GridRow, Header, Icon, List,
 } from 'semantic-ui-react';
 import { DateTime } from 'luxon';
 import I18n from '../../lib/i18n';
@@ -20,9 +21,15 @@ export default function GeneralInfoTab({
   userInfo,
   records,
   winners,
+  media = [],
 }) {
   const [showRegistrationRequirements, setShowRegistrationRequirements] = useState(!competition['is_probably_over?']);
   const [showHighlights, setShowHighlights] = useState(true);
+  const [mediaIndex, setMediaIndex] = useState(-1);
+
+  const handleMediaClick = (index) => {
+    setMediaIndex(mediaIndex === index ? -1 : index);
+  };
 
   return (
     <Grid>
@@ -239,7 +246,6 @@ export default function GeneralInfoTab({
                 </Grid.Column>
               </Grid.Row>
             )}
-
             {competition['results_posted?'] && (
               <Grid.Row verticalAlign="middle">
                 <Grid.Column width={4} textAlign="right">
@@ -248,36 +254,46 @@ export default function GeneralInfoTab({
                 <Grid.Column width={12}>{competition.competitor_count}</Grid.Column>
               </Grid.Row>
             )}
-            {(competition.media.accepted ?? []).map((mediaType) => (
-              <div className="panel panel-default" key={mediaType.type}>
-                <div className="panel-heading">
-                  <h4 className="panel-title">
-                    <a
-                      data-toggle="collapse"
-                      href={`#collapse-${mediaType.type}`}
-                      className="collapsed"
-                    >
-                      {`${mediaType.type}s (${mediaType.items.length})`}
-                    </a>
-                  </h4>
-                </div>
-                <div id={`collapse-${mediaType.type}`} className="panel-collapse collapse">
-                  <ul className="list-group">
-                    {mediaType.items.map((item) => (
-                      <a
-                        href={item.uri}
-                        className="list-group-item"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        key={item.text}
-                      >
-                        {item.text}
-                      </a>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-            ))}
+            { media && (
+              <Grid.Row>
+                <Accordion
+                  fluid
+                  styled
+                  exclusive
+                  activeIndex={mediaIndex}
+                >
+                  {['report', 'article', 'multimedia'].map((mediaType, i) => {
+                    const mediaOfType = media.filter((m) => m.type === mediaType);
+                    if (mediaOfType.length > 0) {
+                      return (
+                        <React.Fragment key={mediaType}>
+                          <Accordion.Title onClick={() => handleMediaClick(i)}>
+                            {`${_.capitalize(mediaType)} (${mediaOfType.length})`}
+                          </Accordion.Title>
+                          <Accordion.Content active={mediaIndex === i}>
+                            <List>
+                              {mediaOfType.map((item) => (
+                                <List.Item>
+                                  <a
+                                    href={item.uri}
+                                    className="list-group-item"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    key={item.text}
+                                  >
+                                    {item.text}
+                                  </a>
+                                </List.Item>
+                              ))}
+                            </List>
+                          </Accordion.Content>
+                        </React.Fragment>
+                      );
+                    }
+                  })}
+                </Accordion>
+              </Grid.Row>
+            ) }
 
             {!competition['results_posted?'] && competition.competitor_limit_enabled && (
               <Grid.Row verticalAlign="middle">
@@ -303,8 +319,8 @@ export default function GeneralInfoTab({
           </Grid>
 
         </GridColumn>
-
         <GridColumn width={16}>
+          <br />
           <Grid>
             {competition.registration_open && competition.registration_close && (
               <Grid.Row>
@@ -347,11 +363,11 @@ export default function GeneralInfoTab({
                           showLinksToRegisterPage
                         />
                       </div>
-                      { competition['is_probably_over?']
+                      {competition['is_probably_over?']
                         && (
-                        <Button onClick={() => setShowRegistrationRequirements(false)}>
-                          {I18n.t('competitions.competition_info.hide_requirements')}
-                        </Button>
+                          <Button onClick={() => setShowRegistrationRequirements(false)}>
+                            {I18n.t('competitions.competition_info.hide_requirements')}
+                          </Button>
                         )}
                     </>
                   ) : (
@@ -375,7 +391,7 @@ export default function GeneralInfoTab({
                           {I18n.t('competitions.competition_info.hide_highlights')}
                         </Button>
                         <div>
-                          {competition.main_event_id && <Markdown md={winners} id="competition-info-winners" /> }
+                          {competition.main_event_id && <Markdown md={winners} id="competition-info-winners" />}
                           <br />
                           {records && <Markdown md={records} id="competition-info-records" />}
                         </div>
