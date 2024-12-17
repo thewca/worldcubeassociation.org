@@ -13,7 +13,6 @@ export default function GuestRequirements({ competition }) {
               competition.currency_code,
             ),
         })}
-        <br />
       </>
     );
   }
@@ -25,7 +24,6 @@ export default function GuestRequirements({ competition }) {
       ) : competition['some_guests_allowed?'] && (
         I18n.t('competitions.competition_info.guests_free.restricted')
       )}
-      <br />
     </>
   );
 }

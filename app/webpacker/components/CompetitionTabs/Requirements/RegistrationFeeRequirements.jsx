@@ -4,7 +4,7 @@ import { isoMoneyToHumanReadable } from '../../../lib/helpers/money';
 
 export default function RegistrationFeeRequirements({ competition }) {
   return (
-    <div>
+    <>
       <p>
         {competition.base_entry_fee_lowest_denomination
           ? I18n.t('competitions.competition_info.entry_fee_is', {
@@ -22,6 +22,6 @@ export default function RegistrationFeeRequirements({ competition }) {
           <dd>{isoMoneyToHumanReadable(event.fee)}</dd>
         </dl>
       ) : null))}
-    </div>
+    </>
   );
 }
