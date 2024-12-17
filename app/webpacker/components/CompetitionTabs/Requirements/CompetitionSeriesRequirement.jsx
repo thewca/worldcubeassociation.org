@@ -18,6 +18,7 @@ export default function CompetitionSeriesRequirement({ competition }) {
         ))}
       </List>
       <br />
+      {/* i18n-tasks-use t('competitions.competition_info.series_registration_warning_html') */}
       <I18nHTMLTranslate i18nKey="competitions.competition_info.series_registration_warning_html" />
     </>
   );

@@ -135,6 +135,7 @@ function LeftColumn({ competition }) {
         icon="print"
       >
         <I18nHTMLTranslate
+          // i18n-tasks-use t('competitions.competition_info.pdf.download_html')
           i18nKey="competitions.competition_info.pdf.download_html"
           options={
                   {

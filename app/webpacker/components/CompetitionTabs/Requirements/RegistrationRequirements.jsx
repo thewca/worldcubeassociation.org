@@ -23,6 +23,7 @@ export default function RegistrationRequirements({
           <AccountRequirement userInfo={userInfo} />
           {showLinksToRegisterPage ? (
             <I18nHTMLTranslate
+              // i18n-tasks-use t('competitions.competition_info.register_link_html')
               i18nKey="competitions.competition_info.register_link_html"
               options={{
                 here: `<a href='/competitions/${competition.id}/register'>${I18n.t('common.here')}</a>`,
@@ -50,6 +51,8 @@ export default function RegistrationRequirements({
       )}
 
       <List.Item>
+        {/* i18n-tasks-use t('competitions.competition_info.competitor_limit_is') */}
+        {/* i18n-tasks-use t('competitions.competition_info.no_competitor_limit') */}
         {I18n.t(
           competition.competitor_limit_enabled
             ? 'competitions.competition_info.competitor_limit_is'
@@ -64,6 +67,8 @@ export default function RegistrationRequirements({
 
       {competition['using_payment_integrations?'] && (
         <List.Item>
+          {/* i18n-tasks-use t('competitions.competition_info.use_stripe_link_html') */}
+          {/* i18n-tasks-use t('competitions.competition_info.use_stripe_below_html') */}
           <I18nHTMLTranslate
             i18nKey={showLinksToRegisterPage
               ? 'competitions.competition_info.use_stripe_link_html'

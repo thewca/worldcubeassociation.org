@@ -7,6 +7,7 @@ import I18nHTMLTranslate from '../../I18nHTMLTranslate';
 export default function EventChangeDeadlineRequirements({ competition }) {
   if (competition.event_change_deadline_date) {
     if (competition['allow_registration_edits?']) {
+      /* i18n-tasks-use t('competitions.competition_info.event_change_deadline_edits_allowed_html') */
       return (
         <I18nHTMLTranslate
           i18nKey="competitions.competition_info.event_change_deadline_edits_allowed_html"
