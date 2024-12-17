@@ -31,4 +31,14 @@ module DbHelper
     ActiveRecord::Base.connection.execute("DROP TABLE IF EXISTS #{temp_table_name}")
     ActiveRecord::Base.connection.execute("DROP TABLE IF EXISTS #{old_table_name}")
   end
+
+  def self.execute_cached_query(cache_params, timestamp, sql_query, db_role: :read_replica)
+    # As we are using the native Rails cache we set the expiry date to 7 days
+    #   as CAD is usually ran much more frequently than that
+    Rails.cache.fetch([*cache_params, timestamp], expires_in: 7.days) do
+      ActiveRecord::Base.connected_to(role: db_role) do
+        ActiveRecord::Base.connection.exec_query(sql_query)
+      end
+    end
+  end
 end
