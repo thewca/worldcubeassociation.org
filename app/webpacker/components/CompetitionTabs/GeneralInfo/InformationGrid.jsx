@@ -175,7 +175,7 @@ function RightColumn({ competition, media }) {
         <Markdown md={competition.information} id="competition-info-information" />
       </TwoColumnGridEntry>
 
-      <TwoColumnGridEntry header={I18n.t('competitions.competition_info.events')}>
+      <TwoColumnGridEntry header={I18n.t('competitions.competition_info.events')} padded>
         {competition.events.map((event) => (
           <React.Fragment key={event.id}>
             <EventIcon id={event.id} size="1.5em" hoverable />
@@ -185,17 +185,17 @@ function RightColumn({ competition, media }) {
       </TwoColumnGridEntry>
 
       {competition.main_event_id && (
-        <TwoColumnGridEntry header={I18n.t('competitions.competition_info.main_event')}>
+        <TwoColumnGridEntry header={I18n.t('competitions.competition_info.main_event')} padded>
           <EventIcon id={competition.main_event_id} size="1.5em" hoverable />
         </TwoColumnGridEntry>
       )}
 
       {competition['results_posted?'] && (
-        <TwoColumnGridEntry header={I18n.t('competitions.nav.menu.competitors')}>
+        <TwoColumnGridEntry header={I18n.t('competitions.nav.menu.competitors')} padded>
           {competition.competitor_count}
         </TwoColumnGridEntry>
       )}
-      { media && (
+      { media.length > 0 && (
         <TwoColumnGridEntry>
           <Accordion
             fluid
@@ -237,13 +237,13 @@ function RightColumn({ competition, media }) {
       ) }
 
       {!competition['results_posted?'] && competition.competitor_limit_enabled && (
-        <TwoColumnGridEntry header={I18n.t('competitions.competition_info.competitor_limit')}>
+        <TwoColumnGridEntry header={I18n.t('competitions.competition_info.competitor_limit')} padded>
           {competition.competitor_limit}
         </TwoColumnGridEntry>
       )}
 
       {!competition['results_posted?'] && (
-        <TwoColumnGridEntry header={I18n.t('competitions.competition_info.number_of_bookmarks')}>
+        <TwoColumnGridEntry header={I18n.t('competitions.competition_info.number_of_bookmarks')} padded>
           {competition.number_of_bookmarks}
         </TwoColumnGridEntry>
       )}

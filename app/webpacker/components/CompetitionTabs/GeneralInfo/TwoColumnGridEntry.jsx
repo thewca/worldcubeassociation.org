@@ -2,11 +2,12 @@ import React from 'react';
 import { Grid, Header, Icon } from 'semantic-ui-react';
 
 export default function TwoColumnGridEntry({
-  header, children, icon,
+  header, children, icon, padded = false,
 }) {
+  const style = padded ? {} : { padding: '0em' };
   return (
     <>
-      <Grid.Row verticalAlign="middle" style={{ padding: '0em' }} only="computer">
+      <Grid.Row verticalAlign="middle" style={style} only="computer">
         <Grid.Column width={4} textAlign="right">
           { icon && <Icon name={icon} /> }
           <Header as="h5">{header}</Header>
@@ -15,7 +16,7 @@ export default function TwoColumnGridEntry({
           {children}
         </Grid.Column>
       </Grid.Row>
-      <Grid.Row style={{ padding: '0em' }} only="tablet mobile">
+      <Grid.Row style={style} only="tablet mobile">
         <Grid.Column width={16} textAlign="left">
           <b>{header}</b>
           <br />

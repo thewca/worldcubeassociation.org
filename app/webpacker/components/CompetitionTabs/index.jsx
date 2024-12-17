@@ -77,7 +77,7 @@ export default function Wrapper({
     }
     tabs.map((tab) => p.push({ slug: `${tab.id}-${_.kebabCase(tab.name)}`, menuItem: tab.name, render: () => <CompetitionTab tab={tab} /> }));
     return p;
-  }, [competition, locale, tabs, userInfo, wcifEvents, wcifSchedule]);
+  }, [competition, locale, media, records, tabs, userInfo, wcifEvents, wcifSchedule, winners]);
 
   return (
     <WCAQueryClientProvider>
