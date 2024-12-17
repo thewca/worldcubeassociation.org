@@ -127,5 +127,16 @@ RSpec.describe WaitingList do
       expect(reg5.waiting_list_position).to eq(4)
       expect(waiting_list.entries.count).to eq(4)
     end
+
+    it 'does nothing if removing an item which isnt present' do
+      expect { waiting_list.remove(999999) }.not_to raise_error
+
+      expect(reg1.waiting_list_position).to eq(1)
+      expect(reg2.waiting_list_position).to eq(2)
+      expect(reg3.waiting_list_position).to eq(3)
+      expect(reg4.waiting_list_position).to eq(4)
+      expect(reg5.waiting_list_position).to eq(5)
+      expect(waiting_list.entries.count).to eq(5)
+    end
   end
 end

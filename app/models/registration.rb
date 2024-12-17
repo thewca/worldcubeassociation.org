@@ -447,6 +447,13 @@ class Registration < ApplicationRecord
       .sort_by { |registration| registration.registration_payments.first.updated_at }
 
     sorted_pending_registrations.each { |r| r.auto_accept }
+
+    puts "checking accept for: #{competition.waiting_list.entries.each}"
+    competition.waiting_list.entries.each do |r_id|
+      puts r_id
+      result = Registration.find(r_id).auto_accept
+      puts result
+    end
   end
 
   def auto_accept
