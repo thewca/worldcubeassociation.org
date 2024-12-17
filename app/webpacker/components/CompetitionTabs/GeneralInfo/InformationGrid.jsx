@@ -9,7 +9,7 @@ import Markdown from '../../Markdown';
 import { countries, events } from '../../../lib/wca-data.js.erb';
 import I18nHTMLTranslate from '../../I18nHTMLTranslate';
 import EventIcon from '../../wca/EventIcon';
-import { competitionUrl, personUrl } from '../../../lib/requests/routes.js.erb';
+import { competitionUrl, contactCompetitionUrl, personUrl } from '../../../lib/requests/routes.js.erb';
 
 const linkToGoogleMapsPlace = (latitude, longitude) => `https://www.google.com/maps/place/${latitude},${longitude}`;
 
@@ -79,21 +79,15 @@ function LeftColumn({ competition }) {
       <TwoColumnGridEntry
         header={I18n.t('competitions.competition_info.contact')}
       >
-        <a
-          href={competition.external_website}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          {competition.contact ? (
-            <Markdown md={competition.contact} id="competition-info-contact" />
-          ) : (
-            <a
-              href={`/contact?contactRecipient=competition&competitionId=${competition.id}`}
-            >
-              {I18n.t('competitions.competition_info.organization_team')}
-            </a>
-          )}
-        </a>
+        {competition.contact ? (
+          <Markdown md={competition.contact} id="competition-info-contact" />
+        ) : (
+          <a
+            href={contactCompetitionUrl(competition.id)}
+          >
+            {I18n.t('competitions.competition_info.organization_team')}
+          </a>
+        )}
       </TwoColumnGridEntry>
 
       {competition.organizers.length > 0 && (
@@ -102,16 +96,18 @@ function LeftColumn({ competition }) {
           count: competition.organizers.length,
         })}
       >
-        {competition.organizers.map((user, i) => (
-          <React.Fragment key={user.id || i}>
-            {user.wca_id ? (
-              <a href={personUrl(user.wca_id)}>{user.name}</a>
-            ) : (
-              user.name
-            )}
-            {i !== competition.organizers.length - 1 && ', '}
-          </React.Fragment>
-        ))}
+        {competition.organizers
+          .toSorted((o1, o2) => o1.name.localeCompare(o2.name))
+          .map((user, i) => (
+            <React.Fragment key={user.id || i}>
+              {user.wca_id ? (
+                <a href={personUrl(user.wca_id)}>{user.name}</a>
+              ) : (
+                user.name
+              )}
+              {i !== competition.organizers.length - 1 && ', '}
+            </React.Fragment>
+          ))}
       </TwoColumnGridEntry>
       )}
 
@@ -120,16 +116,18 @@ function LeftColumn({ competition }) {
           count: competition.delegates.length,
         })}
       >
-        {competition.delegates.map((user, i) => (
-          <React.Fragment key={user.id || i}>
-            {user.wca_id ? (
-              <a href={personUrl(user.wca_id)}>{user.name}</a>
-            ) : (
-              user.name
-            )}
-            {i !== competition.delegates.length - 1 && ', '}
-          </React.Fragment>
-        ))}
+        {competition.delegates
+          .toSorted((d1, d2) => d1.name.localeCompare(d2.name))
+          .map((user, i) => (
+            <React.Fragment key={user.id || i}>
+              {user.wca_id ? (
+                <a href={personUrl(user.wca_id)}>{user.name}</a>
+              ) : (
+                user.name
+              )}
+              {i !== competition.delegates.length - 1 && ', '}
+            </React.Fragment>
+          ))}
       </TwoColumnGridEntry>
 
       {competition['has_schedule?'] && (
