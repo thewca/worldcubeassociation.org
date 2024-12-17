@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import {
-  Accordion, Grid, GridColumn, Icon, List,
+  Accordion, Grid, GridColumn, Icon, List, Popup,
 } from 'semantic-ui-react';
 import _ from 'lodash';
 import TwoColumnGridEntry from './TwoColumnGridEntry';
 import I18n from '../../../lib/i18n';
 import Markdown from '../../Markdown';
-import { countries } from '../../../lib/wca-data.js.erb';
+import { countries, events } from '../../../lib/wca-data.js.erb';
 import I18nHTMLTranslate from '../../I18nHTMLTranslate';
 import EventIcon from '../../wca/EventIcon';
 import { competitionUrl, personUrl } from '../../../lib/requests/routes.js.erb';
@@ -172,7 +172,7 @@ function RightColumn({ competition, media }) {
       <TwoColumnGridEntry header={I18n.t('competitions.competition_info.events')} padded>
         {competition.events.map((event) => (
           <React.Fragment key={event.id}>
-            <EventIcon id={event.id} size="1.5em" hoverable />
+            <Popup trigger={<EventIcon id={event.id} size="1.5em" />} content={events.byId[event.id].name} />
             {' '}
           </React.Fragment>
         ))}
@@ -180,7 +180,7 @@ function RightColumn({ competition, media }) {
 
       {competition.main_event_id && (
         <TwoColumnGridEntry header={I18n.t('competitions.competition_info.main_event')} padded>
-          <EventIcon id={competition.main_event_id} size="1.5em" hoverable />
+          <Popup trigger={<EventIcon id={competition.main_event_id} size="1.5em" />} content={events.byId[competition.main_event_id].name} />
         </TwoColumnGridEntry>
       )}
 
