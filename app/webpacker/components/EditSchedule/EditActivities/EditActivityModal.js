@@ -103,6 +103,7 @@ function EditActivityModal({
           icon="save"
           content="Save"
           positive
+          disabled={!activityCode || !activityName?.trim()}
           onClick={() => {
             onModalSave({ activityCode, activityName });
             closeModalAndCleanUp();
