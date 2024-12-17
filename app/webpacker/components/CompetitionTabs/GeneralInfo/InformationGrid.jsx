@@ -136,14 +136,9 @@ function LeftColumn({ competition }) {
       <TwoColumnGridEntry
         icon="print"
       >
-        <a
-          href={competition.external_website}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <I18nHTMLTranslate
-            i18nKey="competitions.competition_info.pdf.download_html"
-            options={
+        <I18nHTMLTranslate
+          i18nKey="competitions.competition_info.pdf.download_html"
+          options={
                   {
                     here: (
                       `<a
@@ -156,8 +151,7 @@ function LeftColumn({ competition }) {
                     ),
                   }
                 }
-          />
-        </a>
+        />
       </TwoColumnGridEntry>
       )}
     </Grid>
@@ -251,7 +245,7 @@ function RightColumn({ competition, media }) {
   );
 }
 
-export default function InformationGrid({ competition, media = [] }) {
+export default function InformationGrid({ competition, media }) {
   return (
     <>
       <GridColumn width={8} only="computer">

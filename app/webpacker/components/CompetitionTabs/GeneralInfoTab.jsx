@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import {
-  Button, Grid, GridColumn, GridRow, Header,
+  Button, Grid, GridColumn, GridRow,
 } from 'semantic-ui-react';
 import { DateTime } from 'luxon';
 import I18n from '../../lib/i18n';

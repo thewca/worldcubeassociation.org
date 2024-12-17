@@ -7,6 +7,7 @@ import Schedule from './Schedule';
 import WCAQueryClientProvider from '../../lib/providers/WCAQueryClientProvider';
 import './style.css';
 import TimeLimitCutoffInfo from './TimeLimitCutoffInfo';
+import I18n from '../../lib/i18n';
 
 const updatePath = (tabSlug) => {
   window.history.replaceState({}, '', `${window.location.pathname}#${tabSlug}`);
@@ -33,7 +34,7 @@ export default function Wrapper({
   const panes = useMemo(() => {
     const p = [{
       slug: 'general-info',
-      menuItem: 'General Info',
+      menuItem: I18n.t('competitions.show.general_info'),
       render: () => (
         <GeneralInfoTab
           competition={competition}
@@ -47,7 +48,7 @@ export default function Wrapper({
     if (competition['has_rounds?']) {
       p.push({
         slug: 'competition-events',
-        menuItem: 'Events',
+        menuItem: I18n.t('competitions.show.events'),
         render: () => (
           <TabPane>
             <EventsTable competitionInfo={competition} wcifEvents={wcifEvents} />
@@ -60,7 +61,7 @@ export default function Wrapper({
     if (competition['has_schedule?']) {
       p.push({
         slug: 'competition-schedule',
-        menuItem: 'Schedule',
+        menuItem: I18n.t('competitions.show.schedule'),
         render: () => (
           <TabPane>
             <Schedule

@@ -9,8 +9,8 @@ export default function TwoColumnGridEntry({
     <>
       <Grid.Row verticalAlign="middle" style={style} only="computer">
         <Grid.Column width={4} textAlign="right">
-          { icon && <Icon name={icon} /> }
-          <Header as="h5">{header}</Header>
+          { icon ? <Icon name={icon} />
+            : <Header as="h5">{header}</Header>}
         </Grid.Column>
         <Grid.Column width={12}>
           {children}

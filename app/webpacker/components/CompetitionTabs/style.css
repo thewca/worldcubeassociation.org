@@ -3,3 +3,7 @@
   flex-direction: row;
   flex-wrap: wrap;
 }
+
+.ui.tab-wrapped.menu .item {
+  color: #e64503 !important;
+}
