@@ -493,9 +493,8 @@ class Competition < ApplicationRecord
   end
 
   # For react pages we do not want to show warnings as we show them in react
-  def warnings_for(user, show_warnings: true)
+  def warnings_for(user)
     warnings = {}
-    return warnings unless show_warnings
 
     if self.showAtAll
       unless self.announced?

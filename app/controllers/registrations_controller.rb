@@ -262,7 +262,7 @@ class RegistrationsController < ApplicationController
   def register
     @competition = competition_from_params
     # This page is in react so we don't want to show the warnings twice
-    @show_warnings = false
+    @skip_warnings = false
   end
 
   def payment_denomination
