@@ -9,7 +9,8 @@
  media number_of_bookmarks date_range information on_the_spot_registration? on_the_spot_entry_fee_lowest_denomination
  guests_per_registration_limit_enabled? guests_per_registration_limit uses_qualification? allow_registration_without_qualification
  events_per_registration_limit_enabled? events_per_registration_limit guests_entry_fee_lowest_denomination all_guests_allowed?
- uses_cumulative? uses_cumulative_across_rounds? uses_cutoff? uses_qualification? results_posted? competitor_count winning_results]} %>
+ uses_cumulative? uses_cumulative_across_rounds? uses_cutoff? uses_qualification? results_posted? competitor_count winning_results
+ competition_series]} %>
 <%= render layout: 'nav' do %>
   <%= react_component("CompetitionTabs", {
     tabs: @competition.tabs.as_json,
