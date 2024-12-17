@@ -8,7 +8,10 @@ import StoreProvider, { useDispatch } from '../../../lib/providers/StoreProvider
 import messageReducer from '../reducers/messageReducer';
 import WCAQueryClientProvider from '../../../lib/providers/WCAQueryClientProvider';
 import ConfirmProvider from '../../../lib/providers/ConfirmProvider';
+import RegistrationNotYetOpenMessage from './RegistrationNotYetOpenMessage';
+import { hasNotPassed } from '../../../lib/utils/dates';
 import RegistrationClosedMessage from './RegistrationClosedMessage';
+import RegistrationNotAllowedMessage from './RegistrationNotAllowedMessage';
 
 export default function Index({
   competitionInfo,
@@ -18,6 +21,7 @@ export default function Index({
   qualifications,
   stripePublishableKey = '',
   connectedAccountId = '',
+  cannotRegisterReasons,
 }) {
   return (
     <WCAQueryClientProvider>
@@ -31,10 +35,38 @@ export default function Index({
             stripePublishableKey={stripePublishableKey}
             connectedAccountId={connectedAccountId}
             qualifications={qualifications}
+            cannotRegisterReasons={cannotRegisterReasons}
           />
         </ConfirmProvider>
       </StoreProvider>
     </WCAQueryClientProvider>
+  );
+}
+
+function Panel({
+  user,
+  preferredEvents,
+  competitionInfo,
+  registration,
+  refetchRegistration,
+  connectedAccountId,
+  stripePublishableKey,
+  qualifications,
+}) {
+  return (
+    <>
+      <RegistrationMessage />
+      <StepPanel
+        user={user}
+        preferredEvents={preferredEvents}
+        competitionInfo={competitionInfo}
+        registration={registration}
+        refetchRegistration={refetchRegistration}
+        connectedAccountId={connectedAccountId}
+        stripePublishableKey={stripePublishableKey}
+        qualifications={qualifications}
+      />
+    </>
   );
 }
 
@@ -46,6 +78,7 @@ function Register({
   preferredEvents,
   connectedAccountId,
   stripePublishableKey,
+  cannotRegisterReasons,
 }) {
   const [timerEnded, setTimerEnded] = useState(false);
 
@@ -74,11 +107,21 @@ function Register({
     return <Loading />;
   }
 
-  if (registration || userCanPreRegister || competitionInfo['registration_currently_open?'] || timerEnded) {
+  const registrationNotYetOpen = hasNotPassed(competitionInfo.registration_open);
+
+  // User can't register
+  if (cannotRegisterReasons.length > 0) {
     return (
-      <>
-        <RegistrationMessage />
-        <StepPanel
+      <RegistrationNotAllowedMessage reasons={cannotRegisterReasons} />
+    );
+  }
+
+  // If Registration is not yet open:
+  // render Panel if timer ended || userCanPreRegister
+  if (registrationNotYetOpen) {
+    if (userCanPreRegister || timerEnded) {
+      return (
+        <Panel
           user={userInfo}
           preferredEvents={preferredEvents}
           competitionInfo={competitionInfo}
@@ -88,14 +131,52 @@ function Register({
           stripePublishableKey={stripePublishableKey}
           qualifications={qualifications}
         />
-      </>
+      );
+    }
+    return (
+      <RegistrationNotYetOpenMessage
+        registrationStart={competitionInfo.registration_open}
+        onTimerEnd={onTimerEnd}
+      />
+    );
+  }
+
+  // If Registration is open
+  // always render Panel
+  if (competitionInfo['registration_currently_open?']) {
+    return (
+      <Panel
+        user={userInfo}
+        preferredEvents={preferredEvents}
+        competitionInfo={competitionInfo}
+        registration={registration}
+        refetchRegistration={refetch}
+        connectedAccountId={connectedAccountId}
+        stripePublishableKey={stripePublishableKey}
+        qualifications={qualifications}
+      />
+    );
+  }
+
+  // If registration is closed:
+  // only render panel if competing status is not cancelled
+
+  if (registration && registration.competing.registration_status !== 'cancelled') {
+    return (
+      <Panel
+        user={userInfo}
+        preferredEvents={preferredEvents}
+        competitionInfo={competitionInfo}
+        registration={registration}
+        refetchRegistration={refetch}
+        connectedAccountId={connectedAccountId}
+        stripePublishableKey={stripePublishableKey}
+        qualifications={qualifications}
+      />
     );
   }
 
   return (
-    <RegistrationClosedMessage
-      registrationStart={competitionInfo.registration_open}
-      onTimerEnd={onTimerEnd}
-    />
+    <RegistrationClosedMessage registrationEnd={competitionInfo.registration_close} />
   );
 }
