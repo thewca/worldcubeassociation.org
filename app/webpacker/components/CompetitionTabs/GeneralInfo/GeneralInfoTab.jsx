@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
 
 import {
-  Button, Grid, GridColumn, GridRow,
+  Button, Grid, GridColumn, GridRow, List,
 } from 'semantic-ui-react';
 import { DateTime } from 'luxon';
-import I18n from '../../lib/i18n';
-import Markdown from '../Markdown';
-import RegistrationRequirements from './Requirements';
-import { getFullDateTimeString } from '../../lib/utils/dates';
-import WinnerTable from './WinnerTable';
-import InformationGrid from './GeneralInfo/InformationGrid';
-import OneColumnGridEntry from './GeneralInfo/OneColumnGridEntry';
+import I18n from '../../../lib/i18n';
+import Markdown from '../../Markdown';
+import RegistrationRequirements from '../Requirements';
+import { getFullDateTimeString } from '../../../lib/utils/dates';
+import WinnerTable from '../WinnerTable';
+import InformationGrid from './InformationGrid';
+import OneColumnGridEntry from './OneColumnGridEntry';
 
 export default function GeneralInfoTab({
   competition,
@@ -78,11 +78,10 @@ export default function GeneralInfoTab({
                       <Button onClick={() => setShowHighlights(false)}>
                         {I18n.t('competitions.competition_info.hide_highlights')}
                       </Button>
-                      <div>
-                        {competition.main_event_id && <Markdown md={winners} id="competition-info-winners" />}
-                        <br />
-                        {records && <Markdown md={records} id="competition-info-records" />}
-                      </div>
+                      <List>
+                        <List.Item>{competition.main_event_id && <Markdown md={winners} id="competition-info-winners" />}</List.Item>
+                        {records && <List.Item><Markdown md={records} id="competition-info-records" /></List.Item>}
+                      </List>
                     </>
                   ) : (
                     <Button onClick={() => setShowHighlights(true)}>
@@ -96,7 +95,7 @@ export default function GeneralInfoTab({
           </Grid>
         </GridColumn>
       </GridRow>
-      { competition['results_posted?']
+      { competition.winning_results
         && (
         <Grid.Row>
           <GridColumn width={16}>
