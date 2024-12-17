@@ -1,11 +1,11 @@
 import React, { useMemo } from 'react';
 import { Tab, TabPane } from 'semantic-ui-react';
-import GeneralInfoTab from './GeneralInfoTab';
+import GeneralInfoTab from './GeneralInfo/GeneralInfoTab';
 import CompetitionTab from './CompetitionTab';
 import EventsTable from './EventsTable';
 import Schedule from './Schedule';
 import WCAQueryClientProvider from '../../lib/providers/WCAQueryClientProvider';
-import './style.css';
+import './style.scss';
 import TimeLimitCutoffInfo from './TimeLimitCutoffInfo';
 import I18n from '../../lib/i18n';
 

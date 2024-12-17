@@ -6,7 +6,7 @@ import {
 import { DateTime } from 'luxon';
 import I18n from '../../../lib/i18n';
 import Markdown from '../../Markdown';
-import RegistrationRequirements from '../Requirements';
+import RegistrationRequirements from '../Requirements/RegistrationRequirements';
 import { getFullDateTimeString } from '../../../lib/utils/dates';
 import WinnerTable from '../WinnerTable';
 import InformationGrid from './InformationGrid';
@@ -95,7 +95,7 @@ export default function GeneralInfoTab({
           </Grid>
         </GridColumn>
       </GridRow>
-      { competition.winning_results
+      { competition.winning_results.length > 0
         && (
         <Grid.Row>
           <GridColumn width={16}>

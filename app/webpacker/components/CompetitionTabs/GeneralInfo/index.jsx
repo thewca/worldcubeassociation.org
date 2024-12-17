@@ -1,15 +1,18 @@
 import React from 'react';
+import GeneralInfoTab from './GeneralInfoTab';
 import WCAQueryClientProvider from '../../../lib/providers/WCAQueryClientProvider';
-import RegistrationRequirements from './RegistrationRequirements';
 
 export default function Wrapper({
-  competition, userInfo,
+  competition, userInfo, records, winners, media,
 }) {
   return (
     <WCAQueryClientProvider>
-      <RegistrationRequirements
+      <GeneralInfoTab
         competition={competition}
         userInfo={userInfo}
+        records={records}
+        media={media}
+        winners={winners}
       />
     </WCAQueryClientProvider>
   );
