@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Button, Dropdown, Icon } from 'semantic-ui-react';
 import _ from 'lodash';
 import { actionUrls } from '../../../lib/requests/routes.js.erb';
@@ -19,6 +19,11 @@ function StatusViewEditMode({
 
   const [newStatus, setNewStatus] = useInputState(metadata.status);
   const { save, saving } = useSaveAction();
+  const statusOptions = useMemo(() => Object.keys(ticketStatuses[ticketType]).map((key) => ({
+    key,
+    text: ticketStatuses[ticketType][key],
+    value: key,
+  })), [ticketType]);
 
   function saveStatus(status) {
     save(
@@ -41,11 +46,7 @@ function StatusViewEditMode({
       <span>{'Status: '}</span>
       <Dropdown
         inline
-        options={Object.keys(ticketStatuses[ticketType]).map((key) => ({
-          key,
-          text: ticketStatuses[ticketType][key],
-          value: key,
-        }))}
+        options={statusOptions}
         value={newStatus}
         onChange={setNewStatus}
       />
