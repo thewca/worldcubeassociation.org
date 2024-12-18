@@ -1,5 +1,15 @@
 <% content = capture do %>
-  <%= render "competition_info", competition: @competition %>
+  <%= react_component("CompetitionTabs/GeneralInfo", {
+    competition: @competition.to_competition_overview_info(include_results: false),
+    userInfo: current_user.as_json({
+                                     only: %w[wca_id unconfirmed_wca_id],
+                                     methods: [],
+                                     include: [],
+                                   }),
+    winners: winners(@competition, @competition.main_event),
+    records: records(@competition),
+    media: @competition.media.accepted
+  }) %>
 
   <% if @competition.user_can_view_results?(current_user) %>
     <% if !@competition.results_posted? %>
