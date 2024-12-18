@@ -28,15 +28,6 @@ module ResultsValidators
     LETTER_AFTER_PERIOD_WARNING = "'%{name}' is missing a space after a period in their name. Please confirm that this is indeed the correct spelling or fix the name."
     SINGLE_LETTER_FIRST_OR_LAST_NAME_WARNING = "'%{name}' has a single letter as first or last name. Please fix the name or confirm that this is indeed the competitor's correct name according to an official document."
     SINGLE_NAME_WARNING = "'%{name}' has only one name. Please confirm that this is indeed the competitor's full name according to an official document."
-    UNKNOWN_DOB_WARNING = "Some unknown DOB warning is thrown, please check with WST."
-
-    DOB_VALIDATION_ISSUES = [
-      :dob_jan_one,
-      :dob_very_young,
-      :dob_not_so_young,
-    ].freeze
-
-    DOB_VALIDATION_ISSUES_MAP = DOB_VALIDATION_ISSUES.to_h { |issue| [issue, issue] }
 
     def self.description
       "This validator checks that Persons data make sense with regard to the competition results and the WCA database."
@@ -50,22 +41,22 @@ module ResultsValidators
       true
     end
 
-    def self.dob_validations(dob)
+    def self.dob_validations(dob, competition_id = nil, name = nil)
       validation_issues = []
 
       # Check if DOB is January 1
       if dob.month == 1 && dob.day == 1
-        validation_issues << DOB_VALIDATION_ISSUES_MAP[:dob_jan_one]
+        validation_issues << ValidationWarning.new(:persons, competition_id, DOB_0101_WARNING, name: name)
       end
 
       # Check if DOB is very young
       if dob.year >= Time.now.year - 3
-        validation_issues << DOB_VALIDATION_ISSUES_MAP[:dob_very_young]
+        validation_issues << ValidationWarning.new(:persons, competition_id, VERY_YOUNG_PERSON_WARNING, name: name)
       end
 
       # Check if DOB is not so young
       if dob.year <= Time.now.year - 100
-        validation_issues << DOB_VALIDATION_ISSUES_MAP[:dob_not_so_young]
+        validation_issues << ValidationWarning.new(:persons, competition_id, NOT_SO_YOUNG_PERSON_WARNING, name: name)
       end
 
       validation_issues
@@ -110,27 +101,13 @@ module ResultsValidators
                                                name: p.name)
           end
 
-          PersonsValidator.dob_validations(p.dob).each do |validation|
-            case validation
-            when DOB_VALIDATION_ISSUES_MAP[:dob_jan_one]
-              @warnings << ValidationWarning.new(:persons, competition.id,
-                                                 DOB_0101_WARNING,
-                                                 name: p.name)
-            when DOB_VALIDATION_ISSUES_MAP[:dob_very_young]
-              @warnings << ValidationWarning.new(:persons, competition.id,
-                                                 VERY_YOUNG_PERSON_WARNING,
-                                                 name: p.name)
-            when DOB_VALIDATION_ISSUES_MAP[:dob_not_so_young]
-              @warnings << ValidationWarning.new(:persons, competition.id,
-                                                 NOT_SO_YOUNG_PERSON_WARNING,
-                                                 name: p.name)
-            else
-              @warnings << ValidationWarning.new(:persons, competition.id,
-                                                 UNKNOWN_DOB_WARNING,
-                                                 name: p.name)
+          PersonsValidator.dob_validations(p.dob, competition.id, p.name).each do |validation|
+            if validation.is_a?(ValidationError)
+              @errors << validation
+            elsif validation.is_a?(ValidationWarning)
+              @warnings << validation
             end
           end
-
           # Look for double whitespaces or leading/trailing whitespaces.
           unless p.name.squeeze(" ").strip == p.name
             @errors << ValidationError.new(:persons, competition.id,

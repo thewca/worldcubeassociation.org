@@ -7,19 +7,6 @@ import Loading from '../../Requests/Loading';
 import useLoadedData from '../../../lib/hooks/useLoadedData';
 import Errored from '../../Requests/Errored';
 
-function warningMessage(messageKey) {
-  switch (messageKey) {
-    case 'dob_jan_one':
-      return 'DOB is Jan 1.';
-    case 'dob_very_young':
-      return 'DOB is too young.';
-    case 'dob_not_so_young':
-      return 'DOB is too old.';
-    default:
-      return 'Unknown warning';
-  }
-}
-
 function EditPersonValidations({ ticketDetails }) {
   const { ticket } = ticketDetails;
   const {
@@ -30,7 +17,7 @@ function EditPersonValidations({ ticketDetails }) {
   if (error) return <Errored />;
 
   return validators.dob.map((validator) => (
-    <Message warning>{warningMessage(validator)}</Message>));
+    <Message warning>{validator.message}</Message>));
 }
 
 function EditPersonTicketWorkbenchForWrt({ ticketDetails, actingStakeholderId, sync }) {
