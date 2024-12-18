@@ -1,6 +1,38 @@
 # frozen_string_literal: true
 
 class TicketsController < ApplicationController
+  include Rails::Pagination
+
+  SORT_WEIGHT_LAMBDAS = {
+    createdAt:
+      lambda { |ticket| ticket.created_at },
+  }.freeze
+
+  def index
+    tickets = Ticket
+
+    # Filters
+    type = params[:type]
+    if type
+      tickets = tickets.where(metadata_type: type)
+    end
+
+    status = params[:status]
+    tickets = tickets.select do |ticket|
+      if status
+        ticket.metadata.status == status
+      else
+        true
+      end
+    end
+
+    # Sort
+    sort_param = params[:sort] || ''
+    tickets = sort(tickets, sort_param, SORT_WEIGHT_LAMBDAS)
+
+    paginate json: tickets
+  end
+
   def show
     respond_to do |format|
       format.html do
