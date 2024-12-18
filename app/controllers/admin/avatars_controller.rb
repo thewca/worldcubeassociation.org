@@ -38,7 +38,7 @@ module Admin
           avatar.save!
         end
       end
-      redirect_to admin_avatars_path
+      render json: { status: :ok }
     end
   end
 end
