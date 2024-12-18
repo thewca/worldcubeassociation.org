@@ -33,7 +33,7 @@ function Avatar({
         }}
       />
       <Divider horizontal />
-      <ButtonGroup>
+      <ButtonGroup toggle>
         {actions.map((action) => (
           <Button
             key={action.label}

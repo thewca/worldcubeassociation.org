@@ -6,18 +6,11 @@ import {
   List,
   Segment,
 } from 'semantic-ui-react';
-import 'pure-react-carousel/dist/react-carousel.es.css';
 import { useMutation } from '@tanstack/react-query';
 import I18n from '../../../../lib/i18n';
 import AvatarCard from './AvatarCard';
 import updateAvatars from './api/updateAvatars';
 import WCAQueryClientProvider from '../../../../lib/providers/WCAQueryClientProvider';
-
-// {
-// "avatars[68402][action]": "approve",
-// "avatars[68402][rejection_reason]": "",
-// "commit": "Submit"
-// }
 
 const transformAvatarsForRequest = (approvedAvatars, rejectedAvatars) => {
   const avatars = {};
