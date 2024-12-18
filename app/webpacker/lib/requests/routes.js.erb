@@ -285,3 +285,7 @@ export const bulkUpdateRegistrationUrl = `<%= CGI.unescape(Rails.application.rou
 export const paymentTicketUrl = (competitionId, donationIso) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v1_registrations_payment_ticket_path(competition_id: "${competitionId}", donation_iso: "${donationIso}")) %>`;
 
 export const regulationsUrl = (regulationNumber) => `<%= CGI.unescape(Rails.application.routes.url_helpers.regulations_path) %>${regulationNumber}`
+
+export const bookmarkUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.bookmark_path) %>`
+
+export const unbookmarkUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.unbookmark_path) %>`

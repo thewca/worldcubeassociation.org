@@ -222,12 +222,7 @@
     <div id="competition-data">
       <h3>
         <% if current_user && @competition.upcoming? %>
-          <span class="bookmark-icon" id="not-bookmarked" data-toggle="tooltip" data-placement="bottom" title="<%= I18n.t('competitions.competition_info.bookmark') %>" <% if current_user.is_bookmarked?(@competition) %>style="display: none;"<% end %>>
-            <%= ui_icon('bookmark') %>
-          </span>
-          <span class="bookmark-icon" id="bookmarked" data-toggle="tooltip" data-placement="bottom" title="<%= I18n.t('competitions.competition_info.is_bookmarked') %>" <% if !current_user.is_bookmarked?(@competition) %>style="display: none;"<% end %>>
-            <%= ui_icon('bookmark') %>
-          </span>
+          <%= react_component("BookmarkIcon", { competitionIsBookmarked: current_user.is_bookmarked?(@competition), competitionId: @competition.id }, { style: "display: inline" }) %>
         <% end %>
         <% if @competition.championships.any? %>
           <span class="championship-trophy" data-toggle="tooltip" data-placement="bottom" title="<%= @competition.championships.sort.map { |championship| championship.name }.join(", ") %>">
