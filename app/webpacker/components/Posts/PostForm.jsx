@@ -122,18 +122,20 @@ export default function PostForm({
             </Message.List>
           </Message>
         )}
-        { postCreated && !postUpdated && (
-        <Message positive>
-          Post successfully created. View it
-          {' '}
-          <a href={postURL}>here</a>
-        </Message>
+        {postCreated && !postUpdated && (
+          <Message positive>
+            Post successfully created. View it
+            {' '}
+            <a href={postURL}>here</a>
+            .
+          </Message>
         )}
-        { postUpdated && (
+        {postUpdated && (
           <Message positive>
             Post successfully updated. View it
             {' '}
             <a href={postURL}>here</a>
+            .
           </Message>
         )}
         <Button type="submit" primary>{ postId ? 'Update Post' : 'Create Post'}</Button>
