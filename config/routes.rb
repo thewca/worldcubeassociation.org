@@ -61,7 +61,7 @@ Rails.application.routes.draw do
   patch 'users/:id/avatar' => 'users#update_avatar'
   delete 'users/:id/avatar' => 'users#delete_avatar'
   get 'admin/avatars' => 'admin/avatars#index'
-  post 'admin/avatars' => 'admin/avatars#update_all'
+  post 'admin/avatars' => 'admin/avatars#update_all', as: :update_avatars
 
   get 'map' => 'competitions#embedable_map'
 
