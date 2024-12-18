@@ -35,6 +35,10 @@ class Ticket < ApplicationRecord
     end
   end
 
+  def can_user_access?(user)
+    user_stakeholders(user).any?
+  end
+
   DEFAULT_SERIALIZE_OPTIONS = {
     include: %w[ticket_logs metadata],
   }.freeze
