@@ -729,7 +729,6 @@ RSpec.describe Registration do
         expect(waiting_list_reg.reload.competing_status).to eq('waiting_list')
       end
 
-
       it 'if competitor limit is exceeded' do
         auto_accept_comp.update(competitor_limit: 5)
         FactoryBot.create_list(:registration, 6, :accepted, :skip_validations, competition: auto_accept_comp)
@@ -802,7 +801,7 @@ RSpec.describe Registration do
         pending_registrations.reverse_each do |r|
           FactoryBot.create(:registration_payment, :skip_create_hook, registration: r, competition: auto_accept_comp)
         end
-        pending_registrations = FactoryBot.create_list(:registration, 5, :pending, competition: auto_accept_comp)
+        FactoryBot.create_list(:registration, 5, :pending, competition: auto_accept_comp)
 
         Registration.bulk_auto_accept(auto_accept_comp)
         expect(auto_accept_comp.registrations.competing_status_accepted.count).to eq(10)
@@ -855,7 +854,7 @@ RSpec.describe Registration do
         pending_registrations.reverse_each do |r|
           FactoryBot.create(:registration_payment, :skip_create_hook, registration: r, competition: auto_accept_comp)
         end
-        pending_registrations = FactoryBot.create_list(:registration, 5, :pending, competition: auto_accept_comp)
+        FactoryBot.create_list(:registration, 5, :pending, competition: auto_accept_comp)
 
         Registration.bulk_auto_accept(auto_accept_comp)
         expect(auto_accept_comp.registrations.competing_status_accepted.count).to eq(10)
@@ -888,7 +887,7 @@ RSpec.describe Registration do
         pending_registrations.reverse_each do |r|
           FactoryBot.create(:registration_payment, :skip_create_hook, registration: r, competition: threshold_auto_accept_comp)
         end
-        pending_registrations = FactoryBot.create_list(:registration, 5, :pending, competition: threshold_auto_accept_comp)
+        FactoryBot.create_list(:registration, 5, :pending, competition: threshold_auto_accept_comp)
 
         Registration.bulk_auto_accept(threshold_auto_accept_comp)
         expect(threshold_auto_accept_comp.registrations.competing_status_accepted.count).to eq(9)
@@ -901,7 +900,6 @@ RSpec.describe Registration do
         threshold_auto_accept_comp.registrations.competing_status_waiting_list.each do |waitlisted_registration|
           expect(waitlisted_registration.registration_payments.first.updated_at).to be >= earliest_accepted_timestamp
         end
-
       end
 
       it 'accepts waitlisted registrations' do
@@ -921,7 +919,7 @@ RSpec.describe Registration do
       it 'accepts waitlisted registrations before pending registrations - waitlisted fills all spots' do
         FactoryBot.create_list(:registration, 9, :paid, :waiting_list, competition: threshold_auto_accept_comp)
         FactoryBot.create_list(:registration, 3, :paid, :pending, competition: threshold_auto_accept_comp)
-        initial_pending_ids = threshold_auto_accept_comp.registrations.competing_status_pending.ids
+        threshold_auto_accept_comp.registrations.competing_status_pending.ids
         expected_accepted = threshold_auto_accept_comp.waiting_list.entries[..3]
         expected_remaining = threshold_auto_accept_comp.waiting_list.entries[4..]
 
@@ -942,7 +940,7 @@ RSpec.describe Registration do
         pending_registrations.reverse_each do |r|
           FactoryBot.create(:registration_payment, :skip_create_hook, registration: r, competition: threshold_auto_accept_comp)
         end
-        pending_registrations = FactoryBot.create_list(:registration, 5, :pending, competition: threshold_auto_accept_comp)
+        FactoryBot.create_list(:registration, 5, :pending, competition: threshold_auto_accept_comp)
 
         Registration.bulk_auto_accept(threshold_auto_accept_comp)
         expect(threshold_auto_accept_comp.registrations.competing_status_accepted.count).to eq(9)
@@ -973,7 +971,7 @@ RSpec.describe Registration do
         pending_registrations.reverse_each do |r|
           FactoryBot.create(:registration_payment, :skip_create_hook, registration: r, competition: auto_accept_comp)
         end
-        pending_registrations = FactoryBot.create_list(:registration, 5, :pending, competition: auto_accept_comp)
+        FactoryBot.create_list(:registration, 5, :pending, competition: auto_accept_comp)
 
         Registration.bulk_auto_accept(auto_accept_comp)
         expect(auto_accept_comp.registrations.competing_status_accepted.count).to eq(14)
@@ -987,7 +985,6 @@ RSpec.describe Registration do
         auto_accept_comp.registrations.competing_status_waiting_list.each do |waitlisted_registration|
           expect(waitlisted_registration.registration_payments.first.updated_at).to be >= earliest_accepted_timestamp
         end
-
       end
 
       it 'accepts waitlisted registrations' do
@@ -1004,7 +1001,7 @@ RSpec.describe Registration do
       it 'accepts a combination of registrations' do
         FactoryBot.create_list(:registration, 9, :paid, :waiting_list, competition: auto_accept_comp)
         FactoryBot.create_list(:registration, 3, :paid, :pending, competition: auto_accept_comp)
-        initial_pending_ids = auto_accept_comp.registrations.competing_status_pending.ids
+        auto_accept_comp.registrations.competing_status_pending.ids
         expected_accepted = auto_accept_comp.waiting_list.entries
 
         Registration.bulk_auto_accept(auto_accept_comp)
@@ -1021,8 +1018,7 @@ RSpec.describe Registration do
         FactoryBot.create_list(:registration, 4, :paid, :rejected, competition: auto_accept_comp)
         FactoryBot.create_list(:registration, 5, :paid, :cancelled, competition: auto_accept_comp)
 
-
-        initial_pending_ids = auto_accept_comp.registrations.competing_status_pending.ids
+        auto_accept_comp.registrations.competing_status_pending.ids
         expected_accepted = auto_accept_comp.waiting_list.entries
 
         Registration.bulk_auto_accept(auto_accept_comp)

@@ -449,19 +449,18 @@ class Registration < ApplicationRecord
     end
 
     sorted_pending_registrations = competition
-      .registrations
-      .competing_status_pending
-      .with_payments
-      .sort_by { |registration| registration.last_positive_payment.updated_at }
+                                   .registrations
+                                   .competing_status_pending
+                                   .with_payments
+                                   .sort_by { |registration| registration.last_positive_payment.updated_at }
 
     sorted_pending_registrations.each { |r| r.auto_accept }
   end
 
   def auto_accept
-    "attempting to auto-accept #{id}"
     return log_error('Auto-accept is not enabled for this competition.') unless competition.auto_accept_registrations
     return log_error('Can only auto-accept pending registrations or first position on waiting list') unless
-      competing_status_pending? || competing_status_waiting_list? && waiting_list_position == 1
+      competing_status_pending? || (competing_status_waiting_list? && waiting_list_position == 1)
     return log_error("Competition has reached auto_accept_disable_threshold of #{competition.auto_accept_disable_threshold} registrations") if
       competition.auto_accept_threshold_reached?
     return log_error('Competitor still has outstanding registration fees') if outstanding_entry_fees > 0
@@ -469,13 +468,13 @@ class Registration < ApplicationRecord
 
     if competition.accepted_full? && competing_status_pending?
       update_lanes!(
-        { user_id: user_id, competing: {status: Registrations::Helper::STATUS_WAITING_LIST}}.with_indifferent_access,
-        'Auto-accept'
+        { user_id: user_id, competing: { status: Registrations::Helper::STATUS_WAITING_LIST } }.with_indifferent_access,
+        'Auto-accept',
       )
     else
       update_lanes!(
-        {user_id: user_id, competing: {status: Registrations::Helper::STATUS_ACCEPTED}}.with_indifferent_access,
-        'Auto-accept'
+        { user_id: user_id, competing: { status: Registrations::Helper::STATUS_ACCEPTED } }.with_indifferent_access,
+        'Auto-accept',
       )
     end
   rescue ActiveRecord::RecordInvalid => e

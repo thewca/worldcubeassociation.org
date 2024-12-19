@@ -44,7 +44,7 @@ FactoryBot.define do
     trait :paid do
       after(:create) do |registration|
         FactoryBot.create :registration_payment, :skip_create_hook, registration: registration, user: registration.user,
-                                                 amount_lowest_denomination: registration.competition.base_entry_fee_lowest_denomination
+                                                                    amount_lowest_denomination: registration.competition.base_entry_fee_lowest_denomination
       end
     end
 
