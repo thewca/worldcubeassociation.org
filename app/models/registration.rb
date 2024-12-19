@@ -49,8 +49,8 @@ class Registration < ApplicationRecord
     Rails.cache.delete(CacheAccess.registration_processing_cache_key(competition_id, user_id))
   end
 
-  def update_lanes!(params, acting_user)
-    Registrations::Lanes::Competing.update!(params, self.competition, acting_user.id)
+  def update_lanes!(params, acting_user_id)
+    Registrations::Lanes::Competing.update!(params, self.competition, acting_user_id)
   end
 
   def guest_limit
@@ -448,12 +448,7 @@ class Registration < ApplicationRecord
 
     sorted_pending_registrations.each { |r| r.auto_accept }
 
-    puts "checking accept for: #{competition.waiting_list.entries.each}"
-    competition.waiting_list.entries.each do |r_id|
-      puts r_id
-      result = Registration.find(r_id).auto_accept
-      puts result
-    end
+    competition.waiting_list.entries.each { |r_id| Registration.find(r_id).auto_accept }
   end
 
   def auto_accept
@@ -465,12 +460,19 @@ class Registration < ApplicationRecord
     return log_error('Competitor still has outstanding registration fees') if outstanding_entry_fees > 0
     return log_error('Cant auto-accept while registration is not open') if !competition.registration_currently_open?
 
-    if competition.accepted_full?
-      update(competing_status: Registrations::Helper::STATUS_WAITING_LIST)
-      competition.waiting_list.add(id)
+    if competition.accepted_full? && competing_status_pending?
+      update_lanes!(
+        { user_id: user_id, competing: {status: Registrations::Helper::STATUS_WAITING_LIST}}.with_indifferent_access,
+        'Auto-accept'
+      )
     else
-      update(competing_status: Registrations::Helper::STATUS_ACCEPTED)
+      update_lanes!(
+        {user_id: user_id, competing: {status: Registrations::Helper::STATUS_ACCEPTED}}.with_indifferent_access,
+        'Auto-accept'
+      )
     end
+  rescue ActiveRecord::RecordInvalid => e
+    log_error("Auto accept error: #{e}")
   end
 
   private def log_error(error)

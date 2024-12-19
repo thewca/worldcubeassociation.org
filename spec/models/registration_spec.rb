@@ -540,6 +540,8 @@ RSpec.describe Registration do
 
       reg.auto_accept
       expect(reg.reload.competing_status).to eq('accepted')
+      expect(reg.registration_history_entries.last.actor_type).to eq('System')
+      expect(reg.registration_history_entries.last.actor_id).to eq('Auto-accept')
     end
 
     it 'auto accepts a competitor who included a donation in their payment' do
@@ -703,28 +705,40 @@ RSpec.describe Registration do
       end
     end
 
-    context 'auto accept is prevented by validations' do
-      it 'if competitor limit is reached' do
-        auto_accept_comp.competitor_limit = 5
+    context 'log when auto accept is prevented by validations' do
+      it 'if competitor limit is reached and status is pending' do
+        auto_accept_comp.update(competitor_limit: 5)
         FactoryBot.create_list(:registration, 5, :accepted, competition: auto_accept_comp)
         expect(reg.competing_status).to eq('pending')
 
         FactoryBot.create(:registration_payment, :skip_create_hook, registration: reg, competition: auto_accept_comp)
 
         reg.auto_accept
-        expect(reg.errors[:competitor_limit]).to include('The competition is full.')
+        expect(Rails.logger).to have_received(:error).with('Auto accept error: Validation failed: Competitor limit The competition is full.')
         expect(reg.reload.competing_status).to eq('pending')
       end
 
+      it 'if competitor limit is reached and first on waiting list' do
+        auto_accept_comp.update(competitor_limit: 5)
+        FactoryBot.create_list(:registration, 5, :accepted, competition: auto_accept_comp)
+        waiting_list_reg = FactoryBot.create(:registration, :waiting_list, :paid, competition: auto_accept_comp)
+        expect(waiting_list_reg.reload.competing_status).to eq('waiting_list')
+
+        waiting_list_reg.auto_accept
+        expect(Rails.logger).to have_received(:error).with('Auto accept error: Validation failed: Competitor limit The competition is full.')
+        expect(waiting_list_reg.reload.competing_status).to eq('waiting_list')
+      end
+
+
       it 'if competitor limit is exceeded' do
-        auto_accept_comp.competitor_limit = 5
+        auto_accept_comp.update(competitor_limit: 5)
         FactoryBot.create_list(:registration, 6, :accepted, :skip_validations, competition: auto_accept_comp)
         expect(reg.competing_status).to eq('pending')
 
         FactoryBot.create(:registration_payment, :skip_create_hook, registration: reg, competition: auto_accept_comp)
 
         reg.auto_accept
-        expect(reg.errors[:competitor_limit]).to include('The competition is full.')
+        expect(Rails.logger).to have_received(:error).with('Auto accept error: Validation failed: Competitor limit The competition is full.')
         expect(reg.reload.competing_status).to eq('pending')
       end
 
@@ -740,7 +754,7 @@ RSpec.describe Registration do
         FactoryBot.create(:registration_payment, :skip_create_hook, registration: regB, competition: competitionB)
 
         regB.auto_accept
-        expect(regB.errors[:competition_id]).to include('You can only be accepted for one Series competition at a time.')
+        expect(Rails.logger).to have_received(:error).with('Auto accept error: Validation failed: Competition You can only be accepted for one Series competition at a time.')
         expect(regB.reload.competing_status).to eq('pending')
       end
     end
@@ -756,6 +770,8 @@ RSpec.describe Registration do
         reg.auto_accept
         expect(reg.reload.competing_status).to eq('waiting_list')
         expect(reg.waiting_list_position).to eq(1)
+        expect(reg.registration_history_entries.last.actor_type).to eq('System')
+        expect(reg.registration_history_entries.last.actor_id).to eq('Auto-accept')
       end
 
       it 'gets prevented by auto-accept threshold' do
@@ -769,7 +785,6 @@ RSpec.describe Registration do
         reg.auto_accept
         expect(reg.reload.competing_status).to eq('pending')
         expect(reg.waiting_list_position).to eq(nil)
-
       end
     end
   end
@@ -815,7 +830,7 @@ RSpec.describe Registration do
 
         expect((expected_accepted - auto_accept_comp.registration_ids).empty?).to eq(true)
 
-        expect(auto_accept_comp.waiting_list.entries).to eq(expected_remaining)
+        expect(auto_accept_comp.waiting_list.reload.entries).to eq(expected_remaining)
       end
 
       it 'accepts a combination of registrations' do

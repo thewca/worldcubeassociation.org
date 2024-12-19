@@ -22,7 +22,7 @@ module Registrations
         registration.add_history_entry(changes, "worker", user_id, "Worker processed")
       end
 
-      def self.update!(update_params, competition, current_user_id)
+      def self.update!(update_params, competition, acting_user_id)
         guests = update_params[:guests]
         status = update_params.dig('competing', 'status')
         comment = update_params.dig('competing', 'comment')
@@ -56,10 +56,14 @@ module Registrations
           changes[:event_ids] = event_ids if event_ids.present?
 
           registration.save!
-          registration.add_history_entry(changes, 'user', current_user_id, Registrations::Helper.action_type(update_params, current_user_id))
+          if acting_user_id == 'Auto-accept'
+            registration.add_history_entry(changes, 'System', acting_user_id, Registrations::Helper.action_type(update_params, acting_user_id))
+          else
+            registration.add_history_entry(changes, 'user', acting_user_id, Registrations::Helper.action_type(update_params, acting_user_id))
+          end
         end
 
-        send_status_change_email(registration, status, user_id, current_user_id) if status.present? && old_status != status
+        send_status_change_email(registration, status, user_id, acting_user_id) if status.present? && old_status != status
 
         # TODO: V3-REG Cleanup Figure out a way to get rid of this reload
         registration.reload

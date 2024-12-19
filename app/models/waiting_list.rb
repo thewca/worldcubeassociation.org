@@ -8,6 +8,8 @@ class WaitingList < ActiveRecord::Base
   end
 
   def add(entry_id)
+    return if entries.include?(entry_id)
+
     if entries.nil?
       update_column :entries, [entry_id]
     else
