@@ -488,7 +488,9 @@ class Registration < ApplicationRecord
 
   private def waiting_list_auto_accept_check
     changed_from_accepted = saved_change_to_competing_status? && saved_change_to_competing_status.first == Registrations::Helper::STATUS_ACCEPTED
-    waiting_list_leader_id = competition.waiting_list.entries.first
+    return unless changed_from_accepted
+
+    waiting_list_leader_id = competition.waiting_list&.entries.first
 
     if changed_from_accepted && waiting_list_leader_id.present?
       Registration.find(waiting_list_leader_id).auto_accept

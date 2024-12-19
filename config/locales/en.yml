@@ -1746,7 +1746,7 @@ en:
           refund_policy_limit_date: "Date after which no more refunds will be issued."
         registration:
           auto_accept_enabled: "This will automatically accept any user who registers and pays. Use at your own risk, and set a disable threshold to have control over the final registrations which get accepted."
-          auto_accept_disable_threshold: "When this number of accepted registrations is reached, auto-accept will disable itself - allowing organizers to manually approve the final registrations. Must be less than the competitor limit."
+          auto_accept_disable_threshold: "When this number of accepted registrations is reached, auto-accept will disable itself - allowing organizers to manually approve the final registrations. Must be less than the competitor limit. 0 = threshold is not enforced."
           opening_date_time: "Note: Registration open and close are in UTC time"
           closing_date_time: ""
           waiting_list_deadline_date: "The date when waitlisted registrants will no longer be accepted. If you have a deadline for refunds, the deadline for being accepted should not be before the deadline for refunds."
