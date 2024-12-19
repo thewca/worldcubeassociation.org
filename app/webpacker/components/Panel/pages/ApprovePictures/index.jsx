@@ -1,73 +1,63 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback } from 'react';
 import {
-  Button,
   CardGroup,
   Header,
   List,
   Segment,
 } from 'semantic-ui-react';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import I18n from '../../../../lib/i18n';
 import AvatarCard from './AvatarCard';
 import updateAvatars from './api/updateAvatars';
 import WCAQueryClientProvider from '../../../../lib/providers/WCAQueryClientProvider';
+import getPendingAvatarUsers from './api/getPendingAvatarUsers';
+import Loading from '../../../Requests/Loading';
 
-const transformAvatarsForRequest = (approvedAvatars, rejectedAvatars) => {
-  const avatars = {};
-
-  approvedAvatars.forEach(({ id }) => {
-    avatars[id] = { action: 'approve' };
-  });
-
-  rejectedAvatars.forEach(({ id, rejectionReason }) => {
-    avatars[id] = { action: 'reject', rejection_reason: rejectionReason };
-  });
-
-  return { avatars };
-};
-
-export default function Wrapper({ pendingUsers }) {
+export default function Wrapper() {
   return (
     <WCAQueryClientProvider>
-      <ApprovePictures pendingUsers={pendingUsers} />
+      <ApprovePictures />
     </WCAQueryClientProvider>
   );
 }
 
-function ApprovePictures({ pendingUsers }) {
-  const [approvedAvatars, setApprovedAvatarIds] = useState([]);
-  const [rejectedAvatars, setRejectedAvatarIds] = useState([]);
-  const [deferredAvatars, setDeferredAvatarIds] = useState([]);
+function ApprovePictures() {
+  const { data: pendingUsers, isLoading } = useQuery({
+    queryKey: ['pending-avatars'],
+    queryFn: getPendingAvatarUsers,
+  });
 
-  const onApprove = useCallback((avatar) => {
-    setApprovedAvatarIds((prev) => (prev.includes(avatar.id) ? prev.filter((a) => a.id !== avatar.id)
-      : [...prev, avatar]));
-  }, [setApprovedAvatarIds]);
-
-  const onReject = useCallback((avatar, rejectionReason) => {
-    setRejectedAvatarIds((prev) => (prev.includes(avatar.id) ? prev.filter((a) => a.id !== avatar.id)
-      : [...prev, { ...avatar, rejectionReason }]));
-  }, [setRejectedAvatarIds]);
-
-  const onDefer = useCallback((avatar) => {
-    setDeferredAvatarIds((prev) => (prev.includes(avatar.id) ? prev.filter((a) => a.id !== avatar.id)
-      : [...prev, avatar]));
-  }, [setDeferredAvatarIds]);
+  const queryClient = useQueryClient();
 
   const { mutate: decideOnAvatars } = useMutation({
-    mutationFn: () => updateAvatars(transformAvatarsForRequest(approvedAvatars, rejectedAvatars)),
-    onSuccess: (data) => {
-      setApprovedAvatarIds([]);
-      setRejectedAvatarIds([]);
+    mutationFn: updateAvatars,
+    onSuccess: (_, params) => {
+      console.log(pendingUsers);
+      console.log(params);
+      queryClient.setQueriesData(pendingUsers.filter((p) => p.pending_avatar_id !== params.avatarId), { queryKey: ['pending_avatars'] });
     },
   });
+
+  const onApprove = useCallback((avatar) => {
+    decideOnAvatars({ avatarId: avatar.id, action: 'approve' });
+  }, [decideOnAvatars]);
+
+  const onReject = useCallback((avatar, rejectionGuidelines, rejectionReason) => {
+    decideOnAvatars({
+      avatarId: avatar.id, action: 'reject', rejectionGuidelines, rejectionReason,
+    });
+  }, [decideOnAvatars]);
+
+  if (isLoading) {
+    return <Loading />;
+  }
 
   return (
     <>
       <Segment>
         <Header as="h3">Guidelines</Header>
         <List bulleted>
-          {I18n.tArray('users.edit.avatar_guidelines').map((g, idx) => <List.Item key={g}>{g}</List.Item>)}
+          {I18n.tArray('users.edit.avatar_guidelines').map((g) => <List.Item key={g}>{g}</List.Item>)}
         </List>
         <Header as="h4">Additional guidelines for Staff Members</Header>
         <List bulleted>
@@ -81,10 +71,8 @@ function ApprovePictures({ pendingUsers }) {
               user={user}
               onApprove={onApprove}
               onReject={onReject}
-              onDefer={onDefer}
             />
           ))}
-          <Button primary onClick={decideOnAvatars}> Submit </Button>
         </CardGroup>
       ) : (
         <p>

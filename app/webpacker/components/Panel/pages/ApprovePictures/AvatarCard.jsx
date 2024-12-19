@@ -11,10 +11,11 @@ import {
   CardMeta,
   CardDescription,
   Grid,
-  Card, Checkbox,
+  Card, Checkbox, Input,
 } from 'semantic-ui-react';
 import { editPersonUrl } from '../../../../lib/requests/routes.js.erb';
 import I18n from '../../../../lib/i18n';
+import useInputState from '../../../../lib/hooks/useInputState';
 
 function Avatar({
   title, actions, imageUrl,
@@ -51,11 +52,12 @@ function Avatar({
 }
 
 export default function AvatarCard({
-  user, onReject, onApprove, onDefer,
+  user, onReject, onApprove,
 }) {
   const [activeAvatarIndex, setActiveAvatarIndex] = useState(0);
-  const [avatarState, setAvatarState] = useState('');
-  const [rejectionReason, setRejectionReason] = useState('');
+  const [rejectionGuidelines, setRejectionGuidelines] = useState([]);
+  const [rejectionReason, setRejectionReason] = useInputState('');
+  const [isChoosingRejectionReason, setIsChoosingRejectionReason] = useState(false);
 
   const possibleRejectionReasons = useMemo(() => {
     const r = I18n.tArray('users.edit.avatar_guidelines');
@@ -87,36 +89,23 @@ export default function AvatarCard({
       label: 'Approve',
       onClick: () => {
         onApprove(user.pending_avatar);
-        setAvatarState('approved');
       },
       color: 'green',
-      disabled: avatarState === 'approved',
     },
     {
       label: 'Reject',
       onClick: () => {
-        if (avatarState === 'chooseRejectionReason') {
-          if (rejectionReason === '') {
-            setAvatarState('');
+        if (isChoosingRejectionReason) {
+          if (rejectionGuidelines.length === 0) {
+            setIsChoosingRejectionReason(false);
           } else {
-            onReject(user.pending_avatar, rejectionReason);
-            setAvatarState('rejected');
+            onReject(user.pending_avatar, rejectionGuidelines, rejectionReason);
           }
         } else {
-          setAvatarState('chooseRejectionReason');
+          setIsChoosingRejectionReason(true);
         }
       },
       color: 'red',
-      disabled: avatarState === 'rejected',
-    },
-    {
-      label: 'Defer',
-      onClick: () => {
-        onDefer(user.pending_avatar);
-        setAvatarState('deferred');
-      },
-      color: 'grey',
-      disabled: avatarState === 'deferred',
     },
   ];
 
@@ -144,14 +133,20 @@ export default function AvatarCard({
                   imageUrl={user.pending_avatar.url}
                   actions={pendingAvatarActions}
                 />
-                { avatarState === 'chooseRejectionReason'
-                  && possibleRejectionReasons.map((r) => (
-                    <Checkbox
-                      checked={rejectionReason === r}
-                      onClick={() => setRejectionReason(r)}
-                      label={r}
-                    />
-                  ))}
+                { isChoosingRejectionReason
+                  && (
+                  <>
+                    {possibleRejectionReasons.map((r) => (
+                      <Checkbox
+                        checked={rejectionGuidelines.includes(r)}
+                        onClick={() => setRejectionGuidelines((prev) => (prev.includes(r) ? prev.filter((reason) => reason !== r)
+                          : [...prev, r]))}
+                        label={r}
+                      />
+                    ))}
+                    <Input fluid placeholder="Additional Rejection Reason" value={rejectionReason} onChange={setRejectionReason} />
+                  </>
+                  )}
               </Grid.Column>
               <Grid.Column>
                 <Avatar
