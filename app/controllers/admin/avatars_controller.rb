@@ -6,7 +6,7 @@ module Admin
     end
 
     def pending_avatar_users
-      render json: User.where.not(pending_avatar: nil).as_json({ methods: %w[staff_or_any_delegate? avatar_history current_avatar_id pending_avatar]})
+      render json: User.where.not(pending_avatar: nil).as_json({ methods: %w[staff_or_any_delegate? avatar_history current_avatar_id pending_avatar] })
     end
 
     def update_all
@@ -43,6 +43,7 @@ module Admin
       end
       render json: { status: :ok }
     end
+
     def update_avatar
       avatar_id = params.require(:avatar_id)
       avatar_action = params.require(:avatar_action)
