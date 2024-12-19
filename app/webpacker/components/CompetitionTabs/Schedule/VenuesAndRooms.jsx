@@ -3,9 +3,9 @@ import {
   Button, Checkbox, Grid, Header,
   Menu, Message, Segment, Transition,
 } from 'semantic-ui-react';
-import { getTextColor, TEXT_WHITE } from '../../lib/utils/calendar';
-import { toDegrees } from '../../lib/utils/edit-schedule';
-import I18n from '../../lib/i18n';
+import { getTextColor, TEXT_WHITE } from '../../../lib/utils/calendar';
+import { toDegrees } from '../../../lib/utils/edit-schedule';
+import I18n from '../../../lib/i18n';
 
 export default function VenuesAndRooms({
   venues,

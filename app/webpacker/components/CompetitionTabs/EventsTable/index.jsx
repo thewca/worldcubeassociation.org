@@ -7,15 +7,15 @@ import {
   TableHeaderCell,
   TableRow,
 } from 'semantic-ui-react';
-import I18n from '../../lib/i18n';
-import { events, formats } from '../../lib/wca-data.js.erb';
+import I18n from '../../../lib/i18n';
+import { events, formats } from '../../../lib/wca-data.js.erb';
 import {
   advancementConditionToString,
   cutoffToString,
   eventQualificationToString,
   getRoundTypeId,
   timeLimitToString,
-} from '../../lib/utils/wcif';
+} from '../../../lib/utils/wcif';
 
 export default function EventsTable({ competitionInfo, wcifEvents }) {
   return (
