@@ -4,6 +4,6 @@
   <%= render layout: "nav" do %>
     <h1><%= yield(:title) %></h1>
 
-    <%= react_component('Panel/pages/ApprovePictures', { pendingUsers: @users.as_json({ methods: %w[staff_or_any_delegate? avatar_history current_avatar_id pending_avatar]})}) %>
+    <%= react_component('Panel/pages/ApprovePictures') %>
   <% end %>
 </div>
