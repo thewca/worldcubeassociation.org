@@ -22,14 +22,14 @@ function BookmarkIcon({ competitionInitiallyBookmarked, competitionId }) {
   const { mutate: bookmarkCompetitionMutation, isPending: isBookmarking } = useMutation({
     mutationFn: bookmarkCompetition,
     onSuccess: () => {
-      setIsBookmarked(!isBookmarked);
+      setIsBookmarked(true);
     },
   });
 
   const { mutate: unbookmarkCompetitionMutation, isPending: isUnbookmarking } = useMutation({
     mutationFn: unbookmarkCompetition,
     onSuccess: () => {
-      setIsBookmarked(!isBookmarked);
+      setIsBookmarked(false);
     },
   });
 
@@ -37,6 +37,7 @@ function BookmarkIcon({ competitionInitiallyBookmarked, competitionId }) {
     <Popup
       trigger={(
         <Icon
+          disabled={isBookmarking || isUnbookmarking}
           link
           onClick={() => (isBookmarked ? unbookmarkCompetitionMutation(competitionId) : bookmarkCompetitionMutation(competitionId))}
           name={isBookmarking || isUnbookmarking ? 'spinner' : 'bookmark'}
