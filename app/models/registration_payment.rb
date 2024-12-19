@@ -30,6 +30,6 @@ class RegistrationPayment < ApplicationRecord
   end
 
   private def attempt_auto_accept
-    registration&.auto_accept
+    registration.auto_accept
   end
 end
