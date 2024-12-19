@@ -452,12 +452,13 @@ class Registration < ApplicationRecord
       .registrations
       .competing_status_pending
       .with_payments
-      .sort_by { |registration| registration.registration_payments.first.updated_at }
+      .sort_by { |registration| registration.last_positive_payment.updated_at }
 
     sorted_pending_registrations.each { |r| r.auto_accept }
   end
 
   def auto_accept
+    "attempting to auto-accept #{id}"
     return log_error('Auto-accept is not enabled for this competition.') unless competition.auto_accept_registrations
     return log_error('Can only auto-accept pending registrations or first position on waiting list') unless
       competing_status_pending? || competing_status_waiting_list? && waiting_list_position == 1
@@ -478,7 +479,7 @@ class Registration < ApplicationRecord
       )
     end
   rescue ActiveRecord::RecordInvalid => e
-    log_error("Auto accept error: #{e}")
+    log_error("Auto accept error for registration #{id}: #{e}")
   end
 
   private def log_error(error)
@@ -493,5 +494,13 @@ class Registration < ApplicationRecord
     if changed_from_accepted && waiting_list_leader_id.present?
       Registration.find(waiting_list_leader_id).auto_accept
     end
+  end
+
+  def last_positive_payment
+    registration_payments
+      .where('amount_lowest_denomination > 0')
+      .order(updated_at: :desc)
+      .limit(1)
+      .first
   end
 end
