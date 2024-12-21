@@ -381,12 +381,7 @@ class RegistrationsController < ApplicationController
       return redirect_to competition_register_path(competition)
     end
 
-    begin
-      stored_record = payment_account.find_payment_from_request(params)
-    rescue WcaExceptions::PaymentInvalidError => e
-      flash[:error] = e.message
-      return redirect_to competition_register_path(competition)
-    end
+    stored_record, secret_check = payment_account.find_payment_from_request(params)
 
     unless stored_record.present?
       flash[:error] = t("registrations.payment_form.errors.generic.not_found", provider: t("payments.payment_providers.#{payment_integration}"))
@@ -397,6 +392,14 @@ class RegistrationsController < ApplicationController
 
     unless stored_intent.present?
       flash[:error] = t("registrations.payment_form.errors.generic.intent_not_found", provider: t("payments.payment_providers.#{payment_integration}"))
+      return redirect_to competition_register_path(competition)
+    end
+
+    # Some API gateways like Stripe provide the client_secret as a kind of "checksum" (or fraud protection)
+    #   back to us upon redirect. Other providers (like PayPal…) unfortunately don't.
+    #   So we only compare this secret value with our stored intent record if it's actually provided to us
+    if secret_check.present? && stored_intent.client_secret != secret_check
+      flash[:error] = t("registrations.payment_form.errors.generic.secret_invalid", provider: t("payments.payment_providers.#{payment_integration}"))
       return redirect_to competition_register_path(competition)
     end
 

@@ -1299,9 +1299,7 @@ en:
           not_found: "%{provider} reported back a transaction ID that couldn't be found."
           intent_not_found: "%{provider} reported back a transaction ID for which we don't have an attempted payment on file."
           remote_not_found: "%{provider} failed to provide API details for the transaction ID that it reported."
-        stripe:
-          not_an_intent: "Stripe reported back a transaction ID that is not actually a payment intent."
-          secret_invalid: "Stripe reported back a transaction secret that doesn't match our records."
+          secret_invalid: "%{provider} reported back a transaction secret that doesn't match our records."
         paypal_canceled: "PayPal reported that the order was manually canceled. Please try again."
         payment_reset: "The payment was rejected by Stripe."
         payment_pending: "The payment has not been completed yet."

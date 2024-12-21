@@ -88,12 +88,9 @@ class ConnectedStripeAccount < ApplicationRecord
     intent_secret = params[:payment_intent_client_secret]
 
     # We expect that the record here is a top-level PaymentIntent in Stripe's API model
-    stored_record = StripeRecord.find_by(stripe_id: intent_id)
+    stored_record = StripeRecord.payment_intent.find_by(stripe_id: intent_id)
 
-    raise WcaExceptions::PaymentInvalidError.new(t("registrations.payment_form.errors.stripe.not_an_intent")) unless stored_record&.payment_intent?
-    raise WcaExceptions::PaymentInvalidError.new(t("registrations.payment_form.errors.stripe.secret_invalid")) unless stored_record.payment_intent&.client_secret == intent_secret
-
-    stored_record
+    [stored_record, intent_secret]
   end
 
   def issue_refund(charge_record, amount_iso)
