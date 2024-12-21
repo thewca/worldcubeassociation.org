@@ -1273,6 +1273,7 @@ en:
       title: "Registration fees"
       payment_successful: "Your payment was successful, and your registration should show up as paid below."
       payment_processing: "Your payment has been confirmed, but the transaction is still pending."
+      payment_partial: "Your payment has been confirmed, but it does not cover the full amount. Please pay the remaining fee as well."
       button_text: "Pay now!"
       hints:
         donation: "Optional donation that will go only to the organization team"
@@ -1300,6 +1301,8 @@ en:
         stripe_not_an_intent: "Stripe reported back a transaction ID that is not actually a payment intent."
         payment_reset: "The payment was rejected by Stripe."
         payment_pending: "The payment has not been completed yet."
+        payment_failed: "The payment was not successful. Please check your payment details and try again."
+        payment_canceled: "The payment was canceled and will not be completed."
     preferred_events_prompt_html: "To speed up registration in the future, you can set your preferred events %{link}."
     preferred_events_populated_html: "We autopopulated this with your preferred events, which you can edit %{link}."
     registration_requirements: "Registration requirements for the competition:"
