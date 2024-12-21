@@ -331,7 +331,7 @@ class RegistrationsController < ApplicationController
     connected_account = ConnectedStripeAccount.find_by(account_id: stored_record.account_id)
 
     unless connected_account.present?
-      logger.error "Stripe webhook reported event for account #{stored_record.account_id} but we are not connected to that account."
+      logger.error "Stripe webhook reported event for account '#{stored_record.account_id}' but we are not connected to that account."
       return head :not_found
     end
 
