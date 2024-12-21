@@ -37,12 +37,11 @@ class PaymentIntent < ApplicationRecord
   def update_status_and_charges(payment_account, api_intent, action_source, source_datetime = DateTime.current)
     self.with_lock do
       # The order of operations here is critical:
-      #   1. Update the underlying raw record
-      #   2. Update this current `self` record, so that `wca_status` can be correctly deduced from (1)
+      #   We need to update the underlying raw record first, so that `determine_wca_status` works correctly
       self.payment_record.update_status(api_intent)
-      self.update_status(api_intent)
+      updated_wca_status = self.determine_wca_status
 
-      case self.wca_status
+      case updated_wca_status
       when PaymentIntent.wca_statuses[:succeeded]
         # The payment didn't need any additional actions and is completed!
 
@@ -51,6 +50,7 @@ class PaymentIntent < ApplicationRecord
           self.update!(
             confirmed_at: source_datetime,
             confirmation_source: action_source,
+            wca_status: updated_wca_status,
           )
         end
 
@@ -69,6 +69,7 @@ class PaymentIntent < ApplicationRecord
           self.update!(
             canceled_at: source_datetime,
             cancellation_source: action_source,
+            wca_status: updated_wca_status,
           )
         end
       when PaymentIntent.wca_statuses[:created]
@@ -79,25 +80,22 @@ class PaymentIntent < ApplicationRecord
           confirmation_source: nil,
           canceled_at: nil,
           cancellation_source: nil,
+          wca_status: updated_wca_status,
         )
       end
+
+      # Write any additional details now that the main status cycle is complete
+      self.update_intent_details(api_intent)
     end
   end
 
   private
 
-    def update_status(api_record)
-      gateway_error = nil
-
+    def update_intent_details(api_record)
       case self.payment_record_type
       when "StripeRecord"
-        gateway_error = api_record.last_payment_error
+        self.update!(error_details: api_record.last_payment_error)
       end
-
-      self.update!(
-        error_details: gateway_error,
-        wca_status: self.determine_wca_status,
-      )
     end
 
     def wca_status_consistency
