@@ -15,7 +15,6 @@ import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { setMessage } from './RegistrationMessage';
 import fetchWithJWTToken from '../../../lib/requests/fetchWithJWTToken';
 import Loading from '../../Requests/Loading';
-import i18n from '../../../lib/i18n';
 import useCheckboxState from '../../../lib/hooks/useCheckboxState';
 import AutonumericField from '../../wca/FormBuilder/input/AutonumericField';
 import getPaymentTicket from "../api/payment/get/getPaymentTicket";
@@ -76,6 +75,7 @@ export default function PaymentStep({
     // be redirected to an intermediate site first to authorize the payment, then
     // redirected to the `return_url`.
     if (error) {
+      // i18n-tasks-use t('registrations.payment_form.errors.stripe_failed')
       dispatch(setMessage('registrations.payment_form.errors.stripe_failed', 'error', {
         provider: I18n.t('payments.payment_providers.stripe'),
       }));
@@ -100,7 +100,7 @@ export default function PaymentStep({
                 setDonationChecked(event, data);
                 setDonationAmount(0);
               }}
-              label={i18n.t('registrations.payment_form.labels.show_donation')}
+              label={I18n.t('registrations.payment_form.labels.show_donation')}
             />
             { isDonationChecked && (
             <AutonumericField
@@ -110,7 +110,7 @@ export default function PaymentStep({
               value={donationAmount}
               label={(
                 <Label>
-                  {i18n.t('registrations.payment_form.labels.donation')}
+                  {I18n.t('registrations.payment_form.labels.donation')}
                 </Label>
 )}
             />
@@ -122,13 +122,14 @@ export default function PaymentStep({
           : (
             <>
               <Header size="small" id="money-subtotal">
-                Subtotal:
+                {I18n.t('registrations.payment_form.labels.subtotal')}
+                :
                 {' '}
                 {displayAmount}
               </Header>
               <Divider hidden />
               <Button type="submit" primary disabled={isLoading || conversionFetching || !stripe || !elements} id="submit">
-                {i18n.t('registrations.payment_form.button_text')}
+                {I18n.t('registrations.payment_form.button_text')}
               </Button>
             </>
           )}

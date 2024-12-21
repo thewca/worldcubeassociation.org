@@ -17,6 +17,11 @@ class AddRegistrationJob < ApplicationJob
   end
 
   def perform(lane_name, competition_id, user_id, lane_params)
+    if Registration.exists?(competition_id: competition_id, user_id: user_id)
+      Rails.cache.delete(CacheAccess.registration_processing_cache_key(competition_id, user_id))
+      return
+    end
+
     lane_model_name = lane_name.upcase_first
 
     lane = Registrations::Lanes.class_eval(lane_model_name)

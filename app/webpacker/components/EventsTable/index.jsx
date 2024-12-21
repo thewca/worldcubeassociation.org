@@ -7,7 +7,7 @@ import {
   TableHeaderCell,
   TableRow,
 } from 'semantic-ui-react';
-import i18n from '../../lib/i18n';
+import I18n from '../../lib/i18n';
 import { events, formats } from '../../lib/wca-data.js.erb';
 import {
   advancementConditionToString,
@@ -24,28 +24,28 @@ export default function EventsTable({ competitionInfo, wcifEvents }) {
         <TableHeader>
           <TableRow>
             <TableHeaderCell>
-              {i18n.t('competitions.results_table.event')}
+              {I18n.t('competitions.results_table.event')}
             </TableHeaderCell>
             <TableHeaderCell>
-              {i18n.t('competitions.results_table.round')}
+              {I18n.t('competitions.results_table.round')}
             </TableHeaderCell>
             <TableHeaderCell>
-              <a href="#format">{i18n.t('competitions.events.format')}</a>
+              <a href="#format">{I18n.t('competitions.events.format')}</a>
             </TableHeaderCell>
             <TableHeaderCell>
-              <a href="#time-limit">{i18n.t('competitions.events.time_limit')}</a>
+              <a href="#time-limit">{I18n.t('competitions.events.time_limit')}</a>
             </TableHeaderCell>
             {competitionInfo['uses_cutoff?'] && (
               <TableHeaderCell>
-                <a href="#cutoff">{i18n.t('competitions.events.cutoff')}</a>
+                <a href="#cutoff">{I18n.t('competitions.events.cutoff')}</a>
               </TableHeaderCell>
             )}
             <TableHeaderCell>
-              {i18n.t('competitions.events.proceed')}
+              {I18n.t('competitions.events.proceed')}
             </TableHeaderCell>
             {competitionInfo['uses_qualification?'] && (
               <TableHeaderCell>
-                {i18n.t('competitions.events.qualification')}
+                {I18n.t('competitions.events.qualification')}
               </TableHeaderCell>
             )}
           </TableRow>
@@ -59,7 +59,7 @@ export default function EventsTable({ competitionInfo, wcifEvents }) {
                   {events.byId[event.id].name}
                 </TableCell>
               )}
-              <TableCell>{i18n.t(`rounds.${getRoundTypeId(i + 1, event.rounds.length, Boolean(round.cutoff))}.cellName`)}</TableCell>
+              <TableCell>{I18n.t(`rounds.${getRoundTypeId(i + 1, event.rounds.length, Boolean(round.cutoff))}.cellName`)}</TableCell>
               <TableCell>
                 {round.cutoff && `${formats.byId[round.cutoff.numberOfAttempts].shortName} / `}
                 {formats.byId[round.format].shortName}

@@ -521,11 +521,6 @@ en:
         comment: ""
         multiple: ""
         question: ""
-      registration:
-        comments: ""
-        guests: ""
-        status: ""
-        administrative_notes: "Additional notes kept as part of managing this registration. These can't be viewed by the competitor."
       vote:
         comment: ""
       competition_medium:
@@ -801,7 +796,7 @@ en:
         weat: "This team is responsible for carrying out the administrative tasks of the WCA Board of Directors."
         wfc: "This committee is responsible for managing the overall finances of the WCA, including budgeting, reporting, analysis, bookkeeping, and tax filings. They also manage the WCA's largest source of income, the WCA Dues System, along with various funding programs that provide support to local communities at different stages of development, including Travel Funding, Equipment Funding, and Regional Organization Support."
         wmt: "This team is responsible for developing and managing the WCA Brand, seeking sponsorships, supporting the distribution of WCA Competition Gear, and marketing WCA Merchandise."
-        wmct: "This team is responsible for overseeing the organization and development of WCA Continental and World Championships."
+        wmct: "The WCA Major Championship Team oversees the coordination and advancement of WCA Continental and World Championships by developing guidelines and strategic plans, managing host city selection, supporting organizing teams, and ensuring consistent championship experiences."
         wqac: "This committee has the role to support and promote continuous quality improvement within the WCA, as well as worldwide application of quality standards to ensure consistent high quality of processes, WCA Staff, Regional Organizations, Competition Organizers, and Competition Staff."
         wrc: "The WRC handles all issues which are related to the application, the improvement and the development of the WCA Regulations. They support WCA Delegates on any kind of procedural matters happening at competitions and decide on unresolved and uncovered incidents."
         wrt: "The WRT is responsible for managing all data in the databases of the WCA, most importantly competition results and persons data."
@@ -1131,7 +1126,6 @@ en:
       need_gender: "Need a gender"
       need_dob: "Need a birthdate"
       need_country: "Need a region"
-      cannot_be_deleted_and_accepted: "A registration cannot be deleted and accepted at the same time."
       must_register: "You must register for at least one event."
       exceeds_event_limit:
         one: "You must register in exactly 1 event."
@@ -1156,20 +1150,7 @@ en:
         other: "people"
     flash:
       not_using_wca: "This competition is not using WCA registration"
-      accepted_and_mailed:
-        one: "Registration accepted! Email notification sent."
-        other: "Registrations accepted! Email notifications sent."
-      rejected_and_mailed:
-        one: "Registration moved to waiting list"
-        other: "Registrations moved to waiting list"
-      deleted_and_mailed:
-        one: "Registration deleted"
-        other: "Registrations deleted"
-      single_deletion_and_mail: "Deleted registration and emailed %{mail}"
-      cannot_delete: "You cannot delete your registration."
       updated: "Updated registration"
-      failed: "Could not update registration"
-      deleted: "Successfully deleted your registration for %{comp}"
       registered: "Registration form submitted - make sure to follow all instructions from the Registration Requirements below to ensure your registration is complete."
       imported: "Successfully imported registrations!"
       added: "Successfully added registration!"
@@ -1238,11 +1219,8 @@ en:
       export_csv: "Export to CSV"
       email: "Email"
       approve: "Approve"
-      reject: "Reject"
-      delete: "Delete"
       waiting_list: "Waiting List"
       approved_registrations: "Approved registrations"
-      deleted_registrations: "Deleted registrations"
       non_competing: "Non-competing registrations"
       not_paid: "Not paid"
       registered:
@@ -1253,9 +1231,7 @@ en:
       payment_completed_on: "Payment completed on: %{date}"
       #context: Counts how many parallel registrations in the same Series there are. Will display a number behind this label.
       series_registrations: "Series registrations"
-      series_registrations_hint_html: "Hint: Series registrations are being displayed as <i>%{description}</i>"
       total: "Total"
-      n_events: "Number of events"
     new_registration:
       title: "Register for %{comp}"
     registered_with_account_html: "This person registered with an account. You can edit their personal information %{here}."
@@ -1266,7 +1242,6 @@ en:
     refund: "Refund Payment"
     refund_confirmation: "Are you sure you want to refund this payment?"
     update: "Update Registration"
-    delete: "Delete"
     delete_confirm: "Are you sure you want to delete your registration?"
     delete_registration: "Delete Registration"
     will_open_html: "Registration will open in <strong>%{days}</strong> on %{time}."
@@ -1288,7 +1263,6 @@ en:
     entry_fees_fully_paid: "You have paid %{paid}, which fully covers the registration fees."
     will_pay_here: "You will pay them here after submitting your registration"
     wont_pay_here: "Please check the competition's information for instructions about how to pay"
-    not_qualified: "Not qualified"
     refund_form:
       hints:
         refund_amount: "The amount to refund to the competitor. Can be any value up to the amount already paid."
@@ -1299,25 +1273,23 @@ en:
       title: "Registration fees"
       payment_successful: "Your payment was successful, and your registration should show up as paid below."
       payment_processing: "Your payment has been confirmed, but the transaction is still pending."
+      payment_partial: "Your payment has been confirmed, but it does not cover the full amount. Please pay the remaining fee as well."
       button_text: "Pay now!"
       hints:
         donation: "Optional donation that will go only to the organization team"
         payment_button: "Your payment information never reaches the WCA website. It is securely sent to Stripe, which handles the payment process and gets back to us."
       labels:
-        entry_fees: "Registration fees"
         fees_paid: "Paid"
         fees_remaining: "Remaining"
         donation: "Donation"
         show_donation: "I would like to make an additional optional donation that will go only to the organization team"
         payment_information: "Payment information"
-        payment_button: "Pay your fees with Stripe"
         ajax_error: "WCA server error"
         payment_service_error: "Payment service error"
         subtotal: "Subtotal"
       alerts:
-        not_a_number: "Please enter a valid amount."
         amount_too_low: "The total amount must be at least the registration fees to be paid."
-        amount_rather_high: "You are about to pay at least double the required amount for your registration to proceed. Please confirm the payment by pressing OK."
+        amount_rather_high: "You are about to pay at least double the required amount for your registration to proceed."
       errors:
         already_paid: "The charge was not placed because the registration fees are already paid."
         not_allowed: "You can't pay for that registration."
@@ -1333,6 +1305,8 @@ en:
         paypal_canceled: "PayPal reported that the order was manually canceled. Please try again."
         payment_reset: "The payment was rejected by Stripe."
         payment_pending: "The payment has not been completed yet."
+        payment_failed: "The payment was not successful. Please check your payment details and try again."
+        payment_canceled: "The payment was canceled and will not be completed."
     preferred_events_prompt_html: "To speed up registration in the future, you can set your preferred events %{link}."
     preferred_events_populated_html: "We autopopulated this with your preferred events, which you can edit %{link}."
     registration_requirements: "Registration requirements for the competition:"
@@ -1859,6 +1833,8 @@ en:
         rejected:
           title: "Rejected registrations"
           information: "Rejected competitors cannot re-register."
+        pending:
+          information: "Pending should only be used for incomplete (eg, unpaid) registrations - please use the Waiting List if your competition is too full to accept new comeptitors."
         payment:
          refunded_status: "Refunded"
          initialized: "Payment process was started on %{date}, but not finished."
@@ -1954,6 +1930,7 @@ en:
         -4010: "The Waiting List Position is not Valid"
         -4011: "You can only accept the first person on the waiting list"
         -4012: "You are not qualified to compete in the selected events"
+        -4014: "You are already registered for this competition."
         -6001: "WCA Payment is not enabled for this competition"
         -6002: "You need to finish your registration before you can pay"
     #context: and when an error occured
