@@ -418,19 +418,19 @@ class RegistrationsController < ApplicationController
     # For details on what the individual statuses mean, please refer to the comments
     #   of the `enum :wca_status` declared in the `payment_intent.rb` model
     case stored_intent.wca_status
-    when 'succeeded'
+    when PaymentIntent.wca_statuses[:succeeded]
       flash[:success] = t("registrations.payment_form.payment_successful")
-    when 'pending'
+    when PaymentIntent.wca_statuses[:pending]
       flash[:warning] = t("registrations.payment_form.errors.payment_pending")
-    when 'created'
+    when PaymentIntent.wca_statuses[:created]
       flash[:error] = t("registrations.payment_form.errors.payment_reset")
-    when 'processing'
+    when PaymentIntent.wca_statuses[:processing]
       flash[:warning] = t("registrations.payment_form.payment_processing")
-    when 'partial'
+    when PaymentIntent.wca_statuses[:partial]
       flash[:warning] = t("registrations.payment_form.payment_partial")
-    when 'failed'
+    when PaymentIntent.wca_statuses[:failed]
       flash[:error] = t("registrations.payment_form.errors.payment_failed")
-    when 'canceled'
+    when PaymentIntent.wca_statuses[:canceled]
       flash[:error] = t("registrations.payment_form.errors.payment_canceled")
     else
       # Invalid status
