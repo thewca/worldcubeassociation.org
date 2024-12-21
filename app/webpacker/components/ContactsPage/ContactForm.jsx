@@ -4,7 +4,7 @@ import {
 } from 'semantic-ui-react';
 import ReCAPTCHA from 'react-google-recaptcha';
 import _ from 'lodash';
-import { contactUrl, contactEditProfileActionUrl } from '../../lib/requests/routes.js.erb';
+import { contactUrl, contactEditProfileActionUrl, contactEditOthersProfileActionUrl } from '../../lib/requests/routes.js.erb';
 import useSaveAction from '../../lib/hooks/useSaveAction';
 import I18n from '../../lib/i18n';
 import UserData from './UserData';
@@ -31,9 +31,12 @@ const getFormRedirection = (formValues) => {
     if (formValues[CONTACT_RECIPIENTS_MAP.wrt].queryType === 'edit_profile') {
       return contactEditProfileActionUrl;
     }
+    if (formValues[CONTACT_RECIPIENTS_MAP.wrt].queryType === 'edit_others_profile') {
+      return contactEditOthersProfileActionUrl;
+    }
   }
   return null;
-}
+};
 
 export default function ContactForm({
   loggedInUserData,
@@ -47,7 +50,10 @@ export default function ContactForm({
   const contactFormState = useStore();
   const dispatch = useDispatch();
   const { formValues: { contactRecipient: selectedContactRecipient, userData } } = contactFormState;
-  const formRedirection = useMemo(() => getFormRedirection(contactFormState.formValues));
+  const formRedirection = useMemo(
+    () => getFormRedirection(contactFormState.formValues),
+    [contactFormState.formValues],
+  );
 
   const isFormValid = (
     selectedContactRecipient && userData.name && userData.email && (captchaValue || formRedirection)
