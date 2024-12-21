@@ -39,7 +39,7 @@ class PaymentIntent < ApplicationRecord
       # The order of operations here is critical:
       #   We need to update the underlying raw record first, so that `determine_wca_status` works correctly
       self.payment_record.update_status(api_intent)
-      updated_wca_status = self.determine_wca_status
+      updated_wca_status = self.determine_wca_status.to_s
 
       case updated_wca_status
       when PaymentIntent.wca_statuses[:succeeded]
@@ -57,7 +57,7 @@ class PaymentIntent < ApplicationRecord
         payment_account.retrieve_payments(self) do |payment|
           # Only trigger outer update blocks for charges that are actually successful. This is reasonable
           # because we only ever trigger this block for PIs that are marked "successful" in the first place
-          charge_successful = payment.determine_wca_status == PaymentIntent.wca_statuses[:succeeded]
+          charge_successful = payment.determine_wca_status.to_s == PaymentIntent.wca_statuses[:succeeded]
 
           yield payment if block_given? && charge_successful
         end
