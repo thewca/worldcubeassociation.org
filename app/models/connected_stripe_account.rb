@@ -78,7 +78,9 @@ class ConnectedStripeAccount < ApplicationRecord
     )
   end
 
-  def retrieve_payments(intent_record)
+  def retrieve_payments(payment_intent)
+    intent_record = payment_intent.payment_record
+
     intent_charges = Stripe::Charge.list(
       { payment_intent: intent_record.stripe_id },
       stripe_account: self.account_id,
