@@ -54,7 +54,7 @@ class PaymentIntent < ApplicationRecord
           )
         end
 
-        payment_account.retrieve_payments(self) do |payment|
+        payment_account.retrieve_payments(self.payment_record) do |payment|
           # Only trigger outer update blocks for charges that are actually successful. This is reasonable
           # because we only ever trigger this block for PIs that are marked "successful" in the first place
           charge_successful = payment.determine_wca_status == PaymentIntent.wca_statuses[:succeeded]

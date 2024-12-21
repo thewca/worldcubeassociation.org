@@ -78,9 +78,9 @@ class ConnectedStripeAccount < ApplicationRecord
     )
   end
 
-  def retrieve_payments(payment_intent)
+  def retrieve_payments(intent_record)
     intent_charges = Stripe::Charge.list(
-      { payment_intent: payment_intent.payment_record.stripe_id },
+      { payment_intent: intent_record.stripe_id },
       stripe_account: self.account_id,
     )
 
@@ -90,7 +90,7 @@ class ConnectedStripeAccount < ApplicationRecord
       if stripe_record.present?
         stripe_record.update_status(charge)
       else
-        stripe_record = StripeRecord.create_from_api(charge, {}, self.account_id, payment_intent.payment_record)
+        stripe_record = StripeRecord.create_from_api(charge, {}, self.account_id, intent_record)
         yield stripe_record if block_given?
       end
 
