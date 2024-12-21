@@ -46,7 +46,7 @@ class PaymentIntent < ApplicationRecord
         # The payment didn't need any additional actions and is completed!
 
         # Record the success timestamp if not already done
-        unless self.confirmed_at.present?
+        unless self.succeeded?
           self.update!(
             confirmed_at: source_datetime,
             confirmation_source: action_source,
@@ -65,7 +65,7 @@ class PaymentIntent < ApplicationRecord
         # Canceled by the gateway
 
         # Record the cancellation timestamp if not already done
-        unless self.canceled_at.present?
+        unless self.canceled?
           self.update!(
             canceled_at: source_datetime,
             cancellation_source: action_source,
