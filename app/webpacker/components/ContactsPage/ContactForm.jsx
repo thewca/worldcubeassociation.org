@@ -50,10 +50,7 @@ export default function ContactForm({
   const contactFormState = useStore();
   const dispatch = useDispatch();
   const { formValues: { contactRecipient: selectedContactRecipient, userData } } = contactFormState;
-  const formRedirection = useMemo(
-    () => getFormRedirection(contactFormState.formValues),
-    [contactFormState.formValues],
-  );
+  const formRedirection = getFormRedirection(contactFormState.formValues);
 
   const isFormValid = (
     selectedContactRecipient && userData.name && userData.email && (captchaValue || formRedirection)

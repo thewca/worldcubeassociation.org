@@ -16,6 +16,42 @@ import SEARCH_MODELS from '../SearchWidget/SearchModel';
 
 const CONTACT_EDIT_PROFILE_QUERY_CLIENT = new QueryClient();
 
+export default function ContactEditProfilePage({ loggedInUserId, recaptchaPublicKey }) {
+  const [queryParams] = useQueryParams();
+  const [contactSuccess, setContactSuccess] = useState(false);
+
+  if (!loggedInUserId) {
+    return (
+      <Message error>
+        <I18nHTMLTranslate i18nKey="page.contact_edit_profile.not_logged_in_error" />
+      </Message>
+    );
+  }
+  if (contactSuccess) {
+    return (
+      <Message
+        success
+        content={I18n.t('page.contact_edit_profile.success_message')}
+      />
+    );
+  }
+
+  if (queryParams.editOthersProfile) {
+    return (
+      <ContactEditProfileOthers
+        setContactSuccess={setContactSuccess}
+        recaptchaPublicKey={recaptchaPublicKey}
+      />
+    );
+  }
+  return (
+    <ContactEditProfileSelf
+      setContactSuccess={setContactSuccess}
+      recaptchaPublicKey={recaptchaPublicKey}
+    />
+  );
+}
+
 function ContactEditProfileSelf({ setContactSuccess, recaptchaPublicKey }) {
   const { data: loggedInUserData, isLoading, isError } = useQuery({
     queryKey: ['userData'],
@@ -79,41 +115,5 @@ function ContactEditProfileOthers({ setContactSuccess, recaptchaPublicKey }) {
         />
       )}
     </Container>
-  );
-}
-
-export default function ContactEditProfilePage({ loggedInUserId, recaptchaPublicKey }) {
-  const [queryParams] = useQueryParams();
-  const [contactSuccess, setContactSuccess] = useState(false);
-
-  if (!loggedInUserId) {
-    return (
-      <Message error>
-        <I18nHTMLTranslate i18nKey="page.contact_edit_profile.not_logged_in_error" />
-      </Message>
-    );
-  }
-  if (contactSuccess) {
-    return (
-      <Message
-        success
-        content={I18n.t('page.contact_edit_profile.success_message')}
-      />
-    );
-  }
-
-  if (queryParams.editOthersProfile) {
-    return (
-      <ContactEditProfileOthers
-        setContactSuccess={setContactSuccess}
-        recaptchaPublicKey={recaptchaPublicKey}
-      />
-    );
-  }
-  return (
-    <ContactEditProfileSelf
-      setContactSuccess={setContactSuccess}
-      recaptchaPublicKey={recaptchaPublicKey}
-    />
   );
 }
