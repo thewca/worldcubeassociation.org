@@ -156,7 +156,7 @@ export function CompetitionsTable({
               <Table.Cell textAlign="right" width={2}>
                 {comp.date_range}
               </Table.Cell>
-              <Table.Cell width={6}>
+              <Table.Cell width={5}>
                 <Flag name={comp.country_iso2?.toLowerCase()} />
                 <a href={competitionUrl(comp.id)}>{comp.short_display_name}</a>
               </Table.Cell>
@@ -164,7 +164,7 @@ export function CompetitionsTable({
                 <strong>{countries.byIso2[comp.country_iso2].name}</strong>
                 {`, ${comp.city}`}
               </Table.Cell>
-              <Table.Cell width={4}>
+              <Table.Cell width={5}>
                 <PseudoLinkMarkdown text={comp.venue} />
               </Table.Cell>
             </Table.Row>
