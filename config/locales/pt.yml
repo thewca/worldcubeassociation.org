@@ -3700,6 +3700,12 @@ pt:
           title: Registos rejeitados
           #original_hash: 3fd2e0c
           information: Competidores rejeitados não se podem registar novamente.
+        pending:
+          #original_hash: f3656e1
+          information: >-
+            Pendente só deve ser utilizado para inscrições incompletas (por
+            exemplo, não pagas) - por favor use a Lista de Espera se a sua
+            competição estiver demasiado cheia para aceitar novos competidores.
         payment:
           #original_hash: d6fbc7a
           refunded_status: Reembolsado
@@ -3907,6 +3913,8 @@ pt:
         '-4011': Só pode aceitar a primeira pessoa da lista de espera
         #original_hash: 8d089d6
         '-4012': Não está qualificado para competir nos eventos selecionados
+        #original_hash: a244fde
+        '-4014': Já está inscrito nesta competição.
         #original_hash: 0df821f
         '-6001': Pagamento WCA não está ativado para esta competição
         #original_hash: 092da51

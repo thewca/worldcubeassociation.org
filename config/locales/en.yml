@@ -1263,6 +1263,7 @@ en:
     payment_form:
       payment_successful: "Your payment was successful, and your registration should show up as paid below."
       payment_processing: "Your payment has been confirmed, but the transaction is still pending."
+      payment_partial: "Your payment has been confirmed, but it does not cover the full amount. Please pay the remaining fee as well."
       button_text: "Pay now!"
       hints:
         donation: "Optional donation that will go only to the organization team"
@@ -1282,14 +1283,18 @@ en:
       errors:
         already_paid: "The charge was not placed because the registration fees are already paid."
         not_allowed: "You can't pay for that registration."
-        stripe_failed: "Please check the Stripe transaction."
-        paypal_failed: "Please check the PayPal order."
+        cpi_disconnected: "Tried to confirm a payment but the payment integration was disabled. Please contact the organizers of the competition."
+        generic:
+          failed: "Please check the %{provider} transaction."
+          not_found: "%{provider} reported back a transaction ID that couldn't be found."
+          intent_not_found: "%{provider} reported back a transaction ID for which we don't have an attempted payment on file."
+          remote_not_found: "%{provider} failed to provide API details for the transaction ID that it reported."
+          secret_invalid: "%{provider} reported back a transaction secret that doesn't match our records."
         paypal_canceled: "PayPal reported that the order was manually canceled. Please try again."
-        stripe_not_found: "Stripe reported back a transaction ID that couldn't be found."
-        stripe_secret_invalid: "Stripe reported back a transaction secret that doesn't match our records."
-        stripe_not_an_intent: "Stripe reported back a transaction ID that is not actually a payment intent."
         payment_reset: "The payment was rejected by Stripe."
         payment_pending: "The payment has not been completed yet."
+        payment_failed: "The payment was not successful. Please check your payment details and try again."
+        payment_canceled: "The payment was canceled and will not be completed."
     preferred_events_prompt_html: "To speed up registration in the future, you can set your preferred events %{link}."
     preferred_events_populated_html: "We autopopulated this with your preferred events, which you can edit %{link}."
     registration_requirements: "Registration requirements for the competition:"
@@ -1816,6 +1821,8 @@ en:
         rejected:
           title: "Rejected registrations"
           information: "Rejected competitors cannot re-register."
+        pending:
+          information: "Pending should only be used for incomplete (eg, unpaid) registrations - please use the Waiting List if your competition is too full to accept new comeptitors."
         payment:
          refunded_status: "Refunded"
          initialized: "Payment process was started on %{date}, but not finished."
@@ -1911,6 +1918,7 @@ en:
         -4010: "The Waiting List Position is not Valid"
         -4011: "You can only accept the first person on the waiting list"
         -4012: "You are not qualified to compete in the selected events"
+        -4014: "You are already registered for this competition."
         -6001: "WCA Payment is not enabled for this competition"
         -6002: "You need to finish your registration before you can pay"
     #context: and when an error occured
