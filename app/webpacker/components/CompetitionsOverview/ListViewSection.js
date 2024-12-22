@@ -217,8 +217,10 @@ export function CompetitionsTabletTable({
                 <a href={competitionUrl(comp.id)}>{comp.short_display_name}</a>
               </Table.Cell>
               <Table.Cell width={7}>
-                <strong>{countries.byIso2[comp.country_iso2].name}</strong>
-                {`, ${comp.city}`}
+                <span>
+                  <strong>{countries.byIso2[comp.country_iso2].name}</strong>
+                  {`, ${comp.city}`}
+                </span>
                 <PseudoLinkMarkdown text={comp.venue} />
               </Table.Cell>
             </Table.Row>
@@ -248,7 +250,7 @@ export function CompetitionsMobileTable({
             />
             <Table.Row error={isCancelled(comp)} className="competition-info mobile-compact">
               <Table.Cell>
-                <Label ribbon="right">
+                <Label ribbon="right" size="small">
                   <StatusIcon
                     comp={comp}
                     shouldShowRegStatus={shouldShowRegStatus}
@@ -262,9 +264,12 @@ export function CompetitionsMobileTable({
                 {' '}
               </Table.Cell>
               <Table.Cell>
-                <strong>{countries.byIso2[comp.country_iso2].name}</strong>
-                {`, ${comp.city}`}
-                <PseudoLinkMarkdown text={comp.venue} />
+                <span>
+                  <strong>{countries.byIso2[comp.country_iso2].name}</strong>
+                  {`, ${comp.city}`}
+                </span>
+                {' '}
+                <PseudoLinkMarkdown text={comp.venue} RenderAs="span" />
               </Table.Cell>
             </Table.Row>
           </React.Fragment>
