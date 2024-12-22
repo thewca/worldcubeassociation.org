@@ -4,7 +4,14 @@
 
   <p><b><%= t('registrations.registration_requirements') %></b>
   </p>
-  <%= render "competitions/registration_requirements", show_links_to_register_page: false %>
+  <%= react_component("CompetitionTabs/Requirements", {
+    competition: @competition.to_competition_overview_info(include_results: false),
+    userInfo: current_user.as_json({
+                                     only: %w[wca_id unconfirmed_wca_id],
+                                     methods: [],
+                                     include: [],
+                                   })
+  }) %>
   <hr/>
 
   <% closes_in_days = distance_of_time_in_words_to_now(@competition.registration_close) %>

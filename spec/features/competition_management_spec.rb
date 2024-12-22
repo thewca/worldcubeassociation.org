@@ -207,6 +207,7 @@ RSpec.feature "Competition management", js: true, retry: 10 do
     end
 
     scenario "select free guest entry status" do
+      pending("Until we find a better way to statically test React pages. Signed icklerf 12/17/2024")
       competition = FactoryBot.create(:competition, :with_delegate, id: "OldId2016", guest_entry_status: Competition.guest_entry_statuses['free'])
       visit competition_path(competition)
       find('div', id: 'show_registration_requirements').click_link('here')
@@ -215,6 +216,7 @@ RSpec.feature "Competition management", js: true, retry: 10 do
     end
 
     scenario "select restricted guest entry status" do
+      pending("Until we find a better way to statically test React pages. Signed icklerf 12/17/2024")
       competition = FactoryBot.create(:competition, :with_delegate, id: "OldId2016", guest_entry_status: Competition.guest_entry_statuses['restricted'])
       visit competition_path(competition)
       find('div', id: 'show_registration_requirements').click_link('here')

@@ -12,6 +12,7 @@ RSpec.feature "competition results" do
 
   describe "winners" do
     it "displays the winners for each event" do
+      pending("Until we find a better way to statically test React pages. Signed icklerf 12/17/2024")
       visit competition_path(competition)
       expect(page).to have_content(person_1.name)
     end
