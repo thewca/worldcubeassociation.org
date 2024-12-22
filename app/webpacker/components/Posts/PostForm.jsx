@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import {
-  Button, Form, FormField, Header, Message,
+  Button, Checkbox, Form, FormField, FormGroup, Header, Message,
 } from 'semantic-ui-react';
 import { useMutation } from '@tanstack/react-query';
 import I18n from '../../lib/i18n';
@@ -86,33 +86,32 @@ export default function PostForm({
         {header}
       </Header>
       <Form onSubmit={onSubmit}>
-        <FormField>
-          <Form.Input label={I18n.t('activerecord.attributes.post.title')} onChange={setFormTitle} value={formTitle} />
-        </FormField>
+        <Form.Input label={I18n.t('activerecord.attributes.post.title')} onChange={setFormTitle} value={formTitle} />
         <FormField>
           <label>{I18n.t('activerecord.attributes.post.body')}</label>
           <MarkdownEditor onChange={setFormBody} value={formBody} />
           {/* i18n-tasks-use t('simple_form.hints.post.body') */}
           <I18nHTMLTranslate i18nKey="simple_form.hints.post.body" />
         </FormField>
-        <FormField>
-          <Form.Select label={I18n.t('activerecord.attributes.post.tags')} options={tagOptions} onChange={(_, data) => { setFormTags(data.value); }} value={formTags} multiple />
-        </FormField>
-        <FormField>
+        <Form.Select label={I18n.t('activerecord.attributes.post.tags')} options={tagOptions} onChange={(_, data) => { setFormTags(data.value); }} value={formTags} multiple />
+        <FormGroup inline>
           <Form.Checkbox label={I18n.t('activerecord.attributes.post.sticky')} onChange={setFormIsStickied} checked={formIsStickied} />
           { formIsStickied
             && (
-            <UtcDatePicker
-              placeholderText={I18n.t('activerecord.attributes.post.unstick_at')}
-              isoDate={unstickAt}
-              onChange={(date) => setUnstickAt(date)}
-            />
+              <FormField>
+                <label>{I18n.t('activerecord.attributes.post.unstick_at')}</label>
+                <UtcDatePicker
+                  placeholderText={I18n.t('activerecord.attributes.post.unstick_at')}
+                  isoDate={unstickAt}
+                  onChange={(date) => setUnstickAt(date)}
+                />
+              </FormField>
             ) }
-        </FormField>
-        <FormField>
-          <Form.Checkbox label={I18n.t('activerecord.attributes.post.show_on_homepage')} onChange={setFormShowOnHomePage} checked={formShowOnHomePage} />
-          <p>{I18n.t('simple_form.hints.post.show_on_homepage')}</p>
-        </FormField>
+        </FormGroup>
+        <Form.Field>
+          <Checkbox label={I18n.t('activerecord.attributes.post.show_on_homepage')} onChange={setFormShowOnHomePage} checked={formShowOnHomePage} />
+          <p className="help-block">{I18n.t('simple_form.hints.post.show_on_homepage')}</p>
+        </Form.Field>
         { errors && (
           <Message negative>
             <Message.Header>Request Failed:</Message.Header>
