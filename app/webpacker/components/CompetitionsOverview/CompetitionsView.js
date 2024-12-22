@@ -8,7 +8,7 @@ import I18n from '../../lib/i18n';
 import { apiV0Urls, WCA_API_PAGINATION } from '../../lib/requests/routes.js.erb';
 import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken';
 
-import CompetitionsFilters from './CompetitionsFilters';
+import CompetitionsFilters, { ResetFilters } from './CompetitionsFilters';
 import ListView from './ListView';
 import MapView from './MapView';
 import {
@@ -113,7 +113,10 @@ function CompetitionsView({ canViewAdminDetails = false }) {
 
   return (
     <Container>
-      <Header as="h2">{I18n.t('competitions.index.title')}</Header>
+      <Header as="h2">
+        {I18n.t('competitions.index.title')}
+        <ResetFilters dispatchFilter={dispatchFilter} floated="right" />
+      </Header>
       <CompetitionsFilters
         filterState={filterState}
         dispatchFilter={dispatchFilter}
