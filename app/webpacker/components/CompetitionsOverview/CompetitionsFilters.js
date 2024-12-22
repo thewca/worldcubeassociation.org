@@ -30,6 +30,7 @@ function CompetitionsFilters({
           selectedEvents={filterState.selectedEvents}
           onEventSelection={dispatchFilter}
           showBreakBeforeButtons={false}
+          eventButtonsCompact
         />
       </Form.Field>
 
@@ -90,6 +91,7 @@ export function EventSelector({
   maxEvents = Infinity,
   shouldErrorOnEmpty = false,
   showBreakBeforeButtons = true,
+  eventButtonsCompact = false,
   eventsDisabled = [],
   // Listing event as an argument here to indicate to developers that it's needed
   // eslint-disable-next-line no-unused-vars
@@ -134,6 +136,7 @@ export function EventSelector({
                         || eventsDisabled.includes(eventId)
                     }
                       basic
+                      compact={eventButtonsCompact}
                       icon
                       toggle
                       type="button"
