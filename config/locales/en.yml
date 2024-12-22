@@ -1528,6 +1528,8 @@ en:
         danger: "Danger"
       from_date: "From"
       to_date: "To"
+      show_filters: "Show Filters"
+      hide_filters: "Hide Filters"
       reset_filters: "Reset Filters"
       #context: selecting a specific year ('year' is a number)
       past_from: "Past from %{year}"

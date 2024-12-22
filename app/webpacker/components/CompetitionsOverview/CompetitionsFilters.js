@@ -16,10 +16,6 @@ import UtcDatePicker from '../wca/UtcDatePicker';
 function CompetitionsFilters({
   filterState,
   dispatchFilter,
-  displayMode,
-  setDisplayMode,
-  shouldShowRegStatus,
-  setShouldShowRegStatus,
   shouldShowAdminDetails,
   canViewAdminDetails,
 }) {
@@ -55,18 +51,6 @@ function CompetitionsFilters({
         </Form.Field>
       </Form.Group>
 
-      <Form.Group inline>
-        <CompDisplayCheckboxes
-          shouldIncludeCancelled={filterState.shouldIncludeCancelled}
-          dispatchFilter={dispatchFilter}
-          shouldShowRegStatus={shouldShowRegStatus}
-          setShouldShowRegStatus={setShouldShowRegStatus}
-          shouldShowAdminDetails={shouldShowAdminDetails}
-          canViewAdminDetails={canViewAdminDetails}
-          displayMode={displayMode}
-        />
-      </Form.Group>
-
       {canViewAdminDetails && shouldShowAdminDetails && (
         <Form.Group>
           <Form.Field>
@@ -74,17 +58,6 @@ function CompetitionsFilters({
           </Form.Field>
         </Form.Group>
       )}
-
-      <Form.Group>
-        <ResetFilters dispatchFilter={dispatchFilter} />
-      </Form.Group>
-
-      <Form.Group>
-        <ToggleListOrMapDisplay
-          displayMode={displayMode}
-          setDisplayMode={setDisplayMode}
-        />
-      </Form.Group>
     </Form>
   );
 }
@@ -467,7 +440,7 @@ function CustomDateSelector({ filterState, dispatchFilter }) {
   );
 }
 
-function CompDisplayCheckboxes({
+export function CompDisplayCheckboxes({
   shouldIncludeCancelled,
   dispatchFilter,
   shouldShowRegStatus,
@@ -523,7 +496,7 @@ function CompDisplayCheckboxes({
   );
 }
 
-function ToggleListOrMapDisplay({ displayMode, setDisplayMode }) {
+export function ToggleListOrMapDisplay({ displayMode, setDisplayMode }) {
   return (
     <Button.Group toggle fluid id="display">
       <Button type="button" name="display" id="display-list" active={displayMode === 'list'} onClick={() => setDisplayMode('list')}>
@@ -535,14 +508,6 @@ function ToggleListOrMapDisplay({ displayMode, setDisplayMode }) {
         {` ${I18n.t('competitions.index.map')} `}
       </Button>
     </Button.Group>
-  );
-}
-
-function ResetFilters({ dispatchFilter }) {
-  return (
-    <Button type="reset" size="mini" id="reset" onClick={() => dispatchFilter({ type: 'reset' })}>
-      {I18n.t('competitions.index.reset_filters')}
-    </Button>
   );
 }
 
