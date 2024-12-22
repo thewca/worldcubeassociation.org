@@ -2,6 +2,6 @@
 
 <div class="container">
   <%= react_component("Posts/CreatePost", {
-    allTags: PostTag.distinct.pluck(:tag).map { |tag| { value: tag, text: tag, key: tag } }.as_json,
+    allTags: PostTag.select(:tag).distinct.pluck(:tag),
   }) %>
 </div>

@@ -2,10 +2,10 @@
 
 <div class="container">
   <%= react_component("Posts/EditPost", {
-    allTags: PostTag.distinct.pluck(:tag).map { |tag| { value: tag, text: tag, key: tag } }.as_json,
-    post: @post.as_json({
-                          only: ["id", "title", "sticky", "show_on_homepage", "unstick_at"],
-                          methods: ["tags_array"],
-                        }),
+    allTags: PostTag.select(:tag).distinct.pluck(:tag),
+    post: @post.as_json(
+      only: ["id", "title", "sticky", "show_on_homepage", "unstick_at"],
+      methods: ["tags_array"],
+    ),
   }) %>
 </div>

@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import {
   Button, Form, FormField, Header, Message,
 } from 'semantic-ui-react';
@@ -22,6 +22,11 @@ export default function PostForm({
   const [postURL, setPostURL] = useInputState(post?.url ?? null);
   const [postId, setPostId] = useInputState(post?.id ?? null);
   const [unstickAt, setUnstickAt] = useState(post?.unstick_at ?? null);
+
+  const tagOptions = useMemo(
+    () => allTags.map((tag) => ({ value: tag, text: tag, key: tag })),
+    [allTags],
+  );
 
   const { mutate: createMutation, isSuccess: postCreated, error: createError } = useMutation({
     mutationFn: createPost,
@@ -91,7 +96,7 @@ export default function PostForm({
           <I18nHTMLTranslate i18nKey="simple_form.hints.post.body" />
         </FormField>
         <FormField>
-          <Form.Select label={I18n.t('activerecord.attributes.post.tags')} options={allTags} onChange={(_, data) => { setFormTags(data.value); }} value={formTags} multiple />
+          <Form.Select label={I18n.t('activerecord.attributes.post.tags')} options={tagOptions} onChange={(_, data) => { setFormTags(data.value); }} value={formTags} multiple />
         </FormField>
         <FormField>
           <Form.Checkbox label={I18n.t('activerecord.attributes.post.sticky')} onChange={setFormIsStickied} checked={formIsStickied} />
