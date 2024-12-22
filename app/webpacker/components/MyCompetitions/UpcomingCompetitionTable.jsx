@@ -12,7 +12,7 @@ import {
 } from './TableCells';
 
 const registrationStatusIcon = (registrationStatus) => {
-  switch (registrationStatus?.competing_status) {
+  switch (registrationStatus) {
     case 'pending': return <Icon name="hourglass" />;
     case 'waiting_list': return <Icon name="hourglass" />;
     case 'accepted': return <Icon name="check circle" />;

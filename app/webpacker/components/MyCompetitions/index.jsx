@@ -3,7 +3,7 @@ import {
   Accordion,
   Header,
   Icon,
-  Checkbox, Segment,
+  Checkbox, Segment, Button, Divider,
 } from 'semantic-ui-react';
 import I18n from '../../lib/i18n';
 import {
@@ -44,9 +44,8 @@ export default function MyCompetitions({ permissions, competitions, wcaId }) {
           />
         </Accordion.Content>
       </Accordion>
-      <Segment>
-        <a href={personUrl(wcaId)}>{I18n.t('layouts.navigation.my_results')}</a>
-      </Segment>
+      <Divider />
+      <Button as="a" href={personUrl(wcaId)}>{I18n.t('layouts.navigation.my_results')}</Button>
       <Header>
         <Icon name="bookmark" />
         {I18n.t('competitions.my_competitions.bookmarked_title')}
