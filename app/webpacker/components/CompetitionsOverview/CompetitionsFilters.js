@@ -29,31 +29,29 @@ function CompetitionsFilters({
         <EventSelector
           selectedEvents={filterState.selectedEvents}
           onEventSelection={dispatchFilter}
+          showBreakBeforeButtons={false}
+          eventButtonsCompact
         />
       </Form.Field>
 
       <Form.Group>
-        <Form.Field width={6}>
+        <Form.Field width={8}>
           <RegionSelector region={filterState.region} dispatchFilter={dispatchFilter} />
         </Form.Field>
-        <Form.Field width={6}>
+        <Form.Field width={8}>
           <SearchBar text={filterState.search} dispatchFilter={dispatchFilter} />
         </Form.Field>
       </Form.Group>
 
       {shouldShowAdminDetails && (
-        <Form.Group>
-          <Form.Field width={8}>
-            <DelegateSelector delegateId={filterState.delegate} dispatchFilter={dispatchFilter} />
-          </Form.Field>
-        </Form.Group>
+        <Form.Field width={16}>
+          <DelegateSelector delegateId={filterState.delegate} dispatchFilter={dispatchFilter} />
+        </Form.Field>
       )}
 
-      <Form.Group>
-        <Form.Field>
-          <TimeOrderButtonGroup filterState={filterState} dispatchFilter={dispatchFilter} />
-        </Form.Field>
-      </Form.Group>
+      <Form.Field>
+        <TimeOrderButtonGroup filterState={filterState} dispatchFilter={dispatchFilter} />
+      </Form.Field>
 
       <Form.Group inline>
         <CompDisplayCheckboxes
@@ -76,10 +74,6 @@ function CompetitionsFilters({
       )}
 
       <Form.Group>
-        <ResetFilters dispatchFilter={dispatchFilter} />
-      </Form.Group>
-
-      <Form.Group>
         <ToggleListOrMapDisplay
           displayMode={displayMode}
           setDisplayMode={setDisplayMode}
@@ -96,6 +90,8 @@ export function EventSelector({
   disabled = false,
   maxEvents = Infinity,
   shouldErrorOnEmpty = false,
+  showBreakBeforeButtons = true,
+  eventButtonsCompact = false,
   eventsDisabled = [],
   // Listing event as an argument here to indicate to developers that it's needed
   // eslint-disable-next-line no-unused-vars
@@ -105,7 +101,7 @@ export function EventSelector({
     <>
       <label htmlFor="events">
         {`${I18n.t('competitions.competition_form.events')}`}
-        <br />
+        {showBreakBeforeButtons ? (<br />) : (' ')}
         <Popup
           disabled={!Number.isFinite(maxEvents)}
           trigger={
@@ -140,6 +136,7 @@ export function EventSelector({
                         || eventsDisabled.includes(eventId)
                     }
                       basic
+                      compact={eventButtonsCompact}
                       icon
                       toggle
                       type="button"
@@ -231,10 +228,10 @@ function DelegateSelector({ delegateId, dispatchFilter }) {
 
   return (
     <>
-      <div style={{ display: 'inline-block' }}>
-        <label htmlFor="delegate">{I18n.t('layouts.navigation.delegate')}</label>
-        {delegatesLoading && <PulseLoader size="10px" cssOverride={{ marginLeft: '5px' }} />}
-      </div>
+      <label htmlFor="delegate" style={{ display: 'inline-block' }}>
+        {I18n.t('layouts.navigation.delegate')}
+        {delegatesLoading && <PulseLoader size="6px" cssOverride={{ marginLeft: '5px' }} />}
+      </label>
       <Dropdown
         name="delegate"
         id="delegate"
@@ -538,9 +535,18 @@ function ToggleListOrMapDisplay({ displayMode, setDisplayMode }) {
   );
 }
 
-function ResetFilters({ dispatchFilter }) {
+export function ResetFilters({ dispatchFilter, floated = null }) {
   return (
-    <Button type="reset" size="mini" id="reset" onClick={() => dispatchFilter({ type: 'reset' })}>
+    <Button
+      type="reset"
+      floated={floated}
+      size="mini"
+      id="reset"
+      icon
+      labelPosition="left"
+      onClick={() => dispatchFilter({ type: 'reset' })}
+    >
+      <Icon name="repeat" />
       {I18n.t('competitions.index.reset_filters')}
     </Button>
   );
