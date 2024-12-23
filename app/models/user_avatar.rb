@@ -35,15 +35,22 @@ class UserAvatar < ApplicationRecord
   validates :public_image, blob: { content_type: :web_image, size_range: 0..MAX_UPLOAD_SIZE }
   validates :private_image, blob: { content_type: :web_image, size_range: 0..MAX_UPLOAD_SIZE }
 
+  private def linked_user
+    # Make sure that we're traversing back the correct association (using `inverse_of`)
+    #   when accessing current profile pictures. Marked as `private` because this is a pure
+    #   convenience method to leverage pre-loaded associations
+    self.approved? ? self.current_user : self.user
+  end
+
   def url
     case self.backend
     when 's3_legacy_cdn'
       host = EnvConfig.S3_AVATARS_ASSET_HOST.delete_prefix('https://')
-      path = "/uploads/user/avatar/#{user.wca_id}/#{self.filename}"
+      path = "/uploads/user/avatar/#{linked_user.wca_id}/#{self.filename}"
 
       URI::HTTPS.build(host: host, path: path).to_s
     when 'active_storage'
-      return UserAvatar.default_avatar(self.user).url unless self.image.attached?
+      return UserAvatar.default_avatar(self.linked_user).url unless self.image.attached?
 
       if self.using_cdn?
         URI.join(EnvConfig.S3_AVATARS_ASSET_HOST, self.image.key).to_s
@@ -63,11 +70,11 @@ class UserAvatar < ApplicationRecord
       actual_filename, file_ending = self.filename.split('.')
       thumb_filename = "#{actual_filename}_thumb.#{file_ending}"
 
-      path = "/uploads/user/avatar/#{user.wca_id}/#{thumb_filename}"
+      path = "/uploads/user/avatar/#{linked_user.wca_id}/#{thumb_filename}"
 
       URI::HTTPS.build(host: host, path: path).to_s
     when 'active_storage'
-      return UserAvatar.default_avatar(self.user).thumbnail_url unless self.image.attached?
+      return UserAvatar.default_avatar(self.linked_user).thumbnail_url unless self.image.attached?
 
       if self.using_cdn?
         URI.join(EnvConfig.S3_AVATARS_ASSET_HOST, self.thumbnail_image.processed.key).to_s
