@@ -119,16 +119,24 @@ function CompetitionsView({ canViewAdminDetails = false }) {
   return (
     <Container>
       <Header as="h2">
-        {I18n.t('competitions.index.title')}
-      </Header>
-      <Menu size="small" tabular attached={showFilters && 'top'}>
-        <Menu.Item active={showFilters} onClick={() => setShowFilters((prev) => !prev)}>
+        <Button
+          floated="right"
+          icon
+          labelPosition="left"
+          toggle
+          // We want to make the button green to invite the user's attention
+          //   when the filters are *not* currently shown. When the filters are shown,
+          //   the button to disable/hide them should be "not-active-grey" to remove emphasis.
+          active={!showFilters}
+          onClick={() => setShowFilters((prev) => !prev)}
+        >
           <Icon name="filter" />
           {showFilters ? I18n.t('competitions.index.hide_filters') : I18n.t('competitions.index.show_filters')}
-        </Menu.Item>
-      </Menu>
+        </Button>
+        {I18n.t('competitions.index.title')}
+      </Header>
       <Transition visible={showFilters} animation="slide down">
-        <Segment raised attached="bottom">
+        <Segment raised>
           <Button
             floated="right"
             icon
