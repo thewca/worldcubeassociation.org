@@ -3,6 +3,7 @@ import React, {
 } from 'react';
 import { keepPreviousData, useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import {
+  Button,
   Container, Form, Header, Icon, Menu, Segment, Transition,
 } from 'semantic-ui-react';
 
@@ -125,15 +126,20 @@ function CompetitionsView({ canViewAdminDetails = false }) {
           <Icon name="filter" />
           {showFilters ? I18n.t('competitions.index.hide_filters') : I18n.t('competitions.index.show_filters')}
         </Menu.Item>
-        <Menu.Item
-          onClick={() => dispatchFilter({ type: 'reset' })}
-        >
-          <Icon name="repeat" />
-          {I18n.t('competitions.index.reset_filters')}
-        </Menu.Item>
       </Menu>
       <Transition visible={showFilters} animation="slide down">
         <Segment raised attached="bottom">
+          <Button
+            floated="right"
+            icon
+            labelPosition="left"
+            size="tiny"
+            secondary
+            onClick={() => dispatchFilter({ type: 'reset' })}
+          >
+            <Icon name="repeat" />
+            {I18n.t('competitions.index.reset_filters')}
+          </Button>
           <CompetitionsFilters
             filterState={filterState}
             dispatchFilter={dispatchFilter}
