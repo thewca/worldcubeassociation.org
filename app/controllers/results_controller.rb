@@ -1,14 +1,41 @@
 # frozen_string_literal: true
 
 class ResultsController < ApplicationController
+  REGION_WORLD = "world"
+  YEARS_ALL = "all years"
+  SHOW_100_PERSONS = "100 persons"
+  SHOW_MIXED = "mixed"
+  GENDER_ALL = "All"
+  EVENTS_ALL = "all events"
+
+  MODE_RANKINGS = "rankings"
+  MODE_RECORDS = "records"
+
+  def self.compute_cache_key(
+    mode,
+    event_id: EVENTS_ALL,
+    region: REGION_WORLD,
+    years: YEARS_ALL,
+    gender: GENDER_ALL,
+    show: nil,
+    type: nil
+  )
+    # The specific order of the entries is determined by backwards compatibility with historical code.
+    [mode, event_id, region, years, show, gender, type].compact
+  end
+
+  private def params_for_cache
+    params.permit(:event_id, :region, :years, :show, :gender, :type).to_h.symbolize_keys
+  end
+
   def rankings
     support_old_links!
 
     # Default params
-    params[:region] ||= "world"
-    params[:years] = "all years" # FIXME: this is disabling years filters for now
-    params[:show] ||= "100 persons"
-    params[:gender] ||= "All"
+    params[:region] ||= REGION_WORLD
+    params[:years] = YEARS_ALL # FIXME: this is disabling years filters for now
+    params[:show] ||= SHOW_100_PERSONS
+    params[:gender] ||= GENDER_ALL
 
     params[:show] = params[:show].gsub(/\d+/, "100") # FIXME: this is disabling anything except show 100 for now
 
@@ -31,7 +58,7 @@ class ResultsController < ApplicationController
     @is_results = splitted_show_param[1] == "results"
     limit_condition = "LIMIT #{@show}"
 
-    @cache_params = ['rankings', params[:event_id], params[:region], params[:years], params[:show], params[:gender], params[:type]]
+    @cache_params = ResultsController.compute_cache_key(MODE_RANKINGS, **params_for_cache)
 
     if @is_persons
       @query = <<-SQL
@@ -137,13 +164,13 @@ class ResultsController < ApplicationController
     support_old_links!
 
     # Default params
-    params[:event_id] ||= "all events"
-    params[:region] ||= "world"
-    params[:years] = "all years" # FIXME: this is disabling years filters for now
-    params[:show] ||= "mixed"
-    params[:gender] ||= "All"
+    params[:event_id] ||= EVENTS_ALL
+    params[:region] ||= REGION_WORLD
+    params[:years] = YEARS_ALL # FIXME: this is disabling years filters for now
+    params[:show] ||= SHOW_MIXED
+    params[:gender] ||= GENDER_ALL
 
-    @shows = ["mixed", "slim", "separate", "history", "mixed history"]
+    @shows = [SHOW_MIXED, "slim", "separate", "history", "mixed history"]
     @is_mixed = params[:show] == @shows[0]
     @is_slim = params[:show] == @shows[1]
     @is_separate = params[:show] == @shows[2]
@@ -153,7 +180,7 @@ class ResultsController < ApplicationController
 
     shared_constants_and_conditions
 
-    @cache_params = ['records', params[:event_id], params[:region], params[:years], params[:show], params[:gender]]
+    @cache_params = ResultsController.compute_cache_key(MODE_RECORDS, **params_for_cache)
 
     if @is_histories
       if @is_history
@@ -263,7 +290,7 @@ class ResultsController < ApplicationController
     @years = Competition.non_future_years
     @types = ["single", "average"]
 
-    if params[:event_id] == "all events"
+    if params[:event_id] == EVENTS_ALL
       @event_condition = ""
     else
       event = Event.c_find!(params[:event_id])
@@ -293,7 +320,7 @@ class ResultsController < ApplicationController
       @gender_condition = ""
     end
 
-    @is_all_years = params[:years] == "all years"
+    @is_all_years = params[:years] == YEARS_ALL
     splitted_years_param = params[:years].split
     @is_only = splitted_years_param[0] == "only"
     @is_until = splitted_years_param[0] == "until"
