@@ -314,6 +314,7 @@ class RegistrationsController < ApplicationController
 
     # Create a default audit that marks the event as "unhandled".
     audit_event = StripeWebhookEvent.create_from_api(event)
+    audit_remote_timestamp = audit_event.created_at_remote
 
     stripe_intent = event.data.object # contains a polymorphic type that depends on the event
     stored_record = StripeRecord.find_by(stripe_id: stripe_intent.id)
@@ -327,6 +328,13 @@ class RegistrationsController < ApplicationController
       end
     end
 
+    connected_account = ConnectedStripeAccount.find_by(account_id: stored_record.account_id)
+
+    unless connected_account.present?
+      logger.error "Stripe webhook reported event for account '#{stored_record.account_id}' but we are not connected to that account."
+      return head :not_found
+    end
+
     # Handle the event
     case event.type
     when StripeWebhookEvent::PAYMENT_INTENT_SUCCEEDED
@@ -334,7 +342,7 @@ class RegistrationsController < ApplicationController
 
       stored_intent = stored_record.payment_intent
 
-      stored_intent.update_status_and_charges(stripe_intent, audit_event, audit_event.created_at_remote) do |charge_transaction|
+      stored_intent.update_status_and_charges(connected_account, stripe_intent, audit_event, audit_remote_timestamp) do |charge_transaction|
         ruby_money = charge_transaction.money_amount
         stored_holder = stored_intent.holder
 
@@ -350,14 +358,14 @@ class RegistrationsController < ApplicationController
           # Context: When our servers die due to traffic spikes, the Stripe webhook cannot be processed
           #   and Stripe tries again after an exponential backoff. So we (erroneously!) record the creation timestamp
           #   in our DB _after_ the backed-off event has been processed. This can lead to a wrong registration order :(
-          stored_payment.update!(created_at: audit_event.created_at_remote)
+          stored_payment.update!(created_at: audit_remote_timestamp)
         end
       end
     when StripeWebhookEvent::PAYMENT_INTENT_CANCELED
       # stripe_intent contains a Stripe::PaymentIntent as per Stripe documentation
 
       stored_intent = stored_record.payment_intent
-      stored_intent.update_status_and_charges(stripe_intent, audit_event, audit_event.created_at_remote)
+      stored_intent.update_status_and_charges(connected_account, stripe_intent, audit_event, audit_remote_timestamp)
     else
       logger.info "Unhandled Stripe event type: #{event.type}"
     end
@@ -412,7 +420,7 @@ class RegistrationsController < ApplicationController
 
     registration = stored_intent.holder
 
-    stored_intent.update_status_and_charges(remote_intent, current_user) do |charge_transaction|
+    stored_intent.update_status_and_charges(payment_account, remote_intent, current_user) do |charge_transaction|
       ruby_money = charge_transaction.money_amount
 
       registration.record_payment(
