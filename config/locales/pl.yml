@@ -2478,6 +2478,10 @@ pl:
       payment_processing: >-
         Twoja płatność została potwierdzona, ale transakcja wciąż ma status
         oczekującej.
+      #original_hash: a8f253d
+      payment_partial: >-
+        Twoja płatność została potwierdzona, ale nie pokrywa całej należności.
+        Prosimy o opłacenie reszty należnego wpisowego.
       #original_hash: 62d7351
       button_text: Zapłać teraz!
       hints:
@@ -2521,26 +2525,43 @@ pl:
           już dokonana.
         #original_hash: f10c80c
         not_allowed: Nie możesz opłacić tej rejestracji
-        #original_hash: a073600
-        stripe_failed: Prosimy sprawdź transakcję Stripe.
-        #original_hash: d571a4e
-        paypal_failed: Prosimy sprawdź zamówienie PayPal
+        #original_hash: 967eaed
+        cpi_disconnected: >-
+          Podjęliśmy próbę potwierdzenia płatności, ale integracja płatności na
+          stronie została wyłączona. Prosimy skontaktuj się z organizatorami.
+        generic:
+          #original_hash: 9896987
+          failed: 'Prosimy sprawdź transakcję %{provider}.'
+          #original_hash: 715f918
+          not_found: >-
+            %{provider} zwrócił ID transakcji które nie mogło zostać
+            odnalezione.
+          #original_hash: d56a75d
+          intent_not_found: >-
+            %{provider} zwrócił ID transakcji, dla której nie mamy zapisanej
+            próby zapłaty.
+          #original_hash: 187a402
+          remote_not_found: >-
+            %{provider} nie dostarczył szczegółów API dla zwróconego przez niego
+            ID transakcji.
+          #original_hash: 3e7e6fc
+          secret_invalid: >-
+            %{provider} zwrócił sekret transakcji który nie zgadza się z
+            posiadanymi przez nas danymi.
         #original_hash: df1a70e
         paypal_canceled: >-
           PayPal zwrócił informację, że zamówienie zostało anulowane ręcznie.
           Prosimy spróbuj ponownie.
-        #original_hash: a32e40f
-        stripe_not_found: 'Stripe zwrócił ID transakcji, które nie mogło zostać znalezione.'
-        #original_hash: aaa8ab7
-        stripe_secret_invalid: >-
-          Stripe zwrócił tajny kod transakcji, który nie zgadza się z naszymi
-          danymi.
-        #original_hash: f808249
-        stripe_not_an_intent: 'Stripe zwrócił ID transakcji, która nie jest zamiarem zapłaty.'
         #original_hash: 8d1a199
         payment_reset: Płatność została odrzucona przez Stripe.
         #original_hash: bcf6a93
         payment_pending: Płatność nie została jeszcze ukończona.
+        #original_hash: 4c5ef13
+        payment_failed: >-
+          Płatność nie powiodła się. Sprawdź swoje dane płatności i spróbuj
+          ponownie.
+        #original_hash: 7fb8be2
+        payment_canceled: Płatność została anulowana i nie będzie ukończona.
     #original_hash: 4cf01a2
     preferred_events_prompt_html: >-
       Aby przyspieszyć rejestrację w przyszłości, możesz ustawić swoje
