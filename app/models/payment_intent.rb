@@ -72,8 +72,8 @@ class PaymentIntent < ApplicationRecord
             wca_status: updated_wca_status,
           )
         end
-      when PaymentIntent.wca_statuses[:created]
-      when PaymentIntent.wca_statuses[:pending]
+      when PaymentIntent.wca_statuses[:created],
+        PaymentIntent.wca_statuses[:pending]
         # Reset by the gateway
         self.update!(
           confirmed_at: nil,
