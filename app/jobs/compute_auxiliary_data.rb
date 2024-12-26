@@ -9,6 +9,10 @@ class ComputeAuxiliaryData < WcaCronjob
 
   def perform
     AuxiliaryDataComputation.compute_everything
+
+    # Trigger rankings computation based on the just-now-computed ranks,
+    #   but insert them into the cache _before_ committing the "CAD has finished" timestamp to the DB
+    self.recompute_popular_rankings
   end
 
   def recompute_popular_rankings
