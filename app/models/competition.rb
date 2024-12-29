@@ -1807,7 +1807,10 @@ class Competition < ApplicationRecord
       order = { start_date: :desc }
     end
 
-    competitions.includes(:delegates, :organizers).order(**order)
+    # Respect other `includes` associations that might have been specified ahead of time
+    previous_includes = competitions.includes_values
+
+    competitions.includes(:delegates, :organizers, *previous_includes).order(**order)
   end
 
   def all_activities
