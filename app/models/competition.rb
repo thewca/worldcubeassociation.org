@@ -1716,6 +1716,11 @@ class Competition < ApplicationRecord
       competitions = Competition.visible
     end
 
+    if params[:include_cancelled].present?
+      include_cancelled = ActiveRecord::Type::Boolean.new.cast(params[:include_cancelled])
+      competitions = competitions.not_cancelled unless include_cancelled
+    end
+
     if params[:continent].present?
       continent = Continent.find(params[:continent])
       if !continent
@@ -1740,6 +1745,19 @@ class Competition < ApplicationRecord
       end
       competitions = competitions.left_outer_joins(:delegates)
                                  .where('competition_delegates.delegate_id = ?', delegate_user.id)
+    end
+
+    if params[:event_ids].present?
+      event_ids = params[:event_ids].presence
+      unless event_ids.is_a?(Array)
+        raise WcaExceptions::BadApiParameter.new("Invalid event IDs: '#{params[:event_ids]}'")
+      end
+      event_ids.each do |event_id|
+        # This looks completely crazy (why not just pass the array as a whole, to build a `WHERE event_id IN (...)`??)
+        #   but is actually necessary to make sure that the competition holds ALL of the required events
+        #   and not just one or more (ie any) of the requested events.
+        competitions = competitions.has_event(event_id)
+      end
     end
 
     if params[:start].present?
