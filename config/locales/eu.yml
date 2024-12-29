@@ -13,13 +13,13 @@ eu:
     #original_hash: 07dee45
     CV: Cabo Verde
     #original_hash: ee10075
-    FM: Mikronesiako Estatu Federatuak‎
+    FM: Mikronesiako Estatu Federatuak
     #original_hash: db871b0
-    GW: Ginea Bissau‎
+    GW: Ginea Bissau
     #original_hash: e758117
     HK: 'Hong Kong, Txina'
     #original_hash: 3ad2dd8
-    KN: Saint Kitts eta Nevis‎
+    KN: Saint Kitts eta Nevis
     #original_hash: 5c34abb
     KP: Koreako Herri Errepublika Demokratikoa
     #original_hash: 4430b22
@@ -4285,7 +4285,7 @@ eu:
         #original_hash: 53adda3
         stripe: >-
           Zure Stripe kontua konektatzeak WCAri salneurriak sor dezan ahalmena
-          ematen dio. Baita zure Stripe kontura zuzenean diru-itzulketak 
+          ematen dio. Baita zure Stripe kontura zuzenean diru-itzulketak
           jaulkitzea.
         #original_hash: 7cedd12
         paypal: >-
