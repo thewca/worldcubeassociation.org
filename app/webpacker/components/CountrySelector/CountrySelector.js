@@ -2,6 +2,7 @@ import React from 'react';
 import { Form } from 'semantic-ui-react';
 
 import { countries } from '../../lib/wca-data.js.erb';
+import I18n from '../../lib/i18n';
 
 const countryOptions = countries.real.map((country) => ({
   key: country.iso2,
@@ -21,7 +22,7 @@ function CountrySelector({
     <Form.Select
       search
       name={name}
-      label="Country"
+      label={I18n.t('activerecord.attributes.user.country_iso2')}
       value={countryIso2}
       error={error}
       options={countryOptions}
