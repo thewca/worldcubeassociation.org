@@ -10,7 +10,12 @@ const genderOptions = _.map(genders.byId, (gender) => ({
   value: gender.id,
 }));
 
-function GenderSelector({ name, gender, onChange }) {
+function GenderSelector({
+  name,
+  gender,
+  onChange,
+  disabled = false,
+}) {
   return (
     <Form.Select
       name={name}
@@ -18,6 +23,7 @@ function GenderSelector({ name, gender, onChange }) {
       value={gender}
       options={genderOptions}
       onChange={onChange}
+      disabled={disabled}
     />
   );
 }
