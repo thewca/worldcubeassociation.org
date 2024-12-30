@@ -5,7 +5,7 @@ import { isoMoneyToHumanReadable } from '../../../lib/helpers/money';
 
 const moneyCountHumanReadable = (registrations, competitionInfo) => {
   const moneyCount = _.sum(registrations.filter(
-    (r) => r.payment.has_paid,
+    (r) => r.payment.payment_amount_iso > 0,
   ).map((r) => r.payment.payment_amount_iso));
 
   return isoMoneyToHumanReadable(
