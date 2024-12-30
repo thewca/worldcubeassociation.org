@@ -160,7 +160,7 @@ export default function TableRow({
 
             {competitionInfo['using_payment_integrations?'] && (
             <Table.Cell>
-              {hasPaid
+              {paymentAmount != 0
                 ? isoMoneyToHumanReadable(paymentAmount, competitionInfo.currency_code)
                 : ''}
             </Table.Cell>
