@@ -1,14 +1,13 @@
 # frozen_string_literal: true
 
 class Registration < ApplicationRecord
-  # TODO: Reg-V3 Cleanup: Remove all these and use the competing_status_{status} scopes
-  scope :pending, -> { where(competing_status: 'pending') }
-  scope :accepted, -> { where(competing_status: 'accepted') }
-  scope :cancelled, -> { where(competing_status: 'cancelled') }
-  scope :rejected, -> { where(competing_status: 'rejected') }
-  scope :waitlisted, -> { where(competing_status: 'waiting_list') }
+  scope :pending, -> { where(competing_status: Registrations::Helper::STATUS_PENDING) }
+  scope :accepted, -> { where(competing_status: Registrations::Helper::STATUS_ACCEPTED) }
+  scope :cancelled, -> { where(competing_status: Registrations::Helper::STATUS_CANCELLED) }
+  scope :rejected, -> { where(competing_status: Registrations::Helper::STATUS_REJECTED) }
+  scope :waitlisted, -> { where(competing_status: Registrations::Helper::STATUS_WAITING_LIST) }
   scope :non_competing, -> { where(is_competing: false) }
-  scope :not_cancelled, -> { where.not(competing_status: 'cancelled') }
+  scope :active, -> { where.not(competing_status: [Registrations::Helper::STATUS_CANCELLED, Registrations::Helper::STATUS_REJECTED]) }
   scope :with_payments, -> { joins(:registration_payments).distinct }
   scope :wcif_ordered, -> { order(:id) }
 
