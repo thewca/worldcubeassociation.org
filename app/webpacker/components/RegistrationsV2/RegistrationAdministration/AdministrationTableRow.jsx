@@ -82,8 +82,6 @@ export default function TableRow({
     payment_statuses: paymentStatuses,
     has_paid: hasPaid,
   } = registration.payment ?? {};
-  {console.log("payment:")}
-  {console.log(registration.payment)}
 
   const copyEmail = () => {
     navigator.clipboard.writeText(emailAddress);
