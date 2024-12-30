@@ -4,9 +4,7 @@ import React from 'react';
 import { isoMoneyToHumanReadable } from '../../../lib/helpers/money';
 
 const moneyCountHumanReadable = (registrations, competitionInfo) => {
-  const moneyCount = _.sum(registrations.filter(
-    (r) => r.payment.payment_amount_iso > 0,
-  ).map((r) => r.payment.payment_amount_iso));
+  const moneyCount = _.sum(registrations.map((r) => r.payment.payment_amount_iso));
 
   return isoMoneyToHumanReadable(
     moneyCount,
