@@ -213,8 +213,7 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
         )}
         {registrationEditDeadlinePassed && (
           <Message>
-            The Registration Edit Deadline has passed!
-            <strong>Changes should only be made in extraordinary circumstances</strong>
+            The Registration Edit Deadline has passed! <strong>Changes should only be made in extraordinary circumstances</strong>
           </Message>
         )}
         <Header>{competitor.name}</Header>
