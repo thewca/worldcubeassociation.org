@@ -135,7 +135,7 @@ class ComputeAuxiliaryData < WcaCronjob
           WHERE 1
             #{event_condition}
           GROUP BY eventId) record,
-        Results result
+        Results result,
         Events event,
         Countries country,
         Competitions competition
