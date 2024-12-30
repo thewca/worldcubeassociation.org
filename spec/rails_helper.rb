@@ -39,8 +39,21 @@ Capybara.register_driver :apparition_debug do |app|
   Capybara::Apparition::Driver.new(app, inspector: true, debug: true, headless: false)
 end
 
+# Minor headache ahead: We drive our tests using Chromium, which doesn't really like being launched as root.
+# However, the Docker Dev environment that we run uses root just for simplicity, and so we must check whether
+#   to allow Chromium root privileges because Capybara isn't very good at detecting terminated Chromium instances
+#   and just hangs indefinitely without any output.
+# See https://github.com/twalpole/apparition/blob/master/lib/capybara/apparition/browser/launcher/local.rb#L193-L195
+#   for details on alternative solutions and the complications of adding proper UID/GID for non-root.
+# Unfortunately, Apparition doesn't have a mechanism for setting whether you want this option to be enabled or not.
+#   As soon as it's included in the array, it passes the option along. End of story. So there is no way to pass a
+#   `false` flag depending on whether you're root or not.
+running_root = Process.uid == 0
+# Apparition needs this `nil` format to pass `--no-sandbox` as a CLI flag instead of `no-sandbox=true` or such.
+browser_options = running_root ? { 'no-sandbox' => nil } : {}
+
 Capybara.register_driver :apparition do |app|
-  Capybara::Apparition::Driver.new(app, js_errors: true, headless: true)
+  Capybara::Apparition::Driver.new(app, js_errors: true, headless: true, browser_options: browser_options)
 end
 
 Capybara.javascript_driver = :apparition
@@ -95,6 +108,8 @@ RSpec.configure do |config|
   else
     WebMock.allow_net_connect! unless EnvConfig.DISABLE_NET_CONNECT_IN_TESTS?
   end
+
+  config.filter_run_excluding disabled: true if Rails.env.local?
 end
 
 # See: https://github.com/rspec/rspec-expectations/issues/664#issuecomment-58134735
