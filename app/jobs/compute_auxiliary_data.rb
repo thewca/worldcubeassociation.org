@@ -113,7 +113,7 @@ class ComputeAuxiliaryData < WcaCronjob
   end
 
   private def current_records_query(value, type, event_id: nil)
-    event_condition = event_id.present? ? "AND eventId = #{event_id}" : ""
+    event_condition = event_id.present? ? "AND eventId = '#{event_id}'" : ""
 
     <<-SQL
       SELECT
