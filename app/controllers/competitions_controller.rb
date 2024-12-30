@@ -839,7 +839,8 @@ class CompetitionsController < ApplicationController
     ActiveRecord::Base.connected_to(role: :read_replica) do
       competition_ids = current_user.organized_competitions.pluck(:competition_id)
       competition_ids.concat(current_user.delegated_competitions.pluck(:competition_id))
-      registrations = current_user.registrations.includes(:competition).active.reject { |r| r.competition.results_posted? }
+      registrations = current_user.registrations.includes(:competition).accepted.reject { |r| r.competition.results_posted? }
+      registrations.concat(current_user.registrations.includes(:competition).waitlisted.select { |r| r.competition.upcoming? })
       registrations.concat(current_user.registrations.includes(:competition).pending.select { |r| r.competition.upcoming? })
       @registered_for_by_competition_id = registrations.uniq.to_h do |r|
         [r.competition.id, r]
