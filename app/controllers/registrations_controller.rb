@@ -378,11 +378,8 @@ class RegistrationsController < ApplicationController
     competition_id = params[:competition_id]
     competition = Competition.find(competition_id)
 
-    # Historically, Stripe was our only payment provider and thus is the implicit default here.
-    #   This can be deleted (and the currently optional parameter in `routes.rb` can be changed
-    #   to become a mandatory parameter) a week or so after deployment.
-    payment_integration = params.fetch(:payment_integration, 'stripe')
-    payment_account = competition.payment_account_for(payment_integration.to_sym)
+    payment_integration = params[:payment_integration].to_sym
+    payment_account = competition.payment_account_for(payment_integration)
 
     unless payment_account.present?
       flash[:danger] = t("registrations.payment_form.errors.cpi_disconnected")
