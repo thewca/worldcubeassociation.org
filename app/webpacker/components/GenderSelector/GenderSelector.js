@@ -10,9 +10,10 @@ const genderOptions = _.map(genders.byId, (gender) => ({
   value: gender.id,
 }));
 
-function GenderSelector({ gender, onChange }) {
+function GenderSelector({ name, gender, onChange }) {
   return (
     <Form.Select
+      name={name}
       label="Gender"
       value={gender}
       options={genderOptions}
