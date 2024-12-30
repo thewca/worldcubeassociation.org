@@ -4,7 +4,12 @@ import React, {
 import { keepPreviousData, useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import {
   Button,
-  Container, Form, Header, Icon, Menu, Segment, Transition,
+  Container,
+  Form,
+  Header,
+  Icon,
+  Segment,
+  Transition,
 } from 'semantic-ui-react';
 
 import I18n from '../../lib/i18n';
