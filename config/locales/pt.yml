@@ -3438,10 +3438,11 @@ pt:
           na página principal da competição. <br/>Preencha este formulário <b>em
           inglês</b> e em qualquer outro idioma que seus competidores falem.
         competitor_limit:
-          #original_hash: dc47c39
+          #original_hash: 945da5b
           enabled: >-
-            Embora não seja exigido pelos Regulamentos fornecer um limite de
-            competidores, é altamente recomendável fazê-lo.
+            É necessário estabelecer um Limite de Competidores. Apenas as
+            competições FMC simultâneas com múltiplos locais podem não ter
+            Limite de Competidores.
           #original_hash: b7b599b
           count: >-
             O número de competidores permitidos nesta competição. Por enquanto
