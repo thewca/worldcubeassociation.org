@@ -3,7 +3,7 @@
 class Registration < ApplicationRecord
   # TODO: Reg-V3 Cleanup: Remove all these and use the competing_status_{status} scopes
   scope :pending, -> { where(competing_status: 'pending') }
-  scope :accepted, -> { where(competing_status: 'accepted') }
+  scope :accepted, -> { where(competing_status: 'accepted', is_competing: true) }
   scope :cancelled, -> { where(competing_status: 'cancelled') }
   scope :rejected, -> { where(competing_status: 'rejected') }
   scope :waitlisted, -> { where(competing_status: 'waiting_list') }
