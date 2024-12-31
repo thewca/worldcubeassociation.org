@@ -1722,7 +1722,7 @@ en:
           competition_ids: "<b>This field cannot be edited!</b><br/>To add competitions to this Series, you have to go to the individual 'Edit' pages of the competitions that you want to add."
         information: "Important information that competitors should know. It will be displayed on the competition main page. <br/>Please fill this out <b>in English</b> and whatever other languages your competitors speak."
         competitor_limit:
-          enabled: "Although it is not required by the Regulations to provide a competitor limit, it's highly recommended to do so."
+          enabled: "A Competitor Limit is required. Only simultaneous FMC competitions with multiple locations can have no Competitor Limit."
           count: "The number of competitors allowed in this competition. For now this number is informational only, and does not yet prevent more people from registering. We are working on adding explicit support for this to the registration flow, but it requires some other work first."
           reason: "What is the reason for the limit on competitors? Please fill this out in English!"
         staff:
