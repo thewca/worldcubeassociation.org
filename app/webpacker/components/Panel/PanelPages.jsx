@@ -26,6 +26,7 @@ import OfficersEditor from './pages/OfficersEditor';
 import RegionsAdmin from './pages/RegionsAdmin';
 import RegionManager from './pages/RegionManager';
 import DownloadVoters from './pages/DownloadVoters';
+import EditPersonRequestsPage from './pages/EditPersonRequestsPage';
 
 const DELEGATE_HANDBOOK_LINK = 'https://documents.worldcubeassociation.org/edudoc/delegate-handbook/delegate-handbook.pdf';
 
@@ -133,5 +134,9 @@ export default {
   [PANEL_PAGES.generateDbToken]: {
     name: 'Generate DB Token',
     link: generateDbTokenUrl,
+  },
+  [PANEL_PAGES.editPersonRequests]: {
+    name: 'Edit Person Requests',
+    component: EditPersonRequestsPage,
   },
 };
