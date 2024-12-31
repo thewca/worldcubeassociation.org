@@ -28,7 +28,7 @@ class ComputeAuxiliaryData < WcaCronjob
         column_value = result_type.gsub('single', 'best')
 
         rankings_query = self.rankings_query(result_type, column_value, event_id)
-        rankings_cache_key = ResultsController.compute_cache_key(ResultsController::MODE_RANKINGS, event_id: event_id, type: result_type)
+        rankings_cache_key = ResultsController.compute_cache_key(ResultsController::MODE_RANKINGS, event_id: event_id, type: result_type, show: ResultsController::SHOW_100_PERSONS)
 
         DbHelper.execute_cached_query(
           rankings_cache_key,
@@ -41,7 +41,7 @@ class ComputeAuxiliaryData < WcaCronjob
       # The records page by default shows a "mixed" view which contains both single and average at once,
       #   so there's no need to do this inside the small single/average loop like the rankings above.
       records_query = self.mixed_records_query(event_id: event_id)
-      records_cache_key = ResultsController.compute_cache_key(ResultsController::MODE_RECORDS, event_id: event_id)
+      records_cache_key = ResultsController.compute_cache_key(ResultsController::MODE_RECORDS, event_id: event_id, show: ResultsController::SHOW_MIXED)
 
       DbHelper.execute_cached_query(
         records_cache_key,
@@ -54,7 +54,7 @@ class ComputeAuxiliaryData < WcaCronjob
     # Lastly, compute the "All events" default view for mixed records.
     #   Again, this only applies to Records because Rankings must specify an event.
     all_records_query = self.mixed_records_query
-    all_records_cache_key = ResultsController.compute_cache_key(ResultsController::MODE_RECORDS)
+    all_records_cache_key = ResultsController.compute_cache_key(ResultsController::MODE_RECORDS, show: ResultsController::SHOW_MIXED)
 
     DbHelper.execute_cached_query(
       all_records_cache_key,
