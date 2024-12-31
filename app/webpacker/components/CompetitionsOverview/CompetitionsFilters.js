@@ -239,48 +239,39 @@ function TimeOrderButtonGroup({ filterState, dispatchFilter }) {
   return (
     <>
       <label htmlFor="state">{I18n.t('competitions.index.state')}</label>
-      <Button.Group id="state" size="small">
-
+      <Button.Group id="state" size="small" compact primary>
         <Button
-          primary
-          type="button"
           name="state"
           id="present"
           value="present"
           onClick={() => dispatchFilter({ timeOrder: 'present' })}
           active={filterState.timeOrder === 'present'}
         >
-          <span className="caption">{I18n.t('competitions.index.present')}</span>
+          {I18n.t('competitions.index.present')}
         </Button>
 
         <Button
-          primary
-          type="button"
           name="state"
           id="recent"
           value="recent"
           onClick={() => dispatchFilter({ timeOrder: 'recent' })}
           active={filterState.timeOrder === 'recent'}
           data-tooltip={I18n.t('competitions.index.tooltips.recent', { count: competitionConstants.competitionRecentDays })}
-          data-variation="tiny"
         >
-          <span className="caption">{I18n.t('competitions.index.recent')}</span>
+          {I18n.t('competitions.index.recent')}
         </Button>
 
         <PastCompYearSelector filterState={filterState} dispatchFilter={dispatchFilter} />
 
         <Button
-          primary
-          type="button"
           name="state"
           id="by_announcement"
           value="by_announcement"
           onClick={() => dispatchFilter({ timeOrder: 'by_announcement' })}
           active={filterState.timeOrder === 'by_announcement'}
           data-tooltip={I18n.t('competitions.index.sort_by_announcement')}
-          data-variation="tiny"
         >
-          <span className="caption">{I18n.t('competitions.index.by_announcement')}</span>
+          {I18n.t('competitions.index.by_announcement')}
         </Button>
 
         <CustomDateSelector filterState={filterState} dispatchFilter={dispatchFilter} />
@@ -294,42 +285,39 @@ function AdminStatusButtonGroup({ filterState, dispatchFilter }) {
   return (
     <>
       <label htmlFor="admin-status">{I18n.t('competitions.index.admin_status')}</label>
-      <Button.Group id="admin-status">
+      <Button.Group id="admin-status" compact>
 
         <Button
           primary
-          type="button"
           name="admin-status"
           id="all"
           value="all"
           onClick={() => dispatchFilter({ adminStatus: 'all' })}
           active={filterState.adminStatus === 'all'}
         >
-          <span className="caption">{I18n.t('competitions.index.status_flags.all')}</span>
+          {I18n.t('competitions.index.status_flags.all')}
         </Button>
 
         <Button
           color="yellow"
-          type="button"
           name="admin-status"
           id="warning"
           value="warning"
           onClick={() => dispatchFilter({ adminStatus: 'warning' })}
           active={filterState.adminStatus === 'warning'}
         >
-          <span className="caption">{I18n.t('competitions.index.status_flags.warning')}</span>
+          {I18n.t('competitions.index.status_flags.warning')}
         </Button>
 
         <Button
           negative
-          type="button"
           name="admin-status"
           id="danger"
           value="danger"
           onClick={() => dispatchFilter({ adminStatus: 'danger' })}
           active={filterState.adminStatus === 'danger'}
         >
-          <span className="caption">{I18n.t('competitions.index.status_flags.danger')}</span>
+          {I18n.t('competitions.index.status_flags.danger')}
         </Button>
 
       </Button.Group>
@@ -340,26 +328,24 @@ function AdminStatusButtonGroup({ filterState, dispatchFilter }) {
 function PastCompYearSelector({ filterState, dispatchFilter }) {
   return (
     <Button
-      primary
-      type="button"
       name="state"
       id="past"
       value="past"
       onClick={() => dispatchFilter({ timeOrder: 'past' })}
       active={filterState.timeOrder === 'past'}
     >
-      <span className="caption">
-        {
-          // eslint-disable-next-line no-nested-ternary
-          filterState.timeOrder === 'past' ? (
-            filterState.selectedYear === 'all_years' ? I18n.t('competitions.index.past_all')
-              : I18n.t('competitions.index.past_from', { year: filterState.selectedYear })
-          ) : I18n.t('competitions.index.past')
-        }
-      </span>
+      {
+        // eslint-disable-next-line no-nested-ternary
+        filterState.timeOrder === 'past' ? (
+          filterState.selectedYear === 'all_years' ? I18n.t('competitions.index.past_all')
+            : I18n.t('competitions.index.past_from', { year: filterState.selectedYear })
+        ) : I18n.t('competitions.index.past')
+      }
       <Dropdown
         name="year"
         id="year"
+        simple
+        compact
         pointing
         scrolling
         upward={false}
@@ -390,15 +376,13 @@ function PastCompYearSelector({ filterState, dispatchFilter }) {
 function CustomDateSelector({ filterState, dispatchFilter }) {
   const customTimeSelectionButton = (
     <Button
-      primary
-      type="button"
       name="state"
       id="custom"
       value="custom"
       onClick={() => dispatchFilter({ timeOrder: 'custom' })}
       active={filterState.timeOrder === 'custom'}
     >
-      <span className="caption">{I18n.t('competitions.index.custom')}</span>
+      {I18n.t('competitions.index.custom')}
     </Button>
   );
 
