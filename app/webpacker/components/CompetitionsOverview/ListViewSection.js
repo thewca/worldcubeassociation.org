@@ -261,9 +261,14 @@ export function CompetitionsMobileTable({
                 </Label>
                 <Flag name={comp.country_iso2?.toLowerCase()} />
                 <a href={competitionUrl(comp.id)}>{comp.short_display_name}</a>
-                {' '}
               </Table.Cell>
-              <Table.Cell>
+              {
+                /* This "magical" 1px is necessary so that the long text from the venue
+                *   "clears" the floating date indicator from above. Otherwise, the text
+                *   would break too early. SemUI doesn't support "nicely" padding cells,
+                *   if anyone has a better idea then please shout. */
+              }
+              <Table.Cell style={{ marginTop: '1px' }}>
                 <span>
                   <strong>{countries.byIso2[comp.country_iso2].name}</strong>
                   {`, ${comp.city}`}
