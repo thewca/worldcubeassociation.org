@@ -353,6 +353,12 @@ class Competition < ApplicationRecord
     end
   end
 
+  validate :payments_nil_to_change_currency
+  private def payments_nil_to_change_currency
+    return unless currency_code_changed?
+    errors.add(:currency_code, I18n.t('competitions.errors.currency_cant_change')) if total_payment_amount != 0
+  end
+
   def has_any_round_per_event?
     competition_events.map(&:rounds).none?(&:empty?)
   end
@@ -2686,6 +2692,10 @@ class Competition < ApplicationRecord
 
   def disconnect_all_payment_integrations
     competition_payment_integrations.destroy_all
+  end
+
+  def total_payment_amount
+    registrations.joins(:registration_payments).sum('registration_payments.amount_lowest_denomination')
   end
 
   # Our React date picker unfortunately behaves weirdly in terms of backend data
