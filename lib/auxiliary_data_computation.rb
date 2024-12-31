@@ -52,17 +52,21 @@ module AuxiliaryDataComputation
       DbHelper.with_temp_table(table_name) do |temp_table_name|
         ActiveRecord::Base.connection.execute <<-SQL.squish
           INSERT INTO #{temp_table_name} (person_id, event_id, best, world_rank, continent_rank, country_rank)
-          WITH personal_best AS (
+          WITH best_per_region AS (
             SELECT event_id, person_id, country_id, continent_id, MIN(#{field}) `value`
             FROM #{concise_table_name}
             GROUP BY person_id, country_id, continent_id, event_id
+          ), personal_bests AS (
+            SELECT *, ROW_NUMBER() OVER (PARTITION BY event_id, person_id ORDER BY value) AS really_best
+            FROM best_per_region
           )
           SELECT
             person_id, event_id, `value`,
             RANK() OVER(PARTITION BY event_id ORDER BY `value`) AS world_rank,
             RANK() OVER(PARTITION BY event_id, continent_id ORDER BY `value`) AS continent_rank,
             RANK() OVER(PARTITION BY event_id, country_id ORDER BY `value`) AS country_rank
-          FROM personal_best
+          FROM personal_bests
+          WHERE really_best = 1
           ORDER BY event_id, `value`
         SQL
       end
