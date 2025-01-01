@@ -1,5 +1,5 @@
 import {
-  Icon, Message, Popup, Table, TableBody, TableHeader,
+  Icon, Message, Popup, Table,
 } from 'semantic-ui-react';
 import React from 'react';
 import I18n from '../../lib/i18n';
@@ -23,7 +23,7 @@ export default function PastCompetitionsTable({
 
   return (
     <Table striped basic="very">
-      <TableHeader>
+      <Table.Header>
         <Table.Row>
           <Table.HeaderCell>
             {I18n.t('competitions.competition_info.name')}
@@ -38,9 +38,9 @@ export default function PastCompetitionsTable({
           <Table.HeaderCell />
           <Table.HeaderCell />
         </Table.Row>
-      </TableHeader>
+      </Table.Header>
 
-      <TableBody>
+      <Table.Body>
         {competitions.map((competition) => (
           <Table.Row key={competition.id}>
             <NameTableCell competition={competition} />
@@ -64,7 +64,7 @@ export default function PastCompetitionsTable({
             <ReportTableCell competitionId={competition.id} permissions={permissions} isReportPosted={competition['report_posted?']} />
           </Table.Row>
         ))}
-      </TableBody>
+      </Table.Body>
     </Table>
   );
 }

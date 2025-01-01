@@ -1,6 +1,5 @@
 import {
-  Icon, Message,
-  Popup, Table, TableBody, TableHeader,
+  Icon, Message, Popup, Table,
 } from 'semantic-ui-react';
 import React from 'react';
 import { DateTime } from 'luxon';
@@ -68,7 +67,7 @@ export default function UpcomingCompetitionTable({
 
   return (
     <Table basic>
-      <TableHeader>
+      <Table.Header>
         <Table.Row>
           { shouldShowRegistrationStatus && <Table.HeaderCell collapsing /> }
           <Table.HeaderCell>
@@ -90,9 +89,9 @@ export default function UpcomingCompetitionTable({
           )}
 
         </Table.Row>
-      </TableHeader>
+      </Table.Header>
 
-      <TableBody>
+      <Table.Body>
         {competitions.map((competition) => (
           <Popup
             key={competition.id}
@@ -108,7 +107,7 @@ export default function UpcomingCompetitionTable({
                       <Table.Cell collapsing>
                         {registrationStatusIcon(competition)}
                       </Table.Cell>
-                  )}
+                    )}
                   />
                 )}
                 <NameTableCell competition={competition} />
@@ -120,14 +119,14 @@ export default function UpcomingCompetitionTable({
                 {(permissions.can_organize_competitions.scope === '*' || permissions.can_organize_competitions.scope.includes(competition.id)) && (
                   <Table.Cell>
                     <a href={editCompetitionsUrl(competition.id)}>
-                      { I18n.t('competitions.my_competitions_table.edit') }
+                      {I18n.t('competitions.my_competitions_table.edit')}
                     </a>
                   </Table.Cell>
                 )}
                 {(permissions.can_organize_competitions.scope === '*' || permissions.can_organize_competitions.scope.includes(competition.id)) && (
                   <Table.Cell>
                     <a href={competitionRegistrationsUrl(competition.id)}>
-                      { I18n.t('competitions.my_competitions_table.registrations') }
+                      {I18n.t('competitions.my_competitions_table.registrations')}
                     </a>
                   </Table.Cell>
                 )}
@@ -140,7 +139,7 @@ export default function UpcomingCompetitionTable({
             )}
           />
         ))}
-      </TableBody>
+      </Table.Body>
     </Table>
   );
 }
