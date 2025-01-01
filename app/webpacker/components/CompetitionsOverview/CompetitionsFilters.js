@@ -96,24 +96,47 @@ export function EventSelector({
   // Listing event as an argument here to indicate to developers that it's needed
   // eslint-disable-next-line no-unused-vars
   disabledText = (event) => {},
+  showLabels = true,
 }) {
   return (
     <>
-      <label htmlFor="events">
-        {`${I18n.t('competitions.competition_form.events')}`}
-        {showBreakBeforeButtons ? (<br />) : (' ')}
-        <Popup
-          disabled={!Number.isFinite(maxEvents)}
-          trigger={
-            <span><Button disabled={disabled || eventList.length >= maxEvents} primary type="button" size="mini" id="select-all-events" onClick={() => onEventSelection({ type: 'select_all_events' })}>{I18n.t('competitions.index.all_events')}</Button></span>
-        }
-        >
-          {I18n.t('competitions.registration_v2.register.event_limit', {
-            max_events: maxEvents,
-          })}
-        </Popup>
-        <Button disabled={disabled} type="button" size="mini" id="clear-all-events" onClick={() => onEventSelection({ type: 'clear_events' })}>{I18n.t('competitions.index.clear')}</Button>
-      </label>
+      {showLabels
+        && (
+        <label htmlFor="events">
+          {`${I18n.t('competitions.competition_form.events')}`}
+          {showBreakBeforeButtons ? (<br />) : (' ')}
+          <Popup
+            disabled={!Number.isFinite(maxEvents)}
+            trigger={(
+              <span>
+                <Button
+                  disabled={disabled || eventList.length >= maxEvents}
+                  primary
+                  type="button"
+                  size="mini"
+                  id="select-all-events"
+                  onClick={() => onEventSelection({ type: 'select_all_events' })}
+                >
+                  {I18n.t('competitions.index.all_events')}
+                </Button>
+              </span>
+            )}
+          >
+            {I18n.t('competitions.registration_v2.register.event_limit', {
+              max_events: maxEvents,
+            })}
+          </Popup>
+          <Button
+            disabled={disabled}
+            type="button"
+            size="mini"
+            id="clear-all-events"
+            onClick={() => onEventSelection({ type: 'clear_events' })}
+          >
+            {I18n.t('competitions.index.clear')}
+          </Button>
+        </label>
+        )}
       <Popup
         open={selectedEvents.length === 0}
         disabled={!shouldErrorOnEmpty}
@@ -131,10 +154,10 @@ export function EventSelector({
                     <Button
                       key={eventId}
                       disabled={
-                      disabled
+                        disabled
                         || (!selectedEvents.includes(eventId) && selectedEvents.length >= maxEvents)
                         || eventsDisabled.includes(eventId)
-                    }
+                      }
                       basic
                       compact={eventButtonsCompact}
                       icon

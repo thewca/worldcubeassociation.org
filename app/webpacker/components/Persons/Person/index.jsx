@@ -58,7 +58,7 @@ function TabSection({ person }) {
 
   return (
     <div>
-      <Tab defaultActiveIndex={panes.length - 1} panes={panes} />
+      <Tab renderActiveOnly defaultActiveIndex={0} panes={panes} />
     </div>
   );
 }
