@@ -3,7 +3,6 @@ import {
   Accordion,
   Header,
   Icon,
-  Checkbox,
   Button,
   Divider,
 } from 'semantic-ui-react';
@@ -13,11 +12,9 @@ import {
 } from '../../lib/requests/routes.js.erb';
 import UpcomingCompetitionTable from './UpcomingCompetitionTable';
 import PastCompetitionsTable from './PastCompetitionTable';
-import useCheckboxState from '../../lib/hooks/useCheckboxState';
 
 export default function MyCompetitions({ permissions, competitions, wcaId }) {
   const [isAccordionOpen, setIsAccordionOpen] = useState(false);
-  const [shouldShowRegistrationStatus, setShouldShowRegistrationStatus] = useCheckboxState(false);
 
   return (
     <>
@@ -53,15 +50,9 @@ export default function MyCompetitions({ permissions, competitions, wcaId }) {
         {I18n.t('competitions.my_competitions.bookmarked_title')}
       </Header>
       <p>{I18n.t('competitions.my_competitions.bookmarked_explanation')}</p>
-      <Checkbox
-        checked={shouldShowRegistrationStatus}
-        label={I18n.t('competitions.index.show_registration_status')}
-        onChange={setShouldShowRegistrationStatus}
-      />
       <UpcomingCompetitionTable
         competitions={competitions.bookmarkedCompetitions}
         registrationStatuses={competitions.registrationStatuses}
-        shouldShowRegistrationStatus={shouldShowRegistrationStatus}
         permissions={permissions}
       />
     </>

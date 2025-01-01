@@ -49,7 +49,7 @@ const competitionStatusIcon = (competition) => {
 };
 
 export default function UpcomingCompetitionTable({
-  competitions, permissions, registrationStatuses, shouldShowRegistrationStatus = false,
+  competitions, permissions, registrationStatuses, shouldShowRegistrationStatus = true,
 }) {
   const canAdminCompetitions = permissions.can_administer_competitions.scope === '*' || competitions.some((c) => permissions.can_administer_competitions.scope.includes(c.id));
 
