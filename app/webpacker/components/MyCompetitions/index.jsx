@@ -20,6 +20,7 @@ export default function MyCompetitions({ permissions, competitions, wcaId }) {
   return (
     <>
       <Header>
+        <Button as="a" href={personUrl(wcaId)} secondary floated="right">{I18n.t('layouts.navigation.my_results')}</Button>
         {I18n.t('competitions.my_competitions.title')}
       </Header>
       <p>
@@ -50,7 +51,6 @@ export default function MyCompetitions({ permissions, competitions, wcaId }) {
         </Accordion.Content>
       </Accordion>
       <Divider />
-      <Button as="a" href={personUrl(wcaId)}>{I18n.t('layouts.navigation.my_results')}</Button>
       <Header>
         <Icon name="bookmark" />
         {I18n.t('competitions.my_competitions.bookmarked_title')}
