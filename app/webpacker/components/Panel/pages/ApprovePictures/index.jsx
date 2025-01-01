@@ -32,8 +32,6 @@ function ApprovePictures() {
   const { mutate: decideOnAvatars } = useMutation({
     mutationFn: updateAvatars,
     onSuccess: (_, params) => {
-      console.log(pendingUsers);
-      console.log(params);
       queryClient.setQueriesData(pendingUsers.filter((p) => p.pending_avatar_id !== params.avatarId), { queryKey: ['pending_avatars'] });
     },
   });
