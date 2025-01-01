@@ -68,14 +68,13 @@ export default function UpcomingCompetitionTable({
             {I18n.t('competitions.competition_info.date')}
           </Table.HeaderCell>
           <Table.HeaderCell />
-          {canAdminCompetitions
-            && (
+          {canAdminCompetitions && (
             <>
               <Table.HeaderCell />
               <Table.HeaderCell />
               <Table.HeaderCell />
             </>
-            )}
+          )}
 
         </Table.Row>
       </TableHeader>
@@ -88,7 +87,7 @@ export default function UpcomingCompetitionTable({
             content={competitionStatusText(competition, registrationStatuses[competition.id])}
             trigger={(
               <Table.Row positive={competition['confirmed?'] && !competition['cancelled?']} negative={!competition['visible?']}>
-                { shouldShowRegistrationStatus && (
+                {shouldShowRegistrationStatus && (
                   <Popup
                     position="top left"
                     content={registrationStatusIconText(competition)}
@@ -105,21 +104,25 @@ export default function UpcomingCompetitionTable({
                 <Table.Cell>
                   {competingStatusIcon(registrationStatuses[competition.id])}
                 </Table.Cell>
-                { (permissions.can_organize_competitions.scope === '*' || permissions.can_organize_competitions.scope.includes(competition.id)) && (
-                <Table.Cell>
-                  <a href={editCompetitionsUrl(competition.id)}>
-                    { I18n.t('competitions.my_competitions_table.edit') }
-                  </a>
-                </Table.Cell>
+                {(permissions.can_organize_competitions.scope === '*' || permissions.can_organize_competitions.scope.includes(competition.id)) && (
+                  <Table.Cell>
+                    <a href={editCompetitionsUrl(competition.id)}>
+                      { I18n.t('competitions.my_competitions_table.edit') }
+                    </a>
+                  </Table.Cell>
                 )}
-                { (permissions.can_organize_competitions.scope === '*' || permissions.can_organize_competitions.scope.includes(competition.id)) && (
-                <Table.Cell>
-                  <a href={competitionRegistrationsUrl(competition.id)}>
-                    { I18n.t('competitions.my_competitions_table.registrations') }
-                  </a>
-                </Table.Cell>
+                {(permissions.can_organize_competitions.scope === '*' || permissions.can_organize_competitions.scope.includes(competition.id)) && (
+                  <Table.Cell>
+                    <a href={competitionRegistrationsUrl(competition.id)}>
+                      { I18n.t('competitions.my_competitions_table.registrations') }
+                    </a>
+                  </Table.Cell>
                 )}
-                <ReportTableCell competitionId={competition.id} permissions={permissions} canAdminCompetitions={canAdminCompetitions} />
+                <ReportTableCell
+                  competitionId={competition.id}
+                  permissions={permissions}
+                  canAdminCompetitions={canAdminCompetitions}
+                />
               </Table.Row>
             )}
           />
