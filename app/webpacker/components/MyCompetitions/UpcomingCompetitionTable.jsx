@@ -57,7 +57,7 @@ export default function UpcomingCompetitionTable({
     <Table>
       <TableHeader>
         <Table.Row>
-          { shouldShowRegistrationStatus && <Table.HeaderCell /> }
+          { shouldShowRegistrationStatus && <Table.HeaderCell collapsing /> }
           <Table.HeaderCell>
             {I18n.t('competitions.competition_info.name')}
           </Table.HeaderCell>
@@ -93,7 +93,7 @@ export default function UpcomingCompetitionTable({
                     position="top left"
                     content={competitionStatusIconText(competition)}
                     trigger={(
-                      <Table.Cell>
+                      <Table.Cell collapsing>
                         {competitionStatusIcon(competition)}
                       </Table.Cell>
                   )}

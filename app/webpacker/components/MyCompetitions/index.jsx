@@ -3,7 +3,9 @@ import {
   Accordion,
   Header,
   Icon,
-  Checkbox, Segment, Button, Divider,
+  Checkbox,
+  Button,
+  Divider,
 } from 'semantic-ui-react';
 import I18n from '../../lib/i18n';
 import {

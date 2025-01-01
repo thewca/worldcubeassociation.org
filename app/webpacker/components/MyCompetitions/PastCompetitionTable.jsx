@@ -9,7 +9,7 @@ import {
 
 export default function PastCompetitionsTable({ competitions, permissions }) {
   return (
-    <Table striped>
+    <Table striped basic="very">
       <TableHeader>
         <Table.Row>
           <Table.HeaderCell>
