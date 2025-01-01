@@ -11,8 +11,8 @@ import {
   DateTableCell, LocationTableCell, NameTableCell, ReportTableCell,
 } from './TableCells';
 
-const registrationStatusIcon = (registrationStatus) => {
-  switch (registrationStatus) {
+const competingStatusIcon = (competingStatus) => {
+  switch (competingStatus) {
     case 'pending': return <Icon name="hourglass" />;
     case 'waiting_list': return <Icon name="hourglass" />;
     case 'accepted': return <Icon name="check circle" />;
@@ -22,7 +22,7 @@ const registrationStatusIcon = (registrationStatus) => {
   }
 };
 
-const competitionStatusIconText = (competition) => {
+const registrationStatusIconText = (competition) => {
   if (competition.registration_status === 'not_yet_opened') {
     return I18n.t('competitions.index.tooltips.registration.opens_in', { duration: DateTime.fromISO(competition.registration_open).toRelative() });
   }
@@ -35,7 +35,7 @@ const competitionStatusIconText = (competition) => {
   return I18n.t('competitions.index.tooltips.registration.open');
 };
 
-const competitionStatusIcon = (competition) => {
+const registrationStatusIcon = (competition) => {
   if (competition.registration_status === 'not_yet_opened') {
     return <Icon name="clock" color="blue" />;
   }
@@ -91,10 +91,10 @@ export default function UpcomingCompetitionTable({
                 { shouldShowRegistrationStatus && (
                   <Popup
                     position="top left"
-                    content={competitionStatusIconText(competition)}
+                    content={registrationStatusIconText(competition)}
                     trigger={(
                       <Table.Cell collapsing>
-                        {competitionStatusIcon(competition)}
+                        {registrationStatusIcon(competition)}
                       </Table.Cell>
                   )}
                   />
@@ -103,7 +103,7 @@ export default function UpcomingCompetitionTable({
                 <LocationTableCell competition={competition} />
                 <DateTableCell competition={competition} />
                 <Table.Cell>
-                  {registrationStatusIcon(registrationStatuses[competition.id])}
+                  {competingStatusIcon(registrationStatuses[competition.id])}
                 </Table.Cell>
                 { (permissions.can_organize_competitions.scope === '*' || permissions.can_organize_competitions.scope.includes(competition.id)) && (
                 <Table.Cell>

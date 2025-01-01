@@ -27,7 +27,7 @@ export default function MyCompetitions({ permissions, competitions, wcaId }) {
       <UpcomingCompetitionTable
         competitions={competitions.futureCompetitions}
         permissions={permissions}
-        registrationStatuses={competitions.registrationStatuses}
+        registrationStatuses={competitions.competingStatuses}
       />
       <Accordion fluid styled>
         <Accordion.Title
@@ -52,7 +52,7 @@ export default function MyCompetitions({ permissions, competitions, wcaId }) {
       <p>{I18n.t('competitions.my_competitions.bookmarked_explanation')}</p>
       <UpcomingCompetitionTable
         competitions={competitions.bookmarkedCompetitions}
-        registrationStatuses={competitions.registrationStatuses}
+        registrationStatuses={competitions.competingStatuses}
         permissions={permissions}
       />
     </>

@@ -14,7 +14,7 @@
         pastCompetitions: @past_competitions.as_json(options),
         futureCompetitions: @not_past_competitions.as_json(options),
         bookmarkedCompetitions: @bookmarked_competitions.as_json(options),
-        registrationStatuses: @registered_for_by_competition_id,
+        competingStatuses: @registered_for_by_competition_id,
       },
   }) %>
 </div>
