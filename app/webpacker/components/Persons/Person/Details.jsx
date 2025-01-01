@@ -1,13 +1,11 @@
-// TODO: this keeps happening? should we keep ignoring?
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import React from 'react';
 import {
-  Card, Header,
-  Icon,
-  Table, TableBody, TableCell, TableHeader, TableHeaderCell, TableRow,
+  Card, Grid, GridColumn, GridRow, Header, Icon,
 } from 'semantic-ui-react';
 import I18nHTMLTranslate from '../../I18nHTMLTranslate';
 import Badges from '../Badges';
+import CountryFlag from '../../wca/CountryFlag';
+import I18n from '../../../lib/i18n';
 
 function PreviousDetails({ prev }) {
   return (
@@ -23,14 +21,6 @@ function PreviousDetails({ prev }) {
   );
 }
 
-function FlagIcon({ countryIso2 }) {
-  return (
-    <span
-      className={`fi fi-${countryIso2.toLowerCase()}`}
-    />
-  );
-}
-
 export default function Details({
   person,
   canEditUser,
@@ -38,7 +28,12 @@ export default function Details({
 }) {
   return (
     <>
-      <Header as="h2">
+      {person.user?.avatar && (
+        <Card image={person.user.avatar.url} centered />
+      )}
+      <Header as="h2" textAlign="center">
+        <CountryFlag iso2={person.country.iso2} />
+        {' '}
         {person.name + (canEditUser ? ' ' : '')}
         {canEditUser && (
           <a href={editUrl}>
@@ -49,60 +44,32 @@ export default function Details({
       </Header>
       {person.previousPersons.length > 0 && <PreviousDetails prev={person.previousPersons} />}
       {person.user && <Badges userId={person.user.id} />}
-      {person.user?.avatar && (
-        <Card image={person.user.avatar.url} centered />
-      )}
-
-      <div className="details" style={{ marginBottom: '0.75rem' }}>
-        <Table striped basic="very" textAlign="center" structured unstackable>
-          <TableHeader fullWidth>
-            <TableRow textAlign="center">
-              <TableHeaderCell>
-                <I18nHTMLTranslate i18nKey="common.country" />
-              </TableHeaderCell>
-              <TableHeaderCell>
-                <I18nHTMLTranslate i18nKey="common.user.wca_id" />
-              </TableHeaderCell>
-              {person.gender && (
-                <TableHeaderCell>
-                  <I18nHTMLTranslate i18nKey="activerecord.attributes.person.gender" />
-                </TableHeaderCell>
-              )}
-              <TableHeaderCell>
-                <I18nHTMLTranslate i18nKey="layouts.navigation.competitions" />
-              </TableHeaderCell>
-              <TableHeaderCell>
-                <I18nHTMLTranslate i18nKey="persons.show.completed_solves" />
-              </TableHeaderCell>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {/* trick to have first row striped */}
-            <TableRow style={{ display: 'none' }} />
-            <TableRow>
-              <TableCell>
-                <FlagIcon countryIso2={person.country.iso2} />
-                {' '}
-                {person.country.name}
-              </TableCell>
-              <TableCell>
-                {person.wcaId}
-              </TableCell>
-              {person.gender && (
-                <TableCell>
-                  <I18nHTMLTranslate i18nKey={`enums.user.gender.${person.gender}`} />
-                </TableCell>
-              )}
-              <TableCell>
-                {person.competitionCount}
-              </TableCell>
-              <TableCell>
-                {person.completedSolves}
-              </TableCell>
-            </TableRow>
-          </TableBody>
-        </Table>
-      </div>
+      <Grid textAlign="center">
+        <GridRow>
+          <GridColumn width={8}>
+            <Header as="h4">
+              {I18n.t('common.user.wca_id')}
+            </Header>
+            {person.wcaId}
+            <Header as="h4">
+              <I18nHTMLTranslate i18nKey="persons.show.completed_solves" />
+            </Header>
+            {person.completedSolves}
+          </GridColumn>
+          <GridColumn width={8}>
+            {person.gender && (
+              <Header as="h4">
+                <I18nHTMLTranslate i18nKey="activerecord.attributes.person.gender" />
+              </Header>
+            )}
+            <I18nHTMLTranslate i18nKey={`enums.user.gender.${person.gender}`} />
+            <Header as="h4">
+              <I18nHTMLTranslate i18nKey="layouts.navigation.competitions" />
+            </Header>
+            {person.competitionCount}
+          </GridColumn>
+        </GridRow>
+      </Grid>
     </>
   );
 }

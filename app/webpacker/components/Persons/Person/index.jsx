@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Container, Grid, GridColumn, Tab, TabPane,
+  Container, Grid, GridColumn, GridRow, Segment, Tab, TabPane,
 } from 'semantic-ui-react';
 import Details from './Details';
 import PersonalRecords from './PersonalRecords';
@@ -72,33 +72,46 @@ export default function Person({
     + (person.records.total > 0 ? 1 : 0);
 
   return (
-    <Container textAlign="center" id="person">
-      <Details
-        person={person}
-        canEditUser={canEditUser}
-        editUrl={editUrl}
-      />
-      <PersonalRecords
-        person={person}
-        averageRanks={person.averageRanks}
-        singleRanks={person.singleRanks}
-      />
-      {medalsAndRecords > 0 && (
-        <Grid columns={medalsAndRecords} stackable>
-          {person.medals.total > 0 && (
-            <GridColumn>
-              <MedalCollection person={person} />
-            </GridColumn>
+    <Grid columns={2}>
+      <GridRow>
+        <GridColumn width={4}>
+          <Segment>
+            <Details
+              person={person}
+              canEditUser={canEditUser}
+              editUrl={editUrl}
+            />
+          </Segment>
+        </GridColumn>
+        <GridColumn width={12}>
+          <Segment>
+            <PersonalRecords
+              person={person}
+              averageRanks={person.averageRanks}
+              singleRanks={person.singleRanks}
+            />
+          </Segment>
+          {medalsAndRecords > 0 && (
+            <Segment>
+              <Grid columns={medalsAndRecords} stackable>
+                {person.medals.total > 0 && (
+                <GridColumn>
+                  <MedalCollection person={person} />
+                </GridColumn>
+                )}
+                {person.records.total > 0 && (
+                <GridColumn>
+                  <RecordCollection person={person} />
+                </GridColumn>
+                )}
+              </Grid>
+            </Segment>
           )}
-          {person.records.total > 0 && (
-            <GridColumn>
-              <RecordCollection person={person} />
-            </GridColumn>
-          )}
-        </Grid>
-      )}
-      <br />
-      <TabSection person={person} />
-    </Container>
+          <Segment>
+            <TabSection person={person} />
+          </Segment>
+        </GridColumn>
+      </GridRow>
+    </Grid>
   );
 }

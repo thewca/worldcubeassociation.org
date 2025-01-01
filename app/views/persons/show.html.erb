@@ -1,114 +1,68 @@
-<% if @enable_react %>
-  <% provide(:title, @person.name) %>
+<% provide(:title, @person.name) %>
 
-  <%= react_component("Persons/NewPerson", {
-    person: {
-      name: @person.name,
-      user: @person.user,
-      previousPersons: @previous_persons.map { |person| {
-        name: person.name,
-        country: person.country.name,
-      }},
-      wcaId: @person.wca_id,
-      gender: @person.gender_visible? ? @person.gender : nil,
-      country: {
-        name: @person.country.name,
-        iso2: @person.country_iso2,
-      },
-      competitionCount: @person.competitions.count,
-      completedSolves: @person.completed_solves_count,
-      medals: @medals,
-      records: @records,
-      averageRanks: @ranks_average.map { |r| {
-        eventId: r.eventId,
-        time: r.solve_time.clock_format,
-        worldRank: r.worldRank,
-        continentRank: r.continentRank,
-        countryRank: r.countryRank,
-        oddRank: odd_rank?(r),
-        rankPath: rankings_path(r.event_id, "average")
-      }},
-      singleRanks: @ranks_single.map { |r| {
-        eventId: r.eventId,
-        time: r.solve_time.clock_format,
-        worldRank: r.worldRank,
-        continentRank: r.continentRank,
-        countryRank: r.countryRank,
-        oddRank: odd_rank?(r),
-        rankPath: rankings_path(r.event_id, "single"),
-        data: r.inspect
-      }},
-      results: [],
+<%= react_component("Persons/Person", {
+  normalPerson: @person,
+  person: {
+    user: @person.user,
+    name: @person.name,
+    wcaId: @person.wca_id,
+    gender: @person.gender_visible? ? @person.gender : nil,
+    country: {
+      name: @person.country.name,
+      iso2: @person.country_iso2,
     },
-  }) %>
-<% else %>
-  <% provide(:title, @person.name) %>
-
-  <%= react_component("Persons/Person", {
-    normalPerson: @person,
-    person: {
-      user: @person.user,
-      name: @person.name,
-      wcaId: @person.wca_id,
-      gender: @person.gender_visible? ? @person.gender : nil,
-      country: {
-        name: @person.country.name,
-        iso2: @person.country_iso2,
+    previousPersons: @previous_persons.map { |person| {
+      name: person.name,
+      country: person.country.name,
+    }},
+    competitionCount: @person.competitions.count,
+    completedSolves: @person.completed_solves_count,
+    averageRanks: @ranks_average.map { |r| {
+      eventId: r.eventId,
+      time: r.solve_time.clock_format,
+      worldRank: r.worldRank,
+      continentRank: r.continentRank,
+      countryRank: r.countryRank,
+      oddRank: odd_rank?(r),
+      rankPath: rankings_path(r.event_id, "average")
+    }},
+    singleRanks: @ranks_single.map { |r| {
+      eventId: r.eventId,
+      time: r.solve_time.clock_format,
+      worldRank: r.worldRank,
+      continentRank: r.continentRank,
+      countryRank: r.countryRank,
+      oddRank: odd_rank?(r),
+      rankPath: rankings_path(r.event_id, "single"),
+      data: r.inspect
+    }},
+    medals: @medals,
+    records: @records,
+    results: @results.map { |result| {
+      id: result.id,
+      eventId: result.event.id,
+      best: result.best_solve.clock_format,
+      average: result.average_solve.clock_format,
+      competition: {
+        id: result.competition.id,
+        name: result.competition.name,
+        url: result.competition.internal_website,
+        lat: result.competition.latitude_degrees,
+        lng: result.competition.longitude_degrees,
+        probablyOver: result.competition.is_probably_over?,
+        markerDate: wca_date_range(result.competition.start_date, result.competition.end_date),
+        cityName: result.competition.cityName,
       },
-      previousPersons: @previous_persons.map { |person| {
-        name: person.name,
-        country: person.country.name,
-      }},
-      competitionCount: @person.competitions.count,
-      completedSolves: @person.completed_solves_count,
-      averageRanks: @ranks_average.map { |r| {
-        eventId: r.eventId,
-        time: r.solve_time.clock_format,
-        worldRank: r.worldRank,
-        continentRank: r.continentRank,
-        countryRank: r.countryRank,
-        oddRank: odd_rank?(r),
-        rankPath: rankings_path(r.event_id, "average")
-      }},
-      singleRanks: @ranks_single.map { |r| {
-        eventId: r.eventId,
-        time: r.solve_time.clock_format,
-        worldRank: r.worldRank,
-        continentRank: r.continentRank,
-        countryRank: r.countryRank,
-        oddRank: odd_rank?(r),
-        rankPath: rankings_path(r.event_id, "single"),
-        data: r.inspect
-      }},
-      medals: @medals,
-      records: @records,
-      results: @results.map { |result| {
-        id: result.id,
-        eventId: result.event.id,
-        best: result.best_solve.clock_format,
-        average: result.average_solve.clock_format,
-        competition: {
-          id: result.competition.id,
-          name: result.competition.name,
-          url: result.competition.internal_website,
-          lat: result.competition.latitude_degrees,
-          lng: result.competition.longitude_degrees,
-          probablyOver: result.competition.is_probably_over?,
-          markerDate: wca_date_range(result.competition.start_date, result.competition.end_date),
-          cityName: result.competition.cityName,
-        },
-        roundTypeId: result.roundTypeId,
-        bestIdx: result.best_index,
-        worstIdx: result.worst_index,
-        attempts: result.solve_times.map { |time| time.clock_format },
-        singleRecord: result.regionalSingleRecord,
-        averageRecord: result.regionalAverageRecord,
-        trimmedIdx: result.trimmed_indices,
-      }},
-      championshipPodiums: @championship_podiums,
-    },
-    canEditUser: current_user&.can_edit_user?(@person.user),
-    editUrl: edit_user_path(@person.user),
-  }) %>
-  <%= render "show_legacy"%>
-<% end %>
+      roundTypeId: result.roundTypeId,
+      bestIdx: result.best_index,
+      worstIdx: result.worst_index,
+      attempts: result.solve_times.map { |time| time.clock_format },
+      singleRecord: result.regionalSingleRecord,
+      averageRecord: result.regionalAverageRecord,
+      trimmedIdx: result.trimmed_indices,
+    }},
+    championshipPodiums: @championship_podiums,
+  },
+  canEditUser: current_user&.can_edit_user?(@person.user),
+  editUrl: edit_user_path(@person.user),
+}) %>
