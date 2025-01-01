@@ -1,17 +1,14 @@
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import {
   Button,
-  ButtonGroup,
   Header,
   Segment,
   Image,
   Divider,
-  CardContent,
-  CardHeader,
-  CardMeta,
-  CardDescription,
   Grid,
-  Card, Checkbox, Input,
+  Card,
+  Checkbox,
+  Input,
 } from 'semantic-ui-react';
 import { editPersonUrl } from '../../../../lib/requests/routes.js.erb';
 import I18n from '../../../../lib/i18n';
@@ -29,12 +26,10 @@ function Avatar({
         centered
         style={{
           objectFit: 'contain',
-          height: '250px',
-          width: '250px',
         }}
       />
       <Divider horizontal />
-      <ButtonGroup toggle>
+      <Button.Group toggle>
         {actions.map((action) => (
           <Button
             key={action.label}
@@ -46,7 +41,7 @@ function Avatar({
             {action.label}
           </Button>
         ))}
-      </ButtonGroup>
+      </Button.Group>
     </Segment>
   );
 }
@@ -60,71 +55,86 @@ export default function AvatarCard({
   const [isChoosingRejectionReason, setIsChoosingRejectionReason] = useState(false);
 
   const possibleRejectionReasons = useMemo(() => {
-    const r = I18n.tArray('users.edit.avatar_guidelines');
+    const standardReasons = I18n.tArray('users.edit.avatar_guidelines');
+
     if (user['staff_or_any_delegate?']) {
-      return r.concat(I18n.tArray('users.edit.staff_avatar_guidelines.paragraphs'));
+      const staffReasons = I18n.tArray('users.edit.staff_avatar_guidelines.paragraphs');
+      return [...standardReasons, ...staffReasons];
     }
-    return r;
+
+    return standardReasons;
   }, [user]);
+
+  const handleRejectionGuidelineClick = useCallback((e, { checked, label: guideline }) => {
+    setRejectionGuidelines(
+      (prev) => (checked ? [...prev, guideline] : prev.filter((reason) => reason !== guideline)),
+    );
+  }, [setRejectionGuidelines]);
 
   const currentAvatarActions = useMemo(() => [
     {
       label: 'Previous',
-      onClick: () => setActiveAvatarIndex(activeAvatarIndex - 1),
+      onClick: () => setActiveAvatarIndex((idx) => idx - 1),
       color: 'blue',
       basic: true,
       disabled: activeAvatarIndex === 0,
     },
     {
       label: 'Next',
-      onClick: () => setActiveAvatarIndex(activeAvatarIndex + 1),
+      onClick: () => setActiveAvatarIndex((idx) => idx + 1),
       color: 'blue',
       basic: true,
       disabled: activeAvatarIndex === user.avatar_history.length - 1,
     },
   ], [activeAvatarIndex, user.avatar_history.length]);
 
+  const handleRejectionButtonClick = useCallback(() => {
+    if (isChoosingRejectionReason) {
+      if (rejectionGuidelines.length === 0) {
+        setIsChoosingRejectionReason(false);
+      } else {
+        onReject(user.pending_avatar, rejectionGuidelines, rejectionReason);
+      }
+    } else {
+      setIsChoosingRejectionReason(true);
+    }
+  }, [
+    isChoosingRejectionReason,
+    onReject,
+    rejectionGuidelines,
+    rejectionReason,
+    user.pending_avatar,
+  ]);
+
   const pendingAvatarActions = [
     {
       label: 'Approve',
-      onClick: () => {
-        onApprove(user.pending_avatar);
-      },
+      onClick: () => onApprove(user.pending_avatar),
       color: 'green',
     },
     {
       label: 'Reject',
-      onClick: () => {
-        if (isChoosingRejectionReason) {
-          if (rejectionGuidelines.length === 0) {
-            setIsChoosingRejectionReason(false);
-          } else {
-            onReject(user.pending_avatar, rejectionGuidelines, rejectionReason);
-          }
-        } else {
-          setIsChoosingRejectionReason(true);
-        }
-      },
+      onClick: () => handleRejectionButtonClick(),
       color: 'red',
     },
   ];
 
   return (
     <Card fluid>
-      <CardContent>
-        <CardHeader>
+      <Card.Content>
+        <Card.Header>
           <a href={editPersonUrl(user.id)}>
             {user.name}
           </a>
-        </CardHeader>
+        </Card.Header>
         { user['staff_or_any_delegate?'] && (
-          <CardMeta>
+          <Card.Meta>
             <strong>Staff Member or Trainee Delegate</strong>
             {' '}
             - see guidelines above
-          </CardMeta>
+          </Card.Meta>
         )}
-        <CardDescription>
+        <Card.Description>
           <Grid columns={2} stackable padded>
             <Grid.Row>
               <Grid.Column>
@@ -133,20 +143,18 @@ export default function AvatarCard({
                   imageUrl={user.pending_avatar.url}
                   actions={pendingAvatarActions}
                 />
-                { isChoosingRejectionReason
-                  && (
+                {isChoosingRejectionReason && (
                   <>
                     {possibleRejectionReasons.map((r) => (
                       <Checkbox
                         checked={rejectionGuidelines.includes(r)}
-                        onClick={() => setRejectionGuidelines((prev) => (prev.includes(r) ? prev.filter((reason) => reason !== r)
-                          : [...prev, r]))}
+                        onClick={handleRejectionGuidelineClick}
                         label={r}
                       />
                     ))}
                     <Input fluid placeholder="Additional Rejection Reason" value={rejectionReason} onChange={setRejectionReason} />
                   </>
-                  )}
+                )}
               </Grid.Column>
               <Grid.Column>
                 <Avatar
@@ -158,8 +166,8 @@ export default function AvatarCard({
               </Grid.Column>
             </Grid.Row>
           </Grid>
-        </CardDescription>
-      </CardContent>
+        </Card.Description>
+      </Card.Content>
     </Card>
   );
 }
