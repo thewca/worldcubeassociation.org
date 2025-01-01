@@ -23,26 +23,26 @@ const registrationStatusIcon = (registrationStatus) => {
 };
 
 const competitionStatusIconText = (competition) => {
-  if (competition['registration_not_yet_opened?']) {
+  if (competition.registration_status === 'not_yet_opened') {
     return I18n.t('competitions.index.tooltips.registration.opens_in', { duration: DateTime.fromISO(competition.registration_open).toRelative() });
   }
-  if (competition['registration_past?']) {
+  if (competition.registration_status === 'past') {
     return I18n.t('competitions.index.tooltips.registration.closed', { days: DateTime.fromISO(competition.start_date).toRelative() });
   }
-  if (competition['registration_full?']) {
+  if (competition.registration_status === 'full') {
     return I18n.t('competitions.index.tooltips.registration.full');
   }
   return I18n.t('competitions.index.tooltips.registration.open');
 };
 
 const competitionStatusIcon = (competition) => {
-  if (competition['registration_not_yet_opened?']) {
+  if (competition.registration_status === 'not_yet_opened') {
     return <Icon name="clock" color="blue" />;
   }
-  if (competition['registration_past?']) {
+  if (competition.registration_status === 'past') {
     return <Icon name="user times" color="red" />;
   }
-  if (competition['registration_full?']) {
+  if (competition.registration_status === 'full') {
     return <Icon name="user clock" color="orange" />;
   }
   return <Icon name="user plus" color="green" />;
