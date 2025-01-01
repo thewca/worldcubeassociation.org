@@ -1,0 +1,8 @@
+.tab-wrapped {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  .item {
+    color: #e64503 !important;
+  }
+}
