@@ -643,6 +643,12 @@ class User < ApplicationRecord
     ].index_with { |panel_page| panel_page.to_s.underscore.dasherize }
   end
 
+  def self.panel_notifications
+    {
+      self.panel_pages[:approveAvatars] => lambda { User.where.not(pending_avatar: nil).count },
+    }
+  end
+
   def self.panel_list
     panel_pages = User.panel_pages
     {

@@ -22,6 +22,10 @@ class PanelController < ApplicationController
     panel_details = User.panel_list[@panel_id.to_sym]
     @pages = panel_details[:pages]
     @title = panel_details[:name]
+    # This awkward mapping is necessary because `panel_notifications` returns callables
+    #   which compute the value _if needed_. The point is to reduce workload, not every time
+    #   that `User.panel_notifications` is called should trigger an actual computation.
+    @notifications = User.panel_notifications.slice(*@pages).transform_values(&:call)
   end
 
   def generate_db_token
