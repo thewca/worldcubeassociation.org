@@ -1,4 +1,4 @@
-FROM ruby:3.3.0 AS base
+FROM ruby:3.3.5 AS base
 ARG BUILD_TAG=local
 ARG WCA_LIVE_SITE
 ARG SHAKAPACKER_ASSET_HOST
@@ -87,6 +87,12 @@ RUN gem install mailcatcher
 
 ENTRYPOINT ["/rails/bin/docker-entrypoint-sidekiq"]
 
+FROM runtime AS shoryuken
+
+USER rails:rails
+
+ENTRYPOINT ["/rails/bin/docker-entrypoint-shoryuken"]
+
 FROM runtime AS monolith
 
 EXPOSE 3000
@@ -96,6 +102,7 @@ EXPOSE 3000
 # unfonts-core = Korean
 # wqy-modern = Chinese
 # ipafont = Japanese
+# thai-tlwg = Thai (as the name suggests)
 # lmodern = Random accents and special symbols for Latin script
 RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y \
@@ -103,6 +110,7 @@ RUN apt-get update -qq && \
       fonts-unfonts-core \
       fonts-wqy-microhei \
       fonts-ipafont \
+      fonts-thai-tlwg \
       fonts-lmodern
 USER rails:rails
 # Regenerate the font cache so WkHtmltopdf can find them
@@ -111,5 +119,15 @@ RUN fc-cache -f -v
 
 # Entrypoint prepares database and starts app on 0.0.0.0:3000 by default,
 # but can also take a rails command, like "console" or "runner" to start instead.
+ENV PIDFILE="/rails/pids/puma.pid"
+
 ENTRYPOINT ["/rails/bin/docker-entrypoint"]
-CMD ["./bin/bundle", "exec", "unicorn", "-c", "/rails/config/unicorn.rb"]
+CMD ["./bin/rails", "server"]
+
+FROM runtime AS monolith-api
+
+EXPOSE 3000
+
+USER rails:rails
+ENV API_ONLY="true"
+CMD ["./bin/rails", "server"]

@@ -77,9 +77,9 @@ function ResponsiveCompetitionsTables({
   regStatusLoading,
   isSortedByAnnouncement,
 }) {
-  const noCompetitons = !competitions || competitions.length === 0;
+  const noCompetitions = !competitions || competitions.length === 0;
 
-  if (noCompetitons && !isLoading && !hasMoreCompsToLoad) {
+  if (noCompetitions && !isLoading && !hasMoreCompsToLoad) {
     return (
       <Container text textAlign="center">{I18n.t('competitions.index.no_comp_found')}</Container>
     );
@@ -156,7 +156,7 @@ export function CompetitionsTable({
               <Table.Cell textAlign="right" width={2}>
                 {comp.date_range}
               </Table.Cell>
-              <Table.Cell width={6}>
+              <Table.Cell width={5}>
                 <Flag name={comp.country_iso2?.toLowerCase()} />
                 <a href={competitionUrl(comp.id)}>{comp.short_display_name}</a>
               </Table.Cell>
@@ -164,7 +164,7 @@ export function CompetitionsTable({
                 <strong>{countries.byIso2[comp.country_iso2].name}</strong>
                 {`, ${comp.city}`}
               </Table.Cell>
-              <Table.Cell width={4}>
+              <Table.Cell width={5}>
                 <PseudoLinkMarkdown text={comp.venue} />
               </Table.Cell>
             </Table.Row>
@@ -217,8 +217,10 @@ export function CompetitionsTabletTable({
                 <a href={competitionUrl(comp.id)}>{comp.short_display_name}</a>
               </Table.Cell>
               <Table.Cell width={7}>
-                <strong>{countries.byIso2[comp.country_iso2].name}</strong>
-                {`, ${comp.city}`}
+                <span>
+                  <strong>{countries.byIso2[comp.country_iso2].name}</strong>
+                  {`, ${comp.city}`}
+                </span>
                 <PseudoLinkMarkdown text={comp.venue} />
               </Table.Cell>
             </Table.Row>
@@ -246,25 +248,33 @@ export function CompetitionsMobileTable({
               isSortedByAnnouncement={isSortedByAnnouncement}
               colSpan={3}
             />
-            <Table.Row error={isCancelled(comp)} className="competition-info">
-              <Table.Cell textAlign="right">
-                {comp.date_range}
-                {' '}
-                <StatusIcon
-                  comp={comp}
-                  shouldShowRegStatus={shouldShowRegStatus}
-                  isSortedByAnnouncement={isSortedByAnnouncement}
-                  regStatusLoading={regStatusLoading}
-                />
-              </Table.Cell>
+            <Table.Row error={isCancelled(comp)} className="competition-info mobile-compact">
               <Table.Cell>
+                <Label ribbon="right" size="small">
+                  <StatusIcon
+                    comp={comp}
+                    shouldShowRegStatus={shouldShowRegStatus}
+                    isSortedByAnnouncement={isSortedByAnnouncement}
+                    regStatusLoading={regStatusLoading}
+                  />
+                  {comp.date_range}
+                </Label>
                 <Flag name={comp.country_iso2?.toLowerCase()} />
                 <a href={competitionUrl(comp.id)}>{comp.short_display_name}</a>
               </Table.Cell>
-              <Table.Cell>
-                <strong>{countries.byIso2[comp.country_iso2].name}</strong>
-                {`, ${comp.city}`}
-                <PseudoLinkMarkdown text={comp.venue} />
+              {
+                /* This "magical" 1px is necessary so that the long text from the venue
+                *   "clears" the floating date indicator from above. Otherwise, the text
+                *   would break too early. SemUI doesn't support "nicely" padding cells,
+                *   if anyone has a better idea then please shout. */
+              }
+              <Table.Cell style={{ marginTop: '1px' }}>
+                <span>
+                  <strong>{countries.byIso2[comp.country_iso2].name}</strong>
+                  {`, ${comp.city}`}
+                </span>
+                {' '}
+                <PseudoLinkMarkdown text={comp.venue} RenderAs="span" />
               </Table.Cell>
             </Table.Row>
           </React.Fragment>
@@ -283,9 +293,9 @@ function AdminCompetitionsTable({
   regStatusLoading,
   isSortedByAnnouncement,
 }) {
-  const noCompetitons = !competitions || competitions.length === 0;
+  const noCompetitions = !competitions || competitions.length === 0;
 
-  if (noCompetitons && !isLoading && !hasMoreCompsToLoad) {
+  if (noCompetitions && !isLoading && !hasMoreCompsToLoad) {
     return (
       <Container text textAlign="center">{I18n.t('competitions.index.no_comp_found')}</Container>
     );

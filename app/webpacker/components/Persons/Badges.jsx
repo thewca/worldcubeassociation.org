@@ -3,7 +3,7 @@ import { Popup } from 'semantic-ui-react';
 import useLoadedData from '../../lib/hooks/useLoadedData';
 import I18n from '../../lib/i18n';
 import {
-  apiV0Urls, delegatesPageUrl, teamsCommitteesCouncilsPageUrl, translatorsPageUrl,
+  apiV0Urls, delegatesPageUrl, teamsCommitteesCouncilsPageUrl, translatorsPageUrl, officersAndBoardPageUrl,
 } from '../../lib/requests/routes.js.erb';
 import { groupTypes } from '../../lib/wca-data.js.erb';
 
@@ -21,7 +21,7 @@ function badgeParams(role) {
       roleTitle: `${role.group.metadata.friendly_id.toUpperCase()} ${I18n.t(`enums.user_roles.status.${role.group.group_type}.${role.metadata.status}`)}`,
       groupTitle: role.group.name,
       badgeClass: `team-${role.metadata.status.replace('_', '-')}-badge`,
-      url: teamsCommitteesCouncilsPageUrl,
+      url: teamsCommitteesCouncilsPageUrl(role.group.metadata.friendly_id),
     };
   }
   if (role.group.group_type === groupTypes.board) {
@@ -29,7 +29,7 @@ function badgeParams(role) {
       roleTitle: role.group.group_type.toUpperCase(),
       groupTitle: I18n.t(`user_groups.group_types.${role.group.group_type}`),
       badgeClass: 'team-member-badge',
-      url: teamsCommitteesCouncilsPageUrl,
+      url: officersAndBoardPageUrl,
     };
   }
   if (role.group.group_type === groupTypes.officers) {
@@ -37,7 +37,7 @@ function badgeParams(role) {
       roleTitle: `${I18n.t(`enums.user_roles.status.${role.group.group_type}.${role.metadata.status}`)}`,
       groupTitle: I18n.t(`user_groups.group_types.${role.group.group_type}`),
       badgeClass: 'officer-badge',
-      url: teamsCommitteesCouncilsPageUrl,
+      url: officersAndBoardPageUrl,
     };
   }
   if (role.group.group_type === groupTypes.translators) {

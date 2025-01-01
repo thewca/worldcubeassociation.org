@@ -34,7 +34,7 @@ class PaypalRecord < ApplicationRecord
   }.freeze
 
   # See https://developer.paypal.com/docs/api/orders/v2/#orders_get!c=200&path=status&t=response
-  enum paypal_status: {
+  enum :paypal_status, {
     created: "CREATED",
     payer_action_required: "PAYER_ACTION_REQUIRED",
     saved: "SAVED",
@@ -53,7 +53,7 @@ class PaypalRecord < ApplicationRecord
     canceled: %w[voided],
   }.freeze
 
-  enum paypal_record_type: {
+  enum :paypal_record_type, {
     # We cannot call this "order" because that's a reserved keyword in SQL and Rails AR
     paypal_order: "paypal_order",
     capture: "capture",
@@ -78,6 +78,27 @@ class PaypalRecord < ApplicationRecord
     result = WCA_TO_PAYPAL_STATUS_MAP.find { |key, values| values.include?(self.paypal_status) }
     result&.first || raise("No associated wca_status for paypal_status: #{self.paypal_status} - our tests should prevent this from happening!")
   end
+
+  def update_status(api_transaction)
+    # TODO: Can we extract error information from a PayPal API Order object?
+
+    self.update!(
+      paypal_status: api_transaction['status'],
+    )
+  end
+
+  def retrieve_paypal
+    case self.paypal_record_type
+    when PaypalRecord.paypal_record_types[:paypal_order]
+      PaypalInterface.retrieve_order(self.merchant_id, self.paypal_id)
+    when PaypalRecord.paypal_record_types[:capture]
+      PaypalInterface.retrieve_capture(self.merchant_id, self.paypal_id)
+    when PaypalRecord.paypal_record_types[:refund]
+      PaypalInterface.retrieve_refund(self.merchant_id, self.paypal_id)
+    end
+  end
+
+  alias_method :retrieve_remote, :retrieve_paypal
 
   def money_amount
     ruby_amount = PaypalRecord.amount_to_ruby(

@@ -81,15 +81,7 @@ export function getRoundTypeId(roundNumber, totalNumberOfRounds, cutoff = false)
   return cutoff ? 'g' : '3';
 }
 
-export const localizeActivityCode = (activityCode, wcifRound, wcifEvent) => {
-  const { eventId, roundNumber, attempt } = parseActivityCode(activityCode);
-
-  const roundTypeId = getRoundTypeId(
-    roundNumber,
-    wcifEvent.rounds.length,
-    Boolean(wcifRound.cutoff),
-  );
-
+export const localizeRoundInformation = (eventId, roundTypeId, attempt = null) => {
   const eventName = I18n.t(`events.${eventId}`);
   const roundTypeName = I18n.t(`rounds.${roundTypeId}.name`);
 
@@ -103,20 +95,36 @@ export const localizeActivityCode = (activityCode, wcifRound, wcifEvent) => {
   return roundName;
 };
 
+export const localizeActivityCode = (activityCode, wcifRound, wcifEvent) => {
+  const { eventId, roundNumber, attempt } = parseActivityCode(activityCode);
+
+  const roundTypeId = getRoundTypeId(
+    roundNumber,
+    wcifEvent.rounds.length,
+    Boolean(wcifRound.cutoff),
+  );
+
+  return localizeRoundInformation(eventId, roundTypeId, attempt);
+};
+
 export const humanizeActivityCode = (activityCode) => {
+  if (activityCode.startsWith('other-')) {
+    return I18n.t(`activity.${activityCode.substring(6)}`);
+  }
+
   const { eventId, roundNumber, attempt } = parseActivityCode(activityCode);
 
   const eventName = I18n.t(`events.${eventId}`);
   const roundName = I18n.t('round.round_number', { round_number: roundNumber });
 
-  const tooltipText = `${eventName}, ${roundName}`;
+  const eventAndRoundName = `${eventName}, ${roundName}`;
 
   if (attempt) {
     const attemptName = I18n.t('attempts.attempt_name', { number: attempt });
-    return `${tooltipText}, ${attemptName}`;
+    return `${eventAndRoundName}, ${attemptName}`;
   }
 
-  return tooltipText;
+  return eventAndRoundName;
 };
 
 export const shortLabelForActivityCode = (activityCode) => {

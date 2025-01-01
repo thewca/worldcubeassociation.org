@@ -11,7 +11,7 @@ function resizeMapContainer() {
 }
 
 onPage('competitions#index', function() {
-  const queryParams = new URLSearchParams(window.location.search);
+  var queryParams = new URLSearchParams(window.location.search);
   if (queryParams.get('legacy') === 'off') return;
 
   resizeMapContainer();

@@ -193,11 +193,6 @@ ja:
       name: 決勝
       #original_hash: 672b22c
       cellName: 決勝
-    g:
-      #original_hash: ccf6f8e
-      name: 第３回戦
-      #original_hash: ccf6f8e
-      cellName: 第３回戦
     h:
       #original_hash: 4d618bb
       name: 予選ラウンド
@@ -263,8 +258,6 @@ ja:
     world: 世界
     #original_hash: 2513cf0
     continent: 大陸
-    #original_hash: d523ebb
-    country: 国
     #original_hash: 0154c0d
     here: こちら
     #original_hash: 77003d0
@@ -283,8 +276,6 @@ ja:
     user:
       #original_hash: 603a218
       wca_id: WCA ID
-      #original_hash: e0f64f7
-      citizen_of: 国籍
     #original_hash: 3fc0ba1
     all_regions: 全地域
     errors:
@@ -293,7 +284,6 @@ ja:
     #original_hash: 49d0140
     days:
       zero: 0 日
-      one: '%{count} 日'
       other: '%{count} 日'
     #original_hash: 203e1b3
     these_events:
@@ -356,8 +346,6 @@ ja:
         unconfirmed_wca_id: WCA ID (未確認)
         #original_hash: 8ed8874
         login: メールアドレスまたは WCA ID
-        #original_hash: 1528d10
-        country_iso2: 国籍
         #original_hash: ab58155
         dob: 生年月日
         #original_hash: 7636bbc
@@ -388,114 +376,6 @@ ja:
         user_preferred_events: お気に入り種目
         #original_hash: e632fbf
         otp_attempt: '二段階認証パスワードを入力してください:'
-      competition:
-        #original_hash: 89f89c0
-        id: ID
-        #original_hash: 7f3d889
-        confirmed: 運営メンバー (代理人除く) による大会編集を許可しない。
-        #original_hash: d493e6a
-        showAtAll: 大会を一般公開する
-        #original_hash: 709a232
-        name: 大会名
-        #original_hash: f91b080
-        name_reason: 大会名の由来 (命名理由)
-        #original_hash: b649210
-        cellName: 大会名略称
-        #original_hash: d523ebb
-        countryId: 開催国
-        #original_hash: 25b7b06
-        cityName: 都市名
-        #original_hash: 67cd406
-        venue: 会場
-        #original_hash: 486f8fb
-        venueAddress: 会場所在地
-        #original_hash: 08767af
-        venueDetails: 会場詳細
-        #original_hash: ff99f5b
-        start_date: 開始日
-        #original_hash: 89d10cd
-        end_date: 終了日
-        #original_hash: 2e8a57c
-        external_website: ウェブサイト
-        #original_hash: 692e1f9
-        generate_website: 追加情報用の外部ウェブサイトを用意せずに WCA ウェブサイトを使用する
-        #original_hash: 6cf623b
-        base_entry_fee_lowest_denomination: 基本参加費
-        #original_hash: 28a6fbb
-        currency_code: 通貨コード
-        #original_hash: 2e3ed8b
-        staff_delegate_ids: WCA 代理人
-        #original_hash: c0ddcd6
-        trainee_delegate_ids: WCA 代理人候補
-        #original_hash: 958562e
-        organizer_ids: 主催者
-        #original_hash: b37456c
-        contact: 連絡先
-        #original_hash: 0eb5ed5
-        information: 概要
-        #original_hash: 87b7d5f
-        use_wca_registration: 参加申し込みに WCA ウェブサイトを使用する
-        #original_hash: 8020e88
-        external_registration_page: 参加申込ページ
-        #original_hash: 9bb1965
-        competitor_limit_enabled: 大会定員
-        #original_hash: 749f4c9
-        competitor_limit: 大会定員
-        #original_hash: 4a8b6f1
-        competitor_limit_reason: 大会定員設定の理由
-        #original_hash: 3c23a67
-        guests_enabled: 見学者人数
-        #original_hash: 089cbfd
-        receive_registration_emails: 大会に参加申し込みがあったとき電子メールで通知する
-        #original_hash: d4aeed9
-        registration_open: 参加申し込みを開始する
-        #original_hash: f8153a2
-        registration_close: 参加申し込みを停止する
-        #original_hash: d7020f4
-        remarks: 備考
-        #original_hash: c305010
-        clone_tabs: すべてのタブを追加情報とともに複製する
-        #original_hash: c5497bc
-        competition_events: 競技種目
-        #original_hash: 71c8461
-        enable_donations: 寄付金の受け入れを有効にする
-        #original_hash: 556fda0
-        extra_registration_requirements: 大会申し込み要件 (追加) ※自動生成される大会申し込み要件の後に追加される情報です。
-        #original_hash: 2529d04
-        on_the_spot_registration: 会場申込について
-        #original_hash: 69780b5
-        on_the_spot_entry_fee_lowest_denomination: 会場申込の場合の参加費
-        #original_hash: 7e53b96
-        allow_registration_edits: 申し込み登録内容の編集
-        #original_hash: efbdbab
-        refund_policy_percent: キャンセル時返金率 (％)
-        #original_hash: b332299
-        refund_policy_limit_date: 返金可能なキャンセル期日
-        #original_hash: 16cf9a4
-        waiting_list_deadline_date: キャンセル待ちリストにいる競技者を繰り上げて承認できる締め切り日時
-        #original_hash: 99a9169
-        event_change_deadline_date: すでに登録済みの申込内容（参加種目など）を変更できる締切日時
-        #original_hash: 3542671
-        guests_entry_fee_lowest_denomination: 見学者の入場料
-        #original_hash: bb16247
-        free_guest_entry_status: 見学者や同伴者への対応
-        #original_hash: 723cad9
-        early_puzzle_submission: 競技の開始以前に特定の時点で、競技者のパズル提出を求める
-        #original_hash: 78308cc
-        early_puzzle_submission_reason: パズル提出を早く設定する理由および詳細
-        #original_hash: 88da0ef
-        qualification_results: 特定の種目の参加者を制限するために、過去の記録を使用する
-        #original_hash: 1ec6dd4
-        qualification_results_reason: 過去の記録の適用の理由および詳細
-        #original_hash: ac30de9
-        event_restrictions: 特定の種目への同時参加を制限する。
-        #original_hash: 4bf194c
-        event_restrictions_reason: 特定種目への同時参加を制限する理由および詳細
-        #original_hash: 3c24bd2
-        main_event_id: メイン種目
-      championship:
-        #original_hash: 4baf44b
-        championship_type: 大会タイプ(日本大会、アジア大会など)
       registration:
         #original_hash: 3c23a67
         guests: 見学者人数
@@ -535,17 +415,11 @@ ja:
         wrc_feedback_requested: 上記インシデントに関して、WCA 規則委員会 (WRC) のフィードバックを求める。
         #original_hash: 0c7191d
         wrc_incidents: WCA 規則委員会 (WRC) のフィードバックを求めるインシデント
-        #original_hash: 5a92b25
-        wdc_feedback_requested: 上記インシデントに関して、WCA 懲罰委員会 (WDC) のフィードバックを求める。
-        #original_hash: 06a0568
-        wdc_incidents: WCA 懲罰委員会 (WDC) のフィードバックを求めるインシデント
         #original_hash: d7020f4
         remarks: 備考
       person:
         #original_hash: 8c41ae8
         wca_id: 個人
-        #original_hash: d523ebb
-        countryId: 国
         #original_hash: ab58155
         dob: 生年月日
         #original_hash: 8a754c6
@@ -615,8 +489,6 @@ ja:
       regional_organization:
         #original_hash: 709a232
         name: 名前
-        #original_hash: d523ebb
-        country: 国
         #original_hash: 2e8a57c
         website: ウェブサイト
         #original_hash: 83fce83
@@ -652,23 +524,6 @@ ja:
         f: 女性
         #original_hash: 6e6a6f2
         o: その他
-      delegate_status:
-        #original_hash: 621101a
-        trainee_delegate: 代理人候補
-        #original_hash: 9b97968
-        candidate_delegate: 準代理人
-        #original_hash: 12ab214
-        delegate: 代理人
-        #original_hash: d463c23
-        senior_delegate: 上級代理人
-    person:
-      gender:
-        #original_hash: 3f3a489
-        m: 男性
-        #original_hash: b7c17e9
-        f: 女性
-        #original_hash: 6e6a6f2
-        o: その他
     competition_medium:
       status:
         #original_hash: 61a0572
@@ -682,14 +537,6 @@ ja:
         article: 記事
         #original_hash: 82dabd0
         multimedia: マルチメディア
-    competition:
-      free_guest_entry_status:
-        #original_hash: 7e54323
-        unclear: 何も表示しない（あるいは、「その他の大会申し込み要件」の項目に記載する）
-        #original_hash: 694bce4
-        anyone: どなたでも無料で見学できます
-        #original_hash: 762c509
-        restricted: 見学は競技参加者の同伴者に限ります
   simple_form:
     #original_hash: 5397e05
     'yes': はい
@@ -722,21 +569,12 @@ ja:
         #original_hash: da39a3e
         competition_id: ''
       user:
-        #original_hash: 87e1e6f
-        dob: '生年月日をすべて半角で記入してください。 例: 2000年1月23日生の場合: 2000-01-23'
-        #original_hash: d0bb74a
-        name: >-
-          氏名を「ローマ字名姓 (漢字名)」の形で記入してください。ローマ字名・漢字名ともにご記入ください
-          (ある場合)。スペースなど、記入方法にご注意ください。例: 中島 悠 の場合: <strong>Yu Nakajima
-          (中島悠)</strong>
         #original_hash: da39a3e
         email: ''
         #original_hash: 8a91e53
         pending_avatar: プロフィール画像の変更は、 WCA 競技結果チームの承認後に反映されます。
         #original_hash: da39a3e
         country_iso2: ''
-        #original_hash: da39a3e
-        delegate_status: ''
         #original_hash: da39a3e
         dob_verification: ''
         #original_hash: da39a3e
@@ -748,8 +586,6 @@ ja:
         #original_hash: da39a3e
         password_confirmation: ''
         #original_hash: da39a3e
-        region: ''
-        #original_hash: da39a3e
         remember_me: ''
         #original_hash: da39a3e
         results_notifications_enabled: ''
@@ -757,130 +593,8 @@ ja:
         unconfirmed_wca_id: ''
         #original_hash: da39a3e
         wca_id: ''
-        #original_hash: 81a76a3
-        receive_delegate_reports: >-
-          あなたが準代理人、代理人候補、上級代理人、規則委員会、品質保証委員会のいずれかに属する場合、デフォルトの設定では代理人レポートを受け取る設定になっています。この設定変更後、反映にしばらく時間がかかることがあります。
         #original_hash: 0627e5c
         otp_attempt: 設定済みの携帯端末でワンタイムパスワードを確認するか、復旧コードを入力してください。
-      competition:
-        #original_hash: 2c812a0
-        name: >-
-          大会の正式名称 (英名) 。<p> (1) 必ず末尾に年号を含める (例 : SCJ Kansai Winter 2020)</p><p>
-          (2) 語頭を大文字にする</p><p> (3) 英数字と - & . : ' および半角スペースのみ使用可。</p>
-        #original_hash: 525fcc8
-        cellName: 大会名の略称 (Kansai 2017 など正式名が短い場合は正式名と重複可)
-        #original_hash: bce4589
-        cityName: '開催都市名 (例 : Kawasaki, Kanagawa や Shibuya, Tokyo など「市区町村, 都道府県」の順)'
-        #original_hash: bb470cc
-        information: >-
-          大会の概要 (例 : UT Open 2010 is the first students-organized competition in
-          Japan.)
-        #original_hash: b4d020f
-        staff_delegate_ids: 'WCA 代理人 (例 : Yuji Suse)'
-        #original_hash: cb9882c
-        trainee_delegate_ids: この大会の代理人候補
-        #original_hash: 517d376
-        organizer_ids: 大会運営チーム (WCA アカウントが必要です)
-        #original_hash: cabe7fb
-        external_website: 大会ウェブサイトの URL
-        #original_hash: 9965635
-        registration_open: 申し込み受付期間 (世界標準時。日本時間 -9 時間)
-        #original_hash: 9ea6021
-        remarks: WCATに伝達する追加情報（例：何か不安がある場合や、要望がある場合に記入）。必ず英語で記入してください。
-        #original_hash: da39a3e
-        clone_tabs: ''
-        #original_hash: da39a3e
-        countryId: ''
-        #original_hash: da39a3e
-        end_date: ''
-        #original_hash: da39a3e
-        generate_website: ''
-        #original_hash: b2af5f5
-        external_registration_page: 競技者が参加申込を行うためのページ。httpまたはhttpsのURLとしてください。
-        #original_hash: 784879d
-        base_entry_fee_lowest_denomination: 大会の基本参加費。大会情報ページおよび大会申込ページ (使用する場合) に表示されます。0に設定した場合、参加無料である旨表示されます。
-        #original_hash: 9735ddf
-        currency_code: 参加費の通貨コード
-        #original_hash: da39a3e
-        guests_enabled: ''
-        #original_hash: da39a3e
-        enable_donations: ''
-        #original_hash: da39a3e
-        id: ''
-        #original_hash: da39a3e
-        confirmed: ''
-        #original_hash: da39a3e
-        receive_registration_emails: ''
-        #original_hash: da39a3e
-        registration_close: ''
-        #original_hash: da39a3e
-        showAtAll: ''
-        #original_hash: da39a3e
-        start_date: ''
-        #original_hash: da39a3e
-        use_wca_registration: ''
-        #original_hash: dc47c39
-        competitor_limit_enabled: WCA 大会規則では大会定員の設定は必須とはされていませんが、強く推奨されています。
-        #original_hash: b7b599b
-        competitor_limit: この大会で許容される参加者数の上限。現在のところ定員による締切システムは未実装のため、この値は表示されるのみで自動処理は行われません。
-        #original_hash: 4bd7102
-        competitor_limit_reason: 大会定員設定の理由 (英語で記入してください)
-        #original_hash: da39a3e
-        venueAddress: ''
-        #original_hash: da39a3e
-        championship_type: ''
-        #original_hash: 3de153b
-        extra_registration_requirements: >-
-          支払い方法など、「大会申し込み要件」で不足する内容はこちらに入力してください。<br/>必ず<b>英語を併記して</b>記入してください。<br/>入力内容は大会情報ページと大会申込ページに表示されます。
-        #original_hash: da39a3e
-        on_the_spot_registration: ''
-        #original_hash: 8c4fdf8
-        on_the_spot_entry_fee_lowest_denomination: 0 と入力した場合、「見学者は入場無料です。」と表示されます。
-        #original_hash: da39a3e
-        allow_registration_edits: ''
-        #original_hash: 180b7b3
-        refund_policy_percent: >-
-          現在のところ返金システムは未実装のため、この値は表示されるのみで自動処理は行われません。実際の返金は手動で行ってください。<br/>0
-          と入力した場合、「キャンセル時の返金は行いません。」と表示されます。
-        #original_hash: f64d853
-        refund_policy_limit_date: 返金対応期限
-        #original_hash: 664db64
-        waiting_list_deadline_date: >-
-          キャンセル待ちリストにいる競技参加者を繰り上げ承認できる期限。もし返金にも期限を設けていれば、返金期限が先、繰り上げ期限はそれと同時か後の関係とする。
-        #original_hash: 75e6c1f
-        event_change_deadline_date: >-
-          参加種目や同伴者の人数など、いったん承認済みの登録内容でも実行委員に問い合わせることで変更を受け付けることができます。この期限は申込期間の終了時と同じか、あるいは終了後も一定の猶予を設けることが可能。このフィールドを空欄にした場合、大会当日に実際に試技をする直前まで変更可能なことになる。もし飛び込み参加可能な大会を企画する場合は空欄となるが、日本での前例はほとんどありません。
-        #original_hash: 25a1324
-        guests_entry_fee_lowest_denomination: >-
-          現在のところ見学者入場料集金システムは未実装のため、この値は表示されるのみで自動処理は行われません。実際の集金は手動で行ってください。<br/>0
-          と入力した場合、「見学者入場料は無料です。」と表示されます。
-        #original_hash: da39a3e
-        free_guest_entry_status: ''
-        #original_hash: da39a3e
-        early_puzzle_submission: ''
-        #original_hash: 4e8488b
-        early_puzzle_submission_reason: パズル提出を早く設定する理由を詳しく説明してください (英語で)
-        #original_hash: da39a3e
-        qualification_results: ''
-        #original_hash: f859883
-        qualification_results_reason: 過去の記録の適用の理由および詳細を記載してください (英語で)
-        #original_hash: da39a3e
-        event_restrictions: ''
-        #original_hash: d3329d7
-        event_restrictions_reason: 特定種目への同時参加を制限する理由および詳細を記載してください (英語で)
-        #original_hash: 1067798
-        main_event_id: この種目の優勝者が本大会の優勝者となります。
-      website_contact:
-        #original_hash: da39a3e
-        inquiry: ''
-        #original_hash: da39a3e
-        competition_id: ''
-        #original_hash: da39a3e
-        message: ''
-        #original_hash: da39a3e
-        name: ''
-        #original_hash: da39a3e
-        your_email: ''
       dob_contact:
         #original_hash: da39a3e
         name: ''
@@ -923,9 +637,7 @@ ja:
         #original_hash: 98bb5cd
         wrc_incidents: WCA 規則委員会のフィードバックを求めるインシデントの番号
         #original_hash: da39a3e
-        wdc_feedback_requested: ''
-        #original_hash: 38a95e5
-        wdc_incidents: WCA 懲罰委員会のフィードバックを求めるインシデントの番号
+        wic_feedback_requested: ''
         #original_hash: f30abdc
         remarks: その他報告事項 (コミュニティーの変化、地域的の今後の計画等ほか、前項までで省いた軽微な事項も構いません)
         #original_hash: da39a3e
@@ -936,22 +648,10 @@ ja:
         #original_hash: da39a3e
         content: ''
       person:
-        #original_hash: 498f4c5
-        dob: '生年月日は半角英数で (西暦)-(月)-(日) の形式で記入してください (2000年1月23日生の場合: 2000-01-23)。'
-        #original_hash: da39a3e
-        countryId: ''
-        #original_hash: da39a3e
-        gender: ''
-        #original_hash: da39a3e
-        name: ''
         #original_hash: da39a3e
         person1_wca_id: ''
         #original_hash: da39a3e
         person2_wca_id: ''
-        #original_hash: da39a3e
-        wca_id: ''
-        #original_hash: da39a3e
-        incorrect_wca_id_claim_count: ''
         #original_hash: da39a3e
         person_wca_id: ''
       poll:
@@ -961,13 +661,6 @@ ja:
         multiple: ''
         #original_hash: da39a3e
         question: ''
-      registration:
-        #original_hash: da39a3e
-        comments: ''
-        #original_hash: da39a3e
-        guests: ''
-        #original_hash: da39a3e
-        status: ''
       vote:
         #original_hash: da39a3e
         comment: ''
@@ -1028,41 +721,15 @@ ja:
         start_date: ''
         #original_hash: da39a3e
         end_date: ''
-      wfc:
-        #original_hash: da39a3e
-        from_date: ''
-        #original_hash: da39a3e
-        to_date: ''
     options:
       registration:
         status:
           #original_hash: 61a0572
           accepted: 登録済
           #original_hash: a6b2452
-          pending: 承認待ちリスト
+          pending: キャンセル待ち
           #original_hash: 441bda6
           deleted: 削除
-      competition:
-        guests_enabled:
-          #original_hash: cb8809d
-          'true': 見学者人数記入を求める
-          #original_hash: f8c2332
-          'false': 見学者人数記入を求めない
-        competitor_limit_enabled:
-          #original_hash: d9c05cc
-          'true': 大会定員を設定する。
-          #original_hash: 5b581b5
-          'false': 大会定員を設定しない。
-        on_the_spot_registration:
-          #original_hash: 0c521ca
-          'true': 会場申込を受け付ける
-          #original_hash: 0f236df
-          'false': 会場申込を受け付けない
-        allow_registration_edits:
-          #original_hash: 52a2f4a
-          'true': 承認済みの申し込み登録情報（参加種目や同伴者人数など）を変更したい場合は、申込期間内に実行委員あてに個別にご連絡ください。
-          #original_hash: 2cbb80e
-          'false': 承認済みの申し込み登録情報（参加種目や同伴者人数など）の変更はできません。
   mail_form:
     attributes:
       contact_form:
@@ -1228,12 +895,8 @@ ja:
       have_competed: WCA 公式大会に参加したことがあります
       #original_hash: dcd1d70
       have_never_competed: WCA 公式大会に参加したことがありません
-      #original_hash: 86a60c9
-      let_us_know: 以前に WCA 大会に参加したことがありますか？
       #original_hash: f9f512b
       welcome_back: こんにちは！WCA アカウントの作成には WCA ID が必要です。
-      #original_hash: 669fb57
-      welcome_html: はじめまして！はじめに、個人情報収集についてご確認ください。生年月日は本人の許可なく公開されることはありません。
   layouts:
     navigation:
       #original_hash: 0eb5ed5
@@ -1254,8 +917,6 @@ ja:
       teams: チーム、委員会、協議会
       #original_hash: 7981fb3
       education: 研修資料
-      #original_hash: a34b69f
-      contact: お問い合わせ
       #original_hash: 8e12c09
       speedcubing_history: スピードキュービングの歴史と沿革
       #original_hash: 4fa8cc8
@@ -1284,8 +945,6 @@ ja:
       statistics: 統計情報
       #original_hash: 82dabd0
       multimedia: メディア
-      #original_hash: 4fd2a7f
-      db_export: データベース
       #original_hash: 1fa73f3
       regulations: 大会規則
       #original_hash: 6bce1b5
@@ -1310,8 +969,6 @@ ja:
       delegate: 代理人で検索
       #original_hash: db34e41
       polls: 投票
-      #original_hash: f158a5a
-      results_phpmyadmin: phpMyAdmin
       #original_hash: 37b8fdc
       regional_organizations: 地域団体
       #original_hash: 6568fa0
@@ -1379,8 +1036,6 @@ ja:
     support:
       #original_hash: 610edba
       title: WCAへの寄付
-      #original_hash: 6253f90
-      text: WCAはアメリカ合衆国に籍を置くボランティア運営のNPO法人です。私達の活動へのご支援をお待ちしています。
       #original_hash: 65c84ec
       button: ご支援いただくには
   users:
@@ -1466,7 +1121,7 @@ ja:
         #original_hash: 2b93022
         not_accepted_html: すでに参加申し込み済みですが、まだ承認されていません。
         #original_hash: d4087ee
-        more_info_html: '参加申込に関する詳細は<a href=%{competition_url}>WCA 大会ページ</a>をご確認ください。'
+        more_info_html: '参加申し込みに関する詳細は<a href=%{competition_url}>WCA 大会ページ</a>をご確認ください。'
       results_presence_email:
         #original_hash: 7ce2558
         header: '%{competition}の結果がアップされました。'
@@ -1511,8 +1166,6 @@ ja:
       preferences: お気に入り種目
       #original_hash: 8be3c94
       password: パスワード
-      #original_hash: 3fc6dbe
-      member_of: 所属
       #original_hash: 42619dd
       preferred_events_desc: お気に入り種目を設定しておくと、大会申し込みが簡単です。
       #original_hash: b402e03
@@ -1525,8 +1178,6 @@ ja:
       unconfirmed_email: 'メールアドレス (%{email}) が確認できません。'
       #original_hash: 7069007
       confirm_new_email: メールアドレスを変更する場合は、確認メールによる認証が必要となります。
-      #original_hash: 8a770cf
-      pending_mail_confirmation: '新しいメールアドレス %{email} の確認を待っています'
       #original_hash: 0340b0b
       pending_avatar_confirmation: 新しいプロフィール画像の確認を待っています
       #original_hash: 7b06f03
@@ -1548,10 +1199,6 @@ ja:
         WCA IDと WCA アカウントが誤って連携しているのを見つけた場合は、お近くの WCA 代理人や WRT (WCA 競技結果チーム)
         にお問い合わせください。
       cannot_edit:
-        #original_hash: 13e8b80
-        msg: >-
-          氏名、生年月日、性別、国籍は変更できません。理由: %{reason}。変更が必要な場合は、<a
-          href='%{delegate_url}'>WCA 代理人</a>に連絡してください。
         reason:
           #original_hash: 370ff12
           assigned: 既に WCA ID が連携されています
@@ -1559,8 +1206,6 @@ ja:
           registered: 大会に参加申し込み済みです
       #original_hash: fe7122d
       guidelines_confirmation: プロフィール画像がガイドラインに合致していることを確認しました。
-      #original_hash: d677ceb
-      confirm_guidelines: プロフィール画像のガイドラインを確認し、正しい形式の画像を送信してください。
       #original_hash: efc007a
       save: 保存
       #original_hash: c3cd636
@@ -1576,41 +1221,24 @@ ja:
       avatar_guidelines:
         #original_hash: 255f28c
         '1': プロフィール画像は実在の人物の写真を利用してください。
-        #original_hash: 9126b0c
-        '2': 写っている人はあなた本人でなくてはいけません。
-        #original_hash: de9b742
-        '3': もしプロフィール画像に複数人が写っている場合は、どれがあなたかわかるようにしてください。
         #original_hash: 4083c00
         '4': あなたの顔が見えるようにしてください。
-        #original_hash: 7c0aab3
-        '5': プロフィール画像に字幕や不自然な加工を含まないことが推奨されます。
-        #original_hash: cc5f23a
-        '6': プロフィール画像は正しい向きでアップロードしなければいけません。
         #original_hash: 1a18831
         '7': 'プロフィール画像は攻撃的な内容 (例 : 攻撃的なジェスチャー) を含んではいけません。'
       staff_avatar_guidelines:
-        #original_hash: da9e6df
-        title: WCA スタッフのアバターの追加ガイドライン
         paragraphs:
           #original_hash: ff6d2e8
           '1': プロフィール写真は現在の自身の写真であり、大会で見られるような姿でなければならない。
-          #original_hash: 64ded69
-          '2': >-
-            プロフィール画像は適切なサイズ、適切なトリミング、適切な角度、適切な明るさのものを選択し、大会会場で競技者や観客があなたを特定できるような画像にしてください。
           #original_hash: 13fab02
           '3': >-
             サムネイルはプロフィール画像の一部であり、プロフィール画像全体の代わりとして使用されます。サムネイルは、必ず顔を含み、単体であなただと認識することができるようにサイズ調整されなければいけません。
       sensitive:
-        #original_hash: 267ac87
-        info: このセクションは重要な変更を含みます。本人確認のためパスワードを再度入力してください。
         #original_hash: f19af51
         success: 本人確認に成功しました。
         #original_hash: 52ebf9c
         failure: 本人確認ができませんでした。
         #original_hash: 4324c73
         confirm_proceed: 次に進む
-        #original_hash: d395f1f
-        identity_error: データを更新できません。入力情報を確認のうえ、再度お試しください。
     errors:
       #original_hash: 094b763
       not_found: 該当なし
@@ -1628,37 +1256,12 @@ ja:
       dob_past: 過去の日付を入力してください
       #original_hash: b320913
       dob_recent: 2歳以上でなくてはいけません
-      #original_hash: b64df45
-      already_represented_country: 国籍は過去に選択した国籍に変更することはできません。
-      #original_hash: b589014
-      must_have_a_change: 国名を変更してください。
       #original_hash: 48653a9
       already_have_id: '既に WCA ID %{wca_id} が連携されているため、WCA ID の連携申請ができません'
       #original_hash: ec5db95
       wca_id_no_birthdate_html: >-
         この WCA ID には生年月日が登録されていません。<a href="%{dob_form_path}">専用フォーム</a> から WCA
         競技結果チームへお問い合わせください。
-      #original_hash: 51fa5a4
-      wca_id_no_gender_html: >-
-        この WCA ID には性別が登録されていません。<a
-        href='mailto:results@worldcubeassociation.org' target='_blank'>WCA
-        競技結果チーム</a> にメールで連絡し，修正してください。
-      #original_hash: 87ee245
-      wca_id_no_citizenship_html: >-
-        この WCA ID には国籍が登録されていません。<a
-        href='mailto:results@worldcubeassociation.org' target='_blank'>WCA
-        競技結果チーム</a> にメールで連絡し，修正してください。
-      #original_hash: c3839bc
-      wca_id_no_name_html: >-
-        この WCA ID には名前が登録されていません。<a
-        href='mailto:results@worldcubeassociation.org' target='_blank'>WCA
-        競技結果チーム</a> にメールで連絡し，修正してください。
-      #original_hash: d02c03b
-      avatar_requires_wca_id: WCA ID の連携が必要です
-      #original_hash: 8f785ea
-      email_used_by_locked_account_html: >-
-        は他のアカウントによって使用されています。他ウェブサイトから大会の参加申込をされた場合でも、このメールアドレスで自動的にアカウントが作成されている場合があります。この場合、<a
-        href='/users/password/new'>こちら</a>でパスワードをリセットすることでアカウントを使用することができます。
       #original_hash: 50897d4
       must_match_person: 対応するWCA IDと個人情報が一致している必要があります
     successes:
@@ -1693,19 +1296,6 @@ ja:
       need_gender: 性別を入力してください
       #original_hash: ebf1ecb
       need_dob: 生年月日を入力してください
-      #original_hash: d84a54f
-      need_country: 国籍を入力してください
-      #original_hash: cec28a0
-      comp_not_found: 大会が見つかりません
-      #original_hash: e0bb243
-      cannot_be_deleted_and_accepted: 参加申し込みの削除と承認を同時に行うことはできません。
-      #original_hash: a38d024
-      must_register: 1 つ以上の競技種目の選択が必要です
-      #original_hash: e78eec3
-      banned_html: >-
-        あなたは出場停止処分を受けています。誤りと思われる場合は、<a
-        href='mailto:disciplinary@worldcubeassociation.org' target='_blank'>WCA
-        懲罰委員会 (WDC) </a>に連絡してください。
       #original_hash: 8d07e7f
       undelete_banned: は出場停止されている競技者で、削除できません。
     registration_info_people:
@@ -1724,58 +1314,26 @@ ja:
     flash:
       #original_hash: da7ec53
       not_using_wca: この大会は WCA 大会申し込みシステムを利用していません
-      #original_hash: d528030
-      accepted_and_mailed:
-        zero: 参加申し込みが完了しました。メールをご確認ください。
-        other: 参加申し込みが完了しました。メールをご確認ください。
-      #original_hash: 42ea8de
-      rejected_and_mailed:
-        zero: 申し込みは承認待ちに登録されました。定員に達している場合、参加が承認されない場合があります。後日、必ず競技者リストで承認をご確認ください。
-        other: 申し込みは承認待ちに登録されました。定員に達している場合、参加が承認されない場合があります。後日、必ず競技者リストで承認をご確認ください。
-      #original_hash: a360b31
-      deleted_and_mailed:
-        zero: 参加申し込みが削除されました。
-        other: 参加申し込みが削除されました。
-      #original_hash: c3aa289
-      single_deletion_and_mail: '参加申し込みが削除されました。%{mail} にメールを送信しました。'
-      #original_hash: d8f067f
-      cannot_delete: 参加申し込みを削除できません。
       #original_hash: 82b3899
       updated: 申し込み内容を更新しました
-      #original_hash: 856484a
-      failed: 申し込み内容を更新できません
-      #original_hash: 016b4ae
-      deleted: '%{comp} の参加申し込みを削除しました'
-      #original_hash: 648424f
-      registered: 参加申し込みが完了しました。
       #original_hash: 82fed60
       imported: 参加申込データをインポートしました。
       #original_hash: 3614fd1
-      added: 参加申込情報を追加しました。
+      added: 参加申し込み情報を追加しました。
     mailer:
       #original_hash: 72e2180
       regards_html: '%{people}'
       new:
-        #original_hash: a32db59
-        mail_subject: '%{comp_name} に参加を申し込みました'
-        #original_hash: 8374583
-        registered_html: '%{comp_name} に申し込みました。'
-        #original_hash: 13fabed
-        awaits_approval: 現在、申し込みは大会運営チームの承認待ちです。
         #original_hash: 826045f
         approval_info_html: >-
           参加申し込みが受理された場合、メールでお知らせします。 申し込みは自動受理にはなりませんのでご注意ください。
           申し込み受理の基準は大会ウェブサイトを確認するか、運営チームにお問い合わせください。 申し込み状況は%{here}でも確認できます。
       accepted:
-        #original_hash: 34515b5
-        mail_subject: '%{comp_name} の参加申し込みが受理されました'
         #original_hash: 24d2883
         message_html: '%{comp_name} の参加申し込みが受理されました。申し込み状況は%{here}で確認できます。'
         #original_hash: 1852cbf
         see_you_soon: '%{comp_name} でお会いできることを楽しみにしております。'
       pending:
-        #original_hash: e48d8bd
-        mail_subject: '%{comp_name} の参加申し込みが承認待ちになりました。'
         #original_hash: 6fd0a8e
         moved_html: '%{comp_name} の参加申し込みが承認待ちになりました。 考えられる理由は次のとおりです。'
         causes:
@@ -1786,8 +1344,6 @@ ja:
         #original_hash: 8f7358f
         email_if_error: これが誤りだと思われる場合は、このメールにご返信ください。
       deleted:
-        #original_hash: 268e248
-        mail_subject: '%{comp_name} の申し込みが取り消されました'
         #original_hash: f66ae63
         message_html: '{comp_name} の申し込みが取り消されました。考えられる理由は次のとおりです。'
         causes:
@@ -1806,26 +1362,18 @@ ja:
       title: '%{comp} の参加申し込み一覧'
       #original_hash: 5301648
       edit: 編集
-      #original_hash: 0ab725c
-      country_plural:
-        zero: 0 か国
-        other: '%{count} か国'
+      #original_hash: beffc45
+      country_plural: null
       #original_hash: 1feee0e
       export_csv: CSV に出力
       #original_hash: 84add5b
       email: メールアドレス
       #original_hash: 7b2c7f1
       approve: 承認
-      #original_hash: 2b03b59
-      reject: 否認
-      #original_hash: f6fdbe4
-      delete: 削除
       #original_hash: 92d40dc
-      waiting_list: 承認待ちリスト
+      waiting_list: キャンセル待ち
       #original_hash: 06f7d1a
       approved_registrations: 承認済み参加申し込み
-      #original_hash: bff04e8
-      deleted_registrations: 削除済み参加申し込み
       #original_hash: ac5d958
       not_paid: 未支払い
       registered:
@@ -1839,8 +1387,6 @@ ja:
       payment_completed_on: '%{date}　に支払い済み'
       #original_hash: b25928c
       total: 合計
-      #original_hash: df036fe
-      n_events: 参加種目数
     new_registration:
       #original_hash: 8b9f726
       title: '%{comp} 参加申し込み'
@@ -1860,12 +1406,8 @@ ja:
     refund_confirmation: 返金を申請しますか？
     #original_hash: a9af643
     update: 申し込み情報を更新する
-    #original_hash: f6fdbe4
-    delete: 削除する
     #original_hash: b72119a
     delete_confirm: 本当に参加申し込みを削除してよろしいですか？
-    #original_hash: cfc4865
-    delete_registration: 参加申し込みを削除しました。
     #original_hash: e9ddc6e
     will_open_html: '参加申し込みは <strong>%{days}</strong> 後 %{time} に開始します。'
     #original_hash: 34eb009
@@ -1906,65 +1448,36 @@ ja:
     entry_fees_fully_paid: '既に参加費全額の%{paid}を支払い済みです。'
     #original_hash: 2e5d1b9
     will_pay_here: 申し込み申請後にこのウェブサイトで支払います
-    #original_hash: b7ef562
-    wont_pay_here: 支払方法および合計参加費については大会情報を確認してください。
     refund_form:
-      hints:
-        #original_hash: d97186d
-        refund_amount: 競技者に返金する金額。すでに支払い済み金額以下の値を入力できます。
       labels:
         #original_hash: 1cc5991
         refund_amount: 返金金額
     payment_form:
       #original_hash: 4de825f
       title: 参加費
-      #original_hash: d1569e6
-      payment_successful: 支払いは完了しました。以下の参加申込者リストで支払済と表示されます。
       hints:
         #original_hash: bf3a39e
         donation: 寄付金 (任意) は大会運営チームへのみ寄付されます
-        #original_hash: 16cf92d
-        card_information: クレジットカード情報はWCAウェブサイトを経由しません。決済を取り扱うサービス「Stripe」に安全に送信されます。
       labels:
-        #original_hash: 4de825f
-        entry_fees: 基本参加費
         #original_hash: 2c09302
         donation: 寄付金
-        #original_hash: 184150d
-        card_information: クレジットカード情報
-        #original_hash: bc8091a
-        cardholder_name: クレジットカード名義人
       alerts:
-        #original_hash: a34940e
-        not_a_number: 正しい金額を入力してください
         #original_hash: 707b9ca
         amount_too_low: 合計金額は事前支払い額以上である必要があります。
       errors:
         #original_hash: 166d48c
         already_paid: 参加費は支払済です。
-        #original_hash: b2bc8ed
-        not_allowed: この参加申込への支払いはできません
-        #original_hash: 630dbb9
-        intent_not_found: 支払いを確認できません。支払い処理が中断されたか、クレジットカードに請求が行われていません。
-        #original_hash: 63e0ec1
-        cardholder_name: クレジットカード名義人を確認してください。
-    #original_hash: 8607a87
-    payment_button_text: 参加費をクレジットカードで支払う
     #original_hash: 4cf01a2
     preferred_events_prompt_html: '参加申し込みを簡単にするため、お気に入り種目を設定できます %{link}。'
     #original_hash: 67d8734
     preferred_events_populated_html: '競技種目はお気に入り種目を設定しておくと自動選択されます。お気に入り種目の設定: %{link}'
     #original_hash: ee89a3e
-    registration_requirements: 'この大会の参加申し込み要件 :'
+    registration_requirements: '参加申し込み要領 :'
     import:
       #original_hash: 5a394f3
-      title: '%{comp}の参加申込データをインポートする。'
-      #original_hash: ccda564
-      info: 参加申込データは2回以上登録しても問題ありません。その場合、データは対応して変更されます。
+      title: '%{comp}の参加申し込みデータをインポートする。'
       #original_hash: 779b272
-      registrations_file_label: 参加申込データファイル
-      #original_hash: 4017f0e
-      registrations_file_hint: 各列が「ステータス」「氏名」「国籍」「WCA ID」「生年月日」「性別」「メールアドレス」「種目 (各種目1列)」となっている CSV ファイル
+      registrations_file_label: 参加申し込みデータファイル
       #original_hash: d6fbc9d
       import: インポート
       errors:
@@ -1973,7 +1486,7 @@ ja:
         #original_hash: 2f0950e
         missing_columns: '列が不足しています：%{columns}'
         #original_hash: 2454f20
-        over_competitor_limit: 'インポートされたファイルは%{accepted_count}人の承認済み申込みを含み、定員の%{limit}人を超過しています。'
+        over_competitor_limit: 'インポートされたファイルは%{accepted_count}人の承認済み申し込みを含み、定員の%{limit}人を超過しています。'
         #original_hash: e6d3197
         invalid_event_column: '参加種目の列は0か1である必要があります。列%{column}に値%{value}を含みます。'
         #original_hash: dcd2f6f
@@ -1996,33 +1509,44 @@ ja:
       add: 参加登録を追加する
       errors:
         #original_hash: d6dcf5c
-        already_registered: この競技者はすでに参加申込済です。
+        already_registered: この競技者はすでに参加申し込み済です。
   competitions:
     messages:
       #original_hash: 7b80062
       not_visible: この大会は非公開です。
-      #original_hash: c1d4926
-      name_too_long: 大会名が 32 文字を超えています。短い名前が好ましいので変更してください。
-      #original_hash: af27396
-      id_starts_with_lowercase: 大会 ID のアルファベットが小文字から始まっています。頭文字は大文字にしてください。
+      #original_hash: 0398a14
+      name_too_long: 大会名が 32 文字を超えています。大会ID・大会略称を設定してください。
+      #original_hash: 5882e05
+      id_starts_with_lowercase: 大会IDは英字大文字で始まることを推奨します。
       #original_hash: 1a20fae
       must_have_events: 大会内容を確定する前に 1 個以上の競技種目を追加してください。
-      #original_hash: a3aea56
-      schedule_must_match_rounds: 各種目は少なくとも1ラウンドあり、またスケジュールはすべてのラウンドを含むことを確認してください。
-      #original_hash: aeb5f2a
-      advancement_condition_must_be_present_for_all_non_final_rounds: 次ラウンドへの進出基準を明記してください。（決勝ラウンドを除く）
-      #original_hash: b73c67a
-      cutoff_is_greater_than_time_limit: 'エラー　%{event} 競技の  %{round_number} ラウンドで、カットオフが制限タイムよりも厳しく設定されています。'
+      #original_hash: fd91320
+      schedule_must_match_rounds: 大会を確定する前に、各種目にラウンドが 1 個以上設定されており、タイムスケジュールにすべてのラウンドが含まれていることを確認してください。
+      #original_hash: 4fe4dee
+      advancement_condition_must_be_present_for_all_non_final_rounds: 決勝以外のすべてのラウンドに次ラウンド進出条件が設定されていることを確認してください。
+      #original_hash: a00f441
+      cutoff_is_greater_than_time_limit: '%{event}のラウンド %{round_number} で、カットオフが制限タイムより長くなっています。'
+      #original_hash: c1580b1
+      cutoff_is_too_fast: '%{event}のラウンド %{round_number} で、カットオフが 5 秒未満に設定されています。'
+      #original_hash: b5f69f2
+      cutoff_is_too_slow: '%{event}のラウンド %{round_number} で、カットオフが 10 分を超えています。'
+      #original_hash: af976ad
+      time_limit_is_too_fast: '%{event}のラウンド %{round_number} で、制限タイムが 10 秒未満に設定されています。'
+      #original_hash: 5dfa8f2
+      time_limit_is_too_slow: '%{event}のラウンド %{round_number} で、制限タイムが 10 分を超えています。'
       #original_hash: e390250
       create_success: 大会が新規作成されました！
+      #original_hash: 5e1ea86
+      registration_payment_info: >-
+        この大会では参加費が設定されていますが、Stripeアカウントが連携されていません。Stripeを使用して参加費を徴収する場合、Stripeアカウントを連携してください。外部決済システムを使用する場合は、参加申し込み要領に詳細を記載してください。
       #original_hash: ba067f0
-      not_announced: この大会は公開されていますが、まだ告知アナウンスはされていません。
+      not_announced: この大会は公開されていますが、まだ告知はされていません。
       #original_hash: ab61991
-      announced_success: 大会が告知アナウンスされました。
-      #original_hash: a582c89
-      cancelled: この大会の開催は中止されました。詳細は別箇所に記載しています。
+      announced_success: 大会が告知されました。
+      #original_hash: cbff8ce
+      cancelled: 大会は中止になりました。詳細は概要セクションをご覧ください。
       #original_hash: b4aa5ee
-      cancel_success: 本大会の中止を承りました。
+      cancel_success: 本大会は中止されました。
       #original_hash: d0478cf
       cancel_failure: この大会を中止できません。
       #original_hash: 09df36b
@@ -2030,54 +1554,67 @@ ja:
       #original_hash: ead4a9e
       uncancel_failure: 本大会の中止を取りやめられません。
       #original_hash: 8ad5e67
-      results_not_posted: 本大会の結果は公開されましたが、まだアナウンスされていません。
+      results_not_posted: 大会結果は確認できますが、まだ公開されていません。
+      #original_hash: 5c24cd8
+      results_still_processing: 大会結果の処理に時間がかかっています。しばらくお待ちください。
       #original_hash: e205d73
-      results_already_posted: 本大会の結果がアナウンスされました。
+      results_already_posted: 大会結果は公開済みです。
       #original_hash: 376f461
-      results_posted: 大会結果が正しく投稿されました。
+      results_posted: 大会結果が公開されました！
       #original_hash: afe3a23
-      results_preview_alert: まだ送信されていない結果を表示しています。
+      results_preview_alert: まだ公開されていない結果を表示しています。
       #original_hash: 07de612
-      upload_results: この大会は終了しています。現在、結果のアップロード作業中です。
+      upload_results: この大会は終了しています。現在、大会結果の公開作業中です。
       #original_hash: 68dd436
-      computing_auxiliary_data: 補助的なデータ演算が終わるまでお待ち下さい。
+      computing_auxiliary_data: 補助的なデータ処理が終わるまでお待ち下さい。
       #original_hash: 8ebe272
-      no_results: 結果がありません。
+      no_results: 大会結果がありません。
       #original_hash: 79e8b95
-      no_main_event_results: 'メイン種目である%{event_name}の結果がありません。'
+      no_main_event_results: 'メイン種目 (%{event_name}) の結果がありません。'
       #original_hash: a0168ee
       in_progress: 'この大会は開催中です。%{date} より後に結果が表示されます。'
+      #original_hash: 8eeeb44
+      in_progress_at_wca_live_html: '大会は進行中です。速報は <a href=''%{link_here}''>こちら</a> から確認できます。'
       #original_hash: 8ab1548
-      reg_opens_too_early: 大会の申込み開始時刻は今から48時間以降でなければいけません。
+      reg_opens_too_early: 大会の申し込み開始時刻は48時間後以降でなければいけません。
+      #original_hash: a25e7a2
+      registration_already_closed: 参加申し込み締切を過ぎています。またの参加をお待ちしています。
       #original_hash: 3322400
       tooltip_registered: 既に申し込み済みです。
+      #original_hash: b10c8d6
+      tooltip_pending: 参加申し込みは承認待ちです。承認条件（事前支払い・フォーム入力等）を満たしているかを大会ページにてご確認のうえお待ちください。
       #original_hash: f2d092f
-      tooltip_waiting_list: 現在承認待ちです。
-      #original_hash: 9ecd976
-      confirmed_visible: この大会は承認済みで公開されています。
-      #original_hash: fa186a9
-      confirmed_not_visible: この大会は承認済みですが非公開です。
-      #original_hash: a66bbe3
-      not_confirmed_visible: この大会は未承認ですが公開されています。
-      #original_hash: 0f44e45
-      not_confirmed_not_visible: この大会は未承認で非公開です。
-      #original_hash: a821396
-      stripe_connected: Stripe アカウントと連携しました。この大会の参加費の支払いをこのアカウントで受け取ることができます。
-      #original_hash: 0a4bb53
-      stripe_not_connected: 問題があり、Stripe アカウントを連携できませんでした。
-      #original_hash: 724cf0d
-      championship_exists: '%{year} 年にすでに %{championship_type} が開催されています'
+      tooltip_waiting_list: 参加申し込みはキャンセル待ちです。
+      #original_hash: f97246a
+      tooltip_deleted: 参加申し込みは削除されました。参加申し込み要領やメール連絡を確認いただき、ご不明な点は運営に問い合わせください。
+      #original_hash: 1b6dc61
+      confirmed_visible: この大会は確定され公開されています。
+      #original_hash: abc2f96
+      confirmed_not_visible: この大会は確定されていますが、未公開です。
+      #original_hash: 6d6290b
+      not_confirmed_visible: この大会は未確定ですが公開されています。
+      #original_hash: b299b27
+      not_confirmed_not_visible: この大会は未確定・未公開です。
+      #original_hash: 1b92d16
+      championship_exists: 'すでに %{year} 年の%{championship_type}があります。'
+      #original_hash: e871f03
+      orga_closed_reg_success: 参加申し込みを締め切りました。
+      #original_hash: 7f197a0
+      orga_closed_reg_failure: 参加申し込みを締め切ることができません。
+      #original_hash: 74caf1a
+      no_waiting_list_specified: >-
+        キャンセル待ちを繰り上げる締切が設定されていません。キャンセル待ちを行う場合は締切を設定してください。キャンセル待ちを行わない場合、その旨を参加申し込み要領に記載するようにしてください。
     my_competitions:
       #original_hash: 5c6d3ea
       title: 自分の大会
       #original_hash: 1fa5a4b
-      disclaimer: WCA 申し込みシステムを使用する大会のみここに表示されます。大会がここに表示されない場合、その大会の専用サイトをご覧ください。
+      disclaimer: WCA のシステムを使用する大会のみここに表示されます。大会がここに表示されない場合、その大会の専用サイトをご覧ください。
       #original_hash: 94a2fc8
       past_competitions: 過去の大会
       #original_hash: ec7e697
       bookmarked_title: ブックマークした大会
       #original_hash: e5665fb
-      bookmarked_explanation: WCA ウェブサイト上でブックマークした大会です。大会申込開始の24時間前にメールが送信されます。
+      bookmarked_explanation: WCA ウェブサイト上でブックマークした大会です。参加申し込み開始の24時間前にメールが送信されます。
     competition_info:
       pdf:
         #original_hash: 05af803
@@ -2089,21 +1626,46 @@ ja:
         #original_hash: a1984e1
         cutoff: 'カットオフ : %{short_cutoff}'
         #original_hash: a8b6fe6
-        download_html: '大会の詳細PDFのダウンロードは%{here}'
+        download_html: '大会の詳細PDFのダウンロードは %{here}'
       #original_hash: eb9a4bc
       date: 日付
       #original_hash: 4f05cd6
       add_to_calendar: カレンダーに追加する
+      #original_hash: 709a232
+      name: 大会名
+      #original_hash: d219c68
+      location: 開催地
       #original_hash: 4271627
       city: 都市
       #original_hash: 67cd406
       venue: 会場
+      #original_hash: 63a1c21
+      location_and_venue: 開催地・会場
       #original_hash: d70f93d
       address: 所在地
       #original_hash: dc3decb
       details: 詳細
       #original_hash: 2e8a57c
       website: ウェブサイト
+      #original_hash: f825aff
+      name_and_location: 大会名・開催地
+      #original_hash: adc24b7
+      delegates: WCA代理人
+      #original_hash: 51290be
+      announced: 公開
+      #original_hash: 614bc93
+      report_posted: レポート投稿済み
+      #original_hash: f59042e
+      results_submitted: 大会結果送信済み
+      relative_days:
+        #original_hash: 021deef
+        before: '%{amount_of_days} 前'
+        #original_hash: 417f8df
+        after: '%{amount_of_days} 後'
+      #original_hash: 96f608c
+      pending: 保留中
+      #original_hash: b8bf8b6
+      submitted_by_other: 他のユーザーにより送信済み
       #original_hash: 2260929
       display_name: '[開催中止] %{name}'
       #original_hash: 680567f
@@ -2125,53 +1687,80 @@ ja:
       #original_hash: 3c24bd2
       main_event: メインイベント
       #original_hash: ff722f0
-      registration_requirements: 参加申し込み要件
+      registration_requirements: 参加申し込み要領
       #original_hash: 74d0bf1
       create_wca_account_html: 'WCA アカウントをお持ちでない場合、%{here}より作成してください。'
       #original_hash: a082288
       claim_wca_id_html: '初めての大会参加でない場合、%{here}より WCA ID を WCA アカウントに連携させてください。'
       #original_hash: 56fc229
-      register_link_html: '大会参加申込は%{here}より行ってください。'
+      register_link_html: '大会参加申し込みは%{here}より行ってください。'
       #original_hash: 45834fd
       register_below_html: 下記より大会にお申し込みください。
+      #original_hash: c5dfcc7
+      part_of_a_series: この大会はシリーズ大会の一部です。
+      #original_hash: 171e593
+      part_of_a_series_list: 'この大会はシリーズ大会 %{name} の一部です。シリーズ大会に含まれるほかの大会は以下の通りです：'
+      #original_hash: 09fa333
+      series_registration_warning_html: >-
+        注意：<b>1 つのシリーズ大会の中で参加できる大会は 1 つだけです。</b>2 つ以上に申し込むことはできますが、そのうち承認されるのは最大
+        1 つです。
+      #original_hash: 9bb1965
+      competitor_limit: 競技者定員
       #original_hash: 196725e
-      competitor_limit_is: '競技者の定員は%{competitor_limit}名です。'
+      competitor_limit_is: '競技者の定員は %{competitor_limit} 名です。'
       #original_hash: 5101f65
-      no_competitor_limit: 大会定員はありません。
+      no_competitor_limit: 競技者定員はありません。
       #original_hash: f979d5e
-      entry_fee_is: 'この大会の基本参加費は%{base_entry_fee}です。参加費の計算方法は別途記載しております。'
+      entry_fee_is: 'この大会の基本参加費は %{base_entry_fee} です。追加参加費が必要な場合があるので、詳細情報も確認してください。'
       #original_hash: 5390a91
-      no_entry_fee: 基本参加費は無料です (参加種目数により参加費がかかる場合があります。大会概要で参加費計算方法をご確認ください)
+      no_entry_fee: 基本参加費は無料です。追加参加費が必要な場合があるので、詳細情報も確認してください。
       #original_hash: 29af5c2
       use_stripe_link_html: '大会参加費は、申し込み後にStripe (%{here})  よりお支払いください。'
       #original_hash: cea0eb4
       use_stripe_below_html: 大会参加費は、申し込み後にStripeよりお支払いください。
       #original_hash: d6bab8f
       refund_policy_html: >-
-        %{limit_date_and_time}
-        までに申込みをキャンセルした場合、参加費の%{refund_policy_percent}が払い戻されます。
+        %{limit_date_and_time} までに申し込みをキャンセルした場合、参加費の %{refund_policy_percent}
+        が払い戻されます。
       #original_hash: 4aca553
       no_refunds: キャンセル時の返金は行いません。
       #original_hash: b016d2f
       waiting_list_deadline_html: >-
-        競技参加者が定員に達した場合でも、%{waiting_list_deadline}までにキャンセルがあればキャンセル待ちの方から先着順で繰り上げ承認されます。
+        競技参加者が定員に達した場合でも、%{waiting_list_deadline}
+        までにキャンセルがあれば、キャンセル待ちから先着順で繰り上げ承認されます。
       #original_hash: 14c5699
-      event_change_deadline_html: 'すでに承認済みの登録内容（参加種目など）の変更を希望する場合、%{event_change_deadline}までに実行委員会にご連絡ください。'
+      event_change_deadline_html: 'すでに承認済みの登録内容（参加種目など）の変更を希望する場合、%{event_change_deadline} までに主催者にご連絡ください。'
+      #original_hash: c58abdf
+      event_change_deadline_edits_allowed_html: 'すでに参加申し込み済みの場合、%{event_change_deadline} までは %{register} タブで参加種目を変更できます。'
+      #original_hash: eff3594
+      event_change_deadline_default_html: 参加種目の追加はWCAウェブサイト上で行うことを推奨しますが、当日その種目が開始するまでは参加種目追加を受け付けます。
       #original_hash: cf7be5d
-      on_the_spot_registration_fee_html: '会場申し込みを基本参加費%{on_the_spot_base_entry_fee}にて受け付けます。'
+      on_the_spot_registration_fee_html: '会場申し込みを基本参加費 %{on_the_spot_base_entry_fee} にて受け付けます。'
       #original_hash: 1637bea
-      on_the_spot_registration_free: 会場申込は無料で受け付けます。
+      on_the_spot_registration_free: 会場申し込みは無料で受け付けます。
       #original_hash: f5f687d
-      no_on_the_spot_registration: 会場申込は受け付けません。
+      no_on_the_spot_registration: 会場申し込みは受け付けません。
       #original_hash: 4df139d
-      guests_pay: '見学者は入場料%{guests_base_fee}をお支払いください。'
+      guests_pay: '見学者は入場料 %{guests_base_fee} をお支払いください。'
       guests_free:
         #original_hash: 573eeb7
-        anyone: 見学者の入場は無料です。
+        free: 見学者は無料です。
+        #original_hash: f1e6aef
+        restricted: 見学者は、競技参加者の同伴としてのみ受け付けます。
+      #original_hash: 35f892a
+      guest_limit:
+        zero: 同伴者は、競技者 1 人につき 1 人まで入場できます。
+        other: '同伴者は、競技者 1 人につき %{count} 人まで入場できます。'
+      #original_hash: bad09c8
+      event_limit:
+        zero: 競技者は 1 種目のみ参加できます。
+        other: '競技者は %{count} 種目まで参加できます。'
+      #original_hash: 64e0ddd
+      require_qualification: 競技者はすでに参加資格のある種目のみに申し込むことができます。
       #original_hash: 97a31ee
-      click_to_display_requirements_html: 'この大会は終了しています。 参加申し込み要件の表示は%{link_here}。'
+      click_to_display_requirements_html: 'この大会は終了しています。 参加申し込み要領の表示は %{link_here} 。'
       #original_hash: ff19a74
-      hide_requirements: 参加申し込み要件を隠す。
+      hide_requirements: 参加申し込み要領を非表示にする。
       registration_period:
         #original_hash: 6888733
         label: 参加申し込み期間
@@ -2182,19 +1771,50 @@ ja:
         #original_hash: 7ac8349
         range_past_html: '参加申し込み期間は %{start_date_and_time} から %{end_date_and_time} までです。'
       #original_hash: 1f9c9c4
-      highlights: 入賞者と記録
+      highlights: 大会結果ハイライト
       #original_hash: 945f917
-      click_to_display_highlights_html: '%{link_here}をクリックして入賞者と記録を表示する'
+      click_to_display_highlights_html: '%{link_here} をクリックして大会結果ハイライトを表示する'
       #original_hash: dc5c597
-      hide_highlights: 入賞者と記録を隠す
+      hide_highlights: 大会結果ハイライトを隠す
       #original_hash: f691bf2
-      result: a result
+      result: 結果
       #original_hash: acab754
-      single: single
+      single: 単発
       #original_hash: e78d7c2
-      average: average
+      average: 平均
       #original_hash: 083c83e
       mean: 平均
+      #original_hash: 22bee3a
+      result_sentence: '%{a_win_by_word} %{result} で'
+      #original_hash: 756603f
+      no_winner: 'メイン種目 %{event_name} の記録がないため、勝者は該当なしです。'
+      #original_hash: 6c3b236
+      winner: 'メイン種目 %{event_name} では、 %{winner} が %{result_sentence} 優勝しました。'
+      #original_hash: ec7f18a
+      first_runner_up: '準優勝は%{first_runner_up} (%{first_runner_up_result})'
+      #original_hash: cffa50a
+      and: 、
+      #original_hash: 67d285c
+      second_runner_up: '第 3 位は%{second_runner_up} (%{second_runner_up_result})でした。'
+      records:
+        #original_hash: 0658e11
+        wr: 世界記録
+        #original_hash: 9d940bb
+        afr: アフリカ記録
+        #original_hash: 56c95a8
+        asr: アジア記録
+        #original_hash: 4cf3c13
+        ocr: オセアニア記録
+        #original_hash: 1b9111e
+        er: ヨーロッパ記録
+        #original_hash: d26cf99
+        nar: 北アメリカ記録
+        #original_hash: 270c007
+        sar: 南アメリカ記録
+      #original_hash: 43d56f3
+      regional_single_record: '%{event_name} 単発 %{result}'
+      #original_hash: 2444261
+      regional_average_record: '%{event_name} 平均 %{result}'
       #original_hash: 8eda7ac
       bookmark: この大会をブックマークする
       #original_hash: 4dfea97
@@ -2204,14 +1824,14 @@ ja:
     index:
       #original_hash: db98a68
       title: 大会一覧
-      #original_hash: f483b9c
-      disclaimer: 世界的な新型コロナウイルス感染症 (COVID-19) の影響により、多くの国と地域でWCA大会の開催が困難な状況となっています。
       #original_hash: 6a72085
       all_events: 全種目
       #original_hash: 6d76b81
       all_years: すべての年
       #original_hash: 719ea39
       clear: クリア
+      #original_hash: e827f28
+      select_hint: 種目を選択してください。
       #original_hash: a1fffaa
       list: リスト
       #original_hash: ab478f3
@@ -2223,21 +1843,38 @@ ja:
       #original_hash: 769bb19
       state: 開催時期
       #original_hash: 4e9f7a3
-      present: 現在
+      present: 今後の大会
       #original_hash: 76eec76
-      recent: 最近行われたもの
+      recent: 最近の大会
       #original_hash: 405c12f
-      past: 過去
+      past: 過去の大会
       #original_hash: 081ae3f
-      custom: 期間で絞り込む
+      custom: 期間を指定
       #original_hash: 73cf180
-      by_announcement: 公表日の順
+      by_announcement: 最新情報
       #original_hash: b3946b2
-      sort_by_announcement: 告知された日付順で並び替える
+      sort_by_announcement: 最近告知された大会から順に表示
+      #original_hash: e63dc91
+      admin_status: 管理状態
+      status_flags:
+        #original_hash: 6a72085
+        all: すべて
+      #original_hash: 3f66052
+      from_date: いつから
+      #original_hash: ae79ea1
+      to_date: いつまで
+      #original_hash: 5be6985
+      reset_filters: 絞り込みをリセット
       #original_hash: 52c30f8
       past_from: '%{year} 年の大会'
       #original_hash: 7cff459
       past_all: 過去のすべての大会
+      #original_hash: 819fe62
+      show_cancelled: 中止された大会も表示
+      #original_hash: 0eda967
+      show_registration_status: 参加申し込み状況を表示
+      #original_hash: c61cc50
+      use_admin_view: 管理者ビュー
       titles:
         #original_hash: 69447c9
         in_progress: 開催中の大会
@@ -2249,6 +1886,8 @@ ja:
         recent: '%{count} 日以内に開催された最近の大会'
         #original_hash: 914742f
         upcoming: 予定されている大会
+        #original_hash: 534071e
+        ongoing_and_upcoming: 開催中 / 予定されている大会
         #original_hash: 8b57693
         custom: 検索条件に該当する大会
         #original_hash: 0933739
@@ -2271,6 +1910,17 @@ ja:
         search: 大会名、都市名
         #original_hash: 3bc8082
         recent: '過去 %{count} 日'
+        registration:
+          #original_hash: 49d8169
+          opens_in: '%{duration} で参加申し込みが開始されます。'
+          #original_hash: 2d601fa
+          closed: '参加申し込み受付は締め切られています。大会は %{days} で開始されます。'
+          #original_hash: 2e17db8
+          open: 参加申し込み受付中です。
+          #original_hash: c098975
+          full: 競技者定員に達しており、キャンセル待ち登録のみできます。
+      #original_hash: 28531af
+      no_more_comps: 大会は以上です。
       #original_hash: 8b09d74
       no_comp_found: 大会が見つかりませんでした。
       #original_hash: 7008166
@@ -2281,7 +1931,7 @@ ja:
       #original_hash: dddbe64
       registrations: 大会申し込み
       #original_hash: 4f98e6d
-      results_up: 競技結果更新！
+      results_up: 競技結果が公開されています。
       #original_hash: 87ab5db
       report: 代理人レポートを読む
       #original_hash: b4ca252
@@ -2295,7 +1945,7 @@ ja:
       #original_hash: 9104a03
       no_past_competitions: 過去に参加した大会はありません。
       #original_hash: 43c3543
-      no_bookmarked_competitions: 開催前の大会がブックマークされていません。大会ページのブックマークアイコンをクリックしてここに保存しておきましょう！
+      no_bookmarked_competitions: 開催前の大会がブックマークされていません。大会ページのブックマークアイコンをクリックして登録した大会はここに表示されます。
     competition_form:
       #original_hash: 2b81984
       wcat: WCA 大会告知チーム
@@ -2303,30 +1953,18 @@ ja:
       supports_md_html: >-
         <a href='https://daringfireball.net/projects/markdown/basics'
         target='_blank'>Markdown</a> が使えます
-      #original_hash: e5cbb13
-      name_reason_html: >-
-        大会名の簡潔な説明。大会名は <a
-        href='https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>WCA
-        大会要件方針</a>に沿っている必要があります。
-      #original_hash: 9d9126e
-      venue_html: >-
-        大会が開催される会場。%{md}。例: [Takatsu Civic
-        Hall](http://www.city.kawasaki.jp/takatsu/category/111-11-1-0-0-0-0-0-0-0.html)。
-      #original_hash: 2651d1a
-      venue_details_html: '会場の詳細 (例: 12階)。%{md}'
-      #original_hash: 447814d
-      contact_html: >-
-        [任意項目]
-        speedcubing.or.jpドメインのメーリングリストを使用することを推奨します。詳細はSCJ社員に尋ねてください。記載がない場合、主催者がWCAアカウントに登録しているメールアドレスが公開されます。%{md}の文法で書いてください　例:
-        [○○大会実行委員会](mailto:○○@speedcubing.or.jp)
+      #original_hash: 05c66b5
+      series_save_first_hint: 注意：シリーズ大会を追加する前に大会情報を保存する必要があります。
       #original_hash: c5497bc
       events: 競技種目
       #original_hash: cafc153
       public_and_locked_html: この大会は公開されており、編集はロックされています。変更する場合は、大会告知メールのスレッドに返信して申請してください。
       #original_hash: e00a339
-      confirmed_but_not_visible_html: 'この大会の概要は確定済ですが未公開です。公開するには%{contact}に連絡してください。'
+      confirmed_but_not_visible_html: 'この大会の概要は確定済ですが未公開です。公開するには %{contact} に連絡してください。'
       #original_hash: e94cba8
       is_visible: この大会は公開済みです。内容の変更は公開情報に反映されます。
+      #original_hash: 1039850
+      pending_confirmation_html: '各項目を入力し、%{contact} による承認が必要な段階になったら、代理人に大会情報の確定を依頼してください。'
       #original_hash: 8966fd0
       submit_create_value: 大会を新規作成する
       #original_hash: 40b0dfd
@@ -2354,187 +1992,376 @@ ja:
         greater_china: 中国統一大会
         #original_hash: 3b920b7
         generic: '地域別大会: %{type}'
+      dues_estimate:
+        #original_hash: 6e56455
+        calculated: '競技者 %{limit} 人に対応するWCA納入金見積額は %{estimate} です。'
+        #original_hash: 5e8cffe
+        per_competitor: '競技者 1 人あたりのWCA納入金見積額は %{estimate} です。'
+        #original_hash: 1b67d84
+        ajax_error: WCA納入金の見積もりにエラーが発生しました（対応する為替レートのデータがない場合があります）
       labels:
         admin:
-          is_confirmed: 運営メンバー (代理人除く) による大会編集を許可しない。
+          #original_hash: 7f3d889
+          is_confirmed: 主催者による大会編集を許可しない。
+          #original_hash: d493e6a
           is_visible: 大会を一般公開する
-        competition_id: ID
+          #original_hash: e7daccb
+          uses_new_registration_system: 新しい申し込みシステムを使用する。
+        #original_hash: 89f89c0
+        competition_id: 大会ID
+        #original_hash: 709a232
         name: 大会名
+        #original_hash: fdba578
         short_name: 大会名略称
+        #original_hash: f91b080
         name_reason: 大会名の由来 (命名理由)
         venue:
-          country_id: 開催国
+          #original_hash: 0f21717
+          country_id: 開催国・地域
+          #original_hash: 25b7b06
           city_name: 都市名
+          #original_hash: 67cd406
           name: 会場
+          #original_hash: 08767af
           details: 会場詳細
+          #original_hash: 486f8fb
           address: 会場所在地
-          coordinates:
-        start_date: 開始日
-        end_date: 終了日
+          #original_hash: 8ebebca
+          coordinates: 緯度・経度
+        #original_hash: ff99f5b
+        start_date: 大会開始日
+        #original_hash: 89d10cd
+        end_date: 大会終了日
+        series:
+          #original_hash: e2b4898
+          series_id: シリーズ大会ID
+          #original_hash: 75ceb67
+          name: シリーズ大会名
+          #original_hash: 8a6bee1
+          short_name: シリーズ大会名略称
+          #original_hash: af3d38e
+          competition_ids: すべての大会
+        #original_hash: 0eb5ed5
         information: 概要
         competitor_limit:
-          enabled: 大会定員
-          count: 大会定員
-          reason: 大会定員設定の理由
+          #original_hash: 9bb1965
+          enabled: 競技者定員
+          #original_hash: 749f4c9
+          count: 競技者定員
+          #original_hash: 4a8b6f1
+          reason: 競技者定員設定の理由
         staff:
-          staff_delegate_ids: WCA 代理人
-          trainee_delegate_ids: WCA 代理人候補
+          #original_hash: 2e3ed8b
+          staff_delegate_ids: WCA代理人
+          #original_hash: c0ddcd6
+          trainee_delegate_ids: WCA代理人候補
+          #original_hash: 958562e
           organizer_ids: 主催者
+          #original_hash: b37456c
           contact: 連絡先
-        championships:
+        #original_hash: 991f419
+        championships: 大会タイプ
         website:
-          generate_website: 追加情報用の外部ウェブサイトを用意せずに WCA ウェブサイトを使用する
+          #original_hash: 692e1f9
+          generate_website: 追加情報用の外部ウェブサイトを用意せずに WCA ウェブサイトを使用する。
+          #original_hash: 2e8a57c
           external_website: ウェブサイト
-          external_registration_page: 参加申込ページ
+          #original_hash: 8020e88
+          external_registration_page: 参加申し込みページ
+          #original_hash: 87b7d5f
           uses_wca_registration: 参加申し込みに WCA ウェブサイトを使用する
-          uses_wca_live:
-        user_settings:
-          receive_registration_emails: 大会に参加申し込みがあったとき電子メールで通知する
+          #original_hash: ebe8c47
+          uses_wca_live: 記録入力にWCA Liveを使用する。
         entry_fees:
+          #original_hash: 28a6fbb
           currency_code: 通貨コード
+          #original_hash: 6cf623b
           base_entry_fee: 基本参加費
-          on_the_spot_entry_fee: 会場申込の場合の参加費
+          #original_hash: 69780b5
+          on_the_spot_entry_fee: 会場申し込みの場合の基本参加費
+          #original_hash: 3542671
           guest_entry_fee: 見学者の入場料
+          #original_hash: 71c8461
           donations_enabled: 寄付金の受け入れを有効にする
+          #original_hash: efbdbab
           refund_policy_percent: キャンセル時返金率 (％)
+          #original_hash: b332299
           refund_policy_limit_date: 返金可能なキャンセル期日
         registration:
+          #original_hash: d4aeed9
           opening_date_time: 参加申し込みを開始する
+          #original_hash: f8153a2
           closing_date_time: 参加申し込みを停止する
+          #original_hash: 16cf9a4
           waiting_list_deadline_date: キャンセル待ちリストにいる競技者を繰り上げて承認できる締め切り日時
-          event_change_deadline_date: すでに登録済みの申込内容（参加種目など）を変更できる締切日時
-          allow_on_the_spot: 会場申込について
-          allow_self_delete_after_acceptance:
+          #original_hash: 99a9169
+          event_change_deadline_date: すでに登録済みの参加申し込み内容（参加種目など）を変更できる締切日時
+          #original_hash: 2529d04
+          allow_on_the_spot: 会場申し込みについて
+          #original_hash: 3d47eca
+          allow_self_delete_after_acceptance: 参加申し込みキャンセル
+          #original_hash: 7e53b96
           allow_self_edits: 申し込み登録内容の編集
+          #original_hash: 3c23a67
           guests_enabled: 見学者人数
+          #original_hash: bb16247
           guest_entry_status: 見学者や同伴者への対応
-          guests_per_registration:
-          extra_requirements: 大会申し込み要件 (追加) ※自動生成される大会申し込み要件の後に追加される情報です。
-          force_comment:
+          #original_hash: 7d78478
+          guests_per_registration: 競技者 1 人あたりの同伴者最大人数
+          #original_hash: 556fda0
+          extra_requirements: 大会申し込み要領 (追加) ※自動生成される大会申し込み要領の後に追加される情報です。
+          #original_hash: 6c8e5bf
+          force_comment: 参加申し込み時にコメントを必須化する
         event_restrictions:
+          forbid_newcomers:
+            #original_hash: d0a4ce9
+            enabled: 初参加者の参加を拒否する
+            #original_hash: 40c4b4c
+            reason: 初参加者の参加を拒否する理由
           early_puzzle_submission:
+            #original_hash: 723cad9
             enabled: 競技の開始以前に特定の時点で、競技者のパズル提出を求める
+            #original_hash: 78308cc
             reason: パズル提出を早く設定する理由および詳細
           qualification_results:
+            #original_hash: 88da0ef
             enabled: 特定の種目の参加者を制限するために、過去の記録を使用する
+            #original_hash: 1ec6dd4
             reason: 過去の記録の適用の理由および詳細
-            allow_registration_without:
+            #original_hash: a541bfa
+            allow_registration_without: 参加資格判定を行う種目
           event_limitation:
+            #original_hash: ac30de9
             enabled: 特定の種目への同時参加を制限する。
+            #original_hash: 4bf194c
             reason: 特定種目への同時参加を制限する理由および詳細
-            per_registration_limit:
+            #original_hash: 22516e1
+            per_registration_limit: 参加種目数の上限
+          #original_hash: 3c24bd2
           main_event_id: メイン種目
+        #original_hash: d7020f4
         remarks: 備考
-        clone_tabs: すべてのタブを追加情報とともに複製する
+        cloning:
+          #original_hash: c305010
+          clone_tabs: すべての追加情報とタブをコピーする
       hints:
         admin:
-          is_confirmed: ''
-          is_visible: ''
+          #original_hash: da39a3e
+          is_confirmed: 確定済み
+          #original_hash: da39a3e
+          is_visible: 公開済み
+        #original_hash: da39a3e
         competition_id: ''
-        name: '大会の正式名称 (英名) 。<p> (1) 必ず末尾に年号を含める (例 : SCJ Kansai Winter 2020)</p><p>
-          (2) 語頭を大文字にする</p><p> (3) 英数字と - & . : '' および半角スペースのみ使用可。</p>'
+        #original_hash: 2c812a0
+        name: >-
+          大会の正式名称 (英名) 。<p> (1) 必ず末尾に年号を含める (例 : SCJ Kansai Winter 2020)</p><p>
+          (2) 語頭を大文字にする</p><p> (3) 英数字と - & . : ' および半角スペースのみ使用可。</p>
+        #original_hash: fbcda66
         short_name: 大会名の略称 (Kansai 2017 など正式名が短い場合は正式名と重複可)
-        name_reason_html: 大会名の簡潔な説明。大会名は <a href='https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>WCA
+        #original_hash: 8ea1fac
+        name_reason_html: >-
+          大会名の簡潔な説明。大会名は <a
+          href='https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>WCA
           大会要件方針</a>に沿っている必要があります。
         venue:
+          #original_hash: da39a3e
           country_id: ''
+          #original_hash: bce4589
           city_name: '開催都市名 (例 : Kawasaki, Kanagawa や Shibuya, Tokyo など「市区町村, 都道府県」の順)'
-          name_html: '大会が開催される会場。%{md}。例: [Takatsu Civic Hall](http://www.city.kawasaki.jp/takatsu/category/111-11-1-0-0-0-0-0-0-0.html)。'
+          #original_hash: 9d9126e
+          name_html: >-
+            大会が開催される会場。%{md}。例: [Takatsu Civic
+            Hall](http://www.city.kawasaki.jp/takatsu/category/111-11-1-0-0-0-0-0-0-0.html)。
+          #original_hash: 2651d1a
           details_html: '会場の詳細 (例: 12階)。%{md}'
+          #original_hash: da39a3e
           address: ''
           coordinates:
+            #original_hash: da39a3e
+            lat: ''
+            #original_hash: da39a3e
+            long: ''
+        #original_hash: da39a3e
         start_date: ''
+        #original_hash: da39a3e
         end_date: ''
-        information: '大会の概要 (例 : UT Open 2010 is the first students-organized competition
-          in Japan.)'
+        series:
+          #original_hash: da39a3e
+          series_id: ''
+          #original_hash: 77811b5
+          name: シリーズ大会の正式名称 (英名) 。大会名と同様のルールで設定してください。
+          #original_hash: 778c20c
+          short_name: シリーズ大会名の略称。大会名略称と同様のルールで設定してください。
+          #original_hash: 3e27501
+          competition_ids: この項目は編集できません。<br/>シリーズ大会に大会を追加するには、個別の大会の編集ページで行ってください。
+        #original_hash: bb470cc
+        information: >-
+          大会の概要 (例 : UT Open 2010 is the first students-organized competition in
+          Japan.)
         competitor_limit:
-          enabled: WCA 大会規則では大会定員の設定は必須とはされていませんが、強く推奨されています。
+          #original_hash: dc47c39
+          enabled: WCA 大会規則では競技者定員の設定は必須とはされていませんが、強く推奨されています。
+          #original_hash: b7b599b
           count: この大会で許容される参加者数の上限。現在のところ定員による締切システムは未実装のため、この値は表示されるのみで自動処理は行われません。
-          reason: 大会定員設定の理由 (英語で記入してください)
+          #original_hash: 4bd7102
+          reason: 競技者定員設定の理由 (英語で記入してください)
         staff:
-          staff_delegate_ids: 'WCA 代理人 (例 : Yuji Suse)'
-          trainee_delegate_ids: この大会の代理人候補
+          #original_hash: b4d020f
+          staff_delegate_ids: 'WCA 代理人 (例 : Shuhei Omura)'
+          #original_hash: cb9882c
+          trainee_delegate_ids: WCA代理人候補
+          #original_hash: 517d376
           organizer_ids: 大会運営チーム (WCA アカウントが必要です)
-          contact_html: "[任意項目] speedcubing.or.jpドメインのメーリングリストを使用することを推奨します。詳細はSCJ社員に尋ねてください。記載がない場合、主催者がWCAアカウントに登録しているメールアドレスが公開されます。%{md}の文法で書いてください　例:
-            [○○大会実行委員会](mailto:○○@speedcubing.or.jp)"
-        championships: ''
+          #original_hash: 447814d
+          contact_html: >-
+            [任意項目]
+            speedcubing.or.jpドメインのメーリングリストを使用することを推奨します。詳細はSCJ社員に尋ねてください。記載がない場合、主催者がWCAアカウントに登録しているメールアドレスが公開されます。%{md}の文法で書いてください　例:
+            [○○大会実行委員会](mailto:○○@speedcubing.or.jp)
         website:
+          #original_hash: da39a3e
           generate_website: ''
+          #original_hash: cabe7fb
           external_website: 大会ウェブサイトの URL
-          external_registration_page: 競技者が参加申込を行うためのページ。httpまたはhttpsのURLとしてください。
+          #original_hash: b2af5f5
+          external_registration_page: 競技者が参加申し込みを行うためのページ。httpまたはhttpsのURLとしてください。
+          #original_hash: da39a3e
           uses_wca_registration: ''
-          uses_wca_live:
+          #original_hash: da39a3e
+          uses_wca_live: ''
         user_settings:
+          #original_hash: da39a3e
           receive_registration_emails: ''
         entry_fees:
+          #original_hash: 9735ddf
           currency_code: 参加費の通貨コード
-          base_entry_fee: 大会の基本参加費。大会情報ページおよび大会申込ページ (使用する場合) に表示されます。0に設定した場合、参加無料である旨表示されます。
+          #original_hash: 82ea18a
+          base_entry_fee: >-
+            大会の基本参加費。大会情報ページおよび大会申し込みページ (使用する場合)
+            に表示されます。0に設定した場合、参加無料である旨表示されます。
+          #original_hash: 8c4fdf8
           on_the_spot_entry_fee: 0 と入力した場合、「見学者は入場無料です。」と表示されます。
-          guest_entry_fee: 現在のところ見学者入場料集金システムは未実装のため、この値は表示されるのみで自動処理は行われません。実際の集金は手動で行ってください。<br/>0
+          #original_hash: 0419547
+          guest_entry_fee: >-
+            現在のところ見学者入場料集金システムは未実装のため、この値は表示されるのみで自動処理は行われません。実際の集金は手動で行ってください。<br/>0
             と入力した場合、「見学者入場料は無料です。」と表示されます。
+          #original_hash: da39a3e
           donations_enabled: ''
-          refund_policy_percent: 現在のところ返金システムは未実装のため、この値は表示されるのみで自動処理は行われません。実際の返金は手動で行ってください。<br/>0
+          #original_hash: 180b7b3
+          refund_policy_percent: >-
+            現在のところ返金システムは未実装のため、この値は表示されるのみで自動処理は行われません。実際の返金は手動で行ってください。<br/>0
             と入力した場合、「キャンセル時の返金は行いません。」と表示されます。
+          #original_hash: f64d853
           refund_policy_limit_date: 返金対応期限
         registration:
+          #original_hash: 9965635
           opening_date_time: 申し込み受付期間 (世界標準時。日本時間 -9 時間)
+          #original_hash: da39a3e
           closing_date_time: ''
-          waiting_list_deadline_date: キャンセル待ちリストにいる競技参加者を繰り上げ承認できる期限。もし返金にも期限を設けていれば、返金期限が先、繰り上げ期限はそれと同時か後の関係とする。
-          event_change_deadline_date: 参加種目や同伴者の人数など、いったん承認済みの登録内容でも実行委員に問い合わせることで変更を受け付けることができます。この期限は申込期間の終了時と同じか、あるいは終了後も一定の猶予を設けることが可能。このフィールドを空欄にした場合、大会当日に実際に試技をする直前まで変更可能なことになる。もし飛び込み参加可能な大会を企画する場合は空欄となるが、日本での前例はほとんどありません。
+          #original_hash: 664db64
+          waiting_list_deadline_date: >-
+            キャンセル待ちリストにいる競技参加者を繰り上げ承認できる期限。もし返金にも期限を設けていれば、返金期限が先、繰り上げ期限はそれと同時か後の関係とする。
+          #original_hash: 75e6c1f
+          event_change_deadline_date: >-
+            参加種目や同伴者の人数など、いったん承認済みの参加申し込み内容でも実行委員に問い合わせることで変更を受け付けることができます。この期限は参加申し込み期間の終了時と同じか、あるいは終了後も一定の猶予を設けることが可能。このフィールドを空欄にした場合、大会当日に実際に試技をする直前まで変更可能なことになる。もし飛び込み参加可能な大会を企画する場合は空欄となるが、日本での前例はほとんどありません。
+          #original_hash: da39a3e
           allow_on_the_spot: ''
-          allow_self_delete_after_acceptance:
+          #original_hash: da39a3e
+          allow_self_delete_after_acceptance: ''
+          #original_hash: da39a3e
           allow_self_edits: ''
+          #original_hash: da39a3e
           guests_enabled: ''
+          #original_hash: da39a3e
           guest_entry_status: ''
-          guests_per_registration:
-          extra_requirements: 支払い方法など、「大会申し込み要件」で不足する内容はこちらに入力してください。<br/>必ず<b>英語を併記して</b>記入してください。<br/>入力内容は大会情報ページと大会申込ページに表示されます。
-          force_comment:
+          #original_hash: 4b51faa
+          guests_per_registration: >-
+            競技参加者 1
+            人あたりの同伴者数の上限です。この上限を超える同伴者を登録した場合は申し込みがブロックされます。上限を設けない場合は空欄のままにしてください。
+          #original_hash: 3de153b
+          extra_requirements: >-
+            支払い方法など、「大会申し込み要領」で不足する内容はこちらに入力してください。<br/>必ず<b>英語を併記して</b>記入してください。<br/>入力内容は大会情報ページと参加申し込みページに表示されます。
+          #original_hash: da39a3e
+          force_comment: ''
         event_restrictions:
+          forbid_newcomers:
+            #original_hash: da39a3e
+            enabled: ''
+            #original_hash: d75332f
+            reason: 初参加者の参加を拒否する理由を英語で詳細に記載してください。
           early_puzzle_submission:
+            #original_hash: da39a3e
             enabled: ''
-            reason: パズル提出を早く設定する理由を詳しく説明してください (英語で)
+            #original_hash: 4e8488b
+            reason: パズル提出を早く設定する理由を英語で詳しく説明してください。
           qualification_results:
+            #original_hash: da39a3e
             enabled: ''
-            reason: 過去の記録の適用の理由および詳細を記載してください (英語で)
-            allow_registration_without:
+            #original_hash: f859883
+            reason: 過去の記録の適用の理由および詳細を英語で記載してください。
+            #original_hash: da39a3e
+            allow_registration_without: ''
           event_limitation:
+            #original_hash: da39a3e
             enabled: ''
-            reason: 特定種目への同時参加を制限する理由および詳細を記載してください (英語で)
-            per_registration_limit:
-          main_event_id: この種目の優勝者が本大会の優勝者となります。
+            #original_hash: d3329d7
+            reason: 特定種目への同時参加を制限する理由および詳細を英語で記載してください。
+          #original_hash: 1067798
+          main_event_id: この種目の優勝者が本大会の優勝者として表示されます。
+        #original_hash: 9ea6021
         remarks: WCATに伝達する追加情報（例：何か不安がある場合や、要望がある場合に記入）。必ず英語で記入してください。
-        clone_tabs: ''
+        cloning:
+          #original_hash: da39a3e
+          clone_tabs: ''
       choices:
+        guests_enabled:
+          #original_hash: cb8809d
+          'true': 同伴者人数を入力させる
+          #original_hash: f8c2332
+          'false': 同伴者人数を入力させない
         competitor_limit:
           enabled:
-            'true': 大会定員を設定する。
-            'false': 大会定員を設定しない。
+            #original_hash: d9c05cc
+            'true': 競技者定員を設定する。
+            #original_hash: 5b581b5
+            'false': 競技者定員を設定しない。
         registration:
           allow_on_the_spot:
-            'true': 会場申込を受け付ける
-            'false': 会場申込を受け付けない
-          allow_self_delete_after_acceptance:
-            'true':
-            'false':
+            #original_hash: 0c521ca
+            'true': 会場申し込みを受け付ける
+            #original_hash: 0f236df
+            'false': 会場申し込みを受け付けない
           allow_self_edits:
-            'true': 承認済みの申し込み登録情報（参加種目や同伴者人数など）を変更したい場合は、申込期間内に実行委員あてに個別にご連絡ください。
-            'false': 承認済みの申し込み登録情報（参加種目や同伴者人数など）の変更はできません。
-          guests_enabled:
-            'true': 見学者人数記入を求める
-            'false': 見学者人数記入を求めない
+            #original_hash: 52a2f4a
+            'true': 種目変更締切までは、申し込み登録情報変更を許可する。
+            #original_hash: 2cbb80e
+            'false': 申し込み登録情報変更を許可しない。
+          allow_self_delete_after_acceptance:
+            #original_hash: 5c2e8c1
+            'true': 承認後も競技者の参加申し込み削除を許可する。
+            #original_hash: 3b77604
+            'false': 承認後は競技者の参加申し込み削除を許可しない。
           guest_entry_status:
-            unclear: 何も表示しない（あるいは、「その他の大会申し込み要件」の項目に記載する）
-            free: どなたでも無料で見学できます
-            restricted: 見学は競技参加者の同伴者に限ります
+            #original_hash: 7e54323
+            unclear: 何も表示しない（「その他の大会申し込み要領」の項目に記載する）
+            #original_hash: 694bce4
+            free: 誰でも無料で見学可能
+            #original_hash: 762c509
+            restricted: 見学は競技参加者の同伴者に限る
         event_restrictions:
           qualification_results:
             allow_registration_without:
-              'true':
-              'false':
+              #original_hash: 9697d98
+              'true': 参加申し込み時点で参加資格がない種目への参加申し込みを許可する
+              #original_hash: 6509041
+              'false': 参加申し込み時点での参加資格を要求する
+    registration_v2:
+      pdf:
+        #original_hash: 5c7d60f
+        link: '<0>%{pdfLink}</0> として'
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-
-        必ず年を末尾にすること。以下の文字のみ使用すること: 英数字、ダッシュ(-)、アンパサンド(&)、ピリオド(.), コロン(:),
+        必ず年を末尾にしてください。以下の文字のみ使用できます: 英数字、ダッシュ(-)、アンパサンド(&)、ピリオド(.), コロン(:),
         アポストロフィ('), スペース( )
       #original_hash: 8e8f765
       cannot_manage: 大会を管理できません。
@@ -2543,25 +2370,51 @@ ja:
       #original_hash: 3935fd6
       cannot_delete_confirmed: 確定済みの大会は削除できません。
       #original_hash: 191df37
-      must_contain_event: この大会には 1 個以上の競技種目を追加する必要があります
+      must_contain_event: 1 個以上の種目を設定する必要があります。
       #original_hash: 54fe619
-      schedule_must_match_rounds: は少なくとも1つのラウンドがあり、すべてのラウンドはスケジュールに含まれていなければなりません。
+      schedule_must_match_rounds: 少なくとも1つのラウンドがあり、すべてのラウンドはスケジュールに含まれていなければなりません。
       #original_hash: 6e228b7
-      must_contain_delegate: 1 人以上の WCA 代理人を追加する必要があります
+      must_contain_delegate: 1 人以上の WCA 代理人を追加する必要があります。
+      #original_hash: b5677c2
+      must_contain_organizer: 1 人以上の主催者を追加する必要があります。
       #original_hash: 8131fc2
-      not_all_delegates: は全員代理人ではありません
+      not_all_delegates: は全員代理人ではありません。
       #original_hash: 43a23c2
-      registration_close_after_open: 申し込み締め切りは申し込み開始より後である必要があります
+      registration_close_after_open: 参加申し込み締切は参加申し込み開始より後である必要があります。
+      #original_hash: 2f8765e
+      registration_already_closed: 参加申し込み締切をすでに過ぎています。
       #original_hash: 8a3a4f6
       start_date_must_be_28_days_in_advance: 開始日は少なくとも28日後以降でなければなりません。
       #original_hash: 43a83a9
-      end_date_before_start: 終了日は開始日より後である必要があります
+      end_date_before_start: 終了日は開始日より後である必要があります。
       #original_hash: 0c507fa
       refund_date_after_start: 返金期限は返金開始日以降としてください。
       #original_hash: be3933b
-      span_too_many_days: '%{max_days} 間を超える大会は開催できません。'
+      span_too_many_days: '%{max_days} 日間を超える大会は開催できません。'
       #original_hash: cdcd288
-      invalid_currency_code: 通貨コードが不適切です
+      invalid_currency_code: 通貨コードが不適切です。
+      #original_hash: 902a278
+      advancement_condition_must_be_present_for_all_non_final_rounds: 決勝以外のラウンドでは次ラウンド進出条件を設定してください。
+      #original_hash: da17c99
+      registration_period_after_start: 参加申し込み期間は大会開始日以前にしてください。
+      #original_hash: f6b244b
+      waiting_list_deadline_before_registration_close: キャンセル待ちの繰り上げ承認期限は、参加申し込み締切以後にしてください。
+      #original_hash: ececa98
+      waiting_list_deadline_before_refund_date: キャンセル待ちの繰り上げ承認期限は、キャンセルによる返金期限以後にしてください。
+      #original_hash: 7324d19
+      waiting_list_deadline_after_end: キャンセル待ちの繰り上げ承認期限は、大会終了以前にしてください。
+      #original_hash: c3eb1be
+      event_change_deadline_before_registration_close: 種目変更期限は参加申し込み締切以後にしてください。
+      #original_hash: bc1ca0f
+      event_change_deadline_after_end_date: 種目変更期限は大会終了以前にしてください。
+      #original_hash: a2e4fc9
+      event_change_deadline_with_ots: 会場申し込みを許可する場合、種目変更期限は大会中に設定してください。
+      #original_hash: 5ae2437
+      series_distance_km: '大会の開催地が %{competition} から遠すぎます。'
+      #original_hash: 4a5d7c5
+      series_distance_days: '大会の日程が %{competition} から離れすぎています。'
+      #original_hash: 7fc8fba
+      must_ask_about_guests_if_specifying_limit: 同伴者人数の上限を設定する場合、「同伴者人数を入力させる」に設定してください。
     new:
       #original_hash: 1208df7
       create_competition: 大会新規作成
@@ -2579,80 +2432,133 @@ ja:
       competition_in: '大会開始は %{n_days} 後です。'
       #original_hash: e6e096a
       competition_was: '大会は %{n_days} 前に終了しました。'
-    nearby_competitions:
-      #original_hash: 241801a
-      competitions:
-        zero: そのような大会はありません
-        other: '%{count} 個の大会'
-      #original_hash: 3446062
-      label_admin: '過去 %{days}'
-      #original_hash: 07a1cf0
-      nearby_admin: '%{x_competitions} は、%{kms} km 以内かつ %{days} 以内に開催されます。'
-      #original_hash: 9eb8f46
-      within: '%{days} 以内'
-      #original_hash: d97d1ee
-      show: 表示
     adjacent_competitions:
       #original_hash: e3528ec
       label: '周辺で開催される大会 (%{days} 以内かつ %{kms} km 以内)'
       #original_hash: feefb46
-      no_comp_nearby: 周辺で開催される大会はありません！
+      no_comp_nearby: 周辺で開催される大会はありません。
       #original_hash: 7e76950
       no_date_yet: この大会の日付が設定されていません。
       #original_hash: 82a95d2
       no_location_yet: この大会の開催場所が設定されていません。
+      #original_hash: 6def491
+      save_first: シリーズ大会に追加する前に、この大会の情報を保存してください。
       #original_hash: 709a232
-      name: 名前
+      name: 大会名
       #original_hash: adc24b7
-      delegates: 代理人
+      delegates: WCA代理人
       #original_hash: eb9a4bc
       date: 日付
+      #original_hash: 6c82e6d
+      time: 時刻
       #original_hash: d219c68
-      location: 場所
+      location: 開催地
       #original_hash: 4232080
       distance: 距離
       #original_hash: 51de2b8
       before: 前
       #original_hash: 405906c
       after: 後
+      #original_hash: e1978a9
+      starts_on: 開始
+      #original_hash: 964aedc
+      ends_on: 終了
       #original_hash: 24d948e
-      limit: 定員
+      limit: 競技者定員
       #original_hash: 855bd26
-      competitors: 競技者
+      competitors: 競技者数
       #original_hash: c5497bc
       events: 種目
+      #original_hash: 50cb854
+      show_events: 種目を表示する
+      #original_hash: 0df66f7
+      hide_events: 種目を非表示にする
+    colliding_registration_start_competitions:
+      #original_hash: 8343ae2
+      label: '参加申し込み期間の重複 ( %{hours} 時間で開始)'
+      #original_hash: f1cecf1
+      no_comp_colliding: 参加申し込み期間の重複はありません。
+      #original_hash: 3e1051e
+      no_registration_start_date_yet: 参加申し込み開始が設定されていません。
+      #original_hash: c38824e
+      opens_registration_at: '参加申し込み開始:'
     #original_hash: 06b01c4
     announcements: 告知
+    #original_hash: a2b80b0
+    post_announcement: 大会を告知する
+    #original_hash: b462eac
+    announced_by_html: '%{announcer_name} が %{date_time} に告知'
+    #original_hash: 63ba8b0
+    announce_confirm: 本当にこの大会を告知してよいですか？
+    #original_hash: 375e17f
+    cancel: 大会を中止する
+    #original_hash: 7628a51
+    uncancel: 大会中止を取りやめる
+    #original_hash: 9122a6c
+    cancelled_by_html: '%{name} が %{date_time} に中止'
+    #original_hash: 25e68c3
+    cancel_confirm: 本当にこの大会を中止してよいですか？
+    #original_hash: 01de5ee
+    post_results: 大会結果を投稿する
+    #original_hash: b6513f1
+    results_posted_by_html: '%{poster_name} が %{date_time} に投稿'
+    #original_hash: a6b5efe
+    cancel_mistake: 誤りがありましたか？
+    #original_hash: 0fb43d5
+    note_before_cancel: '注意: 確定済みの大会のみ中止にできます。'
+    #original_hash: b38ee61
+    orga_close_reg: 参加申し込みを締め切る
+    #original_hash: b2bfea9
+    orga_close_reg_confirm: 本当に参加申し込みを締め切ってよいですか？この操作は取り消せません。
+    #original_hash: ce5686a
+    note_reg_not_full_orga_close_reg: '注意: 競技者定員に達した場合のみ参加申し込みを手動で締め切ることができます。'
+    #original_hash: c66488a
+    user_preferences: ユーザー設定
+    #original_hash: 089cbfd
+    receive_registration_emails: 参加申し込みがあった際にメール通知する
+    #original_hash: 9d473a2
+    note_reg_closed_orga_close_reg: '注意: 参加申し込みは締め切り済みです。'
     show:
-      #original_hash: b0fe391
-      general_info: お知らせ
+      #original_hash: a1fd58a
+      general_info: 概要
       #original_hash: c5497bc
       events: 開催種目
       #original_hash: 0a8adac
       schedule: タイムスケジュール
       #original_hash: 1060ed0
-      no_schedule: この大会はスケジュールがありません。PDFは生成できません。
+      no_schedule: この大会はタイムスケジュールがありません。PDFを生成できません。
     events:
       time_limit_information:
         #original_hash: 88c5f1a
         time_limit_html: >-
           試技中に制限タイムを超過した場合、ジャッジは試技を中断し、その試技の記録はDNF (記録なし) となります
-          (%{regulation_link}参照)。
+          (%{regulation_link} 参照)。
         #original_hash: 83d204f
-        regulation_link_text: '大会規則%{number}'
+        regulation_link_text: '大会規則 %{number}'
         #original_hash: bd0e4a9
-        guideline_link_text: 'ガイドライン%{number}'
+        guideline_link_text: 'ガイドライン %{number}'
         #original_hash: b2a983a
         cumulative_time_limit: 累積制限タイム
         #original_hash: d47f11a
-        cumulative_one_round_html: '%{cumulative_time_limit}が採用される場合があります (%{regulation_link}参照)。'
+        cumulative_one_round_html: '%{cumulative_time_limit} が採用される場合があります (%{regulation_link} 参照)。'
         #original_hash: c6190b6
-        cumulative_across_rounds_html: '%{cumulative_time_limit}がラウンドをまたいで採用される場合があります (%{guideline_link}参照)。'
+        cumulative_across_rounds_html: >-
+          %{cumulative_time_limit} がラウンドをまたいで採用される場合があります (%{guideline_link}
+          参照)。
+        #original_hash: e8d17df
+        cutoff_html: 'ラウンド後半の試技を行う条件となるタイム (%{regulation_link} 参照)。'
         #original_hash: f571a30
         format_html: >-
-          競技形式は、計測結果をどう計算して順位を決定するのかを決めたものです。競技形式の一覧は%{link_to_9b}をご覧ください。(Ao5 /
-          Average of 5 : 5回の記録のベストとワーストを除く3回の平均、Bo3 / Best of 3 : 3回の記録のベスト、Mo3
-          (Mean of 3) : 3回の記録の平均、詳細は%{link_to_9f}参照)
+          競技形式は、計測結果をどう計算して順位を決定するのかを決めたものです。<br/>(種目ごとの競技形式は %{link_to_9b}
+          、各競技形式の詳細は %{link_to_9f} 参照)<br/>Ao5 / Average of 5 :
+          5回の記録のベストとワーストを除く3回の平均<br/>Bo3 / Best of 3 : 3回の記録のベスト<br/>Mo3 (Mean
+          of 3) : 3回の記録の平均
+        #original_hash: fa50f5c
+        qualification_html: 参加資格タイムの設定された競技に参加するためには、他のWCA大会で参加資格タイムの条件を満たす必要があります。
+        #original_hash: 51dfad5
+        qualification_all_events_html: '参加資格タイムの条件は <b>%{date}</b> までに満たす必要があります。'
+        #original_hash: 5eac9e5
+        qualification_some_events_html: '%{events} の参加資格タイムの条件は <b>%{date}</b> までに満たす必要があります。'
       #original_hash: 041a5de
       format: 競技形式
       #original_hash: 0d1fcc3
@@ -2661,10 +2567,10 @@ ja:
       cutoff: カットオフ
       #original_hash: 02ed4a4
       proceed: 進出人数
+      #original_hash: 2ffe44e
+      qualification: 参加資格
     schedule:
       display_as:
-        #original_hash: ec5dd7c
-        label: 'タイムスケジュールの表示形式 :'
         #original_hash: 0424f6e
         table: 表
         #original_hash: adab509
@@ -2682,18 +2588,53 @@ ja:
       end: 終了
       #original_hash: 81c0d91
       activity: 内容
-      #original_hash: 90e2fca
-      room: 部屋
+      #original_hash: 15e58c6
+      no_activities: 選択した会場ではタイムスケジュールが設定されていません。
+      #original_hash: 10a56c8
+      all_venues: すべての会場
+      #original_hash: a0b3266
+      room_or_stage: 部屋・競技エリア
+      #original_hash: f37605b
+      more_details: ラウンドの詳細を表示
+      #original_hash: a30e720
+      time_zone: タイムゾーン
+      rooms_panel:
+        #original_hash: 3a28d6f
+        title: 部屋
+        #original_hash: 6a72085
+        all: すべて
+        #original_hash: 6eef664
+        none: クリア
+        #original_hash: 9b9a6aa
+        show_buttons: タイムゾーンボタンを表示
+        #original_hash: d2ac826
+        use_time_zone: この部屋のタイムゾーンを使用
       #original_hash: 73acb7f
       room_in_venue: '%{room} (%{venue})'
-      #original_hash: 2896c7a
-      venue_information_html: '次の会場のタイムスケジュールを表示しています : %{venue_name}'
-      #original_hash: b97e383
-      timezone_message: 'タイムスケジュールは次のタイムゾーンの時刻で表示されています : %{timezone}'
-      #original_hash: 2ab94a0
-      multiple_venues_available: この大会は複数の会場で開催されています。別会場のタイムスケジュールもご確認ください。
+      #original_hash: f7fd979
+      venue_selection_html:
+        zero: '%{venue_name} のタイムスケジュールを表示しています (ほかに会場はありません)。'
+        other: '%{venue_name} のタイムスケジュールを表示しています (%{count} 個の会場のうちの 1 つです)。'
+      #original_hash: 8d175ad
+      venue_selection_all: '%{venueCount} 個の会場のタイムスケジュールをすべて表示しています。'
+      #original_hash: 97df911
+      timezone_message: 'この会場のタイムゾーンは %{timezone} です。'
+      #original_hash: 94b2570
+      timezone_setting: 'このタイムゾーンの時刻でタイムスケジュールを表示しています:'
+      #original_hash: 75194fd
+      multiple_timezones_available: '注意: タイムゾーンが異なる (時差のある) 会場があります。'
+      #original_hash: d94a371
+      timezone_set_local: 自分のタイムゾーン (時刻) で表示
+      #original_hash: 17ab650
+      timezone_set_venue: 会場のタイムゾーン (時刻) で表示
+      #original_hash: 9974a46
+      timezone_follow_venue: 自動で会場のタイムゾーンを使用する
       #original_hash: 37b1adb
-      schedule_for_date: 'タイムスケジュール : %{day_name} (%{full_date})'
+      schedule_for_date: '%{day_name} (%{full_date}) のタイムスケジュール'
+      #original_hash: d58b281
+      schedule_for_full_date: '%{date} のタイムスケジュール'
+      #original_hash: eb1090e
+      schedule_change_warning: タイムスケジュールは変更される可能性があります。大きな変更があった場合、競技者にメールで通知されます。
     nav:
       menu:
         #original_hash: 612e12d
@@ -2705,35 +2646,35 @@ ja:
         #original_hash: aaefdb6
         by_person: 競技者ごと
         #original_hash: 4b631f6
-        info: 情報
+        info: 大会情報
         #original_hash: 5301648
         edit: 編集
         #original_hash: d8cdb57
         clone: コピーを作成
         #original_hash: 2b92094
-        orga_view: 主催者モード
+        orga_view: 基本情報設定
         #original_hash: c6171f8
-        event_view: 競技種目を編集
+        event_view: 競技種目設定
         #original_hash: 6235b27
-        schedule_view: タイムスケジュールを編集する。
+        schedule_view: タイムスケジュール設定
         #original_hash: 6f7aef9
         payment_view: 支払い設定
         #original_hash: 76bfdcf
-        admin_view: 管理者モード
+        admin_view: 管理者設定
         #original_hash: a857eb4
-        tabs: タブ管理
+        tabs: タブ設定
         #original_hash: f3d6278
         submit_results: 結果送信
         #original_hash: 4c9f914
         delegate_report: 代理人レポート
         #original_hash: b233e77
-        registration: 申し込み
+        registration: 申し込み状況
         #original_hash: 3f9176e
-        import_registrations: 参加申込データをインポートする
+        import_registrations: 参加申し込みデータをインポートする
         #original_hash: d672995
-        register: 申し込む
+        register: 参加申し込み
         #original_hash: 855bd26
-        competitors: 参加者一覧
+        competitors: 競技者一覧
         #original_hash: c4622c3
         scrambles: スクランブル
     results_table:
@@ -2757,17 +2698,22 @@ ja:
       group: グループ
       #original_hash: b7126cd
       scramble: スクランブル
+    competition_series_fields:
+      #original_hash: ed8ff7b
+      add_series: シリーズ大会に追加
+      #original_hash: be6edcd
+      remove_series: シリーズ大会から除外
   competition_tabs:
     headers:
       #original_hash: 2a4d562
       tabs: タブ
       #original_hash: 709a232
-      name: 名前
+      name: タブ名
     form_elements:
       #original_hash: 90f8dcb
       create_button: タブを作成
       #original_hash: 8d5b6f9
-      goto_button: '%{tab_name} タブへ移動'
+      goto_button: '%{tab_name} タブを表示'
       #original_hash: 6f23a36
       new_tab: 新規タブ
       #original_hash: 5301648
@@ -2779,7 +2725,7 @@ ja:
       #original_hash: 14e49c1
       confirm_delete: '%{tab_name} タブを削除してよろしいですか？'
       #original_hash: ce1bf0b
-      back_to_tabs: タブへ戻る
+      back_to_tabs: タブ設定画面へ戻る
     new:
       #original_hash: 73ed8c2
       new_tab_title: '%{comp_name} への新規タブ'
@@ -2867,8 +2813,6 @@ ja:
       name: 氏名
       #original_hash: 5faa59d
       result: 結果
-      #original_hash: e0f64f7
-      citizen_of: 国籍
       #original_hash: 1917f4f
       competition: 大会
       #original_hash: e7f6fc5
@@ -2899,22 +2843,17 @@ ja:
       name_or_wca_id: 名前または WCA ID
       #original_hash: 709a232
       name: 名前
-      #original_hash: d523ebb
-      country: 国籍
       #original_hash: 02ae2bd
       podiums: 入賞回数
       #original_hash: 56656a0
       no_persons_found: キーワードにマッチする検索結果はありません。
     show:
       #original_hash: 1e43436
-      previously: 旧姓
+      previously: 過去の情報
       #original_hash: 4bc65e0
       completed_solves: ソルブ数
       #original_hash: fc78642
       personal_records: 自己記録一覧
-      #original_hash: e631f13
-      odd_rank_reason: >-
-        ランキング未記載や国内ランキングが大陸ランキングより低い原因は国籍の変更によるものです。以前の地域における結果は現在のランキングの計算に使用されません。
       #original_hash: a91508f
       championship_podiums: 地域別大会入賞
       championship_podium_levels:
@@ -2962,28 +2901,6 @@ ja:
       #original_hash: 75d7ff7
       unstick_at_future: は現在より後でなければなりません
   contacts:
-    website:
-      #original_hash: 35c333c
-      faq_note_html: >-
-        問い合わせの前に、<a href="/faq">よくある質問</a>もご覧ください。特定の委員会やチームに連絡したい場合は、<a
-        href="/teams-committees">こちらのページ</a>より連絡先を確認してください。
-      #original_hash: 4ef2aad
-      title: WCA 問い合わせフォーム
-      inquiries:
-        #original_hash: 92ea7e8
-        competition: 特定の大会に関して (選択してください)
-        #original_hash: f0bffb7
-        competitions_in_general: 大会一般に関して (大会運営、大会ルールに関すること等)
-        #original_hash: f6ffa78
-        wca_id_or_profile: WCA ID や WCA プロフィール
-        #original_hash: 0c77aee
-        media: メディア
-        #original_hash: 9ad0522
-        software: ソフトウェア
-        #original_hash: 6e6a6f2
-        different: その他
-      #original_hash: c70a890
-      submit: 送信する
     dob:
       #original_hash: 907ac6c
       title: 生年月日変更申請フォーム
@@ -3021,7 +2938,7 @@ ja:
           #original_hash: b645fe1
           '1': >-
             WCA ID と WCA
-            プロフィールは、あなたが初めて参加した大会の結果公開時に自動的に作成されます。初参加の申込み時点ではこれらは必要ありません。
+            プロフィールは、あなたが初めて参加した大会の結果公開時に自動的に作成されます。初参加の参加申し込み時点ではこれらは必要ありません。
       '2':
         #original_hash: eb948e7
         title: 今後のWCA大会はどこで開催されますか？
@@ -3078,7 +2995,7 @@ ja:
           #original_hash: 57a3767
           '1': >-
             WCA IDと WCA
-            プロフィールは初めてのWCA大会参加後に発行されます。一方、WCAアカウントは大会参加経験にかかわらず誰でも作成でき、初参加の申込み時に必要です。
+            プロフィールは初めてのWCA大会参加後に発行されます。一方、WCAアカウントは大会参加経験にかかわらず誰でも作成でき、初参加の申し込み時に必要です。
           #original_hash: c5ad7a3
           '2': >-
             WCA IDは <strong>2007OMUR01</strong>のような文字列です。<p>WCAプロフィールは<a
@@ -3176,32 +3093,14 @@ ja:
     mission_footer: WCA のミッション
     #original_hash: cdab446
     who_we_are_title: WCA とは
-    #original_hash: 9248dc4
-    who_we_are_content_html: >-
-      <p>世界キューブ協会 (WCA) は、一部をひねることで操作するような機械的パズル (回転パズル)
-      の大会を統制しています。このようなパズルで最も有名なものは、ハンガリーのルービック教授によって発明されたルービックキューブです。このようなパズルのうちのいくつかが
-      WCA の公式競技種目として選ばれています。</p> <p>WCA
-      は10年以上にわたり発展を続け、現在までに10万人以上が我々の大会に参加しました。この成長の一方で、地域の代理人から理事に及ぶまで、我々は全面的にボランティアによって運営されています。我々は
-      WCA
-      が機能するために日々時間を割くすべての人々に感謝します。さらなる財政的支援により、我々がより多くの世界中でイベントを認定するなかで大会でより高度な専門性を発揮できることを望んでいます。</p>
     #original_hash: bccd8c5
     spirit: 我々の精神は、世界中の人々がともに友好的に楽しみ、互いに助け合い、またスポーツマンシップに則って振る舞うことです。
     #original_hash: 69131cc
     spirit_footer: WCAの精神
     #original_hash: c1781ee
     our_goals_title: 我々の目標
-    #original_hash: caf6bf2
-    our_goals_content_html: >-
-      <p>世界キューブ協会 (WCA)
-      は、我々の「回転パズル」の大会により参加しやすくすることで、世界中の若者にコミュニティでのメンバーシップおよびリーダーシップを発揮する機会を提供しようとしています。大会およびコミュニティでの経験は若者にとっての成長の機会を創出し、また新たな人々にパズルイベントをもたらすことは、我々のコミュニティ全体をより強固にすると信じています。WCAにおける理事のビジョンおよび戦略などの文書は<a
-      href="https://documents.worldcubeassociation.org/documents/WCA_Vision_and_Strategy.pdf">こちら</a>よりご覧いただけます。</p>
     #original_hash: f64ccc7
     whats_next_title: WCA の今後
-    #original_hash: a08c67f
-    whats_next_content_html: >-
-      <p>世界キューブ協会 (WCA) は 140 か国にわたる 10
-      万人以上の競技者を受け入れてきましたが、その手を緩めることはありません。キューブコミュニティは 2004 年の WCA
-      設立以来着実に成長を続け、また新たな領域でも大会のアクセスしやすさを向上することで、未来にわたってこれを継続していきます。将来的には、パズルに関心を持つ人々との連携をより強化することで我々のコミュニティを支えていくことを目指しています。</p>
     #original_hash: dc71704
     world_championship_title: 世界大会
     #original_hash: 57cf7f7
@@ -3222,141 +3121,23 @@ ja:
       <p>金銭的でない方法で世界キューブ協会をご支援いただけるのであれば、我々はたいへん嬉しく思います。ぜひ<a
       href="mailto:communication@worldcubeassociation.org">communication@worldcubeassociation.org</a>までご連絡ください。</p>
     donation_banner:
-      #original_hash: 6253f90
-      content: >-
-        世界キューブ協会は、アメリカ合衆国501(c)(3)免税非営利団体です。完全ボランティアの非営利団体として、世界中でより魅力的な大会を開催していくビジョンをさらに推し進めるための寄付をお待ちしております。
       #original_hash: 24c87db
       donate_credit: クレジットカードによる寄付
       #original_hash: 96d77f3
       donate_other: 他の方法による寄付
     structure:
-      #original_hash: 0d62207
-      teams_committees_councils: WCA チーム、委員会、評議会
       #original_hash: 9482c5d
       title: 組織
       board:
-        #original_hash: abd2828
-        name: WCA 理事会
         #original_hash: e0d37a2
         description: WCA 理事は包括的な組織の指揮をとります。WCA チーム、委員会、評議会では満たせないすべての役割がその所掌となります。
-      #original_hash: d54d953
-      committees: >-
-        WCA チームおよび委員会は、日々の業務を遂行して組織を機能させるために欠かせない存在です。これらは WCA のコミュニティメンバー (WCA
-        代理人と競技者を含む) により組織され、それぞれのリーダーの監督下で互いに統制のとれた活動をしています。<p>評議会はWCA
-        スタッフではなくコミュニティメンバーのみから構成される特殊な立場で、 WCA
-        理事会に対して助言を行います。</p><p>これらの委員会、チーム、評議会の新規メンバー募集要項は WCA トップページに掲載されます。</p>
-      #original_hash: c366473
-      senior_member: 上級メンバー
-      #original_hash: e26c936
-      leader: リーダー
-      officers:
-        #original_hash: d79bd00
-        name: WCA 役員
-        #original_hash: 312e799
-        description: >-
-          WCA 役員は WCA 理事により選出され、その非営利団体資格に係る業務を扱います。代表理事は WCA の CEO
-          を務め、議長は全ての理事会議を主宰し、秘書官は各種書類を管理し、経理は 会計を扱います。
-      chair:
-        #original_hash: de34439
-        name: WCA 議長
-      executive_director:
-        #original_hash: 7d405ff
-        name: WCA 代表理事
-      secretary:
-        #original_hash: 1dd4a07
-        name: WCA 秘書官
-      vice_chair:
-        #original_hash: 0388b19
-        name: WCA 副議長
-      treasurer:
-        #original_hash: 75e65d9
-        name: WCA 経理
       users:
         #original_hash: 57bbaad
         profile: '%{user_name}のプロフィール'
-      wdc:
-        #original_hash: c97077a
-        name: WCA 懲罰委員会
-        #original_hash: 286fdf8
-        description: WCA 大会規則への違反嫌疑などの特殊案件を WCA 理事に報告する他、WCA 大会における重要な個人的事案を受け付ける窓口でもあります。
-      wdpc:
-        #original_hash: 70539cd
-        name: WCA 情報保護委員会
-        #original_hash: 1f69829
-        description: 情報保護に関する事項を担当します。
-      wrc:
-        #original_hash: 3da1e85
-        name: WCA 規則委員会
-        #original_hash: 13ada5b
-        description: WCA 大会規則の管理を担当します。
-      wrt:
-        #original_hash: 67be768
-        name: WCA 競技結果チーム
-        #original_hash: 439ffae
-        description: すべての競技結果の管理を担当します。
-      wst:
-        #original_hash: a14bc62
-        name: WCA ソフトウェアチーム
-        #original_hash: ec961e4
-        description: WCA ソフトウェア (ウェブサイト、スクランブル生成、ワークブック、管理ツール) の管理を担当します。
-      wct:
-        #original_hash: 63a2388
-        name: WCA コミュニケーションチーム
-        #original_hash: 50fd091
-        description: >-
-          WCA とコミュニティ・世間一般とのコミュニケーションを監督しサポートする役割です。 ここでいうコミュニケーションとは、WCA
-          の活動目的、友好的な文化醸成、組織の透明性、インクルージョン、寛容の精神、社会的責任などを意味します。
-      wfc:
-        #original_hash: 9cb13de
-        name: WCA 財務委員会
-        #original_hash: b4ed44b
-        description: WCA の財務を担当します。
-      wec:
-        #original_hash: 83bd1d0
-        name: WCA 倫理委員会
-        #original_hash: c304d57
-        description: >-
-          WCA スタッフと外部スタッフによるすべての手続きが WCA
-          倫理規定を遵守しているかを確かめる役割を担います。時には独立した調査機関としてもはたらき、このとき調査の情報源は秘匿されます。<p>
-
-          さらに、関係者がWCA懲戒委員会の決定に同意しない場合の控訴機関としても機能します。</p>
-      weat:
-        #original_hash: d1dbb86
-        name: WCA 運営補佐チーム
-        #original_hash: 889dd90
-        description: WCA 理事会の事務作業を遂行します。
-      wqac:
-        #original_hash: 8f32116
-        name: WCA 品質保証委員会
-        #original_hash: 0171b3b
-        description: >-
-          WCA の継続的な品質の向上、およびプロセス・WCA
-          スタッフ・地域団体・大会運営者・大会スタッフを高い品質に保つための品質規格を世界中に適用することをサポートし促進する役割を担います。
-      wcat:
-        #original_hash: 2b81984
-        name: WCA 大会告知チーム
-        #original_hash: f511502
-        description: WCA 大会を承認・告知し、これらがWCA 品質水準を遵守していることを管理します。
-      wmt:
-        #original_hash: 2035811
-        name: WCA マーケティングチーム
-        #original_hash: f2a0140
-        description: WCA ブランドの発展および管理、スポンサーシップ、タイマーなど大会用具の配布サポート、WCA 関連商品のマーケティングを担当します。
-      wac:
-        #original_hash: 1ce7604
-        name: WCA 評議会
-        #original_hash: fb6cd86
-        description: WCA コミュニティと WCA スタッフの間の意見交換の場の設置・維持に対し責任を負います。
-      banned:
-        #original_hash: d30e2e5
-        name: 制裁対象の競技者
       #original_hash: f8c3f3c
       operations_html: '日々の運営は WCA の %{committees_and_teams} によって行われています。'
       #original_hash: 0e7a036
       teams_committees: チーム、委員会
-      probation:
-        #original_hash: 1dd6e3b
-        name: 管理下の代理人
       #original_hash: 7e849d2
       delegates_html: >-
         <p><strong>WCA 代理人</strong>は WCA 動議によって定義された職能です。代理人自身の担当する大会において WCA
@@ -3421,11 +3202,6 @@ ja:
     how_to:
       #original_hash: b243b1f
       title: WCA 認定地域団体となるには
-      #original_hash: f042a88
-      description: >-
-        WCA は世界中に様々な地域団体を認定しています。それぞれの地域団体は WCA のパートナーとして WCA 大会をはじめとする担当地域での
-        WCA 活動を推進します。<p>まだ地域団体が存在しない国と地域では、まず近隣の WCA 代理人と連携して WCA
-        活動実績を重ねた後、新たな団体を組織していくことになります。</p>
     requirements:
       #original_hash: 1e04fd7
       title: WCA 地域団体の要件
@@ -3464,110 +3240,9 @@ ja:
     create:
       #original_hash: 60cdccc
       create_success: 申請が送信されました。WCA 理事会によるレビューをお待ちください。
-  contact:
-    #original_hash: a34b69f
-    title: お問い合わせ
-    #original_hash: b5c2eaa
-    info_alert_html: '本ページ記載のお問い合わせ先に連絡する前に、%{link} をご覧ください。'
-    #original_hash: 2b023eb
-    questions_and_comments_html: >-
-      ウェブサイトへの質問、コメント、提案は、<a
-      href='/contact/website'>お問い合わせフォーム</a>からお問い合わせください。特定の地域や大会に関することは、お近くの
-      %{link} にお問い合わせください。
-    #original_hash: 4a30d30
-    committees_and_teams_html: <u>委員会・チーム</u>
-    #original_hash: 1cb449c
-    members: メンバー
-    board:
-      #original_hash: f3cbb35
-      info_html: 世界キューブ協会は WCA 理事により指揮され、問い合わせや WCA 組織について責任を負います。
-    wct:
-      #original_hash: 846684d
-      info_html: >-
-        WCT は WCA とコミュニティー・一般の人々とのコミュニケーションを監督しサポートする役割を担っています。WCA
-        に関する一般的なお問い合わせやソーシャルメディア上での WCA に関するお問い合わせがある場合は、こちらへお問い合わせください。
-    wdc:
-      #original_hash: 77f119f
-      info_html: >-
-        WDC は様々な事象を調査し解決方法を提案します (必要あらば罰則を与えます)。事象とは特に WCA
-        大会規則の違反やコミュニティの問題のことを指します。これらに関与する場合 WDC にお問い合わせください。
-    wdpc:
-      #original_hash: c21a96e
-      info_html: >-
-        WCA 情報保護方針・WCA
-        データを扱う外部機関との契約について調査・締結・改訂・管理・執行および、情報保護に関する管理業務に対し責任を負います。
-    wrc:
-      #original_hash: fcd3526
-      info_html: >-
-        WRC は WCA 大会規則のアプリケーション・改善・開発に関するすべての問題を担当します。WRC
-        は大会中に発生する大会規則で解決・カバーされないようなインシデントを対処する面で WCA 代理人をサポートします。WRC は WCA
-        内部的な報告書を定期的に発行し WCA 代理人が大会規則の理解を深めるためにサポートします。大会規則の改善や提言がある場合は WRC
-        へメールでお問い合わせいただくか、<a
-        href='https://github.com/thewca/wca-regulations'>GitHub</a>
-        上の議論にご参加ください。
-    wrt:
-      #original_hash: 45b0c09
-      info_html: >-
-        WRT は WCA データベース (競技結果や個人データ等) の管理を担当します。WCA 代理人が大会結果を送信した後、WRT が大会結果を
-        WCA ウェブサイトに掲載します。WRT は大会結果や WCA
-        プロフィールページの修正も担当します。例えば、生年月日等のユーザデータの修正やプロフィール画像の管理等です。
-    wst:
-      #original_hash: 7de6222
-      info_html: >-
-        WST は WCA のすべてのソフトウェアの維持と管理を担当します。WST
-        は必要に応じて新しいソフトウェアの開発も担当します。ウェブサイトの改善に関するアイデアや、ソフトウェアにエラーやバグを発見した場合は、WST
-        にお問い合わせください。WCA ウェブサイトはオープンソースで <a
-        href='https://github.com/thewca/worldcubeassociation.org'>GitHub</a>
-        で公開されています。WCA のソフトウェア開発に興味がある方はぜひご覧ください。
-    wfc:
-      #original_hash: 3ec8256
-      info_html: WFC は WCA の会計に関するすべてを担当します。WCA の会計を年次予算案にしたがって管理します。
-    wec:
-      #original_hash: ec2b9c3
-      info_html: この委員会は「WCA スタッフ」と「外部スタッフ」によるすべての手続きが倫理規定を遵守しているかを確かめる役割を担っています。
-    weat:
-      #original_hash: 889dd90
-      info_html: WCA 理事会の事務作業を遂行します。
-    wqac:
-      #original_hash: 0171b3b
-      info_html: >-
-        WCA の継続的な品質の向上、およびプロセス・WCA
-        スタッフ・地域団体・大会運営者・大会スタッフを高い品質に保つための品質規格を世界中に適用することをサポートし促進する役割を担います。
-    wcat:
-      #original_hash: 61a471f
-      info_html: この委員会は、WCA 代理人により申請された WCA 公式大会が WCA の品質基準を満たしていることを確認し、承認・告知を行います。
-    wmt:
-      #original_hash: f2a0140
-      info_html: WCA ブランドの発展および管理、スポンサーシップ、タイマーなど大会用具の配布サポート、WCA 関連商品のマーケティングを担当します。
-    #original_hash: f97a4f5
-    councils_html: 協議会
-    wac:
-      #original_hash: fb6cd86
-      info_html: WCA コミュニティと WCA スタッフの間の意見交換の場の設置・維持に対し責任を負います。
   logo:
     #original_hash: c72c969
     title: WCA ロゴ
-    paragraphs:
-      #original_hash: 44cfe8d
-      '1': >-
-        WCA ロゴは Justin Eastman さんが 2005 年 1 月のデザインコンテストで作成しました。<br
-        />デザイン、色、Rubik's Cube / 3x3x3 キューブだけを特定に表現していない点が採用した理由です。
-      #original_hash: 916e3fc
-      '2': >-
-        WCAロゴデータには4つのバージョンがあります。　<a href="/files/WCAlogo_XL.jpg">jpg画像</a> (46
-        KB, 1756 x 1068 ピクセル)　<a href="/files/WCAlogo.svg">svgベクター画像</a>　<a
-        href="/files/WCAlogo_notext.svg">svgベクター画像 (テキストなし)</a>　<a
-        href="/files/WCAlogo_monochrome.svg">svgベクター画像（白黒）</a>
-      #original_hash: dcb1ad6
-      '3': >-
-        3D バージョンのロゴです。ベトナムの Vu Minh Tan さんがデザインしました: <a
-        href="/files/WCALogo3D.png">PNG 形式</a> (2.1 MB)、<a
-        href="/files/WCALogo3Dsmall.png">PNG 形式 (小さいサイズ)</a> (0.25 MB)。
-      #original_hash: e5df1bf
-      '4': >-
-        WCA 公式大会の主催者は WCA ロゴを WCA 公式大会に限り、ウェブサイト、衣類、ギフト、装飾に使用することができます。<br
-        />その他の方やその他の目的で WCA ロゴを使用する場合は、<a
-        href="mailto:board@worldcubeassociation.org">WCA 理事</a>の承認が必要です。
   search_results:
     index:
       #original_hash: db98a68
@@ -3682,22 +3357,12 @@ ja:
     paragraph3:
       #original_hash: 00d3bf8
       title: 大会アナウンスの期限
-      #original_hash: 3613823
-      content_html: >-
-        大会は少なくとも開始日の28日前には告知されなければなりません (<a
-        href='https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>大会要件</a>参照)。
     paragraph4:
       #original_hash: b6dca56
       title: 開催地の方針
-      #original_hash: 79ed06e
-      content1: >-
-        WCA 公式大会は、他の大会と 100km または 19 日以上離れていなければなりません。WCAT
-        は審査を行うため、これらの条件を満たしていない場合は代理人に説明する責任があります。これらを認める事由は以下のような場合があります :
       olist1:
         #original_hash: de00462
         '1': 共通の競技種目が開催されない。
-        #original_hash: f7bacc5
-        '2': 異なる国で開催される。
       #original_hash: 5c5cf04
       content2: 「3x3x3 最少手数同時開催大会」とは、競技種目が 3x3x3 最少手数のみで複数の場所で同時に開催される WCA の大会のことを指します。
       olist2:
@@ -3708,8 +3373,6 @@ ja:
             #original_hash: 75aa0c7
             1a: これらの大会は同時に開催できません。
         '2':
-          #original_hash: 8d9c548
-          content1: FMC 同時開催大会の開催地が別の大会の開催地から 100 km 未満の距離である場合、
           alist1:
             #original_hash: 8f532bb
             2a: それらの大会の間は 5 日以上空いていることが望ましい、または
@@ -3723,31 +3386,26 @@ ja:
     paragraph5:
       #original_hash: 17d01de
       title: 競技者の人数制限
-      #original_hash: bd8e6ee
-      content_html: >-
-        競技者数は種目ごとまたは大会全体で制限することができます (<a
-        href='https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>大会要件</a>参照)。大会代理人は、競技者数制限についてWCATの認可を受けなければなりません。競技者数制限は、合理的に設定され、想定される競技者の需要に対応したものでなければなりません。制限は、些細な理由で低く設定されるべきではありません。想定する競技者数制限は、会場の選定の際にも考慮に入れることが望まれます。競技者数制限は、WCA
-        ウェブサイト上の大会ページで明確に記載されていなければなりません。
     paragraph6:
       #original_hash: ce4c3d0
-      title: 申込について
+      title: 参加申し込みについて
       #original_hash: bd669a1
       content: >-
         大会参加受付は先着順で受理されなければなりません。参加費の事前支払いが必要な場合は、参加費の支払いが完了した段階で参加受付が完了したものとします。これは大会ウェブサイトの支払い要領に明記されます。
     paragraph7:
       #original_hash: e4f1c62
-      title: 承認待ちリストの管理
+      title: キャンセル待ちの管理
       #original_hash: 81ca3f3
       content1: >-
-        競技者の人数制限に達したら、承認待ちリストを用意することが望ましいです。申込済み競技者が申込をキャンセルした場合、承認待ちリストで次に控えている競技者を承認することができます。
+        競技者の人数制限に達したら、キャンセル待ちリストに競技者を追加することが望ましいです。承認済み競技者が申し込みをキャンセルした場合、キャンセル待ちリストで次に控えている競技者を承認することができます。
       #original_hash: 802b34f
       content2: >-
         参加費の事前支払い制を採用する場合、キャンセル待ちを繰り上げる際にはキャンセル待ち最上位に支払期限 (例 : 48 時間)
         を設けることが推奨されます。期限以内に支払われないか辞退した場合その権利は次に移行させ、空き枠が埋まるまでこれを繰り返します。
       #original_hash: 37bcbd6
       content3: >-
-        競技者が正常の申込手続きせずに競技した場合、その競技者の結果は過去にさかのぼって抹消されます
-        (競技者の人数制限が設定されていて到達していなくても適用されます)。
+        競技者が正常の参加申し込み手続きせずに競技した場合、その競技者の結果は過去にさかのぼって抹消されます
+        (競技者定員に反していなくても適用されます)。
     paragraph8:
       #original_hash: c8ad8e6
       title: 大会前にやること

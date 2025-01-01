@@ -101,10 +101,19 @@ variable "shared" {
     pma_production: object({
       arn: string
     })
+    api_gateway: object({
+      id: string,
+      root_resource_id: string
+    })
     account_id: string
     # These are booth arrays
     private_subnets: any
     rails-production: any
   })
   description = "The shared resources between Environments"
+}
+
+variable "WRC_WEBHOOK_URL" {
+  description = "The URL to send delegate report webhook notifications for WRC to"
+  type = string
 }

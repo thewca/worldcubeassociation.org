@@ -13,6 +13,10 @@ Bundler.require(*Rails.groups)
 require_relative '../env_config'
 require_relative '../app_secrets'
 
+# Production default for configuring Rails cryptographic base key,
+# which is necessary because `config.secret_key_base=` only works in local environments.
+ENV["SECRET_KEY_BASE"] ||= AppSecrets.SECRET_KEY_BASE
+
 module WcaOnRails
   BOOTED_AT = Time.now
 
@@ -29,7 +33,12 @@ module WcaOnRails
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
 
-    config.load_defaults 7.1
+    # secret_key_base is an important cryptographic key that lots of other Rails procedures (cookies, signatures, etc.)
+    # are based on. Rails desperately wants you to set it through `credentials.yml.enc` but GB desperately doesn't want
+    # to check in credentials to git (no matter whether their encryption is strong or not)
+    config.secret_key_base = AppSecrets.SECRET_KEY_BASE
+
+    config.load_defaults 7.2
 
     # Force belongs_to validations even on empty/unset keys.
     #   This is potentially a Rails bug (?!?) and has been reported at https://github.com/rails/rails/issues/52614
@@ -55,7 +64,11 @@ module WcaOnRails
     end
 
     config.default_from_address = "notifications@worldcubeassociation.org"
-    config.site_name = "World Cube Association"
+    config.site_name = if EnvConfig.API_ONLY?
+                         "World Cube Association API"
+                       else
+                         "World Cube Association"
+                       end
 
     config.middleware.insert_before 0, Rack::Cors, debug: false, logger: (-> { Rails.logger }) do
       allow do

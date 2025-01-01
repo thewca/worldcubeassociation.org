@@ -51,6 +51,8 @@ class DelegateReportsController < ApplicationController
         if @competition.end_date >= DelegateReport::REPORTS_ENABLED_DATE
           CompetitionsMailer.notify_of_delegate_report_submission(@competition).deliver_later
           CompetitionsMailer.wrc_delegate_report_followup(@competition).deliver_later
+          SendWrcReportNotification.perform_later(@competition)
+
           flash[:info] = "Your report has been posted and emailed!"
         else
           flash[:info] = "Your report has been posted but not emailed because it is for a pre June 2016 competition."
@@ -68,16 +70,13 @@ class DelegateReportsController < ApplicationController
     params.require(:delegate_report).permit(
       :discussion_url,
       :schedule_url,
-      :equipment,
-      :venue,
-      :organization,
-      :incidents,
       :remarks,
       :posted,
       :wrc_feedback_requested,
       :wrc_incidents,
       :wic_feedback_requested,
       :wic_incidents,
+      *DelegateReport::AVAILABLE_SECTIONS,
     )
   end
 

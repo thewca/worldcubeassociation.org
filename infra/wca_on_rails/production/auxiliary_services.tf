@@ -13,15 +13,16 @@ resource "aws_ecs_task_definition" "auxiliary" {
   execution_role_arn = aws_iam_role.task_execution_role.arn
   task_role_arn      = aws_iam_role.task_role.arn
 
-  cpu = "2048"
-  memory = "7861"
+  cpu = "1536"
+  memory = "3910"
 
   container_definitions = jsonencode([
+
     {
       name              = "sidekiq-main"
       image             = "${var.shared.ecr_repository.repository_url}:sidekiq-production"
       cpu    = 1024
-      memory = 6837
+      memory = 3398
       portMappings = []
       logConfiguration = {
         logDriver = "awslogs"

@@ -29,34 +29,22 @@ class UserGroup < ApplicationRecord
   has_many :direct_child_users, through: :direct_child_roles, source: :user
   has_many :active_direct_child_users, through: :active_direct_child_roles, source: :user
 
-  belongs_to :metadata, polymorphic: true, optional: true
+  # The `touch` is important because we generally access "semantic" UserGroups
+  #   (ie T/Cs, DelegateRegions, Translators, etc.) through their metadata.
+  #   This metadata however is cached, because we don't want to fire a SELECT call every time the code wants to know
+  #   whether some random user is a WST or WCAT member.
+  # So if the server after booting loads all T/Cs once, then during server runtime somebody adds a new member
+  #   to one particular team, the cached instance from boot time would still hold the old `user_group`
+  #   and thus the old memberships.
+  # The `touch` makes it so that a small change to the metadata is written, which triggers an `after_commit` hook
+  #   in our custom caching mechanism (see also concerns/cachable.rb)
+  belongs_to :metadata, polymorphic: true, optional: true, touch: true
   belongs_to :parent_group, class_name: "UserGroup", optional: true
 
   scope :root_groups, -> { where(parent_group: nil) }
   scope :active_groups, -> { where(is_active: true) }
 
   validates :active_roles, absence: true, unless: :is_active?
-
-  # This is important because we generally access "semantic" UserGroups
-  # (ie T/Cs, DelegateRegions, Translators) etc. by metadata. This metadata usually has an `user_group`
-  # association defined, and Rails uses caching on that. So if the server after booting loads all T/Cs once,
-  # then during server runtime somebody adds a new member to one particular team, the cached instance from boot time
-  # still holds the old `user_group` and thus the old memberships.
-  #
-  # This commit hook makes it so that whenever a change happens, we reset the metadata
-  # so that it finds the newest changes even in cache mode (reset_* methods are provided by Rails magically.)
-  after_commit :reset_metadata, on: [:update, :destroy]
-
-  private def reset_metadata
-    return unless self.metadata.present?
-
-    metadata_cachable = self.metadata.class < Cachable
-    metadata_has_assoc = self.metadata.class.reflect_on_association(:user_group).present?
-
-    if metadata_cachable && metadata_has_assoc
-      self.metadata.as_cached.reset_user_group
-    end
-  end
 
   def all_child_groups
     [direct_child_groups, direct_child_groups.map(&:all_child_groups)].flatten

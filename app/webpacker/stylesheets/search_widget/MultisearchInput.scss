@@ -4,8 +4,9 @@
   }
   .selected-item {
     display: inline-flex;
-    img {
-      height: 2.1em;
+    .avatar-image {
+      max-height: 2.1em;
+      max-width: 2.1em;
       margin-right: 5px;
     }
   }

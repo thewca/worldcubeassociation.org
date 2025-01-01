@@ -2,6 +2,24 @@
 
 module CheckRegionalRecords
   REGION_WORLD = '__World'
+  LOOKUP_TABLE_NAME = 'regional_records_lookup'
+
+  def self.add_to_lookup_table(competition_id = nil, table_name: LOOKUP_TABLE_NAME)
+    ActiveRecord::Base.connection.execute <<-SQL
+      INSERT INTO #{table_name}
+      (resultId, countryId, eventId, competitionEndDate, best, average)
+      SELECT Results.id, Results.countryId, Results.eventId, Competitions.end_date, Results.best, Results.average
+      FROM Results
+      INNER JOIN Competitions ON Results.competitionId = Competitions.id
+      #{competition_id.present? ? "WHERE Results.competitionId = '#{competition_id}'" : ''}
+      ON DUPLICATE KEY UPDATE
+        countryId = Results.countryId,
+        eventId = Results.eventId,
+        competitionEndDate = Competitions.end_date,
+        best = Results.best,
+        average = Results.average
+    SQL
+  end
 
   def self.compute_record_marker(regional_records, result, wca_value)
     computed_marker = nil
@@ -120,28 +138,14 @@ module CheckRegionalRecords
 
       if competition_id.present?
         model_comp = Competition.find(competition_id)
+        event_filter = event_id || model_comp.event_ids
 
-        non_zero_results = Result.select(:eventId, :competitionId, :countryId, value_column.to_sym)
-                                 .where.not(value_column => ..0)
-
-        if event_id.present?
-          non_zero_results = non_zero_results.where(eventId: event_id)
-        end
-
-        earlier_competitions = Competition.select(:id)
-                                          .where(end_date: ...model_comp.start_date)
-
-        previous_min_results = Result.select("r.eventId, r.countryId, MIN(r.#{value_column}) AS `value`")
-                                     .from("(#{non_zero_results.to_sql}) AS r")
-                                     .joins("INNER JOIN (#{earlier_competitions.to_sql}) c ON c.id = r.competitionId")
-                                     .group("r.eventId, r.countryId")
-
-        unless event_id.present?
-          competition_events = CompetitionEvent.select(:event_id)
-                                               .where(competition_id: model_comp.id)
-
-          previous_min_results = previous_min_results.joins("INNER JOIN (#{competition_events.to_sql}) ce ON ce.event_id = r.eventId")
-        end
+        previous_min_results = Result.select("eventId, countryId, MIN(#{value_column}) AS `value`")
+                                     .from("#{LOOKUP_TABLE_NAME} AS Results")
+                                     .where.not(value_column => ..0)
+                                     .where(competitionEndDate: ...model_comp.start_date)
+                                     .where(eventId: event_filter)
+                                     .group(:eventId, :countryId)
 
         previous_min_results.each do |r|
           event_records = base_records[r.event_id] || {}

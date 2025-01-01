@@ -3655,10 +3655,6 @@ pt-BR:
         '-2003': Você não tem permissão para realizar esta ação
         #original_hash: cb4093a
         '-3000': Inscrição não existe
-        #original_hash: 0df821f
-        '-3001': Pagamento da WCA não está habilitado para esta competição
-        #original_hash: 092da51
-        '-3002': Você precisar concluir sua inscrição antes de pagar
         #original_hash: bc53fb6
         '-4000': O pedido contém informações inválidas
         #original_hash: 35fddf4
@@ -3677,6 +3673,10 @@ pt-BR:
         '-4007': Situação de inscrição inválida
         #original_hash: 020234c
         '-4008': As inscrições estão encerradas
+        #original_hash: 0df821f
+        '-6001': Pagamento da WCA não está habilitado para esta competição
+        #original_hash: 092da51
+        '-6002': Você precisar concluir sua inscrição antes de pagar
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-

@@ -25,6 +25,7 @@ import EditActivities from './EditActivities';
 function EditSchedule({
   wcifEvents,
   countryZones,
+  referenceTime,
   calendarLocale,
 }) {
   const {
@@ -131,6 +132,7 @@ function EditSchedule({
           >
             <EditVenues
               countryZones={countryZones}
+              referenceTime={referenceTime}
             />
           </Accordion.Content>
           <Accordion.Title
@@ -145,6 +147,7 @@ function EditSchedule({
           >
             <EditActivities
               wcifEvents={wcifEvents}
+              referenceTime={referenceTime}
               calendarLocale={calendarLocale}
             />
           </Accordion.Content>
@@ -160,6 +163,7 @@ export default function Wrapper({
   wcifEvents,
   wcifSchedule,
   countryZones,
+  referenceTime,
   calendarLocale,
 }) {
   return (
@@ -173,8 +177,9 @@ export default function Wrapper({
     >
       <ConfirmProvider>
         <EditSchedule
-          countryZones={countryZones}
           wcifEvents={wcifEvents}
+          countryZones={countryZones}
+          referenceTime={referenceTime}
           calendarLocale={calendarLocale}
         />
       </ConfirmProvider>

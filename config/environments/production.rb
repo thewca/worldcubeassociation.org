@@ -138,8 +138,13 @@ Rails.application.configure do
 
   # Error pages for production
   config.exceptions_app = ->(env) {
-    ErrorsController.action(:show).call(env)
+    if EnvConfig.API_ONLY?
+      ApiErrorsController.action(:show).call(env)
+    else
+      ErrorsController.action(:show).call(env)
+    end
   }
+
   # Inserts middleware to perform automatic connection switching.
   # The `database_selector` hash is used to pass options to the DatabaseSelector
   # middleware. The `delay` is used to determine how long to wait after a write

@@ -3,8 +3,7 @@ import {
 } from 'semantic-ui-react';
 import React from 'react';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
-import _ from 'lodash';
-import i18n from '../../../lib/i18n';
+import I18n from '../../../lib/i18n';
 import TableHeader from './AdministrationTableHeader';
 import TableRow from './AdministrationTableRow';
 import RegistrationAdministrationTableFooter from './RegistrationAdministrationTableFooter';
@@ -34,7 +33,7 @@ export default function RegistrationAdministrationTable({
   if (registrations.length === 0) {
     return (
       <Segment>
-        {i18n.t('competitions.registration_v2.list.empty')}
+        {I18n.t('competitions.registration_v2.list.empty')}
       </Segment>
     );
   }

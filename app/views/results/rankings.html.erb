@@ -1,7 +1,7 @@
 <% provide(:title, t(".title")) %>
 
-<% ranking_timestamp = ComputeAuxiliaryData.end_date || Date.current %>
-<% @rows = execute_cached_query([*@cache_params, ranking_timestamp], @query) %>
+<% ranking_timestamp = ComputeAuxiliaryData.successful_start_date || Date.current %>
+<% @rows = DbHelper.execute_cached_query(@cache_params, ranking_timestamp, @query) %>
 
 <div class="container">
   <h1><%= yield(:title) %></h1>
