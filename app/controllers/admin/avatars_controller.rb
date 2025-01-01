@@ -9,41 +9,6 @@ module Admin
       render json: User.where.not(pending_avatar: nil).as_json({ methods: %w[staff_or_any_delegate? avatar_history current_avatar_id pending_avatar] })
     end
 
-    def update_all
-      avatars = params.require(:avatars)
-
-      ActiveRecord::Base.transaction do
-        avatars.each do |avatar_id, args|
-          avatar = UserAvatar.pending.find(avatar_id)
-
-          case args[:action]
-          when "approve"
-            avatar.status = UserAvatar.statuses[:approved]
-            avatar.approved_by_user = current_user
-          when "reject"
-            avatar.status = UserAvatar.statuses[:rejected]
-
-            rejection_guidelines = args[:rejection_guidelines] || []
-            additional_reason = args[:rejection_reason].presence
-            combined_reasons = (rejection_guidelines + [additional_reason]).compact.join(" ")
-
-            avatar.revoked_by_user = current_user
-            avatar.revocation_reason = combined_reasons
-
-            user = avatar.pending_user
-            AvatarsMailer.notify_user_of_avatar_rejection(user, combined_reasons).deliver_later
-          when "defer"
-            # do nothing!
-          else
-            raise "Unrecognized avatar action '#{args[:action]}'"
-          end
-
-          avatar.save!
-        end
-      end
-      render json: { status: :ok }
-    end
-
     def update_avatar
       avatar_id = params.require(:avatar_id)
       avatar_action = params.require(:avatar_action)
