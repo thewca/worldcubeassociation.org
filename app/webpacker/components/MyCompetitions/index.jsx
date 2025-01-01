@@ -9,6 +9,7 @@ import {
 import I18n from '../../lib/i18n';
 import {
   personUrl,
+  competitionsUrl,
 } from '../../lib/requests/routes.js.erb';
 import UpcomingCompetitionTable from './UpcomingCompetitionTable';
 import PastCompetitionsTable from './PastCompetitionTable';
@@ -28,6 +29,10 @@ export default function MyCompetitions({ permissions, competitions, wcaId }) {
         competitions={competitions.futureCompetitions}
         permissions={permissions}
         registrationStatuses={competitions.competingStatuses}
+        fallbackMessage={{
+          key: 'competitions.my_competitions_table.no_upcoming_competitions_html',
+          options: { link: `<a href="${competitionsUrl({})}">${I18n.t('competitions.my_competitions_table.competitions_list')}</a>` },
+        }}
       />
       <Accordion fluid styled>
         <Accordion.Title
@@ -40,6 +45,7 @@ export default function MyCompetitions({ permissions, competitions, wcaId }) {
           <PastCompetitionsTable
             permissions={permissions}
             competitions={competitions.pastCompetitions}
+            fallbackMessage={{ key: 'competitions.my_competitions_table.no_past_competitions' }}
           />
         </Accordion.Content>
       </Accordion>
@@ -54,6 +60,7 @@ export default function MyCompetitions({ permissions, competitions, wcaId }) {
         competitions={competitions.bookmarkedCompetitions}
         registrationStatuses={competitions.competingStatuses}
         permissions={permissions}
+        fallbackMessage={{ key: 'competitions.my_competitions_table.no_bookmarked_competitions' }}
       />
     </>
   );

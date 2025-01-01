@@ -1,5 +1,5 @@
 import {
-  Icon,
+  Icon, Message,
   Popup, Table, TableBody, TableHeader,
 } from 'semantic-ui-react';
 import React from 'react';
@@ -10,6 +10,7 @@ import { competitionRegistrationsUrl, editCompetitionsUrl } from '../../lib/requ
 import {
   DateTableCell, LocationTableCell, NameTableCell, ReportTableCell,
 } from './TableCells';
+import I18nHTMLTranslate from '../I18nHTMLTranslate';
 
 const competingStatusIcon = (competingStatus) => {
   switch (competingStatus) {
@@ -49,12 +50,24 @@ const registrationStatusIcon = (competition) => {
 };
 
 export default function UpcomingCompetitionTable({
-  competitions, permissions, registrationStatuses, shouldShowRegistrationStatus = true,
+  competitions,
+  permissions,
+  registrationStatuses,
+  shouldShowRegistrationStatus = true,
+  fallbackMessage = null,
 }) {
   const canAdminCompetitions = permissions.can_administer_competitions.scope === '*' || competitions.some((c) => permissions.can_administer_competitions.scope.includes(c.id));
 
+  if (competitions.length === 0 && fallbackMessage) {
+    return (
+      <Message info>
+        <I18nHTMLTranslate i18nKey={fallbackMessage.key} options={fallbackMessage.options} />
+      </Message>
+    );
+  }
+
   return (
-    <Table>
+    <Table basic>
       <TableHeader>
         <Table.Row>
           { shouldShowRegistrationStatus && <Table.HeaderCell collapsing /> }

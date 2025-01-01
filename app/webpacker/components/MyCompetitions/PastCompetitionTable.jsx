@@ -1,13 +1,26 @@
 import {
-  Icon, Popup, Table, TableBody, TableHeader,
+  Icon, Message, Popup, Table, TableBody, TableHeader,
 } from 'semantic-ui-react';
 import React from 'react';
 import I18n from '../../lib/i18n';
 import {
   DateTableCell, LocationTableCell, NameTableCell, ReportTableCell,
 } from './TableCells';
+import I18nHTMLTranslate from '../I18nHTMLTranslate';
 
-export default function PastCompetitionsTable({ competitions, permissions }) {
+export default function PastCompetitionsTable({
+  competitions,
+  permissions,
+  fallbackMessage = null,
+}) {
+  if (competitions.length === 0 && fallbackMessage) {
+    return (
+      <Message info>
+        <I18nHTMLTranslate i18nKey={fallbackMessage.key} options={fallbackMessage.options} />
+      </Message>
+    );
+  }
+
   return (
     <Table striped basic="very">
       <TableHeader>
