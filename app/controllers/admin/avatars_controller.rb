@@ -2,9 +2,6 @@
 
 module Admin
   class AvatarsController < AdminController
-    def index
-    end
-
     def pending_avatar_users
       render json: User.where.not(pending_avatar: nil).as_json({ methods: %w[staff_or_any_delegate? avatar_history current_avatar_id pending_avatar] })
     end
