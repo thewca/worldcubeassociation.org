@@ -18,15 +18,12 @@ function Avatar({
   title, actions, imageUrl,
 }) {
   return (
-    <Segment textAlign="center" padded>
+    <Segment textAlign="center" basic>
       <Header as="h3" content={title} />
       <Image
         src={imageUrl}
         size="medium"
         centered
-        style={{
-          objectFit: 'contain',
-        }}
       />
       <Divider horizontal />
       <Button.Group toggle>
@@ -135,8 +132,8 @@ export default function AvatarCard({
           </Card.Meta>
         )}
         <Card.Description>
-          <Grid columns={2} stackable padded>
-            <Grid.Row>
+          <Grid columns={2} stackable padded centered celled="internally">
+            <Grid.Row stretched>
               <Grid.Column>
                 <Avatar
                   title="Pending Avatar"
