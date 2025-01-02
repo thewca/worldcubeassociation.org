@@ -184,7 +184,8 @@ export const officersAndBoardPageUrl = `<%= CGI.unescape(Rails.application.route
 export const translatorsPageUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.translators_path)%>`;
 
 export const editUserAvatarUrl = (userId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.edit_user_path("${userId}", section: "avatar"))%>`;
-export const adminAvatarsUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.admin_avatars_path)%>`;
+export const updateAvatarUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.admin_update_avatar_path)%>`;
+export const getPendingAvatarUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.pending_avatars_path)%>`;
 
 export const contactUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.contact_path) %>`
 
@@ -244,6 +245,9 @@ export const panelUrls = {
   },
   leader: {
     groupsManager: `<%= CGI.unescape(Rails.application.routes.url_helpers.panel_index_path(panel_id: :leader, anchor: User.panel_pages[:groupsManager])) %>`,
+  },
+  wrt: {
+    approveAvatars: `<%= CGI.unescape(Rails.application.routes.url_helpers.panel_index_path(panel_id: :leader, anchor: User.panel_pages[:approveAvatars])) %>`
   },
 }
 
