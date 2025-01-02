@@ -23,10 +23,10 @@ export default function GeneralInfoTab({
   const [showHighlights, setShowHighlights] = useState(true);
 
   return (
-    <Grid padded>
-      <GridRow>
+    <Grid padded stackable>
+      <Grid.Row>
         <InformationGrid competition={competition} media={media} />
-      </GridRow>
+      </Grid.Row>
       <GridRow>
         <GridColumn width={16}>
           <Grid padded>

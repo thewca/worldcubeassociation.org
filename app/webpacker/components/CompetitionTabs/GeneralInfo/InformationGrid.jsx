@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {
-  Accordion, Grid, GridColumn, Icon, List, Popup,
+  Accordion, Grid, Icon, List, Popup,
 } from 'semantic-ui-react';
 import _ from 'lodash';
 import TwoColumnGridEntry from './TwoColumnGridEntry';
@@ -247,18 +247,12 @@ function RightColumn({ competition, media }) {
 export default function InformationGrid({ competition, media }) {
   return (
     <>
-      <GridColumn width={8} only="computer">
+      <Grid.Column width={8}>
         <LeftColumn competition={competition} />
-      </GridColumn>
-      <GridColumn width={16} only="tablet mobile">
-        <LeftColumn competition={competition} />
-      </GridColumn>
-      <GridColumn width={8} only="computer">
+      </Grid.Column>
+      <Grid.Column width={8}>
         <RightColumn media={media} competition={competition} />
-      </GridColumn>
-      <GridColumn width={16} only="tablet mobile">
-        <RightColumn media={media} competition={competition} />
-      </GridColumn>
+      </Grid.Column>
     </>
   );
 }
