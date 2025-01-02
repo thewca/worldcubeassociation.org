@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { Tab, TabPane } from 'semantic-ui-react';
+import { Divider, Tab } from 'semantic-ui-react';
 import GeneralInfoTab from './GeneralInfo/GeneralInfoTab';
 import CompetitionTab from './CompetitionTab';
 import EventsTable from './EventsTable';
@@ -50,11 +50,11 @@ export default function Wrapper({
         slug: 'competition-events',
         menuItem: I18n.t('competitions.show.events'),
         render: () => (
-          <TabPane>
+          <>
             <EventsTable competitionInfo={competition} wcifEvents={wcifEvents} />
-            <br />
+            <Divider />
             <TimeLimitCutoffInfo competition={competition} />
-          </TabPane>
+          </>
         ),
       });
     }
@@ -63,16 +63,16 @@ export default function Wrapper({
         slug: 'competition-schedule',
         menuItem: I18n.t('competitions.show.schedule'),
         render: () => (
-          <TabPane>
+          <>
             <Schedule
               wcifEvents={wcifEvents}
               wcifSchedule={wcifSchedule}
               calendarLocale={locale}
               competitionName={competition.name}
             />
-            <br />
+            <Divider />
             <TimeLimitCutoffInfo competition={competition} />
-          </TabPane>
+          </>
         ),
       });
     }
