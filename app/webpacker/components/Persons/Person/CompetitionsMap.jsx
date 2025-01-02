@@ -4,6 +4,7 @@ import {
 } from 'react-leaflet';
 import { userTileProvider } from '../../../lib/leaflet-wca/providers';
 import { blueMarker, redMarker } from '../../../lib/leaflet-wca/markers';
+import 'leaflet/dist/leaflet.css';
 
 function MarkerForCompetition({ competition }) {
   const markerImage = competition.probablyOver ? blueMarker : redMarker;
