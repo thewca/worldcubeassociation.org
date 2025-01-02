@@ -21,6 +21,9 @@
         If the source of the error has been fixed, you can <%= link_to "reset", reset_link %> the status for this cronjob.
         <em>Use at your own risk! If you push this button without consulting WST, you risk incurring their wrath!</em>
       </div>
+
+      <%# Debug information for WST %>
+      <%= tag.pre(JSON.pretty_generate cronjob.cronjob_statistics.attributes) %>
     <% else %>
       <%= alert :info, "The job is running. Thanks for checking =)" %>
     <% end %>
