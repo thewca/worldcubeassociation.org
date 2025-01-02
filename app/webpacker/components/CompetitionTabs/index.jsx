@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
 import { Divider, Tab } from 'semantic-ui-react';
+import _ from 'lodash';
 import GeneralInfoTab from './GeneralInfo/GeneralInfoTab';
 import CompetitionTab from './CompetitionTab';
 import EventsTable from './EventsTable';
@@ -86,7 +87,7 @@ export default function Wrapper({
         defaultActiveIndex={tabIndexFromSlug(panes)}
         panes={panes}
         menu={{ pointing: true, className: 'tab-wrapped' }}
-        onTabChange={(_, { activeIndex }) => {
+        onTabChange={(e, { activeIndex }) => {
           const tab = panes[activeIndex];
           updatePath(tab.slug);
         }}
