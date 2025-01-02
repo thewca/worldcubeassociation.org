@@ -12,14 +12,6 @@ GIT
     selectize-rails (0.12.1)
 
 GIT
-  remote: https://github.com/thewca/i18n-country-translations.git
-  revision: e6706abe0eaa65729c1acb698be08b91dd2b6fde
-  specs:
-    i18n-country-translations (1.4.1)
-      i18n (>= 0.9.3, < 2)
-      railties (>= 5.0)
-
-GIT
   remote: https://github.com/thewca/ruby-iso.git
   revision: 3782e23f5c913434e71120cfc358d5539a70265e
   specs:
@@ -867,7 +859,6 @@ DEPENDENCIES
   guard-rspec
   hiredis
   http_accept_language
-  i18n-country-translations!
   i18n-js
   i18n-spec
   i18n-tasks
