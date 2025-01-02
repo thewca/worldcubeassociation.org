@@ -90,7 +90,7 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
   def list
     competition_id = list_params
     competition = Competition.find(competition_id)
-    registrations = competition.registrations.accepted
+    registrations = competition.registrations.accepted.competing
     payload = Rails.cache.fetch([
                                   "registrations_v2_list",
                                   competition.id,
