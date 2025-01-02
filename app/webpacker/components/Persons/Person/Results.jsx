@@ -6,6 +6,30 @@ import _ from 'lodash';
 import { events, roundTypes } from '../../../lib/wca-data.js.erb';
 import { EventSelector } from '../../CompetitionsOverview/CompetitionsFilters';
 import { competitionUrl } from '../../../lib/requests/routes.js.erb';
+import I18n from '../../../lib/i18n';
+
+const colorForResult = (regionalRecord, pbMarker) => {
+  let recordColor = { };
+  if (pbMarker) {
+    recordColor = { color: '#fc4a0a' };
+  }
+  if (regionalRecord) {
+    switch (regionalRecord) {
+      case 'WR': {
+        recordColor = { color: '#0366d6' };
+        break;
+      }
+      case 'NR': {
+        recordColor = { color: '#28a745' };
+        break;
+      }
+      default: {
+        recordColor = { color: '#d00404' };
+      }
+    }
+  }
+  return recordColor;
+};
 
 export default function Results({
   person,
@@ -17,7 +41,8 @@ export default function Results({
     () => person.results.filter((r) => r.eventId === currentEvent),
     [currentEvent, person.results],
   );
-
+  const currentResultsPbs = useMemo(() => person.pbMarkers[currentEvent], [person.pbMarkers, currentEvent]);
+  console.log(person.pbMarkers);
   return (
     <>
       <EventSelector
@@ -39,11 +64,13 @@ export default function Results({
               Place
             </Table.HeaderCell>
             <Table.HeaderCell>
-              Single
+              {I18n.t('common.best')}
             </Table.HeaderCell>
+            <Table.HeaderCell />
             <Table.HeaderCell>
-              Average
+              {I18n.t('common.average')}
             </Table.HeaderCell>
+            <Table.HeaderCell />
             <Table.HeaderCell />
             <Table.HeaderCell />
             <Table.HeaderCell>
@@ -60,8 +87,10 @@ export default function Results({
                 </Table.Cell>
                 <Table.Cell>{roundTypes.byId[r.roundTypeId].name}</Table.Cell>
                 <Table.Cell>{r.pos}</Table.Cell>
-                <Table.Cell>{r.best}</Table.Cell>
-                <Table.Cell>{r.average}</Table.Cell>
+                <Table.Cell style={colorForResult(r.singleRecord, currentResultsPbs[r.id]?.single)}>{r.best}</Table.Cell>
+                <Table.Cell><b>{r.singleRecord}</b></Table.Cell>
+                <Table.Cell style={colorForResult(r.averageRecord, currentResultsPbs[r.id]?.average)}>{r.average}</Table.Cell>
+                <Table.Cell><b>{r.averageRecord}</b></Table.Cell>
                 {r.attempts.map((a, i) => {
                   if (i === r.bestIdx || i === r.worstIdx) {
                     return (

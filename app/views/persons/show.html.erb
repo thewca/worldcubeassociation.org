@@ -63,6 +63,9 @@
       trimmedIdx: result.trimmed_indices,
     }},
     championshipPodiums: @championship_podiums,
+    pbMarkers: @results.group_by(&:event_id).each_with_object({}) do |(event_id, event_results), hash|
+      hash[event_id] = historical_pb_markers(event_results.reverse)
+    end,
   },
   canEditUser: current_user&.can_edit_user?(@person.user),
   editUrl: edit_user_path(@person.user),
