@@ -22,11 +22,11 @@ export default function Results({
     <>
       <EventSelector
         showLabels={false}
-        selectedEvents={currentEvent}
+        selectedEvents={[currentEvent]}
         onEventSelection={({ eventId }) => setCurrentEvent(eventId)}
         eventList={eventList}
       />
-      <Table striped compact>
+      <Table striped compact basic="very">
         <TableHeader>
           <Table.HeaderCell>
             Competition
@@ -43,9 +43,13 @@ export default function Results({
           <Table.HeaderCell>
             Average
           </Table.HeaderCell>
+          <Table.HeaderCell />
+          <Table.HeaderCell />
           <Table.HeaderCell>
             Solves
           </Table.HeaderCell>
+          <Table.HeaderCell />
+          <Table.HeaderCell />
         </TableHeader>
         <TableBody>
           {_.map(_.groupBy(currentResults, 'competition.id'), ((c) => c.map((r, index) => (
@@ -57,14 +61,18 @@ export default function Results({
               <Table.Cell>{r.pos}</Table.Cell>
               <Table.Cell>{r.best}</Table.Cell>
               <Table.Cell>{r.average}</Table.Cell>
-              <Table.Cell>
-                {r.attempts.map((a, i) => {
-                  if (i === r.bestIdx || i === r.worstIdx) {
-                    return `(${a})`;
-                  }
-                  return a;
-                }).join(' ')}
-              </Table.Cell>
+              {r.attempts.map((a, i) => {
+                if (i === r.bestIdx || i === r.worstIdx) {
+                  return (
+                    <Table.Cell>
+                      (
+                      {a}
+                      )
+                    </Table.Cell>
+                  );
+                }
+                return <Table.Cell>{a}</Table.Cell>;
+              })}
             </Table.Row>
           ))))}
         </TableBody>

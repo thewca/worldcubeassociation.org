@@ -58,7 +58,12 @@ function TabSection({ person }) {
 
   return (
     <div>
-      <Tab renderActiveOnly defaultActiveIndex={0} panes={panes} />
+      <Tab
+        renderActiveOnly
+        defaultActiveIndex={0}
+        panes={panes}
+        menu={{ fluid: true, widths: panes.length }}
+      />
     </div>
   );
 }
@@ -72,26 +77,27 @@ export default function Person({
     + (person.records.total > 0 ? 1 : 0);
 
   return (
-    <Grid columns={2}>
-      <GridRow>
-        <GridColumn width={4}>
-          <Segment>
-            <Details
-              person={person}
-              canEditUser={canEditUser}
-              editUrl={editUrl}
-            />
-          </Segment>
-        </GridColumn>
-        <GridColumn width={12}>
-          <Segment>
-            <PersonalRecords
-              person={person}
-              averageRanks={person.averageRanks}
-              singleRanks={person.singleRanks}
-            />
-          </Segment>
-          {medalsAndRecords > 0 && (
+    <Container fluid style={{ margin: '10px' }}>
+      <Grid columns={2}>
+        <GridRow>
+          <GridColumn width={4}>
+            <Segment>
+              <Details
+                person={person}
+                canEditUser={canEditUser}
+                editUrl={editUrl}
+              />
+            </Segment>
+          </GridColumn>
+          <GridColumn width={12}>
+            <Segment>
+              <PersonalRecords
+                person={person}
+                averageRanks={person.averageRanks}
+                singleRanks={person.singleRanks}
+              />
+            </Segment>
+            {medalsAndRecords > 0 && (
             <Segment>
               <Grid columns={medalsAndRecords} stackable>
                 {person.medals.total > 0 && (
@@ -106,12 +112,11 @@ export default function Person({
                 )}
               </Grid>
             </Segment>
-          )}
-          <Segment>
+            )}
             <TabSection person={person} />
-          </Segment>
-        </GridColumn>
-      </GridRow>
-    </Grid>
+          </GridColumn>
+        </GridRow>
+      </Grid>
+    </Container>
   );
 }

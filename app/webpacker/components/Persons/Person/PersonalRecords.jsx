@@ -149,7 +149,7 @@ export default function PersonalRecords({ person, averageRanks, singleRanks }) {
         <I18nHTMLTranslate i18nKey="persons.show.personal_records" />
       </h3>
       <div style={{ overflowX: 'auto', marginBottom: '0.75rem' }}>
-        <Table striped unstackable>
+        <Table striped unstackable basic="very" compact>
           <TableHeader>
             <TableRow>
               <TableHeaderCell>
