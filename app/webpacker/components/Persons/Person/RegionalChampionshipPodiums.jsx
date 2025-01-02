@@ -70,7 +70,7 @@ function RegionalChampionshipPodiumsOld({
     <div className="wc-podiums">
       <h3 className="text-center">{title}</h3>
       <div style={{ overflowX: 'auto', marginBottom: '0.75rem' }}>
-        <Table striped unstackable>
+        <Table striped unstackable singleLine basic="very" compact="very">
           <TableHeader>
             <TableRow>
               <TableHeaderCell className="event"><I18nHTMLTranslate i18nKey="competitions.results_table.event" /></TableHeaderCell>

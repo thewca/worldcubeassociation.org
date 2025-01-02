@@ -54,31 +54,6 @@ function groupByTypeAndEvent(results) {
   return typeGroups;
 }
 
-// {
-//   "id": 4070724,
-//   "pos": 4,
-//   "best": 67300,
-//   "average": -1,
-//   "name": "Simon Kelly",
-//   "country_iso2": "IE",
-//   "competition_id": "DontDNFDublin2022",
-//   "event_id": "444bf",
-//   "round_type_id": "f",
-//   "format_id": "3",
-//   "wca_id": "2017KELL08",
-//   "attempts": [
-//   -1,
-//   67300,
-//   -2,
-//   0,
-//   0
-// ],
-//   "best_index": 1,
-//   "worst_index": 2,
-//   "regional_single_record": "NR",
-//   "regional_average_record": null
-// }
-
 function DrawEventResults({ eventId, results, types }) {
   return (
     <>
@@ -123,7 +98,7 @@ function RegionalRecordsOld({ groupedResults, title, type }) {
         {title}
       </h3>
       <div style={{ overflowX: 'auto', marginBottom: '0.75rem' }}>
-        <Table striped unstackable>
+        <Table unstackable compact="very" singleLine basic="very" striped>
           <TableHeader>
             <TableRow>
               <TableHeaderCell>

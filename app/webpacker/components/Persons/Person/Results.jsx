@@ -42,7 +42,6 @@ export default function Results({
     [currentEvent, person.results],
   );
   const currentResultsPbs = useMemo(() => person.pbMarkers[currentEvent], [person.pbMarkers, currentEvent]);
-  console.log(person.pbMarkers);
   return (
     <>
       <EventSelector

@@ -77,7 +77,7 @@ export default function Person({
     + (person.records.total > 0 ? 1 : 0);
 
   return (
-    <Container fluid style={{ margin: '10px' }}>
+    <Container fluid>
       <Grid columns={2} stackable>
         <GridRow>
           <GridColumn width={4}>
