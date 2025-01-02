@@ -303,6 +303,11 @@ class AdminController < ApplicationController
     redirect_to admin_compute_auxiliary_data_path
   end
 
+  def reset_compute_auxiliary_data
+    ComputeAuxiliaryData.reset_error_state!
+    redirect_to admin_compute_auxiliary_data_path
+  end
+
   def generate_exports
   end
 

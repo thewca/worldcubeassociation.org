@@ -276,6 +276,7 @@ Rails.application.routes.draw do
   get '/admin/person_data' => 'admin#person_data'
   get '/admin/compute_auxiliary_data' => 'admin#compute_auxiliary_data'
   get '/admin/do_compute_auxiliary_data' => 'admin#do_compute_auxiliary_data'
+  get '/admin/reset_compute_auxiliary_data' => 'admin#reset_compute_auxiliary_data'
   get '/admin/generate_exports' => 'admin#generate_exports'
   get '/admin/generate_db_token' => 'admin#generate_db_token'
   get '/admin/do_generate_dev_export' => 'admin#do_generate_dev_export'

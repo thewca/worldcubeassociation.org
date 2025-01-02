@@ -1,5 +1,6 @@
 <% cronjob ||= nil %>
 <% trigger_link ||= nil %>
+<% reset_link ||= nil %>
 
 <h2><%= "Controls for #{cronjob.name}" %></h2>
 
@@ -11,7 +12,21 @@
   <% if cronjob.scheduled? %>
     <%= alert :info, "The job has been scheduled #{time_ago_in_words cronjob.enqueued_at} ago, but it hasn't been picked up by the job handler yet. Please come back later." %>
   <% elsif cronjob.in_progress? %>
-    <%= alert :info, "The job is running. Thanks for checking =)" %>
+    <% if cronjob.recently_errored? %>
+      <%= alert :danger do %>
+        The job started to run but crashed :O The error message was: "<%= cronjob.last_error_message %>"
+      <% end %>
+
+      <div>
+        If the source of the error has been fixed, you can <%= link_to "reset", reset_link %> the status for this cronjob.
+        <em>Use at your own risk! If you push this button without consulting WST, you risk incurring their wrath!</em>
+      </div>
+
+      <%# Debug information for WST %>
+      <%= tag.pre(JSON.pretty_generate cronjob.cronjob_statistics.attributes) %>
+    <% else %>
+      <%= alert :info, "The job is running. Thanks for checking =)" %>
+    <% end %>
   <% elsif cronjob.finished? %>
     <% if cronjob.last_run_successful? %>
       <%= alert :success do %>
