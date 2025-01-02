@@ -26,57 +26,59 @@ export default function Results({
         onEventSelection={({ eventId }) => setCurrentEvent(eventId)}
         eventList={eventList}
       />
-      <Table striped compact basic="very">
-        <TableHeader>
-          <Table.HeaderCell>
-            Competition
-          </Table.HeaderCell>
-          <Table.HeaderCell>
-            Round
-          </Table.HeaderCell>
-          <Table.HeaderCell>
-            Place
-          </Table.HeaderCell>
-          <Table.HeaderCell>
-            Single
-          </Table.HeaderCell>
-          <Table.HeaderCell>
-            Average
-          </Table.HeaderCell>
-          <Table.HeaderCell />
-          <Table.HeaderCell />
-          <Table.HeaderCell>
-            Solves
-          </Table.HeaderCell>
-          <Table.HeaderCell />
-          <Table.HeaderCell />
-        </TableHeader>
-        <TableBody>
-          {_.map(_.groupBy(currentResults, 'competition.id'), ((c) => c.map((r, index) => (
-            <Table.Row key={r.id}>
-              <Table.Cell>
-                {index === 0 && <a href={competitionUrl(r.competition.id)}>{r.competition.name}</a>}
-              </Table.Cell>
-              <Table.Cell>{roundTypes.byId[r.roundTypeId].name}</Table.Cell>
-              <Table.Cell>{r.pos}</Table.Cell>
-              <Table.Cell>{r.best}</Table.Cell>
-              <Table.Cell>{r.average}</Table.Cell>
-              {r.attempts.map((a, i) => {
-                if (i === r.bestIdx || i === r.worstIdx) {
-                  return (
-                    <Table.Cell>
-                      (
-                      {a}
-                      )
-                    </Table.Cell>
-                  );
-                }
-                return <Table.Cell>{a}</Table.Cell>;
-              })}
-            </Table.Row>
-          ))))}
-        </TableBody>
-      </Table>
+      <div style={{ overflowX: 'auto', marginBottom: '0.75rem' }}>
+        <Table unstackable compact="very" singleLine basic="very" striped>
+          <TableHeader>
+            <Table.HeaderCell>
+              Competition
+            </Table.HeaderCell>
+            <Table.HeaderCell>
+              Round
+            </Table.HeaderCell>
+            <Table.HeaderCell>
+              Place
+            </Table.HeaderCell>
+            <Table.HeaderCell>
+              Single
+            </Table.HeaderCell>
+            <Table.HeaderCell>
+              Average
+            </Table.HeaderCell>
+            <Table.HeaderCell />
+            <Table.HeaderCell />
+            <Table.HeaderCell>
+              Solves
+            </Table.HeaderCell>
+            <Table.HeaderCell />
+            <Table.HeaderCell />
+          </TableHeader>
+          <TableBody>
+            {_.map(_.groupBy(currentResults, 'competition.id'), ((c) => c.map((r, index) => (
+              <Table.Row key={r.id}>
+                <Table.Cell>
+                  {index === 0 && <a href={competitionUrl(r.competition.id)}>{r.competition.name}</a>}
+                </Table.Cell>
+                <Table.Cell>{roundTypes.byId[r.roundTypeId].name}</Table.Cell>
+                <Table.Cell>{r.pos}</Table.Cell>
+                <Table.Cell>{r.best}</Table.Cell>
+                <Table.Cell>{r.average}</Table.Cell>
+                {r.attempts.map((a, i) => {
+                  if (i === r.bestIdx || i === r.worstIdx) {
+                    return (
+                      <Table.Cell>
+                        (
+                        {a}
+                        )
+                      </Table.Cell>
+                    );
+                  }
+                  return <Table.Cell>{a}</Table.Cell>;
+                })}
+              </Table.Row>
+            ))))}
+          </TableBody>
+        </Table>
+      </div>
     </>
   );
 }

@@ -78,7 +78,7 @@ export default function Person({
 
   return (
     <Container fluid style={{ margin: '10px' }}>
-      <Grid columns={2}>
+      <Grid columns={2} stackable>
         <GridRow>
           <GridColumn width={4}>
             <Segment>
