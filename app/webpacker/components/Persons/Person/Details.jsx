@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Card, Grid, GridColumn, GridRow, Header, Icon,
+  Card, Grid, GridColumn, GridRow, Header, Icon, Statistic, StatisticGroup, StatisticLabel, StatisticValue,
 } from 'semantic-ui-react';
 import I18nHTMLTranslate from '../../I18nHTMLTranslate';
 import Badges from '../Badges';
@@ -44,32 +44,26 @@ export default function Details({
       </Header>
       {person.previousPersons.length > 0 && <PreviousDetails prev={person.previousPersons} />}
       {person.user && <Badges userId={person.user.id} />}
-      <Grid textAlign="center">
-        <GridRow>
-          <GridColumn width={8}>
-            <Header as="h4">
-              {I18n.t('common.user.wca_id')}
-            </Header>
-            {person.wcaId}
-            <Header as="h4">
-              <I18nHTMLTranslate i18nKey="persons.show.completed_solves" />
-            </Header>
-            {person.completedSolves}
-          </GridColumn>
-          <GridColumn width={8}>
-            {person.gender && (
-              <Header as="h4">
-                <I18nHTMLTranslate i18nKey="activerecord.attributes.person.gender" />
-              </Header>
-            )}
-            <I18nHTMLTranslate i18nKey={`enums.user.gender.${person.gender}`} />
-            <Header as="h4">
-              <I18nHTMLTranslate i18nKey="layouts.navigation.competitions" />
-            </Header>
-            {person.competitionCount}
-          </GridColumn>
-        </GridRow>
-      </Grid>
+      <StatisticGroup size="tiny" widths={2}>
+        <Statistic>
+          <StatisticLabel>{I18n.t('common.user.wca_id')}</StatisticLabel>
+          <StatisticValue>{person.wcaId}</StatisticValue>
+        </Statistic>
+        <Statistic>
+          <StatisticLabel>{I18n.t('persons.show.completed_solves')}</StatisticLabel>
+          <StatisticValue>{person.completedSolves}</StatisticValue>
+        </Statistic>
+        {person.gender && (
+          <Statistic>
+            <StatisticLabel>{I18n.t('activerecord.attributes.person.gender')}</StatisticLabel>
+            <StatisticValue>{I18n.t(`enums.user.gender.${person.gender}`)}</StatisticValue>
+          </Statistic>
+        )}
+        <Statistic>
+          <StatisticLabel>{I18n.t('layouts.navigation.competitions')}</StatisticLabel>
+          <StatisticValue>{person.competitionCount}</StatisticValue>
+        </Statistic>
+      </StatisticGroup>
     </>
   );
 }
