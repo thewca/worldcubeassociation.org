@@ -2,9 +2,13 @@
 
 FactoryBot.define do
   factory :person do
+    transient do
+      wca_id_year { "2016" }
+    end
+
     wca_id do
       mid = ('A'..'Z').to_a.sample(4).join
-      id = "2016#{mid}01"
+      id = "#{wca_id_year}#{mid}01"
       id = id.next while Person.exists?(wca_id: id)
       id
     end

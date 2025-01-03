@@ -175,6 +175,7 @@ module Registrations
       end
 
       # rubocop:disable Metrics/ParameterLists
+      # rubocop:disable Metrics/CyclomaticComplexity
       def validate_update_status!(new_status, competition, current_user, target_user, registration, events)
         raise WcaExceptions::RegistrationError.new(:unprocessable_entity, Registrations::ErrorCodes::INVALID_REQUEST_DATA) unless
           Registration.competing_statuses.include?(new_status)
@@ -183,6 +184,19 @@ module Registrations
           competition.registrations.accepted.count >= competition.competitor_limit
         raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::ALREADY_REGISTERED_IN_SERIES) if
           new_status == Registrations::Helper::STATUS_ACCEPTED && existing_registration_in_series?(competition, target_user)
+
+        if new_status == Registrations::Helper::STATUS_ACCEPTED && competition.competitor_limit_enabled?
+          raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::COMPETITOR_LIMIT_REACHED) if
+            competition.registrations.competing_status_accepted.count >= competition.competitor_limit
+
+          if !target_user.newcomer? && competition.newcomer_reserved_spots > 0
+            available_spots = competition.competitor_limit - competition.registrations.competing_status_accepted.count
+            newcomer_reserved_spots_remaining = competition.newcomer_reserved_spots - competition.newcomers_competing_count
+
+            raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::NO_UNRESERVED_SPOTS_REMAINING) if
+              (available_spots <= newcomer_reserved_spots_remaining) && competition.registration_currently_open?
+          end
+        end
 
         # Otherwise, organizers can make any status change they want to
         return if current_user.can_manage_competition?(competition)
@@ -212,6 +226,7 @@ module Registrations
         raise WcaExceptions::RegistrationError.new(:unprocessable_entity, Registrations::ErrorCodes::INVALID_REQUEST_DATA) if
           events.present? && registration.event_ids != events
       end
+      # rubocop:enable Metrics/CyclomaticComplexity
       # rubocop:enable Metrics/ParameterLists
 
       def validate_update_events!(event_ids, competition)

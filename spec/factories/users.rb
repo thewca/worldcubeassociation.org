@@ -220,6 +220,16 @@ FactoryBot.define do
       end
     end
 
+    trait :current_year_wca_id do
+      transient do
+        person {
+          FactoryBot.create(
+            :person, name: name, countryId: Country.find_by_iso2(country_iso2).id, gender: gender, dob: dob.strftime("%F"), wca_id_year: Time.current.year.to_s
+          )
+        }
+      end
+    end
+
     trait :with_2fa do
       otp_required_for_login { true }
       otp_secret { User.generate_otp_secret }
