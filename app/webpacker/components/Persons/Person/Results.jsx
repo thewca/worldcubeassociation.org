@@ -37,7 +37,7 @@ export default function Results({
 }) {
   const personEvents = new Set(person.results.map((r) => r.eventId));
   const eventList = events.official.filter((r) => personEvents.has(r.id)).map((r) => r.id);
-  const [currentEvent, setCurrentEvent] = useState(eventList[0]);
+  const [currentEvent, setCurrentEvent] = useState(new URL(document.location.toString()).searchParams.get('event') ?? eventList[0]);
   const currentResults = useMemo(
     () => person.results.filter((r) => r.eventId === currentEvent),
     [currentEvent, person.results],
@@ -48,7 +48,12 @@ export default function Results({
       <EventSelector
         showLabels={false}
         selectedEvents={[currentEvent]}
-        onEventSelection={({ eventId }) => setCurrentEvent(eventId)}
+        onEventSelection={({ eventId }) => {
+          setCurrentEvent(eventId);
+          const url = new URL(window.location.href);
+          url.searchParams.set('event', eventId);
+          window.history.pushState({}, '', url);
+        }}
         eventList={eventList}
       />
       <Divider />

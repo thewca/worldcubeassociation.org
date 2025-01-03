@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useMemo, useRef } from 'react';
 import {
   Container, Grid, GridColumn, GridRow, Segment, Sticky, Tab, TabPane,
 } from 'semantic-ui-react';
@@ -13,56 +13,71 @@ import CompetitionsMap from './CompetitionsMap';
 import Results from './Results';
 
 function TabSection({ person }) {
-  // TODO: Url Params?
-  const panes = [{
-    menuItem: I18n.t('persons.show.results'),
-    render: () => (
-      <TabPane>
-        <Results person={person} />
-      </TabPane>
-    ),
-  }];
-  if (person.records.total > 0) {
-    panes.push({
-      menuItem: I18n.t('persons.show.records'),
+  const panes = useMemo(() => {
+    const p = [{
+      menuItem: I18n.t('persons.show.results'),
+      tabSlug: 'results-by-event',
       render: () => (
         <TabPane>
-          <RegionalRecords person={person} />
+          <Results person={person} />
+        </TabPane>
+      ),
+    }];
+    if (person.records.total > 0) {
+      p.push({
+        menuItem: I18n.t('persons.show.records'),
+        tabSlug: 'record',
+        render: () => (
+          <TabPane>
+            <RegionalRecords person={person} />
+          </TabPane>
+        ),
+      });
+    }
+
+    const anyPodiums = Object
+      .values(person.championshipPodiums)
+      .some((podiums) => podiums.length > 0);
+    if (anyPodiums) {
+      p.push({
+        menuItem: I18n.t('persons.show.championship_podiums'),
+        tabSlug: 'championship-podiums',
+        render: () => (
+          <TabPane>
+            <RegionalChampionshipPodiums person={person} />
+          </TabPane>
+        ),
+      });
+    }
+
+    p.push({
+      menuItem: I18n.t('persons.show.competitions_map'),
+      tabSlug: 'map',
+      render: () => (
+        <TabPane>
+          <CompetitionsMap person={person} />
         </TabPane>
       ),
     });
-  }
+    return p;
+  }, [person]);
 
-  const anyPodiums = Object
-    .values(person.championshipPodiums)
-    .some((podiums) => podiums.length > 0);
-  if (anyPodiums) {
-    panes.push({
-      menuItem: I18n.t('persons.show.championship_podiums'),
-      render: () => (
-        <TabPane>
-          <RegionalChampionshipPodiums person={person} />
-        </TabPane>
-      ),
-    });
-  }
-
-  panes.push({
-    menuItem: I18n.t('persons.show.competitions_map'),
-    render: () => (
-      <TabPane>
-        <CompetitionsMap person={person} />
-      </TabPane>
-    ),
-  });
+  const tabSlug = new URL(document.location.toString()).searchParams.get('tab');
+  const activeIndex = tabSlug ? panes.findIndex((p) => p.tabSlug === tabSlug) : 0;
 
   return (
     <div>
       <Tab
         renderActiveOnly
-        defaultActiveIndex={0}
+        defaultActiveIndex={activeIndex}
         panes={panes}
         menu={{ fluid: true, widths: panes.length }}
+        onTabChange={(a, b) => {
+          const newSlug = panes[b.activeIndex].tabSlug;
+          const url = new URL(window.location.href);
+          url.searchParams.set('tab', newSlug);
+          window.history.pushState({}, '', url);
+        }}
       />
     </div>
   );
