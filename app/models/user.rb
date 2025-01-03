@@ -639,6 +639,7 @@ class User < ApplicationRecord
       :regionsAdmin,
       :downloadVoters,
       :generateDbToken,
+      :approveAvatars,
     ].index_with { |panel_page| panel_page.to_s.underscore.dasherize }
   end
 
@@ -658,6 +659,12 @@ class User < ApplicationRecord
         pages: [
           panel_pages[:importantLinks],
           panel_pages[:delegateHandbook],
+          panel_pages[:bannedCompetitors],
+        ],
+      },
+      wapc: {
+        name: 'WAC panel',
+        pages: [
           panel_pages[:bannedCompetitors],
         ],
       },
@@ -1406,6 +1413,8 @@ class User < ApplicationRecord
       active_roles.any? { |role| role.is_lead? && (role.group.teams_committees? || role.group.councils?) }
     when :senior_delegate
       senior_delegate?
+    when :wapc
+      appeals_committee?
     when :wic
       wic_team?
     when :weat
@@ -1413,10 +1422,6 @@ class User < ApplicationRecord
     else
       false
     end
-  end
-
-  def can_access_at_least_one_panel?
-    panels_with_access.any?
   end
 
   def subordinate_delegates

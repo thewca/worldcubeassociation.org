@@ -18,17 +18,17 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
   end
 
   def competition_index
-    competitions = Competition.includes(:events)
-                              .search(params[:q], params: params)
+    admin_mode = current_user&.can_see_admin_competitions?
+
+    competitions_scope = Competition.includes(:events)
+    competitions_scope = competitions_scope.includes(:delegate_report, delegates: [:current_avatar]) if admin_mode
+
+    competitions = competitions_scope.search(params[:q], params: params)
 
     serial_methods = ["short_display_name", "city", "country_iso2", "event_ids", "date_range", "latitude_degrees", "longitude_degrees"]
     serial_includes = {}
 
-    admin_mode = current_user&.can_see_admin_competitions?
-
-    competitions = competitions.includes(:delegate_report) if admin_mode
-
-    serial_includes["delegates"] = { only: ["id", "name"], include: ["avatar"] } if admin_mode
+    serial_includes["delegates"] = { only: ["id", "name"], methods: [], include: ["avatar"] } if admin_mode
     serial_methods |= ["announced_at", "results_submitted_at", "report_posted_at"] if admin_mode
 
     paginate json: competitions,

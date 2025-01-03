@@ -8,7 +8,7 @@ import I18n from '../../lib/i18n';
 import { apiV0Urls, WCA_API_PAGINATION } from '../../lib/requests/routes.js.erb';
 import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken';
 
-import CompetitionsFilters from './CompetitionsFilters';
+import CompetitionsFilters, { ResetFilters } from './CompetitionsFilters';
 import ListView from './ListView';
 import MapView from './MapView';
 import {
@@ -19,7 +19,7 @@ import {
 } from './filterUtils';
 import { calculateQueryKey, createSearchParams } from './queryUtils';
 import useDebounce from '../../lib/hooks/useDebounce';
-import { isCancelled, isInProgress, isProbablyOver } from '../../lib/utils/competition-table';
+import { isInProgress, isProbablyOver } from '../../lib/utils/competition-table';
 
 const DEBOUNCE_MS = 600;
 
@@ -76,12 +76,7 @@ function CompetitionsView({ canViewAdminDetails = false }) {
     },
   });
 
-  const baseCompetitions = rawCompetitionData?.pages.flatMap((page) => page.data)
-    .filter((comp) => (
-      (!isCancelled(comp) || debouncedFilterState.shouldIncludeCancelled)
-      && (debouncedFilterState.selectedEvents.every((event) => comp.event_ids.includes(event)))
-    ));
-
+  const baseCompetitions = rawCompetitionData?.pages.flatMap((page) => page.data);
   const compIds = baseCompetitions?.map((comp) => comp.id) || [];
 
   const {
@@ -113,7 +108,10 @@ function CompetitionsView({ canViewAdminDetails = false }) {
 
   return (
     <Container>
-      <Header as="h2">{I18n.t('competitions.index.title')}</Header>
+      <Header as="h2">
+        {I18n.t('competitions.index.title')}
+        <ResetFilters dispatchFilter={dispatchFilter} floated="right" />
+      </Header>
       <CompetitionsFilters
         filterState={filterState}
         dispatchFilter={dispatchFilter}
