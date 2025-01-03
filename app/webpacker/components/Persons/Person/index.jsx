@@ -1,16 +1,15 @@
 import React, { useMemo, useRef } from 'react';
 import {
-  Container, Grid, GridColumn, GridRow, Segment, Sticky, Tab, TabPane,
+  Container, Divider, Grid, GridColumn, GridRow, Segment, Sticky, Tab, TabPane,
 } from 'semantic-ui-react';
 import Details from './Details';
 import PersonalRecords from './PersonalRecords';
-import MedalCollection from './MedalCollection';
-import RecordCollection from './RecordCollection';
 import I18n from '../../../lib/i18n';
 import RegionalRecords from './RegionalRecords';
 import RegionalChampionshipPodiums from './RegionalChampionshipPodiums';
 import CompetitionsMap from './CompetitionsMap';
 import Results from './Results';
+import CountStats from './CountStats';
 
 function TabSection({ person }) {
   const panes = useMemo(() => {
@@ -126,21 +125,11 @@ export default function Person({
                 />
               </Segment>
               {medalsAndRecords > 0 && (
-              <Segment raised>
                 <Grid columns={medalsAndRecords} stackable>
-                  {person.medals.total > 0 && (
-                  <GridColumn>
-                    <MedalCollection person={person} />
-                  </GridColumn>
-                  )}
-                  {person.records.total > 0 && (
-                  <GridColumn>
-                    <RecordCollection person={person} />
-                  </GridColumn>
-                  )}
+                  <CountStats person={person} />
                 </Grid>
-              </Segment>
               )}
+              <Divider />
               <TabSection person={person} />
             </GridColumn>
           </GridRow>

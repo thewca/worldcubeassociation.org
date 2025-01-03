@@ -11,7 +11,7 @@ import ProfileDetails from './ProfileDetails';
 
 import './person.css';
 import I18nHTMLTranslate from '../../I18nHTMLTranslate';
-import CountStats from './CountStats';
+import CountStats from '../Person/CountStats';
 import Badges from '../Badges';
 
 function PreviousDetails({ person }) {
