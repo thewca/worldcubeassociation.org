@@ -429,7 +429,9 @@ function ConditionalYearHeader({
   ) {
     return (
       <Table.Row>
-        <Table.Cell textAlign="center" colSpan={colSpan}>{startYear(competitions[index])}</Table.Cell>
+        <Table.Cell textAlign="center" colSpan={colSpan} active>
+          <Header>{startYear(competitions[index])}</Header>
+        </Table.Cell>
       </Table.Row>
     );
   }
