@@ -194,6 +194,7 @@ Rails.application.routes.draw do
   get 'panel/redirect/:panel_page' => 'panel#redirect', as: :panel_redirect
   resources :tickets, only: [:show] do
     post 'update_status' => 'tickets#update_status', as: :update_status
+    get 'edit_person_validators' => 'tickets#edit_person_validators', as: :edit_person_validators
   end
   resources :notifications, only: [:index]
 

@@ -50,4 +50,18 @@ class TicketsController < ApplicationController
     end
     render json: { success: true }
   end
+
+  def edit_person_validators
+    ticket = Ticket.find(params.require(:ticket_id))
+    dob_validation_issues = []
+
+    ticket.metadata.tickets_edit_person_fields.each do |edit_person_field|
+      case edit_person_field[:field_name]
+      when TicketsEditPersonField.field_names[:dob]
+        dob_validation_issues = ResultsValidators::PersonsValidator.dob_validations(Date.parse(edit_person_field[:new_value]))
+      end
+    end
+
+    render json: { dob: dob_validation_issues }
+  end
 end
