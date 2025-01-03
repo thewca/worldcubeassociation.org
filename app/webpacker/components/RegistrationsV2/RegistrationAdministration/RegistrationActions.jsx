@@ -42,26 +42,6 @@ function V3csvExport(selected, registrations, competition) {
   generateCSV(csvContent, filename);
 }
 
-function V2csvExport(selected, registrations) {
-  let csvContent = 'data:text/csv;charset=utf-8,';
-  csvContent
-    += 'user_id,guests,competing.event_ids,competing.registration_status,competing.registered_on,competing.comment,competing.admin_comment\n';
-  registrations
-    .filter((r) => selected.length === 0 || selected.includes(r.user_id))
-    .forEach((registration) => {
-      csvContent += `${registration.user_id},${
-        registration.guests
-      },${registration.competing.event_ids.join(';')},${
-        registration.competing.registration_status
-      },${registration.competing.registered_on},${
-        registration.competing.comment
-      },${registration.competing.admin_comment}\n`;
-    });
-
-  const filename = `${competition.id}-registrations.csv`;
-  generateCSV(csvContent, filename);
-}
-
 function csvExport(selected, registrations, competition) {
   V3csvExport(selected, registrations.toSorted(
     (a, b) => DateTime.fromISO(a.competing.registered_on).toMillis()
