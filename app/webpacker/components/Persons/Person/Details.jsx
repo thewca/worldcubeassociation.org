@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Card, Grid, GridColumn, GridRow, Header, Icon, Statistic, StatisticGroup, StatisticLabel, StatisticValue,
+  Card, Divider, Grid, GridColumn, GridRow, Header, Icon, Statistic, StatisticGroup, StatisticLabel, StatisticValue,
 } from 'semantic-ui-react';
 import I18nHTMLTranslate from '../../I18nHTMLTranslate';
 import Badges from '../Badges';
@@ -29,7 +29,7 @@ export default function Details({
   return (
     <>
       {person.user?.avatar && (
-        <Card image={person.user.avatar.url} centered />
+        <Card image={person.user.avatar.url} centered raised />
       )}
       <Header as="h2" textAlign="center">
         <CountryFlag iso2={person.country.iso2} />

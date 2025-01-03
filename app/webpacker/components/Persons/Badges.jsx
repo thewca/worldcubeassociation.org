@@ -1,5 +1,5 @@
 import React from 'react';
-import { Popup } from 'semantic-ui-react';
+import { Grid, Popup } from 'semantic-ui-react';
 import useLoadedData from '../../lib/hooks/useLoadedData';
 import I18n from '../../lib/i18n';
 import {
@@ -63,8 +63,9 @@ export default function Badges({ userId }) {
   const roles = data || [];
 
   return (
-    <div className="positions-container">
-      {
+    <Grid centered padded columns={roles.length}>
+      <Grid.Row>
+        {
         roles.map((role) => {
           const {
             roleTitle, groupTitle, badgeClass, url,
@@ -76,14 +77,15 @@ export default function Badges({ userId }) {
               position="bottom center"
               inverted
               trigger={(
-                <span className={`badge ${badgeClass}`}>
+                <Grid.Column textAlign="center" width={Math.floor(16 / roles.length)} className={`badge ${badgeClass}`}>
                   <a href={url}>{roleTitle}</a>
-                </span>
+                </Grid.Column>
             )}
             />
           );
         })
       }
-    </div>
+      </Grid.Row>
+    </Grid>
   );
 }

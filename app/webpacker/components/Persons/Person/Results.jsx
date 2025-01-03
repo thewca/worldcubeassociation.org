@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import {
+  Divider,
   Table, TableBody, TableHeader,
 } from 'semantic-ui-react';
 import _ from 'lodash';
@@ -50,7 +51,8 @@ export default function Results({
         onEventSelection={({ eventId }) => setCurrentEvent(eventId)}
         eventList={eventList}
       />
-      <div style={{ overflowX: 'auto', marginBottom: '0.75rem' }}>
+      <Divider />
+      <div style={{ overflowX: 'auto' }}>
         <Table unstackable compact="very" singleLine basic="very" striped>
           <TableHeader>
             <Table.HeaderCell>
