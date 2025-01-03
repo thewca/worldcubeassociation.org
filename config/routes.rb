@@ -43,7 +43,7 @@ Rails.application.routes.draw do
 
   post 'registration/:id/load-payment-intent/:payment_integration' => 'registrations#load_payment_intent', as: :registration_payment_intent
   post 'competitions/:competition_id/refund/:payment_integration/:payment_id' => 'registrations#refund_payment', as: :registration_payment_refund
-  get 'competitions/:competition_id/payment-completion' => 'registrations#payment_completion', as: :registration_payment_completion
+  get 'competitions/:competition_id/payment-completion/:payment_integration' => 'registrations#payment_completion', as: :registration_payment_completion
   post 'registration/stripe-webhook' => 'registrations#stripe_webhook', as: :registration_stripe_webhook
   get 'registration/payment-denomination' => 'registrations#payment_denomination', as: :registration_payment_denomination
   resources :users, only: [:index, :edit, :update]
@@ -60,8 +60,8 @@ Rails.application.routes.draw do
   post 'users/:id/avatar' => 'users#upload_avatar'
   patch 'users/:id/avatar' => 'users#update_avatar'
   delete 'users/:id/avatar' => 'users#delete_avatar'
-  get 'admin/avatars' => 'admin/avatars#index'
-  post 'admin/avatars' => 'admin/avatars#update_all'
+  get 'admin/avatars/pending' => 'admin/avatars#pending_avatar_users', as: :pending_avatars
+  post 'admin/avatars' => 'admin/avatars#update_avatar', as: :admin_update_avatar
 
   get 'map' => 'competitions#embedable_map'
 
@@ -70,7 +70,7 @@ Rails.application.routes.draw do
   get 'competitions/:id/enable_v2' => "competitions#enable_v2", as: :enable_v2
   post 'competitions/bookmark' => 'competitions#bookmark', as: :bookmark
   post 'competitions/unbookmark' => 'competitions#unbookmark', as: :unbookmark
-  get 'competitions/registrations_v2/:competition_id/:user_id/edit' => 'registrations#edit_v2', as: :edit_registration_v2
+  get 'competitions/registrations_v2/:competition_id/:user_id/edit' => 'registrations#edit', as: :edit_registration_v2
 
   resources :competitions do
     get 'edit/admin' => 'competitions#admin_edit', as: :admin_edit
@@ -120,6 +120,7 @@ Rails.application.routes.draw do
     delete '/admin/inbox-data' => 'admin#delete_inbox_data', as: :admin_delete_inbox_data
     delete '/admin/results-data' => 'admin#delete_results_data', as: :admin_delete_results_data
     get '/admin/results/:round_id/new' => 'admin/results#new', as: :new_result
+    get '/admin/scrambles/:round_id/new' => 'admin/scrambles#new', as: :new_scramble
 
     get '/payment_integration/setup' => 'competitions#payment_integration_setup', as: :payment_integration_setup
     get '/payment_integration/:payment_integration/connect' => 'competitions#connect_payment_integration', as: :connect_payment_integration
@@ -156,7 +157,7 @@ Rails.application.routes.draw do
 
   scope '/admin' do
     resources :results, except: [:index, :new], controller: 'admin/results'
-    post 'results' => 'admin/results#create'
+    resources :scrambles, except: [:index, :new], controller: 'admin/scrambles'
     get 'events_data/:competition_id' => 'admin/results#show_events_data', as: :competition_events_data
   end
 
@@ -190,6 +191,10 @@ Rails.application.routes.draw do
     get 'generate_db_token' => 'panel#generate_db_token', as: :panel_generate_db_token
   end
   get 'panel/:panel_id' => 'panel#index', as: :panel_index
+  get 'panel/redirect/:panel_page' => 'panel#redirect', as: :panel_redirect
+  resources :tickets, only: [:show] do
+    post 'update_status' => 'tickets#update_status', as: :update_status
+  end
   resources :notifications, only: [:index]
 
   root 'posts#homepage'
@@ -272,6 +277,7 @@ Rails.application.routes.draw do
   get '/admin/person_data' => 'admin#person_data'
   get '/admin/compute_auxiliary_data' => 'admin#compute_auxiliary_data'
   get '/admin/do_compute_auxiliary_data' => 'admin#do_compute_auxiliary_data'
+  get '/admin/reset_compute_auxiliary_data' => 'admin#reset_compute_auxiliary_data'
   get '/admin/generate_exports' => 'admin#generate_exports'
   get '/admin/generate_db_token' => 'admin#generate_db_token'
   get '/admin/do_generate_dev_export' => 'admin#do_generate_dev_export'

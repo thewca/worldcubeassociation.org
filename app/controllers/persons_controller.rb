@@ -4,7 +4,7 @@ class PersonsController < ApplicationController
   def index
     respond_to do |format|
       format.html
-      format.js do
+      format.json do
         persons = Person.in_region(params[:region]).order(:name)
         params[:search]&.split&.each do |part|
           persons = persons.where("MATCH(Persons.name) AGAINST (:name_match IN BOOLEAN MODE) OR wca_id LIKE :wca_id_part", name_match: "#{part}*", wca_id_part: "#{part}%")
@@ -14,9 +14,9 @@ class PersonsController < ApplicationController
           total: persons.count,
           rows: persons.limit(params[:limit]).offset(params[:offset]).map do |person|
             {
-              name: view_context.link_to(person.name, person_path(person.wca_id)),
+              name: person.name,
               wca_id: person.wca_id,
-              country: person.country.name,
+              country: person.country.iso2,
               competitions_count: person.competitions.count,
               podiums_count: person.results.podium.count,
             }

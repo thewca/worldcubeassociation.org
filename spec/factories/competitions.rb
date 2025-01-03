@@ -99,7 +99,7 @@ FactoryBot.define do
     refund_policy_percent { 0 }
     guests_entry_fee_lowest_denomination { 0 }
 
-    registration_version { :v1 }
+    registration_version { :v3 }
 
     trait :newcomer_month do
       registration_open
@@ -275,6 +275,7 @@ FactoryBot.define do
       registration_close { 1.weeks.ago.change(usec: 0) }
       starts { 1.month.from_now }
       ends { starts }
+      use_wca_registration { true }
     end
 
     trait :registration_not_opened do

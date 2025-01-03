@@ -595,7 +595,18 @@ module DatabaseDumper
     "microservice_registrations" => :skip_all_rows,
     "registration_history_changes" => :skip_all_rows,
     "registration_history_entries" => :skip_all_rows,
-    "waiting_lists" => :skip_all_rows,
+    "waiting_lists" => {
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w(
+          id
+          holder_type
+          holder_id
+          entries
+          created_at
+          updated_at
+        ),
+      ),
+    }.freeze,
     "sanity_checks" => :skip_all_rows,
     "sanity_check_categories" => :skip_all_rows,
     "sanity_check_exclusions" => :skip_all_rows,
@@ -909,6 +920,11 @@ module DatabaseDumper
     "jwt_denylist" => :skip_all_rows,
     "wfc_xero_users" => :skip_all_rows,
     "wfc_dues_redirects" => :skip_all_rows,
+    "ticket_logs" => :skip_all_rows,
+    "ticket_stakeholders" => :skip_all_rows,
+    "tickets" => :skip_all_rows,
+    "tickets_edit_person" => :skip_all_rows,
+    "tickets_edit_person_fields" => :skip_all_rows,
   }.freeze
 
   RESULTS_SANITIZERS = {

@@ -65,6 +65,15 @@ class MergePeople
     end
   end
 
+  validate :person2_year_must_not_be_earlier
+  def person2_year_must_not_be_earlier
+    year1 = person1_wca_id[0, 4].to_i
+    year2 = person2_wca_id[0, 4].to_i
+    if year2 < year1
+      errors.add(:person2_wca_id, "WCA ID year cannot be earlier than person1's WCA ID year")
+    end
+  end
+
   def do_merge
     if !valid?
       return false

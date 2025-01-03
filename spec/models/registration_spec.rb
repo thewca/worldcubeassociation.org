@@ -51,10 +51,17 @@ RSpec.describe Registration do
       expect(registration).to be_invalid_with_errors(user_id: ["Need a birthdate"])
     end
 
-    it "requires user not banned" do
+    it "user cant register if banned when competitor starts" do
       user = FactoryBot.create(:user, :banned)
       registration.user = user
       expect(registration).to be_invalid_with_errors(user_id: [I18n.t('registrations.errors.banned_html').html_safe])
+    end
+
+    it 'user can register if ban ends before competition start' do
+      user = FactoryBot.create(:user, :briefly_banned)
+      registration.user = user
+      registration.validate
+      expect(registration.errors[:user_id]).not_to include(I18n.t('registrations.errors.banned_html').html_safe)
     end
   end
 
@@ -68,17 +75,27 @@ RSpec.describe Registration do
     user = FactoryBot.create(:user, :banned)
     registration.user = user
     registration.save!
-    registration.deleted_at = Time.now
+    registration.competing_status = Registrations::Helper::STATUS_CANCELLED
     expect(registration).to be_valid
   end
 
   it "doesn't allow undeleting a registration of a banned competitor" do
     user = FactoryBot.create(:user, :banned)
     registration.user = user
-    registration.deleted_at = Time.now
+    registration.competing_status = Registrations::Helper::STATUS_CANCELLED
     registration.save!
-    registration.deleted_at = nil
+    registration.competing_status = Registrations::Helper::STATUS_ACCEPTED
     expect(registration).to be_invalid_with_errors(user_id: [I18n.t('registrations.errors.undelete_banned')])
+  end
+
+  it "allows undeleting a banned competitor if ban ends before comp starts" do
+    user = FactoryBot.create(:user, :briefly_banned)
+    registration.user = user
+    registration.competing_status = Registrations::Helper::STATUS_CANCELLED
+    registration.save!
+    registration.competing_status = Registrations::Helper::STATUS_ACCEPTED
+    registration.validate
+    expect(registration.errors[:user_id]).not_to include(I18n.t('registrations.errors.undelete_banned'))
   end
 
   it "requires at least one event" do
@@ -216,7 +233,7 @@ RSpec.describe Registration do
     end
 
     context "and one registration is accepted" do
-      before { registration.update!(accepted_at: Time.now) }
+      before { registration.update!(competing_status: Registrations::Helper::STATUS_ACCEPTED) }
 
       it "does allow accepting when the other registration is pending" do
         expect(registration).to be_valid
@@ -226,14 +243,14 @@ RSpec.describe Registration do
       it "does allow accepting when the other registration is deleted" do
         expect(registration).to be_valid
 
-        partner_registration.deleted_at = Time.now
+        partner_registration.competing_status = Registrations::Helper::STATUS_CANCELLED
         expect(partner_registration).to be_valid
       end
 
       it "doesn't allow accepting when the other registration is confirmed" do
         expect(registration).to be_valid
 
-        partner_registration.accepted_at = Time.now
+        partner_registration.competing_status = Registrations::Helper::STATUS_ACCEPTED
         expect(partner_registration).to be_invalid_with_errors(competition_id: [I18n.t('registrations.errors.series_more_than_one_accepted')])
       end
     end
@@ -336,7 +353,7 @@ RSpec.describe Registration do
     it 'deleted state returns deleted status' do
       registration = FactoryBot.create(:registration, :cancelled)
 
-      expect(registration.deleted?).to eq(true)
+      expect(registration.cancelled?).to eq(true)
       expect(registration.to_wcif['status']).to eq('deleted')
     end
 
