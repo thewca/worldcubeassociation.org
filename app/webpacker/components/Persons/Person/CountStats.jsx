@@ -10,7 +10,9 @@ function CountStat({ title, data }) {
       <StatisticGroup>
         {data.map((d) => d.count > 0 && (
           <Statistic key={d.label} horizontal>
-            <StatisticValue textAlign="center">{d.count}</StatisticValue>
+            <StatisticValue textAlign="center">
+              {d.onClick ? <a style={{ cursor: 'pointer' }} onClick={d.onClick}>{d.count}</a> : d.count}
+            </StatisticValue>
             <StatisticLabel>
               <Icon name={d.icon} color={d.iconColor} />
             &nbsp;
@@ -23,7 +25,7 @@ function CountStat({ title, data }) {
   );
 }
 
-export default function CountStats({ person }) {
+export default function CountStats({ person, setHighlight }) {
   return (
     <>
       {person.medals.total > 0 && (
@@ -33,13 +35,13 @@ export default function CountStats({ person }) {
               title="Medals"
               data={[
                 {
-                  label: 'Gold', icon: 'trophy', iconColor: 'yellow', count: person.medals.gold,
+                  label: 'Gold', icon: 'trophy', iconColor: 'yellow', count: person.medals.gold, onClick: () => setHighlight(1),
                 },
                 {
-                  label: 'Silver', icon: 'trophy', iconColor: 'grey', count: person.medals.silver,
+                  label: 'Silver', icon: 'trophy', iconColor: 'grey', count: person.medals.silver, onClick: () => setHighlight(2),
                 },
                 {
-                  label: 'Bronze', icon: 'trophy', iconColor: 'orange', count: person.medals.bronze,
+                  label: 'Bronze', icon: 'trophy', iconColor: 'orange', count: person.medals.bronze, onClick: () => setHighlight(3),
                 },
               ]}
             />

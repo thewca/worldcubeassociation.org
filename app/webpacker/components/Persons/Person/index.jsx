@@ -1,4 +1,4 @@
-import React, { useMemo, useRef } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
 import {
   Container, Divider, Grid, GridColumn, GridRow, Segment, Sticky, Tab, TabPane,
 } from 'semantic-ui-react';
@@ -11,14 +11,14 @@ import CompetitionsMap from './CompetitionsMap';
 import Results from './Results';
 import CountStats from './CountStats';
 
-function TabSection({ person }) {
+function TabSection({ person, highlight }) {
   const panes = useMemo(() => {
     const p = [{
       menuItem: I18n.t('persons.show.results'),
       tabSlug: 'results-by-event',
       render: () => (
         <TabPane>
-          <Results person={person} />
+          <Results person={person} highlightPosition={highlight} />
         </TabPane>
       ),
     }];
@@ -59,26 +59,24 @@ function TabSection({ person }) {
       ),
     });
     return p;
-  }, [person]);
+  }, [person, highlight]);
 
   const tabSlug = new URL(document.location.toString()).searchParams.get('tab');
   const activeIndex = tabSlug ? panes.findIndex((p) => p.tabSlug === tabSlug) : 0;
 
   return (
-    <div>
-      <Tab
-        renderActiveOnly
-        defaultActiveIndex={activeIndex}
-        panes={panes}
-        menu={{ fluid: true, widths: panes.length }}
-        onTabChange={(a, b) => {
-          const newSlug = panes[b.activeIndex].tabSlug;
-          const url = new URL(window.location.href);
-          url.searchParams.set('tab', newSlug);
-          window.history.pushState({}, '', url);
-        }}
-      />
-    </div>
+    <Tab
+      renderActiveOnly
+      defaultActiveIndex={activeIndex}
+      panes={panes}
+      menu={{ fluid: true, widths: panes.length }}
+      onTabChange={(a, b) => {
+        const newSlug = panes[b.activeIndex].tabSlug;
+        const url = new URL(window.location.href);
+        url.searchParams.set('tab', newSlug);
+        window.history.pushState({}, '', url);
+      }}
+    />
   );
 }
 
@@ -87,6 +85,7 @@ export default function Person({
   canEditUser,
   editUrl,
 }) {
+  const [highlight, setHighlight] = useState(-1);
   const medalsAndRecords = (person.medals.total > 0 ? 1 : 0)
     + (person.records.total > 0 ? 1 : 0);
   const ref = useRef();
@@ -126,11 +125,11 @@ export default function Person({
               </Segment>
               {medalsAndRecords > 0 && (
                 <Grid columns={medalsAndRecords} stackable>
-                  <CountStats person={person} />
+                  <CountStats person={person} setHighlight={setHighlight} />
                 </Grid>
               )}
               <Divider />
-              <TabSection person={person} />
+              <TabSection person={person} highlight={highlight} />
             </GridColumn>
           </GridRow>
         </Grid>
