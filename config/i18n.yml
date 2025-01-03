@@ -61,6 +61,7 @@ translations:
       - "*.activerecord.attributes.competition_series.*"
       - "*.activerecord.attributes.championship.*"
       - "*.activerecord.attributes.registration.*"
+      - "*.activerecord.attributes.person.*"
       - "*.datetime.*"
       - "*.wca.errors.messages.form_error"
       - "*.users.edit.*"
@@ -74,4 +75,4 @@ translations:
       - "*.attempts.*"
       - "*.time_limit.*"
       - "*.users.edit.*"
-      - "*.persons.index.*"
+      - "*.persons.*"
