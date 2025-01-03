@@ -837,6 +837,8 @@ en:
             label: "Which of the following best describes your inquiry?"
             edit_profile:
               label: "Edit my profile data (name, country, gender or DOB)"
+            edit_others_profile:
+              label: "Edit someone else's profile data"
             report_result_issue:
               label: "Report an issue in a result"
             other_query:
@@ -873,11 +875,14 @@ en:
       title: "Edit Profile Form"
       not_logged_in_error: "Looks like you are not logged in. Please log in to edit your profile. For any other queries, please <a href=\"https://www.worldcubeassociation.org/contact?contactRecipient=wrt\">contact us</a>."
       no_profile_error: "Looks like you don't have a WCA profile yet because you have not participated in any competitions. For any other queries, please <a href=\"https://www.worldcubeassociation.org/contact?contactRecipient=wrt\">contact us</a>."
+      no_permission_error: "You don't have permission to request edit others profile."
       form:
         contact_email:
           label: "Contact Email"
         wca_id:
           label: "Enter WCA ID"
+        wca_id_search:
+          label: "Search for the WCA ID that you want to edit."
         edit_reason:
           label: "Reason for the change"
         proof_attach:
