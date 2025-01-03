@@ -175,6 +175,7 @@ module Registrations
       end
 
       # rubocop:disable Metrics/ParameterLists
+      # rubocop:disable Metrics/CyclomaticComplexity
       def validate_update_status!(new_status, competition, current_user, target_user, registration, events)
         raise WcaExceptions::RegistrationError.new(:unprocessable_entity, Registrations::ErrorCodes::INVALID_REQUEST_DATA) unless
           Registration.competing_statuses.include?(new_status)
@@ -225,6 +226,7 @@ module Registrations
         raise WcaExceptions::RegistrationError.new(:unprocessable_entity, Registrations::ErrorCodes::INVALID_REQUEST_DATA) if
           events.present? && registration.event_ids != events
       end
+      # rubocop:enable Metrics/CyclomaticComplexity
       # rubocop:enable Metrics/ParameterLists
 
       def validate_update_events!(event_ids, competition)
