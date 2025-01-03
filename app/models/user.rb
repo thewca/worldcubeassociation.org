@@ -57,6 +57,7 @@ class User < ApplicationRecord
   has_many :user_avatars, dependent: :destroy, inverse_of: :user
 
   scope :confirmed_email, -> { where.not(confirmed_at: nil) }
+  scope :newcomers, -> { where(wca_id: nil).or(where('wca_id LIKE ?', "#{Time.current.year}%")) }
 
   scope :in_region, lambda { |region_id|
     unless region_id.blank? || region_id == 'all'

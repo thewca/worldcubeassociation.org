@@ -250,24 +250,18 @@ class Competition < ApplicationRecord
   private def validate_newcomer_reserved_spots
     return unless competitor_limit.present?
 
-    if newcomer_reserved_spots > 0 && !NEWCOMER_MONTH_ENABLED
-      errors.add(:newcomer_reserved_spots, 'newcomer competitions are not allowed at present')
-    end
-
     max_newcomer_spots = (competitor_limit * MAX_NEWCOMER_SPOTS_RESERVED_FRACTION).to_i
     if newcomer_reserved_spots > max_newcomer_spots
       errors.add(:newcomer_reserved_spots, 'cant reserve more than 50% of spots for newcomers')
     end
   end
 
-  # TODO: Make sure this query is optimized
-  def newcomers_competing
-    registrations.competing_status_accepted.includes(:user).select { |registration| registration.user.newcomer? }
+  def newcomers_competing_count
+    registrations.accepted.joins(:user).merge(User.newcomer).count
   end
 
-  # TODO: What if there are no newcomer reserved spots? Is this represented as nil or 0 in the db?
   def newcomer_reserved_spots_remaining
-    newcomer_reserved_spots - newcomers_competing.count
+    newcomer_reserved_spots - newcomers_competing_count
   end
 
   # Dirty old trick to deal with competition id changes (see other methods using

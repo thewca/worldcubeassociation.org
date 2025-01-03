@@ -1609,7 +1609,7 @@ RSpec.describe Competition do
 
       it 'doesnt include newcomers in count' do
         expect(newcomer_month_comp.registrations.count).to eq(3)
-        expect(newcomer_month_comp.non_newcomers_competing.count).to eq(2)
+        expect(newcomer_month_comp.non_newcomers_competing_count).to eq(2)
       end
 
       it 'doesnt include non-newcomers in non-accepted states' do
@@ -1619,7 +1619,7 @@ RSpec.describe Competition do
         FactoryBot.create(:registration, :waiting_list, competition: newcomer_month_comp)
 
         expect(newcomer_month_comp.registrations.count).to eq(7)
-        expect(newcomer_month_comp.non_newcomers_competing.count).to eq(2)
+        expect(newcomer_month_comp.non_newcomers_competing_count).to eq(2)
       end
     end
   end
