@@ -34,6 +34,7 @@ const colorForResult = (regionalRecord, pbMarker) => {
 
 export default function Results({
   person,
+  highlightPosition,
 }) {
   const personEvents = new Set(person.results.map((r) => r.eventId));
   const eventList = events.official.filter((r) => personEvents.has(r.id)).map((r) => r.id);
@@ -87,7 +88,7 @@ export default function Results({
           </TableHeader>
           <TableBody>
             {_.map(_.groupBy(currentResults, 'competition.id'), ((c) => c.map((r, index) => (
-              <Table.Row key={r.id}>
+              <Table.Row key={r.id} positive={highlightPosition === r.pos}>
                 <Table.Cell>
                   {index === 0 && <a href={competitionUrl(r.competition.id)}>{r.competition.name}</a>}
                 </Table.Cell>

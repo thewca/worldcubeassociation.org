@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+  Header,
   Icon, Popup, PopupContent, PopupHeader,
   Table, TableBody, TableCell, TableHeader, TableHeaderCell, TableRow,
 } from 'semantic-ui-react';
@@ -67,17 +68,17 @@ function ResultPopup({
     <Popup
       trigger={(
         <a href={resultForEvent.rankPath} className="plain">
-          {resultForEvent.time}
+          <b>{resultForEvent.time}</b>
         </a>
       )}
     >
       <PopupHeader><I18nHTMLTranslate i18nKey={`events.${eventId}`} /></PopupHeader>
       <PopupContent>
-        <h2>
+        <Header as="h2">
           {resultForEvent.time}
           {' '}
           <I18nHTMLTranslate i18nKey={average ? 'common.average' : 'common.single'} />
-        </h2>
+        </Header>
         <p>
           <EventIcon id={eventId} style={{ fontSize: 'medium' }} />
           {' '}
@@ -109,12 +110,12 @@ function EventRanks({
       <RankCell ranks={singleForEvent} type="country" />
       <RankCell ranks={singleForEvent} type="continent" />
       <RankCell ranks={singleForEvent} type="world" />
-      <TableCell>
+      <TableCell textAlign="right">
         {singleForEvent && (
           <ResultPopup person={person} resultForEvent={singleForEvent} eventId={eventId} />
         )}
       </TableCell>
-      <TableCell>
+      <TableCell textAlign="left">
         {averageForEvent && (
           <ResultPopup person={person} resultForEvent={averageForEvent} eventId={eventId} average />
         )}
@@ -145,10 +146,10 @@ export default function PersonalRecords({ person, averageRanks, singleRanks }) {
 
   return (
     <div>
-      <h3 className="text-center">
-        <I18nHTMLTranslate i18nKey="persons.show.personal_records" />
-      </h3>
-      <div style={{ overflowX: 'auto', marginBottom: '0.75rem' }}>
+      <Header as="h3" textAlign="center">
+        {I18n.t('persons.show.personal_records')}
+      </Header>
+      <div style={{ overflowX: 'auto' }}>
         <Table striped unstackable basic="very" compact="very" singleLine>
           <TableHeader>
             <TableRow>
@@ -158,11 +159,11 @@ export default function PersonalRecords({ person, averageRanks, singleRanks }) {
               <RankHeader type="national" short="NR" />
               <RankHeader type="continent" short="CR" />
               <RankHeader type="world" short="WR" />
-              <TableHeaderCell>
-                <I18nHTMLTranslate i18nKey="common.single" />
+              <TableHeaderCell collapsing textAlign="right">
+                {I18n.t('common.single')}
               </TableHeaderCell>
               <TableHeaderCell>
-                <I18nHTMLTranslate i18nKey="common.average" />
+                {I18n.t('common.average')}
               </TableHeaderCell>
               <RankHeader type="world" short="WR" />
               <RankHeader type="continent" short="CR" />
