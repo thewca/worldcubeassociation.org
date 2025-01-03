@@ -46,17 +46,17 @@ module ResultsValidators
 
       # Check if DOB is January 1
       if dob.month == 1 && dob.day == 1
-        validation_issues << ValidationWarning.new(:persons, competition_id, DOB_0101_WARNING, name: name)
+        validation_issues << ValidationWarning.new(ValidationIssue::VALIDATION_TYPES[:dob_jan_one], :persons, competition_id, DOB_0101_WARNING, name: name)
       end
 
       # Check if DOB is very young, competitor less than 3 years old are extremely rare, so we'd better check these birthdate are correct.
       if dob.year >= Time.now.year - 3
-        validation_issues << ValidationWarning.new(:persons, competition_id, VERY_YOUNG_PERSON_WARNING, name: name)
+        validation_issues << ValidationWarning.new(ValidationIssue::VALIDATION_TYPES[:dob_too_young], :persons, competition_id, VERY_YOUNG_PERSON_WARNING, name: name)
       end
 
       # Check if DOB is not so young
       if dob.year <= Time.now.year - 100
-        validation_issues << ValidationWarning.new(:persons, competition_id, NOT_SO_YOUNG_PERSON_WARNING, name: name)
+        validation_issues << ValidationWarning.new(ValidationIssue::VALIDATION_TYPES[:dob_too_old], :persons, competition_id, NOT_SO_YOUNG_PERSON_WARNING, name: name)
       end
 
       validation_issues

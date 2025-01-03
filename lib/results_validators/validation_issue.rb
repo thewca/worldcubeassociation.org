@@ -2,8 +2,21 @@
 
 module ResultsValidators
   class ValidationIssue
+    # Maintain the list in alphabetical order. This is to easily identify if a duplicate is added.
+    # Since this is not rails model, we need to manually maintain the uniqueness of the keys.
+    VALIDATION_TYPES_KEYS = [
+      :dob_jan_one,
+      :dob_too_old,
+      :dob_too_young,
+    ].freeze
+
+    VALIDATION_TYPES = VALIDATION_TYPES_KEYS.each_with_object({}) do |key, hash|
+      hash[key] = key.to_s
+    end.freeze
+
     attr_reader :kind, :competition_id
-    def initialize(kind, competition_id, message, **message_args)
+    def initialize(id, kind, competition_id, message, **message_args)
+      @id = id
       @message = message
       @kind = kind
       @args = message_args
