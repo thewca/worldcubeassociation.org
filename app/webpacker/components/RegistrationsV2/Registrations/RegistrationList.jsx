@@ -116,7 +116,7 @@ export default function RegistrationList({ competitionInfo }) {
     enabled: psychSheetEvent !== undefined,
   });
 
-  const registrationsWithPsychsheet = useMemo(() => {
+  const registrationsWithPsychSheet = useMemo(() => {
     if (psychSheet !== undefined) {
       setPsychSheetSortBy(psychSheet.sort_by);
       return psychSheet.sorted_rankings.map((p) => {
@@ -128,7 +128,7 @@ export default function RegistrationList({ competitionInfo }) {
   }, [psychSheet, registrations]);
 
   const data = useMemo(() => {
-    if (registrationsWithPsychsheet) {
+    if (registrationsWithPsychSheet) {
       let orderBy = [];
       if (psychSheetEvent === undefined) {
         switch (sortColumn) {
@@ -150,10 +150,10 @@ export default function RegistrationList({ competitionInfo }) {
       }
       const direction = sortDirection === 'descending' ? 'desc' : 'asc';
 
-      return _.orderBy(registrationsWithPsychsheet, orderBy, [direction]);
+      return _.orderBy(registrationsWithPsychSheet, orderBy, [direction]);
     }
     return [];
-  }, [registrationsWithPsychsheet, sortColumn, sortDirection, psychSheetEvent]);
+  }, [registrationsWithPsychSheet, sortColumn, sortDirection, psychSheetEvent]);
 
   if (isError) {
     return (
