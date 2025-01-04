@@ -1,5 +1,5 @@
 import 'flag-icons/css/flag-icons.css';
-import '@cubing/icons/css';
+import '@cubing/icons';
 
 import 'semantic-css/accordion';
 import 'semantic-css/button';
