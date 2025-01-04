@@ -20,6 +20,7 @@ import Errored from '../../Requests/Errored';
 import { formatAttemptResult } from '../../../lib/wca-live/attempts';
 import I18n from '../../../lib/i18n';
 import { countries } from '../../../lib/wca-data.js.erb';
+import { EventSelector } from '../../CompetitionsOverview/CompetitionsFilters';
 
 const sortReducer = createSortReducer(['name', 'country', 'total']);
 
@@ -72,7 +73,6 @@ function FooterContent({
           <Table.Cell />
           <Table.Cell />
           <Table.Cell />
-          <Table.Cell />
         </>
       )}
     </Table.Row>
@@ -96,6 +96,9 @@ export default function RegistrationList({ competitionInfo }) {
 
   const [psychSheetEvent, setPsychSheetEvent] = useState();
   const [psychSheetSortBy, setPsychSheetSortBy] = useState('single');
+  const handleEventSelection = ({ type, eventId }) => {
+    setPsychSheetEvent(type === 'toggle_event' ? eventId : undefined);
+  };
 
   const { isLoading: isLoadingPsychSheet, data: psychSheet } = useQuery({
     queryKey: [
@@ -113,7 +116,7 @@ export default function RegistrationList({ competitionInfo }) {
     enabled: psychSheetEvent !== undefined,
   });
 
-  const registrationsWithPsychsheet = useMemo(() => {
+  const registrationsWithPsychSheet = useMemo(() => {
     if (psychSheet !== undefined) {
       setPsychSheetSortBy(psychSheet.sort_by);
       return psychSheet.sorted_rankings.map((p) => {
@@ -125,7 +128,7 @@ export default function RegistrationList({ competitionInfo }) {
   }, [psychSheet, registrations]);
 
   const data = useMemo(() => {
-    if (registrationsWithPsychsheet) {
+    if (registrationsWithPsychSheet) {
       let orderBy = [];
       if (psychSheetEvent === undefined) {
         switch (sortColumn) {
@@ -147,10 +150,10 @@ export default function RegistrationList({ competitionInfo }) {
       }
       const direction = sortDirection === 'descending' ? 'desc' : 'asc';
 
-      return _.orderBy(registrationsWithPsychsheet, orderBy, [direction]);
+      return _.orderBy(registrationsWithPsychSheet, orderBy, [direction]);
     }
     return [];
-  }, [registrationsWithPsychsheet, sortColumn, sortDirection, psychSheetEvent]);
+  }, [registrationsWithPsychSheet, sortColumn, sortDirection, psychSheetEvent]);
 
   if (isError) {
     return (
@@ -161,6 +164,11 @@ export default function RegistrationList({ competitionInfo }) {
   if (registrationsLoading || isLoadingPsychSheet) {
     return (
       <Segment>
+        <PsychSheetEventSelector
+          handleEventSelection={handleEventSelection}
+          eventList={competitionInfo.event_ids}
+          selectedEvents={[psychSheetEvent].filter(Boolean)}
+        />
         <Loading />
       </Segment>
     );
@@ -168,7 +176,12 @@ export default function RegistrationList({ competitionInfo }) {
 
   return (
     <Segment style={{ overflowX: 'scroll' }}>
-      <Table sortable unstackable singleLine textAlign="left">
+      <PsychSheetEventSelector
+        handleEventSelection={handleEventSelection}
+        eventList={competitionInfo.event_ids}
+        selectedEvents={[psychSheetEvent].filter(Boolean)}
+      />
+      <Table striped sortable unstackable singleLine textAlign="left">
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell
@@ -188,7 +201,6 @@ export default function RegistrationList({ competitionInfo }) {
                 {competitionInfo.event_ids.map((id) => (
                   <Table.HeaderCell
                     key={`registration-table-header-${id}`}
-                    onClick={() => setPsychSheetEvent(id)}
                   >
                     <EventIcon id={id} size="1em" className="selected" />
                   </Table.HeaderCell>
@@ -202,14 +214,6 @@ export default function RegistrationList({ competitionInfo }) {
               </>
             ) : (
               <>
-                <Table.HeaderCell
-                  collapsing
-                  onClick={() => setPsychSheetEvent(undefined)}
-                >
-                  <Icon name="backward" />
-                  {' '}
-                  {I18n.t('competitions.registration_v2.list.psychsheets.go_back')}
-                </Table.HeaderCell>
                 <Table.HeaderCell>
                   <EventIcon id={psychSheetEvent} className="selected" size="1em" />
                 </Table.HeaderCell>
@@ -276,7 +280,6 @@ export default function RegistrationList({ competitionInfo }) {
                   </>
                 ) : (
                   <>
-                    <Table.Cell />
                     <Table.Cell
                       collapsing
                       textAlign="right"
@@ -325,4 +328,21 @@ export default function RegistrationList({ competitionInfo }) {
       </Table>
     </Segment>
   );
+}
+
+function PsychSheetEventSelector({
+  handleEventSelection,
+  eventList,
+  selectedEvents,
+}) {
+  return (
+    <EventSelector
+      onEventSelection={handleEventSelection}
+      eventList={eventList}
+      selectedEvents={selectedEvents}
+      showBreakBeforeButtons={false}
+      hideAllButton
+      id="event-selection"
+    />
+  )
 }

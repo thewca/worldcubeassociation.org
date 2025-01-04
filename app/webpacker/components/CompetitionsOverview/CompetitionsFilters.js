@@ -68,6 +68,8 @@ export function EventSelector({
   maxEvents = Infinity,
   shouldErrorOnEmpty = false,
   showBreakBeforeButtons = true,
+  hideAllButton = false,
+  hideClearButton = false,
   eventButtonsCompact = false,
   eventsDisabled = [],
   // Listing event as an argument here to indicate to developers that it's needed
@@ -79,17 +81,19 @@ export function EventSelector({
       <label htmlFor="events">
         {`${I18n.t('competitions.competition_form.events')}`}
         {showBreakBeforeButtons ? (<br />) : (' ')}
-        <Popup
-          disabled={!Number.isFinite(maxEvents)}
-          trigger={
-            <span><Button disabled={disabled || eventList.length >= maxEvents} primary type="button" size="mini" id="select-all-events" onClick={() => onEventSelection({ type: 'select_all_events' })}>{I18n.t('competitions.index.all_events')}</Button></span>
-        }
-        >
-          {I18n.t('competitions.registration_v2.register.event_limit', {
-            max_events: maxEvents,
-          })}
-        </Popup>
-        <Button disabled={disabled} type="button" size="mini" id="clear-all-events" onClick={() => onEventSelection({ type: 'clear_events' })}>{I18n.t('competitions.index.clear')}</Button>
+        {hideAllButton || (
+          <Popup
+            disabled={!Number.isFinite(maxEvents)}
+            trigger={
+              <span><Button disabled={disabled || eventList.length >= maxEvents} primary type="button" size="mini" id="select-all-events" onClick={() => onEventSelection({ type: 'select_all_events' })}>{I18n.t('competitions.index.all_events')}</Button></span>
+            }
+          >
+            {I18n.t('competitions.registration_v2.register.event_limit', {
+              max_events: maxEvents,
+            })}
+          </Popup>
+        )}
+        {hideClearButton || <Button disabled={disabled} type="button" size="mini" id="clear-all-events" onClick={() => onEventSelection({ type: 'clear_events' })}>{I18n.t('competitions.index.clear')}</Button>}
       </label>
       <Popup
         open={selectedEvents.length === 0}
