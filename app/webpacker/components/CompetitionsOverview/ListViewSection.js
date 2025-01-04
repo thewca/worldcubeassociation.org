@@ -406,7 +406,7 @@ function ConditionalYearHeader({
 }
 
 function RegistrationStatus({ comp }) {
-  if (comp.registration_status === 'not_yet_opened') {
+  if (comp.cached_registration_status === 'not_yet_opened') {
     return (
       <Popup
         trigger={<Icon name="clock" color="blue" />}
@@ -426,7 +426,7 @@ function RegistrationStatus({ comp }) {
     );
   }
 
-  if (comp.registration_status === 'past') {
+  if (comp.cached_registration_status === 'past') {
     return (
       <Popup
         trigger={<Icon name="user times" color="red" />}
@@ -446,7 +446,7 @@ function RegistrationStatus({ comp }) {
     );
   }
 
-  if (comp.registration_status === 'full') {
+  if (comp.cached_registration_status === 'full') {
     return (
       <Popup
         trigger={<Icon className="user clock" color="orange" />}
@@ -457,7 +457,7 @@ function RegistrationStatus({ comp }) {
     );
   }
 
-  if (comp.registration_status === 'open') {
+  if (comp.cached_registration_status === 'open') {
     return (
       <Popup
         trigger={<Icon name="user plus" color="green" />}

@@ -25,7 +25,7 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
 
     competitions = competitions_scope.search(params[:q], params: params)
 
-    serial_methods = ["short_display_name", "city", "country_iso2", "event_ids", "latitude_degrees", "longitude_degrees", "announced_at", "registration_status"]
+    serial_methods = ["short_display_name", "city", "country_iso2", "event_ids", "latitude_degrees", "longitude_degrees", "announced_at", "cached_registration_status"]
     serial_includes = {}
 
     serial_includes["delegates"] = { only: ["id", "name"], methods: [], include: ["avatar"] } if admin_mode
