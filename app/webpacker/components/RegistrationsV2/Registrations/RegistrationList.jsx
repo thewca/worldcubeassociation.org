@@ -181,7 +181,7 @@ export default function RegistrationList({ competitionInfo }) {
         eventList={competitionInfo.event_ids}
         selectedEvents={[psychSheetEvent].filter(Boolean)}
       />
-      <Table sortable unstackable singleLine textAlign="left">
+      <Table striped sortable unstackable singleLine textAlign="left">
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell
