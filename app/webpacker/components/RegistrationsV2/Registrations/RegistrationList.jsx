@@ -341,6 +341,7 @@ function PsychSheetEventSelector({
       eventList={eventList}
       selectedEvents={selectedEvents}
       showBreakBeforeButtons={false}
+      hideAllButton
       id="event-selection"
     />
   )
