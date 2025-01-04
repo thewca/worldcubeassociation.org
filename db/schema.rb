@@ -665,6 +665,16 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_02_154917) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "country_band_details", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.integer "number", null: false
+    t.date "start_date", null: false
+    t.date "end_date"
+    t.integer "due_amount_per_competitor_in_cents", null: false
+    t.integer "due_percent_registration_fee", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "country_bands", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.integer "number", null: false
     t.string "iso2", limit: 2, null: false
