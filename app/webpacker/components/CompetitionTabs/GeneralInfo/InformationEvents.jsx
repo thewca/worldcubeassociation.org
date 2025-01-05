@@ -9,10 +9,13 @@ import { events } from '../../../lib/wca-data.js.erb';
 import EventIcon from '../../wca/EventIcon';
 import InformationList from './InformationList';
 
-function EventsIconList({ competition }) {
+function EventsIconList({ competition, mainEventId }) {
   return competition.events.map((event) => (
     <React.Fragment key={event.id}>
-      <Popup trigger={<EventIcon id={event.id} size="1.5em" />} content={events.byId[event.id].name} />
+      <Popup
+        trigger={<EventIcon id={event.id} size={event.id === mainEventId ? '3em' : '1.5em'} />}
+        content={events.byId[event.id].name}
+      />
       {' '}
     </React.Fragment>
   ));
@@ -76,12 +79,7 @@ export default function InformationEvents({ competition, media }) {
     },
     {
       header: I18n.t('competitions.competition_info.events'),
-      content: (<EventsIconList competition={competition} />),
-    },
-    {
-      // TODO only enabled if `competition.main_event_id`
-      header: I18n.t('competitions.competition_info.main_event'),
-      content: (<Popup trigger={<EventIcon id={competition.main_event_id} size="1.5em" />} content={events.byId[competition.main_event_id].name} />),
+      content: (<EventsIconList competition={competition} mainEventId={competition.main_event_id} />),
     },
     {
       // TODO only enabled if `competition['results_posted?']`
