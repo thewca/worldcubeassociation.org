@@ -27,6 +27,7 @@ RSpec.describe 'API Registrations' do
           post api_v1_registrations_register_path, params: registration_request, headers: headers
         }.to have_enqueued_job(AddRegistrationJob)
       end
+
       it 'creates a registration when job is worked off' do
         perform_enqueued_jobs do
           post api_v1_registrations_register_path, params: registration_request, headers: headers
@@ -35,6 +36,18 @@ RSpec.describe 'API Registrations' do
           registration = Registration.find_by(user_id: user.id)
           expect(registration).to be_present
           expect(registration.events.map(&:id).sort).to eq(['333', '333oh'])
+        end
+      end
+
+      it 'creates a registration history' do
+        perform_enqueued_jobs do
+          post api_v1_registrations_register_path, params: registration_request, headers: headers
+
+          registration = Registration.find_by(user_id: user.id)
+          reg_history = registration.registration_history.first
+
+          expect(reg_history[:actor_id]).to eq(user.id.to_s)
+          expect(reg_history[:action]).to eq("Worker processed")
         end
       end
     end

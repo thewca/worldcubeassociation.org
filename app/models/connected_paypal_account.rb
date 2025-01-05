@@ -25,8 +25,45 @@ class ConnectedPaypalAccount < ApplicationRecord
     )
   end
 
+  def retrieve_payments(payment_intent)
+    captured_order = PaypalInterface.retrieve_order(self.paypal_merchant_id, payment_intent.payment_record.paypal_id)
+    raw_captures = captured_order['purchase_units'].first['payments']['captures']
+
+    raw_captures.map do |capture|
+      paypal_record = PaypalRecord.find_by(paypal_id: capture['id'])
+
+      if paypal_record.present?
+        paypal_record.update_status(capture)
+      else
+        paypal_record = PaypalRecord.create_from_api(
+          capture,
+          :capture,
+          {},
+          self.paypal_merchant_id,
+          payment_intent.payment_record,
+        )
+
+        yield paypal_record if block_given?
+      end
+
+      paypal_record
+    end
+  end
+
   def find_payment(record_id)
     PaypalRecord.capture.find(record_id)
+  end
+
+  def find_payment_from_request(params)
+    # Provided by ourselves when we pass the order body from the PayPal frontend SDK
+    #   to our own backend redirect route
+    order_id = params[:orderID]
+
+    # We expect that the record here is a top-level `order` object in PayPal's API model
+    stored_order = PaypalRecord.paypal_order.find_by(paypal_id: order_id)
+
+    # PayPal doesn't have nice checksums with orders unfortunately :/
+    [stored_order, nil]
   end
 
   def issue_refund(capture_record, amount_iso)

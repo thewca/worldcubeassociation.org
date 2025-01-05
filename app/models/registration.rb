@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
 class Registration < ApplicationRecord
-  # TODO: Reg-V3 Cleanup: Remove all these and use the competing_status_{status} scopes
   scope :pending, -> { where(competing_status: 'pending') }
   scope :accepted, -> { where(competing_status: 'accepted') }
   scope :cancelled, -> { where(competing_status: 'cancelled') }
   scope :rejected, -> { where(competing_status: 'rejected') }
   scope :waitlisted, -> { where(competing_status: 'waiting_list') }
   scope :non_competing, -> { where(is_competing: false) }
+  scope :competing, -> { where(is_competing: true) }
   scope :not_cancelled, -> { where.not(competing_status: 'cancelled') }
   scope :with_payments, -> { joins(:registration_payments).distinct }
   scope :wcif_ordered, -> { order(:id) }
@@ -338,7 +338,7 @@ class Registration < ApplicationRecord
   # TODO: V3-REG cleanup. All these Validations can be used instead of the registration_checker checks
   validate :cannot_be_undeleted_when_banned, if: :competing_status_changed?
   private def cannot_be_undeleted_when_banned
-    if user.banned? && might_attend?
+    if user.banned_at_date?(competition.start_date) && might_attend?
       errors.add(:user_id, I18n.t('registrations.errors.undelete_banned'))
     end
   end

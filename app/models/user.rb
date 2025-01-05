@@ -639,6 +639,7 @@ class User < ApplicationRecord
       :regionsAdmin,
       :downloadVoters,
       :generateDbToken,
+      :approveAvatars,
     ].index_with { |panel_page| panel_page.to_s.underscore.dasherize }
   end
 
@@ -1421,10 +1422,6 @@ class User < ApplicationRecord
     else
       false
     end
-  end
-
-  def can_access_at_least_one_panel?
-    panels_with_access.any?
   end
 
   def subordinate_delegates
