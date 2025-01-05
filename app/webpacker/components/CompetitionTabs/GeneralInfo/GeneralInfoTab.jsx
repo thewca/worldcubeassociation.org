@@ -117,7 +117,7 @@ export default function GeneralInfoTab({
       </Grid.Row>
       <Grid.Row>
         <Grid.Column>
-          <InformationList items={bottomItems} headerBias={2} />
+          <InformationList items={bottomItems} />
         </Grid.Column>
       </Grid.Row>
       {competition.winning_results.length > 0 && (
