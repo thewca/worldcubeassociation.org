@@ -122,6 +122,7 @@ export default function DateAddressContact({ competition }) {
     {
       header: I18n.t('competitions.competition_info.date'),
       content: (<DateWithCalendar competition={competition} />),
+      icon: 'calendar plus',
     },
     {
       header: I18n.t('competitions.competition_info.city'),
@@ -132,28 +133,34 @@ export default function DateAddressContact({ competition }) {
           {countries.byIso2[competition.country_iso2].name}
         </>
       ),
+      icon: 'map marker alternate',
     },
     {
       header: I18n.t('competitions.competition_info.venue'),
       content: (<Markdown md={competition.venue} id="competition-info-venue" />),
+      icon: 'building outline',
     },
     {
       header: I18n.t('competitions.competition_info.address'),
       content: (<VenueAddressLink competition={competition} />),
+      icon: 'map outline',
     },
     {
       // TODO only enabled if `competition.venue_details`
       header: I18n.t('competitions.competition_info.details'),
       content: (<PseudoLinkMarkdown text={competition.venue_details} />),
+      icon: 'info circle',
     },
     {
       // TODO only enabled if `competition.external_website`
       header: I18n.t('competitions.competition_info.website'),
       content: (<ExternalWebsiteLink competition={competition} />),
+      icon: 'globe',
     },
     {
       header: I18n.t('competitions.competition_info.contact'),
       content: (<ContactInformation competition={competition} />),
+      icon: 'comment outline',
     },
     {
       // TODO only enabled if `competition.organizers.length > 0`
@@ -161,12 +168,14 @@ export default function DateAddressContact({ competition }) {
         count: competition.organizers.length,
       }),
       content: (<OrganizersList competition={competition} />),
+      icon: 'folder open outline',
     },
     {
       header: I18n.t('competitions.competition_info.delegate', {
         count: competition.delegates.length,
       }),
       content: (<DelegatesList competition={competition} />),
+      icon: 'address card outline',
     },
     {
       // TODO only enabled if `competition['has_schedule?']`
