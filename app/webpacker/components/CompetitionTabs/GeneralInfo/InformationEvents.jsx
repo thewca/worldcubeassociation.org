@@ -1,0 +1,115 @@
+import React, { useCallback, useMemo, useState } from 'react';
+import {
+  Accordion, List, Popup,
+} from 'semantic-ui-react';
+import _ from 'lodash';
+import I18n from '../../../lib/i18n';
+import Markdown from '../../Markdown';
+import { events } from '../../../lib/wca-data.js.erb';
+import EventIcon from '../../wca/EventIcon';
+import InformationList from './InformationList';
+
+function EventsIconList({ competition }) {
+  return competition.events.map((event) => (
+    <React.Fragment key={event.id}>
+      <Popup trigger={<EventIcon id={event.id} size="1.5em" />} content={events.byId[event.id].name} />
+      {' '}
+    </React.Fragment>
+  ));
+}
+
+function MediaAccordion({ media }) {
+  const [mediaIndex, setMediaIndex] = useState(-1);
+
+  const handleMediaClick = useCallback((index) => {
+    setMediaIndex((oldIdx) => (oldIdx === index ? -1 : index));
+  }, [setMediaIndex]);
+
+  return (
+    <Accordion
+      fluid
+      styled
+      exclusive
+      activeIndex={mediaIndex}
+    >
+      {['report', 'article', 'multimedia'].map((mediaType, i) => {
+        const mediaOfType = media.filter((m) => m.type === mediaType);
+
+        if (mediaOfType.length <= 0) {
+          return null;
+        }
+
+        return (
+          <React.Fragment key={mediaType}>
+            <Accordion.Title onClick={() => handleMediaClick(i)}>
+              {`${_.capitalize(mediaType)} (${mediaOfType.length})`}
+            </Accordion.Title>
+            <Accordion.Content active={mediaIndex === i}>
+              <List>
+                {mediaOfType.map((item) => (
+                  <List.Item>
+                    <a
+                      href={item.uri}
+                      className="list-group-item"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      key={item.text}
+                    >
+                      {item.text}
+                    </a>
+                  </List.Item>
+                ))}
+              </List>
+            </Accordion.Content>
+          </React.Fragment>
+        );
+      })}
+    </Accordion>
+  );
+}
+
+export default function InformationEvents({ competition, media }) {
+  const infoEntries = useMemo(() => [
+    {
+      header: I18n.t('competitions.competition_info.information'),
+      content: (<Markdown md={competition.information} id="competition-info-information" />),
+    },
+    {
+      header: I18n.t('competitions.competition_info.events'),
+      padded: true,
+      content: (<EventsIconList competition={competition} />),
+    },
+    {
+      // TODO only enabled if `competition.main_event_id`
+      header: I18n.t('competitions.competition_info.main_event'),
+      padded: true,
+      content: (<Popup trigger={<EventIcon id={competition.main_event_id} size="1.5em" />} content={events.byId[competition.main_event_id].name} />),
+    },
+    {
+      // TODO only enabled if `competition['results_posted?']`
+      header: I18n.t('competitions.nav.menu.competitors'),
+      padded: true,
+      content: (competition.competitor_count),
+    },
+    {
+      // TODO only enabled if `media.length > 0`
+      content: (<MediaAccordion media={media} />),
+    },
+    {
+      // TODO only enabled if `!competition['results_posted?'] && competition.competitor_limit_enabled`
+      header: I18n.t('competitions.competition_info.competitor_limit'),
+      padded: true,
+      content: (competition.competitor_limit),
+    },
+    {
+      // TODO only enabled if `!competition['results_posted?']`
+      header: I18n.t('competitions.competition_info.number_of_bookmarks'),
+      padded: true,
+      content: (competition.number_of_bookmarks),
+    },
+  ], [competition, media]);
+
+  return (
+    <InformationList items={infoEntries} />
+  );
+}
