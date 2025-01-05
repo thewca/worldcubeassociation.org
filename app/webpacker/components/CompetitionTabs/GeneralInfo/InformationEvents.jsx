@@ -76,19 +76,16 @@ export default function InformationEvents({ competition, media }) {
     },
     {
       header: I18n.t('competitions.competition_info.events'),
-      padded: true,
       content: (<EventsIconList competition={competition} />),
     },
     {
       // TODO only enabled if `competition.main_event_id`
       header: I18n.t('competitions.competition_info.main_event'),
-      padded: true,
       content: (<Popup trigger={<EventIcon id={competition.main_event_id} size="1.5em" />} content={events.byId[competition.main_event_id].name} />),
     },
     {
       // TODO only enabled if `competition['results_posted?']`
       header: I18n.t('competitions.nav.menu.competitors'),
-      padded: true,
       content: (competition.competitor_count),
     },
     {
@@ -98,13 +95,11 @@ export default function InformationEvents({ competition, media }) {
     {
       // TODO only enabled if `!competition['results_posted?'] && competition.competitor_limit_enabled`
       header: I18n.t('competitions.competition_info.competitor_limit'),
-      padded: true,
       content: (competition.competitor_limit),
     },
     {
       // TODO only enabled if `!competition['results_posted?']`
       header: I18n.t('competitions.competition_info.number_of_bookmarks'),
-      padded: true,
       content: (competition.number_of_bookmarks),
     },
   ], [competition, media]);

@@ -5,14 +5,11 @@ export default function DataListGridEntry({
   header,
   children,
   icon,
-  padded = false,
   headerBias = 0,
 }) {
-  const style = padded ? {} : { padding: '0em' };
-
   return (
     <>
-      <Grid.Row verticalAlign="middle" style={style} only="computer">
+      <Grid.Row verticalAlign="middle" only="computer">
         <Grid.Column width={4 - headerBias} textAlign="right">
           { icon ? <Icon name={icon} />
             : <Header as="h5">{header}</Header>}
@@ -21,7 +18,7 @@ export default function DataListGridEntry({
           {children}
         </Grid.Column>
       </Grid.Row>
-      <Grid.Row style={style} only="tablet mobile">
+      <Grid.Row only="tablet mobile">
         <Grid.Column width={16} textAlign="left">
           <b>{header}</b>
           <br />
