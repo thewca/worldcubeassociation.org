@@ -6,7 +6,6 @@ import CompetitionTab from './CompetitionTab';
 import EventsTable from './EventsTable';
 import Schedule from './Schedule';
 import WCAQueryClientProvider from '../../lib/providers/WCAQueryClientProvider';
-import './style.scss';
 import TimeLimitCutoffInfo from './TimeLimitCutoffInfo';
 import I18n from '../../lib/i18n';
 
@@ -86,7 +85,7 @@ export default function Wrapper({
       <Tab
         defaultActiveIndex={tabIndexFromSlug(panes)}
         panes={panes}
-        menu={{ pointing: true, className: 'tab-wrapped' }}
+        menu={{ pointing: true, color: 'orange', style: { flexWrap: 'wrap' } }}
         onTabChange={(e, { activeIndex }) => {
           const tab = panes[activeIndex];
           updatePath(tab.slug);
