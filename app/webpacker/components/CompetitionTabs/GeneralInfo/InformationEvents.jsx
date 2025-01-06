@@ -72,35 +72,48 @@ function MediaAccordion({ media }) {
 }
 
 export default function InformationEvents({ competition, media }) {
-  const infoEntries = useMemo(() => [
-    {
-      header: I18n.t('competitions.competition_info.information'),
-      content: (<Markdown md={competition.information} id="competition-info-information" />),
-    },
-    {
-      header: I18n.t('competitions.competition_info.events'),
-      content: (<EventsIconList competition={competition} mainEventId={competition.main_event_id} />),
-    },
-    {
-      // TODO only enabled if `competition['results_posted?']`
-      header: I18n.t('competitions.nav.menu.competitors'),
-      content: (competition.competitor_count),
-    },
-    {
-      // TODO only enabled if `media.length > 0`
-      content: (<MediaAccordion media={media} />),
-    },
-    {
-      // TODO only enabled if `!competition['results_posted?'] && competition.competitor_limit_enabled`
-      header: I18n.t('competitions.competition_info.competitor_limit'),
-      content: (competition.competitor_limit),
-    },
-    {
-      // TODO only enabled if `!competition['results_posted?']`
-      header: I18n.t('competitions.competition_info.number_of_bookmarks'),
-      content: (competition.number_of_bookmarks),
-    },
-  ], [competition, media]);
+  const infoEntries = useMemo(() => {
+    const entries = [
+      {
+        header: I18n.t('competitions.competition_info.information'),
+        content: (<Markdown md={competition.information} id="competition-info-information" />),
+      },
+      {
+        header: I18n.t('competitions.competition_info.events'),
+        content: (<EventsIconList competition={competition} mainEventId={competition.main_event_id} />),
+      }];
+
+    if (competition['results_posted?']) {
+      entries.push({
+        header: I18n.t('competitions.nav.menu.competitors'),
+        content: (competition.competitor_count),
+      });
+    }
+
+    if (media.length > 0) {
+      entries.push(
+        {
+          content: (<MediaAccordion media={media} />),
+        },
+      );
+    }
+
+    if (!competition['results_posted?'] && competition.competitor_limit_enabled) {
+      entries.push({
+        header: I18n.t('competitions.competition_info.competitor_limit'),
+        content: (competition.competitor_limit),
+      });
+    }
+
+    if (!competition['results_posted?']) {
+      entries.push({
+        header: I18n.t('competitions.competition_info.number_of_bookmarks'),
+        content: (competition.number_of_bookmarks),
+      });
+    }
+
+    return entries;
+  }, [competition, media]);
 
   return (
     <InformationList items={infoEntries} />
