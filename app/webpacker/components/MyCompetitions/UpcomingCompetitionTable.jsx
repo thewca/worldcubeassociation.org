@@ -66,80 +66,82 @@ export default function UpcomingCompetitionTable({
   }
 
   return (
-    <Table basic>
-      <Table.Header>
-        <Table.Row>
-          { shouldShowRegistrationStatus && <Table.HeaderCell collapsing /> }
-          <Table.HeaderCell>
-            {I18n.t('competitions.competition_info.name')}
-          </Table.HeaderCell>
-          <Table.HeaderCell>
-            {I18n.t('competitions.competition_info.location')}
-          </Table.HeaderCell>
-          <Table.HeaderCell>
-            {I18n.t('competitions.competition_info.date')}
-          </Table.HeaderCell>
-          <Table.HeaderCell />
-          {canAdminCompetitions && (
-            <>
-              <Table.HeaderCell />
-              <Table.HeaderCell />
-              <Table.HeaderCell />
-            </>
-          )}
-
-        </Table.Row>
-      </Table.Header>
-
-      <Table.Body>
-        {competitions.map((competition) => (
-          <Popup
-            key={competition.id}
-            position="top center"
-            content={competitionStatusText(competition, registrationStatuses[competition.id])}
-            trigger={(
-              <Table.Row positive={competition['confirmed?'] && !competition['cancelled?']} negative={!competition['visible?']}>
-                {shouldShowRegistrationStatus && (
-                  <Popup
-                    position="top left"
-                    content={registrationStatusIconText(competition)}
-                    trigger={(
-                      <Table.Cell collapsing>
-                        {registrationStatusIcon(competition)}
-                      </Table.Cell>
-                    )}
-                  />
-                )}
-                <NameTableCell competition={competition} />
-                <LocationTableCell competition={competition} />
-                <DateTableCell competition={competition} />
-                <Table.Cell>
-                  {competingStatusIcon(registrationStatuses[competition.id])}
-                </Table.Cell>
-                {(permissions.can_organize_competitions.scope === '*' || permissions.can_organize_competitions.scope.includes(competition.id)) && (
-                  <Table.Cell>
-                    <a href={editCompetitionsUrl(competition.id)}>
-                      {I18n.t('competitions.my_competitions_table.edit')}
-                    </a>
-                  </Table.Cell>
-                )}
-                {(permissions.can_organize_competitions.scope === '*' || permissions.can_organize_competitions.scope.includes(competition.id)) && (
-                  <Table.Cell>
-                    <a href={competitionRegistrationsUrl(competition.id)}>
-                      {I18n.t('competitions.my_competitions_table.registrations')}
-                    </a>
-                  </Table.Cell>
-                )}
-                <ReportTableCell
-                  competitionId={competition.id}
-                  permissions={permissions}
-                  canAdminCompetitions={canAdminCompetitions}
-                />
-              </Table.Row>
+    <div style={{ overflowX: 'scroll' }}>
+      <Table basic unstackable singleLine>
+        <Table.Header>
+          <Table.Row>
+            { shouldShowRegistrationStatus && <Table.HeaderCell collapsing /> }
+            <Table.HeaderCell>
+              {I18n.t('competitions.competition_info.name')}
+            </Table.HeaderCell>
+            <Table.HeaderCell>
+              {I18n.t('competitions.competition_info.location')}
+            </Table.HeaderCell>
+            <Table.HeaderCell>
+              {I18n.t('competitions.competition_info.date')}
+            </Table.HeaderCell>
+            <Table.HeaderCell />
+            {canAdminCompetitions && (
+              <>
+                <Table.HeaderCell />
+                <Table.HeaderCell />
+                <Table.HeaderCell />
+              </>
             )}
-          />
-        ))}
-      </Table.Body>
-    </Table>
+
+          </Table.Row>
+        </Table.Header>
+
+        <Table.Body>
+          {competitions.map((competition) => (
+            <Popup
+              key={competition.id}
+              position="top center"
+              content={competitionStatusText(competition, registrationStatuses[competition.id])}
+              trigger={(
+                <Table.Row positive={competition['confirmed?'] && !competition['cancelled?']} negative={!competition['visible?']}>
+                  {shouldShowRegistrationStatus && (
+                    <Popup
+                      position="top left"
+                      content={registrationStatusIconText(competition)}
+                      trigger={(
+                        <Table.Cell collapsing>
+                          {registrationStatusIcon(competition)}
+                        </Table.Cell>
+                      )}
+                    />
+                  )}
+                  <NameTableCell competition={competition} />
+                  <LocationTableCell competition={competition} />
+                  <DateTableCell competition={competition} />
+                  <Table.Cell>
+                    {competingStatusIcon(registrationStatuses[competition.id])}
+                  </Table.Cell>
+                  {(permissions.can_organize_competitions.scope === '*' || permissions.can_organize_competitions.scope.includes(competition.id)) && (
+                    <Table.Cell>
+                      <a href={editCompetitionsUrl(competition.id)}>
+                        {I18n.t('competitions.my_competitions_table.edit')}
+                      </a>
+                    </Table.Cell>
+                  )}
+                  {(permissions.can_organize_competitions.scope === '*' || permissions.can_organize_competitions.scope.includes(competition.id)) && (
+                    <Table.Cell>
+                      <a href={competitionRegistrationsUrl(competition.id)}>
+                        {I18n.t('competitions.my_competitions_table.registrations')}
+                      </a>
+                    </Table.Cell>
+                  )}
+                  <ReportTableCell
+                    competitionId={competition.id}
+                    permissions={permissions}
+                    canAdminCompetitions={canAdminCompetitions}
+                  />
+                </Table.Row>
+              )}
+            />
+          ))}
+        </Table.Body>
+      </Table>
+    </div>
   );
 }
