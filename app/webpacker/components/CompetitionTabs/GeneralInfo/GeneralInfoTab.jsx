@@ -86,24 +86,28 @@ export default function GeneralInfoTab({
   winners,
   media = [],
 }) {
-  const bottomItems = useMemo(() => [
-    {
-      // TODO enabled if `competition.registration_open && competition.registration_close`
-      header: I18n.t('competitions.competition_info.registration_period.label'),
-      content: (<RegistrationTime competition={competition} />),
-    },
-    {
+  const bottomItems = useMemo(() => {
+    const items = [];
+    if (competition.registration_open && competition.registration_close) {
+      items.push({
+        header: I18n.t('competitions.competition_info.registration_period.label'),
+        content: (<RegistrationTime competition={competition} />),
+      });
+    }
+    items.push({
       header: I18n.t('competitions.competition_info.registration_requirements'),
       content: (<RegistrationRequirementsToggle competition={competition} userInfo={userInfo} />),
-    },
-    {
-      // TODO enabled if competition['results_posted?'] && (competition.main_event_id || records)
-      header: I18n.t('competitions.competition_info.highlights'),
-      content: (
-        <CompetitionHighlights competition={competition} records={records} winners={winners} />
-      ),
-    },
-  ], [competition, records, userInfo, winners]);
+    });
+    if (competition['results_posted?'] && (competition.main_event_id || records)) {
+      items.push({
+        header: I18n.t('competitions.competition_info.highlights'),
+        content: (
+          <CompetitionHighlights competition={competition} records={records} winners={winners} />
+        ),
+      });
+    }
+    return items;
+  }, [competition, records, userInfo, winners]);
 
   return (
     <Grid padded stackable>
