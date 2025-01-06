@@ -118,71 +118,86 @@ function PdfDownloadLink({ competition }) {
 }
 
 export default function DateAddressContact({ competition }) {
-  const infoEntries = useMemo(() => [
-    {
-      header: I18n.t('competitions.competition_info.date'),
-      content: (<DateWithCalendar competition={competition} />),
-      icon: 'calendar plus',
-    },
-    {
-      header: I18n.t('competitions.competition_info.city'),
-      content: (
-        <>
-          {competition.city}
-          {', '}
-          {countries.byIso2[competition.country_iso2].name}
-        </>
-      ),
-      icon: 'map marker alternate',
-    },
-    {
-      header: I18n.t('competitions.competition_info.venue'),
-      content: (<Markdown md={competition.venue} id="competition-info-venue" />),
-      icon: 'building outline',
-    },
-    {
-      header: I18n.t('competitions.competition_info.address'),
-      content: (<VenueAddressLink competition={competition} />),
-      icon: 'map outline',
-    },
-    {
-      // TODO only enabled if `competition.venue_details`
-      header: I18n.t('competitions.competition_info.details'),
-      content: (<PseudoLinkMarkdown text={competition.venue_details} />),
-      icon: 'info circle',
-    },
-    {
-      // TODO only enabled if `competition.external_website`
-      header: I18n.t('competitions.competition_info.website'),
-      content: (<ExternalWebsiteLink competition={competition} />),
-      icon: 'globe',
-    },
-    {
-      header: I18n.t('competitions.competition_info.contact'),
-      content: (<ContactInformation competition={competition} />),
-      icon: 'comment outline',
-    },
-    {
-      // TODO only enabled if `competition.organizers.length > 0`
-      header: I18n.t('competitions.competition_info.organizer_plural', {
-        count: competition.organizers.length,
-      }),
-      content: (<OrganizersList competition={competition} />),
-      icon: 'folder open outline',
-    },
-    {
+  const infoEntries = useMemo(() => {
+    const entries = [
+      {
+        header: I18n.t('competitions.competition_info.date'),
+        content: (<DateWithCalendar competition={competition} />),
+        icon: 'calendar plus',
+      },
+      {
+        header: I18n.t('competitions.competition_info.city'),
+        content: (
+          <>
+            {competition.city}
+            {', '}
+            {countries.byIso2[competition.country_iso2].name}
+          </>
+        ),
+        icon: 'map marker alternate',
+      },
+      {
+        header: I18n.t('competitions.competition_info.venue'),
+        content: (<Markdown md={competition.venue} id="competition-info-venue" />),
+        icon: 'building outline',
+      },
+      {
+        header: I18n.t('competitions.competition_info.address'),
+        content: (<VenueAddressLink competition={competition} />),
+        icon: 'map outline',
+      }];
+
+    if (competition.venue_details) {
+      entries.push({
+        header: I18n.t('competitions.competition_info.details'),
+        content: (<PseudoLinkMarkdown text={competition.venue_details} />),
+        icon: 'info circle',
+      });
+    }
+
+    if (competition.external_website) {
+      entries.push({
+        header: I18n.t('competitions.competition_info.website'),
+        content: (<ExternalWebsiteLink competition={competition} />),
+        icon: 'globe',
+      });
+    }
+
+    entries.push(
+      {
+        header: I18n.t('competitions.competition_info.contact'),
+        content: (<ContactInformation competition={competition} />),
+        icon: 'comment outline',
+      },
+    );
+
+    if (competition.organizers.length > 0) {
+      entries.push({
+        header: I18n.t('competitions.competition_info.organizer_plural', {
+          count: competition.organizers.length,
+        }),
+        content: (<OrganizersList competition={competition} />),
+        icon: 'folder open outline',
+      });
+    }
+
+    entries.push({
       header: I18n.t('competitions.competition_info.delegate', {
         count: competition.delegates.length,
       }),
       content: (<DelegatesList competition={competition} />),
       icon: 'address card outline',
-    },
-    {
-      // TODO only enabled if `competition['has_schedule?']`
-      icon: 'print',
-      content: (<PdfDownloadLink competition={competition} />),
-    },
-  ], [competition]);
+    });
+
+    if (competition['has_schedule?']) {
+      entries.push({
+        icon: 'print',
+        content: (<PdfDownloadLink competition={competition} />),
+      });
+    }
+
+    return entries;
+  }, [competition]);
 
   return (
     <InformationList items={infoEntries} />
