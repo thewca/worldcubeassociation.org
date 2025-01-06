@@ -181,7 +181,7 @@ export default function RegistrationList({ competitionInfo }) {
         eventList={competitionInfo.event_ids}
         selectedEvents={[psychSheetEvent].filter(Boolean)}
       />
-      <Table striped sortable unstackable singleLine textAlign="left">
+      <Table striped sortable unstackable compact singleLine textAlign="left">
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell
@@ -344,5 +344,5 @@ function PsychSheetEventSelector({
       hideAllButton
       id="event-selection"
     />
-  )
+  );
 }
