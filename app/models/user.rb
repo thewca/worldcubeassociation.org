@@ -677,6 +677,7 @@ class User < ApplicationRecord
         pages: [
           panel_pages[:postingDashboard],
           panel_pages[:editPerson],
+          panel_pages[:approveAvatars],
         ],
       },
       wst: {

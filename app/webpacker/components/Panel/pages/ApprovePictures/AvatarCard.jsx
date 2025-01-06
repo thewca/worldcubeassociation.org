@@ -154,12 +154,16 @@ export default function AvatarCard({
                 )}
               </Grid.Column>
               <Grid.Column>
-                <Avatar
-                  title={user.avatar_history[activeAvatarIndex].id === user.avatar.id ? `Current profile picture for ${user.name}`
-                    : `Old profile picture for ${user.name}`}
-                  imageUrl={user.avatar_history[activeAvatarIndex].url}
-                  actions={currentAvatarActions}
-                />
+                {user.avatar_history.length > 0 ? (
+                  <Avatar
+                    title={user.avatar_history[activeAvatarIndex].id === user.avatar.id ? `Current profile picture for ${user.name}`
+                      : `Old profile picture for ${user.name}`}
+                    imageUrl={user.avatar_history[activeAvatarIndex].url}
+                    actions={currentAvatarActions}
+                  />
+                ) : (
+                  <span>No previous avatars!</span>
+                )}
               </Grid.Column>
             </Grid.Row>
           </Grid>
