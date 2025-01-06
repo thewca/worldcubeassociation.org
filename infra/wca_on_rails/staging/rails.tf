@@ -42,7 +42,7 @@ locals {
     },
     {
       name = "SIDEKIQ_REDIS_URL"
-      value = "redis://redis-main-staging-001.iebvzt.0001.usw2.cache.amazonaws.com:6379"
+      value = "redis://wca-staging-sidekiq-001.iebvzt.0001.usw2.cache.amazonaws.com:6379"
     },
     {
       name = "STAGING_OAUTH_URL"
@@ -51,6 +51,10 @@ locals {
     {
       name = "STORAGE_AWS_BUCKET"
       value = aws_s3_bucket.storage-bucket.id
+    },
+    {
+      name = "REGISTRATION_QUEUE"
+      value = aws_sqs_queue.this.url
     },
     {
       name = "AWS_REGION"
@@ -196,6 +200,17 @@ data "aws_iam_policy_document" "task_policy" {
       "rds-db:connect",
     ]
     resources = ["arn:aws:rds-db:${var.region}:${var.shared.account_id}:dbuser:${var.rds_iam_identifier}/${var.DATABASE_WRT_USER}"]
+  }
+  statement {
+    effect = "Allow"
+    actions = [
+      "sqs:SendMessage",
+      "sqs:ReceiveMessage",
+      "sqs:DeleteMessage",
+      "sqs:GetQueueAttributes",
+      "sqs:GetQueueUrl"
+    ]
+    resources = [aws_sqs_queue.this.arn]
   }
 }
 

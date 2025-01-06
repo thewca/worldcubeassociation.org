@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_10_25_161404) do
+ActiveRecord::Schema[7.2].define(version: 2024_11_24_050607) do
   create_table "Competitions", id: { type: :string, limit: 32, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", limit: 50, default: "", null: false
     t.string "cityName", limit: 50, default: "", null: false
@@ -982,7 +982,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_25_161404) do
   create_table "registration_history_changes", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "registration_history_entry_id"
     t.string "key"
-    t.string "value"
+    t.text "value"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["registration_history_entry_id"], name: "idx_on_registration_history_entry_id_e1e6e4bed0"
@@ -1030,8 +1030,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_25_161404) do
     t.text "roles"
     t.boolean "is_competing", default: true
     t.text "administrative_notes"
-    t.datetime "rejected_at"
-    t.datetime "waitlisted_at"
+    t.string "competing_status", default: "pending", null: false
     t.index ["competition_id", "user_id"], name: "index_registrations_on_competition_id_and_user_id", unique: true
     t.index ["competition_id"], name: "index_registrations_on_competition_id"
     t.index ["user_id"], name: "index_registrations_on_user_id"
@@ -1180,6 +1179,56 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_25_161404) do
     t.index ["stripe_record_id"], name: "index_stripe_webhook_events_on_stripe_record_id"
   end
 
+  create_table "ticket_logs", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.bigint "ticket_id", null: false
+    t.string "action_type", null: false
+    t.string "action_value"
+    t.integer "acting_user_id", null: false
+    t.bigint "acting_stakeholder_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["acting_stakeholder_id"], name: "index_ticket_logs_on_acting_stakeholder_id"
+    t.index ["acting_user_id"], name: "index_ticket_logs_on_acting_user_id"
+    t.index ["ticket_id"], name: "index_ticket_logs_on_ticket_id"
+  end
+
+  create_table "ticket_stakeholders", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.bigint "ticket_id", null: false
+    t.string "stakeholder_type", null: false
+    t.bigint "stakeholder_id", null: false
+    t.string "connection", null: false
+    t.boolean "is_active", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["stakeholder_type", "stakeholder_id"], name: "index_ticket_stakeholders_on_stakeholder"
+    t.index ["ticket_id"], name: "index_ticket_stakeholders_on_ticket_id"
+  end
+
+  create_table "tickets", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "metadata_type", null: false
+    t.bigint "metadata_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["metadata_type", "metadata_id"], name: "index_tickets_on_metadata"
+  end
+
+  create_table "tickets_edit_person", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "status", null: false
+    t.string "wca_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "tickets_edit_person_fields", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.bigint "tickets_edit_person_id", null: false
+    t.string "field_name", null: false
+    t.text "old_value", null: false
+    t.text "new_value", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["tickets_edit_person_id"], name: "index_tickets_edit_person_fields_on_tickets_edit_person_id"
+  end
+
   create_table "uploaded_jsons", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "competition_id"
     t.text "json_str", size: :long
@@ -1310,7 +1359,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_25_161404) do
 
   create_table "waiting_lists", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "holder_type"
-    t.bigint "holder_id"
+    t.string "holder_id"
     t.json "entries"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -1350,12 +1399,14 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_25_161404) do
   add_foreign_key "oauth_openid_requests", "oauth_access_grants", column: "access_grant_id", on_delete: :cascade
   add_foreign_key "payment_intents", "users", column: "initiated_by_id"
   add_foreign_key "paypal_records", "paypal_records", column: "parent_record_id"
-  add_foreign_key "regional_records_lookup", "Results", column: "resultId"
+  add_foreign_key "regional_records_lookup", "Results", column: "resultId", on_update: :cascade, on_delete: :cascade
   add_foreign_key "registration_history_changes", "registration_history_entries"
   add_foreign_key "sanity_check_exclusions", "sanity_checks"
   add_foreign_key "sanity_checks", "sanity_check_categories"
   add_foreign_key "stripe_records", "stripe_records", column: "parent_record_id"
   add_foreign_key "stripe_webhook_events", "stripe_records"
+  add_foreign_key "ticket_logs", "ticket_stakeholders", column: "acting_stakeholder_id"
+  add_foreign_key "ticket_logs", "users", column: "acting_user_id"
   add_foreign_key "user_avatars", "users"
   add_foreign_key "user_groups", "user_groups", column: "parent_group_id"
   add_foreign_key "user_roles", "user_groups", column: "group_id"

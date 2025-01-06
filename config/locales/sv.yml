@@ -669,6 +669,8 @@ sv:
         competing_only: Enbart tävlande
         #original_hash: 35a6012
         competing_and_attending: Tävlande & närvarande
+        #original_hash: 4f30c10
+        competing_and_attending_and_forums: 'Tävlande, Närvarande, & Forum'
     competition_medium:
       status:
         #original_hash: 61a0572
@@ -3162,7 +3164,7 @@ sv:
           #original_hash: d493e6a
           is_visible: Gör tävlingen synlig för allmänheten
           #original_hash: e7daccb
-          uses_v_2_registrations: Använd nya anmälningssystemet
+          uses_new_registration_system: Använd det nya anmälningssystemet
         #original_hash: 89f89c0
         competition_id: ID
         #original_hash: 709a232
@@ -3315,7 +3317,7 @@ sv:
           #original_hash: da39a3e
           is_visible: ''
           #original_hash: 68d3cc6
-          uses_v_2_registrations: >-
+          uses_new_registration_system: >-
             Om detta är inaktiverat kommer byte av anmälningssystem att orsaka
             tekniska problem. Kontakta WST för att få hjälp om du fortfarande
             behöver byta anmälningssystem.

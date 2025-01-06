@@ -56,7 +56,7 @@ function Register({
     refetch,
   } = useQuery({
     queryKey: ['registration', competitionInfo.id, userInfo.id],
-    queryFn: () => getSingleRegistration(userInfo.id, competitionInfo.id),
+    queryFn: () => getSingleRegistration(userInfo.id, competitionInfo),
     onError: (data) => {
       const { error } = data.json;
       dispatch(setMessage(
@@ -74,7 +74,7 @@ function Register({
     return <Loading />;
   }
 
-  if (userCanPreRegister || competitionInfo['registration_currently_open?'] || timerEnded) {
+  if (registration || userCanPreRegister || competitionInfo['registration_currently_open?'] || timerEnded) {
     return (
       <>
         <RegistrationMessage />

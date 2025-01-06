@@ -22,6 +22,10 @@ class PanelController < ApplicationController
     panel_details = User.panel_list[@panel_id.to_sym]
     @pages = panel_details[:pages]
     @title = panel_details[:name]
+    # This awkward mapping is necessary because `panel_notifications` returns callables
+    #   which compute the value _if needed_. The point is to reduce workload, not every time
+    #   that `User.panel_notifications` is called should trigger an actual computation.
+    @notifications = User.panel_notifications.slice(*@pages).transform_values(&:call)
   end
 
   def generate_db_token
@@ -44,5 +48,13 @@ class PanelController < ApplicationController
       main: 1,
       replica: 2,
     }
+  end
+
+  def redirect
+    @panel_page = params.require(:panel_page)
+    panel_with_panel_page = current_user.panels_with_access&.find { |panel| User.panel_list[panel][:pages].include?(@panel_page) }
+
+    return head :unauthorized if panel_with_panel_page.nil?
+    redirect_to panel_index_path(panel_id: panel_with_panel_page, anchor: @panel_page)
   end
 end

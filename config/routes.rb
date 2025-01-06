@@ -41,13 +41,9 @@ Rails.application.routes.draw do
     delete 'users/sign-out-other' => 'sessions#destroy_other', as: :destroy_other_user_sessions
   end
 
-  # TODO: This can be removed after deployment, this is so we don't have any users error out if they click on pay
-  # while the deployment happens
-  get 'registration/:id/payment-completion' => 'registrations#payment_completion_legacy', as: :registration_payment_completion_legacy
-
   post 'registration/:id/load-payment-intent/:payment_integration' => 'registrations#load_payment_intent', as: :registration_payment_intent
   post 'competitions/:competition_id/refund/:payment_integration/:payment_id' => 'registrations#refund_payment', as: :registration_payment_refund
-  get 'competitions/:competition_id/payment-completion' => 'registrations#payment_completion', as: :registration_payment_completion
+  get 'competitions/:competition_id/payment-completion/:payment_integration' => 'registrations#payment_completion', as: :registration_payment_completion
   post 'registration/stripe-webhook' => 'registrations#stripe_webhook', as: :registration_stripe_webhook
   get 'registration/payment-denomination' => 'registrations#payment_denomination', as: :registration_payment_denomination
   resources :users, only: [:index, :edit, :update]
@@ -64,8 +60,8 @@ Rails.application.routes.draw do
   post 'users/:id/avatar' => 'users#upload_avatar'
   patch 'users/:id/avatar' => 'users#update_avatar'
   delete 'users/:id/avatar' => 'users#delete_avatar'
-  get 'admin/avatars' => 'admin/avatars#index'
-  post 'admin/avatars' => 'admin/avatars#update_all'
+  get 'admin/avatars/pending' => 'admin/avatars#pending_avatar_users', as: :pending_avatars
+  post 'admin/avatars' => 'admin/avatars#update_avatar', as: :admin_update_avatar
 
   get 'map' => 'competitions#embedable_map'
 
@@ -74,7 +70,7 @@ Rails.application.routes.draw do
   get 'competitions/:id/enable_v2' => "competitions#enable_v2", as: :enable_v2
   post 'competitions/bookmark' => 'competitions#bookmark', as: :bookmark
   post 'competitions/unbookmark' => 'competitions#unbookmark', as: :unbookmark
-  get 'competitions/registrations_v2/:competition_id/:user_id/edit' => 'registrations#edit_v2', as: :edit_registration_v2
+  get 'competitions/registrations_v2/:competition_id/:user_id/edit' => 'registrations#edit', as: :edit_registration_v2
 
   resources :competitions do
     get 'edit/admin' => 'competitions#admin_edit', as: :admin_edit
@@ -124,6 +120,7 @@ Rails.application.routes.draw do
     delete '/admin/inbox-data' => 'admin#delete_inbox_data', as: :admin_delete_inbox_data
     delete '/admin/results-data' => 'admin#delete_results_data', as: :admin_delete_results_data
     get '/admin/results/:round_id/new' => 'admin/results#new', as: :new_result
+    get '/admin/scrambles/:round_id/new' => 'admin/scrambles#new', as: :new_scramble
 
     get '/payment_integration/setup' => 'competitions#payment_integration_setup', as: :payment_integration_setup
     get '/payment_integration/:payment_integration/connect' => 'competitions#connect_payment_integration', as: :connect_payment_integration
@@ -160,7 +157,7 @@ Rails.application.routes.draw do
 
   scope '/admin' do
     resources :results, except: [:index, :new], controller: 'admin/results'
-    post 'results' => 'admin/results#create'
+    resources :scrambles, except: [:index, :new], controller: 'admin/scrambles'
     get 'events_data/:competition_id' => 'admin/results#show_events_data', as: :competition_events_data
   end
 
@@ -194,6 +191,11 @@ Rails.application.routes.draw do
     get 'generate_db_token' => 'panel#generate_db_token', as: :panel_generate_db_token
   end
   get 'panel/:panel_id' => 'panel#index', as: :panel_index
+  get 'panel/redirect/:panel_page' => 'panel#redirect', as: :panel_redirect
+  resources :tickets, only: [:show] do
+    post 'update_status' => 'tickets#update_status', as: :update_status
+    get 'edit_person_validators' => 'tickets#edit_person_validators', as: :edit_person_validators
+  end
   resources :notifications, only: [:index]
 
   root 'posts#homepage'
@@ -239,8 +241,12 @@ Rails.application.routes.draw do
 
   get 'contact' => 'contacts#index'
   post 'contact' => 'contacts#contact'
-  get 'contact/dob' => 'contacts#dob'
-  post 'contact/dob' => 'contacts#dob_create'
+  scope 'contact' do
+    get 'edit_profile' => 'contacts#edit_profile'
+    post 'edit_profile' => 'contacts#edit_profile_action', as: :contact_edit_profile_action
+    get 'dob' => 'contacts#dob', as: :contact_dob
+    post 'dob' => 'contacts#dob_create'
+  end
 
   get '/regulations' => 'regulations#show', id: 'index'
   get '/regulations/wca-regulations-and-guidelines', to: redirect('https://regulations.worldcubeassociation.org/wca-regulations-and-guidelines.pdf', status: 302)
@@ -272,6 +278,7 @@ Rails.application.routes.draw do
   get '/admin/person_data' => 'admin#person_data'
   get '/admin/compute_auxiliary_data' => 'admin#compute_auxiliary_data'
   get '/admin/do_compute_auxiliary_data' => 'admin#do_compute_auxiliary_data'
+  get '/admin/reset_compute_auxiliary_data' => 'admin#reset_compute_auxiliary_data'
   get '/admin/generate_exports' => 'admin#generate_exports'
   get '/admin/generate_db_token' => 'admin#generate_db_token'
   get '/admin/do_generate_dev_export' => 'admin#do_generate_dev_export'
@@ -335,6 +342,21 @@ Rails.application.routes.draw do
         post '/payment/init_stripe' => 'payment#init_stripe'
       end
     end
+
+    # While this is the start of a v1 API, this is currently not usable by outside developers as
+    # getting a JWT token requires you to be logged in through the Website
+    namespace :v1 do
+      namespace :registrations do
+        get '/register', to: 'registrations#show'
+        post '/register', to: 'registrations#create'
+        patch '/register', to: 'registrations#update'
+        patch '/bulk_update', to: 'registrations#bulk_update'
+        get '/:competition_id', to: 'registrations#list'
+        get '/:competition_id/admin', to: 'registrations#list_admin', as: :list_admin
+        get '/:competition_id/payment', to: 'registrations#payment_ticket', as: :payment_ticket
+      end
+    end
+
     namespace :v0 do
       get '/', to: redirect('/help/api', status: 302)
       get '/me' => 'api#me'
@@ -350,6 +372,7 @@ Rails.application.routes.draw do
       get '/search/regulations' => 'api#regulations_search'
       get '/search/incidents' => 'api#incidents_search'
       get '/users' => 'users#show_users_by_id'
+      post '/users' => 'users#show_users_by_id'
       get '/users/me' => 'users#show_me'
       get '/users/me/personal_records' => 'users#personal_records'
       get '/users/me/preferred_events' => 'users#preferred_events'

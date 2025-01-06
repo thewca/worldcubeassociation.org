@@ -33,12 +33,12 @@ class UsersController < ApplicationController
           total: @users.size,
           rows: @users.limit(params[:limit]).offset(params[:offset]).map do |user|
             {
-              wca_id: user.wca_id ? view_context.link_to(user.wca_id, person_path(user.wca_id)) : "",
+              wca_id: user.wca_id,
               name: ERB::Util.html_escape(user.name),
               # Users don't have to provide a country upon registration
-              country: user.country&.id,
+              country: user.country&.iso2,
               email: ERB::Util.html_escape(user.email),
-              edit: view_context.link_to("Edit", edit_user_path(user)),
+              user_id: user.id,
             }
           end,
         }
@@ -163,7 +163,7 @@ class UsersController < ApplicationController
     thumbnail_json = params.require(:thumbnail)
     thumbnail = JSON.parse(thumbnail_json).symbolize_keys
 
-    user_avatar = UserAvatar.create!(
+    user_avatar = UserAvatar.build(
       user: user_to_edit,
       thumbnail_crop_x: thumbnail[:x],
       thumbnail_crop_y: thumbnail[:y],
@@ -172,7 +172,11 @@ class UsersController < ApplicationController
       private_image: upload_file,
     )
 
-    render json: { ok: user_avatar.valid? }
+    if user_avatar.save
+      render json: { ok: true }
+    else
+      render status: :unprocessable_content, json: user_avatar.errors
+    end
   end
 
   def update_avatar
@@ -254,7 +258,7 @@ class UsersController < ApplicationController
   end
 
   private def sso_moderator?(user)
-    user.communication_team?
+    user.communication_team? || user.results_team?
   end
 
   def sso_discourse

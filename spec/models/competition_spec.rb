@@ -561,7 +561,7 @@ RSpec.describe Competition do
       expect(competition).to be_valid
       expect(competition.is_probably_over?).to be true
       expect(competition.results_posted?).to be false
-      expect(competition.info_for(nil)[:upload_results]).to eq "This competition is over, we are working to upload the results as soon as possible!"
+      expect(competition.info_for(nil)[:upload_results]).to eq "This competition is over. We are working to upload the results as soon as possible!"
     end
 
     it "displays info if competition is in progress" do

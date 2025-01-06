@@ -4,8 +4,6 @@ require "uri"
 require "fileutils"
 
 class User < ApplicationRecord
-  include MicroserviceRegistrationHolder
-
   has_many :competition_delegates, foreign_key: "delegate_id"
   # This gives all the competitions where the user is marked as a Delegate,
   # regardless of the competition's status.
@@ -493,6 +491,10 @@ class User < ApplicationRecord
     senior_delegate_roles.any?
   end
 
+  def regional_delegate?
+    regional_delegate_roles.any?
+  end
+
   def staff_or_any_delegate?
     staff? || any_kind_of_delegate?
   end
@@ -542,8 +544,12 @@ class User < ApplicationRecord
     delegate_roles.select { |role| role.metadata.status == RolesMetadataDelegateRegions.statuses[:senior_delegate] }
   end
 
+  private def regional_delegate_roles
+    delegate_roles.select { |role| role.metadata.status == RolesMetadataDelegateRegions.statuses[:regional_delegate] }
+  end
+
   private def can_view_current_banned_competitors?
-    can_view_past_banned_competitors? || staff_delegate?
+    can_view_past_banned_competitors? || staff_delegate? || appeals_committee?
   end
 
   private def can_view_past_banned_competitors?
@@ -633,7 +639,14 @@ class User < ApplicationRecord
       :regionsAdmin,
       :downloadVoters,
       :generateDbToken,
+      :approveAvatars,
     ].index_with { |panel_page| panel_page.to_s.underscore.dasherize }
+  end
+
+  def self.panel_notifications
+    {
+      self.panel_pages[:approveAvatars] => lambda { User.where.not(pending_avatar: nil).count },
+    }
   end
 
   def self.panel_list
@@ -655,6 +668,12 @@ class User < ApplicationRecord
           panel_pages[:bannedCompetitors],
         ],
       },
+      wapc: {
+        name: 'WAC panel',
+        pages: [
+          panel_pages[:bannedCompetitors],
+        ],
+      },
       wfc: {
         name: 'WFC panel',
         pages: [],
@@ -664,6 +683,7 @@ class User < ApplicationRecord
         pages: [
           panel_pages[:postingDashboard],
           panel_pages[:editPerson],
+          panel_pages[:approveAvatars],
         ],
       },
       wst: {
@@ -769,7 +789,7 @@ class User < ApplicationRecord
   end
 
   def can_view_all_users?
-    admin? || board_member? || results_team? || communication_team? || wic_team? || any_kind_of_delegate? || weat_team? || wrc_team?
+    admin? || board_member? || results_team? || communication_team? || wic_team? || any_kind_of_delegate? || weat_team? || wrc_team? || appeals_committee?
   end
 
   def can_edit_user?(user)
@@ -836,6 +856,7 @@ class User < ApplicationRecord
       competition.organizers.include?(self) ||
       competition.delegates.include?(self) ||
       competition.delegates.flat_map(&:senior_delegates).compact.include?(self) ||
+      competition.delegates.flat_map(&:regional_delegates).compact.include?(self) ||
       wic_team?
     )
   end
@@ -947,7 +968,7 @@ class User < ApplicationRecord
   end
 
   def can_see_admin_competitions?
-    can_admin_competitions? || senior_delegate? || quality_assurance_committee? || weat_team?
+    can_admin_competitions? || senior_delegate? || regional_delegate? || quality_assurance_committee? || weat_team?
   end
 
   def can_issue_refunds?(competition)
@@ -1399,6 +1420,8 @@ class User < ApplicationRecord
       active_roles.any? { |role| role.is_lead? && (role.group.teams_committees? || role.group.councils?) }
     when :senior_delegate
       senior_delegate?
+    when :wapc
+      appeals_committee?
     when :wic
       wic_team?
     when :weat
@@ -1406,10 +1429,6 @@ class User < ApplicationRecord
     else
       false
     end
-  end
-
-  def can_access_at_least_one_panel?
-    panels_with_access.any?
   end
 
   def subordinate_delegates

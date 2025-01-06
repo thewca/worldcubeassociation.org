@@ -269,6 +269,10 @@ class Person < ApplicationRecord
     Rails.application.routes.url_helpers.person_url(wca_id, host: EnvConfig.ROOT_URL)
   end
 
+  def self.fields_edit_requestable
+    [:name, :country_iso2, :gender, :dob].freeze
+  end
+
   DEFAULT_SERIALIZE_OPTIONS = {
     only: ["wca_id", "name", "gender"],
     methods: ["url", "country_iso2"],

@@ -16,7 +16,7 @@ import ImageUpload from './ImageUpload';
 import 'react-image-crop/dist/ReactCrop.css';
 import ThumbnailEditor from './ThumbnailEditor';
 import useLoadedData from '../../lib/hooks/useLoadedData';
-import { userAvatarDataUrl, adminAvatarsUrl } from '../../lib/requests/routes.js.erb';
+import { userAvatarDataUrl, panelUrls } from '../../lib/requests/routes.js.erb';
 import Errored from '../Requests/Errored';
 import useSaveAction from '../../lib/hooks/useSaveAction';
 import UserAvatar from '../UserAvatar';
@@ -39,6 +39,7 @@ function EditAvatar({
     sync,
   } = useLoadedData(avatarDataUrl);
 
+  const [uploadedImageErrors, setUploadedImageErrors] = useState();
   const [isEditingPending, setIsEditingPending] = useCheckboxState(false);
 
   const currentAvatar = useMemo(() => data?.avatar, [data]);
@@ -89,6 +90,7 @@ function EditAvatar({
     setUserCropAbs(undefined);
 
     setUserUploadedImage(img);
+    setUploadedImageErrors(null);
   };
 
   const { save, saving } = useSaveAction();
@@ -111,6 +113,8 @@ function EditAvatar({
 
     save(avatarDataUrl, formData, () => {
       setUserUploadedImage(undefined);
+      setUploadedImageErrors(null);
+
       sync();
     }, {
       method: 'POST',
@@ -119,6 +123,16 @@ function EditAvatar({
       //   application/json header, nor do we want to submit stringified JSON.
       headers: {},
       body: formData,
+    }, (err) => {
+      if (err.json !== null) {
+        // whatever photo is uploaded here, it will end up in `private_image`.
+        // Even admin users don't have permission to write to `public_image` directly.
+        const imageErrors = err.json.private_image;
+        setUploadedImageErrors(imageErrors);
+      } else {
+        // Let the JS console do its thing.
+        throw err;
+      }
     });
   };
 
@@ -149,7 +163,16 @@ function EditAvatar({
             onChange={setIsEditingPending}
           />
           {isEditingPending && <b>{I18n.t('users.edit.pending_avatar_edit_warning')}</b>}
-          {canAdminAvatars && <a href={adminAvatarsUrl}>{I18n.t('users.edit.manage_pending')}</a>}
+          {canAdminAvatars && <a href={panelUrls.wrt.approveAvatars}>{I18n.t('users.edit.manage_pending')}</a>}
+        </Message>
+      )}
+      {uploadedImageErrors && (
+        <Message error>
+          <Message.List>
+            {uploadedImageErrors.map((errItem) => (
+              <Message.Item key={errItem}>{errItem}</Message.Item>
+            ))}
+          </Message.List>
         </Message>
       )}
       <Dimmer.Dimmable as={Grid}>
