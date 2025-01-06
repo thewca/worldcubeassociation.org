@@ -14,7 +14,7 @@ function EventsIconList({ competition, mainEventId }) {
     <React.Fragment key={event.id}>
       <Popup
         trigger={<EventIcon id={event.id} size={event.id === mainEventId ? '3em' : '1.5em'} />}
-        content={events.byId[event.id].name}
+        content={event.id === mainEventId ? `${I18n.t('competitions.competition_info.main_event')}: ${events.byId[event.id].name}` : events.byId[event.id].name}
       />
       {' '}
     </React.Fragment>
