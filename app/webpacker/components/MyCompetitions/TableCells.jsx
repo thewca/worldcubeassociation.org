@@ -34,9 +34,9 @@ export function DateTableCell({ competition }) {
 }
 
 export function ReportTableCell({
-  permissions, competitionId, isReportPosted, canAdminCompetitions,
+  permissions, competitionId, isReportPosted, canViewDelegateReport,
 }) {
-  if (permissions.can_administer_competitions.scope === '*' || permissions.can_administer_competitions.scope.includes(competitionId)) {
+  if (permissions.can_view_delegate_report.scope === '*' || permissions.can_view_delegate_report.scope.includes(competitionId)) {
     return (
       <Table.Cell>
         <>
@@ -72,7 +72,7 @@ export function ReportTableCell({
 
   // A user might be able to see only certain reports in the list, so we return an empty cell
 
-  if (canAdminCompetitions) {
+  if (canViewDelegateReport) {
     return <Table.Cell />;
   }
 }
