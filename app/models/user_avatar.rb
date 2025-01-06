@@ -167,7 +167,7 @@ class UserAvatar < ApplicationRecord
              # In the long run, the active_storage? check should disappear.
              #   The local-fs enum entry is only used for the dummy avatar, and that one is never deleted.
              #   The s3-legacy-cdn will be replaced/migrated in the future.
-             if: [:active_storage?, :status_previously_changed?, :attached?],
+             if: [:active_storage?, :status_previously_changed?],
              unless: :destroyed?
 
   def move_image_if_approved
@@ -193,6 +193,8 @@ class UserAvatar < ApplicationRecord
   end
 
   private def reattach_image(from_file, to_file)
+    return unless from_file.attached?
+
     # ActiveStorage is a bit inconvenient when moving files around.
     #   Simply writing `to_file.attach(from_file.blob)` makes the code execute successfully,
     #   but under the hood the file is not actually moved because AS thinks that it's already uploaded :/
