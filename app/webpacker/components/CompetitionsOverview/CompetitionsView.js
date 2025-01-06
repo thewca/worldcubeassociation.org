@@ -5,7 +5,6 @@ import { useInfiniteQuery } from '@tanstack/react-query';
 import {
   Button,
   Container,
-  Form,
   Header,
   Icon,
   Segment,
@@ -16,7 +15,7 @@ import I18n from '../../lib/i18n';
 import { apiV0Urls, WCA_API_PAGINATION } from '../../lib/requests/routes.js.erb';
 import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken';
 
-import CompetitionsFilters, { CompDisplayCheckboxes, ToggleListOrMapDisplay } from './CompetitionsFilters';
+import CompetitionsFilters, { ToggleListOrMapDisplay } from './CompetitionsFilters';
 import ListView from './ListView';
 import MapView from './MapView';
 import {
@@ -125,27 +124,15 @@ function CompetitionsView({ canViewAdminDetails = false }) {
             dispatchFilter={dispatchFilter}
             shouldShowAdminDetails={shouldShowAdminDetails}
             canViewAdminDetails={canViewAdminDetails}
+            displayMode={displayMode}
           />
         </Segment>
       </Transition>
 
-      <Form>
-        <Form.Group inline>
-          <CompDisplayCheckboxes
-            shouldIncludeCancelled={filterState.shouldIncludeCancelled}
-            dispatchFilter={dispatchFilter}
-            shouldShowAdminDetails={shouldShowAdminDetails}
-            canViewAdminDetails={canViewAdminDetails}
-            displayMode={displayMode}
-          />
-        </Form.Group>
-        <Form.Field>
-          <ToggleListOrMapDisplay
-            displayMode={displayMode}
-            setDisplayMode={setDisplayMode}
-          />
-        </Form.Field>
-      </Form>
+      <ToggleListOrMapDisplay
+        displayMode={displayMode}
+        setDisplayMode={setDisplayMode}
+      />
 
       <Segment basic>
         {

@@ -32,17 +32,17 @@ function CompetitionsFilters({
         />
       </Form.Field>
 
-      <Form.Group>
-        <Form.Field width={8}>
+      <Form.Group widths="equal">
+        <Form.Field>
           <RegionSelector region={filterState.region} dispatchFilter={dispatchFilter} />
         </Form.Field>
-        <Form.Field width={8}>
+        <Form.Field>
           <SearchBar text={filterState.search} dispatchFilter={dispatchFilter} />
         </Form.Field>
       </Form.Group>
 
       {shouldShowAdminDetails && (
-        <Form.Field width={16}>
+        <Form.Field>
           <DelegateSelector delegateId={filterState.delegate} dispatchFilter={dispatchFilter} />
         </Form.Field>
       )}
@@ -62,11 +62,9 @@ function CompetitionsFilters({
       </Form.Group>
 
       {canViewAdminDetails && shouldShowAdminDetails && (
-        <Form.Group>
-          <Form.Field>
-            <AdminStatusButtonGroup filterState={filterState} dispatchFilter={dispatchFilter} />
-          </Form.Field>
-        </Form.Group>
+        <Form.Field>
+          <AdminStatusButtonGroup filterState={filterState} dispatchFilter={dispatchFilter} />
+        </Form.Field>
       )}
     </Form>
   );
