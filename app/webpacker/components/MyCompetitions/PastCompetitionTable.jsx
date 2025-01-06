@@ -22,7 +22,7 @@ export default function PastCompetitionsTable({
   }
 
   return (
-    <Table striped basic="very">
+    <Table striped compact basic="very">
       <Table.Header>
         <Table.Row>
           <Table.HeaderCell>

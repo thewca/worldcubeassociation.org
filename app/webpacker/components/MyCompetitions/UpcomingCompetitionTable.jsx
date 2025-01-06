@@ -67,7 +67,7 @@ export default function UpcomingCompetitionTable({
 
   return (
     <div style={{ overflowX: 'scroll' }}>
-      <Table basic unstackable singleLine>
+      <Table basic unstackable compact singleLine>
         <Table.Header>
           <Table.Row>
             { shouldShowRegistrationStatus && <Table.HeaderCell collapsing /> }
