@@ -50,7 +50,7 @@ class UserAvatar < ApplicationRecord
 
       URI::HTTPS.build(host: host, path: path).to_s
     when 'active_storage'
-      return UserAvatar.default_avatar(self.linked_user).url unless self.image.attached?
+      return UserAvatar.default_avatar(self.linked_user).url unless self.attached?
 
       if self.using_cdn?
         URI.join(EnvConfig.S3_AVATARS_ASSET_HOST, self.image.key).to_s
@@ -74,7 +74,7 @@ class UserAvatar < ApplicationRecord
 
       URI::HTTPS.build(host: host, path: path).to_s
     when 'active_storage'
-      return UserAvatar.default_avatar(self.linked_user).thumbnail_url unless self.image.attached?
+      return UserAvatar.default_avatar(self.linked_user).thumbnail_url unless self.attached?
 
       if self.using_cdn?
         URI.join(EnvConfig.S3_AVATARS_ASSET_HOST, self.thumbnail_image.processed.key).to_s
@@ -167,7 +167,7 @@ class UserAvatar < ApplicationRecord
              # In the long run, the active_storage? check should disappear.
              #   The local-fs enum entry is only used for the dummy avatar, and that one is never deleted.
              #   The s3-legacy-cdn will be replaced/migrated in the future.
-             if: [:active_storage?, :status_previously_changed?],
+             if: [:active_storage?, :status_previously_changed?, :attached?],
              unless: :destroyed?
 
   def move_image_if_approved
