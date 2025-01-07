@@ -25,16 +25,16 @@ import { EventSelector } from '../../CompetitionsOverview/CompetitionsFilters';
 const sortReducer = createSortReducer(['name', 'country', 'total']);
 
 function FooterContent({
-  dataWithUser, registrations, competitionInfo, psychSheetEvent,
+  registrations, psychSheetEvent, competitionInfo,
 }) {
-  if (!dataWithUser || !registrations) return null;
+  if (!registrations) return null;
 
-  const newcomerCount = dataWithUser.filter(
+  const newcomerCount = registrations.filter(
     (reg) => !reg.user.wca_id,
   ).length;
 
   const countryCount = new Set(
-    dataWithUser.map((reg) => reg.user.country.iso2),
+    registrations.map((reg) => reg.user.country.iso2),
   ).size;
 
   const eventCounts = Object.fromEntries(
@@ -53,9 +53,9 @@ function FooterContent({
     <Table.Row>
       <Table.Cell>
         {`${newcomerCount} ${I18n.t('registrations.registration_info_people.newcomer', { count: newcomerCount })} + ${
-          dataWithUser.length - newcomerCount
-        } ${I18n.t('registrations.registration_info_people.returner', { count: dataWithUser.length - newcomerCount })} =
-         ${dataWithUser.length} ${I18n.t('registrations.registration_info_people.person', { count: dataWithUser.length })}`}
+          registrations.length - newcomerCount
+        } ${I18n.t('registrations.registration_info_people.returner', { count: registrations.length - newcomerCount })} =
+         ${registrations.length} ${I18n.t('registrations.registration_info_people.person', { count: registrations.length })}`}
       </Table.Cell>
       <Table.Cell>{`${I18n.t('registrations.list.country_plural', { count: countryCount })}`}</Table.Cell>
       {psychSheetEvent === undefined ? (
@@ -321,7 +321,6 @@ export default function RegistrationList({ competitionInfo }) {
           <FooterContent
             registrations={registrations}
             psychSheetEvent={psychSheetEvent}
-            dataWithUser={registrations}
             competitionInfo={competitionInfo}
           />
         </Table.Footer>
