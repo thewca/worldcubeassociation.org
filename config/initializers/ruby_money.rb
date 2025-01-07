@@ -4,15 +4,16 @@ require 'money/bank/currencylayer_bank'
 
 Money.locale_backend = :i18n
 
-if Rails.env.test? || Rails.env.development?
+if Rails.env.local?
   eu_bank = EuCentralBank.new
+  eu_bank.update_rates
   Money.default_bank = eu_bank
 else
   mclb = Money::Bank::CurrencylayerBank.new
   mclb.access_key = AppSecrets.CURRENCY_LAYER_API_KEY
   mclb.currencylayer = true
   mclb.ttl_in_seconds = 86_400
-  mclb.cache = proc.new do |payload|
+  mclb.cache = proc do |payload|
     key = 'money:currencylayer_bank'
     if payload
       Rails.cache.write(key, payload)
