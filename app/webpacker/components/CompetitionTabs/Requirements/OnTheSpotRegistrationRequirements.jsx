@@ -8,7 +8,7 @@ export default function OnTheSpotRegistrationRequirements({ competition }) {
       I18n.t('competitions.competition_info.on_the_spot_registration_fee_html', {
         on_the_spot_base_entry_fee:
           isoMoneyToHumanReadable(
-            competition.on_the_spot_base_entry_fee,
+            competition.on_the_spot_entry_fee_lowest_denomination,
             competition.currency_code,
           ),
       }));

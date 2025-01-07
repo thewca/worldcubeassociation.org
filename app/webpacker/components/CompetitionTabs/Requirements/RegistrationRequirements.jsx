@@ -14,13 +14,15 @@ import GuestRequirements from './GuestRequirements';
 
 export default function RegistrationRequirements({
   competition,
-  userInfo, showLinksToRegisterPage = false,
+  userInfo,
+  showLinksToRegisterPage = false,
 }) {
   return (
     <List>
       {competition.use_wca_registration && (
         <List.Item>
           <AccountRequirement userInfo={userInfo} />
+          {' '}
           {showLinksToRegisterPage ? (
             <I18nHTMLTranslate
               // i18n-tasks-use t('competitions.competition_info.register_link_html')
@@ -116,9 +118,7 @@ export default function RegistrationRequirements({
           : I18n.t('competitions.competition_info.no_on_the_spot_registration')}
       </List.Item>
 
-      <List.Item>
-        <GuestRequirements competition={competition} />
-      </List.Item>
+      <GuestRequirements competition={competition} />
 
       {competition['guests_per_registration_limit_enabled?'] && (
         <List.Item>

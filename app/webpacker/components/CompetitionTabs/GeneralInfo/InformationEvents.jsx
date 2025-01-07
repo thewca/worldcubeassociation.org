@@ -16,10 +16,11 @@ function EventsIconList({ competition, mainEventId }) {
         trigger={<EventIcon id={event.id} size={event.id === mainEventId ? '3em' : '1.5em'} />}
         content={event.id === mainEventId ? `${I18n.t('competitions.competition_info.main_event')}: ${events.byId[event.id].name}` : events.byId[event.id].name}
       />
-      {' '}
     </React.Fragment>
   ));
 }
+
+const mediaTypes = ['report', 'article', 'multimedia'];
 
 function MediaAccordion({ media }) {
   const [mediaIndex, setMediaIndex] = useState(-1);
@@ -35,7 +36,7 @@ function MediaAccordion({ media }) {
       exclusive
       activeIndex={mediaIndex}
     >
-      {['report', 'article', 'multimedia'].map((mediaType, i) => {
+      {mediaTypes.map((mediaType, i) => {
         const mediaOfType = media.filter((m) => m.type === mediaType);
 
         if (mediaOfType.length <= 0) {
