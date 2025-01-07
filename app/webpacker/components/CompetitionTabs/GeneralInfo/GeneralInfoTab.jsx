@@ -35,21 +35,19 @@ function RegistrationRequirementsToggle({ competition, userInfo }) {
   const [showRegistrationRequirements, setShowRegistrationRequirements] = useState(!competition['is_probably_over?']);
 
   return showRegistrationRequirements ? (
-    <>
-      <div>
-        <RegistrationRequirements
-          competition={competition}
-          userInfo={userInfo}
-          showLinksToRegisterPage
-        />
-      </div>
+    <div>
       {competition['is_probably_over?']
           && (
             <Button onClick={() => setShowRegistrationRequirements(false)}>
               {I18n.t('competitions.competition_info.hide_requirements')}
             </Button>
           )}
-    </>
+      <RegistrationRequirements
+        competition={competition}
+        userInfo={userInfo}
+        showLinksToRegisterPage
+      />
+    </div>
   ) : (
     <Button onClick={() => setShowRegistrationRequirements(true)}>
       {I18n.t('competitions.competition_info.click_to_display_requirements_html', { link_here: I18n.t('common.here') })}
