@@ -16,14 +16,8 @@
       comp_ids = @rows.map { |r| r["competitionId"] }.uniq
       @competitions_by_id = Hash[Competition.where(id: comp_ids).map { |c| [c.id, c] }]
     %>
-    <div id="search-results" class="results">
-      <div id="results-list">
-        <% if @is_by_region %>
-          <%= render 'rankings_by_region_table' %>
-        <% else %>
-          <%= render 'rankings_table' %>
-        <% end %>
-      </div>
-    </div>
+    <%= react_component("Results/Rankings", {
+      rows: @rows.as_json, competitionsById: @competitions_by_id.as_json({ methods: %w[country name id], includes: [] }), isAverage: @is_average, isByRegion: @is_by_region,
+    }) %>
   <% end %>
 </div>
