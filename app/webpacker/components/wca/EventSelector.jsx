@@ -2,7 +2,9 @@ import React from 'react';
 import {
   Button, Icon, Popup,
 } from 'semantic-ui-react';
-import { WCA_EVENT_IDS } from '../CompetitionsOverview/filterUtils';
+import { events } from '../../lib/wca-data.js.erb';
+
+const WCA_EVENT_IDS = Object.values(events.official).map((e) => e.id);
 
 export function EventSelector({
   selectedEvents,
