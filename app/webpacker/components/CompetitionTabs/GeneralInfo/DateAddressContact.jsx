@@ -1,13 +1,11 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import {
-  Accordion, Grid, Icon, List, Popup,
+  Icon,
 } from 'semantic-ui-react';
-import _ from 'lodash';
 import I18n from '../../../lib/i18n';
 import Markdown from '../../Markdown';
-import { countries, events } from '../../../lib/wca-data.js.erb';
+import { countries } from '../../../lib/wca-data.js.erb';
 import I18nHTMLTranslate from '../../I18nHTMLTranslate';
-import EventIcon from '../../wca/EventIcon';
 import { competitionUrl, contactCompetitionUrl, personUrl } from '../../../lib/requests/routes.js.erb';
 import InformationList from './InformationList';
 import { PseudoLinkMarkdown } from '../../../lib/utils/competition-table';
@@ -35,6 +33,8 @@ function VenueAddressLink({ competition }) {
         competition.latitude_degrees,
         competition.longitude_degrees,
       )}
+      target="_blank"
+      rel="noreferrer"
     >
       {competition.venue_address}
     </a>
@@ -65,23 +65,8 @@ function ContactInformation({ competition }) {
   );
 }
 
-function OrganizersList({ competition }) {
-  return competition.organizers
-    .toSorted((o1, o2) => o1.name.localeCompare(o2.name))
-    .map((user, i) => (
-      <React.Fragment key={user.id}>
-        {user.wca_id ? (
-          <a href={personUrl(user.wca_id)}>{user.name}</a>
-        ) : (
-          user.name
-        )}
-        {i !== competition.organizers.length - 1 && ', '}
-      </React.Fragment>
-    ));
-}
-
-function DelegatesList({ competition }) {
-  return competition.delegates
+function OrganizerOrDelegatesList({ organizersOrDelegates }) {
+  return organizersOrDelegates
     .toSorted((d1, d2) => d1.name.localeCompare(d2.name))
     .map((user, i) => (
       <React.Fragment key={user.id || i}>
@@ -90,7 +75,7 @@ function DelegatesList({ competition }) {
         ) : (
           user.name
         )}
-        {i !== competition.delegates.length - 1 && ', '}
+        {i !== organizersOrDelegates.length - 1 && ', '}
       </React.Fragment>
     ));
 }
@@ -176,7 +161,9 @@ export default function DateAddressContact({ competition }) {
         header: I18n.t('competitions.competition_info.organizer_plural', {
           count: competition.organizers.length,
         }),
-        content: (<OrganizersList competition={competition} />),
+        content: (<OrganizerOrDelegatesList
+          organizersOrDelegates={competition.organizers}
+        />),
         icon: 'folder open outline',
       });
     }
@@ -185,7 +172,9 @@ export default function DateAddressContact({ competition }) {
       header: I18n.t('competitions.competition_info.delegate', {
         count: competition.delegates.length,
       }),
-      content: (<DelegatesList competition={competition} />),
+      content: (<OrganizerOrDelegatesList
+        organizersOrDelegates={competition.delegates}
+      />),
       icon: 'address card outline',
     });
 
