@@ -1880,7 +1880,7 @@ class Competition < ApplicationRecord
                             guests_per_registration_limit_enabled? guests_per_registration_limit uses_qualification? allow_registration_without_qualification
                             events_per_registration_limit_enabled? events_per_registration_limit guests_entry_fee_lowest_denomination all_guests_allowed?
                             uses_cumulative? uses_cumulative_across_rounds? uses_cutoff? uses_qualification? results_posted? competitor_count
-                            competition_series] }
+                            competition_series registration_count] }
     options[:methods].append("winning_results") if include_results
     self.as_json(options)
   end
@@ -2257,6 +2257,10 @@ class Competition < ApplicationRecord
 
   def competitor_count
     competitors.count
+  end
+
+  def registration_count
+    registrations.accepted.count
   end
 
   def to_ics

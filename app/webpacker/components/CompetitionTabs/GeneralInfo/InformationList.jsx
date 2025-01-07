@@ -10,7 +10,7 @@ function DataListGridEntry({
     <List.Item>
       {icon && <List.Icon name={icon} />}
       <List.Content>
-        <List.Header>{header}</List.Header>
+        <List.Header as="h5">{header}</List.Header>
         <List.Description>{children}</List.Description>
       </List.Content>
     </List.Item>

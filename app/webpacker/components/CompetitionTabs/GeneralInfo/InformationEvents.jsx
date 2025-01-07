@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import {
-  Accordion, List, Popup,
+  Accordion, Divider, List, Popup, Statistic, StatisticGroup,
 } from 'semantic-ui-react';
 import _ from 'lodash';
 import I18n from '../../../lib/i18n';
@@ -80,7 +80,10 @@ export default function InformationEvents({ competition, media }) {
       },
       {
         header: I18n.t('competitions.competition_info.events'),
-        content: (<EventsIconList competition={competition} mainEventId={competition.main_event_id} />),
+        content: (<EventsIconList
+          competition={competition}
+          mainEventId={competition.main_event_id}
+        />),
       }];
 
     if (competition['results_posted?']) {
@@ -98,24 +101,42 @@ export default function InformationEvents({ competition, media }) {
       );
     }
 
-    if (!competition['results_posted?'] && competition.competitor_limit_enabled) {
-      entries.push({
-        header: I18n.t('competitions.competition_info.competitor_limit'),
-        content: (competition.competitor_limit),
-      });
-    }
-
-    if (!competition['results_posted?']) {
-      entries.push({
-        header: I18n.t('competitions.competition_info.number_of_bookmarks'),
-        content: (competition.number_of_bookmarks),
-      });
-    }
-
     return entries;
   }, [competition, media]);
 
   return (
-    <InformationList items={infoEntries} />
+    <>
+      <StatisticGroup size="tiny" widths={3}>
+        {!competition['results_posted?']
+          && (
+            <Statistic>
+              <Statistic.Label>{I18n.t('competitions.competition_info.number_of_bookmarks')}</Statistic.Label>
+              <Statistic.Value>{competition.number_of_bookmarks}</Statistic.Value>
+            </Statistic>
+          )}
+        {!competition['results_posted?'] && competition.competitor_limit_enabled
+          && (
+            <Statistic>
+              <Statistic.Label>{I18n.t('competitions.competition_info.competitor_limit')}</Statistic.Label>
+              <Statistic.Value>{competition.competitor_limit}</Statistic.Value>
+            </Statistic>
+          )}
+        {competition['results_posted?']
+          ? (
+            <Statistic>
+              <Statistic.Label>{I18n.t('competitions.nav.menu.competitors')}</Statistic.Label>
+              <Statistic.Value>{competition.competitor_count}</Statistic.Value>
+            </Statistic>
+          )
+          : (
+            <Statistic>
+              <Statistic.Label>{I18n.t('competitions.my_competitions_table.registrations')}</Statistic.Label>
+              <Statistic.Value>{competition.registration_count}</Statistic.Value>
+            </Statistic>
+          )}
+      </StatisticGroup>
+      <Divider />
+      <InformationList items={infoEntries} />
+    </>
   );
 }
