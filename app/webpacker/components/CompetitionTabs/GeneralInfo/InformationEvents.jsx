@@ -87,13 +87,6 @@ export default function InformationEvents({ competition, media }) {
         />),
       }];
 
-    if (competition['results_posted?']) {
-      entries.push({
-        header: I18n.t('competitions.nav.menu.competitors'),
-        content: (competition.competitor_count),
-      });
-    }
-
     if (media.length > 0) {
       entries.push(
         {
@@ -107,7 +100,7 @@ export default function InformationEvents({ competition, media }) {
 
   return (
     <>
-      <StatisticGroup size="tiny" widths={3}>
+      <StatisticGroup size="tiny" widths={competition['results_posted?'] ? 1 : 3}>
         {!competition['results_posted?']
           && (
             <Statistic>

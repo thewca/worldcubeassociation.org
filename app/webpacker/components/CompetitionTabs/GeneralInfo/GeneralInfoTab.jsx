@@ -122,7 +122,7 @@ export default function GeneralInfoTab({
           <InformationList items={bottomItems} />
         </Grid.Column>
       </Grid.Row>
-      {competition.winning_results.length > 0 && (
+      {competition.winning_results?.length > 0 && (
         <Grid.Row>
           <Grid.Column>
             <WinnerTable results={competition.winning_results} competition={competition} />
