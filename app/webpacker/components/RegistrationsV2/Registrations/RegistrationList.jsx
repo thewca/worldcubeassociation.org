@@ -319,7 +319,7 @@ export default function RegistrationList({ competitionInfo }) {
         </Table.Body>
         <Table.Footer>
           <FooterContent
-            registrations={registrations}
+            registrations={registrationsWithPsychSheet}
             psychSheetEvent={psychSheetEvent}
             competitionInfo={competitionInfo}
           />
