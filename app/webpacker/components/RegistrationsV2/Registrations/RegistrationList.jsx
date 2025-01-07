@@ -20,7 +20,7 @@ import Errored from '../../Requests/Errored';
 import { formatAttemptResult } from '../../../lib/wca-live/attempts';
 import I18n from '../../../lib/i18n';
 import { countries } from '../../../lib/wca-data.js.erb';
-import { EventSelector } from '../../CompetitionsOverview/EventSelector';
+import { EventSelector } from '../../wca/EventSelector';
 
 const sortReducer = createSortReducer(['name', 'country', 'total']);
 

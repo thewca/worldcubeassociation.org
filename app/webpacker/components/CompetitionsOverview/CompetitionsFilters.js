@@ -12,7 +12,7 @@ import {
 import { DEFAULT_REGION_ALL } from './filterUtils';
 import useDelegatesData from './useDelegatesData';
 import UtcDatePicker from '../wca/UtcDatePicker';
-import { EventSelector } from './EventSelector';
+import { EventSelector } from '../wca/EventSelector';
 
 function CompetitionsFilters({
   filterState,
