@@ -13,21 +13,21 @@ import InformationEvents from './InformationEvents';
 function RegistrationTime({ competition }) {
   if (competition['registration_not_yet_opened?']) {
     return I18n.t('competitions.competition_info.registration_period.range_future_html', {
-      start_date_and_time: getFullDateTimeString(DateTime.fromISO(competition.registration_open)),
-      end_date_and_time: getFullDateTimeString(DateTime.fromISO(competition.registration_close)),
+      start_date_and_time: getFullDateTimeString(DateTime.fromISO(competition.registration_open), 'local', false),
+      end_date_and_time: getFullDateTimeString(DateTime.fromISO(competition.registration_close), 'local', false),
     });
   }
 
   if (competition['registration_past?']) {
     return I18n.t('competitions.competition_info.registration_period.range_past_html', {
-      start_date_and_time: getFullDateTimeString(DateTime.fromISO(competition.registration_open)),
-      end_date_and_time: getFullDateTimeString(DateTime.fromISO(competition.registration_close)),
+      start_date_and_time: getFullDateTimeString(DateTime.fromISO(competition.registration_open), 'local', false),
+      end_date_and_time: getFullDateTimeString(DateTime.fromISO(competition.registration_close), 'local', false),
     });
   }
 
   return I18n.t('competitions.competition_info.registration_period.range_ongoing_html', {
-    start_date_and_time: getFullDateTimeString(DateTime.fromISO(competition.registration_open)),
-    end_date_and_time: getFullDateTimeString(DateTime.fromISO(competition.registration_close)),
+    start_date_and_time: getFullDateTimeString(DateTime.fromISO(competition.registration_open), 'local', false),
+    end_date_and_time: getFullDateTimeString(DateTime.fromISO(competition.registration_close), 'local', false),
   });
 }
 

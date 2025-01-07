@@ -84,9 +84,9 @@ export const getRegistrationTimestamp = (datetime, timeZone = 'local') => DateTi
   .setZone(timeZone)
   .toFormat('D TT.u ZZZZ');
 
-export const getFullDateTimeString = (dateTime, timeZone = 'local') => DateTime.fromISO(dateTime)
+export const getFullDateTimeString = (dateTime, timeZone = 'local', withSeconds = true) => DateTime.fromISO(dateTime)
   .setZone(timeZone)
-  .toLocaleString(DateTime.DATETIME_FULL_WITH_SECONDS);
+  .toLocaleString(withSeconds ? DateTime.DATETIME_FULL_WITH_SECONDS : DateTime.DATETIME_FULL);
 
 // start/end dates may have different time-of-days
 export const getDatesBetweenInclusive = (
