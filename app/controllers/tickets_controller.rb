@@ -20,7 +20,7 @@ class TicketsController < ApplicationController
     status = params[:status]
     tickets = tickets.select do |ticket|
       if status
-        ticket.metadata.status == status
+        ticket.metadata&.status == status
       else
         true
       end
@@ -35,6 +35,10 @@ class TicketsController < ApplicationController
     sort_param = params[:sort] || ''
     tickets = sort(tickets, sort_param, SORT_WEIGHT_LAMBDAS)
 
+    # paginate won't help in improving efficiency here because we are fetching all the tickets
+    # and then filtering and sorting them. We can't use the database to do this because the
+    # filtering and sorting is based on the metadata of the ticket.
+    # TODO: Check the feasibility of using the database to filter and sort the tickets.
     paginate json: tickets
   end
 
