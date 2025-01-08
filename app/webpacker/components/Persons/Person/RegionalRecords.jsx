@@ -88,13 +88,13 @@ function DrawEventResults({
               </a>
             </TableCell>
             <TableCell>
-              <I18nHTMLTranslate i18nKey={`rounds.${result.roundTypeId}.cellName`}/>
+              <I18nHTMLTranslate i18nKey={`rounds.${result.roundTypeId}.cellName`} />
             </TableCell>
             {types.includes(result.averageRecord) ? result.attempts.map((_, i) => (
               // eslint-disable-next-line react/no-array-index-key
-              <AttemptItem key={i} result={result} attemptNumber={i}/>
+              <AttemptItem key={i} result={result} attemptNumber={i} />
             )) : (
-              <TableCell colSpan="5"/>
+              <TableCell colSpan="5" />
             )}
           </TableRow>
         );
@@ -103,7 +103,9 @@ function DrawEventResults({
   );
 }
 
-function RegionalRecordsOld({ groupedResults, title, type }) {
+function RegionalRecordsOld({
+  groupedResults, competitions, title, type,
+}) {
   return (
     <div className="records">
       <h3 className="text-center">
@@ -138,6 +140,7 @@ function RegionalRecordsOld({ groupedResults, title, type }) {
                   key={eventId}
                   eventId={eventId}
                   results={groupedResults[eventId]}
+                  competitions={competitions}
                   types={recordTypes[type].records}
                 />
               );
@@ -149,7 +152,7 @@ function RegionalRecordsOld({ groupedResults, title, type }) {
   );
 }
 
-export default function RegionalRecords({ results }) {
+export default function RegionalRecords({ results, competitions }) {
   const groupedResults = groupByTypeAndEvent(results);
   return (
     <>
@@ -157,6 +160,7 @@ export default function RegionalRecords({ results }) {
         <RegionalRecordsOld
           key={type}
           groupedResults={groupedResults[type]}
+          competitions={competitions}
           title={recordTypes[type].title}
           type={type}
         />

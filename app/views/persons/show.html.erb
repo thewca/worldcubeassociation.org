@@ -27,7 +27,7 @@
     trimmedIdx: result.trimmed_indices,
   }},
   competitions: @person.competitions.index_by(&:id).transform_values do |competition|
-    competition.as_json(only: [:id, :name, :latitude_degrees, :longitude_degrees, :end_date, :cityName], methods: [:date_range], include: [])
+    competition.as_json(only: [:id, :name, :end_date, :cityName], methods: [:date_range, :latitude_degrees, :longitude_degrees], include: [])
   end,
   medals: @medals,
   records: @records,

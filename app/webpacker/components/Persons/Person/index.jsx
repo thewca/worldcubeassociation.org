@@ -41,7 +41,7 @@ function TabSection({
         tabSlug: 'record',
         render: () => (
           <TabPane>
-            <RegionalRecords results={results} />
+            <RegionalRecords results={results} competitions={competitions} />
           </TabPane>
         ),
       });

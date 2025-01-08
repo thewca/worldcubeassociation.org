@@ -33,7 +33,8 @@ function MarkerForCompetition({ competition }) {
   );
 }
 
-const mapAndAverage = (arr, mappingFn) => arr.map(mappingFn).join('+') / arr.length;
+const mapAndAverage = (arr, mappingFn) => arr.map(mappingFn)
+  .reduce((a, b) => a + b, 0) / arr.length;
 
 export default function CompetitionsMap({ competitions }) {
   const avgLatitude = mapAndAverage(competitions, (comp) => comp.latitude_degrees);

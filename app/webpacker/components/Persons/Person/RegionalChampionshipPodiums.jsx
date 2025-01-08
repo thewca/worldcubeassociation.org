@@ -11,17 +11,16 @@ import { formatAttemptResult } from '../../../lib/wca-live/attempts';
 
 function CompetitionResults({
   data,
-  competition,
 }) {
   return (
     <>
       <TableRow>
         <TableCell colSpan={9}>
           <a
-            href={competitionUrl(competition.id)}
+            href={competitionUrl(data.competition.id)}
             className="competition-link"
           >
-            {competition.name}
+            {data.competition.name}
           </a>
         </TableCell>
       </TableRow>
@@ -86,7 +85,10 @@ function RegionalChampionshipPodiumsOld({
           </TableHeader>
           <TableBody>
             {compAndResults.map((data) => (
-              <CompetitionResults data={data} key={data.competition.id} />
+              <CompetitionResults
+                data={data}
+                key={data.competition.id}
+              />
             ))}
           </TableBody>
         </Table>
