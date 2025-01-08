@@ -17,7 +17,7 @@ import updateRegistration from '../api/registration/patch/update_registration';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { setMessage } from '../Register/RegistrationMessage';
 import Loading from '../../Requests/Loading';
-import { EventSelector } from '../../CompetitionsOverview/CompetitionsFilters';
+import { EventSelector } from '../../wca/EventSelector';
 import Refunds from './Refunds';
 import { editPersonUrl } from '../../../lib/requests/routes.js.erb';
 import { useConfirm } from '../../../lib/providers/ConfirmProvider';
