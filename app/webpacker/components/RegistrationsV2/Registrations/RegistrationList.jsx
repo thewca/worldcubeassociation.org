@@ -20,64 +20,9 @@ import Errored from '../../Requests/Errored';
 import { formatAttemptResult } from '../../../lib/wca-live/attempts';
 import I18n from '../../../lib/i18n';
 import { countries } from '../../../lib/wca-data.js.erb';
-import { EventSelector } from '../../CompetitionsOverview/CompetitionsFilters';
+import { EventSelector } from '../../wca/EventSelector';
 
 const sortReducer = createSortReducer(['name', 'country', 'total']);
-
-function FooterContent({
-  dataWithUser, registrations, competitionInfo, psychSheetEvent,
-}) {
-  if (!dataWithUser || !registrations) return null;
-
-  const newcomerCount = dataWithUser.filter(
-    (reg) => !reg.user.wca_id,
-  ).length;
-
-  const countryCount = new Set(
-    dataWithUser.map((reg) => reg.user.country.iso2),
-  ).size;
-
-  const eventCounts = Object.fromEntries(
-    competitionInfo.event_ids.map((evt) => {
-      const competingCount = registrations.filter(
-        (reg) => reg.competing.event_ids.includes(evt),
-      ).length;
-
-      return [evt, competingCount];
-    }),
-  );
-
-  const totalEvents = Object.values(eventCounts).reduce((a, b) => a + b, 0);
-
-  return (
-    <Table.Row>
-      <Table.Cell>
-        {`${newcomerCount} ${I18n.t('registrations.registration_info_people.newcomer', { count: newcomerCount })} + ${
-          dataWithUser.length - newcomerCount
-        } ${I18n.t('registrations.registration_info_people.returner', { count: dataWithUser.length - newcomerCount })} =
-         ${dataWithUser.length} ${I18n.t('registrations.registration_info_people.person', { count: dataWithUser.length })}`}
-      </Table.Cell>
-      <Table.Cell>{`${I18n.t('registrations.list.country_plural', { count: countryCount })}`}</Table.Cell>
-      {psychSheetEvent === undefined ? (
-        <>
-          {competitionInfo.event_ids.map((evt) => (
-            <Table.Cell key={`footer-count-${evt}`}>
-              {eventCounts[evt]}
-            </Table.Cell>
-          ))}
-          <Table.Cell>{totalEvents}</Table.Cell>
-        </>
-      ) : (
-        <>
-          <Table.Cell />
-          <Table.Cell />
-          <Table.Cell />
-          <Table.Cell />
-        </>
-      )}
-    </Table.Row>
-  );
-}
 
 export default function RegistrationList({ competitionInfo }) {
   const { isLoading: registrationsLoading, data: registrations, isError } = useQuery({
@@ -319,14 +264,68 @@ export default function RegistrationList({ competitionInfo }) {
         </Table.Body>
         <Table.Footer>
           <FooterContent
-            registrations={registrations}
+            registrations={registrationsWithPsychSheet}
             psychSheetEvent={psychSheetEvent}
-            dataWithUser={registrations}
             competitionInfo={competitionInfo}
           />
         </Table.Footer>
       </Table>
     </Segment>
+  );
+}
+
+function FooterContent({
+  registrations, psychSheetEvent, competitionInfo,
+}) {
+  if (!registrations) return null;
+
+  const newcomerCount = registrations.filter(
+    (reg) => !reg.user.wca_id,
+  ).length;
+
+  const countryCount = new Set(
+    registrations.map((reg) => reg.user.country.iso2),
+  ).size;
+
+  const eventCounts = Object.fromEntries(
+    competitionInfo.event_ids.map((evt) => {
+      const competingCount = registrations.filter(
+        (reg) => reg.competing.event_ids.includes(evt),
+      ).length;
+
+      return [evt, competingCount];
+    }),
+  );
+
+  const totalEvents = Object.values(eventCounts).reduce((a, b) => a + b, 0);
+
+  return (
+    <Table.Row>
+      <Table.Cell>
+        {`${newcomerCount} ${I18n.t('registrations.registration_info_people.newcomer', { count: newcomerCount })} + ${
+          registrations.length - newcomerCount
+        } ${I18n.t('registrations.registration_info_people.returner', { count: registrations.length - newcomerCount })} =
+         ${registrations.length} ${I18n.t('registrations.registration_info_people.person', { count: registrations.length })}`}
+      </Table.Cell>
+      <Table.Cell>{`${I18n.t('registrations.list.country_plural', { count: countryCount })}`}</Table.Cell>
+      {psychSheetEvent === undefined ? (
+        <>
+          {competitionInfo.event_ids.map((evt) => (
+            <Table.Cell key={`footer-count-${evt}`}>
+              {eventCounts[evt]}
+            </Table.Cell>
+          ))}
+          <Table.Cell>{totalEvents}</Table.Cell>
+        </>
+      ) : (
+        <>
+          <Table.Cell />
+          <Table.Cell />
+          <Table.Cell />
+          <Table.Cell />
+        </>
+      )}
+    </Table.Row>
   );
 }
 
