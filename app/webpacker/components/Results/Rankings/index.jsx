@@ -58,38 +58,36 @@ export function Rankings({
 
   return (
     <Container>
-      <Segment loading={isFetching}>
-        <Grid>
-          <Grid.Row columns={1}>
-            <EventSelector selectedEvents={[event]} onEventSelection={({ eventId }) => setEvent(eventId)} showLabels={false} />
-            <RegionSelector region={region} dispatchFilter={({ region: r }) => setRegion(r)} />
-          </Grid.Row>
-          <Grid.Row columns={1}>
-            <ButtonGroup>
-              <Button onClick={() => setRankingType('single')}>Single</Button>
-              <Button onClick={() => setGender('average')}>Average</Button>
-            </ButtonGroup>
-            <ButtonGroup>
-              <Button>All years</Button>
-            </ButtonGroup>
-            <ButtonGroup>
-              <Button onClick={() => setGender('All')}>All</Button>
-              <Button onClick={() => setGender('Male')}>Male</Button>
-              <Button onClick={() => setGender('Female')}>Female</Button>
-            </ButtonGroup>
-            <ButtonGroup>
-              <Button>100 persons</Button>
-              <Button>Results</Button>
-              <Button>By Region</Button>
-            </ButtonGroup>
-          </Grid.Row>
-        </Grid>
-        <RankingsTable
-          competitionsById={data.competitionsById}
-          isAverage={rankingType === 'average'}
-          rows={data.rows}
-        />
-      </Segment>
+      <Grid>
+        <Grid.Row columns={1}>
+          <EventSelector selectedEvents={[event]} onEventSelection={({ eventId }) => setEvent(eventId)} showLabels={false} />
+          <RegionSelector region={region} dispatchFilter={({ region: r }) => setRegion(r)} />
+        </Grid.Row>
+        <Grid.Row columns={1}>
+          <ButtonGroup>
+            <Button onClick={() => setRankingType('single')}>Single</Button>
+            <Button onClick={() => setGender('average')}>Average</Button>
+          </ButtonGroup>
+          <ButtonGroup>
+            <Button>All years</Button>
+          </ButtonGroup>
+          <ButtonGroup>
+            <Button onClick={() => setGender('All')}>All</Button>
+            <Button onClick={() => setGender('Male')}>Male</Button>
+            <Button onClick={() => setGender('Female')}>Female</Button>
+          </ButtonGroup>
+          <ButtonGroup>
+            <Button>100 persons</Button>
+            <Button>Results</Button>
+            <Button>By Region</Button>
+          </ButtonGroup>
+        </Grid.Row>
+      </Grid>
+      <RankingsTable
+        competitionsById={data.competitionsById}
+        isAverage={rankingType === 'average'}
+        rows={data.rows}
+      />
     </Container>
   );
 }

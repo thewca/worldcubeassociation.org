@@ -167,9 +167,9 @@ class ResultsController < ApplicationController
         cached_data = Rails.cache.fetch [*@cache_params, @ranking_timestamp] do
           rows = DbHelper.execute_cached_query(@cache_params, @ranking_timestamp, @query)
           comp_ids = rows.map { |r| r["competitionId"] }.uniq
-          competitions_by_id = Hash[Competition.where(id: comp_ids).map { |c| [c.id, c] }]
+          competitions_by_id = Competition.where(id: comp_ids).to_h { |c| [c.id, c] }
           {
-            rows: rows.as_json, competitionsById: competitions_by_id.as_json({ methods: %w[country cellName id], includes: [] }),
+            rows: rows.as_json, competitionsById: competitions_by_id.as_json({ methods: %w[country cellName id], includes: [] })
           }
         end
         render json: cached_data
