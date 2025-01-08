@@ -49,7 +49,7 @@ class TicketsController < ApplicationController
     ticket.metadata.tickets_edit_person_fields.each do |edit_person_field|
       case edit_person_field[:field_name]
       when TicketsEditPersonField.field_names[:dob]
-        dob_validation_issues = ResultsValidators::PersonsValidator.dob_validations(Date.parse(edit_person_field[:new_value]))
+        dob_validation_issues = ResultsValidators::PersonsValidator.dob_validations(Date.parse(edit_person_field[:new_value]), { name: ticket.metadata.wca_id })
       end
     end
 
