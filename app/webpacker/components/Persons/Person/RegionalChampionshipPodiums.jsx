@@ -6,6 +6,7 @@ import I18nHTMLTranslate from '../../I18nHTMLTranslate';
 import EventIcon from '../../wca/EventIcon';
 import { AttemptItem } from './TableComponents';
 import I18n from '../../../lib/i18n';
+import { competitionUrl } from '../../../lib/requests/routes.js.erb';
 
 function CompetitionResults({
   data,
@@ -15,7 +16,7 @@ function CompetitionResults({
       <TableRow>
         <TableCell colSpan={9}>
           <a
-            href={data.competition.url}
+            href={competitionUrl(data.competition.id)}
             className="competition-link"
           >
             {data.competition.name}

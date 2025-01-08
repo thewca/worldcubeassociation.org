@@ -19,11 +19,10 @@
       competition: {
         id: result.competition.id,
         name: result.competition.name,
-        url: result.competition.internal_website,
         lat: result.competition.latitude_degrees,
         lng: result.competition.longitude_degrees,
-        probablyOver: result.competition.is_probably_over?,
-        markerDate: wca_date_range(result.competition.start_date, result.competition.end_date),
+        end_date: result.competition.end_date,
+        markerDate: result.competition.date_range,
         cityName: result.competition.cityName,
       },
       roundTypeId: result.roundTypeId,
@@ -34,12 +33,12 @@
       averageRecord: result.regionalAverageRecord,
       trimmedIdx: result.trimmed_indices,
     }},
-    pbMarkers: @results.group_by(&:event_id).transform_values do |event_results|
-      historical_pb_markers(event_results.reverse)
-    end,
   },
   medals: @medals,
   records: @records,
+  pbMarkers: @results.group_by(&:event_id).transform_values do |event_results|
+    historical_pb_markers(event_results.reverse)
+  end,
   championshipPodiums: @championship_podiums,
   singleRanks: @ranks_single.map { |r| {
     eventId: r.eventId,

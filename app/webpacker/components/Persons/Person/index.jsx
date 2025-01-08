@@ -15,6 +15,7 @@ function TabSection({
   person,
   records,
   championshipPodiums,
+  pbMarkers,
   highlight,
 }) {
   const panes = useMemo(() => {
@@ -23,7 +24,7 @@ function TabSection({
       tabSlug: 'results-by-event',
       render: () => (
         <TabPane>
-          <Results person={person} highlightPosition={highlight} />
+          <Results person={person} pbMarkers={pbMarkers} highlightPosition={highlight} />
         </TabPane>
       ),
     }];
@@ -91,10 +92,12 @@ export default function Person({
   singleRanks,
   medals,
   records,
+  pbMarkers,
   championshipPodiums,
   canEditUser,
 }) {
   const [highlight, setHighlight] = useState(-1);
+
   const medalsAndRecords = (medals.total > 0 ? 1 : 0)
     + (records.total > 0 ? 1 : 0);
 
@@ -141,6 +144,7 @@ export default function Person({
                 person={person}
                 records={records}
                 championshipPodiums={championshipPodiums}
+                pbMarkers={pbMarkers}
                 highlight={highlight}
               />
             </GridColumn>

@@ -5,9 +5,11 @@ import {
 import { userTileProvider } from '../../../lib/leaflet-wca/providers';
 import { blueMarker, redMarker } from '../../../lib/leaflet-wca/markers';
 import 'leaflet/dist/leaflet.css';
+import { competitionUrl } from '../../../lib/requests/routes.js.erb';
+import { isProbablyOver } from '../../../lib/utils/competition-table';
 
 function MarkerForCompetition({ competition }) {
-  const markerImage = competition.probablyOver ? blueMarker : redMarker;
+  const markerImage = isProbablyOver(competition) ? blueMarker : redMarker;
   return (
     <Marker
       position={[competition.lat, competition.lng]}
@@ -15,7 +17,7 @@ function MarkerForCompetition({ competition }) {
       title={competition.name}
     >
       <Popup>
-        <a href={competition.url}>{competition.name}</a>
+        <a href={competitionUrl(competition.id)}>{competition.name}</a>
         <br />
         {competition.markerDate}
         {' - '}

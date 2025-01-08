@@ -7,6 +7,7 @@ import EventIcon from '../../wca/EventIcon';
 import { events } from '../../../lib/wca-data.js.erb';
 import { AttemptItem } from './TableComponents';
 import I18n from '../../../lib/i18n';
+import { competitionUrl } from '../../../lib/requests/routes.js.erb';
 
 const allEvents = events.official.map((event) => event.id);
 Object.entries(events.byId).forEach((entry) => {
@@ -72,7 +73,7 @@ function DrawEventResults({ eventId, results, types }) {
             {types.includes(result.averageRecord) && result.average}
           </TableCell>
           <TableCell>
-            <a href={result.competition.url}>
+            <a href={competitionUrl(result.competition.id)}>
               {result.competition.name}
             </a>
           </TableCell>

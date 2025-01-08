@@ -34,6 +34,7 @@ const colorForResult = (regionalRecord, pbMarker) => {
 
 export default function Results({
   person,
+  pbMarkers,
   highlightPosition,
 }) {
   const personEvents = new Set(person.results.map((r) => r.eventId));
@@ -43,7 +44,12 @@ export default function Results({
     () => person.results.filter((r) => r.eventId === currentEvent),
     [currentEvent, person.results],
   );
-  const currentResultsPbs = useMemo(() => person.pbMarkers[currentEvent], [person.pbMarkers, currentEvent]);
+
+  const currentResultsPbs = useMemo(
+    () => pbMarkers[currentEvent],
+    [pbMarkers, currentEvent],
+  );
+
   return (
     <>
       <EventSelector
