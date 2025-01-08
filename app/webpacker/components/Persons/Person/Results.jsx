@@ -5,7 +5,7 @@ import {
 } from 'semantic-ui-react';
 import _ from 'lodash';
 import { events, roundTypes } from '../../../lib/wca-data.js.erb';
-import { EventSelector } from '../../CompetitionsOverview/CompetitionsFilters';
+import { EventSelector } from '../../wca/EventSelector';
 import { competitionUrl } from '../../../lib/requests/routes.js.erb';
 import I18n from '../../../lib/i18n';
 
