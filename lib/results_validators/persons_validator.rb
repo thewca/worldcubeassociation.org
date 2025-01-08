@@ -7,9 +7,9 @@ module ResultsValidators
     WHITESPACE_IN_NAME_ERROR = "Person '%{name}' has leading/trailing whitespaces or double whitespaces."
     WRONG_WCA_ID_ERROR = "Person %{name} has a WCA ID which does not exist: %{wca_id}."
     WRONG_PARENTHESIS_FORMAT_ERROR = "Opening parenthesis in '%{name}' must be preceded by a space."
-    DOB_0101_WARNING = "The date of birth of %{name} is on January 1st, please ensure it's correct."
-    VERY_YOUNG_PERSON_WARNING = "%{name} seems to be less than 3 years old, please ensure it's correct."
-    NOT_SO_YOUNG_PERSON_WARNING = "%{name} seems to be around 100 years old, please ensure it's correct."
+    DOB_JAN_ONE = "dob_jan_one"
+    DOB_TOO_YOUNG = "dob_too_young"
+    DOB_TOO_OLD = "dob_too_old"
     SAME_PERSON_NAME_WARNING = "There is already at least one person with the name '%{name}' in the WCA database (%{wca_ids}). " \
                                "Please ensure that your '%{name}' is a different person. If not, please assign the correct WCA ID to the user account and regenerate the results JSON."
     NON_MATCHING_DOB_WARNING = "The birthdate '%{dob}' provided for %{name} (%{wca_id}) does not match the current record in the WCA database ('%{expected_dob}'). If this is an error, fix it. Otherwise, leave a comment to the WRT about it."
@@ -46,17 +46,17 @@ module ResultsValidators
 
       # Check if DOB is January 1
       if dob.month == 1 && dob.day == 1
-        validation_issues << ValidationWarning.new(:persons, competition_id, DOB_0101_WARNING, **message_args)
+        validation_issues << ValidationWarning.new(DOB_JAN_ONE, :persons, competition_id, **message_args)
       end
 
       # Check if DOB is very young, competitor less than 3 years old are extremely rare, so we'd better check these birthdate are correct.
       if dob.year >= Time.now.year - 3
-        validation_issues << ValidationWarning.new(:persons, competition_id, VERY_YOUNG_PERSON_WARNING, **message_args)
+        validation_issues << ValidationWarning.new(DOB_TOO_YOUNG, :persons, competition_id, **message_args)
       end
 
       # Check if DOB is not so young
       if dob.year <= Time.now.year - 100
-        validation_issues << ValidationWarning.new(:persons, competition_id, NOT_SO_YOUNG_PERSON_WARNING, **message_args)
+        validation_issues << ValidationWarning.new(DOB_TOO_OLD, :persons, competition_id, **message_args)
       end
 
       validation_issues

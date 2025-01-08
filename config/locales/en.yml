@@ -2806,3 +2806,8 @@ en:
       description_html: "On this page we offer the WST developer export for download as SQL dump. Details can be found at %{github_link}."
       #context: The button that is clicked to download the file
       download: "Download"
+  validators:
+    person:
+      dob_jan_one: "The date of birth of %{name} is on January 1st, please ensure it's correct."
+      dob_too_young: "%{name} seems to be less than 3 years old, please ensure it's correct."
+      dob_too_old: "%{name} seems to be around 100 years old, please ensure it's correct."
