@@ -32,7 +32,10 @@ function ApprovePictures() {
   const { mutate: decideOnAvatars } = useMutation({
     mutationFn: updateAvatars,
     onSuccess: (_, params) => {
-      queryClient.setQueriesData(pendingUsers.filter((p) => p.pending_avatar_id !== params.avatarId), { queryKey: ['pending_avatars'] });
+      queryClient.setQueryData(
+        ['pending-avatars'],
+        (oldData) => oldData.filter((p) => p.pending_avatar.id !== params.avatarId),
+      );
     },
   });
 
@@ -66,6 +69,7 @@ function ApprovePictures() {
         <CardGroup>
           {pendingUsers.map((user) => (
             <AvatarCard
+              key={user.id}
               user={user}
               onApprove={onApprove}
               onReject={onReject}
