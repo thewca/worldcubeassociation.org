@@ -95,7 +95,7 @@ export default function Results({
             <Table.HeaderCell />
           </TableHeader>
           <TableBody>
-            {_.map(_.groupBy(currentResults, 'competition.id'), ((c) => c.map((r, index) => (
+            {_.map(_.groupBy(currentResults, 'competition_id'), ((c) => c.map((r, index) => (
               <Table.Row key={r.id} positive={highlightPosition === r.pos && r.roundTypeId === 'f'}>
                 <Table.Cell>
                   {index === 0 && <a href={competitionUrl(r.competition_id)}>{competitions[r.competition_id].name}</a>}
