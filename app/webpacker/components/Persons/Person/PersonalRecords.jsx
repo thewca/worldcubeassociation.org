@@ -9,6 +9,7 @@ import I18n from '../../../lib/i18n';
 import { events } from '../../../lib/wca-data.js.erb';
 import EventIcon from '../../wca/EventIcon';
 import { rankingsPath } from '../../../lib/requests/routes.js.erb';
+import {formatAttemptResult} from "../../../lib/wca-live/attempts";
 
 function isOddRank(rank) {
   if (rank === undefined) {
@@ -73,7 +74,7 @@ function ResultPopup({
   if (!matchingResult) {
     return (
       <a href={rankingsPath(eventId, resultType)} className="plain">
-        {rankForEvent.time}
+        {formatAttemptResult(rankForEvent.time, eventId)}
       </a>
     );
   }
@@ -84,14 +85,14 @@ function ResultPopup({
     <Popup
       trigger={(
         <a href={rankingsPath(eventId, resultType)} className="plain">
-          <b>{rankForEvent.time}</b>
+          <b>{formatAttemptResult(rankForEvent.time, eventId)}</b>
         </a>
       )}
     >
       <PopupHeader><I18nHTMLTranslate i18nKey={`events.${eventId}`} /></PopupHeader>
       <PopupContent>
         <Header as="h2">
-          {rankForEvent.time}
+          {formatAttemptResult(rankForEvent.time, eventId)}
           {' '}
           <I18nHTMLTranslate i18nKey={average ? 'common.average' : 'common.single'} />
         </Header>
