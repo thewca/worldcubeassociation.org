@@ -7,6 +7,7 @@ import EventIcon from '../../wca/EventIcon';
 import { AttemptItem } from './TableComponents';
 import I18n from '../../../lib/i18n';
 import { competitionUrl } from '../../../lib/requests/routes.js.erb';
+import {formatAttemptResult} from "../../../lib/wca-live/attempts";
 
 function CompetitionResults({
   data,
@@ -30,8 +31,8 @@ function CompetitionResults({
             <I18nHTMLTranslate i18nKey={`events.${result.eventId}`} />
           </TableCell>
           <TableCell className="place">{podium.pos}</TableCell>
-          <TableCell className="single">{result.best}</TableCell>
-          <TableCell className="average">{result.average}</TableCell>
+          <TableCell className="single">{formatAttemptResult(result.best, result.eventId)}</TableCell>
+          <TableCell className="average">{formatAttemptResult(result.average, result.eventId)}</TableCell>
           {result.attempts.map((_, i) => (
             // eslint-disable-next-line react/no-array-index-key
             <AttemptItem key={i} result={result} attemptNumber={i} />
@@ -111,17 +112,17 @@ const championshipTypes = {
   },
 };
 
-export default function RegionalChampionshipPodiums({ person }) {
+export default function RegionalChampionshipPodiums({ person, championshipPodiums }) {
   return (
     <>
       {Object.entries(championshipTypes).map((
         [type, { title }],
-      ) => person.championshipPodiums[type]?.length > 0 && (
+      ) => championshipPodiums[type]?.length > 0 && (
         <RegionalChampionshipPodiumsOld
           key={type}
           person={person}
           title={title}
-          podiums={person.championshipPodiums[type]}
+          podiums={championshipPodiums[type]}
         />
       ))}
     </>

@@ -12,9 +12,9 @@
     completedSolves: @person.completed_solves_count,
     results: @results.map { |result| {
       id: result.id,
-      eventId: result.event.id,
-      best: result.best_solve.clock_format,
-      average: result.average_solve.clock_format,
+      eventId: result.event_id,
+      best: result.best,
+      average: result.average,
       pos: result.pos,
       competition: {
         id: result.competition.id,
@@ -28,7 +28,7 @@
       roundTypeId: result.roundTypeId,
       bestIdx: result.best_index,
       worstIdx: result.worst_index,
-      attempts: result.solve_times.map { |time| time.clock_format },
+      attempts: result.attempts,
       singleRecord: result.regionalSingleRecord,
       averageRecord: result.regionalAverageRecord,
       trimmedIdx: result.trimmed_indices,
@@ -42,14 +42,14 @@
   championshipPodiums: @championship_podiums,
   singleRanks: @ranks_single.map { |r| {
     eventId: r.eventId,
-    time: r.solve_time.clock_format,
+    time: r.best,
     worldRank: r.worldRank,
     continentRank: r.continentRank,
     countryRank: r.countryRank,
   }},
   averageRanks: @ranks_average.map { |r| {
     eventId: r.eventId,
-    time: r.solve_time.clock_format,
+    time: r.best,
     worldRank: r.worldRank,
     continentRank: r.continentRank,
     countryRank: r.countryRank,

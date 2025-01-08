@@ -8,6 +8,7 @@ import { events, roundTypes } from '../../../lib/wca-data.js.erb';
 import { EventSelector } from '../../wca/EventSelector';
 import { competitionUrl } from '../../../lib/requests/routes.js.erb';
 import I18n from '../../../lib/i18n';
+import { formatAttemptResult } from '../../../lib/wca-live/attempts';
 
 const colorForResult = (regionalRecord, pbMarker) => {
   let recordColor = { };
@@ -100,21 +101,27 @@ export default function Results({
                 </Table.Cell>
                 <Table.Cell>{roundTypes.byId[r.roundTypeId].name}</Table.Cell>
                 <Table.Cell>{r.pos}</Table.Cell>
-                <Table.Cell style={colorForResult(r.singleRecord, currentResultsPbs[r.id]?.single)}>{r.best}</Table.Cell>
+                <Table.Cell style={colorForResult(r.singleRecord, currentResultsPbs[r.id]?.single)}>
+                  {formatAttemptResult(r.best, r.eventId)}
+                </Table.Cell>
                 <Table.Cell><b>{r.singleRecord}</b></Table.Cell>
-                <Table.Cell style={colorForResult(r.averageRecord, currentResultsPbs[r.id]?.average)}>{r.average}</Table.Cell>
+                <Table.Cell style={colorForResult(r.averageRecord, currentResultsPbs[r.id]?.average)}>
+                  {formatAttemptResult(r.average, r.eventId)}
+                </Table.Cell>
                 <Table.Cell><b>{r.averageRecord}</b></Table.Cell>
                 {r.attempts.map((a, i) => {
+                  const attemptClock = formatAttemptResult(a, r.eventId);
+
                   if (i === r.bestIdx || i === r.worstIdx) {
                     return (
                       <Table.Cell>
                         (
-                        {a}
+                        {attemptClock}
                         )
                       </Table.Cell>
                     );
                   }
-                  return <Table.Cell>{a}</Table.Cell>;
+                  return <Table.Cell>{attemptClock}</Table.Cell>;
                 })}
               </Table.Row>
             ))))}

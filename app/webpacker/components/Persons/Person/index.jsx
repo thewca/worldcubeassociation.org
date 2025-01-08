@@ -49,7 +49,10 @@ function TabSection({
         tabSlug: 'championship-podiums',
         render: () => (
           <TabPane>
-            <RegionalChampionshipPodiums person={person} />
+            <RegionalChampionshipPodiums
+              person={person}
+              championshipPodiums={championshipPodiums}
+            />
           </TabPane>
         ),
       });

@@ -8,6 +8,7 @@ import { events } from '../../../lib/wca-data.js.erb';
 import { AttemptItem } from './TableComponents';
 import I18n from '../../../lib/i18n';
 import { competitionUrl } from '../../../lib/requests/routes.js.erb';
+import {formatAttemptResult} from "../../../lib/wca-live/attempts";
 
 const allEvents = events.official.map((event) => event.id);
 Object.entries(events.byId).forEach((entry) => {
@@ -67,10 +68,14 @@ function DrawEventResults({ eventId, results, types }) {
       {results.map((result) => (
         <TableRow key={result.id}>
           <TableCell>
-            {types.includes(result.singleRecord) && result.best}
+            {types.includes(result.singleRecord) && (
+              formatAttemptResult(result.best, result.eventId)
+            )}
           </TableCell>
           <TableCell>
-            {types.includes(result.averageRecord) && result.average}
+            {types.includes(result.averageRecord) && (
+              formatAttemptResult(result.average, result.eventId)
+            )}
           </TableCell>
           <TableCell>
             <a href={competitionUrl(result.competition.id)}>
