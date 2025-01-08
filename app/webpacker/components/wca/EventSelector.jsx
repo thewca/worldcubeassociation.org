@@ -3,6 +3,7 @@ import {
   Button, Icon, Popup,
 } from 'semantic-ui-react';
 import { events } from '../../lib/wca-data.js.erb';
+import I18n from '../../lib/i18n';
 
 const WCA_EVENT_IDS = Object.values(events.official).map((e) => e.id);
 
@@ -78,13 +79,13 @@ export function EventSelector({
                       <Icon className={`cubing-icon event-${eventId}`} style={eventsDisabled.includes(eventId) ? { color: '#FFBBBB' } : {}} />
                     </Button>
                   </span>
-)}
+                )}
               >
                 {eventsDisabled.includes(eventId) ? disabledText(eventId) : I18n.t(`events.${eventId}`)}
               </Popup>
             ))}
           </div>
-)}
+        )}
       >
         {I18n.t('registrations.errors.must_register')}
       </Popup>
