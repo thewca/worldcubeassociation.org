@@ -44,11 +44,11 @@ function CompetitionResults({
   );
 }
 
-function getResultsForComp(podiums, person, competitions) {
+function getResultsForComp(podiums, results, competitions) {
   const grouped = {};
   podiums.forEach((podium) => {
     const compId = podium.competition_id;
-    const matchedResult = person.results.find((result) => result.id === podium.id);
+    const matchedResult = results.find((result) => result.id === podium.id);
     if (!grouped[compId]) {
       grouped[compId] = {
         competition: competitions[matchedResult.competition_id],
@@ -64,12 +64,12 @@ function getResultsForComp(podiums, person, competitions) {
 }
 
 function RegionalChampionshipPodiumsOld({
-  person,
+  results,
   title,
   podiums,
   competitions,
 }) {
-  const compAndResults = getResultsForComp(podiums, person, competitions);
+  const compAndResults = getResultsForComp(podiums, results, competitions);
   return (
     <div className="wc-podiums">
       <h3 className="text-center">{title}</h3>
@@ -114,7 +114,7 @@ const championshipTypes = {
   },
 };
 
-export default function RegionalChampionshipPodiums({ person, championshipPodiums, competitions }) {
+export default function RegionalChampionshipPodiums({ results, championshipPodiums, competitions }) {
   return (
     <>
       {Object.entries(championshipTypes).map((
@@ -122,7 +122,7 @@ export default function RegionalChampionshipPodiums({ person, championshipPodium
       ) => championshipPodiums[type]?.length > 0 && (
         <RegionalChampionshipPodiumsOld
           key={type}
-          person={person}
+          results={results}
           title={title}
           podiums={championshipPodiums[type]}
           competitions={competitions}

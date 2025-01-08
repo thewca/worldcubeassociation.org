@@ -61,9 +61,9 @@ function RankCell({ ranks, type }) {
 }
 
 function ResultPopup({
-  person, rankForEvent, average, eventId, competitions,
+  results, rankForEvent, average, eventId, competitions,
 }) {
-  const matchingResult = person.results.reverse().find((r) => {
+  const matchingResult = results.reverse().find((r) => {
     if (r.eventId !== eventId) return false;
     if (average) return r.average === rankForEvent.time;
     return r.best === rankForEvent.time;
@@ -110,7 +110,7 @@ function ResultPopup({
 }
 
 function EventRanks({
-  person, singles, averages, competitions, eventId, anyOddRank,
+  results, singles, averages, competitions, eventId, anyOddRank,
 }) {
   const singleForEvent = singles.find((r) => r.eventId === eventId);
   const averageForEvent = averages.find((r) => r.eventId === eventId);
@@ -130,7 +130,7 @@ function EventRanks({
       <TableCell textAlign="right">
         {singleForEvent && (
           <ResultPopup
-            person={person}
+            results={results}
             rankForEvent={singleForEvent}
             eventId={eventId}
             competitions={competitions}
@@ -140,7 +140,7 @@ function EventRanks({
       <TableCell textAlign="left">
         {averageForEvent && (
           <ResultPopup
-            person={person}
+            results={results}
             rankForEvent={averageForEvent}
             eventId={eventId}
             competitions={competitions}
@@ -170,7 +170,7 @@ function EventRanks({
 }
 
 export default function PersonalRecords({
-  person, averageRanks, singleRanks, competitions,
+  results, averageRanks, singleRanks, competitions,
 }) {
   const anyOddRank = singleRanks.some((r) => isOddRank(r))
     || averageRanks.some((r) => isOddRank(r));
@@ -205,7 +205,7 @@ export default function PersonalRecords({
           <TableBody>
             {events.official.map((event) => (
               <EventRanks
-                person={person}
+                results={results}
                 key={event.id}
                 eventId={event.id}
                 averages={averageRanks}

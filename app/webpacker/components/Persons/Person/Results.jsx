@@ -34,17 +34,17 @@ const colorForResult = (regionalRecord, pbMarker) => {
 };
 
 export default function Results({
-  person,
+  results,
   competitions,
   pbMarkers,
   highlightPosition,
 }) {
-  const personEvents = new Set(person.results.map((r) => r.eventId));
+  const personEvents = new Set(results.map((r) => r.eventId));
   const eventList = events.official.filter((r) => personEvents.has(r.id)).map((r) => r.id);
   const [currentEvent, setCurrentEvent] = useState(new URL(document.location.toString()).searchParams.get('event') ?? eventList[0]);
   const currentResults = useMemo(
-    () => person.results.filter((r) => r.eventId === currentEvent),
-    [currentEvent, person.results],
+    () => results.filter((r) => r.eventId === currentEvent),
+    [currentEvent, results],
   );
 
   const currentResultsPbs = useMemo(

@@ -13,6 +13,7 @@ import CountStats from './CountStats';
 
 function TabSection({
   person,
+  results,
   records,
   competitions,
   championshipPodiums,
@@ -26,7 +27,7 @@ function TabSection({
       render: () => (
         <TabPane>
           <Results
-            person={person}
+            results={results}
             pbMarkers={pbMarkers}
             highlightPosition={highlight}
             competitions={competitions}
@@ -40,7 +41,7 @@ function TabSection({
         tabSlug: 'record',
         render: () => (
           <TabPane>
-            <RegionalRecords person={person} />
+            <RegionalRecords results={results} />
           </TabPane>
         ),
       });
@@ -57,7 +58,7 @@ function TabSection({
         render: () => (
           <TabPane>
             <RegionalChampionshipPodiums
-              person={person}
+              results={results}
               championshipPodiums={championshipPodiums}
               competitions={competitions}
             />
@@ -101,6 +102,7 @@ function TabSection({
 
 export default function Person({
   person,
+  results,
   averageRanks,
   singleRanks,
   competitions,
@@ -143,7 +145,7 @@ export default function Person({
             <GridColumn width={12}>
               <Segment raised>
                 <PersonalRecords
-                  person={person}
+                  results={results}
                   averageRanks={averageRanks}
                   singleRanks={singleRanks}
                   competitions={competitions}
@@ -157,6 +159,7 @@ export default function Person({
               <Divider />
               <TabSection
                 person={person}
+                results={results}
                 records={records}
                 competitions={competitions}
                 championshipPodiums={championshipPodiums}

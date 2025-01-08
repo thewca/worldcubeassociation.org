@@ -149,14 +149,14 @@ function RegionalRecordsOld({ groupedResults, title, type }) {
   );
 }
 
-export default function RegionalRecords({ person }) {
-  const results = groupByTypeAndEvent(person.results);
+export default function RegionalRecords({ results }) {
+  const groupedResults = groupByTypeAndEvent(results);
   return (
     <>
-      {Object.keys(recordTypes).map((type) => results[type] && (
+      {Object.keys(recordTypes).map((type) => groupedResults[type] && (
         <RegionalRecordsOld
           key={type}
-          groupedResults={results[type]}
+          groupedResults={groupedResults[type]}
           title={recordTypes[type].title}
           type={type}
         />
