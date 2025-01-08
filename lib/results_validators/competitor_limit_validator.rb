@@ -2,8 +2,7 @@
 
 module ResultsValidators
   class CompetitorLimitValidator < GenericValidator
-    COMPETITOR_LIMIT_WARNING = "The number of persons in the competition (%{n_competitors}) is above the competitor limit (%{competitor_limit}). " \
-                               "The results of the competitors registered after the competitor limit was reached must be removed."
+    COMPETITOR_LIMIT_WARNING = :competitor_limit_warning
 
     def self.description
       "For competition with a competitor limit, this validator checks that this limit is respected."
@@ -25,8 +24,8 @@ module ResultsValidators
         total_competitors = competition_data.persons.count
 
         if competition.competitor_limit_enabled && total_competitors > competitor_limit
-          @warnings << ValidationWarning.new(:persons, competition.id,
-                                             COMPETITOR_LIMIT_WARNING,
+          @warnings << ValidationWarning.new(COMPETITOR_LIMIT_WARNING,
+                                             :persons, competition.id,
                                              n_competitors: total_competitors,
                                              competitor_limit: competitor_limit)
         end

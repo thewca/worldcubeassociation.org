@@ -19,7 +19,7 @@ function EditPersonValidations({ ticketDetails }) {
   if (error) return <Errored />;
 
   return validators.dob.map((validator) => (
-    <Message warning>{I18n.t(`validators.person.${validator.id}`)}</Message>
+    <Message warning>{I18n.t(`validators.${validator.kind}.${validator.id}`, validator.args)}</Message>
   ));
 }
 

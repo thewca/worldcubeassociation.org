@@ -11,7 +11,7 @@ module ResultsValidators
     end
 
     def to_s
-      I18n.t("validators.person.#{@id}", @args)
+      I18n.t("validators.#{@kind}.#{@id}", **@args, locale: 'en')
     end
 
     def ==(other)

@@ -2,8 +2,8 @@
 
 module ResultsValidators
   class PositionsValidator < GenericValidator
-    WRONG_POSITION_IN_RESULTS_ERROR = "[%{round_id}] %{person_name} is in the wrong position: expected %{expected_pos}, but got %{pos}."
-    POSITION_FIXED_INFO = "[%{round_id}] Automatically fixed the position of %{person_name} from %{pos} to %{expected_pos}."
+    WRONG_POSITION_IN_RESULTS_ERROR = :wrong_position_in_results_error
+    POSITION_FIXED_INFO = :position_fixed_info
 
     def self.description
       "This validator checks that positions stored in results are correct with regard to the actual results."
@@ -50,16 +50,16 @@ module ResultsValidators
 
             if expected_pos != result.pos
               if @apply_fixes
-                @infos << ValidationInfo.new(:results, competition.id,
-                                             POSITION_FIXED_INFO,
+                @infos << ValidationInfo.new(POSITION_FIXED_INFO,
+                                             :results, competition.id,
                                              round_id: round_id,
                                              person_name: result.personName,
                                              expected_pos: expected_pos,
                                              pos: result.pos)
                 result.update!(pos: expected_pos)
               else
-                @errors << ValidationError.new(:results, competition.id,
-                                               WRONG_POSITION_IN_RESULTS_ERROR,
+                @errors << ValidationError.new(WRONG_POSITION_IN_RESULTS_ERROR,
+                                               :results, competition.id,
                                                round_id: round_id,
                                                person_name: result.personName,
                                                expected_pos: expected_pos,
