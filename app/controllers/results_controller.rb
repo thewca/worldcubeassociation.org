@@ -156,7 +156,24 @@ class ResultsController < ApplicationController
 
     else
       flash[:danger] = t(".unknown_show")
-      redirect_to rankings_path
+      return redirect_to rankings_path
+    end
+
+    @ranking_timestamp = ComputeAuxiliaryData.successful_start_date || Date.current
+
+    respond_to do |format|
+      format.html
+      format.json do
+        cached_data = Rails.cache.fetch [*@cache_params, @ranking_timestamp] do
+          rows = DbHelper.execute_cached_query(@cache_params, @ranking_timestamp, @query)
+          comp_ids = rows.map { |r| r["competitionId"] }.uniq
+          competitions_by_id = Hash[Competition.where(id: comp_ids).map { |c| [c.id, c] }]
+          {
+            rows: rows.as_json, competitionsById: competitions_by_id.as_json({ methods: %w[country cellName id], includes: [] }),
+          }
+        end
+        render json: cached_data
+      end
     end
   end
 

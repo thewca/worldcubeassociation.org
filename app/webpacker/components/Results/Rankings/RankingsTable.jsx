@@ -1,10 +1,10 @@
 import React, { useMemo } from 'react';
-import { Container, Table } from 'semantic-ui-react';
+import { Table } from 'semantic-ui-react';
 import _ from 'lodash';
 import I18n from '../../../lib/i18n';
 import { formatAttemptResult } from '../../../lib/wca-live/attempts';
 import CountryFlag from '../../wca/CountryFlag';
-import { countries, events } from '../../../lib/wca-data.js.erb';
+import { countries } from '../../../lib/wca-data.js.erb';
 
 function ResultRow({
   result, competition, rank, isAverage,
@@ -14,6 +14,7 @@ function ResultRow({
   const worstResult = _.min(attempts);
   const bestResultIndex = attempts.findIndex((a) => a === bestResult);
   const worstResultIndex = attempts.findIndex((a) => a === worstResult);
+  const country = countries.real.find((c) => c.id === result.countryId);
   return (
     <Table.Row>
       <Table.Cell>{rank}</Table.Cell>
@@ -24,16 +25,18 @@ function ResultRow({
         {formatAttemptResult(result.value, result.eventId)}
       </Table.Cell>
       <Table.Cell textAlign="left">
-        <CountryFlag iso2={countries.real.find((c) => c.id === result.countryId).iso2} />
+        <CountryFlag iso2={country.iso2} />
+        {' '}
+        {country.name}
       </Table.Cell>
       <Table.Cell>
         <CountryFlag iso2={competition.country.iso2} />
         {' '}
-        <a href={`/competition/${competition.id}`}>{competition.name}</a>
+        <a href={`/competition/${competition.id}`}>{competition.cellName}</a>
       </Table.Cell>
       {isAverage && (attempts.map((a, i) => (
         <Table.Cell>
-          { events.byId[result.eventId].format.expectedSolveCount === 5
+          { attempts.length === 5
               && (i === bestResultIndex || i === worstResultIndex)
             ? `(${formatAttemptResult(a, result.eventId)})` : formatAttemptResult(a, result.eventId)}
         </Table.Cell>
@@ -70,15 +73,14 @@ export default function RankingsTable({ rows, competitionsById, isAverage }) {
   }, [competitionsById, isAverage, rows]);
 
   return (
-    <Container>
-      <Table basic="very" compact="very" singleLine>
-        <Table.Header>
-          <Table.HeaderCell>#</Table.HeaderCell>
-          <Table.HeaderCell>{I18n.t('results.table_elements.name')}</Table.HeaderCell>
-          <Table.HeaderCell>{I18n.t('results.table_elements.result')}</Table.HeaderCell>
-          <Table.HeaderCell textAlign="left">{I18n.t('results.table_elements.representing')}</Table.HeaderCell>
-          <Table.HeaderCell>{I18n.t('results.table_elements.competition')}</Table.HeaderCell>
-          {isAverage && (
+    <Table basic="very" compact="very" singleLine striped>
+      <Table.Header>
+        <Table.HeaderCell>#</Table.HeaderCell>
+        <Table.HeaderCell>{I18n.t('results.table_elements.name')}</Table.HeaderCell>
+        <Table.HeaderCell>{I18n.t('results.table_elements.result')}</Table.HeaderCell>
+        <Table.HeaderCell textAlign="left">{I18n.t('results.table_elements.representing')}</Table.HeaderCell>
+        <Table.HeaderCell>{I18n.t('results.table_elements.competition')}</Table.HeaderCell>
+        {isAverage && (
           <>
             <Table.HeaderCell>{I18n.t('results.table_elements.solves')}</Table.HeaderCell>
             <Table.HeaderCell />
@@ -86,12 +88,11 @@ export default function RankingsTable({ rows, competitionsById, isAverage }) {
             <Table.HeaderCell />
             <Table.HeaderCell />
           </>
-          )}
-        </Table.Header>
-        <Table.Body>
-          {r}
-        </Table.Body>
-      </Table>
-    </Container>
+        )}
+      </Table.Header>
+      <Table.Body>
+        {r}
+      </Table.Body>
+    </Table>
   );
 }
