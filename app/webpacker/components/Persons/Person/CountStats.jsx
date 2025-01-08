@@ -25,43 +25,43 @@ function CountStat({ title, data }) {
   );
 }
 
-export default function CountStats({ person, setHighlight }) {
+export default function CountStats({ medals, records, setHighlight }) {
   return (
     <>
-      {person.medals.total > 0 && (
+      {medals.total > 0 && (
         <GridColumn>
           <Segment raised padded>
             <CountStat
               title="Medals"
               data={[
                 {
-                  label: 'Gold', icon: 'trophy', iconColor: 'yellow', count: person.medals.gold, onClick: () => setHighlight(1),
+                  label: 'Gold', icon: 'trophy', iconColor: 'yellow', count: medals.gold, onClick: () => setHighlight(1),
                 },
                 {
-                  label: 'Silver', icon: 'trophy', iconColor: 'grey', count: person.medals.silver, onClick: () => setHighlight(2),
+                  label: 'Silver', icon: 'trophy', iconColor: 'grey', count: medals.silver, onClick: () => setHighlight(2),
                 },
                 {
-                  label: 'Bronze', icon: 'trophy', iconColor: 'orange', count: person.medals.bronze, onClick: () => setHighlight(3),
+                  label: 'Bronze', icon: 'trophy', iconColor: 'orange', count: medals.bronze, onClick: () => setHighlight(3),
                 },
               ]}
             />
           </Segment>
         </GridColumn>
       )}
-      {person.records.total > 0 && (
+      {records.total > 0 && (
         <GridColumn>
           <Segment raised padded>
             <CountStat
               title="Records"
               data={[
                 {
-                  label: 'World', icon: 'globe', iconColor: 'green', count: person.records.world,
+                  label: 'World', icon: 'globe', iconColor: 'green', count: records.world,
                 },
                 {
-                  label: 'Continental', icon: 'map', iconColor: 'teal', count: person.records.continental,
+                  label: 'Continental', icon: 'map', iconColor: 'teal', count: records.continental,
                 },
                 {
-                  label: 'National', icon: 'flag', iconColor: 'blue', count: person.records.national,
+                  label: 'National', icon: 'flag', iconColor: 'blue', count: records.national,
                 },
               ]}
             />

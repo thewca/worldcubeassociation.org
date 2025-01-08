@@ -1,43 +1,15 @@
 <% provide(:title, @person.name) %>
 
 <%= react_component("Persons/Person", {
-  normalPerson: @person,
   person: {
-    user: @person.user,
+    user: @person.user.as_json(only: [:id], methods: [:avatar], include: []),
     name: @person.name,
     wcaId: @person.wca_id,
     gender: @person.gender_visible? ? @person.gender : nil,
-    country: {
-      name: @person.country.name,
-      iso2: @person.country_iso2,
-    },
-    previousPersons: @previous_persons.map { |person| {
-      name: person.name,
-      country: person.country.name,
-    }},
+    countryIso2: @person.country_iso2,
+    previousPersons: @previous_persons.as_json(only: [:name], methods: [:country_iso2], include: []),
     competitionCount: @person.competitions.count,
     completedSolves: @person.completed_solves_count,
-    averageRanks: @ranks_average.map { |r| {
-      eventId: r.eventId,
-      time: r.solve_time.clock_format,
-      worldRank: r.worldRank,
-      continentRank: r.continentRank,
-      countryRank: r.countryRank,
-      oddRank: odd_rank?(r),
-      rankPath: rankings_path(r.event_id, "average")
-    }},
-    singleRanks: @ranks_single.map { |r| {
-      eventId: r.eventId,
-      time: r.solve_time.clock_format,
-      worldRank: r.worldRank,
-      continentRank: r.continentRank,
-      countryRank: r.countryRank,
-      oddRank: odd_rank?(r),
-      rankPath: rankings_path(r.event_id, "single"),
-      data: r.inspect
-    }},
-    medals: @medals,
-    records: @records,
     results: @results.map { |result| {
       id: result.id,
       eventId: result.event.id,
@@ -62,11 +34,26 @@
       averageRecord: result.regionalAverageRecord,
       trimmedIdx: result.trimmed_indices,
     }},
-    championshipPodiums: @championship_podiums,
-    pbMarkers: @results.group_by(&:event_id).each_with_object({}) do |(event_id, event_results), hash|
-      hash[event_id] = historical_pb_markers(event_results.reverse)
+    pbMarkers: @results.group_by(&:event_id).transform_values do |event_results|
+      historical_pb_markers(event_results.reverse)
     end,
   },
+  medals: @medals,
+  records: @records,
+  championshipPodiums: @championship_podiums,
+  singleRanks: @ranks_single.map { |r| {
+    eventId: r.eventId,
+    time: r.solve_time.clock_format,
+    worldRank: r.worldRank,
+    continentRank: r.continentRank,
+    countryRank: r.countryRank,
+  }},
+  averageRanks: @ranks_average.map { |r| {
+    eventId: r.eventId,
+    time: r.solve_time.clock_format,
+    worldRank: r.worldRank,
+    continentRank: r.continentRank,
+    countryRank: r.countryRank,
+  }},
   canEditUser: current_user&.can_edit_user?(@person.user),
-  editUrl: edit_user_path(@person.user),
 }) %>

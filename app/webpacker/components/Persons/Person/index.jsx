@@ -11,7 +11,12 @@ import CompetitionsMap from './CompetitionsMap';
 import Results from './Results';
 import CountStats from './CountStats';
 
-function TabSection({ person, highlight }) {
+function TabSection({
+  person,
+  records,
+  championshipPodiums,
+  highlight,
+}) {
   const panes = useMemo(() => {
     const p = [{
       menuItem: I18n.t('persons.show.results'),
@@ -22,7 +27,7 @@ function TabSection({ person, highlight }) {
         </TabPane>
       ),
     }];
-    if (person.records.total > 0) {
+    if (records.total > 0) {
       p.push({
         menuItem: I18n.t('persons.show.records'),
         tabSlug: 'record',
@@ -35,7 +40,7 @@ function TabSection({ person, highlight }) {
     }
 
     const anyPodiums = Object
-      .values(person.championshipPodiums)
+      .values(championshipPodiums)
       .some((podiums) => podiums.length > 0);
     if (anyPodiums) {
       p.push({
@@ -82,12 +87,17 @@ function TabSection({ person, highlight }) {
 
 export default function Person({
   person,
+  averageRanks,
+  singleRanks,
+  medals,
+  records,
+  championshipPodiums,
   canEditUser,
-  editUrl,
 }) {
   const [highlight, setHighlight] = useState(-1);
-  const medalsAndRecords = (person.medals.total > 0 ? 1 : 0)
-    + (person.records.total > 0 ? 1 : 0);
+  const medalsAndRecords = (medals.total > 0 ? 1 : 0)
+    + (records.total > 0 ? 1 : 0);
+
   const ref = useRef();
 
   return (
@@ -101,7 +111,6 @@ export default function Person({
                   <Details
                     person={person}
                     canEditUser={canEditUser}
-                    editUrl={editUrl}
                   />
                 </Segment>
               </Sticky>
@@ -111,7 +120,6 @@ export default function Person({
                 <Details
                   person={person}
                   canEditUser={canEditUser}
-                  editUrl={editUrl}
                 />
               </Segment>
             </GridColumn>
@@ -119,17 +127,22 @@ export default function Person({
               <Segment raised>
                 <PersonalRecords
                   person={person}
-                  averageRanks={person.averageRanks}
-                  singleRanks={person.singleRanks}
+                  averageRanks={averageRanks}
+                  singleRanks={singleRanks}
                 />
               </Segment>
               {medalsAndRecords > 0 && (
                 <Grid columns={medalsAndRecords} stackable>
-                  <CountStats person={person} setHighlight={setHighlight} />
+                  <CountStats medals={medals} records={records} setHighlight={setHighlight} />
                 </Grid>
               )}
               <Divider />
-              <TabSection person={person} highlight={highlight} />
+              <TabSection
+                person={person}
+                records={records}
+                championshipPodiums={championshipPodiums}
+                highlight={highlight}
+              />
             </GridColumn>
           </GridRow>
         </Grid>

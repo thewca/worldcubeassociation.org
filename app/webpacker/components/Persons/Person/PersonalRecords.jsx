@@ -8,6 +8,18 @@ import I18nHTMLTranslate from '../../I18nHTMLTranslate';
 import I18n from '../../../lib/i18n';
 import { events } from '../../../lib/wca-data.js.erb';
 import EventIcon from '../../wca/EventIcon';
+import { rankingsPath } from '../../../lib/requests/routes.js.erb';
+
+function isOddRank(rank) {
+  if (rank === undefined) {
+    return false;
+  }
+
+  // NOTE: world rank is always present.
+  const anyMissing = rank.continentRank === 0 || rank.countryRank === 0;
+
+  return anyMissing || rank.continentRank < rank.countryRank;
+}
 
 function RankHeader({ type, short }) {
   return (
@@ -56,9 +68,11 @@ function ResultPopup({
     return r.best === resultForEvent.time;
   });
 
+  const resultType = average ? 'average' : 'single';
+
   if (!matchingResult) {
     return (
-      <a href={resultForEvent.rankPath} className="plain">
+      <a href={rankingsPath(eventId, resultType)} className="plain">
         {resultForEvent.time}
       </a>
     );
@@ -67,7 +81,7 @@ function ResultPopup({
   return (
     <Popup
       trigger={(
-        <a href={resultForEvent.rankPath} className="plain">
+        <a href={rankingsPath(eventId, resultType)} className="plain">
           <b>{resultForEvent.time}</b>
         </a>
       )}
@@ -99,7 +113,7 @@ function EventRanks({
   const averageForEvent = averages.find((r) => r.eventId === eventId);
   if (!singleForEvent && !averageForEvent) return null;
 
-  const oddRank = singleForEvent.oddRank || averageForEvent?.oddRank;
+  const oddRank = isOddRank(singleForEvent) || isOddRank(averageForEvent);
 
   return (
     <TableRow key={eventId}>
@@ -142,7 +156,8 @@ function EventRanks({
 }
 
 export default function PersonalRecords({ person, averageRanks, singleRanks }) {
-  const anyOddRank = singleRanks.some((r) => r.oddRank) || averageRanks.some((r) => r.oddRank);
+  const anyOddRank = singleRanks.some((r) => isOddRank(r))
+    || averageRanks.some((r) => isOddRank(r));
 
   return (
     <div>

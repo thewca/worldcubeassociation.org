@@ -6,6 +6,8 @@ import I18nHTMLTranslate from '../../I18nHTMLTranslate';
 import Badges from '../Badges';
 import CountryFlag from '../../wca/CountryFlag';
 import I18n from '../../../lib/i18n';
+import { countries } from '../../../lib/wca-data.js.erb';
+import { editPersonUrl } from '../../../lib/requests/routes.js.erb';
 
 function PreviousDetails({ prev }) {
   return (
@@ -14,7 +16,7 @@ function PreviousDetails({ prev }) {
       <I18nHTMLTranslate i18nKey="persons.show.previously" />
       {' '}
       {prev
-        .map((previousPerson) => `${previousPerson.name} - ${previousPerson.country}`)
+        .map((previousPerson) => `${previousPerson.name} - ${countries.byIso2[previousPerson.country_iso2].name}`)
         .join(', ')}
       )
     </Header>
@@ -24,7 +26,6 @@ function PreviousDetails({ prev }) {
 export default function Details({
   person,
   canEditUser,
-  editUrl,
 }) {
   return (
     <>
@@ -32,11 +33,11 @@ export default function Details({
         <Card image={person.user.avatar.url} centered raised />
       )}
       <Header as="h2" textAlign="center">
-        <CountryFlag iso2={person.country.iso2} />
+        <CountryFlag iso2={person.countryIso2} />
         {' '}
-        {person.name + (canEditUser ? ' ' : '')}
+        {person.name}
         {canEditUser && (
-          <a href={editUrl}>
+          <a href={editPersonUrl(person.user.id)}>
             {' '}
             <Icon name="edit" />
           </a>
