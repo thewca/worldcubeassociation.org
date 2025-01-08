@@ -10,9 +10,15 @@ import { isProbablyOver } from '../../../lib/utils/competition-table';
 
 function MarkerForCompetition({ competition }) {
   const markerImage = isProbablyOver(competition) ? blueMarker : redMarker;
+
+  const coordinateTuple = [
+    competition.latitude_degrees,
+    competition.longitude_degrees,
+  ];
+
   return (
     <Marker
-      position={[competition.lat, competition.lng]}
+      position={coordinateTuple}
       icon={markerImage}
       title={competition.name}
     >
@@ -27,29 +33,17 @@ function MarkerForCompetition({ competition }) {
   );
 }
 
-export default function CompetitionsMap({ person }) {
-  const competitions = [];
+const mapAndAverage = (arr, mappingFn) => arr.map(mappingFn).join('+') / arr.length;
 
-  const compIds = new Set();
-  person.results.forEach((result) => {
-    if (!compIds.has(result.competition.id)) {
-      compIds.add(result.competition.id);
-      competitions.push(result.competition);
-    }
-  });
-
-  let sumLat = 0;
-  let sumLon = 0;
-  competitions.forEach((comp) => {
-    sumLat += comp.lat;
-    sumLon += comp.lng;
-  });
+export default function CompetitionsMap({ competitions }) {
+  const avgLatitude = mapAndAverage(competitions, (comp) => comp.latitude_degrees);
+  const avgLongitude = mapAndAverage(competitions, (comp) => comp.longitude_degrees);
 
   return (
     <div style={{ height: '500px', width: '100%' }}>
       <MapContainer
         style={{ height: '100%' }}
-        center={[sumLat / competitions.length, sumLon / competitions.length]}
+        center={[avgLatitude, avgLongitude]}
         zoom={2}
       >
         <TileLayer

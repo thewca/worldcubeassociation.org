@@ -8,7 +8,7 @@ import { events } from '../../../lib/wca-data.js.erb';
 import { AttemptItem } from './TableComponents';
 import I18n from '../../../lib/i18n';
 import { competitionUrl } from '../../../lib/requests/routes.js.erb';
-import {formatAttemptResult} from "../../../lib/wca-live/attempts";
+import { formatAttemptResult } from '../../../lib/wca-live/attempts';
 
 const allEvents = events.official.map((event) => event.id);
 Object.entries(events.byId).forEach((entry) => {
@@ -56,7 +56,9 @@ function groupByTypeAndEvent(results) {
   return typeGroups;
 }
 
-function DrawEventResults({ eventId, results, types }) {
+function DrawEventResults({
+  eventId, results, types, competitions,
+}) {
   return (
     <>
       <TableRow>
@@ -65,34 +67,38 @@ function DrawEventResults({ eventId, results, types }) {
           <I18nHTMLTranslate i18nKey={`events.${eventId}`} />
         </TableCell>
       </TableRow>
-      {results.map((result) => (
-        <TableRow key={result.id}>
-          <TableCell>
-            {types.includes(result.singleRecord) && (
-              formatAttemptResult(result.best, result.eventId)
+      {results.map((result) => {
+        const competition = competitions[result.competition_id];
+
+        return (
+          <TableRow key={result.id}>
+            <TableCell>
+              {types.includes(result.singleRecord) && (
+                formatAttemptResult(result.best, result.eventId)
+              )}
+            </TableCell>
+            <TableCell>
+              {types.includes(result.averageRecord) && (
+                formatAttemptResult(result.average, result.eventId)
+              )}
+            </TableCell>
+            <TableCell>
+              <a href={competitionUrl(competition.id)}>
+                {competition.name}
+              </a>
+            </TableCell>
+            <TableCell>
+              <I18nHTMLTranslate i18nKey={`rounds.${result.roundTypeId}.cellName`}/>
+            </TableCell>
+            {types.includes(result.averageRecord) ? result.attempts.map((_, i) => (
+              // eslint-disable-next-line react/no-array-index-key
+              <AttemptItem key={i} result={result} attemptNumber={i}/>
+            )) : (
+              <TableCell colSpan="5"/>
             )}
-          </TableCell>
-          <TableCell>
-            {types.includes(result.averageRecord) && (
-              formatAttemptResult(result.average, result.eventId)
-            )}
-          </TableCell>
-          <TableCell>
-            <a href={competitionUrl(result.competition.id)}>
-              {result.competition.name}
-            </a>
-          </TableCell>
-          <TableCell>
-            <I18nHTMLTranslate i18nKey={`rounds.${result.roundTypeId}.cellName`} />
-          </TableCell>
-          {types.includes(result.averageRecord) ? result.attempts.map((_, i) => (
-            // eslint-disable-next-line react/no-array-index-key
-            <AttemptItem key={i} result={result} attemptNumber={i} />
-          )) : (
-            <TableCell colSpan="5" />
-          )}
-        </TableRow>
-      ))}
+          </TableRow>
+        );
+      })}
     </>
   );
 }

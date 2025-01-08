@@ -14,6 +14,7 @@ import CountStats from './CountStats';
 function TabSection({
   person,
   records,
+  competitions,
   championshipPodiums,
   pbMarkers,
   highlight,
@@ -24,7 +25,12 @@ function TabSection({
       tabSlug: 'results-by-event',
       render: () => (
         <TabPane>
-          <Results person={person} pbMarkers={pbMarkers} highlightPosition={highlight} />
+          <Results
+            person={person}
+            pbMarkers={pbMarkers}
+            highlightPosition={highlight}
+            competitions={competitions}
+          />
         </TabPane>
       ),
     }];
@@ -43,6 +49,7 @@ function TabSection({
     const anyPodiums = Object
       .values(championshipPodiums)
       .some((podiums) => podiums.length > 0);
+
     if (anyPodiums) {
       p.push({
         menuItem: I18n.t('persons.show.championship_podiums'),
@@ -52,23 +59,26 @@ function TabSection({
             <RegionalChampionshipPodiums
               person={person}
               championshipPodiums={championshipPodiums}
+              competitions={competitions}
             />
           </TabPane>
         ),
       });
     }
 
+    const competitionValues = Object.values(competitions);
+
     p.push({
       menuItem: I18n.t('persons.show.competitions_map'),
       tabSlug: 'map',
       render: () => (
         <TabPane>
-          <CompetitionsMap person={person} />
+          <CompetitionsMap competitions={competitionValues} />
         </TabPane>
       ),
     });
     return p;
-  }, [person, highlight]);
+  }, [records, championshipPodiums, person, pbMarkers, highlight, competitions]);
 
   const tabSlug = new URL(document.location.toString()).searchParams.get('tab');
   const activeIndex = tabSlug ? panes.findIndex((p) => p.tabSlug === tabSlug) : 0;
@@ -93,6 +103,7 @@ export default function Person({
   person,
   averageRanks,
   singleRanks,
+  competitions,
   medals,
   records,
   pbMarkers,
@@ -135,6 +146,7 @@ export default function Person({
                   person={person}
                   averageRanks={averageRanks}
                   singleRanks={singleRanks}
+                  competitions={competitions}
                 />
               </Segment>
               {medalsAndRecords > 0 && (
@@ -146,6 +158,7 @@ export default function Person({
               <TabSection
                 person={person}
                 records={records}
+                competitions={competitions}
                 championshipPodiums={championshipPodiums}
                 pbMarkers={pbMarkers}
                 highlight={highlight}

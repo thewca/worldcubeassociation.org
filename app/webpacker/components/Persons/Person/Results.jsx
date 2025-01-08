@@ -35,6 +35,7 @@ const colorForResult = (regionalRecord, pbMarker) => {
 
 export default function Results({
   person,
+  competitions,
   pbMarkers,
   highlightPosition,
 }) {
@@ -97,7 +98,7 @@ export default function Results({
             {_.map(_.groupBy(currentResults, 'competition.id'), ((c) => c.map((r, index) => (
               <Table.Row key={r.id} positive={highlightPosition === r.pos && r.roundTypeId === 'f'}>
                 <Table.Cell>
-                  {index === 0 && <a href={competitionUrl(r.competition.id)}>{r.competition.name}</a>}
+                  {index === 0 && <a href={competitionUrl(r.competition_id)}>{competitions[r.competition_id].name}</a>}
                 </Table.Cell>
                 <Table.Cell>{roundTypes.byId[r.roundTypeId].name}</Table.Cell>
                 <Table.Cell>{r.pos}</Table.Cell>

@@ -7,20 +7,21 @@ import EventIcon from '../../wca/EventIcon';
 import { AttemptItem } from './TableComponents';
 import I18n from '../../../lib/i18n';
 import { competitionUrl } from '../../../lib/requests/routes.js.erb';
-import {formatAttemptResult} from "../../../lib/wca-live/attempts";
+import { formatAttemptResult } from '../../../lib/wca-live/attempts';
 
 function CompetitionResults({
   data,
+  competition,
 }) {
   return (
     <>
       <TableRow>
         <TableCell colSpan={9}>
           <a
-            href={competitionUrl(data.competition.id)}
+            href={competitionUrl(competition.id)}
             className="competition-link"
           >
-            {data.competition.name}
+            {competition.name}
           </a>
         </TableCell>
       </TableRow>
@@ -43,14 +44,14 @@ function CompetitionResults({
   );
 }
 
-function getResultsForComp(podiums, person) {
+function getResultsForComp(podiums, person, competitions) {
   const grouped = {};
   podiums.forEach((podium) => {
     const compId = podium.competition_id;
     const matchedResult = person.results.find((result) => result.id === podium.id);
     if (!grouped[compId]) {
       grouped[compId] = {
-        competition: matchedResult.competition,
+        competition: competitions[matchedResult.competition_id],
         results: [],
       };
     }
@@ -66,8 +67,9 @@ function RegionalChampionshipPodiumsOld({
   person,
   title,
   podiums,
+  competitions,
 }) {
-  const compAndResults = getResultsForComp(podiums, person);
+  const compAndResults = getResultsForComp(podiums, person, competitions);
   return (
     <div className="wc-podiums">
       <h3 className="text-center">{title}</h3>
@@ -112,7 +114,7 @@ const championshipTypes = {
   },
 };
 
-export default function RegionalChampionshipPodiums({ person, championshipPodiums }) {
+export default function RegionalChampionshipPodiums({ person, championshipPodiums, competitions }) {
   return (
     <>
       {Object.entries(championshipTypes).map((
@@ -123,6 +125,7 @@ export default function RegionalChampionshipPodiums({ person, championshipPodium
           person={person}
           title={title}
           podiums={championshipPodiums[type]}
+          competitions={competitions}
         />
       ))}
     </>

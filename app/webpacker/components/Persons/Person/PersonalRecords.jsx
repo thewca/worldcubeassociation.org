@@ -60,12 +60,12 @@ function RankCell({ ranks, type }) {
 }
 
 function ResultPopup({
-  person, resultForEvent, average, eventId,
+  person, rankForEvent, average, eventId, competitions,
 }) {
   const matchingResult = person.results.reverse().find((r) => {
     if (r.eventId !== eventId) return false;
-    if (average) return r.average === resultForEvent.time;
-    return r.best === resultForEvent.time;
+    if (average) return r.average === rankForEvent.time;
+    return r.best === rankForEvent.time;
   });
 
   const resultType = average ? 'average' : 'single';
@@ -73,33 +73,35 @@ function ResultPopup({
   if (!matchingResult) {
     return (
       <a href={rankingsPath(eventId, resultType)} className="plain">
-        {resultForEvent.time}
+        {rankForEvent.time}
       </a>
     );
   }
+
+  const competition = competitions[matchingResult.competition_id];
 
   return (
     <Popup
       trigger={(
         <a href={rankingsPath(eventId, resultType)} className="plain">
-          <b>{resultForEvent.time}</b>
+          <b>{rankForEvent.time}</b>
         </a>
       )}
     >
       <PopupHeader><I18nHTMLTranslate i18nKey={`events.${eventId}`} /></PopupHeader>
       <PopupContent>
         <Header as="h2">
-          {resultForEvent.time}
+          {rankForEvent.time}
           {' '}
           <I18nHTMLTranslate i18nKey={average ? 'common.average' : 'common.single'} />
         </Header>
         <p>
           <EventIcon id={eventId} style={{ fontSize: 'medium' }} />
           {' '}
-          {matchingResult.competition.name}
+          {competition.name}
         </p>
         <p>
-          {matchingResult.competition.markerDate}
+          {competition.date_range}
         </p>
       </PopupContent>
     </Popup>
@@ -107,7 +109,7 @@ function ResultPopup({
 }
 
 function EventRanks({
-  person, singles, averages, eventId, anyOddRank,
+  person, singles, averages, competitions, eventId, anyOddRank,
 }) {
   const singleForEvent = singles.find((r) => r.eventId === eventId);
   const averageForEvent = averages.find((r) => r.eventId === eventId);
@@ -126,12 +128,23 @@ function EventRanks({
       <RankCell ranks={singleForEvent} type="world" />
       <TableCell textAlign="right">
         {singleForEvent && (
-          <ResultPopup person={person} resultForEvent={singleForEvent} eventId={eventId} />
+          <ResultPopup
+            person={person}
+            rankForEvent={singleForEvent}
+            eventId={eventId}
+            competitions={competitions}
+          />
         )}
       </TableCell>
       <TableCell textAlign="left">
         {averageForEvent && (
-          <ResultPopup person={person} resultForEvent={averageForEvent} eventId={eventId} average />
+          <ResultPopup
+            person={person}
+            rankForEvent={averageForEvent}
+            eventId={eventId}
+            competitions={competitions}
+            average
+          />
         )}
       </TableCell>
       <RankCell ranks={averageForEvent} type="world" />
@@ -155,7 +168,9 @@ function EventRanks({
   );
 }
 
-export default function PersonalRecords({ person, averageRanks, singleRanks }) {
+export default function PersonalRecords({
+  person, averageRanks, singleRanks, competitions,
+}) {
   const anyOddRank = singleRanks.some((r) => isOddRank(r))
     || averageRanks.some((r) => isOddRank(r));
 
@@ -194,6 +209,7 @@ export default function PersonalRecords({ person, averageRanks, singleRanks }) {
                 eventId={event.id}
                 averages={averageRanks}
                 singles={singleRanks}
+                competitions={competitions}
                 anyOddRank={anyOddRank}
               />
             ))}

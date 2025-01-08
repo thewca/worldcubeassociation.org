@@ -13,18 +13,10 @@
     results: @results.map { |result| {
       id: result.id,
       eventId: result.event_id,
+      competition_id: result.competition_id,
       best: result.best,
       average: result.average,
       pos: result.pos,
-      competition: {
-        id: result.competition.id,
-        name: result.competition.name,
-        lat: result.competition.latitude_degrees,
-        lng: result.competition.longitude_degrees,
-        end_date: result.competition.end_date,
-        markerDate: result.competition.date_range,
-        cityName: result.competition.cityName,
-      },
       roundTypeId: result.roundTypeId,
       bestIdx: result.best_index,
       worstIdx: result.worst_index,
@@ -34,6 +26,9 @@
       trimmedIdx: result.trimmed_indices,
     }},
   },
+  competitions: @person.competitions.index_by(&:id).transform_values do |competition|
+    competition.as_json(only: [:id, :name, :latitude_degrees, :longitude_degrees, :end_date, :cityName], methods: [:date_range], include: [])
+  end,
   medals: @medals,
   records: @records,
   pbMarkers: @results.group_by(&:event_id).transform_values do |event_results|

@@ -29,10 +29,10 @@ class PersonsController < ApplicationController
   def show
     @enable_react = params[:beta]&.to_s == '0xDbOverload' || (!EnvConfig.WCA_LIVE_SITE?)
 
-    @person = Person.current.includes(:user, :ranksSingle, :ranksAverage, :competitions).find_by_wca_id!(params[:id])
+    @person = Person.current.includes(:user, :competitions).find_by_wca_id!(params[:id])
     @previous_persons = Person.where(wca_id: params[:id]).where.not(subId: 1).order(:subId)
-    @ranks_single = @person.ranksSingle.select { |r| r.event.official? }
-    @ranks_average = @person.ranksAverage.select { |r| r.event.official? }
+    @ranks_single = @person.ranksSingle.joins(:event).merge(Event.official)
+    @ranks_average = @person.ranksAverage.joins(:event).merge(Event.official)
     @medals = @person.medals
     @records = @person.records
     @results = @person.results.includes(:competition, :event, :format, :round_type).order("Events.rank, Competitions.start_date DESC, Competitions.id, RoundTypes.rank DESC")
