@@ -843,7 +843,7 @@ class CompetitionsController < ApplicationController
       registrations.concat(current_user.registrations.includes(:competition).waitlisted.select { |r| r.competition.upcoming? })
       registrations.concat(current_user.registrations.includes(:competition).pending.select { |r| r.competition.upcoming? })
       @registered_for_by_competition_id = registrations.uniq.to_h do |r|
-        [r.competition.id, r]
+        [r.competition_id, r.competing_status]
       end
       competition_ids.concat(@registered_for_by_competition_id.keys)
       if current_user.person
@@ -852,7 +852,7 @@ class CompetitionsController < ApplicationController
       # An organiser might still have duties to perform for a cancelled competition until the date of the competition has passed.
       # For example, mailing all competitors about the cancellation.
       # In general ensuring ease of access until it is certain that they won't need to frequently visit the page anymore.
-      competitions = Competition.includes(:delegate_report, :delegates)
+      competitions = Competition.includes(:delegate_report, :championships)
                                 .where(id: competition_ids.uniq).where("cancelled_at is null or end_date >= curdate()")
                                 .sort_by { |comp| comp.start_date || (Date.today + 20.year) }.reverse
       @past_competitions, @not_past_competitions = competitions.partition(&:is_probably_over?)

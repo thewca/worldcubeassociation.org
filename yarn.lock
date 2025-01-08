@@ -1999,17 +1999,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@floating-ui/react@npm:^0.26.23":
-  version: 0.26.24
-  resolution: "@floating-ui/react@npm:0.26.24"
+"@floating-ui/react@npm:^0.27.0":
+  version: 0.27.2
+  resolution: "@floating-ui/react@npm:0.27.2"
   dependencies:
     "@floating-ui/react-dom": "npm:^2.1.2"
     "@floating-ui/utils": "npm:^0.2.8"
     tabbable: "npm:^6.0.0"
   peerDependencies:
-    react: ">=16.8.0"
-    react-dom: ">=16.8.0"
-  checksum: 10c0/c5c3ac265802087673a69b0e08b3bea1ee02de9da4cdbc40bb1c9e06823be72628a82f1655b40d56a4383715b4ab3b6deddff4e69146f513970ee592e1dd8f92
+    react: ">=17.0.0"
+    react-dom: ">=17.0.0"
+  checksum: 10c0/7de7810b501422a12e4d4089042dc8ab9de8a95f53003a4a5e2b25fd8b2ee0dddcfab996a26558ec4614c2e15ce1b68d2e06f188bec55de7346c904610d50837
   languageName: node
   linkType: hard
 
@@ -2550,21 +2550,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tanstack/query-core@npm:5.62.9":
-  version: 5.62.9
-  resolution: "@tanstack/query-core@npm:5.62.9"
-  checksum: 10c0/3d0708ec761563bbb5c5efa97160d10ed891b63a61cc24ebc04c24d8196e7fa5cde89ea220e70546fc94066fa1034c1a368138dab3f353c82846cc5f9595a7fc
+"@tanstack/query-core@npm:5.62.15":
+  version: 5.62.15
+  resolution: "@tanstack/query-core@npm:5.62.15"
+  checksum: 10c0/e79ce47749e7ed3cb09b1d489a8688baa6b2b1af389032178dd39b64e9627b4a5a88ca1add5f7ceddf60e65603562f8ba55297c43796104f0fc2c15a893019ea
   languageName: node
   linkType: hard
 
-"@tanstack/react-query@npm:^5.62.11":
-  version: 5.62.11
-  resolution: "@tanstack/react-query@npm:5.62.11"
+"@tanstack/react-query@npm:^5.62.15":
+  version: 5.62.15
+  resolution: "@tanstack/react-query@npm:5.62.15"
   dependencies:
-    "@tanstack/query-core": "npm:5.62.9"
+    "@tanstack/query-core": "npm:5.62.15"
   peerDependencies:
     react: ^18 || ^19
-  checksum: 10c0/358ffb3d80aba9e1dec51205b318ff9d162c5ba54a79e44ddcf3986fcf6529a4b2cb9504dbabd39cdfc164f6215e3fcd59e5e174f8b4c670e164d13ad9ba3034
+  checksum: 10c0/e9cedd69590d2f011196988bd13f9e10e1fc0a0722cf7c3a041ddc1a887c011f0ff951683085ff9ba2a936432752391fb404e3d4978cb21b38fe38fc31d5312b
   languageName: node
   linkType: hard
 
@@ -9595,18 +9595,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-datepicker@npm:^7.5.0":
-  version: 7.5.0
-  resolution: "react-datepicker@npm:7.5.0"
+"react-datepicker@npm:^7.6.0":
+  version: 7.6.0
+  resolution: "react-datepicker@npm:7.6.0"
   dependencies:
-    "@floating-ui/react": "npm:^0.26.23"
+    "@floating-ui/react": "npm:^0.27.0"
     clsx: "npm:^2.1.1"
     date-fns: "npm:^3.6.0"
-    prop-types: "npm:^15.8.1"
   peerDependencies:
-    react: ^16.9.0 || ^17 || ^18
-    react-dom: ^16.9.0 || ^17 || ^18
-  checksum: 10c0/6e94a609654b8a0eaa9b2e8c4fab803aa954e78df9729f05337ae97c4e910b1488129ee8d4b11dea575dbe0992242c078cb692ed0cba4e5d98414d8ba393972d
+    react: ^16.9.0 || ^17 || ^18 || ^19 || ^19.0.0-rc
+    react-dom: ^16.9.0 || ^17 || ^18 || ^19 || ^19.0.0-rc
+  checksum: 10c0/4bce57a4d9fff654d516e9b33152d46e4c5c2794ef52f436155ee52702c3c76ac567d1bbc8075c169805e17e400aeb388f8f60e6e3b019e543a08be76eee3ba7
   languageName: node
   linkType: hard
 
@@ -9650,16 +9649,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-intersection-observer@npm:^9.14.0":
-  version: 9.14.0
-  resolution: "react-intersection-observer@npm:9.14.0"
+"react-intersection-observer@npm:^9.14.1":
+  version: 9.14.1
+  resolution: "react-intersection-observer@npm:9.14.1"
   peerDependencies:
     react: ^17.0.0 || ^18.0.0 || ^19.0.0
     react-dom: ^17.0.0 || ^18.0.0 || ^19.0.0
   peerDependenciesMeta:
     react-dom:
       optional: true
-  checksum: 10c0/a91785984525997d01afdeac12538649b8929d6ca44b5e070f02dbf352628f49cce5930a5eaf32fbbecafb0f9577fc1996dcd3328d20b375d3cef54eea028f0e
+  checksum: 10c0/66587560e9f74672fa62aabe13cc3aabe0e55cbc69c206324f0628ea5d25b6b70f138716074350c945ca390362b35bc8b64568a4fc3f2508c68829cdeb9c96cc
   languageName: node
   linkType: hard
 
@@ -10169,7 +10168,7 @@ __metadata:
     "@rails/ujs": "npm:^7.1.501"
     "@stripe/react-stripe-js": "npm:^3.1.1"
     "@stripe/stripe-js": "npm:^5.4.0"
-    "@tanstack/react-query": "npm:^5.62.11"
+    "@tanstack/react-query": "npm:^5.62.15"
     "@wca/helpers": "npm:^1.1.5"
     autonumeric: "npm:^4.10.7"
     autoprefixer: "npm:^10.4.20"
@@ -10222,11 +10221,11 @@ __metadata:
     react: "npm:^18.3.1"
     react-beautiful-dnd: "npm:^13.1.1"
     react-csv: "npm:^2.2.2"
-    react-datepicker: "npm:^7.5.0"
+    react-datepicker: "npm:^7.6.0"
     react-dom: "npm:^18.3.1"
     react-google-recaptcha: "npm:^3.1.0"
     react-image-crop: "npm:^11.0.7"
-    react-intersection-observer: "npm:^9.14.0"
+    react-intersection-observer: "npm:^9.14.1"
     react-leaflet: "npm:^4.2.1"
     react-refresh: "npm:^0.16.0"
     react-simplemde-editor: "npm:^5.2.0"
@@ -10235,7 +10234,7 @@ __metadata:
     react_ujs: "npm:^3.2.1"
     regenerator-runtime: "npm:^0.14.1"
     resolve-url-loader: "npm:^5.0.0"
-    sass: "npm:^1.83.0"
+    sass: "npm:^1.83.1"
     sass-loader: "npm:^16.0.4"
     semantic-ui-react: "npm:^2.1.5"
     shakapacker: "npm:8.0.2"
@@ -10352,9 +10351,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sass@npm:^1.83.0":
-  version: 1.83.0
-  resolution: "sass@npm:1.83.0"
+"sass@npm:^1.83.1":
+  version: 1.83.1
+  resolution: "sass@npm:1.83.1"
   dependencies:
     "@parcel/watcher": "npm:^2.4.1"
     chokidar: "npm:^4.0.0"
@@ -10365,7 +10364,7 @@ __metadata:
       optional: true
   bin:
     sass: sass.js
-  checksum: 10c0/4415361229879a9041d77c953da85482e89032aa4321ba13250a9987d39c80fac6c88af3777f2a2d76a4e8b0c8afbd21c1970fdbe84e0b3ec25fb26741f92beb
+  checksum: 10c0/9772506cd8290df7b5e800055098e91a8a65100840fd9e90c660deb74b248b3ddbbd1a274b8f7f09777d472d2c873575357bd87939a40fb5a80bdf654985486f
   languageName: node
   linkType: hard
 

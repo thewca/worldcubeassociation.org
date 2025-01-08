@@ -639,7 +639,14 @@ class User < ApplicationRecord
       :regionsAdmin,
       :downloadVoters,
       :generateDbToken,
+      :approveAvatars,
     ].index_with { |panel_page| panel_page.to_s.underscore.dasherize }
+  end
+
+  def self.panel_notifications
+    {
+      self.panel_pages[:approveAvatars] => lambda { User.where.not(pending_avatar: nil).count },
+    }
   end
 
   def self.panel_list
@@ -676,6 +683,7 @@ class User < ApplicationRecord
         pages: [
           panel_pages[:postingDashboard],
           panel_pages[:editPerson],
+          panel_pages[:approveAvatars],
         ],
       },
       wst: {
@@ -1421,10 +1429,6 @@ class User < ApplicationRecord
     else
       false
     end
-  end
-
-  def can_access_at_least_one_panel?
-    panels_with_access.any?
   end
 
   def subordinate_delegates

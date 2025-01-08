@@ -60,8 +60,8 @@ Rails.application.routes.draw do
   post 'users/:id/avatar' => 'users#upload_avatar'
   patch 'users/:id/avatar' => 'users#update_avatar'
   delete 'users/:id/avatar' => 'users#delete_avatar'
-  get 'admin/avatars' => 'admin/avatars#index'
-  post 'admin/avatars' => 'admin/avatars#update_all'
+  get 'admin/avatars/pending' => 'admin/avatars#pending_avatar_users', as: :pending_avatars
+  post 'admin/avatars' => 'admin/avatars#update_avatar', as: :admin_update_avatar
 
   get 'map' => 'competitions#embedable_map'
 
@@ -191,8 +191,10 @@ Rails.application.routes.draw do
     get 'generate_db_token' => 'panel#generate_db_token', as: :panel_generate_db_token
   end
   get 'panel/:panel_id' => 'panel#index', as: :panel_index
+  get 'panel/redirect/:panel_page' => 'panel#redirect', as: :panel_redirect
   resources :tickets, only: [:show] do
     post 'update_status' => 'tickets#update_status', as: :update_status
+    get 'edit_person_validators' => 'tickets#edit_person_validators', as: :edit_person_validators
   end
   resources :notifications, only: [:index]
 
@@ -276,6 +278,7 @@ Rails.application.routes.draw do
   get '/admin/person_data' => 'admin#person_data'
   get '/admin/compute_auxiliary_data' => 'admin#compute_auxiliary_data'
   get '/admin/do_compute_auxiliary_data' => 'admin#do_compute_auxiliary_data'
+  get '/admin/reset_compute_auxiliary_data' => 'admin#reset_compute_auxiliary_data'
   get '/admin/generate_exports' => 'admin#generate_exports'
   get '/admin/generate_db_token' => 'admin#generate_db_token'
   get '/admin/do_generate_dev_export' => 'admin#do_generate_dev_export'
