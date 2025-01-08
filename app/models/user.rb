@@ -752,10 +752,10 @@ class User < ApplicationRecord
         scope: can_view_delegate_matters? ? "*" : [],
       },
       can_view_delegate_report: {
-        scope: can_view_delegate_matters? ? "*" : delegated_competitions_ids
+        scope: can_view_delegate_matters? ? "*" : delegated_competitions_ids,
       },
       can_edit_delegate_report: {
-        scope: can_admin_results? ? "*" : delegated_competitions_ids
+        scope: can_admin_results? ? "*" : delegated_competitions_ids,
       },
       can_create_groups: {
         scope: groups_with_create_access,
