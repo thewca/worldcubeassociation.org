@@ -23,9 +23,9 @@ export default function ContactEditProfilePage({ loggedInUserId, recaptchaPublic
     queryKey: ['userData'],
     queryFn: () => fetchJsonOrError(apiV0Urls.users.me.userDetails),
     enabled: (
-      // If not logged in, fetching WCA ID of logged in user is not possible.
+      // If the user is logged in, then we need to fetch their WCA ID.
       !!loggedInUserId
-      // If the user needs to edit other's profile, then fetching own WCA ID is not needed.
+      // If the user is not editing somebody else's profile, then we need to fetch their own WCA ID.
        || !editOthersProfileMode
     ),
   }, CONTACT_EDIT_PROFILE_QUERY_CLIENT);
