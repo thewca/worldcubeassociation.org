@@ -36,26 +36,34 @@ export function DateTableCell({ competition }) {
 export function ReportTableCell({
   permissions, competitionId, isReportPosted, canViewDelegateReport,
 }) {
-  if (permissions.can_view_delegate_report.scope === '*' || permissions.can_view_delegate_report.scope.includes(competitionId)) {
+  if (canViewDelegateReport) {
     return (
       <Table.Cell>
         <>
+          {(permissions.can_view_delegate_report.scope === '*' || permissions.can_view_delegate_report.scope.includes(competitionId))
+          && (
           <Popup
             content={I18n.t('competitions.my_competitions_table.report')}
             trigger={(
               <a href={competitionReportUrl(competitionId)}>
                 <Icon name="file alternate" />
               </a>
-          )}
+            )}
           />
-          <Popup
-            content={I18n.t('competitions.my_competitions_table.edit_report')}
-            trigger={(
-              <a href={competitionReportEditUrl(competitionId)}>
-                <Icon name="edit" />
-              </a>
           )}
-          />
+
+          {(permissions.can_edit_delegate_report.scope === '*' || permissions.can_edit_delegate_report.scope.includes(competitionId))
+            && (
+            <Popup
+              content={I18n.t('competitions.my_competitions_table.edit_report')}
+              trigger={(
+                <a href={competitionReportEditUrl(competitionId)}>
+                  <Icon name="edit" />
+                </a>
+              )}
+            />
+            )}
+
           { !isReportPosted
           && permissions.can_administer_competitions.scope.includes(competitionId) && (
             <Popup
@@ -68,11 +76,5 @@ export function ReportTableCell({
         </>
       </Table.Cell>
     );
-  }
-
-  // A user might be able to see only certain reports in the list, so we return an empty cell
-
-  if (canViewDelegateReport) {
-    return <Table.Cell />;
   }
 }
