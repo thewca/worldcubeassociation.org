@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class PopulateCountryBandDetails < ActiveRecord::Migration[7.2]
-  def change
+  def up
     CountryBandDetail.create!(
       number: 0,
       start_date: '2018-01-01',
@@ -38,5 +38,9 @@ class PopulateCountryBandDetails < ActiveRecord::Migration[7.2]
       due_amount_per_competitor_in_cents: 300,
       due_percent_registration_fee: 15,
     )
+  end
+
+  def down
+    CountryBandDetail.delete_all
   end
 end

@@ -10,7 +10,7 @@ class CountryBandsController < ApplicationController
 
   def edit
     @number = id_from_params
-    unless CountryBandDetail.distinct.pluck(:number).include?(@number)
+    unless CountryBandDetail.exists?(number: @number)
       flash[:danger] = "Unknown band number"
       return redirect_to country_bands_path
     end

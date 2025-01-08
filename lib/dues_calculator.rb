@@ -10,17 +10,17 @@ module DuesCalculator
 
   def self.dues_per_competitor_in_usd(country_iso2, base_entry_fee_lowest_denomination, currency_code)
     country_band = CountryBand.find_by(iso2: country_iso2)&.number
-
-    input_money_us_dollars = Money.new(base_entry_fee_lowest_denomination, currency_code).exchange_to("USD")
-
     country_band_detail = CountryBandDetail.find_by(number: country_band)
-    return nil unless country_band_detail
+    registration_fees = Money.new(base_entry_fee_lowest_denomination, currency_code).exchange_to("USD")
 
-    registration_fee_dues_us_dollars = input_money_us_dollars * country_band_detail.due_percent_registration_fee.to_f/100
-    # cent is given directly because Money require lowest currency subunit, which is cents for USD
-    country_band_dues_us_dollars_money = Money.new(country_band_detail.due_amount_per_competitor_in_cents, "USD")
+    # Calculation of 'registration fee dues'
+    registration_fee_dues = Money.new(registration_fees * (country_band_detail&.due_percent_registration_fee.to_f || 0) / 100, "USD")
 
-    [registration_fee_dues_us_dollars, country_band_dues_us_dollars_money].max
+    # Calculation of 'country band dues'
+    country_band_dues = Money.new(country_band_detail&.due_amount_per_competitor_in_cents || 0, "USD")
+
+    # The maximum of the two is the total dues per competitor
+    [registration_fee_dues, country_band_dues].max
   rescue Money::Currency::UnknownCurrency, CurrencyUnavailable
     nil
   end
