@@ -35,19 +35,7 @@
     historical_pb_markers(event_results.reverse)
   end,
   championshipPodiums: @championship_podiums,
-  singleRanks: @ranks_single.map { |r| {
-    eventId: r.eventId,
-    time: r.best,
-    worldRank: r.worldRank,
-    continentRank: r.continentRank,
-    countryRank: r.countryRank,
-  }},
-  averageRanks: @ranks_average.map { |r| {
-    eventId: r.eventId,
-    time: r.best,
-    worldRank: r.worldRank,
-    continentRank: r.continentRank,
-    countryRank: r.countryRank,
-  }},
+  singleRanks: @ranks_single.map(&:to_wcif),
+  averageRanks: @ranks_average.map(&:to_wcif),
   canEditUser: current_user&.can_edit_user?(@person.user),
 }) %>

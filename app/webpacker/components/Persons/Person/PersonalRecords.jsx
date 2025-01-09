@@ -17,9 +17,9 @@ function isOddRank(rank) {
   }
 
   // NOTE: world rank is always present.
-  const anyMissing = rank.continentRank === 0 || rank.countryRank === 0;
+  const anyMissing = rank.continentalRanking === 0 || rank.nationalRanking === 0;
 
-  return anyMissing || rank.continentRank < rank.countryRank;
+  return anyMissing || rank.continentalRanking < rank.nationalRanking;
 }
 
 function RankHeader({ type, short }) {
@@ -35,7 +35,7 @@ function RankHeader({ type, short }) {
 function RankCell({ ranks, type }) {
   if (!ranks) return <TableCell />;
 
-  const rank = ranks[`${type}Rank`];
+  const rank = ranks[`${type}Ranking`];
   if (!rank) return <TableCell />;
 
   const opacity = rank === 1 ? 1 : {
@@ -65,8 +65,8 @@ function ResultPopup({
 }) {
   const matchingResult = results.reverse().find((r) => {
     if (r.eventId !== eventId) return false;
-    if (average) return r.average === rankForEvent.time;
-    return r.best === rankForEvent.time;
+    if (average) return r.average === rankForEvent.best;
+    return r.best === rankForEvent.best;
   });
 
   const resultType = average ? 'average' : 'single';
@@ -74,7 +74,7 @@ function ResultPopup({
   if (!matchingResult) {
     return (
       <a href={rankingsPath(eventId, resultType)} className="plain">
-        {formatAttemptResult(rankForEvent.time, eventId)}
+        {formatAttemptResult(rankForEvent.best, eventId)}
       </a>
     );
   }
@@ -85,14 +85,14 @@ function ResultPopup({
     <Popup
       trigger={(
         <a href={rankingsPath(eventId, resultType)} className="plain">
-          <b>{formatAttemptResult(rankForEvent.time, eventId)}</b>
+          <b>{formatAttemptResult(rankForEvent.best, eventId)}</b>
         </a>
       )}
     >
       <PopupHeader><I18nHTMLTranslate i18nKey={`events.${eventId}`} /></PopupHeader>
       <PopupContent>
         <Header as="h2">
-          {formatAttemptResult(rankForEvent.time, eventId)}
+          {formatAttemptResult(rankForEvent.best, eventId)}
           {' '}
           <I18nHTMLTranslate i18nKey={average ? 'common.average' : 'common.single'} />
         </Header>
@@ -124,8 +124,8 @@ function EventRanks({
         <EventIcon id={eventId} />
         <I18nHTMLTranslate i18nKey={`events.${eventId}`} />
       </TableCell>
-      <RankCell ranks={singleForEvent} type="country" />
-      <RankCell ranks={singleForEvent} type="continent" />
+      <RankCell ranks={singleForEvent} type="national" />
+      <RankCell ranks={singleForEvent} type="continental" />
       <RankCell ranks={singleForEvent} type="world" />
       <TableCell textAlign="right">
         {singleForEvent && (
@@ -149,8 +149,8 @@ function EventRanks({
         )}
       </TableCell>
       <RankCell ranks={averageForEvent} type="world" />
-      <RankCell ranks={averageForEvent} type="continent" />
-      <RankCell ranks={averageForEvent} type="country" />
+      <RankCell ranks={averageForEvent} type="continental" />
+      <RankCell ranks={averageForEvent} type="national" />
       {anyOddRank && (
         <TableCell>
           {oddRank && (
