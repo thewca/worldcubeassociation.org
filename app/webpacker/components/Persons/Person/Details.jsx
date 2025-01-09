@@ -25,6 +25,7 @@ function PreviousDetails({ prev }) {
 
 export default function Details({
   person,
+  previousPersons,
   canEditUser,
 }) {
   return (
@@ -43,7 +44,7 @@ export default function Details({
           </a>
         )}
       </Header>
-      {person.previousPersons.length > 0 && <PreviousDetails prev={person.previousPersons} />}
+      {previousPersons.length > 0 && <PreviousDetails prev={previousPersons} />}
       {person.user && <Badges userId={person.user.id} />}
       <StatisticGroup size="tiny" widths={2}>
         <Statistic>

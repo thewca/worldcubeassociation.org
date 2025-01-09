@@ -7,16 +7,14 @@
     wcaId: @person.wca_id,
     gender: @person.gender_visible? ? @person.gender : nil,
     countryIso2: @person.country_iso2,
-    previousPersons: @previous_persons.as_json(only: [:name], methods: [:country_iso2], include: []),
     competitionCount: @person.competitions.count,
     completedSolves: @person.completed_solves_count,
   },
-  results: @results.map { |result|
-    result.as_json(
-      only: [:id, :best, :average, :pos],
-      methods: [:event_id, :competition_id, :round_type_id, :best_index, :worst_index, :attempts, :regional_single_record, :regional_average_record, :trimmed_indices],
-    )
-  },
+  previousPersons: @previous_persons.as_json(only: [:name], methods: [:country_iso2], include: []),
+  results: @results.as_json(
+    only: [:id, :best, :average, :pos],
+    methods: [:event_id, :competition_id, :round_type_id, :best_index, :worst_index, :attempts, :regional_single_record, :regional_average_record, :trimmed_indices],
+  ),
   competitions: @person.competitions.index_by(&:id).transform_values do |competition|
     competition.as_json(
       only: [:id, :name, :end_date],

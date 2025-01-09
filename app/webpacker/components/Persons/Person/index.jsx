@@ -102,6 +102,7 @@ function TabSection({
 
 export default function Person({
   person,
+  previousPersons,
   results,
   averageRanks,
   singleRanks,
@@ -129,6 +130,7 @@ export default function Person({
                 <Segment raised>
                   <Details
                     person={person}
+                    previousPersons={previousPersons}
                     canEditUser={canEditUser}
                   />
                 </Segment>
@@ -138,6 +140,7 @@ export default function Person({
               <Segment raised>
                 <Details
                   person={person}
+                  previousPersons={previousPersons}
                   canEditUser={canEditUser}
                 />
               </Segment>
