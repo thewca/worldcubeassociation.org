@@ -281,9 +281,9 @@ class Person < ApplicationRecord
   USER_COMMON_SERIALIZE_OPTIONS = {
     only: ["name", "gender"],
     methods: ["country_iso2"],
-    # grrr… some tests (and apparently also API endpoints) rely on serializing teams _through_ person.
+    # grrr… some tests (and apparently also API endpoints) rely on serializing this data _through_ person.
     #   Not a good code design decision, but very cumbersome to properly refactor. Signed GB 2025-01-09
-    include: ["teams"],
+    include: User::DEFAULT_SERIALIZE_OPTIONS[:include],
   }.freeze
 
   def personal_records
@@ -314,9 +314,17 @@ class Person < ApplicationRecord
       json[:incorrect_wca_id_claim_count] = incorrect_wca_id_claim_count
     end
 
+    # Passing down options from Person to User (which are completely different models in the DB!)
+    #   is a horrible idea. Unfortunately, our external APIs have come to rely on it,
+    #   so we need to hack around it.
+    #   - `merge_union` makes sure that only values specified in USER_COMMON_SERIALIZE_OPTIONS kick in
+    #   - `filter` makes sure that when the result of `merge_union` are empty, the defaults from
+    #       User::DEFAULT_SERIALIZE_OPTIONS can override.
+    user_override_options = USER_COMMON_SERIALIZE_OPTIONS.merge_union(options&.stringify_keys)
+                                                         .filter { |_, v| v.present? }
+
     # If there's a user for this Person, merge in all their data,
     # the Person's data takes priority, though.
-    user_override_options = USER_COMMON_SERIALIZE_OPTIONS.merge_union(options&.stringify_keys)
     (user || User.new).serializable_hash(user_override_options).merge(json)
   end
 end
