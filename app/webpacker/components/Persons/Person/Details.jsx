@@ -34,7 +34,7 @@ export default function Details({
         <Card image={person.user.avatar.url} centered raised />
       )}
       <Header as="h2" textAlign="center">
-        <CountryFlag iso2={person.countryIso2} />
+        <CountryFlag iso2={person.country_iso2} />
         {' '}
         {person.name}
         {canEditUser && (
@@ -49,21 +49,21 @@ export default function Details({
       <StatisticGroup size="tiny" widths={2}>
         <Statistic>
           <StatisticLabel>{I18n.t('common.user.wca_id')}</StatisticLabel>
-          <StatisticValue>{person.wcaId}</StatisticValue>
+          <StatisticValue>{person.wca_id}</StatisticValue>
         </Statistic>
         <Statistic>
           <StatisticLabel>{I18n.t('persons.show.completed_solves')}</StatisticLabel>
-          <StatisticValue>{person.completedSolves}</StatisticValue>
+          <StatisticValue>{person.completed_solves_count}</StatisticValue>
         </Statistic>
-        {person.gender && (
+        {person.visible_gender && (
           <Statistic>
             <StatisticLabel>{I18n.t('activerecord.attributes.person.gender')}</StatisticLabel>
-            <StatisticValue>{I18n.t(`enums.user.gender.${person.gender}`)}</StatisticValue>
+            <StatisticValue>{I18n.t(`enums.user.gender.${person.visible_gender}`)}</StatisticValue>
           </Statistic>
         )}
         <Statistic>
           <StatisticLabel>{I18n.t('layouts.navigation.competitions')}</StatisticLabel>
-          <StatisticValue>{person.competitionCount}</StatisticValue>
+          <StatisticValue>{person.competition_count}</StatisticValue>
         </Statistic>
       </StatisticGroup>
     </>

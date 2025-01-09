@@ -1,15 +1,17 @@
 <% provide(:title, @person.name) %>
 
 <%= react_component("Persons/Person", {
-  person: {
-    user: @person.user.as_json(only: [:id], methods: [:avatar], include: []),
-    name: @person.name,
-    wcaId: @person.wca_id,
-    gender: @person.gender_visible? ? @person.gender : nil,
-    countryIso2: @person.country_iso2,
-    competitionCount: @person.competitions.count,
-    completedSolves: @person.completed_solves_count,
-  },
+  person: @person.as_json(
+    only: [:name, :wca_id],
+    methods: [:visible_gender, :country_iso2, :competition_count, :completed_solves_count],
+    include: {
+      user: {
+        only: [:id],
+        methods: [:avatar],
+        include: [],
+      },
+    },
+  ),
   previousPersons: @previous_persons.as_json(only: [:name], methods: [:country_iso2], include: []),
   results: @results.as_json(
     only: [:id, :best, :average, :pos],
