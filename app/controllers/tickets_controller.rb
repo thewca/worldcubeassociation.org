@@ -1,6 +1,47 @@
 # frozen_string_literal: true
 
 class TicketsController < ApplicationController
+  include Rails::Pagination
+
+  SORT_WEIGHT_LAMBDAS = {
+    createdAt:
+      lambda { |ticket| ticket.created_at },
+  }.freeze
+
+  def index
+    tickets = Ticket
+
+    # Filter based on params
+    type = params[:type]
+    if type
+      tickets = tickets.where(metadata_type: type)
+    end
+
+    status = params[:status]
+    tickets = tickets.select do |ticket|
+      if status
+        ticket.metadata&.status == status
+      else
+        true
+      end
+    end
+
+    # Filter based on current_user's permission
+    tickets = tickets.select do |ticket|
+      ticket.can_user_access?(current_user)
+    end
+
+    # Sort
+    sort_param = params[:sort] || ''
+    tickets = sort(tickets, sort_param, SORT_WEIGHT_LAMBDAS)
+
+    # paginate won't help in improving efficiency here because we are fetching all the tickets
+    # and then filtering and sorting them. We can't use the database to do this because the
+    # filtering and sorting is based on the metadata of the ticket.
+    # TODO: Check the feasibility of using the database to filter and sort the tickets.
+    paginate json: tickets
+  end
+
   def show
     respond_to do |format|
       format.html do

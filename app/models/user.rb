@@ -640,6 +640,7 @@ class User < ApplicationRecord
       :downloadVoters,
       :generateDbToken,
       :approveAvatars,
+      :editPersonRequests,
     ].index_with { |panel_page| panel_page.to_s.underscore.dasherize }
   end
 
@@ -682,6 +683,7 @@ class User < ApplicationRecord
         name: 'WRT panel',
         pages: [
           panel_pages[:postingDashboard],
+          panel_pages[:editPersonRequests],
           panel_pages[:editPerson],
           panel_pages[:approveAvatars],
         ],
