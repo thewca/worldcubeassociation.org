@@ -8,6 +8,8 @@ a {
 
 // We need the import here, otherwise Rails' asset adds a BOM at the beginning of it,
 // and the font doesn't get recognize!
+// This refers to: `[repo root]/node_modules/@cubing/icons/dist/lib/@cubing/icons/cubing-icons.css`,
+// per a configuration in `assets.rb`.
 @import "cubing-icons"; /* stylelint-disable-line no-invalid-position-at-import-rule */
 
 header {
