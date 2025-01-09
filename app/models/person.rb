@@ -281,7 +281,9 @@ class Person < ApplicationRecord
   USER_COMMON_SERIALIZE_OPTIONS = {
     only: ["name", "gender"],
     methods: ["country_iso2"],
-    include: [],
+    # grrr… some tests (and apparently also API endpoints) rely on serializing teams _through_ person.
+    #   Not a good code design decision, but very cumbersome to properly refactor. Signed GB 2025-01-09
+    include: ["teams"],
   }.freeze
 
   def personal_records
