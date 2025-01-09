@@ -18,7 +18,11 @@
     )
   },
   competitions: @person.competitions.index_by(&:id).transform_values do |competition|
-    competition.as_json(only: [:id, :name, :end_date, :cityName], methods: [:date_range, :latitude_degrees, :longitude_degrees], include: [])
+    competition.as_json(
+      only: [:id, :name, :end_date],
+      methods: [:date_range, :latitude_degrees, :longitude_degrees, :city],
+      include: [],
+    )
   end,
   medals: @medals,
   records: @records,

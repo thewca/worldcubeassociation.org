@@ -27,7 +27,7 @@ function MarkerForCompetition({ competition }) {
         <br />
         {competition.markerDate}
         {' - '}
-        {competition.cityName}
+        {competition.city}
       </Popup>
     </Marker>
   );
