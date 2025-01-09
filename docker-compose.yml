@@ -108,11 +108,13 @@ services:
         condition: service_completed_successfully
 
   wca_db:
+    # You will have to run docker exec -it database mysql to connect to the database and then
+    # ALTER USER 'root'@'%' IDENTIFIED WITH caching_sha2_password BY '';
+    # To upgrade your DB from mysql8.0 to mysql8.4
     image: mysql:8.4
     container_name: "database"
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: "true"
-    command: --mysql-native-password=ON --authentication-policy=mysql_native_password
     ports:
       - "3306:3306"
     volumes:
