@@ -12,7 +12,6 @@ import Results from './Results';
 import CountStats from './CountStats';
 
 function TabSection({
-  person,
   results,
   records,
   competitions,
@@ -79,7 +78,7 @@ function TabSection({
       ),
     });
     return p;
-  }, [records, championshipPodiums, person, pbMarkers, highlight, competitions]);
+  }, [records, championshipPodiums, competitions, results, pbMarkers, highlight]);
 
   const tabSlug = new URL(document.location.toString()).searchParams.get('tab');
   const activeIndex = tabSlug ? panes.findIndex((p) => p.tabSlug === tabSlug) : 0;
@@ -123,7 +122,7 @@ export default function Person({
   return (
     <div ref={ref}>
       <Container fluid>
-        <Grid columns={2} stackable>
+        <Grid centered stackable>
           <Grid.Row>
             <Grid.Column width={4} only="computer tablet">
               <Sticky context={ref}>
