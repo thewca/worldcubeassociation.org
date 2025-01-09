@@ -677,7 +677,13 @@ class User < ApplicationRecord
       },
       wfc: {
         name: 'WFC panel',
-        pages: [],
+        pages: [
+          panel_pages[:duesExport],
+          panel_pages[:countryBands],
+          panel_pages[:xeroUsers],
+          panel_pages[:duesRedirect],
+          panel_pages[:bannedCompetitors],
+        ],
       },
       wrt: {
         name: 'WRT panel',
@@ -770,9 +776,6 @@ class User < ApplicationRecord
       },
       can_edit_groups: {
         scope: groups_with_edit_access,
-      },
-      can_access_wfc_senior_matters: {
-        scope: can_access_wfc_senior_matters? ? "*" : [],
       },
       can_access_panels: {
         scope: panels_with_access,
