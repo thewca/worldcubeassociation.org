@@ -1,15 +1,13 @@
 import React from 'react';
 import {
-  Header,
-  Icon, Popup, PopupContent, PopupHeader,
-  Table, TableBody, TableCell, TableHeader, TableHeaderCell, TableRow,
+  Header, Icon, Popup, Table,
 } from 'semantic-ui-react';
 import I18nHTMLTranslate from '../../I18nHTMLTranslate';
 import I18n from '../../../lib/i18n';
 import { events } from '../../../lib/wca-data.js.erb';
 import EventIcon from '../../wca/EventIcon';
 import { rankingsPath } from '../../../lib/requests/routes.js.erb';
-import {formatAttemptResult} from "../../../lib/wca-live/attempts";
+import { formatAttemptResult } from '../../../lib/wca-live/attempts';
 
 function isOddRank(rank) {
   if (rank === undefined) {
@@ -24,19 +22,19 @@ function isOddRank(rank) {
 
 function RankHeader({ type, short }) {
   return (
-    <TableHeaderCell>
+    <Table.HeaderCell>
       <abbr title={I18n.t(`competitions.results_table.rank.${type}`)}>
         {short}
       </abbr>
-    </TableHeaderCell>
+    </Table.HeaderCell>
   );
 }
 
 function RankCell({ ranks, type }) {
-  if (!ranks) return <TableCell />;
+  if (!ranks) return <Table.Cell />;
 
   const rank = ranks[`${type}Ranking`];
-  if (!rank) return <TableCell />;
+  if (!rank) return <Table.Cell />;
 
   const opacity = rank === 1 ? 1 : {
     country: 0.6,
@@ -47,7 +45,7 @@ function RankCell({ ranks, type }) {
   const color = rank === 1 ? 'red' : undefined;
 
   return (
-    <TableCell>
+    <Table.Cell>
       <span
         style={{
           opacity,
@@ -56,7 +54,7 @@ function RankCell({ ranks, type }) {
       >
         {rank === 0 ? '-' : rank}
       </span>
-    </TableCell>
+    </Table.Cell>
   );
 }
 
@@ -89,8 +87,8 @@ function ResultPopup({
         </a>
       )}
     >
-      <PopupHeader><I18nHTMLTranslate i18nKey={`events.${eventId}`} /></PopupHeader>
-      <PopupContent>
+      <Popup.Header><I18nHTMLTranslate i18nKey={`events.${eventId}`} /></Popup.Header>
+      <Popup.Content>
         <Header as="h2">
           {formatAttemptResult(rankForEvent.best, eventId)}
           {' '}
@@ -104,7 +102,7 @@ function ResultPopup({
         <p>
           {competition.date_range}
         </p>
-      </PopupContent>
+      </Popup.Content>
     </Popup>
   );
 }
@@ -119,15 +117,15 @@ function EventRanks({
   const oddRank = isOddRank(singleForEvent) || isOddRank(averageForEvent);
 
   return (
-    <TableRow key={eventId}>
-      <TableCell>
+    <Table.Row key={eventId}>
+      <Table.Cell>
         <EventIcon id={eventId} />
         <I18nHTMLTranslate i18nKey={`events.${eventId}`} />
-      </TableCell>
+      </Table.Cell>
       <RankCell ranks={singleForEvent} type="national" />
       <RankCell ranks={singleForEvent} type="continental" />
       <RankCell ranks={singleForEvent} type="world" />
-      <TableCell textAlign="right">
+      <Table.Cell textAlign="right">
         {singleForEvent && (
           <ResultPopup
             results={results}
@@ -136,8 +134,8 @@ function EventRanks({
             competitions={competitions}
           />
         )}
-      </TableCell>
-      <TableCell textAlign="left">
+      </Table.Cell>
+      <Table.Cell textAlign="left">
         {averageForEvent && (
           <ResultPopup
             results={results}
@@ -147,12 +145,12 @@ function EventRanks({
             average
           />
         )}
-      </TableCell>
+      </Table.Cell>
       <RankCell ranks={averageForEvent} type="world" />
       <RankCell ranks={averageForEvent} type="continental" />
       <RankCell ranks={averageForEvent} type="national" />
       {anyOddRank && (
-        <TableCell>
+        <Table.Cell>
           {oddRank && (
             <Popup
               content={I18n.t('persons.show.odd_rank_reason')}
@@ -163,9 +161,9 @@ function EventRanks({
               )}
             />
           )}
-        </TableCell>
+        </Table.Cell>
       )}
-    </TableRow>
+    </Table.Row>
   );
 }
 
@@ -182,27 +180,27 @@ export default function PersonalRecords({
       </Header>
       <div style={{ overflowX: 'auto' }}>
         <Table striped unstackable basic="very" compact="very" singleLine>
-          <TableHeader>
-            <TableRow>
-              <TableHeaderCell>
+          <Table.Header>
+            <Table.Row>
+              <Table.HeaderCell>
                 <I18nHTMLTranslate i18nKey="competitions.results_table.event" />
-              </TableHeaderCell>
+              </Table.HeaderCell>
               <RankHeader type="national" short="NR" />
               <RankHeader type="continent" short="CR" />
               <RankHeader type="world" short="WR" />
-              <TableHeaderCell collapsing textAlign="right">
+              <Table.HeaderCell collapsing textAlign="right">
                 {I18n.t('common.single')}
-              </TableHeaderCell>
-              <TableHeaderCell>
+              </Table.HeaderCell>
+              <Table.HeaderCell>
                 {I18n.t('common.average')}
-              </TableHeaderCell>
+              </Table.HeaderCell>
               <RankHeader type="world" short="WR" />
               <RankHeader type="continent" short="CR" />
               <RankHeader type="national" short="NR" />
-              {anyOddRank && (<TableHeaderCell />)}
-            </TableRow>
-          </TableHeader>
-          <TableBody>
+              {anyOddRank && (<Table.HeaderCell />)}
+            </Table.Row>
+          </Table.Header>
+          <Table.Body>
             {events.official.map((event) => (
               <EventRanks
                 results={results}
@@ -214,7 +212,7 @@ export default function PersonalRecords({
                 anyOddRank={anyOddRank}
               />
             ))}
-          </TableBody>
+          </Table.Body>
         </Table>
       </div>
     </div>

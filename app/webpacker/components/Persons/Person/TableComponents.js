@@ -1,11 +1,11 @@
 import React from 'react';
-import { TableCell } from 'semantic-ui-react';
+import { Table } from 'semantic-ui-react';
 import { formatAttemptResult } from '../../../lib/wca-live/attempts';
 
 // eslint-disable-next-line import/prefer-default-export
 export function AttemptItem({ result, attemptNumber }) {
   if (result.attempts.length <= attemptNumber) {
-    return <TableCell />;
+    return <Table.Cell />;
   }
 
   const attemptRaw = result.attempts[attemptNumber];
@@ -19,6 +19,6 @@ export function AttemptItem({ result, attemptNumber }) {
     : ` ${attemptClock} `;
 
   return (
-    <TableCell textAlign="right">{text}</TableCell>
+    <Table.Cell textAlign="right">{text}</Table.Cell>
   );
 }

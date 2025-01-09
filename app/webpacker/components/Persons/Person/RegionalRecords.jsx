@@ -1,7 +1,5 @@
 import React from 'react';
-import {
-  Table, TableBody, TableCell, TableHeader, TableHeaderCell, TableRow,
-} from 'semantic-ui-react';
+import { Table } from 'semantic-ui-react';
 import I18nHTMLTranslate from '../../I18nHTMLTranslate';
 import EventIcon from '../../wca/EventIcon';
 import { events } from '../../../lib/wca-data.js.erb';
@@ -61,42 +59,42 @@ function DrawEventResults({
 }) {
   return (
     <>
-      <TableRow>
-        <TableCell colSpan="9">
+      <Table.Row>
+        <Table.Cell colSpan="9">
           <EventIcon id={eventId} />
           <I18nHTMLTranslate i18nKey={`events.${eventId}`} />
-        </TableCell>
-      </TableRow>
+        </Table.Cell>
+      </Table.Row>
       {results.map((result) => {
         const competition = competitions[result.competition_id];
 
         return (
-          <TableRow key={result.id}>
-            <TableCell>
+          <Table.Row key={result.id}>
+            <Table.Cell>
               {types.includes(result.regional_single_record) && (
                 formatAttemptResult(result.best, result.event_id)
               )}
-            </TableCell>
-            <TableCell>
+            </Table.Cell>
+            <Table.Cell>
               {types.includes(result.regional_average_record) && (
                 formatAttemptResult(result.average, result.event_id)
               )}
-            </TableCell>
-            <TableCell>
+            </Table.Cell>
+            <Table.Cell>
               <a href={competitionUrl(competition.id)}>
                 {competition.name}
               </a>
-            </TableCell>
-            <TableCell>
+            </Table.Cell>
+            <Table.Cell>
               <I18nHTMLTranslate i18nKey={`rounds.${result.round_type_id}.cellName`} />
-            </TableCell>
+            </Table.Cell>
             {types.includes(result.averageRecord) ? result.attempts.map((_, i) => (
               // eslint-disable-next-line react/no-array-index-key
               <AttemptItem key={i} result={result} attemptNumber={i} />
             )) : (
-              <TableCell colSpan="5" />
+              <Table.Cell colSpan="5" />
             )}
-          </TableRow>
+          </Table.Row>
         );
       })}
     </>
@@ -113,26 +111,26 @@ function RegionalRecordsOld({
       </h3>
       <div style={{ overflowX: 'auto', marginBottom: '0.75rem' }}>
         <Table unstackable compact="very" singleLine basic="very" striped>
-          <TableHeader>
-            <TableRow>
-              <TableHeaderCell>
+          <Table.Header>
+            <Table.Row>
+              <Table.HeaderCell>
                 <I18nHTMLTranslate i18nKey="common.single" />
-              </TableHeaderCell>
-              <TableHeaderCell>
+              </Table.HeaderCell>
+              <Table.HeaderCell>
                 <I18nHTMLTranslate i18nKey="common.average" />
-              </TableHeaderCell>
-              <TableHeaderCell>
+              </Table.HeaderCell>
+              <Table.HeaderCell>
                 <I18nHTMLTranslate i18nKey="persons.show.competition" />
-              </TableHeaderCell>
-              <TableHeaderCell>
+              </Table.HeaderCell>
+              <Table.HeaderCell>
                 <I18nHTMLTranslate i18nKey="competitions.results_table.round" />
-              </TableHeaderCell>
-              <TableHeaderCell colSpan="5" textAlign="center">
+              </Table.HeaderCell>
+              <Table.HeaderCell colSpan="5" textAlign="center">
                 <I18nHTMLTranslate i18nKey="common.solves" />
-              </TableHeaderCell>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
+              </Table.HeaderCell>
+            </Table.Row>
+          </Table.Header>
+          <Table.Body>
             {allEvents.map((eventId) => {
               if (!groupedResults[eventId]) return null;
               return (
@@ -145,7 +143,7 @@ function RegionalRecordsOld({
                 />
               );
             })}
-          </TableBody>
+          </Table.Body>
         </Table>
       </div>
     </div>

@@ -1,7 +1,5 @@
 import React from 'react';
-import {
-  Table, TableBody, TableCell, TableHeader, TableHeaderCell, TableRow,
-} from 'semantic-ui-react';
+import { Table } from 'semantic-ui-react';
 import I18nHTMLTranslate from '../../I18nHTMLTranslate';
 
 export default function RecordCollection({
@@ -14,22 +12,22 @@ export default function RecordCollection({
         <I18nHTMLTranslate i18nKey="persons.show.record_collection" />
       </h3>
       <Table striped basic="very" textAlign="center" structured unstackable>
-        <TableHeader fullWidth>
-          <TableRow textAlign="center">
-            <TableHeaderCell width={3}>WR</TableHeaderCell>
-            <TableHeaderCell width={3}>CR</TableHeaderCell>
-            <TableHeaderCell width={3}>NR</TableHeaderCell>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
+        <Table.Header fullWidth>
+          <Table.Row textAlign="center">
+            <Table.HeaderCell width={3}>WR</Table.HeaderCell>
+            <Table.HeaderCell width={3}>CR</Table.HeaderCell>
+            <Table.HeaderCell width={3}>NR</Table.HeaderCell>
+          </Table.Row>
+        </Table.Header>
+        <Table.Body>
           {/* trick to have first row striped */}
-          <TableRow style={{ display: 'none' }} />
-          <TableRow>
-            <TableCell>{world}</TableCell>
-            <TableCell>{continental}</TableCell>
-            <TableCell>{national}</TableCell>
-          </TableRow>
-        </TableBody>
+          <Table.Row style={{ display: 'none' }} />
+          <Table.Row>
+            <Table.Cell>{world}</Table.Cell>
+            <Table.Cell>{continental}</Table.Cell>
+            <Table.Cell>{national}</Table.Cell>
+          </Table.Row>
+        </Table.Body>
       </Table>
     </>
   );

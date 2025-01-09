@@ -1,8 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import {
-  Divider,
-  Table, TableBody, TableHeader,
-} from 'semantic-ui-react';
+import { Divider, Table } from 'semantic-ui-react';
 import _ from 'lodash';
 import { events, roundTypes } from '../../../lib/wca-data.js.erb';
 import { EventSelector } from '../../wca/EventSelector';
@@ -68,7 +65,7 @@ export default function Results({
       <Divider />
       <div style={{ overflowX: 'auto' }}>
         <Table unstackable compact="very" singleLine basic="very" striped>
-          <TableHeader>
+          <Table.Header>
             <Table.HeaderCell>
               Competition
             </Table.HeaderCell>
@@ -93,8 +90,8 @@ export default function Results({
             </Table.HeaderCell>
             <Table.HeaderCell />
             <Table.HeaderCell />
-          </TableHeader>
-          <TableBody>
+          </Table.Header>
+          <Table.Body>
             {_.map(_.groupBy(currentResults, 'competition_id'), ((c) => c.map((r, index) => (
               <Table.Row key={r.id} positive={highlightPosition === r.pos && r.round_type_id === 'f'}>
                 <Table.Cell>
@@ -126,7 +123,7 @@ export default function Results({
                 })}
               </Table.Row>
             ))))}
-          </TableBody>
+          </Table.Body>
         </Table>
       </div>
     </>

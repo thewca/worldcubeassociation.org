@@ -1,5 +1,5 @@
 import {
-  GridColumn, Header, Icon, Segment, Statistic, StatisticGroup, StatisticLabel, StatisticValue,
+  Grid, Header, Icon, Segment, Statistic,
 } from 'semantic-ui-react';
 import React from 'react';
 
@@ -7,20 +7,20 @@ function CountStat({ title, data }) {
   return (
     <>
       <Header>{title}</Header>
-      <StatisticGroup>
+      <Statistic.Group>
         {data.map((d) => d.count > 0 && (
           <Statistic key={d.label} horizontal>
-            <StatisticValue textAlign="center">
+            <Statistic.Value textAlign="center">
               {d.onClick ? <a style={{ cursor: 'pointer' }} onClick={d.onClick}>{d.count}</a> : d.count}
-            </StatisticValue>
-            <StatisticLabel>
+            </Statistic.Value>
+            <Statistic.Label>
               <Icon name={d.icon} color={d.iconColor} />
             &nbsp;
               {d.label}
-            </StatisticLabel>
+            </Statistic.Label>
           </Statistic>
         ))}
-      </StatisticGroup>
+      </Statistic.Group>
     </>
   );
 }
@@ -29,7 +29,7 @@ export default function CountStats({ medals, records, setHighlight }) {
   return (
     <>
       {medals.total > 0 && (
-        <GridColumn>
+        <Grid.Column>
           <Segment raised padded>
             <CountStat
               title="Medals"
@@ -46,10 +46,10 @@ export default function CountStats({ medals, records, setHighlight }) {
               ]}
             />
           </Segment>
-        </GridColumn>
+        </Grid.Column>
       )}
       {records.total > 0 && (
-        <GridColumn>
+        <Grid.Column>
           <Segment raised padded>
             <CountStat
               title="Records"
@@ -66,7 +66,7 @@ export default function CountStats({ medals, records, setHighlight }) {
               ]}
             />
           </Segment>
-        </GridColumn>
+        </Grid.Column>
       )}
     </>
   );

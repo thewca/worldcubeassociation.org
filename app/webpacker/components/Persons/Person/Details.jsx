@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Card, Divider, Grid, GridColumn, GridRow, Header, Icon, Statistic, StatisticGroup, StatisticLabel, StatisticValue,
+  Card, Header, Icon, Statistic,
 } from 'semantic-ui-react';
 import I18nHTMLTranslate from '../../I18nHTMLTranslate';
 import Badges from '../Badges';
@@ -46,26 +46,26 @@ export default function Details({
       </Header>
       {previousPersons.length > 0 && <PreviousDetails prev={previousPersons} />}
       {person.user && <Badges userId={person.user.id} />}
-      <StatisticGroup size="tiny" widths={2}>
+      <Statistic.Group size="tiny" widths={2}>
         <Statistic>
-          <StatisticLabel>{I18n.t('common.user.wca_id')}</StatisticLabel>
-          <StatisticValue>{person.wca_id}</StatisticValue>
+          <Statistic.Label>{I18n.t('common.user.wca_id')}</Statistic.Label>
+          <Statistic.Value>{person.wca_id}</Statistic.Value>
         </Statistic>
         <Statistic>
-          <StatisticLabel>{I18n.t('persons.show.completed_solves')}</StatisticLabel>
-          <StatisticValue>{person.completed_solves_count}</StatisticValue>
+          <Statistic.Label>{I18n.t('persons.show.completed_solves')}</Statistic.Label>
+          <Statistic.Value>{person.completed_solves_count}</Statistic.Value>
         </Statistic>
         {person.visible_gender && (
           <Statistic>
-            <StatisticLabel>{I18n.t('activerecord.attributes.person.gender')}</StatisticLabel>
-            <StatisticValue>{I18n.t(`enums.user.gender.${person.visible_gender}`)}</StatisticValue>
+            <Statistic.Label>{I18n.t('activerecord.attributes.person.gender')}</Statistic.Label>
+            <Statistic.Value>{I18n.t(`enums.user.gender.${person.visible_gender}`)}</Statistic.Value>
           </Statistic>
         )}
         <Statistic>
-          <StatisticLabel>{I18n.t('layouts.navigation.competitions')}</StatisticLabel>
-          <StatisticValue>{person.competition_count}</StatisticValue>
+          <Statistic.Label>{I18n.t('layouts.navigation.competitions')}</Statistic.Label>
+          <Statistic.Value>{person.competition_count}</Statistic.Value>
         </Statistic>
-      </StatisticGroup>
+      </Statistic.Group>
     </>
   );
 }

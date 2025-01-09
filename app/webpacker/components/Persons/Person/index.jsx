@@ -1,6 +1,6 @@
 import React, { useMemo, useRef, useState } from 'react';
 import {
-  Container, Divider, Grid, GridColumn, GridRow, Segment, Sticky, Tab, TabPane,
+  Container, Divider, Grid, Segment, Sticky, Tab,
 } from 'semantic-ui-react';
 import Details from './Details';
 import PersonalRecords from './PersonalRecords';
@@ -25,14 +25,14 @@ function TabSection({
       menuItem: I18n.t('persons.show.results'),
       tabSlug: 'results-by-event',
       render: () => (
-        <TabPane>
+        <Tab.Pane>
           <Results
             results={results}
             pbMarkers={pbMarkers}
             highlightPosition={highlight}
             competitions={competitions}
           />
-        </TabPane>
+        </Tab.Pane>
       ),
     }];
     if (records.total > 0) {
@@ -40,9 +40,9 @@ function TabSection({
         menuItem: I18n.t('persons.show.records'),
         tabSlug: 'record',
         render: () => (
-          <TabPane>
+          <Tab.Pane>
             <RegionalRecords results={results} competitions={competitions} />
-          </TabPane>
+          </Tab.Pane>
         ),
       });
     }
@@ -56,13 +56,13 @@ function TabSection({
         menuItem: I18n.t('persons.show.championship_podiums'),
         tabSlug: 'championship-podiums',
         render: () => (
-          <TabPane>
+          <Tab.Pane>
             <RegionalChampionshipPodiums
               results={results}
               championshipPodiums={championshipPodiums}
               competitions={competitions}
             />
-          </TabPane>
+          </Tab.Pane>
         ),
       });
     }
@@ -73,9 +73,9 @@ function TabSection({
       menuItem: I18n.t('persons.show.competitions_map'),
       tabSlug: 'map',
       render: () => (
-        <TabPane>
+        <Tab.Pane>
           <CompetitionsMap competitions={competitionValues} />
-        </TabPane>
+        </Tab.Pane>
       ),
     });
     return p;
@@ -124,8 +124,8 @@ export default function Person({
     <div ref={ref}>
       <Container fluid>
         <Grid columns={2} stackable>
-          <GridRow>
-            <GridColumn width={4} only="computer tablet">
+          <Grid.Row>
+            <Grid.Column width={4} only="computer tablet">
               <Sticky context={ref}>
                 <Segment raised>
                   <Details
@@ -135,8 +135,8 @@ export default function Person({
                   />
                 </Segment>
               </Sticky>
-            </GridColumn>
-            <GridColumn width={4} only="mobile">
+            </Grid.Column>
+            <Grid.Column width={4} only="mobile">
               <Segment raised>
                 <Details
                   person={person}
@@ -144,8 +144,8 @@ export default function Person({
                   canEditUser={canEditUser}
                 />
               </Segment>
-            </GridColumn>
-            <GridColumn width={12}>
+            </Grid.Column>
+            <Grid.Column width={12}>
               <Segment raised>
                 <PersonalRecords
                   results={results}
@@ -169,8 +169,8 @@ export default function Person({
                 pbMarkers={pbMarkers}
                 highlight={highlight}
               />
-            </GridColumn>
-          </GridRow>
+            </Grid.Column>
+          </Grid.Row>
         </Grid>
       </Container>
     </div>

@@ -1,7 +1,5 @@
 import React from 'react';
-import {
-  Table, TableBody, TableCell, TableHeader, TableHeaderCell, TableRow,
-} from 'semantic-ui-react';
+import { Table } from 'semantic-ui-react';
 import I18nHTMLTranslate from '../../I18nHTMLTranslate';
 import EventIcon from '../../wca/EventIcon';
 import { AttemptItem } from './TableComponents';
@@ -14,30 +12,30 @@ function CompetitionResults({
 }) {
   return (
     <>
-      <TableRow>
-        <TableCell colSpan={9}>
+      <Table.Row>
+        <Table.Cell colSpan={9}>
           <a
             href={competitionUrl(data.competition.id)}
             className="competition-link"
           >
             {data.competition.name}
           </a>
-        </TableCell>
-      </TableRow>
+        </Table.Cell>
+      </Table.Row>
       {data.results.map(([result, podium]) => (
-        <TableRow key={result.id} className="result">
-          <TableCell className="event">
+        <Table.Row key={result.id} className="result">
+          <Table.Cell className="event">
             <EventIcon id={result.event_id} />
             <I18nHTMLTranslate i18nKey={`events.${result.event_id}`} />
-          </TableCell>
-          <TableCell className="place">{podium.pos}</TableCell>
-          <TableCell className="single">{formatAttemptResult(result.best, result.event_id)}</TableCell>
-          <TableCell className="average">{formatAttemptResult(result.average, result.event_id)}</TableCell>
+          </Table.Cell>
+          <Table.Cell className="place">{podium.pos}</Table.Cell>
+          <Table.Cell className="single">{formatAttemptResult(result.best, result.event_id)}</Table.Cell>
+          <Table.Cell className="average">{formatAttemptResult(result.average, result.event_id)}</Table.Cell>
           {result.attempts.map((_, i) => (
             // eslint-disable-next-line react/no-array-index-key
             <AttemptItem key={i} result={result} attemptNumber={i} />
           ))}
-        </TableRow>
+        </Table.Row>
       ))}
     </>
   );
@@ -74,23 +72,23 @@ function RegionalChampionshipPodiumsOld({
       <h3 className="text-center">{title}</h3>
       <div style={{ overflowX: 'auto', marginBottom: '0.75rem' }}>
         <Table striped unstackable singleLine basic="very" compact="very">
-          <TableHeader>
-            <TableRow>
-              <TableHeaderCell className="event"><I18nHTMLTranslate i18nKey="competitions.results_table.event" /></TableHeaderCell>
-              <TableHeaderCell className="place"><I18nHTMLTranslate i18nKey="persons.show.place" /></TableHeaderCell>
-              <TableHeaderCell className="single"><I18nHTMLTranslate i18nKey="common.single" /></TableHeaderCell>
-              <TableHeaderCell className="average"><I18nHTMLTranslate i18nKey="common.average" /></TableHeaderCell>
-              <TableHeaderCell className="solves" colSpan={5}><I18nHTMLTranslate i18nKey="common.solves" /></TableHeaderCell>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
+          <Table.Header>
+            <Table.Row>
+              <Table.HeaderCell className="event"><I18nHTMLTranslate i18nKey="competitions.results_table.event" /></Table.HeaderCell>
+              <Table.HeaderCell className="place"><I18nHTMLTranslate i18nKey="persons.show.place" /></Table.HeaderCell>
+              <Table.HeaderCell className="single"><I18nHTMLTranslate i18nKey="common.single" /></Table.HeaderCell>
+              <Table.HeaderCell className="average"><I18nHTMLTranslate i18nKey="common.average" /></Table.HeaderCell>
+              <Table.HeaderCell className="solves" colSpan={5}><I18nHTMLTranslate i18nKey="common.solves" /></Table.HeaderCell>
+            </Table.Row>
+          </Table.Header>
+          <Table.Body>
             {compAndResults.map((data) => (
               <CompetitionResults
                 data={data}
                 key={data.competition.id}
               />
             ))}
-          </TableBody>
+          </Table.Body>
         </Table>
       </div>
     </div>
