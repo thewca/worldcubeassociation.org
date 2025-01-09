@@ -314,7 +314,7 @@ class Person < ApplicationRecord
 
     # If there's a user for this Person, merge in all their data,
     # the Person's data takes priority, though.
-    user_override_options = USER_COMMON_SERIALIZE_OPTIONS.merge_union(options)
+    user_override_options = USER_COMMON_SERIALIZE_OPTIONS.merge_union(options&.stringify_keys)
     (user || User.new).serializable_hash(user_override_options).merge(json)
   end
 end
