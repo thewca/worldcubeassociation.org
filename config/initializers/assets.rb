@@ -10,7 +10,12 @@ Rails.application.config.assets.version = '1.0'
 # helper!
 # wicked_pdf's helpers can't handle "packs_with_chunks" and therefore cannot
 # properly inline our packs :(
-Rails.application.config.assets.paths << Rails.root.join("node_modules", "@cubing", "icons", "www", "css")
+# Note: reaching into the package structure violates the semantics of package
+# exports, which could theoretically turn any release of `@cubing/icons` into a
+# breaking one. However, this path should be fairly stable, and the usage here
+# should be safe as long as `@cubing/icons` is not bumped automatically without
+# exercising this code path in a test.
+Rails.application.config.assets.paths << Rails.root.join("node_modules", "@cubing", "icons", "dist", "lib", "@cubing", "icons")
 
 # Precompile additional assets.
 # application.js, application.css, and all non-JS/CSS in app/assets folder are already added.
