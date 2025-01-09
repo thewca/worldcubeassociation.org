@@ -27,12 +27,12 @@ function CompetitionResults({
       {data.results.map(([result, podium]) => (
         <TableRow key={result.id} className="result">
           <TableCell className="event">
-            <EventIcon id={result.eventId} />
-            <I18nHTMLTranslate i18nKey={`events.${result.eventId}`} />
+            <EventIcon id={result.event_id} />
+            <I18nHTMLTranslate i18nKey={`events.${result.event_id}`} />
           </TableCell>
           <TableCell className="place">{podium.pos}</TableCell>
-          <TableCell className="single">{formatAttemptResult(result.best, result.eventId)}</TableCell>
-          <TableCell className="average">{formatAttemptResult(result.average, result.eventId)}</TableCell>
+          <TableCell className="single">{formatAttemptResult(result.best, result.event_id)}</TableCell>
+          <TableCell className="average">{formatAttemptResult(result.average, result.event_id)}</TableCell>
           {result.attempts.map((_, i) => (
             // eslint-disable-next-line react/no-array-index-key
             <AttemptItem key={i} result={result} attemptNumber={i} />

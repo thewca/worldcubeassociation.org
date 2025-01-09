@@ -36,17 +36,17 @@ function groupByTypeAndEvent(results) {
 
   results.forEach((result) => {
     Object.entries(recordTypes).forEach(([recordGroup, groupData]) => {
-      if (groupData.records.includes(result.averageRecord)
-        || groupData.records.includes(result.singleRecord)) {
+      if (groupData.records.includes(result.regional_average_record)
+        || groupData.records.includes(result.regional_single_record)) {
         let recordData = typeGroups[recordGroup];
         if (!recordData) {
           recordData = [];
           typeGroups[recordGroup] = recordData;
         }
-        let eventResults = recordData[result.eventId];
+        let eventResults = recordData[result.event_id];
         if (!eventResults) {
           eventResults = [];
-          recordData[result.eventId] = eventResults;
+          recordData[result.event_id] = eventResults;
         }
         eventResults.push(result);
       }
@@ -73,13 +73,13 @@ function DrawEventResults({
         return (
           <TableRow key={result.id}>
             <TableCell>
-              {types.includes(result.singleRecord) && (
-                formatAttemptResult(result.best, result.eventId)
+              {types.includes(result.regional_single_record) && (
+                formatAttemptResult(result.best, result.event_id)
               )}
             </TableCell>
             <TableCell>
-              {types.includes(result.averageRecord) && (
-                formatAttemptResult(result.average, result.eventId)
+              {types.includes(result.regional_average_record) && (
+                formatAttemptResult(result.average, result.event_id)
               )}
             </TableCell>
             <TableCell>
@@ -88,7 +88,7 @@ function DrawEventResults({
               </a>
             </TableCell>
             <TableCell>
-              <I18nHTMLTranslate i18nKey={`rounds.${result.roundTypeId}.cellName`} />
+              <I18nHTMLTranslate i18nKey={`rounds.${result.round_type_id}.cellName`} />
             </TableCell>
             {types.includes(result.averageRecord) ? result.attempts.map((_, i) => (
               // eslint-disable-next-line react/no-array-index-key

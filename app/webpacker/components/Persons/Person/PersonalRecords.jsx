@@ -64,7 +64,7 @@ function ResultPopup({
   results, rankForEvent, average, eventId, competitions,
 }) {
   const matchingResult = results.reverse().find((r) => {
-    if (r.eventId !== eventId) return false;
+    if (r.event_id !== eventId) return false;
     if (average) return r.average === rankForEvent.best;
     return r.best === rankForEvent.best;
   });

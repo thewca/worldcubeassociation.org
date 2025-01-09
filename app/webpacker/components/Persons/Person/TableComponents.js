@@ -9,12 +9,12 @@ export function AttemptItem({ result, attemptNumber }) {
   }
 
   const attemptRaw = result.attempts[attemptNumber];
-  const attemptClock = formatAttemptResult(attemptRaw, result.eventId);
+  const attemptClock = formatAttemptResult(attemptRaw, result.event_id);
 
-  const isBest = result.bestIdx === attemptNumber;
-  const isWorst = result.worstIdx === attemptNumber;
+  const isBest = result.best_index === attemptNumber;
+  const isWorst = result.worst_index === attemptNumber;
 
-  const text = (isBest || isWorst) && result.trimmedIdx.includes(attemptNumber)
+  const text = (isBest || isWorst) && result.trimmed_indices.includes(attemptNumber)
     ? `(${attemptClock})`
     : ` ${attemptClock} `;
 

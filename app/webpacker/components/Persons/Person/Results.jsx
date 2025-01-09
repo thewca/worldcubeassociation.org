@@ -39,11 +39,11 @@ export default function Results({
   pbMarkers,
   highlightPosition,
 }) {
-  const personEvents = new Set(results.map((r) => r.eventId));
+  const personEvents = new Set(results.map((r) => r.event_id));
   const eventList = events.official.filter((r) => personEvents.has(r.id)).map((r) => r.id);
   const [currentEvent, setCurrentEvent] = useState(new URL(document.location.toString()).searchParams.get('event') ?? eventList[0]);
   const currentResults = useMemo(
-    () => results.filter((r) => r.eventId === currentEvent),
+    () => results.filter((r) => r.event_id === currentEvent),
     [currentEvent, results],
   );
 
@@ -96,24 +96,24 @@ export default function Results({
           </TableHeader>
           <TableBody>
             {_.map(_.groupBy(currentResults, 'competition_id'), ((c) => c.map((r, index) => (
-              <Table.Row key={r.id} positive={highlightPosition === r.pos && r.roundTypeId === 'f'}>
+              <Table.Row key={r.id} positive={highlightPosition === r.pos && r.round_type_id === 'f'}>
                 <Table.Cell>
                   {index === 0 && <a href={competitionUrl(r.competition_id)}>{competitions[r.competition_id].name}</a>}
                 </Table.Cell>
-                <Table.Cell>{roundTypes.byId[r.roundTypeId].name}</Table.Cell>
+                <Table.Cell>{roundTypes.byId[r.round_type_id].name}</Table.Cell>
                 <Table.Cell>{r.pos}</Table.Cell>
-                <Table.Cell style={colorForResult(r.singleRecord, currentResultsPbs[r.id]?.single)}>
-                  {formatAttemptResult(r.best, r.eventId)}
+                <Table.Cell style={colorForResult(r.regional_single_record, currentResultsPbs[r.id]?.single)}>
+                  {formatAttemptResult(r.best, r.event_id)}
                 </Table.Cell>
-                <Table.Cell><b>{r.singleRecord}</b></Table.Cell>
-                <Table.Cell style={colorForResult(r.averageRecord, currentResultsPbs[r.id]?.average)}>
-                  {formatAttemptResult(r.average, r.eventId)}
+                <Table.Cell><b>{r.regional_single_record}</b></Table.Cell>
+                <Table.Cell style={colorForResult(r.regional_average_record, currentResultsPbs[r.id]?.average)}>
+                  {formatAttemptResult(r.average, r.event_id)}
                 </Table.Cell>
-                <Table.Cell><b>{r.averageRecord}</b></Table.Cell>
+                <Table.Cell><b>{r.regional_average_record}</b></Table.Cell>
                 {r.attempts.map((a, i) => {
-                  const attemptClock = formatAttemptResult(a, r.eventId);
+                  const attemptClock = formatAttemptResult(a, r.event_id);
 
-                  if (i === r.bestIdx || i === r.worstIdx) {
+                  if (i === r.best_index || i === r.worst_index) {
                     return (
                       <Table.Cell>
                         (
