@@ -278,6 +278,12 @@ class Person < ApplicationRecord
     methods: ["url", "country_iso2"],
   }.freeze
 
+  USER_COMMON_SERIALIZE_OPTIONS = {
+    only: ["name", "gender"],
+    methods: ["country_iso2"],
+    include: [],
+  }.freeze
+
   def personal_records
     [self.ranksAverage, self.ranksSingle].compact.flatten
   end
@@ -308,6 +314,7 @@ class Person < ApplicationRecord
 
     # If there's a user for this Person, merge in all their data,
     # the Person's data takes priority, though.
-    (user || User.new).serializable_hash(options).merge(json)
+    user_override_options = USER_COMMON_SERIALIZE_OPTIONS.merge_union(options)
+    (user || User.new).serializable_hash(user_override_options).merge(json)
   end
 end
