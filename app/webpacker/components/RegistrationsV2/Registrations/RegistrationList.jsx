@@ -33,7 +33,7 @@ export default function RegistrationList({ competitionInfo }) {
 
   const [{ sortColumn, sortDirection }, sortDispatch] = useReducer(sortReducer, {
     sortColumn: 'name',
-    sortDirection: undefined,
+    sortDirection: 'ascending',
   });
 
   const changeSortColumn = (name) => sortDispatch({ type: 'CHANGE_SORT', sortColumn: name });
