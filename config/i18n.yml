@@ -76,3 +76,4 @@ translations:
       - "*.users.edit.*"
       - "*.persons.index.*"
       - "*.results.table_elements.*"
+      - "*.results.selector_elements.*"

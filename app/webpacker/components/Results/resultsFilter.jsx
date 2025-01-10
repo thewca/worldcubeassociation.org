@@ -5,6 +5,7 @@ import {
 import { EventSelector } from '../wca/EventSelector';
 import { RegionSelector } from '../CompetitionsOverview/CompetitionsFilters';
 import { countries } from '../../lib/wca-data.js.erb';
+import I18n from '../../lib/i18n';
 
 export default function ResultsFilter({ filterState }) {
   const {
@@ -46,15 +47,15 @@ export default function ResultsFilter({ filterState }) {
         </Form.Field>
         <Form.Group>
           <Form.Field width={3}>
-            <label>Type</label>
+            <label>{I18n.t('results.selector_elements.type_selector.type')}</label>
             <ButtonGroup primary>
               <Button
                 active={rankingType === 'single'}
                 onClick={() => setRankingType('single')}
               >
-                Single
+                {I18n.t('results.selector_elements.type_selector.single')}
               </Button>
-              <Button active={rankingType === 'average'} onClick={() => setRankingType('average')}>Average</Button>
+              <Button active={rankingType === 'average'} onClick={() => setRankingType('average')}>{I18n.t('results.selector_elements.type_selector.average')}</Button>
             </ButtonGroup>
           </Form.Field>
           {/* <Form.Field width={1}> */}
@@ -63,19 +64,19 @@ export default function ResultsFilter({ filterState }) {
           {/*   </ButtonGroup> */}
           {/* </Form.Field> */}
           <Form.Field width={4}>
-            <label>Gender</label>
+            <label>{I18n.t('results.selector_elements.gender_selector.gender')}</label>
             <ButtonGroup color="teal">
-              <Button active={gender === 'All'} onClick={() => setGender('All')}>All</Button>
-              <Button active={gender === 'Male'} onClick={() => setGender('Male')}>Male</Button>
-              <Button active={gender === 'Female'} onClick={() => setGender('Female')}>Female</Button>
+              <Button active={gender === 'All'} onClick={() => setGender('All')}>{I18n.t('results.selector_elements.gender_selector.gender_all')}</Button>
+              <Button active={gender === 'Male'} onClick={() => setGender('Male')}>{I18n.t('results.selector_elements.gender_selector.male')}</Button>
+              <Button active={gender === 'Female'} onClick={() => setGender('Female')}>{I18n.t('results.selector_elements.gender_selector.female')}</Button>
             </ButtonGroup>
           </Form.Field>
           <Form.Field width={2}>
-            <label>Show</label>
+            <label>{I18n.t('results.selector_elements.show_selector.show')}</label>
             <ButtonGroup color="teal">
-              <Button active={show === '100 persons'} onClick={() => setShow('100 persons')}>Persons</Button>
-              <Button active={show === '100 results'} onClick={() => setShow('100 results')}>Results</Button>
-              <Button active={show === 'by region'} onClick={() => setShow('by region')}>By Region</Button>
+              <Button active={show === '100 persons'} onClick={() => setShow('100 persons')}>{I18n.t('results.selector_elements.show_selector.persons')}</Button>
+              <Button active={show === '100 results'} onClick={() => setShow('100 results')}>{I18n.t('results.selector_elements.show_selector.results')}</Button>
+              <Button active={show === 'by region'} onClick={() => setShow('by region')}>{I18n.t('results.selector_elements.show_selector.by_region')}</Button>
             </ButtonGroup>
           </Form.Field>
         </Form.Group>
