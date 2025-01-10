@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import {
   Button, ButtonGroup, Form, Segment,
 } from 'semantic-ui-react';
@@ -19,7 +19,16 @@ export default function ResultsFilter({ filterState }) {
     show,
     setShow,
   } = filterState;
-  const regionIso2 = countries.real.find((country) => country.id === region)?.iso2 ?? region;
+  const regionIso2 = useMemo(() => {
+    if (region === 'world') {
+      return 'all';
+    }
+    const iso2 = countries.real.find((country) => country.id === region)?.iso2;
+    if (iso2) {
+      return iso2;
+    }
+    return region;
+  }, [region]);
   return (
     <Segment raised>
       <Form>
@@ -64,8 +73,8 @@ export default function ResultsFilter({ filterState }) {
           <Form.Field width={2}>
             <label>Show</label>
             <ButtonGroup color="teal">
-              <Button active={show === 'Persons'} onClick={() => setShow('Persons')}>Persons</Button>
-              <Button active={show === '100 Results'} onClick={() => setShow('100 Results')}>Results</Button>
+              <Button active={show === '100 persons'} onClick={() => setShow('100 persons')}>Persons</Button>
+              <Button active={show === '100 results'} onClick={() => setShow('100 results')}>Results</Button>
               <Button active={show === 'by region'} onClick={() => setShow('by region')}>By Region</Button>
             </ButtonGroup>
           </Form.Field>

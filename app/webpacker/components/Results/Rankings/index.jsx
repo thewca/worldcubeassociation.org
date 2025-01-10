@@ -67,6 +67,7 @@ export function Rankings({
         competitionsById={data.competitionsById}
         isAverage={rankingType === 'average'}
         rows={data.rows}
+        show={show}
       />
     </Container>
   );
