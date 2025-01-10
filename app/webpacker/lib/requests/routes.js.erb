@@ -293,7 +293,7 @@ export const bulkUpdateRegistrationUrl = `<%= CGI.unescape(Rails.application.rou
 
 export const paymentTicketUrl = (competitionId, donationIso) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v1_registrations_payment_ticket_path(competition_id: "${competitionId}", donation_iso: "${donationIso}")) %>`;
 
-export const rankingsUrl = (eventId, rankingType, region, gender) => {
+export const rankingsUrl = (eventId, rankingType, region, gender, show) => {
   const url = `<%= CGI.unescape(Rails.application.routes.url_helpers.rankings_path(event_id: "${eventId}", type: "${rankingType}")) %>`
   const queryParams = new URLSearchParams();
 
@@ -304,5 +304,10 @@ export const rankingsUrl = (eventId, rankingType, region, gender) => {
   if (gender !== 'All') {
     queryParams.append('gender', gender);
   }
+
+  if (show !== 'Persons') {
+    queryParams.append('show', show);
+  }
+
   return `${url}?${queryParams.toString()}`
 };

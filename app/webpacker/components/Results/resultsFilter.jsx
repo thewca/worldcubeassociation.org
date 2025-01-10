@@ -8,7 +8,16 @@ import { countries } from '../../lib/wca-data.js.erb';
 
 export default function ResultsFilter({ filterState }) {
   const {
-    event, setEvent, region, setRegion, rankingType, setRankingType, gender, setGender,
+    event,
+    setEvent,
+    region,
+    setRegion,
+    rankingType,
+    setRankingType,
+    gender,
+    setGender,
+    show,
+    setShow,
   } = filterState;
   const regionIso2 = countries.real.find((country) => country.id === region)?.iso2 ?? region;
   return (
@@ -29,7 +38,7 @@ export default function ResultsFilter({ filterState }) {
         <Form.Group>
           <Form.Field width={3}>
             <label>Type</label>
-            <ButtonGroup>
+            <ButtonGroup primary>
               <Button
                 active={rankingType === 'single'}
                 onClick={() => setRankingType('single')}
@@ -46,7 +55,7 @@ export default function ResultsFilter({ filterState }) {
           {/* </Form.Field> */}
           <Form.Field width={4}>
             <label>Gender</label>
-            <ButtonGroup>
+            <ButtonGroup color="teal">
               <Button active={gender === 'All'} onClick={() => setGender('All')}>All</Button>
               <Button active={gender === 'Male'} onClick={() => setGender('Male')}>Male</Button>
               <Button active={gender === 'Female'} onClick={() => setGender('Female')}>Female</Button>
@@ -54,9 +63,10 @@ export default function ResultsFilter({ filterState }) {
           </Form.Field>
           <Form.Field width={2}>
             <label>Show</label>
-            <ButtonGroup>
-              <Button>Results</Button>
-              <Button>By Region</Button>
+            <ButtonGroup color="teal">
+              <Button active={show === 'Persons'} onClick={() => setShow('Persons')}>Persons</Button>
+              <Button active={show === '100 Results'} onClick={() => setShow('100 Results')}>Results</Button>
+              <Button active={show === 'by region'} onClick={() => setShow('by region')}>By Region</Button>
             </ButtonGroup>
           </Form.Field>
         </Form.Group>

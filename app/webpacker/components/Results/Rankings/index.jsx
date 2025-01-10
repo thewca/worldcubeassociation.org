@@ -1,7 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import {
-  Button, ButtonGroup, Container, Grid, Segment,
-} from 'semantic-ui-react';
+import { Container } from 'semantic-ui-react';
 import { useQuery } from '@tanstack/react-query';
 import RankingsTable from './RankingsTable';
 import WCAQueryClientProvider from '../../../lib/providers/WCAQueryClientProvider';
@@ -11,22 +9,30 @@ import { rankingsUrl } from '../../../lib/requests/routes.js.erb';
 import ResultsFilter from '../resultsFilter';
 
 export default function Wrapper({
-  event, region, year, rankingType, gender,
+  event, region, year, rankingType, gender, show,
 }) {
   return (
     <WCAQueryClientProvider>
-      <Rankings initialEvent={event} initialRegion={region} initialYear={year} initialRankingType={rankingType} initialGender={gender} />
+      <Rankings
+        initialEvent={event}
+        initialRegion={region}
+        initialYear={year}
+        initialRankingType={rankingType}
+        initialGender={gender}
+        initialShow={show}
+      />
     </WCAQueryClientProvider>
   );
 }
 
 export function Rankings({
-  initialEvent, initialRegion, initialRankingType, initialGender,
+  initialEvent, initialRegion, initialRankingType, initialGender, initialShow,
 }) {
   const [event, setEvent] = useState(initialEvent);
   const [region, setRegion] = useState(initialRegion ?? 'all');
   const [rankingType, setRankingType] = useState(initialRankingType);
   const [gender, setGender] = useState(initialGender);
+  const [show, setShow] = useState(initialShow ?? 'Persons');
 
   const filterState = useMemo(() => ({
     event,
@@ -37,16 +43,18 @@ export function Rankings({
     setRankingType,
     gender,
     setGender,
-  }), [event, gender, rankingType, region]);
+    show,
+    setShow,
+  }), [event, gender, rankingType, region, show]);
 
   const { data, isFetching } = useQuery({
-    queryKey: ['rankings', event, region, rankingType, gender],
-    queryFn: () => getRankings(event, rankingType, region, gender),
+    queryKey: ['rankings', event, region, rankingType, gender, show],
+    queryFn: () => getRankings(event, rankingType, region, gender, show),
   });
 
   useEffect(() => {
-    window.history.replaceState(null, '', rankingsUrl(event, rankingType, region, gender));
-  }, [event, region, rankingType, gender]);
+    window.history.replaceState(null, '', rankingsUrl(event, rankingType, region, gender, show));
+  }, [event, region, rankingType, gender, show]);
 
   if (isFetching) {
     return <Loading />;

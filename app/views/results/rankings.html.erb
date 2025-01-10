@@ -6,6 +6,11 @@
   <p><i><%= t('results.filters_fixes_underway') %></i></p>
 
   <%= react_component("Results/Rankings", {
-    event: params[:event_id], region: params[:region], rankingType: params[:type], year: params[:year], gender: params[:gender],
+    event: params[:event_id],
+    region: params[:region],
+    rankingType: params[:type],
+    year: params[:year],
+    gender: params[:gender],
+    show: params[:show],
   }) %>
 </div>

@@ -2,7 +2,7 @@ import { fetchJsonOrError } from '../../../lib/requests/fetchWithAuthenticityTok
 import { rankingsUrl } from '../../../lib/requests/routes.js.erb';
 
 // eslint-disable-next-line import/prefer-default-export
-export async function getRankings(eventId, rankingType, region, gender) {
-  const { data } = await fetchJsonOrError(rankingsUrl(eventId, rankingType, region, gender), { headers: { Accept: 'application/json' } });
+export async function getRankings(eventId, rankingType, region, gender, show) {
+  const { data } = await fetchJsonOrError(rankingsUrl(eventId, rankingType, region, gender, show), { headers: { Accept: 'application/json' } });
   return data;
 }
