@@ -297,6 +297,8 @@ export default function CompetingStep({
             warning
             list={formWarnings}
           />
+          {console.log("comp info")}
+          {console.log(competitionInfo)}
           <Form.Field required error={hasInteracted && selectedEvents.length === 0}>
             <EventSelector
               onEventSelection={handleEventSelection}
@@ -304,11 +306,15 @@ export default function CompetingStep({
               selectedEvents={selectedEvents}
               id="event-selection"
               maxEvents={maxEvents}
-              eventsDisabled={eventsNotQualifiedFor(
-                competitionInfo.event_ids,
-                qualifications.wcif,
-                qualifications.personalRecords,
-              )}
+              eventsDisabled={
+                competitionInfo.allow_registration_without_qualification
+                ? []
+                : eventsNotQualifiedFor(
+                  competitionInfo.event_ids,
+                  qualifications.wcif,
+                  qualifications.personalRecords,
+                )
+              }
               disabledText={(event) => eventQualificationToString(
                 { id: event },
                 qualifications.wcif[event],
