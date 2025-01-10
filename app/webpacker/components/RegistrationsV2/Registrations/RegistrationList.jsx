@@ -130,6 +130,11 @@ export default function RegistrationList({ competitionInfo }) {
       <Table striped sortable unstackable compact singleLine textAlign="left">
         <Table.Header>
           <Table.Row>
+            {isPsychSheet && (
+              <Table.HeaderCell disabled>
+                <EventIcon id={psychSheetEvent} className="selected" size="1em" />
+              </Table.HeaderCell>
+            )}
             <Table.HeaderCell
               sorted={isAllCompetitors && sortColumn === 'name' ? sortDirection : undefined}
               onClick={isAllCompetitors ? () => changeSortColumn('name') : undefined}
@@ -162,9 +167,6 @@ export default function RegistrationList({ competitionInfo }) {
               </>
             ) : (
               <>
-                <Table.HeaderCell>
-                  <EventIcon id={psychSheetEvent} className="selected" size="1em" />
-                </Table.HeaderCell>
                 <Table.HeaderCell disabled>
                   <Icon name="trophy" />
                   {' '}
@@ -194,6 +196,15 @@ export default function RegistrationList({ competitionInfo }) {
           {data.length > 0 ? (
             data.map((registration) => (
               <Table.Row key={`registration-table-row-${registration.user.id}`}>
+                {isPsychSheet && (
+                  <Table.Cell
+                    collapsing
+                    textAlign="right"
+                    disabled={registration.tied_previous}
+                  >
+                    {registration.pos}
+                  </Table.Cell>
+                )}
                 <Table.Cell>
                   {registration.user.wca_id ? (
                     <a
@@ -228,13 +239,6 @@ export default function RegistrationList({ competitionInfo }) {
                   </>
                 ) : (
                   <>
-                    <Table.Cell
-                      collapsing
-                      textAlign="right"
-                      disabled={registration.tied_previous}
-                    >
-                      {registration.pos}
-                    </Table.Cell>
                     <Table.Cell>
                       {psychSheetSortBy === 'single'
                         ? registration.single_rank
@@ -304,6 +308,10 @@ function FooterContent({
 
   return (
     <Table.Row>
+      {!isAllCompetitors && (
+        // psych sheet position
+        <Table.Cell />
+      )}
       <Table.Cell>
         {`${newcomerCount} ${I18n.t('registrations.registration_info_people.newcomer', { count: newcomerCount })} + ${
           registrations.length - newcomerCount
@@ -321,8 +329,8 @@ function FooterContent({
           <Table.Cell>{totalEvents}</Table.Cell>
         </>
       ) : (
+        // WR, single, average
         <>
-          <Table.Cell />
           <Table.Cell />
           <Table.Cell />
           <Table.Cell />
