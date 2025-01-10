@@ -1,4 +1,4 @@
-import { DateTime } from 'luxon';
+import { DateTime, Interval } from 'luxon';
 import I18n from '../i18n';
 // parameter name conventions:
 // - `luxonDate` for luxon DateTime objects
@@ -121,73 +121,6 @@ export const todayWithTime = (dateTime, timeZone) => {
   });
 };
 
-function getMonthNames(format = 'short') {
-  const formatter = new Intl.DateTimeFormat(window.I18n.locale, {
-    month: format === 'short' ? 'short' : 'long',
-  });
-
-  return Array.from({ length: 12 }, (_, i) => formatter.format(new Date(2000, i)));
-}
-
-// Translated from https://github.com/mbillard/time_will_tell/blob/master/lib/time_will_tell/helpers/date_range_helper.rb
 export function dateRange(fromDate, toDate, options = {}) {
-  const format = options.format || 'short';
-  const scope = options.scope || 'time_will_tell.date_range';
-  const separator = options.separator || '—';
-  const showYear = options.showYear !== false;
-
-  const monthNames = getMonthNames(format);
-
-  let fromDateTime = DateTime.fromISO(fromDate);
-  let toDateTime = DateTime.fromISO(toDate);
-
-  if (fromDateTime > toDateTime) {
-    [fromDateTime, toDateTime] = [toDateTime, fromDateTime];
-  }
-
-  const fromDay = fromDateTime.day;
-  const fromMonth = monthNames[fromDateTime.month - 1];
-  const fromYear = fromDateTime.year;
-  const toDay = toDateTime.day;
-
-  const dates = { from_day: fromDay, sep: separator };
-  let template;
-
-  if (fromDateTime.hasSame(toDateTime, 'day')) {
-    template = 'same_date';
-    Object.assign(dates, { month: fromMonth, year: fromYear });
-  } else if (fromDateTime.hasSame(toDateTime, 'month') && fromDateTime.hasSame(toDateTime, 'year')) {
-    template = 'same_month';
-    Object.assign(dates, { to_day: toDay, month: fromMonth, year: fromYear });
-  } else {
-    const toMonth = monthNames[toDateTime.month - 1];
-
-    Object.assign(dates, {
-      from_month: fromMonth,
-      to_month: toMonth,
-      to_day: toDay,
-    });
-
-    if (fromDateTime.hasSame(toDateTime, 'year')) {
-      template = 'different_months_same_year';
-      dates.year = fromYear;
-    } else {
-      const toYear = toDateTime.year;
-      template = 'different_years';
-      Object.assign(dates, { from_year: fromYear, to_year: toYear });
-    }
-  }
-
-  const withoutYear = I18n.t(`${scope}.${template}`, dates);
-
-  if (showYear && fromDateTime.hasSame(toDateTime, 'year')) {
-    return (
-      I18n.t(`${scope}.with_year`, {
-        date_range: withoutYear,
-        year: fromYear,
-        defaultValue: withoutYear,
-      }) || withoutYear
-    );
-  }
-  return withoutYear;
+  return Interval.fromDateTimes(DateTime.fromISO(fromDate), DateTime.fromISO(toDate)).toLocaleString({ month: 'short', day: '2-digit', year: 'numeric' }, options);
 }
