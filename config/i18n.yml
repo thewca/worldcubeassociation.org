@@ -75,3 +75,4 @@ translations:
       - "*.time_limit.*"
       - "*.users.edit.*"
       - "*.persons.index.*"
+      - "*.time_will_tell.*"
