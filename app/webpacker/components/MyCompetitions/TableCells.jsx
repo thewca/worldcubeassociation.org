@@ -3,6 +3,7 @@ import React from 'react';
 import I18n from '../../lib/i18n';
 import { competitionReportUrl, competitionReportEditUrl } from '../../lib/requests/routes.js.erb';
 import { countries } from '../../lib/wca-data.js.erb';
+import { dateRange } from '../../lib/utils/dates';
 
 export function NameTableCell({ competition }) {
   return (
@@ -26,9 +27,10 @@ export function LocationTableCell({ competition }) {
 }
 
 export function DateTableCell({ competition }) {
+  console.log(competition);
   return (
     <Table.Cell>
-      {competition.date_range}
+      {dateRange(competition.start_date, competition.end_date, { separator: '-' })}
     </Table.Cell>
   );
 }
