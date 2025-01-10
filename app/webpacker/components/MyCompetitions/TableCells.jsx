@@ -27,7 +27,6 @@ export function LocationTableCell({ competition }) {
 }
 
 export function DateTableCell({ competition }) {
-  console.log(competition);
   return (
     <Table.Cell>
       {dateRange(competition.start_date, competition.end_date, { separator: '-' })}
