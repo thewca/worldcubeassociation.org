@@ -297,8 +297,6 @@ export default function CompetingStep({
             warning
             list={formWarnings}
           />
-          {console.log("comp info")}
-          {console.log(competitionInfo)}
           <Form.Field required error={hasInteracted && selectedEvents.length === 0}>
             <EventSelector
               onEventSelection={handleEventSelection}
