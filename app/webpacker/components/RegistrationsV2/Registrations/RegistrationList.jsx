@@ -154,6 +154,7 @@ export default function RegistrationList({ competitionInfo }) {
                 {competitionInfo.event_ids.map((id) => (
                   <Table.HeaderCell
                     key={`registration-table-header-${id}`}
+                    onClick={() => setPsychSheetEvent(id)} // 3
                   >
                     <EventIcon id={id} size="1em" className="selected" />
                   </Table.HeaderCell>
