@@ -1,3 +1,4 @@
+import {countries} from "../wca-data.js.erb";
 function jsonToQueryString(json) {
   const jsonAfterRemovingUndefinedAndNull = Object.fromEntries(
     Object.entries(json).filter(([key, value]) => value !== null && value !== undefined)
@@ -292,4 +293,16 @@ export const bulkUpdateRegistrationUrl = `<%= CGI.unescape(Rails.application.rou
 
 export const paymentTicketUrl = (competitionId, donationIso) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v1_registrations_payment_ticket_path(competition_id: "${competitionId}", donation_iso: "${donationIso}")) %>`;
 
-export const rankingsUrl = (eventId, rankingType, year, region) => `<%= CGI.unescape(Rails.application.routes.url_helpers.rankings_path(event_id: "${eventId}", type: "${rankingType}")) %>`;
+export const rankingsUrl = (eventId, rankingType, region, gender) => {
+  const url = `<%= CGI.unescape(Rails.application.routes.url_helpers.rankings_path(event_id: "${eventId}", type: "${rankingType}")) %>`
+  const queryParams = new URLSearchParams();
+
+  if (region !== 'all') {
+    queryParams.append('region', region);
+  }
+
+  if (gender !== 'All') {
+    queryParams.append('gender', gender);
+  }
+  return `${url}?${queryParams.toString()}`
+};

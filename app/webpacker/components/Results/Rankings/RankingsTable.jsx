@@ -5,6 +5,7 @@ import I18n from '../../../lib/i18n';
 import { formatAttemptResult } from '../../../lib/wca-live/attempts';
 import CountryFlag from '../../wca/CountryFlag';
 import { countries } from '../../../lib/wca-data.js.erb';
+import { personUrl } from '../../../lib/requests/routes.js.erb';
 
 function ResultRow({
   result, competition, rank, isAverage,
@@ -17,9 +18,9 @@ function ResultRow({
   const country = countries.real.find((c) => c.id === result.countryId);
   return (
     <Table.Row>
-      <Table.Cell>{rank}</Table.Cell>
+      <Table.Cell textAlign="center">{rank}</Table.Cell>
       <Table.Cell>
-        <a href={`/person/${result.personId}`}>{result.personName}</a>
+        <a href={personUrl(result.personId)}>{result.personName}</a>
       </Table.Cell>
       <Table.Cell>
         {formatAttemptResult(result.value, result.eventId)}
@@ -75,7 +76,7 @@ export default function RankingsTable({ rows, competitionsById, isAverage }) {
   return (
     <Table basic="very" compact="very" singleLine striped>
       <Table.Header>
-        <Table.HeaderCell>#</Table.HeaderCell>
+        <Table.HeaderCell textAlign="center">#</Table.HeaderCell>
         <Table.HeaderCell>{I18n.t('results.table_elements.name')}</Table.HeaderCell>
         <Table.HeaderCell>{I18n.t('results.table_elements.result')}</Table.HeaderCell>
         <Table.HeaderCell textAlign="left">{I18n.t('results.table_elements.representing')}</Table.HeaderCell>

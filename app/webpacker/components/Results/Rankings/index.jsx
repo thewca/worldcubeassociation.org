@@ -40,25 +40,12 @@ export function Rankings({
   }), [event, gender, rankingType, region]);
 
   const { data, isFetching } = useQuery({
-    queryKey: ['rankings', event, region, rankingType],
-    queryFn: () => getRankings(event, rankingType, region),
+    queryKey: ['rankings', event, region, rankingType, gender],
+    queryFn: () => getRankings(event, rankingType, region, gender),
   });
 
   useEffect(() => {
-    const queryParams = new URLSearchParams();
-
-    if (region !== 'world') {
-      queryParams.append('region', region);
-    }
-    // if (year) {
-    //   queryParams.append('years', `only ${year}`);
-    // }
-    if (gender !== 'All') {
-      queryParams.append('gender', gender);
-    }
-
-    const newUrl = `${rankingsUrl(event, rankingType)}?${queryParams.toString()}`;
-    window.history.replaceState(null, '', newUrl);
+    window.history.replaceState(null, '', rankingsUrl(event, rankingType, region, gender));
   }, [event, region, rankingType, gender]);
 
   if (isFetching) {

@@ -32,7 +32,7 @@ class ResultsController < ApplicationController
     support_old_links!
 
     # Default params
-    params[:region] ||= REGION_WORLD
+    params[:region] ||= "all"
     params[:years] = YEARS_ALL # FIXME: this is disabling years filters for now
     params[:show] ||= SHOW_100_PERSONS
     params[:gender] ||= GENDER_ALL

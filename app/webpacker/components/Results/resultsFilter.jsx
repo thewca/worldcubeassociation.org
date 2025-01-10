@@ -4,11 +4,13 @@ import {
 } from 'semantic-ui-react';
 import { EventSelector } from '../wca/EventSelector';
 import { RegionSelector } from '../CompetitionsOverview/CompetitionsFilters';
+import { countries } from '../../lib/wca-data.js.erb';
 
 export default function ResultsFilter({ filterState }) {
   const {
     event, setEvent, region, setRegion, rankingType, setRankingType, gender, setGender,
   } = filterState;
+  const regionIso2 = countries.real.find((country) => country.id === region)?.iso2 ?? region;
   return (
     <Segment raised>
       <Form>
@@ -19,7 +21,10 @@ export default function ResultsFilter({ filterState }) {
             hideAllButton
             hideClearButton
           />
-          <RegionSelector region={region} dispatchFilter={({ region: r }) => setRegion(r)} />
+          <RegionSelector
+            region={regionIso2}
+            dispatchFilter={({ region: r }) => setRegion(countries.byIso2[r]?.id ?? r)}
+          />
         </Form.Field>
         <Form.Group>
           <Form.Field width={3}>
