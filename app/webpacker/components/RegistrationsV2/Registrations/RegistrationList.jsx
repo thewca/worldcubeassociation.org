@@ -31,13 +31,12 @@ export default function RegistrationList({ competitionInfo }) {
     retry: false,
   });
 
-  const [state, dispatch] = useReducer(sortReducer, {
+  const [{ sortColumn, sortDirection }, sortDispatch] = useReducer(sortReducer, {
     sortColumn: 'name',
     sortDirection: undefined,
   });
 
-  const { sortColumn, sortDirection } = state;
-  const changeSortColumn = (name) => dispatch({ type: 'CHANGE_SORT', sortColumn: name });
+  const changeSortColumn = (name) => sortDispatch({ type: 'CHANGE_SORT', sortColumn: name });
 
   const [psychSheetEvent, setPsychSheetEvent] = useState();
   const [psychSheetSortBy, setPsychSheetSortBy] = useState('single');
