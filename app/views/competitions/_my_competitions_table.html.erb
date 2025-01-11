@@ -51,7 +51,7 @@
               <% end %>
             </td>
             <td><%= competition.city_and_country %></td>
-            <td><%= wca_date_range(competition.start_date, competition.end_date) %></td>
+            <td><%= wca_date_range(competition.start_date, competition.end_date, locale: :en) %></td>
             <td>
               <% if registration %>
                 <%= ui_icon(registration.accepted? ? "calendar check" : "hourglass half") %>

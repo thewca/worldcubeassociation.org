@@ -3,7 +3,7 @@
     <dl class="dl-horizontal compact">
       <dt><%= t '.date' %></dt>
       <dd>
-        <%= wca_date_range(competition.start_date, competition.end_date) %>
+        <%= wca_date_range(competition.start_date, competition.end_date, locale: :en) %>
         <%= link_to(ui_icon("calendar plus"), competition_path(competition, format: :ics),
                     title: t('.add_to_calendar'),
                     data: {
