@@ -1170,6 +1170,7 @@ class Competition < ApplicationRecord
   # can registration edits be done right now
   # must be allowed in general, and if the deadline field exists, is it a date and in the future
   def registration_edits_allowed?
+    return false if started?
     self.allow_registration_edits &&
       (!has_event_change_deadline_date? || !event_change_deadline_date.present? || event_change_deadline_date > DateTime.now)
   end
