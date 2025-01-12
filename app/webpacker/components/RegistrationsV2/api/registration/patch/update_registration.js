@@ -1,5 +1,5 @@
 import fetchWithJWTToken from '../../../../../lib/requests/fetchWithJWTToken';
-import { bulkUpdateRegistrationUrl, updateRegistrationUrl } from '../../../../../lib/requests/routes.js.erb';
+import { bulkAutoAcceptRegistrationsUrl, bulkUpdateRegistrationUrl, updateRegistrationUrl } from '../../../../../lib/requests/routes.js.erb';
 
 export default async function updateRegistration(
   body,
@@ -29,3 +29,18 @@ export async function bulkUpdateRegistrations(
   });
   return data;
 }
+
+export async function bulkAutoAcceptRegistrations(
+  body,
+) {
+  console.log("Trying to bulk accept");
+  const route = bulkAutoAcceptRegistrationsUrl;
+  const { data } = await fetchWithJWTToken(route, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+  return data;
+}
+

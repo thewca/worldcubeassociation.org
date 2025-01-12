@@ -1,4 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { Button, Icon } from 'semantic-ui-react';
 import React, {
   useMemo, useReducer, useRef,
 } from 'react';
@@ -13,7 +14,7 @@ import { setMessage } from '../Register/RegistrationMessage';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
 import I18n from '../../../lib/i18n';
 import Loading from '../../Requests/Loading';
-import { bulkUpdateRegistrations } from '../api/registration/patch/update_registration';
+import { bulkAutoAcceptRegistrations, bulkUpdateRegistrations } from '../api/registration/patch/update_registration';
 import RegistrationAdministrationTable from './RegistrationsAdministrationTable';
 import useCheckboxState from '../../../lib/hooks/useCheckboxState';
 import { countries } from '../../../lib/wca-data.js.erb';
@@ -344,6 +345,18 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
           {pending.length}
           )
         </Header>
+
+        <Button
+          onClick={() => {
+            bulkAutoAcceptRegistrations()
+          }}
+        >
+          <Icon name="thumbs up" />
+          {' '}
+          {I18n.t('competitions.registration_v2.update.bulk_auto_accept')}
+        </Button>
+
+
         <RegistrationAdministrationTable
           columnsExpanded={expandedColumns}
           registrations={pending}

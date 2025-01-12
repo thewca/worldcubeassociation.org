@@ -7,7 +7,7 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
   # before_actions are triggered in the order they are defined
   before_action :validate_create_request, only: [:create]
   before_action :validate_show_registration, only: [:show]
-  before_action :validate_list_admin, only: [:list_admin]
+  before_action :validate_admin_action, only: [:list_admin, :bulk_auto_accept]
   before_action :validate_update_request, only: [:update]
   before_action :validate_bulk_update_request, only: [:bulk_update]
   before_action :validate_payment_ticket_request, only: [:payment_ticket]
@@ -26,6 +26,7 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
     Rails.logger.debug { "Bulk update was rejected with error #{e.errors} at #{e.backtrace[0]}" }
     render_error(e.status, e.errors)
   end
+
 
   def validate_show_registration
     @user_id, @competition_id = show_params
@@ -94,9 +95,8 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
   end
 
   # To list Registrations in the admin view you need to be able to administer the competition
-  def validate_list_admin
+  def validate_admin_action
     competition_id = list_params
-    # TODO: Do we set this as an instance variable here so we can use it below?
     @competition = Competition.find(competition_id)
     unless @current_user.can_manage_competition?(@competition)
       render_error(:unauthorized, ErrorCodes::USER_INSUFFICIENT_PERMISSIONS)
@@ -114,6 +114,11 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
       registration_payments: :receipt,
       registration_history_entries: :registration_history_changes,
     ).map { |r| r.to_v2_json(admin: true, history: true, pii: true) }
+  end
+
+  def bulk_auto_accept
+    Registration.bulk_auto_accept(@competition)
+    render json: { result: "success" }
   end
 
   def validate_payment_ticket_request
