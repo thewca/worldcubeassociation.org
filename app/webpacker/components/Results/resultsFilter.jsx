@@ -35,6 +35,7 @@ export default function ResultsFilter({ filterState, filterActions }) {
       <Form>
         <Form.Field>
           <EventSelector
+            title={I18n.t('results.selector_elements.events_selector.event')}
             selectedEvents={[event]}
             onEventSelection={({ eventId }) => setEvent(eventId)}
             hideAllButton
