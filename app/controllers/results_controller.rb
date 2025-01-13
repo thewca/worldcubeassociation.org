@@ -170,7 +170,7 @@ class ResultsController < ApplicationController
           if @is_by_region
             rows = compute_rankings_by_region(rows, @continent, @country)
           end
-          competitions_by_id = Competition.where(id: comp_ids).index_by(&:id).transform_values { |comp| comp.as_json(methods: %w[country cellName id], includes: [], only: []) }
+          competitions_by_id = Competition.where(id: comp_ids).index_by(&:id).transform_values { |comp| comp.as_json(methods: %w[country], include: [], only: %w[cellName id]) }
           {
             rows: rows.as_json, competitionsById: competitions_by_id
           }
