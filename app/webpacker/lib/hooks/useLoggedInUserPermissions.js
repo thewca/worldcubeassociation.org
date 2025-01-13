@@ -15,7 +15,6 @@ export default function useLoggedInUserPermissions() {
   const loggedInUserPermissions = React.useMemo(() => ({
     canViewDelegateAdminPage: Boolean(data?.can_view_delegate_admin_page.scope === '*'),
     canEditGroup: (groupId) => Boolean(data?.can_edit_groups.scope === '*' || data?.can_edit_groups.scope.includes(groupId)),
-    canAccessWfcSeniorMatters: Boolean(data?.can_access_wfc_senior_matters.scope === '*'),
   }), [data]);
 
   return { loggedInUserPermissions, loading };
