@@ -786,6 +786,9 @@ class User < ApplicationRecord
       can_access_panels: {
         scope: panels_with_access,
       },
+      can_request_to_edit_others_profile: {
+        scope: any_kind_of_delegate? ? "*" : [],
+      },
     }
     if banned?
       permissions[:can_attend_competitions][:scope] = []
