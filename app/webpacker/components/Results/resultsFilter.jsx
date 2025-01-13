@@ -38,7 +38,13 @@ export default function ResultsFilter({ filterState }) {
           />
           <RegionSelector
             region={regionIso2}
-            dispatchFilter={({ region: r }) => setRegion(countries.byIso2[r]?.id ?? r)}
+            dispatchFilter={({ region: r }) => {
+              if (r === 'all') {
+                setRegion('world');
+              } else {
+                setRegion(countries.byIso2[r]?.id ?? r);
+              }
+            }}
           />
         </Form.Field>
         <Form.Group>

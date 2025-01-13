@@ -115,7 +115,7 @@ export default function RankingsTable({
             </>
           )}
         </Table.Header>
-        <Table.Body>
+        <Table.Body key={show}>
           {results.map((r) => (
             <ResultRow
               country={r.country}
