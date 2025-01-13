@@ -168,9 +168,11 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
     require_can_manage!(competition)
     skip_schedule = params[:'skip-schedule']
     skip_schedule = ActiveRecord::Type::Boolean.new.cast(skip_schedule)
-    wcif = params.except("skip-schedule").permit!.to_h
+    skip_venue_details = params[:'skip-venue-details']
+    skip_venue_details = ActiveRecord::Type::Boolean.new.cast(skip_venue_details)
+    wcif = params.except("skip-schedule", "skip-venue-details").permit!.to_h
     wcif = wcif["_json"] || wcif
-    competition.set_wcif!(wcif, require_user!, skip_schedule: skip_schedule)
+    competition.set_wcif!(wcif, require_user!, skip_schedule: skip_schedule, skip_venue_details: skip_venue_details)
     render json: {
       status: "Successfully saved WCIF",
     }

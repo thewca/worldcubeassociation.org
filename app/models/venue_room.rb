@@ -53,8 +53,8 @@ class VenueRoom < ApplicationRecord
     }
   end
 
-  def load_wcif!(wcif, skip_schedule: false)
-    update!(VenueRoom.wcif_to_attributes(wcif))
+  def load_wcif!(wcif, skip_schedule: false, skip_venue_details: false)
+    update!(VenueRoom.wcif_to_attributes(wcif)) unless skip_venue_details
     unless skip_schedule
       new_activities = wcif["activities"].map do |activity_wcif|
         activity = schedule_activities.find { |a| a.wcif_id == activity_wcif["id"] } || schedule_activities.build
