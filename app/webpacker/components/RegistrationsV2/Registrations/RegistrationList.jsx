@@ -287,6 +287,8 @@ function FooterContent({
 }) {
   if (!registrations) return null;
 
+  const isPsychSheet = !isAllCompetitors
+
   const newcomerCount = registrations.filter(
     (reg) => !reg.user.wca_id,
   ).length;
@@ -309,7 +311,7 @@ function FooterContent({
 
   return (
     <Table.Row>
-      {!isAllCompetitors && (
+      {isPsychSheet && (
         // psych sheet position
         <Table.Cell />
       )}
