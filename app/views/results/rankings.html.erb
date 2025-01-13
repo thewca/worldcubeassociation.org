@@ -5,12 +5,5 @@
   <p><%= t("results.last_updated_html", timestamp: wca_local_time(@ranking_timestamp)) %></p>
   <p><i><%= t('results.filters_fixes_underway') %></i></p>
 
-  <%= react_component("Results/Rankings", {
-    event: params[:event_id],
-    region: params[:region],
-    rankingType: params[:type],
-    year: params[:year],
-    gender: params[:gender],
-    show: params[:show],
-  }) %>
+  <%= react_component("Results/Rankings") %>
 </div>

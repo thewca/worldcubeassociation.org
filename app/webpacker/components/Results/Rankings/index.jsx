@@ -1,5 +1,5 @@
 import React, {
-  useEffect, useMemo, useReducer, useState,
+  useEffect, useMemo, useReducer,
 } from 'react';
 import { Container } from 'semantic-ui-react';
 import { useQuery } from '@tanstack/react-query';
@@ -18,6 +18,31 @@ const ActionTypes = {
   SET_SHOW: 'SET_SHOW',
 };
 
+function parseInitialStateFromUrl(url) {
+  const urlPattern = /\/results\/rankings\/(\d+)\/(\w+)/; // Matches `/results/rankings/{event}/{rankingType}`
+  const match = url.match(urlPattern);
+
+  if (!match) {
+    throw new Error('URL does not match the expected pattern.');
+  }
+
+  const [, event, rankingType] = match; // Extract event and rankingType from regex groups
+
+  const urlObj = new URL(url);
+  const params = urlObj.searchParams;
+  const region = params.get('region') || 'world'; // Default to 'all' if not provided
+  const gender = params.get('gender') || 'All'; // Default to 'all' if not provided
+  const show = params.get('show') || '100 persons'; // Default to 'Persons' if not provided
+
+  return {
+    event,
+    region,
+    gender,
+    show,
+    rankingType,
+  };
+}
+
 function filterReducer(state, action) {
   switch (action.type) {
     case ActionTypes.SET_EVENT:
@@ -35,34 +60,17 @@ function filterReducer(state, action) {
   }
 }
 
-export default function Wrapper({
-  event, region, year, rankingType, gender, show,
-}) {
+export default function Wrapper() {
   return (
     <WCAQueryClientProvider>
-      <Rankings
-        initialEvent={event}
-        initialRegion={region}
-        initialYear={year}
-        initialRankingType={rankingType}
-        initialGender={gender}
-        initialShow={show}
-      />
+      <Rankings />
     </WCAQueryClientProvider>
   );
 }
 
-export function Rankings({
-  initialEvent, initialRegion, initialRankingType, initialGender, initialShow,
-}) {
+export function Rankings() {
   // Define the initial state
-  const initialState = useMemo(() => ({
-    event: initialEvent,
-    region: initialRegion,
-    rankingType: initialRankingType,
-    gender: initialGender,
-    show: initialShow,
-  }), [initialEvent, initialGender, initialRankingType, initialRegion, initialShow]);
+  const initialState = useMemo(() => parseInitialStateFromUrl(window.location.href), []);
 
   // Use the reducer
   const [filterState, dispatch] = useReducer(filterReducer, initialState);
