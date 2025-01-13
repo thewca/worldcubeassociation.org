@@ -257,7 +257,7 @@ class Competition < ApplicationRecord
   end
 
   def newcomers_competing_count
-    registrations.accepted.joins(:user).merge(User.newcomer).count
+    registrations.accepted.joins(:user).merge(User.newcomers).count
   end
 
   def newcomer_reserved_spots_remaining
