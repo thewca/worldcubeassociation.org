@@ -64,6 +64,12 @@ class User < ApplicationRecord
     end
   }
 
+  ANONYMOUS_ACCOUNT_EMAIL_ID_SUFFIX = '@worldcubeassociation.org'
+  ANONYMOUS_ACCOUNT_NAME = 'Anonymous'
+  ANONYMOUS_ACCOUNT_DOB = '1954-12-04'
+  ANONYMOUS_ACCOUNT_GENDER = 'o'
+  ANONYMOUS_ACCOUNT_COUNTRY_ISO2 = 'US'
+
   def self.eligible_voters
     [
       UserGroup.delegate_regions,

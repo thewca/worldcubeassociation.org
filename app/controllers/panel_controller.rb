@@ -7,14 +7,7 @@ class PanelController < ApplicationController
   before_action -> { redirect_to_root_unless_user(:has_permission?, 'can_access_panels', params[:panel_id].to_sym) }, only: [:index]
   before_action -> { redirect_to_root_unless_user(:has_permission?, 'can_access_panels', :staff) }, only: [:staff]
   before_action -> { redirect_to_root_unless_user(:has_permission?, 'can_access_panels', :admin) }, only: [:generate_db_token]
-  before_action -> { redirect_to_root_unless_user(:has_permission?, 'can_access_panels', :wrt) }, only: [:anonymize_user]
   before_action -> { redirect_to_root_unless_user(:can_access_senior_delegate_panel?) }, only: [:pending_claims_for_subordinate_delegates]
-
-  ANONYMOUS_ACCOUNT_EMAIL_ID_SUFFIX = '@worldcubeassociation.org'
-  ANONYMOUS_ACCOUNT_NAME = 'Anonymous'
-  ANONYMOUS_ACCOUNT_DOB = '1954-12-04'
-  ANONYMOUS_ACCOUNT_GENDER = 'o'
-  ANONYMOUS_ACCOUNT_COUNTRY_ISO2 = 'US'
 
   def pending_claims_for_subordinate_delegates
     # Show pending claims for a given user, or the current user, if they can see them
@@ -63,23 +56,5 @@ class PanelController < ApplicationController
 
     return head :unauthorized if panel_with_panel_page.nil?
     redirect_to panel_index_path(panel_id: panel_with_panel_page, anchor: panel_page_id)
-  end
-
-  def anonymize_user
-    user_id = params.require(:userId)
-    user = User.find(user_id)
-    user.update!(
-      email: user_id.to_s + ANONYMOUS_ACCOUNT_EMAIL_ID_SUFFIX,
-      name: ANONYMOUS_ACCOUNT_NAME,
-      wca_id: nil,
-      unconfirmed_wca_id: nil,
-      delegate_id_to_handle_wca_id_claim: nil,
-      dob: ANONYMOUS_ACCOUNT_DOB,
-      gender: ANONYMOUS_ACCOUNT_GENDER,
-      country_iso2: ANONYMOUS_ACCOUNT_COUNTRY_ISO2,
-      current_sign_in_ip: nil,
-      last_sign_in_ip: nil,
-    )
-    render json: { success: true }
   end
 end

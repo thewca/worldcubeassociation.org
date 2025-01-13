@@ -60,6 +60,7 @@ Rails.application.routes.draw do
   post 'users/:id/avatar' => 'users#upload_avatar'
   patch 'users/:id/avatar' => 'users#update_avatar'
   delete 'users/:id/avatar' => 'users#delete_avatar'
+  post 'users/:id/anonymize' => 'users#anonymize', as: :anonymize_user
   get 'admin/avatars/pending' => 'admin/avatars#pending_avatar_users', as: :pending_avatars
   post 'admin/avatars' => 'admin/avatars#update_avatar', as: :admin_update_avatar
 
@@ -188,7 +189,6 @@ Rails.application.routes.draw do
   scope 'panel' do
     get 'staff' => 'panel#staff', as: :panel_staff
     get 'generate_db_token' => 'panel#generate_db_token', as: :panel_generate_db_token
-    post 'anonymize_user' => 'panel#anonymize_user', as: :panel_anonymize_user
   end
   get 'panel/:panel_id' => 'panel#index', as: :panel_index
   get 'panel-page/:id' => 'panel#panel_page', as: :panel_page

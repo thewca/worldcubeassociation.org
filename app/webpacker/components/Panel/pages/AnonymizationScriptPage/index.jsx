@@ -1,32 +1,26 @@
-import React, { useState } from 'react';
-import { Message } from 'semantic-ui-react';
-import { IdWcaSearch } from '../../../SearchWidget/WcaSearch';
+import React from 'react';
+import WcaSearch from '../../../SearchWidget/WcaSearch';
 import SEARCH_MODELS from '../../../SearchWidget/SearchModel';
 import useInputState from '../../../../lib/hooks/useInputState';
-import AnonymizeUser from './AnonymizeUser';
+import AnonymizationTicketWorkbench from '../../../Tickets/TicketWorkbenches/AnonymizationTicketWorkbench';
 
 export default function AnonymizationScriptPage() {
-  const [userId, setUserId] = useInputState();
-  const [success, setSuccess] = useState();
+  const [user, setUser] = useInputState();
 
-  if (success) {
-    return <Message positive>Anonymization successful.</Message>;
-  }
-
-  return userId
+  return user
     ? (
-      <AnonymizeUser
-        userId={userId}
-        onSuccess={() => setSuccess(true)}
+      <AnonymizationTicketWorkbench
+        userId={user?.id}
+        wcaId={user?.item?.wca_id}
       />
     )
     : (
-      <IdWcaSearch
+      <WcaSearch
         label="Enter the user to anonymize"
         model={SEARCH_MODELS.user}
         multiple={false}
-        value={userId}
-        onChange={setUserId}
+        value={user}
+        onChange={setUser}
       />
     );
 }

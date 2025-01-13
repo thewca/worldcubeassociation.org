@@ -17,16 +17,10 @@ class Api::V0::UsersController < Api::V0::ApiController
   def show_users_by_id
     user_ids = params.require(:ids)
     users = User.where(id: user_ids)
-    private_attributes = []
-    if current_user && current_user.can_admin_results?
-      # These attributes are needed to check anonymization status during anonymization.
-      private_attributes = %w[dob email]
-    end
     render status: :ok, json: { users: users.as_json({
                                                        only: %w[id wca_id name gender country_iso2],
                                                        methods: ["country"],
                                                        include: [],
-                                                       private_attributes: private_attributes,
                                                      }) }
   end
 
