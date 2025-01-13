@@ -44,7 +44,7 @@ export default function ResultsFilter({ filterState }) {
         <Form.Group>
           <Form.Field width={3}>
             <label>{I18n.t('results.selector_elements.type_selector.type')}</label>
-            <ButtonGroup primary>
+            <ButtonGroup primary compact>
               <Button
                 active={rankingType === 'single'}
                 onClick={() => setRankingType('single')}
@@ -61,7 +61,7 @@ export default function ResultsFilter({ filterState }) {
           {/* </Form.Field> */}
           <Form.Field width={4}>
             <label>{I18n.t('results.selector_elements.gender_selector.gender')}</label>
-            <ButtonGroup color="teal">
+            <ButtonGroup color="teal" compact>
               <Button active={gender === 'All'} onClick={() => setGender('All')}>{I18n.t('results.selector_elements.gender_selector.gender_all')}</Button>
               <Button active={gender === 'Male'} onClick={() => setGender('Male')}>{I18n.t('results.selector_elements.gender_selector.male')}</Button>
               <Button active={gender === 'Female'} onClick={() => setGender('Female')}>{I18n.t('results.selector_elements.gender_selector.female')}</Button>
@@ -69,7 +69,7 @@ export default function ResultsFilter({ filterState }) {
           </Form.Field>
           <Form.Field width={2}>
             <label>{I18n.t('results.selector_elements.show_selector.show')}</label>
-            <ButtonGroup color="teal">
+            <ButtonGroup color="teal" compact>
               <Button active={show === '100 persons'} onClick={() => setShow('100 persons')}>{I18n.t('results.selector_elements.show_selector.persons')}</Button>
               <Button active={show === '100 results'} onClick={() => setShow('100 results')}>{I18n.t('results.selector_elements.show_selector.results')}</Button>
               <Button active={show === 'by region'} onClick={() => setShow('by region')}>{I18n.t('results.selector_elements.show_selector.by_region')}</Button>

@@ -99,27 +99,30 @@ export default function RankingsTable({
   }, [competitionsById, isAverage, rows, show]);
 
   return (
-    <Table basic="very" compact="very" singleLine striped>
-      <Table.Header>
-        {show !== 'by region' ? <Table.HeaderCell textAlign="center">#</Table.HeaderCell>
-          : <Table.HeaderCell>{I18n.t('results.table_elements.region')}</Table.HeaderCell>}
-        <Table.HeaderCell>{I18n.t('results.table_elements.name')}</Table.HeaderCell>
-        <Table.HeaderCell>{I18n.t('results.table_elements.result')}</Table.HeaderCell>
-        {show !== 'by region' && <Table.HeaderCell textAlign="left">{I18n.t('results.table_elements.representing')}</Table.HeaderCell>}
-        <Table.HeaderCell>{I18n.t('results.table_elements.competition')}</Table.HeaderCell>
-        {isAverage && (
-          <>
-            <Table.HeaderCell>{I18n.t('results.table_elements.solves')}</Table.HeaderCell>
-            <Table.HeaderCell />
-            <Table.HeaderCell />
-            <Table.HeaderCell />
-            <Table.HeaderCell />
-          </>
-        )}
-      </Table.Header>
-      <Table.Body>
-        {r}
-      </Table.Body>
-    </Table>
+    <div style={{ overflowX: 'scroll' }}>
+      <Table basic="very" compact="very" singleLine striped unstackable>
+        <Table.Header>
+          {show !== 'by region' ? <Table.HeaderCell textAlign="center">#</Table.HeaderCell>
+            : <Table.HeaderCell>{I18n.t('results.table_elements.region')}</Table.HeaderCell>}
+          <Table.HeaderCell>{I18n.t('results.table_elements.name')}</Table.HeaderCell>
+          <Table.HeaderCell>{I18n.t('results.table_elements.result')}</Table.HeaderCell>
+          {show !== 'by region'
+            && <Table.HeaderCell textAlign="left">{I18n.t('results.table_elements.representing')}</Table.HeaderCell>}
+          <Table.HeaderCell>{I18n.t('results.table_elements.competition')}</Table.HeaderCell>
+          {isAverage && (
+            <>
+              <Table.HeaderCell>{I18n.t('results.table_elements.solves')}</Table.HeaderCell>
+              <Table.HeaderCell />
+              <Table.HeaderCell />
+              <Table.HeaderCell />
+              <Table.HeaderCell />
+            </>
+          )}
+        </Table.Header>
+        <Table.Body>
+          {r}
+        </Table.Body>
+      </Table>
+    </div>
   );
 }

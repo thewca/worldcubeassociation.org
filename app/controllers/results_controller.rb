@@ -162,7 +162,7 @@ class ResultsController < ApplicationController
     @ranking_timestamp = ComputeAuxiliaryData.successful_start_date || Date.current
 
     respond_to do |format|
-      format.html
+      format.html {}
       format.json do
         cached_data = Rails.cache.fetch ["results-page-api", *@cache_params, @ranking_timestamp] do
           rows = DbHelper.execute_cached_query(@cache_params, @ranking_timestamp, @query)

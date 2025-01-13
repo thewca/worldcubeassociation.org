@@ -61,7 +61,7 @@ export function Rankings({
   }
 
   return (
-    <Container>
+    <Container fluid>
       <ResultsFilter filterState={filterState} />
       <RankingsTable
         competitionsById={data.competitionsById}
