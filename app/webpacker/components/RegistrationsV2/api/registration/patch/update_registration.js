@@ -30,11 +30,8 @@ export async function bulkUpdateRegistrations(
   return data;
 }
 
-export async function bulkAutoAcceptRegistrations(
-  body,
-) {
-  console.log("Trying to bulk accept");
-  const route = bulkAutoAcceptRegistrationsUrl;
+export async function bulkAutoAcceptRegistrations(competitionId) {
+  const route = bulkAutoAcceptRegistrationsUrl(competitionId);
   const { data } = await fetchWithJWTToken(route, {
     method: 'GET',
     headers: {

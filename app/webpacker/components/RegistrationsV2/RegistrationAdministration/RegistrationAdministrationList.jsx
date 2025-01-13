@@ -309,6 +309,37 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
     <Loading />
   ) : (
     <Segment loading={isMutating} style={{ overflowX: 'scroll' }}>
+
+      {console.log("comp info")}
+      {console.log(competitionInfo)}
+      { competitionInfo.auto_accept_registrations && (
+        <>
+          <Button
+            color="teal"
+            onClick={() => {
+              bulkAutoAcceptRegistrations(competitionInfo.id)
+            }}
+          >
+            <Icon name="thumbs up" />
+            {' '}
+            {I18n.t('competitions.registration_v2.update.bulk_auto_accept')}
+          </Button>
+
+          <Button
+            color="red"
+            onClick={() => {
+              bulkAutoAcceptRegistrations()
+            }}
+          >
+            <Icon name="ban" />
+            {' '}
+            {I18n.t('competitions.registration_v2.update.disable_bulk_auto_accept')}
+          </Button>
+        </>
+      )}
+
+
+
       <Form>
         <Form.Group widths="equal">
           {Object.entries(expandableColumns).map(([id, name]) => (
@@ -345,17 +376,6 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
           {pending.length}
           )
         </Header>
-
-        <Button
-          onClick={() => {
-            bulkAutoAcceptRegistrations()
-          }}
-        >
-          <Icon name="thumbs up" />
-          {' '}
-          {I18n.t('competitions.registration_v2.update.bulk_auto_accept')}
-        </Button>
-
 
         <RegistrationAdministrationTable
           columnsExpanded={expandedColumns}
