@@ -55,7 +55,7 @@ class Event < ApplicationRecord
   end
 
   def multiple_blindfolded?
-    self.id == "333mbf" || self.id == "333mbo"
+    ["333mbf", "333mbo"].include?(self.id)
   end
 
   def can_change_time_limit?
