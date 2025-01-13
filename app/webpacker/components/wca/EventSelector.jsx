@@ -29,16 +29,16 @@ export function EventSelector({
         {`${I18n.t('competitions.competition_form.events')}`}
         {showBreakBeforeButtons ? (<br />) : (' ')}
         {hideAllButton || (
-        <Popup
-          disabled={!Number.isFinite(maxEvents)}
-          trigger={
-            <span><Button disabled={disabled || eventList.length >= maxEvents} primary type="button" size="mini" id="select-all-events" onClick={() => onEventSelection({ type: 'select_all_events' })}>{I18n.t('competitions.index.all_events')}</Button></span>
-              }
-        >
-          {I18n.t('competitions.registration_v2.register.event_limit', {
-            max_events: maxEvents,
-          })}
-        </Popup>
+          <Popup
+            disabled={!Number.isFinite(maxEvents)}
+            trigger={
+              <span><Button disabled={disabled || eventList.length >= maxEvents} primary type="button" size="mini" id="select-all-events" onClick={() => onEventSelection({ type: 'select_all_events' })}>{I18n.t('competitions.index.all_events')}</Button></span>
+            }
+          >
+            {I18n.t('competitions.registration_v2.register.event_limit', {
+              max_events: maxEvents,
+            })}
+          </Popup>
         )}
         {hideClearButton || <Button disabled={disabled} type="button" size="mini" id="clear-all-events" onClick={() => onEventSelection({ type: 'clear_events' })}>{I18n.t('competitions.index.clear')}</Button>}
       </label>
