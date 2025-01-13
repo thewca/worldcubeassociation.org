@@ -31,7 +31,7 @@ class DelegateReport < ApplicationRecord
   end
 
   private def render_section_template(section)
-    ActionController::Base.new.render_to_string(template: "delegate_reports/#{self.version}/_#{section}_default", formats: :md)
+    ActionController::Base.render(template: "delegate_reports/#{self.version}/_#{section}_default", formats: :md)
   end
 
   before_create :md_section_defaults!
