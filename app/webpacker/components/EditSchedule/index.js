@@ -55,7 +55,7 @@ function EditSchedule({
     };
   }, [onUnload]);
 
-  const { saveWcif, saving } = useSaveWcifAction();
+  const { saveWcif, saving } = useSaveWcifAction({ skipVenueDetails: true });
 
   const save = useCallback(() => {
     saveWcif(
