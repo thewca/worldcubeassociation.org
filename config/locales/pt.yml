@@ -2439,6 +2439,10 @@ pt:
         pago.
       #original_hash: 92dde77
       payment_processing: 'O seu pagamento foi confirmado, mas a transação ainda está pendente.'
+      #original_hash: a8f253d
+      payment_partial: >-
+        O seu pagamento foi confirmado, mas não cobre o valor total. Por favor,
+        pague também o valor restante.
       #original_hash: 62d7351
       button_text: Pagar agora!
       hints:
@@ -2480,28 +2484,42 @@ pt:
         already_paid: O pagamento não foi realizado porque a taxa de registo já foi paga.
         #original_hash: f10c80c
         not_allowed: Não pode pagar para esse registo
-        #original_hash: a073600
-        stripe_failed: Por favor verifique a transação Stripe.
-        #original_hash: d571a4e
-        paypal_failed: Por favor verifique o pedido do PayPal.
+        #original_hash: 967eaed
+        cpi_disconnected: >-
+          Tentámos confirmar um pagamento, mas a integração do pagamento foi
+          desativada. Por favor entre em contacto com os organizadores da
+          competição.
+        generic:
+          #original_hash: 9896987
+          failed: 'Verifique a transação %{provider}.'
+          #original_hash: 715f918
+          not_found: '%{provider} reportou um ID de transação que não foi encontrado.'
+          #original_hash: d56a75d
+          intent_not_found: >-
+            %{provider} reportou-nos um ID de transação para o qual não temos
+            qualquer tentativa de pagamento registada.
+          #original_hash: 187a402
+          remote_not_found: >-
+            %{provider} não forneceu detalhes de API para o ID da transação que
+            reportou.
+          #original_hash: 3e7e6fc
+          secret_invalid: >-
+            %{provider} reportou um segredo de transação que não corresponde ao
+            registado nos nossos registos.
         #original_hash: df1a70e
         paypal_canceled: >-
           O PayPal informou que o pedido foi cancelado manualmente. Por favor,
           tente novamente.
-        #original_hash: a32e40f
-        stripe_not_found: O Stripe reportou um ID de transação que não foi encontrado.
-        #original_hash: aaa8ab7
-        stripe_secret_invalid: >-
-          O Stripe reportou um código secreto de transação que não corresponde
-          aos nossos registos.
-        #original_hash: f808249
-        stripe_not_an_intent: >-
-          Stripe reportou um ID de transação que não é realmente uma intenção de
-          pagamento.
         #original_hash: 8d1a199
         payment_reset: O pagamento foi rejeitado pelo Stripe.
         #original_hash: bcf6a93
         payment_pending: O pagamento ainda não foi concluído.
+        #original_hash: 4c5ef13
+        payment_failed: >-
+          O pagamento não foi bem-sucedido. Verifique os seus dados de pagamento
+          e tente novamente.
+        #original_hash: 7fb8be2
+        payment_canceled: O pagamento foi cancelado e não será concluído.
     #original_hash: 4cf01a2
     preferred_events_prompt_html: >-
       Para agilizar a inscrição no futuro, pode escolher os seus eventos
@@ -2659,9 +2677,9 @@ pt:
       results_posted: Resultados publicados com sucesso!
       #original_hash: afe3a23
       results_preview_alert: Está a visualizar resultados que ainda não foram publicados.
-      #original_hash: 07de612
+      #original_hash: 16dd227
       upload_results: >-
-        Esta competição já terminou, estamos a trabalhar para publicar os
+        Esta competição já terminou. Estamos a trabalhar para publicar os
         resultados o mais rápido possível!
       #original_hash: 68dd436
       computing_auxiliary_data: Por favor aguarde enquanto dados auxiliares são processados.
@@ -3017,6 +3035,10 @@ pt:
       from_date: De
       #original_hash: ae79ea1
       to_date: Para
+      #original_hash: 17fd5f4
+      show_filters: Mostrar Filtros
+      #original_hash: 0d781a3
+      hide_filters: Esconder Filtros
       #original_hash: 5be6985
       reset_filters: Limpar Filtros
       #original_hash: 52c30f8
@@ -3420,10 +3442,11 @@ pt:
           na página principal da competição. <br/>Preencha este formulário <b>em
           inglês</b> e em qualquer outro idioma que seus competidores falem.
         competitor_limit:
-          #original_hash: dc47c39
+          #original_hash: 945da5b
           enabled: >-
-            Embora não seja exigido pelos Regulamentos fornecer um limite de
-            competidores, é altamente recomendável fazê-lo.
+            É necessário estabelecer um Limite de Competidores. Apenas as
+            competições FMC simultâneas com múltiplos locais podem não ter
+            Limite de Competidores.
           #original_hash: b7b599b
           count: >-
             O número de competidores permitidos nesta competição. Por enquanto
@@ -3602,7 +3625,7 @@ pt:
           enabled:
             #original_hash: d9c05cc
             'true': Quero especificar um limite de competidores
-            #original_hash: 5b581b5
+            #original_hash: 53397ec
             'false': NÃO QUERO especificar um limite de competidores
         registration:
           allow_on_the_spot:
@@ -4147,12 +4170,14 @@ pt:
         qualification_html: >-
           Tempos de Qualificação têm que ser estabelecidos noutras competições
           da WCA para poder competir.
-        #original_hash: 51dfad5
-        qualification_all_events_html: 'Tempos de qualificação têm que ser definidos antes de  <b>%{date}</b>.'
-        #original_hash: 5eac9e5
+        #original_hash: 6ab548b
+        qualification_all_events_html: >-
+          Tempos de qualificação têm que ser definidos até <b>%{date}</b>
+          inclusivé.
+        #original_hash: b701c2a
         qualification_some_events_html: >-
-          Tempos de qualificação em %{events} têm que ser obtidos antes de
-          <b>%{date}</b>.
+          Tempos de qualificação em %{events} têm que ser obtidos até
+          <b>%{date}</b> inclusivé.
       #original_hash: 041a5de
       format: Formato
       #original_hash: 0d1fcc3

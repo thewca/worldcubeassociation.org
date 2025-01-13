@@ -2478,6 +2478,10 @@ pl:
       payment_processing: >-
         Twoja płatność została potwierdzona, ale transakcja wciąż ma status
         oczekującej.
+      #original_hash: a8f253d
+      payment_partial: >-
+        Twoja płatność została potwierdzona, ale nie pokrywa całej należności.
+        Prosimy o opłacenie reszty należnego wpisowego.
       #original_hash: 62d7351
       button_text: Zapłać teraz!
       hints:
@@ -2521,26 +2525,43 @@ pl:
           już dokonana.
         #original_hash: f10c80c
         not_allowed: Nie możesz opłacić tej rejestracji
-        #original_hash: a073600
-        stripe_failed: Prosimy sprawdź transakcję Stripe.
-        #original_hash: d571a4e
-        paypal_failed: Prosimy sprawdź zamówienie PayPal
+        #original_hash: 967eaed
+        cpi_disconnected: >-
+          Podjęliśmy próbę potwierdzenia płatności, ale integracja płatności na
+          stronie została wyłączona. Prosimy skontaktuj się z organizatorami.
+        generic:
+          #original_hash: 9896987
+          failed: 'Prosimy sprawdź transakcję %{provider}.'
+          #original_hash: 715f918
+          not_found: >-
+            %{provider} zwrócił ID transakcji które nie mogło zostać
+            odnalezione.
+          #original_hash: d56a75d
+          intent_not_found: >-
+            %{provider} zwrócił ID transakcji, dla której nie mamy zapisanej
+            próby zapłaty.
+          #original_hash: 187a402
+          remote_not_found: >-
+            %{provider} nie dostarczył szczegółów API dla zwróconego przez niego
+            ID transakcji.
+          #original_hash: 3e7e6fc
+          secret_invalid: >-
+            %{provider} zwrócił sekret transakcji który nie zgadza się z
+            posiadanymi przez nas danymi.
         #original_hash: df1a70e
         paypal_canceled: >-
           PayPal zwrócił informację, że zamówienie zostało anulowane ręcznie.
           Prosimy spróbuj ponownie.
-        #original_hash: a32e40f
-        stripe_not_found: 'Stripe zwrócił ID transakcji, które nie mogło zostać znalezione.'
-        #original_hash: aaa8ab7
-        stripe_secret_invalid: >-
-          Stripe zwrócił tajny kod transakcji, który nie zgadza się z naszymi
-          danymi.
-        #original_hash: f808249
-        stripe_not_an_intent: 'Stripe zwrócił ID transakcji, która nie jest zamiarem zapłaty.'
         #original_hash: 8d1a199
         payment_reset: Płatność została odrzucona przez Stripe.
         #original_hash: bcf6a93
         payment_pending: Płatność nie została jeszcze ukończona.
+        #original_hash: 4c5ef13
+        payment_failed: >-
+          Płatność nie powiodła się. Sprawdź swoje dane płatności i spróbuj
+          ponownie.
+        #original_hash: 7fb8be2
+        payment_canceled: Płatność została anulowana i nie będzie ukończona.
     #original_hash: 4cf01a2
     preferred_events_prompt_html: >-
       Aby przyspieszyć rejestrację w przyszłości, możesz ustawić swoje
@@ -2696,9 +2717,9 @@ pl:
       results_posted: Ogłaszanie wyników zakończone sukcesem!
       #original_hash: afe3a23
       results_preview_alert: 'Oglądasz wyniki, które nie zostały jeszcze wysłane.'
-      #original_hash: 07de612
+      #original_hash: 16dd227
       upload_results: >-
-        Zawody są zakończone, pracujemy nad przesłaniem wyników tak szybko jak
+        Zawody są zakończone. Pracujemy nad przesłaniem wyników tak szybko jak
         to możliwe!
       #original_hash: 68dd436
       computing_auxiliary_data: Poczekaj aż zakończy się obliczanie danych pomocniczych.
@@ -3072,6 +3093,10 @@ pl:
       from_date: Od
       #original_hash: ae79ea1
       to_date: Do
+      #original_hash: 17fd5f4
+      show_filters: Pokaż filtry
+      #original_hash: 0d781a3
+      hide_filters: Ukryj filtry
       #original_hash: 5be6985
       reset_filters: Zresetuj filtry
       #original_hash: 52c30f8
@@ -3470,10 +3495,10 @@ pl:
           tego <b>w języku angielskim</b> oraz jakichkolwiek innych językach
           używanych przez twoich zawodników.
         competitor_limit:
-          #original_hash: dc47c39
+          #original_hash: 945da5b
           enabled: >-
-            Pomimo że Regulamin nie wymaga określania limitu zawodników, jest to
-            wysoce wskazane.
+            Limit zawodników jest wymagany. Jedynie wielolokacyjne jednoczesne
+            zawody FMC mogą nie mieć limitu zawodników.
           #original_hash: b7b599b
           count: >-
             Liczba zawodników dopuszczona do udziału w zawodach. Obecnie ta
@@ -3657,7 +3682,7 @@ pl:
           enabled:
             #original_hash: d9c05cc
             'true': Chciałbym określić limit zawodników
-            #original_hash: 5b581b5
+            #original_hash: 53397ec
             'false': NIE chcę określać limitu zawodników
         registration:
           allow_on_the_spot:
@@ -4197,12 +4222,14 @@ pl:
         qualification_html: >-
           Czasy kwalifikacyjne muszą być ustanowione na innych zawodów WCA aby
           móc wystartować.
-        #original_hash: 51dfad5
-        qualification_all_events_html: 'Czasy kwalifikacyjne musza zostać ustanowione przed <b>%{date}</b>.'
-        #original_hash: 5eac9e5
-        qualification_some_events_html: >-
-          Czasy kwalifikacyjne w %{events} muszą zostać ustanowione do
+        #original_hash: 6ab548b
+        qualification_all_events_html: >-
+          Czasy kwalifikacyjne musza zostać ustanowione przed lub dnia
           <b>%{date}</b>.
+        #original_hash: b701c2a
+        qualification_some_events_html: >-
+          Czasy kwalifikacyjne w %{events} muszą zostać ustanowione do lub w
+          dniu <b>%{date}</b>.
       #original_hash: 041a5de
       format: Format
       #original_hash: 0d1fcc3

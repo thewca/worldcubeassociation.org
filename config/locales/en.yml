@@ -1365,7 +1365,7 @@ en:
       results_already_posted: "The results have already been posted."
       results_posted: "Successfully posted results!"
       results_preview_alert: "You are viewing results that have not been posted yet."
-      upload_results: "This competition is over, we are working to upload the results as soon as possible!"
+      upload_results: "This competition is over. We are working to upload the results as soon as possible!"
       computing_auxiliary_data: "Please wait until auxiliary data is computed."
       no_results: "There are no results."
       no_main_event_results: "There are no results for the main event (%{event_name})."
@@ -1533,6 +1533,8 @@ en:
         danger: "Danger"
       from_date: "From"
       to_date: "To"
+      show_filters: "Show Filters"
+      hide_filters: "Hide Filters"
       reset_filters: "Reset Filters"
       #context: selecting a specific year ('year' is a number)
       past_from: "Past from %{year}"
@@ -1727,7 +1729,7 @@ en:
           competition_ids: "<b>This field cannot be edited!</b><br/>To add competitions to this Series, you have to go to the individual 'Edit' pages of the competitions that you want to add."
         information: "Important information that competitors should know. It will be displayed on the competition main page. <br/>Please fill this out <b>in English</b> and whatever other languages your competitors speak."
         competitor_limit:
-          enabled: "Although it is not required by the Regulations to provide a competitor limit, it's highly recommended to do so."
+          enabled: "A Competitor Limit is required. Only simultaneous FMC competitions with multiple locations can have no Competitor Limit."
           count: "The number of competitors allowed in this competition. For now this number is informational only, and does not yet prevent more people from registering. We are working on adding explicit support for this to the registration flow, but it requires some other work first."
           reason: "What is the reason for the limit on competitors? Please fill this out in English!"
         staff:
@@ -1791,7 +1793,7 @@ en:
         competitor_limit:
           enabled:
             "true": "I want to specify a competitor limit"
-            "false": "I DON'T WANT to specify a competitor limit"
+            "false": "I DO NOT want to specify a competitor limit"
         registration:
           allow_on_the_spot:
             "true": "On the spot registrations will be accepted"
@@ -1956,7 +1958,7 @@ en:
       invalid_currency_code: "Selected currency code is invalid"
       advancement_condition_must_be_present_for_all_non_final_rounds: "must have an advancement condition to all non final rounds."
       registration_period_after_start: "Registration period cannot be after start date."
-      waiting_list_deadline_before_registration_close: "Wailting list deadline cannot be before registration close date."
+      waiting_list_deadline_before_registration_close: "Waiting list deadline cannot be before registration close date."
       waiting_list_deadline_before_refund_date: "Waiting list deadline cannot be before limit date for refunds."
       waiting_list_deadline_after_end: "Waiting list deadline must be before the competition ends."
       event_change_deadline_before_registration_close: "Deadline for updating events cannot be before registration close date."
@@ -2041,8 +2043,8 @@ en:
         cutoff_html: "The result to beat to proceed to the second phase of a cutoff round (see %{regulation_link})."
         format_html: "The format describes how to determine the ranking of competitors based on their results. The list of allowed formats per event is described in %{link_to_9b}. See %{link_to_9f} for a description of each format."
         qualification_html: "Qualification times must be set in other WCA competitions in order to compete."
-        qualification_all_events_html: "Qualification times must be set before <b>%{date}</b>."
-        qualification_some_events_html: "Qualification times in %{events} must be set before <b>%{date}</b>."
+        qualification_all_events_html: "Qualification times must be set on or before <b>%{date}</b>."
+        qualification_some_events_html: "Qualification times in %{events} must be set on or before <b>%{date}</b>."
       format: "Format"
       time_limit: "Time limit"
       cutoff: "Cutoff"

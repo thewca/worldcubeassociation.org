@@ -79,6 +79,27 @@ class PaypalRecord < ApplicationRecord
     result&.first || raise("No associated wca_status for paypal_status: #{self.paypal_status} - our tests should prevent this from happening!")
   end
 
+  def update_status(api_transaction)
+    # TODO: Can we extract error information from a PayPal API Order object?
+
+    self.update!(
+      paypal_status: api_transaction['status'],
+    )
+  end
+
+  def retrieve_paypal
+    case self.paypal_record_type
+    when PaypalRecord.paypal_record_types[:paypal_order]
+      PaypalInterface.retrieve_order(self.merchant_id, self.paypal_id)
+    when PaypalRecord.paypal_record_types[:capture]
+      PaypalInterface.retrieve_capture(self.merchant_id, self.paypal_id)
+    when PaypalRecord.paypal_record_types[:refund]
+      PaypalInterface.retrieve_refund(self.merchant_id, self.paypal_id)
+    end
+  end
+
+  alias_method :retrieve_remote, :retrieve_paypal
+
   def money_amount
     ruby_amount = PaypalRecord.amount_to_ruby(
       self.amount_paypal_denomination,
