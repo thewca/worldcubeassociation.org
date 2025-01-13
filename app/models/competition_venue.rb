@@ -22,11 +22,11 @@ class CompetitionVenue < ApplicationRecord
     Country.find_by_iso2(self.country_iso2)
   end
 
-  def load_wcif!(wcif)
+  def load_wcif!(wcif, skip_schedule: false)
     update!(CompetitionVenue.wcif_to_attributes(wcif))
     new_rooms = wcif["rooms"].map do |room_wcif|
       room = venue_rooms.find { |r| r.wcif_id == room_wcif["id"] } || venue_rooms.build
-      room.load_wcif!(room_wcif)
+      room.load_wcif!(room_wcif, skip_schedule: skip_schedule)
     end
     self.venue_rooms = new_rooms
     WcifExtension.update_wcif_extensions!(self, wcif["extensions"]) if wcif["extensions"]

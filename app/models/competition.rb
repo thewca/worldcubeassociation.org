@@ -1963,13 +1963,13 @@ class Competition < ApplicationRecord
     }
   end
 
-  def set_wcif!(wcif, current_user)
+  def set_wcif!(wcif, current_user, skip_schedule: false)
     JSON::Validator.validate!(Competition.wcif_json_schema, wcif)
 
     ActiveRecord::Base.transaction do
       set_wcif_series!(wcif["series"], current_user) if wcif["series"]
       set_wcif_events!(wcif["events"], current_user) if wcif["events"]
-      set_wcif_schedule!(wcif["schedule"], current_user) if wcif["schedule"]
+      set_wcif_schedule!(wcif["schedule"], current_user, skip_schedule: skip_schedule) if wcif["schedule"]
       update_persons_wcif!(wcif["persons"], current_user) if wcif["persons"]
       WcifExtension.update_wcif_extensions!(self, wcif["extensions"]) if wcif["extensions"]
       set_wcif_competitor_limit!(wcif["competitorLimit"], current_user) if wcif["competitorLimit"]
@@ -2134,7 +2134,7 @@ class Competition < ApplicationRecord
     Assignment.upsert_all(new_assignments) if new_assignments.any?
   end
 
-  def set_wcif_schedule!(wcif_schedule, current_user)
+  def set_wcif_schedule!(wcif_schedule, current_user, skip_schedule: false)
     if wcif_schedule["startDate"] != start_date.strftime("%F")
       raise WcaExceptions::BadApiParameter.new("Wrong start date for competition")
     elsif wcif_schedule["numberOfDays"] != number_of_days
@@ -2153,7 +2153,7 @@ class Competition < ApplicationRecord
       # using this find instead of ActiveRecord's find_or_create_by avoid several queries
       # (despite having the association included :()
       venue = competition_venues.find { |v| v.wcif_id == venue_wcif["id"] } || competition_venues.build
-      venue.load_wcif!(venue_wcif)
+      venue.load_wcif!(venue_wcif, skip_schedule: skip_schedule)
     end
     self.competition_venues = new_venues
 
