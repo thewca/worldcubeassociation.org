@@ -1,4 +1,3 @@
-import {countries} from "../wca-data.js.erb";
 function jsonToQueryString(json) {
   const jsonAfterRemovingUndefinedAndNull = Object.fromEntries(
     Object.entries(json).filter(([key, value]) => value !== null && value !== undefined)
