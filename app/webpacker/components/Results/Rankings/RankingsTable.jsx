@@ -18,15 +18,16 @@ function CountryCell({ country }) {
 }
 
 function ResultRow({
-  result, competition, rank, isAverage, show, country,
+  result, competition, rank, isAverage, show, country, key,
 }) {
-  const attempts = [result.value1, result.value2, result.value3, result.value4, result.value5];
+  const attempts = [result.value1, result.value2, result.value3, result.value4, result.value5]
+    .filter(Boolean);
   const bestResult = _.max(attempts);
   const worstResult = _.min(attempts);
   const bestResultIndex = attempts.indexOf(bestResult);
-  const worstResultIndex = attempts.findIndex((a) => a === worstResult);
+  const worstResultIndex = attempts.indexOf(worstResult);
   return (
-    <Table.Row>
+    <Table.Row key={key}>
       {show === 'by region' ? <CountryCell country={country} />
         : <Table.Cell textAlign="center">{rank}</Table.Cell> }
       <Table.Cell>
@@ -57,7 +58,7 @@ function ResultRow({
 export default function RankingsTable({
   rows, competitionsById, isAverage, show,
 }) {
-  const r = useMemo(() => {
+  const results = useMemo(() => {
     let rowsToMap = rows;
     let firstContinentIndex = 0;
     let firstCountryIndex = 0;
@@ -83,21 +84,16 @@ export default function RankingsTable({
       previousValue = value;
       previousRank = rank;
 
-      return (
-        <ResultRow
-          country={country}
-          key={result.id}
-          result={result}
-          competition={competition}
-          rank={rank}
-          tiedPrevious={tiedPrevious}
-          isAverage={isAverage}
-          show={show}
-        />
-      );
+      return {
+        result,
+        competition,
+        country,
+        rank,
+        tiedPrevious,
+        key: `${result.id}-${show}`,
+      };
     });
-  }, [competitionsById, isAverage, rows, show]);
-
+  }, [competitionsById, rows, show]);
   return (
     <div style={{ overflowX: 'scroll' }}>
       <Table basic="very" compact="very" singleLine striped unstackable>
@@ -120,7 +116,18 @@ export default function RankingsTable({
           )}
         </Table.Header>
         <Table.Body>
-          {r}
+          {results.map((r) => (
+            <ResultRow
+              country={r.country}
+              key={r.key}
+              result={r.result}
+              competition={r.competition}
+              rank={r.rank}
+              tiedPrevious={r.tiedPrevious}
+              isAverage={isAverage}
+              show={show}
+            />
+          ))}
         </Table.Body>
       </Table>
     </div>
