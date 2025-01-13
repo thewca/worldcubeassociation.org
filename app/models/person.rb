@@ -253,8 +253,16 @@ class Person < ApplicationRecord
     results.pluck("value1, value2, value3, value4, value5").flatten.count { |value| value > 0 }
   end
 
+  def competition_count
+    competitions.count
+  end
+
   def gender_visible?
     %w(m f).include? gender
+  end
+
+  def visible_gender
+    gender_visible? ? gender : nil
   end
 
   def self.search(query, params: {})
