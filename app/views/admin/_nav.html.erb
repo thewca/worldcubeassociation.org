@@ -15,8 +15,6 @@
         { text: "Merge people", path: admin_merge_people_path, fa_icon: "code branch" },
         { text: "Anonymize person", path: admin_anonymize_person_path, fa_icon: "id card" },
         { text: "Reassign connected wca id", path: admin_reassign_wca_id_path, fa_icon: "code branch" },
-        { text: "WCA all voting members", path: eligible_voters_path, fa_icon: "download" },
-        { text: "WCA leaders and seniors", path: leader_senior_voters_path, fa_icon: "download" },
         { text: "Server status", path: server_status_path, fa_icon: "info" },
       ].each do |nav_item| %>
         <%= link_to nav_item[:path], class: "list-group-item" + (current_page?(nav_item[:path]) ? ' active' : '') do %>

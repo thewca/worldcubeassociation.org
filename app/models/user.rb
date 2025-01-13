@@ -720,6 +720,7 @@ class User < ApplicationRecord
           panel_pages[:officersEditor],
           panel_pages[:regionsAdmin],
           panel_pages[:bannedCompetitors],
+          panel_pages[:downloadVoters],
         ],
       },
       leader: {
@@ -778,6 +779,9 @@ class User < ApplicationRecord
       },
       can_edit_delegate_report: {
         scope: can_admin_results? ? "*" : delegated_competition_ids,
+      },
+      can_edit_results: {
+        scope: results_team? || admin? ? "*" : [],
       },
       can_create_groups: {
         scope: groups_with_create_access,
