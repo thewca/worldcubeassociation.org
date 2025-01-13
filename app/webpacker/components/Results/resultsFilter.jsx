@@ -24,11 +24,7 @@ export default function ResultsFilter({ filterState }) {
     if (region === 'world') {
       return 'all';
     }
-    const iso2 = countries.real.find((country) => country.id === region)?.iso2;
-    if (iso2) {
-      return iso2;
-    }
-    return region;
+    return countries.real.find((country) => country.id === region)?.iso2 || region;
   }, [region]);
   return (
     <Segment raised>
