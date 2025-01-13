@@ -41,6 +41,27 @@ module ResultsValidators
       true
     end
 
+    def self.dob_validations(dob, competition_id = nil, **message_args)
+      validation_issues = []
+
+      # Check if DOB is January 1
+      if dob.month == 1 && dob.day == 1
+        validation_issues << ValidationWarning.new(:persons, competition_id, DOB_0101_WARNING, **message_args)
+      end
+
+      # Check if DOB is very young, competitor less than 3 years old are extremely rare, so we'd better check these birthdate are correct.
+      if dob.year >= Time.now.year - 3
+        validation_issues << ValidationWarning.new(:persons, competition_id, VERY_YOUNG_PERSON_WARNING, **message_args)
+      end
+
+      # Check if DOB is not so young
+      if dob.year <= Time.now.year - 100
+        validation_issues << ValidationWarning.new(:persons, competition_id, NOT_SO_YOUNG_PERSON_WARNING, **message_args)
+      end
+
+      validation_issues
+    end
+
     def run_validation(validator_data)
       validator_data.each do |competition_data|
         competition = competition_data.competition
@@ -74,26 +95,18 @@ module ResultsValidators
         end
         duplicate_newcomer_names = []
         without_wca_id.each do |p|
-          if p.dob.month == 1 && p.dob.day == 1
-            @warnings << ValidationWarning.new(:persons, competition.id,
-                                               DOB_0101_WARNING,
-                                               name: p.name)
-          end
           if p.gender.blank?
             @warnings << ValidationWarning.new(:persons, competition.id,
                                                EMPTY_GENDER_WARNING,
                                                name: p.name)
           end
-          # Competitor less than 3 years old are extremely rare, so we'd better check these birthdate are correct.
-          if p.dob.year >= Time.now.year - 3
-            @warnings << ValidationWarning.new(:persons, competition.id,
-                                               VERY_YOUNG_PERSON_WARNING,
-                                               name: p.name)
-          end
-          if p.dob.year <= Time.now.year - 100
-            @warnings << ValidationWarning.new(:persons, competition.id,
-                                               NOT_SO_YOUNG_PERSON_WARNING,
-                                               name: p.name)
+
+          PersonsValidator.dob_validations(p.dob, competition.id, name: p.name).each do |validation|
+            if validation.is_a?(ValidationError)
+              @errors << validation
+            elsif validation.is_a?(ValidationWarning)
+              @warnings << validation
+            end
           end
           # Look for double whitespaces or leading/trailing whitespaces.
           unless p.name.squeeze(" ").strip == p.name

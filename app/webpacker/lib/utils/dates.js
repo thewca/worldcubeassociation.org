@@ -1,5 +1,4 @@
-import { DateTime } from 'luxon';
-
+import { DateTime, Interval } from 'luxon';
 // parameter name conventions:
 // - `luxonDate` for luxon DateTime objects
 // - `date` for date-only ISO strings (no time)
@@ -24,6 +23,18 @@ export const addEndBufferWithinDay = (luxonDate) => {
     return luxonDate;
   }
   return buffered;
+};
+
+export const fullTimeDiff = (luxonDate) => {
+  const now = DateTime.local();
+
+  const diff = luxonDate.diff(now, ['days', 'hours', 'minutes', 'seconds']).toObject();
+  return {
+    days: Math.floor(diff.days),
+    hours: Math.floor(diff.hours),
+    minutes: Math.floor(diff.minutes),
+    seconds: Math.floor(diff.seconds),
+  };
 };
 
 /// / string parameters
@@ -108,3 +119,7 @@ export const todayWithTime = (dateTime, timeZone) => {
     millisecond: luxonDate.millisecond,
   });
 };
+
+export function dateRange(fromDate, toDate, options = {}) {
+  return Interval.fromDateTimes(DateTime.fromISO(fromDate), DateTime.fromISO(toDate)).toLocaleString({ month: 'short', day: '2-digit', year: 'numeric' }, options);
+}

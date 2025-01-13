@@ -92,9 +92,7 @@ class MysqlSettingsCheck < StatusCheck
   EXPECTED_MYSQL_SETTINGS = {
     "@@innodb_ft_min_token_size" => 2,
     "@@ft_min_word_len" => 2,
-    # The default server character set changed from latin1 to ut8mb4 in mysql 8.0, however our PHP didn't recognize it and failed to connect.
-    # We reverted it to latin1. The setting only affects the default charset for CREATE DATABASE statements that have no charset specified.
-    "@@character_set_server" => "latin1",
+    "@@character_set_server" => "utf8mb4",
   }.freeze
 
   def label

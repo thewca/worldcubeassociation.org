@@ -1,4 +1,4 @@
-@import "variables";
+@use "variables";
 
 .user-badge {
   margin: 4px !important;
@@ -12,13 +12,13 @@
 
   &.leader {
     .user-badge-subtext {
-      color: $dark-blue;
+      color: variables.$dark-blue;
     }
   }
 
   &.senior {
     .user-badge-subtext {
-      color: $dark-green;
+      color: variables.$dark-green;
     }
   }
 

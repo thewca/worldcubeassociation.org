@@ -51,6 +51,14 @@ Rails.configuration.to_prepare do
     end
   end
 
+  Hash.class_eval do
+    def merge_union(other = nil)
+      self.to_h do |key, value|
+        [key, value & (other&.fetch(key.to_s, []) || [])]
+      end
+    end
+  end
+
   ActiveSupport::Duration.class_eval do
     def in_seconds
       self.to_i
@@ -99,6 +107,15 @@ Rails.configuration.to_prepare do
         else
           ActiveRecord::SchemaMigration.table_name
         end
+      end
+    end
+  end
+  # Temporary fix until https://github.com/ruby-shoryuken/shoryuken/pull/777 or
+  # https://github.com/rails/rails/pull/53336 is merged
+  if Rails.env.production?
+    ActiveJob::QueueAdapters::ShoryukenAdapter.class_eval do
+      def enqueue_after_transaction_commit?
+        true
       end
     end
   end

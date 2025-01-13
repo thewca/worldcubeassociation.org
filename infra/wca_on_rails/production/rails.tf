@@ -25,6 +25,10 @@ locals {
       value = "https://assets.worldcubeassociation.org"
     },
     {
+      name = "WRC_WEBHOOK_URL",
+      value = var.WRC_WEBHOOK_URL
+    },
+    {
       name = "WCA_REGISTRATIONS_POLL_URL"
       value = "https://1rq8d7dif3.execute-api.us-west-2.amazonaws.com/v1/prod"
     },
@@ -73,8 +77,20 @@ locals {
       value = aws_s3_bucket.avatars.id
     },
     {
+      name = "S3_AVATARS_PRIVATE_BUCKET"
+      value = aws_s3_bucket.avatars_private.id
+    },
+    {
       name = "S3_AVATARS_ASSET_HOST"
       value = "https://avatars.worldcubeassociation.org"
+    },
+    {
+      name = "AVATARS_PUBLIC_STORAGE"
+      value = "s3_avatars_public"
+    },
+    {
+      name = "AVATARS_PRIVATE_STORAGE"
+      value = "s3_avatars_private"
     },
     {
       name = "CDN_AVATARS_DISTRIBUTION_ID"
@@ -99,6 +115,10 @@ locals {
     {
       name = "VAULT_ADDR"
       value = var.VAULT_ADDR
+    },
+    {
+      name = "REGISTRATION_QUEUE"
+      value = aws_sqs_queue.this.url
     },
     {
       name = "VAULT_APPLICATION"
@@ -172,7 +192,9 @@ data "aws_iam_policy_document" "task_policy" {
                   aws_s3_bucket.regulations.arn,
                   "${aws_s3_bucket.regulations.arn}/*",
                   aws_s3_bucket.assets.arn,
-                  "${aws_s3_bucket.assets.arn}/*"]
+                  "${aws_s3_bucket.assets.arn}/*",
+                    aws_s3_bucket.avatars_private.arn,
+                  "${aws_s3_bucket.avatars_private.arn}/*",]
     }
   statement {
     actions = [
@@ -186,6 +208,17 @@ data "aws_iam_policy_document" "task_policy" {
       "rds-db:connect",
     ]
     resources = ["arn:aws:rds-db:${var.region}:${var.shared.account_id}:dbuser:${var.rds_iam_identifier}/${var.DATABASE_WRT_USER}"]
+  }
+  statement {
+    effect = "Allow"
+    actions = [
+      "sqs:SendMessage",
+      "sqs:ReceiveMessage",
+      "sqs:DeleteMessage",
+      "sqs:GetQueueAttributes",
+      "sqs:GetQueueUrl"
+    ]
+    resources = [aws_sqs_queue.this.arn]
   }
 }
 

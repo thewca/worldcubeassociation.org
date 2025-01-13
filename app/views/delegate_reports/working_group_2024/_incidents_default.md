@@ -1,6 +1,6 @@
 [Common incidents are not necessary to report. Please give all incidents unique numbers/characters to identify them.]
 
-* **Incidents Requiring WRC/WDC Feedback**
+* **Incidents Requiring WRC/WIC Feedback**
 
 A1.
 

@@ -196,7 +196,7 @@ class CompetitionsController < ApplicationController
       @competitions = @competitions.select { |competition| competition.pending_results_or_report(days) }
     end
 
-    @enable_react = params[:legacy]&.to_s == 'off'
+    @disable_react = params[:legacy]&.to_s == 'on'
 
     respond_to do |format|
       format.html {}
@@ -285,7 +285,6 @@ class CompetitionsController < ApplicationController
       competitor_limit_enabled: true,
       base_entry_fee_lowest_denomination: 0,
       guests_entry_fee_lowest_denomination: 0,
-      uses_v2_registrations: true,
     )
 
     assign_editing_user(@competition)
@@ -775,7 +774,7 @@ class CompetitionsController < ApplicationController
       return render json: { error: "Already announced" }
     end
 
-    competition.update!(announced_at: Time.now, announced_by: current_user.id)
+    competition.update!(announced_at: Time.now, announced_by: current_user.id, showAtAll: true)
 
     competition.organizers.each do |organizer|
       CompetitionsMailer.notify_organizer_of_announced_competition(competition, organizer).deliver_later
@@ -842,21 +841,14 @@ class CompetitionsController < ApplicationController
   end
 
   def my_competitions
-    if Rails.env.production?
-      registrations_v2 = current_user.microservice_registrations
-    else
-      registrations_v2 = []
-    end
-
     ActiveRecord::Base.connected_to(role: :read_replica) do
       competition_ids = current_user.organized_competitions.pluck(:competition_id)
       competition_ids.concat(current_user.delegated_competitions.pluck(:competition_id))
       registrations = current_user.registrations.includes(:competition).accepted.reject { |r| r.competition.results_posted? }
+      registrations.concat(current_user.registrations.includes(:competition).waitlisted.select { |r| r.competition.upcoming? })
       registrations.concat(current_user.registrations.includes(:competition).pending.select { |r| r.competition.upcoming? })
-      # TODO: filter like above: accepted only if results not posted, pending only if upcoming
-      registrations.concat(registrations_v2)
       @registered_for_by_competition_id = registrations.uniq.to_h do |r|
-        [r.competition.id, r]
+        [r.competition_id, r.competing_status]
       end
       competition_ids.concat(@registered_for_by_competition_id.keys)
       if current_user.person
@@ -865,7 +857,7 @@ class CompetitionsController < ApplicationController
       # An organiser might still have duties to perform for a cancelled competition until the date of the competition has passed.
       # For example, mailing all competitors about the cancellation.
       # In general ensuring ease of access until it is certain that they won't need to frequently visit the page anymore.
-      competitions = Competition.includes(:delegate_report, :delegates)
+      competitions = Competition.includes(:delegate_report, :championships)
                                 .where(id: competition_ids.uniq).where("cancelled_at is null or end_date >= curdate()")
                                 .sort_by { |comp| comp.start_date || (Date.today + 20.year) }.reverse
       @past_competitions, @not_past_competitions = competitions.partition(&:is_probably_over?)

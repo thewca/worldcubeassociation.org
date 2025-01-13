@@ -27,6 +27,10 @@ module Locales
       flag_id: "eo",
       name: "Esperanto",
     },
+    eu: {
+      flag_id: "es-eu",
+      name: "Euskara",
+    },
     es: {
       flag_id: "es",
       name: "Español",

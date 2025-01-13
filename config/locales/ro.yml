@@ -2132,19 +2132,19 @@ ro:
       #original_hash: 51fa5a4
       wca_id_no_gender_html: >-
         Nu avem genul înregistrat pentru acest Id WCA. Te rugăm să trimiți un
-        e-mail către <a href='mailto:results@worldcubeassociation.org'
+        e-mail către <a href='%{wrt_contact_path}'
         target='_blank'>Echipa de Rezultate WCA</a> pentru a rezolva această
         problemă.
       #original_hash: 87ee245
       wca_id_no_citizenship_html: >-
         Nu avem cetățenia înregistrată pentru acest Id WCA. Te rugăm să trimiți
-        un e-mail către <a href='mailto:results@worldcubeassociation.org'
+        un e-mail către <a href='%{wrt_contact_path}'
         target='_blank'>Echipa de Rezultate WCA</a> pentru a rezolva această
         problemă.
       #original_hash: c3839bc
       wca_id_no_name_html: >-
         Nu avem numele înregistrat pentru acest Id WCA. Te rugăm să trimiți un
-        e-mail către <a href='mailto:results@worldcubeassociation.org'
+        e-mail către <a href='%{wrt_contact_path}'
         target='_blank'>Echipa de Rezultate WCA</a> pentru a rezolva această
         problemă.
       #original_hash: d02c03b

@@ -49,7 +49,7 @@ module ResultsValidators
 
       def check_main_event(competition)
         if competition.main_event
-          if competition.main_event_id != "333"
+          if competition.main_event_id != "333" && competition.events.size > 1
             @warnings << ValidationWarning.new(:events, competition.id,
                                                NOT_333_MAIN_EVENT_WARNING,
                                                main_event_id: competition.main_event_id)

@@ -7,12 +7,6 @@ class AdminController < ApplicationController
   before_action -> { redirect_to_root_unless_user(:can_admin_results?) }, except: [:all_voters, :leader_senior_voters]
   before_action -> { redirect_to_root_unless_user(:can_see_eligible_voters?) }, only: [:all_voters, :leader_senior_voters]
 
-  before_action :compute_navbar_data
-
-  def compute_navbar_data
-    @pending_avatars_count = User.where.not(pending_avatar: nil).count
-  end
-
   def index
   end
 
@@ -309,6 +303,11 @@ class AdminController < ApplicationController
     redirect_to admin_compute_auxiliary_data_path
   end
 
+  def reset_compute_auxiliary_data
+    ComputeAuxiliaryData.reset_error_state!
+    redirect_to admin_compute_auxiliary_data_path
+  end
+
   def generate_exports
   end
 
@@ -326,12 +325,15 @@ class AdminController < ApplicationController
     @check_records_request = CheckRegionalRecordsForm.new(
       competition_id: params[:competition_id] || nil,
       event_id: params[:event_id] || nil,
+      refresh_index: params[:refresh_index] || nil,
     )
+
+    @cad_timestamp = ComputeAuxiliaryData.successful_start_date&.to_fs || 'never'
   end
 
   def override_regional_records
     action_params = params.require(:check_regional_records_form)
-                          .permit(:competition_id, :event_id)
+                          .permit(:competition_id, :event_id, :refresh_index)
 
     @check_records_request = CheckRegionalRecordsForm.new(action_params)
     @check_results = @check_records_request.run_check

@@ -145,12 +145,15 @@ module ApplicationHelper
     options_for_select(years, selected_year)
   end
 
-  def region_option_tags(selected_id: nil, real_only: false, use_world: false)
-    regions = {
+  def region_options_hash(real_only: false)
+    {
       t('common.continent') => Continent.all_sorted_by(I18n.locale, real: real_only).map { |continent| [continent.name, continent.id] },
       t('common.country') => Country.all_sorted_by(I18n.locale, real: real_only).map { |country| [country.name, country.id] },
     }
+  end
 
+  def region_option_tags(selected_id: nil, real_only: false, use_world: false)
+    regions = region_options_hash(real_only: real_only)
     options_for_select((use_world ? [[t('common.world'), "world"]] : [[t('common.all_regions'), "all"]]), selected_id) + grouped_options_for_select(regions, selected_id)
   end
 

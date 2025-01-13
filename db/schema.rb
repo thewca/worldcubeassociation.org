@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_09_30_132809) do
+ActiveRecord::Schema[7.2].define(version: 2024_11_24_050607) do
   create_table "Competitions", id: { type: :string, limit: 32, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", limit: 50, default: "", null: false
     t.string "cityName", limit: 50, default: "", null: false
@@ -79,9 +79,9 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_30_132809) do
     t.integer "events_per_registration_limit"
     t.boolean "force_comment_in_registration"
     t.integer "posting_by"
-    t.boolean "uses_v2_registrations", default: false, null: false
     t.boolean "forbid_newcomers", default: false, null: false
     t.string "forbid_newcomers_reason"
+    t.integer "registration_version", default: 0, null: false
     t.index ["cancelled_at"], name: "index_Competitions_on_cancelled_at"
     t.index ["countryId"], name: "index_Competitions_on_countryId"
     t.index ["end_date"], name: "index_Competitions_on_end_date"
@@ -960,6 +960,18 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_30_132809) do
     t.index ["name"], name: "index_regional_organizations_on_name"
   end
 
+  create_table "regional_records_lookup", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.integer "resultId", null: false
+    t.string "countryId", null: false
+    t.string "eventId", null: false
+    t.date "competitionEndDate", null: false
+    t.integer "best", default: 0, null: false
+    t.integer "average", default: 0, null: false
+    t.index ["eventId", "countryId", "average", "competitionEndDate"], name: "idx_on_eventId_countryId_average_competitionEndDate_b424c59953"
+    t.index ["eventId", "countryId", "best", "competitionEndDate"], name: "idx_on_eventId_countryId_best_competitionEndDate_4e01b1ae38"
+    t.index ["resultId"], name: "index_regional_records_lookup_on_resultId"
+  end
+
   create_table "registration_competition_events", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.integer "registration_id"
     t.integer "competition_event_id"
@@ -970,7 +982,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_30_132809) do
   create_table "registration_history_changes", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "registration_history_entry_id"
     t.string "key"
-    t.string "value"
+    t.text "value"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["registration_history_entry_id"], name: "idx_on_registration_history_entry_id_e1e6e4bed0"
@@ -1018,8 +1030,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_30_132809) do
     t.text "roles"
     t.boolean "is_competing", default: true
     t.text "administrative_notes"
-    t.datetime "rejected_at"
-    t.datetime "waitlisted_at"
+    t.string "competing_status", default: "pending", null: false
     t.index ["competition_id", "user_id"], name: "index_registrations_on_competition_id_and_user_id", unique: true
     t.index ["competition_id"], name: "index_registrations_on_competition_id"
     t.index ["user_id"], name: "index_registrations_on_user_id"
@@ -1168,10 +1179,80 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_30_132809) do
     t.index ["stripe_record_id"], name: "index_stripe_webhook_events_on_stripe_record_id"
   end
 
+  create_table "ticket_logs", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.bigint "ticket_id", null: false
+    t.string "action_type", null: false
+    t.string "action_value"
+    t.integer "acting_user_id", null: false
+    t.bigint "acting_stakeholder_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["acting_stakeholder_id"], name: "index_ticket_logs_on_acting_stakeholder_id"
+    t.index ["acting_user_id"], name: "index_ticket_logs_on_acting_user_id"
+    t.index ["ticket_id"], name: "index_ticket_logs_on_ticket_id"
+  end
+
+  create_table "ticket_stakeholders", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.bigint "ticket_id", null: false
+    t.string "stakeholder_type", null: false
+    t.bigint "stakeholder_id", null: false
+    t.string "connection", null: false
+    t.boolean "is_active", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["stakeholder_type", "stakeholder_id"], name: "index_ticket_stakeholders_on_stakeholder"
+    t.index ["ticket_id"], name: "index_ticket_stakeholders_on_ticket_id"
+  end
+
+  create_table "tickets", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "metadata_type", null: false
+    t.bigint "metadata_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["metadata_type", "metadata_id"], name: "index_tickets_on_metadata"
+  end
+
+  create_table "tickets_edit_person", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "status", null: false
+    t.string "wca_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "tickets_edit_person_fields", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.bigint "tickets_edit_person_id", null: false
+    t.string "field_name", null: false
+    t.text "old_value", null: false
+    t.text "new_value", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["tickets_edit_person_id"], name: "index_tickets_edit_person_fields_on_tickets_edit_person_id"
+  end
+
   create_table "uploaded_jsons", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "competition_id"
     t.text "json_str", size: :long
     t.index ["competition_id"], name: "index_uploaded_jsons_on_competition_id"
+  end
+
+  create_table "user_avatars", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.integer "user_id"
+    t.string "filename"
+    t.string "status"
+    t.integer "thumbnail_crop_x"
+    t.integer "thumbnail_crop_y"
+    t.integer "thumbnail_crop_w"
+    t.integer "thumbnail_crop_h"
+    t.string "backend"
+    t.integer "approved_by"
+    t.datetime "approved_at", precision: nil
+    t.integer "revoked_by"
+    t.datetime "revoked_at", precision: nil
+    t.text "revocation_reason"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["status"], name: "index_user_avatars_on_status"
+    t.index ["user_id"], name: "index_user_avatars_on_user_id"
   end
 
   create_table "user_groups", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
@@ -1225,16 +1306,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_30_132809) do
     t.datetime "updated_at", precision: nil
     t.string "name", limit: 255
     t.string "wca_id"
-    t.string "avatar", limit: 255
-    t.string "pending_avatar", limit: 255
-    t.integer "saved_avatar_crop_x"
-    t.integer "saved_avatar_crop_y"
-    t.integer "saved_avatar_crop_w"
-    t.integer "saved_avatar_crop_h"
-    t.integer "saved_pending_avatar_crop_x"
-    t.integer "saved_pending_avatar_crop_y"
-    t.integer "saved_pending_avatar_crop_w"
-    t.integer "saved_pending_avatar_crop_h"
+    t.bigint "current_avatar_id"
+    t.bigint "pending_avatar_id"
     t.string "unconfirmed_wca_id", limit: 255
     t.integer "delegate_id_to_handle_wca_id_claim"
     t.date "dob"
@@ -1244,6 +1317,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_30_132809) do
     t.string "preferred_locale", limit: 255
     t.boolean "competition_notifications_enabled"
     t.boolean "receive_delegate_reports", default: false, null: false
+    t.string "delegate_reports_region_id"
+    t.string "delegate_reports_region_type"
     t.boolean "dummy_account", default: false, null: false
     t.integer "consumed_timestep"
     t.boolean "otp_required_for_login", default: false
@@ -1253,6 +1328,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_30_132809) do
     t.boolean "registration_notifications_enabled", default: false
     t.string "otp_secret"
     t.index ["delegate_id_to_handle_wca_id_claim"], name: "index_users_on_delegate_id_to_handle_wca_id_claim"
+    t.index ["delegate_reports_region_type", "delegate_reports_region_id"], name: "index_users_on_delegate_reports_region"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["wca_id"], name: "index_users_on_wca_id", unique: true
@@ -1283,7 +1359,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_30_132809) do
 
   create_table "waiting_lists", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "holder_type"
-    t.bigint "holder_id"
+    t.string "holder_id"
     t.json "entries"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -1318,16 +1394,20 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_30_132809) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
-  add_foreign_key "microservice_registrations", "Competitions", column: "competition_id"
+  add_foreign_key "microservice_registrations", "Competitions", column: "competition_id", on_update: :cascade, on_delete: :cascade
   add_foreign_key "microservice_registrations", "users"
   add_foreign_key "oauth_openid_requests", "oauth_access_grants", column: "access_grant_id", on_delete: :cascade
   add_foreign_key "payment_intents", "users", column: "initiated_by_id"
   add_foreign_key "paypal_records", "paypal_records", column: "parent_record_id"
+  add_foreign_key "regional_records_lookup", "Results", column: "resultId", on_update: :cascade, on_delete: :cascade
   add_foreign_key "registration_history_changes", "registration_history_entries"
   add_foreign_key "sanity_check_exclusions", "sanity_checks"
   add_foreign_key "sanity_checks", "sanity_check_categories"
   add_foreign_key "stripe_records", "stripe_records", column: "parent_record_id"
   add_foreign_key "stripe_webhook_events", "stripe_records"
+  add_foreign_key "ticket_logs", "ticket_stakeholders", column: "acting_stakeholder_id"
+  add_foreign_key "ticket_logs", "users", column: "acting_user_id"
+  add_foreign_key "user_avatars", "users"
   add_foreign_key "user_groups", "user_groups", column: "parent_group_id"
   add_foreign_key "user_roles", "user_groups", column: "group_id"
   add_foreign_key "user_roles", "users"

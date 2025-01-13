@@ -1951,17 +1951,17 @@ nl:
       #original_hash: 51fa5a4
       wca_id_no_gender_html: >-
         Voor deze WCA-id hebben we nog geen geslacht. Stuur een e-mail aan <a
-        href='mailto:results@worldcubeassociation.org'
+        href='%{wrt_contact_path}'
         target='_blank'>WCA-resultatenteam</a> om dit op te lossen.
       #original_hash: 87ee245
       wca_id_no_citizenship_html: >-
         Voor deze WCA-id hebben wij nog geen land gevuld. Stuur een e-mail aan
-        <a href='mailto:results@worldcubeassociation.org'
+        <a href='%{wrt_contact_path}'
         target='_blank'>WCA-resultatenteam</a> om dit op te lossen.
       #original_hash: c3839bc
       wca_id_no_name_html: >-
         Voor deze WCA-id hebben wij nog geen naam gevuld. Stuur een e-mail aan
-        <a href='mailto:results@worldcubeassociation.org'
+        <a href='%{wrt_contact_path}'
         target='_blank'>WCA-resultatenteam</a> om dit op te lossen.
       #original_hash: d02c03b
       avatar_requires_wca_id: vereist een toegekend WCA-id

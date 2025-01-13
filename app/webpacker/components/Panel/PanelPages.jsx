@@ -6,7 +6,7 @@ import {
   generateDbTokenUrl,
 } from '../../lib/requests/routes.js.erb';
 import PostingCompetitionsTable from '../PostingCompetitions';
-import EditPerson from './pages/EditPerson';
+import EditPersonPage from './pages/EditPersonPage';
 import BannedCompetitorsPage from './pages/BannedCompetitorsPage';
 import GroupsManagerAdmin from './pages/GroupsManagerAdmin';
 import Translators from './pages/Translators';
@@ -26,6 +26,8 @@ import OfficersEditor from './pages/OfficersEditor';
 import RegionsAdmin from './pages/RegionsAdmin';
 import RegionManager from './pages/RegionManager';
 import DownloadVoters from './pages/DownloadVoters';
+import ApprovePictures from './pages/ApprovePictures';
+import EditPersonRequestsPage from './pages/EditPersonRequestsPage';
 
 const DELEGATE_HANDBOOK_LINK = 'https://documents.worldcubeassociation.org/edudoc/delegate-handbook/delegate-handbook.pdf';
 
@@ -36,7 +38,7 @@ export default {
   },
   [PANEL_PAGES.editPerson]: {
     name: 'Edit Person',
-    component: EditPerson,
+    component: EditPersonPage,
   },
   [PANEL_PAGES.regionsManager]: {
     name: 'Regions Manager',
@@ -133,5 +135,13 @@ export default {
   [PANEL_PAGES.generateDbToken]: {
     name: 'Generate DB Token',
     link: generateDbTokenUrl,
+  },
+  [PANEL_PAGES.approveAvatars]: {
+    name: 'Approve Avatars',
+    component: ApprovePictures,
+  },
+  [PANEL_PAGES.editPersonRequests]: {
+    name: 'Edit Person Requests',
+    component: EditPersonRequestsPage,
   },
 };
