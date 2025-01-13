@@ -24,10 +24,10 @@ const competingStatusIcon = (competingStatus) => {
 
 const registrationStatusIconText = (competition) => {
   if (competition.registration_status === 'not_yet_opened') {
-    return I18n.t('competitions.index.tooltips.registration.opens_in', { duration: DateTime.fromISO(competition.registration_open).toRelative() });
+    return I18n.t('competitions.index.tooltips.registration.opens_in', { duration: DateTime.fromISO(competition.registration_open).toRelative({ locale: window.I18n.locale }) });
   }
   if (competition.registration_status === 'past') {
-    return I18n.t('competitions.index.tooltips.registration.closed', { days: DateTime.fromISO(competition.start_date).toRelative() });
+    return I18n.t('competitions.index.tooltips.registration.closed', { days: DateTime.fromISO(competition.start_date).toRelative({ locale: window.I18n.locale }) });
   }
   if (competition.registration_status === 'full') {
     return I18n.t('competitions.index.tooltips.registration.full');
@@ -67,7 +67,7 @@ export default function UpcomingCompetitionTable({
 
   return (
     <div style={{ overflowX: 'scroll' }}>
-      <Table basic unstackable singleLine>
+      <Table basic unstackable compact singleLine>
         <Table.Header>
           <Table.Row>
             { shouldShowRegistrationStatus && <Table.HeaderCell collapsing /> }

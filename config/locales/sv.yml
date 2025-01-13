@@ -885,17 +885,6 @@ sv:
         multiple: ''
         #original_hash: da39a3e
         question: ''
-      registration:
-        #original_hash: da39a3e
-        comments: ''
-        #original_hash: da39a3e
-        guests: ''
-        #original_hash: da39a3e
-        status: ''
-        #original_hash: 34ef763
-        administrative_notes: >-
-          Ytterligare kommentarer för hanteringen av den här anmälan. Dessa är
-          inte synliga för den tävlande.
       vote:
         #original_hash: da39a3e
         comment: ''
@@ -1050,7 +1039,7 @@ sv:
               Du försöker verifiera dig på WCA:s hemsida. Du har
               tvåfaktorsautentisering aktiverat och du begärde nyss att få ett
               engångslösenord via e-post. Det hittar du nedan:
-            #original_hash: e27e540
+            #original_hash: 8aeccbf
             disclaimer: >-
               Om du inte begärde autentiseringskoden, vänligen kontakta WST
               direkt genom att svara på det här e-postmeddelandet: du kan ha en
@@ -1407,6 +1396,8 @@ sv:
         wfc: WCA Financial Committee
         #original_hash: 2035811
         wmt: WCA Marketing Team
+        #original_hash: c90653c
+        wmct: WCA Major Championships Team
         #original_hash: 8f32116
         wqac: WCA Quality Assurance Committee
         #original_hash: 3da1e85
@@ -1467,6 +1458,12 @@ sv:
           Detta team ansvarar för att utveckla och förvalta WCA:s varumärke,
           söka sponsorer, stödja distributionen av WCA:s tävlingsutrustning och
           marknadsföra WCA:s merchandise.
+        #original_hash: e0dbf86
+        wmct: >-
+          WCA Major Championship Team övervakar samordningen och främjandet av
+          kontinentala mästerskap och världsmästerskap genom att utveckla
+          riktlinjer och strategiska planer, hantera valet av värdstad, stödja
+          arrangörsteam och säkerställa konsekventa mästerskapsupplevelser.
         #original_hash: 0171b3b
         wqac: >-
           Denna kommitté har till uppgift att stödja och främja kontinuerlig
@@ -1510,6 +1507,11 @@ sv:
         href=”/teams-committees-councils”>den här sidan</a>.
       #original_hash: ea20be0
       success_message: Mejl skickat - vi återkommer till dig inom kort.
+      #original_hash: 8fa6b95
+      prefilled: >-
+        För att uppdatera din anmälan måste du kontakta arrangörerna av
+        tävlingen. Vi har fyllt i kontaktformuläret med dina begärda ändringar -
+        vänligen skicka in formuläret.
       form:
         user_data:
           name:
@@ -1606,8 +1608,46 @@ sv:
         captcha:
           #original_hash: 58c1271
           validation_error: Verifiera att du inte är en robot.
+        #original_hash: bc98198
+        next_button: Nästa
         #original_hash: 2dacf65
         submit_button: Skicka in
+    contact_edit_profile:
+      #original_hash: 460577c
+      title: Redigera profil
+      #original_hash: f01c4c7
+      not_logged_in_error: >-
+        Det verkar som om du inte är inloggad. Vänligen logga in för att
+        redigera din profil. För alla andra frågor, vänligen <a
+        href="https://www.worldcubeassociation.org/contact?contactRecipient=wrt">kontakta
+        oss</a>.
+      #original_hash: 0afb595
+      no_profile_error: >-
+        Det ser ut som om du inte har någon WCA-profil ännu eftersom du inte har
+        deltagit i några tävlingar. För alla andra frågor, vänligen <a
+        href="https://www.worldcubeassociation.org/contact?contactRecipient=wrt">kontakta
+        oss</a>.
+      form:
+        contact_email:
+          #original_hash: 3142970
+          label: E-postadress för kontakt
+        wca_id:
+          #original_hash: 6344c9e
+          label: Ange WCA-ID
+        edit_reason:
+          #original_hash: fdfcccf
+          label: Anledning till ändringen
+        proof_attach:
+          #original_hash: a9645b1
+          label: Bifoga dokumentation
+        submit_edit_request_button:
+          #original_hash: ab529a9
+          label: Skicka in ändringsförfrågan
+        captcha:
+          #original_hash: 58c1271
+          validation_error: Vänligen verifiera att du inte är en robot.
+      #original_hash: 126541e
+      success_message: Begäran skickad - vi återkommer till dig inom kort.
   homepage:
     #original_hash: 824d76b
     learn_more: Läs mer
@@ -1869,7 +1909,7 @@ sv:
       confirm_new_email: >-
         För att ändra din e-postadress måste du bekräfta den nya e-postadressen
         innan den träder i kraft.
-      #original_hash: 8a770cf
+      #original_hash: ff43ee2
       pending_mail_confirmation: 'Detta konto väntar på att den nya e-postadressen %{email} ska bekräftas.'
       #original_hash: 0340b0b
       pending_avatar_confirmation: Detta konto väntar på att en ny profilbild ska bekräftas.
@@ -1919,7 +1959,7 @@ sv:
       guidelines_confirmation: >-
         Jag bekräftar att min profilbild uppfyller alla riktlinjer för
         profilbilder.
-      #original_hash: d677ceb
+      #original_hash: 9a85f5e
       confirm_guidelines: >-
         Se till att du läser riktlinjerna för profilbilder och skickar in en
         giltig bild.
@@ -1944,17 +1984,17 @@ sv:
         '1': Alla profilbilder ska vara bilder på riktiga personer.
         #original_hash: b12d293
         '2': Personen som visas måste vara du.
-        #original_hash: de9b742
+        #original_hash: 8165cf0
         '3': >-
-          Om det finns mer än en person på profilbilden bör det vara tydligt vem
-          av dem som är du.
+          Om det finns mer än en person i profilbilden bör det vara tydligt
+          vilken av dem som är du.
         #original_hash: 4083c00
         '4': 'Ditt huvud, men inte nödvändigtvis hela ansiktet, ska vara synligt.'
-        #original_hash: fc17fa7
+        #original_hash: 14c72b2
         '5': >-
-          Profilbilden bör inte innehålla tillagda texter, infogade bilder,
-          eller onaturliga filter, inklusive ramar.
-        #original_hash: cc5f23a
+          Profilbilden bör inte innehålla tillagd text, infogade bilder, eller
+          onaturliga filter, inklusive ramar.
+        #original_hash: 7f9c9c6
         '6': Profilbilden måste skickas in i rätt orientering.
         #original_hash: 1a18831
         '7': >-
@@ -1968,7 +2008,7 @@ sv:
           '1': >-
             Profilbilden måste visa ditt nuvarande jag, avbildad på samma sätt
             som du skulle se ut vid en tävling.
-          #original_hash: 64ded69
+          #original_hash: f1f3854
           '2': >-
             Profilbilden måste vara beskuren, vinklad, och upplyst, så att alla
             tävlande eller åskådare vid en tävling kan använda den för att
@@ -1980,7 +2020,7 @@ sv:
             Miniatyrbilden måste justeras så att du kan kännas igen från den och
             den måste innehålla ditt ansikte.
       sensitive:
-        #original_hash: 267ac87
+        #original_hash: 3f0a787
         info: >-
           Det här avsnittet gör det möjligt för dig att redigera känsliga data.
           För att göra det, bekräfta din identitet nedan.
@@ -1990,7 +2030,7 @@ sv:
         failure: Det gick inte att verifiera din identitet
         #original_hash: 4324c73
         confirm_proceed: Bekräfta och fortsätt
-        #original_hash: d395f1f
+        #original_hash: 10a90b7
         identity_error: >-
           Det går inte att redigera dina uppgifter. Bekräfta din identitet nedan
           innan du försöker igen.
@@ -2045,7 +2085,7 @@ sv:
         Vi har inte registrerat ett namn för detta WCA-ID. Vänligen kontakta <a
         href='%{wrt_contact_path}' target='_blank'>WCA Results Team</a> för att
         lösa detta.
-      #original_hash: 8f785ea
+      #original_hash: d2f4856
       email_used_by_locked_account_html: >-
         används redan av ett annat konto. Det har skapats automatiskt som ett
         resultat av att du anmält dig till en tävling via en extern tjänst. Om
@@ -2115,8 +2155,6 @@ sv:
       need_dob: Behöver ett födelsedatum
       #original_hash: aab7355
       need_country: Behöver en region
-      #original_hash: e0bb243
-      cannot_be_deleted_and_accepted: En anmälan kan inte raderas och godkännas samtidigt.
       #original_hash: 820bcf7
       must_register: Du måste anmäla dig till minst en gren.
       #original_hash: ef9b4ad
@@ -2160,31 +2198,8 @@ sv:
     flash:
       #original_hash: da7ec53
       not_using_wca: 'Denna tävling använder inte anmälan på WCA:s hemsida'
-      #original_hash: d528030
-      accepted_and_mailed:
-        zero: Anmälningar godkända! E-post skickade.
-        one: Anmälan godkänd! E-post skickat.
-        other: Anmälningar godkända! E-post skickade.
-      #original_hash: 42ea8de
-      rejected_and_mailed:
-        zero: Anmälningarna flyttade till väntelistan
-        one: Anmälan flyttad till väntelistan
-        other: Anmälningarna flyttade till väntelistan
-      #original_hash: a360b31
-      deleted_and_mailed:
-        zero: Anmälningarna raderade
-        one: Anmälan har raderats
-        other: Anmälningarna raderade
-      #original_hash: c3aa289
-      single_deletion_and_mail: 'Anmälan borttagen och e-post skickat till %{mail}'
-      #original_hash: d8f067f
-      cannot_delete: Du kan inte radera din anmälan.
       #original_hash: 82b3899
       updated: Anmälan uppdaterad
-      #original_hash: 856484a
-      failed: Det gick inte att uppdatera anmälan
-      #original_hash: 016b4ae
-      deleted: 'Din anmälan för %{comp} har raderats'
       #original_hash: 7707307
       registered: >-
         Anmälningsformuläret har skickats in - se till att följa alla
@@ -2279,16 +2294,10 @@ sv:
       email: E-post
       #original_hash: 7b2c7f1
       approve: Godkänn
-      #original_hash: 2b03b59
-      reject: Avvisa
-      #original_hash: f6fdbe4
-      delete: Radera
       #original_hash: 92d40dc
       waiting_list: Väntelista
       #original_hash: 06f7d1a
       approved_registrations: Godkända anmälningar
-      #original_hash: bff04e8
-      deleted_registrations: Raderade anmälningar
       #original_hash: e86b1e1
       non_competing: Icke-tävlande anmälningar
       #original_hash: ac5d958
@@ -2304,12 +2313,8 @@ sv:
       payment_completed_on: 'Betalning slutförd: %{date}'
       #original_hash: 3141a14
       series_registrations: Anmälan till tävlingsserie
-      #original_hash: 845bb47
-      series_registrations_hint_html: 'Tips: Vissa anmälningar visas som <i>%{description}</i>'
       #original_hash: b25928c
       total: Totalt
-      #original_hash: df036fe
-      n_events: Antal grenar
     new_registration:
       #original_hash: 8b9f726
       title: 'Anmäl dig till %{comp}'
@@ -2331,11 +2336,9 @@ sv:
     refund_confirmation: Är du säker på att du vill återbetala den här avgiften?
     #original_hash: a9af643
     update: Uppdatera anmälan
-    #original_hash: f6fdbe4
-    delete: Radera
     #original_hash: b72119a
     delete_confirm: Är du säker på att du vill radera din anmälan?
-    #original_hash: cfc4865
+    #original_hash: bbcc3dc
     delete_registration: Radera anmälan.
     #original_hash: e9ddc6e
     will_open_html: 'Anmälan öppnar om <strong>%{days}</strong> den %{time}.'
@@ -2394,26 +2397,28 @@ sv:
     entry_fees_fully_paid: 'Du har betalat %{paid}, vilket täcker hela anmälningsavgiften.'
     #original_hash: 2e5d1b9
     will_pay_here: Du betalar här efter att du har skickat in din anmälan
-    #original_hash: b7ef562
+    #original_hash: 86877d4
     wont_pay_here: Se tävlingens information för instruktioner om hur du betalar
-    #original_hash: be4b39d
-    not_qualified: Inte kvalificerad
     refund_form:
       hints:
-        #original_hash: d97186d
+        #original_hash: 38c904c
         refund_amount: >-
-          Beloppet som återbetalas till den tävlande kan vara vilket värde som
-          helst upp till det belopp som redan har betalats.
+          Beloppet som återbetalas till den tävlande. Det kan vara vilket värde
+          som helst upp till det belopp som redan har betalats.
       labels:
         #original_hash: 1cc5991
         refund_amount: Att återbetala
     payment_form:
       #original_hash: 4de825f
       title: Anmälningsavgift
-      #original_hash: d1569e6
+      #original_hash: 8897f02
       payment_successful: Din betalning lyckades och din anmälan bör stå som betald nedan.
       #original_hash: 92dde77
       payment_processing: 'Din betalning har bekräftats, men transaktionen är fortfarande pågående.'
+      #original_hash: a8f253d
+      payment_partial: >-
+        Din betalning har bekräftats, men den täcker inte hela beloppet.
+        Vänligen betala även den återstående avgiften.
       #original_hash: 62d7351
       button_text: Betala nu!
       hints:
@@ -2421,14 +2426,12 @@ sv:
         donation: >-
           Frivillig donation utöver anmälningsavgiften, som går till
           arrangörerna (för svenska tävlingar går dessa donationer till SveKub)
-        #original_hash: f7fa263
+        #original_hash: 737c228
         payment_button: >-
           Din betalningsinformation når aldrig WCA:s webbplats. Den skickas på
-          ett säkert sätt till Stripe som hanterar betalningsprocessen och
+          ett säkert sätt till Stripe, som hanterar betalningsprocessen och
           rapporterar tillbaka till oss.
       labels:
-        #original_hash: 4de825f
-        entry_fees: Anmälningsavgift
         #original_hash: dc9d458
         fees_paid: Betalat
         #original_hash: cc632b5
@@ -2441,8 +2444,6 @@ sv:
           svenska tävlingar tillfaller donationerna SveKub)
         #original_hash: 4930c06
         payment_information: Betalningsinformation
-        #original_hash: de0fc95
-        payment_button: Betala avgifter med Stripe
         #original_hash: f94d00f
         ajax_error: WCA server-error
         #original_hash: d9185e8
@@ -2450,47 +2451,54 @@ sv:
         #original_hash: 97f7359
         subtotal: Summa
       alerts:
-        #original_hash: a34940e
-        not_a_number: Ange ett giltigt belopp.
         #original_hash: 707b9ca
         amount_too_low: >-
           Det totala beloppet måste vara minst de anmälningsavgifter som ska
           betalas.
-        #original_hash: 5cf6ce2
+        #original_hash: b245028
         amount_rather_high: >-
           Du håller på att betala minst dubbelt så mycket som krävs för din
-          anmälan. Bekräfta betalningen genom att trycka på OK.
+          anmälan.
       errors:
         #original_hash: 166d48c
         already_paid: Avgiften drogs inte eftersom anmälningsavgiften redan har betalats.
         #original_hash: f10c80c
         not_allowed: Du kan inte betala för den anmälan.
-        #original_hash: a073600
-        stripe_failed: Var vänlig kontrollera Stripe-transaktionen
-        #original_hash: d571a4e
-        paypal_failed: Vänligen kontrollera PayPal-ordern.
+        #original_hash: 967eaed
+        cpi_disconnected: >-
+          Försökte bekräfta en betalning men betalningsintegrationen var
+          inaktiverad. Vänligen kontakta arrangörerna av tävlingen.
+        generic:
+          #original_hash: 9896987
+          failed: 'Vänligen kontrollera %{provider}-transaktionen.'
+          #original_hash: 715f918
+          not_found: >-
+            %{provider} rapporterade tillbaka ett transaktions-ID som inte kunde
+            hittas.
+          #original_hash: d56a75d
+          intent_not_found: >-
+            %{provider} rapporterade tillbaka ett transaktions-ID som inte
+            matchar något betalningsförsök vi har registrerat.
+          #original_hash: 187a402
+          remote_not_found: >-
+            %{provider} kunde inte tillhandahålla API-detaljer för det
+            transaktions-ID som rapporterades.
+          #original_hash: 3e7e6fc
+          secret_invalid: >-
+            %{provider} rapporterade tillbaka en transaction secret som inte
+            stämmer överens med våra uppgifter.
         #original_hash: df1a70e
         paypal_canceled: PayPal rapporterade att ordern avbröts manuellt. Vänligen försök igen.
-        #original_hash: a32e40f
-        stripe_not_found: >-
-          Stripe rapporterade tillbaka ett transaktions-ID som inte kunde
-          hittas.
-        #original_hash: aaa8ab7
-        stripe_secret_invalid: >-
-          Stripe rapporterade tillbaka en transaction secret som inte matchar
-          våra uppgifter.
-        #original_hash: f808249
-        stripe_not_an_intent: >-
-          Stripe rapporterade tillbaka ett transaktions-ID som inte är ett
-          payment intent.
         #original_hash: 8d1a199
         payment_reset: Betalningen avvisades av Stripe.
         #original_hash: bcf6a93
         payment_pending: Betalningen har inte genomförts ännu.
-        #original_hash: c3f8d65
-        registration_unreachable: >-
-          Det uppstod ett problem med anmälningstjänsten, vänligen kontakta
-          Software Team.
+        #original_hash: 4c5ef13
+        payment_failed: >-
+          Betalningen gick inte igenom. Vänligen kontrollera dina
+          betalningsuppgifter och försök igen.
+        #original_hash: 7fb8be2
+        payment_canceled: Betalningen avbröts och kommer inte att slutföras.
     #original_hash: 4cf01a2
     preferred_events_prompt_html: >-
       För att göra anmälan snabbare i framtiden kan du välja dina favoritgrenar
@@ -2502,9 +2510,9 @@ sv:
     import:
       #original_hash: 5a394f3
       title: 'Importera anmälningar för %{comp}'
-      #original_hash: ccda564
+      #original_hash: 620f5ce
       info: >-
-        Du kan importera anmälningar flera gånger, ändringar kommer att
+        Du kan importera anmälningar flera gånger. Ändringar kommer att
         identifieras och databasen uppdateras därefter.
       #original_hash: 779b272
       registrations_file_label: Anmälningsfilen
@@ -2574,19 +2582,19 @@ sv:
         börjar med en stor bokstav.
       #original_hash: 1a20fae
       must_have_events: Lägg till minst en gren innan ni bekräftar tävlingen.
-      #original_hash: a3aea56
+      #original_hash: fd91320
       schedule_must_match_rounds: >-
         Se till att tävlingen har minst en omgång per gren och att schemat ni
         skapat innehåller alla de omgångar ni angett innan ni bekräftade
         tävlingen.
-      #original_hash: aeb5f2a
+      #original_hash: 4fe4dee
       advancement_condition_must_be_present_for_all_non_final_rounds: >-
         Se till att alla icke-finalomgångar har ett specificerat villkor för
         vilka som går vidare.
-      #original_hash: f50ffd8
+      #original_hash: a00f441
       cutoff_is_greater_than_time_limit: >-
         Omgång %{round_number} i %{event} har en cutoff som är högre än
-        tidsgränsen, vänligen se till att cutoffen inte är högre än tidsgränsen.
+        tidsgränsen. Vänligen se till att cutoffen inte är högre än tidsgränsen.
       #original_hash: c1580b1
       cutoff_is_too_fast: >-
         Omgång %{round_number} i %{event} har en cutoff under 5 sekunder.
@@ -2605,7 +2613,7 @@ sv:
         Vänligen kontrollera att det är korrekt.
       #original_hash: e390250
       create_success: Ny tävling skapad!
-      #original_hash: bc3e673
+      #original_hash: 5e1ea86
       registration_payment_info: >-
         Den här tävlingen har anmälningsavgifter men inget Stripe-konto är
         anslutet. Kom ihåg att ansluta ditt Stripe-konto om du använder Stripe
@@ -2637,9 +2645,9 @@ sv:
       results_posted: Resultat publicerade!
       #original_hash: afe3a23
       results_preview_alert: Du ser resultat som inte har publicerats ännu.
-      #original_hash: 07de612
+      #original_hash: 16dd227
       upload_results: >-
-        Tävlingen är över, vi arbetar med att ladda upp resultaten så snart som
+        Tävlingen är över. Vi arbetar med att ladda upp resultaten så snart som
         möjligt!
       #original_hash: 68dd436
       computing_auxiliary_data: Vänta tills hjälpdata beräknas.
@@ -2661,13 +2669,13 @@ sv:
       registration_already_closed: >-
         Deadline för anmälan har redan passerat. Vänligen ange en framtida
         tidpunkt.
-      #original_hash: 9a07b42
-      uses_v2_registrations: >-
-        Denna tävling använder det nya anmälningssystemet. Vänligen kontakta
-        WCAT om du vill att den här tävlingen ska använda det gamla systemet
-        istället.
       #original_hash: 3322400
       tooltip_registered: Du är anmäld.
+      #original_hash: b10c8d6
+      tooltip_pending: >-
+        Din registrering väntar på manuellt godkännande. Vänligen se till att du
+        har följt alla instruktioner (t.ex. betalning) som anges på
+        tävlingssidan.
       #original_hash: f2d092f
       tooltip_waiting_list: Du är för närvarande på väntelistan.
       #original_hash: f97246a
@@ -2684,7 +2692,7 @@ sv:
       not_confirmed_not_visible: Tävlingen är inte bekräftad och inte synlig.
       #original_hash: 1b92d16
       championship_exists: 'Det finns redan ett %{championship_type} för %{year}.'
-      #original_hash: 0644bdc
+      #original_hash: e871f03
       orga_closed_reg_success: Anmälan har stängts.
       #original_hash: 7f197a0
       orga_closed_reg_failure: Kunde inte stänga anmälan.
@@ -2992,6 +3000,10 @@ sv:
       from_date: Från
       #original_hash: ae79ea1
       to_date: Till
+      #original_hash: 17fd5f4
+      show_filters: Visa filter
+      #original_hash: 0d781a3
+      hide_filters: Göm filter
       #original_hash: 5be6985
       reset_filters: Nollställ filter
       #original_hash: 52c30f8
@@ -3390,10 +3402,10 @@ sv:
           tävlingens huvudsida. <br/>Vänligen fyll i detta <b>på engelska</b>
           och eventuella ytterligare språk som de tävlande talar.
         competitor_limit:
-          #original_hash: dc47c39
+          #original_hash: 945da5b
           enabled: >-
-            Även om en gräns för antalet tävlande inte krävs av reglerna är det
-            starkt rekommenderat.
+            En gräns för antalet tävlande krävs. Endast FMC-tävlingar med flera
+            platser kan skickas in utan någon gräns.
           #original_hash: b7b599b
           count: >-
             Antalet tävlande som tillåts på denna tävling. För närvarande är
@@ -3565,7 +3577,7 @@ sv:
           enabled:
             #original_hash: d9c05cc
             'true': Jag vill ange en gräns för antalet tävlande
-            #original_hash: 5b581b5
+            #original_hash: 53397ec
             'false': Jag VILL INTE ange en gräns för antalet tävlande
         registration:
           allow_on_the_spot:
@@ -3653,6 +3665,12 @@ sv:
           title: Avslagna anmälningar
           #original_hash: 3fd2e0c
           information: Tävlande med avslagna anmälningar kan inte anmäla sig igen.
+        pending:
+          #original_hash: f3656e1
+          information: >-
+            Ohanterade bör endast användas för ofullständiga (t.ex. obetalda)
+            anmälningar - använd väntelistan om din tävling är för full för att
+            ta emot nya deltagare.
         payment:
           #original_hash: d6fbc7a
           refunded_status: Återbetalad
@@ -3687,6 +3705,20 @@ sv:
         being_deleted: Anmälan raderas...
         #original_hash: cbf13af
         update_confirm: Är du säker på att du vill uppdatera din anmälan?
+        #original_hash: 9b92912
+        update_confirm_contact: >-
+          Du behöver kontakta arrangörerna för att uppdatera din anmälan, klicka
+          på Ja för att komma till kontaktformuläret.
+        #original_hash: d54056b
+        delete_confirm_contact: >-
+          Du behöver kontakta arrangörerna för att radera din anmälan, klicka på
+          Ja för att komma till kontaktformuläret.
+        #original_hash: 7fbb20c
+        update_contact_message: >-
+          Jag skulle vilja uppdatera mina anmälningsuppgifter enligt följande:
+          %{update_params}
+        #original_hash: 8bf02a9
+        delete_contact_message: Jag vill radera min anmälan
         #original_hash: 65bbb07
         no_changes: Det finns inga ändringar
         #original_hash: be4e8e2
@@ -3768,8 +3800,10 @@ sv:
         disclaimer: Inskickande av anmälan innebär inte godkännande att tävla
         #original_hash: 8fe68a1
         processing: Din anmälan hanteras...
-        #original_hash: 897f272
-        processing_longer: 'Hanteringen tar längre tid än vanligt, lämna inte sidan!'
+        #original_hash: c7f124a
+        processing_longer: >-
+          Din anmälan har tagits emot och kommer att behandlas inom kort - det
+          kan ta en stund om våra servrar är hårt belastade.
         #original_hash: 79ba42a
         processing_queue: 'Många anmälningar hanteras just nu, %{queueCount} i kö.'
         #original_hash: ff6550f
@@ -3836,6 +3870,8 @@ sv:
         '-4011': Du kan endast acceptera den första personen på väntelistan
         #original_hash: 8d089d6
         '-4012': Du är inte kvalificerad att delta i de valda grenarna
+        #original_hash: a244fde
+        '-4014': Du är redan anmäld till den här tävlingen.
         #original_hash: 0df821f
         '-6001': WCA-betalning är inte aktiverad för denna tävling
         #original_hash: 092da51
@@ -4057,11 +4093,11 @@ sv:
         qualification_html: >-
           Kvalificeringstider måste uppnås på andra WCA-tävlingar för att få
           tävla.
-        #original_hash: 51dfad5
-        qualification_all_events_html: 'Kvalificeringstider måste vara uppnådda före <b>%{date}</b>.'
-        #original_hash: 5eac9e5
+        #original_hash: 6ab548b
+        qualification_all_events_html: 'Kvalificeringstider måste vara uppnådda på eller före <b>%{date}</b>.'
+        #original_hash: b701c2a
         qualification_some_events_html: >-
-          Kvalificeringstider för %{events} måste vara uppnådda före
+          Kvalificeringstider för %{events} måste vara uppnådda på eller före
           <b>%{date}</b>.
       #original_hash: 041a5de
       format: Format
@@ -4383,7 +4419,7 @@ sv:
       account_connected: >-
         Du har anslutit ditt %{provider}-konto och kan nu ta emot
         anmälningsavgifter för den här tävlingen.
-      #original_hash: 18d1326
+      #original_hash: b83891e
       account_disconnected_success: '%{provider}-konto bortkopplat.'
       #original_hash: 6b934e2
       account_disconnected_failure: 'Det uppstod ett fel vid frånkopplingen av %{provider}-kontot.'
@@ -4774,14 +4810,14 @@ sv:
     mission_footer: 'WCA:s Verksamhet'
     #original_hash: cdab446
     who_we_are_title: Vilka vi är
-    #original_hash: c0d9a3e
+    #original_hash: 303f17a
     who_we_are_content_html: >-
       <p>World Cube Association reglerar tävlingar för mekaniska pussel som
       manipuleras genom att vrida grupper av bitar, allmänt kända som "twisty
       puzzles". Det mest kända av dessa pussel är Rubiks Kub, uppfunnen av
       professor Rubik från Ungern. Ett urval av dessa pussel har valts som
       officiella grenar i WCA.</p> <p>I takt med att WCA har utvecklats under
-      det senaste decenniet har över 200 000 personer tävlat i våra tävlingar.
+      det senaste decenniet har över 245 000 personer tävlat i våra tävlingar.
       Trots denna tillväxt förblir vi en organisation som helt drivs av
       volontärer, från lokala arrangörer till WCA-delegater och till och med
       WCA:s styrelse. Vi är väldigt tacksamma för alla som tar tid ur sina liv
@@ -4808,9 +4844,9 @@ sv:
       href="https://documents.worldcubeassociation.org/documents/WCA_Vision_and_Strategy.pdf">här</a>.</p>
     #original_hash: f64ccc7
     whats_next_title: Hur ser framtiden för WCA ut?
-    #original_hash: 487c6a1
+    #original_hash: 3312277
     whats_next_content_html: >-
-      <p>World Cube Association har haft över 200 000 unika tävlande i 158 olika
+      <p>World Cube Association har haft över 245 000 unika tävlande i 158 olika
       regioner och vi planerar inte att sakta in! Kubintresset har ökat stadigt
       sedan grundandet 2004 och vi vill möjliggöra detta att fortsätta in i
       framtiden genom att öka tillgängligheten av tävlingar till nya områden. I

@@ -2677,9 +2677,9 @@ pt:
       results_posted: Resultados publicados com sucesso!
       #original_hash: afe3a23
       results_preview_alert: Está a visualizar resultados que ainda não foram publicados.
-      #original_hash: 07de612
+      #original_hash: 16dd227
       upload_results: >-
-        Esta competição já terminou, estamos a trabalhar para publicar os
+        Esta competição já terminou. Estamos a trabalhar para publicar os
         resultados o mais rápido possível!
       #original_hash: 68dd436
       computing_auxiliary_data: Por favor aguarde enquanto dados auxiliares são processados.
@@ -3035,6 +3035,10 @@ pt:
       from_date: De
       #original_hash: ae79ea1
       to_date: Para
+      #original_hash: 17fd5f4
+      show_filters: Mostrar Filtros
+      #original_hash: 0d781a3
+      hide_filters: Esconder Filtros
       #original_hash: 5be6985
       reset_filters: Limpar Filtros
       #original_hash: 52c30f8
@@ -3621,7 +3625,7 @@ pt:
           enabled:
             #original_hash: d9c05cc
             'true': Quero especificar um limite de competidores
-            #original_hash: 5b581b5
+            #original_hash: 53397ec
             'false': NÃO QUERO especificar um limite de competidores
         registration:
           allow_on_the_spot:
@@ -4166,12 +4170,14 @@ pt:
         qualification_html: >-
           Tempos de Qualificação têm que ser estabelecidos noutras competições
           da WCA para poder competir.
-        #original_hash: 51dfad5
-        qualification_all_events_html: 'Tempos de qualificação têm que ser definidos antes de  <b>%{date}</b>.'
-        #original_hash: 5eac9e5
+        #original_hash: 6ab548b
+        qualification_all_events_html: >-
+          Tempos de qualificação têm que ser definidos até <b>%{date}</b>
+          inclusivé.
+        #original_hash: b701c2a
         qualification_some_events_html: >-
-          Tempos de qualificação em %{events} têm que ser obtidos antes de
-          <b>%{date}</b>.
+          Tempos de qualificação em %{events} têm que ser obtidos até
+          <b>%{date}</b> inclusivé.
       #original_hash: 041a5de
       format: Formato
       #original_hash: 0d1fcc3
