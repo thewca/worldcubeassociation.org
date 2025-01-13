@@ -164,15 +164,15 @@ class ResultsController < ApplicationController
     respond_to do |format|
       format.html
       format.json do
-        cached_data = Rails.cache.fetch [*@cache_params, @ranking_timestamp] do
+        cached_data = Rails.cache.fetch ["results-page-api", *@cache_params, @ranking_timestamp] do
           rows = DbHelper.execute_cached_query(@cache_params, @ranking_timestamp, @query)
           comp_ids = rows.map { |r| r["competitionId"] }.uniq
           if @is_by_region
             rows = compute_rankings_by_region(rows, @continent, @country)
           end
-          competitions_by_id = Competition.where(id: comp_ids).to_h { |c| [c.id, c] }
+          competitions_by_id = Competition.where(id: comp_ids).index_by(&:id).transform_values { |comp| comp.as_json(methods: %w[country cellName id], includes: [], only: []) }
           {
-            rows: rows.as_json, competitionsById: competitions_by_id.as_json({ methods: %w[country cellName id], includes: [] })
+            rows: rows.as_json, competitionsById: competitions_by_id
           }
         end
         render json: cached_data
