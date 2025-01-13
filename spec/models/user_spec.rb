@@ -538,9 +538,9 @@ RSpec.describe User, type: :model do
 
   describe "#editable_fields_of_user" do
     let(:competition) { FactoryBot.create(:competition, :registration_open, :with_organizer, starts: 1.month.from_now) }
-    let(:registration) { FactoryBot.create(:registration, :newcomer, competition: competition) }
+    let(:registration) { FactoryBot.create(:registration, :first_timer, competition: competition) }
 
-    it "allows organizers of upcoming competitions to edit newcomer names" do
+    it "allows organizers of upcoming competitions to edit first-timer names", :tag do
       organizer = competition.organizers.first
       expect(organizer.can_edit_user?(registration.user)).to eq true
       expect(organizer.editable_fields_of_user(registration.user).to_a).to eq [:name]
@@ -789,6 +789,23 @@ RSpec.describe User, type: :model do
       wrc_senior_member_role = FactoryBot.create(:wrc_senior_member_role, user: user)
       expect(user.teams_committees_at_least_senior_roles).to include(wsot_leader_role, wrc_senior_member_role)
       expect(user.teams_committees_at_least_senior_roles).not_to include(wrt_role)
+    end
+  end
+
+  describe 'newcomer?' do
+    it 'true for user with no WCA ID' do
+      user = FactoryBot.create(:user)
+      expect(user.newcomer?).to eq(true)
+    end
+
+    it 'true for user with current year WCA ID' do
+      user = FactoryBot.create(:user, :current_year_wca_id)
+      expect(user.newcomer?).to eq(true)
+    end
+
+    it 'false for user with previous year WCA ID' do
+      user = FactoryBot.create(:user, :wca_id)
+      expect(user.newcomer?).to eq(false)
     end
   end
 end
