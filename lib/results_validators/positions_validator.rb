@@ -3,7 +3,7 @@
 module ResultsValidators
   class PositionsValidator < GenericValidator
     WRONG_POSITION_IN_RESULTS_ERROR = :wrong_position_in_results_error
-    POSITION_FIXED_INFO = :position_fixed_info
+    POSITION_FIXED_INFO = :automatically_position_fixed_info
 
     def self.description
       "This validator checks that positions stored in results are correct with regard to the actual results."

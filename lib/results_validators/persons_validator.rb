@@ -2,14 +2,14 @@
 
 module ResultsValidators
   class PersonsValidator < GenericValidator
-    PERSON_WITHOUT_RESULTS_ERROR = :person_without_results_error
-    RESULTS_WITHOUT_PERSON_ERROR = :results_without_person_error
+    PERSON_WITHOUT_RESULTS_ERROR = :person_doesnt_have_any_results_error
+    RESULTS_WITHOUT_PERSON_ERROR = :results_not_associated_with_any_person_error
     WHITESPACE_IN_NAME_ERROR = :whitespace_in_name_error
-    WRONG_WCA_ID_ERROR = :wrong_wca_id_error
-    WRONG_PARENTHESIS_FORMAT_ERROR = :wrong_parenthesis_format_error
-    DOB_JAN_ONE = :dob_jan_one
-    DOB_TOO_YOUNG = :dob_too_young
-    DOB_TOO_OLD = :dob_too_old
+    WRONG_WCA_ID_ERROR = :person_with_non_existing_wca_id_error
+    WRONG_PARENTHESIS_FORMAT_ERROR = :no_space_before_parenthesis_error
+    DOB_JAN_ONE = :dob_is_jan_one_double_check_required
+    DOB_TOO_YOUNG = :dob_is_too_young_double_check_required
+    DOB_TOO_OLD = :dob_is_too_old_double_check_required
     SAME_PERSON_NAME_WARNING = :same_person_name_warning
     NON_MATCHING_DOB_WARNING = :non_matching_dob_warning
     NON_MATCHING_GENDER_WARNING = :non_matching_gender_warning
@@ -18,9 +18,9 @@ module ResultsValidators
     NON_MATCHING_COUNTRY_WARNING = :non_matching_country_warning
     MULTIPLE_NEWCOMERS_WITH_SAME_NAME_WARNING = :multiple_newcomers_with_same_name_warning
     WRONG_PARENTHESIS_TYPE_ERROR = :wrong_parenthesis_type_error
-    UPPERCASE_NAME_WARNING = :uppercase_name_warning
+    UPPERCASE_NAME_WARNING = :successive_uppercase_name_warning
     LOWERCASE_NAME_WARNING = :lowercase_name_warning
-    MISSING_PERIOD_WARNING = :missing_period_warning
+    MISSING_PERIOD_WARNING = :missing_period_in_single_letter_middle_name_warning
     LETTER_AFTER_PERIOD_WARNING = :letter_after_period_warning
     SINGLE_LETTER_FIRST_OR_LAST_NAME_WARNING = :single_letter_first_or_last_name_warning
     SINGLE_NAME_WARNING = :single_name_warning

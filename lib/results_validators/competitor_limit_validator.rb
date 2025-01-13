@@ -2,7 +2,7 @@
 
 module ResultsValidators
   class CompetitorLimitValidator < GenericValidator
-    COMPETITOR_LIMIT_WARNING = :competitor_limit_warning
+    COMPETITOR_LIMIT_WARNING = :competitor_limit_exceeded_warning
 
     def self.description
       "For competition with a competitor limit, this validator checks that this limit is respected."

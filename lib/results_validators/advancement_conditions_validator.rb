@@ -9,8 +9,8 @@ module ResultsValidators
     REGULATION_9M2_ERROR = :regulation_9m2_error
     REGULATION_9M3_ERROR = :regulation_9m3_error
     REGULATION_9P1_ERROR = :regulation_9p1_error
-    OLD_REGULATION_9P_ERROR = :old_regulation_9p_error
-    ROUND_9P1_ERROR = :round_9p1_error
+    OLD_REGULATION_9P_ERROR = :no_competitor_eliminated_error
+    ROUND_9P1_ERROR = :less_than_twenty_five_percent_eliminated_error
     TOO_MANY_QUALIFIED_WARNING = :too_many_qualified_warning
     NOT_ENOUGH_QUALIFIED_WARNING = :not_enough_qualified_warning
     COMPETED_NOT_QUALIFIED_ERROR = :competed_not_qualified_error

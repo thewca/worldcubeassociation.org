@@ -7,14 +7,14 @@ module ResultsValidators
     RESULT_AFTER_DNS_WARNING = :result_after_dns_warning
     SIMILAR_RESULTS_WARNING = :similar_results_warning
 
-    MET_CUTOFF_MISSING_RESULTS_ERROR = :met_cutoff_missing_results_error
-    DIDNT_MEET_CUTOFF_HAS_RESULTS_ERROR = :didnt_meet_cutoff_has_results_error
+    MET_CUTOFF_MISSING_RESULTS_ERROR = :met_cutoff_but_missing_results_error
+    DIDNT_MEET_CUTOFF_HAS_RESULTS_ERROR = :didnt_meet_cutoff_but_has_results_error
     WRONG_ATTEMPTS_FOR_CUTOFF_ERROR = :wrong_attempts_for_cutoff_error
     MISMATCHED_RESULT_FORMAT_ERROR = :mismatched_result_format_error
     RESULT_OVER_TIME_LIMIT_ERROR = :result_over_time_limit_error
     RESULTS_OVER_CUMULATIVE_TIME_LIMIT_ERROR = :results_over_cumulative_time_limit_error
     NO_ROUND_INFORMATION_WARNING = :no_round_information_warning
-    UNDEF_TL_WARNING = :undef_tl_warning
+    UNDEF_TL_WARNING = :undefined_time_limit_warning
     SUSPICIOUS_DNF_WARNING = :suspicious_dnf_warning
 
     # Miscelaneous errors
