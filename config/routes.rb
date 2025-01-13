@@ -190,7 +190,7 @@ Rails.application.routes.draw do
     get 'generate_db_token' => 'panel#generate_db_token', as: :panel_generate_db_token
   end
   get 'panel/:panel_id' => 'panel#index', as: :panel_index
-  get 'panel/redirect/:panel_page' => 'panel#redirect', as: :panel_redirect
+  get 'panel-page/:id' => 'panel#panel_page', as: :panel_page
   resources :tickets, only: [:index, :show] do
     post 'update_status' => 'tickets#update_status', as: :update_status
     get 'edit_person_validators' => 'tickets#edit_person_validators', as: :edit_person_validators
