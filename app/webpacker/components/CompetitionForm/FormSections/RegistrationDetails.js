@@ -41,7 +41,7 @@ export default function RegistrationDetails() {
       <ConditionalSection showIf={guestsGoFree}>
         <InputSelect id="guestEntryStatus" options={guestMessageOptions} required={guestsGoFree} />
       </ConditionalSection>
-      <ConditionalSection showIf={guestsRestricted}>
+      <ConditionalSection showIf={registration?.guestsEnabled}>
         <InputNumber id="guestsPerRegistration" required={guestsRestricted} />
       </ConditionalSection>
       <InputMarkdown id="extraRequirements" />
