@@ -5,8 +5,9 @@ import I18n from '../i18n';
 import { attemptResultToString, attemptResultToMbPoints } from './edit-events';
 import useSaveAction from '../hooks/useSaveAction';
 import { centisecondsToClockFormat } from '../wca-live/attempts';
+import { patchWcifUrl } from '../requests/routes.js.erb';
 
-export function useSaveWcifAction() {
+export function useSaveWcifAction(skipSchedule = false) {
   const { save, saving } = useSaveAction();
 
   const alertWcifError = (err) => {
@@ -22,11 +23,11 @@ export function useSaveWcifAction() {
       options = {},
       onError = alertWcifError,
     ) => {
-      const url = `/api/v0/competitions/${competitionId}/wcif`;
+      const url = patchWcifUrl(competitionId, skipSchedule);
 
       save(url, wcifData, onSuccess, options, onError);
     },
-    [save],
+    [save, skipSchedule],
   );
 
   return {
