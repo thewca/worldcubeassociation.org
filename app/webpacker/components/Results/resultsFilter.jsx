@@ -7,19 +7,23 @@ import { RegionSelector } from '../CompetitionsOverview/CompetitionsFilters';
 import { countries } from '../../lib/wca-data.js.erb';
 import I18n from '../../lib/i18n';
 
-export default function ResultsFilter({ filterState }) {
+export default function ResultsFilter({ filterState, filterActions }) {
   const {
     event,
-    setEvent,
     region,
-    setRegion,
     rankingType,
-    setRankingType,
     gender,
-    setGender,
     show,
-    setShow,
   } = filterState;
+
+  const {
+    setEvent,
+    setRegion,
+    setRankingType,
+    setGender,
+    setShow,
+  } = filterActions;
+
   const regionIso2 = useMemo(() => {
     if (region === 'world') {
       return 'all';
