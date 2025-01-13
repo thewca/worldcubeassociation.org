@@ -23,7 +23,7 @@ function ResultRow({
   const attempts = [result.value1, result.value2, result.value3, result.value4, result.value5];
   const bestResult = _.max(attempts);
   const worstResult = _.min(attempts);
-  const bestResultIndex = attempts.findIndex((a) => a === bestResult);
+  const bestResultIndex = attempts.indexOf(bestResult);
   const worstResultIndex = attempts.findIndex((a) => a === worstResult);
   return (
     <Table.Row>
