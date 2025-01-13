@@ -21,7 +21,8 @@ function EditForm({
   backendOptions,
   CustomHeader = null,
   CustomFooter = null,
-  disabledOverrideFn = null,
+  disabledFn = null,
+  allowDisabledOverridesFn = null,
 }) {
   const {
     object,
@@ -56,14 +57,18 @@ function EditForm({
     </Message>
   );
 
-  const sectionDisabled = useMemo(() => (
-    !disabledOverrideFn || disabledOverrideFn(object)
-  ), [disabledOverrideFn, object]);
+  const rootDisabled = useMemo(() => (
+    !!disabledFn && disabledFn(object)
+  ), [disabledFn, object]);
+
+  const rootAllowDisabledOverrides = useMemo(() => (
+    !allowDisabledOverridesFn || allowDisabledOverridesFn(object)
+  ), [allowDisabledOverridesFn, object]);
 
   const stickyRef = useRef();
 
   return (
-    <SectionProvider disabled={sectionDisabled}>
+    <SectionProvider disabled={rootDisabled} allowDisabledOverride={rootAllowDisabledOverrides}>
       <div ref={stickyRef}>
         {unsavedChanges && (
           <Sticky context={stickyRef} offset={20} styleElement={{ zIndex: 2000 }}>
@@ -93,21 +98,21 @@ export default function Wrapper({
   backendOptions,
   CustomHeader = null,
   CustomFooter = null,
-  disabledOverrideFn = null,
+  disabledFn = null,
+  allowDisableOverridesFn = null,
 }) {
   return (
     <FormObjectProvider initialObject={initialObject}>
-      <SectionProvider>
-        <EditForm
-          backendUrlFn={backendUrlFn}
-          backendOptions={backendOptions}
-          CustomHeader={CustomHeader}
-          CustomFooter={CustomFooter}
-          disabledOverrideFn={disabledOverrideFn}
-        >
-          {children}
-        </EditForm>
-      </SectionProvider>
+      <EditForm
+        backendUrlFn={backendUrlFn}
+        backendOptions={backendOptions}
+        CustomHeader={CustomHeader}
+        CustomFooter={CustomFooter}
+        disabledFn={disabledFn}
+        allowDisabledOverridesFn={allowDisableOverridesFn}
+      >
+        {children}
+      </EditForm>
     </FormObjectProvider>
   );
 }
