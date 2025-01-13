@@ -36,8 +36,7 @@ function ResultRow({
       <Table.Cell>
         {formatAttemptResult(result.value, result.eventId)}
       </Table.Cell>
-      {show !== 'by region'
-      && <CountryCell country={country} />}
+      {show !== 'by region' && <CountryCell country={country} />}
       <Table.Cell>
         <CountryFlag iso2={competition.country.iso2} />
         {' '}
@@ -66,33 +65,35 @@ export default function RankingsTable({
       [rowsToMap, firstContinentIndex, firstCountryIndex] = rows;
     }
 
-    let previousValue = 0;
-    let previousRank = 0;
-    return rowsToMap.map((result, index) => {
+    return rowsToMap.reduce((acc, result, index) => {
       const competition = competitionsById[result.competitionId];
       const { value } = result;
+
+      const lastItem = acc[acc.length - 1];
+      const previousValue = lastItem?.result.value || 0;
+      const previousRank = lastItem?.rank || 0;
+
       const rank = value === previousValue ? previousRank : index + 1;
       const tiedPrevious = rank === previousRank;
-      let country = countries.real.find((c) => c.id === result.countryId);
 
+      let country = countries.real.find((c) => c.id === result.countryId);
       if (index < firstContinentIndex) {
         country = { name: I18n.t('results.table_elements.world') };
       } else if (index >= firstContinentIndex && index < firstCountryIndex) {
         country = continents.real.find((c) => c.id === country.continentId);
       }
 
-      previousValue = value;
-      previousRank = rank;
-
-      return {
+      acc.push({
         result,
         competition,
         country,
         rank,
         tiedPrevious,
         key: `${result.id}-${show}`,
-      };
-    });
+      });
+
+      return acc;
+    }, []);
   }, [competitionsById, rows, show]);
   return (
     <div style={{ overflowX: 'scroll' }}>
