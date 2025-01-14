@@ -242,7 +242,25 @@ class ResultsController < ApplicationController
       SQL
     end
 
-    @ranking_timestamp = ComputeAuxiliaryData.successful_start_date || Date.current
+    @record_timestamp = ComputeAuxiliaryData.successful_start_date || Date.current
+
+    respond_to do |format|
+      format.html {}
+      format.json do
+        cached_data = Rails.cache.fetch ["records-page-api", *@cache_params, @record_timestamp] do
+          rows = DbHelper.execute_cached_query(@cache_params, @record_timestamp, @query)
+          comp_ids = rows.map { |r| r["competitionId"] }.uniq
+          if @is_slim || @is_separate
+            rows = compute_slim_or_separate_records(@rows)
+          end
+          competitions_by_id = Competition.where(id: comp_ids).index_by(&:id).transform_values { |comp| comp.as_json(methods: %w[country], include: [], only: %w[cellName id]) }
+          {
+            rows: rows.as_json, competitionsById: competitions_by_id
+          }
+        end
+        render json: cached_data
+      end
+    end
   end
 
   private def current_records_query(value, type)

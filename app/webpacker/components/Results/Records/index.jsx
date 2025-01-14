@@ -30,9 +30,9 @@ function parseInitialStateFromUrl(url) {
 
   const urlObj = new URL(url);
   const params = urlObj.searchParams;
-  const region = params.get('region') || 'world'; // Default to 'all' if not provided
-  const gender = params.get('gender') || 'All'; // Default to 'all' if not provided
-  const show = params.get('show') || '100 persons'; // Default to 'Persons' if not provided
+  const region = params.get('region') || 'world';
+  const gender = params.get('gender') || 'All';
+  const show = params.get('show') || '100 persons';
 
   return {
     event,
@@ -71,7 +71,7 @@ export default function Wrapper() {
 export function Rankings() {
   // Define the initial state
   const initialState = useMemo(() => ({
-    event: '333', region: 'world', gender: 'All', show: '',
+    event: undefined, region: 'world', gender: 'All', show: '',
   }), []);
 
   // Use the reducer
@@ -81,7 +81,6 @@ export function Rankings() {
     () => ({
       setEvent: (event) => dispatch({ type: ActionTypes.SET_EVENT, payload: event }),
       setRegion: (region) => dispatch({ type: ActionTypes.SET_REGION, payload: region }),
-      setRankingType: (rankingType) => dispatch({ type: ActionTypes.SET_RANKING_TYPE, payload: rankingType }),
       setGender: (gender) => dispatch({ type: ActionTypes.SET_GENDER, payload: gender }),
       setShow: (show) => dispatch({ type: ActionTypes.SET_SHOW, payload: show }),
     }),

@@ -5,7 +5,7 @@ import {
 import { events } from '../../lib/wca-data.js.erb';
 import I18n from '../../lib/i18n';
 
-const WCA_EVENT_IDS = Object.values(events.official).map((e) => e.id);
+export const WCA_EVENT_IDS = Object.values(events.official).map((e) => e.id);
 
 export function EventSelector({
   selectedEvents,
