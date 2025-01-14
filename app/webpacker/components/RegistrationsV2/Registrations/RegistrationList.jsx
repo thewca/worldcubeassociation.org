@@ -24,7 +24,7 @@ import { EventSelector } from '../../wca/EventSelector';
 
 const sortReducer = createSortReducer(['name', 'country', 'total']);
 
-export default function RegistrationList({ competitionInfo }) {
+export default function RegistrationList({ competitionInfo, userInfo }) {
   const { isLoading: registrationsLoading, data: registrations, isError } = useQuery({
     queryKey: ['registrations', competitionInfo.id],
     queryFn: () => getConfirmedRegistrations(competitionInfo),
