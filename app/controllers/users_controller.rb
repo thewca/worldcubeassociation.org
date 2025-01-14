@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class UsersController < ApplicationController
-  before_action :authenticate_user!, except: [:select_nearby_delegate, :acknowledge_cookies, :anonymize]
+  before_action :authenticate_user!, except: [:select_nearby_delegate, :acknowledge_cookies]
   before_action :check_recent_authentication!, only: [:enable_2fa, :disable_2fa, :regenerate_2fa_backup_codes]
   before_action :set_recent_authentication!, only: [:edit, :update, :enable_2fa, :disable_2fa]
   before_action -> { redirect_to_root_unless_user(:can_admin_results?) }, only: [:anonymize]

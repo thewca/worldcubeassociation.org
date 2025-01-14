@@ -7,14 +7,8 @@ import AnonymizationTicketWorkbench from '../../../Tickets/TicketWorkbenches/Ano
 export default function AnonymizationScriptPage() {
   const [user, setUser] = useInputState();
 
-  return user
-    ? (
-      <AnonymizationTicketWorkbench
-        userId={user?.id}
-        wcaId={user?.item?.wca_id}
-      />
-    )
-    : (
+  return (
+    <>
       <WcaSearch
         label="Enter the user to anonymize"
         model={SEARCH_MODELS.user}
@@ -22,5 +16,10 @@ export default function AnonymizationScriptPage() {
         value={user}
         onChange={setUser}
       />
-    );
+      <AnonymizationTicketWorkbench
+        userId={user?.id}
+        wcaId={user?.item?.wca_id}
+      />
+    </>
+  );
 }
