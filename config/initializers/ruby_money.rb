@@ -4,11 +4,7 @@ require 'money/bank/currencylayer_bank'
 
 Money.locale_backend = :i18n
 
-if Rails.env.local?
-  eu_bank = EuCentralBank.new
-  eu_bank.update_rates
-  Money.default_bank = eu_bank
-else
+if Rails.env.production? && EnvConfig.WCA_LIVE_SITE?
   mclb = Money::Bank::CurrencylayerBank.new
   mclb.access_key = AppSecrets.CURRENCY_LAYER_API_KEY
   mclb.currencylayer = true
@@ -23,6 +19,10 @@ else
   end
   mclb.update_rates
   Money.default_bank = mclb
+else
+  eu_bank = EuCentralBank.new
+  eu_bank.update_rates
+  Money.default_bank = eu_bank
 end
 
 Money.default_currency = Money::Currency.new("USD")
