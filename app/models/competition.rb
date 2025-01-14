@@ -361,9 +361,17 @@ class Competition < ApplicationRecord
       auto_accept_registrations && !use_wca_registration
 
     errors.add(:auto_accept_registrations, I18n.t('competitions.errors.auto_accept_limit')) if
-      auto_accept_disable_threshold > 0 && competitor_limit.present? && auto_accept_disable_threshold >= competitor_limit
+      auto_accept_disable_threshold > 0 &&
+      competitor_limit.present? &&
+      auto_accept_disable_threshold >= competitor_limit
 
     errors.add(:auto_accept_registrations, I18n.t('competitions.errors.auto_accept_not_negative')) if auto_accept_disable_threshold < 0
+
+    if auto_accept_registrations_changed?
+      errors.add(:auto_accept_registrations, I18n.t('competitions.errors.auto_accept_accept_paid_pending')) if registrations.pending.with_payments.count > 0
+      errors.add(:auto_accept_registrations, I18n.t('competitions.errors.auto_accept_accept_waitlisted')) if
+        registrations.waitlisted.count > 0 && !accepted_full?
+    end
   end
 
   def has_any_round_per_event?
@@ -2392,8 +2400,6 @@ class Competition < ApplicationRecord
         "guestsPerRegistration" => guests_per_registration_limit,
         "extraRequirements" => extra_registration_requirements,
         "forceComment" => force_comment_in_registration,
-        "autoAcceptEnabled" => auto_accept_registrations,
-        "autoAcceptDisableThreshold" => auto_accept_disable_threshold,
       },
       "eventRestrictions" => {
         "forbidNewcomers" => {
@@ -2420,6 +2426,8 @@ class Competition < ApplicationRecord
       "admin" => {
         "isConfirmed" => confirmed?,
         "isVisible" => showAtAll?,
+        "autoAcceptEnabled" => auto_accept_registrations,
+        "autoAcceptDisableThreshold" => auto_accept_disable_threshold,
       },
       "cloning" => {
         "fromId" => being_cloned_from_id,
@@ -2495,8 +2503,6 @@ class Competition < ApplicationRecord
         "guestsPerRegistration" => errors[:guests_per_registration_limit],
         "extraRequirements" => errors[:extra_registration_requirements],
         "forceComment" => errors[:force_comment_in_registration],
-        "autoAcceptEnabled" => errors[:auto_accept_registrations],
-        "autoAcceptDisableThreshold" => errors[:auto_accept_disable_threshold],
       },
       "eventRestrictions" => {
         "forbidNewcomers" => {
@@ -2523,6 +2529,8 @@ class Competition < ApplicationRecord
       "admin" => {
         "isConfirmed" => errors[:confirmed_at],
         "isVisible" => errors[:showAtAll],
+        "autoAcceptEnabled" => errors[:auto_accept_registrations],
+        "autoAcceptDisableThreshold" => errors[:auto_accept_disable_threshold],
       },
       "cloning" => {
         "fromId" => errors[:being_cloned_from_id],
@@ -2628,8 +2636,8 @@ class Competition < ApplicationRecord
       showAtAll: form_data.dig('admin', 'isVisible'),
       being_cloned_from_id: form_data.dig('cloning', 'fromId'),
       clone_tabs: form_data.dig('cloning', 'cloneTabs'),
-      auto_accept_registrations: form_data.dig('registration', 'autoAcceptEnabled'),
-      auto_accept_disable_threshold: form_data.dig('registration', 'autoAcceptDisableThreshold'),
+      auto_accept_registrations: form_data.dig('admin', 'autoAcceptEnabled'),
+      auto_accept_disable_threshold: form_data.dig('admin', 'autoAcceptDisableThreshold'),
     }
   end
 

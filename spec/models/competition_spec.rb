@@ -1586,11 +1586,30 @@ RSpec.describe Competition do
 
   describe "validate auto accept fields" do
     let(:auto_accept_comp) { FactoryBot.build(:competition, :auto_accept) }
+    let(:competition) { FactoryBot.create(:competition, use_wca_registration: true) }
 
-    it 'cant enable auto-accept if not using WCA registration' do
-      auto_accept_comp.use_wca_registration = false
-      expect(auto_accept_comp).not_to be_valid
-      expect(auto_accept_comp.errors[:auto_accept_registrations]).to include("Auto-accept can only be used if you are using the WCA website for registrations")
+    context 'cant enable auto-accept when' do
+      it 'not using WCA registration' do
+        auto_accept_comp.use_wca_registration = false
+        expect(auto_accept_comp).not_to be_valid
+        expect(auto_accept_comp.errors[:auto_accept_registrations]).to include("Auto-accept can only be used if you are using the WCA website for registrations")
+      end
+
+      it 'any paid-pending registrations exist' do
+        FactoryBot.create(:registration, :paid, :pending, competition: competition)
+        competition.auto_accept_registrations = true
+
+        expect(competition).not_to be_valid
+        expect(competition.errors[:auto_accept_registrations]).to include("Cant enable auto-accept if there are paid-pending registrations - either accept them or move them to the waiting list")
+      end
+
+      it 'waitlisted registrations exist and accepted competitors < competition limit' do
+        FactoryBot.create(:registration, :waiting_list, competition: competition)
+        competition.auto_accept_registrations = true
+
+        expect(competition).not_to be_valid
+        expect(competition.errors[:auto_accept_registrations]).to include("Cant enable auto-accept - please accept as many users from the Waiting List as possible.")
+      end
     end
 
     it 'disable threshold cant exceed competitor limit' do

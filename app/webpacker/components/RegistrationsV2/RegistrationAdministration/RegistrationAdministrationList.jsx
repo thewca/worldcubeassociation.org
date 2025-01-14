@@ -310,21 +310,8 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
   ) : (
     <Segment loading={isMutating} style={{ overflowX: 'scroll' }}>
 
-      {console.log("comp info")}
-      {console.log(competitionInfo)}
       { competitionInfo.auto_accept_registrations && (
         <>
-          <Button
-            color="teal"
-            onClick={() => {
-              bulkAutoAcceptRegistrations(competitionInfo.id)
-            }}
-          >
-            <Icon name="thumbs up" />
-            {' '}
-            {I18n.t('competitions.registration_v2.update.bulk_auto_accept')}
-          </Button>
-
           <Button
             color="red"
             onClick={() => {
