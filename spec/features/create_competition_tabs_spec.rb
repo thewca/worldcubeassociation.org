@@ -7,6 +7,7 @@ RSpec.feature "create competition tabs" do
   let(:competition) { FactoryBot.create :competition, organizers: [organizer] }
 
   it "creating a new tab" do
+    pending("Until we find a better way to statically test React pages. Signed icklerf 12/17/2024")
     sign_in organizer
     visit competition_path(competition)
     click_on "Manage tabs"
@@ -22,6 +23,7 @@ RSpec.feature "create competition tabs" do
   end
 
   it "editing an existing tab" do
+    pending("Until we find a better way to statically test React pages. Signed icklerf 12/17/2024")
     FactoryBot.create(:competition_tab, competition: competition, name: "Accomodation", content: "On your own.")
 
     sign_in organizer

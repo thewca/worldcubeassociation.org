@@ -34,6 +34,7 @@ import 'semantic-css/step';
 import 'semantic-css/sticky';
 import 'semantic-css/table';
 import 'semantic-css/transition';
+import 'semantic-css/statistic';
 // NOTE: This is the js, wouldn't go fine through our module-resolver!
 import '../stylesheets/semantic/components/accordion.min';
 import '../stylesheets/semantic/components/checkbox.min';
