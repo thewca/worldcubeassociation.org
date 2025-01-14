@@ -19,27 +19,18 @@ const ActionTypes = {
 };
 
 function parseInitialStateFromUrl(url) {
-  const urlPattern = /\/results\/records\/(\d+)\/(\w+)/; // Matches `/results/rankings/{event}/{rankingType}`
-  const match = url.match(urlPattern);
-
-  if (!match) {
-    throw new Error('URL does not match the expected pattern.');
-  }
-
-  const [, event, rankingType] = match; // Extract event and rankingType from regex groups
-
   const urlObj = new URL(url);
   const params = urlObj.searchParams;
   const region = params.get('region') || 'world';
   const gender = params.get('gender') || 'All';
   const show = params.get('show') || '100 persons';
+  const event = params.get('event_id');
 
   return {
     event,
     region,
     gender,
     show,
-    rankingType,
   };
 }
 
@@ -67,13 +58,7 @@ export default function Wrapper() {
 }
 
 export function Rankings() {
-  // Define the initial state
-  const initialState = useMemo(() => ({
-    event: undefined, region: 'world', gender: 'All', show: '',
-  }), []);
-
-  // Use the reducer
-  const [filterState, dispatch] = useReducer(filterReducer, initialState);
+  const [filterState, dispatch] = useReducer(filterReducer, window.location.href, parseInitialStateFromUrl);
 
   const filterActions = useMemo(
     () => ({
