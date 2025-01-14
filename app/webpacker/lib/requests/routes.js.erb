@@ -299,4 +299,4 @@ export const bulkUpdateRegistrationUrl = `<%= CGI.unescape(Rails.application.rou
 
 export const paymentTicketUrl = (competitionId, donationIso) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v1_registrations_payment_ticket_path(competition_id: "${competitionId}", donation_iso: "${donationIso}")) %>`;
 
-export const patchWcifUrl = (competitionId, patchOpts = {}) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_competition_update_wcif_path(competition_id: "${competitionId}")) %>?skip-schedule=${patchOpts["skipSchedule"]}&skip-venue-details=${patchOpts["skipVenueDetails"]}`;
+export const patchWcifUrl = (competitionId, patchOpts = {}) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_competition_update_wcif_path(competition_id: "${competitionId}")) %>?${jsonToQueryString(patchOpts)}`;
