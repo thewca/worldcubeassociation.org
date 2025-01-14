@@ -69,11 +69,11 @@ export default function Wrapper() {
 }
 
 export function Rankings() {
-  // Define the initial state
-  const initialState = useMemo(() => parseInitialStateFromUrl(window.location.href), []);
-
-  // Use the reducer
-  const [filterState, dispatch] = useReducer(filterReducer, initialState);
+  const [filterState, dispatch] = useReducer(
+    filterReducer,
+    window.location.href,
+    parseInitialStateFromUrl,
+  );
 
   const filterActions = useMemo(
     () => ({
