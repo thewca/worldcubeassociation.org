@@ -6,7 +6,7 @@ module ResultsValidators
 
     BACKOFF_INT_MAX = 2_147_483_648
 
-    attr_accessor :competition, :results, :persons
+    attr_accessor :competition, :results, :persons, :registered_users
 
     def self.from_competitions(validator, competition_ids, check_real_results, batch_size: nil)
       associations = self.load_associations(validator, check_real_results: check_real_results)
@@ -86,6 +86,9 @@ module ResultsValidators
 
       if validator.include_persons?
         data.persons = check_real_results ? competition.competitors : competition.inbox_persons
+        if data.persons.empty?
+          data.registered_users = competition.registrations.map(&:user)
+        end
       end
 
       data

@@ -29,6 +29,11 @@ module ResultsValidators
     SINGLE_LETTER_FIRST_OR_LAST_NAME_WARNING = "'%{name}' has a single letter as first or last name. Please fix the name or confirm that this is indeed the competitor's correct name according to an official document."
     SINGLE_NAME_WARNING = "'%{name}' has only one name. Please confirm that this is indeed the competitor's full name according to an official document."
 
+    UserDetails = Struct.new(
+      :name,
+      :dob,
+    )
+
     def self.description
       "This validator checks that Persons data make sense with regard to the competition results and the WCA database."
     end
@@ -84,6 +89,25 @@ module ResultsValidators
         end
 
         without_wca_id, with_wca_id = persons_by_id.values.partition { |p| p.wca_id.empty? }
+
+        if competition_data.registered_users.present?
+          new_users = competition_data.registered_users
+                                      .select { |user| user.wca_id.nil? }
+                                      .map { |user| UserDetails.new(name: user.name, dob: user.dob) }
+        else
+          new_users = without_wca_id.flat_map { |p| UserDetails.new(name: p.name, dob: p.dob) }
+        end
+
+        new_users.each do |user|
+          PersonsValidator.dob_validations(user.dob, competition.id, name: user.name).each do |validation|
+            if validation.is_a?(ValidationError)
+              @errors << validation
+            elsif validation.is_a?(ValidationWarning)
+              @warnings << validation
+            end
+          end
+        end
+
         if without_wca_id.any?
           existing_person_in_db_by_name = Person.where(name: without_wca_id.map(&:name)).group_by(&:name)
           existing_person_in_db_by_name.each do |name, persons|
@@ -99,14 +123,6 @@ module ResultsValidators
             @warnings << ValidationWarning.new(:persons, competition.id,
                                                EMPTY_GENDER_WARNING,
                                                name: p.name)
-          end
-
-          PersonsValidator.dob_validations(p.dob, competition.id, name: p.name).each do |validation|
-            if validation.is_a?(ValidationError)
-              @errors << validation
-            elsif validation.is_a?(ValidationWarning)
-              @warnings << validation
-            end
           end
           # Look for double whitespaces or leading/trailing whitespaces.
           unless p.name.squeeze(" ").strip == p.name
