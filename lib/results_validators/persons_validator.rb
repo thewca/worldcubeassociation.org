@@ -7,9 +7,9 @@ module ResultsValidators
     WHITESPACE_IN_NAME_ERROR = :whitespace_in_name_error
     WRONG_WCA_ID_ERROR = :person_with_non_existing_wca_id_error
     WRONG_PARENTHESIS_FORMAT_ERROR = :no_space_before_parenthesis_error
-    DOB_JAN_ONE = :dob_is_jan_one_double_check_required
-    DOB_TOO_YOUNG = :dob_is_too_young_double_check_required
-    DOB_TOO_OLD = :dob_is_too_old_double_check_required
+    DOB_JAN_ONE = :dob_is_jan_one_warning
+    DOB_TOO_YOUNG = :dob_is_too_young_warning
+    DOB_TOO_OLD = :dob_is_too_old_warning
     SAME_PERSON_NAME_WARNING = :same_person_name_warning
     NON_MATCHING_DOB_WARNING = :non_matching_dob_warning
     NON_MATCHING_GENDER_WARNING = :non_matching_gender_warning

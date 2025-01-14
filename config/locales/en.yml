@@ -2808,9 +2808,9 @@ en:
       download: "Download"
   validators:
     persons:
-      dob_is_jan_one_double_check_required: "The date of birth of %{name} is on January 1st, please ensure it's correct."
-      dob_is_too_young_double_check_required: "%{name} seems to be less than 3 years old, please ensure it's correct."
-      dob_is_too_old_double_check_required: "%{name} seems to be around 100 years old, please ensure it's correct."
+      dob_is_jan_one_warning: "The date of birth of %{name} is on January 1st, please ensure it's correct."
+      dob_is_too_young_warning: "%{name} seems to be less than 3 years old, please ensure it's correct."
+      dob_is_too_old_warning: "%{name} seems to be around 100 years old, please ensure it's correct."
       person_doesnt_have_any_results_error: "There are no results for %{person_name} with person id %{person_id}"
       results_not_associated_with_any_person_error: "There are results for an unknown person with person id %{person_id}"
       whitespace_in_name_error: "Person '%{name}' has leading/trailing whitespaces or double whitespaces."
