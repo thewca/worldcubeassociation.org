@@ -60,13 +60,8 @@ export default function RankingsTable({
   rows, competitionsById, isAverage, show,
 }) {
   const results = useMemo(() => {
-    let rowsToMap = rows;
-    let firstContinentIndex = 0;
-    let firstCountryIndex = 0;
-
-    if (show === 'by region') {
-      [rowsToMap, firstContinentIndex, firstCountryIndex] = rowsToMap;
-    }
+    const isByRegion = show === 'by region';
+    const [rowsToMap, firstContinentIndex, firstCountryIndex] = isByRegion ? rows : [rows, 0, 0];
 
     return rowsToMap.reduce((acc, result, index) => {
       const competition = competitionsById[result.competitionId];
