@@ -7,7 +7,7 @@ import useSaveAction from '../hooks/useSaveAction';
 import { centisecondsToClockFormat } from '../wca-live/attempts';
 import { patchWcifUrl } from '../requests/routes.js.erb';
 
-export function useSaveWcifAction(patchOpts = {}) {
+export function useSaveWcifAction() {
   const { save, saving } = useSaveAction();
 
   const alertWcifError = (err) => {
@@ -20,14 +20,15 @@ export function useSaveWcifAction(patchOpts = {}) {
       competitionId,
       wcifData,
       onSuccess,
-      options = {},
+      fetchOptions = {},
+      patchWcifOptions = {},
       onError = alertWcifError,
     ) => {
-      const url = patchWcifUrl(competitionId, patchOpts);
+      const url = patchWcifUrl(competitionId, patchWcifOptions);
 
-      save(url, wcifData, onSuccess, options, onError);
+      save(url, wcifData, onSuccess, fetchOptions, onError);
     },
-    [save, patchOpts],
+    [save],
   );
 
   return {

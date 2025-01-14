@@ -19,6 +19,8 @@ import Store, { useDispatch, useStore } from '../../lib/providers/StoreProvider'
 import ConfirmProvider from '../../lib/providers/ConfirmProvider';
 import ManageActivities from './ManageActivities';
 
+const PATCH_OPTIONS = { skipVenueDetails: true };
+
 function EditSchedule({
   wcifEvents,
   referenceTime,
@@ -55,13 +57,15 @@ function EditSchedule({
     };
   }, [onUnload]);
 
-  const { saveWcif, saving } = useSaveWcifAction({ skipVenueDetails: true });
+  const { saveWcif, saving } = useSaveWcifAction();
 
   const save = useCallback(() => {
     saveWcif(
       competitionId,
       { schedule: wcifSchedule },
       () => dispatch(changesSaved()),
+      {},
+      PATCH_OPTIONS,
     );
   }, [competitionId, dispatch, saveWcif, wcifSchedule]);
 
