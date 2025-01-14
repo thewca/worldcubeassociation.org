@@ -18,14 +18,16 @@ function CountryCell({ country }) {
 }
 
 function ResultRow({
-  result, competition, rank, isAverage, show, country, key,
+  result, competition, rank, isAverage, show, country,
 }) {
   const attempts = [result.value1, result.value2, result.value3, result.value4, result.value5]
     .filter(Boolean);
+
   const bestResult = _.max(attempts);
   const worstResult = _.min(attempts);
   const bestResultIndex = attempts.indexOf(bestResult);
   const worstResultIndex = attempts.indexOf(worstResult);
+
   return (
     <Table.Row>
       {show === 'by region' ? <CountryCell country={country} />
@@ -61,8 +63,9 @@ export default function RankingsTable({
     let rowsToMap = rows;
     let firstContinentIndex = 0;
     let firstCountryIndex = 0;
+
     if (show === 'by region') {
-      [rowsToMap, firstContinentIndex, firstCountryIndex] = rows;
+      [rowsToMap, firstContinentIndex, firstCountryIndex] = rowsToMap;
     }
 
     return rowsToMap.reduce((acc, result, index) => {
@@ -95,26 +98,29 @@ export default function RankingsTable({
       return acc;
     }, []);
   }, [competitionsById, rows, show]);
+
   return (
     <div style={{ overflowX: 'scroll' }}>
       <Table basic="very" compact="very" singleLine striped unstackable>
         <Table.Header>
-          {show !== 'by region' ? <Table.HeaderCell textAlign="center">#</Table.HeaderCell>
-            : <Table.HeaderCell>{I18n.t('results.table_elements.region')}</Table.HeaderCell>}
-          <Table.HeaderCell>{I18n.t('results.table_elements.name')}</Table.HeaderCell>
-          <Table.HeaderCell>{I18n.t('results.table_elements.result')}</Table.HeaderCell>
-          {show !== 'by region'
-            && <Table.HeaderCell textAlign="left">{I18n.t('results.table_elements.representing')}</Table.HeaderCell>}
-          <Table.HeaderCell>{I18n.t('results.table_elements.competition')}</Table.HeaderCell>
-          {isAverage && (
-            <>
-              <Table.HeaderCell>{I18n.t('results.table_elements.solves')}</Table.HeaderCell>
-              <Table.HeaderCell />
-              <Table.HeaderCell />
-              <Table.HeaderCell />
-              <Table.HeaderCell />
-            </>
-          )}
+          <Table.Row>
+            {show !== 'by region' ? <Table.HeaderCell textAlign="center">#</Table.HeaderCell>
+              : <Table.HeaderCell>{I18n.t('results.table_elements.region')}</Table.HeaderCell>}
+            <Table.HeaderCell>{I18n.t('results.table_elements.name')}</Table.HeaderCell>
+            <Table.HeaderCell>{I18n.t('results.table_elements.result')}</Table.HeaderCell>
+            {show !== 'by region'
+              && <Table.HeaderCell textAlign="left">{I18n.t('results.table_elements.representing')}</Table.HeaderCell>}
+            <Table.HeaderCell>{I18n.t('results.table_elements.competition')}</Table.HeaderCell>
+            {isAverage && (
+              <>
+                <Table.HeaderCell>{I18n.t('results.table_elements.solves')}</Table.HeaderCell>
+                <Table.HeaderCell />
+                <Table.HeaderCell />
+                <Table.HeaderCell />
+                <Table.HeaderCell />
+              </>
+            )}
+          </Table.Row>
         </Table.Header>
         <Table.Body key={show}>
           {results.map((r) => (
