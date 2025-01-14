@@ -27,7 +27,7 @@ function ResultRow({
   const bestResultIndex = attempts.indexOf(bestResult);
   const worstResultIndex = attempts.indexOf(worstResult);
   return (
-    <Table.Row key={key}>
+    <Table.Row>
       {show === 'by region' ? <CountryCell country={country} />
         : <Table.Cell textAlign="center">{rank}</Table.Cell> }
       <Table.Cell>
