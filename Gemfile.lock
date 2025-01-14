@@ -111,6 +111,10 @@ GEM
       globalid (>= 0.3.6)
     activemodel (7.2.2.1)
       activesupport (= 7.2.2.1)
+    activemodel-serializers-xml (1.0.3)
+      activemodel (>= 5.0.0.a)
+      activesupport (>= 5.0.0.a)
+      builder (~> 3.1)
     activerecord (7.2.2.1)
       activemodel (= 7.2.2.1)
       activesupport (= 7.2.2.1)
@@ -473,6 +477,7 @@ GEM
     mutex_m (0.3.0)
     mysql2 (0.5.6)
     nenv (0.3.0)
+    nested_form (0.3.2)
     net-http (0.6.0)
       uri
     net-imap (0.5.1)
@@ -577,6 +582,13 @@ GEM
     rails-i18n (7.0.10)
       i18n (>= 0.7, < 2)
       railties (>= 6.0.0, < 8)
+    rails_admin (3.3.0)
+      activemodel-serializers-xml (>= 1.0)
+      csv
+      kaminari (>= 0.14, < 2.0)
+      nested_form (~> 0.3)
+      rails (>= 6.0, < 9)
+      turbo-rails (>= 1.0, < 3)
     railties (7.2.2.1)
       actionpack (= 7.2.2.1)
       activesupport (= 7.2.2.1)
@@ -768,6 +780,9 @@ GEM
     trailblazer-option (0.1.2)
     translighterate (0.3.0)
       actionview (>= 6.0)
+    turbo-rails (2.0.11)
+      actionpack (>= 6.0.0)
+      railties (>= 6.0.0)
     twitter_cldr (6.12.1)
       camertron-eprun
       cldr-plurals-runtime-rb (~> 1.1)
@@ -901,6 +916,7 @@ DEPENDENCIES
   rails
   rails-controller-testing
   rails-i18n
+  rails_admin
   rake
   react-rails
   recaptcha
