@@ -68,27 +68,6 @@ module ResultsHelper
     [rows_to_display, first_continent_index, first_country_index]
   end
 
-  def compute_slim_or_separate_records(rows)
-    single_rows = []
-    average_rows = []
-    rows
-      .group_by { |row| row["eventId"] }
-      .each_value do |event_rows|
-        singles, averages = event_rows.partition { |row| row["type"] == "single" }
-        balance = singles.size - averages.size
-        if balance < 0
-          singles += Array.new(-balance, nil)
-        elsif balance > 0
-          averages += Array.new(balance, nil)
-        end
-        single_rows += singles
-        average_rows += averages
-      end
-
-    slim_rows = single_rows.zip(average_rows)
-    [slim_rows, single_rows.compact, average_rows.compact]
-  end
-
   def pb_type_class_for_result(regional_record, pb_marker)
     if pb_marker
       record_class = 'pb'

@@ -9,6 +9,7 @@ import { getRecords } from '../api/records';
 import Loading from '../../Requests/Loading';
 import { recordsUrl } from '../../../lib/requests/routes.js.erb';
 import ResultsFilter from '../resultsFilter';
+import SlimRecordTable from './SlimRecordsTable';
 
 const ActionTypes = {
   SET_EVENT: 'SET_EVENT',
@@ -95,11 +96,13 @@ export function Rankings() {
         isRecords
         showCategories={['mixed', 'slim', 'separate', 'history', 'mixed history']}
       />
-      <RecordsTable
-        competitionsById={data.competitionsById}
-        rows={data.rows}
-        show={show}
-      />
+      { show === 'slim' ? <SlimRecordTable records={data.rows} competitionsById={data.competitionsById} /> : (
+        <RecordsTable
+          competitionsById={data.competitionsById}
+          rows={data.rows}
+          show={show}
+        />
+      ) }
     </Container>
   );
 }
