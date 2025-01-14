@@ -569,6 +569,26 @@ RSpec.describe "API Competitions" do
       end
     end
   end
+
+  describe "PATCH #disable_auto_accept" do
+    let!(:auto_accept_comp) { FactoryBot.create(:competition, :auto_accept, :registration_open, :with_organizer) }
+
+    it 'successfully disables auto accept' do
+      sign_in(auto_accept_comp.organizers.first)
+
+      patch api_v0_competition_disable_auto_accept_path(auto_accept_comp), headers: headers
+      expect(response).to be_successful
+      expect(auto_accept_comp.reload.auto_accept_registrations).to eq(false)
+    end
+
+    it 'doesnt work if not an organizer of the comp' do
+      sign_in(FactoryBot.create :user)
+
+      patch api_v0_competition_disable_auto_accept_path(auto_accept_comp), headers: headers
+      expect(response.code).to eq("404")
+      expect(auto_accept_comp.reload.auto_accept_registrations).to eq(true)
+    end
+  end
 end
 
 def create_wcif_with_events(event_ids)

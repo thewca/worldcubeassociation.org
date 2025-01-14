@@ -411,7 +411,7 @@ RSpec.describe 'API Registrations' do
     end
   end
 
-  describe 'GET #bulk_accept' do
+  describe 'PATCH #bulk_accept' do
     let(:auto_accept_comp) { FactoryBot.create(:competition, :auto_accept, :registration_open, :with_organizer, :with_competitor_limit, competitor_limit: 10) }
 
     before do
@@ -427,7 +427,7 @@ RSpec.describe 'API Registrations' do
       expected_accepted = auto_accept_comp.waiting_list.entries[..4]
       expected_remaining = auto_accept_comp.waiting_list.entries[5..] + initial_pending_ids
 
-      get api_v1_registrations_bulk_auto_accept_path(competition_id: auto_accept_comp.id), headers: headers
+      patch api_v1_registrations_bulk_auto_accept_path(competition_id: auto_accept_comp.id), headers: headers
       expect(response.status).to eq(200)
 
       expect(auto_accept_comp.registrations.competing_status_accepted.count).to eq(10)

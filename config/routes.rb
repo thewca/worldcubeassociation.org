@@ -348,7 +348,7 @@ Rails.application.routes.draw do
         post '/register', to: 'registrations#create'
         patch '/register', to: 'registrations#update'
         patch '/bulk_update', to: 'registrations#bulk_update'
-        get '/:competition_id/bulk_auto_accept', to: 'registrations#bulk_auto_accept', as: :bulk_auto_accept
+        patch '/:competition_id/bulk_auto_accept', to: 'registrations#bulk_auto_accept', as: :bulk_auto_accept
         get '/:competition_id', to: 'registrations#list'
         get '/:competition_id/admin', to: 'registrations#list_admin', as: :list_admin
         get '/:competition_id/payment', to: 'registrations#payment_ticket', as: :payment_ticket
@@ -405,6 +405,7 @@ Rails.application.routes.draw do
         get '/scrambles' => 'competitions#scrambles', as: :scrambles
         get '/scrambles/:event_id' => 'competitions#event_scrambles', as: :event_scrambles
         get '/psych-sheet/:event_id' => 'competitions#event_psych_sheet', as: :event_psych_sheet
+        patch '/disable_auto_accept' => 'competitions#disable_auto_accept', as: :disable_auto_accept # Should this be a patch instead? We're making changes, but not providing a payload
         patch '/wcif' => 'competitions#update_wcif', as: :update_wcif
       end
 

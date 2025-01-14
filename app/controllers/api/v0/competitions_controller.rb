@@ -184,6 +184,15 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
     }
   end
 
+  def disable_auto_accept
+    competition = competition_from_params
+    require_can_manage!(competition)
+
+    competition.update!(auto_accept_registrations: false)
+    render json: {status: 'success'}
+  end
+
+
   private def competition_from_params(associations: {})
     id = params[:competition_id] || params[:id]
     competition = Competition.includes(associations).find_by_id(id)
