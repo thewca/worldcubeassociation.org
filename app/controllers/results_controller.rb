@@ -241,6 +241,8 @@ class ResultsController < ApplicationController
           `rank`, type DESC, start_date, roundTypeId, personName
       SQL
     end
+
+    @ranking_timestamp = ComputeAuxiliaryData.successful_start_date || Date.current
   end
 
   private def current_records_query(value, type)
