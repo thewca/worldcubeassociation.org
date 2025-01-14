@@ -2,12 +2,15 @@ import React, { useMemo } from 'react';
 import {
   Button, ButtonGroup, Form, Segment,
 } from 'semantic-ui-react';
+import _ from 'lodash';
 import { EventSelector } from '../wca/EventSelector';
 import { RegionSelector } from '../CompetitionsOverview/CompetitionsFilters';
 import { countries } from '../../lib/wca-data.js.erb';
 import I18n from '../../lib/i18n';
 
-export default function ResultsFilter({ filterState, filterActions, showCategories }) {
+export default function ResultsFilter({
+  filterState, filterActions, showCategories, isRecords,
+}) {
   const {
     event,
     region,
@@ -38,7 +41,7 @@ export default function ResultsFilter({ filterState, filterActions, showCategori
             title={I18n.t('results.selector_elements.events_selector.event')}
             selectedEvents={[event]}
             onEventSelection={({ eventId }) => setEvent(eventId)}
-            hideAllButton
+            hideAllButton={!isRecords}
             hideClearButton
           />
         </Form.Field>
@@ -84,10 +87,10 @@ export default function ResultsFilter({ filterState, filterActions, showCategori
           </Form.Field>
           <Form.Field width={2}>
             <label>{I18n.t('results.selector_elements.show_selector.show')}</label>
-            <ButtonGroup compact color="teal" widths={3}>
-              <Button active={show === '100 persons'} onClick={() => setShow('100 persons')}>{I18n.t('results.selector_elements.show_selector.persons')}</Button>
-              <Button active={show === '100 results'} onClick={() => setShow('100 results')}>{I18n.t('results.selector_elements.show_selector.results')}</Button>
-              <Button active={show === 'by region'} onClick={() => setShow('by region')}>{I18n.t('results.selector_elements.show_selector.by_region')}</Button>
+            <ButtonGroup compact color="teal" widths={showCategories.length}>
+              {showCategories.map((category) => (
+                <Button active={show === category} onClick={() => setShow(category)}>{I18n.t(`results.selector_elements.show_selector.${_.snakeCase(category)}`)}</Button>
+              ))}
             </ButtonGroup>
           </Form.Field>
         </Form.Group>

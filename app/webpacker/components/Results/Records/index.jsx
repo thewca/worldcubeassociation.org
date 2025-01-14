@@ -49,8 +49,6 @@ function filterReducer(state, action) {
       return { ...state, event: action.payload };
     case ActionTypes.SET_REGION:
       return { ...state, region: action.payload };
-    case ActionTypes.SET_RANKING_TYPE:
-      return { ...state, rankingType: action.payload };
     case ActionTypes.SET_GENDER:
       return { ...state, gender: action.payload };
     case ActionTypes.SET_SHOW:
@@ -106,7 +104,12 @@ export function Rankings() {
 
   return (
     <Container fluid>
-      <ResultsFilter filterState={filterState} filterActions={filterActions} />
+      <ResultsFilter
+        filterState={filterState}
+        filterActions={filterActions}
+        isRecords
+        showCategories={['mixed', 'slim', 'separate', 'history', 'mixed history']}
+      />
       <RecordsTable
         competitionsById={data.competitionsById}
         rows={data.rows}
