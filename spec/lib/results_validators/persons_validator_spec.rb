@@ -121,9 +121,9 @@ RSpec.describe PV do
       # PERSON_WITHOUT_RESULTS_ERROR
       # WRONG_WCA_ID_ERROR
       # WRONG_PARENTHESIS_FORMAT_ERROR
-      # DOB_JAN_ONE
-      # DOB_TOO_YOUNG
-      # DOB_TOO_OLD
+      # DOB_0101_WARNING
+      # VERY_YOUNG_PERSON_WARNING
+      # NOT_SO_YOUNG_PERSON_WARNING
       # EMPTY_GENDER_WARNING
       # WHITESPACE_IN_NAME_ERROR
       # WRONG_PARENTHESIS_TYPE_ERROR
@@ -213,13 +213,13 @@ RSpec.describe PV do
                                   name: res_bad_parenthesis.person.name),
         ]
         expected_warnings = [
-          RV::ValidationWarning.new(PV::DOB_JAN_ONE,
+          RV::ValidationWarning.new(PV::DOB_0101_WARNING,
                                     :persons, competition1.id,
                                     name: res0101.person.name),
-          RV::ValidationWarning.new(PV::DOB_TOO_YOUNG,
+          RV::ValidationWarning.new(PV::VERY_YOUNG_PERSON_WARNING,
                                     :persons, competition1.id,
                                     name: res_too_young.person.name),
-          RV::ValidationWarning.new(PV::DOB_TOO_OLD,
+          RV::ValidationWarning.new(PV::NOT_SO_YOUNG_PERSON_WARNING,
                                     :persons, competition1.id,
                                     name: res_not_young.person.name),
           RV::ValidationWarning.new(PV::EMPTY_GENDER_WARNING,
