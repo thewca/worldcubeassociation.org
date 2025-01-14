@@ -38,11 +38,11 @@ RSpec.describe SV do
         end
 
         expected_errors = [
-          RV::ValidationError.new(:scrambles, competition1.id,
-                                  SV::UNEXPECTED_SCRAMBLES_FOR_ROUND_ERROR,
+          RV::ValidationError.new(SV::UNEXPECTED_SCRAMBLES_FOR_ROUND_ERROR,
+                                  :scrambles, competition1.id,
                                   round_id: "333-f"),
-          RV::ValidationError.new(:scrambles, competition2.id,
-                                  SV::MISSING_SCRAMBLES_FOR_ROUND_ERROR,
+          RV::ValidationError.new(SV::MISSING_SCRAMBLES_FOR_ROUND_ERROR,
+                                  :scrambles, competition2.id,
                                   round_id: "333bf-f"),
         ]
 
@@ -68,11 +68,11 @@ RSpec.describe SV do
         create_scramble_set(2, competitionId: competition2.id, eventId: "333bf")
 
         expected_errors = [
-          RV::ValidationError.new(:scrambles, competition1.id,
-                                  SV::MISSING_SCRAMBLES_FOR_COMPETITION_ERROR,
+          RV::ValidationError.new(SV::MISSING_SCRAMBLES_FOR_COMPETITION_ERROR,
+                                  :scrambles, competition1.id,
                                   competition_id: competition1.id),
-          RV::ValidationError.new(:scrambles, competition2.id,
-                                  SV::MISSING_SCRAMBLES_FOR_GROUP_ERROR,
+          RV::ValidationError.new(SV::MISSING_SCRAMBLES_FOR_GROUP_ERROR,
+                                  :scrambles, competition2.id,
                                   round_id: "333bf-f", group_id: "A",
                                   actual: 2, expected: 3),
         ]
@@ -98,8 +98,8 @@ RSpec.describe SV do
         create_scramble_set(5, competitionId: competition1.id, eventId: "333oh", groupId: "C")
 
         expected_errors = [
-          RV::ValidationError.new(:scrambles, competition1.id,
-                                  SV::WRONG_NUMBER_OF_SCRAMBLE_SETS_ERROR,
+          RV::ValidationError.new(SV::WRONG_NUMBER_OF_SCRAMBLE_SETS_ERROR,
+                                  :scrambles, competition1.id,
                                   round_id: "333oh-f"),
         ]
 
@@ -123,8 +123,8 @@ RSpec.describe SV do
         create_scramble_set(3, competitionId: competition3.id, eventId: "333fm", groupId: "B")
 
         expected_warnings = [
-          RV::ValidationWarning.new(:scrambles, competition3.id,
-                                    SV::MULTIPLE_FMC_GROUPS_WARNING,
+          RV::ValidationWarning.new(SV::MULTIPLE_FMC_GROUPS_WARNING,
+                                    :scrambles, competition3.id,
                                     round_id: "333fm-f"),
         ]
 
@@ -156,8 +156,8 @@ RSpec.describe SV do
         create_scramble_set(2, competitionId: competition2.id, eventId: "333mbf", groupId: "B")
 
         expected_errors = [
-          RV::ValidationError.new(:scrambles, competition2.id,
-                                  SV::MISSING_SCRAMBLES_FOR_MULTI_ERROR,
+          RV::ValidationError.new(SV::MISSING_SCRAMBLES_FOR_MULTI_ERROR,
+                                  :scrambles, competition2.id,
                                   round_id: "333mbf-f"),
         ]
 
