@@ -99,14 +99,15 @@ export default function RecordsTable({
     <div style={{ overflowX: 'scroll' }}>
       <Table basic="very" compact="very" singleLine striped unstackable>
         <Table.Header>
-          {show !== 'by region' ? <Table.HeaderCell textAlign="center">#</Table.HeaderCell>
-            : <Table.HeaderCell>{I18n.t('results.table_elements.region')}</Table.HeaderCell>}
-          <Table.HeaderCell>{I18n.t('results.table_elements.name')}</Table.HeaderCell>
-          <Table.HeaderCell>{I18n.t('results.table_elements.result')}</Table.HeaderCell>
-          {show !== 'by region'
+          <Table.Row>
+            {show !== 'by region' ? <Table.HeaderCell textAlign="center">#</Table.HeaderCell>
+              : <Table.HeaderCell>{I18n.t('results.table_elements.region')}</Table.HeaderCell>}
+            <Table.HeaderCell>{I18n.t('results.table_elements.name')}</Table.HeaderCell>
+            <Table.HeaderCell>{I18n.t('results.table_elements.result')}</Table.HeaderCell>
+            {show !== 'by region'
             && <Table.HeaderCell textAlign="left">{I18n.t('results.table_elements.representing')}</Table.HeaderCell>}
-          <Table.HeaderCell>{I18n.t('results.table_elements.competition')}</Table.HeaderCell>
-          {isAverage && (
+            <Table.HeaderCell>{I18n.t('results.table_elements.competition')}</Table.HeaderCell>
+            {isAverage && (
             <>
               <Table.HeaderCell>{I18n.t('results.table_elements.solves')}</Table.HeaderCell>
               <Table.HeaderCell />
@@ -114,7 +115,8 @@ export default function RecordsTable({
               <Table.HeaderCell />
               <Table.HeaderCell />
             </>
-          )}
+            )}
+          </Table.Row>
         </Table.Header>
         <Table.Body key={show}>
           {results.map((r) => (
