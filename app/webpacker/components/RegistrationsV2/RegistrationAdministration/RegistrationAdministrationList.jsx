@@ -14,7 +14,8 @@ import { setMessage } from '../Register/RegistrationMessage';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
 import I18n from '../../../lib/i18n';
 import Loading from '../../Requests/Loading';
-import { bulkAutoAcceptRegistrations, bulkUpdateRegistrations } from '../api/registration/patch/update_registration';
+import { bulkUpdateRegistrations } from '../api/registration/patch/update_registration';
+import { disableAutoAccept } from '../api/registration/patch/auto_accept';
 import RegistrationAdministrationTable from './RegistrationsAdministrationTable';
 import useCheckboxState from '../../../lib/hooks/useCheckboxState';
 import { countries } from '../../../lib/wca-data.js.erb';
@@ -314,13 +315,11 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
         <>
           <Button
             color="red"
-            onClick={() => {
-              bulkAutoAcceptRegistrations()
-            }}
+            onClick={() => disableAutoAccept(competitionInfo.id)}
           >
             <Icon name="ban" />
             {' '}
-            {I18n.t('competitions.registration_v2.update.disable_bulk_auto_accept')}
+            {I18n.t('competitions.registration_v2.update.disable_auto_accept')}
           </Button>
         </>
       )}
