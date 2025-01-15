@@ -19,9 +19,9 @@ class Api::V0::PersonsController < Api::V0::ApiController
     person = Person.current.includes(:user, :ranksSingle, :ranksAverage).find_by_wca_id!(wca_id)
     private_attributes = []
     if current_user
-      if current_user&.wca_id == wca_id || current_user&.any_kind_of_delegate?
+      if current_user.wca_id == wca_id || current_user.any_kind_of_delegate?
         private_attributes = %w[dob]
-      elsif current_user&.can_admin_results?
+      elsif current_user.can_admin_results?
         private_attributes = %w[incorrect_wca_id_claim_count dob]
       end
     end
