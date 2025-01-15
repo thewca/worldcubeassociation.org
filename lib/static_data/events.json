@@ -12,7 +12,8 @@
     "is_official": true,
     "format_ids": [
       "a"
-    ]
+    ],
+    "is_blindfolded": false
   },
   {
     "id": "222",
@@ -27,7 +28,8 @@
     "is_official": true,
     "format_ids": [
       "a"
-    ]
+    ],
+    "is_blindfolded": false
   },
   {
     "id": "444",
@@ -42,7 +44,8 @@
     "is_official": true,
     "format_ids": [
       "a"
-    ]
+    ],
+    "is_blindfolded": false
   },
   {
     "id": "555",
@@ -57,7 +60,8 @@
     "is_official": true,
     "format_ids": [
       "a"
-    ]
+    ],
+    "is_blindfolded": false
   },
   {
     "id": "666",
@@ -72,7 +76,8 @@
     "is_official": true,
     "format_ids": [
       "m"
-    ]
+    ],
+    "is_blindfolded": false
   },
   {
     "id": "777",
@@ -87,7 +92,8 @@
     "is_official": true,
     "format_ids": [
       "m"
-    ]
+    ],
+    "is_blindfolded": false
   },
   {
     "id": "333bf",
@@ -102,7 +108,8 @@
     "is_official": true,
     "format_ids": [
       "3"
-    ]
+    ],
+    "is_blindfolded": true
   },
   {
     "id": "333fm",
@@ -119,7 +126,8 @@
       "m",
       "2",
       "1"
-    ]
+    ],
+    "is_blindfolded": false
   },
   {
     "id": "333oh",
@@ -134,7 +142,8 @@
     "is_official": true,
     "format_ids": [
       "a"
-    ]
+    ],
+    "is_blindfolded": false
   },
   {
     "id": "clock",
@@ -149,7 +158,8 @@
     "is_official": true,
     "format_ids": [
       "a"
-    ]
+    ],
+    "is_blindfolded": false
   },
   {
     "id": "minx",
@@ -164,7 +174,8 @@
     "is_official": true,
     "format_ids": [
       "a"
-    ]
+    ],
+    "is_blindfolded": false
   },
   {
     "id": "pyram",
@@ -179,7 +190,8 @@
     "is_official": true,
     "format_ids": [
       "a"
-    ]
+    ],
+    "is_blindfolded": false
   },
   {
     "id": "skewb",
@@ -194,7 +206,8 @@
     "is_official": true,
     "format_ids": [
       "a"
-    ]
+    ],
+    "is_blindfolded": false
   },
   {
     "id": "sq1",
@@ -209,7 +222,8 @@
     "is_official": true,
     "format_ids": [
       "a"
-    ]
+    ],
+    "is_blindfolded": false
   },
   {
     "id": "444bf",
@@ -224,7 +238,8 @@
     "is_official": true,
     "format_ids": [
       "3"
-    ]
+    ],
+    "is_blindfolded": true
   },
   {
     "id": "555bf",
@@ -239,7 +254,8 @@
     "is_official": true,
     "format_ids": [
       "3"
-    ]
+    ],
+    "is_blindfolded": true
   },
   {
     "id": "333mbf",
@@ -256,7 +272,8 @@
       "1",
       "2",
       "3"
-    ]
+    ],
+    "is_blindfolded": true
   },
   {
     "id": "333ft",
@@ -274,7 +291,8 @@
       "3",
       "2",
       "1"
-    ]
+    ],
+    "is_blindfolded": false
   },
   {
     "id": "magic",
@@ -289,7 +307,8 @@
     "is_official": false,
     "format_ids": [
       "a"
-    ]
+    ],
+    "is_blindfolded": false
   },
   {
     "id": "mmagic",
@@ -304,7 +323,8 @@
     "is_official": false,
     "format_ids": [
       "a"
-    ]
+    ],
+    "is_blindfolded": false
   },
   {
     "id": "333mbo",
@@ -321,6 +341,7 @@
       "3",
       "2",
       "1"
-    ]
+    ],
+    "is_blindfolded": true
   }
 ]
