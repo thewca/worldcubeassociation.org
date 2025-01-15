@@ -7,6 +7,7 @@ import { ticketStatuses } from '../../../lib/wca-data.js.erb';
 import Loading from '../../Requests/Loading';
 import useLoadedData from '../../../lib/hooks/useLoadedData';
 import Errored from '../../Requests/Errored';
+import I18n from '../../../lib/i18n';
 
 function EditPersonValidations({ ticketDetails }) {
   const { ticket } = ticketDetails;
@@ -18,7 +19,7 @@ function EditPersonValidations({ ticketDetails }) {
   if (error) return <Errored />;
 
   return validators.dob.map((validator) => (
-    <Message warning>{validator.message}</Message>
+    <Message warning>{I18n.t(`validators.${validator.kind}.${validator.id}`, validator.args)}</Message>
   ));
 }
 

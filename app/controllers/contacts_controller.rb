@@ -114,14 +114,19 @@ class ContactsController < ApplicationController
     edit_profile_reason = formValues[:editProfileReason]
     attachment = params[:attachment]
     wca_id = formValues[:wcaId]
+    person = Person.find_by(wca_id: wca_id)
 
-    return render status: :unauthorized, json: { error: "Cannot request profile change without login" } unless current_user.present?
+    if current_user.nil?
+      return render status: :unauthorized, json: { error: "Cannot request profile change without login" }
+    elsif current_user.wca_id != wca_id && !current_user.has_permission?(:can_request_to_edit_others_profile)
+      return render status: :unauthorized, json: { error: "Cannot request to change others profile" }
+    end
 
     profile_to_edit = {
-      name: current_user.person.name,
-      country_iso2: current_user.person.country_iso2,
-      gender: current_user.person.gender,
-      dob: current_user.person.dob,
+      name: person.name,
+      country_iso2: person.country_iso2,
+      gender: person.gender,
+      dob: person.dob,
     }
     changes_requested = Person.fields_edit_requestable
                               .reject { |field| profile_to_edit[field].to_s == edited_profile_details[field].to_s }

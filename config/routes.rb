@@ -60,6 +60,7 @@ Rails.application.routes.draw do
   post 'users/:id/avatar' => 'users#upload_avatar'
   patch 'users/:id/avatar' => 'users#update_avatar'
   delete 'users/:id/avatar' => 'users#delete_avatar'
+  post 'users/:id/anonymize' => 'users#anonymize', as: :anonymize_user
   get 'admin/avatars/pending' => 'admin/avatars#pending_avatar_users', as: :pending_avatars
   post 'admin/avatars' => 'admin/avatars#update_avatar', as: :admin_update_avatar
 
@@ -133,6 +134,7 @@ Rails.application.routes.draw do
   get 'competitions/:competition_id/report/edit' => 'delegate_reports#edit', as: :delegate_report_edit
   get 'competitions/:competition_id/report' => 'delegate_reports#show', as: :delegate_report
   patch 'competitions/:competition_id/report' => 'delegate_reports#update'
+  delete 'competitions/:competition_id/report/:image_id' => 'delegate_reports#delete_image', as: :delegate_report_delete_image
 
   # Stripe needs this special redirect URL during OAuth, see the linked controller method for details
   get 'stripe-connect' => 'competitions#stripe_connect', as: :competitions_stripe_connect
