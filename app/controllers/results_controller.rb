@@ -197,6 +197,7 @@ class ResultsController < ApplicationController
           DAY(competition.start_date)   day,
           event.id             eventId,
           event.name           eventName,
+          result.id            id,
           result.type          type,
           result.value         value,
           result.formatId      formatId,

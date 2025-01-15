@@ -32,7 +32,7 @@ export default function RecordsTable({
   }, [competitionsById, rows, show]);
   return (
     <div style={{ overflowX: 'scroll' }}>
-      { show === 'mixed' ? WCA_EVENT_IDS.map((id) => Object.keys(results).includes(id)
+      { show !== 'mixed history' ? WCA_EVENT_IDS.map((id) => Object.keys(results).includes(id)
           && <RecordTable record={results[id]} eventId={id} show={show} />)
         : <RecordTable record={results} show={show} />}
     </div>
@@ -169,7 +169,7 @@ function RecordRow({
 function RecordTable({ record, eventId, show }) {
   return (
     <>
-      { show === 'mixed' && <Header>{events.byId[eventId].name}</Header>}
+      { show !== 'mixed history' && <Header>{events.byId[eventId].name}</Header>}
       <Table basic="very" compact="very" striped unstackable singleLine>
         { show === 'mixed' ? <MixedHeader /> : <HistoryHeader mixed={show === 'mixed history'} /> }
         <Table.Body>
