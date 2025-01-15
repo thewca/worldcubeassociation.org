@@ -231,7 +231,7 @@ export default function RegistrationList({ competitionInfo, userInfo }) {
               return (
                 <Table.Row
                   key={`registration-table-row-${registration.user.id}`}
-                  style={{ backgroundColor: isUser ? "LightBlue" : undefined }}
+                  active={isUser}
                 >
                   {isPsychSheet && (
                     <Table.Cell
