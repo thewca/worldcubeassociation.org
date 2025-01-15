@@ -136,13 +136,25 @@ export default function RegistrationList({ competitionInfo, userInfo }) {
       {userIsInTable && (
         <Message>
           {userPosition && (
-            `Your rank by ${psychSheetSortBy} is ${userPosition}. `
+            I18n.t(
+              'competitions.registration_v2.list.psychsheets.your_rank',
+              { psychSheetSortBy, userPosition },
+            )
           )}
           {!userPosition && isPsychSheet && (
-            `You do not have an official ${psychSheetSortBy}. `
+            I18n.t(
+              'competitions.registration_v2.list.psychsheets.no_result',
+              { psychSheetSortBy },
+            )
           )}
-          <Button size="mini" onClick={() => userRowRef?.current?.scrollIntoView({ behavior: "smooth", block: "center" })}>
-            Scroll to me
+          {' '}
+          <Button
+            size="mini"
+            onClick={
+              () => userRowRef?.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+            }
+          >
+            {I18n.t('competitions.registration_v2.list.psychsheets.scroll_to_me')}
           </Button>
         </Message>
       )}
