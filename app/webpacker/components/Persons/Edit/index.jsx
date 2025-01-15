@@ -12,10 +12,17 @@ import PasswordChangeTab from './PasswordChangeTab';
 import PreferencesTab from './PreferencesTab';
 import TwoFactorChangeTab from './TwoFactorChangeTab';
 
-export default function Wrapper({ user, currentUser, editableFields }) {
+export default function Wrapper({
+  user, currentUser, editableFields, recentlyAuthenticated,
+}) {
   return (
     <WCAQueryClientProvider>
-      <EditUser user={user} currentUser={currentUser} editableFields={editableFields} />
+      <EditUser
+        user={user}
+        currentUser={currentUser}
+        editableFields={editableFields}
+        recentlyAuthenticated={recentlyAuthenticated}
+      />
     </WCAQueryClientProvider>
   );
 }
@@ -50,7 +57,7 @@ function getFormWarnings(user, currentUser) {
   }
 
   if (currentUser.cannot_edit_data_reason_html) {
-    warnings.push({ content: cannot_edit_data_reason_html });
+    warnings.push({ content: currentUser.cannot_edit_data_reason_html });
   }
 
   return warnings;
@@ -75,7 +82,9 @@ const updatePath = (tabSlug) => {
   window.history.replaceState({}, '', `${window.location.pathname}#${tabSlug}`);
 };
 
-function EditUser({ user, currentUser, editableFields }) {
+function EditUser({
+  user, currentUser, editableFields, recentlyAuthenticated,
+}) {
   const warnings = useMemo(() => getFormWarnings(user), [user]);
   const panes = useMemo(() => {
     const p = [{
@@ -94,6 +103,8 @@ function EditUser({ user, currentUser, editableFields }) {
         render: () => (
           <EmailChangeTab
             user={user}
+            editableFields={editableFields}
+            recentlyAuthenticated={recentlyAuthenticated}
           />
         ),
       },
@@ -112,6 +123,7 @@ function EditUser({ user, currentUser, editableFields }) {
         render: () => (
           <PasswordChangeTab
             user={user}
+            recentlyAuthenticated={recentlyAuthenticated}
           />
         ),
       },
@@ -121,6 +133,7 @@ function EditUser({ user, currentUser, editableFields }) {
         render: () => (
           <TwoFactorChangeTab
             user={user}
+            recentlyAuthenticated={recentlyAuthenticated}
           />
         ),
       }]);
