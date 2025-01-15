@@ -28,6 +28,7 @@ import RegionManager from './pages/RegionManager';
 import DownloadVoters from './pages/DownloadVoters';
 import ApprovePictures from './pages/ApprovePictures';
 import EditPersonRequestsPage from './pages/EditPersonRequestsPage';
+import AnonymizationScriptPage from './pages/AnonymizationScriptPage';
 
 const DELEGATE_HANDBOOK_LINK = 'https://documents.worldcubeassociation.org/edudoc/delegate-handbook/delegate-handbook.pdf';
 
@@ -143,5 +144,9 @@ export default {
   [PANEL_PAGES.editPersonRequests]: {
     name: 'Edit Person Requests',
     component: EditPersonRequestsPage,
+  },
+  [PANEL_PAGES.anonymizationScript]: {
+    name: 'Anonymization Script',
+    component: AnonymizationScriptPage,
   },
 };
