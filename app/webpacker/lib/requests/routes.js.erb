@@ -77,6 +77,8 @@ export const competitionEventsDataUrl = (id) => `<%= CGI.unescape(Rails.applicat
 
 export const adminCADUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.admin_compute_auxiliary_data_path) %>`;
 
+export const adminAnonymizePersonUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.admin_anonymize_person_path) %>`;
+
 export const adminFixResultsUrl = (personId, competition_id = undefined, event_id = undefined, round_type_id = undefined) => {
   const searchParams = new URLSearchParams(`person_id=${personId}`);
 
@@ -271,6 +273,9 @@ export const actionUrls = {
     updateStatus: (ticketId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.ticket_update_status_path("${ticketId}")) %>`,
     editPersonValidators: (ticketId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.ticket_edit_person_validators_path("${ticketId}")) %>`,
   },
+  users: {
+    anonymize: (userId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.anonymize_user_path("${userId}")) %>`,
+  },
 }
 
 export const userPreferencesRoute = `<%= CGI.unescape(Rails.application.routes.url_helpers.profile_edit_path)%>?section=preferences`;
@@ -300,6 +305,8 @@ export const updateRegistrationUrl = `<%= CGI.unescape(Rails.application.routes.
 export const bulkUpdateRegistrationUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v1_registrations_bulk_update_path) %>`;
 
 export const paymentTicketUrl = (competitionId, donationIso) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v1_registrations_payment_ticket_path(competition_id: "${competitionId}", donation_iso: "${donationIso}")) %>`;
+
+export const serverStatusPageUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.server_status_path) %>`;
 
 export const recordsUrl = (eventId, region, gender, show) => {
   const url = `<%= CGI.unescape(Rails.application.routes.url_helpers.records_path) %>`
