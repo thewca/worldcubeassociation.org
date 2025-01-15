@@ -64,6 +64,12 @@ class User < ApplicationRecord
     end
   }
 
+  ANONYMOUS_ACCOUNT_EMAIL_ID_SUFFIX = '@worldcubeassociation.org'
+  ANONYMOUS_ACCOUNT_NAME = 'Anonymous'
+  ANONYMOUS_ACCOUNT_DOB = '1954-12-04'
+  ANONYMOUS_ACCOUNT_GENDER = 'o'
+  ANONYMOUS_ACCOUNT_COUNTRY_ISO2 = 'US'
+
   def self.eligible_voters
     [
       UserGroup.delegate_regions,
@@ -641,6 +647,7 @@ class User < ApplicationRecord
       :generateDbToken,
       :approveAvatars,
       :editPersonRequests,
+      :anonymizationScript,
     ].index_with { |panel_page| panel_page.to_s.underscore.dasherize }
   end
 
@@ -692,6 +699,7 @@ class User < ApplicationRecord
           panel_pages[:editPersonRequests],
           panel_pages[:editPerson],
           panel_pages[:approveAvatars],
+          panel_pages[:anonymizationScript],
         ],
       },
       wst: {

@@ -45,7 +45,7 @@ export default function ContactEditProfilePage({ loggedInUserId, recaptchaPublic
       </Message>
     );
   }
-  if (loggedInUserData && !wcaId) {
+  if (!editOthersProfileMode && loggedInUserData && !wcaId) {
     return (
       <Message error>
         <I18nHTMLTranslate i18nKey="page.contact_edit_profile.no_profile_error" />
