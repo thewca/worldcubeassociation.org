@@ -3,7 +3,6 @@ import _ from 'lodash';
 import { Table } from 'semantic-ui-react';
 import { DateTime } from 'luxon';
 import { formatAttemptResult } from '../../lib/wca-live/attempts';
-import CountryFlag from '../wca/CountryFlag';
 import I18n from '../../lib/i18n';
 import {
   AttemptsCells, CompetitionCell, CountryCell, EventCell, PersonCell,
@@ -51,11 +50,7 @@ export function SeparateRecordsRow({ result, competition, rankingType }) {
       <EventCell eventId={result.eventId} />
       <Table.Cell>{formatAttemptResult(result.value, result.eventId)}</Table.Cell>
       <PersonCell personId={result.personId} personName={result.personName} />
-      <Table.Cell textAlign="left">
-        {country.iso2 && <CountryFlag iso2={country.iso2} />}
-        {' '}
-        {country.name}
-      </Table.Cell>
+      <CountryCell country={country} />
       <CompetitionCell competition={competition} />
       {rankingType === 'average' && (
         <AttemptsCells
@@ -70,7 +65,7 @@ export function SeparateRecordsRow({ result, competition, rankingType }) {
 }
 
 export function HistoryRow({
-  result, competition, mixed,
+  result, competition, mixed, country,
 }) {
   const [attempts, bestResultIndex, worstResultIndex] = resultAttempts(result);
   return (
@@ -81,6 +76,7 @@ export function HistoryRow({
       {result.type === 'average' && <Table.Cell />}
       <Table.Cell>{formatAttemptResult(result.value, result.eventId)}</Table.Cell>
       {result.type === 'single' && <Table.Cell />}
+      <CountryCell country={country} />
       <CompetitionCell competition={competition} />
       <AttemptsCells
         attempts={attempts}
@@ -93,7 +89,7 @@ export function HistoryRow({
 }
 
 export function RecordRow({
-  result, competition,
+  result, competition, country,
 }) {
   const [attempts, bestResultIndex, worstResultIndex] = resultAttempts(result);
   return (
@@ -101,6 +97,7 @@ export function RecordRow({
       <Table.Cell>{I18n.t(`results.selector_elements.type_selector.${result.type}`)}</Table.Cell>
       <PersonCell personId={result.personId} personName={result.personName} />
       <Table.Cell>{formatAttemptResult(result.value, result.eventId)}</Table.Cell>
+      <CountryCell country={country} />
       <CompetitionCell competition={competition} />
       <AttemptsCells
         attempts={attempts}
