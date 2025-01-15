@@ -91,10 +91,13 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       user = User.find(user_id)
       ban_reason = params[:banReason]
       scope = params[:scope]
-      upcoming_comps_for_user = user.competitions_registered_for.not_over.merge(Registration.not_cancelled).pluck(:id)
+      upcoming_comps_for_user = user.competitions_registered_for.not_over.merge(Registration.not_cancelled)
+      if end_date.present?
+        upcoming_comps_for_user = upcoming_comps_for_user.between_dates(Date.today, end_date)
+      end
       unless upcoming_comps_for_user.empty?
         return render status: :unprocessable_entity, json: {
-          error: "The user has upcoming competitions: #{upcoming_comps_for_user.join(', ')}. Before banning the user, make sure their registrations are deleted.",
+          error: "The user has upcoming competitions: #{upcoming_comps_for_user.pluck(:id).join(', ')}. Before banning the user, make sure their registrations are deleted.",
         }
       end
     end

@@ -304,11 +304,15 @@ export default function CompetingStep({
               selectedEvents={selectedEvents}
               id="event-selection"
               maxEvents={maxEvents}
-              eventsDisabled={eventsNotQualifiedFor(
-                competitionInfo.event_ids,
-                qualifications.wcif,
-                qualifications.personalRecords,
-              )}
+              eventsDisabled={
+                competitionInfo.allow_registration_without_qualification
+                ? []
+                : eventsNotQualifiedFor(
+                  competitionInfo.event_ids,
+                  qualifications.wcif,
+                  qualifications.personalRecords,
+                )
+              }
               disabledText={(event) => eventQualificationToString(
                 { id: event },
                 qualifications.wcif[event],

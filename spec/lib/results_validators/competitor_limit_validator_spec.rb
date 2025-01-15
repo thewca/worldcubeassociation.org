@@ -45,8 +45,8 @@ RSpec.describe CLV do
         FactoryBot.create(:result, competition: competition2, eventId: "222")
         FactoryBot.create(:inbox_result, competition: competition2, eventId: "222")
         expected_warnings = [
-          RV::ValidationWarning.new(:persons, competition2.id,
-                                    CLV::COMPETITOR_LIMIT_WARNING,
+          RV::ValidationWarning.new(CLV::COMPETITOR_LIMIT_WARNING,
+                                    :persons, competition2.id,
                                     n_competitors: 11,
                                     competitor_limit: 10),
         ]

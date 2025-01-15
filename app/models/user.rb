@@ -640,6 +640,7 @@ class User < ApplicationRecord
       :downloadVoters,
       :generateDbToken,
       :approveAvatars,
+      :editPersonRequests,
     ].index_with { |panel_page| panel_page.to_s.underscore.dasherize }
   end
 
@@ -676,12 +677,19 @@ class User < ApplicationRecord
       },
       wfc: {
         name: 'WFC panel',
-        pages: [],
+        pages: [
+          panel_pages[:duesExport],
+          panel_pages[:countryBands],
+          panel_pages[:xeroUsers],
+          panel_pages[:duesRedirect],
+          panel_pages[:bannedCompetitors],
+        ],
       },
       wrt: {
         name: 'WRT panel',
         pages: [
           panel_pages[:postingDashboard],
+          panel_pages[:editPersonRequests],
           panel_pages[:editPerson],
           panel_pages[:approveAvatars],
         ],
@@ -757,6 +765,12 @@ class User < ApplicationRecord
       can_view_delegate_admin_page: {
         scope: can_view_delegate_matters? ? "*" : [],
       },
+      can_view_delegate_report: {
+        scope: can_view_delegate_matters? ? "*" : delegated_competition_ids,
+      },
+      can_edit_delegate_report: {
+        scope: can_admin_results? ? "*" : delegated_competition_ids,
+      },
       can_create_groups: {
         scope: groups_with_create_access,
       },
@@ -769,11 +783,11 @@ class User < ApplicationRecord
       can_edit_groups: {
         scope: groups_with_edit_access,
       },
-      can_access_wfc_senior_matters: {
-        scope: can_access_wfc_senior_matters? ? "*" : [],
-      },
       can_access_panels: {
         scope: panels_with_access,
+      },
+      can_request_to_edit_others_profile: {
+        scope: any_kind_of_delegate? ? "*" : [],
       },
     }
     if banned?
