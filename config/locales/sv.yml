@@ -505,6 +505,8 @@ sv:
         organization: Arrangemang
         #original_hash: 5e326b1
         incidents: Incidenter
+        #original_hash: 7106c2d
+        setup_images: Bilder på tävlingssetup
         #original_hash: 1362470
         wrc_feedback_requested: Jag vill ha feedback från WRC om några av incidenterna ovan.
         #original_hash: 0c7191d
@@ -846,6 +848,13 @@ sv:
           hänvisning till deras nummer. Även om allt verkade normalt, lista bara
           åtminstone de mest anmärkningsvärda fallen. Markera kryssrutorna nedan
           om du aktivt söker feedback.
+        #original_hash: 8af00aa
+        setup_images: >-
+          Välj minst %{image_count} bilder som illustrerar tävlingens setup
+          (blandningsområde, tävlingsområde etc.). Du kan välja flera filer
+          samtidigt. Du kan ta bort bilder först när tillräckligt många andra
+          bilder har laddats upp (om du vill byta ut en bild måste du först
+          ladda upp den nya bilden och sedan ta bort den gamla).
         #original_hash: da39a3e
         wrc_feedback_requested: ''
         #original_hash: 98bb5cd
