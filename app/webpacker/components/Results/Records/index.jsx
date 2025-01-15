@@ -11,6 +11,7 @@ import { recordsUrl } from '../../../lib/requests/routes.js.erb';
 import ResultsFilter from '../resultsFilter';
 import SlimRecordTable from './SlimRecordsTable';
 import SeparateRecordsTable from './SeparateRecordsTable';
+import RecordHistoryTable from './RecordHIstoryTable';
 
 const ActionTypes = {
   SET_EVENT: 'SET_EVENT',
@@ -114,6 +115,14 @@ function TableWrapper({ competitionsById, rows, show }) {
   if (show === 'separate') {
     return (
       <SeparateRecordsTable
+        competitionsById={competitionsById}
+        rows={rows}
+      />
+    );
+  }
+  if (show === 'history') {
+    return (
+      <RecordHistoryTable
         competitionsById={competitionsById}
         rows={rows}
       />
