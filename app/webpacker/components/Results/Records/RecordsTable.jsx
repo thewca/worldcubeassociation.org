@@ -8,6 +8,28 @@ import { countries, events } from '../../../lib/wca-data.js.erb';
 import { personUrl } from '../../../lib/requests/routes.js.erb';
 import { WCA_EVENT_IDS } from '../../wca/EventSelector';
 
+export default function RecordsTable({
+  rows, competitionsById, show,
+}) {
+  const results = useMemo(() => _.groupBy(rows.map((result) => {
+    const competition = competitionsById[result.competitionId];
+    const country = countries.real.find((c) => c.id === result.countryId);
+
+    return {
+      result,
+      competition,
+      country,
+      key: `${result.id}-${show}`,
+    };
+  }), 'result.eventId'), [competitionsById, rows, show]);
+  return (
+    <div style={{ overflowX: 'scroll' }}>
+      {WCA_EVENT_IDS.map((id) => Object.keys(results).includes(id)
+        && <RecordTable record={results[id]} eventId={id} />)}
+    </div>
+  );
+}
+
 function CountryCell({ country }) {
   return (
     <Table.Cell textAlign="left">
@@ -28,7 +50,7 @@ function RecordRow({
   const worstResultIndex = attempts.indexOf(worstResult);
   return (
     <Table.Row>
-      <Table.Cell>{result.type}</Table.Cell>
+      <Table.Cell>{I18n.t(`results.selector_elements.type_selector.${result.type}`)}</Table.Cell>
       <Table.Cell>
         <a href={personUrl(result.personId)}>{result.personName}</a>
       </Table.Cell>
@@ -44,7 +66,7 @@ function RecordRow({
       {attempts.map((a, i) => (result.type === 'average' ? (
         <Table.Cell>
           { attempts.filter(Boolean).length === 5
-        && (i === bestResultIndex || i === worstResultIndex)
+          && (i === bestResultIndex || i === worstResultIndex)
             ? `(${formatAttemptResult(a, result.eventId)})` : formatAttemptResult(a, result.eventId)}
         </Table.Cell>
       ) : <Table.Cell />))}
@@ -85,27 +107,5 @@ function RecordTable({ record, eventId }) {
         </Table.Body>
       </Table>
     </>
-  );
-}
-
-export default function RecordsTable({
-  rows, competitionsById, show,
-}) {
-  const results = useMemo(() => _.groupBy(rows.map((result) => {
-    const competition = competitionsById[result.competitionId];
-    const country = countries.real.find((c) => c.id === result.countryId);
-
-    return {
-      result,
-      competition,
-      country,
-      key: `${result.id}-${show}`,
-    };
-  }), 'result.eventId'), [competitionsById, rows, show]);
-  return (
-    <div style={{ overflowX: 'scroll' }}>
-      {WCA_EVENT_IDS.map((id) => Object.keys(results).includes(id)
-        && <RecordTable record={results[id]} eventId={id} />)}
-    </div>
   );
 }

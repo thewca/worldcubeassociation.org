@@ -7,7 +7,7 @@ import { events } from '../../../lib/wca-data.js.erb';
 import { personUrl } from '../../../lib/requests/routes.js.erb';
 import EventIcon from '../../wca/EventIcon';
 
-export default function SlimRecordTable({ records }) {
+export default function SlimRecordsTable({ records }) {
   return (
     <Table basic="very" compact="very" striped unstackable>
       <Table.Header>
