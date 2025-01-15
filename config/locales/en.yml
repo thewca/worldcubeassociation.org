@@ -1811,6 +1811,12 @@ en:
               "false": "Competitors MUST be qualified to register for an event"
         #context: new registration system
     registration_v2:
+      auto_accept:
+        bulk_auto_accept: "Bulk Auto Accept"
+        enable: "Enable Auto Accept"
+        disable: "Disable Auto Accept"
+        cant_disable: "Error encountered trying to disable auto accept."
+        disabled: "Auto accept disabled."
       pdf:
         #context: <0> indicates an html tag for internationalizing in React, see https://docs.worldcubeassociation.org/guides/translating_the_website.html#using-react
         link: "As a <0>%{pdfLink}</0>"
@@ -1849,9 +1855,6 @@ en:
         acknowledgement: "I have read and acknowledged all information under the 'Register' tab, including entry fees, refund policies and any extra requirements listed above."
         next_step: "Continue to next Step"
       update:
-        bulk_auto_accept: "Bulk Auto Accept"
-        enable_auto_accept: "Enable Auto Accept"
-        disable_auto_accept: "Disable Auto Accept"
         being_updated: "Registration is being updated..."
         being_deleted: "Registration is being deleted..."
         update_confirm: "Are you sure you want to update your registration?"
@@ -1906,6 +1909,7 @@ en:
         event_limit: "This competition limits the amount of events you can register for to %{max_events}."
       errors:
         events: "Loading Events failed, please try again"
+        disable_auto_accept: "Error occurred when disabling auto accept."
         #context: These are error codes coming from the registration service
         -1: "You have sent an invalid token, please refresh the page. If this issue persists contact WST"
         -2: "Authentication Expired, please refresh the page"

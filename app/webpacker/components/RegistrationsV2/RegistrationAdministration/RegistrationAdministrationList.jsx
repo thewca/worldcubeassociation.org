@@ -116,6 +116,7 @@ const columnReducer = (state, action) => {
   return state;
 };
 
+
 export default function RegistrationAdministrationList({ competitionInfo }) {
   const [expandedColumns, dispatchColumns] = useReducer(
     columnReducer,
@@ -159,6 +160,21 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
           : 'registrations.flash.failed',
         'negative',
       ));
+    },
+  });
+
+
+  const { mutate: disableAutoAcceptMutation, isPending: isUpdating } = useMutation({
+    mutationFn: disableAutoAccept,
+    onError: (data) => {
+      const { error } = data.json;
+      dispatch(setMessage(
+        `competitions.registration_v2.auto_accept.cant_disable`,
+        'negative',
+      ));
+    },
+    onSuccess: () => {
+      dispatch(setMessage('competitions.registration_v2.auto_accept.disabled', 'positive'));
     },
   });
 
@@ -315,11 +331,11 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
         <>
           <Button
             color="red"
-            onClick={() => disableAutoAccept(competitionInfo.id)}
+            onClick={() => disableAutoAcceptMutation(competitionInfo.id)}
           >
             <Icon name="ban" />
             {' '}
-            {I18n.t('competitions.registration_v2.update.disable_auto_accept')}
+            {I18n.t('competitions.registration_v2.auto_accept.disable')}
           </Button>
         </>
       )}
