@@ -168,13 +168,13 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
     mutationFn: disableAutoAccept,
     onError: (data) => {
       const { error } = data.json;
-      dispatch(setMessage(
+      dispatchStore(setMessage(
         `competitions.registration_v2.auto_accept.cant_disable`,
         'negative',
       ));
     },
     onSuccess: () => {
-      dispatch(setMessage('competitions.registration_v2.auto_accept.disabled', 'positive'));
+      dispatchStore(setMessage('competitions.registration_v2.auto_accept.disabled', 'positive'));
     },
   });
 
@@ -330,6 +330,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
       { competitionInfo.auto_accept_registrations && (
         <>
           <Button
+            disabled={isUpdating}
             color="red"
             onClick={() => disableAutoAcceptMutation(competitionInfo.id)}
           >
