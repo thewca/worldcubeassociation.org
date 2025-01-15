@@ -87,7 +87,7 @@ export default function RankingsTable({
         country,
         rank,
         tiedPrevious,
-        key: `${result.id}-${show}`,
+        key: `${result.id}-${show}-${country.name}`,
       });
 
       return acc;
@@ -117,7 +117,7 @@ export default function RankingsTable({
             )}
           </Table.Row>
         </Table.Header>
-        <Table.Body key={show}>
+        <Table.Body>
           {results.map((r) => (
             <ResultRow
               country={r.country}
