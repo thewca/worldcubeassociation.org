@@ -7,6 +7,10 @@ import I18n from '../../../lib/i18n';
 import EditAvatar from '../../EditAvatar';
 import RolesTab from '../../RolesTab';
 import GeneralChangesTab from './GeneralChangesTab';
+import EmailChangeTab from './EmailChangeTab';
+import PasswordChangeTab from './PasswordChangeTab';
+import PreferencesTab from './PreferencesTab';
+import TwoFactorChangeTab from './TwoFactorChangeTab';
 
 export default function Wrapper({ user, currentUser, editableFields }) {
   return (
@@ -73,38 +77,82 @@ const updatePath = (tabSlug) => {
 
 function EditUser({ user, currentUser, editableFields }) {
   const warnings = useMemo(() => getFormWarnings(user), [user]);
-  const panes = useMemo(() => [{
-    slug: 'general',
-    menuItem: I18n.t('users.edit.general'),
-    render: () => (
-      <GeneralChangesTab
-        user={user}
-      />
-    ),
-  },
-  // todo: if current_user.can_change_users_avatar?(@user)
-  {
-    slug: 'avatar',
-    menuItem: I18n.t('users.edit.avatar'),
-    render: () => (
-      <EditAvatar
-        userId={user.id}
-        showStaffGuidelines={user['staff_or_any_delegate?']}
-        uploadDisabled={!editableFields.include('pending_avatar')}
-        canAdminAvatars={editableFields.include('remove_avatar')}
-        canRemoveAvatar={currentUser['can_admin_results?']}
-      />
-    ),
-  },
-  {
-    slug: 'roles',
-    menuItem: I18n.t('en.users.edit.roles'),
-    render: () => (
-      <RolesTab
-        userId={user.id}
-      />
-    ),
-  }], [user]);
+  const panes = useMemo(() => {
+    const p = [{
+      slug: 'general',
+      menuItem: I18n.t('users.edit.general'),
+      render: () => (
+        <GeneralChangesTab
+          user={user}
+        />
+      ),
+    }];
+    if (user.id === currentUser.id) {
+      p.concat([{
+        slug: 'email',
+        menuItem: I18n.t('users.edit.email'),
+        render: () => (
+          <EmailChangeTab
+            user={user}
+          />
+        ),
+      },
+      {
+        slug: 'preferences',
+        menuItem: I18n.t('users.edit.preferences'),
+        render: () => (
+          <PreferencesTab
+            user={user}
+          />
+        ),
+      },
+      {
+        slug: 'password',
+        menuItem: I18n.t('users.edit.password'),
+        render: () => (
+          <PasswordChangeTab
+            user={user}
+          />
+        ),
+      },
+      {
+        slug: '2fa',
+        menuItem: '2FA',
+        render: () => (
+          <TwoFactorChangeTab
+            user={user}
+          />
+        ),
+      }]);
+    }
+    if (currentUser['can_change_users_avatar?']) {
+      p.push({
+        slug: 'avatar',
+        menuItem: I18n.t('users.edit.avatar'),
+        render: () => (
+          <EditAvatar
+            userId={user.id}
+            showStaffGuidelines={user['staff_or_any_delegate?']}
+            uploadDisabled={!editableFields.include('pending_avatar')}
+            canAdminAvatars={editableFields.include('remove_avatar')}
+            canRemoveAvatar={currentUser['can_admin_results?']}
+          />
+        ),
+      });
+    }
+    if (currentUser['can_view_all_users?']) {
+      p.push({
+        slug: 'roles',
+        menuItem: 'Roles',
+        render: () => (
+          <RolesTab
+            userId={user.id}
+          />
+        ),
+      });
+    }
+    return p;
+  }, [user, currentUser, editableFields]);
 
   return (
     <Container>
