@@ -56,7 +56,7 @@ function RecordTable({ record, eventId }) {
   return (
     <>
       <Header>{events.byId[eventId].name}</Header>
-      <Table basic="very" compact="very" striped unstackable fixed>
+      <Table basic="very" compact="very" striped unstackable singleLine>
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell>{I18n.t('results.selector_elements.type_selector.type')}</Table.HeaderCell>
