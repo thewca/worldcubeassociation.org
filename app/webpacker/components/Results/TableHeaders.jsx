@@ -39,7 +39,7 @@ const headerConfig = {
     'common.average',
     'results.table_elements.name',
     'results.table_elements.solves',
-    ...Array(4).fill(''), // Empty cells
+    ...Array(4).fill(''),
   ],
 };
 

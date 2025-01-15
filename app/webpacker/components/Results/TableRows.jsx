@@ -2,13 +2,13 @@ import React from 'react';
 import _ from 'lodash';
 import { Table } from 'semantic-ui-react';
 import { DateTime } from 'luxon';
-import EventIcon from '../wca/EventIcon';
 import { formatAttemptResult } from '../../lib/wca-live/attempts';
 import CountryFlag from '../wca/CountryFlag';
 import I18n from '../../lib/i18n';
-import { personUrl } from '../../lib/requests/routes.js.erb';
-import { CountryCell } from './TableCells';
-import { countries, events } from '../../lib/wca-data.js.erb';
+import {
+  AttemptsCells, CompetitionCell, CountryCell, EventCell, PersonCell,
+} from './TableCells';
+import { countries } from '../../lib/wca-data.js.erb';
 
 function resultAttempts(result) {
   const attempts = [result?.value1, result?.value2, result?.value3, result?.value4, result?.value5];
@@ -24,32 +24,19 @@ export function SlimRecordsRow({ row }) {
   const [attempts, bestResultIndex, worstResultIndex] = resultAttempts(average);
   return (
     <Table.Row>
-      <Table.Cell>
-        <a href={personUrl(single.personId)}>{single.personName}</a>
-      </Table.Cell>
-      <Table.Cell>
-        {formatAttemptResult(single.value, single.eventId)}
-      </Table.Cell>
-      <Table.Cell>
-        <EventIcon id={single.eventId} />
-        {' '}
-        {events.byId[single.eventId].name}
-      </Table.Cell>
+      <PersonCell personId={single.personId} personName={single.personName} />
+      <Table.Cell>{formatAttemptResult(single.value, single.eventId)}</Table.Cell>
+      <EventCell eventId={single.eventId} />
       {average && (
         <>
-          <Table.Cell>
-            {formatAttemptResult(average.value, average.eventId)}
-          </Table.Cell>
-          <Table.Cell>
-            <a href={personUrl(average.personId)}>{average.personName}</a>
-          </Table.Cell>
-          {attempts.map((a, i) => (
-            <Table.Cell>
-              { attempts.filter(Boolean).length === 5
-              && (i === bestResultIndex || i === worstResultIndex)
-                ? `(${formatAttemptResult(a, average.eventId)})` : formatAttemptResult(a, average.eventId)}
-            </Table.Cell>
-          ))}
+          <Table.Cell>{formatAttemptResult(average.value, average.eventId)}</Table.Cell>
+          <PersonCell personId={average.personId} personName={average.personName} />
+          <AttemptsCells
+            attempts={attempts}
+            bestResultIndex={bestResultIndex}
+            worstResultIndex={worstResultIndex}
+            eventId={average.eventId}
+          />
         </>
       )}
     </Table.Row>
@@ -61,37 +48,22 @@ export function SeparateRecordsRow({ result, competition, rankingType }) {
   const country = countries.real.find((c) => c.id === result.countryId);
   return (
     <Table.Row>
-      <Table.Cell>
-        <EventIcon id={result.eventId} />
-        {' '}
-        {events.byId[result.eventId].name}
-      </Table.Cell>
-      <Table.Cell>
-        {formatAttemptResult(result.value, result.eventId)}
-      </Table.Cell>
-      <Table.Cell>
-        <a href={personUrl(result.personId)}>{result.personName}</a>
-      </Table.Cell>
+      <EventCell eventId={result.eventId} />
+      <Table.Cell>{formatAttemptResult(result.value, result.eventId)}</Table.Cell>
+      <PersonCell personId={result.personId} personName={result.personName} />
       <Table.Cell textAlign="left">
         {country.iso2 && <CountryFlag iso2={country.iso2} />}
         {' '}
         {country.name}
       </Table.Cell>
-      <Table.Cell>
-        <CountryFlag iso2={competition.country.iso2} />
-        {' '}
-        <a href={`/competition/${competition.id}`}>{competition.cellName}</a>
-      </Table.Cell>
+      <CompetitionCell competition={competition} />
       {rankingType === 'average' && (
-        <>
-          {attempts.map((a, i) => (
-            <Table.Cell>
-              { attempts.filter(Boolean).length === 5
-              && (i === bestResultIndex || i === worstResultIndex)
-                ? `(${formatAttemptResult(a, result.eventId)})` : formatAttemptResult(a, result.eventId)}
-            </Table.Cell>
-          ))}
-        </>
+        <AttemptsCells
+          attempts={attempts}
+          bestResultIndex={bestResultIndex}
+          worstResultIndex={worstResultIndex}
+          eventId={result.eventId}
+        />
       )}
     </Table.Row>
   );
@@ -104,34 +76,19 @@ export function HistoryRow({
   return (
     <Table.Row>
       <Table.Cell>{DateTime.fromISO(result.start_date).toFormat('MMM dd, yyyy')}</Table.Cell>
-      { mixed && (
-        <Table.Cell>
-          <EventIcon id={result.eventId} />
-          {' '}
-          {events.byId[result.eventId].name}
-        </Table.Cell>
-      )}
-      <Table.Cell>
-        <a href={personUrl(result.personId)}>{result.personName}</a>
-      </Table.Cell>
+      {mixed && <EventCell eventId={result.eventId} />}
+      <PersonCell personId={result.personId} personName={result.personName} />
       {result.type === 'average' && <Table.Cell />}
-      <Table.Cell>
-        {formatAttemptResult(result.value, result.eventId)}
-      </Table.Cell>
+      <Table.Cell>{formatAttemptResult(result.value, result.eventId)}</Table.Cell>
       {result.type === 'single' && <Table.Cell />}
       {show !== 'by region' && <CountryCell country={country} />}
-      <Table.Cell>
-        <CountryFlag iso2={competition.country.iso2} />
-        {' '}
-        <a href={`/competition/${competition.id}`}>{competition.cellName}</a>
-      </Table.Cell>
-      {attempts.map((a, i) => (result.type === 'average' ? (
-        <Table.Cell>
-          { attempts.filter(Boolean).length === 5
-          && (i === bestResultIndex || i === worstResultIndex)
-            ? `(${formatAttemptResult(a, result.eventId)})` : formatAttemptResult(a, result.eventId)}
-        </Table.Cell>
-      ) : <Table.Cell />))}
+      <CompetitionCell competition={competition} />
+      <AttemptsCells
+        attempts={attempts}
+        bestResultIndex={bestResultIndex}
+        worstResultIndex={worstResultIndex}
+        eventId={result.eventId}
+      />
     </Table.Row>
   );
 }
@@ -143,25 +100,16 @@ export function RecordRow({
   return (
     <Table.Row>
       <Table.Cell>{I18n.t(`results.selector_elements.type_selector.${result.type}`)}</Table.Cell>
-      <Table.Cell>
-        <a href={personUrl(result.personId)}>{result.personName}</a>
-      </Table.Cell>
-      <Table.Cell>
-        {formatAttemptResult(result.value, result.eventId)}
-      </Table.Cell>
+      <PersonCell personId={result.personId} personName={result.personName} />
+      <Table.Cell>{formatAttemptResult(result.value, result.eventId)}</Table.Cell>
       {show !== 'by region' && <CountryCell country={country} />}
-      <Table.Cell>
-        <CountryFlag iso2={competition.country.iso2} />
-        {' '}
-        <a href={`/competition/${competition.id}`}>{competition.cellName}</a>
-      </Table.Cell>
-      {attempts.map((a, i) => (result.type === 'average' ? (
-        <Table.Cell>
-          { attempts.filter(Boolean).length === 5
-          && (i === bestResultIndex || i === worstResultIndex)
-            ? `(${formatAttemptResult(a, result.eventId)})` : formatAttemptResult(a, result.eventId)}
-        </Table.Cell>
-      ) : <Table.Cell />))}
+      <CompetitionCell competition={competition} />
+      <AttemptsCells
+        attempts={attempts}
+        bestResultIndex={bestResultIndex}
+        worstResultIndex={worstResultIndex}
+        eventId={result.eventId}
+      />
     </Table.Row>
   );
 }
