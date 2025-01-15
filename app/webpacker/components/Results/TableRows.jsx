@@ -11,7 +11,7 @@ import { CountryCell } from './TableCells';
 import { countries, events } from '../../lib/wca-data.js.erb';
 
 function resultAttempts(result) {
-  const attempts = [result.value1, result.value2, result.value3, result.value4, result.value5];
+  const attempts = [result?.value1, result?.value2, result?.value3, result?.value4, result?.value5];
   const bestResult = _.max(attempts);
   const worstResult = _.min(attempts);
   const bestResultIndex = attempts.indexOf(bestResult);

@@ -3,12 +3,12 @@ import { Table } from 'semantic-ui-react';
 import { SlimHeader } from '../TableHeaders';
 import { SlimRecordsRow } from '../TableRows';
 
-export default function SlimRecordsTable({ records }) {
+export default function SlimRecordsTable({ rows }) {
   return (
     <Table basic="very" compact="very" striped unstackable>
       <SlimHeader />
       <Table.Body>
-        {records[0].map((row) => <SlimRecordsRow row={row} />)}
+        {rows[0].map((row) => <SlimRecordsRow row={row} />)}
       </Table.Body>
     </Table>
   );

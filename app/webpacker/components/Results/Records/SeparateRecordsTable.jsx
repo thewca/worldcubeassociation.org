@@ -20,7 +20,7 @@ export default function SeparateRecordsTable({ rows, competitionsById }) {
 function RankingTypeTable({ records, rankingType, competitionsById }) {
   return (
     <Table basic="very" compact="very" striped unstackable singleLine>
-      <SeparateHeader rankingType={rankingType} />
+      <SeparateHeader isAverage={rankingType === 'average'} />
       <Table.Body>
         {records.map((row) => (
           <SeparateRecordsRow
