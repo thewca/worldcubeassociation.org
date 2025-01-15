@@ -745,7 +745,6 @@ en:
       panel: "Panel"
       polls: "Polls"
       results_team: "Results team"
-      results_admin: "Admin"
       results_database: "Database"
       #context: "Sidekiq" is the name of a software product
       results_sidekiq: "Sidekiq dashboard"
