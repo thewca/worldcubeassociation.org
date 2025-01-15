@@ -70,7 +70,7 @@ export function SeparateRecordsRow({ result, competition, rankingType }) {
 }
 
 export function HistoryRow({
-  result, competition, show, country, mixed,
+  result, competition, mixed,
 }) {
   const [attempts, bestResultIndex, worstResultIndex] = resultAttempts(result);
   return (
@@ -81,7 +81,6 @@ export function HistoryRow({
       {result.type === 'average' && <Table.Cell />}
       <Table.Cell>{formatAttemptResult(result.value, result.eventId)}</Table.Cell>
       {result.type === 'single' && <Table.Cell />}
-      {show !== 'by region' && <CountryCell country={country} />}
       <CompetitionCell competition={competition} />
       <AttemptsCells
         attempts={attempts}
@@ -94,7 +93,7 @@ export function HistoryRow({
 }
 
 export function RecordRow({
-  result, competition, show, country,
+  result, competition,
 }) {
   const [attempts, bestResultIndex, worstResultIndex] = resultAttempts(result);
   return (
@@ -102,7 +101,6 @@ export function RecordRow({
       <Table.Cell>{I18n.t(`results.selector_elements.type_selector.${result.type}`)}</Table.Cell>
       <PersonCell personId={result.personId} personName={result.personName} />
       <Table.Cell>{formatAttemptResult(result.value, result.eventId)}</Table.Cell>
-      {show !== 'by region' && <CountryCell country={country} />}
       <CompetitionCell competition={competition} />
       <AttemptsCells
         attempts={attempts}
