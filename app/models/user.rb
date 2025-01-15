@@ -780,9 +780,6 @@ class User < ApplicationRecord
       can_edit_delegate_report: {
         scope: can_admin_results? ? "*" : delegated_competition_ids,
       },
-      can_edit_results: {
-        scope: can_edit_results? ? "*" : [],
-      },
       can_create_groups: {
         scope: groups_with_create_access,
       },
@@ -840,10 +837,6 @@ class User < ApplicationRecord
 
   def can_admin_results?
     admin? || board_member? || results_team?
-  end
-
-  private def can_edit_results?
-    admin? || results_team?
   end
 
   def can_admin_finances?

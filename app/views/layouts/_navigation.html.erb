@@ -249,7 +249,7 @@
               <li><%= link_to t('.new_competition'), new_competition_path if current_user.can_create_competitions? %></li>
             <% end %>
 
-            <% if current_user.has_permission?(:can_edit_results) %>
+            <% if current_user.can_admin_results? %>
               <li class="divider"></li>
               <li role="presentation" class="dropdown-header">
                 <%= t '.results_team' %>
