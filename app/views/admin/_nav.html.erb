@@ -4,8 +4,6 @@
       <% competitions_view = "/competitions"
          competitions_view += "?display=admin" if current_user.can_see_admin_competitions? %>
       <% [
-        { text: "List competitions", path: competitions_view, fa_icon: "list" },
-        { text: "Delegates", path: delegates_path(anchor: "all"), fa_icon: "sitemap" },
         { text: "Run validators", path: admin_check_results_path, fa_icon: "check double" },
         { text: "Create newcomers", path: admin_finish_unfinished_persons_path, fa_icon: "user plus" },
         { text: "Check records", path: admin_check_regional_records_path, fa_icon: "trophy" },
@@ -15,7 +13,6 @@
         { text: "Merge people", path: admin_merge_people_path, fa_icon: "code branch" },
         { text: "Anonymize person", path: admin_anonymize_person_path, fa_icon: "id card" },
         { text: "Reassign connected wca id", path: admin_reassign_wca_id_path, fa_icon: "code branch" },
-        { text: "Server status", path: server_status_path, fa_icon: "info" },
       ].each do |nav_item| %>
         <%= link_to nav_item[:path], class: "list-group-item" + (current_page?(nav_item[:path]) ? ' active' : '') do %>
           <%= ui_icon(nav_item[:fa_icon]) %> <%= nav_item[:text] %>

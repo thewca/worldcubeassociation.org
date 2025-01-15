@@ -648,6 +648,7 @@ class User < ApplicationRecord
       :approveAvatars,
       :editPersonRequests,
       :anonymizationScript,
+      :serverStatus,
     ].index_with { |panel_page| panel_page.to_s.underscore.dasherize }
   end
 
@@ -706,6 +707,7 @@ class User < ApplicationRecord
         name: 'WST panel',
         pages: [
           panel_pages[:translators],
+          panel_pages[:serverStatus],
         ],
       },
       board: {

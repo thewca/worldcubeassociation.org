@@ -4,6 +4,7 @@ import {
   subordinateDelegateClaimsUrl,
   subordinateUpcomingCompetitionsUrl,
   generateDbTokenUrl,
+  serverStatusPageUrl,
 } from '../../lib/requests/routes.js.erb';
 import PostingCompetitionsTable from '../PostingCompetitions';
 import EditPersonPage from './pages/EditPersonPage';
@@ -148,5 +149,9 @@ export default {
   [PANEL_PAGES.anonymizationScript]: {
     name: 'Anonymization Script',
     component: AnonymizationScriptPage,
+  },
+  [PANEL_PAGES.serverStatus]: {
+    name: 'Server Status',
+    link: serverStatusPageUrl,
   },
 };
