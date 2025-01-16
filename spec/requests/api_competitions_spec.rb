@@ -582,7 +582,7 @@ RSpec.describe "API Competitions" do
     end
 
     it 'doesnt work if not an organizer of the comp' do
-      sign_in(FactoryBot.create :user)
+      sign_in(FactoryBot.create(:user))
 
       patch api_v0_competition_disable_auto_accept_path(auto_accept_comp), headers: headers
       expect(response.code).to eq("404")

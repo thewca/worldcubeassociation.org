@@ -27,7 +27,6 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
     render_error(e.status, e.errors)
   end
 
-
   def validate_show_registration
     @user_id, @competition_id = show_params
     @competition = Competition.find(@competition_id)

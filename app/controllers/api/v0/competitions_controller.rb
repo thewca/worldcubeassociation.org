@@ -189,9 +189,8 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
     require_can_manage!(competition)
 
     competition.update!(auto_accept_registrations: false)
-    render json: {status: 'success'}
+    render json: { status: 'success' }
   end
-
 
   private def competition_from_params(associations: {})
     id = params[:competition_id] || params[:id]
