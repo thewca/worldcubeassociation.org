@@ -102,6 +102,7 @@ EXPOSE 3000
 # unfonts-core = Korean
 # wqy-modern = Chinese
 # ipafont = Japanese
+# thai-tlwg = Thai (as the name suggests)
 # lmodern = Random accents and special symbols for Latin script
 RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y \
@@ -109,6 +110,7 @@ RUN apt-get update -qq && \
       fonts-unfonts-core \
       fonts-wqy-microhei \
       fonts-ipafont \
+      fonts-thai-tlwg \
       fonts-lmodern
 USER rails:rails
 # Regenerate the font cache so WkHtmltopdf can find them

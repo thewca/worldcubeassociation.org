@@ -17,7 +17,7 @@ import updateRegistration from '../api/registration/patch/update_registration';
 import submitEventRegistration from '../api/registration/post/submit_registration';
 import Processing from './Processing';
 import { contactCompetitionUrl, userPreferencesRoute } from '../../../lib/requests/routes.js.erb';
-import { EventSelector } from '../../CompetitionsOverview/CompetitionsFilters';
+import { EventSelector } from '../../wca/EventSelector';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { setMessage } from './RegistrationMessage';
 import I18n from '../../../lib/i18n';
@@ -304,11 +304,15 @@ export default function CompetingStep({
               selectedEvents={selectedEvents}
               id="event-selection"
               maxEvents={maxEvents}
-              eventsDisabled={eventsNotQualifiedFor(
-                competitionInfo.event_ids,
-                qualifications.wcif,
-                qualifications.personalRecords,
-              )}
+              eventsDisabled={
+                competitionInfo.allow_registration_without_qualification
+                ? []
+                : eventsNotQualifiedFor(
+                  competitionInfo.event_ids,
+                  qualifications.wcif,
+                  qualifications.personalRecords,
+                )
+              }
               disabledText={(event) => eventQualificationToString(
                 { id: event },
                 qualifications.wcif[event],

@@ -13,6 +13,7 @@ FactoryBot.define do
       event_ids { ['333', '333oh'] }
       events { competition.events.where(id: event_ids) }
     end
+
     competition_events { competition.competition_events.where(event: events) }
 
     competing_status { Registrations::Helper::STATUS_PENDING }

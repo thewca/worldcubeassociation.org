@@ -74,3 +74,5 @@ translations:
       - "*.attempts.*"
       - "*.time_limit.*"
       - "*.users.edit.*"
+      - "*.persons.index.*"
+      - "*.validators.*"
