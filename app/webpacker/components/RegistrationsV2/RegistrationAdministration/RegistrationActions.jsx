@@ -12,9 +12,9 @@ function V3csvExport(selected, registrations, competition) {
   registrations
     .filter((r) => selected.length === 0 || selected.includes(r.user_id))
     .forEach((registration) => {
-      csvContent += `${registration.competing.registration_status === 'accepted' ? 'a' : 'p'},${
+      csvContent += `${registration.competing.registration_status === 'accepted' ? 'a' : 'p'},"${
         registration.user.name
-      },"${registration.user.country.name}",${
+      }","${registration.user.country.name}",${
         registration.user.wca_id
       },${registration.user.dob},${
         registration.user.gender

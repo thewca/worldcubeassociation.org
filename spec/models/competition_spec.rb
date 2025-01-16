@@ -419,7 +419,8 @@ RSpec.describe Competition do
 
     it "does not warn for posted reports" do
       competition = FactoryBot.create :competition, :visible, :with_delegate, starts: 2.days.ago
-      competition.delegate_report.update!(schedule_url: "http://example.com", posted: true)
+      posted_dummy_dr = FactoryBot.create :delegate_report, :posted, competition: competition
+      competition.delegate_report.update!(schedule_url: "http://example.com", posted: true, setup_images: posted_dummy_dr.setup_images_blobs)
       delegate = competition.delegates.first
       expect(competition.user_should_post_delegate_report?(delegate)).to eq false
     end
@@ -561,7 +562,7 @@ RSpec.describe Competition do
       expect(competition).to be_valid
       expect(competition.is_probably_over?).to be true
       expect(competition.results_posted?).to be false
-      expect(competition.info_for(nil)[:upload_results]).to eq "This competition is over, we are working to upload the results as soon as possible!"
+      expect(competition.info_for(nil)[:upload_results]).to eq "This competition is over. We are working to upload the results as soon as possible!"
     end
 
     it "displays info if competition is in progress" do

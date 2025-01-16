@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import {
   Button, Container, Dropdown, Message, Modal,
 } from 'semantic-ui-react';
@@ -41,7 +41,11 @@ function SkateholderSelector({ stakeholderList, setUserSelectedStakeholder }) {
 function TicketContent({ ticketDetails, currentStakeholder, sync }) {
   return (
     <>
-      <TicketHeader ticketDetails={ticketDetails} />
+      <TicketHeader
+        ticketDetails={ticketDetails}
+        currentStakeholder={currentStakeholder}
+        sync={sync}
+      />
       <TicketWorkbench
         ticketDetails={ticketDetails}
         sync={sync}

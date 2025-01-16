@@ -6,6 +6,34 @@ function parseDateString(yyyymmddDateString) {
   return DateTime.fromFormat(yyyymmddDateString, 'yyyy-MM-dd');
 }
 
+const registrationStatusHint = (competingStatus) => {
+  if (competingStatus === 'waiting_list') {
+    return I18n.t('competitions.messages.tooltip_waiting_list');
+  } if (competingStatus === 'accepted') {
+    return I18n.t('competitions.messages.tooltip_registered');
+  } if (competingStatus === 'cancelled' || competingStatus === 'rejected') {
+    return I18n.t('competitions.messages.tooltip_deleted');
+  } if (competingStatus === 'pending') {
+    return I18n.t('competitions.messages.tooltip_pending');
+  }
+  return '';
+};
+
+const competitionStatusHint = (competition) => {
+  let text = '';
+  if (competition['confirmed?']) {
+    text += I18n.t('competitions.messages.confirmed_visible');
+  } else if (competition['visible?']) {
+    text += I18n.t('competitions.messages.confirmed_not_visible');
+  } else {
+    text += I18n.t('competitions.messages.not_confirmed_not_visible');
+  }
+
+  return text;
+};
+
+export const competitionStatusText = (competition, registrationStatus) => `${registrationStatusHint(registrationStatus)} ${competitionStatusHint(competition)}`;
+
 export function dayDifferenceFromToday(yyyymmddDateString) {
   const dateLuxon = parseDateString(yyyymmddDateString);
   const exactDaysDiff = dateLuxon.diffNow('days').days;
@@ -132,7 +160,7 @@ export function computeReportsAndResultsStatus(comp, refDate) {
 
 // Currently, the venue attribute of a competition object can be written as markdown,
 // and using third party libraries like react-markdown to parse it requires too much work
-export function PseudoLinkMarkdown({ text }) {
+export function PseudoLinkMarkdown({ text, RenderAs = 'p' }) {
   const openBracketIndex = text.indexOf('[');
   const closeBracketIndex = text.indexOf(']', openBracketIndex);
   const openParenIndex = text.indexOf('(', closeBracketIndex);
@@ -140,14 +168,14 @@ export function PseudoLinkMarkdown({ text }) {
 
   if (openBracketIndex === -1 || closeBracketIndex === -1
     || openParenIndex === -1 || closeParenIndex === -1) {
-    return <p>{text}</p>;
+    return <RenderAs>{text}</RenderAs>;
   }
 
   return (
-    <p>
+    <RenderAs>
       <a href={text.slice(openParenIndex + 1, closeParenIndex)} target="_blank" rel="noreferrer">
         {text.slice(openBracketIndex + 1, closeBracketIndex)}
       </a>
-    </p>
+    </RenderAs>
   );
 }

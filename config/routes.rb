@@ -43,7 +43,7 @@ Rails.application.routes.draw do
 
   post 'registration/:id/load-payment-intent/:payment_integration' => 'registrations#load_payment_intent', as: :registration_payment_intent
   post 'competitions/:competition_id/refund/:payment_integration/:payment_id' => 'registrations#refund_payment', as: :registration_payment_refund
-  get 'competitions/:competition_id/payment-completion' => 'registrations#payment_completion', as: :registration_payment_completion
+  get 'competitions/:competition_id/payment-completion/:payment_integration' => 'registrations#payment_completion', as: :registration_payment_completion
   post 'registration/stripe-webhook' => 'registrations#stripe_webhook', as: :registration_stripe_webhook
   get 'registration/payment-denomination' => 'registrations#payment_denomination', as: :registration_payment_denomination
   resources :users, only: [:index, :edit, :update]
@@ -60,8 +60,9 @@ Rails.application.routes.draw do
   post 'users/:id/avatar' => 'users#upload_avatar'
   patch 'users/:id/avatar' => 'users#update_avatar'
   delete 'users/:id/avatar' => 'users#delete_avatar'
-  get 'admin/avatars' => 'admin/avatars#index'
-  post 'admin/avatars' => 'admin/avatars#update_all'
+  post 'users/:id/anonymize' => 'users#anonymize', as: :anonymize_user
+  get 'admin/avatars/pending' => 'admin/avatars#pending_avatar_users', as: :pending_avatars
+  post 'admin/avatars' => 'admin/avatars#update_avatar', as: :admin_update_avatar
 
   get 'map' => 'competitions#embedable_map'
 
@@ -133,6 +134,7 @@ Rails.application.routes.draw do
   get 'competitions/:competition_id/report/edit' => 'delegate_reports#edit', as: :delegate_report_edit
   get 'competitions/:competition_id/report' => 'delegate_reports#show', as: :delegate_report
   patch 'competitions/:competition_id/report' => 'delegate_reports#update'
+  delete 'competitions/:competition_id/report/:image_id' => 'delegate_reports#delete_image', as: :delegate_report_delete_image
 
   # Stripe needs this special redirect URL during OAuth, see the linked controller method for details
   get 'stripe-connect' => 'competitions#stripe_connect', as: :competitions_stripe_connect
@@ -187,12 +189,13 @@ Rails.application.routes.draw do
   get 'panel/pending-claims(/:user_id)' => 'panel#pending_claims_for_subordinate_delegates', as: 'pending_claims'
   scope 'panel' do
     get 'staff' => 'panel#staff', as: :panel_staff
-    get 'wfc' => 'panel#wfc', as: :panel_wfc
     get 'generate_db_token' => 'panel#generate_db_token', as: :panel_generate_db_token
   end
   get 'panel/:panel_id' => 'panel#index', as: :panel_index
-  resources :tickets, only: [:show] do
+  get 'panel-page/:id' => 'panel#panel_page', as: :panel_page
+  resources :tickets, only: [:index, :show] do
     post 'update_status' => 'tickets#update_status', as: :update_status
+    get 'edit_person_validators' => 'tickets#edit_person_validators', as: :edit_person_validators
   end
   resources :notifications, only: [:index]
 
@@ -276,6 +279,7 @@ Rails.application.routes.draw do
   get '/admin/person_data' => 'admin#person_data'
   get '/admin/compute_auxiliary_data' => 'admin#compute_auxiliary_data'
   get '/admin/do_compute_auxiliary_data' => 'admin#do_compute_auxiliary_data'
+  get '/admin/reset_compute_auxiliary_data' => 'admin#reset_compute_auxiliary_data'
   get '/admin/generate_exports' => 'admin#generate_exports'
   get '/admin/generate_db_token' => 'admin#generate_db_token'
   get '/admin/do_generate_dev_export' => 'admin#do_generate_dev_export'
