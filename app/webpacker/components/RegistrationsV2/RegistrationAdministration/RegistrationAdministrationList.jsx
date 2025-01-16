@@ -116,7 +116,6 @@ const columnReducer = (state, action) => {
   return state;
 };
 
-
 export default function RegistrationAdministrationList({ competitionInfo }) {
   const [expandedColumns, dispatchColumns] = useReducer(
     columnReducer,
@@ -343,8 +342,6 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
           </Button>
         </>
       )}
-
-
 
       <Form>
         <Form.Group widths="equal">

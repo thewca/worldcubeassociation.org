@@ -404,7 +404,7 @@ Rails.application.routes.draw do
         get '/scrambles' => 'competitions#scrambles', as: :scrambles
         get '/scrambles/:event_id' => 'competitions#event_scrambles', as: :event_scrambles
         get '/psych-sheet/:event_id' => 'competitions#event_psych_sheet', as: :event_psych_sheet
-        patch '/disable_auto_accept' => 'competitions#disable_auto_accept', as: :disable_auto_accept # Should this be a patch instead? We're making changes, but not providing a payload
+        patch '/disable_auto_accept' => 'competitions#disable_auto_accept', as: :disable_auto_accept
         patch '/wcif' => 'competitions#update_wcif', as: :update_wcif
       end
 
