@@ -46,7 +46,7 @@ export default function RegistrationList({ competitionInfo }) {
   const handleEventSelection = ({ type, eventId }) => {
     setPsychSheetEvent(type === 'toggle_event' ? eventId : undefined);
     if (type === 'toggle_event' ) {
-      const event = events.byId[eventId]
+      const event = events.byId[eventId];
       setPsychSheetSortBy(event.recommendedFormat().sortBy);
     }
   };
