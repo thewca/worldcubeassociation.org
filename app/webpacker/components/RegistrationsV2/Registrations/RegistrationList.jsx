@@ -46,8 +46,9 @@ export default function RegistrationList({ competitionInfo }) {
   const handleEventSelection = ({ type, eventId }) => {
     setPsychSheetEvent(type === 'toggle_event' ? eventId : undefined);
     if (type === 'toggle_event' ) {
-      const sortBy = events.byId[eventId].isBlindfolded? 'single' : 'average';
-      setPsychSheetSortBy(sortBy);
+      const event = events.byId[eventId]
+      const sortValue = event.recommendedFormat().sortBy;
+      setPsychSheetSortBy(sortValue);
     }
   };
 
