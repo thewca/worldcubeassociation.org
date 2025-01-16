@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Button, Icon } from 'semantic-ui-react';
 import React, {
-  useMemo, useReducer, useRef,
+  useMemo, useReducer, useRef, useState,
 } from 'react';
 import {
   Checkbox, Form, Header, Segment, Sticky,
@@ -131,6 +131,8 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
 
   const actionsRef = useRef();
 
+  const [autoAcceptEnabled, setAutoAcceptEnabled] = useState(competitionInfo.auto_accept_registrations)
+
   const [state, dispatchSort] = useReducer(sortReducer, {
     sortColumn: competitionInfo['using_payment_integrations?']
       ? 'paid_on_with_registered_on_fallback'
@@ -175,6 +177,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
     },
     onSuccess: () => {
       dispatchStore(setMessage('competitions.registration_v2.auto_accept.disabled', 'positive'));
+      setAutoAcceptEnabled(false)
     },
   });
 
@@ -327,7 +330,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
   ) : (
     <Segment loading={isMutating} style={{ overflowX: 'scroll' }}>
 
-      { competitionInfo.auto_accept_registrations && (
+      { autoAcceptEnabled && (
         <>
           <Button
             disabled={isUpdating}
