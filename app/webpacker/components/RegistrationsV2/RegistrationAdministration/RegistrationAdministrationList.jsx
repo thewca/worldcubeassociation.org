@@ -15,7 +15,7 @@ import { useDispatch } from '../../../lib/providers/StoreProvider';
 import I18n from '../../../lib/i18n';
 import Loading from '../../Requests/Loading';
 import { bulkUpdateRegistrations } from '../api/registration/patch/update_registration';
-import { disableAutoAccept } from '../api/registration/patch/auto_accept';
+import disableAutoAccept from '../api/registration/patch/auto_accept';
 import RegistrationAdministrationTable from './RegistrationsAdministrationTable';
 import useCheckboxState from '../../../lib/hooks/useCheckboxState';
 import { countries } from '../../../lib/wca-data.js.erb';
@@ -168,7 +168,6 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
   const { mutate: disableAutoAcceptMutation, isPending: isUpdating } = useMutation({
     mutationFn: disableAutoAccept,
     onError: (data) => {
-      const { error } = data.json;
       dispatchStore(setMessage(
         `competitions.registration_v2.auto_accept.cant_disable`,
         'negative',
@@ -330,17 +329,15 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
     <Segment loading={isMutating} style={{ overflowX: 'scroll' }}>
 
       { autoAcceptEnabled && (
-        <>
-          <Button
-            disabled={isUpdating}
-            color="red"
-            onClick={() => disableAutoAcceptMutation(competitionInfo.id)}
-          >
-            <Icon name="ban" />
-            {' '}
-            {I18n.t('competitions.registration_v2.auto_accept.disable')}
-          </Button>
-        </>
+        <Button
+          disabled={isUpdating}
+          color="red"
+          onClick={() => disableAutoAcceptMutation(competitionInfo.id)}
+        >
+          <Icon name="ban" />
+          {' '}
+          {I18n.t('competitions.registration_v2.auto_accept.disable')}
+        </Button>
       )}
 
       <Form>
