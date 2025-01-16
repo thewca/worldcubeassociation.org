@@ -1812,7 +1812,6 @@ en:
         #context: new registration system
     registration_v2:
       auto_accept:
-        bulk_auto_accept: "Bulk Auto Accept"
         enable: "Enable Auto Accept"
         disable: "Disable Auto Accept"
         cant_disable: "Error encountered trying to disable auto accept."

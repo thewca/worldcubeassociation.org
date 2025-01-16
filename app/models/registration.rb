@@ -439,27 +439,6 @@ class Registration < ApplicationRecord
     super(DEFAULT_SERIALIZE_OPTIONS.merge(options || {}))
   end
 
-  def self.bulk_auto_accept(competition)
-
-    if competition.waiting_list.present?
-      competition.waiting_list.entries.each do |r_id|
-        Registration.find(r_id).auto_accept
-        # It isnt clear to me why this is needed - but without it, the auto-accepted items getting removed from the waiting list reappear
-        # on the waiting list in the test body, even when calling waiting_list.reload there
-        # I have also tried assigning competition.waiting_list.entries to a variable and iterating over that, but it didnt help
-        competition.waiting_list.reload
-      end
-    end
-
-    sorted_pending_registrations = competition
-                                   .registrations
-                                   .competing_status_pending
-                                   .with_payments
-                                   .sort_by { |registration| registration.last_positive_payment.updated_at }
-
-    sorted_pending_registrations.each { |r| r.auto_accept }
-  end
-
   def auto_accept
     return log_error('Auto-accept is not enabled for this competition.') unless competition.auto_accept_registrations
     return log_error('Can only auto-accept pending registrations or first position on waiting list') unless

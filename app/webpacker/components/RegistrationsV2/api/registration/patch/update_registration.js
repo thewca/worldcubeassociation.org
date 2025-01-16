@@ -1,5 +1,5 @@
 import fetchWithJWTToken from '../../../../../lib/requests/fetchWithJWTToken';
-import { bulkAutoAcceptRegistrationsUrl, bulkUpdateRegistrationUrl, updateRegistrationUrl } from '../../../../../lib/requests/routes.js.erb';
+import { bulkUpdateRegistrationUrl, updateRegistrationUrl } from '../../../../../lib/requests/routes.js.erb';
 
 export default async function updateRegistration(
   body,

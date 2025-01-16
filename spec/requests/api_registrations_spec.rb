@@ -410,32 +410,4 @@ RSpec.describe 'API Registrations' do
       end
     end
   end
-
-  describe 'PATCH #bulk_accept' do
-    let(:auto_accept_comp) { FactoryBot.create(:competition, :auto_accept, :registration_open, :with_organizer, :with_competitor_limit, competitor_limit: 10) }
-
-    before do
-      FactoryBot.create_list(:registration, 5, :accepted, competition: auto_accept_comp)
-    end
-
-    it 'triggers bulk auto accept via API route', :tag do
-      headers['Authorization'] = fetch_jwt_token(auto_accept_comp.organizers.first.id)
-
-      FactoryBot.create_list(:registration, 9, :paid, :waiting_list, competition: auto_accept_comp)
-      FactoryBot.create_list(:registration, 3, :paid, :pending, competition: auto_accept_comp)
-      initial_pending_ids = auto_accept_comp.registrations.competing_status_pending.ids
-      expected_accepted = auto_accept_comp.waiting_list.entries[..4]
-      expected_remaining = auto_accept_comp.waiting_list.entries[5..] + initial_pending_ids
-
-      patch api_v1_registrations_bulk_auto_accept_path(competition_id: auto_accept_comp.id), headers: headers
-      expect(response.status).to eq(200)
-
-      expect(auto_accept_comp.registrations.competing_status_accepted.count).to eq(10)
-      expect(auto_accept_comp.registrations.competing_status_waiting_list.count).to eq(7)
-
-      expect((expected_accepted - auto_accept_comp.registrations.competing_status_accepted.ids).empty?).to eq(true)
-
-      expect(auto_accept_comp.waiting_list.reload.entries).to eq(expected_remaining)
-    end
-  end
 end
