@@ -157,7 +157,7 @@ export default function EditPersonForm({ wcaId, onSuccess }) {
           name="dob"
           control={UtcDatePicker}
           showYearDropdown
-          dateFormatOverride="YYYY-MM-dd"
+          dateFormatOverride="yyyy-MM-dd"
           dropdownMode="select"
           disabled={!editedUserDetails}
           isoDate={editedUserDetails?.dob}
