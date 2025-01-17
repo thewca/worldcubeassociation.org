@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import { Table } from 'semantic-ui-react';
 import _ from 'lodash';
+import { flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
 import I18n from '../../../lib/i18n';
 import { formatAttemptResult } from '../../../lib/wca-live/attempts';
 import CountryFlag from '../../wca/CountryFlag';
@@ -94,42 +95,91 @@ export default function RankingsTable({
     }, []);
   }, [competitionsById, rows, show]);
 
+  const columns = useMemo(() => {
+    const commonColumns = [
+      {
+        accessorKey: 'rank',
+        header: show !== 'by region' ? '#' : I18n.t('results.table_elements.region'),
+        cell: (info) => info.getValue(),
+      },
+      {
+        accessorKey: 'result.name',
+        header: I18n.t('results.table_elements.name'),
+        cell: (info) => info.getValue(),
+      },
+      {
+        accessorKey: 'result.value',
+        header: I18n.t('results.table_elements.result'),
+        cell: (info) => info.getValue(),
+      },
+    ];
+
+    if (show !== 'by region') {
+      commonColumns.push({
+        accessorKey: 'country.name',
+        header: I18n.t('results.table_elements.representing'),
+        cell: (info) => info.getValue(),
+      });
+    }
+
+    commonColumns.push({
+      accessorKey: 'competition.name',
+      header: I18n.t('results.table_elements.competition'),
+      cell: (info) => info.getValue(),
+    });
+
+    if (isAverage) {
+      commonColumns.push(
+        ...Array(5).fill({
+          accessorKey: 'solves', // Adjust as needed
+          header: I18n.t('results.table_elements.solves'),
+        }),
+      );
+    }
+
+    return commonColumns;
+  }, [show, isAverage]);
+
+  const table = useReactTable({
+    data: results,
+    columns,
+    getCoreRowModel: getCoreRowModel(),
+  });
+
   return (
     <div style={{ overflowX: 'scroll' }}>
       <Table basic="very" compact="very" singleLine striped unstackable>
         <Table.Header>
-          <Table.Row>
-            {show !== 'by region' ? <Table.HeaderCell textAlign="center">#</Table.HeaderCell>
-              : <Table.HeaderCell>{I18n.t('results.table_elements.region')}</Table.HeaderCell>}
-            <Table.HeaderCell>{I18n.t('results.table_elements.name')}</Table.HeaderCell>
-            <Table.HeaderCell>{I18n.t('results.table_elements.result')}</Table.HeaderCell>
-            {show !== 'by region'
-              && <Table.HeaderCell textAlign="left">{I18n.t('results.table_elements.representing')}</Table.HeaderCell>}
-            <Table.HeaderCell>{I18n.t('results.table_elements.competition')}</Table.HeaderCell>
-            {isAverage && (
-              <>
-                <Table.HeaderCell>{I18n.t('results.table_elements.solves')}</Table.HeaderCell>
-                <Table.HeaderCell />
-                <Table.HeaderCell />
-                <Table.HeaderCell />
-                <Table.HeaderCell />
-              </>
-            )}
-          </Table.Row>
+          {table.getHeaderGroups().map((headerGroup) => (
+            <Table.Row key={headerGroup.id}>
+              {headerGroup.headers.map((header) => (
+                <Table.HeaderCell key={header.id}>
+                  {header.isPlaceholder
+                    ? null
+                    : flexRender(header.column.columnDef.header, header.getContext())}
+                </Table.HeaderCell>
+              ))}
+            </Table.Row>
+          ))}
         </Table.Header>
         <Table.Body>
-          {results.map((r) => (
-            <ResultRow
-              country={r.country}
-              key={r.key}
-              result={r.result}
-              competition={r.competition}
-              rank={r.rank}
-              tiedPrevious={r.tiedPrevious}
-              isAverage={isAverage}
-              show={show}
-            />
-          ))}
+          {table.getRowModel().rows.map((row) => {
+            const {
+              country, result, competition, rank, tiedPrevious,
+            } = row.original;
+            return (
+              <ResultRow
+                country={country}
+                key={row.key}
+                result={result}
+                competition={competition}
+                rank={rank}
+                tiedPrevious={tiedPrevious}
+                isAverage={isAverage}
+                show={show}
+              />
+            );
+          })}
         </Table.Body>
       </Table>
     </div>
