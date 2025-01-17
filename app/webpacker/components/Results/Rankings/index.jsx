@@ -19,7 +19,7 @@ const ActionTypes = {
 };
 
 function parseInitialStateFromUrl(url) {
-  const urlPattern = /\/results\/rankings\/(\d+)\/(\w+)/; // Matches `/results/rankings/{event}/{rankingType}`
+  const urlPattern = /\/results\/rankings\/(\w+)\/(\w+)/; // Matches `/results/rankings/{event}/{rankingType}`
   const match = url.match(urlPattern);
 
   if (!match) {
