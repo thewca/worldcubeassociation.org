@@ -648,6 +648,16 @@ class User < ApplicationRecord
       :approveAvatars,
       :editPersonRequests,
       :anonymizationScript,
+      :serverStatus,
+      :runValidators,
+      :createNewComers,
+      :checkRecords,
+      :computeAuxiliaryData,
+      :generateDataExports,
+      :fixResults,
+      :mergeProfiles,
+      :anonymizePerson,
+      :reassignConnectedWcaId,
     ].index_with { |panel_page| panel_page.to_s.underscore.dasherize }
   end
 
@@ -661,7 +671,7 @@ class User < ApplicationRecord
     panel_pages = User.panel_pages
     {
       admin: {
-        name: 'New Admin panel',
+        name: 'Admin panel',
         pages: panel_pages.values,
       },
       staff: {
@@ -700,12 +710,22 @@ class User < ApplicationRecord
           panel_pages[:editPerson],
           panel_pages[:approveAvatars],
           panel_pages[:anonymizationScript],
+          panel_pages[:runValidators],
+          panel_pages[:createNewComers],
+          panel_pages[:checkRecords],
+          panel_pages[:computeAuxiliaryData],
+          panel_pages[:generateDataExports],
+          panel_pages[:fixResults],
+          panel_pages[:mergeProfiles],
+          panel_pages[:anonymizePerson],
+          panel_pages[:reassignConnectedWcaId],
         ],
       },
       wst: {
         name: 'WST panel',
         pages: [
           panel_pages[:translators],
+          panel_pages[:serverStatus],
         ],
       },
       board: {
@@ -720,6 +740,7 @@ class User < ApplicationRecord
           panel_pages[:officersEditor],
           panel_pages[:regionsAdmin],
           panel_pages[:bannedCompetitors],
+          panel_pages[:downloadVoters],
         ],
       },
       leader: {
