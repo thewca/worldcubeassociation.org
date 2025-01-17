@@ -95,10 +95,6 @@ class Competition < ApplicationRecord
     restricted: 2,
   }, prefix: true
 
-  NEW_REG_SYSTEM_DEFAULT = :v3
-
-  enum :registration_version, [:v1, :v2, :v3], prefix: true, default: NEW_REG_SYSTEM_DEFAULT
-
   CLONEABLE_ATTRIBUTES = %w(
     cityName
     countryId
@@ -172,7 +168,6 @@ class Competition < ApplicationRecord
     waiting_list_deadline_date
     event_change_deadline_date
     competition_series_id
-    registration_version
   ).freeze
   VALID_NAME_RE = /\A([-&.:' [:alnum:]]+) (\d{4})\z/
   VALID_ID_RE = /\A[a-zA-Z0-9]+\Z/
