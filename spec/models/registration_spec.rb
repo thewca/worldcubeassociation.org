@@ -806,8 +806,9 @@ RSpec.describe Registration do
   end
 
   it 'can still create non-accepted registrations if the competitor list is full' do
-    auto_accept_comp.competitor_limit = 5
-    FactoryBot.create_list(:registration, 5, :accepted, competition: auto_accept_comp)
-    expect(FactoryBot.create(:registration, :waiting_list, competition: auto_accept_comp)).to be_valid
+    competition = FactoryBot.create(:competition, :registration_open)
+    competition.competitor_limit = 5
+    FactoryBot.create_list(:registration, 5, :accepted, competition: competition)
+    expect(FactoryBot.create(:registration, :waiting_list, competition: competition)).to be_valid
   end
 end
