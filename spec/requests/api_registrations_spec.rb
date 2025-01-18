@@ -115,7 +115,7 @@ RSpec.describe 'API Registrations' do
 
   describe 'PATCH #update' do
     let(:user) { FactoryBot.create :user }
-    let(:competition) { FactoryBot.create :competition, :registration_open, :editable_registrations }
+    let(:competition) { FactoryBot.create :competition, :registration_open, :editable_registrations, :with_organizer }
     let(:registration) { FactoryBot.create(:registration, competition: competition, user: user) }
 
     it 'updates a registration' do
@@ -163,6 +163,49 @@ RSpec.describe 'API Registrations' do
 
       registration = Registration.find_by(user_id: user.id, competition_id: favourites_reg.competition.id)
       expect(registration.event_ids.sort).to eq(new_event_ids.sort)
+    end
+
+    it 'user gets registration email if they cancel and re-register' do
+      perform_enqueued_jobs do
+        cancelled_reg = FactoryBot.create(:registration, :cancelled, competition: competition)
+
+        update_request = FactoryBot.build(
+          :update_request,
+          user_id: cancelled_reg.user_id,
+          competition_id: cancelled_reg.competition.id,
+          competing: { 'status' => 'pending' },
+        )
+        headers = { 'Authorization' => update_request['jwt_token'] }
+
+        patch api_v1_registrations_register_path, params: update_request, headers: headers
+
+        expect(response.status).to eq(200)
+
+        email = ActionMailer::Base.deliveries.last
+        expect(email.subject).to eq(I18n.t('registrations.mailer.new.mail_subject',  comp_name: registration.competition.name))
+      end
+    end
+
+    it 'user gets registration email if they were rejected and get moved to pending' do
+      perform_enqueued_jobs do
+        rejected_reg = FactoryBot.create(:registration, :rejected, competition: competition)
+
+        update_request = FactoryBot.build(
+          :update_request,
+          user_id: rejected_reg.user_id,
+          competition_id: rejected_reg.competition.id,
+          submitted_by: competition.organizers.first.id,
+          competing: { 'status' => 'pending' },
+        )
+        headers = { 'Authorization' => update_request['jwt_token'] }
+
+        patch api_v1_registrations_register_path, params: update_request, headers: headers
+
+        expect(response.status).to eq(200)
+
+        email = ActionMailer::Base.deliveries.last
+        expect(email.subject).to eq(I18n.t('registrations.mailer.new.mail_subject',  comp_name: registration.competition.name))
+      end
     end
   end
 
