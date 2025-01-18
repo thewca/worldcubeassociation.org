@@ -40,7 +40,8 @@ import ApprovePictures from './pages/ApprovePictures';
 import EditPersonRequestsPage from './pages/EditPersonRequestsPage';
 import AnonymizationScriptPage from './pages/AnonymizationScriptPage';
 
-const DELEGATE_HANDBOOK_LINK = 'https://documents.worldcubeassociation.org/edudoc/delegate-handbook/delegate-handbook.pdf';
+const DELEGATE_HANDBOOK_LINK =
+  'https://documents.worldcubeassociation.org/edudoc/delegate-handbook/delegate-handbook.pdf';
 
 export default {
   [PANEL_PAGES.postingDashboard]: {
@@ -114,10 +115,6 @@ export default {
   [PANEL_PAGES.importantLinks]: {
     name: 'Important Links',
     component: ImportantLinks,
-  },
-  [PANEL_PAGES.delegateHandbook]: {
-    name: 'Delegate Handbook',
-    link: DELEGATE_HANDBOOK_LINK,
   },
   [PANEL_PAGES.seniorDelegatesList]: {
     name: 'Senior Delegates List',
