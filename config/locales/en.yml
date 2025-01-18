@@ -216,6 +216,8 @@ en:
     lunch: "Lunch"
     dinner: "Dinner"
     awards: "Awards"
+    setup: "Setup"
+    teardown: "Teardown"
     misc: "Other"
   #context: Common word used in multiple places on the website
   common:
