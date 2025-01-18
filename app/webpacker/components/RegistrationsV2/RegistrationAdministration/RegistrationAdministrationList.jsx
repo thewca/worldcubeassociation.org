@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { Button, Icon } from 'semantic-ui-react';
 import React, {
-  useMemo, useReducer, useRef,
+  useMemo, useReducer, useRef, useState,
 } from 'react';
 import {
   Checkbox, Form, Header, Segment, Sticky,
@@ -14,6 +15,7 @@ import { useDispatch } from '../../../lib/providers/StoreProvider';
 import I18n from '../../../lib/i18n';
 import Loading from '../../Requests/Loading';
 import { bulkUpdateRegistrations } from '../api/registration/patch/update_registration';
+import disableAutoAccept from '../api/registration/patch/auto_accept';
 import RegistrationAdministrationTable from './RegistrationsAdministrationTable';
 import useCheckboxState from '../../../lib/hooks/useCheckboxState';
 import { countries } from '../../../lib/wca-data.js.erb';
@@ -128,6 +130,8 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
 
   const actionsRef = useRef();
 
+  const [autoAcceptEnabled, setAutoAcceptEnabled] = useState(competitionInfo.auto_accept_registrations)
+
   const [state, dispatchSort] = useReducer(sortReducer, {
     sortColumn: competitionInfo['using_payment_integrations?']
       ? 'paid_on_with_registered_on_fallback'
@@ -157,6 +161,21 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
           : 'registrations.flash.failed',
         'negative',
       ));
+    },
+  });
+
+
+  const { mutate: disableAutoAcceptMutation, isPending: isUpdating } = useMutation({
+    mutationFn: disableAutoAccept,
+    onError: (data) => {
+      dispatchStore(setMessage(
+        `competitions.registration_v2.auto_accept.cant_disable`,
+        'negative',
+      ));
+    },
+    onSuccess: () => {
+      dispatchStore(setMessage('competitions.registration_v2.auto_accept.disabled', 'positive'));
+      setAutoAcceptEnabled(false)
     },
   });
 
@@ -308,6 +327,19 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
     <Loading />
   ) : (
     <Segment loading={isMutating} style={{ overflowX: 'scroll' }}>
+
+      { autoAcceptEnabled && (
+        <Button
+          disabled={isUpdating}
+          color="red"
+          onClick={() => disableAutoAcceptMutation(competitionInfo.id)}
+        >
+          <Icon name="ban" />
+          {' '}
+          {I18n.t('competitions.registration_v2.auto_accept.disable')}
+        </Button>
+      )}
+
       <Form>
         <Form.Group widths="equal">
           {Object.entries(expandableColumns).map(([id, name]) => (
@@ -344,9 +376,11 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
           {pending.length}
           )
         </Header>
+
         <Header.Subheader>
           {I18n.t('competitions.registration_v2.list.pending.information')}
         </Header.Subheader>
+
         <RegistrationAdministrationTable
           columnsExpanded={expandedColumns}
           registrations={pending}
