@@ -813,7 +813,6 @@ RSpec.describe Registrations::RegistrationChecker do
           expect(error.status).to eq(:forbidden)
           expect(error.error).to eq(Registrations::ErrorCodes::USER_EDITS_NOT_ALLOWED)
         end
-
       end
 
       it 'user cant change events after event change deadline' do
