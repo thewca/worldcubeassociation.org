@@ -5,7 +5,6 @@ import {
   subordinateUpcomingCompetitionsUrl,
   generateDbTokenUrl,
   serverStatusPageUrl,
-  runValidatorsUrl,
   createNewComersUrl,
   checkRecordsUrl,
   computeAuxiliaryDataUrl,
@@ -39,6 +38,7 @@ import DownloadVoters from './pages/DownloadVoters';
 import ApprovePictures from './pages/ApprovePictures';
 import EditPersonRequestsPage from './pages/EditPersonRequestsPage';
 import AnonymizationScriptPage from './pages/AnonymizationScriptPage';
+import RunValidatorsForm from './pages/RunValidatorsPage/RunValidatorsForm';
 
 const DELEGATE_HANDBOOK_LINK = 'https://documents.worldcubeassociation.org/edudoc/delegate-handbook/delegate-handbook.pdf';
 
@@ -165,7 +165,7 @@ export default {
   },
   [PANEL_PAGES.runValidators]: {
     name: 'Run Validators',
-    link: runValidatorsUrl,
+    component: RunValidatorsForm,
   },
   [PANEL_PAGES.createNewComers]: {
     name: 'Create New Comers',
