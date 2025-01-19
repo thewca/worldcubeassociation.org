@@ -50,6 +50,45 @@ class PanelController < ApplicationController
     }
   end
 
+  private def validators_for_competition_ids(competition_ids)
+    validators = params.require(:selectedValidators).split(',').map(&:constantize)
+    apply_fix_when_possible = params.require(:applyFixWhenPossible)
+
+    results_validator = ResultsValidators::CompetitionsResultsValidator.new(
+      validators,
+      check_real_results: true,
+      apply_fixes: apply_fix_when_possible,
+    )
+    results_validator.validate(competition_ids)
+    render json: {
+      has_results: results_validator.has_results?,
+      validators: results_validator.validators,
+      infos: results_validator.infos,
+      errors: results_validator.errors,
+      warnings: results_validator.warnings,
+    }
+  end
+
+  private def competition_ids_in_range(range)
+    start_date = range[:startDate]
+    end_date = range[:endDate]
+    ResultValidationForm.competitions_between(start_date, end_date)
+                        .order(:start_date)
+                        .ids
+  end
+
+  def validators_for_competition_list
+    competition_ids = params.require(:competitionIds).split(',')
+    validators_for_competition_ids(competition_ids)
+  end
+
+  def validators_for_competitions_in_range
+    range = JSON.parse(params.require(:competitionRange)).transform_keys(&:to_sym)
+    competition_ids = competition_ids_in_range(range)
+
+    validators_for_competition_ids(competition_ids)
+  end
+
   def panel_page
     panel_page_id = params.require(:id)
     panel_with_panel_page = current_user.panels_with_access&.find { |panel| User.panel_list[panel][:pages].include?(panel_page_id) }

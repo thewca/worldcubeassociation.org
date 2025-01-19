@@ -33,10 +33,6 @@ class AdminController < ApplicationController
     @results_validator.validate(@competition.id)
   end
 
-  def check_results
-    with_results_validator
-  end
-
   def check_competition_results
     with_results_validator do
       @competition = competition_from_params
@@ -70,12 +66,6 @@ class AdminController < ApplicationController
     # to actually run (by default all validators will be selected).
     @results_validator = ResultsValidators::CompetitionsResultsValidator.new(check_real_results: true)
     yield if block_given?
-  end
-
-  def do_check_results
-    running_validators do
-      render :check_results
-    end
   end
 
   def do_check_competition_results
