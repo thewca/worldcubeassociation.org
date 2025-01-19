@@ -281,7 +281,8 @@ export const actionUrls = {
     addComment: (ticketId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.ticket_comments_path("${ticketId}")) %>`,
   },
   users: {
-    anonymize: (userId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.anonymize_user_path("${userId}")) %>`,
+    getDetailsBeforeAnonymization: (userId, wcaId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.tickets_details_before_anonymization_path) %>?${jsonToQueryString({ userId, wcaId })}`,
+    anonymize: (userId, wcaId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.tickets_anonymize_path) %>`,
   },
 }
 
@@ -357,8 +358,6 @@ export const generateDataExportsUrl = `<%= CGI.unescape(Rails.application.routes
 export const fixResultsUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.admin_fix_results_path) %>`;
 
 export const mergeProfilesUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.admin_merge_people_path) %>`;
-
-export const anonymizePersonUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.admin_anonymize_person_path) %>`;
 
 export const reassignConnectedWcaIdUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.admin_reassign_wca_id_path) %>`;
 

@@ -512,7 +512,6 @@ en:
       person:
         person1_wca_id: ""
         person2_wca_id: ""
-        person_wca_id: ""
       poll:
         comment: ""
         multiple: ""

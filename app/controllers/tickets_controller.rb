@@ -106,4 +106,161 @@ class TicketsController < ApplicationController
       dob: dob_validation_issues,
     }
   end
+
+  private def user_details(user)
+    return nil if user.nil?
+    {
+      email: user.email,
+      dob: user.dob,
+      is_currently_banned: user.banned?,
+      banned_in_past: user.banned_in_past?,
+    }
+  end
+
+  private def person_details(person)
+    return nil if person.nil?
+    {
+      dob: person.dob,
+      record_count: person.records,
+      championship_podiums: person.championship_podiums,
+    }
+  end
+
+  private def get_user_and_person
+    user_id = params[:userId]
+    wca_id = params[:wcaId]
+
+    if user_id && !wca_id
+      user = User.find(user_id)
+      person = user.person
+    elsif !user_id && wca_id
+      person = Person.find_by(wca_id: wca_id)
+      user = person.user
+    elsif user_id && wca_id
+      person = Person.find_by(wca_id: wca_id)
+      user = User.find(user_id)
+    end
+    [user, person]
+  end
+
+  private def check_errors(user, person)
+    if user.present? && person.present? && person&.user != user
+      render status: :unprocessable_entity, json: {
+        error: "Person and user not linked.",
+      }
+      return true
+    end
+
+    if user.nil? && person.nil?
+      render status: :unprocessable_entity, json: {
+        error: "User ID and WCA ID is not provided.",
+      }
+      return true
+    end
+    false
+  end
+
+  def details_before_anonymization
+    user, person = get_user_and_person
+    return if check_errors(user, person)
+
+    render json: {
+      user_details: user_details(user),
+      person_details: person_details(person),
+    }
+  end
+
+  def anonymize
+    user, person = get_user_and_person
+    return if check_errors(user, person)
+
+    if user&.banned?
+      return render status: :unprocessable_entity, json: {
+        error: "Error anonymizing: This person is currently banned and cannot be anonymized.",
+      }
+    end
+
+    if person.present?
+      wca_id_year = person.wca_id[0..3]
+      semi_id, = FinishUnfinishedPersons.compute_semi_id(wca_id_year, User::ANONYMOUS_NAME)
+      new_wca_id, = FinishUnfinishedPersons.complete_wca_id(semi_id)
+
+      if new_wca_id.nil?
+        return render status: :internal_server_error, json: {
+          error: "Error generating new WCA ID",
+        }
+      end
+    end
+
+    if user.present? && person.present?
+      users_to_anonymize = User.where(id: user.id).or(User.where(unconfirmed_wca_id: person.wca_id))
+    elsif user.present? && person.nil?
+      users_to_anonymize = User.where(id: user.id)
+    elsif user.nil? && person.present?
+      users_to_anonymize = User.where(unconfirmed_wca_id: person.wca_id)
+    end
+
+    ActiveRecord::Base.transaction do
+      if person.present?
+        # Anonymize person's data in Results
+        person.results.update_all(personId: new_wca_id, personName: User::ANONYMOUS_NAME)
+
+        # Anonymize person's data in Persons
+        if person.sub_ids.length > 1
+          # if an updated person is due to a name change, this will delete the previous person.
+          # if an updated person is due to a country change, this will keep the sub person with an appropriate subId
+          previous_persons = Person.where(wca_id: wca_id).where.not(subId: 1).order(:subId)
+          current_sub_id = 1
+          current_country_id = person.countryId
+
+          previous_persons.each do |p|
+            if p.countryId == current_country_id
+              p.delete
+            else
+              current_sub_id += 1
+              current_country_id = p.countryId
+              p.update(
+                wca_id: new_wca_id,
+                name: User::ANONYMOUS_NAME,
+                gender: User::ANONYMOUS_GENDER,
+                dob: User::ANONYMOUS_DOB,
+                subId: current_sub_id,
+              )
+            end
+          end
+        end
+        # Anonymize person's data in Persons for subid 1
+        person.update(
+          wca_id: new_wca_id,
+          name: User::ANONYMOUS_NAME,
+          gender: User::ANONYMOUS_GENDER,
+          dob: User::ANONYMOUS_DOB,
+        )
+      end
+
+      users_to_anonymize.each do |user_to_anonymize|
+        user_to_anonymize.skip_reconfirmation!
+        user_to_anonymize.update(
+          email: user_to_anonymize.id.to_s + User::ANONYMOUS_ACCOUNT_EMAIL_ID_SUFFIX,
+          name: User::ANONYMOUS_NAME,
+          unconfirmed_wca_id: nil,
+          delegate_id_to_handle_wca_id_claim: nil,
+          dob: User::ANONYMOUS_DOB,
+          gender: User::ANONYMOUS_GENDER,
+          current_sign_in_ip: nil,
+          last_sign_in_ip: nil,
+          # If the account associated with the WCA ID is a special account (delegate, organizer,
+          # team member) then we want to keep the link between the Person and the account.
+          wca_id: user&.is_special_account? ? new_wca_id : nil,
+          current_avatar_id: user&.is_special_account? ? nil : user_to_anonymize.current_avatar_id,
+          country_iso2: user&.is_special_account? ? user_to_anonymize.country_iso2 : nil,
+        )
+      end
+    end
+
+    render json: {
+      success: true,
+      new_wca_id: new_wca_id,
+    }
+  end
 end
