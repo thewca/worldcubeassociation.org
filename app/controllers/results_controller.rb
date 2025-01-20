@@ -197,6 +197,7 @@ class ResultsController < ApplicationController
           DAY(competition.start_date)   day,
           event.id             eventId,
           event.name           eventName,
+          result.id            id,
           result.type          type,
           result.value         value,
           result.formatId      formatId,
@@ -241,6 +242,26 @@ class ResultsController < ApplicationController
           `rank`, type DESC, start_date, roundTypeId, personName
       SQL
     end
+
+    @record_timestamp = ComputeAuxiliaryData.successful_start_date || Date.current
+
+    respond_to do |format|
+      format.html {}
+      format.json do
+        cached_data = Rails.cache.fetch ["records-page-api", *@cache_params, @record_timestamp] do
+          rows = DbHelper.execute_cached_query(@cache_params, @record_timestamp, @query)
+          comp_ids = rows.map { |r| r["competitionId"] }.uniq
+          if @is_slim || @is_separate
+            rows = compute_slim_or_separate_records(rows)
+          end
+          competitions_by_id = Competition.where(id: comp_ids).index_by(&:id).transform_values { |comp| comp.as_json(methods: %w[country], include: [], only: %w[cellName id]) }
+          {
+            rows: rows.as_json, competitionsById: competitions_by_id
+          }
+        end
+        render json: cached_data
+      end
+    end
   end
 
   private def current_records_query(value, type)
@@ -284,6 +305,27 @@ class ResultsController < ApplicationController
         AND competition.id = result.competitionId
         AND event.`rank` < 990
     SQL
+  end
+
+  private def compute_slim_or_separate_records(rows)
+    single_rows = []
+    average_rows = []
+    rows
+      .group_by { |row| row["eventId"] }
+      .each_value do |event_rows|
+      singles, averages = event_rows.partition { |row| row["type"] == "single" }
+      balance = singles.size - averages.size
+      if balance < 0
+        singles += Array.new(-balance, nil)
+      elsif balance > 0
+        averages += Array.new(balance, nil)
+      end
+      single_rows += singles
+      average_rows += averages
+    end
+
+    slim_rows = single_rows.zip(average_rows)
+    [slim_rows, single_rows.compact, average_rows.compact]
   end
 
   private def shared_constants_and_conditions

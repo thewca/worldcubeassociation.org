@@ -75,4 +75,5 @@ translations:
       - "*.time_limit.*"
       - "*.users.edit.*"
       - "*.persons.index.*"
+      - "*.results.*"
       - "*.validators.*"
