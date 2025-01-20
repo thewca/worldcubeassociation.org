@@ -1,7 +1,12 @@
 import React, { useEffect } from 'react';
-import { Form } from 'semantic-ui-react';
+import {
+  Button, Divider, Form, Header,
+} from 'semantic-ui-react';
+import useInputState from '../../../lib/hooks/useInputState';
 
 export default function PasswordChangeTab({ user, recentlyAuthenticated }) {
+  const [password, setPassword] = useInputState('');
+  const [confirmPassword, setConfirmPassword] = useInputState('');
   // Hack to allow this with devise
   useEffect(() => {
     if (!recentlyAuthenticated) {
@@ -14,8 +19,19 @@ export default function PasswordChangeTab({ user, recentlyAuthenticated }) {
   }
 
   return (
-    <Form>
-      TODO+
-    </Form>
+    <>
+      <Form>
+        <Form.Field>
+          <Form.Input value={password} type="password" onChange={setPassword} label="Password" />
+        </Form.Field>
+        <Form.Field>
+          <Form.Input value={confirmPassword} type="password" onChange={setConfirmPassword} label="Re-enter password" />
+        </Form.Field>
+        <Form.Button>Save</Form.Button>
+      </Form>
+      <Divider />
+      <Header>Actions</Header>
+      <Button negative>Sign out of Other devices</Button>
+    </>
   );
 }
