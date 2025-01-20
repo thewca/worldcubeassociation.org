@@ -598,7 +598,7 @@ GEM
       execjs
       railties (>= 3.2)
       tilt
-    recaptcha (5.18.0)
+    recaptcha (5.19.0)
     redcarpet (3.6.0)
     redis (5.3.0)
       redis-client (>= 0.22.0)
