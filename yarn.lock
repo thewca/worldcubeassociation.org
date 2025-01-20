@@ -4196,10 +4196,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"core-js@npm:^3.39.0":
-  version: 3.39.0
-  resolution: "core-js@npm:3.39.0"
-  checksum: 10c0/f7602069b6afb2e3298eec612a5c1e0c3e6a458930fbfc7a4c5f9ac03426507f49ce395eecdd2d9bae9024f820e44582b67ffe16f2272395af26964f174eeb6b
+"core-js@npm:^3.40.0":
+  version: 3.40.0
+  resolution: "core-js@npm:3.40.0"
+  checksum: 10c0/db7946ada881e845d8b157061945b1187618fa45cf162f392a151e8a497962aed2da688c982eaa1d444c864be97a70f8be4d73385294b515d224dd164d19f1d4
   languageName: node
   linkType: hard
 
@@ -5808,10 +5808,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"flag-icons@npm:^7.2.3":
-  version: 7.2.3
-  resolution: "flag-icons@npm:7.2.3"
-  checksum: 10c0/370fa3a2ccef574e9d2b17cad513157414bf4de1e8ca4b9f3f1465dddbcd80fce7eea021795f77cafc0814d3909ea273d70b85b0bb82ef7f5efadd77e773e8e5
+"flag-icons@npm:^7.3.2":
+  version: 7.3.2
+  resolution: "flag-icons@npm:7.3.2"
+  checksum: 10c0/4ca9698bd13f004311225a3d87d23f59e2020496a055fbea8a2f72642775c0b0ed0f6f87cb00dd7e7a7cfce0328e4cd2e0dc89dc0ee26cd334d334956d068fd5
   languageName: node
   linkType: hard
 
@@ -6464,10 +6464,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ignore@npm:^7.0.0":
-  version: 7.0.0
-  resolution: "ignore@npm:7.0.0"
-  checksum: 10c0/4bb6b6f7ab4cc79c14ca17b6f584e88a547c133b9b07de677fd6c2e98767379ae4314a116569204dd9b2cb252d5d8338ff178f134e7384a43fe627c43c4d4875
+"ignore@npm:^7.0.1":
+  version: 7.0.3
+  resolution: "ignore@npm:7.0.3"
+  checksum: 10c0/8e21637513cbcd888a4873d34d5c651a2e24b3c4c9a6b159335a26bed348c3c386c51d6fab23577f59140e1b226323138fbd50e63882d4568fd12aa6c822029e
   languageName: node
   linkType: hard
 
@@ -7520,6 +7520,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"mdn-data@npm:^2.14.0":
+  version: 2.15.0
+  resolution: "mdn-data@npm:2.15.0"
+  checksum: 10c0/8a0c83198b013d43c2c43bd19c38d44e397b3fe097d269fa3c093d8c112acf12d0be4d892ba50a4802cccb91dd4f720218a66e675150ea2cc3d8aa0d32247e76
+  languageName: node
+  linkType: hard
+
 "media-typer@npm:0.3.0":
   version: 0.3.0
   resolution: "media-typer@npm:0.3.0"
@@ -7817,7 +7824,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nanoid@npm:^3.3.7":
+"nanoid@npm:^3.3.7, nanoid@npm:^3.3.8":
   version: 3.3.8
   resolution: "nanoid@npm:3.3.8"
   bin:
@@ -9482,6 +9489,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"postcss@npm:^8.5.1":
+  version: 8.5.1
+  resolution: "postcss@npm:8.5.1"
+  dependencies:
+    nanoid: "npm:^3.3.8"
+    picocolors: "npm:^1.1.1"
+    source-map-js: "npm:^1.2.1"
+  checksum: 10c0/c4d90c59c98e8a0c102b77d3f4cac190f883b42d63dc60e2f3ed840f16197c0c8e25a4327d2e9a847b45a985612317dc0534178feeebd0a1cf3eb0eecf75cae4
+  languageName: node
+  linkType: hard
+
 "preact@npm:~10.12.1":
   version: 10.12.1
   resolution: "preact@npm:10.12.1"
@@ -10235,7 +10253,7 @@ __metadata:
     blueimp-load-image: "npm:^5.16.0"
     classnames: "npm:^2.5.1"
     compression-webpack-plugin: "npm:^11.1.0"
-    core-js: "npm:^3.39.0"
+    core-js: "npm:^3.40.0"
     css-loader: "npm:^7.1.2"
     css-minimizer-webpack-plugin: "npm:^7.0.0"
     date-fns: "npm:^4.1.0"
@@ -10250,7 +10268,7 @@ __metadata:
     eslint-plugin-react-hooks: "npm:^5.1.0"
     expose-loader: "npm:^5.0.0"
     file-loader: "npm:^6.2.0"
-    flag-icons: "npm:^7.2.3"
+    flag-icons: "npm:^7.3.2"
     glob: "npm:^11.0.1"
     i18n-js: "npm:^4.5.1"
     jquery: "npm:3.7.1"
@@ -10264,7 +10282,7 @@ __metadata:
     mini-css-extract-plugin: "npm:^2.9.2"
     path-complete-extname: "npm:^1.0.0"
     pnp-webpack-plugin: "npm:^1.7.0"
-    postcss: "npm:^8.4.49"
+    postcss: "npm:^8.5.1"
     postcss-flexbugs-fixes: "npm:^5.0.2"
     postcss-import: "npm:^16.1.0"
     postcss-loader: "npm:^8.1.1"
@@ -10287,14 +10305,14 @@ __metadata:
     react_ujs: "npm:^3.2.1"
     regenerator-runtime: "npm:^0.14.1"
     resolve-url-loader: "npm:^5.0.0"
-    sass: "npm:^1.83.1"
+    sass: "npm:^1.83.4"
     sass-loader: "npm:^16.0.4"
     semantic-ui-react: "npm:^2.1.5"
     shakapacker: "npm:8.0.2"
     style-loader: "npm:^4.0.0"
-    stylelint: "npm:^16.13.0"
+    stylelint: "npm:^16.13.2"
     stylelint-config-recommended-scss: "npm:^14.1.0"
-    stylelint-scss: "npm:^6.10.0"
+    stylelint-scss: "npm:^6.10.1"
     terser-webpack-plugin: "npm:^5.3.11"
     webpack: "npm:^5.97.1"
     webpack-assets-manifest: "npm:^5.2.1"
@@ -10404,9 +10422,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sass@npm:^1.83.1":
-  version: 1.83.1
-  resolution: "sass@npm:1.83.1"
+"sass@npm:^1.83.4":
+  version: 1.83.4
+  resolution: "sass@npm:1.83.4"
   dependencies:
     "@parcel/watcher": "npm:^2.4.1"
     chokidar: "npm:^4.0.0"
@@ -10417,7 +10435,7 @@ __metadata:
       optional: true
   bin:
     sass: sass.js
-  checksum: 10c0/9772506cd8290df7b5e800055098e91a8a65100840fd9e90c660deb74b248b3ddbbd1a274b8f7f09777d472d2c873575357bd87939a40fb5a80bdf654985486f
+  checksum: 10c0/6f27f0eebfeb50222b14baaeef548ef58a05daf8abd9797e6c499334ed7ad40541767056c8693780d06ca83d8836348ea7396a923d3be439b133507993ca78be
   languageName: node
   linkType: hard
 
@@ -11141,7 +11159,25 @@ __metadata:
   languageName: node
   linkType: hard
 
-"stylelint-scss@npm:^6.10.0, stylelint-scss@npm:^6.4.0":
+"stylelint-scss@npm:^6.10.1":
+  version: 6.10.1
+  resolution: "stylelint-scss@npm:6.10.1"
+  dependencies:
+    css-tree: "npm:^3.0.1"
+    is-plain-object: "npm:^5.0.0"
+    known-css-properties: "npm:^0.35.0"
+    mdn-data: "npm:^2.14.0"
+    postcss-media-query-parser: "npm:^0.2.3"
+    postcss-resolve-nested-selector: "npm:^0.1.6"
+    postcss-selector-parser: "npm:^7.0.0"
+    postcss-value-parser: "npm:^4.2.0"
+  peerDependencies:
+    stylelint: ^16.0.2
+  checksum: 10c0/3fc9b456bff649840783b92365fc30f5e54539794711744f09df45020d2a3d86164e8e16948a35b3b167f6fc8109837d487253faebd8b1ac29800e67a7f7adc9
+  languageName: node
+  linkType: hard
+
+"stylelint-scss@npm:^6.4.0":
   version: 6.10.0
   resolution: "stylelint-scss@npm:6.10.0"
   dependencies:
@@ -11159,9 +11195,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"stylelint@npm:^16.13.0":
-  version: 16.13.0
-  resolution: "stylelint@npm:16.13.0"
+"stylelint@npm:^16.13.2":
+  version: 16.13.2
+  resolution: "stylelint@npm:16.13.2"
   dependencies:
     "@csstools/css-parser-algorithms": "npm:^3.0.4"
     "@csstools/css-tokenizer": "npm:^3.0.3"
@@ -11181,7 +11217,7 @@ __metadata:
     globby: "npm:^11.1.0"
     globjoin: "npm:^0.1.4"
     html-tags: "npm:^3.3.1"
-    ignore: "npm:^7.0.0"
+    ignore: "npm:^7.0.1"
     imurmurhash: "npm:^0.1.4"
     is-plain-object: "npm:^5.0.0"
     known-css-properties: "npm:^0.35.0"
@@ -11203,7 +11239,7 @@ __metadata:
     write-file-atomic: "npm:^5.0.1"
   bin:
     stylelint: bin/stylelint.mjs
-  checksum: 10c0/1b318e936365bdefd1822260d17ddd10a6d1ca46ec8066e1476320409b8b5afac2251be6445f16f727b47a6f149452b6efa777ea1da98baee4e440f32ea798a6
+  checksum: 10c0/07d5f6f80a6671d0a02ef448977c45b2ba45060b2942a5619297694b6b653b931284a174b36154b03c23ae302abfdbbba0ca61f4142734e98e6703511f1f363b
   languageName: node
   linkType: hard
 

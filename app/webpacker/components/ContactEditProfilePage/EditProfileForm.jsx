@@ -122,7 +122,7 @@ export default function EditProfileForm({
         name="dob"
         control={UtcDatePicker}
         showYearDropdown
-        dateFormatOverride="YYYY-MM-dd"
+        dateFormatOverride="yyyy-MM-dd"
         dropdownMode="select"
         isoDate={editedProfileDetails?.dob}
         onChange={handleDobChange}

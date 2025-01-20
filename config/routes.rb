@@ -192,6 +192,17 @@ Rails.application.routes.draw do
     get 'generate_db_token' => 'panel#generate_db_token', as: :panel_generate_db_token
   end
   get 'panel/:panel_id' => 'panel#index', as: :panel_index
+  scope 'panel-page' do
+    get 'run-validators' => 'admin#check_results', as: :admin_check_results
+    get 'create-new-comers' => 'admin#finish_unfinished_persons', as: :admin_finish_unfinished_persons
+    get 'check-records' => 'admin#check_regional_records', as: :admin_check_regional_records
+    get 'compute-auxiliary-data' => 'admin#compute_auxiliary_data', as: :admin_compute_auxiliary_data
+    get 'generate-data-exports' => 'admin#generate_exports', as: :admin_generate_exports
+    get 'fix-results' => 'admin#fix_results', as: :admin_fix_results
+    get 'merge-profiles' => 'admin#merge_people', as: :admin_merge_people
+    get 'anonymize-person' => 'admin#anonymize_person', as: :admin_anonymize_person
+    get 'reassign-connected-wca-id' => 'admin#reassign_wca_id', as: :admin_reassign_wca_id
+  end
   get 'panel-page/:id' => 'panel#panel_page', as: :panel_page
   resources :tickets, only: [:index, :show] do
     post 'update_status' => 'tickets#update_status', as: :update_status
@@ -266,36 +277,26 @@ Rails.application.routes.draw do
   get '/regulations/history/official/:id/guidelines' => 'regulations#historical_guidelines'
   get '/regulations/history/official/:id/wca-regulations-and-guidelines', to: redirect('https://regulations.worldcubeassociation.org/history/official/%{id}/wca-regulations-and-guidelines.pdf', status: 302)
 
-  get '/admin' => 'admin#index'
   get '/admin/all-voters' => 'admin#all_voters', as: :eligible_voters
   get '/admin/leader-senior-voters' => 'admin#leader_senior_voters', as: :leader_senior_voters
-  get '/admin/check_results' => 'admin#check_results'
   get '/admin/validation_competitions' => "admin#compute_validation_competitions"
   post '/admin/check_results' => 'admin#do_check_results'
-  get '/admin/merge_people' => 'admin#merge_people'
   post '/admin/merge_people' => 'admin#do_merge_people'
-  get '/admin/fix_results' => 'admin#fix_results'
   get '/admin/fix_results_selector' => 'admin#fix_results_selector', as: :admin_fix_results_ajax
   get '/admin/person_data' => 'admin#person_data'
-  get '/admin/compute_auxiliary_data' => 'admin#compute_auxiliary_data'
   get '/admin/do_compute_auxiliary_data' => 'admin#do_compute_auxiliary_data'
   get '/admin/reset_compute_auxiliary_data' => 'admin#reset_compute_auxiliary_data'
-  get '/admin/generate_exports' => 'admin#generate_exports'
   get '/admin/generate_db_token' => 'admin#generate_db_token'
   get '/admin/do_generate_dev_export' => 'admin#do_generate_dev_export'
   get '/admin/do_generate_public_export' => 'admin#do_generate_public_export'
-  get '/admin/check_regional_records' => 'admin#check_regional_records'
   get '/admin/override_regional_records' => 'admin#override_regional_records'
   post '/admin/override_regional_records' => 'admin#do_override_regional_records'
   get '/admin/finish_persons' => 'admin#finish_persons'
   post '/admin/finish_persons' => 'admin#do_finish_persons'
-  get '/admin/finish_unfinished_persons' => 'admin#finish_unfinished_persons'
   get '/admin/complete_persons' => 'admin#complete_persons'
   post '/admin/complete_persons' => 'admin#do_complete_persons'
   get '/admin/peek_unfinished_results' => 'admin#peek_unfinished_results'
-  get '/admin/anonymize_person' => 'admin#anonymize_person'
   post '/admin/anonymize_person' => 'admin#do_anonymize_person'
-  get '/admin/reassign_wca_id' => 'admin#reassign_wca_id'
   get '/admin/validate_reassign_wca_id' => 'admin#validate_reassign_wca_id'
   post '/admin/reassign_wca_id' => 'admin#do_reassign_wca_id'
 
