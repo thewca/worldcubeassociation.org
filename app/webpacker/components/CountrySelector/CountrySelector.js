@@ -13,7 +13,7 @@ const countryOptions = countries.real.map((country) => ({
 }));
 
 function CountrySelector({
-  name, countryIso2, onChange, error,
+  name, countryIso2, onChange, error, disabled,
 }) {
   return (
     <Form.Select
@@ -25,6 +25,7 @@ function CountrySelector({
       error={error}
       options={countryOptions}
       onChange={onChange}
+      disabled={disabled}
     />
   );
 }
