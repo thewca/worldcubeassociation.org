@@ -1,10 +1,16 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Form } from 'semantic-ui-react';
-import PasswordConfirm from './PasswordConfirm';
 
 export default function TwoFactorChangeTab({ user, recentlyAuthenticated }) {
+  // Hack to allow this with devise
+  useEffect(() => {
+    if (!recentlyAuthenticated) {
+      document.getElementById('reauthenticate').display = 'block';
+    }
+  }, [recentlyAuthenticated]);
+
   if (!recentlyAuthenticated) {
-    return (<PasswordConfirm />);
+    return <> Please reauthenticate</>;
   }
 
   return (

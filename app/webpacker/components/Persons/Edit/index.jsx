@@ -85,7 +85,7 @@ const updatePath = (tabSlug) => {
 function EditUser({
   user, currentUser, editableFields, recentlyAuthenticated,
 }) {
-  const warnings = useMemo(() => getFormWarnings(user), [user]);
+  const warnings = useMemo(() => getFormWarnings(user, currentUser), [user, currentUser]);
   const panes = useMemo(() => {
     const p = [{
       slug: 'general',
@@ -93,6 +93,7 @@ function EditUser({
       render: () => (
         <GeneralChangesTab
           user={user}
+          editableFields={editableFields}
         />
       ),
     }];
@@ -165,22 +166,26 @@ function EditUser({
       });
     }
     return p;
-  }, [user, currentUser, editableFields]);
+  }, [user, currentUser, editableFields, recentlyAuthenticated]);
 
   return (
     <Container>
-      <Header>
+      <Header as="h1" textAlign="center">
         {user.name}
         {' '}
         (
         <a href={`mailto:${user.email}`}>{user.email}</a>
         )
       </Header>
-      {warnings.map((warning) => <Message warning list={warning.list}>{warning.content}</Message>)}
+      {warnings.map((warning) => (
+        <Message warning list={warning.list}>
+          <span dangerouslySetInnerHTML={{ __html: warning.content }} />
+        </Message>
+      ))}
       <Tab
         defaultActiveIndex={tabIndexFromSlug(panes)}
         panes={panes}
-        menu={{ color: 'orange' }}
+        menu={{ color: 'orange', widths: panes.length }}
         onTabChange={(e, { activeIndex }) => {
           const tab = panes[activeIndex];
           updatePath(tab.slug);
