@@ -5,14 +5,14 @@ import { SeparateHeader } from '../TableHeaders';
 import { SeparateRecordsRow } from '../TableRows';
 
 export default function SeparateRecordsTable({ rows, competitionsById }) {
-  const [, single, average] = rows;
+  const [, singleRecords, averageRecords] = rows;
 
   return (
     <>
       <Header>{I18n.t('results.selector_elements.type_selector.single')}</Header>
-      <RankingTypeTable records={single} competitionsById={competitionsById} rankingType="single" />
+      <RankingTypeTable records={singleRecords} competitionsById={competitionsById} rankingType="single" />
       <Header>{I18n.t('results.selector_elements.type_selector.average')}</Header>
-      <RankingTypeTable records={average} competitionsById={competitionsById} rankingType="average" />
+      <RankingTypeTable records={averageRecords} competitionsById={competitionsById} rankingType="average" />
     </>
   );
 }

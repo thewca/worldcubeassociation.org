@@ -8,14 +8,13 @@ import WCAQueryClientProvider from '../../../lib/providers/WCAQueryClientProvide
 import { getRecords } from '../api/records';
 import Loading from '../../Requests/Loading';
 import { recordsUrl } from '../../../lib/requests/routes.js.erb';
-import ResultsFilter from '../resultsFilter';
+import ResultsFilter from '../ResultsFilter';
 import SlimRecordTable from './SlimRecordsTable';
 import SeparateRecordsTable from './SeparateRecordsTable';
 
 const ActionTypes = {
   SET_EVENT: 'SET_EVENT',
   SET_REGION: 'SET_REGION',
-  SET_RANKING_TYPE: 'SET_RANKING_TYPE',
   SET_GENDER: 'SET_GENDER',
   SET_SHOW: 'SET_SHOW',
 };
@@ -59,8 +58,14 @@ export default function Wrapper() {
   );
 }
 
+const SHOW_CATEGORIES = ['mixed', 'slim', 'separate', 'history', 'mixed history'];
+
 export function Rankings() {
-  const [filterState, dispatch] = useReducer(filterReducer, window.location.href, parseInitialStateFromUrl);
+  const [filterState, dispatch] = useReducer(
+    filterReducer,
+    window.location.href,
+    parseInitialStateFromUrl,
+  );
 
   const filterActions = useMemo(
     () => ({
@@ -95,7 +100,7 @@ export function Rankings() {
         filterState={filterState}
         filterActions={filterActions}
         isRecords
-        showCategories={['mixed', 'slim', 'separate', 'history', 'mixed history']}
+        showCategories={SHOW_CATEGORIES}
       />
       <TableWrapper competitionsById={data.competitionsById} rows={data.rows} show={show} />
     </Container>
@@ -106,8 +111,7 @@ function TableWrapper({ competitionsById, rows, show }) {
   if (show === 'slim') {
     return (
       <SlimRecordTable
-        rows={rows}
-        show={show}
+        rows={rows[0]}
       />
     );
   }
