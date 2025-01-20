@@ -19,9 +19,8 @@ import { personUrl } from '../../../lib/requests/routes.js.erb';
 import Errored from '../../Requests/Errored';
 import { formatAttemptResult } from '../../../lib/wca-live/attempts';
 import I18n from '../../../lib/i18n';
-import { countries } from '../../../lib/wca-data.js.erb';
+import { countries, events } from '../../../lib/wca-data.js.erb';
 import { EventSelector } from '../../wca/EventSelector';
-import { events } from '../../../lib/wca-data.js.erb';
 
 const sortReducer = createSortReducer(['name', 'country', 'total']);
 
@@ -41,11 +40,11 @@ export default function RegistrationList({ competitionInfo }) {
 
   const [psychSheetEvent, setPsychSheetEvent] = useState();
   const [psychSheetSortBy, setPsychSheetSortBy] = useState();
-  const isPsychSheet = psychSheetEvent !== undefined
-  const isAllCompetitors = !isPsychSheet
+  const isPsychSheet = psychSheetEvent !== undefined;
+  const isAllCompetitors = !isPsychSheet;
   const handleEventSelection = ({ type, eventId }) => {
     setPsychSheetEvent(type === 'toggle_event' ? eventId : undefined);
-    if (type === 'toggle_event' ) {
+    if (type === 'toggle_event') {
       const event = events.byId[eventId];
       setPsychSheetSortBy(event.recommendedFormat().sortBy);
     }
@@ -292,7 +291,7 @@ function FooterContent({
 }) {
   if (!registrations) return null;
 
-  const isPsychSheet = !isAllCompetitors
+  const isPsychSheet = !isAllCompetitors;
 
   const newcomerCount = registrations.filter(
     (reg) => !reg.user.wca_id,
