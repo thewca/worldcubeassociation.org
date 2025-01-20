@@ -50,7 +50,7 @@ class UserAvatar < ApplicationRecord
 
       URI::HTTPS.build(host: host, path: path).to_s
     when 'active_storage'
-      return UserAvatar.default_avatar(self.linked_user).url unless self.image.attached?
+      return UserAvatar.default_avatar(self.linked_user).url unless self.attached?
 
       if self.using_cdn?
         URI.join(EnvConfig.S3_AVATARS_ASSET_HOST, self.image.key).to_s
@@ -74,7 +74,7 @@ class UserAvatar < ApplicationRecord
 
       URI::HTTPS.build(host: host, path: path).to_s
     when 'active_storage'
-      return UserAvatar.default_avatar(self.linked_user).thumbnail_url unless self.image.attached?
+      return UserAvatar.default_avatar(self.linked_user).thumbnail_url unless self.attached?
 
       if self.using_cdn?
         URI.join(EnvConfig.S3_AVATARS_ASSET_HOST, self.thumbnail_image.processed.key).to_s
@@ -193,6 +193,8 @@ class UserAvatar < ApplicationRecord
   end
 
   private def reattach_image(from_file, to_file)
+    return unless from_file.attached?
+
     # ActiveStorage is a bit inconvenient when moving files around.
     #   Simply writing `to_file.attach(from_file.blob)` makes the code execute successfully,
     #   but under the hood the file is not actually moved because AS thinks that it's already uploaded :/

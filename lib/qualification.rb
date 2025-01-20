@@ -10,7 +10,7 @@ class Qualification
   validates :level, numericality: { only_integer: true, greater_than: 0 }, if: :result_or_ranking?
 
   def result_or_ranking?
-    self.wcif_type == 'attemptResult' || self.wcif_type == 'ranking'
+    ['attemptResult', 'ranking'].include?(self.wcif_type)
   end
 
   def ==(other)

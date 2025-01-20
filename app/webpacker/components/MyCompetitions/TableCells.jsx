@@ -3,6 +3,7 @@ import React from 'react';
 import I18n from '../../lib/i18n';
 import { competitionReportUrl, competitionReportEditUrl } from '../../lib/requests/routes.js.erb';
 import { countries } from '../../lib/wca-data.js.erb';
+import { dateRange } from '../../lib/utils/dates';
 
 export function NameTableCell({ competition }) {
   return (
@@ -28,34 +29,42 @@ export function LocationTableCell({ competition }) {
 export function DateTableCell({ competition }) {
   return (
     <Table.Cell>
-      {competition.date_range}
+      {dateRange(competition.start_date, competition.end_date, { separator: '-' })}
     </Table.Cell>
   );
 }
 
 export function ReportTableCell({
-  permissions, competitionId, isReportPosted, canAdminCompetitions,
+  permissions, competitionId, isReportPosted, canViewDelegateReport,
 }) {
-  if (permissions.can_administer_competitions.scope === '*' || permissions.can_administer_competitions.scope.includes(competitionId)) {
+  if (canViewDelegateReport) {
     return (
       <Table.Cell>
         <>
+          {(permissions.can_view_delegate_report.scope === '*' || permissions.can_view_delegate_report.scope.includes(competitionId))
+          && (
           <Popup
             content={I18n.t('competitions.my_competitions_table.report')}
             trigger={(
               <a href={competitionReportUrl(competitionId)}>
                 <Icon name="file alternate" />
               </a>
-          )}
+            )}
           />
-          <Popup
-            content={I18n.t('competitions.my_competitions_table.edit_report')}
-            trigger={(
-              <a href={competitionReportEditUrl(competitionId)}>
-                <Icon name="edit" />
-              </a>
           )}
-          />
+
+          {(permissions.can_edit_delegate_report.scope === '*' || permissions.can_edit_delegate_report.scope.includes(competitionId))
+            && (
+            <Popup
+              content={I18n.t('competitions.my_competitions_table.edit_report')}
+              trigger={(
+                <a href={competitionReportEditUrl(competitionId)}>
+                  <Icon name="edit" />
+                </a>
+              )}
+            />
+            )}
+
           { !isReportPosted
           && permissions.can_administer_competitions.scope.includes(competitionId) && (
             <Popup
@@ -68,11 +77,5 @@ export function ReportTableCell({
         </>
       </Table.Cell>
     );
-  }
-
-  // A user might be able to see only certain reports in the list, so we return an empty cell
-
-  if (canAdminCompetitions) {
-    return <Table.Cell />;
   }
 }

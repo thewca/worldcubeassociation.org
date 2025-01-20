@@ -4,6 +4,7 @@ import { DateTime } from 'luxon';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { setMessage } from '../Register/RegistrationMessage';
 import I18n from '../../../lib/i18n';
+import { countries } from '../../../lib/wca-data.js.erb';
 
 function V3csvExport(selected, registrations, competition) {
   let csvContent = 'data:text/csv;charset=utf-8,';
@@ -12,9 +13,9 @@ function V3csvExport(selected, registrations, competition) {
   registrations
     .filter((r) => selected.length === 0 || selected.includes(r.user_id))
     .forEach((registration) => {
-      csvContent += `${registration.competing.registration_status === 'accepted' ? 'a' : 'p'},${
+      csvContent += `${registration.competing.registration_status === 'accepted' ? 'a' : 'p'},"${
         registration.user.name
-      },"${registration.user.country.name}",${
+      }","${countries.byIso2[registration.user.country.iso2].name}",${
         registration.user.wca_id
       },${registration.user.dob},${
         registration.user.gender
