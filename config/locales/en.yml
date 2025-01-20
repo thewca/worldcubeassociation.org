@@ -216,6 +216,8 @@ en:
     lunch: "Lunch"
     dinner: "Dinner"
     awards: "Awards"
+    setup: "Setup"
+    teardown: "Teardown"
     misc: "Other"
   #context: Common word used in multiple places on the website
   common:
@@ -745,7 +747,6 @@ en:
       panel: "Panel"
       polls: "Polls"
       results_team: "Results team"
-      results_admin: "Admin"
       results_database: "Database"
       #context: "Sidekiq" is the name of a software product
       results_sidekiq: "Sidekiq dashboard"
