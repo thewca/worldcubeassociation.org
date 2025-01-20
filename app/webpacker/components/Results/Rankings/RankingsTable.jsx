@@ -100,17 +100,14 @@ export default function RankingsTable({
       {
         accessorKey: 'rank',
         header: show !== 'by region' ? '#' : I18n.t('results.table_elements.region'),
-        cell: (info) => info.getValue(),
       },
       {
         accessorKey: 'result.name',
         header: I18n.t('results.table_elements.name'),
-        cell: (info) => info.getValue(),
       },
       {
         accessorKey: 'result.value',
         header: I18n.t('results.table_elements.result'),
-        cell: (info) => info.getValue(),
       },
     ];
 
@@ -118,21 +115,23 @@ export default function RankingsTable({
       commonColumns.push({
         accessorKey: 'country.name',
         header: I18n.t('results.table_elements.representing'),
-        cell: (info) => info.getValue(),
       });
     }
 
     commonColumns.push({
       accessorKey: 'competition.name',
       header: I18n.t('results.table_elements.competition'),
-      cell: (info) => info.getValue(),
     });
 
     if (isAverage) {
+      commonColumns.push({
+        accessorKey: 'solves',
+        header: I18n.t('results.table_elements.solves'),
+      });
       commonColumns.push(
-        ...Array(5).fill({
-          accessorKey: 'solves', // Adjust as needed
-          header: I18n.t('results.table_elements.solves'),
+        ...Array(4).fill({
+          accessorKey: '',
+          header: ' ',
         }),
       );
     }
