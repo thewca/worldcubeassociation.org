@@ -5,7 +5,7 @@ export default function EmailChangeTab({ user, recentlyAuthenticated }) {
   // Hack to allow this with devise
   useEffect(() => {
     if (!recentlyAuthenticated) {
-      document.getElementById('reauthenticate').display = 'block';
+      document.getElementById('2fa-check').style.display = 'block';
     }
   }, [recentlyAuthenticated]);
 

@@ -5,10 +5,18 @@
    current_user_json["can_change_users_avatar?"] = current_user.can_change_users_avatar?(@user)
 %>
 
+<% unless @recently_authenticated %>
+  <div class="ui page modals transition visible active">
+    <div class="ui small modal transition visible active" id="2fa-check" style="display: none">
+      <%= render "2fa_confirm" %>
+    </div>
+  </div>
+<% end %>
+
 <%= react_component("Persons/Edit", {
   user: @user.as_json({
                         include: [],
-                        only: [:email, :wca_id, :unconfirmed_email],
+                        only: [:email, :id, :wca_id, :unconfirmed_email],
                         methods: [
                           :confirmed_at,
                           :unconfirmed_wca_id,

@@ -98,46 +98,48 @@ function EditUser({
       ),
     }];
     if (user.id === currentUser.id) {
-      p.concat([{
-        slug: 'email',
-        menuItem: I18n.t('users.edit.email'),
-        render: () => (
-          <EmailChangeTab
-            user={user}
-            editableFields={editableFields}
-            recentlyAuthenticated={recentlyAuthenticated}
-          />
-        ),
-      },
-      {
-        slug: 'preferences',
-        menuItem: I18n.t('users.edit.preferences'),
-        render: () => (
-          <PreferencesTab
-            user={user}
-          />
-        ),
-      },
-      {
-        slug: 'password',
-        menuItem: I18n.t('users.edit.password'),
-        render: () => (
-          <PasswordChangeTab
-            user={user}
-            recentlyAuthenticated={recentlyAuthenticated}
-          />
-        ),
-      },
-      {
-        slug: '2fa',
-        menuItem: '2FA',
-        render: () => (
-          <TwoFactorChangeTab
-            user={user}
-            recentlyAuthenticated={recentlyAuthenticated}
-          />
-        ),
-      }]);
+      p.push(
+        {
+          slug: 'email',
+          menuItem: I18n.t('users.edit.email'),
+          render: () => (
+            <EmailChangeTab
+              user={user}
+              editableFields={editableFields}
+              recentlyAuthenticated={recentlyAuthenticated}
+            />
+          ),
+        },
+        {
+          slug: 'preferences',
+          menuItem: I18n.t('users.edit.preferences'),
+          render: () => (
+            <PreferencesTab
+              user={user}
+            />
+          ),
+        },
+        {
+          slug: 'password',
+          menuItem: I18n.t('users.edit.password'),
+          render: () => (
+            <PasswordChangeTab
+              user={user}
+              recentlyAuthenticated={recentlyAuthenticated}
+            />
+          ),
+        },
+        {
+          slug: '2fa',
+          menuItem: '2FA',
+          render: () => (
+            <TwoFactorChangeTab
+              user={user}
+              recentlyAuthenticated={recentlyAuthenticated}
+            />
+          ),
+        },
+      );
     }
     if (currentUser['can_change_users_avatar?']) {
       p.push({
