@@ -11,6 +11,7 @@ const WCA_EVENT_IDS = Object.values(events.official).map((e) => e.id);
 export function EventSelector({
   selectedEvents,
   onEventSelection,
+  title = I18n.t('competitions.competition_form.events'),
   eventList = WCA_EVENT_IDS,
   disabled = false,
   maxEvents = Infinity,
@@ -27,7 +28,7 @@ export function EventSelector({
   return (
     <>
       <label htmlFor="events">
-        {`${I18n.t('competitions.competition_form.events')}`}
+        {title}
         {showBreakBeforeButtons ? (<br />) : (' ')}
         {hideAllButton || (
           <Popup
