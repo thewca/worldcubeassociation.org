@@ -69,7 +69,6 @@ export default function RegistrationList({ competitionInfo, userInfo }) {
 
   const registrationsWithPsychSheet = useMemo(() => {
     if (psychSheet !== undefined) {
-      setPsychSheetSortBy(psychSheet.sort_by);
       return psychSheet.sorted_rankings.map((p) => {
         const registrationEntry = registrations.find((r) => p.user_id === r.user_id);
         return { ...p, ...registrationEntry };
