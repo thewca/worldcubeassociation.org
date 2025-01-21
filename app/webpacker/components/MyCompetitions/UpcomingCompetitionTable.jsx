@@ -25,10 +25,10 @@ const competingStatusIcon = (competingStatus) => {
 
 const registrationStatusIconText = (competition) => {
   if (competition.registration_status === 'not_yet_opened') {
-    return I18n.t('competitions.index.tooltips.registration.opens_in', { duration: DateTime.fromISO(competition.registration_open).toRelative(toRelativeOptions.default) });
+    return I18n.t('competitions.index.tooltips.registration.opens_in', { relativeDate: DateTime.fromISO(competition.registration_open).toRelative(toRelativeOptions.default) });
   }
   if (competition.registration_status === 'past') {
-    return I18n.t('competitions.index.tooltips.registration.closed', { days: DateTime.fromISO(competition.start_date).toRelative(toRelativeOptions.roundUpAndAtBestDayPrecision) });
+    return I18n.t('competitions.index.tooltips.registration.closed', { relativeDate: DateTime.fromISO(competition.start_date).toRelative(toRelativeOptions.roundUpAndAtBestDayPrecision) });
   }
   if (competition.registration_status === 'full') {
     return I18n.t('competitions.index.tooltips.registration.full');

@@ -454,7 +454,7 @@ function RegistrationStatus({ comp, isLoading }) {
         content={
           I18n.t(
             'competitions.index.tooltips.registration.opens_in',
-            { duration: DateTime.fromISO(comp.registration_open).toRelative(toRelativeOptions.default) },
+            { relativeDate: DateTime.fromISO(comp.registration_open).toRelative(toRelativeOptions.default) },
           )
         }
         position="top center"
@@ -470,7 +470,7 @@ function RegistrationStatus({ comp, isLoading }) {
         content={
           I18n.t(
             'competitions.index.tooltips.registration.closed',
-            { days: DateTime.fromISO(comp.start_date).toRelative(toRelativeOptions.roundUpAndAtBestDayPrecision) },
+            { relativeDate: DateTime.fromISO(comp.start_date).toRelative(toRelativeOptions.roundUpAndAtBestDayPrecision) },
           )
         }
         position="top center"

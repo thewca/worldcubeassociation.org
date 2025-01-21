@@ -1575,8 +1575,8 @@ en:
         recent: "Last %{count} days"
         #context: the registration status icon
         registration:
-          opens_in: "Registration will open %{duration}."
-          closed: "Registration has closed. Competition starts %{days}."
+          opens_in: "Registration will open %{relativeDate}."
+          closed: "Registration has closed. Competition will start %{relativeDate}."
           open: "Registration is open!"
           full: "Competitor limit reached, new registrations will go to the waiting list."
       no_more_comps: "No more competitions."
