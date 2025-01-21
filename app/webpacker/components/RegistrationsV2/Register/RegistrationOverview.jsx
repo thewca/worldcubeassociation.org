@@ -1,9 +1,9 @@
 import React from 'react';
 import {
-  Button, ButtonGroup, Form, FormField, Header, Message, Segment,
+  Button, ButtonGroup, Form, Header, List, Message, Segment,
 } from 'semantic-ui-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import i18n from '../../../lib/i18n';
+import I18n from '../../../lib/i18n';
 import EventIcon from '../../wca/EventIcon';
 import { hasPassed } from '../../../lib/utils/dates';
 import { events } from '../../../lib/wca-data.js.erb';
@@ -27,7 +27,7 @@ export default function RegistrationOverview({
   const isRejected = registration.competing.registration_status === 'rejected';
 
   const deleteAllowed = (registration.competing.registration_status !== 'accepted'
-      || competitionInfo.allow_registration_self_delete_after_acceptance);
+    || competitionInfo.allow_registration_self_delete_after_acceptance);
 
   const queryClient = useQueryClient();
 
@@ -61,10 +61,12 @@ export default function RegistrationOverview({
 
   const deleteRegistration = (event) => {
     event.preventDefault();
-    confirm({ content: i18n.t(deleteAllowed ? 'registrations.delete_confirm' : 'competitions.registration_v2.update.delete_confirm_contact') })
+    // i18n-tasks-use t('registrations.delete_confirm')
+    confirm({ content: I18n.t(deleteAllowed ? 'registrations.delete_confirm' : 'competitions.registration_v2.update.delete_confirm_contact') })
+      // eslint-disable-next-line no-return-assign
       .then(() => (deleteAllowed
         ? deleteRegistrationMutation()
-        : window.location = contactCompetitionUrl(competitionInfo.id, encodeURIComponent(i18n.t('competitions.registration_v2.update.delete_contact_message')))))
+        : window.location = contactCompetitionUrl(competitionInfo.id, encodeURIComponent(I18n.t('competitions.registration_v2.update.delete_contact_message')))))
       .catch(() => nextStep({ refresh: true }));
   };
 
@@ -77,55 +79,60 @@ export default function RegistrationOverview({
       <RegistrationStatus registration={registration} competitionInfo={competitionInfo} />
       { !competitionInfo['using_payment_integrations?'] && registration.competing.registration_status === 'pending' && competitionInfo.base_entry_fee_lowest_denomination && (
         <Message info>
-          {i18n.t('registrations.wont_pay_here')}
+          {I18n.t('registrations.wont_pay_here')}
         </Message>
       )}
       <Segment loading={isDeleting}>
-        <Header>{i18n.t('competitions.nav.menu.registration')}</Header>
+        <Header>{I18n.t('competitions.nav.menu.registration')}</Header>
         <Form onSubmit={nextStep} size="large">
-          <FormField>
-            <label>
-              {i18n.t('activerecord.attributes.registration.registration_competition_events')}
-              :
-            </label>
-            { /* Make sure to keep WCA Event order */}
-            {events.official
-              .filter((e) => registration.competing.event_ids.includes(e.id))
-              .map((e) => (<EventIcon key={e.id} id={e.id} hoverable={false} />))}
-          </FormField>
-          <FormField />
-          <FormField>
-            <label>
-              {i18n.t('activerecord.attributes.registration.comments')}
-              :
-            </label>
-            {registration.competing.comment.length > 0 ? registration.competing.comment : i18n.t('competitions.schedule.rooms_panel.none')}
-          </FormField>
-          <FormField />
-          {competitionInfo.guests_enabled && (
-            <FormField>
-              <label>
-                {i18n.t('activerecord.attributes.registration.guests')}
+          <List>
+            <List.Item>
+              <List.Header>
+                {I18n.t('activerecord.attributes.registration.registration_competition_events')}
                 :
-              </label>
-              {registration.guests}
-            </FormField>
-          )}
-          <ButtonGroup widths={2}>
-            <Button
-              primary
-              type="submit"
-              disabled={hasRegistrationEditDeadlinePassed}
-            >
-              {i18n.t(hasRegistrationEditDeadlinePassed ? 'competitions.registration_v2.errors.-4001' : 'registrations.update')}
-            </Button>
-            <Button
-              negative
-              onClick={deleteRegistration}
-            >
-              {i18n.t('registrations.delete_registration')}
-            </Button>
-          </ButtonGroup>
+              </List.Header>
+              { /* Make sure to keep WCA Event order */}
+              {events.official
+                .filter((e) => registration.competing.event_ids.includes(e.id))
+                .map((e) => (
+                  <React.Fragment key={e.id}>
+                    <EventIcon id={e.id} hoverable={false} />
+                    {' '}
+                  </React.Fragment>
+                ))}
+            </List.Item>
+            <List.Item>
+              <List.Header>
+                {I18n.t('activerecord.attributes.registration.comments')}
+                :
+              </List.Header>
+              {registration.competing.comment.length > 0 ? registration.competing.comment : I18n.t('competitions.schedule.rooms_panel.none')}
+            </List.Item>
+            {competitionInfo.guests_enabled && (
+              <List.Item>
+                <List.Header>
+                  {I18n.t('activerecord.attributes.registration.guests')}
+                  :
+                </List.Header>
+                {registration.guests}
+              </List.Item>
+            )}
+            <ButtonGroup widths={2}>
+              <Button
+                primary
+                type="submit"
+                disabled={hasRegistrationEditDeadlinePassed}
+              >
+                {I18n.t(hasRegistrationEditDeadlinePassed ? 'competitions.registration_v2.errors.-4001' : 'registrations.update')}
+              </Button>
+              <Button
+                negative
+                onClick={deleteRegistration}
+              >
+                {I18n.t('registrations.delete_registration')}
+              </Button>
+            </ButtonGroup>
+          </List>
         </Form>
       </Segment>
     </>

@@ -4,7 +4,7 @@ import {
 import React from 'react';
 import { Draggable } from 'react-beautiful-dnd';
 import { setMessage } from '../Register/RegistrationMessage';
-import i18n from '../../../lib/i18n';
+import I18n from '../../../lib/i18n';
 import {
   getRegistrationTimestamp,
   getShortDateString,
@@ -30,16 +30,16 @@ function RegistrationTime({
   const mostRecentPaymentStatus = paymentStatuses ? paymentStatuses[0] : 'unpaid';
 
   if (usesPaymentIntegration && !hasPaid) {
-    let content = i18n.t('registrations.list.payment_requested_on', { date: getRegistrationTimestamp(registeredOn) });
-    let trigger = <span>{i18n.t('registrations.list.not_paid')}</span>;
+    let content = I18n.t('registrations.list.payment_requested_on', { date: getRegistrationTimestamp(registeredOn) });
+    let trigger = <span>{I18n.t('registrations.list.not_paid')}</span>;
 
     if (mostRecentPaymentStatus === 'initialized') {
-      content = i18n.t('competitions.registration_v2.list.payment.initialized', { date: getRegistrationTimestamp(paidOn) });
+      content = I18n.t('competitions.registration_v2.list.payment.initialized', { date: getRegistrationTimestamp(paidOn) });
     }
 
     if (mostRecentPaymentStatus === 'refund') {
-      content = i18n.t('competitions.registration_v2.list.payment.refunded', { date: getRegistrationTimestamp(paidOn) });
-      trigger = <span>{i18n.t('competitions.registration_v2.list.payment.refunded_status')}</span>;
+      content = I18n.t('competitions.registration_v2.list.payment.refunded', { date: getRegistrationTimestamp(paidOn) });
+      trigger = <span>{I18n.t('competitions.registration_v2.list.payment.refunded_status')}</span>;
     }
 
     return (
@@ -110,7 +110,7 @@ export default function TableRow({
 
             <Table.Cell>
               <a href={editRegistrationUrl(id, competitionInfo.id)}>
-                {i18n.t('registrations.list.edit')}
+                {I18n.t('registrations.list.edit')}
               </a>
             </Table.Cell>
 
@@ -120,7 +120,7 @@ export default function TableRow({
               ) : (
                 <a href={editPersonUrl(id)}>
                   <Icon name="edit" />
-                  {i18n.t('users.edit.profile')}
+                  {I18n.t('users.edit.profile')}
                 </a>
               )}
             </Table.Cell>
@@ -160,7 +160,7 @@ export default function TableRow({
 
             {competitionInfo['using_payment_integrations?'] && (
             <Table.Cell>
-              {hasPaid
+              {paymentAmount !== 0
                 ? isoMoneyToHumanReadable(paymentAmount, competitionInfo.currency_code)
                 : ''}
             </Table.Cell>
@@ -229,7 +229,7 @@ export default function TableRow({
                 )}
               </a>
               {' '}
-              <Icon link onClick={copyEmail} name="copy" title={i18n.t('competitions.registration_v2.update.email_copy')} />
+              <Icon link onClick={copyEmail} name="copy" title={I18n.t('competitions.registration_v2.update.email_copy')} />
             </Table.Cell>
           </Table.Row>
         </Ref>
