@@ -5,7 +5,7 @@ import React from 'react';
 import { DateTime } from 'luxon';
 import I18n from '../../lib/i18n';
 import { competitionStatusText } from '../../lib/utils/competition-table';
-import { competitionRegistrationsUrl, editCompetitionsUrl } from '../../lib/requests/routes.js.erb';
+import { competitionEditRegistrationsUrl, editCompetitionsUrl } from '../../lib/requests/routes.js.erb';
 import {
   DateTableCell, LocationTableCell, NameTableCell, ReportTableCell,
 } from './TableCells';
@@ -126,7 +126,7 @@ export default function UpcomingCompetitionTable({
                   )}
                   {(permissions.can_organize_competitions.scope === '*' || permissions.can_organize_competitions.scope.includes(competition.id)) && (
                     <Table.Cell>
-                      <a href={competitionRegistrationsUrl(competition.id)}>
+                      <a href={competitionEditRegistrationsUrl(competition.id)}>
                         {I18n.t('competitions.my_competitions_table.registrations')}
                       </a>
                     </Table.Cell>
