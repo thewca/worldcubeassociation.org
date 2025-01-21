@@ -2,7 +2,7 @@ import React from 'react';
 import {
   Container, Header, List, Message,
 } from 'semantic-ui-react';
-import { adminAnonymizePersonUrl } from '../../../../lib/requests/routes.js.erb';
+import { anonymizePersonUrl } from '../../../../lib/requests/routes.js.erb';
 import AccountAnonymization from './AccountAnonymization';
 
 export default function AnonymizationTicketWorkbench({ userId, wcaId }) {
@@ -36,7 +36,7 @@ export default function AnonymizationTicketWorkbench({ userId, wcaId }) {
         <>
           <Header as="h4">Profile anonymization</Header>
           {'Anonymize profile using '}
-          <a href={adminAnonymizePersonUrl}>old anonymization script</a>
+          <a href={anonymizePersonUrl}>old anonymization script</a>
         </>
       )}
 

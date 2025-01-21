@@ -25,7 +25,7 @@
       </button>
     <% end %>
   <% else %>
-    <%= simple_form_for @reassign_wca_id, url: admin_reassign_wca_id_path do |form| %>
+    <%= simple_form_for @reassign_wca_id, url: admin_do_reassign_wca_id_path do |form| %>
       <div class="row">
         <div class="col-sm-6">
           <%= form.input :account1, as: :user_ids, users_table: true, only_one: true, label: "Account 1" %>

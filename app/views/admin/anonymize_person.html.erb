@@ -10,7 +10,7 @@
   <p>- Personally identifiable information (PII) in the users, Results, and Persons tables will be anonymized.</p>
   <p>- This PII includes: name, DOB, email, avatar, gender, and IP addresses).</p>
 
-  <%= simple_form_for @anonymize_person, url: admin_anonymize_person_path do |f| %>
+  <%= simple_form_for @anonymize_person, url: admin_do_anonymize_person_path do |f| %>
     <% if @anonymize_person.current_step == AnonymizePerson::STEP_1 %>
       <%= f.input :person_wca_id, as: :user_ids, persons_table: true, only_one: true, label: "Person to Anonymize" %>
     <% elsif @anonymize_person.current_step == AnonymizePerson::STEP_2 %>

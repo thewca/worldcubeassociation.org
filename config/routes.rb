@@ -280,8 +280,8 @@ Rails.application.routes.draw do
   get '/admin/all-voters' => 'admin#all_voters', as: :eligible_voters
   get '/admin/leader-senior-voters' => 'admin#leader_senior_voters', as: :leader_senior_voters
   get '/admin/validation_competitions' => "admin#compute_validation_competitions"
-  post '/admin/check_results' => 'admin#do_check_results'
-  post '/admin/merge_people' => 'admin#do_merge_people'
+  post '/admin/check_results' => 'admin#do_check_results', as: :admin_do_check_results
+  post '/admin/merge_people' => 'admin#do_merge_people', as: :admin_do_merge_people
   get '/admin/fix_results_selector' => 'admin#fix_results_selector', as: :admin_fix_results_ajax
   get '/admin/person_data' => 'admin#person_data'
   get '/admin/do_compute_auxiliary_data' => 'admin#do_compute_auxiliary_data'
@@ -296,8 +296,8 @@ Rails.application.routes.draw do
   get '/admin/complete_persons' => 'admin#complete_persons'
   post '/admin/complete_persons' => 'admin#do_complete_persons'
   get '/admin/peek_unfinished_results' => 'admin#peek_unfinished_results'
-  post '/admin/anonymize_person' => 'admin#do_anonymize_person'
-  get '/admin/validate_reassign_wca_id' => 'admin#validate_reassign_wca_id'
+  post '/admin/anonymize_person' => 'admin#do_anonymize_person', as: :admin_do_anonymize_person
+  get '/admin/validate_reassign_wca_id' => 'admin#validate_reassign_wca_id', as: :admin_do_reassign_wca_id
   post '/admin/reassign_wca_id' => 'admin#do_reassign_wca_id'
 
   get '/search' => 'search_results#index'
