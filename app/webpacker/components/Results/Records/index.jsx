@@ -3,7 +3,6 @@ import React, {
 } from 'react';
 import { Container } from 'semantic-ui-react';
 import { useQuery } from '@tanstack/react-query';
-import RecordsTable from './RecordsTable';
 import WCAQueryClientProvider from '../../../lib/providers/WCAQueryClientProvider';
 import { getRecords } from '../api/records';
 import Loading from '../../Requests/Loading';
@@ -11,6 +10,9 @@ import { recordsUrl } from '../../../lib/requests/routes.js.erb';
 import ResultsFilter from '../ResultsFilter';
 import SlimRecordTable from './SlimRecordsTable';
 import SeparateRecordsTable from './SeparateRecordsTable';
+import MixedRecordsTable from './MixedRecordsTable';
+import HistoryRecordsTable from './HistoryRecordsTable';
+import MixedHistoryRecordsTable from './MixedHistoryRecordsTable';
 
 const ActionTypes = {
   SET_EVENT: 'SET_EVENT',
@@ -108,26 +110,48 @@ export function Rankings() {
 }
 
 function TableWrapper({ competitionsById, rows, show }) {
-  if (show === 'slim') {
-    return (
-      <SlimRecordTable
-        rows={rows[0]}
-      />
-    );
+  switch (show) {
+    case 'mixed':
+      return (
+        <MixedRecordsTable
+          rows={rows}
+          competitionsById={competitionsById}
+        />
+      );
+
+    case 'slim':
+      return (
+        <SlimRecordTable
+          rows={rows[0]}
+        />
+      );
+
+    case 'separate':
+      return (
+        <SeparateRecordsTable
+          rows={rows}
+          competitionsById={competitionsById}
+        />
+      );
+
+    case 'history':
+      return (
+        <HistoryRecordsTable
+          rows={rows}
+          competitionsById={competitionsById}
+        />
+      );
+
+    case 'mixed history':
+      return (
+        <MixedHistoryRecordsTable
+          rows={rows}
+          competitionsById={competitionsById}
+        />
+      );
+
+    default:
+      console.error(`Invalid record table: ${show}`);
+      return null;
   }
-  if (show === 'separate') {
-    return (
-      <SeparateRecordsTable
-        competitionsById={competitionsById}
-        rows={rows}
-      />
-    );
-  }
-  return (
-    <RecordsTable
-      competitionsById={competitionsById}
-      rows={rows}
-      show={show}
-    />
-  );
 }
