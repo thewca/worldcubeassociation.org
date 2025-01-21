@@ -21,7 +21,7 @@ import {
 } from '../../lib/utils/competition-table';
 import { countries } from '../../lib/wca-data.js.erb';
 import { adminCompetitionUrl, competitionUrl } from '../../lib/requests/routes.js.erb';
-import { dateRange } from '../../lib/utils/dates';
+import { dateRange, toRelativeOptions } from '../../lib/utils/dates';
 import { DateTime } from 'luxon';
 
 function ListViewSection({
@@ -454,7 +454,7 @@ function RegistrationStatus({ comp, isLoading }) {
         content={
           I18n.t(
             'competitions.index.tooltips.registration.opens_in',
-            { duration: DateTime.fromISO(comp.registration_open).toRelative({ locale: window.I18n.locale }) },
+            { duration: DateTime.fromISO(comp.registration_open).toRelative(toRelativeOptions.default) },
           )
         }
         position="top center"
@@ -464,21 +464,13 @@ function RegistrationStatus({ comp, isLoading }) {
   }
 
   if (comp.registration_status === 'past') {
-    const roundUpAndAtBestDayPrecision = {
-      locale: window.I18n.locale,
-      // don't be more precise than "days" (i.e. no hours/minutes/seconds)
-      unit: ["years", "months", "weeks", "days"],
-      // round up, e.g. in 8 hours -> pads to 1 day 8 hours -> rounds to "in 1 day"
-      padding: 24 * 60 * 60 * 1000,
-    };
-
     return (
       <Popup
         trigger={<Icon name="user times" color="red" />}
         content={
           I18n.t(
             'competitions.index.tooltips.registration.closed',
-            { days: DateTime.fromISO(comp.start_date).toRelative(roundUpAndAtBestDayPrecision) },
+            { days: DateTime.fromISO(comp.start_date).toRelative(toRelativeOptions.roundUpAndAtBestDayPrecision) },
           )
         }
         position="top center"
