@@ -219,7 +219,7 @@ export default function CompetingStep({
     nextStep,
     updateRegistrationMutation,
     competitionInfo,
-    registration.user_id,
+    registration?.user_id,
     hasCommentChanged,
     comment,
     hasEventsChanged,
@@ -241,7 +241,7 @@ export default function CompetingStep({
     });
   }, [
     updateRegistrationMutation,
-    registration.user_id,
+    registration?.user_id,
     competitionInfo.id,
     comment,
     selectedEvents,
