@@ -172,7 +172,7 @@ export default function CompetingStep({
     [dispatch, eventsAreValid, hasChanges, maxEvents],
   );
 
-  const actionCreateRegistration = () => {
+  const actionCreateRegistration = useCallback(() => {
     createRegistrationMutation({
       user_id: user.id,
       competition_id: competitionInfo.id,
@@ -182,9 +182,9 @@ export default function CompetingStep({
       },
       guests,
     });
-  };
+  }, [user.id, competitionInfo.id, selectedEvents, comment, guests]);
 
-  const actionUpdateRegistration = () => {
+  const actionUpdateRegistration = useCallback(() => {
     confirm({
       content: I18n.t(competitionInfo.allow_registration_edits ? 'competitions.registration_v2.update.update_confirm' : 'competitions.registration_v2.update.update_confirm_contact'),
     }).then(() => {
@@ -206,9 +206,19 @@ export default function CompetingStep({
     }).catch(() => {
       nextStep();
     });
-  };
+  }, [
+    competitionInfo,
+    registration.user_id,
+    hasCommentChanged,
+    comment,
+    hasEventsChanged,
+    selectedEvents,
+    hasGuestsChanged,
+    guests,
+    updateMessage,
+  ]);
 
-  const actionReRegister = () => {
+  const actionReRegister = useCallback(() => {
     updateRegistrationMutation({
       user_id: registration.user_id,
       competition_id: competitionInfo.id,
@@ -219,7 +229,7 @@ export default function CompetingStep({
       },
       guests,
     });
-  };
+  }, [registration.user_id, competitionInfo.id, comment, selectedEvents, guests]);
 
   const handleEventSelection = ({ type, eventId }) => {
     if (type === 'select_all_events') {
