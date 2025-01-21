@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import {
-  Button, Divider, Form, Header,
+  Button, Divider, Form, Header, Modal,
 } from 'semantic-ui-react';
 import useInputState from '../../../lib/hooks/useInputState';
 
@@ -15,7 +15,7 @@ export default function PasswordChangeTab({ user, recentlyAuthenticated }) {
   }, [recentlyAuthenticated]);
 
   if (!recentlyAuthenticated) {
-    return <> Please reauthenticate</>;
+    return <Modal dimmer="blurring" open />;
   }
 
   return (
