@@ -27,10 +27,10 @@ export default function HistoryRecordsTable({
 
   return (
     <div style={{ overflowX: 'scroll' }}>
-      {WCA_EVENT_IDS.map((id) => (
-        Object.keys(results).includes(id)
-          && <RecordTable key={id} record={results[id]} eventId={id} />
-      ))}
+      {WCA_EVENT_IDS
+        .filter((id) => Object.keys(results).includes(id))
+        .map((id) => <RecordTable record={results[id]} eventId={id} />
+      )}
     </div>
   );
 }
