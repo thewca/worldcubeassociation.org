@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import {
-  Button, ButtonGroup, Form, Segment,
+  Button, ButtonGroup, Form, Header, Segment,
 } from 'semantic-ui-react';
 import _ from 'lodash';
 import { EventSelector } from '../wca/EventSelector';
@@ -61,7 +61,7 @@ export default function ResultsFilter({
         <Form.Group widths="equal">
           { rankingType && (
             <Form.Field>
-              <label>{I18n.t('results.selector_elements.type_selector.type')}</label>
+              <Header as="h6">{I18n.t('results.selector_elements.type_selector.type')}</Header>
               <ButtonGroup primary compact widths={2}>
                 <Button
                   active={rankingType === 'single'}
@@ -79,7 +79,7 @@ export default function ResultsFilter({
           {/*   </ButtonGroup> */}
           {/* </Form.Field> */}
           <Form.Field width={4}>
-            <label>{I18n.t('results.selector_elements.gender_selector.gender')}</label>
+            <Header as="h6">{I18n.t('results.selector_elements.gender_selector.gender')}</Header>
             <ButtonGroup compact color="teal" widths={3}>
               <Button active={gender === 'All'} onClick={() => setGender('All')}>{I18n.t('results.selector_elements.gender_selector.gender_all')}</Button>
               <Button active={gender === 'Male'} onClick={() => setGender('Male')}>{I18n.t('results.selector_elements.gender_selector.male')}</Button>
@@ -87,7 +87,7 @@ export default function ResultsFilter({
             </ButtonGroup>
           </Form.Field>
           <Form.Field width={2}>
-            <label>{I18n.t('results.selector_elements.show_selector.show')}</label>
+            <Header as="h6">{I18n.t('results.selector_elements.show_selector.show')}</Header>
             <ButtonGroup compact color="teal" widths={showCategories.length}>
               {showCategories.map((category) => (
                 <Button active={show === category} onClick={() => setShow(category)}>{I18n.t(`results.selector_elements.show_selector.${_.snakeCase(category)}`)}</Button>

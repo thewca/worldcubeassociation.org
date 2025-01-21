@@ -1,7 +1,6 @@
 import React from 'react';
 import { Header, Table } from 'semantic-ui-react';
-import _ from 'lodash';
-import {  events } from '../../../lib/wca-data.js.erb';
+import { events } from '../../../lib/wca-data.js.erb';
 import { WCA_EVENT_IDS } from '../../wca/EventSelector';
 import { RecordRow } from '../TableRows';
 import { MixedHeader } from '../TableHeaders';
@@ -17,8 +16,7 @@ export default function MixedRecordsTables({
     <div style={{ overflowX: 'scroll' }}>
       {WCA_EVENT_IDS
         .filter((id) => Object.keys(results).includes(id))
-        .map((id) => <MixedRecordsTable record={results[id]} eventId={id} />)
-      }
+        .map((id) => <MixedRecordsTable record={results[id]} eventId={id} />)}
     </div>
   );
 }

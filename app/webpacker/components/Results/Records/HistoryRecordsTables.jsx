@@ -1,6 +1,5 @@
 import React from 'react';
 import { Header, Table } from 'semantic-ui-react';
-import _ from 'lodash';
 import { events } from '../../../lib/wca-data.js.erb';
 import { WCA_EVENT_IDS } from '../../wca/EventSelector';
 import { HistoryRow } from '../TableRows';
@@ -17,8 +16,7 @@ export default function HistoryRecordsTables({
     <div style={{ overflowX: 'scroll' }}>
       {WCA_EVENT_IDS
         .filter((id) => Object.keys(results).includes(id))
-        .map((id) => <HistoryRecordsTable record={results[id]} eventId={id} />)
-      }
+        .map((id) => <HistoryRecordsTable record={results[id]} eventId={id} />)}
     </div>
   );
 }

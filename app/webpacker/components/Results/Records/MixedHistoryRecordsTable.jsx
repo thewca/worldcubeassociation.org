@@ -1,6 +1,5 @@
 import React from 'react';
 import { Table } from 'semantic-ui-react';
-import _ from 'lodash';
 import { HistoryRow } from '../TableRows';
 import { HistoryHeader } from '../TableHeaders';
 import { augmentResults } from './utils';
