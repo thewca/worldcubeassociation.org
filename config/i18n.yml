@@ -76,3 +76,4 @@ translations:
       - "*.users.edit.*"
       - "*.persons.index.*"
       - "*.validators.*"
+      - "*.devise.sessions.new.*"
