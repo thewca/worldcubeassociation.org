@@ -194,20 +194,6 @@ class CompetitionsController < ApplicationController
       days = (params[:status] == "warning" ? Competition::REPORT_AND_RESULTS_DAYS_WARNING : Competition::REPORT_AND_RESULTS_DAYS_DANGER)
       @competitions = @competitions.select { |competition| competition.pending_results_or_report(days) }
     end
-
-    @disable_react = params[:legacy]&.to_s == 'on'
-
-    respond_to do |format|
-      format.html {}
-      format.js do
-        # We change the browser's history when replacing url after an Ajax request.
-        # So we must prevent a browser from caching the JavaScript response.
-        # It's necessary because if the browser caches the response, the user will see a JavaScript response
-        # when he clicks browser back/forward buttons.
-        response.headers["Cache-Control"] = "no-cache, no-store"
-        render 'index', locals: { current_path: request.original_fullpath }
-      end
-    end
   end
 
   def post_results
