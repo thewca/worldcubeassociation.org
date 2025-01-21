@@ -26,7 +26,7 @@ function parseInitialStateFromUrl(url) {
   const params = urlObj.searchParams;
   const region = params.get('region') || 'world';
   const gender = params.get('gender') || 'All';
-  const show = params.get('show') || '100 persons';
+  const show = params.get('show') || 'mixed';
   const event = params.get('event_id');
 
   return {
