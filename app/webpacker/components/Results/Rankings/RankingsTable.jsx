@@ -13,7 +13,7 @@ function CountryCell({ country }) {
     <Table.Cell textAlign="left">
       {country.iso2 && <CountryFlag iso2={country.iso2} />}
       {' '}
-      {country.byIso2[country.iso2].name}
+      {country.name}
     </Table.Cell>
   );
 }
