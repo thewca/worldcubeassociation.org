@@ -8,6 +8,13 @@ import { RegionSelector } from '../CompetitionsOverview/CompetitionsFilters';
 import { countries } from '../../lib/wca-data.js.erb';
 import I18n from '../../lib/i18n';
 
+function getRegionIdWithFallback(region) {
+  if (region === 'all') {
+    return 'world';
+  }
+  return countries.byIso2[region]?.id ?? region;
+}
+
 export default function ResultsFilter({
   filterState, filterActions, showCategories, isRecords,
 }) {
@@ -48,13 +55,7 @@ export default function ResultsFilter({
         <Form.Field>
           <RegionSelector
             region={regionIso2}
-            dispatchFilter={({ region: r }) => {
-              if (r === 'all') {
-                setRegion('world');
-              } else {
-                setRegion(countries.byIso2[r]?.id ?? r);
-              }
-            }}
+            dispatchFilter={({ region: r }) => setRegion(getRegionIdWithFallback(r))}
           />
         </Form.Field>
         <Form.Group widths="equal">
