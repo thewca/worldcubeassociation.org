@@ -260,7 +260,7 @@ export default function CompetingStep({
     if (shouldShowUpdateButton) {
       return attemptAction(actionUpdateRegistration, { checkForChanges: true });
     }
-    attemptAction(actionCreateRegistration);
+    return attemptAction(actionCreateRegistration);
   }, [
     actionCreateRegistration,
     actionReRegister,
@@ -306,12 +306,12 @@ export default function CompetingStep({
               maxEvents={maxEvents}
               eventsDisabled={
                 competitionInfo.allow_registration_without_qualification
-                ? []
-                : eventsNotQualifiedFor(
-                  competitionInfo.event_ids,
-                  qualifications.wcif,
-                  qualifications.personalRecords,
-                )
+                  ? []
+                  : eventsNotQualifiedFor(
+                    competitionInfo.event_ids,
+                    qualifications.wcif,
+                    qualifications.personalRecords,
+                  )
               }
               disabledText={(event) => eventQualificationToString(
                 { id: event },
@@ -356,7 +356,7 @@ export default function CompetingStep({
           </Form.Field>
           {competitionInfo.guests_enabled && (
             <Form.Field>
-              <label>{I18n.t('activerecord.attributes.registration.guests')}</label>
+              <label htmlFor="guest-dropdown">{I18n.t('activerecord.attributes.registration.guests')}</label>
               <Form.Input
                 id="guest-dropdown"
                 type="number"

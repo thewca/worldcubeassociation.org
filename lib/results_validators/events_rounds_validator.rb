@@ -2,16 +2,13 @@
 
 module ResultsValidators
   class EventsRoundsValidator < GenericValidator
-    NOT_333_MAIN_EVENT_WARNING = "The selected main event for this competition is %{main_event_id}. " \
-                                 "How was that event treated as the main event of the competition? " \
-                                 "Please give WRT a brief explanation (e.g. number of rounds, prizes, declared winner of the competition, ...)."
-    NO_MAIN_EVENT_WARNING = "There is no selected main event for this competition. Please let WRT know that this is correct."
-    UNEXPECTED_RESULTS_ERROR = "Results are present for %{event_id}, however it is not listed as an official event. " \
-                               "Please remove the event from the results or contact the WCAT to request the event to be added to the WCA website."
-    UNEXPECTED_ROUND_RESULTS_ERROR = "The round %{round_id} is present in the results but was not created on the events tab. Please include the round's information in the competition's manage events page."
-    MISSING_RESULTS_WARNING = "There are no results for %{event_id}, but it is listed as an official event. If the event was held, please reupload your JSON with the results included. If the event was not held, leave a comment for the WRT."
-    MISSING_ROUND_RESULTS_ERROR = "There are no results for round %{round_id} but it is listed in the events tab. If this round was not held, please remove the round in the competition's manage events page."
-    UNEXPECTED_COMBINED_ROUND_ERROR = "No cutoff was announced for '%{round_name}', but it has been detected as a cutoff round in the results. Please update the round's information in the competition's manage events page."
+    NOT_333_MAIN_EVENT_WARNING = :not_333_main_event_warning
+    NO_MAIN_EVENT_WARNING = :no_main_event_warning
+    UNEXPECTED_RESULTS_ERROR = :unexpected_results_error
+    UNEXPECTED_ROUND_RESULTS_ERROR = :unexpected_round_results_error
+    MISSING_RESULTS_WARNING = :missing_results_warning
+    MISSING_ROUND_RESULTS_ERROR = :missing_round_results_error
+    UNEXPECTED_COMBINED_ROUND_ERROR = :unexpected_combined_round_error
 
     def self.description
       "This validator checks that all events and rounds match between what has been announced and what is present in the results. It also check for a main event and emit a warning if there is none (and if 3x3 is not in the results)."
@@ -50,13 +47,13 @@ module ResultsValidators
       def check_main_event(competition)
         if competition.main_event
           if competition.main_event_id != "333" && competition.events.size > 1
-            @warnings << ValidationWarning.new(:events, competition.id,
-                                               NOT_333_MAIN_EVENT_WARNING,
+            @warnings << ValidationWarning.new(NOT_333_MAIN_EVENT_WARNING,
+                                               :events, competition.id,
                                                main_event_id: competition.main_event_id)
           end
         else
-          @warnings << ValidationWarning.new(:events, competition.id,
-                                             NO_MAIN_EVENT_WARNING)
+          @warnings << ValidationWarning.new(NO_MAIN_EVENT_WARNING,
+                                             :events, competition.id)
         end
       end
 
@@ -67,14 +64,14 @@ module ResultsValidators
         real = results.map(&:eventId).uniq
 
         (real - expected).each do |event_id|
-          @errors << ValidationError.new(:events, competition.id,
-                                         UNEXPECTED_RESULTS_ERROR,
+          @errors << ValidationError.new(UNEXPECTED_RESULTS_ERROR,
+                                         :events, competition.id,
                                          event_id: event_id)
         end
 
         (expected - real).each do |event_id|
-          @warnings << ValidationWarning.new(:events, competition.id,
-                                             MISSING_RESULTS_WARNING,
+          @warnings << ValidationWarning.new(MISSING_RESULTS_WARNING,
+                                             :events, competition.id,
                                              event_id: event_id)
         end
       end
@@ -97,19 +94,19 @@ module ResultsValidators
             unexpected.delete(equivalent_round_id)
             round = expected_rounds_by_ids[round_id]
             unless round.round_type.combined?
-              @errors << ValidationError.new(:rounds, competition.id,
-                                             UNEXPECTED_COMBINED_ROUND_ERROR,
+              @errors << ValidationError.new(UNEXPECTED_COMBINED_ROUND_ERROR,
+                                             :rounds, competition.id,
                                              round_name: round.name)
             end
           else
-            @errors << ValidationError.new(:rounds, competition.id,
-                                           MISSING_ROUND_RESULTS_ERROR,
+            @errors << ValidationError.new(MISSING_ROUND_RESULTS_ERROR,
+                                           :rounds, competition.id,
                                            round_id: round_id)
           end
         end
         unexpected.each do |round_id|
-          @errors << ValidationError.new(:rounds, competition.id,
-                                         UNEXPECTED_ROUND_RESULTS_ERROR,
+          @errors << ValidationError.new(UNEXPECTED_ROUND_RESULTS_ERROR,
+                                         :rounds, competition.id,
                                          round_id: round_id)
         end
       end

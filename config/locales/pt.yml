@@ -1574,6 +1574,9 @@ pt:
               label: >-
                 Editar os dados do meu perfil (nome, país, sexo ou data de
                 nascimento)
+            edit_others_profile:
+              #original_hash: d08e8eb
+              label: Editar os dados de perfil de outra pessoa
             report_result_issue:
               #original_hash: 2edbb52
               label: Reportar um problema num resultado
@@ -1637,6 +1640,8 @@ pt:
         Parece que ainda não tem um perfil WCA porque não participou em nenhuma
         competição. Para qualquer outra questão, por favor <a
         href="https://www.worldcubeassociation.org/contact?contactRecipient=wrt">contacte-nos</a>.
+      #original_hash: 43f15fd
+      no_permission_error: Não tem permissões para solicitar a edição do perfil de outras pessoas.
       form:
         contact_email:
           #original_hash: 3142970
@@ -1644,6 +1649,9 @@ pt:
         wca_id:
           #original_hash: 6344c9e
           label: Introduza o ID da WCA
+        wca_id_search:
+          #original_hash: fbba19d
+          label: Procure pelo ID da WCA de quem pretende editar.
         edit_reason:
           #original_hash: fdfcccf
           label: Motivo para a alteração
@@ -3984,7 +3992,7 @@ pt:
       advancement_condition_must_be_present_for_all_non_final_rounds: deve ter uma condição de avanço para todas as rondas não finais.
       #original_hash: da17c99
       registration_period_after_start: Período de registo não pode ser depois da data de início.
-      #original_hash: f6b244b
+      #original_hash: 2a26c1c
       waiting_list_deadline_before_registration_close: >-
         Prazo limite de lista de espera não pode ser antes da data de fecho de
         registo.

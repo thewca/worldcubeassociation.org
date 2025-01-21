@@ -216,6 +216,8 @@ en:
     lunch: "Lunch"
     dinner: "Dinner"
     awards: "Awards"
+    setup: "Setup"
+    teardown: "Teardown"
     misc: "Other"
   #context: Common word used in multiple places on the website
   common:
@@ -331,6 +333,7 @@ en:
         venue: "Venue"
         organization: "Organization"
         incidents: "Incidents"
+        setup_images: "Competition setup images"
         wrc_feedback_requested: "I would like feedback from the WRC on some of the incidents above."
         wrc_incidents: "Incidents Needing WRC Feedback"
         wic_feedback_requested: "I would like feedback from the WIC on some of the incidents above."
@@ -502,6 +505,7 @@ en:
         venue: "The listed points above are just for guidance for a complete report. Use them at your discretion for what you see fit. Please remove unused parts!"
         organization: "The listed points above are just for guidance for a complete report. Use them at your discretion for what you see fit. Please remove unused parts!"
         incidents: "Please report all incidents which are non-standard cases. Number the incidents starting from 1., so that other Delegates can comment referring to them by their numbers. Even if everything seemed generic, just list at least the most noteworthy cases. Please check off the appropriate boxes below if you are actively seeking feedback."
+        setup_images: "Please choose at least %{image_count} images which illustrate the competition setup (scrambling area, competition area, etc). You can select multiple files at once. You can delete images only when enough other images have been uploaded (if you want to replace an image, you need to upload the new one first, and then delete the old one)."
         wrc_feedback_requested: ""
         wrc_incidents: "List of numbers referencing any incidents that you would like the WRC's feedback on."
         wic_feedback_requested: ""
@@ -743,7 +747,6 @@ en:
       panel: "Panel"
       polls: "Polls"
       results_team: "Results team"
-      results_admin: "Admin"
       results_database: "Database"
       #context: "Sidekiq" is the name of a software product
       results_sidekiq: "Sidekiq dashboard"
@@ -837,6 +840,8 @@ en:
             label: "Which of the following best describes your inquiry?"
             edit_profile:
               label: "Edit my profile data (name, country, gender or DOB)"
+            edit_others_profile:
+              label: "Edit someone else's profile data"
             report_result_issue:
               label: "Report an issue in a result"
             other_query:
@@ -873,11 +878,14 @@ en:
       title: "Edit Profile Form"
       not_logged_in_error: "Looks like you are not logged in. Please log in to edit your profile. For any other queries, please <a href=\"https://www.worldcubeassociation.org/contact?contactRecipient=wrt\">contact us</a>."
       no_profile_error: "Looks like you don't have a WCA profile yet because you have not participated in any competitions. For any other queries, please <a href=\"https://www.worldcubeassociation.org/contact?contactRecipient=wrt\">contact us</a>."
+      no_permission_error: "You don't have permission to request edit others profile."
       form:
         contact_email:
           label: "Contact Email"
         wca_id:
           label: "Enter WCA ID"
+        wca_id_search:
+          label: "Search for the WCA ID that you want to edit."
         edit_reason:
           label: "Reason for the change"
         proof_attach:
@@ -2807,3 +2815,71 @@ en:
       description_html: "On this page we offer the WST developer export for download as SQL dump. Details can be found at %{github_link}."
       #context: The button that is clicked to download the file
       download: "Download"
+  validators:
+    persons:
+      dob_is_jan_one_warning: "The date of birth of %{name} is on January 1st, please ensure it's correct."
+      dob_is_too_young_warning: "%{name} seems to be less than 3 years old, please ensure it's correct."
+      dob_is_too_old_warning: "%{name} seems to be around 100 years old, please ensure it's correct."
+      person_doesnt_have_any_results_error: "There are no results for %{person_name} with person id %{person_id}"
+      results_not_associated_with_any_person_error: "There are results for an unknown person with person id %{person_id}"
+      whitespace_in_name_error: "Person '%{name}' has leading/trailing whitespaces or double whitespaces."
+      person_with_non_existing_wca_id_error: "Person %{name} has a WCA ID which does not exist: %{wca_id}."
+      no_space_before_parenthesis_error: "Opening parenthesis in '%{name}' must be preceded by a space."
+      same_person_name_warning: "There is already at least one person with the name '%{name}' in the WCA database (%{wca_ids}). Please ensure that your '%{name}' is a different person. If not, please assign the correct WCA ID to the user account and regenerate the results JSON."
+      non_matching_dob_warning: "The birthdate '%{dob}' provided for %{name} (%{wca_id}) does not match the current record in the WCA database ('%{expected_dob}'). If this is an error, fix it. Otherwise, leave a comment to the WRT about it."
+      non_matching_gender_warning: "The gender '%{gender}' provided for %{name} (%{wca_id}) does not match the current record in the WCA database ('%{expected_gender}'). If this is an error, fix it. Otherwise, leave a comment to the WRT about it."
+      empty_gender_warning: "The gender for newcomer %{name} is empty. Valid gender values are 'female', 'male' and 'other'. Please leave a comment to the WRT about this."
+      non_matching_name_warning: "The name '%{name}' provided for %{wca_id} does not match the current record in the WCA database ('%{expected_name}'). "
+      non_matching_country_warning: "The country '%{country}' provided for %{name} (%{wca_id}) does not match the current record in the WCA database ('%{expected_country}'). If this is an error, fix it. Otherwise, leave a comment to the WRT about it."
+      multiple_newcomers_with_same_name_warning: "There are multiple new competitors with the exact same name: %{name}. Please ensure that all results are correct for these competitors and that all results are correctly seperated by their corresponding id."
+      wrong_parenthesis_type_error: "The parenthesis character used in '%{name}' is an irregular character, please replace it with a regular parenthesis '(' or ')' and with appropriate spacing."
+      successive_uppercase_name_warning: "'%{name}' has successive uppercase letters in their name. Please confirm that this is indeed the correct spelling or fix the name."
+      lowercase_name_warning: "'%{name}' has a lowercase name. Please confirm that this is indeed the correct spelling or fix the name."
+      missing_period_in_single_letter_middle_name_warning: "'%{name}' has a single letter middle name without an abbreviation period. Please confirm that this is indeed the correct spelling or fix the name."
+      letter_after_period_warning: "'%{name}' is missing a space after a period in their name. Please confirm that this is indeed the correct spelling or fix the name."
+      single_letter_first_or_last_name_warning: "'%{name}' has a single letter as first or last name. Please fix the name or confirm that this is indeed the competitor's correct name according to an official document."
+      single_name_warning: "'%{name}' has only one name. Please confirm that this is indeed the competitor's full name according to an official document."
+      competitor_limit_exceeded_warning: "The number of persons in the competition (%{n_competitors}) is above the competitor limit (%{competitor_limit}). The results of the competitors registered after the competitor limit was reached must be removed."
+    results:
+      automatically_position_fixed_info: "[%{round_id}] Automatically fixed the position of %{person_name} from %{pos} to %{expected_pos}."
+      mbf_result_over_time_limit_warning: "[%{round_id}] Result '%{result}' for %{person_name} is over the time limit. Please ensure this is due to time penalties before sending the results, or fix the result to DNF."
+      result_after_dns_warning: "[%{round_id}] %{person_name} has at least one DNS result followed by a valid result. Please ensure it is indeed a DNS and if so, explain what happened to WRT."
+      similar_results_warning: "[%{round_id}] Results for %{person_name} are similar to the results for %{similar_person_name}. Please ensure that these results are correctly recorded for both competitors."
+      met_cutoff_but_missing_results_error: "[%{round_id}] %{person_name} met the cutoff but is missing results for the second phase of the round. The cutoff was %{cutoff}."
+      didnt_meet_cutoff_but_has_results_error: "[%{round_id}] %{person_name} has at least one result for the second phase of the round but didn't meet the cutoff. The cutoff was %{cutoff}."
+      wrong_attempts_for_cutoff_error: "[%{round_id}] %{person_name} is missing at least one attempt for the cutoff phase. Please edit the result to include the missing attempt(s) or update the round's information in the competition's Manage Events page."
+      mismatched_result_format_error: "[%{round_id}] Results for %{person_name} are in the wrong format: expected %{expected_format}, but got %{format}."
+      result_over_time_limit_error: "[%{round_id}] At least one result for %{person_name} is over the time limit for the round, which is %{time_limit} per attempt. All solves over the time limit must be changed to DNF."
+      results_over_cumulative_time_limit_error: "[%{round_ids}] The sum of results for %{person_name} is over the cumulative time limit, which was %{time_limit}."
+      no_round_information_warning: "[%{round_id}] There is no information about the cutoff and time limit for this round. These validations have been skipped. Please update the round's information in the competition's Manage Events page."
+      undefined_time_limit_warning: "[%{round_id}] The time limit for this round is undefined, time limit validations have been skipped. This is expected only for competitions before 2013."
+      suspicious_dnf_warning: "[%{round_ids}] The round has a cumulative time limit, and extrapolating based on %{person_name}'s successful solves, they would have had very little time left for at least one of their DNFs. Please ensure that every DNF and DNS is indeed correct. If the competitor did not start an attempt or did not have any remaining time before starting an attempt, it must be entered as DNS."
+      missing_cumulative_round_id_error: "[%{original_round_id}] Unable to find the round %{wcif_id} for the cumulative time limit specified in the WCIF. Please go to the competition's Manage Events page and remove %{wcif_id} from the cumulative time limit for %{original_round_id}. WST knows about this bug (GitHub issue #3254)."
+      wrong_position_in_results_error: "[%{round_id}] %{person_name} is in the wrong position: expected %{expected_pos}, but got %{pos}."
+    rounds:
+      too_many_qualified_warning: "Round %{round_id}: more competitors qualified than what the advancement condition planned (%{actual} instead of %{expected}, the condition was: %{condition}). Please update the round information in the manage events page."
+      unexpected_round_results_error: "The round %{round_id} is present in the results but was not created on the events tab. Please include the round's information in the competition's manage events page."
+      regulation_9m1_error: "Round %{round_id} has 99 or fewer competitors but has more than two subsequent rounds, which is not permitted as per Regulation 9m1."
+      regulation_9m2_error: "Round %{round_id} has 15 or fewer competitors but has more than one subsequent round, which is not permitted as per Regulation 9m2."
+      regulation_9m3_error: "Round %{round_id} has 7 or fewer competitors but has at least one subsequent round, which is not permitted as per Regulation 9m3."
+      regulation_9p1_error: "Round %{round_id}: Fewer than 25%% of competitors were eliminated, which is not permitted as per Regulation 9p1."
+      no_competitor_eliminated_error: "Round %{round_id}: There must be at least one competitor eliminated, which is required as per Regulation 9p (competitions before April 2010)."
+      less_than_twenty_five_percent_eliminated_error: "Round %{round_id}: according to the advancement condition (%{condition}), fewer than 25%% of competitors would be eliminated, which is not permitted as per Regulation 9p1. Please update the round information in the manage events page."
+      not_enough_qualified_warning: "Round %{round_id}: according to the events data, at most %{expected} could have proceed, but only %{actual} competed in the round. Please leave a comment about that (or fix the events data if you applied a different advancement condition)."
+      competed_not_qualified_error: "Round %{round_id}: %{ids} competed but did not meet the attempt result advancement condition (%{condition}). Please make sure the advancement condition reflects what was used during the competition, and remove the results if needed."
+      round_not_found_error: "Round %{round_id} could not be found. Please make sure that the WCA website Edit Events panel and WCA Live are in sync."
+      missing_round_results_error: "There are no results for round %{round_id} but it is listed in the events tab. If this round was not held, please remove the round in the competition's manage events page."
+      unexpected_combined_round_error: "No cutoff was announced for '%{round_name}', but it has been detected as a cutoff round in the results. Please update the round's information in the competition's manage events page."
+    events:
+      not_333_main_event_warning: "The selected main event for this competition is %{main_event_id}. How was that event treated as the main event of the competition? Please give WRT a brief explanation (e.g. number of rounds, prizes, declared winner of the competition, ...)."
+      no_main_event_warning: "There is no selected main event for this competition. Please let WRT know that this is correct."
+      unexpected_results_error: "Results are present for %{event_id}, however it is not listed as an official event. Please remove the event from the results or contact the WCAT to request the event to be added to the WCA website."
+      missing_results_warning: "There are no results for %{event_id}, but it is listed as an official event. If the event was held, please reupload your JSON with the results included. If the event was not held, leave a comment for the WRT."
+    scrambles:
+      missing_scrambles_for_round_error: "[%{round_id}] Missing scrambles. Use Scrambles Matcher to add the correct scrambles to the round."
+      missing_scrambles_for_competition_error: "Missing scrambles for the competition. Use Scrambles Matcher to add scrambles."
+      unexpected_scrambles_for_round_error: "[%{round_id}] Too many scrambles. Use Scrambles Matcher to uncheck the unused scrambles."
+      missing_scrambles_for_group_error: "[%{round_id}] Group %{group_id}: missing scrambles, detected only %{actual} instead of %{expected}."
+      missing_scrambles_for_multi_error: "[%{round_id}] While you may have multiple groups in 3x3x3 Multi-Blind, at least one of the groups must contain scrambles for all attempts."
+      multiple_fmc_groups_warning: "[%{round_id}] There are multiple groups of FMC used. If one group of FMC was used, please use the Scrambles Matcher to uncheck the unused scrambles. Otherwise, please include a comment to WRT explaining why multiple groups of FMC were used."
+      wrong_number_of_scramble_sets_error: "[%{round_id}] This round has a different number of scramble sets than specified on the Manage Events tab. Please adjust the number of scramble sets in the Manage Events tab to the number of sets that were used."

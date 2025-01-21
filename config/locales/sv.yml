@@ -505,6 +505,8 @@ sv:
         organization: Arrangemang
         #original_hash: 5e326b1
         incidents: Incidenter
+        #original_hash: 7106c2d
+        setup_images: Bilder på tävlingssetup
         #original_hash: 1362470
         wrc_feedback_requested: Jag vill ha feedback från WRC om några av incidenterna ovan.
         #original_hash: 0c7191d
@@ -846,6 +848,13 @@ sv:
           hänvisning till deras nummer. Även om allt verkade normalt, lista bara
           åtminstone de mest anmärkningsvärda fallen. Markera kryssrutorna nedan
           om du aktivt söker feedback.
+        #original_hash: 8af00aa
+        setup_images: >-
+          Välj minst %{image_count} bilder som illustrerar tävlingens setup
+          (blandningsområde, tävlingsområde etc.). Du kan välja flera filer
+          samtidigt. Du kan ta bort bilder först när tillräckligt många andra
+          bilder har laddats upp (om du vill byta ut en bild måste du först
+          ladda upp den nya bilden och sedan ta bort den gamla).
         #original_hash: da39a3e
         wrc_feedback_requested: ''
         #original_hash: 98bb5cd
@@ -1308,8 +1317,6 @@ sv:
       polls: Omröstningar
       #original_hash: d3a928c
       results_team: Results Team
-      #original_hash: 4e7afeb
-      results_admin: Admin
       #original_hash: 61074f1
       results_database: Databas
       #original_hash: 54e0548
@@ -1562,6 +1569,9 @@ sv:
               label: >-
                 Redigera mina profiluppgifter (namn, land, kön, eller
                 födelsedatum)
+            edit_others_profile:
+              #original_hash: d08e8eb
+              label: Redigera någon annans profildata
             report_result_issue:
               #original_hash: 2edbb52
               label: Rapportera ett problem med ett resultat
@@ -1634,6 +1644,9 @@ sv:
         wca_id:
           #original_hash: 6344c9e
           label: Ange WCA-ID
+        wca_id_search:
+          #original_hash: fbba19d
+          label: Sök efter det WCA-ID som du vill redigera.
         edit_reason:
           #original_hash: fdfcccf
           label: Anledning till ändringen
@@ -3918,7 +3931,7 @@ sv:
         icke-finalomgångar.
       #original_hash: da17c99
       registration_period_after_start: Anmälningsperioden kan inte vara efter startdatumet.
-      #original_hash: f6b244b
+      #original_hash: 2a26c1c
       waiting_list_deadline_before_registration_close: >-
         Deadline för att bli godkänd från väntelistan kan inte vara före anmälan
         stänger.
@@ -5816,3 +5829,289 @@ sv:
         SQL-dump. Detaljer finns på %{github_link}.
       #original_hash: a479c9c
       download: Ladda ned
+  validators:
+    persons:
+      #original_hash: 847f614
+      dob_is_jan_one_warning: >-
+        Födelsedatumet för %{name} är den 1:a januari, kontrollera att det är
+        korrekt.
+      #original_hash: b4b736a
+      dob_is_too_young_warning: >-
+        %{name} verkar vara mindre än 3 år gammal, kontrollera att den är
+        korrekt.
+      #original_hash: b7c88ef
+      dob_is_too_old_warning: '%{name} verkar vara cirka 100 år gammal, se till att det är korrekt.'
+      #original_hash: 809f305
+      person_doesnt_have_any_results_error: 'Det finns inga resultat för %{person_name} med ID %{person_id}'
+      #original_hash: ebc1b15
+      results_not_associated_with_any_person_error: 'Det finns resultat för en okänd person med ID %{person_id}'
+      #original_hash: c29e35d
+      whitespace_in_name_error: >-
+        Personen '%{name}' har inledande/avslutande mellanslag eller dubbla
+        mellanslag.
+      #original_hash: 9b1ae5f
+      person_with_non_existing_wca_id_error: 'Person %{name} har ett WCA-ID som inte existerar: %{wca_id}.'
+      #original_hash: 924d832
+      no_space_before_parenthesis_error: 'Öppningsparentesen i ”%{name}” måste föregås av ett mellanslag.'
+      #original_hash: 6daf706
+      same_person_name_warning: >-
+        Det finns redan minst en person med namnet ”%{name}” i WCA:s databas
+        (%{wca_ids}). Kontrollera att din ”%{name}” är en annan person. Om inte,
+        tilldela användarkontot rätt WCA-ID och regenerera om resultat-JSON.
+      #original_hash: eeb688a
+      non_matching_dob_warning: >-
+        Födelsedatumet ”%{dob}” för %{name} (%{wca_id}) stämmer inte överens med
+        den nuvarande informationen i WCA-databasen (”%{expected_dob}”). Om
+        detta är ett fel, åtgärda det. Annars, lämna en kommentar till WRT om
+        det.
+      #original_hash: 6a81cc0
+      non_matching_gender_warning: >-
+        Könet ”%{gender}” som angetts för %{name} (%{wca_id}) stämmer inte
+        överens med den den nuvarande informationen i WCA-databasen
+        (”%{expected_gender}”).
+
+        Om detta är ett fel, åtgärda det. Om inte, lämna en kommentar till WRT
+        om det.
+      #original_hash: da398a2
+      empty_gender_warning: >-
+        Könet för nykomlingen %{name} är tomt. Giltiga värden för kön är
+        'kvinna', 'man' och ' övrigt'. Lämna en kommentar till WRT om detta.
+      #original_hash: 050c7e2
+      non_matching_name_warning: >-
+        Namnet ”%{name}” som angetts för %{wca_id} stämmer inte överens med den
+        aktuella informationen i WCA-databasen (”%{expected_name}”).
+      #original_hash: 333a035
+      non_matching_country_warning: >-
+        Landet '%{country}' som angetts för %{name} (%{wca_id}) stämmer inte
+        överens med den aktuella informationen i WCA-databasen
+        ('%{expected_country}'). Om detta är ett fel, åtgärda det. I annat fall,
+        lämna en kommentar till WRT om det.
+      #original_hash: e15e700
+      multiple_newcomers_with_same_name_warning: >-
+        Det finns flera nya tävlande med exakt samma namn: %{name}. Se till att
+        alla resultat är korrekta för dessa personer och att alla resultat är
+        korrekt separerade med respektive id.
+      #original_hash: 7732038
+      wrong_parenthesis_type_error: >-
+        Parentestecknet som används i '%{name}' är ett ovanligt tecken, vänligen
+        ersätt det med ett vanligt parentestecken '(' eller ')' och med lämpligt
+        mellanrum.
+      #original_hash: 4b90583
+      successive_uppercase_name_warning: >-
+        '%{name}' har efterföljande versaler i sitt namn. Vänligen bekräfta att
+        detta är den korrekta stavningen eller korrigera namnet.
+      #original_hash: 654b60d
+      lowercase_name_warning: >-
+        '%{name}' har ett namn med liten bokstav. Vänligen bekräfta att detta är
+        den korrekta stavningen eller korrigera namnet.
+      #original_hash: 4ea44b6
+      missing_period_in_single_letter_middle_name_warning: >-
+        '%{name}' har ett mellannamn på en bokstav utan punkt. Vänligen bekräfta
+        att detta är den korrekta stavningen eller korrigera namnet.
+      #original_hash: cbd3bd6
+      letter_after_period_warning: >-
+        '%{name}' saknar ett mellanslag efter en punkt i sitt namn. Vänligen
+        bekräfta att detta är den korrekta stavningen eller korrigera namnet.
+      #original_hash: d7803d4
+      single_letter_first_or_last_name_warning: >-
+        '%{name}' har en enda bokstav som för- eller efternamn. Vänligen
+        korrigera namnet eller bekräfta att detta verkligen är den tävlandes
+        korrekta namn enligt officiell handling.
+      #original_hash: 9adb87f
+      single_name_warning: >-
+        '%{name}' har bara ett namn. Vänligen bekräfta att detta verkligen är
+        den tävlandes fullständiga namn enligt officiell handling.
+      #original_hash: 39c7f3d
+      competitor_limit_exceeded_warning: >-
+        Antalet personer i tävlingen (%{n_competitors}) är högre än
+        deltagargränsen (%{competitor_limit}). Resultaten för de deltagare som
+        anmälts efter att deltagargränsen uppnåtts måste tas bort.
+    results:
+      #original_hash: 5685ae8
+      automatically_position_fixed_info: >-
+        [%{round_id}] Fixade automatiskt placeringen av %{person_name} från
+        %{pos} till %{expected_pos}.
+      #original_hash: e895bf5
+      mbf_result_over_time_limit_warning: >-
+        [%{round_id}] Resultatet '%{result}' för %{person_name} är över
+        tidsgränsen. Kontrollera att detta beror på tidsstraff innan du skickar
+        resultaten, eller korrigera resultatet till DNF.
+      #original_hash: c74c2c6
+      result_after_dns_warning: >-
+        [%{round_id}] %{person_name} har minst ett DNS-resultat följt av ett
+        giltigt resultat. Kontrollera att det verkligen är en DNS och förklara i
+        så fall vad som hände för WRT.
+      #original_hash: a2032e9
+      similar_results_warning: >-
+        [%{round_id}] Resultaten för %{person_name} liknar resultaten för
+        %{similar_person_name}. Vänligen se till att dessa resultat registreras
+        korrekt för båda deltagarna.
+      #original_hash: ebbab6f
+      met_cutoff_but_missing_results_error: >-
+        [%{round_id}] %{person_name} klarade cutoffen men saknar resultat för
+        omgångens andra del. Cutoffen var %{cutoff}.
+      #original_hash: cc0b47b
+      didnt_meet_cutoff_but_has_results_error: >-
+        [%{round_id}] %{person_name} har minst ett resultat för omgångens andra
+        del, men klarade inte cutoffen. Cutoffen var %{cutoff}.
+      #original_hash: 4fc3fd7
+      wrong_attempts_for_cutoff_error: >-
+        [%{round_id}] %{person_name} saknar minst ett försök för cutoff-delen.
+        Redigera resultatet för att inkludera de saknade försöken eller
+        uppdatera omgångens information på tävlingens WCA-sida.
+      #original_hash: 24c10d3
+      mismatched_result_format_error: >-
+        [%{round_id}] Resultaten för %{person_name} är i fel format: förväntade
+        %{expected_format}, men fick %{format}.
+      #original_hash: 32ea6be
+      result_over_time_limit_error: >-
+        [%{round_id}] Minst ett resultat för %{person_name} är över tidsgränsen
+        för omgången, som är %{time_limit} per försök. Alla lösningar som
+        överskrider tidsgränsen måste ändras till DNF.
+      #original_hash: 1678105
+      results_over_cumulative_time_limit_error: >-
+        [%{round_ids}] Summan av resultaten för %{person_name} är över den
+        kumulativa tidsgränsen, som var %{time_limit}.
+      #original_hash: 3fbb505
+      no_round_information_warning: >-
+        [%{round_id}] Det finns ingen information om cutoff och tidsgräns för
+        denna omgång. Dessa valideringar har hoppats över. Uppdatera
+        informationen om omgången på tävlingens WCA-sida.
+      #original_hash: 76dc4e7
+      undefined_time_limit_warning: >-
+        [%{round_id}] Tidsgränsen för denna omgång är odefinierad, valideringar
+        av tidsgränser har hoppats över. Detta förväntas endast för tävlingar
+        före 2013.
+      #original_hash: 10ad25f
+      suspicious_dnf_warning: >-
+        [%{round_ids}] Omgången har en kumulativ tidsgräns, och om man
+        extrapolerar utifrån %{person_name}s lyckade lösningar hade de haft
+        väldigt lite tid kvar för åtminstone en av sina DNF:er. Vänligen
+        kontrollera att varje DNF och DNS verkligen är korrekt. Om den tävlande
+        inte påbörjade ett försök eller inte hade någon återstående tid innan
+        hen påbörjade ett försök, ska det registreras som DNS.
+      #original_hash: 8057a12
+      missing_cumulative_round_id_error: >-
+        [%{original_round_id}] Det gick inte att hitta omgången %{wcif_id} för
+        den kumulativa tidsgränsen som anges i WCIF. Gå till tävlingens WCA-sida
+        och ta bort %{wcif_id} från den kumulativa tidsgränsen för
+        %{original_round_id}. WST känner till den här buggen (GitHub issue
+        #3254).
+      #original_hash: ad200c1
+      wrong_position_in_results_error: >-
+        [%{round_id}] %{person_name} är på fel placering: förväntade
+        %{expected_pos}, men fick %{pos}.
+    rounds:
+      #original_hash: 517fd54
+      too_many_qualified_warning: >-
+        Omgång %{round_id}: fler tävlande kvalificerade sig än vad som var
+        angivet i avancemangsvillkoren (%{actual} istället för %{expected},
+        villkoret var: %{condition}). Uppdatera informationen om omgången på
+        WCA-sidan.
+      #original_hash: 09d3568
+      unexpected_round_results_error: >-
+        Omgången %{round_id} finns med i resultaten men finns inte på på
+        WCA-sidan. Lägg till information om omgången på tävlingens WCA-sida.
+      #original_hash: 5b5f9ee
+      regulation_9m1_error: >-
+        Omgång %{round_id} har 99 eller färre tävlande men har mer än två
+        efterföljande omgångar, vilket inte är tillåtet enligt regel 9m1.
+      #original_hash: 892e0d5
+      regulation_9m2_error: >-
+        Omgång %{round_id} har 15 eller färre tävlande men har mer än en
+        efterföljande omgång, vilket inte är tillåtet enligt regel 9m2.
+      #original_hash: cb8522e
+      regulation_9m3_error: >-
+        Omgång %{round_id} har 7 eller färre tävlande men har minst en
+        efterföljande omgång, vilket inte är tillåtet enligt regel 9m3.
+      #original_hash: e12138a
+      regulation_9p1_error: >-
+        Omgång %{round_id}: Färre än 25 % av de tävlande eliminerades, vilket
+        inte är tillåtet enligt regel 9p1.
+      #original_hash: f5d8ae9
+      no_competitor_eliminated_error: >-
+        Omgång %{round_id}: Minst en tävlande måste elimineras, vilket krävs
+        enligt regel 9p (tävlingar före april 2010).
+      #original_hash: b868019
+      less_than_twenty_five_percent_eliminated_error: >-
+        Rond %{round_id}: enligt avancemangsvillkoren (%{condition}) skulle
+        färre än 25% av de tävlande elimineras, vilket inte är tillåtet enligt
+        regel 9p1. Uppdatera informationen om omgången på WCA-sidan.
+      #original_hash: d6fc805
+      not_enough_qualified_warning: >-
+        Omgång %{round_id}: enligt WCA-sidan kunde högst %{expected} ha gått
+        vidare, men endast %{actual} deltog i omgången. Lämna en kommentar om
+        detta (eller korrigera WCA-sidan om du tillämpade andra
+        avancemangsvillkor).
+      #original_hash: 7915e13
+      competed_not_qualified_error: >-
+        Omgång %{round_id}: %{ids} tävlade men uppfyllde inte
+        avanceringsvillkoren (%{condition}). Kontrollera att
+        avancemangsvillkoren stämmer överens med vad som användes under
+        tävlingen, och ta bort resultaten om det behövs.
+      #original_hash: c4a7f11
+      round_not_found_error: >-
+        Omgången %{round_id} kunde inte hittas. Kontrollera att WCA-sidan och
+        WCA Live är synkroniserade.
+      #original_hash: 3c739f3
+      missing_round_results_error: >-
+        Det finns inga resultat för omgången %{round_id} men den är listad på
+        WCA-sidan. Om denna omgång inte hölls, ta bort omgången från WCA-sidan.
+      #original_hash: dcf92d3
+      unexpected_combined_round_error: >-
+        Ingen cutoff publicerades för '%{round_name}', men den har identifierats
+        som en cutoff-runda i resultaten. Uppdatera informationen om omgången på
+        WCA-sidan.
+    events:
+      #original_hash: e87f8a0
+      not_333_main_event_warning: >-
+        Den valda huvudgrenen för den här tävlingen är %{main_event_id}. Hur
+        behandlades den grenen som tävlingens huvudgren? Ge WRT en kort
+        förklaring (t.ex. antal omgångar, priser, utnämnd vinnare av tävlingen,
+        ...).
+      #original_hash: 1d4e297
+      no_main_event_warning: >-
+        Det finns ingen vald huvudgren för denna tävling. Vänligen meddela WRT
+        att detta är korrekt.
+      #original_hash: 6fa46ad
+      unexpected_results_error: >-
+        Resultat finns för %{event_id}, men det är inte listat som en officiell
+        gren. Vänligen ta bort grenen från resultaten eller kontakta WCAT för
+        att begära att grenen läggs till på WCA-sidan.
+      #original_hash: fde208d
+      missing_results_warning: >-
+        Det finns inga resultat för %{event_id}, men det är listat som en
+        officiell gren. Om grenen hölls, ladda upp din JSON igen med resultaten
+        inkluderade. Om grenen inte hölls, lämna en kommentar till WRT.
+    scrambles:
+      #original_hash: ff7e063
+      missing_scrambles_for_round_error: >-
+        [%{round_id}] Saknar blandningar. Använd Scrambles Matcher för att lägga
+        till rätt blandningar i omgången.
+      #original_hash: 340d2f3
+      missing_scrambles_for_competition_error: >-
+        Saknar blandningar för tävlingen. Använd Scrambles Matcher för att lägga
+        till blandningar.
+      #original_hash: 0f334fd
+      unexpected_scrambles_for_round_error: >-
+        [%{round_id}] För många blandningar. Använd Scrambles Matcher för att
+        avmarkera oanvända blandningar.
+      #original_hash: 22706c5
+      missing_scrambles_for_group_error: >-
+        [%{round_id}] Grupp %{group_id}: saknar blandningar, hittade bara
+        %{actual} istället för %{expected}.
+      #original_hash: 665014c
+      missing_scrambles_for_multi_error: >-
+        [%{round_id}] Även om du kan ha flera grupper i 3x3x3 Multi-Blind, måste
+        minst en av grupperna innehålla blandningar för alla försök.
+      #original_hash: 3d5255d
+      multiple_fmc_groups_warning: >-
+        [%{round_id}] Det finns flera grupper av FMC som används. Om en grupp av
+        FMC användes, använd Scrambles Matcher för att avmarkera de oanvända
+        blandningarna. Om inte, skicka en kommentar till WRT där du förklarar
+        varför flera grupper av FMC användes.
+      #original_hash: d6830c0
+      wrong_number_of_scramble_sets_error: >-
+        [%{round_id}] Denna omgång har ett annat antal blandnings-set än vad som
+        anges på WCA-sidan. Justera antalet blandnings-set på WCA-sidan till det
+        antal som användes.

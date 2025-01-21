@@ -2,26 +2,23 @@
 
 module ResultsValidators
   class IndividualResultsValidator < GenericValidator
-    MBF_RESULT_OVER_TIME_LIMIT_WARNING = "[%{round_id}] Result '%{result}' for %{person_name} is over the time limit. Please ensure this is due to time penalties before sending the results, or fix the result to DNF."
+    MBF_RESULT_OVER_TIME_LIMIT_WARNING = :mbf_result_over_time_limit_warning
 
-    RESULT_AFTER_DNS_WARNING = "[%{round_id}] %{person_name} has at least one DNS result followed by a valid result. Please ensure it is indeed a DNS and if so, explain what happened to WRT."
-    SIMILAR_RESULTS_WARNING = "[%{round_id}] Results for %{person_name} are similar to the results for %{similar_person_name}. Please ensure that these results are correctly recorded for both competitors."
+    RESULT_AFTER_DNS_WARNING = :result_after_dns_warning
+    SIMILAR_RESULTS_WARNING = :similar_results_warning
 
-    MET_CUTOFF_MISSING_RESULTS_ERROR = "[%{round_id}] %{person_name} met the cutoff but is missing results for the second phase of the round. The cutoff was %{cutoff}."
-    DIDNT_MEET_CUTOFF_HAS_RESULTS_ERROR = "[%{round_id}] %{person_name} has at least one result for the second phase of the round but didn't meet the cutoff. The cutoff was %{cutoff}."
-    WRONG_ATTEMPTS_FOR_CUTOFF_ERROR = "[%{round_id}] %{person_name} is missing at least one attempt for the cutoff phase. " \
-                                      "Please edit the result to include the missing attempt(s) or update the round's information in the competition's Manage Events page."
-    MISMATCHED_RESULT_FORMAT_ERROR = "[%{round_id}] Results for %{person_name} are in the wrong format: expected %{expected_format}, but got %{format}."
-    RESULT_OVER_TIME_LIMIT_ERROR = "[%{round_id}] At least one result for %{person_name} is over the time limit for the round, which is %{time_limit} per attempt. All solves over the time limit must be changed to DNF."
-    RESULTS_OVER_CUMULATIVE_TIME_LIMIT_ERROR = "[%{round_ids}] The sum of results for %{person_name} is over the cumulative time limit, which was %{time_limit}."
-    NO_ROUND_INFORMATION_WARNING = "[%{round_id}] There is no information about the cutoff and time limit for this round. These validations have been skipped. Please update the round's information in the competition's Manage Events page."
-    UNDEF_TL_WARNING = "[%{round_id}] The time limit for this round is undefined, time limit validations have been skipped. This is expected only for competitions before 2013."
-    SUSPICIOUS_DNF_WARNING = "[%{round_ids}] The round has a cumulative time limit, and extrapolating based on %{person_name}'s successful solves, they would have had very little time left for at least one of their DNFs. " \
-                             "Please ensure that every DNF and DNS is indeed correct. If the competitor did not start an attempt or did not have any remaining time before starting an attempt, it must be entered as DNS."
+    MET_CUTOFF_MISSING_RESULTS_ERROR = :met_cutoff_but_missing_results_error
+    DIDNT_MEET_CUTOFF_HAS_RESULTS_ERROR = :didnt_meet_cutoff_but_has_results_error
+    WRONG_ATTEMPTS_FOR_CUTOFF_ERROR = :wrong_attempts_for_cutoff_error
+    MISMATCHED_RESULT_FORMAT_ERROR = :mismatched_result_format_error
+    RESULT_OVER_TIME_LIMIT_ERROR = :result_over_time_limit_error
+    RESULTS_OVER_CUMULATIVE_TIME_LIMIT_ERROR = :results_over_cumulative_time_limit_error
+    NO_ROUND_INFORMATION_WARNING = :no_round_information_warning
+    UNDEF_TL_WARNING = :undefined_time_limit_warning
+    SUSPICIOUS_DNF_WARNING = :suspicious_dnf_warning
 
     # Miscelaneous errors
-    MISSING_CUMULATIVE_ROUND_ID_ERROR = "[%{original_round_id}] Unable to find the round %{wcif_id} for the cumulative time limit specified in the WCIF. " \
-                                        "Please go to the competition's Manage Events page and remove %{wcif_id} from the cumulative time limit for %{original_round_id}. WST knows about this bug (GitHub issue #3254)."
+    MISSING_CUMULATIVE_ROUND_ID_ERROR = :missing_cumulative_round_id_error
 
     def self.description
       "This validator checks that all results respect the format, time limit, and cutoff information if available. It also looks for similar results within the round."
@@ -58,8 +55,8 @@ module ResultsValidators
 
           unless round_info
             # This situation may happen with "old" competitions
-            @warnings << ValidationWarning.new(:results, competition.id,
-                                               NO_ROUND_INFORMATION_WARNING,
+            @warnings << ValidationWarning.new(NO_ROUND_INFORMATION_WARNING,
+                                               :results, competition.id,
                                                round_id: round_id)
             next
           end
@@ -71,8 +68,8 @@ module ResultsValidators
             # were possibly not enforced at the discretion of the WCA Delegate.
             # In which case we let the TL undefined, and no errors should be
             # generated.
-            @warnings << ValidationWarning.new(:results, competition.id,
-                                               UNDEF_TL_WARNING,
+            @warnings << ValidationWarning.new(UNDEF_TL_WARNING,
+                                               :results, competition.id,
                                                round_id: round_id)
           end
 
@@ -107,8 +104,8 @@ module ResultsValidators
                 # easy case: each completed result (not DNS, DNF, or SKIPPED) must be below the time limit.
                 results_over_time_limit = completed_solves.reject { |t| t.time_centiseconds < time_limit_for_round.centiseconds }
                 if results_over_time_limit&.any?
-                  @errors << ValidationError.new(:results, competition.id,
-                                                 RESULT_OVER_TIME_LIMIT_ERROR,
+                  @errors << ValidationError.new(RESULT_OVER_TIME_LIMIT_ERROR,
+                                                 :results, competition.id,
                                                  round_id: round_id,
                                                  person_name: result.personName,
                                                  time_limit: time_limit_for_round.to_s(round_info))
@@ -136,8 +133,8 @@ module ResultsValidators
         completed_solves.each do |solve_time|
           time_limit_seconds = [3600, solve_time.attempted * 600].min
           if solve_time.time_seconds > time_limit_seconds
-            @warnings << ValidationWarning.new(:results, competition_id,
-                                               MBF_RESULT_OVER_TIME_LIMIT_WARNING,
+            @warnings << ValidationWarning.new(MBF_RESULT_OVER_TIME_LIMIT_WARNING,
+                                               :results, competition_id,
                                                round_id: round_id,
                                                result: solve_time.clock_format,
                                                person_name: result.personName)
@@ -149,8 +146,8 @@ module ResultsValidators
         competition_id, result, round_id, = context
         similar = results_similar_to(result, index, results_for_round)
         similar.each do |r|
-          @warnings << ValidationWarning.new(:results, competition_id,
-                                             SIMILAR_RESULTS_WARNING,
+          @warnings << ValidationWarning.new(SIMILAR_RESULTS_WARNING,
+                                             :results, competition_id,
                                              round_id: round_id,
                                              person_name: result.personName,
                                              similar_person_name: r.personName)
@@ -163,8 +160,8 @@ module ResultsValidators
         # Just use '5' here to get all of them
         if first_index && all_solve_times[first_index, 5].any?(&:complete?)
           competition_id, result, round_id, = context
-          @warnings << ValidationWarning.new(:results, competition_id,
-                                             RESULT_AFTER_DNS_WARNING,
+          @warnings << ValidationWarning.new(RESULT_AFTER_DNS_WARNING,
+                                             :results, competition_id,
                                              round_id: round_id,
                                              person_name: result.personName)
         end
@@ -176,8 +173,8 @@ module ResultsValidators
         # "check consistency of roundTypeIds and formatIds" across a given round
         # Check that the result's format matches the round format
         unless round_info.format.id == result.formatId
-          @errors << ValidationError.new(:results, competition_id,
-                                         MISMATCHED_RESULT_FORMAT_ERROR,
+          @errors << ValidationError.new(MISMATCHED_RESULT_FORMAT_ERROR,
+                                         :results, competition_id,
                                          round_id: round_id,
                                          person_name: result.personName,
                                          expected_format: round_info.format.name,
@@ -197,8 +194,8 @@ module ResultsValidators
 
         if maybe_qualifying_results.any?(&:skipped?)
           # There are at least one skipped results among those in the first phase.
-          @errors << ValidationError.new(:results, competition_id,
-                                         WRONG_ATTEMPTS_FOR_CUTOFF_ERROR,
+          @errors << ValidationError.new(WRONG_ATTEMPTS_FOR_CUTOFF_ERROR,
+                                         :results, competition_id,
                                          round_id: round_id,
                                          person_name: result.personName)
         end
@@ -208,8 +205,8 @@ module ResultsValidators
         if qualifying_results.any?
           # Meets the cutoff, no result should be SKIPPED
           if skipped.any?
-            @errors << ValidationError.new(:results, competition_id,
-                                           MET_CUTOFF_MISSING_RESULTS_ERROR,
+            @errors << ValidationError.new(MET_CUTOFF_MISSING_RESULTS_ERROR,
+                                           :results, competition_id,
                                            round_id: round_id,
                                            person_name: result.personName,
                                            cutoff: cutoff.to_s(round))
@@ -217,8 +214,8 @@ module ResultsValidators
         else
           # Doesn't meet the cutoff, all results should be SKIPPED
           if unskipped.any?
-            @errors << ValidationError.new(:results, competition_id,
-                                           DIDNT_MEET_CUTOFF_HAS_RESULTS_ERROR,
+            @errors << ValidationError.new(DIDNT_MEET_CUTOFF_HAS_RESULTS_ERROR,
+                                           :results, competition_id,
                                            round_id: round_id,
                                            person_name: result.personName,
                                            cutoff: cutoff.to_s(round))
@@ -245,8 +242,8 @@ module ResultsValidators
           end
           unless actual_round_id
             # FIXME: this needs to be removed when https://github.com/thewca/worldcubeassociation.org/issues/3254 is fixed.
-            @errors << ValidationError.new(:results, competition_id,
-                                           MISSING_CUMULATIVE_ROUND_ID_ERROR,
+            @errors << ValidationError.new(MISSING_CUMULATIVE_ROUND_ID_ERROR,
+                                           :results, competition_id,
                                            wcif_id: wcif_id, original_round_id: round_id)
           end
           actual_round_id&.at(0)
@@ -265,8 +262,8 @@ module ResultsValidators
 
         # Check the sum is below the limit
         unless sum_of_times_for_rounds < time_limit_for_round.centiseconds
-          @errors << ValidationError.new(:results, competition_id,
-                                         RESULTS_OVER_CUMULATIVE_TIME_LIMIT_ERROR,
+          @errors << ValidationError.new(RESULTS_OVER_CUMULATIVE_TIME_LIMIT_ERROR,
+                                         :results, competition_id,
                                          round_ids: cumulative_round_ids.join(","),
                                          person_name: result.personName,
                                          time_limit: time_limit_for_round.to_s(round_info))
@@ -280,8 +277,8 @@ module ResultsValidators
         avg_per_solve = sum_of_times_for_rounds.to_f / completed_solves_for_rounds.size
         # We want to issue a warning if the estimated time for all solves + DNFs goes roughly over the cumulative time limit by at least 20% (estimation tolerance to reduce false positive).
         if (number_of_dnf_solves + completed_solves_for_rounds.size) * avg_per_solve >= 1.2 * time_limit_for_round.centiseconds
-          @warnings << ValidationWarning.new(:results, competition_id,
-                                             SUSPICIOUS_DNF_WARNING,
+          @warnings << ValidationWarning.new(SUSPICIOUS_DNF_WARNING,
+                                             :results, competition_id,
                                              round_ids: cumulative_round_ids.join(","),
                                              person_name: result.personName)
         end

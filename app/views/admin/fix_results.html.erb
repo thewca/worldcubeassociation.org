@@ -1,11 +1,9 @@
 <% provide(:title, "Fix results") %>
 <div class="container">
-  <%= render layout: 'nav' do %>
-    <h1><%= yield(:title) %></h1>
-    <p>
-      Entry point to fix existing results.
-    </p>
+  <h1>Fix results</h1>
+  <p>
+    Entry point to fix existing results.
+  </p>
 
-    <%= render "fix_results_selector" %>
-  <% end %>
+  <%= render "fix_results_selector" %>
 </div>
