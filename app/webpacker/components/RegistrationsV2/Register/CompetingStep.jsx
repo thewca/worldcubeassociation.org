@@ -182,7 +182,14 @@ export default function CompetingStep({
       },
       guests,
     });
-  }, [user.id, competitionInfo.id, selectedEvents, comment, guests]);
+  }, [
+    createRegistrationMutation,
+    user.id,
+    competitionInfo.id,
+    selectedEvents,
+    comment,
+    guests,
+  ]);
 
   const actionUpdateRegistration = useCallback(() => {
     confirm({
@@ -207,6 +214,10 @@ export default function CompetingStep({
       nextStep();
     });
   }, [
+    confirm,
+    dispatch,
+    nextStep,
+    updateRegistrationMutation,
     competitionInfo,
     registration.user_id,
     hasCommentChanged,
@@ -215,7 +226,6 @@ export default function CompetingStep({
     selectedEvents,
     hasGuestsChanged,
     guests,
-    updateMessage,
   ]);
 
   const actionReRegister = useCallback(() => {
@@ -229,7 +239,14 @@ export default function CompetingStep({
       },
       guests,
     });
-  }, [registration.user_id, competitionInfo.id, comment, selectedEvents, guests]);
+  }, [
+    updateRegistrationMutation,
+    registration.user_id,
+    competitionInfo.id,
+    comment,
+    selectedEvents,
+    guests,
+  ]);
 
   const handleEventSelection = ({ type, eventId }) => {
     if (type === 'select_all_events') {
