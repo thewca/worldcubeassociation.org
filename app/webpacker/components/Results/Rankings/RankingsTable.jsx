@@ -8,6 +8,16 @@ import CountryFlag from '../../wca/CountryFlag';
 import { continents, countries } from '../../../lib/wca-data.js.erb';
 import { personUrl } from '../../../lib/requests/routes.js.erb';
 
+function getCountryOrContinent(result, firstContinentIndex, firstCountryIndex, index) {
+  if (index < firstContinentIndex) {
+    return { name: I18n.t('results.table_elements.world') };
+  }
+  if (index >= firstContinentIndex && index < firstCountryIndex) {
+    return continents.real.find((c) => c.id === countries.byId[result.countryId].continentId);
+  }
+  return countries.byId[result.countryId];
+}
+
 function CountryCell({ country }) {
   return (
     <Table.Cell textAlign="left">
@@ -75,12 +85,7 @@ export default function RankingsTable({
       const rank = value === previousValue ? previousRank : index + 1;
       const tiedPrevious = rank === previousRank;
 
-      let country = countries.byId[result.countryId];
-      if (index < firstContinentIndex) {
-        country = { name: I18n.t('results.table_elements.world') };
-      } else if (index >= firstContinentIndex && index < firstCountryIndex) {
-        country = continents.real.find((c) => c.id === country.continentId);
-      }
+      const country = getCountryOrContinent(result, firstContinentIndex, firstCountryIndex, index);
 
       return [...acc, {
         result,
@@ -122,6 +127,7 @@ export default function RankingsTable({
     });
 
     if (isAverage) {
+      // One Cell per Solve of an Average
       commonColumns.push({
         accessorKey: 'solves',
         header: I18n.t('results.table_elements.solves'),
@@ -164,6 +170,7 @@ export default function RankingsTable({
             const {
               country, result, competition, rank, tiedPrevious,
             } = row.original;
+
             return (
               <ResultRow
                 country={country}
