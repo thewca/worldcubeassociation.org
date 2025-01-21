@@ -5,6 +5,7 @@ import I18n from '../i18n';
 import { attemptResultToString, attemptResultToMbPoints } from './edit-events';
 import useSaveAction from '../hooks/useSaveAction';
 import { centisecondsToClockFormat } from '../wca-live/attempts';
+import { patchWcifUrl } from '../requests/routes.js.erb';
 
 export function useSaveWcifAction() {
   const { save, saving } = useSaveAction();
@@ -19,12 +20,13 @@ export function useSaveWcifAction() {
       competitionId,
       wcifData,
       onSuccess,
-      options = {},
+      fetchOptions = {},
+      patchWcifOptions = {},
       onError = alertWcifError,
     ) => {
-      const url = `/api/v0/competitions/${competitionId}/wcif`;
+      const url = patchWcifUrl(competitionId, patchWcifOptions);
 
-      save(url, wcifData, onSuccess, options, onError);
+      save(url, wcifData, onSuccess, fetchOptions, onError);
     },
     [save],
   );
