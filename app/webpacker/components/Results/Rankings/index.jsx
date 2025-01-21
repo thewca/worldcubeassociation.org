@@ -79,7 +79,8 @@ export function Rankings() {
     () => ({
       setEvent: (event) => dispatch({ type: ActionTypes.SET_EVENT, payload: event }),
       setRegion: (region) => dispatch({ type: ActionTypes.SET_REGION, payload: region }),
-      setRankingType: (rankingType) => dispatch({ type: ActionTypes.SET_RANKING_TYPE, payload: rankingType }),
+      setRankingType:
+        (rankingType) => dispatch({ type: ActionTypes.SET_RANKING_TYPE, payload: rankingType }),
       setGender: (gender) => dispatch({ type: ActionTypes.SET_GENDER, payload: gender }),
       setShow: (show) => dispatch({ type: ActionTypes.SET_SHOW, payload: show }),
     }),

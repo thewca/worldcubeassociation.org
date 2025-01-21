@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import {
-  Button, ButtonGroup, Form, Segment,
+  Button, ButtonGroup, Form, Header, Segment,
 } from 'semantic-ui-react';
 import { EventSelector } from '../wca/EventSelector';
 import { RegionSelector } from '../CompetitionsOverview/CompetitionsFilters';
@@ -56,7 +56,7 @@ export default function ResultsFilter({ filterState, filterActions }) {
         </Form.Field>
         <Form.Group widths="equal">
           <Form.Field>
-            <label>{I18n.t('results.selector_elements.type_selector.type')}</label>
+            <Header as="h6">{I18n.t('results.selector_elements.type_selector.type')}</Header>
             <ButtonGroup primary compact widths={2}>
               <Button
                 active={rankingType === 'single'}
@@ -73,7 +73,7 @@ export default function ResultsFilter({ filterState, filterActions }) {
           {/*   </ButtonGroup> */}
           {/* </Form.Field> */}
           <Form.Field>
-            <label>{I18n.t('results.selector_elements.gender_selector.gender')}</label>
+            <Header as="h6">{I18n.t('results.selector_elements.gender_selector.gender')}</Header>
             <ButtonGroup compact color="teal" widths={3}>
               <Button active={gender === 'All'} onClick={() => setGender('All')}>{I18n.t('results.selector_elements.gender_selector.gender_all')}</Button>
               <Button active={gender === 'Male'} onClick={() => setGender('Male')}>{I18n.t('results.selector_elements.gender_selector.male')}</Button>
@@ -81,7 +81,7 @@ export default function ResultsFilter({ filterState, filterActions }) {
             </ButtonGroup>
           </Form.Field>
           <Form.Field>
-            <label>{I18n.t('results.selector_elements.show_selector.show')}</label>
+            <Header as="h6">{I18n.t('results.selector_elements.show_selector.show')}</Header>
             <ButtonGroup compact color="teal" widths={3}>
               <Button active={show === '100 persons'} onClick={() => setShow('100 persons')}>{I18n.t('results.selector_elements.show_selector.persons')}</Button>
               <Button active={show === '100 results'} onClick={() => setShow('100 results')}>{I18n.t('results.selector_elements.show_selector.results')}</Button>
