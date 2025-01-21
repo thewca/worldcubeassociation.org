@@ -25,7 +25,7 @@ import { EventSelector } from '../../wca/EventSelector';
 
 const sortReducer = createSortReducer(['name', 'country', 'total']);
 
-export default function RegistrationList({ competitionInfo, userInfo }) {
+export default function RegistrationList({ competitionInfo, userId }) {
   const { isLoading: registrationsLoading, data: registrations, isError } = useQuery({
     queryKey: ['registrations', competitionInfo.id],
     queryFn: () => getConfirmedRegistrations(competitionInfo),
@@ -105,7 +105,7 @@ export default function RegistrationList({ competitionInfo, userInfo }) {
     return [];
   }, [isAllCompetitors, registrationsWithPsychSheet, sortColumn, sortDirection]);
 
-  const userRegistration = data?.find((row) => row.user_id === userInfo?.id);
+  const userRegistration = data?.find((row) => row.user_id === userId);
   const userIsInTable = Boolean(userRegistration);
   const userPosition = userRegistration?.pos;
   const userRowRef = useRef();
@@ -224,7 +224,7 @@ export default function RegistrationList({ competitionInfo, userInfo }) {
         <Table.Body>
           {data.length > 0 ? (
             data.map((registration) => {
-              const isUser = registration.user_id === userInfo?.id;
+              const isUser = registration.user_id === userId;
               return (
                 <Table.Row
                   key={`registration-table-row-${registration.user.id}`}

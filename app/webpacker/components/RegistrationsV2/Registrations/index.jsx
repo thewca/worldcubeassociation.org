@@ -7,7 +7,7 @@ export default function Index({ competitionInfo, userInfo }) {
     <QueryClientProvider client={new QueryClient()}>
       <RegistrationList
         competitionInfo={competitionInfo}
-        userInfo={userInfo}
+        userId={userInfo?.id}
       />
     </QueryClientProvider>
   );
