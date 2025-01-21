@@ -12,18 +12,10 @@ export default function MixedHistoryRecordsTable({
 
   return (
     <div style={{ overflowX: 'scroll' }}>
-      <RecordTable record={results} />
-    </div>
-  );
-}
-
-function RecordTable({ record }) {
-  return (
-    <>
       <Table basic="very" compact="very" striped unstackable singleLine>
         <HistoryHeader mixed />
         <Table.Body>
-          {record.map((r) => (
+          {results.map((r) => (
             <HistoryRow
               country={r.country}
               key={r.key}
@@ -36,6 +28,6 @@ function RecordTable({ record }) {
           ))}
         </Table.Body>
       </Table>
-    </>
+    </div>
   );
 }

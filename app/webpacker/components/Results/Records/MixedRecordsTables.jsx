@@ -16,13 +16,13 @@ export default function MixedRecordsTables({
     <div style={{ overflowX: 'scroll' }}>
       {WCA_EVENT_IDS
         .filter((id) => Object.keys(results).includes(id))
-        .map((id) => <RecordTable record={results[id]} eventId={id} />
+        .map((id) => <MixedRecordsTable record={results[id]} eventId={id} />
       )}
     </div>
   );
 }
 
-function RecordTable({ record, eventId }) {
+function MixedRecordsTable({ record, eventId }) {
   return (
     <>
       <Header>{events.byId[eventId].name}</Header>
