@@ -7,7 +7,7 @@
 
 <% unless @recently_authenticated %>
   <div class="ui page modals transition visible active">
-    <div class="ui small modal transition visible active" id="2fa-check" style="display: none">
+    <div class="ui small modal transition active" id="2fa-check" style="display: none; padding: 10px; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%)">
       <%= render "2fa_confirm" %>
     </div>
   </div>

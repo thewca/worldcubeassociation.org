@@ -5,7 +5,7 @@ export default function TwoFactorChangeTab({ user, recentlyAuthenticated }) {
   // Hack to allow this with devise
   useEffect(() => {
     if (!recentlyAuthenticated) {
-      document.getElementById('2fa-check').display = 'block';
+      document.getElementById('2fa-check').style.display = 'block';
     }
   }, [recentlyAuthenticated]);
 
