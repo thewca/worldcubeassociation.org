@@ -3,14 +3,16 @@ import React, {
 } from 'react';
 import { Container, Segment } from 'semantic-ui-react';
 import { useQuery } from '@tanstack/react-query';
-import RecordsTable from './RecordsTable';
 import WCAQueryClientProvider from '../../../lib/providers/WCAQueryClientProvider';
 import { getRecords } from '../api/records';
 import Loading from '../../Requests/Loading';
 import { recordsUrl } from '../../../lib/requests/routes.js.erb';
 import ResultsFilter from '../ResultsFilter';
 import SlimRecordTable from './SlimRecordsTable';
-import SeparateRecordsTable from './SeparateRecordsTable';
+import SeparateRecordsTables from './SeparateRecordsTables';
+import MixedRecordsTables from './MixedRecordsTables';
+import HistoryRecordsTables from './HistoryRecordsTables';
+import MixedHistoryRecordsTable from './MixedHistoryRecordsTable';
 
 const ActionTypes = {
   SET_EVENT: 'SET_EVENT',
@@ -24,7 +26,7 @@ function parseInitialStateFromUrl(url) {
   const params = urlObj.searchParams;
   const region = params.get('region') || 'world';
   const gender = params.get('gender') || 'All';
-  const show = params.get('show') || '100 persons';
+  const show = params.get('show') || 'mixed';
   const event = params.get('event_id');
 
   return {
@@ -102,36 +104,62 @@ export function Records() {
         isRecords
         showCategories={SHOW_CATEGORIES}
       />
-      <TableWrapper competitionsById={data.competitionsById} rows={data.rows} show={show} />
+      <RecordsTables
+        competitionsById={data.competitionsById}
+        rows={data.rows}
+        show={show}
+      />
     </Container>
   );
 }
 
-function TableWrapper({ competitionsById, rows, show }) {
+function RecordsTables({ competitionsById, rows, show }) {
   if (rows.length === 0) {
     return <Segment>No results found</Segment>;
   }
 
-  if (show === 'slim') {
-    return (
-      <SlimRecordTable
-        rows={rows[0]}
-      />
-    );
+  switch (show) {
+    case 'mixed':
+      return (
+        <MixedRecordsTables
+          rows={rows}
+          competitionsById={competitionsById}
+        />
+      );
+
+    case 'slim':
+      return (
+        <SlimRecordTable
+          rows={rows[0]}
+        />
+      );
+
+    case 'separate':
+      return (
+        <SeparateRecordsTables
+          rows={rows}
+          competitionsById={competitionsById}
+        />
+      );
+
+    case 'history':
+      return (
+        <HistoryRecordsTables
+          rows={rows}
+          competitionsById={competitionsById}
+        />
+      );
+
+    case 'mixed history':
+      return (
+        <MixedHistoryRecordsTable
+          rows={rows}
+          competitionsById={competitionsById}
+        />
+      );
+
+    default:
+      console.error(`Invalid record table: ${show}`);
+      return null;
   }
-  if (show === 'separate') {
-    return (
-      <SeparateRecordsTable
-        competitionsById={competitionsById}
-        rows={rows}
-      />
-    );
-  }
-  return (
-    <RecordsTable
-      competitionsById={competitionsById}
-      rows={rows}
-      show={show}
-    />
-  );
 }

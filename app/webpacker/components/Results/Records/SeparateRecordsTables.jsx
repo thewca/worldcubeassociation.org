@@ -3,8 +3,9 @@ import { Header, Table } from 'semantic-ui-react';
 import I18n from '../../../lib/i18n';
 import { SeparateHeader } from '../TableHeaders';
 import { SeparateRecordsRow } from '../TableRows';
+import RecordsTable from '../RecordsTable';
 
-export default function SeparateRecordsTable({ rows, competitionsById }) {
+export default function SeparateRecordsTables({ rows, competitionsById }) {
   const [, singleRecords, averageRecords] = rows;
 
   return (
@@ -19,17 +20,18 @@ export default function SeparateRecordsTable({ rows, competitionsById }) {
 
 function RankingTypeTable({ records, rankingType, competitionsById }) {
   return (
-    <Table basic="very" compact="very" striped unstackable singleLine>
+    <RecordsTable>
       <SeparateHeader isAverage={rankingType === 'average'} />
       <Table.Body>
         {records.map((row) => (
           <SeparateRecordsRow
+            key={row.id}
             rankingType={rankingType}
             competition={competitionsById[row.competitionId]}
             result={row}
           />
         ))}
       </Table.Body>
-    </Table>
+    </RecordsTable>
   );
 }
