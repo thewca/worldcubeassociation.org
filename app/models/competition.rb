@@ -14,7 +14,7 @@ class Competition < ApplicationRecord
   has_many :competitors, -> { distinct }, through: :results, source: :person
   has_many :competitor_users, -> { distinct }, through: :competitors, source: :user
   has_many :competition_delegates, dependent: :delete_all
-  has_many :delegates, -> { includes(:delegate_roles, :delegate_role_metadata) }, through: :competition_delegates
+  has_many :delegates, -> { includes(:delegate_roles, :delegate_role_metadata).distinct }, through: :competition_delegates
   has_many :competition_organizers, dependent: :delete_all
   has_many :organizers, through: :competition_organizers
   has_many :media, class_name: "CompetitionMedium", foreign_key: "competitionId", dependent: :delete_all
@@ -54,6 +54,7 @@ class Competition < ApplicationRecord
   scope :not_visible, -> { where(showAtAll: false) }
   scope :over, -> { where("results_posted_at IS NOT NULL OR end_date < ?", Date.today) }
   scope :not_over, -> { where("results_posted_at IS NULL AND end_date >= ?", Date.today) }
+  scope :between_dates, ->(start_date, end_date) { where("start_date <= ? AND end_date >= ?", end_date, start_date) }
   scope :end_date_passed_since, lambda { |num_days| where(end_date: ...(num_days.days.ago)) }
   scope :belongs_to_region, lambda { |region_id|
     joins(:country).where(
@@ -273,7 +274,7 @@ class Competition < ApplicationRecord
   end
 
   NEARBY_DISTANCE_KM_WARNING = 250
-  NEARBY_DISTANCE_KM_DANGER = 10
+  NEARBY_DISTANCE_KM_DANGER = 30
   NEARBY_DISTANCE_KM_INFO = 100
   NEARBY_DAYS_WARNING = 180
   NEARBY_DAYS_DANGER = 5
@@ -397,6 +398,10 @@ class Competition < ApplicationRecord
     Event.c_find(main_event_id)
   end
 
+  def report_posted?
+    delegate_report.posted?
+  end
+
   def events_held?(desired_event_ids)
     # rubocop:disable Style/BitwisePredicate
     #   We have to shut up Rubocop here because otherwise it thinks that
@@ -449,13 +454,7 @@ class Competition < ApplicationRecord
   end
 
   def registration_full?
-    # TODO: V3-Reg cleanup, move this to registrations.accepted_and_paid_pending_count again
-    competitor_count =
-      if registration_version_v3?
-        registrations.competing_status_accepted.count + registrations.competing_status_pending.with_payments.count
-      else
-        registrations.accepted_and_paid_pending_count
-      end
+    competitor_count = registrations.accepted_and_paid_pending_count
     competitor_limit_enabled? && competitor_count >= competitor_limit
   end
 
@@ -719,6 +718,7 @@ class Competition < ApplicationRecord
 
   validate :dates_must_be_valid
 
+  alias_attribute :visible, :showAtAll
   alias_attribute :latitude_microdegrees, :latitude
   alias_attribute :longitude_microdegrees, :longitude
   before_validation :compute_coordinates
@@ -756,12 +756,8 @@ class Competition < ApplicationRecord
     @trainee_delegate_ids || trainee_delegates.map(&:id).join(",")
   end
 
-  def uses_new_registration_system?
-    self.registration_version_v3?
-  end
-
   def should_render_register_v2?(user)
-    uses_new_registration_system? && user.cannot_register_for_competition_reasons(self).empty?
+    user.cannot_register_for_competition_reasons(self).empty?
   end
 
   before_validation :unpack_delegate_organizer_ids
@@ -1151,12 +1147,7 @@ class Competition < ApplicationRecord
   end
 
   def pending_competitors_count
-    # TODO: V3-Reg Cleanup, we can go back to use registrations.pending when we are on v3
-    if registration_version_v3?
-      registrations.competing_status_pending.count
-    else
-      registrations.pending.count
-    end
+    registrations.pending.count
   end
 
   def registration_period_required?
@@ -1731,6 +1722,11 @@ class Competition < ApplicationRecord
       competitions = Competition.visible
     end
 
+    if params[:include_cancelled].present?
+      include_cancelled = ActiveRecord::Type::Boolean.new.cast(params[:include_cancelled])
+      competitions = competitions.not_cancelled unless include_cancelled
+    end
+
     if params[:continent].present?
       continent = Continent.find(params[:continent])
       if !continent
@@ -1755,6 +1751,19 @@ class Competition < ApplicationRecord
       end
       competitions = competitions.left_outer_joins(:delegates)
                                  .where('competition_delegates.delegate_id = ?', delegate_user.id)
+    end
+
+    if params[:event_ids].present?
+      event_ids = params[:event_ids].presence
+      unless event_ids.is_a?(Array)
+        raise WcaExceptions::BadApiParameter.new("Invalid event IDs: '#{params[:event_ids]}'")
+      end
+      event_ids.each do |event_id|
+        # This looks completely crazy (why not just pass the array as a whole, to build a `WHERE event_id IN (...)`??)
+        #   but is actually necessary to make sure that the competition holds ALL of the required events
+        #   and not just one or more (ie any) of the requested events.
+        competitions = competitions.has_event(event_id)
+      end
     end
 
     if params[:start].present?
@@ -1822,7 +1831,10 @@ class Competition < ApplicationRecord
       order = { start_date: :desc }
     end
 
-    competitions.includes(:delegates, :organizers).order(**order)
+    # Respect other `includes` associations that might have been specified ahead of time
+    previous_includes = competitions.includes_values
+
+    competitions.includes(:delegates, :organizers, *previous_includes).order(**order)
   end
 
   def all_activities
@@ -1867,7 +1879,8 @@ class Competition < ApplicationRecord
                force_comment_in_registration use_wca_registration external_registration_page guests_entry_fee_lowest_denomination guest_entry_status
                information events_per_registration_limit guests_enabled],
       methods: %w[url website short_name city venue_address venue_details latitude_degrees longitude_degrees country_iso2 event_ids registration_currently_open?
-                  main_event_id number_of_bookmarks using_payment_integrations? uses_qualification? uses_cutoff? competition_series_ids registration_full? registration_version],
+                  main_event_id number_of_bookmarks using_payment_integrations? uses_qualification? uses_cutoff? competition_series_ids registration_full?
+                  part_of_competition_series?],
       include: %w[delegates organizers],
     }
     self.as_json(options)

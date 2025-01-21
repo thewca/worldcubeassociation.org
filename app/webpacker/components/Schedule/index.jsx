@@ -8,8 +8,8 @@ import ViewSelector from './ViewSelector';
 import useStoredState from '../../lib/hooks/useStoredState';
 import { earliestWithLongestTieBreaker } from '../../lib/utils/activities';
 import { getDatesBetweenInclusive } from '../../lib/utils/dates';
-import { EventSelector } from '../CompetitionsOverview/CompetitionsFilters';
-import i18n from '../../lib/i18n';
+import { EventSelector } from '../wca/EventSelector';
+import I18n from '../../lib/i18n';
 
 const activeIdReducer = (state, { type, id, ids }) => {
   let newState = [...state];
@@ -119,14 +119,14 @@ export default function Schedule({
       {timeZoneCount > 1 && (
         <Message warning>
           <Message.Content>
-            {i18n.t('competitions.schedule.multiple_timezones_available')}
+            {I18n.t('competitions.schedule.multiple_timezones_available')}
           </Message.Content>
         </Message>
       )}
 
       <Message>
         <Message.Content>
-          {i18n.t('competitions.schedule.schedule_change_warning')}
+          {I18n.t('competitions.schedule.schedule_change_warning')}
         </Message.Content>
       </Message>
 

@@ -21,6 +21,7 @@ import {
 } from '../../lib/utils/competition-table';
 import { countries } from '../../lib/wca-data.js.erb';
 import { adminCompetitionUrl, competitionUrl } from '../../lib/requests/routes.js.erb';
+import { dateRange } from '../../lib/utils/dates';
 
 function ListViewSection({
   competitions,
@@ -154,9 +155,9 @@ export function CompetitionsTable({
                 />
               </Table.Cell>
               <Table.Cell textAlign="right" width={2}>
-                {comp.date_range}
+                {dateRange(comp.start_date, comp.end_date)}
               </Table.Cell>
-              <Table.Cell width={6}>
+              <Table.Cell width={5}>
                 <Flag name={comp.country_iso2?.toLowerCase()} />
                 <a href={competitionUrl(comp.id)}>{comp.short_display_name}</a>
               </Table.Cell>
@@ -164,7 +165,7 @@ export function CompetitionsTable({
                 <strong>{countries.byIso2[comp.country_iso2].name}</strong>
                 {`, ${comp.city}`}
               </Table.Cell>
-              <Table.Cell width={4}>
+              <Table.Cell width={5}>
                 <PseudoLinkMarkdown text={comp.venue} />
               </Table.Cell>
             </Table.Row>
@@ -210,15 +211,17 @@ export function CompetitionsTabletTable({
                 />
               </Table.Cell>
               <Table.Cell textAlign="right" width={3}>
-                {comp.date_range}
+                {dateRange(comp.start_date, comp.end_date)}
               </Table.Cell>
               <Table.Cell width={6}>
                 <Flag name={comp.country_iso2?.toLowerCase()} />
                 <a href={competitionUrl(comp.id)}>{comp.short_display_name}</a>
               </Table.Cell>
               <Table.Cell width={7}>
-                <strong>{countries.byIso2[comp.country_iso2].name}</strong>
-                {`, ${comp.city}`}
+                <span>
+                  <strong>{countries.byIso2[comp.country_iso2].name}</strong>
+                  {`, ${comp.city}`}
+                </span>
                 <PseudoLinkMarkdown text={comp.venue} />
               </Table.Cell>
             </Table.Row>
@@ -248,23 +251,31 @@ export function CompetitionsMobileTable({
             />
             <Table.Row error={isCancelled(comp)} className="competition-info mobile-compact">
               <Table.Cell>
-                <Label ribbon="right">
+                <Label ribbon="right" size="small">
                   <StatusIcon
                     comp={comp}
                     shouldShowRegStatus={shouldShowRegStatus}
                     isSortedByAnnouncement={isSortedByAnnouncement}
                     regStatusLoading={regStatusLoading}
                   />
-                  {comp.date_range}
+                  {dateRange(comp.start_date, comp.end_date)}
                 </Label>
                 <Flag name={comp.country_iso2?.toLowerCase()} />
                 <a href={competitionUrl(comp.id)}>{comp.short_display_name}</a>
-                {' '}
               </Table.Cell>
-              <Table.Cell>
-                <strong>{countries.byIso2[comp.country_iso2].name}</strong>
-                {`, ${comp.city}`}
-                <PseudoLinkMarkdown text={comp.venue} />
+              {
+                /* This "magical" 1px is necessary so that the long text from the venue
+                *   "clears" the floating date indicator from above. Otherwise, the text
+                *   would break too early. SemUI doesn't support "nicely" padding cells,
+                *   if anyone has a better idea then please shout. */
+              }
+              <Table.Cell style={{ marginTop: '1px' }}>
+                <span>
+                  <strong>{countries.byIso2[comp.country_iso2].name}</strong>
+                  {`, ${comp.city}`}
+                </span>
+                {' '}
+                <PseudoLinkMarkdown text={comp.venue} RenderAs="span" />
               </Table.Cell>
             </Table.Row>
           </React.Fragment>
@@ -350,7 +361,7 @@ function AdminCompetitionsTable({
                   </List>
                 </Table.Cell>
                 <Table.Cell textAlign="center" width={3}>
-                  {comp.date_range}
+                  {dateRange(comp.start_date, comp.end_date)}
                 </Table.Cell>
                 <Table.Cell
                   textAlign="center"
@@ -419,7 +430,9 @@ function ConditionalYearHeader({
   ) {
     return (
       <Table.Row>
-        <Table.Cell textAlign="center" colSpan={colSpan}>{startYear(competitions[index])}</Table.Cell>
+        <Table.Cell textAlign="center" colSpan={colSpan} active>
+          <Header>{startYear(competitions[index])}</Header>
+        </Table.Cell>
       </Table.Row>
     );
   }

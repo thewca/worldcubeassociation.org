@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import React, {
   useMemo, useReducer, useRef,
 } from 'react';
@@ -11,7 +11,7 @@ import createSortReducer from '../reducers/sortReducer';
 import RegistrationActions from './RegistrationActions';
 import { setMessage } from '../Register/RegistrationMessage';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
-import i18n from '../../../lib/i18n';
+import I18n from '../../../lib/i18n';
 import Loading from '../../Requests/Loading';
 import { bulkUpdateRegistrations } from '../api/registration/patch/update_registration';
 import RegistrationAdministrationTable from './RegistrationsAdministrationTable';
@@ -88,12 +88,12 @@ const partitionRegistrations = (registrations) => registrations.reduce(
 );
 
 const expandableColumns = {
-  dob: i18n.t('activerecord.attributes.user.dob'),
-  region: i18n.t('activerecord.attributes.user.region'),
-  events: i18n.t('competitions.show.events'),
-  comments: i18n.t('competitions.registration_v2.list.comment_and_note'),
-  email: i18n.t('activerecord.attributes.user.email'),
-  timestamp: i18n.t('competitions.registration_v2.list.timestamp'),
+  dob: I18n.t('activerecord.attributes.user.dob'),
+  region: I18n.t('activerecord.attributes.user.region'),
+  events: I18n.t('competitions.show.events'),
+  comments: I18n.t('competitions.registration_v2.list.comment_and_note'),
+  email: I18n.t('activerecord.attributes.user.email'),
+  timestamp: I18n.t('competitions.registration_v2.list.timestamp'),
 };
 const initialExpandedColumns = {
   dob: false,
@@ -119,8 +119,6 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
     columnReducer,
     initialExpandedColumns,
   );
-
-  const queryClient = useQueryClient();
 
   const [editable, setEditable] = useCheckboxState(false);
 
@@ -199,7 +197,8 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
             return a.user.wca_id.localeCompare(b.user.wca_id);
           }
           case 'country':
-            return countries.byIso2[a.user.country.iso2].name.localeCompare(countries.byIso2[b.user.country.iso2].name);
+            return countries.byIso2[a.user.country.iso2].name
+              .localeCompare(countries.byIso2[b.user.country.iso2].name);
           case 'events':
             return a.competing.event_ids.length - b.competing.event_ids.length;
           case 'guests':
@@ -269,7 +268,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
   // some sticky/floating bar somewhere with totals/info would be better
   // than putting this in the table headers which scroll out of sight
   const spotsRemaining = (competitionInfo.competitor_limit || Infinity) - accepted.length;
-  const spotsRemainingText = i18n.t(
+  const spotsRemainingText = I18n.t(
     'competitions.registration_v2.list.spots_remaining_plural',
     { count: spotsRemaining },
   );
@@ -286,19 +285,21 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
   const handleOnDragEnd = useMemo(() => async (result) => {
     if (!result.destination) return;
     if (result.destination.index === result.source.index) return;
-    const waitingSorted = waiting.toSorted((a, b) => a.competing.waiting_list_position - b.competing.waiting_list_position);
+    const waitingSorted = waiting
+      .toSorted((a, b) => a.competing.waiting_list_position - b.competing.waiting_list_position);
     updateRegistrationMutation({
       competition_id: competitionInfo.id,
       requests: [{
         competition_id: competitionInfo.id,
         user_id: waitingSorted[result.source.index].user_id,
         competing: {
-          waiting_list_position: waitingSorted[result.destination.index].competing.waiting_list_position,
+          waiting_list_position: waitingSorted[result.destination.index]
+            .competing.waiting_list_position,
         },
       }],
     }, {
       onSuccess: () => {
-        // We need to get the information for all Competitors if you change the waiting list position
+        // We need to get the info for all Competitors if you change the waiting list position
         refetch();
       },
     });
@@ -344,6 +345,9 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
           {pending.length}
           )
         </Header>
+        <Header.Subheader>
+          {I18n.t('competitions.registration_v2.list.pending.information')}
+        </Header.Subheader>
         <RegistrationAdministrationTable
           columnsExpanded={expandedColumns}
           registrations={pending}
@@ -358,7 +362,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
         />
 
         <Header>
-          {i18n.t('registrations.list.approved_registrations')}
+          {I18n.t('registrations.list.approved_registrations')}
           {' '}
           (
           {accepted.length}
@@ -383,14 +387,14 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
           competitionInfo={competitionInfo}
         />
         <Header>
-          {i18n.t('registrations.list.waiting_list')}
+          {I18n.t('registrations.list.waiting_list')}
           {' '}
           (
           {waiting.length}
           )
         </Header>
 
-        <Checkbox toggle value={editable} onChange={setEditable} label={i18n.t('competitions.registration_v2.list.edit_waiting_list')} />
+        <Checkbox toggle value={editable} onChange={setEditable} label={I18n.t('competitions.registration_v2.list.edit_waiting_list')} />
 
         <RegistrationAdministrationTable
           columnsExpanded={expandedColumns}
@@ -411,14 +415,14 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
         />
 
         <Header>
-          {i18n.t('competitions.registration_v2.list.cancelled.title')}
+          {I18n.t('competitions.registration_v2.list.cancelled.title')}
           {' '}
           (
           {cancelled.length}
           )
         </Header>
         <Header.Subheader>
-          {i18n.t('competitions.registration_v2.list.cancelled.information')}
+          {I18n.t('competitions.registration_v2.list.cancelled.information')}
         </Header.Subheader>
         <RegistrationAdministrationTable
           columnsExpanded={expandedColumns}
@@ -434,14 +438,14 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
         />
 
         <Header>
-          {i18n.t('competitions.registration_v2.list.rejected.title')}
+          {I18n.t('competitions.registration_v2.list.rejected.title')}
           {' '}
           (
           {rejected.length}
           )
         </Header>
         <Header.Subheader>
-          {i18n.t('competitions.registration_v2.list.rejected.information')}
+          {I18n.t('competitions.registration_v2.list.rejected.information')}
         </Header.Subheader>
         <RegistrationAdministrationTable
           columnsExpanded={expandedColumns}
@@ -455,6 +459,8 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
           sortColumn={sortColumn}
           competitionInfo={competitionInfo}
         />
+        {/* TODO: Either add non competing registrations here on in a separate staff tab */}
+        {/* i18n-tasks-use t('registrations.list.non_competing') */}
       </div>
     </Segment>
   );

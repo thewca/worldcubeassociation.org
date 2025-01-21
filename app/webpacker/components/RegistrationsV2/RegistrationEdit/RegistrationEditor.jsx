@@ -17,14 +17,15 @@ import updateRegistration from '../api/registration/patch/update_registration';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { setMessage } from '../Register/RegistrationMessage';
 import Loading from '../../Requests/Loading';
-import { EventSelector } from '../../CompetitionsOverview/CompetitionsFilters';
+import { EventSelector } from '../../wca/EventSelector';
 import Refunds from './Refunds';
 import { editPersonUrl } from '../../../lib/requests/routes.js.erb';
 import { useConfirm } from '../../../lib/providers/ConfirmProvider';
-import i18n from '../../../lib/i18n';
+import I18n from '../../../lib/i18n';
 import RegistrationHistory from './RegistrationHistory';
 import { hasPassed } from '../../../lib/utils/dates';
 import getUsersInfo from '../api/user/post/getUserInfo';
+import I18nHTMLTranslate from '../../I18nHTMLTranslate';
 
 export default function RegistrationEditor({ competitor, competitionInfo }) {
   const dispatch = useDispatch();
@@ -49,7 +50,8 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
 
   const { isLoading, data: competitorsInfo } = useQuery({
     queryKey: ['history-user', serverRegistration?.history],
-    queryFn: () => getUsersInfo(_.uniq(serverRegistration.history.flatMap((e) => (e.actor_type === 'user' ? Number(e.actor_id) : [])))),
+    queryFn: () => getUsersInfo(_.uniq(serverRegistration.history.flatMap((e) => (
+      (e.actor_type === 'user' || e.actor_type === 'worker') ? Number(e.actor_id) : [])))),
     enabled: Boolean(serverRegistration),
   });
 
@@ -115,8 +117,10 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
     if (!hasChanges) {
       dispatch(setMessage('competitions.registration_v2.update.no_changes', 'basic'));
     } else if (!commentIsValid) {
+      // i18n-tasks-use t('registrations.errors.cannot_register_without_comment')
       dispatch(setMessage('registrations.errors.cannot_register_without_comment', 'negative'));
     } else if (!eventsAreValid) {
+      // i18n-tasks-use t('registrations.errors.must_register')
       dispatch(setMessage(
         maxEvents === Infinity
           ? 'registrations.errors.must_register'
@@ -147,7 +151,7 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
         body.guests = guests;
       }
       confirm({
-        content: i18n.t('competitions.registration_v2.update.update_confirm'),
+        content: I18n.t('competitions.registration_v2.update.update_confirm'),
       }).then(() => {
         updateRegistrationMutation(body);
       }).catch(() => {});
@@ -199,16 +203,19 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
       <Form onSubmit={handleRegisterClick}>
         {!competitor.wca_id && (
           <Message>
-            This person registered with an account. You can edit their
-            personal information
-            {' '}
-            <a href={editPersonUrl(competitor.id)}>here</a>
-            .
+            <I18nHTMLTranslate
+              // i18n-tasks-use t('registrations.registered_with_account_html')
+              i18nKey="registrations.registered_with_account_html"
+              options={{
+                here: `<a href=${editPersonUrl(competitor.id)}>here</a>`,
+              }}
+            />
           </Message>
         )}
         {registrationEditDeadlinePassed && (
           <Message>
             The Registration Edit Deadline has passed!
+            {' '}
             <strong>Changes should only be made in extraordinary circumstances</strong>
           </Message>
         )}
@@ -224,68 +231,69 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
           />
         </Form.Field>
 
-        <label>Comment</label>
         <Form.TextArea
+          label="Comment"
           id="competitor-comment"
           maxLength={240}
           value={comment}
           onChange={(event, data) => setComment(data.value)}
         />
 
-        <label>Administrative Notes</label>
         <Form.TextArea
+          label="Administrative Notes"
           id="admin-comment"
           maxLength={240}
           value={adminComment}
           onChange={(event, data) => setAdminComment(data.value)}
         />
 
+        <Header as="h6">Status</Header>
         <Form.Group inline>
-          <label>Status</label>
-          <Form.Checkbox
-            radio
+          <Form.Radio
+            id="radio-status-pending"
             label="Pending"
-            name="checkboxRadioGroup"
+            name="regStatusRadioGroup"
             value="pending"
             checked={status === 'pending'}
             onChange={(event, data) => setStatus(data.value)}
           />
-          <Form.Checkbox
-            radio
+          <Form.Radio
+            id="radio-status-accepted"
             label="Accepted"
-            name="checkboxRadioGroup"
+            name="regStatusRadioGroup"
             value="accepted"
             checked={status === 'accepted'}
             onChange={(event, data) => setStatus(data.value)}
           />
-          <Form.Checkbox
-            radio
+          <Form.Radio
+            id="radio-status-waiting-list"
             label="Waiting List"
-            name="checkboxRadioGroup"
+            name="regStatusRadioGroup"
             value="waiting_list"
             checked={status === 'waiting_list'}
             onChange={(event, data) => setStatus(data.value)}
           />
-          <Form.Checkbox
-            radio
+          <Form.Radio
+            id="radio-status-cancelled"
             label="Cancelled"
-            name="checkboxRadioGroup"
+            name="regStatusRadioGroup"
             value="cancelled"
             checked={status === 'cancelled'}
             onChange={(event, data) => setStatus(data.value)}
           />
-          <Form.Checkbox
-            radio
+          <Form.Radio
+            id="radio-status-rejected"
             label="Rejected"
-            name="checkboxRadioGroup"
+            name="regStatusRadioGroup"
             value="rejected"
             disabled={registrationEditDeadlinePassed}
             checked={status === 'rejected'}
             onChange={(event, data) => setStatus(data.value)}
           />
         </Form.Group>
-        <label>Guests</label>
         <Form.Input
+          label="Guests"
+          id="guest-dropdown"
           type="number"
           min={0}
           max={99}
@@ -299,6 +307,10 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
           Update Registration
         </Button>
       </Form>
+
+      {/* TODO: Add information about Series Registration here */}
+      {/* i18n-tasks-use t('registrations.list.series_registrations') */}
+
       {competitionInfo['using_payment_integrations?'] && (
         <>
           <List>

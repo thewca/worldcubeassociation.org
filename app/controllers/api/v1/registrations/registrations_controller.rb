@@ -89,8 +89,17 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
 
   def list
     competition_id = list_params
-    registrations = Registration.where(competition_id: competition_id).competing_status_accepted
-    render json: registrations.includes(:user).map { |r| r.to_v2_json }
+    competition = Competition.find(competition_id)
+    registrations = competition.registrations.accepted.competing
+    payload = Rails.cache.fetch([
+                                  "registrations_v2_list",
+                                  competition.id,
+                                  competition.event_ids,
+                                  registrations.joins(:user).order(:id).pluck(:id, :updated_at, user: [:updated_at]),
+                                ]) do
+      registrations.includes(:user).map { |r| r.to_v2_json }
+    end
+    render json: payload
   end
 
   # To list Registrations in the admin view you need to be able to administer the competition

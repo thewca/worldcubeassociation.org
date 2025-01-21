@@ -7,7 +7,7 @@ import {
   Segment,
 } from 'semantic-ui-react';
 import _ from 'lodash';
-import i18n from '../../lib/i18n';
+import I18n from '../../lib/i18n';
 import { backendTimezones } from '../../lib/wca-data.js.erb';
 import { sortByOffset } from '../../lib/utils/timezone';
 
@@ -39,21 +39,21 @@ export default function TimeZoneSelector({
 }) {
   return (
     <Segment>
-      <Header size="small">{i18n.t('competitions.schedule.time_zone')}</Header>
-      {i18n.t('competitions.schedule.timezone_setting')}
+      <Header size="small">{I18n.t('competitions.schedule.time_zone')}</Header>
+      {I18n.t('competitions.schedule.timezone_setting')}
       {' '}
       <Dropdown
         search
         selection
         value={activeTimeZone}
-        onChange={(_, data) => setActiveTimeZone(data.value)}
+        onChange={(_e, data) => setActiveTimeZone(data.value)}
         options={timeZoneOptions}
       />
       <br />
       <Button
         compact
         icon="home"
-        content={i18n.t('competitions.schedule.timezone_set_local')}
+        content={I18n.t('competitions.schedule.timezone_set_local')}
         labelPosition="left"
         onClick={() => setActiveTimeZone(userTimeZone)}
       />
@@ -61,7 +61,7 @@ export default function TimeZoneSelector({
         <Button
           compact
           icon="map pin"
-          content={i18n.t('competitions.schedule.timezone_set_venue')}
+          content={I18n.t('competitions.schedule.timezone_set_venue')}
           labelPosition="left"
           onClick={() => setActiveTimeZone(activeVenueOrNull.timezone)}
         />
@@ -69,9 +69,9 @@ export default function TimeZoneSelector({
       {' '}
       {hasMultipleVenues && (
         <Checkbox
-          label={i18n.t('competitions.schedule.timezone_follow_venue')}
+          label={I18n.t('competitions.schedule.timezone_follow_venue')}
           checked={followVenueSelection}
-          onChange={(_, data) => setFollowVenueSelection(data.checked)}
+          onChange={(_e, data) => setFollowVenueSelection(data.checked)}
         />
       )}
     </Segment>

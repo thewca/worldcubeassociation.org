@@ -3,7 +3,8 @@ import { Button, Icon } from 'semantic-ui-react';
 import { DateTime } from 'luxon';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { setMessage } from '../Register/RegistrationMessage';
-import i18n from '../../../lib/i18n';
+import I18n from '../../../lib/i18n';
+import { countries } from '../../../lib/wca-data.js.erb';
 
 function V3csvExport(selected, registrations, competition) {
   let csvContent = 'data:text/csv;charset=utf-8,';
@@ -12,14 +13,14 @@ function V3csvExport(selected, registrations, competition) {
   registrations
     .filter((r) => selected.length === 0 || selected.includes(r.user_id))
     .forEach((registration) => {
-      csvContent += `${registration.competing.registration_status === 'accepted' ? 'a' : 'p'},${
+      csvContent += `${registration.competing.registration_status === 'accepted' ? 'a' : 'p'},"${
         registration.user.name
-      },${registration.user.country.name},${
+      }","${countries.byIso2[registration.user.country.iso2].name}",${
         registration.user.wca_id
-      },${registration.dob},${
+      },${registration.user.dob},${
         registration.user.gender
       },${competition.event_ids.map((evt) => (registration.competing.event_ids.includes(evt) ? '1' : '0'))},${
-        registration.email
+        registration.user.email
       },${
         registration.guests // IP feel always blank
       },"",${
@@ -30,34 +31,11 @@ function V3csvExport(selected, registrations, competition) {
   window.open(encodedUri);
 }
 
-function V2csvExport(selected, registrations) {
-  let csvContent = 'data:text/csv;charset=utf-8,';
-  csvContent
-    += 'user_id,guests,competing.event_ids,competing.registration_status,competing.registered_on,competing.comment,competing.admin_comment\n';
-  registrations
-    .filter((r) => selected.length === 0 || selected.includes(r.user_id))
-    .forEach((registration) => {
-      csvContent += `${registration.user_id},${
-        registration.guests
-      },${registration.competing.event_ids.join(';')},${
-        registration.competing.registration_status
-      },${registration.competing.registered_on},${
-        registration.competing.comment
-      },${registration.competing.admin_comment}\n`;
-    });
-  const encodedUri = encodeURI(csvContent);
-  window.open(encodedUri);
-}
-
 function csvExport(selected, registrations, competition) {
-  if (competition.registration_version === 'v3') {
-    V3csvExport(selected, registrations.toSorted(
-      (a, b) => DateTime.fromISO(a.competing.registered_on).toMillis()
+  V3csvExport(selected, registrations.toSorted(
+    (a, b) => DateTime.fromISO(a.competing.registered_on).toMillis()
       - DateTime.fromISO(b.competing.registered_on).toMillis(),
-    ), competition);
-  } else {
-    V2csvExport(selected, registrations);
-  }
+  ), competition);
 }
 
 export default function RegistrationActions({
@@ -142,7 +120,7 @@ export default function RegistrationActions({
       >
         <Icon name="download" />
         {' '}
-        {i18n.t('registrations.list.export_csv')}
+        {I18n.t('registrations.list.export_csv')}
       </Button>
 
       {anySelected && (
@@ -155,19 +133,19 @@ export default function RegistrationActions({
               rel="noreferrer"
             >
               <Icon name="envelope" />
-              {i18n.t('competitions.registration_v2.update.email_send')}
+              {I18n.t('competitions.registration_v2.update.email_send')}
             </a>
           </Button>
 
           <Button onClick={() => copyEmails(selectedEmails)}>
             <Icon name="copy" />
-            {i18n.t('competitions.registration_v2.update.email_copy')}
+            {I18n.t('competitions.registration_v2.update.email_copy')}
           </Button>
           <>
             {anyApprovable && (
               <Button positive onClick={attemptToApprove}>
                 <Icon name="check" />
-                {i18n.t('registrations.list.approve')}
+                {I18n.t('registrations.list.approve')}
               </Button>
             )}
 
@@ -179,7 +157,7 @@ export default function RegistrationActions({
                 )}
               >
                 <Icon name="times" />
-                {i18n.t('competitions.registration_v2.update.move_pending')}
+                {I18n.t('competitions.registration_v2.update.move_pending')}
               </Button>
             )}
 
@@ -192,7 +170,7 @@ export default function RegistrationActions({
               )}
             >
               <Icon name="hourglass" />
-              {i18n.t('competitions.registration_v2.update.move_waiting')}
+              {I18n.t('competitions.registration_v2.update.move_waiting')}
             </Button>
             )}
 
@@ -205,7 +183,7 @@ export default function RegistrationActions({
                 )}
               >
                 <Icon name="trash" />
-                {i18n.t('competitions.registration_v2.update.cancel')}
+                {I18n.t('competitions.registration_v2.update.cancel')}
               </Button>
             )}
 
@@ -218,7 +196,7 @@ export default function RegistrationActions({
                 )}
               >
                 <Icon name="delete" />
-                {i18n.t('competitions.registration_v2.update.reject')}
+                {I18n.t('competitions.registration_v2.update.reject')}
               </Button>
             )}
           </>

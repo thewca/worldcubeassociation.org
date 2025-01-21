@@ -1,5 +1,4 @@
-import { DateTime } from 'luxon';
-
+import { DateTime, Interval } from 'luxon';
 // parameter name conventions:
 // - `luxonDate` for luxon DateTime objects
 // - `date` for date-only ISO strings (no time)
@@ -120,3 +119,7 @@ export const todayWithTime = (dateTime, timeZone) => {
     millisecond: luxonDate.millisecond,
   });
 };
+
+export function dateRange(fromDate, toDate, options = {}) {
+  return Interval.fromDateTimes(DateTime.fromISO(fromDate), DateTime.fromISO(toDate)).toLocaleString({ month: 'short', day: '2-digit', year: 'numeric' }, options);
+}
