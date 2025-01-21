@@ -1,29 +1,16 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { Header, Table } from 'semantic-ui-react';
 import _ from 'lodash';
-import { countries, events } from '../../../lib/wca-data.js.erb';
+import { events } from '../../../lib/wca-data.js.erb';
 import { WCA_EVENT_IDS } from '../../wca/EventSelector';
 import { HistoryRow } from '../TableRows';
 import { HistoryHeader } from '../TableHeaders';
+import { augmentAndGroupResults } from './utils';
 
 export default function HistoryRecordsTable({
   rows, competitionsById,
 }) {
-  const results = useMemo(() => {
-    const r = rows.map((result) => {
-      const competition = competitionsById[result.competitionId];
-      const country = countries.real.find((c) => c.id === result.countryId);
-
-      return {
-        result,
-        competition,
-        country,
-        key: `${result.id}-${result.type}`,
-      };
-    });
-
-    return _.groupBy(r, 'result.eventId');
-  }, [competitionsById, rows]);
+  const results = augmentAndGroupResults(rows, competitionsById);
 
   return (
     <div style={{ overflowX: 'scroll' }}>
