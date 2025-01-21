@@ -38,7 +38,7 @@ function HistoryRecordsTable({ record, eventId }) {
               competition={r.competition}
               rank={r.rank}
               tiedPrevious={r.tiedPrevious}
-              mixed={false}
+              isMixed={false}
             />
           ))}
         </Table.Body>

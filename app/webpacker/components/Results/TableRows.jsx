@@ -65,13 +65,13 @@ export function SeparateRecordsRow({ result, competition, rankingType }) {
 }
 
 export function HistoryRow({
-  result, competition, mixed, country,
+  result, competition, isMixed, country,
 }) {
   const [attempts, bestResultIndex, worstResultIndex] = resultAttempts(result);
   return (
     <Table.Row>
       <Table.Cell>{DateTime.fromISO(result.start_date).toFormat('MMM dd, yyyy')}</Table.Cell>
-      {mixed && <EventCell eventId={result.eventId} />}
+      {isMixed && <EventCell eventId={result.eventId} />}
       <PersonCell personId={result.personId} personName={result.personName} />
       {result.type === 'average' && <Table.Cell />}
       <Table.Cell>{formatAttemptResult(result.value, result.eventId)}</Table.Cell>

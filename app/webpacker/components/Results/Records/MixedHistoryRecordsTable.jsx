@@ -24,7 +24,7 @@ export default function MixedHistoryRecordsTable({
               competition={r.competition}
               rank={r.rank}
               tiedPrevious={r.tiedPrevious}
-              mixed
+              isMixed
             />
           ))}
         </Table.Body>
