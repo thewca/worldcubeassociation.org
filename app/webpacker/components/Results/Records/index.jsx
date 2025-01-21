@@ -104,12 +104,16 @@ export function Rankings() {
         isRecords
         showCategories={SHOW_CATEGORIES}
       />
-      <TableWrapper competitionsById={data.competitionsById} rows={data.rows} show={show} />
+      <RecordsTable
+        competitionsById={data.competitionsById}
+        rows={data.rows}
+        show={show}
+      />
     </Container>
   );
 }
 
-function TableWrapper({ competitionsById, rows, show }) {
+function RecordsTable({ competitionsById, rows, show }) {
   switch (show) {
     case 'mixed':
       return (
