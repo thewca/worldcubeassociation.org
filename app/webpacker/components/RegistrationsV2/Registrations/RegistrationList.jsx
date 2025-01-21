@@ -106,9 +106,9 @@ export default function RegistrationList({ competitionInfo, userInfo }) {
   }, [isAllCompetitors, registrationsWithPsychSheet, sortColumn, sortDirection]);
 
   const userRegistration = data?.find((row) => row.user_id === userInfo?.id);
-  const userIsInTable = Boolean(userRegistration)
-  const userPosition = userRegistration?.pos
-  const userRowRef = useRef()
+  const userIsInTable = Boolean(userRegistration);
+  const userPosition = userRegistration?.pos;
+  const userRowRef = useRef();
 
   if (isError) {
     return (
