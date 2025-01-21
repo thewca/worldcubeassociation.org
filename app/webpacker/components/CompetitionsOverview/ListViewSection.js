@@ -22,6 +22,7 @@ import {
 import { countries } from '../../lib/wca-data.js.erb';
 import { adminCompetitionUrl, competitionUrl } from '../../lib/requests/routes.js.erb';
 import { dateRange } from '../../lib/utils/dates';
+import { DateTime } from 'luxon';
 
 function ListViewSection({
   competitions,
@@ -450,22 +451,42 @@ function RegistrationStatus({ comp, isLoading }) {
     return (
       <Popup
         trigger={<Icon name="clock" color="blue" />}
-        content={I18n.t('competitions.index.tooltips.registration.opens_in', { duration: comp.time_until_registration })}
+        content={
+          I18n.t(
+            'competitions.index.tooltips.registration.opens_in',
+            { duration: DateTime.fromISO(comp.registration_open).toRelative({ locale: window.I18n.locale }) },
+          )
+        }
         position="top center"
         size="tiny"
       />
     );
   }
+
   if (comp.registration_status === 'past') {
+    const roundUpAndAtBestDayPrecision = {
+      locale: window.I18n.locale,
+      // don't be more precise than "days" (i.e. no hours/minutes/seconds)
+      unit: ["years", "months", "weeks", "days"],
+      // round up, e.g. in 8 hours -> pads to 1 day 8 hours -> rounds to "in 1 day"
+      padding: 24 * 60 * 60 * 1000,
+    };
+
     return (
       <Popup
         trigger={<Icon name="user times" color="red" />}
-        content={I18n.t('competitions.index.tooltips.registration.closed', { days: I18n.t('common.days', { count: dayDifferenceFromToday(comp.start_date) }) })}
+        content={
+          I18n.t(
+            'competitions.index.tooltips.registration.closed',
+            { days: DateTime.fromISO(comp.start_date).toRelative(roundUpAndAtBestDayPrecision) },
+          )
+        }
         position="top center"
         size="tiny"
       />
     );
   }
+
   if (comp.registration_status === 'full') {
     return (
       <Popup
@@ -476,6 +497,7 @@ function RegistrationStatus({ comp, isLoading }) {
       />
     );
   }
+
   if (comp.registration_status === 'open') {
     return (
       <Popup
