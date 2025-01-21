@@ -82,16 +82,14 @@ export default function RankingsTable({
         country = continents.real.find((c) => c.id === country.continentId);
       }
 
-      acc.push({
+      return [...acc, {
         result,
         competition,
         country,
         rank,
         tiedPrevious,
         key: `${result.id}-${show}-${country.name}`,
-      });
-
-      return acc;
+      }];
     }, []);
   }, [competitionsById, rows, show]);
 
