@@ -24,6 +24,7 @@ function RankingTypeTable({ records, rankingType, competitionsById }) {
       <Table.Body>
         {records.map((row) => (
           <SeparateRecordsRow
+            key={row.id}
             rankingType={rankingType}
             competition={competitionsById[row.competitionId]}
             result={row}
