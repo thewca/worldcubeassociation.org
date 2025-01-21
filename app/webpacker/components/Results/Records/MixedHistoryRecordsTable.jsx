@@ -4,6 +4,7 @@ import _ from 'lodash';
 import { HistoryRow } from '../TableRows';
 import { HistoryHeader } from '../TableHeaders';
 import { augmentResults } from './utils';
+import RecordsTable from '../RecordsTable';
 
 export default function MixedHistoryRecordsTable({
   rows, competitionsById,
@@ -12,7 +13,7 @@ export default function MixedHistoryRecordsTable({
 
   return (
     <div style={{ overflowX: 'scroll' }}>
-      <Table basic="very" compact="very" striped unstackable singleLine>
+      <RecordsTable>
         <HistoryHeader mixed />
         <Table.Body>
           {results.map((r) => (
@@ -27,7 +28,7 @@ export default function MixedHistoryRecordsTable({
             />
           ))}
         </Table.Body>
-      </Table>
+      </RecordsTable>
     </div>
   );
 }

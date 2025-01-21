@@ -6,6 +6,7 @@ import { WCA_EVENT_IDS } from '../../wca/EventSelector';
 import { HistoryRow } from '../TableRows';
 import { HistoryHeader } from '../TableHeaders';
 import { augmentAndGroupResults } from './utils';
+import RecordsTable from '../RecordsTable';
 
 export default function HistoryRecordsTables({
   rows, competitionsById,
@@ -26,7 +27,7 @@ function HistoryRecordsTable({ record, eventId }) {
   return (
     <>
       <Header>{events.byId[eventId].name}</Header>
-      <Table basic="very" compact="very" striped unstackable singleLine>
+      <RecordsTable>
         <HistoryHeader mixed={false} />
         <Table.Body>
           {record.map((r) => (
@@ -41,7 +42,7 @@ function HistoryRecordsTable({ record, eventId }) {
             />
           ))}
         </Table.Body>
-      </Table>
+      </RecordsTable>
     </>
   );
 }

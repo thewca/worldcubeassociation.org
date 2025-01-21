@@ -6,6 +6,7 @@ import { WCA_EVENT_IDS } from '../../wca/EventSelector';
 import { RecordRow } from '../TableRows';
 import { MixedHeader } from '../TableHeaders';
 import { augmentAndGroupResults } from './utils';
+import RecordsTable from '../RecordsTable';
 
 export default function MixedRecordsTables({
   rows, competitionsById,
@@ -26,7 +27,7 @@ function MixedRecordsTable({ record, eventId }) {
   return (
     <>
       <Header>{events.byId[eventId].name}</Header>
-      <Table basic="very" compact="very" striped unstackable singleLine>
+      <RecordsTable>
         <MixedHeader />
         <Table.Body>
           {record.map((r) => (
@@ -40,7 +41,7 @@ function MixedRecordsTable({ record, eventId }) {
             />
           ))}
         </Table.Body>
-      </Table>
+      </RecordsTable>
     </>
   );
 }
