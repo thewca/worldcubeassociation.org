@@ -9,9 +9,9 @@ import Loading from '../../Requests/Loading';
 import { recordsUrl } from '../../../lib/requests/routes.js.erb';
 import ResultsFilter from '../ResultsFilter';
 import SlimRecordTable from './SlimRecordsTable';
-import SeparateRecordsTable from './SeparateRecordsTable';
-import MixedRecordsTable from './MixedRecordsTable';
-import HistoryRecordsTable from './HistoryRecordsTable';
+import SeparateRecordsTables from './SeparateRecordsTables';
+import MixedRecordsTables from './MixedRecordsTables';
+import HistoryRecordsTables from './HistoryRecordsTables';
 import MixedHistoryRecordsTable from './MixedHistoryRecordsTable';
 
 const ActionTypes = {
@@ -104,7 +104,7 @@ export function Rankings() {
         isRecords
         showCategories={SHOW_CATEGORIES}
       />
-      <RecordsTable
+      <RecordsTables
         competitionsById={data.competitionsById}
         rows={data.rows}
         show={show}
@@ -113,11 +113,11 @@ export function Rankings() {
   );
 }
 
-function RecordsTable({ competitionsById, rows, show }) {
+function RecordsTables({ competitionsById, rows, show }) {
   switch (show) {
     case 'mixed':
       return (
-        <MixedRecordsTable
+        <MixedRecordsTables
           rows={rows}
           competitionsById={competitionsById}
         />
@@ -132,7 +132,7 @@ function RecordsTable({ competitionsById, rows, show }) {
 
     case 'separate':
       return (
-        <SeparateRecordsTable
+        <SeparateRecordsTables
           rows={rows}
           competitionsById={competitionsById}
         />
@@ -140,7 +140,7 @@ function RecordsTable({ competitionsById, rows, show }) {
 
     case 'history':
       return (
-        <HistoryRecordsTable
+        <HistoryRecordsTables
           rows={rows}
           competitionsById={competitionsById}
         />

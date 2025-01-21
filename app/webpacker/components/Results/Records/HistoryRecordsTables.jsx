@@ -7,7 +7,7 @@ import { HistoryRow } from '../TableRows';
 import { HistoryHeader } from '../TableHeaders';
 import { augmentAndGroupResults } from './utils';
 
-export default function HistoryRecordsTable({
+export default function HistoryRecordsTables({
   rows, competitionsById,
 }) {
   const results = augmentAndGroupResults(rows, competitionsById);

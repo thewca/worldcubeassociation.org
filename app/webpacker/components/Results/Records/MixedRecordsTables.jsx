@@ -7,7 +7,7 @@ import { RecordRow } from '../TableRows';
 import { MixedHeader } from '../TableHeaders';
 import { augmentAndGroupResults } from './utils';
 
-export default function MixedRecordsTable({
+export default function MixedRecordsTables({
   rows, competitionsById,
 }) {
   const results = augmentAndGroupResults(rows, competitionsById);

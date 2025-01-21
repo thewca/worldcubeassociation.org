@@ -4,7 +4,7 @@ import I18n from '../../../lib/i18n';
 import { SeparateHeader } from '../TableHeaders';
 import { SeparateRecordsRow } from '../TableRows';
 
-export default function SeparateRecordsTable({ rows, competitionsById }) {
+export default function SeparateRecordsTables({ rows, competitionsById }) {
   const [, singleRecords, averageRecords] = rows;
 
   return (
