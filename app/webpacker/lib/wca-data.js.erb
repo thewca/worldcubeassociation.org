@@ -25,6 +25,7 @@ const realCountryData = countryData.filter((c) => !fictionalCountryIds.includes(
 
 export const countries = {
   byIso2: _.mapValues(_.keyBy(countryData, 'iso2'), extendCountries),
+  byId: _.mapValues(_.keyBy(countryData, 'id'), extendCountries),
   real: _.map(realCountryData, extendCountries),
 };
 

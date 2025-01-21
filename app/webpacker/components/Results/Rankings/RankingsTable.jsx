@@ -41,7 +41,7 @@ function ResultRow({
       </Table.Cell>
       {show !== 'by region' && <CountryCell country={country} />}
       <Table.Cell>
-        <CountryFlag iso2={competition.country.iso2} />
+        <CountryFlag iso2={countries.byId[competition.countryId].iso2} />
         {' '}
         <a href={`/competition/${competition.id}`}>{competition.cellName}</a>
       </Table.Cell>
@@ -75,7 +75,7 @@ export default function RankingsTable({
       const rank = value === previousValue ? previousRank : index + 1;
       const tiedPrevious = rank === previousRank;
 
-      let country = countries.real.find((c) => c.id === result.countryId);
+      let country = countries.byId[result.countryId];
       if (index < firstContinentIndex) {
         country = { name: I18n.t('results.table_elements.world') };
       } else if (index >= firstContinentIndex && index < firstCountryIndex) {
