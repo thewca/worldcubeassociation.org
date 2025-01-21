@@ -5,6 +5,15 @@ import {
   subordinateUpcomingCompetitionsUrl,
   generateDbTokenUrl,
   serverStatusPageUrl,
+  runValidatorsUrl,
+  createNewComersUrl,
+  checkRecordsUrl,
+  computeAuxiliaryDataUrl,
+  generateDataExportsUrl,
+  fixResultsUrl,
+  mergeProfilesUrl,
+  anonymizePersonUrl,
+  reassignConnectedWcaIdUrl,
 } from '../../lib/requests/routes.js.erb';
 import PostingCompetitionsTable from '../PostingCompetitions';
 import EditPersonPage from './pages/EditPersonPage';
@@ -153,5 +162,41 @@ export default {
   [PANEL_PAGES.serverStatus]: {
     name: 'Server Status',
     link: serverStatusPageUrl,
+  },
+  [PANEL_PAGES.runValidators]: {
+    name: 'Run Validators',
+    link: runValidatorsUrl,
+  },
+  [PANEL_PAGES.createNewComers]: {
+    name: 'Create New Comers',
+    link: createNewComersUrl,
+  },
+  [PANEL_PAGES.checkRecords]: {
+    name: 'Check Records',
+    link: checkRecordsUrl,
+  },
+  [PANEL_PAGES.computeAuxiliaryData]: {
+    name: 'Compute Auxiliary Data',
+    link: computeAuxiliaryDataUrl,
+  },
+  [PANEL_PAGES.generateDataExports]: {
+    name: 'Generate Data Exports',
+    link: generateDataExportsUrl,
+  },
+  [PANEL_PAGES.fixResults]: {
+    name: 'Fix Results',
+    link: fixResultsUrl,
+  },
+  [PANEL_PAGES.mergeProfiles]: {
+    name: 'Merge Profiles',
+    link: mergeProfilesUrl,
+  },
+  [PANEL_PAGES.anonymizePerson]: {
+    name: 'Anonymize Person',
+    link: anonymizePersonUrl,
+  },
+  [PANEL_PAGES.reassignConnectedWcaId]: {
+    name: 'Reassign Connected WCA ID',
+    link: reassignConnectedWcaIdUrl,
   },
 };
