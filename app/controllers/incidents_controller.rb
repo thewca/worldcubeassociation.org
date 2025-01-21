@@ -13,13 +13,7 @@ class IncidentsController < ApplicationController
 
   def index
     base_model = Incident.includes(:competitions, :incident_tags)
-    @incidents = if current_user&.can_manage_incidents? # WRC members see all
-                   base_model.all
-                 elsif current_user&.can_view_delegate_matters? # Staff see staff + public
-                   base_model.staff_visible
-                 else # Public users only see public
-                   base_model.publicly_visible
-                 end
+    @incidents = base_model.visible_to?(current_user)
 
     respond_to do |format|
       format.html do
@@ -50,7 +44,7 @@ class IncidentsController < ApplicationController
       nil
     end
 
-    unless @incident.resolved?
+    if @incident.visibility == 'public' && !@incident.resolved?
       redirect_to_root_unless_user(:can_manage_incidents?)
     end
   end
@@ -102,6 +96,12 @@ class IncidentsController < ApplicationController
 
   def update
     set_incident
+    if @incident.update(incident_params)
+      flash[:success] = "Incident was successfully updated."
+      redirect_to @incident
+    else
+      render :edit
+    end
   end
 
   def destroy
@@ -121,7 +121,7 @@ class IncidentsController < ApplicationController
     end
 
     def incident_params
-      permitted_params = [
+      params.require(:incident).permit(
         :title,
         :private_description,
         :private_wrc_decision,
@@ -129,9 +129,7 @@ class IncidentsController < ApplicationController
         :tags,
         :digest_worthy,
         :visibility,
-        { incident_competitions_attributes: [:id, :competition_id, :comments, :_destroy] },
-      ]
-
-      params.require(:incident).permit(permitted_params)
+        incident_competitions_attributes: [:id, :competition_id, :comments, :_destroy],
+      )
     end
 end

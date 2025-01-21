@@ -7,17 +7,15 @@ class Incident < ApplicationRecord
 
   accepts_nested_attributes_for :incident_competitions, allow_destroy: true
 
-  attribute :visibility, :integer, default: :visible
+  enum visibility: [
+    :draft,          # Only visible to WRC members
+    :staff,          # Visible to WCA staff members only
+    :open,           # Visible to everyone
+  ]
 
-  enum visibility: {
-    draft: 0,          # Only visible to WRC members
-    staff: 1,          # Visible to WCA staff members only
-    visible: 2,        # Visible to everyone
-  }
-
-  scope :publicly_visible, -> { where(visibility: :visible) }
-  scope :staff_visible, -> { where(visibility: [:staff, :visible]) }
-  scope :wrc_visible, -> { all }
+  Incident.open
+  Incident.staff.or(Incident.open)
+  Incident.all
 
   validate :digest_sent_at_consistent
   validates_presence_of :title
@@ -41,11 +39,16 @@ class Incident < ApplicationRecord
   end
 
   def digest_sent_at_consistent
-    if digest_sent_at && !digest_worthy
-      errors.add(:digest_sent_at, "can't be set if digest_worthy is false.")
-    end
-    if digest_sent_at && !visible?
-      errors.add(:digest_sent_at, "can't be set if incident is not public.")
+    if digest_sent_at
+
+      if !digest_worthy
+        errors.add(:digest_sent_at, "can't be set if digest_worthy is false.")
+      end
+
+      if !open?
+        errors.add(:digest_sent_at, "can't be set if incident is not public.")
+
+      end
     end
   end
 
@@ -106,18 +109,14 @@ class Incident < ApplicationRecord
     json
   end
 
-  def visible_to?(user)
-    case visibility
-    when "visible"
-      true # Everyone can see public incidents
-    when "staff"
-      user&.staff? || user&.can_manage_incidents? # Staff and WRC can see staff incidents
-    when "draft"
-      user&.can_manage_incidents? # Only WRC can see drafts
+  def self.visible_to?(user)
+
+    if user&.can_manage_incidents? # WRC members see all
+      Incident.all
+    elsif user&.staff? # Staff see staff + public
+      Incident.staff.or(Incident.open)
+    else # Public users only see public
+      Incident.open
     end
   end
-
-  scope :publicly_visible, -> { where(visibility: :visible) } # Public sees only visible
-  scope :staff_visible, -> { where(visibility: [:staff, :visible]) } # Staff sees staff + visible
-  scope :wrc_visible, -> { all } # WRC sees everything
 end
