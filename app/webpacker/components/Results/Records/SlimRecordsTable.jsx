@@ -8,7 +8,9 @@ export default function SlimRecordsTable({ rows }) {
     <Table basic="very" compact="very" striped unstackable>
       <SlimHeader />
       <Table.Body>
-        {rows.map((row) => <SlimRecordsRow row={row} />)}
+        {rows.map((row) => (
+          <SlimRecordsRow key={row[0]?.id + row[1]?.id} row={row} />
+        ))}
       </Table.Body>
     </Table>
   );
