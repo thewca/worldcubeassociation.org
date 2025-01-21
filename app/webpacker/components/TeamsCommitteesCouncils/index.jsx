@@ -46,12 +46,12 @@ export default function TeamsCommitteesCouncils({ canViewPastRoles }) {
   const hashIsValid = Boolean(activeGroup);
 
   useEffect(
-    function sanitizeHash() {
+    () => {
       if (!isLoading && !hashIsValid) {
         if (groups.length > 0) {
           setHash(groups[0].metadata.friendly_id);
         } else {
-          setHash(null)
+          setHash(null);
         }
       }
     },

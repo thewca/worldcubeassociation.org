@@ -19,7 +19,7 @@ RSpec.describe DelegateReport do
   end
 
   it "schedule_url is required when posted" do
-    dr = FactoryBot.build :delegate_report, schedule_url: nil
+    dr = FactoryBot.build :delegate_report, :with_images, schedule_url: nil
     expect(dr).to be_valid
 
     dr.posted = true
@@ -79,7 +79,8 @@ RSpec.describe DelegateReport do
       end
 
       it "can view delegate report with posted report" do
-        competition.delegate_report.update!(schedule_url: "http://example.com", posted: true)
+        posted_dummy_dr = FactoryBot.create :delegate_report, :posted, competition: competition
+        competition.delegate_report.update!(schedule_url: "http://example.com", posted: true, setup_images: posted_dummy_dr.setup_images_blobs)
 
         expect(other_delegate.can_view_delegate_report?(competition.delegate_report)).to eq true
       end

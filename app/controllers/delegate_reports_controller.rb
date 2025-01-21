@@ -66,6 +66,15 @@ class DelegateReportsController < ApplicationController
     end
   end
 
+  def delete_image
+    image = ActiveStorage::Attachment.find(params[:image_id])
+    image.purge
+
+    flash[:success] = "Image deleted successfully."
+
+    redirect_to delegate_report_edit_path(competition_from_params)
+  end
+
   private def delegate_report_params
     params.require(:delegate_report).permit(
       :discussion_url,
@@ -77,6 +86,7 @@ class DelegateReportsController < ApplicationController
       :wic_feedback_requested,
       :wic_incidents,
       *DelegateReport::AVAILABLE_SECTIONS,
+      setup_images: [],
     )
   end
 

@@ -10,10 +10,9 @@ import {
   Label,
   Segment,
 } from 'semantic-ui-react';
-import { paymentFinishUrl, paymentTicketUrl } from '../../../lib/requests/routes.js.erb';
+import { paymentFinishUrl } from '../../../lib/requests/routes.js.erb';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { setMessage } from './RegistrationMessage';
-import fetchWithJWTToken from '../../../lib/requests/fetchWithJWTToken';
 import Loading from '../../Requests/Loading';
 import I18n from '../../../lib/i18n';
 import useCheckboxState from '../../../lib/hooks/useCheckboxState';
@@ -36,7 +35,8 @@ export default function PaymentStep({
   const [isDonationChecked, setDonationChecked] = useCheckboxState(false);
 
   useEffect(() => {
-    // TODO When we add per Event Payment this logic needs to also check if an additional payment is needed
+    // TODO When we add per Event Payment this logic needs to also check
+    //  if an additional payment is needed
     if (registration?.payment?.has_paid) {
       nextStep();
     }
