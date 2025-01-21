@@ -26,13 +26,13 @@ const registrationStatusIconText = (competition) => {
   const toRelativeOptions = {
     locale: window.I18n.locale,
     // don't be more precise than "days" (i.e. no hours/minutes/seconds)
-    unit: ["years", "quarters", "months", "weeks", "days"],
+    unit: ["years", "months", "weeks", "days"],
     // round up, e.g. in 8 hours -> pads to 1 day 8 hours -> rounds to "in 1 day"
     padding: 24 * 60 * 60 * 1000,
   };
 
   if (competition.registration_status === 'not_yet_opened') {
-    return I18n.t('competitions.index.tooltips.registration.opens_in', { duration: DateTime.fromISO(competition.registration_open).toRelative(toRelativeOptions) });
+    return I18n.t('competitions.index.tooltips.registration.opens_in', { duration: DateTime.fromISO(competition.registration_open).toRelative({ locale: window.I18n.locale }) });
   }
   if (competition.registration_status === 'past') {
     return I18n.t('competitions.index.tooltips.registration.closed', { days: DateTime.fromISO(competition.start_date).toRelative(toRelativeOptions) });
