@@ -2,10 +2,8 @@ import React from 'react';
 import {
   Button, Icon, Popup,
 } from 'semantic-ui-react';
-import { events } from '../../lib/wca-data.js.erb';
+import { WCA_EVENT_IDS } from '../../lib/wca-data.js.erb';
 import I18n from '../../lib/i18n';
-
-const WCA_EVENT_IDS = Object.values(events.official).map((e) => e.id);
 
 // eslint-disable-next-line import/prefer-default-export
 export function EventSelector({

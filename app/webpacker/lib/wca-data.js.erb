@@ -102,6 +102,8 @@ export const events = {
   byId: _.mapValues(_.keyBy(eventsData, 'id'), extendEvents),
 };
 
+export const WCA_EVENT_IDS = Object.values(events.official).map((e) => e.id);
+
 function extendEvents(rawEvent) {
   return {
     ...rawEvent,
