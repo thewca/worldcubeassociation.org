@@ -1848,9 +1848,8 @@ en:
          initialized: "Payment process was started on %{date}, but not finished."
          refunded: "Payment was refunded on %{date}."
         psychsheets:
-          scroll_to_me: "Scroll to me"
-          your_rank: "Your rank by %{psychSheetSortBy} is %{userPosition}."
-          no_result: "You do not have an official %{psychSheetSortBy}."
+          show_me: "Show me"
+          rank: "Rank: %{userPosition}"
         timestamp: "Timestamp"
         comment_and_note: "Comment & Note"
         edit_waiting_list: "Enable Waiting List Edit Mode"
