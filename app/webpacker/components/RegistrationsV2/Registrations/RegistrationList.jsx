@@ -224,7 +224,7 @@ export default function RegistrationList({ competitionInfo, userInfo }) {
         <Table.Body>
           {data.length > 0 ? (
             data.map((registration) => {
-              const isUser = registration.user_id === userInfo?.id
+              const isUser = registration.user_id === userInfo?.id;
               return (
                 <Table.Row
                   key={`registration-table-row-${registration.user.id}`}
@@ -242,16 +242,16 @@ export default function RegistrationList({ competitionInfo, userInfo }) {
                   <Table.Cell>
                     <div ref={isUser ? userRowRef : undefined}>
                       {registration.user.wca_id ? (
-                          <a
-                            href={personUrl(registration.user.wca_id)}
-                          >
-                            {registration.user.name}
-                          </a>
-                        ) : (
-                          registration.user.name
-                        )}
-                      </div>
-                    </Table.Cell>
+                        <a
+                          href={personUrl(registration.user.wca_id)}
+                        >
+                          {registration.user.name}
+                        </a>
+                      ) : (
+                        registration.user.name
+                      )}
+                    </div>
+                  </Table.Cell>
                   <Table.Cell>
                     <Flag
                       name={registration.user.country.iso2.toLowerCase()}
@@ -289,7 +289,7 @@ export default function RegistrationList({ competitionInfo, userInfo }) {
                     </>
                   )}
                 </Table.Row>
-              )
+              );
             })
           ) : (
             <Table.Row>
