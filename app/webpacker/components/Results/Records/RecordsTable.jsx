@@ -21,11 +21,14 @@ export default function RecordsTable({
         key: `${result.id}-${show}-${result.type}`,
       };
     });
+
     if (show !== 'mixed history') {
       return _.groupBy(r, 'result.eventId');
     }
+
     return r;
   }, [competitionsById, rows, show]);
+
   return (
     <div style={{ overflowX: 'scroll' }}>
       { show !== 'mixed history' ? WCA_EVENT_IDS.map((id) => Object.keys(results).includes(id)
