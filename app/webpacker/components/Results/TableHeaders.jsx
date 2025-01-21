@@ -47,7 +47,7 @@ function DynamicHeader({ type, props }) {
   const config = headerConfig[type];
 
   return (
-    <Table.Header key={type}>
+    <Table.Header>
       <Table.Row>
         {config.map((item) => {
           if (typeof item === 'string' && item !== '') {
