@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
-import { Form } from 'semantic-ui-react';
+import { Form, Modal } from 'semantic-ui-react';
 import useInputState from '../../../lib/hooks/useInputState';
+import I18nHTMLTranslate from '../../I18nHTMLTranslate';
 
 export default function EmailChangeTab({ user, recentlyAuthenticated }) {
   const [email, setEmail] = useInputState(user.email);
@@ -13,15 +14,16 @@ export default function EmailChangeTab({ user, recentlyAuthenticated }) {
   }, [recentlyAuthenticated]);
 
   if (!recentlyAuthenticated) {
-    return <> Please reauthenticate</>;
+    return <Modal dimmer="blurring" open />;
   }
 
   return (
     <Form>
       <Form.Field>
         <Form.Input value={email} onChange={setEmail} label="Email" />
-        Changing your email will require confirming the new email before being effective.
+        <I18nHTMLTranslate i18nKey="users.edit.confirm_new_email" />
       </Form.Field>
+      <Form.Button>Save</Form.Button>
     </Form>
   );
 }

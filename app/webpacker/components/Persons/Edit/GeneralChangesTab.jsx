@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Form } from 'semantic-ui-react';
 import useInputState from '../../../lib/hooks/useInputState';
 import CountrySelector from '../../CountrySelector/CountrySelector';
+import I18nHTMLTranslate from '../../I18nHTMLTranslate';
 
 export default function GeneralChangesTab({ user, editableFields }) {
   const [name, setName] = useInputState(user.name);
@@ -15,12 +16,11 @@ export default function GeneralChangesTab({ user, editableFields }) {
     <Form>
       <Form.Field>
         <Form.Input label="Full Name" fluid onChange={setName} value={name} disabled={!editableFields.includes('name')} />
-        Enter the competitor's full name correctly, for example Stefan Pochmann. Not sloppily like s pochman.
-        Middle names (either full or as initials) are optional.
+        <I18nHTMLTranslate i18nKey="simple_form.hints.user.name" />
       </Form.Field>
       <Form.Field>
         <Form.Input type="date" label="Birthdate" onChange={setDob} value={dob} disabled={!editableFields.includes('dob')} />
-        Enter the competitor's date of birth in the format YYYY-MM-DD.
+        <I18nHTMLTranslate i18nKey="simple_form.hints.user.dob" />
       </Form.Field>
       <Form.Field fluid>
         <Form.Input label="Gender" onChange={setGender} value={gender} disabled={!editableFields.includes('gender')} />

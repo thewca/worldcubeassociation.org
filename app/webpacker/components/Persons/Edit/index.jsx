@@ -144,7 +144,7 @@ function EditUser({
     if (currentUser['can_change_users_avatar?']) {
       p.push({
         slug: 'avatar',
-        menuItem: I18n.t('users.edit.avatar'),
+        menuItem: 'Avatar',
         render: () => (
           <EditAvatar
             userId={user.id}

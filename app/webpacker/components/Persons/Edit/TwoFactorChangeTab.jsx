@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Form } from 'semantic-ui-react';
+import { Form, Modal } from 'semantic-ui-react';
 
 export default function TwoFactorChangeTab({ user, recentlyAuthenticated }) {
   // Hack to allow this with devise
@@ -10,7 +10,7 @@ export default function TwoFactorChangeTab({ user, recentlyAuthenticated }) {
   }, [recentlyAuthenticated]);
 
   if (!recentlyAuthenticated) {
-    return <> Please reauthenticate</>;
+    return <Modal dimmer="blurring" open />;
   }
 
   return (
