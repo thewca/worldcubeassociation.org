@@ -149,8 +149,8 @@ function EditUser({
           <EditAvatar
             userId={user.id}
             showStaffGuidelines={user['staff_or_any_delegate?']}
-            uploadDisabled={!editableFields.include('pending_avatar')}
-            canAdminAvatars={editableFields.include('remove_avatar')}
+            uploadDisabled={!editableFields.includes('pending_avatar')}
+            canAdminAvatars={editableFields.includes('remove_avatar')}
             canRemoveAvatar={currentUser['can_admin_results?']}
           />
         ),
