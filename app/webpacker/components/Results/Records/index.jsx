@@ -1,7 +1,7 @@
 import React, {
   useEffect, useMemo, useReducer,
 } from 'react';
-import { Container } from 'semantic-ui-react';
+import { Container, Segment } from 'semantic-ui-react';
 import { useQuery } from '@tanstack/react-query';
 import WCAQueryClientProvider from '../../../lib/providers/WCAQueryClientProvider';
 import { getRecords } from '../api/records';
@@ -55,14 +55,14 @@ function filterReducer(state, action) {
 export default function Wrapper() {
   return (
     <WCAQueryClientProvider>
-      <Rankings />
+      <Records />
     </WCAQueryClientProvider>
   );
 }
 
 const SHOW_CATEGORIES = ['mixed', 'slim', 'separate', 'history', 'mixed history'];
 
-export function Rankings() {
+export function Records() {
   const [filterState, dispatch] = useReducer(
     filterReducer,
     window.location.href,
@@ -114,6 +114,10 @@ export function Rankings() {
 }
 
 function RecordsTables({ competitionsById, rows, show }) {
+  if (rows.length === 0) {
+    return <Segment>No results found</Segment>;
+  }
+
   switch (show) {
     case 'mixed':
       return (
