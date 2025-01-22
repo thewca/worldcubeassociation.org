@@ -15,8 +15,8 @@ import {
   isProbablyOver,
   PseudoLinkMarkdown,
   reportAdminCellContent,
+  resultsSubmittedAtAdminCellContent,
   startYear,
-  timeDifferenceAfter,
   timeDifferenceBefore,
 } from '../../lib/utils/competition-table';
 import { countries } from '../../lib/wca-data.js.erb';
@@ -389,11 +389,7 @@ function AdminCompetitionsTable({
                   warning={resultsPostedStatus === 'warning'}
                   error={resultsPostedStatus === 'danger'}
                 >
-                  {
-                    comp.results_posted_at
-                      ? timeDifferenceAfter(comp, comp.results_posted_at)
-                      : (isProbablyOver(comp) && I18n.t('competitions.competition_info.pending'))
-                  }
+                  {resultsSubmittedAtAdminCellContent(comp)}
                 </Table.Cell>
                 <Table.Cell collapsing>
                   <Button

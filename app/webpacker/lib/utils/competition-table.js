@@ -106,9 +106,22 @@ export function reportAdminCellContent(comp) {
   if (comp.report_posted_at) {
     const delegateIds = comp.delegates.map((delegate) => delegate.id);
 
-    return delegateIds.includes(comp.report_posted_by_user)
+    return delegateIds.includes(comp.delegate_report.posted_by_user_id)
       ? timeDifferenceAfter(comp, comp.report_posted_at)
       : I18n.t('competitions.competition_info.submitted_by_other');
+  }
+
+  if (isProbablyOver(comp)) {
+    return I18n.t('competitions.competition_info.pending');
+  }
+
+  return null;
+}
+
+export function resultsSubmittedAtAdminCellContent(comp) {
+  if (comp.results_posted_at) {
+    const date = comp.results_submitted_at ? comp.results_submitted_at : comp.results_posted_at;
+    return timeDifferenceAfter(comp, date);
   }
 
   if (isProbablyOver(comp)) {
