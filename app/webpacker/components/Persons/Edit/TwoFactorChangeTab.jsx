@@ -1,9 +1,10 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import {
-  Button, Message, List, Modal, Header,
+  Button, Message, List, Modal, Header, Form, Segment,
 } from 'semantic-ui-react';
 import I18nHTMLTranslate from '../../I18nHTMLTranslate';
 import I18n from '../../../lib/i18n';
+import { enable2FaUrl, disable2FaUrl } from '../../../lib/requests/routes.js.erb';
 
 export default function TwoFactorChangeTab({ user, recentlyAuthenticated }) {
   const [backupCodes, setBackupCodes] = useState(user.otp_backup_codes);
@@ -25,7 +26,7 @@ export default function TwoFactorChangeTab({ user, recentlyAuthenticated }) {
   }
 
   return (
-    <>
+    <Segment>
       <I18nHTMLTranslate
         i18nKey="devise.sessions.new.2fa.support_desc_html"
         options={{
@@ -53,15 +54,29 @@ export default function TwoFactorChangeTab({ user, recentlyAuthenticated }) {
         />
       </Message>
       {!user.otp_required_for_login ? (
-        <Button primary>
-          {I18n.t('devise.sessions.new.2fa.enable')}
-        </Button>
+        <Form action={enable2FaUrl()} method="POST">
+          <input
+            type="hidden"
+            name="authenticity_token"
+            value={document.querySelector('meta[name=csrf-token]').content}
+          />
+          <Form.Button primary type="submit">
+            {I18n.t('devise.sessions.new.2fa.enable')}
+          </Form.Button>
+        </Form>
       ) : (
         <>
           <I18nHTMLTranslate i18nKey="devise.sessions.new.2fa.reset_if_needed" />
-          <Button negative>
-            {I18n.t('devise.sessions.new.2fa.reset')}
-          </Button>
+          <Form action={enable2FaUrl()} method="POST">
+            <input
+              type="hidden"
+              name="authenticity_token"
+              value={document.querySelector('meta[name=csrf-token]').content}
+            />
+            <Form.Button type="submit" negative>
+              {I18n.t('devise.sessions.new.2fa.reset')}
+            </Form.Button>
+          </Form>
           <I18nHTMLTranslate i18nKey="devise.sessions.new.2fa.reset_warning" />
 
           <Header as="h2">{I18n.t('devise.sessions.new.2fa.methods')}</Header>
@@ -105,11 +120,18 @@ export default function TwoFactorChangeTab({ user, recentlyAuthenticated }) {
 
           <Header as="h2">{I18n.t('devise.sessions.new.2fa.disable_section_title')}</Header>
           <I18nHTMLTranslate i18nKey="devise.sessions.new.2fa.disable_section_content" />
-          <Button negative>
-            {I18n.t('devise.sessions.new.2fa.disable')}
-          </Button>
+          <Form action={enable2FaUrl()} method="POST">
+            <input
+              type="hidden"
+              name="authenticity_token"
+              value={document.querySelector('meta[name=csrf-token]').content}
+            />
+            <Button negative type="submit">
+              {I18n.t('devise.sessions.new.2fa.disable')}
+            </Button>
+          </Form>
         </>
       )}
-    </>
+    </Segment>
   );
 }

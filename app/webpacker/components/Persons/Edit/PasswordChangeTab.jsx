@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import {
-  Button, Divider, Form, Header, Modal,
+  Button, Divider, Form, Header, Modal, Segment,
 } from 'semantic-ui-react';
 import useInputState from '../../../lib/hooks/useInputState';
 import { updateUserUrl } from '../../../lib/requests/routes.js.erb';
@@ -20,7 +20,7 @@ export default function PasswordChangeTab({ user, recentlyAuthenticated }) {
   }
 
   return (
-    <>
+    <Segment>
       <Form method="POST" action={updateUserUrl(user.id)}>
         <input type="hidden" name="_method" value="patch" />
         <input type="hidden" name="authenticity_token" value={document.querySelector('meta[name=csrf-token]').content} />
@@ -35,6 +35,6 @@ export default function PasswordChangeTab({ user, recentlyAuthenticated }) {
       <Divider />
       <Header>Actions</Header>
       <Button negative>Sign out of Other devices</Button>
-    </>
+    </Segment>
   );
 }
