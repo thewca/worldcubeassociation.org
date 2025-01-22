@@ -4,6 +4,7 @@ import {
 } from 'semantic-ui-react';
 
 import { BarLoader } from 'react-spinners';
+import { DateTime } from 'luxon';
 import I18n from '../../lib/i18n';
 import {
   computeAnnouncementStatus,
@@ -22,7 +23,6 @@ import {
 import { countries } from '../../lib/wca-data.js.erb';
 import { adminCompetitionUrl, competitionUrl } from '../../lib/requests/routes.js.erb';
 import { dateRange, toRelativeOptions } from '../../lib/utils/dates';
-import { DateTime } from 'luxon';
 
 function ListViewSection({
   competitions,
@@ -454,7 +454,11 @@ function RegistrationStatus({ comp, isLoading }) {
         content={
           I18n.t(
             'competitions.index.tooltips.registration.opens_in',
-            { relativeDate: DateTime.fromISO(comp.registration_open).toRelative(toRelativeOptions.default) },
+            {
+              relativeDate: DateTime.fromISO(comp.registration_open).toRelative(
+                toRelativeOptions.default,
+              )
+            },
           )
         }
         position="top center"
@@ -470,7 +474,11 @@ function RegistrationStatus({ comp, isLoading }) {
         content={
           I18n.t(
             'competitions.index.tooltips.registration.closed',
-            { relativeDate: DateTime.fromISO(comp.start_date).toRelative(toRelativeOptions.roundUpAndAtBestDayPrecision) },
+            {
+              relativeDate: DateTime.fromISO(comp.start_date).toRelative(
+                toRelativeOptions.roundUpAndAtBestDayPrecision,
+              )
+            },
           )
         }
         position="top center"
