@@ -40,7 +40,7 @@ export default function PreferencesTab({ user }) {
 
   return (
     <Segment loading={isPending}>
-      { isSuccess && <Message success>Successfully updated Preferences</Message>}
+      { isSuccess && <Message success>{I18n.t('users.successes.messages.account_updated')}</Message>}
       { isError && <Message error>Something went wrong updating your Preferences</Message>}
       <EventSelector
         selectedEvents={preferredEvents}
