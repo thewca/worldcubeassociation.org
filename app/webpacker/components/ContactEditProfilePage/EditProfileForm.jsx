@@ -2,9 +2,10 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { Form, Message } from 'semantic-ui-react';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { QueryClient, useQuery } from '@tanstack/react-query';
-import i18n from '../../lib/i18n';
+import _ from 'lodash';
+import I18n from '../../lib/i18n';
 import { apiV0Urls, contactEditProfileActionUrl } from '../../lib/requests/routes.js.erb';
-import { genders, countries } from '../../lib/wca-data.js.erb';
+import { genders } from '../../lib/wca-data.js.erb';
 import Loading from '../Requests/Loading';
 import Errored from '../Requests/Errored';
 import useSaveAction from '../../lib/hooks/useSaveAction';
@@ -77,9 +78,7 @@ export default function EditProfileForm({
   };
 
   const handleFormChange = (e, { name: formName, value }) => {
-    setEditedProfileDetails((prev) => {
-      return { ...prev, [formName]: value };
-    });
+    setEditedProfileDetails((prev) => ({ ...prev, [formName]: value }));
   };
 
   const handleDobChange = (date) => handleFormChange(null, {
@@ -93,7 +92,7 @@ export default function EditProfileForm({
   return (
     <Form onSubmit={formSubmitHandler}>
       <Form.Input
-        label={i18n.t('activerecord.attributes.user.name')}
+        label={I18n.t('activerecord.attributes.user.name')}
         name="name"
         value={editedProfileDetails?.name}
         onChange={handleFormChange}
@@ -106,13 +105,13 @@ export default function EditProfileForm({
       />
       <Form.Select
         options={genderOptions}
-        label={i18n.t('activerecord.attributes.user.gender')}
+        label={I18n.t('activerecord.attributes.user.gender')}
         name="gender"
         value={editedProfileDetails?.gender}
         onChange={handleFormChange}
       />
       <Form.Field
-        label={i18n.t('activerecord.attributes.user.dob')}
+        label={I18n.t('activerecord.attributes.user.dob')}
         name="dob"
         control={UtcDatePicker}
         showYearDropdown
@@ -123,14 +122,14 @@ export default function EditProfileForm({
         required
       />
       <Form.TextArea
-        label={i18n.t('page.contact_edit_profile.form.edit_reason.label')}
+        label={I18n.t('page.contact_edit_profile.form.edit_reason.label')}
         name="editProfileReason"
         required
         value={editProfileReason}
         onChange={handleEditProfileReasonChange}
       />
       <Form.Input
-        label={i18n.t('page.contact_edit_profile.form.proof_attach.label')}
+        label={I18n.t('page.contact_edit_profile.form.proof_attach.label')}
         type="file"
         onChange={handleProofUpload}
       />
@@ -146,7 +145,7 @@ export default function EditProfileForm({
         {captchaError && (
           <Message
             error
-            content={i18n.t('page.contact_edit_profile.form.captcha.validation_error')}
+            content={I18n.t('page.contact_edit_profile.form.captcha.validation_error')}
           />
         )}
       </Form.Field>
@@ -154,7 +153,7 @@ export default function EditProfileForm({
         type="submit"
         disabled={isSubmitDisabled}
       >
-        {i18n.t('page.contact_edit_profile.form.submit_edit_request_button.label')}
+        {I18n.t('page.contact_edit_profile.form.submit_edit_request_button.label')}
       </Form.Button>
     </Form>
   );
