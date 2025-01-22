@@ -18,7 +18,10 @@ export default function PostForm({
   const [formBody, setFormBody] = useInputState(post?.body ?? '');
   const [formTags, setFormTags] = useState(post?.tags_array ?? []);
   const [formIsStickied, setFormIsStickied] = useCheckboxState(post?.sticky ?? false);
-  const [formShowOnHomePage, setFormShowOnHomePage] = useCheckboxState(post?.show_on_homepage ?? true);
+  const [
+    formShowOnHomePage,
+    setFormShowOnHomePage,
+  ] = useCheckboxState(post?.show_on_homepage ?? true);
   const [postURL, setPostURL] = useInputState(post?.url ?? null);
   const [postId, setPostId] = useInputState(post?.id ?? null);
   const [unstickAt, setUnstickAt] = useState(post?.unstick_at ?? null);
@@ -88,8 +91,8 @@ export default function PostForm({
       <Form onSubmit={onSubmit}>
         <Form.Input label={I18n.t('activerecord.attributes.post.title')} onChange={setFormTitle} value={formTitle} />
         <FormField>
-          <label>{I18n.t('activerecord.attributes.post.body')}</label>
-          <MarkdownEditor onChange={setFormBody} value={formBody} />
+          <label htmlFor="post-body">{I18n.t('activerecord.attributes.post.body')}</label>
+          <MarkdownEditor id="post-body" onChange={setFormBody} value={formBody} />
           {/* i18n-tasks-use t('simple_form.hints.post.body') */}
           <I18nHTMLTranslate i18nKey="simple_form.hints.post.body" />
         </FormField>
@@ -99,8 +102,9 @@ export default function PostForm({
           { formIsStickied
             && (
               <FormField>
-                <label>{I18n.t('activerecord.attributes.post.unstick_at')}</label>
+                <label htmlFor="unstick-at">{I18n.t('activerecord.attributes.post.unstick_at')}</label>
                 <UtcDatePicker
+                  id="unstick-at"
                   placeholderText={I18n.t('activerecord.attributes.post.unstick_at')}
                   isoDate={unstickAt}
                   onChange={(date) => setUnstickAt(date)}
