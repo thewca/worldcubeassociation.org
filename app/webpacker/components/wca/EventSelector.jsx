@@ -7,6 +7,7 @@ import I18n from '../../lib/i18n';
 
 const WCA_EVENT_IDS = Object.values(events.official).map((e) => e.id);
 
+// eslint-disable-next-line import/prefer-default-export
 export function EventSelector({
   selectedEvents,
   onEventSelection,

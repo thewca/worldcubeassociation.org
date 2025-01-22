@@ -76,3 +76,7 @@ translations:
       - "*.time_limit.*"
       - "*.users.edit.*"
       - "*.persons.*"
+      - "*.activerecord.attributes.post.*"
+      - "*.simple_form.hints.post.*"
+      - "*.persons.index.*"
+      - "*.validators.*"

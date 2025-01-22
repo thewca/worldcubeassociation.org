@@ -2,32 +2,28 @@
 
 module ResultsValidators
   class PersonsValidator < GenericValidator
-    PERSON_WITHOUT_RESULTS_ERROR = "There are no results for %{person_name} with person id %{person_id}"
-    RESULTS_WITHOUT_PERSON_ERROR = "There are results for an unknown person with person id %{person_id}"
-    WHITESPACE_IN_NAME_ERROR = "Person '%{name}' has leading/trailing whitespaces or double whitespaces."
-    WRONG_WCA_ID_ERROR = "Person %{name} has a WCA ID which does not exist: %{wca_id}."
-    WRONG_PARENTHESIS_FORMAT_ERROR = "Opening parenthesis in '%{name}' must be preceded by a space."
-    DOB_0101_WARNING = "The date of birth of %{name} is on January 1st, please ensure it's correct."
-    VERY_YOUNG_PERSON_WARNING = "%{name} seems to be less than 3 years old, please ensure it's correct."
-    NOT_SO_YOUNG_PERSON_WARNING = "%{name} seems to be around 100 years old, please ensure it's correct."
-    SAME_PERSON_NAME_WARNING = "There is already at least one person with the name '%{name}' in the WCA database (%{wca_ids}). " \
-                               "Please ensure that your '%{name}' is a different person. If not, please assign the correct WCA ID to the user account and regenerate the results JSON."
-    NON_MATCHING_DOB_WARNING = "The birthdate '%{dob}' provided for %{name} (%{wca_id}) does not match the current record in the WCA database ('%{expected_dob}'). If this is an error, fix it. Otherwise, leave a comment to the WRT about it."
-    NON_MATCHING_GENDER_WARNING = "The gender '%{gender}' provided for %{name} (%{wca_id}) does not match the current record in the WCA database ('%{expected_gender}'). " \
-                                  "If this is an error, fix it. Otherwise, leave a comment to the WRT about it."
-    EMPTY_GENDER_WARNING = "The gender for newcomer %{name} is empty. Valid gender values are 'female', 'male' and 'other'. Please leave a comment to the WRT about this."
-    NON_MATCHING_NAME_WARNING = "The name '%{name}' provided for %{wca_id} does not match the current record in the WCA database ('%{expected_name}'). "
-    NON_MATCHING_COUNTRY_WARNING = "The country '%{country}' provided for %{name} (%{wca_id}) does not match the current record in the WCA database ('%{expected_country}'). " \
-                                   "If this is an error, fix it. Otherwise, leave a comment to the WRT about it."
-    MULTIPLE_NEWCOMERS_WITH_SAME_NAME_WARNING = "There are multiple new competitors with the exact same name: %{name}. Please ensure that all results are correct for these competitors " \
-                                                "and that all results are correctly seperated by their corresponding id."
-    WRONG_PARENTHESIS_TYPE_ERROR = "The parenthesis character used in '%{name}' is an irregular character, please replace it with a regular parenthesis '(' or ')' and with appropriate spacing."
-    UPPERCASE_NAME_WARNING = "'%{name}' has successive uppercase letters in their name. Please confirm that this is indeed the correct spelling or fix the name."
-    LOWERCASE_NAME_WARNING = "'%{name}' has a lowercase name. Please confirm that this is indeed the correct spelling or fix the name."
-    MISSING_PERIOD_WARNING = "'%{name}' has a single letter middle name without an abbreviation period. Please confirm that this is indeed the correct spelling or fix the name."
-    LETTER_AFTER_PERIOD_WARNING = "'%{name}' is missing a space after a period in their name. Please confirm that this is indeed the correct spelling or fix the name."
-    SINGLE_LETTER_FIRST_OR_LAST_NAME_WARNING = "'%{name}' has a single letter as first or last name. Please fix the name or confirm that this is indeed the competitor's correct name according to an official document."
-    SINGLE_NAME_WARNING = "'%{name}' has only one name. Please confirm that this is indeed the competitor's full name according to an official document."
+    PERSON_WITHOUT_RESULTS_ERROR = :person_doesnt_have_any_results_error
+    RESULTS_WITHOUT_PERSON_ERROR = :results_not_associated_with_any_person_error
+    WHITESPACE_IN_NAME_ERROR = :whitespace_in_name_error
+    WRONG_WCA_ID_ERROR = :person_with_non_existing_wca_id_error
+    WRONG_PARENTHESIS_FORMAT_ERROR = :no_space_before_parenthesis_error
+    DOB_0101_WARNING = :dob_is_jan_one_warning
+    VERY_YOUNG_PERSON_WARNING = :dob_is_too_young_warning
+    NOT_SO_YOUNG_PERSON_WARNING = :dob_is_too_old_warning
+    SAME_PERSON_NAME_WARNING = :same_person_name_warning
+    NON_MATCHING_DOB_WARNING = :non_matching_dob_warning
+    NON_MATCHING_GENDER_WARNING = :non_matching_gender_warning
+    EMPTY_GENDER_WARNING = :empty_gender_warning
+    NON_MATCHING_NAME_WARNING = :non_matching_name_warning
+    NON_MATCHING_COUNTRY_WARNING = :non_matching_country_warning
+    MULTIPLE_NEWCOMERS_WITH_SAME_NAME_WARNING = :multiple_newcomers_with_same_name_warning
+    WRONG_PARENTHESIS_TYPE_ERROR = :wrong_parenthesis_type_error
+    UPPERCASE_NAME_WARNING = :successive_uppercase_name_warning
+    LOWERCASE_NAME_WARNING = :lowercase_name_warning
+    MISSING_PERIOD_WARNING = :missing_period_in_single_letter_middle_name_warning
+    LETTER_AFTER_PERIOD_WARNING = :letter_after_period_warning
+    SINGLE_LETTER_FIRST_OR_LAST_NAME_WARNING = :single_letter_first_or_last_name_warning
+    SINGLE_NAME_WARNING = :single_name_warning
 
     def self.description
       "This validator checks that Persons data make sense with regard to the competition results and the WCA database."
@@ -46,17 +42,17 @@ module ResultsValidators
 
       # Check if DOB is January 1
       if dob.month == 1 && dob.day == 1
-        validation_issues << ValidationWarning.new(:persons, competition_id, DOB_0101_WARNING, **message_args)
+        validation_issues << ValidationWarning.new(DOB_0101_WARNING, :persons, competition_id, **message_args)
       end
 
       # Check if DOB is very young, competitor less than 3 years old are extremely rare, so we'd better check these birthdate are correct.
       if dob.year >= Time.now.year - 3
-        validation_issues << ValidationWarning.new(:persons, competition_id, VERY_YOUNG_PERSON_WARNING, **message_args)
+        validation_issues << ValidationWarning.new(VERY_YOUNG_PERSON_WARNING, :persons, competition_id, **message_args)
       end
 
       # Check if DOB is not so young
       if dob.year <= Time.now.year - 100
-        validation_issues << ValidationWarning.new(:persons, competition_id, NOT_SO_YOUNG_PERSON_WARNING, **message_args)
+        validation_issues << ValidationWarning.new(NOT_SO_YOUNG_PERSON_WARNING, :persons, competition_id, **message_args)
       end
 
       validation_issues
@@ -72,14 +68,14 @@ module ResultsValidators
         detected_person_ids = persons_by_id.keys
         persons_with_results = results_for_comp.map(&:personId)
         (detected_person_ids - persons_with_results).each do |person_id|
-          @errors << ValidationError.new(:persons, competition.id,
-                                         PERSON_WITHOUT_RESULTS_ERROR,
+          @errors << ValidationError.new(PERSON_WITHOUT_RESULTS_ERROR,
+                                         :persons, competition.id,
                                          person_id: person_id,
                                          person_name: persons_by_id[person_id].name)
         end
         (persons_with_results - detected_person_ids).each do |person_id|
-          @errors << ValidationError.new(:persons, competition.id,
-                                         RESULTS_WITHOUT_PERSON_ERROR,
+          @errors << ValidationError.new(RESULTS_WITHOUT_PERSON_ERROR,
+                                         :persons, competition.id,
                                          person_id: person_id)
         end
 
@@ -87,8 +83,8 @@ module ResultsValidators
         if without_wca_id.any?
           existing_person_in_db_by_name = Person.where(name: without_wca_id.map(&:name)).group_by(&:name)
           existing_person_in_db_by_name.each do |name, persons|
-            @warnings << ValidationWarning.new(:persons, competition.id,
-                                               SAME_PERSON_NAME_WARNING,
+            @warnings << ValidationWarning.new(SAME_PERSON_NAME_WARNING,
+                                               :persons, competition.id,
                                                name: name,
                                                wca_ids: persons.map(&:wca_id).join(", "))
           end
@@ -96,8 +92,8 @@ module ResultsValidators
         duplicate_newcomer_names = []
         without_wca_id.each do |p|
           if p.gender.blank?
-            @warnings << ValidationWarning.new(:persons, competition.id,
-                                               EMPTY_GENDER_WARNING,
+            @warnings << ValidationWarning.new(EMPTY_GENDER_WARNING,
+                                               :persons, competition.id,
                                                name: p.name)
           end
 
@@ -110,18 +106,18 @@ module ResultsValidators
           end
           # Look for double whitespaces or leading/trailing whitespaces.
           unless p.name.squeeze(" ").strip == p.name
-            @errors << ValidationError.new(:persons, competition.id,
-                                           WHITESPACE_IN_NAME_ERROR,
+            @errors << ValidationError.new(WHITESPACE_IN_NAME_ERROR,
+                                           :persons, competition.id,
                                            name: p.name)
           end
           if /[[:alnum:]]\(/ =~ p.name
-            @errors << ValidationError.new(:persons, competition.id,
-                                           WRONG_PARENTHESIS_FORMAT_ERROR,
+            @errors << ValidationError.new(WRONG_PARENTHESIS_FORMAT_ERROR,
+                                           :persons, competition.id,
                                            name: p.name)
           end
           if /[（）]/ =~ p.name
-            @errors << ValidationError.new(:persons, competition.id,
-                                           WRONG_PARENTHESIS_TYPE_ERROR,
+            @errors << ValidationError.new(WRONG_PARENTHESIS_TYPE_ERROR,
+                                           :persons, competition.id,
                                            name: p.name)
           end
           # Look for if 2 new competitors that share the exact same name
@@ -136,43 +132,43 @@ module ResultsValidators
           end
           split_name = roman_readable.split
           if split_name.first.downcase == split_name.first || split_name.last.downcase == split_name.last
-            @warnings << ValidationWarning.new(:persons, competition.id,
-                                               LOWERCASE_NAME_WARNING,
+            @warnings << ValidationWarning.new(LOWERCASE_NAME_WARNING,
+                                               :persons, competition.id,
                                                name: p.name)
           end
           if split_name.any? { |n| n =~ /[[:upper:]]{2}/ && n.length > 2 && n != 'III' } # Roman numerals are allowed as suffixes
-            @warnings << ValidationWarning.new(:persons, competition.id,
-                                               UPPERCASE_NAME_WARNING,
+            @warnings << ValidationWarning.new(UPPERCASE_NAME_WARNING,
+                                               :persons, competition.id,
                                                name: p.name)
           end
           if split_name.length == 1
-            @warnings << ValidationWarning.new(:persons, competition.id,
-                                               SINGLE_NAME_WARNING,
+            @warnings << ValidationWarning.new(SINGLE_NAME_WARNING,
+                                               :persons, competition.id,
                                                name: p.name)
           elsif split_name.length > 2
             if split_name[1, split_name.length-2].any? { |n| n.length == 1 }
-              @warnings << ValidationWarning.new(:persons, competition.id,
-                                                 MISSING_PERIOD_WARNING,
+              @warnings << ValidationWarning.new(MISSING_PERIOD_WARNING,
+                                                 :persons, competition.id,
                                                  name: p.name)
             end
           end
           if split_name.any? { |n| n.chop.include? '.' }
-            @warnings << ValidationWarning.new(:persons, competition.id,
-                                               LETTER_AFTER_PERIOD_WARNING,
+            @warnings << ValidationWarning.new(LETTER_AFTER_PERIOD_WARNING,
+                                               :persons, competition.id,
                                                name: p.name)
           end
           non_word_after_first_letter = [' ', '.'].include?(roman_readable[1])
           space_before_last_letter = (roman_readable[-2] == " ") && !['I', 'V'].include?(roman_readable[-1]) # Roman numerals are allowed as suffixes
           abbreviated_last_name = (roman_readable[-1] == ".") && (roman_readable[-3] == " ")
           if non_word_after_first_letter || space_before_last_letter || abbreviated_last_name
-            @warnings << ValidationWarning.new(:persons, competition.id,
-                                               SINGLE_LETTER_FIRST_OR_LAST_NAME_WARNING,
+            @warnings << ValidationWarning.new(SINGLE_LETTER_FIRST_OR_LAST_NAME_WARNING,
+                                               :persons, competition.id,
                                                name: p.name)
           end
         end
         duplicate_newcomer_names.each do |name|
-          @warnings << ValidationWarning.new(:persons, competition.id,
-                                             MULTIPLE_NEWCOMERS_WITH_SAME_NAME_WARNING,
+          @warnings << ValidationWarning.new(MULTIPLE_NEWCOMERS_WITH_SAME_NAME_WARNING,
+                                             :persons, competition.id,
                                              name: name)
         end
         with_wca_id.each do |p|
@@ -183,35 +179,35 @@ module ResultsValidators
             # WRT wants to show warnings for wrong person information.
             # (If I get this right, we do not actually update existing persons from InboxPerson)
             unless p.dob == existing_person.dob
-              @warnings << ValidationWarning.new(:persons, competition.id,
-                                                 NON_MATCHING_DOB_WARNING,
+              @warnings << ValidationWarning.new(NON_MATCHING_DOB_WARNING,
+                                                 :persons, competition.id,
                                                  name: p.name, wca_id: p.wca_id,
                                                  expected_dob: existing_person.dob,
                                                  dob: p.dob)
             end
             unless p.gender == existing_person.gender
-              @warnings << ValidationWarning.new(:persons, competition.id,
-                                                 NON_MATCHING_GENDER_WARNING,
+              @warnings << ValidationWarning.new(NON_MATCHING_GENDER_WARNING,
+                                                 :persons, competition.id,
                                                  name: p.name, wca_id: p.wca_id,
                                                  expected_gender: existing_person.gender,
                                                  gender: p.gender)
             end
             unless p.name == existing_person.name
-              @warnings << ValidationWarning.new(:persons, competition.id,
-                                                 NON_MATCHING_NAME_WARNING,
+              @warnings << ValidationWarning.new(NON_MATCHING_NAME_WARNING,
+                                                 :persons, competition.id,
                                                  name: p.name, wca_id: p.wca_id,
                                                  expected_name: existing_person.name)
             end
             unless p.country.id == existing_person.country.id
-              @warnings << ValidationWarning.new(:persons, competition.id,
-                                                 NON_MATCHING_COUNTRY_WARNING,
+              @warnings << ValidationWarning.new(NON_MATCHING_COUNTRY_WARNING,
+                                                 :persons, competition.id,
                                                  name: p.name, wca_id: p.wca_id,
                                                  expected_country: existing_person.country_iso2,
                                                  country: p.countryId)
             end
           else
-            @errors << ValidationError.new(:persons, competition.id,
-                                           WRONG_WCA_ID_ERROR,
+            @errors << ValidationError.new(WRONG_WCA_ID_ERROR,
+                                           :persons, competition.id,
                                            name: p.name, wca_id: p.wca_id)
           end
         end

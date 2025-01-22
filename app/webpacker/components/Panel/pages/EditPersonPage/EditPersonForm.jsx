@@ -24,7 +24,7 @@ const countryOptions = _.map(countries.byIso2, (country) => ({
   value: country.iso2,
 }));
 
-export default function EditPersonForm({ wcaId, onSuccess }) {
+export default function EditPersonForm({ wcaId, onSuccess, showDestroyButton = false }) {
   const {
     data: personFetchData, loading, error: personError,
   } = useLoadedData(
@@ -157,7 +157,7 @@ export default function EditPersonForm({ wcaId, onSuccess }) {
           name="dob"
           control={UtcDatePicker}
           showYearDropdown
-          dateFormatOverride="YYYY-MM-dd"
+          dateFormatOverride="yyyy-MM-dd"
           dropdownMode="select"
           disabled={!editedUserDetails}
           isoDate={editedUserDetails?.dob}
@@ -180,10 +180,12 @@ export default function EditPersonForm({ wcaId, onSuccess }) {
           <Icon name="clone" />
           Update
         </Button>
-        <Button disabled={!editedUserDetails} onClick={handleDestroy}>
-          <Icon name="trash" />
-          Destroy
-        </Button>
+        {showDestroyButton && (
+          <Button disabled={!editedUserDetails} onClick={handleDestroy}>
+            <Icon name="trash" />
+            Destroy
+          </Button>
+        )}
         {incorrectClaimCount > 0 && (
           <Button onClick={handleResetClaimCount}>
             <Icon name="redo" />

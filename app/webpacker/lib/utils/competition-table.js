@@ -32,7 +32,7 @@ const competitionStatusHint = (competition) => {
   return text;
 };
 
-export const competitionStatusText = (competition, registrationStatus) => `${registrationStatusHint(registrationStatus?.competing_status)} ${competitionStatusHint(competition)}`;
+export const competitionStatusText = (competition, registrationStatus) => `${registrationStatusHint(registrationStatus)} ${competitionStatusHint(competition)}`;
 
 export function dayDifferenceFromToday(yyyymmddDateString) {
   const dateLuxon = parseDateString(yyyymmddDateString);

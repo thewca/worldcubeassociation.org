@@ -260,7 +260,7 @@ export default function CompetingStep({
     if (shouldShowUpdateButton) {
       return attemptAction(actionUpdateRegistration, { checkForChanges: true });
     }
-    attemptAction(actionCreateRegistration);
+    return attemptAction(actionCreateRegistration);
   }, [
     actionCreateRegistration,
     actionReRegister,
@@ -269,6 +269,8 @@ export default function CompetingStep({
     shouldShowReRegisterButton,
     shouldShowUpdateButton,
   ]);
+
+  const guestsRestricted = competitionInfo.guest_entry_status === 'restricted';
 
   const formWarnings = useMemo(() => potentialWarnings(competitionInfo), [competitionInfo]);
   return (
@@ -306,12 +308,12 @@ export default function CompetingStep({
               maxEvents={maxEvents}
               eventsDisabled={
                 competitionInfo.allow_registration_without_qualification
-                ? []
-                : eventsNotQualifiedFor(
-                  competitionInfo.event_ids,
-                  qualifications.wcif,
-                  qualifications.personalRecords,
-                )
+                  ? []
+                  : eventsNotQualifiedFor(
+                    competitionInfo.event_ids,
+                    qualifications.wcif,
+                    qualifications.personalRecords,
+                  )
               }
               disabledText={(event) => eventQualificationToString(
                 { id: event },
@@ -356,7 +358,7 @@ export default function CompetingStep({
           </Form.Field>
           {competitionInfo.guests_enabled && (
             <Form.Field>
-              <label>{I18n.t('activerecord.attributes.registration.guests')}</label>
+              <label htmlFor="guest-dropdown">{I18n.t('activerecord.attributes.registration.guests')}</label>
               <Form.Input
                 id="guest-dropdown"
                 type="number"
@@ -365,8 +367,8 @@ export default function CompetingStep({
                   setGuests(Number.parseInt(data.value, 10));
                 }}
                 min="0"
-                max={competitionInfo.guests_per_registration_limit ?? 99}
-                error={Number.isInteger(competitionInfo.guests_per_registration_limit) && guests > competitionInfo.guests_per_registration_limit && I18n.t('competitions.competition_info.guest_limit', { count: competitionInfo.guests_per_registration_limit })}
+                max={guestsRestricted && (competitionInfo.guests_per_registration_limit ?? 99)}
+                error={guestsRestricted && Number.isInteger(competitionInfo.guests_per_registration_limit) && guests > competitionInfo.guests_per_registration_limit && I18n.t('competitions.competition_info.guest_limit', { count: competitionInfo.guests_per_registration_limit })}
               />
             </Form.Field>
           )}
