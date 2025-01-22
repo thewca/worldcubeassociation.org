@@ -3,12 +3,11 @@ import {
   Button, Card, Icon, List, Pagination,
 } from 'semantic-ui-react';
 
-import useLoadedData from '../lib/hooks/useLoadedData';
-import { postsUrl } from '../lib/requests/routes.js.erb';
-import Loading from './Requests/Loading';
-import Errored from './Requests/Errored';
-import { formattedTextForDate } from '../lib/utils/wca';
-import '../stylesheets/posts_widget.scss';
+import useLoadedData from '../../lib/hooks/useLoadedData';
+import { postsUrl } from '../../lib/requests/routes.js.erb';
+import Loading from '../Requests/Loading';
+import Errored from '../Requests/Errored';
+import { formattedTextForDate } from '../../lib/utils/wca';
 
 function PostTitlesList({
   posts,
