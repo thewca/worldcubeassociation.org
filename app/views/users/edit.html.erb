@@ -13,6 +13,13 @@
   </div>
 <% end %>
 
+<% otp_svg = raw(qrcode_for_user(@user).as_svg(
+  offset: 0,
+  color: '000',
+  shape_rendering: 'crispEdges',
+  module_size: 4
+)) if @user.otp_required_for_login %>
+
 <%= react_component("Persons/Edit", {
   user: @user.as_json({
                         include: [],
@@ -35,4 +42,5 @@
   currentUser: current_user_json,
   editableFields: current_user.editable_fields_of_user(@user),
   recentlyAuthenticated: @recently_authenticated,
+  otpSVG: otp_svg,
 }) %>

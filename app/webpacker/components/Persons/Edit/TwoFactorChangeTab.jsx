@@ -2,12 +2,14 @@ import React, { useCallback, useEffect, useState } from 'react';
 import {
   Button, Message, List, Modal, Header, Form, Segment,
 } from 'semantic-ui-react';
+import { useMutation } from '@tanstack/react-query';
 import I18nHTMLTranslate from '../../I18nHTMLTranslate';
 import I18n from '../../../lib/i18n';
 import { enable2FaUrl, disable2FaUrl } from '../../../lib/requests/routes.js.erb';
+import { getBackupCodes } from '../api/getBackupCodes';
 
-export default function TwoFactorChangeTab({ user, recentlyAuthenticated }) {
-  const [backupCodes, setBackupCodes] = useState(user.otp_backup_codes);
+export default function TwoFactorChangeTab({ user, recentlyAuthenticated, otpSVG }) {
+  const [backupCodes, setBackupCodes] = useState(null);
 
   // Hack to allow this with devise
   useEffect(() => {
@@ -16,10 +18,18 @@ export default function TwoFactorChangeTab({ user, recentlyAuthenticated }) {
     }
   }, [recentlyAuthenticated]);
 
-  // TODO
+  const {
+    mutate: getBackupCodesMutation,
+  } = useMutation({
+    mutationFn: getBackupCodes,
+    onSuccess: (data) => {
+      setBackupCodes(data.codes);
+    },
+  });
+
   const handleGenerateBackupCodes = useCallback(() => {
-    setBackupCodes('aa');
-  }, []);
+    getBackupCodesMutation();
+  }, [getBackupCodesMutation]);
 
   if (!recentlyAuthenticated) {
     return <Modal dimmer="blurring" open />;
@@ -97,10 +107,13 @@ export default function TwoFactorChangeTab({ user, recentlyAuthenticated }) {
               here: `<a href='${user.otpProvisioningUri}'>${I18n.t('common.here')}</a>`,
             }}
           />
-          <div dangerouslySetInnerHTML={{ __html: user.qrCodeSvg }} />
+          <div dangerouslySetInnerHTML={{ __html: otpSVG }} />
 
           <Header as="h3">{I18n.t('devise.sessions.new.2fa.backup_codes')}</Header>
           <I18nHTMLTranslate i18nKey="devise.sessions.new.2fa.backup_codes_desc" />
+          <Message>
+            {I18n.t('devise.sessions.new.2fa.backup_codes_warning')}
+          </Message>
           {!backupCodes ? (
             <>
               <I18nHTMLTranslate i18nKey="devise.sessions.new.2fa.no_backup_codes" />
@@ -111,16 +124,13 @@ export default function TwoFactorChangeTab({ user, recentlyAuthenticated }) {
           ) : (
             <pre>{backupCodes.join('\n')}</pre>
           )}
-          <Message>
-            {I18n.t('devise.sessions.new.2fa.backup_codes_warning')}
-          </Message>
 
           <Header as="h3">{I18n.t('devise.sessions.new.2fa.email_auth')}</Header>
           <I18nHTMLTranslate i18nKey="devise.sessions.new.2fa.email_auth_desc" />
 
           <Header as="h2">{I18n.t('devise.sessions.new.2fa.disable_section_title')}</Header>
           <I18nHTMLTranslate i18nKey="devise.sessions.new.2fa.disable_section_content" />
-          <Form action={enable2FaUrl()} method="POST">
+          <Form action={disable2FaUrl()} method="POST">
             <input
               type="hidden"
               name="authenticity_token"

@@ -13,7 +13,7 @@ import PreferencesTab from './PreferencesTab';
 import TwoFactorChangeTab from './TwoFactorChangeTab';
 
 export default function Wrapper({
-  user, currentUser, editableFields, recentlyAuthenticated,
+  user, currentUser, editableFields, recentlyAuthenticated, otpSVG,
 }) {
   return (
     <WCAQueryClientProvider>
@@ -22,6 +22,7 @@ export default function Wrapper({
         currentUser={currentUser}
         editableFields={editableFields}
         recentlyAuthenticated={recentlyAuthenticated}
+        otpSVG={otpSVG}
       />
     </WCAQueryClientProvider>
   );
@@ -83,7 +84,7 @@ const updatePath = (tabSlug) => {
 };
 
 function EditUser({
-  user, currentUser, editableFields, recentlyAuthenticated,
+  user, currentUser, editableFields, recentlyAuthenticated, otpSVG,
 }) {
   const warnings = useMemo(() => getFormWarnings(user, currentUser), [user, currentUser]);
   const panes = useMemo(() => {
@@ -135,6 +136,7 @@ function EditUser({
           render: () => (
             <TwoFactorChangeTab
               user={user}
+              otpSVG={otpSVG}
               recentlyAuthenticated={recentlyAuthenticated}
             />
           ),
