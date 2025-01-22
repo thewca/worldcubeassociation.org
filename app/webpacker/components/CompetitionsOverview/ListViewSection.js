@@ -457,7 +457,7 @@ function RegistrationStatus({ comp, isLoading }) {
             {
               relativeDate: DateTime.fromISO(comp.registration_open).toRelative(
                 toRelativeOptions.default,
-              )
+              ),
             },
           )
         }
@@ -477,7 +477,7 @@ function RegistrationStatus({ comp, isLoading }) {
             {
               relativeDate: DateTime.fromISO(comp.start_date).toRelative(
                 toRelativeOptions.roundUpAndAtBestDayPrecision,
-              )
+              ),
             },
           )
         }
