@@ -270,6 +270,8 @@ export default function CompetingStep({
     shouldShowUpdateButton,
   ]);
 
+  const guestsRestricted = competitionInfo.guest_entry_status === 'restricted';
+
   const formWarnings = useMemo(() => potentialWarnings(competitionInfo), [competitionInfo]);
   return (
     <Segment basic loading={isUpdating}>
@@ -365,8 +367,8 @@ export default function CompetingStep({
                   setGuests(Number.parseInt(data.value, 10));
                 }}
                 min="0"
-                max={competitionInfo.guests_per_registration_limit ?? 99}
-                error={Number.isInteger(competitionInfo.guests_per_registration_limit) && guests > competitionInfo.guests_per_registration_limit && I18n.t('competitions.competition_info.guest_limit', { count: competitionInfo.guests_per_registration_limit })}
+                max={guestsRestricted && (competitionInfo.guests_per_registration_limit ?? 99)}
+                error={guestsRestricted && Number.isInteger(competitionInfo.guests_per_registration_limit) && guests > competitionInfo.guests_per_registration_limit && I18n.t('competitions.competition_info.guest_limit', { count: competitionInfo.guests_per_registration_limit })}
               />
             </Form.Field>
           )}
