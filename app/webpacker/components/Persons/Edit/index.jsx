@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import {
-  Container, Form, Header, Message, Tab,
+  Container, Header, Message, Tab,
 } from 'semantic-ui-react';
 import WCAQueryClientProvider from '../../../lib/providers/WCAQueryClientProvider';
 import I18n from '../../../lib/i18n';

@@ -19,6 +19,8 @@ export default function EmailChangeTab({ user, recentlyAuthenticated }) {
 
   return (
     <Form>
+      <input type="hidden" name="_method" value="patch" />
+      <input type="hidden" name="authenticity_token" value={document.querySelector('meta[name=csrf-token]').content} />
       <Form.Field>
         <Form.Input value={email} onChange={setEmail} label="Email" />
         <I18nHTMLTranslate i18nKey="users.edit.confirm_new_email" />
