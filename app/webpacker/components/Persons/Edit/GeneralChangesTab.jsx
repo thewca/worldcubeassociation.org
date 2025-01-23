@@ -5,6 +5,7 @@ import CountrySelector from '../../CountrySelector/CountrySelector';
 import I18nHTMLTranslate from '../../I18nHTMLTranslate';
 import { updateUserUrl } from '../../../lib/requests/routes.js.erb';
 import './preferences.scss';
+import GenderSelector from '../../GenderSelector/GenderSelector';
 
 export default function GeneralChangesTab({ user, editableFields }) {
   const [name, setName] = useInputState(user.name);
@@ -42,13 +43,7 @@ export default function GeneralChangesTab({ user, editableFields }) {
           <I18nHTMLTranslate i18nKey="simple_form.hints.user.dob" />
         </Form.Field>
         <Form.Field fluid>
-          <Form.Input
-            label="Gender"
-            name="user[gender]"
-            onChange={setGender}
-            value={gender}
-            disabled={!editableFields.includes('gender')}
-          />
+          <GenderSelector onChange={setGender} gender={gender} name="user[gender]" disabled={!editableFields.includes('gender')} />
         </Form.Field>
         <Form.Field fluid>
           <CountrySelector
