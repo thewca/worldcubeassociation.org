@@ -1,0 +1,10 @@
+.preferences-form {
+  .disabled {
+    opacity: 0.75 !important;
+    cursor: not-allowed;
+    pointer-events: all;
+    label {
+      opacity: 1 !important;
+    }
+  }
+}

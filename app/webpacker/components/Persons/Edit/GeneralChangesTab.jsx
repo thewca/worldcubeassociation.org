@@ -4,6 +4,7 @@ import useInputState from '../../../lib/hooks/useInputState';
 import CountrySelector from '../../CountrySelector/CountrySelector';
 import I18nHTMLTranslate from '../../I18nHTMLTranslate';
 import { updateUserUrl } from '../../../lib/requests/routes.js.erb';
+import './preferences.scss';
 
 export default function GeneralChangesTab({ user, editableFields }) {
   const [name, setName] = useInputState(user.name);
@@ -15,7 +16,7 @@ export default function GeneralChangesTab({ user, editableFields }) {
 
   return (
     <Segment>
-      <Form method="POST" action={updateUserUrl(user.id)}>
+      <Form method="POST" action={updateUserUrl(user.id)} className="preferences-form">
         <input type="hidden" name="_method" value="patch" />
         <input type="hidden" name="authenticity_token" value={document.querySelector('meta[name=csrf-token]').content} />
         <Form.Field>
