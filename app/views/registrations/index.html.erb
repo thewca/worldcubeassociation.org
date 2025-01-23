@@ -1,7 +1,5 @@
 <% provide(:title, I18n.t('registrations.list.title', comp: @competition.name)) %>
 
 <%= render layout: "nav" do %>
-  <%= react_component('RegistrationsV2/Registrations', { competitionInfo: @competition.to_competition_info, userInfo: @current_user.as_json(
-    only: %w[id],
-  )}) %>
+  <%= react_component('RegistrationsV2/Registrations', { competitionInfo: @competition.to_competition_info, userId: @current_user&.id }) %>
 <% end %>
