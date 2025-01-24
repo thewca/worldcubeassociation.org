@@ -7,9 +7,9 @@ module ApplicationCable
 
     # identified_by :current_user
     #
-    # def connect
-    #   self.current_user = find_verified_user
-    # end
+    def connect
+      reject_unauthorized_connection if EnvConfig.WCA_LIVE_SITE?
+    end
     #
     # private
     #
