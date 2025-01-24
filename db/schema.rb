@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_11_24_050607) do
+ActiveRecord::Schema[7.2].define(version: 2025_01_24_154917) do
   create_table "Competitions", id: { type: :string, limit: 32, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", limit: 50, default: "", null: false
     t.string "cityName", limit: 50, default: "", null: false
@@ -578,6 +578,17 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_24_050607) do
     t.index ["competition_id", "championship_type"], name: "index_championships_on_competition_id_and_championship_type", unique: true
   end
 
+  create_table "check_records_results", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "competition_id"
+    t.string "event_id"
+    t.datetime "run_start"
+    t.datetime "run_end"
+    t.json "results"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["competition_id", "event_id"], name: "index_check_records_results_on_competition_id_and_event_id", unique: true
+  end
+
   create_table "competition_delegates", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "competition_id"
     t.integer "delegate_id"
@@ -783,6 +794,23 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_24_050607) do
     t.string "jti", null: false
     t.datetime "exp", null: false
     t.index ["jti"], name: "index_jwt_denylist_on_jti"
+  end
+
+  create_table "live_attempts", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.integer "result", null: false
+    t.integer "replaces"
+    t.bigint "live_result_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["live_result_id"], name: "index_live_attempts_on_live_result_id"
+  end
+
+  create_table "live_results", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.integer "person_id", null: false
+    t.integer "round_id", null: false
+    t.integer "entered_by_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "locations", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
@@ -1394,6 +1422,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_24_050607) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "live_attempts", "live_results"
   add_foreign_key "microservice_registrations", "Competitions", column: "competition_id", on_update: :cascade, on_delete: :cascade
   add_foreign_key "microservice_registrations", "users"
   add_foreign_key "oauth_openid_requests", "oauth_access_grants", column: "access_grant_id", on_delete: :cascade
