@@ -57,6 +57,10 @@ locals {
       value = aws_sqs_queue.this.url
     },
     {
+      name = "LIVE_QUEUE"
+      value = aws_sqs_queue.results.url
+    },
+    {
       name = "STORAGE_AWS_REGION"
       value = var.region
     },

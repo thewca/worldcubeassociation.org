@@ -121,6 +121,10 @@ locals {
       value = aws_sqs_queue.this.url
     },
     {
+      name = "LIVE_QUEUE"
+      value = aws_sqs_queue.results.url
+    },
+    {
       name = "VAULT_APPLICATION"
       value = var.VAULT_APPLICATION
     },
