@@ -42,9 +42,7 @@ export default function FormObjectProvider({
   useEffect(() => {
     window.addEventListener('beforeunload', onUnload);
 
-    return () => {
-      window.removeEventListener('beforeunload', onUnload);
-    };
+    return () => window.removeEventListener('beforeunload', onUnload);
   }, [onUnload]);
 
   const onSuccess = useCallback((data) => {

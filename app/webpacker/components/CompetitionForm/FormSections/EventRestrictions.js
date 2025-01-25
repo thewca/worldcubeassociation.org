@@ -29,11 +29,11 @@ export default function EventRestrictions() {
   } = useFormObject();
 
   const mainEventOptions = useMemo(() => {
-    const storedEventOptions = storedEvents.map((event) => ({
+    const storedEventOptions = storedEvents?.map((event) => ({
       key: event.id,
       value: event.id,
       text: event.name,
-    }));
+    })) || [];
 
     return [{
       key: '',

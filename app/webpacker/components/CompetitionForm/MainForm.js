@@ -1,6 +1,5 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import { Divider } from 'semantic-ui-react';
-import _ from 'lodash';
 import VenueInfo from './FormSections/VenueInfo';
 import {
   InputBoolean,
@@ -18,18 +17,11 @@ import Admin from './FormSections/Admin';
 import NameDetails from './FormSections/NameDetails';
 import NearbyComps from './Tables/NearbyComps';
 import Series from './FormSections/Series';
-import StoreProvider, { useStore } from '../../lib/providers/StoreProvider';
 import CompDates from './FormSections/CompDates';
 import RegistrationDates from './FormSections/RegistrationDates';
-import { createCompetitionUrl, competitionUrl } from '../../lib/requests/routes.js.erb';
-import EditForm from '../wca/FormBuilder/EditForm';
 import SubSection from '../wca/FormBuilder/SubSection';
-import Header from './Header';
-import Footer from './Footer';
 
-function CompetitionForm() {
-  const { isCloning } = useStore();
-
+export default function MainForm({ isCloning = false }) {
   return (
     <>
       <Admin />
@@ -70,54 +62,5 @@ function CompetitionForm() {
         </SubSection>
       )}
     </>
-  );
-}
-
-export default function Wrapper({
-  competition = null,
-  storedEvents = [],
-  isAdminView = false,
-  isPersisted = false,
-  isSeriesPersisted = false,
-  isCloning = false,
-}) {
-  const backendUrlFn = (comp, initialComp) => {
-    if (isPersisted) {
-      return `${competitionUrl(initialComp.competitionId)}?adminView=${isAdminView}`;
-    }
-
-    return createCompetitionUrl;
-  };
-
-  const backendOptions = { method: isPersisted ? 'PATCH' : 'POST' };
-
-  const isDisabled = useCallback((formState) => {
-    const { admin: { isConfirmed } } = formState;
-
-    return isConfirmed && !isAdminView;
-  }, [isAdminView]);
-
-  return (
-    <StoreProvider
-      reducer={_.identity}
-      initialState={{
-        storedEvents,
-        isAdminView,
-        isPersisted,
-        isSeriesPersisted,
-        isCloning,
-      }}
-    >
-      <EditForm
-        initialObject={competition}
-        backendUrlFn={backendUrlFn}
-        backendOptions={backendOptions}
-        CustomHeader={Header}
-        CustomFooter={Footer}
-        disabledOverrideFn={isDisabled}
-      >
-        <CompetitionForm />
-      </EditForm>
-    </StoreProvider>
   );
 }

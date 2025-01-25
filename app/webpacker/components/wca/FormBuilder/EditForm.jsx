@@ -57,7 +57,7 @@ function EditForm({
   );
 
   const sectionDisabled = useMemo(() => (
-    !disabledOverrideFn || disabledOverrideFn(object)
+    !!disabledOverrideFn && disabledOverrideFn(object)
   ), [disabledOverrideFn, object]);
 
   const stickyRef = useRef();
