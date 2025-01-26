@@ -40,9 +40,9 @@ function AnnounceAction({
     mutationFn: (compId) => fetchJsonOrError(announceCompetitionUrl(compId), {
       method: 'PUT',
     }),
-    onSuccess: (_, compId) => queryClient.setQueryData(
+    onSuccess: (respData, compId) => queryClient.setQueryData(
       announcementDataQueryKey(compId),
-      (oldData) => ({ ...oldData, isAnnounced: true }),
+      respData,
     ),
   });
 
@@ -90,9 +90,9 @@ function CancelAction({
     mutationFn: ({ compId, undo }) => fetchJsonOrError(cancelCompetitionUrl(compId, undo), {
       method: 'PUT',
     }),
-    onSuccess: (_, variables) => queryClient.setQueryData(
+    onSuccess: (respData, variables) => queryClient.setQueryData(
       confirmationDataQueryKey(variables.compId),
-      (oldData) => ({ ...oldData, isCancelled: true }),
+      respData,
     ),
   });
 
@@ -108,9 +108,7 @@ function CancelAction({
     } else {
       confirm({
         content: I18n.t('competitions.cancel_confirm'),
-      }).then(() => {
-        submitCancelToBackend(undo);
-      });
+      }).then(() => submitCancelToBackend(undo));
     }
   }, [confirm, submitCancelToBackend]);
 
@@ -174,9 +172,9 @@ function CloseRegistrationAction({
     mutationFn: (compId) => fetchJsonOrError(closeRegistrationWhenFullUrl(compId), {
       method: 'PUT',
     }),
-    onSuccess: (_, compId) => queryClient.setQueryData(
+    onSuccess: (respData, compId) => queryClient.setQueryData(
       announcementDataQueryKey(compId),
-      (oldData) => ({ ...oldData, isRegistrationPast: true }),
+      respData,
     ),
     onError,
   });

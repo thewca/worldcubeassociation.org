@@ -29,9 +29,9 @@ function ConfirmButton({
     mutationFn: (compId) => fetchJsonOrError(confirmCompetitionUrl(compId), {
       method: 'PUT',
     }),
-    onSuccess: (_, compId) => queryClient.setQueryData(
+    onSuccess: (respData, compId) => queryClient.setQueryData(
       confirmationDataQueryKey(compId),
-      (oldData) => ({ ...oldData, isConfirmed: true }),
+      respData,
     ),
     onError,
   });

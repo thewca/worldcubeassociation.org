@@ -34,9 +34,9 @@ function NotificationSettingsAction({
         receive_registration_emails: receiveNotifications,
       }),
     }),
-    onSuccess: (_, variables) => queryClient.setQueryData(
+    onSuccess: (respData, variables) => queryClient.setQueryData(
       userPreferencesQueryKey(variables.competitionId),
-      (oldData) => ({ ...oldData, isReceivingNotifications: variables.receiveNotifications }),
+      respData,
     ),
   });
 
