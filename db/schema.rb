@@ -578,17 +578,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_01_24_154917) do
     t.index ["competition_id", "championship_type"], name: "index_championships_on_competition_id_and_championship_type", unique: true
   end
 
-  create_table "check_records_results", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
-    t.string "competition_id"
-    t.string "event_id"
-    t.datetime "run_start"
-    t.datetime "run_end"
-    t.json "results"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["competition_id", "event_id"], name: "index_check_records_results_on_competition_id_and_event_id", unique: true
-  end
-
   create_table "competition_delegates", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "competition_id"
     t.integer "delegate_id"
