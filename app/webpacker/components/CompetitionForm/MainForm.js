@@ -13,7 +13,6 @@ import Website from './FormSections/Website';
 import RegistrationFee from './FormSections/RegistrationFees';
 import RegistrationDetails from './FormSections/RegistrationDetails';
 import EventRestrictions from './FormSections/EventRestrictions';
-import Admin from './FormSections/Admin';
 import NameDetails from './FormSections/NameDetails';
 import NearbyComps from './Tables/NearbyComps';
 import Series from './FormSections/Series';
@@ -24,7 +23,6 @@ import SubSection from '../wca/FormBuilder/SubSection';
 export default function MainForm({ isCloning = false }) {
   return (
     <>
-      <Admin />
       <NameDetails />
       <VenueInfo />
       <Divider />

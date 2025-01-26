@@ -121,6 +121,7 @@ export const geocodingTimeZoneUrl = `<%= CGI.unescape(Rails.application.routes.u
 export const competitionAnnouncementDataUrl = (competitionId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.competition_announcement_data_path("${competitionId}")) %>`
 export const competitionUserPreferencesUrl = (competitionId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.competition_user_preferences_path("${competitionId}")) %>`
 export const competitionConfirmationDataUrl = (competitionId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.competition_confirmation_data_path("${competitionId}")) %>`
+export const updateCompetitionConfirmationDataUrl = (competitionId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.competition_update_confirmation_data_path("${competitionId}")) %>`
 
 export const announceCompetitionUrl = (competitionId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.competition_announce_path("${competitionId}")) %>`
 export const cancelCompetitionUrl = (competitionId, undo = false) => `<%= CGI.unescape(Rails.application.routes.url_helpers.competition_cancel_path("${competitionId}")) %>?undo=${undo}`

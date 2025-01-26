@@ -593,6 +593,24 @@ class CompetitionsController < ApplicationController
     render json: competition.form_confirmation_data(current_user)
   end
 
+  before_action -> { require_user_permission(:can_admin_competitions?, competition_from_params) }, only: [:update_confirmation_data]
+
+  def update_confirmation_data
+    competition = competition_from_params
+
+    competition.confirmed = params[:isConfirmed] if params.key?(:isConfirmed)
+    competition.showAtAll = params[:isVisible] if params.key?(:isVisible)
+
+    if competition.save
+      render json: {
+        status: "ok",
+        data: competition.form_confirmation_data(current_user),
+      }
+    else
+      render status: :bad_request, json: competition.errors
+    end
+  end
+
   before_action -> { require_user_permission(:get_cannot_delete_competition_reason, competition_from_params, is_message: true) }, only: [:destroy]
 
   def destroy

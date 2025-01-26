@@ -2602,8 +2602,6 @@ class Competition < ApplicationRecord
       guests_per_registration_limit: form_data.dig('registration', 'guestsPerRegistration'),
       events_per_registration_limit: form_data.dig('eventRestrictions', 'eventLimitation', 'perRegistrationLimit'),
       force_comment_in_registration: form_data.dig('registration', 'forceComment'),
-      confirmed: form_data.dig('admin', 'isConfirmed'),
-      showAtAll: form_data.dig('admin', 'isVisible'),
       being_cloned_from_id: form_data.dig('cloning', 'fromId'),
       clone_tabs: form_data.dig('cloning', 'cloneTabs'),
     }
