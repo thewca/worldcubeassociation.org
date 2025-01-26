@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { Fragment, useMemo } from 'react';
 import _ from 'lodash';
 import { Header, List, ListItem } from 'semantic-ui-react';
 import I18n from '../../../../lib/i18n';
@@ -19,11 +19,11 @@ export default function ValidationListView({ validations, showCompetitionNameOnO
   return (
     <>
       {Object.entries(listByGroup).map(([group, list]) => (
-        <>
+        <Fragment key={group}>
           <Header as="h5">{`${headingPrefixForType(type)} ${group}`}</Header>
           <List bulleted>
             {list.map((validationData) => (
-              <ListItem>
+              <ListItem key={validationData.id}>
                 <ValidationText
                   validationData={validationData}
                   group={group}
@@ -32,7 +32,7 @@ export default function ValidationListView({ validations, showCompetitionNameOnO
               </ListItem>
             ))}
           </List>
-        </>
+        </Fragment>
       ))}
     </>
   );
