@@ -5,12 +5,12 @@ import Errored from '../../../Requests/Errored';
 import ValidationListView from './ValidationListView';
 
 export default function ValidationOutput({
-  validationOutput, isFetching, isError, showCompetitionNameOnOutput,
+  validationOutput, isPending, isError, showCompetitionNameOnOutput,
 }) {
-  if (isFetching) return <Loading />;
+  if (isPending) return <Loading />;
   if (isError) return <Errored />;
 
-  if (!isFetching && !isError && !validationOutput) {
+  if (!validationOutput) {
     return (
       <Message>Please run the validators to see the output.</Message>
     );

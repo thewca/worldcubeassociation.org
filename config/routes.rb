@@ -297,7 +297,6 @@ Rails.application.routes.draw do
 
   get '/admin/all-voters' => 'admin#all_voters', as: :eligible_voters
   get '/admin/leader-senior-voters' => 'admin#leader_senior_voters', as: :leader_senior_voters
-  get '/admin/validation_competitions' => "admin#compute_validation_competitions"
   post '/admin/merge_people' => 'admin#do_merge_people'
   get '/admin/fix_results_selector' => 'admin#fix_results_selector', as: :admin_fix_results_ajax
   get '/admin/person_data' => 'admin#person_data'
@@ -411,6 +410,7 @@ Rails.application.routes.draw do
       get '/results/:user_id/qualification_data' => 'api#user_qualification_data', as: :user_qualification_data
       get '/competition_series/:id' => 'api#competition_series'
       get '/competition_index' => 'competitions#competition_index', as: :competition_index
+      get '/competition_count' => 'competitions#competition_count', as: :competition_count
 
       resources :competitions, only: [:index, :show] do
         get '/wcif' => 'competitions#show_wcif'
