@@ -9,14 +9,14 @@ import Errored from '../../../Requests/Errored';
 const RUN_VALIDATORS_QUERY_CLIENT = new QueryClient();
 
 export default function CompetitionRangeSelector({ range, setRange }) {
-  const enableCompetitionCountFetch = Boolean(range?.startDate && range?.endDate);
+  const bothDatesAreSelected = Boolean(range?.startDate && range?.endDate);
 
   const {
     data: competitionCount, isLoading, isError,
   } = useQuery({
     queryKey: ['competitionCountInRange', range?.startDate, range?.endDate],
     queryFn: () => getCompetitionCount(range?.startDate, range?.endDate),
-    enabled: enableCompetitionCountFetch,
+    enabled: bothDatesAreSelected,
   }, RUN_VALIDATORS_QUERY_CLIENT);
 
   return (
@@ -49,7 +49,7 @@ export default function CompetitionRangeSelector({ range, setRange }) {
           });
         }}
       />
-      {enableCompetitionCountFetch && (
+      {bothDatesAreSelected && (
         <CompetitionCountViewer
           isLoading={isLoading}
           isError={isError}
