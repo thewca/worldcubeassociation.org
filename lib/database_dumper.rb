@@ -436,6 +436,8 @@ module DatabaseDumper
         ),
       ),
     }.freeze,
+    "live_results" => :skip_all_rows,
+    "live_attempts" => :skip_all_rows,
     "schedule_activities" => {
       where_clause: "WHERE (holder_type=\"ScheduleActivity\" AND holder_id IN (#{VISIBLE_ACTIVITY_IDS}) or id in (#{VISIBLE_ACTIVITY_IDS}))",
       column_sanitizers: actions_to_column_sanitizers(
