@@ -9,22 +9,20 @@ import React, { useMemo } from 'react';
 import { DateTime } from 'luxon';
 import I18n from '../../lib/i18n';
 import { useStore } from '../../lib/providers/StoreProvider';
-import useLoadedData from '../../lib/hooks/useLoadedData';
 import {
   announceCompetitionUrl,
   cancelCompetitionUrl,
-  closeRegistrationWhenFullUrl,
-  competitionAnnouncementDataUrl,
+  closeRegistrationWhenFullUrl, competitionAnnouncementDataUrl,
 } from '../../lib/requests/routes.js.erb';
-import Loading from '../Requests/Loading';
 import ConfirmProvider, { useConfirm } from '../../lib/providers/ConfirmProvider';
 import useSaveAction from '../../lib/hooks/useSaveAction';
 import {
   useFormContext,
   useFormErrorHandler,
-  useFormInitialObject,
 } from '../wca/FormBuilder/provider/FormObjectProvider';
 import { useFormCommitAction, useFormUpdateAction } from '../wca/FormBuilder/EditForm';
+import useLoadedData from '../../lib/hooks/useLoadedData';
+import Loading from '../Requests/Loading';
 
 function AnnounceAction({
   competitionId,
@@ -195,11 +193,10 @@ function CloseRegistrationAction({
   );
 }
 
-export default function AnnouncementActions() {
+export default function AnnouncementActions({ competitionId }) {
   const { isAdminView } = useStore();
 
-  const { competitionId } = useFormInitialObject();
-  const { unsavedChanges: disabled } = useFormContext();
+  const { unsavedChanges } = useFormContext();
 
   const dataUrl = useMemo(() => competitionAnnouncementDataUrl(competitionId), [competitionId]);
 
@@ -213,8 +210,8 @@ export default function AnnouncementActions() {
 
   return (
     <ConfirmProvider>
-      <Dimmer.Dimmable as={Segment} blurring dimmed={disabled}>
-        <Dimmer active={disabled}>
+      <Dimmer.Dimmable as={Segment} blurring dimmed={unsavedChanges}>
+        <Dimmer active={unsavedChanges}>
           You have unsaved changes. Please save the competition before taking any other action.
         </Dimmer>
 

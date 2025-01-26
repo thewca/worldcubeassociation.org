@@ -104,5 +104,4 @@ export const useFormDispatch = () => useFormContext().dispatch;
 export const useFormObject = () => useFormContext().object;
 export const useFormInitialObject = () => useFormContext().initialObject;
 
-export const useFormSuccessHandler = () => useFormContext().onSuccess;
 export const useFormErrorHandler = () => useFormContext().onError;

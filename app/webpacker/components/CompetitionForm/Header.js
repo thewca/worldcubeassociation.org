@@ -11,7 +11,6 @@ const WCAT_FRIENDLY_ID = 'wcat';
 
 function AnnouncementMessage() {
   const {
-    isPersisted,
     isAdminView,
   } = useStore();
 
@@ -21,8 +20,6 @@ function AnnouncementMessage() {
       isVisible,
     },
   } = useFormInitialObject();
-
-  if (!isPersisted) return null;
 
   let messageStyle = null;
 
@@ -58,12 +55,12 @@ function AnnouncementMessage() {
 }
 
 export default function Header() {
-  const { isPersisted } = useStore();
+  const { competitionId } = useFormInitialObject();
 
   return (
     <>
-      {isPersisted && <AnnouncementActions />}
-      {isPersisted && <UserPreferences />}
+      <AnnouncementActions competitionId={competitionId} />
+      <UserPreferences competitionId={competitionId} />
       <AnnouncementMessage />
     </>
   );

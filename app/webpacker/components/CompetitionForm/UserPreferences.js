@@ -43,9 +43,8 @@ function NotificationSettingsAction({
   );
 }
 
-export default function UserPreferences() {
-  const { competitionId } = useFormInitialObject();
-  const { unsavedChanges: disabled } = useFormContext();
+export default function UserPreferences({ competitionId }) {
+  const { unsavedChanges } = useFormContext();
 
   const dataUrl = useMemo(() => competitionUserPreferencesUrl(competitionId), [competitionId]);
 
@@ -58,8 +57,8 @@ export default function UserPreferences() {
   if (loading) return <Loading />;
 
   return (
-    <Dimmer.Dimmable as={Segment} blurring dimmed={disabled}>
-      <Dimmer active={disabled}>
+    <Dimmer.Dimmable as={Segment} blurring dimmed={unsavedChanges}>
+      <Dimmer active={unsavedChanges}>
         You have unsaved changes. Please save the competition before taking any other action.
       </Dimmer>
 

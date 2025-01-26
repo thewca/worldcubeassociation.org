@@ -17,7 +17,7 @@ import FormObjectProvider, { useFormContext, useFormDispatch, useFormObject } fr
 
 function EditForm({
   children,
-  backendUrlFn,
+  backendUrl,
   backendOptions,
   CustomHeader = null,
   CustomFooter = null,
@@ -25,7 +25,6 @@ function EditForm({
 }) {
   const {
     object,
-    initialObject,
     unsavedChanges,
     errors,
     onSuccess,
@@ -35,11 +34,10 @@ function EditForm({
   const { save, saving } = useSaveAction();
 
   const saveObject = useCallback(() => {
-    const saveUrl = backendUrlFn(object, initialObject);
     const saveOptions = backendOptions || {};
 
-    save(saveUrl, object, onSuccess, saveOptions, onError);
-  }, [backendUrlFn, backendOptions, object, initialObject, save, onError, onSuccess]);
+    save(backendUrl, object, onSuccess, saveOptions, onError);
+  }, [backendUrl, backendOptions, object, save, onError, onSuccess]);
 
   const renderUnsavedChangesAlert = () => (
     <Message info>
@@ -76,12 +74,13 @@ function EditForm({
           {children}
         </Form>
       </div>
-      {CustomFooter ? (
+      {(unsavedChanges && renderUnsavedChangesAlert())}
+      {CustomFooter && (
         <>
           <Divider />
           <CustomFooter saveObject={saveObject} />
         </>
-      ) : (unsavedChanges && renderUnsavedChangesAlert())}
+      )}
     </SectionProvider>
   );
 }
@@ -89,7 +88,7 @@ function EditForm({
 export default function Wrapper({
   children,
   initialObject,
-  backendUrlFn,
+  backendUrl,
   backendOptions,
   CustomHeader = null,
   CustomFooter = null,
@@ -97,17 +96,15 @@ export default function Wrapper({
 }) {
   return (
     <FormObjectProvider initialObject={initialObject}>
-      <SectionProvider>
-        <EditForm
-          backendUrlFn={backendUrlFn}
-          backendOptions={backendOptions}
-          CustomHeader={CustomHeader}
-          CustomFooter={CustomFooter}
-          disabledOverrideFn={disabledOverrideFn}
-        >
-          {children}
-        </EditForm>
-      </SectionProvider>
+      <EditForm
+        backendUrl={backendUrl}
+        backendOptions={backendOptions}
+        CustomHeader={CustomHeader}
+        CustomFooter={CustomFooter}
+        disabledOverrideFn={disabledOverrideFn}
+      >
+        {children}
+      </EditForm>
     </FormObjectProvider>
   );
 }

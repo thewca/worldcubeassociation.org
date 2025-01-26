@@ -13,7 +13,7 @@ export default function Edit({
   isAdminView = false,
   isSeriesPersisted = false,
 }) {
-  const backendUrlFn = (comp, initialComp) => `${competitionUrl(competition.competitionId)}?adminView=${isAdminView}`;
+  const backendUrl = `${competitionUrl(competition.competitionId)}?adminView=${isAdminView}`;
   const backendOptions = { method: 'PATCH' };
 
   const isDisabled = useCallback((formState) => {
@@ -28,13 +28,12 @@ export default function Edit({
       initialState={{
         storedEvents,
         isAdminView,
-        isPersisted: true,
         isSeriesPersisted,
       }}
     >
       <EditForm
         initialObject={competition}
-        backendUrlFn={backendUrlFn}
+        backendUrl={backendUrl}
         backendOptions={backendOptions}
         CustomHeader={Header}
         CustomFooter={Footer}

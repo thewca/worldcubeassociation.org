@@ -9,7 +9,6 @@ export default function Create({
   competition = null,
   isCloning = false,
 }) {
-  const backendUrlFn = (comp, initialComp) => createCompetitionUrl;
   const backendOptions = { method: 'POST' };
 
   return (
@@ -21,7 +20,7 @@ export default function Create({
     >
       <EditForm
         initialObject={competition}
-        backendUrlFn={backendUrlFn}
+        backendUrl={createCompetitionUrl}
         backendOptions={backendOptions}
       >
         <MainForm isCloning={isCloning} />
