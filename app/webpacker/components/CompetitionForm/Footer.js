@@ -1,52 +1,46 @@
 import { Button } from 'semantic-ui-react';
-import React, { useMemo } from 'react';
+import React, { useCallback } from 'react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import I18n from '../../lib/i18n';
 import { useStore } from '../../lib/providers/StoreProvider';
-import useLoadedData from '../../lib/hooks/useLoadedData';
 import {
-  competitionConfirmationDataUrl,
   competitionUrl,
   confirmCompetitionUrl,
   homepageUrl,
 } from '../../lib/requests/routes.js.erb';
 import Loading from '../Requests/Loading';
 import ConfirmProvider, { useConfirm } from '../../lib/providers/ConfirmProvider';
-import useSaveAction from '../../lib/hooks/useSaveAction';
-import { useFormCommitAction, useFormUpdateAction } from '../wca/FormBuilder/EditForm';
 import { useFormErrorHandler, useFormInitialObject } from '../wca/FormBuilder/provider/FormObjectProvider';
+import { confirmationDataQueryKey, useConfirmationData } from './api';
+import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken';
 
 function ConfirmButton({
   competitionId,
-  data,
-  sync,
+  confirmationData,
 }) {
-  const { canConfirm } = data;
+  const { canConfirm } = confirmationData;
 
   const onError = useFormErrorHandler();
 
-  const { save } = useSaveAction();
   const confirm = useConfirm();
+  const queryClient = useQueryClient();
 
-  const updateFormObject = useFormUpdateAction();
-  const commitFormObject = useFormCommitAction();
+  const mutation = useMutation({
+    mutationFn: (compId) => fetchJsonOrError(confirmCompetitionUrl(compId), {
+      method: 'PUT',
+    }),
+    onSuccess: (_, compId) => queryClient.setQueryData(
+      confirmationDataQueryKey(compId),
+      (oldData) => ({ ...oldData, isConfirmed: true }),
+    ),
+    onError,
+  });
 
-  const confirmCompetition = () => {
+  const confirmCompetition = useCallback(() => {
     confirm({
       content: I18n.t('competitions.competition_form.submit_confirm'),
-    }).then(() => {
-      save(confirmCompetitionUrl(competitionId), null, () => {
-        sync();
-
-        // mark the competition as announced and commit immediately.
-        // (we do not want the announce button to trigger the "there are unsaved changes" alert)
-        updateFormObject('isConfirmed', true, ['admin']);
-        commitFormObject();
-      }, {
-        body: null,
-        method: 'PUT',
-      }, onError);
-    });
-  };
+    }).then(() => mutation.mutate(competitionId));
+  }, [competitionId, confirm, mutation]);
 
   if (!canConfirm) return null;
 
@@ -54,6 +48,7 @@ function ConfirmButton({
     <Button
       positive
       onClick={confirmCompetition}
+      disabled={mutation.isPending}
     >
       {I18n.t('competitions.competition_form.submit_confirm_value')}
     </Button>
@@ -62,25 +57,24 @@ function ConfirmButton({
 
 function DeleteButton({
   competitionId,
-  data,
+  confirmationData,
 }) {
-  const { cannotDeleteReason } = data;
+  const { cannotDeleteReason } = confirmationData;
 
-  const { save } = useSaveAction();
   const confirm = useConfirm();
 
-  const deleteCompetition = () => {
+  const mutation = useMutation({
+    mutationFn: (compId) => fetchJsonOrError(competitionUrl(compId), {
+      method: 'DELETE',
+    }),
+    onSuccess: () => window.location.replace(homepageUrl),
+  });
+
+  const deleteCompetition = useCallback(() => {
     confirm({
       content: I18n.t('competitions.competition_form.submit_delete'),
-    }).then(() => {
-      save(competitionUrl(competitionId), null, () => {
-        window.location.replace(homepageUrl);
-      }, {
-        body: null,
-        method: 'DELETE',
-      });
-    });
-  };
+    }).then(() => mutation.mutate(competitionId));
+  }, [competitionId, confirm, mutation]);
 
   if (cannotDeleteReason) return null;
 
@@ -96,30 +90,25 @@ function DeleteButton({
 
 export default function Footer() {
   const { isAdminView } = useStore();
+  const { competitionId } = useFormInitialObject();
 
   const {
-    competitionId,
-    admin: { isConfirmed },
-  } = useFormInitialObject();
-
-  const dataUrl = useMemo(() => competitionConfirmationDataUrl(competitionId), [competitionId]);
-
-  const {
-    data,
+    data: confirmationData,
     loading,
-    sync,
-  } = useLoadedData(dataUrl);
+  } = useConfirmationData(competitionId);
 
   if (loading) return <Loading />;
+
+  const { isConfirmed } = confirmationData;
 
   return (
     <ConfirmProvider>
       <Button.Group>
         {!isAdminView && !isConfirmed && (
-          <ConfirmButton competitionId={competitionId} data={data} sync={sync} />
+          <ConfirmButton competitionId={competitionId} confirmationData={confirmationData} />
         )}
         {!isConfirmed && (
-          <DeleteButton competitionId={competitionId} data={data} />
+          <DeleteButton competitionId={competitionId} confirmationData={confirmationData} />
         )}
       </Button.Group>
     </ConfirmProvider>

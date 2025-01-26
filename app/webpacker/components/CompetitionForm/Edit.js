@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useMemo } from 'react';
 import _ from 'lodash';
 import StoreProvider from '../../lib/providers/StoreProvider';
 import { competitionUrl } from '../../lib/requests/routes.js.erb';
@@ -6,21 +6,25 @@ import EditForm from '../wca/FormBuilder/EditForm';
 import Header from './Header';
 import Footer from './Footer';
 import MainForm from './MainForm';
+import WCAQueryClientProvider from '../../lib/providers/WCAQueryClientProvider';
+import { useConfirmationData } from './api';
 
-export default function Edit({
+function EditCompetition({
   competition,
-  storedEvents = [],
-  isAdminView = false,
-  isSeriesPersisted = false,
+  storedEvents,
+  isAdminView,
+  isSeriesPersisted,
 }) {
   const backendUrl = `${competitionUrl(competition.competitionId)}?adminView=${isAdminView}`;
   const backendOptions = { method: 'PATCH' };
 
-  const isDisabled = useCallback((formState) => {
-    const { admin: { isConfirmed } } = formState;
+  const { data: confirmationData } = useConfirmationData(competition.competitionId);
+
+  const isDisabled = useMemo(() => {
+    const { isConfirmed } = confirmationData;
 
     return isConfirmed && !isAdminView;
-  }, [isAdminView]);
+  }, [confirmationData, isAdminView]);
 
   return (
     <StoreProvider
@@ -28,7 +32,9 @@ export default function Edit({
       initialState={{
         storedEvents,
         isAdminView,
+        isPersisted: true,
         isSeriesPersisted,
+        isCloning: false,
       }}
     >
       <EditForm
@@ -37,10 +43,28 @@ export default function Edit({
         backendOptions={backendOptions}
         CustomHeader={Header}
         CustomFooter={Footer}
-        disabledOverrideFn={isDisabled}
+        globalDisabled={isDisabled}
       >
         <MainForm />
       </EditForm>
     </StoreProvider>
+  );
+}
+
+export default function Wrapper({
+  competition,
+  storedEvents = [],
+  isAdminView = false,
+  isSeriesPersisted = false,
+}) {
+  return (
+    <WCAQueryClientProvider>
+      <EditCompetition
+        competition={competition}
+        storedEvents={storedEvents}
+        isAdminView={isAdminView}
+        isSeriesPersisted={isSeriesPersisted}
+      />
+    </WCAQueryClientProvider>
   );
 }

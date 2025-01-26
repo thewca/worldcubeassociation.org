@@ -15,6 +15,10 @@ export default function Create({
     <StoreProvider
       reducer={_.identity}
       initialState={{
+        storedEvents: [],
+        isAdminView: false,
+        isPersisted: false,
+        isSeriesPersisted: false,
         isCloning,
       }}
     >

@@ -5,21 +5,26 @@ import AnnouncementActions from './AnnouncementActions';
 import UserPreferences from './UserPreferences';
 import { useFormInitialObject } from '../wca/FormBuilder/provider/FormObjectProvider';
 import I18nHTMLTranslate from '../I18nHTMLTranslate';
+import Loading from '../Requests/Loading';
+import { useAnnouncementData, useConfirmationData } from './api';
 
 // FIXME: We should consider a better way of accessing the friendly ID instead of hard-coding.
 const WCAT_FRIENDLY_ID = 'wcat';
 
-function AnnouncementMessage() {
-  const {
-    isAdminView,
-  } = useStore();
+function AnnouncementMessage({ competitionId }) {
+  const { isAdminView } = useStore();
 
   const {
-    admin: {
-      isConfirmed,
-      isVisible,
-    },
-  } = useFormInitialObject();
+    data: confirmationData,
+    isLoading,
+  } = useConfirmationData(competitionId);
+
+  if (isLoading) return <Loading />;
+
+  const {
+    isConfirmed,
+    isVisible,
+  } = confirmationData;
 
   let messageStyle = null;
 
@@ -61,7 +66,7 @@ export default function Header() {
     <>
       <AnnouncementActions competitionId={competitionId} />
       <UserPreferences competitionId={competitionId} />
-      <AnnouncementMessage />
+      <AnnouncementMessage competitionId={competitionId} />
     </>
   );
 }

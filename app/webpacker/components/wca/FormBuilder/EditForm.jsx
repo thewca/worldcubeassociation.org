@@ -1,5 +1,5 @@
 import React, {
-  useCallback, useMemo,
+  useCallback,
   useRef,
 } from 'react';
 import {
@@ -21,7 +21,7 @@ function EditForm({
   backendOptions,
   CustomHeader = null,
   CustomFooter = null,
-  disabledOverrideFn = null,
+  globalDisabled = false,
 }) {
   const {
     object,
@@ -54,14 +54,10 @@ function EditForm({
     </Message>
   );
 
-  const sectionDisabled = useMemo(() => (
-    !!disabledOverrideFn && disabledOverrideFn(object)
-  ), [disabledOverrideFn, object]);
-
   const stickyRef = useRef();
 
   return (
-    <SectionProvider disabled={sectionDisabled}>
+    <SectionProvider disabled={globalDisabled}>
       <div ref={stickyRef}>
         {unsavedChanges && (
           <Sticky context={stickyRef} offset={20} styleElement={{ zIndex: 2000 }}>
@@ -92,7 +88,7 @@ export default function Wrapper({
   backendOptions,
   CustomHeader = null,
   CustomFooter = null,
-  disabledOverrideFn = null,
+  globalDisabled = false,
 }) {
   return (
     <FormObjectProvider initialObject={initialObject}>
@@ -101,7 +97,7 @@ export default function Wrapper({
         backendOptions={backendOptions}
         CustomHeader={CustomHeader}
         CustomFooter={CustomFooter}
-        disabledOverrideFn={disabledOverrideFn}
+        globalDisabled={globalDisabled}
       >
         {children}
       </EditForm>
