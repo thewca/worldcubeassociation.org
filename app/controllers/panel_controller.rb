@@ -72,11 +72,12 @@ class PanelController < ApplicationController
   private def competition_ids_in_range(range)
     start_date = range[:startDate]
     end_date = range[:endDate]
-    Competition.over.not_cancelled
-                    .where(start_date: start_date..)
-                    .where(start_date: ..end_date)
-                    .order(:start_date)
-                    .ids
+    Competition.over
+               .not_cancelled
+               .where(start_date: start_date..)
+               .where(start_date: ..end_date)
+               .order(:start_date)
+               .ids
   end
 
   def validators_for_competition_list
