@@ -8,6 +8,7 @@ import { competitionMaxShortNameLength } from '../../../lib/wca-data.js.erb';
 import SubSection from '../../wca/FormBuilder/SubSection';
 import { useFormUpdateAction } from '../../wca/FormBuilder/EditForm';
 import { useFormObject } from '../../wca/FormBuilder/provider/FormObjectProvider';
+import { useSectionDisabled } from '../../wca/FormBuilder/provider/FormSectionProvider';
 
 export default function Series() {
   const {
@@ -15,12 +16,8 @@ export default function Series() {
     isSeriesPersisted,
   } = useStore();
 
-  const {
-    series,
-    admin: { isConfirmed },
-  } = useFormObject();
-
-  const formDisabled = isConfirmed && !isAdminView;
+  const { series } = useFormObject();
+  const sectionDisabled = useSectionDisabled();
 
   const updateFormObject = useFormUpdateAction();
 
@@ -44,7 +41,7 @@ export default function Series() {
       />
       <Button
         negative
-        disabled={formDisabled}
+        disabled={sectionDisabled}
         onClick={removeFromSeries}
       >
         {I18n.t('competitions.competition_series_fields.remove_series')}
