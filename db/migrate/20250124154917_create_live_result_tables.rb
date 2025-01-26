@@ -9,6 +9,10 @@ class CreateLiveResultTables < ActiveRecord::Migration[7.2]
       t.timestamps
     end
 
+    add_index :live_results, [:person_id, :round_id], unique: true
+    add_index :live_results, :round_id
+    add_index :live_results, :person_id
+
     create_table :live_attempts do |t|
       t.integer :result, null: false
       t.integer :replaces
