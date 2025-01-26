@@ -14,8 +14,8 @@ class LiveResult < ApplicationRecord
 
   private
 
-  def notify_users
-    ActionCable.server.broadcast("results_#{round_id}",
-                                 { attempts: live_attempts.as_json, user_id: person_id, result_id: id })
-  end
+    def notify_users
+      ActionCable.server.broadcast("results_#{round_id}",
+                                   { attempts: live_attempts.as_json, user_id: person_id, result_id: id })
+    end
 end
