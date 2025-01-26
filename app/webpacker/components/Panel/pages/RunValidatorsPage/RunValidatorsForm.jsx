@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import {
-  Form, FormField, FormGroup, Header, Radio,
+  Form, FormField, FormGroup, Header, HeaderSubheader, Radio,
 } from 'semantic-ui-react';
-import { QueryClient, useQuery } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import useInputState from '../../../../lib/hooks/useInputState';
 import { ALL_VALIDATORS, VALIDATORS_WITH_FIX } from '../../../../lib/wca-data.js.erb';
 import { IdWcaSearch } from '../../../SearchWidget/WcaSearch';
@@ -12,6 +12,7 @@ import useCheckboxState from '../../../../lib/hooks/useCheckboxState';
 import runValidatorsForCompetitionList from './api/runValidatorsForCompetitionList';
 import runValidatorsForCompetitionsInRange from './api/runValidatorsForCompetitionsInRange';
 import ValidationOutput from './ValidationOutput';
+import WCAQueryClientProvider from '../../../../lib/providers/WCAQueryClientProvider';
 
 const validatorNameReadable = (validatorName) => validatorName.split('::')[1];
 
@@ -21,38 +22,36 @@ const VALIDATOR_OPTIONS = ALL_VALIDATORS.map((validator) => ({
   value: validator,
 }));
 
-const COMPETITION_SELECTION_OPTIONS_MAP = {
-  manual: {
-    key: 'manual',
-    text: 'Pick competition(s) manually',
-  },
-  range: {
-    key: 'range',
-    text: 'Competition between dates',
-  },
+const COMPETITION_SELECTION_OPTIONS_TEXT = {
+  manual: 'Pick competition(s) manually',
+  range: 'Competition between dates',
 };
 
-const COMPETITION_SELECTION_OPTIONS = [
-  COMPETITION_SELECTION_OPTIONS_MAP.manual.key,
-  COMPETITION_SELECTION_OPTIONS_MAP.range.key,
-];
+const COMPETITION_SELECTION_OPTIONS = Object.keys(COMPETITION_SELECTION_OPTIONS_TEXT);
 
-const RUN_VALIDATORS_QUERY_CLIENT = new QueryClient();
+export default function Wrapper() {
+  return (
+    <WCAQueryClientProvider>
+      <RunValidatorsForm />
+    </WCAQueryClientProvider>
+  );
+}
 
-export default function RunValidatorsForm({ competitionIds }) {
+function RunValidatorsForm({ competitionIds }) {
   const [
     selectedCompetitionSelectionOption,
     setSelectedCompetitionSelectionOption,
-  ] = useInputState(COMPETITION_SELECTION_OPTIONS_MAP.manual.key);
+  ] = useInputState('manual');
 
   const [selectedCompetitionIds, setSelectedCompetitionIds] = useInputState(competitionIds || []);
   const [selectedCompetitionRange, setSelectedCompetitionRange] = useState();
+  const [validationOutput, setValidationOutput] = useState();
 
   const [selectedValidators, setSelectedValidators] = useInputState(ALL_VALIDATORS);
   const [applyFixWhenPossible, setApplyFixWhenPossible] = useCheckboxState(false);
 
   const runValidatorsForCompetitions = () => {
-    if (selectedCompetitionSelectionOption === COMPETITION_SELECTION_OPTIONS_MAP.manual.key) {
+    if (selectedCompetitionSelectionOption === 'manual') {
       return runValidatorsForCompetitionList(
         selectedCompetitionIds,
         selectedValidators,
@@ -67,12 +66,15 @@ export default function RunValidatorsForm({ competitionIds }) {
   };
 
   const {
-    data: validationOutput, isFetching, isError, refetch: runValidators,
-  } = useQuery({
-    queryKey: ['competitionCountInRange'],
-    queryFn: runValidatorsForCompetitions,
-    enabled: false,
-  }, RUN_VALIDATORS_QUERY_CLIENT);
+    mutate: runValidators,
+    isPending,
+    isError,
+  } = useMutation({
+    mutationFn: runValidatorsForCompetitions,
+    onSuccess: (data) => {
+      setValidationOutput(data);
+    },
+  });
 
   // enableCompetitionEditor says whether competition list editor should be enabled or not. If the
   // list of competitions is passed as parameter, then the editor need not be shown.
@@ -81,7 +83,7 @@ export default function RunValidatorsForm({ competitionIds }) {
   // Competition name needs to be shown on output only when the script is not ran just for a single
   // competition.
   const showCompetitionNameOnOutput = !(
-    selectedCompetitionSelectionOption === COMPETITION_SELECTION_OPTIONS_MAP.manual.key
+    selectedCompetitionSelectionOption === 'manual'
     && selectedCompetitionIds.length === 1
   );
 
@@ -92,34 +94,34 @@ export default function RunValidatorsForm({ competitionIds }) {
           <>
             <Header>Competition Selector</Header>
             <FormGroup grouped>
-              {COMPETITION_SELECTION_OPTIONS.map((option) => (
-                <FormField key={option}>
+              {COMPETITION_SELECTION_OPTIONS.map((key) => (
+                <FormField key={key}>
                   <Radio
-                    label={COMPETITION_SELECTION_OPTIONS_MAP[option].text}
+                    label={COMPETITION_SELECTION_OPTIONS_TEXT[key]}
                     name="competitionSelectionOption"
-                    value={option}
-                    checked={selectedCompetitionSelectionOption === option}
+                    value={key}
+                    checked={selectedCompetitionSelectionOption === key}
                     onChange={setSelectedCompetitionSelectionOption}
                   />
                 </FormField>
               ))}
             </FormGroup>
             {(
-              selectedCompetitionSelectionOption === COMPETITION_SELECTION_OPTIONS_MAP.manual.key
+              selectedCompetitionSelectionOption === 'manual'
             ) && (
-            <Form.Field
-              label="Competition ID(s)"
-              control={IdWcaSearch}
-              name="competitionIds"
-              value={selectedCompetitionIds}
-              onChange={setSelectedCompetitionIds}
-              model={SEARCH_MODELS.competition}
-              multiple
-              required
-            />
+              <Form.Field
+                label="Competition ID(s)"
+                control={IdWcaSearch}
+                name="competitionIds"
+                value={selectedCompetitionIds}
+                onChange={setSelectedCompetitionIds}
+                model={SEARCH_MODELS.competition}
+                multiple
+                required
+              />
             )}
             {(
-              selectedCompetitionSelectionOption === COMPETITION_SELECTION_OPTIONS_MAP.range.key
+              selectedCompetitionSelectionOption === 'range'
             ) && (
               <CompetitionRangeSelector
                 range={selectedCompetitionRange}
@@ -139,17 +141,22 @@ export default function RunValidatorsForm({ competitionIds }) {
           onChange={setSelectedValidators}
         />
         <Form.Checkbox
-          label={`Apply fix when possible (List of validators with automated fix: ${
-            VALIDATORS_WITH_FIX.map(validatorNameReadable).join(', ')
-          })`}
+          label="Apply fix when possible"
           value={applyFixWhenPossible}
           onChange={setApplyFixWhenPossible}
         />
+        <Header as="h4">
+          <HeaderSubheader>
+            {`List of validators with automated fix: ${
+              VALIDATORS_WITH_FIX.map(validatorNameReadable).join(', ')
+            }`}
+          </HeaderSubheader>
+        </Header>
         <Form.Button type="submit">Run Validators</Form.Button>
       </Form>
       <ValidationOutput
         validationOutput={validationOutput}
-        isFetching={isFetching}
+        isPending={isPending}
         isError={isError}
         showCompetitionNameOnOutput={showCompetitionNameOnOutput}
       />

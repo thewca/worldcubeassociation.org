@@ -1,34 +1,23 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Form } from 'semantic-ui-react';
 import { QueryClient, useQuery } from '@tanstack/react-query';
 import UtcDatePicker from '../../../wca/UtcDatePicker';
-import getCompetitionList from './api/getCompetitionList';
+import getCompetitionCount from './api/getCompetitionCount';
 import Loading from '../../../Requests/Loading';
 import Errored from '../../../Requests/Errored';
 
 const RUN_VALIDATORS_QUERY_CLIENT = new QueryClient();
-const MAX_COMPETITIONS_PER_QUERY = 50;
 
 export default function CompetitionRangeSelector({ range, setRange }) {
-  const [startDate, setStartDate] = useState(range?.startDate);
-  const [endDate, setEndDate] = useState(range?.endDate);
-
-  const enableCompetitionListFetch = Boolean(startDate && endDate);
+  const enableCompetitionCountFetch = Boolean(range?.startDate && range?.endDate);
 
   const {
-    data: competitionList, isLoading, isError, refetch,
+    data: competitionCount, isLoading, isError,
   } = useQuery({
-    queryKey: ['competitionCountInRange'],
-    queryFn: () => getCompetitionList(startDate, endDate, MAX_COMPETITIONS_PER_QUERY),
-    enabled: enableCompetitionListFetch,
+    queryKey: ['competitionCountInRange', range?.startDate, range?.endDate],
+    queryFn: () => getCompetitionCount(range?.startDate, range?.endDate),
+    enabled: enableCompetitionCountFetch,
   }, RUN_VALIDATORS_QUERY_CLIENT);
-
-  useEffect(() => {
-    setRange({ startDate, endDate });
-    if (enableCompetitionListFetch) {
-      refetch();
-    }
-  }, [startDate, endDate, setRange, enableCompetitionListFetch, refetch]);
 
   return (
     <>
@@ -38,8 +27,13 @@ export default function CompetitionRangeSelector({ range, setRange }) {
         showYearDropdown
         dateFormatOverride="yyyy-MM-dd"
         dropdownMode="select"
-        isoDate={startDate}
-        onChange={setStartDate}
+        isoDate={range?.startDate}
+        onChange={(date) => {
+          setRange({
+            ...range,
+            startDate: date,
+          });
+        }}
       />
       <Form.Field
         label="End Date"
@@ -47,22 +41,27 @@ export default function CompetitionRangeSelector({ range, setRange }) {
         showYearDropdown
         dateFormatOverride="yyyy-MM-dd"
         dropdownMode="select"
-        isoDate={endDate}
-        onChange={setEndDate}
+        isoDate={range?.endDate}
+        onChange={(date) => {
+          setRange({
+            ...range,
+            endDate: date,
+          });
+        }}
       />
-      {enableCompetitionListFetch && (
-        <>
-          {isLoading && (<Loading />)}
-          {isError && <Errored />}
-          {!isLoading && !isError && (
-            <div>
-              {`The checks will run for ${competitionList.length}${
-                competitionList.length >= MAX_COMPETITIONS_PER_QUERY ? '+' : ''
-              } competitions`}
-            </div>
-          )}
-        </>
+      {enableCompetitionCountFetch && (
+        <CompetitionCountViewer
+          isLoading={isLoading}
+          isError={isError}
+          competitionCount={competitionCount}
+        />
       )}
     </>
   );
+}
+
+function CompetitionCountViewer({ isLoading, isError, competitionCount }) {
+  if (isLoading) return <Loading />;
+  if (isError) return <Errored />;
+  return `The checks will run for ${competitionCount} competitions`;
 }
