@@ -18,7 +18,7 @@ import UtcDatePicker from '../../UtcDatePicker';
 import { IdWcaSearch } from '../../../SearchWidget/WcaSearch';
 import SEARCH_MODELS from '../../../SearchWidget/SearchModel';
 import { readValueRecursive, useSectionDisabled, useSections } from '../provider/FormSectionProvider';
-import { useFormObjectSection, useFormSectionUpdateAction } from '../EditForm';
+import { useFormObjectSection, useFormUpdateAction } from '../EditForm';
 import { useFormContext } from '../provider/FormObjectProvider';
 
 function snakifyId(id, section = []) {
@@ -108,7 +108,7 @@ const wrapInput = (
   const sectionDisabled = useSectionDisabled();
 
   const formValues = useFormObjectSection();
-  const updateFormValue = useFormSectionUpdateAction();
+  const updateFormValue = useFormUpdateAction();
 
   const inputProps = additionalPropNames.reduce((acc, propName) => ({
     ...acc,
@@ -116,8 +116,8 @@ const wrapInput = (
   }), {});
 
   const onChange = useCallback((e, { [inputValueKey]: newValue }) => {
-    updateFormValue(props.id, newValue);
-  }, [updateFormValue, props.id]);
+    updateFormValue(props.id, newValue, section);
+  }, [updateFormValue, props.id, section]);
 
   let value = formValues[props.id];
 

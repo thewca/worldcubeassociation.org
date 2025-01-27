@@ -3,18 +3,19 @@ import React, {
   useRef,
 } from 'react';
 import {
-  Button, Dimmer,
+  Button,
+  Dimmer,
   Divider,
-  Form, Header, List,
-  Message, Segment,
+  Form,
+  Message,
+  Segment,
   Sticky,
 } from 'semantic-ui-react';
 import SectionProvider, { readValueRecursive, useSections } from './provider/FormSectionProvider';
-import { changesSaved, updateFormValue } from './store/actions';
+import { updateFormValue } from './store/actions';
 import FormErrors from './FormErrors';
 import useSaveAction from '../../../lib/hooks/useSaveAction';
 import FormObjectProvider, { useFormContext, useFormDispatch, useFormObject } from './provider/FormObjectProvider';
-import I18n from "../../../lib/i18n";
 
 function EditForm({
   children,
@@ -79,7 +80,7 @@ function EditForm({
           {children}
         </Form>
       </div>
-      {(unsavedChanges && renderUnsavedChangesAlert())}
+      {unsavedChanges && renderUnsavedChangesAlert()}
       {CustomFooter && (
         <>
           <Divider />
@@ -126,22 +127,5 @@ export const useFormUpdateAction = () => {
 
   return useCallback((key, value, sections = []) => (
     dispatch(updateFormValue(key, value, sections))
-  ), [dispatch]);
-};
-
-export const useFormSectionUpdateAction = () => {
-  const sections = useSections();
-  const dispatch = useFormDispatch();
-
-  return useCallback((key, value) => (
-    dispatch(updateFormValue(key, value, sections))
-  ), [dispatch, sections]);
-};
-
-export const useFormCommitAction = () => {
-  const dispatch = useFormDispatch();
-
-  return useCallback(() => (
-    dispatch(changesSaved())
   ), [dispatch]);
 };
