@@ -329,6 +329,10 @@ pl:
     dinner: Kolacja
     #original_hash: 75226d7
     awards: Ceremonia nagród
+    #original_hash: cdd7bb2
+    setup: Przygotowanie sali
+    #original_hash: 0b28e08
+    teardown: Sprzątanie sali
     #original_hash: 6e6a6f2
     misc: Inne
   common:
@@ -517,6 +521,8 @@ pl:
         organization: Organizacja
         #original_hash: 5e326b1
         incidents: Incydenty
+        #original_hash: 7106c2d
+        setup_images: Zdjęcia ustawienia sali zawodów
         #original_hash: 1362470
         wrc_feedback_requested: >-
           Chciałbym uzyskać opinię Komitetu Regulacyjnego WCA (WRC) na temat
@@ -779,9 +785,9 @@ pl:
         wca_id: ''
         #original_hash: 27c2251
         receive_delegate_reports: >-
-          Jeżeli jesteś Delegatem Praktykantem, Młodszym Delegatem, Starszym
-          Delegatem, Członkiem WRC lub WQAC, otrzymujesz Raporty Delegata
-          domyślnie. Uwaga: zmiana przyniesie skutek do godziny.
+          Jeżeli jesteś Starszym Delegatem, Członkiem WRC lub WQAC, otrzymujesz
+          Raporty Delegata domyślnie. Uwaga: zmiana przyniesie skutek do
+          godziny.
         #original_hash: 364624c
         delegate_reports_region: >-
           Jeżeli chcesz otrzymywać wszystkie raporty, pozostaw to pole puste
@@ -818,14 +824,6 @@ pl:
           Używaj tagu &lt;!-- break --&gt; aby pokazać podgląd postu na stronie
           głównej. Każdy post na stronie głównej pokaże cały tekst powyżej tego
           rozdzielacza. Właściwy post wyświetli całą treść.
-        #original_hash: da39a3e
-        sticky: ''
-        #original_hash: da39a3e
-        unstick_at: ''
-        #original_hash: da39a3e
-        title: ''
-        #original_hash: da39a3e
-        tags: ''
         #original_hash: 0e3764f
         show_on_homepage: >-
           Uwaga! To nie jest bezpieczne w przypadku prywatnych danych, jedynie
@@ -864,6 +862,13 @@ pl:
           wszystko wydawało się typowe, wymień chociaż najbardziej godne
           odnotowania przypadki. Prosimy o zaznaczenie odpowiednich pól poniżej
           jeżeli szukasz opinii.
+        #original_hash: 8af00aa
+        setup_images: >-
+          Prosimy o wybranie co najmniej %{image_count} obrazów które
+          przedstawiają ustawienie sali zawodów (strefa mieszaczy, scena etc.).
+          Możesz wybrać wiele plików na raz. Możesz usunąć obrazki tylko jeżeli
+          wystarczająco dużo innych zostało przesłanych (jeżeli chcesz zastąpić
+          obraz, najpierw prześlij nowy, a następnie usuń poprzedni).
         #original_hash: da39a3e
         wrc_feedback_requested: ''
         #original_hash: 98bb5cd
@@ -1335,8 +1340,6 @@ pl:
       polls: Głosowania
       #original_hash: d3a928c
       results_team: Zespół do spraw wyników
-      #original_hash: 4e7afeb
-      results_admin: Admin
       #original_hash: 61074f1
       results_database: Baza danych
       #original_hash: 54e0548
@@ -1438,7 +1441,7 @@ pl:
       groups_description:
         #original_hash: 5b1aade
         wat: >-
-          WAT jest odpowiedzilany za zarządzanie rozwojem i utrzymaniem archiwum
+          WAT jest odpowiedzialny za zarządzanie rozwojem i utrzymaniem archiwum
           historycznego WCA. Dokumentują oni najważniejsze wydarzenia
           speedcubingowe i warte odnotowania kamienie milowe WCA jako część
           szerszej osi czasu WCA, aby zapewnić przetrwanie dziedzictwa WCA w
@@ -1591,6 +1594,9 @@ pl:
               label: >-
                 Edytuj moje dane profilowe (Imię i Nazwisko, Państwo, Płeć lub
                 Datę urodzenia)
+            edit_others_profile:
+              #original_hash: d08e8eb
+              label: Edytuj profil innej osoby
             report_result_issue:
               #original_hash: 2edbb52
               label: Zgłoszenie problemu z wynikiem
@@ -1656,6 +1662,8 @@ pl:
         uczestniczyłeś w żadnych zawodach. W razie innych pytań, prosimy <a
         href="https://www.worldcubeassociation.org/contact?contactRecipient=wrt">skontaktuj
         się z nami</a>.
+      #original_hash: 43f15fd
+      no_permission_error: Nie masz uprawnień aby prosić o edytowanie danych innego profilu.
       form:
         contact_email:
           #original_hash: 3142970
@@ -1663,6 +1671,9 @@ pl:
         wca_id:
           #original_hash: 6344c9e
           label: Wpisz WCA ID
+        wca_id_search:
+          #original_hash: fbba19d
+          label: Wyszukaj WCA ID które chcesz edytować.
         edit_reason:
           #original_hash: fdfcccf
           label: Powód zmiany
@@ -3778,7 +3789,7 @@ pl:
           #original_hash: 3fd2e0c
           information: Odrzuceni zawodnicy nie mogą zarejestrować się ponownie
         pending:
-          #original_hash: f3656e1
+          #original_hash: 5e16c6d
           information: >-
             Oczekujące powinno być używane tylko dla niekompletnych (np.
             nieopłaconych) rejestracji - prosimy o użycie Listy Rezerwowej
@@ -3794,8 +3805,10 @@ pl:
           #original_hash: 3a16c0d
           refunded: 'Płatność została zwrócona w dniu %{date}.'
         psychsheets:
-          #original_hash: f03e2d0
-          go_back: Wróć
+          #original_hash: ded0a5d
+          show_me: Pokaż mnie
+          #original_hash: a23dc2b
+          rank: 'Pozycja: %{userPosition}'
         #original_hash: 19eabc9
         timestamp: Znacznik czasu
         #original_hash: 5e0207a
@@ -4040,7 +4053,7 @@ pl:
       registration_period_after_start: >-
         Okres rejestracyjny nie może rozpoczynać się po dacie rozpoczęcia
         zawodów.
-      #original_hash: f6b244b
+      #original_hash: 2a26c1c
       waiting_list_deadline_before_registration_close: >-
         Termin usunięcia listy rezerwowej nie może być ustawiony przed końcem
         rejestracji.
@@ -5979,3 +5992,297 @@ pl:
         SQL. Szczegóły można znaleźć na stronie %{github_link}.
       #original_hash: a479c9c
       download: Pobierz
+  validators:
+    persons:
+      #original_hash: 847f614
+      dob_is_jan_one_warning: >-
+        Data urodzenia %{name} jest ustawiona na 1 stycznia, prosimy sprawdź czy
+        nie jest to błąd.
+      #original_hash: b4b736a
+      dob_is_too_young_warning: >-
+        %{name} zdaje się mieć mniej niż 3 lata, prosimy sprawdź czy nie jest to
+        błąd.
+      #original_hash: b7c88ef
+      dob_is_too_old_warning: >-
+        %{name} zdaje się mieć około 100 lat, prosimy sprawdź czy nie jest to
+        błąd.
+      #original_hash: 809f305
+      person_doesnt_have_any_results_error: 'Nie ma wyników dla %{person_name} z ID %{person_id}'
+      #original_hash: ebc1b15
+      results_not_associated_with_any_person_error: 'Istnieją wyniki dla nieznanej osoby z ID %{person_id}'
+      #original_hash: c29e35d
+      whitespace_in_name_error: 'Osoba ''%{name}'' ma wiodące/końcowe białe znaki lub podwójne spacje.'
+      #original_hash: 9b1ae5f
+      person_with_non_existing_wca_id_error: 'Osoba %{name} ma WCA ID które nie istnieje: %{wca_id}.'
+      #original_hash: 924d832
+      no_space_before_parenthesis_error: 'Nawiasy otwierające w ''%{name}'' muszą być poprzedzone spacją.'
+      #original_hash: 6daf706
+      same_person_name_warning: >-
+        W bazie danych WCA istnieje już co najmniej jedna osoba z imieniem
+        '%{name}' (%{wca_ids}). Prosimy upewnij się, że '%{name}' jest inną
+        osobą. Jeżeli nie, prosimy przydziel poprawne WCA ID do konta
+        użytkownika i wygeneruj ponownie JSON z wynikami.
+      #original_hash: eeb688a
+      non_matching_dob_warning: >-
+        Data urodzenia '%{dob}' podana dla %{name} (%{wca_id}) nie zgadza się z
+        obecnie istniejącymi danymi w bazie WCA ('%{expected_dob}'). Jeżeli to
+        błąd, popraw go. W przeciwnym wypadku pozostaw komentarz dla WRT w tym
+        temacie.
+      #original_hash: 6a81cc0
+      non_matching_gender_warning: >-
+        Płeć '%{gender}' podana dla %{name} (%{wca_id}) nie zgadza się z obecnie
+        istniejącymi danymi w bazie WCA ('%{expected_gender}'). Jeżeli to błąd,
+        popraw go. W przeciwnym wypadku pozostaw komentarz do WRT w tym temacie.
+      #original_hash: da398a2
+      empty_gender_warning: >-
+        Płeć dla nowego zawodnika %{name} jest pusta. Poprawne wartości płci to
+        'female' (kobieta), 'male' (mężczyzna) i 'other' (inna). Pozostaw
+        komentarz dla WRT w tym temacie.
+      #original_hash: 050c7e2
+      non_matching_name_warning: >-
+        Imię i nazwisko '%{name}' podane dla ID %{wca_id} nie zgadza się z
+        danymi w bazie danych WCA ('%{expected_name}').
+      #original_hash: 333a035
+      non_matching_country_warning: >-
+        Kraj '%{country}' podany dla %{name} (%{wca_id}) nie zgadza się z
+        podanym w bazie WCA ('%{expected_country}'). Jeżeli to błąd, popraw go.
+        W przeciwnym wypadku pozostaw komentarz do WRT na ten temat.
+      #original_hash: e15e700
+      multiple_newcomers_with_same_name_warning: >-
+        Jest wielu nowych zawodników z dokładnie tym samym imieniem i
+        nazwiskiem: %{name}. Prosimy upewnij się, że wyniki tych zawodników są
+        poprawnie podzielone pomiędzy nich.
+      #original_hash: 7732038
+      wrong_parenthesis_type_error: >-
+        Nawias użyty w '%{name}' jest niepoprawnym znakiem, prosimy zastąp go
+        nawiasem okrągłym '(' lub ')' z poprawnym użyciem spacji.
+      #original_hash: 4b90583
+      successive_uppercase_name_warning: >-
+        '%{name}' ma wiele następujących po sobie wielkich liter w imieniu.
+        Prosimy upewnij się, że jest to poprawny zapis lub popraw imię.
+      #original_hash: 654b60d
+      lowercase_name_warning: >-
+        '%{name}' ma całe imię i nazwisko małymi literami. Prosimy upewnij się,
+        że jest to poprawny zapis lub popraw imię.
+      #original_hash: 4ea44b6
+      missing_period_in_single_letter_middle_name_warning: >-
+        '%{name}' ma środkowe imię składające się z jednej litery bez oznaczenia
+        skrócenia kropką. Prosimy potwierdź, że jest to poprawny zapis lub
+        popraw imię.
+      #original_hash: cbd3bd6
+      letter_after_period_warning: >-
+        '%{name}' nie ma spacji po kropce w imieniu. Prosimy upewnij się, że
+        jest to poprawny zapis lub popraw imię.
+      #original_hash: d7803d4
+      single_letter_first_or_last_name_warning: >-
+        '%{name}' ma pojedynczą literę jako imię lub nazwisko. Prosimy popraw
+        imię lub potwierdź, że jest to poprawne imię zawodnika zgodnie z
+        oficjalnym dokumentem.
+      #original_hash: 9adb87f
+      single_name_warning: >-
+        '%{name}' nie ma nazwiska. Prosimy potwierdź, że jest to pełny sposób
+        nazywania zawodnika zgodnie z oficjalnym dokumentem.
+      #original_hash: 39c7f3d
+      competitor_limit_exceeded_warning: >-
+        Liczba osób na zawodach (%{n_competitors}) jest powyżej limitu
+        zawodników (%{competitor_limit}). Wyniki zawodników zarejestrowanych po
+        osiągnięciu limitu zawodników muszą być usunięte.
+    results:
+      #original_hash: 5685ae8
+      automatically_position_fixed_info: >-
+        [%{round_id}] Automatycznie naprawiono pozycję %{person_name} z %{pos}
+        na %{expected_pos}.
+      #original_hash: e895bf5
+      mbf_result_over_time_limit_warning: >-
+        [%{round_id}] wynik '%{result}' dla%{person_name} jest powyżej limitu
+        czasowego. Prosimy upewnij się, że jest to spowodowane karami czasowymi
+        przed wysłaniem wyników lub zmień wynik na DNF.
+      #original_hash: c74c2c6
+      result_after_dns_warning: >-
+        [%{round_id}] %{person_name} ma przynajmniej jeden wynik DNS
+        poprzedzający poprawny wynik. Prosimy upewnij się, że jest to DNS, a
+        jeżeli tak, wyjaśnij WRT co się stało.
+      #original_hash: a2032e9
+      similar_results_warning: >-
+        [%{round_id}] Wyniki %{person_name} są podobne do wyników
+        %{similar_person_name}. Prosimy upewnij się, że te wyniki są poprawnie
+        zapisane dla obu zawodników.
+      #original_hash: ebbab6f
+      met_cutoff_but_missing_results_error: >-
+        [%{round_id}] %{person_name} pokonał cutoff, ale nie ma wyników z
+        drugiej fazy rundy. Cutoff wynosił %{cutoff}.
+      #original_hash: cc0b47b
+      didnt_meet_cutoff_but_has_results_error: >-
+        [%{round_id}] %{person_name} ma co najmniej jeden wynik z drugiej fazy
+        rundy, ale nie pokonał cutoffa. Cutoff wynosił %{cutoff}.
+      #original_hash: 4fc3fd7
+      wrong_attempts_for_cutoff_error: >-
+        [%{round_id}] %{person_name} nie ma co najmniej jednego wyniku w fazie
+        cutoff. Prosimy uzupełnij brakujące próby lub zaktualizuj informacje o
+        rundzie w panelu zarządzania konkurencjami zawodów.
+      #original_hash: 24c10d3
+      mismatched_result_format_error: >-
+        [%{round_id}] Wyniki %{person_name} są w złym formacie: spodziewany
+        %{expected_format}, ale jest %{format}.
+      #original_hash: 32ea6be
+      result_over_time_limit_error: >-
+        [%{round_id}] Co najmniej jeden wynik %{person_name} jest powyżej limitu
+        czasowego dla rundy, który wynosi %{time_limit} na próbę. Wszystkie
+        ułożenia powyżej limitu czasowego muszą zostać zmienione na DNF.
+      #original_hash: 1678105
+      results_over_cumulative_time_limit_error: >-
+        [%{round_ids}] Suma wyników %{person_name} jest powyżej limitu
+        kumulatywnego wynoszącego %{time_limit}.
+      #original_hash: 3fbb505
+      no_round_information_warning: >-
+        [%{round_id}] Nie ma informacji dotyczących limitu czasowego i cutoffa
+        dla tej rundy. Walidatory tych wartości zostały pominięte. Prosimy
+        zaktualizuj informacje o rundzie w panelu zarządzania konkurencjami
+        zawodów.
+      #original_hash: 76dc4e7
+      undefined_time_limit_warning: >-
+        [%{round_id}] Limit czasowy dla tej rundy jest niezdefiniowany,
+        walidatory limitu czasowego zostały pominięte. Jest to oczekiwane tylko
+        dla zawodów sprzed 2013 roku.
+      #original_hash: 10ad25f
+      suspicious_dnf_warning: >-
+        [%{round_ids}] Runda ma limit kumulatywny, extrapolując na podstawie
+        udanych prób %{person_name}, powinni mieć oni bardzo mało czasu na
+        przynajmniej jednego ze swoich DNFów. Prosimy upewnij się, że jest każdy
+        DNF i DNS są poprawne. Jeżeli zawodnik nie rozpoczął próby, albo nie
+        miał już żadnego pozostałego czasu przed rozpoczęciem próby, musi być
+        ona wpisana jako DNS.
+      #original_hash: 8057a12
+      missing_cumulative_round_id_error: >-
+        [%{original_round_id}] Nie udało się znaleźć rundy %{wcif_id} dla limitu
+        kumulowanego podanego w WCIF. Prosimy wejść w panel zarządzania
+        konkurencjami zawodów i usunać %{wcif_id} z limitu kumulowanego
+        %{original_round_id}. WST zdaje sobie sprawę z tego błędu (GitHub issue
+        #3254).
+      #original_hash: ad200c1
+      wrong_position_in_results_error: >-
+        [%{round_id}] %{person_name} jest na złej pozycji: spodziewana
+        %{expected_pos}, ale jest %{pos}.
+    rounds:
+      #original_hash: 517fd54
+      too_many_qualified_warning: >-
+        Runda %{round_id}: więcej zawodników zakwalifikowało się niż jest podane
+        w planowanych warunkach awansu (%{actual} zamiast %{expected}, warunku
+        awansu: %{condition}). Prosimy zaktualizuj informacje o rundzie w panelu
+        zarządzania konkurencjami zawodów.
+      #original_hash: 09d3568
+      unexpected_round_results_error: >-
+        Runda %{round_id} istnieje w wynikach jednak nie została stworzona
+        zakładce konkurencje. Prosimy dodaj informacje o rundzie w panelu
+        zarządzania konkurencjami zawodów.
+      #original_hash: 5b5f9ee
+      regulation_9m1_error: >-
+        Runda %{round_id} ma 99 lub mniej zawodników ale ma więcej niż dwie
+        kolejne rundy, co nie jest dozwolone przez Regulamin w punkcie 9m1.
+      #original_hash: 892e0d5
+      regulation_9m2_error: >-
+        Runda %{round_id} ma 15 lub mniej zawodników, ale ma więcej niż jedną
+        kolejną rundę, co nie jest dozwolone przez Regulamin w punkcie 9m2.
+      #original_hash: cb8522e
+      regulation_9m3_error: >-
+        Runda %{round_id} ma 7 lub mniej zawodników, ale ma co najmniej jedną
+        kolejną rundę, co nie jest dozwolone przez Regulamin w punkcie 9m3.
+      #original_hash: e12138a
+      regulation_9p1_error: >-
+        Runda %{round_id}: Mniej niż 25% zawodników zostało wyeliminowanych, co
+        nie jest dozwolone przez Regulamin w punkcie 9p1.
+      #original_hash: f5d8ae9
+      no_competitor_eliminated_error: >-
+        Runda %{round_id}:Musi być co najmniej jeden wyeliminowany zawodnik, co
+        jest wymagane przez Regulamin w punkcie 9p (zawody przed kwietniem
+        2010).
+      #original_hash: b868019
+      less_than_twenty_five_percent_eliminated_error: >-
+        Runda %{round_id}: według zasad awansu (%{condition}), mniej niż 25%
+        zawodników zostałoby wyeliminowanych, co nie jest dozwolone przez
+        regulamin w punkcie 9p1. Prosimy zaktualizuj informacje o rundzie w
+        panelu zarządzania konkurencjami zawodów.
+      #original_hash: d6fc805
+      not_enough_qualified_warning: >-
+        Runda %{round_id}: według danych dotyczących konkurencji, awansować
+        mogło co najwyżej %{expected}, ale jedynie %{actual} zawodników
+        startowało w rundzie. Prosimy pozostaw komentarz na ten temat (lub
+        popraw dane konkurencji, jeżeli zaaplikowałeś inne warunki awansu).
+      #original_hash: 7915e13
+      competed_not_qualified_error: >-
+        Runda %{round_id}: %{ids} startowało, ale nie spełniło warunków awansu
+        (%{condition}). Prosimy upewnij się, że zapisane warunki awansu oddają
+        to, co było wykorzystane na zawodach i usuń wyniki jeżeli zajdzie taka
+        potrzeba.
+      #original_hash: c4a7f11
+      round_not_found_error: >-
+        Runda %{round_id} nie została znaleziona. Prosimy upewnij się, że strona
+        panel zarządzania konkurencjami na stronie WCA i WCA Live są
+        zsynchronizowane.
+      #original_hash: 3c739f3
+      missing_round_results_error: >-
+        Nie ma wyników dla rundy %{round_id}, jednak znajduje się ona w zakładce
+        konkurencje. Jeżeli ta runda nie była rozgrywana, prosimy usuń ją z
+        panelu zarządzania konkurencjami zawodów.
+      #original_hash: dcf92d3
+      unexpected_combined_round_error: >-
+        Cutoff nie był ogłoszony dla '%{round_name}', ale runda została wykryta
+        jako runda z cutoffem w wynikach. Prosimy zaktualizuj informacje w
+        panelu zarządzania konkurencjami zawodów.
+    events:
+      #original_hash: e87f8a0
+      not_333_main_event_warning: >-
+        Wybraną główną konkurencją zawodów jest %{main_event_id}. W jaki sposób
+        ta konkurencja była traktowana jako główna na zawodach. Prosimy o
+        krótkie wyjaśnienie dla WRT (np. liczba rund, nagrody, ogłoszenie
+        zwycięzcy jako zwycięzcy zawodów, ...).
+      #original_hash: 1d4e297
+      no_main_event_warning: >-
+        Żadna konkurencja nie jest wybrana jako główna konkurencja tych zawodów.
+        Prosimy o informację dla WRT czy jest to poprawne.
+      #original_hash: 6fa46ad
+      unexpected_results_error: >-
+        Konkurencja %{event_id} ma wyniki, jednak nie jest wylistowana jako
+        oficjalna konkurencja na tych zawodach. Prosimy o usunięcie wyników lub
+        skontaktowanie się z WCAT aby poprosić o dodanie konkurencji do strony
+        WCA.
+      #original_hash: fde208d
+      missing_results_warning: >-
+        Nie ma wyników w konkurencji %{event_id} ale jest listowana jako
+        oficjalna konkurencja tych zawodów. Jeżeli konkurencja się odbyła,
+        prosimy o ponowne wysłanie pliku JSON z wynikami zawierającego wyniki
+        tej konkurencji. Jeżeli konkurencja się nie odbyła, pozostaw komentarz
+        dla WRT.
+    scrambles:
+      #original_hash: ff7e063
+      missing_scrambles_for_round_error: >-
+        [%{round_id}] Brakujące scramble. Użyj programu Scrambles Matcher aby
+        dodać poprawne scramble do rund.
+      #original_hash: 340d2f3
+      missing_scrambles_for_competition_error: >-
+        Brakujące scramble dla zawodów. Użyj programu Scrambles Matcher aby
+        dodać scramble.
+      #original_hash: 0f334fd
+      unexpected_scrambles_for_round_error: >-
+        [%{round_id}] Zbyt wiele scrambli. Uzyj programu Scrambles Matcher aby
+        usunąć nieużywane scramble.
+      #original_hash: 22706c5
+      missing_scrambles_for_group_error: >-
+        [%{round_id}] Grupa %{group_id}: brakujące scramble, wykryto jedynie
+        %{actual} zamiast %{expected}.
+      #original_hash: 665014c
+      missing_scrambles_for_multi_error: >-
+        [%{round_id}] Możliwe jest użycie wielu grup w konkurencji 3x3x3 Wiele
+        kostek bez patrzenia, co najmniej jedna z grup musi zawierać wszystkie
+        scramble dla wszystkich prób.
+      #original_hash: 3d5255d
+      multiple_fmc_groups_warning: >-
+        [%{round_id}] Wykryto użycie wielu grup w konkurencji FMC. Jeżeli użyto
+        jednej grupy w konkurencji FMC, użyj programu Scrambles Matcher aby
+        usunąć nieużywane scramble. W przeciwnym wypadku, pozostaw komentarz dla
+        WRT wyjaśniający użycie wielu grup w konkurencji FMC.
+      #original_hash: d6830c0
+      wrong_number_of_scramble_sets_error: >-
+        [%{round_id}] Ta runda ma inną liczbę grup scrambli niż ta podana w
+        panelu zarządzania konkurencjami. Prosimy dostosuj liczbę grup scrambli
+        w panelu zarządzania konkurencjami do liczby grup użytych na zawodach.
