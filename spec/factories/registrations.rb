@@ -61,7 +61,7 @@ FactoryBot.define do
     end
 
     after(:create) do |registration|
-      registration.competition.waiting_list.add(registration.id) if registration.competing_status == Registrations::Helper::STATUS_WAITING_LIST
+      registration.competition.waiting_list.add(registration) if registration.competing_status == Registrations::Helper::STATUS_WAITING_LIST
     end
   end
 end

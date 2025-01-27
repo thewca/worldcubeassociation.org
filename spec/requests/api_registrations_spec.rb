@@ -300,9 +300,9 @@ RSpec.describe 'API Registrations' do
 
     it 'accepts competitors from the waiting list' do
       waiting_list = FactoryBot.create(:waiting_list, holder: competition)
-      waiting_list.add(registration1.user_id)
-      waiting_list.add(registration2.user_id)
-      waiting_list.add(registration3.user_id)
+      waiting_list.add(registration1)
+      waiting_list.add(registration2)
+      waiting_list.add(registration3)
 
       update_request1 = FactoryBot.build(
         :update_request,
