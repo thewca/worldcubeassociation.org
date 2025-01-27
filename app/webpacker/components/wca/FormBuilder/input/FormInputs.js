@@ -18,8 +18,7 @@ import UtcDatePicker from '../../UtcDatePicker';
 import { IdWcaSearch } from '../../../SearchWidget/WcaSearch';
 import SEARCH_MODELS from '../../../SearchWidget/SearchModel';
 import { readValueRecursive, useSectionDisabled, useSections } from '../provider/FormSectionProvider';
-import { useFormObjectSection, useFormUpdateAction } from '../EditForm';
-import { useFormContext } from '../provider/FormObjectProvider';
+import { useFormContext, useFormObjectSection, useFormUpdateAction } from '../provider/FormObjectProvider';
 
 function snakifyId(id, section = []) {
   const idParts = [...section, id];

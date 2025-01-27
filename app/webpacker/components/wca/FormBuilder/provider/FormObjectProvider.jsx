@@ -2,13 +2,13 @@ import React, {
   createContext,
   useCallback,
   useContext,
-  useEffect,
   useMemo,
   useReducer,
 } from 'react';
 import _ from 'lodash';
-import { changesSaved, setErrors } from '../store/actions';
+import { changesSaved, setErrors, updateFormValue } from '../store/actions';
 import formReducer from '../store/reducer';
+import SectionProvider, { readValueRecursive, useSections } from './FormSectionProvider';
 
 const FormContext = createContext(null);
 
@@ -21,6 +21,7 @@ const createState = (initialObject) => ({
 export default function FormObjectProvider({
   children,
   initialObject,
+  globalDisabled = false,
 }) {
   const [formState, dispatch] = useReducer(formReducer, initialObject, createState);
 
@@ -28,34 +29,10 @@ export default function FormObjectProvider({
     !_.isEqual(formState.object, formState.initialObject)
   ), [formState.object, formState.initialObject]);
 
-  const onUnload = useCallback((e) => {
-    // Prompt the user before letting them navigate away from this page with unsaved changes.
-    if (unsavedChanges) {
-      const confirmationMessage = 'You have unsaved changes, are you sure you want to leave?';
-      e.returnValue = confirmationMessage;
-      return confirmationMessage;
-    }
-
-    return null;
-  }, [unsavedChanges]);
-
-  useEffect(() => {
-    window.addEventListener('beforeunload', onUnload);
-
-    return () => window.removeEventListener('beforeunload', onUnload);
-  }, [onUnload]);
-
-  const onSuccess = useCallback((data) => {
-    const { redirect } = data;
-
-    if (redirect) {
-      window.removeEventListener('beforeunload', onUnload);
-      window.location.replace(redirect);
-    } else {
-      dispatch(changesSaved());
-      dispatch(setErrors(null));
-    }
-  }, [dispatch, onUnload]);
+  const onSuccess = useCallback(() => {
+    dispatch(changesSaved());
+    dispatch(setErrors(null));
+  }, [dispatch]);
 
   const onError = useCallback((err) => {
     // check whether the 'json' and 'response' properties are set,
@@ -92,7 +69,9 @@ export default function FormObjectProvider({
 
   return (
     <FormContext.Provider value={formContext}>
-      {children}
+      <SectionProvider disabled={globalDisabled}>
+        {children}
+      </SectionProvider>
     </FormContext.Provider>
   );
 }
@@ -105,3 +84,18 @@ export const useFormObject = () => useFormContext().object;
 export const useFormInitialObject = () => useFormContext().initialObject;
 
 export const useFormErrorHandler = () => useFormContext().onError;
+
+export const useFormObjectSection = () => {
+  const formObject = useFormObject();
+  const sections = useSections();
+
+  return readValueRecursive(formObject, sections);
+};
+
+export const useFormUpdateAction = () => {
+  const dispatch = useFormDispatch();
+
+  return useCallback((key, value, sections = []) => (
+    dispatch(updateFormValue(key, value, sections))
+  ), [dispatch]);
+};

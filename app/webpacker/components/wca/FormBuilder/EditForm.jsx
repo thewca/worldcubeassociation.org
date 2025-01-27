@@ -1,5 +1,6 @@
 import React, {
   useCallback,
+  useEffect,
   useRef,
 } from 'react';
 import {
@@ -11,11 +12,9 @@ import {
   Segment,
   Sticky,
 } from 'semantic-ui-react';
-import SectionProvider, { readValueRecursive, useSections } from './provider/FormSectionProvider';
-import { updateFormValue } from './store/actions';
 import FormErrors from './FormErrors';
 import useSaveAction from '../../../lib/hooks/useSaveAction';
-import FormObjectProvider, { useFormContext, useFormDispatch, useFormObject } from './provider/FormObjectProvider';
+import FormObjectProvider, { useFormContext } from './provider/FormObjectProvider';
 
 function EditForm({
   children,
@@ -23,7 +22,6 @@ function EditForm({
   backendOptions,
   CustomHeader = null,
   CustomFooter = null,
-  globalDisabled = false,
 }) {
   const {
     object,
@@ -33,13 +31,36 @@ function EditForm({
     onError,
   } = useFormContext();
 
+  const onUnload = useCallback((e) => {
+    // Prompt the user before letting them navigate away from this page with unsaved changes.
+    if (unsavedChanges) {
+      const confirmationMessage = 'You have unsaved changes, are you sure you want to leave?';
+      e.returnValue = confirmationMessage;
+      return confirmationMessage;
+    }
+
+    return null;
+  }, [unsavedChanges]);
+
+  useEffect(() => {
+    window.addEventListener('beforeunload', onUnload);
+
+    return () => window.removeEventListener('beforeunload', onUnload);
+  }, [onUnload]);
+
+  const onSuccessSafe = useCallback(() => {
+    window.removeEventListener('beforeunload', onUnload);
+    onSuccess();
+    window.addEventListener('beforeunload', onUnload);
+  }, [onSuccess, onUnload]);
+
   const { save, saving } = useSaveAction();
 
   const saveObject = useCallback(() => {
     const saveOptions = backendOptions || {};
 
-    save(backendUrl, object, onSuccess, saveOptions, onError);
-  }, [backendUrl, backendOptions, object, save, onError, onSuccess]);
+    save(backendUrl, object, onSuccessSafe, saveOptions, onError);
+  }, [backendUrl, backendOptions, object, save, onError, onSuccessSafe]);
 
   const renderUnsavedChangesAlert = () => (
     <Message info>
@@ -59,7 +80,7 @@ function EditForm({
   const stickyRef = useRef();
 
   return (
-    <SectionProvider disabled={globalDisabled}>
+    <>
       <div ref={stickyRef}>
         {unsavedChanges && (
           <Sticky context={stickyRef} offset={20} styleElement={{ zIndex: 2000 }}>
@@ -87,7 +108,7 @@ function EditForm({
           <CustomFooter saveObject={saveObject} />
         </>
       )}
-    </SectionProvider>
+    </>
   );
 }
 
@@ -101,31 +122,18 @@ export default function Wrapper({
   globalDisabled = false,
 }) {
   return (
-    <FormObjectProvider initialObject={initialObject}>
+    <FormObjectProvider
+      initialObject={initialObject}
+      globalDisabled={globalDisabled}
+    >
       <EditForm
         backendUrl={backendUrl}
         backendOptions={backendOptions}
         CustomHeader={CustomHeader}
         CustomFooter={CustomFooter}
-        globalDisabled={globalDisabled}
       >
         {children}
       </EditForm>
     </FormObjectProvider>
   );
 }
-
-export const useFormObjectSection = () => {
-  const formObject = useFormObject();
-  const sections = useSections();
-
-  return readValueRecursive(formObject, sections);
-};
-
-export const useFormUpdateAction = () => {
-  const dispatch = useFormDispatch();
-
-  return useCallback((key, value, sections = []) => (
-    dispatch(updateFormValue(key, value, sections))
-  ), [dispatch]);
-};
