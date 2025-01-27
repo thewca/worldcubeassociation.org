@@ -523,7 +523,7 @@ RSpec.describe Registration do
       it 'removes from waiting list' do
         reg4.update_lanes!({ user_id: reg4.user.id, competing: { status: 'pending' } }.with_indifferent_access, reg4.user)
 
-        expect(reg4.waiting_list_position).to eq(nil)
+        expect(reg4.reload.waiting_list_position).to eq(nil)
         expect(waiting_list.entries.count).to eq(4)
       end
 

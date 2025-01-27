@@ -213,7 +213,7 @@ class Registration < ApplicationRecord
   end
 
   def waiting_list_position
-    competition.waiting_list.position(id)
+    competition.waiting_list.position(self)
   end
 
   def wcif_status
