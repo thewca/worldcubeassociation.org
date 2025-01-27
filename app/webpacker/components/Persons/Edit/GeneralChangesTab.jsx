@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { Form, Segment, Message } from 'semantic-ui-react';
+import {
+  Form, Segment, Message, ButtonGroup, Button,
+} from 'semantic-ui-react';
 import useInputState from '../../../lib/hooks/useInputState';
 import CountrySelector from '../../CountrySelector/CountrySelector';
 import I18nHTMLTranslate from '../../I18nHTMLTranslate';
@@ -71,8 +73,11 @@ export default function GeneralChangesTab({ user, currentUser, editableFields })
                 onChange={setWcaId}
                 disabled={!editableFields.includes('wca_id')}
               />
-              <I18nHTMLTranslate i18nKey="users.edit.account_is_special" />
             </Form.Group>
+            <ButtonGroup widths={2}>
+              <Button>{I18n.t('users.edit.profile')}</Button>
+              <Button>{I18n.t('users.edit.approve')}</Button>
+            </ButtonGroup>
             { currentUser['can_edit_any_user?'] && user['is_special_account?']
             && (
               <Message>
