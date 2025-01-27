@@ -182,7 +182,7 @@ RSpec.describe 'API Registrations' do
         expect(response.status).to eq(200)
 
         email = ActionMailer::Base.deliveries.last
-        expect(email.subject).to eq(I18n.t('registrations.mailer.new.mail_subject',  comp_name: registration.competition.name))
+        expect(email.subject).to eq(I18n.t('registrations.mailer.new.mail_subject', comp_name: registration.competition.name))
       end
     end
 
@@ -204,7 +204,7 @@ RSpec.describe 'API Registrations' do
         expect(response.status).to eq(200)
 
         email = ActionMailer::Base.deliveries.last
-        expect(email.subject).to eq(I18n.t('registrations.mailer.new.mail_subject',  comp_name: registration.competition.name))
+        expect(email.subject).to eq(I18n.t('registrations.mailer.new.mail_subject', comp_name: registration.competition.name))
       end
     end
   end
