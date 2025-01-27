@@ -6,16 +6,29 @@ class LiveResult < ApplicationRecord
   after_create :notify_users
   after_update :notify_users
 
-  belongs_to :person, class_name: 'User', foreign_key: 'person_id'
+  belongs_to :registration
 
   belongs_to :entered_by, class_name: 'User', foreign_key: 'entered_by_id'
 
   belongs_to :round
 
+  def serializable_hash(options = nil)
+    {
+      attempts: live_attempts.as_json,
+      registration_id: registration_id,
+      result_id: id,
+      best: best,
+      average: average,
+      single_record_tag: single_record_tag,
+      average_record_tag: average_record_tag,
+      advancing: advancing,
+      advancing_questionable: advancing_questionable,
+    }
+  end
+
   private
 
     def notify_users
-      ActionCable.server.broadcast("results_#{round_id}",
-                                   { attempts: live_attempts.as_json, user_id: person_id, result_id: id })
+      ActionCable.server.broadcast("results_#{round_id}", serializable_hash)
     end
 end
