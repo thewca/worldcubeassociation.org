@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Card, Header, Icon, Statistic,
+  Card, Grid, Header, Icon, Statistic,
 } from 'semantic-ui-react';
 import I18nHTMLTranslate from '../../I18nHTMLTranslate';
 import Badges from '../Badges';
@@ -46,26 +46,30 @@ export default function Details({
       </Header>
       {previousPersons.length > 0 && <PreviousDetails prev={previousPersons} />}
       {person.user && <Badges userId={person.user.id} />}
-      <Statistic.Group size="tiny" widths={2}>
-        <Statistic>
-          <Statistic.Label>{I18n.t('common.user.wca_id')}</Statistic.Label>
-          <Statistic.Value>{person.wca_id}</Statistic.Value>
-        </Statistic>
-        <Statistic>
-          <Statistic.Label>{I18n.t('persons.show.completed_solves')}</Statistic.Label>
-          <Statistic.Value>{person.completed_solves_count}</Statistic.Value>
-        </Statistic>
-        {person.visible_gender && (
-          <Statistic>
+      <Grid widths={2} stackable>
+        <Grid.Column width={8} textAlign="center">
+          <Statistic size="tiny">
+            <Statistic.Label>{I18n.t('common.user.wca_id')}</Statistic.Label>
+            <Statistic.Value>{person.wca_id}</Statistic.Value>
+          </Statistic>
+          <Statistic size="tiny">
+            <Statistic.Label>{I18n.t('persons.show.completed_solves')}</Statistic.Label>
+            <Statistic.Value>{person.completed_solves_count}</Statistic.Value>
+          </Statistic>
+        </Grid.Column>
+        <Grid.Column width={8} textAlign="center">
+          {person.visible_gender && (
+          <Statistic size="tiny">
             <Statistic.Label>{I18n.t('activerecord.attributes.person.gender')}</Statistic.Label>
             <Statistic.Value>{I18n.t(`enums.user.gender.${person.visible_gender}`)}</Statistic.Value>
           </Statistic>
-        )}
-        <Statistic>
-          <Statistic.Label>{I18n.t('layouts.navigation.competitions')}</Statistic.Label>
-          <Statistic.Value>{person.competition_count}</Statistic.Value>
-        </Statistic>
-      </Statistic.Group>
+          )}
+          <Statistic size="tiny">
+            <Statistic.Label>{I18n.t('layouts.navigation.competitions')}</Statistic.Label>
+            <Statistic.Value>{person.competition_count}</Statistic.Value>
+          </Statistic>
+        </Grid.Column>
+      </Grid>
     </>
   );
 }
