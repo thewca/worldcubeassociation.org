@@ -34,10 +34,10 @@ function AnnounceAction({
   const mutation = useMutation({
     mutationFn: (compId) => fetchJsonOrError(announceCompetitionUrl(compId), {
       method: 'PUT',
-    }),
+    }).then((raw) => raw.data),
     onSuccess: (respData, compId) => queryClient.setQueryData(
       announcementDataQueryKey(compId),
-      respData,
+      respData.data,
     ),
   });
 
@@ -84,10 +84,10 @@ function CancelAction({
   const mutation = useMutation({
     mutationFn: ({ compId, undo }) => fetchJsonOrError(cancelCompetitionUrl(compId, undo), {
       method: 'PUT',
-    }),
+    }).then((raw) => raw.data),
     onSuccess: (respData, variables) => queryClient.setQueryData(
       confirmationDataQueryKey(variables.compId),
-      respData,
+      respData.data,
     ),
   });
 
@@ -150,7 +150,7 @@ function CancelAction({
 
 function CloseRegistrationAction({
   competitionId,
- announcementData,
+  announcementData,
 }) {
   const {
     isRegistrationPast,
@@ -166,10 +166,10 @@ function CloseRegistrationAction({
   const mutation = useMutation({
     mutationFn: (compId) => fetchJsonOrError(closeRegistrationWhenFullUrl(compId), {
       method: 'PUT',
-    }),
+    }).then((raw) => raw.data),
     onSuccess: (respData, compId) => queryClient.setQueryData(
       announcementDataQueryKey(compId),
-      respData,
+      respData.data,
     ),
     onError,
   });

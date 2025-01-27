@@ -30,10 +30,10 @@ function NotificationSettingsAction({
       body: JSON.stringify({
         receive_registration_emails: receiveNotifications,
       }),
-    }),
+    }).then((raw) => raw.data),
     onSuccess: (respData, variables) => queryClient.setQueryData(
       userPreferencesQueryKey(variables.competitionId),
-      respData,
+      respData.data,
     ),
   });
 

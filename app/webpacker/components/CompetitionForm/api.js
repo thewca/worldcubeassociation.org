@@ -13,7 +13,8 @@ export function announcementDataQueryKey(competitionId) {
 export function useAnnouncementData(competitionId) {
   return useQuery({
     queryKey: announcementDataQueryKey(competitionId),
-    queryFn: () => fetchJsonOrError(competitionAnnouncementDataUrl(competitionId)),
+    queryFn: () => fetchJsonOrError(competitionAnnouncementDataUrl(competitionId))
+      .then((raw) => raw.data),
   });
 }
 
@@ -24,7 +25,8 @@ export function confirmationDataQueryKey(competitionId) {
 export function useConfirmationData(competitionId) {
   return useQuery({
     queryKey: confirmationDataQueryKey(competitionId),
-    queryFn: () => fetchJsonOrError(competitionConfirmationDataUrl(competitionId)),
+    queryFn: () => fetchJsonOrError(competitionConfirmationDataUrl(competitionId))
+      .then((raw) => raw.data),
   });
 }
 
@@ -35,6 +37,7 @@ export function userPreferencesQueryKey(competitionId) {
 export function useUserPreferences(competitionId) {
   return useQuery({
     queryKey: userPreferencesQueryKey(competitionId),
-    queryFn: () => fetchJsonOrError(competitionUserPreferencesUrl(competitionId)),
+    queryFn: () => fetchJsonOrError(competitionUserPreferencesUrl(competitionId))
+      .then((raw) => raw.data),
   });
 }

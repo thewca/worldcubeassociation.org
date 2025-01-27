@@ -4,23 +4,21 @@ import {
 } from 'semantic-ui-react';
 import React, { useCallback } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import _ from 'lodash';
 import I18n from '../../lib/i18n';
 import { useStore } from '../../lib/providers/StoreProvider';
 import { useFormErrorHandler } from '../wca/FormBuilder/provider/FormObjectProvider';
 import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken';
-import {
-  useConfirmationData,
-  userPreferencesQueryKey,
-} from './api';
+import { confirmationDataQueryKey, useConfirmationData } from './api';
 import Loading from '../Requests/Loading';
 import { updateCompetitionConfirmationDataUrl } from '../../lib/requests/routes.js.erb';
 
 function ConfirmationControlCheckbox({
   competitionId,
-  announcementData,
+  confirmationData,
   toggleKey,
 }) {
-  const { [toggleKey]: isChecked } = announcementData;
+  const { [toggleKey]: isChecked } = confirmationData;
 
   const onError = useFormErrorHandler();
   const queryClient = useQueryClient();
@@ -37,15 +35,15 @@ function ConfirmationControlCheckbox({
       body: JSON.stringify({
         [toggleKey]: toggleValue,
       }),
-    }),
+    }).then((raw) => raw.data),
     onSuccess: (respData, variables) => queryClient.setQueryData(
-      userPreferencesQueryKey(variables.competitionId),
-      respData,
+      confirmationDataQueryKey(variables.compId),
+      respData.data,
     ),
     onError,
   });
 
-  const saveNotificationPreference = useCallback((_, { checked }) => {
+  const saveNotificationPreference = useCallback((_e, { checked }) => {
     mutation.mutate({ compId: competitionId, toggleValue: checked });
   }, [competitionId, mutation]);
 
@@ -54,7 +52,7 @@ function ConfirmationControlCheckbox({
       checked={isChecked}
       onChange={saveNotificationPreference}
       disabled={mutation.isPending}
-      label={I18n.t('competitions.receive_registration_emails')}
+      label={I18n.t(`competitions.competition_form.labels.admin.${_.snakeCase(toggleKey)}`)}
     />
   );
 }
@@ -63,7 +61,7 @@ export default function ConfirmationToggles({ competitionId }) {
   const { isAdminView } = useStore();
 
   const {
-    data: announcementData,
+    data: confirmationData,
     isLoading,
   } = useConfirmationData(competitionId);
 
@@ -76,12 +74,12 @@ export default function ConfirmationToggles({ competitionId }) {
       <Form.Group widths="equal">
         <ConfirmationControlCheckbox
           competitionId={competitionId}
-          announcementData={announcementData}
+          confirmationData={confirmationData}
           toggleKey="isConfirmed"
         />
         <ConfirmationControlCheckbox
           competitionId={competitionId}
-          announcementData={announcementData}
+          confirmationData={confirmationData}
           toggleKey="isVisible"
         />
       </Form.Group>
