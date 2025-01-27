@@ -112,7 +112,7 @@ export default function Person({
   championshipPodiums,
   canEditUser,
 }) {
-  const [highlight, setHighlight] = useState(-1);
+  const [podiumHighlight, setPodiumHighlight] = useState(-1);
 
   const medalsAndRecords = (medals.total > 0 ? 1 : 0)
     + (records.total > 0 ? 1 : 0);
@@ -155,7 +155,7 @@ export default function Person({
               </Segment>
               {medalsAndRecords > 0 && (
                 <Grid columns={medalsAndRecords} stackable>
-                  <CountStats medals={medals} records={records} setHighlight={setHighlight} />
+                  <CountStats medals={medals} records={records} setHighlight={setPodiumHighlight} />
                 </Grid>
               )}
               <Divider />
@@ -166,7 +166,7 @@ export default function Person({
                 competitions={competitions}
                 championshipPodiums={championshipPodiums}
                 pbMarkers={pbMarkers}
-                highlight={highlight}
+                highlight={podiumHighlight}
               />
             </Grid.Column>
           </Grid.Row>
