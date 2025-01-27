@@ -1821,12 +1821,11 @@ class Competition < ApplicationRecord
     orderable_fields = %i(name start_date end_date announced_at)
     if params[:sort]
       order = params[:sort].split(',')
-                           .map do |part|
+                           .to_h do |part|
                              reverse, field = part.match(/^(-)?(\w+)$/).captures
                              [field.to_sym, reverse ? :desc : :asc]
                            end
-                           .select { |field, _| orderable_fields.include?(field) }
-                           .to_h
+                           .slice(*orderable_fields)
     else
       order = { start_date: :desc }
     end
