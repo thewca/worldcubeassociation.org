@@ -23,7 +23,7 @@ export function EventSelector({
   // Listing event as an argument here to indicate to developers that it's needed
   // eslint-disable-next-line no-unused-vars
   disabledText = (event) => {},
-  showLabels = false,
+  showLabels = true,
 }) {
   return (
     <>
