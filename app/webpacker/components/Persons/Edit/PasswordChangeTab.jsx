@@ -33,7 +33,7 @@ export default function PasswordChangeTab({ user, recentlyAuthenticated }) {
         <Form.Button type="submit">{I18n.t('users.edit.save')}</Form.Button>
       </RailsForm>
       <Divider />
-      <Header>Actions</Header>
+      <Header>{I18n.t('users.edit.actions')}</Header>
       <RailsForm action={destroyOtherSessionsUrl()} method="delete">
         <Form.Button primary type="submit">
           {I18n.t('users.edit.sign_out_of_devices')}

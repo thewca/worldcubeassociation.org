@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
-import { Form, Segment } from 'semantic-ui-react';
+import { Form, Segment, Message } from 'semantic-ui-react';
 import useInputState from '../../../lib/hooks/useInputState';
 import CountrySelector from '../../CountrySelector/CountrySelector';
 import I18nHTMLTranslate from '../../I18nHTMLTranslate';
-import { updateUserUrl } from '../../../lib/requests/routes.js.erb';
+import { personUrl, profileClaimWCAIdUrl, updateUserUrl } from '../../../lib/requests/routes.js.erb';
+import I18n from '../../../lib/i18n';
 import './preferences.scss';
 import GenderSelector from '../../GenderSelector/GenderSelector';
 import RailsForm from './RailsForm';
 
-export default function GeneralChangesTab({ user, editableFields }) {
+export default function GeneralChangesTab({ user, currentUser, editableFields }) {
   const [name, setName] = useInputState(user.name);
   const [dob, setDob] = useInputState(user.dob);
   const [gender, setGender] = useInputState(user.gender);
@@ -53,22 +54,44 @@ export default function GeneralChangesTab({ user, editableFields }) {
             onChange={(({ region }) => setCountryIso2(region))}
           />
         </Form.Field>
-        <Form.Group widths={2}>
-          {unconfirmedWcaId && (
-          <Form.Input
-            value={unconfirmedWcaId}
-            onChange={setUnconfirmedWcaId}
-            disabled={!editableFields.includes('unconfirmed_wca_id')}
+        { currentUser['can_view_all_users?'] ? (
+          <>
+            <Form.Group widths={2}>
+              {unconfirmedWcaId && (
+              <Form.Input
+                value={unconfirmedWcaId}
+                onChange={setUnconfirmedWcaId}
+                disabled={!editableFields.includes('unconfirmed_wca_id')}
+              />
+              )}
+              <Form.Input
+                label="WCA ID"
+                name="user[wca_id]"
+                value={wcaId}
+                onChange={setWcaId}
+                disabled={!editableFields.includes('wca_id')}
+              />
+              <I18nHTMLTranslate i18nKey="users.edit.account_is_special" />
+            </Form.Group>
+            { currentUser['can_edit_any_user?'] && user['is_special_account?']
+            && (
+              <Message>
+                {/* i18n-tasks-use t('users.edit.account_is_special') */}
+                <I18nHTMLTranslate i18nKey="users.edit.account_is_special" />
+              </Message>
+            )}
+          </>
+        ) : (
+          <I18nHTMLTranslate
+            /* i18n-tasks-use t('users.edit.have_wca_id_html') */
+            /* i18n-tasks-use t('users.edit.have_no_wca_id_html') */
+            i18nKey={wcaId ? 'users.edit.have_wca_id_html' : 'users.edit.have_no_wca_id_html'}
+            options={{
+              here: `<a href="${profileClaimWCAIdUrl()}">${I18n.t('common.here')}</a>`,
+              link_id: `<a href="${personUrl(wcaId)}">${wcaId}</a>`,
+            }}
           />
-          )}
-          <Form.Input
-            label="WCA ID"
-            name="user[wca_id]"
-            value={wcaId}
-            onChange={setWcaId}
-            disabled={!editableFields.includes('wca_id')}
-          />
-        </Form.Group>
+        )}
         <Form.Button>Save</Form.Button>
       </RailsForm>
     </Segment>

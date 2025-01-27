@@ -21,6 +21,8 @@ export const generateBackupCodesUrl = () => `<%= CGI.unescape(Rails.application.
 
 export const personUrl = (wcaId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.person_path("${wcaId}"))%>`;
 
+export const profileClaimWCAIdUrl = () => `<%= CGI.unescape(Rails.application.routes.url_helpers.profile_claim_wca_id_path)%>`;
+
 export const personsUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.persons_path) %>`;
 export const usersUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.users_path) %>`;
 
