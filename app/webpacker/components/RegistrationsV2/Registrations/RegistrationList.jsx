@@ -129,8 +129,8 @@ export default function RegistrationList({ competitionInfo, userId }) {
     );
   }
 
-  const registrationCount = registrations.length;
-  const newcomerCount = registrations?.filter(
+  const registrationCount = registrationsWithPsychSheet.length;
+  const newcomerCount = registrationsWithPsychSheet.filter(
     (reg) => !reg.user.wca_id,
   ).length;
   const returnerCount = registrationCount - newcomerCount;
