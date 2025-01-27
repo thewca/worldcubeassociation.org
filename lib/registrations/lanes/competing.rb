@@ -9,13 +9,16 @@ module Registrations
                                           comments: lane_params[:competing][:comment] || '',
                                           guests: lane_params[:guests] || 0)
 
-        registration.registration_competition_events.build(lane_params[:competing][:event_ids].map do |event_id|
-          competition_event = Competition.find(competition_id).competition_events.find { |ce| ce.event_id == event_id }
-          { competition_event_id: competition_event.id }
-        end)
+        create_event_ids = lane_params[:competing][:event_ids]
+
+        create_competition_events = registration.competition.competition_events.where(event_id: create_event_ids)
+        registration.competition_events = create_competition_events
+
         changes = registration.changes.transform_values { |change| change[1] }
-        changes[:event_ids] = lane_params[:competing][:event_ids]
+        changes[:event_ids] = create_event_ids
         registration.save!
+        RegistrationsMailer.notify_organizers_of_new_registration(registration).deliver_later
+        RegistrationsMailer.notify_registrant_of_new_registration(registration).deliver_later
         registration.add_history_entry(changes, "worker", user_id, "Worker processed")
       end
 
@@ -33,8 +36,8 @@ module Registrations
 
         ActiveRecord::Base.transaction do
           update_event_ids(registration, event_ids)
-          registration.comments = comment if comment.present?
-          registration.administrative_notes = admin_comment if admin_comment.present?
+          registration.comments = comment unless comment.nil?
+          registration.administrative_notes = admin_comment unless admin_comment.nil?
           registration.guests = guests if guests.present?
 
           if old_status == Registrations::Helper::STATUS_WAITING_LIST || status == Registrations::Helper::STATUS_WAITING_LIST
@@ -105,16 +108,8 @@ module Registrations
         # TODO: V3-REG Cleanup, this is probably why we need the reload above
         return unless event_ids.present?
 
-        registration.registration_competition_events.each do |registration_competition_event|
-          registration_competition_event.destroy unless event_ids.include?(registration_competition_event.competition_event.event_id)
-        end
-
-        event_ids.each do |event_id|
-          unless registration.event_ids.include?(event_id)
-            competition_event = registration.competition.competition_events.find { |ce| ce.event_id == event_id }
-            registration.registration_competition_events.build({ competition_event_id: competition_event.id })
-          end
-        end
+        update_competition_events = registration.competition.competition_events.where(event_id: event_ids)
+        registration.competition_events = update_competition_events
       end
     end
   end

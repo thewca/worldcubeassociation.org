@@ -26,7 +26,7 @@ module Registrations
       new_status = update_request.dig('competing', 'status')
       events = update_request.dig('competing', 'event_ids')
 
-      user_can_modify_registration!(competition, current_user, target_user, registration)
+      user_can_modify_registration!(competition, current_user, target_user, registration, new_status)
       validate_guests!(guests.to_i, competition) unless guests.nil?
       validate_comment!(comment, competition, registration)
       validate_organizer_fields!(update_request, current_user, competition)
@@ -34,7 +34,7 @@ module Registrations
       validate_waiting_list_position!(waiting_list_position, competition, registration) unless waiting_list_position.nil?
       validate_update_status!(new_status, competition, current_user, target_user, registration, events) unless new_status.nil?
       validate_update_events!(events, competition) unless events.nil?
-      validate_qualifications!(update_request, competition, target_user)
+      validate_qualifications!(update_request, competition, target_user) unless events.nil?
     end
 
     def self.bulk_update_allowed!(bulk_update_request, current_user)
@@ -58,6 +58,9 @@ module Registrations
 
     class << self
       def user_can_create_registration!(competition, current_user, target_user)
+        raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::REGISTRATION_ALREADY_EXISTS) if
+          Registration.exists?(competition_id: competition.id, user_id: target_user.id)
+
         # Only the user themselves can create a registration for the user
         raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless current_user.id == target_user.id
 
@@ -71,15 +74,19 @@ module Registrations
         raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::ALREADY_REGISTERED_IN_SERIES) if existing_registration_in_series?(competition, target_user)
       end
 
-      def user_can_modify_registration!(competition, current_user, target_user, registration)
+      def user_can_modify_registration!(competition, current_user, target_user, registration, new_status)
         raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless
           can_administer_or_current_user?(competition, current_user, target_user)
         raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::USER_EDITS_NOT_ALLOWED) unless
-          competition.registration_edits_allowed? || current_user.can_manage_competition?(competition)
+          competition.registration_edits_allowed? || current_user.can_manage_competition?(competition) || user_uncancelling_registration?(registration, new_status)
         raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::REGISTRATION_IS_REJECTED) if
           user_is_rejected?(current_user, target_user, registration) && !organizer_modifying_own_registration?(competition, current_user, target_user)
         raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::ALREADY_REGISTERED_IN_SERIES) if
           existing_registration_in_series?(competition, target_user) && !current_user.can_manage_competition?(competition)
+      end
+
+      def user_uncancelling_registration?(registration, new_status)
+        registration.competing_status_cancelled? && new_status == Registrations::Helper::STATUS_PENDING
       end
 
       def user_is_rejected?(current_user, target_user, registration)
@@ -190,7 +197,10 @@ module Registrations
 
         # User reactivating registration
         if new_status == Registrations::Helper::STATUS_PENDING
-          raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless registration.deleted?
+          raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless registration.cancelled?
+          raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::REGISTRATION_CLOSED) if
+            registration.cancelled? && !competition.registration_currently_open?
+
           return # No further checks needed if status is pending
         end
 

@@ -51,6 +51,14 @@ Rails.configuration.to_prepare do
     end
   end
 
+  Hash.class_eval do
+    def merge_union(other = nil)
+      self.to_h do |key, value|
+        [key, value & (other&.fetch(key.to_s, []) || [])]
+      end
+    end
+  end
+
   ActiveSupport::Duration.class_eval do
     def in_seconds
       self.to_i

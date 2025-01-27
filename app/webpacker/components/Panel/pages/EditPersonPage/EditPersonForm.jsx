@@ -24,7 +24,7 @@ const countryOptions = _.map(countries.byIso2, (country) => ({
   value: country.iso2,
 }));
 
-export default function EditPersonForm({ wcaId }) {
+export default function EditPersonForm({ wcaId, onSuccess, showDestroyButton = false }) {
   const {
     data: personFetchData, loading, error: personError,
   } = useLoadedData(
@@ -71,6 +71,9 @@ export default function EditPersonForm({ wcaId }) {
         showCountryChangeWarning:
           originalUserDetails.representing !== editedUserDetails.representing,
       });
+      if (onSuccess) {
+        onSuccess();
+      }
     }, {
       method: 'PATCH',
     }, (error) => {
@@ -177,10 +180,12 @@ export default function EditPersonForm({ wcaId }) {
           <Icon name="clone" />
           Update
         </Button>
-        <Button disabled={!editedUserDetails} onClick={handleDestroy}>
-          <Icon name="trash" />
-          Destroy
-        </Button>
+        {showDestroyButton && (
+          <Button disabled={!editedUserDetails} onClick={handleDestroy}>
+            <Icon name="trash" />
+            Destroy
+          </Button>
+        )}
         {incorrectClaimCount > 0 && (
           <Button onClick={handleResetClaimCount}>
             <Icon name="redo" />

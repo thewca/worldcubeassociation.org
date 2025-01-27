@@ -755,7 +755,6 @@ RSpec.describe CompetitionsController do
 
       it "removes an organizer and expects him to receive a notification email" do
         competition.organizers << [organizer1, organizer2]
-        puts competition.organizers.count
         expect(CompetitionsMailer).to receive(:notify_organizer_of_removal_from_competition).with(competition.trainee_delegates.last, competition, organizer2).and_call_original
         update_params = build_competition_update(competition, staff: { organizerIds: [competition.organizers.first.id, organizer1.id] })
         expect do

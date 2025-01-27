@@ -10,7 +10,7 @@ class Qualification
   validates :level, numericality: { only_integer: true, greater_than: 0 }, if: :result_or_ranking?
 
   def result_or_ranking?
-    self.wcif_type == 'attemptResult' || self.wcif_type == 'ranking'
+    ['attemptResult', 'ranking'].include?(self.wcif_type)
   end
 
   def ==(other)
@@ -41,7 +41,7 @@ class Qualification
 
   def can_register?(user, event_id)
     return false if user.person.nil?
-    before_deadline_results = user.person.results.in_event(event_id).before(self.when_date)
+    before_deadline_results = user.person.results.in_event(event_id).on_or_before(self.when_date)
     # Allow any competitor with a result to register when type == "ranking" or type == "anyResult".
     # When type == "ranking", the results need to be manually cleared out later.
     case self.wcif_type

@@ -3,7 +3,7 @@ import {
   continents, countries, events, nonFutureCompetitionYears,
 } from '../../lib/wca-data.js.erb';
 
-export const WCA_EVENT_IDS = Object.values(events.official).map((e) => e.id);
+const WCA_EVENT_IDS = Object.values(events.official).map((e) => e.id);
 
 // note: inconsistencies with previous search params
 // - year value was 'all+years', is now 'all_years'

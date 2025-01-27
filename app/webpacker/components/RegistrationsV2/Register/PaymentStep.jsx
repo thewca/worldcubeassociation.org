@@ -15,10 +15,10 @@ import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { setMessage } from './RegistrationMessage';
 import fetchWithJWTToken from '../../../lib/requests/fetchWithJWTToken';
 import Loading from '../../Requests/Loading';
-import i18n from '../../../lib/i18n';
+import I18n from '../../../lib/i18n';
 import useCheckboxState from '../../../lib/hooks/useCheckboxState';
 import AutonumericField from '../../wca/FormBuilder/input/AutonumericField';
-import getPaymentTicket from "../api/payment/get/getPaymentTicket";
+import getPaymentTicket from '../api/payment/get/getPaymentTicket';
 
 export default function PaymentStep({
   competitionInfo,
@@ -65,7 +65,7 @@ export default function PaymentStep({
       elements,
       clientSecret,
       confirmParams: {
-        return_url: paymentFinishUrl(competitionInfo.id),
+        return_url: paymentFinishUrl(competitionInfo.id, 'stripe'),
       },
     });
 
@@ -75,7 +75,11 @@ export default function PaymentStep({
     // be redirected to an intermediate site first to authorize the payment, then
     // redirected to the `return_url`.
     if (error) {
-      dispatch(setMessage('registrations.payment_form.errors.stripe_failed', 'error'));
+      // i18n-tasks-use t('registrations.payment_form.errors.generic.failed')
+      dispatch(setMessage('registrations.payment_form.errors.generic.failed', 'error', {
+        provider: I18n.t('payments.payment_providers.stripe'),
+      }));
+
       console.error(error);
     }
 
@@ -90,21 +94,23 @@ export default function PaymentStep({
         { competitionInfo.enable_donations && (
           <FormField>
             <Checkbox
+              id="useDonationCheckbox"
               value={isDonationChecked}
               onChange={(event, data) => {
                 setDonationChecked(event, data);
                 setDonationAmount(0);
               }}
-              label={i18n.t('registrations.payment_form.labels.show_donation')}
+              label={I18n.t('registrations.payment_form.labels.show_donation')}
             />
             { isDonationChecked && (
             <AutonumericField
+              id="donationInputField"
               onChange={(_, { value }) => setDonationAmount(value)}
               currency={competitionInfo.currency_code}
               value={donationAmount}
               label={(
                 <Label>
-                  {i18n.t('registrations.payment_form.labels.donation')}
+                  {I18n.t('registrations.payment_form.labels.donation')}
                 </Label>
 )}
             />
@@ -115,14 +121,15 @@ export default function PaymentStep({
           ? <Loading />
           : (
             <>
-              <Header size="small">
-                Subtotal:
+              <Header size="small" id="money-subtotal">
+                {I18n.t('registrations.payment_form.labels.subtotal')}
+                :
                 {' '}
                 {displayAmount}
               </Header>
               <Divider hidden />
               <Button type="submit" primary disabled={isLoading || conversionFetching || !stripe || !elements} id="submit">
-                {i18n.t('registrations.payment_form.button_text')}
+                {I18n.t('registrations.payment_form.button_text')}
               </Button>
             </>
           )}
