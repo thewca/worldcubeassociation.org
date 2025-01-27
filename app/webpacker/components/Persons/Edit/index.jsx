@@ -11,6 +11,7 @@ import EmailChangeTab from './EmailChangeTab';
 import PasswordChangeTab from './PasswordChangeTab';
 import PreferencesTab from './PreferencesTab';
 import TwoFactorChangeTab from './TwoFactorChangeTab';
+import { personUrl } from '../../../lib/requests/routes.js.erb';
 
 export default function Wrapper({
   user, currentUser, editableFields, recentlyAuthenticated, otpSVG,
@@ -36,7 +37,15 @@ function getFormWarnings(user, currentUser) {
   }
 
   if (user.unconfirmed_wca_id) {
-    warnings.push({ content: I18n.t('users.edit.unconfirmed_email', { email: user.email }) });
+    const options = {
+      wca_id: `<a href="${personUrl(user.unconfirmed_wca_id)}">${user.unconfirmed_wca_id}</a>`,
+      delegate: `<a href="mailto:${user.delegate_to_handle_wca_id_claim.email}">${user.delegate_to_handle_wca_id_claim.name}</a>`,
+    };
+    if (user.confirmed_at) {
+      warnings.push({ content: I18n.t('users.edit.pending_claim_confirmation_html', options) });
+    } else {
+      warnings.push({ content: I18n.t('users.edit.pending_claim_mail_confirmation_html', options) });
+    }
   }
 
   if (user.unconfirmed_email) {
@@ -170,7 +179,7 @@ function EditUser({
       });
     }
     return p;
-  }, [user, currentUser, editableFields, recentlyAuthenticated]);
+  }, [user, currentUser, editableFields, recentlyAuthenticated, otpSVG]);
 
   return (
     <Container>
