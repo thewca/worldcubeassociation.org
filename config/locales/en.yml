@@ -1194,13 +1194,8 @@ en:
       #context: when registration is moved to waiting list
       pending:
         #context: "comp_name" contains the competition's name
-        mail_subject: "Registration Moved to Waitlist: %{comp_name}"
-        #context: "comp_name" contains the competition's name
-        moved_html: "Your registration for %{comp_name} has been moved to the waiting list. Possible causes are:"
-        #context: this key is one of the reasons explaining why a registration could be moved to the waiting list
-        causes:
-          accepted: "Your registration was accidentally accepted"
-          withdrawal: "You asked for withdrawal"
+        mail_subject: "You're on the Waiting List: %{comp_name}"
+        waitlisted: "The competition is full, but you have been placed on a waiting list, and you will receive an email if enough spots open up for you to be able to attend. Check the %{register} page to see your place on the waiting list."
         email_if_error: "If you think this is an error, please reply to this email."
       #context: when registration is deleted
       deleted:
