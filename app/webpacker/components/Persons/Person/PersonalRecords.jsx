@@ -9,7 +9,7 @@ import EventIcon from '../../wca/EventIcon';
 import { rankingsPath } from '../../../lib/requests/routes.js.erb';
 import { formatAttemptResult } from '../../../lib/wca-live/attempts';
 
-function isOddRank(rank) {
+function isUnusualRank(rank) {
   if (rank === undefined) {
     return false;
   }
@@ -114,7 +114,7 @@ function EventRanks({
   const averageForEvent = averages.find((r) => r.eventId === eventId);
   if (!singleForEvent && !averageForEvent) return null;
 
-  const oddRank = isOddRank(singleForEvent) || isOddRank(averageForEvent);
+  const oddRank = isUnusualRank(singleForEvent) || isUnusualRank(averageForEvent);
 
   return (
     <Table.Row key={eventId}>
@@ -170,8 +170,8 @@ function EventRanks({
 export default function PersonalRecords({
   results, averageRanks, singleRanks, competitions,
 }) {
-  const anyOddRank = singleRanks.some((r) => isOddRank(r))
-    || averageRanks.some((r) => isOddRank(r));
+  const anyOddRank = singleRanks.some((r) => isUnusualRank(r))
+    || averageRanks.some((r) => isUnusualRank(r));
 
   return (
     <div>
