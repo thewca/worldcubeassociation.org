@@ -3,10 +3,10 @@ import React, {
   useRef,
 } from 'react';
 import {
-  Button,
+  Button, Dimmer,
   Divider,
-  Form,
-  Message,
+  Form, Header, List,
+  Message, Segment,
   Sticky,
 } from 'semantic-ui-react';
 import SectionProvider, { readValueRecursive, useSections } from './provider/FormSectionProvider';
@@ -14,6 +14,7 @@ import { changesSaved, updateFormValue } from './store/actions';
 import FormErrors from './FormErrors';
 import useSaveAction from '../../../lib/hooks/useSaveAction';
 import FormObjectProvider, { useFormContext, useFormDispatch, useFormObject } from './provider/FormObjectProvider';
+import I18n from "../../../lib/i18n";
 
 function EditForm({
   children,
@@ -65,7 +66,15 @@ function EditForm({
           </Sticky>
         )}
         <FormErrors errors={errors} />
-        {CustomHeader && <CustomHeader />}
+        {CustomHeader && (
+          <Dimmer.Dimmable as={Segment} blurring dimmed={unsavedChanges}>
+            <Dimmer active={unsavedChanges}>
+              You have unsaved changes. Please save the competition before taking any other action.
+            </Dimmer>
+
+            <CustomHeader />
+          </Dimmer.Dimmable>
+        )}
         <Form>
           {children}
         </Form>

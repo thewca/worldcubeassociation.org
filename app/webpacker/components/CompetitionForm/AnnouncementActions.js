@@ -1,9 +1,7 @@
 import {
   Button,
-  Dimmer,
   Header,
   List,
-  Segment,
 } from 'semantic-ui-react';
 import React, { useCallback } from 'react';
 import { DateTime } from 'luxon';
@@ -16,10 +14,7 @@ import {
   closeRegistrationWhenFullUrl,
 } from '../../lib/requests/routes.js.erb';
 import ConfirmProvider, { useConfirm } from '../../lib/providers/ConfirmProvider';
-import {
-  useFormContext,
-  useFormErrorHandler,
-} from '../wca/FormBuilder/provider/FormObjectProvider';
+import { useFormErrorHandler } from '../wca/FormBuilder/provider/FormObjectProvider';
 import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken';
 import { announcementDataQueryKey, confirmationDataQueryKey, useAnnouncementData } from './api';
 import Loading from '../Requests/Loading';
@@ -224,24 +219,16 @@ export default function AnnouncementActions({ competitionId }) {
     isLoading,
   } = useAnnouncementData(competitionId);
 
-  const { unsavedChanges } = useFormContext();
-
   if (isLoading) return <Loading />;
 
   return (
     <ConfirmProvider>
-      <Dimmer.Dimmable as={Segment} blurring dimmed={unsavedChanges}>
-        <Dimmer active={unsavedChanges}>
-          You have unsaved changes. Please save the competition before taking any other action.
-        </Dimmer>
-
-        <Header style={{ marginTop: 0 }}>{I18n.t('competitions.announcements')}</Header>
-        <List bulleted verticalAlign="middle">
-          {isAdminView && <AnnounceAction competitionId={competitionId} data={announcementData} />}
-          {isAdminView && <CancelAction competitionId={competitionId} data={announcementData} />}
-          <CloseRegistrationAction competitionId={competitionId} data={announcementData} />
-        </List>
-      </Dimmer.Dimmable>
+      <Header style={{ marginTop: 0 }}>{I18n.t('competitions.announcements')}</Header>
+      <List bulleted verticalAlign="middle">
+        {isAdminView && <AnnounceAction competitionId={competitionId} data={announcementData} />}
+        {isAdminView && <CancelAction competitionId={competitionId} data={announcementData} />}
+        <CloseRegistrationAction competitionId={competitionId} data={announcementData} />
+      </List>
     </ConfirmProvider>
   );
 }

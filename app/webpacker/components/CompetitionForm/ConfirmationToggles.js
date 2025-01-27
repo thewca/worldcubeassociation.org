@@ -1,15 +1,12 @@
 import {
-  Dimmer,
   Form,
   Header,
-  Segment,
 } from 'semantic-ui-react';
 import React, { useCallback } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import I18n from '../../lib/i18n';
 import { useStore } from '../../lib/providers/StoreProvider';
-import ConfirmProvider from '../../lib/providers/ConfirmProvider';
-import { useFormContext, useFormErrorHandler } from '../wca/FormBuilder/provider/FormObjectProvider';
+import { useFormErrorHandler } from '../wca/FormBuilder/provider/FormObjectProvider';
 import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken';
 import {
   useConfirmationData,
@@ -70,32 +67,24 @@ export default function ConfirmationToggles({ competitionId }) {
     isLoading,
   } = useConfirmationData(competitionId);
 
-  const { unsavedChanges } = useFormContext();
-
   if (!isAdminView) return null;
   if (isLoading) return <Loading />;
 
   return (
-    <ConfirmProvider>
-      <Dimmer.Dimmable as={Segment} blurring dimmed={unsavedChanges}>
-        <Dimmer active={unsavedChanges}>
-          You have unsaved changes. Please save the competition before taking any other action.
-        </Dimmer>
-
-        <Header style={{ marginTop: 0 }}>{I18n.t('competitions.announcements')}</Header>
-        <Form.Group widths="equal">
-          <ConfirmationControlCheckbox
-            competitionId={competitionId}
-            announcementData={announcementData}
-            toggleKey="isConfirmed"
-          />
-          <ConfirmationControlCheckbox
-            competitionId={competitionId}
-            announcementData={announcementData}
-            toggleKey="isVisible"
-          />
-        </Form.Group>
-      </Dimmer.Dimmable>
-    </ConfirmProvider>
+    <>
+      <Header style={{ marginTop: 0 }}>{I18n.t('competitions.announcements')}</Header>
+      <Form.Group widths="equal">
+        <ConfirmationControlCheckbox
+          competitionId={competitionId}
+          announcementData={announcementData}
+          toggleKey="isConfirmed"
+        />
+        <ConfirmationControlCheckbox
+          competitionId={competitionId}
+          announcementData={announcementData}
+          toggleKey="isVisible"
+        />
+      </Form.Group>
+    </>
   );
 }

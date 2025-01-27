@@ -7,7 +7,7 @@ import { useFormInitialObject } from '../wca/FormBuilder/provider/FormObjectProv
 import I18nHTMLTranslate from '../I18nHTMLTranslate';
 import Loading from '../Requests/Loading';
 import { useConfirmationData } from './api';
-import ConfirmationToggles from "./ConfirmationToggles";
+import ConfirmationToggles from './ConfirmationToggles';
 
 // FIXME: We should consider a better way of accessing the friendly ID instead of hard-coding.
 const WCAT_FRIENDLY_ID = 'wcat';
