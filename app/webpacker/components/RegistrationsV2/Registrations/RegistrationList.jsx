@@ -129,6 +129,12 @@ export default function RegistrationList({ competitionInfo, userId }) {
     );
   }
 
+  const registrationCount = registrationsWithPsychSheet.length;
+  const newcomerCount = registrationsWithPsychSheet.filter(
+    (reg) => !reg.user.wca_id,
+  ).length;
+  const returnerCount = registrationCount - newcomerCount;
+
   return (
     <Segment style={{ overflowX: 'scroll' }}>
       <PsychSheetEventSelector
@@ -136,8 +142,8 @@ export default function RegistrationList({ competitionInfo, userId }) {
         eventList={competitionInfo.event_ids}
         selectedEvents={[psychSheetEvent].filter(Boolean)}
       />
-      {userIsInTable && (
-        <Message>
+      <Message>
+        {userIsInTable && (
           <Button
             size="mini"
             onClick={
@@ -146,15 +152,32 @@ export default function RegistrationList({ competitionInfo, userId }) {
           >
             {I18n.t('competitions.registration_v2.list.psychsheets.show_me')}
           </Button>
-          {' '}
-          {(userPosition || isPsychSheet) && (
+        )}
+        {' '}
+        {userIsInTable && (userPosition || isPsychSheet) && (
+          `${
             I18n.t(
               'competitions.registration_v2.list.psychsheets.rank',
               { userPosition: userPosition ?? '-' },
             )
-          )}
-        </Message>
-      )}
+          }; `
+        )}
+        {
+          `${
+            newcomerCount
+          } ${
+            I18n.t('registrations.registration_info_people.newcomer', { count: newcomerCount })
+          } + ${
+            returnerCount
+          } ${
+            I18n.t('registrations.registration_info_people.returner', { count: returnerCount })
+          } = ${
+            registrationCount
+          } ${
+            I18n.t('registrations.registration_info_people.person', { count: registrationCount })
+          }`
+        }
+      </Message>
       <Table striped sortable unstackable compact singleLine textAlign="left">
         <Table.Header>
           <Table.Row>
@@ -325,9 +348,7 @@ function FooterContent({
 
   const isPsychSheet = !isAllCompetitors;
 
-  const newcomerCount = registrations.filter(
-    (reg) => !reg.user.wca_id,
-  ).length;
+  const registrationCount = registrations.length;
 
   const countryCount = new Set(
     registrations.map((reg) => reg.user.country.iso2),
@@ -352,10 +373,13 @@ function FooterContent({
         <Table.Cell />
       )}
       <Table.Cell>
-        {`${newcomerCount} ${I18n.t('registrations.registration_info_people.newcomer', { count: newcomerCount })} + ${
-          registrations.length - newcomerCount
-        } ${I18n.t('registrations.registration_info_people.returner', { count: registrations.length - newcomerCount })} =
-         ${registrations.length} ${I18n.t('registrations.registration_info_people.person', { count: registrations.length })}`}
+        {
+          `${
+            registrationCount
+          } ${
+            I18n.t('registrations.registration_info_people.person', { count: registrationCount })
+          }`
+        }
       </Table.Cell>
       <Table.Cell>{`${I18n.t('registrations.list.country_plural', { count: countryCount })}`}</Table.Cell>
       {isAllCompetitors ? (
