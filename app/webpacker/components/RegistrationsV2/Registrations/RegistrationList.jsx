@@ -142,8 +142,8 @@ export default function RegistrationList({ competitionInfo, userId }) {
         eventList={competitionInfo.event_ids}
         selectedEvents={[psychSheetEvent].filter(Boolean)}
       />
-      {userIsInTable && (
-        <Message>
+      <Message>
+        {userIsInTable && (
           <Button
             size="mini"
             onClick={
@@ -152,32 +152,32 @@ export default function RegistrationList({ competitionInfo, userId }) {
           >
             {I18n.t('competitions.registration_v2.list.psychsheets.show_me')}
           </Button>
-          {' '}
-          {(userPosition || isPsychSheet) && (
-            `${
-              I18n.t(
-                'competitions.registration_v2.list.psychsheets.rank',
-                { userPosition: userPosition ?? '-' },
-              )
-            }; `
-          )}
-          {
-            `${
-              newcomerCount
-            } ${
-              I18n.t('registrations.registration_info_people.newcomer', { count: newcomerCount })
-            } + ${
-              returnerCount
-            } ${
-              I18n.t('registrations.registration_info_people.returner', { count: returnerCount })
-            } = ${
-              registrationCount
-            } ${
-              I18n.t('registrations.registration_info_people.person', { count: registrationCount })
-            }`
-          }
-        </Message>
-      )}
+        )}
+        {' '}
+        {userIsInTable && (userPosition || isPsychSheet) && (
+          `${
+            I18n.t(
+              'competitions.registration_v2.list.psychsheets.rank',
+              { userPosition: userPosition ?? '-' },
+            )
+          }; `
+        )}
+        {
+          `${
+            newcomerCount
+          } ${
+            I18n.t('registrations.registration_info_people.newcomer', { count: newcomerCount })
+          } + ${
+            returnerCount
+          } ${
+            I18n.t('registrations.registration_info_people.returner', { count: returnerCount })
+          } = ${
+            registrationCount
+          } ${
+            I18n.t('registrations.registration_info_people.person', { count: registrationCount })
+          }`
+        }
+      </Message>
       <Table striped sortable unstackable compact singleLine textAlign="left">
         <Table.Header>
           <Table.Row>
