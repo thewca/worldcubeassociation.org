@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Button, Form, Icon, Message,
+  Button, Form, Header, Icon, Message,
 } from 'semantic-ui-react';
 import _ from 'lodash';
 import { adminCheckRecordsUrl, apiV0Urls } from '../../../../lib/requests/routes.js.erb';
@@ -127,6 +127,13 @@ export default function EditPersonForm({ wcaId, onSuccess, showDestroyButton = f
           </Message.Content>
         </Message>
       )}
+      <Header as="h3">
+        WCA ID:
+        {' '}
+        <a href={`/persons/${wcaId}`}>
+          {wcaId}
+        </a>
+      </Header>
       <Form>
         <Form.Input
           label={I18n.t('activerecord.attributes.user.name')}
