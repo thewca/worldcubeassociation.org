@@ -40,7 +40,7 @@ module Registrations
           registration.administrative_notes = admin_comment unless admin_comment.nil?
           registration.guests = guests if guests.present?
 
-          update_status(registration, status) # Update status after updating waiting list so that can access the old_status
+          update_status(registration, status)
 
           if old_status == Registrations::Helper::STATUS_WAITING_LIST || status == Registrations::Helper::STATUS_WAITING_LIST
             waiting_list = competition.waiting_list || competition.create_waiting_list(entries: [])
