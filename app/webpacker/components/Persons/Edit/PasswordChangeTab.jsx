@@ -3,7 +3,8 @@ import {
   Button, Divider, Form, Header, Modal, Segment,
 } from 'semantic-ui-react';
 import useInputState from '../../../lib/hooks/useInputState';
-import { updateUserUrl } from '../../../lib/requests/routes.js.erb';
+import { destroyOtherSessionsUrl, updateUserUrl } from '../../../lib/requests/routes.js.erb';
+import I18n from '../../../lib/i18n';
 
 export default function PasswordChangeTab({ user, recentlyAuthenticated }) {
   const [password, setPassword] = useInputState('');
@@ -34,7 +35,16 @@ export default function PasswordChangeTab({ user, recentlyAuthenticated }) {
       </Form>
       <Divider />
       <Header>Actions</Header>
-      <Button negative>Sign out of Other devices</Button>
+      <Form action={destroyOtherSessionsUrl()} method="DELETE">
+        <input
+          type="hidden"
+          name="authenticity_token"
+          value={document.querySelector('meta[name=csrf-token]').content}
+        />
+        <Form.Button primary type="submit">
+          {I18n.t('users.edit.sign_out_of_devices')}
+        </Form.Button>
+      </Form>
     </Segment>
   );
 }

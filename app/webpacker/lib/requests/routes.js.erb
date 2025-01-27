@@ -13,6 +13,8 @@ export const updatePreferencesUrl = (userId) => `<%= CGI.unescape(Rails.applicat
 
 export const enable2FaUrl = () => `<%= CGI.unescape(Rails.application.routes.url_helpers.profile_enable_2fa_path)%>`
 
+export const destroyOtherSessionsUrl = () => `<%= CGI.unescape(Rails.application.routes.url_helpers.destroy_other_user_sessions_path)%>`
+
 export const disable2FaUrl = () => `<%= CGI.unescape(Rails.application.routes.url_helpers.profile_disable_2fa_path)%>`
 
 export const generateBackupCodesUrl = () => `<%= CGI.unescape(Rails.application.routes.url_helpers.profile_generate_2fa_backup_path)%>`

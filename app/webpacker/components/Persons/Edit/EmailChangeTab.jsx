@@ -25,6 +25,7 @@ export default function EmailChangeTab({ user, recentlyAuthenticated }) {
         <input type="hidden" name="authenticity_token" value={document.querySelector('meta[name=csrf-token]').content} />
         <Form.Field>
           <Form.Input name="user[email]" value={email} onChange={setEmail} label="Email" />
+          {/* i18n-tasks-use t('users.edit.confirm_new_email') */}
           <I18nHTMLTranslate i18nKey="users.edit.confirm_new_email" />
         </Form.Field>
         <Form.Button type="submit">Save</Form.Button>

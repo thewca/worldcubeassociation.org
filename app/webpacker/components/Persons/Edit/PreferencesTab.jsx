@@ -58,6 +58,8 @@ export default function PreferencesTab({ user }) {
             checked={resultsPostedNotification}
             onChange={setResultsPostedNotification}
           />
+          {/* i18n-tasks-use t('simple_form.hints.user.results_notifications_enabled') */}
+          <I18nHTMLTranslate i18nKey="simple_form.hints.user.results_notifications_enabled" />
         </Form.Field>
         <Form.Field>
           <Form.Checkbox
@@ -65,6 +67,7 @@ export default function PreferencesTab({ user }) {
             checked={registrationNotifications}
             onChange={setRegistrationNotifications}
           />
+          {/* i18n-tasks-use t('simple_form.hints.user.registration_notifications_enabled') */}
           <I18nHTMLTranslate i18nKey="simple_form.hints.user.registration_notifications_enabled" />
         </Form.Field>
         <Form.Button type="submit" disabled={isPending}>Save</Form.Button>
