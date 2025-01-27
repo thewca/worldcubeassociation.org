@@ -70,7 +70,7 @@ export default function RegistrationList({ competitionInfo, userId }) {
   const registrationsWithPsychSheet = useMemo(() => {
     if (psychSheet !== undefined) {
       return psychSheet.sorted_rankings.map((p) => {
-        const registrationEntry = registrations.find((r) => p.user_id === r.user_id);
+        const registrationEntry = registrations?.find((r) => p.user_id === r.user_id) || {};
         return { ...p, ...registrationEntry };
       });
     }
