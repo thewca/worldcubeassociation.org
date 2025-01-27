@@ -127,8 +127,9 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
 
   const actionsRef = useRef();
 
-  const [autoAcceptEnabled, setAutoAcceptEnabled] =
-    useState(competitionInfo.auto_accept_registrations);
+  const [autoAcceptEnabled, setAutoAcceptEnabled] = useState(
+    competitionInfo.auto_accept_registrations
+  );
 
   const [state, dispatchSort] = useReducer(sortReducer, {
     sortColumn: competitionInfo['using_payment_integrations?']
