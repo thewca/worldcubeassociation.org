@@ -127,7 +127,8 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
 
   const actionsRef = useRef();
 
-  const [autoAcceptEnabled, setAutoAcceptEnabled] = useState(competitionInfo.auto_accept_registrations);
+  const [autoAcceptEnabled, setAutoAcceptEnabled] =
+    useState(competitionInfo.auto_accept_registrations);
 
   const [state, dispatchSort] = useReducer(sortReducer, {
     sortColumn: competitionInfo['using_payment_integrations?']
@@ -165,8 +166,8 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
     mutationFn: disableAutoAccept,
     onError: () => {
       dispatchStore(setMessage(
-        `competitions.registration_v2.auto_accept.cant_disable`,
-        "negative",
+        'competitions.registration_v2.auto_accept.cant_disable',
+        'negative',
       ));
     },
     onSuccess: () => {
