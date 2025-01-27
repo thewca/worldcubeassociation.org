@@ -69,14 +69,14 @@ function AnnounceAction({
 
 function CancelAction({
   competitionId,
-  data,
+  announcementData,
 }) {
   const {
     isCancelled,
     cancelledBy,
     cancelledAt,
     canBeCancelled,
-  } = data;
+  } = announcementData;
 
   const confirm = useConfirm();
   const queryClient = useQueryClient();
@@ -150,13 +150,13 @@ function CancelAction({
 
 function CloseRegistrationAction({
   competitionId,
-  data,
+ announcementData,
 }) {
   const {
     isRegistrationPast,
     isRegistrationFull,
     canCloseFullRegistration,
-  } = data;
+  } = announcementData;
 
   const onError = useFormErrorHandler();
 
@@ -225,9 +225,22 @@ export default function AnnouncementActions({ competitionId }) {
     <ConfirmProvider>
       <Header style={{ marginTop: 0 }}>{I18n.t('competitions.announcements')}</Header>
       <List bulleted verticalAlign="middle">
-        {isAdminView && <AnnounceAction competitionId={competitionId} data={announcementData} />}
-        {isAdminView && <CancelAction competitionId={competitionId} data={announcementData} />}
-        <CloseRegistrationAction competitionId={competitionId} data={announcementData} />
+        {isAdminView && (
+          <AnnounceAction
+            competitionId={competitionId}
+            announcementData={announcementData}
+          />
+        )}
+        {isAdminView && (
+          <CancelAction
+            competitionId={competitionId}
+            announcementData={announcementData}
+          />
+        )}
+        <CloseRegistrationAction
+          competitionId={competitionId}
+          announcementData={announcementData}
+        />
       </List>
     </ConfirmProvider>
   );

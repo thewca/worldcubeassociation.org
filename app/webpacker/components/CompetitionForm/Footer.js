@@ -94,10 +94,10 @@ export default function Footer() {
 
   const {
     data: confirmationData,
-    loading,
+    isLoading,
   } = useConfirmationData(competitionId);
 
-  if (loading) return <Loading />;
+  if (isLoading) return <Loading />;
 
   const { isConfirmed } = confirmationData;
 

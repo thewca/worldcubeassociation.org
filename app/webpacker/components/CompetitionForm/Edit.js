@@ -18,13 +18,15 @@ function EditCompetition({
   const backendUrl = `${competitionUrl(competition.competitionId)}?adminView=${isAdminView}`;
   const backendOptions = { method: 'PATCH' };
 
-  const { data: confirmationData } = useConfirmationData(competition.competitionId);
+  const { data: confirmationData, isLoading } = useConfirmationData(competition.competitionId);
 
   const isDisabled = useMemo(() => {
+    if (isLoading) return true;
+
     const { isConfirmed } = confirmationData;
 
     return isConfirmed && !isAdminView;
-  }, [confirmationData, isAdminView]);
+  }, [confirmationData, isAdminView, isLoading]);
 
   return (
     <StoreProvider
