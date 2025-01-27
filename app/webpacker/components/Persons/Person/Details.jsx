@@ -37,9 +37,9 @@ export default function Details({
         <CountryFlag iso2={person.country_iso2} />
         {' '}
         {person.name}
+        {' '}
         {canEditUser && (
           <a href={editPersonUrl(person.user.id)}>
-            {' '}
             <Icon name="edit" />
           </a>
         )}
