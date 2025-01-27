@@ -379,7 +379,7 @@ function FooterContent({
           } ${
             I18n.t('registrations.registration_info_people.person', { count: registrationCount })
           }`
-          }
+        }
       </Table.Cell>
       <Table.Cell>{`${I18n.t('registrations.list.country_plural', { count: countryCount })}`}</Table.Cell>
       {isAllCompetitors ? (
