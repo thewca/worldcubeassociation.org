@@ -122,8 +122,6 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
     initialExpandedColumns,
   );
 
-  const queryClient = useQueryClient();
-
   const [editable, setEditable] = useCheckboxState(false);
 
   const dispatchStore = useDispatch();
@@ -218,7 +216,8 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
             return a.user.wca_id.localeCompare(b.user.wca_id);
           }
           case 'country':
-            return countries.byIso2[a.user.country.iso2].name.localeCompare(countries.byIso2[b.user.country.iso2].name);
+            return countries.byIso2[a.user.country.iso2].name
+              .localeCompare(countries.byIso2[b.user.country.iso2].name);
           case 'events':
             return a.competing.event_ids.length - b.competing.event_ids.length;
           case 'guests':
@@ -305,19 +304,21 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
   const handleOnDragEnd = useMemo(() => async (result) => {
     if (!result.destination) return;
     if (result.destination.index === result.source.index) return;
-    const waitingSorted = waiting.toSorted((a, b) => a.competing.waiting_list_position - b.competing.waiting_list_position);
+    const waitingSorted = waiting
+      .toSorted((a, b) => a.competing.waiting_list_position - b.competing.waiting_list_position);
     updateRegistrationMutation({
       competition_id: competitionInfo.id,
       requests: [{
         competition_id: competitionInfo.id,
         user_id: waitingSorted[result.source.index].user_id,
         competing: {
-          waiting_list_position: waitingSorted[result.destination.index].competing.waiting_list_position,
+          waiting_list_position: waitingSorted[result.destination.index]
+            .competing.waiting_list_position,
         },
       }],
     }, {
       onSuccess: () => {
-        // We need to get the information for all Competitors if you change the waiting list position
+        // We need to get the info for all Competitors if you change the waiting list position
         refetch();
       },
     });
