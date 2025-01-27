@@ -59,9 +59,6 @@ GIT
 GEM
   remote: https://rubygems.org/
   specs:
-    RubyInline (3.13.0)
-      ZenTest (~> 4.3)
-    ZenTest (4.12.1)
     actioncable (7.2.2.1)
       actionpack (= 7.2.2.1)
       activesupport (= 7.2.2.1)
@@ -318,8 +315,6 @@ GEM
     fugit (1.11.1)
       et-orbi (~> 1, >= 1.2.11)
       raabro (~> 1.4)
-    fuzzy-string-match (1.0.1)
-      RubyInline (>= 3.8.6)
     gli (2.21.5)
     glob (0.4.0)
     globalid (1.2.1)
@@ -402,6 +397,7 @@ GEM
       pp (>= 0.6.0)
       rdoc (>= 4.0.0)
       reline (>= 0.4.2)
+    jaro_winkler (1.6.0)
     jbuilder (2.13.0)
       actionview (>= 5.0.0)
       activesupport (>= 5.0.0)
@@ -870,7 +866,6 @@ DEPENDENCIES
   faker
   faraday
   faraday-retry
-  fuzzy-string-match
   google-apis-admin_directory_v1
   guard-rspec
   hiredis
@@ -883,6 +878,7 @@ DEPENDENCIES
   image_processing
   irb
   iso!
+  jaro_winkler
   jbuilder
   json-schema
   jwt
@@ -954,4 +950,4 @@ DEPENDENCIES
   wkhtmltopdf-binary-ng
 
 BUNDLED WITH
-   2.5.18
+   2.6.3
