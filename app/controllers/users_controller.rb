@@ -180,6 +180,31 @@ class UsersController < ApplicationController
     end
   end
 
+  def update_preferences
+    user = user_to_edit
+    user.current_user = current_user
+    return render json: { ok: false } unless current_user&.can_edit_user?(user)
+
+    preferred_events = params[:preferred_event_ids]
+    if preferred_events.present?
+      user.update(preferred_events: Event.find(preferred_events))
+    end
+
+    results_notifications_enabled = params[:results_notifications_enabled]
+
+    if params.key?(:results_notifications_enabled)
+      user.update(results_notifications_enabled: results_notifications_enabled)
+    end
+
+    registration_notifications_enabled = params[:registration_notifications_enabled]
+
+    if params.key?(:registration_notifications_enabled)
+      user.update(registration_notifications_enabled: registration_notifications_enabled)
+    end
+
+    render json: { ok: true }
+  end
+
   def update_avatar
     avatar_id = params.require(:avatarId)
 

@@ -78,3 +78,5 @@ translations:
       - "*.simple_form.hints.post.*"
       - "*.persons.index.*"
       - "*.validators.*"
+      - "*.devise.sessions.new.*"
+      - "*.users.successes.*"

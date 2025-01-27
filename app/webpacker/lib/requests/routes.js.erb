@@ -7,7 +7,21 @@ function jsonToQueryString(json) {
 
 export const editPersonUrl = (userId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.edit_user_path("${userId}"))%>`;
 
+export const updateUserUrl = (userId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.user_path("${userId}"))%>`;
+
+export const updatePreferencesUrl = (userId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.update_preferences_path("${userId}"))%>`;
+
+export const enable2FaUrl = () => `<%= CGI.unescape(Rails.application.routes.url_helpers.profile_enable_2fa_path)%>`
+
+export const destroyOtherSessionsUrl = () => `<%= CGI.unescape(Rails.application.routes.url_helpers.destroy_other_user_sessions_path)%>`
+
+export const disable2FaUrl = () => `<%= CGI.unescape(Rails.application.routes.url_helpers.profile_disable_2fa_path)%>`
+
+export const generateBackupCodesUrl = () => `<%= CGI.unescape(Rails.application.routes.url_helpers.profile_generate_2fa_backup_path)%>`
+
 export const personUrl = (wcaId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.person_path("${wcaId}"))%>`;
+
+export const profileClaimWCAIdUrl = () => `<%= CGI.unescape(Rails.application.routes.url_helpers.profile_claim_wca_id_path)%>`;
 
 export const personsUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.persons_path) %>`;
 export const usersUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.users_path) %>`;
@@ -327,4 +341,3 @@ export const mergeProfilesUrl = `<%= CGI.unescape(Rails.application.routes.url_h
 export const anonymizePersonUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.admin_anonymize_person_path) %>`;
 
 export const reassignConnectedWcaIdUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.admin_reassign_wca_id_path) %>`;
-

@@ -59,6 +59,7 @@ Rails.application.routes.draw do
   get 'users/:id/avatar' => 'users#avatar_data', as: :users_avatar_data
   post 'users/:id/avatar' => 'users#upload_avatar'
   patch 'users/:id/avatar' => 'users#update_avatar'
+  patch 'users/:id/preferences' => 'users#update_preferences', as: :update_preferences
   delete 'users/:id/avatar' => 'users#delete_avatar'
   post 'users/:id/anonymize' => 'users#anonymize', as: :anonymize_user
   get 'admin/avatars/pending' => 'admin/avatars#pending_avatar_users', as: :pending_avatars
