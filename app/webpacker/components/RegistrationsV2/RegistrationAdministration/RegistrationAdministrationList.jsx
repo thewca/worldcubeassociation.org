@@ -1,10 +1,9 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { Button, Icon } from 'semantic-ui-react';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import React, {
   useMemo, useReducer, useRef, useState,
 } from 'react';
 import {
-  Checkbox, Form, Header, Segment, Sticky,
+  Button, Icon, Checkbox, Form, Header, Segment, Sticky,
 } from 'semantic-ui-react';
 import { DateTime } from 'luxon';
 import { getAllRegistrations } from '../api/registration/get/get_registrations';
@@ -128,7 +127,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
 
   const actionsRef = useRef();
 
-  const [autoAcceptEnabled, setAutoAcceptEnabled] = useState(competitionInfo.auto_accept_registrations)
+  const [autoAcceptEnabled, setAutoAcceptEnabled] = useState(competitionInfo.auto_accept_registrations);
 
   const [state, dispatchSort] = useReducer(sortReducer, {
     sortColumn: competitionInfo['using_payment_integrations?']
@@ -162,18 +161,17 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
     },
   });
 
-
   const { mutate: disableAutoAcceptMutation, isPending: isUpdating } = useMutation({
     mutationFn: disableAutoAccept,
-    onError: (data) => {
+    onError: () => {
       dispatchStore(setMessage(
         `competitions.registration_v2.auto_accept.cant_disable`,
-        'negative',
+        "negative",
       ));
     },
     onSuccess: () => {
       dispatchStore(setMessage('competitions.registration_v2.auto_accept.disabled', 'positive'));
-      setAutoAcceptEnabled(false)
+      setAutoAcceptEnabled(false);
     },
   });
 
