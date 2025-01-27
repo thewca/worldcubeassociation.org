@@ -6,6 +6,7 @@ import I18nHTMLTranslate from '../../I18nHTMLTranslate';
 import { updateUserUrl } from '../../../lib/requests/routes.js.erb';
 import './preferences.scss';
 import GenderSelector from '../../GenderSelector/GenderSelector';
+import RailsForm from './RailsForm';
 
 export default function GeneralChangesTab({ user, editableFields }) {
   const [name, setName] = useInputState(user.name);
@@ -17,9 +18,7 @@ export default function GeneralChangesTab({ user, editableFields }) {
 
   return (
     <Segment>
-      <Form method="POST" action={updateUserUrl(user.id)} className="preferences-form">
-        <input type="hidden" name="_method" value="patch" />
-        <input type="hidden" name="authenticity_token" value={document.querySelector('meta[name=csrf-token]').content} />
+      <RailsForm method="patch" action={updateUserUrl(user.id)} className="preferences-form">
         <Form.Field>
           <Form.Input
             label="Full Name"
@@ -71,7 +70,7 @@ export default function GeneralChangesTab({ user, editableFields }) {
           />
         </Form.Group>
         <Form.Button>Save</Form.Button>
-      </Form>
+      </RailsForm>
     </Segment>
   );
 }

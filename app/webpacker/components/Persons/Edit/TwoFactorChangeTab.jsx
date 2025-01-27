@@ -7,6 +7,7 @@ import I18nHTMLTranslate from '../../I18nHTMLTranslate';
 import I18n from '../../../lib/i18n';
 import { enable2FaUrl, disable2FaUrl } from '../../../lib/requests/routes.js.erb';
 import { getBackupCodes } from '../api/getBackupCodes';
+import RailsForm from './RailsForm';
 
 export default function TwoFactorChangeTab({ user, recentlyAuthenticated, otpSVG }) {
   const [backupCodes, setBackupCodes] = useState(null);
@@ -64,29 +65,19 @@ export default function TwoFactorChangeTab({ user, recentlyAuthenticated, otpSVG
         />
       </Message>
       {!user.otp_required_for_login ? (
-        <Form action={enable2FaUrl()} method="POST">
-          <input
-            type="hidden"
-            name="authenticity_token"
-            value={document.querySelector('meta[name=csrf-token]').content}
-          />
+        <RailsForm action={enable2FaUrl()} method="post">
           <Form.Button primary type="submit">
             {I18n.t('devise.sessions.new.2fa.enable')}
           </Form.Button>
-        </Form>
+        </RailsForm>
       ) : (
         <>
           <I18nHTMLTranslate i18nKey="devise.sessions.new.2fa.reset_if_needed" />
-          <Form action={enable2FaUrl()} method="POST">
-            <input
-              type="hidden"
-              name="authenticity_token"
-              value={document.querySelector('meta[name=csrf-token]').content}
-            />
+          <RailsForm action={enable2FaUrl()} method="post">
             <Form.Button type="submit" negative>
               {I18n.t('devise.sessions.new.2fa.reset')}
             </Form.Button>
-          </Form>
+          </RailsForm>
           <I18nHTMLTranslate i18nKey="devise.sessions.new.2fa.reset_warning" />
 
           <Header as="h2">{I18n.t('devise.sessions.new.2fa.methods')}</Header>
@@ -130,16 +121,11 @@ export default function TwoFactorChangeTab({ user, recentlyAuthenticated, otpSVG
 
           <Header as="h2">{I18n.t('devise.sessions.new.2fa.disable_section_title')}</Header>
           <I18nHTMLTranslate i18nKey="devise.sessions.new.2fa.disable_section_content" />
-          <Form action={disable2FaUrl()} method="POST">
-            <input
-              type="hidden"
-              name="authenticity_token"
-              value={document.querySelector('meta[name=csrf-token]').content}
-            />
-            <Button negative type="submit">
+          <RailsForm action={disable2FaUrl()} method="post">
+            <Form.Button negative type="submit">
               {I18n.t('devise.sessions.new.2fa.disable')}
-            </Button>
-          </Form>
+            </Form.Button>
+          </RailsForm>
         </>
       )}
     </Segment>
