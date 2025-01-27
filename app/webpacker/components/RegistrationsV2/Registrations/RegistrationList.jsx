@@ -129,6 +129,12 @@ export default function RegistrationList({ competitionInfo, userId }) {
     );
   }
 
+  const registrationCount = registrations.length;
+  const newcomerCount = registrations?.filter(
+    (reg) => !reg.user.wca_id,
+  ).length;
+  const returnerCount = registrationCount - newcomerCount;
+
   return (
     <Segment style={{ overflowX: 'scroll' }}>
       <PsychSheetEventSelector
@@ -148,11 +154,28 @@ export default function RegistrationList({ competitionInfo, userId }) {
           </Button>
           {' '}
           {(userPosition || isPsychSheet) && (
-            I18n.t(
-              'competitions.registration_v2.list.psychsheets.rank',
-              { userPosition: userPosition ?? '-' },
-            )
+            `${
+              I18n.t(
+                'competitions.registration_v2.list.psychsheets.rank',
+                { userPosition: userPosition ?? '-' },
+              )
+            }; `
           )}
+          {
+            `${
+              newcomerCount
+            } ${
+              I18n.t('registrations.registration_info_people.newcomer', { count: newcomerCount })
+            } + ${
+              returnerCount
+            } ${
+              I18n.t('registrations.registration_info_people.returner', { count: returnerCount })
+            } = ${
+              registrationCount
+            } ${
+              I18n.t('registrations.registration_info_people.person', { count: registrationCount })
+            }`
+          }
         </Message>
       )}
       <Table striped sortable unstackable compact singleLine textAlign="left">
