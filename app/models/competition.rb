@@ -1821,11 +1821,17 @@ class Competition < ApplicationRecord
     orderable_fields = %i(name start_date end_date announced_at)
     if params[:sort]
       order = params[:sort].split(',')
-                           .to_h do |part|
+                           .map do |part|
                              reverse, field = part.match(/^(-)?(\w+)$/).captures
                              [field.to_sym, reverse ? :desc : :asc]
                            end
-                           .slice(*orderable_fields)
+                           # rubocop:disable Style/HashSlice
+                           #   RuboCop suggests using `slice` here, which is a noble intention but breaks the order
+                           #   of sort arguments. However, this order is crucial (sorting by "name then start_date"
+                           #   is different from sorting by "start_date then name") so we insist on doing it our way.
+                           .select { |field, _| orderable_fields.include?(field) }
+                           # rubocop:enable Style/HashSlice
+                           .to_h
     else
       order = { start_date: :desc }
     end
