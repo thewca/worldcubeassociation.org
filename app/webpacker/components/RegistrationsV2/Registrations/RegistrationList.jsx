@@ -315,106 +315,134 @@ function PsychSheet({
         onScrollToMeClick={onScrollToMeClick}
       />
       <Table striped sortable unstackable compact singleLine textAlign="left">
-        <Table.Header>
-          <Table.Row>
-            <Table.HeaderCell disabled>
-              <EventIcon id={psychSheetEvent} className="selected" size="1em" />
-            </Table.HeaderCell>
-            <Table.HeaderCell disabled>
-              {I18n.t('activerecord.attributes.registration.name')}
-            </Table.HeaderCell>
-            <Table.HeaderCell disabled>
-              {I18n.t('activerecord.attributes.user.country_iso2')}
-            </Table.HeaderCell>
-            <Table.HeaderCell disabled>
-              <Icon name="trophy" />
-              {' '}
-              WR
-            </Table.HeaderCell>
-            <Table.HeaderCell
-              sorted={
-                psychSheetSortBy === 'single' ? 'ascending' : undefined
-              }
-              onClick={() => setPsychSheetSortBy('single')}
-            >
-              {I18n.t('common.single')}
-            </Table.HeaderCell>
-            <Table.HeaderCell
-              sorted={
-                psychSheetSortBy === 'average' ? 'ascending' : undefined
-              }
-              onClick={() => setPsychSheetSortBy('average')}
-            >
-              {I18n.t('common.average')}
-            </Table.HeaderCell>
-          </Table.Row>
-        </Table.Header>
-        <Table.Body>
-          {registrations.length > 0 ? (
-            registrations.map((registration) => {
-              const isUser = registration.user_id === userId;
-              return (
-                <Table.Row
-                  key={`registration-table-row-${registration.user.id}`}
-                  active={isUser}
-                >
-                  <Table.Cell
-                    collapsing
-                    textAlign="right"
-                    disabled={registration.tied_previous}
-                  >
-                      {registration.pos}
-                  </Table.Cell>
-                  <Table.Cell>
-                    <div ref={isUser ? userRowRef : undefined}>
-                      {registration.user.wca_id ? (
-                        <a
-                          href={personUrl(registration.user.wca_id)}
-                        >
-                          {registration.user.name}
-                        </a>
-                      ) : (
-                        registration.user.name
-                      )}
-                    </div>
-                  </Table.Cell>
-                  <Table.Cell>
-                    <Flag
-                      name={registration.user.country.iso2.toLowerCase()}
-                    />
-                    {countries.byIso2[registration.user.country.iso2].name}
-                  </Table.Cell>
-                  <Table.Cell>
-                    {psychSheetSortBy === 'single'
-                      ? registration.single_rank
-                      : registration.average_rank}
-                  </Table.Cell>
-                  <Table.Cell>
-                    {formatAttemptResult(registration.single_best, psychSheetEvent)}
-                  </Table.Cell>
-                  <Table.Cell>
-                    {formatAttemptResult(registration.average_best, psychSheetEvent)}
-                  </Table.Cell>
-                </Table.Row>
-              );
-            })
-          ) : (
-            <Table.Row>
-              <Table.Cell
-                textAlign="center"
-                colSpan={7}
-              >
-                {I18n.t('competitions.registration_v2.list.empty')}
-              </Table.Cell>
-            </Table.Row>
-          )}
-        </Table.Body>
+        <PsychSheetHeader
+          psychSheetEvent={psychSheetEvent}
+          psychSheetSortBy={psychSheetSortBy}
+          setPsychSheetSortBy={setPsychSheetSortBy}
+        />
+        <PsychSheetBody
+          registrations={registrations}
+          psychSheetEvent={psychSheetEvent}
+          psychSheetSortBy={psychSheetSortBy}
+          userId={userId}
+          userRowRef={userRowRef}
+        />
         <Footer
           registrations={registrations}
           competitionInfo={competitionInfo}
         />
       </Table>
     </>
+  );
+}
+
+function PsychSheetHeader({
+  psychSheetEvent,
+  psychSheetSortBy,
+  setPsychSheetSortBy,
+}) {
+  return (
+    <Table.Header>
+      <Table.Row>
+        <Table.HeaderCell disabled>
+          <EventIcon id={psychSheetEvent} className="selected" size="1em" />
+        </Table.HeaderCell>
+        <Table.HeaderCell disabled>
+          {I18n.t('activerecord.attributes.registration.name')}
+        </Table.HeaderCell>
+        <Table.HeaderCell disabled>
+          {I18n.t('activerecord.attributes.user.country_iso2')}
+        </Table.HeaderCell>
+        <Table.HeaderCell disabled>
+          <Icon name="trophy" />
+          {' '}
+          WR
+        </Table.HeaderCell>
+        <Table.HeaderCell
+          sorted={psychSheetSortBy === 'single' ? 'ascending' : undefined}
+          onClick={() => setPsychSheetSortBy('single')}
+        >
+          {I18n.t('common.single')}
+        </Table.HeaderCell>
+        <Table.HeaderCell
+          sorted={psychSheetSortBy === 'average' ? 'ascending' : undefined}
+          onClick={() => setPsychSheetSortBy('average')}
+        >
+          {I18n.t('common.average')}
+        </Table.HeaderCell>
+      </Table.Row>
+    </Table.Header>
+  );
+}
+
+function PsychSheetBody({
+  registrations,
+  psychSheetEvent,
+  psychSheetSortBy,
+  userId,
+  userRowRef,
+}) {
+  return (
+    <Table.Body>
+      {registrations.length > 0 ? (
+        registrations.map((registration) => {
+          const isUser = registration.user_id === userId;
+          return (
+            <Table.Row
+              key={`registration-table-row-${registration.user.id}`}
+              active={isUser}
+            >
+              <Table.Cell
+                collapsing
+                textAlign="right"
+                disabled={registration.tied_previous}
+              >
+                  {registration.pos}
+              </Table.Cell>
+              <Table.Cell>
+                <div ref={isUser ? userRowRef : undefined}>
+                  {registration.user.wca_id ? (
+                    <a
+                      href={personUrl(registration.user.wca_id)}
+                    >
+                      {registration.user.name}
+                    </a>
+                  ) : (
+                    registration.user.name
+                  )}
+                </div>
+              </Table.Cell>
+              <Table.Cell>
+                <Flag
+                  name={registration.user.country.iso2.toLowerCase()}
+                />
+                {countries.byIso2[registration.user.country.iso2].name}
+              </Table.Cell>
+              <Table.Cell>
+                {psychSheetSortBy === 'single'
+                  ? registration.single_rank
+                  : registration.average_rank}
+              </Table.Cell>
+              <Table.Cell>
+                {formatAttemptResult(registration.single_best, psychSheetEvent)}
+              </Table.Cell>
+              <Table.Cell>
+                {formatAttemptResult(registration.average_best, psychSheetEvent)}
+              </Table.Cell>
+            </Table.Row>
+          );
+        })
+      ) : (
+        <Table.Row>
+          <Table.Cell
+            textAlign="center"
+            colSpan={7}
+          >
+            {I18n.t('competitions.registration_v2.list.empty')}
+          </Table.Cell>
+        </Table.Row>
+      )}
+    </Table.Body>
   );
 }
 
