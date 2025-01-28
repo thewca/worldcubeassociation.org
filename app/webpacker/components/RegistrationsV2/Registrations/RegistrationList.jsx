@@ -26,23 +26,21 @@ import { EventSelector } from '../../wca/EventSelector';
 const sortReducer = createSortReducer(['name', 'country', 'total']);
 
 export default function RegistrationList({ competitionInfo, userId }) {
-  const { isLoading: registrationsLoading, data: registrations, isError } = useQuery({
+  const { isLoading: registrationsIsLoading, data: registrationsData, isError } = useQuery({
     queryKey: ['registrations', competitionInfo.id],
     queryFn: () => getConfirmedRegistrations(competitionInfo),
     retry: false,
   });
 
-  const [{ sortColumn, sortDirection }, sortDispatch] = useReducer(sortReducer, {
-    sortColumn: 'name',
-    sortDirection: 'ascending',
-  });
-
-  const changeSortColumn = (name) => sortDispatch({ type: 'CHANGE_SORT', sortColumn: name });
-
   const [psychSheetEvent, setPsychSheetEvent] = useState();
   const [psychSheetSortBy, setPsychSheetSortBy] = useState();
   const isPsychSheet = psychSheetEvent !== undefined;
-  const isAllCompetitors = !isPsychSheet;
+
+  const onEventClick = (eventId) => {
+    setPsychSheetEvent(eventId);
+    const event = events.byId[eventId];
+    setPsychSheetSortBy(event.recommendedFormat().sortBy);
+  };
   const handleEventSelection = ({ type, eventId }) => {
     if (type === 'toggle_event') {
       onEventClick(eventId);
@@ -50,13 +48,8 @@ export default function RegistrationList({ competitionInfo, userId }) {
       setPsychSheetEvent(undefined);
     }
   };
-  const onEventClick = (eventId) => {
-    setPsychSheetEvent(eventId)
-    const event = events.byId[eventId];
-    setPsychSheetSortBy(event.recommendedFormat().sortBy);
-  }
 
-  const { isLoading: isLoadingPsychSheet, data: psychSheet } = useQuery({
+  const { isLoading: psychSheetIsLoading, data: psychSheetData } = useQuery({
     queryKey: [
       'psychSheet',
       competitionInfo.id,
@@ -72,41 +65,14 @@ export default function RegistrationList({ competitionInfo, userId }) {
     enabled: isPsychSheet,
   });
 
-  const registrationsWithPsychSheet = useMemo(() => {
-    if (psychSheet !== undefined) {
-      return psychSheet.sorted_rankings.map((p) => {
-        const registrationEntry = registrations?.find((r) => p.user_id === r.user_id) || {};
-        return { ...p, ...registrationEntry };
-      });
-    }
-    return registrations;
-  }, [psychSheet, registrations]);
-
-  const allCompetitorsData = useMemo(() => {
-    if (registrationsWithPsychSheet) {
-      let orderBy = [];
-      switch (sortColumn) {
-        case 'country':
-          orderBy = [
-            (item) => countries.byIso2[item.user.country.iso2].name,
-          ];
-          break;
-        case 'total':
-          orderBy = [
-            (item) => item.competing.event_ids.length,
-          ];
-          break;
-        default:
-          break;
-      }
-      // always sort by user name as a fallback
-      orderBy.push('user.name');
-      const direction = sortDirection === 'descending' ? 'desc' : 'asc';
-
-      return _.orderBy(registrationsWithPsychSheet, orderBy, [direction]);
-    }
-    return [];
-  }, [isAllCompetitors, registrationsWithPsychSheet, sortColumn, sortDirection]);
+  // psychSheetData is only missing the country iso2, otherwise we wouldn't
+  //  need to mix in registrationData
+  const registrationsWithPsychSheetData = useMemo(() => {
+    return psychSheetData?.sorted_rankings?.map((p) => {
+      const registrationEntry = registrationsData?.find((r) => p.user_id === r.user_id) || {};
+      return { ...p, ...registrationEntry };
+    });
+  }, [psychSheetData, registrationsData]);
 
   const userRowRef = useRef();
   const scrollToUser = () => userRowRef?.current?.scrollIntoView(
@@ -119,7 +85,7 @@ export default function RegistrationList({ competitionInfo, userId }) {
     );
   }
 
-  if (registrationsLoading || isLoadingPsychSheet) {
+  if (registrationsIsLoading || psychSheetIsLoading) {
     return (
       <Segment>
         <PsychSheetEventSelector
@@ -139,27 +105,22 @@ export default function RegistrationList({ competitionInfo, userId }) {
         eventList={competitionInfo.event_ids}
         selectedEvents={[psychSheetEvent].filter(Boolean)}
       />
-      {isAllCompetitors ? (
-        <CompetitorsTable
-          data={allCompetitorsData}
+      {isPsychSheet ? (
+        <PsychSheet
           competitionInfo={competitionInfo}
-          registrations={registrations}
-          sortColumn={sortColumn}
-          sortDirection={sortDirection}
-          changeSortColumn={changeSortColumn}
-          onEventClick={onEventClick}
+          registrations={registrationsWithPsychSheetData}
+          psychSheetEvent={psychSheetEvent}
+          psychSheetSortBy={psychSheetSortBy}
+          setPsychSheetSortBy={setPsychSheetSortBy}
           userId={userId}
           userRowRef={userRowRef}
           onScrollToMeClick={scrollToUser}
         />
       ) : (
-        <PsychSheetTable
-          data={registrationsWithPsychSheet}
+        <Competitors
           competitionInfo={competitionInfo}
-          registrationsWithPsychSheet={registrationsWithPsychSheet}
-          psychSheetEvent={psychSheetEvent}
-          psychSheetSortBy={psychSheetSortBy}
-          setPsychSheetSortBy={setPsychSheetSortBy}
+          registrations={registrationsData}
+          onEventClick={onEventClick}
           userId={userId}
           userRowRef={userRowRef}
           onScrollToMeClick={scrollToUser}
@@ -169,18 +130,47 @@ export default function RegistrationList({ competitionInfo, userId }) {
   );
 }
 
-function CompetitorsTable({
-  data,
+function Competitors({
   competitionInfo,
   registrations,
-  sortColumn,
-  sortDirection,
-  changeSortColumn,
   onEventClick,
   userId,
   userRowRef,
   onScrollToMeClick,
 }) {
+  const [{ sortColumn, sortDirection }, sortDispatch] = useReducer(sortReducer, {
+    sortColumn: 'name',
+    sortDirection: 'ascending',
+  });
+  const changeSortColumn = (name) => sortDispatch({ type: 'CHANGE_SORT', sortColumn: name });
+
+  // TODO: use react table
+  const data = useMemo(() => {
+    if (registrations) {
+      let orderBy = [];
+      switch (sortColumn) {
+        case 'country':
+          orderBy = [
+            (item) => countries.byIso2[item.user.country.iso2].name,
+          ];
+          break;
+        case 'total':
+          orderBy = [
+            (item) => item.competing.event_ids.length,
+          ];
+          break;
+        default:
+          break;
+      }
+      // always sort by user name as a fallback
+      orderBy.push('user.name');
+      const direction = sortDirection === 'descending' ? 'desc' : 'asc';
+
+      return _.orderBy(registrations, orderBy, [direction]);
+    }
+    return [];
+  }, [registrations, sortColumn, sortDirection]);
+
   const userRegistration = registrations?.find((row) => row.user_id === userId);
   const userIsInTable = Boolean(userRegistration);
 
@@ -295,10 +285,9 @@ function CompetitorsTable({
   );
 }
 
-function PsychSheetTable({
-  data,
+function PsychSheet({
   competitionInfo,
-  registrationsWithPsychSheet,
+  registrations,
   psychSheetEvent,
   psychSheetSortBy,
   setPsychSheetSortBy,
@@ -306,12 +295,12 @@ function PsychSheetTable({
   userRowRef,
   onScrollToMeClick,
 }) {
-  const userRegistration = registrationsWithPsychSheet.find((row) => row.user_id === userId);
+  const userRegistration = registrations.find((row) => row.user_id === userId);
   const userIsInTable = Boolean(userRegistration);
   const userPosition = userRegistration?.pos;
 
-  const registrationCount = registrationsWithPsychSheet.length;
-  const newcomerCount = registrationsWithPsychSheet.filter(
+  const registrationCount = registrations.length;
+  const newcomerCount = registrations.filter(
     (reg) => !reg.user.wca_id,
   ).length;
   const returnerCount = registrationCount - newcomerCount;
@@ -363,8 +352,8 @@ function PsychSheetTable({
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {data.length > 0 ? (
-            data.map((registration) => {
+          {registrations.length > 0 ? (
+            registrations.map((registration) => {
               const isUser = registration.user_id === userId;
               return (
                 <Table.Row
@@ -423,7 +412,7 @@ function PsychSheetTable({
           )}
         </Table.Body>
         <Footer
-          registrations={registrationsWithPsychSheet}
+          registrations={registrations}
           competitionInfo={competitionInfo}
         />
       </Table>
