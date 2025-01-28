@@ -171,14 +171,11 @@ function Competitors({
     return [];
   }, [registrations, sortedColumn, sortedDirection]);
 
-  const userRegistration = registrations?.find((row) => row.user_id === userId);
-  const userIsInTable = Boolean(userRegistration);
+  const { userIsInTable } = getUserPositionInfo(registrations, userId);
 
-  const registrationCount = registrations.length;
-  const newcomerCount = registrations.filter(
-    (reg) => !reg.user.wca_id,
-  ).length;
-  const returnerCount = registrationCount - newcomerCount;
+  const { registrationCount, newcomerCount, returnerCount } = getPeopleCounts(
+    registrations,
+  );
 
   return (
     <>
@@ -373,15 +370,14 @@ function PsychSheet({
   userRowRef,
   onScrollToMeClick,
 }) {
-  const userRegistration = registrations.find((row) => row.user_id === userId);
-  const userIsInTable = Boolean(userRegistration);
-  const userPosition = userRegistration?.pos;
+  const { userIsInTable, userPosition } = getUserPositionInfo(
+    registrations,
+    userId,
+  );
 
-  const registrationCount = registrations.length;
-  const newcomerCount = registrations.filter(
-    (reg) => !reg.user.wca_id,
-  ).length;
-  const returnerCount = registrationCount - newcomerCount;
+  const { registrationCount, newcomerCount, returnerCount } = getPeopleCounts(
+    registrations,
+  );
 
   return (
     <>
@@ -621,4 +617,27 @@ function PreTableInfo({
       }
     </Message>
   );
+}
+
+function getUserPositionInfo(registrations, userId) {
+  const userRegistration = registrations.find((r) => r.user_id === userId);
+  const userIsInTable = Boolean(userRegistration);
+  const userPosition = userRegistration?.pos;
+
+  return ({
+    userIsInTable,
+    userPosition,
+  })
+}
+
+function getPeopleCounts(registrations) {
+  const registrationCount = registrations.length;
+  const newcomerCount = registrations.filter((r) => !r.user.wca_id,).length;
+  const returnerCount = registrationCount - newcomerCount;
+
+  return ({
+    registrationCount,
+    newcomerCount,
+    returnerCount,
+  })
 }
