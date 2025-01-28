@@ -38,7 +38,7 @@ import DownloadVoters from './pages/DownloadVoters';
 import ApprovePictures from './pages/ApprovePictures';
 import EditPersonRequestsPage from './pages/EditPersonRequestsPage';
 import AnonymizationScriptPage from './pages/AnonymizationScriptPage';
-import CreateNewComersPage from './pages/CreateNewComersPage';
+import CreateNewcomersPage from './pages/CreateNewcomersPage';
 
 export default {
   [PANEL_PAGES.postingDashboard]: {
@@ -162,8 +162,8 @@ export default {
     link: runValidatorsUrl,
   },
   [PANEL_PAGES.createNewComers]: {
-    name: 'Create New Comers',
-    component: CreateNewComersPage,
+    name: 'Create Newcomers',
+    component: CreateNewcomersPage,
   },
   [PANEL_PAGES.checkRecords]: {
     name: 'Check Records',

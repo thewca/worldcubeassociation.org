@@ -419,11 +419,11 @@ class AdminController < ApplicationController
   end
 
   private def competition_list_from_string(competition_ids_string)
-    (competition_ids_string || '').split(',').uniq.compact
+    competition_ids_string.split(',').uniq.compact
   end
 
   def complete_persons
-    @competition_ids = competition_list_from_string(params[:competition_ids])
+    @competition_ids = competition_list_from_string(params.fetch(:competition_ids, ""))
     @persons_to_finish = FinishUnfinishedPersons.search_persons(@competition_ids)
 
     if @persons_to_finish.empty?
