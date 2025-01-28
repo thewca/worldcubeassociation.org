@@ -142,206 +142,215 @@ export default function RegistrationList({ competitionInfo, userId }) {
         eventList={competitionInfo.event_ids}
         selectedEvents={[psychSheetEvent].filter(Boolean)}
       />
-      <Message>
-        {userIsInTable && (
-          <Button
-            size="mini"
-            onClick={
-              () => userRowRef?.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })
-            }
-          >
-            {I18n.t('competitions.registration_v2.list.psychsheets.show_me')}
-          </Button>
-        )}
-        {' '}
-        {userIsInTable && (userPosition || isPsychSheet) && (
-          `${
-            I18n.t(
-              'competitions.registration_v2.list.psychsheets.rank',
-              { userPosition: userPosition ?? '-' },
-            )
-          }; `
-        )}
-        {
-          `${
-            newcomerCount
-          } ${
-            I18n.t('registrations.registration_info_people.newcomer', { count: newcomerCount })
-          } + ${
-            returnerCount
-          } ${
-            I18n.t('registrations.registration_info_people.returner', { count: returnerCount })
-          } = ${
-            registrationCount
-          } ${
-            I18n.t('registrations.registration_info_people.person', { count: registrationCount })
-          }`
+      <TableInfo
+        scrollToMeIsShown={userIsInTable}
+        onScrollToMeClick={
+          () => userRowRef?.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })
         }
-      </Message>
-      <Table striped sortable unstackable compact singleLine textAlign="left">
-        <Table.Header>
-          <Table.Row>
-            {isPsychSheet && (
-              <Table.HeaderCell disabled>
-                <EventIcon id={psychSheetEvent} className="selected" size="1em" />
-              </Table.HeaderCell>
-            )}
-            <Table.HeaderCell
-              sorted={isAllCompetitors && sortColumn === 'name' ? sortDirection : undefined}
-              onClick={isAllCompetitors ? () => changeSortColumn('name') : undefined}
-              disabled={isPsychSheet}
-            >
-              {I18n.t('activerecord.attributes.registration.name')}
-            </Table.HeaderCell>
-            <Table.HeaderCell
-              sorted={isAllCompetitors && sortColumn === 'country' ? sortDirection : undefined}
-              onClick={isAllCompetitors ? () => changeSortColumn('country') : undefined}
-              disabled={isPsychSheet}
-            >
-              {I18n.t('activerecord.attributes.user.country_iso2')}
-            </Table.HeaderCell>
-            {isAllCompetitors ? (
-              <>
-                {competitionInfo.event_ids.map((id) => (
-                  <Table.HeaderCell
-                    key={`registration-table-header-${id}`}
-                    onClick={() => setPsychSheetEvent(id)} // 3
-                  >
-                    <EventIcon id={id} size="1em" className="selected" />
-                  </Table.HeaderCell>
-                ))}
-                <Table.HeaderCell
-                  sorted={sortColumn === 'total' ? sortDirection : undefined}
-                  onClick={() => changeSortColumn('total')}
-                >
-                  {I18n.t('registrations.list.total')}
-                </Table.HeaderCell>
-              </>
-            ) : (
-              <>
-                <Table.HeaderCell disabled>
-                  <Icon name="trophy" />
-                  {' '}
-                  WR
-                </Table.HeaderCell>
-                <Table.HeaderCell
-                  sorted={
-                    psychSheetSortBy === 'single' ? 'ascending' : undefined
-                  }
-                  onClick={() => setPsychSheetSortBy('single')}
-                >
-                  {I18n.t('common.single')}
-                </Table.HeaderCell>
-                <Table.HeaderCell
-                  sorted={
-                    psychSheetSortBy === 'average' ? 'ascending' : undefined
-                  }
-                  onClick={() => setPsychSheetSortBy('average')}
-                >
-                  {I18n.t('common.average')}
-                </Table.HeaderCell>
-              </>
-            )}
-          </Table.Row>
-        </Table.Header>
-        <Table.Body>
-          {data.length > 0 ? (
-            data.map((registration) => {
-              const isUser = registration.user_id === userId;
-              return (
-                <Table.Row
-                  key={`registration-table-row-${registration.user.id}`}
-                  active={isUser}
-                >
-                  {isPsychSheet && (
-                    <Table.Cell
-                      collapsing
-                      textAlign="right"
-                      disabled={registration.tied_previous}
-                    >
-                        {registration.pos}
-                    </Table.Cell>
-                  )}
-                  <Table.Cell>
-                    <div ref={isUser ? userRowRef : undefined}>
-                      {registration.user.wca_id ? (
-                        <a
-                          href={personUrl(registration.user.wca_id)}
-                        >
-                          {registration.user.name}
-                        </a>
-                      ) : (
-                        registration.user.name
-                      )}
-                    </div>
-                  </Table.Cell>
-                  <Table.Cell>
-                    <Flag
-                      name={registration.user.country.iso2.toLowerCase()}
-                    />
-                    {countries.byIso2[registration.user.country.iso2].name}
-                  </Table.Cell>
-                  {isAllCompetitors ? (
-                    <>
-                      {competitionInfo.event_ids.map((id) => (
-                        <Table.Cell
-                          key={`registration-table-row-${registration.user.id}-${id}`}
-                        >
-                          {registration.competing.event_ids.includes(id) ? (
-                            <EventIcon id={id} size="1em" hoverable={false} />
-                          ) : null}
-                        </Table.Cell>
-                      ))}
-                      <Table.Cell>
-                        {registration.competing.event_ids.length}
-                      </Table.Cell>
-                    </>
-                  ) : (
-                    <>
-                      <Table.Cell>
-                        {psychSheetSortBy === 'single'
-                          ? registration.single_rank
-                          : registration.average_rank}
-                      </Table.Cell>
-                      <Table.Cell>
-                        {formatAttemptResult(registration.single_best, psychSheetEvent)}
-                      </Table.Cell>
-                      <Table.Cell>
-                        {formatAttemptResult(registration.average_best, psychSheetEvent)}
-                      </Table.Cell>
-                    </>
-                  )}
-                </Table.Row>
-              );
-            })
-          ) : (
-            <Table.Row>
-              <Table.Cell
-                textAlign="center"
-                colSpan={
-                  isAllCompetitors
-                    ? competitionInfo.event_ids.length + 3
-                    : 7
-                }
-              >
-                {isPsychSheet && I18n.t('competitions.registration_v2.list.empty')}
-              </Table.Cell>
-            </Table.Row>
-          )}
-        </Table.Body>
-        <Table.Footer>
-          <FooterContent
-            registrations={registrationsWithPsychSheet}
-            isAllCompetitors={isAllCompetitors}
-            competitionInfo={competitionInfo}
-          />
-        </Table.Footer>
-      </Table>
+        userRankIsShown={userIsInTable && (userPosition || isPsychSheet)}
+        userRank={userPosition ?? '-'}
+        registrationCount={registrationCount}
+        newcomerCount={newcomerCount}
+        returnerCount={returnerCount}
+      />
+      <RegistrationsTable
+        data={data}
+        competitionInfo={competitionInfo}
+        registrationsWithPsychSheet={registrationsWithPsychSheet}
+        isPsychSheet={isPsychSheet}
+        isAllCompetitors={isAllCompetitors}
+        sortColumn={sortColumn}
+        sortDirection={sortDirection}
+        changeSortColumn={changeSortColumn}
+        psychSheetEvent={psychSheetEvent}
+        setPsychSheetEvent={setPsychSheetEvent}
+        psychSheetSortBy={psychSheetSortBy}
+        setPsychSheetSortBy={setPsychSheetSortBy}
+        userId={userId}
+        userRowRef={userRowRef}
+      />
     </Segment>
   );
 }
 
-function FooterContent({
+function RegistrationsTable({
+  data,
+  competitionInfo,
+  registrationsWithPsychSheet,
+  isPsychSheet,
+  isAllCompetitors,
+  sortColumn,
+  sortDirection,
+  changeSortColumn,
+  psychSheetEvent,
+  setPsychSheetEvent,
+  psychSheetSortBy,
+  setPsychSheetSortBy,
+  userId,
+  userRowRef,
+}) {
+  return (
+    <Table striped sortable unstackable compact singleLine textAlign="left">
+    <Table.Header>
+      <Table.Row>
+        {isPsychSheet && (
+          <Table.HeaderCell disabled>
+            <EventIcon id={psychSheetEvent} className="selected" size="1em" />
+          </Table.HeaderCell>
+        )}
+        <Table.HeaderCell
+          sorted={isAllCompetitors && sortColumn === 'name' ? sortDirection : undefined}
+          onClick={isAllCompetitors ? () => changeSortColumn('name') : undefined}
+          disabled={isPsychSheet}
+        >
+          {I18n.t('activerecord.attributes.registration.name')}
+        </Table.HeaderCell>
+        <Table.HeaderCell
+          sorted={isAllCompetitors && sortColumn === 'country' ? sortDirection : undefined}
+          onClick={isAllCompetitors ? () => changeSortColumn('country') : undefined}
+          disabled={isPsychSheet}
+        >
+          {I18n.t('activerecord.attributes.user.country_iso2')}
+        </Table.HeaderCell>
+        {isAllCompetitors ? (
+          <>
+            {competitionInfo.event_ids.map((id) => (
+              <Table.HeaderCell
+                key={`registration-table-header-${id}`}
+                onClick={() => setPsychSheetEvent(id)}
+              >
+                <EventIcon id={id} size="1em" className="selected" />
+              </Table.HeaderCell>
+            ))}
+            <Table.HeaderCell
+              sorted={sortColumn === 'total' ? sortDirection : undefined}
+              onClick={() => changeSortColumn('total')}
+            >
+              {I18n.t('registrations.list.total')}
+            </Table.HeaderCell>
+          </>
+        ) : (
+          <>
+            <Table.HeaderCell disabled>
+              <Icon name="trophy" />
+              {' '}
+              WR
+            </Table.HeaderCell>
+            <Table.HeaderCell
+              sorted={
+                psychSheetSortBy === 'single' ? 'ascending' : undefined
+              }
+              onClick={() => setPsychSheetSortBy('single')}
+            >
+              {I18n.t('common.single')}
+            </Table.HeaderCell>
+            <Table.HeaderCell
+              sorted={
+                psychSheetSortBy === 'average' ? 'ascending' : undefined
+              }
+              onClick={() => setPsychSheetSortBy('average')}
+            >
+              {I18n.t('common.average')}
+            </Table.HeaderCell>
+          </>
+        )}
+      </Table.Row>
+    </Table.Header>
+    <Table.Body>
+      {data.length > 0 ? (
+        data.map((registration) => {
+          const isUser = registration.user_id === userId;
+          return (
+            <Table.Row
+              key={`registration-table-row-${registration.user.id}`}
+              active={isUser}
+            >
+              {isPsychSheet && (
+                <Table.Cell
+                  collapsing
+                  textAlign="right"
+                  disabled={registration.tied_previous}
+                >
+                    {registration.pos}
+                </Table.Cell>
+              )}
+              <Table.Cell>
+                <div ref={isUser ? userRowRef : undefined}>
+                  {registration.user.wca_id ? (
+                    <a
+                      href={personUrl(registration.user.wca_id)}
+                    >
+                      {registration.user.name}
+                    </a>
+                  ) : (
+                    registration.user.name
+                  )}
+                </div>
+              </Table.Cell>
+              <Table.Cell>
+                <Flag
+                  name={registration.user.country.iso2.toLowerCase()}
+                />
+                {countries.byIso2[registration.user.country.iso2].name}
+              </Table.Cell>
+              {isAllCompetitors ? (
+                <>
+                  {competitionInfo.event_ids.map((id) => (
+                    <Table.Cell
+                      key={`registration-table-row-${registration.user.id}-${id}`}
+                    >
+                      {registration.competing.event_ids.includes(id) ? (
+                        <EventIcon id={id} size="1em" hoverable={false} />
+                      ) : null}
+                    </Table.Cell>
+                  ))}
+                  <Table.Cell>
+                    {registration.competing.event_ids.length}
+                  </Table.Cell>
+                </>
+              ) : (
+                <>
+                  <Table.Cell>
+                    {psychSheetSortBy === 'single'
+                      ? registration.single_rank
+                      : registration.average_rank}
+                  </Table.Cell>
+                  <Table.Cell>
+                    {formatAttemptResult(registration.single_best, psychSheetEvent)}
+                  </Table.Cell>
+                  <Table.Cell>
+                    {formatAttemptResult(registration.average_best, psychSheetEvent)}
+                  </Table.Cell>
+                </>
+              )}
+            </Table.Row>
+          );
+        })
+      ) : (
+        <Table.Row>
+          <Table.Cell
+            textAlign="center"
+            colSpan={
+              isAllCompetitors
+                ? competitionInfo.event_ids.length + 3
+                : 7
+            }
+          >
+            {isPsychSheet && I18n.t('competitions.registration_v2.list.empty')}
+          </Table.Cell>
+        </Table.Row>
+      )}
+    </Table.Body>
+    <Footer
+      registrations={registrationsWithPsychSheet}
+      isAllCompetitors={isAllCompetitors}
+      competitionInfo={competitionInfo}
+    />
+  </Table>
+  );
+}
+
+function Footer({
   registrations, isAllCompetitors, competitionInfo,
 }) {
   if (!registrations) return null;
@@ -367,39 +376,41 @@ function FooterContent({
   const totalEvents = Object.values(eventCounts).reduce((a, b) => a + b, 0);
 
   return (
-    <Table.Row>
-      {isPsychSheet && (
-        // psych sheet position
-        <Table.Cell />
-      )}
-      <Table.Cell>
-        {
-          `${
-            registrationCount
-          } ${
-            I18n.t('registrations.registration_info_people.person', { count: registrationCount })
-          }`
-        }
-      </Table.Cell>
-      <Table.Cell>{`${I18n.t('registrations.list.country_plural', { count: countryCount })}`}</Table.Cell>
-      {isAllCompetitors ? (
-        <>
-          {competitionInfo.event_ids.map((evt) => (
-            <Table.Cell key={`footer-count-${evt}`}>
-              {eventCounts[evt]}
-            </Table.Cell>
-          ))}
-          <Table.Cell>{totalEvents}</Table.Cell>
-        </>
-      ) : (
-        // WR, single, average
-        <>
+    <Table.Footer>
+      <Table.Row>
+        {isPsychSheet && (
+          // psych sheet position
           <Table.Cell />
-          <Table.Cell />
-          <Table.Cell />
-        </>
-      )}
-    </Table.Row>
+        )}
+        <Table.Cell>
+          {
+            `${
+              registrationCount
+            } ${
+              I18n.t('registrations.registration_info_people.person', { count: registrationCount })
+            }`
+          }
+        </Table.Cell>
+        <Table.Cell>{`${I18n.t('registrations.list.country_plural', { count: countryCount })}`}</Table.Cell>
+        {isAllCompetitors ? (
+          <>
+            {competitionInfo.event_ids.map((evt) => (
+              <Table.Cell key={`footer-count-${evt}`}>
+                {eventCounts[evt]}
+              </Table.Cell>
+            ))}
+            <Table.Cell>{totalEvents}</Table.Cell>
+          </>
+        ) : (
+          // WR, single, average
+          <>
+            <Table.Cell />
+            <Table.Cell />
+            <Table.Cell />
+          </>
+        )}
+      </Table.Row>
+    </Table.Footer>
   );
 }
 
@@ -417,5 +428,52 @@ function PsychSheetEventSelector({
       hideAllButton
       id="event-selection"
     />
+  );
+}
+
+function TableInfo({
+  scrollToMeIsShown,
+  onScrollToMeClick = {},
+  userRankIsShown,
+  userRank = "-",
+  registrationCount,
+  newcomerCount,
+  returnerCount,
+}) {
+  return (
+    <Message>
+      {scrollToMeIsShown && (
+        <Button
+          size="mini"
+          onClick={onScrollToMeClick}
+        >
+          {I18n.t('competitions.registration_v2.list.psychsheets.show_me')}
+        </Button>
+      )}
+      {' '}
+      {userRankIsShown && (
+        `${
+          I18n.t(
+            'competitions.registration_v2.list.psychsheets.rank',
+            { userPosition: userRank },
+          )
+        }; `
+      )}
+      {
+        `${
+          newcomerCount
+        } ${
+          I18n.t('registrations.registration_info_people.newcomer', { count: newcomerCount })
+        } + ${
+          returnerCount
+        } ${
+          I18n.t('registrations.registration_info_people.returner', { count: returnerCount })
+        } = ${
+          registrationCount
+        } ${
+          I18n.t('registrations.registration_info_people.person', { count: registrationCount })
+        }`
+      }
+    </Message>
   );
 }
