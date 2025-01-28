@@ -1192,7 +1192,7 @@ en:
         #context: "comp_name" contains the competition's name
         see_you_soon: "We look forward to seeing you at %{comp_name}!"
       #context: when registration is moved to waiting list
-      pending:
+      waiting_list:
         #context: "comp_name" contains the competition's name
         mail_subject: "You're on the Waiting List: %{comp_name}"
         waitlisted: "The competition is full, but you have been placed on a waiting list, and you will receive an email if enough spots open up for you to be able to attend. Check the %{register} page to see your place on the waiting list."

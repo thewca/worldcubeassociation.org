@@ -1,11 +1,11 @@
 <% @competition = @registration.competition %>
 
 <p>
-  <%= t 'registrations.mailer.pending.waitlisted', register: link_to(@competition.name, competition_register_path(@competition)) %>
+  <%= t 'registrations.mailer.waiting_list.waitlisted', register: link_to(@competition.name, competition_register_path(@competition)) %>
 </p>
 
 <p>
-  <%= t 'registrations.mailer.pending.email_if_error' %>
+  <%= t 'registrations.mailer.waiting_list.email_if_error' %>
 </p>
 
 <%= render partial: 'organizers_or_delegates_signature' %>
