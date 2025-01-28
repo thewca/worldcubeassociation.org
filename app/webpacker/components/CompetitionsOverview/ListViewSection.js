@@ -4,6 +4,7 @@ import {
 } from 'semantic-ui-react';
 
 import { BarLoader } from 'react-spinners';
+import { DateTime } from 'luxon';
 import I18n from '../../lib/i18n';
 import {
   computeAnnouncementStatus,
@@ -515,7 +516,10 @@ function StatusIcon({
   } else if (shouldShowRegStatus) {
     return <RegistrationStatus comp={comp} isLoading={regStatusLoading} />;
   } else if (isSortedByAnnouncement) {
-    tooltipInfo = I18n.t('competitions.index.tooltips.hourglass.announced_on', { announcement_date: comp.announced_at });
+    const announcedAtLuxon = DateTime.fromISO(comp.announced_at);
+    const announcedAtFormatted = announcedAtLuxon.toLocaleString(DateTime.DATETIME_MED);
+
+    tooltipInfo = I18n.t('competitions.index.tooltips.hourglass.announced_on', { announcement_date: announcedAtFormatted });
     iconClass = 'hourglass start';
   } else {
     tooltipInfo = I18n.t('competitions.index.tooltips.hourglass.starts_in', { days: I18n.t('common.days', { count: dayDifferenceFromToday(comp.start_date) }) });
