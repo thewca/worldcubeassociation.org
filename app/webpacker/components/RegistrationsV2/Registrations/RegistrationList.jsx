@@ -91,7 +91,7 @@ export default function RegistrationList({ competitionInfo, userId }) {
         <PsychSheetEventSelector
           handleEventSelection={handleEventSelection}
           eventList={competitionInfo.event_ids}
-          selectedEvents={[psychSheetEvent].filter(Boolean)}
+          selectedEvent={psychSheetEvent}
         />
         <Loading />
       </Segment>
@@ -103,7 +103,7 @@ export default function RegistrationList({ competitionInfo, userId }) {
       <PsychSheetEventSelector
         handleEventSelection={handleEventSelection}
         eventList={competitionInfo.event_ids}
-        selectedEvents={[psychSheetEvent].filter(Boolean)}
+        selectedEvent={psychSheetEvent}
       />
       {isPsychSheet ? (
         <PsychSheet
@@ -557,16 +557,16 @@ function PsychSheetFooter({
 function PsychSheetEventSelector({
   handleEventSelection,
   eventList,
-  selectedEvents,
+  selectedEvent,
 }) {
   return (
     <EventSelector
       onEventSelection={handleEventSelection}
       eventList={eventList}
-      selectedEvents={selectedEvents}
+      selectedEvents={[selectedEvent].filter(Boolean)}
       showBreakBeforeButtons={false}
       hideAllButton
-      hideClearButton={selectedEvents.length === 0}
+      hideClearButton={!Boolean(selectedEvent)}
       id="event-selection"
     />
   );
