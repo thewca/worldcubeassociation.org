@@ -637,7 +637,6 @@ class User < ApplicationRecord
       :leaderForms,
       :groupsManager,
       :importantLinks,
-      :delegateHandbook,
       :seniorDelegatesList,
       :leadersAdmin,
       :boardEditor,
@@ -682,7 +681,6 @@ class User < ApplicationRecord
         name: 'Delegate panel',
         pages: [
           panel_pages[:importantLinks],
-          panel_pages[:delegateHandbook],
           panel_pages[:bannedCompetitors],
         ],
       },
@@ -864,7 +862,7 @@ class User < ApplicationRecord
   end
 
   def can_edit_banned_competitors?
-    can_edit_any_groups? || group_leader?(UserGroup.teams_committees_group_wic)
+    can_edit_any_groups? || group_leader?(UserGroup.teams_committees_group_wic) || group_leader?(UserGroup.teams_committees_group_wapc)
   end
 
   def can_manage_regional_organizations?

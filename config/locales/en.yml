@@ -1838,13 +1838,14 @@ en:
           title: "Rejected registrations"
           information: "Rejected competitors cannot re-register."
         pending:
-          information: "Pending should only be used for incomplete (eg, unpaid) registrations - please use the Waiting List if your competition is too full to accept new comeptitors."
+          information: "Pending should only be used for incomplete (eg, unpaid) registrations - please use the Waiting List if your competition is too full to accept new competitors."
         payment:
          refunded_status: "Refunded"
          initialized: "Payment process was started on %{date}, but not finished."
          refunded: "Payment was refunded on %{date}."
         psychsheets:
-          go_back: "Go Back"
+          show_me: "Show me"
+          rank: "Rank: %{userPosition}"
         timestamp: "Timestamp"
         comment_and_note: "Comment & Note"
         edit_waiting_list: "Enable Waiting List Edit Mode"
