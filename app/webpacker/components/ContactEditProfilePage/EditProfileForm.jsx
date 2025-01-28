@@ -5,21 +5,15 @@ import { QueryClient, useQuery } from '@tanstack/react-query';
 import _ from 'lodash';
 import I18n from '../../lib/i18n';
 import { apiV0Urls, contactEditProfileActionUrl } from '../../lib/requests/routes.js.erb';
-import { genders } from '../../lib/wca-data.js.erb';
 import Loading from '../Requests/Loading';
 import Errored from '../Requests/Errored';
 import useSaveAction from '../../lib/hooks/useSaveAction';
 import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken';
 import UtcDatePicker from '../wca/UtcDatePicker';
 import CountrySelector from '../CountrySelector/CountrySelector';
+import GenderSelector from '../GenderSelector/GenderSelector';
 
 const CONTACT_EDIT_PROFILE_FORM_QUERY_CLIENT = new QueryClient();
-
-const genderOptions = _.map(genders.byId, (gender) => ({
-  key: gender.id,
-  text: gender.name,
-  value: gender.id,
-}));
 
 export default function EditProfileForm({
   wcaId,
@@ -103,11 +97,9 @@ export default function EditProfileForm({
         countryIso2={editedProfileDetails?.country_iso2}
         onChange={handleFormChange}
       />
-      <Form.Select
-        options={genderOptions}
-        label={I18n.t('activerecord.attributes.user.gender')}
+      <GenderSelector
         name="gender"
-        value={editedProfileDetails?.gender}
+        gender={editedProfileDetails?.gender}
         onChange={handleFormChange}
       />
       <Form.Field
