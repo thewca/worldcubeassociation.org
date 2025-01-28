@@ -107,7 +107,6 @@ export default function RegistrationList({ competitionInfo, userId }) {
       />
       {isPsychSheet ? (
         <PsychSheet
-          competitionInfo={competitionInfo}
           registrations={registrationsWithPsychSheetData}
           psychSheetEvent={psychSheetEvent}
           psychSheetSortBy={psychSheetSortBy}
@@ -118,8 +117,8 @@ export default function RegistrationList({ competitionInfo, userId }) {
         />
       ) : (
         <Competitors
-          competitionInfo={competitionInfo}
           registrations={registrationsData}
+          eventIds={competitionInfo.event_ids}
           onEventClick={onEventClick}
           userId={userId}
           userRowRef={userRowRef}
@@ -131,8 +130,8 @@ export default function RegistrationList({ competitionInfo, userId }) {
 }
 
 function Competitors({
-  competitionInfo,
   registrations,
+  eventIds,
   onEventClick,
   userId,
   userRowRef,
@@ -195,18 +194,18 @@ function Competitors({
           sortColumn={sortColumn}
           sortDirection={sortDirection}
           changeSortColumn={changeSortColumn}
-          eventIds={competitionInfo.event_ids}
+          eventIds={eventIds}
           onEventClick={onEventClick}
         />
         <CompetitorsBody
           data={data}
           userId={userId}
           userRowRef={userRowRef}
-          eventIds={competitionInfo.event_ids}
+          eventIds={eventIds}
         />
         <CompetitorsFooter
           registrations={registrations}
-          eventIds={competitionInfo.event_ids}
+          eventIds={eventIds}
         />
       </Table>
     </>
@@ -365,7 +364,6 @@ function CompetitorsFooter({
 }
 
 function PsychSheet({
-  competitionInfo,
   registrations,
   psychSheetEvent,
   psychSheetSortBy,
