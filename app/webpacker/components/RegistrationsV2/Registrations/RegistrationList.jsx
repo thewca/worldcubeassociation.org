@@ -7,7 +7,6 @@ import React, {
 import {
   Segment,
 } from 'semantic-ui-react';
-import _ from 'lodash';
 import {
   getConfirmedRegistrations,
   getPsychSheetForEvent,
@@ -61,12 +60,11 @@ export default function RegistrationList({ competitionInfo, userId }) {
 
   // psychSheetData is only missing the country iso2, otherwise we wouldn't
   //  need to mix in registrationData
-  const registrationsWithPsychSheetData = useMemo(() => {
-    return psychSheetData?.sorted_rankings?.map((p) => {
+  const registrationsWithPsychSheetData = useMemo(
+    () => psychSheetData?.sorted_rankings?.map((p) => {
       const registrationEntry = registrationsData?.find((r) => p.user_id === r.user_id) || {};
       return { ...p, ...registrationEntry };
-    });
-  }, [psychSheetData, registrationsData]);
+    }), [psychSheetData, registrationsData]);
 
   const userRowRef = useRef();
   const scrollToUser = () => userRowRef?.current?.scrollIntoView(

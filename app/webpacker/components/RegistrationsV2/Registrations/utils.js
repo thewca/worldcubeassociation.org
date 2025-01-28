@@ -6,19 +6,19 @@ export function getUserPositionInfo(registrations, userId) {
   return ({
     userIsInTable,
     userPosition,
-  })
+  });
 }
 
 export function getPeopleCounts(registrations) {
   const registrationCount = registrations.length;
-  const newcomerCount = registrations.filter((r) => !r.user.wca_id,).length;
+  const newcomerCount = registrations.filter((r) => !r.user.wca_id).length;
   const returnerCount = registrationCount - newcomerCount;
 
   return ({
     registrationCount,
     newcomerCount,
     returnerCount,
-  })
+  });
 }
 
 export function getTotals(registrations, eventIds = []) {
@@ -45,5 +45,5 @@ export function getTotals(registrations, eventIds = []) {
     countryCount,
     eventCounts,
     eventCountsSum,
-  })
+  });
 }

@@ -2,14 +2,13 @@ import React from 'react';
 import {
   Button, Message,
 } from 'semantic-ui-react';
-import _ from 'lodash';
 import I18n from '../../../lib/i18n';
 
 export default function PreTableInfo({
   scrollToMeIsShown,
   onScrollToMeClick = {},
   userRankIsShown,
-  userRank = "-",
+  userRank = '-',
   registrationCount,
   newcomerCount,
   returnerCount,

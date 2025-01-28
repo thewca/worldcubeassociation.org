@@ -1,5 +1,4 @@
 import React from 'react';
-import _ from 'lodash';
 import { EventSelector } from '../../wca/EventSelector';
 
 export default function PsychSheetEventSelector({
@@ -14,7 +13,7 @@ export default function PsychSheetEventSelector({
       selectedEvents={[selectedEvent].filter(Boolean)}
       showBreakBeforeButtons={false}
       hideAllButton
-      hideClearButton={!Boolean(selectedEvent)}
+      hideClearButton={!selectedEvent}
       id="event-selection"
     />
   );

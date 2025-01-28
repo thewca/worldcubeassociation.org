@@ -2,13 +2,11 @@ import React from 'react';
 import {
   Flag, Icon, Table,
 } from 'semantic-ui-react';
-import _ from 'lodash';
 import EventIcon from '../../wca/EventIcon';
 import { personUrl } from '../../../lib/requests/routes.js.erb';
 import { formatAttemptResult } from '../../../lib/wca-live/attempts';
 import I18n from '../../../lib/i18n';
 import { countries } from '../../../lib/wca-data.js.erb';
-import { EventSelector } from '../../wca/EventSelector';
 import { getPeopleCounts, getTotals, getUserPositionInfo } from './utils';
 import PreTableInfo from './PreTableInfo';
 
