@@ -6,7 +6,6 @@ import {
   generateDbTokenUrl,
   serverStatusPageUrl,
   runValidatorsUrl,
-  createNewComersUrl,
   checkRecordsUrl,
   computeAuxiliaryDataUrl,
   generateDataExportsUrl,
@@ -39,6 +38,7 @@ import DownloadVoters from './pages/DownloadVoters';
 import ApprovePictures from './pages/ApprovePictures';
 import EditPersonRequestsPage from './pages/EditPersonRequestsPage';
 import AnonymizationScriptPage from './pages/AnonymizationScriptPage';
+import CreateNewComersPage from './pages/CreateNewComersPage';
 
 export default {
   [PANEL_PAGES.postingDashboard]: {
@@ -163,7 +163,7 @@ export default {
   },
   [PANEL_PAGES.createNewComers]: {
     name: 'Create New Comers',
-    link: createNewComersUrl,
+    component: CreateNewComersPage,
   },
   [PANEL_PAGES.checkRecords]: {
     name: 'Check Records',

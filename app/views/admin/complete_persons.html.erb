@@ -1,18 +1,18 @@
 <% provide(:title, 'Finish unfinished persons') %>
 
 <div class="container">
-  <% competition_ids = @finish_persons.competition_ids %>
+  <% competition_ids = @competition_ids %>
 
   <h2>
     <%= yield(:title) %>
-    <%= link_to "Go back", admin_finish_unfinished_persons_path(competition_ids: competition_ids), class: "btn btn-default" %>
+    <%= link_to "Go back", panel_page_path(id: User.panel_pages[:createNewComers], competition_ids: competition_ids), class: "btn btn-default" %>
   </h2>
 
   <% if competition_ids.present? %>
     <p>For competition(s):</p>
 
     <ul>
-      <% @finish_persons.competitions.each do |competition_id| %>
+      <% competition_ids.each do |competition_id| %>
         <li><code><%= competition_id %></code></li>
       <% end %>
     </ul>
@@ -42,7 +42,7 @@
 
         <tr class="active">
           <td colspan="8" class="text-center">
-            <% if competition_ids.present? && @finish_persons.competitions.length == 1 %>
+            <% if competition_ids.present? && competition_ids.length == 1 %>
               <b><%= p[:person_name] %></b> (ID <code><%= p[:person_id] %></code>)
             <% else %>
               <b><%= p[:person_name] %></b> (ID <code><%= p[:person_id] %></code>, Competition <code><%= p[:competition_id] %></code>)
@@ -116,7 +116,7 @@
     <% end %>
     <%= f.input :continue_batch, as: :boolean, label: "Continue with the next batch of newcomers if there are more pending entries", hint: "If you are redirected to the 'Create Newcomers' entry point, it means that there are no more pending entries.", input_html: { checked: competition_ids.present? } %>
     <%= f.button :submit, value: "Submit changes!", class: "btn-primary" %>
-    <%= link_to "Go back", admin_finish_unfinished_persons_path(competition_ids: competition_ids), class: "btn btn-default" %>
+    <%= link_to "Go back", panel_page_path(id: User.panel_pages[:createNewComers], competition_ids: competition_ids), class: "btn btn-default" %>
   <% end %>
 </div>
 

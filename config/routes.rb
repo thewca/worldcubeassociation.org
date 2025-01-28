@@ -194,7 +194,6 @@ Rails.application.routes.draw do
   get 'panel/:panel_id' => 'panel#index', as: :panel_index
   scope 'panel-page' do
     get 'run-validators' => 'admin#check_results', as: :admin_check_results
-    get 'create-new-comers' => 'admin#finish_unfinished_persons', as: :admin_finish_unfinished_persons
     get 'check-records' => 'admin#check_regional_records', as: :admin_check_regional_records
     get 'compute-auxiliary-data' => 'admin#compute_auxiliary_data', as: :admin_compute_auxiliary_data
     get 'generate-data-exports' => 'admin#generate_exports', as: :admin_generate_exports
