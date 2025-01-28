@@ -317,23 +317,9 @@ function CompetitorsFooter({
   registrations,
   eventIds,
 }) {
-  const registrationCount = registrations.length;
-
-  const countryCount = new Set(
-    registrations.map((reg) => reg.user.country.iso2),
-  ).size;
-
-  const eventCounts = Object.fromEntries(
-    eventIds.map((evt) => {
-      const competingCount = registrations.filter(
-        (reg) => reg.competing.event_ids.includes(evt),
-      ).length;
-
-      return [evt, competingCount];
-    }),
-  );
-
-  const eventCountsSum = Object.values(eventCounts).reduce((a, b) => a + b, 0);
+  const {
+    registrationCount, countryCount, eventCounts, eventCountsSum,
+  } = getTotals(registrations, eventIds);
 
   return (
     <Table.Footer>
@@ -524,11 +510,7 @@ function PsychSheetBody({
 function PsychSheetFooter({
   registrations,
 }) {
-  const registrationCount = registrations.length;
-
-  const countryCount = new Set(
-    registrations.map((reg) => reg.user.country.iso2),
-  ).size;
+  const { registrationCount, countryCount } = getTotals(registrations);
 
   return (
     <Table.Footer>
@@ -639,5 +621,32 @@ function getPeopleCounts(registrations) {
     registrationCount,
     newcomerCount,
     returnerCount,
+  })
+}
+
+function getTotals(registrations, eventIds = []) {
+  const registrationCount = registrations.length;
+
+  const countryCount = new Set(
+    registrations.map((reg) => reg.user.country.iso2),
+  ).size;
+
+  const eventCounts = Object.fromEntries(
+    eventIds.map((evt) => {
+      const competingCount = registrations.filter(
+        (reg) => reg.competing.event_ids.includes(evt),
+      ).length;
+
+      return [evt, competingCount];
+    }),
+  );
+
+  const eventCountsSum = Object.values(eventCounts).reduce((a, b) => a + b, 0);
+
+  return ({
+    registrationCount,
+    countryCount,
+    eventCounts,
+    eventCountsSum,
   })
 }
