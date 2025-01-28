@@ -1681,6 +1681,7 @@ class Competition < ApplicationRecord
           user_id: user.id,
           wca_id: user.wca_id,
           country_id: user.country.id,
+          country_iso2: user.country_iso2,
           average_rank: average_ranking&.worldRank,
           average_best: average_ranking&.best || 0,
           single_rank: single_ranking&.worldRank,
