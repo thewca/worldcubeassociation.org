@@ -570,6 +570,7 @@ function PsychSheetEventSelector({
       selectedEvents={selectedEvents}
       showBreakBeforeButtons={false}
       hideAllButton
+      hideClearButton={selectedEvents.length === 0}
       id="event-selection"
     />
   );
