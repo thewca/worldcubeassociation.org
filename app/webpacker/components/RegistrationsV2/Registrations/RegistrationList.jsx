@@ -388,7 +388,7 @@ function PsychSheet({
     <>
       <PreTableInfo
         scrollToMeIsShown={userIsInTable}
-        userRankIsShown={userIsInTable && userPosition}
+        userRankIsShown={userIsInTable}
         userRank={userPosition ?? '-'}
         registrationCount={registrationCount}
         newcomerCount={newcomerCount}
