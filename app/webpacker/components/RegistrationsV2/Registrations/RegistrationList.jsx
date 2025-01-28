@@ -249,20 +249,18 @@ function Competitors({
                     />
                     {countries.byIso2[registration.user.country.iso2].name}
                   </Table.Cell>
-                  <>
-                    {competitionInfo.event_ids.map((id) => (
-                      <Table.Cell
-                        key={`registration-table-row-${registration.user.id}-${id}`}
-                      >
-                        {registration.competing.event_ids.includes(id) ? (
-                          <EventIcon id={id} size="1em" hoverable={false} />
-                        ) : null}
-                      </Table.Cell>
-                    ))}
-                    <Table.Cell>
-                      {registration.competing.event_ids.length}
+                  {competitionInfo.event_ids.map((id) => (
+                    <Table.Cell
+                      key={`registration-table-row-${registration.user.id}-${id}`}
+                    >
+                      {registration.competing.event_ids.includes(id) && (
+                        <EventIcon id={id} size="1em" hoverable={false} />
+                      )}
                     </Table.Cell>
-                  </>
+                  ))}
+                  <Table.Cell>
+                    {registration.competing.event_ids.length}
+                  </Table.Cell>
                 </Table.Row>
               );
             })
