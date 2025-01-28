@@ -83,7 +83,7 @@ export default function RankingsTable({ filterState }) {
     placeholderData: { rows: [], competitionsById: {} },
   });
 
-  const { rows, competitionsById } = data || {};
+  const { rows, competitionsById } = data;
 
   const results = useMemo(() => {
     const isByRegion = show === 'by region';
@@ -116,7 +116,7 @@ export default function RankingsTable({ filterState }) {
     const commonColumns = [
       {
         accessorKey: 'rank',
-        header: show !== 'by region' ? '#' : I18n.t('results.table_elements.region'),
+        header: show === 'by region' ? I18n.t('results.table_elements.region') : '#',
       },
       {
         accessorKey: 'result.name',
@@ -145,13 +145,8 @@ export default function RankingsTable({ filterState }) {
       commonColumns.push({
         accessorKey: 'solves',
         header: I18n.t('results.table_elements.solves'),
+        colSpan: 5,
       });
-      commonColumns.push(
-        ...Array(4).fill({
-          accessorKey: '',
-          header: ' ',
-        }),
-      );
     }
 
     return commonColumns;
@@ -172,7 +167,7 @@ export default function RankingsTable({ filterState }) {
           {table.getHeaderGroups().map((headerGroup) => (
             <Table.Row key={headerGroup.id}>
               {headerGroup.headers.map((header) => (
-                <Table.HeaderCell key={header.id}>
+                <Table.HeaderCell key={header.id} colSpan={header.column.columnDef.colSpan}>
                   {header.isPlaceholder
                     ? null
                     : flexRender(header.column.columnDef.header, header.getContext())}
