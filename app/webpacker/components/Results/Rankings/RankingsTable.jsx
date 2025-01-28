@@ -108,7 +108,6 @@ export default function RankingsTable({ filterState }) {
         country,
         rank,
         tiedPrevious,
-        key: `${result.id}-${show}-${country.name}`,
       }];
     }, []);
   }, [competitionsById, rows, show]);
@@ -191,7 +190,7 @@ export default function RankingsTable({ filterState }) {
             return (
               <ResultRow
                 country={country}
-                key={row.key}
+                key={row.id}
                 result={result}
                 competition={competition}
                 rank={rank}
