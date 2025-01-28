@@ -29,7 +29,7 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
     serial_includes = {}
 
     serial_includes["delegates"] = { only: ["id", "name"], methods: [], include: ["avatar"] } if admin_mode
-    serial_methods |= ["results_submitted_at", "report_posted_at"] if admin_mode
+    serial_methods |= ["results_submitted_at", "results_posted_at", "report_posted_at", "report_posted_by_user"] if admin_mode
 
     paginate json: competitions,
              only: ["id", "name", "start_date", "end_date", "registration_open", "registration_close", "venue"],

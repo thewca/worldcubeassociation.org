@@ -118,6 +118,19 @@ export function reportAdminCellContent(comp) {
   return null;
 }
 
+export function resultsSubmittedAtAdminCellContent(comp) {
+  if (comp.results_posted_at) {
+    const date = comp.results_submitted_at ? comp.results_submitted_at : comp.results_posted_at;
+    return timeDifferenceAfter(comp, date);
+  }
+
+  if (isProbablyOver(comp)) {
+    return I18n.t('competitions.competition_info.pending');
+  }
+
+  return null;
+}
+
 function lookupStatus(numOfDays, statusMap, compareFn, defaultStatus = null) {
   if (!Number.isInteger(numOfDays)) {
     return defaultStatus;
