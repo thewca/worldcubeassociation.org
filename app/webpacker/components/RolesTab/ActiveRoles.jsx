@@ -1,6 +1,6 @@
 import React from 'react';
 import { Header, List, Icon } from 'semantic-ui-react';
-import { panelRedirectUrl } from '../../lib/requests/routes.js.erb';
+import { panelPageUrl } from '../../lib/requests/routes.js.erb';
 import Loading from '../Requests/Loading';
 import useLoggedInUserPermissions from '../../lib/hooks/useLoggedInUserPermissions';
 import { groupTypes, delegateRegionsStatus, PANEL_PAGES } from '../../lib/wca-data.js.erb';
@@ -12,17 +12,17 @@ function hyperlink(role) {
       delegateRegionsStatus.senior_delegate,
       delegateRegionsStatus.regional_delegate,
     ].includes(role.metadata.status)) {
-      return panelRedirectUrl(PANEL_PAGES.regionsManager);
+      return panelPageUrl(PANEL_PAGES.regionsManager);
     }
-    return panelRedirectUrl(PANEL_PAGES.regions);
+    return panelPageUrl(PANEL_PAGES.regions);
   }
   if (role.group.group_type === groupTypes.teams_committees) {
     // FIXME: Redirect to correct dropdown in groupsManager. Currently it only goes to the
     // groupsManager page without selecting the group of the user.
-    return panelRedirectUrl(PANEL_PAGES.groupsManager);
+    return panelPageUrl(PANEL_PAGES.groupsManager);
   }
   if (role.group.group_type === groupTypes.translators) {
-    return panelRedirectUrl(PANEL_PAGES.translators);
+    return panelPageUrl(PANEL_PAGES.translators);
   }
   return null;
 }

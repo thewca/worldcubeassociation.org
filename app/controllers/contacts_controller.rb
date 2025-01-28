@@ -108,20 +108,37 @@ class ContactsController < ApplicationController
     end
   end
 
+  private def requestor_info(user, edit_others_profile_mode)
+    if !edit_others_profile_mode
+      requestor_role = "Self"
+    elsif user.any_kind_of_delegate?
+      requestor_role = "Delegate"
+    else
+      requestor_role = "Unknown"
+    end
+    "#{user.name} (#{requestor_role})"
+  end
+
   def edit_profile_action
     formValues = JSON.parse(params.require(:formValues), symbolize_names: true)
     edited_profile_details = formValues[:editedProfileDetails]
     edit_profile_reason = formValues[:editProfileReason]
     attachment = params[:attachment]
     wca_id = formValues[:wcaId]
+    person = Person.find_by(wca_id: wca_id)
+    edit_others_profile_mode = current_user&.wca_id != wca_id
 
-    return render status: :unauthorized, json: { error: "Cannot request profile change without login" } unless current_user.present?
+    if current_user.nil?
+      return render status: :unauthorized, json: { error: "Cannot request profile change without login" }
+    elsif edit_others_profile_mode && !current_user.has_permission?(:can_request_to_edit_others_profile)
+      return render status: :unauthorized, json: { error: "Cannot request to change others profile" }
+    end
 
     profile_to_edit = {
-      name: current_user.person.name,
-      country_iso2: current_user.person.country_iso2,
-      gender: current_user.person.gender,
-      dob: current_user.person.dob,
+      name: person.name,
+      country_iso2: person.country_iso2,
+      gender: person.gender,
+      dob: person.dob,
     }
     changes_requested = Person.fields_edit_requestable
                               .reject { |field| profile_to_edit[field].to_s == edited_profile_details[field].to_s }
@@ -142,6 +159,7 @@ class ContactsController < ApplicationController
         wca_id: wca_id,
         changes_requested: changes_requested_humanized(changes_requested),
         edit_profile_reason: edit_profile_reason,
+        requestor: requestor_info(current_user, edit_others_profile_mode),
         ticket: ticket,
         document: attachment,
         request: request,

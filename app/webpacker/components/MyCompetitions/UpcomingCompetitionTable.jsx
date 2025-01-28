@@ -5,7 +5,7 @@ import React from 'react';
 import { DateTime } from 'luxon';
 import I18n from '../../lib/i18n';
 import { competitionStatusText } from '../../lib/utils/competition-table';
-import { competitionRegistrationsUrl, editCompetitionsUrl } from '../../lib/requests/routes.js.erb';
+import { competitionEditRegistrationsUrl, editCompetitionsUrl } from '../../lib/requests/routes.js.erb';
 import {
   DateTableCell, LocationTableCell, NameTableCell, ReportTableCell,
 } from './TableCells';
@@ -24,10 +24,10 @@ const competingStatusIcon = (competingStatus) => {
 
 const registrationStatusIconText = (competition) => {
   if (competition.registration_status === 'not_yet_opened') {
-    return I18n.t('competitions.index.tooltips.registration.opens_in', { duration: DateTime.fromISO(competition.registration_open).toRelative() });
+    return I18n.t('competitions.index.tooltips.registration.opens_in', { duration: DateTime.fromISO(competition.registration_open).toRelative({ locale: window.I18n.locale }) });
   }
   if (competition.registration_status === 'past') {
-    return I18n.t('competitions.index.tooltips.registration.closed', { days: DateTime.fromISO(competition.start_date).toRelative() });
+    return I18n.t('competitions.index.tooltips.registration.closed', { days: DateTime.fromISO(competition.start_date).toRelative({ locale: window.I18n.locale }) });
   }
   if (competition.registration_status === 'full') {
     return I18n.t('competitions.index.tooltips.registration.full');
@@ -55,7 +55,7 @@ export default function UpcomingCompetitionTable({
   shouldShowRegistrationStatus = true,
   fallbackMessage = null,
 }) {
-  const canAdminCompetitions = permissions.can_administer_competitions.scope === '*' || competitions.some((c) => permissions.can_administer_competitions.scope.includes(c.id));
+  const canViewDelegateReport = permissions.can_view_delegate_report.scope === '*' || competitions.some((c) => permissions.can_view_delegate_report.scope.includes(c.id));
 
   if (competitions.length === 0 && fallbackMessage) {
     return (
@@ -81,7 +81,7 @@ export default function UpcomingCompetitionTable({
               {I18n.t('competitions.competition_info.date')}
             </Table.HeaderCell>
             <Table.HeaderCell />
-            {canAdminCompetitions && (
+            {canViewDelegateReport && (
               <>
                 <Table.HeaderCell />
                 <Table.HeaderCell />
@@ -126,7 +126,7 @@ export default function UpcomingCompetitionTable({
                   )}
                   {(permissions.can_organize_competitions.scope === '*' || permissions.can_organize_competitions.scope.includes(competition.id)) && (
                     <Table.Cell>
-                      <a href={competitionRegistrationsUrl(competition.id)}>
+                      <a href={competitionEditRegistrationsUrl(competition.id)}>
                         {I18n.t('competitions.my_competitions_table.registrations')}
                       </a>
                     </Table.Cell>
@@ -134,7 +134,7 @@ export default function UpcomingCompetitionTable({
                   <ReportTableCell
                     competitionId={competition.id}
                     permissions={permissions}
-                    canAdminCompetitions={canAdminCompetitions}
+                    canViewDelegateReport={canViewDelegateReport}
                   />
                 </Table.Row>
               )}

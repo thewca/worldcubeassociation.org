@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import {
   Container, Dropdown, Grid, Header, Menu, Segment,
 } from 'semantic-ui-react';
@@ -24,32 +24,41 @@ export default function TeamsCommitteesCouncils({ canViewPastRoles }) {
     error: councilsError,
   } = useLoadedData(apiV0Urls.userGroups.list(groupTypes.councils, 'name', { isActive: true, isHidden: false }));
 
-  const [hash, setHash] = useHash();
-  const loading = teamsCommitteesLoading || councilsLoading;
+  const isLoading = teamsCommitteesLoading || councilsLoading;
 
-  const groupList = useMemo(() => (loading ? [] : [
+  const groups = useMemo(() => (isLoading ? [] : [
     ...(teamsCommittees || []),
     ...(councils || []),
-  ]), [loading, teamsCommittees, councils]);
+  ]), [isLoading, teamsCommittees, councils]);
 
-  const menuOptions = useMemo(() => groupList.map((group) => ({
+  const menuOptions = useMemo(() => groups.map((group) => ({
     id: group.id,
     text: I18n.t(`page.teams_committees_councils.groups_name.${group.metadata.friendly_id}`),
     friendlyId: group.metadata.friendly_id,
-  })), [groupList]);
+  })), [groups]);
 
-  const activeGroup = React.useMemo(() => {
-    const selectedGroupIndex = groupList.findIndex(
-      (group) => group.metadata.friendly_id === hash,
-    );
-    if (selectedGroupIndex === -1 && groupList.length > 0) {
-      setHash(groupList[0]?.metadata.friendly_id);
-      return null;
-    }
-    return groupList[selectedGroupIndex];
-  }, [groupList, hash, setHash]);
+  const [hash, setHash] = useHash();
 
-  if (loading || !activeGroup) return <Loading />;
+  const activeGroup = useMemo(() => groups.find(
+    (group) => group.metadata.friendly_id === hash,
+  ), [groups, hash]);
+
+  const hashIsValid = Boolean(activeGroup);
+
+  useEffect(
+    () => {
+      if (!isLoading && !hashIsValid) {
+        if (groups.length > 0) {
+          setHash(groups[0].metadata.friendly_id);
+        } else {
+          setHash(null);
+        }
+      }
+    },
+    [isLoading, hashIsValid, groups, setHash],
+  );
+
+  if (isLoading || !activeGroup) return <Loading />;
   if (teamsCommitteesError || councilsError) return <Errored />;
 
   return (

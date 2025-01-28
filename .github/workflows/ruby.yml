@@ -16,6 +16,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: fregante/setup-git-user@v2 # set up dummy user.name and user.email in git so that Overcommit doesn't explode
+      - name: Set up ImageMagick # This is not included in GitHub runners by default anymore
+        uses: mfinelli/setup-imagemagick@v6
+        with:
+          cache: true
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:

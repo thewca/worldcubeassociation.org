@@ -4,6 +4,7 @@ import {
 } from 'semantic-ui-react';
 
 import { BarLoader } from 'react-spinners';
+import { DateTime } from 'luxon';
 import I18n from '../../lib/i18n';
 import {
   computeAnnouncementStatus,
@@ -15,12 +16,13 @@ import {
   isProbablyOver,
   PseudoLinkMarkdown,
   reportAdminCellContent,
+  resultsSubmittedAtAdminCellContent,
   startYear,
-  timeDifferenceAfter,
   timeDifferenceBefore,
 } from '../../lib/utils/competition-table';
 import { countries } from '../../lib/wca-data.js.erb';
 import { adminCompetitionUrl, competitionUrl } from '../../lib/requests/routes.js.erb';
+import { dateRange } from '../../lib/utils/dates';
 
 function ListViewSection({
   competitions,
@@ -154,7 +156,7 @@ export function CompetitionsTable({
                 />
               </Table.Cell>
               <Table.Cell textAlign="right" width={2}>
-                {comp.date_range}
+                {dateRange(comp.start_date, comp.end_date)}
               </Table.Cell>
               <Table.Cell width={5}>
                 <Flag name={comp.country_iso2?.toLowerCase()} />
@@ -210,7 +212,7 @@ export function CompetitionsTabletTable({
                 />
               </Table.Cell>
               <Table.Cell textAlign="right" width={3}>
-                {comp.date_range}
+                {dateRange(comp.start_date, comp.end_date)}
               </Table.Cell>
               <Table.Cell width={6}>
                 <Flag name={comp.country_iso2?.toLowerCase()} />
@@ -257,7 +259,7 @@ export function CompetitionsMobileTable({
                     isSortedByAnnouncement={isSortedByAnnouncement}
                     regStatusLoading={regStatusLoading}
                   />
-                  {comp.date_range}
+                  {dateRange(comp.start_date, comp.end_date)}
                 </Label>
                 <Flag name={comp.country_iso2?.toLowerCase()} />
                 <a href={competitionUrl(comp.id)}>{comp.short_display_name}</a>
@@ -360,7 +362,7 @@ function AdminCompetitionsTable({
                   </List>
                 </Table.Cell>
                 <Table.Cell textAlign="center" width={3}>
-                  {comp.date_range}
+                  {dateRange(comp.start_date, comp.end_date)}
                 </Table.Cell>
                 <Table.Cell
                   textAlign="center"
@@ -388,11 +390,7 @@ function AdminCompetitionsTable({
                   warning={resultsPostedStatus === 'warning'}
                   error={resultsPostedStatus === 'danger'}
                 >
-                  {
-                    comp.results_posted_at
-                      ? timeDifferenceAfter(comp, comp.results_posted_at)
-                      : (isProbablyOver(comp) && I18n.t('competitions.competition_info.pending'))
-                  }
+                  {resultsSubmittedAtAdminCellContent(comp)}
                 </Table.Cell>
                 <Table.Cell collapsing>
                   <Button
@@ -514,7 +512,10 @@ function StatusIcon({
   } else if (shouldShowRegStatus) {
     return <RegistrationStatus comp={comp} isLoading={regStatusLoading} />;
   } else if (isSortedByAnnouncement) {
-    tooltipInfo = I18n.t('competitions.index.tooltips.hourglass.announced_on', { announcement_date: comp.announced_at });
+    const announcedAtLuxon = DateTime.fromISO(comp.announced_at);
+    const announcedAtFormatted = announcedAtLuxon.toLocaleString(DateTime.DATETIME_MED);
+
+    tooltipInfo = I18n.t('competitions.index.tooltips.hourglass.announced_on', { announcement_date: announcedAtFormatted });
     iconClass = 'hourglass start';
   } else {
     tooltipInfo = I18n.t('competitions.index.tooltips.hourglass.starts_in', { days: I18n.t('common.days', { count: dayDifferenceFromToday(comp.start_date) }) });

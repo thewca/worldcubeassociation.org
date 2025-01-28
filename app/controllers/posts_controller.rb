@@ -66,9 +66,9 @@ class PostsController < ApplicationController
     @post.author = current_user
     if @post.save
       flash[:success] = "Created new post"
-      redirect_to post_path(@post.slug)
+      render json: { status: 'ok', post: @post }
     else
-      render 'new'
+      render json: { status: 'validation failed', errors: @post.errors }, status: :bad_request
     end
   end
 
@@ -79,10 +79,11 @@ class PostsController < ApplicationController
   def update
     @post = find_post
     if @post.update(post_params)
+      puts(post_params.inspect)
       flash[:success] = "Updated post"
-      redirect_to post_path(@post.slug)
+      render json: { status: 'ok', post: @post }
     else
-      render 'edit'
+      render json: { status: 'validation failed', errors: @post.errors }, status: :bad_request
     end
   end
 

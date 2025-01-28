@@ -7,24 +7,13 @@ import { adminCheckRecordsUrl, apiV0Urls } from '../../../../lib/requests/routes
 import useSaveAction from '../../../../lib/hooks/useSaveAction';
 import Loading from '../../../Requests/Loading';
 import I18n from '../../../../lib/i18n';
-import { genders, countries } from '../../../../lib/wca-data.js.erb';
 import useLoadedData from '../../../../lib/hooks/useLoadedData';
 import Errored from '../../../Requests/Errored';
 import UtcDatePicker from '../../../wca/UtcDatePicker';
+import CountrySelector from '../../../CountrySelector/CountrySelector';
+import GenderSelector from '../../../GenderSelector/GenderSelector';
 
-const genderOptions = _.map(genders.byId, (gender) => ({
-  key: gender.id,
-  text: gender.name,
-  value: gender.id,
-}));
-
-const countryOptions = _.map(countries.byIso2, (country) => ({
-  key: country.iso2,
-  text: country.name,
-  value: country.iso2,
-}));
-
-export default function EditPersonForm({ wcaId, onSuccess }) {
+export default function EditPersonForm({ wcaId, onSuccess, showDestroyButton = false }) {
   const {
     data: personFetchData, loading, error: personError,
   } = useLoadedData(
@@ -135,21 +124,16 @@ export default function EditPersonForm({ wcaId, onSuccess }) {
           value={editedUserDetails?.name || ''}
           onChange={handleFormChange}
         />
-        <Form.Select
-          options={countryOptions}
-          label={I18n.t('activerecord.attributes.user.country_iso2')}
+        <CountrySelector
           name="representing"
-          search
           disabled={!editedUserDetails}
-          value={editedUserDetails?.representing || ''}
+          countryIso2={editedUserDetails?.representing || ''}
           onChange={handleFormChange}
         />
-        <Form.Select
-          options={genderOptions}
-          label={I18n.t('activerecord.attributes.user.gender')}
+        <GenderSelector
           name="gender"
           disabled={!editedUserDetails}
-          value={editedUserDetails?.gender || ''}
+          gender={editedUserDetails?.gender || ''}
           onChange={handleFormChange}
         />
         <Form.Field
@@ -157,7 +141,7 @@ export default function EditPersonForm({ wcaId, onSuccess }) {
           name="dob"
           control={UtcDatePicker}
           showYearDropdown
-          dateFormatOverride="YYYY-MM-dd"
+          dateFormatOverride="yyyy-MM-dd"
           dropdownMode="select"
           disabled={!editedUserDetails}
           isoDate={editedUserDetails?.dob}
@@ -180,10 +164,12 @@ export default function EditPersonForm({ wcaId, onSuccess }) {
           <Icon name="clone" />
           Update
         </Button>
-        <Button disabled={!editedUserDetails} onClick={handleDestroy}>
-          <Icon name="trash" />
-          Destroy
-        </Button>
+        {showDestroyButton && (
+          <Button disabled={!editedUserDetails} onClick={handleDestroy}>
+            <Icon name="trash" />
+            Destroy
+          </Button>
+        )}
         {incorrectClaimCount > 0 && (
           <Button onClick={handleResetClaimCount}>
             <Icon name="redo" />
