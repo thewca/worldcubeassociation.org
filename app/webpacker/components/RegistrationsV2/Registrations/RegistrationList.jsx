@@ -64,7 +64,9 @@ export default function RegistrationList({ competitionInfo, userId }) {
     () => psychSheetData?.sorted_rankings?.map((p) => {
       const registrationEntry = registrationsData?.find((r) => p.user_id === r.user_id) || {};
       return { ...p, ...registrationEntry };
-    }), [psychSheetData, registrationsData]);
+    }),
+    [psychSheetData, registrationsData],
+  );
 
   const userRowRef = useRef();
   const scrollToUser = () => userRowRef?.current?.scrollIntoView(
