@@ -79,7 +79,7 @@ export default function EventRestrictions() {
       {!isCloning && isPersisted && (
         <>
           <Divider />
-          <InputSelect id="mainEventId" options={mainEventOptions} />
+          <InputSelect id="mainEventId" options={mainEventOptions} ignoreDisabled />
         </>
       )}
     </SubSection>

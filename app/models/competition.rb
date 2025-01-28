@@ -2548,11 +2548,39 @@ class Competition < ApplicationRecord
     }
   end
 
+  def self.compute_diff(old_form, new_form)
+    compute_diff = HashDiff.left_diff(old_form, new_form)
+
+    compute_diff.reject_values_recursive do |value|
+      value == HashDiff::NO_VALUE
+    end
+  end
+
   def set_form_data(form_data, current_user)
     JSON::Validator.validate!(Competition.form_data_json_schema, form_data)
 
     if self.confirmed? && !current_user.can_admin_competitions?
-      raise WcaExceptions::BadApiParameter.new("Cannot change announced competition")
+      current_state_form = self.to_form_data
+      changed_form_data = Competition.compute_diff(current_state_form, form_data)
+
+      # This is a much "stricter" version of the general schema above.
+      #    If the Delegate submits fields that they are not allowed to edit,
+      #    then these fields will not be included in the schema and validation will fail.
+      JSON::Validator.validate!(Competition.delegate_edits_json_schema, changed_form_data)
+
+      changed_form_data.each_recursive do |key, value, *prefixes|
+        joined_key = (prefixes + [key]).join('.')
+
+        if %w[registration.closingDateTime registration.waitingListDeadlineDate registration.eventChangeDeadlineDate].include?(joined_key)
+          existing_value = current_state_form.dig(*prefixes, key)
+
+          if existing_value.present?
+            date_model = DateTime.parse(existing_value).utc
+
+            raise WcaExceptions::BadApiParameter.new("You're only allowed to change dates for deadlines that have not yet passed. #{joined_key} with value #{value} is not in the past.") unless date_model > DateTime.now.utc
+          end
+        end
+      end
     end
 
     ActiveRecord::Base.transaction do
@@ -2876,6 +2904,83 @@ class Competition < ApplicationRecord
           "properties" => {
             "fromId" => { "type" => ["string", "null"] },
             "cloneTabs" => { "type" => "boolean" },
+          },
+        },
+      },
+    }
+  end
+
+  # Stuff that Delegates are allowed to edit even after the competition is announced,
+  #   see also https://docs.google.com/document/d/1-GwE5OXurBUnR7EVBRTGIN_dGj3AaU7vvan_6RjOW7Q/edit
+  def self.delegate_edits_json_schema
+    {
+      "type" => "object",
+      "additionalProperties" => false,
+      "properties" => {
+        "information" => { "type" => ["string", "null"] },
+        "staff" => {
+          "type" => "object",
+          "additionalProperties" => false,
+          "properties" => {
+            "staffDelegateIds" => {
+              "type" => "array",
+              "items" => { "type" => "integer" },
+              "uniqueItems" => true,
+            },
+            "traineeDelegateIds" => {
+              "type" => "array",
+              "items" => { "type" => "integer" },
+              "uniqueItems" => true,
+            },
+            "organizerIds" => {
+              "type" => "array",
+              "items" => { "type" => "integer" },
+              "uniqueItems" => true,
+            },
+            "contact" => { "type" => ["string", "null"] },
+          },
+        },
+        "website" => {
+          "type" => "object",
+          "additionalProperties" => false,
+          "properties" => {
+            "externalWebsite" => { "type" => ["string", "null"] },
+            "usesWcaLive" => { "type" => "boolean" },
+          },
+        },
+        "userSettings" => {
+          "type" => "object",
+          "additionalProperties" => false,
+          "properties" => {
+            "receiveRegistrationEmails" => { "type" => "boolean" },
+          },
+        },
+        "entryFees" => {
+          "type" => "object",
+          "additionalProperties" => false,
+          "properties" => {
+            "onTheSpotEntryFee" => { "type" => ["integer", "null"] },
+            "donationsEnabled" => { "type" => ["boolean", "null"] },
+          },
+        },
+        "registration" => {
+          "type" => "object",
+          "additionalProperties" => false,
+          "properties" => {
+            "closingDateTime" => date_json_schema("date-time"),
+            "waitingListDeadlineDate" => date_json_schema("date-time"),
+            "eventChangeDeadlineDate" => date_json_schema("date-time"),
+            "allowOnTheSpot" => { "type" => ["boolean", "null"] },
+            "allowSelfDeleteAfterAcceptance" => { "type" => "boolean" },
+            "allowSelfEdits" => { "type" => "boolean" },
+            "forceComment" => { "type" => ["boolean", "null"] },
+          },
+        },
+        "eventRestrictions" => {
+          "type" => "object",
+          "additionalProperties" => false,
+          "properties" => {
+            "mainEventId" => { "type" => ["string", "null"] },
           },
         },
       },
