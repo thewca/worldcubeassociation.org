@@ -291,8 +291,6 @@ Rails.application.routes.draw do
   get '/admin/do_generate_public_export' => 'admin#do_generate_public_export'
   get '/admin/override_regional_records' => 'admin#override_regional_records'
   post '/admin/override_regional_records' => 'admin#do_override_regional_records'
-  get '/admin/finish_persons' => 'admin#finish_persons'
-  post '/admin/finish_persons' => 'admin#do_finish_persons'
   get '/admin/complete_persons' => 'admin#complete_persons'
   post '/admin/complete_persons' => 'admin#do_complete_persons'
   get '/admin/peek_unfinished_results' => 'admin#peek_unfinished_results'
