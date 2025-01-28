@@ -297,8 +297,8 @@ Rails.application.routes.draw do
   post '/admin/complete_persons' => 'admin#do_complete_persons'
   get '/admin/peek_unfinished_results' => 'admin#peek_unfinished_results'
   post '/admin/anonymize_person' => 'admin#do_anonymize_person', as: :admin_do_anonymize_person
-  get '/admin/validate_reassign_wca_id' => 'admin#validate_reassign_wca_id', as: :admin_do_reassign_wca_id
-  post '/admin/reassign_wca_id' => 'admin#do_reassign_wca_id'
+  get '/admin/validate_reassign_wca_id' => 'admin#validate_reassign_wca_id', as: :admin_validate_reassign_wca_id
+  post '/admin/reassign_wca_id' => 'admin#do_reassign_wca_id', as: :admin_do_reassign_wca_id
 
   get '/search' => 'search_results#index'
 

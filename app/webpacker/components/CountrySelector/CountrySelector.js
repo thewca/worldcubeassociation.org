@@ -2,29 +2,32 @@ import React from 'react';
 import { Form } from 'semantic-ui-react';
 
 import { countries } from '../../lib/wca-data.js.erb';
-import CountryFlag from '../wca/CountryFlag';
-import '../../stylesheets/country_selector.scss';
+import I18n from '../../lib/i18n';
 
 const countryOptions = countries.real.map((country) => ({
   key: country.iso2,
   text: country.name,
   value: country.iso2,
-  image: <CountryFlag iso2={country.iso2} />,
+  flag: country.iso2.toLowerCase(),
 }));
 
 function CountrySelector({
-  name, countryIso2, onChange, error,
+  name,
+  countryIso2,
+  onChange,
+  error = null,
+  disabled = false,
 }) {
   return (
     <Form.Select
-      className="country-selector"
       search
       name={name}
-      label="Country"
+      label={I18n.t('activerecord.attributes.user.country_iso2')}
       value={countryIso2}
       error={error}
       options={countryOptions}
       onChange={onChange}
+      disabled={disabled}
     />
   );
 }

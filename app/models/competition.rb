@@ -838,6 +838,10 @@ class Competition < ApplicationRecord
     delegate_report&.posted_at
   end
 
+  def report_posted_by_user
+    delegate_report&.posted_by_user_id
+  end
+
   # This callback updates all tables having the competition id, when the id changes.
   # This should be deleted after competition id is made immutable: https://github.com/thewca/worldcubeassociation.org/pull/381
   after_save :update_foreign_keys, if: :saved_change_to_id?
@@ -1825,7 +1829,12 @@ class Competition < ApplicationRecord
                              reverse, field = part.match(/^(-)?(\w+)$/).captures
                              [field.to_sym, reverse ? :desc : :asc]
                            end
+                           # rubocop:disable Style/HashSlice
+                           #   RuboCop suggests using `slice` here, which is a noble intention but breaks the order
+                           #   of sort arguments. However, this order is crucial (sorting by "name then start_date"
+                           #   is different from sorting by "start_date then name") so we insist on doing it our way.
                            .select { |field, _| orderable_fields.include?(field) }
+                           # rubocop:enable Style/HashSlice
                            .to_h
     else
       order = { start_date: :desc }

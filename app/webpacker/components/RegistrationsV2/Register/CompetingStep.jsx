@@ -172,7 +172,7 @@ export default function CompetingStep({
     [dispatch, eventsAreValid, hasChanges, maxEvents],
   );
 
-  const actionCreateRegistration = () => {
+  const actionCreateRegistration = useCallback(() => {
     createRegistrationMutation({
       user_id: user.id,
       competition_id: competitionInfo.id,
@@ -182,9 +182,16 @@ export default function CompetingStep({
       },
       guests,
     });
-  };
+  }, [
+    createRegistrationMutation,
+    user.id,
+    competitionInfo.id,
+    selectedEvents,
+    comment,
+    guests,
+  ]);
 
-  const actionUpdateRegistration = () => {
+  const actionUpdateRegistration = useCallback(() => {
     confirm({
       content: I18n.t(competitionInfo.allow_registration_edits ? 'competitions.registration_v2.update.update_confirm' : 'competitions.registration_v2.update.update_confirm_contact'),
     }).then(() => {
@@ -206,9 +213,22 @@ export default function CompetingStep({
     }).catch(() => {
       nextStep();
     });
-  };
+  }, [
+    confirm,
+    dispatch,
+    nextStep,
+    updateRegistrationMutation,
+    competitionInfo,
+    registration?.user_id,
+    hasCommentChanged,
+    comment,
+    hasEventsChanged,
+    selectedEvents,
+    hasGuestsChanged,
+    guests,
+  ]);
 
-  const actionReRegister = () => {
+  const actionReRegister = useCallback(() => {
     updateRegistrationMutation({
       user_id: registration.user_id,
       competition_id: competitionInfo.id,
@@ -219,7 +239,14 @@ export default function CompetingStep({
       },
       guests,
     });
-  };
+  }, [
+    updateRegistrationMutation,
+    registration?.user_id,
+    competitionInfo.id,
+    comment,
+    selectedEvents,
+    guests,
+  ]);
 
   const handleEventSelection = ({ type, eventId }) => {
     if (type === 'select_all_events') {
@@ -269,6 +296,8 @@ export default function CompetingStep({
     shouldShowReRegisterButton,
     shouldShowUpdateButton,
   ]);
+
+  const guestsRestricted = competitionInfo.guest_entry_status === 'restricted';
 
   const formWarnings = useMemo(() => potentialWarnings(competitionInfo), [competitionInfo]);
   return (
@@ -365,8 +394,8 @@ export default function CompetingStep({
                   setGuests(Number.parseInt(data.value, 10));
                 }}
                 min="0"
-                max={competitionInfo.guests_per_registration_limit ?? 99}
-                error={Number.isInteger(competitionInfo.guests_per_registration_limit) && guests > competitionInfo.guests_per_registration_limit && I18n.t('competitions.competition_info.guest_limit', { count: competitionInfo.guests_per_registration_limit })}
+                max={guestsRestricted && (competitionInfo.guests_per_registration_limit ?? 99)}
+                error={guestsRestricted && Number.isInteger(competitionInfo.guests_per_registration_limit) && guests > competitionInfo.guests_per_registration_limit && I18n.t('competitions.competition_info.guest_limit', { count: competitionInfo.guests_per_registration_limit })}
               />
             </Form.Field>
           )}
