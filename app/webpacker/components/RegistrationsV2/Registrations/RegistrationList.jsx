@@ -137,17 +137,18 @@ function Competitors({
   userRowRef,
   onScrollToMeClick,
 }) {
-  const [{ sortColumn, sortDirection }, sortDispatch] = useReducer(sortReducer, {
+  const [sortState, sortDispatch] = useReducer(sortReducer, {
     sortColumn: 'name',
     sortDirection: 'ascending',
   });
+  const { sortColumn: sortedColumn, sortDirection: sortedDirection } = sortState;
   const changeSortColumn = (name) => sortDispatch({ type: 'CHANGE_SORT', sortColumn: name });
 
   // TODO: use react table
   const data = useMemo(() => {
     if (registrations) {
       let orderBy = [];
-      switch (sortColumn) {
+      switch (sortedColumn) {
         case 'country':
           orderBy = [
             (item) => countries.byIso2[item.user.country.iso2].name,
@@ -163,12 +164,12 @@ function Competitors({
       }
       // always sort by user name as a fallback
       orderBy.push('user.name');
-      const direction = sortDirection === 'descending' ? 'desc' : 'asc';
+      const direction = sortedDirection === 'descending' ? 'desc' : 'asc';
 
       return _.orderBy(registrations, orderBy, [direction]);
     }
     return [];
-  }, [registrations, sortColumn, sortDirection]);
+  }, [registrations, sortedColumn, sortedDirection]);
 
   const userRegistration = registrations?.find((row) => row.user_id === userId);
   const userIsInTable = Boolean(userRegistration);
@@ -191,17 +192,17 @@ function Competitors({
       />
       <Table striped sortable unstackable compact singleLine textAlign="left">
         <CompetitorsHeader
-          sortColumn={sortColumn}
-          sortDirection={sortDirection}
-          changeSortColumn={changeSortColumn}
           eventIds={eventIds}
-          onEventClick={onEventClick}
+          sortedColumn={sortedColumn}
+          sortedDirection={sortedDirection}
+          onSortableColumnClick={changeSortColumn}
+          onEventColumnClick={onEventClick}
         />
         <CompetitorsBody
-          data={data}
+          registrations={data}
+          eventIds={eventIds}
           userId={userId}
           userRowRef={userRowRef}
-          eventIds={eventIds}
         />
         <CompetitorsFooter
           registrations={registrations}
@@ -213,38 +214,38 @@ function Competitors({
 }
 
 function CompetitorsHeader({
-  sortColumn,
-  sortDirection,
-  changeSortColumn,
   eventIds,
-  onEventClick,
+  sortedColumn,
+  sortedDirection,
+  onSortableColumnClick,
+  onEventColumnClick,
 }) {
   return (
     <Table.Header>
       <Table.Row>
         <Table.HeaderCell
-          sorted={sortColumn === 'name' ? sortDirection : undefined}
-          onClick={() => changeSortColumn('name')}
+          sorted={sortedColumn === 'name' ? sortedDirection : undefined}
+          onClick={() => onSortableColumnClick('name')}
         >
           {I18n.t('activerecord.attributes.registration.name')}
         </Table.HeaderCell>
         <Table.HeaderCell
-          sorted={sortColumn === 'country' ? sortDirection : undefined}
-          onClick={() => changeSortColumn('country')}
+          sorted={sortedColumn === 'country' ? sortedDirection : undefined}
+          onClick={() => onSortableColumnClick('country')}
         >
           {I18n.t('activerecord.attributes.user.country_iso2')}
         </Table.HeaderCell>
         {eventIds.map((id) => (
           <Table.HeaderCell
             key={`registration-table-header-${id}`}
-            onClick={() => onEventClick(id)}
+            onClick={() => onEventColumnClick(id)}
           >
             <EventIcon id={id} size="1em" className="selected" />
           </Table.HeaderCell>
         ))}
         <Table.HeaderCell
-          sorted={sortColumn === 'total' ? sortDirection : undefined}
-          onClick={() => changeSortColumn('total')}
+          sorted={sortedColumn === 'total' ? sortedDirection : undefined}
+          onClick={() => onSortableColumnClick('total')}
         >
           {I18n.t('registrations.list.total')}
         </Table.HeaderCell>
@@ -254,15 +255,15 @@ function CompetitorsHeader({
 }
 
 function CompetitorsBody({
-  data,
+  registrations,
+  eventIds,
   userId,
   userRowRef,
-  eventIds,
 }) {
   return (
     <Table.Body>
-      {data.length > 0 ? (
-        data.map((registration) => {
+      {registrations.length > 0 ? (
+        registrations.map((registration) => {
           const isUser = registration.user_id === userId;
           return (
             <Table.Row
@@ -395,14 +396,14 @@ function PsychSheet({
       />
       <Table striped sortable unstackable compact singleLine textAlign="left">
         <PsychSheetHeader
-          psychSheetEvent={psychSheetEvent}
-          psychSheetSortBy={psychSheetSortBy}
-          setPsychSheetSortBy={setPsychSheetSortBy}
+          selectedEvent={psychSheetEvent}
+          sortedColumn={psychSheetSortBy}
+          onColumnClick={setPsychSheetSortBy}
         />
         <PsychSheetBody
           registrations={registrations}
-          psychSheetEvent={psychSheetEvent}
-          psychSheetSortBy={psychSheetSortBy}
+          selectedEvent={psychSheetEvent}
+          sortedColumn={psychSheetSortBy}
           userId={userId}
           userRowRef={userRowRef}
         />
@@ -415,15 +416,15 @@ function PsychSheet({
 }
 
 function PsychSheetHeader({
-  psychSheetEvent,
-  psychSheetSortBy,
-  setPsychSheetSortBy,
+  selectedEvent,
+  sortedColumn,
+  onColumnClick,
 }) {
   return (
     <Table.Header>
       <Table.Row>
         <Table.HeaderCell disabled>
-          <EventIcon id={psychSheetEvent} className="selected" size="1em" />
+          <EventIcon id={selectedEvent} className="selected" size="1em" />
         </Table.HeaderCell>
         <Table.HeaderCell disabled>
           {I18n.t('activerecord.attributes.registration.name')}
@@ -437,14 +438,14 @@ function PsychSheetHeader({
           WR
         </Table.HeaderCell>
         <Table.HeaderCell
-          sorted={psychSheetSortBy === 'single' ? 'ascending' : undefined}
-          onClick={() => setPsychSheetSortBy('single')}
+          sorted={sortedColumn === 'single' ? 'ascending' : undefined}
+          onClick={() => onColumnClick('single')}
         >
           {I18n.t('common.single')}
         </Table.HeaderCell>
         <Table.HeaderCell
-          sorted={psychSheetSortBy === 'average' ? 'ascending' : undefined}
-          onClick={() => setPsychSheetSortBy('average')}
+          sorted={sortedColumn === 'average' ? 'ascending' : undefined}
+          onClick={() => onColumnClick('average')}
         >
           {I18n.t('common.average')}
         </Table.HeaderCell>
@@ -455,8 +456,8 @@ function PsychSheetHeader({
 
 function PsychSheetBody({
   registrations,
-  psychSheetEvent,
-  psychSheetSortBy,
+  selectedEvent,
+  sortedColumn,
   userId,
   userRowRef,
 }) {
@@ -475,7 +476,7 @@ function PsychSheetBody({
                 textAlign="right"
                 disabled={registration.tied_previous}
               >
-                  {registration.pos}
+                {registration.pos}
               </Table.Cell>
               <Table.Cell>
                 <div ref={isUser ? userRowRef : undefined}>
@@ -497,15 +498,15 @@ function PsychSheetBody({
                 {countries.byIso2[registration.user.country.iso2].name}
               </Table.Cell>
               <Table.Cell>
-                {psychSheetSortBy === 'single'
+                {sortedColumn === 'single'
                   ? registration.single_rank
                   : registration.average_rank}
               </Table.Cell>
               <Table.Cell>
-                {formatAttemptResult(registration.single_best, psychSheetEvent)}
+                {formatAttemptResult(registration.single_best, selectedEvent)}
               </Table.Cell>
               <Table.Cell>
-                {formatAttemptResult(registration.average_best, psychSheetEvent)}
+                {formatAttemptResult(registration.average_best, selectedEvent)}
               </Table.Cell>
             </Table.Row>
           );
