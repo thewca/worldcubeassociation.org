@@ -191,88 +191,19 @@ function Competitors({
         onScrollToMeClick={onScrollToMeClick}
       />
       <Table striped sortable unstackable compact singleLine textAlign="left">
-        <Table.Header>
-          <Table.Row>
-            <Table.HeaderCell
-              sorted={sortColumn === 'name' ? sortDirection : undefined}
-              onClick={() => changeSortColumn('name')}
-            >
-              {I18n.t('activerecord.attributes.registration.name')}
-            </Table.HeaderCell>
-            <Table.HeaderCell
-              sorted={sortColumn === 'country' ? sortDirection : undefined}
-              onClick={() => changeSortColumn('country')}
-            >
-              {I18n.t('activerecord.attributes.user.country_iso2')}
-            </Table.HeaderCell>
-            {competitionInfo.event_ids.map((id) => (
-              <Table.HeaderCell
-                key={`registration-table-header-${id}`}
-                onClick={() => onEventClick(id)}
-              >
-                <EventIcon id={id} size="1em" className="selected" />
-              </Table.HeaderCell>
-            ))}
-            <Table.HeaderCell
-              sorted={sortColumn === 'total' ? sortDirection : undefined}
-              onClick={() => changeSortColumn('total')}
-            >
-              {I18n.t('registrations.list.total')}
-            </Table.HeaderCell>
-          </Table.Row>
-        </Table.Header>
-        <Table.Body>
-          {data.length > 0 ? (
-            data.map((registration) => {
-              const isUser = registration.user_id === userId;
-              return (
-                <Table.Row
-                  key={`registration-table-row-${registration.user.id}`}
-                  active={isUser}
-                >
-                  <Table.Cell>
-                    <div ref={isUser ? userRowRef : undefined}>
-                      {registration.user.wca_id ? (
-                        <a
-                          href={personUrl(registration.user.wca_id)}
-                        >
-                          {registration.user.name}
-                        </a>
-                      ) : (
-                        registration.user.name
-                      )}
-                    </div>
-                  </Table.Cell>
-                  <Table.Cell>
-                    <Flag
-                      name={registration.user.country.iso2.toLowerCase()}
-                    />
-                    {countries.byIso2[registration.user.country.iso2].name}
-                  </Table.Cell>
-                  {competitionInfo.event_ids.map((id) => (
-                    <Table.Cell
-                      key={`registration-table-row-${registration.user.id}-${id}`}
-                    >
-                      {registration.competing.event_ids.includes(id) && (
-                        <EventIcon id={id} size="1em" hoverable={false} />
-                      )}
-                    </Table.Cell>
-                  ))}
-                  <Table.Cell>
-                    {registration.competing.event_ids.length}
-                  </Table.Cell>
-                </Table.Row>
-              );
-            })
-          ) : (
-            <Table.Row>
-              <Table.Cell
-                textAlign="center"
-                colSpan={competitionInfo.event_ids.length + 3}
-              />
-            </Table.Row>
-          )}
-        </Table.Body>
+        <CompetitorsHeader
+          sortColumn={sortColumn}
+          sortDirection={sortDirection}
+          changeSortColumn={changeSortColumn}
+          eventIds={competitionInfo.event_ids}
+          onEventClick={onEventClick}
+        />
+        <CompetitorsBody
+          data={data}
+          userId={userId}
+          userRowRef={userRowRef}
+          eventIds={competitionInfo.event_ids}
+        />
         <Footer
           registrations={registrations}
           isAllCompetitors
@@ -280,6 +211,109 @@ function Competitors({
         />
       </Table>
     </>
+  );
+}
+
+function CompetitorsHeader({
+  sortColumn,
+  sortDirection,
+  changeSortColumn,
+  eventIds,
+  onEventClick,
+}) {
+  return (
+    <Table.Header>
+      <Table.Row>
+        <Table.HeaderCell
+          sorted={sortColumn === 'name' ? sortDirection : undefined}
+          onClick={() => changeSortColumn('name')}
+        >
+          {I18n.t('activerecord.attributes.registration.name')}
+        </Table.HeaderCell>
+        <Table.HeaderCell
+          sorted={sortColumn === 'country' ? sortDirection : undefined}
+          onClick={() => changeSortColumn('country')}
+        >
+          {I18n.t('activerecord.attributes.user.country_iso2')}
+        </Table.HeaderCell>
+        {eventIds.map((id) => (
+          <Table.HeaderCell
+            key={`registration-table-header-${id}`}
+            onClick={() => onEventClick(id)}
+          >
+            <EventIcon id={id} size="1em" className="selected" />
+          </Table.HeaderCell>
+        ))}
+        <Table.HeaderCell
+          sorted={sortColumn === 'total' ? sortDirection : undefined}
+          onClick={() => changeSortColumn('total')}
+        >
+          {I18n.t('registrations.list.total')}
+        </Table.HeaderCell>
+      </Table.Row>
+    </Table.Header>
+  );
+}
+
+function CompetitorsBody({
+  data,
+  userId,
+  userRowRef,
+  eventIds,
+}) {
+  return (
+    <Table.Body>
+      {data.length > 0 ? (
+        data.map((registration) => {
+          const isUser = registration.user_id === userId;
+          return (
+            <Table.Row
+              key={`registration-table-row-${registration.user.id}`}
+              active={isUser}
+            >
+              <Table.Cell>
+                <div ref={isUser ? userRowRef : undefined}>
+                  {registration.user.wca_id ? (
+                    <a
+                      href={personUrl(registration.user.wca_id)}
+                    >
+                      {registration.user.name}
+                    </a>
+                  ) : (
+                    registration.user.name
+                  )}
+                </div>
+              </Table.Cell>
+              <Table.Cell>
+                <Flag
+                  name={registration.user.country.iso2.toLowerCase()}
+                />
+                {countries.byIso2[registration.user.country.iso2].name}
+              </Table.Cell>
+              {eventIds.map((id) => (
+                <Table.Cell
+                  key={`registration-table-row-${registration.user.id}-${id}`}
+                >
+                  {registration.competing.event_ids.includes(id) && (
+                    <EventIcon id={id} size="1em" hoverable={false} />
+                  )}
+                </Table.Cell>
+              ))}
+              <Table.Cell>
+                {registration.competing.event_ids.length}
+              </Table.Cell>
+            </Table.Row>
+          );
+        })
+      ) : (
+        <Table.Row>
+          <Table.Cell
+            textAlign="center"
+            colSpan={eventIds.length + 3}
+          />
+        </Table.Row>
+      )}
+    </Table.Body>
   );
 }
 
