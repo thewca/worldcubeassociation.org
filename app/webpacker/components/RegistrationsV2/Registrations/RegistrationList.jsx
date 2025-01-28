@@ -204,10 +204,9 @@ function Competitors({
           userRowRef={userRowRef}
           eventIds={competitionInfo.event_ids}
         />
-        <Footer
+        <CompetitorsFooter
           registrations={registrations}
-          isAllCompetitors
-          competitionInfo={competitionInfo}
+          eventIds={competitionInfo.event_ids}
         />
       </Table>
     </>
@@ -317,6 +316,54 @@ function CompetitorsBody({
   );
 }
 
+function CompetitorsFooter({
+  registrations,
+  eventIds,
+}) {
+  const registrationCount = registrations.length;
+
+  const countryCount = new Set(
+    registrations.map((reg) => reg.user.country.iso2),
+  ).size;
+
+  const eventCounts = Object.fromEntries(
+    eventIds.map((evt) => {
+      const competingCount = registrations.filter(
+        (reg) => reg.competing.event_ids.includes(evt),
+      ).length;
+
+      return [evt, competingCount];
+    }),
+  );
+
+  const eventCountsSum = Object.values(eventCounts).reduce((a, b) => a + b, 0);
+
+  return (
+    <Table.Footer>
+      <Table.Row>
+        <Table.Cell>
+          {
+            `${
+              registrationCount
+            } ${
+              I18n.t('registrations.registration_info_people.person', { count: registrationCount })
+            }`
+          }
+        </Table.Cell>
+        <Table.Cell>
+          {`${I18n.t('registrations.list.country_plural', { count: countryCount })}`}
+        </Table.Cell>
+        {eventIds.map((evt) => (
+          <Table.Cell key={`footer-count-${evt}`}>
+            {eventCounts[evt]}
+          </Table.Cell>
+        ))}
+        <Table.Cell>{eventCountsSum}</Table.Cell>
+      </Table.Row>
+    </Table.Footer>
+  );
+}
+
 function PsychSheet({
   competitionInfo,
   registrations,
@@ -361,9 +408,8 @@ function PsychSheet({
           userId={userId}
           userRowRef={userRowRef}
         />
-        <Footer
+        <PsychSheetFooter
           registrations={registrations}
-          competitionInfo={competitionInfo}
         />
       </Table>
     </>
@@ -480,38 +526,19 @@ function PsychSheetBody({
   );
 }
 
-function Footer({
-  registrations, isAllCompetitors, competitionInfo,
+function PsychSheetFooter({
+  registrations,
 }) {
-  if (!registrations) return null;
-
-  const isPsychSheet = !isAllCompetitors;
-
   const registrationCount = registrations.length;
 
   const countryCount = new Set(
     registrations.map((reg) => reg.user.country.iso2),
   ).size;
 
-  const eventCounts = Object.fromEntries(
-    competitionInfo.event_ids.map((evt) => {
-      const competingCount = registrations.filter(
-        (reg) => reg.competing.event_ids.includes(evt),
-      ).length;
-
-      return [evt, competingCount];
-    }),
-  );
-
-  const totalEvents = Object.values(eventCounts).reduce((a, b) => a + b, 0);
-
   return (
     <Table.Footer>
       <Table.Row>
-        {isPsychSheet && (
-          // psych sheet position
-          <Table.Cell />
-        )}
+        <Table.Cell key="position" />
         <Table.Cell>
           {
             `${
@@ -521,24 +548,12 @@ function Footer({
             }`
           }
         </Table.Cell>
-        <Table.Cell>{`${I18n.t('registrations.list.country_plural', { count: countryCount })}`}</Table.Cell>
-        {isAllCompetitors ? (
-          <>
-            {competitionInfo.event_ids.map((evt) => (
-              <Table.Cell key={`footer-count-${evt}`}>
-                {eventCounts[evt]}
-              </Table.Cell>
-            ))}
-            <Table.Cell>{totalEvents}</Table.Cell>
-          </>
-        ) : (
-          // WR, single, average
-          <>
-            <Table.Cell />
-            <Table.Cell />
-            <Table.Cell />
-          </>
-        )}
+        <Table.Cell>
+          {`${I18n.t('registrations.list.country_plural', { count: countryCount })}`}
+        </Table.Cell>
+        <Table.Cell key="WR" />
+        <Table.Cell key="single" />
+        <Table.Cell key="average" />
       </Table.Row>
     </Table.Footer>
   );
