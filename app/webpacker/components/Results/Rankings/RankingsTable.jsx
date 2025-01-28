@@ -2,11 +2,14 @@ import React, { useMemo } from 'react';
 import { Table } from 'semantic-ui-react';
 import _ from 'lodash';
 import { flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
+import { useQuery } from '@tanstack/react-query';
 import I18n from '../../../lib/i18n';
 import { formatAttemptResult } from '../../../lib/wca-live/attempts';
 import CountryFlag from '../../wca/CountryFlag';
 import { continents, countries } from '../../../lib/wca-data.js.erb';
 import { personUrl } from '../../../lib/requests/routes.js.erb';
+import { getRankings } from '../api/rankings';
+import Loading from '../../Requests/Loading';
 
 function getCountryOrContinent(result, firstContinentIndex, firstCountryIndex, index) {
   if (index < firstContinentIndex) {
@@ -67,9 +70,21 @@ function ResultRow({
   );
 }
 
-export default function RankingsTable({
-  rows, competitionsById, isAverage, show,
-}) {
+export default function RankingsTable({ filterState }) {
+  const {
+    event, region, rankingType, gender, show,
+  } = filterState;
+
+  const isAverage = rankingType === 'average';
+
+  const { data, isFetching } = useQuery({
+    queryKey: ['rankings', event, region, rankingType, gender, show],
+    queryFn: () => getRankings(event, rankingType, region, gender, show),
+    placeholderData: { rows: [], competitionsById: {} },
+  });
+
+  const { rows, competitionsById } = data || {};
+
   const results = useMemo(() => {
     const isByRegion = show === 'by region';
     const [rowsToMap, firstContinentIndex, firstCountryIndex] = isByRegion ? rows : [rows, 0, 0];
@@ -148,6 +163,8 @@ export default function RankingsTable({
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
+
+  if (isFetching) return <Loading />;
 
   return (
     <div style={{ overflowX: 'scroll' }}>

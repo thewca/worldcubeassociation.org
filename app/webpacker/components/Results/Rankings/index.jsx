@@ -2,11 +2,8 @@ import React, {
   useEffect, useMemo, useReducer,
 } from 'react';
 import { Container } from 'semantic-ui-react';
-import { useQuery } from '@tanstack/react-query';
 import RankingsTable from './RankingsTable';
 import WCAQueryClientProvider from '../../../lib/providers/WCAQueryClientProvider';
-import { getRankings } from '../api/rankings';
-import Loading from '../../Requests/Loading';
 import { rankingsUrl } from '../../../lib/requests/routes.js.erb';
 import ResultsFilter from '../resultsFilter';
 
@@ -91,28 +88,14 @@ export function Rankings() {
     event, region, rankingType, gender, show,
   } = filterState;
 
-  const { data, isFetching } = useQuery({
-    queryKey: ['rankings', event, region, rankingType, gender, show],
-    queryFn: () => getRankings(event, rankingType, region, gender, show),
-  });
-
   useEffect(() => {
     window.history.replaceState(null, '', rankingsUrl(event, rankingType, region, gender, show));
   }, [event, region, rankingType, gender, show]);
 
-  if (isFetching) {
-    return <Loading />;
-  }
-
   return (
     <Container fluid>
       <ResultsFilter filterState={filterState} filterActions={filterActions} />
-      <RankingsTable
-        competitionsById={data.competitionsById}
-        isAverage={rankingType === 'average'}
-        rows={data.rows}
-        show={show}
-      />
+      <RankingsTable filterState={filterState} />
     </Container>
   );
 }
