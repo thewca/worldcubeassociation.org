@@ -348,7 +348,6 @@ export function CompDisplayCheckboxes({
   shouldIncludeCancelled,
   dispatchFilter,
   shouldShowRegStatus,
-  setShouldShowRegStatus,
   shouldShowAdminDetails,
   canViewAdminDetails,
   displayMode,
@@ -376,7 +375,9 @@ export function CompDisplayCheckboxes({
                 name="show_registration_status"
                 id="show_registration_status"
                 checked={shouldShowRegStatus}
-                onChange={() => setShouldShowRegStatus(!shouldShowRegStatus)}
+                onChange={() => dispatchFilter(
+                  { shouldShowRegStatus: !shouldShowRegStatus },
+                )}
               />
             </div>
             {canViewAdminDetails && (

@@ -22,6 +22,7 @@ export function calculateQueryKey(filterState, canViewAdminDetails = false) {
     search: filterState?.search,
     time: timeKey,
     shouldIncludeCancelled: filterState?.shouldIncludeCancelled,
+    shouldShowRegStatus: filterState?.shouldShowRegStatus,
     adminStatus,
   };
 }
@@ -38,6 +39,7 @@ export function createSearchParams(filterState, pageParam, canViewAdminDetails =
     customEndDate,
     adminStatus,
     shouldIncludeCancelled,
+    shouldShowRegStatus,
   } = filterState;
 
   const dateNow = DateTime.now();
@@ -60,6 +62,7 @@ export function createSearchParams(filterState, pageParam, canViewAdminDetails =
     searchParams.append('admin_status', adminStatus);
   }
   searchParams.append('include_cancelled', shouldIncludeCancelled);
+  searchParams.append('include_registration_status', shouldShowRegStatus);
 
   if (timeOrder === 'present') {
     searchParams.append('sort', 'start_date,end_date,name');

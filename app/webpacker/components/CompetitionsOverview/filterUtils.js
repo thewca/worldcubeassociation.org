@@ -22,6 +22,7 @@ const DELEGATE = 'delegate';
 const SEARCH = 'search';
 const SELECTED_EVENTS = 'event_ids[]';
 const INCLUDE_CANCELLED = 'show_cancelled';
+const SHOW_REGISTRATION_STATUS = 'show_reg_status';
 const SHOW_ADMIN_DETAILS = 'show_admin_details';
 const ADMIN_STATUS = 'admin_status';
 const LEGACY_ADMIN_STATUS = 'status';
@@ -36,6 +37,7 @@ const DEFAULT_DELEGATE = '';
 const DEFAULT_SEARCH = '';
 const DEFAULT_ADMIN_STATUS = 'all';
 const INCLUDE_CANCELLED_TRUE = 'on';
+const SHOW_REGISTRATION_STATUS_TRUE = 'on';
 const SHOW_ADMIN_DETAILS_TRUE = 'yes';
 const LEGACY_DISPLAY_MODE_ADMIN = 'admin';
 
@@ -111,6 +113,7 @@ export const createFilterState = (searchParams) => ({
   selectedEvents:
     sanitizeEvents(searchParams.getAll(SELECTED_EVENTS)),
   shouldIncludeCancelled: searchParams.get(INCLUDE_CANCELLED) === INCLUDE_CANCELLED_TRUE,
+  shouldShowRegStatus: searchParams.get(SHOW_REGISTRATION_STATUS) === SHOW_REGISTRATION_STATUS_TRUE,
   shouldShowAdminDetails: searchParams.get(SHOW_ADMIN_DETAILS) === SHOW_ADMIN_DETAILS_TRUE
     || searchParams.get(DISPLAY_MODE) === LEGACY_DISPLAY_MODE_ADMIN,
   adminStatus: sanitizeAdminStatus(
@@ -130,6 +133,7 @@ export const updateSearchParams = (searchParams, filterState, displayMode) => {
     search,
     selectedEvents,
     shouldIncludeCancelled,
+    shouldShowRegStatus,
     shouldShowAdminDetails,
     adminStatus,
   } = filterState;
@@ -183,6 +187,12 @@ export const updateSearchParams = (searchParams, filterState, displayMode) => {
     searchParams.set(INCLUDE_CANCELLED, INCLUDE_CANCELLED_TRUE);
   } else {
     searchParams.delete(INCLUDE_CANCELLED);
+  }
+
+  if (shouldShowRegStatus) {
+    searchParams.set(SHOW_REGISTRATION_STATUS, SHOW_REGISTRATION_STATUS_TRUE);
+  } else {
+    searchParams.delete(SHOW_REGISTRATION_STATUS);
   }
 
   if (shouldShowAdminDetails) {

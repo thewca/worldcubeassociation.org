@@ -44,7 +44,6 @@ function CompetitionsView({ canViewAdminDetails = false }) {
   );
   const debouncedFilterState = useDebounce(filterState, DEBOUNCE_MS);
   const [displayMode, setDisplayMode] = useState(() => getDisplayMode(searchParams));
-  const [shouldShowRegStatus, setShouldShowRegStatus] = useState(false);
   const competitionQueryKey = useMemo(
     () => calculateQueryKey(debouncedFilterState, canViewAdminDetails),
     [debouncedFilterState, canViewAdminDetails],
@@ -99,7 +98,7 @@ function CompetitionsView({ canViewAdminDetails = false }) {
       body: JSON.stringify({ ids: compIds }),
     }),
     queryKey: ['registration-info', ...compIds],
-    enabled: shouldShowRegStatus && compIds.length > 0,
+    enabled: filterState.shouldShowRegStatus && compIds.length > 0,
     // This is where the magic happens: Using `keepPreviousData` makes it so that
     //   all previously loaded indicators are held in-cache while the fetcher for the next
     //   batch is running in the background. (Adding comment here because it's not in the docs)
@@ -107,12 +106,12 @@ function CompetitionsView({ canViewAdminDetails = false }) {
     select: (data) => data.data,
   });
 
-  const competitions = useMemo(() => (shouldShowRegStatus ? (
+  const competitions = useMemo(() => (filterState.shouldShowRegStatus ? (
     baseCompetitions?.map((comp) => {
       const regData = compRegistrationData?.find((reg) => reg.id === comp.id);
       return regData ? { ...comp, ...regData } : comp;
     })
-  ) : baseCompetitions), [baseCompetitions, compRegistrationData, shouldShowRegStatus]);
+  ) : baseCompetitions), [baseCompetitions, compRegistrationData, filterState.shouldShowRegStatus]);
 
   const [showFilters, setShowFilters] = useState(true);
 
@@ -162,8 +161,7 @@ function CompetitionsView({ canViewAdminDetails = false }) {
           <CompDisplayCheckboxes
             shouldIncludeCancelled={filterState.shouldIncludeCancelled}
             dispatchFilter={dispatchFilter}
-            shouldShowRegStatus={shouldShowRegStatus}
-            setShouldShowRegStatus={setShouldShowRegStatus}
+            shouldShowRegStatus={filterState.shouldShowRegStatus}
             shouldShowAdminDetails={shouldShowAdminDetails}
             canViewAdminDetails={canViewAdminDetails}
             displayMode={displayMode}
@@ -184,7 +182,7 @@ function CompetitionsView({ canViewAdminDetails = false }) {
             <ListView
               competitions={competitions}
               filterState={debouncedFilterState}
-              shouldShowRegStatus={shouldShowRegStatus}
+              shouldShowRegStatus={filterState.shouldShowRegStatus}
               shouldShowAdminDetails={shouldShowAdminDetails}
               isLoading={competitionsIsFetching}
               regStatusLoading={regDataIsPending}
