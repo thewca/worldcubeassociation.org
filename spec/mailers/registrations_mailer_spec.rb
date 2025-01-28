@@ -166,6 +166,35 @@ RSpec.describe RegistrationsMailer, type: :mailer do
     end
   end
 
+  describe "notify_registrant_of_waitlisted_registration for competition without organizers" do
+    let(:mail) { RegistrationsMailer.notify_registrant_of_waitlisted_registration(registration) }
+    let(:registration) { FactoryBot.create(:registration, competition: competition_without_organizers) }
+
+    it "renders the headers" do
+      expect(mail.subject).to eq("You're on the Waiting List: #{competition_without_organizers.name}")
+      expect(mail.to).to eq([registration.email])
+      expect(mail.reply_to).to eq(competition_without_organizers.delegates.map(&:email))
+      expect(mail.from).to eq(["notifications@worldcubeassociation.org"])
+    end
+
+    it "renders the body" do
+      expect(mail.body.encoded).to match("The competition is full, but you have been placed on a waiting list, and you will receive an email if enough spots open up for you to be able to attend.")
+    end
+  end
+
+  describe "notify_registrant_of_waitlisted_registration for competition with organizers" do
+    let(:mail) { RegistrationsMailer.notify_registrant_of_waitlisted_registration(registration) }
+    let(:registration) { FactoryBot.create(:registration, competition: competition_with_organizers) }
+
+    it "sets organizers in the reply_to" do
+      expect(mail.reply_to).to eq(competition_with_organizers.organizers.map(&:email))
+    end
+
+    it "displays organizer names in the signature" do
+      expect(mail.body.encoded).to match("Regards, #{users_to_sentence(competition_with_organizers.organizers_or_delegates)}.")
+    end
+  end
+
   describe "notify_registrant_of_deleted_registration for a competition without organizers" do
     let(:mail) { RegistrationsMailer.notify_registrant_of_deleted_registration(registration) }
     let(:registration) { FactoryBot.create(:registration, competition: competition_without_organizers) }

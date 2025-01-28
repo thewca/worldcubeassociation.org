@@ -1,7 +1,7 @@
 <% @competition = @registration.competition %>
 
 <p>
-  <%= t 'registrations.mailer.waiting_list.waitlisted', register: link_to(@competition.name, competition_register_path(@competition)) %>
+  <%= t 'registrations.mailer.waiting_list.waitlisted', register: link_to(@competition.name, competition_register_url(@competition)) %>
 </p>
 
 <p>

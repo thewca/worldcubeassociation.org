@@ -80,5 +80,4 @@ class RegistrationsMailer < ApplicationMailer
                    to: registration.user.email,
                    reply_to: registration.competition.organizers_or_delegates.map(&:email)
   end
-
 end
