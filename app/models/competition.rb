@@ -838,6 +838,10 @@ class Competition < ApplicationRecord
     delegate_report&.posted_at
   end
 
+  def report_posted_by_user
+    delegate_report&.posted_by_user_id
+  end
+
   # This callback updates all tables having the competition id, when the id changes.
   # This should be deleted after competition id is made immutable: https://github.com/thewca/worldcubeassociation.org/pull/381
   after_save :update_foreign_keys, if: :saved_change_to_id?

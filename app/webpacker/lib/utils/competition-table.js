@@ -106,7 +106,7 @@ export function reportAdminCellContent(comp) {
   if (comp.report_posted_at) {
     const delegateIds = comp.delegates.map((delegate) => delegate.id);
 
-    return delegateIds.includes(comp.delegate_report.posted_by_user_id)
+    return delegateIds.includes(comp.report_posted_by_user)
       ? timeDifferenceAfter(comp, comp.report_posted_at)
       : I18n.t('competitions.competition_info.submitted_by_other');
   }
