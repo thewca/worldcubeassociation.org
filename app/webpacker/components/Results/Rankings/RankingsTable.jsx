@@ -89,7 +89,7 @@ export default function RankingsTable({ filterState }) {
     const isByRegion = show === 'by region';
     const [rowsToMap, firstContinentIndex, firstCountryIndex] = isByRegion ? rows : [rows, 0, 0];
 
-    return rowsToMap.reduce((acc, result, index) => {
+    return rowsToMap?.reduce((acc, result, index) => {
       const competition = competitionsById[result.competitionId];
       const { value } = result;
 
@@ -109,7 +109,7 @@ export default function RankingsTable({ filterState }) {
         rank,
         tiedPrevious,
       }];
-    }, []);
+    }, []) || [];
   }, [competitionsById, rows, show]);
 
   const columns = useMemo(() => {
