@@ -586,6 +586,7 @@ en:
       wrong_size: "is the wrong size (should be %{file_size})"
       size_too_small: "is too small (should be at least %{file_size})"
       size_too_big: "is too big (should be at most %{file_size})"
+      no_permission: "You do not have the required permissions to access this page."
   devise:
     #context: Overridden key for sign in
     passwords:
@@ -2879,5 +2880,3 @@ en:
       missing_scrambles_for_multi_error: "[%{round_id}] While you may have multiple groups in 3x3x3 Multi-Blind, at least one of the groups must contain scrambles for all attempts."
       multiple_fmc_groups_warning: "[%{round_id}] There are multiple groups of FMC used. If one group of FMC was used, please use the Scrambles Matcher to uncheck the unused scrambles. Otherwise, please include a comment to WRT explaining why multiple groups of FMC were used."
       wrong_number_of_scramble_sets_error: "[%{round_id}] This round has a different number of scramble sets than specified on the Manage Events tab. Please adjust the number of scramble sets in the Manage Events tab to the number of sets that were used."
-  application:
-    no_permission: "You do not have the required permissions to access this page."
