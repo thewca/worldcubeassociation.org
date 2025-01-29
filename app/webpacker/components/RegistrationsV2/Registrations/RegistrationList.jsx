@@ -13,20 +13,25 @@ import Competitors from './Competitors';
 export default function RegistrationList({ competitionInfo, userId }) {
   const [psychSheetEvent, setPsychSheetEvent] = useState();
   const [psychSheetSortBy, setPsychSheetSortBy] = useState();
-  const isPsychSheet = psychSheetEvent !== undefined;
 
-  const onEventClick = (eventId) => {
-    setPsychSheetEvent(eventId);
+  const showPsychSheetFor = (eventId) => {
     const event = events.byId[eventId];
+    setPsychSheetEvent(eventId);
     setPsychSheetSortBy(event.recommendedFormat().sortBy);
+  };
+  const returnToCompetitorsList = () => {
+    setPsychSheetEvent(undefined);
+    setPsychSheetSortBy(undefined);
   };
   const handleEventSelection = ({ type, eventId }) => {
     if (type === 'toggle_event') {
-      onEventClick(eventId);
+      showPsychSheetFor(eventId);
     } else {
-      setPsychSheetEvent(undefined);
+      returnToCompetitorsList();
     }
   };
+
+  const anEventIsSelected = psychSheetEvent !== undefined;
 
   const userRowRef = useRef();
   const scrollToUser = () => userRowRef?.current?.scrollIntoView(
@@ -40,7 +45,7 @@ export default function RegistrationList({ competitionInfo, userId }) {
         eventList={competitionInfo.event_ids}
         selectedEvent={psychSheetEvent}
       />
-      {isPsychSheet ? (
+      {anEventIsSelected ? (
         <PsychSheet
           competitionInfo={competitionInfo}
           psychSheetEvent={psychSheetEvent}
@@ -54,7 +59,7 @@ export default function RegistrationList({ competitionInfo, userId }) {
         <Competitors
           competitionInfo={competitionInfo}
           eventIds={competitionInfo.event_ids}
-          onEventClick={onEventClick}
+          onEventClick={showPsychSheetFor}
           userId={userId}
           userRowRef={userRowRef}
           onScrollToMeClick={scrollToUser}

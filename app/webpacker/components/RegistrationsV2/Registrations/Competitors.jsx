@@ -43,7 +43,7 @@ export default function Competitors({
   const { sortColumn: sortedColumn, sortDirection: sortedDirection } = sortState;
   const changeSortColumn = (name) => sortDispatch({ type: 'CHANGE_SORT', sortColumn: name });
 
-  // TODO: use react table
+  // TODO: use react table (future PR)
   const data = useMemo(() => {
     if (registrations) {
       let orderBy = [];
