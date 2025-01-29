@@ -88,12 +88,11 @@ class RegistrationsMailer < ApplicationMailer
     if to.empty?
       nil
     else
-    mail(
-      to: to,
-      reply_to: "integrity@worldcubeassociation.org",
-      subject: "A formerly-banned competitor just registered for #{registration.competition.name}",
-    )
+      mail(
+        to: to,
+        reply_to: "integrity@worldcubeassociation.org",
+        subject: "A formerly-banned competitor just registered for #{registration.competition.name}",
+      )
     end
   end
-
 end
