@@ -22,7 +22,7 @@ import {
 } from '../../lib/utils/competition-table';
 import { countries } from '../../lib/wca-data.js.erb';
 import { adminCompetitionUrl, competitionUrl } from '../../lib/requests/routes.js.erb';
-import { dateRange } from '../../lib/utils/dates';
+import { dateRange, toRelativeOptions } from '../../lib/utils/dates';
 
 function ListViewSection({
   competitions,
@@ -447,22 +447,42 @@ function RegistrationStatus({ comp, isLoading }) {
     return (
       <Popup
         trigger={<Icon name="clock" color="blue" />}
-        content={I18n.t('competitions.index.tooltips.registration.opens_in', { duration: comp.time_until_registration })}
+        content={
+          I18n.t(
+            'competitions.index.tooltips.registration.opens_in',
+            {
+              relativeDate: DateTime.fromISO(comp.registration_open).toRelative(
+                toRelativeOptions.default,
+              ),
+            },
+          )
+        }
         position="top center"
         size="tiny"
       />
     );
   }
+
   if (comp.registration_status === 'past') {
     return (
       <Popup
         trigger={<Icon name="user times" color="red" />}
-        content={I18n.t('competitions.index.tooltips.registration.closed', { days: I18n.t('common.days', { count: dayDifferenceFromToday(comp.start_date) }) })}
+        content={
+          I18n.t(
+            'competitions.index.tooltips.registration.closed',
+            {
+              relativeDate: DateTime.fromISO(comp.start_date).toRelative(
+                toRelativeOptions.roundUpAndAtBestDayPrecision,
+              ),
+            },
+          )
+        }
         position="top center"
         size="tiny"
       />
     );
   }
+
   if (comp.registration_status === 'full') {
     return (
       <Popup
@@ -473,6 +493,7 @@ function RegistrationStatus({ comp, isLoading }) {
       />
     );
   }
+
   if (comp.registration_status === 'open') {
     return (
       <Popup
