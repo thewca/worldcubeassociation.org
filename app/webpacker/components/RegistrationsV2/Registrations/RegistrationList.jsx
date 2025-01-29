@@ -25,7 +25,9 @@ export default function RegistrationList({ competitionInfo, userId }) {
   };
   const handleEventSelection = ({ type, eventId }) => {
     if (type === 'toggle_event') {
-      showPsychSheetFor(eventId);
+      if (eventId !== psychSheetEventId) {
+        showPsychSheetFor(eventId);
+      }
     } else {
       returnToCompetitorsList();
     }
