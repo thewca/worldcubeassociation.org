@@ -14,12 +14,12 @@ RSpec.feature "Competitions list", js: true do
 
       before do
         visit "/competitions?show_admin_details=yes"
+        # Wait until the Delegate index finished loading
+        expect(page).not_to have_selector("#delegate-pulse")
         within(:css, "#delegate") do
           find(".search").set(delegate.name)
           find(".search").send_keys(:enter)
         end
-        # Wait until the Delegate index finished loading
-        expect(page).not_to have_selector("#delegate-pulse")
       end
 
       it "the delegate is selected within the form" do
