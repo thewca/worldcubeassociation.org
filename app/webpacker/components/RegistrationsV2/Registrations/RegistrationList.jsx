@@ -1,6 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
 import React, {
-  useMemo,
   useRef,
   useState,
 } from 'react';
@@ -117,7 +116,9 @@ export default function RegistrationList({ competitionInfo, userId }) {
 // for consistency with competitors table data, to reuse helper functions
 function mapPsychSheetDate(data) {
   return data.sorted_rankings.map((entry) => {
-    const { name, user_id, wca_id, country_id, country_iso2, ...rest } = entry;
+    const {
+      name, user_id, wca_id, country_id, country_iso2, ...rest
+    } = entry;
     return ({
       user: {
         name,
