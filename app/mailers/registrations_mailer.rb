@@ -80,4 +80,20 @@ class RegistrationsMailer < ApplicationMailer
       subject: "Unlock your new account on the WCA website",
     )
   end
+
+  def notify_delegates_of_formerly_banned_user_registration(registration)
+    @registration = registration
+    delegate_ids = registration.competition.competition_delegates.map(&:delegate_id)
+    to = User.where(id: delegate_ids).map(&:email)
+    if to.empty?
+      nil
+    else
+    mail(
+      to: to,
+      reply_to: "integrity@worldcubeassociation.org",
+      subject: "A formerly-banned competitor just registered for #{registration.competition.name}",
+    )
+    end
+  end
+
 end
