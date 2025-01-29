@@ -39,9 +39,9 @@ function mapPsychSheetDate(data) {
 
 export default function PsychSheet({
   competitionInfo,
-  psychSheetEvent,
-  psychSheetSortBy,
-  setPsychSheetSortBy,
+  selectedEvent,
+  sortedBy,
+  setSortedBy,
   userId,
   userRowRef,
   onScrollToMeClick,
@@ -51,13 +51,13 @@ export default function PsychSheet({
     queryKey: [
       'psychSheet',
       competitionInfo.id,
-      psychSheetEvent,
-      psychSheetSortBy,
+      selectedEvent,
+      sortedBy,
     ],
     queryFn: () => getPsychSheetForEvent(
       competitionInfo.id,
-      psychSheetEvent,
-      psychSheetSortBy,
+      selectedEvent,
+      sortedBy,
     ),
     select: mapPsychSheetDate,
     retry: false,
@@ -99,14 +99,14 @@ export default function PsychSheet({
       />
       <Table striped sortable unstackable compact singleLine textAlign="left">
         <PsychSheetHeader
-          selectedEvent={psychSheetEvent}
-          sortedColumn={psychSheetSortBy}
-          onColumnClick={setPsychSheetSortBy}
+          selectedEvent={selectedEvent}
+          sortedColumn={sortedBy}
+          onColumnClick={setSortedBy}
         />
         <PsychSheetBody
           registrations={rankings}
-          selectedEvent={psychSheetEvent}
-          sortedColumn={psychSheetSortBy}
+          selectedEvent={selectedEvent}
+          sortedColumn={sortedBy}
           userId={userId}
           userRowRef={userRowRef}
         />

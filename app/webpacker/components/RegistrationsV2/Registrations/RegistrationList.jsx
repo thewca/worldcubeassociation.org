@@ -11,17 +11,17 @@ import PsychSheetEventSelector from './PsychSheetEventSelector';
 import Competitors from './Competitors';
 
 export default function RegistrationList({ competitionInfo, userId }) {
-  const [psychSheetEvent, setPsychSheetEvent] = useState();
-  const [psychSheetSortBy, setPsychSheetSortBy] = useState();
+  const [psychSheetEventId, setPsychSheetEventId] = useState();
+  const [psychSheetSortedBy, setPsychSheetSortedBy] = useState();
 
   const showPsychSheetFor = (eventId) => {
     const event = events.byId[eventId];
-    setPsychSheetEvent(eventId);
-    setPsychSheetSortBy(event.recommendedFormat().sortBy);
+    setPsychSheetEventId(eventId);
+    setPsychSheetSortedBy(event.recommendedFormat().sortBy);
   };
   const returnToCompetitorsList = () => {
-    setPsychSheetEvent(undefined);
-    setPsychSheetSortBy(undefined);
+    setPsychSheetEventId(undefined);
+    setPsychSheetSortedBy(undefined);
   };
   const handleEventSelection = ({ type, eventId }) => {
     if (type === 'toggle_event') {
@@ -31,7 +31,7 @@ export default function RegistrationList({ competitionInfo, userId }) {
     }
   };
 
-  const anEventIsSelected = psychSheetEvent !== undefined;
+  const anEventIsSelected = psychSheetEventId !== undefined;
 
   const userRowRef = useRef();
   const scrollToUser = () => userRowRef?.current?.scrollIntoView(
@@ -43,14 +43,14 @@ export default function RegistrationList({ competitionInfo, userId }) {
       <PsychSheetEventSelector
         handleEventSelection={handleEventSelection}
         eventList={competitionInfo.event_ids}
-        selectedEvent={psychSheetEvent}
+        selectedEvent={psychSheetEventId}
       />
       {anEventIsSelected ? (
         <PsychSheet
           competitionInfo={competitionInfo}
-          psychSheetEvent={psychSheetEvent}
-          psychSheetSortBy={psychSheetSortBy}
-          setPsychSheetSortBy={setPsychSheetSortBy}
+          selectedEvent={psychSheetEventId}
+          sortedBy={psychSheetSortedBy}
+          setSortedBy={setPsychSheetSortedBy}
           userId={userId}
           userRowRef={userRowRef}
           onScrollToMeClick={scrollToUser}
