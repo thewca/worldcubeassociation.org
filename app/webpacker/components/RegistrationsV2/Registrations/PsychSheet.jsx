@@ -20,16 +20,22 @@ import Errored from '../../Requests/Errored';
 function mapPsychSheetDate(data) {
   return data.sorted_rankings.map((entry) => {
     const {
-      name, user_id, wca_id, country_id, country_iso2, ...rest
+      name,
+      user_id: userId,
+      wca_id: wcaId,
+      country_id: countryId,
+      country_iso2: countryIso2,
+      ...rest
     } = entry;
+
     return ({
       user: {
         name,
-        id: user_id,
-        wca_id,
+        id: userId,
+        wca_id: wcaId,
         country: {
-          id: country_id,
-          iso2: country_iso2,
+          id: countryId,
+          iso2: countryIso2,
         },
       },
       ...rest,
