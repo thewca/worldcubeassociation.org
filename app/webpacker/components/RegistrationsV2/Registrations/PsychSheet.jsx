@@ -1,7 +1,11 @@
+import { useQuery } from '@tanstack/react-query';
 import React from 'react';
 import {
-  Flag, Icon, Table,
+  Flag, Icon, Segment, Table,
 } from 'semantic-ui-react';
+import {
+  getPsychSheetForEvent,
+} from '../api/registration/get/get_registrations';
 import EventIcon from '../../wca/EventIcon';
 import { personUrl } from '../../../lib/requests/routes.js.erb';
 import { formatAttemptResult } from '../../../lib/wca-live/attempts';
@@ -9,9 +13,32 @@ import I18n from '../../../lib/i18n';
 import { countries } from '../../../lib/wca-data.js.erb';
 import { getPeopleCounts, getTotals, getUserPositionInfo } from './utils';
 import PreTableInfo from './PreTableInfo';
+import Loading from '../../Requests/Loading';
+import Errored from '../../Requests/Errored';
+
+// for consistency with competitors table data, to reuse helper functions
+function mapPsychSheetDate(data) {
+  return data.sorted_rankings.map((entry) => {
+    const {
+      name, user_id, wca_id, country_id, country_iso2, ...rest
+    } = entry;
+    return ({
+      user: {
+        name,
+        id: user_id,
+        wca_id,
+        country: {
+          id: country_id,
+          iso2: country_iso2,
+        },
+      },
+      ...rest,
+    });
+  });
+}
 
 export default function PsychSheet({
-  registrations,
+  competitionInfo,
   psychSheetEvent,
   psychSheetSortBy,
   setPsychSheetSortBy,
@@ -19,13 +46,44 @@ export default function PsychSheet({
   userRowRef,
   onScrollToMeClick,
 }) {
+
+  const { isLoading, data: rankings, isError } = useQuery({
+    queryKey: [
+      'psychSheet',
+      competitionInfo.id,
+      psychSheetEvent,
+      psychSheetSortBy,
+    ],
+    queryFn: () => getPsychSheetForEvent(
+      competitionInfo.id,
+      psychSheetEvent,
+      psychSheetSortBy,
+    ),
+    select: mapPsychSheetDate,
+    retry: false,
+  });
+
+  if (isError) {
+    return (
+      <Errored componentName="PsychSheet" />
+    );
+  }
+
+  if (isLoading) {
+    return (
+      <Segment>
+        <Loading />
+      </Segment>
+    );
+  }
+
   const { userIsInTable, userPosition } = getUserPositionInfo(
-    registrations,
+    rankings,
     userId,
   );
 
   const { registrationCount, newcomerCount, returnerCount } = getPeopleCounts(
-    registrations,
+    rankings,
   );
 
   return (
@@ -46,14 +104,14 @@ export default function PsychSheet({
           onColumnClick={setPsychSheetSortBy}
         />
         <PsychSheetBody
-          registrations={registrations}
+          registrations={rankings}
           selectedEvent={psychSheetEvent}
           sortedColumn={psychSheetSortBy}
           userId={userId}
           userRowRef={userRowRef}
         />
         <PsychSheetFooter
-          registrations={registrations}
+          registrations={rankings}
         />
       </Table>
     </>

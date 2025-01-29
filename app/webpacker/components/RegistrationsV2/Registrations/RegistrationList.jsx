@@ -1,4 +1,3 @@
-import { useQuery } from '@tanstack/react-query';
 import React, {
   useRef,
   useState,
@@ -6,24 +5,12 @@ import React, {
 import {
   Segment,
 } from 'semantic-ui-react';
-import {
-  getConfirmedRegistrations,
-  getPsychSheetForEvent,
-} from '../api/registration/get/get_registrations';
-import Loading from '../../Requests/Loading';
-import Errored from '../../Requests/Errored';
 import { events } from '../../../lib/wca-data.js.erb';
 import PsychSheet from './PsychSheet';
 import PsychSheetEventSelector from './PsychSheetEventSelector';
 import Competitors from './Competitors';
 
 export default function RegistrationList({ competitionInfo, userId }) {
-  const { isLoading: registrationsIsLoading, data: registrationsData, isError } = useQuery({
-    queryKey: ['registrations', competitionInfo.id],
-    queryFn: () => getConfirmedRegistrations(competitionInfo),
-    retry: false,
-  });
-
   const [psychSheetEvent, setPsychSheetEvent] = useState();
   const [psychSheetSortBy, setPsychSheetSortBy] = useState();
   const isPsychSheet = psychSheetEvent !== undefined;
@@ -41,46 +28,10 @@ export default function RegistrationList({ competitionInfo, userId }) {
     }
   };
 
-  const { isLoading: psychSheetIsLoading, data: psychSheetData } = useQuery({
-    queryKey: [
-      'psychSheet',
-      competitionInfo.id,
-      psychSheetEvent,
-      psychSheetSortBy,
-    ],
-    queryFn: () => getPsychSheetForEvent(
-      competitionInfo.id,
-      psychSheetEvent,
-      psychSheetSortBy,
-    ),
-    select: mapPsychSheetDate,
-    retry: false,
-    enabled: isPsychSheet,
-  });
-
   const userRowRef = useRef();
   const scrollToUser = () => userRowRef?.current?.scrollIntoView(
     { behavior: 'smooth', block: 'center' },
   );
-
-  if (isError) {
-    return (
-      <Errored componentName="RegistrationList" />
-    );
-  }
-
-  if (registrationsIsLoading || psychSheetIsLoading) {
-    return (
-      <Segment>
-        <PsychSheetEventSelector
-          handleEventSelection={handleEventSelection}
-          eventList={competitionInfo.event_ids}
-          selectedEvent={psychSheetEvent}
-        />
-        <Loading />
-      </Segment>
-    );
-  }
 
   return (
     <Segment style={{ overflowX: 'scroll' }}>
@@ -91,7 +42,7 @@ export default function RegistrationList({ competitionInfo, userId }) {
       />
       {isPsychSheet ? (
         <PsychSheet
-          registrations={psychSheetData}
+          competitionInfo={competitionInfo}
           psychSheetEvent={psychSheetEvent}
           psychSheetSortBy={psychSheetSortBy}
           setPsychSheetSortBy={setPsychSheetSortBy}
@@ -101,7 +52,7 @@ export default function RegistrationList({ competitionInfo, userId }) {
         />
       ) : (
         <Competitors
-          registrations={registrationsData}
+          competitionInfo={competitionInfo}
           eventIds={competitionInfo.event_ids}
           onEventClick={onEventClick}
           userId={userId}
@@ -111,25 +62,4 @@ export default function RegistrationList({ competitionInfo, userId }) {
       )}
     </Segment>
   );
-}
-
-// for consistency with competitors table data, to reuse helper functions
-function mapPsychSheetDate(data) {
-  return data.sorted_rankings.map((entry) => {
-    const {
-      name, user_id, wca_id, country_id, country_iso2, ...rest
-    } = entry;
-    return ({
-      user: {
-        name,
-        id: user_id,
-        wca_id,
-        country: {
-          id: country_id,
-          iso2: country_iso2,
-        },
-      },
-      ...rest,
-    });
-  });
 }

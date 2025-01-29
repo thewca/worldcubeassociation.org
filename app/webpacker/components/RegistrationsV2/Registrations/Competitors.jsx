@@ -1,11 +1,15 @@
+import { useQuery } from '@tanstack/react-query';
 import React, {
   useMemo,
   useReducer,
 } from 'react';
 import {
-  Flag, Table,
+  Flag, Segment, Table,
 } from 'semantic-ui-react';
 import _ from 'lodash';
+import {
+  getConfirmedRegistrations,
+} from '../api/registration/get/get_registrations';
 import createSortReducer from '../reducers/sortReducer';
 import EventIcon from '../../wca/EventIcon';
 import { personUrl } from '../../../lib/requests/routes.js.erb';
@@ -13,17 +17,25 @@ import I18n from '../../../lib/i18n';
 import { countries } from '../../../lib/wca-data.js.erb';
 import { getPeopleCounts, getTotals, getUserPositionInfo } from './utils';
 import PreTableInfo from './PreTableInfo';
+import Errored from '../../Requests/Errored';
+import Loading from '../../Requests/Loading';
 
 const sortReducer = createSortReducer(['name', 'country', 'total']);
 
 export default function Competitors({
-  registrations,
+  competitionInfo,
   eventIds,
   onEventClick,
   userId,
   userRowRef,
   onScrollToMeClick,
 }) {
+  const { isLoading, data: registrations, isError } = useQuery({
+    queryKey: ['registrations', competitionInfo.id],
+    queryFn: () => getConfirmedRegistrations(competitionInfo),
+    retry: false,
+  });
+
   const [sortState, sortDispatch] = useReducer(sortReducer, {
     sortColumn: 'name',
     sortDirection: 'ascending',
@@ -57,6 +69,20 @@ export default function Competitors({
     }
     return [];
   }, [registrations, sortedColumn, sortedDirection]);
+
+  if (isError) {
+    return (
+      <Errored componentName="Competitors" />
+    );
+  }
+
+  if (isLoading) {
+    return (
+      <Segment>
+        <Loading />
+      </Segment>
+    );
+  }
 
   const { userIsInTable } = getUserPositionInfo(registrations, userId);
 
