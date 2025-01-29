@@ -126,7 +126,7 @@ function DelegateSelector({ delegateId, dispatchFilter }) {
     <>
       <label htmlFor="delegate" style={{ display: 'inline-block' }}>
         {I18n.t('layouts.navigation.delegate')}
-        {delegatesLoading && <PulseLoader size="6px" cssOverride={{ marginLeft: '5px' }} />}
+        {delegatesLoading && <PulseLoader id="delegate-pulse" size="6px" cssOverride={{ marginLeft: '5px' }} />}
       </label>
       <Dropdown
         name="delegate"
