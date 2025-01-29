@@ -96,7 +96,7 @@ class ApplicationController < ActionController::Base
       if redirecting
         flash[:danger] = case action
                          when :has_permission?
-                           t("errors.messages.no_permission.no_permission")
+                           t("errors.messages.no_permission")
                          else
                            "You are not allowed to #{action.to_s.sub(/^can_/, '').chomp('?').humanize.downcase}"
                          end
