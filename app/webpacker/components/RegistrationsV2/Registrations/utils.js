@@ -1,5 +1,5 @@
 export function getUserPositionInfo(registrations, userId) {
-  const userRegistration = registrations.find((r) => r.user_id === userId);
+  const userRegistration = registrations.find((r) => r.user.id === userId);
   const userIsInTable = Boolean(userRegistration);
   const userPosition = userRegistration?.pos;
 

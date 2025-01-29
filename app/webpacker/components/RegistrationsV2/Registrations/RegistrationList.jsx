@@ -54,19 +54,10 @@ export default function RegistrationList({ competitionInfo, userId }) {
       psychSheetEvent,
       psychSheetSortBy,
     ),
+    select: mapPsychSheetDate,
     retry: false,
     enabled: isPsychSheet,
   });
-
-  // psychSheetData is only missing the country iso2, otherwise we wouldn't
-  //  need to mix in registrationData
-  const registrationsWithPsychSheetData = useMemo(
-    () => psychSheetData?.sorted_rankings?.map((p) => {
-      const registrationEntry = registrationsData?.find((r) => p.user_id === r.user_id) || {};
-      return { ...p, ...registrationEntry };
-    }),
-    [psychSheetData, registrationsData],
-  );
 
   const userRowRef = useRef();
   const scrollToUser = () => userRowRef?.current?.scrollIntoView(
@@ -101,7 +92,7 @@ export default function RegistrationList({ competitionInfo, userId }) {
       />
       {isPsychSheet ? (
         <PsychSheet
-          registrations={registrationsWithPsychSheetData}
+          registrations={psychSheetData}
           psychSheetEvent={psychSheetEvent}
           psychSheetSortBy={psychSheetSortBy}
           setPsychSheetSortBy={setPsychSheetSortBy}
@@ -121,4 +112,23 @@ export default function RegistrationList({ competitionInfo, userId }) {
       )}
     </Segment>
   );
+}
+
+// for consistency with competitors table data, to reuse helper functions
+function mapPsychSheetDate(data) {
+  return data.sorted_rankings.map((entry) => {
+    const { name, user_id, wca_id, country_id, country_iso2, ...rest } = entry;
+    return ({
+      user: {
+        name,
+        id: user_id,
+        wca_id,
+        country: {
+          id: country_id,
+          iso2: country_iso2,
+        },
+      },
+      ...rest,
+    });
+  });
 }

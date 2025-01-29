@@ -110,7 +110,7 @@ function PsychSheetBody({
     <Table.Body>
       {registrations.length > 0 ? (
         registrations.map((registration) => {
-          const isUser = registration.user_id === userId;
+          const isUser = registration.user.id === userId;
           return (
             <Table.Row
               key={`registration-table-row-${registration.user.id}`}
