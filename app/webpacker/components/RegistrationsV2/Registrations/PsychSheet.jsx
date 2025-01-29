@@ -46,7 +46,6 @@ export default function PsychSheet({
   userRowRef,
   onScrollToMeClick,
 }) {
-
   const { isLoading, data: rankings, isError } = useQuery({
     queryKey: [
       'psychSheet',
