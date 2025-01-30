@@ -155,6 +155,7 @@ function CompetitorsHeader({
           </Table.HeaderCell>
         ))}
         <Table.HeaderCell
+          textAlign="center"
           sorted={sortedColumn === 'total' ? sortedDirection : undefined}
           onClick={() => onSortableColumnClick('total')}
         >
@@ -210,7 +211,7 @@ function CompetitorsBody({
                   )}
                 </Table.Cell>
               ))}
-              <Table.Cell>
+              <Table.Cell textAlign="center">
                 {registration.competing.event_ids.length}
               </Table.Cell>
             </Table.Row>
@@ -256,7 +257,7 @@ function CompetitorsFooter({
             {eventCounts[evt]}
           </Table.Cell>
         ))}
-        <Table.Cell>{eventCountsSum}</Table.Cell>
+        <Table.Cell textAlign="center">{eventCountsSum}</Table.Cell>
       </Table.Row>
     </Table.Footer>
   );
