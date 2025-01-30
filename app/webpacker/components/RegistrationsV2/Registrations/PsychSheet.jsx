@@ -114,7 +114,6 @@ export default function PsychSheet({
         <PsychSheetBody
           registrations={rankings}
           selectedEvent={selectedEvent}
-          sortedColumn={sortedBy}
           userId={userId}
           userRowRef={userRowRef}
           hideAverage={eventIsMbf}
@@ -183,7 +182,6 @@ function PsychSheetHeader({
 function PsychSheetBody({
   registrations,
   selectedEvent,
-  sortedColumn,
   userId,
   userRowRef,
   hideAverage = false,
