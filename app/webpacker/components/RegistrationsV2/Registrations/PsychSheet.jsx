@@ -140,18 +140,20 @@ function PsychSheetHeader({
         <Table.HeaderCell disabled>
           {I18n.t('activerecord.attributes.user.country_iso2')}
         </Table.HeaderCell>
-        <Table.HeaderCell disabled>
+        <Table.HeaderCell textAlign="right" disabled>
           <Icon name="trophy" />
           {' '}
           WR
         </Table.HeaderCell>
         <Table.HeaderCell
+          textAlign="right"
           sorted={sortedColumn === 'single' ? 'ascending' : undefined}
           onClick={() => onColumnClick('single')}
         >
           {I18n.t('common.single')}
         </Table.HeaderCell>
         <Table.HeaderCell
+          textAlign="right"
           sorted={sortedColumn === 'average' ? 'ascending' : undefined}
           onClick={() => onColumnClick('average')}
         >
@@ -205,15 +207,15 @@ function PsychSheetBody({
                 />
                 {countries.byIso2[registration.user.country.iso2].name}
               </Table.Cell>
-              <Table.Cell>
+              <Table.Cell textAlign="right">
                 {sortedColumn === 'single'
                   ? registration.single_rank
                   : registration.average_rank}
               </Table.Cell>
-              <Table.Cell>
+              <Table.Cell textAlign="right">
                 {formatAttemptResult(registration.single_best, selectedEvent)}
               </Table.Cell>
-              <Table.Cell>
+              <Table.Cell textAlign="right">
                 {formatAttemptResult(registration.average_best, selectedEvent)}
               </Table.Cell>
             </Table.Row>
