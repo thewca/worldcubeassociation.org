@@ -52,6 +52,8 @@ export default function PsychSheet({
   userRowRef,
   onScrollToMeClick,
 }) {
+  const eventIsMbf = selectedEvent === '333mbf';
+
   const { isLoading, data: rankings, isError } = useQuery({
     queryKey: [
       'psychSheet',
@@ -107,6 +109,7 @@ export default function PsychSheet({
           selectedEvent={selectedEvent}
           sortedColumn={sortedBy}
           onColumnClick={setSortedBy}
+          hideAverage={eventIsMbf}
         />
         <PsychSheetBody
           registrations={rankings}
@@ -114,9 +117,11 @@ export default function PsychSheet({
           sortedColumn={sortedBy}
           userId={userId}
           userRowRef={userRowRef}
+          hideAverage={eventIsMbf}
         />
         <PsychSheetFooter
           registrations={rankings}
+          hideAverage={eventIsMbf}
         />
       </Table>
     </>
@@ -127,6 +132,7 @@ function PsychSheetHeader({
   selectedEvent,
   sortedColumn,
   onColumnClick,
+  hideAverage = false,
 }) {
   return (
     <Table.Header>
@@ -149,21 +155,26 @@ function PsychSheetHeader({
           textAlign="right"
           sorted={sortedColumn === 'single' ? 'ascending' : undefined}
           onClick={() => onColumnClick('single')}
+          disabled={hideAverage}
         >
           {I18n.t('common.single')}
         </Table.HeaderCell>
-        <Table.HeaderCell
-          textAlign="right"
-          sorted={sortedColumn === 'average' ? 'ascending' : undefined}
-          onClick={() => onColumnClick('average')}
-        >
-          {I18n.t('common.average')}
-        </Table.HeaderCell>
-        <Table.HeaderCell textAlign="right" disabled>
-          <Icon name="trophy" />
-          {' '}
-          WR
-        </Table.HeaderCell>
+        {hideAverage || (
+          <>
+            <Table.HeaderCell
+              textAlign="right"
+              sorted={sortedColumn === 'average' ? 'ascending' : undefined}
+              onClick={() => onColumnClick('average')}
+            >
+              {I18n.t('common.average')}
+            </Table.HeaderCell>
+            <Table.HeaderCell textAlign="right" disabled>
+              <Icon name="trophy" />
+              {' '}
+              WR
+            </Table.HeaderCell>
+          </>
+        )}
       </Table.Row>
     </Table.Header>
   );
@@ -175,6 +186,7 @@ function PsychSheetBody({
   sortedColumn,
   userId,
   userRowRef,
+  hideAverage = false,
 }) {
   return (
     <Table.Body>
@@ -218,12 +230,16 @@ function PsychSheetBody({
               <Table.Cell textAlign="right">
                 {formatAttemptResult(registration.single_best, selectedEvent)}
               </Table.Cell>
-              <Table.Cell textAlign="right">
-                {formatAttemptResult(registration.average_best, selectedEvent)}
-              </Table.Cell>
-              <Table.Cell textAlign="right">
-                {registration.average_rank}
-              </Table.Cell>
+              {hideAverage || (
+                <>
+                  <Table.Cell textAlign="right">
+                    {formatAttemptResult(registration.average_best, selectedEvent)}
+                  </Table.Cell>
+                  <Table.Cell textAlign="right">
+                    {registration.average_rank}
+                  </Table.Cell>
+                </>
+              )}
             </Table.Row>
           );
         })
@@ -243,6 +259,7 @@ function PsychSheetBody({
 
 function PsychSheetFooter({
   registrations,
+  hideAverage = false,
 }) {
   const { registrationCount, countryCount } = getTotals(registrations);
 
@@ -264,8 +281,12 @@ function PsychSheetFooter({
         </Table.Cell>
         <Table.Cell key="single-world-rank" />
         <Table.Cell key="single" />
-        <Table.Cell key="average" />
-        <Table.Cell key="average-world-rank" />
+        {hideAverage || (
+          <>
+            <Table.Cell key="average" />
+            <Table.Cell key="average-world-rank" />
+          </>
+        )}
       </Table.Row>
     </Table.Footer>
   );
