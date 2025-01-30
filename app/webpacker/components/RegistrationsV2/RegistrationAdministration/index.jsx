@@ -6,7 +6,7 @@ import messageReducer from '../reducers/messageReducer';
 import StoreProvider from '../../../lib/providers/StoreProvider';
 import WCAQueryClientProvider from '../../../lib/providers/WCAQueryClientProvider';
 
-export default function RegistrationEdit({ competitionInfo }) {
+export default function RegistrationEdit({ competitionId }) {
   const ref = useRef();
   return (
     <div ref={ref}>
@@ -15,7 +15,7 @@ export default function RegistrationEdit({ competitionInfo }) {
           <Sticky context={ref} offset={60}>
             <RegistrationMessage />
           </Sticky>
-          <RegistrationAdministrationList competitionInfo={competitionInfo} />
+          <RegistrationAdministrationList competitionId={competitionId} />
         </StoreProvider>
       </WCAQueryClientProvider>
     </div>

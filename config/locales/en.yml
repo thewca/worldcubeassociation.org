@@ -1954,6 +1954,7 @@ en:
         -6002: "You need to finish your registration before you can pay"
     #context: and when an error occured
     errors:
+      cant_load_competition_info: "Failed to load competition information - please retry or contact WST if this error persists."
       must_use_wca_registration: "Auto-accept can only be used if you are using the WCA website for registrations"
       auto_accept_limit: "Limit for auto-accepted registrations must be less than the competitor limit"
       auto_accept_not_negative: "Limit for auto-accepted registrations cannot be less than 0."

@@ -7,6 +7,7 @@ import {
 } from 'semantic-ui-react';
 import { DateTime } from 'luxon';
 import { getAllRegistrations } from '../api/registration/get/get_registrations';
+import getCompetitionInfo from '../api/competition/get_competition_info';
 import createSortReducer from '../reducers/sortReducer';
 import RegistrationActions from './RegistrationActions';
 import { setMessage } from '../Register/RegistrationMessage';
@@ -115,7 +116,28 @@ const columnReducer = (state, action) => {
   return state;
 };
 
-export default function RegistrationAdministrationList({ competitionInfo }) {
+export default function RegistrationAdministrationList({ competitionId }) {
+  const {
+    isLoading: isCompetitionInfoLoading,
+    data: competitionInfo,
+    refetchCompetitionInfo,
+  } = useQuery({
+    queryKey: ['competitionInfo', competitionId],
+    queryFn: () => getCompetitionInfo(competitionId),
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+    staleTime: Infinity,
+    refetchOnMount: 'always',
+    retry: false,
+    onError: (err) => {
+      const { errorCode } = err;
+      dispatchStore(setMessage(
+        `competitions.errors.cant_load_competition_info`,
+        'negative',
+      ));
+    },
+  });
+
   const [expandedColumns, dispatchColumns] = useReducer(
     columnReducer,
     initialExpandedColumns,
@@ -126,10 +148,6 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
   const dispatchStore = useDispatch();
 
   const actionsRef = useRef();
-
-  const [autoAcceptEnabled, setAutoAcceptEnabled] = useState(
-    competitionInfo.auto_accept_registrations,
-  );
 
   const [state, dispatchSort] = useReducer(sortReducer, {
     sortColumn: competitionInfo['using_payment_integrations?']
@@ -171,9 +189,9 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
         'negative',
       ));
     },
-    onSuccess: () => {
+    onSuccess: async () => {
       dispatchStore(setMessage('competitions.registration_v2.auto_accept.disabled', 'positive'));
-      setAutoAcceptEnabled(false);
+      await refetchCompetitionInfo();
     },
   });
 
