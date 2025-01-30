@@ -147,6 +147,7 @@ function CompetitorsHeader({
         </Table.HeaderCell>
         {eventIds.map((id) => (
           <Table.HeaderCell
+            textAlign="center"
             key={`registration-table-header-${id}`}
             onClick={() => onEventColumnClick(id)}
           >
@@ -201,6 +202,7 @@ function CompetitorsBody({
               </Table.Cell>
               {eventIds.map((id) => (
                 <Table.Cell
+                  textAlign="center"
                   key={`registration-table-row-${registration.user.id}-${id}`}
                 >
                   {registration.competing.event_ids.includes(id) && (
@@ -250,7 +252,7 @@ function CompetitorsFooter({
           {`${I18n.t('registrations.list.country_plural', { count: countryCount })}`}
         </Table.Cell>
         {eventIds.map((evt) => (
-          <Table.Cell key={`footer-count-${evt}`}>
+          <Table.Cell textAlign="center" key={`footer-count-${evt}`}>
             {eventCounts[evt]}
           </Table.Cell>
         ))}
