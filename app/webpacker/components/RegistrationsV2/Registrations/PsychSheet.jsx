@@ -159,6 +159,11 @@ function PsychSheetHeader({
         >
           {I18n.t('common.average')}
         </Table.HeaderCell>
+        <Table.HeaderCell textAlign="right" disabled>
+          <Icon name="trophy" />
+          {' '}
+          WR
+        </Table.HeaderCell>
       </Table.Row>
     </Table.Header>
   );
@@ -208,15 +213,16 @@ function PsychSheetBody({
                 {countries.byIso2[registration.user.country.iso2].name}
               </Table.Cell>
               <Table.Cell textAlign="right">
-                {sortedColumn === 'single'
-                  ? registration.single_rank
-                  : registration.average_rank}
+                {registration.single_rank}
               </Table.Cell>
               <Table.Cell textAlign="right">
                 {formatAttemptResult(registration.single_best, selectedEvent)}
               </Table.Cell>
               <Table.Cell textAlign="right">
                 {formatAttemptResult(registration.average_best, selectedEvent)}
+              </Table.Cell>
+              <Table.Cell textAlign="right">
+                {registration.average_rank}
               </Table.Cell>
             </Table.Row>
           );
@@ -256,9 +262,10 @@ function PsychSheetFooter({
         <Table.Cell>
           {`${I18n.t('registrations.list.country_plural', { count: countryCount })}`}
         </Table.Cell>
-        <Table.Cell key="WR" />
+        <Table.Cell key="single-world-rank" />
         <Table.Cell key="single" />
         <Table.Cell key="average" />
+        <Table.Cell key="average-world-rank" />
       </Table.Row>
     </Table.Footer>
   );
