@@ -1195,19 +1195,20 @@ en:
       waiting_list:
         #context: "comp_name" contains the competition's name
         mail_subject: "You're on the Waiting List: %{comp_name}"
-        waitlisted: "The competition is full, but you have been placed on a waiting list, and you will receive an email if enough spots open up for you to be able to attend. Check the %{register} page to see your place on the waiting list."
+        waitlisted_html: "The competition is full, but you have been placed on a waiting list, and you will receive an email if enough spots open up for you to be able to attend. Check your position on the waiting list %{here}."
         email_if_error: "If you think this is an error, please reply to this email."
       #context: when registration is deleted
       deleted:
         #context: "comp_name" contains the competition's name
         mail_subject: "Registration Deleted: %{comp_name}"
         message_html: "Your registration for %{comp_name} has been deleted. Possible causes are:"
+        email_if_error: "If you think this is an error, please reply to this email."
         #context: this key is one of the reasons explaining why a registration could be deleted
         causes:
           missing_info: "You did not submit all the required details"
           incomplete: "You didn't meet the registration criteria (for example, paying the registration fee in advance or meeting the qualifying times for events)"
           registrations_full: "The competitor limit has been reached and there are no more spots available"
-          multiple_registrations: "You registered twice or more times"
+          multiple_registrations: "You registered two or more times"
           competition_canceled: "The competition has been canceled"
     #context: on the registrations list
     list:
