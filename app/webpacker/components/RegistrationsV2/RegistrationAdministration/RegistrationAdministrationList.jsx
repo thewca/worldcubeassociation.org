@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import React, {
-  useMemo, useReducer, useRef, useState,
+  useMemo, useReducer, useRef,
 } from 'react';
 import {
   Button, Icon, Checkbox, Form, Header, Segment, Sticky,
@@ -117,6 +117,7 @@ const columnReducer = (state, action) => {
 };
 
 export default function RegistrationAdministrationList({ competitionId }) {
+
   const {
     isLoading: isCompetitionInfoLoading,
     data: competitionInfo,
@@ -163,7 +164,7 @@ export default function RegistrationAdministrationList({ competitionId }) {
     data: registrations,
     refetch,
   } = useQuery({
-    queryKey: ['registrations-admin', competitionInfo.id],
+    queryKey: ['registrations-admin', competitionId],
     queryFn: () => getAllRegistrations(competitionInfo),
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
@@ -325,9 +326,9 @@ export default function RegistrationAdministrationList({ competitionId }) {
     const waitingSorted = waiting
       .toSorted((a, b) => a.competing.waiting_list_position - b.competing.waiting_list_position);
     updateRegistrationMutation({
-      competition_id: competitionInfo.id,
+      competition_id: competitionId,
       requests: [{
-        competition_id: competitionInfo.id,
+        competition_id: competitionId,
         user_id: waitingSorted[result.source.index].user_id,
         competing: {
           waiting_list_position: waitingSorted[result.destination.index]
@@ -340,7 +341,7 @@ export default function RegistrationAdministrationList({ competitionId }) {
         refetch();
       },
     });
-  }, [competitionInfo.id, refetch, updateRegistrationMutation, waiting]);
+  }, [competitionId, refetch, updateRegistrationMutation, waiting]);
 
   return isRegistrationsLoading ? (
     <Loading />
@@ -351,7 +352,7 @@ export default function RegistrationAdministrationList({ competitionId }) {
         <Button
           disabled={isUpdating}
           color="red"
-          onClick={() => disableAutoAcceptMutation(competitionInfo.id)}
+          onClick={() => disableAutoAcceptMutation(competitionId)}
         >
           <Icon name="ban" />
           {' '}
@@ -406,7 +407,7 @@ export default function RegistrationAdministrationList({ competitionId }) {
           selected={partitionedSelected.pending}
           select={select}
           unselect={unselect}
-          competition_id={competitionInfo.id}
+          competition_id={competitionId}
           changeSortColumn={changeSortColumn}
           sortDirection={sortDirection}
           sortColumn={sortColumn}
@@ -432,7 +433,7 @@ export default function RegistrationAdministrationList({ competitionId }) {
           selected={partitionedSelected.accepted}
           select={select}
           unselect={unselect}
-          competition_id={competitionInfo.id}
+          competition_id={competitionId}
           changeSortColumn={changeSortColumn}
           sortDirection={sortDirection}
           sortColumn={sortColumn}
@@ -453,7 +454,7 @@ export default function RegistrationAdministrationList({ competitionId }) {
           selected={partitionedSelected.waiting}
           select={select}
           unselect={unselect}
-          competition_id={competitionInfo.id}
+          competition_id={competitionId}
           changeSortColumn={changeSortColumn}
           sortDirection={sortDirection}
           sortColumn={sortColumn}
@@ -482,7 +483,7 @@ export default function RegistrationAdministrationList({ competitionId }) {
           selected={partitionedSelected.cancelled}
           select={select}
           unselect={unselect}
-          competition_id={competitionInfo.id}
+          competition_id={competitionId}
           changeSortColumn={changeSortColumn}
           sortDirection={sortDirection}
           sortColumn={sortColumn}
@@ -505,7 +506,7 @@ export default function RegistrationAdministrationList({ competitionId }) {
           selected={partitionedSelected.rejected}
           select={select}
           unselect={unselect}
-          competition_id={competitionInfo.id}
+          competition_id={competitionId}
           changeSortColumn={changeSortColumn}
           sortDirection={sortDirection}
           sortColumn={sortColumn}
