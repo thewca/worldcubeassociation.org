@@ -1,5 +1,5 @@
 <% provide(:title, I18n.t('registrations.list.title', comp: @competition.name)) %>
 
 <%= render layout: 'nav' do %>
-  <%= react_component('RegistrationsV2/RegistrationAdministration', { initialCompetitionInfo: @competition.to_competition_info }) %>
+  <%= react_component('RegistrationsV2/RegistrationAdministration', { competitionId: @competition.id }) %>
 <% end %>

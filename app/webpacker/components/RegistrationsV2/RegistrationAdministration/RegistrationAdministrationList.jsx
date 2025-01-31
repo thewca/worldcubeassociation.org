@@ -1,21 +1,13 @@
-import { useMutation, useQuery } from '@tanstack/react-query';
 import React, {
-  useMemo, useReducer, useRef, useState,
+  useMemo, useReducer, useRef,
 } from 'react';
 import {
   Button, Icon, Checkbox, Form, Header, Segment, Sticky,
 } from 'semantic-ui-react';
 import { DateTime } from 'luxon';
-import { getAllRegistrations } from '../api/registration/get/get_registrations';
-import getCompetitionInfo from '../api/competition/get_competition_info';
 import createSortReducer from '../reducers/sortReducer';
 import RegistrationActions from './RegistrationActions';
-import { setMessage } from '../Register/RegistrationMessage';
-import { useDispatch } from '../../../lib/providers/StoreProvider';
 import I18n from '../../../lib/i18n';
-import Loading from '../../Requests/Loading';
-import { bulkUpdateRegistrations } from '../api/registration/patch/update_registration';
-import disableAutoAccept from '../api/registration/patch/auto_accept';
 import RegistrationAdministrationTable from './RegistrationsAdministrationTable';
 import useCheckboxState from '../../../lib/hooks/useCheckboxState';
 import { countries } from '../../../lib/wca-data.js.erb';
@@ -116,32 +108,14 @@ const columnReducer = (state, action) => {
   return state;
 };
 
-export default function RegistrationAdministrationList({ initialCompetitionInfo }) {
-  const [competitionInfo, setCompetitionInfo] = useState(initialCompetitionInfo);
-
-  const {
-    isLoading: isCompetitionInfoLoading,
-    data: fetchedCompetitionInfo,
-    refetchCompetitionInfo,
-  } = useQuery({
-    queryKey: ['competitionInfo', competitionInfo.id],
-    queryFn: () => getCompetitionInfo(competitionInfo.id),
-    refetchOnWindowFocus: false,
-    refetchOnReconnect: false,
-    staleTime: Infinity,
-    refetchOnMount: 'always',
-    retry: false,
-    onError: (err) => {
-      const { errorCode } = err;
-      dispatchStore(setMessage(
-        `competitions.errors.cant_load_competition_info`,
-        'negative',
-      ));
-    },
-    onSuccess: (data) => {
-      setCompetitionInfo(data)
-    }
-  });
+export default function RegistrationAdministrationList({
+  competitionInfo,
+  registrations,
+  disableAutoAcceptMutation,
+  updateRegistrationMutation,
+}) {
+  console.log("comp info - list")
+  console.log(competitionInfo)
 
   const [expandedColumns, dispatchColumns] = useReducer(
     columnReducer,
@@ -149,8 +123,6 @@ export default function RegistrationAdministrationList({ initialCompetitionInfo 
   );
 
   const [editable, setEditable] = useCheckboxState(false);
-
-  const dispatchStore = useDispatch();
 
   const actionsRef = useRef();
 
@@ -162,61 +134,6 @@ export default function RegistrationAdministrationList({ initialCompetitionInfo 
   });
   const { sortColumn, sortDirection } = state;
   const changeSortColumn = (name) => dispatchSort({ type: 'CHANGE_SORT', sortColumn: name });
-
-  const {
-    isLoading: isRegistrationsLoading,
-    data: registrations,
-    refetch,
-  } = useQuery({
-    queryKey: ['registrations-admin', competitionInfo.id],
-    queryFn: () => getAllRegistrations(competitionInfo),
-    refetchOnWindowFocus: false,
-    refetchOnReconnect: false,
-    staleTime: Infinity,
-    refetchOnMount: 'always',
-    retry: false,
-    onError: (err) => {
-      const { errorCode } = err;
-      dispatchStore(setMessage(
-        errorCode
-          ? `competitions.registration_v2.errors.${errorCode}`
-          : 'registrations.flash.failed',
-        'negative',
-      ));
-    },
-  });
-
-  const { mutate: disableAutoAcceptMutation, isPending: isUpdating } = useMutation({
-    mutationFn: disableAutoAccept,
-    onError: () => {
-      dispatchStore(setMessage(
-        'competitions.registration_v2.auto_accept.cant_disable',
-        'negative',
-      ));
-    },
-    onSuccess: async () => {
-      dispatchStore(setMessage('competitions.registration_v2.auto_accept.disabled', 'positive'));
-      await refetchCompetitionInfo();
-    },
-  });
-
-  const { mutate: updateRegistrationMutation, isPending: isMutating } = useMutation({
-    mutationFn: bulkUpdateRegistrations,
-    onError: (data) => {
-      const { error } = data.json;
-      dispatchStore(setMessage(
-        Object.values(error).map((err) => `competitions.registration_v2.errors.${err}`),
-        'negative',
-      ));
-    },
-    onSuccess: async () => {
-      // If multiple organizers approve people at the same time,
-      // or if registrations are still coming in while organizers approve them
-      // we want the data to be refreshed. Optimal solution would be subscribing to changes
-      // via graphql/websockets, but we aren't there yet
-      await refetch();
-    },
-  });
 
   const sortedRegistrationsWithUser = useMemo(() => {
     if (registrations) {
@@ -347,9 +264,7 @@ export default function RegistrationAdministrationList({ initialCompetitionInfo 
     });
   }, [competitionInfo.id, refetch, updateRegistrationMutation, waiting]);
 
-  return isRegistrationsLoading ? (
-    <Loading />
-  ) : (
+  return (
     <Segment loading={isMutating} style={{ overflowX: 'scroll' }}>
       { competitionInfo.auto_accept_registrations && (
         <Button
