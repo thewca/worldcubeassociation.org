@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
 class LiveAttempt < ApplicationRecord
-  # Associations
   belongs_to :live_result
 
-  # Validations
-  validates :result, presence: true
   validates :result, numericality: { only_integer: true }
+  validates :attempt_number, numericality: { only_integer: true }
+
+  belongs_to :replaces, class_name: "LiveAttempt", optional: true
 
   def serializable_hash(options = nil)
     result
