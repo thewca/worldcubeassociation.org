@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
 class LiveAttempt < ApplicationRecord
-  belongs_to :live_result
+  # If the Attempt has been replaced, it no longer points to a live_result, but instead is being pointed to
+  # by another Attempt
+  belongs_to :live_result, optional: true
 
   validates :result, numericality: { only_integer: true }
   validates :attempt_number, numericality: { only_integer: true }

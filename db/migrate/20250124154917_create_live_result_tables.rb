@@ -23,8 +23,8 @@ class CreateLiveResultTables < ActiveRecord::Migration[7.2]
     create_table :live_attempts do |t|
       t.integer :result, null: false
       t.integer :attempt_number, null: false
-      t.integer :replaces
-      t.references :live_result, foreign_key: { to_table: :live_results }, null: false
+      t.references :replaces, foreign_key: { to_table: :live_attempts }
+      t.references :live_result, foreign_key: { to_table: :live_results }
       t.timestamps
     end
   end
