@@ -13,13 +13,11 @@ import {
   Sticky,
 } from 'semantic-ui-react';
 import FormErrors from './FormErrors';
-import useSaveAction from '../../../lib/hooks/useSaveAction';
 import FormObjectProvider, { useFormContext } from './provider/FormObjectProvider';
 
 function EditForm({
   children,
-  backendUrl,
-  backendOptions,
+  saveMutation,
   CustomHeader = null,
   CustomFooter = null,
 }) {
@@ -48,19 +46,16 @@ function EditForm({
     return () => window.removeEventListener('beforeunload', onUnload);
   }, [onUnload]);
 
-  const onSuccessSafe = useCallback(() => {
-    window.removeEventListener('beforeunload', onUnload);
-    onSuccess();
-    window.addEventListener('beforeunload', onUnload);
-  }, [onSuccess, onUnload]);
-
-  const { save, saving } = useSaveAction();
-
   const saveObject = useCallback(() => {
-    const saveOptions = backendOptions || {};
+    window.removeEventListener('beforeunload', onUnload);
 
-    save(backendUrl, object, onSuccessSafe, saveOptions, onError);
-  }, [backendUrl, backendOptions, object, save, onError, onSuccessSafe]);
+    // The `saveMutation` may have side-effects like Redirects
+    //   that are not supposed to trigger the "are you sure" warning.
+    // TODO: Refactor `unsavedChanges` so that it doesn't fire in the first place
+    saveMutation.mutate(object, { onSuccess, onError });
+
+    window.addEventListener('beforeunload', onUnload);
+  }, [saveMutation, object, onSuccess, onError, onUnload]);
 
   const renderUnsavedChangesAlert = () => (
     <Message info>
@@ -68,8 +63,8 @@ function EditForm({
       {' '}
       <Button
         onClick={saveObject}
-        disabled={saving}
-        loading={saving}
+        disabled={saveMutation.isPending}
+        loading={saveMutation.isPending}
         primary
       >
         save your changes!
@@ -115,8 +110,7 @@ function EditForm({
 export default function Wrapper({
   children,
   initialObject,
-  backendUrl,
-  backendOptions,
+  saveMutation,
   CustomHeader = null,
   CustomFooter = null,
   globalDisabled = false,
@@ -127,8 +121,7 @@ export default function Wrapper({
       globalDisabled={globalDisabled}
     >
       <EditForm
-        backendUrl={backendUrl}
-        backendOptions={backendOptions}
+        saveMutation={saveMutation}
         CustomHeader={CustomHeader}
         CustomFooter={CustomFooter}
       >
