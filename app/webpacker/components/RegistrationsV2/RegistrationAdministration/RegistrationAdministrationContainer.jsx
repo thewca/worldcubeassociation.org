@@ -25,7 +25,7 @@ export default function RegistrationAdministrationContainer({ competitionId }) {
     retry: false,
     onError: () => {
       dispatchStore(setMessage(
-        'competitions.errors.cant_load_competition_info',
+        `competitions.errors.cant_load_competition_info`,
         'negative',
       ));
     },
