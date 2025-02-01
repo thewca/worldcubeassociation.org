@@ -23,7 +23,7 @@ export default function RegistrationAdministrationContainer({ competitionId }) {
     staleTime: Infinity,
     refetchOnMount: 'always',
     retry: false,
-    onError: (err) => {
+    onError: () => {
       dispatchStore(setMessage(
         'competitions.errors.cant_load_competition_info',
         'negative',
@@ -33,8 +33,9 @@ export default function RegistrationAdministrationContainer({ competitionId }) {
 
   return isCompetitionInfoLoading ? (
     <Loading />
-  ) : ( <RegistrationAdministrationList
+  ) : (
+  <RegistrationAdministrationList
     competitionInfo={competitionInfo}
     refetchCompetitionInfo={refetchCompetitionInfo}
-  /> )
+  />);
 }
