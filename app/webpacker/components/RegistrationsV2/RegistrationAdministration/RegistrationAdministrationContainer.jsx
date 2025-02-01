@@ -34,8 +34,9 @@ export default function RegistrationAdministrationContainer({ competitionId }) {
   return isCompetitionInfoLoading ? (
     <Loading />
   ) : (
-  <RegistrationAdministrationList
-    competitionInfo={competitionInfo}
-    refetchCompetitionInfo={refetchCompetitionInfo}
-  />);
+    <RegistrationAdministrationList
+      competitionInfo={competitionInfo}
+      refetchCompetitionInfo={refetchCompetitionInfo}
+    />
+  );
 }
