@@ -1,7 +1,7 @@
 import React from 'react';
+import { useQuery } from '@tanstack/react-query';
 import getCompetitionInfo from '../api/competition/get_competition_info';
 import RegistrationAdministrationList from './RegistrationAdministrationList';
-import { useQuery } from '@tanstack/react-query';
 import Loading from '../../Requests/Loading';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { setMessage } from '../Register/RegistrationMessage';
@@ -9,9 +9,7 @@ import { setMessage } from '../Register/RegistrationMessage';
 export default function RegistrationAdministrationContainer({ competitionId }) {
   const dispatchStore = useDispatch();
 
-  const fetchCompetitionInfo = async () => {
-    return getCompetitionInfo(competitionId);
-  };
+  const fetchCompetitionInfo = async () => getCompetitionInfo(competitionId);
 
   const {
     isLoading: isCompetitionInfoLoading,
@@ -26,9 +24,8 @@ export default function RegistrationAdministrationContainer({ competitionId }) {
     refetchOnMount: 'always',
     retry: false,
     onError: (err) => {
-      const { errorCode } = err;
       dispatchStore(setMessage(
-        `competitions.errors.cant_load_competition_info`,
+        'competitions.errors.cant_load_competition_info',
         'negative',
       ));
     },
@@ -36,8 +33,8 @@ export default function RegistrationAdministrationContainer({ competitionId }) {
 
   return isCompetitionInfoLoading ? (
     <Loading />
-  ) : <RegistrationAdministrationList
-        competitionInfo={competitionInfo}
-        refetchCompetitionInfo={refetchCompetitionInfo}
-  />
+  ) : ( <RegistrationAdministrationList
+    competitionInfo={competitionInfo}
+    refetchCompetitionInfo={refetchCompetitionInfo}
+  /> )
 }

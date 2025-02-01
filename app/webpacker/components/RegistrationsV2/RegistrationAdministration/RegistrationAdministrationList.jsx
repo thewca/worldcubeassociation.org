@@ -2,15 +2,16 @@ import React, {
   useMemo, useReducer, useRef,
 } from 'react';
 import { useMutation, useQuery } from '@tanstack/react-query';
+import { DateTime } from 'luxon';
+import {
+  Button, Icon, Checkbox, Form, Header, Segment, Sticky,
+} from 'semantic-ui-react';
+import Loading from '../../Requests/Loading';
 import { getAllRegistrations } from '../api/registration/get/get_registrations';
 import { bulkUpdateRegistrations } from '../api/registration/patch/update_registration';
 import { setMessage } from '../Register/RegistrationMessage';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
 import disableAutoAccept from '../api/registration/patch/auto_accept';
-import {
-  Button, Icon, Checkbox, Form, Header, Segment, Sticky,
-} from 'semantic-ui-react';
-import { DateTime } from 'luxon';
 import createSortReducer from '../reducers/sortReducer';
 import RegistrationActions from './RegistrationActions';
 import I18n from '../../../lib/i18n';
@@ -163,7 +164,7 @@ export default function RegistrationAdministrationList({
 
   const { mutate: disableAutoAcceptMutation, isPending: isUpdating } = useMutation({
     mutationFn: disableAutoAccept,
-    onError: (error) => {
+    onError: () => {
       dispatchStore(setMessage(
         'competitions.registration_v2.auto_accept.cant_disable',
         'negative',
@@ -171,7 +172,7 @@ export default function RegistrationAdministrationList({
     },
     onSuccess: async () => {
       dispatchStore(setMessage('competitions.registration_v2.auto_accept.disabled', 'positive'));
-      await refetchCompetitionInfo({force: true});
+      await refetchCompetitionInfo();
     },
   });
 
@@ -189,13 +190,9 @@ export default function RegistrationAdministrationList({
       // or if registrations are still coming in while organizers approve them
       // we want the data to be refreshed. Optimal solution would be subscribing to changes
       // via graphql/websockets, but we aren't there yet
-      await refetch();
+      await refetchRegistrations();
     },
   });
-
-
-
-
 
   const sortedRegistrationsWithUser = useMemo(() => {
     if (registrations) {
@@ -326,7 +323,9 @@ export default function RegistrationAdministrationList({
     });
   }, [competitionInfo.id, refetchRegistrations, updateRegistrationMutation, waiting]);
 
-  return (
+  return isRegistrationsLoading ? (
+    <Loading />
+  ) : (
     <Segment loading={isMutating} style={{ overflowX: 'scroll' }}>
       { competitionInfo.auto_accept_registrations && (
         <Button
