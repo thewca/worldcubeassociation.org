@@ -25,6 +25,7 @@ export default function RegistrationAdministrationContainer({ competitionId }) {
     retry: false,
     onError: () => {
       dispatchStore(setMessage(
+        // eslint-disable-next-line quotes
         `competitions.errors.cant_load_competition_info`,
         'negative',
       ));
