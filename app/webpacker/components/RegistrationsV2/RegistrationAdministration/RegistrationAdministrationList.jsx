@@ -1,6 +1,12 @@
 import React, {
   useMemo, useReducer, useRef,
 } from 'react';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { getAllRegistrations } from '../api/registration/get/get_registrations';
+import { bulkUpdateRegistrations } from '../api/registration/patch/update_registration';
+import { setMessage } from '../Register/RegistrationMessage';
+import { useDispatch } from '../../../lib/providers/StoreProvider';
+import disableAutoAccept from '../api/registration/patch/auto_accept';
 import {
   Button, Icon, Checkbox, Form, Header, Segment, Sticky,
 } from 'semantic-ui-react';
@@ -110,12 +116,9 @@ const columnReducer = (state, action) => {
 
 export default function RegistrationAdministrationList({
   competitionInfo,
-  registrations,
-  disableAutoAcceptMutation,
-  updateRegistrationMutation,
+  refetchCompetitionInfo,
 }) {
-  console.log("comp info - list")
-  console.log(competitionInfo)
+  const dispatchStore = useDispatch();
 
   const [expandedColumns, dispatchColumns] = useReducer(
     columnReducer,
@@ -134,6 +137,65 @@ export default function RegistrationAdministrationList({
   });
   const { sortColumn, sortDirection } = state;
   const changeSortColumn = (name) => dispatchSort({ type: 'CHANGE_SORT', sortColumn: name });
+
+  const {
+    isLoading: isRegistrationsLoading,
+    data: registrations,
+    refetch: refetchRegistrations,
+  } = useQuery({
+    queryKey: ['registrations-admin', competitionInfo.id],
+    queryFn: () => getAllRegistrations(competitionInfo),
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+    staleTime: Infinity,
+    refetchOnMount: 'always',
+    retry: false,
+    onError: (err) => {
+      const { errorCode } = err;
+      dispatchStore(setMessage(
+        errorCode
+          ? `competitions.registration_v2.errors.${errorCode}`
+          : 'registrations.flash.failed',
+        'negative',
+      ));
+    },
+  });
+
+  const { mutate: disableAutoAcceptMutation, isPending: isUpdating } = useMutation({
+    mutationFn: disableAutoAccept,
+    onError: (error) => {
+      dispatchStore(setMessage(
+        'competitions.registration_v2.auto_accept.cant_disable',
+        'negative',
+      ));
+    },
+    onSuccess: async () => {
+      dispatchStore(setMessage('competitions.registration_v2.auto_accept.disabled', 'positive'));
+      await refetchCompetitionInfo({force: true});
+    },
+  });
+
+  const { mutate: updateRegistrationMutation, isPending: isMutating } = useMutation({
+    mutationFn: bulkUpdateRegistrations,
+    onError: (data) => {
+      const { error } = data.json;
+      dispatchStore(setMessage(
+        Object.values(error).map((err) => `competitions.registration_v2.errors.${err}`),
+        'negative',
+      ));
+    },
+    onSuccess: async () => {
+      // If multiple organizers approve people at the same time,
+      // or if registrations are still coming in while organizers approve them
+      // we want the data to be refreshed. Optimal solution would be subscribing to changes
+      // via graphql/websockets, but we aren't there yet
+      await refetch();
+    },
+  });
+
+
+
+
 
   const sortedRegistrationsWithUser = useMemo(() => {
     if (registrations) {
@@ -259,10 +321,10 @@ export default function RegistrationAdministrationList({
     }, {
       onSuccess: () => {
         // We need to get the info for all Competitors if you change the waiting list position
-        refetch();
+        refetchRegistrations();
       },
     });
-  }, [competitionInfo.id, refetch, updateRegistrationMutation, waiting]);
+  }, [competitionInfo.id, refetchRegistrations, updateRegistrationMutation, waiting]);
 
   return (
     <Segment loading={isMutating} style={{ overflowX: 'scroll' }}>
