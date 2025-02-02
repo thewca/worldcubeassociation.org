@@ -12,28 +12,46 @@ import {
   Sticky,
 } from 'semantic-ui-react';
 import FormErrors from './FormErrors';
-import FormObjectProvider, { useFormContext } from './provider/FormObjectProvider';
+import FormObjectProvider, { useFormContext, useFormObject } from './provider/FormObjectProvider';
 import ConfirmProvider, { useConfirm } from '../../../lib/providers/ConfirmProvider';
+
+function useSafeMutation(mutation, mutationArgs, unloadListener) {
+  const { onSuccess, onError } = useFormContext();
+
+  return useCallback(() => {
+    window.removeEventListener('beforeunload', unloadListener);
+
+    // The `saveMutation` may have side-effects like Redirects
+    //   that are not supposed to trigger the "are you sure" warning.
+    // TODO: Refactor `unsavedChanges` so that it doesn't fire in the first place
+    mutation.mutate(mutationArgs, { onSuccess, onError });
+
+    window.addEventListener('beforeunload', unloadListener);
+  }, [unloadListener, mutation, mutationArgs, onSuccess, onError]);
+}
 
 function FooterButton({
   buttonConfig,
+  onUnload,
 }) {
   const confirm = useConfirm();
-  const { object: formObject, onSuccess, onError } = useFormContext();
+  const formObject = useFormObject();
 
   const {
     mutation, enabled, confirmationMessage, buttonText, buttonProps,
   } = buttonConfig;
 
+  const safeMutation = useSafeMutation(mutation, formObject, onUnload);
+
   const handleClick = useCallback(() => {
     if (confirmationMessage) {
       confirm({
         content: confirmationMessage,
-      }).then(() => mutation.mutate(formObject, { onSuccess, onError }));
+      }).then(safeMutation);
     } else {
-      mutation.mutate(formObject, { onSuccess, onError });
+      safeMutation();
     }
-  }, [confirm, confirmationMessage, formObject, mutation, onError, onSuccess]);
+  }, [confirm, confirmationMessage, safeMutation]);
 
   if (!enabled) return null;
 
@@ -61,8 +79,6 @@ function EditForm({
     object,
     unsavedChanges,
     errors,
-    onSuccess,
-    onError,
   } = useFormContext();
 
   const onUnload = useCallback((e) => {
@@ -82,16 +98,7 @@ function EditForm({
     return () => window.removeEventListener('beforeunload', onUnload);
   }, [onUnload]);
 
-  const saveObject = useCallback(() => {
-    window.removeEventListener('beforeunload', onUnload);
-
-    // The `saveMutation` may have side-effects like Redirects
-    //   that are not supposed to trigger the "are you sure" warning.
-    // TODO: Refactor `unsavedChanges` so that it doesn't fire in the first place
-    saveMutation.mutate(object, { onSuccess, onError });
-
-    window.addEventListener('beforeunload', onUnload);
-  }, [saveMutation, object, onSuccess, onError, onUnload]);
+  const saveObject = useSafeMutation(saveMutation, object, onUnload);
 
   const renderSaveButton = (buttonText) => (
     <Button
@@ -141,7 +148,7 @@ function EditForm({
           <Button.Group>
             {renderSaveButton('Save')}
             {footerActions.map((action) => (
-              <FooterButton key={action.id} buttonConfig={action} />
+              <FooterButton key={action.id} buttonConfig={action} onUnload={onUnload} />
             ))}
           </Button.Group>
         </ConfirmProvider>
