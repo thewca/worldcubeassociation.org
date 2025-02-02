@@ -1,15 +1,15 @@
 import React, { useMemo } from 'react';
 import _ from 'lodash';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import StoreProvider from '../../lib/providers/StoreProvider';
-import { competitionUrl } from '../../lib/requests/routes.js.erb';
+import { competitionUrl, confirmCompetitionUrl, homepageUrl } from '../../lib/requests/routes.js.erb';
 import EditForm from '../wca/FormBuilder/EditForm';
 import Header from './Header';
-import Footer from './Footer';
 import MainForm from './MainForm';
 import WCAQueryClientProvider from '../../lib/providers/WCAQueryClientProvider';
-import { useConfirmationData } from './api';
+import { confirmationDataQueryKey, useConfirmationData } from './api';
 import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken';
+import I18n from '../../lib/i18n';
 
 function EditCompetition({
   competition,
@@ -17,7 +17,8 @@ function EditCompetition({
   isAdminView,
   isSeriesPersisted,
 }) {
-  const backendUrl = `${competitionUrl(competition.competitionId)}?adminView=${isAdminView}`;
+  const originalCompId = competition.competitionId;
+  const backendUrl = `${competitionUrl(originalCompId)}?adminView=${isAdminView}`;
 
   const saveMutation = useMutation({
     // Deliberately do NOT use the "fresh" parameter `object` here, because
@@ -36,7 +37,45 @@ function EditCompetition({
     },
   });
 
+  const queryClient = useQueryClient();
+
+  const confirmCompMutation = useMutation({
+    mutationFn: () => fetchJsonOrError(confirmCompetitionUrl(originalCompId), {
+      method: 'PUT',
+    }).then((resp) => resp.data),
+    onSuccess: (respData) => queryClient.setQueryData(
+      confirmationDataQueryKey(originalCompId),
+      respData.data,
+    ),
+  });
+
+  const deleteCompMutation = useMutation({
+    mutationFn: () => fetchJsonOrError(competitionUrl(originalCompId), {
+      method: 'DELETE',
+    }),
+    onSuccess: () => window.location.replace(homepageUrl),
+  });
+
   const { data: confirmationData, isLoading } = useConfirmationData(competition.competitionId);
+
+  const footerActions = [
+    {
+      id: 'confirm',
+      mutation: confirmCompMutation,
+      enabled: confirmationData?.canConfirm && !confirmationData?.isConfirmed && !isAdminView,
+      confirmationMessage: I18n.t('competitions.competition_form.submit_confirm'),
+      buttonText: I18n.t('competitions.competition_form.submit_confirm_value'),
+      buttonProps: { positive: true },
+    },
+    {
+      id: 'delete',
+      mutation: deleteCompMutation,
+      enabled: !confirmationData?.cannotDeleteReason && !confirmationData?.isConfirmed,
+      confirmationMessage: I18n.t('competitions.competition_form.submit_delete'),
+      buttonText: I18n.t('competitions.competition_form.submit_delete_value'),
+      buttonProps: { negative: true },
+    },
+  ];
 
   const isDisabled = useMemo(() => {
     if (isLoading) return true;
@@ -61,7 +100,7 @@ function EditCompetition({
         initialObject={competition}
         saveMutation={saveMutation}
         CustomHeader={Header}
-        CustomFooter={Footer}
+        footerActions={footerActions}
         globalDisabled={isDisabled}
       >
         <MainForm />

@@ -6,7 +6,6 @@ import React, {
 import {
   Button,
   Dimmer,
-  Divider,
   Form,
   Message,
   Segment,
@@ -14,12 +13,49 @@ import {
 } from 'semantic-ui-react';
 import FormErrors from './FormErrors';
 import FormObjectProvider, { useFormContext } from './provider/FormObjectProvider';
+import ConfirmProvider, { useConfirm } from '../../../lib/providers/ConfirmProvider';
+
+function FooterButton({
+  buttonConfig,
+}) {
+  const confirm = useConfirm();
+  const { object: formObject, onSuccess, onError } = useFormContext();
+
+  const {
+    mutation, enabled, confirmationMessage, buttonText, buttonProps,
+  } = buttonConfig;
+
+  const handleClick = useCallback(() => {
+    if (confirmationMessage) {
+      confirm({
+        content: confirmationMessage,
+      }).then(() => mutation.mutate(formObject, { onSuccess, onError }));
+    } else {
+      mutation.mutate(formObject, { onSuccess, onError });
+    }
+  }, [confirm, confirmationMessage, formObject, mutation, onError, onSuccess]);
+
+  if (!enabled) return null;
+
+  /* eslint-disable react/jsx-props-no-spreading */
+  return (
+    <Button
+      onClick={handleClick}
+      disabled={mutation.isPending}
+      loading={mutation.isPending}
+      {...buttonProps}
+    >
+      {buttonText}
+    </Button>
+  );
+  /* eslint-enable react/jsx-props-no-spreading */
+}
 
 function EditForm({
   children,
   saveMutation,
   CustomHeader = null,
-  CustomFooter = null,
+  footerActions = [],
 }) {
   const {
     object,
@@ -57,18 +93,22 @@ function EditForm({
     window.addEventListener('beforeunload', onUnload);
   }, [saveMutation, object, onSuccess, onError, onUnload]);
 
+  const renderSaveButton = (buttonText) => (
+    <Button
+      onClick={saveObject}
+      disabled={saveMutation.isPending}
+      loading={saveMutation.isPending}
+      primary
+    >
+      {buttonText}
+    </Button>
+  );
+
   const renderUnsavedChangesAlert = () => (
     <Message info>
       You have unsaved changes. Don&apos;t forget to
       {' '}
-      <Button
-        onClick={saveObject}
-        disabled={saveMutation.isPending}
-        loading={saveMutation.isPending}
-        primary
-      >
-        save your changes!
-      </Button>
+      {renderSaveButton('save your changes!')}
     </Message>
   );
 
@@ -96,12 +136,15 @@ function EditForm({
           {children}
         </Form>
       </div>
-      {unsavedChanges && renderUnsavedChangesAlert()}
-      {CustomFooter && (
-        <>
-          <Divider />
-          <CustomFooter saveObject={saveObject} />
-        </>
+      {unsavedChanges ? renderUnsavedChangesAlert() : (
+        <ConfirmProvider>
+          <Button.Group>
+            {renderSaveButton('Save')}
+            {footerActions.map((action) => (
+              <FooterButton key={action.id} buttonConfig={action} />
+            ))}
+          </Button.Group>
+        </ConfirmProvider>
       )}
     </>
   );
@@ -112,7 +155,7 @@ export default function Wrapper({
   initialObject,
   saveMutation,
   CustomHeader = null,
-  CustomFooter = null,
+  footerActions = [],
   globalDisabled = false,
 }) {
   return (
@@ -123,7 +166,7 @@ export default function Wrapper({
       <EditForm
         saveMutation={saveMutation}
         CustomHeader={CustomHeader}
-        CustomFooter={CustomFooter}
+        footerActions={footerActions}
       >
         {children}
       </EditForm>
