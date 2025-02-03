@@ -45,7 +45,10 @@ function ResultRow({
         {formatAttemptResult(result.value, result.eventId)}
       </Table.Cell>
       {show !== 'by region' && <CountryCell country={country} />}
-      <CompetitionCell competition={competition} />
+      <CompetitionCell
+        competition={competition}
+        compatIso2={countries.byId[competition.countryId].iso2}
+      />
       {isAverage && (
         <AttemptsCells
           attempts={attempts}
