@@ -126,5 +126,6 @@ AppSecrets = SuperConfig.new(raise_exception: !EnvConfig.ASSETS_COMPILATION?) do
     optional :TNOODLE_PUBLIC_KEY, :string, ''
     optional :WRC_WEBHOOK_USERNAME, :string, ''
     optional :WRC_WEBHOOK_PASSWORD, :string, ''
+    optional :CURRENCY_LAYER_API_KEY, :string, ''
   end
 end
