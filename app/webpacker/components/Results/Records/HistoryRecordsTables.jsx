@@ -1,7 +1,6 @@
 import React from 'react';
 import { Header, Table } from 'semantic-ui-react';
-import { events } from '../../../lib/wca-data.js.erb';
-import { WCA_EVENT_IDS } from '../../wca/EventSelector';
+import { events, WCA_EVENT_IDS } from '../../../lib/wca-data.js.erb';
 import { HistoryRow } from '../TableRows';
 import { HistoryHeader } from '../TableHeaders';
 import { augmentAndGroupResults } from './utils';
