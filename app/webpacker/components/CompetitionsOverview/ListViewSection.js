@@ -159,7 +159,7 @@ export function CompetitionsTable({
                 {dateRange(comp.start_date, comp.end_date)}
               </Table.Cell>
               <Table.Cell width={5}>
-                <Flag name={comp.country_iso2?.toLowerCase()} />
+                <Flag className={comp.country_iso2?.toLowerCase()} />
                 <a href={competitionUrl(comp.id)}>{comp.short_display_name}</a>
               </Table.Cell>
               <Table.Cell width={4}>
@@ -215,7 +215,7 @@ export function CompetitionsTabletTable({
                 {dateRange(comp.start_date, comp.end_date)}
               </Table.Cell>
               <Table.Cell width={6}>
-                <Flag name={comp.country_iso2?.toLowerCase()} />
+                <Flag className={comp.country_iso2?.toLowerCase()} />
                 <a href={competitionUrl(comp.id)}>{comp.short_display_name}</a>
               </Table.Cell>
               <Table.Cell width={7}>
@@ -261,7 +261,7 @@ export function CompetitionsMobileTable({
                   />
                   {dateRange(comp.start_date, comp.end_date)}
                 </Label>
-                <Flag name={comp.country_iso2?.toLowerCase()} />
+                <Flag className={comp.country_iso2?.toLowerCase()} />
                 <a href={competitionUrl(comp.id)}>{comp.short_display_name}</a>
               </Table.Cell>
               {
@@ -341,7 +341,7 @@ function AdminCompetitionsTable({
                   />
                 </Table.Cell>
                 <Table.Cell width={4}>
-                  <Flag name={comp.country_iso2?.toLowerCase()} />
+                  <Flag className={comp.country_iso2?.toLowerCase()} />
                   <a href={competitionUrl(comp.id)}>{comp.short_display_name}</a>
                   <br />
                   <strong>{countries.byIso2[comp.country_iso2].name}</strong>
