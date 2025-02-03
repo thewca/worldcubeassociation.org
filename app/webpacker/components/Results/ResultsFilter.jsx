@@ -50,6 +50,7 @@ export default function ResultsFilter({
             onEventSelection={({ eventId }) => setEvent(eventId)}
             hideAllButton={!isRecords}
             hideClearButton
+            showBreakBeforeButtons={false}
           />
         </Form.Field>
         <Form.Field>
