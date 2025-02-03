@@ -77,4 +77,6 @@ translations:
       - "*.activerecord.attributes.post.*"
       - "*.simple_form.hints.post.*"
       - "*.persons.index.*"
+      - "*.results.table_elements.*"
+      - "*.results.selector_elements.*"
       - "*.validators.*"
