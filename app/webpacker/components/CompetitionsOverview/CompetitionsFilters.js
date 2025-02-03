@@ -81,7 +81,10 @@ export function RegionSelector({ region, dispatchFilter }) {
     },
     ...(Object.values(countries.real).map((country) => (
       {
-        key: country.id, text: country.name, value: country.iso2, flag: country.iso2.toLowerCase(),
+        key: country.id,
+        text: country.name,
+        value: country.iso2,
+        flag: { className: country.iso2.toLowerCase() },
       }
     ))),
   ];

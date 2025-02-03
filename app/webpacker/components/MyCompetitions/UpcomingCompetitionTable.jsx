@@ -44,7 +44,7 @@ const registrationStatusIcon = (competition) => {
     return <Icon name="user times" color="red" />;
   }
   if (competition.registration_status === 'full') {
-    return <Icon name="user clock" color="orange" />;
+    return <Icon className="user clock" color="orange" />;
   }
   return <Icon name="user plus" color="green" />;
 };

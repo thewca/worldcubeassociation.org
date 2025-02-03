@@ -195,7 +195,7 @@ function CompetitorsBody({
               </Table.Cell>
               <Table.Cell>
                 <Flag
-                  name={registration.user.country.iso2.toLowerCase()}
+                  className={registration.user.country.iso2.toLowerCase()}
                 />
                 {countries.byIso2[registration.user.country.iso2].name}
               </Table.Cell>

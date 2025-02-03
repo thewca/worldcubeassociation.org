@@ -8,7 +8,7 @@ const countryOptions = countries.real.map((country) => ({
   key: country.iso2,
   text: country.name,
   value: country.iso2,
-  flag: country.iso2.toLowerCase(),
+  flag: { className: country.iso2.toLowerCase() },
 }));
 
 function CountrySelector({
