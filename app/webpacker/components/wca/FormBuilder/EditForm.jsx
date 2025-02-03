@@ -5,7 +5,7 @@ import React, {
 } from 'react';
 import {
   Button,
-  Dimmer,
+  Dimmer, Divider,
   Form,
   Message,
   Segment,
@@ -25,8 +25,6 @@ function useSafeMutation(mutation, mutationArgs, unloadListener) {
     //   that are not supposed to trigger the "are you sure" warning.
     // TODO: Refactor `unsavedChanges` so that it doesn't fire in the first place
     mutation.mutate(mutationArgs, { onSuccess, onError });
-
-    window.addEventListener('beforeunload', unloadListener);
   }, [unloadListener, mutation, mutationArgs, onSuccess, onError]);
 }
 
@@ -119,11 +117,6 @@ function EditForm({
   return (
     <>
       <div ref={stickyRef}>
-        {unsavedChanges && (
-          <Sticky context={stickyRef} offset={20} styleElement={{ zIndex: 2000 }}>
-            {renderUnsavedChangesAlert()}
-          </Sticky>
-        )}
         <FormErrors errors={errors} />
         {CustomHeader && (
           <Dimmer.Dimmable as={Segment} blurring dimmed={unsavedChanges}>
@@ -134,12 +127,18 @@ function EditForm({
             <CustomHeader />
           </Dimmer.Dimmable>
         )}
+        {unsavedChanges && (
+          <Sticky context={stickyRef} offset={20} styleElement={{ zIndex: 2000 }}>
+            {renderUnsavedChangesAlert()}
+          </Sticky>
+        )}
         <Form>
           {children}
         </Form>
       </div>
       {unsavedChanges ? renderUnsavedChangesAlert() : (
         <ConfirmProvider>
+          <Divider />
           <Button.Group>
             {renderSaveButton('Save')}
             {footerActions.map((action) => (
