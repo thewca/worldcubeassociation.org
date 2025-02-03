@@ -20,7 +20,10 @@ import CompDates from './FormSections/CompDates';
 import RegistrationDates from './FormSections/RegistrationDates';
 import SubSection from '../wca/FormBuilder/SubSection';
 
-export default function MainForm({ isCloning = false }) {
+export default function MainForm({
+  isCloning = false,
+  storedEvents = [],
+}) {
   return (
     <>
       <NameDetails />
@@ -50,7 +53,7 @@ export default function MainForm({ isCloning = false }) {
       <RegistrationFee />
       <Divider />
 
-      <EventRestrictions />
+      <EventRestrictions isCloning={isCloning} storedEvents={storedEvents} />
 
       <InputTextArea id="remarks" />
 

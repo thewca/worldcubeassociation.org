@@ -30,11 +30,9 @@ function CreateCompetition({
     <StoreProvider
       reducer={_.identity}
       initialState={{
-        storedEvents: [],
         isAdminView: false,
         isPersisted: false,
         isSeriesPersisted: false,
-        isCloning,
       }}
     >
       <EditForm

@@ -89,11 +89,9 @@ function EditCompetition({
     <StoreProvider
       reducer={_.identity}
       initialState={{
-        storedEvents,
         isAdminView,
         isPersisted: true,
         isSeriesPersisted,
-        isCloning: false,
       }}
     >
       <EditForm
@@ -103,7 +101,7 @@ function EditCompetition({
         footerActions={footerActions}
         globalDisabled={isDisabled}
       >
-        <MainForm />
+        <MainForm storedEvents={storedEvents} />
       </EditForm>
     </StoreProvider>
   );

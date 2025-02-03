@@ -12,12 +12,11 @@ import ConditionalSection from './ConditionalSection';
 import SubSection from '../../wca/FormBuilder/SubSection';
 import { useFormObject } from '../../wca/FormBuilder/provider/FormObjectProvider';
 
-export default function EventRestrictions() {
-  const {
-    isCloning,
-    isPersisted,
-    storedEvents,
-  } = useStore();
+export default function EventRestrictions({
+  isCloning = false,
+  storedEvents = [],
+}) {
+  const { isPersisted } = useStore();
 
   const {
     eventRestrictions: {
