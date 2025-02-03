@@ -23,7 +23,6 @@ export default function RegistrationAdministrationContainer({ competitionId }) {
     staleTime: Infinity,
     refetchOnMount: 'always',
     retry: false,
-    },
   });
 
   return isCompetitionInfoLoading ? (
