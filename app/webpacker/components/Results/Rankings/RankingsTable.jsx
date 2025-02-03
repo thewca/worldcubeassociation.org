@@ -47,7 +47,7 @@ function ResultRow({
       {show !== 'by region' && <CountryCell country={country} />}
       <CompetitionCell
         competition={competition}
-        compatIso2={countries.byId[competition.countryId].iso2}
+        compatIso2={countries.byId[competition.countryId]?.iso2}
       />
       {isAverage && (
         <AttemptsCells
