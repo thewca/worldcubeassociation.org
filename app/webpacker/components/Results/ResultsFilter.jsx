@@ -69,7 +69,7 @@ export default function ResultsFilter({
                 >
                   {I18n.t('results.selector_elements.type_selector.single')}
                 </Button>
-                <Button active={rankingType === 'average'} onClick={() => setRankingType('average')}>{I18n.t('results.selector_elements.type_selector.average')}</Button>
+                { event !== '333mbf' && <Button active={rankingType === 'average'} onClick={() => setRankingType('average')}>{I18n.t('results.selector_elements.type_selector.average')}</Button>}
               </ButtonGroup>
             </Form.Field>
           )}
@@ -78,7 +78,7 @@ export default function ResultsFilter({
           {/*    <Button>All years</Button> */}
           {/*   </ButtonGroup> */}
           {/* </Form.Field> */}
-          <Form.Field width={4}>
+          <Form.Field>
             <Header as="h6">{I18n.t('results.selector_elements.gender_selector.gender')}</Header>
             <ButtonGroup compact color="teal" widths={3}>
               <Button active={gender === 'All'} onClick={() => setGender('All')}>{I18n.t('results.selector_elements.gender_selector.gender_all')}</Button>
@@ -86,11 +86,11 @@ export default function ResultsFilter({
               <Button active={gender === 'Female'} onClick={() => setGender('Female')}>{I18n.t('results.selector_elements.gender_selector.female')}</Button>
             </ButtonGroup>
           </Form.Field>
-          <Form.Field width={2}>
+          <Form.Field>
             <Header as="h6">{I18n.t('results.selector_elements.show_selector.show')}</Header>
             <ButtonGroup compact color="teal" widths={showCategories.length}>
               {showCategories.map((category) => (
-                <Button active={show === category} onClick={() => setShow(category)}>{I18n.t(`results.selector_elements.show_selector.${_.snakeCase(category)}`)}</Button>
+                <Button key={category} active={show === category} onClick={() => setShow(category)}>{I18n.t(`results.selector_elements.show_selector.${_.snakeCase(category.replace(/^\d+/, '').trim())}`)}</Button>
               ))}
             </ButtonGroup>
           </Form.Field>
