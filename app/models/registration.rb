@@ -478,12 +478,4 @@ class Registration < ApplicationRecord
       Registration.find(waiting_list_leader_id).auto_accept
     end
   end
-
-  def last_positive_payment
-    registration_payments
-      .where('amount_lowest_denomination > 0')
-      .order(updated_at: :desc)
-      .limit(1)
-      .first
-  end
 end

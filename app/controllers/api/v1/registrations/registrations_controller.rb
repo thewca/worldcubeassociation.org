@@ -7,7 +7,7 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
   # before_actions are triggered in the order they are defined
   before_action :validate_create_request, only: [:create]
   before_action :validate_show_registration, only: [:show]
-  before_action :validate_admin_action, only: [:list_admin]
+  before_action :validate_list_admin, only: [:list_admin]
   before_action :validate_update_request, only: [:update]
   before_action :validate_bulk_update_request, only: [:bulk_update]
   before_action :validate_payment_ticket_request, only: [:payment_ticket]
@@ -103,7 +103,7 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
   end
 
   # To list Registrations in the admin view you need to be able to administer the competition
-  def validate_admin_action
+  def validate_list_admin
     competition_id = list_params
     @competition = Competition.find(competition_id)
     unless @current_user.can_manage_competition?(@competition)
