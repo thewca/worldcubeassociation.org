@@ -1,5 +1,5 @@
 import React from 'react';
-import { Header, Table } from 'semantic-ui-react';
+import { Header, Icon, Table } from 'semantic-ui-react';
 import { events, WCA_EVENT_IDS } from '../../../lib/wca-data.js.erb';
 import { RecordRow } from '../TableRows';
 import { MixedHeader } from '../TableHeaders';
@@ -23,7 +23,10 @@ export default function MixedRecordsTables({
 function MixedRecordsTable({ record, eventId }) {
   return (
     <>
-      <Header>{events.byId[eventId].name}</Header>
+      <Header>
+        <Icon className={`cubing-icon event-${eventId}`} />
+        {events.byId[eventId].name}
+      </Header>
       <RecordsTable>
         <MixedHeader />
         <Table.Body>
