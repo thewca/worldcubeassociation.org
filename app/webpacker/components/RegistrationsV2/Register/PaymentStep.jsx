@@ -1,4 +1,5 @@
 import { PaymentElement, useElements, useStripe } from '@stripe/react-stripe-js';
+import I18nHTMLTranslate from '../../I18nHTMLTranslate';
 import React, { useEffect, useState } from 'react';
 import {
   Button,
@@ -8,6 +9,7 @@ import {
   FormField,
   Header,
   Label,
+  Message,
   Segment,
 } from 'semantic-ui-react';
 import { paymentFinishUrl } from '../../../lib/requests/routes.js.erb';
@@ -59,6 +61,8 @@ export default function PaymentStep({
     // Create the PaymentIntent and obtain clientSecret
     const data = await getPaymentTicket(competitionInfo, donationAmount);
 
+
+
     const { client_secret: clientSecret } = data;
 
     const { error } = await stripe.confirmPayment({
@@ -85,6 +89,14 @@ export default function PaymentStep({
 
     setIsLoading(false);
   };
+
+  if (!competitionInfo['registration_currently_open?']) {
+    return (
+      <Message color="red">
+        <I18nHTMLTranslate i18nKey="registrations.payment_form.errors.registration_closed" options={{ days: 3, time: 4 }} />
+      </Message>
+    );
+  }
 
   return (
     <Segment>

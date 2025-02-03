@@ -397,7 +397,7 @@ RSpec.describe 'API Registrations' do
 
       body = JSON.parse(response.body)
       expect(response.status).to eq(403)
-      expect(body).to eq({error: Registrations::ErrorCodes::REGISTRATION_CLOSED}.with_indifferent_access)
+      expect(body).to eq({ error: Registrations::ErrorCodes::REGISTRATION_CLOSED }.with_indifferent_access)
     end
   end
 end

@@ -133,7 +133,7 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
     return render_error(:forbidden, Registrations::ErrorCodes::REGISTRATION_CLOSED) if @competition.registration_past?
 
     @registration = Registration.find_by(user: @current_user, competition: @competition)
-    return render_error(:forbidden, Registrations::ErrorCodes::PAYMENT_NOT_READY) if @registration.nil?
+    render_error(:forbidden, Registrations::ErrorCodes::PAYMENT_NOT_READY) if @registration.nil?
   end
 
   def payment_ticket
