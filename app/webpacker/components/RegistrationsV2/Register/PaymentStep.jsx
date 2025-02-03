@@ -11,7 +11,6 @@ import {
   Message,
   Segment,
 } from 'semantic-ui-react';
-import I18nHTMLTranslate from '../../I18nHTMLTranslate';
 import { paymentFinishUrl } from '../../../lib/requests/routes.js.erb';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { setMessage } from './RegistrationMessage';
