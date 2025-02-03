@@ -18,7 +18,10 @@ function EditPersonValidations({ ticketDetails }) {
   if (loading) return <Loading />;
   if (error) return <Errored />;
 
-  return validators.dob.map((validator) => (
+  return [
+    ...validators.name,
+    ...validators.dob,
+  ].map((validator) => (
     <Message warning>{I18n.t(`validators.${validator.kind}.${validator.id}`, validator.args)}</Message>
   ));
 }
