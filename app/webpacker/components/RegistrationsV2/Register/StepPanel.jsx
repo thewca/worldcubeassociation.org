@@ -43,6 +43,7 @@ const shouldShowCompleted = (isRegistered, hasPaid, isAccepted, key, index) => {
   if (key === registrationOverviewConfig.key) {
     return isAccepted;
   }
+  return false;
 };
 
 const shouldBeDisabled = (hasPaid, key, activeIndex, index, competitionInfo, isRejected) => {
@@ -51,7 +52,7 @@ const shouldBeDisabled = (hasPaid, key, activeIndex, index, competitionInfo, isR
   }
 
   if (key === paymentStepConfig.key) {
-    return !hasPaid && index > activeIndex;
+    return (!hasPaid && index > activeIndex) || !competitionInfo['registration_currently_open?'];
   }
   if (key === competingStepConfig.key) {
     return index > activeIndex;
@@ -59,6 +60,7 @@ const shouldBeDisabled = (hasPaid, key, activeIndex, index, competitionInfo, isR
   if (key === requirementsStepConfig.key) {
     return activeIndex !== 0;
   }
+  return false;
 };
 
 export default function StepPanel({
@@ -75,7 +77,7 @@ export default function StepPanel({
   const isAccepted = isRegistered && registration.competing.registration_status === 'accepted';
   const isRejected = isRegistered && registration.competing.registration_status === 'rejected';
   const hasPaid = registration?.payment?.has_paid;
-  const registrationFinished = (isRegistered && hasPaid) || (isRegistered && !competitionInfo['using_payment_integrations?']);
+  const registrationFinished = (isRegistered && hasPaid) || (isRegistered && !competitionInfo['using_payment_integrations?']) || !competitionInfo['registration_currently_open?'];
 
   const steps = useMemo(() => {
     const stepList = [requirementsStepConfig, competingStepConfig];

@@ -8,7 +8,7 @@
     into Person 1, and Person 2 will be deleted.
   </p>
 
-  <%= simple_form_for @merge_people, url: admin_merge_people_path do |f| %>
+  <%= simple_form_for @merge_people, url: admin_do_merge_people_path do |f| %>
     <%= f.input :person1_wca_id, as: :user_ids, persons_table: true, only_one: true, label: "Person 1" %>
     <%= f.input :person2_wca_id, as: :user_ids, persons_table: true, only_one: true, label: "Person 2" %>
 

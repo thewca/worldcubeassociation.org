@@ -3,7 +3,6 @@ import {
   Header, Input, Pagination, Table,
 } from 'semantic-ui-react';
 import { useQuery } from '@tanstack/react-query';
-import I18n from '../../../lib/i18n';
 import useDebounce from '../../../lib/hooks/useDebounce';
 import { getPersons } from '../api/getUsers';
 import Loading from '../../Requests/Loading';
