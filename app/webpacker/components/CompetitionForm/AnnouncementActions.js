@@ -1,11 +1,10 @@
 import {
-  Button,
   Header,
   List,
 } from 'semantic-ui-react';
-import React, { useCallback } from 'react';
+import React from 'react';
 import { DateTime } from 'luxon';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import I18n from '../../lib/i18n';
 import { useStore } from '../../lib/providers/StoreProvider';
 import {
@@ -13,11 +12,16 @@ import {
   cancelCompetitionUrl,
   closeRegistrationWhenFullUrl,
 } from '../../lib/requests/routes.js.erb';
-import ConfirmProvider, { useConfirm } from '../../lib/providers/ConfirmProvider';
-import { useFormErrorHandler } from '../wca/FormBuilder/provider/FormObjectProvider';
+import ConfirmProvider from '../../lib/providers/ConfirmProvider';
 import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken';
-import { announcementDataQueryKey, confirmationDataQueryKey, useAnnouncementData } from './api';
+import {
+  announcementDataQueryKey,
+  confirmationDataQueryKey,
+  useAnnouncementData,
+  useQueryDataSetter,
+} from './api';
 import Loading from '../Requests/Loading';
+import { FormActionButton } from '../wca/FormBuilder/EditForm';
 
 function AnnounceAction({
   competitionId,
@@ -29,41 +33,31 @@ function AnnounceAction({
     announcedAt,
   } = announcementData;
 
-  const queryClient = useQueryClient();
+  const setAnnouncementData = useQueryDataSetter(announcementDataQueryKey(competitionId));
 
   const mutation = useMutation({
-    mutationFn: (compId) => fetchJsonOrError(announceCompetitionUrl(compId), {
+    mutationFn: () => fetchJsonOrError(announceCompetitionUrl(competitionId), {
       method: 'PUT',
     }).then((raw) => raw.data),
-    onSuccess: (respData, compId) => queryClient.setQueryData(
-      announcementDataQueryKey(compId),
-      respData.data,
-    ),
+    onSuccess: setAnnouncementData,
   });
-
-  const confirm = useConfirm();
-
-  const postAnnouncement = useCallback(() => confirm({
-    content: I18n.t('competitions.announce_confirm'),
-  }).then(() => mutation.mutate(competitionId)), [competitionId, confirm, mutation]);
 
   if (isAnnounced) {
     const announcedAtLuxon = DateTime.fromISO(announcedAt);
 
-    return (
-      <List.Item>
-        {I18n.t('competitions.announced_by_html', {
-          announcer_name: announcedBy,
-          date_time: announcedAtLuxon.toLocaleString(DateTime.DATETIME_FULL),
-        })}
-      </List.Item>
-    );
+    return I18n.t('competitions.announced_by_html', {
+      announcer_name: announcedBy,
+      date_time: announcedAtLuxon.toLocaleString(DateTime.DATETIME_FULL),
+    });
   }
 
   return (
-    <List.Item>
-      <Button positive onClick={postAnnouncement}>{I18n.t('competitions.post_announcement')}</Button>
-    </List.Item>
+    <FormActionButton
+      mutation={mutation}
+      confirmationMessage={I18n.t('competitions.announce_confirm')}
+      buttonText={I18n.t('competitions.post_announcement')}
+      buttonProps={{ positive: true }}
+    />
   );
 }
 
@@ -78,74 +72,54 @@ function CancelAction({
     canBeCancelled,
   } = announcementData;
 
-  const confirm = useConfirm();
-  const queryClient = useQueryClient();
+  const setConfirmationData = useQueryDataSetter(confirmationDataQueryKey(competitionId));
 
-  const mutation = useMutation({
-    mutationFn: ({ compId, undo }) => fetchJsonOrError(cancelCompetitionUrl(compId, undo), {
+  const cancelMutation = useMutation({
+    mutationFn: () => fetchJsonOrError(cancelCompetitionUrl(competitionId), {
       method: 'PUT',
     }).then((raw) => raw.data),
-    onSuccess: (respData, variables) => queryClient.setQueryData(
-      confirmationDataQueryKey(variables.compId),
-      respData.data,
-    ),
+    onSuccess: setConfirmationData,
   });
 
-  const submitCancelToBackend = useCallback(
-    (undo) => mutation.mutate({ compId: competitionId, undo }),
-    [competitionId, mutation],
-  );
-
-  const cancelCompetition = useCallback((undo) => {
-    if (undo) {
-      // No confirmation message for undoing the cancel
-      submitCancelToBackend(undo);
-    } else {
-      confirm({
-        content: I18n.t('competitions.cancel_confirm'),
-      }).then(() => submitCancelToBackend(undo));
-    }
-  }, [confirm, submitCancelToBackend]);
+  const uncancelMutation = useMutation({
+    mutationFn: () => fetchJsonOrError(cancelCompetitionUrl(competitionId, true), {
+      method: 'PUT',
+    }).then((raw) => raw.data),
+    onSuccess: setConfirmationData,
+  });
 
   if (isCancelled) {
     return (
-      <List.Item>
+      <>
         {I18n.t('competitions.cancelled_by_html', { name: cancelledBy, date_time: cancelledAt })}
         <List.List verticalAlign="middle">
           <List.Item>
             {I18n.t('competitions.cancel_mistake')}
-            <Button
-              secondary
-              disabled={mutation.isPending}
-              onClick={() => cancelCompetition(true)}
-            >
-              {I18n.t('competitions.uncancel')}
-            </Button>
+          </List.Item>
+          <List.Item>
+            <FormActionButton
+              mutation={uncancelMutation}
+              buttonText={I18n.t('competitions.uncancel')}
+              buttonProps={{ secondary: true }}
+            />
           </List.Item>
         </List.List>
-      </List.Item>
+      </>
     );
   }
 
   if (canBeCancelled) {
     return (
-      <List.Item>
-        <Button
-          negative
-          disabled={mutation.isPending}
-          onClick={() => cancelCompetition(false)}
-        >
-          {I18n.t('competitions.cancel')}
-        </Button>
-      </List.Item>
+      <FormActionButton
+        mutation={cancelMutation}
+        confirmationMessage={I18n.t('competitions.cancel_confirm')}
+        buttonText={I18n.t('competitions.cancel')}
+        buttonProps={{ negative: true }}
+      />
     );
   }
 
-  return (
-    <List.Item>
-      {I18n.t('competitions.note_before_cancel')}
-    </List.Item>
-  );
+  return I18n.t('competitions.note_before_cancel');
 }
 
 function CloseRegistrationAction({
@@ -158,56 +132,27 @@ function CloseRegistrationAction({
     canCloseFullRegistration,
   } = announcementData;
 
-  const onError = useFormErrorHandler();
-
-  const confirm = useConfirm();
-  const queryClient = useQueryClient();
+  const setAnnouncementData = useQueryDataSetter(announcementDataQueryKey(competitionId));
 
   const mutation = useMutation({
-    mutationFn: (compId) => fetchJsonOrError(closeRegistrationWhenFullUrl(compId), {
+    mutationFn: () => fetchJsonOrError(closeRegistrationWhenFullUrl(competitionId), {
       method: 'PUT',
     }).then((raw) => raw.data),
-    onSuccess: (respData, compId) => queryClient.setQueryData(
-      announcementDataQueryKey(compId),
-      respData.data,
-    ),
-    onError,
+    onSuccess: setAnnouncementData,
   });
 
-  const closeRegistrationWhenFull = useCallback(() => confirm({
-    content: I18n.t('competitions.orga_close_reg_confirm'),
-  }).then(() => {
-    mutation.mutate(competitionId);
-  }), [competitionId, confirm, mutation]);
-
-  if (isRegistrationPast) {
-    return (
-      <List.Item>
-        {I18n.t('competitions.note_reg_closed_orga_close_reg')}
-      </List.Item>
-    );
-  }
-
-  if (!isRegistrationFull) {
-    return (
-      <List.Item>
-        {I18n.t('competitions.note_reg_not_full_orga_close_reg')}
-      </List.Item>
-    );
-  }
+  if (isRegistrationPast) return I18n.t('competitions.note_reg_closed_orga_close_reg');
+  if (!isRegistrationFull) return I18n.t('competitions.note_reg_not_full_orga_close_reg');
 
   if (!canCloseFullRegistration) return null;
 
   return (
-    <List.Item>
-      <Button
-        negative
-        onClick={closeRegistrationWhenFull}
-        disabled={mutation.isPending}
-      >
-        {I18n.t('competitions.orga_close_reg')}
-      </Button>
-    </List.Item>
+    <FormActionButton
+      mutation={mutation}
+      confirmationMessage={I18n.t('competitions.orga_close_reg_confirm')}
+      buttonText={I18n.t('competitions.orga_close_reg')}
+      buttonProps={{ negative: true }}
+    />
   );
 }
 
@@ -226,21 +171,27 @@ export default function AnnouncementActions({ competitionId }) {
       <Header style={{ marginTop: 0 }}>{I18n.t('competitions.announcements')}</Header>
       <List bulleted verticalAlign="middle">
         {isAdminView && (
-          <AnnounceAction
-            competitionId={competitionId}
-            announcementData={announcementData}
-          />
+          <List.Item>
+            <AnnounceAction
+              competitionId={competitionId}
+              announcementData={announcementData}
+            />
+          </List.Item>
         )}
         {isAdminView && (
-          <CancelAction
+          <List.Item>
+            <CancelAction
+              competitionId={competitionId}
+              announcementData={announcementData}
+            />
+          </List.Item>
+        )}
+        <List.Item>
+          <CloseRegistrationAction
             competitionId={competitionId}
             announcementData={announcementData}
           />
-        )}
-        <CloseRegistrationAction
-          competitionId={competitionId}
-          announcementData={announcementData}
-        />
+        </List.Item>
       </List>
     </ConfirmProvider>
   );

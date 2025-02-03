@@ -30,16 +30,17 @@ function useSafeMutation(mutation, mutationArgs, unloadListener) {
   }, [unloadListener, mutation, mutationArgs, onSuccess, onError]);
 }
 
-function FooterButton({
-  buttonConfig,
+export function FormActionButton({
+  mutation,
+  enabled = true,
+  confirmationMessage = null,
+  buttonText = null,
+  buttonProps,
   onUnload,
+  children,
 }) {
   const confirm = useConfirm();
   const formObject = useFormObject();
-
-  const {
-    mutation, enabled, confirmationMessage, buttonText, buttonProps,
-  } = buttonConfig;
 
   const safeMutation = useSafeMutation(mutation, formObject, onUnload);
 
@@ -48,9 +49,7 @@ function FooterButton({
       confirm({
         content: confirmationMessage,
       }).then(safeMutation);
-    } else {
-      safeMutation();
-    }
+    } else safeMutation();
   }, [confirm, confirmationMessage, safeMutation]);
 
   if (!enabled) return null;
@@ -63,7 +62,7 @@ function FooterButton({
       loading={mutation.isPending}
       {...buttonProps}
     >
-      {buttonText}
+      {buttonText || children}
     </Button>
   );
   /* eslint-enable react/jsx-props-no-spreading */
@@ -76,7 +75,6 @@ function EditForm({
   footerActions = [],
 }) {
   const {
-    object,
     unsavedChanges,
     errors,
   } = useFormContext();
@@ -98,17 +96,13 @@ function EditForm({
     return () => window.removeEventListener('beforeunload', onUnload);
   }, [onUnload]);
 
-  const saveObject = useSafeMutation(saveMutation, object, onUnload);
-
   const renderSaveButton = (buttonText) => (
-    <Button
-      onClick={saveObject}
-      disabled={saveMutation.isPending}
-      loading={saveMutation.isPending}
-      primary
-    >
-      {buttonText}
-    </Button>
+    <FormActionButton
+      mutation={saveMutation}
+      buttonText={buttonText}
+      buttonProps={{ primary: true }}
+      onUnload={onUnload}
+    />
   );
 
   const renderUnsavedChangesAlert = () => (
@@ -121,6 +115,7 @@ function EditForm({
 
   const stickyRef = useRef();
 
+  /* eslint-disable react/jsx-props-no-spreading */
   return (
     <>
       <div ref={stickyRef}>
@@ -148,13 +143,14 @@ function EditForm({
           <Button.Group>
             {renderSaveButton('Save')}
             {footerActions.map((action) => (
-              <FooterButton key={action.id} buttonConfig={action} onUnload={onUnload} />
+              <FormActionButton key={action.id} onUnload={onUnload} {...action} />
             ))}
           </Button.Group>
         </ConfirmProvider>
       )}
     </>
   );
+  /* eslint-enable react/jsx-props-no-spreading */
 }
 
 export default function Wrapper({

@@ -6,11 +6,14 @@ import { createCompetitionUrl } from '../../lib/requests/routes.js.erb';
 import EditForm from '../wca/FormBuilder/EditForm';
 import MainForm from './MainForm';
 import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken';
+import { useQueryRedirect } from './api';
 
 export default function Create({
   competition = null,
   isCloning = false,
 }) {
+  const redirectHandler = useQueryRedirect();
+
   const saveMutation = useMutation({
     mutationFn: (object) => fetchJsonOrError(createCompetitionUrl, {
       headers: {
@@ -19,11 +22,7 @@ export default function Create({
       method: 'POST',
       body: JSON.stringify(object),
     }).then((resp) => resp.data),
-    onSuccess: (resp) => {
-      if (resp.redirect) {
-        window.location.replace(resp.redirect);
-      }
-    },
+    onSuccess: redirectHandler,
   });
 
   return (

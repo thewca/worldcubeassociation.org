@@ -1,13 +1,18 @@
 import React, { useMemo } from 'react';
 import _ from 'lodash';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import StoreProvider from '../../lib/providers/StoreProvider';
 import { competitionUrl, confirmCompetitionUrl, homepageUrl } from '../../lib/requests/routes.js.erb';
 import EditForm from '../wca/FormBuilder/EditForm';
 import Header from './Header';
 import MainForm from './MainForm';
 import WCAQueryClientProvider from '../../lib/providers/WCAQueryClientProvider';
-import { confirmationDataQueryKey, useConfirmationData } from './api';
+import {
+  confirmationDataQueryKey,
+  useConfirmationData,
+  useQueryDataSetter,
+  useQueryRedirect,
+} from './api';
 import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken';
 import I18n from '../../lib/i18n';
 
@@ -20,6 +25,8 @@ function EditCompetition({
   const originalCompId = competition.competitionId;
   const backendUrl = `${competitionUrl(originalCompId)}?adminView=${isAdminView}`;
 
+  const redirectHandler = useQueryRedirect();
+
   const saveMutation = useMutation({
     // Deliberately do NOT use the "fresh" parameter `object` here, because
     //   when an admin changes the ID on the fly, the backend doesn't know about it yet.
@@ -30,23 +37,16 @@ function EditCompetition({
       method: 'PATCH',
       body: JSON.stringify(object),
     }).then((resp) => resp.data),
-    onSuccess: (resp) => {
-      if (resp.redirect) {
-        window.location.replace(resp.redirect);
-      }
-    },
+    onSuccess: redirectHandler,
   });
 
-  const queryClient = useQueryClient();
+  const setConfirmationData = useQueryDataSetter(confirmationDataQueryKey(originalCompId));
 
   const confirmCompMutation = useMutation({
     mutationFn: () => fetchJsonOrError(confirmCompetitionUrl(originalCompId), {
       method: 'PUT',
     }).then((resp) => resp.data),
-    onSuccess: (respData) => queryClient.setQueryData(
-      confirmationDataQueryKey(originalCompId),
-      respData.data,
-    ),
+    onSuccess: setConfirmationData,
   });
 
   const deleteCompMutation = useMutation({
