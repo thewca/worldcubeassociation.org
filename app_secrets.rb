@@ -82,6 +82,7 @@ AppSecrets = SuperConfig.new(raise_exception: !EnvConfig.ASSETS_COMPILATION?) do
     vault :TNOODLE_PUBLIC_KEY
     vault :WRC_WEBHOOK_USERNAME
     vault :WRC_WEBHOOK_PASSWORD
+    vault :CURRENCY_LAYER_API_KEY
 
     # To allow logging in to staging with your prod account
     unless EnvConfig.WCA_LIVE_SITE?
