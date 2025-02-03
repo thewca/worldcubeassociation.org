@@ -2,7 +2,7 @@ import React from 'react';
 import { Table } from 'semantic-ui-react';
 import CountryFlag from '../wca/CountryFlag';
 import EventIcon from '../wca/EventIcon';
-import { personUrl } from '../../lib/requests/routes.js.erb';
+import { competitionUrl, personUrl } from '../../lib/requests/routes.js.erb';
 import { formatAttemptResult } from '../../lib/wca-live/attempts';
 import { events } from '../../lib/wca-data.js.erb';
 
@@ -36,7 +36,7 @@ export function CompetitionCell({ competition }) {
     <Table.Cell>
       <CountryFlag iso2={competition.country.iso2} />
       {' '}
-      <a href={`/competition/${competition.id}`}>{competition.cellName}</a>
+      <a href={competitionUrl(competition.id)}>{competition.cellName}</a>
     </Table.Cell>
   );
 }

@@ -5,11 +5,15 @@ import { flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-tabl
 import { useQuery } from '@tanstack/react-query';
 import I18n from '../../../lib/i18n';
 import { formatAttemptResult } from '../../../lib/wca-live/attempts';
-import CountryFlag from '../../wca/CountryFlag';
 import { continents, countries } from '../../../lib/wca-data.js.erb';
-import { personUrl } from '../../../lib/requests/routes.js.erb';
 import { getRankings } from '../api/rankings';
 import Loading from '../../Requests/Loading';
+import {
+  AttemptsCells,
+  CompetitionCell,
+  CountryCell,
+  PersonCell,
+} from '../TableCells';
 
 function getCountryOrContinent(result, firstContinentIndex, firstCountryIndex, index) {
   if (index < firstContinentIndex) {
@@ -19,16 +23,6 @@ function getCountryOrContinent(result, firstContinentIndex, firstCountryIndex, i
     return continents.real.find((c) => c.id === countries.byId[result.countryId].continentId);
   }
   return countries.byId[result.countryId];
-}
-
-function CountryCell({ country }) {
-  return (
-    <Table.Cell textAlign="left">
-      {country.iso2 && <CountryFlag iso2={country.iso2} />}
-      {' '}
-      {country.name}
-    </Table.Cell>
-  );
 }
 
 function ResultRow({
@@ -46,25 +40,19 @@ function ResultRow({
     <Table.Row>
       {show === 'by region' ? <CountryCell country={country} />
         : <Table.Cell textAlign="center">{rank}</Table.Cell> }
-      <Table.Cell>
-        <a href={personUrl(result.personId)}>{result.personName}</a>
-      </Table.Cell>
+      <PersonCell personId={result.personId} personName={result.personName} />
       <Table.Cell>
         {formatAttemptResult(result.value, result.eventId)}
       </Table.Cell>
       {show !== 'by region' && <CountryCell country={country} />}
-      <Table.Cell>
-        <CountryFlag iso2={countries.byId[competition.countryId].iso2} />
-        {' '}
-        <a href={`/competition/${competition.id}`}>{competition.cellName}</a>
-      </Table.Cell>
-      {isAverage && (attempts.map((a, i) => (
-        <Table.Cell>
-          { attempts.length === 5
-              && (i === bestResultIndex || i === worstResultIndex)
-            ? `(${formatAttemptResult(a, result.eventId)})` : formatAttemptResult(a, result.eventId)}
-        </Table.Cell>
-      ))
+      <CompetitionCell competition={competition} />
+      {isAverage && (
+        <AttemptsCells
+          attempts={attempts}
+          bestResultIndex={bestResultIndex}
+          worstResultIndex={worstResultIndex}
+          eventId={result.eventId}
+        />
       )}
     </Table.Row>
   );
