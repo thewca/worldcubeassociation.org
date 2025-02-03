@@ -83,18 +83,9 @@ export function Records() {
     event, region, gender, show,
   } = filterState;
 
-  const { data, isFetching } = useQuery({
-    queryKey: ['records', event, region, gender, show],
-    queryFn: () => getRecords(event, region, gender, show),
-  });
-
   useEffect(() => {
     window.history.replaceState(null, '', recordsUrl(event, region, gender, show));
   }, [event, region, gender, show]);
-
-  if (isFetching) {
-    return <Loading />;
-  }
 
   return (
     <Container fluid>
@@ -104,16 +95,28 @@ export function Records() {
         isRecords
         showCategories={SHOW_CATEGORIES}
       />
-      <RecordsTables
-        competitionsById={data.competitionsById}
-        rows={data.rows}
-        show={show}
-      />
+      <RecordsTables filterState={filterState} />
     </Container>
   );
 }
 
-function RecordsTables({ competitionsById, rows, show }) {
+function RecordsTables({ filterState }) {
+  const {
+    event, region, gender, show,
+  } = filterState;
+
+  const { data, isFetching } = useQuery({
+    queryKey: ['records', event, region, gender, show],
+    queryFn: () => getRecords(event, region, gender, show),
+    placeholderData: { rows: [], competitionsById: {} },
+  });
+
+  const { rows, competitionsById } = data;
+
+  if (isFetching) {
+    return <Loading />;
+  }
+
   if (rows.length === 0) {
     return <Segment>No results found</Segment>;
   }
