@@ -107,7 +107,6 @@ AppSecrets = SuperConfig.new(raise_exception: !EnvConfig.ASSETS_COMPILATION?) do
     mandatory :OIDC_SECRET_KEY, :string
     mandatory :STAGING_OAUTH_CLIENT, :string
     mandatory :STAGING_OAUTH_SECRET, :string
-    mandatory :CURRENCY_LAYER_API_KEY, :string
 
     optional :AWS_ACCESS_KEY_ID, :string, ''
     optional :AWS_SECRET_ACCESS_KEY, :string, ''
