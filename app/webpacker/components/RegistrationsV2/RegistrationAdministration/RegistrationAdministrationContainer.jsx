@@ -3,12 +3,8 @@ import { useQuery } from '@tanstack/react-query';
 import getCompetitionInfo from '../api/competition/get_competition_info';
 import RegistrationAdministrationList from './RegistrationAdministrationList';
 import Loading from '../../Requests/Loading';
-import { useDispatch } from '../../../lib/providers/StoreProvider';
-import { setMessage } from '../Register/RegistrationMessage';
 
 export default function RegistrationAdministrationContainer({ competitionId }) {
-  const dispatchStore = useDispatch();
-
   const fetchCompetitionInfo = async () => getCompetitionInfo(competitionId);
 
   const {
