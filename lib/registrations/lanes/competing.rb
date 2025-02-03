@@ -19,8 +19,7 @@ module Registrations
         registration.save!
         RegistrationsMailer.notify_organizers_of_new_registration(registration).deliver_later
         RegistrationsMailer.notify_registrant_of_new_registration(registration).deliver_later
-        user = User.find_by_id(user_id)
-        if user&.banned_in_past?
+        if registration.user.banned_in_past?
           RegistrationsMailer.notify_delegates_of_formerly_banned_user_registration(registration).deliver_later
         end
         registration.add_history_entry(changes, "worker", user_id, "Worker processed")
