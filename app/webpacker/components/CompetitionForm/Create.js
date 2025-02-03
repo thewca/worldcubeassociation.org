@@ -7,8 +7,9 @@ import EditForm from '../wca/FormBuilder/EditForm';
 import MainForm from './MainForm';
 import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken';
 import { useQueryRedirect } from './api';
+import WCAQueryClientProvider from '../../lib/providers/WCAQueryClientProvider';
 
-export default function Create({
+function CreateCompetition({
   competition = null,
   isCloning = false,
 }) {
@@ -43,5 +44,16 @@ export default function Create({
         <MainForm isCloning={isCloning} />
       </EditForm>
     </StoreProvider>
+  );
+}
+
+export default function Wrapper({
+  competition = null,
+  isCloning = false,
+}) {
+  return (
+    <WCAQueryClientProvider>
+      <CreateCompetition competition={competition} isCloning={isCloning} />
+    </WCAQueryClientProvider>
   );
 }
