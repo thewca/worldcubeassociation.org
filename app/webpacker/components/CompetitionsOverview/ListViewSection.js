@@ -22,7 +22,7 @@ import {
 } from '../../lib/utils/competition-table';
 import { countries } from '../../lib/wca-data.js.erb';
 import { adminCompetitionUrl, competitionUrl } from '../../lib/requests/routes.js.erb';
-import { dateRange } from '../../lib/utils/dates';
+import { dateRange, toRelativeOptions } from '../../lib/utils/dates';
 
 function ListViewSection({
   competitions,
@@ -159,7 +159,7 @@ export function CompetitionsTable({
                 {dateRange(comp.start_date, comp.end_date)}
               </Table.Cell>
               <Table.Cell width={5}>
-                <Flag name={comp.country_iso2?.toLowerCase()} />
+                <Flag className={comp.country_iso2?.toLowerCase()} />
                 <a href={competitionUrl(comp.id)}>{comp.short_display_name}</a>
               </Table.Cell>
               <Table.Cell width={4}>
@@ -215,7 +215,7 @@ export function CompetitionsTabletTable({
                 {dateRange(comp.start_date, comp.end_date)}
               </Table.Cell>
               <Table.Cell width={6}>
-                <Flag name={comp.country_iso2?.toLowerCase()} />
+                <Flag className={comp.country_iso2?.toLowerCase()} />
                 <a href={competitionUrl(comp.id)}>{comp.short_display_name}</a>
               </Table.Cell>
               <Table.Cell width={7}>
@@ -261,7 +261,7 @@ export function CompetitionsMobileTable({
                   />
                   {dateRange(comp.start_date, comp.end_date)}
                 </Label>
-                <Flag name={comp.country_iso2?.toLowerCase()} />
+                <Flag className={comp.country_iso2?.toLowerCase()} />
                 <a href={competitionUrl(comp.id)}>{comp.short_display_name}</a>
               </Table.Cell>
               {
@@ -341,7 +341,7 @@ function AdminCompetitionsTable({
                   />
                 </Table.Cell>
                 <Table.Cell width={4}>
-                  <Flag name={comp.country_iso2?.toLowerCase()} />
+                  <Flag className={comp.country_iso2?.toLowerCase()} />
                   <a href={competitionUrl(comp.id)}>{comp.short_display_name}</a>
                   <br />
                   <strong>{countries.byIso2[comp.country_iso2].name}</strong>
@@ -447,32 +447,53 @@ function RegistrationStatus({ comp, isLoading }) {
     return (
       <Popup
         trigger={<Icon name="clock" color="blue" />}
-        content={I18n.t('competitions.index.tooltips.registration.opens_in', { duration: comp.time_until_registration })}
+        content={
+          I18n.t(
+            'competitions.index.tooltips.registration.opens_in',
+            {
+              relativeDate: DateTime.fromISO(comp.registration_open).toRelative(
+                toRelativeOptions.default,
+              ),
+            },
+          )
+        }
         position="top center"
         size="tiny"
       />
     );
   }
+
   if (comp.registration_status === 'past') {
     return (
       <Popup
         trigger={<Icon name="user times" color="red" />}
-        content={I18n.t('competitions.index.tooltips.registration.closed', { days: I18n.t('common.days', { count: dayDifferenceFromToday(comp.start_date) }) })}
+        content={
+          I18n.t(
+            'competitions.index.tooltips.registration.closed',
+            {
+              relativeDate: DateTime.fromISO(comp.start_date).toRelative(
+                toRelativeOptions.roundUpAndAtBestDayPrecision,
+              ),
+            },
+          )
+        }
         position="top center"
         size="tiny"
       />
     );
   }
+
   if (comp.registration_status === 'full') {
     return (
       <Popup
-        trigger={<Icon name="user clock" color="orange" />}
+        trigger={<Icon className="user clock" color="orange" />}
         content={I18n.t('competitions.index.tooltips.registration.full')}
         position="top center"
         size="tiny"
       />
     );
   }
+
   if (comp.registration_status === 'open') {
     return (
       <Popup
