@@ -65,7 +65,7 @@ function UtcDatePicker({
   // weird quirk in the 3rd party datepicker implementation: The "dateFormat" field actually means
   //  "format for the whole input row, which may or may not include time". The field "timeFormat"
   //  is only considered for time-specific inputs *within* the dropdown parts of the picker.
-  const dateOnlyFormat = dateFormatOverride || 'P';
+  const dateOnlyFormat = dateFormatOverride || "yyyy-MM-dd";
   const dateFormat = showTimeInput ? (dateOnlyFormat + timeFormat) : dateOnlyFormat;
 
   return (
