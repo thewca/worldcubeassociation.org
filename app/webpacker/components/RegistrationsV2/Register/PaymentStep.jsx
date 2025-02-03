@@ -91,7 +91,7 @@ export default function PaymentStep({
   if (!competitionInfo['registration_currently_open?']) {
     return (
       <Message color="red">
-        <I18nHTMLTranslate i18nKey="registrations.payment_form.errors.registration_closed"/>
+        <I18nHTMLTranslate i18nKey="registrations.payment_form.errors.registration_closed" />
       </Message>
     );
   }
