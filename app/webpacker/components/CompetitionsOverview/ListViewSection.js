@@ -486,7 +486,7 @@ function RegistrationStatus({ comp, isLoading }) {
   if (comp.registration_status === 'full') {
     return (
       <Popup
-        trigger={<Icon name="user clock" color="orange" />}
+        trigger={<Icon className="user clock" color="orange" />}
         content={I18n.t('competitions.index.tooltips.registration.full')}
         position="top center"
         size="tiny"
