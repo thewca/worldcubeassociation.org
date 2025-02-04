@@ -318,6 +318,14 @@ class Competition < ApplicationRecord
     end
   end
 
+  validate :auto_close_threshold_validations
+  private def auto_close_threshold_validations
+    errors.add(:auto_close_registrations_threshold, I18n.t('competitions.errors.auto_close_not_negative')) if auto_close_registrations_threshold < 0
+    errors.add(:auto_close_registrations_threshold, I18n.t('competitions.errors.must_exceed_competitor_limit')) if
+      (competitor_limit.present? && auto_close_registrations_threshold <= competitor_limit) && auto_close_registrations_threshold != 0
+    errors.add(:auto_close_registrations_threshold, I18n.t('competitions.errors.use_wca_registration')) unless use_wca_registration
+  end
+
   # Only validate on update: nobody can confirm competition on creation.
   # The only exception to this is within tests, in which case we actually don't want to run this validation.
   validate :schedule_must_match_rounds, if: :confirmed_at_changed?, on: :update
@@ -924,6 +932,8 @@ class Competition < ApplicationRecord
   private def clear_external_website
     update_column :external_website, nil
   end
+
+  after_save :auto_close, if: -> { saved_change_to_auto_close_registrations_threshold? }
 
   def website
     generate_website ? internal_website : external_website
@@ -2885,6 +2895,7 @@ class Competition < ApplicationRecord
   end
 
   def auto_close
-    update!(closing_full_registration: true, registration_close: Time.now)
+    threshold_reached = registrations.with_payments.count >= auto_close_registrations_threshold && auto_close_registrations_threshold > 0
+    update!(closing_full_registration: true, registration_close: Time.now) if threshold_reached
   end
 end

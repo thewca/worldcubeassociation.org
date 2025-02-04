@@ -1587,29 +1587,68 @@ RSpec.describe Competition do
 
   context 'auto-close registrations' do
     let(:auto_close_comp) { FactoryBot.create(:competition, :registration_open, auto_close_registrations_threshold: 5)}
+    let(:comp) { FactoryBot.create(:competition, :registration_open, :with_competitor_limit, competitor_limit: 3) }
 
-    it 'closes registrations when the close threshold is reached', :tag do
+    it 'doesnt auto-close if threshold not reached' do
+      FactoryBot.create(:registration, :paid, competition: auto_close_comp)
+      expect(auto_close_comp.registration_past?).to eq(false)
+    end
+
+    it 'doesnt auto-close if threshold is 0' do
+      FactoryBot.create(:registration, :paid, competition: comp)
+      expect(comp.registration_past?).to eq(false)
+    end
+
+    it 'closes registrations when the close threshold is reached' do
       FactoryBot.create_list(:registration, 5, :paid, competition: auto_close_comp)
       expect(auto_close_comp.registration_past?).to eq(true)
     end
 
-    it 'doesnt auto-close if threshold not reached' do
-    end
-
-    it 'only auto-closes if the registrations are paid registrations' do
-    end
-
     it 'closes registrations when the close threshold is exceeded' do
-      comp = FactoryBot.create(:competition, :registration_open)
-      FactoryBot.create_list(:registration, 5, competition: comp)
+      FactoryBot.create_list(:registration, 5, :paid, competition: comp)
 
       comp.auto_close_registrations_threshold = 5
-      FactoryBot.create(:registration,  competition: comp)
+      FactoryBot.create(:registration, :paid, competition: comp)
 
-      expect(auto_close_comp.registration_past?).to eq(true)
+      expect(comp.registration_past?).to eq(true)
     end
 
     it 'if close threshold is added == number of registrations, registration will close' do
+      FactoryBot.create_list(:registration, 5, :paid, competition: comp)
+      expect(comp.registration_past?).to eq(false)
+
+      comp.update!(auto_close_registrations_threshold: 5)
+      expect(comp.registration_past?).to eq(true)
+    end
+
+    it 'only auto-closes if the registrations are paid registrations' do
+      FactoryBot.create_list(:registration, 5, competition: auto_close_comp)
+      expect(auto_close_comp.registration_past?).to eq(false)
+    end
+
+    context 'validations' do
+      it 'auto-close threshold must be positive' do
+        comp.auto_close_registrations_threshold = -1
+        expect(comp).not_to be_valid
+        expect(comp.errors[:auto_close_registrations_threshold]).to include("Auto-close threshold must be a positive number")
+      end
+
+      it 'must be greater than competitor limit' do
+        comp.auto_close_registrations_threshold = comp.competitor_limit
+        expect(comp).not_to be_valid
+        expect(comp.errors[:auto_close_registrations_threshold]).to include("Auto-close threshold must be greater than the competitor limit")
+
+        comp.auto_close_registrations_threshold = comp.competitor_limit - 1
+        expect(comp).not_to be_valid
+        expect(comp.errors[:auto_close_registrations_threshold]).to include("Auto-close threshold must be greater than the competitor limit")
+      end
+
+      it 'comp must use wca registration' do
+        comp.use_wca_registration = false
+        comp.auto_close_registrations_threshold = 1
+        expect(comp).not_to be_valid
+        expect(comp.errors[:auto_close_registrations_threshold]).to include("Competition must use WCA registration")
+      end
     end
   end
 end
