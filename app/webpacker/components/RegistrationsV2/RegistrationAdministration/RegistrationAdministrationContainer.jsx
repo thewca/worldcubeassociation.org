@@ -24,12 +24,12 @@ export default function RegistrationAdministrationContainer({ competitionId }) {
     refetchOnMount: 'always',
     retry: false,
     onError: () => {
-     dispatchStore(setMessage(
-       // i18n-tasks-use t('competitions.errors.cant_load_competition_info')
-       // eslint-disable-next-line quotes
-       `competitions.errors.cant_load_competition_info`,
-       'negative',
-     ));
+      dispatchStore(setMessage(
+        // i18n-tasks-use t('competitions.errors.cant_load_competition_info')
+        // eslint-disable-next-line quotes
+        `competitions.errors.cant_load_competition_info`,
+        'negative',
+      ));
     }
   });
 
