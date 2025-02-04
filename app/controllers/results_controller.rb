@@ -156,7 +156,27 @@ class ResultsController < ApplicationController
 
     else
       flash[:danger] = t(".unknown_show")
-      redirect_to rankings_path
+      return redirect_to rankings_path
+    end
+
+    @ranking_timestamp = ComputeAuxiliaryData.successful_start_date || Date.current
+
+    respond_to do |format|
+      format.html {}
+      format.json do
+        cached_data = Rails.cache.fetch ["results-page-api", *@cache_params, @ranking_timestamp] do
+          rows = DbHelper.execute_cached_query(@cache_params, @ranking_timestamp, @query)
+          comp_ids = rows.map { |r| r["competitionId"] }.uniq
+          if @is_by_region
+            rows = compute_rankings_by_region(rows, @continent, @country)
+          end
+          competitions_by_id = Competition.where(id: comp_ids).index_by(&:id).transform_values { |comp| comp.as_json(methods: %w[], include: [], only: %w[cellName id countryId]) }
+          {
+            rows: rows.as_json, competitionsById: competitions_by_id
+          }
+        end
+        render json: cached_data
+      end
     end
   end
 
@@ -355,5 +375,44 @@ class ResultsController < ApplicationController
     if params[:show]&.include?("all")
       params[:show] = nil
     end
+  end
+
+  private def compute_rankings_by_region(rows, continent, country)
+    if rows.empty?
+      return [[], 0, 0]
+    end
+    best_value_of_world = rows.first["value"]
+    best_values_of_continents = {}
+    best_values_of_countries = {}
+    world_rows = []
+    continents_rows = []
+    countries_rows = []
+    rows.each do |row|
+      result = LightResult.new(row)
+      value = row["value"]
+
+      world_rows << row if value == best_value_of_world
+
+      if best_values_of_continents[result.country.continent.id].nil? || value == best_values_of_continents[result.country.continent.id]
+        best_values_of_continents[result.country.continent.id] = value
+
+        if (country.present? && country.continent.id == result.country.continent.id) || (continent.present? && continent.id == result.country.continent.id) || params[:region] == "world"
+          continents_rows << row
+        end
+      end
+
+      if best_values_of_countries[result.country.id].nil? || value == best_values_of_countries[result.country.id]
+        best_values_of_countries[result.country.id] = value
+
+        if (country.present? && country.id == result.country.id) || params[:region] == "world"
+          countries_rows << row
+        end
+      end
+    end
+
+    first_continent_index = world_rows.length
+    first_country_index = first_continent_index + continents_rows.length
+    rows_to_display = world_rows + continents_rows + countries_rows
+    [rows_to_display, first_continent_index, first_country_index]
   end
 end

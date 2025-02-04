@@ -10,6 +10,7 @@ import {
   DateTableCell, LocationTableCell, NameTableCell, ReportTableCell,
 } from './TableCells';
 import I18nHTMLTranslate from '../I18nHTMLTranslate';
+import { toRelativeOptions } from '../../lib/utils/dates';
 
 const competingStatusIcon = (competingStatus) => {
   switch (competingStatus) {
@@ -24,10 +25,10 @@ const competingStatusIcon = (competingStatus) => {
 
 const registrationStatusIconText = (competition) => {
   if (competition.registration_status === 'not_yet_opened') {
-    return I18n.t('competitions.index.tooltips.registration.opens_in', { duration: DateTime.fromISO(competition.registration_open).toRelative({ locale: window.I18n.locale }) });
+    return I18n.t('competitions.index.tooltips.registration.opens_in', { relativeDate: DateTime.fromISO(competition.registration_open).toRelative(toRelativeOptions.default) });
   }
   if (competition.registration_status === 'past') {
-    return I18n.t('competitions.index.tooltips.registration.closed', { days: DateTime.fromISO(competition.start_date).toRelative({ locale: window.I18n.locale }) });
+    return I18n.t('competitions.index.tooltips.registration.closed', { relativeDate: DateTime.fromISO(competition.start_date).toRelative(toRelativeOptions.roundUpAndAtBestDayPrecision) });
   }
   if (competition.registration_status === 'full') {
     return I18n.t('competitions.index.tooltips.registration.full');
@@ -43,7 +44,7 @@ const registrationStatusIcon = (competition) => {
     return <Icon name="user times" color="red" />;
   }
   if (competition.registration_status === 'full') {
-    return <Icon name="user clock" color="orange" />;
+    return <Icon className="user clock" color="orange" />;
   }
   return <Icon name="user plus" color="green" />;
 };

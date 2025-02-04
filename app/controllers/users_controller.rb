@@ -379,6 +379,7 @@ class UsersController < ApplicationController
     user_id = params.require(:id)
     user = User.find(user_id)
 
+    user.skip_reconfirmation!
     user_update_success = user.update(
       email: user_id.to_s + User::ANONYMOUS_ACCOUNT_EMAIL_ID_SUFFIX,
       name: User::ANONYMOUS_ACCOUNT_NAME,
