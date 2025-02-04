@@ -15,6 +15,7 @@ RSpec.describe RegistrationsMailer, type: :mailer do
     let(:registration) { FactoryBot.create(:registration, user: french_user, competition: competition_with_organizers) }
     let(:mail_new) { RegistrationsMailer.notify_registrant_of_new_registration(registration) }
     let(:mail_accepted) { RegistrationsMailer.notify_registrant_of_accepted_registration(registration) }
+    let(:mail_waitlisted) { RegistrationsMailer.notify_registrant_of_waitlisted_registration(registration) }
     let(:mail_deleted) { RegistrationsMailer.notify_registrant_of_deleted_registration(registration) }
 
     it "renders the headers in foreign locale" do
@@ -25,6 +26,7 @@ RSpec.describe RegistrationsMailer, type: :mailer do
       # scope this call, but rather compare the result to the expected locale.
       expect(mail_new.subject).to eq(I18n.t('registrations.mailer.new.mail_subject', comp_name: registration.competition.name, locale: :fr))
       expect(mail_accepted.subject).to eq(I18n.t('registrations.mailer.accepted.mail_subject', comp_name: registration.competition.name, locale: :fr))
+      expect(mail_waitlisted.subject).to eq(I18n.t('registrations.mailer.waitlisted.mail_subject', comp_name: registration.competition.name, locale: :fr))
       expect(mail_deleted.subject).to eq(I18n.t('registrations.mailer.deleted.mail_subject', comp_name: registration.competition.name, locale: :fr))
     end
 
@@ -39,6 +41,7 @@ RSpec.describe RegistrationsMailer, type: :mailer do
       end
       expect(mail_new.body.encoded).to match(regards_in_french)
       expect(mail_accepted.body.encoded).to match(regards_in_french)
+      expect(mail_waitlisted.body.encoded).to match(regards_in_french)
       expect(mail_deleted.body.encoded).to match(regards_in_french)
     end
   end
