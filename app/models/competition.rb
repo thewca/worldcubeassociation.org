@@ -117,6 +117,7 @@ class Competition < ApplicationRecord
     competitor_limit_enabled
     competitor_limit
     competitor_limit_reason
+    auto_close_threshold
     forbid_newcomers
     forbid_newcomers_reason
     guests_enabled
@@ -320,10 +321,10 @@ class Competition < ApplicationRecord
 
   validate :auto_close_threshold_validations
   private def auto_close_threshold_validations
-    errors.add(:auto_close_registrations_threshold, I18n.t('competitions.errors.auto_close_not_negative')) if auto_close_registrations_threshold < 0
-    errors.add(:auto_close_registrations_threshold, I18n.t('competitions.errors.must_exceed_competitor_limit')) if
-      (competitor_limit.present? && auto_close_registrations_threshold <= competitor_limit) && auto_close_registrations_threshold != 0
-    errors.add(:auto_close_registrations_threshold, I18n.t('competitions.errors.use_wca_registration')) unless use_wca_registration
+    errors.add(:auto_close_threshold, I18n.t('competitions.errors.auto_close_not_negative')) if auto_close_threshold < 0
+    errors.add(:auto_close_threshold, I18n.t('competitions.errors.must_exceed_competitor_limit')) if
+      (competitor_limit.present? && auto_close_threshold <= competitor_limit) && auto_close_threshold != 0
+    errors.add(:auto_close_threshold, I18n.t('competitions.errors.use_wca_registration')) unless use_wca_registration
   end
 
   # Only validate on update: nobody can confirm competition on creation.
@@ -933,7 +934,7 @@ class Competition < ApplicationRecord
     update_column :external_website, nil
   end
 
-  after_save :auto_close, if: -> { saved_change_to_auto_close_registrations_threshold? }
+  after_save :auto_close, if: -> { saved_change_to_auto_close_threshold? }
 
   def website
     generate_website ? internal_website : external_website
@@ -2385,6 +2386,7 @@ class Competition < ApplicationRecord
         "enabled" => competitor_limit_enabled,
         "count" => competitor_limit,
         "reason" => competitor_limit_reason,
+        "autoCloseThreshold" => auto_close_threshold
       },
       "staff" => {
         "staffDelegateIds" => staff_delegates.to_a.pluck(:id),
@@ -2486,6 +2488,7 @@ class Competition < ApplicationRecord
         "enabled" => errors[:competitor_limit_enabled],
         "count" => errors[:competitor_limit],
         "reason" => errors[:competitor_limit_reason],
+        "autoCloseThreshold" => errors[:auto_close_threshold],
       },
       "staff" => {
         "staffDelegateIds" => errors[:staff_delegate_ids],
@@ -2623,6 +2626,7 @@ class Competition < ApplicationRecord
       competitor_limit_enabled: form_data.dig('competitorLimit', 'enabled'),
       competitor_limit: form_data.dig('competitorLimit', 'count'),
       competitor_limit_reason: form_data.dig('competitorLimit', 'reason'),
+      auto_close_threshold: form_data.dig('competitorLimit', 'autoCloseThreshold'),
       extra_registration_requirements: form_data.dig('registration', 'extraRequirements'),
       on_the_spot_registration: form_data.dig('registration', 'allowOnTheSpot'),
       on_the_spot_entry_fee_lowest_denomination: form_data.dig('entryFees', 'onTheSpotEntryFee'),
@@ -2895,7 +2899,7 @@ class Competition < ApplicationRecord
   end
 
   def auto_close
-    threshold_reached = registrations.with_payments.count >= auto_close_registrations_threshold && auto_close_registrations_threshold > 0
+    threshold_reached = registrations.with_payments.count >= auto_close_threshold && auto_close_threshold > 0
     update!(closing_full_registration: true, registration_close: Time.now) if threshold_reached
   end
 end

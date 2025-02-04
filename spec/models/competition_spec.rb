@@ -1586,7 +1586,7 @@ RSpec.describe Competition do
   end
 
   context 'auto-close registrations' do
-    let(:auto_close_comp) { FactoryBot.create(:competition, :registration_open, auto_close_registrations_threshold: 5)}
+    let(:auto_close_comp) { FactoryBot.create(:competition, :registration_open, auto_close_threshold: 5)}
     let(:comp) { FactoryBot.create(:competition, :registration_open, :with_competitor_limit, competitor_limit: 3) }
 
     it 'doesnt auto-close if threshold not reached' do
@@ -1607,7 +1607,7 @@ RSpec.describe Competition do
     it 'closes registrations when the close threshold is exceeded' do
       FactoryBot.create_list(:registration, 5, :paid, competition: comp)
 
-      comp.auto_close_registrations_threshold = 5
+      comp.auto_close_threshold = 5
       FactoryBot.create(:registration, :paid, competition: comp)
 
       expect(comp.registration_past?).to eq(true)
@@ -1617,7 +1617,7 @@ RSpec.describe Competition do
       FactoryBot.create_list(:registration, 5, :paid, competition: comp)
       expect(comp.registration_past?).to eq(false)
 
-      comp.update!(auto_close_registrations_threshold: 5)
+      comp.update!(auto_close_threshold: 5)
       expect(comp.registration_past?).to eq(true)
     end
 
@@ -1628,26 +1628,26 @@ RSpec.describe Competition do
 
     context 'validations' do
       it 'auto-close threshold must be positive' do
-        comp.auto_close_registrations_threshold = -1
+        comp.auto_close_threshold = -1
         expect(comp).not_to be_valid
-        expect(comp.errors[:auto_close_registrations_threshold]).to include("Auto-close threshold must be a positive number")
+        expect(comp.errors[:auto_close_threshold]).to include("Auto-close threshold must be a positive number")
       end
 
       it 'must be greater than competitor limit' do
-        comp.auto_close_registrations_threshold = comp.competitor_limit
+        comp.auto_close_threshold = comp.competitor_limit
         expect(comp).not_to be_valid
-        expect(comp.errors[:auto_close_registrations_threshold]).to include("Auto-close threshold must be greater than the competitor limit")
+        expect(comp.errors[:auto_close_threshold]).to include("Auto-close threshold must be greater than the competitor limit")
 
-        comp.auto_close_registrations_threshold = comp.competitor_limit - 1
+        comp.auto_close_threshold = comp.competitor_limit - 1
         expect(comp).not_to be_valid
-        expect(comp.errors[:auto_close_registrations_threshold]).to include("Auto-close threshold must be greater than the competitor limit")
+        expect(comp.errors[:auto_close_threshold]).to include("Auto-close threshold must be greater than the competitor limit")
       end
 
       it 'comp must use wca registration' do
         comp.use_wca_registration = false
-        comp.auto_close_registrations_threshold = 1
+        comp.auto_close_threshold = 1
         expect(comp).not_to be_valid
-        expect(comp.errors[:auto_close_registrations_threshold]).to include("Competition must use WCA registration")
+        expect(comp.errors[:auto_close_threshold]).to include("Competition must use WCA registration")
       end
     end
   end

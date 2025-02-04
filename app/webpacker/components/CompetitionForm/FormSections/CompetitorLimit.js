@@ -8,6 +8,7 @@ export default function CompetitorLimit() {
   const {
     competitorLimit: {
       enabled: hasLimit,
+      autoCloseThreshold,
     },
   } = useFormObject();
 
@@ -18,6 +19,11 @@ export default function CompetitorLimit() {
         <InputNumber id="count" min={0} />
         <InputTextArea id="reason" />
       </ConditionalSection>
+      <ConditionalSection showIf={hasLimit}>
+        <InputNumber id="threshold" min={0} />
+        <InputTextArea id="reason" />
+      </ConditionalSection>
+
     </SubSection>
   );
 }
