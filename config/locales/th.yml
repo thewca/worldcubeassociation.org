@@ -364,10 +364,6 @@ th:
     days:
       zero: '%{count} วัน'
       other: '%{count} วัน'
-    #original_hash: 203e1b3
-    these_events:
-      zero: ประเภทนี้
-      other: '%{count} ประเภทนี้'
     #original_hash: 51ef7d4
     search_site: ค้นหาในเว็บ
     #original_hash: d7decf1
@@ -799,14 +795,6 @@ th:
           ใช้ &lt;!-- break --&gt; ในการแสดงตัวอย่างในหน้าแรก โพสต์ใด ๆ
           ในหน้าแรกจะแสดงข้อความทั้งหมดก่อนตัวแบ่งนี้
           โพสต์จริงจะแสดงเนื้อหาแบบเต็ม
-        #original_hash: da39a3e
-        sticky: ''
-        #original_hash: da39a3e
-        unstick_at: ''
-        #original_hash: da39a3e
-        title: ''
-        #original_hash: da39a3e
-        tags: ''
         #original_hash: 0e3764f
         show_on_homepage: >-
           ระวัง! สิ่งนี้ไม่ปลอดภัยสำหรับข้อมูลส่วนตัว
@@ -2943,8 +2931,6 @@ th:
         custom: การแข่งขันในช่วงเวลาที่เลือก
         #original_hash: 0933739
         by_announcement: การแข่งขันเรียงตามการประกาศ การแข่งขันที่ใหม่กว่าอยู่ด้านบน
-      #original_hash: 6684214
-      no_access: คุณไม่มีสิทธิ์เข้าถึงหน้านี้!
       tooltips:
         hourglass:
           #original_hash: b5183e1
@@ -2962,13 +2948,13 @@ th:
         #original_hash: 3bc8082
         recent: 'ย้อนหลัง %{count} วัน'
         registration:
-          #original_hash: 49d8169
-          opens_in: 'การรับสมัครจะเปิดใน %{duration}'
-          #original_hash: 2d601fa
-          closed: 'ปิดการรับสมัครแล้ว การแข่งขันจะเริ่มใน %{days}'
+          #original_hash: fe28f94
+          opens_in: 'การรับสมัครจะเปิดใน %{relativeDate}'
+          #original_hash: f9f709e
+          closed: 'ปิดการรับสมัครแล้ว การแข่งขันจะเริ่มใน %{relativeDate}'
           #original_hash: 2e17db8
           open: เปิดรับสมัครแล้ว!
-          #original_hash: c098975
+          #original_hash: be2118d
           full: >-
             ผู้เข้าแข่งขันถึงจำนวนที่กำหนดแล้ว
             การสมัครการแข่งขันหลังจากนี้จะไปอยู่ใน waiting list
@@ -2976,10 +2962,6 @@ th:
       no_more_comps: ไม่มีการแข่งขัน
       #original_hash: 8b09d74
       no_comp_found: ไม่พบการแข่งขัน
-      #original_hash: 7008166
-      no_comp_match: >-
-        เราไม่พบการแข่งขันที่มี %{events}!
-        ลองอีกครั้งด้วยประเภทการแข่งขันที่น้อยลง
     my_competitions_table:
       #original_hash: 5301648
       edit: แก้ไข
@@ -3545,7 +3527,7 @@ th:
           information: >-
             ผู้เข้าแข่งขันที่ถูกปฎิเสธการสมัครไม่สามารถสมัครการแข่งขันอีกครั้งได้
         pending:
-          #original_hash: f3656e1
+          #original_hash: 5e16c6d
           information: >-
             ควรใช้สถานะรอดำเนินการสำหรับการสมัครที่ไม่สมบูรณ์ (เช่น
             ไม่ได้ชำระเงิน) เท่านั้น - โปรดใช้ Waiting List
@@ -3558,8 +3540,10 @@ th:
           #original_hash: 3a16c0d
           refunded: 'การชำระค่าสมัครได้ทำการคืนเงินแล้วเมื่อวันที่ %{date}'
         psychsheets:
-          #original_hash: f03e2d0
-          go_back: Go Back
+          #original_hash: ded0a5d
+          show_me: แสดงฉัน
+          #original_hash: a23dc2b
+          rank: 'Rank: %{userPosition}'
         #original_hash: 19eabc9
         timestamp: Timestamp
         #original_hash: 5e0207a
