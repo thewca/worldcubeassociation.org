@@ -115,6 +115,7 @@ AppSecrets = SuperConfig.new(raise_exception: !EnvConfig.ASSETS_COMPILATION?) do
     optional :RECAPTCHA_PRIVATE_KEY, :string, ''
     optional :CDN_AVATARS_DISTRIBUTION_ID, :string, ''
     optional :STAGING_PASSWORD, :string, ''
+    optional :NEW_RELIC_LICENSE_KEY, :string, ''
     optional :SMTP_USERNAME, :string, ''
     optional :SMTP_PASSWORD, :string, ''
     optional :GOOGLE_APPLICATION_CREDENTIALS, :string, ''
@@ -125,5 +126,6 @@ AppSecrets = SuperConfig.new(raise_exception: !EnvConfig.ASSETS_COMPILATION?) do
     optional :TNOODLE_PUBLIC_KEY, :string, ''
     optional :WRC_WEBHOOK_USERNAME, :string, ''
     optional :WRC_WEBHOOK_PASSWORD, :string, ''
+    optional :CURRENCY_LAYER_API_KEY, :string, ''
   end
 end

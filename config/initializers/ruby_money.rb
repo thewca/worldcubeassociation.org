@@ -4,7 +4,7 @@ require 'money/bank/currencylayer_bank'
 
 Money.locale_backend = :i18n
 
-if Rails.env.production? && EnvConfig.WCA_LIVE_SITE?
+if Rails.env.production? && EnvConfig.WCA_LIVE_SITE? && !EnvConfig.ASSETS_COMPILATION?
   mclb = Money::Bank::CurrencylayerBank.new
   mclb.access_key = AppSecrets.CURRENCY_LAYER_API_KEY
   mclb.currencylayer = true

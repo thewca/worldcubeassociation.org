@@ -25,40 +25,31 @@ function getCountryOrContinent(result, firstContinentIndex, firstCountryIndex, i
   return countries.byId[result.countryId];
 }
 
-function ResultRow({
-  result, competition, rank, isAverage, show, country,
-}) {
-  const attempts = [result.value1, result.value2, result.value3, result.value4, result.value5]
-    .filter(Boolean);
+function mapRankingsData(data, isByRegion) {
+  const { rows, competitionsById } = data;
+  const [rowsToMap, firstContinentIndex, firstCountryIndex] = isByRegion ? rows : [rows, 0, 0];
 
-  const bestResult = _.max(attempts);
-  const worstResult = _.min(attempts);
-  const bestResultIndex = attempts.indexOf(bestResult);
-  const worstResultIndex = attempts.indexOf(worstResult);
+  return rowsToMap.reduce((acc, result, index) => {
+    const competition = competitionsById[result.competitionId];
+    const { value } = result;
 
-  return (
-    <Table.Row>
-      {show === 'by region' ? <CountryCell country={country} />
-        : <Table.Cell textAlign="center">{rank}</Table.Cell> }
-      <PersonCell personId={result.personId} personName={result.personName} />
-      <Table.Cell>
-        {formatAttemptResult(result.value, result.eventId)}
-      </Table.Cell>
-      {show !== 'by region' && <CountryCell country={country} />}
-      <CompetitionCell
-        competition={competition}
-        compatIso2={countries.byId[competition.countryId]?.iso2}
-      />
-      {isAverage && (
-        <AttemptsCells
-          attempts={attempts}
-          bestResultIndex={bestResultIndex}
-          worstResultIndex={worstResultIndex}
-          eventId={result.eventId}
-        />
-      )}
-    </Table.Row>
-  );
+    const previousItem = acc[acc.length - 1];
+    const previousValue = previousItem?.result.value || 0;
+    const previousRank = previousItem?.rank || 0;
+
+    const rank = value === previousValue ? previousRank : index + 1;
+    const tiedPrevious = rank === previousRank;
+
+    const country = getCountryOrContinent(result, firstContinentIndex, firstCountryIndex, index);
+
+    return [...acc, {
+      result,
+      competition,
+      country,
+      rank,
+      tiedPrevious,
+    }];
+  }, []);
 }
 
 export default function RankingsTable({ filterState }) {
@@ -71,37 +62,8 @@ export default function RankingsTable({ filterState }) {
   const { data, isFetching } = useQuery({
     queryKey: ['rankings', event, region, rankingType, gender, show],
     queryFn: () => getRankings(event, rankingType, region, gender, show),
-    placeholderData: { rows: [], competitionsById: {} },
+    select: (rankingsData) => mapRankingsData(rankingsData, show === 'by region'),
   });
-
-  const { rows, competitionsById } = data;
-
-  const results = useMemo(() => {
-    const isByRegion = show === 'by region';
-    const [rowsToMap, firstContinentIndex, firstCountryIndex] = isByRegion ? rows : [rows, 0, 0];
-
-    return rowsToMap?.reduce((acc, result, index) => {
-      const competition = competitionsById[result.competitionId];
-      const { value } = result;
-
-      const lastItem = acc[acc.length - 1];
-      const previousValue = lastItem?.result.value || 0;
-      const previousRank = lastItem?.rank || 0;
-
-      const rank = value === previousValue ? previousRank : index + 1;
-      const tiedPrevious = rank === previousRank;
-
-      const country = getCountryOrContinent(result, firstContinentIndex, firstCountryIndex, index);
-
-      return [...acc, {
-        result,
-        competition,
-        country,
-        rank,
-        tiedPrevious,
-      }];
-    }, []) || [];
-  }, [competitionsById, rows, show]);
 
   const columns = useMemo(() => {
     const commonColumns = [
@@ -144,7 +106,7 @@ export default function RankingsTable({ filterState }) {
   }, [show, isAverage]);
 
   const table = useReactTable({
-    data: results,
+    data: data || [],
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
@@ -189,5 +151,41 @@ export default function RankingsTable({ filterState }) {
         </Table.Body>
       </Table>
     </div>
+  );
+}
+
+function ResultRow({
+  result, competition, rank, isAverage, show, country,
+}) {
+  const attempts = [result.value1, result.value2, result.value3, result.value4, result.value5]
+    .filter(Boolean);
+
+  const bestResult = _.max(attempts);
+  const worstResult = _.min(attempts);
+  const bestResultIndex = attempts.indexOf(bestResult);
+  const worstResultIndex = attempts.indexOf(worstResult);
+
+  return (
+    <Table.Row>
+      {show === 'by region' ? <CountryCell country={country} />
+        : <Table.Cell textAlign="center">{rank}</Table.Cell> }
+      <PersonCell personId={result.personId} personName={result.personName} />
+      <Table.Cell>
+        {formatAttemptResult(result.value, result.eventId)}
+      </Table.Cell>
+      {show !== 'by region' && <CountryCell country={country} />}
+      <CompetitionCell
+        competition={competition}
+        compatIso2={countries.byId[competition.countryId]?.iso2}
+      />
+      {isAverage && (
+        <AttemptsCells
+          attempts={attempts}
+          bestResultIndex={bestResultIndex}
+          worstResultIndex={worstResultIndex}
+          eventId={result.eventId}
+        />
+      )}
+    </Table.Row>
   );
 }
