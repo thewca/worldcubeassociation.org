@@ -66,18 +66,42 @@ export default function RankingsTable({ filterState }) {
   });
 
   const columns = useMemo(() => {
+    const rankColumn = {
+      accessorKey: 'rank',
+      header: '#',
+      cell: ({ row }) => (
+        <Table.Cell textAlign="center">{row.original.rank}</Table.Cell>
+      ),
+    };
+
+    const regionColumn = {
+      accessorKey: 'country',
+      header: I18n.t('results.table_elements.region'),
+      cell: ({ row }) => (
+        <CountryCell country={row.original.country} />
+      ),
+    };
+
     const commonColumns = [
-      {
-        accessorKey: 'rank',
-        header: show === 'by region' ? I18n.t('results.table_elements.region') : '#',
-      },
+      show === 'by region' ? regionColumn : rankColumn,
       {
         accessorKey: 'result.name',
         header: I18n.t('results.table_elements.name'),
+        cell: ({ row }) => (
+          <PersonCell
+            personId={row.original.result.personId}
+            personName={row.original.result.personName}
+          />
+        ),
       },
       {
         accessorKey: 'result.value',
         header: I18n.t('results.table_elements.result'),
+        cell: ({ row }) => (
+          <Table.Cell>
+            {formatAttemptResult(row.original.result.value, row.original.result.eventId)}
+          </Table.Cell>
+        ),
       },
     ];
 
@@ -85,12 +109,19 @@ export default function RankingsTable({ filterState }) {
       commonColumns.push({
         accessorKey: 'country.name',
         header: I18n.t('results.table_elements.representing'),
+        cell: ({ row }) => (<CountryCell country={row.original.country} />),
       });
     }
 
     commonColumns.push({
       accessorKey: 'competition.name',
       header: I18n.t('results.table_elements.competition'),
+      cell: ({ row }) => (
+        <CompetitionCell
+          competition={row.original.competition}
+          compatIso2={countries.byId[row.original.competition.countryId]?.iso2}
+        />
+      ),
     });
 
     if (isAverage) {
@@ -99,6 +130,26 @@ export default function RankingsTable({ filterState }) {
         accessorKey: 'solves',
         header: I18n.t('results.table_elements.solves'),
         colSpan: 5,
+        cell: ({ row }) => {
+          const { result } = row.original;
+
+          const attempts = [result.value1, result.value2, result.value3, result.value4, result.value5]
+            .filter(Boolean);
+
+          const bestResult = _.max(attempts);
+          const worstResult = _.min(attempts);
+          const bestResultIndex = attempts.indexOf(bestResult);
+          const worstResultIndex = attempts.indexOf(worstResult);
+
+          return (
+            <AttemptsCells
+              attempts={attempts}
+              bestResultIndex={bestResultIndex}
+              worstResultIndex={worstResultIndex}
+              eventId={result.eventId}
+            />
+          );
+        },
       });
     }
 
@@ -130,24 +181,13 @@ export default function RankingsTable({ filterState }) {
           ))}
         </Table.Header>
         <Table.Body>
-          {table.getRowModel().rows.map((row) => {
-            const {
-              country, result, competition, rank, tiedPrevious,
-            } = row.original;
-
-            return (
-              <ResultRow
-                country={country}
-                key={row.id}
-                result={result}
-                competition={competition}
-                rank={rank}
-                tiedPrevious={tiedPrevious}
-                isAverage={isAverage}
-                show={show}
-              />
-            );
-          })}
+          {table.getRowModel().rows.map((row) => (
+            <Table.Row key={row.id}>
+              {row.getVisibleCells().map((cell) => {
+                return flexRender(cell.column.columnDef.cell, cell.getContext());
+              })}
+            </Table.Row>
+          ))}
         </Table.Body>
       </Table>
     </div>
