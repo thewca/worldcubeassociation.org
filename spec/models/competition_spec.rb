@@ -1586,7 +1586,7 @@ RSpec.describe Competition do
   end
 
   context 'auto-close registrations' do
-    let(:auto_close_comp) { FactoryBot.create(:competition, :registration_open, auto_close_threshold: 5)}
+    let(:auto_close_comp) { FactoryBot.create(:competition, :registration_open, auto_close_threshold: 5) }
     let(:comp) { FactoryBot.create(:competition, :registration_open, :with_competitor_limit, competitor_limit: 3) }
 
     it 'doesnt auto-close if threshold not reached' do

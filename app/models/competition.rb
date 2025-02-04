@@ -1842,12 +1842,10 @@ class Competition < ApplicationRecord
                              reverse, field = part.match(/^(-)?(\w+)$/).captures
                              [field.to_sym, reverse ? :desc : :asc]
                            end
-                           # rubocop:disable Style/HashSlice
                            #   RuboCop suggests using `slice` here, which is a noble intention but breaks the order
                            #   of sort arguments. However, this order is crucial (sorting by "name then start_date"
                            #   is different from sorting by "start_date then name") so we insist on doing it our way.
                            .select { |field, _| orderable_fields.include?(field) }
-                           # rubocop:enable Style/HashSlice
                            .to_h
     else
       order = { start_date: :desc }
@@ -2386,7 +2384,7 @@ class Competition < ApplicationRecord
         "enabled" => competitor_limit_enabled,
         "count" => competitor_limit,
         "reason" => competitor_limit_reason,
-        "autoCloseThreshold" => auto_close_threshold
+        "autoCloseThreshold" => auto_close_threshold,
       },
       "staff" => {
         "staffDelegateIds" => staff_delegates.to_a.pluck(:id),
