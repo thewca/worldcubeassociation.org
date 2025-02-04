@@ -48,55 +48,6 @@ function mapRankingsData(data, isByRegion) {
   }, []);
 }
 
-function CountryCell({ country }) {
-  return (
-    <Table.Cell textAlign="left">
-      {country.iso2 && <CountryFlag iso2={country.iso2} />}
-      {' '}
-      {country.name}
-    </Table.Cell>
-  );
-}
-
-function ResultRow({
-  result, competition, rank, isAverage, show, country,
-}) {
-  const attempts = [result.value1, result.value2, result.value3, result.value4, result.value5]
-    .filter(Boolean);
-
-  const bestResult = _.max(attempts);
-  const worstResult = _.min(attempts);
-  const bestResultIndex = attempts.indexOf(bestResult);
-  const worstResultIndex = attempts.indexOf(worstResult);
-
-  return (
-    <Table.Row>
-      {show === 'by region' ? <CountryCell country={country} />
-        : <Table.Cell textAlign="center">{rank}</Table.Cell> }
-      <Table.Cell>
-        <a href={personUrl(result.personId)}>{result.personName}</a>
-      </Table.Cell>
-      <Table.Cell>
-        {formatAttemptResult(result.value, result.eventId)}
-      </Table.Cell>
-      {show !== 'by region' && <CountryCell country={country} />}
-      <Table.Cell>
-        <CountryFlag iso2={countries.byId[competition.countryId].iso2} />
-        {' '}
-        <a href={competitionUrl(competition.id)}>{competition.cellName}</a>
-      </Table.Cell>
-      {isAverage && (attempts.map((a, i) => (
-        <Table.Cell>
-          { attempts.length === 5
-              && (i === bestResultIndex || i === worstResultIndex)
-            ? `(${formatAttemptResult(a, result.eventId)})` : formatAttemptResult(a, result.eventId)}
-        </Table.Cell>
-      ))
-      )}
-    </Table.Row>
-  );
-}
-
 export default function RankingsTable({ filterState }) {
   const {
     event, region, rankingType, gender, show,
@@ -196,5 +147,54 @@ export default function RankingsTable({ filterState }) {
         </Table.Body>
       </Table>
     </div>
+  );
+}
+
+function ResultRow({
+  result, competition, rank, isAverage, show, country,
+}) {
+  const attempts = [result.value1, result.value2, result.value3, result.value4, result.value5]
+    .filter(Boolean);
+
+  const bestResult = _.max(attempts);
+  const worstResult = _.min(attempts);
+  const bestResultIndex = attempts.indexOf(bestResult);
+  const worstResultIndex = attempts.indexOf(worstResult);
+
+  return (
+    <Table.Row>
+      {show === 'by region' ? <CountryCell country={country} />
+        : <Table.Cell textAlign="center">{rank}</Table.Cell> }
+      <Table.Cell>
+        <a href={personUrl(result.personId)}>{result.personName}</a>
+      </Table.Cell>
+      <Table.Cell>
+        {formatAttemptResult(result.value, result.eventId)}
+      </Table.Cell>
+      {show !== 'by region' && <CountryCell country={country} />}
+      <Table.Cell>
+        <CountryFlag iso2={countries.byId[competition.countryId].iso2} />
+        {' '}
+        <a href={competitionUrl(competition.id)}>{competition.cellName}</a>
+      </Table.Cell>
+      {isAverage && (attempts.map((a, i) => (
+        <Table.Cell>
+          { attempts.length === 5
+              && (i === bestResultIndex || i === worstResultIndex)
+            ? `(${formatAttemptResult(a, result.eventId)})` : formatAttemptResult(a, result.eventId)}
+        </Table.Cell>
+      ))
+      )}
+    </Table.Row>
+  );
+}
+
+function CountryCell({ country }) {
+  return (
+    <Table.Cell textAlign="left">
+      {country.iso2 && <CountryFlag iso2={country.iso2} />}
+      {' '}
+      {country.name}
+    </Table.Cell>
   );
 }
