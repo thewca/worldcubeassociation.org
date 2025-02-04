@@ -2883,4 +2883,8 @@ class Competition < ApplicationRecord
       },
     }
   end
+
+  def auto_close
+    update!(closing_full_registration: true, registration_close: Time.now)
+  end
 end
