@@ -7,7 +7,7 @@ import I18n from '../../../lib/i18n';
 import { formatAttemptResult } from '../../../lib/wca-live/attempts';
 import CountryFlag from '../../wca/CountryFlag';
 import { continents, countries } from '../../../lib/wca-data.js.erb';
-import { personUrl } from '../../../lib/requests/routes.js.erb';
+import { competitionUrl, personUrl } from '../../../lib/requests/routes.js.erb';
 import { getRankings } from '../api/rankings';
 import Loading from '../../Requests/Loading';
 
@@ -56,7 +56,7 @@ function ResultRow({
       <Table.Cell>
         <CountryFlag iso2={countries.byId[competition.countryId].iso2} />
         {' '}
-        <a href={`/competition/${competition.id}`}>{competition.cellName}</a>
+        <a href={competitionUrl(competition.id)}>{competition.cellName}</a>
       </Table.Cell>
       {isAverage && (attempts.map((a, i) => (
         <Table.Cell>
