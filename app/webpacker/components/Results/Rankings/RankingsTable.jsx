@@ -58,7 +58,7 @@ export default function RankingsTable({ filterState }) {
   const { data, isFetching } = useQuery({
     queryKey: ['rankings', event, region, rankingType, gender, show],
     queryFn: () => getRankings(event, rankingType, region, gender, show),
-    select: (data) => mapRankingsData(data, show === 'by region'),
+    select: (rankingsData) => mapRankingsData(rankingsData, show === 'by region'),
   });
 
   const columns = useMemo(() => {
