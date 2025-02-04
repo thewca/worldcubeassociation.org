@@ -16,8 +16,6 @@ resource "aws_sqs_queue" "this" {
 
 resource "aws_sqs_queue" "results" {
   name                      = "results-staging-monolith"
-  content_based_deduplication = true
-  deduplication_scope        = "queue"
   delay_seconds              = 0
   max_message_size           = 262144
   message_retention_seconds  = 345600
