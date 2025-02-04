@@ -325,7 +325,7 @@ class Competition < ApplicationRecord
     if auto_close_threshold != 0
       errors.add(:auto_close_threshold, I18n.t('competitions.errors.use_wca_registration')) unless use_wca_registration
       errors.add(:auto_close_threshold, I18n.t('competitions.errors.must_exceed_competitor_limit')) if
-        (competitor_limit.present? && auto_close_threshold <= competitor_limit)
+        competitor_limit.present? && auto_close_threshold <= competitor_limit
     end
   end
 
