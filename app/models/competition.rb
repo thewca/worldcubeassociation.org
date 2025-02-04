@@ -322,9 +322,11 @@ class Competition < ApplicationRecord
   validate :auto_close_threshold_validations
   private def auto_close_threshold_validations
     errors.add(:auto_close_threshold, I18n.t('competitions.errors.auto_close_not_negative')) if auto_close_threshold < 0
-    errors.add(:auto_close_threshold, I18n.t('competitions.errors.must_exceed_competitor_limit')) if
-      (competitor_limit.present? && auto_close_threshold <= competitor_limit) && auto_close_threshold != 0
-    errors.add(:auto_close_threshold, I18n.t('competitions.errors.use_wca_registration')) unless use_wca_registration
+    if auto_close_threshold != 0
+      errors.add(:auto_close_threshold, I18n.t('competitions.errors.use_wca_registration')) unless use_wca_registration
+      errors.add(:auto_close_threshold, I18n.t('competitions.errors.must_exceed_competitor_limit')) if
+        (competitor_limit.present? && auto_close_threshold <= competitor_limit)
+    end
   end
 
   # Only validate on update: nobody can confirm competition on creation.
