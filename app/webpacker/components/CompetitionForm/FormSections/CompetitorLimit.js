@@ -20,10 +20,9 @@ export default function CompetitorLimit() {
         <InputTextArea id="reason" />
       </ConditionalSection>
       <ConditionalSection showIf={hasLimit}>
-        <InputNumber id="threshold" min={0} />
+        <InputNumber id="autoCloseThreshold" min={0} />
         <InputTextArea id="reason" />
       </ConditionalSection>
-
     </SubSection>
   );
 }

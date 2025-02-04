@@ -82,8 +82,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_04_104514) do
     t.boolean "forbid_newcomers", default: false, null: false
     t.string "forbid_newcomers_reason"
     t.integer "registration_version", default: 0, null: false
-    t.boolean "auto_accept_registrations", default: false, null: false
-    t.integer "auto_accept_disable_threshold", default: 0, null: false
     t.integer "auto_close_threshold", default: 0, null: false
     t.index ["cancelled_at"], name: "index_Competitions_on_cancelled_at"
     t.index ["countryId"], name: "index_Competitions_on_countryId"
