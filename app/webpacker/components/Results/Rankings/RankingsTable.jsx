@@ -102,7 +102,7 @@ export default function RankingsTable({ filterState }) {
   }, [show, isAverage]);
 
   const table = useReactTable({
-    data,
+    data: data || [],
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
