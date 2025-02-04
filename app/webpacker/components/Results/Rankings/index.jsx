@@ -43,7 +43,11 @@ function parseInitialStateFromUrl(url) {
 function filterReducer(state, action) {
   switch (action.type) {
     case ActionTypes.SET_EVENT:
-      return { ...state, event: action.payload };
+      if (action.payload === '333mbf') {
+        return { ...state, event: action.payload, rankingType: 'single' };
+      } else {
+        return { ...state, event: action.payload };
+      }
     case ActionTypes.SET_REGION:
       return { ...state, region: action.payload };
     case ActionTypes.SET_RANKING_TYPE:
