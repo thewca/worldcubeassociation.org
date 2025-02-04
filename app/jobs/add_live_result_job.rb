@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
 class AddLiveResultJob < ApplicationJob
-  self.queue_adapter = :shoryuken if Rails.env.production? && !EnvConfig.WCA_LIVE_SITE?
-  queue_as EnvConfig.LIVE_QUEUE if Rails.env.production? && !EnvConfig.WCA_LIVE_SITE?
+  self.queue_adapter = :shoryuken if WcaLive.sqs_queued?
+  queue_as EnvConfig.LIVE_QUEUE if WcaLive.sqs_queued?
 
   def perform(params)
-    ActionCable.server.broadcast("results_#{params[:round_id]}",
+    ActionCable.server.broadcast(WcaLive.broadcast_key(params[:round_id]),
                                  { attempts: params[:results], user_id: params[:user_id] })
   end
 end
