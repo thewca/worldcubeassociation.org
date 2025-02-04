@@ -26,7 +26,7 @@ export default function RegistrationAdministrationContainer({ competitionId }) {
        `competitions.errors.cant_load_competition_info`,
        'negative',
     ));
-  });
+  };
 
   return isCompetitionInfoLoading ? (
     <Loading />
