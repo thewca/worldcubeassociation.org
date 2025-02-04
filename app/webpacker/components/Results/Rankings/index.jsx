@@ -45,9 +45,8 @@ function filterReducer(state, action) {
     case ActionTypes.SET_EVENT:
       if (action.payload === '333mbf') {
         return { ...state, event: action.payload, rankingType: 'single' };
-      } else {
-        return { ...state, event: action.payload };
       }
+      return { ...state, event: action.payload };
     case ActionTypes.SET_REGION:
       return { ...state, region: action.payload };
     case ActionTypes.SET_RANKING_TYPE:
