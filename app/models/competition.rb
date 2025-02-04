@@ -2577,6 +2577,13 @@ class Competition < ApplicationRecord
         self.championships = []
       end
 
+      if (competitor_limit = form_data["competitorLimit"]).present?
+        if competitor_limit["enabled"] == false
+          competitor_limit["count"] = nil
+          competitor_limit["reason"] = nil
+        end
+      end
+
       assign_attributes(Competition.form_data_to_attributes(form_data))
     end
   end
