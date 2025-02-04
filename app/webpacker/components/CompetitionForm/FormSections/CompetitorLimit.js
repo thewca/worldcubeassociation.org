@@ -8,7 +8,6 @@ export default function CompetitorLimit() {
   const {
     competitorLimit: {
       enabled: hasLimit,
-      autoCloseThreshold,
     },
   } = useFormObject();
 
