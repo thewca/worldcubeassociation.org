@@ -21,6 +21,33 @@ function getCountryOrContinent(result, firstContinentIndex, firstCountryIndex, i
   return countries.byId[result.countryId];
 }
 
+function mapRankingsData(data, isByRegion) {
+  const { rows, competitionsById } = data;
+  const [rowsToMap, firstContinentIndex, firstCountryIndex] = isByRegion ? rows : [rows, 0, 0];
+
+  return rowsToMap.reduce((acc, result, index) => {
+    const competition = competitionsById[result.competitionId];
+    const { value } = result;
+
+    const previousItem = acc[acc.length - 1];
+    const previousValue = previousItem?.result.value || 0;
+    const previousRank = previousItem?.rank || 0;
+
+    const rank = value === previousValue ? previousRank : index + 1;
+    const tiedPrevious = rank === previousRank;
+
+    const country = getCountryOrContinent(result, firstContinentIndex, firstCountryIndex, index);
+
+    return [...acc, {
+      result,
+      competition,
+      country,
+      rank,
+      tiedPrevious,
+    }];
+  }, []);
+}
+
 function CountryCell({ country }) {
   return (
     <Table.Cell textAlign="left">
@@ -80,37 +107,8 @@ export default function RankingsTable({ filterState }) {
   const { data, isFetching } = useQuery({
     queryKey: ['rankings', event, region, rankingType, gender, show],
     queryFn: () => getRankings(event, rankingType, region, gender, show),
-    placeholderData: { rows: [], competitionsById: {} },
+    select: (data) => mapRankingsData(data, show === 'by region'),
   });
-
-  const { rows, competitionsById } = data;
-
-  const results = useMemo(() => {
-    const isByRegion = show === 'by region';
-    const [rowsToMap, firstContinentIndex, firstCountryIndex] = isByRegion ? rows : [rows, 0, 0];
-
-    return rowsToMap?.reduce((acc, result, index) => {
-      const competition = competitionsById[result.competitionId];
-      const { value } = result;
-
-      const lastItem = acc[acc.length - 1];
-      const previousValue = lastItem?.result.value || 0;
-      const previousRank = lastItem?.rank || 0;
-
-      const rank = value === previousValue ? previousRank : index + 1;
-      const tiedPrevious = rank === previousRank;
-
-      const country = getCountryOrContinent(result, firstContinentIndex, firstCountryIndex, index);
-
-      return [...acc, {
-        result,
-        competition,
-        country,
-        rank,
-        tiedPrevious,
-      }];
-    }, []) || [];
-  }, [competitionsById, rows, show]);
 
   const columns = useMemo(() => {
     const commonColumns = [
@@ -153,7 +151,7 @@ export default function RankingsTable({ filterState }) {
   }, [show, isAverage]);
 
   const table = useReactTable({
-    data: results,
+    data,
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
