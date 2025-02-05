@@ -37,6 +37,14 @@ module ResultsValidators
       true
     end
 
+    def self.roman_readable_part(name)
+      if name.include? " ("
+        name[0, name.index('(')-1]
+      else
+        name
+      end
+    end
+
     def self.dob_validations(dob, competition_id = nil, **message_args)
       validation_issues = []
 
@@ -53,6 +61,64 @@ module ResultsValidators
       # Check if DOB is not so young
       if dob.year <= Time.now.year - 100
         validation_issues << ValidationWarning.new(NOT_SO_YOUNG_PERSON_WARNING, :persons, competition_id, **message_args)
+      end
+
+      validation_issues
+    end
+
+    def self.name_validations(name, competition_id = nil, **message_args)
+      validation_issues = []
+      roman_readable = PersonsValidator.roman_readable_part(name)
+      split_name = roman_readable.split
+
+      # Check for double whitespaces or leading/trailing whitespaces.
+      unless name.squeeze(" ").strip == name
+        validation_issues << ValidationError.new(WHITESPACE_IN_NAME_ERROR, :persons, competition_id, name: name)
+      end
+
+      # Check for opening parenthesis without space before it.
+      if /[[:alnum:]]\(/ =~ name
+        validation_issues << ValidationError.new(WRONG_PARENTHESIS_FORMAT_ERROR, :persons, competition_id, name: name)
+      end
+
+      # Check for wrong parenthesis type.
+      if /[（）]/ =~ name
+        validation_issues << ValidationError.new(WRONG_PARENTHESIS_TYPE_ERROR, :persons, competition_id, name: name)
+      end
+
+      # Check for lowercase name.
+      if split_name.first.downcase == split_name.first || split_name.last.downcase == split_name.last
+        validation_issues << ValidationWarning.new(LOWERCASE_NAME_WARNING, :persons, competition_id, name: name)
+      end
+
+      # Check for successive uppercase letters in the name.
+      if split_name.any? { |n| n =~ /[[:upper:]]{2}/ && n.length > 2 && n != 'III' } # Roman numerals are allowed as suffixes
+        validation_issues << ValidationWarning.new(UPPERCASE_NAME_WARNING, :persons, competition_id, name: name)
+      end
+
+      # Check if the name is a single name.
+      if split_name.length == 1
+        validation_issues << ValidationWarning.new(SINGLE_NAME_WARNING, :persons, competition_id, name: name)
+      end
+
+      # Check for missing period in single letter middle name.
+      if split_name.length > 2
+        if split_name[1, split_name.length-2].any? { |n| n.length == 1 }
+          validation_issues << ValidationWarning.new(MISSING_PERIOD_WARNING, :persons, competition_id, name: name)
+        end
+      end
+
+      # Check for letter after period.
+      if split_name.any? { |n| n.chop.include? '.' }
+        validation_issues << ValidationWarning.new(LETTER_AFTER_PERIOD_WARNING, :persons, competition_id, name: name)
+      end
+
+      # Check for single letter first or last name.
+      non_word_after_first_letter = [' ', '.'].include?(roman_readable[1])
+      space_before_last_letter = (roman_readable[-2] == " ") && !['I', 'V'].include?(roman_readable[-1]) # Roman numerals are allowed as suffixes
+      abbreviated_last_name = (roman_readable[-1] == ".") && (roman_readable[-3] == " ")
+      if non_word_after_first_letter || space_before_last_letter || abbreviated_last_name
+        validation_issues << ValidationWarning.new(SINGLE_LETTER_FIRST_OR_LAST_NAME_WARNING, :persons, competition_id, name: name)
       end
 
       validation_issues
@@ -97,73 +163,19 @@ module ResultsValidators
                                                name: p.name)
           end
 
-          PersonsValidator.dob_validations(p.dob, competition.id, name: p.name).each do |validation|
+          [
+            PersonsValidator.name_validations(p.name, competition.id),
+            PersonsValidator.dob_validations(p.dob, competition.id, name: p.name),
+          ].flatten.each do |validation|
             if validation.is_a?(ValidationError)
               @errors << validation
             elsif validation.is_a?(ValidationWarning)
               @warnings << validation
             end
           end
-          # Look for double whitespaces or leading/trailing whitespaces.
-          unless p.name.squeeze(" ").strip == p.name
-            @errors << ValidationError.new(WHITESPACE_IN_NAME_ERROR,
-                                           :persons, competition.id,
-                                           name: p.name)
-          end
-          if /[[:alnum:]]\(/ =~ p.name
-            @errors << ValidationError.new(WRONG_PARENTHESIS_FORMAT_ERROR,
-                                           :persons, competition.id,
-                                           name: p.name)
-          end
-          if /[（）]/ =~ p.name
-            @errors << ValidationError.new(WRONG_PARENTHESIS_TYPE_ERROR,
-                                           :persons, competition.id,
-                                           name: p.name)
-          end
           # Look for if 2 new competitors that share the exact same name
           if without_wca_id.select { |p2| p2.name == p.name }.length > 1 && !duplicate_newcomer_names.include?(p.name)
             duplicate_newcomer_names << p.name
-          end
-          # Look for obvious person name issues (in roman-readable part)
-          if p.name.include? " ("
-            roman_readable = p.name[0, p.name.index('(')-1]
-          else
-            roman_readable = p.name
-          end
-          split_name = roman_readable.split
-          if split_name.first.downcase == split_name.first || split_name.last.downcase == split_name.last
-            @warnings << ValidationWarning.new(LOWERCASE_NAME_WARNING,
-                                               :persons, competition.id,
-                                               name: p.name)
-          end
-          if split_name.any? { |n| n =~ /[[:upper:]]{2}/ && n.length > 2 && n != 'III' } # Roman numerals are allowed as suffixes
-            @warnings << ValidationWarning.new(UPPERCASE_NAME_WARNING,
-                                               :persons, competition.id,
-                                               name: p.name)
-          end
-          if split_name.length == 1
-            @warnings << ValidationWarning.new(SINGLE_NAME_WARNING,
-                                               :persons, competition.id,
-                                               name: p.name)
-          elsif split_name.length > 2
-            if split_name[1, split_name.length-2].any? { |n| n.length == 1 }
-              @warnings << ValidationWarning.new(MISSING_PERIOD_WARNING,
-                                                 :persons, competition.id,
-                                                 name: p.name)
-            end
-          end
-          if split_name.any? { |n| n.chop.include? '.' }
-            @warnings << ValidationWarning.new(LETTER_AFTER_PERIOD_WARNING,
-                                               :persons, competition.id,
-                                               name: p.name)
-          end
-          non_word_after_first_letter = [' ', '.'].include?(roman_readable[1])
-          space_before_last_letter = (roman_readable[-2] == " ") && !['I', 'V'].include?(roman_readable[-1]) # Roman numerals are allowed as suffixes
-          abbreviated_last_name = (roman_readable[-1] == ".") && (roman_readable[-3] == " ")
-          if non_word_after_first_letter || space_before_last_letter || abbreviated_last_name
-            @warnings << ValidationWarning.new(SINGLE_LETTER_FIRST_OR_LAST_NAME_WARNING,
-                                               :persons, competition.id,
-                                               name: p.name)
           end
         end
         duplicate_newcomer_names.each do |name|

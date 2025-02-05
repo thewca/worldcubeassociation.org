@@ -582,6 +582,7 @@ en:
       wrong_size: "is the wrong size (should be %{file_size})"
       size_too_small: "is too small (should be at least %{file_size})"
       size_too_big: "is too big (should be at most %{file_size})"
+      no_permission: "You do not have the required permissions to access this page."
   devise:
     #context: Overridden key for sign in
     passwords:
@@ -1291,6 +1292,7 @@ en:
         amount_too_low: "The total amount must be at least the registration fees to be paid."
         amount_rather_high: "You are about to pay at least double the required amount for your registration to proceed."
       errors:
+        registration_closed: "Registration has closed - no further payments are allowed."
         already_paid: "The charge was not placed because the registration fees are already paid."
         not_allowed: "You can't pay for that registration."
         cpi_disconnected: "Tried to confirm a payment but the payment integration was disabled. Please contact the organizers of the competition."

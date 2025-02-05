@@ -8,6 +8,7 @@ import {
   FormField,
   Header,
   Label,
+  Message,
   Segment,
 } from 'semantic-ui-react';
 import { paymentFinishUrl } from '../../../lib/requests/routes.js.erb';
@@ -85,6 +86,12 @@ export default function PaymentStep({
 
     setIsLoading(false);
   };
+
+  if (!competitionInfo['registration_currently_open?']) {
+    return (
+      <Message color="red">{I18n.t('registrations.payment_form.errors.registration_closed')}</Message>
+    );
+  }
 
   return (
     <Segment>
