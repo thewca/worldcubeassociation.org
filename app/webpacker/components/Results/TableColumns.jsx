@@ -13,16 +13,24 @@ import {
 } from './TableCells';
 
 function resultAttempts(result) {
-  const attempts = [result?.value1, result?.value2, result?.value3, result?.value4, result?.value5]
-    .filter(Boolean);
+  const definedAttempts = [
+    result?.value1,
+    result?.value2,
+    result?.value3,
+    result?.value4,
+    result?.value5,
+  ].filter((res) => res !== undefined);
 
-  const bestResult = _.max(attempts);
-  const worstResult = _.min(attempts);
+  const validAttempts = definedAttempts.filter((res) => res !== 0);
+  const completedAttempts = validAttempts.filter((res) => res > 0);
 
-  const bestResultIndex = attempts.indexOf(bestResult);
-  const worstResultIndex = attempts.indexOf(worstResult);
+  const worstResult = _.max(completedAttempts);
+  const bestResult = _.min(completedAttempts);
 
-  return [attempts, bestResultIndex, worstResultIndex];
+  const bestResultIndex = definedAttempts.indexOf(bestResult);
+  const worstResultIndex = definedAttempts.indexOf(worstResult);
+
+  return [definedAttempts, bestResultIndex, worstResultIndex];
 }
 
 export const resultsFiveWideColumn = {
