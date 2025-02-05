@@ -126,14 +126,14 @@ export const slimConfig = [
     cell: ({ getValue }) => <EventCell eventId={getValue()} />,
   },
   {
-    accessorFn: (res) => res.average?.value,
+    accessorKey: 'average.value',
     header: I18n.t('common.average'),
     cell: ({ row, getValue }) => (
       getValue() && formatAttemptResult(getValue(), row.original.average?.eventId)
     ),
   },
   {
-    accessorFn: (res) => res.average?.personName,
+    accessorKey: 'average.personName',
     header: I18n.t('results.table_elements.name'),
     cell: ({ row, getValue }) => getValue && (
       <PersonCell
@@ -143,7 +143,7 @@ export const slimConfig = [
     ),
   },
   {
-    accessorFn: (res) => res.average,
+    accessorKey: 'average',
     header: I18n.t('results.table_elements.solves'),
     colSpan: 5,
     isMultiAttemptsHack: true,
