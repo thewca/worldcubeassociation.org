@@ -1,18 +1,9 @@
-import React, {
-  useEffect, useMemo, useReducer,
-} from 'react';
-import { Container, Segment } from 'semantic-ui-react';
-import { useQuery } from '@tanstack/react-query';
+import React, { useEffect, useMemo, useReducer } from 'react';
+import { Container } from 'semantic-ui-react';
 import WCAQueryClientProvider from '../../../lib/providers/WCAQueryClientProvider';
-import { getRecords } from '../api/records';
-import Loading from '../../Requests/Loading';
 import { recordsUrl } from '../../../lib/requests/routes.js.erb';
 import ResultsFilter from '../ResultsFilter';
-import SlimRecordTable from './SlimRecordsTable';
-import SeparateRecordsTables from './SeparateRecordsTables';
-import MixedRecordsTables from './MixedRecordsTables';
-import HistoryRecordsTables from './HistoryRecordsTables';
-import MixedHistoryRecordsTable from './MixedHistoryRecordsTable';
+import RecordsTable from './RecordsTable';
 
 const ActionTypes = {
   SET_EVENT: 'SET_EVENT',
@@ -95,74 +86,7 @@ export function Records() {
         isRecords
         showCategories={SHOW_CATEGORIES}
       />
-      <RecordsTables filterState={filterState} />
+      <RecordsTable filterState={filterState} />
     </Container>
   );
-}
-
-function RecordsTables({ filterState }) {
-  const {
-    event, region, gender, show,
-  } = filterState;
-
-  const { data, isFetching } = useQuery({
-    queryKey: ['records', event, region, gender, show],
-    queryFn: () => getRecords(event, region, gender, show),
-    placeholderData: { rows: [], competitionsById: {} },
-  });
-
-  const { rows, competitionsById } = data;
-
-  if (isFetching) {
-    return <Loading />;
-  }
-
-  if (rows.length === 0) {
-    return <Segment>No results found</Segment>;
-  }
-
-  switch (show) {
-    case 'mixed':
-      return (
-        <MixedRecordsTables
-          rows={rows}
-          competitionsById={competitionsById}
-        />
-      );
-
-    case 'slim':
-      return (
-        <SlimRecordTable
-          rows={rows[0]}
-        />
-      );
-
-    case 'separate':
-      return (
-        <SeparateRecordsTables
-          rows={rows}
-          competitionsById={competitionsById}
-        />
-      );
-
-    case 'history':
-      return (
-        <HistoryRecordsTables
-          rows={rows}
-          competitionsById={competitionsById}
-        />
-      );
-
-    case 'mixed history':
-      return (
-        <MixedHistoryRecordsTable
-          rows={rows}
-          competitionsById={competitionsById}
-        />
-      );
-
-    default:
-      console.error(`Invalid record table: ${show}`);
-      return null;
-  }
 }

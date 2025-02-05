@@ -2,16 +2,19 @@ import React from 'react';
 import { Table } from 'semantic-ui-react';
 import { SlimHeader } from '../TableHeaders';
 import { SlimRecordsRow } from '../TableRows';
+import RecordsTable from '../RecordsTable';
 
-export default function SlimRecordsTable({ rows }) {
+export default function SlimRecordsTable({ results }) {
+  const [slimmedRows] = results;
+
   return (
-    <Table basic="very" compact="very" striped unstackable>
+    <RecordsTable>
       <SlimHeader />
       <Table.Body>
-        {rows.map((row) => (
+        {slimmedRows.map((row) => (
           <SlimRecordsRow key={row[0]?.id + row[1]?.id} row={row} />
         ))}
       </Table.Body>
-    </Table>
+    </RecordsTable>
   );
 }

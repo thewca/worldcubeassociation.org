@@ -42,16 +42,16 @@ export function SlimRecordsRow({ row }) {
   );
 }
 
-export function SeparateRecordsRow({ result, competition, rankingType }) {
+export function SeparateRecordsRow({ result, rankingType }) {
   const [attempts, bestResultIndex, worstResultIndex] = resultAttempts(result);
-  const country = countries.real.find((c) => c.id === result.countryId);
+
   return (
     <Table.Row>
       <EventCell eventId={result.eventId} />
       <Table.Cell>{formatAttemptResult(result.value, result.eventId)}</Table.Cell>
       <PersonCell personId={result.personId} personName={result.personName} />
-      <CountryCell country={country} />
-      <CompetitionCell competition={competition} />
+      <CountryCell country={result.country} />
+      <CompetitionCell competition={result.competition} />
       {rankingType === 'average' && (
         <AttemptsCells
           attempts={attempts}
