@@ -11,9 +11,16 @@ export default function SlimRecordsTable({ results }) {
     <RecordsTable>
       <SlimHeader />
       <Table.Body>
-        {slimmedRows.map((row) => (
-          <SlimRecordsRow key={row[0]?.id + row[1]?.id} row={row} />
-        ))}
+        {slimmedRows.map((row) => {
+          const combinedKey = [
+            row[0]?.key,
+            row[1]?.key,
+          ].filter(Boolean).join('-');
+
+          return (
+            <SlimRecordsRow key={combinedKey} row={row} />
+          );
+        })}
       </Table.Body>
     </RecordsTable>
   );
