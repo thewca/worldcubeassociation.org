@@ -13,7 +13,6 @@ class LiveResult < ApplicationRecord
 
   has_one :event, through: :round
 
-
   DEFAULT_SERIALIZE_OPTIONS = {
     only: %w[ranking registration_id round live_attempts round best average single_record_tag average_record_tag advancing advancing_questionable entered_at entered_by_id],
     methods: %w[event_id attempts result_id],

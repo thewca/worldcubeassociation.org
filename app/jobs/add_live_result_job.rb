@@ -19,7 +19,7 @@ class AddLiveResultJob < ApplicationJob
                        live_attempts: attempts,
                        entered_by: params[:entered_by],
                        entered_at: Time.now.utc,
-                       best:  r.compute_correct_best,
+                       best: r.compute_correct_best,
                        average: r.compute_correct_average)
   end
 end
