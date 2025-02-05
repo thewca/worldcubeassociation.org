@@ -94,60 +94,60 @@ const eventColumn = {
 
 export const slimConfig = [
   {
-    accessorKey: 'single.result.personName',
+    accessorKey: 'single.personName',
     header: I18n.t('results.table_elements.name'),
     cell: ({ row, getValue }) => (
       <PersonCell
-        personId={row.original.single.result.personId}
+        personId={row.original.single.personId}
         personName={getValue()}
       />
     ),
   },
   {
-    accessorKey: 'single.result.value',
+    accessorKey: 'single.value',
     header: I18n.t('common.single'),
     cell: ({ row, getValue }) => (
       <Table.Cell>
-        {formatAttemptResult(getValue(), row.original.single.result.eventId)}
+        {formatAttemptResult(getValue(), row.original.single.eventId)}
       </Table.Cell>
     ),
   },
   {
-    accessorKey: 'single.result.eventId',
+    accessorKey: 'single.eventId',
     header: I18n.t('results.table_elements.event'),
     cell: ({ getValue }) => <EventCell eventId={getValue()} />,
   },
   {
-    accessorFn: (res) => res.average?.result?.value,
+    accessorFn: (res) => res.average?.value,
     header: I18n.t('common.average'),
     cell: ({ row, getValue }) => (
       <Table.Cell>
-        {getValue() && formatAttemptResult(getValue(), row.original.average?.result?.eventId)}
+        {getValue() && formatAttemptResult(getValue(), row.original.average?.eventId)}
       </Table.Cell>
     ),
   },
   {
-    accessorFn: (res) => res.average?.result?.personName,
+    accessorFn: (res) => res.average?.personName,
     header: I18n.t('results.table_elements.name'),
     cell: ({ row, getValue }) => {
       if (getValue() === undefined) return <Table.Cell />;
 
       return (
         <PersonCell
-          personId={row.original.average?.result?.personId}
+          personId={row.original.average?.personId}
           personName={getValue()}
         />
       );
     },
   },
   {
-    accessorFn: (res) => res.average?.result,
+    accessorFn: (res) => res.average,
     header: I18n.t('results.table_elements.solves'),
     colSpan: 5,
     cell: ({ getValue }) => {
-      if (getValue() === undefined) return <Table.Cell />;
-
       const result = getValue();
+
+      if (!result) return <Table.Cell />;
 
       const [attempts, bestResultIndex, worstResultIndex] = resultAttempts(result);
 

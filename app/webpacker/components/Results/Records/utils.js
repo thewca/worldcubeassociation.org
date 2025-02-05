@@ -25,10 +25,8 @@ export function augmentApiResults(data, show) {
   if (isSlim || isSeparate) {
     const [slimmed, singleRows, averageRows] = rows;
 
-    const augmentSlimmed = slimmed.map((pair) => augmentResults(pair, competitionsById));
-
     return [
-      augmentSlimmed,
+      slimmed, // The 'slim' view does not need augmented data
       augmentResults(singleRows, competitionsById),
       augmentResults(averageRows, competitionsById),
     ];
