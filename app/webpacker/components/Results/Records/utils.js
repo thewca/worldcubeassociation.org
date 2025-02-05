@@ -55,7 +55,7 @@ export const slimConfig = [
   {
     accessorKey: 'single.personName',
     header: I18n.t('results.table_elements.name'),
-    cell: ({ row, getValue }) => (
+    cell: ({ row, getValue }) => getValue() && (
       <PersonCell
         personId={row.original.single.personId}
         personName={getValue()}
@@ -65,12 +65,14 @@ export const slimConfig = [
   {
     accessorKey: 'single.value',
     header: I18n.t('common.single'),
-    cell: ({ row, getValue }) => formatAttemptResult(getValue(), row.original.single.eventId),
+    cell: ({ row, getValue }) => (
+      getValue() && formatAttemptResult(getValue(), row.original.single.eventId)
+    ),
   },
   {
     accessorKey: 'single.eventId',
     header: I18n.t('results.table_elements.event'),
-    cell: ({ getValue }) => <EventCell eventId={getValue()} />,
+    cell: ({ getValue }) => getValue() && <EventCell eventId={getValue()} />,
   },
   {
     accessorKey: 'average.value',
