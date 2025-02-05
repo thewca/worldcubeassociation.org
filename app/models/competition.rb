@@ -643,9 +643,9 @@ class Competition < ApplicationRecord
     delegates.include?(user) || trainee_delegates.include?(user) || organizers.include?(user)
   end
 
-  attr_accessor :being_cloned_from_id
+  attr_accessor :being_cloned_from_id, :being_cloned_from_cache
   def being_cloned_from
-    Competition.find_by(id: being_cloned_from_id)
+    @being_cloned_from_cache ||= Competition.find_by(id: being_cloned_from_id)
   end
 
   def build_clone
@@ -709,7 +709,7 @@ class Competition < ApplicationRecord
     # Clone competition tabs.
     if clone_tabs
       being_cloned_from&.tabs&.each do |tab|
-        tabs.create(tab.attributes.slice(*CompetitionTab::CLONEABLE_ATTRIBUTES))
+        tabs.create!(tab.attributes.slice(*CompetitionTab::CLONEABLE_ATTRIBUTES))
       end
     end
   end
@@ -2449,7 +2449,13 @@ class Competition < ApplicationRecord
   # It is quite uncool that we have to duplicate the internal form_data formatting like this
   # but as long as we let our backend handle the complete error validation we literally have no other choice
   def form_errors
-    return {} if self.valid?
+    self_valid = self.valid?
+    # If we're cloning, we also need to check the parent's associations.
+    #   Otherwise, the user may be surprised by a silent fail if some tabs/venues/schedules
+    #   of the parent are invalid. (This can happen if we introduce new validations on old data)
+    self_valid &= being_cloned_from&.tabs&.all?(&:valid?) if being_cloned_from_id.present?
+
+    return {} if self_valid
 
     {
       # for historic reasons, we keep 'name' errors listed under ID. Don't ask.
@@ -2542,12 +2548,16 @@ class Competition < ApplicationRecord
       },
       "cloning" => {
         "fromId" => errors[:being_cloned_from_id],
-        "cloneTabs" => errors[:clone_tabs],
+        "cloneTabs" => being_cloned_from_id.present? ? being_cloned_from&.association_errors(:tabs) : errors[:clone_tabs],
       },
       "other" => {
         "competitionEvents" => errors[:competition_events],
       },
     }
+  end
+
+  def association_errors(association_name)
+    self.public_send(association_name).map(&:errors).flat_map(&:to_a)
   end
 
   def set_form_data(form_data, current_user)

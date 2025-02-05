@@ -34,7 +34,7 @@ class CompetitionTab < ApplicationRecord
     competition.tabs.where("display_order > ?", display_order).update_all("display_order = display_order - 1")
   end
 
-  validate :verify_if_full_urls, on: :update
+  validate :verify_if_full_urls
   private def verify_if_full_urls
     content.scan(/\[(.*?)\]\((.*?)\)/).any? do |match|
       url = match[1]
