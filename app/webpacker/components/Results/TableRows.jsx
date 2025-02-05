@@ -26,7 +26,7 @@ function resultAttempts(result) {
   return [attempts, bestResultIndex, worstResultIndex];
 }
 
-const resultsFiveWideColumn = {
+export const resultsFiveWideColumn = {
   accessorKey: 'result',
   header: I18n.t('results.table_elements.solves'),
   colSpan: 5,
@@ -46,7 +46,7 @@ const resultsFiveWideColumn = {
   },
 };
 
-const competitionColumn = {
+export const competitionColumn = {
   accessorKey: 'competition',
   header: I18n.t('results.table_elements.competition'),
   cell: ({ getValue }) => (
@@ -57,7 +57,7 @@ const competitionColumn = {
   ),
 };
 
-const regionColumn = {
+export const regionColumn = {
   accessorKey: 'country',
   header: I18n.t('results.table_elements.region'),
   cell: ({ getValue }) => (
@@ -65,7 +65,15 @@ const regionColumn = {
   ),
 };
 
-const attemptResultColumn = {
+export const representingColumn = {
+  accessorKey: 'country',
+  header: I18n.t('results.table_elements.region'),
+  cell: ({ getValue }) => (
+    <CountryCell country={getValue()} />
+  ),
+};
+
+export const attemptResultColumn = {
   accessorKey: 'result.value',
   header: I18n.t('results.table_elements.result'),
   cell: ({ row, getValue }) => (
@@ -75,7 +83,7 @@ const attemptResultColumn = {
   ),
 };
 
-const personColumn = {
+export const personColumn = {
   accessorKey: 'result.name',
   header: I18n.t('results.table_elements.name'),
   cell: ({ row }) => (
@@ -90,6 +98,14 @@ const eventColumn = {
   accessorKey: 'result.eventId',
   header: I18n.t('results.table_elements.event'),
   cell: ({ getValue }) => <EventCell eventId={getValue()} />,
+};
+
+export const rankColumn = {
+  accessorKey: 'rank',
+  header: '#',
+  cell: ({ getValue }) => (
+    <Table.Cell textAlign="center">{getValue()}</Table.Cell>
+  ),
 };
 
 export const slimConfig = [

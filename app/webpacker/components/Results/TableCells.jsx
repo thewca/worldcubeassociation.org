@@ -20,6 +20,7 @@ export function AttemptsCells({
   attempts, bestResultIndex, worstResultIndex, eventId,
 }) {
   return attempts.map((a, i) => (
+    // One Cell per Solve of an Average
     <Table.Cell>
       {attempts.filter(Boolean).length === 5
       && (i === bestResultIndex || i === worstResultIndex) ? (

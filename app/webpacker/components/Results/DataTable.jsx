@@ -28,9 +28,7 @@ export default function DataTable({ rows, config }) {
         <Table.Body>
           {table.getRowModel().rows.map((row) => (
             <Table.Row key={row.id}>
-              {row.getVisibleCells().map((cell) => {
-                return flexRender(cell.column.columnDef.cell, cell.getContext());
-              })}
+              {row.getVisibleCells().map((cell) => flexRender(cell.column.columnDef.cell, cell.getContext()))}
             </Table.Row>
           ))}
         </Table.Body>
