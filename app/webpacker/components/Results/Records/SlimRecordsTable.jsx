@@ -1,27 +1,15 @@
 import React from 'react';
-import { Table } from 'semantic-ui-react';
-import { SlimHeader } from '../TableHeaders';
-import { SlimRecordsRow } from '../TableRows';
-import RecordsTable from '../RecordsTable';
+import { slimConfig } from '../TableRows';
+import DataTable from './DataTable';
 
 export default function SlimRecordsTable({ results }) {
   const [slimmedRows] = results;
 
-  return (
-    <RecordsTable>
-      <SlimHeader />
-      <Table.Body>
-        {slimmedRows.map((row) => {
-          const combinedKey = [
-            row[0]?.key,
-            row[1]?.key,
-          ].filter(Boolean).join('-');
+  // Need to re-key with `single` and `average` indices so that React-Table
+  //   will have an easier time operating on the data.
+  const slimmedData = slimmedRows.map(([single, average]) => ({ single, average }));
 
-          return (
-            <SlimRecordsRow key={combinedKey} row={row} />
-          );
-        })}
-      </Table.Body>
-    </RecordsTable>
+  return (
+    <DataTable rows={slimmedData} config={slimConfig} />
   );
 }

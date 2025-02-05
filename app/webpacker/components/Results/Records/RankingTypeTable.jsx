@@ -1,24 +1,9 @@
-import { Table } from 'semantic-ui-react';
 import React from 'react';
-import RecordsTable from '../RecordsTable';
-import { SeparateHeader } from '../TableHeaders';
-import { SeparateRecordsRow } from '../TableRows';
+import { separateRecordsConfig } from '../TableRows';
+import DataTable from './DataTable';
 
 export default function RankingTypeTable({ results, rankingType }) {
   return (
-    <RecordsTable>
-      <SeparateHeader isAverage={rankingType === 'average'} />
-      <Table.Body>
-        {results.map((row) => (
-          <SeparateRecordsRow
-            key={row.key}
-            result={row.result}
-            competition={row.competition}
-            rankingType={rankingType}
-            country={row.country}
-          />
-        ))}
-      </Table.Body>
-    </RecordsTable>
+    <DataTable rows={results} config={separateRecordsConfig(rankingType)} />
   );
 }

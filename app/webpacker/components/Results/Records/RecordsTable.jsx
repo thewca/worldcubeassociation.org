@@ -1,13 +1,13 @@
-import { useQuery } from '@tanstack/react-query';
-import { Segment } from 'semantic-ui-react';
+import {useQuery} from '@tanstack/react-query';
+import {Segment} from 'semantic-ui-react';
 import React from 'react';
-import { getRecords } from '../api/records';
+import {getRecords} from '../api/records';
 import Loading from '../../Requests/Loading';
 import MixedRecordsTables from './MixedRecordsTables';
 import SlimRecordTable from './SlimRecordsTable';
 import HistoryRecordsTables from './HistoryRecordsTables';
 import MixedHistoryRecordsTable from './MixedHistoryRecordsTable';
-import { augmentApiResults } from './utils';
+import {augmentApiResults} from './utils';
 import GroupedEventsTable from './GroupedEventsTable';
 import GroupedRankingTypesTable from './GroupedRankingTypesTable';
 import RankingTypeTable from './RankingTypeTable';
