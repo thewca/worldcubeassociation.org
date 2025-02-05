@@ -184,6 +184,7 @@ export const historyConfig = (isMixed) => [
   isMixed && eventColumn,
   personColumn,
   {
+    id: 'single',
     accessorKey: 'result.value',
     header: I18n.t('common.single'),
     cell: ({ row, getValue }) => (
@@ -192,6 +193,7 @@ export const historyConfig = (isMixed) => [
     ),
   },
   {
+    id: 'average',
     accessorKey: 'result.value',
     header: I18n.t('common.average'),
     cell: ({ row, getValue }) => (
