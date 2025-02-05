@@ -7,7 +7,6 @@ import I18n from '../../lib/i18n';
 import {
   AttemptsCells, CompetitionCell, CountryCell, EventCell, PersonCell,
 } from './TableCells';
-import { countries } from '../../lib/wca-data.js.erb';
 
 function resultAttempts(result) {
   const attempts = [result?.value1, result?.value2, result?.value3, result?.value4, result?.value5];
@@ -19,7 +18,7 @@ function resultAttempts(result) {
 }
 
 export function SlimRecordsRow({ row }) {
-  const [single, average] = row;
+  const [single, average] = row.map((augResult) => augResult?.result);
   const [attempts, bestResultIndex, worstResultIndex] = resultAttempts(average);
   return (
     <Table.Row>
@@ -42,7 +41,9 @@ export function SlimRecordsRow({ row }) {
   );
 }
 
-export function SeparateRecordsRow({ result, rankingType }) {
+export function SeparateRecordsRow({
+  result, competition, rankingType, country,
+}) {
   const [attempts, bestResultIndex, worstResultIndex] = resultAttempts(result);
 
   return (
@@ -50,8 +51,8 @@ export function SeparateRecordsRow({ result, rankingType }) {
       <EventCell eventId={result.eventId} />
       <Table.Cell>{formatAttemptResult(result.value, result.eventId)}</Table.Cell>
       <PersonCell personId={result.personId} personName={result.personName} />
-      <CountryCell country={result.country} />
-      <CompetitionCell competition={result.competition} />
+      <CountryCell country={country} />
+      <CompetitionCell competition={competition} />
       {rankingType === 'average' && (
         <AttemptsCells
           attempts={attempts}

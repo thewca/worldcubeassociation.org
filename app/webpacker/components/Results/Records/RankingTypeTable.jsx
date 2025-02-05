@@ -11,9 +11,11 @@ export default function RankingTypeTable({ results, rankingType }) {
       <Table.Body>
         {results.map((row) => (
           <SeparateRecordsRow
-            key={row.id}
+            key={row.key}
+            result={row.result}
+            competition={row.competition}
             rankingType={rankingType}
-            result={row}
+            country={row.country}
           />
         ))}
       </Table.Body>
