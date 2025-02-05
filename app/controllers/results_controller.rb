@@ -161,22 +161,8 @@ class ResultsController < ApplicationController
 
     @ranking_timestamp = ComputeAuxiliaryData.successful_start_date || Date.current
 
-    respond_to do |format|
-      format.html {}
-      format.json do
-        cached_data = Rails.cache.fetch ["results-page-api", *@cache_params, @ranking_timestamp] do
-          rows = DbHelper.execute_cached_query(@cache_params, @ranking_timestamp, @query)
-          comp_ids = rows.map { |r| r["competitionId"] }.uniq
-          if @is_by_region
-            rows = compute_rankings_by_region(rows, @continent, @country)
-          end
-          competitions_by_id = Competition.where(id: comp_ids).index_by(&:id).transform_values { |comp| comp.as_json(methods: %w[country], include: [], only: %w[cellName id]) }
-          {
-            rows: rows.as_json, competitionsById: competitions_by_id
-          }
-        end
-        render json: cached_data
-      end
+    respond_from_cache("results-page-api") do |rows|
+      @is_by_region ? compute_rankings_by_region(rows, @continent, @country) : rows
     end
   end
 
@@ -265,22 +251,8 @@ class ResultsController < ApplicationController
 
     @record_timestamp = ComputeAuxiliaryData.successful_start_date || Date.current
 
-    respond_to do |format|
-      format.html {}
-      format.json do
-        cached_data = Rails.cache.fetch ["records-page-api", *@cache_params, @record_timestamp] do
-          rows = DbHelper.execute_cached_query(@cache_params, @record_timestamp, @query)
-          comp_ids = rows.map { |r| r["competitionId"] }.uniq
-          if @is_slim || @is_separate
-            rows = compute_slim_or_separate_records(rows)
-          end
-          competitions_by_id = Competition.where(id: comp_ids).index_by(&:id).transform_values { |comp| comp.as_json(methods: %w[country], include: [], only: %w[cellName id]) }
-          {
-            rows: rows.as_json, competitionsById: competitions_by_id
-          }
-        end
-        render json: cached_data
-      end
+    respond_from_cache("records-page-api") do |rows|
+      @is_slim || @is_separate ? compute_slim_or_separate_records(rows) : rows
     end
   end
 
@@ -456,5 +428,30 @@ class ResultsController < ApplicationController
     first_country_index = first_continent_index + continents_rows.length
     rows_to_display = world_rows + continents_rows + countries_rows
     [rows_to_display, first_continent_index, first_country_index]
+  end
+
+  private def respond_from_cache(key_prefix, &)
+    respond_to do |format|
+      format.html {}
+      format.json do
+        cached_data = Rails.cache.fetch [key_prefix, *@cache_params, @record_timestamp] do
+          rows = DbHelper.execute_cached_query(@cache_params, @record_timestamp, @query)
+
+          # First, extract unique competitions
+          comp_ids = rows.map { |r| r["competitionId"] }.uniq
+          competitions_by_id = Competition.where(id: comp_ids)
+                                          .index_by(&:id)
+                                          .transform_values { |comp| comp.as_json(methods: %w[country], include: [], only: %w[cellName id]) }
+
+          # Now that we've remembered all competitions, we can safely transform the rows
+          rows = yield rows if block_given?
+
+          {
+            rows: rows.as_json, competitionsById: competitions_by_id
+          }
+        end
+        render json: cached_data
+      end
+    end
   end
 end
