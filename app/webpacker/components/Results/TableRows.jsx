@@ -30,6 +30,7 @@ export const resultsFiveWideColumn = {
   accessorKey: 'result',
   header: I18n.t('results.table_elements.solves'),
   colSpan: 5,
+  isMultiAttemptsHack: true,
   cell: ({ getValue }) => {
     const result = getValue();
 
@@ -76,11 +77,7 @@ export const representingColumn = {
 export const attemptResultColumn = {
   accessorKey: 'result.value',
   header: I18n.t('results.table_elements.result'),
-  cell: ({ row, getValue }) => (
-    <Table.Cell>
-      {formatAttemptResult(getValue(), row.original.result.eventId)}
-    </Table.Cell>
-  ),
+  cell: ({ row, getValue }) => formatAttemptResult(getValue(), row.original.result.eventId),
 };
 
 export const personColumn = {
@@ -103,9 +100,8 @@ const eventColumn = {
 export const rankColumn = {
   accessorKey: 'rank',
   header: '#',
-  cell: ({ getValue }) => (
-    <Table.Cell textAlign="center">{getValue()}</Table.Cell>
-  ),
+  textAlign: 'center',
+  cell: ({ getValue }) => getValue(),
 };
 
 export const slimConfig = [
@@ -122,11 +118,7 @@ export const slimConfig = [
   {
     accessorKey: 'single.value',
     header: I18n.t('common.single'),
-    cell: ({ row, getValue }) => (
-      <Table.Cell>
-        {formatAttemptResult(getValue(), row.original.single.eventId)}
-      </Table.Cell>
-    ),
+    cell: ({ row, getValue }) => formatAttemptResult(getValue(), row.original.single.eventId),
   },
   {
     accessorKey: 'single.eventId',
@@ -137,29 +129,24 @@ export const slimConfig = [
     accessorFn: (res) => res.average?.value,
     header: I18n.t('common.average'),
     cell: ({ row, getValue }) => (
-      <Table.Cell>
-        {getValue() && formatAttemptResult(getValue(), row.original.average?.eventId)}
-      </Table.Cell>
+      getValue() && formatAttemptResult(getValue(), row.original.average?.eventId)
     ),
   },
   {
     accessorFn: (res) => res.average?.personName,
     header: I18n.t('results.table_elements.name'),
-    cell: ({ row, getValue }) => {
-      if (getValue() === undefined) return <Table.Cell />;
-
-      return (
-        <PersonCell
-          personId={row.original.average?.personId}
-          personName={getValue()}
-        />
-      );
-    },
+    cell: ({ row, getValue }) => getValue && (
+      <PersonCell
+        personId={row.original.average?.personId}
+        personName={getValue()}
+      />
+    ),
   },
   {
     accessorFn: (res) => res.average,
     header: I18n.t('results.table_elements.solves'),
     colSpan: 5,
+    isMultiAttemptsHack: true,
     cell: ({ getValue }) => {
       const result = getValue();
 
@@ -192,9 +179,7 @@ export const historyConfig = (isMixed) => [
   {
     accessorKey: 'result.start_date',
     header: I18n.t('results.table_elements.date_circa'),
-    cell: ({ getValue }) => (
-      <Table.Cell>{DateTime.fromISO(getValue()).toFormat('MMM dd, yyyy')}</Table.Cell>
-    ),
+    cell: ({ getValue }) => DateTime.fromISO(getValue()).toFormat('MMM dd, yyyy'),
   },
   isMixed && eventColumn,
   personColumn,
@@ -202,18 +187,16 @@ export const historyConfig = (isMixed) => [
     accessorKey: 'result.value',
     header: I18n.t('common.single'),
     cell: ({ row, getValue }) => (
-      <Table.Cell>
-        {row.original.result.type === 'single' && formatAttemptResult(getValue(), row.original.result.eventId)}
-      </Table.Cell>
+      row.original.result.type === 'single'
+        && formatAttemptResult(getValue(), row.original.result.eventId)
     ),
   },
   {
     accessorKey: 'result.value',
     header: I18n.t('common.average'),
     cell: ({ row, getValue }) => (
-      <Table.Cell>
-        {row.original.result.type === 'average' && formatAttemptResult(getValue(), row.original.result.eventId)}
-      </Table.Cell>
+      row.original.result.type === 'average'
+        && formatAttemptResult(getValue(), row.original.result.eventId)
     ),
   },
   regionColumn,
@@ -225,9 +208,7 @@ export const mixedRecordsConfig = [
   {
     accessorKey: 'result.type',
     header: I18n.t('results.selector_elements.type_selector.type'),
-    cell: ({ getValue }) => (
-      <Table.Cell>{I18n.t(`results.selector_elements.type_selector.${getValue()}`)}</Table.Cell>
-    ),
+    cell: ({ getValue }) => I18n.t(`results.selector_elements.type_selector.${getValue()}`),
   },
   personColumn,
   attemptResultColumn,

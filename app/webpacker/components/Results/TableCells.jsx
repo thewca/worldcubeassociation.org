@@ -8,11 +8,11 @@ import { events } from '../../lib/wca-data.js.erb';
 
 export function CountryCell({ country }) {
   return (
-    <Table.Cell textAlign="left">
+    <>
       {country.iso2 && <CountryFlag iso2={country.iso2} />}
       {' '}
       {country.name}
-    </Table.Cell>
+    </>
   );
 }
 
@@ -20,8 +20,10 @@ export function AttemptsCells({
   attempts, bestResultIndex, worstResultIndex, eventId,
 }) {
   return attempts.map((a, i) => (
-    // One Cell per Solve of an Average
-    <Table.Cell>
+    // One Cell per Solve of an Average. The exact same result may occur multiple times
+    //   in the same average (think FMC), so we use the iteration index as key.
+    // eslint-disable-next-line react/no-array-index-key
+    <Table.Cell key={`attempt-${a}-${i}`}>
       {attempts.filter(Boolean).length === 5
       && (i === bestResultIndex || i === worstResultIndex) ? (
           `(${formatAttemptResult(a, eventId)})`
@@ -40,28 +42,26 @@ export function CompetitionCell({ competition, compatIso2 }) {
   const iso2 = compatIso2 || competition.country.iso2;
 
   return (
-    <Table.Cell>
+    <>
       <CountryFlag iso2={iso2} />
       {' '}
       <a href={competitionUrl(competition.id)}>{competition.cellName}</a>
-    </Table.Cell>
+    </>
   );
 }
 
 export function PersonCell({ personId, personName }) {
   return (
-    <Table.Cell>
-      <a href={personUrl(personId)}>{personName}</a>
-    </Table.Cell>
+    <a href={personUrl(personId)}>{personName}</a>
   );
 }
 
 export function EventCell({ eventId }) {
   return (
-    <Table.Cell>
+    <>
       <EventIcon id={eventId} />
       {' '}
       {events.byId[eventId].name}
-    </Table.Cell>
+    </>
   );
 }

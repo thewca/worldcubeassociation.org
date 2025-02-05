@@ -28,7 +28,19 @@ export default function DataTable({ rows, config }) {
         <Table.Body>
           {table.getRowModel().rows.map((row) => (
             <Table.Row key={row.id}>
-              {row.getVisibleCells().map((cell) => flexRender(cell.column.columnDef.cell, cell.getContext()))}
+              {row.getVisibleCells().map((cell) => (
+                cell.column.columnDef.isMultiAttemptsHack
+                  ? (
+                    <React.Fragment key={cell.id}>
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                    </React.Fragment>
+                  )
+                  : (
+                    <Table.Cell key={cell.id}>
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                    </Table.Cell>
+                  )
+              ))}
             </Table.Row>
           ))}
         </Table.Body>
