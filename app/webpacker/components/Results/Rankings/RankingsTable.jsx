@@ -13,7 +13,7 @@ import {
   regionColumn,
   representingColumn,
   resultsFiveWideColumn,
-} from '../TableRows';
+} from '../TableColumns';
 
 function getCountryOrContinent(result, firstContinentIndex, firstCountryIndex, index) {
   if (index < firstContinentIndex) {

@@ -3,15 +3,15 @@ import { Segment } from 'semantic-ui-react';
 import React from 'react';
 import { getRecords } from '../api/records';
 import Loading from '../../Requests/Loading';
-import { augmentApiResults } from './utils';
 import GroupedEventsTable from './GroupedEventsTable';
 import GroupedRankingTypesTable from './GroupedRankingTypesTable';
 import {
+  augmentApiResults,
   historyConfig,
   mixedRecordsConfig,
   separateRecordsConfig,
   slimConfig,
-} from '../TableRows';
+} from './utils';
 import DataTable from '../DataTable';
 
 function SlimRecordsTable({ results }) {
