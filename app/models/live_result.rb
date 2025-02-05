@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class LiveResult < ApplicationRecord
-  has_many :live_attempts, -> { where(replaced_by_id: nil).order(:attempt_number) }
+  has_many :live_attempts, -> { where(replaced_by: nil).order(:attempt_number) }
 
   after_save :notify_users
 
@@ -42,7 +42,7 @@ class LiveResult < ApplicationRecord
   end
 
   def complete?
-    live_attempts.count == round.format.expected_solve_count
+    live_attempts.where.not(result: 0).count == round.format.expected_solve_count
   end
 
   private

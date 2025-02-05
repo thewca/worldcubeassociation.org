@@ -3,9 +3,9 @@
 class CreateLiveResultTables < ActiveRecord::Migration[7.2]
   def change
     create_table :live_results do |t|
-      t.references :registration, null: false, foreign_key: { to_table: :registrations }, index: true
-      t.references :round, null: false, foreign_key: { to_table: :rounds }, index: true
-      t.references :entered_by, null: false, foreign_key: { to_table: :users }
+      t.references :registration, null: false, index: true
+      t.references :round, null: false, index: true
+      t.references :entered_by, type: :integer, null: false, foreign_key: { to_table: :users }
       t.datetime :entered_at, null: false
       t.integer :ranking
       t.integer :best, null: false
@@ -23,7 +23,7 @@ class CreateLiveResultTables < ActiveRecord::Migration[7.2]
       t.integer :result, null: false
       t.integer :attempt_number, null: false
       t.references :replaced_by, foreign_key: { to_table: :live_attempts }
-      t.references :live_result, null: false, foreign_key: { to_table: :live_results }
+      t.references :live_result, null: false
       t.timestamps
     end
   end
