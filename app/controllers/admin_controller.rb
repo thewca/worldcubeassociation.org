@@ -423,7 +423,8 @@ class AdminController < ApplicationController
   end
 
   def complete_persons
-    @competition_ids = competition_list_from_string(params.fetch(:competition_ids, ""))
+    @competition_ids_string = params.fetch(:competition_ids, "")
+    @competition_ids = competition_list_from_string(@competition_ids_string)
     @persons_to_finish = FinishUnfinishedPersons.search_persons(@competition_ids)
 
     if @persons_to_finish.empty?

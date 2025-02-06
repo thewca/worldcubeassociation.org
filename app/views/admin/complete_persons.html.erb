@@ -3,7 +3,7 @@
 <div class="container">
   <h2>
     <%= yield(:title) %>
-    <%= link_to "Go back", panel_page_path(id: User.panel_pages[:createNewComers], competition_ids: @competition_ids.join(',')), class: "btn btn-default" %>
+    <%= link_to "Go back", panel_page_path(id: User.panel_pages[:createNewComers], competition_ids: @competition_ids_string), class: "btn btn-default" %>
   </h2>
 
   <% if @competition_ids.present? %>
@@ -17,7 +17,7 @@
   <% end %>
 
   <%= simple_form_for :person_completions, url: admin_complete_persons_path do |f| %>
-    <%= f.hidden_field :competition_ids, value: @competition_ids %>
+    <%= f.hidden_field :competition_ids, value: @competition_ids_string %>
 
     <%= wca_table table_class: 'wca-persons', striped: false, greedy: false do %>
       <thead>
@@ -114,7 +114,7 @@
     <% end %>
     <%= f.input :continue_batch, as: :boolean, label: "Continue with the next batch of newcomers if there are more pending entries", hint: "If you are redirected to the 'Create Newcomers' entry point, it means that there are no more pending entries.", input_html: { checked: @competition_ids.present? } %>
     <%= f.button :submit, value: "Submit changes!", class: "btn-primary" %>
-    <%= link_to "Go back", panel_page_path(id: User.panel_pages[:createNewComers], competition_ids: @competition_ids), class: "btn btn-default" %>
+    <%= link_to "Go back", panel_page_path(id: User.panel_pages[:createNewComers], competition_ids: @competition_ids_string), class: "btn btn-default" %>
   <% end %>
 </div>
 

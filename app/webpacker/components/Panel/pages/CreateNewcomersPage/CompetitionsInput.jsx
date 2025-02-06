@@ -10,7 +10,7 @@ import useInputState from '../../../../lib/hooks/useInputState';
 
 export default function CompetitionsInput() {
   const [queryParams] = useQueryParams();
-  const competitionIdsFromQuery = queryParams?.competition_ids?.split(',');
+  const competitionIdsFromQuery = queryParams?.competition_ids?.split(',').filter(Boolean);
   const [competitionIds, setCompetitionIds] = useInputState(competitionIdsFromQuery || []);
 
   return (
@@ -30,7 +30,7 @@ export default function CompetitionsInput() {
       <Button
         primary
         size="big"
-        href={viewUrls.admin.completePersons(competitionIds.length > 0 ? competitionIds : null)}
+        href={viewUrls.admin.completePersons(competitionIds)}
       >
         Check newcomers
       </Button>
