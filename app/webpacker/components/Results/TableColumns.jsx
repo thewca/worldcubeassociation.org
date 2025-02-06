@@ -23,8 +23,12 @@ function resultAttempts(result) {
 
   const validAttempts = definedAttempts.filter((res) => res !== 0);
   const completedAttempts = validAttempts.filter((res) => res > 0);
+  const uncompletedAttempts = validAttempts.filter((res) => res < 0);
 
-  const worstResult = _.max(completedAttempts);
+  // DNF/DNS values are very small. If all solves were successful,
+  //   then `uncompletedAttempts` is empty and the min is `undefined`,
+  //   which means we fall back to the actually slowest value.
+  const worstResult = _.min(uncompletedAttempts) || _.max(validAttempts);
   const bestResult = _.min(completedAttempts);
 
   const bestResultIndex = definedAttempts.indexOf(bestResult);
