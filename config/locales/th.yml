@@ -974,6 +974,8 @@ th:
       size_too_small: 'ขนาดเล็กเกินไป (ควรมีขนาดมากกว่า %{file_size})'
       #original_hash: a2a43b3
       size_too_big: 'ใหญ่เกินไป (ควรมีขนาดไม่เกิน %{file_size})'
+      #original_hash: de76004
+      no_permission: คุณไม่มีสิทธิ์ในการเข้าถึงหน้านี้
   devise:
     passwords:
       edit:
@@ -2371,6 +2373,8 @@ th:
         amount_rather_high: >-
           คุณกำลังจะชำระเงินอย่างน้อยสองเท่าของจำนวนเงินที่จำเป็นสำหรับการสมัครของคุณ
       errors:
+        #original_hash: c80ec45
+        registration_closed: การสมัครการแข่งขันปิดลงแล้ว - ไม่อนุญาตให้ชำระเงินใด ๆ เพิ่มเติมอีก
         #original_hash: 166d48c
         already_paid: การเปลี่ยนแปลงไม่สามารถทำได้ เนื่องจากค่าสมัครได้ถูกชำระแล้ว
         #original_hash: f10c80c
