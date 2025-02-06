@@ -27,7 +27,6 @@ export function augmentResults(results, competitionsById) {
       result,
       competition,
       country,
-      key: `${result.id}-${result.type}`,
     };
   });
 }
