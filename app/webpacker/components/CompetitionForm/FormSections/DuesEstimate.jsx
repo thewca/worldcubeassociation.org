@@ -24,6 +24,7 @@ export default function DuesEstimate({
   }, CALCULATE_DUES_QUERY_CLIENT);
 
   const { dues_value: duesValue } = data?.data || {};
+  const totalDues = (duesValue * competitorCount || 0) / currencyInfo.subunitToUnit;
 
   if (isLoading) return <Loading />;
   if (isError) return <Errored error="Dues fetching failed..." />;
@@ -43,7 +44,12 @@ export default function DuesEstimate({
           onChange={setCompetitorCount}
         />
         <p>
-          {`Dues for ${competitorCount} competitors (approximately): ${currencyInfo?.symbol || ''}${(duesValue * competitorCount).toFixed(2)}`}
+          {`Dues for ${competitorCount} competitors (approximately): ${
+            totalDues.toLocaleString(
+              undefined, // undefined will use the browser's default locale
+              { style: 'currency', currency: currencyCode },
+            )
+          }`}
         </p>
       </Modal.Content>
     </Modal>
