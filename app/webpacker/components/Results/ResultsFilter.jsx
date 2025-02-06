@@ -70,7 +70,7 @@ export default function ResultsFilter({
                 >
                   {I18n.t('results.selector_elements.type_selector.single')}
                 </Button>
-                { event !== '333mbf' && <Button active={rankingType === 'average'} onClick={() => setRankingType('average')}>{I18n.t('results.selector_elements.type_selector.average')}</Button>}
+                {event !== '333mbf' && <Button active={rankingType === 'average'} onClick={() => setRankingType('average')}>{I18n.t('results.selector_elements.type_selector.average')}</Button>}
               </ButtonGroup>
             </Form.Field>
           )}
