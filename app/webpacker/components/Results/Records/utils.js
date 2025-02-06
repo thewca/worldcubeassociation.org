@@ -16,8 +16,10 @@ import {
   eventColumn,
 } from '../TableColumns';
 
-export function augmentResults(results, competitionsById) {
+function augmentResults(results, competitionsById) {
   return results.map((result) => {
+    // This happens particularly during "Slim" view augmenting,
+    //   where we iterate over [single, average] tuples and the average does not exist.
     if (result === null) return null;
 
     const competition = competitionsById[result.competitionId];
