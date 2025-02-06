@@ -87,7 +87,7 @@ export default function PaymentStep({
     setIsLoading(false);
   };
 
-  if (!competitionInfo['registration_currently_open?']) {
+  if (new Date() > new Date(competitionInfo['registration_close'])) {
     return (
       <Message color="red">{I18n.t('registrations.payment_form.errors.registration_closed')}</Message>
     );
