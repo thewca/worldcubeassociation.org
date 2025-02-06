@@ -1,5 +1,14 @@
 import I18n from '../../../lib/i18n';
 import { continents, countries } from '../../../lib/wca-data.js.erb';
+import {useMemo} from "react";
+import {
+  attemptResultColumn,
+  competitionColumn,
+  personColumn,
+  rankColumn,
+  regionColumn,
+  representingColumn, resultsFiveWideColumn
+} from "../TableColumns";
 
 function getCountryOrContinent(result, firstContinentIndex, firstCountryIndex, index) {
   if (index < firstContinentIndex) {
@@ -37,3 +46,12 @@ export function mapRankingsData(data, isByRegion) {
     }];
   }, []);
 }
+
+export const rankingsConfig = (show, isAverage) => [
+  show === 'by region' ? regionColumn : rankColumn,
+  personColumn,
+  attemptResultColumn,
+  show !== 'by region' && representingColumn,
+  competitionColumn,
+  isAverage && resultsFiveWideColumn,
+].filter(Boolean);
