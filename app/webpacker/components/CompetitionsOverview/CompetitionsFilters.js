@@ -162,7 +162,7 @@ function TimeOrderButtonGroup({ filterState, dispatchFilter }) {
   return (
     <>
       <label htmlFor="state">{I18n.t('competitions.index.state')}</label>
-      <Button.Group id="state" size="large" primary>
+      <Button.Group id="state" size="small" compact primary>
         <Button
           name="state"
           id="present"
