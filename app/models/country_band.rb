@@ -2,13 +2,15 @@
 
 class CountryBand < ApplicationRecord
   belongs_to :country, foreign_key: :iso2, primary_key: :iso2
+  has_many :country_band_details, foreign_key: :number, primary_key: :number
   validates_inclusion_of :iso2, in: Country::WCA_COUNTRY_ISO_CODES
+  validates_inclusion_of :number, in: (0..5).to_a
 
   def country
     Country.find_by_iso2(self.iso2)
   end
 
   def active_country_band_detail
-    CountryBandDetail.active.find_by(number: self.number)
+    country_band_details.active.first
   end
 end
