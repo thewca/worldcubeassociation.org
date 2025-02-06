@@ -1,14 +1,14 @@
 import I18n from '../../../lib/i18n';
 import { continents, countries } from '../../../lib/wca-data.js.erb';
-import {useMemo} from "react";
 import {
   attemptResultColumn,
   competitionColumn,
   personColumn,
   rankColumn,
   regionColumn,
-  representingColumn, resultsFiveWideColumn
-} from "../TableColumns";
+  representingColumn,
+  resultsFiveWideColumn,
+} from '../TableColumns';
 
 function getCountryOrContinent(result, firstContinentIndex, firstCountryIndex, index) {
   if (index < firstContinentIndex) {
