@@ -67,7 +67,7 @@ export default function RegistrationActions({
     .map((userId) => userEmailMap[userId])
     .join(',');
 
-  const changeStatus = (attendees, status) => {
+  const changeStatus = useCallback((attendees, status) => {
     updateRegistrationMutation(
       {
         requests: attendees.map((attendee) => (
@@ -85,12 +85,14 @@ export default function RegistrationActions({
         },
       },
     );
-  };
+  }, [competitionInfo.id]);
 
-  const moveToWaitingList = (attendees) => {
+  const moveToWaitingList = useCallback((attendees) => {
+    const registrationsByUserId = _.groupBy(registrations, 'user_id');
+
     const attendeesWithRegistrations = attendees
       .map((userId) => {
-        const registration = registrations.find((reg) => reg.user_id === userId);
+        const registration = registrationsByUserId[userId]?.[0];
         return {
           userId,
           registration,
@@ -98,20 +100,15 @@ export default function RegistrationActions({
         };
       });
 
-    // Sort paid registrations by their payment timestamp
-    const paid = attendeesWithRegistrations.filter(({ paymentUpdatedAt }) => paymentUpdatedAt);
-    // Leave unpaid registrations in the order of selection
-    const unpaid = attendeesWithRegistrations.filter(({ paymentUpdatedAt }) => !paymentUpdatedAt);
+    const [paid, unpaid] = _.partition(attendeesWithRegistrations, ({ paymentUpdatedAt }) => paymentUpdatedAt);
 
     paid.sort((a, b) => {
-      if (!a.paymentUpdatedAt) return 1;
-      if (!b.paymentUpdatedAt) return -1;
       return new Date(a.paymentUpdatedAt) - new Date(b.paymentUpdatedAt);
     });
 
     const combined = paid.concat(unpaid);
     changeStatus(combined.map(({ userId }) => userId), 'waiting_list');
-  };
+  }, [registrations, changeStatus]);
 
   const attemptToApprove = () => {
     const idsToAccept = [...pending, ...cancelled, ...waiting, ...rejected];
