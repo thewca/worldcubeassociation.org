@@ -67,6 +67,32 @@ export default function RegistrationActions({
     .map((userId) => userEmailMap[userId])
     .join(',');
 
+  const moveToWaitingList = (attendees) => {
+    const attendeesWithRegistrations = attendees
+      .map((user_id) => {
+        const registration = registrations.find((reg) => reg.user_id === user_id);
+        return {
+          user_id,
+          registration,
+          paymentUpdatedAt: registration?.payment?.updated_at || null,
+        };
+      });
+
+    // Sort paid registrations by their payment timestamp
+    const paid = attendeesWithRegistrations.filter(({ paymentUpdatedAt }) => paymentUpdatedAt);
+    // Leave unpaid registrations in the order of selection
+    const unpaid = attendeesWithRegistrations.filter(({ paymentUpdatedAt }) => !paymentUpdatedAt);
+
+    paid.sort((a, b) => {
+      if (!a.paymentUpdatedAt) return 1; // Push entries without payment to the end
+      if (!b.paymentUpdatedAt) return -1;
+      return new Date(a.paymentUpdatedAt) - new Date(b.paymentUpdatedAt);
+    });
+
+    const combined = paid.concat(unpaid)
+    changeStatus(combined.map(({user_id}) =>  user_id ), "waiting_list");
+  }
+
   const changeStatus = (attendees, status) => {
     updateRegistrationMutation(
       {
@@ -164,10 +190,7 @@ export default function RegistrationActions({
             {anyWaitlistable && (
             <Button
               color="yellow"
-              onClick={() => changeStatus(
-                [...pending, ...cancelled, ...accepted, ...rejected],
-                'waiting_list',
-              )}
+              onClick={() => moveToWaitingList([...pending, ...cancelled, ...accepted, ...rejected])}
             >
               <Icon name="hourglass" />
               {I18n.t('competitions.registration_v2.update.move_waiting')}
