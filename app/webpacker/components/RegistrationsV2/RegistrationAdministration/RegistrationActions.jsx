@@ -68,8 +68,6 @@ export default function RegistrationActions({
     .join(',');
 
   const changeStatus = useCallback((attendees, status) => {
-    console.log("attendees")
-    console.log(attendees)
     updateRegistrationMutation(
       {
         requests: attendees.map((attendee) => (
