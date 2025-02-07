@@ -68,6 +68,8 @@ export default function RegistrationActions({
     .join(',');
 
   const changeStatus = useCallback((attendees, status) => {
+    console.log("attendees")
+    console.log(attendees)
     updateRegistrationMutation(
       {
         requests: attendees.map((attendee) => (
@@ -90,23 +92,18 @@ export default function RegistrationActions({
   const moveToWaitingList = useCallback((attendees) => {
     const registrationsByUserId = _.groupBy(registrations, 'user_id');
 
-    const attendeesWithRegistrations = attendees
-      .map((userId) => {
-        const registration = registrationsByUserId[userId]?.[0];
-        return {
-          userId,
-          registration,
-          paymentUpdatedAt: registration?.payment?.updated_at || null,
-        };
-      });
+    const [paid, unpaid] = _.partition(attendees, (userId) =>
+      registrationsByUserId[userId]?.[0]?.payment?.updated_at
+    );
 
-    const hasPayment = ({ paymentUpdatedAt }) => paymentUpdatedAt;
-    const [paid, unpaid] = _.partition(attendeesWithRegistrations, hasPayment);
-
-    paid.sort((a, b) => new Date(a.paymentUpdatedAt) - new Date(b.paymentUpdatedAt));
+    paid.sort((a, b) => {
+      const dateA = new Date(registrationsByUserId[a][0].payment.updated_at);
+      const dateB = new Date(registrationsByUserId[b][0].payment.updated_at);
+      return dateA - dateB;
+    });
 
     const combined = paid.concat(unpaid);
-    changeStatus(combined.map(({ userId }) => userId), 'waiting_list');
+    changeStatus(combined, 'waiting_list');
   }, [registrations, changeStatus]);
 
   const attemptToApprove = () => {
