@@ -31,6 +31,8 @@ class Round < ApplicationRecord
 
   has_many :wcif_extensions, as: :extendable, dependent: :delete_all
 
+  has_many :live_results
+
   MAX_NUMBER = 4
   validates_numericality_of :number,
                             only_integer: true,
@@ -135,7 +137,8 @@ class Round < ApplicationRecord
                     registration_competition_events: { competition_event_id: competition_event_id }
                   ).includes([:user])
     else
-      previous_round.live_results.where(advancing: true).includes(:registration).map(&:registration)
+      advancing = previous_round.live_results.where(advancing: true).pluck(:registration_id)
+      Registration.find(advancing)
     end
   end
 
