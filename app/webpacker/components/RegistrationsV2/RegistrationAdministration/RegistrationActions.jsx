@@ -90,8 +90,9 @@ export default function RegistrationActions({
   const moveToWaitingList = useCallback((attendees) => {
     const registrationsByUserId = _.groupBy(registrations, 'user_id');
 
-    const [paid, unpaid] = _.partition(attendees, (userId) =>
-      registrationsByUserId[userId]?.[0]?.payment?.updated_at
+    const [paid, unpaid] = _.partition(
+      attendees,
+      (userId) => registrationsByUserId[userId]?.[0]?.payment?.updated_at,
     );
 
     paid.sort((a, b) => {
