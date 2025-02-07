@@ -8,6 +8,8 @@ class LiveAttempt < ApplicationRecord
   # by another Attempt
   belongs_to :replaced_by, class_name: "LiveAttempt", optional: true
 
+  belongs_to :entered_by, class_name: 'User'
+
   validates :result, presence: true
   validates :result, numericality: { only_integer: true }
   validates :attempt_number, numericality: { only_integer: true }

@@ -7,8 +7,6 @@ class LiveResult < ApplicationRecord
 
   belongs_to :registration
 
-  belongs_to :entered_by, class_name: 'User', foreign_key: 'entered_by_id'
-
   belongs_to :round
 
   alias_attribute :result_id, :id
