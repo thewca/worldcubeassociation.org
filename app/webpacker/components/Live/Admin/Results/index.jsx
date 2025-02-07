@@ -1,17 +1,17 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import {
-  Form, Grid, Button, Message, Header, Segment,
+  Grid, Button, Header, Segment,
 } from 'semantic-ui-react';
 import { createConsumer } from '@rails/actioncable';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { events } from '../../../../lib/wca-data.js.erb';
 import WCAQueryClientProvider from '../../../../lib/providers/WCAQueryClientProvider';
 import ResultsTable from '../../components/ResultsTable';
-import AttemptResultField from '../../../EditResult/WCALive/AttemptResultField/AttemptResultField';
 import getRoundResults from '../../api/getRoundResults';
 import submitRoundResults from '../../api/submitRoundResults';
 import updateRoundResults from '../../api/updateRoundResults';
 import { competitionEditRegistrationsUrl, liveUrls } from '../../../../lib/requests/routes.js.erb';
+import AttemptsForm from '../../components/AttemptsForm';
 
 export default function Wrapper({
   roundId, eventId, competitionId, competitors,
@@ -100,7 +100,8 @@ function AddResults({
       {
         received: (data) => {
           queryClient.setQueryData([roundId, 'results'], (oldData) => {
-            const existingIndex = oldData.map((a) => a.registration_id).indexOf(data.registration_id);
+            const existingIndex = oldData.map((a) => a.registration_id)
+              .indexOf(data.registration_id);
             if (existingIndex === -1) {
               return [...oldData, data];
             }
@@ -142,48 +143,35 @@ function AddResults({
     <Segment loading={isLoading || isPendingSubmit || isPendingUpdate}>
       <Grid>
         <Grid.Column width={4}>
-          <Form error={!!error} success={!!success}>
-            <Header>
-              Add New Result
-            </Header>
-
-            {error && <Message error content={error} />}
-            {success && <Message success content={success} />}
-
-            <Form.Select
-              label="Competitor"
-              placeholder="Competitor"
-              value={registrationId}
-              search={(inputs, value) => inputs.filter((d) => d.text.toLowerCase().includes(value.toLowerCase()) || parseInt(value, 10) === d.registrationId)}
-              onChange={handleRegistrationIdChange}
-              options={competitors.toSorted((a, b) => a.id - b.id).map((p) => ({
-                key: p.id,
-                value: p.id,
-                registrationId: p.registration_id,
-                text: `${p.user.name} (${p.registration_id})`,
-              }))}
-            />
-            {Array.from(zeroedArrayOfSize(solveCount).keys()).map((index) => (
-              <AttemptResultField
-                eventId={eventId}
-                key={index}
-                label={`Attempt ${index + 1}`}
-                placeholder="Time in milliseconds or DNF"
-                value={attempts[index] ?? 0}
-                onChange={(value) => handleAttemptChange(index, value)}
-              />
-            ))}
-
-            <Button primary onClick={handleSubmit}>Submit Results</Button>
-          </Form>
+          <AttemptsForm
+            error={error}
+            success={success}
+            registrationId={registrationId}
+            handleAttemptChange={handleAttemptChange}
+            handleSubmit={handleSubmit}
+            handleRegistrationIdChange={handleRegistrationIdChange}
+            header="Add Result"
+            attempts={attempts}
+            competitors={competitors}
+            solveCount={solveCount}
+            eventId={eventId}
+          />
         </Grid.Column>
 
         <Grid.Column width={12}>
           <Button.Group floated="right">
-            <a href={liveUrls.roundResults(competitionId, roundId)}><Button>Results</Button></a>
-            <a href={competitionEditRegistrationsUrl(competitionId)}><Button>Add Competitor</Button></a>
-            <a href={liveUrls.roundResults(competitionId, roundId)}><Button>PDF</Button></a>
-            <a href={liveUrls.checkRoundResultsAdmin(competitionId, roundId)}><Button>Double Check</Button></a>
+            <a href={liveUrls.roundResults(competitionId, roundId)}>
+              <Button>Results</Button>
+            </a>
+            <a href={competitionEditRegistrationsUrl(competitionId)}>
+              <Button>Add Competitor</Button>
+            </a>
+            <a href={liveUrls.roundResults(competitionId, roundId)}>
+              <Button>PDF</Button>
+            </a>
+            <a href={liveUrls.checkRoundResultsAdmin(competitionId, roundId)}>
+              <Button>Double Check</Button>
+            </a>
           </Button.Group>
           <Header>Live Results</Header>
           <ResultsTable

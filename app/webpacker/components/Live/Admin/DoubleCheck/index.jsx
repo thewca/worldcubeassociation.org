@@ -13,6 +13,7 @@ import AttemptResultField from '../../../EditResult/WCALive/AttemptResultField/A
 import updateRoundResults from '../../api/updateRoundResults';
 import getRoundResults from '../../api/getRoundResults';
 import Loading from '../../../Requests/Loading';
+import AttemptsForm from '../../components/AttemptsForm';
 
 export default function Wrapper({
   competitionId, competitors, round,
@@ -75,9 +76,7 @@ function DoubleCheck({
 
   const handleRegistrationIdChange = useCallback((_, { value }) => {
     setRegistrationId(value);
-    const alreadyEnteredResults = results.find((r) => r.registration_id === value);
-    setAttempts(alreadyEnteredResults.attempts.map((a) => a.result));
-  }, [results]);
+  }, []);
 
   const currentCompetitor = useMemo(() => {
     if (results) {
@@ -103,32 +102,17 @@ function DoubleCheck({
       </Grid.Column>
       <Grid.Column width={7}>
         <Segment loading={isPendingUpdate}>
-          <Form>
-            <Form.Select
-              label="Competitor"
-              placeholder="Competitor"
-              value={currentCompetitor.id}
-              search={(inputs, value) => inputs.filter((d) => d.text.toLowerCase().includes(value.toLowerCase()) || parseInt(value, 10) === d.registrationId)}
-              onChange={handleRegistrationIdChange}
-              options={competitors.map((p) => ({
-                key: p.id,
-                value: p.id,
-                registrationId: p.registration_id,
-                text: `${p.user.name} (${p.registration_id})`,
-              }))}
-            />
-            {Array.from(zeroedArrayOfSize(solveCount).keys()).map((index) => (
-              <AttemptResultField
-                eventId={eventId}
-                key={index}
-                label={`Attempt ${index + 1}`}
-                placeholder="Time in milliseconds or DNF"
-                value={attempts[index] ?? 0}
-                onChange={(value) => handleAttemptChange(index, value)}
-              />
-            ))}
-            <Form.Button primary onClick={handleSubmit}>Submit Results</Form.Button>
-          </Form>
+          <AttemptsForm
+            registrationId={currentCompetitor.id}
+            handleAttemptChange={handleAttemptChange}
+            handleSubmit={handleSubmit}
+            handleRegistrationIdChange={handleRegistrationIdChange}
+            header="Double Check Result"
+            attempts={attempts}
+            competitors={competitors}
+            solveCount={solveCount}
+            eventId={eventId}
+          />
         </Segment>
       </Grid.Column>
       <Grid.Column width={1} verticalAlign="middle">
