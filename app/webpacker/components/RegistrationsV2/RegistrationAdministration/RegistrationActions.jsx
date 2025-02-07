@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Button, Icon } from 'semantic-ui-react';
 import { DateTime } from 'luxon';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
@@ -100,11 +100,11 @@ export default function RegistrationActions({
         };
       });
 
-    const [paid, unpaid] = _.partition(attendeesWithRegistrations, ({ paymentUpdatedAt }) => paymentUpdatedAt);
+    const [paid, unpaid] = _.partition(
+      attendeesWithRegistrations, ({ paymentUpdatedAt }) => paymentUpdatedAt
+    );
 
-    paid.sort((a, b) => {
-      return new Date(a.paymentUpdatedAt) - new Date(b.paymentUpdatedAt);
-    });
+    paid.sort((a, b) => new Date(a.paymentUpdatedAt) - new Date(b.paymentUpdatedAt));
 
     const combined = paid.concat(unpaid);
     changeStatus(combined.map(({ userId }) => userId), 'waiting_list');
