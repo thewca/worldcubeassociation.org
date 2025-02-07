@@ -100,9 +100,8 @@ export default function RegistrationActions({
         };
       });
 
-    const [paid, unpaid] = _.partition(attendeesWithRegistrations, ({ paymentUpdatedAt }) =>
-      paymentUpdatedAt
-    );
+    const hasPayment = ({ paymentUpdatedAt }) => paymentUpdatedAt;
+    const [paid, unpaid] = _.partition(attendeesWithRegistrations, hasPayment);
 
     paid.sort((a, b) => new Date(a.paymentUpdatedAt) - new Date(b.paymentUpdatedAt));
 
