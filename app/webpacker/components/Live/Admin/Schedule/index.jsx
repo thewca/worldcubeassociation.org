@@ -19,21 +19,15 @@ export default function TestSchedulePage({ competitionId, rounds }) {
               <List>
                 {r.map((round) => (
                   <List.Item key={round.id}>
-                    {round.is_open ? (
-                      <>
-                        <a href={liveUrls.roundResultsAdmin(competitionId, round.id)}>
-                          {round.name}
-                        </a>
-                        {' '}
-                        (
-                        {round.competitors_live_results_entered}
-                        /
-                        {round.total_registrations}
-                        )
-                      </>
-                    ) : round.name}
+                    <a href={liveUrls.roundResultsAdmin(competitionId, round.id)}>
+                      {round.name}
+                    </a>
                     {' '}
-                    {round['round_can_be_opened?'] && <a href={liveUrls.api.openRound(competitionId, round.id)}>Open Round</a>}
+                    (
+                    {round.competitors_live_results_entered}
+                    /
+                    {round.total_registrations}
+                    )
                   </List.Item>
                 ))}
               </List>

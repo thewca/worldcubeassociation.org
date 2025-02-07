@@ -280,12 +280,6 @@ export const actionUrls = {
   },
 }
 
-export const liveUrls = {
-    api: {
-    openRound: (competitionId, roundId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.live_open_round_path(competition_id: "${competitionId}", round_id: "${roundId}")) %>`,
-  }
-}
-
 export const userPreferencesRoute = `<%= CGI.unescape(Rails.application.routes.url_helpers.profile_edit_path)%>?section=preferences`;
 
 export const pollingRoute = (userId, competitionId) => `<%= EnvConfig.V3_REGISTRATIONS_POLL_URL %>?competition_id=${competitionId}&user_id=${userId}`;
