@@ -2,14 +2,13 @@ import React, {
   useCallback, useEffect, useMemo, useState,
 } from 'react';
 import {
-  Button, Card, Form,
+  Button, Card,
   Grid, Header, Message,
   Segment,
 } from 'semantic-ui-react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { events } from '../../../../lib/wca-data.js.erb';
 import WCAQueryClientProvider from '../../../../lib/providers/WCAQueryClientProvider';
-import AttemptResultField from '../../../EditResult/WCALive/AttemptResultField/AttemptResultField';
 import updateRoundResults from '../../api/updateRoundResults';
 import getRoundResults from '../../api/getRoundResults';
 import Loading from '../../../Requests/Loading';
