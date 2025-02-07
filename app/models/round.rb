@@ -121,6 +121,11 @@ class Round < ApplicationRecord
     Round.name_from_attributes(event, round_type)
   end
 
+  def previous_round
+    return nil if number == 1
+    Round.joins(:competition_event).find_by(competition_event: competition_event, number: number - 1)
+  end
+
   def registrations
     if number == 1
       Registration.joins(:registration_competition_events)
@@ -130,7 +135,6 @@ class Round < ApplicationRecord
                     registration_competition_events: { competition_event_id: competition_event_id }
                   ).includes([:user])
     else
-      previous_round = Round.joins(:competition_event).find_by(competition_event: { competition_id: competition_event.competition_id, event_id: event.id }, number: number - 1)
       previous_round.live_results.where(advancing: true).includes(:registration).map(&:registration)
     end
   end
@@ -145,7 +149,6 @@ class Round < ApplicationRecord
                   .select { |r, registrant_id| r.competing_status == 'accepted' && r.event_ids.include?(event.id) }
                   .map { |r, registrant_id| r.as_json({ include: [:user => { only: [:name], methods: [], include: []}]}).merge("registration_id" => registrant_id) }
     else
-      previous_round = Round.joins(:competition_event).find_by(competition_event: { competition_id: competition_event.competition_id, event_id: event.id }, number: number - 1)
       advancing = previous_round.live_results.where(advancing: true).pluck(:registration_id)
       Registration.where(competition_id: competition_event.competition_id)
                   .includes([:user])
