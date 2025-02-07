@@ -18,10 +18,10 @@ class LiveController < ApplicationController
       return render json: { status: "result already exist" }, status: :unprocessable_entity
     end
 
-    AddLiveResultJob.perform_now({ results: results,
-                                   round_id: round_id,
-                                   registration_id: registration_id,
-                                   entered_by: current_user })
+    AddLiveResultJob.perform_now(results: results,
+                                 round_id: round_id,
+                                 registration_id: registration_id,
+                                 entered_by: current_user)
 
     render json: { status: "ok" }
   end
@@ -33,9 +33,8 @@ class LiveController < ApplicationController
 
     result = LiveResult.includes(:live_attempts).find_by(round: round, registration_id: registration_id)
 
-    unless result.present?
-      return render json: { status: "result does not exist" }, status: :unprocessable_entity
-    end
+
+    return render json: { status: "result does not exist" }, status: :unprocessable_entity unless result.present?
 
     previous_attempts = result.live_attempts
 
@@ -45,7 +44,7 @@ class LiveController < ApplicationController
         same_result
       else
         different_result = previous_attempts.find_by(attempt_number: i)
-        new_result = LiveAttempt.build(result: r, attempt_number: i)
+        new_result = LiveAttempt.build(result: r, attempt_number: i, entered_at: Time.now.utc, entered_by: current_user)
         different_result&.update(replaced_by_id: new_result.id)
         new_result
       end
@@ -54,7 +53,7 @@ class LiveController < ApplicationController
     # TODO: What is the best way to do this?
     r = Result.build({ value1: results[0], value2: results[1], value3: results[2], value4: results[3] || 0, value5: results[4] || 0, event_id: round.event.id, round_type_id: round.round_type_id, format_id: round.format_id })
 
-    result.update(average: r.compute_correct_average, best: r.compute_correct_best, live_attempts: new_attempts, entered_at: Time.now.utc, entered_by: current_user)
+    result.update(average: r.compute_correct_average, best: r.compute_correct_best, live_attempts: new_attempts, last_attempt_entered_at: Time.now.utc)
 
     render json: { status: "ok" }
   end
@@ -65,26 +64,6 @@ class LiveController < ApplicationController
     # TODO: Figure out why this fires a query for every live_attempt
     # LiveAttempt Load (0.6ms)  SELECT `live_attempts`.* FROM `live_attempts` WHERE `live_attempts`.`live_result_id` = 39 AND `live_attempts`.`replaced_by_id` IS NULL ORDER BY `live_attempts`.`attempt_number` ASC
     render json: Round.includes(live_results: [:live_attempts, :round, :event]).find(round_id).live_results
-  end
-
-  def open_round
-    round_id = params.require(:round_id)
-    competition_id = params.require(:competition_id)
-    round = Round.find(round_id)
-
-    if round.is_open?
-      flash[:danger] = "Round is already open"
-      return redirect_to live_schedule_admin_path(competition_id: competition_id)
-    end
-
-    unless round.round_can_be_opened?
-      flash[:danger] = "You can't open this round yet"
-      return redirect_to live_schedule_admin_path(competition_id: competition_id)
-    end
-
-    round.update(is_open: true)
-    flash[:success] = "Successfully opened round"
-    redirect_to live_schedule_admin_path(competition_id: competition_id)
   end
 
   def double_check
