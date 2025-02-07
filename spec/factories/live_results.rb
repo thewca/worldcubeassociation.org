@@ -2,13 +2,12 @@
 
 FactoryBot.define do
   factory :live_result do
-    association :entered_by, factory: [:user, :wca_id]
     association :registration, factory: [:registration]
     round { FactoryBot.create(:round, event_id: '333oh', format_id: 'a') } # Ensure the round exists
 
     best { 3000 }
     average { 5000 }
-    entered_at { Time.now.utc }
+    last_attempt_entered_at { Time.now.utc }
 
     transient do
       attempts_count { 5 }

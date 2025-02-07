@@ -2,6 +2,9 @@
 
 FactoryBot.define do
   factory :live_attempt do
+    association :entered_by, factory: [:user, :wca_id]
+    entered_at { Time.now.utc }
+
     result { 3000 }
     attempt_number { 1 }
 

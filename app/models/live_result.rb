@@ -11,6 +11,8 @@ class LiveResult < ApplicationRecord
 
   belongs_to :round
 
+  alias_attribute :result_id, :id
+
   has_one :event, through: :round
 
   DEFAULT_SERIALIZE_OPTIONS = {
