@@ -134,7 +134,7 @@ class Round < ApplicationRecord
                   .where(
                     competition_id: competition_event.competition_id,
                     competing_status: 'accepted',
-                    registration_competition_events: { competition_event_id: competition_event_id }
+                    registration_competition_events: { competition_event_id: competition_event_id },
                   ).includes([:user])
     else
       advancing = previous_round.live_results.where(advancing: true).pluck(:registration_id)
@@ -150,7 +150,7 @@ class Round < ApplicationRecord
                   .to_enum
                   .with_index(1)
                   .select { |r, registrant_id| r.competing_status == 'accepted' && r.event_ids.include?(event.id) }
-                  .map { |r, registrant_id| r.as_json({ include: [:user => { only: [:name], methods: [], include: []}]}).merge("registration_id" => registrant_id) }
+                  .map { |r, registrant_id| r.as_json({ include: [user: { only: [:name], methods: [], include: [] }] }).merge("registration_id" => registrant_id) }
     else
       advancing = previous_round.live_results.where(advancing: true).pluck(:registration_id)
       Registration.where(competition_id: competition_event.competition_id)
@@ -159,7 +159,7 @@ class Round < ApplicationRecord
                   .to_enum
                   .with_index(1)
                   .select { |r, registrant_id| advancing.include?(r.id) }
-                  .map { |r, registrant_id| r.as_json({ include: [:user => { only: [:name], methods: [], include: []}]}).merge("registration_id" => registrant_id) }
+                  .map { |r, registrant_id| r.as_json({ include: [user: { only: [:name], methods: [], include: [] }] }).merge("registration_id" => registrant_id) }
     end
   end
 

@@ -37,10 +37,6 @@ export default function Wrapper({
   );
 }
 
-function zeroedArrayOfSize(size) {
-  return Array(size).fill(0);
-}
-
 function DoubleCheck({
   competitionId, competitors, round, eventId,
 }) {
@@ -48,7 +44,7 @@ function DoubleCheck({
   const solveCount = event.recommendedFormat().expectedSolveCount;
   const [currentIndex, setCurrentIndex] = useState(0);
   const [registrationId, setRegistrationId] = useState(competitors[0].id);
-  const [attempts, setAttempts] = useState(zeroedArrayOfSize(solveCount));
+  const [attempts, setAttempts] = useState(_.times(solveCount, _.constant(0)));
 
   const { data: results, isLoading } = useQuery({
     queryKey: [round.id, 'results'],
@@ -131,8 +127,10 @@ function DoubleCheck({
             Double-check
           </Card.Content>
           <Card.Description>
-            Here you can iterate over results ordered by entry time (newest first). When doing double-check you can place a
-            scorecard next to the form to quickly compare attempt results. For optimal experience make sure to always put
+            Here you can iterate over results ordered by entry time (newest first).
+            When doing double-check you can place a
+            scorecard next to the form to quickly compare attempt results.
+            For optimal experience make sure to always put
             entered/updated scorecard at the top of the pile.
           </Card.Description>
         </Card>
