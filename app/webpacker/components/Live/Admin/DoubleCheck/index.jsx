@@ -3,7 +3,7 @@ import React, {
 } from 'react';
 import {
   Button, Card, Form,
-  Grid, Header,
+  Grid, Header, Message,
   Segment,
 } from 'semantic-ui-react';
 import { useMutation, useQuery } from '@tanstack/react-query';
@@ -17,9 +17,17 @@ import Loading from '../../../Requests/Loading';
 export default function Wrapper({
   competitionId, competitors, round,
 }) {
+  if (competitors.length === 0) {
+    return (
+      <Message negative>
+        No Results entered yet
+      </Message>
+    );
+  }
+
   return (
     <WCAQueryClientProvider>
-      <Competitors
+      <DoubleCheck
         eventId={round.event.id}
         competitionId={competitionId}
         competitors={competitors}
@@ -33,7 +41,7 @@ function zeroedArrayOfSize(size) {
   return Array(size).fill(0);
 }
 
-function Competitors({
+function DoubleCheck({
   competitionId, competitors, round, eventId,
 }) {
   const event = events.byId[eventId];
