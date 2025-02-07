@@ -104,13 +104,13 @@ export default function RegistrationActions({
     const unpaid = attendeesWithRegistrations.filter(({ paymentUpdatedAt }) => !paymentUpdatedAt);
 
     paid.sort((a, b) => {
-      if (!a.paymentUpdatedAt) return 1; // Push entries without payment to the end
+      if (!a.paymentUpdatedAt) return 1;
       if (!b.paymentUpdatedAt) return -1;
       return new Date(a.paymentUpdatedAt) - new Date(b.paymentUpdatedAt);
     });
 
     const combined = paid.concat(unpaid);
-    changeStatus(combined.map(({ userId }) => userId ), 'waiting_list');
+    changeStatus(combined.map(({ userId }) => userId), 'waiting_list');
   };
 
   const attemptToApprove = () => {
@@ -191,8 +191,8 @@ export default function RegistrationActions({
             <Button
               color="yellow"
               onClick={() => moveToWaitingList(
-                  [...pending, ...cancelled, ...accepted, ...rejected],
-                )}
+                [...pending, ...cancelled, ...accepted, ...rejected],
+              )}
             >
               <Icon name="hourglass" />
               {I18n.t('competitions.registration_v2.update.move_waiting')}
