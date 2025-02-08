@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import { Button, Icon } from 'semantic-ui-react';
 import { DateTime } from 'luxon';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
@@ -67,7 +67,7 @@ export default function RegistrationActions({
     .map((userId) => userEmailMap[userId])
     .join(',');
 
-  const changeStatus = useCallback((attendees, status) => {
+  const changeStatus = (attendees, status) => {
     updateRegistrationMutation(
       {
         requests: attendees.map((attendee) => (
@@ -85,9 +85,9 @@ export default function RegistrationActions({
         },
       },
     );
-  }, [competitionInfo.id]);
+  };
 
-  const moveToWaitingList = useCallback((attendees) => {
+  const moveToWaitingList = (attendees) => {
     const registrationsByUserId = _.groupBy(registrations, 'user_id');
 
     const [paid, unpaid] = _.partition(
@@ -103,7 +103,7 @@ export default function RegistrationActions({
 
     const combined = paid.concat(unpaid);
     changeStatus(combined, 'waiting_list');
-  }, [registrations, changeStatus]);
+  };
 
   const attemptToApprove = () => {
     const idsToAccept = [...pending, ...cancelled, ...waiting, ...rejected];
