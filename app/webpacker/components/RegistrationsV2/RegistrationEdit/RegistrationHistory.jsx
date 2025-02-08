@@ -1,6 +1,6 @@
 import React from 'react';
 import { Header, Popup, Table } from 'semantic-ui-react';
-import {getIsoDateString, getShortTimeString} from '../../../lib/utils/dates';
+import { getIsoDateString, getShortTimeString } from '../../../lib/utils/dates';
 import { events } from '../../../lib/wca-data.js.erb';
 import EventIcon from '../../wca/EventIcon';
 
