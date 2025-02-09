@@ -3,6 +3,8 @@
 class TicketsController < ApplicationController
   include Rails::Pagination
 
+  before_action :authenticate_user!
+
   SORT_WEIGHT_LAMBDAS = {
     createdAt:
       lambda { |ticket| ticket.created_at },
