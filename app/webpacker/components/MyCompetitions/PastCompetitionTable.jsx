@@ -65,7 +65,7 @@ export default function PastCompetitionsTable({
               competitionId={competition.id}
               permissions={permissions}
               isReportPosted={competition['report_posted?']}
-              isPastCompetition={true}
+              isPastCompetition
             />
           </Table.Row>
         ))}
