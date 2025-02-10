@@ -81,6 +81,7 @@ export default function UpcomingCompetitionTable({
             </Table.HeaderCell>
             <Table.HeaderCell />
             <Table.HeaderCell />
+            <Table.HeaderCell />
           </Table.Row>
         </Table.Header>
 
