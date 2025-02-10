@@ -14,8 +14,8 @@ RSpec.describe "WCA Live API" do
       registration = FactoryBot.create(:registration, :accepted, competition: competition)
       FactoryBot.create(:live_result, round: round, registration: registration)
       live_request = {
-        attempts: [111,222,333,444,555],
-        registration_id: registration.id
+        attempts: [111, 222, 333, 444, 555],
+        registration_id: registration.id,
       }
 
       patch update_live_result_path(competition.id, round.id), params: live_request
@@ -24,11 +24,11 @@ RSpec.describe "WCA Live API" do
       result = LiveResult.find_by(round_id: round.id, registration_id: registration.id)
       expect(result).to be_present
 
-      expect(result.live_attempts.map { |l| { attempt_number: l.attempt_number, result: l.result }}).to contain_exactly({ attempt_number: 1, result: 111 },
-                                                            { attempt_number: 2, result: 222 },
-                                                            { attempt_number: 3, result: 333 },
-                                                            { attempt_number: 4, result: 444 },
-                                                            { attempt_number: 5, result: 555 })
+      expect(result.live_attempts.map { |l| { attempt_number: l.attempt_number, result: l.result } }).to contain_exactly({ attempt_number: 1, result: 111 },
+                                                                                                                         { attempt_number: 2, result: 222 },
+                                                                                                                         { attempt_number: 3, result: 333 },
+                                                                                                                         { attempt_number: 4, result: 444 },
+                                                                                                                         { attempt_number: 5, result: 555 })
       expect(result.best).to eq 111
       expect(result.average).to eq 333
     end
@@ -41,8 +41,8 @@ RSpec.describe "WCA Live API" do
       registration = FactoryBot.create(:registration, :accepted, competition: competition)
 
       live_request = {
-        attempts: [111,222,333,444,555],
-        registration_id: registration.id
+        attempts: [111, 222, 333, 444, 555],
+        registration_id: registration.id,
       }
 
       patch update_live_result_path(competition.id, round.id), params: live_request
