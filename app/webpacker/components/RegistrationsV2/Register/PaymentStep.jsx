@@ -17,6 +17,7 @@ import { setMessage } from './RegistrationMessage';
 import Loading from '../../Requests/Loading';
 import I18n from '../../../lib/i18n';
 import useCheckboxState from '../../../lib/hooks/useCheckboxState';
+import { hasPassed } from '../../../lib/utils/dates';
 import AutonumericField from '../../wca/FormBuilder/input/AutonumericField';
 import getPaymentTicket from '../api/payment/get/getPaymentTicket';
 
@@ -86,8 +87,7 @@ export default function PaymentStep({
 
     setIsLoading(false);
   };
-
-  if (!competitionInfo['registration_currently_open?']) {
+  if (hasPassed(competitionInfo.registration_close)) {
     return (
       <Message color="red">{I18n.t('registrations.payment_form.errors.registration_closed')}</Message>
     );

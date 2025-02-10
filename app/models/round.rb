@@ -31,6 +31,8 @@ class Round < ApplicationRecord
 
   has_many :wcif_extensions, as: :extendable, dependent: :delete_all
 
+  has_many :live_results
+
   MAX_NUMBER = 4
   validates_numericality_of :number,
                             only_integer: true,
