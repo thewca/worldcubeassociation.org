@@ -1,4 +1,4 @@
-import { Message, Sticky } from 'semantic-ui-react';
+import { Message } from 'semantic-ui-react';
 import React, { useEffect } from 'react';
 import { useDispatch, useStore } from '../../../lib/providers/StoreProvider';
 import I18n from '../../../lib/i18n';

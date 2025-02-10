@@ -216,6 +216,8 @@ en:
     lunch: "Lunch"
     dinner: "Dinner"
     awards: "Awards"
+    setup: "Setup"
+    teardown: "Teardown"
     misc: "Other"
   #context: Common word used in multiple places on the website
   common:
@@ -243,10 +245,6 @@ en:
     days:
       one: "1 day"
       other: "%{count} days"
-    #context: Key used for the pluralization of "x event(s)" in a sentence like "Couldn't find a competition with these x events"
-    these_events:
-      one: "this event"
-      other: "these %{count} events"
     search_site: "Search site"
     filter: Filter
     delete: Delete
@@ -490,10 +488,6 @@ en:
       #context: for a post
       post:
         body: "Use the &lt;!-- break --&gt; tag to show a preview on the home page. Any post on the home page will show all text before this divider. The actual post will display the full body."
-        sticky: ""
-        unstick_at: ""
-        title: ""
-        tags: ""
         show_on_homepage: "Careful! This is not secure for private data. This is only to prevent cluttering the homepage. Posts that are not shown on the homepage are still accessible to the public via permalink or through tags."
       #context: for a delegate report
       delegate_report:
@@ -588,6 +582,7 @@ en:
       wrong_size: "is the wrong size (should be %{file_size})"
       size_too_small: "is too small (should be at least %{file_size})"
       size_too_big: "is too big (should be at most %{file_size})"
+      no_permission: "You do not have the required permissions to access this page."
   devise:
     #context: Overridden key for sign in
     passwords:
@@ -1293,6 +1288,7 @@ en:
         amount_too_low: "The total amount must be at least the registration fees to be paid."
         amount_rather_high: "You are about to pay at least double the required amount for your registration to proceed."
       errors:
+        registration_closed: "Registration has closed - no further payments are allowed."
         already_paid: "The charge was not placed because the registration fees are already paid."
         not_allowed: "You can't pay for that registration."
         cpi_disconnected: "Tried to confirm a payment but the payment integration was disabled. Please contact the organizers of the competition."
@@ -1553,7 +1549,6 @@ en:
         ongoing_and_upcoming: "Ongoing and upcoming competitions"
         custom: "Competitions in the selected period of time"
         by_announcement: "Competitions sorted by announcement date, newest on top"
-      no_access: "You don't have access to this page!"
       #context: tooltip displayed when hovering
       tooltips:
         #context: the hourglass icon
@@ -1569,13 +1564,12 @@ en:
         recent: "Last %{count} days"
         #context: the registration status icon
         registration:
-          opens_in: "Registration will open in %{duration}"
-          closed: "Registration has closed. Competition starts in %{days}"
+          opens_in: "Registration will open %{relativeDate}."
+          closed: "Registration has closed. Competition will start %{relativeDate}."
           open: "Registration is open!"
-          full: "Competitor limit reached, new registrations will go to the waiting list"
+          full: "Competitor limit reached, new registrations will go to the waiting list."
       no_more_comps: "No more competitions."
       no_comp_found: "No competitions found."
-      no_comp_match: "We didn't find any competitions with %{events}! Try searching for fewer events."
     #context: on the "My competitions" page
     my_competitions_table:
       edit: "Edit"
@@ -1836,13 +1830,14 @@ en:
           title: "Rejected registrations"
           information: "Rejected competitors cannot re-register."
         pending:
-          information: "Pending should only be used for incomplete (eg, unpaid) registrations - please use the Waiting List if your competition is too full to accept new comeptitors."
+          information: "Pending should only be used for incomplete (eg, unpaid) registrations - please use the Waiting List if your competition is too full to accept new competitors."
         payment:
          refunded_status: "Refunded"
          initialized: "Payment process was started on %{date}, but not finished."
          refunded: "Payment was refunded on %{date}."
         psychsheets:
-          go_back: "Go Back"
+          show_me: "Show me"
+          rank: "Rank: %{userPosition}"
         timestamp: "Timestamp"
         comment_and_note: "Comment & Note"
         edit_waiting_list: "Enable Waiting List Edit Mode"

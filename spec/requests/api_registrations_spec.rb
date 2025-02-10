@@ -422,4 +422,18 @@ RSpec.describe 'API Registrations' do
       end
     end
   end
+
+  describe 'GET #payment_ticket' do
+    it 'refuses ticket create request if registration is closed' do
+      closed_comp = FactoryBot.create(:competition, :registration_closed, :with_organizer, :stripe_connected)
+      reg = FactoryBot.create(:registration, :pending, competition: closed_comp)
+
+      headers = { 'Authorization' => fetch_jwt_token(reg.user_id) }
+      get api_v1_registrations_payment_ticket_path(competition_id: closed_comp.id), headers: headers
+
+      body = JSON.parse(response.body)
+      expect(response.status).to eq(403)
+      expect(body).to eq({ error: Registrations::ErrorCodes::REGISTRATION_CLOSED }.with_indifferent_access)
+    end
+  end
 end

@@ -80,4 +80,16 @@ class RegistrationsMailer < ApplicationMailer
                    to: registration.user.email,
                    reply_to: registration.competition.organizers_or_delegates.map(&:email)
   end
+
+  def notify_delegates_of_formerly_banned_user_registration(registration)
+    @registration = registration
+    to = registration.competition.competition_delegates.map(&:user).map(&:email)
+    unless to.empty?
+      mail(
+        to: to,
+        reply_to: UserGroup.teams_committees_group_wic.metadata.email,
+        subject: "A formerly-banned competitor just registered for #{registration.competition.name}",
+      )
+    end
+  end
 end

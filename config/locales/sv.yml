@@ -1317,8 +1317,6 @@ sv:
       polls: Omröstningar
       #original_hash: d3a928c
       results_team: Results Team
-      #original_hash: 4e7afeb
-      results_admin: Admin
       #original_hash: 61074f1
       results_database: Databas
       #original_hash: 54e0548
@@ -2828,7 +2826,7 @@ sv:
       series_registration_warning_html: >-
         Obs: Du kan skicka in anmälningar till alla tävlingar i en
         tävlingsserie, men bara en av anmälningarna kan bekräftas och godkännas.
-        <b>Du kommer bara tillåtas att delta i en tävling i tävlingsserien!<\b>
+        <b>Du kommer bara tillåtas att delta i en tävling i tävlingsserien!</b>
       #original_hash: 9bb1965
       competitor_limit: Gräns för antal tävlande
       #original_hash: 196725e
