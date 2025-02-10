@@ -50,7 +50,7 @@ export function ReportTableCell({
               </a>
             )}
           />
-          { isPastCompetition && !isReportPosted && (permissions.can_edit_delegate_report.scope === '*' || permissions.can_edit_delegate_report.scope.includes(competitionId))
+          { !isReportPosted && (permissions.can_edit_delegate_report.scope === '*' || permissions.can_edit_delegate_report.scope.includes(competitionId))
             && (
             <Popup
               content={I18n.t('competitions.my_competitions_table.edit_report')}
