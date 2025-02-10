@@ -56,8 +56,6 @@ export default function UpcomingCompetitionTable({
   shouldShowRegistrationStatus = true,
   fallbackMessage = null,
 }) {
-  const canViewDelegateReport = permissions.can_view_delegate_report.scope === '*' || competitions.some((c) => permissions.can_view_delegate_report.scope.includes(c.id));
-
   if (competitions.length === 0 && fallbackMessage) {
     return (
       <Message info>
@@ -82,14 +80,7 @@ export default function UpcomingCompetitionTable({
               {I18n.t('competitions.competition_info.date')}
             </Table.HeaderCell>
             <Table.HeaderCell />
-            {canViewDelegateReport && (
-              <>
-                <Table.HeaderCell />
-                <Table.HeaderCell />
-                <Table.HeaderCell />
-              </>
-            )}
-
+            <Table.HeaderCell />
           </Table.Row>
         </Table.Header>
 
@@ -135,7 +126,6 @@ export default function UpcomingCompetitionTable({
                   <ReportTableCell
                     competitionId={competition.id}
                     permissions={permissions}
-                    canViewDelegateReport={canViewDelegateReport}
                   />
                 </Table.Row>
               )}

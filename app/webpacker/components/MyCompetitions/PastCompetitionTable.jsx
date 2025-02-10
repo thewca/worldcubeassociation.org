@@ -13,7 +13,6 @@ export default function PastCompetitionsTable({
   permissions,
   fallbackMessage = null,
 }) {
-  const canViewDelegateReport = permissions.can_view_delegate_report.scope === '*' || competitions.some((c) => permissions.can_view_delegate_report.scope.includes(c.id));
   if (competitions.length === 0 && fallbackMessage) {
     return (
       <Message info>
@@ -62,7 +61,12 @@ export default function PastCompetitionsTable({
                 />
               )}
             </Table.Cell>
-            <ReportTableCell competitionId={competition.id} permissions={permissions} isReportPosted={competition['report_posted?']} canViewDelegateReport={canViewDelegateReport} />
+            <ReportTableCell
+              competitionId={competition.id}
+              permissions={permissions}
+              isReportPosted={competition['report_posted?']}
+              isPastCompetition={true}
+            />
           </Table.Row>
         ))}
       </Table.Body>
