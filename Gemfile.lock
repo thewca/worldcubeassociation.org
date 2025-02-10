@@ -305,8 +305,8 @@ GEM
     faraday-mashify (0.1.1)
       faraday (~> 2.0)
       hashie
-    faraday-multipart (1.0.4)
-      multipart-post (~> 2)
+    faraday-multipart (1.1.0)
+      multipart-post (~> 2.0)
     faraday-net_http (3.4.0)
       net-http (>= 0.5.0)
     faraday-retry (2.2.1)
@@ -316,7 +316,8 @@ GEM
     fugit (1.11.1)
       et-orbi (~> 1, >= 1.2.11)
       raabro (~> 1.4)
-    gli (2.21.5)
+    gli (2.22.2)
+      ostruct
     glob (0.4.0)
     globalid (1.2.1)
       activesupport (>= 6.1)
@@ -741,12 +742,13 @@ GEM
     simplecov_json_formatter (0.1.4)
     simpleidn (0.2.1)
       unf (~> 0.1.4)
-    slack-ruby-client (2.4.0)
+    slack-ruby-client (2.5.0)
       faraday (>= 2.0)
       faraday-mashify
       faraday-multipart
       gli
       hashie
+      logger
     snaky_hash (2.0.1)
       hashie
       version_gem (~> 1.1, >= 1.1.1)
