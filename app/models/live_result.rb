@@ -4,7 +4,7 @@ class LiveResult < ApplicationRecord
   has_many :live_attempts, -> { where(replaced_by: nil).order(:attempt_number) }
 
   after_create :recompute_ranks
-  after_update :recompute_ranks, :if => :should_recompute?
+  after_update :recompute_ranks, if: :should_recompute?
 
   after_save :notify_users
 
