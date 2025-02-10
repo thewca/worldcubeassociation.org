@@ -95,6 +95,12 @@ class Competition < ApplicationRecord
     restricted: 2,
   }, prefix: true
 
+  enum cancellation_restrictions: {
+    no_restrictions: 0,
+    restrict_accepted: 1,
+    restrict_any_paid: 2
+  }
+
   NEW_REG_SYSTEM_DEFAULT = :v3
 
   enum :registration_version, [:v1, :v2, :v3], prefix: true, default: NEW_REG_SYSTEM_DEFAULT
