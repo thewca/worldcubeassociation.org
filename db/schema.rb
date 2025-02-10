@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_02_02_154917) do
+ActiveRecord::Schema[7.2].define(version: 2025_02_10_154917) do
   create_table "Competitions", id: { type: :string, limit: 32, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", limit: 50, default: "", null: false
     t.string "cityName", limit: 50, default: "", null: false
@@ -791,7 +791,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_02_154917) do
     t.bigint "replaced_by_id"
     t.datetime "entered_at", null: false
     t.integer "entered_by_id", null: false
-    t.bigint "live_result_id", null: false
+    t.bigint "live_result_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["entered_by_id"], name: "index_live_attempts_on_entered_by_id"

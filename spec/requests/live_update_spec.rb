@@ -6,21 +6,20 @@ RSpec.describe "WCA Live API" do
   describe "POST #add_result" do
     let!(:delegate) { FactoryBot.create :delegate }
 
-    it "Adds the Live Result Correctly" do
+    it "Updates a Live Result Correctly" do
       sign_in delegate
 
       competition = FactoryBot.create(:competition, event_ids: ["333"], delegates: [delegate])
       round = FactoryBot.create(:round, competition: competition, event_id: "333")
       registration = FactoryBot.create(:registration, :accepted, competition: competition)
-
+      FactoryBot.create(:live_result, round: round, registration: registration)
       live_request = {
         attempts: [111,222,333,444,555],
         registration_id: registration.id
       }
 
-      post add_live_result_path(competition.id, round.id), params: live_request
+      patch update_live_result_path(competition.id, round.id), params: live_request
       expect(response).to be_successful
-      perform_enqueued_jobs
 
       result = LiveResult.find_by(round_id: round.id, registration_id: registration.id)
       expect(result).to be_present
@@ -34,19 +33,19 @@ RSpec.describe "WCA Live API" do
       expect(result.average).to eq 333
     end
 
-    it "Can't add result if it already exist" do
+    it "Can't update result if it doesn't exist" do
       sign_in delegate
 
       competition = FactoryBot.create(:competition, event_ids: ["333"], delegates: [delegate])
       round = FactoryBot.create(:round, competition: competition, event_id: "333")
       registration = FactoryBot.create(:registration, :accepted, competition: competition)
-      FactoryBot.create(:live_result, round: round, registration: registration)
+
       live_request = {
         attempts: [111,222,333,444,555],
         registration_id: registration.id
       }
 
-      post add_live_result_path(competition.id, round.id), params: live_request
+      patch update_live_result_path(competition.id, round.id), params: live_request
       expect(response).not_to be_successful
     end
   end
