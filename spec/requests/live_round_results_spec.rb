@@ -3,10 +3,10 @@
 require "rails_helper"
 
 RSpec.describe "WCA Live API" do
-  describe "POST #add_result" do
+  describe "GET #round_results" do
     let!(:delegate) { FactoryBot.create :delegate }
 
-    it "Adds the Live Result Correctly" do
+    it "Returns the Live Reults correctly" do
       sign_in delegate
 
       competition = FactoryBot.create(:competition, event_ids: ["333"], delegates: [delegate])
