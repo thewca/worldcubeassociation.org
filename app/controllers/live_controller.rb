@@ -18,10 +18,7 @@ class LiveController < ApplicationController
       return render json: { status: "result already exist" }, status: :unprocessable_entity
     end
 
-    AddLiveResultJob.perform_now(results: results,
-                                 round_id: round_id,
-                                 registration_id: registration_id,
-                                 entered_by: current_user)
+    AddLiveResultJob.perform_later(results, round_id, registration_id, current_user)
 
     render json: { status: "ok" }
   end
