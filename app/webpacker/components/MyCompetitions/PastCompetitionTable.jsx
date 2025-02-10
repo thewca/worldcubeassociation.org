@@ -38,13 +38,6 @@ export default function PastCompetitionsTable({
           <Table.HeaderCell />
           <Table.HeaderCell />
           <Table.HeaderCell />
-          {canViewDelegateReport && (
-            <>
-              <Table.HeaderCell />
-              <Table.HeaderCell />
-              <Table.HeaderCell />
-            </>
-          )}
         </Table.Row>
       </Table.Header>
 
