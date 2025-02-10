@@ -94,6 +94,7 @@ export function numberOfDaysAfter(competition, refDate) {
 
   const numberOfDays = parsedStartDate.diff(parsedRefDate, 'days').days;
 
+  // Floor is used here to ensure partial days are rounded down to the nearest whole number
   return Math.floor(Math.abs(numberOfDays));
 }
 
