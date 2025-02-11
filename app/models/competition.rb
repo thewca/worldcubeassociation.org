@@ -95,7 +95,7 @@ class Competition < ApplicationRecord
     restricted: 2,
   }, prefix: true
 
-  enum :cancellation_restrictions, [:no_restrictions, :restrict_accepted, :restrict_paid]
+  enum :cancellation_restrictions, [:no_restrictions, :restrict_accepted, :restrict_paid], prefix: :registration_cancel
 
   NEW_REG_SYSTEM_DEFAULT = :v3
 
@@ -1179,11 +1179,6 @@ class Competition < ApplicationRecord
   def registration_edits_allowed?
     self.allow_registration_edits &&
       (!has_event_change_deadline_date? || !event_change_deadline_date.present? || event_change_deadline_date > DateTime.now)
-  end
-
-  # can competitors delete their own registration after it has been accepetd
-  def registration_delete_after_acceptance_allowed?
-    self.no_restrictions?
   end
 
   private def dates_must_be_valid
