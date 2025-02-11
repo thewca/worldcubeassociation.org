@@ -2,10 +2,9 @@ import React from 'react';
 import {
   Card, List, Segment,
 } from 'semantic-ui-react';
-import { liveUrls } from '../../../../lib/requests/routes.js.erb';
 import { events } from '../../../../lib/wca-data.js.erb';
 
-export default function TestSchedulePage({ competitionId, rounds }) {
+export default function TestSchedulePage({ rounds }) {
   const roundsById = _.groupBy(rounds, 'event.id');
   return (
     <Segment>
@@ -19,9 +18,7 @@ export default function TestSchedulePage({ competitionId, rounds }) {
               <List>
                 {r.map((round) => (
                   <List.Item key={round.id}>
-                    <a href={liveUrls.roundResultsAdmin(competitionId, round.id)}>
-                      {round.name}
-                    </a>
+                    {round.name}
                     {' '}
                     (
                     {round.competitors_live_results_entered}
