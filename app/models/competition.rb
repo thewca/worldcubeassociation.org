@@ -98,7 +98,7 @@ class Competition < ApplicationRecord
   enum cancellation_restrictions: {
     no_restrictions: 0,
     restrict_accepted: 1,
-    restrict_any_paid: 2
+    restrict_any_paid: 2,
   }
 
   NEW_REG_SYSTEM_DEFAULT = :v3
