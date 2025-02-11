@@ -1669,7 +1669,7 @@ en:
           waiting_list_deadline_date: "Deadline for accepting competitors from the waiting list"
           event_change_deadline_date: "Deadline for competitors to update their registered events"
           allow_on_the_spot: "On the spot registrations"
-          allow_self_delete_after_acceptance: "Registration cancellations"
+          cancellation_restrictions: "Registration cancellation restrictions"
           allow_self_edits: "Registration edits"
           guests_enabled: "Guests"
           guest_entry_status: "Display message for free guest entry"
@@ -1754,7 +1754,7 @@ en:
           waiting_list_deadline_date: "The date when waitlisted registrants will no longer be accepted. If you have a deadline for refunds, the deadline for being accepted should not be before the deadline for refunds."
           event_change_deadline_date: "Registered competitors have the right to update their registered events until this time by contacting the organization team. This deadline must not be set to a time before registration is set to close. Leaving this field blank means that competitors may add an event to their registered events up until that event is held. If you have on the spot registration, this must be set to the same day as the competition."
           allow_on_the_spot: ""
-          allow_self_delete_after_acceptance: ""
+          cancellation_restrictions: ""
           allow_self_edits: ""
           guests_enabled: ""
           guest_entry_status: ""
@@ -1796,9 +1796,10 @@ en:
           allow_self_edits:
             "true": "Competitors may edit their registration until the deadline for updating events"
             "false": "Competitors may NOT edit their registration once it has been accepted"
-          allow_self_delete_after_acceptance:
-            "true": "Competitors may delete their own registration even after it has been accepted"
-            "false": "Competitors may NOT delete their own registration once it has been accepted"
+          cancellation_restrictions:
+            "none": "Competitors may delete their own registration at any time - even after paying/being accepted"
+            "accepted": "After being accepted, competitors may NOT delete their own registration"
+            "payment": "After paying, competitors may NOT delete their own registration"
           guest_entry_status:
             unclear: 'Do not display anything (and perhaps elaborate in the "Extra registration requirements" section)'
             free: '"Any spectator can attend for free"'
