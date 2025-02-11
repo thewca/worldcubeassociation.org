@@ -4,6 +4,8 @@ import _ from 'lodash';
 import { formatAttemptResult } from '../../../lib/wca-live/attempts';
 import { editRegistrationUrl, liveUrls } from '../../../lib/requests/routes.js.erb';
 
+const advancingColor = '0, 230, 118';
+
 const customOrderBy = (competitor, resultsByRegistrationId, sortBy) => {
   const competitorResults = resultsByRegistrationId[competitor.id];
 
@@ -19,11 +21,11 @@ export const rankingCellStyle = (result) => {
     return {};
   }
   if (result.advancing) {
-    return { backgroundColor: 'rgb(0, 230, 118)' };
+    return { backgroundColor: `rgb(${advancingColor})` };
   }
 
   if (result.advancing_questionable) {
-    return { backgroundColor: 'rgba(0, 230, 118, 0.5)' };
+    return { backgroundColor: `rgba(${advancingColor}, 0.5)` };
   }
 
   return {};
