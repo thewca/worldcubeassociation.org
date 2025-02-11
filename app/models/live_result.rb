@@ -3,8 +3,7 @@
 class LiveResult < ApplicationRecord
   has_many :live_attempts, -> { where(replaced_by: nil).order(:attempt_number) }
 
-  after_create :recompute_advancing
-  after_update :recompute_advancing, if: :should_recompute?
+  after_save :recompute_advancing, if: :should_recompute?
 
   after_save :notify_users
 
