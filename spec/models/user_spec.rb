@@ -672,21 +672,21 @@ RSpec.describe User, type: :model do
 
     it "if their registration is pending" do
       registration.competing_status = Registrations::Helper::STATUS_PENDING
-      competition.allow_registration_self_delete_after_acceptance = false
+      competition.cancellation_registrictions = 1
       expect(competitor.can_delete_registration?(registration)).to be true
-      competition.allow_registration_self_delete_after_acceptance = true
+      competition.cancellation_registrictions = 0
       expect(competitor.can_delete_registration?(registration)).to be true
     end
 
     it "if their registration is accepted and the competition still allows deletion" do
       registration.competing_status = Registrations::Helper::STATUS_ACCEPTED
-      competition.allow_registration_self_delete_after_acceptance = true
+      competition.cancellation_registrictions = 0
       expect(competitor.can_delete_registration?(registration)).to be true
     end
 
     it "unless their registration is accepted and the competition does not allow deletion afterwards" do
       registration.competing_status = Registrations::Helper::STATUS_ACCEPTED
-      competition.allow_registration_self_delete_after_acceptance = false
+      competition.cancellation_registrictions = 1
       expect(competitor.can_delete_registration?(registration)).to be false
     end
   end

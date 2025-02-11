@@ -1428,7 +1428,7 @@ RSpec.describe Registrations::RegistrationChecker do
 
       it 'user cant delete accepted registration if competition requires organizers to cancel registration' do
         cant_cancel = FactoryBot.create(
-          :competition, :registration_closed, :editable_registrations, allow_registration_self_delete_after_acceptance: false
+          :competition, :registration_closed, :editable_registrations, cancellation_registrictions: 1
         )
         accepted_reg = FactoryBot.create(:registration, :accepted, competition: cant_cancel)
 
@@ -1449,7 +1449,7 @@ RSpec.describe Registrations::RegistrationChecker do
 
       it 'user can cancel non-accepted registration if competition requires organizers to cancel registration' do
         cant_cancel = FactoryBot.create(
-          :competition, :registration_closed, :editable_registrations, allow_registration_self_delete_after_acceptance: false
+          :competition, :registration_closed, :editable_registrations, cancellation_registrictions: 1
         )
         not_accepted_reg = FactoryBot.create(:registration, competition: cant_cancel)
 

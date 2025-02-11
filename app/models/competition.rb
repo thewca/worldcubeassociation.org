@@ -139,6 +139,7 @@ class Competition < ApplicationRecord
     refund_policy_percent
     guests_entry_fee_lowest_denomination
     guest_entry_status
+    cancellation_restrictions
   ).freeze
   UNCLONEABLE_ATTRIBUTES = %w(
     id
@@ -1186,7 +1187,7 @@ class Competition < ApplicationRecord
 
   # can competitors delete their own registration after it has been accepetd
   def registration_delete_after_acceptance_allowed?
-    self.allow_registration_self_delete_after_acceptance
+    self.cancellation_restrictions.no_restrictions?
   end
 
   private def dates_must_be_valid
@@ -1891,7 +1892,7 @@ class Competition < ApplicationRecord
       only: %w[id name website start_date registration_open registration_close announced_at cancelled_at end_date competitor_limit
                extra_registration_requirements enable_donations refund_policy_limit_date event_change_deadline_date waiting_list_deadline_date
                on_the_spot_registration on_the_spot_entry_fee_lowest_denomination qualification_results event_restrictions
-               base_entry_fee_lowest_denomination currency_code allow_registration_edits allow_registration_self_delete_after_acceptance
+               base_entry_fee_lowest_denomination currency_code allow_registration_edits cancellation_restrictions
                allow_registration_without_qualification refund_policy_percent use_wca_registration guests_per_registration_limit venue contact
                force_comment_in_registration use_wca_registration external_registration_page guests_entry_fee_lowest_denomination guest_entry_status
                information events_per_registration_limit guests_enabled],
@@ -2411,7 +2412,7 @@ class Competition < ApplicationRecord
         "waitingListDeadlineDate" => waiting_list_deadline_date&.iso8601,
         "eventChangeDeadlineDate" => event_change_deadline_date&.iso8601,
         "allowOnTheSpot" => on_the_spot_registration,
-        "allowSelfDeleteAfterAcceptance" => allow_registration_self_delete_after_acceptance,
+        "cancellationRestrictions" => cancellation_restrictions,
         "allowSelfEdits" => allow_registration_edits,
         "guestsEnabled" => guests_enabled,
         "guestEntryStatus" => guest_entry_status,
@@ -2512,7 +2513,7 @@ class Competition < ApplicationRecord
         "waitingListDeadlineDate" => errors[:waiting_list_deadline_date],
         "eventChangeDeadlineDate" => errors[:event_change_deadline_date],
         "allowOnTheSpot" => errors[:on_the_spot_registration],
-        "allowSelfDeleteAfterAcceptance" => errors[:allow_registration_self_delete_after_acceptance],
+        "cancellationRestrictions" => errors[:cancellation_restrictions],
         "allowSelfEdits" => errors[:allow_registration_edits],
         "guestsEnabled" => errors[:guests_enabled],
         "guestEntryStatus" => errors[:guest_entry_status],
@@ -2640,7 +2641,7 @@ class Competition < ApplicationRecord
       event_change_deadline_date: form_data.dig('registration', 'eventChangeDeadlineDate')&.presence,
       guest_entry_status: form_data.dig('registration', 'guestEntryStatus'),
       allow_registration_edits: form_data.dig('registration', 'allowSelfEdits'),
-      allow_registration_self_delete_after_acceptance: form_data.dig('registration', 'allowSelfDeleteAfterAcceptance'),
+      cancellation_restrictions: form_data.dig('registration', 'cancellationRestrictions'),
       use_wca_live_for_scoretaking: form_data.dig('website', 'usesWcaLive'),
       allow_registration_without_qualification: form_data.dig('eventRestrictions', 'qualificationResults', 'allowRegistrationWithout'),
       guests_per_registration_limit: form_data.dig('registration', 'guestsPerRegistration'),
