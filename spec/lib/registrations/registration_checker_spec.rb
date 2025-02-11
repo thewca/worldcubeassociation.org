@@ -1257,9 +1257,11 @@ RSpec.describe Registrations::RegistrationChecker do
 
     describe '#update_registration_allowed!.validate_update_status!' do
       context 'cancellation_restriction: restrict_accepted' do
-        let(:accepted_cant_cancel) { FactoryBot.create(
-          :competition, :registration_closed, :editable_registrations, :with_organizer, cancellation_restrictions: :restrict_accepted
-        )}
+        let(:accepted_cant_cancel) {
+          FactoryBot.create(
+            :competition, :registration_closed, :editable_registrations, :with_organizer, cancellation_restrictions: :restrict_accepted
+          )
+        }
 
         it 'lets non-accepted user cancel' do
           not_accepted_reg = FactoryBot.create(:registration, competition: accepted_cant_cancel)
@@ -1310,9 +1312,11 @@ RSpec.describe Registrations::RegistrationChecker do
       end
 
       context 'cancellation_restriction: restrict_paid' do
-        let(:paid_cant_cancel) { FactoryBot.create(
-          :competition, :registration_closed, :editable_registrations, :with_organizer, cancellation_restrictions: :restrict_paid
-        )}
+        let(:paid_cant_cancel) {
+          FactoryBot.create(
+            :competition, :registration_closed, :editable_registrations, :with_organizer, cancellation_restrictions: :restrict_paid
+          )
+        }
 
         it 'lets user cancel unpaid registration' do
           not_paid_reg = FactoryBot.create(:registration, competition: paid_cant_cancel)
@@ -1372,7 +1376,7 @@ RSpec.describe Registrations::RegistrationChecker do
             user_id: not_paid_reg.user_id,
             competition_id: not_paid_reg.competition.id,
             competing: { 'status' => 'cancelled' },
-            submitted_by: not_paid_reg.competition.organizers.first.id
+            submitted_by: not_paid_reg.competition.organizers.first.id,
           )
 
           expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, Competition.find(update_request['competition_id']), User.find(update_request['submitted_by'])) }

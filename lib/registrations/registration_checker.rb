@@ -208,7 +208,6 @@ module Registrations
         raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::ORGANIZER_MUST_CANCEL_REGISTRATION) if
         (competition.restrict_accepted? && registration.accepted?) || (competition.restrict_paid? && registration.paid_entry_fees > 0)
 
-
         # Users aren't allowed to change events when cancelling
         raise WcaExceptions::RegistrationError.new(:unprocessable_entity, Registrations::ErrorCodes::INVALID_REQUEST_DATA) if
           events.present? && registration.event_ids != events
