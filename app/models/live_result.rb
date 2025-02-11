@@ -95,7 +95,7 @@ class LiveResult < ApplicationRecord
       end
 
       # Determine which results would advance if everyone achieved their best possible attempt.
-      advancing_ids = results_with_potential.first(max_clinched).select(&:complete?).map(&:id)
+      advancing_ids = results_with_potential.take(max_clinched).select(&:complete?).pluck(:id)
 
       round_results.update_all(advancing: false)
       LiveResult.where(id: advancing_ids).update_all(advancing: true)
