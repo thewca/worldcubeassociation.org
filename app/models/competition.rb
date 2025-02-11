@@ -95,10 +95,10 @@ class Competition < ApplicationRecord
     restricted: 2,
   }, prefix: true
 
-  enum cancellation_restrictions: {
+  enum :cancellation_restrictions, {
     no_restrictions: 0,
     restrict_accepted: 1,
-    restrict_any_paid: 2,
+    restrict_paid: 2,
   }
 
   NEW_REG_SYSTEM_DEFAULT = :v3
