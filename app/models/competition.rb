@@ -1187,7 +1187,7 @@ class Competition < ApplicationRecord
 
   # can competitors delete their own registration after it has been accepetd
   def registration_delete_after_acceptance_allowed?
-    self.cancellation_restrictions.no_restrictions?
+    self.no_restrictions?
   end
 
   private def dates_must_be_valid
