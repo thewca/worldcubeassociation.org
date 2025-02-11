@@ -26,9 +26,9 @@ export default function RegistrationOverview({
 
   const isRejected = registration.competing.registration_status === 'rejected';
 
-  const deleteAllowed = (competitionInfo.cancellation_restrictions === 'no_restrictions') ||
-    (competitionInfo.cancellation_restrictions === 'restrict_accepted' && registration.competing.registration_status !== 'accepted' ) ||
-    (competitionInfo.cancellation_restrictions === 'restrict_paid' && !registration.payment?.has_paid);
+  const deleteAllowed = (competitionInfo.cancellation_restrictions === 'no_restrictions')
+    || (competitionInfo.cancellation_restrictions === 'restrict_accepted' && registration.competing.registration_status !== 'accepted' )
+    || (competitionInfo.cancellation_restrictions === 'restrict_paid' && !registration.payment?.has_paid);
 
   const queryClient = useQueryClient();
 
