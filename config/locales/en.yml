@@ -1797,9 +1797,9 @@ en:
             "true": "Competitors may edit their registration until the deadline for updating events"
             "false": "Competitors may NOT edit their registration once it has been accepted"
           cancellation_restrictions:
-            "none": "Competitors may delete their own registration at any time - even after paying/being accepted"
-            "accepted": "After being accepted, competitors may NOT delete their own registration"
-            "payment": "After paying, competitors may NOT delete their own registration"
+            "no_restrictions": "Competitors may delete their own registration at any time - even after paying/being accepted"
+            "restrict_accepted": "After being accepted, competitors may NOT delete their own registration"
+            "restrict_paid": "After paying, competitors may NOT delete their own registration"
           guest_entry_status:
             unclear: 'Do not display anything (and perhaps elaborate in the "Extra registration requirements" section)'
             free: '"Any spectator can attend for free"'

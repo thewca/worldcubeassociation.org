@@ -24,7 +24,7 @@ const guestMessageOptions = ['unclear', 'free', 'restricted'].map((status) => ({
   text: I18n.t(`competitions.competition_form.choices.registration.guest_entry_status.${status}`),
 }));
 
-const cancellationRestrictionOptions = ['none', 'accepted', 'payment'].map((status) => ({
+const cancellationRestrictionOptions = ['no_restrictions', 'restrict_accepted', 'restrict_paid'].map((status) => ({
   key: status,
   value: status,
   text: I18n.t(`competitions.competition_form.choices.registration.cancellation_restrictions.${status}`),
