@@ -15,7 +15,7 @@ RSpec.describe "WCA Live API" do
 
         registrations = Array.new(5) { |i| FactoryBot.create(:registration, event_ids: ["333"], competition: competition, competing_status: "accepted") }
 
-        expect(round.total_registrations).to eq 5
+        expect(round.total_accepted_registrations).to eq 5
 
         5.times do |i|
           FactoryBot.create(:live_result, registration: registrations[i], round: round, ranking: i + 1, average: (i + 1) * 100)

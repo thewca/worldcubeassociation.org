@@ -8,6 +8,8 @@ class Round < ApplicationRecord
   # CompetitionEvent uses the cached value
   delegate :event, to: :competition_event
 
+  has_many :registrations, through: :competition_event
+
   # For the following association, we want to keep it to be able to do some joins,
   # but we definitely want to use cached values when directly using the method.
   belongs_to :format
@@ -95,22 +97,17 @@ class Round < ApplicationRecord
     [cutoff_format, format].compact
   end
 
-  def registrations
+  def accepted_registrations
     if number == 1
-      Registration.joins(:registration_competition_events)
-                  .where(
-                    competition_id: competition_event.competition_id,
-                    competing_status: 'accepted',
-                    registration_competition_events: { competition_event_id: competition_event_id }
-                  ).includes([:user])
+      registrations.accepted
     else
       previous_round = Round.joins(:competition_event).find_by(competition_event: { competition_id: competition_event.competition_id, event_id: event.id }, number: number - 1)
       previous_round.live_results.where(advancing: true).includes(:registration).map(&:registration)
     end
   end
 
-  def total_registrations
-    registrations.count
+  def total_accepted_registrations
+    accepted_registrations.count
   end
 
   def full_format_name(with_short_names: false, with_tooltips: false)

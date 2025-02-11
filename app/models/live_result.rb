@@ -61,7 +61,7 @@ class LiveResult < ApplicationRecord
       round_results = LiveResult.where(round: round)
       round_results.update_all(advancing: false)
 
-      missing_attempts = round.total_registrations - round_results.count
+      missing_attempts = round.total_accepted_registrations - round_results.count
       potential_results = Array.new(missing_attempts) { |i| LiveResult.build(round: round) }
       results_with_potential = (round_results.to_a + potential_results).sort_by(&:potential_score)
 
