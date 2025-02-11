@@ -26,7 +26,7 @@ RSpec.describe RegistrationsMailer, type: :mailer do
       # scope this call, but rather compare the result to the expected locale.
       expect(mail_new.subject).to eq(I18n.t('registrations.mailer.new.mail_subject', comp_name: registration.competition.name, locale: :fr))
       expect(mail_accepted.subject).to eq(I18n.t('registrations.mailer.accepted.mail_subject', comp_name: registration.competition.name, locale: :fr))
-      expect(mail_waitlisted.subject).to eq(I18n.t('registrations.mailer.waitlisted.mail_subject', comp_name: registration.competition.name, locale: :fr))
+      expect(mail_waitlisted.subject).to eq(I18n.t('registrations.mailer.waiting_list.mail_subject', comp_name: registration.competition.name, locale: :fr))
       expect(mail_deleted.subject).to eq(I18n.t('registrations.mailer.deleted.mail_subject', comp_name: registration.competition.name, locale: :fr))
     end
 
