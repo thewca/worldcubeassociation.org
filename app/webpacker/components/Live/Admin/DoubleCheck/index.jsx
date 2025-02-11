@@ -121,9 +121,10 @@ function DoubleCheck({
             of
             {' '}
             {results.length}
+            <br />
+            {round.name}
           </Card.Header>
           <Card.Content>
-            <Header>{round.name}</Header>
             Double-check
           </Card.Content>
           <Card.Description>
