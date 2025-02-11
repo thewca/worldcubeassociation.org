@@ -39,6 +39,10 @@ class LiveResult < ApplicationRecord
     complete? ? self[rank_by.to_sym] : best_possible_score
   end
 
+  def best_possible_score
+    1
+  end
+
   def complete?
     live_attempts.where.not(result: 0).count == round.format.expected_solve_count
   end
@@ -58,7 +62,6 @@ class LiveResult < ApplicationRecord
       round_results.update_all(advancing: false)
 
       missing_attempts = round.total_registrations - round_results.count
-      puts(round.registrations.inspect)
       potential_results = Array.new(missing_attempts) { |i| LiveResult.build(round: round) }
       results_with_potential = (round_results.to_a + potential_results).sort_by(&:potential_score)
 
