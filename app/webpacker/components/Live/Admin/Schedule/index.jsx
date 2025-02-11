@@ -26,7 +26,7 @@ export default function TestSchedulePage({ competitionId, rounds }) {
                     (
                     {round.competitors_live_results_entered}
                     /
-                    {round.total_registrations}
+                    {round.total_accepted_registrations}
                     )
                   </List.Item>
                 ))}
