@@ -801,12 +801,24 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_12_082508) do
     t.bigint "replaced_by_id"
     t.datetime "entered_at", null: false
     t.integer "entered_by_id", null: false
-    t.bigint "live_result_id", null: false
+    t.bigint "live_result_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["entered_by_id"], name: "index_live_attempts_on_entered_by_id"
     t.index ["live_result_id"], name: "index_live_attempts_on_live_result_id"
     t.index ["replaced_by_id"], name: "index_live_attempts_on_replaced_by_id"
+  end
+
+  create_table "live_records", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "record_type", null: false
+    t.integer "value", null: false
+    t.string "event_id", null: false
+    t.string "country_id"
+    t.string "continent_id"
+    t.string "record_scope", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["event_id", "record_type", "record_scope"], name: "idx_on_event_id_record_type_record_scope_f273422d94", unique: true
   end
 
   create_table "live_results", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|

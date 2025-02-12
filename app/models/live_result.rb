@@ -60,7 +60,7 @@ class LiveResult < ApplicationRecord
                        #{", CASE WHEN #{secondary_rank_by} > 0 THEN #{secondary_rank_by} ELSE 1e9 END ASC" if secondary_rank_by}
                  ) AS `rank`
           FROM live_results
-          WHERE round_id = #{round.id} AND best != 0
+          WHERE round_id = #{round.id} AND best > 0
       ) ranked
       ON r.id = ranked.id
       SET r.ranking = ranked.rank
