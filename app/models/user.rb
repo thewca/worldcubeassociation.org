@@ -697,7 +697,7 @@ class User < ApplicationRecord
           panel_pages[:countryBands],
           panel_pages[:xeroUsers],
           panel_pages[:duesRedirect],
-          panel_pages[:bannedCompetitors],
+          panel_pages[:delegateProbations],
         ],
       },
       wrt: {
