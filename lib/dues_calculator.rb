@@ -1,28 +1,28 @@
 # frozen_string_literal: true
 
 module DuesCalculator
-  def self.dues_for_n_competitors(country_iso2, base_entry_fee_lowest_denomination, currency_code, n)
+  def self.dues_per_competitor(country_iso2, base_entry_fee_lowest_denomination, currency_code)
     dues_per_competitor_in_usd_money = dues_per_competitor_in_usd(country_iso2, base_entry_fee_lowest_denomination, currency_code)
-    if dues_per_competitor_in_usd_money.present?
-      (dues_per_competitor_in_usd_money * n).exchange_to(currency_code)
-    else
-      nil
-    end
+    dues_per_competitor_in_usd_money&.exchange_to(currency_code)
   rescue CurrencyUnavailable
     nil
   end
 
   def self.dues_per_competitor_in_usd(country_iso2, base_entry_fee_lowest_denomination, currency_code)
-    country_band = CountryBand.find_by(iso2: country_iso2)&.number
+    country_band = CountryBand.find_by(iso2: country_iso2)
+    country_band_detail = country_band&.active_country_band_detail
 
-    input_money_us_dollars = Money.new(base_entry_fee_lowest_denomination, currency_code).exchange_to("USD")
+    return nil if country_band_detail.nil?
 
-    registration_fee_dues_us_dollars = input_money_us_dollars * CountryBand.percent_registration_fee_used_for_due_amount(country_band)
-    country_band_dues_us_dollars = country_band.present? && country_band > 0 ? CountryBand::BANDS[country_band][:value] : 0
-    # times 100 because Money require lowest currency subunit, which is cents for USD
-    country_band_dues_us_dollars_money = Money.new(country_band_dues_us_dollars * 100, "USD")
+    # Calculation of 'registration fee dues'
+    registration_fees_in_usd = Money.new(base_entry_fee_lowest_denomination, currency_code).exchange_to("USD")
+    registration_fee_dues = registration_fees_in_usd * country_band_detail.due_percent_registration_fee / 100.0
 
-    [registration_fee_dues_us_dollars, country_band_dues_us_dollars_money].max
+    # Calculation of 'country band dues'
+    country_band_dues = Money.new(country_band_detail.due_amount_per_competitor_us_cents, "USD")
+
+    # The maximum of the two is the total dues per competitor
+    [registration_fee_dues, country_band_dues].max
   rescue Money::Currency::UnknownCurrency, CurrencyUnavailable
     nil
   end

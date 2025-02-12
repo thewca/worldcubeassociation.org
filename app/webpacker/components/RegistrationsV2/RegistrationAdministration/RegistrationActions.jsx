@@ -87,6 +87,24 @@ export default function RegistrationActions({
     );
   };
 
+  const moveToWaitingList = (attendees) => {
+    const registrationsByUserId = _.groupBy(registrations, 'user_id');
+
+    const [paid, unpaid] = _.partition(
+      attendees,
+      (userId) => registrationsByUserId[userId]?.[0]?.payment?.updated_at,
+    );
+
+    paid.sort((a, b) => {
+      const dateA = new Date(registrationsByUserId[a][0].payment.updated_at);
+      const dateB = new Date(registrationsByUserId[b][0].payment.updated_at);
+      return dateA - dateB;
+    });
+
+    const combined = paid.concat(unpaid);
+    changeStatus(combined, 'waiting_list');
+  };
+
   const attemptToApprove = () => {
     const idsToAccept = [...pending, ...cancelled, ...waiting, ...rejected];
     if (idsToAccept.length > spotsRemaining) {
@@ -164,9 +182,8 @@ export default function RegistrationActions({
             {anyWaitlistable && (
             <Button
               color="yellow"
-              onClick={() => changeStatus(
+              onClick={() => moveToWaitingList(
                 [...pending, ...cancelled, ...accepted, ...rejected],
-                'waiting_list',
               )}
             >
               <Icon name="hourglass" />
