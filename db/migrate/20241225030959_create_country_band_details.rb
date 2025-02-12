@@ -6,7 +6,7 @@ class CreateCountryBandDetails < ActiveRecord::Migration[7.2]
       t.integer "number", null: false
       t.date "start_date", null: false
       t.date "end_date"
-      t.integer "due_amount_per_competitor_in_cents", null: false
+      t.integer "due_amount_per_competitor_us_cents", null: false
       t.integer "due_percent_registration_fee", null: false
       t.timestamps
     end

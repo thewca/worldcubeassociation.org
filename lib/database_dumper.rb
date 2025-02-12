@@ -864,7 +864,7 @@ module DatabaseDumper
           number
           start_date
           end_date
-          due_amount_per_competitor_in_cents
+          due_amount_per_competitor_us_cents
           due_percent_registration_fee
           created_at
           updated_at

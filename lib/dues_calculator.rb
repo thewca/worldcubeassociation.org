@@ -15,11 +15,11 @@ module DuesCalculator
 
     # Calculation of 'registration fee dues'
     due_percent_registration_fee = country_band_detail&.due_percent_registration_fee.to_f || 0
-    registration_fee_dues = Money.new(registration_fees * due_percent_registration_fee / 100, "USD")
+    registration_fee_dues = registration_fees * due_percent_registration_fee / 100
 
     # Calculation of 'country band dues'
-    due_amount_per_competitor_in_cents = country_band_detail&.due_amount_per_competitor_in_cents || 0
-    country_band_dues = Money.new(due_amount_per_competitor_in_cents, "USD")
+    due_amount_per_competitor_us_cents = country_band_detail&.due_amount_per_competitor_us_cents || 0
+    country_band_dues = Money.new(due_amount_per_competitor_us_cents, "USD")
 
     # The maximum of the two is the total dues per competitor
     [registration_fee_dues, country_band_dues].max
