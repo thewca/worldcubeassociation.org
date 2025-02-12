@@ -101,9 +101,12 @@ export const getFullDateTimeString = (dateTime, timeZone = 'local') => DateTime.
   .setZone(timeZone)
   .toLocaleString(DateTime.DATETIME_FULL_WITH_SECONDS);
 
-export const getIsoDateWithTimeString = (dateTime, timeZone = 'local') => DateTime.fromISO(dateTime)
+export const getIsoDateString = (dateTime, timeZone = 'local') => DateTime.fromISO(dateTime)
   .setZone(timeZone)
-  .toISODate() + ' ' + DateTime.fromISO(dateTime)
+  .toISODate();
+
+
+export const getTimeWithSecondsString = (dateTime, timeZone = 'local') => DateTime.fromISO(dateTime)
   .setZone(timeZone)
   .toFormat(DateTime.TIME_WITH_SECONDS);
 
