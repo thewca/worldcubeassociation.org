@@ -6,7 +6,7 @@ class CreateLiveAttemptHistoryEntries < ActiveRecord::Migration[7.2]
       t.datetime :entered_at, null: false
       t.string :entered_by, null: false
       t.references :live_attempt, null: false, foreign_key: true
-      t.integer :value, null: false
+      t.integer :result, null: false
 
       t.timestamps
     end

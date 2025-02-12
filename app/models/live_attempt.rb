@@ -4,7 +4,6 @@ class LiveAttempt < ApplicationRecord
   include Comparable
 
   belongs_to :live_result
-  validate :needs_live_result_or_replaced_by
   has_many :live_attempt_history_entries, dependent: :destroy
 
   validates :result, presence: true
@@ -21,5 +20,14 @@ class LiveAttempt < ApplicationRecord
 
   def <=>(other)
     result <=> other.result
+  end
+
+  def update_with_history_entry(r, current_user)
+    update(result: r)
+    live_attempt_history_entries.create({
+                                          result: r,
+                                          entered_at: Time.current.utc,
+                                          entered_by: current_user
+                                        })
   end
 end

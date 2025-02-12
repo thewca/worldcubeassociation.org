@@ -32,17 +32,18 @@ class LiveController < ApplicationController
 
     return render json: { status: "result does not exist" }, status: :unprocessable_entity unless result.present?
 
-    previous_attempts = result.live_attempts
+    previous_attempts = result.live_attempts.index_by(&:attempt_number)
 
     new_attempts = results.map.with_index(1) do |r, i|
-      same_result = previous_attempts.find_by(result: r, attempt_number: i)
-      if same_result.present?
-        same_result
+      if previous_attempts[i]&.result == r
+        previous_attempts[i]
       else
-        different_result = previous_attempts.find_by(attempt_number: i)
-        new_result = LiveAttempt.build(result: r, attempt_number: i, entered_at: Time.now.utc, entered_by: current_user)
-        different_result&.update(replaced_by_id: new_result.id)
-        new_result
+        if previous_attempts[i].present?
+          previous_attempts[i].update_with_history_entry(r, current_user)
+          previous_attempts[i]
+        else
+          LiveAttempt.create(registration_id: registration_id, attempt_number: i, result: r)
+        end
       end
     end
 
