@@ -10,7 +10,7 @@ import useInputState from '../../../../lib/hooks/useInputState';
 
 export default function CompetitionsInput() {
   const [queryParams] = useQueryParams();
-  const competitionIdsFromQuery = queryParams?.competition_ids?.split(',').filter(Boolean);
+  const competitionIdsFromQuery = queryParams?.competition_ids?.split(',')?.filter(Boolean);
   const [competitionIds, setCompetitionIds] = useInputState(competitionIdsFromQuery || []);
 
   return (
