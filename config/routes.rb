@@ -150,6 +150,8 @@ Rails.application.routes.draw do
   get 'competitions/edit/registration-collisions-json' => 'competitions#registration_collisions_json', as: :registration_collisions_json
   get 'competitions/edit/series-eligible-competitions-json' => 'competitions#series_eligible_competitions_json', as: :series_eligible_competitions_json
 
+  get 'competitions/:competition_id/live/admin' => 'live#schedule_admin', as: :live_schedule_admin
+
   get 'results/rankings', to: redirect('results/rankings/333/single', status: 302)
   get 'results/rankings/333mbf/average',
       to: redirect(status: 302) { |params, request| URI.parse(request.original_url).query ? "results/rankings/333mbf/single?#{URI.parse(request.original_url).query}" : "results/rankings/333mbf/single" }
@@ -194,7 +196,6 @@ Rails.application.routes.draw do
   get 'panel/:panel_id' => 'panel#index', as: :panel_index
   scope 'panel-page' do
     get 'run-validators' => 'admin#check_results', as: :admin_check_results
-    get 'create-new-comers' => 'admin#finish_unfinished_persons', as: :admin_finish_unfinished_persons
     get 'check-records' => 'admin#check_regional_records', as: :admin_check_regional_records
     get 'compute-auxiliary-data' => 'admin#compute_auxiliary_data', as: :admin_compute_auxiliary_data
     get 'generate-data-exports' => 'admin#generate_exports', as: :admin_generate_exports
@@ -291,8 +292,6 @@ Rails.application.routes.draw do
   get '/admin/do_generate_public_export' => 'admin#do_generate_public_export'
   get '/admin/override_regional_records' => 'admin#override_regional_records'
   post '/admin/override_regional_records' => 'admin#do_override_regional_records'
-  get '/admin/finish_persons' => 'admin#finish_persons'
-  post '/admin/finish_persons' => 'admin#do_finish_persons'
   get '/admin/complete_persons' => 'admin#complete_persons'
   post '/admin/complete_persons' => 'admin#do_complete_persons'
   get '/admin/peek_unfinished_results' => 'admin#peek_unfinished_results'

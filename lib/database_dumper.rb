@@ -857,6 +857,20 @@ module DatabaseDumper
         ),
       ),
     }.freeze,
+    "country_band_details" => {
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w(
+          id
+          number
+          start_date
+          end_date
+          due_amount_per_competitor_us_cents
+          due_percent_registration_fee
+          created_at
+          updated_at
+        ),
+      ),
+    }.freeze,
     "user_roles" => {
       where_clause: "JOIN user_groups ON user_groups.id=group_id WHERE NOT user_groups.is_hidden",
       column_sanitizers: actions_to_column_sanitizers(
