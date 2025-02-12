@@ -150,6 +150,32 @@ class Round < ApplicationRecord
     advancement_condition ? advancement_condition.to_s(self, short: short) : ""
   end
 
+  def previous_round
+    return nil if number == 1
+    Round.joins(:competition_event).find_by(competition_event: competition_event, number: number - 1)
+  end
+
+  def accepted_registrations
+    if number == 1
+      registrations.accepted
+    else
+      advancing = previous_round.live_results.where(advancing: true).pluck(:registration_id)
+      Registration.find(advancing)
+    end
+  end
+
+  def total_accepted_registrations
+    accepted_registrations.count
+  end
+
+  def competitors_live_results_entered
+    live_results.count
+  end
+
+  def score_taking_done?
+    competitors_live_results_entered == total_accepted_registrations
+  end
+
   def has_undef_tl?
     can_change_time_limit? && time_limit == TimeLimit::UNDEF_TL
   end

@@ -14,8 +14,8 @@
     </div>
   </div>
   <div class="list-group">
-    <% CountryBand::BANDS.each do |number, data| %>
-      <%= render "show_band", number: number, data: data %>
+    <% CountryBandDetail.active.order(:number).each do |country_band_detail| %>
+      <%= render "show_band", country_band_detail: country_band_detail %>
     <% end %>
   </div>
 </div>

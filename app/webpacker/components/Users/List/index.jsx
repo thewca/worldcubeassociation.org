@@ -64,10 +64,10 @@ function PersonList() {
           {data.rows.map((row) => (
             <Table.Row key={`${row.wca_id}-${row.name}`}>
               <Table.Cell>
-                {row.wca_id}
+                {row.wca_id && <a href={personUrl(row.wca_id)}>{row.wca_id}</a>}
               </Table.Cell>
               <Table.Cell>
-                <a href={personUrl(row.wca_id)}>{row.name}</a>
+                {row.name}
               </Table.Cell>
               <Table.Cell>
                 {countries.byIso2[row.country]?.name}
