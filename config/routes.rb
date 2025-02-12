@@ -150,7 +150,15 @@ Rails.application.routes.draw do
   get 'competitions/edit/registration-collisions-json' => 'competitions#registration_collisions_json', as: :registration_collisions_json
   get 'competitions/edit/series-eligible-competitions-json' => 'competitions#series_eligible_competitions_json', as: :series_eligible_competitions_json
 
-  get 'competitions/:competition_id/live/admin' => 'live#schedule_admin', as: :live_schedule_admin
+  if WcaLive.enabled?
+    get 'competitions/:competition_id/live/rounds/:round_id/admin' => 'live#admin', as: :live_admin_round_results
+    get 'competitions/:competition_id/live/rounds/:round_id/admin/check' => 'live#double_check', as: :live_admin_check_round_results
+    get 'competitions/:competition_id/live/admin' => 'live#schedule_admin', as: :live_schedule_admin
+
+    get 'api/competitions/:competition_id/rounds/:round_id' => 'live#round_results', as: :live_round_results_api
+    post 'api/competitions/:competition_id/rounds/:round_id' => 'live#add_result', as: :add_live_result
+    patch 'api/competitions/:competition_id/rounds/:round_id' => 'live#update_result', as: :update_live_result
+  end
 
   get 'results/rankings', to: redirect('results/rankings/333/single', status: 302)
   get 'results/rankings/333mbf/average',

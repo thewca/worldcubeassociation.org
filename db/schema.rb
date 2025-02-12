@@ -801,7 +801,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_12_082508) do
     t.bigint "replaced_by_id"
     t.datetime "entered_at", null: false
     t.integer "entered_by_id", null: false
-    t.bigint "live_result_id", null: false
+    t.bigint "live_result_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["entered_by_id"], name: "index_live_attempts_on_entered_by_id"
