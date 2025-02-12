@@ -125,11 +125,6 @@ class Round < ApplicationRecord
     Round.name_from_attributes(event, round_type)
   end
 
-  def previous_round
-    return nil if number == 1
-    Round.joins(:competition_event).find_by(competition_event: competition_event, number: number - 1)
-  end
-
   def registrations
     if number == 1
       Registration.joins(:registration_competition_events)
