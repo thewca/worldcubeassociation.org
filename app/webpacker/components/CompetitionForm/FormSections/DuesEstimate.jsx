@@ -19,7 +19,7 @@ export default function DuesEstimate({
   const {
     data, isLoading, isError,
   } = useQuery({
-    queryKey: [countryId, currencyCode, baseEntryFee],
+    queryKey: ['dues-estimate', countryId, currencyCode, baseEntryFee],
     queryFn: () => fetchJsonOrError(calculateDuesUrl(countryId, currencyCode, baseEntryFee)),
   }, CALCULATE_DUES_QUERY_CLIENT);
 

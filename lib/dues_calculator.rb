@@ -3,7 +3,9 @@
 module DuesCalculator
   def self.dues_per_competitor(country_iso2, base_entry_fee_lowest_denomination, currency_code)
     dues_per_competitor_in_usd_money = dues_per_competitor_in_usd(country_iso2, base_entry_fee_lowest_denomination, currency_code)
-    dues_per_competitor_in_usd_money.exchange_to(currency_code)
+    dues_per_competitor_in_usd_money&.exchange_to(currency_code)
+  rescue CurrencyUnavailable
+    nil
   end
 
   def self.dues_per_competitor_in_usd(country_iso2, base_entry_fee_lowest_denomination, currency_code)

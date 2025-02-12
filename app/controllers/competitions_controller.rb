@@ -376,7 +376,7 @@ class CompetitionsController < ApplicationController
       params[:baseEntryFee].to_i,
       params[:currencyCode],
     )
-    per_competitor_dues_in_lowest_denomination = per_competitor_dues.cents
+    per_competitor_dues_in_lowest_denomination = per_competitor_dues&.cents
 
     render json: {
       dues_value: per_competitor_dues_in_lowest_denomination,
