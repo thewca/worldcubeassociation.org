@@ -43,6 +43,10 @@ class LiveResult < ApplicationRecord
     complete? ? self[rank_by.to_sym] : BEST_POSSIBLE_SCORE
   end
 
+  def should_recompute?
+    saved_change_to_best? || saved_change_to_average?
+  end
+
   def recompute_ranks
     rank_by = round.format.sort_by == 'single' ? 'best' : 'average'
     # We only want to decide ties by single in events decided by average
@@ -77,10 +81,6 @@ class LiveResult < ApplicationRecord
   end
 
   private
-
-    def should_recompute?
-      saved_change_to_best? || saved_change_to_average?
-    end
 
     def notify_users
       ActionCable.server.broadcast("results_#{round_id}", serializable_hash)
