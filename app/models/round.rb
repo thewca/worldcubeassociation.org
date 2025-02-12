@@ -137,6 +137,10 @@ class Round < ApplicationRecord
     advancement_condition ? advancement_condition.to_s(self, short: short) : ""
   end
 
+  def podium
+    live_results.where(ranking: 1..3)
+  end
+
   def previous_round
     return nil if number == 1
     Round.joins(:competition_event).find_by(competition_event: competition_event, number: number - 1)
