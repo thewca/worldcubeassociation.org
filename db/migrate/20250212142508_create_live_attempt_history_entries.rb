@@ -11,8 +11,8 @@ class CreateLiveAttemptHistoryEntries < ActiveRecord::Migration[7.2]
       t.timestamps
     end
 
-    remove_column :live_attempts, :entered_at
-    remove_column :live_attempts, :entered_by
-    remove_column :live_attempts, :replaced_by
+    remove_column :live_attempts, :entered_at, :datetime
+    remove_column :live_attempts, :entered_by_id, :integer
+    remove_column :live_attempts, :replaced_by_id, :integer
   end
 end

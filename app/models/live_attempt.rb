@@ -26,8 +26,9 @@ class LiveAttempt < ApplicationRecord
     update(result: r)
     live_attempt_history_entries.create({
                                           result: r,
-                                          entered_at: Time.current.utc,
+                                          entered_at: Time.now.utc,
                                           entered_by: current_user
                                         })
+    self
   end
 end
