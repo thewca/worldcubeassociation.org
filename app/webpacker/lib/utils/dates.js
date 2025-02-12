@@ -105,7 +105,6 @@ export const getIsoDateString = (dateTime, timeZone = 'local') => DateTime.fromI
   .setZone(timeZone)
   .toISODate();
 
-
 export const getTimeWithSecondsString = (dateTime, timeZone = 'local') => DateTime.fromISO(dateTime)
   .setZone(timeZone)
   .toFormat(DateTime.TIME_WITH_SECONDS);
