@@ -19,6 +19,7 @@ class LiveResult < ApplicationRecord
   alias_attribute :result_id, :id
 
   has_one :event, through: :round
+  has_one :format, through: :round
 
   DEFAULT_SERIALIZE_OPTIONS = {
     only: %w[ranking registration_id round_id best average single_record_tag average_record_tag advancing advancing_questionable entered_at entered_by_id],
@@ -36,6 +37,10 @@ class LiveResult < ApplicationRecord
 
   def attempts
     live_attempts.order(:attempt_number)
+  end
+
+  def to_solve_time(field)
+    SolveTime.new(event_id, field, send(field))
   end
 
   def potential_score
