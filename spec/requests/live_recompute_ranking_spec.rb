@@ -94,7 +94,7 @@ RSpec.describe "WCA Live API" do
       registration = FactoryBot.create(:registration, :accepted, competition: competition, event_ids: ["333bf"])
       FactoryBot.create(:live_result, round: round, registration: registration, best: -1)
 
-      expect(round.live_results.sort_by(&:best).pluck(:ranking)).to eq [nil, 1, 2, 3]
+      expect(round.live_results.sort_by(&:best).pluck(:ranking)).to eq [4, 1, 2, 3]
     end
 
     it "Ranks results correctly by single even with DNSs present" do
@@ -110,7 +110,7 @@ RSpec.describe "WCA Live API" do
       registration = FactoryBot.create(:registration, :accepted, competition: competition, event_ids: ["333bf"])
       FactoryBot.create(:live_result, round: round, registration: registration, best: -2)
 
-      expect(round.live_results.sort_by(&:best).pluck(:ranking)).to eq [nil, 1, 2, 3]
+      expect(round.live_results.sort_by(&:best).pluck(:ranking)).to eq [4, 1, 2, 3]
     end
 
     it "Ranks results correctly by single even with incomplete results present" do
