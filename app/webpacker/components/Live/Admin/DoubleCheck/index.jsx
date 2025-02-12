@@ -1,9 +1,9 @@
 import React, {
-  useCallback, useEffect, useMemo, useState,
+  useEffect, useMemo, useState,
 } from 'react';
 import {
   Button, Card,
-  Grid, Header, Message,
+  Grid, Message,
   Segment,
 } from 'semantic-ui-react';
 import { useMutation, useQuery } from '@tanstack/react-query';
@@ -28,7 +28,6 @@ export default function Wrapper({
   return (
     <WCAQueryClientProvider>
       <DoubleCheck
-        eventId={round.event.id}
         competitionId={competitionId}
         competitors={competitors}
         round={round}
@@ -38,9 +37,9 @@ export default function Wrapper({
 }
 
 function DoubleCheck({
-  competitionId, competitors, round, eventId,
+  competitionId, competitors, round,
 }) {
-  const event = events.byId[eventId];
+  const event = events.byId[round.event_id];
   const solveCount = event.recommendedFormat().expectedSolveCount;
   const [currentIndex, setCurrentIndex] = useState(0);
   const [registrationId, setRegistrationId] = useState(competitors[0].id);
@@ -69,9 +68,9 @@ function DoubleCheck({
     setAttempts(newAttempts);
   };
 
-  const handleRegistrationIdChange = useCallback((_, { value }) => {
+  const handleRegistrationIdChange = (_, { value }) => {
     setRegistrationId(value);
-  }, []);
+  };
 
   const currentCompetitor = useMemo(() => {
     if (results) {
@@ -80,11 +79,15 @@ function DoubleCheck({
     return {};
   }, [competitors, currentIndex, results]);
 
-  useEffect(() => {
-    if (results) {
-      setAttempts(results[currentIndex].attempts.map((a) => a.result));
-    }
-  }, [currentIndex, results]);
+  const onPrevious = () => {
+    setAttempts(results[currentIndex - 1].attempts.map((a) => a.result));
+    setCurrentIndex((oldIndex) => oldIndex - 1);
+  };
+
+  const onNext = () => {
+    setAttempts(results[currentIndex + 1].attempts.map((a) => a.result));
+    setCurrentIndex((oldIndex) => oldIndex + 1);
+  };
 
   if (isLoading) {
     return <Loading />;
@@ -93,7 +96,7 @@ function DoubleCheck({
   return (
     <Grid>
       <Grid.Column width={1} verticalAlign="middle">
-        { currentIndex !== 0 && <Button onClick={() => setCurrentIndex((oldIndex) => oldIndex - 1)}>{'<'}</Button>}
+        { currentIndex !== 0 && <Button onClick={onPrevious}>{'<'}</Button>}
       </Grid.Column>
       <Grid.Column width={7}>
         <Segment loading={isPendingUpdate}>
@@ -106,12 +109,12 @@ function DoubleCheck({
             attempts={attempts}
             competitors={competitors}
             solveCount={solveCount}
-            eventId={eventId}
+            eventId={round.event_id}
           />
         </Segment>
       </Grid.Column>
       <Grid.Column width={1} verticalAlign="middle">
-        {currentIndex !== results.length - 1 && <Button onClick={() => setCurrentIndex((oldIndex) => oldIndex + 1)}>{'>'}</Button>}
+        {currentIndex !== results.length - 1 && <Button onClick={onNext}>{'>'}</Button>}
       </Grid.Column>
       <Grid.Column textAlign="center" width={7} verticalAlign="middle">
         <Card fluid raised>
