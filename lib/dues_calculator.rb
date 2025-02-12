@@ -1,13 +1,9 @@
 # frozen_string_literal: true
 
 module DuesCalculator
-  def self.dues_for_n_competitors(country_iso2, base_entry_fee_lowest_denomination, currency_code, n)
+  def self.dues_per_competitor(country_iso2, base_entry_fee_lowest_denomination, currency_code)
     dues_per_competitor_in_usd_money = dues_per_competitor_in_usd(country_iso2, base_entry_fee_lowest_denomination, currency_code)
-    if dues_per_competitor_in_usd_money.present?
-      (dues_per_competitor_in_usd_money * n).exchange_to(currency_code)
-    else
-      nil
-    end
+    dues_per_competitor_in_usd_money&.exchange_to(currency_code)
   rescue CurrencyUnavailable
     nil
   end

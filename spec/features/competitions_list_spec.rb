@@ -10,11 +10,13 @@ RSpec.feature "Competitions list", js: true do
 
     context "when a delegate is set in the params" do
       let(:competition) { FactoryBot.create :competition, :visible, :future }
-      let(:delegate) { competition.delegates.first }
+      let!(:delegate) { competition.delegates.first }
 
       before do
         visit "/competitions?show_admin_details=yes"
-        # Wait until the Delegate index finished loading
+        # Wait for the Delegate index to start loading
+        expect(page).to have_selector("#delegate-pulse")
+        # …and then wait for it to finish loading
         expect(page).not_to have_selector("#delegate-pulse")
         within(:css, "#delegate") do
           find(".search").set(delegate.name)
