@@ -1,5 +1,5 @@
 import React, {
-  useEffect, useMemo, useState,
+  useMemo, useState,
 } from 'react';
 import {
   Button, Card,
