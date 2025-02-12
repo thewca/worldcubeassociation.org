@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class LiveResult < ApplicationRecord
+  BEST_POSSIBLE_SCORE = 1
+
   has_many :live_attempts, -> { where(replaced_by: nil).order(:attempt_number) }
 
   after_save :recompute_advancing, if: :should_recompute?
@@ -35,11 +37,7 @@ class LiveResult < ApplicationRecord
 
   def potential_score
     rank_by = round.format.sort_by == 'single' ? 'best' : 'average'
-    complete? ? self[rank_by.to_sym] : best_possible_score
-  end
-
-  def best_possible_score
-    1
+    complete? ? self[rank_by.to_sym] : BEST_POSSIBLE_SCORE
   end
 
   def complete?
