@@ -41,7 +41,7 @@ export const resultsFiveWideColumn = {
   accessorKey: 'result',
   header: I18n.t('results.table_elements.solves'),
   colSpan: 5,
-  isMultiAttemptsHack: true,
+  rendersOwnCells: true,
   cell: ({ getValue }) => {
     const result = getValue();
 

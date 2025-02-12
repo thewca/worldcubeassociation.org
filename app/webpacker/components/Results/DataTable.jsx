@@ -29,7 +29,7 @@ export default function DataTable({ rows, config }) {
           {table.getRowModel().rows.map((row) => (
             <Table.Row key={row.id}>
               {row.getVisibleCells().map((cell) => (
-                cell.column.columnDef.isMultiAttemptsHack
+                cell.column.columnDef.rendersOwnCells
                   ? (
                     <React.Fragment key={cell.id}>
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}

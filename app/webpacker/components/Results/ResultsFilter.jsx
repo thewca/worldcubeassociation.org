@@ -16,7 +16,10 @@ function getRegionIdWithFallback(region) {
 }
 
 export default function ResultsFilter({
-  filterState, filterActions, showCategories, isRecords,
+  filterState,
+  filterActions,
+  showCategories,
+  clearEventIsAllowed = false,
 }) {
   const {
     event,
@@ -49,7 +52,7 @@ export default function ResultsFilter({
             selectedEvents={[event]}
             onEventSelection={({ eventId }) => setEvent(eventId)}
             hideAllButton
-            hideClearButton={!isRecords}
+            hideClearButton={!clearEventIsAllowed || !event}
             showBreakBeforeButtons={false}
           />
         </Form.Field>

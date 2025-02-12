@@ -83,7 +83,7 @@ export function Records() {
       <ResultsFilter
         filterState={filterState}
         filterActions={filterActions}
-        isRecords
+        clearEventIsAllowed
         showCategories={SHOW_CATEGORIES}
       />
       <RecordsTable filterState={filterState} />
