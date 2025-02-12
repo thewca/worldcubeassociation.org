@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_01_24_154917) do
+ActiveRecord::Schema[7.2].define(version: 2025_02_12_082508) do
   create_table "Competitions", id: { type: :string, limit: 32, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", limit: 50, default: "", null: false
     t.string "cityName", limit: 50, default: "", null: false
@@ -1017,8 +1017,10 @@ ActiveRecord::Schema[7.2].define(version: 2025_01_24_154917) do
   create_table "registration_competition_events", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.integer "registration_id"
     t.integer "competition_event_id"
+    t.index ["competition_event_id"], name: "index_registration_competition_events_on_competition_event_id"
     t.index ["registration_id", "competition_event_id"], name: "idx_registration_competition_events_on_reg_id_and_comp_event_id", unique: true
     t.index ["registration_id", "competition_event_id"], name: "index_reg_events_reg_id_comp_event_id"
+    t.index ["registration_id"], name: "index_registration_competition_events_on_registration_id"
   end
 
   create_table "registration_history_changes", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
