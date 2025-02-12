@@ -12,13 +12,13 @@ export default function RankingsTable({ filterState }) {
 
   const isAverage = rankingType === 'average';
 
-  const { data: rows, isFetching } = useQuery({
+  const { data: rows, isLoading } = useQuery({
     queryKey: ['rankings', event, region, rankingType, gender, show],
     queryFn: () => getRankings(event, rankingType, region, gender, show),
     select: (rankingsData) => mapRankingsData(rankingsData, show === 'by region'),
   });
 
-  if (isFetching) return <Loading />;
+  if (isLoading) return <Loading />;
 
   return (
     <DataTable rows={rows} config={rankingsConfig(show, isAverage)} />

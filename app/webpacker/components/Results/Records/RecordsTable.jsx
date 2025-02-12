@@ -1,5 +1,4 @@
 import { useQuery } from '@tanstack/react-query';
-import { Segment } from 'semantic-ui-react';
 import React from 'react';
 import { getRecords } from '../api/records';
 import Loading from '../../Requests/Loading';
@@ -31,14 +30,13 @@ export default function RecordsTable({ filterState }) {
     event, region, gender, show,
   } = filterState;
 
-  const { data: rows, isFetching } = useQuery({
+  const { data: rows, isLoading } = useQuery({
     queryKey: ['records', event, region, gender, show],
     queryFn: () => getRecords(event, region, gender, show),
     select: (recordsData) => augmentApiResults(recordsData, show),
   });
 
-  if (isFetching) return <Loading />;
-  if (rows.length === 0) return <Segment>No results found</Segment>;
+  if (isLoading) return <Loading />;
 
   switch (show) {
     case 'mixed':

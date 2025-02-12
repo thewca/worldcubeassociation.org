@@ -1,13 +1,22 @@
 import { flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
-import { Table } from 'semantic-ui-react';
+import { Segment, Table } from 'semantic-ui-react';
 import React from 'react';
+import I18n from '../../lib/i18n';
 
 export default function DataTable({ rows, config }) {
+  const tableData = rows || [];
+
   const table = useReactTable({
-    data: rows || [],
+    data: tableData,
     columns: config,
     getCoreRowModel: getCoreRowModel(),
   });
+
+  if (tableData.length === 0) {
+    return (
+      <Segment>{I18n.t('search_results.index.not_found.generic')}</Segment>
+    );
+  }
 
   return (
     <div style={{ overflowX: 'scroll' }}>
