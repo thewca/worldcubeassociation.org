@@ -97,19 +97,6 @@ class Round < ApplicationRecord
     [cutoff_format, format].compact
   end
 
-  def accepted_registrations
-    if number == 1
-      registrations.accepted
-    else
-      previous_round = Round.joins(:competition_event).find_by(competition_event: { competition_id: competition_event.competition_id, event_id: event.id }, number: number - 1)
-      previous_round.live_results.where(advancing: true).includes(:registration).map(&:registration)
-    end
-  end
-
-  def total_accepted_registrations
-    accepted_registrations.count
-  end
-
   def full_format_name(with_short_names: false, with_tooltips: false)
     # 'with_tooltips' implies that short names are used for display, and long
     # names are used in the tooltip.
