@@ -137,7 +137,7 @@ export const seriesEligibleCompetitionsJsonUrl = `<%= CGI.unescape(Rails.applica
 
 export const registrationCollisionsJsonUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.registration_collisions_json_path)%>`;
 
-export const calculateDuesUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.calculate_dues_path)%>`;
+export const calculateDuesUrl = (countryId, currencyCode, baseEntryFee) => `<%= CGI.unescape(Rails.application.routes.url_helpers.calculate_dues_path)%>?${jsonToQueryString({ countryId, currencyCode, baseEntryFee })}`;
 
 export const adminPostingCompetitionsUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.results_posting_dashboard_path(format: "json")) %>`;
 
