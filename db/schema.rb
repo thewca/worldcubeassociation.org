@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_02_02_154917) do
+ActiveRecord::Schema[7.2].define(version: 2025_01_24_154917) do
   create_table "Competitions", id: { type: :string, limit: 32, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", limit: 50, default: "", null: false
     t.string "cityName", limit: 50, default: "", null: false
@@ -661,6 +661,16 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_02_154917) do
 
   create_table "connected_stripe_accounts", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "account_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "country_band_details", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.integer "number", null: false
+    t.date "start_date", null: false
+    t.date "end_date"
+    t.integer "due_amount_per_competitor_us_cents", null: false
+    t.integer "due_percent_registration_fee", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
