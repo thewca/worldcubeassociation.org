@@ -154,6 +154,7 @@ Rails.application.routes.draw do
     get 'competitions/:competition_id/live/rounds/:round_id/admin' => 'live#admin', as: :live_admin_round_results
     get 'competitions/:competition_id/live/rounds/:round_id/admin/check' => 'live#double_check', as: :live_admin_check_round_results
     get 'competitions/:competition_id/live/admin' => 'live#schedule_admin', as: :live_schedule_admin
+    get 'competitions/:competition_id/live/admin' => 'live#schedule_admin', as: :live_schedule_admin
 
     get 'api/competitions/:competition_id/rounds/:round_id' => 'live#round_results', as: :live_round_results_api
     post 'api/competitions/:competition_id/rounds/:round_id' => 'live#add_result', as: :add_live_result
@@ -204,7 +205,6 @@ Rails.application.routes.draw do
   get 'panel/:panel_id' => 'panel#index', as: :panel_index
   scope 'panel-page' do
     get 'run-validators' => 'admin#check_results', as: :admin_check_results
-    get 'create-new-comers' => 'admin#finish_unfinished_persons', as: :admin_finish_unfinished_persons
     get 'check-records' => 'admin#check_regional_records', as: :admin_check_regional_records
     get 'compute-auxiliary-data' => 'admin#compute_auxiliary_data', as: :admin_compute_auxiliary_data
     get 'generate-data-exports' => 'admin#generate_exports', as: :admin_generate_exports
@@ -301,8 +301,6 @@ Rails.application.routes.draw do
   get '/admin/do_generate_public_export' => 'admin#do_generate_public_export'
   get '/admin/override_regional_records' => 'admin#override_regional_records'
   post '/admin/override_regional_records' => 'admin#do_override_regional_records'
-  get '/admin/finish_persons' => 'admin#finish_persons'
-  post '/admin/finish_persons' => 'admin#do_finish_persons'
   get '/admin/complete_persons' => 'admin#complete_persons'
   post '/admin/complete_persons' => 'admin#do_complete_persons'
   get '/admin/peek_unfinished_results' => 'admin#peek_unfinished_results'

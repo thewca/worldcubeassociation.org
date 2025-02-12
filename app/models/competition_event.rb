@@ -6,6 +6,7 @@ class CompetitionEvent < ApplicationRecord
 
   has_one :waiting_list, dependent: :destroy, as: :holder
   has_many :registration_competition_events, dependent: :destroy
+  has_many :registrations, through: :registration_competition_events
   has_many :rounds, -> { order(:number) }, dependent: :destroy
   has_many :wcif_extensions, as: :extendable, dependent: :delete_all
   has_many :formats, through: :rounds
