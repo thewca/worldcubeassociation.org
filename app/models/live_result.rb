@@ -5,10 +5,11 @@ class LiveResult < ApplicationRecord
 
   has_many :live_attempts, -> { where(replaced_by: nil).order(:attempt_number) }
 
-  after_save :recompute_advancing, if: :should_recompute?
-
   after_create :recompute_ranks
   after_update :recompute_ranks, if: :should_recompute?
+
+  # This hook has to be executed _after_ computing the rankings
+  after_save :recompute_advancing, if: :should_recompute?
 
   after_save :notify_users
 
@@ -92,7 +93,8 @@ class LiveResult < ApplicationRecord
     end
 
     def recompute_advancing
-      round_results = round.live_results
+      # Only ranked results can be considered for advancing.
+      round_results = round.live_results.where.not(ranking: nil)
       round_results.update_all(advancing: false, advancing_questionable: false)
 
       missing_attempts = round.total_accepted_registrations - round_results.count
