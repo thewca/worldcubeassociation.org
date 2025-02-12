@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_02_02_154917) do
+ActiveRecord::Schema[7.2].define(version: 2025_02_11_173917) do
   create_table "Competitions", id: { type: :string, limit: 32, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", limit: 50, default: "", null: false
     t.string "cityName", limit: 50, default: "", null: false
@@ -797,6 +797,18 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_02_154917) do
     t.index ["entered_by_id"], name: "index_live_attempts_on_entered_by_id"
     t.index ["live_result_id"], name: "index_live_attempts_on_live_result_id"
     t.index ["replaced_by_id"], name: "index_live_attempts_on_replaced_by_id"
+  end
+
+  create_table "live_records", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "record_type", null: false
+    t.integer "value", null: false
+    t.string "event_id", null: false
+    t.string "country_id"
+    t.string "continent_id"
+    t.string "record_scope", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["event_id", "record_type", "record_scope"], name: "idx_on_event_id_record_type_record_scope_f273422d94", unique: true
   end
 
   create_table "live_results", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|

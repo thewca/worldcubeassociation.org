@@ -42,6 +42,40 @@ class LiveResult < ApplicationRecord
 
   private
 
+    def compute_record_tag
+      LiveRecord::RECORD_SCOPES.each do |scope|
+        single_record = LiveRecord.best_for(event_id, 'single', scope,
+                                              country_id: (scope == 'NR' ? registration.user.country.id : nil),
+                                              continent_id: (scope == 'CR' ? registration.user.country.continentId : nil))
+
+        average_record = LiveRecord.best_for(event_id, 'average', scope,
+                                               country_id: (scope == 'NR' ? registration.user.country.id : nil),
+                                               continent_id: (scope == 'CR' ? registration.user.country.continentId : nil))
+
+        if single_record.value && single_record.value <= best
+          update(single_record_tag: scope)
+          single_record.update(value: best, live_result: self)
+          got_record = true
+        end
+
+        if average_record.value && average_record.value <= average
+          update(average_record_tag: scope)
+          average_record.update(value: average, live_result: self)
+          got_record = true
+        end
+
+        return if got_record
+      end
+
+      personal_records = { :single => registration.best_solve(event_id, 'single'), :average => registration.best_solve(event_id, 'average')}
+      if personal_records[:single].time_centiseconds < best
+        update(single_record_tag: 'PR')
+      end
+      if personal_records[:average].time_centiseconds < average
+        update(average_record_tag: 'PR')
+      end
+    end
+
     def notify_users
       ActionCable.server.broadcast("results_#{round_id}", serializable_hash)
     end
