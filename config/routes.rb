@@ -412,8 +412,6 @@ Rails.application.routes.draw do
         patch '/wcif' => 'competitions#update_wcif', as: :update_wcif
       end
 
-      post '/registration-data' => 'competitions#registration_data', as: :registration_data
-
       scope 'user_roles' do
         get '/search' => 'user_roles#search', as: :user_roles_search
       end
