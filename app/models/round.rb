@@ -117,6 +117,12 @@ class Round < ApplicationRecord
     RoundType.c_find(round_type_id)
   end
 
+  def number_of_competitors_advancing
+    return 3 if final_round?
+    max_qualifying = (live_results.length * 0.75).floor
+    [advancement_condition.max_advancing(live_results), max_qualifying].min
+  end
+
   def final_round?
     number == total_number_of_rounds
   end

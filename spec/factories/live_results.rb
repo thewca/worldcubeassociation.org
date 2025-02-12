@@ -13,7 +13,7 @@ FactoryBot.define do
       attempts_count { 5 }
     end
 
-    after(:create) do |live_result, evaluator|
+    before(:create) do |live_result, evaluator|
       create_list(:live_attempt, evaluator.attempts_count, live_result: live_result)
     end
 
