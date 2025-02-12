@@ -382,12 +382,6 @@ class AdminController < ApplicationController
     Competition.includes(associations).find_by_id!(params[:competition_id])
   end
 
-  def finish_unfinished_persons
-    @finish_persons = FinishPersonsForm.new(
-      competition_ids: params[:competition_ids] || nil,
-    )
-  end
-
   def complete_persons
     @competition_ids_string = params.fetch(:competition_ids, "")
     @competition_ids = competition_list_from_string(@competition_ids_string)
