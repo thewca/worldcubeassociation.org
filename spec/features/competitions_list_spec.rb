@@ -10,7 +10,7 @@ RSpec.feature "Competitions list", js: true do
 
     context "when a delegate is set in the params" do
       let(:competition) { FactoryBot.create :competition, :visible, :future }
-      let(:delegate) { competition.delegates.first }
+      let!(:delegate) { competition.delegates.first }
 
       before do
         visit "/competitions?show_admin_details=yes"
