@@ -1,6 +1,6 @@
 import React from 'react';
 import { Header, Popup, Table } from 'semantic-ui-react';
-import { getIsoDateString, getShortTimeString } from '../../../lib/utils/dates';
+import { getIsoDateWithTimeString, getShortTimeString } from '../../../lib/utils/dates';
 import { events } from '../../../lib/wca-data.js.erb';
 import EventIcon from '../../wca/EventIcon';
 
@@ -31,7 +31,7 @@ export default function RegistrationHistory({ history, competitorsInfo }) {
                 <Popup
                   content={getShortTimeString(entry.timestamp)}
                   trigger={
-                    <span>{getIsoDateString(entry.timestamp)}</span>
+                    <span>{getIsoDateWithTimeString(entry.timestamp)}</span>
                   }
                 />
               </Table.Cell>
