@@ -5,7 +5,14 @@ class AddLiveResultJob < ApplicationJob
   queue_as EnvConfig.LIVE_QUEUE if WcaLive.sqs_queued?
 
   def perform(results, round_id, registration_id, entered_by)
-    attempts = results.map.with_index(1) { |r, i| LiveAttempt.build(result: r, attempt_number: i, entered_by: entered_by, entered_at: Time.now.utc) }
+    attempts = results.map.with_index(1) { |r, i|
+      LiveAttempt.build(result: r, attempt_number: i,
+                        live_attempt_history_entries: [LiveAttemptHistoryEntry.build(
+                          result: r,
+                          entered_at: Time.now.utc,
+                          entered_by: entered_by,
+                        )])
+    }
     round = Round.find(round_id)
     event = round.event
     format = round.format
@@ -17,11 +24,6 @@ class AddLiveResultJob < ApplicationJob
                        live_attempts: attempts,
                        last_attempt_entered_at: Time.now.utc,
                        best: r.compute_correct_best,
-                       average: r.compute_correct_average,
-                       live_attempt_history_entries: [LiveAttemptHistoryEntry.build(
-                         result: r,
-                         entered_at: Time.now.utc,
-                         entered_by: current_user
-                       )])
+                       average: r.compute_correct_average)
   end
 end

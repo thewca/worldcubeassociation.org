@@ -43,18 +43,17 @@ class LiveController < ApplicationController
         else
           LiveAttempt.build(attempt_number: i,
                             result: r,
-                            current_user: current_user,
                             live_attempt_history_entries: [LiveAttemptHistoryEntry.build(
-                                                             result: r,
-                                                             entered_at: Time.now.utc,
-                                                             entered_by: current_user
+                              result: r,
+                              entered_at: Time.now.utc,
+                              entered_by: current_user,
                             )])
         end
       end
     end
 
     # TODO: What is the best way to do this?
-    r = Result.new( value1: results[0], value2: results[1], value3: results[2], value4: results[3] || 0, value5: results[4] || 0, event_id: round.event.id, round_type_id: round.round_type_id, format_id: round.format_id)
+    r = Result.new(value1: results[0], value2: results[1], value3: results[2], value4: results[3] || 0, value5: results[4] || 0, event_id: round.event.id, round_type_id: round.round_type_id, format_id: round.format_id)
 
     result.update(average: r.compute_correct_average, best: r.compute_correct_best, live_attempts: new_attempts, last_attempt_entered_at: Time.now.utc)
 
