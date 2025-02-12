@@ -34,7 +34,6 @@ function Podiums({
               competitionId={competitionId}
               competitors={competitors}
               event={events.byId[results.event.id]}
-              showEmpty={false}
             />
           ) : 'Podiums to be determined'}
         </>
