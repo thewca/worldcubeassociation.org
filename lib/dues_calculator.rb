@@ -14,8 +14,8 @@ module DuesCalculator
     registration_fees = Money.new(base_entry_fee_lowest_denomination, currency_code).exchange_to("USD")
 
     # Calculation of 'registration fee dues'
-    due_percent_registration_fee = country_band_detail&.due_percent_registration_fee.to_f || 0
-    registration_fee_dues = registration_fees * due_percent_registration_fee / 100
+    due_percent_registration_fee = country_band_detail&.due_percent_registration_fee || 0
+    registration_fee_dues = registration_fees * due_percent_registration_fee / 100.0
 
     # Calculation of 'country band dues'
     due_amount_per_competitor_us_cents = country_band_detail&.due_amount_per_competitor_us_cents || 0
