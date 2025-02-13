@@ -3,13 +3,10 @@
 class LiveAttempt < ApplicationRecord
   include Comparable
 
-  # If the Attempt has been replaced, it no longer points to a live_result, but instead is being pointed to
-  # by another Attempt
-  belongs_to :live_result, optional: true
-  belongs_to :replaced_by, class_name: "LiveAttempt", optional: true
-  validate :needs_live_result_or_replaced_by
+  default_scope { order(:attempt_number) }
 
-  belongs_to :entered_by, class_name: 'User'
+  belongs_to :live_result
+  has_many :live_attempt_history_entries, dependent: :destroy
 
   validates :result, presence: true
   validates :result, numericality: { only_integer: true }
@@ -27,9 +24,29 @@ class LiveAttempt < ApplicationRecord
     result <=> other.result
   end
 
-  def needs_live_result_or_replaced_by
-    if replaced_by.nil? && live_result.nil?
-      errors.add(:replaced_by, "When unlinking an attempt from a live result you need to set replaced_by")
-    end
+  def self.build_with_history_entry(result, attempt_number, acting_user)
+    LiveAttempt.build(
+      result: result,
+      attempt_number: attempt_number,
+      live_attempt_history_entries: [
+        LiveAttemptHistoryEntry.build(
+          result: result,
+          entered_at: Time.now.utc,
+          entered_by: acting_user,
+        ),
+      ],
+    )
+  end
+
+  def update_with_history_entry(result, acting_user)
+    self.update(result: result)
+    self.live_attempt_history_entries.create(
+      result: result,
+      entered_at: Time.now.utc,
+      entered_by: acting_user,
+    )
+
+    # Return `self` for method chaining
+    self
   end
 end

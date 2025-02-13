@@ -32,22 +32,24 @@ class LiveController < ApplicationController
 
     return render json: { status: "result does not exist" }, status: :unprocessable_entity unless result.present?
 
-    previous_attempts = result.live_attempts
+    previous_attempts = result.live_attempts.index_by(&:attempt_number)
 
     new_attempts = results.map.with_index(1) do |r, i|
-      same_result = previous_attempts.find_by(result: r, attempt_number: i)
-      if same_result.present?
-        same_result
+      previous_attempt = previous_attempts[i]
+
+      if previous_attempt.present?
+        if previous_attempt.result == r
+          previous_attempt
+        else
+          previous_attempt.update_with_history_entry(r, current_user)
+        end
       else
-        different_result = previous_attempts.find_by(attempt_number: i)
-        new_result = LiveAttempt.build(result: r, attempt_number: i, entered_at: Time.now.utc, entered_by: current_user)
-        different_result&.update(replaced_by_id: new_result.id)
-        new_result
+        LiveAttempt.build_with_history_entry(r, i, current_user)
       end
     end
 
     # TODO: What is the best way to do this?
-    r = Result.build({ value1: results[0], value2: results[1], value3: results[2], value4: results[3] || 0, value5: results[4] || 0, event_id: round.event.id, round_type_id: round.round_type_id, format_id: round.format_id })
+    r = Result.new(value1: results[0], value2: results[1], value3: results[2], value4: results[3] || 0, value5: results[4] || 0, event_id: round.event.id, round_type_id: round.round_type_id, format_id: round.format_id)
 
     result.update(average: r.compute_correct_average, best: r.compute_correct_best, live_attempts: new_attempts, last_attempt_entered_at: Time.now.utc)
 

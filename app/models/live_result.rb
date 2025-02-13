@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
 class LiveResult < ApplicationRecord
-  has_many :live_attempts, -> { where(replaced_by: nil).order(:attempt_number) }
+  has_many :live_attempts
+  alias_method :attempts, :live_attempts
 
   after_create :recompute_ranks
   after_update :recompute_ranks, if: :should_recompute?
@@ -28,10 +29,6 @@ class LiveResult < ApplicationRecord
 
   def event_id
     event.id
-  end
-
-  def attempts
-    live_attempts.order(:attempt_number)
   end
 
   def potential_score
