@@ -326,6 +326,8 @@ class Competition < ApplicationRecord
       errors.add(:auto_close_threshold, I18n.t('competitions.errors.use_wca_registration')) unless use_wca_registration
       errors.add(:auto_close_threshold, I18n.t('competitions.errors.must_exceed_competitor_limit')) if
         competitor_limit.present? && auto_close_threshold <= competitor_limit
+      errors.add(:auto_close_threshold, I18n.t('competitions.errors.auto_close_exceed_paid')) unless
+        auto_close_threshold > registrations.with_payments.count
     end
   end
 

@@ -1649,6 +1649,20 @@ RSpec.describe Competition do
         expect(comp).not_to be_valid
         expect(comp.errors[:auto_close_threshold]).to include("Competition must use WCA registration")
       end
+
+      it 'cant set auto_close_threshold == number of paid registrations' do
+        FactoryBot.create_list(:registration, 3, :paid, competition: auto_close_comp)
+        auto_close_comp.auto_close_threshold = 3
+        expect(auto_close_comp).not_to be_valid
+        expect(auto_close_comp.errors[:auto_close_threshold]).to include("Auto close threshold must be greater than the number of currently paid registrations")
+      end
+
+      it 'cant set auto_close_threshold < number of paid registrations' do
+        FactoryBot.create_list(:registration, 3, :paid, competition: auto_close_comp)
+        auto_close_comp.auto_close_threshold = 2
+        expect(auto_close_comp).not_to be_valid
+        expect(auto_close_comp.errors[:auto_close_threshold]).to include("Auto close threshold must be greater than the number of currently paid registrations")
+      end
     end
   end
 end
