@@ -98,7 +98,11 @@ class LiveResult < ApplicationRecord
       potential_results = Array.new(missing_attempts) { |i| LiveResult.build(round: round) }
       results_with_potential = (round_results.to_a + potential_results).sort_by(&:potential_score)
 
-      qualifying_index = round.number_of_competitors_advancing
+      # Our Regulations allow at most 75% of competitors to proceed
+      max_qualifying = (round_results.count * 0.75).floor
+      advancement_qualifying = [round.advancement_condition.max_advancing(round_results), max_qualifying].min
+
+      qualifying_index = round.final_round? ? 3 : advancement_qualifying
       round_results.update_all("advancing_questionable = ranking BETWEEN 1 AND #{qualifying_index}")
 
       # Determine which results would advance if everyone achieved their best possible attempt.
