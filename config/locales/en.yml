@@ -1187,27 +1187,23 @@ en:
         #context: "comp_name" contains the competition's name
         see_you_soon: "We look forward to seeing you at %{comp_name}!"
       #context: when registration is moved to waiting list
-      pending:
+      waiting_list:
         #context: "comp_name" contains the competition's name
-        mail_subject: "Registration Moved to Waitlist: %{comp_name}"
-        #context: "comp_name" contains the competition's name
-        moved_html: "Your registration for %{comp_name} has been moved to the waiting list. Possible causes are:"
-        #context: this key is one of the reasons explaining why a registration could be moved to the waiting list
-        causes:
-          accepted: "Your registration was accidentally accepted"
-          withdrawal: "You asked for withdrawal"
+        mail_subject: "You're on the Waiting List: %{comp_name}"
+        waitlisted_html: "The competition is full, but you have been placed on a waiting list, and you will receive an email if enough spots open up for you to be able to attend. Check your position on the waiting list %{here}."
         email_if_error: "If you think this is an error, please reply to this email."
       #context: when registration is deleted
       deleted:
         #context: "comp_name" contains the competition's name
         mail_subject: "Registration Deleted: %{comp_name}"
         message_html: "Your registration for %{comp_name} has been deleted. Possible causes are:"
+        email_if_error: "If you think this is an error, please reply to this email."
         #context: this key is one of the reasons explaining why a registration could be deleted
         causes:
           missing_info: "You did not submit all the required details"
           incomplete: "You didn't meet the registration criteria (for example, paying the registration fee in advance or meeting the qualifying times for events)"
           registrations_full: "The competitor limit has been reached and there are no more spots available"
-          multiple_registrations: "You registered twice or more times"
+          multiple_registrations: "You registered two or more times"
           competition_canceled: "The competition has been canceled"
     #context: on the registrations list
     list:
@@ -1964,6 +1960,7 @@ en:
       series_distance_km: "The competition is located too far away from %{competition}."
       series_distance_days: "The competition is scheduled too many days away from %{competition}."
       must_ask_about_guests_if_specifying_limit: "Must ask about guests if a guest limit is specified."
+      not_full_url: "You have a relative URL (%{url}) in the content. Please enter full URLs with prefix http:// or https://."
     new:
       create_competition: "Create competition"
       note_clone: "To clone an existing competition visit the information page for that competition and click the \"Clone\" link in the menu."

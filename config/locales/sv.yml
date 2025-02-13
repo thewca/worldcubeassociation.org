@@ -2249,25 +2249,24 @@ sv:
           kontrollera statusen för din anmälan %{here}.
         #original_hash: 1852cbf
         see_you_soon: 'Vi ser fram emot att träffa dig på %{comp_name}!'
-      pending:
-        #original_hash: 8d26297
-        mail_subject: 'Anmälan flyttad till väntelistan: %{comp_name}'
-        #original_hash: 6fd0a8e
-        moved_html: >-
-          Din anmälan till %{comp_name} har flyttats till väntelistan. Möjliga
-          orsaker är:
-        causes:
-          #original_hash: eadfc0d
-          accepted: Din anmälan godkändes av misstag
-          #original_hash: 2ac6d84
-          withdrawal: Du bad om att dra dig ur
+      waiting_list:
+        #original_hash: 54c2106
+        mail_subject: 'Du är på väntelistan: %{comp_name}'
+        #original_hash: 2a0c44f
+        waitlisted_html: >-
+          Tävlingen är fylld, men du har placerats på en väntelista, och du
+          kommer att få ett mejl om tillräckligt många platser blir lediga för
+          att du ska kunna delta. Kontrollera din position på väntelistan
+          %{here}.
         #original_hash: 8f7358f
-        email_if_error: 'Om du tror att detta är ett fel, svara på det här e-postmeddelandet.'
+        email_if_error: 'Om du tror att detta är ett fel, vänligen svara på detta mejl.'
       deleted:
         #original_hash: 8cbc6c0
         mail_subject: 'Anmälan raderad: %{comp_name}'
         #original_hash: f66ae63
         message_html: 'Din anmälan till %{comp_name} har raderats. Möjliga orsaker är:'
+        #original_hash: 8f7358f
+        email_if_error: 'Om du tror att detta är ett fel, vänligen svara på detta mejl.'
         causes:
           #original_hash: 978944c
           missing_info: Du har inte skickat in alla nödvändiga uppgifter
@@ -2280,8 +2279,8 @@ sv:
           registrations_full: >-
             Gränsen för antalet tävlande har uppnåtts och det finns inga fler
             platser tillgängliga
-          #original_hash: 0d4cce9
-          multiple_registrations: Du anmälde dig två gånger eller fler gånger
+          #original_hash: 238f4ff
+          multiple_registrations: Du anmälde dig två eller fler gånger
           #original_hash: 70b1e2c
           competition_canceled: Tävlingen har ställts in
     list:
@@ -3946,6 +3945,10 @@ sv:
       series_distance_days: 'Tävlingen är för många dagar ifrån %{competition}.'
       #original_hash: 7fc8fba
       must_ask_about_guests_if_specifying_limit: Måste fråga om antal gäster om det finns en gräns för antalet gäster.
+      #original_hash: 000564d
+      not_full_url: >-
+        Du har en relativ URL (%{url}) i innehållet. Ange fullständiga URL:er
+        med prefix http:// eller https://.
     new:
       #original_hash: 1208df7
       create_competition: Skapa tävling
