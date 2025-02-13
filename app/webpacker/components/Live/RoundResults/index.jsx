@@ -35,12 +35,20 @@ function ResultPage({
   const queryClient = useQueryClient();
 
   const { data: results, isLoading } = useQuery({
-    queryKey: `${roundId}-results`,
+    queryKey: ['round-results', roundId],
     queryFn: () => getRoundResults(roundId, competitionId),
   });
 
   const updateResults = useCallback((data) => {
-    queryClient.setQueryData(`${roundId}-results`, (oldData) => [...oldData, data]);
+    const { registration_id: updatedRegistrationId } = data;
+
+    queryClient.setQueryData(['round-results', roundId], (oldData) => {
+      const untouchedResults = oldData.filter(
+        ({ registration_id: registrationId }) => registrationId !== updatedRegistrationId,
+      );
+
+      return [...untouchedResults, data];
+    });
   }, [roundId, queryClient]);
 
   useResultsSubscription(roundId, updateResults);
