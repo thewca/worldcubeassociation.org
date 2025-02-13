@@ -66,7 +66,8 @@ export function ReportTableCell({
             />
           )}
 
-        { isPastCompetition && !isReportPosted && permissions.can_administer_competitions.scope.includes(competitionId) && (
+        { isPastCompetition && !isReportPosted
+          && permissions.can_administer_competitions.scope.includes(competitionId) && (
             <Popup
               content={I18n.t('competitions.my_competitions_table.missing_report')}
               trigger={(
