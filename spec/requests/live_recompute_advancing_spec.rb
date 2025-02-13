@@ -17,14 +17,14 @@ end
 RSpec.describe "WCA Live API" do
   describe "Advancing Recomputation" do
     let(:competition) { FactoryBot.create(:competition, event_ids: ["333"]) }
+    let(:registrations) { FactoryBot.create_list(:registration, 5, :accepted, competition: competition, event_ids: ["333"]) }
 
     context 'with a ranking advancement condition' do
       it 'returns results with ranking better or equal to the given level' do
         round = FactoryBot.create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition, advancement_condition: ranking_condition)
 
         5.times do |i|
-          registration = FactoryBot.create(:registration, :accepted, competition: competition, event_ids: ["333"])
-          FactoryBot.create(:live_result, registration: registration, round: round, ranking: i + 1, average: (i + 1) * 100)
+          FactoryBot.create(:live_result, registration: registrations[i], round: round, ranking: i + 1, average: (i + 1) * 100)
         end
 
         expect(round.total_accepted_registrations).to eq 5
@@ -39,8 +39,7 @@ RSpec.describe "WCA Live API" do
         round = FactoryBot.create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition, advancement_condition: percent_condition)
 
         5.times do |i|
-          registration = FactoryBot.create(:registration, :accepted, competition: competition, event_ids: ["333"])
-          FactoryBot.create(:live_result, registration: registration, round: round, ranking: i + 1, average: (i + 1) * 100)
+          FactoryBot.create(:live_result, registration: registrations[i], round: round, ranking: i + 1, average: (i + 1) * 100)
         end
 
         expect(round.total_accepted_registrations).to eq 5
@@ -56,8 +55,7 @@ RSpec.describe "WCA Live API" do
         round = FactoryBot.create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition, advancement_condition: attempt_result_condition)
 
         5.times do |i|
-          registration = FactoryBot.create(:registration, :accepted, competition: competition, event_ids: ["333"])
-          FactoryBot.create(:live_result, registration: registration, round: round, ranking: i + 1, average: (i + 1) * 100)
+          FactoryBot.create(:live_result, registration: registrations[i], round: round, ranking: i + 1, average: (i + 1) * 100)
         end
 
         expect(round.total_accepted_registrations).to eq 5
