@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, {useCallback, useEffect} from 'react';
 import {
   Button, Container,
   Grid, Header,
@@ -11,6 +11,7 @@ import ResultsTable from '../components/ResultsTable';
 import { liveUrls } from '../../../lib/requests/routes.js.erb';
 import Loading from '../../Requests/Loading';
 import getRoundResults from '../api/getRoundResults';
+import useResultsSubscription from "../hooks/useResultsSubscription";
 
 export default function Wrapper({
   roundId, eventId, competitionId, competitors, canAdminResults,
@@ -39,22 +40,11 @@ function ResultPage({
     queryFn: () => getRoundResults(roundId, competitionId),
   });
 
-  useEffect(() => {
-    const cable = createConsumer();
+  const updateResults = useCallback((data) => {
+    queryClient.setQueryData(`${roundId}-results`, (oldData) => [...oldData, data]);
+  }, [roundId, queryClient]);
 
-    const subscription = cable.subscriptions.create(
-      { channel: 'LiveResultsChannel', round_id: roundId },
-      {
-        received: (data) => {
-          queryClient.setQueryData(`${roundId}-results`, (oldData) => [...oldData, data]);
-        },
-      },
-    );
-
-    return () => {
-      subscription.unsubscribe();
-    };
-  }, [roundId, queryClient, eventId]);
+  useResultsSubscription(roundId, updateResults);
 
   const event = events.byId[eventId];
 

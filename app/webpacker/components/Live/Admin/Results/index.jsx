@@ -12,6 +12,7 @@ import submitRoundResults from '../../api/submitRoundResults';
 import updateRoundResults from '../../api/updateRoundResults';
 import { competitionEditRegistrationsUrl, liveUrls } from '../../../../lib/requests/routes.js.erb';
 import AttemptsForm from '../../components/AttemptsForm';
+import useResultsSubscription from "../../hooks/useResultsSubscription";
 
 export default function Wrapper({
   roundId, eventId, competitionId, competitors,
@@ -92,29 +93,18 @@ function AddResults({
     },
   });
 
-  useEffect(() => {
-    const cable = createConsumer();
+  const updateResultsData = useCallback((data) => {
+    queryClient.setQueryData([roundId, 'results'], (oldData) => {
+      const existingIndex = oldData.map((a) => a.registration_id)
+        .indexOf(data.registration_id);
+      if (existingIndex === -1) {
+        return [...oldData, data];
+      }
+      return oldData.map((a) => (a.registration_id === data.registration_id ? data : a));
+    });
+  }, [queryClient, roundId]);
 
-    const subscription = cable.subscriptions.create(
-      { channel: 'LiveResultsChannel', round_id: roundId },
-      {
-        received: (data) => {
-          queryClient.setQueryData([roundId, 'results'], (oldData) => {
-            const existingIndex = oldData.map((a) => a.registration_id)
-              .indexOf(data.registration_id);
-            if (existingIndex === -1) {
-              return [...oldData, data];
-            }
-            return oldData.map((a) => (a.registration_id === data.registration_id ? data : a));
-          });
-        },
-      },
-    );
-
-    return () => {
-      subscription.unsubscribe();
-    };
-  }, [roundId, queryClient, eventId]);
+  useResultsSubscription(roundId, updateResultsData);
 
   const handleAttemptChange = (index, value) => {
     const newAttempts = [...attempts];
