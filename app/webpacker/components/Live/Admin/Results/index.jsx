@@ -6,7 +6,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { events } from '../../../../lib/wca-data.js.erb';
 import WCAQueryClientProvider from '../../../../lib/providers/WCAQueryClientProvider';
 import ResultsTable from '../../components/ResultsTable';
-import getRoundResults from '../../api/getRoundResults';
+import getRoundResults, { insertNewResult, roundResultsKey } from '../../api/getRoundResults';
 import submitRoundResults from '../../api/submitRoundResults';
 import updateRoundResults from '../../api/updateRoundResults';
 import { competitionEditRegistrationsUrl, liveUrls } from '../../../../lib/requests/routes.js.erb';
@@ -44,7 +44,7 @@ function AddResults({
   const queryClient = useQueryClient();
 
   const { data: results, isLoading } = useQuery({
-    queryKey: [roundId, 'results'],
+    queryKey: roundResultsKey(roundId),
     queryFn: () => getRoundResults(roundId, competitionId),
   });
 
@@ -93,14 +93,10 @@ function AddResults({
   });
 
   const updateResultsData = useCallback((data) => {
-    queryClient.setQueryData([roundId, 'results'], (oldData) => {
-      const existingIndex = oldData.map((a) => a.registration_id)
-        .indexOf(data.registration_id);
-      if (existingIndex === -1) {
-        return [...oldData, data];
-      }
-      return oldData.map((a) => (a.registration_id === data.registration_id ? data : a));
-    });
+    queryClient.setQueryData(
+      roundResultsKey(roundId),
+      (oldData) => insertNewResult(oldData, data),
+    );
   }, [queryClient, roundId]);
 
   useResultsSubscription(roundId, updateResultsData);

@@ -9,7 +9,7 @@ import WCAQueryClientProvider from '../../../lib/providers/WCAQueryClientProvide
 import ResultsTable from '../components/ResultsTable';
 import { liveUrls } from '../../../lib/requests/routes.js.erb';
 import Loading from '../../Requests/Loading';
-import getRoundResults from '../api/getRoundResults';
+import getRoundResults, { insertNewResult, roundResultsKey } from '../api/getRoundResults';
 import useResultsSubscription from '../hooks/useResultsSubscription';
 
 export default function Wrapper({
@@ -35,20 +35,15 @@ function ResultPage({
   const queryClient = useQueryClient();
 
   const { data: results, isLoading } = useQuery({
-    queryKey: ['round-results', roundId],
+    queryKey: roundResultsKey(roundId),
     queryFn: () => getRoundResults(roundId, competitionId),
   });
 
   const updateResults = useCallback((data) => {
-    const { registration_id: updatedRegistrationId } = data;
-
-    queryClient.setQueryData(['round-results', roundId], (oldData) => {
-      const untouchedResults = oldData.filter(
-        ({ registration_id: registrationId }) => registrationId !== updatedRegistrationId,
-      );
-
-      return [...untouchedResults, data];
-    });
+    queryClient.setQueryData(
+      roundResultsKey(roundId),
+      (oldData) => insertNewResult(oldData, data),
+    );
   }, [roundId, queryClient]);
 
   useResultsSubscription(roundId, updateResults);
