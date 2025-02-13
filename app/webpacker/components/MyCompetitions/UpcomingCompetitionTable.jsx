@@ -11,6 +11,8 @@ import {
 } from './TableCells';
 import I18nHTMLTranslate from '../I18nHTMLTranslate';
 import { toRelativeOptions } from '../../lib/utils/dates';
+import TableHeader
+  from "../RegistrationsV2/RegistrationAdministration/AdministrationTableHeader";
 
 const competingStatusIcon = (competingStatus) => {
   switch (competingStatus) {
@@ -57,7 +59,7 @@ export default function UpcomingCompetitionTable({
   fallbackMessage = null,
 }) {
   const canViewDelegateReport = permissions.can_view_delegate_report.scope === '*' || competitions.some((c) => permissions.can_view_delegate_report.scope.includes(c.id));
-
+  const canAdministerCompetitions = permissions.can_administer_competitions.scope === '*' || competitions.some((c) => permissions.can_administer_competitions.scope.includes(c.id));
   if (competitions.length === 0 && fallbackMessage) {
     return (
       <Message info>
@@ -82,12 +84,14 @@ export default function UpcomingCompetitionTable({
               {I18n.t('competitions.competition_info.date')}
             </Table.HeaderCell>
             <Table.HeaderCell />
-            {canViewDelegateReport && (
-              <>
+            { canAdministerCompetitions && (
+             <>
+               <Table.HeaderCell/>
+               <Table.HeaderCell/>
+             </>
+            )}
+            { canViewDelegateReport && (
                 <Table.HeaderCell />
-                <Table.HeaderCell />
-                <Table.HeaderCell />
-              </>
             )}
 
           </Table.Row>
@@ -118,14 +122,14 @@ export default function UpcomingCompetitionTable({
                   <Table.Cell>
                     {competingStatusIcon(registrationStatuses[competition.id])}
                   </Table.Cell>
-                  {(permissions.can_organize_competitions.scope === '*' || permissions.can_organize_competitions.scope.includes(competition.id)) && (
+                  {(permissions.can_administer_competitions.scope === '*' || permissions.can_administer_competitions.scope.includes(competition.id)) && (
                     <Table.Cell>
                       <a href={editCompetitionsUrl(competition.id)}>
                         {I18n.t('competitions.my_competitions_table.edit')}
                       </a>
                     </Table.Cell>
                   )}
-                  {(permissions.can_organize_competitions.scope === '*' || permissions.can_organize_competitions.scope.includes(competition.id)) && (
+                  {(permissions.can_administer_competitions.scope === '*' || permissions.can_administer_competitions.scope.includes(competition.id)) && (
                     <Table.Cell>
                       <a href={competitionEditRegistrationsUrl(competition.id)}>
                         {I18n.t('competitions.my_competitions_table.registrations')}
