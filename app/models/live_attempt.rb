@@ -24,13 +24,27 @@ class LiveAttempt < ApplicationRecord
     result <=> other.result
   end
 
-  def update_with_history_entry(r, current_user)
-    update(result: r)
-    live_attempt_history_entries.create({
-                                          result: r,
-                                          entered_at: Time.now.utc,
-                                          entered_by: current_user,
-                                        })
+  def self.build_with_history_entry(r, i, acting_user)
+    LiveAttempt.build(
+      result: r,
+      attempt_number: i,
+      live_attempt_history_entries: [
+        LiveAttemptHistoryEntry.build(
+          result: r,
+          entered_at: Time.now.utc,
+          entered_by: acting_user,
+        ),
+      ],
+    )
+  end
+
+  def update_with_history_entry(result, acting_user)
+    update(result: result)
+    live_attempt_history_entries.create(
+      result: r,
+      entered_at: Time.now.utc,
+      entered_by: acting_user,
+    )
     self
   end
 end

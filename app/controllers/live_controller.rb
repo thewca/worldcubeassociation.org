@@ -41,13 +41,7 @@ class LiveController < ApplicationController
         if previous_attempts[i].present?
           previous_attempts[i].update_with_history_entry(r, current_user)
         else
-          LiveAttempt.build(attempt_number: i,
-                            result: r,
-                            live_attempt_history_entries: [LiveAttemptHistoryEntry.build(
-                              result: r,
-                              entered_at: Time.now.utc,
-                              entered_by: current_user,
-                            )])
+          LiveAttempt.build_with_history_entry(r, i, current_user)
         end
       end
     end

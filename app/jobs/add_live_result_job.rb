@@ -6,12 +6,7 @@ class AddLiveResultJob < ApplicationJob
 
   def perform(results, round_id, registration_id, entered_by)
     attempts = results.map.with_index(1) { |r, i|
-      LiveAttempt.build(result: r, attempt_number: i,
-                        live_attempt_history_entries: [LiveAttemptHistoryEntry.build(
-                          result: r,
-                          entered_at: Time.now.utc,
-                          entered_by: entered_by,
-                        )])
+      LiveAttempt.build_with_history_entry(r, i, entered_by)
     }
     round = Round.find(round_id)
     event = round.event
