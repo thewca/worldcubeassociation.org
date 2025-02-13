@@ -24,13 +24,13 @@ class LiveAttempt < ApplicationRecord
     result <=> other.result
   end
 
-  def self.build_with_history_entry(r, i, acting_user)
+  def self.build_with_history_entry(result, attempt_number, acting_user)
     LiveAttempt.build(
-      result: r,
-      attempt_number: i,
+      result: result,
+      attempt_number: attempt_number,
       live_attempt_history_entries: [
         LiveAttemptHistoryEntry.build(
-          result: r,
+          result: result,
           entered_at: Time.now.utc,
           entered_by: acting_user,
         ),
@@ -39,12 +39,14 @@ class LiveAttempt < ApplicationRecord
   end
 
   def update_with_history_entry(result, acting_user)
-    update(result: result)
-    live_attempt_history_entries.create(
-      result: r,
+    self.update(result: result)
+    self.live_attempt_history_entries.create(
+      result: result,
       entered_at: Time.now.utc,
       entered_by: acting_user,
     )
+
+    # Return `self` for method chaining
     self
   end
 end

@@ -35,14 +35,16 @@ class LiveController < ApplicationController
     previous_attempts = result.live_attempts.index_by(&:attempt_number)
 
     new_attempts = results.map.with_index(1) do |r, i|
-      if previous_attempts[i]&.result == r
-        previous_attempts[i]
-      else
-        if previous_attempts[i].present?
-          previous_attempts[i].update_with_history_entry(r, current_user)
+      previous_attempt = previous_attempts[i]
+
+      if previous_attempt.present?
+        if previous_attempt.result == r
+          previous_attempt
         else
-          LiveAttempt.build_with_history_entry(r, i, current_user)
+          previous_attempt.update_with_history_entry(r, current_user)
         end
+      else
+        LiveAttempt.build_with_history_entry(r, i, current_user)
       end
     end
 
