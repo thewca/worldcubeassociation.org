@@ -1665,7 +1665,7 @@ en:
           waiting_list_deadline_date: "Deadline for accepting competitors from the waiting list"
           event_change_deadline_date: "Deadline for competitors to update their registered events"
           allow_on_the_spot: "On the spot registrations"
-          user_can_cancel: "Registration cancellation restrictions"
+          user_can_cancel: "When can users cancel registrations"
           allow_self_edits: "Registration edits"
           guests_enabled: "Guests"
           guest_entry_status: "Display message for free guest entry"
@@ -1793,9 +1793,9 @@ en:
             "true": "Competitors may edit their registration until the deadline for updating events"
             "false": "Competitors may NOT edit their registration once it has been accepted"
           user_can_cancel:
-            "always": "None - competitors may cancel their registration at any point"
-            "not_accepted": "Accepted registrations cannot be cancelled by competitors"
-            "unpaid": "Paid registrations cannot be cancelled by competitiors"
+            "always": "Always"
+            "not_accepted": "Until they're accepted"
+            "unpaid": "Until they pay"
           guest_entry_status:
             unclear: 'Do not display anything (and perhaps elaborate in the "Extra registration requirements" section)'
             free: '"Any spectator can attend for free"'
