@@ -284,6 +284,7 @@ export const actionUrls = {
 }
 
 export const liveUrls = {
+  personResults: (competitionId, registrationId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.live_person_results_path(competition_id: "${competitionId}", registration_id: "${registrationId}")) %>`,
   roundResultsAdmin: (competitionId, roundId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.live_admin_round_results_path(competition_id: "${competitionId}", round_id: "${roundId}")) %>`,
   checkRoundResultsAdmin: (competitionId, roundId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.live_admin_check_round_results_path(competition_id: "${competitionId}", round_id: "${roundId}")) %>`,
   api: {

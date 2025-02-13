@@ -151,6 +151,9 @@ Rails.application.routes.draw do
   get 'competitions/edit/series-eligible-competitions-json' => 'competitions#series_eligible_competitions_json', as: :series_eligible_competitions_json
 
   if WcaLive.enabled?
+    get 'competitions/:competition_id/live/competitors/:registration_id' => 'live#by_person', as: :live_person_results
+    get 'competitions/:competition_id/live/podiums' => 'live#podiums', as: :live_podiums
+    get 'competitions/:competition_id/live/competitors' => 'live#competitors', as: :live_competitors
     get 'competitions/:competition_id/live/rounds/:round_id/admin' => 'live#admin', as: :live_admin_round_results
     get 'competitions/:competition_id/live/rounds/:round_id/admin/check' => 'live#double_check', as: :live_admin_check_round_results
     get 'competitions/:competition_id/live/admin' => 'live#schedule_admin', as: :live_schedule_admin
