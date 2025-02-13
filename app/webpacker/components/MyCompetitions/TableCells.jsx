@@ -43,38 +43,40 @@ export function ReportTableCell({
     return <Table.Cell />;
   }
   return (
-      <Table.Cell>
-        <>
-          <Popup
-            content={I18n.t('competitions.my_competitions_table.report')}
-            trigger={(
-              <a href={competitionReportUrl(competitionId)}>
-                <Icon name="file alternate" />
-              </a>
-            )}
-          />
-          { !isReportPosted && canEditDelegateReport
-            && (
+    <Table.Cell>
+      <>
+        <Popup
+          content={I18n.t('competitions.my_competitions_table.report')}
+          trigger={(
+            <a href={competitionReportUrl(competitionId)}>
+              <Icon name="file alternate"/>
+            </a>
+          )}
+        />
+        {!isReportPosted && canEditDelegateReport
+          && (
             <Popup
               content={I18n.t('competitions.my_competitions_table.edit_report')}
               trigger={(
                 <a href={competitionReportEditUrl(competitionId)}>
-                  <Icon name="edit" />
+                  <Icon name="edit"/>
                 </a>
               )}
             />
-            )}
+          )}
 
-          { isPastCompetition && !isReportPosted
-          && permissions.can_administer_competitions.scope.includes(competitionId) && (
+        {isPastCompetition && !isReportPosted
+          && permissions.can_administer_competitions.scope.includes(
+            competitionId) && (
             <Popup
-              content={I18n.t('competitions.my_competitions_table.missing_report')}
+              content={I18n.t(
+                'competitions.my_competitions_table.missing_report')}
               trigger={(
-                <Icon name="warning" />
+                <Icon name="warning"/>
               )}
             />
           )}
-        </>
-      </Table.Cell>
+      </>
+    </Table.Cell>
   );
 }
