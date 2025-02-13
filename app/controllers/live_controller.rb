@@ -80,13 +80,13 @@ class LiveController < ApplicationController
 
   def podiums
     @competition = Competition.find(params[:competition_id])
-    @competitors = @competition.registrations.accepted
-    @results = @competition.rounds.select(&:final_round?)
+    @competitors = @competition.registrations.includes(:user).accepted
+    @final_rounds = @competition.rounds.select(&:final_round?)
   end
 
   def competitors
     @competition = Competition.find(params[:competition_id])
-    @competitors = @competition.registrations.accepted
+    @competitors = @competition.registrations.includes(:user).accepted
   end
 
   def by_persons
@@ -97,6 +97,6 @@ class LiveController < ApplicationController
     @competition = Competition.find(@competition_id)
 
     @user = registration.user
-    @results = registration.live_results.includes([:live_attempts])
+    @results = registration.live_results.includes(:live_attempts)
   end
 end

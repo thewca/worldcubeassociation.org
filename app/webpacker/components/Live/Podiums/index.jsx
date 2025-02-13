@@ -25,15 +25,15 @@ function Podiums({
       <Header>
         Podiums
       </Header>
-      {podiums.map((results) => (
+      {podiums.map((finalRound) => (
         <>
-          <Header as="h3">{events.byId[results.event.id].name}</Header>
-          { results.podium.length > 0 ? (
+          <Header as="h3">{events.byId[finalRound.event_id].name}</Header>
+          {finalRound.live_podium.length > 0 ? (
             <ResultsTable
-              results={results.podium}
+              results={finalRound.live_podium}
               competitionId={competitionId}
               competitors={competitors}
-              event={events.byId[results.event.id]}
+              event={events.byId[finalRound.event_id]}
             />
           ) : 'Podiums to be determined'}
         </>
