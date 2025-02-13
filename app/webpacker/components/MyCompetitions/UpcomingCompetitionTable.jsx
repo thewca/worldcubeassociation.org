@@ -82,14 +82,14 @@ export default function UpcomingCompetitionTable({
               {I18n.t('competitions.competition_info.date')}
             </Table.HeaderCell>
             <Table.HeaderCell />
-            { canAdministerCompetitions && (
-             <>
-               <Table.HeaderCell/>
-               <Table.HeaderCell/>
-             </>
-            )}
-            { canViewDelegateReport && (
+            {canAdministerCompetitions && (
+              <>
                 <Table.HeaderCell />
+                <Table.HeaderCell />
+              </>
+            )}
+            {canViewDelegateReport && (
+              <Table.HeaderCell />
             )}
 
           </Table.Row>
