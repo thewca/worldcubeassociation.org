@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_02_12_082508) do
+ActiveRecord::Schema[7.2].define(version: 2025_02_12_142508) do
   create_table "Competitions", id: { type: :string, limit: 32, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", limit: 50, default: "", null: false
     t.string "cityName", limit: 50, default: "", null: false
@@ -795,18 +795,23 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_12_082508) do
     t.index ["jti"], name: "index_jwt_denylist_on_jti"
   end
 
+  create_table "live_attempt_history_entries", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.datetime "entered_at", null: false
+    t.string "entered_by", null: false
+    t.bigint "live_attempt_id", null: false
+    t.integer "result", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["live_attempt_id"], name: "index_live_attempt_history_entries_on_live_attempt_id"
+  end
+
   create_table "live_attempts", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.integer "result", null: false
     t.integer "attempt_number", null: false
-    t.bigint "replaced_by_id"
-    t.datetime "entered_at", null: false
-    t.integer "entered_by_id", null: false
     t.bigint "live_result_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["entered_by_id"], name: "index_live_attempts_on_entered_by_id"
     t.index ["live_result_id"], name: "index_live_attempts_on_live_result_id"
-    t.index ["replaced_by_id"], name: "index_live_attempts_on_replaced_by_id"
   end
 
   create_table "live_results", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
@@ -1438,8 +1443,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_12_082508) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
-  add_foreign_key "live_attempts", "live_attempts", column: "replaced_by_id"
-  add_foreign_key "live_attempts", "users", column: "entered_by_id"
+  add_foreign_key "live_attempt_history_entries", "live_attempts"
   add_foreign_key "microservice_registrations", "Competitions", column: "competition_id", on_update: :cascade, on_delete: :cascade
   add_foreign_key "microservice_registrations", "users"
   add_foreign_key "oauth_openid_requests", "oauth_access_grants", column: "access_grant_id", on_delete: :cascade
