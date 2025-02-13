@@ -420,6 +420,11 @@ class Registration < ApplicationRecord
                                    .join(" + ")
   end
 
+  def can_be_waitlisted!
+    raise ArgumentError.new("Registration must have a competing_status of 'waiting_list' to be added to the waiting list") unless
+      competing_status == Registrations::Helper::STATUS_WAITING_LIST
+  end
+
   DEFAULT_SERIALIZE_OPTIONS = {
     only: ["id", "competition_id", "user_id"],
     methods: ["event_ids"],
