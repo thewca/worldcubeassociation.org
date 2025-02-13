@@ -1665,7 +1665,7 @@ en:
           waiting_list_deadline_date: "Deadline for accepting competitors from the waiting list"
           event_change_deadline_date: "Deadline for competitors to update their registered events"
           allow_on_the_spot: "On the spot registrations"
-          user_can_cancel: "When can users cancel registrations"
+          user_can_cancel: "When can users cancel their registrations"
           allow_self_edits: "Registration edits"
           guests_enabled: "Guests"
           guest_entry_status: "Display message for free guest entry"
