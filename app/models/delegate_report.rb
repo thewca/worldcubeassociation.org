@@ -61,6 +61,15 @@ class DelegateReport < ApplicationRecord
     end
   end
 
+  validate :setup_image_format, if: -> { setup_images.attached? }
+  private def setup_image_format
+    setup_images.each do |image|
+      if !image.content_type.in?(%w[image/png image/jpeg image/jpg image/gif])
+        errors.add(:setup_images, "must be a valid image format (JPG, PNG, GIF)")
+      end
+    end
+  end
+
   def schedule_and_discussion_urls_required?
     posted? && created_at > Date.new(2019, 7, 21)
   end
