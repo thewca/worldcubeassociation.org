@@ -326,8 +326,8 @@ class Competition < ApplicationRecord
       errors.add(:auto_close_threshold, I18n.t('competitions.errors.use_wca_registration')) unless use_wca_registration
       errors.add(:auto_close_threshold, I18n.t('competitions.errors.must_exceed_competitor_limit')) if
         competitor_limit.present? && auto_close_threshold <= competitor_limit
-      errors.add(:auto_close_threshold, I18n.t('competitions.errors.auto_close_exceed_paid')) unless
-        auto_close_threshold > registrations.with_payments.count
+      errors.add(:auto_close_threshold, I18n.t('competitions.errors.auto_close_exceed_paid')) if
+        will_save_change_to_auto_close_threshold? && auto_close_threshold <= registrations.with_payments.count
     end
   end
 
@@ -937,8 +937,6 @@ class Competition < ApplicationRecord
   private def clear_external_website
     update_column :external_website, nil
   end
-
-  after_save :auto_close, if: -> { saved_change_to_auto_close_threshold? }
 
   def website
     generate_website ? internal_website : external_website

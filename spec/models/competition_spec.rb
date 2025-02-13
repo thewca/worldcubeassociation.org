@@ -1586,7 +1586,7 @@ RSpec.describe Competition do
   end
 
   context 'auto-close registrations' do
-    let(:auto_close_comp) { FactoryBot.create(:competition, :registration_open, auto_close_threshold: 5) }
+    let!(:auto_close_comp) { FactoryBot.create(:competition, :registration_open, auto_close_threshold: 5) }
     let(:comp) { FactoryBot.create(:competition, :registration_open, :with_competitor_limit, competitor_limit: 3) }
 
     it 'doesnt auto-close if threshold not reached' do
@@ -1607,17 +1607,9 @@ RSpec.describe Competition do
     it 'closes registrations when the close threshold is exceeded' do
       FactoryBot.create_list(:registration, 5, :paid, competition: comp)
 
-      comp.auto_close_threshold = 5
+      comp.update_column(:auto_close_threshold, 5)
       FactoryBot.create(:registration, :paid, competition: comp)
 
-      expect(comp.registration_past?).to eq(true)
-    end
-
-    it 'if close threshold is added == number of registrations, registration will close' do
-      FactoryBot.create_list(:registration, 5, :paid, competition: comp)
-      expect(comp.registration_past?).to eq(false)
-
-      comp.update!(auto_close_threshold: 5)
       expect(comp.registration_past?).to eq(true)
     end
 
