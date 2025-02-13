@@ -17,14 +17,11 @@ const customOrderBy = (competitor, resultsByRegistrationId, sortBy) => {
 };
 
 export const rankingCellStyle = (result) => {
-  if (!result) {
-    return {};
-  }
-  if (result.advancing) {
+  if (result?.advancing) {
     return { backgroundColor: `rgb(${advancingColor})` };
   }
 
-  if (result.advancing_questionable) {
+  if (result?.advancing_questionable) {
     return { backgroundColor: `rgba(${advancingColor}, 0.5)` };
   }
 

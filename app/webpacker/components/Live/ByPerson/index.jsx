@@ -47,7 +47,15 @@ function PersonResults({
               </Table.Row>
             </Table.Header>
             <Table.Body>
-              {eventResults.map(({ round, attempts }) => {
+              {eventResults.map((result) => {
+                const {
+                  round,
+                  attempts,
+                  ranking,
+                  average,
+                  best,
+                } = result;
+
                 return (
                   <Table.Row>
                     <Table.Cell width={1}>
@@ -57,14 +65,14 @@ function PersonResults({
                         {round.number}
                       </a>
                     </Table.Cell>
-                    <Table.Cell width={1} style={rankingCellStyle(r)}>{r.ranking}</Table.Cell>
+                    <Table.Cell width={1} style={rankingCellStyle(result)}>{ranking}</Table.Cell>
                     {attempts.map((a) => (
                       <Table.Cell>
                         {formatAttemptResult(a.result, events.byId[key].id)}
                       </Table.Cell>
                     ))}
-                    <Table.Cell>{formatAttemptResult(r.average, events.byId[key].id)}</Table.Cell>
-                    <Table.Cell>{formatAttemptResult(r.best, events.byId[key].id)}</Table.Cell>
+                    <Table.Cell>{formatAttemptResult(average, events.byId[key].id)}</Table.Cell>
+                    <Table.Cell>{formatAttemptResult(best, events.byId[key].id)}</Table.Cell>
                   </Table.Row>
                 );
               })}
