@@ -1631,7 +1631,6 @@ RSpec.describe Competition do
       expect(auto_close_comp.registration_past?).to eq(false)
     end
 
-
     context 'validations' do
       it 'auto-close threshold must be positive' do
         comp.auto_close_threshold = -1
