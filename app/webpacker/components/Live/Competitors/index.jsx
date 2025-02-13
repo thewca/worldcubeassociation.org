@@ -8,11 +8,11 @@ import useInputState from '../../../lib/hooks/useInputState';
 import CountryFlag from '../../wca/CountryFlag';
 
 export default function Wrapper({
-  podiums, competitionId, competitors,
+  competitionId, competitors,
 }) {
   return (
     <WCAQueryClientProvider>
-      <Competitors podiums={podiums} competitionId={competitionId} competitors={competitors} />
+      <Competitors competitionId={competitionId} competitors={competitors} />
     </WCAQueryClientProvider>
   );
 }
@@ -31,11 +31,11 @@ function Competitors({
           <Table.HeaderCell />
         </Table.Header>
         <Table.Body>
-          {competitors.filter((c) => c.name.includes(searchInput)).map((c) => (
+          {competitors.filter((c) => c.user.name.includes(searchInput)).map((c) => (
             <Table.Row>
               <Table.Cell><CountryFlag iso2={c.user.country_iso2} /></Table.Cell>
               <Table.Cell>
-                <a href={liveUrls.personResults(competitionId, c.id)}>{c.name}</a>
+                <a href={liveUrls.personResults(competitionId, c.id)}>{c.user.name}</a>
               </Table.Cell>
             </Table.Row>
           ))}

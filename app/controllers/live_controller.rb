@@ -89,7 +89,7 @@ class LiveController < ApplicationController
     @competitors = @competition.registrations.includes(:user).accepted
   end
 
-  def by_persons
+  def by_person
     registration_id = params.require(:registration_id)
     registration = Registration.find(registration_id)
 
