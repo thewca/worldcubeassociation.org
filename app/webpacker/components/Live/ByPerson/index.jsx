@@ -47,8 +47,7 @@ function PersonResults({
               </Table.Row>
             </Table.Header>
             <Table.Body>
-              {eventResults.map((r) => {
-                const { round, attempts } = r;
+              {eventResults.map(({ round, attempts }) => {
                 return (
                   <Table.Row>
                     <Table.Cell width={1}>
