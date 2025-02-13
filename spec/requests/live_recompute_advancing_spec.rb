@@ -21,7 +21,7 @@ RSpec.describe "WCA Live API" do
 
     context 'with a ranking advancement condition' do
       it 'returns results with ranking better or equal to the given level' do
-        round = FactoryBot.create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", advancement_condition: ranking_condition, competition: competition)
+        round = FactoryBot.create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition, advancement_condition: ranking_condition)
 
         expect(round.total_accepted_registrations).to eq 5
 
@@ -35,7 +35,7 @@ RSpec.describe "WCA Live API" do
 
     context 'with a percent advancement condition' do
       it 'returns results with ranking better or equal to the given level' do
-        round = FactoryBot.create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", advancement_condition: percent_condition, competition: competition)
+        round = FactoryBot.create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition, advancement_condition: percent_condition)
 
         expect(round.total_accepted_registrations).to eq 5
 
@@ -50,7 +50,7 @@ RSpec.describe "WCA Live API" do
 
     context 'with an attempt_result advancement condition' do
       it 'returns results with ranking better or equal to the given level' do
-        round = FactoryBot.create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", advancement_condition: attempt_result_condition, competition: competition)
+        round = FactoryBot.create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition, advancement_condition: attempt_result_condition)
 
         expect(round.total_accepted_registrations).to eq 5
 
