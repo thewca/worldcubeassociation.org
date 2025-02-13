@@ -38,11 +38,11 @@ export function ReportTableCell({
   permissions, competitionId, isReportPosted, isPastCompetition,
 }) {
   const canViewDelegateReport = permissions.can_view_delegate_report.scope === '*' || permissions.can_view_delegate_report.scope.includes(competitionId);
-  const canEditDelegateReport = permissions.can_edit_delegate_report.scope === '*' || permissions.can_edit_delegate_report.scope.includes(competitionId)
+  const canEditDelegateReport = permissions.can_edit_delegate_report.scope === '*' || permissions.can_edit_delegate_report.scope.includes(competitionId);
   if (!canViewDelegateReport) {
     return <Table.Cell />;
   }
-    return (
+  return (
       <Table.Cell>
         <>
           <Popup
@@ -76,5 +76,5 @@ export function ReportTableCell({
           )}
         </>
       </Table.Cell>
-    );
+  );
 }
