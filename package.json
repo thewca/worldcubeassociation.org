@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "@babel/core": "^7.26.7",
+    "@babel/core": "^7.26.8",
     "@babel/plugin-proposal-class-properties": "^7.17.12",
     "@babel/plugin-proposal-decorators": "^7.25.9",
     "@babel/plugin-proposal-export-namespace-from": "^7.18.9",
@@ -15,8 +15,8 @@
     "@babel/plugin-transform-destructuring": "^7.25.7",
     "@babel/plugin-transform-object-rest-spread": "^7.25.9",
     "@babel/plugin-transform-regenerator": "^7.25.7",
-    "@babel/plugin-transform-runtime": "^7.25.9",
-    "@babel/preset-env": "^7.26.7",
+    "@babel/plugin-transform-runtime": "^7.26.8",
+    "@babel/preset-env": "^7.26.8",
     "@babel/preset-react": "^7.26.3",
     "@babel/runtime": "^7.26.7",
     "@cubing/icons": "^2.0.2",
@@ -25,10 +25,12 @@
     "@fullcalendar/luxon3": "^6.1.15",
     "@fullcalendar/react": "^6.1.15",
     "@fullcalendar/timegrid": "^6.1.15",
+    "@rails/actioncable": "^8.0.100",
     "@rails/ujs": "^7.1.501",
     "@stripe/react-stripe-js": "^3.1.1",
     "@stripe/stripe-js": "^5.6.0",
     "@tanstack/react-query": "^5.66.0",
+    "@tanstack/react-table": "^8.20.6",
     "@wca/helpers": "^1.1.5",
     "autonumeric": "^4.10.7",
     "autoprefixer": "^10.4.20",
@@ -48,7 +50,7 @@
     "date-fns": "^4.1.0",
     "dompurify": "^3.2.4",
     "easymde": "^2.18.0",
-    "expose-loader": "^5.0.0",
+    "expose-loader": "^5.0.1",
     "file-loader": "^6.2.0",
     "flag-icons": "^7.3.2",
     "glob": "^11.0.1",
@@ -56,7 +58,7 @@
     "jquery": "3.7.1",
     "js-yaml": "^4.1.0",
     "leaflet": "^1.9.4",
-    "leaflet-geosearch": "^4.1.0",
+    "leaflet-geosearch": "^4.2.0",
     "lodash": "^4.17.21",
     "luxon": "^3.5.0",
     "make-plural": "^7.4.0",
@@ -85,7 +87,7 @@
     "react_ujs": "^3.2.1",
     "regenerator-runtime": "^0.14.1",
     "resolve-url-loader": "^5.0.0",
-    "sass": "^1.83.4",
+    "sass": "^1.84.0",
     "sass-loader": "^16.0.4",
     "semantic-ui-react": "^2.1.5",
     "shakapacker": "8.1.0",
@@ -120,6 +122,7 @@
     "webpack-dev-server": "^5.2.0"
   },
   "scripts": {
+    "lint": "eslint -c .eslintrc.json app/webpacker/components",
     "webpack:analyze": "mkdir -p public/packs && RACK_ENV=test NODE_ENV=production webpack --config config/webpack/webpack.config.js --profile --json > public/packs/stats.json && webpack-bundle-analyzer public/packs/stats.json"
   },
   "packageManager": "yarn@4.5.1"

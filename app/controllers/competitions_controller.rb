@@ -370,11 +370,16 @@ class CompetitionsController < ApplicationController
   end
 
   def calculate_dues
-    country_iso2 = Country.find_by(id: params[:country_id])&.iso2
-    multiplier = ActiveRecord::Type::Boolean.new.cast(params[:competitor_limit_enabled]) ? params[:competitor_limit].to_i : 1
-    total_dues = DuesCalculator.dues_for_n_competitors(country_iso2, params[:base_entry_fee_lowest_denomination].to_i, params[:currency_code], multiplier)
+    country_iso2 = Country.find_by(id: params[:countryId])&.iso2
+    per_competitor_dues = DuesCalculator.dues_per_competitor(
+      country_iso2,
+      params[:baseEntryFee].to_i,
+      params[:currencyCode],
+    )
+    per_competitor_dues_in_lowest_denomination = per_competitor_dues&.cents
+
     render json: {
-      dues_value: total_dues.present? ? total_dues.format : nil,
+      dues_value: per_competitor_dues_in_lowest_denomination,
     }
   end
 

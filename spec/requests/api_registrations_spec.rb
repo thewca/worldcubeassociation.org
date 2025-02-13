@@ -29,26 +29,23 @@ RSpec.describe 'API Registrations' do
       end
 
       it 'creates a registration when job is worked off' do
-        perform_enqueued_jobs do
-          post api_v1_registrations_register_path, params: registration_request, headers: headers
-          # post api_v1_registrations_register_path, params: registration_request, headers: headers
+        post api_v1_registrations_register_path, params: registration_request, headers: headers
+        perform_enqueued_jobs
 
-          registration = Registration.find_by(user_id: user.id)
-          expect(registration).to be_present
-          expect(registration.events.map(&:id).sort).to eq(['333', '333oh'])
-        end
+        registration = Registration.find_by(user_id: user.id)
+        expect(registration).to be_present
+        expect(registration.events.map(&:id).sort).to eq(['333', '333oh'])
       end
 
       it 'creates a registration history' do
-        perform_enqueued_jobs do
-          post api_v1_registrations_register_path, params: registration_request, headers: headers
+        post api_v1_registrations_register_path, params: registration_request, headers: headers
+        perform_enqueued_jobs
 
-          registration = Registration.find_by(user_id: user.id)
-          reg_history = registration.registration_history.first
+        registration = Registration.find_by(user_id: user.id)
+        reg_history = registration.registration_history.first
 
-          expect(reg_history[:actor_id]).to eq(user.id.to_s)
-          expect(reg_history[:action]).to eq("Worker processed")
-        end
+        expect(reg_history[:actor_id]).to eq(user.id.to_s)
+        expect(reg_history[:action]).to eq("Worker processed")
       end
     end
 
@@ -76,15 +73,14 @@ RSpec.describe 'API Registrations' do
         )
         headers = { 'Authorization' => registration_request['jwt_token'] }
 
-        perform_enqueued_jobs do
-          post api_v1_registrations_register_path, params: registration_request, headers: headers
+        post api_v1_registrations_register_path, params: registration_request, headers: headers
+        perform_enqueued_jobs
 
-          expect(response.status).to eq(202)
+        expect(response.status).to eq(202)
 
-          registration = Registration.find_by(user_id: user_with_results.id)
-          expect(registration).to be_present
-          expect(registration.events.map(&:id).sort).to eq(events)
-        end
+        registration = Registration.find_by(user_id: user_with_results.id)
+        expect(registration).to be_present
+        expect(registration.events.map(&:id).sort).to eq(events)
       end
 
       it 'cant register when qualifications arent met' do
@@ -94,28 +90,27 @@ RSpec.describe 'API Registrations' do
 
         headers = { 'Authorization' => registration_request['jwt_token'] }
 
-        perform_enqueued_jobs do
-          post api_v1_registrations_register_path, params: registration_request, headers: headers
+        post api_v1_registrations_register_path, params: registration_request, headers: headers
+        perform_enqueued_jobs
 
-          expect(response.status).to eq(422)
+        expect(response.status).to eq(422)
 
-          error_json = {
-            error: Registrations::ErrorCodes::QUALIFICATION_NOT_MET,
-            data: events,
-          }.to_json
+        error_json = {
+          error: Registrations::ErrorCodes::QUALIFICATION_NOT_MET,
+          data: events,
+        }.to_json
 
-          expect(response.body).to eq(error_json)
+        expect(response.body).to eq(error_json)
 
-          registration = Registration.find_by(user_id: user_without_results.id)
-          expect(registration).not_to be_present
-        end
+        registration = Registration.find_by(user_id: user_without_results.id)
+        expect(registration).not_to be_present
       end
     end
   end
 
   describe 'PATCH #update' do
     let(:user) { FactoryBot.create :user }
-    let(:competition) { FactoryBot.create :competition, :registration_open, :editable_registrations }
+    let(:competition) { FactoryBot.create :competition, :registration_open, :editable_registrations, :with_organizer }
     let(:registration) { FactoryBot.create(:registration, competition: competition, user: user) }
 
     it 'updates a registration' do
@@ -163,6 +158,47 @@ RSpec.describe 'API Registrations' do
 
       registration = Registration.find_by(user_id: user.id, competition_id: favourites_reg.competition.id)
       expect(registration.event_ids.sort).to eq(new_event_ids.sort)
+    end
+
+    it 'user gets registration email if they cancel and re-register' do
+      cancelled_reg = FactoryBot.create(:registration, :cancelled, competition: competition)
+
+      update_request = FactoryBot.build(
+        :update_request,
+        user_id: cancelled_reg.user_id,
+        competition_id: cancelled_reg.competition.id,
+        competing: { 'status' => 'pending' },
+      )
+      headers = { 'Authorization' => update_request['jwt_token'] }
+
+      patch api_v1_registrations_register_path, params: update_request, headers: headers
+      perform_enqueued_jobs
+
+      expect(response.status).to eq(200)
+
+      email = ActionMailer::Base.deliveries.last
+      expect(email.subject).to eq(I18n.t('registrations.mailer.new.mail_subject', comp_name: registration.competition.name))
+    end
+
+    it 'user gets registration email if they were rejected and get moved to pending' do
+      rejected_reg = FactoryBot.create(:registration, :rejected, competition: competition)
+
+      update_request = FactoryBot.build(
+        :update_request,
+        user_id: rejected_reg.user_id,
+        competition_id: rejected_reg.competition.id,
+        submitted_by: competition.organizers.first.id,
+        competing: { 'status' => 'pending' },
+      )
+      headers = { 'Authorization' => update_request['jwt_token'] }
+
+      patch api_v1_registrations_register_path, params: update_request, headers: headers
+      perform_enqueued_jobs
+
+      expect(response.status).to eq(200)
+
+      email = ActionMailer::Base.deliveries.last
+      expect(email.subject).to eq(I18n.t('registrations.mailer.new.mail_subject', comp_name: registration.competition.name))
     end
   end
 
@@ -384,6 +420,20 @@ RSpec.describe 'API Registrations' do
           expect(data.dig('competing', 'waiting_list_position')).to eq(3)
         end
       end
+    end
+  end
+
+  describe 'GET #payment_ticket' do
+    it 'refuses ticket create request if registration is closed' do
+      closed_comp = FactoryBot.create(:competition, :registration_closed, :with_organizer, :stripe_connected)
+      reg = FactoryBot.create(:registration, :pending, competition: closed_comp)
+
+      headers = { 'Authorization' => fetch_jwt_token(reg.user_id) }
+      get api_v1_registrations_payment_ticket_path(competition_id: closed_comp.id), headers: headers
+
+      body = JSON.parse(response.body)
+      expect(response.status).to eq(403)
+      expect(body).to eq({ error: Registrations::ErrorCodes::REGISTRATION_CLOSED }.with_indifferent_access)
     end
   end
 end
