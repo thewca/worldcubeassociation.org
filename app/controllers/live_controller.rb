@@ -6,7 +6,7 @@ class LiveController < ApplicationController
     @competition = Competition.find(@competition_id)
     @round = Round.find(params[:round_id])
     @event_id = @round.event.id
-    @competitors = @round.registrations_with_wcif_id
+    @competitors = @round.accepted_registrations_with_wcif_id
   end
 
   def add_result
@@ -68,7 +68,7 @@ class LiveController < ApplicationController
     @round = Round.find(params.require(:round_id))
     @competition = Competition.find(params.require(:competition_id))
 
-    @competitors = @round.registrations_with_wcif_id
+    @competitors = @round.accepted_registrations_with_wcif_id
   end
 
   def schedule_admin
