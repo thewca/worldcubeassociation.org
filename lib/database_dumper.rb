@@ -437,6 +437,9 @@ module DatabaseDumper
         ),
       ),
     }.freeze,
+    "live_results" => :skip_all_rows,
+    "live_attempts" => :skip_all_rows,
+    "live_attempt_history_entries" => :skip_all_rows,
     "schedule_activities" => {
       where_clause: "WHERE (holder_type=\"ScheduleActivity\" AND holder_id IN (#{VISIBLE_ACTIVITY_IDS}) or id in (#{VISIBLE_ACTIVITY_IDS}))",
       column_sanitizers: actions_to_column_sanitizers(
@@ -853,6 +856,20 @@ module DatabaseDumper
           id
           number
           iso2
+        ),
+      ),
+    }.freeze,
+    "country_band_details" => {
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w(
+          id
+          number
+          start_date
+          end_date
+          due_amount_per_competitor_us_cents
+          due_percent_registration_fee
+          created_at
+          updated_at
         ),
       ),
     }.freeze,

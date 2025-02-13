@@ -34,6 +34,16 @@ class CompetitionTab < ApplicationRecord
     competition.tabs.where("display_order > ?", display_order).update_all("display_order = display_order - 1")
   end
 
+  validate :verify_if_full_urls
+  private def verify_if_full_urls
+    content.scan(/\[(.*?)\]\((.*?)\)/).any? do |match|
+      url = match[1]
+      unless url.starts_with?('http://', 'https://')
+        errors.add(:content, I18n.t('competitions.errors.not_full_url', url: url))
+      end
+    end
+  end
+
   def reorder(direction)
     current_display_order = display_order
     other_display_order = display_order + (direction.to_s == "up" ? -1 : 1)
