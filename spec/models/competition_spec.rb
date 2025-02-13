@@ -1589,6 +1589,19 @@ RSpec.describe Competition do
     let!(:auto_close_comp) { FactoryBot.create(:competition, :registration_open, auto_close_threshold: 5) }
     let(:comp) { FactoryBot.create(:competition, :registration_open, :with_competitor_limit, competitor_limit: 3) }
 
+    it 'attempt auto close returns false when it fails' do
+      expect(auto_close_comp.attempt_auto_close!).to eq(false)
+    end
+
+    it 'attempt auto close returns true when it succeeds' do
+      FactoryBot.create_list(:registration, 4, :paid, competition: auto_close_comp)
+      reg = FactoryBot.create(:registration, competition: auto_close_comp)
+      payment = FactoryBot.build(:registration_payment, registration: reg)
+      payment.save(validate: false) # Stop the after_save hook from being triggered so that we can trigger it manually
+
+      expect(auto_close_comp.attempt_auto_close!).to eq(true)
+    end
+
     it 'doesnt auto-close if threshold not reached' do
       FactoryBot.create(:registration, :paid, competition: auto_close_comp)
       expect(auto_close_comp.registration_past?).to eq(false)
@@ -1617,6 +1630,7 @@ RSpec.describe Competition do
       FactoryBot.create_list(:registration, 5, competition: auto_close_comp)
       expect(auto_close_comp.registration_past?).to eq(false)
     end
+
 
     context 'validations' do
       it 'auto-close threshold must be positive' do

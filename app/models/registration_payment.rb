@@ -30,6 +30,6 @@ class RegistrationPayment < ApplicationRecord
   end
 
   private def attempt_auto_close
-    registration.competition.auto_close
+    registration.competition.attempt_auto_close!
   end
 end
