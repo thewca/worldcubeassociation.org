@@ -38,7 +38,10 @@ export function ReportTableCell({
   permissions, competitionId, isReportPosted, isPastCompetition,
 }) {
   const canViewDelegateReport = permissions.can_view_delegate_report.scope === '*' || permissions.can_view_delegate_report.scope.includes(competitionId);
-  if (canViewDelegateReport) {
+  const canEditDelegateReport = permissions.can_edit_delegate_report.scope === '*' || permissions.can_edit_delegate_report.scope.includes(competitionId)
+  if (!canViewDelegateReport) {
+    return <Table.Cell />;
+  }
     return (
       <Table.Cell>
         <>
@@ -50,7 +53,7 @@ export function ReportTableCell({
               </a>
             )}
           />
-          { !isReportPosted && (permissions.can_edit_delegate_report.scope === '*' || permissions.can_edit_delegate_report.scope.includes(competitionId))
+          { !isReportPosted && canEditDelegateReport
             && (
             <Popup
               content={I18n.t('competitions.my_competitions_table.edit_report')}
@@ -74,5 +77,4 @@ export function ReportTableCell({
         </>
       </Table.Cell>
     );
-  }
 }
