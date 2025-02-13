@@ -3,6 +3,8 @@
 class LiveAttempt < ApplicationRecord
   include Comparable
 
+  default_scope { order(:attempt_number) }
+
   belongs_to :live_result
   has_many :live_attempt_history_entries, dependent: :destroy
 
