@@ -4,6 +4,15 @@ import {
   subordinateDelegateClaimsUrl,
   subordinateUpcomingCompetitionsUrl,
   generateDbTokenUrl,
+  serverStatusPageUrl,
+  runValidatorsUrl,
+  checkRecordsUrl,
+  computeAuxiliaryDataUrl,
+  generateDataExportsUrl,
+  fixResultsUrl,
+  mergeProfilesUrl,
+  anonymizePersonUrl,
+  reassignConnectedWcaIdUrl,
 } from '../../lib/requests/routes.js.erb';
 import PostingCompetitionsTable from '../PostingCompetitions';
 import EditPersonPage from './pages/EditPersonPage';
@@ -26,8 +35,10 @@ import OfficersEditor from './pages/OfficersEditor';
 import RegionsAdmin from './pages/RegionsAdmin';
 import RegionManager from './pages/RegionManager';
 import DownloadVoters from './pages/DownloadVoters';
-
-const DELEGATE_HANDBOOK_LINK = 'https://documents.worldcubeassociation.org/edudoc/delegate-handbook/delegate-handbook.pdf';
+import ApprovePictures from './pages/ApprovePictures';
+import EditPersonRequestsPage from './pages/EditPersonRequestsPage';
+import AnonymizationScriptPage from './pages/AnonymizationScriptPage';
+import CreateNewcomersPage from './pages/CreateNewcomersPage';
 
 export default {
   [PANEL_PAGES.postingDashboard]: {
@@ -102,10 +113,6 @@ export default {
     name: 'Important Links',
     component: ImportantLinks,
   },
-  [PANEL_PAGES.delegateHandbook]: {
-    name: 'Delegate Handbook',
-    link: DELEGATE_HANDBOOK_LINK,
-  },
   [PANEL_PAGES.seniorDelegatesList]: {
     name: 'Senior Delegates List',
     component: SeniorDelegatesList,
@@ -133,5 +140,57 @@ export default {
   [PANEL_PAGES.generateDbToken]: {
     name: 'Generate DB Token',
     link: generateDbTokenUrl,
+  },
+  [PANEL_PAGES.approveAvatars]: {
+    name: 'Approve Avatars',
+    component: ApprovePictures,
+  },
+  [PANEL_PAGES.editPersonRequests]: {
+    name: 'Edit Person Requests',
+    component: EditPersonRequestsPage,
+  },
+  [PANEL_PAGES.anonymizationScript]: {
+    name: 'Anonymization Script',
+    component: AnonymizationScriptPage,
+  },
+  [PANEL_PAGES.serverStatus]: {
+    name: 'Server Status',
+    link: serverStatusPageUrl,
+  },
+  [PANEL_PAGES.runValidators]: {
+    name: 'Run Validators',
+    link: runValidatorsUrl,
+  },
+  [PANEL_PAGES.createNewComers]: {
+    name: 'Create Newcomers',
+    component: CreateNewcomersPage,
+  },
+  [PANEL_PAGES.checkRecords]: {
+    name: 'Check Records',
+    link: checkRecordsUrl,
+  },
+  [PANEL_PAGES.computeAuxiliaryData]: {
+    name: 'Compute Auxiliary Data',
+    link: computeAuxiliaryDataUrl,
+  },
+  [PANEL_PAGES.generateDataExports]: {
+    name: 'Generate Data Exports',
+    link: generateDataExportsUrl,
+  },
+  [PANEL_PAGES.fixResults]: {
+    name: 'Fix Results',
+    link: fixResultsUrl,
+  },
+  [PANEL_PAGES.mergeProfiles]: {
+    name: 'Merge Profiles',
+    link: mergeProfilesUrl,
+  },
+  [PANEL_PAGES.anonymizePerson]: {
+    name: 'Anonymize Person',
+    link: anonymizePersonUrl,
+  },
+  [PANEL_PAGES.reassignConnectedWcaId]: {
+    name: 'Reassign Connected WCA ID',
+    link: reassignConnectedWcaIdUrl,
   },
 };

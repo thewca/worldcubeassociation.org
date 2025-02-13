@@ -132,7 +132,7 @@ export default function TableRow({
             <Table.Cell>
               {region ? (
                 <>
-                  <Flag name={country.iso2.toLowerCase()} />
+                  <Flag className={country.iso2.toLowerCase()} />
                   {region && countries.byIso2[country.iso2].name}
                 </>
               ) : (
@@ -140,7 +140,7 @@ export default function TableRow({
                   content={countries.byIso2[country.iso2].name}
                   trigger={(
                     <span>
-                      <Flag name={country.iso2.toLowerCase()} />
+                      <Flag className={country.iso2.toLowerCase()} />
                     </span>
             )}
                 />
@@ -160,7 +160,7 @@ export default function TableRow({
 
             {competitionInfo['using_payment_integrations?'] && (
             <Table.Cell>
-              {hasPaid
+              {paymentAmount !== 0
                 ? isoMoneyToHumanReadable(paymentAmount, competitionInfo.currency_code)
                 : ''}
             </Table.Cell>

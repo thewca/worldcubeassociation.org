@@ -54,6 +54,7 @@ class Competition < ApplicationRecord
   scope :not_visible, -> { where(showAtAll: false) }
   scope :over, -> { where("results_posted_at IS NOT NULL OR end_date < ?", Date.today) }
   scope :not_over, -> { where("results_posted_at IS NULL AND end_date >= ?", Date.today) }
+  scope :between_dates, ->(start_date, end_date) { where("start_date <= ? AND end_date >= ?", end_date, start_date) }
   scope :end_date_passed_since, lambda { |num_days| where(end_date: ...(num_days.days.ago)) }
   scope :belongs_to_region, lambda { |region_id|
     joins(:country).where(
@@ -273,7 +274,7 @@ class Competition < ApplicationRecord
   end
 
   NEARBY_DISTANCE_KM_WARNING = 250
-  NEARBY_DISTANCE_KM_DANGER = 10
+  NEARBY_DISTANCE_KM_DANGER = 30
   NEARBY_DISTANCE_KM_INFO = 100
   NEARBY_DAYS_WARNING = 180
   NEARBY_DAYS_DANGER = 5
@@ -395,6 +396,10 @@ class Competition < ApplicationRecord
 
   def main_event
     Event.c_find(main_event_id)
+  end
+
+  def report_posted?
+    delegate_report.posted?
   end
 
   def events_held?(desired_event_ids)
@@ -635,9 +640,9 @@ class Competition < ApplicationRecord
     delegates.include?(user) || trainee_delegates.include?(user) || organizers.include?(user)
   end
 
-  attr_accessor :being_cloned_from_id
+  attr_accessor :being_cloned_from_id, :being_cloned_from_cache
   def being_cloned_from
-    Competition.find_by(id: being_cloned_from_id)
+    @being_cloned_from_cache ||= Competition.find_by(id: being_cloned_from_id)
   end
 
   def build_clone
@@ -701,7 +706,7 @@ class Competition < ApplicationRecord
     # Clone competition tabs.
     if clone_tabs
       being_cloned_from&.tabs&.each do |tab|
-        tabs.create(tab.attributes.slice(*CompetitionTab::CLONEABLE_ATTRIBUTES))
+        tabs.create!(tab.attributes.slice(*CompetitionTab::CLONEABLE_ATTRIBUTES))
       end
     end
   end
@@ -710,6 +715,7 @@ class Competition < ApplicationRecord
 
   validate :dates_must_be_valid
 
+  alias_attribute :visible, :showAtAll
   alias_attribute :latitude_microdegrees, :latitude
   alias_attribute :longitude_microdegrees, :longitude
   before_validation :compute_coordinates
@@ -827,6 +833,10 @@ class Competition < ApplicationRecord
 
   def report_posted_at
     delegate_report&.posted_at
+  end
+
+  def report_posted_by_user
+    delegate_report&.posted_by_user_id
   end
 
   # This callback updates all tables having the competition id, when the id changes.
@@ -1567,6 +1577,7 @@ class Competition < ApplicationRecord
     :user_id,
     :wca_id,
     :country_id,
+    :country_iso2,
     :average_best,
     :average_rank,
     :single_best,
@@ -1672,6 +1683,7 @@ class Competition < ApplicationRecord
           user_id: user.id,
           wca_id: user.wca_id,
           country_id: user.country.id,
+          country_iso2: user.country_iso2,
           average_rank: average_ranking&.worldRank,
           average_best: average_ranking&.best || 0,
           single_rank: single_ranking&.worldRank,
@@ -1713,6 +1725,11 @@ class Competition < ApplicationRecord
       competitions = Competition.visible
     end
 
+    if params[:include_cancelled].present?
+      include_cancelled = ActiveRecord::Type::Boolean.new.cast(params[:include_cancelled])
+      competitions = competitions.not_cancelled unless include_cancelled
+    end
+
     if params[:continent].present?
       continent = Continent.find(params[:continent])
       if !continent
@@ -1737,6 +1754,19 @@ class Competition < ApplicationRecord
       end
       competitions = competitions.left_outer_joins(:delegates)
                                  .where('competition_delegates.delegate_id = ?', delegate_user.id)
+    end
+
+    if params[:event_ids].present?
+      event_ids = params[:event_ids].presence
+      unless event_ids.is_a?(Array)
+        raise WcaExceptions::BadApiParameter.new("Invalid event IDs: '#{params[:event_ids]}'")
+      end
+      event_ids.each do |event_id|
+        # This looks completely crazy (why not just pass the array as a whole, to build a `WHERE event_id IN (...)`??)
+        #   but is actually necessary to make sure that the competition holds ALL of the required events
+        #   and not just one or more (ie any) of the requested events.
+        competitions = competitions.has_event(event_id)
+      end
     end
 
     if params[:start].present?
@@ -1798,13 +1828,21 @@ class Competition < ApplicationRecord
                              reverse, field = part.match(/^(-)?(\w+)$/).captures
                              [field.to_sym, reverse ? :desc : :asc]
                            end
+                           # rubocop:disable Style/HashSlice
+                           #   RuboCop suggests using `slice` here, which is a noble intention but breaks the order
+                           #   of sort arguments. However, this order is crucial (sorting by "name then start_date"
+                           #   is different from sorting by "start_date then name") so we insist on doing it our way.
                            .select { |field, _| orderable_fields.include?(field) }
+                           # rubocop:enable Style/HashSlice
                            .to_h
     else
       order = { start_date: :desc }
     end
 
-    competitions.includes(:delegates, :organizers).order(**order)
+    # Respect other `includes` associations that might have been specified ahead of time
+    previous_includes = competitions.includes_values
+
+    competitions.includes(:delegates, :organizers, *previous_includes).order(**order)
   end
 
   def all_activities
@@ -2408,7 +2446,13 @@ class Competition < ApplicationRecord
   # It is quite uncool that we have to duplicate the internal form_data formatting like this
   # but as long as we let our backend handle the complete error validation we literally have no other choice
   def form_errors
-    return {} if self.valid?
+    self_valid = self.valid?
+    # If we're cloning, we also need to check the parent's associations.
+    #   Otherwise, the user may be surprised by a silent fail if some tabs/venues/schedules
+    #   of the parent are invalid. (This can happen if we introduce new validations on old data)
+    self_valid &= being_cloned_from&.tabs&.all?(&:valid?) if being_cloned_from_id.present?
+
+    return {} if self_valid
 
     {
       # for historic reasons, we keep 'name' errors listed under ID. Don't ask.
@@ -2501,12 +2545,16 @@ class Competition < ApplicationRecord
       },
       "cloning" => {
         "fromId" => errors[:being_cloned_from_id],
-        "cloneTabs" => errors[:clone_tabs],
+        "cloneTabs" => being_cloned_from_id.present? ? being_cloned_from&.association_errors(:tabs) : errors[:clone_tabs],
       },
       "other" => {
         "competitionEvents" => errors[:competition_events],
       },
     }
+  end
+
+  def association_errors(association_name)
+    self.public_send(association_name).map(&:errors).flat_map(&:to_a)
   end
 
   def set_form_data(form_data, current_user)

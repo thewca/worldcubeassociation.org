@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
 class Registration < ApplicationRecord
-  # TODO: Reg-V3 Cleanup: Remove all these and use the competing_status_{status} scopes
   scope :pending, -> { where(competing_status: 'pending') }
   scope :accepted, -> { where(competing_status: 'accepted') }
   scope :cancelled, -> { where(competing_status: 'cancelled') }
   scope :rejected, -> { where(competing_status: 'rejected') }
   scope :waitlisted, -> { where(competing_status: 'waiting_list') }
   scope :non_competing, -> { where(is_competing: false) }
+  scope :competing, -> { where(is_competing: true) }
   scope :not_cancelled, -> { where.not(competing_status: 'cancelled') }
   scope :with_payments, -> { joins(:registration_payments).distinct }
   scope :wcif_ordered, -> { order(:id) }
@@ -19,6 +19,7 @@ class Registration < ApplicationRecord
   has_many :registration_payments
   has_many :competition_events, through: :registration_competition_events
   has_many :events, through: :competition_events
+  has_many :live_results
   has_many :assignments, as: :registration, dependent: :delete_all
   has_many :wcif_extensions, as: :extendable, dependent: :delete_all
   has_many :payment_intents, as: :holder, dependent: :delete_all

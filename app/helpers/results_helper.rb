@@ -29,45 +29,6 @@ module ResultsHelper
     end
   end
 
-  def compute_rankings_by_region(rows, continent, country)
-    if rows.empty?
-      return [[], 0, 0]
-    end
-    best_value_of_world = rows.first["value"]
-    best_values_of_continents = {}
-    best_values_of_countries = {}
-    world_rows = []
-    continents_rows = []
-    countries_rows = []
-    rows.each do |row|
-      result = LightResult.new(row)
-      value = row["value"]
-
-      world_rows << row if value == best_value_of_world
-
-      if best_values_of_continents[result.country.continent.id].nil? || value == best_values_of_continents[result.country.continent.id]
-        best_values_of_continents[result.country.continent.id] = value
-
-        if (country.present? && country.continent.id == result.country.continent.id) || (continent.present? && continent.id == result.country.continent.id) || params[:region] == "world"
-          continents_rows << row
-        end
-      end
-
-      if best_values_of_countries[result.country.id].nil? || value == best_values_of_countries[result.country.id]
-        best_values_of_countries[result.country.id] = value
-
-        if (country.present? && country.id == result.country.id) || params[:region] == "world"
-          countries_rows << row
-        end
-      end
-    end
-
-    first_continent_index = world_rows.length
-    first_country_index = first_continent_index + continents_rows.length
-    rows_to_display = world_rows + continents_rows + countries_rows
-    [rows_to_display, first_continent_index, first_country_index]
-  end
-
   def compute_slim_or_separate_records(rows)
     single_rows = []
     average_rows = []
@@ -104,15 +65,5 @@ module ResultsHelper
       end
     end
     record_class
-  end
-
-  def execute_cached_query(cache_key, sql_query)
-    # As we are using the native Rails cache we set the expiry date to 7 days
-    # as CAD is ran usually before that
-    Rails.cache.fetch(cache_key, expires_in: 7.days) do
-      ActiveRecord::Base.connected_to(role: :read_replica) do
-        ActiveRecord::Base.connection.exec_query(sql_query)
-      end
-    end
   end
 end

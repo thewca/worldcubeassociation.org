@@ -3,7 +3,6 @@ import {
   Header, Input, Pagination, Table,
 } from 'semantic-ui-react';
 import { useQuery } from '@tanstack/react-query';
-import I18n from '../../../lib/i18n';
 import useDebounce from '../../../lib/hooks/useDebounce';
 import { getPersons } from '../api/getUsers';
 import Loading from '../../Requests/Loading';
@@ -65,10 +64,10 @@ function PersonList() {
           {data.rows.map((row) => (
             <Table.Row key={`${row.wca_id}-${row.name}`}>
               <Table.Cell>
-                {row.wca_id}
+                {row.wca_id && <a href={personUrl(row.wca_id)}>{row.wca_id}</a>}
               </Table.Cell>
               <Table.Cell>
-                <a href={personUrl(row.wca_id)}>{row.name}</a>
+                {row.name}
               </Table.Cell>
               <Table.Cell>
                 {countries.byIso2[row.country]?.name}
