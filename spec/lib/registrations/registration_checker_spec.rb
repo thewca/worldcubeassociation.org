@@ -797,7 +797,7 @@ RSpec.describe Registrations::RegistrationChecker do
         end
       end
 
-      it 'user cant change events after comp has started', :tag do
+      it 'user cant change events after comp has started' do
         comp_started = FactoryBot.create(:competition, :ongoing, allow_registration_edits: true)
         registration = FactoryBot.create(:registration, competition: comp_started)
 
