@@ -1,9 +1,8 @@
-import React, {useCallback, useEffect} from 'react';
+import React, { useCallback } from 'react';
 import {
   Button, Container,
   Grid, Header,
 } from 'semantic-ui-react';
-import { createConsumer } from '@rails/actioncable';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { events } from '../../../lib/wca-data.js.erb';
 import WCAQueryClientProvider from '../../../lib/providers/WCAQueryClientProvider';
@@ -11,7 +10,7 @@ import ResultsTable from '../components/ResultsTable';
 import { liveUrls } from '../../../lib/requests/routes.js.erb';
 import Loading from '../../Requests/Loading';
 import getRoundResults from '../api/getRoundResults';
-import useResultsSubscription from "../hooks/useResultsSubscription";
+import useResultsSubscription from '../hooks/useResultsSubscription';
 
 export default function Wrapper({
   roundId, eventId, competitionId, competitors, canAdminResults,
