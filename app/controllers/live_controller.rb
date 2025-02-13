@@ -57,6 +57,14 @@ class LiveController < ApplicationController
   end
 
   def round_results
+    @competition_id = params[:competition_id]
+    @competition = Competition.find(@competition_id)
+    @round = Round.find(params[:round_id])
+    @event_id = @round.event.id
+    @competitors = @round.registrations
+  end
+
+  def round_results_api
     round_id = params.require(:round_id)
 
     # TODO: Figure out why this fires a query for every live_attempt

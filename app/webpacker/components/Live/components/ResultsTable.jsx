@@ -7,13 +7,13 @@ import { editRegistrationUrl, liveUrls } from '../../../lib/requests/routes.js.e
 const advancingColor = '0, 230, 118';
 
 const customOrderBy = (competitor, resultsByRegistrationId, sortBy) => {
-  const competitorResults = resultsByRegistrationId[competitor.id];
+  const competitorResult = resultsByRegistrationId[competitor.id];
 
-  if (!competitorResults) {
+  if (!competitorResult) {
     return competitor.id;
   }
 
-  return competitorResults[0][sortBy];
+  return competitorResult[sortBy];
 };
 
 export const rankingCellStyle = (result) => {
@@ -70,7 +70,7 @@ export const recordTagStyle = (tag) => {
 export default function ResultsTable({
   results, event, competitors, competitionId, isAdmin = false, showEmpty = true,
 }) {
-  const resultsByRegistrationId = _.groupBy(results, 'registration_id');
+  const resultsByRegistrationId = _.keyBy(results, 'registration_id');
 
   const sortedCompetitors = useMemo(() => {
     const { sortBy } = event.recommendedFormat();
@@ -79,7 +79,8 @@ export default function ResultsTable({
       competitors,
       [
         (competitor) => customOrderBy(competitor, resultsByRegistrationId, sortBy === 'single' ? 'best' : 'average'),
-        (competitor) => customOrderBy(competitor, resultsByRegistrationId, sortBy === 'single' ? 'average' : 'best')],
+        (competitor) => customOrderBy(competitor, resultsByRegistrationId, sortBy === 'single' ? 'average' : 'best'),
+      ],
       ['asc', 'asc'],
     );
   }, [competitors, event, resultsByRegistrationId]);
@@ -106,18 +107,16 @@ export default function ResultsTable({
 
       <Table.Body>
         {sortedCompetitors.map((competitor, index) => {
-          const potentialResults = resultsByRegistrationId[competitor.id];
+          const competitorResult = resultsByRegistrationId[competitor.id];
+          const hasResult = Boolean(competitorResult);
 
-          const hasResults = Boolean(potentialResults);
-          const result = hasResults ? potentialResults[0] : null;
-
-          if (!showEmpty && !hasResults) {
+          if (!showEmpty && !hasResult) {
             return null;
           }
 
           return (
             <Table.Row key={competitor.user_id}>
-              <Table.Cell width={1} textAlign="right" style={rankingCellStyle(result)}>
+              <Table.Cell width={1} textAlign="right" style={rankingCellStyle(competitorResult)}>
                 {index + 1}
               </Table.Cell>
               {isAdmin && (
@@ -132,7 +131,7 @@ export default function ResultsTable({
                   {competitor.user.name}
                 </a>
               </Table.Cell>
-              {hasResults && result.attempts.map((attempt) => (
+              {hasResult && competitorResult.attempts.map((attempt) => (
                 <Table.Cell
                   textAlign="right"
                   key={`${competitor.user_id}-${attempt.attempt_number}`}
@@ -140,24 +139,24 @@ export default function ResultsTable({
                   {formatAttemptResult(attempt.result, event.id)}
                 </Table.Cell>
               ))}
-              {hasResults && (
+              {hasResult && (
               <>
                 <Table.Cell textAlign="right" style={{ position: 'relative' }}>
-                  {formatAttemptResult(result.average, event.id)}
+                  {formatAttemptResult(competitorResult.average, event.id)}
                   {' '}
                   {!isAdmin
                     && (
-                    <span style={recordTagStyle(result.average_record_tag)}>
-                      {result.average_record_tag}
+                    <span style={recordTagStyle(competitorResult.average_record_tag)}>
+                      {competitorResult.average_record_tag}
                     </span>
                     )}
                 </Table.Cell>
                 <Table.Cell textAlign="right" style={{ position: 'relative' }}>
-                  {formatAttemptResult(result.best, event.id)}
+                  {formatAttemptResult(competitorResult.best, event.id)}
                   {!isAdmin
                     && (
-                    <span style={recordTagStyle(result.single_record_tag)}>
-                      {result.single_record_tag}
+                    <span style={recordTagStyle(competitorResult.single_record_tag)}>
+                      {competitorResult.single_record_tag}
                     </span>
                     )}
                 </Table.Cell>

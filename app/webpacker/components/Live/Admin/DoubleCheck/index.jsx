@@ -10,7 +10,7 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import { events } from '../../../../lib/wca-data.js.erb';
 import WCAQueryClientProvider from '../../../../lib/providers/WCAQueryClientProvider';
 import updateRoundResults from '../../api/updateRoundResults';
-import getRoundResults from '../../api/getRoundResults';
+import getRoundResults, { roundResultsKey } from '../../api/getRoundResults';
 import Loading from '../../../Requests/Loading';
 import AttemptsForm from '../../components/AttemptsForm';
 
@@ -46,7 +46,7 @@ function DoubleCheck({
   const [attempts, setAttempts] = useState(_.times(solveCount, _.constant(0)));
 
   const { data: results, isLoading } = useQuery({
-    queryKey: [round.id, 'results'],
+    queryKey: roundResultsKey(round.id),
     queryFn: () => getRoundResults(round.id, competitionId),
   });
 
