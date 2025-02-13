@@ -92,6 +92,10 @@ class Round < ApplicationRecord
     end
   end
 
+  def event_id
+    event.id
+  end
+
   def formats_used
     cutoff_format = Format.c_find!(cutoff.number_of_attempts.to_s) if cutoff
     [cutoff_format, format].compact
@@ -135,6 +139,10 @@ class Round < ApplicationRecord
 
   def advancement_condition_to_s(short: false)
     advancement_condition ? advancement_condition.to_s(self, short: short) : ""
+  end
+
+  def live_podium
+    live_results.where(ranking: 1..3)
   end
 
   def previous_round
