@@ -1133,7 +1133,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_12_142508) do
     t.text "round_results", size: :medium
     t.integer "total_number_of_rounds", null: false
     t.string "old_type", limit: 1
-    t.boolean "is_open", default: false, null: false
     t.index ["competition_event_id", "number"], name: "index_rounds_on_competition_event_id_and_number", unique: true
   end
 
