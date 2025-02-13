@@ -14,21 +14,22 @@ export default function Wrapper({
 }) {
   return (
     <WCAQueryClientProvider>
-      <PersonResults allResults={results} user={user} competitionId={competitionId} />
+      <PersonResults results={results} user={user} competitionId={competitionId} />
     </WCAQueryClientProvider>
   );
 }
 
 function PersonResults({
-  allResults, user, competitionId,
+  results, user, competitionId,
 }) {
-  const resultsById = _.groupBy(allResults, 'event_id');
+  const resultsByEvent = _.groupBy(results, 'event_id');
+
   return (
     <Segment>
       <Header>
         {user.name}
       </Header>
-      {_.map(resultsById, (results, key) => (
+      {_.map(resultsByEvent, (eventResults, key) => (
         <>
           <Header as="h3">{events.byId[key].name}</Header>
           <Table>
@@ -46,7 +47,7 @@ function PersonResults({
               </Table.Row>
             </Table.Header>
             <Table.Body>
-              {results.map((r) => {
+              {eventResults.map((r) => {
                 const { round, attempts } = r;
                 return (
                   <Table.Row>
