@@ -24,10 +24,10 @@ const guestMessageOptions = ['unclear', 'free', 'restricted'].map((status) => ({
   text: I18n.t(`competitions.competition_form.choices.registration.guest_entry_status.${status}`),
 }));
 
-const cancellationRestrictionOptions = ['can_cancel_always', 'can_cancel_not_accepted', 'can_cancel_unpaid'].map((status) => ({
+const cancellationRestrictionOptions = ['always', 'not_accepted', 'unpaid'].map((status) => ({
   key: status,
   value: status,
-  text: I18n.t(`competitions.competition_form.choices.registration.cancellation_restrictions.${status}`),
+  text: I18n.t(`competitions.competition_form.choices.registration.user_can_cancel.${status}`),
 }));
 
 export default function RegistrationDetails() {

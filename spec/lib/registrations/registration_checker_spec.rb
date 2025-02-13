@@ -1256,10 +1256,10 @@ RSpec.describe Registrations::RegistrationChecker do
     end
 
     describe '#update_registration_allowed!.validate_update_status!' do
-      context 'cancellation_restriction: cancel_cancel_not_accepted' do
+      context 'user_can_cancel: not_accepted' do
         let(:accepted_cant_cancel) {
           FactoryBot.create(
-            :competition, :registration_closed, :editable_registrations, :with_organizer, cancellation_restrictions: :can_cancel_not_accepted
+            :competition, :registration_closed, :editable_registrations, :with_organizer, user_can_cancel: :not_accepted
           )
         }
 
@@ -1311,10 +1311,10 @@ RSpec.describe Registrations::RegistrationChecker do
         end
       end
 
-      context 'cancellation_restriction: restrict_paid' do
+      context 'user_can_cancel: restrict_paid' do
         let(:paid_cant_cancel) {
           FactoryBot.create(
-            :competition, :registration_closed, :editable_registrations, :with_organizer, cancellation_restrictions: :can_cancel_unpaid
+            :competition, :registration_closed, :editable_registrations, :with_organizer, user_can_cancel: :unpaid
           )
         }
 

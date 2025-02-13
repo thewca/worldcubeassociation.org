@@ -2,12 +2,12 @@
 
 class ExpandCancellationRestrictionsForCompetitions < ActiveRecord::Migration[7.2]
   def up
-    add_column :Competitions, :cancellation_restrictions, :integer, default: 0, null: false
+    add_column :Competitions, :user_can_cancel, :integer, default: 0, null: false
     Competition.where(allow_registration_self_delete_after_acceptance: false)
-               .update_all(cancellation_restrictions: :can_cancel_not_accepted)
+               .update_all(user_can_cancel: :not_accepted)
   end
 
   def down
-    remove_column :Competitions, :cancellation_restrictions
+    remove_column :Competitions, :user_can_cancel
   end
 end
