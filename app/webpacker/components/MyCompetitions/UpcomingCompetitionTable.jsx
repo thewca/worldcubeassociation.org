@@ -11,8 +11,6 @@ import {
 } from './TableCells';
 import I18nHTMLTranslate from '../I18nHTMLTranslate';
 import { toRelativeOptions } from '../../lib/utils/dates';
-import TableHeader
-  from "../RegistrationsV2/RegistrationAdministration/AdministrationTableHeader";
 
 const competingStatusIcon = (competingStatus) => {
   switch (competingStatus) {
