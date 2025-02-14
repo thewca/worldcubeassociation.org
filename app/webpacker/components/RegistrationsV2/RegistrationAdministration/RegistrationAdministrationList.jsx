@@ -312,7 +312,15 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
   const panels = [
     {
       key: 'pending',
-      title: { content: <Header as="span">Pending registrations ({pending.length})</Header> },
+      title: {
+        content: (
+          <Header as="span">
+            Pending registrations
+            {' '}
+            ({pending.length})
+          </Header>
+        ),
+      },
       content: {
         content: (
           <>
@@ -339,7 +347,11 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
       key: 'waitlist',
       title: {
         content: (
-          <Header as="span">{I18n.t('registrations.list.waiting_list')} ({waiting.length})</Header>
+          <Header as="span">
+            {I18n.t('registrations.list.waiting_list')}
+            {' '}
+            ({waiting.length})
+          </Header>
         ),
       },
       content: {
@@ -488,9 +500,9 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
     ['cancelled', cancelled],
     ['rejected', rejected],
   ].filter(
-    ([_, list]) => list.length > 0,
+    ([, list]) => list.length > 0,
   ).map(
-    ([key, _]) => panels.findIndex((panel) => panel.key === key),
+    ([key]) => panels.findIndex((panel) => panel.key === key),
   );
 
   return (
