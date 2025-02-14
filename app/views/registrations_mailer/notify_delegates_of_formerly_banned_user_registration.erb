@@ -7,7 +7,7 @@
 </p>
 
 <% user = @registration.user %>
-<% bans = user.past_roles.filter { |role| role.group == UserGroup.banned_competitors.first } %>
+<% bans = user.past_bans %>
 
 <p>User has been banned <%= bans.count %> time(s), with the following scopes and reasons:</p>
 
