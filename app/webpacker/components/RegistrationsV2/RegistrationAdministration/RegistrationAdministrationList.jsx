@@ -479,7 +479,19 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
       },
     },
     // TODO: Either add non competing registrations here on in a separate staff tab
-  ]
+  ];
+
+  const nonEmptyTableIndices = [
+    ['pending', pending],
+    ['waitlist', waiting],
+    ['accepted', accepted],
+    ['cancelled', cancelled],
+    ['rejected', rejected],
+  ].filter(
+    ([_, list]) => list.length > 0,
+  ).map(
+    ([key, _]) => panels.findIndex((panel) => panel.key === key),
+  );
 
   return (
     <Segment loading={isMutating} style={{ overflowX: 'scroll' }}>
@@ -514,7 +526,12 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
           />
         </Sticky>
 
-        <Accordion defaultActiveIndex={['waitlist']} panels={panels} exclusive={false} fluid vertical />
+        <Accordion
+          defaultActiveIndex={nonEmptyTableIndices}
+          panels={panels}
+          exclusive={false}
+          fluid
+        />
 
         {/* i18n-tasks-use t('registrations.list.non_competing') */}
       </div>
