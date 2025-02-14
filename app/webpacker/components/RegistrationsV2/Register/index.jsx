@@ -91,7 +91,11 @@ function Register({
   // User can't register
   if (cannotRegisterReasons.length > 0) {
     return (
-      <RegistrationNotAllowedMessage reasons={cannotRegisterReasons} competitionInfo={competitionInfo} userInfo={userInfo} />
+      <RegistrationNotAllowedMessage
+        reasons={cannotRegisterReasons}
+        competitionInfo={competitionInfo}
+        userInfo={userInfo}
+      />
     );
   }
 

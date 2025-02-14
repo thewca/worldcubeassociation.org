@@ -13,8 +13,8 @@ export default function RegistrationNotAllowedMessage({ reasons, competitionInfo
         options={{ comp: competitionInfo.name, profile: `<a href='${editPersonUrl(userInfo.id)}' >${I18n.t('registrations.profile')}</a>` }}
       />
       <List bulleted>
-        {reasons.map((reason, index) => (
-          <List.Item key={index}>
+        {reasons.map((reason) => (
+          <List.Item key={reason}>
             <span dangerouslySetInnerHTML={{ __html: reason }} />
           </List.Item>
         ))}
