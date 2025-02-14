@@ -7,7 +7,7 @@
 </p>
 
 <% user = @registration.user %>
-<% bans = user.past_bans %>
+<% bans = user.past_bans_metadata %>
 
 <p>
   <%= t 'registrations.mailer.formerly_banned.ban_count', ban_count: bans.count %>
