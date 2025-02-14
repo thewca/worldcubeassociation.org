@@ -1207,6 +1207,7 @@ en:
           competition_canceled: "The competition has been canceled"
       formerly_banned:
         ban_count: "Competitor has been banned %{ban_count} time(s), with the following scopes and reasons:"
+        scope_and_reason: "Scope: %{scope}, Reason: %{reason}"
         wic_message: "If you have any questions regarding the competitor's disciplinary history, please reach out to the WIC by replying to this email."
     #context: on the registrations list
     list:
