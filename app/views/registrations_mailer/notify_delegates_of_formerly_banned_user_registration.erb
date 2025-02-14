@@ -9,12 +9,16 @@
 <% user = @registration.user %>
 <% bans = user.past_bans %>
 
-<p>User has been banned <%= bans.count %> time(s), with the following scopes and reasons:</p>
+<p>
+  <%= t 'registrations.mailer.formerly_banned.ban_count', ban_count: bans.count %>
+</p>
 
 <ul>
   <% bans.each do |ban| %>
-    <li>Scope: <%= ban.scope %>, reason: <%= ban.ban_reason %></li>
+    <li>Scope: <%= ban.scope %>, Reason: <%= ban.ban_reason %></li>
   <% end %>
 </ul>
 
-<p>If you have any questions regarding the competitor's disciplinary history, please reach out to the WIC by replying to this email.</p>
+<p>
+  <%= t 'registrations.mailer.formerly_banned.wic_message' %>
+</p>
