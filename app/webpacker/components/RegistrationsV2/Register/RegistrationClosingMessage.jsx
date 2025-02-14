@@ -13,7 +13,7 @@ export default function RegistrationClosingMessage({
 
   const timeLeft = usePerpetualState(recomputeDiff);
 
-  if (timeLeft.seconds < 0) {
+  if (timeLeft.seconds < 0 || timeLeft.minutes < 0 || timeLeft.hours < 0 || timeLeft.days < 0) {
     return (
       <Message negative>
         {/* i18n-tasks-use t('registrations.closed_html') */}
