@@ -91,11 +91,11 @@ function Register({
   // User can't register
   if (cannotRegisterReasons.length > 0) {
     return (
-      <RegistrationNotAllowedMessage reasons={cannotRegisterReasons} />
+      <RegistrationNotAllowedMessage reasons={cannotRegisterReasons} competitionInfo={competitionInfo} userInfo={userInfo} />
     );
   }
 
-  // This is true iff we're exactly between the two timestamps (open and close)
+  // This is true if we're exactly between the two timestamps (open and close)
   const registrationCurrentlyOpen = registrationAlreadyOpen && registrationNotYetClosed;
 
   // We should always show the panel to allow editing an existing registration.
