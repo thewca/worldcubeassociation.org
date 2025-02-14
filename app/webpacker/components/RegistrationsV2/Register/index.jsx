@@ -48,33 +48,6 @@ export default function Index({
   );
 }
 
-function Panel({
-  user,
-  preferredEvents,
-  competitionInfo,
-  registration,
-  refetchRegistration,
-  connectedAccountId,
-  stripePublishableKey,
-  qualifications,
-}) {
-  return (
-    <>
-      <RegistrationMessage />
-      <StepPanel
-        user={user}
-        preferredEvents={preferredEvents}
-        competitionInfo={competitionInfo}
-        registration={registration}
-        refetchRegistration={refetchRegistration}
-        connectedAccountId={connectedAccountId}
-        stripePublishableKey={stripePublishableKey}
-        qualifications={qualifications}
-      />
-    </>
-  );
-}
-
 function Register({
   userCanPreRegister,
   competitionInfo,
@@ -138,16 +111,19 @@ function Register({
       <RegistrationOpeningMessage registrationStart={competitionInfo.registration_open} />
       <RegistrationClosingMessage registrationEnd={competitionInfo.registration_close} />
       {showRegistrationPanel && (
-        <Panel
-          user={userInfo}
-          preferredEvents={preferredEvents}
-          competitionInfo={competitionInfo}
-          registration={registration}
-          refetchRegistration={refetch}
-          connectedAccountId={connectedAccountId}
-          stripePublishableKey={stripePublishableKey}
-          qualifications={qualifications}
-        />
+        <>
+          <RegistrationMessage />
+          <StepPanel
+            user={userInfo}
+            preferredEvents={preferredEvents}
+            competitionInfo={competitionInfo}
+            registration={registration}
+            refetchRegistration={refetch}
+            connectedAccountId={connectedAccountId}
+            stripePublishableKey={stripePublishableKey}
+            qualifications={qualifications}
+          />
+        </>
       )}
     </>
   );
