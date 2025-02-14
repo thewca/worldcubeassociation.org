@@ -519,7 +519,7 @@ class User < ApplicationRecord
   end
 
   def banned_in_past?
-    past_roles.any? { |role| role.group == UserGroup.banned_competitors.first }
+    past_bans.any?
   end
 
   def current_ban
