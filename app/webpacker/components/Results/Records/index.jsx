@@ -1,56 +1,39 @@
-import React, {
-  useEffect, useMemo, useReducer,
-} from 'react';
+import React, { useEffect, useMemo, useReducer } from 'react';
 import { Container } from 'semantic-ui-react';
-import RankingsTable from './RankingsTable';
 import WCAQueryClientProvider from '../../../lib/providers/WCAQueryClientProvider';
-import { rankingsUrl } from '../../../lib/requests/routes.js.erb';
+import { recordsUrl } from '../../../lib/requests/routes.js.erb';
 import ResultsFilter from '../ResultsFilter';
+import RecordsTable from './RecordsTable';
 
 const ActionTypes = {
   SET_EVENT: 'SET_EVENT',
   SET_REGION: 'SET_REGION',
-  SET_RANKING_TYPE: 'SET_RANKING_TYPE',
   SET_GENDER: 'SET_GENDER',
   SET_SHOW: 'SET_SHOW',
 };
 
 function parseInitialStateFromUrl(url) {
-  const urlPattern = /\/results\/rankings\/(\w+)\/(\w+)/; // Matches `/results/rankings/{event}/{rankingType}`
-  const match = url.match(urlPattern);
-
-  if (!match) {
-    throw new Error('URL does not match the expected pattern.');
-  }
-
-  const [, event, rankingType] = match; // Extract event and rankingType from regex groups
-
   const urlObj = new URL(url);
   const params = urlObj.searchParams;
-  const region = params.get('region') || 'world'; // Default to 'all' if not provided
-  const gender = params.get('gender') || 'All'; // Default to 'all' if not provided
-  const show = params.get('show') || '100 persons'; // Default to 'Persons' if not provided
+  const region = params.get('region') || 'world';
+  const gender = params.get('gender') || 'All';
+  const show = params.get('show') || 'mixed';
+  const event = params.get('event_id');
 
   return {
     event,
     region,
     gender,
     show,
-    rankingType,
   };
 }
 
 function filterReducer(state, action) {
   switch (action.type) {
     case ActionTypes.SET_EVENT:
-      if (action.payload === '333mbf') {
-        return { ...state, event: action.payload, rankingType: 'single' };
-      }
       return { ...state, event: action.payload };
     case ActionTypes.SET_REGION:
       return { ...state, region: action.payload };
-    case ActionTypes.SET_RANKING_TYPE:
-      return { ...state, rankingType: action.payload };
     case ActionTypes.SET_GENDER:
       return { ...state, gender: action.payload };
     case ActionTypes.SET_SHOW:
@@ -63,14 +46,14 @@ function filterReducer(state, action) {
 export default function Wrapper() {
   return (
     <WCAQueryClientProvider>
-      <Rankings />
+      <Records />
     </WCAQueryClientProvider>
   );
 }
 
-const SHOW_CATEGORIES = ['100 persons', '100 results', 'by region'];
+const SHOW_CATEGORIES = ['mixed', 'slim', 'separate', 'history', 'mixed history'];
 
-export function Rankings() {
+export function Records() {
   const [filterState, dispatch] = useReducer(
     filterReducer,
     window.location.href,
@@ -81,8 +64,6 @@ export function Rankings() {
     () => ({
       setEvent: (event) => dispatch({ type: ActionTypes.SET_EVENT, payload: event }),
       setRegion: (region) => dispatch({ type: ActionTypes.SET_REGION, payload: region }),
-      setRankingType:
-        (rankingType) => dispatch({ type: ActionTypes.SET_RANKING_TYPE, payload: rankingType }),
       setGender: (gender) => dispatch({ type: ActionTypes.SET_GENDER, payload: gender }),
       setShow: (show) => dispatch({ type: ActionTypes.SET_SHOW, payload: show }),
     }),
@@ -90,21 +71,22 @@ export function Rankings() {
   );
 
   const {
-    event, region, rankingType, gender, show,
+    event, region, gender, show,
   } = filterState;
 
   useEffect(() => {
-    window.history.replaceState(null, '', rankingsUrl(event, rankingType, region, gender, show));
-  }, [event, region, rankingType, gender, show]);
+    window.history.replaceState(null, '', recordsUrl(event, region, gender, show));
+  }, [event, region, gender, show]);
 
   return (
     <Container fluid>
       <ResultsFilter
         filterState={filterState}
         filterActions={filterActions}
+        clearEventIsAllowed
         showCategories={SHOW_CATEGORIES}
       />
-      <RankingsTable filterState={filterState} />
+      <RecordsTable filterState={filterState} />
     </Container>
   );
 }
