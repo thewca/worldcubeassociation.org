@@ -332,7 +332,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
               competitionInfo={competitionInfo}
             />
           </>
-        )
+        ),
       },
     },
     {
@@ -340,7 +340,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
       title: {
         content: (
           <Header as="span">{I18n.t('registrations.list.waiting_list')} ({waiting.length})</Header>
-        )
+        ),
       },
       content: {
         content: (
@@ -406,7 +406,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
             competitionInfo={competitionInfo}
           />
         ),
-      }
+      },
     },
     {
       key: 'cancelled',
@@ -441,7 +441,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
             />
           </>
         ),
-      }
+      },
     },
     {
       key: 'rejected',
@@ -476,7 +476,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
             />
           </>
         ),
-      }
+      },
     },
     // TODO: Either add non competing registrations here on in a separate staff tab
   ]
