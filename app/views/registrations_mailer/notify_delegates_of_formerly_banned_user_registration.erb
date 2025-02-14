@@ -6,7 +6,15 @@
   just registered for <%= @registration.competition.name %>.
 </p>
 
-<p>
-You can check the ban scope and reason
-  <%= link_to "here", panel_page_url(id: User.panel_pages[:bannedCompetitors]) %>
-</p>
+<% user = @registration.user %>
+<% bans = user.past_bans %>
+
+<p>User has been banned <%= bans.count %> time(s), with the following scopes and reasons:</p>
+
+<ul>
+  <% bans.each do |ban| %>
+    <li>Scope: <%= ban.metadata.scope %>, reason: <%= ban.metadata.ban_reason %></li>
+  <% end %>
+</ul>
+
+<p>If you have any questions regarding the competitor's disciplinary history, please reach out to the WIC by replying to this email.</p>
