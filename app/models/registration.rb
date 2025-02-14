@@ -420,7 +420,7 @@ class Registration < ApplicationRecord
                                    .join(" + ")
   end
 
-  def can_be_waitlisted!
+  def ensure_waitlist_eligibility!
     raise ArgumentError.new("Registration must have a competing_status of 'waiting_list' to be added to the waiting list") unless
       competing_status == Registrations::Helper::STATUS_WAITING_LIST
   end

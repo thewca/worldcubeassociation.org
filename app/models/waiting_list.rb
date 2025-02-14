@@ -8,7 +8,7 @@ class WaitingList < ActiveRecord::Base
   end
 
   def add(entry)
-    entry.can_be_waitlisted! # can_be_waitlisted! raises an error if it fails
+    entry.try(:ensure_waitlist_eligibility!) # raises an error if not waitlistable
     return if entries.include?(entry.id)
 
     if entries.nil?
