@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import StepPanel from './StepPanel';
 import { getSingleRegistration } from '../api/registration/get/get_registrations';
@@ -9,10 +9,14 @@ import messageReducer from '../reducers/messageReducer';
 import WCAQueryClientProvider from '../../../lib/providers/WCAQueryClientProvider';
 import ConfirmProvider from '../../../lib/providers/ConfirmProvider';
 import RegistrationNotYetOpenMessage from './RegistrationNotYetOpenMessage';
-import { hasNotPassed } from '../../../lib/utils/dates';
-import RegistrationClosedMessage from './RegistrationClosedMessage';
+import { hasNotPassed, hasPassed } from '../../../lib/utils/dates';
 import RegistrationNotAllowedMessage from './RegistrationNotAllowedMessage';
-import RegistrationClosingMessage from "./RegistrationClosingMessage";
+import RegistrationClosingMessage from './RegistrationClosingMessage';
+import usePerpetualState from '../hooks/usePerpetualState';
+
+// The following states should show the Panel even when registration is already closed.
+//   (You can think of this as "is there a non-cancelled, non-rejected registration?)
+const editableRegistrationStates = ['accepted', 'pending', 'waiting_list'];
 
 export default function Index({
   competitionInfo,
@@ -81,9 +85,8 @@ function Register({
   stripePublishableKey,
   cannotRegisterReasons,
 }) {
-  const [timerEnded, setTimerEnded] = useState(false);
-
   const dispatch = useDispatch();
+
   const {
     data: registration,
     isFetching,
@@ -100,15 +103,17 @@ function Register({
     },
   });
 
-  const onTimerEnd = useCallback(() => {
-    setTimerEnded(true);
-  }, [setTimerEnded]);
+  const registrationNotYetOpen = usePerpetualState(
+    () => hasNotPassed(competitionInfo.registration_open),
+  );
+
+  const registrationAlreadyClosed = usePerpetualState(
+    () => hasPassed(competitionInfo.registration_close),
+  );
 
   if (isFetching) {
     return <Loading />;
   }
-
-  const registrationNotYetOpen = hasNotPassed(competitionInfo.registration_open);
 
   // User can't register
   if (cannotRegisterReasons.length > 0) {
@@ -118,10 +123,30 @@ function Register({
   }
 
   // If Registration is not yet open:
-  // render Panel if timer ended || userCanPreRegister
-  if (registrationNotYetOpen) {
-    if (userCanPreRegister || timerEnded) {
-      return (
+  //  Show the countdown, unless the user is allowed to "slip past" (ie. pre-register)
+  if (registrationNotYetOpen && !userCanPreRegister) {
+    return (
+      <RegistrationNotYetOpenMessage registrationStart={competitionInfo.registration_open} />
+    );
+  }
+
+  // At this point in the code, we know that:
+  // - Registration opening has passed OR
+  // - The user is able to pre-register.
+
+  // Note that "Registration opening has passed" (see above)
+  //   means that registration MAY already be closed.
+  //   So we check whether
+  //  - Registration is indeed still open (i.e. not yet closed)
+  //  - There's an existing registration to edit (accepted or pending)
+  const hasEditableRegistration = registration
+    && editableRegistrationStates.includes(registration.competing.registration_status);
+  const showRegistrationPanel = hasEditableRegistration || !registrationAlreadyClosed;
+
+  return (
+    <>
+      <RegistrationClosingMessage registrationEnd={competitionInfo.registration_close} />
+      {showRegistrationPanel && (
         <Panel
           user={userInfo}
           preferredEvents={preferredEvents}
@@ -132,55 +157,7 @@ function Register({
           stripePublishableKey={stripePublishableKey}
           qualifications={qualifications}
         />
-      );
-    }
-    return (
-      <RegistrationNotYetOpenMessage
-        registrationStart={competitionInfo.registration_open}
-        onTimerEnd={onTimerEnd}
-      />
-    );
-  }
-
-  // If Registration is open
-  // always render Panel
-  if (competitionInfo['registration_currently_open?']) {
-    return (
-      <Panel
-        user={userInfo}
-        preferredEvents={preferredEvents}
-        competitionInfo={competitionInfo}
-        registration={registration}
-        refetchRegistration={refetch}
-        connectedAccountId={connectedAccountId}
-        stripePublishableKey={stripePublishableKey}
-        qualifications={qualifications}
-      />
-    );
-  }
-
-  // If registration is closed:
-  // only render panel if competing status is not cancelled
-
-  if (registration && registration.competing.registration_status !== 'cancelled') {
-    return (
-      <Panel
-        user={userInfo}
-        preferredEvents={preferredEvents}
-        competitionInfo={competitionInfo}
-        registration={registration}
-        refetchRegistration={refetch}
-        connectedAccountId={connectedAccountId}
-        stripePublishableKey={stripePublishableKey}
-        qualifications={qualifications}
-      />
-    );
-  }
-
-  return (
-    <RegistrationClosingMessage
-      registrationEnd={competitionInfo.registration_close}
-      onTimerEnd={onTimerEnd}
-    />
+      )}
+    </>
   );
 }
