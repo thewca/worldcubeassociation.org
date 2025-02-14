@@ -5,7 +5,7 @@ import I18nHTMLTranslate from '../../I18nHTMLTranslate';
 import { fullTimeDiff } from '../../../lib/utils/dates';
 import usePerpetualState from '../hooks/usePerpetualState';
 
-export default function RegistrationNotYetOpenMessage({
+export default function RegistrationOpeningMessage({
   registrationStart,
 }) {
   const start = DateTime.fromISO(registrationStart);
@@ -13,8 +13,8 @@ export default function RegistrationNotYetOpenMessage({
 
   const timeLeft = usePerpetualState(recomputeDiff);
 
-  // `seconds < 0` means that the deadline definitely passed.
-  if (timeLeft.seconds < 0) {
+  // The values getting negative means that the deadline definitely passed.
+  if (timeLeft.seconds < 0 || timeLeft.minutes < 0 || timeLeft.hours < 0 || timeLeft.days < 0) {
     return null;
   }
 

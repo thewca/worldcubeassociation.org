@@ -8,7 +8,7 @@ import StoreProvider, { useDispatch } from '../../../lib/providers/StoreProvider
 import messageReducer from '../reducers/messageReducer';
 import WCAQueryClientProvider from '../../../lib/providers/WCAQueryClientProvider';
 import ConfirmProvider from '../../../lib/providers/ConfirmProvider';
-import RegistrationNotYetOpenMessage from './RegistrationNotYetOpenMessage';
+import RegistrationOpeningMessage from './RegistrationOpeningMessage';
 import { hasNotPassed, hasPassed } from '../../../lib/utils/dates';
 import RegistrationNotAllowedMessage from './RegistrationNotAllowedMessage';
 import RegistrationClosingMessage from './RegistrationClosingMessage';
@@ -103,12 +103,12 @@ function Register({
     },
   });
 
-  const registrationNotYetOpen = usePerpetualState(
-    () => hasNotPassed(competitionInfo.registration_open),
+  const registrationAlreadyOpen = usePerpetualState(
+    () => hasPassed(competitionInfo.registration_open),
   );
 
-  const registrationAlreadyClosed = usePerpetualState(
-    () => hasPassed(competitionInfo.registration_close),
+  const registrationNotYetClosed = usePerpetualState(
+    () => hasNotPassed(competitionInfo.registration_close),
   );
 
   if (isFetching) {
@@ -122,29 +122,20 @@ function Register({
     );
   }
 
-  // If Registration is not yet open:
-  //  Show the countdown, unless the user is allowed to "slip past" (ie. pre-register)
-  if (registrationNotYetOpen && !userCanPreRegister) {
-    return (
-      <RegistrationNotYetOpenMessage registrationStart={competitionInfo.registration_open} />
-    );
-  }
+  // This is true iff we're exactly between the two timestamps (open and close)
+  const registrationCurrentlyOpen = registrationAlreadyOpen && registrationNotYetClosed;
 
-  // At this point in the code, we know that:
-  // - Registration opening has passed OR
-  // - The user is able to pre-register.
-
-  // Note that "Registration opening has passed" (see above)
-  //   means that registration MAY already be closed.
-  //   So we check whether
-  //  - Registration is indeed still open (i.e. not yet closed)
-  //  - There's an existing registration to edit (accepted or pending)
+  // We should always show the panel to allow editing an existing registration.
   const hasEditableRegistration = registration
     && editableRegistrationStates.includes(registration.competing.registration_status);
-  const showRegistrationPanel = hasEditableRegistration || !registrationAlreadyClosed;
+
+  const showRegistrationPanel = registrationCurrentlyOpen
+    || (userCanPreRegister && registrationNotYetClosed)
+    || hasEditableRegistration;
 
   return (
     <>
+      <RegistrationOpeningMessage registrationStart={competitionInfo.registration_open} />
       <RegistrationClosingMessage registrationEnd={competitionInfo.registration_close} />
       {showRegistrationPanel && (
         <Panel
