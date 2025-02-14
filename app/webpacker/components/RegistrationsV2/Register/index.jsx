@@ -12,6 +12,7 @@ import RegistrationNotYetOpenMessage from './RegistrationNotYetOpenMessage';
 import { hasNotPassed } from '../../../lib/utils/dates';
 import RegistrationClosedMessage from './RegistrationClosedMessage';
 import RegistrationNotAllowedMessage from './RegistrationNotAllowedMessage';
+import RegistrationClosingMessage from "./RegistrationClosingMessage";
 
 export default function Index({
   competitionInfo,
@@ -177,6 +178,9 @@ function Register({
   }
 
   return (
-    <RegistrationClosedMessage registrationEnd={competitionInfo.registration_close} />
+    <RegistrationClosingMessage
+      registrationEnd={competitionInfo.registration_close}
+      onTimerEnd={onTimerEnd}
+    />
   );
 }

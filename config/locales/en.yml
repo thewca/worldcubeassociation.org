@@ -1241,6 +1241,7 @@ en:
     delete_confirm: "Are you sure you want to delete your registration?"
     delete_registration: "Delete Registration"
     will_open_html: "Registration will open in <strong>%{days}</strong> on %{time}."
+    will_close_html: "Registration closes in <strong>%{days}</strong> on %{time}."
     closed_html: "Registration closed <strong>%{days}</strong> ago on %{time}."
     please_sign_in_past_html: "%{sign_in} to check the status of your registration. If you do not yet have a WCA account, you can create one %{here}, but it is too late to register for this competition."
     please_sign_in_not_yet_open_html: "%{sign_in} to check the status of your registration. If you do not yet have a WCA account, you can create one %{here}, but its registration is not yet open."
@@ -1857,6 +1858,7 @@ en:
         no_self_update: "Contact the Organization Team to update your registration."
       register:
         will_open_countdown: "Registration will open in %{minutes} minutes %{seconds} seconds. This page will refresh automatically when registration opens."
+        will_close_countdown: "Registration closes in %{minutes} minutes %{seconds} seconds. This page will refresh automatically when registration closes."
         panel:
           approval:
             title: "Approval"
