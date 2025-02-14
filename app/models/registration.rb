@@ -312,8 +312,12 @@ class Registration < ApplicationRecord
     }
   end
 
+  def self.accepted_count
+    accepted.count
+  end
+
   def self.accepted_and_paid_pending_count
-    accepted.count + pending.with_payments.count
+    accepted_count + pending.with_payments.count
   end
 
   # Only run the validations when creating the registration as we don't want user changes

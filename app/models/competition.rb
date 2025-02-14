@@ -458,6 +458,11 @@ class Competition < ApplicationRecord
     competitor_limit_enabled? && competitor_count >= competitor_limit
   end
 
+  def registration_full_and_accepted?
+    competitor_count = registrations.accepted_count
+    competitor_limit_enabled? && competitor_count >= competitor_limit
+  end
+
   def number_of_bookmarks
     bookmarked_users.count
   end
@@ -579,10 +584,12 @@ class Competition < ApplicationRecord
     warnings
   end
 
+  # @deprecated Fully transitioned to React. Keeping the method here because the test cases are interesting,
+  #   and I want to "save" them until we can do proper React component testing (signed GB 2025-02-14)
   def registration_full_message
-    if registration_full? && registrations.accepted.count >= competitor_limit
+    if registration_full_and_accepted?
       I18n.t('registrations.registration_full', competitor_limit: competitor_limit)
-    else
+    elsif registration_full?
       I18n.t('registrations.registration_full_include_waiting_list', competitor_limit: competitor_limit)
     end
   end
@@ -1888,7 +1895,7 @@ class Competition < ApplicationRecord
                information events_per_registration_limit guests_enabled],
       methods: %w[url website short_name city venue_address venue_details latitude_degrees longitude_degrees country_iso2 event_ids registration_currently_open?
                   main_event_id number_of_bookmarks using_payment_integrations? uses_qualification? uses_cutoff? competition_series_ids registration_full?
-                  part_of_competition_series?],
+                  part_of_competition_series? registration_full_and_accepted?],
       include: %w[delegates organizers],
     }
     self.as_json(options)
