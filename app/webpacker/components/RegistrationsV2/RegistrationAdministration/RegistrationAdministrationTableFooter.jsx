@@ -44,7 +44,7 @@ export default function RegistrationAdministrationTableFooter({
           registrations.length - newcomerCount
         } Returners = ${registrations.length} People`}
       </Table.Cell>
-      <Table.Cell>{`${countryCount}  Countries`}</Table.Cell>
+      <Table.Cell>{`${countryCount} Countries`}</Table.Cell>
       <Table.Cell key="registered on" />
       {competitionInfo['using_payment_integrations?'] && (
         <Table.Cell>{moneyCountHumanReadable(registrations, competitionInfo)}</Table.Cell>
