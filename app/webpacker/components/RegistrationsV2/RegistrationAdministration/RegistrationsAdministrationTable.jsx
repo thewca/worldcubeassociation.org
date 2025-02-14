@@ -85,7 +85,6 @@ export default function RegistrationAdministrationTable({
           columnsExpanded={columnsExpanded}
           registrations={registrations}
           competitionInfo={competitionInfo}
-          eventsToggled={columnsExpanded.events}
         />
       </TableFooter>
     </Table>

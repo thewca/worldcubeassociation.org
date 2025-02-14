@@ -13,9 +13,9 @@ const moneyCountHumanReadable = (registrations, competitionInfo) => {
 };
 
 export default function RegistrationAdministrationTableFooter({
-  columnsExpanded, registrations, competitionInfo, eventsToggled,
+  columnsExpanded, registrations, competitionInfo,
 }) {
-  const { dob, events, comments } = columnsExpanded;
+  const { events: eventsAreExpanded, comments: commentsAreVisible } = columnsExpanded;
 
   const newcomerCount = registrations.filter(
     (reg) => !reg.user.wca_id,
@@ -49,13 +49,13 @@ export default function RegistrationAdministrationTableFooter({
       {competitionInfo['using_payment_integrations?'] && (
         <Table.Cell>{moneyCountHumanReadable(registrations, competitionInfo)}</Table.Cell>
       )}
-      {eventsToggled ? competitionInfo.event_ids.map((evt) => (
+      {eventsAreExpanded ? competitionInfo.event_ids.map((evt) => (
         <Table.Cell key={`footer-count-${evt}`}>
           {eventCounts[evt]}
         </Table.Cell>
       )) : <Table.Cell />}
       <Table.Cell>{guestCount}</Table.Cell>
-      {comments && (
+      {commentsAreVisible && (
         <>
           <Table.Cell key="comment" />
           <Table.Cell key="note" />
