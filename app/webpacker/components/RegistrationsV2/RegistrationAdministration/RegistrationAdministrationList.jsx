@@ -362,6 +362,32 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
         />
 
         <Header>
+          {I18n.t('registrations.list.waiting_list')}
+          {' '}
+          ({waiting.length})
+        </Header>
+
+        <Checkbox toggle value={editable} onChange={setEditable} label={I18n.t('competitions.registration_v2.list.edit_waiting_list')} />
+
+        <RegistrationAdministrationTable
+          columnsExpanded={expandedColumns}
+          selected={partitionedSelected.waiting}
+          select={select}
+          unselect={unselect}
+          competition_id={competitionInfo.id}
+          changeSortColumn={changeSortColumn}
+          sortDirection={sortDirection}
+          sortColumn={sortColumn}
+          competitionInfo={competitionInfo}
+          registrations={waiting.toSorted(
+            (a, b) => a.competing.waiting_list_position - b.competing.waiting_list_position,
+          )}
+          handleOnDragEnd={handleOnDragEnd}
+          draggable={editable}
+          sortable={false}
+        />
+
+        <Header>
           {I18n.t('registrations.list.approved_registrations')}
           {' '}
           (
@@ -385,33 +411,6 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
           sortDirection={sortDirection}
           sortColumn={sortColumn}
           competitionInfo={competitionInfo}
-        />
-        <Header>
-          {I18n.t('registrations.list.waiting_list')}
-          {' '}
-          (
-          {waiting.length}
-          )
-        </Header>
-
-        <Checkbox toggle value={editable} onChange={setEditable} label={I18n.t('competitions.registration_v2.list.edit_waiting_list')} />
-
-        <RegistrationAdministrationTable
-          columnsExpanded={expandedColumns}
-          selected={partitionedSelected.waiting}
-          select={select}
-          unselect={unselect}
-          competition_id={competitionInfo.id}
-          changeSortColumn={changeSortColumn}
-          sortDirection={sortDirection}
-          sortColumn={sortColumn}
-          competitionInfo={competitionInfo}
-          registrations={waiting.toSorted(
-            (a, b) => a.competing.waiting_list_position - b.competing.waiting_list_position,
-          )}
-          handleOnDragEnd={handleOnDragEnd}
-          draggable={editable}
-          sortable={false}
         />
 
         <Header>
