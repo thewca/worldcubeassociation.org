@@ -32,7 +32,7 @@ export default function RegistrationClosingMessage({
   return (
     <Message info>
       { timeLeft.days < 1 && timeLeft.hours < 1 && timeLeft.minutes < 30
-        ? <I18nHTMLTranslate i18nKey="competitions.registration_v2.register.will_open_countdown" options={timeLeft} />
+        ? <I18nHTMLTranslate i18nKey="competitions.registration_v2.register.will_close_countdown" options={timeLeft} />
         // i18n-tasks-use t('registrations.will_close_html')
         : <I18nHTMLTranslate i18nKey="registrations.will_close_html" options={{ days: end.toRelative(), time: end.toLocaleString(DateTime.DATETIME_FULL) }} />}
     </Message>
