@@ -16,7 +16,7 @@
 <ul>
   <% bans.each do |ban| %>
     <li>
-      <%= t 'registrations.mailer.formerly_banned.scope_and_reason',scope: ban.scope, reason: ban.ban_reason %>
+      <%= t('registrations.mailer.formerly_banned.scope_and_reason', scope: ban.scope, reason: ban.ban_reason) %>
     </li>
   <% end %>
 </ul>
