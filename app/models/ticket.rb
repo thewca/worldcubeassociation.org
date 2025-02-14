@@ -5,6 +5,7 @@ class Ticket < ApplicationRecord
     edit_person: "TicketsEditPerson",
   }.freeze
 
+  has_many :ticket_comments
   has_many :ticket_logs
   has_many :ticket_stakeholders
   belongs_to :metadata, polymorphic: true
