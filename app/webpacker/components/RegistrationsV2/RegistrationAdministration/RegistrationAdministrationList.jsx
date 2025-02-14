@@ -316,8 +316,9 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
         content: (
           <Header as="span">
             Pending registrations
-            {' '}
-            ({pending.length})
+            {' ('}
+            {pending.length}
+            {')'}
           </Header>
         ),
       },
@@ -349,8 +350,9 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
         content: (
           <Header as="span">
             {I18n.t('registrations.list.waiting_list')}
-            {' '}
-            ({waiting.length})
+            {' ('}
+            {waiting.length}
+            {')'}
           </Header>
         ),
       },
