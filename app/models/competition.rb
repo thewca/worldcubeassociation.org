@@ -502,7 +502,6 @@ class Competition < ApplicationRecord
     persisted? && is_probably_over? && !cancelled? && !self.results_submitted? && delegates.include?(user)
   end
 
-  # For react pages we do not want to show warnings as we show them in react
   def warnings_for(user)
     warnings = {}
 

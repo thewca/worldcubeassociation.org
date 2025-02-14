@@ -267,10 +267,8 @@
         <% end %>
       <% end %>
 
-      <% unless defined?(@skip_warnings )%>
-        <% @competition.warnings_for(current_user).each do |field, message| %>
-          <%= alert :warning, message, note: true %>
-        <% end %>
+      <% @competition.warnings_for(current_user).each do |field, message| %>
+        <%= alert :warning, message, note: true %>
       <% end %>
 
       <% @competition.info_for(current_user).each do |field, message| %>
