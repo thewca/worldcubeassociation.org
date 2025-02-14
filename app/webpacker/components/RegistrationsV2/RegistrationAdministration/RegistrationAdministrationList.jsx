@@ -305,9 +305,11 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
     });
   }, [competitionInfo.id, refetch, updateRegistrationMutation, waiting]);
 
-  return isRegistrationsLoading ? (
-    <Loading />
-  ) : (
+  if (isRegistrationsLoading) {
+    return <Loading />;
+  }
+
+  return (
     <Segment loading={isMutating} style={{ overflowX: 'scroll' }}>
       <Form>
         <Form.Group widths="equal">
