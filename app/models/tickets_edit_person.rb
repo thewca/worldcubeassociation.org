@@ -60,4 +60,14 @@ class TicketsEditPerson < ApplicationRecord
       return ticket
     end
   end
+
+  DEFAULT_SERIALIZE_OPTIONS = {
+    include: %w[tickets_edit_person_fields],
+  }.freeze
+
+  def serializable_hash(options = nil)
+    json = super(DEFAULT_SERIALIZE_OPTIONS.merge(options || {}))
+    json[:class] = self.class.to_s.downcase
+    json
+  end
 end

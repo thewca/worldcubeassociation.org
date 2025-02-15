@@ -1,5 +1,5 @@
 import React from 'react';
-import { Message } from 'semantic-ui-react';
+import { Header, List, Message } from 'semantic-ui-react';
 import EditPersonForm from '../../Panel/pages/EditPersonPage/EditPersonForm';
 import useSaveAction from '../../../lib/hooks/useSaveAction';
 import { actionUrls } from '../../../lib/requests/routes.js.erb';
@@ -26,6 +26,28 @@ function EditPersonValidations({ ticketDetails }) {
   ));
 }
 
+function EditPersonRequestedChangesList({ ticketDetails }) {
+  const { ticket } = ticketDetails;
+  const { tickets_edit_person_fields: requestedChanges } = ticket.metadata;
+  return (
+    <>
+      <Header as="h3">Requested changes</Header>
+      <List>
+        {requestedChanges.map((change) => (
+          <List.Item>
+            {I18n.t(`activerecord.attributes.user.${change.field_name}`)}
+            :
+            {' '}
+            {change.old_value.replace(' ', '#')}
+            {' -> '}
+            {change.new_value.replace(' ', '#')}
+          </List.Item>
+        ))}
+      </List>
+    </>
+  );
+}
+
 function EditPersonTicketWorkbenchForWrt({ ticketDetails, actingStakeholderId, sync }) {
   const { ticket } = ticketDetails;
   const { save, saving } = useSaveAction();
@@ -47,6 +69,9 @@ function EditPersonTicketWorkbenchForWrt({ ticketDetails, actingStakeholderId, s
   return (
     <>
       <EditPersonValidations
+        ticketDetails={ticketDetails}
+      />
+      <EditPersonRequestedChangesList
         ticketDetails={ticketDetails}
       />
       <EditPersonForm
