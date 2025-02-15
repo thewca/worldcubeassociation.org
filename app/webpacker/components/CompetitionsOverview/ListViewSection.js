@@ -23,7 +23,7 @@ import {
 import { countries } from '../../lib/wca-data.js.erb';
 import { adminCompetitionUrl, competitionUrl } from '../../lib/requests/routes.js.erb';
 import { dateRange, toRelativeOptions } from '../../lib/utils/dates';
-import CountryFlag from '../wca/CountryFlag';
+import RegionFlag from '../wca/RegionFlag';
 
 function ListViewSection({
   competitions,
@@ -160,7 +160,7 @@ export function CompetitionsTable({
                 {dateRange(comp.start_date, comp.end_date)}
               </Table.Cell>
               <Table.Cell width={5}>
-                {comp.country_iso2 && <CountryFlag iso2={comp.country_iso2} />}
+                {comp.country_iso2 && <RegionFlag iso2={comp.country_iso2} />}
                 {' '}
                 <a href={competitionUrl(comp.id)}>{comp.short_display_name}</a>
               </Table.Cell>
@@ -217,7 +217,7 @@ export function CompetitionsTabletTable({
                 {dateRange(comp.start_date, comp.end_date)}
               </Table.Cell>
               <Table.Cell width={6}>
-                {comp.country_iso2 && <CountryFlag iso2={comp.country_iso2} />}
+                {comp.country_iso2 && <RegionFlag iso2={comp.country_iso2} />}
                 {' '}
                 <a href={competitionUrl(comp.id)}>{comp.short_display_name}</a>
               </Table.Cell>
@@ -264,7 +264,7 @@ export function CompetitionsMobileTable({
                   />
                   {dateRange(comp.start_date, comp.end_date)}
                 </Label>
-                {comp.country_iso2 && <CountryFlag iso2={comp.country_iso2} />}
+                {comp.country_iso2 && <RegionFlag iso2={comp.country_iso2} />}
                 {' '}
                 <a href={competitionUrl(comp.id)}>{comp.short_display_name}</a>
               </Table.Cell>
@@ -345,7 +345,7 @@ function AdminCompetitionsTable({
                   />
                 </Table.Cell>
                 <Table.Cell width={4}>
-                  {comp.country_iso2 && <CountryFlag iso2={comp.country_iso2} />}
+                  {comp.country_iso2 && <RegionFlag iso2={comp.country_iso2} />}
                   {' '}
                   <a href={competitionUrl(comp.id)}>{comp.short_display_name}</a>
                   <br />

@@ -5,7 +5,7 @@ import {
 import WCAQueryClientProvider from '../../../lib/providers/WCAQueryClientProvider';
 import { liveUrls } from '../../../lib/requests/routes.js.erb';
 import useInputState from '../../../lib/hooks/useInputState';
-import CountryFlag from '../../wca/CountryFlag';
+import RegionFlag from '../../wca/RegionFlag';
 
 export default function Wrapper({
   competitionId, competitors,
@@ -33,7 +33,7 @@ function Competitors({
         <Table.Body>
           {competitors.filter((c) => c.user.name.includes(searchInput)).map((c) => (
             <Table.Row>
-              <Table.Cell><CountryFlag iso2={c.user.country_iso2} /></Table.Cell>
+              <Table.Cell><RegionFlag iso2={c.user.country_iso2} /></Table.Cell>
               <Table.Cell>
                 <a href={liveUrls.personResults(competitionId, c.id)}>{c.user.name}</a>
               </Table.Cell>

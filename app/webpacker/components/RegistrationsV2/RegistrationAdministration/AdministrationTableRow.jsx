@@ -13,7 +13,7 @@ import EventIcon from '../../wca/EventIcon';
 import { editRegistrationUrl, editPersonUrl, personUrl } from '../../../lib/requests/routes.js.erb';
 import { isoMoneyToHumanReadable } from '../../../lib/helpers/money';
 import { countries } from '../../../lib/wca-data.js.erb';
-import CountryFlag from '../../wca/CountryFlag';
+import RegionFlag from '../../wca/RegionFlag';
 
 // Semantic Table only allows truncating _all_ columns in a table in
 // single line fixed mode. As we only want to truncate the comment/admin notes
@@ -131,7 +131,7 @@ export default function TableRow({
             {dob && <Table.Cell>{dateOfBirth}</Table.Cell>}
 
             <Table.Cell>
-              <CountryFlag iso2={country.iso2} withoutTooltip={region} />
+              <RegionFlag iso2={country.iso2} withoutTooltip={region} />
               {' '}
               {region && countries.byIso2[country.iso2].name}
             </Table.Cell>

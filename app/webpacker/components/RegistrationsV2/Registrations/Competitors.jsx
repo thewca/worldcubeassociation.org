@@ -19,7 +19,7 @@ import { getPeopleCounts, getTotals, getUserPositionInfo } from './utils';
 import PreTableInfo from './PreTableInfo';
 import Errored from '../../Requests/Errored';
 import Loading from '../../Requests/Loading';
-import CountryFlag from '../../wca/CountryFlag';
+import RegionFlag from '../../wca/RegionFlag';
 
 const sortReducer = createSortReducer(['name', 'country', 'total']);
 
@@ -197,7 +197,7 @@ function CompetitorsBody({
                 </div>
               </Table.Cell>
               <Table.Cell>
-                <CountryFlag iso2={registration.user.country.iso2} withoutTooltip />
+                <RegionFlag iso2={registration.user.country.iso2} withoutTooltip />
                 {' '}
                 {countries.byIso2[registration.user.country.iso2].name}
               </Table.Cell>
