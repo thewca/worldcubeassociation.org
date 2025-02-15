@@ -3,12 +3,12 @@ import { Popup } from 'semantic-ui-react';
 import classnames from 'classnames';
 import { countries } from '../../lib/wca-data.js.erb';
 
-export default function CountryFlag({ iso2, withTooltip = true }) {
-  if (withTooltip) {
-    return <CountryFlagWithTooltip iso2={iso2} />;
+export default function CountryFlag({ iso2, withoutTooltip = false }) {
+  if (withoutTooltip) {
+    return <CountryFlagWithoutTooltip iso2={iso2} />;
   }
 
-  return <CountryFlagWithoutTooltip iso2={iso2} />;
+  return <CountryFlagWithTooltip iso2={iso2} />;
 }
 
 function CountryFlagWithTooltip({ iso2 }) {
