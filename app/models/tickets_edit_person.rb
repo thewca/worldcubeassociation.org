@@ -66,8 +66,6 @@ class TicketsEditPerson < ApplicationRecord
   }.freeze
 
   def serializable_hash(options = nil)
-    json = super(DEFAULT_SERIALIZE_OPTIONS.merge(options || {}))
-    json[:class] = self.class.to_s.downcase
-    json
+    super(DEFAULT_SERIALIZE_OPTIONS.merge(options || {}))
   end
 end

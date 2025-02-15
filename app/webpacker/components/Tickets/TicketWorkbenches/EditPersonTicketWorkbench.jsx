@@ -1,5 +1,5 @@
 import React from 'react';
-import { Header, List, Message } from 'semantic-ui-react';
+import { Header, Message, Table } from 'semantic-ui-react';
 import EditPersonForm from '../../Panel/pages/EditPersonPage/EditPersonForm';
 import useSaveAction from '../../../lib/hooks/useSaveAction';
 import { actionUrls } from '../../../lib/requests/routes.js.erb';
@@ -8,6 +8,10 @@ import Loading from '../../Requests/Loading';
 import useLoadedData from '../../../lib/hooks/useLoadedData';
 import Errored from '../../Requests/Errored';
 import I18n from '../../../lib/i18n';
+
+function formatField(field, value) {
+  return field === 'name' ? value.replace(' ', '#') : value;
+}
 
 function EditPersonValidations({ ticketDetails }) {
   const { ticket } = ticketDetails;
@@ -26,24 +30,28 @@ function EditPersonValidations({ ticketDetails }) {
   ));
 }
 
-function EditPersonRequestedChangesList({ ticketDetails }) {
-  const { ticket } = ticketDetails;
-  const { tickets_edit_person_fields: requestedChanges } = ticket.metadata;
+function EditPersonRequestedChangesList({ requestedChanges }) {
   return (
     <>
       <Header as="h3">Requested changes</Header>
-      <List>
-        {requestedChanges.map((change) => (
-          <List.Item>
-            {I18n.t(`activerecord.attributes.user.${change.field_name}`)}
-            :
-            {' '}
-            {change.old_value.replace(' ', '#')}
-            {' -> '}
-            {change.new_value.replace(' ', '#')}
-          </List.Item>
-        ))}
-      </List>
+      <Table>
+        <Table.Header>
+          <Table.Row>
+            <Table.HeaderCell>Field</Table.HeaderCell>
+            <Table.HeaderCell>Old value</Table.HeaderCell>
+            <Table.HeaderCell>New value</Table.HeaderCell>
+          </Table.Row>
+        </Table.Header>
+        <Table.Body>
+          {requestedChanges.map((change) => (
+            <Table.Row>
+              <Table.Cell>{I18n.t(`activerecord.attributes.user.${change.field_name}`)}</Table.Cell>
+              <Table.Cell>{formatField(change.field_name, change.old_value)}</Table.Cell>
+              <Table.Cell>{formatField(change.field_name, change.new_value)}</Table.Cell>
+            </Table.Row>
+          ))}
+        </Table.Body>
+      </Table>
     </>
   );
 }
@@ -72,7 +80,7 @@ function EditPersonTicketWorkbenchForWrt({ ticketDetails, actingStakeholderId, s
         ticketDetails={ticketDetails}
       />
       <EditPersonRequestedChangesList
-        ticketDetails={ticketDetails}
+        requestedChanges={ticketDetails.ticket.metadata?.tickets_edit_person_fields}
       />
       <EditPersonForm
         wcaId={ticket.metadata.wca_id}
