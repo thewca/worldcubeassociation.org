@@ -15,6 +15,7 @@ import { getPeopleCounts, getTotals, getUserPositionInfo } from './utils';
 import PreTableInfo from './PreTableInfo';
 import Loading from '../../Requests/Loading';
 import Errored from '../../Requests/Errored';
+import CountryFlag from '../../wca/CountryFlag';
 
 // for consistency with competitors table data, to reuse helper functions
 function mapPsychSheetDate(data) {
@@ -217,9 +218,8 @@ function PsychSheetBody({
                 </div>
               </Table.Cell>
               <Table.Cell>
-                <Flag
-                  className={registration.user.country.iso2.toLowerCase()}
-                />
+                <CountryFlag iso2={registration.user.country.iso2} withoutTooltip />
+                {' '}
                 {countries.byIso2[registration.user.country.iso2].name}
               </Table.Cell>
               <Table.Cell textAlign="right">
