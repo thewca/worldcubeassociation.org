@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import React from 'react';
 import {
-  Flag, Icon, Segment, Table,
+  Icon, Segment, Table,
 } from 'semantic-ui-react';
 import {
   getPsychSheetForEvent,

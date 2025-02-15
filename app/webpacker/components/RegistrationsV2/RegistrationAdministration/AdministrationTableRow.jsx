@@ -1,5 +1,5 @@
 import {
-  Checkbox, Flag, Icon, Popup, Ref, Table,
+  Checkbox, Icon, Popup, Ref, Table,
 } from 'semantic-ui-react';
 import React from 'react';
 import { Draggable } from 'react-beautiful-dnd';

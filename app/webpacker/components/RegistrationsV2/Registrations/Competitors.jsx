@@ -1,11 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
-import React, {
-  useMemo,
-  useReducer,
-} from 'react';
-import {
-  Flag, Segment, Table,
-} from 'semantic-ui-react';
+import React, { useMemo, useReducer } from 'react';
+import { Segment, Table } from 'semantic-ui-react';
 import _ from 'lodash';
 import {
   getConfirmedRegistrations,
