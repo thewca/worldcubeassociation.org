@@ -22,7 +22,7 @@ export default function EventSelector({
   eventsDisabled = [],
   // Listing event as an arg here to indicate to developers that it's available
   // eslint-disable-next-line no-unused-vars
-  disabledText = (event) => {},
+  disabledText = (eventId) => {},
 }) {
   return (
     <>
