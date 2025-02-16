@@ -62,11 +62,10 @@ function TicketContent({ ticketDetails, currentStakeholder, sync }) {
   );
 }
 
-export default function Wrapper(args) {
+export default function Wrapper({ id }) {
   return (
     <WCAQueryClientProvider>
-      {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-      <Tickets {...args} />
+      <Tickets id={id} />
     </WCAQueryClientProvider>
   );
 }

@@ -5,5 +5,5 @@ export default async function getComments({ ticketId }) {
   const { data } = await fetchJsonOrError(
     viewUrls.tickets.listComments(ticketId),
   );
-  return data?.comments || [];
+  return data || {};
 }

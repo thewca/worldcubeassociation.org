@@ -13,7 +13,7 @@ export default function TicketCommentCreate({
   const [comment, setComment] = useInputState();
 
   const {
-    mutate: doCreateComment,
+    mutate: createCommentMutation,
     isPending,
     isError,
   } = useMutation({
@@ -44,7 +44,7 @@ export default function TicketCommentCreate({
       <Modal.Actions>
         <Button
           primary
-          onClick={() => doCreateComment({ ticketId, comment, currentStakeholder })}
+          onClick={() => createCommentMutation({ ticketId, comment, currentStakeholder })}
         >
           Add comment
         </Button>

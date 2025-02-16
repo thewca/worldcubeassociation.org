@@ -1230,7 +1230,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_14_015507) do
 
   create_table "ticket_comments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "ticket_id", null: false
-    t.string "comment"
+    t.text "comment"
     t.integer "acting_user_id", null: false
     t.bigint "acting_stakeholder_id", null: false
     t.datetime "created_at", null: false
@@ -1468,6 +1468,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_14_015507) do
   add_foreign_key "stripe_records", "stripe_records", column: "parent_record_id"
   add_foreign_key "stripe_webhook_events", "stripe_records"
   add_foreign_key "ticket_comments", "ticket_stakeholders", column: "acting_stakeholder_id"
+  add_foreign_key "ticket_comments", "tickets"
   add_foreign_key "ticket_comments", "users", column: "acting_user_id"
   add_foreign_key "ticket_logs", "ticket_stakeholders", column: "acting_stakeholder_id"
   add_foreign_key "ticket_logs", "users", column: "acting_user_id"

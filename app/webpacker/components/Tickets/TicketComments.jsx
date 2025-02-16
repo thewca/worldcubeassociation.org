@@ -1,15 +1,5 @@
 import React, { useState } from 'react';
-import {
-  Button,
-  Comment,
-  CommentAuthor,
-  CommentAvatar,
-  CommentContent,
-  CommentGroup,
-  CommentMetadata,
-  CommentText,
-  Header,
-} from 'semantic-ui-react';
+import { Button, Comment, Header } from 'semantic-ui-react';
 import { useQuery } from '@tanstack/react-query';
 import { DateTime } from 'luxon';
 import TicketCommentCreate from './TicketCommentCreate';
@@ -22,38 +12,34 @@ export default function TicketComments({ ticketId, currentStakeholder }) {
   const [createComment, setCreateComment] = useState(false);
 
   const {
-    data: comments, isLoading, isError, refetch, isRefetching,
+    data: { comments } = { comments: [] }, isFetching, isError, refetch,
   } = useQuery({
     queryKey: ['ticket-comments', ticketId],
     queryFn: () => getComments({ ticketId }),
   });
 
-  if (isLoading || isRefetching) {
-    return <Loading />;
-  }
-  if (isError) {
-    return <Errored />;
-  }
+  if (isFetching) return <Loading />;
+  if (isError) return <Errored />;
 
   return (
     <>
       <Header as="h2">Comments</Header>
       <Button onClick={() => setCreateComment(true)}>Add new comment</Button>
 
-      <CommentGroup>
+      <Comment.Group>
         {comments.map((comment) => (
           <Comment>
-            <CommentAvatar src={comment.acting_user.avatar.thumb_url} />
-            <CommentContent>
-              <CommentAuthor as="a">{comment.acting_user.name}</CommentAuthor>
-              <CommentMetadata>
+            <Comment.Avatar src={comment.acting_user.avatar.thumb_url} />
+            <Comment.Content>
+              <Comment.Author as="a">{comment.acting_user.name}</Comment.Author>
+              <Comment.Metadata>
                 <div>{DateTime.fromISO(comment.created_at).toLocal().toRelative()}</div>
-              </CommentMetadata>
-              <CommentText>{comment.comment}</CommentText>
-            </CommentContent>
+              </Comment.Metadata>
+              <Comment.Text>{comment.comment}</Comment.Text>
+            </Comment.Content>
           </Comment>
         ))}
-      </CommentGroup>
+      </Comment.Group>
 
       <TicketCommentCreate
         open={createComment}
