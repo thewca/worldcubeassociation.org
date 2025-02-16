@@ -50,9 +50,10 @@ export default function ResultsFilter({
           <EventSelector
             title={I18n.t('results.selector_elements.events_selector.event')}
             selectedEvents={[event]}
-            onEventSelection={({ eventId }) => setEvent(eventId)}
+            onEventClick={setEvent}
             hideAllButton
             hideClearButton={!clearEventIsAllowed || !event}
+            onClearClick={() => setEvent(undefined)}
             showBreakBeforeButtons={false}
           />
         </Form.Field>
