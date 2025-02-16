@@ -6,12 +6,15 @@ import { WCA_EVENT_IDS } from '../../lib/wca-data.js.erb';
 import I18n from '../../lib/i18n';
 
 export default function EventSelector({
+  onEventSelection,
   title = I18n.t('competitions.competition_form.events'),
   eventList = WCA_EVENT_IDS,
   selectedEvents,
-  onEventSelection,
+  onEventClick = (eventId) => onEventSelection({ type: 'toggle_event', eventId }),
   hideAllButton = false,
+  onAllClick = () => onEventSelection({ type: 'select_all_events' }),
   hideClearButton = false,
+  onClearClick = () => onEventSelection({ type: 'clear_events' }),
   disabled = false,
   shouldErrorOnEmpty = false,
   showBreakBeforeButtons = true,
@@ -22,10 +25,6 @@ export default function EventSelector({
   // eslint-disable-next-line no-unused-vars
   disabledText = (event) => {},
 }) {
-  const onEventClick = (eventId) => onEventSelection({ type: 'toggle_event', eventId });
-  const onAllClick = () => onEventSelection({ type: 'select_all_events' });
-  const onClearClick = () => onEventSelection({ type: 'clear_events' });
-
   return (
     <>
       <label htmlFor="events">
