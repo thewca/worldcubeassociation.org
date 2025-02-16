@@ -80,7 +80,7 @@ function EditPersonTicketWorkbenchForWrt({ ticketDetails, actingStakeholderId, s
         ticketDetails={ticketDetails}
       />
       <EditPersonRequestedChangesList
-        requestedChanges={ticketDetails.ticket.metadata?.tickets_edit_person_fields}
+        requestedChanges={ticket.metadata?.tickets_edit_person_fields}
       />
       <EditPersonForm
         wcaId={ticket.metadata.wca_id}
