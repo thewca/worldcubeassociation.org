@@ -18,8 +18,7 @@ function RegionFlagWithTooltip({ iso2 }) {
       id="resultCountryFlagTooltip"
       position="top center"
       content={countries.byIso2[iso2].name}
-      // trigger <RegionFlagWithoutTooltip iso2={iso2} /> doesn't work (??)
-      trigger={<span className={classnames('fi', `fi-${iso2.toLowerCase()}`)} />}
+      trigger={<span><RegionFlagWithoutTooltip iso2={iso2} /></span>}
     />
   );
 }
