@@ -22,6 +22,10 @@ export default function EventSelector({
   // eslint-disable-next-line no-unused-vars
   disabledText = (event) => {},
 }) {
+  const onEventClick = (eventId) => onEventSelection({ type: 'toggle_event', eventId });
+  const onAllClick = () => onEventSelection({ type: 'select_all_events' });
+  const onClearClick = () => onEventSelection({ type: 'clear_events' });
+
   return (
     <>
       <label htmlFor="events">
@@ -38,7 +42,7 @@ export default function EventSelector({
                   type="button"
                   size="mini"
                   id="select-all-events"
-                  onClick={() => onEventSelection({ type: 'select_all_events' })}
+                  onClick={onAllClick}
                 >
                   {I18n.t('competitions.index.all_events')}
                 </Button>
@@ -56,7 +60,7 @@ export default function EventSelector({
             type="button"
             size="mini"
             id="clear-all-events"
-            onClick={() => onEventSelection({ type: 'clear_events' })}
+            onClick={onClearClick}
           >
             {I18n.t('competitions.index.clear')}
           </Button>
@@ -94,7 +98,7 @@ export default function EventSelector({
                         id={`checkbox-${eventId}`}
                         value={eventId}
                         data-variation="tiny"
-                        onClick={() => onEventSelection({ type: 'toggle_event', eventId })}
+                        onClick={() => onEventClick(eventId)}
                         active={selectedEvents.includes(eventId)}
                       >
                         <Icon
