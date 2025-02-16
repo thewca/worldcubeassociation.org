@@ -2,19 +2,21 @@ import React from 'react';
 import EventSelector from '../../wca/EventSelector';
 
 export default function PsychSheetEventSelector({
-  handleEventSelection,
   eventList,
   selectedEvent,
+  onEventClick,
+  onClearClick,
 }) {
   return (
     <EventSelector
-      onEventSelection={handleEventSelection}
+      id="event-selection"
       eventList={eventList}
       selectedEvents={[selectedEvent].filter(Boolean)}
-      showBreakBeforeButtons={false}
+      onEventClick={onEventClick}
       hideAllButton
       hideClearButton={!selectedEvent}
-      id="event-selection"
+      onClearClick={onClearClick}
+      showBreakBeforeButtons={false}
     />
   );
 }
