@@ -6,15 +6,14 @@ import { WCA_EVENT_IDS } from '../../lib/wca-data.js.erb';
 import I18n from '../../lib/i18n';
 
 export default function EventSelector({
-  onEventSelection,
   title = I18n.t('competitions.competition_form.events'),
   eventList = WCA_EVENT_IDS,
   selectedEvents,
-  onEventClick = (eventId) => onEventSelection({ type: 'toggle_event', eventId }),
+  onEventClick = {},
   hideAllButton = false,
-  onAllClick = () => onEventSelection({ type: 'select_all_events' }),
+  onAllClick = {},
   hideClearButton = false,
-  onClearClick = () => onEventSelection({ type: 'clear_events' }),
+  onClearClick = {},
   disabled = false,
   shouldErrorOnEmpty = false,
   showBreakBeforeButtons = true,
