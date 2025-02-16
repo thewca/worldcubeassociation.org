@@ -25,7 +25,9 @@ function CompetitionsFilters({
       <Form.Field>
         <EventSelector
           selectedEvents={filterState.selectedEvents}
-          onEventSelection={dispatchFilter}
+          onEventClick={(eventId) => dispatchFilter({ type: 'toggle_event', eventId })}
+          onAllClick={() => dispatchFilter({ type: 'select_all_events' })}
+          onClearClick={() => dispatchFilter({ type: 'clear_events' })}
           showBreakBeforeButtons={false}
           eventButtonsCompact
         />
