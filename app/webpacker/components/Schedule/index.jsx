@@ -8,7 +8,7 @@ import ViewSelector from './ViewSelector';
 import useStoredState from '../../lib/hooks/useStoredState';
 import { earliestWithLongestTieBreaker } from '../../lib/utils/activities';
 import { getDatesBetweenInclusive } from '../../lib/utils/dates';
-import { EventSelector } from '../wca/EventSelector';
+import EventSelector from '../wca/EventSelector';
 import I18n from '../../lib/i18n';
 
 const activeIdReducer = (state, { type, id, ids }) => {

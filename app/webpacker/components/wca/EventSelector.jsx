@@ -5,8 +5,7 @@ import {
 import { WCA_EVENT_IDS } from '../../lib/wca-data.js.erb';
 import I18n from '../../lib/i18n';
 
-// eslint-disable-next-line import/prefer-default-export
-export function EventSelector({
+export default function EventSelector({
   selectedEvents,
   onEventSelection,
   title = I18n.t('competitions.competition_form.events'),

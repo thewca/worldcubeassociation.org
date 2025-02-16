@@ -17,7 +17,7 @@ import updateRegistration from '../api/registration/patch/update_registration';
 import submitEventRegistration from '../api/registration/post/submit_registration';
 import Processing from './Processing';
 import { contactCompetitionUrl, userPreferencesRoute } from '../../../lib/requests/routes.js.erb';
-import { EventSelector } from '../../wca/EventSelector';
+import EventSelector from '../../wca/EventSelector';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { setMessage } from './RegistrationMessage';
 import I18n from '../../../lib/i18n';
