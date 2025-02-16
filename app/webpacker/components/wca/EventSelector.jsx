@@ -18,7 +18,7 @@ export default function EventSelector({
   eventButtonsCompact = false,
   maxEvents = Infinity,
   eventsDisabled = [],
-  // Listing event as an argument here to indicate to developers that it's needed
+  // Listing event as an arg here to indicate to developers that it's available
   // eslint-disable-next-line no-unused-vars
   disabledText = (event) => {},
 }) {
