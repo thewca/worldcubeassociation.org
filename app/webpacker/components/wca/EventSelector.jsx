@@ -6,17 +6,17 @@ import { WCA_EVENT_IDS } from '../../lib/wca-data.js.erb';
 import I18n from '../../lib/i18n';
 
 export default function EventSelector({
-  selectedEvents,
-  onEventSelection,
   title = I18n.t('competitions.competition_form.events'),
   eventList = WCA_EVENT_IDS,
-  disabled = false,
-  maxEvents = Infinity,
-  shouldErrorOnEmpty = false,
-  showBreakBeforeButtons = true,
+  selectedEvents,
+  onEventSelection,
   hideAllButton = false,
   hideClearButton = false,
+  disabled = false,
+  shouldErrorOnEmpty = false,
+  showBreakBeforeButtons = true,
   eventButtonsCompact = false,
+  maxEvents = Infinity,
   eventsDisabled = [],
   // Listing event as an argument here to indicate to developers that it's needed
   // eslint-disable-next-line no-unused-vars
