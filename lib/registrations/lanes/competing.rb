@@ -66,7 +66,7 @@ module Registrations
           end
         end
 
-        send_status_change_email(registration, status, user_id, acting_user_id) if status.present? && old_status != status
+        send_status_change_email(registration, status, old_status, user_id, acting_user_id) if status.present? && old_status != status
 
         # TODO: V3-REG Cleanup Figure out a way to get rid of this reload
         registration.reload
@@ -92,12 +92,12 @@ module Registrations
         registration.competing_status = status
       end
 
-      def self.send_status_change_email(registration, status, user_id, current_user_id)
+      def self.send_status_change_email(registration, status, old_status, user_id, current_user_id)
         case status
         when Registrations::Helper::STATUS_WAITING_LIST
-          # TODO: V3-REG Cleanup, at new waiting list email
+          RegistrationsMailer.notify_registrant_of_waitlisted_registration(registration).deliver_later
         when Registrations::Helper::STATUS_PENDING
-          RegistrationsMailer.notify_registrant_of_pending_registration(registration).deliver_later
+          RegistrationsMailer.notify_registrant_of_new_registration(registration).deliver_later
         when Registrations::Helper::STATUS_ACCEPTED
           RegistrationsMailer.notify_registrant_of_accepted_registration(registration).deliver_later
         when Registrations::Helper::STATUS_REJECTED, Registrations::Helper::STATUS_DELETED, Registrations::Helper::STATUS_CANCELLED

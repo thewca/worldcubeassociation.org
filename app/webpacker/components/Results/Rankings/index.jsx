@@ -5,7 +5,7 @@ import { Container } from 'semantic-ui-react';
 import RankingsTable from './RankingsTable';
 import WCAQueryClientProvider from '../../../lib/providers/WCAQueryClientProvider';
 import { rankingsUrl } from '../../../lib/requests/routes.js.erb';
-import ResultsFilter from '../resultsFilter';
+import ResultsFilter from '../ResultsFilter';
 
 const ActionTypes = {
   SET_EVENT: 'SET_EVENT',
@@ -43,6 +43,9 @@ function parseInitialStateFromUrl(url) {
 function filterReducer(state, action) {
   switch (action.type) {
     case ActionTypes.SET_EVENT:
+      if (action.payload === '333mbf') {
+        return { ...state, event: action.payload, rankingType: 'single' };
+      }
       return { ...state, event: action.payload };
     case ActionTypes.SET_REGION:
       return { ...state, region: action.payload };
@@ -64,6 +67,8 @@ export default function Wrapper() {
     </WCAQueryClientProvider>
   );
 }
+
+const SHOW_CATEGORIES = ['100 persons', '100 results', 'by region'];
 
 export function Rankings() {
   const [filterState, dispatch] = useReducer(
@@ -94,7 +99,11 @@ export function Rankings() {
 
   return (
     <Container fluid>
-      <ResultsFilter filterState={filterState} filterActions={filterActions} />
+      <ResultsFilter
+        filterState={filterState}
+        filterActions={filterActions}
+        showCategories={SHOW_CATEGORIES}
+      />
       <RankingsTable filterState={filterState} />
     </Container>
   );

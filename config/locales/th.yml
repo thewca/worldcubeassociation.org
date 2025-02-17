@@ -974,6 +974,8 @@ th:
       size_too_small: 'ขนาดเล็กเกินไป (ควรมีขนาดมากกว่า %{file_size})'
       #original_hash: a2a43b3
       size_too_big: 'ใหญ่เกินไป (ควรมีขนาดไม่เกิน %{file_size})'
+      #original_hash: de76004
+      no_permission: คุณไม่มีสิทธิ์ในการเข้าถึงหน้านี้
   devise:
     passwords:
       edit:
@@ -2171,25 +2173,23 @@ th:
           หากต้องการตรวจสอบสถานะการสมัคร สามารถครวจสอบได้ที่ %{here}.
         #original_hash: 1852cbf
         see_you_soon: 'เรารอที่จะได้พบคุณที่ %{comp_name}!'
-      pending:
-        #original_hash: 8d26297
-        mail_subject: 'การสมัครที่ถูกย้ายไปอยู่ใน Waitlist: %{comp_name}'
-        #original_hash: 6fd0a8e
-        moved_html: >-
-          การสมัครการแข่งขัน %{comp_name} ของคุณ ได้ถูกย้ายไปอยู่รายชื่อรอ
-          สาเหตุที่เป็นไปได้คือ:
-        causes:
-          #original_hash: eadfc0d
-          accepted: การสมัครของคุณถูกยืนยันโดยไม่ได้ตั้งใจ
-          #original_hash: 2ac6d84
-          withdrawal: คุณขอถอนตัวจากการแข่งขัน
+      waiting_list:
+        #original_hash: 54c2106
+        mail_subject: 'คุณอยู่ในรายชื่อรอของการแข่งขัน: %{comp_name}'
+        #original_hash: 2a0c44f
+        waitlisted_html: >-
+          การแข่งขันมีผู้สมัครเต็มแล้ว แต่คุณถูกเพิ่มไว้ในรายชื่อรอ
+          และคุณจะได้รับอีเมลหากมีที่ว่างเพียงพอให้คุณเข้าร่วมได้
+          ตรวจสอบตำแหน่งของคุณในรายชื่อรอ %{here}
         #original_hash: 8f7358f
-        email_if_error: ถ้าคุณคิดว่านี่เป็นข้อผิดพลาด กรุณาตอบกลับ email นี้
+        email_if_error: หากคุณคิดว่านี่เป็นข้อผิดพลาด โปรดตอบกลับอีเมลนี้
       deleted:
         #original_hash: 8cbc6c0
         mail_subject: 'การสมัครที่โดนลบ: %{comp_name}'
         #original_hash: f66ae63
         message_html: 'การสมัครการแข่งขัน %{comp_name} ของคุณถูกลบทิ้ง สาเหตุที่เป็นไปได้คือ:'
+        #original_hash: 8f7358f
+        email_if_error: หากคุณคิดว่านี่เป็นข้อผิดพลาด โปรดตอบกลับอีเมลนี้
         causes:
           #original_hash: 978944c
           missing_info: คุณส่งรายละเอียดที่จำเป็นทั้งหมด
@@ -2199,8 +2199,8 @@ th:
             หรือผ่านการคัดเลือกได้ตรงตามเวลา)
           #original_hash: 1e225f0
           registrations_full: จำนวนผู้เข้าแข่งขันครบแล้ว และไม่มีที่ว่างเหลือ
-          #original_hash: 0d4cce9
-          multiple_registrations: คุณสมัครการแข่งขันซ้ำซ้อน
+          #original_hash: 238f4ff
+          multiple_registrations: คุณสมัครการแข่งขันมากกว่า 2 ครั้ง
           #original_hash: 70b1e2c
           competition_canceled: การแข่งขันถูกยกเลิก
     list:
@@ -2371,6 +2371,8 @@ th:
         amount_rather_high: >-
           คุณกำลังจะชำระเงินอย่างน้อยสองเท่าของจำนวนเงินที่จำเป็นสำหรับการสมัครของคุณ
       errors:
+        #original_hash: c80ec45
+        registration_closed: การสมัครการแข่งขันปิดลงแล้ว - ไม่อนุญาตให้ชำระเงินใด ๆ เพิ่มเติมอีก
         #original_hash: 166d48c
         already_paid: การเปลี่ยนแปลงไม่สามารถทำได้ เนื่องจากค่าสมัครได้ถูกชำระแล้ว
         #original_hash: f10c80c
@@ -3800,6 +3802,10 @@ th:
       series_distance_days: 'การแข่งขันถูกกำหนดให้อยู่ห่างจาก %{competition} หลายวันเกินไป'
       #original_hash: 7fc8fba
       must_ask_about_guests_if_specifying_limit: ต้องถามเกี่ยวกับผู้ติดตามหากมีการระบุขีดจำกัดของผู้ติดตาม
+      #original_hash: 000564d
+      not_full_url: >-
+        คุณมี URL (%{url}) ในเนื้อหา โปรดใส่ URL แบบเต็มที่มีคำนำหน้า http://
+        หรือ https://
     new:
       #original_hash: 1208df7
       create_competition: สร้างการแข่งขัน
