@@ -110,7 +110,7 @@ module DatabaseDumper
           registration_version
           forbid_newcomers
           forbid_newcomers_reason
-          user_can_cancel
+          competitor_can_cancel
         ),
         db_default: %w(
           connected_stripe_account_id
