@@ -766,7 +766,7 @@ GEM
     strip_attributes (1.14.1)
       activemodel (>= 3.0, < 9.0)
     stripe (12.6.0)
-    superconfig (2.2.0)
+    superconfig (2.2.1)
     terminal-table (3.0.2)
       unicode-display_width (>= 1.1.1, < 3)
     terser (1.2.5)
