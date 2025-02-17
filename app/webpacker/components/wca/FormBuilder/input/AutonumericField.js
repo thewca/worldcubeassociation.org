@@ -37,20 +37,22 @@ export default function AutonumericField({
       minimumValue: 0,
       onInvalidPaste: 'clamp',
     };
+
     if (max) {
       options.maximumValue = max / currencyInfo.subunitToUnit;
     }
+
     return options;
   }, [currencyInfo, max]);
 
   const autoNumericRef = useCallback((node) => {
-    if (!node?.inputRef) return;
+    if (!node) return;
 
     // Only initialize AutoNumeric once, otherwise some weird glitches can occur
     if (autoNumeric !== null) return;
 
     const newAutoNumeric = new AutoNumeric(
-      node.inputRef.current,
+      node,
       autoNumericValue,
       autoNumericOptions,
     );
@@ -69,7 +71,7 @@ export default function AutonumericField({
     if (!autoNumeric) return;
 
     // AutoNumeric has an internal state that it remembers, based on the
-    // HTML <input> tag forwarded by `node.inputRef.current` above. We only need to
+    // HTML <input> tag forwarded by `autoNumericRef` above. We only need to
     // manually update if the change came from the outside world, i.e. a new JSON was being loaded
     if (value !== getCurrentUiValue()) {
       autoNumeric.set(autoNumericValue);
