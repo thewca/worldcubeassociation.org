@@ -35,7 +35,10 @@ class User < ApplicationRecord
   has_many :teams_committees_at_least_senior_roles, through: :teams_committees_at_least_senior_role_metadata, source: :user_role, class_name: "UserRole"
   has_many :teams_committees_at_least_senior_groups, through: :teams_committees_at_least_senior_roles, source: :group, class_name: "UserGroup"
   has_many :teams_committees_at_least_senior, through: :teams_committees_at_least_senior_groups, source: :metadata, source_type: "GroupsMetadataTeamsCommittees"
-  has_many :past_bans, through: :past_roles, source: :metadata, source_type: "RolesMetadataBannedCompetitors"
+  has_many :past_bans_metadata, through: :past_roles, source: :metadata, source_type: "RolesMetadataBannedCompetitors"
+  has_many :past_bans, through: :past_bans_metadata, source: :user_role, class_name: "UserRole"
+  has_many :active_bans_metadata, through: :active_roles, source: :metadata, source_type: "RolesMetadataBannedCompetitors"
+  has_many :active_bans, through: :active_bans_metadata, source: :user_role, class_name: "UserRole"
   has_many :active_groups, through: :active_roles, source: :group, class_name: "UserGroup"
   has_many :board_metadata, through: :active_groups, source: :metadata, source_type: "GroupsMetadataBoard"
   has_many :confirmed_users_claiming_wca_id, -> { confirmed_email }, foreign_key: "delegate_id_to_handle_wca_id_claim", class_name: "User"
@@ -519,11 +522,11 @@ class User < ApplicationRecord
   end
 
   def banned_in_past?
-    past_roles.any? { |role| role.group == UserGroup.banned_competitors.first }
+    past_bans.any?
   end
 
   def current_ban
-    active_roles.select { |role| role.group == UserGroup.banned_competitors.first }.first
+    active_bans.first
   end
 
   def ban_end

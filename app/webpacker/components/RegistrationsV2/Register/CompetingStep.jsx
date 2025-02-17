@@ -17,7 +17,7 @@ import updateRegistration from '../api/registration/patch/update_registration';
 import submitEventRegistration from '../api/registration/post/submit_registration';
 import Processing from './Processing';
 import { contactCompetitionUrl, userPreferencesRoute } from '../../../lib/requests/routes.js.erb';
-import { EventSelector } from '../../wca/EventSelector';
+import EventSelector from '../../wca/EventSelector';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { setMessage } from './RegistrationMessage';
 import I18n from '../../../lib/i18n';
@@ -248,29 +248,33 @@ export default function CompetingStep({
     guests,
   ]);
 
-  const handleEventSelection = ({ type, eventId }) => {
-    if (type === 'select_all_events') {
-      if (competitionInfo['uses_qualification?']) {
-        setSelectedEvents(
-          competitionInfo.event_ids.filter((e) => isQualifiedForEvent(
-            e,
-            qualifications.wcif,
-            qualifications.personalRecords,
-          )),
-        );
-      } else {
-        setSelectedEvents(competitionInfo.event_ids);
-      }
-    } else if (type === 'clear_events') {
-      setSelectedEvents([]);
-    } else if (type === 'toggle_event') {
-      const index = selectedEvents.indexOf(eventId);
-      if (index === -1) {
-        setSelectedEvents([...selectedEvents, eventId]);
-      } else {
-        setSelectedEvents(selectedEvents.toSpliced(index, 1));
-      }
+  const onEventClick = (eventId) => {
+    const index = selectedEvents.indexOf(eventId);
+    if (index === -1) {
+      setSelectedEvents([...selectedEvents, eventId]);
+    } else {
+      setSelectedEvents(selectedEvents.toSpliced(index, 1));
     }
+    setHasInteracted(true);
+  };
+
+  const onAllEventsClick = () => {
+    if (competitionInfo['uses_qualification?']) {
+      setSelectedEvents(
+        competitionInfo.event_ids.filter((e) => isQualifiedForEvent(
+          e,
+          qualifications.wcif,
+          qualifications.personalRecords,
+        )),
+      );
+    } else {
+      setSelectedEvents(competitionInfo.event_ids);
+    }
+    setHasInteracted(true);
+  };
+
+  const onClearEventsClick = () => {
+    setSelectedEvents([]);
     setHasInteracted(true);
   };
 
@@ -328,10 +332,12 @@ export default function CompetingStep({
           />
           <Form.Field required error={hasInteracted && selectedEvents.length === 0}>
             <EventSelector
-              onEventSelection={handleEventSelection}
+              id="event-selection"
               eventList={competitionInfo.event_ids}
               selectedEvents={selectedEvents}
-              id="event-selection"
+              onEventClick={onEventClick}
+              onAllClick={onAllEventsClick}
+              onClearClick={onClearEventsClick}
               maxEvents={maxEvents}
               eventsDisabled={
                 competitionInfo.allow_registration_without_qualification

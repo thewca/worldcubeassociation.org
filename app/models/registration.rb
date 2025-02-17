@@ -158,14 +158,6 @@ class Registration < ApplicationRecord
     !new_record? && (pending? || accepted?) && competition.using_payment_integrations? && outstanding_entry_fees > 0
   end
 
-  def show_payment_form?
-    competition.registration_currently_open? && to_be_paid_through_wca?
-  end
-
-  def show_details?(user)
-    (competition.registration_currently_open? || !(new_or_deleted?)) || (competition.user_can_pre_register?(user))
-  end
-
   def record_payment(
     amount_lowest_denomination,
     currency_code,
@@ -320,8 +312,12 @@ class Registration < ApplicationRecord
     }
   end
 
+  def self.accepted_count
+    accepted.count
+  end
+
   def self.accepted_and_paid_pending_count
-    accepted.count + pending.with_payments.count
+    accepted_count + pending.with_payments.count
   end
 
   # Only run the validations when creating the registration as we don't want user changes

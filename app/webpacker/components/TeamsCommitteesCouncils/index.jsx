@@ -85,7 +85,7 @@ export default function TeamsCommitteesCouncils({ canViewPastRoles }) {
               <Grid centered>
                 <Grid.Row only="computer">
                   <Header>
-                    {`${I18n.t(`page.teams_committees_councils.groups_name.${activeGroup.metadata.friendly_id}`)} (${activeGroup.metadata.friendly_id.toUpperCase()})`}
+                    {`${I18n.t(`page.teams_committees_councils.groups_name.${activeGroup.metadata.friendly_id}`)}`}
                   </Header>
                 </Grid.Row>
                 <Grid.Row only="tablet mobile">

@@ -82,9 +82,9 @@ export default function RegistrationAdministrationTable({
       </DragDropContext>
       <TableFooter>
         <RegistrationAdministrationTableFooter
+          columnsExpanded={columnsExpanded}
           registrations={registrations}
           competitionInfo={competitionInfo}
-          eventsToggled={columnsExpanded.events}
         />
       </TableFooter>
     </Table>
