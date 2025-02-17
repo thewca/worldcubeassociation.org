@@ -206,7 +206,7 @@ export const InputNumber = wrapInput((props) => {
       name={props.htmlName}
       type="number"
       label={props.attachedLabel}
-      value={props.value ?? ""}
+      value={props.value ?? ''}
       onChange={onChangeNumber}
       min={props.min}
       max={props.max}
