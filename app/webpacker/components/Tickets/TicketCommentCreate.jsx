@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Modal } from 'semantic-ui-react';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import MarkdownEditor from '../wca/FormBuilder/input/MarkdownEditor';
 import useInputState from '../../lib/hooks/useInputState';
 import createComment from './api/createComment';
@@ -8,24 +8,28 @@ import Loading from '../Requests/Loading';
 import Errored from '../Requests/Errored';
 
 export default function TicketCommentCreate({
-  open, onClose, ticketId, currentStakeholder, refetchComments,
+  open, onClose, ticketId, currentStakeholder,
 }) {
   const [comment, setComment] = useInputState();
 
+  const queryClient = useQueryClient();
   const {
     mutate: createCommentMutation,
-    isPending,
+    isLoading,
     isError,
   } = useMutation({
     mutationFn: createComment,
-    onSuccess: () => {
+    onSuccess: (newComment) => {
       setComment('');
-      refetchComments();
+      queryClient.setQueryData(
+        ['ticket-comments', ticketId],
+        (previousData) => [newComment, ...previousData],
+      );
       onClose();
     },
   });
 
-  if (isPending) return <Loading />;
+  if (isLoading) return <Loading />;
   if (isError) return <Errored />;
 
   return (

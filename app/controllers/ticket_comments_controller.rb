@@ -1,15 +1,18 @@
 # frozen_string_literal: true
 
 class TicketCommentsController < ApplicationController
+  include Rails::Pagination
+
+  before_action :authenticate_user!
+
   def index
     ticket = Ticket.find(params.require(:ticket_id))
 
     # Currently only stakeholders can access the ticket comments.
     return head :unauthorized unless ticket.can_user_access?(current_user)
 
-    render json: {
-      comments: ticket.ticket_comments,
-    }
+    comments = ticket.ticket_comments.order(created_at: :desc)
+    paginate json: comments
   end
 
   def create
@@ -20,13 +23,13 @@ class TicketCommentsController < ApplicationController
     return head :unauthorized unless ticket.can_user_access?(current_user)
     return head :bad_request unless ticket.user_stakeholders(current_user).map(&:id).include?(acting_stakeholder_id)
 
-    TicketComment.create!(
+    comment = TicketComment.create!(
       ticket: ticket,
       comment: params.require(:comment),
       acting_user_id: current_user.id,
       acting_stakeholder_id: acting_stakeholder_id,
     )
 
-    render json: { success: true }
+    render json: comment
   end
 end

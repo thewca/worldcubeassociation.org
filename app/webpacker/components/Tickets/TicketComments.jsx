@@ -12,7 +12,7 @@ export default function TicketComments({ ticketId, currentStakeholder }) {
   const [createComment, setCreateComment] = useState(false);
 
   const {
-    data: { comments } = { comments: [] }, isFetching, isError, refetch,
+    data: comments, isFetching, isError, refetch,
   } = useQuery({
     queryKey: ['ticket-comments', ticketId],
     queryFn: () => getComments({ ticketId }),
