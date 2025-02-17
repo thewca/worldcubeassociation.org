@@ -236,7 +236,6 @@ class Api::V0::UserRolesController < Api::V0::ApiController
 
       ActiveRecord::Base.transaction do
         role.update!(end_date: Date.today)
-        new_role_metadata.save!
         new_role.metadata = new_role_metadata
         new_role.save!
       end
