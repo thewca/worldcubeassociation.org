@@ -1,22 +1,21 @@
 import React, { useMemo } from 'react';
 import { Form } from 'semantic-ui-react';
-import useLoadedData from '../../../../lib/hooks/useLoadedData';
 import { apiV0Urls } from '../../../../lib/requests/routes.js.erb';
 import { groupTypes } from '../../../../lib/wca-data.js.erb';
-import Loading from '../../../Requests/Loading';
+import useLoadedData from '../../../../lib/hooks/useLoadedData';
 import Errored from '../../../Requests/Errored';
+import Loading from '../../../Requests/Loading';
 import I18n from '../../../../lib/i18n';
-import useInputState from '../../../../lib/hooks/useInputState';
 
-export default function RegionSelector({ delegate, onRegionSelect, onCancel }) {
+export default function LocationEditorForm({
+  groupId, setGroupId, location, setLocation,
+}) {
   const { data: delegateRegions, loading, error } = useLoadedData(
     apiV0Urls.userGroups.list(groupTypes.delegate_regions),
   );
-  const [selectedGroupId, setSelectedGroupId] = useInputState(delegate.group.id);
-
   const selectedGroup = useMemo(
-    () => delegateRegions?.find((region) => region.id === selectedGroupId),
-    [delegateRegions, selectedGroupId],
+    () => delegateRegions?.find((region) => region.id === groupId),
+    [delegateRegions, groupId],
   );
 
   const selectedRegionId = selectedGroup?.parent_group_id || selectedGroup?.id;
@@ -48,25 +47,30 @@ export default function RegionSelector({ delegate, onRegionSelect, onCancel }) {
   return (
     <Form>
       <Form.Dropdown
+        inline
         label={I18n.t('activerecord.attributes.user.region')}
         fluid
         selection
         value={selectedRegionId}
         options={regions}
-        onChange={setSelectedGroupId}
+        onChange={setGroupId}
       />
       {subRegions.length > 0 && (
-      <Form.Dropdown
-        label={I18n.t('activerecord.attributes.user.subRegion')}
-        fluid
-        selection
-        value={selectedSubRegionId}
-        options={subRegions}
-        onChange={setSelectedGroupId}
-      />
+        <Form.Dropdown
+          inline
+          label={I18n.t('activerecord.attributes.user.subRegion')}
+          fluid
+          selection
+          value={selectedSubRegionId}
+          options={subRegions}
+          onChange={setGroupId}
+        />
       )}
-      <Form.Button onClick={() => onCancel()}>Cancel</Form.Button>
-      <Form.Button onClick={() => onRegionSelect(selectedGroupId)}>Save</Form.Button>
+      <Form.Input
+        label="Location"
+        value={location}
+        onChange={setLocation}
+      />
     </Form>
   );
 }
