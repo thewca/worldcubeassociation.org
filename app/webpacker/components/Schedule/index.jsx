@@ -8,7 +8,7 @@ import ViewSelector from './ViewSelector';
 import useStoredState from '../../lib/hooks/useStoredState';
 import { earliestWithLongestTieBreaker } from '../../lib/utils/activities';
 import { getDatesBetweenInclusive } from '../../lib/utils/dates';
-import { EventSelector } from '../wca/EventSelector';
+import EventSelector from '../wca/EventSelector';
 import I18n from '../../lib/i18n';
 
 const activeIdReducer = (state, { type, id, ids }) => {
@@ -87,16 +87,6 @@ export default function Schedule({
   const availableEventIds = wcifEvents.map(({ id }) => id);
   const activeEvents = wcifEvents.filter(({ id }) => activeEventIds.includes(id));
 
-  const handleEventSelection = ({ type, eventId }) => {
-    if (type === 'select_all_events') {
-      dispatchEvents({ type: 'reset', ids: availableEventIds });
-    } else if (type === 'clear_events') {
-      dispatchEvents({ type: 'reset' });
-    } else if (type === 'toggle_event') {
-      dispatchEvents({ type: 'toggle', id: eventId });
-    }
-  };
-
   // view
 
   const [activeView, setActiveView] = useStoredState('calendar', 'scheduleView');
@@ -146,7 +136,9 @@ export default function Schedule({
         <EventSelector
           eventList={availableEventIds}
           selectedEvents={activeEventIds}
-          onEventSelection={handleEventSelection}
+          onEventClick={(eventId) => dispatchEvents({ type: 'toggle', id: eventId })}
+          onAllClick={() => dispatchEvents({ type: 'reset', ids: availableEventIds })}
+          onClearClick={() => dispatchEvents({ type: 'reset' })}
         />
       </Segment>
 
