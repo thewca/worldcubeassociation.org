@@ -11,16 +11,19 @@ export default function TableHeader({
   sortColumn,
   changeSortColumn,
   competitionInfo,
-  draggable,
+  withCheckbox = true,
 }) {
-  const { dob, events, comments } = columnsExpanded;
+  const {
+    dob: dobIsShown, events: eventsAreExpanded, comments: commentsAreShown,
+  } = columnsExpanded;
 
   return (
     <Table.Header>
       <Table.Row>
         <Table.HeaderCell>
-          { !draggable
-            && <Checkbox checked={isChecked} onChange={onCheckboxChanged} />}
+          {withCheckbox && (
+            <Checkbox checked={isChecked} onChange={onCheckboxChanged} />
+          )}
         </Table.HeaderCell>
         <Table.HeaderCell />
         <Table.HeaderCell
@@ -35,7 +38,7 @@ export default function TableHeader({
         >
           {I18n.t('delegates_page.table.name')}
         </Table.HeaderCell>
-        {dob && (
+        {dobIsShown && (
           <Table.HeaderCell
             sorted={sortColumn === 'dob' ? sortDirection : undefined}
             onClick={() => changeSortColumn('dob')}
@@ -49,26 +52,25 @@ export default function TableHeader({
         >
           {I18n.t('common.user.representing')}
         </Table.HeaderCell>
-        { competitionInfo['using_payment_integrations?']
-          ? (
-            <>
-              <Table.HeaderCell
-                sorted={sortColumn === 'paid_on_with_registered_on_fallback' ? sortDirection : undefined}
-                onClick={() => changeSortColumn('paid_on_with_registered_on_fallback')}
-              >
-                {I18n.t('registrations.list.registered.with_stripe')}
-              </Table.HeaderCell>
-              <Table.HeaderCell>{I18n.t('competitions.registration_v2.update.amount')}</Table.HeaderCell>
-            </>
-          ) : (
+        {competitionInfo['using_payment_integrations?'] ? (
+          <>
             <Table.HeaderCell
-              sorted={sortColumn === 'registered_on' ? sortDirection : undefined}
-              onClick={() => changeSortColumn('registered_on')}
+              sorted={sortColumn === 'paid_on_with_registered_on_fallback' ? sortDirection : undefined}
+              onClick={() => changeSortColumn('paid_on_with_registered_on_fallback')}
             >
-              {I18n.t('registrations.list.registered.without_stripe')}
+              {I18n.t('registrations.list.registered.with_stripe')}
             </Table.HeaderCell>
-          )}
-        {events ? (
+            <Table.HeaderCell>{I18n.t('competitions.registration_v2.update.amount')}</Table.HeaderCell>
+          </>
+        ) : (
+          <Table.HeaderCell
+            sorted={sortColumn === 'registered_on' ? sortDirection : undefined}
+            onClick={() => changeSortColumn('registered_on')}
+          >
+            {I18n.t('registrations.list.registered.without_stripe')}
+          </Table.HeaderCell>
+        )}
+        {eventsAreExpanded ? (
           competitionInfo.event_ids.map((eventId) => (
             <Table.HeaderCell key={`event-${eventId}`}>
               <EventIcon id={eventId} size="1em" />
@@ -90,7 +92,7 @@ export default function TableHeader({
             'competitions.competition_form.labels.registration.guests_enabled',
           )}
         </Table.HeaderCell>
-        {comments && (
+        {commentsAreShown && (
           <>
             <Table.HeaderCell
               sorted={sortColumn === 'comment' ? sortDirection : undefined}

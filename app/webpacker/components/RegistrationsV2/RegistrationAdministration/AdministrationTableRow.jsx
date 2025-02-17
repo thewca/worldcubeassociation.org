@@ -68,7 +68,12 @@ export default function TableRow({
   draggable = false,
 }) {
   const {
-    dob, region, events, comments, email, timestamp,
+    dob: dobIsShown,
+    region: regionIsExpanded,
+    events: eventsAreExpanded,
+    comments: commentsAreShown,
+    email: emailIsExpanded,
+    timestamp: timestampIsShown,
   } = columnsExpanded;
   const {
     id, wca_id: wcaId, name, country, dob: dateOfBirth, email: emailAddress,
@@ -87,6 +92,7 @@ export default function TableRow({
     navigator.clipboard.writeText(emailAddress);
     setMessage('Copied email address to clipboard.', 'positive');
   };
+
   /* eslint-disable react/jsx-props-no-spreading */
   return (
     <Draggable
@@ -127,13 +133,13 @@ export default function TableRow({
 
             <Table.Cell>{name}</Table.Cell>
 
-            {dob && <Table.Cell>{dateOfBirth}</Table.Cell>}
+            {dobIsShown && <Table.Cell>{dateOfBirth}</Table.Cell>}
 
             <Table.Cell>
-              {region ? (
+              {regionIsExpanded ? (
                 <>
                   <Flag className={country.iso2.toLowerCase()} />
-                  {region && countries.byIso2[country.iso2].name}
+                  {regionIsExpanded && countries.byIso2[country.iso2].name}
                 </>
               ) : (
                 <Popup
@@ -142,14 +148,14 @@ export default function TableRow({
                     <span>
                       <Flag className={country.iso2.toLowerCase()} />
                     </span>
-            )}
+                  )}
                 />
               )}
             </Table.Cell>
 
             <Table.Cell>
               <RegistrationTime
-                timestamp={timestamp}
+                timestamp={timestampIsShown}
                 paidOn={updatedAt}
                 hasPaid={hasPaid}
                 registeredOn={registeredOn}
@@ -166,7 +172,7 @@ export default function TableRow({
             </Table.Cell>
             )}
 
-            {events ? (
+            {eventsAreExpanded ? (
               competitionInfo.event_ids.map((eventId) => (
                 <Table.Cell key={`event-${eventId}`}>
                   {eventIds.includes(eventId) && (
@@ -188,43 +194,39 @@ export default function TableRow({
                       <Icon name="magnify" />
                     </span>
                   </Table.Cell>
-          )}
+                 )}
               />
 
             )}
 
             <Table.Cell>{registration.guests}</Table.Cell>
 
-            {comments && (
-            <>
-              <Table.Cell>
-                <Popup
-                  content={comment}
-                  trigger={<span>{truncateComment(comment)}</span>}
-                />
-              </Table.Cell>
+            {commentsAreShown && (
+              <>
+                <Table.Cell>
+                  <Popup
+                    content={comment}
+                    trigger={<span>{truncateComment(comment)}</span>}
+                  />
+                </Table.Cell>
 
-              <Table.Cell>
-                <Popup
-                  content={adminComment}
-                  trigger={<span>{truncateComment(adminComment)}</span>}
-                />
-              </Table.Cell>
-            </>
+                <Table.Cell>
+                  <Popup
+                    content={adminComment}
+                    trigger={<span>{truncateComment(adminComment)}</span>}
+                  />
+                </Table.Cell>
+              </>
             )}
 
             <Table.Cell>
               <a href={`mailto:${emailAddress}`}>
-                {email ? (
+                {emailIsExpanded ? (
                   emailAddress
                 ) : (
                   <Popup
                     content={emailAddress}
-                    trigger={(
-                      <span>
-                        <Icon name="mail" />
-                      </span>
-              )}
+                    trigger={<span><Icon name="mail" /></span>}
                   />
                 )}
               </a>

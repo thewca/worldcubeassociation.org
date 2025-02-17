@@ -49,7 +49,7 @@ export default function RegistrationAdministrationTable({
         sortColumn={sortColumn}
         changeSortColumn={changeSortColumn}
         competitionInfo={competitionInfo}
-        draggable={draggable}
+        withCheckbox={!draggable}
       />
 
       <DragDropContext onDragEnd={handleOnDragEnd}>
