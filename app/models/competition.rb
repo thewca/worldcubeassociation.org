@@ -319,9 +319,9 @@ class Competition < ApplicationRecord
     end
   end
 
-  validate :auto_close_threshold_validations
+  validate :auto_close_threshold_validations, if: -> { auto_close_threshold.present? }
   private def auto_close_threshold_validations
-    errors.add(:auto_close_threshold, I18n.t('competitions.errors.auto_close_not_negative')) if auto_close_threshold < 0
+    errors.add(:auto_close_threshold, I18n.t('competitions.errors.auto_close_positive_nonzero')) unless auto_close_threshold > 0
     if auto_close_threshold != 0
       errors.add(:auto_close_threshold, I18n.t('competitions.errors.use_wca_registration')) unless use_wca_registration
       errors.add(:auto_close_threshold, I18n.t('competitions.errors.must_exceed_competitor_limit')) if
@@ -2911,6 +2911,7 @@ class Competition < ApplicationRecord
   end
 
   def attempt_auto_close!
+    return false if auto_close_threshold.nil?
     threshold_reached = registrations.with_payments.count >= auto_close_threshold && auto_close_threshold > 0
     # update!(closing_full_registration: true, registration_close: Time.now) if threshold_reached
     threshold_reached && update!(closing_full_registration: true, registration_close: Time.now)

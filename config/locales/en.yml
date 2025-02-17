@@ -1935,7 +1935,7 @@ en:
     #context: and when an error occured
     errors:
       auto_close_exceed_paid: "Auto close threshold must be greater than the number of currently paid registrations"
-      auto_close_not_negative: "Auto-close threshold must be a positive number"
+      auto_close_positive_nonzero: "Auto-close threshold must be greater than 0"
       must_exceed_competitor_limit: "Auto-close threshold must be greater than the competitor limit"
       use_wca_registration: "Competition must use WCA registration"
       invalid_name_message: "must end with a year and must contain only alphanumeric characters, dashes(-), ampersands(&), periods(.), colons(:), apostrophes('), and spaces( )"

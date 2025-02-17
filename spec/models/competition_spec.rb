@@ -1607,7 +1607,7 @@ RSpec.describe Competition do
       expect(auto_close_comp.registration_past?).to eq(false)
     end
 
-    it 'doesnt auto-close if threshold is 0' do
+    it 'doesnt auto-close if threshold is null' do
       FactoryBot.create(:registration, :paid, competition: comp)
       expect(comp.registration_past?).to eq(false)
     end
@@ -1635,7 +1635,7 @@ RSpec.describe Competition do
       it 'auto-close threshold must be positive' do
         comp.auto_close_threshold = -1
         expect(comp).not_to be_valid
-        expect(comp.errors[:auto_close_threshold]).to include("Auto-close threshold must be a positive number")
+        expect(comp.errors[:auto_close_threshold]).to include("Auto-close threshold must be greater than 0")
       end
 
       it 'must be greater than competitor limit' do
@@ -1667,6 +1667,12 @@ RSpec.describe Competition do
         auto_close_comp.auto_close_threshold = 2
         expect(auto_close_comp).not_to be_valid
         expect(auto_close_comp.errors[:auto_close_threshold]).to include("Auto close threshold must be greater than the number of currently paid registrations")
+      end
+
+      it 'auto-close must be greater than 0' do
+        auto_close_comp.auto_close_threshold = 0
+        expect(auto_close_comp).not_to be_valid
+        expect(auto_close_comp.errors[:auto_close_threshold]).to include("Auto-close threshold must be greater than 0")
       end
     end
   end
