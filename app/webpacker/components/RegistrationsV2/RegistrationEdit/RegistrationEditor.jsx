@@ -17,7 +17,7 @@ import updateRegistration from '../api/registration/patch/update_registration';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { setMessage } from '../Register/RegistrationMessage';
 import Loading from '../../Requests/Loading';
-import { EventSelector } from '../../wca/EventSelector';
+import EventSelector from '../../wca/EventSelector';
 import Refunds from './Refunds';
 import { editPersonUrl } from '../../../lib/requests/routes.js.erb';
 import { useConfirm } from '../../../lib/providers/ConfirmProvider';
@@ -51,8 +51,7 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
   const { isLoading, data: competitorsInfo } = useQuery({
     queryKey: ['history-user', serverRegistration?.history],
     queryFn: () => getUsersInfo(_.uniq(serverRegistration.history.flatMap((e) => (
-      (e.actor_type === 'user' || e.actor_type === 'worker') ? Number(e.actor_id) : [])
-    ))),
+      (e.actor_type === 'user' || e.actor_type === 'worker') ? Number(e.actor_id) : [])))),
     enabled: Boolean(serverRegistration),
   });
 
@@ -157,7 +156,8 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
         updateRegistrationMutation(body);
       }).catch(() => {});
     }
-  }, [hasChanges,
+  }, [
+    hasChanges,
     confirm,
     commentIsValid,
     eventsAreValid,
@@ -175,20 +175,15 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
     comment,
     adminComment,
     status,
-    guests]);
+    guests,
+  ]);
 
-  const handleEventSelection = ({ type, eventId }) => {
-    if (type === 'select_all_events') {
-      setSelectedEvents(competitionInfo.event_ids);
-    } else if (type === 'clear_events') {
-      setSelectedEvents([]);
-    } else if (type === 'toggle_event') {
-      const index = selectedEvents.indexOf(eventId);
-      if (index === -1) {
-        setSelectedEvents([...selectedEvents, eventId]);
-      } else {
-        setSelectedEvents(selectedEvents.toSpliced(index, 1));
-      }
+  const onEventClick = (eventId) => {
+    const index = selectedEvents.indexOf(eventId);
+    if (index === -1) {
+      setSelectedEvents([...selectedEvents, eventId]);
+    } else {
+      setSelectedEvents(selectedEvents.toSpliced(index, 1));
     }
   };
 
@@ -215,39 +210,43 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
         )}
         {registrationEditDeadlinePassed && (
           <Message>
-            The Registration Edit Deadline has passed! <strong>Changes should only be made in extraordinary circumstances</strong>
+            The Registration Edit Deadline has passed!
+            {' '}
+            <strong>Changes should only be made in extraordinary circumstances</strong>
           </Message>
         )}
         <Header>{competitor.name}</Header>
         <Form.Field required error={selectedEvents.length === 0}>
           <EventSelector
-            onEventSelection={handleEventSelection}
+            id="event-selection"
             eventList={competitionInfo.event_ids}
             selectedEvents={selectedEvents}
-            id="event-selection"
+            onEventClick={onEventClick}
+            onAllClick={() => setSelectedEvents(competitionInfo.event_ids)}
+            onClearClick={() => setSelectedEvents([])}
             maxEvents={maxEvents}
             shouldErrorOnEmpty
           />
         </Form.Field>
 
-        <label>Comment</label>
         <Form.TextArea
+          label="Comment"
           id="competitor-comment"
           maxLength={240}
           value={comment}
           onChange={(event, data) => setComment(data.value)}
         />
 
-        <label>Administrative Notes</label>
         <Form.TextArea
+          label="Administrative Notes"
           id="admin-comment"
           maxLength={240}
           value={adminComment}
           onChange={(event, data) => setAdminComment(data.value)}
         />
 
+        <Header as="h6">Status</Header>
         <Form.Group inline>
-          <label>Status</label>
           <Form.Radio
             id="radio-status-pending"
             label="Pending"
@@ -290,8 +289,8 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
             onChange={(event, data) => setStatus(data.value)}
           />
         </Form.Group>
-        <label>Guests</label>
         <Form.Input
+          label="Guests"
           id="guest-dropdown"
           type="number"
           min={0}

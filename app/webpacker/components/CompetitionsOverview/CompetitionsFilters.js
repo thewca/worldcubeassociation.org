@@ -12,7 +12,7 @@ import {
 import { DEFAULT_REGION_ALL } from './filterUtils';
 import useDelegatesData from './useDelegatesData';
 import UtcDatePicker from '../wca/UtcDatePicker';
-import { EventSelector } from '../wca/EventSelector';
+import EventSelector from '../wca/EventSelector';
 
 function CompetitionsFilters({
   filterState,
@@ -25,7 +25,9 @@ function CompetitionsFilters({
       <Form.Field>
         <EventSelector
           selectedEvents={filterState.selectedEvents}
-          onEventSelection={dispatchFilter}
+          onEventClick={(eventId) => dispatchFilter({ type: 'toggle_event', eventId })}
+          onAllClick={() => dispatchFilter({ type: 'select_all_events' })}
+          onClearClick={() => dispatchFilter({ type: 'clear_events' })}
           showBreakBeforeButtons={false}
           eventButtonsCompact
         />
@@ -81,7 +83,10 @@ export function RegionSelector({ region, dispatchFilter }) {
     },
     ...(Object.values(countries.real).map((country) => (
       {
-        key: country.id, text: country.name, value: country.iso2, flag: country.iso2.toLowerCase(),
+        key: country.id,
+        text: country.name,
+        value: country.iso2,
+        flag: { className: country.iso2.toLowerCase() },
       }
     ))),
   ];
@@ -126,7 +131,7 @@ function DelegateSelector({ delegateId, dispatchFilter }) {
     <>
       <label htmlFor="delegate" style={{ display: 'inline-block' }}>
         {I18n.t('layouts.navigation.delegate')}
-        {delegatesLoading && <PulseLoader size="6px" cssOverride={{ marginLeft: '5px' }} />}
+        {delegatesLoading && <PulseLoader id="delegate-pulse" size="6px" cssOverride={{ marginLeft: '5px' }} />}
       </label>
       <Dropdown
         name="delegate"

@@ -140,7 +140,7 @@ module Registrations
           raise WcaExceptions::RegistrationError.new(:unprocessable_entity, Registrations::ErrorCodes::REQUIRED_COMMENT_MISSING) if competition.force_comment_in_registration
         else
           raise WcaExceptions::RegistrationError.new(:unprocessable_entity, ErrorCodes::USER_COMMENT_TOO_LONG) if comment.length > COMMENT_CHARACTER_LIMIT
-          raise WcaExceptions::RegistrationError.new(:unprocessable_entity, ErrorCodes::REQUIRED_COMMENT_MISSING) if competition.force_comment_in_registration && comment == ''
+          raise WcaExceptions::RegistrationError.new(:unprocessable_entity, ErrorCodes::REQUIRED_COMMENT_MISSING) if competition.force_comment_in_registration && comment.strip.empty?
         end
       end
 

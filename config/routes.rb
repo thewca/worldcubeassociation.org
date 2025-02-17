@@ -60,6 +60,7 @@ Rails.application.routes.draw do
   post 'users/:id/avatar' => 'users#upload_avatar'
   patch 'users/:id/avatar' => 'users#update_avatar'
   delete 'users/:id/avatar' => 'users#delete_avatar'
+  post 'users/:id/anonymize' => 'users#anonymize', as: :anonymize_user
   get 'admin/avatars/pending' => 'admin/avatars#pending_avatar_users', as: :pending_avatars
   post 'admin/avatars' => 'admin/avatars#update_avatar', as: :admin_update_avatar
 
@@ -133,6 +134,7 @@ Rails.application.routes.draw do
   get 'competitions/:competition_id/report/edit' => 'delegate_reports#edit', as: :delegate_report_edit
   get 'competitions/:competition_id/report' => 'delegate_reports#show', as: :delegate_report
   patch 'competitions/:competition_id/report' => 'delegate_reports#update'
+  delete 'competitions/:competition_id/report/:image_id' => 'delegate_reports#delete_image', as: :delegate_report_delete_image
 
   # Stripe needs this special redirect URL during OAuth, see the linked controller method for details
   get 'stripe-connect' => 'competitions#stripe_connect', as: :competitions_stripe_connect
@@ -147,6 +149,20 @@ Rails.application.routes.draw do
   get 'competitions/edit/nearby-competitions-json' => 'competitions#nearby_competitions_json', as: :nearby_competitions_json
   get 'competitions/edit/registration-collisions-json' => 'competitions#registration_collisions_json', as: :registration_collisions_json
   get 'competitions/edit/series-eligible-competitions-json' => 'competitions#series_eligible_competitions_json', as: :series_eligible_competitions_json
+
+  if WcaLive.enabled?
+    get 'competitions/:competition_id/live/competitors/:registration_id' => 'live#by_person', as: :live_person_results
+    get 'competitions/:competition_id/live/podiums' => 'live#podiums', as: :live_podiums
+    get 'competitions/:competition_id/live/competitors' => 'live#competitors', as: :live_competitors
+    get 'competitions/:competition_id/live/rounds/:round_id/admin' => 'live#admin', as: :live_admin_round_results
+    get 'competitions/:competition_id/live/rounds/:round_id/admin/check' => 'live#double_check', as: :live_admin_check_round_results
+    get 'competitions/:competition_id/live/admin' => 'live#schedule_admin', as: :live_schedule_admin
+    get 'competitions/:competition_id/live/rounds/:round_id' => 'live#round_results', as: :live_round_results
+
+    get 'api/competitions/:competition_id/rounds/:round_id' => 'live#round_results_api', as: :live_round_results_api
+    post 'api/competitions/:competition_id/rounds/:round_id' => 'live#add_result', as: :add_live_result
+    patch 'api/competitions/:competition_id/rounds/:round_id' => 'live#update_result', as: :update_live_result
+  end
 
   get 'results/rankings', to: redirect('results/rankings/333/single', status: 302)
   get 'results/rankings/333mbf/average',
@@ -187,11 +203,20 @@ Rails.application.routes.draw do
   get 'panel/pending-claims(/:user_id)' => 'panel#pending_claims_for_subordinate_delegates', as: 'pending_claims'
   scope 'panel' do
     get 'staff' => 'panel#staff', as: :panel_staff
-    get 'wfc' => 'panel#wfc', as: :panel_wfc
     get 'generate_db_token' => 'panel#generate_db_token', as: :panel_generate_db_token
   end
   get 'panel/:panel_id' => 'panel#index', as: :panel_index
-  get 'panel/redirect/:panel_page' => 'panel#redirect', as: :panel_redirect
+  scope 'panel-page' do
+    get 'run-validators' => 'admin#check_results', as: :admin_check_results
+    get 'check-records' => 'admin#check_regional_records', as: :admin_check_regional_records
+    get 'compute-auxiliary-data' => 'admin#compute_auxiliary_data', as: :admin_compute_auxiliary_data
+    get 'generate-data-exports' => 'admin#generate_exports', as: :admin_generate_exports
+    get 'fix-results' => 'admin#fix_results', as: :admin_fix_results
+    get 'merge-profiles' => 'admin#merge_people', as: :admin_merge_people
+    get 'anonymize-person' => 'admin#anonymize_person', as: :admin_anonymize_person
+    get 'reassign-connected-wca-id' => 'admin#reassign_wca_id', as: :admin_reassign_wca_id
+  end
+  get 'panel-page/:id' => 'panel#panel_page', as: :panel_page
   resources :tickets, only: [:index, :show] do
     post 'update_status' => 'tickets#update_status', as: :update_status
     get 'edit_person_validators' => 'tickets#edit_person_validators', as: :edit_person_validators
@@ -265,38 +290,26 @@ Rails.application.routes.draw do
   get '/regulations/history/official/:id/guidelines' => 'regulations#historical_guidelines'
   get '/regulations/history/official/:id/wca-regulations-and-guidelines', to: redirect('https://regulations.worldcubeassociation.org/history/official/%{id}/wca-regulations-and-guidelines.pdf', status: 302)
 
-  get '/admin' => 'admin#index'
   get '/admin/all-voters' => 'admin#all_voters', as: :eligible_voters
   get '/admin/leader-senior-voters' => 'admin#leader_senior_voters', as: :leader_senior_voters
-  get '/admin/check_results' => 'admin#check_results'
   get '/admin/validation_competitions' => "admin#compute_validation_competitions"
-  post '/admin/check_results' => 'admin#do_check_results'
-  get '/admin/merge_people' => 'admin#merge_people'
-  post '/admin/merge_people' => 'admin#do_merge_people'
-  get '/admin/fix_results' => 'admin#fix_results'
+  post '/admin/check_results' => 'admin#do_check_results', as: :admin_do_check_results
+  post '/admin/merge_people' => 'admin#do_merge_people', as: :admin_do_merge_people
   get '/admin/fix_results_selector' => 'admin#fix_results_selector', as: :admin_fix_results_ajax
   get '/admin/person_data' => 'admin#person_data'
-  get '/admin/compute_auxiliary_data' => 'admin#compute_auxiliary_data'
   get '/admin/do_compute_auxiliary_data' => 'admin#do_compute_auxiliary_data'
   get '/admin/reset_compute_auxiliary_data' => 'admin#reset_compute_auxiliary_data'
-  get '/admin/generate_exports' => 'admin#generate_exports'
   get '/admin/generate_db_token' => 'admin#generate_db_token'
   get '/admin/do_generate_dev_export' => 'admin#do_generate_dev_export'
   get '/admin/do_generate_public_export' => 'admin#do_generate_public_export'
-  get '/admin/check_regional_records' => 'admin#check_regional_records'
   get '/admin/override_regional_records' => 'admin#override_regional_records'
   post '/admin/override_regional_records' => 'admin#do_override_regional_records'
-  get '/admin/finish_persons' => 'admin#finish_persons'
-  post '/admin/finish_persons' => 'admin#do_finish_persons'
-  get '/admin/finish_unfinished_persons' => 'admin#finish_unfinished_persons'
   get '/admin/complete_persons' => 'admin#complete_persons'
   post '/admin/complete_persons' => 'admin#do_complete_persons'
   get '/admin/peek_unfinished_results' => 'admin#peek_unfinished_results'
-  get '/admin/anonymize_person' => 'admin#anonymize_person'
-  post '/admin/anonymize_person' => 'admin#do_anonymize_person'
-  get '/admin/reassign_wca_id' => 'admin#reassign_wca_id'
-  get '/admin/validate_reassign_wca_id' => 'admin#validate_reassign_wca_id'
-  post '/admin/reassign_wca_id' => 'admin#do_reassign_wca_id'
+  post '/admin/anonymize_person' => 'admin#do_anonymize_person', as: :admin_do_anonymize_person
+  get '/admin/validate_reassign_wca_id' => 'admin#validate_reassign_wca_id', as: :admin_validate_reassign_wca_id
+  post '/admin/reassign_wca_id' => 'admin#do_reassign_wca_id', as: :admin_do_reassign_wca_id
 
   get '/search' => 'search_results#index'
 

@@ -17,7 +17,7 @@ import updateRegistration from '../api/registration/patch/update_registration';
 import submitEventRegistration from '../api/registration/post/submit_registration';
 import Processing from './Processing';
 import { contactCompetitionUrl, userPreferencesRoute } from '../../../lib/requests/routes.js.erb';
-import { EventSelector } from '../../wca/EventSelector';
+import EventSelector from '../../wca/EventSelector';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { setMessage } from './RegistrationMessage';
 import I18n from '../../../lib/i18n';
@@ -172,7 +172,7 @@ export default function CompetingStep({
     [dispatch, eventsAreValid, hasChanges, maxEvents],
   );
 
-  const actionCreateRegistration = () => {
+  const actionCreateRegistration = useCallback(() => {
     createRegistrationMutation({
       user_id: user.id,
       competition_id: competitionInfo.id,
@@ -182,9 +182,16 @@ export default function CompetingStep({
       },
       guests,
     });
-  };
+  }, [
+    createRegistrationMutation,
+    user.id,
+    competitionInfo.id,
+    selectedEvents,
+    comment,
+    guests,
+  ]);
 
-  const actionUpdateRegistration = () => {
+  const actionUpdateRegistration = useCallback(() => {
     confirm({
       content: I18n.t(competitionInfo.allow_registration_edits ? 'competitions.registration_v2.update.update_confirm' : 'competitions.registration_v2.update.update_confirm_contact'),
     }).then(() => {
@@ -206,9 +213,22 @@ export default function CompetingStep({
     }).catch(() => {
       nextStep();
     });
-  };
+  }, [
+    confirm,
+    dispatch,
+    nextStep,
+    updateRegistrationMutation,
+    competitionInfo,
+    registration?.user_id,
+    hasCommentChanged,
+    comment,
+    hasEventsChanged,
+    selectedEvents,
+    hasGuestsChanged,
+    guests,
+  ]);
 
-  const actionReRegister = () => {
+  const actionReRegister = useCallback(() => {
     updateRegistrationMutation({
       user_id: registration.user_id,
       competition_id: competitionInfo.id,
@@ -219,31 +239,42 @@ export default function CompetingStep({
       },
       guests,
     });
+  }, [
+    updateRegistrationMutation,
+    registration?.user_id,
+    competitionInfo.id,
+    comment,
+    selectedEvents,
+    guests,
+  ]);
+
+  const onEventClick = (eventId) => {
+    const index = selectedEvents.indexOf(eventId);
+    if (index === -1) {
+      setSelectedEvents([...selectedEvents, eventId]);
+    } else {
+      setSelectedEvents(selectedEvents.toSpliced(index, 1));
+    }
+    setHasInteracted(true);
   };
 
-  const handleEventSelection = ({ type, eventId }) => {
-    if (type === 'select_all_events') {
-      if (competitionInfo['uses_qualification?']) {
-        setSelectedEvents(
-          competitionInfo.event_ids.filter((e) => isQualifiedForEvent(
-            e,
-            qualifications.wcif,
-            qualifications.personalRecords,
-          )),
-        );
-      } else {
-        setSelectedEvents(competitionInfo.event_ids);
-      }
-    } else if (type === 'clear_events') {
-      setSelectedEvents([]);
-    } else if (type === 'toggle_event') {
-      const index = selectedEvents.indexOf(eventId);
-      if (index === -1) {
-        setSelectedEvents([...selectedEvents, eventId]);
-      } else {
-        setSelectedEvents(selectedEvents.toSpliced(index, 1));
-      }
+  const onAllEventsClick = () => {
+    if (competitionInfo['uses_qualification?']) {
+      setSelectedEvents(
+        competitionInfo.event_ids.filter((e) => isQualifiedForEvent(
+          e,
+          qualifications.wcif,
+          qualifications.personalRecords,
+        )),
+      );
+    } else {
+      setSelectedEvents(competitionInfo.event_ids);
     }
+    setHasInteracted(true);
+  };
+
+  const onClearEventsClick = () => {
+    setSelectedEvents([]);
     setHasInteracted(true);
   };
 
@@ -260,7 +291,7 @@ export default function CompetingStep({
     if (shouldShowUpdateButton) {
       return attemptAction(actionUpdateRegistration, { checkForChanges: true });
     }
-    attemptAction(actionCreateRegistration);
+    return attemptAction(actionCreateRegistration);
   }, [
     actionCreateRegistration,
     actionReRegister,
@@ -269,6 +300,8 @@ export default function CompetingStep({
     shouldShowReRegisterButton,
     shouldShowUpdateButton,
   ]);
+
+  const guestsRestricted = competitionInfo.guest_entry_status === 'restricted';
 
   const formWarnings = useMemo(() => potentialWarnings(competitionInfo), [competitionInfo]);
   return (
@@ -299,19 +332,21 @@ export default function CompetingStep({
           />
           <Form.Field required error={hasInteracted && selectedEvents.length === 0}>
             <EventSelector
-              onEventSelection={handleEventSelection}
+              id="event-selection"
               eventList={competitionInfo.event_ids}
               selectedEvents={selectedEvents}
-              id="event-selection"
+              onEventClick={onEventClick}
+              onAllClick={onAllEventsClick}
+              onClearClick={onClearEventsClick}
               maxEvents={maxEvents}
               eventsDisabled={
                 competitionInfo.allow_registration_without_qualification
-                ? []
-                : eventsNotQualifiedFor(
-                  competitionInfo.event_ids,
-                  qualifications.wcif,
-                  qualifications.personalRecords,
-                )
+                  ? []
+                  : eventsNotQualifiedFor(
+                    competitionInfo.event_ids,
+                    qualifications.wcif,
+                    qualifications.personalRecords,
+                  )
               }
               disabledText={(event) => eventQualificationToString(
                 { id: event },
@@ -356,7 +391,7 @@ export default function CompetingStep({
           </Form.Field>
           {competitionInfo.guests_enabled && (
             <Form.Field>
-              <label>{I18n.t('activerecord.attributes.registration.guests')}</label>
+              <label htmlFor="guest-dropdown">{I18n.t('activerecord.attributes.registration.guests')}</label>
               <Form.Input
                 id="guest-dropdown"
                 type="number"
@@ -365,8 +400,8 @@ export default function CompetingStep({
                   setGuests(Number.parseInt(data.value, 10));
                 }}
                 min="0"
-                max={competitionInfo.guests_per_registration_limit ?? 99}
-                error={Number.isInteger(competitionInfo.guests_per_registration_limit) && guests > competitionInfo.guests_per_registration_limit && I18n.t('competitions.competition_info.guest_limit', { count: competitionInfo.guests_per_registration_limit })}
+                max={guestsRestricted && (competitionInfo.guests_per_registration_limit ?? 99)}
+                error={guestsRestricted && Number.isInteger(competitionInfo.guests_per_registration_limit) && guests > competitionInfo.guests_per_registration_limit && I18n.t('competitions.competition_info.guest_limit', { count: competitionInfo.guests_per_registration_limit })}
               />
             </Form.Field>
           )}

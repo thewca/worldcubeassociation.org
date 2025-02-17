@@ -188,6 +188,19 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     return head :unauthorized unless current_user.has_permission?(:can_edit_groups, role.group.id)
 
     if group_type == UserGroup.group_types[:delegate_regions]
+      new_role = UserRole.new(
+        user_id: role.user.id,
+        group_id: role.group.id,
+        start_date: Date.today,
+      )
+      new_role_metadata = RolesMetadataDelegateRegions.new(
+        status: role.metadata.status,
+        location: role.metadata.location,
+        first_delegated: role.metadata.first_delegated,
+        last_delegated: role.metadata.last_delegated,
+        total_delegated: role.metadata.total_delegated,
+      )
+
       if params.key?(:status)
         status = params.require(:status)
         changes << UserRole::UserRoleChange.new(
@@ -195,75 +208,36 @@ class Api::V0::UserRolesController < Api::V0::ApiController
           previous_value: I18n.t("enums.user_roles.status.delegate_regions.#{role.metadata.status}", locale: 'en'),
           new_value: I18n.t("enums.user_roles.status.delegate_regions.#{status}", locale: 'en'),
         )
+        new_role_metadata.status = status
+      end
 
-        ActiveRecord::Base.transaction do
-          role.update!(end_date: Date.today)
-          metadata = RolesMetadataDelegateRegions.create!(
-            status: status,
-            location: role.metadata.location,
-            first_delegated: role.metadata.first_delegated,
-            last_delegated: role.metadata.last_delegated,
-            total_delegated: role.metadata.total_delegated,
-          )
-          role = UserRole.create!(
-            user_id: role.user.id,
-            group_id: role.group.id,
-            start_date: Date.today,
-            metadata: metadata,
-          )
-        end
-      elsif params.key?(:groupId)
+      if params.key?(:groupId)
         group_id = params.require(:groupId)
         changes << UserRole::UserRoleChange.new(
           changed_parameter: 'Delegate Region',
           previous_value: UserGroup.find(role.group.id).name,
           new_value: UserGroup.find(group_id).name,
         )
+        new_role.group_id = group_id
+      end
 
-        return head :unauthorized unless current_user.has_permission?(:can_edit_groups, group_id)
-
-        ActiveRecord::Base.transaction do
-          role.update!(end_date: Date.today)
-          metadata = RolesMetadataDelegateRegions.create!(
-            status: role.metadata.status,
-            location: role.metadata.location,
-            first_delegated: role.metadata.first_delegated,
-            last_delegated: role.metadata.last_delegated,
-            total_delegated: role.metadata.total_delegated,
-          )
-          role = UserRole.create!(
-            user_id: role.user.id,
-            group_id: group_id,
-            start_date: Date.today,
-            metadata: metadata,
-          )
-        end
-      elsif params.key?(:location)
+      if params.key?(:location)
         location = params.require(:location)
         changes << UserRole::UserRoleChange.new(
           changed_parameter: 'Location',
           previous_value: role.metadata.location,
           new_value: location,
         )
+        new_role_metadata.location = location
+      end
 
-        ActiveRecord::Base.transaction do
-          role.update!(end_date: Date.today)
-          metadata = RolesMetadataDelegateRegions.create!(
-            status: role.metadata.status,
-            location: location,
-            first_delegated: role.metadata.first_delegated,
-            last_delegated: role.metadata.last_delegated,
-            total_delegated: role.metadata.total_delegated,
-          )
-          role = UserRole.create!(
-            user_id: role.user.id,
-            group_id: role.group.id,
-            start_date: Date.today,
-            metadata: metadata,
-          )
-        end
-      else
-        return render status: :unprocessable_entity, json: { error: "Invalid parameter to be changed" }
+      return render status: :unprocessable_entity, json: { error: "No valid parameters to be changed" } if changes.empty?
+      return head :unauthorized unless current_user.has_permission?(:can_edit_groups, new_role.group_id)
+
+      ActiveRecord::Base.transaction do
+        role.update!(end_date: Date.today)
+        new_role.metadata = new_role_metadata
+        new_role.save!
       end
     elsif group_type == UserGroup.group_types[:delegate_probation]
       if params.key?(:endDate)

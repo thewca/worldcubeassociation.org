@@ -35,29 +35,38 @@ export function DateTableCell({ competition }) {
 }
 
 export function ReportTableCell({
-  permissions, competitionId, isReportPosted, canAdminCompetitions,
+  permissions, competitionId, isReportPosted, isPastCompetition,
 }) {
-  if (permissions.can_administer_competitions.scope === '*' || permissions.can_administer_competitions.scope.includes(competitionId)) {
-    return (
-      <Table.Cell>
-        <>
-          <Popup
-            content={I18n.t('competitions.my_competitions_table.report')}
-            trigger={(
-              <a href={competitionReportUrl(competitionId)}>
-                <Icon name="file alternate" />
-              </a>
+  const canViewDelegateReport = permissions.can_view_delegate_report.scope === '*' || permissions.can_view_delegate_report.scope.includes(competitionId);
+  const canEditDelegateReport = permissions.can_edit_delegate_report.scope === '*' || permissions.can_edit_delegate_report.scope.includes(competitionId);
+  if (!canViewDelegateReport) {
+    return <Table.Cell />;
+  }
+  return (
+    <Table.Cell>
+      <>
+        <Popup
+          content={I18n.t('competitions.my_competitions_table.report')}
+          trigger={(
+            <a href={competitionReportUrl(competitionId)}>
+              <Icon name="file alternate" />
+            </a>
           )}
-          />
-          <Popup
-            content={I18n.t('competitions.my_competitions_table.edit_report')}
-            trigger={(
-              <a href={competitionReportEditUrl(competitionId)}>
-                <Icon name="edit" />
-              </a>
+        />
+
+        { !isReportPosted && canEditDelegateReport
+          && (
+            <Popup
+              content={I18n.t('competitions.my_competitions_table.edit_report')}
+              trigger={(
+                <a href={competitionReportEditUrl(competitionId)}>
+                  <Icon name="edit" />
+                </a>
+              )}
+            />
           )}
-          />
-          { !isReportPosted
+
+        { isPastCompetition && !isReportPosted
           && permissions.can_administer_competitions.scope.includes(competitionId) && (
             <Popup
               content={I18n.t('competitions.my_competitions_table.missing_report')}
@@ -65,15 +74,8 @@ export function ReportTableCell({
                 <Icon name="warning" />
               )}
             />
-          )}
-        </>
-      </Table.Cell>
-    );
-  }
-
-  // A user might be able to see only certain reports in the list, so we return an empty cell
-
-  if (canAdminCompetitions) {
-    return <Table.Cell />;
-  }
+        )}
+      </>
+    </Table.Cell>
+  );
 }

@@ -3,6 +3,8 @@
 class TicketsController < ApplicationController
   include Rails::Pagination
 
+  before_action :authenticate_user!
+
   SORT_WEIGHT_LAMBDAS = {
     createdAt:
       lambda { |ticket| ticket.created_at },
@@ -85,15 +87,23 @@ class TicketsController < ApplicationController
 
   def edit_person_validators
     ticket = Ticket.find(params.require(:ticket_id))
+    name_validation_issues = []
     dob_validation_issues = []
 
     ticket.metadata.tickets_edit_person_fields.each do |edit_person_field|
       case edit_person_field[:field_name]
+      when TicketsEditPersonField.field_names[:name]
+        name_to_validate = edit_person_field[:new_value]
+        name_validation_issues = ResultsValidators::PersonsValidator.name_validations(name_to_validate, nil)
       when TicketsEditPersonField.field_names[:dob]
-        dob_validation_issues = ResultsValidators::PersonsValidator.dob_validations(Date.parse(edit_person_field[:new_value]))
+        dob_to_validate = Date.parse(edit_person_field[:new_value])
+        dob_validation_issues = ResultsValidators::PersonsValidator.dob_validations(dob_to_validate, nil, name: ticket.metadata.wca_id)
       end
     end
 
-    render json: { dob: dob_validation_issues }
+    render json: {
+      name: name_validation_issues,
+      dob: dob_validation_issues,
+    }
   end
 end
