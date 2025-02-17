@@ -196,7 +196,7 @@ export const InputTextArea = wrapInput((props) => (
 
 export const InputNumber = wrapInput((props) => {
   const onChangeNumber = useCallback((e, { value: newValue }) => {
-    const convertedNumber = Number(newValue);
+    const convertedNumber = (props.nullable && newValue === "") ? "" : newValue = Number(newValue)
     props.onChange(e, { value: convertedNumber });
   }, [props]);
 
@@ -206,14 +206,14 @@ export const InputNumber = wrapInput((props) => {
       name={props.htmlName}
       type="number"
       label={props.attachedLabel}
-      value={props.value}
+      value={props.value ?? ""}
       onChange={onChangeNumber}
       min={props.min}
       max={props.max}
       step={props.step}
     />
   );
-}, ['attachedLabel', 'min', 'max', 'step']);
+}, ['attachedLabel', 'min', 'max', 'step', 'nullable']);
 
 export const InputDate = wrapInput((props) => {
   const onChangeInternal = useCallback((isoDate) => {

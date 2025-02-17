@@ -19,7 +19,7 @@ export default function CompetitorLimit() {
         <InputTextArea id="reason" />
       </ConditionalSection>
       <ConditionalSection showIf={hasLimit}>
-        <InputNumber id="autoCloseThreshold" min={0} />
+        <InputNumber id="autoCloseThreshold" nullable={true} />
       </ConditionalSection>
     </SubSection>
   );
