@@ -1,5 +1,5 @@
 import {
-  Ref, Segment, Table, TableFooter,
+  Segment, Table, TableFooter,
 } from 'semantic-ui-react';
 import React from 'react';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
@@ -55,28 +55,26 @@ export default function RegistrationAdministrationTable({
       <DragDropContext onDragEnd={handleOnDragEnd}>
         <Droppable droppableId="droppable-table">
           {(providedDroppable) => (
-            <Ref innerRef={providedDroppable.innerRef}>
-              <Table.Body {...providedDroppable.droppableProps}>
-                {registrations.map((w, i) => (
-                  <TableRow
-                    competitionInfo={competitionInfo}
-                    columnsExpanded={columnsExpanded}
-                    registration={w}
-                    onCheckboxChange={(_, data) => {
-                      if (data.checked) {
-                        select([w.user.id]);
-                      } else {
-                        unselect([w.user.id]);
-                      }
-                    }}
-                    index={i}
-                    draggable={draggable}
-                    isSelected={selected.includes(w.user.id)}
-                  />
-                ))}
-                {providedDroppable.placeholder}
-              </Table.Body>
-            </Ref>
+            <Table.Body ref={providedDroppable.innerRef} {...providedDroppable.droppableProps}>
+              {registrations.map((w, i) => (
+                <TableRow
+                  competitionInfo={competitionInfo}
+                  columnsExpanded={columnsExpanded}
+                  registration={w}
+                  onCheckboxChange={(_, data) => {
+                    if (data.checked) {
+                      select([w.user.id]);
+                    } else {
+                      unselect([w.user.id]);
+                    }
+                  }}
+                  index={i}
+                  draggable={draggable}
+                  isSelected={selected.includes(w.user.id)}
+                />
+              ))}
+              {providedDroppable.placeholder}
+            </Table.Body>
           )}
         </Droppable>
       </DragDropContext>
