@@ -195,9 +195,10 @@ export const InputTextArea = wrapInput((props) => (
 ), [], '');
 
 export const InputNumber = wrapInput((props) => {
-  const onChangeNumber = useCallback((e, { value: newValue }) => {
-    const convertedNumber = (props.nullable && newValue === '') ? '' : Number(newValue);
-    props.onChange(e, { value: convertedNumber });
+  const onChangeNumber = useCallback((e, { value: inputValue }) => {
+    const setToNull = props.nullable && inputValue === ''
+    const processedValue = setToNull ? '' : Number(inputValue);
+    props.onChange(e, { value: processedValue });
   }, [props]);
 
   return (
@@ -206,7 +207,7 @@ export const InputNumber = wrapInput((props) => {
       name={props.htmlName}
       type="number"
       label={props.attachedLabel}
-      value={props.value ?? ''}
+      value={props.value}
       onChange={onChangeNumber}
       min={props.min}
       max={props.max}
