@@ -196,7 +196,7 @@ export const InputTextArea = wrapInput((props) => (
 
 export const InputNumber = wrapInput((props) => {
   const onChangeNumber = useCallback((e, { value: newValue }) => {
-    const convertedNumber = (props.nullable && newValue === "") ? "" : newValue = Number(newValue)
+    const convertedNumber = (props.nullable && newValue === '') ? '' : Number(newValue);
     props.onChange(e, { value: convertedNumber });
   }, [props]);
 
