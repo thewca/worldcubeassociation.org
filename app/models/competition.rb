@@ -95,7 +95,7 @@ class Competition < ApplicationRecord
     restricted: 2,
   }, prefix: true
 
-  enum :user_can_cancel, [:always, :not_accepted, :unpaid], prefix: :can_cancel
+  enum :user_can_cancel, [:always, :not_accepted, :unpaid]
 
   NEW_REG_SYSTEM_DEFAULT = :v3
 
