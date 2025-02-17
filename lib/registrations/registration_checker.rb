@@ -205,9 +205,8 @@ module Registrations
           [Registrations::Helper::STATUS_DELETED, Registrations::Helper::STATUS_CANCELLED].include?(new_status)
 
         # Raise an error if competition prevents users from cancelling a registration once it is accepted
-        raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::ORGANIZER_MUST_CANCEL_REGISTRATION) if
-        (competition.competitor_can_cancel_not_accepted? && registration.accepted?) ||
-        (competition.competitor_can_cancel_unpaid? && registration.paid_entry_fees > 0)
+        raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::ORGANIZER_MUST_CANCEL_REGISTRATION) unless
+          registration.permit_user_cancellation?
 
         # Users aren't allowed to change events when cancelling
         raise WcaExceptions::RegistrationError.new(:unprocessable_entity, Registrations::ErrorCodes::INVALID_REQUEST_DATA) if
