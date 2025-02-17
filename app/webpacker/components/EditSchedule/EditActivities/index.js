@@ -11,9 +11,11 @@ import {
   Divider,
   Form,
   Grid,
-  Icon, List,
+  Icon,
+  List,
   Message,
-  Popup, Ref, Segment,
+  Popup,
+  Segment,
   Sticky,
 } from 'semantic-ui-react';
 
@@ -422,13 +424,11 @@ function EditActivities({
                       </Popup>
                     </Grid.Column>
                     <Grid.Column width={15}>
-                      <Ref innerRef={dropToDeleteRef}>
-                        <Message negative floating>
-                          <Icon name="trash" />
-                          Drop an event here to remove it from the schedule.
-                          <Icon name="trash" />
-                        </Message>
-                      </Ref>
+                      <Message ref={dropToDeleteRef} negative floating>
+                        <Icon name="trash" />
+                        Drop an event here to remove it from the schedule.
+                        <Icon name="trash" />
+                      </Message>
                     </Grid.Column>
                   </Grid>
                 </Container>
