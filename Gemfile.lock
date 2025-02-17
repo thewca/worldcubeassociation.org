@@ -407,7 +407,7 @@ GEM
     jmespath (1.6.2)
     js_cookie_rails (2.2.0)
       railties (>= 3.1)
-    json (2.9.1)
+    json (2.10.1)
     json-schema (5.1.1)
       addressable (~> 2.8)
       bigdecimal (~> 3.1)
@@ -743,7 +743,7 @@ GEM
     simplecov_json_formatter (0.1.4)
     simpleidn (0.2.1)
       unf (~> 0.1.4)
-    slack-ruby-client (2.5.0)
+    slack-ruby-client (2.5.1)
       faraday (>= 2.0)
       faraday-mashify
       faraday-multipart
