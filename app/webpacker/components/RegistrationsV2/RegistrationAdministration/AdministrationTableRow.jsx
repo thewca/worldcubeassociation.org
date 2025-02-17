@@ -66,6 +66,7 @@ export default function TableRow({
   competitionInfo,
   index,
   draggable = false,
+  withPosition = false,
 }) {
   const {
     dob: dobIsShown,
@@ -79,7 +80,11 @@ export default function TableRow({
     id, wca_id: wcaId, name, country, dob: dateOfBirth, email: emailAddress,
   } = registration.user;
   const {
-    registered_on: registeredOn, event_ids: eventIds, comment, admin_comment: adminComment,
+    registered_on: registeredOn,
+    event_ids: eventIds,
+    comment,
+    admin_comment: adminComment,
+    waiting_list_position: position,
   } = registration.competing;
   const {
     payment_amount_iso: paymentAmount,
@@ -111,8 +116,16 @@ export default function TableRow({
           >
             <Table.Cell>
               { /* We manually set the margin to 0 here to fix the table row height */}
-              {draggable ? <Icon name="bars" /> : <Checkbox onChange={onCheckboxChange} checked={isSelected} style={{ margin: 0 }} />}
+              {draggable ? (
+                <Icon name="bars" />
+              ) : (
+                <Checkbox onChange={onCheckboxChange} checked={isSelected} style={{ margin: 0 }} />
+              )}
             </Table.Cell>
+
+            {withPosition && (
+              <Table.Cell>{position}</Table.Cell>
+            )}
 
             <Table.Cell>
               <a href={editRegistrationUrl(id, competitionInfo.id)}>

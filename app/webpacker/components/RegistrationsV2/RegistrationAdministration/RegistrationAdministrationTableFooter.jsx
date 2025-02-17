@@ -13,7 +13,10 @@ const moneyCountHumanReadable = (registrations, competitionInfo) => {
 };
 
 export default function RegistrationAdministrationTableFooter({
-  columnsExpanded, registrations, competitionInfo,
+  columnsExpanded,
+  registrations,
+  competitionInfo,
+  withPosition = false,
 }) {
   const { events: eventsAreExpanded, comments: commentsAreShown } = columnsExpanded;
 
@@ -39,7 +42,7 @@ export default function RegistrationAdministrationTableFooter({
 
   return (
     <Table.Row>
-      <Table.Cell colSpan={4}>
+      <Table.Cell colSpan={withPosition ? 5 : 4}>
         {`${newcomerCount} First-Timers + ${
           registrations.length - newcomerCount
         } Returners = ${registrations.length} People`}

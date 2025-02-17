@@ -12,6 +12,7 @@ export default function TableHeader({
   changeSortColumn,
   competitionInfo,
   withCheckbox = true,
+  withPosition = false,
 }) {
   const {
     dob: dobIsShown, events: eventsAreExpanded, comments: commentsAreShown,
@@ -25,6 +26,9 @@ export default function TableHeader({
             <Checkbox checked={isChecked} onChange={onCheckboxChanged} />
           )}
         </Table.HeaderCell>
+        {withPosition && (
+          <Table.HeaderCell>#</Table.HeaderCell>
+        )}
         <Table.HeaderCell />
         <Table.HeaderCell
           sorted={sortColumn === 'wca_id' ? sortDirection : undefined}

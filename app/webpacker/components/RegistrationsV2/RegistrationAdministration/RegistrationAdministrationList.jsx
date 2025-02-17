@@ -383,6 +383,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
               handleOnDragEnd={handleOnDragEnd}
               draggable={editable}
               sortable={false}
+              withPosition
             />
           </>
         ),
