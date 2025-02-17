@@ -1234,7 +1234,6 @@ en:
     registered_with_account_html: "This person registered with an account. You can edit their personal information %{here}."
     sign_in: "Sign in"
     profile: "profile"
-    panel_title: "Registration details"
     register: "Register!"
     refund: "Refund Payment"
     refund_confirmation: "Are you sure you want to refund this payment?"
@@ -1247,16 +1246,9 @@ en:
     please_sign_in_past_html: "%{sign_in} to check the status of your registration. If you do not yet have a WCA account, you can create one %{here}, but it is too late to register for this competition."
     please_sign_in_not_yet_open_html: "%{sign_in} to check the status of your registration. If you do not yet have a WCA account, you can create one %{here}, but its registration is not yet open."
     please_sign_in_html: "%{sign_in} to register for %{comp}. If you do not yet have a WCA account, you can create one %{here}."
-    greeting: "Hi, %{name}!"
     please_fix_profile_html: "In order to register for %{comp}, you must fix the following problems with your %{profile}:"
     registration_full: "The competitor limit for this competition is %{competitor_limit} and it has already been reached. If you register, your registration will be placed on a waiting list. It may not be approved unless a spot frees up."
     registration_full_include_waiting_list: "The competitor limit for this competition is %{competitor_limit} and it may be filled. If you register, your registration will be placed on a waiting list. It may not be approved unless a spot frees up."
-    can_register: "You can register for %{comp} below."
-    check_registration_information: "Please check the information about registration to find out if you need to do something else, like paying a registration fee."
-    have_registered: "You have submitted your registration for %{comp}. You can see your registration details below."
-    contact_organizer: "Contact the organizer if you wish to make a change."
-    waiting_list: "Your registration is pending. For approval, you may need to pay a registration fee. Check the competition website for details."
-    accepted: "Your registration has been accepted!"
     entry_fees_fully_paid: "You have paid %{paid}, which fully covers the registration fees."
     will_pay_here: "You will pay them here after submitting your registration"
     wont_pay_here: "Please check the competition's information for instructions about how to pay"
@@ -1267,7 +1259,6 @@ en:
         refund_amount: "Refund Amount"
     #context: on the payment form, when registering to a competition
     payment_form:
-      title: "Registration fees"
       payment_successful: "Your payment was successful, and your registration should show up as paid below."
       payment_processing: "Your payment has been confirmed, but the transaction is still pending."
       payment_partial: "Your payment has been confirmed, but it does not cover the full amount. Please pay the remaining fee as well."
@@ -1867,6 +1858,7 @@ en:
         no_self_update: "Contact the Organization Team to update your registration."
       register:
         will_open_countdown: "Registration will open in %{minutes} minutes %{seconds} seconds. This page will refresh automatically when registration opens."
+        will_close_countdown: "Registration closes in %{minutes} minutes %{seconds} seconds. This page will refresh automatically when registration closes."
         panel:
           approval:
             title: "Approval"
