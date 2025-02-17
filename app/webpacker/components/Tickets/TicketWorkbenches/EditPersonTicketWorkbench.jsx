@@ -43,7 +43,7 @@ function EditPersonRequestedChangesList({ requestedChanges }) {
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {requestedChanges.map((change) => (
+          {requestedChanges?.map((change) => (
             <Table.Row>
               <Table.Cell>{I18n.t(`activerecord.attributes.user.${change.field_name}`)}</Table.Cell>
               <Table.Cell>{formatField(change.field_name, change.old_value)}</Table.Cell>
