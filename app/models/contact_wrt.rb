@@ -13,4 +13,9 @@ class ContactWrt < ContactForm
   def subject
     Time.now.strftime("[WCA Website] Results Team Comment by #{name} on %d %b %Y at %R")
   end
+
+  def self.human_attribute_name(attr, options = {})
+    return "WCA ID" if attr.to_s == "wca_id"
+    super
+  end
 end
