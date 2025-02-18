@@ -12,7 +12,7 @@ export const showMessages = (messages) => ({ newMessages: messages });
 
 export const clearAllMessages = () => ({ messages: [] });
 
-// const clearMessage = (id) => ({ toClear: [id] });
+const clearMessage = (id) => ({ toClear: [id] });
 
 const clearMessages = (ids) => ({ toClear: ids });
 
@@ -33,13 +33,13 @@ export default function RegistrationMessage() {
 
   if (messages.length === 0) return null;
 
-  // TODO: allow clearing message
   return messages.map(({ id, key, type, params }) => (
     <Message
       key={id}
       style={{ margin: messages.length === 1 ? 0 : undefined }}
       positive={type === 'positive'}
       negative={type === 'negative'}
+      onDismiss={() => dispatch(clearMessage(id))}
     >
       {I18n.t(key, params)}
     </Message>
