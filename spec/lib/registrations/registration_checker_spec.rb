@@ -797,6 +797,24 @@ RSpec.describe Registrations::RegistrationChecker do
         end
       end
 
+      it 'user cant change events after comp has started' do
+        comp_started = FactoryBot.create(:competition, :ongoing, allow_registration_edits: true)
+        registration = FactoryBot.create(:registration, competition: comp_started)
+
+        update_request = FactoryBot.build(
+          :update_request,
+          competition_id: registration.competition.id,
+          user_id: registration.user_id,
+        )
+
+        expect {
+          Registrations::RegistrationChecker.update_registration_allowed!(update_request, Competition.find(update_request['competition_id']), User.find(update_request['submitted_by']))
+        }.to raise_error(WcaExceptions::RegistrationError) do |error|
+          expect(error.status).to eq(:forbidden)
+          expect(error.error).to eq(Registrations::ErrorCodes::USER_EDITS_NOT_ALLOWED)
+        end
+      end
+
       it 'user cant change events after event change deadline' do
         edit_deadline_passed = FactoryBot.create(:competition, :event_edit_passed)
         registration = FactoryBot.create(:registration, competition: edit_deadline_passed)

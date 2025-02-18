@@ -3,7 +3,7 @@ import {
   Button, ButtonGroup, Form, Header, Segment,
 } from 'semantic-ui-react';
 import _ from 'lodash';
-import { EventSelector } from '../wca/EventSelector';
+import EventSelector from '../wca/EventSelector';
 import { RegionSelector } from '../CompetitionsOverview/CompetitionsFilters';
 import { countries } from '../../lib/wca-data.js.erb';
 import I18n from '../../lib/i18n';
@@ -50,9 +50,10 @@ export default function ResultsFilter({
           <EventSelector
             title={I18n.t('results.selector_elements.events_selector.event')}
             selectedEvents={[event]}
-            onEventSelection={({ eventId }) => setEvent(eventId)}
+            onEventClick={setEvent}
             hideAllButton
             hideClearButton={!clearEventIsAllowed || !event}
+            onClearClick={() => setEvent(undefined)}
             showBreakBeforeButtons={false}
           />
         </Form.Field>

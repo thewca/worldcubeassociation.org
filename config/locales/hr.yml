@@ -728,10 +728,10 @@ hr:
         competition_id: ''
       user:
         #original_hash: 7588d71
-        dob: Unesi natjecateljev datum rođenja u formatu YYYY-MM-DD.
+        dob: Unesi datum rođenja natjecatelja u formatu YYYY-MM-DD.
         #original_hash: ac908c9
         name: >-
-          Unesi natjecateljevo puno ime točno, primjerice <strong>Pero
+          Unesi puno ime natjecatelja točno, primjerice <strong>Pero
           Perić</strong>. Nemoj unijeti loše kao <strong>p perić</strong>. <br/>
           Srednje ime ili inicijali su neobavezni.
         #original_hash: da39a3e
@@ -1411,89 +1411,87 @@ hr:
         #original_hash: 78949a7
         wapc: WCA Tim za prigovore
       groups_description:
-        #original_hash: 5b1aade
+        #original_hash: d62001b
         wat: >-
-          WAT je odgovoran za upravljanje razvojem i održavanjem povijesnog
-          arhiva WCA. Oni dokumentiraju ključne speedcubing događaje i značajne
-          WCA prekretnice koje će biti predstavljene kao dio šire WCA vremenske
+          WCA Tim za arhivu upravlja razvojem i održavanjem povijesnog arhiva
+          WCA. Oni dokumentiraju ključne speedcubing događaje i značajne WCA
+          prekretnice koje će biti predstavljene kao dio šire WCA vremenske
           linije, kako bi se očuvala ostavština WCA u speedcubingu.
-        #original_hash: 50fd091
+        #original_hash: 7803faf
         wct: >-
-          WCA Komunikacijski tim (WCT) ima ulogu nadgledati i podržavati
-          komunikaciju WCA sa Zajednicom i javnošću. Komunikacija WCA trebala bi
-          doprinijeti ciljevima WCA i podržati opću pozitivnu kulturu
-          susretljivosti, transparentnosti, inkluzivnosti, otvorenosti i
-          osjetljivosti.
-        #original_hash: 3e5570f
+          WCA Komunikacijski tim (WCT) nadgleda i podržava komunikaciju WCA sa
+          Zajednicom i javnošću. Komunikacija WCA trebala bi doprinijeti
+          ciljevima WCA i podržati opću pozitivnu kulturu susretljivosti,
+          transparentnosti, inkluzivnosti, otvorenosti i osjetljivosti.
+        #original_hash: bd69012
         wcat: >-
-          Tim za najave WCA natjecanja (WCAT) ima ulogu odobriti i objaviti WCA
-          natjecanja koje su podnijeli delegati i osigurati da se takve najave
-          pridržavaju WCA standarda kvalitete. Ovaj tim je također odgovoran za
-          održavanje ispravnog protokola podnošenja natjecanja iz dokumenata kao
-          što je WCA Politika zahtjeva za natjecanje. WCAT NIJE odgovoran za
-          organizaciju i delegiranje pojedinačnih natjecanja.
+          WCA Tim za najave natjecanja (WCAT) odobrava i objavljuje WCA
+          natjecanja koja su WCA Delegati zatražili i osigurava da se takve
+          najave pridržavaju WCA standarda kvalitete. Ovaj tim je također
+          odgovoran za održavanje ispravnog protokola podnošenja natjecanja iz
+          dokumenata kao što je WCA Politika zahtjeva za natjecanje. WCAT NIJE
+          odgovoran za organizaciju i delegiranje pojedinačnih natjecanja.
         #original_hash: 5007698
         wic: >-
           WCA Odbor za integritet (WIC) provodi neovisne istrage o članovima WCA
           zajednice i incidentima tijekom WCA natjecanja ili na službenim,
           online WCA platformama. Ovi incidenti su navodna kršenja Duha, Kodeksa
           ponašanja, Etičkog kodeksa i/ili propisa WCA.
-        #original_hash: 889dd90
+        #original_hash: be491ec
         weat: >-
-          Ovaj tim je odgovoran za obavljanje administrativnih zadataka WCA
-          Upravnog odbora.
-        #original_hash: 43e4e33
+          WCA Tim izvršnih pomoćnika (WEAT) je odgovoran za obavljanje
+          administrativnih zadataka WCA Upravnog odbora.
+        #original_hash: fc67562
         wfc: >-
-          Ovaj odbor odgovoran je za upravljanje cjelokupnim financijama WCA,
-          uključujući proračun, izvješćivanje, analizu, knjigovodstvo i porezne
+          WCA Financijski odbor (WFC) upravlja cjelokupnim financijama WCA,
+          uključujući proračune, izvješćivanje, analizu, knjigovodstvo i porezne
           prijave. Oni također upravljaju najvećim izvorom prihoda WCA, WCA Dues
           System, zajedno s raznim programima financiranja koji pružaju potporu
           lokalnim zajednicama na različitim stupnjevima razvoja, uključujući
           financiranje putovanja, financiranje opreme i podršku regionalnim
           organizacijama.
-        #original_hash: f2a0140
+        #original_hash: 88a00fa
         wmt: >-
-          Ovaj tim je odgovoran za razvoj i upravljanje WCA brendom, traženje
-          sponzorstava, podršku distribuciji WCA opreme za natjecanje i
-          marketing WCA robe.
-        #original_hash: e0dbf86
+          WCA Marketinški tim (WMT) razvija i upravlja WCA brendom, traženje
+          sponzorstava i marketinga WCA robe.
+        #original_hash: fcaa701
         wmct: >-
-          WCA Tim za velika natjecanja nadzire koordinaciju i napredak WCA
-          kontinentalnih i svjetskih prvenstava razvijanjem smjernica i
+          WCA Tim za velika natjecanja (WMCT) nadzire koordinaciju i napredak
+          WCA kontinentalnih i svjetskih prvenstava razvijanjem smjernica i
           strateških planova, upravljanjem odabirom grada domaćina, podržavanjem
           organizacijskih timova i osiguravanjem dosljednih iskustava na
           prvenstvu.
-        #original_hash: 0171b3b
+        #original_hash: 94e9ad1
         wqac: >-
-          Ovaj odbor ima ulogu poduprijeti i promovirati kontinuirano
+          WCA Odbor za osiguravanje kvalitete podupire i promovira kontinuirano
           poboljšanje kvalitete unutar WCA, kao i primjenu standarda kvalitete
           diljem svijeta kako bi se osigurala dosljedna visoka kvaliteta
           procesa, WCA osoblja, regionalnih organizacija, organizatora
           natjecanja i osoblja natjecanja.
-        #original_hash: a1260bb
+        #original_hash: 355babe
         wrc: >-
-          WRC rješava sva pitanja koja se odnose na primjenu, poboljšanje i
-          razvoj WCA pravilnika. Oni podržavaju WCA delegate u svim
-          proceduralnim stvarima koje se događaju na natjecanjima i odlučuju o
-          neriješenim i otkrivenim incidentima.
-        #original_hash: 7bc588b
+          WCA Odbor za pravilnik (WRC) rješava sva pitanja koja se odnose na
+          primjenu, poboljšanje i razvoj WCA pravilnika. Oni podržavaju WCA
+          delegate u svim proceduralnim stvarima koje se događaju na
+          natjecanjima i odlučuju o neriješenim i otkrivenim incidentima.
+        #original_hash: 7ca3e6f
         wrt: >-
-          WRT je odgovoran za upravljanje svim podacima u bazama podataka WCA,
-          što je najvažnije o rezultatima natjecanja i podacima o osobama.
-        #original_hash: ec961e4
+          WCA Tim za rezultate (WRT) upravljanja svim podacima u bazama podataka
+          WCA, uključujući rezultatima natjecanja i osobnim podacima.
+        #original_hash: f905744
         wst: >-
           Ovaj tim je odgovoran za upravljanje WCA softverom (web stranica,
           scrambleovi, radne knjige, administratorski alati).
-        #original_hash: 8f888d6
+        #original_hash: 638652c
         wsot: >-
-          Ovaj tim ima ulogu nadgledati i podržati priznavanje WCA kao
-          međunarodne sportske organizacije.
-        #original_hash: 9f45bfa
+          WCA Tim sportske organizacije (WSOT) nadzire i podržava priznavanje
+          WCA kao međunarodne sportske organizacije.
+        #original_hash: 4882d55
         wapc: >-
-          WCA Odbor za žalbe (WAC) odgovoran je za pregled i rješavanje žalbi u
-          vezi s odlukama koje je donijelo drugo osoblje WCA. WAC osigurava
-          neovisan i nepristran proces revizije kako bi osigurao da su odluke
-          pravedne, razumne i u skladu s WCA politikama i propisima.
+          WCA Tim za prigovore (WAC) pregledava i rješava žalbe u vezi s
+          odlukama koje je donijelo drugo osoblje WCA. WAC osigurava neovisan i
+          nepristran proces revizije kako bi osigurao da su odluke pravedne,
+          razumne i u skladu s WCA politikama i propisima.
     contacts:
       #original_hash: 4ef2aad
       title: WCA Kontakt forma
@@ -1730,7 +1728,7 @@ hr:
   users:
     update_locale:
       #original_hash: 4cde9bc
-      success: Ažurirano lokalno
+      success: Ažurirana lokalizacija.
       #original_hash: dcc2f49
       failure: Nemoguće ažuriranje profila.
       #original_hash: c29870c
@@ -1926,8 +1924,8 @@ hr:
       unconfirmed_email: 'E-mail adresa (%{email}) ovog korisničkog računa nije potvrđena.'
       #original_hash: 7069007
       confirm_new_email: >-
-        Mijenjanje e-mail adrese zahtjeva potvrdu nove adrese prije nego bude u
-        efektu.
+        Mijenjanje e-mail adrese zahtjeva potvrdu nove adrese prije nego se
+        odradi promjena.
       #original_hash: ff43ee2
       pending_mail_confirmation: 'Ovaj korisnički račun čeka odobrenje nove e-mail adrese %{email}.'
       #original_hash: 0340b0b
@@ -2286,6 +2284,17 @@ hr:
           multiple_registrations: Registrirao/la si se dva ili više puta
           #original_hash: 70b1e2c
           competition_canceled: Natjecanje se otkazalo
+      formerly_banned:
+        #original_hash: f2c70a9
+        ban_count: >-
+          Natjecatelju je izdana zabrana %{ban_count} put(a), sa sljedećim
+          opsegom i razlozima:
+        #original_hash: 67e08fe
+        scope_and_reason: 'Opseg: %{ban_scope}, Razlog: %{ban_reason}'
+        #original_hash: 2a246da
+        wic_message: >-
+          Ako imate bilo kakvih pitanja u vezi s disciplinskom poviješću
+          natjecatelja, obratite se WIC odgovorom na ovu e-poruku.
     list:
       #original_hash: 8b7631c
       title: 'Registracije za %{comp}'
@@ -2326,7 +2335,7 @@ hr:
       total: Ukupno
     new_registration:
       #original_hash: 8b9f726
-      title: 'Registriran/na za %{comp}'
+      title: 'Registriraj se za %{comp}'
     #original_hash: 7cae988
     registered_with_account_html: >-
       Ova osoba se registrirala s korisničkim računom. Možeš urediti njihove
@@ -2335,8 +2344,6 @@ hr:
     sign_in: Prijavi se
     #original_hash: 5d45a00
     profile: profil
-    #original_hash: 801b3e9
-    panel_title: Detalji registracije
     #original_hash: c0063c3
     register: Registriraj se!
     #original_hash: f484f15
@@ -2369,8 +2376,6 @@ hr:
     please_sign_in_html: >-
       %{sign_in} kako bi se registrirao/la za %{comp}. Ukoliko još nemaš WCA
       korisnički račun, napravi ga %{here}.
-    #original_hash: 89b4e7f
-    greeting: 'Pozdrav, %{name}!'
     #original_hash: 322f646
     please_fix_profile_html: >-
       Kako bi se registrirao/la za %{comp}, moraš popraviti slijedeće probleme
@@ -2386,24 +2391,6 @@ hr:
       Limit natjecatelja za ovo natjecanje je %{competitor_limit} i moguće je da
       se dostigao. Ako se prijavite, vaša će se registracija staviti na listu
       čekanja. Možda neće biti odobrena osim ako se ne oslobodi mjesto.
-    #original_hash: 855ca9c
-    can_register: 'Ispod se možeš registrirati za %{comp}.'
-    #original_hash: 4167ed7
-    check_registration_information: >-
-      Provjeri informacije o registraciji kako bi saznao/la trebaš li napraviti
-      još nešto, primjerice, platiti kotizaciju unaprijed.
-    #original_hash: 88ac7c3
-    have_registered: >-
-      Registrirao/la si se za %{comp}. Informacije o registraciji možeš vidjeti
-      ispod.
-    #original_hash: 3c9141f
-    contact_organizer: Kontaktiraj organizatora ukoliko želiš napraviti promjenu.
-    #original_hash: 59354fd
-    waiting_list: >-
-      Tvoja registracija je u tijeku. Za prihvaćanje iste, možda trebaš platiti
-      kotizaciju unaprijed. Provjeri web-stranicu natjecanja za detalje.
-    #original_hash: 58b1a3c
-    accepted: Tvoja registracija je prihvaćena!
     #original_hash: bcd7d70
     entry_fees_fully_paid: 'Platio/la si %{paid}, što pokriva troškove kotizacije.'
     #original_hash: 2e5d1b9
@@ -2420,8 +2407,6 @@ hr:
         #original_hash: 1cc5991
         refund_amount: Vrati novac
     payment_form:
-      #original_hash: 4de825f
-      title: Kotizacije
       #original_hash: 8897f02
       payment_successful: >-
         Tvoje plaćanje je uspješno i registracija bi trebala prikazivati da je
@@ -2725,10 +2710,10 @@ hr:
       #original_hash: 94a2fc8
       past_competitions: Prošla natjecanja
       #original_hash: ec7e697
-      bookmarked_title: Označena natjecanja
+      bookmarked_title: Spremljena natjecanja
       #original_hash: e5665fb
       bookmarked_explanation: >-
-        Natjecanja koja si označio/la na WCA stranici. Poslat ćemo ti e-mail 24
+        Natjecanja koja si spremio/la na WCA stranici. Poslat ćemo ti email 24
         sata prije nego se registracije otvore.
     competition_info:
       pdf:
@@ -2975,9 +2960,9 @@ hr:
       #original_hash: 2444261
       regional_average_record: '%{event_name} %{result} (prosječno)'
       #original_hash: 8eda7ac
-      bookmark: Označi ovo natjecanje
+      bookmark: Spremi ovo natjecanje
       #original_hash: 4dfea97
-      is_bookmarked: Označio/la si ovo natjecanje
+      is_bookmarked: Spremio/la si ovo natjecanje
       #original_hash: 74598a7
       number_of_bookmarks: Broj puta koliko je ovo natjecanje označeno
     index:
@@ -3786,6 +3771,10 @@ hr:
         will_open_countdown: >-
           Registracija će se otvoriti za %{minutes} minuta %{seconds} sekundi.
           Ova stranica će se automatski osvježiti kada se otvori registracija.
+        #original_hash: 604d27a
+        will_close_countdown: >-
+          Registracije se zatvaraju za %{minutes} minuta %{seconds} sekundi. Ova
+          stranica će se automatski osvježiti kada se registracije zatvore.
         panel:
           approval:
             #original_hash: 8cc047a
@@ -3796,7 +3785,7 @@ hr:
             #original_hash: 4930c06
             title: Podaci o plaćanju
             #original_hash: 0d084a5
-            description: Unesite podatke o naplati
+            description: Unesi podatke o naplati
           competing:
             #original_hash: d672995
             title: Registriraj se
@@ -3806,7 +3795,7 @@ hr:
             #original_hash: 09a428f
             title: Zahtjevi
             #original_hash: 46f4145
-            description: Prihvatite uvjete natjecanja
+            description: Prihvati uvjete natjecanja
         #original_hash: a38d5fa
         success: 'Registrirani ste za %{comp_name}'
         #original_hash: affea61

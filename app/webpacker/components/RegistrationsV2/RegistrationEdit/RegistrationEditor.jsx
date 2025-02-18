@@ -17,7 +17,7 @@ import updateRegistration from '../api/registration/patch/update_registration';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { setMessage } from '../Register/RegistrationMessage';
 import Loading from '../../Requests/Loading';
-import { EventSelector } from '../../wca/EventSelector';
+import EventSelector from '../../wca/EventSelector';
 import Refunds from './Refunds';
 import { editPersonUrl } from '../../../lib/requests/routes.js.erb';
 import { useConfirm } from '../../../lib/providers/ConfirmProvider';
@@ -156,7 +156,8 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
         updateRegistrationMutation(body);
       }).catch(() => {});
     }
-  }, [hasChanges,
+  }, [
+    hasChanges,
     confirm,
     commentIsValid,
     eventsAreValid,
@@ -174,20 +175,15 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
     comment,
     adminComment,
     status,
-    guests]);
+    guests,
+  ]);
 
-  const handleEventSelection = ({ type, eventId }) => {
-    if (type === 'select_all_events') {
-      setSelectedEvents(competitionInfo.event_ids);
-    } else if (type === 'clear_events') {
-      setSelectedEvents([]);
-    } else if (type === 'toggle_event') {
-      const index = selectedEvents.indexOf(eventId);
-      if (index === -1) {
-        setSelectedEvents([...selectedEvents, eventId]);
-      } else {
-        setSelectedEvents(selectedEvents.toSpliced(index, 1));
-      }
+  const onEventClick = (eventId) => {
+    const index = selectedEvents.indexOf(eventId);
+    if (index === -1) {
+      setSelectedEvents([...selectedEvents, eventId]);
+    } else {
+      setSelectedEvents(selectedEvents.toSpliced(index, 1));
     }
   };
 
@@ -222,10 +218,12 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
         <Header>{competitor.name}</Header>
         <Form.Field required error={selectedEvents.length === 0}>
           <EventSelector
-            onEventSelection={handleEventSelection}
+            id="event-selection"
             eventList={competitionInfo.event_ids}
             selectedEvents={selectedEvents}
-            id="event-selection"
+            onEventClick={onEventClick}
+            onAllClick={() => setSelectedEvents(competitionInfo.event_ids)}
+            onClearClick={() => setSelectedEvents([])}
             maxEvents={maxEvents}
             shouldErrorOnEmpty
           />

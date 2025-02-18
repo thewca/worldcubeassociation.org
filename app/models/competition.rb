@@ -371,7 +371,7 @@ class Competition < ApplicationRecord
     if auto_accept_registrations_changed?
       errors.add(:auto_accept_registrations, I18n.t('competitions.errors.auto_accept_accept_paid_pending')) if registrations.pending.with_payments.count > 0
       errors.add(:auto_accept_registrations, I18n.t('competitions.errors.auto_accept_accept_waitlisted')) if
-        registrations.waitlisted.count > 0 && !accepted_full?
+        registrations.waitlisted.count > 0 && !registration_full_and_accepted?
     end
   end
 
@@ -480,8 +480,9 @@ class Competition < ApplicationRecord
     competitor_limit_enabled? && competitor_count >= competitor_limit
   end
 
-  def accepted_full?
-    competitor_limit_enabled? && registrations.competing_status_accepted.count >= competitor_limit
+  def registration_full_and_accepted?
+    competitor_count = registrations.accepted_count
+    competitor_limit_enabled? && competitor_count >= competitor_limit
   end
 
   def number_of_bookmarks
@@ -525,6 +526,7 @@ class Competition < ApplicationRecord
 
   def warnings_for(user)
     warnings = {}
+
     if self.showAtAll
       unless self.announced?
         warnings[:announcement] = I18n.t('competitions.messages.not_announced')
@@ -537,11 +539,6 @@ class Competition < ApplicationRecord
           warnings[:results] = I18n.t('competitions.messages.results_still_processing')
         end
       end
-
-      if self.registration_full? && self.registration_currently_open?
-        warnings[:waiting_list] = registration_full_message
-      end
-
     else
       warnings[:invisible] = I18n.t('competitions.messages.not_visible')
 
@@ -608,10 +605,12 @@ class Competition < ApplicationRecord
     warnings
   end
 
+  # @deprecated Fully transitioned to React. Keeping the method here because the test cases are interesting,
+  #   and I want to "save" them until we can do proper React component testing (signed GB 2025-02-14)
   def registration_full_message
-    if registration_full? && registrations.accepted.count >= competitor_limit
+    if registration_full_and_accepted?
       I18n.t('registrations.registration_full', competitor_limit: competitor_limit)
-    else
+    elsif registration_full?
       I18n.t('registrations.registration_full_include_waiting_list', competitor_limit: competitor_limit)
     end
   end
@@ -1199,8 +1198,8 @@ class Competition < ApplicationRecord
 
   # can registration edits be done right now
   # must be allowed in general, and if the deadline field exists, is it a date and in the future
-  def registration_edits_allowed?
-    self.allow_registration_edits &&
+  def registration_edits_currently_permitted?
+    !started? && self.allow_registration_edits &&
       (!has_event_change_deadline_date? || !event_change_deadline_date.present? || event_change_deadline_date > DateTime.now)
   end
 
@@ -1594,7 +1593,7 @@ class Competition < ApplicationRecord
   end
 
   def started?
-    start_date.present? && start_date < Date.today
+    start_date.present? && start_date <= Date.today
   end
 
   def organizers_or_delegates
@@ -1917,7 +1916,7 @@ class Competition < ApplicationRecord
                information events_per_registration_limit guests_enabled auto_accept_registrations auto_accept_disable_threshold],
       methods: %w[url website short_name city venue_address venue_details latitude_degrees longitude_degrees country_iso2 event_ids registration_currently_open?
                   main_event_id number_of_bookmarks using_payment_integrations? uses_qualification? uses_cutoff? competition_series_ids registration_full?
-                  part_of_competition_series?],
+                  part_of_competition_series? registration_full_and_accepted?],
       include: %w[delegates organizers],
     }
     self.as_json(options)
