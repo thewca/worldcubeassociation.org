@@ -3,6 +3,10 @@ import React, { useEffect } from 'react';
 import { useDispatch, useStore } from '../../../lib/providers/StoreProvider';
 import I18n from '../../../lib/i18n';
 
+/**
+ * You may pass an array of keys - if so, also pass an
+ * array of params of the same length.
+ */
 export const setMessage = (key, type, params) => ({
   payload: {
     key,
@@ -33,12 +37,13 @@ export default function RegistrationMessage() {
   if (!message?.key) return null;
 
   if (Array.isArray(message.key)) {
-    return message.key.map((key) => (
+    return message.key.map((key, index) => (
       <Message
+        key={key}
         positive={message.type === 'positive'}
         negative={message.type === 'negative'}
       >
-        {I18n.t(key, message.params)}
+        {I18n.t(key, (message.params ?? [])[index] ?? {})}
       </Message>
     ));
   }
