@@ -2676,7 +2676,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/codemirror@npm:^5.60.4, @types/codemirror@npm:~5.60.5":
+"@types/codemirror@npm:^5.60.10, @types/codemirror@npm:~5.60.5":
   version: 5.60.15
   resolution: "@types/codemirror@npm:5.60.15"
   dependencies:
@@ -4088,10 +4088,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"codemirror@npm:^5.63.1":
-  version: 5.65.6
-  resolution: "codemirror@npm:5.65.6"
-  checksum: 10c0/4b0f977d6648fbb861f3c2fb1c7461ef21b94000e3a84112d8b28e78c734c30ba7b514624a28a4a5192ae5498da87ab617780e90242c4886562a192dcf4c2d3e
+"codemirror@npm:^5.65.15":
+  version: 5.65.18
+  resolution: "codemirror@npm:5.65.18"
+  checksum: 10c0/806e00c7081f9a5ba6bc59205d0cf5ada273bc977da9967d04a78e94e27cdfbd41a10409fcf74eea4b12eebe1972e05120771780729a8bc04eef14b1ed20ac98
   languageName: node
   linkType: hard
 
@@ -5038,16 +5038,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"easymde@npm:^2.18.0":
-  version: 2.18.0
-  resolution: "easymde@npm:2.18.0"
+"easymde@npm:^2.19.0":
+  version: 2.19.0
+  resolution: "easymde@npm:2.19.0"
   dependencies:
-    "@types/codemirror": "npm:^5.60.4"
+    "@types/codemirror": "npm:^5.60.10"
     "@types/marked": "npm:^4.0.7"
-    codemirror: "npm:^5.63.1"
+    codemirror: "npm:^5.65.15"
     codemirror-spell-checker: "npm:1.1.2"
     marked: "npm:^4.1.0"
-  checksum: 10c0/de9c6a57a7191df5abce56e8414797ef5d7a2e6d68bbd090e5bc0e50dbd3e2edc50fc4a90c16f8cbbe70a3e06b35d84419d0817aebcd31d959b33bc7b201ae6b
+  checksum: 10c0/43e0fb4202e824ba66db4d1aebcd54887888f283644034716b3fce1a491b0640a8c14dbe90c3c0815f5d7c9ff181f0074610e876e468fce42a883d54ad4bf774
   languageName: node
   linkType: hard
 
@@ -10327,7 +10327,7 @@ __metadata:
     css-minimizer-webpack-plugin: "npm:^7.0.0"
     date-fns: "npm:^4.1.0"
     dompurify: "npm:^3.2.4"
-    easymde: "npm:^2.18.0"
+    easymde: "npm:^2.19.0"
     eslint: "npm:^8.57.0"
     eslint-config-airbnb: "npm:^19.0.4"
     eslint-plugin-import: "npm:^2.31.0"
