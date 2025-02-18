@@ -88,10 +88,10 @@ const partitionRegistrations = (registrations) => registrations.reduce(
 );
 
 const getUserName = (registrations, userId) => {
-  const registration = registrations.find(({ user_id }) => user_id === userId);
+  const registration = registrations.find(({ user_id: id }) => id === userId);
   if (!registration) return null;
   return registration.user.name;
-}
+};
 
 const expandableColumns = {
   dob: I18n.t('activerecord.attributes.user.dob'),
@@ -175,7 +175,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
             type: 'negative',
             params: { name: getUserName(registrations, Number(userId)) ?? userId },
           }
-        ))
+        )),
       ));
     },
     onSuccess: async () => {

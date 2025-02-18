@@ -33,7 +33,9 @@ export default function RegistrationMessage() {
 
   if (messages.length === 0) return null;
 
-  return messages.map(({ id, key, type, params }) => (
+  return messages.map(({
+    id, key, type, params,
+  }) => (
     <Message
       key={id}
       style={{ margin: messages.length === 1 ? 0 : undefined }}

@@ -1,5 +1,6 @@
 const messageReducer = (state, { messages, newMessages, toClear }) => {
-  const nextId = state.nextId ?? 0
+  const nextId = state.nextId ?? 0;
+
   // overwrite existing messages
   if (messages) {
     const messagesWithId = messages.map((message, index) => (
@@ -16,7 +17,7 @@ const messageReducer = (state, { messages, newMessages, toClear }) => {
   if (newMessages) {
     const newMessagesWithId = newMessages.map((message, index) => (
       { ...message, id: nextId + index }
-    ))
+    ));
     return {
       ...state,
       messages: [...state.messages, ...newMessagesWithId],
