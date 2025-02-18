@@ -191,7 +191,6 @@ RSpec.describe 'API Registrations' do
 
       patch api_v1_registrations_register_path, params: update_request, headers: headers
 
-
       expect(response.status).to eq(200)
 
       expect(auto_accept_comp.registrations.competing_status_accepted.count).to eq(5)
