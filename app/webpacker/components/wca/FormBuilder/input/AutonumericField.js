@@ -79,8 +79,16 @@ export default function AutonumericField({
   useEffect(() => {
     if (!autoNumeric) return;
 
+    // When setting values, we don't know whether this hook or the `options` hook below
+    // triggers first. Unfortunately for us, AN throws hard errors when setting some value
+    // greater than the defined max, so we have to manually work around the situation
+    // where the `max` option updates first, by just capping the value.
+    if (autoNumericOptions.maximumValue) {
+      autoNumeric.set(Math.min(autoNumericValue, autoNumericOptions.maximumValue));
+    }
+
     autoNumeric.update(autoNumericOptions);
-  }, [autoNumeric, autoNumericOptions]);
+  }, [autoNumeric, autoNumericOptions, autoNumericValue]);
 
   const onChangeAutonumeric = (event) => {
     onChange(event, { value: getCurrentUiValue() });
