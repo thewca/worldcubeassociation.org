@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   Button, Header, Message, Table,
 } from 'semantic-ui-react';
@@ -77,6 +77,14 @@ function RefundRow({
   refund, refundMutation, isMutating, userId, competitionId,
 }) {
   const [amountToRefund, setAmountToRefund] = useInputState(refund.ruby_amount_refundable);
+
+  // React state persists across rerenders, so `amountToRefund` would keep old values
+  // which is problematic when refunding more than 50% of the original
+  // (because then the input exceeds the new max, leading to a whole new tragedy with AN)
+  useEffect(() => {
+    setAmountToRefund((prevAmount) => Math.min(prevAmount, refund.ruby_amount_refundable));
+  }, [refund.ruby_amount_refundable, setAmountToRefund]);
+
   const confirm = useConfirm();
 
   const attemptRefund = () => confirm({
