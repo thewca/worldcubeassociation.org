@@ -8,7 +8,9 @@ import React, {
 import {
   Button,
   Form,
-  Header, List,
+  Header,
+  Icon,
+  List,
   Message,
   Segment,
 } from 'semantic-ui-react';
@@ -19,7 +21,7 @@ import { setMessage } from '../Register/RegistrationMessage';
 import Loading from '../../Requests/Loading';
 import EventSelector from '../../wca/EventSelector';
 import Refunds from './Refunds';
-import { editPersonUrl } from '../../../lib/requests/routes.js.erb';
+import { personUrl, editPersonUrl } from '../../../lib/requests/routes.js.erb';
 import { useConfirm } from '../../../lib/providers/ConfirmProvider';
 import I18n from '../../../lib/i18n';
 import RegistrationHistory from './RegistrationHistory';
@@ -113,6 +115,21 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
   const maxEvents = competitionInfo.events_per_registration_limit ?? Infinity;
   const eventsAreValid = selectedEvents.length > 0 && selectedEvents.length <= maxEvents;
 
+  const formatBody = (body) => {
+    const simplifiedBody = {
+      events: body.competing.event_ids,
+      status: body.competing.status,
+      comment: body.competing.comment,
+      admin_comment: body.competing.adminComment,
+      guests: body.guests,
+    };
+
+    return Object.entries(simplifiedBody)
+      .filter(([_, value]) => value !== null && value !== undefined)
+      .map(([key, value]) => `${key}: ${value}`)
+      .join('\n');
+  };
+
   const handleRegisterClick = useCallback(() => {
     if (!hasChanges) {
       dispatch(setMessage('competitions.registration_v2.update.no_changes', 'basic'));
@@ -128,7 +145,6 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
         'negative',
       ));
     } else {
-      dispatch(setMessage('competitions.registration_v2.update.being_updated', 'positive'));
       // Only send changed values
       const body = {
         user_id: competitor.id,
@@ -151,9 +167,17 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
         body.guests = guests;
       }
       confirm({
-        content: I18n.t('competitions.registration_v2.update.update_confirm'),
+        content: (
+          <>
+            <pre>
+              {I18n.t('competitions.registration_v2.update.organizer_update_confirm') + '\n'}
+              {formatBody(body)}
+            </pre>
+          </>
+        ),
       }).then(() => {
         updateRegistrationMutation(body);
+        dispatch(setMessage('competitions.registration_v2.update.being_updated', 'positive'));
       }).catch(() => {});
     }
   }, [
@@ -203,7 +227,7 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
               // i18n-tasks-use t('registrations.registered_with_account_html')
               i18nKey="registrations.registered_with_account_html"
               options={{
-                here: `<a href=${editPersonUrl(competitor.id)}>here</a>`,
+                here: `<a href=${kditPersonUrl(competitor.id)}>here</a>`,
               }}
             />
           </Message>
@@ -215,7 +239,28 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
             <strong>Changes should only be made in extraordinary circumstances</strong>
           </Message>
         )}
-        <Header>{competitor.name}</Header>
+        <Header>
+          {/* The onClick functions are used to stop semUI rendering enormous icons which tell the user that links will open in a new tab*/}
+          {competitor.name + " "}
+
+          (<a href={personUrl(competitor.wca_id)} onClick={(e) => {
+            e.preventDefault();
+            window.open(personUrl(competitor.wca_id), "_blank", "noopener,noreferrer");
+          }}>{competitor.wca_id}</a>){" "}
+
+          <a
+            href={editPersonUrl(competitor.id)}
+            aria-label="Edit"
+            role="menuitem"
+            className="edit-link"
+            onClick={(e) => {
+              e.preventDefault();
+              window.open(personUrl(competitor.wca_id), "_blank", "noopener,noreferrer");
+            }}
+          ><Icon name="edit" /></a>
+
+        </Header>
+
         <Form.Field required error={selectedEvents.length === 0}>
           <EventSelector
             id="event-selection"
