@@ -87,6 +87,12 @@ const partitionRegistrations = (registrations) => registrations.reduce(
   },
 );
 
+const getUserName = (registrations, userId) => {
+  const registration = registrations.find(({ user_id }) => user_id === userId);
+  if (!registration) return null;
+  return registration.user.name;
+}
+
 const expandableColumns = {
   dob: I18n.t('activerecord.attributes.user.dob'),
   region: I18n.t('activerecord.attributes.user.region'),
@@ -165,6 +171,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
       dispatchStore(setMessage(
         Object.values(error).map((err) => `competitions.registration_v2.errors.${err}`),
         'negative',
+        Object.keys(error).map((userId) => ({ name: getUserName(registrations, Number(userId)) ?? userId })),
       ));
     },
     onSuccess: async () => {

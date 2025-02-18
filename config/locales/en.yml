@@ -1909,7 +1909,7 @@ en:
         -2003: "You don't have the permissions to complete this action"
         -2004: "You are not allowed to register, as the organizers have rejected your registration. Please contact them if you think there has been a mistake."
         -3000: "Registration does not exist"
-        -3001: "You have already registered for another Competition in the series"
+        -3001: "%{name} has already registered for another Competition in the series."
         -4000: "The Request contains invalid data"
         -4001: "The event edit deadline has passed"
         -4002: "The number of guests are over the allowed limit"
