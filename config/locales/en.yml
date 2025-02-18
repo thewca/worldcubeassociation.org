@@ -1531,7 +1531,6 @@ en:
       delegates_loading: "Waiting to finish loading all Delegates..."
       no_delegates_found: "No Delegates found."
       show_cancelled: "Show cancelled competitions"
-      show_registration_status: "Show registration status icon"
       use_admin_view: "Use admin view"
       #context: titles for the competitions list
       titles:
@@ -1551,7 +1550,6 @@ en:
           ended: "Ended %{days} ago"
           in_progress: "In progress!"
           posted: "Results are posted!"
-          starts_in: "Starts in %{days}"
           announced_on: "Announced on %{announcement_date}"
         #context: the "search" button
         search: "Name or city"

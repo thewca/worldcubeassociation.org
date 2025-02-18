@@ -25,7 +25,7 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
 
     competitions = competitions_scope.search(params[:q], params: params)
 
-    serial_methods = ["short_display_name", "city", "country_iso2", "event_ids", "latitude_degrees", "longitude_degrees", "announced_at"]
+    serial_methods = ["short_display_name", "city", "country_iso2", "event_ids", "latitude_degrees", "longitude_degrees", "announced_at", "cached_registration_status"]
     serial_includes = {}
 
     serial_includes["delegates"] = { only: ["id", "name"], methods: [], include: ["avatar"] } if admin_mode
@@ -132,16 +132,6 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
   def registrations
     competition = competition_from_params
     render json: competition.registrations.accepted.includes(:events)
-  end
-
-  def registration_data
-    competition_ids = params.require(:ids)
-
-    data = CacheAccess.hydrate_entities('comp-registration-data', competition_ids, expires_in: 5.minutes) do |uncached_ids|
-      Competition.find(uncached_ids).map { |comp| { id: comp.id, registration_status: comp.registration_status } }
-    end
-
-    render json: data
   end
 
   def show_wcif

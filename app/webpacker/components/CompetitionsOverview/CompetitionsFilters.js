@@ -17,6 +17,7 @@ import EventSelector from '../wca/EventSelector';
 function CompetitionsFilters({
   filterState,
   dispatchFilter,
+  displayMode,
   shouldShowAdminDetails,
   canViewAdminDetails,
 }) {
@@ -33,17 +34,17 @@ function CompetitionsFilters({
         />
       </Form.Field>
 
-      <Form.Group>
-        <Form.Field width={8}>
+      <Form.Group widths="equal">
+        <Form.Field>
           <RegionSelector region={filterState.region} dispatchFilter={dispatchFilter} />
         </Form.Field>
-        <Form.Field width={8}>
+        <Form.Field>
           <SearchBar text={filterState.search} dispatchFilter={dispatchFilter} />
         </Form.Field>
       </Form.Group>
 
       {shouldShowAdminDetails && (
-        <Form.Field width={16}>
+        <Form.Field>
           <DelegateSelector delegateId={filterState.delegate} dispatchFilter={dispatchFilter} />
         </Form.Field>
       )}
@@ -52,12 +53,20 @@ function CompetitionsFilters({
         <TimeOrderButtonGroup filterState={filterState} dispatchFilter={dispatchFilter} />
       </Form.Field>
 
+      <Form.Group inline>
+        <CompDisplayCheckboxes
+          shouldIncludeCancelled={filterState.shouldIncludeCancelled}
+          dispatchFilter={dispatchFilter}
+          shouldShowAdminDetails={shouldShowAdminDetails}
+          canViewAdminDetails={canViewAdminDetails}
+          displayMode={displayMode}
+        />
+      </Form.Group>
+
       {canViewAdminDetails && shouldShowAdminDetails && (
-        <Form.Group>
-          <Form.Field>
-            <AdminStatusButtonGroup filterState={filterState} dispatchFilter={dispatchFilter} />
-          </Form.Field>
-        </Form.Group>
+        <Form.Field>
+          <AdminStatusButtonGroup filterState={filterState} dispatchFilter={dispatchFilter} />
+        </Form.Field>
       )}
     </Form>
   );
@@ -352,8 +361,6 @@ function CustomDateSelector({ filterState, dispatchFilter }) {
 export function CompDisplayCheckboxes({
   shouldIncludeCancelled,
   dispatchFilter,
-  shouldShowRegStatus,
-  setShouldShowRegStatus,
   shouldShowAdminDetails,
   canViewAdminDetails,
   displayMode,
@@ -373,32 +380,19 @@ export function CompDisplayCheckboxes({
       </div>
 
       {
-        displayMode === 'list' && (
-          <>
-            <div id="registration-status" className="registration-status-selector">
-              <Form.Checkbox
-                label={I18n.t('competitions.index.show_registration_status')}
-                name="show_registration_status"
-                id="show_registration_status"
-                checked={shouldShowRegStatus}
-                onChange={() => setShouldShowRegStatus(!shouldShowRegStatus)}
-              />
-            </div>
-            {canViewAdminDetails && (
-              <div id="admin-data" className="admin-data-selector">
-                <Form.Checkbox
-                  toggle
-                  label={I18n.t('competitions.index.use_admin_view')}
-                  name="show_admin_data"
-                  id="show_admin_data"
-                  checked={shouldShowAdminDetails}
-                  onChange={() => dispatchFilter(
-                    { shouldShowAdminDetails: !shouldShowAdminDetails },
-                  )}
-                />
-              </div>
-            )}
-          </>
+        displayMode === 'list' && canViewAdminDetails && (
+          <div id="admin-data" className="admin-data-selector">
+            <Form.Checkbox
+              toggle
+              label={I18n.t('competitions.index.use_admin_view')}
+              name="show_admin_data"
+              id="show_admin_data"
+              checked={shouldShowAdminDetails}
+              onChange={() => dispatchFilter(
+                { shouldShowAdminDetails: !shouldShowAdminDetails },
+              )}
+            />
+          </div>
         )
       }
     </>

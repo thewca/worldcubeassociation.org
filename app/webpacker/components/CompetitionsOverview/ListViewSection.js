@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Icon, Popup, Loader, Table, Flag, Label, Header, Container, Grid, List, Image, Button,
+  Icon, Popup, Table, Flag, Label, Header, Container, Grid, List, Image, Button,
 } from 'semantic-ui-react';
 
 import { BarLoader } from 'react-spinners';
@@ -27,11 +27,9 @@ import { dateRange, toRelativeOptions } from '../../lib/utils/dates';
 function ListViewSection({
   competitions,
   title,
-  shouldShowRegStatus,
   shouldShowAdminDetails,
   selectedDelegate,
   isLoading,
-  regStatusLoading,
   hasMoreCompsToLoad,
   isSortedByAnnouncement = false,
 }) {
@@ -51,9 +49,7 @@ function ListViewSection({
           competitions={competitions}
           isLoading={isLoading}
           hasMoreCompsToLoad={hasMoreCompsToLoad}
-          shouldShowRegStatus={shouldShowRegStatus}
           selectedDelegate={selectedDelegate}
-          regStatusLoading={regStatusLoading}
           isSortedByAnnouncement={isSortedByAnnouncement}
         />
       ) : (
@@ -61,8 +57,6 @@ function ListViewSection({
           competitions={competitions}
           isLoading={isLoading}
           hasMoreCompsToLoad={hasMoreCompsToLoad}
-          shouldShowRegStatus={shouldShowRegStatus}
-          regStatusLoading={regStatusLoading}
           isSortedByAnnouncement={isSortedByAnnouncement}
         />
       )}
@@ -75,8 +69,6 @@ function ResponsiveCompetitionsTables({
   competitions,
   isLoading,
   hasMoreCompsToLoad,
-  shouldShowRegStatus,
-  regStatusLoading,
   isSortedByAnnouncement,
 }) {
   const noCompetitions = !competitions || competitions.length === 0;
@@ -93,8 +85,6 @@ function ResponsiveCompetitionsTables({
         <CompetitionsTable
           competitions={competitions}
           isLoading={isLoading}
-          shouldShowRegStatus={shouldShowRegStatus}
-          regStatusLoading={regStatusLoading}
           isSortedByAnnouncement={isSortedByAnnouncement}
         />
       </Grid.Row>
@@ -102,8 +92,6 @@ function ResponsiveCompetitionsTables({
         <CompetitionsTabletTable
           competitions={competitions}
           isLoading={isLoading}
-          shouldShowRegStatus={shouldShowRegStatus}
-          regStatusLoading={regStatusLoading}
           isSortedByAnnouncement={isSortedByAnnouncement}
         />
       </Grid.Row>
@@ -111,8 +99,6 @@ function ResponsiveCompetitionsTables({
         <CompetitionsMobileTable
           competitions={competitions}
           isLoading={isLoading}
-          shouldShowRegStatus={shouldShowRegStatus}
-          regStatusLoading={regStatusLoading}
           isSortedByAnnouncement={isSortedByAnnouncement}
         />
       </Grid.Row>
@@ -122,8 +108,6 @@ function ResponsiveCompetitionsTables({
 
 export function CompetitionsTable({
   competitions,
-  shouldShowRegStatus,
-  regStatusLoading,
   isSortedByAnnouncement = false,
 }) {
   return (
@@ -150,9 +134,7 @@ export function CompetitionsTable({
               <Table.Cell collapsing>
                 <StatusIcon
                   comp={comp}
-                  shouldShowRegStatus={shouldShowRegStatus}
                   isSortedByAnnouncement={isSortedByAnnouncement}
-                  regStatusLoading={regStatusLoading}
                 />
               </Table.Cell>
               <Table.Cell textAlign="right" width={2}>
@@ -179,8 +161,6 @@ export function CompetitionsTable({
 
 export function CompetitionsTabletTable({
   competitions,
-  shouldShowRegStatus,
-  regStatusLoading,
   isSortedByAnnouncement = false,
 }) {
   return (
@@ -206,9 +186,7 @@ export function CompetitionsTabletTable({
               <Table.Cell collapsing>
                 <StatusIcon
                   comp={comp}
-                  shouldShowRegStatus={shouldShowRegStatus}
                   isSortedByAnnouncement={isSortedByAnnouncement}
-                  regStatusLoading={regStatusLoading}
                 />
               </Table.Cell>
               <Table.Cell textAlign="right" width={3}>
@@ -235,8 +213,6 @@ export function CompetitionsTabletTable({
 
 export function CompetitionsMobileTable({
   competitions,
-  shouldShowRegStatus,
-  regStatusLoading,
   isSortedByAnnouncement = false,
 }) {
   return (
@@ -255,9 +231,7 @@ export function CompetitionsMobileTable({
                 <Label ribbon="right" size="small">
                   <StatusIcon
                     comp={comp}
-                    shouldShowRegStatus={shouldShowRegStatus}
                     isSortedByAnnouncement={isSortedByAnnouncement}
-                    regStatusLoading={regStatusLoading}
                   />
                   {dateRange(comp.start_date, comp.end_date)}
                 </Label>
@@ -290,9 +264,7 @@ function AdminCompetitionsTable({
   competitions,
   isLoading,
   hasMoreCompsToLoad,
-  shouldShowRegStatus,
   selectedDelegate,
-  regStatusLoading,
   isSortedByAnnouncement,
 }) {
   const noCompetitions = !competitions || competitions.length === 0;
@@ -335,9 +307,7 @@ function AdminCompetitionsTable({
                 <Table.Cell collapsing>
                   <StatusIcon
                     comp={comp}
-                    shouldShowRegStatus={shouldShowRegStatus}
                     isSortedByAnnouncement={isSortedByAnnouncement}
-                    regStatusLoading={regStatusLoading}
                   />
                 </Table.Cell>
                 <Table.Cell width={4}>
@@ -435,15 +405,8 @@ function ConditionalYearHeader({
   }
 }
 
-function RegistrationStatus({ comp, isLoading }) {
-  // It is important that we check both conditions, because the query hook
-  //   uses a `keepPreviousData` trick that holds existing data in-memory while
-  //   also executing the query for the next batch of rows in the background.
-  if (isLoading && !comp.registration_status) {
-    return (<Loader active inline size="mini" />);
-  }
-
-  if (comp.registration_status === 'not_yet_opened') {
+function RegistrationStatus({ comp }) {
+  if (comp.cached_registration_status === 'not_yet_opened') {
     return (
       <Popup
         trigger={<Icon name="clock" color="blue" />}
@@ -463,7 +426,7 @@ function RegistrationStatus({ comp, isLoading }) {
     );
   }
 
-  if (comp.registration_status === 'past') {
+  if (comp.cached_registration_status === 'past') {
     return (
       <Popup
         trigger={<Icon name="user times" color="red" />}
@@ -483,7 +446,7 @@ function RegistrationStatus({ comp, isLoading }) {
     );
   }
 
-  if (comp.registration_status === 'full') {
+  if (comp.cached_registration_status === 'full') {
     return (
       <Popup
         trigger={<Icon className="user clock" color="orange" />}
@@ -494,7 +457,7 @@ function RegistrationStatus({ comp, isLoading }) {
     );
   }
 
-  if (comp.registration_status === 'open') {
+  if (comp.cached_registration_status === 'open') {
     return (
       <Popup
         trigger={<Icon name="user plus" color="green" />}
@@ -512,9 +475,7 @@ function RegistrationStatus({ comp, isLoading }) {
 
 function StatusIcon({
   comp,
-  shouldShowRegStatus,
   isSortedByAnnouncement,
-  regStatusLoading,
 }) {
   let tooltipInfo = '';
   let iconClass = '';
@@ -530,8 +491,6 @@ function StatusIcon({
   } else if (isInProgress(comp)) {
     tooltipInfo = I18n.t('competitions.index.tooltips.hourglass.in_progress');
     iconClass = 'hourglass half';
-  } else if (shouldShowRegStatus) {
-    return <RegistrationStatus comp={comp} isLoading={regStatusLoading} />;
   } else if (isSortedByAnnouncement) {
     const announcedAtLuxon = DateTime.fromISO(comp.announced_at);
     const announcedAtFormatted = announcedAtLuxon.toLocaleString(DateTime.DATETIME_MED);
@@ -539,8 +498,7 @@ function StatusIcon({
     tooltipInfo = I18n.t('competitions.index.tooltips.hourglass.announced_on', { announcement_date: announcedAtFormatted });
     iconClass = 'hourglass start';
   } else {
-    tooltipInfo = I18n.t('competitions.index.tooltips.hourglass.starts_in', { days: I18n.t('common.days', { count: dayDifferenceFromToday(comp.start_date) }) });
-    iconClass = 'hourglass start';
+    return <RegistrationStatus comp={comp} />;
   }
 
   return (

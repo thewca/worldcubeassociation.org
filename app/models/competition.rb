@@ -1016,6 +1016,12 @@ class Competition < ApplicationRecord
     end
   end
 
+  def cached_registration_status
+    Rails.cache.fetch(["comp-registration-status", self.id], expires_in: 5.minutes) do
+      self.registration_status
+    end
+  end
+
   def any_registrations?
     self.registrations.any?
   end
