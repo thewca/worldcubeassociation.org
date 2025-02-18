@@ -98,7 +98,7 @@ eu:
     #original_hash: 29d5411
     333bf: 3x3x3 Itsututa
     #original_hash: 0a5e7bf
-    333fm: 3x3x3 Ahalik eta Mugimendu Gutxien
+    333fm: 3x3x3 Mugimendu Gutxien
     #original_hash: 31ed23f
     333oh: 3x3x3 Esku batekin
     #original_hash: be41d70
@@ -1469,8 +1469,8 @@ eu:
         #original_hash: f2a0140
         wmt: >-
           Talde honen ardura WCA Marka garatu eta kudeatzea, babesleak bilatzea,
-          WCAko lehiaketetarako ekipamendua banatzeko laguntza ematea eta WCA
-          merchandising-a merkaturatzea da.
+          WCAko lehiaketetarako ekipamendua banatzeko laguntza ematea eta WCAko
+          merkantzia merkaturatzea da.
         #original_hash: e0dbf86
         wmct: >-
           WCAko Txapelketa Handien Taldeak WCAko txapelketa kontinental eta
@@ -1702,13 +1702,13 @@ eu:
         dituzu? Zoaz hona %{wca_live_link}!
     merchandise:
       #original_hash: 698cfc8
-      title: Merchandising
+      title: Merkantzia
       #original_hash: 6403f2b
       ad_new: Berria
       #original_hash: 9ad68ce
       text_html: >-
-        Begira ezazu gure merchandising ofizial berria, elastikoetatik
-        sudaderetara hedatzen den arropa sorta duena.
+        Begira ezazu gure merkantzia ofizial berria, elastikoetatik sudaderetara
+        hedatzen den arropa sorta duena.
       #original_hash: b0fc6c4
       link_title: Dendaren esteka
     records:
@@ -5561,9 +5561,9 @@ eu:
       title: Gertutasun politika
       #original_hash: f5eeb95
       content1: >-
-        WCAko lehiaketak beste edozein lehiaketatik 10km edo 5 egunetara badago
+        WCAko lehiaketa beste edozein lehiaketatik 10km edo 5 egunetara badago
         onartuko da. WCATk proposatutako lehiaketa batek aurreko baldintzak
-        betetzen ez baditu aztertu beharko luke bereziki. Horrelako lehiaketa
+        betetzen ez baditu aztertu beharko du bereziki. Horrelako lehiaketa
         baterako onarpena eskatzen duen Ordezkariak azalpen gehiago eman beharko
         ditu lehiaketa zergatik onartu beharko litzatekeen buruzkoak. Honelako
         lehiaketa bat onartua izatea babesten duten argudioak honakoak litezke:
@@ -5574,15 +5574,15 @@ eu:
         '2': Bi lehiaketak eskualde ezberdinetan gauzatzen dira.
       #original_hash: 5c5cf04
       content2: >-
-        "3x3x3 Ahalik eta Mugimendu Gutxiengo aldibereko lehiaketak" 3x3x3
-        Ahalik eta Mugimendu Gutxien proba bakartzat daukaten eta aldi berean
-        gauzatzen diren WCAko lehiaketak dira.
+        "3x3x3 Mugimendu Gutxiengo aldibereko lehiaketak" 3x3x3 Mugimendu
+        Gutxien proba bakartzat daukaten eta aldi berean gauzatzen diren WCAko
+        lehiaketak dira.
       olist2:
         '1':
           #original_hash: 316fd13
           content1: >-
-            3x3x3 Ahalik eta Mugimendu Gutxien aldibereko lehiaketak ezin dira
-            beste lehiaketa arrunt baten parte izan.
+            3x3x3 Mugimendu Gutxien aldibereko lehiaketak ezin dira beste
+            lehiaketa arrunt baten parte izan.
           alist1:
             #original_hash: 75aa0c7
             1a: Biak lehiaketak gauzatzeko epeak ezin dira gainjarri.
@@ -5595,9 +5595,7 @@ eu:
             #original_hash: 8f532bb
             2a: 'bi lehiaketek 5 eguneko tartea izan beharko lukete, edo'
             #original_hash: e14e11e
-            2b: >-
-              beste lehiaketak ezin du 3x3x3 Ahalik eta Mugimendu Gutxien proba
-              izan.
+            2b: beste lehiaketak ezin du 3x3x3 Mugimendu Gutxien proba izan.
     paragraph-events:
       #original_hash: b16c5f1
       title: Probak iragartzea
