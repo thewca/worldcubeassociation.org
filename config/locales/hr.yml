@@ -1267,7 +1267,7 @@ hr:
       #original_hash: 612e12d
       results: Rezultati
       #original_hash: f5fe73c
-      rankings: Poredak
+      rankings: Rangiranje
       #original_hash: e51c552
       records: Rekordi
       #original_hash: f3cf96e
@@ -1686,7 +1686,7 @@ hr:
       #original_hash: 9ad68ce
       text_html: >-
         Pogledajte novu službenu robu koja uključuje sve od majica kratkih
-        rukava do hoodica
+        rukava do hoodica.
       #original_hash: b0fc6c4
       link_title: Link do trgovine
     records:
@@ -1700,8 +1700,7 @@ hr:
       #original_hash: 1e0206f
       text: >-
         Pogledaj našu listu Najčešće postavljanih pitanja ukoliko ti je potrebna
-        pomoć s nečime. Većina pitanja koja te zanimaju tamo mogu imati svoje
-        odgovore.
+        pomoć s nečime. Većina pitanja koja te zanimaju tamo imaju odgovore.
     contact:
       #original_hash: b37456c
       title: Kontakt
@@ -1721,7 +1720,7 @@ hr:
       text: >-
         World Cube Association je 501(c)(3) organizacija oslobođena od poreza.
         Kao 100% volontersko neprofitna organizacija, prihvaćamo donacije koje
-        bi nam mogle pomoći u ostvarivanju naše vizije organiziranja više
+        bi nam mogle pomoći u ostvarivanju naše vizije organiziranja što više
         natjecanja diljem svijeta.
       #original_hash: 65c84ec
       button: Prouči više o tome kako možeš podržati WCA
@@ -2993,9 +2992,9 @@ hr:
       #original_hash: 405c12f
       past: Prošlo
       #original_hash: 081ae3f
-      custom: Posebno
+      custom: Prilagođeno
       #original_hash: 73cf180
-      by_announcement: Najavom
+      by_announcement: Po najavi
       #original_hash: b3946b2
       sort_by_announcement: Sortiraj najavom
       #original_hash: e63dc91
@@ -4329,7 +4328,7 @@ hr:
   results:
     rankings:
       #original_hash: f5fe73c
-      title: Ljestvica
+      title: Rangiranje
       #original_hash: 65310e5
       unknown_type: 'Nepoznat tip parametra, mora biti ili "pojedinačno" ili "prosječno"'
       #original_hash: 01e188f
@@ -4538,7 +4537,7 @@ hr:
   persons:
     index:
       #original_hash: 5934b4c
-      name_or_wca_id: Upiši dijelove ili WCA ID
+      name_or_wca_id: Upiši ime ili WCA ID
       #original_hash: 709a232
       name: Ime
       #original_hash: fa4c045
@@ -4603,7 +4602,7 @@ hr:
       Jesi li siguran/a da želiš obrisati ovu objavu? Ova radnja se ne može
       vratiti.
     #original_hash: 3dcbf6d
-    announcement_info_html: 'Najavio/la %{author_name} na dan %{date_time}'
+    announcement_info_html: 'Objavio/la %{author_name} na dan %{date_time}'
     errors:
       #original_hash: 75d7ff7
       unstick_at_future: mora biti u budućnosti
@@ -4662,7 +4661,7 @@ hr:
         title: Kako mogu naći WCA Natjecanje?
         content:
           #original_hash: d195cec
-          '1': Pogledaj našu listu <a href='/competitions'>natjecanja</a>
+          '1': Pogledaj popis <a href='/competitions'>natjecanja</a>
       '3':
         #original_hash: af6ad12
         title: >-
@@ -4673,7 +4672,7 @@ hr:
           '1': >-
             Mnoga natjecanja koriste WCA stranicu za registracije, ali neke
             koriste i svoj vlastiti sistem. Trebaš kontaktirati organizatore
-            natjecanja za više detalja. %{comp_search_form}
+            natjecanja za dodatne informacije. %{comp_search_form}
       '4':
         #original_hash: 9a5ae28
         title: >-
@@ -4695,8 +4694,8 @@ hr:
         content:
           #original_hash: 3d4eb1c
           '1': >-
-            Ukoliko si zainteresiran/a za organizaciju natjecanja, toplo je
-            preporučeno da odeš barem na jedno ili dva natjecanja kao
+            Ukoliko si zainteresiran/a za organizaciju natjecanja, toplo se
+            preporučuje da odeš barem na jedno ili dva natjecanja kao
             natjecatelj da skupiš iskustvo.
           #original_hash: be305b8
           '2': >-
@@ -4785,7 +4784,7 @@ hr:
             strpljenje.
           #original_hash: bf8adbe
           '3': >-
-            Dodatno, ukoliko imaš spojen WCA korisnički račun sa svojim WCA
+            Dodatno, ukoliko imaš povezan WCA korisnički račun sa svojim WCA
             ID-om, možeš omogućiti e-mail obavijesti o svojim rezultatima <a
             href='%{preferences_edit_path}'>ovdje</a>.
       regulations1:
@@ -4798,7 +4797,7 @@ hr:
             href='https://www.worldcubeassociation.org/regulations/#3'>članku
             3.</a> Sve slagalice moraju biti odobrene od strane WCA Delegata.
             Ukoliko nisi siguran/a, pitaj svog Delegata na natjecanju. Za svaki
-            slučaj, ponesi dodatnu slagalicu u slučajnu da ti prijašnja nije
+            slučaj, ponesi dodatnu slagalicu u slučajnu da ti prethodna nije
             odobrena.
       regulations2:
         #original_hash: 48f1234
@@ -4820,8 +4819,8 @@ hr:
         content:
           #original_hash: 0d76323
           '1': >-
-            Ne smiješ koristiti navedenu slagalicu. Slagalice ne smiju imati
-            nikakvu štetu ili razlike koje mogu pomoći u razlikovanju 2 dijela
+            Ne smiješ koristiti navedenu slagalicu. Slagalice ne smiju biti
+            oštećene ili imati razlike koje mogu pomoći u razlikovanju 2 dijela
             (pogledajte <a
             href='https://www.worldcubeassociation.org/regulations/#3j'>Pravilo
             3j</a>).
@@ -4832,7 +4831,7 @@ hr:
           #original_hash: 984704a
           '1': >-
             Nema dobne granice. Međutim, pitaj svoje roditelje prije nego se
-            registriraš (pogledajte a
+            registriraš (pogledajte <a
             href='https://www.worldcubeassociation.org/regulations/#2b'>Pravilo
             2b</a>).
   about:
@@ -4849,14 +4848,14 @@ hr:
     #original_hash: 303f17a
     who_we_are_content_html: >-
       <p> World Cube Association upravlja natjecanjima za mehaničke mozgalice
-      koje se korite okretanjem grupe dijelova, poznatije kao "twisty puzzles".
+      koje se koriste okretanjem grupe dijelova, poznatije kao "twisty puzzles".
       Najpoznatija među njima je Rubikova kocka, koju je izumio profesor Rubik
       iz Mađarske. Odabrane mozgalice su službene discipline WCA.</p> <p>Kako se
       WCA razvijao u proteklom desetljeću, preko 245 000 ljudi se natjecalo na
       našim natjecanjima. Unatoč ovom rastu, i dalje smo organizacija koja je
       većinom pogonjena volonterima, od lokalnih organizatora do Delegata, pa i
       do Upravnog odbora. Veoma smo zahvalni svima koji svoje osobno vrijeme
-      izdvajaju kako bi dopustili da WCA nastavi funkcionirati. S više
+      izdvajaju kako bi omogućili da WCA nastavi funkcionirati. S više
       financijske potpore, nadamo se podići razinu profesionalizma naših
       natjecanja jer se trudimo organizirati ih što više diljem svijeta.</p>
     #original_hash: bccd8c5
@@ -4864,7 +4863,7 @@ hr:
       Naš duh čine ljudi diljem svijeta koji se zabavljaju zajedno u
       prijateljskoj atmosferi, pomažući jedni drugima i u sportskom duhu.
     #original_hash: 69131cc
-    spirit_footer: WCA Spirit
+    spirit_footer: WCA Duh
     #original_hash: c1781ee
     our_goals_title: Naši ciljevi
     #original_hash: 375db0f
@@ -4878,7 +4877,7 @@ hr:
       može se pronaći <a
       href="https://documents.worldcubeassociation.org/documents/WCA_Vision_and_Strategy.pdf">ovdje</a>.</p>
     #original_hash: f64ccc7
-    whats_next_title: Što je slijedeće za WCA?
+    whats_next_title: Što je sljedeće za WCA?
     #original_hash: 3312277
     whats_next_content_html: >-
       <p>World Cube Association je podržao preko 245 000 natjecatelja diljem 158
@@ -4891,10 +4890,10 @@ hr:
     world_championship_title: Svjetsko prvenstvo
     #original_hash: 57cf7f7
     world_championship_content_html: >-
-      <p>Svake dvije godine, organiziramo veliko natjecanje na kojemu se sazna
-      tko je slijedeći svjetski prvak. Ovakvi događaju zahtijevaju vrlo pažljivo
-      planiranje velikog broja volontera, kao i velika financijska obaveza s
-      kojom se plaća prostor i ostale potrebne stvari.</p>
+      <p>Svake dvije godine, organiziramo veliko natjecanje na kojemu se kruni
+      sljedeći svjetski prvak. Ovakvi događaju zahtjevaju vrlo pažljivo
+      planiranje velikog broja volontera, kao i veliki financijski pothvat s
+      kojim se plaća prostor i ostale potrebne stvari.</p>
     #original_hash: 1aa5344
     contributing_title: Davanje doprinosa
     #original_hash: 538a82f
@@ -4916,7 +4915,7 @@ hr:
       content: >-
         World Cube Association je 501(c)(3) organizacija oslobođena od poreza.
         Kao 100% volontersko neprofitna organizacija, prihvaćamo donacije koje
-        bi nam mogle pomoći u ostvarivanju naše vizije oganiziranja više
+        bi nam mogle pomoći u ostvarivanju naše vizije organiziranja što više
         natjecanja diljem svijeta.
       #original_hash: 24c87db
       donate_credit: Doniraj preko kreditne kartice
@@ -4932,7 +4931,7 @@ hr:
         description: >-
           WCA Upravni odbor je odgovoran za upravljanje organizacije i
           upotpunjavanje svih onih dužnosti koje nisu u mogućnosti upotpuniti
-          Timovi, Odbori i Vijeća
+          Timovi, Odbori i Vijeća.
       users:
         #original_hash: 57bbaad
         profile: '%{user_name} profil'
@@ -4946,18 +4945,17 @@ hr:
         opisana u WCA Pravilniku. Primarna dužnost delegata je nadgledanje
         natjecanja u ime WCA. WCA Delegat je odgovoran da su sva WCA Natjecanja
         održana u skladu s misijom, duhom i po WCA Pravilima. WCA razlikuje
-        <strong>WCA Senior delegate</strong>,<strong>Regionalne
+        <strong>WCA Senior Delegate</strong>, <strong>Regionalne
         Delegate</strong>, <strong>Delegate</strong>, <strong>Junior
-        Delegate</strong> i <strong>Delegate
-        pripravnike</strong>%{see_link}.</p> <p>Uz dužnosti WCA Delegata, WCA
-        Senior Delegat je odgovoran za vođenje WCA Delegata na svom području i
-        može biti kontaktiran od strane zajednice za bilo kakve regionalne
-        upite.</p> <p>Novi Delegati su navedeni kao WCA Junior Delegati u
-        početku; nakon toga su obavezni pokazati vještost u upravljanju WCA
-        Natjecanjima prije nego budu promovirani u WCA Delegata.</p> <p>
-        Delegati pripravnici se obučavaju za poziciju Delegata i mogu nadgledati
-        samo ona natjecanja na kojima je prisutan barem još jedan WCA Delegat.
-        </p>
+        Delegate</strong> i <strong>Delegate Pripravnike</strong>%{see_link}.
+        </p> <p>Uz dužnosti WCA Delegata, WCA Senior Delegat je odgovoran za
+        vođenje WCA Delegata na svom području i može biti kontaktiran od strane
+        zajednice za bilo kakve regionalne upite.</p> <p>Novi Delegati su
+        navedeni kao WCA Junior Delegati u početku; nakon toga su obavezni
+        pokazati vještost u upravljanju WCA Natjecanjima prije nego budu
+        promovirani u WCA Delegata.</p> <p> Delegati Pripravnici se obučavaju za
+        poziciju Delegata i mogu nadgledati samo ona natjecanja na kojima je
+        prisutan barem još jedan WCA Delegat.</p>
       #original_hash: 27d18ac
       see_link_html: '(vidi %{link})'
       #original_hash: 5b01fcc
@@ -4971,9 +4969,9 @@ hr:
     #original_hash: 687c828
     title: Dokumenti
     #original_hash: 1b537dc
-    determination_letter: IRS Determination Letter
+    determination_letter: Pismo odluke porezne uprave SAD-a
     #original_hash: 9855f80
-    bylaws: Aktovi WCA
+    bylaws: WCA Statut
     #original_hash: fdceb44
     motions: Prijedlozi
     #original_hash: 092f99e
@@ -4993,7 +4991,7 @@ hr:
     title: WCA Edukacijski resursi
     #original_hash: 081d65d
     description: >-
-      WQAC je objavio nekoliko dokumenata za zajednicu, moguće ih je skinuti
+      WQAC je objavio nekoliko dokumenata za zajednicu, moguće ih je preuzeti
       ovdje.
     #original_hash: d0a3812
     competitor_tutorial: Natjecateljski tutorijal
@@ -5033,12 +5031,12 @@ hr:
     #original_hash: 37b8fdc
     title: Regionalne Organizacije
     #original_hash: 15a06d6
-    content: 'WCA priznaje slijedeće Regionalne Organizacije:'
+    content: 'WCA priznaje sljedeće Regionalne Organizacije:'
     #original_hash: e5b77eb
     empty: Nijedna Regionalna Organizacija nije trenutno priznata od strane WCA.
     how_to:
       #original_hash: b243b1f
-      title: Kako postati WCA Regionalna organizacija
+      title: Kako postati WCA Regionalna Organizacija
       #original_hash: 9f31403
       description: >-
         WCA priznaje razne Regionalne organizacije diljem svijeta. Svrha WCA
@@ -5049,7 +5047,7 @@ hr:
         kontaktiraj svog najbližeg WCA Delegata.
     requirements:
       #original_hash: 1e04fd7
-      title: Zahtjevi za WCA Regionalnu organizaciju
+      title: Zahtjevi za WCA Regionalnu Organizaciju
       list:
         #original_hash: 22a9f26
         '1': >-
@@ -5058,7 +5056,7 @@ hr:
         #original_hash: 63714d1
         '2': >-
           Podrška kontinentalnim WCA Natjecanjima koja se održavaju na kontinetu
-          željene Regionalne organizacije, ukoliko to zahtjeva Organizacijski
+          željene Regionalne Organizacije, ukoliko to zahtjeva Organizacijski
           tim
         #original_hash: 3c07dd6
         '3': >-
@@ -5110,19 +5108,19 @@ hr:
     intro:
       #original_hash: 0c5fab5
       desc: >-
-        Ova stranica predstavlja neiscrpan popis alata za koje se zna da se
-        koriste kao pomoć u organizaciji WCA natjecanja.
+        Ova stranica sadrži neiscrpan popis alata koji pomažu u organizaciji WCA
+        natjecanja.
       #original_hash: 479b542
       disclaimer: >-
-        WST ne održava sve alate na toj stranici: definitivno je u redu! Nemamo
-        radnu snagu da upravljamo cijelim WCA softverom :)
+        WST ne održava sve alate na ovoj stranici – i to je sasvim u redu!
+        Nemamo dovoljno ljudi za upravljanje cjelokupnim WCA softverom. :)
       #original_hash: 80f97b9
       used: >-
-        Svi programi na ovom popisu korišteni su tijekom pravih WCA natjecanja i
-        integriraju se s WCA web stranicom: omogućuju vam da se prijavite sa
-        svojim WCA računom kako biste mogli uvesti (a ponekad i ažurirati) svoje
-        podatke o nadolazećim natjecanjima. Za svako od njih, programer koji ga
-        održava će se jasno izjasniti.
+        Svi programi na ovom popisu korišteni su na stvarnim WCA natjecanjima i
+        integriraju se s WCA web stranicom: Omogućuju vam prijavu sa svojim WCA
+        računom kako biste mogli uvesti (a ponekad i ažurirati) svoje podatke o
+        nadolazećim natjecanjima. Za svaki od njih, programer koji ga održava
+        jasno će to naznačiti.
     before:
       #original_hash: 9850344
       title: Prije natjecanja
@@ -5130,8 +5128,7 @@ hr:
       desc: >-
         Upravljanje registracijama natjecatelja može se obaviti izravno na web
         stranici WCA. Budući da ručno upravljanje grupama i osobljem može
-        zahtijevati puno vremena, razmislite o upotrebi jednog od alata u
-        nastavku.
+        oduzeti puno vremena, razmislite o upotrebi jednog od alata u nastavku.
     during:
       #original_hash: 9934200
       title: Tijekom natjecanja
@@ -5166,8 +5163,8 @@ hr:
           Alat za upravljanje zadacima i grupama za organizatore WCA natjecanja.
           Među glavnim značajkama koje ćete pronaći su: razvrstavanje
           natjecatelja po rangu, dodjeljivanje zadataka (suđenje, scramblanje),
-          odlučivanje koliko će biti potrebno scrambleovea, generiranje tablice
-          rezultata, osobnih tablica i sažetaka ... Pogledajte web stranicu kako
+          odlučivanje koliko će scrambleova biti potrebno, generiranje tablice
+          rezultata, osobnih tablica i sažetaka... Pogledajte web stranicu kako
           biste saznali više.
       scorecards:
         #original_hash: aa1b64d
@@ -5179,8 +5176,8 @@ hr:
         title: TNoodle (Scrambleovi)
         #original_hash: 0a38b22
         description: >-
-          TNoodle je službeni program za scrambleove koji se koristi za WCA
-          natjecanja. Obično ga koriste WCA Delegati prije WCA natjecanja, ali
+          TNoodle je službeni program za generiranje scrambleova na WCA
+          natjecanjima. Obično ga koriste WCA Delegati prije WCA natjecanja, ali
           njegovo korisničko sučelje omogućuje bilo kome generiranje bilo koje
           scramblove za sve WCA događaje.
       live:
@@ -5195,14 +5192,14 @@ hr:
         title: Tablica rezultata
         #original_hash: 466f4c2
         description: >-
-          Ponekad se ove stvari događaju... Ukoliko nemate pristup internetu,
-          morat ćete koristiti dobre stare tablice.
+          Takve stvari se ponekad događaju… Ako nemate pristup internetu, morat
+          ćete koristiti klasične tablice.
       matcher:
         #original_hash: cc59bc9
         title: Scrambles Matcher
         #original_hash: a352bd1
         description: >-
-          Može se koristiti za dodjeljivanje scrambleova generiranih preko
+          Može se koristiti za dodjeljivanje scrambleova generiranih pomoću
           TNoodlea. Uvezite rezultate s WCA web stranice (kada koristite WCA
           Live), proračunsku tablicu ili samostalnu WCIF datoteku. Uvozite
           kodove iz jedne ili više json datoteka TNoodlea. Izvozite rezultate u
@@ -5310,8 +5307,8 @@ hr:
   incidents_log:
     #original_hash: 61ab89f
     i18n_disclaimer: >-
-      Imaj na umu da je sekcija incidenata samo moguća na engleskom jeziku.
-      Sadržaj ispod nije preveden.
+      Napominjemo da je odjeljak o incidentima dostupan samo na engleskom
+      jeziku, sadržaj u nastavku nije preveden.
     #original_hash: 2c23c1a
     incident: 'Incident:'
   about_regulations:
@@ -5332,7 +5329,7 @@ hr:
       #original_hash: c8e1783
       content3_html: >-
         Važne odluke oko incidenata koji su se dogodili na natjecanju i koji su
-        riješeni od strane WCA ODbora za Regulacije mogu se pronaći u <a
+        riješeni od strane WCA Odbora za Regulacije mogu se pronaći u <a
         href="/incidents">Zapisniku o incidentima</a>.
     panel2:
       #original_hash: 8ad8302
@@ -5370,20 +5367,20 @@ hr:
     title: 'WCA Regulacije i Smjernice: Prijevodi'
     #original_hash: 386ecc1
     paragraph1: >-
-      Ukoliko govoriš neki drugi jezik osim engleskog, mogu ti koristiti ovi
-      prijevodi.
+      Ako govoriš neki drugi jezik, osim engleskog jezika, ovi prijevodi ti mogu
+      biti korisni.
     #original_hash: 32b1132
     paragraph2: >-
-      Zapamti da ovi prijevodi nemaju službeni status iako su vidljivi na WCA
-      web stranici: ne dolaze s nikakvom garancijom. Ukoliko postoji razlika
-      između prijevoda i (trenutno službene) engleske verzije, engleska verzija
-      se mora koristiti.
+      Imajte na umu da prijevodi nemaju nikakav službeni status, iako su
+      dostupni na web stranici WCA: ne dolaze s nikakvim jamstvom. Ako postoji
+      razlika između prijevoda i (trenutne službene) engleske verzije, mora se
+      koristiti engleska verzija.
     #original_hash: 8ad8302
     translations: Prijevodi
     #original_hash: 4fc0e2b
     current: Trenutni
     #original_hash: fbb3c38
-    old: Stari
+    old: Stariji
     table_elements:
       #original_hash: 2da600b
       version: Verzija
@@ -5394,7 +5391,7 @@ hr:
     #original_hash: 1b026e1
     paragraph3_html: >-
       Ukoliko želiš dodati/ažurirati prijevod, pogledaj <a
-      href="https://github.com/thewca/wca-regulations-translations#translation-instructions">insturkcije
+      href="https://github.com/thewca/wca-regulations-translations#translation-instructions">upute
       na GitHub repozitoriju za prevođenje</a>.
   full_organizer_guidelines:
     #original_hash: 5d602df
@@ -5682,25 +5679,25 @@ hr:
     page_title: Medijsko i Instagram prilaganje
     general_media_submission:
       #original_hash: 2b4c8c8
-      title: Generalno medijsko prilaganje
+      title: Općenito medijsko prilaganje
       #original_hash: 670a1a8
       body_html: >-
         WCA dijeli članke i fotografije s natjecanja koje su zaprimljene od
-        zajednice na naškoj <a href="/media">medijskoj stranici</a>. Ukoliko
-        želite nešto podijeliti, ispunite našu <a href="/media/new">formu za
-        prilaganje datoteka</a>!
+        zajednice na našoj <a href="/media">medijskoj stranici</a>. Ako želite
+        nešto podijeliti, ispunite našu <a href="/media/new">formu za prilaganje
+        datoteka</a>!
     instagram_submission:
       #original_hash: e01c612
-      title: Instagram podnošenje
+      title: Predaja sadržaja za Instagram
       #original_hash: 1acd0d2
       paragraph1_html: >-
         Kao što se već može vidjeti, WCA ima <a
         href="https://www.instagram.com/thewcaofficial/">aktivan Instagram</a>!
-        Kako bismo najbolje odražavali globalnu zajednicu cubera, objavljujemo
+        Kako bismo što bolje predstavili globalnu zajednicu cubera, objavljujemo
         sadržaj koji su nam poslali cuberi iz cijelog svijeta.
       #original_hash: 9b6abcd
       paragraph2: >-
-        Ako imate kvalitetne fotografije ili video zapise koje želite da
+        Ako imate kvalitetne fotografije ili videozapise koje želite da
         objavimo, kliknite donji gumb i ispunite obrazac! Da bismo mogli
         objaviti vaš sadržaj, morate ga posjedovati i morate WCA-u dati dozvolu
         za njegovo objavljivanje. Zbog velikog broja zaprimljenih prijava, ne
@@ -5713,10 +5710,10 @@ hr:
       #original_hash: 0742378
       photo_interest: >-
         Pokušajte učiniti svoj sadržaj zanimljivim širokoj publici. Sadržaj koji
-        je interesantan samo za nekoliko ljudi ne pripada ovdje.
+        je interesantan samo nekolicini ne pripada ovdje.
       #original_hash: 497bc27
       wca_related: >-
-        Objavite fotografije i videozapise koji imaju veze sa WCA, jer o tome i
+        Objavite fotografije i videozapise koji su povezani s WCA, jer o tome i
         ovisi naš profil! Volimo vidjeti cubere kako se zabavljaju!
       #original_hash: af882f2
       submit_instagram_content: Podnesi Instagram sadržaj
@@ -5725,17 +5722,17 @@ hr:
       title: Instagram hosting
       #original_hash: 541106b
       paragraph1_html: >-
-        Ponekad ćemo članovima zajednice omogućiti da objavljuju službene WCA
-        Instagram priče s natjecanja na kojem sudjeluju! Ako vas to zanima,
-        kliknite gumb i ispunite donji obrazac. WCA Komunikacijski tim javit će
-        vam se nakon što budu poslane sve informacije i ako budete odobreni za
-        hosting. Ako imate bilo kakvih pitanja, molimo <a
+        Ponekad ćemo članovima zajednice omogućiti objavu službene WCA Instagram
+        priče s natjecanja na kojem sudjeluju! Ako ste zainteresirani, kliknite
+        gumb i ispunite donji obrazac. WCA Komunikacijski tim javit će vam se
+        nakon što budu poslane sve informacije i ako budete odobreni za hosting.
+        Ako imate bilo kakva pitanja, molimo <a
         href="https://www.worldcubeassociation.org/contact/website">kontaktirajte
         nas</a>.
       #original_hash: aca6c32
       paragraph2: >-
         Naš je cilj podijeliti osobna iskustva svakog cubera i svakog
-        natjecanja. Ovo ne bi trebao predstavljati veliki teret tijekom vikenda
+        natjecanja. Ovo ne bi trebalo predstavljati veliki teret tijekom vikenda
         i, naravno, želimo da prvo uživate u natjecanju, a zatim da budete u
         mogućnosti dijeliti nešto s njega.
       #original_hash: af023ed
@@ -5744,23 +5741,22 @@ hr:
       short_intro: 'Ukratko se predstavite, razgovarajte o sebi i natjecanju'
       #original_hash: a053b5a
       venue_feel: >-
-        Snimite nekoliko isječaka kako biste osjetili mjesto i ljude, ovo bi
-        mogao biti samo snimak iz natjecateljskog područja i područja za
-        slaganje
+        Snimite nekoliko isječaka kako biste prikazali atmosferu i ljude, to
+        može biti samo snimak iz natjecateljskog područja i područja za slaganje
       #original_hash: d17fb2f
       people_solving: >-
-        Snimite kadrove gdje ljudi slažu (preferirani su brzi ljudi u svojim
-        glavnim disciplinama)
+        Snimite kadrove na kojima ljudi slažu (preferirani su brzi ljudi u
+        svojim glavnim disciplinama)
       #original_hash: 76d2358
       mini_interviews: >-
         Mogli biste napraviti mini intervjue (organizatora, delegata, itd ...)
-        ispitujući ih općenito o natjecanju
+        postavljajući im općenita pitanja o natjecanju
       #original_hash: 6003b20
-      pictures_too: 'Možete i slati fotografije, ne moraju to biti samo videozapisi'
+      pictures_too: 'Možete slati i fotografije, ne moraju to biti samo videozapisi'
       #original_hash: 8813619
       paragraph4: >-
-        Naša komunikacija tijekom vikenda obično prolazi kroz WhatsApp grupu.
-        Provjerite jeste li upoznati s ovom platformom za razmjenu poruka ili
+        Naša komunikacija tijekom vikenda obično se odvija kroz WhatsApp grupu.
+        Provjerite jeste li upoznati s ovom aplikacijom za razmjenu poruka ili
         nam javite ako je ne možete koristiti kako bismo mogli organizirati
         druga rješenja.
       #original_hash: 38191c1
@@ -5831,7 +5827,7 @@ hr:
       permalink: permalink
       file_formats:
         #original_hash: b086d79
-        sql: 'SQL izvadci, za uvoz u SQL bazu podataka'
+        sql: 'SQL izvadak, za uvoz u SQL bazu podataka.'
         #original_hash: 5f6fb6e
         tsv: >-
           Tab-separated vrijednosti, za spreadsheetove u OpenOffice.org, Excel i
