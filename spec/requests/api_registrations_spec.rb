@@ -171,7 +171,6 @@ RSpec.describe 'API Registrations' do
       expect(registration.event_ids.sort).to eq(new_event_ids.sort)
     end
 
-<<<<<<< HEAD
     it 'auto-accept from Waiting List triggers if a user is moved off the Accepted list' do
       auto_accept_comp = FactoryBot.create(
         :competition, :auto_accept, :registration_open, :editable_registrations, :allow_self_delete, competitor_limit: 5
