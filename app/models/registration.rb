@@ -44,12 +44,14 @@ class Registration < ApplicationRecord
 
   after_save :mark_registration_processing_as_done
 
+  after_update :waiting_list_auto_accept_check
+
   private def mark_registration_processing_as_done
     Rails.cache.delete(CacheAccess.registration_processing_cache_key(competition_id, user_id))
   end
 
-  def update_lanes!(params, acting_user)
-    Registrations::Lanes::Competing.update!(params, self.competition, acting_user.id)
+  def update_lanes!(params, acting_user_id)
+    Registrations::Lanes::Competing.update!(params, self.competition, acting_user_id)
   end
 
   def guest_limit
@@ -332,6 +334,14 @@ class Registration < ApplicationRecord
     end
   end
 
+  validate :does_not_exceed_competitor_limit
+  private def does_not_exceed_competitor_limit
+    return unless competition&.competitor_limit.present?
+    return unless competing_status == Registrations::Helper::STATUS_ACCEPTED
+    errors.add(:competitor_limit, I18n.t('registrations.errors.competitor_limit_reached')) if
+      competition.registrations.competing_status_accepted.count >= competition.competitor_limit
+  end
+
   # TODO: V3-REG cleanup. All these Validations can be used instead of the registration_checker checks
   validate :cannot_be_undeleted_when_banned, if: :competing_status_changed?
   private def cannot_be_undeleted_when_banned
@@ -424,5 +434,45 @@ class Registration < ApplicationRecord
 
   def serializable_hash(options = nil)
     super(DEFAULT_SERIALIZE_OPTIONS.merge(options || {}))
+  end
+
+  def auto_accept
+    return log_error('Auto-accept is not enabled for this competition.') unless competition.auto_accept_registrations
+    return log_error('Can only auto-accept pending registrations or first position on waiting list') unless
+      competing_status_pending? || (competing_status_waiting_list? && waiting_list_position == 1)
+    return log_error("Competition has reached auto_accept_disable_threshold of #{competition.auto_accept_disable_threshold} registrations") if
+      competition.auto_accept_threshold_reached?
+    return log_error('Competitor still has outstanding registration fees') if outstanding_entry_fees > 0
+    return log_error('Cant auto-accept while registration is not open') if !competition.registration_currently_open?
+
+    if competition.registration_full_and_accepted? && competing_status_pending?
+      update_lanes!(
+        { user_id: user_id, competing: { status: Registrations::Helper::STATUS_WAITING_LIST } }.with_indifferent_access,
+        'Auto-accept',
+      )
+    else
+      update_lanes!(
+        { user_id: user_id, competing: { status: Registrations::Helper::STATUS_ACCEPTED } }.with_indifferent_access,
+        'Auto-accept',
+      )
+    end
+  rescue ActiveRecord::RecordInvalid => e
+    log_error("Auto accept error for registration #{id}: #{e}")
+  end
+
+  private def log_error(error)
+    Rails.logger.error(error)
+    false
+  end
+
+  private def waiting_list_auto_accept_check
+    changed_from_accepted = saved_change_to_competing_status? && saved_change_to_competing_status.first == Registrations::Helper::STATUS_ACCEPTED
+    return unless changed_from_accepted
+
+    waiting_list_leader_id = competition.waiting_list&.entries&.first
+
+    if changed_from_accepted && waiting_list_leader_id.present?
+      Registration.find(waiting_list_leader_id).auto_accept
+    end
   end
 end

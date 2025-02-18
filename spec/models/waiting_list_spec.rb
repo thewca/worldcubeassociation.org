@@ -22,6 +22,13 @@ RSpec.describe WaitingList do
       registration = FactoryBot.create(:registration, :waiting_list, competition: competition)
       expect(competition.waiting_list.entries[1]).to eq(registration.id)
     end
+
+    it 're-adding a registration has no effect' do
+      registrations = FactoryBot.create_list(:registration, 3, :waiting_list, competition: competition)
+      initial_waiting_list = waiting_list.entries
+      waiting_list.add(registrations.first.id)
+      expect(competition.waiting_list.reload.entries).to eq(initial_waiting_list)
+    end
   end
 
   describe 'with populated waiting list' do
@@ -126,6 +133,17 @@ RSpec.describe WaitingList do
       expect(reg4.waiting_list_position).to eq(3)
       expect(reg5.waiting_list_position).to eq(4)
       expect(waiting_list.entries.count).to eq(4)
+    end
+
+    it 'does nothing if removing an item which isnt present' do
+      expect { waiting_list.remove(999_999) }.not_to raise_error
+
+      expect(reg1.waiting_list_position).to eq(1)
+      expect(reg2.waiting_list_position).to eq(2)
+      expect(reg3.waiting_list_position).to eq(3)
+      expect(reg4.waiting_list_position).to eq(4)
+      expect(reg5.waiting_list_position).to eq(5)
+      expect(waiting_list.entries.count).to eq(5)
     end
   end
 end

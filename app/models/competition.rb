@@ -173,6 +173,8 @@ class Competition < ApplicationRecord
     event_change_deadline_date
     competition_series_id
     registration_version
+    auto_accept_registrations
+    auto_accept_disable_threshold
   ).freeze
   VALID_NAME_RE = /\A([-&.:' [:alnum:]]+) (\d{4})\z/
   VALID_ID_RE = /\A[a-zA-Z0-9]+\Z/
@@ -354,6 +356,25 @@ class Competition < ApplicationRecord
     end
   end
 
+  validate :auto_accept_validations
+  private def auto_accept_validations
+    errors.add(:auto_accept_registrations, I18n.t('competitions.errors.must_use_wca_registration')) if
+      auto_accept_registrations && !use_wca_registration
+
+    errors.add(:auto_accept_registrations, I18n.t('competitions.errors.auto_accept_limit')) if
+      auto_accept_disable_threshold > 0 &&
+      competitor_limit.present? &&
+      auto_accept_disable_threshold >= competitor_limit
+
+    errors.add(:auto_accept_registrations, I18n.t('competitions.errors.auto_accept_not_negative')) if auto_accept_disable_threshold < 0
+
+    if auto_accept_registrations_changed?
+      errors.add(:auto_accept_registrations, I18n.t('competitions.errors.auto_accept_accept_paid_pending')) if registrations.pending.with_payments.count > 0
+      errors.add(:auto_accept_registrations, I18n.t('competitions.errors.auto_accept_accept_waitlisted')) if
+        registrations.waitlisted.count > 0 && !registration_full_and_accepted?
+    end
+  end
+
   def has_any_round_per_event?
     competition_events.map(&:rounds).none?(&:empty?)
   end
@@ -453,6 +474,7 @@ class Competition < ApplicationRecord
     self.confirmed? || self.showAtAll
   end
 
+  # TODO: Consider refactoring this once auto-accept is implemented
   def registration_full?
     competitor_count = registrations.accepted_and_paid_pending_count
     competitor_limit_enabled? && competitor_count >= competitor_limit
@@ -1891,7 +1913,7 @@ class Competition < ApplicationRecord
                base_entry_fee_lowest_denomination currency_code allow_registration_edits allow_registration_self_delete_after_acceptance
                allow_registration_without_qualification refund_policy_percent use_wca_registration guests_per_registration_limit venue contact
                force_comment_in_registration use_wca_registration external_registration_page guests_entry_fee_lowest_denomination guest_entry_status
-               information events_per_registration_limit guests_enabled],
+               information events_per_registration_limit guests_enabled auto_accept_registrations auto_accept_disable_threshold],
       methods: %w[url website short_name city venue_address venue_details latitude_degrees longitude_degrees country_iso2 event_ids registration_currently_open?
                   main_event_id number_of_bookmarks using_payment_integrations? uses_qualification? uses_cutoff? competition_series_ids registration_full?
                   part_of_competition_series? registration_full_and_accepted?],
@@ -2441,6 +2463,8 @@ class Competition < ApplicationRecord
       "admin" => {
         "isConfirmed" => confirmed?,
         "isVisible" => showAtAll?,
+        "autoAcceptEnabled" => auto_accept_registrations,
+        "autoAcceptDisableThreshold" => auto_accept_disable_threshold,
       },
       "cloning" => {
         "fromId" => being_cloned_from_id,
@@ -2548,6 +2572,8 @@ class Competition < ApplicationRecord
       "admin" => {
         "isConfirmed" => errors[:confirmed_at],
         "isVisible" => errors[:showAtAll],
+        "autoAcceptEnabled" => errors[:auto_accept_registrations],
+        "autoAcceptDisableThreshold" => errors[:auto_accept_disable_threshold],
       },
       "cloning" => {
         "fromId" => errors[:being_cloned_from_id],
@@ -2657,6 +2683,8 @@ class Competition < ApplicationRecord
       showAtAll: form_data.dig('admin', 'isVisible'),
       being_cloned_from_id: form_data.dig('cloning', 'fromId'),
       clone_tabs: form_data.dig('cloning', 'cloneTabs'),
+      auto_accept_registrations: form_data.dig('admin', 'autoAcceptEnabled'),
+      auto_accept_disable_threshold: form_data.dig('admin', 'autoAcceptDisableThreshold'),
     }
   end
 
@@ -2840,6 +2868,8 @@ class Competition < ApplicationRecord
             "guestsPerRegistration" => { "type" => ["integer", "null"] },
             "extraRequirements" => { "type" => ["string", "null"] },
             "forceComment" => { "type" => ["boolean", "null"] },
+            "autoAcceptEnabled" => { "type" => ["boolean", "null"] },
+            "autoAcceptDisableThreshold" => { "type" => ["integer", "null"] },
           },
         },
         "eventRestrictions" => {
@@ -2895,5 +2925,9 @@ class Competition < ApplicationRecord
         },
       },
     }
+  end
+
+  def auto_accept_threshold_reached?
+    auto_accept_disable_threshold > 0 && auto_accept_disable_threshold <= registrations.competing_status_accepted.count
   end
 end

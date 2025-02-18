@@ -101,6 +101,15 @@ FactoryBot.define do
 
     registration_version { :v3 }
 
+    trait :auto_accept do
+      use_wca_registration { true }
+      auto_accept_registrations { true }
+    end
+
+    trait :allow_self_delete do
+      allow_registration_self_delete_after_acceptance { true }
+    end
+
     trait :enforces_qualifications do
       with_organizer
       qualification_results { true }
@@ -272,7 +281,7 @@ FactoryBot.define do
 
     trait :registration_not_opened do
       registration_open { 1.weeks.from_now.change(usec: 0) }
-      registration_close { 4.weeks.from_now.change(usec: 0) }
+      registration_close { 3.weeks.from_now.change(usec: 0) }
       starts { 1.month.from_now }
       ends { starts }
     end

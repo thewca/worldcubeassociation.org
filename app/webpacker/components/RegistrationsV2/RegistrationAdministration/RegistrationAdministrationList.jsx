@@ -1,19 +1,20 @@
-import { useMutation, useQuery } from '@tanstack/react-query';
 import React, {
   useMemo, useReducer, useRef,
 } from 'react';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import {
-  Accordion, Checkbox, Form, Header, Segment, Sticky,
+  Accordion, Button, Icon, Checkbox, Form, Header, Segment, Sticky,
 } from 'semantic-ui-react';
 import { DateTime } from 'luxon';
+import Loading from '../../Requests/Loading';
 import { getAllRegistrations } from '../api/registration/get/get_registrations';
-import createSortReducer from '../reducers/sortReducer';
-import RegistrationActions from './RegistrationActions';
+import { bulkUpdateRegistrations } from '../api/registration/patch/update_registration';
 import { setMessage } from '../Register/RegistrationMessage';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
+import disableAutoAccept from '../api/registration/patch/auto_accept';
+import createSortReducer from '../reducers/sortReducer';
+import RegistrationActions from './RegistrationActions';
 import I18n from '../../../lib/i18n';
-import Loading from '../../Requests/Loading';
-import { bulkUpdateRegistrations } from '../api/registration/patch/update_registration';
 import RegistrationAdministrationTable from './RegistrationsAdministrationTable';
 import useCheckboxState from '../../../lib/hooks/useCheckboxState';
 import { countries } from '../../../lib/wca-data.js.erb';
@@ -114,15 +115,18 @@ const columnReducer = (state, action) => {
   return state;
 };
 
-export default function RegistrationAdministrationList({ competitionInfo }) {
+export default function RegistrationAdministrationList({
+  competitionInfo,
+  refetchCompetitionInfo,
+}) {
+  const dispatchStore = useDispatch();
+
   const [expandedColumns, dispatchColumns] = useReducer(
     columnReducer,
     initialExpandedColumns,
   );
 
   const [editable, setEditable] = useCheckboxState(false);
-
-  const dispatchStore = useDispatch();
 
   const actionsRef = useRef();
 
@@ -138,7 +142,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
   const {
     isLoading: isRegistrationsLoading,
     data: registrations,
-    refetch,
+    refetch: refetchRegistrations,
   } = useQuery({
     queryKey: ['registrations-admin', competitionInfo.id],
     queryFn: () => getAllRegistrations(competitionInfo),
@@ -158,6 +162,20 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
     },
   });
 
+  const { mutate: disableAutoAcceptMutation, isPending: isUpdating } = useMutation({
+    mutationFn: disableAutoAccept,
+    onError: () => {
+      dispatchStore(setMessage(
+        'competitions.registration_v2.auto_accept.cant_disable',
+        'negative',
+      ));
+    },
+    onSuccess: async () => {
+      dispatchStore(setMessage('competitions.registration_v2.auto_accept.disabled', 'positive'));
+      await refetchCompetitionInfo();
+    },
+  });
+
   const { mutate: updateRegistrationMutation, isPending: isMutating } = useMutation({
     mutationFn: bulkUpdateRegistrations,
     onError: (data) => {
@@ -172,7 +190,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
       // or if registrations are still coming in while organizers approve them
       // we want the data to be refreshed. Optimal solution would be subscribing to changes
       // via graphql/websockets, but we aren't there yet
-      await refetch();
+      await refetchRegistrations();
     },
   });
 
@@ -300,10 +318,10 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
     }, {
       onSuccess: () => {
         // We need to get the info for all Competitors if you change the waiting list position
-        refetch();
+        refetchRegistrations();
       },
     });
-  }, [competitionInfo.id, refetch, updateRegistrationMutation, waiting]);
+  }, [competitionInfo.id, refetchRegistrations, updateRegistrationMutation, waiting]);
 
   if (isRegistrationsLoading) {
     return <Loading />;
@@ -511,6 +529,18 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
 
   return (
     <Segment loading={isMutating} style={{ overflowX: 'scroll' }}>
+      { competitionInfo.auto_accept_registrations && (
+        <Button
+          disabled={isUpdating}
+          color="red"
+          onClick={() => disableAutoAcceptMutation(competitionInfo.id)}
+        >
+          <Icon name="ban" />
+          {' '}
+          {I18n.t('competitions.registration_v2.auto_accept.disable')}
+        </Button>
+      )}
+
       <Form>
         <Form.Group widths="equal">
           {Object.entries(expandableColumns).map(([id, name]) => (
