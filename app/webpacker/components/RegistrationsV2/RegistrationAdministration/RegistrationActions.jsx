@@ -63,7 +63,7 @@ export default function RegistrationActions({
   const anyWaitlistable = waiting.length < selectedCount;
   const anyRejectable = rejected.length < selectedCount;
 
-  const selectedEmails = [...pending, ...accepted, ...cancelled, ...waiting]
+  const selectedEmails = [...pending, ...waiting, ...accepted, ...cancelled, ...rejected]
     .map((userId) => userEmailMap[userId])
     .join(',');
 
