@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
-import React, { useEffect } from 'react';
+import React from 'react';
 import {
   Button, Header, Message, Table,
 } from 'semantic-ui-react';
@@ -78,10 +78,6 @@ function RefundRow({
 }) {
   const [amountToRefund, setAmountToRefund] = useInputState(refund.ruby_amount_refundable);
   const confirm = useConfirm();
-
-  useEffect(() => {
-    setAmountToRefund(refund.ruby_amount_refundable);
-  }, [refund.ruby_amount_refundable, setAmountToRefund]);
 
   const attemptRefund = () => confirm({
     content: I18n.t('registrations.refund_confirmation'),
