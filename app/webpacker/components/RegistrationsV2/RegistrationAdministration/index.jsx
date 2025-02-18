@@ -11,7 +11,7 @@ export default function RegistrationEdit({ competitionInfo }) {
   return (
     <div ref={ref}>
       <WCAQueryClientProvider>
-        <StoreProvider reducer={messageReducer} initialState={{ message: null }}>
+        <StoreProvider reducer={messageReducer} initialState={{ messages: [] }}>
           <Sticky context={ref} offset={60}>
             <RegistrationMessage />
           </Sticky>

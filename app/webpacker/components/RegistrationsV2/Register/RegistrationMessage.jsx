@@ -3,58 +3,45 @@ import React, { useEffect } from 'react';
 import { useDispatch, useStore } from '../../../lib/providers/StoreProvider';
 import I18n from '../../../lib/i18n';
 
-/**
- * You may pass an array of keys - if so, also pass an
- * array of params of the same length.
- */
-export const setMessage = (key, type, params) => ({
-  payload: {
-    key,
-    type,
-    params,
-  },
+/** To show multiple messages, use `showMessages` instead. */
+export const showMessage = (key, type, params) => ({
+  newMessages: [{ key, type, params }],
 });
 
-export const clearMessage = () => ({
-  payload: {
-    message: null,
-  },
-});
+export const showMessages = (messages) => ({ newMessages: messages });
+
+export const clearAllMessages = () => ({ messages: [] });
+
+// const clearMessage = (id) => ({ toClear: [id] });
+
+const clearMessages = (ids) => ({ toClear: ids });
 
 export default function RegistrationMessage() {
-  const { message } = useStore();
+  const { messages } = useStore();
   const dispatch = useDispatch();
 
+  const positiveMessages = messages.filter(({ type }) => type === 'positive');
+
   useEffect(() => {
-    // Don't clear negative Messages automatically
-    if (message?.key && message.type !== 'negative') {
+    if (positiveMessages.length > 0) {
       setTimeout(() => {
-        dispatch({ payload: { message: null } });
+        // some may already be cleared by an earlier timeout; that's fine
+        dispatch(clearMessages(positiveMessages.map(({ id }) => id)));
       }, 4000);
     }
-  }, [dispatch, message]);
+  }, [dispatch, positiveMessages]);
 
-  if (!message?.key) return null;
+  if (messages.length === 0) return null;
 
-  if (Array.isArray(message.key)) {
-    return message.key.map((key, index) => (
-      <Message
-        key={key}
-        positive={message.type === 'positive'}
-        negative={message.type === 'negative'}
-      >
-        {I18n.t(key, (message.params ?? [])[index] ?? {})}
-      </Message>
-    ));
-  }
-
-  return (
+  // TODO: allow clearing message
+  return messages.map(({ id, key, type, params }) => (
     <Message
-      style={{ margin: 0 }}
-      positive={message.type === 'positive'}
-      negative={message.type === 'negative'}
+      key={id}
+      style={{ margin: messages.length === 1 ? 0 : undefined }}
+      positive={type === 'positive'}
+      negative={type === 'negative'}
     >
-      {I18n.t(message.key, message.params)}
+      {I18n.t(key, params)}
     </Message>
-  );
+  ));
 }

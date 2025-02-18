@@ -8,7 +8,7 @@ import EventIcon from '../../wca/EventIcon';
 import { hasPassed } from '../../../lib/utils/dates';
 import { events } from '../../../lib/wca-data.js.erb';
 import updateRegistration from '../api/registration/patch/update_registration';
-import { setMessage } from './RegistrationMessage';
+import { showMessage } from './RegistrationMessage';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { useConfirm } from '../../../lib/providers/ConfirmProvider';
 import { contactCompetitionUrl } from '../../../lib/requests/routes.js.erb';
@@ -41,7 +41,7 @@ export default function RegistrationOverview({
     }),
     onError: (data) => {
       const { error } = data.json;
-      dispatch(setMessage(
+      dispatch(showMessage(
         `competitions.registration_v2.errors.${error}`,
         'negative',
       ));
@@ -55,7 +55,7 @@ export default function RegistrationOverview({
           payment: registration.payment,
         },
       );
-      dispatch(setMessage('competitions.registration_v2.register.registration_status.cancelled', 'positive'));
+      dispatch(showMessage('competitions.registration_v2.register.registration_status.cancelled', 'positive'));
     },
   });
 

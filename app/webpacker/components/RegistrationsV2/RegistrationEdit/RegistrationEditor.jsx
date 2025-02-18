@@ -15,7 +15,7 @@ import {
 import { getSingleRegistration } from '../api/registration/get/get_registrations';
 import updateRegistration from '../api/registration/patch/update_registration';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
-import { setMessage } from '../Register/RegistrationMessage';
+import { showMessage } from '../Register/RegistrationMessage';
 import Loading from '../../Requests/Loading';
 import EventSelector from '../../wca/EventSelector';
 import Refunds from './Refunds';
@@ -59,7 +59,7 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
     mutationFn: updateRegistration,
     onError: (data) => {
       const { error } = data.json;
-      dispatch(setMessage(
+      dispatch(showMessage(
         `competitions.registration_v2.errors.${error}`,
         'negative',
       ));
@@ -74,10 +74,10 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
       );
       // Going from cancelled -> pending
       if (registration.competing.registration_status === 'cancelled') {
-        dispatch(setMessage('registrations.flash.registered', 'positive'));
+        dispatch(showMessage('registrations.flash.registered', 'positive'));
         // Not changing status
       } else {
-        dispatch(setMessage('registrations.flash.updated', 'positive'));
+        dispatch(showMessage('registrations.flash.updated', 'positive'));
       }
     },
   });
@@ -115,20 +115,20 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
 
   const handleRegisterClick = useCallback(() => {
     if (!hasChanges) {
-      dispatch(setMessage('competitions.registration_v2.update.no_changes', 'basic'));
+      dispatch(showMessage('competitions.registration_v2.update.no_changes', 'basic'));
     } else if (!commentIsValid) {
       // i18n-tasks-use t('registrations.errors.cannot_register_without_comment')
-      dispatch(setMessage('registrations.errors.cannot_register_without_comment', 'negative'));
+      dispatch(showMessage('registrations.errors.cannot_register_without_comment', 'negative'));
     } else if (!eventsAreValid) {
       // i18n-tasks-use t('registrations.errors.must_register')
-      dispatch(setMessage(
+      dispatch(showMessage(
         maxEvents === Infinity
           ? 'registrations.errors.must_register'
           : 'registrations.errors.exceeds_event_limit.other',
         'negative',
       ));
     } else {
-      dispatch(setMessage('competitions.registration_v2.update.being_updated', 'positive'));
+      dispatch(showMessage('competitions.registration_v2.update.being_updated', 'positive'));
       // Only send changed values
       const body = {
         user_id: competitor.id,

@@ -9,7 +9,7 @@ import { DateTime } from 'luxon';
 import { getAllRegistrations } from '../api/registration/get/get_registrations';
 import createSortReducer from '../reducers/sortReducer';
 import RegistrationActions from './RegistrationActions';
-import { setMessage } from '../Register/RegistrationMessage';
+import { showMessage, showMessages } from '../Register/RegistrationMessage';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
 import I18n from '../../../lib/i18n';
 import Loading from '../../Requests/Loading';
@@ -155,7 +155,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
     retry: false,
     onError: (err) => {
       const { errorCode } = err;
-      dispatchStore(setMessage(
+      dispatchStore(showMessage(
         errorCode
           ? `competitions.registration_v2.errors.${errorCode}`
           : 'registrations.flash.failed',
@@ -168,10 +168,14 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
     mutationFn: bulkUpdateRegistrations,
     onError: (data) => {
       const { error } = data.json;
-      dispatchStore(setMessage(
-        Object.values(error).map((err) => `competitions.registration_v2.errors.${err}`),
-        'negative',
-        Object.keys(error).map((userId) => ({ name: getUserName(registrations, Number(userId)) ?? userId })),
+      dispatchStore(showMessages(
+        Object.entries(error).map(([userId, err]) => (
+          {
+            key: `competitions.registration_v2.errors.${err}`,
+            type: 'negative',
+            params: { name: getUserName(registrations, Number(userId)) ?? userId },
+          }
+        ))
       ));
     },
     onSuccess: async () => {

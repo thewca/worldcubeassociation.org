@@ -3,7 +3,7 @@ import {
 } from 'semantic-ui-react';
 import React from 'react';
 import { Draggable } from 'react-beautiful-dnd';
-import { setMessage } from '../Register/RegistrationMessage';
+import { showMessage } from '../Register/RegistrationMessage';
 import I18n from '../../../lib/i18n';
 import {
   getRegistrationTimestamp,
@@ -85,7 +85,7 @@ export default function TableRow({
 
   const copyEmail = () => {
     navigator.clipboard.writeText(emailAddress);
-    setMessage('Copied email address to clipboard.', 'positive');
+    showMessage('Copied email address to clipboard.', 'positive');
   };
   /* eslint-disable react/jsx-props-no-spreading */
   return (
