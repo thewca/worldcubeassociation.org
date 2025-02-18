@@ -1080,7 +1080,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_18_070141) do
     t.boolean "is_competing", default: true
     t.text "administrative_notes"
     t.string "competing_status", default: "pending", null: false
-    t.datetime "registered_at", null: false
+    t.datetime "registered_at", default: -> { "CURRENT_TIMESTAMP(6)" }
     t.index ["competition_id", "user_id"], name: "index_registrations_on_competition_id_and_user_id", unique: true
     t.index ["competition_id"], name: "index_registrations_on_competition_id"
     t.index ["user_id"], name: "index_registrations_on_user_id"
