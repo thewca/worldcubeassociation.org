@@ -266,7 +266,7 @@ class Registration < ApplicationRecord
                               guests: guests,
                               competing: {
                                 registration_status: competing_status,
-                                registered_on: created_at,
+                                registered_on: registered_at,
                                 comment: comments,
                                 admin_comment: administrative_notes,
                               },
