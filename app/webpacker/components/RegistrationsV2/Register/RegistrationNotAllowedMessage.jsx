@@ -15,6 +15,7 @@ export default function RegistrationNotAllowedMessage({ reasons, competitionInfo
       <List bulleted>
         {reasons.map((reason) => (
           <List.Item key={reason}>
+            {/* eslint-disable-next-line react/no-danger */}
             <span dangerouslySetInnerHTML={{ __html: reason }} />
           </List.Item>
         ))}
