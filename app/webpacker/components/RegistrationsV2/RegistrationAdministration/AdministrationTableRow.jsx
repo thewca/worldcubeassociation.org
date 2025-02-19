@@ -1,5 +1,5 @@
 import {
-  Checkbox, Flag, Icon, Popup, Ref, Table,
+  Checkbox, Icon, Popup, Ref, Table,
 } from 'semantic-ui-react';
 import React from 'react';
 import { Draggable } from 'react-beautiful-dnd';
@@ -13,6 +13,7 @@ import EventIcon from '../../wca/EventIcon';
 import { editRegistrationUrl, editPersonUrl, personUrl } from '../../../lib/requests/routes.js.erb';
 import { isoMoneyToHumanReadable } from '../../../lib/helpers/money';
 import { countries } from '../../../lib/wca-data.js.erb';
+import RegionFlag from '../../wca/RegionFlag';
 
 // Semantic Table only allows truncating _all_ columns in a table in
 // single line fixed mode. As we only want to truncate the comment/admin notes
@@ -149,21 +150,9 @@ export default function TableRow({
             {dobIsShown && <Table.Cell>{dateOfBirth}</Table.Cell>}
 
             <Table.Cell>
-              {regionIsExpanded ? (
-                <>
-                  <Flag className={country.iso2.toLowerCase()} />
-                  {regionIsExpanded && countries.byIso2[country.iso2].name}
-                </>
-              ) : (
-                <Popup
-                  content={countries.byIso2[country.iso2].name}
-                  trigger={(
-                    <span>
-                      <Flag className={country.iso2.toLowerCase()} />
-                    </span>
-                  )}
-                />
-              )}
+              <RegionFlag iso2={country.iso2} withoutTooltip={regionIsExpanded} />
+              {' '}
+              {regionIsExpanded && countries.byIso2[country.iso2].name}
             </Table.Cell>
 
             <Table.Cell>
