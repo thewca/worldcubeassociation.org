@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class TicketCommentsController < ApplicationController
-  include Rails::Pagination
-
   before_action :authenticate_user!
 
   def index
