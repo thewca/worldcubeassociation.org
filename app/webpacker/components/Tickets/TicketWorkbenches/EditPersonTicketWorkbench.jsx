@@ -10,7 +10,7 @@ import Errored from '../../Requests/Errored';
 import I18n from '../../../lib/i18n';
 
 function formatField(field, value) {
-  return field === 'name' ? value.replace(' ', '#') : value;
+  return field === 'name' ? value.replaceAll(' ', '#') : value;
 }
 
 function EditPersonValidations({ ticketDetails }) {
