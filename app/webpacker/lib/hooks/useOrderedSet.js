@@ -1,9 +1,13 @@
 import { useCallback, useReducer } from 'react';
+import _ from 'lodash';
 
 const reducer = (state, {
-  type, array, element,
+  type, array, elements,
 }) => {
-  switch (type) {
+    const toAdd = _.uniq(elements?.filter((e) => !state.array.includes(e)) ?? []);
+    const toRemove = _.uniq(elements?.filter((e) => state.array.includes(e)) ?? []);
+
+    switch (type) {
     case 'clear':
       return { ...state, array: [] };
 
@@ -11,22 +15,25 @@ const reducer = (state, {
       return { ...state, array };
 
     case 'add':
-      if (!state.array.includes(element)) {
-        return { ...state, array: [...state.array, element] };
+      if (toAdd.length) {
+        return { ...state, array: [...state.array, ...toAdd] };
       }
       break;
 
     case 'remove':
-      if (state.array.includes(element)) {
-        return { ...state, array: [...state.array.filter((e) => e !== element)] };
+      if (toRemove.length) {
+        return { ...state, array: [...state.array.filter((e) => !toRemove.includes(e))] };
       }
       break;
 
     case 'toggle':
-      if (state.array.includes(element)) {
-        return { ...state, array: [...state.array.filter((e) => e !== element)] };
+      if (elements?.length) {
+        return {
+          ...state,
+          array: [...state.array.filter((e) => !toRemove.includes(e)), ...toAdd],
+        };
       }
-      return { ...state, array: [...state.array, element] };
+      break;
 
     default:
       console.error('Unknown action type', type);
@@ -36,25 +43,23 @@ const reducer = (state, {
   return state;
 };
 
-const removeDuplicates = (array) => [...new Set(array)];
-
 /** Maintains an ordered set as an array without duplicates. */
 export default function useOrderedSet(initialArray = []) {
   const [{ array }, dispatch] = useReducer(
     reducer,
     initialArray,
-    (arr) => ({ array: removeDuplicates(arr) }),
+    (arr) => ({ array: _.uniq(arr) }),
   );
 
   const clear = useCallback(() => dispatch({ type: 'clear' }), []);
 
   const update = useCallback((newArray) => dispatch({ type: 'override', array: newArray }), []);
 
-  const add = useCallback((element) => dispatch({ type: 'add', element }), []);
+  const add = useCallback((...elements) => dispatch({ type: 'add', elements }), []);
 
-  const remove = useCallback((element) => dispatch({ type: 'remove', element }), []);
+  const remove = useCallback((...elements) => dispatch({ type: 'remove', elements }), []);
 
-  const toggle = useCallback((element) => dispatch({ type: 'toggle', element }), []);
+  const toggle = useCallback((...elements) => dispatch({ type: 'toggle', elements }), []);
 
   return {
     asArray: array, clear, update, add, remove, toggle,
