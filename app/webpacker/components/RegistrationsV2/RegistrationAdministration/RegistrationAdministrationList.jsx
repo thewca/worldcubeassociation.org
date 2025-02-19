@@ -284,13 +284,10 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
       key: 'pending',
       title: {
         content: (
-          <Header as="span">
-            Pending registrations
-            {' '}
-            (
-            {pending.length}
-            )
-          </Header>
+          <SectionToggle
+            title="Pending registrations"
+            inParens={pending.length}
+          />
         ),
       },
       content: {
@@ -320,13 +317,10 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
       key: 'waitlist',
       title: {
         content: (
-          <Header as="span">
-            {I18n.t('registrations.list.waiting_list')}
-            {' '}
-            (
-            {waiting.length}
-            )
-          </Header>
+          <SectionToggle
+            title={I18n.t('registrations.list.waiting_list')}
+            inParens={waiting.length}
+          />
         ),
       },
       content: {
@@ -365,19 +359,18 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
       key: 'accepted',
       title: {
         content: (
-          <Header as="span">
-            {I18n.t('registrations.list.approved_registrations')}
-            {' '}
-            (
-            {accepted.length}
-            {spotsRemaining !== Infinity && (
-              <>
-                {`/${competitionInfo.competitor_limit}; `}
-                {spotsRemainingText}
-              </>
-            )}
-            )
-          </Header>
+          <SectionToggle
+            title={I18n.t('registrations.list.approved_registrations')}
+            inParens={
+              `${
+                accepted.length
+              }${
+                spotsRemaining !== Infinity
+                  ? `/${competitionInfo.competitor_limit}, ${spotsRemainingText}`
+                  : ''
+              }`
+            }
+          />
         ),
       },
       content: {
@@ -402,13 +395,10 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
       key: 'cancelled',
       title: {
         content: (
-          <Header as="span">
-            {I18n.t('competitions.registration_v2.list.cancelled.title')}
-            {' '}
-            (
-            {cancelled.length}
-            )
-          </Header>
+          <SectionToggle
+            title={I18n.t('competitions.registration_v2.list.cancelled.title')}
+            inParens={cancelled.length}
+          />
         ),
       },
       content: {
@@ -438,13 +428,10 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
       key: 'rejected',
       title: {
         content: (
-          <Header as="span">
-            {I18n.t('competitions.registration_v2.list.rejected.title')}
-            {' '}
-            (
-            {rejected.length}
-            )
-          </Header>
+          <SectionToggle
+            title={I18n.t('competitions.registration_v2.list.rejected.title')}
+            inParens={rejected.length}
+          />
         ),
       },
       content: {
@@ -526,5 +513,13 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
         {/* i18n-tasks-use t('registrations.list.non_competing') */}
       </div>
     </Segment>
+  );
+}
+
+function SectionToggle({ title, inParens }) {
+  return (
+    <Header as="span">
+      {`${title} (${inParens})`}
+    </Header>
   );
 }
