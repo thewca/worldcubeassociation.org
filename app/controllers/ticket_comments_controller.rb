@@ -12,7 +12,7 @@ class TicketCommentsController < ApplicationController
     return head :unauthorized unless ticket.can_user_access?(current_user)
 
     comments = ticket.ticket_comments.order(created_at: :desc)
-    paginate json: comments
+    render json: comments
   end
 
   def create
