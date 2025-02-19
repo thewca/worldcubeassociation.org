@@ -57,7 +57,9 @@ function TicketContent({ ticketDetails, currentStakeholder, sync }) {
         ticketId={ticketDetails.ticket.id}
         currentStakeholder={currentStakeholder}
       />
-      <TicketLogs logs={ticketDetails.ticket.ticket_logs} />
+      <TicketLogs
+        ticketId={ticketDetails.ticket.id}
+      />
     </>
   );
 }

@@ -37,7 +37,7 @@ class Ticket < ApplicationRecord
   end
 
   DEFAULT_SERIALIZE_OPTIONS = {
-    include: %w[ticket_logs metadata],
+    include: %w[metadata],
   }.freeze
 
   def serializable_hash(options = nil)
