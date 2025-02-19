@@ -303,9 +303,9 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
               columnsExpanded={expandedColumns}
               registrations={pending}
               selected={partitionedSelected.pending}
-              select={selectedIds.add}
-              unselect={selectedIds.remove}
-              toggle={selectedIds.toggle}
+              onSelect={selectedIds.add}
+              onUnselect={selectedIds.remove}
+              onToggle={selectedIds.toggle}
               competition_id={competitionInfo.id}
               changeSortColumn={changeSortColumn}
               sortDirection={sortDirection}
@@ -341,9 +341,9 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
             <RegistrationAdministrationTable
               columnsExpanded={expandedColumns}
               selected={partitionedSelected.waiting}
-              select={selectedIds.add}
-              unselect={selectedIds.remove}
-              toggle={selectedIds.toggle}
+              onSelect={selectedIds.add}
+              onUnselect={selectedIds.remove}
+              onToggle={selectedIds.toggle}
               competition_id={competitionInfo.id}
               changeSortColumn={changeSortColumn}
               sortDirection={sortDirection}
@@ -385,9 +385,9 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
             columnsExpanded={expandedColumns}
             registrations={accepted}
             selected={partitionedSelected.accepted}
-            select={selectedIds.add}
-            unselect={selectedIds.remove}
-            toggle={selectedIds.toggle}
+            onSelect={selectedIds.add}
+            onUnselect={selectedIds.remove}
+            onToggle={selectedIds.toggle}
             competition_id={competitionInfo.id}
             changeSortColumn={changeSortColumn}
             sortDirection={sortDirection}
@@ -420,9 +420,9 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
               columnsExpanded={expandedColumns}
               registrations={cancelled}
               selected={partitionedSelected.cancelled}
-              select={selectedIds.add}
-              unselect={selectedIds.remove}
-              toggle={selectedIds.toggle}
+              onSelect={selectedIds.add}
+              onUnselect={selectedIds.remove}
+              onToggle={selectedIds.toggle}
               competition_id={competitionInfo.id}
               changeSortColumn={changeSortColumn}
               sortDirection={sortDirection}
@@ -456,9 +456,9 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
               columnsExpanded={expandedColumns}
               registrations={rejected}
               selected={partitionedSelected.rejected}
-              select={selectedIds.add}
-              unselect={selectedIds.remove}
-              toggle={selectedIds.toggle}
+              onSelect={selectedIds.add}
+              onUnselect={selectedIds.remove}
+              onToggle={selectedIds.toggle}
               competition_id={competitionInfo.id}
               changeSortColumn={changeSortColumn}
               sortDirection={sortDirection}
