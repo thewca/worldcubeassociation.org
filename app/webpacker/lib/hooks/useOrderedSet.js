@@ -61,7 +61,11 @@ export default function useOrderedSet(initialArray = []) {
 
   const toggle = useCallback((...elements) => dispatch({ type: 'toggle', elements }), []);
 
+  const size = array.length;
+
+  const has = useCallback((element) => array.includes(element), [array]);
+
   return {
-    asArray: array, clear, update, add, remove, toggle,
+    asArray: array, size, has, clear, update, add, remove, toggle,
   };
 }
