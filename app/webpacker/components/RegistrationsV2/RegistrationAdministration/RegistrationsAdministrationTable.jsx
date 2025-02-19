@@ -14,6 +14,7 @@ export default function RegistrationAdministrationTable({
   selected,
   select,
   unselect,
+  toggle,
   sortDirection,
   sortColumn,
   changeSortColumn,
@@ -24,9 +25,9 @@ export default function RegistrationAdministrationTable({
 }) {
   const handleHeaderCheck = (_, data) => {
     if (data.checked) {
-      select(registrations.map(({ user }) => user.id));
+      select(...registrations.map(({ user }) => user.id));
     } else {
-      unselect(registrations.map(({ user }) => user.id));
+      unselect(...registrations.map(({ user }) => user.id));
     }
   };
 
@@ -62,13 +63,7 @@ export default function RegistrationAdministrationTable({
                     competitionInfo={competitionInfo}
                     columnsExpanded={columnsExpanded}
                     registration={w}
-                    onCheckboxChange={(_, data) => {
-                      if (data.checked) {
-                        select([w.user.id]);
-                      } else {
-                        unselect([w.user.id]);
-                      }
-                    }}
+                    onCheckboxChange={() => toggle(w.user.id)}
                     index={i}
                     draggable={draggable}
                     isSelected={selected.includes(w.user.id)}
