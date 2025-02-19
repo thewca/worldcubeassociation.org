@@ -47,3 +47,16 @@ export function getTotals(registrations, eventIds = []) {
     eventCountsSum,
   });
 }
+
+export function expandSortTerm(term) {
+  switch (term) {
+    case 'asc':
+      return 'ascending'
+    
+    case 'desc':
+      return 'descending'
+  
+    default:
+      return undefined
+  }
+}
