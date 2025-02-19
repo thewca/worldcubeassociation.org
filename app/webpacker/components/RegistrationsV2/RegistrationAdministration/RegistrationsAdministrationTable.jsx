@@ -20,6 +20,7 @@ export default function RegistrationAdministrationTable({
   competitionInfo,
   draggable = false,
   sortable = true,
+  withPosition = false,
   handleOnDragEnd,
 }) {
   const handleHeaderCheck = (_, data) => {
@@ -49,7 +50,8 @@ export default function RegistrationAdministrationTable({
         sortColumn={sortColumn}
         changeSortColumn={changeSortColumn}
         competitionInfo={competitionInfo}
-        draggable={draggable}
+        withCheckbox={!draggable}
+        withPosition={withPosition}
       />
 
       <DragDropContext onDragEnd={handleOnDragEnd}>
@@ -72,6 +74,7 @@ export default function RegistrationAdministrationTable({
                     index={i}
                     draggable={draggable}
                     isSelected={selected.includes(w.user.id)}
+                    withPosition={withPosition}
                   />
                 ))}
                 {providedDroppable.placeholder}
@@ -85,6 +88,7 @@ export default function RegistrationAdministrationTable({
           columnsExpanded={columnsExpanded}
           registrations={registrations}
           competitionInfo={competitionInfo}
+          withPosition={withPosition}
         />
       </TableFooter>
     </Table>
