@@ -4,10 +4,10 @@ import _ from 'lodash';
 const reducer = (state, {
   type, array, elements,
 }) => {
-    const toAdd = _.uniq(elements?.filter((e) => !state.array.includes(e)) ?? []);
-    const toRemove = _.uniq(elements?.filter((e) => state.array.includes(e)) ?? []);
+  const toAdd = _.uniq(elements?.filter((e) => !state.array.includes(e)) ?? []);
+  const toRemove = _.uniq(elements?.filter((e) => state.array.includes(e)) ?? []);
 
-    switch (type) {
+  switch (type) {
     case 'clear':
       return { ...state, array: [] };
 
