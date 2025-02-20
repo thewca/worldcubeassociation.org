@@ -5,6 +5,7 @@ import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { setMessage } from '../Register/RegistrationMessage';
 import I18n from '../../../lib/i18n';
 import { countries } from '../../../lib/wca-data.js.erb';
+import { APPROVED_COLOR, CANCELLED_COLOR, PENDING_COLOR, REJECTED_COLOR, WAITLIST_COLOR } from '../../../lib/utils/registrationAdmin';
 
 function V3csvExport(selected, registrations, competition) {
   let csvContent = 'data:text/csv;charset=utf-8,';
@@ -135,6 +136,7 @@ export default function RegistrationActions({
             competitionInfo,
           );
         }}
+        color="blue"
         icon="copy"
         content={I18n.t('registrations.list.export_csv')}
       />
@@ -161,8 +163,8 @@ export default function RegistrationActions({
           <>
             {anyApprovable && (
               <Button
-                positive
                 onClick={attemptToApprove}
+                color={APPROVED_COLOR}
                 icon="check"
                 content={I18n.t('registrations.list.approve')}
               />
@@ -174,6 +176,7 @@ export default function RegistrationActions({
                   [...accepted, ...cancelled, ...waiting, ...rejected],
                   'pending',
                 )}
+                color={PENDING_COLOR}
                 icon="times"
                 content={I18n.t('competitions.registration_v2.update.move_pending')}
               />
@@ -181,10 +184,10 @@ export default function RegistrationActions({
 
             {anyWaitlistable && (
               <Button
-                color="yellow"
                 onClick={() => moveToWaitingList(
                   [...pending, ...cancelled, ...accepted, ...rejected],
                 )}
+                color={WAITLIST_COLOR}
                 icon="hourglass"
                 content={I18n.t('competitions.registration_v2.update.move_waiting')}
               />
@@ -192,11 +195,11 @@ export default function RegistrationActions({
 
             {anyCancellable && (
               <Button
-                color="orange"
                 onClick={() => changeStatus(
                   [...pending, ...accepted, ...waiting, ...rejected],
                   'cancelled',
                 )}
+                color={CANCELLED_COLOR}
                 icon="trash"
                 content={I18n.t('competitions.registration_v2.update.cancel')}
               />
@@ -204,11 +207,11 @@ export default function RegistrationActions({
 
             {anyRejectable && (
               <Button
-                negative
                 onClick={() => changeStatus(
                   [...pending, ...accepted, ...waiting, ...cancelled],
                   'rejected',
                 )}
+                color={REJECTED_COLOR}
                 icon="delete"
                 content={I18n.t('competitions.registration_v2.update.reject')}
               />
