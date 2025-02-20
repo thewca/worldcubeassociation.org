@@ -137,7 +137,7 @@ export default function RegistrationActions({
           );
         }}
         color="blue"
-        icon="copy"
+        icon="download"
         content={I18n.t('registrations.list.export_csv')}
       />
 
@@ -167,7 +167,7 @@ export default function RegistrationActions({
               'pending',
             )}
             color={PENDING_COLOR}
-            icon="times"
+            icon="left arrow"
             content={I18n.t('competitions.registration_v2.update.move_pending')}
             disabled={!anyPending}
           />
