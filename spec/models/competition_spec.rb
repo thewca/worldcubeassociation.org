@@ -1594,41 +1594,39 @@ RSpec.describe Competition do
     end
 
     it 'attempt auto close returns true when it succeeds' do
-      FactoryBot.create_list(:registration, 4, :paid, competition: auto_close_comp)
-      reg = FactoryBot.create(:registration, competition: auto_close_comp)
-      payment = FactoryBot.build(:registration_payment, registration: reg)
-      payment.save(validate: false) # Stop the after_save hook from being triggered so that we can trigger it manually
+      FactoryBot.create_list(:registration, 4, :paid_no_hooks, competition: auto_close_comp)
+      reg = FactoryBot.create(:registration, :paid_no_hooks, competition: auto_close_comp)
 
       expect(auto_close_comp.attempt_auto_close!).to eq(true)
     end
 
-    it 'doesnt auto-close if threshold not reached' do
-      FactoryBot.create(:registration, :paid, competition: auto_close_comp)
-      expect(auto_close_comp.registration_past?).to eq(false)
+    it 'wont auto-close if threshold not reached' do
+      FactoryBot.create(:registration, :paid_no_hooks, competition: auto_close_comp)
+      expect(auto_close_comp.attempt_auto_close!).to eq(false)
     end
 
     it 'doesnt auto-close if threshold is null' do
-      FactoryBot.create(:registration, :paid, competition: comp)
-      expect(comp.registration_past?).to eq(false)
+      FactoryBot.create(:registration, :paid_no_hooks, competition: comp)
+      expect(comp.attempt_auto_close!).to eq(false)
     end
 
     it 'closes registrations when the close threshold is reached' do
-      FactoryBot.create_list(:registration, 5, :paid, competition: auto_close_comp)
-      expect(auto_close_comp.registration_past?).to eq(true)
+      FactoryBot.create_list(:registration, 5, :paid_no_hooks, competition: auto_close_comp)
+      expect(auto_close_comp.attempt_auto_close!).to eq(true)
     end
 
     it 'closes registrations when the close threshold is exceeded' do
-      FactoryBot.create_list(:registration, 5, :paid, competition: comp)
+      FactoryBot.create_list(:registration, 5, :paid_no_hooks, competition: comp)
 
       comp.update_column(:auto_close_threshold, 5)
-      FactoryBot.create(:registration, :paid, competition: comp)
+      FactoryBot.create(:registration, :paid_no_hooks, competition: comp)
 
-      expect(comp.registration_past?).to eq(true)
+      expect(comp.attempt_auto_close!).to eq(true)
     end
 
-    it 'only auto-closes if the registrations are paid registrations' do
+    it 'only auto-closes if the registrations are paid_no_hooks registrations' do
       FactoryBot.create_list(:registration, 5, competition: auto_close_comp)
-      expect(auto_close_comp.registration_past?).to eq(false)
+      expect(auto_close_comp.attempt_auto_close!).to eq(false)
     end
 
     context 'validations' do
@@ -1656,14 +1654,14 @@ RSpec.describe Competition do
       end
 
       it 'cant set auto_close_threshold == number of paid registrations' do
-        FactoryBot.create_list(:registration, 3, :paid, competition: auto_close_comp)
+        FactoryBot.create_list(:registration, 3, :paid_no_hooks, competition: auto_close_comp)
         auto_close_comp.auto_close_threshold = 3
         expect(auto_close_comp).not_to be_valid
         expect(auto_close_comp.errors[:auto_close_threshold]).to include("Auto close threshold must be greater than the number of currently paid registrations")
       end
 
       it 'cant set auto_close_threshold < number of paid registrations' do
-        FactoryBot.create_list(:registration, 3, :paid, competition: auto_close_comp)
+        FactoryBot.create_list(:registration, 3, :paid_no_hooks, competition: auto_close_comp)
         auto_close_comp.auto_close_threshold = 2
         expect(auto_close_comp).not_to be_valid
         expect(auto_close_comp.errors[:auto_close_threshold]).to include("Auto close threshold must be greater than the number of currently paid registrations")
