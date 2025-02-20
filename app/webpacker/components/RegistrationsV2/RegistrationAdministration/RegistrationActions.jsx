@@ -160,14 +160,6 @@ export default function RegistrationActions({
             icon="copy"
             content={I18n.t('competitions.registration_v2.update.email_copy')}
           />
-          
-          <Button
-            onClick={attemptToApprove}
-            color={APPROVED_COLOR}
-            icon="check"
-            content={I18n.t('registrations.list.approve')}
-            disabled={!anyApprovable}
-          />
 
           <Button
             onClick={() => changeStatus(
@@ -188,6 +180,14 @@ export default function RegistrationActions({
             icon="hourglass"
             content={I18n.t('competitions.registration_v2.update.move_waiting')}
             disabled={!anyWaitlistable}
+          />
+          
+          <Button
+            onClick={attemptToApprove}
+            color={APPROVED_COLOR}
+            icon="check"
+            content={I18n.t('registrations.list.approve')}
+            disabled={!anyApprovable}
           />
 
           <Button
