@@ -11,7 +11,7 @@ import {
 import _ from 'lodash';
 
 import VenueLocationMap from './VenueLocationMap';
-import { countries, backendTimezones } from '../../../lib/wca-data.js.erb';
+import { backendTimezones } from '../../../lib/wca-data.js.erb';
 import RoomPanel from './RoomPanel';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { useConfirm } from '../../../lib/providers/ConfirmProvider';
@@ -22,13 +22,7 @@ import {
 } from '../store/actions';
 import { toDegrees, toMicrodegrees } from '../../../lib/utils/edit-schedule';
 import { getTimeZoneDropdownLabel, sortByOffset } from '../../../lib/utils/timezone';
-
-const countryOptions = countries.real.map((country) => ({
-  key: country.iso2,
-  text: country.name,
-  value: country.iso2,
-  flag: country.iso2.toLowerCase(),
-}));
+import CountrySelector from '../../CountrySelector/CountrySelector';
 
 function VenuePanel({
   venue,
@@ -140,12 +134,9 @@ function VenuePanel({
               value={venue.name}
               onChange={handleVenueChange}
             />
-            <Form.Select
-              search
-              label="Country"
+            <CountrySelector
               name="countryIso2"
-              options={countryOptions}
-              value={venue.countryIso2}
+              countryIso2={venue.countryIso2}
               onChange={handleVenueChange}
             />
             <Form.Select

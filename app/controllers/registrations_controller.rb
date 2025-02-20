@@ -261,9 +261,6 @@ class RegistrationsController < ApplicationController
 
   def register
     @competition = competition_from_params
-    if current_user
-      @registration = @competition.registrations.find_or_initialize_by(user_id: current_user.id, competition_id: @competition.id)
-    end
   end
 
   def payment_denomination

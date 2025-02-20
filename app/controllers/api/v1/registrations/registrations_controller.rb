@@ -30,7 +30,7 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
   def validate_show_registration
     @user_id, @competition_id = show_params
     @competition = Competition.find(@competition_id)
-    render_error(:unauthorized, ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless @current_user.id == @user_id.to_i || @current_user.can_manage_competition?(@competition)
+    render_error(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless @current_user.id == @user_id.to_i || @current_user.can_manage_competition?(@competition)
   end
 
   def show
@@ -108,7 +108,7 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
     # TODO: Do we set this as an instance variable here so we can use it below?
     @competition = Competition.find(competition_id)
     unless @current_user.can_manage_competition?(@competition)
-      render_error(:unauthorized, ErrorCodes::USER_INSUFFICIENT_PERMISSIONS)
+      render_error(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS)
     end
   end
 
@@ -128,10 +128,12 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
   def validate_payment_ticket_request
     competition_id = params[:competition_id]
     @competition = Competition.find(competition_id)
-    render_error(:forbidden, ErrorCodes::PAYMENT_NOT_ENABLED) unless @competition.using_payment_integrations?
+    return render_error(:forbidden, Registrations::ErrorCodes::PAYMENT_NOT_ENABLED) unless @competition.using_payment_integrations?
+
+    return render_error(:forbidden, Registrations::ErrorCodes::REGISTRATION_CLOSED) if @competition.registration_past?
 
     @registration = Registration.find_by(user: @current_user, competition: @competition)
-    render_error(:forbidden, ErrorCodes::PAYMENT_NOT_READY) if @registration.nil?
+    render_error(:forbidden, Registrations::ErrorCodes::PAYMENT_NOT_READY) if @registration.nil?
   end
 
   def payment_ticket

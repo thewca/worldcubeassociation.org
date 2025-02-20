@@ -107,6 +107,6 @@ RSpec.describe "RegulationsCheck" do
     expect(status).to eq :danger
     # The \d reference is a line number in the external `json` gem which might change every now and then.
     # We want to avoid having to change our tests whenever that library updates.
-    expect(description).to match(/Error while loading regulations: unexpected token at 'i am definitely not json' from JSON::ParserError/)
+    expect(description).to match(/Error while loading regulations: unexpected character: 'i am definitely not json' from JSON::ParserError/)
   end
 end

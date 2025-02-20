@@ -3,7 +3,11 @@ import { Popup } from 'semantic-ui-react';
 import useLoadedData from '../../lib/hooks/useLoadedData';
 import I18n from '../../lib/i18n';
 import {
-  apiV0Urls, delegatesPageUrl, teamsCommitteesCouncilsPageUrl, translatorsPageUrl, officersAndBoardPageUrl,
+  apiV0Urls,
+  delegatesPageUrl,
+  teamsCommitteesCouncilsPageUrl,
+  translatorsPageUrl,
+  officersAndBoardPageUrl,
 } from '../../lib/requests/routes.js.erb';
 import { groupTypes } from '../../lib/wca-data.js.erb';
 

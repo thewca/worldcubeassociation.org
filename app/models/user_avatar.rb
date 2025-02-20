@@ -50,7 +50,7 @@ class UserAvatar < ApplicationRecord
 
       URI::HTTPS.build(host: host, path: path).to_s
     when 'active_storage'
-      return UserAvatar.default_avatar(self.linked_user).url unless self.image.attached?
+      return UserAvatar.default_avatar(self.linked_user).url unless self.attached?
 
       if self.using_cdn?
         URI.join(EnvConfig.S3_AVATARS_ASSET_HOST, self.image.key).to_s
@@ -74,7 +74,7 @@ class UserAvatar < ApplicationRecord
 
       URI::HTTPS.build(host: host, path: path).to_s
     when 'active_storage'
-      return UserAvatar.default_avatar(self.linked_user).thumbnail_url unless self.image.attached?
+      return UserAvatar.default_avatar(self.linked_user).thumbnail_url unless self.attached?
 
       if self.using_cdn?
         URI.join(EnvConfig.S3_AVATARS_ASSET_HOST, self.thumbnail_image.processed.key).to_s
@@ -135,6 +135,13 @@ class UserAvatar < ApplicationRecord
 
   alias_method :can_edit_thumbnail, :can_edit_thumbnail?
 
+  def thumbnail_previously_changed?
+    self.thumbnail_crop_x_previously_changed? ||
+      self.thumbnail_crop_y_previously_changed? ||
+      self.thumbnail_crop_w_previously_changed? ||
+      self.thumbnail_crop_h_previously_changed?
+  end
+
   after_save :move_user_associations,
              if: :status_previously_changed?,
              unless: :destroyed?
@@ -193,6 +200,8 @@ class UserAvatar < ApplicationRecord
   end
 
   private def reattach_image(from_file, to_file)
+    return unless from_file.attached?
+
     # ActiveStorage is a bit inconvenient when moving files around.
     #   Simply writing `to_file.attach(from_file.blob)` makes the code execute successfully,
     #   but under the hood the file is not actually moved because AS thinks that it's already uploaded :/
@@ -207,8 +216,11 @@ class UserAvatar < ApplicationRecord
   end
 
   after_save :invalidate_thumbnail_if_approved,
-             if: [:active_storage?, :approved?, :attached?],
-             unless: :destroyed?
+             if: [:using_cdn?, :approved?],
+             # If the thumbnail details changed, Rails will generate a new key anyways,
+             #   and it is not necessary to manually invalidate
+             #   because the new ActiveStorage key will result in a new, fresh URL
+             unless: [:destroyed?, :thumbnail_previously_changed?]
 
   def invalidate_thumbnail_if_approved
     return unless AppSecrets.CDN_AVATARS_DISTRIBUTION_ID.present?

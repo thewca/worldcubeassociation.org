@@ -43,6 +43,7 @@ const shouldShowCompleted = (isRegistered, hasPaid, isAccepted, key, index) => {
   if (key === registrationOverviewConfig.key) {
     return isAccepted;
   }
+  return false;
 };
 
 const shouldBeDisabled = (hasPaid, key, activeIndex, index, competitionInfo, isRejected) => {
@@ -51,7 +52,7 @@ const shouldBeDisabled = (hasPaid, key, activeIndex, index, competitionInfo, isR
   }
 
   if (key === paymentStepConfig.key) {
-    return !hasPaid && index > activeIndex;
+    return (!hasPaid && index > activeIndex) || !competitionInfo['registration_currently_open?'];
   }
   if (key === competingStepConfig.key) {
     return index > activeIndex;
@@ -59,6 +60,7 @@ const shouldBeDisabled = (hasPaid, key, activeIndex, index, competitionInfo, isR
   if (key === requirementsStepConfig.key) {
     return activeIndex !== 0;
   }
+  return false;
 };
 
 export default function StepPanel({
