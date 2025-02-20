@@ -38,6 +38,8 @@ class Registration < ApplicationRecord
 
   validates :user, presence: true, on: [:create]
 
+  validates :registered_at, presence: true
+
   validates_numericality_of :guests, greater_than_or_equal_to: 0
 
   validates_numericality_of :guests, less_than_or_equal_to: :guest_limit, if: :check_guest_limit?

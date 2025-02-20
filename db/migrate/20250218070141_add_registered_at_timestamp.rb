@@ -2,9 +2,9 @@
 
 class AddRegisteredAtTimestamp < ActiveRecord::Migration[7.2]
   def up
-    add_column :registrations, :registered_at, :datetime, precision: 6, default: -> { 'NOW(6)' }
+    add_column :registrations, :registered_at, :datetime, precision: 6
     Registration.update_all('registered_at = created_at')
-    # change_column_null :registrations, :registered_at, false
+    change_column_null :registrations, :registered_at, false
 
     ActiveRecord::Base.connection.execute(<<~SQL)
       UPDATE registrations

@@ -7,7 +7,8 @@ module Registrations
         registration = Registration.build(competition_id: competition_id,
                                           user_id: user_id,
                                           comments: lane_params[:competing][:comment] || '',
-                                          guests: lane_params[:guests] || 0)
+                                          guests: lane_params[:guests] || 0,
+                                          registered_at: Time.now.utc)
 
         create_event_ids = lane_params[:competing][:event_ids]
 
