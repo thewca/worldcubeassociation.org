@@ -221,6 +221,7 @@ Rails.application.routes.draw do
     post 'update_status' => 'tickets#update_status', as: :update_status
     get 'edit_person_validators' => 'tickets#edit_person_validators', as: :edit_person_validators
     resources :ticket_comments, only: [:index, :create], as: :comments
+    resources :ticket_logs, only: [:index], as: :logs
   end
   resources :notifications, only: [:index]
 
