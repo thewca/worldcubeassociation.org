@@ -135,11 +135,9 @@ export default function RegistrationActions({
             competitionInfo,
           );
         }}
-      >
-        <Icon name="download" />
-        {' '}
-        {I18n.t('registrations.list.export_csv')}
-      </Button>
+        icon="copy"
+        content={I18n.t('registrations.list.export_csv')}
+      />
 
       {anySelected && (
         <>
@@ -155,16 +153,19 @@ export default function RegistrationActions({
             </a>
           </Button>
 
-          <Button onClick={() => copyEmails(selectedEmails)}>
-            <Icon name="copy" />
-            {I18n.t('competitions.registration_v2.update.email_copy')}
-          </Button>
+          <Button
+            onClick={() => copyEmails(selectedEmails)}
+            icon="copy"
+            content={I18n.t('competitions.registration_v2.update.email_copy')}
+          />
           <>
             {anyApprovable && (
-              <Button positive onClick={attemptToApprove}>
-                <Icon name="check" />
-                {I18n.t('registrations.list.approve')}
-              </Button>
+              <Button
+                positive
+                onClick={attemptToApprove}
+                icon="check"
+                content={I18n.t('registrations.list.approve')}
+              />
             )}
 
             {anyPending && (
@@ -173,22 +174,20 @@ export default function RegistrationActions({
                   [...accepted, ...cancelled, ...waiting, ...rejected],
                   'pending',
                 )}
-              >
-                <Icon name="times" />
-                {I18n.t('competitions.registration_v2.update.move_pending')}
-              </Button>
+                icon="times"
+                content={I18n.t('competitions.registration_v2.update.move_pending')}
+              />
             )}
 
             {anyWaitlistable && (
-            <Button
-              color="yellow"
-              onClick={() => moveToWaitingList(
-                [...pending, ...cancelled, ...accepted, ...rejected],
-              )}
-            >
-              <Icon name="hourglass" />
-              {I18n.t('competitions.registration_v2.update.move_waiting')}
-            </Button>
+              <Button
+                color="yellow"
+                onClick={() => moveToWaitingList(
+                  [...pending, ...cancelled, ...accepted, ...rejected],
+                )}
+                icon="hourglass"
+                content={I18n.t('competitions.registration_v2.update.move_waiting')}
+              />
             )}
 
             {anyCancellable && (
@@ -198,10 +197,9 @@ export default function RegistrationActions({
                   [...pending, ...accepted, ...waiting, ...rejected],
                   'cancelled',
                 )}
-              >
-                <Icon name="trash" />
-                {I18n.t('competitions.registration_v2.update.cancel')}
-              </Button>
+                icon="trash"
+                content={I18n.t('competitions.registration_v2.update.cancel')}
+              />
             )}
 
             {anyRejectable && (
@@ -211,10 +209,9 @@ export default function RegistrationActions({
                   [...pending, ...accepted, ...waiting, ...cancelled],
                   'rejected',
                 )}
-              >
-                <Icon name="delete" />
-                {I18n.t('competitions.registration_v2.update.reject')}
-              </Button>
+                icon="delete"
+                content={I18n.t('competitions.registration_v2.update.reject')}
+              />
             )}
           </>
           )
