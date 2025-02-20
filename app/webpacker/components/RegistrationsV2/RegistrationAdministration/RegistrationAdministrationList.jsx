@@ -17,34 +17,7 @@ import { bulkUpdateRegistrations } from '../api/registration/patch/update_regist
 import RegistrationAdministrationTable from './RegistrationsAdministrationTable';
 import useCheckboxState from '../../../lib/hooks/useCheckboxState';
 import { countries } from '../../../lib/wca-data.js.erb';
-
-const selectedReducer = (state, action) => {
-  let newState = [...state];
-
-  const { type, attendee, attendees } = action;
-  const idList = attendees || [attendee];
-
-  switch (type) {
-    case 'add':
-      idList.forEach((id) => {
-        // Make sure no one adds an attendee twice
-        if (!newState.includes(id)) newState.push(id);
-      });
-      break;
-
-    case 'remove':
-      newState = newState.filter((id) => !idList.includes(id));
-      break;
-
-    case 'clear-selected':
-      return [];
-
-    default:
-      throw new Error('Unknown action.');
-  }
-
-  return newState;
-};
+import useOrderedSet from '../../../lib/hooks/useOrderedSet';
 
 const sortReducer = createSortReducer([
   'name',
@@ -250,20 +223,17 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
     [sortedRegistrationsWithUser],
   );
 
-  const [selected, dispatch] = useReducer(selectedReducer, []);
+  const selectedIds = useOrderedSet();
   const partitionedSelected = useMemo(
     () => ({
-      pending: selected.filter((id) => pending.some((reg) => id === reg.user.id)),
-      waiting: selected.filter((id) => waiting.some((reg) => id === reg.user.id)),
-      accepted: selected.filter((id) => accepted.some((reg) => id === reg.user.id)),
-      cancelled: selected.filter((id) => cancelled.some((reg) => id === reg.user.id)),
-      rejected: selected.filter((id) => rejected.some((reg) => id === reg.user.id)),
+      pending: selectedIds.asArray.filter((id) => pending.some((reg) => id === reg.user.id)),
+      waiting: selectedIds.asArray.filter((id) => waiting.some((reg) => id === reg.user.id)),
+      accepted: selectedIds.asArray.filter((id) => accepted.some((reg) => id === reg.user.id)),
+      cancelled: selectedIds.asArray.filter((id) => cancelled.some((reg) => id === reg.user.id)),
+      rejected: selectedIds.asArray.filter((id) => rejected.some((reg) => id === reg.user.id)),
     }),
-    [selected, pending, waiting, accepted, cancelled, rejected],
+    [selectedIds.asArray, pending, waiting, accepted, cancelled, rejected],
   );
-
-  const select = (attendees) => dispatch({ type: 'add', attendees });
-  const unselect = (attendees) => dispatch({ type: 'remove', attendees });
 
   // some sticky/floating bar somewhere with totals/info would be better
   // than putting this in the table headers which scroll out of sight
@@ -333,8 +303,9 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
               columnsExpanded={expandedColumns}
               registrations={pending}
               selected={partitionedSelected.pending}
-              select={select}
-              unselect={unselect}
+              onSelect={selectedIds.add}
+              onUnselect={selectedIds.remove}
+              onToggle={selectedIds.toggle}
               competition_id={competitionInfo.id}
               changeSortColumn={changeSortColumn}
               sortDirection={sortDirection}
@@ -370,8 +341,9 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
             <RegistrationAdministrationTable
               columnsExpanded={expandedColumns}
               selected={partitionedSelected.waiting}
-              select={select}
-              unselect={unselect}
+              onSelect={selectedIds.add}
+              onUnselect={selectedIds.remove}
+              onToggle={selectedIds.toggle}
               competition_id={competitionInfo.id}
               changeSortColumn={changeSortColumn}
               sortDirection={sortDirection}
@@ -383,6 +355,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
               handleOnDragEnd={handleOnDragEnd}
               draggable={editable}
               sortable={false}
+              withPosition
             />
           </>
         ),
@@ -413,8 +386,9 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
             columnsExpanded={expandedColumns}
             registrations={accepted}
             selected={partitionedSelected.accepted}
-            select={select}
-            unselect={unselect}
+            onSelect={selectedIds.add}
+            onUnselect={selectedIds.remove}
+            onToggle={selectedIds.toggle}
             competition_id={competitionInfo.id}
             changeSortColumn={changeSortColumn}
             sortDirection={sortDirection}
@@ -447,8 +421,9 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
               columnsExpanded={expandedColumns}
               registrations={cancelled}
               selected={partitionedSelected.cancelled}
-              select={select}
-              unselect={unselect}
+              onSelect={selectedIds.add}
+              onUnselect={selectedIds.remove}
+              onToggle={selectedIds.toggle}
               competition_id={competitionInfo.id}
               changeSortColumn={changeSortColumn}
               sortDirection={sortDirection}
@@ -482,8 +457,9 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
               columnsExpanded={expandedColumns}
               registrations={rejected}
               selected={partitionedSelected.rejected}
-              select={select}
-              unselect={unselect}
+              onSelect={selectedIds.add}
+              onUnselect={selectedIds.remove}
+              onToggle={selectedIds.toggle}
               competition_id={competitionInfo.id}
               changeSortColumn={changeSortColumn}
               sortDirection={sortDirection}
@@ -531,9 +507,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
         <Sticky context={actionsRef} offset={20}>
           <RegistrationActions
             partitionedSelected={partitionedSelected}
-            refresh={() => {
-              dispatch({ type: 'clear-selected' });
-            }}
+            refresh={selectedIds.clear}
             registrations={registrations}
             spotsRemaining={spotsRemaining}
             userEmailMap={userEmailMap}

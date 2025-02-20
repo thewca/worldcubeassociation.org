@@ -27,6 +27,7 @@ import { events } from '../../../lib/wca-data.js.erb';
 import { eventsNotQualifiedFor, isQualifiedForEvent } from '../../../lib/helpers/qualifications';
 import { eventQualificationToString } from '../../../lib/utils/wcif';
 import { hasNotPassed } from '../../../lib/utils/dates';
+import useSet from '../../../lib/hooks/useSet';
 
 const maxCommentLength = 240;
 
@@ -75,22 +76,23 @@ export default function CompetingStep({
       }
       return preferredEventHeld;
     });
-  const [selectedEvents, setSelectedEvents] = useState(
-    initialSelectedEvents,
-  );
+  const selectedEventIds = useSet(initialSelectedEvents);
   // Don't set an error state before the user has interacted with the eventPicker
   const [hasInteracted, setHasInteracted] = useState(false);
+
   const [guests, setGuests] = useState(0);
 
   const [processing, setProcessing] = useState(false);
 
+  // using selectedEventIds.update in dependency array causes warnings
+  const { update: setSelectedEventIds } = selectedEventIds;
   useEffect(() => {
     if (isRegistered && registration.competing.registration_status !== 'cancelled') {
       setComment(registration.competing.comment ?? '');
-      setSelectedEvents(registration.competing.event_ids);
+      setSelectedEventIds(registration.competing.event_ids);
       setGuests(registration.guests);
     }
-  }, [isRegistered, registration]);
+  }, [isRegistered, registration, setSelectedEventIds]);
 
   const queryClient = useQueryClient();
   const { mutate: updateRegistrationMutation, isPending: isUpdating } = useMutation({
@@ -141,14 +143,14 @@ export default function CompetingStep({
   });
 
   const hasEventsChanged = registration?.competing
-    && _.xor(registration.competing.event_ids, selectedEvents).length > 0;
+    && _.xor(registration.competing.event_ids, selectedEventIds.asArray).length > 0;
   const hasCommentChanged = registration?.competing
     && comment !== (registration.competing.comment ?? '');
   const hasGuestsChanged = registration && guests !== registration.guests;
 
   const hasChanges = hasEventsChanged || hasCommentChanged || hasGuestsChanged;
 
-  const eventsAreValid = selectedEvents.length > 0 && selectedEvents.length <= maxEvents;
+  const eventsAreValid = selectedEventIds.size > 0 && selectedEventIds.size <= maxEvents;
 
   const attemptAction = useCallback(
     (action, options = {}) => {
@@ -177,7 +179,7 @@ export default function CompetingStep({
       user_id: user.id,
       competition_id: competitionInfo.id,
       competing: {
-        event_ids: selectedEvents,
+        event_ids: selectedEventIds.asArray,
         comment,
       },
       guests,
@@ -186,7 +188,7 @@ export default function CompetingStep({
     createRegistrationMutation,
     user.id,
     competitionInfo.id,
-    selectedEvents,
+    selectedEventIds.asArray,
     comment,
     guests,
   ]);
@@ -202,12 +204,12 @@ export default function CompetingStep({
           competition_id: competitionInfo.id,
           competing: {
             comment: hasCommentChanged ? comment : undefined,
-            event_ids: hasEventsChanged ? selectedEvents : undefined,
+            event_ids: hasEventsChanged ? selectedEventIds.asArray : undefined,
           },
           guests,
         });
       } else {
-        const updateMessage = `\n${hasCommentChanged ? `Comment: ${comment}\n` : ''}${hasEventsChanged ? `Events: ${selectedEvents.map((eventId) => events.byId[eventId].name).join(', ')}\n` : ''}${hasGuestsChanged ? `Guests: ${guests}\n` : ''}`;
+        const updateMessage = `\n${hasCommentChanged ? `Comment: ${comment}\n` : ''}${hasEventsChanged ? `Events: ${selectedEventIds.asArray.map((eventId) => events.byId[eventId].name).join(', ')}\n` : ''}${hasGuestsChanged ? `Guests: ${guests}\n` : ''}`;
         window.location = contactCompetitionUrl(competitionInfo.id, encodeURIComponent(I18n.t('competitions.registration_v2.update.update_contact_message', { update_params: updateMessage })));
       }
     }).catch(() => {
@@ -223,7 +225,7 @@ export default function CompetingStep({
     hasCommentChanged,
     comment,
     hasEventsChanged,
-    selectedEvents,
+    selectedEventIds.asArray,
     hasGuestsChanged,
     guests,
   ]);
@@ -234,7 +236,7 @@ export default function CompetingStep({
       competition_id: competitionInfo.id,
       competing: {
         comment,
-        event_ids: selectedEvents,
+        event_ids: selectedEventIds.asArray,
         status: 'pending',
       },
       guests,
@@ -244,23 +246,18 @@ export default function CompetingStep({
     registration?.user_id,
     competitionInfo.id,
     comment,
-    selectedEvents,
+    selectedEventIds.asArray,
     guests,
   ]);
 
   const onEventClick = (eventId) => {
-    const index = selectedEvents.indexOf(eventId);
-    if (index === -1) {
-      setSelectedEvents([...selectedEvents, eventId]);
-    } else {
-      setSelectedEvents(selectedEvents.toSpliced(index, 1));
-    }
+    selectedEventIds.toggle(eventId);
     setHasInteracted(true);
   };
 
   const onAllEventsClick = () => {
     if (competitionInfo['uses_qualification?']) {
-      setSelectedEvents(
+      selectedEventIds.update(
         competitionInfo.event_ids.filter((e) => isQualifiedForEvent(
           e,
           qualifications.wcif,
@@ -268,13 +265,13 @@ export default function CompetingStep({
         )),
       );
     } else {
-      setSelectedEvents(competitionInfo.event_ids);
+      selectedEventIds.update(competitionInfo.event_ids);
     }
     setHasInteracted(true);
   };
 
   const onClearEventsClick = () => {
-    setSelectedEvents([]);
+    selectedEventIds.clear();
     setHasInteracted(true);
   };
 
@@ -330,11 +327,11 @@ export default function CompetingStep({
             warning
             list={formWarnings}
           />
-          <Form.Field required error={hasInteracted && selectedEvents.length === 0}>
+          <Form.Field required error={hasInteracted && selectedEventIds.size === 0}>
             <EventSelector
               id="event-selection"
               eventList={competitionInfo.event_ids}
-              selectedEvents={selectedEvents}
+              selectedEvents={selectedEventIds.asArray}
               onEventClick={onEventClick}
               onAllClick={onAllEventsClick}
               onClearClick={onClearEventsClick}

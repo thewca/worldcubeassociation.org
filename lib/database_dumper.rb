@@ -938,6 +938,7 @@ module DatabaseDumper
     "wfc_xero_users" => :skip_all_rows,
     "wfc_dues_redirects" => :skip_all_rows,
     "ticket_logs" => :skip_all_rows,
+    "ticket_comments" => :skip_all_rows,
     "ticket_stakeholders" => :skip_all_rows,
     "tickets" => :skip_all_rows,
     "tickets_edit_person" => :skip_all_rows,

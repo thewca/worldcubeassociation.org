@@ -572,6 +572,8 @@ en:
         wca_id: "Your WCA ID"
         dob: "Correct birthdate"
         document: "Document"
+      contact_wrt:
+        wca_id: "WCA ID"
     errors:
       dob_contact:
         dob_invalid: "is misformatted"

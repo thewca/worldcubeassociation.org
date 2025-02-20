@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Icon, Popup, Loader, Table, Flag, Label, Header, Container, Grid, List, Image, Button,
+  Icon, Popup, Loader, Table, Label, Header, Container, Grid, List, Image, Button,
 } from 'semantic-ui-react';
 
 import { BarLoader } from 'react-spinners';
@@ -23,6 +23,7 @@ import {
 import { countries } from '../../lib/wca-data.js.erb';
 import { adminCompetitionUrl, competitionUrl } from '../../lib/requests/routes.js.erb';
 import { dateRange, toRelativeOptions } from '../../lib/utils/dates';
+import RegionFlag from '../wca/RegionFlag';
 
 function ListViewSection({
   competitions,
@@ -159,7 +160,8 @@ export function CompetitionsTable({
                 {dateRange(comp.start_date, comp.end_date)}
               </Table.Cell>
               <Table.Cell width={5}>
-                <Flag className={comp.country_iso2?.toLowerCase()} />
+                {comp.country_iso2 && <RegionFlag iso2={comp.country_iso2} />}
+                {' '}
                 <a href={competitionUrl(comp.id)}>{comp.short_display_name}</a>
               </Table.Cell>
               <Table.Cell width={4}>
@@ -215,7 +217,8 @@ export function CompetitionsTabletTable({
                 {dateRange(comp.start_date, comp.end_date)}
               </Table.Cell>
               <Table.Cell width={6}>
-                <Flag className={comp.country_iso2?.toLowerCase()} />
+                {comp.country_iso2 && <RegionFlag iso2={comp.country_iso2} />}
+                {' '}
                 <a href={competitionUrl(comp.id)}>{comp.short_display_name}</a>
               </Table.Cell>
               <Table.Cell width={7}>
@@ -261,7 +264,8 @@ export function CompetitionsMobileTable({
                   />
                   {dateRange(comp.start_date, comp.end_date)}
                 </Label>
-                <Flag className={comp.country_iso2?.toLowerCase()} />
+                {comp.country_iso2 && <RegionFlag iso2={comp.country_iso2} />}
+                {' '}
                 <a href={competitionUrl(comp.id)}>{comp.short_display_name}</a>
               </Table.Cell>
               {
@@ -341,7 +345,8 @@ function AdminCompetitionsTable({
                   />
                 </Table.Cell>
                 <Table.Cell width={4}>
-                  <Flag className={comp.country_iso2?.toLowerCase()} />
+                  {comp.country_iso2 && <RegionFlag iso2={comp.country_iso2} />}
+                  {' '}
                   <a href={competitionUrl(comp.id)}>{comp.short_display_name}</a>
                   <br />
                   <strong>{countries.byIso2[comp.country_iso2].name}</strong>

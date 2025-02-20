@@ -5,6 +5,7 @@ class Ticket < ApplicationRecord
     edit_person: "TicketsEditPerson",
   }.freeze
 
+  has_many :ticket_comments
   has_many :ticket_logs
   has_many :ticket_stakeholders
   belongs_to :metadata, polymorphic: true
@@ -36,7 +37,7 @@ class Ticket < ApplicationRecord
   end
 
   DEFAULT_SERIALIZE_OPTIONS = {
-    include: %w[ticket_logs metadata],
+    include: %w[metadata],
   }.freeze
 
   def serializable_hash(options = nil)
