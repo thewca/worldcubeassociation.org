@@ -5,7 +5,9 @@ import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { setMessage } from '../Register/RegistrationMessage';
 import I18n from '../../../lib/i18n';
 import { countries } from '../../../lib/wca-data.js.erb';
-import { APPROVED_COLOR, CANCELLED_COLOR, PENDING_COLOR, REJECTED_COLOR, WAITLIST_COLOR } from '../../../lib/utils/registrationAdmin';
+import {
+  APPROVED_COLOR, CANCELLED_COLOR, PENDING_COLOR, REJECTED_COLOR, WAITLIST_COLOR,
+} from '../../../lib/utils/registrationAdmin';
 
 function V3csvExport(selected, registrations, competition) {
   let csvContent = 'data:text/csv;charset=utf-8,';
@@ -181,7 +183,7 @@ export default function RegistrationActions({
             content={I18n.t('competitions.registration_v2.update.move_waiting')}
             disabled={!anyWaitlistable}
           />
-          
+
           <Button
             onClick={attemptToApprove}
             color={APPROVED_COLOR}
