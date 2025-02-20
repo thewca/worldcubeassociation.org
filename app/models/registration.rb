@@ -387,12 +387,12 @@ class Registration < ApplicationRecord
   end
 
   def permit_user_cancellation?
-    case competition.competitor_can_cancel
-    when 'always'
+    case competition.competitor_can_cancel.to_sym
+    when :always
       true
-    when 'not_accepted'
+    when :not_accepted
       !accepted?
-    when 'unpaid'
+    when :unpaid
       paid_entry_fees == 0
     else
       false
