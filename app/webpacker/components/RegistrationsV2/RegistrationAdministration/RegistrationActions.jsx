@@ -160,63 +160,62 @@ export default function RegistrationActions({
             icon="copy"
             content={I18n.t('competitions.registration_v2.update.email_copy')}
           />
-          <>
-            {anyApprovable && (
-              <Button
-                onClick={attemptToApprove}
-                color={APPROVED_COLOR}
-                icon="check"
-                content={I18n.t('registrations.list.approve')}
-              />
-            )}
+          
+          {anyApprovable && (
+            <Button
+              onClick={attemptToApprove}
+              color={APPROVED_COLOR}
+              icon="check"
+              content={I18n.t('registrations.list.approve')}
+            />
+          )}
 
-            {anyPending && (
-              <Button
-                onClick={() => changeStatus(
-                  [...accepted, ...cancelled, ...waiting, ...rejected],
-                  'pending',
-                )}
-                color={PENDING_COLOR}
-                icon="times"
-                content={I18n.t('competitions.registration_v2.update.move_pending')}
-              />
-            )}
+          {anyPending && (
+            <Button
+              onClick={() => changeStatus(
+                [...accepted, ...cancelled, ...waiting, ...rejected],
+                'pending',
+              )}
+              color={PENDING_COLOR}
+              icon="times"
+              content={I18n.t('competitions.registration_v2.update.move_pending')}
+            />
+          )}
 
-            {anyWaitlistable && (
-              <Button
-                onClick={() => moveToWaitingList(
-                  [...pending, ...cancelled, ...accepted, ...rejected],
-                )}
-                color={WAITLIST_COLOR}
-                icon="hourglass"
-                content={I18n.t('competitions.registration_v2.update.move_waiting')}
-              />
-            )}
+          {anyWaitlistable && (
+            <Button
+              onClick={() => moveToWaitingList(
+                [...pending, ...cancelled, ...accepted, ...rejected],
+              )}
+              color={WAITLIST_COLOR}
+              icon="hourglass"
+              content={I18n.t('competitions.registration_v2.update.move_waiting')}
+            />
+          )}
 
-            {anyCancellable && (
-              <Button
-                onClick={() => changeStatus(
-                  [...pending, ...accepted, ...waiting, ...rejected],
-                  'cancelled',
-                )}
-                color={CANCELLED_COLOR}
-                icon="trash"
-                content={I18n.t('competitions.registration_v2.update.cancel')}
-              />
-            )}
+          {anyCancellable && (
+            <Button
+              onClick={() => changeStatus(
+                [...pending, ...accepted, ...waiting, ...rejected],
+                'cancelled',
+              )}
+              color={CANCELLED_COLOR}
+              icon="trash"
+              content={I18n.t('competitions.registration_v2.update.cancel')}
+            />
+          )}
 
-            {anyRejectable && (
-              <Button
-                onClick={() => changeStatus(
-                  [...pending, ...accepted, ...waiting, ...cancelled],
-                  'rejected',
-                )}
-                color={REJECTED_COLOR}
-                icon="delete"
-                content={I18n.t('competitions.registration_v2.update.reject')}
-              />
-            )}
-          </>
+          {anyRejectable && (
+            <Button
+              onClick={() => changeStatus(
+                [...pending, ...accepted, ...waiting, ...cancelled],
+                'rejected',
+              )}
+              color={REJECTED_COLOR}
+              icon="delete"
+              content={I18n.t('competitions.registration_v2.update.reject')}
+            />
+          )}
         </>
       )}
     </Button.Group>
