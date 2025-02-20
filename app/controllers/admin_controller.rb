@@ -418,22 +418,18 @@ class AdminController < ApplicationController
     render 'anonymize_person'
   end
 
-  def finish_unfinished_persons
-    @finish_persons = FinishPersonsForm.new(
-      competition_ids: params[:competition_ids] || nil,
-    )
+  private def competition_list_from_string(competition_ids_string)
+    competition_ids_string.split(',').uniq.compact
   end
 
   def complete_persons
-    action_params = params.require(:finish_persons_form)
-                          .permit(:competition_ids)
-
-    @finish_persons = FinishPersonsForm.new(action_params)
-    @persons_to_finish = @finish_persons.search_persons
+    @competition_ids_string = params.fetch(:competition_ids, "")
+    @competition_ids = competition_list_from_string(@competition_ids_string)
+    @persons_to_finish = FinishUnfinishedPersons.search_persons(@competition_ids)
 
     if @persons_to_finish.empty?
       flash[:warning] = "There are no persons to complete for the selected competition"
-      redirect_to action: :finish_unfinished_persons
+      redirect_to panel_page_path(id: User.panel_pages[:createNewComers], competition_ids: @competition_ids)
     end
   end
 
@@ -488,15 +484,14 @@ class AdminController < ApplicationController
     competition_ids = params.dig(:person_completions, :competition_ids)
 
     if continue_batch
-      finish_persons = FinishPersonsForm.new(competition_ids: competition_ids)
-      can_continue = FinishUnfinishedPersons.unfinished_results_scope(finish_persons.competitions).any?
+      can_continue = FinishUnfinishedPersons.unfinished_results_scope(competition_list_from_string(competition_ids)).any?
 
       if can_continue
-        return redirect_to action: :complete_persons, finish_persons_form: { competition_ids: competition_ids }
+        return redirect_to action: :complete_persons, competition_ids: competition_ids
       end
     end
 
-    redirect_to action: :finish_unfinished_persons, competition_ids: competition_ids
+    redirect_to panel_page_path(id: User.panel_pages[:createNewComers], competition_ids: competition_ids)
   end
 
   def peek_unfinished_results

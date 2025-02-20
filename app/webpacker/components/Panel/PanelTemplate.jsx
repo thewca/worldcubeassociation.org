@@ -2,13 +2,18 @@ import React from 'react';
 import {
   Container,
   Dropdown,
-  Grid, Header, Icon, Menu, Segment,
+  Grid, Header, Icon, Label, Menu, Segment,
 } from 'semantic-ui-react';
 import useHash from '../../lib/hooks/useHash';
 import ConfirmProvider from '../../lib/providers/ConfirmProvider';
 import PanelPages from './PanelPages';
 
-export default function PanelTemplate({ heading, pages, loggedInUserId }) {
+export default function PanelTemplate({
+  heading,
+  pages,
+  pageNotifications,
+  loggedInUserId,
+}) {
   const [hash, setHash] = useHash();
 
   const SelectedComponent = React.useMemo(() => {
@@ -28,9 +33,10 @@ export default function PanelTemplate({ heading, pages, loggedInUserId }) {
   const menuOptions = React.useMemo(() => (pages.map(
     (page) => ({
       id: page,
+      notification: pageNotifications?.[page],
       ...PanelPages[page],
     }),
-  )), [pages]);
+  )), [pages, pageNotifications]);
 
   return (
     <Container fluid>
@@ -48,6 +54,11 @@ export default function PanelTemplate({ heading, pages, loggedInUserId }) {
                 )}
               >
                 {!menuOption.component && <Icon name="external alternate" />}
+                {menuOption.notification !== undefined && (
+                  <Label color={menuOption.notification === 0 ? 'green' : 'red'}>
+                    {menuOption.notification}
+                  </Label>
+                )}
                 {menuOption.name}
               </Menu.Item>
             ))}
@@ -65,6 +76,7 @@ export default function PanelTemplate({ heading, pages, loggedInUserId }) {
                     text: menuOption.name,
                     value: menuOption.id,
                     icon: !menuOption.component && 'external alternate',
+                    label: menuOption.notification && ({ color: 'red', content: menuOption.notification }),
                   }))}
                   value={hash}
                   onChange={(_, { value }) => setHash(value)}

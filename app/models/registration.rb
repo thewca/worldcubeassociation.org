@@ -19,6 +19,7 @@ class Registration < ApplicationRecord
   has_many :registration_payments
   has_many :competition_events, through: :registration_competition_events
   has_many :events, through: :competition_events
+  has_many :live_results
   has_many :assignments, as: :registration, dependent: :delete_all
   has_many :wcif_extensions, as: :extendable, dependent: :delete_all
   has_many :payment_intents, as: :holder, dependent: :delete_all
@@ -155,14 +156,6 @@ class Registration < ApplicationRecord
 
   def to_be_paid_through_wca?
     !new_record? && (pending? || accepted?) && competition.using_payment_integrations? && outstanding_entry_fees > 0
-  end
-
-  def show_payment_form?
-    competition.registration_currently_open? && to_be_paid_through_wca?
-  end
-
-  def show_details?(user)
-    (competition.registration_currently_open? || !(new_or_deleted?)) || (competition.user_can_pre_register?(user))
   end
 
   def record_payment(
@@ -319,8 +312,12 @@ class Registration < ApplicationRecord
     }
   end
 
+  def self.accepted_count
+    accepted.count
+  end
+
   def self.accepted_and_paid_pending_count
-    accepted.count + pending.with_payments.count
+    accepted_count + pending.with_payments.count
   end
 
   # Only run the validations when creating the registration as we don't want user changes

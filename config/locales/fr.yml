@@ -2272,6 +2272,8 @@ fr:
     mailer:
       #original_hash: 72e2180
       regards_html: 'Cordialement, %{people}.'
+      waiting_list:
+        mail_subject: "Vous êtes sur la liste d'attente"
       new:
         #original_hash: 63591e5
         mail_subject: 'Inscription en Attente : %{comp_name}'

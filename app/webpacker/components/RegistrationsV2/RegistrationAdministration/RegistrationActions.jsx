@@ -4,6 +4,7 @@ import { DateTime } from 'luxon';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { setMessage } from '../Register/RegistrationMessage';
 import I18n from '../../../lib/i18n';
+import { countries } from '../../../lib/wca-data.js.erb';
 
 function V3csvExport(selected, registrations, competition) {
   let csvContent = 'data:text/csv;charset=utf-8,';
@@ -12,9 +13,9 @@ function V3csvExport(selected, registrations, competition) {
   registrations
     .filter((r) => selected.length === 0 || selected.includes(r.user_id))
     .forEach((registration) => {
-      csvContent += `${registration.competing.registration_status === 'accepted' ? 'a' : 'p'},${
+      csvContent += `${registration.competing.registration_status === 'accepted' ? 'a' : 'p'},"${
         registration.user.name
-      },"${registration.user.country.name}",${
+      }","${countries.byIso2[registration.user.country.iso2].name}",${
         registration.user.wca_id
       },${registration.user.dob},${
         registration.user.gender
@@ -62,7 +63,7 @@ export default function RegistrationActions({
   const anyWaitlistable = waiting.length < selectedCount;
   const anyRejectable = rejected.length < selectedCount;
 
-  const selectedEmails = [...pending, ...accepted, ...cancelled, ...waiting]
+  const selectedEmails = [...pending, ...waiting, ...accepted, ...cancelled, ...rejected]
     .map((userId) => userEmailMap[userId])
     .join(',');
 
@@ -84,6 +85,24 @@ export default function RegistrationActions({
         },
       },
     );
+  };
+
+  const moveToWaitingList = (attendees) => {
+    const registrationsByUserId = _.groupBy(registrations, 'user_id');
+
+    const [paid, unpaid] = _.partition(
+      attendees,
+      (userId) => registrationsByUserId[userId]?.[0]?.payment?.updated_at,
+    );
+
+    paid.sort((a, b) => {
+      const dateA = new Date(registrationsByUserId[a][0].payment.updated_at);
+      const dateB = new Date(registrationsByUserId[b][0].payment.updated_at);
+      return dateA - dateB;
+    });
+
+    const combined = paid.concat(unpaid);
+    changeStatus(combined, 'waiting_list');
   };
 
   const attemptToApprove = () => {
@@ -163,9 +182,8 @@ export default function RegistrationActions({
             {anyWaitlistable && (
             <Button
               color="yellow"
-              onClick={() => changeStatus(
+              onClick={() => moveToWaitingList(
                 [...pending, ...cancelled, ...accepted, ...rejected],
-                'waiting_list',
               )}
             >
               <Icon name="hourglass" />

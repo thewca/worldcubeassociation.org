@@ -78,7 +78,7 @@ module Registrations
         raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless
           can_administer_or_current_user?(competition, current_user, target_user)
         raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::USER_EDITS_NOT_ALLOWED) unless
-          competition.registration_edits_allowed? || current_user.can_manage_competition?(competition) || user_uncancelling_registration?(registration, new_status)
+          competition.registration_edits_currently_permitted? || current_user.can_manage_competition?(competition) || user_uncancelling_registration?(registration, new_status)
         raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::REGISTRATION_IS_REJECTED) if
           user_is_rejected?(current_user, target_user, registration) && !organizer_modifying_own_registration?(competition, current_user, target_user)
         raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::ALREADY_REGISTERED_IN_SERIES) if
@@ -140,7 +140,7 @@ module Registrations
           raise WcaExceptions::RegistrationError.new(:unprocessable_entity, Registrations::ErrorCodes::REQUIRED_COMMENT_MISSING) if competition.force_comment_in_registration
         else
           raise WcaExceptions::RegistrationError.new(:unprocessable_entity, ErrorCodes::USER_COMMENT_TOO_LONG) if comment.length > COMMENT_CHARACTER_LIMIT
-          raise WcaExceptions::RegistrationError.new(:unprocessable_entity, ErrorCodes::REQUIRED_COMMENT_MISSING) if competition.force_comment_in_registration && comment == ''
+          raise WcaExceptions::RegistrationError.new(:unprocessable_entity, ErrorCodes::REQUIRED_COMMENT_MISSING) if competition.force_comment_in_registration && comment.strip.empty?
         end
       end
 

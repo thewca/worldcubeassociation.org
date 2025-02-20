@@ -17,7 +17,7 @@ import updateRegistration from '../api/registration/patch/update_registration';
 import submitEventRegistration from '../api/registration/post/submit_registration';
 import Processing from './Processing';
 import { contactCompetitionUrl, userPreferencesRoute } from '../../../lib/requests/routes.js.erb';
-import { EventSelector } from '../../CompetitionsOverview/CompetitionsFilters';
+import EventSelector from '../../wca/EventSelector';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { setMessage } from './RegistrationMessage';
 import I18n from '../../../lib/i18n';
@@ -27,6 +27,7 @@ import { events } from '../../../lib/wca-data.js.erb';
 import { eventsNotQualifiedFor, isQualifiedForEvent } from '../../../lib/helpers/qualifications';
 import { eventQualificationToString } from '../../../lib/utils/wcif';
 import { hasNotPassed } from '../../../lib/utils/dates';
+import useSet from '../../../lib/hooks/useSet';
 
 const maxCommentLength = 240;
 
@@ -75,22 +76,23 @@ export default function CompetingStep({
       }
       return preferredEventHeld;
     });
-  const [selectedEvents, setSelectedEvents] = useState(
-    initialSelectedEvents,
-  );
+  const selectedEventIds = useSet(initialSelectedEvents);
   // Don't set an error state before the user has interacted with the eventPicker
   const [hasInteracted, setHasInteracted] = useState(false);
+
   const [guests, setGuests] = useState(0);
 
   const [processing, setProcessing] = useState(false);
 
+  // using selectedEventIds.update in dependency array causes warnings
+  const { update: setSelectedEventIds } = selectedEventIds;
   useEffect(() => {
     if (isRegistered && registration.competing.registration_status !== 'cancelled') {
       setComment(registration.competing.comment ?? '');
-      setSelectedEvents(registration.competing.event_ids);
+      setSelectedEventIds(registration.competing.event_ids);
       setGuests(registration.guests);
     }
-  }, [isRegistered, registration]);
+  }, [isRegistered, registration, setSelectedEventIds]);
 
   const queryClient = useQueryClient();
   const { mutate: updateRegistrationMutation, isPending: isUpdating } = useMutation({
@@ -141,14 +143,14 @@ export default function CompetingStep({
   });
 
   const hasEventsChanged = registration?.competing
-    && _.xor(registration.competing.event_ids, selectedEvents).length > 0;
+    && _.xor(registration.competing.event_ids, selectedEventIds.asArray).length > 0;
   const hasCommentChanged = registration?.competing
     && comment !== (registration.competing.comment ?? '');
   const hasGuestsChanged = registration && guests !== registration.guests;
 
   const hasChanges = hasEventsChanged || hasCommentChanged || hasGuestsChanged;
 
-  const eventsAreValid = selectedEvents.length > 0 && selectedEvents.length <= maxEvents;
+  const eventsAreValid = selectedEventIds.size > 0 && selectedEventIds.size <= maxEvents;
 
   const attemptAction = useCallback(
     (action, options = {}) => {
@@ -172,19 +174,26 @@ export default function CompetingStep({
     [dispatch, eventsAreValid, hasChanges, maxEvents],
   );
 
-  const actionCreateRegistration = () => {
+  const actionCreateRegistration = useCallback(() => {
     createRegistrationMutation({
       user_id: user.id,
       competition_id: competitionInfo.id,
       competing: {
-        event_ids: selectedEvents,
+        event_ids: selectedEventIds.asArray,
         comment,
       },
       guests,
     });
-  };
+  }, [
+    createRegistrationMutation,
+    user.id,
+    competitionInfo.id,
+    selectedEventIds.asArray,
+    comment,
+    guests,
+  ]);
 
-  const actionUpdateRegistration = () => {
+  const actionUpdateRegistration = useCallback(() => {
     confirm({
       content: I18n.t(competitionInfo.allow_registration_edits ? 'competitions.registration_v2.update.update_confirm' : 'competitions.registration_v2.update.update_confirm_contact'),
     }).then(() => {
@@ -195,55 +204,74 @@ export default function CompetingStep({
           competition_id: competitionInfo.id,
           competing: {
             comment: hasCommentChanged ? comment : undefined,
-            event_ids: hasEventsChanged ? selectedEvents : undefined,
+            event_ids: hasEventsChanged ? selectedEventIds.asArray : undefined,
           },
           guests,
         });
       } else {
-        const updateMessage = `\n${hasCommentChanged ? `Comment: ${comment}\n` : ''}${hasEventsChanged ? `Events: ${selectedEvents.map((eventId) => events.byId[eventId].name).join(', ')}\n` : ''}${hasGuestsChanged ? `Guests: ${guests}\n` : ''}`;
+        const updateMessage = `\n${hasCommentChanged ? `Comment: ${comment}\n` : ''}${hasEventsChanged ? `Events: ${selectedEventIds.asArray.map((eventId) => events.byId[eventId].name).join(', ')}\n` : ''}${hasGuestsChanged ? `Guests: ${guests}\n` : ''}`;
         window.location = contactCompetitionUrl(competitionInfo.id, encodeURIComponent(I18n.t('competitions.registration_v2.update.update_contact_message', { update_params: updateMessage })));
       }
     }).catch(() => {
       nextStep();
     });
-  };
+  }, [
+    confirm,
+    dispatch,
+    nextStep,
+    updateRegistrationMutation,
+    competitionInfo,
+    registration?.user_id,
+    hasCommentChanged,
+    comment,
+    hasEventsChanged,
+    selectedEventIds.asArray,
+    hasGuestsChanged,
+    guests,
+  ]);
 
-  const actionReRegister = () => {
+  const actionReRegister = useCallback(() => {
     updateRegistrationMutation({
       user_id: registration.user_id,
       competition_id: competitionInfo.id,
       competing: {
         comment,
-        event_ids: selectedEvents,
+        event_ids: selectedEventIds.asArray,
         status: 'pending',
       },
       guests,
     });
+  }, [
+    updateRegistrationMutation,
+    registration?.user_id,
+    competitionInfo.id,
+    comment,
+    selectedEventIds.asArray,
+    guests,
+  ]);
+
+  const onEventClick = (eventId) => {
+    selectedEventIds.toggle(eventId);
+    setHasInteracted(true);
   };
 
-  const handleEventSelection = ({ type, eventId }) => {
-    if (type === 'select_all_events') {
-      if (competitionInfo['uses_qualification?']) {
-        setSelectedEvents(
-          competitionInfo.event_ids.filter((e) => isQualifiedForEvent(
-            e,
-            qualifications.wcif,
-            qualifications.personalRecords,
-          )),
-        );
-      } else {
-        setSelectedEvents(competitionInfo.event_ids);
-      }
-    } else if (type === 'clear_events') {
-      setSelectedEvents([]);
-    } else if (type === 'toggle_event') {
-      const index = selectedEvents.indexOf(eventId);
-      if (index === -1) {
-        setSelectedEvents([...selectedEvents, eventId]);
-      } else {
-        setSelectedEvents(selectedEvents.toSpliced(index, 1));
-      }
+  const onAllEventsClick = () => {
+    if (competitionInfo['uses_qualification?']) {
+      selectedEventIds.update(
+        competitionInfo.event_ids.filter((e) => isQualifiedForEvent(
+          e,
+          qualifications.wcif,
+          qualifications.personalRecords,
+        )),
+      );
+    } else {
+      selectedEventIds.update(competitionInfo.event_ids);
     }
+    setHasInteracted(true);
+  };
+
+  const onClearEventsClick = () => {
+    selectedEventIds.clear();
     setHasInteracted(true);
   };
 
@@ -260,7 +288,7 @@ export default function CompetingStep({
     if (shouldShowUpdateButton) {
       return attemptAction(actionUpdateRegistration, { checkForChanges: true });
     }
-    attemptAction(actionCreateRegistration);
+    return attemptAction(actionCreateRegistration);
   }, [
     actionCreateRegistration,
     actionReRegister,
@@ -269,6 +297,8 @@ export default function CompetingStep({
     shouldShowReRegisterButton,
     shouldShowUpdateButton,
   ]);
+
+  const guestsRestricted = competitionInfo.guest_entry_status === 'restricted';
 
   const formWarnings = useMemo(() => potentialWarnings(competitionInfo), [competitionInfo]);
   return (
@@ -297,18 +327,24 @@ export default function CompetingStep({
             warning
             list={formWarnings}
           />
-          <Form.Field required error={hasInteracted && selectedEvents.length === 0}>
+          <Form.Field required error={hasInteracted && selectedEventIds.size === 0}>
             <EventSelector
-              onEventSelection={handleEventSelection}
-              eventList={competitionInfo.event_ids}
-              selectedEvents={selectedEvents}
               id="event-selection"
+              eventList={competitionInfo.event_ids}
+              selectedEvents={selectedEventIds.asArray}
+              onEventClick={onEventClick}
+              onAllClick={onAllEventsClick}
+              onClearClick={onClearEventsClick}
               maxEvents={maxEvents}
-              eventsDisabled={eventsNotQualifiedFor(
-                competitionInfo.event_ids,
-                qualifications.wcif,
-                qualifications.personalRecords,
-              )}
+              eventsDisabled={
+                competitionInfo.allow_registration_without_qualification
+                  ? []
+                  : eventsNotQualifiedFor(
+                    competitionInfo.event_ids,
+                    qualifications.wcif,
+                    qualifications.personalRecords,
+                  )
+              }
               disabledText={(event) => eventQualificationToString(
                 { id: event },
                 qualifications.wcif[event],
@@ -352,7 +388,7 @@ export default function CompetingStep({
           </Form.Field>
           {competitionInfo.guests_enabled && (
             <Form.Field>
-              <label>{I18n.t('activerecord.attributes.registration.guests')}</label>
+              <label htmlFor="guest-dropdown">{I18n.t('activerecord.attributes.registration.guests')}</label>
               <Form.Input
                 id="guest-dropdown"
                 type="number"
@@ -361,8 +397,8 @@ export default function CompetingStep({
                   setGuests(Number.parseInt(data.value, 10));
                 }}
                 min="0"
-                max={competitionInfo.guests_per_registration_limit ?? 99}
-                error={Number.isInteger(competitionInfo.guests_per_registration_limit) && guests > competitionInfo.guests_per_registration_limit && I18n.t('competitions.competition_info.guest_limit', { count: competitionInfo.guests_per_registration_limit })}
+                max={guestsRestricted && (competitionInfo.guests_per_registration_limit ?? 99)}
+                error={guestsRestricted && Number.isInteger(competitionInfo.guests_per_registration_limit) && guests > competitionInfo.guests_per_registration_limit && I18n.t('competitions.competition_info.guest_limit', { count: competitionInfo.guests_per_registration_limit })}
               />
             </Form.Field>
           )}

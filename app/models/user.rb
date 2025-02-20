@@ -35,6 +35,10 @@ class User < ApplicationRecord
   has_many :teams_committees_at_least_senior_roles, through: :teams_committees_at_least_senior_role_metadata, source: :user_role, class_name: "UserRole"
   has_many :teams_committees_at_least_senior_groups, through: :teams_committees_at_least_senior_roles, source: :group, class_name: "UserGroup"
   has_many :teams_committees_at_least_senior, through: :teams_committees_at_least_senior_groups, source: :metadata, source_type: "GroupsMetadataTeamsCommittees"
+  has_many :past_bans_metadata, through: :past_roles, source: :metadata, source_type: "RolesMetadataBannedCompetitors"
+  has_many :past_bans, through: :past_bans_metadata, source: :user_role, class_name: "UserRole"
+  has_many :active_bans_metadata, through: :active_roles, source: :metadata, source_type: "RolesMetadataBannedCompetitors"
+  has_many :active_bans, through: :active_bans_metadata, source: :user_role, class_name: "UserRole"
   has_many :active_groups, through: :active_roles, source: :group, class_name: "UserGroup"
   has_many :board_metadata, through: :active_groups, source: :metadata, source_type: "GroupsMetadataBoard"
   has_many :confirmed_users_claiming_wca_id, -> { confirmed_email }, foreign_key: "delegate_id_to_handle_wca_id_claim", class_name: "User"
@@ -64,6 +68,12 @@ class User < ApplicationRecord
       where(country_iso2: (Continent.country_iso2s(region_id) || Country.c_find(region_id)&.iso2))
     end
   }
+
+  ANONYMOUS_ACCOUNT_EMAIL_ID_SUFFIX = '@worldcubeassociation.org'
+  ANONYMOUS_ACCOUNT_NAME = 'Anonymous'
+  ANONYMOUS_ACCOUNT_DOB = '1954-12-04'
+  ANONYMOUS_ACCOUNT_GENDER = 'o'
+  ANONYMOUS_ACCOUNT_COUNTRY_ISO2 = 'US'
 
   def self.eligible_voters
     [
@@ -517,11 +527,11 @@ class User < ApplicationRecord
   end
 
   def banned_in_past?
-    past_roles.any? { |role| role.group == UserGroup.banned_competitors.first }
+    past_bans.any?
   end
 
   def current_ban
-    active_roles.select { |role| role.group == UserGroup.banned_competitors.first }.first
+    active_bans.first
   end
 
   def ban_end
@@ -636,7 +646,6 @@ class User < ApplicationRecord
       :leaderForms,
       :groupsManager,
       :importantLinks,
-      :delegateHandbook,
       :seniorDelegatesList,
       :leadersAdmin,
       :boardEditor,
@@ -645,14 +654,32 @@ class User < ApplicationRecord
       :downloadVoters,
       :generateDbToken,
       :approveAvatars,
+      :editPersonRequests,
+      :anonymizationScript,
+      :serverStatus,
+      :runValidators,
+      :createNewComers,
+      :checkRecords,
+      :computeAuxiliaryData,
+      :generateDataExports,
+      :fixResults,
+      :mergeProfiles,
+      :anonymizePerson,
+      :reassignConnectedWcaId,
     ].index_with { |panel_page| panel_page.to_s.underscore.dasherize }
+  end
+
+  def self.panel_notifications
+    {
+      self.panel_pages[:approveAvatars] => lambda { User.where.not(pending_avatar: nil).count },
+    }
   end
 
   def self.panel_list
     panel_pages = User.panel_pages
     {
       admin: {
-        name: 'New Admin panel',
+        name: 'Admin panel',
         pages: panel_pages.values,
       },
       staff: {
@@ -663,7 +690,6 @@ class User < ApplicationRecord
         name: 'Delegate panel',
         pages: [
           panel_pages[:importantLinks],
-          panel_pages[:delegateHandbook],
           panel_pages[:bannedCompetitors],
         ],
       },
@@ -675,19 +701,38 @@ class User < ApplicationRecord
       },
       wfc: {
         name: 'WFC panel',
-        pages: [],
+        pages: [
+          panel_pages[:duesExport],
+          panel_pages[:countryBands],
+          panel_pages[:xeroUsers],
+          panel_pages[:duesRedirect],
+          panel_pages[:delegateProbations],
+        ],
       },
       wrt: {
         name: 'WRT panel',
         pages: [
           panel_pages[:postingDashboard],
+          panel_pages[:editPersonRequests],
           panel_pages[:editPerson],
+          panel_pages[:approveAvatars],
+          panel_pages[:anonymizationScript],
+          panel_pages[:runValidators],
+          panel_pages[:createNewComers],
+          panel_pages[:checkRecords],
+          panel_pages[:computeAuxiliaryData],
+          panel_pages[:generateDataExports],
+          panel_pages[:fixResults],
+          panel_pages[:mergeProfiles],
+          panel_pages[:anonymizePerson],
+          panel_pages[:reassignConnectedWcaId],
         ],
       },
       wst: {
         name: 'WST panel',
         pages: [
           panel_pages[:translators],
+          panel_pages[:serverStatus],
         ],
       },
       board: {
@@ -702,6 +747,7 @@ class User < ApplicationRecord
           panel_pages[:officersEditor],
           panel_pages[:regionsAdmin],
           panel_pages[:bannedCompetitors],
+          panel_pages[:downloadVoters],
         ],
       },
       leader: {
@@ -755,6 +801,12 @@ class User < ApplicationRecord
       can_view_delegate_admin_page: {
         scope: can_view_delegate_matters? ? "*" : [],
       },
+      can_view_delegate_report: {
+        scope: can_view_delegate_matters? ? "*" : delegated_competition_ids,
+      },
+      can_edit_delegate_report: {
+        scope: can_admin_results? ? "*" : delegated_competition_ids,
+      },
       can_create_groups: {
         scope: groups_with_create_access,
       },
@@ -767,11 +819,11 @@ class User < ApplicationRecord
       can_edit_groups: {
         scope: groups_with_edit_access,
       },
-      can_access_wfc_senior_matters: {
-        scope: can_access_wfc_senior_matters? ? "*" : [],
-      },
       can_access_panels: {
         scope: panels_with_access,
+      },
+      can_request_to_edit_others_profile: {
+        scope: any_kind_of_delegate? ? "*" : [],
       },
     }
     if banned?
@@ -819,7 +871,7 @@ class User < ApplicationRecord
   end
 
   def can_edit_banned_competitors?
-    can_edit_any_groups? || group_leader?(UserGroup.teams_committees_group_wic)
+    can_edit_any_groups? || group_leader?(UserGroup.teams_committees_group_wic) || group_leader?(UserGroup.teams_committees_group_wapc)
   end
 
   def can_manage_regional_organizations?
@@ -869,7 +921,7 @@ class User < ApplicationRecord
 
   def can_edit_registration?(registration)
     # A registration can be edited by a user if it hasn't been accepted yet, and if edits are allowed.
-    editable_by_user = (!registration.accepted? || registration.competition.registration_edits_allowed?)
+    editable_by_user = (!registration.accepted? || registration.competition.registration_edits_currently_permitted?)
     can_manage_competition?(registration.competition) || (registration.user_id == self.id && editable_by_user)
   end
 
