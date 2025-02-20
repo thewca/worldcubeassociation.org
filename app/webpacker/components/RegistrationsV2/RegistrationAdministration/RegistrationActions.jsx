@@ -214,7 +214,6 @@ export default function RegistrationActions({
               />
             )}
           </>
-          )
         </>
       )}
     </Button.Group>
