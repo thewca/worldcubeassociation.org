@@ -1614,7 +1614,7 @@ RSpec.describe Competition do
         expect(newcomer_month_comp.newcomers_competing_count).to eq(1)
       end
 
-      it 'doesnt include newcomers in non-accepted states', :tag do
+      it 'doesnt include newcomers in non-accepted states' do
         FactoryBot.create(:registration, :newcomer, competition: newcomer_month_comp)
         FactoryBot.create(:registration, :newcomer, :cancelled, competition: newcomer_month_comp)
         FactoryBot.create(:registration, :newcomer, :rejected, competition: newcomer_month_comp)
