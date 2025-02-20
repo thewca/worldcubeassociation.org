@@ -68,6 +68,7 @@ export default function TableRow({
   index,
   draggable = false,
   withPosition = false,
+  color,
 }) {
   const {
     dob: dobIsShown,
@@ -115,7 +116,7 @@ export default function TableRow({
             {...provided.draggableProps}
             {...provided.dragHandleProps}
           >
-            <Table.Cell>
+            <Table.Cell className={color}>
               { /* We manually set the margin to 0 here to fix the table row height */}
               {draggable ? (
                 <Icon name="bars" />

@@ -18,6 +18,9 @@ import RegistrationAdministrationTable from './RegistrationsAdministrationTable'
 import useCheckboxState from '../../../lib/hooks/useCheckboxState';
 import { countries } from '../../../lib/wca-data.js.erb';
 import useOrderedSet from '../../../lib/hooks/useOrderedSet';
+import {
+  APPROVED_COLOR, CANCELLED_COLOR, PENDING_COLOR, REJECTED_COLOR, WAITLIST_COLOR,
+} from '../../../lib/utils/registrationAdmin';
 
 const sortReducer = createSortReducer([
   'name',
@@ -308,6 +311,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
               sortDirection={sortDirection}
               sortColumn={sortColumn}
               competitionInfo={competitionInfo}
+              color={PENDING_COLOR}
             />
           </>
         ),
@@ -350,6 +354,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
               draggable={editable}
               sortable={false}
               withPosition
+              color={WAITLIST_COLOR}
             />
           </>
         ),
@@ -387,6 +392,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
             sortDirection={sortDirection}
             sortColumn={sortColumn}
             competitionInfo={competitionInfo}
+            color={APPROVED_COLOR}
           />
         ),
       },
@@ -419,6 +425,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
               sortDirection={sortDirection}
               sortColumn={sortColumn}
               competitionInfo={competitionInfo}
+              color={CANCELLED_COLOR}
             />
           </>
         ),
@@ -452,6 +459,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
               sortDirection={sortDirection}
               sortColumn={sortColumn}
               competitionInfo={competitionInfo}
+              color={REJECTED_COLOR}
             />
           </>
         ),
