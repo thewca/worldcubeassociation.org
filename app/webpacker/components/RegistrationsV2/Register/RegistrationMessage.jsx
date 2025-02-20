@@ -20,16 +20,16 @@ export default function RegistrationMessage() {
   const { messages } = useStore();
   const dispatch = useDispatch();
 
-  const positiveMessages = messages.filter(({ type }) => type === 'positive');
+  const nonNegativeMessages = messages.filter(({ type }) => type !== 'negative');
 
   useEffect(() => {
-    if (positiveMessages.length > 0) {
+    if (nonNegativeMessages.length > 0) {
       setTimeout(() => {
         // some may already be cleared by an earlier timeout; that's fine
-        dispatch(clearMessages(positiveMessages.map(({ id }) => id)));
+        dispatch(clearMessages(nonNegativeMessages.map(({ id }) => id)));
       }, 4000);
     }
-  }, [dispatch, positiveMessages]);
+  }, [dispatch, nonNegativeMessages]);
 
   if (messages.length === 0) return null;
 
