@@ -41,7 +41,7 @@ export default function RegistrationMessage() {
       style={{ margin: messages.length === 1 ? 0 : undefined }}
       positive={type === 'positive'}
       negative={type === 'negative'}
-      onDismiss={() => dispatch(clearMessage(id))}
+      onDismiss={type === 'negative' && (() => dispatch(clearMessage(id)))}
     >
       {I18n.t(key, params)}
     </Message>
