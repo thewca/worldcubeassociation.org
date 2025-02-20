@@ -3,7 +3,7 @@ import React, {
   useMemo, useReducer, useRef,
 } from 'react';
 import {
-  Accordion, Checkbox, Form, Header, Segment, Sticky,
+  Accordion, Checkbox, Form, Header, Label, Segment, Sticky,
 } from 'semantic-ui-react';
 import { DateTime } from 'luxon';
 import { getAllRegistrations } from '../api/registration/get/get_registrations';
@@ -290,6 +290,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
           <SectionToggle
             title="Pending registrations"
             inParens={pending.length}
+            color={PENDING_COLOR}
           />
         ),
       },
@@ -324,6 +325,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
           <SectionToggle
             title={I18n.t('registrations.list.waiting_list')}
             inParens={waiting.length}
+            color={WAITLIST_COLOR}
           />
         ),
       },
@@ -375,6 +377,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
                   : ''
               }`
             }
+            color={APPROVED_COLOR}
           />
         ),
       },
@@ -404,6 +407,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
           <SectionToggle
             title={I18n.t('competitions.registration_v2.list.cancelled.title')}
             inParens={cancelled.length}
+            color={CANCELLED_COLOR}
           />
         ),
       },
@@ -438,6 +442,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
           <SectionToggle
             title={I18n.t('competitions.registration_v2.list.rejected.title')}
             inParens={rejected.length}
+            color={REJECTED_COLOR}
           />
         ),
       },
@@ -524,10 +529,10 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
   );
 }
 
-function SectionToggle({ title, inParens }) {
+function SectionToggle({ title, inParens, color }) {
   return (
-    <Header as="span">
+    <Label as="span" color={color} size="big">
       {`${title} (${inParens})`}
-    </Header>
+    </Label>
   );
 }
