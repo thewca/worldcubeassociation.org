@@ -1595,7 +1595,7 @@ RSpec.describe Competition do
 
     it 'attempt auto close returns true when it succeeds' do
       FactoryBot.create_list(:registration, 4, :paid_no_hooks, competition: auto_close_comp)
-      reg = FactoryBot.create(:registration, :paid_no_hooks, competition: auto_close_comp)
+      FactoryBot.create(:registration, :paid_no_hooks, competition: auto_close_comp)
 
       expect(auto_close_comp.attempt_auto_close!).to eq(true)
     end
