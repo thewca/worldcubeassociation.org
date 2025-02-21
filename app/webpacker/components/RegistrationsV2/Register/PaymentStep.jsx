@@ -13,7 +13,7 @@ import {
 } from 'semantic-ui-react';
 import { paymentFinishUrl } from '../../../lib/requests/routes.js.erb';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
-import { setMessage } from './RegistrationMessage';
+import { showMessage } from './RegistrationMessage';
 import Loading from '../../Requests/Loading';
 import I18n from '../../../lib/i18n';
 import useCheckboxState from '../../../lib/hooks/useCheckboxState';
@@ -78,7 +78,7 @@ export default function PaymentStep({
     // redirected to the `return_url`.
     if (error) {
       // i18n-tasks-use t('registrations.payment_form.errors.generic.failed')
-      dispatch(setMessage('registrations.payment_form.errors.generic.failed', 'error', {
+      dispatch(showMessage('registrations.payment_form.errors.generic.failed', 'error', {
         provider: I18n.t('payments.payment_providers.stripe'),
       }));
 

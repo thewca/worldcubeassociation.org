@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, Icon } from 'semantic-ui-react';
 import { DateTime } from 'luxon';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
-import { setMessage } from '../Register/RegistrationMessage';
+import { showMessage } from '../Register/RegistrationMessage';
 import I18n from '../../../lib/i18n';
 import { countries } from '../../../lib/wca-data.js.erb';
 
@@ -80,7 +80,7 @@ export default function RegistrationActions({
       },
       {
         onSuccess: () => {
-          dispatch(setMessage('registrations.flash.updated', 'positive'));
+          dispatch(showMessage('registrations.flash.updated', 'positive'));
           refresh();
         },
       },
@@ -108,7 +108,7 @@ export default function RegistrationActions({
   const attemptToApprove = () => {
     const idsToAccept = [...pending, ...cancelled, ...waiting, ...rejected];
     if (idsToAccept.length > spotsRemaining) {
-      dispatch(setMessage(
+      dispatch(showMessage(
         'competitions.registration_v2.update.too_many',
         'negative',
         {
@@ -122,7 +122,7 @@ export default function RegistrationActions({
 
   const copyEmails = (emails) => {
     navigator.clipboard.writeText(emails);
-    dispatch(setMessage('competitions.registration_v2.update.email_message', 'positive'));
+    dispatch(showMessage('competitions.registration_v2.update.email_message', 'positive'));
   };
 
   return (

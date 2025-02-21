@@ -1081,7 +1081,7 @@ en:
         failure: "Couldn't verify your identity"
         confirm_proceed: "Confirm and proceed"
         identity_error: "Cannot edit your data. Please confirm your identity below before trying again."
-    #context: when an error occured during the edition
+    #context: when an error occurred during the edition
     errors:
       not_found: "not found"
       already_assigned: "already assigned to a different user"
@@ -1801,7 +1801,7 @@ en:
             allow_registration_without:
               "true": "Competitors will be allowed to register for events they're not qualified for (I'll remove them later)"
               "false": "Competitors MUST be qualified to register for an event"
-        #context: new registration system
+    #context: new registration system
     registration_v2:
       pdf:
         #context: <0> indicates an html tag for internationalizing in React, see https://docs.worldcubeassociation.org/guides/translating_the_website.html#using-react
@@ -1928,7 +1928,7 @@ en:
         -4014: "You are already registered for this competition."
         -6001: "WCA Payment is not enabled for this competition"
         -6002: "You need to finish your registration before you can pay"
-    #context: and when an error occured
+    #context: and when an error occurred
     errors:
       invalid_name_message: "must end with a year and must contain only alphanumeric characters, dashes(-), ampersands(&), periods(.), colons(:), apostrophes('), and spaces( )"
       cannot_manage: "Cannot manage competition."
