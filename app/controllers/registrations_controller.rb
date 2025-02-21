@@ -165,7 +165,9 @@ class RegistrationsController < ApplicationController
     end
     ActiveRecord::Base.transaction do
       user, locked_account_created = user_for_registration!(params[:registration_data])
-      registration = @competition.registrations.find_or_initialize_by(user_id: user.id)
+      registration = @competition.registrations.find_or_initialize_by(user_id: user.id) do |reg|
+        reg.registered_at = Time.now.utc
+      end
       raise I18n.t("registrations.add.errors.already_registered") unless registration.new_record?
       registration_comment = params.dig(:registration_data, :comments)
       registration.assign_attributes(comments: registration_comment) if registration_comment.present?
