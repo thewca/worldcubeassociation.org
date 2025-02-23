@@ -1,12 +1,16 @@
 import React from 'react';
-import { Button, Icon } from 'semantic-ui-react';
+import { Button, Dropdown, Icon } from 'semantic-ui-react';
 import { DateTime } from 'luxon';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { setMessage } from '../Register/RegistrationMessage';
 import I18n from '../../../lib/i18n';
 import { countries } from '../../../lib/wca-data.js.erb';
 import {
-  APPROVED_COLOR, CANCELLED_COLOR, PENDING_COLOR, REJECTED_COLOR, WAITLIST_COLOR,
+  APPROVED_COLOR, APPROVED_ICON,
+  CANCELLED_COLOR, CANCELLED_ICON,
+  PENDING_COLOR, PENDING_ICON,
+  REJECTED_COLOR, REJECTED_ICON,
+  WAITLIST_COLOR, WAITLIST_ICON,
 } from '../../../lib/utils/registrationAdmin';
 
 function V3csvExport(selected, registrations, competition) {
@@ -129,7 +133,7 @@ export default function RegistrationActions({
   };
 
   return (
-    <Button.Group className="stackable">
+    <>
       <Button
         onClick={() => {
           csvExport(
@@ -163,58 +167,64 @@ export default function RegistrationActions({
             content={I18n.t('competitions.registration_v2.update.email_copy')}
           />
 
-          <Button
-            onClick={() => changeStatus(
-              [...accepted, ...cancelled, ...waiting, ...rejected],
-              'pending',
-            )}
-            color={PENDING_COLOR}
-            icon="left arrow"
-            content={I18n.t('competitions.registration_v2.update.move_pending')}
-            disabled={!anyPending}
-          />
+          <Dropdown
+            pointing
+            className="icon"
+            labeled
+            text="Move to" // TODO: translate
+            icon="arrow right"
+            button
+          >
+            <Dropdown.Menu>
+              <Dropdown.Item
+                onClick={() => changeStatus(
+                  [...accepted, ...cancelled, ...waiting, ...rejected],
+                  'pending',
+                )}
+                content={I18n.t('competitions.registration_v2.update.move_pending')}
+                icon={{ name: PENDING_ICON, color: PENDING_COLOR, size: 'large' }}
+                disabled={!anyPending}
+              />
 
-          <Button
-            onClick={() => moveToWaitingList(
-              [...pending, ...cancelled, ...accepted, ...rejected],
-            )}
-            color={WAITLIST_COLOR}
-            icon="hourglass"
-            content={I18n.t('competitions.registration_v2.update.move_waiting')}
-            disabled={!anyWaitlistable}
-          />
+              <Dropdown.Item
+                onClick={() => moveToWaitingList(
+                  [...pending, ...cancelled, ...accepted, ...rejected],
+                )}
+                content={I18n.t('competitions.registration_v2.update.move_waiting')}
+                icon={{ name: WAITLIST_ICON, color: WAITLIST_COLOR, size: 'large' }}
+                disabled={!anyWaitlistable}
+              />
 
-          <Button
-            onClick={attemptToApprove}
-            color={APPROVED_COLOR}
-            icon="check"
-            content={I18n.t('registrations.list.approve')}
-            disabled={!anyApprovable}
-          />
+              <Dropdown.Item
+                onClick={attemptToApprove}
+                content={I18n.t('registrations.list.approve')}
+                icon={{ color: APPROVED_COLOR, name: APPROVED_ICON, size: 'large' }}
+                disabled={!anyApprovable}
+              />
 
-          <Button
-            onClick={() => changeStatus(
-              [...pending, ...accepted, ...waiting, ...rejected],
-              'cancelled',
-            )}
-            color={CANCELLED_COLOR}
-            icon="trash"
-            content={I18n.t('competitions.registration_v2.update.cancel')}
-            disabled={!anyCancellable}
-          />
+              <Dropdown.Item
+                onClick={() => changeStatus(
+                  [...pending, ...accepted, ...waiting, ...rejected],
+                  'cancelled',
+                )}
+                content={I18n.t('competitions.registration_v2.update.cancel')}
+                icon={{ name: CANCELLED_ICON, color: CANCELLED_COLOR, size: 'large' }}
+                disabled={!anyCancellable}
+              />
 
-          <Button
-            onClick={() => changeStatus(
-              [...pending, ...accepted, ...waiting, ...cancelled],
-              'rejected',
-            )}
-            color={REJECTED_COLOR}
-            icon="delete"
-            content={I18n.t('competitions.registration_v2.update.reject')}
-            disabled={!anyRejectable}
-          />
+              <Dropdown.Item
+                onClick={() => changeStatus(
+                  [...pending, ...accepted, ...waiting, ...cancelled],
+                  'rejected',
+                )}
+                content={I18n.t('competitions.registration_v2.update.reject')}
+                icon={{ name: REJECTED_ICON, color: REJECTED_COLOR, size: 'large' }}
+                disabled={!anyRejectable}
+              />
+            </Dropdown.Menu>
+          </Dropdown>
         </>
       )}
-    </Button.Group>
+    </>
   );
 }
