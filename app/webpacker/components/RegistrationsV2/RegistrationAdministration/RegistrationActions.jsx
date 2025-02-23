@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Dropdown, Icon } from 'semantic-ui-react';
+import { Button, Dropdown } from 'semantic-ui-react';
 import { DateTime } from 'luxon';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { setMessage } from '../Register/RegistrationMessage';
@@ -148,89 +148,88 @@ export default function RegistrationActions({
         }}
       />
 
-      {anySelected && (
-        <>
-          <Button
-            as="a"
-            content={I18n.t('competitions.registration_v2.update.email_send')}
-            href={`mailto:?bcc=${selectedEmails}`}
-            id="email-selected"
-            target="_blank"
-            rel="noreferrer"
-            icon="envelope"
-            labelPosition="left"
+      <Button
+        as="a"
+        content={I18n.t('competitions.registration_v2.update.email_send')}
+        href={`mailto:?bcc=${selectedEmails}`}
+        id="email-selected"
+        target="_blank"
+        rel="noreferrer"
+        icon="envelope"
+        labelPosition="left"
+        disabled={!anySelected}
+      />
+
+      <Button
+        content={I18n.t('competitions.registration_v2.update.email_copy')}
+        icon="copy"
+        labelPosition="left"
+        onClick={() => copyEmails(selectedEmails)}
+        disabled={!anySelected}
+      />
+
+      <Dropdown
+        pointing
+        className="icon brown"
+        labeled
+        text={I18n.t('competitions.registration_v2.update.move_to')}
+        icon="arrow right"
+        button
+        disabled={!anySelected}
+      >
+        <Dropdown.Menu>
+          <MoveAction
+            text={I18n.t('competitions.registration_v2.update.pending')}
+            icon={PENDING_ICON}
+            color={PENDING_COLOR}
+            isDisabled={!anyPending}
+            onClick={() => changeStatus(
+              [...accepted, ...cancelled, ...waiting, ...rejected],
+              'pending',
+            )}
           />
 
-          <Button
-            content={I18n.t('competitions.registration_v2.update.email_copy')}
-            icon="copy"
-            labelPosition="left"
-            onClick={() => copyEmails(selectedEmails)}
+          <MoveAction
+            text={I18n.t('competitions.registration_v2.update.waitlist')}
+            icon={WAITLIST_ICON}
+            color={WAITLIST_COLOR}
+            isDisabled={!anyWaitlistable}
+            onClick={() => moveToWaitingList(
+              [...pending, ...cancelled, ...accepted, ...rejected],
+            )}
           />
 
-          <Dropdown
-            pointing
-            className="icon brown"
-            labeled
-            text={I18n.t('competitions.registration_v2.update.move_to')}
-            icon="arrow right"
-            button
-          >
-            <Dropdown.Menu>
-              <MoveAction
-                text={I18n.t('competitions.registration_v2.update.pending')}
-                icon={PENDING_ICON}
-                color={PENDING_COLOR}
-                isDisabled={!anyPending}
-                onClick={() => changeStatus(
-                  [...accepted, ...cancelled, ...waiting, ...rejected],
-                  'pending',
-                )}
-              />
+          <MoveAction
+            text={I18n.t('competitions.registration_v2.update.approved')}
+            icon={APPROVED_ICON}
+            color={APPROVED_COLOR}
+            isDisabled={!anyApprovable}
+            onClick={attemptToApprove}
+          />
 
-              <MoveAction
-                text={I18n.t('competitions.registration_v2.update.waitlist')}
-                icon={WAITLIST_ICON}
-                color={WAITLIST_COLOR}
-                isDisabled={!anyWaitlistable}
-                onClick={() => moveToWaitingList(
-                  [...pending, ...cancelled, ...accepted, ...rejected],
-                )}
-              />
+          <MoveAction
+            text={I18n.t('competitions.registration_v2.update.cancelled')}
+            icon={CANCELLED_ICON}
+            color={CANCELLED_COLOR}
+            isDisabled={!anyCancellable}
+            onClick={() => changeStatus(
+              [...pending, ...accepted, ...waiting, ...rejected],
+              'cancelled',
+            )}
+          />
 
-              <MoveAction
-                text={I18n.t('competitions.registration_v2.update.approved')}
-                icon={APPROVED_ICON}
-                color={APPROVED_COLOR}
-                isDisabled={!anyApprovable}
-                onClick={attemptToApprove}
-              />
-
-              <MoveAction
-                text={I18n.t('competitions.registration_v2.update.cancelled')}
-                icon={CANCELLED_ICON}
-                color={CANCELLED_COLOR}
-                isDisabled={!anyCancellable}
-                onClick={() => changeStatus(
-                  [...pending, ...accepted, ...waiting, ...rejected],
-                  'cancelled',
-                )}
-              />
-
-              <MoveAction
-                text={I18n.t('competitions.registration_v2.update.rejected')}
-                icon={REJECTED_ICON}
-                color={REJECTED_COLOR}
-                isDisabled={!anyRejectable}
-                onClick={() => changeStatus(
-                  [...pending, ...accepted, ...waiting, ...cancelled],
-                  'rejected',
-                )}
-              />
-            </Dropdown.Menu>
-          </Dropdown>
-        </>
-      )}
+          <MoveAction
+            text={I18n.t('competitions.registration_v2.update.rejected')}
+            icon={REJECTED_ICON}
+            color={REJECTED_COLOR}
+            isDisabled={!anyRejectable}
+            onClick={() => changeStatus(
+              [...pending, ...accepted, ...waiting, ...cancelled],
+              'rejected',
+            )}
+          />
+        </Dropdown.Menu>
+      </Dropdown>
     </>
   );
 }
