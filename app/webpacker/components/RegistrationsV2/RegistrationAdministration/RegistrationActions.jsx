@@ -180,7 +180,7 @@ export default function RegistrationActions({
                 text={I18n.t('competitions.registration_v2.update.move_pending')}
                 icon={PENDING_ICON}
                 color={PENDING_COLOR}
-                disabled={!anyPending}
+                isDisabled={!anyPending}
                 onClick={() => changeStatus(
                   [...accepted, ...cancelled, ...waiting, ...rejected],
                   'pending',
@@ -191,7 +191,7 @@ export default function RegistrationActions({
                 text={I18n.t('competitions.registration_v2.update.move_waiting')}
                 icon={WAITLIST_ICON}
                 color={WAITLIST_COLOR}
-                disabled={!anyWaitlistable}
+                isDisabled={!anyWaitlistable}
                 onClick={() => moveToWaitingList(
                   [...pending, ...cancelled, ...accepted, ...rejected],
                 )}
@@ -201,7 +201,7 @@ export default function RegistrationActions({
                 text={I18n.t('registrations.list.approve')}
                 icon={APPROVED_ICON}
                 color={APPROVED_COLOR}
-                disabled={!anyApprovable}
+                isDisabled={!anyApprovable}
                 onClick={attemptToApprove}
               />
 
@@ -209,7 +209,7 @@ export default function RegistrationActions({
                 text={I18n.t('competitions.registration_v2.update.cancel')}
                 icon={CANCELLED_ICON}
                 color={CANCELLED_COLOR}
-                disabled={!anyCancellable}
+                isDisabled={!anyCancellable}
                 onClick={() => changeStatus(
                   [...pending, ...accepted, ...waiting, ...rejected],
                   'cancelled',
@@ -220,7 +220,7 @@ export default function RegistrationActions({
                 text={I18n.t('competitions.registration_v2.update.reject')}
                 icon={REJECTED_ICON}
                 color={REJECTED_COLOR}
-                disabled={!anyRejectable}
+                isDisabled={!anyRejectable}
                 onClick={() => changeStatus(
                   [...pending, ...accepted, ...waiting, ...cancelled],
                   'rejected',
