@@ -171,13 +171,13 @@ export default function RegistrationActions({
             pointing
             className="icon"
             labeled
-            text="Move to" // TODO: translate
+            text={I18n.t('competitions.registration_v2.update.move_to')}
             icon="arrow right"
             button
           >
             <Dropdown.Menu>
               <MoveAction
-                text={I18n.t('competitions.registration_v2.update.move_pending')}
+                text={I18n.t('competitions.registration_v2.update.pending')}
                 icon={PENDING_ICON}
                 color={PENDING_COLOR}
                 isDisabled={!anyPending}
@@ -188,7 +188,7 @@ export default function RegistrationActions({
               />
 
               <MoveAction
-                text={I18n.t('competitions.registration_v2.update.move_waiting')}
+                text={I18n.t('competitions.registration_v2.update.waitlist')}
                 icon={WAITLIST_ICON}
                 color={WAITLIST_COLOR}
                 isDisabled={!anyWaitlistable}
@@ -198,7 +198,7 @@ export default function RegistrationActions({
               />
 
               <MoveAction
-                text={I18n.t('registrations.list.approve')}
+                text={I18n.t('competitions.registration_v2.update.approved')}
                 icon={APPROVED_ICON}
                 color={APPROVED_COLOR}
                 isDisabled={!anyApprovable}
@@ -206,7 +206,7 @@ export default function RegistrationActions({
               />
 
               <MoveAction
-                text={I18n.t('competitions.registration_v2.update.cancel')}
+                text={I18n.t('competitions.registration_v2.update.cancelled')}
                 icon={CANCELLED_ICON}
                 color={CANCELLED_COLOR}
                 isDisabled={!anyCancellable}
@@ -217,7 +217,7 @@ export default function RegistrationActions({
               />
 
               <MoveAction
-                text={I18n.t('competitions.registration_v2.update.reject')}
+                text={I18n.t('competitions.registration_v2.update.rejected')}
                 icon={REJECTED_ICON}
                 color={REJECTED_COLOR}
                 isDisabled={!anyRejectable}
