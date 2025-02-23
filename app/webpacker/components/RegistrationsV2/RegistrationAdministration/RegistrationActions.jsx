@@ -176,55 +176,73 @@ export default function RegistrationActions({
             button
           >
             <Dropdown.Menu>
-              <Dropdown.Item
+              <MoveAction
+                text={I18n.t('competitions.registration_v2.update.move_pending')}
+                icon={PENDING_ICON}
+                color={PENDING_COLOR}
+                disabled={!anyPending}
                 onClick={() => changeStatus(
                   [...accepted, ...cancelled, ...waiting, ...rejected],
                   'pending',
                 )}
-                content={I18n.t('competitions.registration_v2.update.move_pending')}
-                icon={{ name: PENDING_ICON, color: PENDING_COLOR, size: 'large' }}
-                disabled={!anyPending}
               />
 
-              <Dropdown.Item
+              <MoveAction
+                text={I18n.t('competitions.registration_v2.update.move_waiting')}
+                icon={WAITLIST_ICON}
+                color={WAITLIST_COLOR}
+                disabled={!anyWaitlistable}
                 onClick={() => moveToWaitingList(
                   [...pending, ...cancelled, ...accepted, ...rejected],
                 )}
-                content={I18n.t('competitions.registration_v2.update.move_waiting')}
-                icon={{ name: WAITLIST_ICON, color: WAITLIST_COLOR, size: 'large' }}
-                disabled={!anyWaitlistable}
               />
 
-              <Dropdown.Item
-                onClick={attemptToApprove}
-                content={I18n.t('registrations.list.approve')}
-                icon={{ color: APPROVED_COLOR, name: APPROVED_ICON, size: 'large' }}
+              <MoveAction
+                text={I18n.t('registrations.list.approve')}
+                icon={APPROVED_ICON}
+                color={APPROVED_COLOR}
                 disabled={!anyApprovable}
+                onClick={attemptToApprove}
               />
 
-              <Dropdown.Item
+              <MoveAction
+                text={I18n.t('competitions.registration_v2.update.cancel')}
+                icon={CANCELLED_ICON}
+                color={CANCELLED_COLOR}
+                disabled={!anyCancellable}
                 onClick={() => changeStatus(
                   [...pending, ...accepted, ...waiting, ...rejected],
                   'cancelled',
                 )}
-                content={I18n.t('competitions.registration_v2.update.cancel')}
-                icon={{ name: CANCELLED_ICON, color: CANCELLED_COLOR, size: 'large' }}
-                disabled={!anyCancellable}
               />
 
-              <Dropdown.Item
+              <MoveAction
+                text={I18n.t('competitions.registration_v2.update.reject')}
+                icon={REJECTED_ICON}
+                color={REJECTED_COLOR}
+                disabled={!anyRejectable}
                 onClick={() => changeStatus(
                   [...pending, ...accepted, ...waiting, ...cancelled],
                   'rejected',
                 )}
-                content={I18n.t('competitions.registration_v2.update.reject')}
-                icon={{ name: REJECTED_ICON, color: REJECTED_COLOR, size: 'large' }}
-                disabled={!anyRejectable}
               />
             </Dropdown.Menu>
           </Dropdown>
         </>
       )}
     </>
+  );
+}
+
+function MoveAction({
+  text, icon, color, isDisabled, onClick,
+}) {
+  return (
+    <Dropdown.Item
+      content={text}
+      icon={{ color, name: icon, size: 'large' }}
+      disabled={isDisabled}
+      onClick={onClick}
+    />
   );
 }
