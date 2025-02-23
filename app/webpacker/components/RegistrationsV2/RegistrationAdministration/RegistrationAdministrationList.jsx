@@ -538,7 +538,9 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
   );
 }
 
-function SectionToggle({ icon, title, inParens, color }) {
+function SectionToggle({
+  icon, title, inParens, color,
+}) {
   return (
     <Header as="span" size="large">
       <Icon name={icon} color={color} />
