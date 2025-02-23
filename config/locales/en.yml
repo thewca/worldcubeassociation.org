@@ -1858,7 +1858,10 @@ en:
         email_send: "Send Email"
         email_copy: "Copy Emails"
         email_message: "Copied to clipboard. Remember to use bcc!"
-        move_to: "Move to"
+        move_to:
+          zero: "Move to"
+          one: "Move %{count} to"
+          other: "Move %{count} to"
         pending: "Pending"
         waitlist: "Waiting List"
         approved: "Approved"

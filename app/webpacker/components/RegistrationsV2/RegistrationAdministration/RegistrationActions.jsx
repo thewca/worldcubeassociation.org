@@ -172,7 +172,7 @@ export default function RegistrationActions({
         pointing
         className="icon brown"
         labeled
-        text={I18n.t('competitions.registration_v2.update.move_to')}
+        text={I18n.t('competitions.registration_v2.update.move_to', { count: selectedCount })}
         icon="arrow right"
         button
         disabled={!anySelected}
