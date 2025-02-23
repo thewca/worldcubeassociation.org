@@ -320,6 +320,10 @@ zh-TW:
     dinner: 晚餐
     #original_hash: 75226d7
     awards: 頒獎
+    #original_hash: cdd7bb2
+    setup: 布置
+    #original_hash: 0b28e08
+    teardown: 收尾
     #original_hash: 6e6a6f2
     misc: 其他
   common:
@@ -358,10 +362,6 @@ zh-TW:
     days:
       zero: 1天
       other: '%{count}天'
-    #original_hash: 203e1b3
-    these_events:
-      zero: 這個項目
-      other: '這%{count}個項目'
     #original_hash: 51ef7d4
     search_site: 搜尋網站
     #original_hash: d7decf1
@@ -498,6 +498,8 @@ zh-TW:
         organization: 主辦團隊
         #original_hash: 5e326b1
         incidents: 意外事件
+        #original_hash: 7106c2d
+        setup_images: 會場布置圖片
         #original_hash: 1362470
         wrc_feedback_requested: 我想要WRC對於某些意外事件做意見回饋
         #original_hash: 0c7191d
@@ -768,14 +770,6 @@ zh-TW:
           Use the &lt;!-- break --&gt; tag to show a preview on the home page.
           Any post on the home page will show all text before this divider. The
           actual post will display the full body.
-        #original_hash: da39a3e
-        sticky: ''
-        #original_hash: da39a3e
-        unstick_at: ''
-        #original_hash: da39a3e
-        title: ''
-        #original_hash: da39a3e
-        tags: ''
         #original_hash: 0e3764f
         show_on_homepage: 請注意！這邊的資訊並不會被隱藏。只是避免首頁混亂。沒有顯示在首頁的文章還是能透過永久連結網址或是標籤進入。
       delegate_report:
@@ -925,6 +919,8 @@ zh-TW:
       size_too_small: '尺寸太小(最小應為%{file_size})'
       #original_hash: a2a43b3
       size_too_big: '尺寸太大(最大應為%{file_size})'
+      #original_hash: de76004
+      no_permission: 您沒有進入這個網頁的所需權限。
   devise:
     passwords:
       edit:
@@ -1185,8 +1181,6 @@ zh-TW:
       polls: 投票
       #original_hash: d3a928c
       results_team: 成績組
-      #original_hash: 4e7afeb
-      results_admin: 成績管理員
       #original_hash: 61074f1
       results_database: 資料庫
       #original_hash: 54e0548
@@ -1256,6 +1250,8 @@ zh-TW:
         wfc: WCA財政委員會 (WFC)
         #original_hash: 2035811
         wmt: WCA行銷組 (WMT)
+        #original_hash: c90653c
+        wmct: WCA大型錦標賽團隊 (WMCT)
         #original_hash: 8f32116
         wqac: WCA品質保證委員會 (WQAC)
         #original_hash: 3da1e85
@@ -1269,40 +1265,45 @@ zh-TW:
         #original_hash: 78949a7
         wapc: WCA申訴委員會 (WAPC)
       groups_description:
-        #original_hash: 5b1aade
+        #original_hash: d62001b
         wat: >-
-          WCA資料整理組的任務是將WCA過去資料做整理和維護保存。他們記錄下重要的方塊速解事件以及值得注意的WCA里程碑，讓這些資料成為WCA整體時間軸的一部分，以此用來傳承WCA在方塊速解上的歷史地位。
-        #original_hash: 50fd091
+          WCA資料整理組(WAT)
+          的任務是將WCA過去資料做整理和維護保存。他們記錄下重要的方塊速解事件以及值得注意的WCA里程碑，讓這些資料成為WCA整體時間軸的一部分，以此用來傳承WCA在方塊速解上的歷史地位。
+        #original_hash: 7803faf
         wct: >-
-          該團隊是監督和協助WCA與社群和一般大眾的溝通橋梁。WCA的溝通內容應傳遞其組織目標並支持友善、透明、包容、開放、熱誠、雙向溝通等正面文化價值。
-        #original_hash: 3e5570f
+          WCA傳播組
+          (WCT)是監督和協助WCA與社群和一般大眾的溝通橋梁。WCA的溝通內容應該傳遞WCA的目標並支持友善、透明、包容、開放、熱誠、雙向溝通等正面文化價值。
+        #original_hash: bd69012
         wcat: >-
-          WCA比賽公告組負責審核和公告由WCA代表所提出的比賽申請，並確保此類公告符合WCA品質標準。這個團隊也負責維持良好的比賽申請用的協定文件，例如「WCA比賽要求政策」。WCA比賽公告組並不負責組織或是監督各個比賽。
+          WCA比賽公告組 (WCAT)
+          負責審核和公告由WCA代表所提出的比賽申請，並確保此類公告符合WCA品質標準。這個團隊也負責維持良好的比賽申請用的協定文件，例如「WCA比賽要求政策」。WCA比賽公告組並不負責組織或是監督各個比賽。
         #original_hash: 5007698
         wic: >-
           WCA廉正委員會（WIC）負責組成獨立的調查團隊。調查內容為在WCA比賽中已註冊玩家、WCA比賽的意外事件或是官方的WCA網路平台。這些意外事件是被指控違反WCA精神、WCA行為準則、WCA倫理規範或/和WCA競賽規則。
-        #original_hash: 889dd90
-        weat: 該團隊是負責執行處理WCA董事會的行政事務。
-        #original_hash: 43e4e33
+        #original_hash: be491ec
+        weat: WCA董事會助理團隊 (WEAT)是負責執行處理WCA董事會的行政事務。
+        #original_hash: fc67562
         wfc: >-
-          該委員會負責管理WCA的財政，包含編制預算、財務報告、財務分析、記帳及報稅。他們也管理WCA最大的收入來源，WCA稅費系統，以及其他各式各樣用來支持各地團體在不同發展階段時需要的資金系統，包含交通資金、設備資金和用來支持區域組織。
-        #original_hash: f2a0140
-        wmt: 該團隊負責開發和管理WCA品牌、尋求贊助、協助WCA比賽器材的分配以及行銷WCA商品。
-        #original_hash: 0171b3b
+          WCA財政委員會
+          (WFC)負責管理WCA的財政，包含編制預算、財務報告、財務分析、記帳及報稅。他們也管理WCA最大的收入來源，WCA稅費系統，以及其他各式各樣用來支持各地團體在不同發展階段時需要的資金系統，包含交通資金、設備資金和用來支持區域組織。
+        #original_hash: 88a00fa
+        wmt: WCA行銷組 (WMT)負責管理WCA品牌、尋求贊助以及行銷WCA商品。
+        #original_hash: 94e9ad1
         wqac: >-
-          該委員會的職責是支持並促進WCA內部持續的品質改善，以及確保應用於全球的標準為一致並保有高品質的程序、WCA員工、區域組織、比賽主辦團隊和工作人員。
-        #original_hash: a1260bb
+          WCA品質保證委員會
+          (WQAC)的職責是促進WCA內部持續的品質改善，以及確保應用於全球的標準為一致並保有高品質的程序、WCA員工、區域組織、比賽主辦團隊和工作人員。
+        #original_hash: 355babe
         wrc: >-
-          WCA規則委員會處理所有跟WCA規則有關的應用，規則改進，規則開發。他們支援WCA代表們任何有關比賽中跟程序有關的判決以及未解決或是未發現的比賽意外事故。
-        #original_hash: 7bc588b
-        wrt: WCA成績組負責管理所有WCA資料庫裏面的資料，最重要的就是比賽成績和個人資料。
-        #original_hash: ec961e4
-        wst: 該團隊負責管理WCA的軟體（網站、轉亂程式、作業工具、管理工具）。
-        #original_hash: 8f888d6
-        wsot: 這個團隊負責監督和協助WCA成為一個國際認可的競技組織。
-        #original_hash: 9f45bfa
+          WCA規則委員會(WRC)處理所有跟WCA規則有關的應用，規則改進，規則開發。他們支援WCA代表們任何有關比賽中跟程序有關的判決以及未解決或是未發現的比賽意外事故。
+        #original_hash: 7ca3e6f
+        wrt: WCA成績組(WRT) 管理所有WCA資料庫裏面的資料，包含比賽成績和個人資料。
+        #original_hash: f905744
+        wst: WCA軟體組 (WST)管理WCA的軟體（網站、轉亂程式、作業工具、管理工具）。
+        #original_hash: 638652c
+        wsot: WCA競技組織團隊 (WSOT)監督和協助WCA成為一個國際認可的競技組織。
+        #original_hash: 4882d55
         wapc: >-
-          WCA申訴委員會（WAPC）負責審視以及解決那些對WCA員工所做出決定的申訴案件。WAPC提供獨立和公正的調查過程來確保決定的公平性、合理性和符合WCA政策及競賽規則。
+          WCA申訴委員會(WAC)審視以及解決那些對WCA員工所做出決定的申訴案件。WAPC提供獨立和公正的調查過程來確保決定的公平性、合理性和符合WCA政策及競賽規則。
     contacts:
       #original_hash: 4ef2aad
       title: WCA聯絡表
@@ -1355,6 +1356,9 @@ zh-TW:
             edit_profile:
               #original_hash: 322db6c
               label: 修改我的個人資料（姓名、區域、性別或生日）
+            edit_others_profile:
+              #original_hash: d08e8eb
+              label: 編輯其他人的個人檔案
             report_result_issue:
               #original_hash: 2edbb52
               label: 成績中的問題
@@ -1416,6 +1420,8 @@ zh-TW:
       no_profile_error: >-
         看來您還沒有WCA個人檔案因為您還沒有參加過任何比賽。如有其他疑問，請 <a
         href="https://www.worldcubeassociation.org/contact?contactRecipient=wrt">聯絡我們</a>。
+      #original_hash: 43f15fd
+      no_permission_error: 您沒有要求編輯其他人個人檔案的權限。
       form:
         contact_email:
           #original_hash: 3142970
@@ -1423,6 +1429,9 @@ zh-TW:
         wca_id:
           #original_hash: 6344c9e
           label: 輸入WCA ID
+        wca_id_search:
+          #original_hash: fbba19d
+          label: 搜尋您想要編輯的WCA ID。
         edit_reason:
           #original_hash: fdfcccf
           label: 變更的理由
@@ -1904,23 +1913,20 @@ zh-TW:
         message_html: '您%{comp_name}的報名已經被批准了。您可以在%{here}檢查您的報名狀態。'
         #original_hash: 1852cbf
         see_you_soon: '我們很期待在%{comp_name}與您相會！'
-      pending:
-        #original_hash: 8d26297
-        mail_subject: '報名已經被移至候補名單：%{comp_name}。'
-        #original_hash: 6fd0a8e
-        moved_html: '您%{comp_name}的報名已經被移至候補名單中。可能的原因為：'
-        causes:
-          #original_hash: eadfc0d
-          accepted: 您報名的批准是不小心按錯
-          #original_hash: 2ac6d84
-          withdrawal: 您要求取消報名
+      waiting_list:
+        #original_hash: 54c2106
+        mail_subject: '您在候補名單：%{comp_name}'
+        #original_hash: 2a0c44f
+        waitlisted_html: '比賽已滿，但您已被列入候補名單。當有足夠的名額釋出讓您參加比賽時，您會收到電子郵件通知。您可以在 %{here} 查看您的候補名單順位。'
         #original_hash: 8f7358f
-        email_if_error: 若您認為這是錯誤，請回覆這篇電子郵件。
+        email_if_error: 如果您認為這有錯誤，請回覆這封電子郵件。
       deleted:
         #original_hash: 8cbc6c0
         mail_subject: '報名已經被取消：%{comp_name}。'
         #original_hash: f66ae63
         message_html: '您%{comp_name}的報名已經被取消。可能的原因為：'
+        #original_hash: 8f7358f
+        email_if_error: 如果您認為這是錯誤，請回覆這封電子郵件。
         causes:
           #original_hash: 978944c
           missing_info: 您沒有輸入所有必填的資料。
@@ -1928,10 +1934,17 @@ zh-TW:
           incomplete: 您沒有符合報名資格（例如：預先支付報名費或達到比賽項目的成績門檻）
           #original_hash: 1e225f0
           registrations_full: 比賽限制人數已經額滿且沒有其他空缺
-          #original_hash: 0d4cce9
+          #original_hash: 238f4ff
           multiple_registrations: 您報名了兩次以上
           #original_hash: 70b1e2c
           competition_canceled: 這場比賽已被取消了
+      formerly_banned:
+        #original_hash: f2c70a9
+        ban_count: '這位參賽者已被禁賽%{ban_count}次，理由及範圍如下：'
+        #original_hash: 67e08fe
+        scope_and_reason: '範圍：%{ban_scope}，理由：%{ban_reason}'
+        #original_hash: 2a246da
+        wic_message: 如果您對選手的紀律記錄有任何疑問，請透過回覆此電子郵件與 WIC 聯繫。
     list:
       #original_hash: 8b7631c
       title: '%{comp}的報名'
@@ -1977,8 +1990,6 @@ zh-TW:
     sign_in: 登入
     #original_hash: 5d45a00
     profile: 個人檔案
-    #original_hash: 801b3e9
-    panel_title: 報名細節
     #original_hash: c0063c3
     register: 報名！
     #original_hash: f484f15
@@ -2003,8 +2014,6 @@ zh-TW:
     please_sign_in_not_yet_open_html: '確認報名進度前請先%{sign_in}。如果您還沒有WCA帳號，您可以在%{here}申請一個，但是比賽報名尚未開始。'
     #original_hash: 4f84af0
     please_sign_in_html: '報名%{comp}前請先%{sign_in}。如果您還沒有WCA帳號，您可以在%{here}申請一個。'
-    #original_hash: 89b4e7f
-    greeting: '嗨，%{name}！'
     #original_hash: 322f646
     please_fix_profile_html: '為了要報名%{comp}，您必須修正您%{profile}帳號中的問題：'
     #original_hash: f22ef22
@@ -2013,18 +2022,6 @@ zh-TW:
     #original_hash: cf29e85
     registration_full_include_waiting_list: >-
       這場比賽的參賽者人數上限是%{competitor_limit}人，且可能已經額滿。如果您現在報名，您會被排在候補名單中。如果沒有名額釋出，您的報名可能不會被核准。
-    #original_hash: 855ca9c
-    can_register: '您可以在底下報名%{comp}。'
-    #original_hash: 4167ed7
-    check_registration_information: 請檢查報名資訊以確認您是否需要完成其他事項，例如支付報名費。
-    #original_hash: 88ac7c3
-    have_registered: '您已經提交%{comp}的報名了。您可以在底下看到您的報名資料。'
-    #original_hash: 3c9141f
-    contact_organizer: 如果您想更改內容的話，請聯絡主辦團隊。
-    #original_hash: 59354fd
-    waiting_list: 您的報名正在確認中。您也許需要先付報名費才能核准報名。詳情請至比賽網站查詢。
-    #original_hash: 58b1a3c
-    accepted: 您的報名已經核准了！
     #original_hash: bcd7d70
     entry_fees_fully_paid: '您已經支付報名費全額%{paid}。'
     #original_hash: 2e5d1b9
@@ -2039,8 +2036,6 @@ zh-TW:
         #original_hash: 1cc5991
         refund_amount: 退款金額
     payment_form:
-      #original_hash: 4de825f
-      title: 報名費
       #original_hash: 8897f02
       payment_successful: 您的付款已完成，您的報名應該會在下面顯示已付款。
       #original_hash: 92dde77
@@ -2077,6 +2072,8 @@ zh-TW:
         #original_hash: b245028
         amount_rather_high: 您即將支付報名要求兩倍以上的金額。
       errors:
+        #original_hash: c80ec45
+        registration_closed: 報名已截止，不再允許新的付款。
         #original_hash: 166d48c
         already_paid: 並沒有扣款費用，因為報名費已付過了。
         #original_hash: f10c80c
@@ -2506,6 +2503,10 @@ zh-TW:
       from_date: 從
       #original_hash: ae79ea1
       to_date: 到
+      #original_hash: 17fd5f4
+      show_filters: 顯示篩選器
+      #original_hash: 0d781a3
+      hide_filters: 隱藏篩選器
       #original_hash: 5be6985
       reset_filters: 重置篩選
       #original_hash: 52c30f8
@@ -2541,8 +2542,6 @@ zh-TW:
         custom: 選取時間內的比賽
         #original_hash: 0933739
         by_announcement: 以公告日期來排列的比賽，最新的在最上面
-      #original_hash: 6684214
-      no_access: 您沒有此頁面的權限！
       tooltips:
         hourglass:
           #original_hash: b5183e1
@@ -2560,20 +2559,18 @@ zh-TW:
         #original_hash: 3bc8082
         recent: '過去%{count}天'
         registration:
-          #original_hash: 49d8169
-          opens_in: '將在%{duration}之後開放報名'
-          #original_hash: 2d601fa
-          closed: '報名時間已結束。比賽將在%{days}之後舉行。'
+          #original_hash: fe28f94
+          opens_in: '將在%{relativeDate}之後開放報名'
+          #original_hash: f9f709e
+          closed: '報名時間已結束。比賽將在%{relativeDate}舉行。'
           #original_hash: 2e17db8
           open: 已開放報名！
-          #original_hash: c098975
+          #original_hash: be2118d
           full: 參賽者人數已滿，將提供候補名單給新的報名。
       #original_hash: 28531af
       no_more_comps: 無比賽存在
       #original_hash: 8b09d74
       no_comp_found: 沒有找到比賽
-      #original_hash: 7008166
-      no_comp_match: '沒有找到任何有%{events}項目的比賽！試著搜尋少一點項目。'
     my_competitions_table:
       #original_hash: 5301648
       edit: 編輯
@@ -3041,8 +3038,8 @@ zh-TW:
           #original_hash: 3a16c0d
           refunded: '款項已在%{date}退款。'
         psychsheets:
-          #original_hash: f03e2d0
-          go_back: 返回
+          #original_hash: a23dc2b
+          rank: '排名：%{userPosition}'
         #original_hash: 19eabc9
         timestamp: 時間戳記
         #original_hash: 5e0207a
@@ -3064,6 +3061,8 @@ zh-TW:
         being_deleted: 正在刪除報名中...
         #original_hash: cbf13af
         update_confirm: 您確定要更新您的報名嗎？
+        #original_hash: 8bf02a9
+        delete_contact_message: 我想要刪除我的報名
         #original_hash: 65bbb07
         no_changes: 沒有變化
         #original_hash: be4e8e2
@@ -3200,6 +3199,8 @@ zh-TW:
         '-4011': 您只能受理候補名單上的第一位
         #original_hash: 8d089d6
         '-4012': 您沒有取得所選比賽項目的參賽資格
+        #original_hash: a244fde
+        '-4014': 您已經報名了這場比賽。
         #original_hash: 0df821f
         '-6001': 這場比賽沒有啟用WCA付款方式
         #original_hash: 092da51
@@ -3241,7 +3242,7 @@ zh-TW:
       advancement_condition_must_be_present_for_all_non_final_rounds: 如果不是最後一輪，必須要設定晉級條件。
       #original_hash: da17c99
       registration_period_after_start: 報名階段不能晚於比賽日期。
-      #original_hash: f6b244b
+      #original_hash: 2a26c1c
       waiting_list_deadline_before_registration_close: 候補截止日期不能早於報名截止日期。
       #original_hash: ececa98
       waiting_list_deadline_before_refund_date: 候補截止日期不能早於退費日期。
@@ -4714,3 +4715,9 @@ zh-TW:
       description_html: '在這個頁面中，我們提供軟體組用的SQL dump檔案輸出。細節可以在%{github_link}查看。'
       #original_hash: a479c9c
       download: 下載
+  validators:
+    persons:
+      #original_hash: b4b736a
+      dob_is_too_young_warning: '%{name}似乎未滿三歲，請確認是不是正確。'
+      #original_hash: b7c88ef
+      dob_is_too_old_warning: '%{name}似乎快一百歲，請確認是不是正確。'
