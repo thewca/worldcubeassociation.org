@@ -3,7 +3,7 @@ import React, {
   useMemo, useReducer, useRef,
 } from 'react';
 import {
-  Accordion, Checkbox, Form, Header, Label, Segment, Sticky,
+  Accordion, Checkbox, Form, Header, Icon, Segment, Sticky,
 } from 'semantic-ui-react';
 import { DateTime } from 'luxon';
 import { getAllRegistrations } from '../api/registration/get/get_registrations';
@@ -19,7 +19,11 @@ import useCheckboxState from '../../../lib/hooks/useCheckboxState';
 import { countries } from '../../../lib/wca-data.js.erb';
 import useOrderedSet from '../../../lib/hooks/useOrderedSet';
 import {
-  APPROVED_COLOR, CANCELLED_COLOR, PENDING_COLOR, REJECTED_COLOR, WAITLIST_COLOR,
+  APPROVED_COLOR, APPROVED_ICON,
+  CANCELLED_COLOR, CANCELLED_ICON,
+  PENDING_COLOR, PENDING_ICON,
+  REJECTED_COLOR, REJECTED_ICON,
+  WAITLIST_COLOR, WAITLIST_ICON,
 } from '../../../lib/utils/registrationAdmin';
 
 const sortReducer = createSortReducer([
@@ -288,6 +292,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
       title: {
         content: (
           <SectionToggle
+            icon={PENDING_ICON}
             title="Pending registrations"
             inParens={pending.length}
             color={PENDING_COLOR}
@@ -323,6 +328,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
       title: {
         content: (
           <SectionToggle
+            icon={WAITLIST_ICON}
             title={I18n.t('registrations.list.waiting_list')}
             inParens={waiting.length}
             color={WAITLIST_COLOR}
@@ -367,6 +373,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
       title: {
         content: (
           <SectionToggle
+            icon={APPROVED_ICON}
             title={I18n.t('registrations.list.approved_registrations')}
             inParens={
               `${
@@ -405,6 +412,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
       title: {
         content: (
           <SectionToggle
+            icon={CANCELLED_ICON}
             title={I18n.t('competitions.registration_v2.list.cancelled.title')}
             inParens={cancelled.length}
             color={CANCELLED_COLOR}
@@ -440,6 +448,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
       title: {
         content: (
           <SectionToggle
+            icon={REJECTED_ICON}
             title={I18n.t('competitions.registration_v2.list.rejected.title')}
             inParens={rejected.length}
             color={REJECTED_COLOR}
@@ -529,10 +538,11 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
   );
 }
 
-function SectionToggle({ title, inParens, color }) {
+function SectionToggle({ icon, title, inParens, color }) {
   return (
-    <Label as="span" color={color} size="big">
+    <Header as="span" size="large">
+      <Icon name={icon} color={color} />
       {`${title} (${inParens})`}
-    </Label>
+    </Header>
   );
 }
