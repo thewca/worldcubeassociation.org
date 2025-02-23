@@ -135,6 +135,10 @@ export default function RegistrationActions({
   return (
     <>
       <Button
+        content={I18n.t('registrations.list.export_csv')}
+        icon="download"
+        labelPosition="left"
+        color="blue"
         onClick={() => {
           csvExport(
             [...pending, ...accepted, ...cancelled, ...waiting, ...rejected],
@@ -142,34 +146,31 @@ export default function RegistrationActions({
             competitionInfo,
           );
         }}
-        color="blue"
-        icon="download"
-        content={I18n.t('registrations.list.export_csv')}
       />
 
       {anySelected && (
         <>
-          <Button>
-            <a
-              href={`mailto:?bcc=${selectedEmails}`}
-              id="email-selected"
-              target="_blank"
-              rel="noreferrer"
-            >
-              <Icon name="envelope" />
-              {I18n.t('competitions.registration_v2.update.email_send')}
-            </a>
-          </Button>
+          <Button
+            as="a"
+            content={I18n.t('competitions.registration_v2.update.email_send')}
+            href={`mailto:?bcc=${selectedEmails}`}
+            id="email-selected"
+            target="_blank"
+            rel="noreferrer"
+            icon="envelope"
+            labelPosition="left"
+          />
 
           <Button
-            onClick={() => copyEmails(selectedEmails)}
-            icon="copy"
             content={I18n.t('competitions.registration_v2.update.email_copy')}
+            icon="copy"
+            labelPosition="left"
+            onClick={() => copyEmails(selectedEmails)}
           />
 
           <Dropdown
             pointing
-            className="icon"
+            className="icon brown"
             labeled
             text={I18n.t('competitions.registration_v2.update.move_to')}
             icon="arrow right"
