@@ -293,7 +293,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
         content: (
           <SectionToggle
             icon={PENDING_ICON}
-            title="Pending registrations"
+            title={I18n.t('competitions.registration_v2.list.pending.title')}
             inParens={pending.length}
             color={PENDING_COLOR}
           />
@@ -329,7 +329,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
         content: (
           <SectionToggle
             icon={WAITLIST_ICON}
-            title={I18n.t('registrations.list.waiting_list')}
+            title={I18n.t('competitions.registration_v2.list.waitlist.title')}
             inParens={waiting.length}
             color={WAITLIST_COLOR}
           />
@@ -374,7 +374,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
         content: (
           <SectionToggle
             icon={APPROVED_ICON}
-            title={I18n.t('registrations.list.approved_registrations')}
+            title={I18n.t('competitions.registration_v2.list.approved.title')}
             inParens={
               `${
                 accepted.length

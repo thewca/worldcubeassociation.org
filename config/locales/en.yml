@@ -1222,8 +1222,6 @@ en:
       export_csv: "Export to CSV"
       email: "Email"
       approve: "Approve"
-      waiting_list: "Waiting List"
-      approved_registrations: "Approved registrations"
       non_competing: "Non-competing registrations"
       not_paid: "Not paid"
       registered:
@@ -1820,14 +1818,19 @@ en:
           zero: "no spots remaining"
           one: "%{count} spot remaining"
           other: "%{count} spots remaining"
+        pending:
+          title: "Pending Registrations"
+          information: "Pending should only be used for incomplete (eg, unpaid) registrations - please use the Waiting List if your competition is too full to accept new competitors."
+        waitlist:
+          title: "Waiting List Registrations"
+        approved:
+          title: "Approved Registrations"
         cancelled:
-          title: "Cancelled registrations"
+          title: "Cancelled Registrations"
           information: "Cancelled competitors are allowed to register again."
         rejected:
-          title: "Rejected registrations"
+          title: "Rejected Registrations"
           information: "Rejected competitors cannot re-register."
-        pending:
-          information: "Pending should only be used for incomplete (eg, unpaid) registrations - please use the Waiting List if your competition is too full to accept new competitors."
         payment:
          refunded_status: "Refunded"
          initialized: "Payment process was started on %{date}, but not finished."
