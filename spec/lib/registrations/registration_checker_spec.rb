@@ -92,6 +92,20 @@ RSpec.describe Registrations::RegistrationChecker do
         end
       end
 
+      it 'guests cant exceed reasonable limit if no guest limit enforced' do
+        registration_request = FactoryBot.build(:registration_request, guests: 1001, competition_id: default_competition.id, user_id: default_user.id)
+
+        expect {
+          Registrations::RegistrationChecker.create_registration_allowed!(
+            registration_request, User.find(registration_request['submitted_by'])
+          )
+        }.to raise_error(WcaExceptions::RegistrationError) do |error|
+          expect(error.status).to eq(:unprocessable_entity)
+          expect(error.error).to eq(Registrations::ErrorCodes::REASONABLE_GUEST_COUNT)
+        end
+
+      end
+
       it 'comment cant exceed character limit' do
         long_comment = 'comment longer than 240 characterscomment longer than 240 characterscomment longer than 240 characterscomment longer than 240 characterscomment longer than 240 characterscomment longer than 240 characterscomment longer
           than 240 characterscomment longer than 240 characters'
@@ -1212,16 +1226,32 @@ RSpec.describe Registrations::RegistrationChecker do
         end
       end
 
-      it 'guests have no limit if guest limit not set' do
+      it 'guests can be high if guest limit not set' do
         update_request = FactoryBot.build(
           :update_request,
           user_id: default_registration.user_id,
           competition_id: default_registration.competition.id,
-          guests: 99,
+          guests: 1000,
         )
 
         expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, Competition.find(update_request['competition_id']), User.find(update_request['submitted_by'])) }
           .not_to raise_error
+      end
+
+      it 'guests cant be unreasonably high when no limit is set' do
+        update_request = FactoryBot.build(
+          :update_request,
+          user_id: default_registration.user_id,
+          competition_id: default_registration.competition.id,
+          guests: 1001,
+        )
+
+        expect {
+          Registrations::RegistrationChecker.update_registration_allowed!(update_request, Competition.find(update_request['competition_id']), User.find(update_request['submitted_by']))
+        }.to raise_error(WcaExceptions::RegistrationError) do |error|
+          expect(error.status).to eq(:unprocessable_entity)
+          expect(error.error).to eq(Registrations::ErrorCodes::REASONABLE_GUEST_COUNT)
+        end
       end
 
       it 'organizer can change number of guests' do

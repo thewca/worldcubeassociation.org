@@ -43,7 +43,6 @@ class Registration < ApplicationRecord
   validates_numericality_of :guests, less_than_or_equal_to: :guest_limit, if: :check_guest_limit?
 
   after_save :mark_registration_processing_as_done
-
   private def mark_registration_processing_as_done
     Rails.cache.delete(CacheAccess.registration_processing_cache_key(competition_id, user_id))
   end
