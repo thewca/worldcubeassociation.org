@@ -2914,6 +2914,6 @@ class Competition < ApplicationRecord
     return false if auto_close_threshold.nil?
     threshold_reached = registrations.with_payments.count >= auto_close_threshold && auto_close_threshold > 0
     # update!(closing_full_registration: true, registration_close: Time.now) if threshold_reached
-    threshold_reached && update!(closing_full_registration: true, registration_close: Time.now)
+    threshold_reached && update(closing_full_registration: true, registration_close: Time.now)
   end
 end
