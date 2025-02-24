@@ -2620,14 +2620,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tanstack/react-query@npm:^5.66.6":
-  version: 5.66.6
-  resolution: "@tanstack/react-query@npm:5.66.6"
+"@tanstack/react-query@npm:^5.66.9":
+  version: 5.66.9
+  resolution: "@tanstack/react-query@npm:5.66.9"
   dependencies:
     "@tanstack/query-core": "npm:5.66.4"
   peerDependencies:
     react: ^18 || ^19
-  checksum: 10c0/8330114ed269b98994b6d62cd1e31307b992042e4c8c31f4d8856249e80b7d098f790fef746c655b74cb1ad9f6c635a502f93a032ab1bcb2f2de398892c68008
+  checksum: 10c0/80565eb550e1fe3e90117c8dd4dd13c1ef27d1bf89689b09c6cdf6df084173582c3a20fbc709638b64502a10b1e10357b3172c38604739641dbdeb29715cae0d
   languageName: node
   linkType: hard
 
@@ -10318,7 +10318,7 @@ __metadata:
     "@rails/ujs": "npm:^7.1.501"
     "@stripe/react-stripe-js": "npm:^3.1.1"
     "@stripe/stripe-js": "npm:^5.6.0"
-    "@tanstack/react-query": "npm:^5.66.6"
+    "@tanstack/react-query": "npm:^5.66.9"
     "@tanstack/react-table": "npm:^8.21.2"
     "@wca/helpers": "npm:^1.1.5"
     autonumeric: "npm:^4.10.7"
