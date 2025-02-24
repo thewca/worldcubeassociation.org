@@ -675,8 +675,9 @@ GEM
       unicode-display_width (>= 2.4.0, < 4.0)
     rubocop-ast (1.38.0)
       parser (>= 3.3.1.0)
-    rubocop-thread_safety (0.6.0)
-      rubocop (>= 1.48.1)
+    rubocop-thread_safety (0.7.0)
+      lint_roller (~> 1.1)
+      rubocop (~> 1.72, >= 1.72.1)
     ruby-ll (2.1.2)
       ansi
       ast
