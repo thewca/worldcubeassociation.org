@@ -747,7 +747,7 @@ GEM
     simplecov_json_formatter (0.1.4)
     simpleidn (0.2.1)
       unf (~> 0.1.4)
-    slack-ruby-client (2.5.1)
+    slack-ruby-client (2.5.2)
       faraday (>= 2.0)
       faraday-mashify
       faraday-multipart
