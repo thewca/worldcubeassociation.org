@@ -307,13 +307,13 @@ RSpec.describe Result do
 
           # https://www.worldcubeassociation.org/regulations/#9f2
           it "truncate averages for 333bf over 10 minutes for x.50" do
-            over10 = 60111 # In centiseconds.
+            over10 = 60_111 # In centiseconds.
             result = build_result(value1: over10,
                                   value2: over10,
                                   value3: over10,
                                   value4: SolveTime::SKIPPED_VALUE,
                                   value5: SolveTime::SKIPPED_VALUE)
-            expect(result.compute_correct_average).to eq(60100)
+            expect(result.compute_correct_average).to eq(60_100)
           end
         end
 
