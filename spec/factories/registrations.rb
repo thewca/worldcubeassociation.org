@@ -44,8 +44,23 @@ FactoryBot.define do
 
     trait :paid do
       after(:create) do |registration|
-        FactoryBot.create :registration_payment, registration: registration, user: registration.user,
-                                                 amount_lowest_denomination: registration.competition.base_entry_fee_lowest_denomination
+        FactoryBot.create(
+          :registration_payment,
+          registration: registration,
+          user: registration.user,
+          amount_lowest_denomination: registration.competition.base_entry_fee_lowest_denomination,
+        )
+      end
+    end
+
+    trait :partially_paid do
+      after(:create) do |registration|
+        FactoryBot.create(
+          :registration_payment,
+          registration: registration,
+          user: registration.user,
+          amount_lowest_denomination: (registration.competition.base_entry_fee_lowest_denomination / 2.0).round,
+        )
       end
     end
 

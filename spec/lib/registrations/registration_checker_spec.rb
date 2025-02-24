@@ -1274,6 +1274,134 @@ RSpec.describe Registrations::RegistrationChecker do
     end
 
     describe '#update_registration_allowed!.validate_update_status!' do
+      context 'competitor_can_cancel: not_accepted' do
+        let(:accepted_cant_cancel) {
+          FactoryBot.create(
+            :competition, :registration_closed, :editable_registrations, :with_organizer, competitor_can_cancel: :not_accepted
+          )
+        }
+
+        it 'lets non-accepted user cancel' do
+          not_accepted_reg = FactoryBot.create(:registration, competition: accepted_cant_cancel)
+
+          update_request = FactoryBot.build(
+            :update_request,
+            user_id: not_accepted_reg.user_id,
+            competition_id: not_accepted_reg.competition.id,
+            competing: { 'status' => 'cancelled' },
+          )
+
+          expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, Competition.find(update_request['competition_id']), User.find(update_request['submitted_by'])) }
+            .not_to raise_error
+        end
+
+        it 'stops accepted user from cancelling' do
+          accepted_reg = FactoryBot.create(:registration, :accepted, competition: accepted_cant_cancel)
+
+          update_request = FactoryBot.build(
+            :update_request,
+            user_id: accepted_reg.user_id,
+            competition_id: accepted_reg.competition.id,
+            competing: { 'status' => 'cancelled' },
+          )
+
+          expect {
+            Registrations::RegistrationChecker.update_registration_allowed!(update_request, Competition.find(update_request['competition_id']), User.find(update_request['submitted_by']))
+          }.to raise_error(WcaExceptions::RegistrationError) do |error|
+            expect(error.status).to eq(:unauthorized)
+            expect(error.error).to eq(Registrations::ErrorCodes::ORGANIZER_MUST_CANCEL_REGISTRATION)
+          end
+        end
+
+        it 'lets organizer cancel accepted registration' do
+          not_accepted_reg = FactoryBot.create(:registration, competition: accepted_cant_cancel)
+
+          update_request = FactoryBot.build(
+            :update_request,
+            user_id: not_accepted_reg.user_id,
+            competition_id: not_accepted_reg.competition.id,
+            competing: { 'status' => 'cancelled' },
+            submitted_by: not_accepted_reg.competition.organizers.first.id,
+          )
+
+          expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, Competition.find(update_request['competition_id']), User.find(update_request['submitted_by'])) }
+            .not_to raise_error
+        end
+      end
+
+      context 'competitor_can_cancel: restrict_paid' do
+        let(:paid_cant_cancel) {
+          FactoryBot.create(
+            :competition, :registration_closed, :editable_registrations, :with_organizer, competitor_can_cancel: :unpaid
+          )
+        }
+
+        it 'lets user cancel unpaid registration' do
+          not_paid_reg = FactoryBot.create(:registration, competition: paid_cant_cancel)
+
+          update_request = FactoryBot.build(
+            :update_request,
+            user_id: not_paid_reg.user_id,
+            competition_id: not_paid_reg.competition.id,
+            competing: { 'status' => 'cancelled' },
+          )
+
+          expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, Competition.find(update_request['competition_id']), User.find(update_request['submitted_by'])) }
+            .not_to raise_error
+        end
+
+        it 'stops user cancelling fully paid registration' do
+          paid_reg = FactoryBot.create(:registration, :paid, competition: paid_cant_cancel)
+
+          update_request = FactoryBot.build(
+            :update_request,
+            user_id: paid_reg.user_id,
+            competition_id: paid_reg.competition.id,
+            competing: { 'status' => 'cancelled' },
+          )
+
+          expect {
+            Registrations::RegistrationChecker.update_registration_allowed!(update_request, Competition.find(update_request['competition_id']), User.find(update_request['submitted_by']))
+          }.to raise_error(WcaExceptions::RegistrationError) do |error|
+            expect(error.status).to eq(:unauthorized)
+            expect(error.error).to eq(Registrations::ErrorCodes::ORGANIZER_MUST_CANCEL_REGISTRATION)
+          end
+        end
+
+        it 'stops user cancelling partially paid registration' do
+          paid_reg = FactoryBot.create(:registration, :partially_paid, competition: paid_cant_cancel)
+
+          update_request = FactoryBot.build(
+            :update_request,
+            user_id: paid_reg.user_id,
+            competition_id: paid_reg.competition.id,
+            competing: { 'status' => 'cancelled' },
+          )
+
+          expect {
+            Registrations::RegistrationChecker.update_registration_allowed!(update_request, Competition.find(update_request['competition_id']), User.find(update_request['submitted_by']))
+          }.to raise_error(WcaExceptions::RegistrationError) do |error|
+            expect(error.status).to eq(:unauthorized)
+            expect(error.error).to eq(Registrations::ErrorCodes::ORGANIZER_MUST_CANCEL_REGISTRATION)
+          end
+        end
+
+        it 'lets organizer cancel paid registration' do
+          not_paid_reg = FactoryBot.create(:registration, competition: paid_cant_cancel)
+
+          update_request = FactoryBot.build(
+            :update_request,
+            user_id: not_paid_reg.user_id,
+            competition_id: not_paid_reg.competition.id,
+            competing: { 'status' => 'cancelled' },
+            submitted_by: not_paid_reg.competition.organizers.first.id,
+          )
+
+          expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, Competition.find(update_request['competition_id']), User.find(update_request['submitted_by'])) }
+            .not_to raise_error
+        end
+      end
+
       it 'user cant submit an invalid status' do
         update_request = FactoryBot.build(
           :update_request,
@@ -1438,44 +1566,6 @@ RSpec.describe Registrations::RegistrationChecker do
           user_id: cancelled_reg.user_id,
           competition_id: cancelled_reg.competition.id,
           competing: { 'status' => 'pending' },
-        )
-
-        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, Competition.find(update_request['competition_id']), User.find(update_request['submitted_by'])) }
-          .not_to raise_error
-      end
-
-      it 'user cant delete accepted registration if competition requires organizers to cancel registration' do
-        cant_cancel = FactoryBot.create(
-          :competition, :registration_closed, :editable_registrations, allow_registration_self_delete_after_acceptance: false
-        )
-        accepted_reg = FactoryBot.create(:registration, :accepted, competition: cant_cancel)
-
-        update_request = FactoryBot.build(
-          :update_request,
-          user_id: accepted_reg.user_id,
-          competition_id: accepted_reg.competition.id,
-          competing: { 'status' => 'cancelled' },
-        )
-
-        expect {
-          Registrations::RegistrationChecker.update_registration_allowed!(update_request, Competition.find(update_request['competition_id']), User.find(update_request['submitted_by']))
-        }.to raise_error(WcaExceptions::RegistrationError) do |error|
-          expect(error.status).to eq(:unauthorized)
-          expect(error.error).to eq(Registrations::ErrorCodes::ORGANIZER_MUST_CANCEL_REGISTRATION)
-        end
-      end
-
-      it 'user can cancel non-accepted registration if competition requires organizers to cancel registration' do
-        cant_cancel = FactoryBot.create(
-          :competition, :registration_closed, :editable_registrations, allow_registration_self_delete_after_acceptance: false
-        )
-        not_accepted_reg = FactoryBot.create(:registration, competition: cant_cancel)
-
-        update_request = FactoryBot.build(
-          :update_request,
-          user_id: not_accepted_reg.user_id,
-          competition_id: not_accepted_reg.competition.id,
-          competing: { 'status' => 'cancelled' },
         )
 
         expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, Competition.find(update_request['competition_id']), User.find(update_request['submitted_by'])) }
