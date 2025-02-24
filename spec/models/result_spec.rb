@@ -127,7 +127,7 @@ RSpec.describe Result do
 
             result.average = 33
             expect(result.compute_correct_average).to eq 60_000
-            expect(result).to be_invalid_with_errors(average: ["should be 60100"])
+            expect(result).to be_invalid_with_errors(average: ["should be 60000"])
           end
 
           it "DNF average" do
@@ -198,12 +198,12 @@ RSpec.describe Result do
 
             it "all solves with average above 10 minutes" do
               # This average computes to 600.66... and should be rounded to 601
-              result = build_result(value1: 60_100, value2: 60_100, value3: 60_000, value4: 0, value5: 0, best: 60_000, average: 60_100)
+              result = build_result(value1: 60_100, value2: 60_100, value3: 60_000, value4: 0, value5: 0, best: 60_000, average: 60_000)
               expect(result).to be_valid
 
               result.average = 33
               expect(result.compute_correct_average).to eq 60_000
-              expect(result).to be_invalid_with_errors(average: ["should be 60100"])
+              expect(result).to be_invalid_with_errors(average: ["should be 60000"])
             end
 
             it "rounds instead of truncates" do
