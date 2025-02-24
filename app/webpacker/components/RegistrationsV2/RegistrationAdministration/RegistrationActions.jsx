@@ -27,8 +27,18 @@ function V3csvExport(selected, registrations, competition) {
         DateTime.fromISO(registration.competing.registered_on).setZone('UTC').toFormat('yyyy-MM-dd HH:mm:ss ZZZZ')
       }\n`;
     });
-  const encodedUri = encodeURI(csvContent);
-  window.open(encodedUri);
+
+  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+
+  const link = document.createElement('a');
+  link.href = url;
+  link.setAttribute('download', `${competition.id}-registration.csv`);
+  document.body.appendChild(link);
+  link.click();
+
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
 }
 
 function csvExport(selected, registrations, competition) {
