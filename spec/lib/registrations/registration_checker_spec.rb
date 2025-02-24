@@ -103,7 +103,6 @@ RSpec.describe Registrations::RegistrationChecker do
           expect(error.status).to eq(:unprocessable_entity)
           expect(error.error).to eq(Registrations::ErrorCodes::REASONABLE_GUEST_COUNT)
         end
-
       end
 
       it 'comment cant exceed character limit' do
