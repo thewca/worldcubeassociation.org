@@ -107,25 +107,6 @@ class TicketsController < ApplicationController
     }
   end
 
-  private def user_details(user)
-    return nil if user.nil?
-    {
-      email: user.email,
-      dob: user.dob,
-      is_currently_banned: user.banned?,
-      banned_in_past: user.banned_in_past?,
-    }
-  end
-
-  private def person_details(person)
-    return nil if person.nil?
-    {
-      dob: person.dob,
-      record_count: person.records,
-      championship_podiums: person.championship_podiums,
-    }
-  end
-
   private def get_user_and_person
     user_id = params[:userId]
     wca_id = params[:wcaId]
@@ -164,9 +145,56 @@ class TicketsController < ApplicationController
     user, person = get_user_and_person
     return if check_errors(user, person)
 
+    anonymization_checks = {}
+    message_args = {}
+    action_items = []
+    non_action_items = []
+
+    # 1. Check whether the user is currently banned or not.
+    anonymization_checks[:user_currently_banned] = user&.banned?
+
+    # 2. Check whether the user was banned in the past.
+    anonymization_checks[:user_banned_in_past] = user&.banned_in_past?
+
+    # 3. Check whether the person has held any records in the past.
+    records = person&.records
+    anonymization_checks[:person_has_records_in_past] = records.present? && records[:total] > 0
+    message_args[:records] = records
+
+    # 4. Check whether the person had podium on national championships.
+    championship_podiums = person&.championship_podiums
+    anonymization_checks[:person_held_championship_podiums] = championship_podiums&.values_at(:world, :continental, :national)&.any?(&:present?)
+    message_args[:championship_podiums] = championship_podiums
+
+    # 5. Check whether the person has competed in last 3 months.
+    recent_competitions_3_months = person&.competitions&.select { |c| c.start_date > (Date.today - 3.month) }
+    anonymization_checks[:person_competed_in_last_3_months] = recent_competitions_3_months&.any?
+    message_args[:recent_competitions_3_months] = recent_competitions_3_months
+
+    # 6. Check whether the user has account in WCA Forum.
+    anonymization_checks[:user_may_have_forum_account] = user.present?
+
+    # 7. Check whether the user has any active OAuth access grants.
+    access_grants = user&.oauth_access_grants&.select { |access_grant| !access_grant.revoked_at.nil? }
+    anonymization_checks[:user_has_active_oauth_access_grants] = access_grants&.any?
+    message_args[:access_grants] = access_grants
+
+    # 8. Check whether there are any competitions with external websites.
+    competitions_with_external_website = person&.competitions&.select { |c| c.external_website.present? }
+    anonymization_checks[:competitions_with_external_website] = competitions_with_external_website&.any?
+    message_args[:competitions_with_external_website] = competitions_with_external_website
+
+    # 9. Check whether there are any recent competitions data to be removed from WCA Live.
+    anonymization_checks[:recent_competitions_data_to_be_removed_wca_live] = recent_competitions_3_months&.any?
+
+    anonymization_checks.each { |key, value| (value ? action_items : non_action_items) << key }
+
     render json: {
-      user_details: user_details(user),
-      person_details: person_details(person),
+      user: user,
+      person: person,
+      action_items: action_items,
+      non_action_items: non_action_items,
+      message_args: message_args,
     }
   end
 

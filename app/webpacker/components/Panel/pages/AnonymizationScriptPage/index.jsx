@@ -5,17 +5,23 @@ import SEARCH_MODELS from '../../../SearchWidget/SearchModel';
 import useInputState from '../../../../lib/hooks/useInputState';
 import AnonymizationTicketWorkbenchForWrt from '../../../Tickets/TicketWorkbenches/AnonymizationTicketWorkbenchForWrt';
 
-const MODEL_NAME = {
-  [SEARCH_MODELS.user]: 'User',
-  [SEARCH_MODELS.person]: 'Person',
-};
+const AVAILABLE_MODELS = [
+  {
+    id: SEARCH_MODELS.user,
+    name: 'User',
+  },
+  {
+    id: SEARCH_MODELS.person,
+    name: 'Person',
+  },
+];
 
 export default function AnonymizationScriptPage() {
-  const [model, setModel] = useInputState(SEARCH_MODELS.user);
+  const [activeModelIndex, setActiveModelIndex] = useInputState(0);
   const [searchInput, setSearchInput] = useInputState();
 
-  const modelSelectHandler = (_, { value: selectedModel }) => {
-    setModel(selectedModel);
+  const modelSelectHandler = (_, { value: selectedModelIndex }) => {
+    setActiveModelIndex(selectedModelIndex);
     setSearchInput(null);
   };
 
@@ -23,34 +29,28 @@ export default function AnonymizationScriptPage() {
     <>
       <FormGroup grouped>
         <div>Select where to search for</div>
-        {[SEARCH_MODELS.user, SEARCH_MODELS.person].map((searchModel, index) => (
-          <FormField key={searchModel}>
+        {AVAILABLE_MODELS.map((model, index) => (
+          <FormField key={activeModelIndex.id}>
             <Radio
-              label={MODEL_NAME[index]}
-              value={searchModel}
-              checked={model === searchModel}
+              label={model.name}
+              value={index}
+              checked={activeModelIndex === index}
               onChange={modelSelectHandler}
             />
           </FormField>
         ))}
       </FormGroup>
       <IdWcaSearch
-        label={`Search ${MODEL_NAME[model]}`}
-        model={model}
+        label={`Search ${AVAILABLE_MODELS[activeModelIndex].name}`}
+        model={AVAILABLE_MODELS[activeModelIndex].id}
         multiple={false}
         value={searchInput}
         onChange={setSearchInput}
       />
-      {model === SEARCH_MODELS.user && (
-        <AnonymizationTicketWorkbenchForWrt
-          userId={searchInput}
-        />
-      )}
-      {model === SEARCH_MODELS.person && (
-        <AnonymizationTicketWorkbenchForWrt
-          wcaId={searchInput}
-        />
-      )}
+      <AnonymizationTicketWorkbenchForWrt
+        userId={AVAILABLE_MODELS[activeModelIndex].id === SEARCH_MODELS.user ? searchInput : null}
+        wcaId={AVAILABLE_MODELS[activeModelIndex].id === SEARCH_MODELS.person ? searchInput : null}
+      />
     </>
   );
 }

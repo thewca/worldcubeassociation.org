@@ -1,26 +1,30 @@
+import { useMutation } from '@tanstack/react-query';
 import React, { useState } from 'react';
 import { Button, Confirm, Message } from 'semantic-ui-react';
-import useSaveAction from '../../../../lib/hooks/useSaveAction';
+import Errored from '../../../Requests/Errored';
 import Loading from '../../../Requests/Loading';
-import { actionUrls } from '../../../../lib/requests/routes.js.erb';
+import anonymize from './api/anonymize';
 
 export default function AnonymizeAction({ userId, wcaId }) {
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [completed, setCompleted] = useState(false);
 
-  const { save, saving } = useSaveAction();
+  const {
+    mutate: anonymizeMutation,
+    isLoading,
+    isError,
+  } = useMutation({
+    mutationFn: anonymize,
+    onSuccess: () => setCompleted(true),
+  });
 
-  const anonymizeAccount = () => {
+  const doAnonymize = () => {
     setConfirmOpen(false);
-    save(
-      actionUrls.tickets.anonymize(userId, wcaId),
-      { userId, wcaId },
-      () => setCompleted(true),
-      { method: 'POST' },
-    );
+    anonymizeMutation({ userId, wcaId });
   };
 
-  if (saving) return <Loading />;
+  if (isLoading) return <Loading />;
+  if (isError) return <Errored />;
 
   return (
     <>
@@ -35,8 +39,8 @@ export default function AnonymizeAction({ userId, wcaId }) {
       <Confirm
         open={confirmOpen}
         onCancel={() => setConfirmOpen(false)}
-        onConfirm={anonymizeAccount}
-        content="Are you sure you want to anonymize the account?"
+        onConfirm={doAnonymize}
+        content="Are you sure you want to anonymize?"
       />
     </>
   );
