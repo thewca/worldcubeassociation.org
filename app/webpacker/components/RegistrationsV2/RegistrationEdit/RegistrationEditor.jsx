@@ -40,7 +40,10 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
 
   const queryClient = useQueryClient();
 
-  const { isFetching: isRegistrationLoading, registration: serverRegistration, refetchRegistration: refetch } = useRegistration();
+  const {
+    isFetching: isRegistrationLoading,
+    registration: serverRegistration, refetchRegistration: refetch,
+  } = useRegistration();
 
   const { isLoading, data: competitorsInfo } = useQuery({
     queryKey: ['history-user', serverRegistration?.history],

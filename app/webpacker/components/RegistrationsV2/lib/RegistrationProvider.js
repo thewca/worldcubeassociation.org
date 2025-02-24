@@ -4,7 +4,7 @@ import React, {
 import { useQuery } from '@tanstack/react-query';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { getSingleRegistration } from '../api/registration/get/get_registrations';
-import { setMessage } from '../Register/RegistrationMessage';
+import { showMessage } from '../Register/RegistrationMessage';
 import pollRegistrations from '../api/registration/get/poll_registrations';
 
 const REFETCH_INTERVAL = 3000;
@@ -49,7 +49,7 @@ export default function RegistrationProvider({ competitionInfo, userInfo, childr
     queryFn: () => getSingleRegistration(userInfo.id, competitionInfo),
     onError: (error) => {
       dispatch(
-        setMessage(
+        showMessage(
           `competitions.registration_v2.errors.${error?.response?.data?.json?.error || 'unknown'}`,
           'negative',
         ),

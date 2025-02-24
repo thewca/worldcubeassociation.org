@@ -1,9 +1,9 @@
-import React, { useCallback, useState } from 'react';
+import React from 'react';
 import StepPanel from './StepPanel';
 import Loading from '../../Requests/Loading';
 import RegistrationProvider, { useRegistration } from '../lib/RegistrationProvider';
-import RegistrationMessage, { showMessage } from './RegistrationMessage';
-import StoreProvider, { useDispatch } from '../../../lib/providers/StoreProvider';
+import RegistrationMessage from './RegistrationMessage';
+import StoreProvider from '../../../lib/providers/StoreProvider';
 import messageReducer from '../reducers/messageReducer';
 import WCAQueryClientProvider from '../../../lib/providers/WCAQueryClientProvider';
 import ConfirmProvider from '../../../lib/providers/ConfirmProvider';
@@ -59,12 +59,6 @@ function Register({
   stripePublishableKey,
   cannotRegisterReasons,
 }) {
-  const [timerEnded, setTimerEnded] = useState(false);
-
-  const onTimerEnd = useCallback(() => {
-    setTimerEnded(true);
-  }, [setTimerEnded]);
-
   const registrationAlreadyOpen = usePerpetualState(
     () => hasPassed(competitionInfo.registration_open),
   );
@@ -113,7 +107,6 @@ function Register({
             preferredEvents={preferredEvents}
             competitionInfo={competitionInfo}
             registration={registration}
-            refetchRegistration={refetch}
             connectedAccountId={connectedAccountId}
             stripePublishableKey={stripePublishableKey}
             qualifications={qualifications}
