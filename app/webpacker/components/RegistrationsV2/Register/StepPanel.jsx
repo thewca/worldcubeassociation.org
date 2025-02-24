@@ -3,7 +3,7 @@ import { Step } from 'semantic-ui-react';
 import CompetingStep from './CompetingStep';
 import RegistrationRequirements from './RegistrationRequirements';
 import StripeWrapper from './StripeWrapper';
-import i18n from '../../../lib/i18n';
+import I18n from '../../../lib/i18n';
 import RegistrationOverview from './RegistrationOverview';
 import { useRegistration } from '../lib/RegistrationProvider';
 
@@ -44,6 +44,7 @@ const shouldShowCompleted = (isRegistered, hasPaid, isAccepted, key, index) => {
   if (key === registrationOverviewConfig.key) {
     return isAccepted;
   }
+  return false;
 };
 
 const shouldBeDisabled = (hasPaid, key, activeIndex, index, competitionInfo, isRejected) => {
@@ -52,7 +53,7 @@ const shouldBeDisabled = (hasPaid, key, activeIndex, index, competitionInfo, isR
   }
 
   if (key === paymentStepConfig.key) {
-    return !hasPaid && index > activeIndex;
+    return (!hasPaid && index > activeIndex) || !competitionInfo['registration_currently_open?'];
   }
   if (key === competingStepConfig.key) {
     return index > activeIndex;
@@ -60,6 +61,7 @@ const shouldBeDisabled = (hasPaid, key, activeIndex, index, competitionInfo, isR
   if (key === requirementsStepConfig.key) {
     return activeIndex !== 0;
   }
+  return false;
 };
 
 export default function StepPanel({
@@ -127,8 +129,8 @@ export default function StepPanel({
             onClick={() => setActiveIndex(index)}
           >
             <Step.Content>
-              <Step.Title>{i18n.t(`${stepConfig.i18nKey}.title`)}</Step.Title>
-              <Step.Description>{i18n.t(`${stepConfig.i18nKey}.description`)}</Step.Description>
+              <Step.Title>{I18n.t(`${stepConfig.i18nKey}.title`)}</Step.Title>
+              <Step.Description>{I18n.t(`${stepConfig.i18nKey}.description`)}</Step.Description>
             </Step.Content>
           </Step>
         ))}

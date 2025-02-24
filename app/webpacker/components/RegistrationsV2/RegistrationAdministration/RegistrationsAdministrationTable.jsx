@@ -3,7 +3,7 @@ import {
 } from 'semantic-ui-react';
 import React from 'react';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
-import i18n from '../../../lib/i18n';
+import I18n from '../../../lib/i18n';
 import TableHeader from './AdministrationTableHeader';
 import TableRow from './AdministrationTableRow';
 import RegistrationAdministrationTableFooter from './RegistrationAdministrationTableFooter';
@@ -12,35 +12,37 @@ export default function RegistrationAdministrationTable({
   columnsExpanded,
   registrations,
   selected,
-  select,
-  unselect,
+  onSelect,
+  onUnselect,
+  onToggle,
   sortDirection,
   sortColumn,
   changeSortColumn,
   competitionInfo,
   draggable = false,
   sortable = true,
+  withPosition = false,
   handleOnDragEnd,
 }) {
   const handleHeaderCheck = (_, data) => {
     if (data.checked) {
-      select(registrations.map(({ user }) => user.id));
+      onSelect(...registrations.map(({ user }) => user.id));
     } else {
-      unselect(registrations.map(({ user }) => user.id));
+      onUnselect(...registrations.map(({ user }) => user.id));
     }
   };
 
   if (registrations.length === 0) {
     return (
       <Segment>
-        {i18n.t('competitions.registration_v2.list.empty')}
+        {I18n.t('competitions.registration_v2.list.empty')}
       </Segment>
     );
   }
   // TODO: use native ref= when we switch to semantic v3
   /* eslint-disable react/jsx-props-no-spreading */
   return (
-    <Table sortable={sortable} striped unstackable singleLine textAlign="left">
+    <Table sortable={sortable} striped unstackable compact singleLine textAlign="left">
       <TableHeader
         columnsExpanded={columnsExpanded}
         isChecked={registrations.length === selected.length}
@@ -49,7 +51,8 @@ export default function RegistrationAdministrationTable({
         sortColumn={sortColumn}
         changeSortColumn={changeSortColumn}
         competitionInfo={competitionInfo}
-        draggable={draggable}
+        withCheckbox={!draggable}
+        withPosition={withPosition}
       />
 
       <DragDropContext onDragEnd={handleOnDragEnd}>
@@ -62,16 +65,11 @@ export default function RegistrationAdministrationTable({
                     competitionInfo={competitionInfo}
                     columnsExpanded={columnsExpanded}
                     registration={w}
-                    onCheckboxChange={(_, data) => {
-                      if (data.checked) {
-                        select([w.user.id]);
-                      } else {
-                        unselect([w.user.id]);
-                      }
-                    }}
+                    onCheckboxChange={() => onToggle(w.user.id)}
                     index={i}
                     draggable={draggable}
                     isSelected={selected.includes(w.user.id)}
+                    withPosition={withPosition}
                   />
                 ))}
                 {providedDroppable.placeholder}
@@ -82,9 +80,10 @@ export default function RegistrationAdministrationTable({
       </DragDropContext>
       <TableFooter>
         <RegistrationAdministrationTableFooter
+          columnsExpanded={columnsExpanded}
           registrations={registrations}
           competitionInfo={competitionInfo}
-          eventsToggled={columnsExpanded.events}
+          withPosition={withPosition}
         />
       </TableFooter>
     </Table>

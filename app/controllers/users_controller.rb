@@ -4,6 +4,7 @@ class UsersController < ApplicationController
   before_action :authenticate_user!, except: [:select_nearby_delegate, :acknowledge_cookies]
   before_action :check_recent_authentication!, only: [:enable_2fa, :disable_2fa, :regenerate_2fa_backup_codes]
   before_action :set_recent_authentication!, only: [:edit, :update, :enable_2fa, :disable_2fa]
+  before_action -> { redirect_to_root_unless_user(:can_admin_results?) }, only: [:anonymize]
 
   RECENT_AUTHENTICATION_DURATION = 10.minutes.freeze
 
@@ -33,12 +34,12 @@ class UsersController < ApplicationController
           total: @users.size,
           rows: @users.limit(params[:limit]).offset(params[:offset]).map do |user|
             {
-              wca_id: user.wca_id ? view_context.link_to(user.wca_id, person_path(user.wca_id)) : "",
+              wca_id: user.wca_id,
               name: ERB::Util.html_escape(user.name),
               # Users don't have to provide a country upon registration
-              country: user.country&.id,
+              country: user.country&.iso2,
               email: ERB::Util.html_escape(user.email),
-              edit: view_context.link_to("Edit", edit_user_path(user)),
+              user_id: user.id,
             }
           end,
         }
@@ -372,5 +373,26 @@ class UsersController < ApplicationController
       return false
     end
     true
+  end
+
+  def anonymize
+    user_id = params.require(:id)
+    user = User.find(user_id)
+
+    user.skip_reconfirmation!
+    user_update_success = user.update(
+      email: user_id.to_s + User::ANONYMOUS_ACCOUNT_EMAIL_ID_SUFFIX,
+      name: User::ANONYMOUS_ACCOUNT_NAME,
+      wca_id: nil,
+      unconfirmed_wca_id: nil,
+      delegate_id_to_handle_wca_id_claim: nil,
+      dob: User::ANONYMOUS_ACCOUNT_DOB,
+      gender: User::ANONYMOUS_ACCOUNT_GENDER,
+      country_iso2: User::ANONYMOUS_ACCOUNT_COUNTRY_ISO2,
+      current_sign_in_ip: nil,
+      last_sign_in_ip: nil,
+    )
+
+    render json: { success: user_update_success }
   end
 end

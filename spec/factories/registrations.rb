@@ -13,6 +13,7 @@ FactoryBot.define do
       event_ids { ['333', '333oh'] }
       events { competition.events.where(id: event_ids) }
     end
+
     competition_events { competition.competition_events.where(event: events) }
 
     competing_status { Registrations::Helper::STATUS_PENDING }
@@ -22,22 +23,18 @@ FactoryBot.define do
     end
 
     trait :accepted do
-      accepted_at { Time.now }
       competing_status { Registrations::Helper::STATUS_ACCEPTED }
     end
 
     trait :cancelled do
-      deleted_at { Time.now }
       competing_status { Registrations::Helper::STATUS_CANCELLED }
     end
 
     trait :pending do
-      accepted_at { nil }
       competing_status { Registrations::Helper::STATUS_PENDING }
     end
 
     trait :waiting_list do
-      accepted_at { nil }
       competing_status { Registrations::Helper::STATUS_WAITING_LIST }
     end
 
@@ -47,8 +44,23 @@ FactoryBot.define do
 
     trait :paid do
       after(:create) do |registration|
-        FactoryBot.create :registration_payment, registration: registration, user: registration.user,
-                                                 amount_lowest_denomination: registration.competition.base_entry_fee_lowest_denomination
+        FactoryBot.create(
+          :registration_payment,
+          registration: registration,
+          user: registration.user,
+          amount_lowest_denomination: registration.competition.base_entry_fee_lowest_denomination,
+        )
+      end
+    end
+
+    trait :partially_paid do
+      after(:create) do |registration|
+        FactoryBot.create(
+          :registration_payment,
+          registration: registration,
+          user: registration.user,
+          amount_lowest_denomination: (registration.competition.base_entry_fee_lowest_denomination / 2.0).round,
+        )
       end
     end
 
@@ -59,7 +71,7 @@ FactoryBot.define do
     end
 
     trait :paid_pending do
-      accepted_at { nil }
+      competing_status { Registrations::Helper::STATUS_PENDING }
       paid
     end
 

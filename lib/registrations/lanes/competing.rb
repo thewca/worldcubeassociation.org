@@ -9,15 +9,19 @@ module Registrations
                                           comments: lane_params[:competing][:comment] || '',
                                           guests: lane_params[:guests] || 0)
 
-        registration.registration_competition_events.build(lane_params[:competing][:event_ids].map do |event_id|
-          competition_event = Competition.find(competition_id).competition_events.find { |ce| ce.event_id == event_id }
-          { competition_event_id: competition_event.id }
-        end)
+        create_event_ids = lane_params[:competing][:event_ids]
+
+        create_competition_events = registration.competition.competition_events.where(event_id: create_event_ids)
+        registration.competition_events = create_competition_events
+
         changes = registration.changes.transform_values { |change| change[1] }
-        changes[:event_ids] = lane_params[:competing][:event_ids]
+        changes[:event_ids] = create_event_ids
         registration.save!
         RegistrationsMailer.notify_organizers_of_new_registration(registration).deliver_later
         RegistrationsMailer.notify_registrant_of_new_registration(registration).deliver_later
+        if registration.user.banned_in_past?
+          RegistrationsMailer.notify_delegates_of_formerly_banned_user_registration(registration).deliver_later
+        end
         registration.add_history_entry(changes, "worker", user_id, "Worker processed")
       end
 
@@ -58,7 +62,7 @@ module Registrations
           registration.add_history_entry(changes, 'user', current_user_id, Registrations::Helper.action_type(update_params, current_user_id))
         end
 
-        send_status_change_email(registration, status, user_id, current_user_id) if status.present? && old_status != status
+        send_status_change_email(registration, status, old_status, user_id, current_user_id) if status.present? && old_status != status
 
         # TODO: V3-REG Cleanup Figure out a way to get rid of this reload
         registration.reload
@@ -84,12 +88,12 @@ module Registrations
         registration.competing_status = status
       end
 
-      def self.send_status_change_email(registration, status, user_id, current_user_id)
+      def self.send_status_change_email(registration, status, old_status, user_id, current_user_id)
         case status
         when Registrations::Helper::STATUS_WAITING_LIST
-          # TODO: V3-REG Cleanup, at new waiting list email
+          RegistrationsMailer.notify_registrant_of_waitlisted_registration(registration).deliver_later
         when Registrations::Helper::STATUS_PENDING
-          RegistrationsMailer.notify_registrant_of_pending_registration(registration).deliver_later
+          RegistrationsMailer.notify_registrant_of_new_registration(registration).deliver_later
         when Registrations::Helper::STATUS_ACCEPTED
           RegistrationsMailer.notify_registrant_of_accepted_registration(registration).deliver_later
         when Registrations::Helper::STATUS_REJECTED, Registrations::Helper::STATUS_DELETED, Registrations::Helper::STATUS_CANCELLED
@@ -107,16 +111,8 @@ module Registrations
         # TODO: V3-REG Cleanup, this is probably why we need the reload above
         return unless event_ids.present?
 
-        registration.registration_competition_events.each do |registration_competition_event|
-          registration_competition_event.destroy unless event_ids.include?(registration_competition_event.competition_event.event_id)
-        end
-
-        event_ids.each do |event_id|
-          unless registration.event_ids.include?(event_id)
-            competition_event = registration.competition.competition_events.find { |ce| ce.event_id == event_id }
-            registration.registration_competition_events.build({ competition_event_id: competition_event.id })
-          end
-        end
+        update_competition_events = registration.competition.competition_events.where(event_id: event_ids)
+        registration.competition_events = update_competition_events
       end
     end
   end

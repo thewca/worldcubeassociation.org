@@ -13,7 +13,7 @@ export default function RegistrationEdit({ competitionInfo, user }) {
   return (
     <div ref={ref}>
       <WCAQueryClientProvider>
-        <StoreProvider reducer={messageReducer} initialState={{ message: null }}>
+        <StoreProvider reducer={messageReducer} initialState={{ messages: [] }}>
           <ConfirmProvider>
             <RegistrationProvider competitionInfo={competitionInfo} userInfo={user}>
               <Sticky context={ref}>

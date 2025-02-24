@@ -1,65 +1,9 @@
 <% provide(:title, t(".title")) %>
 
-<% record_timestamp = ComputeAuxiliaryData.end_date || Date.current %>
-
-<% @rows = execute_cached_query([*@cache_params, record_timestamp], @query) %>
-
 <div class="container">
   <h1><%= yield(:title) %></h1>
-  <p><%= t("results.last_updated_html", timestamp: wca_local_time(record_timestamp)) %></p>
+  <p><%= t("results.last_updated_html", timestamp: wca_local_time(@record_timestamp)) %></p>
   <p><i><%= t('results.filters_fixes_underway') %></i></p>
 
-  <div id="results-selector" class="results-select form-inline">
-    <%= render 'results_selector', show_records_options: true %>
-  </div>
-
-  <% cache [*@cache_params, record_timestamp, I18n.locale] do %>
-    <%
-      comp_ids = @rows.map { |r| r["competitionId"] }.uniq
-      unless @is_slim
-        @competitions_by_id = Hash[Competition.where(id: comp_ids).map { |c| [c.id, c] }]
-      end
-    %>
-
-    <div id="search-results" class="results">
-      <div id="results-list">
-        <% if @is_mixed %>
-          <% @rows.group_by { |row| row["eventId"] }.each do |event_id, rows| %>
-            <% event = Event.c_find(event_id) %>
-            <h2>
-              <%= link_to rankings_path(event.id, "single"), class: "plain" do %>
-                <%= cubing_icon event.id %>
-                <%= event.name %>
-              <% end %>
-            </h2>
-            <%= render 'records_mixed_table', rows: rows %>
-          <% end %>
-        <% elsif @is_slim || @is_separate %>
-          <% slim_rows, single_rows, average_rows = compute_slim_or_separate_records(@rows) %>
-          <% if @is_slim %>
-            <%= render 'records_slim_table', rows: slim_rows %>
-          <% else %>
-            <h2> <%= t("results.table_elements.type_options.single") %> </h2>
-            <%= render 'records_separate_table', rows: single_rows, type: "single" %>
-
-            <h2> <%= t("results.table_elements.type_options.average") %> </h2>
-            <%= render 'records_separate_table', rows: average_rows, type: "average" %>
-          <% end %>
-        <% elsif @is_history %>
-          <% @rows.group_by { |row| row["eventId"] }.each do |event_id, rows| %>
-            <% event = Event.c_find(event_id) %>
-            <h2>
-              <%= link_to rankings_path(event.id, "single"), class: "plain" do %>
-                <%= cubing_icon event.id %>
-                <%= event.name %>
-              <% end %>
-            </h2>
-            <%= render 'records_histories_table', rows: rows %>
-          <% end %>
-        <% elsif @is_mixed_history %>
-          <%= render 'records_histories_table', rows: @rows %>
-        <% end %>
-      </div>
-    </div>
-  <% end %>
+  <%= react_component("Results/Records") %>
 </div>

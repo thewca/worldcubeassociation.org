@@ -132,14 +132,10 @@
           end
 
           if @competition.any_registrations?
-            event_icons = @competition.events.map do |event|
-              { text: event.id, path: competition_psych_sheet_event_path(@competition, event.id), cubing_icon: event.id, title: event.name }
-            end unless @competition.uses_new_registration_system?
             nav_items << {
               text: t('.menu.competitors'),
               path: competition_registrations_path(@competition),
               icon: "users", # Don't add event icons if v2 is used
-              tiny_children: event_icons
             }
           end
         end
@@ -274,7 +270,6 @@
       <% @competition.warnings_for(current_user).each do |field, message| %>
         <%= alert :warning, message, note: true %>
       <% end %>
-
 
       <% @competition.info_for(current_user).each do |field, message| %>
         <%= alert :info, message, note: true %>

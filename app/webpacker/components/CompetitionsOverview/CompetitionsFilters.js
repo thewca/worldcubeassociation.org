@@ -9,17 +9,14 @@ import {
   continents, countries, competitionConstants, nonFutureCompetitionYears,
 } from '../../lib/wca-data.js.erb';
 
-import { DEFAULT_REGION_ALL, WCA_EVENT_IDS } from './filterUtils';
+import { DEFAULT_REGION_ALL } from './filterUtils';
 import useDelegatesData from './useDelegatesData';
 import UtcDatePicker from '../wca/UtcDatePicker';
+import EventSelector from '../wca/EventSelector';
 
 function CompetitionsFilters({
   filterState,
   dispatchFilter,
-  displayMode,
-  setDisplayMode,
-  shouldShowRegStatus,
-  setShouldShowRegStatus,
   shouldShowAdminDetails,
   canViewAdminDetails,
 }) {
@@ -28,44 +25,32 @@ function CompetitionsFilters({
       <Form.Field>
         <EventSelector
           selectedEvents={filterState.selectedEvents}
-          onEventSelection={dispatchFilter}
+          onEventClick={(eventId) => dispatchFilter({ type: 'toggle_event', eventId })}
+          onAllClick={() => dispatchFilter({ type: 'select_all_events' })}
+          onClearClick={() => dispatchFilter({ type: 'clear_events' })}
+          showBreakBeforeButtons={false}
+          eventButtonsCompact
         />
       </Form.Field>
 
       <Form.Group>
-        <Form.Field width={6}>
+        <Form.Field width={8}>
           <RegionSelector region={filterState.region} dispatchFilter={dispatchFilter} />
         </Form.Field>
-        <Form.Field width={6}>
+        <Form.Field width={8}>
           <SearchBar text={filterState.search} dispatchFilter={dispatchFilter} />
         </Form.Field>
       </Form.Group>
 
       {shouldShowAdminDetails && (
-        <Form.Group>
-          <Form.Field width={8}>
-            <DelegateSelector delegateId={filterState.delegate} dispatchFilter={dispatchFilter} />
-          </Form.Field>
-        </Form.Group>
+        <Form.Field width={16}>
+          <DelegateSelector delegateId={filterState.delegate} dispatchFilter={dispatchFilter} />
+        </Form.Field>
       )}
 
-      <Form.Group>
-        <Form.Field>
-          <TimeOrderButtonGroup filterState={filterState} dispatchFilter={dispatchFilter} />
-        </Form.Field>
-      </Form.Group>
-
-      <Form.Group inline>
-        <CompDisplayCheckboxes
-          shouldIncludeCancelled={filterState.shouldIncludeCancelled}
-          dispatchFilter={dispatchFilter}
-          shouldShowRegStatus={shouldShowRegStatus}
-          setShouldShowRegStatus={setShouldShowRegStatus}
-          shouldShowAdminDetails={shouldShowAdminDetails}
-          canViewAdminDetails={canViewAdminDetails}
-          displayMode={displayMode}
-        />
-      </Form.Group>
+      <Form.Field>
+        <TimeOrderButtonGroup filterState={filterState} dispatchFilter={dispatchFilter} />
+      </Form.Field>
 
       {canViewAdminDetails && shouldShowAdminDetails && (
         <Form.Group>
@@ -74,101 +59,11 @@ function CompetitionsFilters({
           </Form.Field>
         </Form.Group>
       )}
-
-      <Form.Group>
-        <ResetFilters dispatchFilter={dispatchFilter} />
-      </Form.Group>
-
-      <Form.Group>
-        <ToggleListOrMapDisplay
-          displayMode={displayMode}
-          setDisplayMode={setDisplayMode}
-        />
-      </Form.Group>
     </Form>
   );
 }
 
-export function EventSelector({
-  selectedEvents,
-  onEventSelection,
-  eventList = WCA_EVENT_IDS,
-  disabled = false,
-  maxEvents = Infinity,
-  shouldErrorOnEmpty = false,
-  eventsDisabled = [],
-  // Listing event as an argument here to indicate to developers that it's needed
-  // eslint-disable-next-line no-unused-vars
-  disabledText = (event) => {},
-}) {
-  return (
-    <>
-      <label htmlFor="events">
-        {`${I18n.t('competitions.competition_form.events')}`}
-        <br />
-        <Popup
-          disabled={!Number.isFinite(maxEvents)}
-          trigger={
-            <span><Button disabled={disabled || eventList.length >= maxEvents} primary type="button" size="mini" id="select-all-events" onClick={() => onEventSelection({ type: 'select_all_events' })}>{I18n.t('competitions.index.all_events')}</Button></span>
-        }
-        >
-          {I18n.t('competitions.registration_v2.register.event_limit', {
-            max_events: maxEvents,
-          })}
-        </Popup>
-        <Button disabled={disabled} type="button" size="mini" id="clear-all-events" onClick={() => onEventSelection({ type: 'clear_events' })}>{I18n.t('competitions.index.clear')}</Button>
-      </label>
-      <Popup
-        open={selectedEvents.length === 0}
-        disabled={!shouldErrorOnEmpty}
-        position="bottom left"
-        style={{ color: '#9f3a38' }}
-        trigger={(
-          <div id="events">
-            {eventList.map((eventId) => (
-              <Popup
-                key={eventId}
-                disabled={selectedEvents.length === 0}
-                trigger={(
-                  <span>
-                    {/* Wrap in span so hover works on disabled buttons */}
-                    <Button
-                      key={eventId}
-                      disabled={
-                      disabled
-                        || (!selectedEvents.includes(eventId) && selectedEvents.length >= maxEvents)
-                        || eventsDisabled.includes(eventId)
-                    }
-                      basic
-                      icon
-                      toggle
-                      type="button"
-                      size="mini"
-                      className="event-checkbox"
-                      id={`checkbox-${eventId}`}
-                      value={eventId}
-                      data-variation="tiny"
-                      onClick={() => onEventSelection({ type: 'toggle_event', eventId })}
-                      active={selectedEvents.includes(eventId)}
-                    >
-                      <Icon className={`cubing-icon event-${eventId}`} style={eventsDisabled.includes(eventId) ? { color: '#FFBBBB' } : {}} />
-                    </Button>
-                  </span>
-)}
-              >
-                {eventsDisabled.includes(eventId) ? disabledText(eventId) : I18n.t(`events.${eventId}`)}
-              </Popup>
-            ))}
-          </div>
-)}
-      >
-        {I18n.t('registrations.errors.must_register')}
-      </Popup>
-    </>
-  );
-}
-
-function RegionSelector({ region, dispatchFilter }) {
+export function RegionSelector({ region, dispatchFilter }) {
   const regionsOptions = [
     { key: 'all', text: I18n.t('common.all_regions'), value: 'all' },
     {
@@ -188,7 +83,10 @@ function RegionSelector({ region, dispatchFilter }) {
     },
     ...(Object.values(countries.real).map((country) => (
       {
-        key: country.id, text: country.name, value: country.iso2, flag: country.iso2.toLowerCase(),
+        key: country.id,
+        text: country.name,
+        value: country.iso2,
+        flag: { className: country.iso2.toLowerCase() },
       }
     ))),
   ];
@@ -231,10 +129,10 @@ function DelegateSelector({ delegateId, dispatchFilter }) {
 
   return (
     <>
-      <div style={{ display: 'inline-block' }}>
-        <label htmlFor="delegate">{I18n.t('layouts.navigation.delegate')}</label>
-        {delegatesLoading && <PulseLoader size="10px" cssOverride={{ marginLeft: '5px' }} />}
-      </div>
+      <label htmlFor="delegate" style={{ display: 'inline-block' }}>
+        {I18n.t('layouts.navigation.delegate')}
+        {delegatesLoading && <PulseLoader id="delegate-pulse" size="6px" cssOverride={{ marginLeft: '5px' }} />}
+      </label>
       <Dropdown
         name="delegate"
         id="delegate"
@@ -266,48 +164,39 @@ function TimeOrderButtonGroup({ filterState, dispatchFilter }) {
   return (
     <>
       <label htmlFor="state">{I18n.t('competitions.index.state')}</label>
-      <Button.Group id="state" size="small">
-
+      <Button.Group id="state" size="small" compact primary>
         <Button
-          primary
-          type="button"
           name="state"
           id="present"
           value="present"
           onClick={() => dispatchFilter({ timeOrder: 'present' })}
           active={filterState.timeOrder === 'present'}
         >
-          <span className="caption">{I18n.t('competitions.index.present')}</span>
+          {I18n.t('competitions.index.present')}
         </Button>
 
         <Button
-          primary
-          type="button"
           name="state"
           id="recent"
           value="recent"
           onClick={() => dispatchFilter({ timeOrder: 'recent' })}
           active={filterState.timeOrder === 'recent'}
           data-tooltip={I18n.t('competitions.index.tooltips.recent', { count: competitionConstants.competitionRecentDays })}
-          data-variation="tiny"
         >
-          <span className="caption">{I18n.t('competitions.index.recent')}</span>
+          {I18n.t('competitions.index.recent')}
         </Button>
 
         <PastCompYearSelector filterState={filterState} dispatchFilter={dispatchFilter} />
 
         <Button
-          primary
-          type="button"
           name="state"
           id="by_announcement"
           value="by_announcement"
           onClick={() => dispatchFilter({ timeOrder: 'by_announcement' })}
           active={filterState.timeOrder === 'by_announcement'}
           data-tooltip={I18n.t('competitions.index.sort_by_announcement')}
-          data-variation="tiny"
         >
-          <span className="caption">{I18n.t('competitions.index.by_announcement')}</span>
+          {I18n.t('competitions.index.by_announcement')}
         </Button>
 
         <CustomDateSelector filterState={filterState} dispatchFilter={dispatchFilter} />
@@ -321,42 +210,39 @@ function AdminStatusButtonGroup({ filterState, dispatchFilter }) {
   return (
     <>
       <label htmlFor="admin-status">{I18n.t('competitions.index.admin_status')}</label>
-      <Button.Group id="admin-status">
+      <Button.Group id="admin-status" compact>
 
         <Button
           primary
-          type="button"
           name="admin-status"
           id="all"
           value="all"
           onClick={() => dispatchFilter({ adminStatus: 'all' })}
           active={filterState.adminStatus === 'all'}
         >
-          <span className="caption">{I18n.t('competitions.index.status_flags.all')}</span>
+          {I18n.t('competitions.index.status_flags.all')}
         </Button>
 
         <Button
           color="yellow"
-          type="button"
           name="admin-status"
           id="warning"
           value="warning"
           onClick={() => dispatchFilter({ adminStatus: 'warning' })}
           active={filterState.adminStatus === 'warning'}
         >
-          <span className="caption">{I18n.t('competitions.index.status_flags.warning')}</span>
+          {I18n.t('competitions.index.status_flags.warning')}
         </Button>
 
         <Button
           negative
-          type="button"
           name="admin-status"
           id="danger"
           value="danger"
           onClick={() => dispatchFilter({ adminStatus: 'danger' })}
           active={filterState.adminStatus === 'danger'}
         >
-          <span className="caption">{I18n.t('competitions.index.status_flags.danger')}</span>
+          {I18n.t('competitions.index.status_flags.danger')}
         </Button>
 
       </Button.Group>
@@ -367,26 +253,24 @@ function AdminStatusButtonGroup({ filterState, dispatchFilter }) {
 function PastCompYearSelector({ filterState, dispatchFilter }) {
   return (
     <Button
-      primary
-      type="button"
       name="state"
       id="past"
       value="past"
       onClick={() => dispatchFilter({ timeOrder: 'past' })}
       active={filterState.timeOrder === 'past'}
     >
-      <span className="caption">
-        {
-          // eslint-disable-next-line no-nested-ternary
-          filterState.timeOrder === 'past' ? (
-            filterState.selectedYear === 'all_years' ? I18n.t('competitions.index.past_all')
-              : I18n.t('competitions.index.past_from', { year: filterState.selectedYear })
-          ) : I18n.t('competitions.index.past')
-        }
-      </span>
+      {
+        // eslint-disable-next-line no-nested-ternary
+        filterState.timeOrder === 'past' ? (
+          filterState.selectedYear === 'all_years' ? I18n.t('competitions.index.past_all')
+            : I18n.t('competitions.index.past_from', { year: filterState.selectedYear })
+        ) : I18n.t('competitions.index.past')
+      }
       <Dropdown
         name="year"
         id="year"
+        simple
+        compact
         pointing
         scrolling
         upward={false}
@@ -417,15 +301,13 @@ function PastCompYearSelector({ filterState, dispatchFilter }) {
 function CustomDateSelector({ filterState, dispatchFilter }) {
   const customTimeSelectionButton = (
     <Button
-      primary
-      type="button"
       name="state"
       id="custom"
       value="custom"
       onClick={() => dispatchFilter({ timeOrder: 'custom' })}
       active={filterState.timeOrder === 'custom'}
     >
-      <span className="caption">{I18n.t('competitions.index.custom')}</span>
+      {I18n.t('competitions.index.custom')}
     </Button>
   );
 
@@ -467,7 +349,7 @@ function CustomDateSelector({ filterState, dispatchFilter }) {
   );
 }
 
-function CompDisplayCheckboxes({
+export function CompDisplayCheckboxes({
   shouldIncludeCancelled,
   dispatchFilter,
   shouldShowRegStatus,
@@ -523,7 +405,7 @@ function CompDisplayCheckboxes({
   );
 }
 
-function ToggleListOrMapDisplay({ displayMode, setDisplayMode }) {
+export function ToggleListOrMapDisplay({ displayMode, setDisplayMode }) {
   return (
     <Button.Group toggle fluid id="display">
       <Button type="button" name="display" id="display-list" active={displayMode === 'list'} onClick={() => setDisplayMode('list')}>
@@ -535,14 +417,6 @@ function ToggleListOrMapDisplay({ displayMode, setDisplayMode }) {
         {` ${I18n.t('competitions.index.map')} `}
       </Button>
     </Button.Group>
-  );
-}
-
-function ResetFilters({ dispatchFilter }) {
-  return (
-    <Button type="reset" size="mini" id="reset" onClick={() => dispatchFilter({ type: 'reset' })}>
-      {I18n.t('competitions.index.reset_filters')}
-    </Button>
   );
 }
 

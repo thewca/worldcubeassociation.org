@@ -1,9 +1,7 @@
 import { DateTime } from 'luxon';
 import {
-  continents, countries, events, nonFutureCompetitionYears,
+  continents, countries, nonFutureCompetitionYears, WCA_EVENT_IDS,
 } from '../../lib/wca-data.js.erb';
-
-export const WCA_EVENT_IDS = Object.values(events.official).map((e) => e.id);
 
 // note: inconsistencies with previous search params
 // - year value was 'all+years', is now 'all_years'
@@ -38,19 +36,29 @@ const DEFAULT_ADMIN_STATUS = 'all';
 const INCLUDE_CANCELLED_TRUE = 'on';
 const SHOW_ADMIN_DETAILS_TRUE = 'yes';
 const LEGACY_DISPLAY_MODE_ADMIN = 'admin';
+const LEGACY_YEARS_ALL = 'all';
 
 // search param sanitizers
 
 const displayModes = ['list', 'map'];
 const sanitizeMode = (mode) => {
-  if (displayModes.includes(mode)) {
-    return mode;
+  // Backwards compatibility for very old PHP links.
+  // They used to set 'List' and 'Map' with uppercase.
+  const lcMode = mode?.toLowerCase();
+
+  if (displayModes.includes(lcMode)) {
+    return lcMode;
   }
   return DEFAULT_DISPLAY_MODE;
 };
 
 const timeOrders = ['present', 'recent', 'past', 'by_announcement', 'custom'];
-const sanitizeTimeOrder = (order) => {
+const sanitizeTimeOrder = (order, year) => {
+  // Backwards compatibility for very old PHP links
+  if (year === LEGACY_YEARS_ALL) {
+    return 'past';
+  }
+
   if (timeOrders.includes(order)) {
     return order;
   }
@@ -101,7 +109,7 @@ export const getDisplayMode = (searchParams) => (
 );
 
 export const createFilterState = (searchParams) => ({
-  timeOrder: sanitizeTimeOrder(searchParams.get(TIME_ORDER)),
+  timeOrder: sanitizeTimeOrder(searchParams.get(TIME_ORDER), searchParams.get(YEAR)),
   selectedYear: sanitizeYear(searchParams.get(YEAR)),
   customStartDate: sanitizeDate(searchParams.get(START_DATE)),
   customEndDate: sanitizeDate(searchParams.get(END_DATE)),

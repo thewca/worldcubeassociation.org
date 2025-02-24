@@ -1,10 +1,10 @@
 import {
-  Checkbox, Flag, Icon, Popup, Ref, Table,
+  Checkbox, Icon, Popup, Ref, Table,
 } from 'semantic-ui-react';
 import React from 'react';
 import { Draggable } from 'react-beautiful-dnd';
-import { setMessage } from '../Register/RegistrationMessage';
-import i18n from '../../../lib/i18n';
+import { showMessage } from '../Register/RegistrationMessage';
+import I18n from '../../../lib/i18n';
 import {
   getRegistrationTimestamp,
   getShortDateString,
@@ -13,6 +13,7 @@ import EventIcon from '../../wca/EventIcon';
 import { editRegistrationUrl, editPersonUrl, personUrl } from '../../../lib/requests/routes.js.erb';
 import { isoMoneyToHumanReadable } from '../../../lib/helpers/money';
 import { countries } from '../../../lib/wca-data.js.erb';
+import RegionFlag from '../../wca/RegionFlag';
 
 // Semantic Table only allows truncating _all_ columns in a table in
 // single line fixed mode. As we only want to truncate the comment/admin notes
@@ -30,16 +31,16 @@ function RegistrationTime({
   const mostRecentPaymentStatus = paymentStatuses ? paymentStatuses[0] : 'unpaid';
 
   if (usesPaymentIntegration && !hasPaid) {
-    let content = i18n.t('registrations.list.payment_requested_on', { date: getRegistrationTimestamp(registeredOn) });
-    let trigger = <span>{i18n.t('registrations.list.not_paid')}</span>;
+    let content = I18n.t('registrations.list.payment_requested_on', { date: getRegistrationTimestamp(registeredOn) });
+    let trigger = <span>{I18n.t('registrations.list.not_paid')}</span>;
 
     if (mostRecentPaymentStatus === 'initialized') {
-      content = i18n.t('competitions.registration_v2.list.payment.initialized', { date: getRegistrationTimestamp(paidOn) });
+      content = I18n.t('competitions.registration_v2.list.payment.initialized', { date: getRegistrationTimestamp(paidOn) });
     }
 
     if (mostRecentPaymentStatus === 'refund') {
-      content = i18n.t('competitions.registration_v2.list.payment.refunded', { date: getRegistrationTimestamp(paidOn) });
-      trigger = <span>{i18n.t('competitions.registration_v2.list.payment.refunded_status')}</span>;
+      content = I18n.t('competitions.registration_v2.list.payment.refunded', { date: getRegistrationTimestamp(paidOn) });
+      trigger = <span>{I18n.t('competitions.registration_v2.list.payment.refunded_status')}</span>;
     }
 
     return (
@@ -66,15 +67,25 @@ export default function TableRow({
   competitionInfo,
   index,
   draggable = false,
+  withPosition = false,
 }) {
   const {
-    dob, region, events, comments, email, timestamp,
+    dob: dobIsShown,
+    region: regionIsExpanded,
+    events: eventsAreExpanded,
+    comments: commentsAreShown,
+    email: emailIsExpanded,
+    timestamp: timestampIsShown,
   } = columnsExpanded;
   const {
     id, wca_id: wcaId, name, country, dob: dateOfBirth, email: emailAddress,
   } = registration.user;
   const {
-    registered_on: registeredOn, event_ids: eventIds, comment, admin_comment: adminComment,
+    registered_on: registeredOn,
+    event_ids: eventIds,
+    comment,
+    admin_comment: adminComment,
+    waiting_list_position: position,
   } = registration.competing;
   const {
     payment_amount_iso: paymentAmount,
@@ -85,8 +96,9 @@ export default function TableRow({
 
   const copyEmail = () => {
     navigator.clipboard.writeText(emailAddress);
-    setMessage('Copied email address to clipboard.', 'positive');
+    showMessage('Copied email address to clipboard.', 'positive');
   };
+
   /* eslint-disable react/jsx-props-no-spreading */
   return (
     <Draggable
@@ -105,12 +117,20 @@ export default function TableRow({
           >
             <Table.Cell>
               { /* We manually set the margin to 0 here to fix the table row height */}
-              {draggable ? <Icon name="bars" /> : <Checkbox onChange={onCheckboxChange} checked={isSelected} style={{ margin: 0 }} />}
+              {draggable ? (
+                <Icon name="bars" />
+              ) : (
+                <Checkbox onChange={onCheckboxChange} checked={isSelected} style={{ margin: 0 }} />
+              )}
             </Table.Cell>
+
+            {withPosition && (
+              <Table.Cell>{position}</Table.Cell>
+            )}
 
             <Table.Cell>
               <a href={editRegistrationUrl(id, competitionInfo.id)}>
-                {i18n.t('registrations.list.edit')}
+                {I18n.t('registrations.list.edit')}
               </a>
             </Table.Cell>
 
@@ -120,36 +140,24 @@ export default function TableRow({
               ) : (
                 <a href={editPersonUrl(id)}>
                   <Icon name="edit" />
-                  {i18n.t('users.edit.profile')}
+                  {I18n.t('users.edit.profile')}
                 </a>
               )}
             </Table.Cell>
 
             <Table.Cell>{name}</Table.Cell>
 
-            {dob && <Table.Cell>{dateOfBirth}</Table.Cell>}
+            {dobIsShown && <Table.Cell>{dateOfBirth}</Table.Cell>}
 
             <Table.Cell>
-              {region ? (
-                <>
-                  <Flag name={country.iso2.toLowerCase()} />
-                  {region && countries.byIso2[country.iso2].name}
-                </>
-              ) : (
-                <Popup
-                  content={countries.byIso2[country.iso2].name}
-                  trigger={(
-                    <span>
-                      <Flag name={country.iso2.toLowerCase()} />
-                    </span>
-            )}
-                />
-              )}
+              <RegionFlag iso2={country.iso2} withoutTooltip={regionIsExpanded} />
+              {' '}
+              {regionIsExpanded && countries.byIso2[country.iso2].name}
             </Table.Cell>
 
             <Table.Cell>
               <RegistrationTime
-                timestamp={timestamp}
+                timestamp={timestampIsShown}
                 paidOn={updatedAt}
                 hasPaid={hasPaid}
                 registeredOn={registeredOn}
@@ -160,13 +168,13 @@ export default function TableRow({
 
             {competitionInfo['using_payment_integrations?'] && (
             <Table.Cell>
-              {hasPaid
+              {paymentAmount !== 0
                 ? isoMoneyToHumanReadable(paymentAmount, competitionInfo.currency_code)
                 : ''}
             </Table.Cell>
             )}
 
-            {events ? (
+            {eventsAreExpanded ? (
               competitionInfo.event_ids.map((eventId) => (
                 <Table.Cell key={`event-${eventId}`}>
                   {eventIds.includes(eventId) && (
@@ -188,48 +196,44 @@ export default function TableRow({
                       <Icon name="magnify" />
                     </span>
                   </Table.Cell>
-          )}
+                 )}
               />
 
             )}
 
             <Table.Cell>{registration.guests}</Table.Cell>
 
-            {comments && (
-            <>
-              <Table.Cell>
-                <Popup
-                  content={comment}
-                  trigger={<span>{truncateComment(comment)}</span>}
-                />
-              </Table.Cell>
+            {commentsAreShown && (
+              <>
+                <Table.Cell>
+                  <Popup
+                    content={comment}
+                    trigger={<span>{truncateComment(comment)}</span>}
+                  />
+                </Table.Cell>
 
-              <Table.Cell>
-                <Popup
-                  content={adminComment}
-                  trigger={<span>{truncateComment(adminComment)}</span>}
-                />
-              </Table.Cell>
-            </>
+                <Table.Cell>
+                  <Popup
+                    content={adminComment}
+                    trigger={<span>{truncateComment(adminComment)}</span>}
+                  />
+                </Table.Cell>
+              </>
             )}
 
             <Table.Cell>
               <a href={`mailto:${emailAddress}`}>
-                {email ? (
+                {emailIsExpanded ? (
                   emailAddress
                 ) : (
                   <Popup
                     content={emailAddress}
-                    trigger={(
-                      <span>
-                        <Icon name="mail" />
-                      </span>
-              )}
+                    trigger={<span><Icon name="mail" /></span>}
                   />
                 )}
               </a>
               {' '}
-              <Icon link onClick={copyEmail} name="copy" title={i18n.t('competitions.registration_v2.update.email_copy')} />
+              <Icon link onClick={copyEmail} name="copy" title={I18n.t('competitions.registration_v2.update.email_copy')} />
             </Table.Cell>
           </Table.Row>
         </Ref>
