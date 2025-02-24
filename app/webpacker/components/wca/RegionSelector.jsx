@@ -34,19 +34,20 @@ const regionsOptions = [
   ))),
 ];
 
-export default function RegionSelector({ region, onRegionChange }) {
-  // clearing should revert to the default, which itself should be un-clearable
-  // but semantic ui will call onChange with the empty string
+export default function RegionSelector({ region, onRegionChange, clearable = false }) {
+  const defaultValue = clearable ? null : ALL_REGIONS_VALUE;
+
   return (
     <>
       <label htmlFor="region">{I18n.t('competitions.index.region')}</label>
       <Dropdown
         search
         selection
-        clearable={region !== ALL_REGIONS_VALUE}
+        clearable={region !== defaultValue}
         value={region}
         options={regionsOptions}
-        onChange={(_, data) => onRegionChange(data.value || ALL_REGIONS_VALUE)}
+        // clearing calls onChange with the empty string; catch and replace it
+        onChange={(_, data) => onRegionChange(data.value || defaultValue)}
       />
     </>
   );
