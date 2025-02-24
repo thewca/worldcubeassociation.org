@@ -193,6 +193,12 @@ export const groupedChampionshipTypes = {
   national: _.map(_.sortBy(countries.real, 'name'), 'iso2'),
 }
 
+// ----- REGISTRATIONS  -----
+
+export const commentCharacterLimit = '<%= Registrations::RegistrationChecker::COMMENT_CHARACTER_LIMIT  %>'
+
+export const defaultGuestLimit = '<%= Registrations::RegistrationChecker::DEFAULT_GUEST_LIMIT %>'
+
 // ----- ROLES & GROUPS -----
 
 export const groupTypes = JSON.parse('<%= UserGroup.group_types.to_json.html_safe %>');
