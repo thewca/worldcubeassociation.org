@@ -167,7 +167,7 @@ module Resultable
         # Round the result.
         # If the average is above 10 minutes, round it to the nearest second as per
         # https://www.worldcubeassociation.org/regulations/#9f2
-        raw_average > 60_000 ? raw_average.round(-2) : raw_average.round
+        raw_average > 60_000 ? (raw_average / 100) * 100 : raw_average.round
       end
     end
   end
