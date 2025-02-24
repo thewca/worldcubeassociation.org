@@ -91,7 +91,7 @@ const sanitizeDate = (date) => {
 };
 
 const sanitizeRegion = (region) => {
-  if (region === 'all') return region;
+  if (region === ALL_REGIONS_VALUE) return region;
   const continent = continents.real.find(
     ({ id, name }) => region === id || region === name,
   );

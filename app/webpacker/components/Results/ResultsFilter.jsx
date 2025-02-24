@@ -6,10 +6,10 @@ import _ from 'lodash';
 import EventSelector from '../wca/EventSelector';
 import { countries } from '../../lib/wca-data.js.erb';
 import I18n from '../../lib/i18n';
-import RegionSelector from '../wca/RegionSelector';
+import RegionSelector, { ALL_REGIONS_VALUE } from '../wca/RegionSelector';
 
 function getRegionIdWithFallback(region) {
-  if (region === 'all') {
+  if (region === ALL_REGIONS_VALUE) {
     return 'world';
   }
   return countries.byIso2[region]?.id ?? region;
