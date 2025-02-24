@@ -3,7 +3,7 @@
 module Registrations
   class RegistrationChecker
     COMMENT_CHARACTER_LIMIT = 240
-    DEFAULT_GUEST_LIMIT = 1000
+    DEFAULT_GUEST_LIMIT = 9
 
     def self.create_registration_allowed!(registration_request, current_user)
       target_user = User.find(registration_request['user_id'])
@@ -131,7 +131,9 @@ module Registrations
       def validate_guests!(guests, competition)
         raise WcaExceptions::RegistrationError.new(:unprocessable_entity, ErrorCodes::INVALID_REQUEST_DATA) if guests < 0
         raise WcaExceptions::RegistrationError.new(:unprocessable_entity, ErrorCodes::GUEST_LIMIT_EXCEEDED) if competition.guest_limit_exceeded?(guests)
-        raise WcaExceptions::RegistrationError.new(:unprocessable_entity, ErrorCodes::REASONABLE_GUEST_COUNT) if guests > DEFAULT_GUEST_LIMIT
+        byebug
+        raise WcaExceptions::RegistrationError.new(:unprocessable_entity, ErrorCodes::REASONABLE_GUEST_COUNT) if guests > DEFAULT_GUEST_LIMIT &&
+          !competition.guest_entry_status_restricted?
       end
 
       def validate_comment!(comment, competition, registration = nil)
