@@ -7,9 +7,9 @@ import useDebounce from '../../../lib/hooks/useDebounce';
 import { getPersons } from '../api/getUsers';
 import Loading from '../../Requests/Loading';
 import WCAQueryClientProvider from '../../../lib/providers/WCAQueryClientProvider';
-import { RegionSelector } from '../../CompetitionsOverview/CompetitionsFilters';
 import { personUrl, editPersonUrl } from '../../../lib/requests/routes.js.erb';
 import { countries } from '../../../lib/wca-data.js.erb';
+import RegionSelector from '../../wca/RegionSelector';
 
 export default function Wrapper() {
   return (

@@ -4,9 +4,9 @@ import {
 } from 'semantic-ui-react';
 import _ from 'lodash';
 import EventSelector from '../wca/EventSelector';
-import { RegionSelector } from '../CompetitionsOverview/CompetitionsFilters';
 import { countries } from '../../lib/wca-data.js.erb';
 import I18n from '../../lib/i18n';
+import RegionSelector from '../wca/RegionSelector';
 
 function getRegionIdWithFallback(region) {
   if (region === 'all') {
