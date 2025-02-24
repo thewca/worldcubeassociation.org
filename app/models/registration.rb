@@ -394,8 +394,6 @@ class Registration < ApplicationRecord
       !accepted?
     when :unpaid
       paid_entry_fees == 0
-    else
-      false
     end
   end
 
