@@ -35,7 +35,10 @@ function CompetitionsFilters({
 
       <Form.Group>
         <Form.Field width={8}>
-          <RegionSelector region={filterState.region} dispatchFilter={dispatchFilter} />
+          <RegionSelector
+            region={filterState.region}
+            onRegionChange={(region) => dispatchFilter({ region })}
+          />
         </Form.Field>
         <Form.Field width={8}>
           <SearchBar text={filterState.search} dispatchFilter={dispatchFilter} />

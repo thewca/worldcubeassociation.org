@@ -34,7 +34,7 @@ const regionsOptions = [
   ))),
 ];
 
-export default function RegionSelector({ region, dispatchFilter }) {
+export default function RegionSelector({ region, onRegionChange }) {
   // clearing should revert to the default, which itself should be un-clearable
   // but semantic ui will call onChange with the empty string
   return (
@@ -46,7 +46,7 @@ export default function RegionSelector({ region, dispatchFilter }) {
         clearable={region !== ALL_REGIONS_VALUE}
         value={region}
         options={regionsOptions}
-        onChange={(_, data) => dispatchFilter({ region: data.value || ALL_REGIONS_VALUE })}
+        onChange={(_, data) => onRegionChange(data.value || ALL_REGIONS_VALUE)}
       />
     </>
   );

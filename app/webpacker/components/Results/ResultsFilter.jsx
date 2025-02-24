@@ -60,7 +60,7 @@ export default function ResultsFilter({
         <Form.Field>
           <RegionSelector
             region={regionIso2}
-            dispatchFilter={({ region: r }) => setRegion(getRegionIdWithFallback(r))}
+            onRegionChange={(r) => setRegion(getRegionIdWithFallback(r))}
           />
         </Form.Field>
         <Form.Group widths="equal">
