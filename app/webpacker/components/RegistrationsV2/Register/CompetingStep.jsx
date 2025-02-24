@@ -298,7 +298,7 @@ export default function CompetingStep({
     shouldShowUpdateButton,
   ]);
 
-  const guestLimit = competitionInfo.guests_per_registration_limit ?? defaultGuestLimit
+  const guestLimit = competitionInfo.guests_per_registration_limit ?? defaultGuestLimit;
 
   const formWarnings = useMemo(() => potentialWarnings(competitionInfo), [competitionInfo]);
   return (
