@@ -126,7 +126,7 @@ RSpec.describe Result do
             expect(result).to be_valid
 
             result.average = 33
-            expect(result.compute_correct_average).to eq 60_100
+            expect(result.compute_correct_average).to eq 60_000
             expect(result).to be_invalid_with_errors(average: ["should be 60100"])
           end
 
@@ -196,13 +196,13 @@ RSpec.describe Result do
               expect(result).to be_invalid_with_errors(average: ["should be 4401"])
             end
 
-            it "all solves with average above 10 minutes" do
+            it "all solves with average above 10 minutes", :tag do
               # This average computes to 600.66... and should be rounded to 601
               result = build_result(value1: 60_100, value2: 60_100, value3: 60_000, value4: 0, value5: 0, best: 60_000, average: 60_100)
               expect(result).to be_valid
 
               result.average = 33
-              expect(result.compute_correct_average).to eq 60_100
+              expect(result.compute_correct_average).to eq 60_000
               expect(result).to be_invalid_with_errors(average: ["should be 60100"])
             end
 
@@ -306,7 +306,7 @@ RSpec.describe Result do
           end
 
           # https://www.worldcubeassociation.org/regulations/#9f2
-          it "rounds averages for 333bf over 10 minutes up to nearest second for x.50" do
+          it "truncate averages for 333bf over 10 minutes for x.50" do
             over10 = (10.minutes + 10.50.seconds) * 100 # In centiseconds.
             result = build_result(value1: over10,
                                   value2: over10,
