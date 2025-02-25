@@ -3,7 +3,6 @@
 module Registrations
   class RegistrationChecker
     COMMENT_CHARACTER_LIMIT = 240
-    DEFAULT_GUEST_LIMIT = 99
 
     def self.create_registration_allowed!(registration_request, current_user)
       target_user = User.find(registration_request['user_id'])
@@ -119,32 +118,34 @@ module Registrations
       def validate_qualifications!(request, competition, target_user)
         return unless competition.enforces_qualifications?
         event_ids = request.dig('competing', 'event_ids')
-
-        unqualified_events = event_ids.filter do |event|
-          qualification = competition.qualification_wcif[event]
-          qualification.present? && !competitor_qualifies_for_event?(event, qualification, target_user)
+        r = Registration.new(competition_events: registration.competition.competition_events.where(event_id: event_ids), competition: competition, user: target_user)
+        r.validate
+        r.errors[:guests].each do |error|
+          raise error
         end
-
-        raise WcaExceptions::RegistrationError.new(:unprocessable_entity, Registrations::ErrorCodes::QUALIFICATION_NOT_MET, unqualified_events) unless unqualified_events.empty?
       end
 
       def validate_guests!(guests, competition)
-        raise WcaExceptions::RegistrationError.new(:unprocessable_entity, ErrorCodes::INVALID_REQUEST_DATA) if guests < 0
-        raise WcaExceptions::RegistrationError.new(:unprocessable_entity, ErrorCodes::GUEST_LIMIT_EXCEEDED) if competition.guest_limit_exceeded?(guests)
-        raise WcaExceptions::RegistrationError.new(:unprocessable_entity, ErrorCodes::UNREASONABLE_GUEST_COUNT) if
-          guests > DEFAULT_GUEST_LIMIT && !competition.guest_entry_status_restricted?
+        r = Registration.new(guests: guests, competition: competition)
+        r.validate
+        r.errors[:guests].each do |error|
+          raise error
+        end
       end
 
       def validate_comment!(comment, competition, registration = nil)
-        if comment.nil?
-          # Return if no comment was supplied in the request but one already exists for the registration
-          return if registration.present? && !registration.comments.nil? && !(registration.comments == '')
+        return if registration.present? && !registration.comments.nil? && !(registration.comments == '')
 
-          # Raise error if comment is mandatory, none has been supplied, and none exists for the registration
-          raise WcaExceptions::RegistrationError.new(:unprocessable_entity, Registrations::ErrorCodes::REQUIRED_COMMENT_MISSING) if competition.force_comment_in_registration
-        else
-          raise WcaExceptions::RegistrationError.new(:unprocessable_entity, ErrorCodes::USER_COMMENT_TOO_LONG) if comment.length > COMMENT_CHARACTER_LIMIT
-          raise WcaExceptions::RegistrationError.new(:unprocessable_entity, ErrorCodes::REQUIRED_COMMENT_MISSING) if competition.force_comment_in_registration && comment.strip.empty?
+        r = if registration.nil?
+              Registration.new(comments: guests, competition: competition)
+            else
+              registration.comments = comment
+              registration
+            end
+
+        r.validate
+        r.errors[:comments].each do |error|
+          raise error
         end
       end
 

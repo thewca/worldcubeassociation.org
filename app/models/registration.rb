@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Registration < ApplicationRecord
+  DEFAULT_GUEST_LIMIT = 99
+
   scope :pending, -> { where(competing_status: 'pending') }
   scope :accepted, -> { where(competing_status: 'accepted') }
   scope :cancelled, -> { where(competing_status: 'cancelled') }
@@ -38,9 +40,31 @@ class Registration < ApplicationRecord
 
   validates :user, presence: true, on: [:create]
 
-  validates_numericality_of :guests, greater_than_or_equal_to: 0
+  validate :guests_set_correctly, if: :is_competing?
 
-  validates_numericality_of :guests, less_than_or_equal_to: :guest_limit, if: :check_guest_limit?
+  private def guests_set_correctly
+    if guests < 0
+      errors.add(:guests, WcaExceptions::RegistrationError.new(:unprocessable_entity, Registrations::ErrorCodes::INVALID_REQUEST_DATA))
+    end
+    if competition.guest_limit_exceeded?(guests)
+      errors.add(:guests, WcaExceptions::RegistrationError.new(:unprocessable_entity, Registrations::ErrorCodes::GUEST_LIMIT_EXCEEDED))
+    end
+    if guests > DEFAULT_GUEST_LIMIT && !competition.guest_entry_status_restricted?
+      errors.add(:guests, WcaExceptions::RegistrationError.new(:unprocessable_entity, Registrations::ErrorCodes::UNREASONABLE_GUEST_COUNT))
+    end
+  end
+
+  validate :comment_set_correctly, if: :is_competing?
+
+  private def comment_set_correctly
+    if comments.nil?
+      # Raise error if comment is mandatory, none has been supplied, and none exists for the registration
+      errors.add(:comments, WcaExceptions::RegistrationError.new(:unprocessable_entity, Registrations::ErrorCodes::REQUIRED_COMMENT_MISSING)) if competition.force_comment_in_registration
+    else
+      errors.add(:comments, WcaExceptions::RegistrationError.new(:unprocessable_entity, ErrorCodes::USER_COMMENT_TOO_LONG)) if comment.length > COMMENT_CHARACTER_LIMIT
+      errors.add(:comments, WcaExceptions::RegistrationError.new(:unprocessable_entity, ErrorCodes::REQUIRED_COMMENT_MISSING)) if competition.force_comment_in_registration && comment.strip.empty?
+    end
+  end
 
   after_save :mark_registration_processing_as_done
 
@@ -359,18 +383,12 @@ class Registration < ApplicationRecord
 
   validate :cannot_register_for_unqualified_events
   private def cannot_register_for_unqualified_events
-    if competition && competition.allow_registration_without_qualification
+    if competition&.allow_registration_without_qualification
       return
     end
-    if registration_competition_events.reject(&:marked_for_destruction?).any? { |event| !event.competition_event&.can_register?(user) }
-      errors.add(:registration_competition_events, I18n.t('registrations.errors.can_only_register_for_qualified_events'))
-    end
-  end
-
-  validate :forcing_competitors_to_add_comment, if: :is_competing?
-  private def forcing_competitors_to_add_comment
-    if competition&.force_comment_in_registration.present? && !comments&.strip&.present?
-      errors.add(:user_id, I18n.t('registrations.errors.cannot_register_without_comment'))
+    unqualified_events = registration_competition_events.reject(&:marked_for_destruction?).select { |event| !event.competition_event&.can_register?(user) }
+    unless unqualified_events.empty?
+      errors.add(:registration_competition_events, WcaExceptions::RegistrationError.new(:unprocessable_entity, Registrations::ErrorCodes::QUALIFICATION_NOT_MET, unqualified_events))
     end
   end
 
