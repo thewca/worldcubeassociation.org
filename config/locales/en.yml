@@ -1221,7 +1221,6 @@ en:
         other: "%{count} regions"
       export_csv: "Export to CSV"
       email: "Email"
-      approve: "Approve"
       non_competing: "Non-competing registrations"
       not_paid: "Not paid"
       registered:
