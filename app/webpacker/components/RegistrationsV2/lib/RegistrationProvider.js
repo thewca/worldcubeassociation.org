@@ -29,7 +29,7 @@ export default function RegistrationProvider({ competitionInfo, userInfo, childr
     queryFn: async () => pollRegistrations(userInfo.id, competitionInfo),
     refetchInterval: REFETCH_INTERVAL,
     onSuccess: () => {
-      setPollCounter(pollCounter + 1);
+      setPollCounter((prevCounter) => prevCounter + 1);
     },
     enabled: isPolling,
   });
@@ -70,6 +70,7 @@ export default function RegistrationProvider({ competitionInfo, userInfo, childr
     registration,
     refetchRegistration,
     isFetching,
+    pollCounter,
     isPolling,
     startPolling,
     isProcessing: pollingStatus !== 'success' || pollingData.processing,
@@ -84,6 +85,7 @@ export default function RegistrationProvider({ competitionInfo, userInfo, childr
     isPolling,
     refetchRegistration,
     registration,
+    pollCounter,
     pollingData,
     startPolling,
   ]);
