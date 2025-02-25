@@ -299,7 +299,7 @@ export default function CompetingStep({
   ]);
 
   const guestsRestricted = competitionInfo.guest_entry_status === 'restricted';
-  const guestLimit = competitionInfo.guests_per_registration_limit != null && guestsRestricted
+  const guestLimit = competitionInfo.guests_per_registration_limit !== null && guestsRestricted
     ? competitionInfo.guests_per_registration_limit
     : defaultGuestLimit;
 
