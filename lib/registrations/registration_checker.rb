@@ -131,9 +131,8 @@ module Registrations
       def validate_guests!(guests, competition)
         raise WcaExceptions::RegistrationError.new(:unprocessable_entity, ErrorCodes::INVALID_REQUEST_DATA) if guests < 0
         raise WcaExceptions::RegistrationError.new(:unprocessable_entity, ErrorCodes::GUEST_LIMIT_EXCEEDED) if competition.guest_limit_exceeded?(guests)
-        byebug
-        raise WcaExceptions::RegistrationError.new(:unprocessable_entity, ErrorCodes::REASONABLE_GUEST_COUNT) if guests > DEFAULT_GUEST_LIMIT &&
-          !competition.guest_entry_status_restricted?
+        raise WcaExceptions::RegistrationError.new(:unprocessable_entity, ErrorCodes::REASONABLE_GUEST_COUNT) if
+          guests > DEFAULT_GUEST_LIMIT && !competition.guest_entry_status_restricted?
       end
 
       def validate_comment!(comment, competition, registration = nil)
