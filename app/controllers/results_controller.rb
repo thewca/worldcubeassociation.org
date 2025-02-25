@@ -159,7 +159,7 @@ class ResultsController < ApplicationController
       return redirect_to rankings_path
     end
 
-    @ranking_timestamp = ComputeAuxiliaryData.successful_start_date || Date.current
+    @record_timestamp = ComputeAuxiliaryData.successful_start_date || Date.current
 
     respond_from_cache("results-page-api") do |rows|
       @is_by_region ? compute_rankings_by_region(rows, @continent, @country) : rows
