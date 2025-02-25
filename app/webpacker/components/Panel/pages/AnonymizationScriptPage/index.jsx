@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { FormField, FormGroup, Radio } from 'semantic-ui-react';
 import { IdWcaSearch } from '../../../SearchWidget/WcaSearch';
 import SEARCH_MODELS from '../../../SearchWidget/SearchModel';
@@ -19,6 +19,7 @@ const AVAILABLE_MODELS = [
 export default function AnonymizationScriptPage() {
   const [activeModelIndex, setActiveModelIndex] = useInputState(0);
   const [searchInput, setSearchInput] = useInputState();
+  const activeModel = useMemo(() => AVAILABLE_MODELS[activeModelIndex], [activeModelIndex]);
 
   const modelSelectHandler = (_, { value: selectedModelIndex }) => {
     setActiveModelIndex(selectedModelIndex);
@@ -30,7 +31,7 @@ export default function AnonymizationScriptPage() {
       <FormGroup grouped>
         <div>Select where to search for</div>
         {AVAILABLE_MODELS.map((model, index) => (
-          <FormField key={activeModelIndex.id}>
+          <FormField key={model.id}>
             <Radio
               label={model.name}
               value={index}
@@ -41,15 +42,15 @@ export default function AnonymizationScriptPage() {
         ))}
       </FormGroup>
       <IdWcaSearch
-        label={`Search ${AVAILABLE_MODELS[activeModelIndex].name}`}
-        model={AVAILABLE_MODELS[activeModelIndex].id}
+        label={`Search ${activeModel.name}`}
+        model={activeModel.id}
         multiple={false}
         value={searchInput}
         onChange={setSearchInput}
       />
       <AnonymizationTicketWorkbenchForWrt
-        userId={AVAILABLE_MODELS[activeModelIndex].id === SEARCH_MODELS.user ? searchInput : null}
-        wcaId={AVAILABLE_MODELS[activeModelIndex].id === SEARCH_MODELS.person ? searchInput : null}
+        userId={activeModel.id === SEARCH_MODELS.user ? searchInput : null}
+        wcaId={activeModel.id === SEARCH_MODELS.person ? searchInput : null}
       />
     </>
   );

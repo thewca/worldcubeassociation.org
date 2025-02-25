@@ -2,7 +2,7 @@ import { fetchJsonOrError } from '../../../../../lib/requests/fetchWithAuthentic
 import { actionUrls } from '../../../../../lib/requests/routes.js.erb';
 
 export default async function anonymize({ userId, wcaId }) {
-  await fetchJsonOrError(
+  const { data } = await fetchJsonOrError(
     actionUrls.tickets.anonymize,
     {
       method: 'POST',
@@ -15,4 +15,5 @@ export default async function anonymize({ userId, wcaId }) {
       }),
     },
   );
+  return data;
 }

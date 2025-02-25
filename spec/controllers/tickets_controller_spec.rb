@@ -63,13 +63,15 @@ RSpec.describe TicketsController do
 
       post :anonymize, params: { wcaId: person.wca_id }
 
-      expect(!!response).to eq true
-      expect(result.reload.personId).to include('ANON')
-      expect(result.reload.personName).to eq User::ANONYMOUS_NAME
-      expect(person.reload.wca_id).to include('ANON')
-      expect(person.reload.name).to eq User::ANONYMOUS_NAME
-      expect(person.reload.gender).to eq User::ANONYMOUS_GENDER
-      expect(person.reload.dob).to eq User::ANONYMOUS_DOB.to_date
+      expect(response).to be_successful
+      result.reload
+      person.reload
+      expect(result.personId).to include('ANON')
+      expect(result.personName).to eq User::ANONYMOUS_NAME
+      expect(person.wca_id).to include('ANON')
+      expect(person.name).to eq User::ANONYMOUS_NAME
+      expect(person.gender).to eq User::ANONYMOUS_GENDER
+      expect(person.dob).to eq User::ANONYMOUS_DOB.to_date
     end
 
     it "can anonymize account data" do
@@ -78,12 +80,13 @@ RSpec.describe TicketsController do
 
       post :anonymize, params: { userId: user.id }
 
-      expect(!!response).to eq true
-      expect(user.reload.wca_id).to eq nil
-      expect(user.reload.email).to eq user.id.to_s + User::ANONYMOUS_ACCOUNT_EMAIL_ID_SUFFIX
-      expect(user.reload.name).to eq User::ANONYMOUS_NAME
-      expect(user.reload.dob).to eq User::ANONYMOUS_DOB.to_date
-      expect(user.reload.gender).to eq User::ANONYMOUS_GENDER
+      expect(response).to be_successful
+      user.reload
+      expect(user.wca_id).to eq nil
+      expect(user.email).to eq user.id.to_s + User::ANONYMOUS_ACCOUNT_EMAIL_ID_SUFFIX
+      expect(user.name).to eq User::ANONYMOUS_NAME
+      expect(user.dob).to eq User::ANONYMOUS_DOB.to_date
+      expect(user.gender).to eq User::ANONYMOUS_GENDER
     end
   end
 end

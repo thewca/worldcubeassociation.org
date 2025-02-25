@@ -298,6 +298,73 @@ class Person < ApplicationRecord
     self.results.on_or_before(target_date).average_succeeded.group(:eventId).minimum(:average)
   end
 
+  def anonymization_checks_with_message_args
+    recent_competitions_3_months = competitions&.select { |c| c.start_date > (Date.today - 3.month) }
+    competitions_with_external_website = competitions&.select { |c| c.external_website.present? }
+
+    [
+      {
+        person_has_records_in_past: records.present? && records[:total] > 0,
+        person_held_championship_podiums: championship_podiums&.values_at(:world, :continental, :national)&.any?(&:present?),
+        person_competed_in_last_3_months: recent_competitions_3_months&.any?,
+        competitions_with_external_website: competitions_with_external_website&.any?,
+        recent_competitions_data_to_be_removed_wca_live: recent_competitions_3_months&.any?,
+      },
+      {
+        records: records,
+        championship_podiums: championship_podiums,
+        recent_competitions_3_months: recent_competitions_3_months,
+        competitions_with_external_website: competitions_with_external_website,
+      },
+    ]
+  end
+
+  def anonymize
+    wca_id_year = wca_id[0..3]
+    semi_id, = FinishUnfinishedPersons.compute_semi_id(wca_id_year, User::ANONYMOUS_NAME)
+    new_wca_id, = FinishUnfinishedPersons.complete_wca_id(semi_id)
+
+    raise "Error generating new WCA ID" if new_wca_id.nil?
+
+    # Anonymize data in Results
+    results.update_all(personId: new_wca_id, personName: User::ANONYMOUS_NAME)
+
+    # Anonymize sub-IDs
+    if sub_ids.length > 1
+      # if an updated person is due to a name change, this will delete the previous person.
+      # if an updated person is due to a country change, this will keep the sub person with an appropriate subId
+      previous_persons = Person.where(wca_id: wca_id).where.not(subId: 1).order(:subId)
+      current_sub_id = 1
+      current_country_id = countryId
+
+      previous_persons.each do |p|
+        if p.countryId == current_country_id
+          p.delete
+        else
+          current_sub_id += 1
+          current_country_id = p.countryId
+          p.update(
+            wca_id: new_wca_id,
+            name: User::ANONYMOUS_NAME,
+            gender: User::ANONYMOUS_GENDER,
+            dob: User::ANONYMOUS_DOB,
+            subId: current_sub_id,
+          )
+        end
+      end
+    end
+
+    # Anonymize person's data in Persons for subid 1
+    update!(
+      wca_id: new_wca_id,
+      name: User::ANONYMOUS_NAME,
+      gender: User::ANONYMOUS_GENDER,
+      dob: User::ANONYMOUS_DOB,
+    )
+
+    new_wca_id
+  end
+
   def serializable_hash(options = nil)
     json = super(DEFAULT_SERIALIZE_OPTIONS.merge(options || {}))
     json.merge!(

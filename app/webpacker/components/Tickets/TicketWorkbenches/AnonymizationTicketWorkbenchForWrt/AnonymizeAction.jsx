@@ -8,6 +8,7 @@ import anonymize from './api/anonymize';
 export default function AnonymizeAction({ userId, wcaId }) {
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [completed, setCompleted] = useState(false);
+  const [newWcaId, setNewWcaId] = useState();
 
   const {
     mutate: anonymizeMutation,
@@ -15,7 +16,12 @@ export default function AnonymizeAction({ userId, wcaId }) {
     isError,
   } = useMutation({
     mutationFn: anonymize,
-    onSuccess: () => setCompleted(true),
+    onSuccess: (data) => {
+      setCompleted(true);
+      if (data.new_wca_id) {
+        setNewWcaId(data.new_wca_id);
+      }
+    },
   });
 
   const doAnonymize = () => {
@@ -29,7 +35,10 @@ export default function AnonymizeAction({ userId, wcaId }) {
   return (
     <>
       {completed && (
-        <Message info>Anonymization completed.</Message>
+        <>
+          <Message info>Anonymization completed.</Message>
+          {newWcaId && <Message info>{`New WCA ID is ${newWcaId}`}</Message>}
+        </>
       )}
       <Button
         onClick={() => setConfirmOpen(true)}

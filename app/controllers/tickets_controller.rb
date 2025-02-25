@@ -107,7 +107,7 @@ class TicketsController < ApplicationController
     }
   end
 
-  private def get_user_and_person
+  private def user_and_person_from_params
     user_id = params[:userId]
     wca_id = params[:wcaId]
 
@@ -129,65 +129,28 @@ class TicketsController < ApplicationController
       render status: :unprocessable_entity, json: {
         error: "Person and user not linked.",
       }
-      return true
-    end
-
-    if user.nil? && person.nil?
+      true
+    elsif user.nil? && person.nil?
       render status: :unprocessable_entity, json: {
         error: "User ID and WCA ID is not provided.",
       }
-      return true
+      true
     end
-    false
   end
 
   def details_before_anonymization
-    user, person = get_user_and_person
+    user, person = user_and_person_from_params
     return if check_errors(user, person)
 
-    anonymization_checks = {}
-    message_args = {}
-    action_items = []
-    non_action_items = []
+    user_anonymization_checks, user_message_args = user&.anonymization_checks_with_message_args
+    person_anonymization_checks, person_message_args = person&.anonymization_checks_with_message_args
 
-    # 1. Check whether the user is currently banned or not.
-    anonymization_checks[:user_currently_banned] = user&.banned?
+    anonymization_checks = (user_anonymization_checks || {}).merge(person_anonymization_checks || {})
+    message_args = (user_message_args || {}).merge(person_message_args || {})
 
-    # 2. Check whether the user was banned in the past.
-    anonymization_checks[:user_banned_in_past] = user&.banned_in_past?
-
-    # 3. Check whether the person has held any records in the past.
-    records = person&.records
-    anonymization_checks[:person_has_records_in_past] = records.present? && records[:total] > 0
-    message_args[:records] = records
-
-    # 4. Check whether the person had podium on national championships.
-    championship_podiums = person&.championship_podiums
-    anonymization_checks[:person_held_championship_podiums] = championship_podiums&.values_at(:world, :continental, :national)&.any?(&:present?)
-    message_args[:championship_podiums] = championship_podiums
-
-    # 5. Check whether the person has competed in last 3 months.
-    recent_competitions_3_months = person&.competitions&.select { |c| c.start_date > (Date.today - 3.month) }
-    anonymization_checks[:person_competed_in_last_3_months] = recent_competitions_3_months&.any?
-    message_args[:recent_competitions_3_months] = recent_competitions_3_months
-
-    # 6. Check whether the user has account in WCA Forum.
-    anonymization_checks[:user_may_have_forum_account] = user.present?
-
-    # 7. Check whether the user has any active OAuth access grants.
-    access_grants = user&.oauth_access_grants&.select { |access_grant| !access_grant.revoked_at.nil? }
-    anonymization_checks[:user_has_active_oauth_access_grants] = access_grants&.any?
-    message_args[:access_grants] = access_grants
-
-    # 8. Check whether there are any competitions with external websites.
-    competitions_with_external_website = person&.competitions&.select { |c| c.external_website.present? }
-    anonymization_checks[:competitions_with_external_website] = competitions_with_external_website&.any?
-    message_args[:competitions_with_external_website] = competitions_with_external_website
-
-    # 9. Check whether there are any recent competitions data to be removed from WCA Live.
-    anonymization_checks[:recent_competitions_data_to_be_removed_wca_live] = recent_competitions_3_months&.any?
-
-    anonymization_checks.each { |key, value| (value ? action_items : non_action_items) << key }
+    action_items, non_action_items = anonymization_checks
+                                     .partition { |_, value| value }
+                                     .map { |checks| checks.map(&:first) }
 
     render json: {
       user: user,
@@ -199,25 +162,13 @@ class TicketsController < ApplicationController
   end
 
   def anonymize
-    user, person = get_user_and_person
+    user, person = user_and_person_from_params
     return if check_errors(user, person)
 
     if user&.banned?
       return render status: :unprocessable_entity, json: {
         error: "Error anonymizing: This person is currently banned and cannot be anonymized.",
       }
-    end
-
-    if person.present?
-      wca_id_year = person.wca_id[0..3]
-      semi_id, = FinishUnfinishedPersons.compute_semi_id(wca_id_year, User::ANONYMOUS_NAME)
-      new_wca_id, = FinishUnfinishedPersons.complete_wca_id(semi_id)
-
-      if new_wca_id.nil?
-        return render status: :internal_server_error, json: {
-          error: "Error generating new WCA ID",
-        }
-      end
     end
 
     if user.present? && person.present?
@@ -229,66 +180,22 @@ class TicketsController < ApplicationController
     end
 
     ActiveRecord::Base.transaction do
-      if person.present?
-        # Anonymize person's data in Results
-        person.results.update_all(personId: new_wca_id, personName: User::ANONYMOUS_NAME)
-
-        # Anonymize person's data in Persons
-        if person.sub_ids.length > 1
-          # if an updated person is due to a name change, this will delete the previous person.
-          # if an updated person is due to a country change, this will keep the sub person with an appropriate subId
-          previous_persons = Person.where(wca_id: wca_id).where.not(subId: 1).order(:subId)
-          current_sub_id = 1
-          current_country_id = person.countryId
-
-          previous_persons.each do |p|
-            if p.countryId == current_country_id
-              p.delete
-            else
-              current_sub_id += 1
-              current_country_id = p.countryId
-              p.update(
-                wca_id: new_wca_id,
-                name: User::ANONYMOUS_NAME,
-                gender: User::ANONYMOUS_GENDER,
-                dob: User::ANONYMOUS_DOB,
-                subId: current_sub_id,
-              )
-            end
-          end
-        end
-        # Anonymize person's data in Persons for subid 1
-        person.update(
-          wca_id: new_wca_id,
-          name: User::ANONYMOUS_NAME,
-          gender: User::ANONYMOUS_GENDER,
-          dob: User::ANONYMOUS_DOB,
-        )
-      end
+      person&.anonymize
 
       users_to_anonymize.each do |user_to_anonymize|
-        user_to_anonymize.skip_reconfirmation!
-        user_to_anonymize.update(
-          email: user_to_anonymize.id.to_s + User::ANONYMOUS_ACCOUNT_EMAIL_ID_SUFFIX,
-          name: User::ANONYMOUS_NAME,
-          unconfirmed_wca_id: nil,
-          delegate_id_to_handle_wca_id_claim: nil,
-          dob: User::ANONYMOUS_DOB,
-          gender: User::ANONYMOUS_GENDER,
-          current_sign_in_ip: nil,
-          last_sign_in_ip: nil,
-          # If the account associated with the WCA ID is a special account (delegate, organizer,
-          # team member) then we want to keep the link between the Person and the account.
-          wca_id: user&.is_special_account? ? new_wca_id : nil,
-          current_avatar_id: user&.is_special_account? ? nil : user_to_anonymize.current_avatar_id,
-          country_iso2: user&.is_special_account? ? user_to_anonymize.country_iso2 : nil,
-        )
+        user_to_anonymize.anonymize
       end
     end
 
+    puts('DJDJDJ start')
+    puts(person)
+    puts(person&.reload)
+    puts(person&.reload&.wca_id)
+    puts('DJDJDJ end')
+
     render json: {
       success: true,
-      new_wca_id: new_wca_id,
+      new_wca_id: person&.reload&.wca_id, # Reload to get the new wca_id
     }
   end
 end

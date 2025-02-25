@@ -16,7 +16,7 @@ export default function VerifyAnonymizeDetails({ data }) {
   return (
     <List bulleted>
       <List.Item>{`Anonymization type: ${anonymizationType(data)}`}</List.Item>
-      <List.Item>{`DOB: ${data.user?.dob || data.user?.dob}`}</List.Item>
+      <List.Item>{`DOB: ${data.user?.dob || 'N/A'}`}</List.Item>
       <List.Item>{`Email: ${data.user?.email || 'N/A'}`}</List.Item>
       <Message>
         Before processing any anonymization requests, WRT must receive verification with a

@@ -1500,4 +1500,39 @@ class User < ApplicationRecord
   def location
     highest_delegate_role&.metadata&.location
   end
+
+  def anonymization_checks_with_message_args
+    access_grants = oauth_access_grants&.select { |access_grant| !access_grant.revoked_at.nil? }
+
+    [
+      {
+        user_currently_banned: banned?,
+        user_banned_in_past: banned_in_past?,
+        user_may_have_forum_account: true,
+        user_has_active_oauth_access_grants: access_grants.any?,
+      },
+      {
+        access_grants: access_grants,
+      },
+    ]
+  end
+
+  def anonymize
+    skip_reconfirmation!
+    update(
+      email: id.to_s + User::ANONYMOUS_ACCOUNT_EMAIL_ID_SUFFIX,
+      name: User::ANONYMOUS_NAME,
+      unconfirmed_wca_id: nil,
+      delegate_id_to_handle_wca_id_claim: nil,
+      dob: User::ANONYMOUS_DOB,
+      gender: User::ANONYMOUS_GENDER,
+      current_sign_in_ip: nil,
+      last_sign_in_ip: nil,
+      # If the account associated with the WCA ID is a special account (delegate, organizer,
+      # team member) then we want to keep the link between the Person and the account.
+      wca_id: is_special_account? ? new_wca_id : nil,
+      current_avatar_id: is_special_account? ? nil : current_avatar_id,
+      country_iso2: is_special_account? ? country_iso2 : nil,
+    )
+  end
 end
