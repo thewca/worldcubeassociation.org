@@ -94,7 +94,7 @@ RSpec.describe Registrations::RegistrationChecker do
         end
 
         it 'guests cant exceed reasonable limit if no guest limit enforced' do
-          registration_request = FactoryBot.build(:registration_request, guests: 10, competition_id: default_competition.id, user_id: default_user.id)
+          registration_request = FactoryBot.build(:registration_request, guests: 100, competition_id: default_competition.id, user_id: default_user.id)
 
           expect {
             Registrations::RegistrationChecker.create_registration_allowed!(
@@ -118,8 +118,8 @@ RSpec.describe Registrations::RegistrationChecker do
         end
 
         it 'guest limit higher than default not respected if guests arent restricted' do
-          comp = FactoryBot.create(:competition, :registration_open, guests_per_registration_limit: 20)
-          registration_request = FactoryBot.build(:registration_request, guests: 11, competition_id: comp.id, user_id: default_user.id)
+          comp = FactoryBot.create(:competition, :registration_open, guests_per_registration_limit: 120)
+          registration_request = FactoryBot.build(:registration_request, guests: 111, competition_id: comp.id, user_id: default_user.id)
 
           expect {
             Registrations::RegistrationChecker.create_registration_allowed!(
@@ -1257,7 +1257,7 @@ RSpec.describe Registrations::RegistrationChecker do
           :update_request,
           user_id: default_registration.user_id,
           competition_id: default_registration.competition.id,
-          guests: 9,
+          guests: 99,
         )
 
         expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, Competition.find(update_request['competition_id']), User.find(update_request['submitted_by'])) }
@@ -1269,7 +1269,7 @@ RSpec.describe Registrations::RegistrationChecker do
           :update_request,
           user_id: default_registration.user_id,
           competition_id: default_registration.competition.id,
-          guests: 10,
+          guests: 100,
         )
 
         expect {
