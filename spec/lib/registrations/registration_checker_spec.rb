@@ -27,68 +27,108 @@ RSpec.describe Registrations::RegistrationChecker do
         end
       end
 
-      it 'guests can equal the maximum allowed' do
-        registration_request = FactoryBot.build(
-          :registration_request, guests: 10, competition_id: default_competition.id, user_id: default_user.id
-        )
-        FactoryBot.create(:competition, :with_guest_limit, :registration_open)
-
-        expect {
-          Registrations::RegistrationChecker.create_registration_allowed!(
-            registration_request, User.find(registration_request['submitted_by'])
+      describe 'validate_guests!' do
+        it 'guests can equal the maximum allowed' do
+          comp = FactoryBot.create(:competition, :with_guest_limit, :registration_open)
+          registration_request = FactoryBot.build(
+            :registration_request, guests: 10, competition_id: comp.id, user_id: default_user.id
           )
-        }.not_to raise_error
-      end
 
-      it 'guests may equal 0' do
-        registration_request = FactoryBot.build(:registration_request, guests: 0, competition_id: default_competition.id, user_id: default_user.id)
-
-        expect {
-          Registrations::RegistrationChecker.create_registration_allowed!(
-            registration_request, User.find(registration_request['submitted_by'])
-          )
-        }.not_to raise_error
-      end
-
-      it 'guests cant exceed 0 if not allowed' do
-        competition = FactoryBot.create(:competition, :registration_open, guests_enabled: false)
-        registration_request = FactoryBot.build(:registration_request, guests: 2, competition_id: competition.id, user_id: default_user.id)
-
-        expect {
-          Registrations::RegistrationChecker.create_registration_allowed!(
-            registration_request, User.find(registration_request['submitted_by'])
-          )
-        }.to raise_error(WcaExceptions::RegistrationError) do |error|
-          expect(error.status).to eq(:unprocessable_entity)
-          expect(error.error).to eq(Registrations::ErrorCodes::GUEST_LIMIT_EXCEEDED)
+          expect {
+            Registrations::RegistrationChecker.create_registration_allowed!(
+              registration_request, User.find(registration_request['submitted_by'])
+            )
+          }.not_to raise_error
         end
-      end
 
-      it 'guests cannot exceed the maximum allowed' do
-        competition = FactoryBot.create(:competition, :registration_open, :with_guest_limit)
-        registration_request = FactoryBot.build(:registration_request, guests: 11, competition_id: competition.id, user_id: default_user.id)
+        it 'guests may equal 0' do
+          registration_request = FactoryBot.build(:registration_request, guests: 0, competition_id: default_competition.id, user_id: default_user.id)
 
-        expect {
-          Registrations::RegistrationChecker.create_registration_allowed!(
-            registration_request,
-            User.find(registration_request['submitted_by']),
-          )
-        }.to raise_error(WcaExceptions::RegistrationError) do |error|
-          expect(error.status).to eq(:unprocessable_entity)
-          expect(error.error).to eq(Registrations::ErrorCodes::GUEST_LIMIT_EXCEEDED)
+          expect {
+            Registrations::RegistrationChecker.create_registration_allowed!(
+              registration_request, User.find(registration_request['submitted_by'])
+            )
+          }.not_to raise_error
         end
-      end
 
-      it 'guests cannot be negative' do
-        registration_request = FactoryBot.build(:registration_request, guests: -1, competition_id: default_competition.id, user_id: default_user.id)
+        it 'guests cant exceed 0 if not allowed' do
+          competition = FactoryBot.create(:competition, :registration_open, guests_enabled: false)
+          registration_request = FactoryBot.build(:registration_request, guests: 2, competition_id: competition.id, user_id: default_user.id)
 
-        expect {
-          Registrations::RegistrationChecker.create_registration_allowed!(
-            registration_request, User.find(registration_request['submitted_by'])
-          )
-        }.to raise_error(WcaExceptions::RegistrationError) do |error|
-          expect(error.status).to eq(:unprocessable_entity)
-          expect(error.error).to eq(Registrations::ErrorCodes::INVALID_REQUEST_DATA)
+          expect {
+            Registrations::RegistrationChecker.create_registration_allowed!(
+              registration_request, User.find(registration_request['submitted_by'])
+            )
+          }.to raise_error(WcaExceptions::RegistrationError) do |error|
+            expect(error.status).to eq(:unprocessable_entity)
+            expect(error.error).to eq(Registrations::ErrorCodes::GUEST_LIMIT_EXCEEDED)
+          end
+        end
+
+        it 'guests cannot exceed the maximum allowed' do
+          competition = FactoryBot.create(:competition, :registration_open, :with_guest_limit)
+          registration_request = FactoryBot.build(:registration_request, guests: 11, competition_id: competition.id, user_id: default_user.id)
+
+          expect {
+            Registrations::RegistrationChecker.create_registration_allowed!(
+              registration_request,
+              User.find(registration_request['submitted_by']),
+            )
+          }.to raise_error(WcaExceptions::RegistrationError) do |error|
+            expect(error.status).to eq(:unprocessable_entity)
+            expect(error.error).to eq(Registrations::ErrorCodes::GUEST_LIMIT_EXCEEDED)
+          end
+        end
+
+        it 'guests cannot be negative' do
+          registration_request = FactoryBot.build(:registration_request, guests: -1, competition_id: default_competition.id, user_id: default_user.id)
+
+          expect {
+            Registrations::RegistrationChecker.create_registration_allowed!(
+              registration_request, User.find(registration_request['submitted_by'])
+            )
+          }.to raise_error(WcaExceptions::RegistrationError) do |error|
+            expect(error.status).to eq(:unprocessable_entity)
+            expect(error.error).to eq(Registrations::ErrorCodes::INVALID_REQUEST_DATA)
+          end
+        end
+
+        it 'guests cant exceed reasonable limit if no guest limit enforced' do
+          registration_request = FactoryBot.build(:registration_request, guests: 100, competition_id: default_competition.id, user_id: default_user.id)
+
+          expect {
+            Registrations::RegistrationChecker.create_registration_allowed!(
+              registration_request, User.find(registration_request['submitted_by'])
+            )
+          }.to raise_error(WcaExceptions::RegistrationError) do |error|
+            expect(error.status).to eq(:unprocessable_entity)
+            expect(error.error).to eq(Registrations::ErrorCodes::UNREASONABLE_GUEST_COUNT)
+          end
+        end
+
+        it 'guest limit higher than default allowed if guests are restricted' do
+          comp = FactoryBot.create(:competition, :with_guest_limit, :registration_open, guests_per_registration_limit: 20)
+          registration_request = FactoryBot.build(:registration_request, guests: 20, competition_id: comp.id, user_id: default_user.id)
+
+          expect {
+            Registrations::RegistrationChecker.create_registration_allowed!(
+              registration_request, User.find(registration_request['submitted_by'])
+            )
+          }.not_to raise_error
+        end
+
+        it 'guest limit higher than default not respected if guests arent restricted' do
+          comp = FactoryBot.create(:competition, :registration_open, guests_per_registration_limit: 120)
+          registration_request = FactoryBot.build(:registration_request, guests: 111, competition_id: comp.id, user_id: default_user.id)
+
+          expect {
+            Registrations::RegistrationChecker.create_registration_allowed!(
+              registration_request, User.find(registration_request['submitted_by'])
+            )
+          }.to raise_error(WcaExceptions::RegistrationError) do |error|
+            expect(error.error).to eq(Registrations::ErrorCodes::UNREASONABLE_GUEST_COUNT)
+            expect(error.status).to eq(:unprocessable_entity)
+          end
         end
       end
 
@@ -1212,7 +1252,7 @@ RSpec.describe Registrations::RegistrationChecker do
         end
       end
 
-      it 'guests have no limit if guest limit not set' do
+      it 'guests can be high if guest limit not set' do
         update_request = FactoryBot.build(
           :update_request,
           user_id: default_registration.user_id,
@@ -1222,6 +1262,22 @@ RSpec.describe Registrations::RegistrationChecker do
 
         expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, Competition.find(update_request['competition_id']), User.find(update_request['submitted_by'])) }
           .not_to raise_error
+      end
+
+      it 'guests cant be unreasonably high when no limit is set' do
+        update_request = FactoryBot.build(
+          :update_request,
+          user_id: default_registration.user_id,
+          competition_id: default_registration.competition.id,
+          guests: 100,
+        )
+
+        expect {
+          Registrations::RegistrationChecker.update_registration_allowed!(update_request, Competition.find(update_request['competition_id']), User.find(update_request['submitted_by']))
+        }.to raise_error(WcaExceptions::RegistrationError) do |error|
+          expect(error.status).to eq(:unprocessable_entity)
+          expect(error.error).to eq(Registrations::ErrorCodes::UNREASONABLE_GUEST_COUNT)
+        end
       end
 
       it 'organizer can change number of guests' do
@@ -1274,6 +1330,134 @@ RSpec.describe Registrations::RegistrationChecker do
     end
 
     describe '#update_registration_allowed!.validate_update_status!' do
+      context 'competitor_can_cancel: not_accepted' do
+        let(:accepted_cant_cancel) {
+          FactoryBot.create(
+            :competition, :registration_closed, :editable_registrations, :with_organizer, competitor_can_cancel: :not_accepted
+          )
+        }
+
+        it 'lets non-accepted user cancel' do
+          not_accepted_reg = FactoryBot.create(:registration, competition: accepted_cant_cancel)
+
+          update_request = FactoryBot.build(
+            :update_request,
+            user_id: not_accepted_reg.user_id,
+            competition_id: not_accepted_reg.competition.id,
+            competing: { 'status' => 'cancelled' },
+          )
+
+          expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, Competition.find(update_request['competition_id']), User.find(update_request['submitted_by'])) }
+            .not_to raise_error
+        end
+
+        it 'stops accepted user from cancelling' do
+          accepted_reg = FactoryBot.create(:registration, :accepted, competition: accepted_cant_cancel)
+
+          update_request = FactoryBot.build(
+            :update_request,
+            user_id: accepted_reg.user_id,
+            competition_id: accepted_reg.competition.id,
+            competing: { 'status' => 'cancelled' },
+          )
+
+          expect {
+            Registrations::RegistrationChecker.update_registration_allowed!(update_request, Competition.find(update_request['competition_id']), User.find(update_request['submitted_by']))
+          }.to raise_error(WcaExceptions::RegistrationError) do |error|
+            expect(error.status).to eq(:unauthorized)
+            expect(error.error).to eq(Registrations::ErrorCodes::ORGANIZER_MUST_CANCEL_REGISTRATION)
+          end
+        end
+
+        it 'lets organizer cancel accepted registration' do
+          not_accepted_reg = FactoryBot.create(:registration, competition: accepted_cant_cancel)
+
+          update_request = FactoryBot.build(
+            :update_request,
+            user_id: not_accepted_reg.user_id,
+            competition_id: not_accepted_reg.competition.id,
+            competing: { 'status' => 'cancelled' },
+            submitted_by: not_accepted_reg.competition.organizers.first.id,
+          )
+
+          expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, Competition.find(update_request['competition_id']), User.find(update_request['submitted_by'])) }
+            .not_to raise_error
+        end
+      end
+
+      context 'competitor_can_cancel: restrict_paid' do
+        let(:paid_cant_cancel) {
+          FactoryBot.create(
+            :competition, :registration_closed, :editable_registrations, :with_organizer, competitor_can_cancel: :unpaid
+          )
+        }
+
+        it 'lets user cancel unpaid registration' do
+          not_paid_reg = FactoryBot.create(:registration, competition: paid_cant_cancel)
+
+          update_request = FactoryBot.build(
+            :update_request,
+            user_id: not_paid_reg.user_id,
+            competition_id: not_paid_reg.competition.id,
+            competing: { 'status' => 'cancelled' },
+          )
+
+          expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, Competition.find(update_request['competition_id']), User.find(update_request['submitted_by'])) }
+            .not_to raise_error
+        end
+
+        it 'stops user cancelling fully paid registration' do
+          paid_reg = FactoryBot.create(:registration, :paid, competition: paid_cant_cancel)
+
+          update_request = FactoryBot.build(
+            :update_request,
+            user_id: paid_reg.user_id,
+            competition_id: paid_reg.competition.id,
+            competing: { 'status' => 'cancelled' },
+          )
+
+          expect {
+            Registrations::RegistrationChecker.update_registration_allowed!(update_request, Competition.find(update_request['competition_id']), User.find(update_request['submitted_by']))
+          }.to raise_error(WcaExceptions::RegistrationError) do |error|
+            expect(error.status).to eq(:unauthorized)
+            expect(error.error).to eq(Registrations::ErrorCodes::ORGANIZER_MUST_CANCEL_REGISTRATION)
+          end
+        end
+
+        it 'stops user cancelling partially paid registration' do
+          paid_reg = FactoryBot.create(:registration, :partially_paid, competition: paid_cant_cancel)
+
+          update_request = FactoryBot.build(
+            :update_request,
+            user_id: paid_reg.user_id,
+            competition_id: paid_reg.competition.id,
+            competing: { 'status' => 'cancelled' },
+          )
+
+          expect {
+            Registrations::RegistrationChecker.update_registration_allowed!(update_request, Competition.find(update_request['competition_id']), User.find(update_request['submitted_by']))
+          }.to raise_error(WcaExceptions::RegistrationError) do |error|
+            expect(error.status).to eq(:unauthorized)
+            expect(error.error).to eq(Registrations::ErrorCodes::ORGANIZER_MUST_CANCEL_REGISTRATION)
+          end
+        end
+
+        it 'lets organizer cancel paid registration' do
+          not_paid_reg = FactoryBot.create(:registration, competition: paid_cant_cancel)
+
+          update_request = FactoryBot.build(
+            :update_request,
+            user_id: not_paid_reg.user_id,
+            competition_id: not_paid_reg.competition.id,
+            competing: { 'status' => 'cancelled' },
+            submitted_by: not_paid_reg.competition.organizers.first.id,
+          )
+
+          expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, Competition.find(update_request['competition_id']), User.find(update_request['submitted_by'])) }
+            .not_to raise_error
+        end
+      end
+
       it 'user cant submit an invalid status' do
         update_request = FactoryBot.build(
           :update_request,
@@ -1438,44 +1622,6 @@ RSpec.describe Registrations::RegistrationChecker do
           user_id: cancelled_reg.user_id,
           competition_id: cancelled_reg.competition.id,
           competing: { 'status' => 'pending' },
-        )
-
-        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, Competition.find(update_request['competition_id']), User.find(update_request['submitted_by'])) }
-          .not_to raise_error
-      end
-
-      it 'user cant delete accepted registration if competition requires organizers to cancel registration' do
-        cant_cancel = FactoryBot.create(
-          :competition, :registration_closed, :editable_registrations, allow_registration_self_delete_after_acceptance: false
-        )
-        accepted_reg = FactoryBot.create(:registration, :accepted, competition: cant_cancel)
-
-        update_request = FactoryBot.build(
-          :update_request,
-          user_id: accepted_reg.user_id,
-          competition_id: accepted_reg.competition.id,
-          competing: { 'status' => 'cancelled' },
-        )
-
-        expect {
-          Registrations::RegistrationChecker.update_registration_allowed!(update_request, Competition.find(update_request['competition_id']), User.find(update_request['submitted_by']))
-        }.to raise_error(WcaExceptions::RegistrationError) do |error|
-          expect(error.status).to eq(:unauthorized)
-          expect(error.error).to eq(Registrations::ErrorCodes::ORGANIZER_MUST_CANCEL_REGISTRATION)
-        end
-      end
-
-      it 'user can cancel non-accepted registration if competition requires organizers to cancel registration' do
-        cant_cancel = FactoryBot.create(
-          :competition, :registration_closed, :editable_registrations, allow_registration_self_delete_after_acceptance: false
-        )
-        not_accepted_reg = FactoryBot.create(:registration, competition: cant_cancel)
-
-        update_request = FactoryBot.build(
-          :update_request,
-          user_id: not_accepted_reg.user_id,
-          competition_id: not_accepted_reg.competition.id,
-          competing: { 'status' => 'cancelled' },
         )
 
         expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, Competition.find(update_request['competition_id']), User.find(update_request['submitted_by'])) }
