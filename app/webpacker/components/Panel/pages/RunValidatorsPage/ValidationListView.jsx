@@ -1,6 +1,8 @@
 import React, { Fragment, useMemo } from 'react';
 import _ from 'lodash';
-import { Header, List, ListItem } from 'semantic-ui-react';
+import {
+  Header, List, ListItem, Message,
+} from 'semantic-ui-react';
 import I18n from '../../../../lib/i18n';
 import { competitionUrl } from '../../../../lib/requests/routes.js.erb';
 
@@ -37,7 +39,12 @@ export default function ValidationListView({
     <>
       <p>{subTextForType(type)}</p>
       {Object.entries(listByGroup).map(([group, list]) => (
-        <Fragment key={group}>
+        <Message
+          key={group}
+          error={type === 'errors'}
+          warning={type === 'warnings'}
+          info={type === 'infos'}
+        >
           <Header as="h5">{`${headingPrefixForType(type)} ${group}`}</Header>
           <List bulleted>
             {list.map((validationData) => (
@@ -50,7 +57,7 @@ export default function ValidationListView({
               </ListItem>
             ))}
           </List>
-        </Fragment>
+        </Message>
       ))}
     </>
   );

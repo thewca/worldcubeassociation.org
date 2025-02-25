@@ -11,6 +11,20 @@ const RUN_VALIDATORS_QUERY_CLIENT = new QueryClient();
 export default function CompetitionRangeSelector({ range, setRange }) {
   const bothDatesAreSelected = Boolean(range?.startDate && range?.endDate);
 
+  const setStartDate = (date) => {
+    setRange({
+      ...range,
+      startDate: date,
+    });
+  };
+
+  const setEndDate = (date) => {
+    setRange({
+      ...range,
+      endDate: date,
+    });
+  };
+
   return (
     <>
       <Form.Field
@@ -20,12 +34,7 @@ export default function CompetitionRangeSelector({ range, setRange }) {
         dateFormatOverride="yyyy-MM-dd"
         dropdownMode="select"
         isoDate={range?.startDate}
-        onChange={(date) => {
-          setRange({
-            ...range,
-            startDate: date,
-          });
-        }}
+        onChange={setStartDate}
       />
       <Form.Field
         label="End Date"
@@ -34,12 +43,7 @@ export default function CompetitionRangeSelector({ range, setRange }) {
         dateFormatOverride="yyyy-MM-dd"
         dropdownMode="select"
         isoDate={range?.endDate}
-        onChange={(date) => {
-          setRange({
-            ...range,
-            endDate: date,
-          });
-        }}
+        onChange={setEndDate}
       />
       {bothDatesAreSelected && (
         <CompetitionCountViewer range={range} />
