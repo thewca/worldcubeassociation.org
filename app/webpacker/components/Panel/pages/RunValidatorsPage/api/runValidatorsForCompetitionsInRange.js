@@ -7,7 +7,8 @@ export default async function runValidatorsForCompetitionsInRange(
   applyFixWhenPossible,
 ) {
   const { data } = await fetchJsonOrError(actionUrls.validators.forCompetitionsInRange(
-    JSON.stringify(competitionRange),
+    competitionRange?.startDate,
+    competitionRange?.endDate,
     selectedValidators,
     applyFixWhenPossible,
   ));

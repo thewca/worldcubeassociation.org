@@ -14,6 +14,9 @@ import runValidatorsForCompetitionsInRange from './api/runValidatorsForCompetiti
 import ValidationOutput from './ValidationOutput';
 import WCAQueryClientProvider from '../../../../lib/providers/WCAQueryClientProvider';
 
+// The validatorName will be in the format "ValidatorCategory::ValidatorName", example:
+// "ResultsValidators::PositionsValidator". We want to show only the ValidatorName, so we split
+// the string and return the second part.
 const validatorNameReadable = (validatorName) => validatorName.split('::')[1];
 
 const VALIDATOR_OPTIONS = ALL_VALIDATORS.map((validator) => ({
@@ -24,7 +27,7 @@ const VALIDATOR_OPTIONS = ALL_VALIDATORS.map((validator) => ({
 
 const COMPETITION_SELECTION_OPTIONS_TEXT = {
   manual: 'Pick competition(s) manually',
-  range: 'Competition between dates',
+  range: 'Competitions between dates',
 };
 
 const COMPETITION_SELECTION_OPTIONS = Object.keys(COMPETITION_SELECTION_OPTIONS_TEXT);
@@ -38,10 +41,7 @@ export default function Wrapper() {
 }
 
 function RunValidatorsForm({ competitionIds }) {
-  const [
-    selectedCompetitionSelectionOption,
-    setSelectedCompetitionSelectionOption,
-  ] = useInputState('manual');
+  const [competitionSelectionMode, setCompetitionSelectionMode] = useInputState('manual');
 
   const [selectedCompetitionIds, setSelectedCompetitionIds] = useInputState(competitionIds || []);
   const [selectedCompetitionRange, setSelectedCompetitionRange] = useState();
@@ -51,7 +51,7 @@ function RunValidatorsForm({ competitionIds }) {
   const [applyFixWhenPossible, setApplyFixWhenPossible] = useCheckboxState(false);
 
   const runValidatorsForCompetitions = () => {
-    if (selectedCompetitionSelectionOption === 'manual') {
+    if (competitionSelectionMode === 'manual') {
       return runValidatorsForCompetitionList(
         selectedCompetitionIds,
         selectedValidators,
@@ -69,6 +69,7 @@ function RunValidatorsForm({ competitionIds }) {
     mutate: runValidators,
     isPending,
     isError,
+    error,
   } = useMutation({
     mutationFn: runValidatorsForCompetitions,
     onSuccess: (data) => {
@@ -80,12 +81,9 @@ function RunValidatorsForm({ competitionIds }) {
   // list of competitions is passed as parameter, then the editor need not be shown.
   const enableCompetitionEditor = !competitionIds;
 
-  // Competition name needs to be shown on output only when the script is not ran just for a single
-  // competition.
-  const showCompetitionNameOnOutput = !(
-    selectedCompetitionSelectionOption === 'manual'
-    && selectedCompetitionIds.length === 1
-  );
+  // Competition name needs to be shown on output only when the script is ran for a range of
+  // competitions.
+  const showCompetitionNameOnOutput = competitionSelectionMode === 'range' || selectedCompetitionIds.length > 1;
 
   return (
     <>
@@ -100,15 +98,13 @@ function RunValidatorsForm({ competitionIds }) {
                     label={COMPETITION_SELECTION_OPTIONS_TEXT[key]}
                     name="competitionSelectionOption"
                     value={key}
-                    checked={selectedCompetitionSelectionOption === key}
-                    onChange={setSelectedCompetitionSelectionOption}
+                    checked={competitionSelectionMode === key}
+                    onChange={setCompetitionSelectionMode}
                   />
                 </FormField>
               ))}
             </FormGroup>
-            {(
-              selectedCompetitionSelectionOption === 'manual'
-            ) && (
+            {competitionSelectionMode === 'manual' && (
               <Form.Field
                 label="Competition ID(s)"
                 control={IdWcaSearch}
@@ -120,9 +116,7 @@ function RunValidatorsForm({ competitionIds }) {
                 required
               />
             )}
-            {(
-              selectedCompetitionSelectionOption === 'range'
-            ) && (
+            {competitionSelectionMode === 'range' && (
               <CompetitionRangeSelector
                 range={selectedCompetitionRange}
                 setRange={setSelectedCompetitionRange}
@@ -152,12 +146,18 @@ function RunValidatorsForm({ competitionIds }) {
             }`}
           </HeaderSubheader>
         </Header>
-        <Form.Button type="submit">Run Validators</Form.Button>
+        <Form.Button
+          type="submit"
+          disabled={selectedValidators.length === 0}
+        >
+          Run Validators
+        </Form.Button>
       </Form>
       <ValidationOutput
         validationOutput={validationOutput}
         isPending={isPending}
         isError={isError}
+        error={error}
         showCompetitionNameOnOutput={showCompetitionNameOnOutput}
       />
     </>

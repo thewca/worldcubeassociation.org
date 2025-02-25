@@ -11,14 +11,6 @@ const RUN_VALIDATORS_QUERY_CLIENT = new QueryClient();
 export default function CompetitionRangeSelector({ range, setRange }) {
   const bothDatesAreSelected = Boolean(range?.startDate && range?.endDate);
 
-  const {
-    data: competitionCount, isLoading, isError,
-  } = useQuery({
-    queryKey: ['competitionCountInRange', range?.startDate, range?.endDate],
-    queryFn: () => getCompetitionCount(range?.startDate, range?.endDate),
-    enabled: bothDatesAreSelected,
-  }, RUN_VALIDATORS_QUERY_CLIENT);
-
   return (
     <>
       <Form.Field
@@ -50,17 +42,20 @@ export default function CompetitionRangeSelector({ range, setRange }) {
         }}
       />
       {bothDatesAreSelected && (
-        <CompetitionCountViewer
-          isLoading={isLoading}
-          isError={isError}
-          competitionCount={competitionCount}
-        />
+        <CompetitionCountViewer range={range} />
       )}
     </>
   );
 }
 
-function CompetitionCountViewer({ isLoading, isError, competitionCount }) {
+function CompetitionCountViewer({ range }) {
+  const {
+    data: competitionCount, isLoading, isError,
+  } = useQuery({
+    queryKey: ['competitionCountInRange', range.startDate, range.endDate],
+    queryFn: () => getCompetitionCount(range.startDate, range.endDate),
+  }, RUN_VALIDATORS_QUERY_CLIENT);
+
   if (isLoading) return <Loading />;
   if (isError) return <Errored />;
   return `The checks will run for ${competitionCount} competitions`;
