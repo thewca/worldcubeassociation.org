@@ -202,6 +202,7 @@ Rails.application.routes.draw do
   scope 'panel' do
     get 'staff' => 'panel#staff', as: :panel_staff
     get 'generate_db_token' => 'panel#generate_db_token', as: :panel_generate_db_token
+    get 'competition_count' => 'panel#competition_count', as: :panel_competition_count
     get 'validators_for_competition_list' => 'panel#validators_for_competition_list', as: :panel_validators_for_competition_list
     get 'validators_for_competitions_in_range' => 'panel#validators_for_competitions_in_range', as: :panel_validators_for_competitions_in_range
   end
@@ -410,7 +411,6 @@ Rails.application.routes.draw do
       get '/results/:user_id/qualification_data' => 'api#user_qualification_data', as: :user_qualification_data
       get '/competition_series/:id' => 'api#competition_series'
       get '/competition_index' => 'competitions#competition_index', as: :competition_index
-      get '/competition_count' => 'competitions#competition_count', as: :competition_count
 
       resources :competitions, only: [:index, :show] do
         get '/wcif' => 'competitions#show_wcif'

@@ -69,15 +69,19 @@ class PanelController < ApplicationController
     }
   end
 
-  private def competition_ids_in_range(range)
-    start_date = range[:startDate]
-    end_date = range[:endDate]
+  private def competitions_between(start_date, end_date)
     Competition.over
                .not_cancelled
-               .where(start_date: start_date..)
-               .where(start_date: ..end_date)
+               .between_dates(start_date, end_date)
                .order(:start_date)
-               .ids
+  end
+
+  def competition_count
+    start_date = params.require(:startDate)
+    end_date = params.require(:endDate)
+
+    count = competitions_between(start_date, end_date).count
+    render json: count
   end
 
   def validators_for_competition_list
@@ -86,8 +90,9 @@ class PanelController < ApplicationController
   end
 
   def validators_for_competitions_in_range
-    range = JSON.parse(params.require(:competitionRange)).transform_keys(&:to_sym)
-    competition_ids = competition_ids_in_range(range)
+    start_date = params.require(:startDate)
+    end_date = params.require(:endDate)
+    competition_ids = competitions_between(start_date, end_date).ids
 
     validators_for_competition_ids(competition_ids)
   end
