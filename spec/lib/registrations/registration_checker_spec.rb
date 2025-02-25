@@ -102,7 +102,7 @@ RSpec.describe Registrations::RegistrationChecker do
             )
           }.to raise_error(WcaExceptions::RegistrationError) do |error|
             expect(error.status).to eq(:unprocessable_entity)
-            expect(error.error).to eq(Registrations::ErrorCodes::REASONABLE_GUEST_COUNT)
+            expect(error.error).to eq(Registrations::ErrorCodes::UNREASONABLE_GUEST_COUNT)
           end
         end
 
@@ -126,7 +126,7 @@ RSpec.describe Registrations::RegistrationChecker do
               registration_request, User.find(registration_request['submitted_by'])
             )
           }.to raise_error(WcaExceptions::RegistrationError) do |error|
-            expect(error.error).to eq(Registrations::ErrorCodes::REASONABLE_GUEST_COUNT)
+            expect(error.error).to eq(Registrations::ErrorCodes::UNREASONABLE_GUEST_COUNT)
             expect(error.status).to eq(:unprocessable_entity)
           end
         end
@@ -1276,7 +1276,7 @@ RSpec.describe Registrations::RegistrationChecker do
           Registrations::RegistrationChecker.update_registration_allowed!(update_request, Competition.find(update_request['competition_id']), User.find(update_request['submitted_by']))
         }.to raise_error(WcaExceptions::RegistrationError) do |error|
           expect(error.status).to eq(:unprocessable_entity)
-          expect(error.error).to eq(Registrations::ErrorCodes::REASONABLE_GUEST_COUNT)
+          expect(error.error).to eq(Registrations::ErrorCodes::UNREASONABLE_GUEST_COUNT)
         end
       end
 
