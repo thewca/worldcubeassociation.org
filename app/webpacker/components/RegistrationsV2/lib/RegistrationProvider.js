@@ -57,7 +57,7 @@ export default function RegistrationProvider({ competitionInfo, userInfo, childr
     },
   });
 
-  const isRegistered = Boolean(registration) && registration.competing.registration_status !== 'cancelled';
+  const isRegistered = registration && registration.competing.registration_status !== 'cancelled';
   const isAccepted = isRegistered && registration.competing.registration_status === 'accepted';
   const isRejected = isRegistered && registration.competing.registration_status === 'rejected';
   const hasPaid = registration?.payment?.has_paid;
@@ -85,7 +85,8 @@ export default function RegistrationProvider({ competitionInfo, userInfo, childr
     refetchRegistration,
     registration,
     pollingData,
-    startPolling]);
+    startPolling,
+  ]);
 
   return (
     <RegistrationContext.Provider value={value}>
