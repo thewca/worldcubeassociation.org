@@ -28,11 +28,11 @@ RSpec.describe Registrations::RegistrationChecker do
       end
 
       describe 'validate_guests!' do
-        it 'guests can equal the maximum allowed', :tag do
+        it 'guests can equal the maximum allowed' do
+          comp = FactoryBot.create(:competition, :with_guest_limit, :registration_open)
           registration_request = FactoryBot.build(
-            :registration_request, guests: 10, competition_id: default_competition.id, user_id: default_user.id
+            :registration_request, guests: 10, competition_id: comp.id, user_id: default_user.id
           )
-          FactoryBot.create(:competition, :with_guest_limit, :registration_open)
 
           expect {
             Registrations::RegistrationChecker.create_registration_allowed!(
