@@ -222,7 +222,7 @@ FactoryBot.define do
     end
 
     trait :with_guest_limit do
-      guest_entry_status { Competition.guest_entry_statuses['restricted'] }
+      guest_entry_status { :restricted }
       guests_per_registration_limit { 10 }
     end
 

@@ -23,7 +23,7 @@ import { showMessage } from './RegistrationMessage';
 import I18n from '../../../lib/i18n';
 import I18nHTMLTranslate from '../../I18nHTMLTranslate';
 import { useConfirm } from '../../../lib/providers/ConfirmProvider';
-import { events } from '../../../lib/wca-data.js.erb';
+import { events, defaultGuestLimit } from '../../../lib/wca-data.js.erb';
 import { eventsNotQualifiedFor, isQualifiedForEvent } from '../../../lib/helpers/qualifications';
 import { eventQualificationToString } from '../../../lib/utils/wcif';
 import { hasNotPassed } from '../../../lib/utils/dates';
@@ -299,6 +299,9 @@ export default function CompetingStep({
   ]);
 
   const guestsRestricted = competitionInfo.guest_entry_status === 'restricted';
+  const guestLimit = competitionInfo.guests_per_registration_limit !== null && guestsRestricted
+    ? competitionInfo.guests_per_registration_limit
+    : defaultGuestLimit;
 
   const formWarnings = useMemo(() => potentialWarnings(competitionInfo), [competitionInfo]);
   return (
@@ -397,8 +400,8 @@ export default function CompetingStep({
                   setGuests(Number.parseInt(data.value, 10));
                 }}
                 min="0"
-                max={guestsRestricted && (competitionInfo.guests_per_registration_limit ?? 99)}
-                error={guestsRestricted && Number.isInteger(competitionInfo.guests_per_registration_limit) && guests > competitionInfo.guests_per_registration_limit && I18n.t('competitions.competition_info.guest_limit', { count: competitionInfo.guests_per_registration_limit })}
+                max={guestLimit}
+                error={guestsRestricted && guests > guestLimit && I18n.t('competitions.competition_info.guest_limit', { count: guestLimit })}
               />
             </Form.Field>
           )}
