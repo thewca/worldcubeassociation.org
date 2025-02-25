@@ -61,8 +61,8 @@ class User < ApplicationRecord
   has_many :user_avatars, dependent: :destroy, inverse_of: :user
 
   scope :confirmed_email, -> { where.not(confirmed_at: nil) }
-  # WMT defines a newcomer as "no id or ID of [the current year]" - see "WCA Newcomer Month 2025" email thread
-  scope :newcomers, -> { where(wca_id: nil).or(where('wca_id LIKE ?', "#{Time.current.year}%")) }
+  scope :newcomers, -> { where(wca_id: nil) }
+  scope :newcomer_month_eligible, -> { where(wca_id: nil).or(where('wca_id LIKE ?', "#{Time.current.year}%")) }
 
   scope :in_region, lambda { |region_id|
     unless region_id.blank? || region_id == 'all'
@@ -399,9 +399,8 @@ class User < ApplicationRecord
     Country.find_by_iso2(country_iso2)
   end
 
-  # WMT defines a newcomer as "no id or ID of [the current year]" - see "WCA Newcomer Month 2025" email thread
   def newcomer?
-    person.nil? || wca_id.start_with?(Time.current.year.to_s)
+    person.nil?
   end
 
   def locale

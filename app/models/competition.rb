@@ -259,8 +259,9 @@ class Competition < ApplicationRecord
     registrations.accepted.joins(:user).merge(User.newcomers).count
   end
 
-  def newcomer_reserved_spots_remaining
-    newcomer_reserved_spots - newcomers_competing_count
+  def newcomer_month_reserved_spots_remaining
+    newcomer_month_eligible_competitors = registrations.accepted.joins(:user).merge(User.newcomer_month_eligible).count
+    newcomer_reserved_spots - newcomer_month_eligible_competitors
   end
 
   # Dirty old trick to deal with competition id changes (see other methods using

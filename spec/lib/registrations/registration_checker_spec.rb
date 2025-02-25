@@ -2354,8 +2354,8 @@ RSpec.describe Registrations::RegistrationChecker do
     describe '#update_registration_allowed!.reserved newcomer spots' do
       let(:newcomer_month_comp) { FactoryBot.create(:competition, :newcomer_month) }
       let(:non_newcomer_reg) { FactoryBot.create(:registration, competition: newcomer_month_comp) }
+      let(:newcomer_month_eligible_reg) { FactoryBot.create(:registration, :newcomer, competition: newcomer_month_comp) }
       let(:newcomer_reg) { FactoryBot.create(:registration, :newcomer, competition: newcomer_month_comp) }
-      let(:first_timer_reg) { FactoryBot.create(:registration, :first_timer, competition: newcomer_month_comp) }
 
       describe 'only newcomer spots remain' do
         before do
@@ -2382,8 +2382,8 @@ RSpec.describe Registrations::RegistrationChecker do
         it 'organizer can accept first-timer' do
           update_request = FactoryBot.build(
             :update_request,
-            user_id: first_timer_reg.user.id,
-            competition_id: first_timer_reg.competition.id,
+            user_id: newcomer_month_eligible_reg.user.id,
+            competition_id: newcomer_month_eligible_reg.competition.id,
             submitted_by: newcomer_month_comp.organizers.first.id,
             competing: { 'status' => 'accepted' },
           )
@@ -2410,7 +2410,7 @@ RSpec.describe Registrations::RegistrationChecker do
 
       describe 'reserved newcomer spots are full' do
         before do
-          FactoryBot.create_list(:registration, 2, :newcomer, :accepted, competition: newcomer_month_comp)
+          FactoryBot.create_list(:registration, 2, :newcomer_month_eligible, :accepted, competition: newcomer_month_comp)
         end
 
         it 'organizer can still accept newcomers if all reserved newcomer spots are full' do
@@ -2443,7 +2443,7 @@ RSpec.describe Registrations::RegistrationChecker do
       end
 
       it 'organizer cant accept newcomer if competition is full' do
-        FactoryBot.create_list(:registration, 4, :newcomer, :accepted, competition: newcomer_month_comp)
+        FactoryBot.create_list(:registration, 4, :newcomer_month_eligible, :accepted, competition: newcomer_month_comp)
 
         update_request = FactoryBot.build(
           :update_request,
@@ -2481,7 +2481,7 @@ RSpec.describe Registrations::RegistrationChecker do
 
       it 'takes newcomer registrations into account when calculating spots remaining' do
         FactoryBot.create_list(:registration, 2, :accepted, competition: newcomer_month_comp)
-        FactoryBot.create(:registration, :accepted, :newcomer, competition: newcomer_month_comp)
+        FactoryBot.create(:registration, :accepted, :newcomer_month_eligible, competition: newcomer_month_comp)
 
         update_request = FactoryBot.build(
           :update_request,

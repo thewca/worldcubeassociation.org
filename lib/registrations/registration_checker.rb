@@ -191,10 +191,9 @@ module Registrations
 
           if !target_user.newcomer? && competition.newcomer_reserved_spots > 0
             available_spots = competition.competitor_limit - competition.registrations.competing_status_accepted.count
-            newcomer_reserved_spots_remaining = competition.newcomer_reserved_spots - competition.newcomers_competing_count
 
             raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::NO_UNRESERVED_SPOTS_REMAINING) if
-              (available_spots <= newcomer_reserved_spots_remaining) && competition.registration_currently_open?
+              (available_spots <= competition.newcomer_month_reserved_spots_remaining) && competition.registration_currently_open?
           end
         end
 
