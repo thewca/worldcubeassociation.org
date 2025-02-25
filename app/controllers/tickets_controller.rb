@@ -187,12 +187,6 @@ class TicketsController < ApplicationController
       end
     end
 
-    puts('DJDJDJ start')
-    puts(person)
-    puts(person&.reload)
-    puts(person&.reload&.wca_id)
-    puts('DJDJDJ end')
-
     render json: {
       success: true,
       new_wca_id: person&.reload&.wca_id, # Reload to get the new wca_id
