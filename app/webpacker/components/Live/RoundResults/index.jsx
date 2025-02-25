@@ -1,7 +1,9 @@
 import React, { useCallback } from 'react';
 import {
-  Button, Container,
-  Grid, Header,
+  Button,
+  Container,
+  Grid,
+  Header,
 } from 'semantic-ui-react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { events } from '../../../lib/wca-data.js.erb';
@@ -11,6 +13,7 @@ import { liveUrls } from '../../../lib/requests/routes.js.erb';
 import Loading from '../../Requests/Loading';
 import getRoundResults, { insertNewResult, roundResultsKey } from '../api/getRoundResults';
 import useResultsSubscription from '../hooks/useResultsSubscription';
+import ConnectionPulse from '../components/ConnectionPulse';
 
 export default function Wrapper({
   roundId, eventId, competitionId, competitors, canAdminResults,
@@ -46,7 +49,7 @@ function ResultPage({
     );
   }, [roundId, queryClient]);
 
-  useResultsSubscription(roundId, updateResults);
+  const connectionState = useResultsSubscription(roundId, updateResults);
 
   const event = events.byId[eventId];
 
@@ -58,6 +61,7 @@ function ResultPage({
     <Container fluid>
       <Header>
         {event.name}
+        <ConnectionPulse connectionState={connectionState} />
         {canAdminResults && <a href={liveUrls.roundResultsAdmin(competitionId, roundId)}><Button floated="right">Admin</Button></a>}
       </Header>
       <Grid>
