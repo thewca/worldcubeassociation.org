@@ -126,8 +126,8 @@ RSpec.describe Result do
             expect(result).to be_valid
 
             result.average = 33
-            expect(result.compute_correct_average).to eq 60_100
-            expect(result).to be_invalid_with_errors(average: ["should be 60100"])
+            expect(result.compute_correct_average).to eq 60_000
+            expect(result).to be_invalid_with_errors(average: ["should be 60000"])
           end
 
           it "DNF average" do
@@ -198,12 +198,12 @@ RSpec.describe Result do
 
             it "all solves with average above 10 minutes" do
               # This average computes to 600.66... and should be rounded to 601
-              result = build_result(value1: 60_100, value2: 60_100, value3: 60_000, value4: 0, value5: 0, best: 60_000, average: 60_100)
+              result = build_result(value1: 60_100, value2: 60_100, value3: 60_000, value4: 0, value5: 0, best: 60_000, average: 60_000)
               expect(result).to be_valid
 
               result.average = 33
-              expect(result.compute_correct_average).to eq 60_100
-              expect(result).to be_invalid_with_errors(average: ["should be 60100"])
+              expect(result.compute_correct_average).to eq 60_000
+              expect(result).to be_invalid_with_errors(average: ["should be 60000"])
             end
 
             it "rounds instead of truncates" do
@@ -306,14 +306,14 @@ RSpec.describe Result do
           end
 
           # https://www.worldcubeassociation.org/regulations/#9f2
-          it "rounds averages for 333bf over 10 minutes up to nearest second for x.50" do
-            over10 = (10.minutes + 10.50.seconds) * 100 # In centiseconds.
+          it "truncate averages for 333bf over 10 minutes for x.50" do
+            over10 = 60_111 # In centiseconds.
             result = build_result(value1: over10,
                                   value2: over10,
                                   value3: over10,
                                   value4: SolveTime::SKIPPED_VALUE,
                                   value5: SolveTime::SKIPPED_VALUE)
-            expect(result.compute_correct_average).to eq((10.minutes + 11.seconds) * 100)
+            expect(result.compute_correct_average).to eq(60_100)
           end
         end
 
