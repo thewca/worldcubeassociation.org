@@ -1724,7 +1724,7 @@ en:
           enabled: "A Competitor Limit is required. Only simultaneous FMC competitions with multiple locations can have no Competitor Limit."
           count: "The number of competitors allowed in this competition. For now this number is informational only, and does not yet prevent more people from registering. We are working on adding explicit support for this to the registration flow, but it requires some other work first."
           reason: "What is the reason for the limit on competitors? Please fill this out in English!"
-          auto_close_threshold: "Registration will automatically close when this number of paid registrations is received. Leave at 0 to disable, ignore if you aren't using integrated payments."
+          auto_close_threshold: "Registration will automatically close when this number of paid registrations is received. Leave blank to disable, ignore if you aren't using integrated payments."
         staff:
           staff_delegate_ids: "WCA Delegates for the competition."
           trainee_delegate_ids: "WCA Trainee Delegates for the competition."
