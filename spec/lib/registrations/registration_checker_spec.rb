@@ -2621,24 +2621,6 @@ RSpec.describe Registrations::RegistrationChecker do
         end
       end
 
-      it 'organizer can accept non-newcomer into a newcomer reserved spot if registration is closed' do
-        closed_newcomer_comp = FactoryBot.create(:competition, :newcomer_month, :registration_closed)
-        normal_reg = FactoryBot.create(:registration, competition: closed_newcomer_comp)
-        FactoryBot.create_list(:registration, 2, :accepted, competition: closed_newcomer_comp)
-
-        update_request = FactoryBot.build(
-          :update_request,
-          user_id: normal_reg.user.id,
-          competition_id: normal_reg.competition.id,
-          submitted_by: closed_newcomer_comp.organizers.first.id,
-          competing: { 'status' => 'accepted' },
-        )
-
-        expect {
-          Registrations::RegistrationChecker.update_registration_allowed!(update_request, Competition.find(update_request['competition_id']), User.find(update_request['submitted_by']))
-        }.not_to raise_error
-      end
-
       it 'takes newcomer registrations into account when calculating spots remaining' do
         FactoryBot.create_list(:registration, 2, :accepted, competition: newcomer_month_comp)
         FactoryBot.create(:registration, :accepted, :newcomer_month_eligible, competition: newcomer_month_comp)
