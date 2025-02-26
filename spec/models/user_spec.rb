@@ -538,9 +538,9 @@ RSpec.describe User, type: :model do
 
   describe "#editable_fields_of_user" do
     let(:competition) { FactoryBot.create(:competition, :registration_open, :with_organizer, starts: 1.month.from_now) }
-    let(:registration) { FactoryBot.create(:registration, :first_timer, competition: competition) }
+    let(:registration) { FactoryBot.create(:registration, :newcomer, competition: competition) }
 
-    it "allows organizers of upcoming competitions to edit first-timer names", :tag do
+    it "allows organizers of upcoming competitions to edit first-timer names" do
       organizer = competition.organizers.first
       expect(organizer.can_edit_user?(registration.user)).to eq true
       expect(organizer.editable_fields_of_user(registration.user).to_a).to eq [:name]
@@ -772,9 +772,9 @@ RSpec.describe User, type: :model do
       expect(user.newcomer?).to eq(true)
     end
 
-    it 'true for user with current year WCA ID' do
+    it 'false for user with current year WCA ID' do
       user = FactoryBot.create(:user, :current_year_wca_id)
-      expect(user.newcomer?).to eq(true)
+      expect(user.newcomer?).to eq(false)
     end
 
     it 'false for user with previous year WCA ID' do

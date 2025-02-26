@@ -885,10 +885,10 @@ RSpec.describe CompetitionsController do
         expect(competition.results_posted_by).to eq wrt_member.id
       end
 
-      it "sends notifications of id claim possibility to first-timers" do
+      it "sends notifications of id claim possibility to newcomers", :tag do
         competition = FactoryBot.create(:competition, :registration_open)
-        FactoryBot.create_list(:registration, 2, :accepted, :first_timer, competition: competition)
-        FactoryBot.create_list(:registration, 3, :pending, :first_timer, competition: competition)
+        FactoryBot.create_list(:registration, 2, :accepted, :newcomer, competition: competition)
+        FactoryBot.create_list(:registration, 3, :pending, :newcomer, competition: competition)
         FactoryBot.create_list(:registration, 4, :accepted, competition: competition)
         FactoryBot.create_list(:user_with_wca_id, 4).each do |user|
           FactoryBot.create(:result, person: user.person, competitionId: competition.id, eventId: "333")

@@ -320,10 +320,6 @@ class Registration < ApplicationRecord
     accepted_count + pending.with_payments.count
   end
 
-  def self.newcomers_competing_count
-    accepted.joins(:user).merge(User.newcomers).count
-  end
-
   def self.newcomer_month_eligible_competitors_count
     accepted.joins(:user).merge(User.newcomer_month_eligible).count
   end

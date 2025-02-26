@@ -1603,32 +1603,5 @@ RSpec.describe Competition do
         newcomer_month_reserved_spots: ['cant reserve more than 50% of spots for newcomers'],
       )
     end
-
-    context 'newcomer month competition' do
-      let(:newcomer_month_comp) { FactoryBot.create(:competition, :newcomer_month) }
-      let!(:newcomer_reg) { FactoryBot.create(:registration, :newcomer, :accepted, competition: newcomer_month_comp) }
-
-      context '#newcomers_competing_count' do
-        before do
-          FactoryBot.create_list(:registration, 2, :accepted, competition: newcomer_month_comp)
-        end
-
-        it 'doesnt include non-newcomers in count' do
-          newcomer_reg.competing_status = "accepted"
-          expect(newcomer_month_comp.registrations.count).to eq(3)
-          expect(newcomer_month_comp.newcomers_competing_count).to eq(1)
-        end
-
-        it 'doesnt include newcomers in non-accepted states' do
-          FactoryBot.create(:registration, :newcomer, competition: newcomer_month_comp)
-          FactoryBot.create(:registration, :newcomer, :cancelled, competition: newcomer_month_comp)
-          FactoryBot.create(:registration, :newcomer, :rejected, competition: newcomer_month_comp)
-          FactoryBot.create(:registration, :newcomer, :waiting_list, competition: newcomer_month_comp)
-
-          expect(newcomer_month_comp.registrations.count).to eq(7)
-          expect(newcomer_month_comp.newcomers_competing_count).to eq(1)
-        end
-      end
-    end
   end
 end
