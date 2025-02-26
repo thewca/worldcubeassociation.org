@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { FormField, FormGroup, Radio } from 'semantic-ui-react';
 import { IdWcaSearch } from '../../../SearchWidget/WcaSearch';
 import SEARCH_MODELS from '../../../SearchWidget/SearchModel';
@@ -19,7 +19,7 @@ const AVAILABLE_MODELS = [
 export default function AnonymizationScriptPage() {
   const [activeModelIndex, setActiveModelIndex] = useInputState(0);
   const [searchInput, setSearchInput] = useInputState();
-  const activeModel = useMemo(() => AVAILABLE_MODELS[activeModelIndex], [activeModelIndex]);
+  const activeModel = AVAILABLE_MODELS[activeModelIndex];
 
   const modelSelectHandler = (_, { value: selectedModelIndex }) => {
     setActiveModelIndex(selectedModelIndex);
