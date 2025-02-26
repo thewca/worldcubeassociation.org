@@ -30,6 +30,6 @@ class RegistrationPayment < ApplicationRecord
   end
 
   private def attempt_auto_close
-    registration.competition.attempt_auto_close!
+    registration.competition.attempt_auto_close! if amount_lowest_denomination > 0
   end
 end

@@ -543,11 +543,25 @@ RSpec.describe Registration do
   end
 
   describe 'hooks' do
-    it 'calls auto_close! after a registration is created' do
+    it 'calls registration.auto_close! after a paid registration is created' do
       competition = FactoryBot.create(:competition)
       expect(competition).to receive(:attempt_auto_close!)
 
       FactoryBot.create(:registration, :paid, competition: competition)
+    end
+
+    it 'doesnt call registration.auto_close! after a refund is created' do
+      competition = FactoryBot.create(:competition)
+      expect(competition).to receive(:attempt_auto_close!).exactly(1).times
+
+      reg = FactoryBot.create(:registration, :paid, competition: competition)
+
+      FactoryBot.create(
+        :registration_payment,
+        registration: reg,
+        user: reg.user,
+        amount_lowest_denomination: -reg.competition.base_entry_fee_lowest_denomination,
+      )
     end
   end
 end
