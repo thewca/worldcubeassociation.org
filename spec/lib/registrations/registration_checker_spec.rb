@@ -2500,7 +2500,7 @@ RSpec.describe Registrations::RegistrationChecker do
     describe '#update_registration_allowed!.reserved newcomer spots' do
       let(:newcomer_month_comp) { FactoryBot.create(:competition, :newcomer_month) }
       let(:non_newcomer_reg) { FactoryBot.create(:registration, competition: newcomer_month_comp) }
-      let(:newcomer_month_eligible_reg) { FactoryBot.create(:registration, :newcomer, competition: newcomer_month_comp) }
+      let(:newcomer_month_eligible_reg) { FactoryBot.create(:registration, :newcomer_month_eligible, competition: newcomer_month_comp) }
       let(:newcomer_reg) { FactoryBot.create(:registration, :newcomer, competition: newcomer_month_comp) }
 
       describe 'only newcomer spots remain' do
@@ -2525,7 +2525,21 @@ RSpec.describe Registrations::RegistrationChecker do
           end
         end
 
-        it 'organizer can accept first-timer' do
+        it 'organizer can accept newcomer' do
+          update_request = FactoryBot.build(
+            :update_request,
+            user_id: newcomer_reg.user.id,
+            competition_id: newcomer_reg.competition.id,
+            submitted_by: newcomer_month_comp.organizers.first.id,
+            competing: { 'status' => 'accepted' },
+          )
+
+          expect {
+            Registrations::RegistrationChecker.update_registration_allowed!(update_request, Competition.find(update_request['competition_id']), User.find(update_request['submitted_by']))
+          }.not_to raise_error
+        end
+
+        it 'organizer can accept user who started competing this year' do
           update_request = FactoryBot.build(
             :update_request,
             user_id: newcomer_month_eligible_reg.user.id,
@@ -2538,8 +2552,14 @@ RSpec.describe Registrations::RegistrationChecker do
             Registrations::RegistrationChecker.update_registration_allowed!(update_request, Competition.find(update_request['competition_id']), User.find(update_request['submitted_by']))
           }.not_to raise_error
         end
+      end
 
-        it 'organizer can accept newcomer who started competing this year' do
+      context 'reserved newcomer spots are full' do
+        before do
+          FactoryBot.create_list(:registration, 2, :newcomer_month_eligible, :accepted, competition: newcomer_month_comp)
+        end
+
+        it 'organizer can still accept newcomers if all reserved newcomer spots are full' do
           update_request = FactoryBot.build(
             :update_request,
             user_id: newcomer_reg.user.id,
@@ -2552,18 +2572,12 @@ RSpec.describe Registrations::RegistrationChecker do
             Registrations::RegistrationChecker.update_registration_allowed!(update_request, Competition.find(update_request['competition_id']), User.find(update_request['submitted_by']))
           }.not_to raise_error
         end
-      end
 
-      describe 'reserved newcomer spots are full' do
-        before do
-          FactoryBot.create_list(:registration, 2, :newcomer_month_eligible, :accepted, competition: newcomer_month_comp)
-        end
-
-        it 'organizer can still accept newcomers if all reserved newcomer spots are full' do
+        it 'organizer can still accept newcomer_month_eligibles if all reserved newcomer spots are full' do
           update_request = FactoryBot.build(
             :update_request,
-            user_id: newcomer_reg.user.id,
-            competition_id: newcomer_reg.competition.id,
+            user_id: newcomer_month_eligible_reg.user.id,
+            competition_id: newcomer_month_eligible_reg.competition.id,
             submitted_by: newcomer_month_comp.organizers.first.id,
             competing: { 'status' => 'accepted' },
           )

@@ -399,8 +399,8 @@ class User < ApplicationRecord
     Country.find_by_iso2(country_iso2)
   end
 
-  def newcomer?
-    person.nil?
+  def newcomer_month_eligible?
+    person.nil? || wca_id.start_with?(Time.current.year.to_s)
   end
 
   def locale
