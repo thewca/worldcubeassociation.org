@@ -252,7 +252,7 @@ class Competition < ApplicationRecord
 
   validate :validate_newcomer_month_reserved_spots, if: -> { competitor_limit.present? }
   private def validate_newcomer_month_reserved_spots
-    max_newcomer_spots = (competitor_limit * MAX_NEWCOMER_SPOTS_RESERVED_FRACTION).floor
+    max_newcomer_spots = (competitor_limit * NEWCOMER_MONTH_RESERVATIONS_FRACTION).floor
     if newcomer_month_reserved_spots > max_newcomer_spots
       errors.add(:newcomer_month_reserved_spots, 'cant reserve more than 50% of spots for newcomers')
     end
