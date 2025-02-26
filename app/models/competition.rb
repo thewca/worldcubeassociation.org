@@ -322,7 +322,7 @@ class Competition < ApplicationRecord
     end
   end
 
-  validate :auto_close_threshold_validations, if: -> { auto_close_threshold? }
+  validate :auto_close_threshold_validations, if: :auto_close_threshold?
   private def auto_close_threshold_validations
     errors.add(:auto_close_threshold, I18n.t('competitions.errors.auto_close_positive_nonzero')) unless auto_close_threshold > 0
     if auto_close_threshold != 0
