@@ -1667,8 +1667,9 @@ RSpec.describe Competition do
         expect(auto_close_comp.errors[:auto_close_threshold]).to include("Auto close threshold must be greater than the number of currently paid registrations")
       end
 
-      it 'auto-close must be greater than 0' do
+      it 'auto-close must be greater than 0', :tag do
         auto_close_comp.auto_close_threshold = 0
+        byebug
         expect(auto_close_comp).not_to be_valid
         expect(auto_close_comp.errors[:auto_close_threshold]).to include("Auto-close threshold must be greater than 0")
       end
