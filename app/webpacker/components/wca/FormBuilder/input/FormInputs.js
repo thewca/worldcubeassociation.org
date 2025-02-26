@@ -197,7 +197,7 @@ export const InputTextArea = wrapInput((props) => (
 export const InputNumber = wrapInput((props) => {
   const onChangeNumber = useCallback((e, { value: inputValue }) => {
     const setToNull = props.nullable && inputValue === '';
-    const processedValue = setToNull ? '' : Number(inputValue);
+    const processedValue = setToNull ? null : Number(inputValue);
     props.onChange(e, { value: processedValue });
   }, [props]);
 
