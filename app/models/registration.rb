@@ -382,6 +382,17 @@ class Registration < ApplicationRecord
     end
   end
 
+  def permit_user_cancellation?
+    case competition.competitor_can_cancel.to_sym
+    when :always
+      true
+    when :not_accepted
+      !accepted?
+    when :unpaid
+      paid_entry_fees == 0
+    end
+  end
+
   validate :only_one_accepted_per_series
   private def only_one_accepted_per_series
     if competition&.part_of_competition_series? && competing_status_accepted?

@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import StepPanel from './StepPanel';
 import { getSingleRegistration } from '../api/registration/get/get_registrations';
 import Loading from '../../Requests/Loading';
-import RegistrationMessage, { setMessage } from './RegistrationMessage';
+import RegistrationMessage, { showMessage } from './RegistrationMessage';
 import StoreProvider, { useDispatch } from '../../../lib/providers/StoreProvider';
 import messageReducer from '../reducers/messageReducer';
 import WCAQueryClientProvider from '../../../lib/providers/WCAQueryClientProvider';
@@ -30,7 +30,7 @@ export default function Index({
 }) {
   return (
     <WCAQueryClientProvider>
-      <StoreProvider reducer={messageReducer} initialState={{ message: null }}>
+      <StoreProvider reducer={messageReducer} initialState={{ messages: [] }}>
         <ConfirmProvider>
           <Register
             competitionInfo={competitionInfo}
@@ -69,7 +69,7 @@ function Register({
     queryFn: () => getSingleRegistration(userInfo.id, competitionInfo),
     onError: (data) => {
       const { error } = data.json;
-      dispatch(setMessage(
+      dispatch(showMessage(
         `competitions.registration_v2.errors.${error}`,
         'negative',
       ));

@@ -244,9 +244,5 @@ ThreadSafety/ClassAndModuleAttributes:
     - 'app/models/concerns/localized_sortable.rb'
     - 'app/models/regulation.rb'
 
-# These are helpers to write our SQL dump to a tempfile, and the dumpers are definitely run
-# from a single thread so there is no need to protect them against multithreaded threats.
 ThreadSafety/DirChdir:
-  Exclude:
-    - 'lib/tasks/db.rake'
-    - 'lib/db_dump_helper.rb'
+  AllowCallWithBlock: true

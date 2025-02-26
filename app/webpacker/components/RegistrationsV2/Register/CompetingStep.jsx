@@ -19,11 +19,11 @@ import Processing from './Processing';
 import { contactCompetitionUrl, userPreferencesRoute } from '../../../lib/requests/routes.js.erb';
 import EventSelector from '../../wca/EventSelector';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
-import { setMessage } from './RegistrationMessage';
+import { showMessage } from './RegistrationMessage';
 import I18n from '../../../lib/i18n';
 import I18nHTMLTranslate from '../../I18nHTMLTranslate';
 import { useConfirm } from '../../../lib/providers/ConfirmProvider';
-import { events } from '../../../lib/wca-data.js.erb';
+import { events, defaultGuestLimit } from '../../../lib/wca-data.js.erb';
 import { eventsNotQualifiedFor, isQualifiedForEvent } from '../../../lib/helpers/qualifications';
 import { eventQualificationToString } from '../../../lib/utils/wcif';
 import { hasNotPassed } from '../../../lib/utils/dates';
@@ -99,7 +99,7 @@ export default function CompetingStep({
     mutationFn: updateRegistration,
     onError: (data) => {
       const { error } = data.json;
-      dispatch(setMessage(
+      dispatch(showMessage(
         `competitions.registration_v2.errors.${error}`,
         'negative',
       ));
@@ -115,11 +115,11 @@ export default function CompetingStep({
       // Going from cancelled -> pending
       if (registration.competing.registration_status === 'cancelled') {
         // i18n-tasks-use t('registrations.flash.registered')
-        dispatch(setMessage('registrations.flash.registered', 'positive'));
+        dispatch(showMessage('registrations.flash.registered', 'positive'));
         // Not changing status
       } else {
         // i18n-tasks-use t('registrations.flash.updated')
-        dispatch(setMessage('registrations.flash.updated', 'positive'));
+        dispatch(showMessage('registrations.flash.updated', 'positive'));
       }
       nextStep();
     },
@@ -129,7 +129,7 @@ export default function CompetingStep({
     mutationFn: submitEventRegistration,
     onError: (data) => {
       const { error } = data.json;
-      dispatch(setMessage(
+      dispatch(showMessage(
         `competitions.registration_v2.errors.${error}`,
         'negative',
       ));
@@ -137,7 +137,7 @@ export default function CompetingStep({
     onSuccess: () => {
       // We can't update the registration yet, because there might be more steps needed
       // And the Registration might still be processing
-      dispatch(setMessage('registrations.flash.registered', 'positive'));
+      dispatch(showMessage('registrations.flash.registered', 'positive'));
       setProcessing(true);
     },
   });
@@ -155,10 +155,10 @@ export default function CompetingStep({
   const attemptAction = useCallback(
     (action, options = {}) => {
       if (options.checkForChanges && !hasChanges) {
-        dispatch(setMessage('competitions.registration_v2.update.no_changes', 'basic'));
+        dispatch(showMessage('competitions.registration_v2.update.no_changes', 'basic'));
       } else if (!eventsAreValid) {
         // i18n-tasks-use t('registrations.errors.exceeds_event_limit')
-        dispatch(setMessage(
+        dispatch(showMessage(
           maxEvents === Infinity
             ? 'registrations.errors.must_register'
             : 'registrations.errors.exceeds_event_limit.other',
@@ -198,7 +198,7 @@ export default function CompetingStep({
       content: I18n.t(competitionInfo.allow_registration_edits ? 'competitions.registration_v2.update.update_confirm' : 'competitions.registration_v2.update.update_confirm_contact'),
     }).then(() => {
       if (competitionInfo.allow_registration_edits) {
-        dispatch(setMessage('competitions.registration_v2.update.being_updated', 'basic'));
+        dispatch(showMessage('competitions.registration_v2.update.being_updated', 'basic'));
         updateRegistrationMutation({
           user_id: registration.user_id,
           competition_id: competitionInfo.id,
@@ -299,6 +299,9 @@ export default function CompetingStep({
   ]);
 
   const guestsRestricted = competitionInfo.guest_entry_status === 'restricted';
+  const guestLimit = competitionInfo.guests_per_registration_limit !== null && guestsRestricted
+    ? competitionInfo.guests_per_registration_limit
+    : defaultGuestLimit;
 
   const formWarnings = useMemo(() => potentialWarnings(competitionInfo), [competitionInfo]);
   return (
@@ -397,8 +400,8 @@ export default function CompetingStep({
                   setGuests(Number.parseInt(data.value, 10));
                 }}
                 min="0"
-                max={guestsRestricted && (competitionInfo.guests_per_registration_limit ?? 99)}
-                error={guestsRestricted && Number.isInteger(competitionInfo.guests_per_registration_limit) && guests > competitionInfo.guests_per_registration_limit && I18n.t('competitions.competition_info.guest_limit', { count: competitionInfo.guests_per_registration_limit })}
+                max={guestLimit}
+                error={guestsRestricted && guests > guestLimit && I18n.t('competitions.competition_info.guest_limit', { count: guestLimit })}
               />
             </Form.Field>
           )}

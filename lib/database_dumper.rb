@@ -111,6 +111,7 @@ module DatabaseDumper
           forbid_newcomers
           forbid_newcomers_reason
           newcomer_month_reserved_spots
+          competitor_can_cancel
         ),
         db_default: %w(
           connected_stripe_account_id
