@@ -12,7 +12,7 @@ import {
 import { DEFAULT_REGION_ALL } from './filterUtils';
 import useDelegatesData from './useDelegatesData';
 import UtcDatePicker from '../wca/UtcDatePicker';
-import { EventSelector } from '../wca/EventSelector';
+import EventSelector from '../wca/EventSelector';
 
 function CompetitionsFilters({
   filterState,
@@ -25,7 +25,9 @@ function CompetitionsFilters({
       <Form.Field>
         <EventSelector
           selectedEvents={filterState.selectedEvents}
-          onEventSelection={dispatchFilter}
+          onEventClick={(eventId) => dispatchFilter({ type: 'toggle_event', eventId })}
+          onAllClick={() => dispatchFilter({ type: 'select_all_events' })}
+          onClearClick={() => dispatchFilter({ type: 'clear_events' })}
           showBreakBeforeButtons={false}
           eventButtonsCompact
         />

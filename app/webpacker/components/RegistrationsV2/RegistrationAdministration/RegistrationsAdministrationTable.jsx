@@ -12,21 +12,23 @@ export default function RegistrationAdministrationTable({
   columnsExpanded,
   registrations,
   selected,
-  select,
-  unselect,
+  onSelect,
+  onUnselect,
+  onToggle,
   sortDirection,
   sortColumn,
   changeSortColumn,
   competitionInfo,
   draggable = false,
   sortable = true,
+  withPosition = false,
   handleOnDragEnd,
 }) {
   const handleHeaderCheck = (_, data) => {
     if (data.checked) {
-      select(registrations.map(({ user }) => user.id));
+      onSelect(...registrations.map(({ user }) => user.id));
     } else {
-      unselect(registrations.map(({ user }) => user.id));
+      onUnselect(...registrations.map(({ user }) => user.id));
     }
   };
 
@@ -49,7 +51,8 @@ export default function RegistrationAdministrationTable({
         sortColumn={sortColumn}
         changeSortColumn={changeSortColumn}
         competitionInfo={competitionInfo}
-        draggable={draggable}
+        withCheckbox={!draggable}
+        withPosition={withPosition}
       />
 
       <DragDropContext onDragEnd={handleOnDragEnd}>
@@ -62,16 +65,11 @@ export default function RegistrationAdministrationTable({
                     competitionInfo={competitionInfo}
                     columnsExpanded={columnsExpanded}
                     registration={w}
-                    onCheckboxChange={(_, data) => {
-                      if (data.checked) {
-                        select([w.user.id]);
-                      } else {
-                        unselect([w.user.id]);
-                      }
-                    }}
+                    onCheckboxChange={() => onToggle(w.user.id)}
                     index={i}
                     draggable={draggable}
                     isSelected={selected.includes(w.user.id)}
+                    withPosition={withPosition}
                   />
                 ))}
                 {providedDroppable.placeholder}
@@ -82,9 +80,10 @@ export default function RegistrationAdministrationTable({
       </DragDropContext>
       <TableFooter>
         <RegistrationAdministrationTableFooter
+          columnsExpanded={columnsExpanded}
           registrations={registrations}
           competitionInfo={competitionInfo}
-          eventsToggled={columnsExpanded.events}
+          withPosition={withPosition}
         />
       </TableFooter>
     </Table>

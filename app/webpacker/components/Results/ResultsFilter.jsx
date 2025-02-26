@@ -2,12 +2,25 @@ import React, { useMemo } from 'react';
 import {
   Button, ButtonGroup, Form, Header, Segment,
 } from 'semantic-ui-react';
-import { EventSelector } from '../wca/EventSelector';
+import _ from 'lodash';
+import EventSelector from '../wca/EventSelector';
 import { RegionSelector } from '../CompetitionsOverview/CompetitionsFilters';
 import { countries } from '../../lib/wca-data.js.erb';
 import I18n from '../../lib/i18n';
 
-export default function ResultsFilter({ filterState, filterActions }) {
+function getRegionIdWithFallback(region) {
+  if (region === 'all') {
+    return 'world';
+  }
+  return countries.byIso2[region]?.id ?? region;
+}
+
+export default function ResultsFilter({
+  filterState,
+  filterActions,
+  showCategories,
+  clearEventIsAllowed = false,
+}) {
   const {
     event,
     region,
@@ -37,36 +50,34 @@ export default function ResultsFilter({ filterState, filterActions }) {
           <EventSelector
             title={I18n.t('results.selector_elements.events_selector.event')}
             selectedEvents={[event]}
-            onEventSelection={({ eventId }) => setEvent(eventId)}
+            onEventClick={setEvent}
             hideAllButton
-            hideClearButton
+            hideClearButton={!clearEventIsAllowed || !event}
+            onClearClick={() => setEvent(undefined)}
+            showBreakBeforeButtons={false}
           />
         </Form.Field>
         <Form.Field>
           <RegionSelector
             region={regionIso2}
-            dispatchFilter={({ region: r }) => {
-              if (r === 'all') {
-                setRegion('world');
-              } else {
-                setRegion(countries.byIso2[r]?.id ?? r);
-              }
-            }}
+            dispatchFilter={({ region: r }) => setRegion(getRegionIdWithFallback(r))}
           />
         </Form.Field>
         <Form.Group widths="equal">
-          <Form.Field>
-            <Header as="h6">{I18n.t('results.selector_elements.type_selector.type')}</Header>
-            <ButtonGroup primary compact widths={2}>
-              <Button
-                active={rankingType === 'single'}
-                onClick={() => setRankingType('single')}
-              >
-                {I18n.t('results.selector_elements.type_selector.single')}
-              </Button>
-              { event !== '333mbf' && <Button active={rankingType === 'average'} onClick={() => setRankingType('average')}>{I18n.t('results.selector_elements.type_selector.average')}</Button>}
-            </ButtonGroup>
-          </Form.Field>
+          { rankingType && (
+            <Form.Field>
+              <Header as="h6">{I18n.t('results.selector_elements.type_selector.type')}</Header>
+              <ButtonGroup primary compact widths={2}>
+                <Button
+                  active={rankingType === 'single'}
+                  onClick={() => setRankingType('single')}
+                >
+                  {I18n.t('results.selector_elements.type_selector.single')}
+                </Button>
+                {event !== '333mbf' && <Button active={rankingType === 'average'} onClick={() => setRankingType('average')}>{I18n.t('results.selector_elements.type_selector.average')}</Button>}
+              </ButtonGroup>
+            </Form.Field>
+          )}
           {/* <Form.Field width={1}> */}
           {/*   <ButtonGroup> */}
           {/*    <Button>All years</Button> */}
@@ -82,10 +93,10 @@ export default function ResultsFilter({ filterState, filterActions }) {
           </Form.Field>
           <Form.Field>
             <Header as="h6">{I18n.t('results.selector_elements.show_selector.show')}</Header>
-            <ButtonGroup compact color="teal" widths={3}>
-              <Button active={show === '100 persons'} onClick={() => setShow('100 persons')}>{I18n.t('results.selector_elements.show_selector.persons')}</Button>
-              <Button active={show === '100 results'} onClick={() => setShow('100 results')}>{I18n.t('results.selector_elements.show_selector.results')}</Button>
-              <Button active={show === 'by region'} onClick={() => setShow('by region')}>{I18n.t('results.selector_elements.show_selector.by_region')}</Button>
+            <ButtonGroup compact color="teal" widths={showCategories.length}>
+              {showCategories.map((category) => (
+                <Button key={category} active={show === category} onClick={() => setShow(category)}>{I18n.t(`results.selector_elements.show_selector.${_.snakeCase(category.replace(/^\d+/, '').trim())}`)}</Button>
+              ))}
             </ButtonGroup>
           </Form.Field>
         </Form.Group>

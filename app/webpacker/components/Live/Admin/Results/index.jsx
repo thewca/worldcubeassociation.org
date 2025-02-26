@@ -1,17 +1,17 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import {
   Grid, Button, Header, Segment,
 } from 'semantic-ui-react';
-import { createConsumer } from '@rails/actioncable';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { events } from '../../../../lib/wca-data.js.erb';
 import WCAQueryClientProvider from '../../../../lib/providers/WCAQueryClientProvider';
 import ResultsTable from '../../components/ResultsTable';
-import getRoundResults from '../../api/getRoundResults';
+import getRoundResults, { insertNewResult, roundResultsKey } from '../../api/getRoundResults';
 import submitRoundResults from '../../api/submitRoundResults';
 import updateRoundResults from '../../api/updateRoundResults';
 import { competitionEditRegistrationsUrl, liveUrls } from '../../../../lib/requests/routes.js.erb';
 import AttemptsForm from '../../components/AttemptsForm';
+import useResultsSubscription from '../../hooks/useResultsSubscription';
 
 export default function Wrapper({
   roundId, eventId, competitionId, competitors,
@@ -44,7 +44,7 @@ function AddResults({
   const queryClient = useQueryClient();
 
   const { data: results, isLoading } = useQuery({
-    queryKey: [roundId, 'results'],
+    queryKey: roundResultsKey(roundId),
     queryFn: () => getRoundResults(roundId, competitionId),
   });
 
@@ -92,29 +92,14 @@ function AddResults({
     },
   });
 
-  useEffect(() => {
-    const cable = createConsumer();
-
-    const subscription = cable.subscriptions.create(
-      { channel: 'LiveResultsChannel', round_id: roundId },
-      {
-        received: (data) => {
-          queryClient.setQueryData([roundId, 'results'], (oldData) => {
-            const existingIndex = oldData.map((a) => a.registration_id)
-              .indexOf(data.registration_id);
-            if (existingIndex === -1) {
-              return [...oldData, data];
-            }
-            return oldData.map((a) => (a.registration_id === data.registration_id ? data : a));
-          });
-        },
-      },
+  const updateResultsData = useCallback((data) => {
+    queryClient.setQueryData(
+      roundResultsKey(roundId),
+      (oldData) => insertNewResult(oldData, data),
     );
+  }, [queryClient, roundId]);
 
-    return () => {
-      subscription.unsubscribe();
-    };
-  }, [roundId, queryClient, eventId]);
+  useResultsSubscription(roundId, updateResultsData);
 
   const handleAttemptChange = (index, value) => {
     const newAttempts = [...attempts];

@@ -107,7 +107,7 @@ export const getIsoDateString = (dateTime, timeZone = 'local') => DateTime.fromI
 
 export const getTimeWithSecondsString = (dateTime, timeZone = 'local') => DateTime.fromISO(dateTime)
   .setZone(timeZone)
-  .toFormat(DateTime.TIME_WITH_SECONDS);
+  .toLocaleString(DateTime.TIME_WITH_SECONDS);
 
 // start/end dates may have different time-of-days
 export const getDatesBetweenInclusive = (

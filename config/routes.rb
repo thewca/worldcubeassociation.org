@@ -157,8 +157,9 @@ Rails.application.routes.draw do
     get 'competitions/:competition_id/live/rounds/:round_id/admin' => 'live#admin', as: :live_admin_round_results
     get 'competitions/:competition_id/live/rounds/:round_id/admin/check' => 'live#double_check', as: :live_admin_check_round_results
     get 'competitions/:competition_id/live/admin' => 'live#schedule_admin', as: :live_schedule_admin
+    get 'competitions/:competition_id/live/rounds/:round_id' => 'live#round_results', as: :live_round_results
 
-    get 'api/competitions/:competition_id/rounds/:round_id' => 'live#round_results', as: :live_round_results_api
+    get 'api/competitions/:competition_id/rounds/:round_id' => 'live#round_results_api', as: :live_round_results_api
     post 'api/competitions/:competition_id/rounds/:round_id' => 'live#add_result', as: :add_live_result
     patch 'api/competitions/:competition_id/rounds/:round_id' => 'live#update_result', as: :update_live_result
   end
@@ -219,6 +220,8 @@ Rails.application.routes.draw do
   resources :tickets, only: [:index, :show] do
     post 'update_status' => 'tickets#update_status', as: :update_status
     get 'edit_person_validators' => 'tickets#edit_person_validators', as: :edit_person_validators
+    resources :ticket_comments, only: [:index, :create], as: :comments
+    resources :ticket_logs, only: [:index], as: :logs
   end
   resources :notifications, only: [:index]
 

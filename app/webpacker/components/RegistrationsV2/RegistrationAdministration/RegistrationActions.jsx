@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, Icon } from 'semantic-ui-react';
 import { DateTime } from 'luxon';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
-import { setMessage } from '../Register/RegistrationMessage';
+import { showMessage } from '../Register/RegistrationMessage';
 import I18n from '../../../lib/i18n';
 import { countries } from '../../../lib/wca-data.js.erb';
 
@@ -27,8 +27,18 @@ function V3csvExport(selected, registrations, competition) {
         DateTime.fromISO(registration.competing.registered_on).setZone('UTC').toFormat('yyyy-MM-dd HH:mm:ss ZZZZ')
       }\n`;
     });
-  const encodedUri = encodeURI(csvContent);
-  window.open(encodedUri);
+
+  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+
+  const link = document.createElement('a');
+  link.href = url;
+  link.setAttribute('download', `${competition.id}-registration.csv`);
+  document.body.appendChild(link);
+  link.click();
+
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
 }
 
 function csvExport(selected, registrations, competition) {
@@ -63,7 +73,7 @@ export default function RegistrationActions({
   const anyWaitlistable = waiting.length < selectedCount;
   const anyRejectable = rejected.length < selectedCount;
 
-  const selectedEmails = [...pending, ...accepted, ...cancelled, ...waiting]
+  const selectedEmails = [...pending, ...waiting, ...accepted, ...cancelled, ...rejected]
     .map((userId) => userEmailMap[userId])
     .join(',');
 
@@ -80,7 +90,7 @@ export default function RegistrationActions({
       },
       {
         onSuccess: () => {
-          dispatch(setMessage('registrations.flash.updated', 'positive'));
+          dispatch(showMessage('registrations.flash.updated', 'positive'));
           refresh();
         },
       },
@@ -108,7 +118,7 @@ export default function RegistrationActions({
   const attemptToApprove = () => {
     const idsToAccept = [...pending, ...cancelled, ...waiting, ...rejected];
     if (idsToAccept.length > spotsRemaining) {
-      dispatch(setMessage(
+      dispatch(showMessage(
         'competitions.registration_v2.update.too_many',
         'negative',
         {
@@ -122,7 +132,7 @@ export default function RegistrationActions({
 
   const copyEmails = (emails) => {
     navigator.clipboard.writeText(emails);
-    dispatch(setMessage('competitions.registration_v2.update.email_message', 'positive'));
+    dispatch(showMessage('competitions.registration_v2.update.email_message', 'positive'));
   };
 
   return (

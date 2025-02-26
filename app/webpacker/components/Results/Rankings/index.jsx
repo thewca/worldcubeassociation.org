@@ -5,7 +5,7 @@ import { Container } from 'semantic-ui-react';
 import RankingsTable from './RankingsTable';
 import WCAQueryClientProvider from '../../../lib/providers/WCAQueryClientProvider';
 import { rankingsUrl } from '../../../lib/requests/routes.js.erb';
-import ResultsFilter from '../resultsFilter';
+import ResultsFilter from '../ResultsFilter';
 
 const ActionTypes = {
   SET_EVENT: 'SET_EVENT',
@@ -68,6 +68,8 @@ export default function Wrapper() {
   );
 }
 
+const SHOW_CATEGORIES = ['100 persons', '100 results', 'by region'];
+
 export function Rankings() {
   const [filterState, dispatch] = useReducer(
     filterReducer,
@@ -97,7 +99,11 @@ export function Rankings() {
 
   return (
     <Container fluid>
-      <ResultsFilter filterState={filterState} filterActions={filterActions} />
+      <ResultsFilter
+        filterState={filterState}
+        filterActions={filterActions}
+        showCategories={SHOW_CATEGORIES}
+      />
       <RankingsTable filterState={filterState} />
     </Container>
   );
