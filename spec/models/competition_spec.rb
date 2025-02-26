@@ -1608,7 +1608,6 @@ RSpec.describe Competition do
       let(:newcomer_month_comp) { FactoryBot.create(:competition, :newcomer_month) }
       let!(:newcomer_reg) { FactoryBot.create(:registration, :newcomer, :accepted, competition: newcomer_month_comp) }
 
-
       context '#newcomers_competing_count' do
         before do
           FactoryBot.create_list(:registration, 2, :accepted, competition: newcomer_month_comp)
