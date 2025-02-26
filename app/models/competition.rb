@@ -2785,6 +2785,7 @@ class Competition < ApplicationRecord
             "enabled" => { "type" => ["boolean", "null"] },
             "count" => { "type" => ["integer", "null"] },
             "reason" => { "type" => ["string", "null"] },
+            "autoCloseThreshold" => { "type" => ["integer", "null"] },
           },
         },
         "staff" => {
