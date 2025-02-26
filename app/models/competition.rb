@@ -194,7 +194,7 @@ class Competition < ApplicationRecord
   MAX_COMPETITOR_LIMIT = 5000
   MAX_GUEST_LIMIT = 100
   NEWCOMER_MONTH_ENABLED = true
-  MAX_NEWCOMER_SPOTS_RESERVED_FRACTION = 0.5
+  NEWCOMER_MONTH_RESERVATIONS_FRACTION = 0.5
 
   validates_inclusion_of :competitor_limit_enabled, in: [true, false], if: :competitor_limit_required?
   validates_numericality_of :competitor_limit, greater_than_or_equal_to: 1, less_than_or_equal_to: MAX_COMPETITOR_LIMIT, if: :competitor_limit_enabled?
@@ -258,13 +258,8 @@ class Competition < ApplicationRecord
     end
   end
 
-  def newcomers_competing_count
-    registrations.accepted.joins(:user).merge(User.newcomers).count
-  end
-
   def newcomer_month_reserved_spots_remaining
-    newcomer_month_eligible_competitors = registrations.accepted.joins(:user).merge(User.newcomer_month_eligible).count
-    newcomer_month_reserved_spots - newcomer_month_eligible_competitors
+    newcomer_month_reserved_spots - registrations.newcomer_month_eligible_competitors_count
   end
 
   # Dirty old trick to deal with competition id changes (see other methods using

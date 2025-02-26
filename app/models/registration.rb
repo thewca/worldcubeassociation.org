@@ -320,6 +320,14 @@ class Registration < ApplicationRecord
     accepted_count + pending.with_payments.count
   end
 
+  def self.newcomers_competing_count
+    accepted.joins(:user).merge(User.newcomers).count
+  end
+
+  def self.newcomer_month_eligible_competitors_count
+    accepted.joins(:user).merge(User.newcomer_month_eligible).count
+  end
+
   # Only run the validations when creating the registration as we don't want user changes
   # to invalidate all the corresponding registrations (e.g. if the user gets banned).
   # Instead the validations should be placed such that they ensure that a user
