@@ -106,7 +106,7 @@ FactoryBot.define do
       with_organizer
       with_competitor_limit
       competitor_limit { 4 }
-      newcomer_reserved_spots { 2 }
+      newcomer_month_reserved_spots { 2 }
     end
 
     trait :enforces_qualifications do

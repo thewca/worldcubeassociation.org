@@ -12,16 +12,16 @@ RSpec.describe Competition do
   end
 
   it 'can reserve newcomer spots up to 50% of registrations' do
-    expect(FactoryBot.build(:competition, newcomer_reserved_spots: 50, competitor_limit: 100)).to be_valid
+    expect(FactoryBot.build(:competition, newcomer_month_reserved_spots: 50, competitor_limit: 100)).to be_valid
   end
 
   it 'reserved newcomers spots cant exceed 50% of registrations' do
-    expect(FactoryBot.build(:competition, newcomer_reserved_spots: 51, competitor_limit: 100)).to be_invalid_with_errors(
-      newcomer_reserved_spots: ['cant reserve more than 50% of spots for newcomers'],
+    expect(FactoryBot.build(:competition, newcomer_month_reserved_spots: 51, competitor_limit: 100)).to be_invalid_with_errors(
+      newcomer_month_reserved_spots: ['cant reserve more than 50% of spots for newcomers'],
     )
 
-    expect(FactoryBot.build(:competition, newcomer_reserved_spots: 50, competitor_limit: 99)).to be_invalid_with_errors(
-      newcomer_reserved_spots: ['cant reserve more than 50% of spots for newcomers'],
+    expect(FactoryBot.build(:competition, newcomer_month_reserved_spots: 50, competitor_limit: 99)).to be_invalid_with_errors(
+      newcomer_month_reserved_spots: ['cant reserve more than 50% of spots for newcomers'],
     )
   end
 

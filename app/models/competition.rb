@@ -173,7 +173,7 @@ class Competition < ApplicationRecord
     event_change_deadline_date
     competition_series_id
     registration_version
-    newcomer_reserved_spots
+    newcomer_month_reserved_spots
   ).freeze
   VALID_NAME_RE = /\A([-&.:' [:alnum:]]+) (\d{4})\z/
   VALID_ID_RE = /\A[a-zA-Z0-9]+\Z/
@@ -247,11 +247,11 @@ class Competition < ApplicationRecord
   validates :external_website, :external_registration_page, length: { maximum: MAX_URL_LENGTH }
   validates :contact, length: { maximum: MAX_MARKDOWN_LENGTH }
 
-  validate :validate_newcomer_reserved_spots, if: -> { competitor_limit.present? }
-  private def validate_newcomer_reserved_spots
+  validate :validate_newcomer_month_reserved_spots, if: -> { competitor_limit.present? }
+  private def validate_newcomer_month_reserved_spots
     max_newcomer_spots = (competitor_limit * MAX_NEWCOMER_SPOTS_RESERVED_FRACTION).floor
-    if newcomer_reserved_spots > max_newcomer_spots
-      errors.add(:newcomer_reserved_spots, 'cant reserve more than 50% of spots for newcomers')
+    if newcomer_month_reserved_spots > max_newcomer_spots
+      errors.add(:newcomer_month_reserved_spots, 'cant reserve more than 50% of spots for newcomers')
     end
   end
 
@@ -261,7 +261,7 @@ class Competition < ApplicationRecord
 
   def newcomer_month_reserved_spots_remaining
     newcomer_month_eligible_competitors = registrations.accepted.joins(:user).merge(User.newcomer_month_eligible).count
-    newcomer_reserved_spots - newcomer_month_eligible_competitors
+    newcomer_month_reserved_spots - newcomer_month_eligible_competitors
   end
 
   # Dirty old trick to deal with competition id changes (see other methods using
@@ -2399,7 +2399,7 @@ class Competition < ApplicationRecord
         "enabled" => competitor_limit_enabled,
         "count" => competitor_limit,
         "reason" => competitor_limit_reason,
-        "newcomerReservedSpots" => newcomer_reserved_spots,
+        "newcomerMonthReservedSpots" => newcomer_month_reserved_spots,
       },
       "staff" => {
         "staffDelegateIds" => staff_delegates.to_a.pluck(:id),
@@ -2507,7 +2507,7 @@ class Competition < ApplicationRecord
         "enabled" => errors[:competitor_limit_enabled],
         "count" => errors[:competitor_limit],
         "reason" => errors[:competitor_limit_reason],
-        "newcomer_reserved_spots" => errors[:newcomer_reserved_spots],
+        "newcomer_month_reserved_spots" => errors[:newcomer_month_reserved_spots],
       },
       "staff" => {
         "staffDelegateIds" => errors[:staff_delegate_ids],
@@ -2649,7 +2649,7 @@ class Competition < ApplicationRecord
       competitor_limit_enabled: form_data.dig('competitorLimit', 'enabled'),
       competitor_limit: form_data.dig('competitorLimit', 'count'),
       competitor_limit_reason: form_data.dig('competitorLimit', 'reason'),
-      newcomer_reserved_spots: form_data.dig('competitorLimit', 'newcomerReservedSpots'),
+      newcomer_month_reserved_spots: form_data.dig('competitorLimit', 'newcomerMonthReservedSpots'),
       extra_registration_requirements: form_data.dig('registration', 'extraRequirements'),
       on_the_spot_registration: form_data.dig('registration', 'allowOnTheSpot'),
       on_the_spot_entry_fee_lowest_denomination: form_data.dig('entryFees', 'onTheSpotEntryFee'),
@@ -2793,7 +2793,7 @@ class Competition < ApplicationRecord
             "enabled" => { "type" => ["boolean", "null"] },
             "count" => { "type" => ["integer", "null"] },
             "reason" => { "type" => ["string", "null"] },
-            "newcomerReservedSpots" => { "type" => ["integer", "null"] },
+            "newcomerMonthReservedSpots" => { "type" => ["integer", "null"] },
           },
         },
         "staff" => {
