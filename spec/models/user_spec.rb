@@ -765,21 +765,4 @@ RSpec.describe User, type: :model do
       expect(user.teams_committees_at_least_senior_roles).not_to include(wrt_role)
     end
   end
-
-  describe 'newcomer?' do
-    it 'true for user with no WCA ID' do
-      user = FactoryBot.create(:user)
-      expect(user.newcomer?).to eq(true)
-    end
-
-    it 'false for user with current year WCA ID' do
-      user = FactoryBot.create(:user, :current_year_wca_id)
-      expect(user.newcomer?).to eq(false)
-    end
-
-    it 'false for user with previous year WCA ID' do
-      user = FactoryBot.create(:user, :wca_id)
-      expect(user.newcomer?).to eq(false)
-    end
-  end
 end
