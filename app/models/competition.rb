@@ -250,7 +250,7 @@ class Competition < ApplicationRecord
   validates :external_website, :external_registration_page, length: { maximum: MAX_URL_LENGTH }
   validates :contact, length: { maximum: MAX_MARKDOWN_LENGTH }
 
-  validate :validate_newcomer_month_reserved_spots, if: -> { competitor_limit.present? }
+  validate :validate_newcomer_month_reserved_spots, if: -> { competitor_limit.present? && newcomer_month_reserved_spots.present? }
   private def validate_newcomer_month_reserved_spots
     max_newcomer_spots = (competitor_limit * NEWCOMER_MONTH_RESERVATIONS_FRACTION).floor
     if newcomer_month_reserved_spots > max_newcomer_spots
