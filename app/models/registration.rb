@@ -321,7 +321,7 @@ class Registration < ApplicationRecord
   end
 
   def self.newcomer_month_eligible_competitors_count
-    accepted.joins(:user).merge(User.newcomer_month_eligible).count
+    joins(:user).merge(User.newcomer_month_eligible).accepted_count
   end
 
   # Only run the validations when creating the registration as we don't want user changes
