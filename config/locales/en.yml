@@ -572,6 +572,8 @@ en:
         wca_id: "Your WCA ID"
         dob: "Correct birthdate"
         document: "Document"
+      contact_wrt:
+        wca_id: "WCA ID"
     errors:
       dob_contact:
         dob_invalid: "is misformatted"
@@ -785,20 +787,20 @@ en:
         wsot: "WCA Sports Organization Team"
         wapc: "WCA Appeals Committee"
       groups_description:
-        wat: "The WAT is responsible for managing the development and maintenance of the WCA's historical archive. They document key speedcubing events and notable WCA milestones to be presented as part of a broader WCA timeline, to preserve the legacy of the WCA in speedcubing."
-        wct: "The WCA Communication Team (WCT) has the role to oversee and support communications of the WCA with the Community and the general public. The communication of the WCA should contribute to the Objectives of the WCA and support a general positive culture of friendliness, transparency, inclusiveness, openness, and responsiveness."
-        wcat: "The WCA Competition Announcement Team (WCAT) has the role to approve and announce WCA Competitions submitted by delegates, and ensure such announcements adhere to WCA quality standards. This team is also responsible for maintaining proper competition submission protocol from documents such as the WCA Competition Requirements Policy. WCAT is NOT responsible for the organization and delegation of individual competitions."
+        wat: "The WCA Archive Team (WAT) manages the development and maintenance of the WCA's historical archive. They document key speedcubing events and notable WCA milestones to be presented as part of a broader WCA timeline, to preserve the legacy of the WCA in speedcubing."
+        wct: "The WCA Communication Team (WCT) oversees and supports communications of the WCA with the Community and the general public. The communication of the WCA should contribute to the Objectives of the WCA and support a general positive culture of friendliness, transparency, inclusiveness, openness, and responsiveness."
+        wcat: "The WCA Competition Announcement Team (WCAT) approves and announces WCA Competitions submitted by WCA Delegates, and ensure such announcements adhere to WCA quality standards. This team is also responsible for maintaining proper competition submission protocol from documents such as the WCA Competition Requirements Policy. The WCAT is NOT responsible for the organization and delegation of individual competitions."
         wic: "The WCA Integrity Committee (WIC) performs independent investigations regarding WCA community members and incidents during WCA Competitions or on official, online WCA platforms. These incidents are alleged violations of the Spirit, Code of Conduct, Code of Ethics and/or Regulations of the WCA."
-        weat: "This team is responsible for carrying out the administrative tasks of the WCA Board of Directors."
-        wfc: "This committee is responsible for managing the overall finances of the WCA, including budgeting, reporting, analysis, bookkeeping, and tax filings. They also manage the WCA's largest source of income, the WCA Dues System, along with various funding programs that provide support to local communities at different stages of development, including Travel Funding, Equipment Funding, and Regional Organization Support."
-        wmt: "This team is responsible for developing and managing the WCA Brand, seeking sponsorships, supporting the distribution of WCA Competition Gear, and marketing WCA Merchandise."
-        wmct: "The WCA Major Championship Team oversees the coordination and advancement of WCA Continental and World Championships by developing guidelines and strategic plans, managing host city selection, supporting organizing teams, and ensuring consistent championship experiences."
-        wqac: "This committee has the role to support and promote continuous quality improvement within the WCA, as well as worldwide application of quality standards to ensure consistent high quality of processes, WCA Staff, Regional Organizations, Competition Organizers, and Competition Staff."
-        wrc: "The WRC handles all issues which are related to the application, the improvement and the development of the WCA Regulations. They support WCA Delegates on any kind of procedural matters happening at competitions and decide on unresolved and uncovered incidents."
-        wrt: "The WRT is responsible for managing all data in the databases of the WCA, most importantly competition results and persons data."
-        wst: "This team is responsible for managing the WCA's software (website, scramblers, workbooks, admin tools)."
-        wsot: "This team has the role to oversee and support the recognition of the WCA as an international sports organization."
-        wapc: "The WCA Appeals Committee (WAC) is responsible for reviewing and resolving appeals regarding decisions made by other WCA Staff. The WAC provides an independent and impartial review process to ensure that decisions are fair, reasonable, and in accordance with WCA policies and regulations."
+        weat: "The WCA Executive Assistants Team (WEAT) carries out the administrative tasks of the WCA Board of Directors."
+        wfc: "The WCA Financial Committee (WFC) manages the overall finances of the WCA, including budgeting, reporting, analysis, bookkeeping, and tax filings. They also manage the WCA's largest source of income, the WCA Dues System, along with various funding programs that provide support to local communities at different stages of development, including Travel Funding, Equipment Funding, and Regional Organization Support."
+        wmt: "The WCA Marketing Team (WMT) manages the WCA Brand, seeking sponsorships, and marketing WCA Merchandise."
+        wmct: "The WCA Major Championship Team (WMCT) oversees the coordination and advancement of WCA Continental and World Championships by developing guidelines and strategic plans, managing host city selection, supporting organizing teams, and ensuring consistent championship experiences."
+        wqac: "The WCA Quality Assurance Committee (WQAC) promotes continuous quality improvement within the WCA, as well as worldwide application of quality standards to ensure consistent high quality of processes, WCA Staff, Regional Organizations, Competition Organizers, and Competition Staff."
+        wrc: "The WCA Regulations Committee (WRC) handles all issues which are related to the application, the improvement and the development of the WCA Regulations. They support WCA Delegates on any kind of procedural matters happening at competitions and decide on unresolved and uncovered incidents."
+        wrt: "The WCA Results Team (WRT) manages all data in the databases of the WCA, including competition results and persons data."
+        wst: "The WCA Software Team (WST) manages the WCA's software (website, scramblers, workbooks, admin tools)."
+        wsot: "The WCA Sports Organization Team (WSOT) oversees and supports the recognition of the WCA as an international sports organization."
+        wapc: "The WCA Appeals Committee (WAC) reviews and resolves appeals regarding decisions made by other WCA Staff. The WAC provides an independent and impartial review process to ensure that decisions are fair, reasonable, and in accordance with WCA policies and regulations."
     contacts:
       title: "WCA Contact Form"
       faq_note_html: 'Before making an inquiry, you may wish to take a look at our <a href="/faq">Frequently Asked Questions</a>! If you wish to contact a specific committee or team not listed here, you may check their details on <a href="/teams-committees-councils">this page</a>.'
@@ -1079,7 +1081,7 @@ en:
         failure: "Couldn't verify your identity"
         confirm_proceed: "Confirm and proceed"
         identity_error: "Cannot edit your data. Please confirm your identity below before trying again."
-    #context: when an error occured during the edition
+    #context: when an error occurred during the edition
     errors:
       not_found: "not found"
       already_assigned: "already assigned to a different user"
@@ -1205,6 +1207,10 @@ en:
           registrations_full: "The competitor limit has been reached and there are no more spots available"
           multiple_registrations: "You registered two or more times"
           competition_canceled: "The competition has been canceled"
+      formerly_banned:
+        ban_count: "Competitor has been banned %{ban_count} time(s), with the following scopes and reasons:"
+        scope_and_reason: "Scope: %{ban_scope}, Reason: %{ban_reason}"
+        wic_message: "If you have any questions regarding the competitor's disciplinary history, please reach out to the WIC by replying to this email."
     #context: on the registrations list
     list:
       title: "Registrations for %{comp}"
@@ -1234,7 +1240,6 @@ en:
     registered_with_account_html: "This person registered with an account. You can edit their personal information %{here}."
     sign_in: "Sign in"
     profile: "profile"
-    panel_title: "Registration details"
     register: "Register!"
     refund: "Refund Payment"
     refund_confirmation: "Are you sure you want to refund this payment?"
@@ -1247,16 +1252,9 @@ en:
     please_sign_in_past_html: "%{sign_in} to check the status of your registration. If you do not yet have a WCA account, you can create one %{here}, but it is too late to register for this competition."
     please_sign_in_not_yet_open_html: "%{sign_in} to check the status of your registration. If you do not yet have a WCA account, you can create one %{here}, but its registration is not yet open."
     please_sign_in_html: "%{sign_in} to register for %{comp}. If you do not yet have a WCA account, you can create one %{here}."
-    greeting: "Hi, %{name}!"
     please_fix_profile_html: "In order to register for %{comp}, you must fix the following problems with your %{profile}:"
     registration_full: "The competitor limit for this competition is %{competitor_limit} and it has already been reached. If you register, your registration will be placed on a waiting list. It may not be approved unless a spot frees up."
     registration_full_include_waiting_list: "The competitor limit for this competition is %{competitor_limit} and it may be filled. If you register, your registration will be placed on a waiting list. It may not be approved unless a spot frees up."
-    can_register: "You can register for %{comp} below."
-    check_registration_information: "Please check the information about registration to find out if you need to do something else, like paying a registration fee."
-    have_registered: "You have submitted your registration for %{comp}. You can see your registration details below."
-    contact_organizer: "Contact the organizer if you wish to make a change."
-    waiting_list: "Your registration is pending. For approval, you may need to pay a registration fee. Check the competition website for details."
-    accepted: "Your registration has been accepted!"
     entry_fees_fully_paid: "You have paid %{paid}, which fully covers the registration fees."
     will_pay_here: "You will pay them here after submitting your registration"
     wont_pay_here: "Please check the competition's information for instructions about how to pay"
@@ -1267,7 +1265,6 @@ en:
         refund_amount: "Refund Amount"
     #context: on the payment form, when registering to a competition
     payment_form:
-      title: "Registration fees"
       payment_successful: "Your payment was successful, and your registration should show up as paid below."
       payment_processing: "Your payment has been confirmed, but the transaction is still pending."
       payment_partial: "Your payment has been confirmed, but it does not cover the full amount. Please pay the remaining fee as well."
@@ -1666,7 +1663,7 @@ en:
           waiting_list_deadline_date: "Deadline for accepting competitors from the waiting list"
           event_change_deadline_date: "Deadline for competitors to update their registered events"
           allow_on_the_spot: "On the spot registrations"
-          allow_self_delete_after_acceptance: "Registration cancellations"
+          competitor_can_cancel: "When can competitors cancel their registrations"
           allow_self_edits: "Registration edits"
           guests_enabled: "Guests"
           guest_entry_status: "Display message for free guest entry"
@@ -1752,7 +1749,7 @@ en:
           waiting_list_deadline_date: "The date when waitlisted registrants will no longer be accepted. If you have a deadline for refunds, the deadline for being accepted should not be before the deadline for refunds."
           event_change_deadline_date: "Registered competitors have the right to update their registered events until this time by contacting the organization team. This deadline must not be set to a time before registration is set to close. Leaving this field blank means that competitors may add an event to their registered events up until that event is held. If you have on the spot registration, this must be set to the same day as the competition."
           allow_on_the_spot: ""
-          allow_self_delete_after_acceptance: ""
+          competitor_can_cancel: ""
           allow_self_edits: ""
           guests_enabled: ""
           guest_entry_status: ""
@@ -1794,9 +1791,10 @@ en:
           allow_self_edits:
             "true": "Competitors may edit their registration until the deadline for updating events"
             "false": "Competitors may NOT edit their registration once it has been accepted"
-          allow_self_delete_after_acceptance:
-            "true": "Competitors may delete their own registration even after it has been accepted"
-            "false": "Competitors may NOT delete their own registration once it has been accepted"
+          competitor_can_cancel:
+            "always": "Always"
+            "not_accepted": "Until they're accepted"
+            "unpaid": "Until they pay"
           guest_entry_status:
             unclear: 'Do not display anything (and perhaps elaborate in the "Extra registration requirements" section)'
             free: '"Any spectator can attend for free"'
@@ -1806,7 +1804,7 @@ en:
             allow_registration_without:
               "true": "Competitors will be allowed to register for events they're not qualified for (I'll remove them later)"
               "false": "Competitors MUST be qualified to register for an event"
-        #context: new registration system
+    #context: new registration system
     registration_v2:
       pdf:
         #context: <0> indicates an html tag for internationalizing in React, see https://docs.worldcubeassociation.org/guides/translating_the_website.html#using-react
@@ -1869,6 +1867,7 @@ en:
         no_self_update: "Contact the Organization Team to update your registration."
       register:
         will_open_countdown: "Registration will open in %{minutes} minutes %{seconds} seconds. This page will refresh automatically when registration opens."
+        will_close_countdown: "Registration closes in %{minutes} minutes %{seconds} seconds. This page will refresh automatically when registration closes."
         panel:
           approval:
             title: "Approval"
@@ -1930,9 +1929,10 @@ en:
         -4011: "You can only accept the first person on the waiting list"
         -4012: "You are not qualified to compete in the selected events"
         -4014: "You are already registered for this competition."
+        -4015: "Please enter a reasonable amount of guests, or contact the organizers if you need to bring an extraordinary amount of guests."
         -6001: "WCA Payment is not enabled for this competition"
         -6002: "You need to finish your registration before you can pay"
-    #context: and when an error occured
+    #context: and when an error occurred
     errors:
       auto_close_exceed_paid: "Auto close threshold must be greater than the number of currently paid registrations"
       auto_close_positive_nonzero: "Auto-close threshold must be greater than 0"

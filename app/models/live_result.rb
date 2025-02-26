@@ -86,7 +86,7 @@ class LiveResult < ApplicationRecord
   private
 
     def notify_users
-      ActionCable.server.broadcast("results_#{round_id}", serializable_hash)
+      ActionCable.server.broadcast(WcaLive.broadcast_key(round_id), as_json)
     end
 
     def recompute_advancing

@@ -61,6 +61,8 @@ class DelegateReport < ApplicationRecord
     end
   end
 
+  validates :setup_images, blob: { content_type: :web_image }
+
   def schedule_and_discussion_urls_required?
     posted? && created_at > Date.new(2019, 7, 21)
   end

@@ -60,4 +60,12 @@ class TicketsEditPerson < ApplicationRecord
       return ticket
     end
   end
+
+  DEFAULT_SERIALIZE_OPTIONS = {
+    include: %w[tickets_edit_person_fields],
+  }.freeze
+
+  def serializable_hash(options = nil)
+    super(DEFAULT_SERIALIZE_OPTIONS.merge(options || {}))
+  end
 end

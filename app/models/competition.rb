@@ -95,6 +95,8 @@ class Competition < ApplicationRecord
     restricted: 2,
   }, prefix: true
 
+  enum :competitor_can_cancel, [:not_accepted, :always, :unpaid], prefix: true
+
   NEW_REG_SYSTEM_DEFAULT = :v3
 
   enum :registration_version, [:v1, :v2, :v3], prefix: true, default: NEW_REG_SYSTEM_DEFAULT
@@ -134,6 +136,7 @@ class Competition < ApplicationRecord
     refund_policy_percent
     guests_entry_fee_lowest_denomination
     guest_entry_status
+    competitor_can_cancel
   ).freeze
   UNCLONEABLE_ATTRIBUTES = %w(
     id
@@ -471,6 +474,11 @@ class Competition < ApplicationRecord
     competitor_limit_enabled? && competitor_count >= competitor_limit
   end
 
+  def registration_full_and_accepted?
+    competitor_count = registrations.accepted_count
+    competitor_limit_enabled? && competitor_count >= competitor_limit
+  end
+
   def number_of_bookmarks
     bookmarked_users.count
   end
@@ -512,6 +520,7 @@ class Competition < ApplicationRecord
 
   def warnings_for(user)
     warnings = {}
+
     if self.showAtAll
       unless self.announced?
         warnings[:announcement] = I18n.t('competitions.messages.not_announced')
@@ -524,11 +533,6 @@ class Competition < ApplicationRecord
           warnings[:results] = I18n.t('competitions.messages.results_still_processing')
         end
       end
-
-      if self.registration_full? && self.registration_currently_open?
-        warnings[:waiting_list] = registration_full_message
-      end
-
     else
       warnings[:invisible] = I18n.t('competitions.messages.not_visible')
 
@@ -595,10 +599,12 @@ class Competition < ApplicationRecord
     warnings
   end
 
+  # @deprecated Fully transitioned to React. Keeping the method here because the test cases are interesting,
+  #   and I want to "save" them until we can do proper React component testing (signed GB 2025-02-14)
   def registration_full_message
-    if registration_full? && registrations.accepted.count >= competitor_limit
+    if registration_full_and_accepted?
       I18n.t('registrations.registration_full', competitor_limit: competitor_limit)
-    else
+    elsif registration_full?
       I18n.t('registrations.registration_full_include_waiting_list', competitor_limit: competitor_limit)
     end
   end
@@ -1186,14 +1192,9 @@ class Competition < ApplicationRecord
 
   # can registration edits be done right now
   # must be allowed in general, and if the deadline field exists, is it a date and in the future
-  def registration_edits_allowed?
-    self.allow_registration_edits &&
+  def registration_edits_currently_permitted?
+    !started? && self.allow_registration_edits &&
       (!has_event_change_deadline_date? || !event_change_deadline_date.present? || event_change_deadline_date > DateTime.now)
-  end
-
-  # can competitors delete their own registration after it has been accepetd
-  def registration_delete_after_acceptance_allowed?
-    self.allow_registration_self_delete_after_acceptance
   end
 
   private def dates_must_be_valid
@@ -1581,7 +1582,7 @@ class Competition < ApplicationRecord
   end
 
   def started?
-    start_date.present? && start_date < Date.today
+    start_date.present? && start_date <= Date.today
   end
 
   def organizers_or_delegates
@@ -1898,13 +1899,13 @@ class Competition < ApplicationRecord
       only: %w[id name website start_date registration_open registration_close announced_at cancelled_at end_date competitor_limit
                extra_registration_requirements enable_donations refund_policy_limit_date event_change_deadline_date waiting_list_deadline_date
                on_the_spot_registration on_the_spot_entry_fee_lowest_denomination qualification_results event_restrictions
-               base_entry_fee_lowest_denomination currency_code allow_registration_edits allow_registration_self_delete_after_acceptance
+               base_entry_fee_lowest_denomination currency_code allow_registration_edits competitor_can_cancel
                allow_registration_without_qualification refund_policy_percent use_wca_registration guests_per_registration_limit venue contact
                force_comment_in_registration use_wca_registration external_registration_page guests_entry_fee_lowest_denomination guest_entry_status
                information events_per_registration_limit guests_enabled],
       methods: %w[url website short_name city venue_address venue_details latitude_degrees longitude_degrees country_iso2 event_ids registration_currently_open?
                   main_event_id number_of_bookmarks using_payment_integrations? uses_qualification? uses_cutoff? competition_series_ids registration_full?
-                  part_of_competition_series?],
+                  part_of_competition_series? registration_full_and_accepted?],
       include: %w[delegates organizers],
     }
     self.as_json(options)
@@ -2419,7 +2420,7 @@ class Competition < ApplicationRecord
         "waitingListDeadlineDate" => waiting_list_deadline_date&.iso8601,
         "eventChangeDeadlineDate" => event_change_deadline_date&.iso8601,
         "allowOnTheSpot" => on_the_spot_registration,
-        "allowSelfDeleteAfterAcceptance" => allow_registration_self_delete_after_acceptance,
+        "competitorCanCancel" => competitor_can_cancel,
         "allowSelfEdits" => allow_registration_edits,
         "guestsEnabled" => guests_enabled,
         "guestEntryStatus" => guest_entry_status,
@@ -2527,7 +2528,7 @@ class Competition < ApplicationRecord
         "waitingListDeadlineDate" => errors[:waiting_list_deadline_date],
         "eventChangeDeadlineDate" => errors[:event_change_deadline_date],
         "allowOnTheSpot" => errors[:on_the_spot_registration],
-        "allowSelfDeleteAfterAcceptance" => errors[:allow_registration_self_delete_after_acceptance],
+        "competitorCanCancel" => errors[:competitor_can_cancel],
         "allowSelfEdits" => errors[:allow_registration_edits],
         "guestsEnabled" => errors[:guests_enabled],
         "guestEntryStatus" => errors[:guest_entry_status],
@@ -2660,7 +2661,7 @@ class Competition < ApplicationRecord
       event_change_deadline_date: form_data.dig('registration', 'eventChangeDeadlineDate')&.presence,
       guest_entry_status: form_data.dig('registration', 'guestEntryStatus'),
       allow_registration_edits: form_data.dig('registration', 'allowSelfEdits'),
-      allow_registration_self_delete_after_acceptance: form_data.dig('registration', 'allowSelfDeleteAfterAcceptance'),
+      competitor_can_cancel: form_data.dig('registration', 'competitorCanCancel'),
       use_wca_live_for_scoretaking: form_data.dig('website', 'usesWcaLive'),
       allow_registration_without_qualification: form_data.dig('eventRestrictions', 'qualificationResults', 'allowRegistrationWithout'),
       guests_per_registration_limit: form_data.dig('registration', 'guestsPerRegistration'),

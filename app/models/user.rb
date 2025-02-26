@@ -35,6 +35,10 @@ class User < ApplicationRecord
   has_many :teams_committees_at_least_senior_roles, through: :teams_committees_at_least_senior_role_metadata, source: :user_role, class_name: "UserRole"
   has_many :teams_committees_at_least_senior_groups, through: :teams_committees_at_least_senior_roles, source: :group, class_name: "UserGroup"
   has_many :teams_committees_at_least_senior, through: :teams_committees_at_least_senior_groups, source: :metadata, source_type: "GroupsMetadataTeamsCommittees"
+  has_many :past_bans_metadata, through: :past_roles, source: :metadata, source_type: "RolesMetadataBannedCompetitors"
+  has_many :past_bans, through: :past_bans_metadata, source: :user_role, class_name: "UserRole"
+  has_many :active_bans_metadata, through: :active_roles, source: :metadata, source_type: "RolesMetadataBannedCompetitors"
+  has_many :active_bans, through: :active_bans_metadata, source: :user_role, class_name: "UserRole"
   has_many :active_groups, through: :active_roles, source: :group, class_name: "UserGroup"
   has_many :board_metadata, through: :active_groups, source: :metadata, source_type: "GroupsMetadataBoard"
   has_many :confirmed_users_claiming_wca_id, -> { confirmed_email }, foreign_key: "delegate_id_to_handle_wca_id_claim", class_name: "User"
@@ -518,11 +522,11 @@ class User < ApplicationRecord
   end
 
   def banned_in_past?
-    past_roles.any? { |role| role.group == UserGroup.banned_competitors.first }
+    past_bans.any?
   end
 
   def current_ban
-    active_roles.select { |role| role.group == UserGroup.banned_competitors.first }.first
+    active_bans.first
   end
 
   def ban_end
@@ -912,14 +916,8 @@ class User < ApplicationRecord
 
   def can_edit_registration?(registration)
     # A registration can be edited by a user if it hasn't been accepted yet, and if edits are allowed.
-    editable_by_user = (!registration.accepted? || registration.competition.registration_edits_allowed?)
+    editable_by_user = (!registration.accepted? || registration.competition.registration_edits_currently_permitted?)
     can_manage_competition?(registration.competition) || (registration.user_id == self.id && editable_by_user)
-  end
-
-  def can_delete_registration?(registration)
-    # A registration can only be deleted by a user after it has been accepted if the organizers allow
-    can_delete_by_user = (!registration.accepted? || registration.competition.registration_delete_after_acceptance_allowed?)
-    can_manage_competition?(registration.competition) || (registration.user_id == self.id && can_delete_by_user)
   end
 
   def can_confirm_competition?(competition)

@@ -366,11 +366,6 @@ it:
       zero: zero giorni
       one: un giorno
       other: '%{count} giorni'
-    #original_hash: 203e1b3
-    these_events:
-      zero: nessun evento
-      one: questo evento
-      other: '%{count} eventi'
     #original_hash: 51ef7d4
     search_site: Cerca nel sito
     #original_hash: d7decf1
@@ -1009,6 +1004,8 @@ it:
       size_too_small: 'è troppo piccolo (dovrebbe essere almeno %{file_size})'
       #original_hash: a2a43b3
       size_too_big: 'è troppo grande (dovrebbe essere al massimo %{file_size})'
+      #original_hash: de76004
+      no_permission: Non sei autorizzato ad accedere a questa pagina.
   devise:
     passwords:
       edit:
@@ -1872,7 +1869,7 @@ it:
         #original_hash: a8f7e72
         information_html: >-
           Questo è un promemoria per ricordarti che le iscrizioni per <a
-          href=%{competition_url}>%{competition}</a> apriranno in meno di 24
+          href=%{competition_url}>%{competition}</a> apriranno tra meno di 24
           ore.
         #original_hash: 2b93022
         not_accepted_html: 'Ti sei iscritto, ma la tua iscrizione non è stata ancora accettata.'
@@ -2313,20 +2310,17 @@ it:
           Puoi controllare lo stato della tua iscrizione %{here}.
         #original_hash: 1852cbf
         see_you_soon: 'Speriamo di vederti al %{comp_name}!'
-      pending:
-        #original_hash: 8d26297
-        mail_subject: 'Iscrizione spostata in lista d''attesa: %{comp_name}'
-        #original_hash: 6fd0a8e
-        moved_html: >-
-          La tua iscrizione per il %{comp_name} è stata spostata in lista
-          d'attesa. Possibili cause:
-        causes:
-          #original_hash: eadfc0d
-          accepted: La tua iscrizione è stata accettata per sbaglio
-          #original_hash: 2ac6d84
-          withdrawal: Hai chiesto di essere rimosso
+      waiting_list:
+        #original_hash: 54c2106
+        mail_subject: 'Sei in lista d''attesa: %{comp_name}'
+        #original_hash: 2a0c44f
+        waitlisted_html: >-
+          La competizione è piena e sei stato messo in lista d'attesa. Riceverai
+          un'email nel caso in cui dovessero liberarsi abbastanza posti per
+          farti partecipare. Controlla la tua posizione nella lista d'attesa
+          %{here}.
         #original_hash: 8f7358f
-        email_if_error: 'Se credi sia un errore, rispondi a questa email.'
+        email_if_error: 'Se credi che si tratti di un errore, rispondi a questa email.'
       deleted:
         #original_hash: 8cbc6c0
         mail_subject: 'Iscrizione cancellata: %{comp_name}'
@@ -2334,6 +2328,8 @@ it:
         message_html: >-
           La tua iscrizione per %{comp_name} è stata cancellata. Possibili
           cause:
+        #original_hash: 8f7358f
+        email_if_error: 'Se credi che si tratti di un errore, rispondi a questa email.'
         causes:
           #original_hash: 978944c
           missing_info: Non hai fornito tutti i dettagli richiesti
@@ -2345,7 +2341,7 @@ it:
           registrations_full: >-
             Il limite di partecipanti è stato raggiunto e non ci sono più posti
             disponibili
-          #original_hash: 0d4cce9
+          #original_hash: 238f4ff
           multiple_registrations: Ti sei iscritto due o più volte
           #original_hash: 70b1e2c
           competition_canceled: La competizione è stata cancellata
@@ -2412,7 +2408,7 @@ it:
     #original_hash: bbcc3dc
     delete_registration: Cancella iscrizione
     #original_hash: e9ddc6e
-    will_open_html: 'Le iscrizioni apriranno tra <strong>%{days}</strong> %{time}.'
+    will_open_html: 'Le iscrizioni apriranno tra <strong>%{days}</strong> il %{time}.'
     #original_hash: 34eb009
     will_close_html: 'Le iscrizioni chiuderanno tra <strong>%{days}</strong> %{time}.'
     #original_hash: dc8a520
@@ -2541,6 +2537,8 @@ it:
           Stai per pagare almeno il doppio della somma richiesta per
           l'iscrizione.
       errors:
+        #original_hash: c80ec45
+        registration_closed: Le iscrizioni sono chiuse e non saranno accettati altri pagamenti.
         #original_hash: 166d48c
         already_paid: >-
           Il costo non è stato addebitato perché la tassa di iscrizione è già
@@ -3152,8 +3150,6 @@ it:
         custom: Competizioni nel periodo di tempo selezionato
         #original_hash: 0933739
         by_announcement: 'Competizioni ordinate per data di annuncio, dalla più recente'
-      #original_hash: 6684214
-      no_access: Non hai accesso a questa pagina!
       tooltips:
         hourglass:
           #original_hash: b5183e1
@@ -3163,7 +3159,7 @@ it:
           #original_hash: 1157462
           posted: Risultati pubblicati!
           #original_hash: 89bcc37
-          starts_in: 'Inizia fra %{days}'
+          starts_in: 'Inizia tra %{days}'
           #original_hash: 97b061a
           announced_on: 'Annunciata il %{announcement_date}'
         #original_hash: ccd2db9
@@ -3171,24 +3167,20 @@ it:
         #original_hash: 3bc8082
         recent: 'Gli ultimi %{count} giorni'
         registration:
-          #original_hash: 49d8169
-          opens_in: 'Le iscrizioni apriranno tra %{duration}'
-          #original_hash: 2d601fa
-          closed: 'Le iscrizioni sono chiuse. La competizione inizierà tra %{days}'
+          #original_hash: fe28f94
+          opens_in: 'Le iscrizioni apriranno %{relativeDate}.'
+          #original_hash: f9f709e
+          closed: 'Le iscrizioni sono chiuse. La competizione inizierà %{relativeDate}.'
           #original_hash: 2e17db8
           open: Le iscrizioni sono aperte!
-          #original_hash: c098975
+          #original_hash: be2118d
           full: >-
             Limite partecipanti raggiunto. Le nuove iscrizioni andranno in lista
-            d'attesa
+            d'attesa.
       #original_hash: 28531af
       no_more_comps: Nessuna competizione.
       #original_hash: 8b09d74
       no_comp_found: Nessuna competizione trovata.
-      #original_hash: 7008166
-      no_comp_match: >-
-        Non abbiamo trovato alcuna competizione con %{events}! Prova a
-        effettuare una ricerca con meno eventi.
     my_competitions_table:
       #original_hash: 5301648
       edit: Modifica
@@ -3582,22 +3574,22 @@ it:
             Quote.</b>
           #original_hash: 8c4fdf8
           on_the_spot_entry_fee: >-
-            Se questo è impostato su 0, verrà visualizzata una frase che dice
-            che le registrazioni in loco saranno accettate gratuitamente.
+            Se impostato a 0, verrà visualizzato il messaggio che le
+            registrazioni in loco saranno accettate gratuitamente.
           #original_hash: 0419547
           guest_entry_fee: >-
             Per ora questo numero è solo informativo, le tasse degli spettatori
-            non possono essere gestite attraverso questo sito. Se è impostato a
-            0, verrà visualizzato un messaggio personalizzato relativo alle
+            non possono essere gestite attraverso questo sito. Se impostato a 0,
+            verrà visualizzato un messaggio personalizzato relativo alle
             restrizioni per gli spettatori.
           #original_hash: da39a3e
           donations_enabled: ''
           #original_hash: 180b7b3
           refund_policy_percent: >-
             Per ora questo numero è solo informativo, i rimborsi dovranno essere
-            emessi manualmente. Se questo è impostato su 0, verrà visualizzata
-            una frase che dice che le tasse di iscrizione non saranno rimborsate
-            in alcun caso.
+            emessi manualmente. Se impostato a 0, verrà visualizzato il
+            messaggio che le tasse di iscrizione non saranno rimborsate in alcun
+            caso.
           #original_hash: f64d853
           refund_policy_limit_date: Termine oltre il quale non sarà più possibile ottenere un rimborso.
         registration:
@@ -4107,6 +4099,10 @@ it:
       must_ask_about_guests_if_specifying_limit: >-
         È necessario fare domande sugli accompagnatori se è stato specificato un
         limite.
+      #original_hash: 000564d
+      not_full_url: >-
+        Nel contenuto è presente un URL relativo (%{url}). Per favore specifica
+        gli URL in formato completo, con il prefisso http:// o https://.
     new:
       #original_hash: 1208df7
       create_competition: Crea competizione
@@ -5719,13 +5715,13 @@ it:
         Il numero di partecipanti può essere limitato per evento o per
         competizione (vedi <a
         href='https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>Requisiti
-        Competizione</a>). Il Delegato della competizione deve ricevere
-        un'approvazione del limite di partecipanti dal WCAT. Il limite di
-        partecipanti deve essere scelto accuratamente e congruentemente con
-        l'aspettativa di partecipazione. Il limite non deve essere impostato a
-        un valore più basso per motivi secondari. Tale limite deve essere tenuto
-        in considerazione già in fase di ricerca di una sede adeguata. Il limite
-        di partecipanti deve essere chiaramente comunicato nella pagina della
+        Competizione</a>). Il Delegato della competizione deve ricevere dal WCAT
+        un'approvazione del limite di partecipanti. Il limite di partecipanti
+        deve essere scelto accuratamente e congruentemente con l'aspettativa di
+        partecipazione. Il limite non deve essere impostato a un valore più
+        basso per motivi secondari. Tale limite deve essere tenuto in
+        considerazione già in fase di ricerca di una sede adeguata. Il limite di
+        partecipanti deve essere chiaramente comunicato nella pagina della
         competizione sul sito WCA.
     paragraph6:
       #original_hash: ce4c3d0

@@ -23,15 +23,6 @@ export default function RegistrationList({ competitionInfo, userId }) {
     setPsychSheetEventId(undefined);
     setPsychSheetSortedBy(undefined);
   };
-  const handleEventSelection = ({ type, eventId }) => {
-    if (type === 'toggle_event') {
-      if (eventId !== psychSheetEventId) {
-        showPsychSheetFor(eventId);
-      }
-    } else {
-      returnToCompetitorsList();
-    }
-  };
 
   const anEventIsSelected = psychSheetEventId !== undefined;
 
@@ -43,9 +34,12 @@ export default function RegistrationList({ competitionInfo, userId }) {
   return (
     <Segment style={{ overflowX: 'scroll' }}>
       <PsychSheetEventSelector
-        handleEventSelection={handleEventSelection}
         eventList={competitionInfo.event_ids}
         selectedEvent={psychSheetEventId}
+        onEventClick={
+          (eventId) => eventId !== psychSheetEventId && showPsychSheetFor(eventId)
+        }
+        onClearClick={returnToCompetitorsList}
       />
       {anEventIsSelected ? (
         <PsychSheet
