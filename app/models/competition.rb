@@ -258,6 +258,10 @@ class Competition < ApplicationRecord
     end
   end
 
+  def enforce_newcomer_month_reservations
+    competition.newcomer_month_reserved_spots.present? && competition.newcomer_month_reserved_spots > 0
+  end
+
   def newcomer_month_reserved_spots_remaining
     newcomer_month_reserved_spots - registrations.newcomer_month_eligible_competitors_count
   end
