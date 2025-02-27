@@ -4,12 +4,12 @@ import {
 } from 'semantic-ui-react';
 import _ from 'lodash';
 import EventSelector from '../wca/EventSelector';
-import { RegionSelector } from '../CompetitionsOverview/CompetitionsFilters';
 import { countries } from '../../lib/wca-data.js.erb';
 import I18n from '../../lib/i18n';
+import RegionSelector, { ALL_REGIONS_VALUE } from '../wca/RegionSelector';
 
 function getRegionIdWithFallback(region) {
-  if (region === 'all') {
+  if (region === ALL_REGIONS_VALUE) {
     return 'world';
   }
   return countries.byIso2[region]?.id ?? region;
@@ -60,7 +60,7 @@ export default function ResultsFilter({
         <Form.Field>
           <RegionSelector
             region={regionIso2}
-            dispatchFilter={({ region: r }) => setRegion(getRegionIdWithFallback(r))}
+            onRegionChange={(r) => setRegion(getRegionIdWithFallback(r))}
           />
         </Form.Field>
         <Form.Group widths="equal">
