@@ -335,35 +335,37 @@ RSpec.describe 'API Registrations' do
     end
 
     it 'accepts competitors from the waiting list' do
-      waiting_list = FactoryBot.create(:waiting_list, holder: competition)
-      waiting_list.add(registration1.user_id)
-      waiting_list.add(registration2.user_id)
-      waiting_list.add(registration3.user_id)
+      waitlisted1 = FactoryBot.create(:registration, :waiting_list, competition: competition)
+      waitlisted2 = FactoryBot.create(:registration, :waiting_list, competition: competition)
+      waitlisted3 = FactoryBot.create(:registration, :waiting_list, competition: competition)
+      expect(waitlisted1.competing_status).to eq('waiting_list')
+      expect(waitlisted2.competing_status).to eq('waiting_list')
+      expect(waitlisted3.competing_status).to eq('waiting_list')
 
       update_request1 = FactoryBot.build(
         :update_request,
-        user_id: registration1.user_id,
-        competition_id: registration1.competition.id,
+        user_id: waitlisted1.user_id,
+        competition_id: waitlisted1.competition.id,
         competing: { 'status' => 'accepted' },
       )
 
       update_request2 = FactoryBot.build(
         :update_request,
-        user_id: registration2.user_id,
-        competition_id: registration2.competition.id,
+        user_id: waitlisted2.user_id,
+        competition_id: waitlisted2.competition.id,
         competing: { 'status' => 'accepted' },
       )
 
       update_request3 = FactoryBot.build(
         :update_request,
-        user_id: registration3.user_id,
-        competition_id: registration3.competition.id,
+        user_id: waitlisted3.user_id,
+        competition_id: waitlisted3.competition.id,
         competing: { 'status' => 'accepted' },
       )
 
       bulk_update_request = FactoryBot.build(
         :bulk_update_request,
-        user_ids: [registration1.user_id],
+        user_ids: [waitlisted1.user_id],
         submitted_by: competition.organizers.first.id,
         competition_id: competition.id,
         requests: [update_request1, update_request2, update_request3],

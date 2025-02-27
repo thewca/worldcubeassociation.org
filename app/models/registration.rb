@@ -206,7 +206,7 @@ class Registration < ApplicationRecord
   end
 
   def waiting_list_position
-    competition.waiting_list.position(id)
+    competition.waiting_list.position(self)
   end
 
   def wcif_status
@@ -430,6 +430,11 @@ class Registration < ApplicationRecord
     SERIES_SIBLING_DISPLAY_STATUSES.map { |st| series_sibling_registrations(st) }
                                    .map(&:count)
                                    .join(" + ")
+  end
+
+  def ensure_waitlist_eligibility!
+    raise ArgumentError.new("Registration must have a competing_status of 'waiting_list' to be added to the waiting list") unless
+      competing_status == Registrations::Helper::STATUS_WAITING_LIST
   end
 
   DEFAULT_SERIALIZE_OPTIONS = {
