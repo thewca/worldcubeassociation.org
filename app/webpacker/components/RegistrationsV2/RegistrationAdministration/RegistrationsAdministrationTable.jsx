@@ -23,6 +23,7 @@ export default function RegistrationAdministrationTable({
   sortable = true,
   withPosition = false,
   handleOnDragEnd,
+  color,
 }) {
   const handleHeaderCheck = (_, data) => {
     if (data.checked) {
@@ -42,7 +43,15 @@ export default function RegistrationAdministrationTable({
   // TODO: use native ref= when we switch to semantic v3
   /* eslint-disable react/jsx-props-no-spreading */
   return (
-    <Table sortable={sortable} striped unstackable compact singleLine textAlign="left">
+    <Table
+      sortable={sortable}
+      striped
+      unstackable
+      compact
+      singleLine
+      textAlign="left"
+      color={color}
+    >
       <TableHeader
         columnsExpanded={columnsExpanded}
         isChecked={registrations.length === selected.length}
@@ -70,6 +79,7 @@ export default function RegistrationAdministrationTable({
                     draggable={draggable}
                     isSelected={selected.includes(w.user.id)}
                     withPosition={withPosition}
+                    color={color}
                   />
                 ))}
                 {providedDroppable.placeholder}
