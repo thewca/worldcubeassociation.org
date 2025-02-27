@@ -13,21 +13,21 @@ import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { useConfirm } from '../../../lib/providers/ConfirmProvider';
 import { contactCompetitionUrl } from '../../../lib/requests/routes.js.erb';
 import RegistrationStatus from './RegistrationStatus';
+import { useRegistration } from '../lib/RegistrationProvider';
 
 export default function RegistrationOverview({
-  nextStep, registration, competitionInfo,
+  nextStep, competitionInfo,
 }) {
   const dispatch = useDispatch();
   const confirm = useConfirm();
+  const { registration, isRejected, isAccepted } = useRegistration();
 
   const hasRegistrationEditDeadlinePassed = hasPassed(
     competitionInfo.event_change_deadline_date ?? competitionInfo.start_date,
   );
 
-  const isRejected = registration.competing.registration_status === 'rejected';
-
   const deleteAllowed = (competitionInfo.competitor_can_cancel === 'always')
-    || (competitionInfo.competitor_can_cancel === 'not_accepted' && registration.competing.registration_status !== 'accepted')
+    || (competitionInfo.competitor_can_cancel === 'not_accepted' && !isAccepted)
     || (competitionInfo.competitor_can_cancel === 'unpaid' && !registration.payment?.has_paid);
 
   const queryClient = useQueryClient();
