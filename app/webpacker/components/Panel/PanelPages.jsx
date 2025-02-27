@@ -11,7 +11,6 @@ import {
   generateDataExportsUrl,
   fixResultsUrl,
   mergeProfilesUrl,
-  anonymizePersonUrl,
   reassignConnectedWcaIdUrl,
 } from '../../lib/requests/routes.js.erb';
 import PostingCompetitionsTable from '../PostingCompetitions';
@@ -184,10 +183,6 @@ export default {
   [PANEL_PAGES.mergeProfiles]: {
     name: 'Merge Profiles',
     link: mergeProfilesUrl,
-  },
-  [PANEL_PAGES.anonymizePerson]: {
-    name: 'Anonymize Person',
-    link: anonymizePersonUrl,
   },
   [PANEL_PAGES.reassignConnectedWcaId]: {
     name: 'Reassign Connected WCA ID',

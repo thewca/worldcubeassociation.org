@@ -60,7 +60,6 @@ Rails.application.routes.draw do
   post 'users/:id/avatar' => 'users#upload_avatar'
   patch 'users/:id/avatar' => 'users#update_avatar'
   delete 'users/:id/avatar' => 'users#delete_avatar'
-  post 'users/:id/anonymize' => 'users#anonymize', as: :anonymize_user
   get 'admin/avatars/pending' => 'admin/avatars#pending_avatar_users', as: :pending_avatars
   post 'admin/avatars' => 'admin/avatars#update_avatar', as: :admin_update_avatar
 
@@ -217,6 +216,10 @@ Rails.application.routes.draw do
     get 'reassign-connected-wca-id' => 'admin#reassign_wca_id', as: :admin_reassign_wca_id
   end
   get 'panel-page/:id' => 'panel#panel_page', as: :panel_page
+  scope 'tickets' do
+    get 'details_before_anonymization' => 'tickets#details_before_anonymization', as: :tickets_details_before_anonymization
+    post 'anonymize' => 'tickets#anonymize', as: :tickets_anonymize
+  end
   resources :tickets, only: [:index, :show] do
     post 'update_status' => 'tickets#update_status', as: :update_status
     get 'edit_person_validators' => 'tickets#edit_person_validators', as: :edit_person_validators
@@ -309,7 +312,6 @@ Rails.application.routes.draw do
   get '/admin/complete_persons' => 'admin#complete_persons'
   post '/admin/complete_persons' => 'admin#do_complete_persons'
   get '/admin/peek_unfinished_results' => 'admin#peek_unfinished_results'
-  post '/admin/anonymize_person' => 'admin#do_anonymize_person', as: :admin_do_anonymize_person
   get '/admin/validate_reassign_wca_id' => 'admin#validate_reassign_wca_id', as: :admin_validate_reassign_wca_id
   post '/admin/reassign_wca_id' => 'admin#do_reassign_wca_id', as: :admin_do_reassign_wca_id
 
