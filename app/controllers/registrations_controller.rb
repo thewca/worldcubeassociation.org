@@ -108,6 +108,10 @@ class RegistrationsController < ApplicationController
       raise I18n.t("registrations.import.errors.wrong_dob_format", raw_dobs: wrong_format_dobs.join(", "))
     end
     new_locked_users = []
+    # registered_at stores millisecond precision, but we want all registrations
+    #   from CSV import to be considered as one "batch". So we mark a timestamp
+    #   once, and then reuse it throughout the loop.
+    import_time = Time.now.utc
     ActiveRecord::Base.transaction do
       competition.registrations.accepted.each do |registration|
         unless emails.include?(registration.user.email)
@@ -117,7 +121,9 @@ class RegistrationsController < ApplicationController
       registration_rows.each do |registration_row|
         user, locked_account_created = user_for_registration!(registration_row)
         new_locked_users << user if locked_account_created
-        registration = competition.registrations.find_or_initialize_by(user_id: user.id)
+        registration = competition.registrations.find_or_initialize_by(user_id: user.id) do |reg|
+          reg.registered_at = import_time
+        end
         unless registration.accepted?
           registration.assign_attributes(competing_status: Registrations::Helper::STATUS_ACCEPTED)
         end
@@ -159,7 +165,9 @@ class RegistrationsController < ApplicationController
     end
     ActiveRecord::Base.transaction do
       user, locked_account_created = user_for_registration!(params[:registration_data])
-      registration = @competition.registrations.find_or_initialize_by(user_id: user.id)
+      registration = @competition.registrations.find_or_initialize_by(user_id: user.id) do |reg|
+        reg.registered_at = Time.now.utc
+      end
       raise I18n.t("registrations.add.errors.already_registered") unless registration.new_record?
       registration_comment = params.dig(:registration_data, :comments)
       registration.assign_attributes(comments: registration_comment) if registration_comment.present?

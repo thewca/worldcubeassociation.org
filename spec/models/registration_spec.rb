@@ -541,4 +541,10 @@ RSpec.describe Registration do
       end
     end
   end
+
+  it 'validates presence of registered_at' do
+    reg = FactoryBot.build(:registration, registered_at: nil)
+    expect(reg).not_to be_valid
+    expect(reg.errors[:registered_at]).to include("can't be blank")
+  end
 end

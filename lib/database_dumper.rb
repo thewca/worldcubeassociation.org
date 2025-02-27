@@ -587,6 +587,7 @@ module DatabaseDumper
           roles
           is_competing
           competing_status
+          registered_at
         ),
         db_default: %w(ip),
         fake_values: {
