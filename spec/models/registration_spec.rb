@@ -546,7 +546,7 @@ RSpec.describe Registration do
     it 'calls registration.auto_close! after a paid registration is created', :only do
       competition = FactoryBot.create(:competition)
       reg = FactoryBot.create(:registration, competition: competition)
-      expect(reg).to receive(:should_auto_close?)
+      expect(reg).to receive(:consider_auto_close)
       expect(competition).to receive(:attempt_auto_close!)
 
       FactoryBot.create(

@@ -30,10 +30,7 @@ class RegistrationPayment < ApplicationRecord
   end
 
   private def auto_close_hook
-    if amount_lowest_denomination > 0
-      return registration.consider_auto_close
-    else
-      return false
-    end
+    puts "in hook"
+    return registration.random_test_function?
   end
 end
