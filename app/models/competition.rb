@@ -177,6 +177,7 @@ class Competition < ApplicationRecord
     event_change_deadline_date
     competition_series_id
     registration_version
+    newcomer_month_reserved_spots
   ).freeze
   VALID_NAME_RE = /\A([-&.:' [:alnum:]]+) (\d{4})\z/
   VALID_ID_RE = /\A[a-zA-Z0-9]+\Z/
@@ -193,6 +194,9 @@ class Competition < ApplicationRecord
   MAX_MARKDOWN_LENGTH = 255
   MAX_COMPETITOR_LIMIT = 5000
   MAX_GUEST_LIMIT = 100
+  NEWCOMER_MONTH_ENABLED = true
+  NEWCOMER_MONTH_RESERVATIONS_FRACTION = 0.5
+
   validates_inclusion_of :competitor_limit_enabled, in: [true, false], if: :competitor_limit_required?
   validates_numericality_of :competitor_limit, greater_than_or_equal_to: 1, less_than_or_equal_to: MAX_COMPETITOR_LIMIT, if: :competitor_limit_enabled?
   validates :competitor_limit_reason, presence: true, if: :competitor_limit_enabled?
@@ -246,6 +250,27 @@ class Competition < ApplicationRecord
   validates :venueAddress, :venueDetails, :name_reason, :forbid_newcomers_reason, length: { maximum: MAX_FREETEXT_LENGTH }
   validates :external_website, :external_registration_page, length: { maximum: MAX_URL_LENGTH }
   validates :contact, length: { maximum: MAX_MARKDOWN_LENGTH }
+
+  validate :validate_newcomer_month_reserved_spots, if: -> { competitor_limit.present? && newcomer_month_reserved_spots.present? }
+  private def validate_newcomer_month_reserved_spots
+    max_newcomer_spots = (competitor_limit * NEWCOMER_MONTH_RESERVATIONS_FRACTION).floor
+    errors.add(:newcomer_month_reserved_spots, I18n.t('competitions.errors.newcomer_month_reservations_percentage')) if
+      newcomer_month_reserved_spots > max_newcomer_spots
+    errors.add(:newcomer_month_reserved_spots, I18n.t('competitions.errors.newcomer_month_reservations_available')) if
+      newcomer_month_reserved_spots > newcomer_month_spots_reservable
+  end
+
+  def enforce_newcomer_month_reservations?
+    newcomer_month_reserved_spots.present? && newcomer_month_reserved_spots > 0 && NEWCOMER_MONTH_ENABLED
+  end
+
+  def newcomer_month_spots_reservable
+    competitor_limit - (registrations.accepted_count - registrations.newcomer_month_eligible_competitors_count)
+  end
+
+  def newcomer_month_reserved_spots_remaining
+    newcomer_month_reserved_spots - registrations.newcomer_month_eligible_competitors_count
+  end
 
   # Dirty old trick to deal with competition id changes (see other methods using
   # 'with_old_id' for more details).
@@ -2392,6 +2417,7 @@ class Competition < ApplicationRecord
         "count" => competitor_limit,
         "reason" => competitor_limit_reason,
         "autoCloseThreshold" => auto_close_threshold,
+        "newcomerMonthReservedSpots" => newcomer_month_reserved_spots,
       },
       "staff" => {
         "staffDelegateIds" => staff_delegates.to_a.pluck(:id),
@@ -2500,6 +2526,7 @@ class Competition < ApplicationRecord
         "count" => errors[:competitor_limit],
         "reason" => errors[:competitor_limit_reason],
         "autoCloseThreshold" => errors[:auto_close_threshold],
+        "newcomer_month_reserved_spots" => errors[:newcomer_month_reserved_spots],
       },
       "staff" => {
         "staffDelegateIds" => errors[:staff_delegate_ids],
@@ -2642,6 +2669,7 @@ class Competition < ApplicationRecord
       competitor_limit: form_data.dig('competitorLimit', 'count'),
       competitor_limit_reason: form_data.dig('competitorLimit', 'reason'),
       auto_close_threshold: form_data.dig('competitorLimit', 'autoCloseThreshold'),
+      newcomer_month_reserved_spots: form_data.dig('competitorLimit', 'newcomerMonthReservedSpots'),
       extra_registration_requirements: form_data.dig('registration', 'extraRequirements'),
       on_the_spot_registration: form_data.dig('registration', 'allowOnTheSpot'),
       on_the_spot_entry_fee_lowest_denomination: form_data.dig('entryFees', 'onTheSpotEntryFee'),
@@ -2786,6 +2814,7 @@ class Competition < ApplicationRecord
             "count" => { "type" => ["integer", "null"] },
             "reason" => { "type" => ["string", "null"] },
             "autoCloseThreshold" => { "type" => ["integer", "null"] },
+            "newcomerMonthReservedSpots" => { "type" => ["integer", "null"] },
           },
         },
         "staff" => {

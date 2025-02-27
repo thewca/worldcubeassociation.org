@@ -1634,6 +1634,7 @@ en:
           count: "Maximum number of competitors"
           reason: "The reason for the competitor limit"
           auto_close_threshold: "Auto-close threshold"
+          newcomer_month_reserved_spots: "Number of spots to reserve for newcomers"
         staff:
           staff_delegate_ids: "WCA Delegate(s)"
           trainee_delegate_ids: "WCA Trainee Delegate(s)"
@@ -1719,6 +1720,7 @@ en:
           count: "The number of competitors allowed in this competition. For now this number is informational only, and does not yet prevent more people from registering. We are working on adding explicit support for this to the registration flow, but it requires some other work first."
           reason: "What is the reason for the limit on competitors? Please fill this out in English!"
           auto_close_threshold: "Registration will automatically close when this number of paid registrations is received. Leave blank to disable, ignore if you aren't using integrated payments."
+          newcomer_month_reserved_spots: "Only allowed during Newcomer Month - reserved spots can't be more than half of the Competitor Limit."
         staff:
           staff_delegate_ids: "WCA Delegates for the competition."
           trainee_delegate_ids: "WCA Trainee Delegates for the competition."
@@ -1935,6 +1937,7 @@ en:
         -4010: "The Waiting List Position is not Valid"
         -4011: "You can only accept the first person on the waiting list"
         -4012: "You are not qualified to compete in the selected events"
+        -4013: "Cant accept non-newcomer when only reserved newcomer spots remain"
         -4014: "You are already registered for this competition."
         -4015: "Please enter a reasonable amount of guests, or contact the organizers if you need to bring an extraordinary amount of guests."
         -6001: "WCA Payment is not enabled for this competition"
@@ -1945,6 +1948,8 @@ en:
       auto_close_positive_nonzero: "Auto-close threshold must be greater than 0"
       must_exceed_competitor_limit: "Auto-close threshold must be greater than the competitor limit"
       use_wca_registration: "Competition must use WCA registration"
+      newcomer_month_reservations_percentage: 'cant reserve more than 50% of spots for newcomers'
+      newcomer_month_reservations_available: 'Desired newcomer month reserved spots exceeds number of spots reservable'
       invalid_name_message: "must end with a year and must contain only alphanumeric characters, dashes(-), ampersands(&), periods(.), colons(:), apostrophes('), and spaces( )"
       cannot_manage: "Cannot manage competition."
       cannot_delete_public: "Cannot delete a competition that is publicly visible."

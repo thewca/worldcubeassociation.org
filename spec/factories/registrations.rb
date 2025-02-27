@@ -42,6 +42,10 @@ FactoryBot.define do
       association :user, factory: [:user]
     end
 
+    trait :newcomer_month_eligible do
+      association :user, factory: [:user, :current_year_wca_id]
+    end
+
     trait :paid do
       after(:create) do |registration|
         FactoryBot.create(

@@ -101,6 +101,14 @@ FactoryBot.define do
 
     registration_version { :v3 }
 
+    trait :newcomer_month do
+      registration_open
+      with_organizer
+      with_competitor_limit
+      competitor_limit { 4 }
+      newcomer_month_reserved_spots { 2 }
+    end
+
     trait :enforces_qualifications do
       with_organizer
       qualification_results { true }
