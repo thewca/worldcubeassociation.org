@@ -5,7 +5,6 @@ import {
   subordinateUpcomingCompetitionsUrl,
   generateDbTokenUrl,
   serverStatusPageUrl,
-  runValidatorsUrl,
   checkRecordsUrl,
   computeAuxiliaryDataUrl,
   generateDataExportsUrl,
@@ -39,6 +38,7 @@ import ApprovePictures from './pages/ApprovePictures';
 import EditPersonRequestsPage from './pages/EditPersonRequestsPage';
 import AnonymizationScriptPage from './pages/AnonymizationScriptPage';
 import CreateNewcomersPage from './pages/CreateNewcomersPage';
+import RunValidatorsForm from './pages/RunValidatorsPage/RunValidatorsForm';
 
 export default {
   [PANEL_PAGES.postingDashboard]: {
@@ -159,7 +159,7 @@ export default {
   },
   [PANEL_PAGES.runValidators]: {
     name: 'Run Validators',
-    link: runValidatorsUrl,
+    component: RunValidatorsForm,
   },
   [PANEL_PAGES.createNewComers]: {
     name: 'Create Newcomers',
