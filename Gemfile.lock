@@ -12,16 +12,6 @@ GIT
     selectize-rails (0.12.1)
 
 GIT
-  remote: https://github.com/sidekiq-cron/sidekiq-cron.git
-  revision: f0ac4038da7b3c6bc09b2c3ca9f0b9979848a95a
-  specs:
-    sidekiq-cron (2.0.0.rc2)
-      cronex (>= 0.13.0)
-      fugit (~> 1.8, >= 1.11.1)
-      globalid (>= 1.0.1)
-      sidekiq (>= 6.5.0)
-
-GIT
   remote: https://github.com/thewca/i18n-country-translations.git
   revision: e6706abe0eaa65729c1acb698be08b91dd2b6fde
   specs:
@@ -69,9 +59,6 @@ GIT
 GEM
   remote: https://rubygems.org/
   specs:
-    RubyInline (3.13.0)
-      ZenTest (~> 4.3)
-    ZenTest (4.12.1)
     actioncable (7.2.2)
       actionpack (= 7.2.2)
       activesupport (= 7.2.2)
@@ -328,8 +315,6 @@ GEM
     fugit (1.11.1)
       et-orbi (~> 1, >= 1.2.11)
       raabro (~> 1.4)
-    fuzzy-string-match (1.0.1)
-      RubyInline (>= 3.8.6)
     gli (2.21.5)
     glob (0.4.0)
     globalid (1.2.1)
@@ -409,6 +394,7 @@ GEM
     irb (1.14.1)
       rdoc (>= 4.0.0)
       reline (>= 0.4.2)
+    jaro_winkler (1.6.0)
     jbuilder (2.13.0)
       actionview (>= 5.0.0)
       activesupport (>= 5.0.0)
@@ -469,6 +455,10 @@ GEM
       money (~> 6.12)
     money (6.16.0)
       i18n (>= 0.6.4, <= 2)
+    money-currencylayer-bank (0.7.2)
+      json (>= 1.8)
+      monetize (~> 1.4)
+      money (~> 6.7)
     money-rails (1.15.0)
       activesupport (>= 3.0)
       monetize (~> 1.9)
@@ -593,10 +583,12 @@ GEM
       zeitwerk (~> 2.6)
     rainbow (3.1.1)
     rake (13.2.1)
+    rake-compiler-dock (1.9.1)
     rb-fsevent (0.11.0)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
-    rb_sys (0.9.98)
+    rb_sys (0.9.110)
+      rake-compiler-dock (= 1.9.1)
     rdoc (6.7.0)
       psych (>= 4.0.0)
     react-rails (3.2.1)
@@ -702,7 +694,7 @@ GEM
     seedbank (0.5.0)
       rake (>= 10.0)
     semantic_range (3.0.0)
-    shakapacker (8.0.2)
+    shakapacker (8.1.0)
       activesupport (>= 5.2)
       package_json
       rack-proxy (>= 0.6.1)
@@ -718,6 +710,11 @@ GEM
       logger
       rack (>= 2.2.4)
       redis-client (>= 0.22.2)
+    sidekiq-cron (2.0.0.rc2)
+      cronex (>= 0.13.0)
+      fugit (~> 1.8, >= 1.11.1)
+      globalid (>= 1.0.1)
+      sidekiq (>= 6.5.0)
     signet (0.19.0)
       addressable (~> 2.8)
       faraday (>= 0.17.5, < 3.a)
@@ -866,7 +863,6 @@ DEPENDENCIES
   faker
   faraday
   faraday-retry
-  fuzzy-string-match
   google-apis-admin_directory_v1
   guard-rspec
   hiredis
@@ -879,6 +875,7 @@ DEPENDENCIES
   image_processing
   irb
   iso!
+  jaro_winkler
   jbuilder
   json-schema
   jwt
@@ -888,6 +885,7 @@ DEPENDENCIES
   mail_form
   mini_magick
   momentjs-rails!
+  money-currencylayer-bank
   money-rails
   mysql2
   newrelic_rpm
@@ -921,10 +919,10 @@ DEPENDENCIES
   sdoc
   seedbank
   selectize-rails!
-  shakapacker (= 8.0.2)
+  shakapacker (= 8.1.0)
   shoryuken
   sidekiq
-  sidekiq-cron!
+  sidekiq-cron
   simple_form
   simplecov
   simplecov-lcov
@@ -951,4 +949,4 @@ DEPENDENCIES
   wkhtmltopdf-binary-ng
 
 BUNDLED WITH
-   2.5.18
+   2.6.3

@@ -1,9 +1,10 @@
 inherit_from: .rubocop_todo.yml
 
-require: rubocop-thread_safety
+plugins:
+  - rubocop-thread_safety
 
 AllCops:
-  TargetRubyVersion: 3.3
+  TargetRubyVersion: 3.4
   DisplayCopNames: true
   NewCops: enable
   Exclude:
@@ -243,3 +244,6 @@ ThreadSafety/ClassAndModuleAttributes:
     - 'app/models/concerns/cachable.rb'
     - 'app/models/concerns/localized_sortable.rb'
     - 'app/models/regulation.rb'
+
+ThreadSafety/DirChdir:
+  AllowCallWithBlock: true

@@ -42,7 +42,7 @@ locals {
     },
     {
       name = "SIDEKIQ_REDIS_URL"
-      value = "redis://redis-main-staging-001.iebvzt.0001.usw2.cache.amazonaws.com:6379"
+      value = "redis://wca-staging-sidekiq-001.iebvzt.0001.usw2.cache.amazonaws.com:6379"
     },
     {
       name = "STAGING_OAUTH_URL"
@@ -55,6 +55,10 @@ locals {
     {
       name = "REGISTRATION_QUEUE"
       value = aws_sqs_queue.this.url
+    },
+    {
+      name = "LIVE_QUEUE"
+      value = aws_sqs_queue.results.url
     },
     {
       name = "STORAGE_AWS_REGION"
@@ -222,7 +226,7 @@ data "aws_iam_policy_document" "task_policy" {
       "sqs:GetQueueAttributes",
       "sqs:GetQueueUrl"
     ]
-    resources = [aws_sqs_queue.this.arn]
+    resources = [aws_sqs_queue.this.arn, aws_sqs_queue.results.arn]
   }
 }
 

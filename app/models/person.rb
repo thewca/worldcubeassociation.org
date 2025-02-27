@@ -269,9 +269,21 @@ class Person < ApplicationRecord
     Rails.application.routes.url_helpers.person_url(wca_id, host: EnvConfig.ROOT_URL)
   end
 
+  def self.fields_edit_requestable
+    [:name, :country_iso2, :gender, :dob].freeze
+  end
+
   DEFAULT_SERIALIZE_OPTIONS = {
     only: ["wca_id", "name", "gender"],
     methods: ["url", "country_iso2"],
+  }.freeze
+
+  USER_COMMON_SERIALIZE_OPTIONS = {
+    only: ["name", "gender"],
+    methods: ["country_iso2"],
+    # grrr… some tests (and apparently also API endpoints) rely on serializing this data _through_ person.
+    #   Not a good code design decision, but very cumbersome to properly refactor. Signed GB 2025-01-09
+    include: User::DEFAULT_SERIALIZE_OPTIONS[:include],
   }.freeze
 
   def personal_records
@@ -302,8 +314,22 @@ class Person < ApplicationRecord
       json[:incorrect_wca_id_claim_count] = incorrect_wca_id_claim_count
     end
 
+    # Passing down options from Person to User (which are completely different models in the DB!)
+    #   is a horrible idea. Unfortunately, our external APIs have come to rely on it,
+    #   so we need to hack around it.
+    # First, we check whether the developer specifically gave instructions about which `user` properties they want.
+    hash_include_specified = options&.dig(:include).is_a? Hash
+    user_pass_down_options = hash_include_specified ? options&.dig(:include, :user) : options
+    # Second, we need to apply some crazy merging logic:
+    #   - `merge_union` makes sure that only values specified in USER_COMMON_SERIALIZE_OPTIONS kick in
+    #   - `filter` makes sure that when the result of `merge_union` are empty, the defaults from
+    #       User::DEFAULT_SERIALIZE_OPTIONS can override.
+    #     However, if the developer explicitly specified that the `user` include should be empty, then respect that.
+    user_override_options = USER_COMMON_SERIALIZE_OPTIONS.merge_serialization_opts(user_pass_down_options&.with_indifferent_access)
+                                                         .filter { |_, v| hash_include_specified || v.present? }
+
     # If there's a user for this Person, merge in all their data,
     # the Person's data takes priority, though.
-    (user || User.new).serializable_hash(options).merge(json)
+    (user || User.new).serializable_hash(user_override_options).merge(json)
   end
 end

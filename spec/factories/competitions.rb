@@ -99,7 +99,7 @@ FactoryBot.define do
     refund_policy_percent { 0 }
     guests_entry_fee_lowest_denomination { 0 }
 
-    registration_version { :v1 }
+    registration_version { :v3 }
 
     trait :enforces_qualifications do
       with_organizer
@@ -222,7 +222,7 @@ FactoryBot.define do
     end
 
     trait :with_guest_limit do
-      guest_entry_status { Competition.guest_entry_statuses['restricted'] }
+      guest_entry_status { :restricted }
       guests_per_registration_limit { 10 }
     end
 
@@ -267,6 +267,7 @@ FactoryBot.define do
       registration_close { 1.weeks.ago.change(usec: 0) }
       starts { 1.month.from_now }
       ends { starts }
+      use_wca_registration { true }
     end
 
     trait :registration_not_opened do

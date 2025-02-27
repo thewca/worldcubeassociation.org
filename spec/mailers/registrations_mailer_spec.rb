@@ -15,7 +15,7 @@ RSpec.describe RegistrationsMailer, type: :mailer do
     let(:registration) { FactoryBot.create(:registration, user: french_user, competition: competition_with_organizers) }
     let(:mail_new) { RegistrationsMailer.notify_registrant_of_new_registration(registration) }
     let(:mail_accepted) { RegistrationsMailer.notify_registrant_of_accepted_registration(registration) }
-    let(:mail_pending) { RegistrationsMailer.notify_registrant_of_pending_registration(registration) }
+    let(:mail_waitlisted) { RegistrationsMailer.notify_registrant_of_waitlisted_registration(registration) }
     let(:mail_deleted) { RegistrationsMailer.notify_registrant_of_deleted_registration(registration) }
 
     it "renders the headers in foreign locale" do
@@ -26,7 +26,7 @@ RSpec.describe RegistrationsMailer, type: :mailer do
       # scope this call, but rather compare the result to the expected locale.
       expect(mail_new.subject).to eq(I18n.t('registrations.mailer.new.mail_subject', comp_name: registration.competition.name, locale: :fr))
       expect(mail_accepted.subject).to eq(I18n.t('registrations.mailer.accepted.mail_subject', comp_name: registration.competition.name, locale: :fr))
-      expect(mail_pending.subject).to eq(I18n.t('registrations.mailer.pending.mail_subject', comp_name: registration.competition.name, locale: :fr))
+      expect(mail_waitlisted.subject).to eq(I18n.t('registrations.mailer.waiting_list.mail_subject', comp_name: registration.competition.name, locale: :fr))
       expect(mail_deleted.subject).to eq(I18n.t('registrations.mailer.deleted.mail_subject', comp_name: registration.competition.name, locale: :fr))
     end
 
@@ -41,7 +41,7 @@ RSpec.describe RegistrationsMailer, type: :mailer do
       end
       expect(mail_new.body.encoded).to match(regards_in_french)
       expect(mail_accepted.body.encoded).to match(regards_in_french)
-      expect(mail_pending.body.encoded).to match(regards_in_french)
+      expect(mail_waitlisted.body.encoded).to match(regards_in_french)
       expect(mail_deleted.body.encoded).to match(regards_in_french)
     end
   end
@@ -68,7 +68,7 @@ RSpec.describe RegistrationsMailer, type: :mailer do
       competition_delegate2.receive_registration_emails = true
       competition_delegate2.save!
 
-      expect(mail.body.encoded).to match(edit_registration_url(registration))
+      expect(mail.body.encoded).to match(edit_registration_v2_url(competition_id: registration.competition_id, user_id: registration.user_id))
     end
 
     it "handles no organizers receiving email" do
@@ -169,26 +169,24 @@ RSpec.describe RegistrationsMailer, type: :mailer do
     end
   end
 
-  describe "notify_registrant_of_pending_registration for a competition without organizers" do
-    let(:mail) { RegistrationsMailer.notify_registrant_of_pending_registration(registration) }
+  describe "notify_registrant_of_waitlisted_registration for competition without organizers" do
+    let(:mail) { RegistrationsMailer.notify_registrant_of_waitlisted_registration(registration) }
     let(:registration) { FactoryBot.create(:registration, competition: competition_without_organizers) }
 
     it "renders the headers" do
-      expect(mail.subject).to eq("Registration Moved to Waitlist: #{competition_without_organizers.name}")
+      expect(mail.subject).to eq("You're on the Waiting List: #{competition_without_organizers.name}")
       expect(mail.to).to eq([registration.email])
       expect(mail.reply_to).to eq(competition_without_organizers.delegates.map(&:email))
       expect(mail.from).to eq(["notifications@worldcubeassociation.org"])
     end
 
     it "renders the body" do
-      expect(mail.body.encoded).to match("Your registration for .{1,200}#{registration.competition.name}.{1,200} has been moved to the waiting list")
-      expect(mail.body.encoded).to match("If you think this is an error, please reply to this email.")
-      expect(mail.body.encoded).to match("Regards, #{users_to_sentence(competition_without_organizers.organizers_or_delegates)}.")
+      expect(mail.body.encoded).to match("The competition is full, but you have been placed on a waiting list, and you will receive an email if enough spots open up for you to be able to attend.")
     end
   end
 
-  describe "notify_registrant_of_pending_registration for a competition with organizers" do
-    let(:mail) { RegistrationsMailer.notify_registrant_of_pending_registration(registration) }
+  describe "notify_registrant_of_waitlisted_registration for competition with organizers" do
+    let(:mail) { RegistrationsMailer.notify_registrant_of_waitlisted_registration(registration) }
     let(:registration) { FactoryBot.create(:registration, competition: competition_with_organizers) }
 
     it "sets organizers in the reply_to" do

@@ -51,10 +51,17 @@ RSpec.describe Registration do
       expect(registration).to be_invalid_with_errors(user_id: ["Need a birthdate"])
     end
 
-    it "requires user not banned" do
+    it "user cant register if banned when competitor starts" do
       user = FactoryBot.create(:user, :banned)
       registration.user = user
       expect(registration).to be_invalid_with_errors(user_id: [I18n.t('registrations.errors.banned_html').html_safe])
+    end
+
+    it 'user can register if ban ends before competition start' do
+      user = FactoryBot.create(:user, :briefly_banned)
+      registration.user = user
+      registration.validate
+      expect(registration.errors[:user_id]).not_to include(I18n.t('registrations.errors.banned_html').html_safe)
     end
   end
 
@@ -68,17 +75,27 @@ RSpec.describe Registration do
     user = FactoryBot.create(:user, :banned)
     registration.user = user
     registration.save!
-    registration.deleted_at = Time.now
+    registration.competing_status = Registrations::Helper::STATUS_CANCELLED
     expect(registration).to be_valid
   end
 
   it "doesn't allow undeleting a registration of a banned competitor" do
     user = FactoryBot.create(:user, :banned)
     registration.user = user
-    registration.deleted_at = Time.now
+    registration.competing_status = Registrations::Helper::STATUS_CANCELLED
     registration.save!
-    registration.deleted_at = nil
+    registration.competing_status = Registrations::Helper::STATUS_ACCEPTED
     expect(registration).to be_invalid_with_errors(user_id: [I18n.t('registrations.errors.undelete_banned')])
+  end
+
+  it "allows undeleting a banned competitor if ban ends before comp starts" do
+    user = FactoryBot.create(:user, :briefly_banned)
+    registration.user = user
+    registration.competing_status = Registrations::Helper::STATUS_CANCELLED
+    registration.save!
+    registration.competing_status = Registrations::Helper::STATUS_ACCEPTED
+    registration.validate
+    expect(registration.errors[:user_id]).not_to include(I18n.t('registrations.errors.undelete_banned'))
   end
 
   it "requires at least one event" do
@@ -216,7 +233,7 @@ RSpec.describe Registration do
     end
 
     context "and one registration is accepted" do
-      before { registration.update!(accepted_at: Time.now) }
+      before { registration.update!(competing_status: Registrations::Helper::STATUS_ACCEPTED) }
 
       it "does allow accepting when the other registration is pending" do
         expect(registration).to be_valid
@@ -226,14 +243,14 @@ RSpec.describe Registration do
       it "does allow accepting when the other registration is deleted" do
         expect(registration).to be_valid
 
-        partner_registration.deleted_at = Time.now
+        partner_registration.competing_status = Registrations::Helper::STATUS_CANCELLED
         expect(partner_registration).to be_valid
       end
 
       it "doesn't allow accepting when the other registration is confirmed" do
         expect(registration).to be_valid
 
-        partner_registration.accepted_at = Time.now
+        partner_registration.competing_status = Registrations::Helper::STATUS_ACCEPTED
         expect(partner_registration).to be_invalid_with_errors(competition_id: [I18n.t('registrations.errors.series_more_than_one_accepted')])
       end
     end
@@ -334,9 +351,9 @@ RSpec.describe Registration do
 
   describe '#to_wcif' do
     it 'deleted state returns deleted status' do
-      registration = FactoryBot.create(:registration, :deleted)
+      registration = FactoryBot.create(:registration, :cancelled)
 
-      expect(registration.deleted?).to eq(true)
+      expect(registration.cancelled?).to eq(true)
       expect(registration.to_wcif['status']).to eq('deleted')
     end
 
@@ -415,26 +432,10 @@ RSpec.describe Registration do
         { initial_status: Registrations::Helper::STATUS_REJECTED, input_status: Registrations::Helper::STATUS_WAITING_LIST },
         { initial_status: Registrations::Helper::STATUS_REJECTED, input_status: Registrations::Helper::STATUS_ACCEPTED },
         { initial_status: Registrations::Helper::STATUS_REJECTED, input_status: Registrations::Helper::STATUS_REJECTED },
-        { initial_status: 'deleted', input_status: Registrations::Helper::STATUS_ACCEPTED },
-        { initial_status: 'deleted', input_status: Registrations::Helper::STATUS_CANCELLED },
-        { initial_status: 'deleted', input_status: Registrations::Helper::STATUS_WAITING_LIST },
-        { initial_status: 'deleted', input_status: Registrations::Helper::STATUS_PENDING },
-        { initial_status: 'deleted', input_status: Registrations::Helper::STATUS_REJECTED },
-      ]
-
-      # TODO: 1. Do we want to have backwards compatibility with 'deleted' status?
-      # 2. If yes, do we want to only support the string, or keep it defined as a constant?
-      deleted_competing_status_updates = [
-        { initial_status: Registrations::Helper::STATUS_PENDING, input_status: 'deleted' },
-        { initial_status: Registrations::Helper::STATUS_ACCEPTED, input_status: 'deleted' },
-        { initial_status: Registrations::Helper::STATUS_WAITING_LIST, input_status: 'deleted' },
-        { initial_status: Registrations::Helper::STATUS_CANCELLED, input_status: 'deleted' },
-        { initial_status: Registrations::Helper::STATUS_REJECTED, input_status: 'deleted' },
-        { initial_status: 'deleted', input_status: 'deleted' },
       ]
 
       it 'tests cover all possible status update combinations' do
-        combined_updates = (competing_status_updates << deleted_competing_status_updates).flatten
+        combined_updates = (competing_status_updates).flatten
         expect(combined_updates).to match_array(REGISTRATION_TRANSITIONS)
       end
 
@@ -457,10 +458,6 @@ RSpec.describe Registration do
 
       competing_status_updates.each do |params|
         it_behaves_like 'update competing status', params[:initial_status], params[:input_status]
-      end
-
-      deleted_competing_status_updates.each do |params|
-        it_behaves_like 'update competing status: deleted cases', params[:initial_status], params[:input_status]
       end
     end
 
@@ -493,6 +490,55 @@ RSpec.describe Registration do
       registration.update_lanes!({ user_id: registration.user.id, competing: { event_ids: ['333', '444', '555'] } }.with_indifferent_access, registration.user)
       registration.reload
       expect(registration.event_ids).to eq(['333', '444', '555'])
+    end
+
+    describe 'update waiting list position' do
+      let(:competition) { FactoryBot.create(:competition, :registration_open, :editable_registrations, :with_organizer) }
+      let(:waiting_list) { competition.waiting_list }
+
+      let!(:reg1) { FactoryBot.create(:registration, :waiting_list, competition: competition) }
+      let!(:reg2) { FactoryBot.create(:registration, :waiting_list, competition: competition) }
+      let!(:reg3) { FactoryBot.create(:registration, :waiting_list, competition: competition) }
+      let!(:reg4) { FactoryBot.create(:registration, :waiting_list, competition: competition) }
+      let!(:reg5) { FactoryBot.create(:registration, :waiting_list, competition: competition) }
+
+      it 'adds to waiting list' do
+        reg = FactoryBot.create(:registration, competition: competition)
+        reg.update_lanes!({ user_id: reg.user.id, competing: { status: 'waiting_list' } }.with_indifferent_access, reg.user)
+
+        expect(reg.waiting_list_position).to eq(6)
+      end
+
+      it 'removes from waiting list' do
+        reg4.update_lanes!({ user_id: reg4.user.id, competing: { status: 'pending' } }.with_indifferent_access, reg4.user)
+
+        expect(reg4.waiting_list_position).to eq(nil)
+        expect(waiting_list.entries.count).to eq(4)
+      end
+
+      it 'moves backwards in waiting list' do
+        reg2.update_lanes!({ user_id: reg2.user.id, competing: { waiting_list_position: 5 } }.with_indifferent_access, reg2.user)
+
+        expect(reg1.waiting_list_position).to eq(1)
+        expect(reg2.waiting_list_position).to eq(5)
+        expect(reg3.waiting_list_position).to eq(2)
+        expect(reg4.waiting_list_position).to eq(3)
+        expect(reg5.waiting_list_position).to eq(4)
+
+        expect(waiting_list.entries.count).to eq(5)
+      end
+
+      it 'moves forwards in waiting list' do
+        reg5.update_lanes!({ user_id: reg5.user.id, competing: { waiting_list_position: 1 } }.with_indifferent_access, reg5.user)
+
+        expect(reg1.waiting_list_position).to eq(2)
+        expect(reg2.waiting_list_position).to eq(3)
+        expect(reg3.waiting_list_position).to eq(4)
+        expect(reg4.waiting_list_position).to eq(5)
+        expect(reg5.waiting_list_position).to eq(1)
+
+        expect(waiting_list.entries.count).to eq(5)
+      end
     end
   end
 end

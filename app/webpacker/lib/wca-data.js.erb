@@ -25,6 +25,7 @@ const realCountryData = countryData.filter((c) => !fictionalCountryIds.includes(
 
 export const countries = {
   byIso2: _.mapValues(_.keyBy(countryData, 'iso2'), extendCountries),
+  byId: _.mapValues(_.keyBy(countryData, 'id'), extendCountries),
   real: _.map(realCountryData, extendCountries),
 };
 
@@ -100,6 +101,8 @@ export const events = {
   official: _.map(_.filter(eventsData, 'isOfficial'), extendEvents),
   byId: _.mapValues(_.keyBy(eventsData, 'id'), extendEvents),
 };
+
+export const WCA_EVENT_IDS = Object.values(events.official).map((e) => e.id);
 
 function extendEvents(rawEvent) {
   return {
@@ -190,6 +193,10 @@ export const groupedChampionshipTypes = {
   national: _.map(_.sortBy(countries.real, 'name'), 'iso2'),
 }
 
+// ----- REGISTRATIONS  -----
+
+export const defaultGuestLimit = '<%= Registrations::RegistrationChecker::DEFAULT_GUEST_LIMIT %>'
+
 // ----- ROLES & GROUPS -----
 
 export const groupTypes = JSON.parse('<%= UserGroup.group_types.to_json.html_safe %>');
@@ -220,3 +227,8 @@ export const PANEL_PAGES = <%= User.panel_pages.to_json.html_safe %>;
 
 // ----- AVATAR CONFIG -----
 export const avatarImageTypes = <%= Rails.application.config.active_storage.web_image_content_types.to_json.html_safe %>;
+
+// ----- TICKETS -----
+export const ticketTypes = <%= Ticket::TICKET_TYPES.to_json %>;
+export const ticketStatuses = <%= Ticket::TICKET_TYPES.transform_values { |value| value.safe_constantize&.statuses }.to_json %>;
+export const ticketLogActionTypes = <%= TicketLog.action_types.to_json %>;

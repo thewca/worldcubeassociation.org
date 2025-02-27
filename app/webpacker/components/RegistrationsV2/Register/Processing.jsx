@@ -18,27 +18,26 @@ export default function Processing({ competitionInfo, user, onProcessingComplete
     },
   });
   useEffect(() => {
-    const processingComplete = competitionInfo.registration_version === 'v2' ? data?.status?.competing === 'pending'
-      : data && !data.processing;
+    const processingComplete = data && !data.processing;
     if (processingComplete) {
       onProcessingComplete();
     }
-  }, [competitionInfo.registration_version, data, onProcessingComplete]);
+  }, [data, onProcessingComplete]);
   return (
     <Modal open={data?.status?.competing !== 'pending' || !data?.processing} dimmer="blurring">
       <Modal.Header>
         {I18n.t('competitions.registration_v2.register.processing')}
       </Modal.Header>
       <Modal.Content>
-        {pollCounter > 3 && (
+        {pollCounter > 1 && (
           <Message warning>
             {I18n.t('competitions.registration_v2.register.processing_longer')}
           </Message>
         )}
-        {data && data.queueCount > 50 && (
+        {data && data.queue_count > 0 && (
           <Message warning>
             {I18n.t('competitions.registration_v2.register.processing_queue', {
-              queueCount: data.queueCount,
+              queueCount: data.queue_count,
             })}
           </Message>
         )}

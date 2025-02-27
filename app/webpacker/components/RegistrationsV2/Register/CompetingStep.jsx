@@ -16,16 +16,18 @@ import {
 import updateRegistration from '../api/registration/patch/update_registration';
 import submitEventRegistration from '../api/registration/post/submit_registration';
 import Processing from './Processing';
-import { userPreferencesRoute } from '../../../lib/requests/routes.js.erb';
-import { EventSelector } from '../../CompetitionsOverview/CompetitionsFilters';
+import { contactCompetitionUrl, userPreferencesRoute } from '../../../lib/requests/routes.js.erb';
+import EventSelector from '../../wca/EventSelector';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
-import { setMessage } from './RegistrationMessage';
-import i18n from '../../../lib/i18n';
+import { showMessage } from './RegistrationMessage';
+import I18n from '../../../lib/i18n';
 import I18nHTMLTranslate from '../../I18nHTMLTranslate';
 import { useConfirm } from '../../../lib/providers/ConfirmProvider';
+import { events, defaultGuestLimit } from '../../../lib/wca-data.js.erb';
 import { eventsNotQualifiedFor, isQualifiedForEvent } from '../../../lib/helpers/qualifications';
 import { eventQualificationToString } from '../../../lib/utils/wcif';
 import { hasNotPassed } from '../../../lib/utils/dates';
+import useSet from '../../../lib/hooks/useSet';
 
 const maxCommentLength = 240;
 
@@ -33,13 +35,17 @@ const potentialWarnings = (competitionInfo) => {
   const warnings = [];
   // Organizer Pre Registration
   if (hasNotPassed(competitionInfo.registration_open)) {
-    warnings.push(i18n.t('competitions.registration_v2.register.early_registration'));
+    warnings.push(I18n.t('competitions.registration_v2.register.early_registration'));
   }
   // Favourites Competition
   if (competitionInfo.events_per_registration_limit) {
-    warnings.push(i18n.t('competitions.registration_v2.register.event_limit', {
+    warnings.push(I18n.t('competitions.registration_v2.register.event_limit', {
       max_events: competitionInfo.events_per_registration_limit,
     }));
+  }
+  // Series Competition
+  if (competitionInfo['part_of_competition_series?']) {
+    warnings.push(I18n.t('competitions.competition_info.part_of_a_series'));
   }
   return warnings;
 };
@@ -70,29 +76,30 @@ export default function CompetingStep({
       }
       return preferredEventHeld;
     });
-  const [selectedEvents, setSelectedEvents] = useState(
-    initialSelectedEvents,
-  );
+  const selectedEventIds = useSet(initialSelectedEvents);
   // Don't set an error state before the user has interacted with the eventPicker
   const [hasInteracted, setHasInteracted] = useState(false);
+
   const [guests, setGuests] = useState(0);
 
   const [processing, setProcessing] = useState(false);
 
+  // using selectedEventIds.update in dependency array causes warnings
+  const { update: setSelectedEventIds } = selectedEventIds;
   useEffect(() => {
     if (isRegistered && registration.competing.registration_status !== 'cancelled') {
       setComment(registration.competing.comment ?? '');
-      setSelectedEvents(registration.competing.event_ids);
+      setSelectedEventIds(registration.competing.event_ids);
       setGuests(registration.guests);
     }
-  }, [isRegistered, registration]);
+  }, [isRegistered, registration, setSelectedEventIds]);
 
   const queryClient = useQueryClient();
   const { mutate: updateRegistrationMutation, isPending: isUpdating } = useMutation({
-    mutationFn: (body) => updateRegistration(competitionInfo, body),
+    mutationFn: updateRegistration,
     onError: (data) => {
       const { error } = data.json;
-      dispatch(setMessage(
+      dispatch(showMessage(
         `competitions.registration_v2.errors.${error}`,
         'negative',
       ));
@@ -107,20 +114,22 @@ export default function CompetingStep({
       );
       // Going from cancelled -> pending
       if (registration.competing.registration_status === 'cancelled') {
-        dispatch(setMessage('registrations.flash.registered', 'positive'));
+        // i18n-tasks-use t('registrations.flash.registered')
+        dispatch(showMessage('registrations.flash.registered', 'positive'));
         // Not changing status
       } else {
-        dispatch(setMessage('registrations.flash.updated', 'positive'));
+        // i18n-tasks-use t('registrations.flash.updated')
+        dispatch(showMessage('registrations.flash.updated', 'positive'));
       }
       nextStep();
     },
   });
 
   const { mutate: createRegistrationMutation, isLoading: isCreating } = useMutation({
-    mutationFn: (body) => submitEventRegistration(competitionInfo, body),
+    mutationFn: submitEventRegistration,
     onError: (data) => {
       const { error } = data.json;
-      dispatch(setMessage(
+      dispatch(showMessage(
         `competitions.registration_v2.errors.${error}`,
         'negative',
       ));
@@ -128,27 +137,28 @@ export default function CompetingStep({
     onSuccess: () => {
       // We can't update the registration yet, because there might be more steps needed
       // And the Registration might still be processing
-      dispatch(setMessage('registrations.flash.registered', 'positive'));
+      dispatch(showMessage('registrations.flash.registered', 'positive'));
       setProcessing(true);
     },
   });
 
   const hasEventsChanged = registration?.competing
-    && _.xor(registration.competing.event_ids, selectedEvents).length > 0;
+    && _.xor(registration.competing.event_ids, selectedEventIds.asArray).length > 0;
   const hasCommentChanged = registration?.competing
     && comment !== (registration.competing.comment ?? '');
   const hasGuestsChanged = registration && guests !== registration.guests;
 
   const hasChanges = hasEventsChanged || hasCommentChanged || hasGuestsChanged;
 
-  const eventsAreValid = selectedEvents.length > 0 && selectedEvents.length <= maxEvents;
+  const eventsAreValid = selectedEventIds.size > 0 && selectedEventIds.size <= maxEvents;
 
   const attemptAction = useCallback(
     (action, options = {}) => {
       if (options.checkForChanges && !hasChanges) {
-        dispatch(setMessage('competitions.registration_v2.update.no_changes', 'basic'));
+        dispatch(showMessage('competitions.registration_v2.update.no_changes', 'basic'));
       } else if (!eventsAreValid) {
-        dispatch(setMessage(
+        // i18n-tasks-use t('registrations.errors.exceeds_event_limit')
+        dispatch(showMessage(
           maxEvents === Infinity
             ? 'registrations.errors.must_register'
             : 'registrations.errors.exceeds_event_limit.other',
@@ -164,73 +174,104 @@ export default function CompetingStep({
     [dispatch, eventsAreValid, hasChanges, maxEvents],
   );
 
-  const actionCreateRegistration = () => {
+  const actionCreateRegistration = useCallback(() => {
     createRegistrationMutation({
       user_id: user.id,
       competition_id: competitionInfo.id,
       competing: {
-        event_ids: selectedEvents,
+        event_ids: selectedEventIds.asArray,
         comment,
       },
       guests,
     });
-  };
+  }, [
+    createRegistrationMutation,
+    user.id,
+    competitionInfo.id,
+    selectedEventIds.asArray,
+    comment,
+    guests,
+  ]);
 
-  const actionUpdateRegistration = () => {
+  const actionUpdateRegistration = useCallback(() => {
     confirm({
-      content: i18n.t('competitions.registration_v2.update.update_confirm'),
+      content: I18n.t(competitionInfo.allow_registration_edits ? 'competitions.registration_v2.update.update_confirm' : 'competitions.registration_v2.update.update_confirm_contact'),
     }).then(() => {
-      dispatch(setMessage('competitions.registration_v2.update.being_updated', 'basic'));
-      updateRegistrationMutation({
-        user_id: registration.user_id,
-        competition_id: competitionInfo.id,
-        competing: {
-          comment: hasCommentChanged ? comment : undefined,
-          event_ids: hasEventsChanged ? selectedEvents : undefined,
-        },
-        guests,
-      });
+      if (competitionInfo.allow_registration_edits) {
+        dispatch(showMessage('competitions.registration_v2.update.being_updated', 'basic'));
+        updateRegistrationMutation({
+          user_id: registration.user_id,
+          competition_id: competitionInfo.id,
+          competing: {
+            comment: hasCommentChanged ? comment : undefined,
+            event_ids: hasEventsChanged ? selectedEventIds.asArray : undefined,
+          },
+          guests,
+        });
+      } else {
+        const updateMessage = `\n${hasCommentChanged ? `Comment: ${comment}\n` : ''}${hasEventsChanged ? `Events: ${selectedEventIds.asArray.map((eventId) => events.byId[eventId].name).join(', ')}\n` : ''}${hasGuestsChanged ? `Guests: ${guests}\n` : ''}`;
+        window.location = contactCompetitionUrl(competitionInfo.id, encodeURIComponent(I18n.t('competitions.registration_v2.update.update_contact_message', { update_params: updateMessage })));
+      }
     }).catch(() => {
       nextStep();
     });
-  };
+  }, [
+    confirm,
+    dispatch,
+    nextStep,
+    updateRegistrationMutation,
+    competitionInfo,
+    registration?.user_id,
+    hasCommentChanged,
+    comment,
+    hasEventsChanged,
+    selectedEventIds.asArray,
+    hasGuestsChanged,
+    guests,
+  ]);
 
-  const actionReRegister = () => {
+  const actionReRegister = useCallback(() => {
     updateRegistrationMutation({
       user_id: registration.user_id,
       competition_id: competitionInfo.id,
       competing: {
         comment,
-        event_ids: selectedEvents,
+        event_ids: selectedEventIds.asArray,
         status: 'pending',
       },
       guests,
     });
+  }, [
+    updateRegistrationMutation,
+    registration?.user_id,
+    competitionInfo.id,
+    comment,
+    selectedEventIds.asArray,
+    guests,
+  ]);
+
+  const onEventClick = (eventId) => {
+    selectedEventIds.toggle(eventId);
+    setHasInteracted(true);
   };
 
-  const handleEventSelection = ({ type, eventId }) => {
-    if (type === 'select_all_events') {
-      if (competitionInfo['uses_qualification?']) {
-        setSelectedEvents(
-          competitionInfo.event_ids.filter((e) => isQualifiedForEvent(
-            e,
-            qualifications.wcif,
-            qualifications.personalRecords,
-          )),
-        );
-      } else {
-        setSelectedEvents(competitionInfo.event_ids);
-      }
-    } else if (type === 'clear_events') {
-      setSelectedEvents([]);
-    } else if (type === 'toggle_event') {
-      const index = selectedEvents.indexOf(eventId);
-      if (index === -1) {
-        setSelectedEvents([...selectedEvents, eventId]);
-      } else {
-        setSelectedEvents(selectedEvents.toSpliced(index, 1));
-      }
+  const onAllEventsClick = () => {
+    if (competitionInfo['uses_qualification?']) {
+      selectedEventIds.update(
+        competitionInfo.event_ids.filter((e) => isQualifiedForEvent(
+          e,
+          qualifications.wcif,
+          qualifications.personalRecords,
+        )),
+      );
+    } else {
+      selectedEventIds.update(competitionInfo.event_ids);
     }
+    setHasInteracted(true);
+  };
+
+  const onClearEventsClick = () => {
+    selectedEventIds.clear();
     setHasInteracted(true);
   };
 
@@ -247,7 +288,7 @@ export default function CompetingStep({
     if (shouldShowUpdateButton) {
       return attemptAction(actionUpdateRegistration, { checkForChanges: true });
     }
-    attemptAction(actionCreateRegistration);
+    return attemptAction(actionCreateRegistration);
   }, [
     actionCreateRegistration,
     actionReRegister,
@@ -256,6 +297,11 @@ export default function CompetingStep({
     shouldShowReRegisterButton,
     shouldShowUpdateButton,
   ]);
+
+  const guestsRestricted = competitionInfo.guest_entry_status === 'restricted';
+  const guestLimit = competitionInfo.guests_per_registration_limit !== null && guestsRestricted
+    ? competitionInfo.guests_per_registration_limit
+    : defaultGuestLimit;
 
   const formWarnings = useMemo(() => potentialWarnings(competitionInfo), [competitionInfo]);
   return (
@@ -275,7 +321,7 @@ export default function CompetingStep({
       <>
         {hasPaid && (
           <Message success>
-            {i18n.t('registrations.entry_fees_fully_paid', { paid: registration?.payment.payment_amount_human_readable })}
+            {I18n.t('registrations.entry_fees_fully_paid', { paid: registration?.payment.payment_amount_human_readable })}
           </Message>
         )}
 
@@ -284,18 +330,24 @@ export default function CompetingStep({
             warning
             list={formWarnings}
           />
-          <Form.Field required error={hasInteracted && selectedEvents.length === 0}>
+          <Form.Field required error={hasInteracted && selectedEventIds.size === 0}>
             <EventSelector
-              onEventSelection={handleEventSelection}
-              eventList={competitionInfo.event_ids}
-              selectedEvents={selectedEvents}
               id="event-selection"
+              eventList={competitionInfo.event_ids}
+              selectedEvents={selectedEventIds.asArray}
+              onEventClick={onEventClick}
+              onAllClick={onAllEventsClick}
+              onClearClick={onClearEventsClick}
               maxEvents={maxEvents}
-              eventsDisabled={eventsNotQualifiedFor(
-                competitionInfo.event_ids,
-                qualifications.wcif,
-                qualifications.personalRecords,
-              )}
+              eventsDisabled={
+                competitionInfo.allow_registration_without_qualification
+                  ? []
+                  : eventsNotQualifiedFor(
+                    competitionInfo.event_ids,
+                    qualifications.wcif,
+                    qualifications.personalRecords,
+                  )
+              }
               disabledText={(event) => eventQualificationToString(
                 { id: event },
                 qualifications.wcif[event],
@@ -316,7 +368,17 @@ export default function CompetingStep({
           </Form.Field>
           <Form.Field required={Boolean(competitionInfo.force_comment_in_registration)}>
             <label htmlFor="comment">
-              {i18n.t('competitions.registration_v2.register.comment')}
+              {I18n.t('competitions.registration_v2.register.comment')}
+              {' '}
+              <div style={{ float: 'right', fontSize: '0.8em' }}>
+                <i>
+                  (
+                  {comment.length}
+                  /
+                  {maxCommentLength}
+                  )
+                </i>
+              </div>
             </label>
             <Form.TextArea
               required={Boolean(competitionInfo.force_comment_in_registration)}
@@ -324,28 +386,25 @@ export default function CompetingStep({
               onChange={(event, data) => setComment(data.value)}
               value={comment}
               id="comment"
-              error={competitionInfo.force_comment_in_registration && comment.trim().length === 0 && i18n.t('registrations.errors.cannot_register_without_comment')}
-            />
-            <p>
-              {comment.length}
-              /
-              {maxCommentLength}
-            </p>
-          </Form.Field>
-          <Form.Field>
-            <label>{i18n.t('activerecord.attributes.registration.guests')}</label>
-            <Form.Input
-              id="guest-dropdown"
-              type="number"
-              value={guests}
-              onChange={(event, data) => {
-                setGuests(Number.parseInt(data.value, 10));
-              }}
-              min="0"
-              max={competitionInfo.guests_per_registration_limit ?? 99}
-              error={Number.isInteger(competitionInfo.guests_per_registration_limit) && guests > competitionInfo.guests_per_registration_limit && i18n.t('competitions.competition_info.guest_limit', { count: competitionInfo.guests_per_registration_limit })}
+              error={competitionInfo.force_comment_in_registration && comment.trim().length === 0 && I18n.t('registrations.errors.cannot_register_without_comment')}
             />
           </Form.Field>
+          {competitionInfo.guests_enabled && (
+            <Form.Field>
+              <label htmlFor="guest-dropdown">{I18n.t('activerecord.attributes.registration.guests')}</label>
+              <Form.Input
+                id="guest-dropdown"
+                type="number"
+                value={guests}
+                onChange={(event, data) => {
+                  setGuests(Number.parseInt(data.value, 10));
+                }}
+                min="0"
+                max={guestLimit}
+                error={guestsRestricted && guests > guestLimit && I18n.t('competitions.competition_info.guest_limit', { count: guestLimit })}
+              />
+            </Form.Field>
+          )}
           {isRegistered ? (
             <ButtonGroup widths={2}>
               {shouldShowUpdateButton && (
@@ -357,11 +416,11 @@ export default function CompetingStep({
                       }
                   type="submit"
                 >
-                  {i18n.t('registrations.update')}
+                  {I18n.t('registrations.update')}
                 </Button>
                 <ButtonOr />
                 <Button secondary onClick={() => nextStep()}>
-                  {i18n.t('competitions.registration_v2.register.view_registration')}
+                  {I18n.t('competitions.registration_v2.register.view_registration')}
                 </Button>
               </>
               )}
@@ -372,7 +431,7 @@ export default function CompetingStep({
                 disabled={isUpdating}
                 type="submit"
               >
-                {i18n.t('registrations.register')}
+                {I18n.t('registrations.register')}
               </Button>
               )}
             </ButtonGroup>
@@ -380,12 +439,12 @@ export default function CompetingStep({
             <>
               <Message info icon floating>
                 <Popup
-                  content={i18n.t('registrations.mailer.new.awaits_approval')}
+                  content={I18n.t('registrations.mailer.new.awaits_approval')}
                   position="top left"
                   trigger={<Icon name="circle info" />}
                 />
                 <Message.Content>
-                  {i18n.t('competitions.registration_v2.register.disclaimer')}
+                  {I18n.t('competitions.registration_v2.register.disclaimer')}
                 </Message.Content>
               </Message>
               <Button
@@ -397,7 +456,7 @@ export default function CompetingStep({
                 disabled={isCreating}
               >
                 <Icon name="paper plane" />
-                {i18n.t('registrations.register')}
+                {I18n.t('registrations.register')}
               </Button>
             </>
           )}

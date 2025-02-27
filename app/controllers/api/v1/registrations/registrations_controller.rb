@@ -30,7 +30,7 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
   def validate_show_registration
     @user_id, @competition_id = show_params
     @competition = Competition.find(@competition_id)
-    render_error(:unauthorized, ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless @current_user.id == @user_id.to_i || @current_user.can_manage_competition?(@competition)
+    render_error(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless @current_user.id == @user_id.to_i || @current_user.can_manage_competition?(@competition)
   end
 
   def show
@@ -89,8 +89,17 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
 
   def list
     competition_id = list_params
-    registrations = Registration.where(competition_id: competition_id)
-    render json: registrations.map { |r| r.to_v2_json }
+    competition = Competition.find(competition_id)
+    registrations = competition.registrations.accepted.competing
+    payload = Rails.cache.fetch([
+                                  "registrations_v2_list",
+                                  competition.id,
+                                  competition.event_ids,
+                                  registrations.joins(:user).order(:id).pluck(:id, :updated_at, user: [:updated_at]),
+                                ]) do
+      registrations.includes(:user).map { |r| r.to_v2_json }
+    end
+    render json: payload
   end
 
   # To list Registrations in the admin view you need to be able to administer the competition
@@ -99,22 +108,32 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
     # TODO: Do we set this as an instance variable here so we can use it below?
     @competition = Competition.find(competition_id)
     unless @current_user.can_manage_competition?(@competition)
-      render_error(:unauthorized, ErrorCodes::USER_INSUFFICIENT_PERMISSIONS)
+      render_error(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS)
     end
   end
 
   def list_admin
     registrations = Registration.where(competition: @competition)
-    render json: registrations.map { |r| r.to_v2_json(admin: true, history: true, pii: true) }
+    render json: registrations.includes(
+      :events,
+      :competition_events,
+      :registration_competition_events,
+      competition: :competition_payment_integrations,
+      user: :delegate_role_metadata,
+      registration_payments: :receipt,
+      registration_history_entries: :registration_history_changes,
+    ).map { |r| r.to_v2_json(admin: true, history: true, pii: true) }
   end
 
   def validate_payment_ticket_request
     competition_id = params[:competition_id]
     @competition = Competition.find(competition_id)
-    render_error(:forbidden, ErrorCodes::PAYMENT_NOT_ENABLED) unless @competition.using_payment_integrations?
+    return render_error(:forbidden, Registrations::ErrorCodes::PAYMENT_NOT_ENABLED) unless @competition.using_payment_integrations?
+
+    return render_error(:forbidden, Registrations::ErrorCodes::REGISTRATION_CLOSED) if @competition.registration_past?
 
     @registration = Registration.find_by(user: @current_user, competition: @competition)
-    render_error(:forbidden, ErrorCodes::PAYMENT_NOT_READY) if @registration.nil?
+    render_error(:forbidden, Registrations::ErrorCodes::PAYMENT_NOT_READY) if @registration.nil?
   end
 
   def payment_ticket

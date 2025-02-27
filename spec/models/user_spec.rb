@@ -641,53 +641,27 @@ RSpec.describe User, type: :model do
     end
 
     it "if their registration is pending" do
-      registration.accepted_at = nil
+      registration.competing_status = Registrations::Helper::STATUS_PENDING
       expect(competitor.can_edit_registration?(registration)).to be true
     end
 
     it "unless their registration is accepted" do
-      registration.accepted_at = Time.now
+      registration.competing_status = Registrations::Helper::STATUS_ACCEPTED
       expect(competitor.can_edit_registration?(registration)).to be false
     end
 
     it "if event edit deadline is in the future" do
-      registration.accepted_at = Time.now
+      registration.competing_status = Registrations::Helper::STATUS_ACCEPTED
       competition.allow_registration_edits = true
       competition.event_change_deadline_date = 2.weeks.from_now
       expect(competitor.can_edit_registration?(registration)).to be true
     end
 
     it "unless event edit deadline has passed" do
-      registration.accepted_at = Time.now
+      registration.competing_status = Registrations::Helper::STATUS_ACCEPTED
       competition.allow_registration_edits = true
       competition.event_change_deadline_date = 2.weeks.ago
       expect(competitor.can_edit_registration?(registration)).to be false
-    end
-  end
-
-  describe "can self-delete registration" do
-    let!(:competitor) { FactoryBot.create :user }
-    let!(:competition) { FactoryBot.create :competition, :registration_open }
-    let!(:registration) { FactoryBot.create :registration, user: competitor, competition: competition }
-
-    it "if their registration is pending" do
-      registration.accepted_at = nil
-      competition.allow_registration_self_delete_after_acceptance = false
-      expect(competitor.can_delete_registration?(registration)).to be true
-      competition.allow_registration_self_delete_after_acceptance = true
-      expect(competitor.can_delete_registration?(registration)).to be true
-    end
-
-    it "if their registration is accepted and the competition still allows deletion" do
-      registration.accepted_at = Time.now
-      competition.allow_registration_self_delete_after_acceptance = true
-      expect(competitor.can_delete_registration?(registration)).to be true
-    end
-
-    it "unless their registration is accepted and the competition does not allow deletion afterwards" do
-      registration.accepted_at = Time.now
-      competition.allow_registration_self_delete_after_acceptance = false
-      expect(competitor.can_delete_registration?(registration)).to be false
     end
   end
 
