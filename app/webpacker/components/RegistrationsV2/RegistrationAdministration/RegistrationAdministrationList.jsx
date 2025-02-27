@@ -3,7 +3,7 @@ import React, {
   useMemo, useReducer, useRef,
 } from 'react';
 import {
-  Accordion, Checkbox, Form, Header, Segment, Sticky,
+  Accordion, Checkbox, Form, Header, Icon, Segment, Sticky,
 } from 'semantic-ui-react';
 import { DateTime } from 'luxon';
 import { getAllRegistrations } from '../api/registration/get/get_registrations';
@@ -18,6 +18,13 @@ import RegistrationAdministrationTable from './RegistrationsAdministrationTable'
 import useCheckboxState from '../../../lib/hooks/useCheckboxState';
 import { countries } from '../../../lib/wca-data.js.erb';
 import useOrderedSet from '../../../lib/hooks/useOrderedSet';
+import {
+  APPROVED_COLOR, APPROVED_ICON,
+  CANCELLED_COLOR, CANCELLED_ICON,
+  PENDING_COLOR, PENDING_ICON,
+  REJECTED_COLOR, REJECTED_ICON,
+  WAITLIST_COLOR, WAITLIST_ICON,
+} from '../../../lib/utils/registrationAdmin';
 
 const sortReducer = createSortReducer([
   'name',
@@ -288,13 +295,12 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
       key: 'pending',
       title: {
         content: (
-          <Header as="span">
-            Pending registrations
-            {' '}
-            (
-            {pending.length}
-            )
-          </Header>
+          <SectionToggle
+            icon={PENDING_ICON}
+            title={I18n.t('competitions.registration_v2.list.pending.title')}
+            inParens={pending.length}
+            color={PENDING_COLOR}
+          />
         ),
       },
       content: {
@@ -315,6 +321,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
               sortDirection={sortDirection}
               sortColumn={sortColumn}
               competitionInfo={competitionInfo}
+              color={PENDING_COLOR}
             />
           </>
         ),
@@ -324,13 +331,12 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
       key: 'waitlist',
       title: {
         content: (
-          <Header as="span">
-            {I18n.t('registrations.list.waiting_list')}
-            {' '}
-            (
-            {waiting.length}
-            )
-          </Header>
+          <SectionToggle
+            icon={WAITLIST_ICON}
+            title={I18n.t('competitions.registration_v2.list.waitlist.title')}
+            inParens={waiting.length}
+            color={WAITLIST_COLOR}
+          />
         ),
       },
       content: {
@@ -360,6 +366,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
               draggable={editable}
               sortable={false}
               withPosition
+              color={WAITLIST_COLOR}
             />
           </>
         ),
@@ -369,19 +376,20 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
       key: 'accepted',
       title: {
         content: (
-          <Header as="span">
-            {I18n.t('registrations.list.approved_registrations')}
-            {' '}
-            (
-            {accepted.length}
-            {spotsRemaining !== Infinity && (
-              <>
-                {`/${competitionInfo.competitor_limit}; `}
-                {spotsRemainingText}
-              </>
-            )}
-            )
-          </Header>
+          <SectionToggle
+            icon={APPROVED_ICON}
+            title={I18n.t('competitions.registration_v2.list.approved.title')}
+            inParens={
+              `${
+                accepted.length
+              }${
+                spotsRemaining !== Infinity
+                  ? `/${competitionInfo.competitor_limit}, ${spotsRemainingText}`
+                  : ''
+              }`
+            }
+            color={APPROVED_COLOR}
+          />
         ),
       },
       content: {
@@ -398,6 +406,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
             sortDirection={sortDirection}
             sortColumn={sortColumn}
             competitionInfo={competitionInfo}
+            color={APPROVED_COLOR}
           />
         ),
       },
@@ -406,13 +415,12 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
       key: 'cancelled',
       title: {
         content: (
-          <Header as="span">
-            {I18n.t('competitions.registration_v2.list.cancelled.title')}
-            {' '}
-            (
-            {cancelled.length}
-            )
-          </Header>
+          <SectionToggle
+            icon={CANCELLED_ICON}
+            title={I18n.t('competitions.registration_v2.list.cancelled.title')}
+            inParens={cancelled.length}
+            color={CANCELLED_COLOR}
+          />
         ),
       },
       content: {
@@ -433,6 +441,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
               sortDirection={sortDirection}
               sortColumn={sortColumn}
               competitionInfo={competitionInfo}
+              color={CANCELLED_COLOR}
             />
           </>
         ),
@@ -442,13 +451,12 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
       key: 'rejected',
       title: {
         content: (
-          <Header as="span">
-            {I18n.t('competitions.registration_v2.list.rejected.title')}
-            {' '}
-            (
-            {rejected.length}
-            )
-          </Header>
+          <SectionToggle
+            icon={REJECTED_ICON}
+            title={I18n.t('competitions.registration_v2.list.rejected.title')}
+            inParens={rejected.length}
+            color={REJECTED_COLOR}
+          />
         ),
       },
       content: {
@@ -469,6 +477,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
               sortDirection={sortDirection}
               sortColumn={sortColumn}
               competitionInfo={competitionInfo}
+              color={REJECTED_COLOR}
             />
           </>
         ),
@@ -530,5 +539,16 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
         {/* i18n-tasks-use t('registrations.list.non_competing') */}
       </div>
     </Segment>
+  );
+}
+
+function SectionToggle({
+  icon, title, inParens, color,
+}) {
+  return (
+    <Header as="span" size="large">
+      <Icon name={icon} color={color} />
+      {`${title} (${inParens})`}
+    </Header>
   );
 }
