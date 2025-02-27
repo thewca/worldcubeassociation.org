@@ -68,10 +68,13 @@ services:
         condition: service_completed_successfully
 
   wca_nextjs:
-    image: node:22-alpine
+    build:
+      dockerfile: Dockerfile.dev
+      context: .
     container_name: "nextjs"
     ports:
       - "3001:3000"
+    working_dir: /app
     command: >
       bash -c 'corepack install && yarn install &&
       yarn run dev'
