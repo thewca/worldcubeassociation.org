@@ -94,6 +94,7 @@ export default function TableRow({
     payment_statuses: paymentStatuses,
     has_paid: hasPaid,
   } = registration.payment ?? {};
+  const usingPayment = competitionInfo['using_payment_integrations?'];
 
   const copyEmail = () => {
     navigator.clipboard.writeText(emailAddress);
@@ -116,7 +117,8 @@ export default function TableRow({
             {...provided.draggableProps}
             {...provided.dragHandleProps}
           >
-            <Table.Cell className={color}>
+            {/* when using payment, only color those who have paid */}
+            <Table.Cell className={(!usingPayment || hasPaid) ? color : ''}>
               { /* We manually set the margin to 0 here to fix the table row height */}
               {draggable ? (
                 <Icon name="bars" />
