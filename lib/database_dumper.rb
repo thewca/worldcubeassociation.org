@@ -110,6 +110,7 @@ module DatabaseDumper
           registration_version
           forbid_newcomers
           forbid_newcomers_reason
+          newcomer_month_reserved_spots
           competitor_can_cancel
         ),
         db_default: %w(
