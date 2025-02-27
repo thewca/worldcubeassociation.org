@@ -6,3 +6,4 @@
 development:
   :concurrency: 5
   :verbose: true
+:timeout: 300
