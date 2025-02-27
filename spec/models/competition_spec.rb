@@ -1603,5 +1603,13 @@ RSpec.describe Competition do
         newcomer_month_reserved_spots: ['cant reserve more than 50% of spots for newcomers'],
       )
     end
+
+    it 'newcomer_month_reserved_spots cant exceed (competitor limit - non_newcomers)' do
+      comp = FactoryBot.create(:competition, competitor_limit: 10)
+      FactoryBot.create_list(:registration, 6, :accepted, competition: comp)
+      comp.newcomer_month_reserved_spots = 5
+      expect(comp).to be_invalid
+      expect(comp.errors.messages[:newcomer_month_reserved_spots]).to include('Desired newcomer month reserved spots exceeds number of spots reservable')
+    end
   end
 end
