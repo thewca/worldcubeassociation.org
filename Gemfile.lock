@@ -771,7 +771,7 @@ GEM
       camertron-eprun
       cldr-plurals-runtime-rb (~> 1.1)
       tzinfo
-    tzf (1.0.0)
+    tzf (1.2.0)
       rb_sys (~> 0.9.89)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
