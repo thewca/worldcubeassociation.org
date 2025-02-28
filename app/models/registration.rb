@@ -397,26 +397,9 @@ class Registration < ApplicationRecord
     end
   end
 
-  def random_test_function?
-    puts "in consider"
-    if outstanding_entry_fees == 0
-      puts "in if branch of consider"
-      return competition.attempt_auto_close!
-    else
-      puts "in else branch of consider"
-      return false
-    end
-  end
-
   def consider_auto_close
-    puts "in consider"
-    if outstanding_entry_fees == 0
-      puts "in if branch of consider"
-      return competition.attempt_auto_close!
-    else
-      puts "in else branch of consider"
-      return false
-    end
+    return competition.attempt_auto_close! if outstanding_entry_fees == 0
+    return false
   end
 
   validate :only_one_accepted_per_series

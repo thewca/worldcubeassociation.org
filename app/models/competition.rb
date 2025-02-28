@@ -2944,10 +2944,8 @@ class Competition < ApplicationRecord
   end
 
   def attempt_auto_close!
-    puts "in attempt auto close"
     return false if auto_close_threshold.nil?
     threshold_reached = registrations.with_payments.count >= auto_close_threshold && auto_close_threshold > 0
-    puts "threshold reached: #{threshold_reached}"
     threshold_reached && update(closing_full_registration: true, registration_close: Time.now)
   end
 end

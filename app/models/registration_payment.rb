@@ -30,7 +30,6 @@ class RegistrationPayment < ApplicationRecord
   end
 
   private def auto_close_hook
-    puts "in hook"
-    return registration.random_test_function?
+    return registration.consider_auto_close
   end
 end

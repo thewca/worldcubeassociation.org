@@ -1624,8 +1624,8 @@ RSpec.describe Competition do
       expect(comp.attempt_auto_close!).to eq(true)
     end
 
-    it 'only auto-closes if the registrations are paid_no_hooks registrations' do
-      FactoryBot.create_list(:registration, 5, competition: auto_close_comp)
+    it 'only auto-closes if the registrations are fully registrations', :tag do
+      FactoryBot.create_list(:registration, 5, :partially_paid, competition: auto_close_comp)
       expect(auto_close_comp.attempt_auto_close!).to eq(false)
     end
 
