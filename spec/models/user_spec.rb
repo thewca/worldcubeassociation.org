@@ -540,7 +540,7 @@ RSpec.describe User, type: :model do
     let(:competition) { FactoryBot.create(:competition, :registration_open, :with_organizer, starts: 1.month.from_now) }
     let(:registration) { FactoryBot.create(:registration, :newcomer, competition: competition) }
 
-    it "allows organizers of upcoming competitions to edit newcomer names" do
+    it "allows organizers of upcoming competitions to edit first-timer names" do
       organizer = competition.organizers.first
       expect(organizer.can_edit_user?(registration.user)).to eq true
       expect(organizer.editable_fields_of_user(registration.user).to_a).to eq [:name]

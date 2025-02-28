@@ -599,9 +599,12 @@ GEM
       zeitwerk (~> 2.6)
     rainbow (3.1.1)
     rake (13.2.1)
+    rake-compiler-dock (1.9.1)
     rb-fsevent (0.11.0)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
+    rb_sys (0.9.110)
+      rake-compiler-dock (= 1.9.1)
     rdoc (6.12.0)
       psych (>= 4.0.0)
     react-rails (3.2.1)
@@ -789,6 +792,8 @@ GEM
       camertron-eprun
       cldr-plurals-runtime-rb (~> 1.1)
       tzinfo
+    tzf (1.2.0)
+      rb_sys (~> 0.9.89)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
     uber (0.1.0)
@@ -955,6 +960,7 @@ DEPENDENCIES
   timecop
   translighterate
   twitter_cldr
+  tzf
   valid_email
   vault
   wca_i18n

@@ -106,4 +106,90 @@ class TicketsController < ApplicationController
       dob: dob_validation_issues,
     }
   end
+
+  private def user_and_person_from_params
+    user_id = params[:userId]
+    wca_id = params[:wcaId]
+
+    if user_id && !wca_id
+      user = User.find(user_id)
+      person = user.person
+    elsif !user_id && wca_id
+      person = Person.find_by(wca_id: wca_id)
+      user = person.user
+    elsif user_id && wca_id
+      person = Person.find_by(wca_id: wca_id)
+      user = User.find(user_id)
+    end
+    [user, person]
+  end
+
+  private def check_errors(user, person)
+    if user.present? && person.present? && person&.user != user
+      render status: :unprocessable_entity, json: {
+        error: "Person and user not linked.",
+      }
+      true
+    elsif user.nil? && person.nil?
+      render status: :unprocessable_entity, json: {
+        error: "User ID and WCA ID is not provided.",
+      }
+      true
+    end
+  end
+
+  def details_before_anonymization
+    user, person = user_and_person_from_params
+    return if check_errors(user, person)
+
+    user_anonymization_checks, user_message_args = user&.anonymization_checks_with_message_args
+    person_anonymization_checks, person_message_args = person&.anonymization_checks_with_message_args
+
+    anonymization_checks = (user_anonymization_checks || {}).merge(person_anonymization_checks || {})
+    message_args = (user_message_args || {}).merge(person_message_args || {})
+
+    action_items, non_action_items = anonymization_checks
+                                     .partition { |_, value| value }
+                                     .map { |checks| checks.map(&:first) }
+
+    render json: {
+      user: user,
+      person: person,
+      action_items: action_items,
+      non_action_items: non_action_items,
+      message_args: message_args,
+    }
+  end
+
+  def anonymize
+    user, person = user_and_person_from_params
+    return if check_errors(user, person)
+
+    if user&.banned?
+      return render status: :unprocessable_entity, json: {
+        error: "Error anonymizing: This person is currently banned and cannot be anonymized.",
+      }
+    end
+
+    if user.present? && person.present?
+      users_to_anonymize = User.where(id: user.id).or(User.where(unconfirmed_wca_id: person.wca_id))
+    elsif user.present? && person.nil?
+      users_to_anonymize = User.where(id: user.id)
+    elsif user.nil? && person.present?
+      users_to_anonymize = User.where(unconfirmed_wca_id: person.wca_id)
+    end
+
+    ActiveRecord::Base.transaction do
+      person&.anonymize
+
+      users_to_anonymize.each do |user_to_anonymize|
+        user_to_anonymize.anonymize
+      end
+    end
+
+    render json: {
+      success: true,
+      new_wca_id: person&.reload&.wca_id, # Reload to get the new wca_id
+    }
+  end
 end

@@ -500,7 +500,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
   );
 
   return (
-    <Segment loading={isMutating} style={{ overflowX: 'scroll' }}>
+    <Segment loading={isMutating}>
       <Form>
         <Form.Group widths="equal">
           {Object.entries(expandableColumns).map(([id, name]) => (
