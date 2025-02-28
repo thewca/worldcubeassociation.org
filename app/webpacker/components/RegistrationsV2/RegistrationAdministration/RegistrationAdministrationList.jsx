@@ -16,7 +16,7 @@ import Loading from '../../Requests/Loading';
 import { bulkUpdateRegistrations } from '../api/registration/patch/update_registration';
 import RegistrationAdministrationTable from './RegistrationsAdministrationTable';
 import useCheckboxState from '../../../lib/hooks/useCheckboxState';
-import { countries } from '../../../lib/wca-data.js.erb';
+import { countries, WCA_EVENT_IDS } from '../../../lib/wca-data.js.erb';
 import useOrderedSet from '../../../lib/hooks/useOrderedSet';
 import {
   APPROVED_COLOR, APPROVED_ICON,
@@ -38,6 +38,7 @@ const sortReducer = createSortReducer([
   'paid_on',
   'comment',
   'dob',
+  ...WCA_EVENT_IDS,
 ]);
 
 const partitionRegistrations = (registrations) => registrations.reduce(
@@ -228,8 +229,22 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
           case 'waiting_list_position':
             return a.competing.waiting_list_position - b.competing.waiting_list_position;
 
-          default:
+          default: {
+            if (WCA_EVENT_IDS.includes(sortColumn)) {
+              const aHasEvent = a.competing.event_ids.includes(sortColumn);
+              const bHasEvent = b.competing.event_ids.includes(sortColumn);
+
+              if (aHasEvent && !bHasEvent) {
+                return -1;
+              }
+              if (!aHasEvent && bHasEvent) {
+                return 1;
+              }
+              return 0;
+            }
+
             return 0;
+          }
         }
       });
       if (sortDirection === 'descending') {

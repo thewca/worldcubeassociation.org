@@ -81,7 +81,11 @@ export default function TableHeader({
         )}
         {eventsAreExpanded ? (
           competitionInfo.event_ids.map((eventId) => (
-            <Table.HeaderCell key={`event-${eventId}`} disabled>
+            <Table.HeaderCell
+              key={`event-${eventId}`}
+              sorted={sortColumn === eventId ? sortDirection : undefined}
+              onClick={() => changeSortColumn(eventId)}
+            >
               <EventIcon id={eventId} size="1em" />
             </Table.HeaderCell>
           ))
