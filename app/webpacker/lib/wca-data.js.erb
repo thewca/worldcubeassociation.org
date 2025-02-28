@@ -232,3 +232,6 @@ export const avatarImageTypes = <%= Rails.application.config.active_storage.web_
 export const ticketTypes = <%= Ticket::TICKET_TYPES.to_json %>;
 export const ticketStatuses = <%= Ticket::TICKET_TYPES.transform_values { |value| value.safe_constantize&.statuses }.to_json %>;
 export const ticketLogActionTypes = <%= TicketLog.action_types.to_json %>;
+
+// ----- CRONJOBS -----
+export const cronjobs = <%= JobUtils::WCA_CRONJOBS.map(&:to_s).to_h { |item| [item, item] }.to_json.html_safe %>;
