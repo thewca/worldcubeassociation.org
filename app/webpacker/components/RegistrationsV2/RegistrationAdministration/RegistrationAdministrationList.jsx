@@ -501,17 +501,16 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
   return (
     <Segment loading={isMutating}>
       <Form>
-        <Form.Group widths="equal">
+        <Form.Group unstackable widths="2">
           {Object.entries(expandableColumns).map(([id, name]) => (
-            <Form.Field key={id}>
-              <Checkbox
-                name={id}
-                label={name}
-                toggle
-                checked={expandedColumns[id]}
-                onChange={() => dispatchColumns({ column: id })}
-              />
-            </Form.Field>
+            <Form.Checkbox
+              key={id}
+              name={id}
+              label={name}
+              toggle
+              checked={expandedColumns[id]}
+              onChange={() => dispatchColumns({ column: id })}
+            />
           ))}
         </Form.Group>
       </Form>
