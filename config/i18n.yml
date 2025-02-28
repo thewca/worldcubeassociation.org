@@ -74,5 +74,8 @@ translations:
       - "*.attempts.*"
       - "*.time_limit.*"
       - "*.users.edit.*"
+      - "*.activerecord.attributes.post.*"
+      - "*.simple_form.hints.post.*"
       - "*.persons.index.*"
+      - "*.results.*"
       - "*.validators.*"

@@ -1,4 +1,4 @@
-FROM ruby:3.3.5 AS base
+FROM ruby:3.4.1 AS base
 ARG BUILD_TAG=local
 ARG WCA_LIVE_SITE
 ARG SHAKAPACKER_ASSET_HOST
@@ -42,6 +42,7 @@ RUN apt-get update -qq && \
       build-essential \
       software-properties-common \
       git \
+      clang \
       pkg-config \
       libvips \
       libssl-dev \

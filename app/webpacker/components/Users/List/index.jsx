@@ -7,9 +7,9 @@ import useDebounce from '../../../lib/hooks/useDebounce';
 import { getPersons } from '../api/getUsers';
 import Loading from '../../Requests/Loading';
 import WCAQueryClientProvider from '../../../lib/providers/WCAQueryClientProvider';
-import { RegionSelector } from '../../CompetitionsOverview/CompetitionsFilters';
 import { personUrl, editPersonUrl } from '../../../lib/requests/routes.js.erb';
 import { countries } from '../../../lib/wca-data.js.erb';
+import RegionSelector, { ALL_REGIONS_VALUE } from '../../wca/RegionSelector';
 
 export default function Wrapper() {
   return (
@@ -22,7 +22,7 @@ export default function Wrapper() {
 function PersonList() {
   const [query, setQuery] = useState('');
   const [page, setPage] = useState(1);
-  const [region, setRegion] = useState('all');
+  const [region, setRegion] = useState(ALL_REGIONS_VALUE);
 
   const debouncedSearch = useDebounce(query, 600);
 
@@ -40,7 +40,7 @@ function PersonList() {
       <Header>
         Users
       </Header>
-      <RegionSelector region={region} dispatchFilter={({ region: r }) => setRegion(r)} />
+      <RegionSelector region={region} onRegionChange={setRegion} />
       <Input type="text" placeholder="Type name, WCA ID, or email. Use a space to separate them." value={query} onChange={(d) => setQuery(d.target.value)} />
       <Table striped>
         <Table.Header>
@@ -64,10 +64,10 @@ function PersonList() {
           {data.rows.map((row) => (
             <Table.Row key={`${row.wca_id}-${row.name}`}>
               <Table.Cell>
-                {row.wca_id}
+                {row.wca_id && <a href={personUrl(row.wca_id)}>{row.wca_id}</a>}
               </Table.Cell>
               <Table.Cell>
-                <a href={personUrl(row.wca_id)}>{row.name}</a>
+                {row.name}
               </Table.Cell>
               <Table.Cell>
                 {countries.byIso2[row.country]?.name}

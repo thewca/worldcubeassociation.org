@@ -1,9 +1,8 @@
 import { DateTime } from 'luxon';
 import {
-  continents, countries, events, nonFutureCompetitionYears,
+  continents, countries, nonFutureCompetitionYears, WCA_EVENT_IDS,
 } from '../../lib/wca-data.js.erb';
-
-const WCA_EVENT_IDS = Object.values(events.official).map((e) => e.id);
+import { ALL_REGIONS_VALUE } from '../wca/RegionSelector';
 
 // note: inconsistencies with previous search params
 // - year value was 'all+years', is now 'all_years'
@@ -30,7 +29,7 @@ const DEFAULT_DISPLAY_MODE = 'list';
 const DEFAULT_TIME_ORDER = 'present';
 const DEFAULT_YEAR = 'all_years';
 const DEFAULT_DATE = null;
-export const DEFAULT_REGION_ALL = 'all';
+const DEFAULT_REGION_ALL = ALL_REGIONS_VALUE;
 const DEFAULT_REGION = '';
 const DEFAULT_DELEGATE = '';
 const DEFAULT_SEARCH = '';
@@ -38,19 +37,29 @@ const DEFAULT_ADMIN_STATUS = 'all';
 const INCLUDE_CANCELLED_TRUE = 'on';
 const SHOW_ADMIN_DETAILS_TRUE = 'yes';
 const LEGACY_DISPLAY_MODE_ADMIN = 'admin';
+const LEGACY_YEARS_ALL = 'all';
 
 // search param sanitizers
 
 const displayModes = ['list', 'map'];
 const sanitizeMode = (mode) => {
-  if (displayModes.includes(mode)) {
-    return mode;
+  // Backwards compatibility for very old PHP links.
+  // They used to set 'List' and 'Map' with uppercase.
+  const lcMode = mode?.toLowerCase();
+
+  if (displayModes.includes(lcMode)) {
+    return lcMode;
   }
   return DEFAULT_DISPLAY_MODE;
 };
 
 const timeOrders = ['present', 'recent', 'past', 'by_announcement', 'custom'];
-const sanitizeTimeOrder = (order) => {
+const sanitizeTimeOrder = (order, year) => {
+  // Backwards compatibility for very old PHP links
+  if (year === LEGACY_YEARS_ALL) {
+    return 'past';
+  }
+
   if (timeOrders.includes(order)) {
     return order;
   }
@@ -82,7 +91,7 @@ const sanitizeDate = (date) => {
 };
 
 const sanitizeRegion = (region) => {
-  if (region === 'all') return region;
+  if (region === ALL_REGIONS_VALUE) return region;
   const continent = continents.real.find(
     ({ id, name }) => region === id || region === name,
   );
@@ -101,7 +110,7 @@ export const getDisplayMode = (searchParams) => (
 );
 
 export const createFilterState = (searchParams) => ({
-  timeOrder: sanitizeTimeOrder(searchParams.get(TIME_ORDER)),
+  timeOrder: sanitizeTimeOrder(searchParams.get(TIME_ORDER), searchParams.get(YEAR)),
   selectedYear: sanitizeYear(searchParams.get(YEAR)),
   customStartDate: sanitizeDate(searchParams.get(START_DATE)),
   customEndDate: sanitizeDate(searchParams.get(END_DATE)),

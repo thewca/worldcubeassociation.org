@@ -323,6 +323,10 @@ sv:
     dinner: Kvällsmat
     #original_hash: 75226d7
     awards: Prisutdelning
+    #original_hash: cdd7bb2
+    setup: Ställa i ordning
+    #original_hash: 0b28e08
+    teardown: Städning
     #original_hash: 6e6a6f2
     misc: Övrigt
   common:
@@ -362,11 +366,6 @@ sv:
       zero: '%{count} dagar'
       one: 1 dag
       other: '%{count} dagar'
-    #original_hash: 203e1b3
-    these_events:
-      zero: 'de här %{count} grenarna'
-      one: den här grenen
-      other: 'de här %{count} grenarna'
     #original_hash: 51ef7d4
     search_site: Sök på hemsidan
     #original_hash: d7decf1
@@ -803,14 +802,6 @@ sv:
           Använd &lt;!-- break --&gt;-taggen för att visa en förhandsgranskning
           på startsidan. Varje inlägg på hemsidan visar all text före avdelaren.
           Det faktiska inlägget visar hela innehållet.
-        #original_hash: da39a3e
-        sticky: ''
-        #original_hash: da39a3e
-        unstick_at: ''
-        #original_hash: da39a3e
-        title: ''
-        #original_hash: da39a3e
-        tags: ''
         #original_hash: 0e3764f
         show_on_homepage: >-
           Försiktigt! Detta är inte säkert för privata data. Detta är bara för
@@ -1000,6 +991,8 @@ sv:
       size_too_small: 'är för liten (bör vara minst %{file_size})'
       #original_hash: a2a43b3
       size_too_big: 'är för stor (bör vara högst %{file_size})'
+      #original_hash: de76004
+      no_permission: Du har inte de behörigheter som krävs för att komma åt den här sidan.
   devise:
     passwords:
       edit:
@@ -2256,25 +2249,24 @@ sv:
           kontrollera statusen för din anmälan %{here}.
         #original_hash: 1852cbf
         see_you_soon: 'Vi ser fram emot att träffa dig på %{comp_name}!'
-      pending:
-        #original_hash: 8d26297
-        mail_subject: 'Anmälan flyttad till väntelistan: %{comp_name}'
-        #original_hash: 6fd0a8e
-        moved_html: >-
-          Din anmälan till %{comp_name} har flyttats till väntelistan. Möjliga
-          orsaker är:
-        causes:
-          #original_hash: eadfc0d
-          accepted: Din anmälan godkändes av misstag
-          #original_hash: 2ac6d84
-          withdrawal: Du bad om att dra dig ur
+      waiting_list:
+        #original_hash: 54c2106
+        mail_subject: 'Du är på väntelistan: %{comp_name}'
+        #original_hash: 2a0c44f
+        waitlisted_html: >-
+          Tävlingen är fylld, men du har placerats på en väntelista, och du
+          kommer att få ett mejl om tillräckligt många platser blir lediga för
+          att du ska kunna delta. Kontrollera din position på väntelistan
+          %{here}.
         #original_hash: 8f7358f
-        email_if_error: 'Om du tror att detta är ett fel, svara på det här e-postmeddelandet.'
+        email_if_error: 'Om du tror att detta är ett fel, vänligen svara på detta mejl.'
       deleted:
         #original_hash: 8cbc6c0
         mail_subject: 'Anmälan raderad: %{comp_name}'
         #original_hash: f66ae63
         message_html: 'Din anmälan till %{comp_name} har raderats. Möjliga orsaker är:'
+        #original_hash: 8f7358f
+        email_if_error: 'Om du tror att detta är ett fel, vänligen svara på detta mejl.'
         causes:
           #original_hash: 978944c
           missing_info: Du har inte skickat in alla nödvändiga uppgifter
@@ -2287,8 +2279,8 @@ sv:
           registrations_full: >-
             Gränsen för antalet tävlande har uppnåtts och det finns inga fler
             platser tillgängliga
-          #original_hash: 0d4cce9
-          multiple_registrations: Du anmälde dig två gånger eller fler gånger
+          #original_hash: 238f4ff
+          multiple_registrations: Du anmälde dig två eller fler gånger
           #original_hash: 70b1e2c
           competition_canceled: Tävlingen har ställts in
     list:
@@ -2473,6 +2465,8 @@ sv:
           Du håller på att betala minst dubbelt så mycket som krävs för din
           anmälan.
       errors:
+        #original_hash: c80ec45
+        registration_closed: Anmälan har stängt - inga ytterligare betalningar är tillåtna.
         #original_hash: 166d48c
         already_paid: Avgiften drogs inte eftersom anmälningsavgiften redan har betalats.
         #original_hash: f10c80c
@@ -2826,7 +2820,7 @@ sv:
       series_registration_warning_html: >-
         Obs: Du kan skicka in anmälningar till alla tävlingar i en
         tävlingsserie, men bara en av anmälningarna kan bekräftas och godkännas.
-        <b>Du kommer bara tillåtas att delta i en tävling i tävlingsserien!<\b>
+        <b>Du kommer bara tillåtas att delta i en tävling i tävlingsserien!</b>
       #original_hash: 9bb1965
       competitor_limit: Gräns för antal tävlande
       #original_hash: 196725e
@@ -3052,8 +3046,6 @@ sv:
         custom: Tävlingar under det valda tidsintervallet
         #original_hash: 0933739
         by_announcement: 'Tävlingar sorterade efter publiceringsdatum, senaste först'
-      #original_hash: 6684214
-      no_access: Du har inte tillgång till den här sidan!
       tooltips:
         hourglass:
           #original_hash: b5183e1
@@ -3071,13 +3063,13 @@ sv:
         #original_hash: 3bc8082
         recent: 'Senaste %{count} dagarna'
         registration:
-          #original_hash: 49d8169
-          opens_in: 'Anmälan öppnar om %{duration}'
-          #original_hash: 2d601fa
-          closed: 'Anmälan har stängt. Tävlingen börjar om %{days}'
+          #original_hash: fe28f94
+          opens_in: 'Anmälan öppnar %{relativeDate}'
+          #original_hash: f9f709e
+          closed: 'Anmälan har stängt. Tävlingen kommer börja %{relativeDate}'
           #original_hash: 2e17db8
           open: Anmälan är öppen!
-          #original_hash: c098975
+          #original_hash: be2118d
           full: >-
             Gränsen för antal tävlande har nåtts, nya anmälningar kommer sättas
             på väntelistan.
@@ -3085,10 +3077,6 @@ sv:
       no_more_comps: Inga fler tävlingar
       #original_hash: 8b09d74
       no_comp_found: Inga tävlingar hittades.
-      #original_hash: 7008166
-      no_comp_match: >-
-        Vi hittade inga tävlingar med %{events}! Försök att söka efter färre
-        grenar.
     my_competitions_table:
       #original_hash: 5301648
       edit: Redigera
@@ -3679,7 +3667,7 @@ sv:
           #original_hash: 3fd2e0c
           information: Tävlande med avslagna anmälningar kan inte anmäla sig igen.
         pending:
-          #original_hash: f3656e1
+          #original_hash: 5e16c6d
           information: >-
             Ohanterade bör endast användas för ofullständiga (t.ex. obetalda)
             anmälningar - använd väntelistan om din tävling är för full för att
@@ -3692,8 +3680,10 @@ sv:
           #original_hash: 3a16c0d
           refunded: 'Betalningen återbetalades den %{date}.'
         psychsheets:
-          #original_hash: f03e2d0
-          go_back: Gå tillbaka
+          #original_hash: ded0a5d
+          show_me: Visa mig
+          #original_hash: a23dc2b
+          rank: 'Ranking: %{userPosition}'
         #original_hash: 19eabc9
         timestamp: Tid
         #original_hash: 5e0207a
@@ -3955,6 +3945,10 @@ sv:
       series_distance_days: 'Tävlingen är för många dagar ifrån %{competition}.'
       #original_hash: 7fc8fba
       must_ask_about_guests_if_specifying_limit: Måste fråga om antal gäster om det finns en gräns för antalet gäster.
+      #original_hash: 000564d
+      not_full_url: >-
+        Du har en relativ URL (%{url}) i innehållet. Ange fullständiga URL:er
+        med prefix http:// eller https://.
     new:
       #original_hash: 1208df7
       create_competition: Skapa tävling

@@ -5,11 +5,12 @@ import React from 'react';
 import { DateTime } from 'luxon';
 import I18n from '../../lib/i18n';
 import { competitionStatusText } from '../../lib/utils/competition-table';
-import { competitionRegistrationsUrl, editCompetitionsUrl } from '../../lib/requests/routes.js.erb';
+import { competitionEditRegistrationsUrl, editCompetitionsUrl } from '../../lib/requests/routes.js.erb';
 import {
   DateTableCell, LocationTableCell, NameTableCell, ReportTableCell,
 } from './TableCells';
 import I18nHTMLTranslate from '../I18nHTMLTranslate';
+import { toRelativeOptions } from '../../lib/utils/dates';
 
 const competingStatusIcon = (competingStatus) => {
   switch (competingStatus) {
@@ -24,10 +25,10 @@ const competingStatusIcon = (competingStatus) => {
 
 const registrationStatusIconText = (competition) => {
   if (competition.registration_status === 'not_yet_opened') {
-    return I18n.t('competitions.index.tooltips.registration.opens_in', { duration: DateTime.fromISO(competition.registration_open).toRelative({ locale: window.I18n.locale }) });
+    return I18n.t('competitions.index.tooltips.registration.opens_in', { relativeDate: DateTime.fromISO(competition.registration_open).toRelative(toRelativeOptions.default) });
   }
   if (competition.registration_status === 'past') {
-    return I18n.t('competitions.index.tooltips.registration.closed', { days: DateTime.fromISO(competition.start_date).toRelative({ locale: window.I18n.locale }) });
+    return I18n.t('competitions.index.tooltips.registration.closed', { relativeDate: DateTime.fromISO(competition.start_date).toRelative(toRelativeOptions.roundUpAndAtBestDayPrecision) });
   }
   if (competition.registration_status === 'full') {
     return I18n.t('competitions.index.tooltips.registration.full');
@@ -43,7 +44,7 @@ const registrationStatusIcon = (competition) => {
     return <Icon name="user times" color="red" />;
   }
   if (competition.registration_status === 'full') {
-    return <Icon name="user clock" color="orange" />;
+    return <Icon className="user clock" color="orange" />;
   }
   return <Icon name="user plus" color="green" />;
 };
@@ -56,7 +57,7 @@ export default function UpcomingCompetitionTable({
   fallbackMessage = null,
 }) {
   const canViewDelegateReport = permissions.can_view_delegate_report.scope === '*' || competitions.some((c) => permissions.can_view_delegate_report.scope.includes(c.id));
-
+  const canAdministerCompetitions = permissions.can_administer_competitions.scope === '*' || competitions.some((c) => permissions.can_administer_competitions.scope.includes(c.id));
   if (competitions.length === 0 && fallbackMessage) {
     return (
       <Message info>
@@ -81,12 +82,14 @@ export default function UpcomingCompetitionTable({
               {I18n.t('competitions.competition_info.date')}
             </Table.HeaderCell>
             <Table.HeaderCell />
-            {canViewDelegateReport && (
+            {canAdministerCompetitions && (
               <>
                 <Table.HeaderCell />
                 <Table.HeaderCell />
-                <Table.HeaderCell />
               </>
+            )}
+            {canViewDelegateReport && (
+              <Table.HeaderCell />
             )}
 
           </Table.Row>
@@ -117,25 +120,26 @@ export default function UpcomingCompetitionTable({
                   <Table.Cell>
                     {competingStatusIcon(registrationStatuses[competition.id])}
                   </Table.Cell>
-                  {(permissions.can_organize_competitions.scope === '*' || permissions.can_organize_competitions.scope.includes(competition.id)) && (
+                  {(permissions.can_administer_competitions.scope === '*' || permissions.can_administer_competitions.scope.includes(competition.id)) && (
                     <Table.Cell>
                       <a href={editCompetitionsUrl(competition.id)}>
                         {I18n.t('competitions.my_competitions_table.edit')}
                       </a>
                     </Table.Cell>
                   )}
-                  {(permissions.can_organize_competitions.scope === '*' || permissions.can_organize_competitions.scope.includes(competition.id)) && (
+                  {(permissions.can_administer_competitions.scope === '*' || permissions.can_administer_competitions.scope.includes(competition.id)) && (
                     <Table.Cell>
-                      <a href={competitionRegistrationsUrl(competition.id)}>
+                      <a href={competitionEditRegistrationsUrl(competition.id)}>
                         {I18n.t('competitions.my_competitions_table.registrations')}
                       </a>
                     </Table.Cell>
                   )}
+                  {canViewDelegateReport && (
                   <ReportTableCell
                     competitionId={competition.id}
                     permissions={permissions}
-                    canViewDelegateReport={canViewDelegateReport}
                   />
+                  )}
                 </Table.Row>
               )}
             />

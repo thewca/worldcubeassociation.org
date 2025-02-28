@@ -95,6 +95,8 @@ class Competition < ApplicationRecord
     restricted: 2,
   }, prefix: true
 
+  enum :competitor_can_cancel, [:not_accepted, :always, :unpaid], prefix: true
+
   NEW_REG_SYSTEM_DEFAULT = :v3
 
   enum :registration_version, [:v1, :v2, :v3], prefix: true, default: NEW_REG_SYSTEM_DEFAULT
@@ -133,6 +135,7 @@ class Competition < ApplicationRecord
     refund_policy_percent
     guests_entry_fee_lowest_denomination
     guest_entry_status
+    competitor_can_cancel
   ).freeze
   UNCLONEABLE_ATTRIBUTES = %w(
     id
@@ -173,6 +176,7 @@ class Competition < ApplicationRecord
     event_change_deadline_date
     competition_series_id
     registration_version
+    newcomer_month_reserved_spots
   ).freeze
   VALID_NAME_RE = /\A([-&.:' [:alnum:]]+) (\d{4})\z/
   VALID_ID_RE = /\A[a-zA-Z0-9]+\Z/
@@ -189,6 +193,9 @@ class Competition < ApplicationRecord
   MAX_MARKDOWN_LENGTH = 255
   MAX_COMPETITOR_LIMIT = 5000
   MAX_GUEST_LIMIT = 100
+  NEWCOMER_MONTH_ENABLED = true
+  NEWCOMER_MONTH_RESERVATIONS_FRACTION = 0.5
+
   validates_inclusion_of :competitor_limit_enabled, in: [true, false], if: :competitor_limit_required?
   validates_numericality_of :competitor_limit, greater_than_or_equal_to: 1, less_than_or_equal_to: MAX_COMPETITOR_LIMIT, if: :competitor_limit_enabled?
   validates :competitor_limit_reason, presence: true, if: :competitor_limit_enabled?
@@ -242,6 +249,27 @@ class Competition < ApplicationRecord
   validates :venueAddress, :venueDetails, :name_reason, :forbid_newcomers_reason, length: { maximum: MAX_FREETEXT_LENGTH }
   validates :external_website, :external_registration_page, length: { maximum: MAX_URL_LENGTH }
   validates :contact, length: { maximum: MAX_MARKDOWN_LENGTH }
+
+  validate :validate_newcomer_month_reserved_spots, if: -> { competitor_limit.present? && newcomer_month_reserved_spots.present? }
+  private def validate_newcomer_month_reserved_spots
+    max_newcomer_spots = (competitor_limit * NEWCOMER_MONTH_RESERVATIONS_FRACTION).floor
+    errors.add(:newcomer_month_reserved_spots, I18n.t('competitions.errors.newcomer_month_reservations_percentage')) if
+      newcomer_month_reserved_spots > max_newcomer_spots
+    errors.add(:newcomer_month_reserved_spots, I18n.t('competitions.errors.newcomer_month_reservations_available')) if
+      newcomer_month_reserved_spots > newcomer_month_spots_reservable
+  end
+
+  def enforce_newcomer_month_reservations?
+    newcomer_month_reserved_spots.present? && newcomer_month_reserved_spots > 0 && NEWCOMER_MONTH_ENABLED
+  end
+
+  def newcomer_month_spots_reservable
+    competitor_limit - (registrations.accepted_count - registrations.newcomer_month_eligible_competitors_count)
+  end
+
+  def newcomer_month_reserved_spots_remaining
+    newcomer_month_reserved_spots - registrations.newcomer_month_eligible_competitors_count
+  end
 
   # Dirty old trick to deal with competition id changes (see other methods using
   # 'with_old_id' for more details).
@@ -458,6 +486,11 @@ class Competition < ApplicationRecord
     competitor_limit_enabled? && competitor_count >= competitor_limit
   end
 
+  def registration_full_and_accepted?
+    competitor_count = registrations.accepted_count
+    competitor_limit_enabled? && competitor_count >= competitor_limit
+  end
+
   def number_of_bookmarks
     bookmarked_users.count
   end
@@ -499,6 +532,7 @@ class Competition < ApplicationRecord
 
   def warnings_for(user)
     warnings = {}
+
     if self.showAtAll
       unless self.announced?
         warnings[:announcement] = I18n.t('competitions.messages.not_announced')
@@ -511,11 +545,6 @@ class Competition < ApplicationRecord
           warnings[:results] = I18n.t('competitions.messages.results_still_processing')
         end
       end
-
-      if self.registration_full? && self.registration_currently_open?
-        warnings[:waiting_list] = registration_full_message
-      end
-
     else
       warnings[:invisible] = I18n.t('competitions.messages.not_visible')
 
@@ -582,10 +611,12 @@ class Competition < ApplicationRecord
     warnings
   end
 
+  # @deprecated Fully transitioned to React. Keeping the method here because the test cases are interesting,
+  #   and I want to "save" them until we can do proper React component testing (signed GB 2025-02-14)
   def registration_full_message
-    if registration_full? && registrations.accepted.count >= competitor_limit
+    if registration_full_and_accepted?
       I18n.t('registrations.registration_full', competitor_limit: competitor_limit)
-    else
+    elsif registration_full?
       I18n.t('registrations.registration_full_include_waiting_list', competitor_limit: competitor_limit)
     end
   end
@@ -643,9 +674,9 @@ class Competition < ApplicationRecord
     delegates.include?(user) || trainee_delegates.include?(user) || organizers.include?(user)
   end
 
-  attr_accessor :being_cloned_from_id
+  attr_accessor :being_cloned_from_id, :being_cloned_from_cache
   def being_cloned_from
-    Competition.find_by(id: being_cloned_from_id)
+    @being_cloned_from_cache ||= Competition.find_by(id: being_cloned_from_id)
   end
 
   def build_clone
@@ -709,7 +740,7 @@ class Competition < ApplicationRecord
     # Clone competition tabs.
     if clone_tabs
       being_cloned_from&.tabs&.each do |tab|
-        tabs.create(tab.attributes.slice(*CompetitionTab::CLONEABLE_ATTRIBUTES))
+        tabs.create!(tab.attributes.slice(*CompetitionTab::CLONEABLE_ATTRIBUTES))
       end
     end
   end
@@ -836,6 +867,10 @@ class Competition < ApplicationRecord
 
   def report_posted_at
     delegate_report&.posted_at
+  end
+
+  def report_posted_by_user
+    delegate_report&.posted_by_user_id
   end
 
   # This callback updates all tables having the competition id, when the id changes.
@@ -1169,14 +1204,9 @@ class Competition < ApplicationRecord
 
   # can registration edits be done right now
   # must be allowed in general, and if the deadline field exists, is it a date and in the future
-  def registration_edits_allowed?
-    self.allow_registration_edits &&
+  def registration_edits_currently_permitted?
+    !started? && self.allow_registration_edits &&
       (!has_event_change_deadline_date? || !event_change_deadline_date.present? || event_change_deadline_date > DateTime.now)
-  end
-
-  # can competitors delete their own registration after it has been accepetd
-  def registration_delete_after_acceptance_allowed?
-    self.allow_registration_self_delete_after_acceptance
   end
 
   private def dates_must_be_valid
@@ -1564,7 +1594,7 @@ class Competition < ApplicationRecord
   end
 
   def started?
-    start_date.present? && start_date < Date.today
+    start_date.present? && start_date <= Date.today
   end
 
   def organizers_or_delegates
@@ -1576,6 +1606,7 @@ class Competition < ApplicationRecord
     :user_id,
     :wca_id,
     :country_id,
+    :country_iso2,
     :average_best,
     :average_rank,
     :single_best,
@@ -1681,6 +1712,7 @@ class Competition < ApplicationRecord
           user_id: user.id,
           wca_id: user.wca_id,
           country_id: user.country.id,
+          country_iso2: user.country_iso2,
           average_rank: average_ranking&.worldRank,
           average_best: average_ranking&.best || 0,
           single_rank: single_ranking&.worldRank,
@@ -1825,7 +1857,12 @@ class Competition < ApplicationRecord
                              reverse, field = part.match(/^(-)?(\w+)$/).captures
                              [field.to_sym, reverse ? :desc : :asc]
                            end
+                           # rubocop:disable Style/HashSlice
+                           #   RuboCop suggests using `slice` here, which is a noble intention but breaks the order
+                           #   of sort arguments. However, this order is crucial (sorting by "name then start_date"
+                           #   is different from sorting by "start_date then name") so we insist on doing it our way.
                            .select { |field, _| orderable_fields.include?(field) }
+                           # rubocop:enable Style/HashSlice
                            .to_h
     else
       order = { start_date: :desc }
@@ -1874,13 +1911,13 @@ class Competition < ApplicationRecord
       only: %w[id name website start_date registration_open registration_close announced_at cancelled_at end_date competitor_limit
                extra_registration_requirements enable_donations refund_policy_limit_date event_change_deadline_date waiting_list_deadline_date
                on_the_spot_registration on_the_spot_entry_fee_lowest_denomination qualification_results event_restrictions
-               base_entry_fee_lowest_denomination currency_code allow_registration_edits allow_registration_self_delete_after_acceptance
+               base_entry_fee_lowest_denomination currency_code allow_registration_edits competitor_can_cancel
                allow_registration_without_qualification refund_policy_percent use_wca_registration guests_per_registration_limit venue contact
                force_comment_in_registration use_wca_registration external_registration_page guests_entry_fee_lowest_denomination guest_entry_status
                information events_per_registration_limit guests_enabled],
       methods: %w[url website short_name city venue_address venue_details latitude_degrees longitude_degrees country_iso2 event_ids registration_currently_open?
                   main_event_id number_of_bookmarks using_payment_integrations? uses_qualification? uses_cutoff? competition_series_ids registration_full?
-                  part_of_competition_series?],
+                  part_of_competition_series? registration_full_and_accepted?],
       include: %w[delegates organizers],
     }
     self.as_json(options)
@@ -2364,6 +2401,7 @@ class Competition < ApplicationRecord
         "enabled" => competitor_limit_enabled,
         "count" => competitor_limit,
         "reason" => competitor_limit_reason,
+        "newcomerMonthReservedSpots" => newcomer_month_reserved_spots,
       },
       "staff" => {
         "staffDelegateIds" => staff_delegates.to_a.pluck(:id),
@@ -2394,7 +2432,7 @@ class Competition < ApplicationRecord
         "waitingListDeadlineDate" => waiting_list_deadline_date&.iso8601,
         "eventChangeDeadlineDate" => event_change_deadline_date&.iso8601,
         "allowOnTheSpot" => on_the_spot_registration,
-        "allowSelfDeleteAfterAcceptance" => allow_registration_self_delete_after_acceptance,
+        "competitorCanCancel" => competitor_can_cancel,
         "allowSelfEdits" => allow_registration_edits,
         "guestsEnabled" => guests_enabled,
         "guestEntryStatus" => guest_entry_status,
@@ -2438,7 +2476,13 @@ class Competition < ApplicationRecord
   # It is quite uncool that we have to duplicate the internal form_data formatting like this
   # but as long as we let our backend handle the complete error validation we literally have no other choice
   def form_errors
-    return {} if self.valid?
+    self_valid = self.valid?
+    # If we're cloning, we also need to check the parent's associations.
+    #   Otherwise, the user may be surprised by a silent fail if some tabs/venues/schedules
+    #   of the parent are invalid. (This can happen if we introduce new validations on old data)
+    self_valid &= being_cloned_from&.tabs&.all?(&:valid?) if being_cloned_from_id.present?
+
+    return {} if self_valid
 
     {
       # for historic reasons, we keep 'name' errors listed under ID. Don't ask.
@@ -2465,6 +2509,7 @@ class Competition < ApplicationRecord
         "enabled" => errors[:competitor_limit_enabled],
         "count" => errors[:competitor_limit],
         "reason" => errors[:competitor_limit_reason],
+        "newcomer_month_reserved_spots" => errors[:newcomer_month_reserved_spots],
       },
       "staff" => {
         "staffDelegateIds" => errors[:staff_delegate_ids],
@@ -2495,7 +2540,7 @@ class Competition < ApplicationRecord
         "waitingListDeadlineDate" => errors[:waiting_list_deadline_date],
         "eventChangeDeadlineDate" => errors[:event_change_deadline_date],
         "allowOnTheSpot" => errors[:on_the_spot_registration],
-        "allowSelfDeleteAfterAcceptance" => errors[:allow_registration_self_delete_after_acceptance],
+        "competitorCanCancel" => errors[:competitor_can_cancel],
         "allowSelfEdits" => errors[:allow_registration_edits],
         "guestsEnabled" => errors[:guests_enabled],
         "guestEntryStatus" => errors[:guest_entry_status],
@@ -2531,12 +2576,16 @@ class Competition < ApplicationRecord
       },
       "cloning" => {
         "fromId" => errors[:being_cloned_from_id],
-        "cloneTabs" => errors[:clone_tabs],
+        "cloneTabs" => being_cloned_from_id.present? ? being_cloned_from&.association_errors(:tabs) : errors[:clone_tabs],
       },
       "other" => {
         "competitionEvents" => errors[:competition_events],
       },
     }
+  end
+
+  def association_errors(association_name)
+    self.public_send(association_name).map(&:errors).flat_map(&:to_a)
   end
 
   def set_form_data(form_data, current_user)
@@ -2602,6 +2651,7 @@ class Competition < ApplicationRecord
       competitor_limit_enabled: form_data.dig('competitorLimit', 'enabled'),
       competitor_limit: form_data.dig('competitorLimit', 'count'),
       competitor_limit_reason: form_data.dig('competitorLimit', 'reason'),
+      newcomer_month_reserved_spots: form_data.dig('competitorLimit', 'newcomerMonthReservedSpots'),
       extra_registration_requirements: form_data.dig('registration', 'extraRequirements'),
       on_the_spot_registration: form_data.dig('registration', 'allowOnTheSpot'),
       on_the_spot_entry_fee_lowest_denomination: form_data.dig('entryFees', 'onTheSpotEntryFee'),
@@ -2623,7 +2673,7 @@ class Competition < ApplicationRecord
       event_change_deadline_date: form_data.dig('registration', 'eventChangeDeadlineDate')&.presence,
       guest_entry_status: form_data.dig('registration', 'guestEntryStatus'),
       allow_registration_edits: form_data.dig('registration', 'allowSelfEdits'),
-      allow_registration_self_delete_after_acceptance: form_data.dig('registration', 'allowSelfDeleteAfterAcceptance'),
+      competitor_can_cancel: form_data.dig('registration', 'competitorCanCancel'),
       use_wca_live_for_scoretaking: form_data.dig('website', 'usesWcaLive'),
       allow_registration_without_qualification: form_data.dig('eventRestrictions', 'qualificationResults', 'allowRegistrationWithout'),
       guests_per_registration_limit: form_data.dig('registration', 'guestsPerRegistration'),
@@ -2745,6 +2795,7 @@ class Competition < ApplicationRecord
             "enabled" => { "type" => ["boolean", "null"] },
             "count" => { "type" => ["integer", "null"] },
             "reason" => { "type" => ["string", "null"] },
+            "newcomerMonthReservedSpots" => { "type" => ["integer", "null"] },
           },
         },
         "staff" => {

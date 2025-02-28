@@ -94,7 +94,8 @@ export function numberOfDaysAfter(competition, refDate) {
 
   const numberOfDays = parsedStartDate.diff(parsedRefDate, 'days').days;
 
-  return Math.ceil(Math.abs(numberOfDays));
+  // Floor is used here because we want to show 0 days after the competition if it's the same day
+  return Math.floor(Math.abs(numberOfDays));
 }
 
 export function timeDifferenceAfter(competition, refDate) {
@@ -109,6 +110,19 @@ export function reportAdminCellContent(comp) {
     return delegateIds.includes(comp.report_posted_by_user)
       ? timeDifferenceAfter(comp, comp.report_posted_at)
       : I18n.t('competitions.competition_info.submitted_by_other');
+  }
+
+  if (isProbablyOver(comp)) {
+    return I18n.t('competitions.competition_info.pending');
+  }
+
+  return null;
+}
+
+export function resultsSubmittedAtAdminCellContent(comp) {
+  if (comp.results_posted_at) {
+    const date = comp.results_submitted_at ? comp.results_submitted_at : comp.results_posted_at;
+    return timeDifferenceAfter(comp, date);
   }
 
   if (isProbablyOver(comp)) {

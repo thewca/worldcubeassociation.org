@@ -3,6 +3,12 @@ resource "aws_cloudwatch_log_group" "this" {
 }
 
 locals {
+  sidekiq_environment = [
+    {
+      "name" = "ECS_CONTAINER_STOP_TIMEOUT"
+      "value" = "305"
+    },
+  ]
   rails_environment = [
     {
       name  = "WCA_LIVE_SITE"
@@ -121,6 +127,10 @@ locals {
       value = aws_sqs_queue.this.url
     },
     {
+      name = "LIVE_QUEUE"
+      value = aws_sqs_queue.results.url
+    },
+    {
       name = "VAULT_APPLICATION"
       value = var.VAULT_APPLICATION
     },
@@ -218,7 +228,7 @@ data "aws_iam_policy_document" "task_policy" {
       "sqs:GetQueueAttributes",
       "sqs:GetQueueUrl"
     ]
-    resources = [aws_sqs_queue.this.arn]
+    resources = [aws_sqs_queue.this.arn, aws_sqs_queue.results.arn]
   }
 }
 

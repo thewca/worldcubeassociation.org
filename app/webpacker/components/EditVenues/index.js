@@ -18,6 +18,7 @@ import wcifScheduleReducer from './store/reducer';
 import Store, { useDispatch, useStore } from '../../lib/providers/StoreProvider';
 import ConfirmProvider from '../../lib/providers/ConfirmProvider';
 import ManageVenues from './ManageVenues';
+import WCAQueryClientProvider from '../../lib/providers/WCAQueryClientProvider';
 
 const PATCH_OPTIONS = { skipSchedule: true };
 
@@ -135,10 +136,12 @@ export default function Wrapper({
       }}
     >
       <ConfirmProvider>
-        <EditVenues
-          countryZones={countryZones}
-          referenceTime={referenceTime}
-        />
+        <WCAQueryClientProvider>
+          <EditVenues
+            countryZones={countryZones}
+            referenceTime={referenceTime}
+          />
+        </WCAQueryClientProvider>
       </ConfirmProvider>
     </Store>
   );

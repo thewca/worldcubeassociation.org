@@ -17,6 +17,7 @@ export default function CompetitorLimit() {
       <ConditionalSection showIf={hasLimit}>
         <InputNumber id="count" min={0} />
         <InputTextArea id="reason" />
+        <InputNumber id="newcomerMonthReservedSpots" min={1} nullable />
       </ConditionalSection>
     </SubSection>
   );
