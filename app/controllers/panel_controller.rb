@@ -108,4 +108,27 @@ class PanelController < ApplicationController
     query_params = request.query_parameters.except(:id)
     redirect_to panel_index_path(panel_id: panel_with_panel_page, anchor: panel_page_id, **query_params)
   end
+
+  private def cronjob_from_params
+    cronjob_class_name = params.require(:cronjob_class_name)
+    Object.const_get(cronjob_class_name)
+  end
+
+  def cronjob_details
+    render json: cronjob_from_params.serialize
+  end
+
+  def cronjob_run
+    cronjob = cronjob_from_params
+    cronjob.perform_later
+
+    render json: cronjob.serialize
+  end
+
+  def cronjob_reset
+    cronjob = cronjob_from_params
+    cronjob.reset_error_state!
+
+    render json: cronjob.serialize
+  end
 end
