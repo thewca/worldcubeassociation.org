@@ -6,7 +6,7 @@ locals {
   sidekiq_environment = [
     {
       "name" = "ECS_CONTAINER_STOP_TIMEOUT"
-      "value" = "300"
+      "value" = "305"
     },
   ]
   rails_environment = [
