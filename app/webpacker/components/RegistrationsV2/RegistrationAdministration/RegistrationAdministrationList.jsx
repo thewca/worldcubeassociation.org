@@ -322,6 +322,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
               sortColumn={sortColumn}
               competitionInfo={competitionInfo}
               color={PENDING_COLOR}
+              distinguishPaidUnpaid
             />
           </>
         ),

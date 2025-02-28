@@ -69,6 +69,7 @@ export default function TableRow({
   draggable = false,
   withPosition = false,
   color,
+  distinguishPaidUnpaid = false,
 }) {
   const {
     dob: dobIsShown,
@@ -95,6 +96,9 @@ export default function TableRow({
     has_paid: hasPaid,
   } = registration.payment ?? {};
   const usingPayment = competitionInfo['using_payment_integrations?'];
+  const checkboxCellColor = !distinguishPaidUnpaid || !usingPayment || hasPaid
+    ? color
+    : undefined;
 
   const copyEmail = () => {
     navigator.clipboard.writeText(emailAddress);
@@ -117,8 +121,7 @@ export default function TableRow({
             {...provided.draggableProps}
             {...provided.dragHandleProps}
           >
-            {/* when using payment, only color those who have paid */}
-            <Table.Cell className={(!usingPayment || hasPaid) ? color : ''}>
+            <Table.Cell className={checkboxCellColor}>
               { /* We manually set the margin to 0 here to fix the table row height */}
               {draggable ? (
                 <Icon name="bars" />
