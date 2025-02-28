@@ -64,7 +64,12 @@ export default function TableHeader({
             >
               {I18n.t('registrations.list.registered.with_stripe')}
             </Table.HeaderCell>
-            <Table.HeaderCell disabled>{I18n.t('competitions.registration_v2.update.amount')}</Table.HeaderCell>
+            <Table.HeaderCell
+              sorted={sortColumn === 'amount' ? sortDirection : undefined}
+              onClick={() => changeSortColumn('amount')}
+            >
+              {I18n.t('competitions.registration_v2.update.amount')}
+            </Table.HeaderCell>
           </>
         ) : (
           <Table.HeaderCell

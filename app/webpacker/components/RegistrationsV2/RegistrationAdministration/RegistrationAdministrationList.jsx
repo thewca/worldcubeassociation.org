@@ -32,6 +32,7 @@ const sortReducer = createSortReducer([
   'country',
   'paid_on_with_registered_on_fallback',
   'registered_on',
+  'amount',
   'events',
   'guests',
   'paid_on',
@@ -166,6 +167,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
         switch (sortColumn) {
           case 'name':
             return a.user.name.localeCompare(b.user.name);
+
           case 'wca_id': {
             const aHasAccount = a.user.wca_id !== null;
             const bHasAccount = b.user.wca_id !== null;
@@ -180,23 +182,29 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
             }
             return a.user.wca_id.localeCompare(b.user.wca_id);
           }
+
           case 'country':
             return countries.byIso2[a.user.country.iso2].name
               .localeCompare(countries.byIso2[b.user.country.iso2].name);
+
           case 'events':
             return a.competing.event_ids.length - b.competing.event_ids.length;
+
           case 'guests':
             return a.guests - b.guests;
+
           case 'dob':
             return DateTime.fromISO(a.user.dob).toMillis()
               - DateTime.fromISO(b.user.dob).toMillis();
+
           case 'comment':
             return a.competing.comment.localeCompare(b.competing.comment);
+
           case 'registered_on':
             return DateTime.fromISO(a.competing.registered_on).toMillis()
               - DateTime.fromISO(b.competing.registered_on).toMillis();
-          case 'paid_on_with_registered_on_fallback':
-          {
+
+          case 'paid_on_with_registered_on_fallback': {
             const hasAPaid = a.payment?.has_paid;
             const hasBPaid = b.payment?.has_paid;
 
@@ -213,8 +221,13 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
             return DateTime.fromISO(a.competing.registered_on).toMillis()
               - DateTime.fromISO(b.competing.registered_on).toMillis();
           }
+
+          case 'amount':
+            return a.payment.payment_amount_iso - b.payment.payment_amount_iso;
+
           case 'waiting_list_position':
             return a.competing.waiting_list_position - b.competing.waiting_list_position;
+
           default:
             return 0;
         }
