@@ -37,14 +37,6 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
              include: serial_includes
   end
 
-  def competition_count
-    start_date = params.require(:startDate)
-    end_date = params.require(:endDate)
-
-    count = Competition.where("start_date >= ? AND end_date <= ?", start_date, end_date).count
-    render json: { count: count }
-  end
-
   def show
     competition = competition_from_params
 

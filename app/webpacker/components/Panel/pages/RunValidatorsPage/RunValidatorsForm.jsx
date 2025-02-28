@@ -45,7 +45,6 @@ function RunValidatorsForm({ competitionIds }) {
 
   const [selectedCompetitionIds, setSelectedCompetitionIds] = useInputState(competitionIds || []);
   const [selectedCompetitionRange, setSelectedCompetitionRange] = useState();
-  const [validationOutput, setValidationOutput] = useState();
 
   const [selectedValidators, setSelectedValidators] = useInputState(ALL_VALIDATORS);
   const [applyFixWhenPossible, setApplyFixWhenPossible] = useCheckboxState(false);
@@ -70,11 +69,9 @@ function RunValidatorsForm({ competitionIds }) {
     isPending,
     isError,
     error,
+    data: validationOutput,
   } = useMutation({
     mutationFn: runValidatorsForCompetitions,
-    onSuccess: (data) => {
-      setValidationOutput(data);
-    },
   });
 
   // enableCompetitionEditor says whether competition list editor should be enabled or not. If the
