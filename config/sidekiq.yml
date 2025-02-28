@@ -6,4 +6,5 @@
 development:
   :concurrency: 5
   :verbose: true
+# The time that Sidekiq waits after a TERM for jobs to finish see https://github.com/sidekiq/sidekiq/blob/11e23346a719fbed5052cf8c058845e13ce14808/lib/sidekiq/launcher.rb#L58
 :timeout: 300
