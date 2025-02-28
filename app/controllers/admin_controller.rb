@@ -382,6 +382,10 @@ class AdminController < ApplicationController
     Competition.includes(associations).find_by_id!(params[:competition_id])
   end
 
+  private def competition_list_from_string(competition_ids_string)
+    competition_ids_string.split(',').uniq.compact
+  end
+
   def complete_persons
     @competition_ids_string = params.fetch(:competition_ids, "")
     @competition_ids = competition_list_from_string(@competition_ids_string)
