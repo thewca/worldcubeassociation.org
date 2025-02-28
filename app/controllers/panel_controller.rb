@@ -40,6 +40,7 @@ class PanelController < ApplicationController
       token_generator.auth_token({
                                    endpoint: "#{url}:3306",
                                    user_name: EnvConfig.DATABASE_WRT_USER,
+                                   region: EnvConfig.AWS_REGION,
                                  })
     end
 
