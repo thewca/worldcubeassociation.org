@@ -1,5 +1,7 @@
-import React from 'react';
-import { Header, Message, Table } from 'semantic-ui-react';
+import React, { useState } from 'react';
+import {
+  Button, Header, Message, Table,
+} from 'semantic-ui-react';
 import EditPersonForm from '../../Panel/pages/EditPersonPage/EditPersonForm';
 import useSaveAction from '../../../lib/hooks/useSaveAction';
 import { actionUrls } from '../../../lib/requests/routes.js.erb';
@@ -30,7 +32,7 @@ function EditPersonValidations({ ticketDetails }) {
   ));
 }
 
-function EditPersonRequestedChangesList({ requestedChanges }) {
+function EditPersonRequestedChangesList({ requestedChanges, copyToForm }) {
   return (
     <>
       <Header as="h3">Requested changes</Header>
@@ -40,14 +42,23 @@ function EditPersonRequestedChangesList({ requestedChanges }) {
             <Table.HeaderCell>Field</Table.HeaderCell>
             <Table.HeaderCell>Old value</Table.HeaderCell>
             <Table.HeaderCell>New value</Table.HeaderCell>
+            <Table.HeaderCell>Actions</Table.HeaderCell>
           </Table.Row>
         </Table.Header>
         <Table.Body>
           {requestedChanges?.map((change) => (
-            <Table.Row>
+            <Table.Row key={change.field_name}>
               <Table.Cell>{I18n.t(`activerecord.attributes.user.${change.field_name}`)}</Table.Cell>
               <Table.Cell>{formatField(change.field_name, change.old_value)}</Table.Cell>
               <Table.Cell>{formatField(change.field_name, change.new_value)}</Table.Cell>
+              <Table.Cell>
+                <Button onClick={() => copyToForm(change.field_name, change.new_value)}>
+                  Copy to form
+                </Button>
+                <Button onClick={() => copyToForm(change.field_name, change.old_value)}>
+                  Undo
+                </Button>
+              </Table.Cell>
             </Table.Row>
           ))}
         </Table.Body>
@@ -59,6 +70,11 @@ function EditPersonRequestedChangesList({ requestedChanges }) {
 function EditPersonTicketWorkbenchForWrt({ ticketDetails, actingStakeholderId, sync }) {
   const { ticket } = ticketDetails;
   const { save, saving } = useSaveAction();
+  const [defaultValues, setDefaultValues] = useState(
+    ticket.metadata?.tickets_edit_person_fields.map((change) => ({
+      [change.field_name]: change.old_value,
+    })).reduce((acc, obj) => ({ ...acc, ...obj }), {}),
+  );
 
   const closeTicket = () => {
     save(
@@ -72,6 +88,10 @@ function EditPersonTicketWorkbenchForWrt({ ticketDetails, actingStakeholderId, s
     );
   };
 
+  const copyToForm = (field, value) => {
+    setDefaultValues({ ...defaultValues, [field]: value });
+  };
+
   if (saving) return <Loading />;
 
   return (
@@ -81,10 +101,12 @@ function EditPersonTicketWorkbenchForWrt({ ticketDetails, actingStakeholderId, s
       />
       <EditPersonRequestedChangesList
         requestedChanges={ticket.metadata?.tickets_edit_person_fields}
+        copyToForm={copyToForm}
       />
       <EditPersonForm
         wcaId={ticket.metadata.wca_id}
         onSuccess={closeTicket}
+        defaultValues={defaultValues}
       />
     </>
   );
