@@ -1503,7 +1503,7 @@ class User < ApplicationRecord
 
   def anonymization_checks_with_message_args
     access_grants = oauth_access_grants
-                    .select { |access_grant| !access_grant.revoked_at.nil? }
+                    .where.not(revoked_at: nil)
                     .map do |access_grant|
                       access_grant.as_json(
                         include: {
