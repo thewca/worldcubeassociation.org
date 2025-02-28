@@ -234,13 +234,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
               const aHasEvent = a.competing.event_ids.includes(sortColumn);
               const bHasEvent = b.competing.event_ids.includes(sortColumn);
 
-              if (aHasEvent && !bHasEvent) {
-                return -1;
-              }
-              if (!aHasEvent && bHasEvent) {
-                return 1;
-              }
-              return 0;
+              return Number(bHasEvent) - Number(aHasEvent);
             }
 
             return 0;
