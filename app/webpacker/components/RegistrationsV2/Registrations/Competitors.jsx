@@ -96,25 +96,27 @@ export default function Competitors({
         returnerCount={returnerCount}
         onScrollToMeClick={onScrollToMeClick}
       />
-      <Table striped sortable unstackable compact singleLine textAlign="left">
-        <CompetitorsHeader
-          eventIds={eventIds}
-          sortedColumn={sortedColumn}
-          sortedDirection={sortedDirection}
-          onSortableColumnClick={changeSortColumn}
-          onEventColumnClick={onEventClick}
-        />
-        <CompetitorsBody
-          registrations={data}
-          eventIds={eventIds}
-          userId={userId}
-          userRowRef={userRowRef}
-        />
-        <CompetitorsFooter
-          registrations={registrations}
-          eventIds={eventIds}
-        />
-      </Table>
+      <div style={{ overflowX: 'auto' }}>
+        <Table striped sortable unstackable compact singleLine textAlign="left">
+          <CompetitorsHeader
+            eventIds={eventIds}
+            sortedColumn={sortedColumn}
+            sortedDirection={sortedDirection}
+            onSortableColumnClick={changeSortColumn}
+            onEventColumnClick={onEventClick}
+          />
+          <CompetitorsBody
+            registrations={data}
+            eventIds={eventIds}
+            userId={userId}
+            userRowRef={userRowRef}
+          />
+          <CompetitorsFooter
+            registrations={registrations}
+            eventIds={eventIds}
+          />
+        </Table>
+      </div>
     </>
   );
 }
