@@ -10,7 +10,7 @@ import { useDispatch, useStore } from '../../../lib/providers/StoreProvider';
 import VenuePanel from './VenuePanel';
 import { addVenue } from '../store/actions';
 
-function EditVenues({
+function ManageVenues({
   countryZones,
   referenceTime,
 }) {
@@ -29,7 +29,7 @@ function EditVenues({
           <Icon name="add" />
           Add a venue
         </Button>
-        Please add all your venues and rooms below:
+        <h3>Venues</h3>
       </Container>
 
       <Segment basic>
@@ -48,4 +48,4 @@ function EditVenues({
   );
 }
 
-export default EditVenues;
+export default ManageVenues;

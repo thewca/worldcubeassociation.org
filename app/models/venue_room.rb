@@ -53,13 +53,15 @@ class VenueRoom < ApplicationRecord
     }
   end
 
-  def load_wcif!(wcif)
-    update!(VenueRoom.wcif_to_attributes(wcif))
-    new_activities = wcif["activities"].map do |activity_wcif|
-      activity = schedule_activities.find { |a| a.wcif_id == activity_wcif["id"] } || schedule_activities.build
-      activity.load_wcif!(activity_wcif)
+  def load_wcif!(wcif, skip_schedule: false, skip_venue_details: false)
+    update!(VenueRoom.wcif_to_attributes(wcif)) unless skip_venue_details
+    unless skip_schedule
+      new_activities = wcif["activities"].map do |activity_wcif|
+        activity = schedule_activities.find { |a| a.wcif_id == activity_wcif["id"] } || schedule_activities.build
+        activity.load_wcif!(activity_wcif)
+      end
+      self.schedule_activities = new_activities
     end
-    self.schedule_activities = new_activities
     WcifExtension.update_wcif_extensions!(self, wcif["extensions"]) if wcif["extensions"]
     self
   end

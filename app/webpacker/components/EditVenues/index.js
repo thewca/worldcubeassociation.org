@@ -17,14 +17,14 @@ import { changesSaved } from './store/actions';
 import wcifScheduleReducer from './store/reducer';
 import Store, { useDispatch, useStore } from '../../lib/providers/StoreProvider';
 import ConfirmProvider from '../../lib/providers/ConfirmProvider';
-import ManageActivities from './ManageActivities';
+import ManageVenues from './ManageVenues';
+import WCAQueryClientProvider from '../../lib/providers/WCAQueryClientProvider';
 
-const PATCH_OPTIONS = { skipVenueDetails: true };
+const PATCH_OPTIONS = { skipSchedule: true };
 
-function EditSchedule({
-  wcifEvents,
+function EditVenues({
+  countryZones,
   referenceTime,
-  calendarLocale,
 }) {
   const {
     competitionId,
@@ -87,8 +87,20 @@ function EditSchedule({
   const renderIntroductionMessage = () => (
     <Container text>
       <p>
-        To create a schedule, first visit the &quot;Manage venues&quot; panel to add venues and
-        rooms/stages.
+        Depending on the size and setup of the competition, it may take place in
+        several rooms of several venues.
+        Therefore a schedule is necessarily linked to a specific room.
+        Each room may have its own schedule (with all or a subset of events).
+        To create the competition&rsquo;s schedule, start by adding at
+        least one venue with one room below.
+        Then you will be able to select this room in the &quot;Manage schedule&quot;
+        panel, and drag and drop event rounds (or attempts for some events) on it.
+      </p>
+      <p>
+        For the typical simple competition, creating one &quot;Main venue&quot;
+        with one &quot;Main room&quot; is enough.
+        If your competition has a single venue but multiple &quot;stages&quot; with different
+        schedules, please input them as different rooms.
       </p>
     </Container>
   );
@@ -98,10 +110,9 @@ function EditSchedule({
       {renderIntroductionMessage()}
       <div>
         {unsavedChanges && renderUnsavedChangesAlert()}
-        <ManageActivities
-          wcifEvents={wcifEvents}
+        <ManageVenues
+          countryZones={countryZones}
           referenceTime={referenceTime}
-          calendarLocale={calendarLocale}
         />
         {unsavedChanges && renderUnsavedChangesAlert()}
       </div>
@@ -111,10 +122,9 @@ function EditSchedule({
 
 export default function Wrapper({
   competitionId,
-  wcifEvents,
   wcifSchedule,
+  countryZones,
   referenceTime,
-  calendarLocale,
 }) {
   return (
     <Store
@@ -126,11 +136,12 @@ export default function Wrapper({
       }}
     >
       <ConfirmProvider>
-        <EditSchedule
-          wcifEvents={wcifEvents}
-          referenceTime={referenceTime}
-          calendarLocale={calendarLocale}
-        />
+        <WCAQueryClientProvider>
+          <EditVenues
+            countryZones={countryZones}
+            referenceTime={referenceTime}
+          />
+        </WCAQueryClientProvider>
       </ConfirmProvider>
     </Store>
   );

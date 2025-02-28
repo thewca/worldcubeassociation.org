@@ -361,6 +361,8 @@ export const mergeProfilesUrl = `<%= CGI.unescape(Rails.application.routes.url_h
 
 export const reassignConnectedWcaIdUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.admin_reassign_wca_id_path) %>`;
 
+export const patchWcifUrl = (competitionId, patchOpts = {}) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_competition_update_wcif_path(competition_id: "${competitionId}")) %>?${jsonToQueryString(patchOpts)}`;
+
 export const recordsUrl = (eventId, region, gender, show) => {
   const url = `<%= CGI.unescape(Rails.application.routes.url_helpers.records_path) %>`
   const queryParams = new URLSearchParams();
