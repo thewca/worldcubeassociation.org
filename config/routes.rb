@@ -212,7 +212,6 @@ Rails.application.routes.draw do
     get 'generate-data-exports' => 'admin#generate_exports', as: :admin_generate_exports
     get 'fix-results' => 'admin#fix_results', as: :admin_fix_results
     get 'merge-profiles' => 'admin#merge_people', as: :admin_merge_people
-    get 'anonymize-person' => 'admin#anonymize_person', as: :admin_anonymize_person
     get 'reassign-connected-wca-id' => 'admin#reassign_wca_id', as: :admin_reassign_wca_id
   end
   get 'panel-page/:id' => 'panel#panel_page', as: :panel_page
