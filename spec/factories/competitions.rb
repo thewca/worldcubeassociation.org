@@ -101,6 +101,14 @@ FactoryBot.define do
 
     registration_version { :v3 }
 
+    trait :newcomer_month do
+      registration_open
+      with_organizer
+      with_competitor_limit
+      competitor_limit { 4 }
+      newcomer_month_reserved_spots { 2 }
+    end
+
     trait :enforces_qualifications do
       with_organizer
       qualification_results { true }
@@ -222,7 +230,7 @@ FactoryBot.define do
     end
 
     trait :with_guest_limit do
-      guest_entry_status { Competition.guest_entry_statuses['restricted'] }
+      guest_entry_status { :restricted }
       guests_per_registration_limit { 10 }
     end
 

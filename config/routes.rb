@@ -60,7 +60,6 @@ Rails.application.routes.draw do
   post 'users/:id/avatar' => 'users#upload_avatar'
   patch 'users/:id/avatar' => 'users#update_avatar'
   delete 'users/:id/avatar' => 'users#delete_avatar'
-  post 'users/:id/anonymize' => 'users#anonymize', as: :anonymize_user
   get 'admin/avatars/pending' => 'admin/avatars#pending_avatar_users', as: :pending_avatars
   post 'admin/avatars' => 'admin/avatars#update_avatar', as: :admin_update_avatar
 
@@ -150,6 +149,20 @@ Rails.application.routes.draw do
   get 'competitions/edit/registration-collisions-json' => 'competitions#registration_collisions_json', as: :registration_collisions_json
   get 'competitions/edit/series-eligible-competitions-json' => 'competitions#series_eligible_competitions_json', as: :series_eligible_competitions_json
 
+  if WcaLive.enabled?
+    get 'competitions/:competition_id/live/competitors/:registration_id' => 'live#by_person', as: :live_person_results
+    get 'competitions/:competition_id/live/podiums' => 'live#podiums', as: :live_podiums
+    get 'competitions/:competition_id/live/competitors' => 'live#competitors', as: :live_competitors
+    get 'competitions/:competition_id/live/rounds/:round_id/admin' => 'live#admin', as: :live_admin_round_results
+    get 'competitions/:competition_id/live/rounds/:round_id/admin/check' => 'live#double_check', as: :live_admin_check_round_results
+    get 'competitions/:competition_id/live/admin' => 'live#schedule_admin', as: :live_schedule_admin
+    get 'competitions/:competition_id/live/rounds/:round_id' => 'live#round_results', as: :live_round_results
+
+    get 'api/competitions/:competition_id/rounds/:round_id' => 'live#round_results_api', as: :live_round_results_api
+    post 'api/competitions/:competition_id/rounds/:round_id' => 'live#add_result', as: :add_live_result
+    patch 'api/competitions/:competition_id/rounds/:round_id' => 'live#update_result', as: :update_live_result
+  end
+
   get 'results/rankings', to: redirect('results/rankings/333/single', status: 302)
   get 'results/rankings/333mbf/average',
       to: redirect(status: 302) { |params, request| URI.parse(request.original_url).query ? "results/rankings/333mbf/single?#{URI.parse(request.original_url).query}" : "results/rankings/333mbf/single" }
@@ -194,19 +207,23 @@ Rails.application.routes.draw do
   get 'panel/:panel_id' => 'panel#index', as: :panel_index
   scope 'panel-page' do
     get 'run-validators' => 'admin#check_results', as: :admin_check_results
-    get 'create-new-comers' => 'admin#finish_unfinished_persons', as: :admin_finish_unfinished_persons
     get 'check-records' => 'admin#check_regional_records', as: :admin_check_regional_records
     get 'compute-auxiliary-data' => 'admin#compute_auxiliary_data', as: :admin_compute_auxiliary_data
     get 'generate-data-exports' => 'admin#generate_exports', as: :admin_generate_exports
     get 'fix-results' => 'admin#fix_results', as: :admin_fix_results
     get 'merge-profiles' => 'admin#merge_people', as: :admin_merge_people
-    get 'anonymize-person' => 'admin#anonymize_person', as: :admin_anonymize_person
     get 'reassign-connected-wca-id' => 'admin#reassign_wca_id', as: :admin_reassign_wca_id
   end
   get 'panel-page/:id' => 'panel#panel_page', as: :panel_page
+  scope 'tickets' do
+    get 'details_before_anonymization' => 'tickets#details_before_anonymization', as: :tickets_details_before_anonymization
+    post 'anonymize' => 'tickets#anonymize', as: :tickets_anonymize
+  end
   resources :tickets, only: [:index, :show] do
     post 'update_status' => 'tickets#update_status', as: :update_status
     get 'edit_person_validators' => 'tickets#edit_person_validators', as: :edit_person_validators
+    resources :ticket_comments, only: [:index, :create], as: :comments
+    resources :ticket_logs, only: [:index], as: :logs
   end
   resources :notifications, only: [:index]
 
@@ -291,12 +308,9 @@ Rails.application.routes.draw do
   get '/admin/do_generate_public_export' => 'admin#do_generate_public_export'
   get '/admin/override_regional_records' => 'admin#override_regional_records'
   post '/admin/override_regional_records' => 'admin#do_override_regional_records'
-  get '/admin/finish_persons' => 'admin#finish_persons'
-  post '/admin/finish_persons' => 'admin#do_finish_persons'
   get '/admin/complete_persons' => 'admin#complete_persons'
   post '/admin/complete_persons' => 'admin#do_complete_persons'
   get '/admin/peek_unfinished_results' => 'admin#peek_unfinished_results'
-  post '/admin/anonymize_person' => 'admin#do_anonymize_person', as: :admin_do_anonymize_person
   get '/admin/validate_reassign_wca_id' => 'admin#validate_reassign_wca_id', as: :admin_validate_reassign_wca_id
   post '/admin/reassign_wca_id' => 'admin#do_reassign_wca_id', as: :admin_do_reassign_wca_id
 
@@ -390,7 +404,8 @@ Rails.application.routes.draw do
       get '/persons/:wca_id/results' => "persons#results", as: :person_results
       get '/persons/:wca_id/competitions' => "persons#competitions", as: :person_competitions
       get '/persons/:wca_id/personal_records' => "persons#personal_records", as: :personal_records
-      get '/geocoding/search' => 'geocoding#get_location_from_query', as: :geocoding_search
+      get '/geocoding/search' => 'geocoding#location_from_query', as: :geocoding_search
+      get '/geocoding/time_zone' => 'geocoding#time_zone_from_coordinates', as: :geocoding_time_zone
       get '/countries' => 'api#countries'
       get '/records' => "api#records"
       get '/results/:user_id/qualification_data' => 'api#user_qualification_data', as: :user_qualification_data

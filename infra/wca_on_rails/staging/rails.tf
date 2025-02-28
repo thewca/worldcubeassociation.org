@@ -57,6 +57,10 @@ locals {
       value = aws_sqs_queue.this.url
     },
     {
+      name = "LIVE_QUEUE"
+      value = aws_sqs_queue.results.url
+    },
+    {
       name = "AWS_REGION"
       value = var.region
     },
@@ -210,7 +214,7 @@ data "aws_iam_policy_document" "task_policy" {
       "sqs:GetQueueAttributes",
       "sqs:GetQueueUrl"
     ]
-    resources = [aws_sqs_queue.this.arn]
+    resources = [aws_sqs_queue.this.arn, aws_sqs_queue.results.arn]
   }
 }
 

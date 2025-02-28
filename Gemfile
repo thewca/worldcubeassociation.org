@@ -45,6 +45,7 @@ gem 'time_will_tell', github: 'thewca/time_will_tell'
 gem 'redcarpet'
 gem 'bootstrap-table-rails'
 gem 'money-rails'
+gem 'money-currencylayer-bank'
 gem 'octokit'
 gem 'stripe'
 gem 'oauth2'
@@ -107,6 +108,7 @@ gem 'sidekiq-cron'
 gem 'after_commit_everywhere'
 gem 'slack-ruby-client'
 gem 'puma'
+gem "tzf"
 
 group :development, :test do
   gem 'spring'

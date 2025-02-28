@@ -245,10 +245,6 @@ en:
     days:
       one: "1 day"
       other: "%{count} days"
-    #context: Key used for the pluralization of "x event(s)" in a sentence like "Couldn't find a competition with these x events"
-    these_events:
-      one: "this event"
-      other: "these %{count} events"
     search_site: "Search site"
     filter: Filter
     delete: Delete
@@ -516,7 +512,6 @@ en:
       person:
         person1_wca_id: ""
         person2_wca_id: ""
-        person_wca_id: ""
       poll:
         comment: ""
         multiple: ""
@@ -576,6 +571,8 @@ en:
         wca_id: "Your WCA ID"
         dob: "Correct birthdate"
         document: "Document"
+      contact_wrt:
+        wca_id: "WCA ID"
     errors:
       dob_contact:
         dob_invalid: "is misformatted"
@@ -586,6 +583,7 @@ en:
       wrong_size: "is the wrong size (should be %{file_size})"
       size_too_small: "is too small (should be at least %{file_size})"
       size_too_big: "is too big (should be at most %{file_size})"
+      no_permission: "You do not have the required permissions to access this page."
   devise:
     #context: Overridden key for sign in
     passwords:
@@ -788,20 +786,20 @@ en:
         wsot: "WCA Sports Organization Team"
         wapc: "WCA Appeals Committee"
       groups_description:
-        wat: "The WAT is responsible for managing the development and maintenance of the WCA's historical archive. They document key speedcubing events and notable WCA milestones to be presented as part of a broader WCA timeline, to preserve the legacy of the WCA in speedcubing."
-        wct: "The WCA Communication Team (WCT) has the role to oversee and support communications of the WCA with the Community and the general public. The communication of the WCA should contribute to the Objectives of the WCA and support a general positive culture of friendliness, transparency, inclusiveness, openness, and responsiveness."
-        wcat: "The WCA Competition Announcement Team (WCAT) has the role to approve and announce WCA Competitions submitted by delegates, and ensure such announcements adhere to WCA quality standards. This team is also responsible for maintaining proper competition submission protocol from documents such as the WCA Competition Requirements Policy. WCAT is NOT responsible for the organization and delegation of individual competitions."
+        wat: "The WCA Archive Team (WAT) manages the development and maintenance of the WCA's historical archive. They document key speedcubing events and notable WCA milestones to be presented as part of a broader WCA timeline, to preserve the legacy of the WCA in speedcubing."
+        wct: "The WCA Communication Team (WCT) oversees and supports communications of the WCA with the Community and the general public. The communication of the WCA should contribute to the Objectives of the WCA and support a general positive culture of friendliness, transparency, inclusiveness, openness, and responsiveness."
+        wcat: "The WCA Competition Announcement Team (WCAT) approves and announces WCA Competitions submitted by WCA Delegates, and ensure such announcements adhere to WCA quality standards. This team is also responsible for maintaining proper competition submission protocol from documents such as the WCA Competition Requirements Policy. The WCAT is NOT responsible for the organization and delegation of individual competitions."
         wic: "The WCA Integrity Committee (WIC) performs independent investigations regarding WCA community members and incidents during WCA Competitions or on official, online WCA platforms. These incidents are alleged violations of the Spirit, Code of Conduct, Code of Ethics and/or Regulations of the WCA."
-        weat: "This team is responsible for carrying out the administrative tasks of the WCA Board of Directors."
-        wfc: "This committee is responsible for managing the overall finances of the WCA, including budgeting, reporting, analysis, bookkeeping, and tax filings. They also manage the WCA's largest source of income, the WCA Dues System, along with various funding programs that provide support to local communities at different stages of development, including Travel Funding, Equipment Funding, and Regional Organization Support."
-        wmt: "This team is responsible for developing and managing the WCA Brand, seeking sponsorships, supporting the distribution of WCA Competition Gear, and marketing WCA Merchandise."
-        wmct: "The WCA Major Championship Team oversees the coordination and advancement of WCA Continental and World Championships by developing guidelines and strategic plans, managing host city selection, supporting organizing teams, and ensuring consistent championship experiences."
-        wqac: "This committee has the role to support and promote continuous quality improvement within the WCA, as well as worldwide application of quality standards to ensure consistent high quality of processes, WCA Staff, Regional Organizations, Competition Organizers, and Competition Staff."
-        wrc: "The WRC handles all issues which are related to the application, the improvement and the development of the WCA Regulations. They support WCA Delegates on any kind of procedural matters happening at competitions and decide on unresolved and uncovered incidents."
-        wrt: "The WRT is responsible for managing all data in the databases of the WCA, most importantly competition results and persons data."
-        wst: "This team is responsible for managing the WCA's software (website, scramblers, workbooks, admin tools)."
-        wsot: "This team has the role to oversee and support the recognition of the WCA as an international sports organization."
-        wapc: "The WCA Appeals Committee (WAC) is responsible for reviewing and resolving appeals regarding decisions made by other WCA Staff. The WAC provides an independent and impartial review process to ensure that decisions are fair, reasonable, and in accordance with WCA policies and regulations."
+        weat: "The WCA Executive Assistants Team (WEAT) carries out the administrative tasks of the WCA Board of Directors."
+        wfc: "The WCA Financial Committee (WFC) manages the overall finances of the WCA, including budgeting, reporting, analysis, bookkeeping, and tax filings. They also manage the WCA's largest source of income, the WCA Dues System, along with various funding programs that provide support to local communities at different stages of development, including Travel Funding, Equipment Funding, and Regional Organization Support."
+        wmt: "The WCA Marketing Team (WMT) manages the WCA Brand, seeking sponsorships, and marketing WCA Merchandise."
+        wmct: "The WCA Major Championship Team (WMCT) oversees the coordination and advancement of WCA Continental and World Championships by developing guidelines and strategic plans, managing host city selection, supporting organizing teams, and ensuring consistent championship experiences."
+        wqac: "The WCA Quality Assurance Committee (WQAC) promotes continuous quality improvement within the WCA, as well as worldwide application of quality standards to ensure consistent high quality of processes, WCA Staff, Regional Organizations, Competition Organizers, and Competition Staff."
+        wrc: "The WCA Regulations Committee (WRC) handles all issues which are related to the application, the improvement and the development of the WCA Regulations. They support WCA Delegates on any kind of procedural matters happening at competitions and decide on unresolved and uncovered incidents."
+        wrt: "The WCA Results Team (WRT) manages all data in the databases of the WCA, including competition results and persons data."
+        wst: "The WCA Software Team (WST) manages the WCA's software (website, scramblers, workbooks, admin tools)."
+        wsot: "The WCA Sports Organization Team (WSOT) oversees and supports the recognition of the WCA as an international sports organization."
+        wapc: "The WCA Appeals Committee (WAC) reviews and resolves appeals regarding decisions made by other WCA Staff. The WAC provides an independent and impartial review process to ensure that decisions are fair, reasonable, and in accordance with WCA policies and regulations."
     contacts:
       title: "WCA Contact Form"
       faq_note_html: 'Before making an inquiry, you may wish to take a look at our <a href="/faq">Frequently Asked Questions</a>! If you wish to contact a specific committee or team not listed here, you may check their details on <a href="/teams-committees-councils">this page</a>.'
@@ -1082,7 +1080,7 @@ en:
         failure: "Couldn't verify your identity"
         confirm_proceed: "Confirm and proceed"
         identity_error: "Cannot edit your data. Please confirm your identity below before trying again."
-    #context: when an error occured during the edition
+    #context: when an error occurred during the edition
     errors:
       not_found: "not found"
       already_assigned: "already assigned to a different user"
@@ -1190,28 +1188,28 @@ en:
         #context: "comp_name" contains the competition's name
         see_you_soon: "We look forward to seeing you at %{comp_name}!"
       #context: when registration is moved to waiting list
-      pending:
+      waiting_list:
         #context: "comp_name" contains the competition's name
-        mail_subject: "Registration Moved to Waitlist: %{comp_name}"
-        #context: "comp_name" contains the competition's name
-        moved_html: "Your registration for %{comp_name} has been moved to the waiting list. Possible causes are:"
-        #context: this key is one of the reasons explaining why a registration could be moved to the waiting list
-        causes:
-          accepted: "Your registration was accidentally accepted"
-          withdrawal: "You asked for withdrawal"
+        mail_subject: "You're on the Waiting List: %{comp_name}"
+        waitlisted_html: "The competition is full, but you have been placed on a waiting list, and you will receive an email if enough spots open up for you to be able to attend. Check your position on the waiting list %{here}."
         email_if_error: "If you think this is an error, please reply to this email."
       #context: when registration is deleted
       deleted:
         #context: "comp_name" contains the competition's name
         mail_subject: "Registration Deleted: %{comp_name}"
         message_html: "Your registration for %{comp_name} has been deleted. Possible causes are:"
+        email_if_error: "If you think this is an error, please reply to this email."
         #context: this key is one of the reasons explaining why a registration could be deleted
         causes:
           missing_info: "You did not submit all the required details"
           incomplete: "You didn't meet the registration criteria (for example, paying the registration fee in advance or meeting the qualifying times for events)"
           registrations_full: "The competitor limit has been reached and there are no more spots available"
-          multiple_registrations: "You registered twice or more times"
+          multiple_registrations: "You registered two or more times"
           competition_canceled: "The competition has been canceled"
+      formerly_banned:
+        ban_count: "Competitor has been banned %{ban_count} time(s), with the following scopes and reasons:"
+        scope_and_reason: "Scope: %{ban_scope}, Reason: %{ban_reason}"
+        wic_message: "If you have any questions regarding the competitor's disciplinary history, please reach out to the WIC by replying to this email."
     #context: on the registrations list
     list:
       title: "Registrations for %{comp}"
@@ -1222,9 +1220,6 @@ en:
         other: "%{count} regions"
       export_csv: "Export to CSV"
       email: "Email"
-      approve: "Approve"
-      waiting_list: "Waiting List"
-      approved_registrations: "Approved registrations"
       non_competing: "Non-competing registrations"
       not_paid: "Not paid"
       registered:
@@ -1241,7 +1236,6 @@ en:
     registered_with_account_html: "This person registered with an account. You can edit their personal information %{here}."
     sign_in: "Sign in"
     profile: "profile"
-    panel_title: "Registration details"
     register: "Register!"
     refund: "Refund Payment"
     refund_confirmation: "Are you sure you want to refund this payment?"
@@ -1254,16 +1248,9 @@ en:
     please_sign_in_past_html: "%{sign_in} to check the status of your registration. If you do not yet have a WCA account, you can create one %{here}, but it is too late to register for this competition."
     please_sign_in_not_yet_open_html: "%{sign_in} to check the status of your registration. If you do not yet have a WCA account, you can create one %{here}, but its registration is not yet open."
     please_sign_in_html: "%{sign_in} to register for %{comp}. If you do not yet have a WCA account, you can create one %{here}."
-    greeting: "Hi, %{name}!"
     please_fix_profile_html: "In order to register for %{comp}, you must fix the following problems with your %{profile}:"
     registration_full: "The competitor limit for this competition is %{competitor_limit} and it has already been reached. If you register, your registration will be placed on a waiting list. It may not be approved unless a spot frees up."
     registration_full_include_waiting_list: "The competitor limit for this competition is %{competitor_limit} and it may be filled. If you register, your registration will be placed on a waiting list. It may not be approved unless a spot frees up."
-    can_register: "You can register for %{comp} below."
-    check_registration_information: "Please check the information about registration to find out if you need to do something else, like paying a registration fee."
-    have_registered: "You have submitted your registration for %{comp}. You can see your registration details below."
-    contact_organizer: "Contact the organizer if you wish to make a change."
-    waiting_list: "Your registration is pending. For approval, you may need to pay a registration fee. Check the competition website for details."
-    accepted: "Your registration has been accepted!"
     entry_fees_fully_paid: "You have paid %{paid}, which fully covers the registration fees."
     will_pay_here: "You will pay them here after submitting your registration"
     wont_pay_here: "Please check the competition's information for instructions about how to pay"
@@ -1274,7 +1261,6 @@ en:
         refund_amount: "Refund Amount"
     #context: on the payment form, when registering to a competition
     payment_form:
-      title: "Registration fees"
       payment_successful: "Your payment was successful, and your registration should show up as paid below."
       payment_processing: "Your payment has been confirmed, but the transaction is still pending."
       payment_partial: "Your payment has been confirmed, but it does not cover the full amount. Please pay the remaining fee as well."
@@ -1295,6 +1281,7 @@ en:
         amount_too_low: "The total amount must be at least the registration fees to be paid."
         amount_rather_high: "You are about to pay at least double the required amount for your registration to proceed."
       errors:
+        registration_closed: "Registration has closed - no further payments are allowed."
         already_paid: "The charge was not placed because the registration fees are already paid."
         not_allowed: "You can't pay for that registration."
         cpi_disconnected: "Tried to confirm a payment but the payment integration was disabled. Please contact the organizers of the competition."
@@ -1555,7 +1542,6 @@ en:
         ongoing_and_upcoming: "Ongoing and upcoming competitions"
         custom: "Competitions in the selected period of time"
         by_announcement: "Competitions sorted by announcement date, newest on top"
-      no_access: "You don't have access to this page!"
       #context: tooltip displayed when hovering
       tooltips:
         #context: the hourglass icon
@@ -1571,13 +1557,12 @@ en:
         recent: "Last %{count} days"
         #context: the registration status icon
         registration:
-          opens_in: "Registration will open in %{duration}"
-          closed: "Registration has closed. Competition starts in %{days}"
+          opens_in: "Registration will open %{relativeDate}."
+          closed: "Registration has closed. Competition will start %{relativeDate}."
           open: "Registration is open!"
-          full: "Competitor limit reached, new registrations will go to the waiting list"
+          full: "Competitor limit reached, new registrations will go to the waiting list."
       no_more_comps: "No more competitions."
       no_comp_found: "No competitions found."
-      no_comp_match: "We didn't find any competitions with %{events}! Try searching for fewer events."
     #context: on the "My competitions" page
     my_competitions_table:
       edit: "Edit"
@@ -1647,6 +1632,7 @@ en:
           enabled: "Competitor limit"
           count: "Maximum number of competitors"
           reason: "The reason for the competitor limit"
+          newcomer_month_reserved_spots: "Number of spots to reserve for newcomers"
         staff:
           staff_delegate_ids: "WCA Delegate(s)"
           trainee_delegate_ids: "WCA Trainee Delegate(s)"
@@ -1673,7 +1659,7 @@ en:
           waiting_list_deadline_date: "Deadline for accepting competitors from the waiting list"
           event_change_deadline_date: "Deadline for competitors to update their registered events"
           allow_on_the_spot: "On the spot registrations"
-          allow_self_delete_after_acceptance: "Registration cancellations"
+          competitor_can_cancel: "When can competitors cancel their registrations"
           allow_self_edits: "Registration edits"
           guests_enabled: "Guests"
           guest_entry_status: "Display message for free guest entry"
@@ -1731,6 +1717,7 @@ en:
           enabled: "A Competitor Limit is required. Only simultaneous FMC competitions with multiple locations can have no Competitor Limit."
           count: "The number of competitors allowed in this competition. For now this number is informational only, and does not yet prevent more people from registering. We are working on adding explicit support for this to the registration flow, but it requires some other work first."
           reason: "What is the reason for the limit on competitors? Please fill this out in English!"
+          newcomer_month_reserved_spots: "Only allowed during Newcomer Month - reserved spots can't be more than half of the Competitor Limit."
         staff:
           staff_delegate_ids: "WCA Delegates for the competition."
           trainee_delegate_ids: "WCA Trainee Delegates for the competition."
@@ -1758,7 +1745,7 @@ en:
           waiting_list_deadline_date: "The date when waitlisted registrants will no longer be accepted. If you have a deadline for refunds, the deadline for being accepted should not be before the deadline for refunds."
           event_change_deadline_date: "Registered competitors have the right to update their registered events until this time by contacting the organization team. This deadline must not be set to a time before registration is set to close. Leaving this field blank means that competitors may add an event to their registered events up until that event is held. If you have on the spot registration, this must be set to the same day as the competition."
           allow_on_the_spot: ""
-          allow_self_delete_after_acceptance: ""
+          competitor_can_cancel: ""
           allow_self_edits: ""
           guests_enabled: ""
           guest_entry_status: ""
@@ -1800,9 +1787,10 @@ en:
           allow_self_edits:
             "true": "Competitors may edit their registration until the deadline for updating events"
             "false": "Competitors may NOT edit their registration once it has been accepted"
-          allow_self_delete_after_acceptance:
-            "true": "Competitors may delete their own registration even after it has been accepted"
-            "false": "Competitors may NOT delete their own registration once it has been accepted"
+          competitor_can_cancel:
+            "always": "Always"
+            "not_accepted": "Until they're accepted"
+            "unpaid": "Until they pay"
           guest_entry_status:
             unclear: 'Do not display anything (and perhaps elaborate in the "Extra registration requirements" section)'
             free: '"Any spectator can attend for free"'
@@ -1812,7 +1800,7 @@ en:
             allow_registration_without:
               "true": "Competitors will be allowed to register for events they're not qualified for (I'll remove them later)"
               "false": "Competitors MUST be qualified to register for an event"
-        #context: new registration system
+    #context: new registration system
     registration_v2:
       pdf:
         #context: <0> indicates an html tag for internationalizing in React, see https://docs.worldcubeassociation.org/guides/translating_the_website.html#using-react
@@ -1822,7 +1810,7 @@ en:
         payment_missing: "Your registration will not be approved until you pay for your registration, unless you have a special arrangement with the organizers or you paid through an alternative method."
         needs_approval: "Don't book your travel arrangements just yet - the organizers still have to manually approve your registration. This can take time."
         is_accepted: "Book your travel and pack your bags - you have a spot at the competition!"
-        is_cancelled: "Your registration has been cancelled and you will not be competing, but you can sign up again"
+        is_cancelled: "Your registration has been cancelled and you will not be competing, but you can sign up again."
         is_rejected: "Your registration has been rejected by the organizers. Please contact the organizing team if you believe this was a mistake."
         is_waitlisted: "Don't book your travel, but don't give up hope either. The competition is full, but you have been placed on a waiting list, and you will receive an email if enough spots open up for you to be able to attend."
       list:
@@ -1831,14 +1819,19 @@ en:
           zero: "no spots remaining"
           one: "%{count} spot remaining"
           other: "%{count} spots remaining"
+        pending:
+          title: "Pending Registrations"
+          information: "Pending should only be used for incomplete (eg, unpaid) registrations - please use the Waiting List if your competition is too full to accept new competitors."
+        waitlist:
+          title: "Waiting List Registrations"
+        approved:
+          title: "Approved Registrations"
         cancelled:
-          title: "Cancelled registrations"
+          title: "Cancelled Registrations"
           information: "Cancelled competitors are allowed to register again."
         rejected:
-          title: "Rejected registrations"
+          title: "Rejected Registrations"
           information: "Rejected competitors cannot re-register."
-        pending:
-          information: "Pending should only be used for incomplete (eg, unpaid) registrations - please use the Waiting List if your competition is too full to accept new competitors."
         payment:
          refunded_status: "Refunded"
          initialized: "Payment process was started on %{date}, but not finished."
@@ -1866,15 +1859,21 @@ en:
         email_send: "Send Email"
         email_copy: "Copy Emails"
         email_message: "Copied to clipboard. Remember to use bcc!"
-        move_pending: "Move to Pending"
-        move_waiting: "Move to Waiting List"
-        cancel: "Cancel Registration"
-        reject: "Reject Registration"
+        move_to:
+          zero: "Move to"
+          one: "Move %{count} to"
+          other: "Move %{count} to"
+        pending: "Pending"
+        waitlist: "Waiting List"
+        approved: "Approved"
+        cancelled: "Cancelled"
+        rejected: "Rejected"
         amount: "Amount"
         too_many: "Accepting all these registrations would go over the competitor limit by %{count}"
         no_self_update: "Contact the Organization Team to update your registration."
       register:
         will_open_countdown: "Registration will open in %{minutes} minutes %{seconds} seconds. This page will refresh automatically when registration opens."
+        will_close_countdown: "Registration closes in %{minutes} minutes %{seconds} seconds. This page will refresh automatically when registration closes."
         panel:
           approval:
             title: "Approval"
@@ -1935,11 +1934,15 @@ en:
         -4010: "The Waiting List Position is not Valid"
         -4011: "You can only accept the first person on the waiting list"
         -4012: "You are not qualified to compete in the selected events"
+        -4013: "Cant accept non-newcomer when only reserved newcomer spots remain"
         -4014: "You are already registered for this competition."
+        -4015: "Please enter a reasonable amount of guests, or contact the organizers if you need to bring an extraordinary amount of guests."
         -6001: "WCA Payment is not enabled for this competition"
         -6002: "You need to finish your registration before you can pay"
-    #context: and when an error occured
+    #context: and when an error occurred
     errors:
+      newcomer_month_reservations_percentage: 'cant reserve more than 50% of spots for newcomers'
+      newcomer_month_reservations_available: 'Desired newcomer month reserved spots exceeds number of spots reservable'
       invalid_name_message: "must end with a year and must contain only alphanumeric characters, dashes(-), ampersands(&), periods(.), colons(:), apostrophes('), and spaces( )"
       cannot_manage: "Cannot manage competition."
       cannot_delete_public: "Cannot delete a competition that is publicly visible."
@@ -1967,6 +1970,7 @@ en:
       series_distance_km: "The competition is located too far away from %{competition}."
       series_distance_days: "The competition is scheduled too many days away from %{competition}."
       must_ask_about_guests_if_specifying_limit: "Must ask about guests if a guest limit is specified."
+      not_full_url: "You have a relative URL (%{url}) in the content. Please enter full URLs with prefix http:// or https://."
     new:
       create_competition: "Create competition"
       note_clone: "To clone an existing competition visit the information page for that competition and click the \"Clone\" link in the menu."

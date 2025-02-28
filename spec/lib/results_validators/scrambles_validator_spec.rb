@@ -170,9 +170,9 @@ RSpec.describe SV do
     end
   end
 
-  def create_scramble_set(n, **kwargs)
+  def create_scramble_set(n, **)
     1.upto(n) do |i|
-      FactoryBot.create(:scramble, scrambleNum: i, **kwargs)
+      FactoryBot.create(:scramble, scrambleNum: i, **)
     end
   end
 end

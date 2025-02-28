@@ -1,8 +1,22 @@
 import { DateTime, Interval } from 'luxon';
+
 // parameter name conventions:
 // - `luxonDate` for luxon DateTime objects
 // - `date` for date-only ISO strings (no time)
 // - `dateTime` for date-and-time ISO strings
+
+export const toRelativeOptions = {
+  default: {
+    locale: window.I18n.locale,
+  },
+  roundUpAndAtBestDayPrecision: {
+    locale: window.I18n.locale,
+    // don't be more precise than "days" (i.e. no hours/minutes/seconds)
+    unit: ['years', 'months', 'weeks', 'days'],
+    // round up, e.g. in 8 hours -> pads to 1 day 8 hours -> rounds to "in 1 day"
+    padding: 24 * 60 * 60 * 1000,
+  },
+};
 
 /// / luxon parameters
 
@@ -86,6 +100,14 @@ export const getRegistrationTimestamp = (datetime, timeZone = 'local') => DateTi
 export const getFullDateTimeString = (dateTime, timeZone = 'local') => DateTime.fromISO(dateTime)
   .setZone(timeZone)
   .toLocaleString(DateTime.DATETIME_FULL_WITH_SECONDS);
+
+export const getIsoDateString = (dateTime, timeZone = 'local') => DateTime.fromISO(dateTime)
+  .setZone(timeZone)
+  .toISODate();
+
+export const getTimeWithSecondsString = (dateTime, timeZone = 'local') => DateTime.fromISO(dateTime)
+  .setZone(timeZone)
+  .toLocaleString(DateTime.TIME_WITH_SECONDS);
 
 // start/end dates may have different time-of-days
 export const getDatesBetweenInclusive = (
