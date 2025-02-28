@@ -43,7 +43,7 @@ export default function RegistrationAdministrationTable({
   // TODO: use native ref= when we switch to semantic v3
   /* eslint-disable react/jsx-props-no-spreading */
   return (
-    <div style={{ overflowX: 'scroll' }}>
+    <div style={{ overflowX: 'auto' }}>
       <Table
         sortable={sortable}
         striped
