@@ -130,7 +130,9 @@ function VenuePanel({
     }
   };
 
-  const handleRegionChange = (country) => handleVenueChange(null, { value: country });
+  const handleRegionChange = (country) => handleVenueChange(null, {
+    name: 'countryIso2', value: country,
+  });
 
   return (
     <Card fluid raised>
