@@ -10,7 +10,7 @@ import I18n from '../../../../lib/i18n';
 import useLoadedData from '../../../../lib/hooks/useLoadedData';
 import Errored from '../../../Requests/Errored';
 import UtcDatePicker from '../../../wca/UtcDatePicker';
-import CountrySelector from '../../../CountrySelector/CountrySelector';
+import RegionSelector from '../../../wca/RegionSelector';
 import GenderSelector from '../../../GenderSelector/GenderSelector';
 
 export default function EditPersonForm({ wcaId, onSuccess, showDestroyButton = false }) {
@@ -49,6 +49,16 @@ export default function EditPersonForm({ wcaId, onSuccess, showDestroyButton = f
   const handleFormChange = (e, { name: formName, value }) => {
     setEditedUserDetails((prev) => ({ ...prev, [formName]: value }));
   };
+
+  const handleDobChange = (date) => handleFormChange(null, {
+    name: 'dob',
+    value: date,
+  });
+
+  const handleCountryChange = (country) => handleFormChange(null, {
+    name: 'representing',
+    value: country,
+  });
 
   const editPerson = (method) => {
     save(apiV0Urls.wrt.edit(wcaId), {
@@ -131,11 +141,12 @@ export default function EditPersonForm({ wcaId, onSuccess, showDestroyButton = f
           value={editedUserDetails?.name || ''}
           onChange={handleFormChange}
         />
-        <CountrySelector
-          name="representing"
+        <RegionSelector
+          label={I18n.t('activerecord.attributes.user.country_iso2')}
+          onlyCountries
           disabled={!editedUserDetails}
-          countryIso2={editedUserDetails?.representing || ''}
-          onChange={handleFormChange}
+          region={editedUserDetails?.representing || ''}
+          onRegionChange={handleCountryChange}
         />
         <GenderSelector
           name="gender"
@@ -152,10 +163,7 @@ export default function EditPersonForm({ wcaId, onSuccess, showDestroyButton = f
           dropdownMode="select"
           disabled={!editedUserDetails}
           isoDate={editedUserDetails?.dob}
-          onChange={(date) => handleFormChange(null, {
-            name: 'dob',
-            value: date,
-          })}
+          onChange={handleDobChange}
         />
         <Button
           disabled={_.isEqual(editedUserDetails, originalUserDetails) || !editedUserDetails}

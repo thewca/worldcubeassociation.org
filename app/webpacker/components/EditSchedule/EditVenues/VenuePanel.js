@@ -25,7 +25,7 @@ import { toDegrees, toMicrodegrees } from '../../../lib/utils/edit-schedule';
 import { fetchWithAuthenticityToken } from '../../../lib/requests/fetchWithAuthenticityToken';
 import { geocodingTimeZoneUrl } from '../../../lib/requests/routes.js.erb';
 import { getTimeZoneDropdownLabel, sortByOffset } from '../../../lib/utils/timezone';
-import CountrySelector from '../../CountrySelector/CountrySelector';
+import RegionSelector from '../../wca/RegionSelector';
 
 function VenuePanel({
   venue,
@@ -130,6 +130,8 @@ function VenuePanel({
     }
   };
 
+  const handleRegionChange = (country) => handleVenueChange(null, { value: country });
+
   return (
     <Card fluid raised>
       { /* Needs the className 'image' so that SemUI fills the top of the card */ }
@@ -168,10 +170,10 @@ function VenuePanel({
               value={venue.name}
               onChange={handleVenueChange}
             />
-            <CountrySelector
-              name="countryIso2"
-              countryIso2={venue.countryIso2}
-              onChange={handleVenueChange}
+            <RegionSelector
+              onlyCountries
+              region={venue.countryIso2}
+              onRegionChange={handleRegionChange}
             />
             {bestMatch && (
               <Button
