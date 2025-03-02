@@ -18,68 +18,40 @@ function getSortedWaitlistRegistrations(registrations) {
   );
 }
 
-function getFirstUnselectedOnWaitlist(
-  registrations,
-  selectedWaitlistIds,
-) {
-  const waitlistRegistrations = getSortedWaitlistRegistrations(registrations);
-
-  return waitlistRegistrations.find(
-    (reg) => !selectedWaitlistIds.includes(reg.user_id),
-  );
-}
-
 function getLastSelectedOnWaitlist(
-  registrations,
+  waitlistRegistrations,
   selectedWaitlistIds,
 ) {
-  const waitlistRegistrations = getSortedWaitlistRegistrations(registrations);
-
   return waitlistRegistrations.findLast(
     (reg) => selectedWaitlistIds.includes(reg.user_id),
   );
 }
 
-export function getSkippedWaitlistRegistration(
+export function getSkippedWaitlistCount(
   registrations,
   partitionedSelectedIds,
 ) {
   const {
     pending, waiting, cancelled, rejected,
   } = partitionedSelectedIds;
-
-  const waitlistRegistrations = getSortedWaitlistRegistrations(registrations);
-  if (waitlistRegistrations.length === 0) return null;
-
-  const firstUnselectedOnWaitlist = getFirstUnselectedOnWaitlist(
-    registrations,
-    waiting,
-  );
-  if (!firstUnselectedOnWaitlist) return null;
-
-  const notAllWaitlistIsSelected = waiting.length < waitlistRegistrations.length;
   const aNonAcceptedNonWaitlistIsSelected = pending.length > 0
     || cancelled.length > 0
     || rejected.length > 0;
-  if (notAllWaitlistIsSelected && aNonAcceptedNonWaitlistIsSelected) {
-    return firstUnselectedOnWaitlist;
-  }
 
+  const waitlistRegistrations = getSortedWaitlistRegistrations(registrations);
   const lastSelectedOnWaitlist = getLastSelectedOnWaitlist(
-    registrations,
+    waitlistRegistrations,
     waiting,
   );
-  // at this point the waitlist is non-empty and fully selected, so this exists
-  if (!lastSelectedOnWaitlist) {
-    console.error('lastSelectedOnWaitlist should exist');
-    return undefined;
-  }
 
-  const firstUnselectedPosition = firstUnselectedOnWaitlist.competing.waiting_list_position;
-  const lastSelectedPosition = lastSelectedOnWaitlist.competing.waiting_list_position;
-  if (firstUnselectedPosition < lastSelectedPosition) {
-    return firstUnselectedOnWaitlist;
-  }
+  const shouldBeSelectedRegistrations = aNonAcceptedNonWaitlistIsSelected
+    ? waitlistRegistrations
+    : waitlistRegistrations.slice(
+      0,
+      lastSelectedOnWaitlist?.competing?.waiting_list_position ?? 0,
+    );
 
-  return null;
+  return shouldBeSelectedRegistrations.filter(
+    (reg) => !waiting.includes(reg.user_id),
+  ).length;
 }

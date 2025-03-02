@@ -8,7 +8,7 @@ import { countries } from '../../../lib/wca-data.js.erb';
 import {
   APPROVED_COLOR, APPROVED_ICON,
   CANCELLED_COLOR, CANCELLED_ICON,
-  getSkippedWaitlistRegistration,
+  getSkippedWaitlistCount,
   PENDING_COLOR, PENDING_ICON,
   REJECTED_COLOR, REJECTED_ICON,
   WAITLIST_COLOR, WAITLIST_ICON,
@@ -127,15 +127,17 @@ export default function RegistrationActions({
 
   const attemptToApprove = () => {
     const idsToAccept = [...pending, ...cancelled, ...waiting, ...rejected];
-    const skippedWaitlistRegistration = getSkippedWaitlistRegistration(
+    const skippedWaitlistCount = getSkippedWaitlistCount(
       registrations,
       partitionedSelected,
     );
 
-    if (skippedWaitlistRegistration) {
-      const { name } = skippedWaitlistRegistration.user;
+    if (skippedWaitlistCount > 0) {
       confirm({
-        content: I18n.t('competitions.registration_v2.list.waitlist.skipped_warning', { name }),
+        content: I18n.t(
+          'competitions.registration_v2.list.waitlist.skipped_warning',
+          { count: skippedWaitlistCount },
+        ),
       }).then(
         () => changeStatus(idsToAccept, 'accepted'),
       ).catch(() => null);
