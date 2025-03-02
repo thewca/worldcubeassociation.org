@@ -8,10 +8,12 @@ import { countries } from '../../../lib/wca-data.js.erb';
 import {
   APPROVED_COLOR, APPROVED_ICON,
   CANCELLED_COLOR, CANCELLED_ICON,
+  getSkippedWaitlistRegistration,
   PENDING_COLOR, PENDING_ICON,
   REJECTED_COLOR, REJECTED_ICON,
   WAITLIST_COLOR, WAITLIST_ICON,
 } from '../../../lib/utils/registrationAdmin';
+import { useConfirm } from '../../../lib/providers/ConfirmProvider';
 
 function V3csvExport(selected, registrations, competition) {
   let csvContent = 'data:text/csv;charset=utf-8,';
@@ -64,6 +66,7 @@ export default function RegistrationActions({
   competitionInfo,
   updateRegistrationMutation,
 }) {
+  const confirm = useConfirm();
   const dispatch = useDispatch();
   const selectedCount = Object.values(partitionedSelected).reduce(
     (sum, part) => sum + part.length,
@@ -124,7 +127,16 @@ export default function RegistrationActions({
 
   const attemptToApprove = () => {
     const idsToAccept = [...pending, ...cancelled, ...waiting, ...rejected];
-    if (idsToAccept.length > spotsRemaining) {
+    const skippedWaitlistRegistration = getSkippedWaitlistRegistration(
+      registrations,
+      partitionedSelected,
+    );
+
+    if (skippedWaitlistRegistration) {
+      confirm().then(
+        () => changeStatus(idsToAccept, 'accepted'),
+      ).catch(() => null);
+    } else if (idsToAccept.length > spotsRemaining) {
       dispatch(showMessage(
         'competitions.registration_v2.update.too_many',
         'negative',
