@@ -38,7 +38,7 @@ RSpec.describe Competition do
 
   context "when there is an entry fee" do
     it "correctly identifies there is a fee when there is only a base fee" do
-      competition = FactoryBot.build :competition, name: "Foo: Test - 2015", base_entry_fee_owest_denomination: 10
+      competition = FactoryBot.build :competition, name: "Foo: Test - 2015", base_entry_fee_lowest_denomination: 10
       expect(competition.has_fees?).to be true
       expect(competition.has_base_entry_fee?).to eq competition.base_entry_fee
     end
