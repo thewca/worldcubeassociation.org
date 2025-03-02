@@ -133,7 +133,10 @@ export default function RegistrationActions({
     );
 
     if (skippedWaitlistRegistration) {
-      confirm().then(
+      const { name } = skippedWaitlistRegistration.user;
+      confirm({
+        content: `You've skipped over ${name} on the waitlist. Are you sure you want to approve the other registration(s) instead?`,
+      }).then(
         () => changeStatus(idsToAccept, 'accepted'),
       ).catch(() => null);
     } else if (idsToAccept.length > spotsRemaining) {
