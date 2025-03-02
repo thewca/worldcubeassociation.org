@@ -135,7 +135,7 @@ export default function RegistrationActions({
     if (skippedWaitlistRegistration) {
       const { name } = skippedWaitlistRegistration.user;
       confirm({
-        content: `You've skipped over ${name} on the waitlist. Are you sure you want to approve the other registration(s) instead?`,
+        content: I18n.t('competitions.registration_v2.list.waitlist.skipped_warning', { name }),
       }).then(
         () => changeStatus(idsToAccept, 'accepted'),
       ).catch(() => null);
