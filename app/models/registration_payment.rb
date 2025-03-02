@@ -30,6 +30,6 @@ class RegistrationPayment < ApplicationRecord
   end
 
   private def auto_close_hook
-    return registration.consider_auto_close
+    registration.consider_auto_close
   end
 end

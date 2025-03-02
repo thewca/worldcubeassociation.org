@@ -38,7 +38,7 @@ RSpec.describe Competition do
 
   context "when there is an entry fee" do
     it "correctly identifies there is a fee when there is only a base fee" do
-      competition = FactoryBot.build :competition, name: "Foo: Test - 2015", base_entry_fee_lowest_denomination: 10
+      competition = FactoryBot.build :competition, name: "Foo: Test - 2015", base_entry_fee_owest_denomination: 10
       expect(competition.has_fees?).to be true
       expect(competition.has_base_entry_fee?).to eq competition.base_entry_fee
     end
@@ -1624,7 +1624,7 @@ RSpec.describe Competition do
       expect(comp.attempt_auto_close!).to eq(true)
     end
 
-    it 'only auto-closes if the registrations are fully registrations', :tag do
+    it 'only auto-closes if the registrations are fully registrations' do
       FactoryBot.create_list(:registration, 5, :partially_paid, competition: auto_close_comp)
       expect(auto_close_comp.attempt_auto_close!).to eq(false)
     end
@@ -1667,9 +1667,8 @@ RSpec.describe Competition do
         expect(auto_close_comp.errors[:auto_close_threshold]).to include("Auto close threshold must be greater than the number of currently paid registrations")
       end
 
-      it 'auto-close must be greater than 0', :tag do
+      it 'auto-close must be greater than 0' do
         auto_close_comp.auto_close_threshold = 0
-        byebug
         expect(auto_close_comp).not_to be_valid
         expect(auto_close_comp.errors[:auto_close_threshold]).to include("Auto-close threshold must be greater than 0")
       end
@@ -1701,6 +1700,31 @@ RSpec.describe Competition do
       comp.newcomer_month_reserved_spots = 5
       expect(comp).to be_invalid
       expect(comp.errors.messages[:newcomer_month_reserved_spots]).to include('Desired newcomer month reserved spots exceeds number of spots reservable')
+    end
+  end
+
+  describe '#fully_paid_registrations_count' do
+    let(:comp) { FactoryBot.create(:competition) }
+
+    it 'doesnt count unpaid registrations' do
+      FactoryBot.create_list(:registration, 5, competition: comp)
+      expect(comp.fully_paid_registrations_count).to eq(0)
+    end
+
+    it 'counts registrations == competition fee' do
+      FactoryBot.create_list(:registration, 5, :paid, competition: comp)
+      expect(comp.fully_paid_registrations_count).to eq(5)
+    end
+
+    it 'includes registrations > competition fee' do
+      FactoryBot.create_list(:registration, 5, :overpaid, competition: comp)
+      expect(comp.fully_paid_registrations_count).to eq(5)
+    end
+
+    it 'considers refunds when determining total paid' do
+      FactoryBot.create_list(:registration, 5, :paid, competition: comp)
+      FactoryBot.create_list(:registration, 3, :refunded, competition: comp)
+      expect(comp.fully_paid_registrations_count).to eq(5)
     end
   end
 end

@@ -347,7 +347,6 @@ class Competition < ApplicationRecord
     end
   end
 
-
   # We check for `present?` specifically so that a value of 0 will return true, and trigger the validation
   validate :auto_close_threshold_validations, if: -> { auto_close_threshold.present? }
   private def auto_close_threshold_validations
@@ -2943,9 +2942,17 @@ class Competition < ApplicationRecord
     }
   end
 
+  def fully_paid_registrations_count
+    registrations
+      .joins(:registration_payments)
+      .group('registrations.id')
+      .having('SUM(registration_payments.amount_lowest_denomination) >= ?', base_entry_fee_lowest_denomination)
+      .count.size # .count changes the AssociationRelation into a hash, and then .size gives the number of items in the hash
+  end
+
   def attempt_auto_close!
     return false if auto_close_threshold.nil?
-    threshold_reached = registrations.with_payments.count >= auto_close_threshold && auto_close_threshold > 0
+    threshold_reached = fully_paid_registrations_count >= auto_close_threshold && auto_close_threshold > 0
     threshold_reached && update(closing_full_registration: true, registration_close: Time.now)
   end
 end

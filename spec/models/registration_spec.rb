@@ -570,12 +570,19 @@ RSpec.describe Registration do
       )
     end
 
-    it 'doesnt call competition.attempt_auto_close! unless reg is fully paid' do
+    it 'doesnt competition.attempt_auto_close! if reg is partially paid' do
       competition = FactoryBot.create(:competition)
       expect(competition).to receive(:attempt_auto_close!).exactly(0).times
 
       reg = FactoryBot.create(:registration, :partially_paid, competition: competition)
       reg.consider_auto_close
+    end
+
+    it 'calls competition.attempt_auto_close! if reg is fully paid' do
+      competition = FactoryBot.create(:competition)
+      expect(competition).to receive(:attempt_auto_close!).exactly(1).times
+
+      FactoryBot.create(:registration, :paid, competition: competition)
     end
   end
 
