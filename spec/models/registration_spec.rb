@@ -579,6 +579,50 @@ RSpec.describe Registration do
     end
   end
 
+  describe 'hooks' do
+    it 'positive registration_payment calls registration.consider_auto_close' do
+      competition = FactoryBot.create(:competition)
+      reg = FactoryBot.create(:registration, competition: competition)
+      expect(reg).to receive(:consider_auto_close)
+
+      FactoryBot.create(
+        :registration_payment,
+        registration: reg,
+        user: reg.user,
+        amount_lowest_denomination: reg.competition.base_entry_fee_lowest_denomination,
+      )
+    end
+
+    it 'doesnt call registration.auto_close! after a refund is created' do
+      competition = FactoryBot.create(:competition)
+      reg = FactoryBot.create(:registration, :paid, competition: competition)
+      expect(reg).to receive(:consider_auto_close).exactly(0).times
+
+      FactoryBot.create(
+        :registration_payment,
+        registration: reg,
+        user: reg.user,
+        amount_lowest_denomination: -reg.competition.base_entry_fee_lowest_denomination,
+        refunded_registration_payment_id: reg.registration_payments.first.id,
+      )
+    end
+
+    it 'doesnt competition.attempt_auto_close! if reg is partially paid' do
+      competition = FactoryBot.create(:competition)
+      expect(competition).to receive(:attempt_auto_close!).exactly(0).times
+
+      reg = FactoryBot.create(:registration, :partially_paid, competition: competition)
+      reg.consider_auto_close
+    end
+
+    it 'calls competition.attempt_auto_close! if reg is fully paid' do
+      competition = FactoryBot.create(:competition)
+      expect(competition).to receive(:attempt_auto_close!).exactly(1).times
+
+      FactoryBot.create(:registration, :paid, competition: competition)
+    end
+  end
+
   describe '#newcomer_month_eligible_competitors_count' do
     let(:newcomer_month_comp) { FactoryBot.create(:competition, :newcomer_month) }
     let!(:newcomer_reg) { FactoryBot.create(:registration, :newcomer, :accepted, competition: newcomer_month_comp) }

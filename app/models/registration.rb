@@ -397,6 +397,10 @@ class Registration < ApplicationRecord
     end
   end
 
+  def consider_auto_close
+    outstanding_entry_fees.zero? && competition.attempt_auto_close!
+  end
+
   validate :only_one_accepted_per_series
   private def only_one_accepted_per_series
     if competition&.part_of_competition_series? && competing_status_accepted?

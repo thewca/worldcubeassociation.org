@@ -57,6 +57,17 @@ FactoryBot.define do
       end
     end
 
+    trait :overpaid do
+      after(:create) do |registration|
+        FactoryBot.create(
+          :registration_payment,
+          registration: registration,
+          user: registration.user,
+          amount_lowest_denomination: registration.competition.base_entry_fee_lowest_denomination * 2,
+        )
+      end
+    end
+
     trait :partially_paid do
       after(:create) do |registration|
         FactoryBot.create(
@@ -65,6 +76,32 @@ FactoryBot.define do
           user: registration.user,
           amount_lowest_denomination: (registration.competition.base_entry_fee_lowest_denomination / 2.0).round,
         )
+      end
+    end
+
+    trait :refunded do
+      after(:create) do |registration|
+        FactoryBot.create(
+          :registration_payment,
+          registration: registration,
+          user: registration.user,
+          amount_lowest_denomination: registration.competition.base_entry_fee_lowest_denomination.round,
+        )
+
+        FactoryBot.create(
+          :registration_payment,
+          registration: registration,
+          user: registration.user,
+          amount_lowest_denomination: -registration.competition.base_entry_fee_lowest_denomination,
+        )
+      end
+    end
+
+    trait :paid_no_hooks do
+      after(:create) do |registration|
+        payment = FactoryBot.build :registration_payment, registration: registration, user: registration.user,
+                                                          amount_lowest_denomination: registration.competition.base_entry_fee_lowest_denomination
+        payment.save(validate: false)
       end
     end
 
