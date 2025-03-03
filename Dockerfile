@@ -14,7 +14,6 @@ ENV RAILS_LOG_TO_STDOUT="1" \
     BUILD_TAG=$BUILD_TAG \
     WCA_LIVE_SITE=$WCA_LIVE_SITE \
     SHAKAPACKER_ASSET_HOST=$SHAKAPACKER_ASSET_HOST
-ENV BUNDLE_JOBS=4 BUNDLE_RETRY=3
 
 # Add dependencies necessary to install nodejs.
 # From: https://github.com/nodesource/distributions#debian-and-ubuntu-based-distributions
