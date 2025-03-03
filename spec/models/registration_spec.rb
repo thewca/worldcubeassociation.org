@@ -647,4 +647,10 @@ RSpec.describe Registration do
       expect(newcomer_month_comp.registrations.newcomer_month_eligible_competitors_count).to eq(1)
     end
   end
+
+  it 'validates presence of registered_at' do
+    reg = FactoryBot.build(:registration, registered_at: nil)
+    expect(reg).not_to be_valid
+    expect(reg.errors[:registered_at]).to include("can't be blank")
+  end
 end
