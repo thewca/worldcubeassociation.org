@@ -43,12 +43,12 @@ module Registrations
           registration.administrative_notes = admin_comment unless admin_comment.nil?
           registration.guests = guests if guests.present?
 
+          update_status(registration, status)
+
           if old_status == Registrations::Helper::STATUS_WAITING_LIST || status == Registrations::Helper::STATUS_WAITING_LIST
             waiting_list = competition.waiting_list || competition.create_waiting_list(entries: [])
-            update_waiting_list(update_params[:competing], registration, waiting_list)
+            update_waiting_list(update_params[:competing], registration, old_status, waiting_list)
           end
-
-          update_status(registration, status) # Update status after updating waiting list so that can access the old_status
 
           changes = registration.changes.transform_values { |change| change[1] }
 
@@ -72,18 +72,18 @@ module Registrations
         registration.reload
       end
 
-      def self.update_waiting_list(competing_params, registration, waiting_list)
+      def self.update_waiting_list(competing_params, registration, old_status, waiting_list)
         status = competing_params['status']
         waiting_list_position = competing_params['waiting_list_position']
 
-        should_add = status == Registrations::Helper::STATUS_WAITING_LIST # TODO: Add case where waiting_list status is present but that matches the old_status
-        should_move = waiting_list_position.present? # TODO: Add case where waiting list pos is present but it matches the current position
-        should_remove = status.present? && registration.competing_status == Registrations::Helper::STATUS_WAITING_LIST &&
-                        status != Registrations::Helper::STATUS_WAITING_LIST # TODO: Consider adding cases for when not all of these are true?
+        should_add = status == Registrations::Helper::STATUS_WAITING_LIST && registration.waiting_list_position.nil?
+        should_move = waiting_list_position.present?
+        should_remove = status.present? && old_status == Registrations::Helper::STATUS_WAITING_LIST &&
+                        status != Registrations::Helper::STATUS_WAITING_LIST
 
-        waiting_list.add(registration.id) if should_add
-        waiting_list.move_to_position(registration.id, competing_params[:waiting_list_position].to_i) if should_move
-        waiting_list.remove(registration.id) if should_remove
+        waiting_list.add(registration) if should_add
+        waiting_list.move_to_position(registration, competing_params[:waiting_list_position].to_i) if should_move
+        waiting_list.remove(registration) if should_remove
       end
 
       def self.update_status(registration, status)

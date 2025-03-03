@@ -509,6 +509,18 @@ RSpec.describe Registration do
         expect(reg.waiting_list_position).to eq(6)
       end
 
+      it 'no change if we try to add a registration on the waiting list' do
+        reg1.update_lanes!({ user_id: reg1.user.id, competing: { status: 'waiting_list' } }.with_indifferent_access, reg1.user)
+
+        expect(reg1.waiting_list_position).to eq(1)
+        expect(reg2.waiting_list_position).to eq(2)
+        expect(reg3.waiting_list_position).to eq(3)
+        expect(reg4.waiting_list_position).to eq(4)
+        expect(reg5.waiting_list_position).to eq(5)
+
+        expect(waiting_list.entries.count).to eq(5)
+      end
+
       it 'removes from waiting list' do
         reg4.update_lanes!({ user_id: reg4.user.id, competing: { status: 'pending' } }.with_indifferent_access, reg4.user)
 
@@ -538,6 +550,31 @@ RSpec.describe Registration do
         expect(reg5.waiting_list_position).to eq(1)
 
         expect(waiting_list.entries.count).to eq(5)
+      end
+
+      it 'moves to the same position' do
+        reg5.update_lanes!({ user_id: reg5.user.id, competing: { waiting_list_position: 5 } }.with_indifferent_access, reg5.user)
+
+        expect(reg1.waiting_list_position).to eq(1)
+        expect(reg2.waiting_list_position).to eq(2)
+        expect(reg3.waiting_list_position).to eq(3)
+        expect(reg4.waiting_list_position).to eq(4)
+        expect(reg5.waiting_list_position).to eq(5)
+
+        expect(waiting_list.entries.count).to eq(5)
+      end
+
+      it 'move request for a registration that isnt in the waiting list' do
+        reg = FactoryBot.create(:registration, competition: competition)
+        reg.update_lanes!({ user_id: reg.user.id, competing: { waiting_list_position: 3 } }.with_indifferent_access, reg.user)
+
+        expect(reg.waiting_list_position).to eq(nil)
+
+        expect(reg1.waiting_list_position).to eq(1)
+        expect(reg2.waiting_list_position).to eq(2)
+        expect(reg3.waiting_list_position).to eq(3)
+        expect(reg4.waiting_list_position).to eq(4)
+        expect(reg5.waiting_list_position).to eq(5)
       end
     end
   end
