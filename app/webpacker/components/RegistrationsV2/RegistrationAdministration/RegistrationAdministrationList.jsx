@@ -9,9 +9,6 @@ import { DateTime } from 'luxon';
 import Loading from '../../Requests/Loading';
 import { getAllRegistrations } from '../api/registration/get/get_registrations';
 import { bulkUpdateRegistrations } from '../api/registration/patch/update_registration';
-import { setMessage } from '../Register/RegistrationMessage';
-import createSortReducer from '../reducers/sortReducer';
-import RegistrationActions from './RegistrationActions';
 import { showMessage, showMessages } from '../Register/RegistrationMessage';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
 import disableAutoAccept from '../api/registration/patch/auto_accept';
@@ -150,13 +147,13 @@ export default function RegistrationAdministrationList({
   const { mutate: disableAutoAcceptMutation, isPending: isUpdating } = useMutation({
     mutationFn: disableAutoAccept,
     onError: () => {
-      dispatchStore(setMessage(
+      dispatchStore(showMessage(
         'competitions.registration_v2.auto_accept.cant_disable',
         'negative',
       ));
     },
     onSuccess: async () => {
-      dispatchStore(setMessage('competitions.registration_v2.auto_accept.disabled', 'positive'));
+      dispatchStore(showMessage('competitions.registration_v2.auto_accept.disabled', 'positive'));
       await refetchCompetitionInfo();
     },
   });

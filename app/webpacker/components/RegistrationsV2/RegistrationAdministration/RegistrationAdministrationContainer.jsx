@@ -1,6 +1,6 @@
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { setMessage } from '../Register/RegistrationMessage';
+import { showMessage } from '../Register/RegistrationMessage';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
 import getCompetitionInfo from '../api/competition/get_competition_info';
 import RegistrationAdministrationList from './RegistrationAdministrationList';
@@ -24,7 +24,7 @@ export default function RegistrationAdministrationContainer({ competitionId }) {
     refetchOnMount: 'always',
     retry: false,
     onError: () => {
-      dispatchStore(setMessage(
+      dispatchStore(showMessage(
         // i18n-tasks-use t('competitions.errors.cant_load_competition_info')
         // eslint-disable-next-line quotes
         `competitions.errors.cant_load_competition_info`,
