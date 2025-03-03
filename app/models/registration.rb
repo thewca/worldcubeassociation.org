@@ -56,7 +56,7 @@ class Registration < ApplicationRecord
     if competition.guest_limit_exceeded?(guests)
       errors.add(:guests, error_status: :unprocessable_entity, error_code: Registrations::ErrorCodes::GUEST_LIMIT_EXCEEDED)
     end
-    if guests > DEFAULT_GUEST_LIMIT && !competition.guest_entry_status_restricted?
+    if guests > Registrations::RegistrationChecker::DEFAULT_GUEST_LIMIT && !competition.guest_entry_status_restricted?
       errors.add(:guests, error_status: :unprocessable_entity, error_code: Registrations::ErrorCodes::UNREASONABLE_GUEST_COUNT)
     end
   end
