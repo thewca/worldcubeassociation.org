@@ -54,7 +54,7 @@ class DelegateReport < ApplicationRecord
     errors.add(:setup_images, "Needs at least #{self.required_setup_images_count} images") if self.setup_images.count < self.required_setup_images_count
   end
 
-  validates :setup_images, content_type: ActiveStorage.web_image_content_types
+  validates :setup_images, content_type: ActiveStorage.web_image_content_types, processable_file: true
 
   def schedule_and_discussion_urls_required?
     posted? && created_at > Date.new(2019, 7, 21)
