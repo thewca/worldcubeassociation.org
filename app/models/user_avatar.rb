@@ -32,8 +32,8 @@ class UserAvatar < ApplicationRecord
 
   MAX_UPLOAD_SIZE = 2.megabytes
 
-  validates :public_image, content_type: ActiveStorage.web_image_content_types, size: { less_than_or_equal_to: MAX_UPLOAD_SIZE }
-  validates :private_image, content_type: ActiveStorage.web_image_content_types, size: { less_than_or_equal_to: MAX_UPLOAD_SIZE }
+  validates :public_image, content_type: ActiveStorage.web_image_content_types, size: { less_than_or_equal_to: MAX_UPLOAD_SIZE }, processable_file: true
+  validates :private_image, content_type: ActiveStorage.web_image_content_types, size: { less_than_or_equal_to: MAX_UPLOAD_SIZE }, processable_file: true
 
   # Only active_storage avatars go through the crop pipeline (see `can_edit_thumbnail?`).
   # Legacy backends never set valid crops and many have nil/garbage crop columns, so validating
