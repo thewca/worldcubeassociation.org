@@ -41,7 +41,7 @@ const initialExpandedColumns = {
   timestamp: false,
 };
 
-const columnReducer = (state, action) => {
+const expandedColumnsReducer = (state, action) => {
   if (action.type === 'reset') {
     return initialExpandedColumns;
   }
@@ -52,12 +52,12 @@ const columnReducer = (state, action) => {
 };
 
 export default function RegistrationAdministrationList({ competitionInfo }) {
-  const [expandedColumns, dispatchColumns] = useReducer(
-    columnReducer,
+  const [expandedColumns, dispatchExpandedColumns] = useReducer(
+    expandedColumnsReducer,
     initialExpandedColumns,
   );
 
-  const [editable, setEditable] = useCheckboxState(false);
+  const [waitlistEditModeEnabled, setWaitlistEditModeEnabled] = useCheckboxState(false);
 
   const dispatchStore = useDispatch();
 
@@ -116,7 +116,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
   );
 
   const selectedIds = useOrderedSet();
-  const partitionedSelected = useMemo(
+  const partitionedSelectedIds = useMemo(
     () => ({
       pending: selectedIds.asArray.filter((id) => pending.some((reg) => id === reg.user.id)),
       waiting: selectedIds.asArray.filter((id) => waiting.some((reg) => id === reg.user.id)),
@@ -184,7 +184,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
             <RegistrationAdministrationTable
               columnsExpanded={expandedColumns}
               registrations={pending}
-              selected={partitionedSelected.pending}
+              selected={partitionedSelectedIds.pending}
               onSelect={selectedIds.add}
               onUnselect={selectedIds.remove}
               onToggle={selectedIds.toggle}
@@ -214,13 +214,13 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
           <>
             <Checkbox
               toggle
-              value={editable}
-              onChange={setEditable}
+              value={waitlistEditModeEnabled}
+              onChange={setWaitlistEditModeEnabled}
               label={I18n.t('competitions.registration_v2.list.edit_waiting_list')}
             />
             <RegistrationAdministrationTable
               columnsExpanded={expandedColumns}
-              selected={partitionedSelected.waiting}
+              selected={partitionedSelectedIds.waiting}
               onSelect={selectedIds.add}
               onUnselect={selectedIds.remove}
               onToggle={selectedIds.toggle}
@@ -231,7 +231,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
                 (a, b) => a.competing.waiting_list_position - b.competing.waiting_list_position,
               )}
               handleOnDragEnd={handleOnDragEnd}
-              draggable={editable}
+              draggable={waitlistEditModeEnabled}
               sortable={false}
               withPosition
               color={WAITLIST_COLOR}
@@ -265,7 +265,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
           <RegistrationAdministrationTable
             columnsExpanded={expandedColumns}
             registrations={accepted}
-            selected={partitionedSelected.accepted}
+            selected={partitionedSelectedIds.accepted}
             onSelect={selectedIds.add}
             onUnselect={selectedIds.remove}
             onToggle={selectedIds.toggle}
@@ -297,7 +297,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
             <RegistrationAdministrationTable
               columnsExpanded={expandedColumns}
               registrations={cancelled}
-              selected={partitionedSelected.cancelled}
+              selected={partitionedSelectedIds.cancelled}
               onSelect={selectedIds.add}
               onUnselect={selectedIds.remove}
               onToggle={selectedIds.toggle}
@@ -330,7 +330,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
             <RegistrationAdministrationTable
               columnsExpanded={expandedColumns}
               registrations={rejected}
-              selected={partitionedSelected.rejected}
+              selected={partitionedSelectedIds.rejected}
               onSelect={selectedIds.add}
               onUnselect={selectedIds.remove}
               onToggle={selectedIds.toggle}
@@ -368,7 +368,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
               label={name}
               toggle
               checked={expandedColumns[id]}
-              onChange={() => dispatchColumns({ column: id })}
+              onChange={() => dispatchExpandedColumns({ column: id })}
             />
           ))}
         </Form.Group>
@@ -377,7 +377,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
       <div ref={actionsRef}>
         <Sticky context={actionsRef} offset={20}>
           <RegistrationActions
-            partitionedSelected={partitionedSelected}
+            partitionedSelectedIds={partitionedSelectedIds}
             refresh={selectedIds.clear}
             registrations={registrations}
             spotsRemaining={spotsRemaining}

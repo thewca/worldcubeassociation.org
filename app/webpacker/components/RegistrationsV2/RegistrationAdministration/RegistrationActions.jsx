@@ -58,7 +58,7 @@ function csvExport(selected, registrations, competition) {
 }
 
 export default function RegistrationActions({
-  partitionedSelected,
+  partitionedSelectedIds,
   refresh,
   registrations,
   spotsRemaining,
@@ -67,7 +67,7 @@ export default function RegistrationActions({
 }) {
   const confirm = useConfirm();
   const dispatch = useDispatch();
-  const selectedCount = Object.values(partitionedSelected).reduce(
+  const selectedCount = Object.values(partitionedSelectedIds).reduce(
     (sum, part) => sum + part.length,
     0,
   );
@@ -75,7 +75,7 @@ export default function RegistrationActions({
 
   const {
     pending, accepted, cancelled, waiting, rejected,
-  } = partitionedSelected;
+  } = partitionedSelectedIds;
   const anyPending = pending.length < selectedCount;
   const anyApprovable = accepted.length < selectedCount;
   const anyCancellable = cancelled.length < selectedCount;
@@ -138,7 +138,7 @@ export default function RegistrationActions({
     const idsToAccept = [...pending, ...cancelled, ...waiting, ...rejected];
     const skippedWaitlistCount = getSkippedWaitlistCount(
       registrations,
-      partitionedSelected,
+      partitionedSelectedIds,
     );
 
     if (skippedWaitlistCount > 0) {
