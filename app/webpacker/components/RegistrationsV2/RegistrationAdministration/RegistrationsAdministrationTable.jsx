@@ -24,6 +24,7 @@ export default function RegistrationAdministrationTable({
   withPosition = false,
   handleOnDragEnd,
   color,
+  distinguishPaidUnpaid = false,
 }) {
   const handleHeaderCheck = (_, data) => {
     if (data.checked) {
@@ -81,6 +82,7 @@ export default function RegistrationAdministrationTable({
                       isSelected={selected.includes(w.user.id)}
                       withPosition={withPosition}
                       color={color}
+                      distinguishPaidUnpaid={distinguishPaidUnpaid}
                     />
                   ))}
                   {providedDroppable.placeholder}
