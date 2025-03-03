@@ -132,8 +132,8 @@ module Registrations
         r = Registration.new(guests: guests, competition: competition)
         r.validate
         unless r.errors.empty?
-          error = r.errors.details[:guests][0]
-          raise WcaExceptions::RegistrationError.new(error.error_status, error.error_code)
+          error = r.errors.details[:guests].first
+          raise WcaExceptions::RegistrationError.new(error[:error_status], error[:error_code]) if error.present?
         end
       end
 
