@@ -33,7 +33,7 @@ module Registrations
       validate_comment!(comment, competition, registration)
       validate_organizer_fields!(update_request, current_user, competition)
       validate_organizer_comment!(update_request)
-      validate_waiting_list_position!(waiting_list_position, competition) unless waiting_list_position.nil?
+      validate_waiting_list_position!(waiting_list_position, competition, registration) unless waiting_list_position.nil?
       validate_update_status!(new_status, competition, current_user, target_user, registration, events) unless new_status.nil?
       validate_update_events!(events, competition) unless events.nil?
       validate_qualifications!(update_request, competition, target_user) unless events.nil?
@@ -160,7 +160,11 @@ module Registrations
           !organizer_comment.nil? && organizer_comment.length > COMMENT_CHARACTER_LIMIT
       end
 
-      def validate_waiting_list_position!(waiting_list_position, competition)
+      def validate_waiting_list_position!(waiting_list_position, competition, registration)
+        # User must be on the wating list
+        raise WcaExceptions::RegistrationError.new(:unprocessable_entity, Registrations::ErrorCodes::INVALID_REQUEST_DATA) unless
+         registration.competing_status == Registrations::Helper::STATUS_WAITING_LIST
+
         # Floats are not allowed
         raise WcaExceptions::RegistrationError.new(:unprocessable_entity, Registrations::ErrorCodes::INVALID_WAITING_LIST_POSITION) if waiting_list_position.is_a? Float
 
