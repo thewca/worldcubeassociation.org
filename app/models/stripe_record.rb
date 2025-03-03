@@ -115,6 +115,13 @@ class StripeRecord < ApplicationRecord
     )
   end
 
+  def confirm_remote_for_test(payment_method)
+    raise "This method is only supposed to be called during testing!" unless Rails.env.test?
+    raise "Not a PaymentIntent, seems that you messed up your test case :P" unless self.payment_intent?
+
+    stripe_client.v1.payment_intents.confirm(self.stripe_id, { payment_method: payment_method })
+  end
+
   def money_amount
     ruby_amount = StripeRecord.amount_to_ruby(
       self.amount_stripe_denomination,
