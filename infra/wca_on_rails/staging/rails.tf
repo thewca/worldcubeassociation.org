@@ -61,19 +61,7 @@ locals {
       value = aws_sqs_queue.results.url
     },
     {
-      name = "STORAGE_AWS_REGION"
-      value = var.region
-    },
-    {
-      name = "VAULT_AWS_REGION"
-      value = var.region
-    },
-    {
-      name = "S3_AVATARS_REGION"
-      value = var.region
-    },
-    {
-      name = "DATABASE_AWS_REGION"
+      name = "AWS_REGION"
       value = var.region
     },
     {

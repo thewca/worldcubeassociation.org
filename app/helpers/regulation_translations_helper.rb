@@ -35,7 +35,6 @@ module RegulationTranslationsHelper
 
   private def regulations_bucket
     Aws::S3::Resource.new(
-      region: EnvConfig.STORAGE_AWS_REGION,
       credentials: Aws::ECSCredentials.new,
     ).bucket(BUCKET_NAME)
   end
