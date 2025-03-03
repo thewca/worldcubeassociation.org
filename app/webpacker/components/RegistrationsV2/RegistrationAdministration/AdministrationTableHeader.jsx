@@ -21,15 +21,15 @@ export default function TableHeader({
   return (
     <Table.Header>
       <Table.Row>
-        <Table.HeaderCell>
+        <Table.HeaderCell disabled>
           {withCheckbox && (
             <Checkbox checked={isChecked} onChange={onCheckboxChanged} />
           )}
         </Table.HeaderCell>
         {withPosition && (
-          <Table.HeaderCell>#</Table.HeaderCell>
+          <Table.HeaderCell disabled>#</Table.HeaderCell>
         )}
-        <Table.HeaderCell />
+        <Table.HeaderCell disabled />
         <Table.HeaderCell
           sorted={sortColumn === 'wca_id' ? sortDirection : undefined}
           onClick={() => changeSortColumn('wca_id')}
@@ -64,7 +64,12 @@ export default function TableHeader({
             >
               {I18n.t('registrations.list.registered.with_stripe')}
             </Table.HeaderCell>
-            <Table.HeaderCell>{I18n.t('competitions.registration_v2.update.amount')}</Table.HeaderCell>
+            <Table.HeaderCell
+              sorted={sortColumn === 'amount' ? sortDirection : undefined}
+              onClick={() => changeSortColumn('amount')}
+            >
+              {I18n.t('competitions.registration_v2.update.amount')}
+            </Table.HeaderCell>
           </>
         ) : (
           <Table.HeaderCell
@@ -76,7 +81,11 @@ export default function TableHeader({
         )}
         {eventsAreExpanded ? (
           competitionInfo.event_ids.map((eventId) => (
-            <Table.HeaderCell key={`event-${eventId}`}>
+            <Table.HeaderCell
+              key={`event-${eventId}`}
+              sorted={sortColumn === eventId ? sortDirection : undefined}
+              onClick={() => changeSortColumn(eventId)}
+            >
               <EventIcon id={eventId} size="1em" />
             </Table.HeaderCell>
           ))
@@ -104,12 +113,12 @@ export default function TableHeader({
             >
               {I18n.t('activerecord.attributes.registration.comments')}
             </Table.HeaderCell>
-            <Table.HeaderCell>
+            <Table.HeaderCell disabled>
               {I18n.t('activerecord.attributes.registration.administrative_notes')}
             </Table.HeaderCell>
           </>
         )}
-        <Table.HeaderCell>{I18n.t('registrations.list.email')}</Table.HeaderCell>
+        <Table.HeaderCell disabled>{I18n.t('registrations.list.email')}</Table.HeaderCell>
       </Table.Row>
     </Table.Header>
   );
