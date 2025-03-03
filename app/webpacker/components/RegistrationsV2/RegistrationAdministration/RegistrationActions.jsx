@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Button, Dropdown } from 'semantic-ui-react';
 import { DateTime } from 'luxon';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
@@ -58,8 +58,7 @@ function csvExport(selected, registrations, competition) {
 }
 
 export default function RegistrationActions({
-  partitionedSelected,
-  userEmailMap,
+  partitionedSelectedIds,
   refresh,
   registrations,
   spotsRemaining,
@@ -68,7 +67,7 @@ export default function RegistrationActions({
 }) {
   const confirm = useConfirm();
   const dispatch = useDispatch();
-  const selectedCount = Object.values(partitionedSelected).reduce(
+  const selectedCount = Object.values(partitionedSelectedIds).reduce(
     (sum, part) => sum + part.length,
     0,
   );
@@ -76,12 +75,22 @@ export default function RegistrationActions({
 
   const {
     pending, accepted, cancelled, waiting, rejected,
-  } = partitionedSelected;
+  } = partitionedSelectedIds;
   const anyPending = pending.length < selectedCount;
   const anyApprovable = accepted.length < selectedCount;
   const anyCancellable = cancelled.length < selectedCount;
   const anyWaitlistable = waiting.length < selectedCount;
   const anyRejectable = rejected.length < selectedCount;
+
+  const userEmailMap = useMemo(
+    () => Object.fromEntries(
+      (registrations ?? []).map((registration) => [
+        registration.user.id,
+        registration.user.email,
+      ]),
+    ),
+    [registrations],
+  );
 
   const selectedEmails = [...pending, ...waiting, ...accepted, ...cancelled, ...rejected]
     .map((userId) => userEmailMap[userId])
@@ -129,7 +138,7 @@ export default function RegistrationActions({
     const idsToAccept = [...pending, ...cancelled, ...waiting, ...rejected];
     const skippedWaitlistCount = getSkippedWaitlistCount(
       registrations,
-      partitionedSelected,
+      partitionedSelectedIds,
     );
 
     if (skippedWaitlistCount > 0) {
