@@ -105,25 +105,27 @@ export default function PsychSheet({
         returnerCount={returnerCount}
         onScrollToMeClick={onScrollToMeClick}
       />
-      <Table striped sortable unstackable compact singleLine textAlign="left">
-        <PsychSheetHeader
-          selectedEvent={selectedEvent}
-          sortedColumn={sortedBy}
-          onColumnClick={setSortedBy}
-          hideAverage={eventIsMbf}
-        />
-        <PsychSheetBody
-          registrations={rankings}
-          selectedEvent={selectedEvent}
-          userId={userId}
-          userRowRef={userRowRef}
-          hideAverage={eventIsMbf}
-        />
-        <PsychSheetFooter
-          registrations={rankings}
-          hideAverage={eventIsMbf}
-        />
-      </Table>
+      <div style={{ overflowX: 'auto' }}>
+        <Table striped sortable unstackable compact singleLine textAlign="left">
+          <PsychSheetHeader
+            selectedEvent={selectedEvent}
+            sortedColumn={sortedBy}
+            onColumnClick={setSortedBy}
+            hideAverage={eventIsMbf}
+          />
+          <PsychSheetBody
+            registrations={rankings}
+            selectedEvent={selectedEvent}
+            userId={userId}
+            userRowRef={userRowRef}
+            hideAverage={eventIsMbf}
+          />
+          <PsychSheetFooter
+            registrations={rankings}
+            hideAverage={eventIsMbf}
+          />
+        </Table>
+      </div>
     </>
   );
 }

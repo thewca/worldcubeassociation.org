@@ -1,24 +1,56 @@
 import React from 'react';
-import WcaSearch from '../../../SearchWidget/WcaSearch';
+import { FormField, FormGroup, Radio } from 'semantic-ui-react';
+import { IdWcaSearch } from '../../../SearchWidget/WcaSearch';
 import SEARCH_MODELS from '../../../SearchWidget/SearchModel';
 import useInputState from '../../../../lib/hooks/useInputState';
-import AnonymizationTicketWorkbench from '../../../Tickets/TicketWorkbenches/AnonymizationTicketWorkbench';
+import AnonymizationTicketWorkbenchForWrt from '../../../Tickets/TicketWorkbenches/AnonymizationTicketWorkbenchForWrt';
+
+const AVAILABLE_MODELS = [
+  {
+    id: SEARCH_MODELS.user,
+    name: 'User',
+  },
+  {
+    id: SEARCH_MODELS.person,
+    name: 'Person',
+  },
+];
 
 export default function AnonymizationScriptPage() {
-  const [user, setUser] = useInputState();
+  const [activeModelIndex, setActiveModelIndex] = useInputState(0);
+  const [searchInput, setSearchInput] = useInputState();
+  const activeModel = AVAILABLE_MODELS[activeModelIndex];
+
+  const modelSelectHandler = (_, { value: selectedModelIndex }) => {
+    setActiveModelIndex(selectedModelIndex);
+    setSearchInput(null);
+  };
 
   return (
     <>
-      <WcaSearch
-        label="Enter the user to anonymize"
-        model={SEARCH_MODELS.user}
+      <FormGroup grouped>
+        <div>Select where to search for</div>
+        {AVAILABLE_MODELS.map((model, index) => (
+          <FormField key={model.id}>
+            <Radio
+              label={model.name}
+              value={index}
+              checked={activeModelIndex === index}
+              onChange={modelSelectHandler}
+            />
+          </FormField>
+        ))}
+      </FormGroup>
+      <IdWcaSearch
+        label={`Search ${activeModel.name}`}
+        model={activeModel.id}
         multiple={false}
-        value={user}
-        onChange={setUser}
+        value={searchInput}
+        onChange={setSearchInput}
       />
-      <AnonymizationTicketWorkbench
-        userId={user?.id}
-        wcaId={user?.item?.wca_id}
+      <AnonymizationTicketWorkbenchForWrt
+        userId={activeModel.id === SEARCH_MODELS.user ? searchInput : null}
+        wcaId={activeModel.id === SEARCH_MODELS.person ? searchInput : null}
       />
     </>
   );

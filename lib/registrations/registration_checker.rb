@@ -32,7 +32,7 @@ module Registrations
       validate_comment!(comment, competition, registration)
       validate_organizer_fields!(update_request, current_user, competition)
       validate_organizer_comment!(update_request)
-      validate_waiting_list_position!(waiting_list_position, competition) unless waiting_list_position.nil?
+      validate_waiting_list_position!(waiting_list_position, competition, registration) unless waiting_list_position.nil?
       validate_update_status!(new_status, competition, current_user, target_user, registration, events) unless new_status.nil?
       validate_update_events!(events, competition) unless events.nil?
       validate_qualifications!(update_request, competition, target_user) unless events.nil?
@@ -160,7 +160,11 @@ module Registrations
           !organizer_comment.nil? && organizer_comment.length > COMMENT_CHARACTER_LIMIT
       end
 
-      def validate_waiting_list_position!(waiting_list_position, competition)
+      def validate_waiting_list_position!(waiting_list_position, competition, registration)
+        # User must be on the wating list
+        raise WcaExceptions::RegistrationError.new(:unprocessable_entity, Registrations::ErrorCodes::INVALID_REQUEST_DATA) unless
+         registration.competing_status == Registrations::Helper::STATUS_WAITING_LIST
+
         # Floats are not allowed
         raise WcaExceptions::RegistrationError.new(:unprocessable_entity, Registrations::ErrorCodes::INVALID_WAITING_LIST_POSITION) if waiting_list_position.is_a? Float
 
@@ -182,11 +186,24 @@ module Registrations
       def validate_update_status!(new_status, competition, current_user, target_user, registration, events)
         raise WcaExceptions::RegistrationError.new(:unprocessable_entity, Registrations::ErrorCodes::INVALID_REQUEST_DATA) unless
           Registration.competing_statuses.include?(new_status)
-        raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::COMPETITOR_LIMIT_REACHED) if
-          new_status == Registrations::Helper::STATUS_ACCEPTED && competition.competitor_limit_enabled? &&
-          competition.registrations.accepted.count >= competition.competitor_limit
         raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::ALREADY_REGISTERED_IN_SERIES) if
           new_status == Registrations::Helper::STATUS_ACCEPTED && existing_registration_in_series?(competition, target_user)
+
+        if new_status == Registrations::Helper::STATUS_ACCEPTED && competition.competitor_limit_enabled?
+          raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::COMPETITOR_LIMIT_REACHED) if
+            competition.registrations.competing_status_accepted.count >= competition.competitor_limit
+
+          if competition.enforce_newcomer_month_reservations? && !target_user.newcomer_month_eligible?
+            available_spots = competition.competitor_limit - competition.registrations.competing_status_accepted.count
+
+            # There are a limited number of "reserved" spots for newcomer_month_eligible competitions
+            # We know that there are _some_ available_spots in the comp available, because we passed the competitor_limit check above
+            # However, we still don't know how many of the reserved spots have been taken up by newcomers, versus how many "general" spots are left
+            # For a non-newcomer to be accepted, there need to be more spots available than spots still reserved for newcomers
+            raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::NO_UNRESERVED_SPOTS_REMAINING) unless
+              available_spots > competition.newcomer_month_reserved_spots_remaining
+          end
+        end
 
         # Otherwise, organizers can make any status change they want to
         return if current_user.can_manage_competition?(competition)

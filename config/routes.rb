@@ -60,7 +60,6 @@ Rails.application.routes.draw do
   post 'users/:id/avatar' => 'users#upload_avatar'
   patch 'users/:id/avatar' => 'users#update_avatar'
   delete 'users/:id/avatar' => 'users#delete_avatar'
-  post 'users/:id/anonymize' => 'users#anonymize', as: :anonymize_user
   get 'admin/avatars/pending' => 'admin/avatars#pending_avatar_users', as: :pending_avatars
   post 'admin/avatars' => 'admin/avatars#update_avatar', as: :admin_update_avatar
 
@@ -213,10 +212,13 @@ Rails.application.routes.draw do
     get 'generate-data-exports' => 'admin#generate_exports', as: :admin_generate_exports
     get 'fix-results' => 'admin#fix_results', as: :admin_fix_results
     get 'merge-profiles' => 'admin#merge_people', as: :admin_merge_people
-    get 'anonymize-person' => 'admin#anonymize_person', as: :admin_anonymize_person
     get 'reassign-connected-wca-id' => 'admin#reassign_wca_id', as: :admin_reassign_wca_id
   end
   get 'panel-page/:id' => 'panel#panel_page', as: :panel_page
+  scope 'tickets' do
+    get 'details_before_anonymization' => 'tickets#details_before_anonymization', as: :tickets_details_before_anonymization
+    post 'anonymize' => 'tickets#anonymize', as: :tickets_anonymize
+  end
   resources :tickets, only: [:index, :show] do
     post 'update_status' => 'tickets#update_status', as: :update_status
     get 'edit_person_validators' => 'tickets#edit_person_validators', as: :edit_person_validators
@@ -309,7 +311,6 @@ Rails.application.routes.draw do
   get '/admin/complete_persons' => 'admin#complete_persons'
   post '/admin/complete_persons' => 'admin#do_complete_persons'
   get '/admin/peek_unfinished_results' => 'admin#peek_unfinished_results'
-  post '/admin/anonymize_person' => 'admin#do_anonymize_person', as: :admin_do_anonymize_person
   get '/admin/validate_reassign_wca_id' => 'admin#validate_reassign_wca_id', as: :admin_validate_reassign_wca_id
   post '/admin/reassign_wca_id' => 'admin#do_reassign_wca_id', as: :admin_do_reassign_wca_id
 
@@ -403,7 +404,8 @@ Rails.application.routes.draw do
       get '/persons/:wca_id/results' => "persons#results", as: :person_results
       get '/persons/:wca_id/competitions' => "persons#competitions", as: :person_competitions
       get '/persons/:wca_id/personal_records' => "persons#personal_records", as: :personal_records
-      get '/geocoding/search' => 'geocoding#get_location_from_query', as: :geocoding_search
+      get '/geocoding/search' => 'geocoding#location_from_query', as: :geocoding_search
+      get '/geocoding/time_zone' => 'geocoding#time_zone_from_coordinates', as: :geocoding_time_zone
       get '/countries' => 'api#countries'
       get '/records' => "api#records"
       get '/results/:user_id/qualification_data' => 'api#user_qualification_data', as: :user_qualification_data

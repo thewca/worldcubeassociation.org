@@ -61,6 +61,8 @@ class User < ApplicationRecord
   has_many :user_avatars, dependent: :destroy, inverse_of: :user
 
   scope :confirmed_email, -> { where.not(confirmed_at: nil) }
+  scope :newcomers, -> { where(wca_id: nil) }
+  scope :newcomer_month_eligible, -> { newcomers.or(where('wca_id LIKE ?', "#{Time.current.year}%")) }
 
   scope :in_region, lambda { |region_id|
     unless region_id.blank? || region_id == 'all'
@@ -69,10 +71,10 @@ class User < ApplicationRecord
   }
 
   ANONYMOUS_ACCOUNT_EMAIL_ID_SUFFIX = '@worldcubeassociation.org'
-  ANONYMOUS_ACCOUNT_NAME = 'Anonymous'
-  ANONYMOUS_ACCOUNT_DOB = '1954-12-04'
-  ANONYMOUS_ACCOUNT_GENDER = 'o'
-  ANONYMOUS_ACCOUNT_COUNTRY_ISO2 = 'US'
+  ANONYMOUS_NAME = 'Anonymous'
+  ANONYMOUS_DOB = '1954-12-04'
+  ANONYMOUS_GENDER = 'o'
+  ANONYMOUS_COUNTRY_ISO2 = 'US'
 
   def self.eligible_voters
     [
@@ -397,6 +399,10 @@ class User < ApplicationRecord
     Country.find_by_iso2(country_iso2)
   end
 
+  def newcomer_month_eligible?
+    person.nil? || wca_id.start_with?(Time.current.year.to_s)
+  end
+
   def locale
     preferred_locale || I18n.default_locale
   end
@@ -659,7 +665,6 @@ class User < ApplicationRecord
       :generateDataExports,
       :fixResults,
       :mergeProfiles,
-      :anonymizePerson,
       :reassignConnectedWcaId,
     ].index_with { |panel_page| panel_page.to_s.underscore.dasherize }
   end
@@ -678,7 +683,7 @@ class User < ApplicationRecord
         pages: panel_pages.values,
       },
       staff: {
-        name: 'Staff panel',
+        name: 'Volunteer panel',
         pages: [],
       },
       delegate: {
@@ -719,7 +724,6 @@ class User < ApplicationRecord
           panel_pages[:generateDataExports],
           panel_pages[:fixResults],
           panel_pages[:mergeProfiles],
-          panel_pages[:anonymizePerson],
           panel_pages[:reassignConnectedWcaId],
         ],
       },
@@ -1495,5 +1499,56 @@ class User < ApplicationRecord
 
   def location
     highest_delegate_role&.metadata&.location
+  end
+
+  def anonymization_checks_with_message_args
+    access_grants = oauth_access_grants
+                    .where.not(revoked_at: nil)
+                    .map do |access_grant|
+                      access_grant.as_json(
+                        include: {
+                          application: {
+                            only: [:name, :redirect_uri],
+                            include: {
+                              owner: {
+                                only: [:name, :email],
+                              },
+                            },
+                          },
+                        },
+                      )
+                    end
+
+    [
+      {
+        user_currently_banned: banned?,
+        user_banned_in_past: banned_in_past?,
+        user_may_have_forum_account: true,
+        user_has_active_oauth_access_grants: access_grants.any?,
+      },
+      {
+        access_grants: access_grants,
+        oauth_applications: oauth_applications,
+      },
+    ]
+  end
+
+  def anonymize
+    skip_reconfirmation!
+    update(
+      email: id.to_s + User::ANONYMOUS_ACCOUNT_EMAIL_ID_SUFFIX,
+      name: User::ANONYMOUS_NAME,
+      unconfirmed_wca_id: nil,
+      delegate_id_to_handle_wca_id_claim: nil,
+      dob: User::ANONYMOUS_DOB,
+      gender: User::ANONYMOUS_GENDER,
+      current_sign_in_ip: nil,
+      last_sign_in_ip: nil,
+      # If the account associated with the WCA ID is a special account (delegate, organizer,
+      # team member) then we want to keep the link between the Person and the account.
+      wca_id: is_special_account? ? new_wca_id : nil,
+      current_avatar_id: is_special_account? ? nil : current_avatar_id,
+      country_iso2: is_special_account? ? country_iso2 : nil,
+    )
   end
 end

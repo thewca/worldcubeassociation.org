@@ -7,7 +7,9 @@ FactoryBot.define do
     guests { 10 }
     comments { "" }
     created_at { Time.now }
+    registered_at { Time.now }
     administrative_notes { "" }
+
     transient do
       # TODO: Consider refactoring registration event definitions to be less reliant on hardcoded event IDs?
       event_ids { ['333', '333oh'] }
@@ -42,6 +44,10 @@ FactoryBot.define do
       association :user, factory: [:user]
     end
 
+    trait :newcomer_month_eligible do
+      association :user, factory: [:user, :current_year_wca_id]
+    end
+
     trait :paid do
       after(:create) do |registration|
         FactoryBot.create(
@@ -49,6 +55,17 @@ FactoryBot.define do
           registration: registration,
           user: registration.user,
           amount_lowest_denomination: registration.competition.base_entry_fee_lowest_denomination,
+        )
+      end
+    end
+
+    trait :overpaid do
+      after(:create) do |registration|
+        FactoryBot.create(
+          :registration_payment,
+          registration: registration,
+          user: registration.user,
+          amount_lowest_denomination: registration.competition.base_entry_fee_lowest_denomination * 2,
         )
       end
     end
@@ -64,6 +81,32 @@ FactoryBot.define do
       end
     end
 
+    trait :refunded do
+      after(:create) do |registration|
+        FactoryBot.create(
+          :registration_payment,
+          registration: registration,
+          user: registration.user,
+          amount_lowest_denomination: registration.competition.base_entry_fee_lowest_denomination.round,
+        )
+
+        FactoryBot.create(
+          :registration_payment,
+          registration: registration,
+          user: registration.user,
+          amount_lowest_denomination: -registration.competition.base_entry_fee_lowest_denomination,
+        )
+      end
+    end
+
+    trait :paid_no_hooks do
+      after(:create) do |registration|
+        payment = FactoryBot.build :registration_payment, registration: registration, user: registration.user,
+                                                          amount_lowest_denomination: registration.competition.base_entry_fee_lowest_denomination
+        payment.save(validate: false)
+      end
+    end
+
     trait :unpaid do
       after(:create) do |registration|
         FactoryBot.create :registration_payment, registration: registration, user: registration.user
@@ -76,7 +119,7 @@ FactoryBot.define do
     end
 
     after(:create) do |registration|
-      registration.competition.waiting_list.add(registration.id) if registration.competing_status == Registrations::Helper::STATUS_WAITING_LIST
+      registration.competition.waiting_list.add(registration) if registration.competing_status == Registrations::Helper::STATUS_WAITING_LIST
     end
   end
 end

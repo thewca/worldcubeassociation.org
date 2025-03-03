@@ -3,6 +3,12 @@ resource "aws_cloudwatch_log_group" "this" {
 }
 
 locals {
+  sidekiq_environment = [
+    {
+      "name" = "ECS_CONTAINER_STOP_TIMEOUT"
+      "value" = "305"
+    },
+  ]
   rails_environment = [
     {
       name  = "WCA_LIVE_SITE"
@@ -53,19 +59,7 @@ locals {
       value = aws_s3_bucket.storage-bucket.id
     },
     {
-      name = "STORAGE_AWS_REGION"
-      value = var.region
-    },
-    {
-      name = "VAULT_AWS_REGION"
-      value = var.region
-    },
-    {
-      name = "S3_AVATARS_REGION"
-      value = var.region
-    },
-    {
-      name = "DATABASE_AWS_REGION"
+      name = "AWS_REGION"
       value = var.region
     },
     {

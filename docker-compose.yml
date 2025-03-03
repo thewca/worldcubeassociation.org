@@ -47,9 +47,9 @@ services:
     restart: no
     depends_on:
       wca_db:
-        condition: 'service_healthy'
+        condition: "service_healthy"
       wca_redis:
-        condition: 'service_started'
+        condition: "service_started"
 
   wca_on_rails:
     <<: *app
@@ -96,7 +96,7 @@ services:
 
   wca_sidekiq:
     <<: *app
-    container_name: 'sidekiq'
+    container_name: "sidekiq"
     environment:
       <<: *appEnv
       # Cronjobs are disabled in development by default. If you wish to run cronjobs,

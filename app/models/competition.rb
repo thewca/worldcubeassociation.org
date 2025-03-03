@@ -119,6 +119,7 @@ class Competition < ApplicationRecord
     competitor_limit_enabled
     competitor_limit
     competitor_limit_reason
+    auto_close_threshold
     forbid_newcomers
     forbid_newcomers_reason
     guests_enabled
@@ -176,6 +177,7 @@ class Competition < ApplicationRecord
     event_change_deadline_date
     competition_series_id
     registration_version
+    newcomer_month_reserved_spots
   ).freeze
   VALID_NAME_RE = /\A([-&.:' [:alnum:]]+) (\d{4})\z/
   VALID_ID_RE = /\A[a-zA-Z0-9]+\Z/
@@ -192,6 +194,9 @@ class Competition < ApplicationRecord
   MAX_MARKDOWN_LENGTH = 255
   MAX_COMPETITOR_LIMIT = 5000
   MAX_GUEST_LIMIT = 100
+  NEWCOMER_MONTH_ENABLED = true
+  NEWCOMER_MONTH_RESERVATIONS_FRACTION = 0.5
+
   validates_inclusion_of :competitor_limit_enabled, in: [true, false], if: :competitor_limit_required?
   validates_numericality_of :competitor_limit, greater_than_or_equal_to: 1, less_than_or_equal_to: MAX_COMPETITOR_LIMIT, if: :competitor_limit_enabled?
   validates :competitor_limit_reason, presence: true, if: :competitor_limit_enabled?
@@ -245,6 +250,27 @@ class Competition < ApplicationRecord
   validates :venueAddress, :venueDetails, :name_reason, :forbid_newcomers_reason, length: { maximum: MAX_FREETEXT_LENGTH }
   validates :external_website, :external_registration_page, length: { maximum: MAX_URL_LENGTH }
   validates :contact, length: { maximum: MAX_MARKDOWN_LENGTH }
+
+  validate :validate_newcomer_month_reserved_spots, if: -> { competitor_limit.present? && newcomer_month_reserved_spots.present? }
+  private def validate_newcomer_month_reserved_spots
+    max_newcomer_spots = (competitor_limit * NEWCOMER_MONTH_RESERVATIONS_FRACTION).floor
+    errors.add(:newcomer_month_reserved_spots, I18n.t('competitions.errors.newcomer_month_reservations_percentage')) if
+      newcomer_month_reserved_spots > max_newcomer_spots
+    errors.add(:newcomer_month_reserved_spots, I18n.t('competitions.errors.newcomer_month_reservations_available')) if
+      newcomer_month_reserved_spots > newcomer_month_spots_reservable
+  end
+
+  def enforce_newcomer_month_reservations?
+    newcomer_month_reserved_spots.present? && newcomer_month_reserved_spots > 0 && NEWCOMER_MONTH_ENABLED
+  end
+
+  def newcomer_month_spots_reservable
+    competitor_limit - (registrations.accepted_count - registrations.newcomer_month_eligible_competitors_count)
+  end
+
+  def newcomer_month_reserved_spots_remaining
+    newcomer_month_reserved_spots - registrations.newcomer_month_eligible_competitors_count
+  end
 
   # Dirty old trick to deal with competition id changes (see other methods using
   # 'with_old_id' for more details).
@@ -318,6 +344,19 @@ class Competition < ApplicationRecord
   private def must_have_at_least_one_event
     if no_events?
       errors.add(:competition_events, I18n.t('competitions.errors.must_contain_event'))
+    end
+  end
+
+  # We check for `present?` specifically so that a value of 0 will return true, and trigger the validation
+  validate :auto_close_threshold_validations, if: -> { auto_close_threshold.present? }
+  private def auto_close_threshold_validations
+    errors.add(:auto_close_threshold, I18n.t('competitions.errors.auto_close_positive_nonzero')) unless auto_close_threshold > 0
+    if auto_close_threshold != 0
+      errors.add(:auto_close_threshold, I18n.t('competitions.errors.use_wca_registration')) unless use_wca_registration
+      errors.add(:auto_close_threshold, I18n.t('competitions.errors.must_exceed_competitor_limit')) if
+        competitor_limit.present? && auto_close_threshold <= competitor_limit
+      errors.add(:auto_close_threshold, I18n.t('competitions.errors.auto_close_exceed_paid')) if
+        will_save_change_to_auto_close_threshold? && auto_close_threshold <= registrations.with_payments.count
     end
   end
 
@@ -2376,6 +2415,8 @@ class Competition < ApplicationRecord
         "enabled" => competitor_limit_enabled,
         "count" => competitor_limit,
         "reason" => competitor_limit_reason,
+        "autoCloseThreshold" => auto_close_threshold,
+        "newcomerMonthReservedSpots" => newcomer_month_reserved_spots,
       },
       "staff" => {
         "staffDelegateIds" => staff_delegates.to_a.pluck(:id),
@@ -2483,6 +2524,8 @@ class Competition < ApplicationRecord
         "enabled" => errors[:competitor_limit_enabled],
         "count" => errors[:competitor_limit],
         "reason" => errors[:competitor_limit_reason],
+        "autoCloseThreshold" => errors[:auto_close_threshold],
+        "newcomer_month_reserved_spots" => errors[:newcomer_month_reserved_spots],
       },
       "staff" => {
         "staffDelegateIds" => errors[:staff_delegate_ids],
@@ -2624,6 +2667,8 @@ class Competition < ApplicationRecord
       competitor_limit_enabled: form_data.dig('competitorLimit', 'enabled'),
       competitor_limit: form_data.dig('competitorLimit', 'count'),
       competitor_limit_reason: form_data.dig('competitorLimit', 'reason'),
+      auto_close_threshold: form_data.dig('competitorLimit', 'autoCloseThreshold'),
+      newcomer_month_reserved_spots: form_data.dig('competitorLimit', 'newcomerMonthReservedSpots'),
       extra_registration_requirements: form_data.dig('registration', 'extraRequirements'),
       on_the_spot_registration: form_data.dig('registration', 'allowOnTheSpot'),
       on_the_spot_entry_fee_lowest_denomination: form_data.dig('entryFees', 'onTheSpotEntryFee'),
@@ -2767,6 +2812,8 @@ class Competition < ApplicationRecord
             "enabled" => { "type" => ["boolean", "null"] },
             "count" => { "type" => ["integer", "null"] },
             "reason" => { "type" => ["string", "null"] },
+            "autoCloseThreshold" => { "type" => ["integer", "null"] },
+            "newcomerMonthReservedSpots" => { "type" => ["integer", "null"] },
           },
         },
         "staff" => {
@@ -2893,5 +2940,19 @@ class Competition < ApplicationRecord
         },
       },
     }
+  end
+
+  def fully_paid_registrations_count
+    registrations
+      .joins(:registration_payments)
+      .group('registrations.id')
+      .having('SUM(registration_payments.amount_lowest_denomination) >= ?', base_entry_fee_lowest_denomination)
+      .count.size # .count changes the AssociationRelation into a hash, and then .size gives the number of items in the hash
+  end
+
+  def attempt_auto_close!
+    return false if auto_close_threshold.nil?
+    threshold_reached = fully_paid_registrations_count >= auto_close_threshold && auto_close_threshold > 0
+    threshold_reached && update(closing_full_registration: true, registration_close: Time.now)
   end
 end
