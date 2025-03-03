@@ -339,9 +339,6 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
               onUnselect={selectedIds.remove}
               onToggle={selectedIds.toggle}
               competition_id={competitionInfo.id}
-              changeSortColumn={changeSortColumn}
-              sortDirection={sortDirection}
-              sortColumn={sortColumn}
               competitionInfo={competitionInfo}
               color={PENDING_COLOR}
               distinguishPaidUnpaid
@@ -378,9 +375,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
               onUnselect={selectedIds.remove}
               onToggle={selectedIds.toggle}
               competition_id={competitionInfo.id}
-              changeSortColumn={changeSortColumn}
-              sortDirection={sortDirection}
-              sortColumn={sortColumn}
+              initialSortColumn="waiting_list_position"
               competitionInfo={competitionInfo}
               registrations={waiting.toSorted(
                 (a, b) => a.competing.waiting_list_position - b.competing.waiting_list_position,
@@ -425,9 +420,6 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
             onUnselect={selectedIds.remove}
             onToggle={selectedIds.toggle}
             competition_id={competitionInfo.id}
-            changeSortColumn={changeSortColumn}
-            sortDirection={sortDirection}
-            sortColumn={sortColumn}
             competitionInfo={competitionInfo}
             color={APPROVED_COLOR}
           />
@@ -460,9 +452,6 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
               onUnselect={selectedIds.remove}
               onToggle={selectedIds.toggle}
               competition_id={competitionInfo.id}
-              changeSortColumn={changeSortColumn}
-              sortDirection={sortDirection}
-              sortColumn={sortColumn}
               competitionInfo={competitionInfo}
               color={CANCELLED_COLOR}
             />
@@ -496,9 +485,6 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
               onUnselect={selectedIds.remove}
               onToggle={selectedIds.toggle}
               competition_id={competitionInfo.id}
-              changeSortColumn={changeSortColumn}
-              sortDirection={sortDirection}
-              sortColumn={sortColumn}
               competitionInfo={competitionInfo}
               color={REJECTED_COLOR}
             />

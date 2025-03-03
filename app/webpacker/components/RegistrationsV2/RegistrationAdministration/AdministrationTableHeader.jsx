@@ -9,7 +9,7 @@ export default function TableHeader({
   onCheckboxChanged,
   sortDirection,
   sortColumn,
-  changeSortColumn,
+  onColumnClick,
   competitionInfo,
   withCheckbox = true,
   withPosition = false,
@@ -32,27 +32,27 @@ export default function TableHeader({
         <Table.HeaderCell disabled />
         <Table.HeaderCell
           sorted={sortColumn === 'wca_id' ? sortDirection : undefined}
-          onClick={() => changeSortColumn('wca_id')}
+          onClick={() => onColumnClick('wca_id')}
         >
           {I18n.t('common.user.wca_id')}
         </Table.HeaderCell>
         <Table.HeaderCell
           sorted={sortColumn === 'name' ? sortDirection : undefined}
-          onClick={() => changeSortColumn('name')}
+          onClick={() => onColumnClick('name')}
         >
           {I18n.t('delegates_page.table.name')}
         </Table.HeaderCell>
         {dobIsShown && (
           <Table.HeaderCell
             sorted={sortColumn === 'dob' ? sortDirection : undefined}
-            onClick={() => changeSortColumn('dob')}
+            onClick={() => onColumnClick('dob')}
           >
             {I18n.t('activerecord.attributes.user.dob')}
           </Table.HeaderCell>
         )}
         <Table.HeaderCell
           sorted={sortColumn === 'country' ? sortDirection : undefined}
-          onClick={() => changeSortColumn('country')}
+          onClick={() => onColumnClick('country')}
         >
           {I18n.t('common.user.representing')}
         </Table.HeaderCell>
@@ -60,13 +60,13 @@ export default function TableHeader({
           <>
             <Table.HeaderCell
               sorted={sortColumn === 'paid_on_with_registered_on_fallback' ? sortDirection : undefined}
-              onClick={() => changeSortColumn('paid_on_with_registered_on_fallback')}
+              onClick={() => onColumnClick('paid_on_with_registered_on_fallback')}
             >
               {I18n.t('registrations.list.registered.with_stripe')}
             </Table.HeaderCell>
             <Table.HeaderCell
               sorted={sortColumn === 'amount' ? sortDirection : undefined}
-              onClick={() => changeSortColumn('amount')}
+              onClick={() => onColumnClick('amount')}
             >
               {I18n.t('competitions.registration_v2.update.amount')}
             </Table.HeaderCell>
@@ -74,7 +74,7 @@ export default function TableHeader({
         ) : (
           <Table.HeaderCell
             sorted={sortColumn === 'registered_on' ? sortDirection : undefined}
-            onClick={() => changeSortColumn('registered_on')}
+            onClick={() => onColumnClick('registered_on')}
           >
             {I18n.t('registrations.list.registered.without_stripe')}
           </Table.HeaderCell>
@@ -84,7 +84,7 @@ export default function TableHeader({
             <Table.HeaderCell
               key={`event-${eventId}`}
               sorted={sortColumn === eventId ? sortDirection : undefined}
-              onClick={() => changeSortColumn(eventId)}
+              onClick={() => onColumnClick(eventId)}
             >
               <EventIcon id={eventId} size="1em" />
             </Table.HeaderCell>
@@ -92,14 +92,14 @@ export default function TableHeader({
         ) : (
           <Table.HeaderCell
             sorted={sortColumn === 'events' ? sortDirection : undefined}
-            onClick={() => changeSortColumn('events')}
+            onClick={() => onColumnClick('events')}
           >
             {I18n.t('competitions.competition_info.events')}
           </Table.HeaderCell>
         )}
         <Table.HeaderCell
           sorted={sortColumn === 'guests' ? sortDirection : undefined}
-          onClick={() => changeSortColumn('guests')}
+          onClick={() => onColumnClick('guests')}
         >
           {I18n.t(
             'competitions.competition_form.labels.registration.guests_enabled',
@@ -109,7 +109,7 @@ export default function TableHeader({
           <>
             <Table.HeaderCell
               sorted={sortColumn === 'comment' ? sortDirection : undefined}
-              onClick={() => changeSortColumn('comment')}
+              onClick={() => onColumnClick('comment')}
             >
               {I18n.t('activerecord.attributes.registration.comments')}
             </Table.HeaderCell>
