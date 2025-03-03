@@ -1,3 +1,8 @@
 #!/bin/bash -e
-mailcatcher --http-ip=0.0.0.0 --no-quit
+
+if [ "$WCA_LIVE_SITE" == "false" ]; then
+  gem install mailcatcher
+  mailcatcher --http-ip=0.0.0.0 --no-quit
+fi
+
 ./bin/bundle exec sidekiq
