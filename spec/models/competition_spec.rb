@@ -1585,7 +1585,6 @@ RSpec.describe Competition do
     end
   end
 
-<<<<<<< HEAD
   describe "validate auto accept fields" do
     let(:auto_accept_comp) { FactoryBot.build(:competition, :auto_accept) }
     let(:competition) { FactoryBot.create(:competition, use_wca_registration: true) }
