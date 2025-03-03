@@ -5,9 +5,7 @@ import React, {
 import {
   Accordion, Checkbox, Form, Header, Icon, Segment, Sticky,
 } from 'semantic-ui-react';
-import { DateTime } from 'luxon';
 import { getAllRegistrations } from '../api/registration/get/get_registrations';
-import createSortReducer from '../reducers/sortReducer';
 import RegistrationActions from './RegistrationActions';
 import { showMessage, showMessages } from '../Register/RegistrationMessage';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
@@ -16,7 +14,6 @@ import Loading from '../../Requests/Loading';
 import { bulkUpdateRegistrations } from '../api/registration/patch/update_registration';
 import RegistrationAdministrationTable from './RegistrationsAdministrationTable';
 import useCheckboxState from '../../../lib/hooks/useCheckboxState';
-import { countries, WCA_EVENT_IDS } from '../../../lib/wca-data.js.erb';
 import useOrderedSet from '../../../lib/hooks/useOrderedSet';
 import {
   APPROVED_COLOR, APPROVED_ICON,
@@ -25,21 +22,6 @@ import {
   REJECTED_COLOR, REJECTED_ICON,
   WAITLIST_COLOR, WAITLIST_ICON,
 } from '../../../lib/utils/registrationAdmin';
-
-const sortReducer = createSortReducer([
-  'name',
-  'wca_id',
-  'country',
-  'paid_on_with_registered_on_fallback',
-  'registered_on',
-  'amount',
-  'events',
-  'guests',
-  'paid_on',
-  'comment',
-  'dob',
-  ...WCA_EVENT_IDS,
-]);
 
 const partitionRegistrations = (registrations) => registrations.reduce(
   (result, registration) => {
@@ -108,15 +90,6 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
 
   const actionsRef = useRef();
 
-  const [state, dispatchSort] = useReducer(sortReducer, {
-    sortColumn: competitionInfo['using_payment_integrations?']
-      ? 'paid_on_with_registered_on_fallback'
-      : 'registered_on',
-    sortDirection: 'ascending',
-  });
-  const { sortColumn, sortDirection } = state;
-  const changeSortColumn = (name) => dispatchSort({ type: 'CHANGE_SORT', sortColumn: name });
-
   const {
     isLoading: isRegistrationsLoading,
     data: registrations,
@@ -124,6 +97,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
   } = useQuery({
     queryKey: ['registrations-admin', competitionInfo.id],
     queryFn: () => getAllRegistrations(competitionInfo),
+    // select: partitionRegistrations,
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
     staleTime: Infinity,
@@ -162,98 +136,11 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
     },
   });
 
-  const sortedRegistrationsWithUser = useMemo(() => {
-    if (registrations) {
-      const sorted = registrations.toSorted((a, b) => {
-        switch (sortColumn) {
-          case 'name':
-            return a.user.name.localeCompare(b.user.name);
-
-          case 'wca_id': {
-            const aHasAccount = a.user.wca_id !== null;
-            const bHasAccount = b.user.wca_id !== null;
-            if (aHasAccount && !bHasAccount) {
-              return 1;
-            }
-            if (!aHasAccount && bHasAccount) {
-              return -1;
-            }
-            if (!aHasAccount && !bHasAccount) {
-              return a.user.name.localeCompare(b.user.name);
-            }
-            return a.user.wca_id.localeCompare(b.user.wca_id);
-          }
-
-          case 'country':
-            return countries.byIso2[a.user.country.iso2].name
-              .localeCompare(countries.byIso2[b.user.country.iso2].name);
-
-          case 'events':
-            return a.competing.event_ids.length - b.competing.event_ids.length;
-
-          case 'guests':
-            return a.guests - b.guests;
-
-          case 'dob':
-            return DateTime.fromISO(a.user.dob).toMillis()
-              - DateTime.fromISO(b.user.dob).toMillis();
-
-          case 'comment':
-            return a.competing.comment.localeCompare(b.competing.comment);
-
-          case 'registered_on':
-            return DateTime.fromISO(a.competing.registered_on).toMillis()
-              - DateTime.fromISO(b.competing.registered_on).toMillis();
-
-          case 'paid_on_with_registered_on_fallback': {
-            const hasAPaid = a.payment?.has_paid;
-            const hasBPaid = b.payment?.has_paid;
-
-            if (hasAPaid && hasBPaid) {
-              return DateTime.fromISO(a.payment.updated_at).toMillis()
-                - DateTime.fromISO(b.payment.updated_at).toMillis();
-            }
-            if (hasAPaid && !hasBPaid) {
-              return -1;
-            }
-            if (!hasAPaid && hasBPaid) {
-              return 1;
-            }
-            return DateTime.fromISO(a.competing.registered_on).toMillis()
-              - DateTime.fromISO(b.competing.registered_on).toMillis();
-          }
-
-          case 'amount':
-            return a.payment.payment_amount_iso - b.payment.payment_amount_iso;
-
-          case 'waiting_list_position':
-            return a.competing.waiting_list_position - b.competing.waiting_list_position;
-
-          default: {
-            if (WCA_EVENT_IDS.includes(sortColumn)) {
-              const aHasEvent = a.competing.event_ids.includes(sortColumn);
-              const bHasEvent = b.competing.event_ids.includes(sortColumn);
-
-              return Number(bHasEvent) - Number(aHasEvent);
-            }
-
-            return 0;
-          }
-        }
-      });
-      if (sortDirection === 'descending') {
-        return sorted.toReversed();
-      }
-      return sorted;
-    }
-    return [];
-  }, [registrations, sortColumn, sortDirection]);
-
   const {
     waiting, accepted, cancelled, pending, rejected,
   } = useMemo(
-    () => partitionRegistrations(sortedRegistrationsWithUser ?? []),
-    [sortedRegistrationsWithUser],
+    () => partitionRegistrations(registrations ?? []),
+    [registrations],
   );
 
   const selectedIds = useOrderedSet();
