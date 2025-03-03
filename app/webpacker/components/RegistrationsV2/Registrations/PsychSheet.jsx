@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import React from 'react';
 import {
-  Flag, Icon, Segment, Table,
+  Icon, Segment, Table,
 } from 'semantic-ui-react';
 import {
   getPsychSheetForEvent,
@@ -15,6 +15,7 @@ import { getPeopleCounts, getTotals, getUserPositionInfo } from './utils';
 import PreTableInfo from './PreTableInfo';
 import Loading from '../../Requests/Loading';
 import Errored from '../../Requests/Errored';
+import RegionFlag from '../../wca/RegionFlag';
 
 // for consistency with competitors table data, to reuse helper functions
 function mapPsychSheetDate(data) {
@@ -104,25 +105,27 @@ export default function PsychSheet({
         returnerCount={returnerCount}
         onScrollToMeClick={onScrollToMeClick}
       />
-      <Table striped sortable unstackable compact singleLine textAlign="left">
-        <PsychSheetHeader
-          selectedEvent={selectedEvent}
-          sortedColumn={sortedBy}
-          onColumnClick={setSortedBy}
-          hideAverage={eventIsMbf}
-        />
-        <PsychSheetBody
-          registrations={rankings}
-          selectedEvent={selectedEvent}
-          userId={userId}
-          userRowRef={userRowRef}
-          hideAverage={eventIsMbf}
-        />
-        <PsychSheetFooter
-          registrations={rankings}
-          hideAverage={eventIsMbf}
-        />
-      </Table>
+      <div style={{ overflowX: 'auto' }}>
+        <Table striped sortable unstackable compact singleLine textAlign="left">
+          <PsychSheetHeader
+            selectedEvent={selectedEvent}
+            sortedColumn={sortedBy}
+            onColumnClick={setSortedBy}
+            hideAverage={eventIsMbf}
+          />
+          <PsychSheetBody
+            registrations={rankings}
+            selectedEvent={selectedEvent}
+            userId={userId}
+            userRowRef={userRowRef}
+            hideAverage={eventIsMbf}
+          />
+          <PsychSheetFooter
+            registrations={rankings}
+            hideAverage={eventIsMbf}
+          />
+        </Table>
+      </div>
     </>
   );
 }
@@ -217,9 +220,8 @@ function PsychSheetBody({
                 </div>
               </Table.Cell>
               <Table.Cell>
-                <Flag
-                  className={registration.user.country.iso2.toLowerCase()}
-                />
+                <RegionFlag iso2={registration.user.country.iso2} withoutTooltip />
+                {' '}
                 {countries.byIso2[registration.user.country.iso2].name}
               </Table.Cell>
               <Table.Cell textAlign="right">

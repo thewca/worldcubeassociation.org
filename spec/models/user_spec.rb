@@ -540,7 +540,7 @@ RSpec.describe User, type: :model do
     let(:competition) { FactoryBot.create(:competition, :registration_open, :with_organizer, starts: 1.month.from_now) }
     let(:registration) { FactoryBot.create(:registration, :newcomer, competition: competition) }
 
-    it "allows organizers of upcoming competitions to edit newcomer names" do
+    it "allows organizers of upcoming competitions to edit first-timer names" do
       organizer = competition.organizers.first
       expect(organizer.can_edit_user?(registration.user)).to eq true
       expect(organizer.editable_fields_of_user(registration.user).to_a).to eq [:name]
@@ -662,32 +662,6 @@ RSpec.describe User, type: :model do
       competition.allow_registration_edits = true
       competition.event_change_deadline_date = 2.weeks.ago
       expect(competitor.can_edit_registration?(registration)).to be false
-    end
-  end
-
-  describe "can self-delete registration" do
-    let!(:competitor) { FactoryBot.create :user }
-    let!(:competition) { FactoryBot.create :competition, :registration_open }
-    let!(:registration) { FactoryBot.create :registration, user: competitor, competition: competition }
-
-    it "if their registration is pending" do
-      registration.competing_status = Registrations::Helper::STATUS_PENDING
-      competition.allow_registration_self_delete_after_acceptance = false
-      expect(competitor.can_delete_registration?(registration)).to be true
-      competition.allow_registration_self_delete_after_acceptance = true
-      expect(competitor.can_delete_registration?(registration)).to be true
-    end
-
-    it "if their registration is accepted and the competition still allows deletion" do
-      registration.competing_status = Registrations::Helper::STATUS_ACCEPTED
-      competition.allow_registration_self_delete_after_acceptance = true
-      expect(competitor.can_delete_registration?(registration)).to be true
-    end
-
-    it "unless their registration is accepted and the competition does not allow deletion afterwards" do
-      registration.competing_status = Registrations::Helper::STATUS_ACCEPTED
-      competition.allow_registration_self_delete_after_acceptance = false
-      expect(competitor.can_delete_registration?(registration)).to be false
     end
   end
 

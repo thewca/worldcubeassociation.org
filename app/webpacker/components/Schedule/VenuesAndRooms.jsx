@@ -15,7 +15,8 @@ export default function VenuesAndRooms({
   timeZoneCount,
   rooms,
   activeRoomIds,
-  dispatchRooms,
+  updateRooms,
+  toggleRoom,
   setActiveTimeZone,
 }) {
   const venueCount = venues.length;
@@ -23,7 +24,7 @@ export default function VenuesAndRooms({
   const setActiveVenueIndexAndResetRooms = (newVenueIndex) => {
     const newVenues = newVenueIndex > -1 ? [venues[newVenueIndex]] : venues;
     const ids = newVenues.flatMap((venue) => venue.rooms).map((room) => room.id);
-    dispatchRooms({ type: 'reset', ids });
+    updateRooms(ids);
 
     setActiveVenueIndex(newVenueIndex);
   };
@@ -80,12 +81,12 @@ export default function VenuesAndRooms({
               primary
               size="mini"
               content={I18n.t('competitions.schedule.rooms_panel.all')}
-              onClick={() => dispatchRooms({ type: 'reset', ids: rooms.map((room) => room.id) })}
+              onClick={() => updateRooms(rooms.map((room) => room.id))}
             />
             <Button
               size="mini"
               content={I18n.t('competitions.schedule.rooms_panel.none')}
-              onClick={() => dispatchRooms({ type: 'reset' })}
+              onClick={() => updateRooms([])}
             />
             <Button
               toggle
@@ -98,7 +99,7 @@ export default function VenuesAndRooms({
           <RoomSelector
             rooms={rooms}
             activeRoomIds={activeRoomIds}
-            toggleRoom={(id) => dispatchRooms({ type: 'toggle', id })}
+            toggleRoom={toggleRoom}
             setTimeZoneForRoom={setTimeZoneForRoom}
             showTimeZoneButton={showTimeZoneButton}
           />

@@ -1,11 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
-import React, {
-  useMemo,
-  useReducer,
-} from 'react';
-import {
-  Flag, Segment, Table,
-} from 'semantic-ui-react';
+import React, { useMemo, useReducer } from 'react';
+import { Segment, Table } from 'semantic-ui-react';
 import _ from 'lodash';
 import {
   getConfirmedRegistrations,
@@ -19,6 +14,7 @@ import { getPeopleCounts, getTotals, getUserPositionInfo } from './utils';
 import PreTableInfo from './PreTableInfo';
 import Errored from '../../Requests/Errored';
 import Loading from '../../Requests/Loading';
+import RegionFlag from '../../wca/RegionFlag';
 
 const sortReducer = createSortReducer(['name', 'country', 'total']);
 
@@ -100,25 +96,27 @@ export default function Competitors({
         returnerCount={returnerCount}
         onScrollToMeClick={onScrollToMeClick}
       />
-      <Table striped sortable unstackable compact singleLine textAlign="left">
-        <CompetitorsHeader
-          eventIds={eventIds}
-          sortedColumn={sortedColumn}
-          sortedDirection={sortedDirection}
-          onSortableColumnClick={changeSortColumn}
-          onEventColumnClick={onEventClick}
-        />
-        <CompetitorsBody
-          registrations={data}
-          eventIds={eventIds}
-          userId={userId}
-          userRowRef={userRowRef}
-        />
-        <CompetitorsFooter
-          registrations={registrations}
-          eventIds={eventIds}
-        />
-      </Table>
+      <div style={{ overflowX: 'auto' }}>
+        <Table striped sortable unstackable compact singleLine textAlign="left">
+          <CompetitorsHeader
+            eventIds={eventIds}
+            sortedColumn={sortedColumn}
+            sortedDirection={sortedDirection}
+            onSortableColumnClick={changeSortColumn}
+            onEventColumnClick={onEventClick}
+          />
+          <CompetitorsBody
+            registrations={data}
+            eventIds={eventIds}
+            userId={userId}
+            userRowRef={userRowRef}
+          />
+          <CompetitorsFooter
+            registrations={registrations}
+            eventIds={eventIds}
+          />
+        </Table>
+      </div>
     </>
   );
 }
@@ -196,9 +194,8 @@ function CompetitorsBody({
                 </div>
               </Table.Cell>
               <Table.Cell>
-                <Flag
-                  className={registration.user.country.iso2.toLowerCase()}
-                />
+                <RegionFlag iso2={registration.user.country.iso2} withoutTooltip />
+                {' '}
                 {countries.byIso2[registration.user.country.iso2].name}
               </Table.Cell>
               {eventIds.map((id) => (

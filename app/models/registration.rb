@@ -322,6 +322,10 @@ class Registration < ApplicationRecord
     accepted_count + pending.with_payments.count
   end
 
+  def self.newcomer_month_eligible_competitors_count
+    joins(:user).merge(User.newcomer_month_eligible).accepted_count
+  end
+
   # Only run the validations when creating the registration as we don't want user changes
   # to invalidate all the corresponding registrations (e.g. if the user gets banned).
   # Instead the validations should be placed such that they ensure that a user
@@ -389,6 +393,17 @@ class Registration < ApplicationRecord
     events.map do |event|
       competition_event = competition.competition_events.find_by!(event: event)
       registration_competition_events.find_by_competition_event_id(competition_event.id) || registration_competition_events.build(competition_event: competition_event)
+    end
+  end
+
+  def permit_user_cancellation?
+    case competition.competitor_can_cancel.to_sym
+    when :always
+      true
+    when :not_accepted
+      !accepted?
+    when :unpaid
+      paid_entry_fees == 0
     end
   end
 

@@ -512,7 +512,6 @@ en:
       person:
         person1_wca_id: ""
         person2_wca_id: ""
-        person_wca_id: ""
       poll:
         comment: ""
         multiple: ""
@@ -572,6 +571,8 @@ en:
         wca_id: "Your WCA ID"
         dob: "Correct birthdate"
         document: "Document"
+      contact_wrt:
+        wca_id: "WCA ID"
     errors:
       dob_contact:
         dob_invalid: "is misformatted"
@@ -1079,7 +1080,7 @@ en:
         failure: "Couldn't verify your identity"
         confirm_proceed: "Confirm and proceed"
         identity_error: "Cannot edit your data. Please confirm your identity below before trying again."
-    #context: when an error occured during the edition
+    #context: when an error occurred during the edition
     errors:
       not_found: "not found"
       already_assigned: "already assigned to a different user"
@@ -1220,9 +1221,6 @@ en:
         other: "%{count} regions"
       export_csv: "Export to CSV"
       email: "Email"
-      approve: "Approve"
-      waiting_list: "Waiting List"
-      approved_registrations: "Approved registrations"
       non_competing: "Non-competing registrations"
       not_paid: "Not paid"
       registered:
@@ -1637,6 +1635,7 @@ en:
           enabled: "Competitor limit"
           count: "Maximum number of competitors"
           reason: "The reason for the competitor limit"
+          newcomer_month_reserved_spots: "Number of spots to reserve for newcomers"
         staff:
           staff_delegate_ids: "WCA Delegate(s)"
           trainee_delegate_ids: "WCA Trainee Delegate(s)"
@@ -1663,7 +1662,7 @@ en:
           waiting_list_deadline_date: "Deadline for accepting competitors from the waiting list"
           event_change_deadline_date: "Deadline for competitors to update their registered events"
           allow_on_the_spot: "On the spot registrations"
-          allow_self_delete_after_acceptance: "Registration cancellations"
+          competitor_can_cancel: "When can competitors cancel their registrations"
           allow_self_edits: "Registration edits"
           guests_enabled: "Guests"
           guest_entry_status: "Display message for free guest entry"
@@ -1722,6 +1721,7 @@ en:
           enabled: "A Competitor Limit is required. Only simultaneous FMC competitions with multiple locations can have no Competitor Limit."
           count: "The number of competitors allowed in this competition. For now this number is informational only, and does not yet prevent more people from registering. We are working on adding explicit support for this to the registration flow, but it requires some other work first."
           reason: "What is the reason for the limit on competitors? Please fill this out in English!"
+          newcomer_month_reserved_spots: "Only allowed during Newcomer Month - reserved spots can't be more than half of the Competitor Limit."
         staff:
           staff_delegate_ids: "WCA Delegates for the competition."
           trainee_delegate_ids: "WCA Trainee Delegates for the competition."
@@ -1749,7 +1749,7 @@ en:
           waiting_list_deadline_date: "The date when waitlisted registrants will no longer be accepted. If you have a deadline for refunds, the deadline for being accepted should not be before the deadline for refunds."
           event_change_deadline_date: "Registered competitors have the right to update their registered events until this time by contacting the organization team. This deadline must not be set to a time before registration is set to close. Leaving this field blank means that competitors may add an event to their registered events up until that event is held. If you have on the spot registration, this must be set to the same day as the competition."
           allow_on_the_spot: ""
-          allow_self_delete_after_acceptance: ""
+          competitor_can_cancel: ""
           allow_self_edits: ""
           guests_enabled: ""
           guest_entry_status: ""
@@ -1795,9 +1795,10 @@ en:
           allow_self_edits:
             "true": "Competitors may edit their registration until the deadline for updating events"
             "false": "Competitors may NOT edit their registration once it has been accepted"
-          allow_self_delete_after_acceptance:
-            "true": "Competitors may delete their own registration even after it has been accepted"
-            "false": "Competitors may NOT delete their own registration once it has been accepted"
+          competitor_can_cancel:
+            "always": "Always"
+            "not_accepted": "Until they're accepted"
+            "unpaid": "Until they pay"
           guest_entry_status:
             unclear: 'Do not display anything (and perhaps elaborate in the "Extra registration requirements" section)'
             free: '"Any spectator can attend for free"'
@@ -1807,7 +1808,7 @@ en:
             allow_registration_without:
               "true": "Competitors will be allowed to register for events they're not qualified for (I'll remove them later)"
               "false": "Competitors MUST be qualified to register for an event"
-        #context: new registration system
+    #context: new registration system
     registration_v2:
       auto_accept:
         enable: "Enable Auto Accept"
@@ -1822,7 +1823,7 @@ en:
         payment_missing: "Your registration will not be approved until you pay for your registration, unless you have a special arrangement with the organizers or you paid through an alternative method."
         needs_approval: "Don't book your travel arrangements just yet - the organizers still have to manually approve your registration. This can take time."
         is_accepted: "Book your travel and pack your bags - you have a spot at the competition!"
-        is_cancelled: "Your registration has been cancelled and you will not be competing, but you can sign up again"
+        is_cancelled: "Your registration has been cancelled and you will not be competing, but you can sign up again."
         is_rejected: "Your registration has been rejected by the organizers. Please contact the organizing team if you believe this was a mistake."
         is_waitlisted: "Don't book your travel, but don't give up hope either. The competition is full, but you have been placed on a waiting list, and you will receive an email if enough spots open up for you to be able to attend."
       list:
@@ -1831,14 +1832,20 @@ en:
           zero: "no spots remaining"
           one: "%{count} spot remaining"
           other: "%{count} spots remaining"
+        pending:
+          title: "Pending Registrations"
+          information: "Pending should only be used for incomplete (eg, unpaid) registrations - please use the Waiting List if your competition is too full to accept new competitors."
+        waitlist:
+          title: "Waiting List Registrations"
+          skipped_warning: "You've skipped %{count} registration(s) on the Waiting List. Are you sure you want to approve the other registration(s) instead?"
+        approved:
+          title: "Approved Registrations"
         cancelled:
-          title: "Cancelled registrations"
+          title: "Cancelled Registrations"
           information: "Cancelled competitors are allowed to register again."
         rejected:
-          title: "Rejected registrations"
+          title: "Rejected Registrations"
           information: "Rejected competitors cannot re-register."
-        pending:
-          information: "Pending should only be used for incomplete (eg, unpaid) registrations - please use the Waiting List if your competition is too full to accept new competitors."
         payment:
          refunded_status: "Refunded"
          initialized: "Payment process was started on %{date}, but not finished."
@@ -1866,10 +1873,15 @@ en:
         email_send: "Send Email"
         email_copy: "Copy Emails"
         email_message: "Copied to clipboard. Remember to use bcc!"
-        move_pending: "Move to Pending"
-        move_waiting: "Move to Waiting List"
-        cancel: "Cancel Registration"
-        reject: "Reject Registration"
+        move_to:
+          zero: "Move to"
+          one: "Move %{count} to"
+          other: "Move %{count} to"
+        pending: "Pending"
+        waitlist: "Waiting List"
+        approved: "Approved"
+        cancelled: "Cancelled"
+        rejected: "Rejected"
         amount: "Amount"
         too_many: "Accepting all these registrations would go over the competitor limit by %{count}"
         no_self_update: "Contact the Organization Team to update your registration."
@@ -1937,10 +1949,12 @@ en:
         -4010: "The Waiting List Position is not Valid"
         -4011: "You can only accept the first person on the waiting list"
         -4012: "You are not qualified to compete in the selected events"
+        -4013: "Cant accept non-newcomer when only reserved newcomer spots remain"
         -4014: "You are already registered for this competition."
+        -4015: "Please enter a reasonable amount of guests, or contact the organizers if you need to bring an extraordinary amount of guests."
         -6001: "WCA Payment is not enabled for this competition"
         -6002: "You need to finish your registration before you can pay"
-    #context: and when an error occured
+    #context: and when an error occurred
     errors:
       cant_load_competition_info: "Failed to load competition information - please retry or contact WST if this error persists."
       must_use_wca_registration: "Auto-accept can only be used if you are using the WCA website for registrations"
@@ -1948,6 +1962,8 @@ en:
       auto_accept_not_negative: "Limit for auto-accepted registrations cannot be less than 0."
       auto_accept_accept_paid_pending: "Cant enable auto-accept if there are paid-pending registrations - either accept them or move them to the waiting list"
       auto_accept_accept_waitlisted: "Cant enable auto-accept - please accept as many users from the Waiting List as possible."
+      newcomer_month_reservations_percentage: 'cant reserve more than 50% of spots for newcomers'
+      newcomer_month_reservations_available: 'Desired newcomer month reserved spots exceeds number of spots reservable'
       invalid_name_message: "must end with a year and must contain only alphanumeric characters, dashes(-), ampersands(&), periods(.), colons(:), apostrophes('), and spaces( )"
       cannot_manage: "Cannot manage competition."
       cannot_delete_public: "Cannot delete a competition that is publicly visible."

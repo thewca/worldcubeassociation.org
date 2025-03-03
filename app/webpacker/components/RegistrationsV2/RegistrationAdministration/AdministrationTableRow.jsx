@@ -1,9 +1,9 @@
 import {
-  Checkbox, Flag, Icon, Popup, Ref, Table,
+  Checkbox, Icon, Popup, Ref, Table,
 } from 'semantic-ui-react';
 import React from 'react';
 import { Draggable } from 'react-beautiful-dnd';
-import { setMessage } from '../Register/RegistrationMessage';
+import { showMessage } from '../Register/RegistrationMessage';
 import I18n from '../../../lib/i18n';
 import {
   getRegistrationTimestamp,
@@ -13,6 +13,7 @@ import EventIcon from '../../wca/EventIcon';
 import { editRegistrationUrl, editPersonUrl, personUrl } from '../../../lib/requests/routes.js.erb';
 import { isoMoneyToHumanReadable } from '../../../lib/helpers/money';
 import { countries } from '../../../lib/wca-data.js.erb';
+import RegionFlag from '../../wca/RegionFlag';
 
 // Semantic Table only allows truncating _all_ columns in a table in
 // single line fixed mode. As we only want to truncate the comment/admin notes
@@ -66,15 +67,27 @@ export default function TableRow({
   competitionInfo,
   index,
   draggable = false,
+  withPosition = false,
+  color,
+  distinguishPaidUnpaid = false,
 }) {
   const {
-    dob, region, events, comments, email, timestamp,
+    dob: dobIsShown,
+    region: regionIsExpanded,
+    events: eventsAreExpanded,
+    comments: commentsAreShown,
+    email: emailIsExpanded,
+    timestamp: timestampIsShown,
   } = columnsExpanded;
   const {
     id, wca_id: wcaId, name, country, dob: dateOfBirth, email: emailAddress,
   } = registration.user;
   const {
-    registered_on: registeredOn, event_ids: eventIds, comment, admin_comment: adminComment,
+    registered_on: registeredOn,
+    event_ids: eventIds,
+    comment,
+    admin_comment: adminComment,
+    waiting_list_position: position,
   } = registration.competing;
   const {
     payment_amount_iso: paymentAmount,
@@ -82,11 +95,16 @@ export default function TableRow({
     payment_statuses: paymentStatuses,
     has_paid: hasPaid,
   } = registration.payment ?? {};
+  const usingPayment = competitionInfo['using_payment_integrations?'];
+  const checkboxCellColor = !distinguishPaidUnpaid || !usingPayment || hasPaid
+    ? color
+    : undefined;
 
   const copyEmail = () => {
     navigator.clipboard.writeText(emailAddress);
-    setMessage('Copied email address to clipboard.', 'positive');
+    showMessage('Copied email address to clipboard.', 'positive');
   };
+
   /* eslint-disable react/jsx-props-no-spreading */
   return (
     <Draggable
@@ -103,10 +121,18 @@ export default function TableRow({
             {...provided.draggableProps}
             {...provided.dragHandleProps}
           >
-            <Table.Cell>
+            <Table.Cell className={checkboxCellColor}>
               { /* We manually set the margin to 0 here to fix the table row height */}
-              {draggable ? <Icon name="bars" /> : <Checkbox onChange={onCheckboxChange} checked={isSelected} style={{ margin: 0 }} />}
+              {draggable ? (
+                <Icon name="bars" />
+              ) : (
+                <Checkbox onChange={onCheckboxChange} checked={isSelected} style={{ margin: 0 }} />
+              )}
             </Table.Cell>
+
+            {withPosition && (
+              <Table.Cell>{position}</Table.Cell>
+            )}
 
             <Table.Cell>
               <a href={editRegistrationUrl(id, competitionInfo.id)}>
@@ -127,29 +153,17 @@ export default function TableRow({
 
             <Table.Cell>{name}</Table.Cell>
 
-            {dob && <Table.Cell>{dateOfBirth}</Table.Cell>}
+            {dobIsShown && <Table.Cell>{dateOfBirth}</Table.Cell>}
 
             <Table.Cell>
-              {region ? (
-                <>
-                  <Flag className={country.iso2.toLowerCase()} />
-                  {region && countries.byIso2[country.iso2].name}
-                </>
-              ) : (
-                <Popup
-                  content={countries.byIso2[country.iso2].name}
-                  trigger={(
-                    <span>
-                      <Flag className={country.iso2.toLowerCase()} />
-                    </span>
-            )}
-                />
-              )}
+              <RegionFlag iso2={country.iso2} withoutTooltip={regionIsExpanded} />
+              {' '}
+              {regionIsExpanded && countries.byIso2[country.iso2].name}
             </Table.Cell>
 
             <Table.Cell>
               <RegistrationTime
-                timestamp={timestamp}
+                timestamp={timestampIsShown}
                 paidOn={updatedAt}
                 hasPaid={hasPaid}
                 registeredOn={registeredOn}
@@ -166,7 +180,7 @@ export default function TableRow({
             </Table.Cell>
             )}
 
-            {events ? (
+            {eventsAreExpanded ? (
               competitionInfo.event_ids.map((eventId) => (
                 <Table.Cell key={`event-${eventId}`}>
                   {eventIds.includes(eventId) && (
@@ -188,43 +202,39 @@ export default function TableRow({
                       <Icon name="magnify" />
                     </span>
                   </Table.Cell>
-          )}
+                 )}
               />
 
             )}
 
             <Table.Cell>{registration.guests}</Table.Cell>
 
-            {comments && (
-            <>
-              <Table.Cell>
-                <Popup
-                  content={comment}
-                  trigger={<span>{truncateComment(comment)}</span>}
-                />
-              </Table.Cell>
+            {commentsAreShown && (
+              <>
+                <Table.Cell>
+                  <Popup
+                    content={comment}
+                    trigger={<span>{truncateComment(comment)}</span>}
+                  />
+                </Table.Cell>
 
-              <Table.Cell>
-                <Popup
-                  content={adminComment}
-                  trigger={<span>{truncateComment(adminComment)}</span>}
-                />
-              </Table.Cell>
-            </>
+                <Table.Cell>
+                  <Popup
+                    content={adminComment}
+                    trigger={<span>{truncateComment(adminComment)}</span>}
+                  />
+                </Table.Cell>
+              </>
             )}
 
             <Table.Cell>
               <a href={`mailto:${emailAddress}`}>
-                {email ? (
+                {emailIsExpanded ? (
                   emailAddress
                 ) : (
                   <Popup
                     content={emailAddress}
-                    trigger={(
-                      <span>
-                        <Icon name="mail" />
-                      </span>
-              )}
+                    trigger={<span><Icon name="mail" /></span>}
                   />
                 )}
               </a>

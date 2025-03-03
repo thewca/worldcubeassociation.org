@@ -1585,6 +1585,7 @@ RSpec.describe Competition do
     end
   end
 
+<<<<<<< HEAD
   describe "validate auto accept fields" do
     let(:auto_accept_comp) { FactoryBot.build(:competition, :auto_accept) }
     let(:competition) { FactoryBot.create(:competition, use_wca_registration: true) }
@@ -1636,6 +1637,34 @@ RSpec.describe Competition do
       auto_accept_comp.auto_accept_disable_threshold = -1
       expect(auto_accept_comp).not_to be_valid
       expect(auto_accept_comp.errors[:auto_accept_registrations]).to include("Limit for auto-accepted registrations cannot be less than 0.")
+    end
+  end
+
+  describe 'newcomer month reserved spots' do
+    it 'newcomer reserved spots can be nil' do
+      expect(FactoryBot.build(:competition, newcomer_month_reserved_spots: nil, competitor_limit: 100)).to be_valid
+    end
+
+    it 'can reserve newcomer spots up to 50% of registrations' do
+      expect(FactoryBot.build(:competition, newcomer_month_reserved_spots: 50, competitor_limit: 100)).to be_valid
+    end
+
+    it 'reserved newcomers spots cant exceed 50% of registrations' do
+      expect(FactoryBot.build(:competition, newcomer_month_reserved_spots: 51, competitor_limit: 100)).to be_invalid_with_errors(
+        newcomer_month_reserved_spots: ['cant reserve more than 50% of spots for newcomers'],
+      )
+
+      expect(FactoryBot.build(:competition, newcomer_month_reserved_spots: 50, competitor_limit: 99)).to be_invalid_with_errors(
+        newcomer_month_reserved_spots: ['cant reserve more than 50% of spots for newcomers'],
+      )
+    end
+
+    it 'newcomer_month_reserved_spots cant exceed (competitor limit - non_newcomers)' do
+      comp = FactoryBot.create(:competition, competitor_limit: 10)
+      FactoryBot.create_list(:registration, 6, :accepted, competition: comp)
+      comp.newcomer_month_reserved_spots = 5
+      expect(comp).to be_invalid
+      expect(comp.errors.messages[:newcomer_month_reserved_spots]).to include('Desired newcomer month reserved spots exceeds number of spots reservable')
     end
   end
 end

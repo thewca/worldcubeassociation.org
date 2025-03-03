@@ -42,10 +42,29 @@ FactoryBot.define do
       association :user, factory: [:user]
     end
 
+    trait :newcomer_month_eligible do
+      association :user, factory: [:user, :current_year_wca_id]
+    end
+
     trait :paid do
       after(:create) do |registration|
-        FactoryBot.create :registration_payment, :skip_create_hook, registration: registration, user: registration.user,
-                                                                    amount_lowest_denomination: registration.competition.base_entry_fee_lowest_denomination
+        FactoryBot.create(
+          :registration_payment,
+          registration: registration,
+          user: registration.user,
+          amount_lowest_denomination: registration.competition.base_entry_fee_lowest_denomination,
+        )
+      end
+    end
+
+    trait :partially_paid do
+      after(:create) do |registration|
+        FactoryBot.create(
+          :registration_payment,
+          registration: registration,
+          user: registration.user,
+          amount_lowest_denomination: (registration.competition.base_entry_fee_lowest_denomination / 2.0).round,
+        )
       end
     end
 

@@ -107,7 +107,15 @@ FactoryBot.define do
     end
 
     trait :allow_self_delete do
-      allow_registration_self_delete_after_acceptance { true }
+      competitor_can_cancel { :always }
+    end
+
+    trait :newcomer_month do
+      registration_open
+      with_organizer
+      with_competitor_limit
+      competitor_limit { 4 }
+      newcomer_month_reserved_spots { 2 }
     end
 
     trait :enforces_qualifications do
@@ -231,7 +239,7 @@ FactoryBot.define do
     end
 
     trait :with_guest_limit do
-      guest_entry_status { Competition.guest_entry_statuses['restricted'] }
+      guest_entry_status { :restricted }
       guests_per_registration_limit { 10 }
     end
 

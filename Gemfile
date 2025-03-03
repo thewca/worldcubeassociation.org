@@ -108,6 +108,7 @@ gem 'sidekiq-cron'
 gem 'after_commit_everywhere'
 gem 'slack-ruby-client'
 gem 'puma'
+gem "tzf"
 
 group :development, :test do
   gem 'spring'

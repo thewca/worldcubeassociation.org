@@ -10,6 +10,9 @@ import Loading from '../../Requests/Loading';
 import { getAllRegistrations } from '../api/registration/get/get_registrations';
 import { bulkUpdateRegistrations } from '../api/registration/patch/update_registration';
 import { setMessage } from '../Register/RegistrationMessage';
+import createSortReducer from '../reducers/sortReducer';
+import RegistrationActions from './RegistrationActions';
+import { showMessage, showMessages } from '../Register/RegistrationMessage';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
 import disableAutoAccept from '../api/registration/patch/auto_accept';
 import createSortReducer from '../reducers/sortReducer';
@@ -17,35 +20,15 @@ import RegistrationActions from './RegistrationActions';
 import I18n from '../../../lib/i18n';
 import RegistrationAdministrationTable from './RegistrationsAdministrationTable';
 import useCheckboxState from '../../../lib/hooks/useCheckboxState';
-import { countries } from '../../../lib/wca-data.js.erb';
-
-const selectedReducer = (state, action) => {
-  let newState = [...state];
-
-  const { type, attendee, attendees } = action;
-  const idList = attendees || [attendee];
-
-  switch (type) {
-    case 'add':
-      idList.forEach((id) => {
-        // Make sure no one adds an attendee twice
-        if (!newState.includes(id)) newState.push(id);
-      });
-      break;
-
-    case 'remove':
-      newState = newState.filter((id) => !idList.includes(id));
-      break;
-
-    case 'clear-selected':
-      return [];
-
-    default:
-      throw new Error('Unknown action.');
-  }
-
-  return newState;
-};
+import { countries, WCA_EVENT_IDS } from '../../../lib/wca-data.js.erb';
+import useOrderedSet from '../../../lib/hooks/useOrderedSet';
+import {
+  APPROVED_COLOR, APPROVED_ICON,
+  CANCELLED_COLOR, CANCELLED_ICON,
+  PENDING_COLOR, PENDING_ICON,
+  REJECTED_COLOR, REJECTED_ICON,
+  WAITLIST_COLOR, WAITLIST_ICON,
+} from '../../../lib/utils/registrationAdmin';
 
 const sortReducer = createSortReducer([
   'name',
@@ -53,11 +36,13 @@ const sortReducer = createSortReducer([
   'country',
   'paid_on_with_registered_on_fallback',
   'registered_on',
+  'amount',
   'events',
   'guests',
   'paid_on',
   'comment',
   'dob',
+  ...WCA_EVENT_IDS,
 ]);
 
 const partitionRegistrations = (registrations) => registrations.reduce(
@@ -153,7 +138,7 @@ export default function RegistrationAdministrationList({
     retry: false,
     onError: (err) => {
       const { errorCode } = err;
-      dispatchStore(setMessage(
+      dispatchStore(showMessage(
         errorCode
           ? `competitions.registration_v2.errors.${errorCode}`
           : 'registrations.flash.failed',
@@ -180,9 +165,13 @@ export default function RegistrationAdministrationList({
     mutationFn: bulkUpdateRegistrations,
     onError: (data) => {
       const { error } = data.json;
-      dispatchStore(setMessage(
-        Object.values(error).map((err) => `competitions.registration_v2.errors.${err}`),
-        'negative',
+      dispatchStore(showMessages(
+        Object.values(error).map((err) => (
+          {
+            key: `competitions.registration_v2.errors.${err}`,
+            type: 'negative',
+          }
+        )),
       ));
     },
     onSuccess: async () => {
@@ -200,6 +189,7 @@ export default function RegistrationAdministrationList({
         switch (sortColumn) {
           case 'name':
             return a.user.name.localeCompare(b.user.name);
+
           case 'wca_id': {
             const aHasAccount = a.user.wca_id !== null;
             const bHasAccount = b.user.wca_id !== null;
@@ -214,23 +204,29 @@ export default function RegistrationAdministrationList({
             }
             return a.user.wca_id.localeCompare(b.user.wca_id);
           }
+
           case 'country':
             return countries.byIso2[a.user.country.iso2].name
               .localeCompare(countries.byIso2[b.user.country.iso2].name);
+
           case 'events':
             return a.competing.event_ids.length - b.competing.event_ids.length;
+
           case 'guests':
             return a.guests - b.guests;
+
           case 'dob':
             return DateTime.fromISO(a.user.dob).toMillis()
               - DateTime.fromISO(b.user.dob).toMillis();
+
           case 'comment':
             return a.competing.comment.localeCompare(b.competing.comment);
+
           case 'registered_on':
             return DateTime.fromISO(a.competing.registered_on).toMillis()
               - DateTime.fromISO(b.competing.registered_on).toMillis();
-          case 'paid_on_with_registered_on_fallback':
-          {
+
+          case 'paid_on_with_registered_on_fallback': {
             const hasAPaid = a.payment?.has_paid;
             const hasBPaid = b.payment?.has_paid;
 
@@ -247,10 +243,23 @@ export default function RegistrationAdministrationList({
             return DateTime.fromISO(a.competing.registered_on).toMillis()
               - DateTime.fromISO(b.competing.registered_on).toMillis();
           }
+
+          case 'amount':
+            return a.payment.payment_amount_iso - b.payment.payment_amount_iso;
+
           case 'waiting_list_position':
             return a.competing.waiting_list_position - b.competing.waiting_list_position;
-          default:
+
+          default: {
+            if (WCA_EVENT_IDS.includes(sortColumn)) {
+              const aHasEvent = a.competing.event_ids.includes(sortColumn);
+              const bHasEvent = b.competing.event_ids.includes(sortColumn);
+
+              return Number(bHasEvent) - Number(aHasEvent);
+            }
+
             return 0;
+          }
         }
       });
       if (sortDirection === 'descending') {
@@ -268,20 +277,17 @@ export default function RegistrationAdministrationList({
     [sortedRegistrationsWithUser],
   );
 
-  const [selected, dispatch] = useReducer(selectedReducer, []);
+  const selectedIds = useOrderedSet();
   const partitionedSelected = useMemo(
     () => ({
-      pending: selected.filter((id) => pending.some((reg) => id === reg.user.id)),
-      waiting: selected.filter((id) => waiting.some((reg) => id === reg.user.id)),
-      accepted: selected.filter((id) => accepted.some((reg) => id === reg.user.id)),
-      cancelled: selected.filter((id) => cancelled.some((reg) => id === reg.user.id)),
-      rejected: selected.filter((id) => rejected.some((reg) => id === reg.user.id)),
+      pending: selectedIds.asArray.filter((id) => pending.some((reg) => id === reg.user.id)),
+      waiting: selectedIds.asArray.filter((id) => waiting.some((reg) => id === reg.user.id)),
+      accepted: selectedIds.asArray.filter((id) => accepted.some((reg) => id === reg.user.id)),
+      cancelled: selectedIds.asArray.filter((id) => cancelled.some((reg) => id === reg.user.id)),
+      rejected: selectedIds.asArray.filter((id) => rejected.some((reg) => id === reg.user.id)),
     }),
-    [selected, pending, waiting, accepted, cancelled, rejected],
+    [selectedIds.asArray, pending, waiting, accepted, cancelled, rejected],
   );
-
-  const select = (attendees) => dispatch({ type: 'add', attendees });
-  const unselect = (attendees) => dispatch({ type: 'remove', attendees });
 
   // some sticky/floating bar somewhere with totals/info would be better
   // than putting this in the table headers which scroll out of sight
@@ -332,13 +338,12 @@ export default function RegistrationAdministrationList({
       key: 'pending',
       title: {
         content: (
-          <Header as="span">
-            Pending registrations
-            {' '}
-            (
-            {pending.length}
-            )
-          </Header>
+          <SectionToggle
+            icon={PENDING_ICON}
+            title={I18n.t('competitions.registration_v2.list.pending.title')}
+            inParens={pending.length}
+            color={PENDING_COLOR}
+          />
         ),
       },
       content: {
@@ -351,13 +356,16 @@ export default function RegistrationAdministrationList({
               columnsExpanded={expandedColumns}
               registrations={pending}
               selected={partitionedSelected.pending}
-              select={select}
-              unselect={unselect}
+              onSelect={selectedIds.add}
+              onUnselect={selectedIds.remove}
+              onToggle={selectedIds.toggle}
               competition_id={competitionInfo.id}
               changeSortColumn={changeSortColumn}
               sortDirection={sortDirection}
               sortColumn={sortColumn}
               competitionInfo={competitionInfo}
+              color={PENDING_COLOR}
+              distinguishPaidUnpaid
             />
           </>
         ),
@@ -367,13 +375,12 @@ export default function RegistrationAdministrationList({
       key: 'waitlist',
       title: {
         content: (
-          <Header as="span">
-            {I18n.t('registrations.list.waiting_list')}
-            {' '}
-            (
-            {waiting.length}
-            )
-          </Header>
+          <SectionToggle
+            icon={WAITLIST_ICON}
+            title={I18n.t('competitions.registration_v2.list.waitlist.title')}
+            inParens={waiting.length}
+            color={WAITLIST_COLOR}
+          />
         ),
       },
       content: {
@@ -388,8 +395,9 @@ export default function RegistrationAdministrationList({
             <RegistrationAdministrationTable
               columnsExpanded={expandedColumns}
               selected={partitionedSelected.waiting}
-              select={select}
-              unselect={unselect}
+              onSelect={selectedIds.add}
+              onUnselect={selectedIds.remove}
+              onToggle={selectedIds.toggle}
               competition_id={competitionInfo.id}
               changeSortColumn={changeSortColumn}
               sortDirection={sortDirection}
@@ -401,6 +409,8 @@ export default function RegistrationAdministrationList({
               handleOnDragEnd={handleOnDragEnd}
               draggable={editable}
               sortable={false}
+              withPosition
+              color={WAITLIST_COLOR}
             />
           </>
         ),
@@ -410,19 +420,20 @@ export default function RegistrationAdministrationList({
       key: 'accepted',
       title: {
         content: (
-          <Header as="span">
-            {I18n.t('registrations.list.approved_registrations')}
-            {' '}
-            (
-            {accepted.length}
-            {spotsRemaining !== Infinity && (
-              <>
-                {`/${competitionInfo.competitor_limit}; `}
-                {spotsRemainingText}
-              </>
-            )}
-            )
-          </Header>
+          <SectionToggle
+            icon={APPROVED_ICON}
+            title={I18n.t('competitions.registration_v2.list.approved.title')}
+            inParens={
+              `${
+                accepted.length
+              }${
+                spotsRemaining !== Infinity
+                  ? `/${competitionInfo.competitor_limit}, ${spotsRemainingText}`
+                  : ''
+              }`
+            }
+            color={APPROVED_COLOR}
+          />
         ),
       },
       content: {
@@ -431,13 +442,15 @@ export default function RegistrationAdministrationList({
             columnsExpanded={expandedColumns}
             registrations={accepted}
             selected={partitionedSelected.accepted}
-            select={select}
-            unselect={unselect}
+            onSelect={selectedIds.add}
+            onUnselect={selectedIds.remove}
+            onToggle={selectedIds.toggle}
             competition_id={competitionInfo.id}
             changeSortColumn={changeSortColumn}
             sortDirection={sortDirection}
             sortColumn={sortColumn}
             competitionInfo={competitionInfo}
+            color={APPROVED_COLOR}
           />
         ),
       },
@@ -446,13 +459,12 @@ export default function RegistrationAdministrationList({
       key: 'cancelled',
       title: {
         content: (
-          <Header as="span">
-            {I18n.t('competitions.registration_v2.list.cancelled.title')}
-            {' '}
-            (
-            {cancelled.length}
-            )
-          </Header>
+          <SectionToggle
+            icon={CANCELLED_ICON}
+            title={I18n.t('competitions.registration_v2.list.cancelled.title')}
+            inParens={cancelled.length}
+            color={CANCELLED_COLOR}
+          />
         ),
       },
       content: {
@@ -465,13 +477,15 @@ export default function RegistrationAdministrationList({
               columnsExpanded={expandedColumns}
               registrations={cancelled}
               selected={partitionedSelected.cancelled}
-              select={select}
-              unselect={unselect}
+              onSelect={selectedIds.add}
+              onUnselect={selectedIds.remove}
+              onToggle={selectedIds.toggle}
               competition_id={competitionInfo.id}
               changeSortColumn={changeSortColumn}
               sortDirection={sortDirection}
               sortColumn={sortColumn}
               competitionInfo={competitionInfo}
+              color={CANCELLED_COLOR}
             />
           </>
         ),
@@ -481,13 +495,12 @@ export default function RegistrationAdministrationList({
       key: 'rejected',
       title: {
         content: (
-          <Header as="span">
-            {I18n.t('competitions.registration_v2.list.rejected.title')}
-            {' '}
-            (
-            {rejected.length}
-            )
-          </Header>
+          <SectionToggle
+            icon={REJECTED_ICON}
+            title={I18n.t('competitions.registration_v2.list.rejected.title')}
+            inParens={rejected.length}
+            color={REJECTED_COLOR}
+          />
         ),
       },
       content: {
@@ -500,13 +513,15 @@ export default function RegistrationAdministrationList({
               columnsExpanded={expandedColumns}
               registrations={rejected}
               selected={partitionedSelected.rejected}
-              select={select}
-              unselect={unselect}
+              onSelect={selectedIds.add}
+              onUnselect={selectedIds.remove}
+              onToggle={selectedIds.toggle}
               competition_id={competitionInfo.id}
               changeSortColumn={changeSortColumn}
               sortDirection={sortDirection}
               sortColumn={sortColumn}
               competitionInfo={competitionInfo}
+              color={REJECTED_COLOR}
             />
           </>
         ),
@@ -542,17 +557,16 @@ export default function RegistrationAdministrationList({
       )}
 
       <Form>
-        <Form.Group widths="equal">
+        <Form.Group unstackable widths="2">
           {Object.entries(expandableColumns).map(([id, name]) => (
-            <Form.Field key={id}>
-              <Checkbox
-                name={id}
-                label={name}
-                toggle
-                checked={expandedColumns[id]}
-                onChange={() => dispatchColumns({ column: id })}
-              />
-            </Form.Field>
+            <Form.Checkbox
+              key={id}
+              name={id}
+              label={name}
+              toggle
+              checked={expandedColumns[id]}
+              onChange={() => dispatchColumns({ column: id })}
+            />
           ))}
         </Form.Group>
       </Form>
@@ -561,9 +575,7 @@ export default function RegistrationAdministrationList({
         <Sticky context={actionsRef} offset={20}>
           <RegistrationActions
             partitionedSelected={partitionedSelected}
-            refresh={() => {
-              dispatch({ type: 'clear-selected' });
-            }}
+            refresh={selectedIds.clear}
             registrations={registrations}
             spotsRemaining={spotsRemaining}
             userEmailMap={userEmailMap}
@@ -582,5 +594,16 @@ export default function RegistrationAdministrationList({
         {/* i18n-tasks-use t('registrations.list.non_competing') */}
       </div>
     </Segment>
+  );
+}
+
+function SectionToggle({
+  icon, title, inParens, color,
+}) {
+  return (
+    <Header as="span" size="large">
+      <Icon name={icon} color={color} />
+      {`${title} (${inParens})`}
+    </Header>
   );
 }

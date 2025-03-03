@@ -12,21 +12,25 @@ export default function RegistrationAdministrationTable({
   columnsExpanded,
   registrations,
   selected,
-  select,
-  unselect,
+  onSelect,
+  onUnselect,
+  onToggle,
   sortDirection,
   sortColumn,
   changeSortColumn,
   competitionInfo,
   draggable = false,
   sortable = true,
+  withPosition = false,
   handleOnDragEnd,
+  color,
+  distinguishPaidUnpaid = false,
 }) {
   const handleHeaderCheck = (_, data) => {
     if (data.checked) {
-      select(registrations.map(({ user }) => user.id));
+      onSelect(...registrations.map(({ user }) => user.id));
     } else {
-      unselect(registrations.map(({ user }) => user.id));
+      onUnselect(...registrations.map(({ user }) => user.id));
     }
   };
 
@@ -40,53 +44,62 @@ export default function RegistrationAdministrationTable({
   // TODO: use native ref= when we switch to semantic v3
   /* eslint-disable react/jsx-props-no-spreading */
   return (
-    <Table sortable={sortable} striped unstackable compact singleLine textAlign="left">
-      <TableHeader
-        columnsExpanded={columnsExpanded}
-        isChecked={registrations.length === selected.length}
-        onCheckboxChanged={handleHeaderCheck}
-        sortDirection={sortDirection}
-        sortColumn={sortColumn}
-        changeSortColumn={changeSortColumn}
-        competitionInfo={competitionInfo}
-        draggable={draggable}
-      />
-
-      <DragDropContext onDragEnd={handleOnDragEnd}>
-        <Droppable droppableId="droppable-table">
-          {(providedDroppable) => (
-            <Ref innerRef={providedDroppable.innerRef}>
-              <Table.Body {...providedDroppable.droppableProps}>
-                {registrations.map((w, i) => (
-                  <TableRow
-                    competitionInfo={competitionInfo}
-                    columnsExpanded={columnsExpanded}
-                    registration={w}
-                    onCheckboxChange={(_, data) => {
-                      if (data.checked) {
-                        select([w.user.id]);
-                      } else {
-                        unselect([w.user.id]);
-                      }
-                    }}
-                    index={i}
-                    draggable={draggable}
-                    isSelected={selected.includes(w.user.id)}
-                  />
-                ))}
-                {providedDroppable.placeholder}
-              </Table.Body>
-            </Ref>
-          )}
-        </Droppable>
-      </DragDropContext>
-      <TableFooter>
-        <RegistrationAdministrationTableFooter
+    <div style={{ overflowX: 'auto' }}>
+      <Table
+        sortable={sortable}
+        striped
+        unstackable
+        compact
+        singleLine
+        textAlign="left"
+        color={color}
+      >
+        <TableHeader
           columnsExpanded={columnsExpanded}
-          registrations={registrations}
+          isChecked={registrations.length === selected.length}
+          onCheckboxChanged={handleHeaderCheck}
+          sortDirection={sortDirection}
+          sortColumn={sortColumn}
+          changeSortColumn={changeSortColumn}
           competitionInfo={competitionInfo}
+          withCheckbox={!draggable}
+          withPosition={withPosition}
         />
-      </TableFooter>
-    </Table>
+
+        <DragDropContext onDragEnd={handleOnDragEnd}>
+          <Droppable droppableId="droppable-table">
+            {(providedDroppable) => (
+              <Ref innerRef={providedDroppable.innerRef}>
+                <Table.Body {...providedDroppable.droppableProps}>
+                  {registrations.map((w, i) => (
+                    <TableRow
+                      competitionInfo={competitionInfo}
+                      columnsExpanded={columnsExpanded}
+                      registration={w}
+                      onCheckboxChange={() => onToggle(w.user.id)}
+                      index={i}
+                      draggable={draggable}
+                      isSelected={selected.includes(w.user.id)}
+                      withPosition={withPosition}
+                      color={color}
+                      distinguishPaidUnpaid={distinguishPaidUnpaid}
+                    />
+                  ))}
+                  {providedDroppable.placeholder}
+                </Table.Body>
+              </Ref>
+            )}
+          </Droppable>
+        </DragDropContext>
+        <TableFooter>
+          <RegistrationAdministrationTableFooter
+            columnsExpanded={columnsExpanded}
+            registrations={registrations}
+            competitionInfo={competitionInfo}
+            withPosition={withPosition}
+          />
+        </TableFooter>
+      </Table>
+    </div>
   );
 }
