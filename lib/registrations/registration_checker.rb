@@ -118,11 +118,13 @@ module Registrations
       def validate_qualifications!(request, competition, target_user)
         return unless competition.enforces_qualifications?
         event_ids = request.dig('competing', 'event_ids')
-        r = Registration.new(competition_events: registration.competition.competition_events.where(event_id: event_ids), competition: competition, user: target_user)
-        r.validate
-        r.errors[:guests].each do |error|
-          raise error
+
+        unqualified_events = event_ids.filter do |event|
+          qualification = competition.qualification_wcif[event]
+          qualification.present? && !competitor_qualifies_for_event?(event, qualification, target_user)
         end
+
+        raise WcaExceptions::RegistrationError.new(:unprocessable_entity, Registrations::ErrorCodes::QUALIFICATION_NOT_MET, unqualified_events) unless unqualified_events.empty?
       end
 
       def validate_guests!(guests, competition)
@@ -134,18 +136,15 @@ module Registrations
       end
 
       def validate_comment!(comment, competition, registration = nil)
-        return if registration.present? && !registration.comments.nil? && !(registration.comments == '')
+        if comment.nil?
+          # Return if no comment was supplied in the request but one already exists for the registration
+          return if registration.present? && !registration.comments.nil? && !(registration.comments == '')
 
-        r = if registration.nil?
-              Registration.new(comments: guests, competition: competition)
-            else
-              registration.comments = comment
-              registration
-            end
-
-        r.validate
-        r.errors[:comments].each do |error|
-          raise error
+          # Raise error if comment is mandatory, none has been supplied, and none exists for the registration
+          raise WcaExceptions::RegistrationError.new(:unprocessable_entity, Registrations::ErrorCodes::REQUIRED_COMMENT_MISSING) if competition.force_comment_in_registration
+        else
+          raise WcaExceptions::RegistrationError.new(:unprocessable_entity, ErrorCodes::USER_COMMENT_TOO_LONG) if comment.length > COMMENT_CHARACTER_LIMIT
+          raise WcaExceptions::RegistrationError.new(:unprocessable_entity, ErrorCodes::REQUIRED_COMMENT_MISSING) if competition.force_comment_in_registration && comment.strip.empty?
         end
       end
 
@@ -183,9 +182,6 @@ module Registrations
       def validate_update_status!(new_status, competition, current_user, target_user, registration, events)
         raise WcaExceptions::RegistrationError.new(:unprocessable_entity, Registrations::ErrorCodes::INVALID_REQUEST_DATA) unless
           Registration.competing_statuses.include?(new_status)
-        raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::COMPETITOR_LIMIT_REACHED) if
-          new_status == Registrations::Helper::STATUS_ACCEPTED && competition.competitor_limit_enabled? &&
-          competition.registrations.accepted.count >= competition.competitor_limit
         raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::ALREADY_REGISTERED_IN_SERIES) if
           new_status == Registrations::Helper::STATUS_ACCEPTED && existing_registration_in_series?(competition, target_user)
 
