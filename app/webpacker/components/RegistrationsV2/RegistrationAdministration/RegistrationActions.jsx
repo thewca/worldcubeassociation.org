@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Button, Dropdown } from 'semantic-ui-react';
 import { DateTime } from 'luxon';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
@@ -59,7 +59,6 @@ function csvExport(selected, registrations, competition) {
 
 export default function RegistrationActions({
   partitionedSelected,
-  userEmailMap,
   refresh,
   registrations,
   spotsRemaining,
@@ -82,6 +81,16 @@ export default function RegistrationActions({
   const anyCancellable = cancelled.length < selectedCount;
   const anyWaitlistable = waiting.length < selectedCount;
   const anyRejectable = rejected.length < selectedCount;
+
+  const userEmailMap = useMemo(
+    () => Object.fromEntries(
+      (registrations ?? []).map((registration) => [
+        registration.user.id,
+        registration.user.email,
+      ]),
+    ),
+    [registrations],
+  );
 
   const selectedEmails = [...pending, ...waiting, ...accepted, ...cancelled, ...rejected]
     .map((userId) => userEmailMap[userId])

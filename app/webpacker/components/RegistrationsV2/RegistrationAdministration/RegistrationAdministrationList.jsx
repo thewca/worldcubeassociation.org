@@ -163,15 +163,6 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
     { count: spotsRemaining },
   );
 
-  const userEmailMap = useMemo(
-    () => Object.fromEntries(
-      (registrations ?? []).map((registration) => [
-        registration.user.id,
-        registration.user.email,
-      ]),
-    ),
-    [registrations],
-  );
   const handleOnDragEnd = useMemo(() => async (result) => {
     if (!result.destination) return;
     if (result.destination.index === result.source.index) return;
@@ -418,7 +409,6 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
             refresh={selectedIds.clear}
             registrations={registrations}
             spotsRemaining={spotsRemaining}
-            userEmailMap={userEmailMap}
             competitionInfo={competitionInfo}
             updateRegistrationMutation={updateRegistrationMutation}
           />
