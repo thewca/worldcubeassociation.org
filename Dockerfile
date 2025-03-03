@@ -53,13 +53,16 @@ RUN apt-get update -qq && \
 COPY Gemfile Gemfile.lock ./
 RUN gem update --system && gem install bundler
 
-COPY . .
+COPY ./bin/bundle ./bin/bundle
 RUN ./bin/bundle install && \
     rm -rf ~/.bundle/ "${BUNDLE_PATH}"/ruby/*/cache "${BUNDLE_PATH}"/ruby/*/bundler/gems/*/.git
 
 # Install node dependencies
 COPY package.json yarn.lock .yarnrc.yml ./
+COPY ./bin/yarn ./bin/yarn
 RUN ./bin/yarn install --immutable
+
+COPY . .
 
 RUN ASSETS_COMPILATION=true SECRET_KEY_BASE=1 ./bin/bundle exec i18n export
 RUN ASSETS_COMPILATION=true SECRET_KEY_BASE=1 ./bin/rake assets:precompile
