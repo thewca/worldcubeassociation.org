@@ -110,6 +110,8 @@ module DatabaseDumper
           registration_version
           forbid_newcomers
           forbid_newcomers_reason
+          auto_accept_registrations
+          auto_accept_disable_threshold
           newcomer_month_reserved_spots
           competitor_can_cancel
         ),
