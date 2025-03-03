@@ -46,18 +46,18 @@ class Registration < ApplicationRecord
   private def mark_registered_at
     self.registered_at = current_time_from_proper_timezone
   end
-  
-   validate :guests_set_correctly, if: :is_competing?
+
+  validate :guests_set_correctly, if: :is_competing?
 
   private def guests_set_correctly
     if guests < 0
-      errors.add(:guests, WcaExceptions::RegistrationError.new(:unprocessable_entity, Registrations::ErrorCodes::INVALID_REQUEST_DATA))
+      errors.add(:guests, :too_few_guests, error_status: :unprocessable_entity, error_code: Registrations::ErrorCodes::INVALID_REQUEST_DATA)
     end
     if competition.guest_limit_exceeded?(guests)
-      errors.add(:guests, WcaExceptions::RegistrationError.new(:unprocessable_entity, Registrations::ErrorCodes::GUEST_LIMIT_EXCEEDED))
+      errors.add(:guests, error_status: :unprocessable_entity, error_code: Registrations::ErrorCodes::GUEST_LIMIT_EXCEEDED)
     end
     if guests > DEFAULT_GUEST_LIMIT && !competition.guest_entry_status_restricted?
-      errors.add(:guests, WcaExceptions::RegistrationError.new(:unprocessable_entity, Registrations::ErrorCodes::UNREASONABLE_GUEST_COUNT))
+      errors.add(:guests, error_status: :unprocessable_entity, error_code: Registrations::ErrorCodes::UNREASONABLE_GUEST_COUNT)
     end
   end
 
