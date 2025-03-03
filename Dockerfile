@@ -53,8 +53,16 @@ RUN apt-get update -qq && \
 COPY bin ./bin
 
 COPY Gemfile Gemfile.lock ./
-RUN gem update --system && gem install bundler && ./bin/bundle install && \
-                                                      rm -rf ~/.bundle/ "${BUNDLE_PATH}"/ruby/*/cache "${BUNDLE_PATH}"/ruby/*/bundler/gems/*/.git
+RUN gem update --system && gem install bundler
+
+RUN bundle config set --local path /rails/.cache/bundle
+
+# Use a cache mount to reuse old gems
+RUN --mount=type=cache,sharing=private,target=/rails/.cache/bundle \
+  mkdir -p vendor && \
+  bundle install && \
+  cp -ar /rails/.cache/bundle vendor/bundle && \
+  bundle config set path vendor/bundle
 
 # Install node dependencies
 COPY package.json yarn.lock .yarnrc.yml ./
@@ -63,7 +71,7 @@ RUN ./bin/yarn install --immutable
 COPY . .
 
 RUN ASSETS_COMPILATION=true SECRET_KEY_BASE=1 RAILS_MAX_THREADS=4 NODE_OPTIONS="--max_old_space_size=4096" ./bin/bundle exec i18n export
-RUN ASSETS_COMPILATION=true SECRET_KEY_BASE=1 RAILS_MAX_THREADS=4 NODE_OPTIONS="--max_old_space_size=4096" ./bin/rake assets:precompile
+RUN --mount=type=cache,uid=1000,target=/rails/tmp/cache ASSETS_COMPILATION=true SECRET_KEY_BASE=1 RAILS_MAX_THREADS=4 NODE_OPTIONS="--max_old_space_size=4096" ./bin/rake assets:precompile
 
 RUN rm -rf node_modules
 
