@@ -18,38 +18,11 @@ import useOrderedSet from '../../../lib/hooks/useOrderedSet';
 import {
   APPROVED_COLOR, APPROVED_ICON,
   CANCELLED_COLOR, CANCELLED_ICON,
+  partitionRegistrations,
   PENDING_COLOR, PENDING_ICON,
   REJECTED_COLOR, REJECTED_ICON,
   WAITLIST_COLOR, WAITLIST_ICON,
 } from '../../../lib/utils/registrationAdmin';
-
-const partitionRegistrations = (registrations) => registrations.reduce(
-  (result, registration) => {
-    switch (registration.competing.registration_status) {
-      case 'pending':
-        result.pending.push(registration);
-        break;
-      case 'waiting_list':
-        result.waiting.push(registration);
-        break;
-      case 'accepted':
-        result.accepted.push(registration);
-        break;
-      case 'cancelled':
-        result.cancelled.push(registration);
-        break;
-      case 'rejected':
-        result.rejected.push(registration);
-        break;
-      default:
-        break;
-    }
-    return result;
-  },
-  {
-    pending: [], waiting: [], accepted: [], cancelled: [], rejected: [],
-  },
-);
 
 const expandableColumns = {
   dob: I18n.t('activerecord.attributes.user.dob'),
@@ -97,7 +70,6 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
   } = useQuery({
     queryKey: ['registrations-admin', competitionInfo.id],
     queryFn: () => getAllRegistrations(competitionInfo),
-    // select: partitionRegistrations,
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
     staleTime: Infinity,

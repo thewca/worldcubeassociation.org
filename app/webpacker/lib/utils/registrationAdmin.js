@@ -13,6 +13,34 @@ export const APPROVED_ICON = 'check';
 export const CANCELLED_ICON = 'trash';
 export const REJECTED_ICON = 'x';
 
+export const partitionRegistrations = (registrations) => registrations.reduce(
+  (result, registration) => {
+    switch (registration.competing.registration_status) {
+      case 'pending':
+        result.pending.push(registration);
+        break;
+      case 'waiting_list':
+        result.waiting.push(registration);
+        break;
+      case 'accepted':
+        result.accepted.push(registration);
+        break;
+      case 'cancelled':
+        result.cancelled.push(registration);
+        break;
+      case 'rejected':
+        result.rejected.push(registration);
+        break;
+      default:
+        break;
+    }
+    return result;
+  },
+  {
+    pending: [], waiting: [], accepted: [], cancelled: [], rejected: [],
+  },
+);
+
 export function sortRegistrations(registrations, sortColumn, sortDirection) {
   const sorted = registrations?.toSorted((a, b) => {
     switch (sortColumn) {
