@@ -3470,10 +3470,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"autonumeric@npm:^4.10.7":
-  version: 4.10.7
-  resolution: "autonumeric@npm:4.10.7"
-  checksum: 10c0/6f04d167d768255f5f4bb8152ffabbcec575ff77aed824021e4956b4e7ad4d1a38a38fb9805cf5a04ae11a7200867438f1262141b5b6232762b7dcc31d08be47
+"autonumeric@npm:^4.10.8":
+  version: 4.10.8
+  resolution: "autonumeric@npm:4.10.8"
+  checksum: 10c0/ff507aace9164fad147d3eb27d395393e589ae86236c3e4d2a051818e3abd3230a8b3bd513a84756773b3304676ed1fc9a9758d5262e5b070792e52646088a3e
   languageName: node
   linkType: hard
 
@@ -10170,7 +10170,7 @@ __metadata:
     "@tanstack/react-query": "npm:^5.66.11"
     "@tanstack/react-table": "npm:^8.21.2"
     "@wca/helpers": "npm:^1.1.5"
-    autonumeric: "npm:^4.10.7"
+    autonumeric: "npm:^4.10.8"
     autoprefixer: "npm:^10.4.20"
     autosize: "npm:^6.0.1"
     babel-loader: "npm:^10.0.0"
