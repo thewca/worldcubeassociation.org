@@ -38,6 +38,15 @@ class Registration < ApplicationRecord
 
   validates :user, presence: true, on: [:create]
 
+  validates :registered_at, presence: true
+  # Set a `registered_at` timestamp for newly created records,
+  #   but only if there is no value already specified from the outside
+  after_initialize :mark_registered_at, if: :new_record?, unless: :registered_at?
+
+  private def mark_registered_at
+    self.registered_at = current_time_from_proper_timezone
+  end
+
   validates_numericality_of :guests, greater_than_or_equal_to: 0
 
   validates_numericality_of :guests, less_than_or_equal_to: :guest_limit, if: :check_guest_limit?
@@ -268,7 +277,7 @@ class Registration < ApplicationRecord
                               guests: guests,
                               competing: {
                                 registration_status: competing_status,
-                                registered_on: created_at,
+                                registered_on: registered_at,
                                 comment: comments,
                                 admin_comment: administrative_notes,
                               },
@@ -405,6 +414,10 @@ class Registration < ApplicationRecord
     when :unpaid
       paid_entry_fees == 0
     end
+  end
+
+  def consider_auto_close
+    outstanding_entry_fees.zero? && competition.attempt_auto_close!
   end
 
   validate :only_one_accepted_per_series

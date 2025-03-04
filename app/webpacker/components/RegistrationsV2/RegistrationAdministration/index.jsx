@@ -17,7 +17,7 @@ export default function RegistrationEdit({ competitionId }) {
             <Sticky context={ref} offset={60}>
               <RegistrationMessage />
             </Sticky>
-            <RegistrationAdministrationContainer competitionInfo={competitionId} />
+            <RegistrationAdministrationContainer competitionId={competitionId} />
           </ConfirmProvider>
         </StoreProvider>
       </WCAQueryClientProvider>

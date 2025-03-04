@@ -683,7 +683,7 @@ class User < ApplicationRecord
         pages: panel_pages.values,
       },
       staff: {
-        name: 'Staff panel',
+        name: 'Volunteer panel',
         pages: [],
       },
       delegate: {

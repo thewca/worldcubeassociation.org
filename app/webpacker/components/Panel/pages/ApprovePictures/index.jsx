@@ -60,7 +60,7 @@ function ApprovePictures() {
         <List bulleted>
           {I18n.tArray('users.edit.avatar_guidelines').map((g) => <List.Item key={g}>{g}</List.Item>)}
         </List>
-        <Header as="h4">Additional guidelines for Staff Members</Header>
+        <Header as="h4">Additional guidelines for Volunteers</Header>
         <List bulleted>
           {I18n.tArray('users.edit.staff_avatar_guidelines.paragraphs').map((g) => <List.Item key={g}>{g}</List.Item>)}
         </List>
