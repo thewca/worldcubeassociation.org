@@ -380,7 +380,7 @@ export default function RegistrationAdministrationList({
       { competitionInfo.auto_accept_registrations && (
         <Button
           disabled={isUpdating}
-          color="red"
+          negative
           onClick={() => disableAutoAcceptMutation(competitionInfo.id)}
         >
           <Icon name="ban" />
