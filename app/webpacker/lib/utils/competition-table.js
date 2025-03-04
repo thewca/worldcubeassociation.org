@@ -89,23 +89,10 @@ export function timeDifferenceBefore(competition, refDate) {
 }
 
 export function numberOfDaysAfter(competition, refDate) {
-  competition.id === "FitchburgFingertricks2025" && console.log("refDate")
-  competition.id === "FitchburgFingertricks2025" && console.log(refDate)
-  competition.id === "FitchburgFingertricks2025" && console.log("raw start date")
-  competition.id === "FitchburgFingertricks2025" && console.log(competition.end_date)
-
-  // const parsedStartDate = parseDateString("2025-02-08").endOf('day');
   const parsedStartDate = parseDateString(competition.end_date).endOf('day');
   const parsedRefDate = DateTime.fromISO(refDate);
-  // const parsedRefDate = DateTime.fromISO("2025-02-16").endOf('day');
 
-  competition.id === "FitchburgFingertricks2025" && console.log("start date")
-  competition.id === "FitchburgFingertricks2025" && console.log(parsedStartDate.toISO())
-  competition.id === "FitchburgFingertricks2025" && console.log("ref date")
-  competition.id === "FitchburgFingertricks2025" && console.log(parsedRefDate.toISO())
   const numberOfDays = parsedStartDate.diff(parsedRefDate, 'days').days;
-  competition.id === "FitchburgFingertricks2025" && console.log("number of days")
-  competition.id === "FitchburgFingertricks2025" && console.log(Math.floor(Math.abs(numberOfDays)))
 
   // Floor is used here because we want to show 0 days after the competition if it's the same day
   return Math.floor(Math.abs(numberOfDays));
