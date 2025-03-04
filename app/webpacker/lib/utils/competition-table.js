@@ -89,10 +89,18 @@ export function timeDifferenceBefore(competition, refDate) {
 }
 
 export function numberOfDaysAfter(competition, refDate) {
-  const parsedStartDate = parseDateString(competition.end_date).endOf('day');
-  const parsedRefDate = DateTime.fromISO(refDate);
+  const parsedStartDate = parseDateString("2025-02-08").endOf('day');
+  // const parsedStartDate = parseDateString(competition.end_date).endOf('day');
+  // const parsedRefDate = DateTime.fromISO(refDate);
+  const parsedRefDate = DateTime.fromISO("2025-02-16").endOf('day');
 
+  competition.id === "MississippiChampionship2025" && console.log("start date")
+  competition.id === "MississippiChampionship2025" && console.log(parsedStartDate.toISO())
+  competition.id === "MississippiChampionship2025" && console.log("ref date")
+  competition.id === "MississippiChampionship2025" && console.log(parsedRefDate.toISO())
   const numberOfDays = parsedStartDate.diff(parsedRefDate, 'days').days;
+  competition.id === "MississippiChampionship2025" && console.log("number of days")
+  competition.id === "MississippiChampionship2025" && console.log(Math.floor(Math.abs(numberOfDays)))
 
   // Floor is used here because we want to show 0 days after the competition if it's the same day
   return Math.floor(Math.abs(numberOfDays));
@@ -104,12 +112,13 @@ export function timeDifferenceAfter(competition, refDate) {
 }
 
 export function reportAdminCellContent(comp) {
+  comp.id === "MississippiChampionship2025" && console.log(comp)
   if (comp.report_posted_at) {
     const delegateIds = comp.delegates.map((delegate) => delegate.id);
 
     return delegateIds.includes(comp.report_posted_by_user)
       ? timeDifferenceAfter(comp, comp.report_posted_at)
-      : I18n.t('competitions.competition_info.submitted_by_other');
+      : I18n.t('competitions.competition_info.submitted_by_other')
   }
 
   if (isProbablyOver(comp)) {
