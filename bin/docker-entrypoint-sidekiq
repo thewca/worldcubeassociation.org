@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-if [ "$WCA_LIVE_SITE" == "false" ]; then
+if [ "$WCA_LIVE_SITE" = "0" ]; then
   gem install mailcatcher
   mailcatcher --http-ip=0.0.0.0 --no-quit
 fi
