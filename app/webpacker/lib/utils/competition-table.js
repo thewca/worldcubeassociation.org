@@ -3,7 +3,7 @@ import { DateTime, Interval } from 'luxon';
 import I18n from '../i18n';
 
 function parseDateString(yyyymmddDateString) {
-  return DateTime.fromFormat(yyyymmddDateString, 'yyyy-MM-dd');
+  return DateTime.fromFormat(yyyymmddDateString, 'yyyy-MM-dd', { zone: 'utc' });
 }
 
 const registrationStatusHint = (competingStatus) => {
@@ -89,18 +89,23 @@ export function timeDifferenceBefore(competition, refDate) {
 }
 
 export function numberOfDaysAfter(competition, refDate) {
-  const parsedStartDate = parseDateString("2025-02-08").endOf('day');
-  // const parsedStartDate = parseDateString(competition.end_date).endOf('day');
-  // const parsedRefDate = DateTime.fromISO(refDate);
-  const parsedRefDate = DateTime.fromISO("2025-02-16").endOf('day');
+  competition.id === "FitchburgFingertricks2025" && console.log("refDate")
+  competition.id === "FitchburgFingertricks2025" && console.log(refDate)
+  competition.id === "FitchburgFingertricks2025" && console.log("raw start date")
+  competition.id === "FitchburgFingertricks2025" && console.log(competition.end_date)
 
-  competition.id === "MississippiChampionship2025" && console.log("start date")
-  competition.id === "MississippiChampionship2025" && console.log(parsedStartDate.toISO())
-  competition.id === "MississippiChampionship2025" && console.log("ref date")
-  competition.id === "MississippiChampionship2025" && console.log(parsedRefDate.toISO())
+  // const parsedStartDate = parseDateString("2025-02-08").endOf('day');
+  const parsedStartDate = parseDateString(competition.end_date).endOf('day');
+  const parsedRefDate = DateTime.fromISO(refDate);
+  // const parsedRefDate = DateTime.fromISO("2025-02-16").endOf('day');
+
+  competition.id === "FitchburgFingertricks2025" && console.log("start date")
+  competition.id === "FitchburgFingertricks2025" && console.log(parsedStartDate.toISO())
+  competition.id === "FitchburgFingertricks2025" && console.log("ref date")
+  competition.id === "FitchburgFingertricks2025" && console.log(parsedRefDate.toISO())
   const numberOfDays = parsedStartDate.diff(parsedRefDate, 'days').days;
-  competition.id === "MississippiChampionship2025" && console.log("number of days")
-  competition.id === "MississippiChampionship2025" && console.log(Math.floor(Math.abs(numberOfDays)))
+  competition.id === "FitchburgFingertricks2025" && console.log("number of days")
+  competition.id === "FitchburgFingertricks2025" && console.log(Math.floor(Math.abs(numberOfDays)))
 
   // Floor is used here because we want to show 0 days after the competition if it's the same day
   return Math.floor(Math.abs(numberOfDays));
@@ -112,10 +117,12 @@ export function timeDifferenceAfter(competition, refDate) {
 }
 
 export function reportAdminCellContent(comp) {
-  comp.id === "MississippiChampionship2025" && console.log(comp)
+  comp.id === "FitchburgFingertricks2025" && console.log(comp)
   if (comp.report_posted_at) {
     const delegateIds = comp.delegates.map((delegate) => delegate.id);
 
+    console.log("report posted at:")
+    console.log(comp.report_posted_at)
     return delegateIds.includes(comp.report_posted_by_user)
       ? timeDifferenceAfter(comp, comp.report_posted_at)
       : I18n.t('competitions.competition_info.submitted_by_other')
