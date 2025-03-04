@@ -101,7 +101,7 @@ RUN useradd rails --create-home --shell /bin/bash
 USER rails:rails
 
 # Copy built artifacts: gems, application
-COPY --from=build /rails .
+COPY --chown=rails:rails --from=build  /rails .
 
 FROM runtime AS sidekiq
 
