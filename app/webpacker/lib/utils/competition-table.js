@@ -104,7 +104,6 @@ export function timeDifferenceAfter(competition, refDate) {
 }
 
 export function reportAdminCellContent(comp) {
-  comp.id === "FitchburgFingertricks2025" && console.log(comp)
   if (comp.report_posted_at) {
     const delegateIds = comp.delegates.map((delegate) => delegate.id);
 
@@ -112,7 +111,7 @@ export function reportAdminCellContent(comp) {
     console.log(comp.report_posted_at)
     return delegateIds.includes(comp.report_posted_by_user)
       ? timeDifferenceAfter(comp, comp.report_posted_at)
-      : I18n.t('competitions.competition_info.submitted_by_other')
+      : I18n.t('competitions.competition_info.submitted_by_other');
   }
 
   if (isProbablyOver(comp)) {
