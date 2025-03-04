@@ -49,8 +49,9 @@ RUN apt-get update -qq && \
       libyaml-dev \
       tzdata
 
-# Install application gems
 COPY bin ./bin
+
+# Install application gems
 
 COPY Gemfile Gemfile.lock ./
 RUN gem update --system && gem install bundler
