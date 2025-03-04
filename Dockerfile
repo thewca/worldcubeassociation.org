@@ -52,7 +52,6 @@ RUN apt-get update -qq && \
 COPY bin ./bin
 
 # Install application gems
-
 COPY Gemfile Gemfile.lock ./
 RUN gem update --system && gem install bundler
 
