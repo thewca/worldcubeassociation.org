@@ -59,10 +59,7 @@ class ConnectedStripeAccount < ApplicationRecord
 
     # Create the PaymentIntent, overriding the stripe_account for the request
     # by the connected stripe account for the competition.
-    intent = Stripe::PaymentIntent.create(
-      payment_intent_args,
-      stripe_account: self.account_id,
-    )
+    intent = stripe_client.v1.payment_intents.create(payment_intent_args)
 
     # Log the payment attempt. We register the payment intent ID to find it later after checkout completed.
     stripe_record = StripeRecord.create_from_api(intent, payment_intent_args, self.account_id)
@@ -81,9 +78,8 @@ class ConnectedStripeAccount < ApplicationRecord
   def retrieve_payments(payment_intent)
     intent_record = payment_intent.payment_record
 
-    intent_charges = Stripe::Charge.list(
+    intent_charges = stripe_client.v1.charges.list(
       { payment_intent: intent_record.stripe_id },
-      stripe_account: self.account_id,
     )
 
     intent_charges.data.map do |charge|
@@ -124,16 +120,13 @@ class ConnectedStripeAccount < ApplicationRecord
       amount: stripe_amount,
     }
 
-    refund = Stripe::Refund.create(
-      refund_args,
-      stripe_account: self.account_id,
-    )
+    refund = stripe_client.v1.refunds.create(refund_args)
 
     StripeRecord.create_from_api(refund, refund_args, self.account_id, charge_record)
   end
 
   def account_details
-    stripe_acct = Stripe::Account.retrieve(self.account_id)
+    stripe_acct = stripe_client.v1.accounts.retrieve(self.account_id)
 
     stripe_acct.as_json.slice("email", "country").merge({
                                                           "business_name" => stripe_acct.business_profile.name,
@@ -175,5 +168,9 @@ class ConnectedStripeAccount < ApplicationRecord
     }
 
     OAuth2::Client.new(AppSecrets.STRIPE_CLIENT_ID, AppSecrets.STRIPE_API_KEY, options)
+  end
+
+  private def stripe_client
+    Stripe::StripeClient.new(AppSecrets.STRIPE_API_KEY, stripe_account: self.account_id)
   end
 end
