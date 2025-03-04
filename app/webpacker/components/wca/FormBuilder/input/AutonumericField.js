@@ -35,6 +35,7 @@ export default function AutonumericField({
       decimalPlaces: (currencyInfo.subunitToUnit === 1) ? 0 : 2,
       modifyValueOnWheel: false,
       minimumValue: 0,
+      onInvalidPaste: 'clamp',
     };
     if (max) {
       options.maximumValue = max / currencyInfo.subunitToUnit;
@@ -79,16 +80,8 @@ export default function AutonumericField({
   useEffect(() => {
     if (!autoNumeric) return;
 
-    // When setting values, we don't know whether this hook or the `options` hook below
-    // triggers first. Unfortunately for us, AN throws hard errors when setting some value
-    // greater than the defined max, so we have to manually work around the situation
-    // where the `max` option updates first, by just capping the value.
-    if (autoNumericOptions.maximumValue) {
-      autoNumeric.set(Math.min(autoNumericValue, autoNumericOptions.maximumValue));
-    }
-
     autoNumeric.update(autoNumericOptions);
-  }, [autoNumeric, autoNumericOptions, autoNumericValue]);
+  }, [autoNumeric, autoNumericOptions]);
 
   const onChangeAutonumeric = (event) => {
     onChange(event, { value: getCurrentUiValue() });
