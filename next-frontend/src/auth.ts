@@ -8,9 +8,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       name: "WCA-OIDC-Provider",
       type: "oauth",
       issuer: "http://wca_on_rails:3000",
-      clientId: "hMLgmJwMyCQaGs5F_X-KGjPGlZJ8GA0K1-5mWVJinFw",
-      clientSecret: "9CoxlAI6FbCrq87qViedhPkFLBIMG0sVcFBo56HppLQ",
+      clientId: "k3cCulPkUe6BCYAB8xP1v4eYMxvKZdzUwH0K3-0R_H0",
+      clientSecret: "euFyUD_CTFiSv7mRX0z77LBUQ9teHQo6checdcXSWzc",
     },
   ],
-  secret: "aaaa",
 })
