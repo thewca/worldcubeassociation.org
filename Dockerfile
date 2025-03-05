@@ -49,57 +49,33 @@ RUN apt-get update -qq && \
       libyaml-dev \
       tzdata
 
+COPY bin ./bin
+
 # Install application gems
 COPY Gemfile Gemfile.lock ./
 RUN gem update --system && gem install bundler
 
-COPY ./bin/bundle ./bin/bundle
-RUN ./bin/bundle install && \
-    rm -rf ~/.bundle/ "${BUNDLE_PATH}"/ruby/*/cache "${BUNDLE_PATH}"/ruby/*/bundler/gems/*/.git
+RUN bundle config set --local path /rails/.cache/bundle
+
+# Use a cache mount to reuse old gems
+RUN --mount=type=cache,sharing=private,target=/rails/.cache/bundle \
+  mkdir -p vendor && \
+  bundle install && \
+  cp -ar /rails/.cache/bundle vendor/bundle && \
+  bundle config set path vendor/bundle
 
 # Install node dependencies
 COPY package.json yarn.lock .yarnrc.yml ./
-COPY ./bin/yarn ./bin/yarn
 RUN ./bin/yarn install --immutable
 
 COPY . .
 
-RUN ASSETS_COMPILATION=true SECRET_KEY_BASE=1 ./bin/bundle exec i18n export
-RUN ASSETS_COMPILATION=true SECRET_KEY_BASE=1 ./bin/rake assets:precompile
+RUN ASSETS_COMPILATION=true SECRET_KEY_BASE=1 RAILS_MAX_THREADS=4 NODE_OPTIONS="--max_old_space_size=4096" ./bin/bundle exec i18n export
+RUN --mount=type=cache,uid=1000,target=/rails/tmp/cache ASSETS_COMPILATION=true SECRET_KEY_BASE=1 RAILS_MAX_THREADS=4 NODE_OPTIONS="--max_old_space_size=4096" ./bin/rake assets:precompile
 
 RUN rm -rf node_modules
 
 FROM base AS runtime
-
-RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y \
-      mariadb-client \
-      zip \
-      python-is-python3
-
-# Copy built artifacts: gems, application
-COPY --from=build /rails .
-
-# Run and own only the runtime files as a non-root user for security
-RUN useradd rails --create-home --shell /bin/bash && \
-    chown -R rails:rails vendor db log tmp public app pids
-
-FROM runtime AS sidekiq
-
-USER rails:rails
-RUN gem install mailcatcher
-
-ENTRYPOINT ["/rails/bin/docker-entrypoint-sidekiq"]
-
-FROM runtime AS shoryuken
-
-USER rails:rails
-
-ENTRYPOINT ["/rails/bin/docker-entrypoint-shoryuken"]
-
-FROM runtime AS monolith
-
-EXPOSE 3000
 
 # Install fonts for rendering PDFs (mostly competition summary PDFs)
 # dejavu = Hebrew, Arabic, Greek
@@ -108,15 +84,37 @@ EXPOSE 3000
 # ipafont = Japanese
 # thai-tlwg = Thai (as the name suggests)
 # lmodern = Random accents and special symbols for Latin script
+
 RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y \
+      mariadb-client \
+      zip \
+      python-is-python3 \
       fonts-dejavu \
       fonts-unfonts-core \
       fonts-wqy-microhei \
       fonts-ipafont \
       fonts-thai-tlwg \
       fonts-lmodern
+
+RUN useradd rails --create-home --shell /bin/bash
 USER rails:rails
+
+# Copy built artifacts: gems, application
+COPY --chown=rails:rails --from=build /rails .
+
+FROM runtime AS sidekiq
+
+ENTRYPOINT ["/rails/bin/docker-entrypoint-sidekiq"]
+
+FROM runtime AS shoryuken
+
+ENTRYPOINT ["/rails/bin/docker-entrypoint-shoryuken"]
+
+FROM runtime AS monolith
+
+EXPOSE 3000
+
 # Regenerate the font cache so WkHtmltopdf can find them
 # per https://dalibornasevic.com/posts/76-figuring-out-missing-fonts-for-wkhtmltopdf
 RUN fc-cache -f -v
@@ -132,6 +130,5 @@ FROM runtime AS monolith-api
 
 EXPOSE 3000
 
-USER rails:rails
 ENV API_ONLY="true"
 CMD ["./bin/rails", "server"]
