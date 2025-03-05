@@ -803,7 +803,7 @@ GEM
     unicode (0.4.4.5)
     unicode-display_width (2.6.0)
     uniform_notifier (1.16.0)
-    uri (1.0.2)
+    uri (1.0.3)
     useragent (0.16.11)
     valid_email (0.2.1)
       activemodel
