@@ -1,6 +1,7 @@
 "use client";
 
-import { useSession, signIn, signOut } from "next-auth/react";
+import { useSession } from "next-auth/react";
+import { signIn, signOut } from "@/auth";
 
 export default function Home() {
   const { data: session } = useSession();
@@ -13,7 +14,7 @@ export default function Home() {
           <button onClick={() => signOut()}>Sign out</button>
         </>
       ) : (
-        <button onClick={() => signIn("oidc")}>Sign in</button>
+        <button onClick={() => signIn("WCA")}>Sign in</button>
       )}
     </div>
   );
