@@ -164,12 +164,25 @@ export default function RegistrationActions({
       registrations,
       partitionedSelectedIds,
     );
+    const skippedPendingCount = getSkippedPendingCount(
+      registrations,
+      partitionedSelectedIds,
+    );
 
     if (skippedWaitlistCount > 0) {
       confirm({
         content: I18n.t(
           'competitions.registration_v2.list.waitlist.skipped_warning',
           { count: skippedWaitlistCount },
+        ),
+      }).then(
+        () => changeStatus(idsToAccept, 'accepted'),
+      ).catch(noop);
+    } else if (skippedPendingCount > 0) {
+      confirm({
+        content: I18n.t(
+          'competitions.registration_v2.list.pending.approve_skipped_warning',
+          { count: skippedPendingCount },
         ),
       }).then(
         () => changeStatus(idsToAccept, 'accepted'),

@@ -1825,6 +1825,7 @@ en:
           title: "Pending Registrations"
           information: "Pending should only be used for incomplete (eg, unpaid) registrations - please use the Waiting List if your competition is too full to accept new competitors."
           waitlist_skipped_warning: "You've skipped %{count} earlier Pending registration(s). Are you sure you want to move the other registration(s) to the Waiting List instead?"
+          approve_skipped_warning: "You've skipped %{count} earlier Pending registration(s). Are you sure you want to accept the other registration(s) instead?"
         waitlist:
           title: "Waiting List Registrations"
           skipped_warning: "You've skipped %{count} registration(s) on the Waiting List. Are you sure you want to approve the other registration(s) instead?"
