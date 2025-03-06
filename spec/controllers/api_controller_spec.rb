@@ -368,7 +368,7 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
         u
       end
       let(:scopes) { Doorkeeper::OAuth::Scopes.new }
-      let(:token) { double acceptable?: true, resource_owner_id: user.id, scopes: scopes }
+      let(:token) { double acceptable?: true, accessible?: true, resource_owner_id: user.id, scopes: scopes }
       before :each do
         allow(controller).to receive(:doorkeeper_token) { token }
       end
@@ -396,7 +396,7 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
     context 'signed in without wca id' do
       let(:user) { FactoryBot.create :user, country_iso2: "US" }
       let(:scopes) { Doorkeeper::OAuth::Scopes.new }
-      let(:token) { double acceptable?: true, resource_owner_id: user.id, scopes: scopes }
+      let(:token) { double acceptable?: true, accessible?: true, resource_owner_id: user.id, scopes: scopes }
       before :each do
         allow(controller).to receive(:doorkeeper_token) { token }
       end
