@@ -85,6 +85,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_18_070141) do
     t.integer "competitor_can_cancel", default: 0, null: false
     t.integer "newcomer_month_reserved_spots"
     t.integer "auto_close_threshold"
+    t.boolean "auto_accept_registrations", default: false, null: false
+    t.integer "auto_accept_disable_threshold", default: 0, null: false
     t.index ["cancelled_at"], name: "index_Competitions_on_cancelled_at"
     t.index ["countryId"], name: "index_Competitions_on_countryId"
     t.index ["end_date"], name: "index_Competitions_on_end_date"
