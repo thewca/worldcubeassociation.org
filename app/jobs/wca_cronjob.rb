@@ -116,21 +116,5 @@ class WcaCronjob < ApplicationJob
         last_error_message: nil,
       )
     end
-
-    def serialize
-      {
-        in_progress: self.in_progress?,
-        scheduled: self.scheduled?,
-        enqueued_at: self.enqueued_at,
-        finished: self.finished?,
-        last_run_successful: self.last_run_successful?,
-        last_error_message: self.last_error_message,
-        recently_errored: self.recently_errored?,
-        start_date: self.start_date,
-        end_date: self.end_date,
-        cronjob_statistics: cronjob_statistics,
-        reason_not_to_run: self.try(:reason_not_to_run),
-      }
-    end
   end
 end
