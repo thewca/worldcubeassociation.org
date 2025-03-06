@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 Doorkeeper::OpenidConnect.configure do
-  issuer EnvConfig.ROOT_URL
+  issuer EnvConfig.OIDC_ISSUER
   subject do |resource_owner|
     resource_owner.id
   end
