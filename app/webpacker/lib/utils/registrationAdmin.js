@@ -128,11 +128,15 @@ export function sortRegistrations(registrations, sortColumn, sortDirection) {
 }
 
 function getSortedWaitlistRegistrations(registrations) {
-  return registrations.filter(
+  const waitlistRegistrations = registrations.filter(
     (reg) => reg.competing.registration_status === 'waiting_list',
-  ).toSorted(
-    (a, b) => a.competing.waiting_list_position - b.competing.waiting_list_position,
   );
+
+  return sortRegistrations(
+    waitlistRegistrations,
+    'waiting_list_position',
+    'ascending',
+  )
 }
 
 function getLastSelectedOnWaitlist(
