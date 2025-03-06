@@ -35,8 +35,6 @@ Doorkeeper::OpenidConnect.configure do
     end
   end
 
-  # DO NOT MERGE IN THIS STATE!
-  # Future WST members: If you ever find this in our code in its current state, punch Gregor.
   discovery_url_options do
     {
       # Override the host only for the `authorization` endpoint, because
@@ -49,7 +47,7 @@ Doorkeeper::OpenidConnect.configure do
       # Note that the doorkeeper-openid_connect gem exposes this setting (probably) for exactly this
       #   use-case. It's even a listed sample snippet in their documentation: Just ABOVE
       #   https://github.com/doorkeeper-gem/doorkeeper-openid_connect?tab=readme-ov-file#scopes
-      authorization: { host: 'http://localhost:3000' }
+      authorization: { host: EnvConfig.ROOT_URL },
     }
   end
 end
