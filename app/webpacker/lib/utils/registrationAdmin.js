@@ -148,7 +148,7 @@ function getSortedWaitlistRegistrations(registrations) {
     waitlistRegistrations,
     'waiting_list_position',
     'ascending',
-  )
+  );
 }
 
 function getLastSelectedIndex(

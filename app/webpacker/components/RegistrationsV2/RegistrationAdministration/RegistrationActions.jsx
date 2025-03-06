@@ -118,26 +118,6 @@ export default function RegistrationActions({
     );
   };
 
-  const onMoveSelectedToWaitlist = () => {
-    const skippedPendingCount = getSkippedPendingCount(
-      registrations,
-      partitionedSelectedIds,
-    );
-
-    if (skippedPendingCount > 0) {
-      confirm({
-        content: I18n.t(
-          'competitions.registration_v2.list.pending.waitlist_skipped_warning',
-          { count: skippedPendingCount },
-        ),
-      }).then(
-        moveSelectedToWaitlist,
-      ).catch(noop);
-    } else {
-      moveSelectedToWaitlist();
-    }
-  }
-
   const moveSelectedToWaitlist = () => {
     const idsToWaitlist = [...pending, ...cancelled, ...accepted, ...rejected];
 
@@ -156,6 +136,26 @@ export default function RegistrationActions({
 
     const combined = paid.concat(unpaid);
     changeStatus(combined, 'waiting_list');
+  };
+
+  const onMoveSelectedToWaitlist = () => {
+    const skippedPendingCount = getSkippedPendingCount(
+      registrations,
+      partitionedSelectedIds,
+    );
+
+    if (skippedPendingCount > 0) {
+      confirm({
+        content: I18n.t(
+          'competitions.registration_v2.list.pending.waitlist_skipped_warning',
+          { count: skippedPendingCount },
+        ),
+      }).then(
+        moveSelectedToWaitlist,
+      ).catch(noop);
+    } else {
+      moveSelectedToWaitlist();
+    }
   };
 
   const onMoveSelectedToApproved = () => {
