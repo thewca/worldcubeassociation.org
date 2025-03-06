@@ -51,7 +51,9 @@ class PanelController < ApplicationController
   end
 
   private def validators_for_competition_ids(competition_ids)
-    validators = params.require(:selectedValidators).split(',').map(&:constantize)
+    validators = params.require(:selectedValidators).split(',').map do |validator_name|
+      ResultsValidators::Utils.validator_class_from_name(validator_name)
+    end
     apply_fix_when_possible = params.require(:applyFixWhenPossible)
 
     results_validator = ResultsValidators::CompetitionsResultsValidator.new(

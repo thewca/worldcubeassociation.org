@@ -14,14 +14,9 @@ import runValidatorsForCompetitionsInRange from './api/runValidatorsForCompetiti
 import ValidationOutput from './ValidationOutput';
 import WCAQueryClientProvider from '../../../../lib/providers/WCAQueryClientProvider';
 
-// The validatorName will be in the format "ValidatorCategory::ValidatorName", example:
-// "ResultsValidators::PositionsValidator". We want to show only the ValidatorName, so we split
-// the string and return the second part.
-const validatorNameReadable = (validatorName) => validatorName.split('::')[1];
-
 const VALIDATOR_OPTIONS = ALL_VALIDATORS.map((validator) => ({
   key: validator,
-  text: validatorNameReadable(validator),
+  text: validator,
   value: validator,
 }));
 
@@ -138,9 +133,7 @@ function RunValidatorsForm({ competitionIds }) {
         />
         <Header as="h4">
           <HeaderSubheader>
-            {`List of validators with automated fix: ${
-              VALIDATORS_WITH_FIX.map(validatorNameReadable).join(', ')
-            }`}
+            {`List of validators with automated fix: ${VALIDATORS_WITH_FIX.join(', ')}`}
           </HeaderSubheader>
         </Header>
         <Form.Button

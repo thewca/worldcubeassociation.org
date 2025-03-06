@@ -234,5 +234,5 @@ export const ticketStatuses = <%= Ticket::TICKET_TYPES.transform_values { |value
 export const ticketLogActionTypes = <%= TicketLog.action_types.to_json %>;
 
 // ----- VALIDATORS -----
-export const ALL_VALIDATORS = <%= ResultsValidators::Utils::ALL_VALIDATORS.map(&:name) %>;
-export const VALIDATORS_WITH_FIX = <%= ResultsValidators::Utils::VALIDATORS_WITH_FIX.map(&:name) %>;
+export const ALL_VALIDATORS = <%= ResultsValidators::Utils::ALL_VALIDATORS.map(&:class_name) %>;
+export const VALIDATORS_WITH_FIX = <%= ResultsValidators::Utils::VALIDATORS_WITH_FIX.map(&:class_name) %>;
