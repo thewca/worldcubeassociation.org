@@ -6,7 +6,7 @@ class WaitingList < ActiveRecord::Base
   def remove(entry)
     update_column :entries, entries - [entry.id]
   end
-  
+
   def add(entry)
     entry.try(:ensure_waitlist_eligibility!) # raises an error if not waitlistable
     return if entries.include?(entry.id)

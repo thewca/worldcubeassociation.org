@@ -470,13 +470,13 @@ class Registration < ApplicationRecord
   end
 
   def auto_accept
-    return log_error('Auto-accept is not enabled for this competition.') unless competition.auto_accept_registrations
+    return log_error('Auto-accept is not enabled for this competition.') unless competition.auto_accept_registrations?
     return log_error('Can only auto-accept pending registrations or first position on waiting list') unless
       competing_status_pending? || (competing_status_waiting_list? && waiting_list_position == 1)
     return log_error("Competition has reached auto_accept_disable_threshold of #{competition.auto_accept_disable_threshold} registrations") if
       competition.auto_accept_threshold_reached?
     return log_error('Competitor still has outstanding registration fees') if outstanding_entry_fees > 0
-    return log_error('Cant auto-accept while registration is not open') if !competition.registration_currently_open?
+    return log_error('Cant auto-accept while registration is not open') unless competition.registration_currently_open?
 
     if competition.registration_full_and_accepted? && competing_status_pending?
       update_lanes!(
