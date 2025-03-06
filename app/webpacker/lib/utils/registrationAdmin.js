@@ -127,6 +127,27 @@ export function sortRegistrations(registrations, sortColumn, sortDirection) {
   return sorted;
 }
 
+function getSortedPendingRegistrations(registrations) {
+  const pendingRegistrations = registrations.filter(
+    (reg) => reg.competing.registration_status === 'pending',
+  );
+
+  return sortRegistrations(
+    pendingRegistrations,
+    'paid_on_with_registered_on_fallback',
+    'ascending',
+  );
+}
+
+function getLastSelectedPendingIndex(
+  pendingRegistrations,
+  selectedPendingIds,
+) {
+  return pendingRegistrations.findLastIndex(
+    (reg) => selectedPendingIds.includes(reg.user_id),
+  );
+}
+
 function getSortedWaitlistRegistrations(registrations) {
   const waitlistRegistrations = registrations.filter(
     (reg) => reg.competing.registration_status === 'waiting_list',
@@ -146,6 +167,29 @@ function getLastSelectedOnWaitlist(
   return waitlistRegistrations.findLast(
     (reg) => selectedWaitlistIds.includes(reg.user_id),
   );
+}
+
+export function getSkippedPendingCount(
+  registrations,
+  partitionedSelectedIds,
+) {
+  const { pending, waiting } = partitionedSelectedIds;
+
+  const pendingRegistrations = getSortedPendingRegistrations(registrations);
+  const lastSelectedPendingIndex = getLastSelectedPendingIndex(
+    pendingRegistrations,
+    pending,
+  );
+
+  const shouldBeSelectedRegistrations = pendingRegistrations.slice(
+    0,
+    // still makes sense if no such index exists as this will be -1 + 1 = 0
+    lastSelectedPendingIndex + 1,
+  );
+
+  return shouldBeSelectedRegistrations.filter(
+    (reg) => !pending.includes(reg.user_id),
+  ).length;
 }
 
 export function getSkippedWaitlistCount(
