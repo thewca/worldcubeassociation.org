@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import { Button, Dropdown } from 'semantic-ui-react';
 import { DateTime } from 'luxon';
+import { noop } from 'lodash';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { showMessage } from '../Register/RegistrationMessage';
 import I18n from '../../../lib/i18n';
@@ -116,7 +117,9 @@ export default function RegistrationActions({
     );
   };
 
-  const moveToWaitingList = (attendees) => {
+  const moveToWaitlist = () => {
+    const attendees = [...pending, ...cancelled, ...accepted, ...rejected];
+
     const registrationsByUserId = _.groupBy(registrations, 'user_id');
 
     const [paid, unpaid] = _.partition(
@@ -149,7 +152,7 @@ export default function RegistrationActions({
         ),
       }).then(
         () => changeStatus(idsToAccept, 'accepted'),
-      ).catch(() => null);
+      ).catch(noop);
     } else if (idsToAccept.length > spotsRemaining) {
       dispatch(showMessage(
         'competitions.registration_v2.update.too_many',
@@ -230,7 +233,7 @@ export default function RegistrationActions({
             icon={WAITLIST_ICON}
             color={WAITLIST_COLOR}
             isDisabled={!anyWaitlistable}
-            onClick={() => moveToWaitingList(
+            onClick={() => moveToWaitlist(
               [...pending, ...cancelled, ...accepted, ...rejected],
             )}
           />
