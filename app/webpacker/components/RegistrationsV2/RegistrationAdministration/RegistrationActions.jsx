@@ -131,14 +131,14 @@ export default function RegistrationActions({
           { count: skippedPendingCount },
         ),
       }).then(
-        moveToWaitlist,
+        moveSelectedToWaitlist,
       ).catch(noop);
     } else {
-      moveToWaitlist();
+      moveSelectedToWaitlist();
     }
   }
 
-  const moveToWaitlist = () => {
+  const moveSelectedToWaitlist = () => {
     const idsToWaitlist = [...pending, ...cancelled, ...accepted, ...rejected];
 
     const registrationsByUserId = _.groupBy(registrations, 'user_id');
