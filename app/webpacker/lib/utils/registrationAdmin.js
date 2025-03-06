@@ -139,15 +139,6 @@ function getSortedPendingRegistrations(registrations) {
   );
 }
 
-function getLastSelectedPendingIndex(
-  pendingRegistrations,
-  selectedPendingIds,
-) {
-  return pendingRegistrations.findLastIndex(
-    (reg) => selectedPendingIds.includes(reg.user_id),
-  );
-}
-
 function getSortedWaitlistRegistrations(registrations) {
   const waitlistRegistrations = registrations.filter(
     (reg) => reg.competing.registration_status === 'waiting_list',
@@ -160,12 +151,12 @@ function getSortedWaitlistRegistrations(registrations) {
   )
 }
 
-function getLastSelectedOnWaitlist(
-  waitlistRegistrations,
-  selectedWaitlistIds,
+function getLastSelectedIndex(
+  sortedRegistrations,
+  selectedIds,
 ) {
-  return waitlistRegistrations.findLast(
-    (reg) => selectedWaitlistIds.includes(reg.user_id),
+  return sortedRegistrations.findLastIndex(
+    (reg) => selectedIds.includes(reg.user_id),
   );
 }
 
@@ -173,10 +164,10 @@ export function getSkippedPendingCount(
   registrations,
   partitionedSelectedIds,
 ) {
-  const { pending, waiting } = partitionedSelectedIds;
+  const { pending } = partitionedSelectedIds;
 
   const pendingRegistrations = getSortedPendingRegistrations(registrations);
-  const lastSelectedPendingIndex = getLastSelectedPendingIndex(
+  const lastSelectedPendingIndex = getLastSelectedIndex(
     pendingRegistrations,
     pending,
   );
@@ -204,7 +195,7 @@ export function getSkippedWaitlistCount(
     || rejected.length > 0;
 
   const waitlistRegistrations = getSortedWaitlistRegistrations(registrations);
-  const lastSelectedOnWaitlist = getLastSelectedOnWaitlist(
+  const lastSelectedWaitlistIndex = getLastSelectedIndex(
     waitlistRegistrations,
     waiting,
   );
@@ -213,7 +204,8 @@ export function getSkippedWaitlistCount(
     ? waitlistRegistrations
     : waitlistRegistrations.slice(
       0,
-      lastSelectedOnWaitlist?.competing?.waiting_list_position ?? 0,
+      // still makes sense if no such index exists as this will be -1 + 1 = 0
+      lastSelectedWaitlistIndex + 1,
     );
 
   return shouldBeSelectedRegistrations.filter(
