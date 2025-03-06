@@ -158,7 +158,7 @@ export default function RegistrationActions({
     changeStatus(combined, 'waiting_list');
   };
 
-  const attemptToApprove = () => {
+  const onMoveSelectedToApproved = () => {
     const idsToAccept = [...pending, ...cancelled, ...waiting, ...rejected];
     const skippedWaitlistCount = getSkippedWaitlistCount(
       registrations,
@@ -262,7 +262,7 @@ export default function RegistrationActions({
             icon={APPROVED_ICON}
             color={APPROVED_COLOR}
             isDisabled={!anyApprovable}
-            onClick={attemptToApprove}
+            onClick={onMoveSelectedToApproved}
           />
 
           <MoveAction
