@@ -401,7 +401,7 @@ class Competition < ApplicationRecord
   validate :auto_accept_validations
   private def auto_accept_validations
     errors.add(:auto_accept_registrations, I18n.t('competitions.errors.must_use_wca_registration')) if
-      auto_accept_registrations && !use_wca_registration
+      auto_accept_registrations? && !use_wca_registration
 
     errors.add(:auto_accept_registrations, I18n.t('competitions.errors.auto_accept_limit')) if
       auto_accept_disable_threshold > 0 &&
@@ -516,7 +516,6 @@ class Competition < ApplicationRecord
     self.confirmed? || self.showAtAll
   end
 
-  # TODO: Consider refactoring this once auto-accept is implemented
   def registration_full?
     competitor_count = registrations.accepted_and_paid_pending_count
     competitor_limit_enabled? && competitor_count >= competitor_limit
@@ -525,6 +524,10 @@ class Competition < ApplicationRecord
   def registration_full_and_accepted?
     competitor_count = registrations.accepted_count
     competitor_limit_enabled? && competitor_count >= competitor_limit
+  end
+
+  def auto_accept_threshold_reached?
+    auto_accept_disable_threshold > 0 && auto_accept_disable_threshold <= registrations.competing_status_accepted.count
   end
 
   def number_of_bookmarks
@@ -2970,10 +2973,6 @@ class Competition < ApplicationRecord
         },
       },
     }
-  end
-
-  def auto_accept_threshold_reached?
-    auto_accept_disable_threshold > 0 && auto_accept_disable_threshold <= registrations.competing_status_accepted.count
   end
 
   def fully_paid_registrations_count
