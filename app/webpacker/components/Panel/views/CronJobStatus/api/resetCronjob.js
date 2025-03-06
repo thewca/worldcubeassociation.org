@@ -1,9 +1,9 @@
 import { fetchJsonOrError } from '../../../../../lib/requests/fetchWithAuthenticityToken';
 import { actionUrls } from '../../../../../lib/requests/routes.js.erb';
 
-export default async function resetCronjob({ cronjobClassName }) {
+export default async function resetCronjob({ cronjobName }) {
   const { data } = await fetchJsonOrError(
-    actionUrls.cronjob.reset(cronjobClassName),
+    actionUrls.cronjob.reset(cronjobName),
     {
       method: 'POST',
       headers: {

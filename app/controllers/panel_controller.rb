@@ -109,26 +109,24 @@ class PanelController < ApplicationController
     redirect_to panel_index_path(panel_id: panel_with_panel_page, anchor: panel_page_id, **query_params)
   end
 
-  private def cronjob_from_params
-    cronjob_class_name = params.require(:cronjob_class_name)
-    Object.const_get(cronjob_class_name)
-  end
-
   def cronjob_details
-    render json: cronjob_from_params.serialize
+    cronjob_name = params.require(:cronjob_name)
+    render json: JobUtils.cronjob_statistics_from_cronjob_name(cronjob_name)
   end
 
   def cronjob_run
-    cronjob = cronjob_from_params
-    cronjob.perform_later
+    cronjob_name = params.require(:cronjob_name)
+    JobUtils.run_cronjob(cronjob_name)
 
-    render json: cronjob.serialize
+    render json: JobUtils.cronjob_statistics_from_cronjob_name(cronjob_name)
+  rescue WcaExceptions::NotPermitted => e
+    render status: e.status, json: { error: e.to_s }
   end
 
   def cronjob_reset
-    cronjob = cronjob_from_params
-    cronjob.reset_error_state!
+    cronjob_name = params.require(:cronjob_name)
+    JobUtils.reset_cronjob(cronjob_name)
 
-    render json: cronjob.serialize
+    render json: JobUtils.cronjob_statistics_from_cronjob_name(cronjob_name)
   end
 end

@@ -275,7 +275,7 @@ export const viewUrls = {
     countInRange: (startDate, endDate) => `<%= CGI.unescape(Rails.application.routes.url_helpers.panel_competition_count_path) %>?${jsonToQueryString({ startDate, endDate })}`,
   },
   cronjob: {
-    details: (cronjobClassName) => `<%= CGI.unescape(Rails.application.routes.url_helpers.panel_cronjob_details_path(cronjob_class_name: "${cronjobClassName}")) %>`,
+    details: (cronjobName) => `<%= CGI.unescape(Rails.application.routes.url_helpers.panel_cronjob_details_path(cronjob_name: "${cronjobName}")) %>`,
   },
 }
 
@@ -293,8 +293,8 @@ export const actionUrls = {
     forCompetitionsInRange: (startDate, endDate, selectedValidators, applyFixWhenPossible) => `<%= CGI.unescape(Rails.application.routes.url_helpers.panel_validators_for_competitions_in_range_path) %>?${jsonToQueryString({ startDate, endDate, selectedValidators, applyFixWhenPossible })}`,
   },
   cronjob: {
-    run: (cronjobClassName) => `<%= CGI.unescape(Rails.application.routes.url_helpers.panel_cronjob_run_path(cronjob_class_name: "${cronjobClassName}")) %>`,
-    reset: (cronjobClassName) => `<%= CGI.unescape(Rails.application.routes.url_helpers.panel_cronjob_reset_path(cronjob_class_name: "${cronjobClassName}")) %>`,
+    run: (cronjobName) => `<%= CGI.unescape(Rails.application.routes.url_helpers.panel_cronjob_run_path(cronjob_name: "${cronjobName}")) %>`,
+    reset: (cronjobName) => `<%= CGI.unescape(Rails.application.routes.url_helpers.panel_cronjob_reset_path(cronjob_name: "${cronjobName}")) %>`,
   },
 }
 
