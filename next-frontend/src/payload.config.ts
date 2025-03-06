@@ -4,6 +4,8 @@ import path from 'path'
 import { buildConfig } from 'payload'
 import { fileURLToPath } from 'url'
 import sharp from 'sharp'
+import { authjsPlugin } from "payload-authjs";
+import { authConfig } from "@/auth.config";
 
 import { Media } from './collections/Media'
 
@@ -28,4 +30,9 @@ export default buildConfig({
     },
   }),
   sharp,
+  plugins: [
+    authjsPlugin({
+      authjsConfig: authConfig,
+    }),
+  ],
 })
