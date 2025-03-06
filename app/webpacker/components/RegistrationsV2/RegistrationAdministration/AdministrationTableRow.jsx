@@ -1,5 +1,5 @@
 import {
-  Checkbox, Icon, Popup, Ref, Table,
+  Checkbox, Icon, Popup, Table,
 } from 'semantic-ui-react';
 import React from 'react';
 import { Draggable } from 'react-beautiful-dnd';
@@ -114,135 +114,133 @@ export default function TableRow({
       isDragDisabled={!draggable}
     >
       {(provided) => (
-        <Ref innerRef={provided.innerRef}>
-          <Table.Row
-            key={id}
-            active={isSelected}
-            {...provided.draggableProps}
-            {...provided.dragHandleProps}
-          >
-            <Table.Cell className={checkboxCellColor}>
-              { /* We manually set the margin to 0 here to fix the table row height */}
-              {draggable ? (
-                <Icon name="bars" />
-              ) : (
-                <Checkbox onChange={onCheckboxChange} checked={isSelected} style={{ margin: 0 }} />
-              )}
-            </Table.Cell>
-
-            {withPosition && (
-              <Table.Cell>{position}</Table.Cell>
+        <Table.Row
+          key={id}
+          active={isSelected}
+          ref={provided.innerRef}
+          {...provided.draggableProps}
+          {...provided.dragHandleProps}
+        >
+          <Table.Cell className={checkboxCellColor}>
+            { /* We manually set the margin to 0 here to fix the table row height */}
+            {draggable ? (
+              <Icon name="bars" />
+            ) : (
+              <Checkbox onChange={onCheckboxChange} checked={isSelected} style={{ margin: 0 }} />
             )}
+          </Table.Cell>
 
-            <Table.Cell>
-              <a href={editRegistrationUrl(id, competitionInfo.id)}>
-                {I18n.t('registrations.list.edit')}
+          {withPosition && (
+            <Table.Cell>{position}</Table.Cell>
+          )}
+
+          <Table.Cell>
+            <a href={editRegistrationUrl(id, competitionInfo.id)}>
+              {I18n.t('registrations.list.edit')}
+            </a>
+          </Table.Cell>
+
+          <Table.Cell>
+            {wcaId ? (
+              <a href={personUrl(wcaId)}>{wcaId}</a>
+            ) : (
+              <a href={editPersonUrl(id)}>
+                <Icon name="edit" />
+                {I18n.t('users.edit.profile')}
               </a>
-            </Table.Cell>
+            )}
+          </Table.Cell>
 
-            <Table.Cell>
-              {wcaId ? (
-                <a href={personUrl(wcaId)}>{wcaId}</a>
-              ) : (
-                <a href={editPersonUrl(id)}>
-                  <Icon name="edit" />
-                  {I18n.t('users.edit.profile')}
-                </a>
-              )}
-            </Table.Cell>
+          <Table.Cell>{name}</Table.Cell>
 
-            <Table.Cell>{name}</Table.Cell>
+          {dobIsShown && <Table.Cell>{dateOfBirth}</Table.Cell>}
 
-            {dobIsShown && <Table.Cell>{dateOfBirth}</Table.Cell>}
+          <Table.Cell>
+            <RegionFlag iso2={country.iso2} withoutTooltip={regionIsExpanded} />
+            {' '}
+            {regionIsExpanded && countries.byIso2[country.iso2].name}
+          </Table.Cell>
 
-            <Table.Cell>
-              <RegionFlag iso2={country.iso2} withoutTooltip={regionIsExpanded} />
-              {' '}
-              {regionIsExpanded && countries.byIso2[country.iso2].name}
-            </Table.Cell>
+          <Table.Cell>
+            <RegistrationTime
+              timestamp={timestampIsShown}
+              paidOn={updatedAt}
+              hasPaid={hasPaid}
+              registeredOn={registeredOn}
+              paymentStatuses={paymentStatuses}
+              usesPaymentIntegration={competitionInfo['using_payment_integrations?']}
+            />
+          </Table.Cell>
 
-            <Table.Cell>
-              <RegistrationTime
-                timestamp={timestampIsShown}
-                paidOn={updatedAt}
-                hasPaid={hasPaid}
-                registeredOn={registeredOn}
-                paymentStatuses={paymentStatuses}
-                usesPaymentIntegration={competitionInfo['using_payment_integrations?']}
-              />
-            </Table.Cell>
-
-            {competitionInfo['using_payment_integrations?'] && (
+          {competitionInfo['using_payment_integrations?'] && (
             <Table.Cell>
               {paymentAmount !== 0
                 ? isoMoneyToHumanReadable(paymentAmount, competitionInfo.currency_code)
                 : ''}
             </Table.Cell>
-            )}
+          )}
 
-            {eventsAreExpanded ? (
-              competitionInfo.event_ids.map((eventId) => (
-                <Table.Cell key={`event-${eventId}`}>
-                  {eventIds.includes(eventId) && (
-                    <EventIcon id={eventId} size="1em" />
-                  )}
-                </Table.Cell>
-              ))
-            ) : (
-              <Popup
-                content={eventIds.map((eventId) => (
-                  <EventIcon key={eventId} id={eventId} size="1em" />
-                ))}
-                position="top center"
-                trigger={(
-                  <Table.Cell>
-                    <span>
-                      {eventIds.length}
-                      {' '}
-                      <Icon name="magnify" />
-                    </span>
-                  </Table.Cell>
-                 )}
-              />
-
-            )}
-
-            <Table.Cell>{registration.guests}</Table.Cell>
-
-            {commentsAreShown && (
-              <>
-                <Table.Cell>
-                  <Popup
-                    content={comment}
-                    trigger={<span>{truncateComment(comment)}</span>}
-                  />
-                </Table.Cell>
-
-                <Table.Cell>
-                  <Popup
-                    content={adminComment}
-                    trigger={<span>{truncateComment(adminComment)}</span>}
-                  />
-                </Table.Cell>
-              </>
-            )}
-
-            <Table.Cell>
-              <a href={`mailto:${emailAddress}`}>
-                {emailIsExpanded ? (
-                  emailAddress
-                ) : (
-                  <Popup
-                    content={emailAddress}
-                    trigger={<span><Icon name="mail" /></span>}
-                  />
+          {eventsAreExpanded ? (
+            competitionInfo.event_ids.map((eventId) => (
+              <Table.Cell key={`event-${eventId}`}>
+                {eventIds.includes(eventId) && (
+                  <EventIcon id={eventId} size="1em" />
                 )}
-              </a>
-              {' '}
-              <Icon link onClick={copyEmail} name="copy" title={I18n.t('competitions.registration_v2.update.email_copy')} />
-            </Table.Cell>
-          </Table.Row>
-        </Ref>
+              </Table.Cell>
+            ))
+          ) : (
+            <Popup
+              content={eventIds.map((eventId) => (
+                <EventIcon key={eventId} id={eventId} size="1em" />
+              ))}
+              position="top center"
+              trigger={(
+                <Table.Cell>
+                  <span>
+                    {eventIds.length}
+                    {' '}
+                    <Icon name="magnify" />
+                  </span>
+                </Table.Cell>
+              )}
+            />
+          )}
+
+          <Table.Cell>{registration.guests}</Table.Cell>
+
+          {commentsAreShown && (
+            <>
+              <Table.Cell>
+                <Popup
+                  content={comment}
+                  trigger={<span>{truncateComment(comment)}</span>}
+                />
+              </Table.Cell>
+
+              <Table.Cell>
+                <Popup
+                  content={adminComment}
+                  trigger={<span>{truncateComment(adminComment)}</span>}
+                />
+              </Table.Cell>
+            </>
+          )}
+
+          <Table.Cell>
+            <a href={`mailto:${emailAddress}`}>
+              {emailIsExpanded ? (
+                emailAddress
+              ) : (
+                <Popup
+                  content={emailAddress}
+                  trigger={<span><Icon name="mail" /></span>}
+                />
+              )}
+            </a>
+            {' '}
+            <Icon link onClick={copyEmail} name="copy" title={I18n.t('competitions.registration_v2.update.email_copy')} />
+          </Table.Cell>
+        </Table.Row>
       )}
     </Draggable>
   );

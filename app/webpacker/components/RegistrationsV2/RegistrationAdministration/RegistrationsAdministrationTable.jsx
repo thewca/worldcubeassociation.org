@@ -1,6 +1,6 @@
 import React, { useMemo, useReducer } from 'react';
 import {
-  Ref, Segment, Table, TableFooter,
+  Segment, Table, TableFooter,
 } from 'semantic-ui-react';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import { noop } from 'lodash';
@@ -101,25 +101,23 @@ export default function RegistrationAdministrationTable({
         <DragDropContext onDragEnd={handleOnDragEnd}>
           <Droppable droppableId="droppable-table">
             {(providedDroppable) => (
-              <Ref innerRef={providedDroppable.innerRef}>
-                <Table.Body {...providedDroppable.droppableProps}>
-                  {sortedRegistrations.map((w, i) => (
-                    <TableRow
-                      competitionInfo={competitionInfo}
-                      columnsExpanded={columnsExpanded}
-                      registration={w}
-                      onCheckboxChange={() => onToggle(w.user.id)}
-                      index={i}
-                      draggable={draggable}
-                      isSelected={selected.includes(w.user.id)}
-                      withPosition={withPosition}
-                      color={color}
-                      distinguishPaidUnpaid={distinguishPaidUnpaid}
-                    />
-                  ))}
-                  {providedDroppable.placeholder}
-                </Table.Body>
-              </Ref>
+              <Table.Body ref={providedDroppable.innerRef} {...providedDroppable.droppableProps}>
+                {sortedRegistrations.map((w, i) => (
+                  <TableRow
+                    competitionInfo={competitionInfo}
+                    columnsExpanded={columnsExpanded}
+                    registration={w}
+                    onCheckboxChange={() => onToggle(w.user.id)}
+                    index={i}
+                    draggable={draggable}
+                    isSelected={selected.includes(w.user.id)}
+                    withPosition={withPosition}
+                    color={color}
+                    distinguishPaidUnpaid={distinguishPaidUnpaid}
+                  />
+                ))}
+                {providedDroppable.placeholder}
+              </Table.Body>
             )}
           </Droppable>
         </DragDropContext>
