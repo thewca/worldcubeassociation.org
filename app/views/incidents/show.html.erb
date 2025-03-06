@@ -12,6 +12,19 @@
     <% end %>
   </div>
 
+  <% if current_user&.can_manage_incidents? %>
+    <div style="margin-top: 10px; display: flex; align-items: center;">
+      <strong style="margin-right: 10px;">Visibility:</strong>
+      <%= form_for @incident, html: { style: 'display: inline-flex; align-items: center;' } do |f| %>
+        <%= f.select :visibility, 
+            Incident.visibilities.map { |k, _| [k.titleize, k] },
+            { selected: @incident.visibility },
+            { class: 'ui dropdown',
+              style: 'min-width: 80px; max-height: 40px;'} %>
+      <% end %>
+    </div>
+  <% end %>
+
   <p>
     <% @incident.tags_array.each do |t| %>
       <%= render "incident_tag", tag: t %>
