@@ -417,6 +417,10 @@ class Registration < ApplicationRecord
   end
 
   def consider_auto_close
+    puts "in consider auto close"
+    puts user.name
+    puts competition.name
+    puts id
     outstanding_entry_fees.zero? && competition.attempt_auto_close!
   end
 

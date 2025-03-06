@@ -28,7 +28,7 @@ RSpec.describe WaitingList do
     it 're-adding a registration has no effect' do
       registrations = FactoryBot.create_list(:registration, 3, :waiting_list, competition: competition)
       initial_waiting_list = waiting_list.entries
-      waiting_list.add(registrations.first.id)
+      waiting_list.add(registrations.first)
       expect(competition.waiting_list.reload.entries).to eq(initial_waiting_list)
     end
 

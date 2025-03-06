@@ -684,7 +684,7 @@ RSpec.describe Registration do
         FactoryBot.create(:registration, :waiting_list, competition: auto_accept_comp)
         FactoryBot.create(:registration_payment, :skip_create_hook, registration: reg, competition: auto_accept_comp)
         reg.update(competing_status: 'waiting_list')
-        auto_accept_comp.waiting_list.add(reg.id)
+        auto_accept_comp.waiting_list.add(reg)
 
         reg.auto_accept
         expect(reg.reload.competing_status).to eq('waiting_list')
@@ -850,10 +850,16 @@ RSpec.describe Registration do
   end
 
   describe 'hooks' do
-    it 'positive registration_payment calls registration.consider_auto_close' do
+    it 'positive registration_payment calls registration.consider_auto_close', :tag do
       competition = FactoryBot.create(:competition)
       reg = FactoryBot.create(:registration, competition: competition)
-      expect(reg).to receive(:consider_auto_close)
+      puts reg.user.name
+      puts reg.competition.name
+      puts reg.id
+      puts reg.object_id
+
+      allow(reg).to receive(:consider_auto_close).and_call_original # Spy setup
+      expect_any_instance_of(Registration).to have_received(:consider_auto_close)
 
       FactoryBot.create(
         :registration_payment,
