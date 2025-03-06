@@ -1944,6 +1944,12 @@ en:
         -6002: "You need to finish your registration before you can pay"
     #context: and when an error occurred
     errors:
+      cant_load_competition_info: "Failed to load competition information - please retry or contact WST if this error persists."
+      must_use_wca_registration: "Auto-accept can only be used if you are using the WCA website for registrations"
+      auto_accept_limit: "Limit for auto-accepted registrations must be less than the competitor limit"
+      auto_accept_not_negative: "Limit for auto-accepted registrations cannot be less than 0."
+      auto_accept_accept_paid_pending: "Cant enable auto-accept if there are paid-pending registrations - either accept them or move them to the waiting list"
+      auto_accept_accept_waitlisted: "Cant enable auto-accept - please accept as many users from the Waiting List as possible."
       auto_close_exceed_paid: "Auto close threshold must be greater than the number of currently paid registrations"
       auto_close_positive_nonzero: "Auto-close threshold must be greater than 0"
       must_exceed_competitor_limit: "Auto-close threshold must be greater than the competitor limit"
