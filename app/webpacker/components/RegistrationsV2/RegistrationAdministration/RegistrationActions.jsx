@@ -9,6 +9,7 @@ import { countries } from '../../../lib/wca-data.js.erb';
 import {
   APPROVED_COLOR, APPROVED_ICON,
   CANCELLED_COLOR, CANCELLED_ICON,
+  getSkippedPendingCount,
   getSkippedWaitlistCount,
   PENDING_COLOR, PENDING_ICON,
   REJECTED_COLOR, REJECTED_ICON,
@@ -116,6 +117,26 @@ export default function RegistrationActions({
       },
     );
   };
+
+  const onMoveSelectedToWaitlist = () => {
+    const skippedPendingCount = getSkippedPendingCount(
+      registrations,
+      partitionedSelectedIds,
+    );
+
+    if (skippedPendingCount > 0) {
+      confirm({
+        content: I18n.t(
+          'competitions.registration_v2.list.pending.waitlist_skipped_warning',
+          { count: skippedPendingCount },
+        ),
+      }).then(
+        moveToWaitlist,
+      ).catch(noop);
+    } else {
+      moveToWaitlist();
+    }
+  }
 
   const moveToWaitlist = () => {
     const attendees = [...pending, ...cancelled, ...accepted, ...rejected];
@@ -233,9 +254,7 @@ export default function RegistrationActions({
             icon={WAITLIST_ICON}
             color={WAITLIST_COLOR}
             isDisabled={!anyWaitlistable}
-            onClick={() => moveToWaitlist(
-              [...pending, ...cancelled, ...accepted, ...rejected],
-            )}
+            onClick={onMoveSelectedToWaitlist}
           />
 
           <MoveAction
