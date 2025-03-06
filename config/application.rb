@@ -100,14 +100,11 @@ module WcaOnRails
 
     # Set global default_url_options, see https://github.com/rails/rails/issues/29992#issuecomment-761892658
     root_url = URI.parse(EnvConfig.ROOT_URL)
-    self.default_url_options = {
+    routes.default_url_options = {
       protocol: root_url.scheme,
       host: root_url.host,
       port: root_url.port,
     }
-
-    routes.default_url_options = self.default_url_options
-    config.action_controller.default_url_options = self.default_url_options
 
     config.action_view.preload_links_header = false
     config.active_storage.variant_processor = :mini_magick
