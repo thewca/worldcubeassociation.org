@@ -1,12 +1,18 @@
 "use client";
 
 import { useSession, signIn, signOut } from "next-auth/react";
-import {useState} from "react";
-import getPermissions from "@/lib/wca/users/permissions";
+import { useCallback, useState } from "react";
+import { authenticatedClient } from "@/lib/wca/wcaAPI";
 
 export default function Home() {
   const { data: session } = useSession();
-  const [result, setResult] = useState<any>(null);
+  const [result, setResult] = useState<unknown>(null);
+
+  const doAPIRequest = useCallback(async () => {
+    const apiClient = authenticatedClient(session?.accessToken);
+    const { data } = await apiClient.GET("/users/me/permissions");
+    setResult(data);
+  }, [session])
 
   return (
     <div>
@@ -14,7 +20,7 @@ export default function Home() {
         <>
           <p>Welcome, {session.user?.name}</p>
           <button onClick={() => signOut()}>Sign out</button>
-          <button onClick={async () => setResult(await getPermissions(session.accessToken))}>Do an API Request</button>
+          <button onClick={doAPIRequest}>Do an API Request</button>
           {result && JSON.stringify(result, null, 2)}
         </>
       ) : (

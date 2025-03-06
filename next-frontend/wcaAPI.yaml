@@ -1,0 +1,130 @@
+openapi: 3.1.0
+title: WCA API Documentation
+summary: Documentation of the WCA API, currently in progress
+description: The WCA API allows developers to access data from the WCA using oidc
+contact:
+  name: WCA Software Team
+  url: https://www.worldcubeassociation.org
+  email: software@worldcubeassociation.org
+version: 0.0.1
+servers:
+  - url: http://localhost:3000/api/v0
+    description: The production API server
+paths:
+  /users/me:
+    get:
+      summary: Get current user info
+      operationId: getCurrentUser
+      tags:
+        - Users
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Successfully retrieved user information
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "401":
+          description: Unauthorized
+
+  /users/me/personal_records:
+    get:
+      summary: Get user's personal records
+      operationId: getPersonalRecords
+      tags:
+        - Users
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Successfully retrieved personal records
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/PersonalRecord"
+        "401":
+          description: Unauthorized
+
+  /users/me/preferred_events:
+    get:
+      summary: Get user's preferred events
+      operationId: getPreferredEvents
+      tags:
+        - Users
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Successfully retrieved preferred events
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Event"
+        "401":
+          description: Unauthorized
+
+  /users/me/permissions:
+    get:
+      summary: Get user's permissions
+      operationId: getUserPermissions
+      tags:
+        - Users
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Successfully retrieved permissions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+        "401":
+          description: Unauthorized
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        email:
+          type: string
+          format: email
+
+    PersonalRecord:
+      type: object
+      properties:
+        eventId:
+          type: string
+        bestTime:
+          type: integer
+          description: Best performance in milliseconds
+        averageTime:
+          type: integer
+          description: Average performance in milliseconds
+
+    Event:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
