@@ -139,12 +139,12 @@ export default function RegistrationActions({
   }
 
   const moveToWaitlist = () => {
-    const attendees = [...pending, ...cancelled, ...accepted, ...rejected];
+    const idsToWaitlist = [...pending, ...cancelled, ...accepted, ...rejected];
 
     const registrationsByUserId = _.groupBy(registrations, 'user_id');
 
     const [paid, unpaid] = _.partition(
-      attendees,
+      idsToWaitlist,
       (userId) => registrationsByUserId[userId]?.[0]?.payment?.updated_at,
     );
 
