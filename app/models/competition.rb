@@ -404,11 +404,13 @@ class Competition < ApplicationRecord
       auto_accept_registrations? && !use_wca_registration
 
     errors.add(:auto_accept_registrations, I18n.t('competitions.errors.auto_accept_limit')) if
+      auto_accept_disable_threshold.present? &&
       auto_accept_disable_threshold > 0 &&
       competitor_limit.present? &&
       auto_accept_disable_threshold >= competitor_limit
 
-    errors.add(:auto_accept_registrations, I18n.t('competitions.errors.auto_accept_not_negative')) if auto_accept_disable_threshold < 0
+    errors.add(:auto_accept_registrations, I18n.t('competitions.errors.auto_accept_not_negative')) if
+      auto_accept_disable_threshold.present? && auto_accept_disable_threshold < 0
 
     # TODO: This logic belongs in a controller more appropriately than in the validation.
     # IF we build a controller endpoint specifically for auto_accept, this logic should be move there.
