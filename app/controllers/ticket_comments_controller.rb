@@ -28,8 +28,6 @@ class TicketCommentsController < ApplicationController
       acting_stakeholder_id: acting_stakeholder_id,
     )
 
-    ticket.ticket_stakeholders.each { |stakeholder| stakeholder.notify_new_comment(comment) }
-
     render json: comment
   end
 end

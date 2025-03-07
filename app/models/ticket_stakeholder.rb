@@ -25,8 +25,8 @@ class TicketStakeholder < ApplicationRecord
     stakeholder_type == "UserGroup"
   end
 
-  def notify_new_comment(comment)
-    TicketsMailer.notify_create_ticket_comment(comment, stakeholder).deliver_later
+  def user_stakeholder?
+    stakeholder_type == "User"
   end
 
   def serializable_hash(options = nil)
