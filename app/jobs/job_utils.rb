@@ -20,4 +20,23 @@ module JobUtils
     WeatMonthlyDigestJob,
     DelegatesMetadataSyncJob,
   ].freeze
+
+  WCA_CRONJOBS_MAP = WCA_CRONJOBS.to_h { |job| [job.name, job] }
+
+  def self.cronjob_statistics_from_cronjob_name(cronjob_name)
+    WCA_CRONJOBS_MAP[cronjob_name]&.cronjob_statistics
+  end
+
+  def self.run_cronjob(cronjob_name)
+    cronjob = WCA_CRONJOBS_MAP[cronjob_name]
+
+    raise WcaExceptions::NotPermitted.new("Cannot run cronjob: #{cronjob.reason_not_to_run}") if cronjob.try(:reason_not_to_run).present?
+
+    cronjob.perform_later
+  end
+
+  def self.reset_cronjob(cronjob_name)
+    cronjob = WCA_CRONJOBS_MAP[cronjob_name]
+    cronjob.reset_error_state!
+  end
 end
