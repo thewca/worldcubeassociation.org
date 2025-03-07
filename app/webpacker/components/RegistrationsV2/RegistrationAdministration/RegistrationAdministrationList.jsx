@@ -397,6 +397,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
             spotsRemaining={spotsRemaining}
             competitionInfo={competitionInfo}
             updateRegistrationMutation={updateRegistrationMutation}
+            tableRefs={tableRefs}
           />
         </Sticky>
 
