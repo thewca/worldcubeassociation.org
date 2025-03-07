@@ -14,8 +14,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   ],
   callbacks: {
     jwt({ token, trigger, session, account }) {
-      if(trigger === "signIn" || trigger === "update"){
-        return { ...token, accessToken: account?.access_token, userId: account?.userId }
+      if(trigger === "signIn"){
+        return { ...token, accessToken: account?.access_token }
       }
       return { ...token };
     },
