@@ -151,7 +151,8 @@ RSpec.describe WaitingList do
     end
 
     it 'does nothing if removing an item which isnt present' do
-      expect { waiting_list.remove(999_999) }.not_to raise_error
+      reg = FactoryBot.create(:registration, id: 999_999, competition: competition)
+      expect { waiting_list.remove(reg) }.not_to raise_error
 
       expect(reg1.waiting_list_position).to eq(1)
       expect(reg2.waiting_list_position).to eq(2)
