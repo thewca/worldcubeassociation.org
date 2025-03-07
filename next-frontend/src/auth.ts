@@ -7,9 +7,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       id: "WCA",
       name: "WCA-OIDC-Provider",
       type: "oidc",
-      issuer: "http://wca_on_rails:3000",
-      clientId: "k3cCulPkUe6BCYAB8xP1v4eYMxvKZdzUwH0K3-0R_H0",
-      clientSecret: "euFyUD_CTFiSv7mRX0z77LBUQ9teHQo6checdcXSWzc",
+      issuer: process.env.OIDC_ISSUER,
+      clientId: process.env.OIDC_CLIENT_ID,
+      clientSecret: process.env.OIDC_CLIENT_SECRET,
     },
   ],
 })
