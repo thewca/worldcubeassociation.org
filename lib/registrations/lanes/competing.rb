@@ -60,10 +60,10 @@ module Registrations
           changes[:event_ids] = event_ids if event_ids.present?
 
           registration.save!
-          registration.add_history_entry(changes, 'user', current_user_id, Registrations::Helper.action_type(update_params, current_user_id))
+          registration.add_history_entry(changes, 'user', acting_user_id, Registrations::Helper.action_type(update_params, acting_user_id))
         end
 
-        send_status_change_email(registration, status, old_status, user_id, current_user_id) if status.present? && old_status != status
+        send_status_change_email(registration, status, old_status, user_id, acting_user_id) if status.present? && old_status != status
 
         # TODO: V3-REG Cleanup Figure out a way to get rid of this reload
         registration.reload
