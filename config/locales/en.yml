@@ -1889,6 +1889,7 @@ en:
         update_contact_message: "I would like to update my registration details as follows: %{update_params}"
         delete_contact_message: "I want to delete my registration"
         no_changes: "There are no changes"
+        email: "Email"
         email_send: "Send Email"
         email_copy: "Copy Emails"
         email_message: "Copied to clipboard. Remember to use bcc!"
