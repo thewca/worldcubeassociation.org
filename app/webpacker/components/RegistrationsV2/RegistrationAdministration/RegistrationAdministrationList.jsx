@@ -515,6 +515,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
         <Sticky context={actionsRef} offset={20}>
           <RegistrationActions
             partitionedSelectedIds={partitionedSelectedIds}
+            partitionedRegistrations={partitionedRegistrations}
             refresh={selectedIds.clear}
             registrations={registrations}
             spotsRemaining={spotsRemaining}

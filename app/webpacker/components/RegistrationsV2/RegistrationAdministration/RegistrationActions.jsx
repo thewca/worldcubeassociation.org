@@ -1,5 +1,7 @@
 import React, { useMemo } from 'react';
-import { Button, Dropdown } from 'semantic-ui-react';
+import {
+  Button, Dropdown, Popup, Table, TableBody, TableCell, TableHeader, TableHeaderCell, TableRow,
+} from 'semantic-ui-react';
 import { DateTime } from 'luxon';
 import { noop } from 'lodash';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
@@ -17,6 +19,14 @@ import {
   WAITLIST_COLOR, WAITLIST_ICON,
 } from '../../../lib/utils/registrationAdmin';
 import { useConfirm } from '../../../lib/providers/ConfirmProvider';
+
+export const registrationStatusTranslationKeys = {
+  pending: 'pending',
+  waiting: 'waitlist',
+  accepted: 'approved',
+  cancelled: 'cancelled',
+  rejected: 'rejected',
+};
 
 function escapeCsv(value) {
   if (!value) return '';
@@ -79,6 +89,7 @@ function csvExport(selected, registrations, competition) {
 
 export default function RegistrationActions({
   partitionedSelectedIds,
+  partitionedRegistrations,
   refresh,
   registrations,
   spotsRemaining,
@@ -247,8 +258,28 @@ export default function RegistrationActions({
     { behavior: 'smooth', block: 'start' },
   );
 
+  const hasCompetitorLimit = Boolean(competitionInfo.competitor_limit);
+
   return (
     <>
+      <Popup
+        flowing
+        trigger={
+          <Button color="black" icon="info" text={I18n.t('competitions.registration_v2.info')} />
+        }
+        content={(
+          <SummaryTable
+            partitionedSelectedIds={partitionedSelectedIds}
+            partitionedRegistrations={partitionedRegistrations}
+            partitionedMaximums={{ accepted: competitionInfo.competitor_limit }}
+            selectedCount={selectedCount}
+            registrationCount={registrations.length}
+            withSelectedCounts={anySelected}
+            withMaximums={hasCompetitorLimit}
+          />
+        )}
+      />
+
       <Dropdown
         pointing
         className="icon white"
@@ -394,6 +425,49 @@ export default function RegistrationActions({
         </Dropdown.Menu>
       </Dropdown>
     </>
+  );
+}
+
+function SummaryTable({
+  partitionedSelectedIds,
+  partitionedRegistrations,
+  partitionedMaximums,
+  selectedCount,
+  registrationCount,
+  withSelectedCounts,
+  withMaximums,
+}) {
+  return (
+    <Table basic="very">
+      <TableHeader>
+        <TableRow>
+          <TableHeaderCell />
+          {withSelectedCounts && <TableHeaderCell textAlign="right">Selected</TableHeaderCell>}
+          <TableHeaderCell textAlign="right">Size</TableHeaderCell>
+          {withMaximums && <TableHeaderCell textAlign="right">Max</TableHeaderCell>}
+        </TableRow>
+      </TableHeader>
+
+      <TableBody>
+        {Object.entries(registrationStatusTranslationKeys).map(([status, translationKey]) => (
+          <TableRow key={status}>
+            <TableCell>{I18n.t(`competitions.registration_v2.update.${translationKey}`)}</TableCell>
+            {withSelectedCounts && <TableCell textAlign="right">{partitionedSelectedIds[status].length}</TableCell>}
+            <TableCell textAlign="right">{partitionedRegistrations[status].length}</TableCell>
+            {withMaximums && <TableCell textAlign="right">{partitionedMaximums[status] ?? '-'}</TableCell>}
+          </TableRow>
+        ))}
+      </TableBody>
+
+      <Table.Footer>
+        <TableRow>
+          <TableCell>Total</TableCell>
+          {withSelectedCounts && <TableCell textAlign="right">{selectedCount}</TableCell>}
+          <TableCell textAlign="right">{registrationCount}</TableCell>
+          {withMaximums && <TableCell textAlign="right">-</TableCell>}
+        </TableRow>
+      </Table.Footer>
+    </Table>
   );
 }
 
