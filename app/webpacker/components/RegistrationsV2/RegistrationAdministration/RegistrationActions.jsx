@@ -184,25 +184,29 @@ export default function RegistrationActions({
         }}
       />
 
-      <Button
-        as="a"
-        content={I18n.t('competitions.registration_v2.update.email_send')}
-        href={`mailto:?bcc=${selectedEmails}`}
-        id="email-selected"
-        target="_blank"
-        rel="noreferrer"
+      <Dropdown
+        pointing
+        className="icon grey"
+        labeled
+        text={I18n.t('competitions.registration_v2.update.email', { count: selectedCount })}
         icon="envelope"
-        labelPosition="left"
+        button
         disabled={!anySelected}
-      />
+      >
+        <Dropdown.Menu>
+          <DropdownLink
+            text={I18n.t('competitions.registration_v2.update.email_send')}
+            icon="pencil"
+            href={`mailto:?bcc=${selectedEmails}`}
+          />
 
-      <Button
-        content={I18n.t('competitions.registration_v2.update.email_copy')}
-        icon="copy"
-        labelPosition="left"
-        onClick={() => copyEmails(selectedEmails)}
-        disabled={!anySelected}
-      />
+          <DropdownAction
+            text={I18n.t('competitions.registration_v2.update.email_copy')}
+            icon="copy"
+            onClick={() => copyEmails(selectedEmails)}
+          />
+        </Dropdown.Menu>
+      </Dropdown>
 
       <Dropdown
         pointing
@@ -214,7 +218,7 @@ export default function RegistrationActions({
         disabled={!anySelected}
       >
         <Dropdown.Menu>
-          <MoveAction
+          <DropdownAction
             text={I18n.t('competitions.registration_v2.update.pending')}
             icon={PENDING_ICON}
             color={PENDING_COLOR}
@@ -225,7 +229,7 @@ export default function RegistrationActions({
             )}
           />
 
-          <MoveAction
+          <DropdownAction
             text={I18n.t('competitions.registration_v2.update.waitlist')}
             icon={WAITLIST_ICON}
             color={WAITLIST_COLOR}
@@ -235,7 +239,7 @@ export default function RegistrationActions({
             )}
           />
 
-          <MoveAction
+          <DropdownAction
             text={I18n.t('competitions.registration_v2.update.approved')}
             icon={APPROVED_ICON}
             color={APPROVED_COLOR}
@@ -243,7 +247,7 @@ export default function RegistrationActions({
             onClick={attemptToApprove}
           />
 
-          <MoveAction
+          <DropdownAction
             text={I18n.t('competitions.registration_v2.update.cancelled')}
             icon={CANCELLED_ICON}
             color={CANCELLED_COLOR}
@@ -254,7 +258,7 @@ export default function RegistrationActions({
             )}
           />
 
-          <MoveAction
+          <DropdownAction
             text={I18n.t('competitions.registration_v2.update.rejected')}
             icon={REJECTED_ICON}
             color={REJECTED_COLOR}
@@ -270,7 +274,7 @@ export default function RegistrationActions({
   );
 }
 
-function MoveAction({
+function DropdownAction({
   text, icon, color, isDisabled, onClick,
 }) {
   return (
@@ -279,6 +283,23 @@ function MoveAction({
       icon={{ color, name: icon, size: 'large' }}
       disabled={isDisabled}
       onClick={onClick}
+    />
+  );
+}
+
+function DropdownLink({
+  text, icon, color, isDisabled, href,
+}) {
+  return (
+    <Dropdown.Item
+      content={text}
+      icon={{ color, name: icon, size: 'large' }}
+      disabled={isDisabled}
+      as="a"
+      href={href}
+      // id="email-selected"
+      target="_blank"
+      rel="noreferrer"
     />
   );
 }
