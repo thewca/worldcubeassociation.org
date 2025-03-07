@@ -190,6 +190,7 @@ export default function RegistrationActions({
     <>
       <Popup
         flowing
+        position="bottom left"
         trigger={
           <Button color="black" icon="info" text={I18n.t('competitions.registration_v2.info')} />
         }
