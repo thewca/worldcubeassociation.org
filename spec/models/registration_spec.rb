@@ -579,6 +579,276 @@ RSpec.describe Registration do
     end
   end
 
+  describe '#auto_accept' do
+    let(:auto_accept_comp) { FactoryBot.create(:competition, :auto_accept, :registration_open) }
+    let!(:reg) { FactoryBot.create(:registration, competition: auto_accept_comp) }
+
+    before do
+      allow(Rails.logger).to receive(:error)
+    end
+
+    it 'auto accepts a competitor who pays for their pending registration' do
+      expect(reg.competing_status).to eq('pending')
+
+      FactoryBot.create(:registration_payment, :skip_create_hook, registration: reg, competition: auto_accept_comp)
+
+      reg.auto_accept
+      expect(reg.reload.competing_status).to eq('accepted')
+      expect(reg.registration_history_entries.last.actor_type).to eq('System')
+      expect(reg.registration_history_entries.last.actor_id).to eq('Auto-accept')
+    end
+
+    it 'auto accepts a competitor who included a donation in their payment' do
+      expect(reg.competing_status).to eq('pending')
+
+      FactoryBot.create(:registration_payment, :skip_create_hook, :with_donation, registration: reg, competition: auto_accept_comp)
+
+      reg.auto_accept
+      expect(reg.reload.competing_status).to eq('accepted')
+    end
+
+    it 'doesnt auto accept a competitor who gets refunded' do
+      expect(reg.competing_status).to eq('pending')
+
+      FactoryBot.create(:registration_payment, :refund, :skip_create_hook, registration: reg, competition: auto_accept_comp)
+
+      reg.auto_accept
+      expect(reg.reload.competing_status).to eq('pending')
+      expect(Rails.logger).to have_received(:error).with('Competitor still has outstanding registration fees')
+    end
+
+    it 'accepts the last competitor on the auto-accept disable threshold' do
+      auto_accept_comp.auto_accept_disable_threshold = 5
+      FactoryBot.create_list(:registration, 4, :accepted, competition: auto_accept_comp)
+
+      # Add some non-accepted registrations to make sure we're checking accepted registrations only
+      FactoryBot.create_list(:registration, 5, competition: auto_accept_comp)
+      expect(reg.competing_status).to eq('pending')
+
+      FactoryBot.create(:registration_payment, :skip_create_hook, registration: reg, competition: auto_accept_comp)
+
+      reg.auto_accept
+      expect(reg.reload.competing_status).to eq('accepted')
+    end
+
+    it 'can auto-accept the first user on the waiting list' do
+      waiting_list_reg = FactoryBot.create(:registration, :waiting_list, competition: auto_accept_comp)
+
+      FactoryBot.create(:registration_payment, :skip_create_hook, registration: waiting_list_reg, competition: auto_accept_comp)
+
+      waiting_list_reg.auto_accept
+      expect(waiting_list_reg.reload.competing_status).to eq('accepted')
+    end
+
+    context 'auto-accept isnt triggered' do
+      it 'if a waitlisted registration is not first in the waiting list' do
+        FactoryBot.create_list(:registration, 3, :waiting_list, competition: auto_accept_comp)
+        waiting_list_reg = FactoryBot.create(:registration, :waiting_list, competition: auto_accept_comp)
+        expect(waiting_list_reg.waiting_list_position).to eq(4)
+
+        FactoryBot.create(:registration_payment, :skip_create_hook, registration: reg, competition: auto_accept_comp)
+
+        waiting_list_reg.auto_accept
+        expect(waiting_list_reg.reload.competing_status).to eq('waiting_list')
+        expect(Rails.logger).to have_received(:error).with('Can only auto-accept pending registrations or first position on waiting list')
+      end
+
+      it 'if status is cancelled' do
+        FactoryBot.create(:registration_payment, :skip_create_hook, registration: reg, competition: auto_accept_comp)
+
+        reg.update(competing_status: 'cancelled')
+
+        reg.auto_accept
+        expect(reg.reload.competing_status).to eq('cancelled')
+        expect(Rails.logger).to have_received(:error).with('Can only auto-accept pending registrations or first position on waiting list')
+      end
+
+      it 'if status is rejected' do
+        FactoryBot.create(:registration_payment, :skip_create_hook, registration: reg, competition: auto_accept_comp)
+        reg.update(competing_status: 'rejected')
+
+        reg.auto_accept
+        expect(reg.reload.competing_status).to eq('rejected')
+        expect(Rails.logger).to have_received(:error).with('Can only auto-accept pending registrations or first position on waiting list')
+      end
+
+      it 'if status is accepted' do
+        FactoryBot.create(:registration_payment, :skip_create_hook, registration: reg, competition: auto_accept_comp)
+        reg.update(competing_status: 'accepted')
+
+        reg.auto_accept
+        expect(Rails.logger).to have_received(:error).with('Can only auto-accept pending registrations or first position on waiting list')
+      end
+
+      it 'if status is waiting_list and position isnt first' do
+        FactoryBot.create(:registration, :waiting_list, competition: auto_accept_comp)
+        FactoryBot.create(:registration_payment, :skip_create_hook, registration: reg, competition: auto_accept_comp)
+        reg.update(competing_status: 'waiting_list')
+        auto_accept_comp.waiting_list.add(reg)
+
+        reg.auto_accept
+        expect(reg.reload.competing_status).to eq('waiting_list')
+        expect(Rails.logger).to have_received(:error).with('Can only auto-accept pending registrations or first position on waiting list')
+      end
+
+      it 'before registration has opened' do
+        unopened_comp = FactoryBot.create(:competition, :auto_accept, :registration_not_opened)
+        unopened_reg = FactoryBot.create(:registration, competition: unopened_comp)
+
+        expect(unopened_reg.competing_status).to eq('pending')
+
+        FactoryBot.create(:registration_payment, :skip_create_hook, registration: unopened_reg, competition: unopened_comp)
+
+        unopened_reg.auto_accept
+        expect(unopened_reg.reload.competing_status).to eq('pending')
+        expect(Rails.logger).to have_received(:error).with('Cant auto-accept while registration is not open')
+      end
+
+      it 'after registration has closed' do
+        closed_comp = FactoryBot.create(:competition, :auto_accept)
+        closed_reg = FactoryBot.create(:registration, competition: closed_comp)
+
+        expect(closed_reg.competing_status).to eq('pending')
+
+        FactoryBot.create(:registration_payment, :skip_create_hook, registration: closed_reg, competition: closed_comp)
+
+        closed_reg.auto_accept
+        expect(closed_reg.reload.competing_status).to eq('pending')
+        expect(Rails.logger).to have_received(:error).with('Cant auto-accept while registration is not open')
+      end
+
+      it 'unless auto-accept is enabled' do
+        no_auto_accept = FactoryBot.create(:competition, :registration_open)
+        no_auto_reg = FactoryBot.create(:registration, competition: no_auto_accept)
+
+        expect(no_auto_reg.competing_status).to eq('pending')
+
+        FactoryBot.create(:registration_payment, :skip_create_hook, registration: no_auto_reg, competition: no_auto_accept)
+
+        no_auto_reg.auto_accept
+        expect(no_auto_reg.reload.competing_status).to eq('pending')
+        expect(Rails.logger).to have_received(:error).with('Auto-accept is not enabled for this competition.')
+      end
+
+      it 'when accepted registrations match the auto-accept disable threshold' do
+        auto_accept_comp.auto_accept_disable_threshold = 5
+        FactoryBot.create_list(:registration, 5, :accepted, competition: auto_accept_comp)
+        expect(reg.competing_status).to eq('pending')
+
+        FactoryBot.create(:registration_payment, :skip_create_hook, registration: reg, competition: auto_accept_comp)
+
+        reg.auto_accept
+        expect(reg.reload.competing_status).to eq('pending')
+        expect(Rails.logger).to have_received(:error).with(
+          'Competition has reached auto_accept_disable_threshold of 5 registrations',
+        )
+      end
+
+      it 'when accepted registrations exceed the auto-accept disable threshold' do
+        auto_accept_comp.auto_accept_disable_threshold = 5
+        FactoryBot.create_list(:registration, 6, :accepted, competition: auto_accept_comp)
+        expect(reg.competing_status).to eq('pending')
+
+        FactoryBot.create(:registration_payment, :skip_create_hook, registration: reg, competition: auto_accept_comp)
+
+        reg.auto_accept
+        expect(reg.reload.competing_status).to eq('pending')
+        expect(Rails.logger).to have_received(:error).with(
+          'Competition has reached auto_accept_disable_threshold of 5 registrations',
+        )
+      end
+    end
+
+    context 'log when auto accept is prevented by validations' do
+      it 'if competitor limit is reached and status is pending' do
+        auto_accept_comp.update(competitor_limit: 5)
+        FactoryBot.create_list(:registration, 5, :accepted, competition: auto_accept_comp)
+        expect(reg.competing_status).to eq('pending')
+
+        FactoryBot.create(:registration_payment, :skip_create_hook, registration: reg, competition: auto_accept_comp)
+
+        reg.auto_accept
+        expect(Rails.logger).to have_received(:error).with(a_string_including('Validation failed: Competitor limit The competition is full.'))
+        expect(reg.reload.competing_status).to eq('pending')
+      end
+
+      it 'if competitor limit is reached and first on waiting list' do
+        auto_accept_comp.update(competitor_limit: 5)
+        FactoryBot.create_list(:registration, 5, :accepted, competition: auto_accept_comp)
+        waiting_list_reg = FactoryBot.create(:registration, :waiting_list, :paid, competition: auto_accept_comp)
+        expect(waiting_list_reg.reload.competing_status).to eq('waiting_list')
+
+        waiting_list_reg.auto_accept
+        expect(Rails.logger).to have_received(:error).with(a_string_including('Validation failed: Competitor limit The competition is full.'))
+        expect(waiting_list_reg.reload.competing_status).to eq('waiting_list')
+      end
+
+      it 'if competitor limit is exceeded' do
+        auto_accept_comp.update(competitor_limit: 5)
+        FactoryBot.create_list(:registration, 6, :accepted, :skip_validations, competition: auto_accept_comp)
+        expect(reg.competing_status).to eq('pending')
+
+        FactoryBot.create(:registration_payment, :skip_create_hook, registration: reg, competition: auto_accept_comp)
+
+        reg.auto_accept
+        expect(Rails.logger).to have_received(:error).with(a_string_including('Validation failed: Competitor limit The competition is full.'))
+        expect(reg.reload.competing_status).to eq('pending')
+      end
+
+      it 'if registration is part of a series with an already-accepted registration' do
+        registration = FactoryBot.create(:registration, :accepted)
+
+        series = FactoryBot.create(:competition_series)
+        competitionA = registration.competition
+        competitionA.update!(competition_series: series)
+        competitionB = FactoryBot.create(:competition, :registration_open, :auto_accept, competition_series: series, series_base: competitionA)
+        regB = FactoryBot.create(:registration, user: registration.user, competition: competitionB)
+
+        FactoryBot.create(:registration_payment, :skip_create_hook, registration: regB, competition: competitionB)
+
+        regB.auto_accept
+        expect(Rails.logger).to have_received(:error).with(a_string_including('Validation failed: Competition You can only be accepted for one Series competition at a time.'))
+        expect(regB.reload.competing_status).to eq('pending')
+      end
+    end
+
+    context 'auto accept onto waiting list' do
+      it 'works with no auto_accept_disable_threshold' do
+        auto_accept_comp.competitor_limit_enabled = true
+        auto_accept_comp.competitor_limit = 5
+        FactoryBot.create_list(:registration, 5, :accepted, competition: auto_accept_comp)
+
+        FactoryBot.create(:registration_payment, :skip_create_hook, registration: reg, competition: auto_accept_comp)
+
+        reg.auto_accept
+        expect(reg.reload.competing_status).to eq('waiting_list')
+        expect(reg.waiting_list_position).to eq(1)
+        expect(reg.registration_history_entries.last.actor_type).to eq('System')
+        expect(reg.registration_history_entries.last.actor_id).to eq('Auto-accept')
+      end
+
+      it 'gets prevented by auto-accept threshold' do
+        auto_accept_comp.competitor_limit_enabled = true
+        auto_accept_comp.competitor_limit = 5
+        auto_accept_comp.auto_accept_disable_threshold = 4
+        FactoryBot.create_list(:registration, 5, :accepted, competition: auto_accept_comp)
+
+        FactoryBot.create(:registration_payment, :skip_create_hook, registration: reg, competition: auto_accept_comp)
+
+        reg.auto_accept
+        expect(reg.reload.competing_status).to eq('pending')
+        expect(reg.waiting_list_position).to eq(nil)
+      end
+    end
+  end
+
+  it 'can still create non-accepted registrations if the competitor list is full' do
+    competition = FactoryBot.create(:competition, :registration_open)
+    competition.competitor_limit = 5
+    FactoryBot.create_list(:registration, 5, :accepted, competition: competition)
+    expect(FactoryBot.create(:registration, :waiting_list, competition: competition)).to be_valid
+  end
+
   describe 'hooks' do
     it 'positive registration_payment calls registration.consider_auto_close' do
       competition = FactoryBot.create(:competition)

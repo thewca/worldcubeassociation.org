@@ -26,7 +26,7 @@ module Registrations
         registration.add_history_entry(changes, "worker", user_id, "Worker processed")
       end
 
-      def self.update!(update_params, competition, current_user_id)
+      def self.update!(update_params, competition, acting_user_id)
         guests = update_params[:guests]
         status = update_params.dig('competing', 'status')
         comment = update_params.dig('competing', 'comment')
