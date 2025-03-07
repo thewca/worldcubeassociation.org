@@ -84,6 +84,7 @@ export default function RegistrationActions({
   spotsRemaining,
   competitionInfo,
   updateRegistrationMutation,
+  tableRefs,
 }) {
   const confirm = useConfirm();
   const dispatch = useDispatch();
@@ -242,8 +243,58 @@ export default function RegistrationActions({
     dispatch(showMessage('competitions.registration_v2.update.email_message', 'positive'));
   };
 
+  const scrollToRef = (ref) => ref.current.scrollIntoView(
+    { behavior: 'smooth', block: 'start' },
+  );
+
   return (
     <>
+      <Dropdown
+        pointing
+        className="icon white"
+        labeled
+        text={I18n.t('competitions.registration_v2.update.scroll_to')}
+        icon="th list"
+        button
+      >
+        <Dropdown.Menu>
+          <DropdownAction
+            text={I18n.t('competitions.registration_v2.update.pending')}
+            icon={PENDING_ICON}
+            color={PENDING_COLOR}
+            onClick={() => scrollToRef(tableRefs.pendingRef)}
+          />
+
+          <DropdownAction
+            text={I18n.t('competitions.registration_v2.update.waitlist')}
+            icon={WAITLIST_ICON}
+            color={WAITLIST_COLOR}
+            onClick={() => scrollToRef(tableRefs.waitlistRef)}
+          />
+
+          <DropdownAction
+            text={I18n.t('competitions.registration_v2.update.approved')}
+            icon={APPROVED_ICON}
+            color={APPROVED_COLOR}
+            onClick={() => scrollToRef(tableRefs.approvedRef)}
+          />
+
+          <DropdownAction
+            text={I18n.t('competitions.registration_v2.update.cancelled')}
+            icon={CANCELLED_ICON}
+            color={CANCELLED_COLOR}
+            onClick={() => scrollToRef(tableRefs.cancelledRef)}
+          />
+
+          <DropdownAction
+            text={I18n.t('competitions.registration_v2.update.rejected')}
+            icon={REJECTED_ICON}
+            color={REJECTED_COLOR}
+            onClick={() => scrollToRef(tableRefs.rejectedRef)}
+          />
+        </Dropdown.Menu>
+      </Dropdown>
+
       <Button
         content={I18n.t('registrations.list.export_csv')}
         icon="download"
