@@ -410,7 +410,9 @@ class Competition < ApplicationRecord
 
     errors.add(:auto_accept_registrations, I18n.t('competitions.errors.auto_accept_not_negative')) if auto_accept_disable_threshold < 0
 
-    if auto_accept_registrations_changed?
+    # TODO: This logic belongs in a controller more appropriately than in the validation.
+    # IF we build a controller endpoint specifically for auto_accept, this logic should be move there.
+    if auto_accept_registrations_changed? && auto_accept_registrations?
       errors.add(:auto_accept_registrations, I18n.t('competitions.errors.auto_accept_accept_paid_pending')) if registrations.pending.with_payments.count > 0
       errors.add(:auto_accept_registrations, I18n.t('competitions.errors.auto_accept_accept_waitlisted')) if
         registrations.waitlisted.count > 0 && !registration_full_and_accepted?
