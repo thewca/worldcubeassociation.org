@@ -50,6 +50,55 @@ class PanelController < ApplicationController
     }
   end
 
+  private def validators_for_competition_ids(competition_ids)
+    validators = params.require(:selectedValidators).split(',').map do |validator_name|
+      ResultsValidators::Utils.validator_class_from_name(validator_name)
+    end
+    apply_fix_when_possible = params.require(:applyFixWhenPossible)
+
+    results_validator = ResultsValidators::CompetitionsResultsValidator.new(
+      validators,
+      check_real_results: true,
+      apply_fixes: apply_fix_when_possible,
+    )
+    results_validator.validate(competition_ids)
+    render json: {
+      has_results: results_validator.has_results?,
+      validators: results_validator.validators,
+      infos: results_validator.infos,
+      errors: results_validator.errors,
+      warnings: results_validator.warnings,
+    }
+  end
+
+  private def competitions_between(start_date, end_date)
+    Competition.over
+               .not_cancelled
+               .between_dates(start_date, end_date)
+               .order(:start_date)
+  end
+
+  def competition_count
+    start_date = params.require(:startDate)
+    end_date = params.require(:endDate)
+
+    count = competitions_between(start_date, end_date).count
+    render json: count
+  end
+
+  def validators_for_competition_list
+    competition_ids = params.require(:competitionIds).split(',')
+    validators_for_competition_ids(competition_ids)
+  end
+
+  def validators_for_competitions_in_range
+    start_date = params.require(:startDate)
+    end_date = params.require(:endDate)
+    competition_ids = competitions_between(start_date, end_date).ids
+
+    validators_for_competition_ids(competition_ids)
+  end
+
   def panel_page
     panel_page_id = params.require(:id)
     panel_with_panel_page = current_user.panels_with_access&.find { |panel| User.panel_list[panel][:pages].include?(panel_page_id) }
