@@ -117,12 +117,13 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
     },
   });
 
-  const {
-    waiting, accepted, cancelled, pending, rejected,
-  } = useMemo(
+  const partitionedRegistrations = useMemo(
     () => partitionRegistrations(registrations ?? []),
     [registrations],
   );
+  const {
+    waiting, accepted, cancelled, pending, rejected,
+  } = partitionedRegistrations;
 
   const selectedIds = useOrderedSet();
   const partitionedSelectedIds = useMemo(
@@ -392,6 +393,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
         <Sticky context={actionsRef} offset={20}>
           <RegistrationActions
             partitionedSelectedIds={partitionedSelectedIds}
+            partitionedRegistrations={partitionedRegistrations}
             refresh={selectedIds.clear}
             registrations={registrations}
             spotsRemaining={spotsRemaining}
