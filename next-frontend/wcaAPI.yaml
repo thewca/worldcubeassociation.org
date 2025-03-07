@@ -83,9 +83,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  type: string
+                $ref: "#/components/schemas/UserPermissions"
         "401":
           description: Unauthorized
 
@@ -97,6 +95,97 @@ components:
       bearerFormat: JWT
 
   schemas:
+    CompetitionPermissions:
+      oneOf:
+        - type: array
+          items:
+            type: string
+        - type: string
+          format: "Wildcard"
+          enum: "*"
+    UserPermissions:
+      type: object
+      properties:
+        can_attend_competitions:
+          type: object
+          properties:
+            scope:
+              $ref: "#/components/schemas/CompetitionPermissions"
+            until:
+              type: string
+              format: date-time
+              nullable: true
+        can_organize_competitions:
+          type: object
+          properties:
+            scope:
+              $ref: "#/components/schemas/CompetitionPermissions"
+        can_administer_competitions:
+          type: object
+          properties:
+            scope:
+              $ref: "#/components/schemas/CompetitionPermissions"
+        can_view_delegate_admin_page:
+          type: object
+          properties:
+            scope:
+              $ref: "#/components/schemas/CompetitionPermissions"
+        can_view_delegate_report:
+          type: object
+          properties:
+            scope:
+              $ref: "#/components/schemas/CompetitionPermissions"
+        can_edit_delegate_report:
+          type: object
+          properties:
+            scope:
+              $ref: "#/components/schemas/CompetitionPermissions"
+        can_create_groups:
+          type: object
+          properties:
+            scope:
+              type: array
+              items:
+                type: string
+        can_read_groups_current:
+          type: object
+          properties:
+            scope:
+              type: array
+              items:
+                type: string
+        can_read_groups_past:
+          type: object
+          properties:
+            scope:
+              type: array
+              items:
+                type: string
+        can_edit_groups:
+          type: object
+          properties:
+            scope:
+              type: array
+              items:
+                type: string
+        can_access_panels:
+          type: object
+          properties:
+            scope:
+              type: array
+              items:
+                type: string
+        can_request_to_edit_others_profile:
+          type: object
+          properties:
+            scope:
+              oneOf:
+                - type: array
+                  items:
+                    type: string
+                - type: string
+                  format: "Wildcard"
+                  enum: "*"
     User:
       type: object
       properties:
