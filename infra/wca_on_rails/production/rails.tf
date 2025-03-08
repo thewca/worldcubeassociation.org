@@ -19,6 +19,10 @@ locals {
       value = var.ROOT_URL
     },
     {
+      name  = "OIDC_ISSUER"
+      value = var.ROOT_URL
+    },
+    {
       name  = "ASSET_HOST"
       value = "https://assets.worldcubeassociation.org"
     },
@@ -59,19 +63,7 @@ locals {
       value = aws_s3_bucket.storage-bucket.id
     },
     {
-      name = "STORAGE_AWS_REGION"
-      value = var.region
-    },
-    {
-      name = "VAULT_AWS_REGION"
-      value = var.region
-    },
-    {
-      name = "S3_AVATARS_REGION"
-      value = var.region
-    },
-    {
-      name = "DATABASE_AWS_REGION"
+      name = "AWS_REGION"
       value = var.region
     },
     {

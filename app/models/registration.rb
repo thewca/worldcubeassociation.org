@@ -38,6 +38,15 @@ class Registration < ApplicationRecord
 
   validates :user, presence: true, on: [:create]
 
+  validates :registered_at, presence: true
+  # Set a `registered_at` timestamp for newly created records,
+  #   but only if there is no value already specified from the outside
+  after_initialize :mark_registered_at, if: :new_record?, unless: :registered_at?
+
+  private def mark_registered_at
+    self.registered_at = current_time_from_proper_timezone
+  end
+
   validates_numericality_of :guests, greater_than_or_equal_to: 0
 
   validates_numericality_of :guests, less_than_or_equal_to: :guest_limit, if: :check_guest_limit?
@@ -206,7 +215,7 @@ class Registration < ApplicationRecord
   end
 
   def waiting_list_position
-    competition.waiting_list.position(id)
+    competition.waiting_list.position(self)
   end
 
   def wcif_status
@@ -266,7 +275,7 @@ class Registration < ApplicationRecord
                               guests: guests,
                               competing: {
                                 registration_status: competing_status,
-                                registered_on: created_at,
+                                registered_on: registered_at,
                                 comment: comments,
                                 admin_comment: administrative_notes,
                               },
@@ -397,6 +406,10 @@ class Registration < ApplicationRecord
     end
   end
 
+  def consider_auto_close
+    outstanding_entry_fees.zero? && competition.attempt_auto_close!
+  end
+
   validate :only_one_accepted_per_series
   private def only_one_accepted_per_series
     if competition&.part_of_competition_series? && competing_status_accepted?
@@ -430,6 +443,11 @@ class Registration < ApplicationRecord
     SERIES_SIBLING_DISPLAY_STATUSES.map { |st| series_sibling_registrations(st) }
                                    .map(&:count)
                                    .join(" + ")
+  end
+
+  def ensure_waitlist_eligibility!
+    raise ArgumentError.new("Registration must have a competing_status of 'waiting_list' to be added to the waiting list") unless
+      competing_status == Registrations::Helper::STATUS_WAITING_LIST
   end
 
   DEFAULT_SERIALIZE_OPTIONS = {

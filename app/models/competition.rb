@@ -119,6 +119,7 @@ class Competition < ApplicationRecord
     competitor_limit_enabled
     competitor_limit
     competitor_limit_reason
+    auto_close_threshold
     forbid_newcomers
     forbid_newcomers_reason
     guests_enabled
@@ -343,6 +344,19 @@ class Competition < ApplicationRecord
   private def must_have_at_least_one_event
     if no_events?
       errors.add(:competition_events, I18n.t('competitions.errors.must_contain_event'))
+    end
+  end
+
+  # We check for `present?` specifically so that a value of 0 will return true, and trigger the validation
+  validate :auto_close_threshold_validations, if: -> { auto_close_threshold.present? }
+  private def auto_close_threshold_validations
+    errors.add(:auto_close_threshold, I18n.t('competitions.errors.auto_close_positive_nonzero')) unless auto_close_threshold > 0
+    if auto_close_threshold != 0
+      errors.add(:auto_close_threshold, I18n.t('competitions.errors.use_wca_registration')) unless use_wca_registration
+      errors.add(:auto_close_threshold, I18n.t('competitions.errors.must_exceed_competitor_limit')) if
+        competitor_limit.present? && auto_close_threshold <= competitor_limit
+      errors.add(:auto_close_threshold, I18n.t('competitions.errors.auto_close_exceed_paid')) if
+        will_save_change_to_auto_close_threshold? && auto_close_threshold <= registrations.with_payments.count
     end
   end
 
@@ -2401,6 +2415,7 @@ class Competition < ApplicationRecord
         "enabled" => competitor_limit_enabled,
         "count" => competitor_limit,
         "reason" => competitor_limit_reason,
+        "autoCloseThreshold" => auto_close_threshold,
         "newcomerMonthReservedSpots" => newcomer_month_reserved_spots,
       },
       "staff" => {
@@ -2509,6 +2524,7 @@ class Competition < ApplicationRecord
         "enabled" => errors[:competitor_limit_enabled],
         "count" => errors[:competitor_limit],
         "reason" => errors[:competitor_limit_reason],
+        "autoCloseThreshold" => errors[:auto_close_threshold],
         "newcomer_month_reserved_spots" => errors[:newcomer_month_reserved_spots],
       },
       "staff" => {
@@ -2651,6 +2667,7 @@ class Competition < ApplicationRecord
       competitor_limit_enabled: form_data.dig('competitorLimit', 'enabled'),
       competitor_limit: form_data.dig('competitorLimit', 'count'),
       competitor_limit_reason: form_data.dig('competitorLimit', 'reason'),
+      auto_close_threshold: form_data.dig('competitorLimit', 'autoCloseThreshold'),
       newcomer_month_reserved_spots: form_data.dig('competitorLimit', 'newcomerMonthReservedSpots'),
       extra_registration_requirements: form_data.dig('registration', 'extraRequirements'),
       on_the_spot_registration: form_data.dig('registration', 'allowOnTheSpot'),
@@ -2795,6 +2812,7 @@ class Competition < ApplicationRecord
             "enabled" => { "type" => ["boolean", "null"] },
             "count" => { "type" => ["integer", "null"] },
             "reason" => { "type" => ["string", "null"] },
+            "autoCloseThreshold" => { "type" => ["integer", "null"] },
             "newcomerMonthReservedSpots" => { "type" => ["integer", "null"] },
           },
         },
@@ -2922,5 +2940,19 @@ class Competition < ApplicationRecord
         },
       },
     }
+  end
+
+  def fully_paid_registrations_count
+    registrations
+      .joins(:registration_payments)
+      .group('registrations.id')
+      .having('SUM(registration_payments.amount_lowest_denomination) >= ?', base_entry_fee_lowest_denomination)
+      .count.size # .count changes the AssociationRelation into a hash, and then .size gives the number of items in the hash
+  end
+
+  def attempt_auto_close!
+    return false if auto_close_threshold.nil?
+    threshold_reached = fully_paid_registrations_count >= auto_close_threshold && auto_close_threshold > 0
+    threshold_reached && update(closing_full_registration: true, registration_close: Time.now)
   end
 end

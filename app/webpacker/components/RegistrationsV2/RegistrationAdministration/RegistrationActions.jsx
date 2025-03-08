@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Button, Dropdown } from 'semantic-ui-react';
 import { DateTime } from 'luxon';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
@@ -8,10 +8,12 @@ import { countries } from '../../../lib/wca-data.js.erb';
 import {
   APPROVED_COLOR, APPROVED_ICON,
   CANCELLED_COLOR, CANCELLED_ICON,
+  getSkippedWaitlistCount,
   PENDING_COLOR, PENDING_ICON,
   REJECTED_COLOR, REJECTED_ICON,
   WAITLIST_COLOR, WAITLIST_ICON,
 } from '../../../lib/utils/registrationAdmin';
+import { useConfirm } from '../../../lib/providers/ConfirmProvider';
 
 function V3csvExport(selected, registrations, competition) {
   let csvContent = 'data:text/csv;charset=utf-8,';
@@ -56,16 +58,16 @@ function csvExport(selected, registrations, competition) {
 }
 
 export default function RegistrationActions({
-  partitionedSelected,
-  userEmailMap,
+  partitionedSelectedIds,
   refresh,
   registrations,
   spotsRemaining,
   competitionInfo,
   updateRegistrationMutation,
 }) {
+  const confirm = useConfirm();
   const dispatch = useDispatch();
-  const selectedCount = Object.values(partitionedSelected).reduce(
+  const selectedCount = Object.values(partitionedSelectedIds).reduce(
     (sum, part) => sum + part.length,
     0,
   );
@@ -73,12 +75,22 @@ export default function RegistrationActions({
 
   const {
     pending, accepted, cancelled, waiting, rejected,
-  } = partitionedSelected;
+  } = partitionedSelectedIds;
   const anyPending = pending.length < selectedCount;
   const anyApprovable = accepted.length < selectedCount;
   const anyCancellable = cancelled.length < selectedCount;
   const anyWaitlistable = waiting.length < selectedCount;
   const anyRejectable = rejected.length < selectedCount;
+
+  const userEmailMap = useMemo(
+    () => Object.fromEntries(
+      (registrations ?? []).map((registration) => [
+        registration.user.id,
+        registration.user.email,
+      ]),
+    ),
+    [registrations],
+  );
 
   const selectedEmails = [...pending, ...waiting, ...accepted, ...cancelled, ...rejected]
     .map((userId) => userEmailMap[userId])
@@ -124,7 +136,21 @@ export default function RegistrationActions({
 
   const attemptToApprove = () => {
     const idsToAccept = [...pending, ...cancelled, ...waiting, ...rejected];
-    if (idsToAccept.length > spotsRemaining) {
+    const skippedWaitlistCount = getSkippedWaitlistCount(
+      registrations,
+      partitionedSelectedIds,
+    );
+
+    if (skippedWaitlistCount > 0) {
+      confirm({
+        content: I18n.t(
+          'competitions.registration_v2.list.waitlist.skipped_warning',
+          { count: skippedWaitlistCount },
+        ),
+      }).then(
+        () => changeStatus(idsToAccept, 'accepted'),
+      ).catch(() => null);
+    } else if (idsToAccept.length > spotsRemaining) {
       dispatch(showMessage(
         'competitions.registration_v2.update.too_many',
         'negative',

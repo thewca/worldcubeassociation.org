@@ -876,8 +876,6 @@ hr:
         person1_wca_id: ''
         #original_hash: da39a3e
         person2_wca_id: ''
-        #original_hash: da39a3e
-        person_wca_id: ''
       poll:
         #original_hash: da39a3e
         comment: ''
@@ -979,6 +977,9 @@ hr:
         dob: Točan datum rođenja
         #original_hash: e214b8a
         document: Dokument
+      contact_wrt:
+        #original_hash: 603a218
+        wca_id: WCA ID
     errors:
       dob_contact:
         #original_hash: 79ccfe2
@@ -2219,14 +2220,14 @@ hr:
       title: '%{person} za %{comp}'
     mailer:
       #original_hash: 72e2180
-      regards_html: 'S poštovanjem, %{people}.'
+      regards_html: 'Srdačano, %{people}.'
       new:
         #original_hash: 63591e5
         mail_subject: 'Registracija na čekanju: %{comp_name}'
         #original_hash: 6aa057a
         registered_html: >-
-          Tvoja registracija za %{comp_name} je sada na čekanju i čeka potvrdu
-          od Organizacijskog tima.
+          Vaša registracija za %{comp_name} je sada na čekanju i čeka potvrdu od
+          Organizacijskog tima.
         #original_hash: f98b245
         awaits_approval: >-
           Obratite pozornost jeste li ispunili sve zahtjeve za registraciju.
@@ -2234,45 +2235,45 @@ hr:
           upotpuni registracija.
         #original_hash: 826045f
         approval_info_html: >-
-          Bit ćeš obaviješten/a e-mailom kada ti se prihvati registracija. Uzmi
-          u obzir da registracije ne budu prihvaćene automatski te budi
-          strpljiv/a ukoliko ti registracija nije odmah prihvaćena. Moguće je da
-          postoji više koraka za registraciju prije nego se tvoja registracija
-          prihvati. Da bi vidio/la kriterije prihvaćanja registracije, provjeri
-          web-stranicu natjecanja ili kontaktiraj organizatore. Također, možeš
-          provjeriti status svoje registracije %{here}.
+          Dobit ćete e-mail kada vaša registracija bude odobrena. Imajte na umu
+          da se registracije ne odobravaju automatski, pa budite strpljivi ako
+          ne budete odmah prihvaćeni. Možda će biti još koraka za registraciju
+          prije nego što vaša registracija bude odobrena. Kako biste vidjeli
+          kriterije odobrenja, posjetite web stranicu natjecanja ili
+          kontaktirajte organizatore. Također možete provjeriti status svoje
+          registracije %{here}.
       accepted:
         #original_hash: 6f1fa1f
         mail_subject: 'Registracija prihvaćena: %{comp_name}'
         #original_hash: 24d2883
         message_html: >-
-          Tvoja registracija za %{comp_name} je prihvaćena. Kao i uvijek, možeš
-          provjeriti status svoje registracije %{here}.
+          Vaša registracija za %{comp_name} je prihvaćena. Kao i uvijek, možete
+          provjeriti status vaše registracije %{here}.
         #original_hash: 1852cbf
-        see_you_soon: 'Veselimo se vidjeti te na %{comp_name}!'
+        see_you_soon: 'Veselimo se što ćemo vas vidjeti na %{comp_name}!'
       waiting_list:
         #original_hash: 54c2106
         mail_subject: 'Nalazite se na listi čekanja: %{comp_name}'
         #original_hash: 2a0c44f
         waitlisted_html: >-
-          Natjecanje je puno, ali ste stavljeni na listu čekanja i primit ćete
-          e-poruku ako se otvori dovoljno mjesta da biste mogli prisustvovati.
-          Provjerite svoju poziciju na listi čekanja %{here}.
+          Natjecanje je popunjeno, ali ste stavljeni na listu čekanja i primit
+          ćete email ako se otvori dovoljno mjesta da biste mogli prisustvovati.
+          Provjerite svoje mjesto na listi čekanja %{here}.
         #original_hash: 8f7358f
-        email_if_error: 'Ako mislite da je ovo pogreška, odgovorite na ovu e-poruku.'
+        email_if_error: 'Ako mislite da je ovo pogreška, odgovorite na ovaj email.'
       deleted:
         #original_hash: 8cbc6c0
         mail_subject: 'Registracija obrisana: %{comp_name}'
         #original_hash: f66ae63
-        message_html: 'Tvoja registracija za %{comp_name} je obrisana. Mogući razlozi su:'
+        message_html: 'Vaša registracija za %{comp_name} je obrisana. Mogući razlozi su:'
         #original_hash: 8f7358f
-        email_if_error: 'Ako mislite da je ovo pogreška, odgovorite na ovu e-poruku.'
+        email_if_error: 'Ako mislite da je ovo pogreška, odgovorite na ovaj email.'
         causes:
           #original_hash: 978944c
-          missing_info: Nisi priložio/la sve potrebne detalje
+          missing_info: Niste priložili sve potrebne detalje
           #original_hash: a700652
           incomplete: >-
-            Nisi udovoljio/la svim kriterijima registracije (npr. plaćanje
+            Niste zadovoljili sve kriterije registracije (npr. plaćanje
             kotizacije unaprijed ili neispunjena kvalifikacijska vremena za
             određene discipline)
           #original_hash: 1e225f0
@@ -2280,7 +2281,7 @@ hr:
             Ograničen broj natjecatelja je dostignut i nema više slobodnih
             mjesta
           #original_hash: 238f4ff
-          multiple_registrations: Registrirao/la si se dva ili više puta
+          multiple_registrations: Registrirali ste se dva ili više puta
           #original_hash: 70b1e2c
           competition_canceled: Natjecanje se otkazalo
       formerly_banned:
@@ -2293,7 +2294,7 @@ hr:
         #original_hash: 2a246da
         wic_message: >-
           Ako imate bilo kakvih pitanja u vezi s disciplinskom poviješću
-          natjecatelja, obratite se WIC odgovorom na ovu e-poruku.
+          natjecatelja, obratite se WIC odgovorom na ovaj email..
     list:
       #original_hash: 8b7631c
       title: 'Registracije za %{comp}'
@@ -2303,25 +2304,19 @@ hr:
       country_plural:
         zero: 0 država
         one: 1 država
-        few: '%{count} država/e'
-        other: '%{count} država/e'
+        few: '%{count} država'
+        other: '%{count} država'
       #original_hash: 1feee0e
       export_csv: Izvezi u .csv datoteku
       #original_hash: 84add5b
-      email: E-mail
-      #original_hash: 7b2c7f1
-      approve: Prihvati
-      #original_hash: 92d40dc
-      waiting_list: Lista čekanja
-      #original_hash: 06f7d1a
-      approved_registrations: Prihvaćene registracije
+      email: Email
       #original_hash: e86b1e1
-      non_competing: Non-competing registrations
+      non_competing: Nenatjecateljske registrations
       #original_hash: ac5d958
       not_paid: Nije plaćeno
       registered:
         #original_hash: 2c2f473
-        without_stripe: Registriran/na dana
+        without_stripe: Registriran/a dana
         #original_hash: fca3213
         with_stripe: Plaćeno dana
       #original_hash: ce53c71
@@ -3225,6 +3220,8 @@ hr:
           count: Maksimalni broj natjecatelja
           #original_hash: 4a8b6f1
           reason: Razlog natjecateljskog ograničenja
+          #original_hash: b1d5af4
+          newcomer_month_reserved_spots: Broj mjesta rezerviranih za first-timere
         staff:
           #original_hash: 2e3ed8b
           staff_delegate_ids: WCA Delegat(i)
@@ -3273,8 +3270,8 @@ hr:
           event_change_deadline_date: Krajnji rok za natjecatelje i njihovo ažuriranje disciplina
           #original_hash: 2529d04
           allow_on_the_spot: Registracije na licu mjesta
-          #original_hash: 3d47eca
-          allow_self_delete_after_acceptance: Otkazane registracije
+          #original_hash: b6faf84
+          competitor_can_cancel: Kada natjecatelj može otkazati svoju registraciju
           #original_hash: 7e53b96
           allow_self_edits: Uređivane registracije
           #original_hash: 3c23a67
@@ -3421,6 +3418,10 @@ hr:
           reason: >-
             Koji je razlog za ograničenje broja natjecatelja? Molimo ispunite
             ovo na engleskom!
+          #original_hash: e1cf4fc
+          newcomer_month_reserved_spots: >-
+            Dozvoljeno samo tokom Newcomer Montha - rezervirana mjesta ne smiju
+            biti više od pola natjecateljskog limita.
         staff:
           #original_hash: b4d020f
           staff_delegate_ids: WCA Delegati na ovom natjecanju.
@@ -3504,7 +3505,7 @@ hr:
           #original_hash: da39a3e
           allow_on_the_spot: ''
           #original_hash: da39a3e
-          allow_self_delete_after_acceptance: ''
+          competitor_can_cancel: ''
           #original_hash: da39a3e
           allow_self_edits: ''
           #original_hash: da39a3e
@@ -3601,15 +3602,13 @@ hr:
             'false': >-
               Natjecatelji NE smiju uređivati svoju registraciju nakon što je
               prihvaćena
-          allow_self_delete_after_acceptance:
-            #original_hash: 5c2e8c1
-            'true': >-
-              Natjecatelji mogu izbrisati vlastitu registraciju čak i nakon što
-              je prihvaćena
-            #original_hash: 3b77604
-            'false': >-
-              Natjecatelji NE smiju izbrisati vlastitu registraciju nakon što je
-              prihvaćena
+          competitor_can_cancel:
+            #original_hash: a91bcce
+            always: Uvijek
+            #original_hash: b64ca70
+            not_accepted: Dok nisu prihvaćeni
+            #original_hash: 4435d55
+            unpaid: Dok ne plate
           guest_entry_status:
             #original_hash: 7e54323
             unclear: >-
@@ -3650,10 +3649,10 @@ hr:
         is_accepted: >-
           Rezervirajte svoje putovanje i spakirajte kofere - imate mjesto na
           natjecanju!
-        #original_hash: e29a4d3
+        #original_hash: 89448a8
         is_cancelled: >-
-          Vaša je registracija otkazana i nećete se natjecati, ali se možete
-          ponovno prijaviti
+          Vaša registracija je otkazana i nećete se moći natjecati, ali se
+          možete ponovno prijaviti.
         #original_hash: 2a88d10
         is_rejected: >-
           Organizatori su odbili vašu registraciju. Molimo kontaktirajte
@@ -3673,22 +3672,30 @@ hr:
           one: '%{count} slobodno mjesto'
           few: '%{count} slobodnih mjesta'
           other: '%{count} slobodnih mjesta'
-        cancelled:
-          #original_hash: e9c5a55
-          title: Otkazane registracije
-          #original_hash: bb5b570
-          information: Otkazani natjecatelji mogu se ponovno prijaviti.
-        rejected:
-          #original_hash: 199b7c5
-          title: Odbijene registracije
-          #original_hash: 3fd2e0c
-          information: Odbijeni natjecatelji se ne mogu ponovno prijaviti.
         pending:
+          #original_hash: 4210670
+          title: Registracije na čekanju
           #original_hash: 5e16c6d
           information: >-
             Na čekanju se treba koristiti samo za nepotpune (npr. neplaćene)
             registracije - koristite Listu čekanja ako je vaše natjecanje
             popunjeno za prihvaćanje novih natjecatelja.
+        waitlist:
+          #original_hash: 3907ca4
+          title: Registracije na listi čekanja
+        approved:
+          #original_hash: a59612c
+          title: Prihvaćene registracije
+        cancelled:
+          #original_hash: bd69c74
+          title: Otkazane registracije
+          #original_hash: bb5b570
+          information: Otkazani natjecatelji mogu se ponovno prijaviti.
+        rejected:
+          #original_hash: 9cef5ae
+          title: Odbijene registracije
+          #original_hash: 3fd2e0c
+          information: Odbijeni natjecatelji se ne mogu ponovno prijaviti.
         payment:
           #original_hash: d6fbc7a
           refunded_status: Vraćeno
@@ -3749,14 +3756,22 @@ hr:
         email_copy: Kopiraj emailove
         #original_hash: b83b663
         email_message: Kopirano u međuspremnik. Ne zaboravi koristiti bcc!
-        #original_hash: 71327f1
-        move_pending: Prebaci u Na čekanju
-        #original_hash: 9144dd6
-        move_waiting: Prebaci na listu čekanja
-        #original_hash: 284b24f
-        cancel: Otkaži registraciju
-        #original_hash: df40450
-        reject: Odbij registraciju
+        #original_hash: beedd53
+        move_to:
+          zero: Prebaci
+          one: 'Prebaci %{count} u'
+          few: 'Prebaci %{count} u'
+          other: 'Prebaci %{count} u'
+        #original_hash: 96f608c
+        pending: Na čekanju
+        #original_hash: 92d40dc
+        waitlist: Lista čekanja
+        #original_hash: 41b81eb
+        approved: Prihvaćeni
+        #original_hash: a1bf92e
+        cancelled: Otkazani
+        #original_hash: 27eeb7a
+        rejected: Odbijeni
         #original_hash: 43dc853
         amount: Iznos
         #original_hash: 67b3c7d
@@ -3897,13 +3912,27 @@ hr:
         '-4011': Možete primiti samo prvu osobu na listi čekanja
         #original_hash: 8d089d6
         '-4012': Niste kvalificirani za natjecanje u odabranim disciplinama
+        #original_hash: fb1d742
+        '-4013': >-
+          Ne može se prihvatiti povratnik ako postoji samo rezervirano mjesto za
+          first-timera
         #original_hash: a244fde
         '-4014': Već ste registrirani za ovo natjecanje.
+        #original_hash: 369db78
+        '-4015': >-
+          Molimo unesite razuman broj vaših gostiju ili kontaktirajte
+          organizatora ukoliko dovodite više gostiju od očekivanog.
         #original_hash: 0df821f
         '-6001': WCA plaćanje nije omogućeno za ovo natjecanje
         #original_hash: 092da51
         '-6002': Prije plaćanja morate dovršiti registraciju
     errors:
+      #original_hash: 2c41c57
+      newcomer_month_reservations_percentage: ne može se rezervirati više od 50% mjesta za first-timere
+      #original_hash: 58d244e
+      newcomer_month_reservations_available: >-
+        Željeni broj rezerviranih mjesta za Newcomer Month premašuje broj mjesta
+        koja se mogu rezervirati
       #original_hash: f7ef9f6
       invalid_name_message: >-
         mora završiti s godinom i mora sadržavati alfanumeričke znakove,

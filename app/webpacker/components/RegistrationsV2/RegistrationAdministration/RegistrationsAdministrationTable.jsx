@@ -1,12 +1,31 @@
+import React, { useMemo, useReducer } from 'react';
 import {
   Ref, Segment, Table, TableFooter,
 } from 'semantic-ui-react';
-import React from 'react';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
+import { noop } from 'lodash';
 import I18n from '../../../lib/i18n';
 import TableHeader from './AdministrationTableHeader';
 import TableRow from './AdministrationTableRow';
 import RegistrationAdministrationTableFooter from './RegistrationAdministrationTableFooter';
+import { sortRegistrations } from '../../../lib/utils/registrationAdmin';
+import { WCA_EVENT_IDS } from '../../../lib/wca-data.js.erb';
+import createSortReducer from '../reducers/sortReducer';
+
+export const sortReducer = createSortReducer([
+  'name',
+  'wca_id',
+  'country',
+  'paid_on_with_registered_on_fallback',
+  'registered_on',
+  'amount',
+  'events',
+  'guests',
+  'paid_on',
+  'comment',
+  'dob',
+  ...WCA_EVENT_IDS,
+]);
 
 export default function RegistrationAdministrationTable({
   columnsExpanded,
@@ -15,16 +34,25 @@ export default function RegistrationAdministrationTable({
   onSelect,
   onUnselect,
   onToggle,
-  sortDirection,
-  sortColumn,
-  changeSortColumn,
+  initialSortColumn,
+  initialSortDirection = 'ascending',
   competitionInfo,
   draggable = false,
   sortable = true,
   withPosition = false,
   handleOnDragEnd,
   color,
+  distinguishPaidUnpaid = false,
 }) {
+  const [{ sortColumn, sortDirection }, dispatchSort] = useReducer(sortReducer, {
+    sortColumn: initialSortColumn ?? (competitionInfo['using_payment_integrations?']
+      ? 'paid_on_with_registered_on_fallback'
+      : 'registered_on'
+    ),
+    sortDirection: initialSortDirection,
+  });
+  const changeSortColumn = (name) => dispatchSort({ type: 'CHANGE_SORT', sortColumn: name });
+
   const handleHeaderCheck = (_, data) => {
     if (data.checked) {
       onSelect(...registrations.map(({ user }) => user.id));
@@ -32,6 +60,11 @@ export default function RegistrationAdministrationTable({
       onUnselect(...registrations.map(({ user }) => user.id));
     }
   };
+
+  const sortedRegistrations = useMemo(
+    () => sortRegistrations(registrations, sortColumn, sortDirection),
+    [registrations, sortColumn, sortDirection],
+  );
 
   if (registrations.length === 0) {
     return (
@@ -59,7 +92,7 @@ export default function RegistrationAdministrationTable({
           onCheckboxChanged={handleHeaderCheck}
           sortDirection={sortDirection}
           sortColumn={sortColumn}
-          changeSortColumn={changeSortColumn}
+          onColumnClick={sortable ? changeSortColumn : noop}
           competitionInfo={competitionInfo}
           withCheckbox={!draggable}
           withPosition={withPosition}
@@ -70,7 +103,7 @@ export default function RegistrationAdministrationTable({
             {(providedDroppable) => (
               <Ref innerRef={providedDroppable.innerRef}>
                 <Table.Body {...providedDroppable.droppableProps}>
-                  {registrations.map((w, i) => (
+                  {sortedRegistrations.map((w, i) => (
                     <TableRow
                       competitionInfo={competitionInfo}
                       columnsExpanded={columnsExpanded}
@@ -81,6 +114,7 @@ export default function RegistrationAdministrationTable({
                       isSelected={selected.includes(w.user.id)}
                       withPosition={withPosition}
                       color={color}
+                      distinguishPaidUnpaid={distinguishPaidUnpaid}
                     />
                   ))}
                   {providedDroppable.placeholder}

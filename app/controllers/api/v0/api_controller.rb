@@ -235,9 +235,7 @@ class Api::V0::ApiController < ApplicationController
   # Find the user that owns the access token.
   # From: https://github.com/doorkeeper-gem/doorkeeper#authenticated-resource-owner
   private def current_api_user
-    return @current_api_user if defined?(@current_api_user)
-
-    @current_api_user = User.find_by_id(doorkeeper_token&.resource_owner_id)
+    @current_api_user ||= User.find_by_id(doorkeeper_token&.resource_owner_id) if doorkeeper_token&.accessible?
   end
 
   private def require_user!

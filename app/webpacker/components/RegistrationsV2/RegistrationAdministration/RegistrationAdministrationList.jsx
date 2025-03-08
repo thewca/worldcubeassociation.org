@@ -5,9 +5,7 @@ import React, {
 import {
   Accordion, Checkbox, Form, Header, Icon, Segment, Sticky,
 } from 'semantic-ui-react';
-import { DateTime } from 'luxon';
 import { getAllRegistrations } from '../api/registration/get/get_registrations';
-import createSortReducer from '../reducers/sortReducer';
 import RegistrationActions from './RegistrationActions';
 import { showMessage, showMessages } from '../Register/RegistrationMessage';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
@@ -16,56 +14,15 @@ import Loading from '../../Requests/Loading';
 import { bulkUpdateRegistrations } from '../api/registration/patch/update_registration';
 import RegistrationAdministrationTable from './RegistrationsAdministrationTable';
 import useCheckboxState from '../../../lib/hooks/useCheckboxState';
-import { countries } from '../../../lib/wca-data.js.erb';
 import useOrderedSet from '../../../lib/hooks/useOrderedSet';
 import {
   APPROVED_COLOR, APPROVED_ICON,
   CANCELLED_COLOR, CANCELLED_ICON,
+  partitionRegistrations,
   PENDING_COLOR, PENDING_ICON,
   REJECTED_COLOR, REJECTED_ICON,
   WAITLIST_COLOR, WAITLIST_ICON,
 } from '../../../lib/utils/registrationAdmin';
-
-const sortReducer = createSortReducer([
-  'name',
-  'wca_id',
-  'country',
-  'paid_on_with_registered_on_fallback',
-  'registered_on',
-  'events',
-  'guests',
-  'paid_on',
-  'comment',
-  'dob',
-]);
-
-const partitionRegistrations = (registrations) => registrations.reduce(
-  (result, registration) => {
-    switch (registration.competing.registration_status) {
-      case 'pending':
-        result.pending.push(registration);
-        break;
-      case 'waiting_list':
-        result.waiting.push(registration);
-        break;
-      case 'accepted':
-        result.accepted.push(registration);
-        break;
-      case 'cancelled':
-        result.cancelled.push(registration);
-        break;
-      case 'rejected':
-        result.rejected.push(registration);
-        break;
-      default:
-        break;
-    }
-    return result;
-  },
-  {
-    pending: [], waiting: [], accepted: [], cancelled: [], rejected: [],
-  },
-);
 
 const expandableColumns = {
   dob: I18n.t('activerecord.attributes.user.dob'),
@@ -84,7 +41,7 @@ const initialExpandedColumns = {
   timestamp: false,
 };
 
-const columnReducer = (state, action) => {
+const expandedColumnsReducer = (state, action) => {
   if (action.type === 'reset') {
     return initialExpandedColumns;
   }
@@ -95,25 +52,16 @@ const columnReducer = (state, action) => {
 };
 
 export default function RegistrationAdministrationList({ competitionInfo }) {
-  const [expandedColumns, dispatchColumns] = useReducer(
-    columnReducer,
+  const [expandedColumns, dispatchExpandedColumns] = useReducer(
+    expandedColumnsReducer,
     initialExpandedColumns,
   );
 
-  const [editable, setEditable] = useCheckboxState(false);
+  const [waitlistEditModeEnabled, setWaitlistEditModeEnabled] = useCheckboxState(false);
 
   const dispatchStore = useDispatch();
 
   const actionsRef = useRef();
-
-  const [state, dispatchSort] = useReducer(sortReducer, {
-    sortColumn: competitionInfo['using_payment_integrations?']
-      ? 'paid_on_with_registered_on_fallback'
-      : 'registered_on',
-    sortDirection: 'ascending',
-  });
-  const { sortColumn, sortDirection } = state;
-  const changeSortColumn = (name) => dispatchSort({ type: 'CHANGE_SORT', sortColumn: name });
 
   const {
     isLoading: isRegistrationsLoading,
@@ -160,82 +108,15 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
     },
   });
 
-  const sortedRegistrationsWithUser = useMemo(() => {
-    if (registrations) {
-      const sorted = registrations.toSorted((a, b) => {
-        switch (sortColumn) {
-          case 'name':
-            return a.user.name.localeCompare(b.user.name);
-          case 'wca_id': {
-            const aHasAccount = a.user.wca_id !== null;
-            const bHasAccount = b.user.wca_id !== null;
-            if (aHasAccount && !bHasAccount) {
-              return 1;
-            }
-            if (!aHasAccount && bHasAccount) {
-              return -1;
-            }
-            if (!aHasAccount && !bHasAccount) {
-              return a.user.name.localeCompare(b.user.name);
-            }
-            return a.user.wca_id.localeCompare(b.user.wca_id);
-          }
-          case 'country':
-            return countries.byIso2[a.user.country.iso2].name
-              .localeCompare(countries.byIso2[b.user.country.iso2].name);
-          case 'events':
-            return a.competing.event_ids.length - b.competing.event_ids.length;
-          case 'guests':
-            return a.guests - b.guests;
-          case 'dob':
-            return DateTime.fromISO(a.user.dob).toMillis()
-              - DateTime.fromISO(b.user.dob).toMillis();
-          case 'comment':
-            return a.competing.comment.localeCompare(b.competing.comment);
-          case 'registered_on':
-            return DateTime.fromISO(a.competing.registered_on).toMillis()
-              - DateTime.fromISO(b.competing.registered_on).toMillis();
-          case 'paid_on_with_registered_on_fallback':
-          {
-            const hasAPaid = a.payment?.has_paid;
-            const hasBPaid = b.payment?.has_paid;
-
-            if (hasAPaid && hasBPaid) {
-              return DateTime.fromISO(a.payment.updated_at).toMillis()
-                - DateTime.fromISO(b.payment.updated_at).toMillis();
-            }
-            if (hasAPaid && !hasBPaid) {
-              return -1;
-            }
-            if (!hasAPaid && hasBPaid) {
-              return 1;
-            }
-            return DateTime.fromISO(a.competing.registered_on).toMillis()
-              - DateTime.fromISO(b.competing.registered_on).toMillis();
-          }
-          case 'waiting_list_position':
-            return a.competing.waiting_list_position - b.competing.waiting_list_position;
-          default:
-            return 0;
-        }
-      });
-      if (sortDirection === 'descending') {
-        return sorted.toReversed();
-      }
-      return sorted;
-    }
-    return [];
-  }, [registrations, sortColumn, sortDirection]);
-
   const {
     waiting, accepted, cancelled, pending, rejected,
   } = useMemo(
-    () => partitionRegistrations(sortedRegistrationsWithUser ?? []),
-    [sortedRegistrationsWithUser],
+    () => partitionRegistrations(registrations ?? []),
+    [registrations],
   );
 
   const selectedIds = useOrderedSet();
-  const partitionedSelected = useMemo(
+  const partitionedSelectedIds = useMemo(
     () => ({
       pending: selectedIds.asArray.filter((id) => pending.some((reg) => id === reg.user.id)),
       waiting: selectedIds.asArray.filter((id) => waiting.some((reg) => id === reg.user.id)),
@@ -254,15 +135,6 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
     { count: spotsRemaining },
   );
 
-  const userEmailMap = useMemo(
-    () => Object.fromEntries(
-      (registrations ?? []).map((registration) => [
-        registration.user.id,
-        registration.user.email,
-      ]),
-    ),
-    [registrations],
-  );
   const handleOnDragEnd = useMemo(() => async (result) => {
     if (!result.destination) return;
     if (result.destination.index === result.source.index) return;
@@ -312,16 +184,14 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
             <RegistrationAdministrationTable
               columnsExpanded={expandedColumns}
               registrations={pending}
-              selected={partitionedSelected.pending}
+              selected={partitionedSelectedIds.pending}
               onSelect={selectedIds.add}
               onUnselect={selectedIds.remove}
               onToggle={selectedIds.toggle}
               competition_id={competitionInfo.id}
-              changeSortColumn={changeSortColumn}
-              sortDirection={sortDirection}
-              sortColumn={sortColumn}
               competitionInfo={competitionInfo}
               color={PENDING_COLOR}
+              distinguishPaidUnpaid
             />
           </>
         ),
@@ -344,26 +214,24 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
           <>
             <Checkbox
               toggle
-              value={editable}
-              onChange={setEditable}
+              value={waitlistEditModeEnabled}
+              onChange={setWaitlistEditModeEnabled}
               label={I18n.t('competitions.registration_v2.list.edit_waiting_list')}
             />
             <RegistrationAdministrationTable
               columnsExpanded={expandedColumns}
-              selected={partitionedSelected.waiting}
+              selected={partitionedSelectedIds.waiting}
               onSelect={selectedIds.add}
               onUnselect={selectedIds.remove}
               onToggle={selectedIds.toggle}
               competition_id={competitionInfo.id}
-              changeSortColumn={changeSortColumn}
-              sortDirection={sortDirection}
-              sortColumn={sortColumn}
+              initialSortColumn="waiting_list_position"
               competitionInfo={competitionInfo}
               registrations={waiting.toSorted(
                 (a, b) => a.competing.waiting_list_position - b.competing.waiting_list_position,
               )}
               handleOnDragEnd={handleOnDragEnd}
-              draggable={editable}
+              draggable={waitlistEditModeEnabled}
               sortable={false}
               withPosition
               color={WAITLIST_COLOR}
@@ -397,14 +265,11 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
           <RegistrationAdministrationTable
             columnsExpanded={expandedColumns}
             registrations={accepted}
-            selected={partitionedSelected.accepted}
+            selected={partitionedSelectedIds.accepted}
             onSelect={selectedIds.add}
             onUnselect={selectedIds.remove}
             onToggle={selectedIds.toggle}
             competition_id={competitionInfo.id}
-            changeSortColumn={changeSortColumn}
-            sortDirection={sortDirection}
-            sortColumn={sortColumn}
             competitionInfo={competitionInfo}
             color={APPROVED_COLOR}
           />
@@ -432,14 +297,11 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
             <RegistrationAdministrationTable
               columnsExpanded={expandedColumns}
               registrations={cancelled}
-              selected={partitionedSelected.cancelled}
+              selected={partitionedSelectedIds.cancelled}
               onSelect={selectedIds.add}
               onUnselect={selectedIds.remove}
               onToggle={selectedIds.toggle}
               competition_id={competitionInfo.id}
-              changeSortColumn={changeSortColumn}
-              sortDirection={sortDirection}
-              sortColumn={sortColumn}
               competitionInfo={competitionInfo}
               color={CANCELLED_COLOR}
             />
@@ -468,14 +330,11 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
             <RegistrationAdministrationTable
               columnsExpanded={expandedColumns}
               registrations={rejected}
-              selected={partitionedSelected.rejected}
+              selected={partitionedSelectedIds.rejected}
               onSelect={selectedIds.add}
               onUnselect={selectedIds.remove}
               onToggle={selectedIds.toggle}
               competition_id={competitionInfo.id}
-              changeSortColumn={changeSortColumn}
-              sortDirection={sortDirection}
-              sortColumn={sortColumn}
               competitionInfo={competitionInfo}
               color={REJECTED_COLOR}
             />
@@ -509,7 +368,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
               label={name}
               toggle
               checked={expandedColumns[id]}
-              onChange={() => dispatchColumns({ column: id })}
+              onChange={() => dispatchExpandedColumns({ column: id })}
             />
           ))}
         </Form.Group>
@@ -518,11 +377,10 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
       <div ref={actionsRef}>
         <Sticky context={actionsRef} offset={20}>
           <RegistrationActions
-            partitionedSelected={partitionedSelected}
+            partitionedSelectedIds={partitionedSelectedIds}
             refresh={selectedIds.clear}
             registrations={registrations}
             spotsRemaining={spotsRemaining}
-            userEmailMap={userEmailMap}
             competitionInfo={competitionInfo}
             updateRegistrationMutation={updateRegistrationMutation}
           />

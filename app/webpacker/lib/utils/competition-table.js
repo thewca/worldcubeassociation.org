@@ -3,7 +3,7 @@ import { DateTime, Interval } from 'luxon';
 import I18n from '../i18n';
 
 function parseDateString(yyyymmddDateString) {
-  return DateTime.fromFormat(yyyymmddDateString, 'yyyy-MM-dd');
+  return DateTime.fromFormat(yyyymmddDateString, 'yyyy-MM-dd', { zone: 'utc' });
 }
 
 const registrationStatusHint = (competingStatus) => {

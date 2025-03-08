@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_02_14_015507) do
+ActiveRecord::Schema[7.2].define(version: 2025_02_18_070141) do
   create_table "Competitions", id: { type: :string, limit: 32, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", limit: 50, default: "", null: false
     t.string "cityName", limit: 50, default: "", null: false
@@ -84,6 +84,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_14_015507) do
     t.integer "registration_version", default: 0, null: false
     t.integer "competitor_can_cancel", default: 0, null: false
     t.integer "newcomer_month_reserved_spots"
+    t.integer "auto_close_threshold"
     t.index ["cancelled_at"], name: "index_Competitions_on_cancelled_at"
     t.index ["countryId"], name: "index_Competitions_on_countryId"
     t.index ["end_date"], name: "index_Competitions_on_end_date"
@@ -1082,6 +1083,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_14_015507) do
     t.boolean "is_competing", default: true
     t.text "administrative_notes"
     t.string "competing_status", default: "pending", null: false
+    t.datetime "registered_at", null: false
     t.index ["competition_id", "user_id"], name: "index_registrations_on_competition_id_and_user_id", unique: true
     t.index ["competition_id"], name: "index_registrations_on_competition_id"
     t.index ["user_id"], name: "index_registrations_on_user_id"

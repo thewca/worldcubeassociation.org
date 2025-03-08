@@ -509,6 +509,18 @@ RSpec.describe Registration do
         expect(reg.waiting_list_position).to eq(6)
       end
 
+      it 'no change if we try to add a registration on the waiting list' do
+        reg1.update_lanes!({ user_id: reg1.user.id, competing: { status: 'waiting_list' } }.with_indifferent_access, reg1.user)
+
+        expect(reg1.waiting_list_position).to eq(1)
+        expect(reg2.waiting_list_position).to eq(2)
+        expect(reg3.waiting_list_position).to eq(3)
+        expect(reg4.waiting_list_position).to eq(4)
+        expect(reg5.waiting_list_position).to eq(5)
+
+        expect(waiting_list.entries.count).to eq(5)
+      end
+
       it 'removes from waiting list' do
         reg4.update_lanes!({ user_id: reg4.user.id, competing: { status: 'pending' } }.with_indifferent_access, reg4.user)
 
@@ -539,6 +551,75 @@ RSpec.describe Registration do
 
         expect(waiting_list.entries.count).to eq(5)
       end
+
+      it 'moves to the same position' do
+        reg5.update_lanes!({ user_id: reg5.user.id, competing: { waiting_list_position: 5 } }.with_indifferent_access, reg5.user)
+
+        expect(reg1.waiting_list_position).to eq(1)
+        expect(reg2.waiting_list_position).to eq(2)
+        expect(reg3.waiting_list_position).to eq(3)
+        expect(reg4.waiting_list_position).to eq(4)
+        expect(reg5.waiting_list_position).to eq(5)
+
+        expect(waiting_list.entries.count).to eq(5)
+      end
+
+      it 'move request for a registration that isnt in the waiting list' do
+        reg = FactoryBot.create(:registration, competition: competition)
+        reg.update_lanes!({ user_id: reg.user.id, competing: { waiting_list_position: 3 } }.with_indifferent_access, reg.user)
+
+        expect(reg.waiting_list_position).to eq(nil)
+
+        expect(reg1.waiting_list_position).to eq(1)
+        expect(reg2.waiting_list_position).to eq(2)
+        expect(reg3.waiting_list_position).to eq(3)
+        expect(reg4.waiting_list_position).to eq(4)
+        expect(reg5.waiting_list_position).to eq(5)
+      end
+    end
+  end
+
+  describe 'hooks' do
+    it 'positive registration_payment calls registration.consider_auto_close' do
+      competition = FactoryBot.create(:competition)
+      reg = FactoryBot.create(:registration, competition: competition)
+      expect(reg).to receive(:consider_auto_close)
+
+      FactoryBot.create(
+        :registration_payment,
+        registration: reg,
+        user: reg.user,
+        amount_lowest_denomination: reg.competition.base_entry_fee_lowest_denomination,
+      )
+    end
+
+    it 'doesnt call registration.auto_close! after a refund is created' do
+      competition = FactoryBot.create(:competition)
+      reg = FactoryBot.create(:registration, :paid, competition: competition)
+      expect(reg).to receive(:consider_auto_close).exactly(0).times
+
+      FactoryBot.create(
+        :registration_payment,
+        registration: reg,
+        user: reg.user,
+        amount_lowest_denomination: -reg.competition.base_entry_fee_lowest_denomination,
+        refunded_registration_payment_id: reg.registration_payments.first.id,
+      )
+    end
+
+    it 'doesnt competition.attempt_auto_close! if reg is partially paid' do
+      competition = FactoryBot.create(:competition)
+      expect(competition).to receive(:attempt_auto_close!).exactly(0).times
+
+      reg = FactoryBot.create(:registration, :partially_paid, competition: competition)
+      reg.consider_auto_close
+    end
+
+    it 'calls competition.attempt_auto_close! if reg is fully paid' do
+      competition = FactoryBot.create(:competition)
+      expect(competition).to receive(:attempt_auto_close!).exactly(1).times
+
+      FactoryBot.create(:registration, :paid, competition: competition)
     end
   end
 
@@ -565,5 +646,11 @@ RSpec.describe Registration do
       expect(newcomer_month_comp.registrations.count).to eq(7)
       expect(newcomer_month_comp.registrations.newcomer_month_eligible_competitors_count).to eq(1)
     end
+  end
+
+  it 'validates presence of registered_at' do
+    reg = FactoryBot.build(:registration, registered_at: nil)
+    expect(reg).not_to be_valid
+    expect(reg.errors[:registered_at]).to include("can't be blank")
   end
 end

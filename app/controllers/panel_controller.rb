@@ -38,9 +38,9 @@ class PanelController < ApplicationController
 
     @db_tokens = @db_endpoints.transform_values do |url|
       token_generator.auth_token({
-                                   region: EnvConfig.DATABASE_AWS_REGION,
                                    endpoint: "#{url}:3306",
                                    user_name: EnvConfig.DATABASE_WRT_USER,
+                                   region: EnvConfig.AWS_REGION,
                                  })
     end
 
