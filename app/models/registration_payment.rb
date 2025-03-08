@@ -9,6 +9,7 @@ class RegistrationPayment < ApplicationRecord
   belongs_to :refunded_registration_payment, class_name: 'RegistrationPayment', optional: true
   has_many :refunding_registration_payments, class_name: 'RegistrationPayment', inverse_of: :refunded_registration_payment, foreign_key: :refunded_registration_payment_id, dependent: :destroy
 
+  # after_create :attempt_auto_accept
   after_create :auto_close_hook, unless: :refunded_registration_payment_id?
 
   monetize :amount_lowest_denomination,
@@ -29,7 +30,13 @@ class RegistrationPayment < ApplicationRecord
     end
   end
 
+  private def attempt_auto_accept
+    registration.auto_accept
+  end
+
   private def auto_close_hook
+    puts "here :)"
+    puts registration.object_id
     registration.consider_auto_close
   end
 end

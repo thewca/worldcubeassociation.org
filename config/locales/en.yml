@@ -1124,6 +1124,7 @@ en:
   registrations:
     #context: and when an error is found
     errors:
+      competitor_limit_reached: "The competition is full."
       need_name: "Need a name"
       need_gender: "Need a gender"
       need_dob: "Need a birthdate"
@@ -1609,6 +1610,8 @@ en:
           is_confirmed: "Do not let organizers edit this competition"
           is_visible: "Make competition visible to the public"
           uses_new_registration_system: "Use the new Registration System"
+          auto_accept_enabled: "Automatic registration acceptance"
+          auto_accept_disable_threshold: "Limit for automatically accepting registrations"
         competition_id: "ID"
         name: "Name"
         short_name: "Competition short name"
@@ -1691,7 +1694,8 @@ en:
         admin:
           is_confirmed: ""
           is_visible: ""
-          uses_new_registration_system: "If this is disabled, changing the registration system will cause technical issues. Please contact WST for assistance if you still need to change the registration system."
+          auto_accept_enabled: "This will automatically accept any user who registers and pays. Use at your own risk, and set a disable threshold to have control over the final registrations which get accepted."
+          auto_accept_disable_threshold: "When this number of accepted registrations is reached, auto-accept will disable itself - allowing organizers to manually approve the final registrations. Must be less than the competitor limit. 0 = threshold is not enforced."
         competition_id: ""
         name: "The full name of the competition including the year at the end (e.g., Danish Open 2016). Be sure to capitalize. The name must contain only alphanumeric characters, dashes(-), ampersands(&), periods(.), colons(:), apostrophes('), and spaces( )."
         short_name: "A short name for displaying. If the name of the competition is below %{short_name_limit} characters this should not be edited and should be the same as the normal name."
@@ -1774,6 +1778,13 @@ en:
         cloning:
           clone_tabs: ""
       choices:
+        admin:
+          auto_accept_enabled:
+            "true": "Automatically accept users once they have paid"
+            "false": "Do not auto-accept users - registrations must be manually accepted"
+          allow_on_the_spot:
+            "true": "On the spot registrations will be accepted"
+            "false": "On the spot registrations WILL NOT be accepted"
         #context: about guests
         guests_enabled:
           "true": "Ask about guests"
@@ -1783,9 +1794,6 @@ en:
             "true": "I want to specify a competitor limit"
             "false": "I DO NOT want to specify a competitor limit"
         registration:
-          allow_on_the_spot:
-            "true": "On the spot registrations will be accepted"
-            "false": "On the spot registrations WILL NOT be accepted"
           allow_self_edits:
             "true": "Competitors may edit their registration until the deadline for updating events"
             "false": "Competitors may NOT edit their registration once it has been accepted"
@@ -1804,6 +1812,11 @@ en:
               "false": "Competitors MUST be qualified to register for an event"
     #context: new registration system
     registration_v2:
+      auto_accept:
+        enable: "Enable Auto Accept"
+        disable: "Disable Auto Accept"
+        cant_disable: "Error encountered trying to disable auto accept."
+        disabled: "Auto accept disabled."
       pdf:
         #context: <0> indicates an html tag for internationalizing in React, see https://docs.worldcubeassociation.org/guides/translating_the_website.html#using-react
         link: "As a <0>%{pdfLink}</0>"
@@ -1911,6 +1924,7 @@ en:
         event_limit: "This competition limits the amount of events you can register for to %{max_events}."
       errors:
         events: "Loading Events failed, please try again"
+        disable_auto_accept: "Error occurred when disabling auto accept."
         #context: These are error codes coming from the registration service
         -1: "You have sent an invalid token, please refresh the page. If this issue persists contact WST"
         -2: "Authentication Expired, please refresh the page"
@@ -1944,6 +1958,12 @@ en:
         -6002: "You need to finish your registration before you can pay"
     #context: and when an error occurred
     errors:
+      cant_load_competition_info: "Failed to load competition information - please retry or contact WST if this error persists."
+      must_use_wca_registration: "Auto-accept can only be used if you are using the WCA website for registrations"
+      auto_accept_limit: "Limit for auto-accepted registrations must be less than the competitor limit"
+      auto_accept_not_negative: "Limit for auto-accepted registrations cannot be less than 0."
+      auto_accept_accept_paid_pending: "Cant enable auto-accept if there are paid-pending registrations - either accept them or move them to the waiting list"
+      auto_accept_accept_waitlisted: "Cant enable auto-accept - please accept as many users from the Waiting List as possible."
       auto_close_exceed_paid: "Auto close threshold must be greater than the number of currently paid registrations"
       auto_close_positive_nonzero: "Auto-close threshold must be greater than 0"
       must_exceed_competitor_limit: "Auto-close threshold must be greater than the competitor limit"
