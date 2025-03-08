@@ -173,6 +173,7 @@ function VenuePanel({
               onChange={handleVenueChange}
             />
             <RegionSelector
+              name="countryIso2"
               onlyCountries
               region={venue.countryIso2}
               onRegionChange={handleRegionChange}

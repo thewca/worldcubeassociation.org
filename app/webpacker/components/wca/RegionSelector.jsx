@@ -55,12 +55,14 @@ export default function RegionSelector({
   nullable = false,
   disabled = false,
   error = null,
+  name,
 }) {
   const defaultValue = (nullable || onlyCountries) ? null : ALL_REGIONS_VALUE;
 
   return (
     <Form.Select
       label={label}
+      name={name}
       search
       selection
       clearable={
