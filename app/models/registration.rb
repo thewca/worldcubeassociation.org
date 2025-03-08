@@ -474,22 +474,22 @@ class Registration < ApplicationRecord
     failure_reason = nil
 
     failure_reason = if outstanding_entry_fees > 0
-      'Competitor still has outstanding registration fees'
-    elsif !competition.auto_accept_registrations?
-      'Auto-accept is not enabled for this competition.'
-    elsif !competing_status_pending? && !(competing_status_waiting_list? && waiting_list_position == 1)
-      'Can only auto-accept pending registrations or first position on waiting list'
-    elsif competition.auto_accept_threshold_reached?
-      ("Competition has reached auto_accept_disable_threshold of #{competition.auto_accept_disable_threshold} registrations")
-    elsif !competition.registration_currently_open?
-      'Cant auto-accept while registration is not open'
-    elsif !does_not_exceed_competitor_limit
+                       'Competitor still has outstanding registration fees'
+                     elsif !competition.auto_accept_registrations?
+                       'Auto-accept is not enabled for this competition.'
+                     elsif !competing_status_pending? && !(competing_status_waiting_list? && waiting_list_position == 1)
+                       'Can only auto-accept pending registrations or first position on waiting list'
+                     elsif competition.auto_accept_threshold_reached?
+                       ("Competition has reached auto_accept_disable_threshold of #{competition.auto_accept_disable_threshold} registrations")
+                     elsif !competition.registration_currently_open?
+                       'Cant auto-accept while registration is not open'
+                     elsif !does_not_exceed_competitor_limit
 
-    end
+                     end
 
     if failure_reason.present?
       add_history_entry(
-        {auto_accept_failure_reason: failure_reason},
+        { auto_accept_failure_reason: failure_reason },
         'System',
         'Auto accept',
         'System reject',
@@ -511,12 +511,11 @@ class Registration < ApplicationRecord
   # Temporary implementation pending discussion of how to access the validation state of the registration in lanes/competing.rb
   rescue ActiveRecord::RecordInvalid => e
     add_history_entry(
-      {auto_accept_failure_reason: e},
+      { auto_accept_failure_reason: e },
       'System',
       'Auto accept',
       'System reject',
     )
-    return false
+    false
   end
-
 end

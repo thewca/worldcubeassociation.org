@@ -651,7 +651,7 @@ RSpec.describe Registration do
         waiting_list_reg.attempt_auto_accept
         expect(waiting_list_reg.reload.competing_status).to eq('waiting_list')
         expect(waiting_list_reg.registration_history.last[:changed_attributes][:auto_accept_failure_reason]).to eq(
-          'Can only auto-accept pending registrations or first position on waiting list'
+          'Can only auto-accept pending registrations or first position on waiting list',
         )
       end
 
@@ -749,7 +749,7 @@ RSpec.describe Registration do
         reg.attempt_auto_accept
         expect(reg.reload.competing_status).to eq('pending')
         expect(reg.registration_history.last[:changed_attributes][:auto_accept_failure_reason]).to eq(
-          'Competition has reached auto_accept_disable_threshold of 5 registrations'
+          'Competition has reached auto_accept_disable_threshold of 5 registrations',
         )
         # expect(Rails.logger).to have_received(:error).with(
         #   'Competition has reached auto_accept_disable_threshold of 5 registrations',
@@ -766,7 +766,7 @@ RSpec.describe Registration do
         reg.attempt_auto_accept
         expect(reg.reload.competing_status).to eq('pending')
         expect(reg.registration_history.last[:changed_attributes][:auto_accept_failure_reason]).to eq(
-          'Competition has reached auto_accept_disable_threshold of 5 registrations'
+          'Competition has reached auto_accept_disable_threshold of 5 registrations',
         )
         # expect(Rails.logger).to have_received(:error).with(
         #   'Competition has reached auto_accept_disable_threshold of 5 registrations',
