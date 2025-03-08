@@ -60,7 +60,11 @@ module Registrations
           changes[:event_ids] = event_ids if event_ids.present?
 
           registration.save!
-          registration.add_history_entry(changes, 'user', acting_user_id, Registrations::Helper.action_type(update_params, acting_user_id))
+          if acting_user_id == 'Auto-accept'
+            registration.add_history_entry(changes, 'System', acting_user_id, Registrations::Helper.action_type(update_params, acting_user_id))
+          else
+            registration.add_history_entry(changes, 'user', acting_user_id, Registrations::Helper.action_type(update_params, acting_user_id))
+          end
         end
 
         send_status_change_email(registration, status, old_status, user_id, acting_user_id) if status.present? && old_status != status

@@ -646,11 +646,13 @@ RSpec.describe Registration do
         waiting_list_reg = FactoryBot.create(:registration, :waiting_list, competition: auto_accept_comp)
         expect(waiting_list_reg.waiting_list_position).to eq(4)
 
-        FactoryBot.create(:registration_payment, :skip_create_hook, registration: reg, competition: auto_accept_comp)
+        FactoryBot.create(:registration_payment, :skip_create_hook, registration: waiting_list_reg, competition: auto_accept_comp)
 
         waiting_list_reg.attempt_auto_accept
         expect(waiting_list_reg.reload.competing_status).to eq('waiting_list')
-        expect(Rails.logger).to have_received(:error).with('Can only auto-accept pending registrations or first position on waiting list')
+        expect(waiting_list_reg.registration_history.last[:changed_attributes][:auto_accept_failure_reason]).to eq(
+          'Can only auto-accept pending registrations or first position on waiting list'
+        )
       end
 
       it 'if status is cancelled' do
@@ -660,7 +662,8 @@ RSpec.describe Registration do
 
         reg.attempt_auto_accept
         expect(reg.reload.competing_status).to eq('cancelled')
-        expect(Rails.logger).to have_received(:error).with('Can only auto-accept pending registrations or first position on waiting list')
+        # expect(Rails.logger).to have_received(:error).with('Can only auto-accept pending registrations or first position on waiting list')
+        expect(reg.registration_history.last[:changed_attributes][:auto_accept_failure_reason]).to eq('Can only auto-accept pending registrations or first position on waiting list')
       end
 
       it 'if status is rejected' do
@@ -669,7 +672,8 @@ RSpec.describe Registration do
 
         reg.attempt_auto_accept
         expect(reg.reload.competing_status).to eq('rejected')
-        expect(Rails.logger).to have_received(:error).with('Can only auto-accept pending registrations or first position on waiting list')
+        # expect(Rails.logger).to have_received(:error).with('Can only auto-accept pending registrations or first position on waiting list')
+        expect(reg.registration_history.last[:changed_attributes][:auto_accept_failure_reason]).to eq('Can only auto-accept pending registrations or first position on waiting list')
       end
 
       it 'if status is accepted' do
@@ -677,7 +681,8 @@ RSpec.describe Registration do
         reg.update(competing_status: 'accepted')
 
         reg.attempt_auto_accept
-        expect(Rails.logger).to have_received(:error).with('Can only auto-accept pending registrations or first position on waiting list')
+        # expect(Rails.logger).to have_received(:error).with('Can only auto-accept pending registrations or first position on waiting list')
+        expect(reg.registration_history.last[:changed_attributes][:auto_accept_failure_reason]).to eq('Can only auto-accept pending registrations or first position on waiting list')
       end
 
       it 'if status is waiting_list and position isnt first' do
@@ -688,7 +693,8 @@ RSpec.describe Registration do
 
         reg.attempt_auto_accept
         expect(reg.reload.competing_status).to eq('waiting_list')
-        expect(Rails.logger).to have_received(:error).with('Can only auto-accept pending registrations or first position on waiting list')
+        # expect(Rails.logger).to have_received(:error).with('Can only auto-accept pending registrations or first position on waiting list')
+        expect(reg.registration_history.last[:changed_attributes][:auto_accept_failure_reason]).to eq('Can only auto-accept pending registrations or first position on waiting list')
       end
 
       it 'before registration has opened' do
@@ -701,7 +707,8 @@ RSpec.describe Registration do
 
         unopened_reg.attempt_auto_accept
         expect(unopened_reg.reload.competing_status).to eq('pending')
-        expect(Rails.logger).to have_received(:error).with('Cant auto-accept while registration is not open')
+        # expect(Rails.logger).to have_received(:error).with('Cant auto-accept while registration is not open')
+        expect(unopened_reg.registration_history.last[:changed_attributes][:auto_accept_failure_reason]).to eq('Cant auto-accept while registration is not open')
       end
 
       it 'after registration has closed' do
@@ -714,7 +721,8 @@ RSpec.describe Registration do
 
         closed_reg.attempt_auto_accept
         expect(closed_reg.reload.competing_status).to eq('pending')
-        expect(Rails.logger).to have_received(:error).with('Cant auto-accept while registration is not open')
+        # expect(Rails.logger).to have_received(:error).with('Cant auto-accept while registration is not open')
+        expect(closed_reg.registration_history.last[:changed_attributes][:auto_accept_failure_reason]).to eq('Cant auto-accept while registration is not open')
       end
 
       it 'unless auto-accept is enabled' do
@@ -727,7 +735,8 @@ RSpec.describe Registration do
 
         no_auto_reg.attempt_auto_accept
         expect(no_auto_reg.reload.competing_status).to eq('pending')
-        expect(Rails.logger).to have_received(:error).with('Auto-accept is not enabled for this competition.')
+        # expect(Rails.logger).to have_received(:error).with('Auto-accept is not enabled for this competition.')
+        expect(no_auto_reg.registration_history.last[:changed_attributes][:auto_accept_failure_reason]).to eq('Auto-accept is not enabled for this competition.')
       end
 
       it 'when accepted registrations match the auto-accept disable threshold' do
@@ -739,9 +748,12 @@ RSpec.describe Registration do
 
         reg.attempt_auto_accept
         expect(reg.reload.competing_status).to eq('pending')
-        expect(Rails.logger).to have_received(:error).with(
-          'Competition has reached auto_accept_disable_threshold of 5 registrations',
+        expect(reg.registration_history.last[:changed_attributes][:auto_accept_failure_reason]).to eq(
+          'Competition has reached auto_accept_disable_threshold of 5 registrations'
         )
+        # expect(Rails.logger).to have_received(:error).with(
+        #   'Competition has reached auto_accept_disable_threshold of 5 registrations',
+        # )
       end
 
       it 'when accepted registrations exceed the auto-accept disable threshold' do
@@ -753,45 +765,52 @@ RSpec.describe Registration do
 
         reg.attempt_auto_accept
         expect(reg.reload.competing_status).to eq('pending')
-        expect(Rails.logger).to have_received(:error).with(
-          'Competition has reached auto_accept_disable_threshold of 5 registrations',
+        expect(reg.registration_history.last[:changed_attributes][:auto_accept_failure_reason]).to eq(
+          'Competition has reached auto_accept_disable_threshold of 5 registrations'
         )
+        # expect(Rails.logger).to have_received(:error).with(
+        #   'Competition has reached auto_accept_disable_threshold of 5 registrations',
+        # )
       end
     end
 
     context 'log when auto accept is prevented by validations' do
       it 'if competitor limit is reached and status is pending' do
-        auto_accept_comp.update(competitor_limit: 5)
+        auto_accept_comp.update(competitor_limit: 5, auto_accept_disable_threshold: nil)
         FactoryBot.create_list(:registration, 5, :accepted, competition: auto_accept_comp)
         expect(reg.competing_status).to eq('pending')
 
         FactoryBot.create(:registration_payment, :skip_create_hook, registration: reg, competition: auto_accept_comp)
 
         reg.attempt_auto_accept
-        expect(Rails.logger).to have_received(:error).with(a_string_including('Validation failed: Competitor limit The competition is full.'))
+        # expect(Rails.logger).to have_received(:error).with(a_string_including('Validation failed: Competitor limit The competition is full.'))
+        expect(reg.registration_history.last[:changed_attributes][:auto_accept_failure_reason]).to eq('Validation failed: Competitor limit The competition is full.')
         expect(reg.reload.competing_status).to eq('pending')
       end
 
       it 'if competitor limit is reached and first on waiting list' do
-        auto_accept_comp.update(competitor_limit: 5)
+        auto_accept_comp.update(competitor_limit: 5, auto_accept_disable_threshold: nil)
         FactoryBot.create_list(:registration, 5, :accepted, competition: auto_accept_comp)
-        waiting_list_reg = FactoryBot.create(:registration, :waiting_list, :paid, competition: auto_accept_comp)
+
+        waiting_list_reg = FactoryBot.create(:registration, :waiting_list, competition: auto_accept_comp)
+        FactoryBot.create(:registration_payment, :skip_create_hook, registration: waiting_list_reg, competition: auto_accept_comp)
         expect(waiting_list_reg.reload.competing_status).to eq('waiting_list')
 
         waiting_list_reg.attempt_auto_accept
-        expect(Rails.logger).to have_received(:error).with(a_string_including('Validation failed: Competitor limit The competition is full.'))
+        expect(waiting_list_reg.registration_history.last[:changed_attributes][:auto_accept_failure_reason]).to eq('Validation failed: Competitor limit The competition is full.')
         expect(waiting_list_reg.reload.competing_status).to eq('waiting_list')
       end
 
       it 'if competitor limit is exceeded' do
-        auto_accept_comp.update(competitor_limit: 5)
+        auto_accept_comp.update(competitor_limit: 5, auto_accept_disable_threshold: nil)
         FactoryBot.create_list(:registration, 6, :accepted, :skip_validations, competition: auto_accept_comp)
         expect(reg.competing_status).to eq('pending')
 
         FactoryBot.create(:registration_payment, :skip_create_hook, registration: reg, competition: auto_accept_comp)
 
         reg.attempt_auto_accept
-        expect(Rails.logger).to have_received(:error).with(a_string_including('Validation failed: Competitor limit The competition is full.'))
+        # expect(Rails.logger).to have_received(:error).with(a_string_including('Validation failed: Competitor limit The competition is full.'))
+        expect(reg.registration_history.last[:changed_attributes][:auto_accept_failure_reason]).to eq('Validation failed: Competitor limit The competition is full.')
         expect(reg.reload.competing_status).to eq('pending')
       end
 
@@ -806,8 +825,9 @@ RSpec.describe Registration do
 
         FactoryBot.create(:registration_payment, :skip_create_hook, registration: regB, competition: competitionB)
 
-        regB.auto_accept
-        expect(Rails.logger).to have_received(:error).with(a_string_including('Validation failed: Competition You can only be accepted for one Series competition at a time.'))
+        regB.attempt_auto_accept
+        # expect(Rails.logger).to have_received(:error).with(a_string_including('Validation failed: Competition You can only be accepted for one Series competition at a time.'))
+        expect(regB.registration_history.last[:changed_attributes][:auto_accept_failure_reason]).to eq('Validation failed: Competition You can only be accepted for one Series competition at a time.')
         expect(regB.reload.competing_status).to eq('pending')
       end
     end
@@ -816,6 +836,7 @@ RSpec.describe Registration do
       it 'works with no auto_accept_disable_threshold' do
         auto_accept_comp.competitor_limit_enabled = true
         auto_accept_comp.competitor_limit = 5
+        auto_accept_comp.auto_accept_disable_threshold = nil
         FactoryBot.create_list(:registration, 5, :accepted, competition: auto_accept_comp)
 
         FactoryBot.create(:registration_payment, :skip_create_hook, registration: reg, competition: auto_accept_comp)

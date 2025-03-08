@@ -57,7 +57,7 @@ class Registration < ApplicationRecord
     Rails.cache.delete(CacheAccess.registration_processing_cache_key(competition_id, user_id))
   end
 
-  def update_lanes!(params, acting_user_id)
+  def update_lanes!(params, acting_user)
     Registrations::Lanes::Competing.update!(params, self.competition, acting_user)
   end
 
@@ -477,12 +477,14 @@ class Registration < ApplicationRecord
       'Competitor still has outstanding registration fees'
     elsif !competition.auto_accept_registrations?
       'Auto-accept is not enabled for this competition.'
-    elsif competing_status_pending? || (competing_status_waiting_list? && waiting_list_position == 1)
+    elsif !competing_status_pending? && !(competing_status_waiting_list? && waiting_list_position == 1)
       'Can only auto-accept pending registrations or first position on waiting list'
     elsif competition.auto_accept_threshold_reached?
       ("Competition has reached auto_accept_disable_threshold of #{competition.auto_accept_disable_threshold} registrations")
     elsif !competition.registration_currently_open?
       'Cant auto-accept while registration is not open'
+    elsif !does_not_exceed_competitor_limit
+
     end
 
     if failure_reason.present?
@@ -506,14 +508,15 @@ class Registration < ApplicationRecord
         'Auto-accept',
       )
     end
+  # Temporary implementation pending discussion of how to access the validation state of the registration in lanes/competing.rb
   rescue ActiveRecord::RecordInvalid => e
-    log_error("Auto accept error for registration #{id}: #{e}")
+    add_history_entry(
+      {auto_accept_failure_reason: e},
+      'System',
+      'Auto accept',
+      'System reject',
+    )
+    return false
   end
-
-  private def log_error(error)
-    Rails.logger.error(error)
-    false
-  end
-
 
 end
