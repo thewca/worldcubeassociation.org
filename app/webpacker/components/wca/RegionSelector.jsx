@@ -4,6 +4,7 @@ import I18n from '../../lib/i18n';
 import {
   continents, countries,
 } from '../../lib/wca-data.js.erb';
+import RegionFlag from './RegionFlag';
 
 export const ALL_REGIONS_VALUE = 'all';
 
@@ -18,7 +19,12 @@ const countryOptions = Object.values(countries.real).map((country) => (
     key: country.id,
     text: country.name,
     value: country.iso2,
-    flag: { className: country.iso2.toLowerCase() },
+    flag: (
+      <>
+        <RegionFlag iso2={country.iso2} withoutTooltip />
+        {' '}
+      </>
+    ),
   }
 ));
 
