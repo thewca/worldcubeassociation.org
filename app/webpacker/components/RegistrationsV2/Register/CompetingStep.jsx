@@ -26,7 +26,7 @@ import { useConfirm } from '../../../lib/providers/ConfirmProvider';
 import { events, defaultGuestLimit } from '../../../lib/wca-data.js.erb';
 import { eventsNotQualifiedFor, isQualifiedForEvent } from '../../../lib/helpers/qualifications';
 import { eventQualificationToString } from '../../../lib/utils/wcif';
-import {hasNotPassed, hasPassed} from '../../../lib/utils/dates';
+import { hasNotPassed, hasPassed } from '../../../lib/utils/dates';
 import useSet from '../../../lib/hooks/useSet';
 
 const maxCommentLength = 240;
