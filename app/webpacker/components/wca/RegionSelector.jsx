@@ -8,7 +8,7 @@ import RegionFlag from './RegionFlag';
 
 export const ALL_REGIONS_VALUE = 'all';
 
-const allOption = { key: 'all', text: I18n.t('common.all_regions'), value: ALL_REGIONS_VALUE };
+const allRegionsOption = { key: 'all', text: I18n.t('common.all_regions'), value: ALL_REGIONS_VALUE };
 
 const continentOptions = Object.values(continents.real).map((continent) => (
   { key: continent.id, text: continent.name, value: continent.id }
@@ -29,7 +29,7 @@ const countryOptions = Object.values(countries.real).map((country) => (
 ));
 
 const regionsOptions = [
-  allOption,
+  allRegionsOption,
   {
     key: 'continents_header',
     value: '',
