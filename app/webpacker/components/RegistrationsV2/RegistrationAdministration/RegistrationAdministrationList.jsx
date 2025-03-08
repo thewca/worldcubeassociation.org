@@ -6,6 +6,7 @@ import {
   Accordion, Checkbox, Form, Header, Icon, Segment, Sticky,
 } from 'semantic-ui-react';
 import { getAllRegistrations } from '../api/registration/get/get_registrations';
+import RegistrationAdministrationSearch from './RegistrationAdministrationSearch';
 import RegistrationActions from './RegistrationActions';
 import { showMessage, showMessages } from '../Register/RegistrationMessage';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
@@ -108,12 +109,13 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
     },
   });
 
-  const {
-    waiting, accepted, cancelled, pending, rejected,
-  } = useMemo(
+  const partitionedRegistrations = useMemo(
     () => partitionRegistrations(registrations ?? []),
     [registrations],
   );
+  const {
+    waiting, accepted, cancelled, pending, rejected,
+  } = partitionedRegistrations;
 
   const selectedIds = useOrderedSet();
   const partitionedSelectedIds = useMemo(
@@ -373,6 +375,13 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
           ))}
         </Form.Group>
       </Form>
+
+      <RegistrationAdministrationSearch
+        partitionedRegistrations={partitionedRegistrations}
+        competitionId={competitionInfo.id}
+        usingPayments={competitionInfo['using_payment_integrations?']}
+        currencyCode={competitionInfo.currency_code}
+      />
 
       <div ref={actionsRef}>
         <Sticky context={actionsRef} offset={20}>
