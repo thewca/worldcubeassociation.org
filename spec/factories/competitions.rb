@@ -101,6 +101,11 @@ FactoryBot.define do
 
     registration_version { :v3 }
 
+    trait :auto_accept do
+      use_wca_registration { true }
+      auto_accept_registrations { true }
+    end
+
     trait :newcomer_month do
       registration_open
       with_organizer

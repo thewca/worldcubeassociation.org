@@ -177,6 +177,8 @@ class Competition < ApplicationRecord
     event_change_deadline_date
     competition_series_id
     registration_version
+    auto_accept_registrations
+    auto_accept_disable_threshold
     newcomer_month_reserved_spots
   ).freeze
   VALID_NAME_RE = /\A([-&.:' [:alnum:]]+) (\d{4})\z/
@@ -396,6 +398,29 @@ class Competition < ApplicationRecord
     end
   end
 
+  validate :auto_accept_validations
+  private def auto_accept_validations
+    errors.add(:auto_accept_registrations, I18n.t('competitions.errors.must_use_wca_registration')) if
+      auto_accept_registrations? && !use_wca_registration
+
+    errors.add(:auto_accept_registrations, I18n.t('competitions.errors.auto_accept_limit')) if
+      auto_accept_disable_threshold.present? &&
+      auto_accept_disable_threshold > 0 &&
+      competitor_limit.present? &&
+      auto_accept_disable_threshold >= competitor_limit
+
+    errors.add(:auto_accept_registrations, I18n.t('competitions.errors.auto_accept_not_negative')) if
+      auto_accept_disable_threshold.present? && auto_accept_disable_threshold < 0
+
+    # TODO: This logic belongs in a controller more appropriately than in the validation.
+    # IF we build a controller endpoint specifically for auto_accept, this logic should be move there.
+    if auto_accept_registrations_changed? && auto_accept_registrations?
+      errors.add(:auto_accept_registrations, I18n.t('competitions.errors.auto_accept_accept_paid_pending')) if registrations.pending.with_payments.count > 0
+      errors.add(:auto_accept_registrations, I18n.t('competitions.errors.auto_accept_accept_waitlisted')) if
+        registrations.waitlisted.count > 0 && !registration_full_and_accepted?
+    end
+  end
+
   def has_any_round_per_event?
     competition_events.map(&:rounds).none?(&:empty?)
   end
@@ -503,6 +528,10 @@ class Competition < ApplicationRecord
   def registration_full_and_accepted?
     competitor_count = registrations.accepted_count
     competitor_limit_enabled? && competitor_count >= competitor_limit
+  end
+
+  def auto_accept_threshold_reached?
+    auto_accept_disable_threshold > 0 && auto_accept_disable_threshold <= registrations.competing_status_accepted.count
   end
 
   def number_of_bookmarks
@@ -1928,7 +1957,7 @@ class Competition < ApplicationRecord
                base_entry_fee_lowest_denomination currency_code allow_registration_edits competitor_can_cancel
                allow_registration_without_qualification refund_policy_percent use_wca_registration guests_per_registration_limit venue contact
                force_comment_in_registration use_wca_registration external_registration_page guests_entry_fee_lowest_denomination guest_entry_status
-               information events_per_registration_limit guests_enabled],
+               information events_per_registration_limit guests_enabled auto_accept_registrations auto_accept_disable_threshold],
       methods: %w[url website short_name city venue_address venue_details latitude_degrees longitude_degrees country_iso2 event_ids registration_currently_open?
                   main_event_id number_of_bookmarks using_payment_integrations? uses_qualification? uses_cutoff? competition_series_ids registration_full?
                   part_of_competition_series? registration_full_and_accepted?],
