@@ -483,8 +483,6 @@ class Registration < ApplicationRecord
                        ("Competition has reached auto_accept_disable_threshold of #{competition.auto_accept_disable_threshold} registrations")
                      elsif !competition.registration_currently_open?
                        'Cant auto-accept while registration is not open'
-                     elsif !does_not_exceed_competitor_limit
-
                      end
 
     if failure_reason.present?
