@@ -26,7 +26,7 @@ import { useConfirm } from '../../../lib/providers/ConfirmProvider';
 import { events, defaultGuestLimit } from '../../../lib/wca-data.js.erb';
 import { eventsNotQualifiedFor, isQualifiedForEvent } from '../../../lib/helpers/qualifications';
 import { eventQualificationToString } from '../../../lib/utils/wcif';
-import { hasNotPassed } from '../../../lib/utils/dates';
+import {hasNotPassed, hasPassed} from '../../../lib/utils/dates';
 import useSet from '../../../lib/hooks/useSet';
 
 const maxCommentLength = 240;
@@ -303,6 +303,10 @@ export default function CompetingStep({
     ? competitionInfo.guests_per_registration_limit
     : defaultGuestLimit;
 
+  const hasRegistrationEditDeadlinePassed = hasPassed(
+    competitionInfo.event_change_deadline_date ?? competitionInfo.start_date,
+  );
+
   const formWarnings = useMemo(() => potentialWarnings(competitionInfo), [competitionInfo]);
   return (
     <Segment basic loading={isUpdating}>
@@ -412,11 +416,11 @@ export default function CompetingStep({
                 <Button
                   primary
                   disabled={
-                        isUpdating || !hasChanges
+                        isUpdating || !hasChanges || hasRegistrationEditDeadlinePassed
                       }
                   type="submit"
                 >
-                  {I18n.t('registrations.update')}
+                  {I18n.t(hasRegistrationEditDeadlinePassed ? 'competitions.registration_v2.errors.-4001' : 'registrations.update')}
                 </Button>
                 <ButtonOr />
                 <Button secondary onClick={() => nextStep()}>
