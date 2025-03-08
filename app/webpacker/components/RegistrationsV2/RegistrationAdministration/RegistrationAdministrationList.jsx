@@ -3,7 +3,7 @@ import React, {
   useMemo, useReducer, useRef,
 } from 'react';
 import {
-  Accordion, Checkbox, Form, Header, Icon, Segment, Sticky,
+  Accordion, Checkbox, Divider, Form, Header, Icon, Segment, Sticky,
 } from 'semantic-ui-react';
 import { getAllRegistrations } from '../api/registration/get/get_registrations';
 import RegistrationAdministrationSearch from './RegistrationAdministrationSearch';
@@ -376,12 +376,16 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
         </Form.Group>
       </Form>
 
+      <Divider />
+
       <RegistrationAdministrationSearch
         partitionedRegistrations={partitionedRegistrations}
         competitionId={competitionInfo.id}
         usingPayments={competitionInfo['using_payment_integrations?']}
         currencyCode={competitionInfo.currency_code}
       />
+
+      <Divider />
 
       <div ref={actionsRef}>
         <Sticky context={actionsRef} offset={20}>
@@ -394,6 +398,8 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
             updateRegistrationMutation={updateRegistrationMutation}
           />
         </Sticky>
+
+        <Divider />
 
         <Accordion
           defaultActiveIndex={nonEmptyTableIndices}
