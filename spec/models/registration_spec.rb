@@ -592,7 +592,7 @@ RSpec.describe Registration do
 
       FactoryBot.create(:registration_payment, :skip_create_hook, registration: reg, competition: auto_accept_comp)
 
-      reg.auto_accept
+      reg.attempt_auto_accept
       expect(reg.reload.competing_status).to eq('accepted')
       expect(reg.registration_history_entries.last.actor_type).to eq('System')
       expect(reg.registration_history_entries.last.actor_id).to eq('Auto-accept')
@@ -603,18 +603,18 @@ RSpec.describe Registration do
 
       FactoryBot.create(:registration_payment, :skip_create_hook, :with_donation, registration: reg, competition: auto_accept_comp)
 
-      reg.auto_accept
+      reg.attempt_auto_accept
       expect(reg.reload.competing_status).to eq('accepted')
     end
 
-    it 'doesnt auto accept a competitor who gets refunded' do
+    it 'doesnt auto accept a competitor who gets refunded', :tag do
       expect(reg.competing_status).to eq('pending')
 
       FactoryBot.create(:registration_payment, :refund, :skip_create_hook, registration: reg, competition: auto_accept_comp)
 
-      reg.auto_accept
+      reg.attempt_auto_accept
       expect(reg.reload.competing_status).to eq('pending')
-      expect(Rails.logger).to have_received(:error).with('Competitor still has outstanding registration fees')
+      expect(reg.registration_history.last[:changed_attributes][:auto_accept_failure_reason]).to eq('Competitor still has outstanding registration fees')
     end
 
     it 'accepts the last competitor on the auto-accept disable threshold' do
@@ -627,7 +627,7 @@ RSpec.describe Registration do
 
       FactoryBot.create(:registration_payment, :skip_create_hook, registration: reg, competition: auto_accept_comp)
 
-      reg.auto_accept
+      reg.attempt_auto_accept
       expect(reg.reload.competing_status).to eq('accepted')
     end
 
@@ -636,7 +636,7 @@ RSpec.describe Registration do
 
       FactoryBot.create(:registration_payment, :skip_create_hook, registration: waiting_list_reg, competition: auto_accept_comp)
 
-      waiting_list_reg.auto_accept
+      waiting_list_reg.attempt_auto_accept
       expect(waiting_list_reg.reload.competing_status).to eq('accepted')
     end
 
@@ -648,7 +648,7 @@ RSpec.describe Registration do
 
         FactoryBot.create(:registration_payment, :skip_create_hook, registration: reg, competition: auto_accept_comp)
 
-        waiting_list_reg.auto_accept
+        waiting_list_reg.attempt_auto_accept
         expect(waiting_list_reg.reload.competing_status).to eq('waiting_list')
         expect(Rails.logger).to have_received(:error).with('Can only auto-accept pending registrations or first position on waiting list')
       end
@@ -658,7 +658,7 @@ RSpec.describe Registration do
 
         reg.update(competing_status: 'cancelled')
 
-        reg.auto_accept
+        reg.attempt_auto_accept
         expect(reg.reload.competing_status).to eq('cancelled')
         expect(Rails.logger).to have_received(:error).with('Can only auto-accept pending registrations or first position on waiting list')
       end
@@ -667,7 +667,7 @@ RSpec.describe Registration do
         FactoryBot.create(:registration_payment, :skip_create_hook, registration: reg, competition: auto_accept_comp)
         reg.update(competing_status: 'rejected')
 
-        reg.auto_accept
+        reg.attempt_auto_accept
         expect(reg.reload.competing_status).to eq('rejected')
         expect(Rails.logger).to have_received(:error).with('Can only auto-accept pending registrations or first position on waiting list')
       end
@@ -676,7 +676,7 @@ RSpec.describe Registration do
         FactoryBot.create(:registration_payment, :skip_create_hook, registration: reg, competition: auto_accept_comp)
         reg.update(competing_status: 'accepted')
 
-        reg.auto_accept
+        reg.attempt_auto_accept
         expect(Rails.logger).to have_received(:error).with('Can only auto-accept pending registrations or first position on waiting list')
       end
 
@@ -686,7 +686,7 @@ RSpec.describe Registration do
         reg.update(competing_status: 'waiting_list')
         auto_accept_comp.waiting_list.add(reg)
 
-        reg.auto_accept
+        reg.attempt_auto_accept
         expect(reg.reload.competing_status).to eq('waiting_list')
         expect(Rails.logger).to have_received(:error).with('Can only auto-accept pending registrations or first position on waiting list')
       end
@@ -699,7 +699,7 @@ RSpec.describe Registration do
 
         FactoryBot.create(:registration_payment, :skip_create_hook, registration: unopened_reg, competition: unopened_comp)
 
-        unopened_reg.auto_accept
+        unopened_reg.attempt_auto_accept
         expect(unopened_reg.reload.competing_status).to eq('pending')
         expect(Rails.logger).to have_received(:error).with('Cant auto-accept while registration is not open')
       end
@@ -712,7 +712,7 @@ RSpec.describe Registration do
 
         FactoryBot.create(:registration_payment, :skip_create_hook, registration: closed_reg, competition: closed_comp)
 
-        closed_reg.auto_accept
+        closed_reg.attempt_auto_accept
         expect(closed_reg.reload.competing_status).to eq('pending')
         expect(Rails.logger).to have_received(:error).with('Cant auto-accept while registration is not open')
       end
@@ -725,7 +725,7 @@ RSpec.describe Registration do
 
         FactoryBot.create(:registration_payment, :skip_create_hook, registration: no_auto_reg, competition: no_auto_accept)
 
-        no_auto_reg.auto_accept
+        no_auto_reg.attempt_auto_accept
         expect(no_auto_reg.reload.competing_status).to eq('pending')
         expect(Rails.logger).to have_received(:error).with('Auto-accept is not enabled for this competition.')
       end
@@ -737,7 +737,7 @@ RSpec.describe Registration do
 
         FactoryBot.create(:registration_payment, :skip_create_hook, registration: reg, competition: auto_accept_comp)
 
-        reg.auto_accept
+        reg.attempt_auto_accept
         expect(reg.reload.competing_status).to eq('pending')
         expect(Rails.logger).to have_received(:error).with(
           'Competition has reached auto_accept_disable_threshold of 5 registrations',
@@ -751,7 +751,7 @@ RSpec.describe Registration do
 
         FactoryBot.create(:registration_payment, :skip_create_hook, registration: reg, competition: auto_accept_comp)
 
-        reg.auto_accept
+        reg.attempt_auto_accept
         expect(reg.reload.competing_status).to eq('pending')
         expect(Rails.logger).to have_received(:error).with(
           'Competition has reached auto_accept_disable_threshold of 5 registrations',
@@ -767,7 +767,7 @@ RSpec.describe Registration do
 
         FactoryBot.create(:registration_payment, :skip_create_hook, registration: reg, competition: auto_accept_comp)
 
-        reg.auto_accept
+        reg.attempt_auto_accept
         expect(Rails.logger).to have_received(:error).with(a_string_including('Validation failed: Competitor limit The competition is full.'))
         expect(reg.reload.competing_status).to eq('pending')
       end
@@ -778,7 +778,7 @@ RSpec.describe Registration do
         waiting_list_reg = FactoryBot.create(:registration, :waiting_list, :paid, competition: auto_accept_comp)
         expect(waiting_list_reg.reload.competing_status).to eq('waiting_list')
 
-        waiting_list_reg.auto_accept
+        waiting_list_reg.attempt_auto_accept
         expect(Rails.logger).to have_received(:error).with(a_string_including('Validation failed: Competitor limit The competition is full.'))
         expect(waiting_list_reg.reload.competing_status).to eq('waiting_list')
       end
@@ -790,7 +790,7 @@ RSpec.describe Registration do
 
         FactoryBot.create(:registration_payment, :skip_create_hook, registration: reg, competition: auto_accept_comp)
 
-        reg.auto_accept
+        reg.attempt_auto_accept
         expect(Rails.logger).to have_received(:error).with(a_string_including('Validation failed: Competitor limit The competition is full.'))
         expect(reg.reload.competing_status).to eq('pending')
       end
@@ -820,7 +820,7 @@ RSpec.describe Registration do
 
         FactoryBot.create(:registration_payment, :skip_create_hook, registration: reg, competition: auto_accept_comp)
 
-        reg.auto_accept
+        reg.attempt_auto_accept
         expect(reg.reload.competing_status).to eq('waiting_list')
         expect(reg.waiting_list_position).to eq(1)
         expect(reg.registration_history_entries.last.actor_type).to eq('System')
@@ -835,7 +835,7 @@ RSpec.describe Registration do
 
         FactoryBot.create(:registration_payment, :skip_create_hook, registration: reg, competition: auto_accept_comp)
 
-        reg.auto_accept
+        reg.attempt_auto_accept
         expect(reg.reload.competing_status).to eq('pending')
         expect(reg.waiting_list_position).to eq(nil)
       end

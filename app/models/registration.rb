@@ -240,12 +240,12 @@ class Registration < ApplicationRecord
                             end
       end
       {
-        changed_attributes: changed_attributes,
+        changed_attributes: changed_attributes.with_indifferent_access,
         actor_type: r.actor_type,
         actor_id: r.actor_id,
         timestamp: r.created_at,
         action: r.action,
-      }
+      }.with_indifferent_access
     end
   end
 
@@ -469,14 +469,31 @@ class Registration < ApplicationRecord
     super(DEFAULT_SERIALIZE_OPTIONS.merge(options || {}))
   end
 
-  def auto_accept
-    return log_error('Auto-accept is not enabled for this competition.') unless competition.auto_accept_registrations?
-    return log_error('Can only auto-accept pending registrations or first position on waiting list') unless
-      competing_status_pending? || (competing_status_waiting_list? && waiting_list_position == 1)
-    return log_error("Competition has reached auto_accept_disable_threshold of #{competition.auto_accept_disable_threshold} registrations") if
-      competition.auto_accept_threshold_reached?
-    return log_error('Competitor still has outstanding registration fees') if outstanding_entry_fees > 0
-    return log_error('Cant auto-accept while registration is not open') unless competition.registration_currently_open?
+  def attempt_auto_accept
+    return false if Rails.env.production? && EnvConfig.WCA_LIVE_SITE?
+    failure_reason = nil
+
+    failure_reason = if outstanding_entry_fees > 0
+      'Competitor still has outstanding registration fees'
+    elsif !competition.auto_accept_registrations?
+      'Auto-accept is not enabled for this competition.'
+    elsif competing_status_pending? || (competing_status_waiting_list? && waiting_list_position == 1)
+      'Can only auto-accept pending registrations or first position on waiting list'
+    elsif competition.auto_accept_threshold_reached?
+      ("Competition has reached auto_accept_disable_threshold of #{competition.auto_accept_disable_threshold} registrations")
+    elsif !competition.registration_currently_open?
+      'Cant auto-accept while registration is not open'
+    end
+
+    if failure_reason.present?
+      add_history_entry(
+        {auto_accept_failure_reason: failure_reason},
+        'System',
+        'Auto accept',
+        'System reject',
+      )
+      return false
+    end
 
     if competition.registration_full_and_accepted? && competing_status_pending?
       update_lanes!(
@@ -497,4 +514,6 @@ class Registration < ApplicationRecord
     Rails.logger.error(error)
     false
   end
+
+
 end
