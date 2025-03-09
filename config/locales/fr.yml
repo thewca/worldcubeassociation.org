@@ -675,7 +675,7 @@ fr:
         #original_hash: 35a6012
         competing_and_attending: Participation et Présence
         #original_hash: 4f30c10
-        competing_and_attending_and_forums: 'Participer, assister et utiliser les forums'
+        competing_and_attending_and_forums: 'Participation, Présence et Utilisation des forums'
     competition_medium:
       status:
         #original_hash: 61a0572
@@ -926,7 +926,7 @@ fr:
         #original_hash: da39a3e
         country: ''
         #original_hash: 72448d6
-        website: Doit être uneURLl http(s) valide. HTTPS est recommandé
+        website: Doit être une URL http(s) valide. HTTPS est recommandé
         #original_hash: 2ace571
         logo: >-
           Doit être au format PNG, avec une bonne résolution et un fond
@@ -2012,7 +2012,7 @@ fr:
       #original_hash: 81fa5f9
       pending_avatar_edit_action: 'Cliquez ici si vous souhaitez l''éditer à la place :'
       #original_hash: 73cebb8
-      pending_avatar_edit_warning: Modification de l'avatar en attente !
+      pending_avatar_edit_warning: Modification de la photo de profil en attente !
       #original_hash: 7b06f03
       pending_claim_confirmation_html: >-
         Ce compte est en attente de %{delegate} pour confirmer l'ID WCA
@@ -2082,7 +2082,7 @@ fr:
         '2': Vous devez utiliser une photo récente.
         #original_hash: 8165cf0
         '3': >-
-          S'il y a plus d'une personne dans l'avatar, il doit être clair
+          S'il y a plus d'une personne dans la photo de profil, il doit être clair
           laquelle vous êtes.
         #original_hash: 4083c00
         '4': >-
@@ -2090,10 +2090,10 @@ fr:
           visible.
         #original_hash: 14c72b2
         '5': >-
-          L'avatar ne doit pas comporter de texte superposé, d'autocollants ou
+          La photo de profil ne doit pas comporter de texte superposé, d'autocollants ou
           de filtres non naturels, y compris des bordures.
         #original_hash: 7f9c9c6
-        '6': L'avatar doit être présenté dans le bon sens.
+        '6': La photo de profil doit être présenté dans le bon sens.
         #original_hash: 1a18831
         '7': >-
           La photo de profil ne doit pas contenir de contenu offensant (ex :
@@ -2110,7 +2110,7 @@ fr:
             vous apparaîtriez à une compétition.
           #original_hash: f1f3854
           '2': >-
-            L'avatar doit être cadré, recadré, incliné et éclairé de manière à
+            La photo de profil doit être cadré, recadré, incliné et éclairé de manière à
             ce que tout compétiteur ou spectateur d'une compétition puisse
             l'utiliser pour vous identifier sans ambiguïté sur le lieu de la
             compétition.
@@ -3122,7 +3122,7 @@ fr:
       #original_hash: b3946b2
       sort_by_announcement: Trier par date d'annonce
       #original_hash: e63dc91
-      admin_status: Statut admin
+      admin_status: Statut administrateur
       status_flags:
         #original_hash: 6a72085
         all: Tous
@@ -4715,7 +4715,7 @@ fr:
       account_disconnected_success: 'Déconnexion réussie de votre compte %{provider}.'
       #original_hash: 6b934e2
       account_disconnected_failure: >-
-        Une erruer s'est produite en tentant de déconnecter votre compte
+        Une erreur s'est produite en tentant de déconnecter votre compte
         %{provider}.
       #original_hash: 340bba4
       account_not_connected: >-
