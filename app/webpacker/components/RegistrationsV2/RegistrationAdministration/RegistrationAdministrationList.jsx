@@ -212,6 +212,9 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
       content: {
         content: (
           <>
+            <Header.Subheader>
+              {I18n.t('competitions.registration_v2.list.waitlist.information')}
+            </Header.Subheader>
             <Checkbox
               toggle
               value={waitlistEditModeEnabled}
