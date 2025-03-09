@@ -1,4 +1,4 @@
-fr:
+fr-CA:
   countries:
     #original_hash: 530670d
     AG: Antigua et Barbuda
@@ -316,11 +316,11 @@ fr:
     #original_hash: ceab6ea
     multi: Soumission de cubes pour le 3x3x3 Multi-Blind
     #original_hash: 364653c
-    breakfast: Petit-déjeuner
+    breakfast: Déjeuner
     #original_hash: 585ecb7
-    lunch: Déjeuner
+    lunch: Dîner
     #original_hash: 8cf98a5
-    dinner: Dîner
+    dinner: Souper
     #original_hash: 75226d7
     awards: Cérémonie des récompenses
     #original_hash: cdd7bb2
@@ -422,7 +422,7 @@ fr:
         #original_hash: cb77bea
         unconfirmed_wca_id: ID WCA à confirmer
         #original_hash: 8ed8874
-        login: E-mail ou ID WCA
+        login: Courriel ou ID WCA
         #original_hash: fa4c045
         country_iso2: Représentant
         #original_hash: ab58155
@@ -432,7 +432,7 @@ fr:
         #original_hash: 8a754c6
         gender: Genre
         #original_hash: 84add5b
-        email: Adresse e-mail
+        email: Adresse courriel
         #original_hash: 8be3c94
         password: Mot de passe
         #original_hash: aefce7f
@@ -444,10 +444,10 @@ fr:
         #original_hash: 58e0c56
         remove_avatar: Supprimer la photo de profil
         #original_hash: 9af9099
-        results_notifications_enabled: M'envoyer un e-mail quand mes résultats sont postés.
+        results_notifications_enabled: M'envoyer un courriel quand mes résultats sont postés.
         #original_hash: 29ce2ff
         registration_notifications_enabled: >-
-          Quand je délègue ou organise une compétition, m'envoyer un e-mail
+          Quand je délègue ou organise une compétition, m'envoyer un courriel
           lorsque de nouvelles inscriptions sont enregistrées.
         #original_hash: de60ab8
         delegate_status: Statut de Délégué
@@ -458,7 +458,7 @@ fr:
         #original_hash: e3fc6e9
         subRegion: Sous-région
         #original_hash: 730db33
-        receive_delegate_reports: Je souhaite recevoir les rapports des compétitions WCA par e-mail
+        receive_delegate_reports: Je souhaite recevoir les rapports des compétitions WCA par courriel
         #original_hash: 8667157
         delegate_reports_region: >-
           Je souhaite uniquement recevoir les rapports des délégués pour la
@@ -485,7 +485,7 @@ fr:
         #original_hash: c5497bc
         registration_competition_events: Épreuves
         #original_hash: 84add5b
-        email: Adresse e-mail
+        email: Adresse courriel
       competition_tab:
         #original_hash: 4f9be05
         content: Contenu
@@ -495,7 +495,7 @@ fr:
         #original_hash: 983d541
         discussion_url: URL de la discussion sur Google Group
         #original_hash: 65a9b28
-        schedule_url: URL du planning
+        schedule_url: URL de l'horaire
         #original_hash: 12b71c3
         summary: Résumé
         #original_hash: 36155d4
@@ -567,7 +567,7 @@ fr:
         #original_hash: 1c2ed61
         public_summary: Résumé (public)
         #original_hash: 62d6896
-        digest_worthy: Mérite d'être envoyé dans le digest
+        digest_worthy: Mérite d'être envoyé dans le résumé
         #original_hash: 848eed0
         tags: Mots-clés
         #original_hash: 861e459
@@ -584,7 +584,7 @@ fr:
         #original_hash: 1be755a
         submitterName: Nom du contributeur
         #original_hash: 78cdfee
-        submitterEmail: Adresse e-mail du contributeur
+        submitterEmail: Adresse courriel du contributeur
         #original_hash: 0d31f23
         submitterComment: Commentaire du contributeur
         #original_hash: bae7d5b
@@ -599,7 +599,7 @@ fr:
         #original_hash: 83fce83
         logo: Logo
         #original_hash: 84add5b
-        email: Adresse e-mail
+        email: Adresse courriel
         #original_hash: 82c42fb
         address: Adresse officielle
         #original_hash: 9855f80
@@ -817,7 +817,7 @@ fr:
       delegate_report:
         #original_hash: 4eefb60
         schedule_url: >-
-          Lien complet vers le planning public (ex :
+          Lien complet vers l'horaire public (ex :
           https://www.cubingusa.com/usnationals2016/schedule.php)
         #original_hash: 1a68719
         equipment: >-
@@ -974,7 +974,7 @@ fr:
         #original_hash: 709a232
         name: Nom
         #original_hash: 3fa6f5f
-        your_email: Votre adresse e-mail
+        your_email: Votre adresse courriel
       website_contact:
         #original_hash: 68f4145
         message: Message
@@ -1025,22 +1025,22 @@ fr:
           #original_hash: 1b0c44f
           enabled_success: L'authentification à deux facteurs a été activée avec succès.
           #original_hash: 9515157
-          email_auth: Authentification par e-mail
+          email_auth: Authentification par courriel
           #original_hash: d305ccb
-          get_by_email: Obtenir un code par e-mail
+          get_by_email: Obtenir un code par courriel
           #original_hash: 4e644aa
           get_by_email_desc: >-
             Si vous ne pouvez pas accéder à votre appareil ou a vos codes de
             secours, vous pouvez aussi cliquer sur le bouton ci-dessous pour
-            obtenir un code à usage unique par e-mail. Copier-coller le
+            obtenir un code à usage unique par courriel. Copier-coller le
             ci-dessous pour vous connecter.
           #original_hash: b243ac5
           email_sent: >-
-            Un code vous a été adressé par e-mail. Ce code est valide pour 2
+            Un code vous a été adressé par courriel. Ce code est valide pour 2
             minutes. Vous pourrez demander un nouveau code dans 2 minutes.
           errors:
             #original_hash: e70dc49
-            cant_send_email: Vous ne pouvez pas générer un e-mail pour le moment
+            cant_send_email: Vous ne pouvez pas générer un courriel pour le moment
             #original_hash: c0d4fc2
             invalid_otp: Code à usage unique invalide.
             #original_hash: c2f5347
@@ -1048,7 +1048,7 @@ fr:
             #original_hash: 14d294b
             unknown: >-
               Une erreur inconnue s'est produite pendant l'envoi de votre
-              e-mail. Merci de contacter l'équipe logicielle de la WCA (WST).
+              courriel. Merci de contacter l'équipe logicielle de la WCA (WST).
           otp_email:
             #original_hash: a20e037
             subject: Votre code à usage unique pour le site internet de la WCA
@@ -1057,11 +1057,11 @@ fr:
               Vous être en train de vous connecter sur le site de la WCA.
               L'authentification à deux facteur est activée pour votre compte,
               et vous venez de demander que l'on vous envoie un mot de passe à
-              usage unique par e-mail. Vous le trouverez ci-dessous :
+              usage unique par courriel. Vous le trouverez ci-dessous :
             #original_hash: 8aeccbf
             disclaimer: >-
               Si vous n'avez pas demandé ce code d'authentification, veuillez
-              contacter le WST immédiatement en répondant à cet e-mail : il se
+              contacter le WST immédiatement en répondant à cet courriel : il se
               peut que vous ayez une session ouverte quelque part ou que votre
               mot de passe soit compromis.
           #original_hash: 8c13694
@@ -1080,7 +1080,7 @@ fr:
               pris dans la liste des codes de secours générés lors de
               l'activation du 2FA.
             #original_hash: eaee403
-            email: envoyé par e-mail lorsque que vous vous connectez.
+            email: envoyé par courriel lorsque que vous vous connectez.
           #original_hash: 7ae99ae
           status_html: 'L''authentification à deux facteurs est %{status} pour vous.'
           #original_hash: 3ea3f98
@@ -1149,7 +1149,7 @@ fr:
             et ne peuvent pas être affichés une nouvelle fois plus tard.
           #original_hash: b5e3ad8
           email_auth_desc: >-
-            Vous pouvez demander un code à usage unique par e-mail lorsque vous
+            Vous pouvez demander un code à usage unique par courriel lorsque vous
             vous connectez.
           #original_hash: dd991ab
           disable_section_title: Désactiver l'authentification à deux facteurs
@@ -1174,19 +1174,19 @@ fr:
         sign_in: Connexion
     failure:
       #original_hash: 1186218
-      invalid: 'Votre e-mail, ID WCA ou mot de passe est invalide.'
+      invalid: 'Votre courriel, ID WCA ou mot de passe est invalide.'
       #original_hash: 1186218
-      not_found_in_database: 'Votre e-mail, ID WCA ou mot de passe est invalide.'
+      not_found_in_database: 'Votre courriel, ID WCA ou mot de passe est invalide.'
       #original_hash: 3f9db99
       unconfirmed: >-
-        Vous devez confirmer votre adresse e-mail avant de continuer. Vous
-        n'avez pas reçu d’e-mail de confirmation ? Visitez
+        Vous devez confirmer votre adresse courriel avant de continuer. Vous
+        n'avez pas reçu de courriel de confirmation ? Visitez
         https://www.worldcubeassociation.org/users/confirmation/new pour en
         réclamer un nouveau.
     mailer:
       confirmation_instructions:
         #original_hash: 0ea8196
-        subject: Merci de confirmer votre nouvelle adresse e-mail
+        subject: Merci de confirmer votre nouvelle adresse courriel
   wca:
     errors:
       messages:
@@ -1225,7 +1225,7 @@ fr:
         #original_hash: d4003be
         dob: Accéder à votre date de naissance
         #original_hash: 17aa24f
-        email: Accéder à votre adresse e-mail
+        email: Accéder à votre adresse courriel
         #original_hash: e0d0654
         manage_competitions: Administrer n'importe quelle compétition que vous organisez
     devise:
@@ -1326,9 +1326,9 @@ fr:
       #original_hash: 8ad8302
       translations: Traductions
       #original_hash: c420cb4
-      disciplinary: Log Disciplinaire
+      disciplinary: Journal Disciplinaire
       #original_hash: ecba5f4
-      incidents: Log d'Incidents
+      incidents: Journal d'Incidents
       #original_hash: b8be3d1
       administration: Administration
       #original_hash: b7ee3c4
@@ -1553,7 +1553,7 @@ fr:
         pouvez consulter ses coordonnées sur <a
         href="/teams-committees-councils">cette page</a>.
       #original_hash: ea20be0
-      success_message: E-mail envoyé - nous vous répondrons sous peu.
+      success_message: Courriel envoyé - nous vous répondrons sous peu.
       #original_hash: 8fa6b95
       prefilled: >-
         Pour mettre à jour votre inscription, vous devez contacter les
@@ -1567,7 +1567,7 @@ fr:
             label: Nom
           email:
             #original_hash: 84add5b
-            label: Adresse e-mail
+            label: Adresse courriel
         contact_recipient:
           #original_hash: 54f0036
           label: Qui souhaitez-vous contacter ?
@@ -1737,13 +1737,13 @@ fr:
         consulter les résultats ? Direction %{wca_live_link} !
     merchandise:
       #original_hash: 698cfc8
-      title: Merchandising
+      title: Produits Dérivés
       #original_hash: 6403f2b
       ad_new: Nouveau
       #original_hash: 9ad68ce
       text_html: >-
-        Allez jeter un œil à notre nouveau merchandising incluant une sélection
-        de vêtements (t-shirts, sweats à capuche...)
+        Allez jeter un œil à nos nouveaux produits dérivés incluant une sélection
+        de vêtements (t-shirts, chandails à capuchon...)
       #original_hash: b0fc6c4
       link_title: Lien vers la boutique
     records:
@@ -1813,7 +1813,7 @@ fr:
         login_form: formulaire de connexion
         #original_hash: 333999b
         addendum: >-
-          Cet e-mail est envoyé automatiquement. Si vous n'avez pas créé de
+          Ce courriel est envoyé automatiquement. Si vous n'avez pas créé de
           compte sur le site internet de la World Cube Association et avez reçu
           ce message par erreur, merci de l'ignorer et de le supprimer.
         #original_hash: dbc2263
@@ -1825,10 +1825,10 @@ fr:
         welcome: 'Bonjour %{user_email} !'
         #original_hash: 3095365
         confirm: >-
-          Vous pouvez confirmer votre nouvelle adresse e-mail avec le lien
+          Vous pouvez confirmer votre nouvelle adresse courriel avec le lien
           ci-dessous :
         #original_hash: 4900afe
-        confirmation_link: Confirmer l'adresse e-mail.
+        confirmation_link: Confirmer l'adresse courriel.
       competition_submission_email:
         #original_hash: ac4841b
         header: '%{delegate_name} a confirmé %{competition}'
@@ -1843,7 +1843,7 @@ fr:
         #original_hash: dfea09d
         contact: >-
           Si vous avez d'autres questions, merci de contacter les Délégués de
-          votre compétition par e-mail :
+          votre compétition par courriel :
       competition_announcement_email:
         #original_hash: 87f1f49
         header: 'Le WCAT a annoncé %{competition}'
@@ -1931,11 +1931,11 @@ fr:
         #original_hash: 00850c3
         instruction3: >-
           Si vous n'avez pas effectué cette demande de réinitialisation, vous
-          pouvez ignorer cet e-mail.
+          pouvez ignorer ce courriel.
         #original_hash: dbc2263
         instruction4: >-
           Vous avez d’autres questions ? Nous serions heureux d’y répondre !
-          N’hésitez pas à nous envoyer un e-mail à %{contact_link}.
+          N’hésitez pas à nous envoyer un courriel à %{contact_link}.
     claim_wca_id:
       #original_hash: f28bf87
       title: Réclamer un ID WCA
@@ -1980,7 +1980,7 @@ fr:
       #original_hash: 9239ee2
       general: Général
       #original_hash: 84add5b
-      email: Adresse e-mail
+      email: Adresse courriel
       #original_hash: 9dfd349
       preferences: Préférences
       #original_hash: 8be3c94
@@ -1998,10 +1998,10 @@ fr:
       #original_hash: 7b2c7f1
       approve: Approuver
       #original_hash: 85de4b8
-      unconfirmed_email: 'L''adresse e-mail (%{email}) de ce compte n''est pas confirmée.'
+      unconfirmed_email: 'L''adresse courriel (%{email}) de ce compte n''est pas confirmée.'
       #original_hash: 7069007
       confirm_new_email: >-
-        Si vous changez votre adresse e-mail, vous devrez la confirmer avant
+        Si vous changez votre adresse courriel, vous devrez la confirmer avant
         qu'elle puisse être effective.
       #original_hash: ff43ee2
       pending_mail_confirmation: >-
@@ -2020,7 +2020,7 @@ fr:
       #original_hash: e7554d8
       pending_claim_mail_confirmation_html: >-
         Cet utilisateur a réclamé l'ID WCA %{wca_id}. Le Délégué %{delegate}
-        sera informé de cette requête dès que l'adresse e-mail de ce compte aura
+        sera informé de cette requête dès que l'adresse courriel de ce compte aura
         été confirmée.
       #original_hash: 1cde7e6
       your_thumbnail: 'Miniature de votre profil :'
@@ -2040,7 +2040,7 @@ fr:
         L'ID WCA et le compte sont connectés à des rôles spéciaux dans la WCA
         (par exemple Délégués, organisateurs, membres d'équipes et comités) et
         ne peuvent pas être supprimés. Merci de contacter l'équipe de résultats
-        de la WCA (WRT) par e-mail pour lier l'ID WCA à un autre compte.
+        de la WCA (WRT) par courriel pour lier l'ID WCA à un autre compte.
       cannot_edit:
         #original_hash: 3d4d222
         msg: "Vous ne pouvez pas changer votre nom, votre date de naissance, votre sexe ou votre région. Raison\_: %{reason}. Contactez l'<a href='%{wrt_contact_path}' target='_blank'>équipe de résultats de la WCA (WRT)</a> ou votre <a href='%{delegate_url}'>Délégué·e</a> si vous devez modifier l’un de ces éléments."
@@ -2055,7 +2055,7 @@ fr:
         recommandations pour les photos de profil.
       #original_hash: 9a85f5e
       confirm_guidelines: >-
-        Veillez à lire les directives relatives aux avatars et à soumettre une
+        Veillez à lire les directives relatives aux photos de profil et à soumettre une
         image valide.
       #original_hash: efc007a
       save: Sauvegarder
@@ -2189,7 +2189,7 @@ fr:
       email_used_by_locked_account_html: >-
         est déjà utilisé par un autre compte. Il a été créé automatiquement à la
         suite de votre inscription à une compétition par l'intermédiaire d'un
-        service externe. Si vous êtes le propriétaire de cet e-mail, vous pouvez
+        service externe. Si vous êtes le propriétaire de ce courriel, vous pouvez
         utiliser le compte après avoir réinitialisé votre mot de passe <a
         href='/users/password/new'>ici</a>.
       #original_hash: 50897d4
@@ -2200,12 +2200,12 @@ fr:
         account_updated: Compte mis à jour
         #original_hash: 49e5851
         wca_id_claimed: >-
-          Vous avez réclamé l'ID WCA %{wca_id} avec succès. Vérifiez vos e-mails
+          Vous avez réclamé l'ID WCA %{wca_id} avec succès. Vérifiez vos courriels
           et attendez que %{user} l'approuve !
         #original_hash: dc89669
         account_updated_confirm: >-
-          Compte mis à jour, un e-mail a été envoyé à %{email} pour confirmer
-          votre nouvelle adresse e-mail.
+          Compte mis à jour, un courriel a été envoyé à %{email} pour confirmer
+          votre nouvelle adresse courriel.
     select_nearby_delegate:
       #original_hash: 407c4f8
       select_delegate_html: >-
@@ -2334,7 +2334,7 @@ fr:
           peuvent devoir être payés avant que l’inscription soit complète.
         #original_hash: 826045f
         approval_info_html: >-
-          Un e-mail vous sera envoyé lorsque votre inscription sera acceptée.
+          Un courriel vous sera envoyé lorsque votre inscription sera acceptée.
           Les inscriptions sont approuvées manuellement, merci d'être patient·e
           si vous n'êtes pas accepté·e immédiatement. Il pourrait y avoir
           d'autres étapes à suivre pour que votre inscription soit acceptée.
@@ -2361,8 +2361,8 @@ fr:
           sur la liste d'attente %{here}.
         #original_hash: 8f7358f
         email_if_error: >-
-          Si vous pensez qu'il s'agit d'une erreur, veuillez répondre à cet
-          e-mail.
+          Si vous pensez qu'il s'agit d'une erreur, veuillez répondre à ce
+          courriel.
       deleted:
         #original_hash: 8cbc6c0
         mail_subject: 'Inscription Supprimée : %{comp_name}'
@@ -2372,8 +2372,8 @@ fr:
           une liste de raisons possibles :
         #original_hash: 8f7358f
         email_if_error: >-
-          Si vous pensez qu'il s'agit d'une erreur, veuillez répondre à cet
-          e-mail.
+          Si vous pensez qu'il s'agit d'une erreur, veuillez répondre à ce
+          courriel.
         causes:
           #original_hash: 978944c
           missing_info: Vous n'avez pas indiqué tous les détails demandés
@@ -2414,7 +2414,7 @@ fr:
       #original_hash: 1feee0e
       export_csv: Exporter en CSV
       #original_hash: 84add5b
-      email: Adresse e-mail
+      email: Adresse courriel
       #original_hash: e86b1e1
       non_competing: Inscriptions de non compétiteurs
       #original_hash: ac5d958
@@ -2646,16 +2646,16 @@ fr:
         non_existent_wca_id: 'L''ID WCA %{wca_id} n''existe pas.'
         #original_hash: b5c8591
         email_user_with_different_wca_id: >-
-          Il y a déjà un utilisateur avec l’adresse e-mail %{email}, mais il a
+          Il y a déjà un utilisateur avec l’adresse courriel %{email}, mais il a
           pour ID WCA %{user_wca_id} au lieu de %{registration_wca_id}.
         #original_hash: c9586e9
         email_user_with_different_unconfirmed_wca_id: >-
-          Il y a déjà un utilisateur avec l’adresse e-mail %{email}, mais il a
+          Il y a déjà un utilisateur avec l’adresse courriel %{email}, mais il a
           pour ID WCA non confirmé %{unconfirmed_wca_id} au lieu de
           %{registration_wca_id}.
         #original_hash: 4e32621
         email_duplicates: >-
-          L'adresse e-mail doit être unique, les adresses suivantes sont
+          L'adresse courriel doit être unique, les adresses suivantes sont
           dupliquées : %{emails}.
         #original_hash: bcd8e78
         wca_id_duplicates: >-
@@ -2700,16 +2700,16 @@ fr:
         condition d'avancement.
       #original_hash: a00f441
       cutoff_is_greater_than_time_limit: >-
-        La ronde %{round_number} de %{event} a une cutoff supérieure à la limite
-        de temps. Veuillez vous assurer que la cutoff n'est pas supérieure à la
+        La ronde %{round_number} de %{event} a un seuil supérieure à la limite
+        de temps. Veuillez vous assurer que le seuil n'est pas supérieure à la
         limite de temps.
       #original_hash: c1580b1
       cutoff_is_too_fast: >-
-        Le tour %{round_number} de %{event} a une cutoff de moins de 5 secondes.
+        Le tour %{round_number} de %{event} a un seuil de moins de 5 secondes.
         Merci de vous assurer que c'est correct.
       #original_hash: b5f69f2
       cutoff_is_too_slow: >-
-        Le tour %{round_number} de %{event} a une cutoff de plus de 10 minutes.
+        Le tour %{round_number} de %{event} a un seuil de plus de 10 minutes.
         Merci de vous assurer que c'est correct.
       #original_hash: af976ad
       time_limit_is_too_fast: >-
@@ -2799,7 +2799,7 @@ fr:
       #original_hash: f97246a
       tooltip_deleted: >-
         Malheureusement votre inscription a été supprimée. Merci de vérifier vos
-        e-mails pour plus de détails, ou contactez l'équipe organisatrice.
+        courriels pour plus de détails, ou contactez l'équipe organisatrice.
       #original_hash: 1b6dc61
       confirmed_visible: Cette compétition est confirmée et visible.
       #original_hash: abc2f96
@@ -2837,7 +2837,7 @@ fr:
       #original_hash: e5665fb
       bookmarked_explanation: >-
         Compétitions que vous avez ajouté en favoris sur le site de la WCA. Vous
-        recevrez un e-mail 24 heures avant que les inscriptions ouvrent.
+        recevrez un courriel 24 heures avant que les inscriptions ouvrent.
     competition_info:
       pdf:
         #original_hash: 05af803
@@ -2847,13 +2847,13 @@ fr:
         #original_hash: 55dc8bc
         abbr_description: '%{short_name} : %{long_name}'
         #original_hash: a1984e1
-        cutoff: 'Cutoff : %{short_cutoff}'
+        cutoff: 'Seuil : %{short_cutoff}'
         #original_hash: a8b6fe6
         download_html: 'Télécharger les détails de la compétition au format PDF %{here}.'
       #original_hash: eb9a4bc
       date: Date
       #original_hash: 4f05cd6
-      add_to_calendar: Ajouter au planning
+      add_to_calendar: Ajouter à l'horaire
       #original_hash: 709a232
       name: Nom
       #original_hash: d219c68
@@ -3065,7 +3065,7 @@ fr:
       second_runner_up: '%{second_runner_up} a terminé troisième (%{second_runner_up_result}).'
       records:
         #original_hash: 0658e11
-        wr: Records du Monde
+        wr: Records Mondiaux
         #original_hash: 9d940bb
         afr: Records d'Afrique
         #original_hash: 56c95a8
@@ -3250,7 +3250,7 @@ fr:
       public_and_locked_html: >-
         Cette compétition est visible publiquement et son édition est
         verrouillée. Si vous souhaitez faire un changement, merci d'écrire en
-        réponse à l'e-mail de confirmation de la compétition.
+        réponse au courriel de confirmation de la compétition.
       #original_hash: e00a339
       confirmed_but_not_visible_html: >-
         Vous avez confirmé cette compétition, mais elle n'est pas encore visible
@@ -3276,7 +3276,7 @@ fr:
       submit_confirm: >-
         Êtes-vous sûr de vouloir confirmer ? Une fois la compétition confirmée,
         vous ne pourrez plus modifier les informations la concernant. Consultez
-        ensuite vos e-mails pour vérifier que le WCAT a été informé.
+        ensuite vos courriels pour vérifier que le WCAT a été informé.
       #original_hash: 4c7deb7
       submit_delete: >-
         Êtes-vous sûr de vouloir supprimer cette compétition ? Cette opération
@@ -3287,7 +3287,7 @@ fr:
       add_championship: Ajouter un type de championnat
       championship_types:
         #original_hash: dc71704
-        world: Championnat du Monde
+        world: Championnat Mondial
         #original_hash: d573eb7
         continental: 'Championnat Continental : %{continent}'
         #original_hash: 39f47e0
@@ -3442,10 +3442,10 @@ fr:
           early_puzzle_submission:
             #original_hash: 723cad9
             enabled: >-
-              Je voudrais imposer au compétiteur la soumission de leur puzzle à
+              Je voudrais imposer au compétiteur la soumission de leur casse-tête à
               un moment précis avant le début prévu d'une épreuve
             #original_hash: 78308cc
-            reason: Raison et détails concernant la soumission avancée des puzzles
+            reason: Raison et détails concernant la soumission avancée des casse-têtes
           qualification_results:
             #original_hash: 88da0ef
             enabled: >-
@@ -3489,8 +3489,8 @@ fr:
         competition_id: ''
         #original_hash: 2c812a0
         name: >-
-          Le nom complet de la compétition, avec la date à la fin ex : Paris
-          Open 2024. Pensez à mettre la première lettre des mots en majuscule.
+          Le nom complet de la compétition, avec la date à la fin ex : Gros
+          Jouets à Montréal 2025. Pensez à mettre la première lettre des mots en majuscule.
           Le nom doit contenir uniquement des caractères alphanumériques, ainsi
           que des tirets (-), esperluettes (&), points (.), deux-points (:),
           apostrophes ('), et espaces ( ).
@@ -3514,8 +3514,7 @@ fr:
             : Paris).
           #original_hash: 9d9126e
           name_html: >-
-            La salle où la compétition à lieu. %{md}. Par exemple : [Cité des
-            Sciences et de l'Industrie](http://www.cite-sciences.fr)
+            La salle où la compétition à lieu. %{md}. Par exemple : [École de Technologie Supérieure](https://www.etsmtl.ca)
           #original_hash: 2651d1a
           details_html: >-
             Détails concernant la salle (par exemple, au première étage au fond
@@ -3537,7 +3536,7 @@ fr:
           #original_hash: 77811b5
           name: >-
             Le nom complet de la série de compétitions, en incluant l'année à la
-            fin (ex : Sud de la France 2024). Assurez-vous de mettre des
+            fin (ex : Saint-Augustin 2025). Assurez-vous de mettre des
             majuscules. Les mêmes règles que pour le nom de compétitions
             individuelles s'appliquent.
           #original_hash: 778c20c
@@ -3595,8 +3594,8 @@ fr:
           contact_html: >-
             Information de contact (optionnel). Si vous ne remplissez pas ce
             champ, les demandes de contact seront envoyées à travers un
-            formulaire ne révélant pas les adresses e-mail des organisateurs.
-            %{md}. Exemple : [Texte à afficher](mailto:un@email.com)
+            formulaire ne révélant pas les adresses courriel des organisateurs.
+            %{md}. Exemple : [Texte à afficher](mailto:un@courriel.com)
         website:
           #original_hash: da39a3e
           generate_website: ''
@@ -3706,7 +3705,7 @@ fr:
             #original_hash: 4e8488b
             reason: >-
               Merci de détailler ici pourquoi vous souhaiteriez imposer aux
-              compétiteurs la soumission avancée de leurs puzzles. Merci de
+              compétiteurs la soumission avancée de leurs casse-têtes. Merci de
               remplir ce champ en Anglais !
           qualification_results:
             #original_hash: da39a3e
@@ -3833,7 +3832,7 @@ fr:
         is_waitlisted: >-
           Ne réservez pas votre voyage, mais ne perdez pas espoir non plus. La
           compétition est complète, mais vous avez été mis sur une liste
-          d’attente et vous recevrez un e-mail si suffisamment de places sont
+          d’attente et vous recevrez un courriel si suffisamment de places sont
           disponibles pour que vous puissiez y assister.
       list:
         #original_hash: 6eef664
@@ -3928,9 +3927,9 @@ fr:
         #original_hash: 65bbb07
         no_changes: Aucun changement
         #original_hash: be4e8e2
-        email_send: Envoyer l'e-mail
+        email_send: Envoyer le courriel
         #original_hash: b4bac52
-        email_copy: Copier les adresses e-mails
+        email_copy: Copier les adresses courriels
         #original_hash: b83b663
         email_message: 'Copié dans le presse-papiers. N’oubliez pas d’utiliser le cci: !'
         #original_hash: beedd53
@@ -4157,7 +4156,7 @@ fr:
       #original_hash: 54fe619
       schedule_must_match_rounds: >-
         doit avoir au moins un tour et tous les tours doivent être inclus dans
-        le planning.
+        l'horaire.
       #original_hash: 6e228b7
       must_contain_delegate: doit contenir au moins un Délégué WCA
       #original_hash: b5677c2
@@ -4236,7 +4235,7 @@ fr:
       save_success: Compétition mise à jour avec succès.
       #original_hash: 5253c86
       confirm_success: >-
-        Compétition confirmée avec succès. Vérifiez vos e-mails et attendez que
+        Compétition confirmée avec succès. Vérifiez vos courriels et attendez que
         le WCAT l'annonce !
       #original_hash: 28567f0
       delete_success: 'La compétition %{id} a été supprimée avec succès.'
@@ -4336,7 +4335,7 @@ fr:
     #original_hash: c66488a
     user_preferences: Préférences utilisateur
     #original_hash: 089cbfd
-    receive_registration_emails: Me prévenir par e-mail lorsque quelqu’un s’inscrit à cette compétition
+    receive_registration_emails: Me prévenir par courriel lorsque quelqu’un s’inscrit à cette compétition
     #original_hash: 9d473a2
     note_reg_closed_orga_close_reg: 'Remarque : Les inscriptions sont déjà fermées.'
     show:
@@ -4345,9 +4344,9 @@ fr:
       #original_hash: c5497bc
       events: Épreuves
       #original_hash: 0a8adac
-      schedule: Planning
+      schedule: Horaire
       #original_hash: 1060ed0
-      no_schedule: 'Cette compétition n''a pas de planning, le PDF ne peut pas être généré.'
+      no_schedule: 'Cette compétition n''a pas d''horaire, le PDF ne peut pas être généré.'
     events:
       time_limit_information:
         #original_hash: 88c5f1a
@@ -4372,7 +4371,7 @@ fr:
         #original_hash: e8d17df
         cutoff_html: >-
           Le score à atteindre pour passer à la deuxième phase d'un tour avec
-          cutoff (voir la %{regulation_link}).
+          seuil (voir la %{regulation_link}).
         #original_hash: f571a30
         format_html: >-
           Le format décrit la manière de déterminer le classement des
@@ -4396,7 +4395,7 @@ fr:
       #original_hash: 0d1fcc3
       time_limit: Limite de temps
       #original_hash: 118de39
-      cutoff: Cutoff
+      cutoff: Seuil
       #original_hash: 02ed4a4
       proceed: Qualifiés
       #original_hash: 2ffe44e
@@ -4406,9 +4405,9 @@ fr:
         #original_hash: 0424f6e
         table: Tableau
         #original_hash: adab509
-        calendar: Planning
+        calendar: Horaire
       #original_hash: 017e4d8
-      display_for_room: 'Afficher le planning pour la salle :'
+      display_for_room: 'Afficher l''horaire pour la salle :'
       range:
         #original_hash: 3f66052
         from: De
@@ -4445,19 +4444,19 @@ fr:
       room_in_venue: '%{room} - %{venue}'
       #original_hash: f7fd979
       venue_selection_html:
-        zero: Vous ne consultez actuellement aucun planning.
+        zero: Vous ne consultez actuellement aucun horaire.
         one: >-
-          Vous consultez le planning de la salle %{venue_name}, seule salle pour
+          Vous consultez l'horaire de la salle %{venue_name}, seule salle pour
           cette compétition.
         other: >-
-          Vous consultez le planning de la %{venue_name}, une des %{count} salle
+          Vous consultez l'horaire de la %{venue_name}, une des %{count} salle
           pour cette compétition.
       #original_hash: 8d175ad
-      venue_selection_all: 'Vous consultez le planning de toutes les salles %{venueCount} à la fois.'
+      venue_selection_all: 'Vous consultez l''horaire de toutes les salles %{venueCount} à la fois.'
       #original_hash: 97df911
       timezone_message: 'Le fuseau horaire pour cette salle est %{timezone}.'
       #original_hash: 94b2570
-      timezone_setting: "Vous consultez ce planning dans le fuseau horaire suivant\_:"
+      timezone_setting: "Vous consultez cet horaire dans le fuseau horaire suivant\_:"
       #original_hash: 75194fd
       multiple_timezones_available: >-
         Notez que toutes les salles ne sont pas sur le même fuseau horaire –
@@ -4469,14 +4468,14 @@ fr:
       #original_hash: 9974a46
       timezone_follow_venue: Utiliser automatiquement le fuseau horaire de la salle sélectionnée
       #original_hash: 37b1adb
-      schedule_for_date: 'Planning pour %{day_name} (%{full_date})'
+      schedule_for_date: 'Horaire pour %{day_name} (%{full_date})'
       #original_hash: d58b281
-      schedule_for_full_date: 'Planning du %{date}'
+      schedule_for_full_date: 'Horaire du %{date}'
       #original_hash: eb1090e
       schedule_change_warning: >-
-        Les plannings sont sujets à des ajustements, surtout une fois que le
+        Les horaires sont sujets à des ajustements, surtout une fois que le
         nombre d'inscriptions est connu. Les compétiteurs inscrits seront avisés
-        par e-mail de tout changement majeur.
+        par courriel de tout changement majeur.
     nav:
       menu:
         #original_hash: 612e12d
@@ -4498,7 +4497,7 @@ fr:
         #original_hash: c6171f8
         event_view: Gérer les épreuves
         #original_hash: 6235b27
-        schedule_view: Gérer le planning
+        schedule_view: Gérer l'horaire
         #original_hash: 6f7aef9
         payment_view: Compte des paiements
         #original_hash: 76bfdcf
@@ -4785,7 +4784,7 @@ fr:
       account_details:
         stripe:
           #original_hash: 84add5b
-          email: Adresse e-mail
+          email: Adresse courriel
           #original_hash: d523ebb
           country: Pays
           #original_hash: a8e3901
@@ -4794,7 +4793,7 @@ fr:
           #original_hash: 709a232
           display_name: Nom
           #original_hash: 84add5b
-          primary_email: Adresse e-mail
+          primary_email: Adresse courriel
         #original_hash: 08d2e98
         fallback_not_applicable: N/A
   persons:
@@ -4826,7 +4825,7 @@ fr:
       championship_podiums: Podiums de Championnats
       championship_podium_levels:
         #original_hash: 3746f3b
-        world: Podiums de Championnats du Monde
+        world: Podiums de Championnats Mondiaux
         #original_hash: d248cd7
         continental: Podiums de Championnats Continentaux
         #original_hash: aa40175
@@ -4855,7 +4854,7 @@ fr:
       #original_hash: ab478f3
       competitions_map: Carte
       #original_hash: a99cec5
-      world_records: Historique des Records du Monde
+      world_records: Historique des Records Mondiaux
       #original_hash: 2d36a49
       continental_records: Historique des Records Continentaux
       #original_hash: 3ce631e
@@ -5049,7 +5048,7 @@ fr:
           #original_hash: 890d879
           '1': >-
             Après qu'une compétition soit terminée, le Délégué WCA doit vérifier
-            la saisie de toutes les feuilles de score ainsi que les informations
+            la saisie de toutes les feuilles de temps ainsi que les informations
             des participants, afin d'éliminer d'éventuelles erreurs. Une fois
             cela fait, les résultats sont envoyés à l'équipe de résultats de la
             WCA (WRT), qui est en charge de mettre en ligne les résultats et de
@@ -5063,29 +5062,29 @@ fr:
           #original_hash: bf8adbe
           '3': >-
             Si vous avez lié votre compte WCA à votre ID WCA, vous pouvez
-            également activer les notifications par e-mail concernant vos
+            également activer les notifications par courriel concernant vos
             résultats <a href='%{preferences_edit_path}'>ici</a>.
       regulations1:
         #original_hash: 2951eb6
-        title: Est-ce que mon puzzle est légal pour la compétition ?
+        title: Est-ce que mon casse-tête est légal pour la compétition ?
         content:
           #original_hash: 5ac78e4
           '1': >-
-            Vous pouvez trouver les règles concernant les puzzles dans l'<a
+            Vous pouvez trouver les règles concernant les casse-têtes dans l'<a
             href='https://www.worldcubeassociation.org/regulations/#3'>Article
-            3</a>. Tous les puzzles doivent être approuvés par un Délégué WCA.
+            3</a>. Tous les casse-têtes doivent être approuvés par un Délégué WCA.
             Si vous n'êtes pas sûr, merci de demander au Délégué WCA de votre
-            compétition. Vous pouvez apporter un puzzle de remplacement au cas
+            compétition. Vous pouvez apporter un casse-tête de remplacement au cas
             où vous ne soyez pas autorisé à l'utiliser.
       regulations2:
         #original_hash: 48f1234
         title: >-
-          Puis-je utiliser un puzzle magnétique lors d'une compétition
+          Puis-je utiliser un casse-tête magnétique lors d'une compétition
           officielle de la WCA ?
         content:
           #original_hash: 024ce81
           '1': >-
-            Vous êtes autorisé à utiliser un puzzle magnétique tant qu'il
+            Vous êtes autorisé à utiliser un casse-tête magnétique tant qu'il
             respecte le <a target='_blank'
             href='https://www.worldcubeassociation.org/regulations/'>Règlement
             WCA</a>. Merci de faire particulièrement attention à la <a
@@ -5094,12 +5093,12 @@ fr:
       regulations3:
         #original_hash: c7460a5
         title: >-
-          J'ai perdu un cache de centre ou une pièce de mon puzzle. Suis-je
+          J'ai perdu un cache de centre ou une pièce de mon casse-tête. Suis-je
           toujours autorisé à l'utiliser ?
         content:
           #original_hash: 0d76323
           '1': >-
-            Vous n'êtes pas autorisé à utiliser ce puzzle. Les puzzles ne
+            Vous n'êtes pas autorisé à utiliser ce casse-tête. Les casse-têtes ne
             doivent pas être abîmés ou avoir de différences qui permettent
             d'identifier une pièce par rapport à une autre pièce similaire (voir
             la <a
@@ -5132,7 +5131,7 @@ fr:
       <p>La World Cube Association régit les compétitions de casse-têtes
       mécaniques fonctionnant par torsion de groupes de pièces, communément
       appelés « twisty puzzles ». Le plus célèbre de ces casse-tête est le
-      Rubik's Cube, inventé par le professeur hongrois Rubik. Une sélection de
+      cube Rubik, inventé par le professeur hongrois Rubik. Une sélection de
       ces casse-têtes est choisie comme événements officiels de la WCA.</p>
       <p>Au fil de l'évolution de la WCA au cours de la dernière décennie, plus
       de 245 000 personnes ont participé à nos compétitions. Malgré cette
@@ -5178,11 +5177,11 @@ fr:
       travers des collaborations et des contacts avec ceux qui s'intéressent aux
       casse-têtes.</p>
     #original_hash: dc71704
-    world_championship_title: Championnats du Monde
+    world_championship_title: Championnats Mondiaux
     #original_hash: 57cf7f7
     world_championship_content_html: >-
       <p>Tous les deux ans, nous homologuons une compétition qui détermine le
-      Champion du Monde dans chaque catégorie. Ce type d'événements demande une
+      Champion Mondial dans chaque catégorie. Ce type d'événements demande une
       organisation précise par un nombre important de bénévoles, ainsi qu'un
       engagement financier important pour réserver la salle et faire les
       préparations nécessaires.</p>
@@ -5392,7 +5391,7 @@ fr:
     create:
       #original_hash: 60cdccc
       create_success: >-
-        Demande soumise avec avec succès ! Merci de vérifier vos e-mails et
+        Demande soumise avec avec succès ! Merci de vérifier vos courriels et
         d'attendre que le Bureau des Directeurs de la WCA l'évalue.
     delete:
       #original_hash: 6588652
@@ -5471,14 +5470,14 @@ fr:
           tâches et les groupes. Les fonctionnalités principales sont : tri des
           compétiteurs par classement, affectation des tâches (juges,
           mélangeurs), choix du nombre de mélanges nécessaire, génération des
-          feuilles de score, planning personnel et résumé général... Rendez-vous
+          feuilles de temps, horaire personnel et résumé général... Rendez-vous
           sur le site pour le reste !
       scorecards:
         #original_hash: aa1b64d
-        title: Feuilles de score
+        title: Feuilles de temps
         #original_hash: 2b8e373
         description: >-
-          Imprimer des feuilles de score pour les compétitions WCA qui utilisent
+          Imprimer des feuilles de temps pour les compétitions WCA qui utilisent
           WCA Live
       tnoodle:
         #original_hash: ba336a1
@@ -5524,7 +5523,7 @@ fr:
   logo:
     #original_hash: c72c969
     title: Logo de la WCA
-    intro: "Le logo de la WCA a été conçu par Justin Eastman, dans un concours de design en janvier\_2005. Nous avons aimé le logo en raison de son design, des couleurs et du fait qu’il ne montre pas spécifiquement un cube 3x3x3."
+    intro: "Le logo de la WCA a été conçu par Justin Eastman, dans un concours de conception en janvier\_2005. Nous avons aimé le logo en raison de sa conception, des couleurs et du fait qu’il ne montre pas spécifiquement un cube 3x3x3."
     headings:
       usage_guidelines:
         #original_hash: d5b47da
@@ -5736,7 +5735,7 @@ fr:
       #original_hash: d3c693b
       budget: Établir le budget d'une compétition
       #original_hash: b1429a7
-      schedule: Établir un planning
+      schedule: Établir un horaire
       #original_hash: beea57d
       checklist: Checklist d'une compétition
       #original_hash: 9defcf1
@@ -5751,7 +5750,7 @@ fr:
       #original_hash: 6e4fb29
       staff: Affectation des bénévoles
       #original_hash: 4735583
-      emails: E-mails
+      emails: Courriels
       #original_hash: 8e7ca09
       running-systems: 'Runner et juger : les différents systèmes'
       #original_hash: 2b31c89
@@ -5918,13 +5917,13 @@ fr:
       list:
         #original_hash: c8abb5e
         '1': >-
-          Avant d'annoncer la compétition, un planning publié sur le site
-          internet de la compétition est requis. Ce planning peut être ajusté
+          Avant d'annoncer la compétition, un horaire publié sur le site
+          internet de la compétition est requis. Cet horaire peut être ajusté
           plus tard.
         #original_hash: e93d043
         '2': >-
           Les compétiteurs devraient être divisé en plusieurs groupes, les
-          feuilles de score doivent être imprimées et réparties selon les
+          feuilles de temps doivent être imprimées et réparties selon les
           groupes. Il est aussi recommandé de prévoir qui seront les mélangeurs
           pour les différents groupes de chaque épreuve, au moins pour les
           premiers tours. Les mélangeurs doivent être fiables.
@@ -5942,7 +5941,7 @@ fr:
         #original_hash: c4388f3
         '2': Faire les annonces
         #original_hash: 45c78ae
-        '3': Appeler les groupes et disposer les feuilles de score
+        '3': Appeler les groupes et disposer les feuilles de temps
         #original_hash: 0b31986
         '4': Faire la saisie des résultats et les imprimer
         #original_hash: 7ab2d4c
@@ -6126,7 +6125,7 @@ fr:
       Ci-après un exemple, utilisant curl, permettant d'obtenir un jeton d'accès
       grâce à un Application ID, un Client Secret, et votre compte WCA :
     #original_hash: 59d8cf3
-    user_email_placeholder: VOTRE_EMAIL
+    user_email_placeholder: VOTRE_COURRIEL
     #original_hash: 981eb7e
     user_password_placeholder: VOTRE_MOT_DE_PASSE
     #original_hash: 80c5cf5
@@ -6140,24 +6139,24 @@ fr:
     login_message: Veuillez vous connecter
   merch:
     #original_hash: 96a95a1
-    title: Merchandising WCA
+    title: Produits Dérivés WCA
     paragraphs:
       #original_hash: 8a23af2
       '1': >-
-        La WCA propose du merchandising exclusif à la vente ! T- shirts,
-        hoodies, stickers, stackmats, sacs à dos et bien plus ! Nos designs sont
-        constamment mis à jour, y compris le logo classique de la WCA, le
-        merchandising officiel du championnat du monde et les designs du record
-        du monde.
+        La WCA propose des produits dérivés exclusifs à la vente ! T- shirts,
+        chandails, stickers, stackmats, sacs à dos et bien plus ! Nos motifs sont
+        constamment mis à jour, y compris le logo classique de la WCA, les
+        produits dérivés officiels du championnat mondial et les motifs du record
+        mondial.
       #original_hash: 2865e1d
       '2': >-
-        Acheter du merch WCA via notre boutique est l'un des meilleurs moyens de
+        Acheter des produits dérivés WCA via notre boutique est l'un des meilleurs moyens de
         supporter la WCA - un organisme bénévole à but non lucratif. Nous
-        utilisons tous les bénéfices du merch pour financer davantage les
+        utilisons tous les bénéfices des produits dérivés pour financer davantage les
         championnats, l’équipement et d’autres activités liées à la WCA.
       #original_hash: 8e57552
       '3': >-
-        Vous pouvez acheter notre merchandising partout dans le monde -- avec
+        Vous pouvez acheter nos produits dérivés partout dans le monde -- avec
         des magasins directs en Europe, en Amérique, en Inde et plus à venir
         bientôt !
   database:
@@ -6325,17 +6324,17 @@ fr:
         correctement enregistrés pour les deux compétiteurs.
       #original_hash: ebbab6f
       met_cutoff_but_missing_results_error: >-
-        [%{round_id}] %{person_name} a atteint la cutoff mais il manque des
-        résultats pour la deuxième phase de la ronde. La cutoff était %{cutoff}.
+        [%{round_id}] %{person_name} a atteint le seuil mais il manque des
+        résultats pour la deuxième phase de la ronde. Le seuil était %{cutoff}.
       #original_hash: cc0b47b
       didnt_meet_cutoff_but_has_results_error: >-
         [%{round_id}] %{person_name} a au moins un résultat pour la deuxième
-        phase de la ronde mais n'a pas atteint la cutoff. Le seuil était
+        phase de la ronde mais n'a pas atteint le seuil. Le seuil était
         %{cutoff}.
       #original_hash: 4fc3fd7
       wrong_attempts_for_cutoff_error: >-
-        Il manque à [%{round_id}] %{person_name} au moins une tentative avant la
-        cutoff. Veuillez modifier le résultat pour inclure la ou les tentatives
+        Il manque à [%{round_id}] %{person_name} au moins une tentative avant le
+        un seuil. Veuillez modifier le résultat pour inclure la ou les tentatives
         manquantes ou mettre à jour les informations relatives à la ronde dans
         la page Gérer les événements de la compétition.
       #original_hash: 24c10d3
@@ -6425,7 +6424,7 @@ fr:
         relatives à la ronde dans la page de gestion des événements.
       #original_hash: d6fc805
       not_enough_qualified_warning: >-
-        Manche %{round_id} : selon les données de l'événement, au plus
+        Ronde %{round_id} : selon les données de l'événement, au plus
         %{expected} aurait pu procéder, mais seulement %{actual} a participé à
         la ronde. Veuillez laisser un commentaire à ce sujet (ou corriger les
         données relatives aux événements si vous avez appliqué une condition
