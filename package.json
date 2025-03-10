@@ -33,7 +33,7 @@
     "@tanstack/react-table": "^8.21.2",
     "@wca/helpers": "^1.1.5",
     "autonumeric": "^4.10.8",
-    "autoprefixer": "^10.4.20",
+    "autoprefixer": "^10.4.21",
     "autosize": "^6.0.1",
     "babel-loader": "^10.0.0",
     "babel-plugin-dynamic-import-node": "^2.3.3",
