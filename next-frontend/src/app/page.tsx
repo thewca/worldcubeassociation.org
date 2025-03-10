@@ -1,7 +1,7 @@
 "use client";
 
 import { useSession, signIn, signOut } from "next-auth/react";
-import usePermissions from "@/lib/wca/users/usePermissions";
+import { usePermissions } from "@/providers/PermissionProvider";
 
 export default function Home() {
   const { data: session } = useSession();

@@ -4,6 +4,7 @@ import "./globals.css";
 import React from "react";
 import AuthProvider from "@/providers/SessionProvider";
 import WCAQueryClientProvider from "@/providers/WCAQueryClientProvider";
+import PermissionProvider from "@/providers/PermissionProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,7 +30,11 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <WCAQueryClientProvider>
-          <AuthProvider>{children}</AuthProvider>
+          <AuthProvider>
+            <PermissionProvider>
+              {children}
+            </PermissionProvider>
+          </AuthProvider>
         </WCAQueryClientProvider>
       </body>
     </html>

@@ -78,43 +78,43 @@ export interface components {
     schemas: {
         CompetitionPermissions: string[] | "*";
         UserPermissions: {
-            can_attend_competitions?: {
-                scope?: components["schemas"]["CompetitionPermissions"];
+            can_attend_competitions: {
+                scope: components["schemas"]["CompetitionPermissions"];
                 /** Format: date-time */
                 until?: string | null;
             };
-            can_organize_competitions?: {
-                scope?: components["schemas"]["CompetitionPermissions"];
+            can_organize_competitions: {
+                scope: components["schemas"]["CompetitionPermissions"];
             };
-            can_administer_competitions?: {
-                scope?: components["schemas"]["CompetitionPermissions"];
+            can_administer_competitions: {
+                scope: components["schemas"]["CompetitionPermissions"];
             };
-            can_view_delegate_admin_page?: {
-                scope?: components["schemas"]["CompetitionPermissions"];
+            can_view_delegate_admin_page: {
+                scope: components["schemas"]["CompetitionPermissions"];
             };
-            can_view_delegate_report?: {
-                scope?: components["schemas"]["CompetitionPermissions"];
+            can_view_delegate_report: {
+                scope: components["schemas"]["CompetitionPermissions"];
             };
-            can_edit_delegate_report?: {
-                scope?: components["schemas"]["CompetitionPermissions"];
+            can_edit_delegate_report: {
+                scope: components["schemas"]["CompetitionPermissions"];
             };
-            can_create_groups?: {
-                scope?: string[];
+            can_create_groups: {
+                scope: string[];
             };
-            can_read_groups_current?: {
-                scope?: string[];
+            can_read_groups_current: {
+                scope: string[];
             };
-            can_read_groups_past?: {
-                scope?: string[];
+            can_read_groups_past: {
+                scope: string[];
             };
-            can_edit_groups?: {
-                scope?: string[];
+            can_edit_groups: {
+                scope: string[];
             };
-            can_access_panels?: {
-                scope?: string[];
+            can_access_panels: {
+                scope: string[];
             };
-            can_request_to_edit_others_profile?: {
-                scope?: string[] | string;
+            can_request_to_edit_others_profile: {
+                scope: string[] | "*";
             };
         };
         User: {
