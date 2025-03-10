@@ -67,7 +67,7 @@ export default function UpcomingCompetitionTable({
   }
 
   return (
-    <div style={{ overflowX: 'scroll' }}>
+    <div style={{ overflowX: 'auto' }}>
       <Table basic unstackable compact singleLine>
         <Table.Header>
           <Table.Row>
