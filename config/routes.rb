@@ -203,13 +203,14 @@ Rails.application.routes.draw do
   scope 'panel' do
     get 'staff' => 'panel#staff', as: :panel_staff
     get 'generate_db_token' => 'panel#generate_db_token', as: :panel_generate_db_token
+    get 'cronjob_details' => 'panel#cronjob_details', as: :panel_cronjob_details
+    post 'cronjob_run' => 'panel#cronjob_run', as: :panel_cronjob_run
+    post 'cronjob_reset' => 'panel#cronjob_reset', as: :panel_cronjob_reset
   end
   get 'panel/:panel_id' => 'panel#index', as: :panel_index
   scope 'panel-page' do
     get 'run-validators' => 'admin#check_results', as: :admin_check_results
     get 'check-records' => 'admin#check_regional_records', as: :admin_check_regional_records
-    get 'compute-auxiliary-data' => 'admin#compute_auxiliary_data', as: :admin_compute_auxiliary_data
-    get 'generate-data-exports' => 'admin#generate_exports', as: :admin_generate_exports
     get 'fix-results' => 'admin#fix_results', as: :admin_fix_results
     get 'merge-profiles' => 'admin#merge_people', as: :admin_merge_people
     get 'reassign-connected-wca-id' => 'admin#reassign_wca_id', as: :admin_reassign_wca_id
@@ -302,10 +303,7 @@ Rails.application.routes.draw do
   get '/admin/fix_results_selector' => 'admin#fix_results_selector', as: :admin_fix_results_ajax
   get '/admin/person_data' => 'admin#person_data'
   get '/admin/do_compute_auxiliary_data' => 'admin#do_compute_auxiliary_data'
-  get '/admin/reset_compute_auxiliary_data' => 'admin#reset_compute_auxiliary_data'
   get '/admin/generate_db_token' => 'admin#generate_db_token'
-  get '/admin/do_generate_dev_export' => 'admin#do_generate_dev_export'
-  get '/admin/do_generate_public_export' => 'admin#do_generate_public_export'
   get '/admin/override_regional_records' => 'admin#override_regional_records'
   post '/admin/override_regional_records' => 'admin#do_override_regional_records'
   get '/admin/complete_persons' => 'admin#complete_persons'
