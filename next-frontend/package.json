@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "build:types": "npx openapi-typescript wcaAPI.yaml -o src/lib/wca/wcaSchema.ts"
   },
   "dependencies": {
     "@chakra-ui/react": "^3.11.0",
