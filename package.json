@@ -92,7 +92,7 @@
     "semantic-ui-react": "^2.1.5",
     "shakapacker": "8.1.0",
     "style-loader": "^4.0.0",
-    "terser-webpack-plugin": "^5.3.12",
+    "terser-webpack-plugin": "^5.3.14",
     "webpack": "^5.98.0",
     "webpack-assets-manifest": "^5.2.1",
     "webpack-cli": "^6.0.1",

@@ -10242,7 +10242,7 @@ __metadata:
     stylelint: "npm:^16.15.0"
     stylelint-config-recommended-scss: "npm:^14.1.0"
     stylelint-scss: "npm:^6.11.1"
-    terser-webpack-plugin: "npm:^5.3.12"
+    terser-webpack-plugin: "npm:^5.3.14"
     webpack: "npm:^5.98.0"
     webpack-assets-manifest: "npm:^5.2.1"
     webpack-bundle-analyzer: "npm:^4.10.2"
@@ -11254,7 +11254,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"terser-webpack-plugin@npm:^5.3.11, terser-webpack-plugin@npm:^5.3.12":
+"terser-webpack-plugin@npm:^5.3.11":
   version: 5.3.12
   resolution: "terser-webpack-plugin@npm:5.3.12"
   dependencies:
@@ -11273,6 +11273,28 @@ __metadata:
     uglify-js:
       optional: true
   checksum: 10c0/b37e21bf4258603456617a88f81fa123c684f9bcd928719ada94d6b713cb3f7d726d69e642f565f67fac04ba7cab9179ebe5d5b8e2c4961afc9a7a8759ee580e
+  languageName: node
+  linkType: hard
+
+"terser-webpack-plugin@npm:^5.3.14":
+  version: 5.3.14
+  resolution: "terser-webpack-plugin@npm:5.3.14"
+  dependencies:
+    "@jridgewell/trace-mapping": "npm:^0.3.25"
+    jest-worker: "npm:^27.4.5"
+    schema-utils: "npm:^4.3.0"
+    serialize-javascript: "npm:^6.0.2"
+    terser: "npm:^5.31.1"
+  peerDependencies:
+    webpack: ^5.1.0
+  peerDependenciesMeta:
+    "@swc/core":
+      optional: true
+    esbuild:
+      optional: true
+    uglify-js:
+      optional: true
+  checksum: 10c0/9b060947241af43bd6fd728456f60e646186aef492163672a35ad49be6fbc7f63b54a7356c3f6ff40a8f83f00a977edc26f044b8e106cc611c053c8c0eaf8569
   languageName: node
   linkType: hard
 
