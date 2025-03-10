@@ -127,13 +127,18 @@ export default function UpcomingCompetitionTable({
                       </a>
                     </Table.Cell>
                   )}
-                  {(permissions.can_administer_competitions.scope === '*' || permissions.can_administer_competitions.scope.includes(competition.id)) && (
+                  {(permissions.can_administer_competitions.scope === '*' || permissions.can_administer_competitions.scope.includes(competition.id)) ? (
                     <Table.Cell>
                       <a href={competitionEditRegistrationsUrl(competition.id)}>
                         {I18n.t('competitions.my_competitions_table.registrations')}
                       </a>
                     </Table.Cell>
-                  )}
+                  ) : (canAdministerCompetitions && (
+                    <>
+                      <Table.Cell />
+                      <Table.Cell />
+                    </>
+                  ))}
                   {canViewDelegateReport && (
                   <ReportTableCell
                     competitionId={competition.id}
