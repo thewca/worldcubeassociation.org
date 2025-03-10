@@ -4961,16 +4961,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"easymde@npm:^2.19.0":
-  version: 2.19.0
-  resolution: "easymde@npm:2.19.0"
+"easymde@npm:^2.20.0":
+  version: 2.20.0
+  resolution: "easymde@npm:2.20.0"
   dependencies:
     "@types/codemirror": "npm:^5.60.10"
     "@types/marked": "npm:^4.0.7"
     codemirror: "npm:^5.65.15"
     codemirror-spell-checker: "npm:1.1.2"
     marked: "npm:^4.1.0"
-  checksum: 10c0/43e0fb4202e824ba66db4d1aebcd54887888f283644034716b3fce1a491b0640a8c14dbe90c3c0815f5d7c9ff181f0074610e876e468fce42a883d54ad4bf774
+  checksum: 10c0/bbaf2b5e97a7e9ac191a97f844555b60973471ebbdbaa2fc1503facb956f5aba84f9127f03b5501519a16d675095658d160f000f72d0a45601c279db989bd55c
   languageName: node
   linkType: hard
 
@@ -10187,7 +10187,7 @@ __metadata:
     css-minimizer-webpack-plugin: "npm:^7.0.0"
     date-fns: "npm:^4.1.0"
     dompurify: "npm:^3.2.4"
-    easymde: "npm:^2.19.0"
+    easymde: "npm:^2.20.0"
     eslint: "npm:^8.57.0"
     eslint-config-airbnb: "npm:^19.0.4"
     eslint-plugin-import: "npm:^2.31.0"
