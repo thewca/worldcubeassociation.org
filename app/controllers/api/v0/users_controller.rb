@@ -2,10 +2,10 @@
 
 class Api::V0::UsersController < Api::V0::ApiController
   def show_me
-    user = require_user!
-    if stale?(user)
+    require_user!
+    if stale?(current_user)
       # Also include the users current prs so we can handle qualifications on the Frontend
-      show_user(user, show_rankings: true, private_attributes: ['email'])
+      show_user(current_user, show_rankings: true, private_attributes: ['email'])
     end
   end
 
@@ -30,31 +30,31 @@ class Api::V0::UsersController < Api::V0::ApiController
   end
 
   def permissions
-    user = require_user!
-    if stale?(user)
-      render json: user.permissions
+    require_user!
+    if stale?(current_user)
+      render json: current_user.permissions
     end
   end
 
   def personal_records
-    user = require_user!
-    return render json: { single: [], average: [] } unless user.wca_id.present?
-    person = Person.includes(:ranksSingle, :ranksAverage).find_by_wca_id!(user.wca_id)
+    require_user!
+    return render json: { single: [], average: [] } unless current_user.wca_id.present?
+    person = Person.includes(:ranksSingle, :ranksAverage).find_by_wca_id!(current_user.wca_id)
     render json: { single: person.ranksSingle.map(&:to_wcif), average: person.ranksAverage.map(&:to_wcif) }
   end
 
   def preferred_events
-    user = require_user!
-    preferred_events = Rails.cache.fetch("#{user.id}-preferred-events", expires_in: 24.hours) do
-      user.preferred_events.pluck(:id)
+    require_user!
+    preferred_events = Rails.cache.fetch("#{current_user.id}-preferred-events", expires_in: 24.hours) do
+      current_user.preferred_events.pluck(:id)
     end
     render json: preferred_events
   end
 
   def bookmarked_competitions
-    user = require_user!
-    bookmarked_competitions = Rails.cache.fetch("#{user.id}-competitions-bookmarked", expires_in: 60.minutes) do
-      user.competitions_bookmarked.pluck(:competition_id)
+    require_user!
+    bookmarked_competitions = Rails.cache.fetch("#{current_user.id}-competitions-bookmarked", expires_in: 60.minutes) do
+      current_user.competitions_bookmarked.pluck(:competition_id)
     end
     render json: bookmarked_competitions
   end

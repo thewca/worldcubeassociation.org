@@ -232,6 +232,10 @@ class Api::V0::ApiController < ApplicationController
     end
   end
 
+  def current_user
+    current_api_user || super
+  end
+
   # Find the user that owns the access token.
   # From: https://github.com/doorkeeper-gem/doorkeeper#authenticated-resource-owner
   private def current_api_user
@@ -239,8 +243,8 @@ class Api::V0::ApiController < ApplicationController
   end
 
   private def require_user!
-    raise WcaExceptions::MustLogIn.new if current_api_user.nil? && current_user.nil?
-    current_api_user || current_user
+    raise WcaExceptions::MustLogIn.new if current_user.nil?
+    current_user
   end
 
   def countries
