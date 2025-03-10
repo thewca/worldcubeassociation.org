@@ -1601,7 +1601,7 @@ RSpec.describe Competition do
         competition.auto_accept_registrations = true
 
         expect(competition).not_to be_valid
-        expect(competition.errors[:auto_accept_registrations]).to include("Cant enable auto-accept if there are paid-pending registrations - either accept them or move them to the waiting list")
+        expect(competition.errors[:auto_accept_registrations]).to include("Can't enable auto-accept if there are paid-pending registrations - either accept them or move them to the waiting list")
       end
 
       it 'waitlisted registrations exist and accepted competitors < competition limit' do
@@ -1609,7 +1609,7 @@ RSpec.describe Competition do
         competition.auto_accept_registrations = true
 
         expect(competition).not_to be_valid
-        expect(competition.errors[:auto_accept_registrations]).to include("Cant enable auto-accept - please accept as many users from the Waiting List as possible.")
+        expect(competition.errors[:auto_accept_registrations]).to include("Can't enable auto-accept - please accept as many users from the Waiting List as possible.")
       end
     end
 
