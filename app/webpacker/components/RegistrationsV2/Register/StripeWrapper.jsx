@@ -8,6 +8,7 @@ import I18n from '../../../lib/i18n';
 import PaymentStep from './PaymentStep';
 import { fetchJsonOrError } from '../../../lib/requests/fetchWithAuthenticityToken';
 import { paymentDenominationUrl } from '../../../lib/requests/routes.js.erb';
+import { useRegistration } from '../lib/RegistrationProvider';
 
 const convertISOAmount = async (amount, currency) => {
   const { data } = await fetchJsonOrError(
@@ -21,12 +22,13 @@ export default function StripeWrapper({
   stripePublishableKey,
   connectedAccountId,
   user,
-  registration,
   nextStep,
 }) {
   const [stripePromise, setStripePromise] = useState(null);
   const initialAmount = competitionInfo.base_entry_fee_lowest_denomination;
   const [donationAmount, setDonationAmount] = useState(0);
+
+  const { registration } = useRegistration();
 
   const {
     data, isFetching,

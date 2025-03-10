@@ -12,7 +12,6 @@ import {
   Message,
   Segment,
 } from 'semantic-ui-react';
-import { getSingleRegistration } from '../api/registration/get/get_registrations';
 import updateRegistration from '../api/registration/patch/update_registration';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { showMessage } from '../Register/RegistrationMessage';
@@ -25,6 +24,7 @@ import I18n from '../../../lib/i18n';
 import RegistrationHistory from './RegistrationHistory';
 import { hasPassed } from '../../../lib/utils/dates';
 import getUsersInfo from '../api/user/post/getUserInfo';
+import { useRegistration } from '../lib/RegistrationProvider';
 import I18nHTMLTranslate from '../../I18nHTMLTranslate';
 import useSet from '../../../lib/hooks/useSet';
 
@@ -40,14 +40,10 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
 
   const queryClient = useQueryClient();
 
-  const { isLoading: isRegistrationLoading, data: serverRegistration, refetch } = useQuery({
-    queryKey: ['registration-admin', competitionInfo.id, competitor.id],
-    queryFn: () => getSingleRegistration(competitor.id, competitionInfo),
-    refetchOnWindowFocus: false,
-    refetchOnReconnect: false,
-    staleTime: Infinity,
-    refetchOnMount: 'always',
-  });
+  const {
+    isFetching: isRegistrationLoading,
+    registration: serverRegistration, refetchRegistration: refetch,
+  } = useRegistration();
 
   const { isLoading, data: competitorsInfo } = useQuery({
     queryKey: ['history-user', serverRegistration?.history],
@@ -67,7 +63,7 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
     },
     onSuccess: (data) => {
       queryClient.setQueryData(
-        ['registration-admin', competitionInfo.id, competitor.id],
+        ['registration', competitionInfo.id, competitor.id],
         {
           ...data.registration,
           payment: serverRegistration.payment,
