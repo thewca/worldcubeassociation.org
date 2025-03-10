@@ -243,8 +243,7 @@ class Api::V0::ApiController < ApplicationController
   end
 
   private def require_user!
-    raise WcaExceptions::MustLogIn.new if current_user.nil?
-    current_user
+    current_user || (raise WcaExceptions::MustLogIn.new)
   end
 
   def countries
