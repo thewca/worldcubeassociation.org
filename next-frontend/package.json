@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "build:types": "npx openapi-typescript wcaAPI.yaml -o src/lib/wca/wcaSchema.ts"
+    "build:types": "openapi-typescript wcaAPI.yaml -o src/lib/wca/wcaSchema.ts"
   },
   "dependencies": {
     "@chakra-ui/react": "^3.11.0",
@@ -29,6 +29,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "15.2.0",
+    "openapi-typescript": "^7.6.1",
     "typescript": "^5"
   },
   "packageManager": "yarn@4.6.0"
