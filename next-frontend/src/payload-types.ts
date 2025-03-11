@@ -83,8 +83,12 @@ export interface Config {
   db: {
     defaultIDType: number;
   };
-  globals: {};
-  globalsSelect: {};
+  globals: {
+    nav: Nav;
+  };
+  globalsSelect: {
+    nav: NavSelect<false> | NavSelect<true>;
+  };
   locale: null;
   user: User & {
     collection: 'users';
@@ -279,6 +283,122 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   batch?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "nav".
+ */
+export interface Nav {
+  id: number;
+  entry: (
+    | {
+        title: string;
+        entries: (
+          | {
+              displayText: string;
+              targetLink: string;
+              id?: string | null;
+              blockName?: string | null;
+              blockType: 'LinkItem';
+            }
+          | {
+              title: string;
+              entries: {
+                displayText: string;
+                targetLink: string;
+                id?: string | null;
+                blockName?: string | null;
+                blockType: 'LinkItem';
+              }[];
+              id?: string | null;
+              blockName?: string | null;
+              blockType: 'NestedDropdown';
+            }
+          | {
+              id?: string | null;
+              blockName?: string | null;
+              blockType: 'VisualDivider';
+            }
+        )[];
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'NavDropdown';
+      }
+    | {
+        displayText: string;
+        targetLink: string;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'LinkItem';
+      }
+  )[];
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "nav_select".
+ */
+export interface NavSelect<T extends boolean = true> {
+  entry?:
+    | T
+    | {
+        NavDropdown?:
+          | T
+          | {
+              title?: T;
+              entries?:
+                | T
+                | {
+                    LinkItem?:
+                      | T
+                      | {
+                          displayText?: T;
+                          targetLink?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    NestedDropdown?:
+                      | T
+                      | {
+                          title?: T;
+                          entries?:
+                            | T
+                            | {
+                                LinkItem?:
+                                  | T
+                                  | {
+                                      displayText?: T;
+                                      targetLink?: T;
+                                      id?: T;
+                                      blockName?: T;
+                                    };
+                              };
+                          id?: T;
+                          blockName?: T;
+                        };
+                    VisualDivider?:
+                      | T
+                      | {
+                          id?: T;
+                          blockName?: T;
+                        };
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        LinkItem?:
+          | T
+          | {
+              displayText?: T;
+              targetLink?: T;
+              id?: T;
+              blockName?: T;
+            };
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
