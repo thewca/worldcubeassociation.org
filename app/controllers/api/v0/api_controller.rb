@@ -232,8 +232,8 @@ class Api::V0::ApiController < ApplicationController
     end
   end
 
-  def current_user
-    current_api_user || super
+  def authenticated_user
+    current_api_user || current_user
   end
 
   # Find the user that owns the access token.
@@ -243,7 +243,8 @@ class Api::V0::ApiController < ApplicationController
   end
 
   private def require_user!
-    current_user || (raise WcaExceptions::MustLogIn.new)
+    raise WcaExceptions::MustLogIn.new if current_api_user.nil? && current_user.nil?
+    current_api_user || current_user
   end
 
   def countries

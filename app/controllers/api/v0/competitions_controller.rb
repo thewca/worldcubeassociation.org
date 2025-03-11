@@ -2,7 +2,7 @@
 
 class Api::V0::CompetitionsController < Api::V0::ApiController
   # Enable CSRF protection if we use cookies based user instead of OAuth one.
-  protect_from_forgery if: -> { current_api_user.nil? }, with: :exception
+  protect_from_forgery if: -> { current_user.present? }, with: :exception
 
   def index
     managed_by_user = nil
@@ -199,7 +199,8 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
   end
 
   private def can_manage?(competition)
-    current_user&.can_manage_competition?(competition)
+    api_user_can_manage = current_api_user&.can_manage_competition?(competition) && doorkeeper_token.scopes.exists?("manage_competitions")
+    api_user_can_manage || current_user&.can_manage_competition?(competition)
   end
 
   private def require_scope!(scope)
@@ -211,7 +212,6 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
 
   def require_can_manage!(competition)
     require_user!
-    require_scope!("manage_competitions")
     raise WcaExceptions::NotPermitted.new("Not authorized to manage competition") unless can_manage?(competition)
   end
 end
