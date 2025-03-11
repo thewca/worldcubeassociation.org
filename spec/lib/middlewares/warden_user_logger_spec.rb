@@ -1,60 +1,30 @@
 # frozen_string_literal: true
 
-RSpec.describe Middlewares::WardenUserLogger do
-  describe "call" do
-    let(:app) { double(:app) }
-    let(:logger) { ->(s) { log_statements << s } }
-    let(:log_statements) { [] }
-    subject { described_class.new(app, logger: logger) }
+DUMMY_SESSION_KEY = 'foobar'
 
-    context "underlying middleware raises exception" do
-      let(:dummy_exception) { Class.new(StandardError).new }
+RSpec.describe LogTagging do
+  describe "user_log_tag" do
+    before(:each) do
+      expect(Rails.application.config).to receive(:session_options).and_return({ key: DUMMY_SESSION_KEY })
+    end
 
-      before :each do
-        expect(app).to receive(:call).and_raise(dummy_exception)
-        expect { subject.call(env) }.to raise_exception(dummy_exception)
-      end
+    let(:cookie_jar) { double(:cookie_jar, encrypted: { DUMMY_SESSION_KEY => env }) }
+    let(:request) { double(:request, cookie_jar: cookie_jar) }
 
-      context "env filled with warden session information" do
-        let(:env) { { 'warden' => Struct.new(user: Struct.new(id: 42)) } }
+    context "env filled with warden session information" do
+      # Yes, the double `user` and the nested array is actually how it looks in real requests
+      let(:env) { { 'warden.user.user.key' => [[42], "encrypted!"] } }
 
-        it "logs the correct user id" do
-          expect(log_statements).to eq ["[User Id] Request was made by user id: 42"]
-        end
-      end
-
-      context "env not filled with warden session information" do
-        let(:env) { { 'warden' => Struct.new } }
-
-        it "logs the absence of a logged in user" do
-          expect(log_statements).to eq ["[User Id] Request was made by user id: <not logged in>"]
-        end
+      it "logs the correct user id" do
+        expect(subject.user_log_tag(request)).to eq "user:42"
       end
     end
 
-    context "underlying middleware doesn't raise exception" do
-      before :each do
-        # Make sure we pass the env hash unmodified to the next
-        # middleware in the chain.
-        expect(app).to receive(:call).with(env)
+    context "env not filled with warden session information" do
+      let(:env) { {} } # Empty hash
 
-        subject.call(env)
-      end
-
-      context "env filled with warden session information" do
-        let(:env) { { 'warden' => Struct.new(user: Struct.new(id: 42)) } }
-
-        it "logs the correct user id" do
-          expect(log_statements).to eq ["[User Id] Request was made by user id: 42"]
-        end
-      end
-
-      context "env not filled with warden session information" do
-        let(:env) { { 'warden' => Struct.new } }
-
-        it "logs the absence of a logged in user" do
-          expect(log_statements).to eq ["[User Id] Request was made by user id: <not logged in>"]
-        end
+      it "logs the absence of a logged in user" do
+        expect(subject.user_log_tag(request)).to be_nil
       end
     end
   end
