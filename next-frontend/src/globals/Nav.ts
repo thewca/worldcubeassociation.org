@@ -68,4 +68,9 @@ export const Nav: GlobalConfig = {
       maxRows: 8,
     },
   ],
+  admin: {
+    livePreview: {
+      url: '/'
+    }
+  }
 }

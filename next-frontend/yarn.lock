@@ -1959,6 +1959,25 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@payloadcms/live-preview-react@npm:^3.27.0":
+  version: 3.27.0
+  resolution: "@payloadcms/live-preview-react@npm:3.27.0"
+  dependencies:
+    "@payloadcms/live-preview": "npm:3.27.0"
+  peerDependencies:
+    react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0 || ^19.0.0-rc-65a56d0e-20241020
+    react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0 || ^19.0.0-rc-65a56d0e-20241020
+  checksum: 10c0/a9ebf8d6e62a0bd8dcda4736f0b619eb25126564d61be4d6fed610b33410ff7779b2cdebbd2e032583e0e3b7ee3bf5de855f2e918062c438e16305db90334fee
+  languageName: node
+  linkType: hard
+
+"@payloadcms/live-preview@npm:3.27.0":
+  version: 3.27.0
+  resolution: "@payloadcms/live-preview@npm:3.27.0"
+  checksum: 10c0/80aab4b1e480e623aff96f577b4410e6ab16f5ff1b1ee04aec9ec4b762c23b25eecff8e2ea76a2cf3edc1a253edef64c98d6e013be2f6a6ed9e9e212a1b75dca
+  languageName: node
+  linkType: hard
+
 "@payloadcms/next@npm:^3.27.0":
   version: 3.27.0
   resolution: "@payloadcms/next@npm:3.27.0"
@@ -6590,6 +6609,7 @@ __metadata:
     "@emotion/react": "npm:^11.14.0"
     "@eslint/eslintrc": "npm:^3"
     "@payloadcms/db-sqlite": "npm:^3.27.0"
+    "@payloadcms/live-preview-react": "npm:^3.27.0"
     "@payloadcms/next": "npm:^3.27.0"
     "@stylistic/eslint-plugin": "npm:^4.2.0"
     "@tanstack/react-query": "npm:^5.67.2"

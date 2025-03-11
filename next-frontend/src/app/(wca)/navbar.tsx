@@ -5,6 +5,7 @@ import { Button, HStack, Menu } from "@chakra-ui/react";
 import { getPayload } from 'payload'
 import config from '@payload-config'
 import Link from "next/link";
+import { RefreshRouteOnSave } from "@/components/RefreshRouteOnSave";
 
 export default async function Navbar() {
   const payload = await getPayload({ config })
@@ -12,6 +13,7 @@ export default async function Navbar() {
 
   return (
     <HStack borderBottom="md" padding="3">
+      <RefreshRouteOnSave />
       {navbar.entry.map((navbarEntry) => (
         <React.Fragment key={navbarEntry.id}>
           {navbarEntry.blockType === "LinkItem" && (
