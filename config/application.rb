@@ -3,7 +3,6 @@
 require_relative 'boot'
 require_relative 'locales/locales'
 require_relative '../lib/middlewares/fix_accept_header'
-require_relative '../lib/middlewares/warden_user_logger'
 
 require 'rails/all'
 
@@ -93,7 +92,6 @@ module WcaOnRails
     config.i18n.fallbacks = [:en]
 
     config.middleware.use Middlewares::FixAcceptHeader
-    config.middleware.use Middlewares::WardenUserLogger, logger: ->(s) { Rails.logger.info(s) }
 
     config.autoload_paths << Rails.root.join('lib')
     config.eager_load_paths << Rails.root.join('lib')
