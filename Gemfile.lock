@@ -921,7 +921,6 @@ DEPENDENCIES
   octokit
   oga
   openssl
-  ostruct
   overcommit
   premailer-rails
   puma

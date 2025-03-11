@@ -2,7 +2,6 @@
 
 require_relative 'boot'
 require_relative 'locales/locales'
-require_relative '../lib/middlewares/warden_user_logger'
 
 require 'rails/all'
 
@@ -90,8 +89,6 @@ module WcaOnRails
     # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
     # the I18n.default_locale when a translation cannot be found).
     config.i18n.fallbacks = [:en]
-
-    config.middleware.use Middlewares::WardenUserLogger, logger: ->(s) { Rails.logger.info(s) }
 
     config.autoload_paths << Rails.root.join('lib')
     config.eager_load_paths << Rails.root.join('lib')
