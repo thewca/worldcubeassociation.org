@@ -272,9 +272,6 @@ Performance/MethodObjectAsBlock:
 Performance/StringReplacement:
   Enabled: false
 
-Performance/RegexpMatch:
-  Enabled: false
-
 Performance/MapMethodChain:
   Enabled: false
 
