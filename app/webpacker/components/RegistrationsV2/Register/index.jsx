@@ -32,7 +32,11 @@ export default function Index({
     <WCAQueryClientProvider>
       <StoreProvider reducer={messageReducer} initialState={{ messages: [] }}>
         <ConfirmProvider>
-          <RegistrationProvider competitionInfo={competitionInfo} userInfo={userInfo} isProcessing={isProcessing}>
+          <RegistrationProvider
+            competitionInfo={competitionInfo}
+            userInfo={userInfo}
+            isProcessing={isProcessing}
+          >
             <Register
               competitionInfo={competitionInfo}
               userInfo={userInfo}

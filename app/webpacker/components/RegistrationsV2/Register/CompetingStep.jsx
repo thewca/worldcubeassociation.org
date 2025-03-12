@@ -86,10 +86,6 @@ export default function CompetingStep({
   const { update: setSelectedEventIds } = selectedEventIds;
 
   useEffect(() => {
-    setProcessing(isProcessing);
-  }, [isProcessing]);
-
-  useEffect(() => {
     if (isRegistered && registration.competing.registration_status !== 'cancelled') {
       setComment(registration.competing.comment ?? '');
       setSelectedEventIds(registration.competing.event_ids);
