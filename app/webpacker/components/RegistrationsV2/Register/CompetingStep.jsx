@@ -420,7 +420,7 @@ export default function CompetingStep({
                       }
                   type="submit"
                 >
-                  {I18n.t(hasRegistrationEditDeadlinePassed ? 'competitions.registration_v2.errors.-4001' : 'registrations.update')}
+                  {I18n.t(!hasRegistrationEditDeadlinePassed ? 'registrations.update' : 'competitions.registration_v2.errors.-4001')}
                 </Button>
                 <ButtonOr />
                 <Button secondary onClick={() => nextStep()}>
