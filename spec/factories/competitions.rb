@@ -489,7 +489,7 @@ FactoryBot.define do
         qualification_data = evaluator.qualifications
 
         events_wcif.each do |event|
-          next unless qualification_data.keys.include?(event['id'])
+          next unless qualification_data.key?(event['id'])
           event['qualification'] = qualification_data[event['id']]
         end
 

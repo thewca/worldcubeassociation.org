@@ -281,9 +281,6 @@ Performance/RedundantBlockCall:
 Performance/BindCall:
   Enabled: false
 
-Performance/InefficientHashSearch:
-  Enabled: false
-
 Performance/RedundantMerge:
   Enabled: false
 
