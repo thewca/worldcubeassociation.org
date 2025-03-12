@@ -136,7 +136,7 @@ class Registration < ApplicationRecord
   end
 
   def entry_fee
-    sum_lowest_denomination = competition.base_entry_fee + competition_events.map(&:fee_lowest_denomination).sum
+    sum_lowest_denomination = competition.base_entry_fee + competition_events.sum(&:fee_lowest_denomination)
 
     Money.new(
       sum_lowest_denomination,
@@ -150,7 +150,7 @@ class Registration < ApplicationRecord
       # registration.includes(:registration_payments) that may exist.
       # It's fine to turn the associated records to an array and sum on ithere,
       # as it's usually just a couple of rows.
-      registration_payments.map(&:amount_lowest_denomination).sum,
+      registration_payments.sum(&:amount_lowest_denomination),
       competition.currency_code,
     )
   end

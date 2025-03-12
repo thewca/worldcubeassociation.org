@@ -308,9 +308,6 @@ Performance/Detect:
 Performance/Count:
   Enabled: false
 
-Performance/Sum:
-  Enabled: false
-
 # Rails
 
 Rails/TimeZone:

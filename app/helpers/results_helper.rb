@@ -2,13 +2,13 @@
 
 module ResultsHelper
   def solve_tds_for_result(result)
-    result.solve_times.each_with_index.map do |solve_time, i|
+    result.solve_times.each_with_index.sum do |solve_time, i|
       classes = ["solve", i.to_s]
       classes << "trimmed" if result.trimmed_indices.include?(i)
       classes << "best" if i == result.best_index
       classes << "worst" if i == result.worst_index
       content_tag :td, solve_time.clock_format, class: classes.join(' ')
-    end.reduce(:+)
+    end
   end
 
   # NOTE: PB markers are computed in the order in which results are given.
