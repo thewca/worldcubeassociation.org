@@ -257,12 +257,6 @@ ThreadSafety/DirChdir:
 
 # Performance
 
-Performance/RedundantEqualityComparisonBlock:
-  Enabled: false
-
-Performance/StringIdentifierArgument:
-  Enabled: false
-
 Performance/CollectionLiteralInLoop:
   Enabled: false
 
