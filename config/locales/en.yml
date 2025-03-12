@@ -2895,17 +2895,3 @@ en:
       missing_scrambles_for_multi_error: "[%{round_id}] While you may have multiple groups in 3x3x3 Multi-Blind, at least one of the groups must contain scrambles for all attempts."
       multiple_fmc_groups_warning: "[%{round_id}] There are multiple groups of FMC used. If one group of FMC was used, please use the Scrambles Matcher to uncheck the unused scrambles. Otherwise, please include a comment to WRT explaining why multiple groups of FMC were used."
       wrong_number_of_scramble_sets_error: "[%{round_id}] This round has a different number of scramble sets than specified on the Manage Events tab. Please adjust the number of scramble sets in the Manage Events tab to the number of sets that were used."
-  cronjobs:
-    compute_auxiliary_data:
-      steps:
-        '1': "Computes some auxiliary tables in the database (ConciseSingleResults, ConciseAverageResults, RanksSingle and RanksAverage)."
-        '2': "Computes the lookup for assigning record markers."
-        '3': "Deletes cached results (so they can be cached again)."
-    dump_developer_database:
-      steps:
-        '1': "Copies a redacted version of our entire database into an SQL file."
-        '2': "Zips the file and makes the ZIP file available for public download."
-    dump_public_results_database:
-      steps:
-        '1': "Generates the public Results Export in SQL and TSV formats."
-        '2': "Zips the file and makes the ZIP file available for public download."

@@ -64,7 +64,7 @@ export default function CronjobActions({ cronjobName, cronjobDetails }) {
       <Button
         toggle
         active={showDebugInfo}
-        onClick={() => setShowDebugInfo(!showDebugInfo)}
+        onClick={() => setShowDebugInfo((debugInfoWas) => !debugInfoWas)}
       >
         Show Debug info for WST
       </Button>
