@@ -305,9 +305,6 @@ Performance/TimesMap:
 Performance/Detect:
   Enabled: false
 
-Performance/Count:
-  Enabled: false
-
 # Rails
 
 Rails/TimeZone:

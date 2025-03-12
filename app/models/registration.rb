@@ -365,7 +365,7 @@ class Registration < ApplicationRecord
     if !competition.present? || !competition.events_per_registration_limit_enabled?
       return
     end
-    if registration_competition_events.reject(&:marked_for_destruction?).length > competition.events_per_registration_limit
+    if registration_competition_events.count { |element| !element.marked_for_destruction? } > competition.events_per_registration_limit
       errors.add(:registration_competition_events, I18n.t('registrations.errors.exceeds_event_limit', count: competition.events_per_registration_limit))
     end
   end
