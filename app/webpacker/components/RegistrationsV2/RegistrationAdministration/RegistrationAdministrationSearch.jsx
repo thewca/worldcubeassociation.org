@@ -6,6 +6,7 @@ import useDebounce from '../../../lib/hooks/useDebounce';
 import { isoMoneyToHumanReadable } from '../../../lib/helpers/money';
 import { getStatusColor, getStatusIcon } from '../../../lib/utils/registrationAdmin';
 import { editRegistrationUrl } from '../../../lib/requests/routes.js.erb';
+import I18n from '../../../lib/i18n';
 
 const MIN_SEARCH_TEXT_LEN = 2;
 
@@ -29,9 +30,13 @@ export default function RegistrationAdministrationSearch({
             description: `${
               user.email
             }${
-              competing.comment ? ` Comment: ${competing.comment}` : ''
+              competing.comment
+                ? ` ${I18n.t('activerecord.attributes.registration.comments')}: ${competing.comment}`
+                : ''
             }${
-              competing.admin_comment ? ` Admin Note: ${competing.admin_comment}` : ''
+              competing.admin_comment
+                ? ` ${I18n.t('activerecord.attributes.registration.administrative_notes')}: ${competing.admin_comment}`
+                : ''
             }`,
             price: usingPayments
               ? isoMoneyToHumanReadable(payment.payment_amount_iso, currencyCode)
