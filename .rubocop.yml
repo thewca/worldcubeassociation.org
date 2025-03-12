@@ -3,6 +3,7 @@ inherit_from: .rubocop_todo.yml
 plugins:
   - rubocop-thread_safety
   - rubocop-performance
+  - rubocop-rails
 
 AllCops:
   TargetRubyVersion: 3.4
@@ -251,6 +252,8 @@ ThreadSafety/DirChdir:
 
 # These are a list of temporarily disabled cops so we can turn them on in batches
 
+# Performance
+
 Performance/RedundantEqualityComparisonBlock:
   Enabled: false
 
@@ -305,3 +308,172 @@ Performance/Count:
 Performance/Sum:
   Enabled: false
 
+# Rails
+
+Rails/TimeZone:
+  Enabled: false
+
+Rails/Date:
+  Enabled: false
+
+Rails/DynamicFindBy:
+  Enabled: false
+
+Rails/ResponseParsedBody:
+  Enabled: false
+
+Rails/SkipsModelValidations:
+  Enabled: false
+
+Rails/PluralizationGrammar:
+  Enabled: false
+
+Rails/FilePath:
+  Enabled: false
+
+Rails/RootPathnameMethods:
+  Enabled: false
+
+Rails/I18nLocaleAssignment:
+  Enabled: false
+
+Rails/Blank:
+  Enabled: false
+
+Rails/Output:
+  Enabled: false
+
+Rails/SquishedSQLHeredocs:
+  Enabled: false
+
+Rails/FindEach:
+  Enabled: false
+
+Rails/IndexBy:
+  Enabled: false
+
+Rails/NegateInclude:
+  Enabled: false
+
+Rails/Pluck:
+  Enabled: false
+
+Rails/Pick:
+  Enabled: false
+
+Rails/Delegate:
+  Enabled: false
+
+Rails/ReversibleMigration:
+  Enabled: false
+
+Rails/BulkChangeTable:
+  Enabled: false
+
+Rails/ThreeStateBooleanColumn:
+  Enabled: false
+
+Rails/CreateTableWithTimestamps:
+  Enabled: false
+
+Rails/NotNullColumn:
+  Enabled: false
+
+Rails/DangerousColumnNames:
+  Enabled: false
+
+Rails/RedundantForeignKey:
+  Enabled: false
+
+Rails/WhereRange:
+  Enabled: false
+
+Rails/InverseOf:
+  Enabled: false
+
+Rails/Validation:
+  Enabled: false
+
+Rails/WhereExists:
+  Enabled: false
+
+Rails/HasManyOrHasOneDependent:
+  Enabled: false
+
+Rails/RedundantActiveRecordAllMethod:
+  Enabled: false
+
+Rails/OutputSafety:
+  Enabled: false
+
+Rails/I18nLocaleTexts:
+  Enabled: false
+
+Rails/ShortI18n:
+  Enabled: false
+
+Rails/RakeEnvironment:
+  Enabled: false
+
+Rails/ApplicationRecord:
+  Enabled: false
+
+Rails/Present:
+  Enabled: false
+
+Rails/WhereEquals:
+  Enabled: false
+
+Rails/CompactBlank:
+  Enabled: false
+
+Rails/EnumHash:
+  Enabled: false
+
+Rails/ReadWriteAttribute:
+  Enabled: false
+
+Rails/IndexWith:
+  Enabled: false
+
+Rails/HelperInstanceVariable:
+  Enabled: false
+
+Rails/LinkToBlank:
+  Enabled: false
+
+Rails/ActionControllerFlashBeforeRender:
+  Enabled: false
+
+Lint/RedundantSafeNavigation:
+  Enabled: false
+
+Rails/Presence:
+  Enabled: false
+
+Rails/UniqueValidationWithoutIndex:
+  Enabled: false
+
+Rails/HttpStatus:
+  Enabled: false
+
+Rails/ActionOrder:
+  Enabled: false
+
+Rails/FindById:
+  Enabled: false
+
+Rails/DotSeparatedKeys:
+  Enabled: false
+
+Rails/I18nLazyLookup:
+  Enabled: false
+
+Rails/LexicallyScopedActionFilter:
+  Enabled: false
+
+Rails/RenderInline:
+  Enabled: false
+
+Rails/ActiveRecordCallbacksOrder:
+  Enabled: false

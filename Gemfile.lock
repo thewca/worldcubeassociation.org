@@ -686,6 +686,12 @@ GEM
       lint_roller (~> 1.1)
       rubocop (>= 1.72.1, < 2.0)
       rubocop-ast (>= 1.38.0, < 2.0)
+    rubocop-rails (2.30.3)
+      activesupport (>= 4.2.0)
+      lint_roller (~> 1.1)
+      rack (>= 1.1)
+      rubocop (>= 1.72.1, < 2.0)
+      rubocop-ast (>= 1.38.0, < 2.0)
     rubocop-thread_safety (0.7.0)
       lint_roller (~> 1.1)
       rubocop (~> 1.72, >= 1.72.1)
@@ -944,6 +950,7 @@ DEPENDENCIES
   rspec-retry
   rubocop
   rubocop-performance
+  rubocop-rails
   rubocop-thread_safety
   sass-rails
   sassc-embedded (~> 1)
