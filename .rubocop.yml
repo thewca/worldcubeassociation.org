@@ -290,9 +290,6 @@ Performance/RedundantBlockCall:
 Performance/SortReverse:
   Enabled: false
 
-Performance/BindCall:
-  Enabled: false
-
 Performance/InefficientHashSearch:
   Enabled: false
 
