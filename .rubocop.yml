@@ -278,9 +278,6 @@ Performance/MapCompact:
 Performance/RedundantBlockCall:
   Enabled: false
 
-Performance/SortReverse:
-  Enabled: false
-
 Performance/BindCall:
   Enabled: false
 
