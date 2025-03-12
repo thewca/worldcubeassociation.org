@@ -6,6 +6,7 @@ plugins:
   - rubocop-rails
   - rubocop-rspec
   - rubocop-rspec_rails
+  - rubocop-factory_bot
 
 AllCops:
   TargetRubyVersion: 3.4
@@ -642,4 +643,27 @@ RSpecRails/InferredSpecType:
   Enabled: false
 
 RSpecRails/HttpStatus:
+  Enabled: false
+
+# Factory Bot
+
+FactoryBot/ConsistentParenthesesStyle:
+  Enabled: false
+
+FactoryBot/SyntaxMethods:
+  Enabled: false
+
+FactoryBot/AssociationStyle:
+  Enabled: false
+
+FactoryBot/RedundantFactoryOption:
+  Enabled: false
+
+FactoryBot/FactoryClassName:
+  Enabled: false
+
+FactoryBot/CreateList:
+  Enabled: false
+
+FactoryBot/ExcessiveCreateList:
   Enabled: false
