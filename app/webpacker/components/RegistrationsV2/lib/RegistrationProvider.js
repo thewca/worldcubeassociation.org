@@ -11,9 +11,9 @@ const REFETCH_INTERVAL = 3000;
 
 const RegistrationContext = createContext();
 
-export default function RegistrationProvider({ competitionInfo, userInfo, children }) {
+export default function RegistrationProvider({ competitionInfo, userInfo, isProcessing, children }) {
   const dispatch = useDispatch();
-  const [isPolling, setIsPolling] = useState(false);
+  const [isPolling, setIsPolling] = useState(isProcessing);
   const [pollCounter, setPollCounter] = useState(0);
 
   const startPolling = useCallback(() => {

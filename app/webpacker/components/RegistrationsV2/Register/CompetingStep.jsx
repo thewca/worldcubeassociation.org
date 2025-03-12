@@ -57,7 +57,6 @@ export default function CompetingStep({
   user,
   preferredEvents,
   qualifications,
-  isProcessing,
 }) {
   const maxEvents = competitionInfo.events_per_registration_limit ?? Infinity;
   const {
