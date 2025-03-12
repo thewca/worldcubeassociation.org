@@ -12,7 +12,7 @@ module Taggable
   TAG_REGEX_MESSAGE = "only allows English letters, numbers, hyphens, and '+'"
 
   private def item_tags
-    public_send("#{self.class.name.underscore}_tags")
+    public_send(:"#{self.class.name.underscore}_tags")
   end
 
   included do
