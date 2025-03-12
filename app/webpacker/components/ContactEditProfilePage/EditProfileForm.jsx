@@ -2,28 +2,18 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { Form, Message } from 'semantic-ui-react';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { QueryClient, useQuery } from '@tanstack/react-query';
-import i18n from '../../lib/i18n';
+import _ from 'lodash';
+import I18n from '../../lib/i18n';
 import { apiV0Urls, contactEditProfileActionUrl } from '../../lib/requests/routes.js.erb';
-import { genders, countries } from '../../lib/wca-data.js.erb';
 import Loading from '../Requests/Loading';
 import Errored from '../Requests/Errored';
 import useSaveAction from '../../lib/hooks/useSaveAction';
 import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken';
 import UtcDatePicker from '../wca/UtcDatePicker';
+import CountrySelector from '../CountrySelector/CountrySelector';
+import GenderSelector from '../GenderSelector/GenderSelector';
 
 const CONTACT_EDIT_PROFILE_FORM_QUERY_CLIENT = new QueryClient();
-
-const genderOptions = _.map(genders.byId, (gender) => ({
-  key: gender.id,
-  text: gender.name,
-  value: gender.id,
-}));
-
-const countryOptions = _.map(countries.byIso2, (country) => ({
-  key: country.iso2,
-  text: country.name,
-  value: country.iso2,
-}));
 
 export default function EditProfileForm({
   wcaId,
@@ -96,46 +86,42 @@ export default function EditProfileForm({
   return (
     <Form onSubmit={formSubmitHandler}>
       <Form.Input
-        label={i18n.t('activerecord.attributes.user.name')}
+        label={I18n.t('activerecord.attributes.user.name')}
         name="name"
         value={editedProfileDetails?.name}
         onChange={handleFormChange}
         required
       />
-      <Form.Select
-        options={countryOptions}
-        label={i18n.t('activerecord.attributes.user.country_iso2')}
+      <CountrySelector
         name="country_iso2"
-        search
-        value={editedProfileDetails?.country_iso2}
+        countryIso2={editedProfileDetails?.country_iso2}
         onChange={handleFormChange}
       />
-      <Form.Select
-        options={genderOptions}
-        label={i18n.t('activerecord.attributes.user.gender')}
+      <GenderSelector
         name="gender"
-        value={editedProfileDetails?.gender}
+        gender={editedProfileDetails?.gender}
         onChange={handleFormChange}
       />
       <Form.Field
-        label={i18n.t('activerecord.attributes.user.dob')}
+        label={I18n.t('activerecord.attributes.user.dob')}
         name="dob"
         control={UtcDatePicker}
         showYearDropdown
-        dateFormatOverride="YYYY-MM-dd"
+        dateFormatOverride="yyyy-MM-dd"
         dropdownMode="select"
         isoDate={editedProfileDetails?.dob}
         onChange={handleDobChange}
+        required
       />
       <Form.TextArea
-        label={i18n.t('page.contact_edit_profile.form.edit_reason.label')}
+        label={I18n.t('page.contact_edit_profile.form.edit_reason.label')}
         name="editProfileReason"
         required
         value={editProfileReason}
         onChange={handleEditProfileReasonChange}
       />
       <Form.Input
-        label={i18n.t('page.contact_edit_profile.form.proof_attach.label')}
+        label={I18n.t('page.contact_edit_profile.form.proof_attach.label')}
         type="file"
         onChange={handleProofUpload}
       />
@@ -151,7 +137,7 @@ export default function EditProfileForm({
         {captchaError && (
           <Message
             error
-            content={i18n.t('page.contact_edit_profile.form.captcha.validation_error')}
+            content={I18n.t('page.contact_edit_profile.form.captcha.validation_error')}
           />
         )}
       </Form.Field>
@@ -159,7 +145,7 @@ export default function EditProfileForm({
         type="submit"
         disabled={isSubmitDisabled}
       >
-        {i18n.t('page.contact_edit_profile.form.submit_edit_request_button.label')}
+        {I18n.t('page.contact_edit_profile.form.submit_edit_request_button.label')}
       </Form.Button>
     </Form>
   );

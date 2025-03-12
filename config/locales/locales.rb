@@ -27,6 +27,10 @@ module Locales
       flag_id: "eo",
       name: "Esperanto",
     },
+    eu: {
+      flag_id: "es-eu",
+      name: "Euskara",
+    },
     es: {
       flag_id: "es",
       name: "Español",
@@ -38,6 +42,10 @@ module Locales
     fr: {
       flag_id: "fr",
       name: "Français",
+    },
+    'fr-CA': {
+      flag_id: "ca",
+      name: "Français Canadien",
     },
     hr: {
       flag_id: "hr",

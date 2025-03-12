@@ -110,6 +110,11 @@ module DatabaseDumper
           registration_version
           forbid_newcomers
           forbid_newcomers_reason
+          auto_close_threshold
+          auto_accept_registrations
+          auto_accept_disable_threshold
+          newcomer_month_reserved_spots
+          competitor_can_cancel
         ),
         db_default: %w(
           connected_stripe_account_id
@@ -436,6 +441,9 @@ module DatabaseDumper
         ),
       ),
     }.freeze,
+    "live_results" => :skip_all_rows,
+    "live_attempts" => :skip_all_rows,
+    "live_attempt_history_entries" => :skip_all_rows,
     "schedule_activities" => {
       where_clause: "WHERE (holder_type=\"ScheduleActivity\" AND holder_id IN (#{VISIBLE_ACTIVITY_IDS}) or id in (#{VISIBLE_ACTIVITY_IDS}))",
       column_sanitizers: actions_to_column_sanitizers(
@@ -583,6 +591,7 @@ module DatabaseDumper
           roles
           is_competing
           competing_status
+          registered_at
         ),
         db_default: %w(ip),
         fake_values: {
@@ -594,7 +603,18 @@ module DatabaseDumper
     "microservice_registrations" => :skip_all_rows,
     "registration_history_changes" => :skip_all_rows,
     "registration_history_entries" => :skip_all_rows,
-    "waiting_lists" => :skip_all_rows,
+    "waiting_lists" => {
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w(
+          id
+          holder_type
+          holder_id
+          entries
+          created_at
+          updated_at
+        ),
+      ),
+    }.freeze,
     "sanity_checks" => :skip_all_rows,
     "sanity_check_categories" => :skip_all_rows,
     "sanity_check_exclusions" => :skip_all_rows,
@@ -844,6 +864,20 @@ module DatabaseDumper
         ),
       ),
     }.freeze,
+    "country_band_details" => {
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w(
+          id
+          number
+          start_date
+          end_date
+          due_amount_per_competitor_us_cents
+          due_percent_registration_fee
+          created_at
+          updated_at
+        ),
+      ),
+    }.freeze,
     "user_roles" => {
       where_clause: "JOIN user_groups ON user_groups.id=group_id WHERE NOT user_groups.is_hidden",
       column_sanitizers: actions_to_column_sanitizers(
@@ -908,6 +942,12 @@ module DatabaseDumper
     "jwt_denylist" => :skip_all_rows,
     "wfc_xero_users" => :skip_all_rows,
     "wfc_dues_redirects" => :skip_all_rows,
+    "ticket_logs" => :skip_all_rows,
+    "ticket_comments" => :skip_all_rows,
+    "ticket_stakeholders" => :skip_all_rows,
+    "tickets" => :skip_all_rows,
+    "tickets_edit_person" => :skip_all_rows,
+    "tickets_edit_person_fields" => :skip_all_rows,
   }.freeze
 
   RESULTS_SANITIZERS = {

@@ -9,7 +9,7 @@ import useLoadedData from '../../lib/hooks/useLoadedData';
 import useSaveAction from '../../lib/hooks/useSaveAction';
 import Loading from '../Requests/Loading';
 import Errored from '../Requests/Errored';
-import CountryFlag from '../wca/CountryFlag';
+import RegionFlag from '../wca/RegionFlag';
 import {
   adminCheckUploadedResults,
   adminPostingCompetitionsUrl,
@@ -75,7 +75,7 @@ function PostingCompetitionsIndex({
               <Header.Subheader>
                 {c.city}
                 {' '}
-                <CountryFlag iso2={c.country_iso2} />
+                <RegionFlag iso2={c.country_iso2} />
               </Header.Subheader>
               <Header.Subheader>
                 {`Submission Timestamp: ${DateTime.fromISO(c.results_submitted_at).toRelative()}`}

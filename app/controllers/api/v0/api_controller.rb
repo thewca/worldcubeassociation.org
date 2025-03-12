@@ -182,7 +182,7 @@ class Api::V0::ApiController < ApplicationController
   def delegates_search_index
     # TODO: There is a `uniq` call at the end which I feel shouldn't be necessary?!
     #   Postponing investigation until the Roles system migration is complete.
-    all_delegates = UserGroup.includes(:active_users).delegate_regions.flat_map(&:active_users).uniq
+    all_delegates = UserGroup.includes(active_users: [:current_avatar]).delegate_regions.flat_map(&:active_users).uniq
 
     search_index = all_delegates.map do |delegate|
       delegate.slice(:id, :name, :wca_id).merge({ thumb_url: delegate.avatar.thumbnail_url })
@@ -235,9 +235,7 @@ class Api::V0::ApiController < ApplicationController
   # Find the user that owns the access token.
   # From: https://github.com/doorkeeper-gem/doorkeeper#authenticated-resource-owner
   private def current_api_user
-    return @current_api_user if defined?(@current_api_user)
-
-    @current_api_user = User.find_by_id(doorkeeper_token&.resource_owner_id)
+    @current_api_user ||= User.find_by_id(doorkeeper_token&.resource_owner_id) if doorkeeper_token&.accessible?
   end
 
   private def require_user!

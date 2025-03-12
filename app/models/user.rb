@@ -35,6 +35,10 @@ class User < ApplicationRecord
   has_many :teams_committees_at_least_senior_roles, through: :teams_committees_at_least_senior_role_metadata, source: :user_role, class_name: "UserRole"
   has_many :teams_committees_at_least_senior_groups, through: :teams_committees_at_least_senior_roles, source: :group, class_name: "UserGroup"
   has_many :teams_committees_at_least_senior, through: :teams_committees_at_least_senior_groups, source: :metadata, source_type: "GroupsMetadataTeamsCommittees"
+  has_many :past_bans_metadata, through: :past_roles, source: :metadata, source_type: "RolesMetadataBannedCompetitors"
+  has_many :past_bans, through: :past_bans_metadata, source: :user_role, class_name: "UserRole"
+  has_many :active_bans_metadata, through: :active_roles, source: :metadata, source_type: "RolesMetadataBannedCompetitors"
+  has_many :active_bans, through: :active_bans_metadata, source: :user_role, class_name: "UserRole"
   has_many :active_groups, through: :active_roles, source: :group, class_name: "UserGroup"
   has_many :board_metadata, through: :active_groups, source: :metadata, source_type: "GroupsMetadataBoard"
   has_many :confirmed_users_claiming_wca_id, -> { confirmed_email }, foreign_key: "delegate_id_to_handle_wca_id_claim", class_name: "User"
@@ -57,12 +61,20 @@ class User < ApplicationRecord
   has_many :user_avatars, dependent: :destroy, inverse_of: :user
 
   scope :confirmed_email, -> { where.not(confirmed_at: nil) }
+  scope :newcomers, -> { where(wca_id: nil) }
+  scope :newcomer_month_eligible, -> { newcomers.or(where('wca_id LIKE ?', "#{Time.current.year}%")) }
 
   scope :in_region, lambda { |region_id|
     unless region_id.blank? || region_id == 'all'
       where(country_iso2: (Continent.country_iso2s(region_id) || Country.c_find(region_id)&.iso2))
     end
   }
+
+  ANONYMOUS_ACCOUNT_EMAIL_ID_SUFFIX = '@worldcubeassociation.org'
+  ANONYMOUS_NAME = 'Anonymous'
+  ANONYMOUS_DOB = '1954-12-04'
+  ANONYMOUS_GENDER = 'o'
+  ANONYMOUS_COUNTRY_ISO2 = 'US'
 
   def self.eligible_voters
     [
@@ -387,6 +399,10 @@ class User < ApplicationRecord
     Country.find_by_iso2(country_iso2)
   end
 
+  def newcomer_month_eligible?
+    person.nil? || wca_id.start_with?(Time.current.year.to_s)
+  end
+
   def locale
     preferred_locale || I18n.default_locale
   end
@@ -512,11 +528,11 @@ class User < ApplicationRecord
   end
 
   def banned_in_past?
-    past_roles.any? { |role| role.group == UserGroup.banned_competitors.first }
+    past_bans.any?
   end
 
   def current_ban
-    active_roles.select { |role| role.group == UserGroup.banned_competitors.first }.first
+    active_bans.first
   end
 
   def ban_end
@@ -631,7 +647,6 @@ class User < ApplicationRecord
       :leaderForms,
       :groupsManager,
       :importantLinks,
-      :delegateHandbook,
       :seniorDelegatesList,
       :leadersAdmin,
       :boardEditor,
@@ -639,43 +654,84 @@ class User < ApplicationRecord
       :regionsAdmin,
       :downloadVoters,
       :generateDbToken,
+      :approveAvatars,
+      :editPersonRequests,
+      :anonymizationScript,
+      :serverStatus,
+      :runValidators,
+      :createNewComers,
+      :checkRecords,
+      :computeAuxiliaryData,
+      :generateDataExports,
+      :fixResults,
+      :mergeProfiles,
+      :reassignConnectedWcaId,
     ].index_with { |panel_page| panel_page.to_s.underscore.dasherize }
+  end
+
+  def self.panel_notifications
+    {
+      self.panel_pages[:approveAvatars] => lambda { User.where.not(pending_avatar: nil).count },
+    }
   end
 
   def self.panel_list
     panel_pages = User.panel_pages
     {
       admin: {
-        name: 'New Admin panel',
+        name: 'Admin panel',
         pages: panel_pages.values,
       },
       staff: {
-        name: 'Staff panel',
+        name: 'Volunteer panel',
         pages: [],
       },
       delegate: {
         name: 'Delegate panel',
         pages: [
           panel_pages[:importantLinks],
-          panel_pages[:delegateHandbook],
+          panel_pages[:bannedCompetitors],
+        ],
+      },
+      wapc: {
+        name: 'WAC panel',
+        pages: [
           panel_pages[:bannedCompetitors],
         ],
       },
       wfc: {
         name: 'WFC panel',
-        pages: [],
+        pages: [
+          panel_pages[:duesExport],
+          panel_pages[:countryBands],
+          panel_pages[:xeroUsers],
+          panel_pages[:duesRedirect],
+          panel_pages[:delegateProbations],
+        ],
       },
       wrt: {
         name: 'WRT panel',
         pages: [
           panel_pages[:postingDashboard],
+          panel_pages[:editPersonRequests],
           panel_pages[:editPerson],
+          panel_pages[:approveAvatars],
+          panel_pages[:anonymizationScript],
+          panel_pages[:runValidators],
+          panel_pages[:createNewComers],
+          panel_pages[:checkRecords],
+          panel_pages[:computeAuxiliaryData],
+          panel_pages[:generateDataExports],
+          panel_pages[:fixResults],
+          panel_pages[:mergeProfiles],
+          panel_pages[:reassignConnectedWcaId],
         ],
       },
       wst: {
         name: 'WST panel',
         pages: [
           panel_pages[:translators],
+          panel_pages[:serverStatus],
         ],
       },
       board: {
@@ -690,6 +746,7 @@ class User < ApplicationRecord
           panel_pages[:officersEditor],
           panel_pages[:regionsAdmin],
           panel_pages[:bannedCompetitors],
+          panel_pages[:downloadVoters],
         ],
       },
       leader: {
@@ -743,6 +800,12 @@ class User < ApplicationRecord
       can_view_delegate_admin_page: {
         scope: can_view_delegate_matters? ? "*" : [],
       },
+      can_view_delegate_report: {
+        scope: can_view_delegate_matters? ? "*" : delegated_competition_ids,
+      },
+      can_edit_delegate_report: {
+        scope: can_admin_results? ? "*" : delegated_competition_ids,
+      },
       can_create_groups: {
         scope: groups_with_create_access,
       },
@@ -755,11 +818,11 @@ class User < ApplicationRecord
       can_edit_groups: {
         scope: groups_with_edit_access,
       },
-      can_access_wfc_senior_matters: {
-        scope: can_access_wfc_senior_matters? ? "*" : [],
-      },
       can_access_panels: {
         scope: panels_with_access,
+      },
+      can_request_to_edit_others_profile: {
+        scope: any_kind_of_delegate? ? "*" : [],
       },
     }
     if banned?
@@ -807,7 +870,7 @@ class User < ApplicationRecord
   end
 
   def can_edit_banned_competitors?
-    can_edit_any_groups? || group_leader?(UserGroup.teams_committees_group_wic)
+    can_edit_any_groups? || group_leader?(UserGroup.teams_committees_group_wic) || group_leader?(UserGroup.teams_committees_group_wapc)
   end
 
   def can_manage_regional_organizations?
@@ -857,14 +920,8 @@ class User < ApplicationRecord
 
   def can_edit_registration?(registration)
     # A registration can be edited by a user if it hasn't been accepted yet, and if edits are allowed.
-    editable_by_user = (!registration.accepted? || registration.competition.registration_edits_allowed?)
+    editable_by_user = (!registration.accepted? || registration.competition.registration_edits_currently_permitted?)
     can_manage_competition?(registration.competition) || (registration.user_id == self.id && editable_by_user)
-  end
-
-  def can_delete_registration?(registration)
-    # A registration can only be deleted by a user after it has been accepted if the organizers allow
-    can_delete_by_user = (!registration.accepted? || registration.competition.registration_delete_after_acceptance_allowed?)
-    can_manage_competition?(registration.competition) || (registration.user_id == self.id && can_delete_by_user)
   end
 
   def can_confirm_competition?(competition)
@@ -1406,6 +1463,8 @@ class User < ApplicationRecord
       active_roles.any? { |role| role.is_lead? && (role.group.teams_committees? || role.group.councils?) }
     when :senior_delegate
       senior_delegate?
+    when :wapc
+      appeals_committee?
     when :wic
       wic_team?
     when :weat
@@ -1413,10 +1472,6 @@ class User < ApplicationRecord
     else
       false
     end
-  end
-
-  def can_access_at_least_one_panel?
-    panels_with_access.any?
   end
 
   def subordinate_delegates
@@ -1444,5 +1499,56 @@ class User < ApplicationRecord
 
   def location
     highest_delegate_role&.metadata&.location
+  end
+
+  def anonymization_checks_with_message_args
+    access_grants = oauth_access_grants
+                    .where.not(revoked_at: nil)
+                    .map do |access_grant|
+                      access_grant.as_json(
+                        include: {
+                          application: {
+                            only: [:name, :redirect_uri],
+                            include: {
+                              owner: {
+                                only: [:name, :email],
+                              },
+                            },
+                          },
+                        },
+                      )
+                    end
+
+    [
+      {
+        user_currently_banned: banned?,
+        user_banned_in_past: banned_in_past?,
+        user_may_have_forum_account: true,
+        user_has_active_oauth_access_grants: access_grants.any?,
+      },
+      {
+        access_grants: access_grants,
+        oauth_applications: oauth_applications,
+      },
+    ]
+  end
+
+  def anonymize
+    skip_reconfirmation!
+    update(
+      email: id.to_s + User::ANONYMOUS_ACCOUNT_EMAIL_ID_SUFFIX,
+      name: User::ANONYMOUS_NAME,
+      unconfirmed_wca_id: nil,
+      delegate_id_to_handle_wca_id_claim: nil,
+      dob: User::ANONYMOUS_DOB,
+      gender: User::ANONYMOUS_GENDER,
+      current_sign_in_ip: nil,
+      last_sign_in_ip: nil,
+      # If the account associated with the WCA ID is a special account (delegate, organizer,
+      # team member) then we want to keep the link between the Person and the account.
+      wca_id: is_special_account? ? new_wca_id : nil,
+      current_avatar_id: is_special_account? ? nil : current_avatar_id,
+      country_iso2: is_special_account? ? country_iso2 : nil,
+    )
   end
 end

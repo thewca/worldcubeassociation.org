@@ -1,26 +1,25 @@
 # frozen_string_literal: true
 
 class Registration < ApplicationRecord
-  scope :pending, -> { where(accepted_at: nil, deleted_at: nil, is_competing: true) }
-  scope :accepted, -> { where.not(accepted_at: nil).where(deleted_at: nil) }
-  scope :deleted, -> { where.not(deleted_at: nil) }
+  scope :pending, -> { where(competing_status: 'pending') }
+  scope :accepted, -> { where(competing_status: 'accepted') }
   scope :cancelled, -> { where(competing_status: 'cancelled') }
   scope :rejected, -> { where(competing_status: 'rejected') }
   scope :waitlisted, -> { where(competing_status: 'waiting_list') }
   scope :non_competing, -> { where(is_competing: false) }
-  scope :not_deleted, -> { where(deleted_at: nil) }
+  scope :competing, -> { where(is_competing: true) }
+  scope :not_cancelled, -> { where.not(competing_status: 'cancelled') }
   scope :with_payments, -> { joins(:registration_payments).distinct }
   scope :wcif_ordered, -> { order(:id) }
 
   belongs_to :competition
   belongs_to :user, optional: true # A user may be deleted later. We only enforce validation directly on creation further down below.
-  belongs_to :accepted_user, foreign_key: "accepted_by", class_name: "User", optional: true
-  belongs_to :deleted_user, foreign_key: "deleted_by", class_name: "User", optional: true
-  has_many :registration_history_entries, dependent: :destroy
+  has_many :registration_history_entries, -> { order(:created_at) }, dependent: :destroy
   has_many :registration_competition_events
   has_many :registration_payments
   has_many :competition_events, through: :registration_competition_events
   has_many :events, through: :competition_events
+  has_many :live_results
   has_many :assignments, as: :registration, dependent: :delete_all
   has_many :wcif_extensions, as: :extendable, dependent: :delete_all
   has_many :payment_intents, as: :holder, dependent: :delete_all
@@ -39,36 +38,18 @@ class Registration < ApplicationRecord
 
   validates :user, presence: true, on: [:create]
 
+  validates :registered_at, presence: true
+  # Set a `registered_at` timestamp for newly created records,
+  #   but only if there is no value already specified from the outside
+  after_initialize :mark_registered_at, if: :new_record?, unless: :registered_at?
+
+  private def mark_registered_at
+    self.registered_at = current_time_from_proper_timezone
+  end
+
   validates_numericality_of :guests, greater_than_or_equal_to: 0
 
   validates_numericality_of :guests, less_than_or_equal_to: :guest_limit, if: :check_guest_limit?
-
-  validate :registration_cannot_be_deleted_and_accepted_simultaneously
-  private def registration_cannot_be_deleted_and_accepted_simultaneously
-    if deleted? && accepted?
-      errors.add(:registration_competition_events, I18n.t('registrations.errors.cannot_be_deleted_and_accepted'))
-    end
-  end
-
-  # Automatically compute the V1 timestamps, for competitions that just changed their competing_status.
-  #   This is a poor-man's backwards compatibility so that V3 registrations can be used by the V1 scopes
-  #   for `accepted` and `pending`, which rely on these timestamps having some non-nil value.
-  # TODO V3: Remove this hook once V1 is completely gone.
-  before_save :recompute_timestamps, if: :competing_status_changed?
-
-  def recompute_timestamps
-    case self.competing_status
-    when Registrations::Helper::STATUS_PENDING
-    when Registrations::Helper::STATUS_WAITING_LIST
-      self.accepted_at = nil
-      self.deleted_at = nil
-    when Registrations::Helper::STATUS_ACCEPTED
-      self.accepted_at = DateTime.now
-    when Registrations::Helper::STATUS_CANCELLED
-    when Registrations::Helper::STATUS_REJECTED
-      self.deleted_at = DateTime.now
-    end
-  end
 
   after_save :mark_registration_processing_as_done
 
@@ -88,10 +69,6 @@ class Registration < ApplicationRecord
     competition.present? && competition.guests_per_registration_limit_enabled?
   end
 
-  def deleted?
-    !deleted_at.nil?
-  end
-
   def rejected?
     competing_status_rejected?
   end
@@ -105,33 +82,19 @@ class Registration < ApplicationRecord
   end
 
   def accepted?
-    !accepted_at.nil? && !deleted?
+    competing_status_accepted?
   end
 
   def pending?
-    !accepted? && !deleted? && !waitlisted? && !rejected? && is_competing?
+    competing_status_pending?
   end
 
   def might_attend?
-    waitlisted? || pending? || accepted?
-  end
-
-  def self.status_from_timestamp(accepted_at, deleted_at)
-    if !accepted_at.nil? && deleted_at.nil?
-      :accepted
-    elsif accepted_at.nil? && deleted_at.nil?
-      :pending
-    else
-      :deleted
-    end
-  end
-
-  def checked_status
-    Registration.status_from_timestamp(accepted_at, deleted_at)
+    accepted? || waitlisted?
   end
 
   def new_or_deleted?
-    new_record? || deleted? || !is_competing?
+    new_record? || cancelled? || !is_competing?
   end
 
   def name
@@ -173,10 +136,12 @@ class Registration < ApplicationRecord
   end
 
   def entry_fee
-    # DEPRECATION WARNING: Rails 7.0 has deprecated Enumerable.sum in favor of Ruby's native implementation
-    # available since 2.4. Sum of non-numeric elements requires an initial argument.
-    zero_money = Money.new 0, competition.currency_code
-    competition.base_entry_fee + competition_events.map(&:fee).sum(zero_money)
+    sum_lowest_denomination = competition.base_entry_fee + competition_events.map(&:fee_lowest_denomination).sum
+
+    Money.new(
+      sum_lowest_denomination,
+      competition.currency_code,
+    )
   end
 
   def paid_entry_fees
@@ -200,14 +165,6 @@ class Registration < ApplicationRecord
 
   def to_be_paid_through_wca?
     !new_record? && (pending? || accepted?) && competition.using_payment_integrations? && outstanding_entry_fees > 0
-  end
-
-  def show_payment_form?
-    competition.registration_currently_open? && to_be_paid_through_wca?
-  end
-
-  def show_details?(user)
-    (competition.registration_currently_open? || !(new_or_deleted?)) || (competition.user_can_pre_register?(user))
   end
 
   def record_payment(
@@ -253,49 +210,29 @@ class Registration < ApplicationRecord
   def add_history_entry(changes, actor_type, actor_id, action, timestamp = Time.now.utc)
     new_entry = registration_history_entries.create(actor_type: actor_type, actor_id: actor_id, action: action, created_at: timestamp)
     changes.each_key do |key|
-      new_entry.registration_history_change.create(value: changes[key], key: key)
+      new_entry.registration_history_changes.create(value: changes[key], key: key)
     end
   end
 
-  def waiting_list_info
-    pending_registrations = competition.registrations.pending.order(:created_at)
-    index = pending_registrations.index(self)
-    Hash.new(index: index, length: pending_registrations.length)
-  end
-
   def waiting_list_position
-    competition.waiting_list.position(id)
+    competition.waiting_list.position(self)
   end
 
   def wcif_status
     # Non-competing staff are treated as accepted.
     # TODO: WCIF spec needs to be updated - and possibly versioned - to include new statuses
-    if accepted? || competing_status_accepted? || !is_competing?
+    if accepted? || !is_competing?
       'accepted'
-    elsif deleted? || rejected? || cancelled?
+    elsif cancelled? || rejected?
       'deleted'
     elsif pending? || waitlisted?
       'pending'
     end
   end
 
-  def compute_competing_status
-    if accepted? || !is_competing?
-      Registrations::Helper::STATUS_ACCEPTED
-    elsif deleted?
-      Registrations::Helper::STATUS_CANCELLED
-    elsif rejected?
-      Registrations::Helper::STATUS_REJECTED
-    elsif pending?
-      Registrations::Helper::STATUS_PENDING
-    elsif waitlisted?
-      Registrations::Helper::STATUS_WAITING_LIST
-    end
-  end
-
   def registration_history
-    registration_history_entries.includes([:registration_history_change]).map do |r|
-      changed_attributes = r.registration_history_change.each_with_object({}) do |change, attrs|
+    registration_history_entries.map do |r|
+      changed_attributes = r.registration_history_changes.each_with_object({}) do |change, attrs|
         attrs[change.key] = if change.key == 'event_ids'
                               JSON.parse(change.value) # Assuming 'event_ids' is stored as JSON array in `to`
                             else
@@ -313,8 +250,10 @@ class Registration < ApplicationRecord
   end
 
   def to_v2_json(admin: false, history: false, pii: false)
+    private_attributes = pii ? %w[dob email] : nil
+
     base_json = {
-      user: user.as_json(only: %w[id wca_id name gender country_iso2], methods: %w[country]),
+      user: user.as_json(only: %w[id wca_id name gender country_iso2], methods: %w[country], include: [], private_attributes: private_attributes),
       user_id: user_id,
       competing: {
         event_ids: event_ids,
@@ -322,40 +261,33 @@ class Registration < ApplicationRecord
     }
     if admin
       if competition.using_payment_integrations?
-        base_json.merge!({
-                           payment: {
-                             has_paid: outstanding_entry_fees <= 0,
-                             payment_statuses: registration_payments.sort_by(&:created_at).reverse!.map { |p| p.payment_status },
-                             payment_amount_iso: paid_entry_fees.cents,
-                             payment_amount_human_readable: "#{paid_entry_fees.format} (#{paid_entry_fees.currency.name})",
-                             updated_at: last_payment_date,
-                           },
-                         })
+        base_json.deep_merge!({
+                                payment: {
+                                  has_paid: outstanding_entry_fees <= 0,
+                                  payment_statuses: registration_payments.sort_by(&:created_at).reverse.map(&:payment_status),
+                                  payment_amount_iso: paid_entry_fees.cents,
+                                  payment_amount_human_readable: "#{paid_entry_fees.format} (#{paid_entry_fees.currency.name})",
+                                  updated_at: last_payment_date,
+                                },
+                              })
       end
-      base_json.merge!({
-                         guests: guests,
-                         competing: {
-                           event_ids: event_ids,
-                           registration_status: competing_status,
-                           registered_on: created_at,
-                           comment: comments,
-                           admin_comment: administrative_notes,
-                         },
-                       })
+      base_json.deep_merge!({
+                              guests: guests,
+                              competing: {
+                                registration_status: competing_status,
+                                registered_on: registered_at,
+                                comment: comments,
+                                admin_comment: administrative_notes,
+                              },
+                            })
       if competing_status == "waiting_list"
         base_json[:competing][:waiting_list_position] = waiting_list_position
       end
     end
     if history
-      base_json.merge!({
-                         history: registration_history || [],
-                       })
-    end
-    if pii
-      base_json.merge!({
-                         email: user.email,
-                         dob: user.dob,
-                       })
+      base_json.deep_merge!({
+                              history: registration_history,
+                            })
     end
     base_json
   end
@@ -389,8 +321,16 @@ class Registration < ApplicationRecord
     }
   end
 
+  def self.accepted_count
+    accepted.count
+  end
+
   def self.accepted_and_paid_pending_count
-    accepted.count + pending.with_payments.count
+    accepted_count + pending.with_payments.count
+  end
+
+  def self.newcomer_month_eligible_competitors_count
+    joins(:user).merge(User.newcomer_month_eligible).accepted_count
   end
 
   # Only run the validations when creating the registration as we don't want user changes
@@ -405,9 +345,10 @@ class Registration < ApplicationRecord
     end
   end
 
-  validate :cannot_be_undeleted_when_banned, if: :deleted_at_changed?
+  # TODO: V3-REG cleanup. All these Validations can be used instead of the registration_checker checks
+  validate :cannot_be_undeleted_when_banned, if: :competing_status_changed?
   private def cannot_be_undeleted_when_banned
-    if user.banned? && deleted_at.nil?
+    if user.banned_at_date?(competition.start_date) && might_attend?
       errors.add(:user_id, I18n.t('registrations.errors.undelete_banned'))
     end
   end
@@ -454,9 +395,24 @@ class Registration < ApplicationRecord
     end
   end
 
+  def permit_user_cancellation?
+    case competition.competitor_can_cancel.to_sym
+    when :always
+      true
+    when :not_accepted
+      !accepted?
+    when :unpaid
+      paid_entry_fees == 0
+    end
+  end
+
+  def consider_auto_close
+    outstanding_entry_fees.zero? && competition.attempt_auto_close!
+  end
+
   validate :only_one_accepted_per_series
   private def only_one_accepted_per_series
-    if competition&.part_of_competition_series? && checked_status == :accepted
+    if competition&.part_of_competition_series? && competing_status_accepted?
       unless series_sibling_registrations(:accepted).empty?
         errors.add(:competition_id, I18n.t('registrations.errors.series_more_than_one_accepted'))
       end
@@ -487,6 +443,11 @@ class Registration < ApplicationRecord
     SERIES_SIBLING_DISPLAY_STATUSES.map { |st| series_sibling_registrations(st) }
                                    .map(&:count)
                                    .join(" + ")
+  end
+
+  def ensure_waitlist_eligibility!
+    raise ArgumentError.new("Registration must have a competing_status of 'waiting_list' to be added to the waiting list") unless
+      competing_status == Registrations::Helper::STATUS_WAITING_LIST
   end
 
   DEFAULT_SERIALIZE_OPTIONS = {

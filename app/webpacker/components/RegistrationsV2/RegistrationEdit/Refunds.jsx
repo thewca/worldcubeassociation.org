@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import {
   Button, Header, Message, Table,
 } from 'semantic-ui-react';
@@ -8,6 +8,8 @@ import refundPayment from '../api/payment/get/refundPayment';
 import Loading from '../../Requests/Loading';
 import AutonumericField from '../../wca/FormBuilder/input/AutonumericField';
 import useInputState from '../../../lib/hooks/useInputState';
+import { useConfirm } from '../../../lib/providers/ConfirmProvider';
+import I18n from '../../../lib/i18n';
 
 export default function Refunds({
   onSuccess, userId, competitionId,
@@ -49,8 +51,8 @@ export default function Refunds({
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell>Original Payment</Table.HeaderCell>
-            <Table.HeaderCell>Available to Refund</Table.HeaderCell>
-            <Table.HeaderCell>Refund Amount </Table.HeaderCell>
+            <Table.HeaderCell>{I18n.t('registrations.refund_form.hints.refund_amount')}</Table.HeaderCell>
+            <Table.HeaderCell>{I18n.t('registrations.refund_form.labels.refund_amount')}</Table.HeaderCell>
             <Table.HeaderCell />
           </Table.Row>
         </Table.Header>
@@ -76,6 +78,27 @@ function RefundRow({
 }) {
   const [amountToRefund, setAmountToRefund] = useInputState(refund.ruby_amount_refundable);
 
+  // React state persists across rerenders, so `amountToRefund` would keep old values
+  // which is problematic when refunding more than 50% of the original
+  // (because then the input exceeds the new max, leading to a whole new tragedy with AN)
+  useEffect(() => {
+    setAmountToRefund((prevAmount) => Math.min(prevAmount, refund.ruby_amount_refundable));
+  }, [refund.ruby_amount_refundable, setAmountToRefund]);
+
+  const confirm = useConfirm();
+
+  const attemptRefund = () => confirm({
+    content: I18n.t('registrations.refund_confirmation'),
+  }).then(() => {
+    refundMutation({
+      competitionId,
+      userId,
+      paymentId: refund.payment_id,
+      paymentProvider: refund.payment_provider,
+      amount: amountToRefund,
+    });
+  });
+
   return (
     <Table.Row>
       <Table.Cell>
@@ -94,16 +117,10 @@ function RefundRow({
       </Table.Cell>
       <Table.Cell>
         <Button
-          onClick={() => refundMutation({
-            competitionId,
-            userId,
-            paymentId: refund.payment_id,
-            paymentProvider: refund.payment_provider,
-            amount: amountToRefund,
-          })}
+          onClick={attemptRefund}
           disabled={isMutating}
         >
-          Refund Amount
+          {I18n.t('registrations.refund')}
         </Button>
       </Table.Cell>
     </Table.Row>

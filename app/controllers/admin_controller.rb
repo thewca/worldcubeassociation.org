@@ -7,12 +7,6 @@ class AdminController < ApplicationController
   before_action -> { redirect_to_root_unless_user(:can_admin_results?) }, except: [:all_voters, :leader_senior_voters]
   before_action -> { redirect_to_root_unless_user(:can_see_eligible_voters?) }, only: [:all_voters, :leader_senior_voters]
 
-  before_action :compute_navbar_data
-
-  def compute_navbar_data
-    @pending_avatars_count = User.where.not(pending_avatar: nil).count
-  end
-
   def index
   end
 
@@ -39,72 +33,16 @@ class AdminController < ApplicationController
     @results_validator.validate(@competition.id)
   end
 
-  def check_results
-    with_results_validator
-  end
-
   def check_competition_results
     with_results_validator do
       @competition = competition_from_params
-      @result_validation.competition_ids = @competition.id
     end
-  end
-
-  def compute_validation_competitions
-    validation_form = ResultValidationForm.new(
-      competition_start_date: params[:start_date],
-      competition_end_date: params[:end_date],
-      competition_selection: ResultValidationForm::COMP_VALIDATION_ALL,
-    )
-
-    render json: {
-      competitions: validation_form.competitions,
-    }
   end
 
   def with_results_validator
-    @result_validation = ResultValidationForm.new(
-      competition_ids: params[:competition_ids] || "",
-      competition_start_date: params[:competition_start_date] || "",
-      competition_end_date: params[:competition_end_date] || "",
-      validator_classes: params[:validator_classes] || ResultValidationForm::ALL_VALIDATOR_NAMES.join(","),
-      competition_selection: params[:competition_selection] || ResultValidationForm::COMP_VALIDATION_MANUAL,
-      apply_fixes: params[:apply_fixes] || false,
-    )
-
     # For this view, we just build an empty validator: the WRT will decide what
     # to actually run (by default all validators will be selected).
     @results_validator = ResultsValidators::CompetitionsResultsValidator.new(check_real_results: true)
-    yield if block_given?
-  end
-
-  def do_check_results
-    running_validators do
-      render :check_results
-    end
-  end
-
-  def do_check_competition_results
-    running_validators do
-      uniq_id = @result_validation.competitions.first
-      @competition = Competition.find(uniq_id)
-
-      render :check_competition_results
-    end
-  end
-
-  def running_validators
-    action_params = params.require(:result_validation_form)
-                          .permit(:competition_ids, :validator_classes, :apply_fixes, :competition_selection, :competition_start_date, :competition_end_date)
-
-    @result_validation = ResultValidationForm.new(action_params)
-
-    if @result_validation.valid?
-      @results_validator = @result_validation.build_and_run
-    else
-      @results_validator = ResultsValidators::CompetitionsResultsValidator.new(check_real_results: true)
-    end
-
     yield if block_given?
   end
 
@@ -309,6 +247,11 @@ class AdminController < ApplicationController
     redirect_to admin_compute_auxiliary_data_path
   end
 
+  def reset_compute_auxiliary_data
+    ComputeAuxiliaryData.reset_error_state!
+    redirect_to admin_compute_auxiliary_data_path
+  end
+
   def generate_exports
   end
 
@@ -383,58 +326,18 @@ class AdminController < ApplicationController
     Competition.includes(associations).find_by_id!(params[:competition_id])
   end
 
-  def anonymize_person
-    session[:anonymize_params] = {}
-    session[:anonymize_step] = nil
-    @anonymize_person = AnonymizePerson.new(session[:anonymize_params])
-    @anonymize_person.current_step = session[:anonymize_step]
-  end
-
-  def do_anonymize_person
-    session[:anonymize_params].deep_merge!((params[:anonymize_person]).permit(:person_wca_id)) if params[:anonymize_person]
-    @anonymize_person = AnonymizePerson.new(session[:anonymize_params])
-    @anonymize_person.current_step = session[:anonymize_step]
-
-    if @anonymize_person.valid?
-
-      if params[:back_button]
-        @anonymize_person.previous_step!
-      elsif @anonymize_person.last_step?
-        do_anonymize_person_response = @anonymize_person.do_anonymize_person
-
-        if do_anonymize_person_response && !do_anonymize_person_response[:error] && do_anonymize_person_response[:new_wca_id]
-          flash.now[:success] = "Successfully anonymized #{@anonymize_person.person_wca_id} to #{do_anonymize_person_response[:new_wca_id]}! Don't forget to run Compute Auxiliary Data and Export Public."
-          @anonymize_person = AnonymizePerson.new
-        else
-          flash.now[:danger] = do_anonymize_person_response[:error] || "Error anonymizing"
-        end
-
-      else
-        @anonymize_person.next_step!
-      end
-
-      session[:anonymize_step] = @anonymize_person.current_step
-    end
-
-    render 'anonymize_person'
-  end
-
-  def finish_unfinished_persons
-    @finish_persons = FinishPersonsForm.new(
-      competition_ids: params[:competition_ids] || nil,
-    )
+  private def competition_list_from_string(competition_ids_string)
+    competition_ids_string.split(',').uniq.compact
   end
 
   def complete_persons
-    action_params = params.require(:finish_persons_form)
-                          .permit(:competition_ids)
-
-    @finish_persons = FinishPersonsForm.new(action_params)
-    @persons_to_finish = @finish_persons.search_persons
+    @competition_ids_string = params.fetch(:competition_ids, "")
+    @competition_ids = competition_list_from_string(@competition_ids_string)
+    @persons_to_finish = FinishUnfinishedPersons.search_persons(@competition_ids)
 
     if @persons_to_finish.empty?
       flash[:warning] = "There are no persons to complete for the selected competition"
-      redirect_to action: :finish_unfinished_persons
+      redirect_to panel_page_path(id: User.panel_pages[:createNewComers], competition_ids: @competition_ids)
     end
   end
 
@@ -489,15 +392,14 @@ class AdminController < ApplicationController
     competition_ids = params.dig(:person_completions, :competition_ids)
 
     if continue_batch
-      finish_persons = FinishPersonsForm.new(competition_ids: competition_ids)
-      can_continue = FinishUnfinishedPersons.unfinished_results_scope(finish_persons.competitions).any?
+      can_continue = FinishUnfinishedPersons.unfinished_results_scope(competition_list_from_string(competition_ids)).any?
 
       if can_continue
-        return redirect_to action: :complete_persons, finish_persons_form: { competition_ids: competition_ids }
+        return redirect_to action: :complete_persons, competition_ids: competition_ids
       end
     end
 
-    redirect_to action: :finish_unfinished_persons, competition_ids: competition_ids
+    redirect_to panel_page_path(id: User.panel_pages[:createNewComers], competition_ids: competition_ids)
   end
 
   def peek_unfinished_results

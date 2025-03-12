@@ -419,7 +419,8 @@ RSpec.describe Competition do
 
     it "does not warn for posted reports" do
       competition = FactoryBot.create :competition, :visible, :with_delegate, starts: 2.days.ago
-      competition.delegate_report.update!(schedule_url: "http://example.com", posted: true)
+      posted_dummy_dr = FactoryBot.create :delegate_report, :posted, competition: competition
+      competition.delegate_report.update!(schedule_url: "http://example.com", posted: true, setup_images: posted_dummy_dr.setup_images_blobs)
       delegate = competition.delegates.first
       expect(competition.user_should_post_delegate_report?(delegate)).to eq false
     end
@@ -561,7 +562,7 @@ RSpec.describe Competition do
       expect(competition).to be_valid
       expect(competition.is_probably_over?).to be true
       expect(competition.results_posted?).to be false
-      expect(competition.info_for(nil)[:upload_results]).to eq "This competition is over, we are working to upload the results as soon as possible!"
+      expect(competition.info_for(nil)[:upload_results]).to eq "This competition is over. We are working to upload the results as soon as possible!"
     end
 
     it "displays info if competition is in progress" do
@@ -1581,6 +1582,203 @@ RSpec.describe Competition do
     it "external website is too long" do
       new_competition.external_website = "201 character external website reeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
       expect(new_competition).not_to be_valid
+    end
+  end
+
+  describe "validate auto accept fields" do
+    let(:auto_accept_comp) { FactoryBot.build(:competition, :auto_accept) }
+    let(:competition) { FactoryBot.create(:competition, use_wca_registration: true) }
+
+    context 'cant enable auto-accept when' do
+      it 'not using WCA registration' do
+        auto_accept_comp.use_wca_registration = false
+        expect(auto_accept_comp).not_to be_valid
+        expect(auto_accept_comp.errors[:auto_accept_registrations]).to include("Auto-accept can only be used if you are using the WCA website for registrations")
+      end
+
+      it 'any paid-pending registrations exist' do
+        FactoryBot.create(:registration, :paid, :pending, competition: competition)
+        competition.auto_accept_registrations = true
+
+        expect(competition).not_to be_valid
+        expect(competition.errors[:auto_accept_registrations]).to include("Can't enable auto-accept if there are paid-pending registrations - either accept them or move them to the waiting list")
+      end
+
+      it 'waitlisted registrations exist and accepted competitors < competition limit' do
+        FactoryBot.create(:registration, :waiting_list, competition: competition)
+        competition.auto_accept_registrations = true
+
+        expect(competition).not_to be_valid
+        expect(competition.errors[:auto_accept_registrations]).to include("Can't enable auto-accept - please accept as many users from the Waiting List as possible.")
+      end
+    end
+
+    it 'disable threshold cant exceed competitor limit' do
+      auto_accept_comp.competitor_limit = 100
+      auto_accept_comp.auto_accept_disable_threshold = 101
+      expect(auto_accept_comp).not_to be_valid
+      expect(auto_accept_comp.errors[:auto_accept_registrations]).to include("Limit for auto-accepted registrations must be less than the competitor limit")
+    end
+
+    it 'disable threshld must be less than competitor limit' do
+      auto_accept_comp.competitor_limit = 100
+      auto_accept_comp.auto_accept_disable_threshold = 100
+      expect(auto_accept_comp).not_to be_valid
+      expect(auto_accept_comp.errors[:auto_accept_registrations]).to include("Limit for auto-accepted registrations must be less than the competitor limit")
+    end
+
+    it 'disable threshold may be 0' do
+      auto_accept_comp.auto_accept_disable_threshold = 0
+      expect(auto_accept_comp).to be_valid
+    end
+
+    it 'disable threshold may not be be less than 0' do
+      auto_accept_comp.auto_accept_disable_threshold = -1
+      expect(auto_accept_comp).not_to be_valid
+      expect(auto_accept_comp.errors[:auto_accept_registrations]).to include("Limit for auto-accepted registrations cannot be less than 0.")
+    end
+  end
+
+  context 'auto-close registrations' do
+    let!(:auto_close_comp) { FactoryBot.create(:competition, :registration_open, auto_close_threshold: 5) }
+    let(:comp) { FactoryBot.create(:competition, :registration_open, :with_competitor_limit, competitor_limit: 3) }
+
+    it 'attempt auto close returns false when it fails' do
+      expect(auto_close_comp.attempt_auto_close!).to eq(false)
+    end
+
+    it 'attempt auto close returns true when it succeeds' do
+      FactoryBot.create_list(:registration, 4, :paid_no_hooks, competition: auto_close_comp)
+      FactoryBot.create(:registration, :paid_no_hooks, competition: auto_close_comp)
+
+      expect(auto_close_comp.attempt_auto_close!).to eq(true)
+    end
+
+    it 'wont auto-close if threshold not reached' do
+      FactoryBot.create(:registration, :paid_no_hooks, competition: auto_close_comp)
+      expect(auto_close_comp.attempt_auto_close!).to eq(false)
+    end
+
+    it 'doesnt auto-close if threshold is null' do
+      FactoryBot.create(:registration, :paid_no_hooks, competition: comp)
+      expect(comp.attempt_auto_close!).to eq(false)
+    end
+
+    it 'closes registrations when the close threshold is reached' do
+      FactoryBot.create_list(:registration, 5, :paid_no_hooks, competition: auto_close_comp)
+      expect(auto_close_comp.attempt_auto_close!).to eq(true)
+    end
+
+    it 'closes registrations when the close threshold is exceeded' do
+      FactoryBot.create_list(:registration, 5, :paid_no_hooks, competition: comp)
+
+      comp.update_column(:auto_close_threshold, 5)
+      FactoryBot.create(:registration, :paid_no_hooks, competition: comp)
+
+      expect(comp.attempt_auto_close!).to eq(true)
+    end
+
+    it 'only auto-closes if the registrations are fully registrations' do
+      FactoryBot.create_list(:registration, 5, :partially_paid, competition: auto_close_comp)
+      expect(auto_close_comp.attempt_auto_close!).to eq(false)
+    end
+
+    context 'validations' do
+      it 'auto-close threshold must be positive' do
+        comp.auto_close_threshold = -1
+        expect(comp).not_to be_valid
+        expect(comp.errors[:auto_close_threshold]).to include("Auto-close threshold must be greater than 0")
+      end
+
+      it 'must be greater than competitor limit' do
+        comp.auto_close_threshold = comp.competitor_limit
+        expect(comp).not_to be_valid
+        expect(comp.errors[:auto_close_threshold]).to include("Auto-close threshold must be greater than the competitor limit")
+
+        comp.auto_close_threshold = comp.competitor_limit - 1
+        expect(comp).not_to be_valid
+        expect(comp.errors[:auto_close_threshold]).to include("Auto-close threshold must be greater than the competitor limit")
+      end
+
+      it 'comp must use wca registration' do
+        comp.use_wca_registration = false
+        comp.auto_close_threshold = 1
+        expect(comp).not_to be_valid
+        expect(comp.errors[:auto_close_threshold]).to include("Competition must use WCA registration")
+      end
+
+      it 'cant set auto_close_threshold == number of paid registrations' do
+        FactoryBot.create_list(:registration, 3, :paid_no_hooks, competition: auto_close_comp)
+        auto_close_comp.auto_close_threshold = 3
+        expect(auto_close_comp).not_to be_valid
+        expect(auto_close_comp.errors[:auto_close_threshold]).to include("Auto close threshold must be greater than the number of currently paid registrations")
+      end
+
+      it 'cant set auto_close_threshold < number of paid registrations' do
+        FactoryBot.create_list(:registration, 3, :paid_no_hooks, competition: auto_close_comp)
+        auto_close_comp.auto_close_threshold = 2
+        expect(auto_close_comp).not_to be_valid
+        expect(auto_close_comp.errors[:auto_close_threshold]).to include("Auto close threshold must be greater than the number of currently paid registrations")
+      end
+
+      it 'auto-close must be greater than 0' do
+        auto_close_comp.auto_close_threshold = 0
+        expect(auto_close_comp).not_to be_valid
+        expect(auto_close_comp.errors[:auto_close_threshold]).to include("Auto-close threshold must be greater than 0")
+      end
+    end
+  end
+
+  describe 'newcomer month reserved spots' do
+    it 'newcomer reserved spots can be nil' do
+      expect(FactoryBot.build(:competition, newcomer_month_reserved_spots: nil, competitor_limit: 100)).to be_valid
+    end
+
+    it 'can reserve newcomer spots up to 50% of registrations' do
+      expect(FactoryBot.build(:competition, newcomer_month_reserved_spots: 50, competitor_limit: 100)).to be_valid
+    end
+
+    it 'reserved newcomers spots cant exceed 50% of registrations' do
+      expect(FactoryBot.build(:competition, newcomer_month_reserved_spots: 51, competitor_limit: 100)).to be_invalid_with_errors(
+        newcomer_month_reserved_spots: ['cant reserve more than 50% of spots for newcomers'],
+      )
+
+      expect(FactoryBot.build(:competition, newcomer_month_reserved_spots: 50, competitor_limit: 99)).to be_invalid_with_errors(
+        newcomer_month_reserved_spots: ['cant reserve more than 50% of spots for newcomers'],
+      )
+    end
+
+    it 'newcomer_month_reserved_spots cant exceed (competitor limit - non_newcomers)' do
+      comp = FactoryBot.create(:competition, competitor_limit: 10)
+      FactoryBot.create_list(:registration, 6, :accepted, competition: comp)
+      comp.newcomer_month_reserved_spots = 5
+      expect(comp).to be_invalid
+      expect(comp.errors.messages[:newcomer_month_reserved_spots]).to include('Desired newcomer month reserved spots exceeds number of spots reservable')
+    end
+  end
+
+  describe '#fully_paid_registrations_count' do
+    let(:comp) { FactoryBot.create(:competition) }
+
+    it 'doesnt count unpaid registrations' do
+      FactoryBot.create_list(:registration, 5, competition: comp)
+      expect(comp.fully_paid_registrations_count).to eq(0)
+    end
+
+    it 'counts registrations == competition fee' do
+      FactoryBot.create_list(:registration, 5, :paid, competition: comp)
+      expect(comp.fully_paid_registrations_count).to eq(5)
+    end
+
+    it 'includes registrations > competition fee' do
+      FactoryBot.create_list(:registration, 5, :overpaid, competition: comp)
+      expect(comp.fully_paid_registrations_count).to eq(5)
+    end
+
+    it 'considers refunds when determining total paid' do
+      FactoryBot.create_list(:registration, 5, :paid, competition: comp)
+      FactoryBot.create_list(:registration, 3, :refunded, competition: comp)
+      expect(comp.fully_paid_registrations_count).to eq(5)
     end
   end
 end

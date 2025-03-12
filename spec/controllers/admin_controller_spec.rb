@@ -3,33 +3,6 @@
 require 'rails_helper'
 
 RSpec.describe AdminController, type: :controller do
-  describe 'GET #index' do
-    context 'when not signed in' do
-      it 'redirects to the sign in page' do
-        get :index
-        expect(response).to redirect_to new_user_session_path
-      end
-    end
-
-    context 'when signed in as a delegate' do
-      sign_in { FactoryBot.create :delegate }
-
-      it 'redirects to the root page' do
-        get :index
-        expect(response).to redirect_to root_path
-      end
-    end
-
-    context 'when signed in as an admin' do
-      sign_in { FactoryBot.create :admin }
-
-      it 'shows the index page' do
-        get :index
-        expect(response).to render_template :index
-      end
-    end
-  end
-
   describe 'merge_people' do
     sign_in { FactoryBot.create :admin }
 
@@ -41,24 +14,6 @@ RSpec.describe AdminController, type: :controller do
       expect(response.status).to eq 200
       expect(response).to render_template :merge_people
       expect(flash.now[:success]).to eq "Successfully merged #{person2.wca_id} into #{person1.wca_id}!"
-    end
-  end
-
-  describe 'anonymize_person' do
-    sign_in { FactoryBot.create :admin }
-
-    let(:person) { FactoryBot.create(:person_who_has_competed_once) }
-
-    it 'can anonymize person' do
-      get :anonymize_person
-      post :do_anonymize_person, params: { anonymize_person: { person_wca_id: person.wca_id } }
-      expect(response.status).to eq 200
-      expect(response).to render_template :anonymize_person
-
-      post :do_anonymize_person, params: { anonymize_person: { person_wca_id: person.wca_id } }
-      expect(response.status).to eq 200
-      expect(response).to render_template :anonymize_person
-      expect(flash.now[:success]).to eq "Successfully anonymized #{person.wca_id} to #{person.wca_id[0..3]}ANON01! Don't forget to run Compute Auxiliary Data and Export Public."
     end
   end
 
