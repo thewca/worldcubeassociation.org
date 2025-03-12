@@ -71,10 +71,9 @@ export default function StepPanel({
   stripePublishableKey,
   connectedAccountId,
   qualifications,
-  isProcessing,
 }) {
   const {
-    isRegistered, isAccepted, isRejected, hasPaid,
+    isRegistered, isAccepted, isRejected, hasPaid, isPolling,
   } = useRegistration();
 
   const registrationFinished = (isRegistered && hasPaid) || (isRegistered && !competitionInfo['using_payment_integrations?']);
@@ -93,7 +92,7 @@ export default function StepPanel({
 
   const [activeIndex, setActiveIndex] = useState(() => {
     // skip ahead to competingStep if we are processing
-    if (isProcessing) {
+    if (isPolling) {
       return steps.findIndex(
         (step) => step === competingStepConfig,
       );
@@ -149,7 +148,6 @@ export default function StepPanel({
         stripePublishableKey={stripePublishableKey}
         connectedAccountId={connectedAccountId}
         qualifications={qualifications}
-        isProcessing={isProcessing}
         nextStep={
           (overwrites = {}) => setActiveIndex((oldActiveIndex) => {
             if (overwrites?.refresh) {
