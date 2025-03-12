@@ -88,8 +88,12 @@ export default function RegistrationAdministrationSearch({
     <Search
       fluid
       category
-      noResultsMessage={debouncedSearchText.length >= MIN_SEARCH_TEXT_LEN ? 'No results' : 'Too few characters'}
-      placeholder="Search..."
+      noResultsMessage={
+        debouncedSearchText.length >= MIN_SEARCH_TEXT_LEN
+          ? I18n.t('activerecord.attributes.registration.no_results')
+          : I18n.t('activerecord.attributes.registration.too_few_chars')
+      }
+      placeholder={I18n.t('activerecord.attributes.registration.search')}
       value={searchText}
       onResultSelect={(e, { result }) => navigateToRegistrationEdit(result)}
       onSearchChange={setSearchText}
