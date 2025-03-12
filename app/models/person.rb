@@ -367,10 +367,8 @@ class Person < ApplicationRecord
 
   def serializable_hash(options = nil)
     json = super(DEFAULT_SERIALIZE_OPTIONS.merge(options || {}))
-    json.merge!(
-      class: self.class.to_s.downcase,
-      id: self.wca_id,
-    )
+    json[:class] = self.class.to_s.downcase
+    json[:id] = self.wca_id
 
     private_attributes = options&.fetch(:private_attributes, []) || []
     if private_attributes.include?("dob")

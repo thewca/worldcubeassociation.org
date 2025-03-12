@@ -296,9 +296,6 @@ Performance/BindCall:
 Performance/InefficientHashSearch:
   Enabled: false
 
-Performance/RedundantMerge:
-  Enabled: false
-
 Performance/Detect:
   Enabled: false
 
