@@ -281,9 +281,6 @@ Performance/RegexpMatch:
 Performance/MapMethodChain:
   Enabled: false
 
-Performance/MapCompact:
-  Enabled: false
-
 Performance/RedundantBlockCall:
   Enabled: false
 

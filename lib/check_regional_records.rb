@@ -166,7 +166,7 @@ module CheckRegionalRecords
       pending_competitions = []
 
       check_results = self.load_ordered_results(event_id, competition_id, value_column, regional_record_symbol)
-                          .map do |r|
+                          .filter_map do |r|
         value_solve = r.send(value_solve_symbol)
 
         # Skip DNF, DNS, invalid Multi attempts
@@ -216,7 +216,7 @@ module CheckRegionalRecords
           competition: r.competition,
           result: r,
         }
-      end.compact
+      end
 
       [value_column, check_results]
     end
