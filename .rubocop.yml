@@ -263,9 +263,6 @@ Performance/CollectionLiteralInLoop:
 Performance/MethodObjectAsBlock:
   Enabled: false
 
-Performance/StringReplacement:
-  Enabled: false
-
 Performance/RedundantMatch:
   Enabled: false
 
