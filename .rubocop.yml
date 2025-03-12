@@ -278,9 +278,6 @@ Performance/RedundantMatch:
 Performance/RegexpMatch:
   Enabled: false
 
-Performance/MapMethodChain:
-  Enabled: false
-
 Performance/SortReverse:
   Enabled: false
 

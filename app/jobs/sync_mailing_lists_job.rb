@@ -38,7 +38,7 @@ class SyncMailingListsJob < WcaCronjob
     GsuiteMailingLists.sync_group("ethics@worldcubeassociation.org", GroupsMetadataTeamsCommittees.wic.user_group.active_users.pluck(:email))
 
     treasurers = UserGroup.officers.flat_map(&:active_roles).filter { |role| role.metadata.status == RolesMetadataOfficers.statuses[:treasurer] }
-    GsuiteMailingLists.sync_group("treasurer@worldcubeassociation.org", treasurers.map(&:user).map(&:email))
+    GsuiteMailingLists.sync_group("treasurer@worldcubeassociation.org", treasurers.map { |x| x.user.email })
 
     delegate_emails = []
     trainee_emails = []
