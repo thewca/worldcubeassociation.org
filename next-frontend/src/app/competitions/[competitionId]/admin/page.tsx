@@ -23,7 +23,7 @@ export default async function CompetitionOverview({ params }: { params: Promise<
   return (
     <Container centerContent>
       <Heading>{competitionInfo.id}</Heading>
-      <PermissionCheck permissionCheck={(permission) => permission.canAdministerCompetition(competitionId)}>
+      <PermissionCheck requiredPermission={"canAdministerCompetition"} item={competitionId}>
         <p>You are administering this competition</p>
         <p>Go back to the public page <Link href={`/competitions/${competitionInfo.id}`}>here</Link></p>
       </PermissionCheck>

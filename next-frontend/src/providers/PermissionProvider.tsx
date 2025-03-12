@@ -6,8 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 import useAPI from "@/lib/wca/useAPI";
 import { useSession } from "next-auth/react";
 
-export interface PermissionContext {
-  permissions?: components["schemas"]["UserPermissions"]
+export interface PermissionFunctions {
   canAccessPanel: (panel: string) => boolean
   canAdministerCompetition: (competition: string) => boolean
   canAttendCompetition: (competition: string) => boolean
@@ -21,6 +20,10 @@ export interface PermissionContext {
   canReadGroupPast: (group: string) => boolean
   canRequestToEditProfile: (profile: string) => boolean
 }
+
+type PermissionContext = {
+  permissions?: components["schemas"]["UserPermissions"]
+} & PermissionFunctions
 
 const PermissionContext = createContext<PermissionContext | null>(null);
 

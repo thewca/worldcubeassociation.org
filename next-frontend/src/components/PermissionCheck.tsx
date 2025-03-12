@@ -1,11 +1,11 @@
 "use client"
 
-import {PermissionContext, usePermissions} from "@/providers/PermissionProvider";
+import { PermissionFunctions, usePermissions} from "@/providers/PermissionProvider";
 
-export default function PermissionCheck({ children, permissionCheck }: { children: React.ReactNode, permissionCheck: (permission: PermissionContext) => boolean }) {
+export default function PermissionCheck({ children, requiredPermission, item }: { children: React.ReactNode, requiredPermission: keyof PermissionFunctions, item: string}) {
   const permissions = usePermissions();
 
-  if(permissionCheck(permissions!)){
+  if(permissions && permissions[requiredPermission](item)){
     return children;
   }
   return <p>
