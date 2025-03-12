@@ -1,4 +1,4 @@
-name: Ruby tests
+name: Javascript tests
 
 on:
   push:
