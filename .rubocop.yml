@@ -299,9 +299,6 @@ Performance/InefficientHashSearch:
 Performance/RedundantMerge:
   Enabled: false
 
-Performance/TimesMap:
-  Enabled: false
-
 Performance/Detect:
   Enabled: false
 
