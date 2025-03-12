@@ -12,7 +12,9 @@ const REFETCH_INTERVAL = 3000;
 const RegistrationContext = createContext();
 
 export default function RegistrationProvider({
-  competitionInfo, userInfo, isProcessing,
+  competitionInfo,
+  userInfo,
+  isProcessing,
   children,
 }) {
   const dispatch = useDispatch();
