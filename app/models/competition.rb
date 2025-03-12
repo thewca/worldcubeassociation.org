@@ -595,7 +595,7 @@ class Competition < ApplicationRecord
         warnings[:name] = I18n.t('competitions.messages.name_too_long')
       end
 
-      unless /^[[:upper:]]|^\d/.match(self.id)
+      unless /^[[:upper:]]|^\d/ =~ self.id
         warnings[:id] = I18n.t('competitions.messages.id_starts_with_lowercase')
       end
 

@@ -7,7 +7,7 @@ class FixColumnsCollation < ActiveRecord::Migration[5.1]
 
   def change
     db.tables.each do |table|
-      next if /archive_phpbb3\w+|schema_migrations|ar_internal_metadata/.match(table)
+      next if /archive_phpbb3\w+|schema_migrations|ar_internal_metadata/ =~ table
       db.columns(table).each do |column|
         case column.sql_type
         when /([a-z]*)text/i
