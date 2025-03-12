@@ -365,6 +365,16 @@ class Person < ApplicationRecord
     new_wca_id
   end
 
+  def private_attributes_for_user(user)
+    if user&.wca_id == wca_id || user&.any_kind_of_delegate?
+      %w[dob]
+    elsif user&.can_admin_results?
+      %w[incorrect_wca_id_claim_count dob]
+    else
+      []
+    end
+  end
+
   def serializable_hash(options = nil)
     json = super(DEFAULT_SERIALIZE_OPTIONS.merge(options || {}))
     json.merge!(
