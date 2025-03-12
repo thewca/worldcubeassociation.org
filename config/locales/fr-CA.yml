@@ -4122,6 +4122,27 @@ fr-CA:
         #original_hash: 092da51
         '-6002': Vous devez terminer votre inscription avant de pouvoir payer
     errors:
+      #original_hash: b14d060
+      must_use_wca_registration: >-
+        L'acceptation automatique ne peut être utilisée que si vous utilisez le
+        site web de la WCA pour les inscriptions.
+      #original_hash: 130c901
+      auto_accept_limit: >-
+        La limite d'inscriptions acceptées automatiquement doit être inférieure
+        à la limite de compétiteurs.
+      #original_hash: 42cd8e6
+      auto_accept_not_negative: >-
+        La limite d'inscriptions acceptées automatiquement ne peut être
+        inférieure à 0.
+      #original_hash: 181d8d9
+      auto_accept_accept_paid_pending: >-
+        Impossible d'activer l'acceptation automatique s'il y a des inscriptions
+        payées en cours - il faut soit les accepter, soit les placer sur la
+        liste d'attente.
+      #original_hash: 96db418
+      auto_accept_accept_waitlisted: >-
+        Impossible d'activer l'acceptation automatique - veuillez accepter
+        autant d'utilisateurs de la liste d'attente que possible.
       #original_hash: 6d11b4e
       auto_close_exceed_paid: >-
         Le seuil de fermeture automatique doit être supérieur au nombre

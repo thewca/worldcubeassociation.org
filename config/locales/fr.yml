@@ -1737,12 +1737,12 @@ fr:
         consulter les résultats ? Direction %{wca_live_link} !
     merchandise:
       #original_hash: 698cfc8
-      title: Merchandising
+      title: Produits Dérivés
       #original_hash: 6403f2b
       ad_new: Nouveau
       #original_hash: 9ad68ce
       text_html: >-
-        Allez jeter un œil à notre nouveau merchandising incluant une sélection
+        Allez jeter un œil à nos nouveaux produits dérivés incluant une sélection
         de vêtements (t-shirts, sweats à capuche...)
       #original_hash: b0fc6c4
       link_title: Lien vers la boutique
@@ -4123,6 +4123,27 @@ fr:
         #original_hash: 092da51
         '-6002': Vous devez terminer votre inscription avant de pouvoir payer
     errors:
+      #original_hash: b14d060
+      must_use_wca_registration: >-
+        L'acceptation automatique ne peut être utilisée que si vous utilisez le
+        site web de la WCA pour les inscriptions.
+      #original_hash: 130c901
+      auto_accept_limit: >-
+        La limite d'inscriptions acceptées automatiquement doit être inférieure
+        à la limite de compétiteurs.
+      #original_hash: 42cd8e6
+      auto_accept_not_negative: >-
+        La limite d'inscriptions acceptées automatiquement ne peut être
+        inférieure à 0.
+      #original_hash: 181d8d9
+      auto_accept_accept_paid_pending: >-
+        Impossible d'activer l'acceptation automatique s'il y a des inscriptions
+        payées en cours - il faut soit les accepter, soit les placer sur la
+        liste d'attente.
+      #original_hash: 96db418
+      auto_accept_accept_waitlisted: >-
+        Impossible d'activer l'acceptation automatique - veuillez accepter
+        autant d'utilisateurs de la liste d'attente que possible.
       #original_hash: 6d11b4e
       auto_close_exceed_paid: >-
         Le seuil de fermeture automatique doit être supérieur au nombre
@@ -6140,24 +6161,24 @@ fr:
     login_message: Veuillez vous connecter
   merch:
     #original_hash: 96a95a1
-    title: Merchandising WCA
+    title: Produits Dérivés WCA
     paragraphs:
       #original_hash: 8a23af2
       '1': >-
-        La WCA propose du merchandising exclusif à la vente ! T- shirts,
+        La WCA propose des produits dérivés exclusifs à la vente ! T- shirts,
         hoodies, stickers, stackmats, sacs à dos et bien plus ! Nos designs sont
-        constamment mis à jour, y compris le logo classique de la WCA, le
-        merchandising officiel du championnat du monde et les designs du record
+        constamment mis à jour, y compris le logo classique de la WCA, les
+        produits dérivés officiels du championnat du monde et les designs du record
         du monde.
       #original_hash: 2865e1d
       '2': >-
-        Acheter du merch WCA via notre boutique est l'un des meilleurs moyens de
+        Acheter des produits dérivés WCA via notre boutique est l'un des meilleurs moyens de
         supporter la WCA - un organisme bénévole à but non lucratif. Nous
-        utilisons tous les bénéfices du merch pour financer davantage les
+        utilisons tous les bénéfices des produits dérivés pour financer davantage les
         championnats, l’équipement et d’autres activités liées à la WCA.
       #original_hash: 8e57552
       '3': >-
-        Vous pouvez acheter notre merchandising partout dans le monde -- avec
+        Vous pouvez acheter nos produits dérivés partout dans le monde -- avec
         des magasins directs en Europe, en Amérique, en Inde et plus à venir
         bientôt !
   database:
