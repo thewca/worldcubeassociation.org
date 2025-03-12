@@ -302,9 +302,6 @@ Performance/RedundantMerge:
 Performance/TimesMap:
   Enabled: false
 
-Performance/Detect:
-  Enabled: false
-
 # Rails
 
 Rails/TimeZone:
