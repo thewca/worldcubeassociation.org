@@ -244,7 +244,7 @@ class RegistrationsController < ApplicationController
       email_user = User.find_by(email: registration_row[:email])
       # Use the user if exists, otherwise create a locked account without WCA ID.
       if email_user
-        unless email_user.wca_id.present?
+        if email_user.wca_id.blank?
           # If this is just a user account with no WCA ID, update its data.
           # Given it's verified by organizers, it's more trustworthy/official data (if different at all).
           email_user.update!(person_details)
@@ -335,7 +335,7 @@ class RegistrationsController < ApplicationController
 
     connected_account = ConnectedStripeAccount.find_by(account_id: stored_record.account_id)
 
-    unless connected_account.present?
+    if connected_account.blank?
       logger.error "Stripe webhook reported event for account '#{stored_record.account_id}' but we are not connected to that account."
       return head :not_found
     end
@@ -386,21 +386,21 @@ class RegistrationsController < ApplicationController
     payment_integration = params[:payment_integration].to_sym
     payment_account = competition.payment_account_for(payment_integration)
 
-    unless payment_account.present?
+    if payment_account.blank?
       flash[:danger] = t("registrations.payment_form.errors.cpi_disconnected")
       return redirect_to competition_register_path(competition)
     end
 
     stored_record, secret_check = payment_account.find_payment_from_request(params)
 
-    unless stored_record.present?
+    if stored_record.blank?
       flash[:error] = t("registrations.payment_form.errors.generic.not_found", provider: t("payments.payment_providers.#{payment_integration}"))
       return redirect_to competition_register_path(competition)
     end
 
     stored_intent = stored_record.payment_intent
 
-    unless stored_intent.present?
+    if stored_intent.blank?
       flash[:error] = t("registrations.payment_form.errors.generic.intent_not_found", provider: t("payments.payment_providers.#{payment_integration}"))
       return redirect_to competition_register_path(competition)
     end
@@ -415,7 +415,7 @@ class RegistrationsController < ApplicationController
 
     remote_intent = stored_intent.retrieve_remote
 
-    unless remote_intent.present?
+    if remote_intent.blank?
       flash[:error] = t("registrations.payment_form.errors.generic.remote_not_found", provider: t("payments.payment_providers.#{payment_integration}"))
       return redirect_to competition_register_path(competition)
     end
@@ -497,7 +497,7 @@ class RegistrationsController < ApplicationController
     payment_integration = params[:payment_integration].to_sym
     payment_account = competition.payment_account_for(payment_integration)
 
-    unless payment_account.present?
+    if payment_account.blank?
       flash[:danger] = "You cannot issue a refund for this competition anymore. Please use your payment provider's dashboard to do so."
       return redirect_to competition_registrations_path(competition)
     end

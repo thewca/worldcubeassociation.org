@@ -209,7 +209,7 @@ class CompetitionsController < ApplicationController
     connector = CompetitionPaymentIntegration::AVAILABLE_INTEGRATIONS[payment_integration.to_sym].safe_constantize
     account_reference = connector&.connect_account(params)
 
-    unless account_reference.present?
+    if account_reference.blank?
       raise ActionController::RoutingError.new("Payment Integration #{payment_integration} not Found")
     end
 

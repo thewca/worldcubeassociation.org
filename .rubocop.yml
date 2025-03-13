@@ -283,9 +283,6 @@ Rails/PluralizationGrammar:
 Rails/I18nLocaleAssignment:
   Enabled: false
 
-Rails/Blank:
-  Enabled: false
-
 Rails/Output:
   Enabled: false
 
