@@ -366,9 +366,11 @@ class Person < ApplicationRecord
   end
 
   def private_attributes_for_user(user)
-    if user&.wca_id == wca_id || user&.any_kind_of_delegate?
+    return [] if user.nil?
+
+    if user.wca_id == wca_id || user.any_kind_of_delegate?
       %w[dob]
-    elsif user&.can_admin_results?
+    elsif user.can_admin_results?
       %w[incorrect_wca_id_claim_count dob]
     else
       []

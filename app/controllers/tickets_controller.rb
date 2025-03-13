@@ -156,7 +156,7 @@ class TicketsController < ApplicationController
 
     render json: {
       user: user,
-      person: person&.serializable_hash(private_attributes: person_private_attributes),
+      person: person&.as_json(private_attributes: person_private_attributes),
       action_items: action_items,
       non_action_items: non_action_items,
       message_args: message_args,
