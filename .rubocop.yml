@@ -257,49 +257,10 @@ ThreadSafety/DirChdir:
 
 # Performance
 
-Performance/RedundantEqualityComparisonBlock:
-  Enabled: false
-
-Performance/StringIdentifierArgument:
-  Enabled: false
-
 Performance/CollectionLiteralInLoop:
   Enabled: false
 
 Performance/MethodObjectAsBlock:
-  Enabled: false
-
-Performance/StringReplacement:
-  Enabled: false
-
-Performance/RedundantMatch:
-  Enabled: false
-
-Performance/RegexpMatch:
-  Enabled: false
-
-Performance/SortReverse:
-  Enabled: false
-
-Performance/BindCall:
-  Enabled: false
-
-Performance/InefficientHashSearch:
-  Enabled: false
-
-Performance/RedundantMerge:
-  Enabled: false
-
-Performance/TimesMap:
-  Enabled: false
-
-Performance/Detect:
-  Enabled: false
-
-Performance/Count:
-  Enabled: false
-
-Performance/Sum:
   Enabled: false
 
 # Rails

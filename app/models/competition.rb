@@ -595,7 +595,7 @@ class Competition < ApplicationRecord
         warnings[:name] = I18n.t('competitions.messages.name_too_long')
       end
 
-      unless /^[[:upper:]]|^\d/.match(self.id)
+      unless /^[[:upper:]]|^\d/.match?(self.id)
         warnings[:id] = I18n.t('competitions.messages.id_starts_with_lowercase')
       end
 
@@ -886,7 +886,7 @@ class Competition < ApplicationRecord
     # so it won't be confused by the fact that our competition's id is changing.
     # See similar hack and comment in unpack_delegate_organizer_ids.
     with_old_id do
-      old_competition_events_attributes.bind(self).call(attributes)
+      old_competition_events_attributes.bind_call(self, attributes)
     end
   end
 

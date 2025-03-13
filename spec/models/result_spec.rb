@@ -389,7 +389,7 @@ RSpec.describe Result do
       def result_with_n_solves(n, options)
         result = FactoryBot.build :result, options
         (1..5).each do |i|
-          result.send "value#{i}=", i <= n ? 42 : 0
+          result.send :"value#{i}=", i <= n ? 42 : 0
         end
         result
       end

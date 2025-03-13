@@ -257,7 +257,7 @@ module ResultsValidators
           results_by_round_id[id]&.find { |r| r.personId == result.personId }
         end.map(&:solve_times).flatten
         completed_solves_for_rounds = all_results_for_cumulative_rounds.select(&:complete?)
-        number_of_dnf_solves = all_results_for_cumulative_rounds.select(&:dnf?).size
+        number_of_dnf_solves = all_results_for_cumulative_rounds.count(&:dnf?)
         sum_of_times_for_rounds = completed_solves_for_rounds.sum(&:time_centiseconds)
 
         # Check the sum is below the limit
