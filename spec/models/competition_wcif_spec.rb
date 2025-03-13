@@ -296,7 +296,7 @@ RSpec.describe "Competition WCIF" do
 
       competition.set_wcif_competitor_limit!(competitor_limit_wcif, delegate)
 
-      expect(competition.competitor_limit_enabled?).to eq(true)
+      expect(competition.competitor_limit_enabled?).to be(true)
       expect(competition.to_wcif["competitorLimit"]).to eq(competitor_limit_wcif)
     end
 

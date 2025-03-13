@@ -114,12 +114,12 @@ RSpec.describe UsersController do
     context "recently authenticated" do
       it "user can change email" do
         sign_in user
-        expect(user.confirmation_sent_at).to eq nil
+        expect(user.confirmation_sent_at).to be nil
         post :authenticate_user_for_sensitive_edit, params: { user: { password: "wca" } }
         patch :update, params: { id: user.id, user: { email: "newEmail@newEmail.com" } }
         user.reload
         expect(user.unconfirmed_email).to eq "newemail@newemail.com"
-        expect(user.confirmation_sent_at).not_to eq nil
+        expect(user.confirmation_sent_at).not_to be nil
       end
     end
 
@@ -128,8 +128,8 @@ RSpec.describe UsersController do
         sign_in user
         patch :update, params: { id: user.id, user: { email: "newEmail@newEmail.com" } }
         user.reload
-        expect(user.unconfirmed_email).to eq nil
-        expect(user.confirmation_sent_at).to eq nil
+        expect(user.unconfirmed_email).to be nil
+        expect(user.confirmation_sent_at).to be nil
         expect(flash[:danger]).to eq I18n.t("users.edit.sensitive.identity_error")
       end
     end
@@ -200,7 +200,7 @@ RSpec.describe UsersController do
         post :acknowledge_cookies
         expect(response.status).to eq 401
         response_json = JSON.parse(response.body)
-        expect(response_json['ok']).to eq false
+        expect(response_json['ok']).to be false
       end
     end
 
@@ -215,14 +215,14 @@ RSpec.describe UsersController do
         expect(admin.reload.cookies_acknowledged).to be false
         post :acknowledge_cookies
         response_json = JSON.parse(response.body)
-        expect(response_json['ok']).to eq true
+        expect(response_json['ok']).to be true
         expect(admin.reload.cookies_acknowledged).to be true
 
         # Do the same thing again. This shouldn't clear their cookies acknowledged
         # state.
         post :acknowledge_cookies
         response_json = JSON.parse(response.body)
-        expect(response_json['ok']).to eq true
+        expect(response_json['ok']).to be true
         expect(admin.reload.cookies_acknowledged).to be true
       end
     end

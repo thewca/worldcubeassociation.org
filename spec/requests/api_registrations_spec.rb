@@ -410,10 +410,10 @@ RSpec.describe 'API Registrations' do
 
       user_ids = [user1.id, user2.id, user3.id, user4.id, user5.id, user6.id]
       body.each do |data|
-        expect(user_ids.include?(data['user_id'])).to eq(true)
+        expect(user_ids.include?(data['user_id'])).to be(true)
         if data['user_id'] == registration1[:user_id] || data['user_id'] == registration2[:user_id] ||data['user_id'] == registration3[:user_id]
           expect(data.dig('competing', 'registration_status')).to eq('accepted')
-          expect(data.dig('competing', 'waiting_list_position')).to eq(nil)
+          expect(data.dig('competing', 'waiting_list_position')).to be(nil)
         elsif data['user_id'] == registration4[:user_id]
           expect(data.dig('competing', 'waiting_list_position')).to eq(1)
         elsif data['user_id'] == registration5[:user_id]

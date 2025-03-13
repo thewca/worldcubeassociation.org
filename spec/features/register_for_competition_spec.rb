@@ -181,7 +181,7 @@ RSpec.feature "Registering for a competition", js: true do
       end
 
       expect(page).to have_text("Updated registration")
-      expect(Registration.find_by_id(registration.id).cancelled?).to eq true
+      expect(Registration.find_by_id(registration.id).cancelled?).to be true
     end
   end
 end

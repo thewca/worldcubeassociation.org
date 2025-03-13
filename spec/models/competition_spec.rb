@@ -260,12 +260,12 @@ RSpec.describe Competition do
 
     it "start_date" do
       competition.start_date = "i am not a date"
-      expect(competition.start_date).to eq nil
+      expect(competition.start_date).to be nil
     end
 
     it "end_date" do
       competition.end_date = "i am also not a date"
-      expect(competition.end_date).to eq nil
+      expect(competition.end_date).to be nil
     end
   end
 
@@ -414,7 +414,7 @@ RSpec.describe Competition do
     it "warns for unposted reports" do
       competition = FactoryBot.create :competition, :visible, :with_delegate, starts: 2.days.ago
       delegate = competition.delegates.first
-      expect(competition.user_should_post_delegate_report?(delegate)).to eq true
+      expect(competition.user_should_post_delegate_report?(delegate)).to be true
     end
 
     it "does not warn for posted reports" do
@@ -422,19 +422,19 @@ RSpec.describe Competition do
       posted_dummy_dr = FactoryBot.create :delegate_report, :posted, competition: competition
       competition.delegate_report.update!(schedule_url: "http://example.com", posted: true, setup_images: posted_dummy_dr.setup_images_blobs)
       delegate = competition.delegates.first
-      expect(competition.user_should_post_delegate_report?(delegate)).to eq false
+      expect(competition.user_should_post_delegate_report?(delegate)).to be false
     end
 
     it "does not warn for upcoming competitions" do
       competition = FactoryBot.create :competition, :visible, :with_delegate, starts: 1.days.from_now
       delegate = competition.delegates.first
-      expect(competition.user_should_post_delegate_report?(delegate)).to eq false
+      expect(competition.user_should_post_delegate_report?(delegate)).to be false
     end
 
     it "does not warn board members" do
       competition = FactoryBot.create :competition, :visible, :with_delegate, starts: 2.days.ago
       board_member = FactoryBot.create :user, :board_member
-      expect(competition.user_should_post_delegate_report?(board_member)).to eq false
+      expect(competition.user_should_post_delegate_report?(board_member)).to be false
     end
   end
 
@@ -450,7 +450,7 @@ RSpec.describe Competition do
     it "does not warn about name greater than 32 when competition is publicly visible" do
       competition = FactoryBot.build :competition, :confirmed, :visible, name: "A really long competition name 2016"
       expect(competition).to be_valid
-      expect(competition.warnings_for(nil)[:name]).to eq nil
+      expect(competition.warnings_for(nil)[:name]).to be nil
     end
 
     it "warns if competition is not visible" do
@@ -489,7 +489,7 @@ RSpec.describe Competition do
 
       competition = FactoryBot.create :competition, starts: Date.new(2019, 10, 1), championship_types: ["world"]
       expect(competition).to be_valid
-      expect(competition.warnings_for(nil)["world"]).to eq nil
+      expect(competition.warnings_for(nil)["world"]).to be nil
     end
 
     it "warns if championship already exists" do
@@ -509,7 +509,7 @@ RSpec.describe Competition do
     it "do not warn if competition id starts with a number" do
       competition = FactoryBot.build :competition, id: "1stNumberedComp2021"
       expect(competition).to be_valid
-      expect(competition.warnings_for(nil)[:id]).to eq nil
+      expect(competition.warnings_for(nil)[:id]).to be nil
     end
 
     it "warns if advancement condition isn't present for a non final round" do
@@ -577,7 +577,7 @@ RSpec.describe Competition do
       competition.results_posted_at = Time.now
       competition.results_posted_by = FactoryBot.create(:user, :wrt_member).id
       expect(competition.in_progress?).to be false
-      expect(competition.info_for(nil)[:in_progress]).to eq nil
+      expect(competition.info_for(nil)[:in_progress]).to be nil
     end
   end
 
@@ -593,14 +593,14 @@ RSpec.describe Competition do
     end
 
     it "not_over scope does not include the competition" do
-      expect(Competition.not_over.find_by_id(competition.id)).to eq nil
+      expect(Competition.not_over.find_by_id(competition.id)).to be nil
     end
   end
 
   it "knows the calendar" do
     competition = FactoryBot.create :competition
     competition.start_date = "1987-0-04"
-    expect(competition.start_date).to eq nil
+    expect(competition.start_date).to be nil
   end
 
   it "gracefully handles multiyear competitions" do
@@ -738,9 +738,9 @@ RSpec.describe Competition do
       expect(CompetitionOrganizer.where(organizer_id: organizer.id).count).to eq 1
 
       cd = CompetitionDelegate.find_by_delegate_id(delegate.id)
-      expect(cd).not_to eq nil
+      expect(cd).not_to be nil
       co = CompetitionOrganizer.find_by_organizer_id(organizer.id)
-      expect(co).not_to eq nil
+      expect(co).not_to be nil
 
       c = Competition.find(competition.id)
       c.id = "NewID2015"
@@ -853,57 +853,57 @@ RSpec.describe Competition do
     let(:delegate_enabled) { FactoryBot.create :delegate, registration_notifications_enabled: true }
 
     it "computes receiving_registration_emails? via OR" do
-      expect(competition.receiving_registration_emails?(delegate.id)).to eq false
+      expect(competition.receiving_registration_emails?(delegate.id)).to be false
 
       competition.delegates << delegate
-      expect(competition.receiving_registration_emails?(delegate.id)).to eq false
+      expect(competition.receiving_registration_emails?(delegate.id)).to be false
 
       competition.delegates << delegate_enabled
-      expect(competition.receiving_registration_emails?(delegate_enabled.id)).to eq true
+      expect(competition.receiving_registration_emails?(delegate_enabled.id)).to be true
 
       cd = competition.competition_delegates.find_by_delegate_id(delegate.id)
       cd.update_column(:receive_registration_emails, true)
-      expect(competition.receiving_registration_emails?(delegate.id)).to eq true
+      expect(competition.receiving_registration_emails?(delegate.id)).to be true
 
       competition.organizers << delegate
-      expect(competition.receiving_registration_emails?(delegate.id)).to eq true
+      expect(competition.receiving_registration_emails?(delegate.id)).to be true
 
       co = competition.competition_organizers.find_by_organizer_id(delegate.id)
       co.update_column(:receive_registration_emails, true)
-      expect(competition.receiving_registration_emails?(delegate.id)).to eq true
+      expect(competition.receiving_registration_emails?(delegate.id)).to be true
     end
 
     it "setting receive_registration_emails" do
       competition.delegates << delegate
       cd = competition.competition_delegates.find_by_delegate_id(delegate.id)
-      expect(cd.receive_registration_emails).to eq false
+      expect(cd.receive_registration_emails).to be false
 
       competition.receive_registration_emails = false
       competition.editing_user_id = delegate.id
       competition.save!
       competition.receive_registration_emails = nil
-      expect(cd.reload.receive_registration_emails).to eq false
+      expect(cd.reload.receive_registration_emails).to be false
 
       competition.organizers << delegate
       co = competition.competition_organizers.find_by_organizer_id(delegate.id)
-      expect(co.receive_registration_emails).to eq false
+      expect(co.receive_registration_emails).to be false
 
       competition.receive_registration_emails = false
       competition.editing_user_id = delegate.id
       competition.save!
 
-      expect(cd.reload.receive_registration_emails).to eq false
-      expect(co.reload.receive_registration_emails).to eq false
+      expect(cd.reload.receive_registration_emails).to be false
+      expect(co.reload.receive_registration_emails).to be false
 
       # Test we can change the setting for a delegate with notifications
       # enabled by default.
       competition.delegates << delegate_enabled
       cde = competition.competition_delegates.find_by_delegate_id(delegate_enabled.id)
-      expect(cde.receive_registration_emails).to eq true
+      expect(cde.receive_registration_emails).to be true
       competition.receive_registration_emails = false
       competition.editing_user_id = delegate_enabled.id
       competition.save!
-      expect(cde.reload.receive_registration_emails).to eq false
+      expect(cde.reload.receive_registration_emails).to be false
     end
   end
 
@@ -964,11 +964,11 @@ RSpec.describe Competition do
       expect(result.map(&:first)).to eq [person_four, person_one, person_three, person_two].map(&:wca_id)
       expect(result.second.last.map(&:roundTypeId)).to eq %w(f 1 c)
 
-      expect(result[1][1][1].muted).to eq true
-      expect(result[1][1][2].muted).to eq false
+      expect(result[1][1][1].muted).to be true
+      expect(result[1][1][2].muted).to be false
 
-      expect(result[2][1][1].muted).to eq true
-      expect(result[3][1][1].muted).to eq true
+      expect(result[2][1][1].muted).to be true
+      expect(result[3][1][1].muted).to be true
     end
 
     it "events_with_round_types_with_results" do
@@ -1075,9 +1075,9 @@ RSpec.describe Competition do
     it "searching with two words" do
       expect(Competition.contains('eso').contains('aci').first).to eq search_comp
       expect(Competition.contains('awesome').contains('comp').first).to eq search_comp
-      expect(Competition.contains('abc').contains('def').first).to eq nil
-      expect(Competition.contains('ped').contains('aci').first).to eq nil
-      expect(Competition.contains('wes').contains('blah').first).to eq nil
+      expect(Competition.contains('abc').contains('def').first).to be nil
+      expect(Competition.contains('ped').contains('aci').first).to be nil
+      expect(Competition.contains('wes').contains('blah').first).to be nil
     end
   end
 
@@ -1223,12 +1223,12 @@ RSpec.describe Competition do
   describe "has_defined_dates" do
     it "is false when no start and end date" do
       competition = FactoryBot.create(:competition, start_date: nil, end_date: nil)
-      expect(competition.has_defined_dates?).to eq false
+      expect(competition.has_defined_dates?).to be false
     end
 
     it "is true when has start and end date" do
       competition = FactoryBot.create(:competition)
-      expect(competition.has_defined_dates?).to eq true
+      expect(competition.has_defined_dates?).to be true
     end
   end
 
@@ -1245,42 +1245,42 @@ RSpec.describe Competition do
 
     it "is false when competition has no championships" do
       competition = FactoryBot.create(:competition, events: [four_by_four], championship_types: [], countryId: "Canada", cityName: "Vancouver, British Columbia")
-      expect(competition.exempt_from_wca_dues?).to eq false
+      expect(competition.exempt_from_wca_dues?).to be false
     end
 
     it "is false when competition is a national championship" do
       competition = FactoryBot.create(:competition, events: Event.official, championship_types: ["CA"], countryId: "Canada", cityName: "Vancouver, British Columbia")
-      expect(competition.exempt_from_wca_dues?).to eq false
+      expect(competition.exempt_from_wca_dues?).to be false
     end
 
     it "is false when 333fm is the only event and competition is in a single country" do
       competition = FactoryBot.create(:competition, events: [fmc], championship_types: [], countryId: "Canada", cityName: "Vancouver, British Columbia")
-      expect(competition.exempt_from_wca_dues?).to eq false
+      expect(competition.exempt_from_wca_dues?).to be false
     end
 
     it "is true when 333fm is the only event and competition is in multiple countries" do
       competition = FactoryBot.create(:competition, events: [fmc], championship_types: [], countryId: "XN")
-      expect(competition.exempt_from_wca_dues?).to eq true
+      expect(competition.exempt_from_wca_dues?).to be true
     end
 
     it "is true when 333fm is the only event and competition is in multiple continents" do
       competition = FactoryBot.create(:competition, events: [fmc], championship_types: [], countryId: "XW")
-      expect(competition.exempt_from_wca_dues?).to eq true
+      expect(competition.exempt_from_wca_dues?).to be true
     end
 
     it "is true when competition is a national championship and a world championship" do
       competition = FactoryBot.create(:competition, events: Event.official, championship_types: ["AU", "world"], countryId: "Australia", cityName: "Melbourne, Victoria")
-      expect(competition.exempt_from_wca_dues?).to eq true
+      expect(competition.exempt_from_wca_dues?).to be true
     end
 
     it "is true when competition is a continental championship" do
       competition = FactoryBot.create(:competition, events: Event.official, championship_types: ["_North America"], countryId: "Canada", cityName: "Vancouver, British Columbia")
-      expect(competition.exempt_from_wca_dues?).to eq true
+      expect(competition.exempt_from_wca_dues?).to be true
     end
 
     it "is true when competition is a world championship" do
       competition = FactoryBot.create(:competition, events: Event.official, championship_types: ["world"], countryId: "Korea")
-      expect(competition.exempt_from_wca_dues?).to eq true
+      expect(competition.exempt_from_wca_dues?).to be true
     end
   end
 
@@ -1445,63 +1445,63 @@ RSpec.describe Competition do
 
       it 'returns nil if no matching account is found' do
         competition = FactoryBot.create(:competition)
-        expect(competition.payment_account_for(:paypal)).to eq(nil)
+        expect(competition.payment_account_for(:paypal)).to be(nil)
       end
     end
 
     describe '#payments_enabled?' do
       it 'returns true when stripe is connected' do
         competition = FactoryBot.create(:competition, :stripe_connected)
-        expect(competition.payments_enabled?).to eq(true)
+        expect(competition.payments_enabled?).to be(true)
       end
 
       it 'returns true when paypal is connected' do
         competition = FactoryBot.create(:competition, :paypal_connected)
-        expect(competition.payments_enabled?).to eq(true)
+        expect(competition.payments_enabled?).to be(true)
       end
 
       it 'returns true when multiple integrations are connected' do
         competition = FactoryBot.create(:competition, :stripe_connected, :paypal_connected)
-        expect(competition.payments_enabled?).to eq(true)
+        expect(competition.payments_enabled?).to be(true)
       end
 
       it 'returns false when no integrations are connected' do
         competition = FactoryBot.create(:competition)
-        expect(competition.payments_enabled?).to eq(false)
+        expect(competition.payments_enabled?).to be(false)
       end
     end
 
     describe '#stripe_connected?' do
       it 'returns true when stripe is connected' do
         competition = FactoryBot.create(:competition, :stripe_connected)
-        expect(competition.stripe_connected?).to eq(true)
+        expect(competition.stripe_connected?).to be(true)
       end
 
       it 'returns false when paypal is connected' do
         competition = FactoryBot.create(:competition, :paypal_connected)
-        expect(competition.stripe_connected?).to eq(false)
+        expect(competition.stripe_connected?).to be(false)
       end
 
       it 'returns false when no integrations are connected' do
         competition = FactoryBot.create(:competition)
-        expect(competition.stripe_connected?).to eq(false)
+        expect(competition.stripe_connected?).to be(false)
       end
     end
 
     describe '#paypal_connected?' do
       it 'returns false when stripe is connected' do
         competition = FactoryBot.create(:competition, :stripe_connected)
-        expect(competition.paypal_connected?).to eq(false)
+        expect(competition.paypal_connected?).to be(false)
       end
 
       it 'returns true when paypal is connected' do
         competition = FactoryBot.create(:competition, :paypal_connected)
-        expect(competition.paypal_connected?).to eq(true)
+        expect(competition.paypal_connected?).to be(true)
       end
 
       it 'returns false when no integrations are connected' do
         competition = FactoryBot.create(:competition)
-        expect(competition.paypal_connected?).to eq(false)
+        expect(competition.paypal_connected?).to be(false)
       end
     end
 
@@ -1524,16 +1524,16 @@ RSpec.describe Competition do
         competition = FactoryBot.create(:competition, :payment_disconnect_delay_elapsed, :paypal_connected, :stripe_connected)
 
         competition.disconnect_payment_integration(:paypal)
-        expect(competition.paypal_connected?).to eq(false)
-        expect(competition.stripe_connected?).to eq(true)
+        expect(competition.paypal_connected?).to be(false)
+        expect(competition.stripe_connected?).to be(true)
       end
 
       it 'disconnecting stripe leaves paypal connected' do
         competition = FactoryBot.create(:competition, :payment_disconnect_delay_elapsed, :paypal_connected, :stripe_connected)
 
         competition.disconnect_payment_integration(:stripe)
-        expect(competition.paypal_connected?).to eq(true)
-        expect(competition.stripe_connected?).to eq(false)
+        expect(competition.paypal_connected?).to be(true)
+        expect(competition.stripe_connected?).to be(false)
       end
 
       it 'fails silently on a competition with no payment integrations' do
@@ -1546,8 +1546,8 @@ RSpec.describe Competition do
     describe '#disconnect_all' do
       it 'disconnects both integrations on a comp with two integrations' do
         competition = FactoryBot.create(:competition, :payment_disconnect_delay_elapsed, :stripe_connected, :paypal_connected)
-        expect(competition.paypal_connected?).to eq(true)
-        expect(competition.stripe_connected?).to eq(true)
+        expect(competition.paypal_connected?).to be(true)
+        expect(competition.stripe_connected?).to be(true)
 
         competition.disconnect_all_payment_integrations
         expect(competition.competition_payment_integrations).to eq([])
@@ -1644,29 +1644,29 @@ RSpec.describe Competition do
     let(:comp) { FactoryBot.create(:competition, :registration_open, :with_competitor_limit, competitor_limit: 3) }
 
     it 'attempt auto close returns false when it fails' do
-      expect(auto_close_comp.attempt_auto_close!).to eq(false)
+      expect(auto_close_comp.attempt_auto_close!).to be(false)
     end
 
     it 'attempt auto close returns true when it succeeds' do
       FactoryBot.create_list(:registration, 4, :paid_no_hooks, competition: auto_close_comp)
       FactoryBot.create(:registration, :paid_no_hooks, competition: auto_close_comp)
 
-      expect(auto_close_comp.attempt_auto_close!).to eq(true)
+      expect(auto_close_comp.attempt_auto_close!).to be(true)
     end
 
     it 'wont auto-close if threshold not reached' do
       FactoryBot.create(:registration, :paid_no_hooks, competition: auto_close_comp)
-      expect(auto_close_comp.attempt_auto_close!).to eq(false)
+      expect(auto_close_comp.attempt_auto_close!).to be(false)
     end
 
     it 'doesnt auto-close if threshold is null' do
       FactoryBot.create(:registration, :paid_no_hooks, competition: comp)
-      expect(comp.attempt_auto_close!).to eq(false)
+      expect(comp.attempt_auto_close!).to be(false)
     end
 
     it 'closes registrations when the close threshold is reached' do
       FactoryBot.create_list(:registration, 5, :paid_no_hooks, competition: auto_close_comp)
-      expect(auto_close_comp.attempt_auto_close!).to eq(true)
+      expect(auto_close_comp.attempt_auto_close!).to be(true)
     end
 
     it 'closes registrations when the close threshold is exceeded' do
@@ -1675,12 +1675,12 @@ RSpec.describe Competition do
       comp.update_column(:auto_close_threshold, 5)
       FactoryBot.create(:registration, :paid_no_hooks, competition: comp)
 
-      expect(comp.attempt_auto_close!).to eq(true)
+      expect(comp.attempt_auto_close!).to be(true)
     end
 
     it 'only auto-closes if the registrations are fully registrations' do
       FactoryBot.create_list(:registration, 5, :partially_paid, competition: auto_close_comp)
-      expect(auto_close_comp.attempt_auto_close!).to eq(false)
+      expect(auto_close_comp.attempt_auto_close!).to be(false)
     end
 
     context 'validations' do

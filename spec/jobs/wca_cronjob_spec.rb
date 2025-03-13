@@ -54,43 +54,43 @@ RSpec.describe WcaCronjob, type: :job do
   end
 
   it "stores timestamps in cronjob_statistics table" do
-    expect(SuccessfulJob.scheduled?).to eq false
-    expect(SuccessfulJob.in_progress?).to eq false
-    expect(SuccessfulJob.finished?).to eq false
+    expect(SuccessfulJob.scheduled?).to be false
+    expect(SuccessfulJob.in_progress?).to be false
+    expect(SuccessfulJob.finished?).to be false
 
     SuccessfulJob.perform_later
 
-    expect(SuccessfulJob.scheduled?).to eq true
-    expect(SuccessfulJob.in_progress?).to eq false
-    expect(SuccessfulJob.finished?).to eq false
+    expect(SuccessfulJob.scheduled?).to be true
+    expect(SuccessfulJob.in_progress?).to be false
+    expect(SuccessfulJob.finished?).to be false
 
     perform_enqueued_jobs
 
-    expect(SuccessfulJob.last_run_successful?).to eq true
+    expect(SuccessfulJob.last_run_successful?).to be true
 
-    expect(SuccessfulJob.scheduled?).to eq false
-    expect(SuccessfulJob.in_progress?).to eq false
-    expect(SuccessfulJob.finished?).to eq true
+    expect(SuccessfulJob.scheduled?).to be false
+    expect(SuccessfulJob.in_progress?).to be false
+    expect(SuccessfulJob.finished?).to be true
   end
 
   it "doesn't delete failed jobs, and notifies on failure" do
-    expect(FailingJob.scheduled?).to eq false
-    expect(FailingJob.in_progress?).to eq false
-    expect(FailingJob.finished?).to eq false
+    expect(FailingJob.scheduled?).to be false
+    expect(FailingJob.in_progress?).to be false
+    expect(FailingJob.finished?).to be false
 
     FailingJob.perform_later
 
-    expect(FailingJob.scheduled?).to eq true
-    expect(FailingJob.in_progress?).to eq false
-    expect(FailingJob.finished?).to eq false
+    expect(FailingJob.scheduled?).to be true
+    expect(FailingJob.in_progress?).to be false
+    expect(FailingJob.finished?).to be false
 
     expect(JobFailureMailer).to receive(:notify_admin_of_job_failure).and_call_original
     expect { perform_enqueued_jobs }.to raise_error(RuntimeError).and change { ActionMailer::Base.deliveries.length }.by(1)
 
-    expect(FailingJob.last_run_successful?).to eq false
+    expect(FailingJob.last_run_successful?).to be false
 
-    expect(FailingJob.scheduled?).to eq false
-    expect(FailingJob.in_progress?).to eq false
-    expect(FailingJob.finished?).to eq true
+    expect(FailingJob.scheduled?).to be false
+    expect(FailingJob.in_progress?).to be false
+    expect(FailingJob.finished?).to be true
   end
 end

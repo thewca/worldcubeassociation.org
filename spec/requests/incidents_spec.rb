@@ -230,28 +230,28 @@ RSpec.describe "Incidents management", type: :request do
 
       it "can mark as resolved" do
         unresolved_incident = FactoryBot.create(:incident)
-        expect(unresolved_incident.resolved?).to eq false
+        expect(unresolved_incident.resolved?).to be false
         patch incident_mark_as_path(incident_id: unresolved_incident.id, kind: "resolved")
         unresolved_incident.reload
-        expect(unresolved_incident.resolved?).to eq true
+        expect(unresolved_incident.resolved?).to be true
         expect(response).to redirect_to(unresolved_incident)
       end
 
       it "can mark as digest sent" do
         resolved_incident = FactoryBot.create(:incident, :resolved, :digest_worthy)
-        expect(resolved_incident.digest_missing?).to eq true
+        expect(resolved_incident.digest_missing?).to be true
         patch incident_mark_as_path(incident_id: resolved_incident.id, kind: "sent")
         resolved_incident.reload
-        expect(resolved_incident.digest_sent?).to eq true
+        expect(resolved_incident.digest_sent?).to be true
         expect(response).to redirect_to(resolved_incident)
       end
 
       it "does not mark as digest sent when incident is not resolved" do
         unresolved_incident = FactoryBot.create(:incident)
-        expect(unresolved_incident.resolved?).to eq false
+        expect(unresolved_incident.resolved?).to be false
         patch incident_mark_as_path(incident_id: unresolved_incident.id, kind: "sent")
         unresolved_incident.reload
-        expect(unresolved_incident.digest_sent?).to eq false
+        expect(unresolved_incident.digest_sent?).to be false
       end
     end
   end

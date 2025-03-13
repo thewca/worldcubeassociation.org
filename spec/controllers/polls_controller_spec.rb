@@ -64,7 +64,7 @@ RSpec.describe PollsController do
         post :update, params: { id: poll.id, poll: { question: "Pedro", multiple: true, deadline: '2016-03-15' } }
         poll.reload
         expect(poll.question).to eq "Pedro"
-        expect(poll.multiple?).to eq true
+        expect(poll.multiple?).to be true
         expect(poll.deadline).to eq '2016-03-15'.to_date
       end
 
@@ -78,7 +78,7 @@ RSpec.describe PollsController do
 
         post :update, params: { id: poll.id, poll: { question: poll.question }, commit: "Confirm" }
         poll.reload
-        expect(poll.confirmed?).to eq true
+        expect(poll.confirmed?).to be true
       end
 
       it "removes an option and try to confirm" do
@@ -94,7 +94,7 @@ RSpec.describe PollsController do
 
         post :update, params: { id: poll.id, poll: { question: poll.question }, commit: "Confirm" }
         poll.reload
-        expect(poll.confirmed?).to eq false
+        expect(poll.confirmed?).to be false
       end
 
       it "can't edit a confirmed poll, except for deadline" do
@@ -102,7 +102,7 @@ RSpec.describe PollsController do
         post :update, params: { id: poll.id, poll: { multiple: true } }
         invalid_poll = assigns :poll
         poll.reload
-        expect(poll.multiple).to eq false
+        expect(poll.multiple).to be false
         expect(invalid_poll.errors[:deadline]).to eq ["you can only change the deadline"]
       end
 
@@ -117,13 +117,13 @@ RSpec.describe PollsController do
       it "can delete an unconfirmed poll" do
         poll = FactoryBot.create(:poll)
         post :destroy, params: { id: poll.id }
-        expect(Poll.find_by_id(poll.id)).to eq nil
+        expect(Poll.find_by_id(poll.id)).to be nil
       end
 
       it "can't delete a confirmed poll" do
         poll = FactoryBot.create(:poll, :confirmed)
         post :destroy, params: { id: poll.id }
-        expect(Poll.find_by_id(poll.id)).not_to eq nil
+        expect(Poll.find_by_id(poll.id)).not_to be nil
       end
 
       it "deadline defaults to now if you don't change it" do

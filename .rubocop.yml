@@ -465,9 +465,6 @@ RSpec/DescribeClass:
 RSpec/ContextWording:
   Enabled: false
 
-RSpec/BeEq:
-  Enabled: false
-
 RSpec/EmptyLineAfterHook:
   Enabled: false
 
