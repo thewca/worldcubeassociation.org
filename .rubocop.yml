@@ -287,9 +287,6 @@ Rails/PluralizationGrammar:
 Rails/I18nLocaleAssignment:
   Enabled: false
 
-Rails/FindEach:
-  Enabled: false
-
 Rails/IndexBy:
   Enabled: false
 

@@ -2,7 +2,7 @@
 
 class NotifyUsersOfDelegatesDemotion < ActiveRecord::Migration
   def change
-    User.where.not(unconfirmed_wca_id: nil).each do |user|
+    User.where.not(unconfirmed_wca_id: nil).find_each do |user|
       next if user.delegate_to_handle_wca_id_claim
       demoted_delegate = User.find_by_id(user.delegate_id_to_handle_wca_id_claim)
       # See why we need this `if` statement: https://github.com/thewca/worldcubeassociation.org/issues/889
