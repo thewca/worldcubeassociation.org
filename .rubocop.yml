@@ -302,9 +302,6 @@ Rails/IndexBy:
 Rails/NegateInclude:
   Enabled: false
 
-Rails/Pluck:
-  Enabled: false
-
 Rails/Delegate:
   Enabled: false
 

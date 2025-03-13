@@ -92,17 +92,17 @@ class RegistrationsController < ApplicationController
                    accepted_count: registration_rows.length,
                    limit: competition.competitor_limit)
     end
-    emails = registration_rows.map { |registration_row| registration_row[:email] }
+    emails = registration_rows.pluck(:email)
     email_duplicates = emails.select { |email| emails.count(email) > 1 }.uniq
     if email_duplicates.any?
       raise I18n.t("registrations.import.errors.email_duplicates", emails: email_duplicates.join(", "))
     end
-    wca_ids = registration_rows.map { |registration_row| registration_row[:wca_id] }
+    wca_ids = registration_rows.pluck(:wca_id)
     wca_id_duplicates = wca_ids.select { |wca_id| wca_ids.count(wca_id) > 1 }.uniq
     if wca_id_duplicates.any?
       raise I18n.t("registrations.import.errors.wca_id_duplicates", wca_ids: wca_id_duplicates.join(", "))
     end
-    raw_dobs = registration_rows.map { |registration_row| registration_row[:birth_date] }
+    raw_dobs = registration_rows.pluck(:birth_date)
     wrong_format_dobs = raw_dobs.select { |raw_dob| Date.safe_parse(raw_dob)&.to_fs != raw_dob }
     if wrong_format_dobs.any?
       raise I18n.t("registrations.import.errors.wrong_dob_format", raw_dobs: wrong_format_dobs.join(", "))
