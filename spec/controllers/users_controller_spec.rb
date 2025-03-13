@@ -148,6 +148,7 @@ RSpec.describe UsersController do
 
     context "after creating a pending registration" do
       let!(:registration) { FactoryBot.create(:registration, :pending, user: user) }
+
       it "user can change name" do
         sign_in user
         patch :update, params: { id: user.id, user: { name: "Johnny 5" } }
@@ -157,6 +158,7 @@ RSpec.describe UsersController do
 
     context "after having a registration deleted" do
       let!(:registration) { FactoryBot.create(:registration, :cancelled, user: user) }
+
       it "user can change name" do
         sign_in user
         patch :update, params: { id: user.id, user: { name: "Johnny 5" } }

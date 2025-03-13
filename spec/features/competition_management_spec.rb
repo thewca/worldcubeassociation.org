@@ -42,6 +42,7 @@ end
 RSpec.feature "Competition management", js: true, retry: 10 do
   context "when signed in as admin" do
     let!(:admin) { FactoryBot.create :admin }
+
     before :each do
       sign_in admin
     end

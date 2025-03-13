@@ -176,6 +176,7 @@ RSpec.describe CompetitionsController do
 
     context 'when signed in as a delegate' do
       let(:delegate) { FactoryBot.create :delegate }
+
       before :each do
         sign_in delegate
       end
@@ -328,6 +329,7 @@ RSpec.describe CompetitionsController do
 
     context 'when signed in as organizer' do
       let(:organizer) { FactoryBot.create(:delegate) }
+
       before :each do
         competition.organizers << organizer
         future_competition.organizers << organizer
@@ -453,6 +455,7 @@ RSpec.describe CompetitionsController do
       let(:delegate) { FactoryBot.create(:delegate) }
       let(:organizer1) { FactoryBot.create(:user) }
       let(:organizer2) { FactoryBot.create(:user) }
+
       before :each do
         competition.delegates << delegate
         sign_in delegate
@@ -621,6 +624,7 @@ RSpec.describe CompetitionsController do
       let(:trainee_delegate) { FactoryBot.create(:trainee_delegate) }
       let(:organizer1) { FactoryBot.create(:user) }
       let(:organizer2) { FactoryBot.create(:user) }
+
       before :each do
         competition.delegates << delegate
         competition.delegates << trainee_delegate
@@ -729,6 +733,7 @@ RSpec.describe CompetitionsController do
 
     context "when signed in as delegate for a different competition" do
       let(:delegate) { FactoryBot.create(:delegate) }
+
       before :each do
         sign_in delegate
       end
@@ -765,8 +770,10 @@ RSpec.describe CompetitionsController do
 
   describe 'PUT #cancel_or_uncancel' do
     let(:competition) { FactoryBot.create(:competition, :confirmed, :announced, :future) }
+
     context 'when signed in as WCAT' do
       let(:wcat_member) { FactoryBot.create(:user, :wcat_member) }
+
       before :each do
         sign_in wcat_member
       end
@@ -801,6 +808,7 @@ RSpec.describe CompetitionsController do
 
     context 'when signed in as orga' do
       let(:orga) { FactoryBot.create(:user) }
+
       before :each do
         sign_in orga
       end
@@ -824,6 +832,7 @@ RSpec.describe CompetitionsController do
   describe 'POST #orga_close_reg_when_full_limit' do
     context 'organiser trying to close registration via button' do
       let(:orga) { FactoryBot.create(:user) }
+
       before :each do
         sign_in orga
       end

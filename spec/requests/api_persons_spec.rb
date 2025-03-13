@@ -79,6 +79,7 @@ RSpec.describe "API Persons" do
 
   describe "GET #results" do
     let!(:result) { FactoryBot.create :result, person: person }
+
     it "renders properly" do
       get api_v0_person_results_path(person.wca_id)
       expect(response).to be_successful

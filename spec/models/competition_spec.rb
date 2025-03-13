@@ -1072,6 +1072,7 @@ RSpec.describe Competition do
   describe "#contains" do
     let!(:delegate) { FactoryBot.create :delegate, name: 'Pedro' }
     let!(:search_comp) { FactoryBot.create :competition, name: "Awesome Comp 2016", cityName: "Piracicaba, São Paulo", countryId: "Brazil", delegates: [delegate] }
+
     it "searching with two words" do
       expect(Competition.contains('eso').contains('aci').first).to eq search_comp
       expect(Competition.contains('awesome').contains('comp').first).to eq search_comp

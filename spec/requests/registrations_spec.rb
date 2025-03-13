@@ -531,6 +531,7 @@ RSpec.describe "registrations" do
       let(:competition) { FactoryBot.create(:competition, :stripe_connected, :visible, :registration_open, events: Event.where(id: %w(222 333))) }
       let!(:user) { FactoryBot.create(:user, :wca_id) }
       let!(:registration) { FactoryBot.create(:registration, competition: competition, user: user) }
+
       sign_out
 
       it "redirects to the sign in page" do

@@ -91,10 +91,12 @@ RSpec.describe "users" do
 
   context "user without 2FA" do
     let!(:user) { FactoryBot.create(:user) }
+
     before { sign_in user }
 
     context "recently authenticated" do
       before { post users_authenticate_sensitive_path, params: { 'user[password]': user.password } }
+
       it 'can enable 2FA' do
         post profile_enable_2fa_path
         expect(response.body).to include "Successfully enabled two-factor"
@@ -130,9 +132,12 @@ RSpec.describe "users" do
 
   context "user with 2FA" do
     let!(:user) { FactoryBot.create(:user, :with_2fa) }
+
     before { sign_in user }
+
     context "recently authenticated" do
       before { post users_authenticate_sensitive_path, params: { 'user[otp_attempt]': user.current_otp } }
+
       it 'can reset 2FA' do
         secret_before = user.otp_secret
         post profile_enable_2fa_path

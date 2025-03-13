@@ -32,6 +32,7 @@ RSpec.describe ResultsValidators::PositionsValidator do
           ],
         }
       }
+
       it "validates results correctly ordered on given competitions" do
         validator_args.each do |arg|
           pv = ResultsValidators::PositionsValidator.new.validate(**arg)

@@ -465,16 +465,7 @@ RSpec/DescribeClass:
 RSpec/ContextWording:
   Enabled: false
 
-RSpec/EmptyLineAfterHook:
-  Enabled: false
-
-RSpec/EmptyLineAfterExampleGroup:
-  Enabled: false
-
 RSpec/ExpectChange:
-  Enabled: false
-
-RSpec/EmptyLineAfterFinalLet:
   Enabled: false
 
 RSpec/SpecFilePathFormat:

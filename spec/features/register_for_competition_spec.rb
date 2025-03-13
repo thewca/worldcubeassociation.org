@@ -131,6 +131,7 @@ RSpec.feature "Registering for a competition", js: true do
   context "signed in as delegate" do
     let!(:registration) { FactoryBot.create(:registration, user: user, competition: competition) }
     let(:delegate_registration) { FactoryBot.create(:registration, :accepted, user: delegate, competition: competition) }
+
     before :each do
       sign_in delegate
     end

@@ -153,6 +153,7 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
     let!(:user) { FactoryBot.create(:delegate, name: "Jeremy Fleischman") }
     let!(:comp) { FactoryBot.create(:competition, :confirmed, :visible, name: "jeremy Jfly's Competition 2015", delegates: [user]) }
     let!(:post) { FactoryBot.create(:post, title: "jeremy post title", body: "post body", author: user) }
+
     s3 = Aws::S3::Client.new(stub_responses: true)
     s3.stub_responses(:get_object, ->(_) { { body: "{}" } })
     Regulation.reload_regulations(Aws::S3::Resource.new(client: s3))
@@ -307,6 +308,7 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
         )
       end
       let(:scopes) { Doorkeeper::OAuth::Scopes.new }
+
       before :each do
         api_sign_in_as(user, scopes: scopes)
       end
@@ -369,6 +371,7 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
       end
       let(:scopes) { Doorkeeper::OAuth::Scopes.new }
       let(:token) { double acceptable?: true, accessible?: true, resource_owner_id: user.id, scopes: scopes }
+
       before :each do
         allow(controller).to receive(:doorkeeper_token) { token }
       end
@@ -397,6 +400,7 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
       let(:user) { FactoryBot.create :user, country_iso2: "US" }
       let(:scopes) { Doorkeeper::OAuth::Scopes.new }
       let(:token) { double acceptable?: true, accessible?: true, resource_owner_id: user.id, scopes: scopes }
+
       before :each do
         allow(controller).to receive(:doorkeeper_token) { token }
       end

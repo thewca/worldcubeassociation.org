@@ -49,6 +49,7 @@ RSpec.describe "Competition WCIF" do
   let!(:round333fm_1) { FactoryBot.create(:round, competition: competition, event_id: "333fm", number: 1, format_id: "m") }
   let!(:round333mbf_1) { FactoryBot.create(:round, competition: competition, event_id: "333mbf", number: 1, format_id: "3") }
   let!(:round333mbf_1_extension) { round333mbf_1.wcif_extensions.create!(extension_id: "com.third.party", spec_url: "https://example.com", data: { "tables" => 5 }) }
+
   before :each do
     # Load all the rounds we just created.
     competition.reload

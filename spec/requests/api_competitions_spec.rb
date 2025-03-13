@@ -173,6 +173,7 @@ RSpec.describe "API Competitions" do
 
     context "when signed in as not a competition manager" do
       let(:competition) { FactoryBot.create(:competition, :visible) }
+
       sign_in { FactoryBot.create :user }
 
       it "does not allow access" do
@@ -459,6 +460,7 @@ RSpec.describe "API Competitions" do
 
     describe "extensions" do
       let!(:competition) { FactoryBot.create(:competition, :with_organizer, :visible) }
+
       context "when signed in as a competition manager" do
         before { sign_in competition.organizers.first }
 

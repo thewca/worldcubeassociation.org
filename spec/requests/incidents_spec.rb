@@ -85,6 +85,7 @@ RSpec.describe "Incidents management", type: :request do
       before do
         sign_in wrc_member
       end
+
       it "shows the incident creation form" do
         get new_incident_path
         expect(response).to be_successful
@@ -105,6 +106,7 @@ RSpec.describe "Incidents management", type: :request do
       before do
         sign_in wrc_member
       end
+
       it "renders the edit page" do
         get edit_incident_path(incident)
         expect(response).to be_successful
@@ -150,6 +152,7 @@ RSpec.describe "Incidents management", type: :request do
 
   describe "PUT #update" do
     let!(:competition) { FactoryBot.create(:competition, :confirmed) }
+
     before :each do
       sign_in wrc_member
     end
