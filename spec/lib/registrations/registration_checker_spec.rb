@@ -410,7 +410,7 @@ RSpec.describe Registrations::RegistrationChecker do
         FactoryBot.create(
           :competition,
           :registration_open,
-          events_per_registration_limit: 5,
+          :with_event_limit,
           event_ids: ['333', '333oh', '222', '444', '555', '666', '777'],
         )
       }

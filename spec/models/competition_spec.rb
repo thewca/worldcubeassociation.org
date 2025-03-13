@@ -1428,15 +1428,6 @@ RSpec.describe Competition do
       competition.events_per_registration_limit = nil
       expect(competition).to be_valid
     end
-
-    it "accepts a competition that does not have event restrictions, but has an event limit" do
-      # Hypothetically, this field can be set, but the limit would not be
-      # enforced nor validated since event restrictions are not enabled.
-      competition.event_restrictions = false
-      competition.event_restrictions_reason = nil
-      competition.events_per_registration_limit = 100
-      expect(competition).to be_valid
-    end
   end
 
   context "has valid schedule" do
