@@ -305,9 +305,6 @@ Rails/NegateInclude:
 Rails/Pluck:
   Enabled: false
 
-Rails/Pick:
-  Enabled: false
-
 Rails/Delegate:
   Enabled: false
 
