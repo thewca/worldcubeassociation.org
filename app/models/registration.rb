@@ -136,7 +136,7 @@ class Registration < ApplicationRecord
   end
 
   def entry_fee
-    sum_lowest_denomination = competition.base_entry_fee + competition_events.map(&:fee_lowest_denomination).sum
+    sum_lowest_denomination = competition.base_entry_fee + competition_events.sum(&:fee_lowest_denomination)
 
     Money.new(
       sum_lowest_denomination,
@@ -150,7 +150,7 @@ class Registration < ApplicationRecord
       # registration.includes(:registration_payments) that may exist.
       # It's fine to turn the associated records to an array and sum on ithere,
       # as it's usually just a couple of rows.
-      registration_payments.map(&:amount_lowest_denomination).sum,
+      registration_payments.sum(&:amount_lowest_denomination),
       competition.currency_code,
     )
   end
@@ -365,7 +365,7 @@ class Registration < ApplicationRecord
     if !competition.present? || !competition.events_per_registration_limit_enabled?
       return
     end
-    if registration_competition_events.reject(&:marked_for_destruction?).length > competition.events_per_registration_limit
+    if registration_competition_events.count { |element| !element.marked_for_destruction? } > competition.events_per_registration_limit
       errors.add(:registration_competition_events, I18n.t('registrations.errors.exceeds_event_limit', count: competition.events_per_registration_limit))
     end
   end

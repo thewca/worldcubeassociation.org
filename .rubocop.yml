@@ -287,15 +287,6 @@ Performance/RedundantMerge:
 Performance/TimesMap:
   Enabled: false
 
-Performance/Detect:
-  Enabled: false
-
-Performance/Count:
-  Enabled: false
-
-Performance/Sum:
-  Enabled: false
-
 # Rails
 
 Rails/TimeZone:
