@@ -62,7 +62,7 @@ class LiveResult < ApplicationRecord
     #   2. The attempts are then sorted among themselves using their normal numeric value.
     #     This works in particular because sorting in MySQL is stable, i.e. the sorting
     #     based on the second part won't destroy the order established by the first part.
-    ActiveRecord::Base.connection.exec_query <<-SQL
+    ActiveRecord::Base.connection.exec_query <<-SQL.squish
       UPDATE live_results r
       LEFT JOIN (
           SELECT id,

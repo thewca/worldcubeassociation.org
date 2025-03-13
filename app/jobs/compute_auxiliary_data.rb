@@ -82,7 +82,7 @@ class ComputeAuxiliaryData < WcaCronjob
   ######
 
   private def rankings_query(type, column, event_id)
-    <<-SQL
+    <<-SQL.squish
       SELECT
         result.*,
         result.#{column} value
@@ -101,7 +101,7 @@ class ComputeAuxiliaryData < WcaCronjob
   end
 
   private def mixed_records_query(event_id: nil)
-    <<-SQL
+    <<-SQL.squish
       SELECT *
       FROM
         (#{self.current_records_query("best", "single", event_id: event_id)}
@@ -115,7 +115,7 @@ class ComputeAuxiliaryData < WcaCronjob
   private def current_records_query(value, type, event_id: nil)
     event_condition = event_id.present? ? "AND eventId = '#{event_id}'" : ""
 
-    <<-SQL
+    <<-SQL.squish
       SELECT
         '#{type}'            type,
                              result.*,

@@ -287,12 +287,6 @@ Rails/PluralizationGrammar:
 Rails/I18nLocaleAssignment:
   Enabled: false
 
-Rails/Output:
-  Enabled: false
-
-Rails/SquishedSQLHeredocs:
-  Enabled: false
-
 Rails/FindEach:
   Enabled: false
 

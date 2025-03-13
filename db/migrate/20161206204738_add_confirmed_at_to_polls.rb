@@ -3,7 +3,7 @@
 class AddConfirmedAtToPolls < ActiveRecord::Migration
   def up
     add_column :polls, :confirmed_at, :datetime
-    execute <<-SQL
+    execute <<-SQL.squish
       UPDATE polls
       SET confirmed_at = created_at
       WHERE confirmed = 1
@@ -13,7 +13,7 @@ class AddConfirmedAtToPolls < ActiveRecord::Migration
 
   def down
     add_column :polls, :confirmed, :boolean
-    execute <<-SQL
+    execute <<-SQL.squish
       UPDATE polls
       SET confirmed = 1
       WHERE confirmed_at IS NOT NULL

@@ -7,11 +7,11 @@ class AddProperDateFieldsToCompetition < ActiveRecord::Migration
     add_column :Competitions, :end_date, :date
     add_index :Competitions, :end_date
 
-    execute <<-SQL
+    execute <<-SQL.squish
       UPDATE Competitions SET start_date=CONCAT(year, '-', month, '-', day) WHERE year != 0 AND month != 0 AND day != 0;
     SQL
 
-    execute <<-SQL
+    execute <<-SQL.squish
       UPDATE Competitions SET end_date=CONCAT(endYear, '-', endMonth, '-', endDay) WHERE endYear != 0 AND endMonth != 0 AND endDay != 0;
     SQL
   end

@@ -2,7 +2,7 @@
 
 class FixResultsPostedAt < ActiveRecord::Migration
   def change
-    execute <<-SQL
+    execute <<-SQL.squish
       UPDATE Competitions
       SET results_posted_at = (SELECT created_at
         FROM posts
