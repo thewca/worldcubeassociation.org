@@ -33,9 +33,7 @@ export default function RootLayout({
         <WCAQueryClientProvider>
           <AuthProvider>
             <UiProvider>
-              <PermissionProvider>
-                {children}
-              </PermissionProvider>
+              <PermissionProvider>{children}</PermissionProvider>
             </UiProvider>
           </AuthProvider>
         </WCAQueryClientProvider>

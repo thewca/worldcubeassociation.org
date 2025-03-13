@@ -3,20 +3,21 @@ import PermissionProvider from "@/providers/PermissionProvider";
 import PermissionsTestMessage from "@/components/competitions/permissionsTestMessage";
 import { getCompetitionInfo } from "@/lib/wca/competitions/getCompetitionInfo";
 
-export default async function CompetitionOverView({ params }: { params: Promise<{ competitionId: string }> }){
+export default async function CompetitionOverView({
+  params,
+}: {
+  params: Promise<{ competitionId: string }>;
+}) {
   const { competitionId } = await params;
-  const { data: competitionInfo, error } = await getCompetitionInfo(competitionId);
+  const { data: competitionInfo, error } =
+    await getCompetitionInfo(competitionId);
 
-  if(error){
-    return <p>
-      Error fetching competition
-    </p>
+  if (error) {
+    return <p>Error fetching competition</p>;
   }
 
-  if(!competitionInfo){
-    return <p>
-      Competition does not exist
-    </p>
+  if (!competitionInfo) {
+    return <p>Competition does not exist</p>;
   }
 
   return (
@@ -27,5 +28,4 @@ export default async function CompetitionOverView({ params }: { params: Promise<
       </PermissionProvider>
     </Container>
   );
-
 }

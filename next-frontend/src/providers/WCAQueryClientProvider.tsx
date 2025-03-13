@@ -9,16 +9,18 @@ const queryClient = new QueryClient({
       refetchOnWindowFocus: false,
       refetchOnReconnect: false,
       staleTime: Infinity,
-      refetchOnMount: 'always',
+      refetchOnMount: "always",
       retry: false,
     },
   },
 });
 
-export default function WCAQueryClientProvider({ children }: { children: React.ReactNode }) {
+export default function WCAQueryClientProvider({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <QueryClientProvider client={queryClient}>
-      {children}
-    </QueryClientProvider>
+    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
   );
 }
