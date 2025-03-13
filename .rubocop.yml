@@ -608,8 +608,5 @@ FactoryBot/SyntaxMethods:
 FactoryBot/AssociationStyle:
   Enabled: false
 
-FactoryBot/RedundantFactoryOption:
-  Enabled: false
-
 FactoryBot/ExcessiveCreateList:
   Enabled: false

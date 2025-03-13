@@ -41,7 +41,7 @@ FactoryBot.define do
     end
 
     trait :newcomer do
-      association :user, factory: [:user]
+      association :user
     end
 
     trait :newcomer_month_eligible do
