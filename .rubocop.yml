@@ -401,9 +401,6 @@ Rails/LexicallyScopedActionFilter:
 Rails/RenderInline:
   Enabled: false
 
-Rails/ActiveRecordCallbacksOrder:
-  Enabled: false
-
 # Rspec
 
 RSpec/MultipleExpectations:
