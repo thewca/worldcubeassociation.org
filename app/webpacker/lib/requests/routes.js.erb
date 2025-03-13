@@ -273,6 +273,9 @@ export const viewUrls = {
   admin: {
     completePersons: (competitionIds) => `<%= CGI.unescape(Rails.application.routes.url_helpers.admin_complete_persons_path) %>?${jsonToQueryString({ competition_ids: competitionIds })}`,
   },
+  competitions: {
+    countInRange: (startDate, endDate) => `<%= CGI.unescape(Rails.application.routes.url_helpers.panel_competition_count_path) %>?${jsonToQueryString({ startDate, endDate })}`,
+  },
 }
 
 export const actionUrls = {
@@ -283,6 +286,10 @@ export const actionUrls = {
     addComment: (ticketId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.ticket_comments_path("${ticketId}")) %>`,
     getDetailsBeforeAnonymization: (userId, wcaId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.tickets_details_before_anonymization_path) %>?${jsonToQueryString({ userId, wcaId })}`,
     anonymize: `<%= CGI.unescape(Rails.application.routes.url_helpers.tickets_anonymize_path) %>`,
+  },
+  validators: {
+    forCompetitionList: (competitionIds, selectedValidators, applyFixWhenPossible) => `<%= CGI.unescape(Rails.application.routes.url_helpers.panel_validators_for_competition_list_path) %>?${jsonToQueryString({ competitionIds, selectedValidators, applyFixWhenPossible })}`,
+    forCompetitionsInRange: (startDate, endDate, selectedValidators, applyFixWhenPossible) => `<%= CGI.unescape(Rails.application.routes.url_helpers.panel_validators_for_competitions_in_range_path) %>?${jsonToQueryString({ startDate, endDate, selectedValidators, applyFixWhenPossible })}`,
   },
 }
 
@@ -346,8 +353,6 @@ export const rankingsUrl = (eventId, rankingType, region, gender, show) => {
 };
 
 export const serverStatusPageUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.server_status_path) %>`;
-
-export const runValidatorsUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.admin_check_results_path) %>`;
 
 export const checkRecordsUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.admin_check_regional_records_path) %>`;
 

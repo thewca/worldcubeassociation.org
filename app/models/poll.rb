@@ -12,7 +12,7 @@ class Poll < ApplicationRecord
   # Validations for confirming a poll
   validate :must_have_at_least_two_options, if: :confirmed?
   def must_have_at_least_two_options
-    if self.poll_options.reject(&:marked_for_destruction?).length < 2
+    if self.poll_options.count { |element| !element.marked_for_destruction? } < 2
       errors.add(:poll_options, "Poll must have at least two options")
     end
   end

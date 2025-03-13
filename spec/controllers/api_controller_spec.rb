@@ -69,7 +69,7 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
       get :users_search, params: { q: "erem" }
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
-      expect(json["result"].select { |u| u["name"] == "Jeremy" }[0]).not_to be_nil
+      expect(json["result"].find { |u| u["name"] == "Jeremy" }).not_to be_nil
     end
 
     it 'does not find dummy accounts' do

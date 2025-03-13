@@ -18,7 +18,7 @@
     "@babel/plugin-transform-runtime": "^7.26.9",
     "@babel/preset-env": "^7.26.9",
     "@babel/preset-react": "^7.26.3",
-    "@babel/runtime": "^7.26.9",
+    "@babel/runtime": "^7.26.10",
     "@cubing/icons": "^2.0.2",
     "@fullcalendar/core": "^6.1.15",
     "@fullcalendar/interaction": "^6.1.15",
@@ -101,7 +101,11 @@
     "whatwg-fetch": "^3.6.20"
   },
   "browserslist": [
-    "defaults"
+    "> 0.2%",
+    "last 5 versions",
+    "Firefox ESR",
+    "not dead",
+    "not op_mini all"
   ],
   "devDependencies": {
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.15",

@@ -138,7 +138,7 @@ module CompetitionsHelper
 
   def announced_class(competition)
     if competition.announced_at
-      level = [Competition::ANNOUNCED_DAYS_WARNING, Competition::ANNOUNCED_DAYS_DANGER].select { |d| days_announced_before_competition(competition) > d }.count
+      level = [Competition::ANNOUNCED_DAYS_WARNING, Competition::ANNOUNCED_DAYS_DANGER].count { |d| days_announced_before_competition(competition) > d }
       ["alert-danger", "alert-orange", "alert-green"][level]
     else
       ""
@@ -146,7 +146,7 @@ module CompetitionsHelper
   end
 
   private def report_and_results_days_to_class(days)
-    level = [Competition::REPORT_AND_RESULTS_DAYS_OK, Competition::REPORT_AND_RESULTS_DAYS_WARNING, Competition::REPORT_AND_RESULTS_DAYS_DANGER].select { |d| days > d }.count
+    level = [Competition::REPORT_AND_RESULTS_DAYS_OK, Competition::REPORT_AND_RESULTS_DAYS_WARNING, Competition::REPORT_AND_RESULTS_DAYS_DANGER].count { |d| days > d }
     ["alert-green", "alert-success", "alert-orange", "alert-danger"][level]
   end
 

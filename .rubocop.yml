@@ -2,6 +2,11 @@ inherit_from: .rubocop_todo.yml
 
 plugins:
   - rubocop-thread_safety
+  - rubocop-performance
+  - rubocop-rails
+  - rubocop-rspec
+  - rubocop-rspec_rails
+  - rubocop-factory_bot
 
 AllCops:
   TargetRubyVersion: 3.4
@@ -247,3 +252,379 @@ ThreadSafety/ClassAndModuleAttributes:
 
 ThreadSafety/DirChdir:
   AllowCallWithBlock: true
+
+# These are a list of temporarily disabled cops so we can turn them on in batches
+
+# Performance
+
+Performance/CollectionLiteralInLoop:
+  Enabled: false
+
+Performance/MethodObjectAsBlock:
+  Enabled: false
+
+Performance/MapMethodChain:
+  Enabled: false
+
+Performance/MapCompact:
+  Enabled: false
+
+Performance/RedundantBlockCall:
+  Enabled: false
+
+# Rails
+
+Rails/TimeZone:
+  Enabled: false
+
+Rails/Date:
+  Enabled: false
+
+Rails/DynamicFindBy:
+  Enabled: false
+
+Rails/ResponseParsedBody:
+  Enabled: false
+
+Rails/SkipsModelValidations:
+  Enabled: false
+
+Rails/PluralizationGrammar:
+  Enabled: false
+
+Rails/FilePath:
+  Enabled: false
+
+Rails/RootPathnameMethods:
+  Enabled: false
+
+Rails/I18nLocaleAssignment:
+  Enabled: false
+
+Rails/Blank:
+  Enabled: false
+
+Rails/Output:
+  Enabled: false
+
+Rails/SquishedSQLHeredocs:
+  Enabled: false
+
+Rails/FindEach:
+  Enabled: false
+
+Rails/IndexBy:
+  Enabled: false
+
+Rails/NegateInclude:
+  Enabled: false
+
+Rails/Pluck:
+  Enabled: false
+
+Rails/Pick:
+  Enabled: false
+
+Rails/Delegate:
+  Enabled: false
+
+Rails/ReversibleMigration:
+  Enabled: false
+
+Rails/BulkChangeTable:
+  Enabled: false
+
+Rails/ThreeStateBooleanColumn:
+  Enabled: false
+
+Rails/CreateTableWithTimestamps:
+  Enabled: false
+
+Rails/NotNullColumn:
+  Enabled: false
+
+Rails/DangerousColumnNames:
+  Enabled: false
+
+Rails/RedundantForeignKey:
+  Enabled: false
+
+Rails/WhereRange:
+  Enabled: false
+
+Rails/InverseOf:
+  Enabled: false
+
+Rails/Validation:
+  Enabled: false
+
+Rails/WhereExists:
+  Enabled: false
+
+Rails/HasManyOrHasOneDependent:
+  Enabled: false
+
+Rails/RedundantActiveRecordAllMethod:
+  Enabled: false
+
+Rails/OutputSafety:
+  Enabled: false
+
+Rails/I18nLocaleTexts:
+  Enabled: false
+
+Rails/ShortI18n:
+  Enabled: false
+
+Rails/RakeEnvironment:
+  Enabled: false
+
+Rails/ApplicationRecord:
+  Enabled: false
+
+Rails/Present:
+  Enabled: false
+
+Rails/WhereEquals:
+  Enabled: false
+
+Rails/CompactBlank:
+  Enabled: false
+
+Rails/EnumHash:
+  Enabled: false
+
+Rails/ReadWriteAttribute:
+  Enabled: false
+
+Rails/IndexWith:
+  Enabled: false
+
+Rails/HelperInstanceVariable:
+  Enabled: false
+
+Rails/LinkToBlank:
+  Enabled: false
+
+Rails/ActionControllerFlashBeforeRender:
+  Enabled: false
+
+Lint/RedundantSafeNavigation:
+  Enabled: false
+
+Rails/Presence:
+  Enabled: false
+
+Rails/UniqueValidationWithoutIndex:
+  Enabled: false
+
+Rails/HttpStatus:
+  Enabled: false
+
+Rails/ActionOrder:
+  Enabled: false
+
+Rails/FindById:
+  Enabled: false
+
+Rails/DotSeparatedKeys:
+  Enabled: false
+
+Rails/I18nLazyLookup:
+  Enabled: false
+
+Rails/LexicallyScopedActionFilter:
+  Enabled: false
+
+Rails/RenderInline:
+  Enabled: false
+
+Rails/ActiveRecordCallbacksOrder:
+  Enabled: false
+
+# Rspec
+
+RSpec/NotToNot:
+ Enabled: false
+
+RSpec/MultipleExpectations:
+ Enabled: false
+
+RSpec/ExampleLength:
+ Enabled: false
+
+RSpec/NoExpectationExample:
+  Enabled: false
+
+RSpec/IndexedLet:
+  Enabled: false
+
+RSpec/HookArgument:
+  Enabled: false
+
+RSpec/MetadataStyle:
+  Enabled: false
+
+RSpec/AnyInstance:
+  Enabled: false
+
+RSpec/VerifiedDoubles:
+  Enabled: false
+
+RSpec/DescribeClass:
+  Enabled: false
+
+RSpec/ContextWording:
+  Enabled: false
+
+RSpec/BeEq:
+  Enabled: false
+
+RSpec/EmptyLineAfterHook:
+  Enabled: false
+
+RSpec/EmptyLineAfterExampleGroup:
+  Enabled: false
+
+RSpec/ExpectChange:
+  Enabled: false
+
+RSpec/EmptyLineAfterFinalLet:
+  Enabled: false
+
+RSpec/SpecFilePathFormat:
+  Enabled: false
+
+RSpec/LetSetup:
+  Enabled: false
+
+RSpec/ChangeByZero:
+  Enabled: false
+
+RSpec/MessageSpies:
+  Enabled: false
+
+RSpec/InstanceVariable:
+  Enabled: false
+
+RSpec/NestedGroups:
+  Enabled: false
+
+RSpec/BeforeAfterAll:
+  Enabled: false
+
+RSpec/MultipleMemoizedHelpers:
+  Enabled: false
+
+RSpec/ItBehavesLike:
+  Enabled: false
+
+RSpec/EmptyLineAfterExample:
+  Enabled: false
+
+RSpec/MatchArray:
+  Enabled: false
+
+RSpec/DescribedClass:
+  Enabled: false
+
+RSpec/VariableName:
+  Enabled: false
+
+RSpec/RepeatedDescription:
+  Enabled: false
+
+RSpec/ReceiveCounts:
+  Enabled: false
+
+RSpec/ContextMethod:
+  Enabled: false
+
+RSpec/BeNil:
+  Enabled: false
+
+RSpec/LetBeforeExamples:
+  Enabled: false
+
+RSpec/ExampleWording:
+  Enabled: false
+
+RSpec/Focus:
+  Enabled: false
+
+RSpec/ExpectInHook:
+  Enabled: false
+
+RSpec/PendingWithoutReason:
+  Enabled: false
+
+RSpec/MultipleDescribes:
+  Enabled: false
+
+RSpec/StubbedMock:
+  Enabled: false
+
+RSpec/SortMetadata:
+  Enabled: false
+
+RSpec/ScatteredSetup:
+  Enabled: false
+
+RSpec/ExcessiveDocstringSpacing:
+  Enabled: false
+
+RSpec/NamedSubject:
+  Enabled: false
+
+RSpec/Be:
+  Enabled: false
+
+RSpec/ScatteredLet:
+  Enabled: false
+
+RSpec/RepeatedExample:
+  Enabled: false
+
+RSpec/RepeatedExampleGroupDescription:
+  Enabled: false
+
+RSpec/ClassCheck:
+  Enabled: false
+
+RSpec/BeEmpty:
+  Enabled: false
+
+RSpecRails/NegationBeValid:
+  Enabled: false
+
+RSpecRails/HaveHttpStatus:
+  Enabled: false
+
+RSpecRails/InferredSpecType:
+  Enabled: false
+
+RSpecRails/HttpStatus:
+  Enabled: false
+
+# Factory Bot
+
+FactoryBot/ConsistentParenthesesStyle:
+  Enabled: false
+
+FactoryBot/SyntaxMethods:
+  Enabled: false
+
+FactoryBot/AssociationStyle:
+  Enabled: false
+
+FactoryBot/RedundantFactoryOption:
+  Enabled: false
+
+FactoryBot/FactoryClassName:
+  Enabled: false
+
+FactoryBot/CreateList:
+  Enabled: false
+
+FactoryBot/ExcessiveCreateList:
+  Enabled: false

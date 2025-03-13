@@ -675,7 +675,7 @@ fr:
         #original_hash: 35a6012
         competing_and_attending: Participation et Présence
         #original_hash: 4f30c10
-        competing_and_attending_and_forums: 'Participer, assister et utiliser les forums'
+        competing_and_attending_and_forums: 'Participation, Présence et Utilisation des forums'
     competition_medium:
       status:
         #original_hash: 61a0572
@@ -926,7 +926,7 @@ fr:
         #original_hash: da39a3e
         country: ''
         #original_hash: 72448d6
-        website: Doit être uneURLl http(s) valide. HTTPS est recommandé
+        website: Doit être une URL http(s) valide. HTTPS est recommandé
         #original_hash: 2ace571
         logo: >-
           Doit être au format PNG, avec une bonne résolution et un fond
@@ -1737,12 +1737,12 @@ fr:
         consulter les résultats ? Direction %{wca_live_link} !
     merchandise:
       #original_hash: 698cfc8
-      title: Merchandising
+      title: Produits Dérivés
       #original_hash: 6403f2b
       ad_new: Nouveau
       #original_hash: 9ad68ce
       text_html: >-
-        Allez jeter un œil à notre nouveau merchandising incluant une sélection
+        Allez jeter un œil à nos nouveaux produits dérivés incluant une sélection
         de vêtements (t-shirts, sweats à capuche...)
       #original_hash: b0fc6c4
       link_title: Lien vers la boutique
@@ -2012,7 +2012,7 @@ fr:
       #original_hash: 81fa5f9
       pending_avatar_edit_action: 'Cliquez ici si vous souhaitez l''éditer à la place :'
       #original_hash: 73cebb8
-      pending_avatar_edit_warning: Modification de l'avatar en attente !
+      pending_avatar_edit_warning: Modification de la photo de profil en attente !
       #original_hash: 7b06f03
       pending_claim_confirmation_html: >-
         Ce compte est en attente de %{delegate} pour confirmer l'ID WCA
@@ -2082,7 +2082,7 @@ fr:
         '2': Vous devez utiliser une photo récente.
         #original_hash: 8165cf0
         '3': >-
-          S'il y a plus d'une personne dans l'avatar, il doit être clair
+          S'il y a plus d'une personne dans la photo de profil, il doit être clair
           laquelle vous êtes.
         #original_hash: 4083c00
         '4': >-
@@ -2090,10 +2090,10 @@ fr:
           visible.
         #original_hash: 14c72b2
         '5': >-
-          L'avatar ne doit pas comporter de texte superposé, d'autocollants ou
+          La photo de profil ne doit pas comporter de texte superposé, d'autocollants ou
           de filtres non naturels, y compris des bordures.
         #original_hash: 7f9c9c6
-        '6': L'avatar doit être présenté dans le bon sens.
+        '6': La photo de profil doit être présenté dans le bon sens.
         #original_hash: 1a18831
         '7': >-
           La photo de profil ne doit pas contenir de contenu offensant (ex :
@@ -2110,7 +2110,7 @@ fr:
             vous apparaîtriez à une compétition.
           #original_hash: f1f3854
           '2': >-
-            L'avatar doit être cadré, recadré, incliné et éclairé de manière à
+            La photo de profil doit être cadré, recadré, incliné et éclairé de manière à
             ce que tout compétiteur ou spectateur d'une compétition puisse
             l'utiliser pour vous identifier sans ambiguïté sur le lieu de la
             compétition.
@@ -3122,7 +3122,7 @@ fr:
       #original_hash: b3946b2
       sort_by_announcement: Trier par date d'annonce
       #original_hash: e63dc91
-      admin_status: Statut admin
+      admin_status: Statut administrateur
       status_flags:
         #original_hash: 6a72085
         all: Tous
@@ -4123,6 +4123,27 @@ fr:
         #original_hash: 092da51
         '-6002': Vous devez terminer votre inscription avant de pouvoir payer
     errors:
+      #original_hash: b14d060
+      must_use_wca_registration: >-
+        L'acceptation automatique ne peut être utilisée que si vous utilisez le
+        site web de la WCA pour les inscriptions.
+      #original_hash: 130c901
+      auto_accept_limit: >-
+        La limite d'inscriptions acceptées automatiquement doit être inférieure
+        à la limite de compétiteurs.
+      #original_hash: 42cd8e6
+      auto_accept_not_negative: >-
+        La limite d'inscriptions acceptées automatiquement ne peut être
+        inférieure à 0.
+      #original_hash: 181d8d9
+      auto_accept_accept_paid_pending: >-
+        Impossible d'activer l'acceptation automatique s'il y a des inscriptions
+        payées en cours - il faut soit les accepter, soit les placer sur la
+        liste d'attente.
+      #original_hash: 96db418
+      auto_accept_accept_waitlisted: >-
+        Impossible d'activer l'acceptation automatique - veuillez accepter
+        autant d'utilisateurs de la liste d'attente que possible.
       #original_hash: 6d11b4e
       auto_close_exceed_paid: >-
         Le seuil de fermeture automatique doit être supérieur au nombre
@@ -4715,7 +4736,7 @@ fr:
       account_disconnected_success: 'Déconnexion réussie de votre compte %{provider}.'
       #original_hash: 6b934e2
       account_disconnected_failure: >-
-        Une erruer s'est produite en tentant de déconnecter votre compte
+        Une erreur s'est produite en tentant de déconnecter votre compte
         %{provider}.
       #original_hash: 340bba4
       account_not_connected: >-
@@ -6140,24 +6161,24 @@ fr:
     login_message: Veuillez vous connecter
   merch:
     #original_hash: 96a95a1
-    title: Merchandising WCA
+    title: Produits Dérivés WCA
     paragraphs:
       #original_hash: 8a23af2
       '1': >-
-        La WCA propose du merchandising exclusif à la vente ! T- shirts,
+        La WCA propose des produits dérivés exclusifs à la vente ! T- shirts,
         hoodies, stickers, stackmats, sacs à dos et bien plus ! Nos designs sont
-        constamment mis à jour, y compris le logo classique de la WCA, le
-        merchandising officiel du championnat du monde et les designs du record
+        constamment mis à jour, y compris le logo classique de la WCA, les
+        produits dérivés officiels du championnat du monde et les designs du record
         du monde.
       #original_hash: 2865e1d
       '2': >-
-        Acheter du merch WCA via notre boutique est l'un des meilleurs moyens de
+        Acheter des produits dérivés WCA via notre boutique est l'un des meilleurs moyens de
         supporter la WCA - un organisme bénévole à but non lucratif. Nous
-        utilisons tous les bénéfices du merch pour financer davantage les
+        utilisons tous les bénéfices des produits dérivés pour financer davantage les
         championnats, l’équipement et d’autres activités liées à la WCA.
       #original_hash: 8e57552
       '3': >-
-        Vous pouvez acheter notre merchandising partout dans le monde -- avec
+        Vous pouvez acheter nos produits dérivés partout dans le monde -- avec
         des magasins directs en Europe, en Amérique, en Inde et plus à venir
         bientôt !
   database:

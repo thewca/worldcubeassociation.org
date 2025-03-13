@@ -101,6 +101,11 @@ FactoryBot.define do
 
     registration_version { :v3 }
 
+    trait :auto_accept do
+      use_wca_registration { true }
+      auto_accept_registrations { true }
+    end
+
     trait :newcomer_month do
       registration_open
       with_organizer
@@ -484,7 +489,7 @@ FactoryBot.define do
         qualification_data = evaluator.qualifications
 
         events_wcif.each do |event|
-          next unless qualification_data.keys.include?(event['id'])
+          next unless qualification_data.key?(event['id'])
           event['qualification'] = qualification_data[event['id']]
         end
 

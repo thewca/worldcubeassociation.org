@@ -1,10 +1,9 @@
 import React from 'react';
-import { useQuery } from '@tanstack/react-query';
 import StepPanel from './StepPanel';
-import { getSingleRegistration } from '../api/registration/get/get_registrations';
 import Loading from '../../Requests/Loading';
-import RegistrationMessage, { showMessage } from './RegistrationMessage';
-import StoreProvider, { useDispatch } from '../../../lib/providers/StoreProvider';
+import RegistrationProvider, { useRegistration } from '../lib/RegistrationProvider';
+import RegistrationMessage from './RegistrationMessage';
+import StoreProvider from '../../../lib/providers/StoreProvider';
 import messageReducer from '../reducers/messageReducer';
 import WCAQueryClientProvider from '../../../lib/providers/WCAQueryClientProvider';
 import ConfirmProvider from '../../../lib/providers/ConfirmProvider';
@@ -32,16 +31,18 @@ export default function Index({
     <WCAQueryClientProvider>
       <StoreProvider reducer={messageReducer} initialState={{ messages: [] }}>
         <ConfirmProvider>
-          <Register
-            competitionInfo={competitionInfo}
-            userInfo={userInfo}
-            userCanPreRegister={userCanPreRegister}
-            preferredEvents={preferredEvents}
-            stripePublishableKey={stripePublishableKey}
-            connectedAccountId={connectedAccountId}
-            qualifications={qualifications}
-            cannotRegisterReasons={cannotRegisterReasons}
-          />
+          <RegistrationProvider competitionInfo={competitionInfo} userInfo={userInfo}>
+            <Register
+              competitionInfo={competitionInfo}
+              userInfo={userInfo}
+              userCanPreRegister={userCanPreRegister}
+              preferredEvents={preferredEvents}
+              stripePublishableKey={stripePublishableKey}
+              connectedAccountId={connectedAccountId}
+              qualifications={qualifications}
+              cannotRegisterReasons={cannotRegisterReasons}
+            />
+          </RegistrationProvider>
         </ConfirmProvider>
       </StoreProvider>
     </WCAQueryClientProvider>
@@ -58,24 +59,6 @@ function Register({
   stripePublishableKey,
   cannotRegisterReasons,
 }) {
-  const dispatch = useDispatch();
-
-  const {
-    data: registration,
-    isFetching,
-    refetch,
-  } = useQuery({
-    queryKey: ['registration', competitionInfo.id, userInfo.id],
-    queryFn: () => getSingleRegistration(userInfo.id, competitionInfo),
-    onError: (data) => {
-      const { error } = data.json;
-      dispatch(showMessage(
-        `competitions.registration_v2.errors.${error}`,
-        'negative',
-      ));
-    },
-  });
-
   const registrationAlreadyOpen = usePerpetualState(
     () => hasPassed(competitionInfo.registration_open),
   );
@@ -83,6 +66,8 @@ function Register({
   const registrationNotYetClosed = usePerpetualState(
     () => hasNotPassed(competitionInfo.registration_close),
   );
+
+  const { isFetching, registration } = useRegistration();
 
   if (isFetching) {
     return <Loading />;
@@ -122,7 +107,6 @@ function Register({
             preferredEvents={preferredEvents}
             competitionInfo={competitionInfo}
             registration={registration}
-            refetchRegistration={refetch}
             connectedAccountId={connectedAccountId}
             stripePublishableKey={stripePublishableKey}
             qualifications={qualifications}

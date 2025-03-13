@@ -243,7 +243,7 @@ class Person < ApplicationRecord
     records = results.pluck(:regionalSingleRecord, :regionalAverageRecord).flatten.select(&:present?)
     {
       national: records.count("NR"),
-      continental: records.reject { |record| %w(NR WR).include?(record) }.count,
+      continental: records.count { |record| !(%w(NR WR).include?(record)) },
       world: records.count("WR"),
       total: records.count,
     }
@@ -367,10 +367,8 @@ class Person < ApplicationRecord
 
   def serializable_hash(options = nil)
     json = super(DEFAULT_SERIALIZE_OPTIONS.merge(options || {}))
-    json.merge!(
-      class: self.class.to_s.downcase,
-      id: self.wca_id,
-    )
+    json[:class] = self.class.to_s.downcase
+    json[:id] = self.wca_id
 
     private_attributes = options&.fetch(:private_attributes, []) || []
     if private_attributes.include?("dob")
