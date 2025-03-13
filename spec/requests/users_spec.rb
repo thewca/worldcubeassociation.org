@@ -91,10 +91,12 @@ RSpec.describe "users" do
 
   context "user without 2FA" do
     let!(:user) { FactoryBot.create(:user) }
+
     before { sign_in user }
 
     context "recently authenticated" do
       before { post users_authenticate_sensitive_path, params: { 'user[password]': user.password } }
+
       it 'can enable 2FA' do
         post profile_enable_2fa_path
         expect(response.body).to include "Successfully enabled two-factor"
@@ -104,7 +106,7 @@ RSpec.describe "users" do
       it 'does not generate backup codes for user without 2FA' do
         expect {
           post profile_generate_2fa_backup_path
-        }.to_not change { user.otp_backup_codes }
+        }.not_to change { user.otp_backup_codes }
         json = response.parsed_body
         expect(json["error"]["message"]).to include "not enabled"
       end
@@ -122,7 +124,7 @@ RSpec.describe "users" do
         expect {
           post profile_generate_2fa_backup_path
           follow_redirect!
-        }.to_not change { user.otp_backup_codes }
+        }.not_to change { user.otp_backup_codes }
         expect(response.body).to include I18n.t('users.edit.sensitive.identity_error')
       end
     end
@@ -130,15 +132,18 @@ RSpec.describe "users" do
 
   context "user with 2FA" do
     let!(:user) { FactoryBot.create(:user, :with_2fa) }
+
     before { sign_in user }
+
     context "recently authenticated" do
       before { post users_authenticate_sensitive_path, params: { 'user[otp_attempt]': user.current_otp } }
+
       it 'can reset 2FA' do
         secret_before = user.otp_secret
         post profile_enable_2fa_path
         secret_after = user.reload.otp_secret
         expect(response.body).to include "Successfully regenerated"
-        expect(secret_before).to_not eq secret_after
+        expect(secret_before).not_to eq secret_after
       end
 
       it 'can disable 2FA' do
@@ -148,9 +153,9 @@ RSpec.describe "users" do
       end
 
       it 'can (re)generate backup codes for user with 2FA' do
-        expect(user.otp_backup_codes).to eq nil
+        expect(user.otp_backup_codes).to be nil
         post profile_generate_2fa_backup_path
-        expect(user.reload.otp_backup_codes).to_not eq nil
+        expect(user.reload.otp_backup_codes).not_to be nil
         json = response.parsed_body
         expect(json["codes"]&.size).to eq User::NUMBER_OF_BACKUP_CODES
       end

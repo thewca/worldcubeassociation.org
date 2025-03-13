@@ -33,7 +33,7 @@ RSpec.describe RegistrationsController, clean_db_with_truncation: true do
 
     it "works when not logged in" do
       get :register, params: { competition_id: competition.id }
-      expect(assigns(:registration)).to eq nil
+      expect(assigns(:registration)).to be nil
     end
   end
 

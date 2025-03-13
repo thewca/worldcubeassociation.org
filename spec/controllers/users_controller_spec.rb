@@ -114,12 +114,12 @@ RSpec.describe UsersController do
     context "recently authenticated" do
       it "user can change email" do
         sign_in user
-        expect(user.confirmation_sent_at).to eq nil
+        expect(user.confirmation_sent_at).to be nil
         post :authenticate_user_for_sensitive_edit, params: { user: { password: "wca" } }
         patch :update, params: { id: user.id, user: { email: "newEmail@newEmail.com" } }
         user.reload
         expect(user.unconfirmed_email).to eq "newemail@newemail.com"
-        expect(user.confirmation_sent_at).not_to eq nil
+        expect(user.confirmation_sent_at).not_to be nil
       end
     end
 
@@ -128,8 +128,8 @@ RSpec.describe UsersController do
         sign_in user
         patch :update, params: { id: user.id, user: { email: "newEmail@newEmail.com" } }
         user.reload
-        expect(user.unconfirmed_email).to eq nil
-        expect(user.confirmation_sent_at).to eq nil
+        expect(user.unconfirmed_email).to be nil
+        expect(user.confirmation_sent_at).to be nil
         expect(flash[:danger]).to eq I18n.t("users.edit.sensitive.identity_error")
       end
     end
@@ -148,6 +148,7 @@ RSpec.describe UsersController do
 
     context "after creating a pending registration" do
       let!(:registration) { FactoryBot.create(:registration, :pending, user: user) }
+
       it "user can change name" do
         sign_in user
         patch :update, params: { id: user.id, user: { name: "Johnny 5" } }
@@ -157,6 +158,7 @@ RSpec.describe UsersController do
 
     context "after having a registration deleted" do
       let!(:registration) { FactoryBot.create(:registration, :cancelled, user: user) }
+
       it "user can change name" do
         sign_in user
         patch :update, params: { id: user.id, user: { name: "Johnny 5" } }
@@ -189,7 +191,7 @@ RSpec.describe UsersController do
       get :index, params: { format: :json, sort: "country", order: "ASC -- HMM" }
       users = assigns(:users)
       sql = users.to_sql
-      expect(sql).to_not match "HMM"
+      expect(sql).not_to match "HMM"
       expect(sql).to match(/order by .+ desc/i)
     end
   end
@@ -200,7 +202,7 @@ RSpec.describe UsersController do
         post :acknowledge_cookies
         expect(response.status).to eq 401
         response_json = response.parsed_body
-        expect(response_json['ok']).to eq false
+        expect(response_json['ok']).to be false
       end
     end
 
@@ -215,14 +217,14 @@ RSpec.describe UsersController do
         expect(admin.reload.cookies_acknowledged).to be false
         post :acknowledge_cookies
         response_json = response.parsed_body
-        expect(response_json['ok']).to eq true
+        expect(response_json['ok']).to be true
         expect(admin.reload.cookies_acknowledged).to be true
 
         # Do the same thing again. This shouldn't clear their cookies acknowledged
         # state.
         post :acknowledge_cookies
         response_json = response.parsed_body
-        expect(response_json['ok']).to eq true
+        expect(response_json['ok']).to be true
         expect(admin.reload.cookies_acknowledged).to be true
       end
     end

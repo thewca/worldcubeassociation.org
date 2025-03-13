@@ -42,6 +42,7 @@ end
 RSpec.feature "Competition management", js: true, retry: 10 do
   context "when signed in as admin" do
     let!(:admin) { FactoryBot.create :admin }
+
     before :each do
       sign_in admin
     end
@@ -276,7 +277,7 @@ RSpec.feature "Competition management", js: true, retry: 10 do
       visit edit_competition_path(comp)
       # patch :update, params: { id: comp, competition: { name: comp.name }, commit: "Confirm" }
       click_button "Confirm"
-      expect(comp.reload.confirmed?).to eq false
+      expect(comp.reload.confirmed?).to be false
     end
 
     scenario 'clone competition', js: true do
@@ -295,8 +296,8 @@ RSpec.feature "Competition management", js: true, retry: 10 do
       expect(new_competition.name).to eq "New Comp 2015"
       expect(new_competition.delegates).to eq [delegate, cloned_delegate]
       expect(new_competition.venue).to eq competition_to_clone.venue
-      expect(new_competition.showAtAll).to eq false
-      expect(new_competition.confirmed?).to eq false
+      expect(new_competition.showAtAll).to be false
+      expect(new_competition.confirmed?).to be false
       expect(new_competition.cityName).to eq 'Melbourne, Victoria'
     end
 

@@ -118,7 +118,7 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
         default_avatar = UserAvatar.default_avatar(nil)
         expect(json['result'][0]['avatar']['url']).to eq default_avatar.url
         expect(json['result'][0]['avatar']['thumb_url']).to eq default_avatar.thumbnail_url
-        expect(json['result'][0]['avatar']['is_default']).to eq true
+        expect(json['result'][0]['avatar']['is_default']).to be true
       end
 
       it "can find by name" do
@@ -153,6 +153,7 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
     let!(:user) { FactoryBot.create(:delegate, name: "Jeremy Fleischman") }
     let!(:comp) { FactoryBot.create(:competition, :confirmed, :visible, name: "jeremy Jfly's Competition 2015", delegates: [user]) }
     let!(:post) { FactoryBot.create(:post, title: "jeremy post title", body: "post body", author: user) }
+
     s3 = Aws::S3::Client.new(stub_responses: true)
     s3.stub_responses(:get_object, ->(_) { { body: "{}" } })
     Regulation.reload_regulations(Aws::S3::Resource.new(client: s3))
@@ -208,7 +209,7 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
       json = response.parsed_body
       expect(json["current"]["name"]).to eq "TNoodle-WCA-1.2.2"
       # the actual key resides in regulations-data, so in the test environment it will simply prompt "false"
-      expect(json["publicKeyBytes"]).to eq false
+      expect(json["publicKeyBytes"]).to be false
     end
   end
 
@@ -235,7 +236,7 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
         expect(json['me']['teams'].length).to eq 1
         team = json['me']['teams'].first
         expect(team['friendly_id']).to eq 'board'
-        expect(team['leader']).to eq false
+        expect(team['leader']).to be false
       end
     end
 
@@ -278,10 +279,10 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
         expect(response.status).to eq 200
         json = response.parsed_body
 
-        expect(json['me']['delegate_status']).to eq nil
+        expect(json['me']['delegate_status']).to be nil
         expect(json['me']['teams'].length).to eq 2
         team = json['me']['teams'].find { |t| t['friendly_id'] == 'wrc' }
-        expect(team['leader']).to eq false
+        expect(team['leader']).to be false
         expect(team['friendly_id']).to eq 'wrc'
         expect(team['avatar']['url']).to be_a String
         expect(team['id']).to be_a Numeric
@@ -307,6 +308,7 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
         )
       end
       let(:scopes) { Doorkeeper::OAuth::Scopes.new }
+
       before :each do
         api_sign_in_as(user, scopes: scopes)
       end
@@ -324,10 +326,10 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
         expect(json['me']['country_iso2']).to eq("US")
         expect(json['me']['gender']).to eq("m")
 
-        expect(json['me']['dob']).to eq(nil)
-        expect(json['me']['email']).to eq(nil)
+        expect(json['me']['dob']).to be(nil)
+        expect(json['me']['email']).to be(nil)
 
-        expect(json['me']['delegate_status']).to eq(nil)
+        expect(json['me']['delegate_status']).to be(nil)
         expect(json['me']['teams']).to eq([])
       end
 
@@ -338,7 +340,7 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
         expect(response.status).to eq 200
         json = response.parsed_body
         expect(json['me']['dob']).to eq("1987-12-04")
-        expect(json['me']['email']).to eq(nil)
+        expect(json['me']['email']).to be(nil)
       end
 
       it 'can request email scope' do
@@ -369,6 +371,7 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
       end
       let(:scopes) { Doorkeeper::OAuth::Scopes.new }
       let(:token) { double acceptable?: true, accessible?: true, resource_owner_id: user.id, scopes: scopes }
+
       before :each do
         allow(controller).to receive(:doorkeeper_token) { token }
       end
@@ -385,7 +388,7 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
         default_avatar = UserAvatar.default_avatar(user)
         expect(json['me']['avatar']['url']).to eq default_avatar.url
         expect(json['me']['avatar']['thumb_url']).to eq default_avatar.thumbnail_url
-        expect(json['me']['avatar']['is_default']).to eq true
+        expect(json['me']['avatar']['is_default']).to be true
 
         expect(json['me']['country_iso2']).to eq "US"
         expect(json['me']['gender']).to eq "m"
@@ -397,6 +400,7 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
       let(:user) { FactoryBot.create :user, country_iso2: "US" }
       let(:scopes) { Doorkeeper::OAuth::Scopes.new }
       let(:token) { double acceptable?: true, accessible?: true, resource_owner_id: user.id, scopes: scopes }
+
       before :each do
         allow(controller).to receive(:doorkeeper_token) { token }
       end
@@ -413,7 +417,7 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
         default_avatar = UserAvatar.default_avatar(user)
         expect(json['me']['avatar']['url']).to eq default_avatar.url
         expect(json['me']['avatar']['thumb_url']).to eq default_avatar.thumbnail_url
-        expect(json['me']['avatar']['is_default']).to eq true
+        expect(json['me']['avatar']['is_default']).to be true
 
         expect(json['me']['country_iso2']).to eq "US"
         expect(json['me']['gender']).to eq "m"

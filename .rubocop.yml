@@ -423,9 +423,6 @@ Rails/ActiveRecordCallbacksOrder:
 
 # Rspec
 
-RSpec/NotToNot:
- Enabled: false
-
 RSpec/MultipleExpectations:
  Enabled: false
 
@@ -456,19 +453,7 @@ RSpec/DescribeClass:
 RSpec/ContextWording:
   Enabled: false
 
-RSpec/BeEq:
-  Enabled: false
-
-RSpec/EmptyLineAfterHook:
-  Enabled: false
-
-RSpec/EmptyLineAfterExampleGroup:
-  Enabled: false
-
 RSpec/ExpectChange:
-  Enabled: false
-
-RSpec/EmptyLineAfterFinalLet:
   Enabled: false
 
 RSpec/SpecFilePathFormat:

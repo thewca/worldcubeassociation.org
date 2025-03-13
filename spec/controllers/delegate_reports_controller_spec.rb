@@ -43,6 +43,7 @@ RSpec.describe DelegateReportsController do
 
   context "logged in as THE delegate" do
     let!(:user) { comp.delegates.first }
+
     before :each do
       sign_in user
     end
@@ -64,17 +65,17 @@ RSpec.describe DelegateReportsController do
       comp.start_date = 1.day.from_now.strftime("%F")
       comp.end_date = 1.day.from_now.strftime("%F")
       comp.save!
-      expect(comp.is_probably_over?).to eq false
+      expect(comp.is_probably_over?).to be false
 
       post :update, params: { competition_id: comp.id, delegate_report: { remarks: "My new remarks", posted: false } }
       comp.reload
       expect(comp.delegate_report.remarks).to eq "My new remarks"
-      expect(comp.delegate_report.posted?).to eq false
+      expect(comp.delegate_report.posted?).to be false
 
       post :update, params: { competition_id: comp.id, delegate_report: { remarks: "My newer remarks", posted: true } }
       comp.reload
       expect(comp.delegate_report.remarks).to eq "My newer remarks"
-      expect(comp.delegate_report.posted?).to eq true
+      expect(comp.delegate_report.posted?).to be true
     end
 
     it "can post report and cannot edit report if it's posted" do
@@ -90,7 +91,7 @@ RSpec.describe DelegateReportsController do
       expect(flash[:info]).to eq "Your report has been posted and emailed!"
       comp.reload
       expect(comp.delegate_report.remarks).to eq "My newer remarks"
-      expect(comp.delegate_report.posted?).to eq true
+      expect(comp.delegate_report.posted?).to be true
       expect(comp.delegate_report.posted_by_user_id).to eq user.id
 
       # Try to update the report when it's posted.
@@ -122,6 +123,7 @@ RSpec.describe DelegateReportsController do
 
   context "logged in as THE trainee delegate" do
     let!(:user) { comp.trainee_delegates.first }
+
     before :each do
       sign_in user
     end
@@ -141,7 +143,7 @@ RSpec.describe DelegateReportsController do
     it "cannot post the report" do
       post :update, params: { competition_id: comp.id, delegate_report: { remarks: "My newer remarks", posted: true } }
       comp.reload
-      expect(comp.delegate_report.posted?).to eq false
+      expect(comp.delegate_report.posted?).to be false
       expect(response).to redirect_to(root_url)
     end
   end

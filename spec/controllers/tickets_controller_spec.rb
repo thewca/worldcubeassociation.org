@@ -82,7 +82,7 @@ RSpec.describe TicketsController do
 
       expect(response).to be_successful
       user.reload
-      expect(user.wca_id).to eq nil
+      expect(user.wca_id).to be nil
       expect(user.email).to eq user.id.to_s + User::ANONYMOUS_ACCOUNT_EMAIL_ID_SUFFIX
       expect(user.name).to eq User::ANONYMOUS_NAME
       expect(user.dob).to eq User::ANONYMOUS_DOB.to_date

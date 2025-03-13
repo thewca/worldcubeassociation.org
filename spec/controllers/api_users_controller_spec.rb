@@ -78,7 +78,7 @@ RSpec.describe Api::V0::UsersController do
       expect(response.status).to eq 200
       json = response.parsed_body
       expect(json["user"]).to eq competed_user.serializable_hash(private_attributes: ['email']).as_json
-      expect(json.key?("rankings")).to eq true
+      expect(json.key?("rankings")).to be true
     end
   end
 

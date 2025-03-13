@@ -28,9 +28,9 @@ RSpec.describe "oauth api" do
     post oauth_token_path, params: { grant_type: "password", client_id: oauth_app.uid, client_secret: oauth_app.secret, username: user.email, password: user.password, scope: "public email" }
     expect(response).to be_successful
     json = response.parsed_body
-    expect(json['error']).to eq(nil)
+    expect(json['error']).to be(nil)
     access_token = json['access_token']
-    expect(access_token).to_not eq(nil)
+    expect(access_token).not_to be(nil)
     verify_access_token access_token
   end
 
@@ -61,9 +61,9 @@ RSpec.describe "oauth api" do
       post oauth_token_path, params: { grant_type: "authorization_code", client_id: oauth_app.uid, client_secret: oauth_app.secret, code: authorization_code, redirect_uri: oauth_authorization_url }
       expect(response).to be_successful
       json = response.parsed_body
-      expect(json['error']).to eq(nil)
+      expect(json['error']).to be(nil)
       access_token = json['access_token']
-      expect(access_token).to_not eq(nil)
+      expect(access_token).not_to be(nil)
       verify_access_token access_token
     end
 
@@ -108,21 +108,21 @@ RSpec.describe "oauth api" do
       post oauth_token_path, params: { grant_type: "authorization_code", client_id: oauth_app.uid, client_secret: oauth_app.secret, code: authorization_code, redirect_uri: oauth_authorization_url }
       expect(response).to be_successful
       json = response.parsed_body
-      expect(json['error']).to eq(nil)
+      expect(json['error']).to be(nil)
       access_token = json['access_token']
-      expect(access_token).to_not eq(nil)
+      expect(access_token).not_to be(nil)
       verify_access_token access_token
       refresh_token = json['refresh_token']
-      expect(refresh_token).to_not eq(nil)
+      expect(refresh_token).not_to be(nil)
 
       # Since we now have a refresh token, we should be able to get a new access
       # token.
       post oauth_token_path, params: { grant_type: "refresh_token", client_id: oauth_app.uid, client_secret: oauth_app.secret, redirect_uri: oauth_authorization_url, refresh_token: refresh_token }
       expect(response).to be_successful
       json = response.parsed_body
-      expect(json['error']).to eq(nil)
+      expect(json['error']).to be(nil)
       access_token = json['access_token']
-      expect(access_token).to_not eq(nil)
+      expect(access_token).not_to be(nil)
       verify_access_token access_token
     end
 
@@ -156,9 +156,9 @@ RSpec.describe "oauth api" do
         post oauth_token_path, params: { grant_type: "authorization_code", client_id: oauth_app.uid, client_secret: oauth_app.secret, code: authorization_code, redirect_uri: different_redirect_uri }
         expect(response).to be_successful
         json = response.parsed_body
-        expect(json['error']).to eq(nil)
+        expect(json['error']).to be(nil)
         access_token = json['access_token']
-        expect(access_token).to_not eq(nil)
+        expect(access_token).not_to be(nil)
         verify_access_token access_token
       end
     end
@@ -183,7 +183,7 @@ RSpec.describe "oauth api" do
 
     query = Rack::Utils.parse_query(URI.parse(current_url).query)
     access_token = query["access_token"]
-    expect(access_token).to_not eq(nil)
+    expect(access_token).not_to be(nil)
     verify_access_token access_token
   end
 
@@ -195,7 +195,7 @@ RSpec.describe "oauth api" do
     # We just do a sanity check of the /me route here. There is a more
     # complete test in api_controller_spec.
     expect(json['me']['id']).to eq(user.id)
-    expect(json['me']['dob']).to eq(nil)
+    expect(json['me']['dob']).to be(nil)
     expect(json['me']['email']).to eq(user.email)
   end
 end
