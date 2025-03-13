@@ -17,7 +17,7 @@ class DelegateReport < ApplicationRecord
   belongs_to :wrc_primary_user, class_name: "User", optional: true
   belongs_to :wrc_secondary_user, class_name: "User", optional: true
 
-  enum :version, [:legacy, :working_group_2024], suffix: true, default: :working_group_2024
+  enum :version, { legacy: 0, working_group_2024: 1 }, suffix: true, default: :working_group_2024
 
   has_many_attached :setup_images do |attachable|
     attachable.variant :preview, resize_to_limit: [100, 100]

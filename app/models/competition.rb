@@ -95,11 +95,11 @@ class Competition < ApplicationRecord
     restricted: 2,
   }, prefix: true
 
-  enum :competitor_can_cancel, [:not_accepted, :always, :unpaid], prefix: true
+  enum :competitor_can_cancel, { not_accepted: 0, always: 1, unpaid: 2 }, prefix: true
 
   NEW_REG_SYSTEM_DEFAULT = :v3
 
-  enum :registration_version, [:v1, :v2, :v3], prefix: true, default: NEW_REG_SYSTEM_DEFAULT
+  enum :registration_version, { v1: 0, v2: 1, v3: 2 }, prefix: true, default: NEW_REG_SYSTEM_DEFAULT
 
   CLONEABLE_ATTRIBUTES = %w(
     cityName
@@ -547,7 +547,7 @@ class Competition < ApplicationRecord
   end
 
   def main_event_id=(event_id)
-    super(event_id.blank? ? nil : event_id)
+    super(event_id.presence)
   end
 
   # Enforce that the users marked as delegates for this competition are
@@ -2388,7 +2388,7 @@ class Competition < ApplicationRecord
 
   def dues_per_competitor_in_usd
     dues = DuesCalculator.dues_per_competitor_in_usd(self.country_iso2, self.base_entry_fee_lowest_denomination.to_i, self.currency_code)
-    dues.present? ? dues : 0
+    (dues.presence || 0)
   end
 
   private def xero_dues_payer
