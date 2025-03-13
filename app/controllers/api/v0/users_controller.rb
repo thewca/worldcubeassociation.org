@@ -31,8 +31,8 @@ class Api::V0::UsersController < Api::V0::ApiController
 
   def permissions
     require_user!
-    if stale?(current_user)
-      render json: current_user.permissions
+    if stale?(authenticated_user)
+      render json: authenticated_user.permissions
     end
   end
 

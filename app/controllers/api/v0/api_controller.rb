@@ -232,6 +232,10 @@ class Api::V0::ApiController < ApplicationController
     end
   end
 
+  def authenticated_user
+    current_api_user || current_user
+  end
+
   # Find the user that owns the access token.
   # From: https://github.com/doorkeeper-gem/doorkeeper#authenticated-resource-owner
   private def current_api_user
