@@ -95,7 +95,7 @@ class User < ApplicationRecord
   end
 
   def self.all_discourse_groups
-    UserGroup.teams_committees.map(&:metadata).map(&:friendly_id) + UserGroup.councils.map(&:metadata).map(&:friendly_id) + RolesMetadataDelegateRegions.statuses.values + [UserGroup.group_types[:board]]
+    UserGroup.teams_committees.map { |x| x.metadata.friendly_id } + UserGroup.councils.map { |x| x.metadata.friendly_id } + RolesMetadataDelegateRegions.statuses.values + [UserGroup.group_types[:board]]
   end
 
   accepts_nested_attributes_for :user_preferred_events, allow_destroy: true

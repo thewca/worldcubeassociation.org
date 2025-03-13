@@ -233,7 +233,7 @@ module ResultsValidators
         #  - check for any suspicious DNF result
 
         # Match wcif round ids to "our" ids
-        cumulative_round_ids = cumulative_wcif_round_ids.map do |wcif_id|
+        cumulative_round_ids = cumulative_wcif_round_ids.filter_map do |wcif_id|
           parsed_wcif_id = Round.parse_wcif_id(wcif_id)
           # Get the actual round_id from our expected rounds by id
 
@@ -247,15 +247,15 @@ module ResultsValidators
                                            wcif_id: wcif_id, original_round_id: round_id)
           end
           actual_round_id&.at(0)
-        end.compact
+        end
 
         # Get all solve times for all cumulative rounds for the current person
-        all_results_for_cumulative_rounds = cumulative_round_ids.map do |id|
+        all_results_for_cumulative_rounds = cumulative_round_ids.filter_map do |id|
           # NOTE: since we proceed with all checks even if some expected rounds
           # do not exist, we may have *expected* cumulative rounds that may
           # not exist in results.
           results_by_round_id[id]&.find { |r| r.personId == result.personId }
-        end.compact.map(&:solve_times).flatten
+        end.map(&:solve_times).flatten
         completed_solves_for_rounds = all_results_for_cumulative_rounds.select(&:complete?)
         number_of_dnf_solves = all_results_for_cumulative_rounds.count(&:dnf?)
         sum_of_times_for_rounds = completed_solves_for_rounds.sum(&:time_centiseconds)

@@ -263,15 +263,6 @@ Performance/CollectionLiteralInLoop:
 Performance/MethodObjectAsBlock:
   Enabled: false
 
-Performance/MapMethodChain:
-  Enabled: false
-
-Performance/MapCompact:
-  Enabled: false
-
-Performance/RedundantBlockCall:
-  Enabled: false
-
 # Rails
 
 Rails/TimeZone:
