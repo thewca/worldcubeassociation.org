@@ -359,9 +359,6 @@ Rails/ApplicationRecord:
 Rails/WhereEquals:
   Enabled: false
 
-Rails/CompactBlank:
-  Enabled: false
-
 Rails/ReadWriteAttribute:
   Enabled: false
 
