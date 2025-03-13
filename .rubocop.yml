@@ -287,9 +287,6 @@ Rails/PluralizationGrammar:
 Rails/I18nLocaleAssignment:
   Enabled: false
 
-Rails/IndexBy:
-  Enabled: false
-
 Rails/NegateInclude:
   Enabled: false
 
@@ -366,9 +363,6 @@ Rails/CompactBlank:
   Enabled: false
 
 Rails/ReadWriteAttribute:
-  Enabled: false
-
-Rails/IndexWith:
   Enabled: false
 
 Rails/HelperInstanceVariable:
