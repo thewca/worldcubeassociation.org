@@ -14,7 +14,7 @@ RSpec.describe "API misc" do
 
       get api_v0_records_path
       expect(response.status).to eq 200
-      json = JSON.parse(response.body)
+      json = response.parsed_body
       expect(json['world_records']['333']['single']).to eq 444
       expect(json['continental_records']['_North America']['333']['single']).to eq 555
       expect(json['national_records']['USA']['333']['single']).to eq 555
