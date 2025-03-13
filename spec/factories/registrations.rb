@@ -2,8 +2,8 @@
 
 FactoryBot.define do
   factory :registration do
-    association :competition, factory: [:competition, :registration_open]
-    association :user, factory: [:user, :wca_id]
+    competition factory: %i[competition registration_open]
+    user factory: %i[user wca_id]
     guests { 10 }
     comments { "" }
     created_at { Time.now }
@@ -41,11 +41,11 @@ FactoryBot.define do
     end
 
     trait :newcomer do
-      association :user
+      user
     end
 
     trait :newcomer_month_eligible do
-      association :user, factory: [:user, :current_year_wca_id]
+      user factory: %i[user current_year_wca_id]
     end
 
     trait :paid do

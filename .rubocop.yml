@@ -605,8 +605,5 @@ FactoryBot/ConsistentParenthesesStyle:
 FactoryBot/SyntaxMethods:
   Enabled: false
 
-FactoryBot/AssociationStyle:
-  Enabled: false
-
 FactoryBot/ExcessiveCreateList:
   Enabled: false
