@@ -111,12 +111,12 @@ RSpec.describe CompetitionsController do
 
       it 'cannot see unconfirmed nearby competitions' do
         get :nearby_competitions_json, params: my_competition.serializable_hash
-        expect(JSON.parse(response.body)).to eq []
+        expect(response.parsed_body).to eq []
         other_competition.organizers = [organizer]
         other_competition.confirmed = true
         other_competition.save!
         get :nearby_competitions_json, params: my_competition.serializable_hash
-        json = JSON.parse(response.body)
+        json = response.parsed_body
         expect(json.length).to eq 1
         expect(json.first["id"]).to eq other_competition.id
       end
@@ -129,7 +129,7 @@ RSpec.describe CompetitionsController do
 
       it "can see unconfirmed nearby competitions" do
         get :nearby_competitions_json, params: my_competition.serializable_hash
-        json = JSON.parse(response.body)
+        json = response.parsed_body
         expect(json.length).to eq 1
         expect(json.first["id"]).to eq other_competition.id
       end
@@ -199,7 +199,7 @@ RSpec.describe CompetitionsController do
         creation_params = build_competition_update(competition, staff: { staffDelegateIds: [delegate.id] }, eventRestrictions: { mainEventId: nil })
         post :create, params: creation_params, as: :json
         expect(response).to have_http_status(:bad_request)
-        errors = JSON.parse(response.body)
+        errors = response.parsed_body
         expect(errors['name']).to eq ["has already been taken"]
       end
 
@@ -340,7 +340,7 @@ RSpec.describe CompetitionsController do
         update_params = build_competition_update(future_competition, staff: { staffDelegateIds: [fake_delegate.id] })
         post :update, params: update_params, as: :json
         expect(response).to have_http_status(:bad_request)
-        errors = JSON.parse(response.body)
+        errors = response.parsed_body
         expect(errors['staff']['staffDelegateIds']).to eq ["are not all Delegates"]
         expect(errors['staff']['traineeDelegateIds']).to eq ["are not all Delegates"]
         future_competition.reload
@@ -382,7 +382,7 @@ RSpec.describe CompetitionsController do
         update_params = build_competition_update(competition, staff: { organizerIds: [original_organizer.id] })
         patch :update, params: update_params, as: :json
         expect(response).to have_http_status(:bad_request)
-        errors = JSON.parse(response.body)
+        errors = response.parsed_body
         expect(errors['staff']['staffDelegateIds']).to eq ["You cannot demote yourself"]
         expect(errors['staff']['traineeDelegateIds']).to eq ["You cannot demote yourself"]
         expect(errors['staff']['organizerIds']).to eq ["You cannot demote yourself"]
@@ -443,7 +443,7 @@ RSpec.describe CompetitionsController do
         competition.update(showAtAll: true)
         delete :destroy, params: { id: competition }
         expect(response).to have_http_status(:forbidden)
-        parsed_body = JSON.parse(response.body)
+        parsed_body = response.parsed_body
         expect(parsed_body["error"]).to eq "Cannot delete a competition that is publicly visible."
         expect(Competition.find_by_id(competition.id)).not_to be_nil
       end
@@ -558,7 +558,7 @@ RSpec.describe CompetitionsController do
         # deletion of (not confirmed and not visible) competitions.
         delete :destroy, params: { id: competition }
         expect(response).to have_http_status(:forbidden)
-        errors = JSON.parse(response.body)
+        errors = response.parsed_body
         expect(errors['error']).to eq "Cannot delete a competition that is publicly visible."
         expect(Competition.find_by_id(competition.id)).not_to be_nil
       end
@@ -569,7 +569,7 @@ RSpec.describe CompetitionsController do
         # delegates deleting unconfirmed competitions.
         delete :destroy, params: { id: competition }
         expect(response).to have_http_status(:forbidden)
-        errors = JSON.parse(response.body)
+        errors = response.parsed_body
         expect(errors['error']).to eq "Cannot delete a confirmed competition."
         expect(Competition.find_by_id(competition.id)).not_to be_nil
       end
@@ -670,7 +670,7 @@ RSpec.describe CompetitionsController do
         # deletion of (not confirmed and not visible) competitions.
         delete :destroy, params: { id: competition }
         expect(response).to have_http_status(:forbidden)
-        errors = JSON.parse(response.body)
+        errors = response.parsed_body
         expect(errors['error']).to eq "Cannot delete a competition that is publicly visible."
         expect(Competition.find_by_id(competition.id)).not_to be_nil
       end
@@ -681,7 +681,7 @@ RSpec.describe CompetitionsController do
         # delegates deleting unconfirmed competitions.
         delete :destroy, params: { id: competition }
         expect(response).to have_http_status(:forbidden)
-        errors = JSON.parse(response.body)
+        errors = response.parsed_body
         expect(errors['error']).to eq "Cannot delete a confirmed competition."
         expect(Competition.find_by_id(competition.id)).not_to be_nil
       end

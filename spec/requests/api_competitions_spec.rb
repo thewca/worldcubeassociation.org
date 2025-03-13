@@ -14,28 +14,28 @@ RSpec.describe "API Competitions" do
     it "orders competitions by date descending by default" do
       get api_v0_competitions_path, params: { start: 2.week.from_now }
       expect(response).to be_successful
-      ids = JSON.parse(response.body).map { |c| c["id"] }
+      ids = response.parsed_body.map { |c| c["id"] }
       expect(ids).to eq [competition4, competition3].map(&:id)
     end
 
     it "allows ordering by date ascending" do
       get api_v0_competitions_path, params: { start: 2.week.from_now, sort: "start_date" }
       expect(response).to be_successful
-      ids = JSON.parse(response.body).map { |c| c["id"] }
+      ids = response.parsed_body.map { |c| c["id"] }
       expect(ids).to eq [competition3, competition4].map(&:id)
     end
 
     it "allows ordering by multiple fields" do
       get api_v0_competitions_path, params: { sort: "start_date,name" }
       expect(response).to be_successful
-      ids = JSON.parse(response.body).map { |c| c["id"] }
+      ids = response.parsed_body.map { |c| c["id"] }
       expect(ids).to eq [competition1, competition2, competition3, competition4].map(&:id)
     end
 
     it "allows setting descending order" do
       get api_v0_competitions_path, params: { sort: "start_date,-name" }
       expect(response).to be_successful
-      ids = JSON.parse(response.body).map { |c| c["id"] }
+      ids = response.parsed_body.map { |c| c["id"] }
       expect(ids).to eq [competition2, competition1, competition3, competition4].map(&:id)
     end
   end
@@ -47,7 +47,7 @@ RSpec.describe "API Competitions" do
     it "renders properly" do
       get api_v0_competition_results_path(competition)
       expect(response).to be_successful
-      json = JSON.parse(response.body)
+      json = response.parsed_body
       expect(json[0]["id"]).to eq result.id
     end
   end
@@ -59,7 +59,7 @@ RSpec.describe "API Competitions" do
     it "renders properly" do
       get api_v0_competition_scrambles_path(competition)
       expect(response).to be_successful
-      json = JSON.parse(response.body)
+      json = response.parsed_body
       expect(json[0]["scrambleId"]).to eq scramble.scrambleId
     end
   end
@@ -71,7 +71,7 @@ RSpec.describe "API Competitions" do
     it "renders properly" do
       get api_v0_competition_competitors_path(competition)
       expect(response).to be_successful
-      json = JSON.parse(response.body)
+      json = response.parsed_body
       expect(json[0]["class"]).to eq "person"
     end
   end
@@ -84,7 +84,7 @@ RSpec.describe "API Competitions" do
     it "renders properly" do
       get api_v0_competition_registrations_path(competition)
       expect(response).to be_successful
-      json = JSON.parse(response.body)
+      json = response.parsed_body
       expect(json.map { |r| r["id"] }).to eq [accepted_registration.id]
     end
   end
@@ -96,7 +96,7 @@ RSpec.describe "API Competitions" do
       it "does not allow access" do
         patch api_v0_competition_wcif_path(competition)
         expect(response).to have_http_status(401)
-        response_json = JSON.parse(response.body)
+        response_json = response.parsed_body
         expect(response_json["error"]).to eq "Please log in"
       end
     end
@@ -107,7 +107,7 @@ RSpec.describe "API Competitions" do
       it "does not allow access" do
         patch api_v0_competition_update_wcif_path(competition)
         expect(response).to have_http_status(403)
-        response_json = JSON.parse(response.body)
+        response_json = response.parsed_body
         expect(response_json["error"]).to eq "Not authorized to manage competition"
       end
     end
@@ -121,7 +121,7 @@ RSpec.describe "API Competitions" do
 
       it "returns confidential person data" do
         get api_v0_competition_wcif_path(competition)
-        response_json = JSON.parse(response.body)
+        response_json = response.parsed_body
         expect(response_json["persons"][0].keys).to include "email"
         expect(response_json["persons"][0].keys).to include "birthdate"
       end
@@ -130,7 +130,7 @@ RSpec.describe "API Competitions" do
         FactoryBot.create(:registration, :cancelled, competition: competition)
         FactoryBot.create(:registration, :pending, competition: competition)
         get api_v0_competition_wcif_path(competition)
-        response_json = JSON.parse(response.body)
+        response_json = response.parsed_body
         expect(response_json["persons"].length).to eq 4
       end
     end
@@ -144,7 +144,7 @@ RSpec.describe "API Competitions" do
 
     it "does not return confidential person data" do
       get api_v0_competition_wcif_public_path(competition)
-      response_json = JSON.parse(response.body)
+      response_json = response.parsed_body
       expect(response_json["persons"][0].keys).to_not include "email"
       expect(response_json["persons"][0].keys).to_not include "birthdate"
     end
@@ -153,7 +153,7 @@ RSpec.describe "API Competitions" do
       FactoryBot.create(:registration, :cancelled, competition: competition)
       FactoryBot.create(:registration, :pending, competition: competition)
       get api_v0_competition_wcif_public_path(competition)
-      response_json = JSON.parse(response.body)
+      response_json = response.parsed_body
       expect(response_json["persons"].length).to eq 2
       expect(response_json["persons"][0]["registration"]["status"]).to eq "accepted"
     end
@@ -166,7 +166,7 @@ RSpec.describe "API Competitions" do
       it "does not allow access" do
         patch api_v0_competition_update_wcif_path(competition)
         expect(response).to have_http_status(401)
-        response_json = JSON.parse(response.body)
+        response_json = response.parsed_body
         expect(response_json["error"]).to eq "Please log in"
       end
     end
@@ -178,7 +178,7 @@ RSpec.describe "API Competitions" do
       it "does not allow access" do
         patch api_v0_competition_update_wcif_path(competition)
         expect(response).to have_http_status(403)
-        response_json = JSON.parse(response.body)
+        response_json = response.parsed_body
         expect(response_json["error"]).to eq "Not authorized to manage competition"
       end
     end
@@ -206,7 +206,7 @@ RSpec.describe "API Competitions" do
           wcif[:events][0][:rounds][0][:format] = "invalidformat"
           patch api_v0_competition_update_wcif_path(competition), params: wcif.to_json, headers: headers
           expect(response).to have_http_status(400)
-          response_json = JSON.parse(response.body)
+          response_json = response.parsed_body
           expect(response_json["error"]).to eq "The property '#/events/0/rounds/0/format' value \"invalidformat\" did not match one of the following values: 1, 2, 3, a, m"
           expect(competition.reload.competition_events.find_by_event_id("333").rounds.length).to eq 2
         end
@@ -257,14 +257,14 @@ RSpec.describe "API Competitions" do
           it "does not allow adding events" do
             patch api_v0_competition_update_wcif_path(competition), params: create_wcif_with_events(%w(333 333oh 222)).to_json, headers: headers
             expect(response).to have_http_status(422)
-            response_json = JSON.parse(response.body)
+            response_json = response.parsed_body
             expect(response_json["error"]).to eq "Cannot add events"
           end
 
           it "does not allow removing events" do
             patch api_v0_competition_update_wcif_path(competition), params: create_wcif_with_events(%w(333)).to_json, headers: headers
             expect(response).to have_http_status(422)
-            response_json = JSON.parse(response.body)
+            response_json = response.parsed_body
             expect(response_json["error"]).to eq "Cannot remove events"
           end
         end
@@ -289,7 +289,7 @@ RSpec.describe "API Competitions" do
           it "does not allow updating events" do
             patch api_v0_competition_update_wcif_path(competition), params: create_wcif_with_events(%w(222 333)).to_json, headers: headers
             expect(response).to have_http_status(422)
-            response_json = JSON.parse(response.body)
+            response_json = response.parsed_body
             expect(response_json["error"]).to eq "Cannot update events"
           end
         end
@@ -523,7 +523,7 @@ RSpec.describe "API Competitions" do
           wcif = create_wcif_with_events(%w(333))
           patch api_v0_competition_update_wcif_path(competition), params: wcif.to_json, headers: { "CONTENT_TYPE" => "application/json" }
           expect(response.status).to eq 403
-          response_json = JSON.parse(response.body)
+          response_json = response.parsed_body
           expect(response_json["error"]).to eq "Not authorized to manage competition"
           expect(competition.reload.competition_events.find_by_event_id("333").rounds.length).to eq 0
         end

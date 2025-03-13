@@ -105,7 +105,7 @@ RSpec.describe "users" do
         expect {
           post profile_generate_2fa_backup_path
         }.to_not change { user.otp_backup_codes }
-        json = JSON.parse(response.body)
+        json = response.parsed_body
         expect(json["error"]["message"]).to include "not enabled"
       end
     end
@@ -151,7 +151,7 @@ RSpec.describe "users" do
         expect(user.otp_backup_codes).to eq nil
         post profile_generate_2fa_backup_path
         expect(user.reload.otp_backup_codes).to_not eq nil
-        json = JSON.parse(response.body)
+        json = response.parsed_body
         expect(json["codes"]&.size).to eq User::NUMBER_OF_BACKUP_CODES
       end
     end

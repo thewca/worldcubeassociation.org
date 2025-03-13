@@ -271,7 +271,7 @@ RSpec.describe 'API Registrations' do
 
       expect(response.status).to eq(200)
 
-      body = JSON.parse(response.body)
+      body = response.parsed_body
       expect(body['updated_registrations'].count).to eq(3)
 
       expect(Registration.find_by(user_id: update_request1['user_id']).competing_status).to eq('cancelled')
@@ -405,7 +405,7 @@ RSpec.describe 'API Registrations' do
 
       expect(response.status).to eq(200)
 
-      body = JSON.parse(response.body)
+      body = response.parsed_body
       expect(body.count).to eq(6)
 
       user_ids = [user1.id, user2.id, user3.id, user4.id, user5.id, user6.id]
@@ -433,7 +433,7 @@ RSpec.describe 'API Registrations' do
       headers = { 'Authorization' => fetch_jwt_token(reg.user_id) }
       get api_v1_registrations_payment_ticket_path(competition_id: closed_comp.id), headers: headers
 
-      body = JSON.parse(response.body)
+      body = response.parsed_body
       expect(response.status).to eq(403)
       expect(body).to eq({ error: Registrations::ErrorCodes::REGISTRATION_CLOSED }.with_indifferent_access)
     end

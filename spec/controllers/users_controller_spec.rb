@@ -199,7 +199,7 @@ RSpec.describe UsersController do
       it 'requires authentication' do
         post :acknowledge_cookies
         expect(response.status).to eq 401
-        response_json = JSON.parse(response.body)
+        response_json = response.parsed_body
         expect(response_json['ok']).to eq false
       end
     end
@@ -214,14 +214,14 @@ RSpec.describe UsersController do
       it "records acknowledgement and is idempotent" do
         expect(admin.reload.cookies_acknowledged).to be false
         post :acknowledge_cookies
-        response_json = JSON.parse(response.body)
+        response_json = response.parsed_body
         expect(response_json['ok']).to eq true
         expect(admin.reload.cookies_acknowledged).to be true
 
         # Do the same thing again. This shouldn't clear their cookies acknowledged
         # state.
         post :acknowledge_cookies
-        response_json = JSON.parse(response.body)
+        response_json = response.parsed_body
         expect(response_json['ok']).to eq true
         expect(admin.reload.cookies_acknowledged).to be true
       end
