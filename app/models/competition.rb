@@ -301,7 +301,7 @@ class Competition < ApplicationRecord
   end
 
   def has_administrative_notes?
-    registrations.any? { |registration| !registration.administrative_notes.blank? }
+    registrations.any? { |registration| registration.administrative_notes.present? }
   end
 
   NEARBY_DISTANCE_KM_WARNING = 250
