@@ -524,7 +524,7 @@ RSpec.describe "API Competitions" do
         it "can't update wcif" do
           wcif = create_wcif_with_events(%w(333))
           patch api_v0_competition_update_wcif_path(competition), params: wcif.to_json, headers: { "CONTENT_TYPE" => "application/json" }
-          expect(response.status).to eq 403
+          expect(response).to have_http_status :forbidden
           response_json = response.parsed_body
           expect(response_json["error"]).to eq "Not authorized to manage competition"
           expect(competition.reload.competition_events.find_by_event_id("333").rounds.length).to eq 0

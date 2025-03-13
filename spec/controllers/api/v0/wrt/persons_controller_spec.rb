@@ -16,7 +16,7 @@ RSpec.describe Api::V0::Wrt::PersonsController, type: :controller do
         representing: 'NZ',
         dob: "2000-01-01",
       } }
-      expect(response.status).to eq 200
+      expect(response).to have_http_status :ok
     end
 
     it "shows a successful message when the person has been changed" do
@@ -27,7 +27,7 @@ RSpec.describe Api::V0::Wrt::PersonsController, type: :controller do
         representing: person.country_iso2,
         dob: "2000-01-01",
       } }
-      expect(response.status).to eq 200
+      expect(response).to have_http_status :ok
       response_json = response.parsed_body
       expect(response_json['success']).to eq "Successfully fixed New Name."
     end
