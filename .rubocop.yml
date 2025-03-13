@@ -550,9 +550,6 @@ RSpecRails/HaveHttpStatus:
 RSpecRails/InferredSpecType:
   Enabled: false
 
-RSpecRails/HttpStatus:
-  Enabled: false
-
 # Factory Bot
 
 FactoryBot/ConsistentParenthesesStyle:
