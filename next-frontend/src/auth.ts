@@ -1,4 +1,4 @@
-import NextAuth from "next-auth"
+import NextAuth from "next-auth";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   debug: true,
@@ -12,4 +12,4 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       clientSecret: process.env.OIDC_CLIENT_SECRET,
     },
   ],
-})
+});
