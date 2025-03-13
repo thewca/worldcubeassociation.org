@@ -1808,7 +1808,7 @@ class Competition < ApplicationRecord
         raise WcaExceptions::BadApiParameter.new("Invalid continent: '#{params[:continent]}'")
       end
       competitions = competitions.joins('INNER JOIN Countries ON Competitions.countryId = Countries.id')
-                                 .where('continentId = ?', continent.id)
+                                 .where(continentId: continent.id)
     end
 
     if params[:country_iso2].present?
@@ -1825,7 +1825,7 @@ class Competition < ApplicationRecord
         raise WcaExceptions::BadApiParameter.new("Invalid delegate: '#{params[:delegate]}'")
       end
       competitions = competitions.left_outer_joins(:delegates)
-                                 .where('competition_delegates.delegate_id = ?', delegate_user.id)
+                                 .where(competition_delegates: { delegate_id: delegate_user.id })
     end
 
     if params[:event_ids].present?

@@ -11,7 +11,7 @@ class PostsController < ApplicationController
       format.json do
         tag = params[:tag]
         if tag
-          @posts = Post.joins(:post_tags).where('post_tags.tag = ?', tag)
+          @posts = Post.joins(:post_tags).where(post_tags: { tag: tag })
         else
           @posts = Post.where(show_on_homepage: true)
         end
@@ -42,7 +42,7 @@ class PostsController < ApplicationController
   def rss
     tag = params[:tag]
     if tag
-      @posts = Post.joins(:post_tags).where('post_tags.tag = ?', tag)
+      @posts = Post.joins(:post_tags).where(post_tags: { tag: tag })
     else
       @posts = Post
     end

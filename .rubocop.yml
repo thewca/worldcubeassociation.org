@@ -356,9 +356,6 @@ Rails/ApplicationRecord:
 Rails/Present:
   Enabled: false
 
-Rails/WhereEquals:
-  Enabled: false
-
 Rails/CompactBlank:
   Enabled: false
 
