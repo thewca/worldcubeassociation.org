@@ -36,7 +36,7 @@ class Api::V0::ApiController < ApplicationController
 
   def user_qualification_data
     date = cutoff_date
-    return render json: { error: 'Invalid date format. Please provide an iso8601 date string.' }, status: :bad_request unless date.present?
+    return render json: { error: 'Invalid date format. Please provide an iso8601 date string.' }, status: :bad_request if date.blank?
     return render json: { error: 'You cannot request qualification data for a future date.' }, status: :bad_request if date > Date.current
 
     user = User.find(params.require(:user_id))
@@ -249,7 +249,7 @@ class Api::V0::ApiController < ApplicationController
 
   def competition_series
     competition_series = CompetitionSeries.find_by_wcif_id(params[:id])
-    if !competition_series.present? || competition_series.public_competitions.empty?
+    if competition_series.blank? || competition_series.public_competitions.empty?
       raise WcaExceptions::NotFound.new("Competition series with ID #{params[:id]} not found")
     end
     render json: competition_series.to_wcif

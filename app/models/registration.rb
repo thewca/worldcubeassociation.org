@@ -362,7 +362,7 @@ class Registration < ApplicationRecord
 
   validate :must_not_register_for_more_events_than_event_limit
   private def must_not_register_for_more_events_than_event_limit
-    if !competition.present? || !competition.events_per_registration_limit_enabled?
+    if competition.blank? || !competition.events_per_registration_limit_enabled?
       return
     end
     if registration_competition_events.count { |element| !element.marked_for_destruction? } > competition.events_per_registration_limit

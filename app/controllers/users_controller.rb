@@ -183,7 +183,7 @@ class UsersController < ApplicationController
     avatar_id = params.require(:avatarId)
 
     user_avatar = user_to_edit.user_avatars.find(avatar_id)
-    return head :not_found unless user_avatar.present?
+    return head :not_found if user_avatar.blank?
 
     thumbnail = params.require(:thumbnail)
 
@@ -201,7 +201,7 @@ class UsersController < ApplicationController
     avatar_id = params.require(:avatarId)
 
     user_avatar = user_to_edit.user_avatars.find(avatar_id)
-    return head :not_found unless user_avatar.present?
+    return head :not_found if user_avatar.blank?
 
     reason = params.require(:reason)
 

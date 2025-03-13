@@ -9,7 +9,7 @@ module Admin
       # If a valid semi_id is provided, just use it.
       semi_id = SemiId.new(value: new_id_params[:semi_id])
       # Else try generating one from params
-      unless semi_id.value.present?
+      if semi_id.value.blank?
         semi_id = SemiId.generate(new_id_params[:name], competition)
       end
 
