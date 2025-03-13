@@ -288,7 +288,7 @@ class AdminController < ApplicationController
       params[:regional_record_overrides].each do |id_and_type, marker|
         next if [:competition_id, :event_id].include? id_and_type.to_sym
 
-        next unless marker.present?
+        next if marker.blank?
 
         result_id, result_type = id_and_type.split('-')
         record_marker = :"regional#{result_type}Record"

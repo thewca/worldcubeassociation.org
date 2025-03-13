@@ -63,7 +63,7 @@ module CompetitionsHelper
     top_three = competition.results.where(event: main_event).podium.order(:pos)
     results_by_place = top_three.group_by(&:pos)
 
-    return t('competitions.competition_info.no_winner', event_name: main_event.name) unless results_by_place.present?
+    return t('competitions.competition_info.no_winner', event_name: main_event.name) if results_by_place.blank?
 
     winners = results_by_place[1]
     text = t('competitions.competition_info.winner', winner: people_to_sentence(winners),
@@ -323,7 +323,7 @@ module CompetitionsHelper
       # Determines what message to display to the user based on the state of their registration.
 
       registration_status = registration || competition.registrations.find_by_user_id(user.id)
-      return unless registration_status.present?
+      return if registration_status.blank?
 
       if registration_status.accepted?
         t('competitions.messages.tooltip_registered')

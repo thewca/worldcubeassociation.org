@@ -28,7 +28,7 @@ RSpec.describe Api::V0::Wrt::PersonsController, type: :controller do
         dob: "2000-01-01",
       } }
       expect(response.status).to eq 200
-      response_json = JSON.parse(response.body)
+      response_json = response.parsed_body
       expect(response_json['success']).to eq "Successfully fixed New Name."
     end
   end

@@ -1249,7 +1249,7 @@ class Competition < ApplicationRecord
   # must be allowed in general, and if the deadline field exists, is it a date and in the future
   def registration_edits_currently_permitted?
     !started? && self.allow_registration_edits &&
-      (!has_event_change_deadline_date? || !event_change_deadline_date.present? || event_change_deadline_date > DateTime.now)
+      (!has_event_change_deadline_date? || event_change_deadline_date.blank? || event_change_deadline_date > DateTime.now)
   end
 
   private def dates_must_be_valid
@@ -1261,8 +1261,8 @@ class Competition < ApplicationRecord
       return
     end
 
-    return errors.add(:start_date, I18n.t('common.errors.invalid')) unless start_date.present?
-    return errors.add(:end_date, I18n.t('common.errors.invalid')) unless end_date.present?
+    return errors.add(:start_date, I18n.t('common.errors.invalid')) if start_date.blank?
+    return errors.add(:end_date, I18n.t('common.errors.invalid')) if end_date.blank?
 
     if end_date < start_date
       errors.add(:end_date, I18n.t('competitions.errors.end_date_before_start'))
@@ -2081,7 +2081,7 @@ class Competition < ApplicationRecord
       raise WcaExceptions::BadApiParameter.new("Cannot update the competitor limit because competitor limits are not enabled for this competition")
     end
 
-    unless wcif_competitor_limit.present?
+    if wcif_competitor_limit.blank?
       raise WcaExceptions::BadApiParameter.new("Cannot remove competitor limit")
     end
 
@@ -2170,7 +2170,7 @@ class Competition < ApplicationRecord
           is_competing: false,
         )
       end
-      next unless registration.present?
+      next if registration.blank?
       WcifExtension.update_wcif_extensions!(registration, wcif_person["extensions"]) if wcif_person["extensions"]
       # NOTE: person doesn't necessarily have corresponding registration (e.g. registratinless organizer/delegate).
       if wcif_person["roles"]

@@ -3,7 +3,7 @@
 class CreateMetadataForDelegateGroups < ActiveRecord::Migration[7.1]
   def change
     UserGroup.delegate_region_groups.each do |region|
-      unless region.metadata.present?
+      if region.metadata.blank?
         ActiveRecord::Base.transaction do
           metadata = GroupsMetadataDelegateRegions.create!(friendly_id: region.name.parameterize)
           region.update!(metadata: metadata)

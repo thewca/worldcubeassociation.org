@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe Api::V0::CompetitionsController do
   def get_wcif_and_compare_persons_to(id, expected)
     get :show_wcif, params: { competition_id: id }
-    parsed_body = JSON.parse(response.body)
+    parsed_body = response.parsed_body
     person_arrays = parsed_body["persons"].map do |p|
       [p["wcaUserId"], p["registrantId"]]
     end
@@ -27,7 +27,7 @@ RSpec.describe Api::V0::CompetitionsController do
     it '404s on invalid competition' do
       get :show, params: { id: "FakeId2014" }
       expect(response.status).to eq 404
-      parsed_body = JSON.parse(response.body)
+      parsed_body = response.parsed_body
       expect(parsed_body["error"]).to eq "Competition with id FakeId2014 not found"
     end
 
@@ -35,14 +35,14 @@ RSpec.describe Api::V0::CompetitionsController do
       competition.update_column(:showAtAll, false)
       get :show, params: { id: competition.id }
       expect(response.status).to eq 404
-      parsed_body = JSON.parse(response.body)
+      parsed_body = response.parsed_body
       expect(parsed_body["error"]).to eq "Competition with id #{competition.id} not found"
     end
 
     it 'finds competition' do
       get :show, params: { id: competition.id }
       expect(response.status).to eq 200
-      parsed_body = JSON.parse(response.body)
+      parsed_body = response.parsed_body
       expect(parsed_body["id"]).to eq "TestComp2014"
       expect(parsed_body["start_date"]).to eq "2014-02-03"
       expect(parsed_body["end_date"]).to eq "2014-02-05"
@@ -67,7 +67,7 @@ RSpec.describe Api::V0::CompetitionsController do
     it '404s on invalid competition' do
       get :show, params: { id: "FakeId2014" }
       expect(response.status).to eq 404
-      parsed_body = JSON.parse(response.body)
+      parsed_body = response.parsed_body
       expect(parsed_body["error"]).to eq "Competition with id FakeId2014 not found"
     end
 
@@ -75,14 +75,14 @@ RSpec.describe Api::V0::CompetitionsController do
       competition.update_column(:showAtAll, false)
       get :show, params: { id: competition.id }
       expect(response.status).to eq 404
-      parsed_body = JSON.parse(response.body)
+      parsed_body = response.parsed_body
       expect(parsed_body["error"]).to eq "Competition with id #{competition.id} not found"
     end
 
     it 'displays schedule' do
       get :schedule, params: { competition_id: competition.id }
       expect(response.status).to eq 200
-      parsed_body = JSON.parse(response.body)
+      parsed_body = response.parsed_body
       expect(parsed_body['startDate']).to eq '2014-02-03'
     end
   end
@@ -96,7 +96,7 @@ RSpec.describe Api::V0::CompetitionsController do
 
       get :index
       expect(response.status).to eq 200
-      json = JSON.parse(response.body)
+      json = response.parsed_body
       expect(json.map { |c| c["id"] }).to eq [tomorrow_comp, today_comp, yesterday_comp, yesteryear_comp].map(&:id)
     end
 
@@ -105,12 +105,12 @@ RSpec.describe Api::V0::CompetitionsController do
       usa_comp = FactoryBot.create(:competition, :confirmed, :visible, countryId: "USA")
 
       get :index, params: { country_iso2: "US" }
-      json = JSON.parse(response.body)
+      json = response.parsed_body
       expect(json.length).to eq 1
       expect(json[0]["id"]).to eq usa_comp.id
 
       get :index, params: { country_iso2: "VN" }
-      json = JSON.parse(response.body)
+      json = response.parsed_body
       expect(json.length).to eq 1
       expect(json[0]["id"]).to eq vietnam_comp.id
     end
@@ -133,7 +133,7 @@ RSpec.describe Api::V0::CompetitionsController do
 
         get :index, params: { managed_by_me: "true" }
         expect(response.status).to eq 200
-        json = JSON.parse(response.body)
+        json = response.parsed_body
         expect(json.length).to eq 1
         expect(json[0]["id"]).to eq competition.id
       end
@@ -145,7 +145,7 @@ RSpec.describe Api::V0::CompetitionsController do
 
         get :index, params: { managed_by_me: "true" }
         expect(response.status).to eq 200
-        json = JSON.parse(response.body)
+        json = response.parsed_body
         expect(json.length).to eq 1
         expect(json[0]["id"]).to eq competition.id
       end
@@ -157,7 +157,7 @@ RSpec.describe Api::V0::CompetitionsController do
 
         get :index, params: { managed_by_me: "true" }
         expect(response.status).to eq 200
-        json = JSON.parse(response.body)
+        json = response.parsed_body
         expect(json.length).to eq 1
         expect(json[0]["id"]).to eq competition.id
       end
@@ -168,13 +168,13 @@ RSpec.describe Api::V0::CompetitionsController do
       awesome_comp = FactoryBot.create(:competition, :confirmed, :visible, name: "An awesome competition 2016", countryId: "France")
 
       get :index, params: { q: "AWES" }
-      json = JSON.parse(response.body)
+      json = response.parsed_body
       expect(json.length).to eq 1
       expect(json[0]["id"]).to eq awesome_comp.id
 
       # Check that composing a plaintext query and a country query works.
       get :index, params: { q: "competition", country_iso2: "US" }
-      json = JSON.parse(response.body)
+      json = response.parsed_body
       expect(json.length).to eq 1
       expect(json[0]["id"]).to eq terrible_comp.id
     end
@@ -182,21 +182,21 @@ RSpec.describe Api::V0::CompetitionsController do
     it 'validates start' do
       get :index, params: { start: "2015" }
       expect(response.status).to eq 422
-      json = JSON.parse(response.body)
+      json = response.parsed_body
       expect(json["error"]).to eq "Invalid start: '2015'"
     end
 
     it 'validates end' do
       get :index, params: { end: "2014" }
       expect(response.status).to eq 422
-      json = JSON.parse(response.body)
+      json = response.parsed_body
       expect(json["error"]).to eq "Invalid end: '2014'"
     end
 
     it 'validates country_iso2' do
       get :index, params: { country_iso2: "this is not a country" }
       expect(response.status).to eq 422
-      json = JSON.parse(response.body)
+      json = response.parsed_body
       expect(json["error"]).to eq "Invalid country_iso2: 'this is not a country'"
     end
 
@@ -206,19 +206,19 @@ RSpec.describe Api::V0::CompetitionsController do
       march_comp = FactoryBot.create(:competition, :confirmed, :visible, starts: Date.new(2016, 3, 1))
 
       get :index, params: { start: "2015-02-01" }
-      json = JSON.parse(response.body)
+      json = response.parsed_body
       expect(json.map { |c| c["id"] }).to eq [march_comp.id, feb_comp.id, last_feb_comp.id]
 
       get :index, params: { end: "2016-03-01" }
-      json = JSON.parse(response.body)
+      json = response.parsed_body
       expect(json.map { |c| c["id"] }).to eq [march_comp.id, feb_comp.id, last_feb_comp.id]
 
       get :index, params: { start: "2015-02-01", end: "2016-02-15" }
-      json = JSON.parse(response.body)
+      json = response.parsed_body
       expect(json.map { |c| c["id"] }).to eq [feb_comp.id, last_feb_comp.id]
 
       get :index, params: { start: "2015-02-01", end: "2015-02-01" }
-      json = JSON.parse(response.body)
+      json = response.parsed_body
       expect(json.map { |c| c["id"] }).to eq [last_feb_comp.id]
     end
 
@@ -227,7 +227,7 @@ RSpec.describe Api::V0::CompetitionsController do
       FactoryBot.create(:competition, :confirmed, :visible, name: "New comp 2018", announced_at: Time.now)
       get :index, params: { announced_after: 2.days.ago }
       expect(response.status).to eq 200
-      json = JSON.parse(response.body)
+      json = response.parsed_body
       expect(json.map { |c| c["name"] }).to eq ["New comp 2018"]
     end
 
@@ -238,7 +238,7 @@ RSpec.describe Api::V0::CompetitionsController do
 
       get :index, params: { per_page: 5 }
       expect(response.status).to eq 200
-      json = JSON.parse(response.body)
+      json = response.parsed_body
       expect(json.length).to eq 5
 
       # Parse HTTP Link header mess
@@ -251,7 +251,7 @@ RSpec.describe Api::V0::CompetitionsController do
 
       get :index, params: Rack::Utils.parse_query(URI(url).query)
       expect(response.status).to eq 200
-      json = JSON.parse(response.body)
+      json = response.parsed_body
       expect(json.length).to eq 2
     end
   end
@@ -293,7 +293,7 @@ RSpec.describe Api::V0::CompetitionsController do
     it '404s on invalid competition' do
       get :show_wcif, params: { competition_id: "FakeId2014" }
       expect(response.status).to eq 404
-      parsed_body = JSON.parse(response.body)
+      parsed_body = response.parsed_body
       expect(parsed_body["error"]).to eq "Competition with id FakeId2014 not found"
     end
 
@@ -301,7 +301,7 @@ RSpec.describe Api::V0::CompetitionsController do
       competition.update_column(:showAtAll, false)
       get :show_wcif, params: { competition_id: "TestComp2014" }
       expect(response.status).to eq 404
-      parsed_body = JSON.parse(response.body)
+      parsed_body = response.parsed_body
       expect(parsed_body["error"]).to eq "Competition with id #{competition.id} not found"
     end
 
@@ -335,14 +335,14 @@ RSpec.describe Api::V0::CompetitionsController do
       it 'does not 404 on their own hidden competition' do
         get :show_wcif, params: { competition_id: hidden_competition.id }
         expect(response.status).to eq 200
-        parsed_body = JSON.parse(response.body)
+        parsed_body = response.parsed_body
         expect(parsed_body["id"]).to eq "HiddenComp2014"
       end
 
       it 'get wcif' do
         get :show_wcif, params: { competition_id: "TestComp2014" }
         expect(response.status).to eq 200
-        parsed_body = JSON.parse(response.body)
+        parsed_body = response.parsed_body
         expect(parsed_body["id"]).to eq "TestComp2014"
       end
 
@@ -370,7 +370,7 @@ RSpec.describe Api::V0::CompetitionsController do
       it 'gets announced and unannounced series competitions ids' do
         get :show_wcif, params: { competition_id: 'TestComp2014' }
         expect(response.status).to eq 200
-        parsed_body = JSON.parse(response.body)
+        parsed_body = response.parsed_body
         expect(parsed_body['series']['competitionIds']).to eq ['HiddenComp2014', 'TestComp2014']
       end
     end
@@ -379,7 +379,7 @@ RSpec.describe Api::V0::CompetitionsController do
       it 'gets only announced series competitions ids' do
         get :show_wcif_public, params: { competition_id: 'TestComp2014' }
         expect(response.status).to eq 200
-        parsed_body = JSON.parse(response.body)
+        parsed_body = response.parsed_body
         expect(parsed_body['series']['competitionIds']).to eq ['TestComp2014']
       end
     end

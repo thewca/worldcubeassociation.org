@@ -5,7 +5,7 @@ module LogTagging
     session_key = Rails.application.config.session_options[:key]
     session_data = request.cookie_jar.encrypted[session_key]
 
-    return unless session_data.present?
+    return if session_data.blank?
 
     # Extract all keys starting with "warden.user." and capture the scope
     session_data.keys.filter_map do |key|
