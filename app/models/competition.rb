@@ -95,11 +95,11 @@ class Competition < ApplicationRecord
     restricted: 2,
   }, prefix: true
 
-  enum :competitor_can_cancel, { not_accepted: 0, always: 1, unpaid: 2 }, prefix: true
+  enum :competitor_can_cancel, [:not_accepted, :always, :unpaid], prefix: true
 
   NEW_REG_SYSTEM_DEFAULT = :v3
 
-  enum :registration_version, { v1: 0, v2: 1, v3: 2 }, prefix: true, default: NEW_REG_SYSTEM_DEFAULT
+  enum :registration_version, [:v1, :v2, :v3], prefix: true, default: NEW_REG_SYSTEM_DEFAULT
 
   CLONEABLE_ATTRIBUTES = %w(
     cityName
