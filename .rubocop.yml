@@ -295,9 +295,6 @@ Rails/I18nLocaleAssignment:
 Rails/Blank:
   Enabled: false
 
-Rails/Output:
-  Enabled: false
-
 Rails/SquishedSQLHeredocs:
   Enabled: false
 
@@ -382,9 +379,6 @@ Rails/WhereEquals:
 Rails/CompactBlank:
   Enabled: false
 
-Rails/EnumHash:
-  Enabled: false
-
 Rails/ReadWriteAttribute:
   Enabled: false
 
@@ -394,22 +388,10 @@ Rails/IndexWith:
 Rails/HelperInstanceVariable:
   Enabled: false
 
-Rails/LinkToBlank:
-  Enabled: false
-
 Rails/ActionControllerFlashBeforeRender:
   Enabled: false
 
-Lint/RedundantSafeNavigation:
-  Enabled: false
-
-Rails/Presence:
-  Enabled: false
-
 Rails/UniqueValidationWithoutIndex:
-  Enabled: false
-
-Rails/HttpStatus:
   Enabled: false
 
 Rails/ActionOrder:

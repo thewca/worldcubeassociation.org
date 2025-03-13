@@ -173,12 +173,12 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
       status: "Successfully saved WCIF",
     }
   rescue ActiveRecord::RecordInvalid => e
-    render status: 400, json: {
+    render status: :bad_request, json: {
       status: "Error while saving WCIF",
       error: e,
     }
   rescue JSON::Schema::ValidationError => e
-    render status: 400, json: {
+    render status: :bad_request, json: {
       status: "Error while saving WCIF",
       error: e.message,
     }
