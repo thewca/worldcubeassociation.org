@@ -2,6 +2,11 @@
 
 module Admin
   class ScramblesController < AdminController
+    def show
+      respond_to do |format|
+        format.json { render json: Scramble.find(params.require(:id)) }
+      end
+    end
     # NOTE: authentication is performed by admin controller
 
     def new
@@ -13,12 +18,6 @@ module Admin
         roundTypeId: round.round_type_id,
         eventId: round.event.id,
       }
-    end
-
-    def show
-      respond_to do |format|
-        format.json { render json: Scramble.find(params.require(:id)) }
-      end
     end
 
     def edit

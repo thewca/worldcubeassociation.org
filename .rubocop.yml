@@ -383,9 +383,6 @@ Rails/ActionControllerFlashBeforeRender:
 Rails/UniqueValidationWithoutIndex:
   Enabled: false
 
-Rails/ActionOrder:
-  Enabled: false
-
 Rails/FindById:
   Enabled: false
 

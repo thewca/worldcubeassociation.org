@@ -18,6 +18,10 @@ class PollsController < ApplicationController
     @poll = Poll.find(params[:id])
   end
 
+  def edit
+    @poll = Poll.find(params[:id])
+  end
+
   def create
     @poll = Poll.new(poll_params)
     @poll.multiple = false
@@ -29,10 +33,6 @@ class PollsController < ApplicationController
     else
       render :new
     end
-  end
-
-  def edit
-    @poll = Poll.find(params[:id])
   end
 
   def update
