@@ -377,9 +377,6 @@ Rails/UniqueValidationWithoutIndex:
 Rails/ActionOrder:
   Enabled: false
 
-Rails/FindById:
-  Enabled: false
-
 Rails/DotSeparatedKeys:
   Enabled: false
 
