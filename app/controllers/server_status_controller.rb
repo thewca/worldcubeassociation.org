@@ -7,7 +7,7 @@ class ServerStatusController < ApplicationController
     @checks = checks
     @everything_good = @checks.all?(&:is_passing?)
     if !@everything_good
-      render status: 503
+      render status: :service_unavailable
     end
   end
 

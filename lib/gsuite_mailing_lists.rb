@@ -19,7 +19,7 @@ module GsuiteMailingLists
       if email.include?("+")
         old_email = email
         email = email.gsub(/\+[^@]*/, '')
-        puts "Warning: '#{old_email}' contains a plus sign, and google groups seems to not support + signs in email addresses, so we're going to add '#{email}' instead."
+        Rails.logger.debug { "Warning: '#{old_email}' contains a plus sign, and google groups seems to not support + signs in email addresses, so we're going to add '#{email}' instead." }
       end
       email
     end
@@ -39,7 +39,7 @@ module GsuiteMailingLists
       contained_aliases = desired_emails & board_aliases
       unless contained_aliases.empty?
         desired_emails -= contained_aliases
-        puts "Warning: Board aliases are contained in the sync group. #{contained_aliases} have been removed."
+        Rails.logger.debug { "Warning: Board aliases are contained in the sync group. #{contained_aliases} have been removed." }
       end
     end
 

@@ -320,7 +320,7 @@ class UsersController < ApplicationController
   end
 
   def acknowledge_cookies
-    return render status: 401, json: { ok: false } if current_user.nil?
+    return render status: :unauthorized, json: { ok: false } if current_user.nil?
 
     current_user.update!(cookies_acknowledged: true)
     render json: { ok: true }

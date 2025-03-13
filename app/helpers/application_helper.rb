@@ -31,7 +31,7 @@ module ApplicationHelper
 
   def link_to_google_maps_place(text, latitude, longitude)
     url = "https://www.google.com/maps/place/#{latitude},#{longitude}"
-    link_to text, url, target: "_blank"
+    link_to text, url, target: "_blank", rel: "noopener"
   end
 
   def link_to_competition_schedule_tab(comp)

@@ -547,7 +547,7 @@ class Competition < ApplicationRecord
   end
 
   def main_event_id=(event_id)
-    super(event_id.blank? ? nil : event_id)
+    super(event_id.presence)
   end
 
   # Enforce that the users marked as delegates for this competition are
@@ -2388,7 +2388,7 @@ class Competition < ApplicationRecord
 
   def dues_per_competitor_in_usd
     dues = DuesCalculator.dues_per_competitor_in_usd(self.country_iso2, self.base_entry_fee_lowest_denomination.to_i, self.currency_code)
-    dues.present? ? dues : 0
+    (dues.presence || 0)
   end
 
   private def xero_dues_payer

@@ -275,7 +275,7 @@ class CompetitionsController < ApplicationController
 
   def competition_form_nearby_json(competition, other_comp)
     if current_user.can_admin_results?
-      comp_link = ActionController::Base.helpers.link_to(other_comp.name, competition_admin_edit_path(other_comp.id), target: "_blank")
+      comp_link = ActionController::Base.helpers.link_to(other_comp.name, competition_admin_edit_path(other_comp.id), target: "_blank", rel: "noopener")
     else
       comp_link = ActionController::Base.helpers.link_to(other_comp.name, competition_path(other_comp.id))
     end
@@ -338,7 +338,7 @@ class CompetitionsController < ApplicationController
 
   def competition_form_registration_collision_json(competition, other_comp)
     if current_user.can_admin_results?
-      comp_link = ActionController::Base.helpers.link_to(other_comp.name, competition_admin_edit_path(other_comp.id), target: "_blank")
+      comp_link = ActionController::Base.helpers.link_to(other_comp.name, competition_admin_edit_path(other_comp.id), target: "_blank", rel: "noopener")
     else
       comp_link = ActionController::Base.helpers.link_to(other_comp.name, competition_path(other_comp.id))
     end

@@ -79,7 +79,6 @@ class PostsController < ApplicationController
   def update
     @post = find_post
     if @post.update(post_params)
-      puts(post_params.inspect)
       flash[:success] = "Updated post"
       render json: { status: 'ok', post: @post }
     else

@@ -190,6 +190,10 @@ Style/StringLiteralsInInterpolation:
 Style/SymbolArray:
   Enabled: false
 
+# We currently have a couple enums that are defined with Arrays, disabling for now
+Rails/EnumHash:
+  Enabled: false
+
 Style/WordArray:
   Enabled: false
 
@@ -370,9 +374,6 @@ Rails/WhereEquals:
 Rails/CompactBlank:
   Enabled: false
 
-Rails/EnumHash:
-  Enabled: false
-
 Rails/ReadWriteAttribute:
   Enabled: false
 
@@ -382,22 +383,10 @@ Rails/IndexWith:
 Rails/HelperInstanceVariable:
   Enabled: false
 
-Rails/LinkToBlank:
-  Enabled: false
-
 Rails/ActionControllerFlashBeforeRender:
   Enabled: false
 
-Lint/RedundantSafeNavigation:
-  Enabled: false
-
-Rails/Presence:
-  Enabled: false
-
 Rails/UniqueValidationWithoutIndex:
-  Enabled: false
-
-Rails/HttpStatus:
   Enabled: false
 
 Rails/ActionOrder:
