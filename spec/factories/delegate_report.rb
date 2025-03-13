@@ -26,7 +26,7 @@ FactoryBot.define do
     after(:build, :create) do |dr, evaluator|
       if evaluator.upload_files
         dr.required_setup_images_count.times do |i|
-          default_io = File.open(Rails.root.join("app/assets/images/og-wca_logo.png"), 'rb')
+          default_io = Rails.root.join("app/assets/images/og-wca_logo.png").open('rb')
 
           dr.setup_images.attach(
             io: default_io,

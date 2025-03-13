@@ -283,9 +283,6 @@ Rails/SkipsModelValidations:
 Rails/PluralizationGrammar:
   Enabled: false
 
-Rails/RootPathnameMethods:
-  Enabled: false
-
 Rails/I18nLocaleAssignment:
   Enabled: false
 
