@@ -498,7 +498,7 @@ RSpec.describe User, type: :model do
 
     it "doesn't send the notification if the user has it disabled" do
       user = FactoryBot.build(:user_with_wca_id, results_notifications_enabled: false)
-      expect(CompetitionsMailer).to_not receive(:notify_users_of_results_presence).with(user, competition).and_call_original
+      expect(CompetitionsMailer).not_to receive(:notify_users_of_results_presence).with(user, competition).and_call_original
       user.notify_of_results_posted(competition)
     end
   end

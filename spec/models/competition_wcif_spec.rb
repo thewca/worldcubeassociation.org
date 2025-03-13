@@ -284,7 +284,7 @@ RSpec.describe "Competition WCIF" do
     it "rendered WCIF matches JSON Schema definition" do
       expect {
         JSON::Validator.validate!(Competition.wcif_json_schema, competition.to_wcif)
-      }.to_not raise_error
+      }.not_to raise_error
     end
   end
 

@@ -30,7 +30,7 @@ RSpec.describe "oauth api" do
     json = JSON.parse(response.body)
     expect(json['error']).to eq(nil)
     access_token = json['access_token']
-    expect(access_token).to_not eq(nil)
+    expect(access_token).not_to eq(nil)
     verify_access_token access_token
   end
 
@@ -63,7 +63,7 @@ RSpec.describe "oauth api" do
       json = JSON.parse(response.body)
       expect(json['error']).to eq(nil)
       access_token = json['access_token']
-      expect(access_token).to_not eq(nil)
+      expect(access_token).not_to eq(nil)
       verify_access_token access_token
     end
 
@@ -110,10 +110,10 @@ RSpec.describe "oauth api" do
       json = JSON.parse(response.body)
       expect(json['error']).to eq(nil)
       access_token = json['access_token']
-      expect(access_token).to_not eq(nil)
+      expect(access_token).not_to eq(nil)
       verify_access_token access_token
       refresh_token = json['refresh_token']
-      expect(refresh_token).to_not eq(nil)
+      expect(refresh_token).not_to eq(nil)
 
       # Since we now have a refresh token, we should be able to get a new access
       # token.
@@ -122,7 +122,7 @@ RSpec.describe "oauth api" do
       json = JSON.parse(response.body)
       expect(json['error']).to eq(nil)
       access_token = json['access_token']
-      expect(access_token).to_not eq(nil)
+      expect(access_token).not_to eq(nil)
       verify_access_token access_token
     end
 
@@ -158,7 +158,7 @@ RSpec.describe "oauth api" do
         json = JSON.parse(response.body)
         expect(json['error']).to eq(nil)
         access_token = json['access_token']
-        expect(access_token).to_not eq(nil)
+        expect(access_token).not_to eq(nil)
         verify_access_token access_token
       end
     end
@@ -183,7 +183,7 @@ RSpec.describe "oauth api" do
 
     query = Rack::Utils.parse_query(URI.parse(current_url).query)
     access_token = query["access_token"]
-    expect(access_token).to_not eq(nil)
+    expect(access_token).not_to eq(nil)
     verify_access_token access_token
   end
 

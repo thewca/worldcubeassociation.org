@@ -435,9 +435,6 @@ Rails/ActiveRecordCallbacksOrder:
 
 # Rspec
 
-RSpec/NotToNot:
- Enabled: false
-
 RSpec/MultipleExpectations:
  Enabled: false
 

@@ -189,7 +189,7 @@ RSpec.describe UsersController do
       get :index, params: { format: :json, sort: "country", order: "ASC -- HMM" }
       users = assigns(:users)
       sql = users.to_sql
-      expect(sql).to_not match "HMM"
+      expect(sql).not_to match "HMM"
       expect(sql).to match(/order by .+ desc/i)
     end
   end

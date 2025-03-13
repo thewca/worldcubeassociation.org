@@ -104,7 +104,7 @@ RSpec.describe "users" do
       it 'does not generate backup codes for user without 2FA' do
         expect {
           post profile_generate_2fa_backup_path
-        }.to_not change { user.otp_backup_codes }
+        }.not_to change { user.otp_backup_codes }
         json = JSON.parse(response.body)
         expect(json["error"]["message"]).to include "not enabled"
       end
@@ -122,7 +122,7 @@ RSpec.describe "users" do
         expect {
           post profile_generate_2fa_backup_path
           follow_redirect!
-        }.to_not change { user.otp_backup_codes }
+        }.not_to change { user.otp_backup_codes }
         expect(response.body).to include I18n.t('users.edit.sensitive.identity_error')
       end
     end
@@ -138,7 +138,7 @@ RSpec.describe "users" do
         post profile_enable_2fa_path
         secret_after = user.reload.otp_secret
         expect(response.body).to include "Successfully regenerated"
-        expect(secret_before).to_not eq secret_after
+        expect(secret_before).not_to eq secret_after
       end
 
       it 'can disable 2FA' do
@@ -150,7 +150,7 @@ RSpec.describe "users" do
       it 'can (re)generate backup codes for user with 2FA' do
         expect(user.otp_backup_codes).to eq nil
         post profile_generate_2fa_backup_path
-        expect(user.reload.otp_backup_codes).to_not eq nil
+        expect(user.reload.otp_backup_codes).not_to eq nil
         json = JSON.parse(response.body)
         expect(json["codes"]&.size).to eq User::NUMBER_OF_BACKUP_CODES
       end
