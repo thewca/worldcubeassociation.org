@@ -233,11 +233,11 @@ class User < ApplicationRecord
     end
 
     if claiming_wca_id || (unconfirmed_wca_id.present? && unconfirmed_wca_id_change)
-      if !delegate_id_to_handle_wca_id_claim.present?
+      if delegate_id_to_handle_wca_id_claim.blank?
         errors.add(:delegate_id_to_handle_wca_id_claim, I18n.t('simple_form.required.text'))
       end
 
-      if !unconfirmed_wca_id.present?
+      if unconfirmed_wca_id.blank?
         errors.add(:unconfirmed_wca_id, I18n.t('simple_form.required.text'))
       end
 
@@ -541,7 +541,7 @@ class User < ApplicationRecord
 
   def banned_at_date?(date)
     if banned?
-      !ban_end.present? || date < ban_end
+      ban_end.blank? || date < ban_end
     else
       false
     end

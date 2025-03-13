@@ -84,7 +84,7 @@ module Registrations
       end
 
       def self.update_status(registration, status)
-        return unless status.present?
+        return if status.blank?
 
         registration.competing_status = status
       end
@@ -110,7 +110,7 @@ module Registrations
 
       def self.update_event_ids(registration, event_ids)
         # TODO: V3-REG Cleanup, this is probably why we need the reload above
-        return unless event_ids.present?
+        return if event_ids.blank?
 
         update_competition_events = registration.competition.competition_events.where(event_id: event_ids)
         registration.competition_events = update_competition_events

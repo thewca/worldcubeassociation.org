@@ -1179,12 +1179,12 @@ RSpec.describe "registrations" do
     end
 
     it 'creates a PaypalRecord of type :capture' do
-      capture_id = JSON.parse(response.body)['purchase_units'][0]['payments']['captures'][0]['id']
+      capture_id = response.parsed_body['purchase_units'][0]['payments']['captures'][0]['id']
       expect(PaypalRecord.find_by(paypal_id: capture_id).paypal_record_type).to eq('capture')
     end
 
     it 'associates PaypalCapture to the PaypalRecord' do
-      paypal_record = PaypalRecord.find_by(paypal_id: JSON.parse(response.body)['id'])
+      paypal_record = PaypalRecord.find_by(paypal_id: response.parsed_body['id'])
       expect(paypal_record.child_records.count).to eq(1)
     end
 

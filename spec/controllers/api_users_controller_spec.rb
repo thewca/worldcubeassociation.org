@@ -9,7 +9,7 @@ RSpec.describe Api::V0::UsersController do
     it 'can query by id' do
       get :show_user_by_id, params: { id: user.id }
       expect(response.status).to eq 200
-      json = JSON.parse(response.body)
+      json = response.parsed_body
       expect(json["user"]["name"]).to eq "Jeremy"
       expect(json["user"]["wca_id"]).to eq user.wca_id
     end
@@ -17,7 +17,7 @@ RSpec.describe Api::V0::UsersController do
     it 'can query by wca id' do
       get :show_user_by_wca_id, params: { wca_id: user.wca_id }
       expect(response.status).to eq 200
-      json = JSON.parse(response.body)
+      json = response.parsed_body
       expect(json["user"]["name"]).to eq "Jeremy"
       expect(json["user"]["wca_id"]).to eq user.wca_id
     end
@@ -25,7 +25,7 @@ RSpec.describe Api::V0::UsersController do
     it '404s nicely' do
       get :show_user_by_wca_id, params: { wca_id: "foo" }
       expect(response.status).to eq 404
-      json = JSON.parse(response.body)
+      json = response.parsed_body
       expect(json["user"]).to be nil
     end
 
@@ -36,14 +36,14 @@ RSpec.describe Api::V0::UsersController do
       it 'does not render upcoming competitions by default' do
         get :show_user_by_id, params: { id: user.id }
         expect(response.status).to eq 200
-        json = JSON.parse(response.body)
+        json = response.parsed_body
         expect(json.keys).not_to include "upcoming_competitions"
       end
 
       it 'renders upcoming competitions when upcoming_competitions param is set' do
         get :show_user_by_id, params: { id: user.id, upcoming_competitions: true }
         expect(response.status).to eq 200
-        json = JSON.parse(response.body)
+        json = response.parsed_body
         expect(json["upcoming_competitions"].size).to eq 1
       end
     end
@@ -56,7 +56,7 @@ RSpec.describe Api::V0::UsersController do
       sign_in normal_user
       get :show_me
       expect(response.status).to eq 200
-      json = JSON.parse(response.body)
+      json = response.parsed_body
       expect(json["user"]).to eq normal_user.serializable_hash(private_attributes: ['email']).as_json
     end
     let!(:id_less_user) { FactoryBot.create(:user, email: "example@email.com") }
@@ -65,7 +65,7 @@ RSpec.describe Api::V0::UsersController do
       sign_in id_less_user
       get :show_me
       expect(response.status).to eq 200
-      json = JSON.parse(response.body)
+      json = response.parsed_body
       expect(json["user"]).to eq id_less_user.serializable_hash(private_attributes: ['email']).as_json
     end
 
@@ -76,7 +76,7 @@ RSpec.describe Api::V0::UsersController do
       sign_in competed_user
       get :show_me
       expect(response.status).to eq 200
-      json = JSON.parse(response.body)
+      json = response.parsed_body
       expect(json["user"]).to eq competed_user.serializable_hash(private_attributes: ['email']).as_json
       expect(json.key?("rankings")).to be true
     end
@@ -98,7 +98,7 @@ RSpec.describe Api::V0::UsersController do
       sign_in banned_user
       get :permissions
       expect(response.status).to eq 200
-      json = JSON.parse(response.body)
+      json = response.parsed_body
       expect(json["can_attend_competitions"]["scope"]).to eq []
     end
 
@@ -108,7 +108,7 @@ RSpec.describe Api::V0::UsersController do
       sign_in banned_user
       get :permissions
       expect(response.status).to eq 200
-      json = JSON.parse(response.body)
+      json = response.parsed_body
       expect(json["can_attend_competitions"]["until"]).to eq end_date
     end
 
@@ -116,7 +116,7 @@ RSpec.describe Api::V0::UsersController do
       sign_in FactoryBot.create :user, :wrt_member
       get :permissions
       expect(response.status).to eq 200
-      json = JSON.parse(response.body)
+      json = response.parsed_body
       expect(json["can_organize_competitions"]["scope"]).to eq "*"
     end
 
@@ -125,7 +125,7 @@ RSpec.describe Api::V0::UsersController do
       sign_in delegate.user
       get :permissions
       expect(response.status).to eq 200
-      json = JSON.parse(response.body)
+      json = response.parsed_body
       expect(json["can_organize_competitions"]["scope"]).to eq "*"
     end
 
@@ -133,7 +133,7 @@ RSpec.describe Api::V0::UsersController do
       sign_in FactoryBot.create :user, :wst_member
       get :permissions
       expect(response.status).to eq 200
-      json = JSON.parse(response.body)
+      json = response.parsed_body
       expect(json["can_organize_competitions"]["scope"]).to eq "*"
     end
 
@@ -141,7 +141,7 @@ RSpec.describe Api::V0::UsersController do
       sign_in FactoryBot.create :user, :board_member
       get :permissions
       expect(response.status).to eq 200
-      json = JSON.parse(response.body)
+      json = response.parsed_body
       expect(json["can_organize_competitions"]["scope"]).to eq "*"
     end
 
@@ -149,7 +149,7 @@ RSpec.describe Api::V0::UsersController do
       sign_in FactoryBot.create :user, :board_member
       get :permissions
       expect(response.status).to eq 200
-      json = JSON.parse(response.body)
+      json = response.parsed_body
       expect(json["can_administer_competitions"]["scope"]).to eq "*"
     end
 
@@ -157,7 +157,7 @@ RSpec.describe Api::V0::UsersController do
       sign_in FactoryBot.create :user, :wrt_member
       get :permissions
       expect(response.status).to eq 200
-      json = JSON.parse(response.body)
+      json = response.parsed_body
       expect(json["can_administer_competitions"]["scope"]).to eq "*"
     end
 
@@ -165,7 +165,7 @@ RSpec.describe Api::V0::UsersController do
       sign_in FactoryBot.create :user, :wst_member
       get :permissions
       expect(response.status).to eq 200
-      json = JSON.parse(response.body)
+      json = response.parsed_body
       expect(json["can_administer_competitions"]["scope"]).to eq "*"
     end
 
@@ -179,7 +179,7 @@ RSpec.describe Api::V0::UsersController do
       sign_in delegate_user
       get :permissions
       expect(response.status).to eq 200
-      json = JSON.parse(response.body)
+      json = response.parsed_body
       expect(json["can_administer_competitions"]["scope"]).to eq [competition.id]
     end
 
@@ -187,7 +187,7 @@ RSpec.describe Api::V0::UsersController do
       sign_in organizer_user
       get :permissions
       expect(response.status).to eq 200
-      json = JSON.parse(response.body)
+      json = response.parsed_body
       expect(json["can_administer_competitions"]["scope"]).to eq [competition.id]
     end
   end

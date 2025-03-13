@@ -21,7 +21,7 @@ RSpec.describe PersonsController, type: :controller do
 
       it "responds with correct JSON when region and search are specified" do
         get :index, params: { search: "Jennifer", region: "USA" }, format: :json
-        json = JSON.parse(response.body)
+        json = response.parsed_body
         expect(json['total']).to eq 1
         json_person = json['rows'][0]
         expect(json_person['name']).to include "Jennifer Lawrence"
@@ -33,21 +33,21 @@ RSpec.describe PersonsController, type: :controller do
 
       it "selecting continent works" do
         get :index, params: { region: "_Europe" }, format: :json
-        json = JSON.parse(response.body)
+        json = response.parsed_body
         expect(json['total']).to eq 1
         expect(json['rows'].count).to eq 1
       end
 
       it "searching by WCA ID works" do
         get :index, params: { search: "2016" }, format: :json
-        json = JSON.parse(response.body)
+        json = response.parsed_body
         expect(json['total']).to eq 2
         expect(json['rows'].count).to eq 2
       end
 
       it "works well when parts of the name are given" do
         get :index, params: { search: "Law Jenn" }, format: :json
-        json = JSON.parse(response.body)
+        json = response.parsed_body
         expect(json['total']).to eq 1
         expect(json['rows'].count).to eq 1
         expect(json['rows'][0]['name']).to include "Jennifer Lawrence"

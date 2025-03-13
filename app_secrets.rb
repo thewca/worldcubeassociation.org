@@ -38,7 +38,7 @@ SuperConfig::Base.class_eval do
       puts "Received exception #{e} from Vault - attempt #{attempt}" if e.present?
 
       secret = Vault.logical.read("kv/data/#{EnvConfig.VAULT_APPLICATION}/#{secret_name}")
-      raise "Tried to read #{secret_name}, but doesn't exist" unless secret.present?
+      raise "Tried to read #{secret_name}, but doesn't exist" if secret.blank?
 
       secret.data[:data]
     end
