@@ -62,9 +62,7 @@ class Result < ApplicationRecord
     [value1, value2, value3, value4, value5]
   end
 
-  def country_iso2
-    country.iso2
-  end
+  delegate :iso2, to: :country, prefix: true
 
   DEFAULT_SERIALIZE_OPTIONS = {
     only: ["id", "pos", "best", "best_index", "worst_index", "average"],

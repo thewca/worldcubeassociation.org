@@ -370,9 +370,7 @@ class User < ApplicationRecord
   end
 
   # Convenience method for Discord SSO, because we need to maintain backwards compatibility
-  def avatar_url
-    avatar.url
-  end
+  delegate :url, to: :avatar, prefix: true
 
   # This method was copied and overridden from https://github.com/plataformatec/devise/blob/master/lib/devise/models/confirmable.rb#L182
   # to enable separate emails for sign-up and email reconfirmation

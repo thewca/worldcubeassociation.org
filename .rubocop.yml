@@ -302,9 +302,6 @@ Rails/IndexBy:
 Rails/NegateInclude:
   Enabled: false
 
-Rails/Delegate:
-  Enabled: false
-
 Rails/ReversibleMigration:
   Enabled: false
 

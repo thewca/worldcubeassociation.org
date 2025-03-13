@@ -33,9 +33,7 @@ class LiveResult < ApplicationRecord
     super(DEFAULT_SERIALIZE_OPTIONS.merge(options || {}))
   end
 
-  def event_id
-    event.id
-  end
+  delegate :id, to: :event, prefix: true
 
   def to_solve_time(field)
     SolveTime.new(event_id, field, send(field))
