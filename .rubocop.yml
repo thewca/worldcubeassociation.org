@@ -614,8 +614,5 @@ FactoryBot/RedundantFactoryOption:
 FactoryBot/FactoryClassName:
   Enabled: false
 
-FactoryBot/CreateList:
-  Enabled: false
-
 FactoryBot/ExcessiveCreateList:
   Enabled: false

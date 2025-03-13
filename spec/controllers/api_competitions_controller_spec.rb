@@ -232,9 +232,7 @@ RSpec.describe Api::V0::CompetitionsController do
     end
 
     it 'paginates' do
-      7.times do
-        FactoryBot.create :competition, :confirmed, :visible
-      end
+      FactoryBot.create_list :competition, 7, :confirmed, :visible
 
       get :index, params: { per_page: 5 }
       expect(response.status).to eq 200
