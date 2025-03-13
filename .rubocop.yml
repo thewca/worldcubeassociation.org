@@ -257,19 +257,10 @@ ThreadSafety/DirChdir:
 
 # Performance
 
-Performance/RedundantEqualityComparisonBlock:
-  Enabled: false
-
-Performance/StringIdentifierArgument:
-  Enabled: false
-
 Performance/CollectionLiteralInLoop:
   Enabled: false
 
 Performance/MethodObjectAsBlock:
-  Enabled: false
-
-Performance/StringReplacement:
   Enabled: false
 
 Performance/RedundantMatch:
@@ -287,13 +278,7 @@ Performance/MapCompact:
 Performance/RedundantBlockCall:
   Enabled: false
 
-Performance/SortReverse:
-  Enabled: false
-
 Performance/BindCall:
-  Enabled: false
-
-Performance/InefficientHashSearch:
   Enabled: false
 
 Performance/RedundantMerge:
