@@ -113,7 +113,7 @@ class PaypalRecord < ApplicationRecord
     # PayPal communicates amounts as strings, so we need to first convert to Ruby amount
     #   (which uses integers) and THEN add/subtract
     paid_amount = self.money_amount
-    already_refunded = child_records.refund.map(&:money_amount).sum
+    already_refunded = child_records.refund.sum(&:money_amount)
 
     # `cents` is the "lowest denomination" method in RubyMoney
     (paid_amount - already_refunded).cents

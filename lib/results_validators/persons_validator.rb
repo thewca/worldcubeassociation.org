@@ -174,7 +174,7 @@ module ResultsValidators
             end
           end
           # Look for if 2 new competitors that share the exact same name
-          if without_wca_id.select { |p2| p2.name == p.name }.length > 1 && !duplicate_newcomer_names.include?(p.name)
+          if without_wca_id.count { |p2| p2.name == p.name } > 1 && !duplicate_newcomer_names.include?(p.name)
             duplicate_newcomer_names << p.name
           end
         end

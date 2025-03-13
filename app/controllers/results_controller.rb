@@ -374,16 +374,16 @@ class ResultsController < ApplicationController
 
   # Normalizes the params so that old links to rankings still work.
   private def support_old_links!
-    params[:event_id]&.gsub!("+", " ")
+    params[:event_id]&.tr!("+", " ")
 
-    params[:region]&.gsub!("+", " ")
+    params[:region]&.tr!("+", " ")
 
-    params[:years]&.gsub!("+", " ")
+    params[:years]&.tr!("+", " ")
     if params[:years] == "all"
       params[:years] = nil
     end
 
-    params[:show]&.gsub!("+", " ")
+    params[:show]&.tr!("+", " ")
     params[:show]&.downcase!
     # We are not supporting the all option anymore!
     if params[:show]&.include?("all")

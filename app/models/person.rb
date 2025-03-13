@@ -243,7 +243,7 @@ class Person < ApplicationRecord
     records = results.pluck(:regionalSingleRecord, :regionalAverageRecord).flatten.select(&:present?)
     {
       national: records.count("NR"),
-      continental: records.reject { |record| %w(NR WR).include?(record) }.count,
+      continental: records.count { |record| !(%w(NR WR).include?(record)) },
       world: records.count("WR"),
       total: records.count,
     }

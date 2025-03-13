@@ -789,7 +789,7 @@ RSpec.describe Competition do
 
     [:confirmed, :showAtAll].each do |action|
       it "can set #{action}" do
-        competition_with_delegate.public_send "#{action}=", true
+        competition_with_delegate.public_send :"#{action}=", true
         expect(competition_with_delegate).to be_valid
       end
 
@@ -811,7 +811,7 @@ RSpec.describe Competition do
       end
 
       it "requires at least one delegate when setting #{action}" do
-        competition_without_delegate.public_send "#{action}=", true
+        competition_without_delegate.public_send :"#{action}=", true
         expect(competition_without_delegate).not_to be_valid
       end
     end

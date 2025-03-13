@@ -89,7 +89,7 @@ module FinishUnfinishedPersons
       persons_with_probas.push [p, name_similarity, country_similarity]
     end
 
-    proba_threshold = only_probas.sort { |a, b| b <=> a }.take(2 * n).last
+    proba_threshold = only_probas.sort.reverse.take(2 * n).last
     sorting_candidates = persons_with_probas.filter { |_, np, _| np >= proba_threshold }
 
     # `sort_by` is _sinfully_ expensive, so we try to reduce the amount of comparisons as much as possible.
