@@ -593,17 +593,5 @@ FactoryBot/ConsistentParenthesesStyle:
 FactoryBot/SyntaxMethods:
   Enabled: false
 
-FactoryBot/AssociationStyle:
-  Enabled: false
-
-FactoryBot/RedundantFactoryOption:
-  Enabled: false
-
-FactoryBot/FactoryClassName:
-  Enabled: false
-
-FactoryBot/CreateList:
-  Enabled: false
-
 FactoryBot/ExcessiveCreateList:
   Enabled: false
