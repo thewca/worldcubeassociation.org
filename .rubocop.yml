@@ -332,9 +332,6 @@ Rails/InverseOf:
 Rails/Validation:
   Enabled: false
 
-Rails/WhereExists:
-  Enabled: false
-
 Rails/HasManyOrHasOneDependent:
   Enabled: false
 
