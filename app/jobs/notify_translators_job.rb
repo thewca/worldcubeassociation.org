@@ -9,7 +9,7 @@ class NotifyTranslatorsJob < WcaCronjob
   def perform
     modification_hash = ServerSetting.find_or_create_by!(name: ServerSetting::BASE_LOCALE_HASH)
 
-    translation_base_file = "#{Rails.root}/config/locales/en.yml"
+    translation_base_file = Rails.root.join("config/locales/en.yml").to_s
     latest_modification_hash = Digest::SHA256.file(translation_base_file).hexdigest
 
     if modification_hash.value && modification_hash.value != latest_modification_hash

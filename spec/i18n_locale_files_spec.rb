@@ -4,7 +4,7 @@ require 'rails_helper'
 require 'i18n-spec'
 
 RSpec.describe "Locale files content" do
-  Dir.glob(Rails.root.join('config', 'locales', '*.yml')).each do |locale_file|
+  Dir.glob(Rails.root.join("config/locales/*.yml")).each do |locale_file|
     describe locale_file.to_s do
       it { is_expected.to be_parseable }
       it { is_expected.to have_valid_pluralization_keys }
