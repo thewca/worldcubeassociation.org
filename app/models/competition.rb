@@ -1846,7 +1846,7 @@ class Competition < ApplicationRecord
       if !start_date
         raise WcaExceptions::BadApiParameter.new("Invalid start: '#{params[:start]}'")
       end
-      competitions = competitions.where("start_date >= ?", start_date)
+      competitions = competitions.where(start_date: start_date..)
     end
 
     if params[:end].present?
@@ -1854,7 +1854,7 @@ class Competition < ApplicationRecord
       if !end_date
         raise WcaExceptions::BadApiParameter.new("Invalid end: '#{params[:end]}'")
       end
-      competitions = competitions.where("end_date <= ?", end_date)
+      competitions = competitions.where(end_date: ..end_date)
     end
 
     if params[:ongoing_and_future].present?
@@ -1862,7 +1862,7 @@ class Competition < ApplicationRecord
       if !target_date
         raise WcaExceptions::BadApiParameter.new("Invalid ongoing_and_future: '#{params[:ongoing_and_future]}'")
       end
-      competitions = competitions.where("end_date >= ?", target_date)
+      competitions = competitions.where(end_date: target_date..)
     end
 
     if params[:announced_after].present?

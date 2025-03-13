@@ -326,9 +326,6 @@ Rails/DangerousColumnNames:
 Rails/RedundantForeignKey:
   Enabled: false
 
-Rails/WhereRange:
-  Enabled: false
-
 Rails/InverseOf:
   Enabled: false
 
