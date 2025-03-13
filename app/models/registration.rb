@@ -97,19 +97,11 @@ class Registration < ApplicationRecord
     new_record? || cancelled? || !is_competing?
   end
 
-  delegate :name, to: :user
-
   def birthday
     user.dob
   end
 
-  delegate :gender, to: :user
-
-  delegate :country, to: :user
-
-  delegate :email, to: :user
-
-  delegate :wca_id, to: :user
+  delegate :name, :gender, :country, :email, :wca_id, to: :user
 
   alias personId wca_id
 
