@@ -61,7 +61,7 @@ class ResultsController < ApplicationController
     @cache_params = ResultsController.compute_cache_key(MODE_RANKINGS, **params_for_cache)
 
     if @is_persons
-      @query = <<-SQL
+      @query = <<-SQL.squish
         SELECT
           result.*,
           result.#{value} value
@@ -84,7 +84,7 @@ class ResultsController < ApplicationController
 
     elsif @is_results
       if @is_average
-        @query = <<-SQL
+        @query = <<-SQL.squish
           SELECT
             result.*,
             average value
@@ -103,7 +103,7 @@ class ResultsController < ApplicationController
 
       else
         subqueries = (1..5).map do |i|
-          <<-SQL
+          <<-SQL.squish
             SELECT
               result.*,
               value#{i} value
@@ -120,7 +120,7 @@ class ResultsController < ApplicationController
           SQL
         end
         subquery = "(" + subqueries.join(") UNION ALL (") + ")"
-        @query = <<-SQL
+        @query = <<-SQL.squish
           SELECT *
           FROM (#{subquery}) result
           ORDER BY value, personName, competitionId, roundTypeId
@@ -128,7 +128,7 @@ class ResultsController < ApplicationController
         SQL
       end
     elsif @is_by_region
-      @query = <<-SQL
+      @query = <<-SQL.squish
         SELECT
           result.*,
           result.#{value} value
@@ -195,7 +195,7 @@ class ResultsController < ApplicationController
         order = 'start_date desc, event.`rank`, type desc, value, roundType.`rank` desc'
       end
 
-      @query = <<-SQL
+      @query = <<-SQL.squish
         SELECT
           competition.start_date,
           YEAR(competition.start_date)  year,
@@ -238,7 +238,7 @@ class ResultsController < ApplicationController
           #{order}
       SQL
     else
-      @query = <<-SQL
+      @query = <<-SQL.squish
         SELECT *
         FROM
           (#{current_records_query("best", "single")}
@@ -257,7 +257,7 @@ class ResultsController < ApplicationController
   end
 
   private def current_records_query(value, type)
-    <<-SQL
+    <<-SQL.squish
       SELECT
         '#{type}'            type,
                              result.*,

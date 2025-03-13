@@ -195,7 +195,7 @@ class Api::V0::ApiController < ApplicationController
     concise_results_date = ComputeAuxiliaryData.end_date || Date.current
     cache_key = ["records", concise_results_date.iso8601]
     json = Rails.cache.fetch(cache_key) do
-      records = ActiveRecord::Base.connection.exec_query <<-SQL
+      records = ActiveRecord::Base.connection.exec_query <<-SQL.squish
         SELECT 'single' type, MIN(best) value, countryId country_id, eventId event_id
         FROM ConciseSingleResults
         GROUP BY countryId, eventId

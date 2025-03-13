@@ -3,7 +3,7 @@
 class ConvertEventIdToCompetitionEventId < ActiveRecord::Migration
   def up
     add_column :registration_events, :competition_event_id, :int
-    execute <<-SQL
+    execute <<-SQL.squish
       UPDATE registration_events
       JOIN Preregs ON Preregs.id = registration_events.registration_id
       JOIN competition_events ON competition_events.competition_id = Preregs.competitionId AND competition_events.event_id = registration_events.event_id
@@ -21,7 +21,7 @@ class ConvertEventIdToCompetitionEventId < ActiveRecord::Migration
     rename_table :registration_competition_events, :registration_events
 
     add_column :registration_events, :event_id, :string
-    execute <<-SQL
+    execute <<-SQL.squish
       UPDATE registration_events
       JOIN competition_events ON competition_events.id = registration_events.competition_event_id
       SET registration_events.event_id = competition_events.event_id
