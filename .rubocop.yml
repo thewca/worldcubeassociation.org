@@ -263,12 +263,6 @@ Performance/CollectionLiteralInLoop:
 Performance/MethodObjectAsBlock:
   Enabled: false
 
-Performance/RedundantMatch:
-  Enabled: false
-
-Performance/RegexpMatch:
-  Enabled: false
-
 Performance/MapMethodChain:
   Enabled: false
 
@@ -276,15 +270,6 @@ Performance/MapCompact:
   Enabled: false
 
 Performance/RedundantBlockCall:
-  Enabled: false
-
-Performance/BindCall:
-  Enabled: false
-
-Performance/RedundantMerge:
-  Enabled: false
-
-Performance/TimesMap:
   Enabled: false
 
 # Rails

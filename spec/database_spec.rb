@@ -34,7 +34,7 @@ RSpec.describe "database" do
   end
 
   db.tables.each do |table|
-    next if /archive_phpbb3\w+|schema_migrations|ar_internal_metadata/.match(table)
+    next if /archive_phpbb3\w+|schema_migrations|ar_internal_metadata/.match?(table)
 
     describe(table) do
       table_info = db.select_one <<-SQL

@@ -77,12 +77,12 @@ module ResultsValidators
       end
 
       # Check for opening parenthesis without space before it.
-      if /[[:alnum:]]\(/ =~ name
+      if /[[:alnum:]]\(/.match?(name)
         validation_issues << ValidationError.new(WRONG_PARENTHESIS_FORMAT_ERROR, :persons, competition_id, name: name)
       end
 
       # Check for wrong parenthesis type.
-      if /[（）]/ =~ name
+      if /[（）]/.match?(name)
         validation_issues << ValidationError.new(WRONG_PARENTHESIS_TYPE_ERROR, :persons, competition_id, name: name)
       end
 

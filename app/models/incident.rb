@@ -77,9 +77,7 @@ class Incident < ApplicationRecord
     end
 
     json = super
-    json.merge!(
-      class: self.class.to_s.downcase,
-    )
+    json[:class] = self.class.to_s.downcase
 
     json[:tags] = tags_array.map { |tag|
       { name: tag }.merge(Regulation.find_or_nil(tag) || {})

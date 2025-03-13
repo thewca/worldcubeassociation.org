@@ -63,9 +63,7 @@ class Post < ApplicationRecord
 
   def serializable_hash(options = nil)
     json = super(DEFAULT_SERIALIZE_OPTIONS.merge(options || {}))
-    json.merge!(
-      class: self.class.to_s.downcase,
-    )
+    json[:class] = self.class.to_s.downcase
     if options[:teaser_only]
       json[:teaser] = md(body_teaser)
     else
