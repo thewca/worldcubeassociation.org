@@ -40,7 +40,8 @@ RSpec.describe PollsController do
   end
 
   context "logged in as a staff member" do
-    sign_in { create(:user, :wrt_member) }
+    let(:staff) { create(:user, :wrt_member) }
+    sign_in { staff }
     it "shows poll results" do
       poll = create(:poll)
       get :results, params: { id: poll.id }

@@ -64,7 +64,8 @@ RSpec.describe Api::V0::UserRolesController do
     end
 
     context 'when user is logged in as an admin' do
-      sign_in { create(:wst_admin_role).user }
+      let(:admin) { create(:admin) }
+      sign_in { admin }
 
       it 'does return banned_competitors if isGroupHidden is true' do
         get :index, params: { userId: banned_competitor.user.id, isGroupHidden: true }
@@ -105,7 +106,8 @@ RSpec.describe Api::V0::UserRolesController do
     let!(:user_to_be_banned_with_deleted_registration_in_future_comps) { create(:user, :with_deleted_registration_in_future_comps) }
 
     context 'when signed in as a WIC Leader' do
-      sign_in { create(:user, :wic_leader) }
+      let(:leader) { create(:user, :wic_leader) }
+      sign_in { leader }
 
       it 'can ban a user if the user does not have any upcoming competitions' do
         post :create, params: {
@@ -169,7 +171,8 @@ RSpec.describe Api::V0::UserRolesController do
     end
 
     context 'when signed in as a Senior Delegate' do
-      sign_in { create(:senior_delegate_role).user }
+      let(:senior_delegate) { create(:senior_delegate_role).user }
+      sign_in { senior_delegate }
 
       it 'can create a new trainee delegate' do
         user_to_be_made_delegate = create(:user)
@@ -187,7 +190,8 @@ RSpec.describe Api::V0::UserRolesController do
     end
 
     context 'when signed in as a Board member' do
-      sign_in { create(:user, :board_member) }
+      let(:board) { create(:board, :board_member) }
+      sign_in { board }
 
       it "creating a new role for leader ends old delegate's role" do
         current_leader = create(:wrt_leader_role)
@@ -206,7 +210,8 @@ RSpec.describe Api::V0::UserRolesController do
 
   describe 'DELETE #destroy' do
     context 'when signed in as a Senior Delegate' do
-      sign_in { create(:senior_delegate_role).user }
+      let(:senior_delegate) { create(:senior_delegate_role).user }
+      sign_in { senior_delegate }
 
       it 'can end role of a junior delegate' do
         junior_delegate_role = create(:junior_delegate_role)

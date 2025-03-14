@@ -69,7 +69,8 @@ RSpec.describe PostsController do
   end
 
   context "logged in as wrc member" do
-    sign_in { create(:user, :wrc_member) }
+    let(:staff) { create(:user, :wrc_member) }
+    sign_in { staff }
 
     describe "GET #new" do
       it "works" do
@@ -89,7 +90,8 @@ RSpec.describe PostsController do
   end
 
   context "logged in as wic member" do
-    sign_in { create(:user, :wic_member) }
+    let(:staff) { create(:user, :wic_member) }
+    sign_in { staff }
 
     describe "GET #new" do
       it "returns 200" do

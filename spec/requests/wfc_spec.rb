@@ -22,7 +22,8 @@ RSpec.describe "WFC controller" do
     end
 
     context "when signed in as a WFC member" do
-      sign_in { create(:user, :wfc_member) }
+      let(:staff) { create(:user, :wfc_member) }
+      sign_in { staff }
       it "shows the page" do
         get panel_index_path(:wfc)
         expect(response).to be_successful
@@ -41,7 +42,8 @@ RSpec.describe "WFC controller" do
     end
 
     context "when signed in as a WFC member" do
-      sign_in { create(:user, :wfc_member) }
+      let(:staff) { create(:user, :wfc_member) }
+      sign_in { staff }
       it "shows the page" do
         get wfc_competitions_export_path(from_date: Time.now, to_date: Time.now)
         expect(response).to be_successful

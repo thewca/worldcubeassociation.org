@@ -32,7 +32,8 @@ RSpec.describe "Country bands controller" do
     end
 
     context "when signed in as a WFC member" do
-      sign_in { create(:user, :wfc_member) }
+      let(:staff) { create(:user, :wfc_member) }
+      sign_in { staff }
       it "shows the page" do
         get edit_country_band_path(0)
         expect(response).to be_successful

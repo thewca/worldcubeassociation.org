@@ -50,7 +50,8 @@ RSpec.describe "Incidents management", type: :request do
     end
 
     context "when logged in as a WIC member" do
-      sign_in { create(:user, :wic_member) }
+      let(:staff) { create(:user, :wic_member) }
+      sign_in { staff }
       it "does not show a pending incident" do
         get incident_path(pending_incident)
         expect(response).not_to be_successful
@@ -58,7 +59,8 @@ RSpec.describe "Incidents management", type: :request do
     end
 
     context "when logged in as a WQAC member" do
-      sign_in { create(:user, :wqac_member) }
+      let(:staff) { create(:user, :wqac_member) }
+      sign_in { staff }
       it "does not show a pending incident" do
         get incident_path(pending_incident)
         expect(response).not_to be_successful
