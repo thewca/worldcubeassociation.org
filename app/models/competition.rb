@@ -542,9 +542,7 @@ class Competition < ApplicationRecord
     Country.c_find(self.countryId)
   end
 
-  def continent
-    country.continent
-  end
+  delegate :continent, to: :country
 
   def main_event_id=(event_id)
     super(event_id.presence)

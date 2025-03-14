@@ -92,9 +92,7 @@ class Round < ApplicationRecord
     end
   end
 
-  def event_id
-    event.id
-  end
+  delegate :id, to: :event, prefix: true
 
   def formats_used
     cutoff_format = Format.c_find!(cutoff.number_of_attempts.to_s) if cutoff

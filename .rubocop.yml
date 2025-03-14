@@ -293,15 +293,6 @@ Rails/FindEach:
 Rails/IndexBy:
   Enabled: false
 
-Rails/Pluck:
-  Enabled: false
-
-Rails/Pick:
-  Enabled: false
-
-Rails/Delegate:
-  Enabled: false
-
 Rails/ReversibleMigration:
   Enabled: false
 
