@@ -10,7 +10,7 @@ module Overcommit::Hook::PreCommit
         "\t" => "tab",
         "\r" => "carriage return",
         "\uFEFF" => "byte order marker (BOM)",
-        ("WCA " + "id") => "We prefer 'WCA ID', see https://github.com/thewca/worldcubeassociation.org/issues/268",
+        "WCA id" => "We prefer 'WCA ID', see https://github.com/thewca/worldcubeassociation.org/issues/268",
       }
       applicable_files.each do |file|
         File.foreach(file).with_index do |line, line_num|

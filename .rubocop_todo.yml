@@ -45,8 +45,5 @@ Metrics/PerceivedComplexity:
     - 'app/models/competition.rb'
     - 'lib/results_validators/*.rb'
 
-Style/SoleNestedConditional:
-  Enabled: false
-
 Lint/EmptyBlock:
   Enabled: false

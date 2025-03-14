@@ -368,10 +368,8 @@ class Competition < ApplicationRecord
   # Competitions after 2018-12-31 will have this check. All comps from 2019 onwards required a schedule.
   # Check added per "Support for cancelled competitions" and adding some old cancelled competitions to the website without a schedule.
   def schedule_must_match_rounds
-    if start_date.present? && start_date > Date.new(2018, 12, 31)
-      unless has_any_round_per_event? && schedule_includes_rounds?
-        errors.add(:competition_events, I18n.t('competitions.errors.schedule_must_match_rounds'))
-      end
+    if start_date.present? && start_date > Date.new(2018, 12, 31) && !(has_any_round_per_event? && schedule_includes_rounds?)
+      errors.add(:competition_events, I18n.t('competitions.errors.schedule_must_match_rounds'))
     end
   end
 
@@ -673,10 +671,8 @@ class Competition < ApplicationRecord
         end
       end
     end
-    if registration_range_specified? && registration_past?
-      unless self.announced?
-        warnings[:regclosed] = I18n.t('competitions.messages.registration_already_closed')
-      end
+    if registration_range_specified? && registration_past? && !self.announced?
+      warnings[:regclosed] = I18n.t('competitions.messages.registration_already_closed')
     end
 
     warnings
