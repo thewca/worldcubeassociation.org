@@ -13,11 +13,7 @@ class IncidentsController < ApplicationController
 
   def index
     base_model = Incident.includes(:competitions, :incident_tags)
-    if current_user&.can_manage_incidents?
-      @incidents = base_model.all
-    else
-      @incidents = base_model.resolved
-    end
+    @incidents = base_model.visible_to?(current_user)
 
     respond_to do |format|
       format.html do
@@ -36,7 +32,19 @@ class IncidentsController < ApplicationController
 
   def show
     set_incident
-    unless @incident.resolved?
+
+    # Check visibility and redirect based on user role
+    if @incident.visibility == 'draft' && !current_user&.can_manage_incidents?
+      redirect_to_root_unless_user(:can_manage_incidents?)
+      return
+    end
+
+    if @incident.visibility == 'staff' && !current_user&.staff?
+      redirect_to_root_unless_user(:staff?)
+      nil
+    end
+
+    if @incident.visibility == 'public' && !@incident.resolved?
       redirect_to_root_unless_user(:can_manage_incidents?)
     end
   end
@@ -120,6 +128,7 @@ class IncidentsController < ApplicationController
         :public_summary,
         :tags,
         :digest_worthy,
+        :visibility,
         incident_competitions_attributes: [:id, :competition_id, :comments, :_destroy],
       )
     end

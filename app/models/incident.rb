@@ -7,7 +7,15 @@ class Incident < ApplicationRecord
 
   accepts_nested_attributes_for :incident_competitions, allow_destroy: true
 
-  scope :resolved, -> { where.not(resolved_at: nil) }
+  enum visibility: [
+    :draft,          # Only visible to WRC members
+    :staff,          # Visible to WCA staff members only
+    :open,           # Visible to everyone
+  ]
+
+  Incident.open
+  Incident.staff.or(Incident.open)
+  Incident.all
 
   validate :digest_sent_at_consistent
   validates :title, presence: true
@@ -31,11 +39,16 @@ class Incident < ApplicationRecord
   end
 
   def digest_sent_at_consistent
-    if digest_sent_at && !digest_worthy
-      errors.add(:digest_sent_at, "can't be set if digest_worthy is false.")
-    end
-    if digest_sent_at && !resolved_at
-      errors.add(:digest_sent_at, "can't be set if incident is not resolved.")
+    if digest_sent_at
+
+      if !digest_worthy
+        errors.add(:digest_sent_at, "can't be set if digest_worthy is false.")
+      end
+
+      if !open?
+        errors.add(:digest_sent_at, "can't be set if incident is not public.")
+
+      end
     end
   end
 
@@ -92,5 +105,16 @@ class Incident < ApplicationRecord
     }
 
     json
+  end
+
+  def self.visible_to?(user)
+
+    if user&.can_manage_incidents? # WRC members see all
+      Incident.all
+    elsif user&.staff? # Staff see staff + public
+      Incident.staff.or(Incident.open)
+    else # Public users only see public
+      Incident.open
+    end
   end
 end
