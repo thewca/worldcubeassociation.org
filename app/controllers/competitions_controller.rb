@@ -741,7 +741,7 @@ class CompetitionsController < ApplicationController
       # In general ensuring ease of access until it is certain that they won't need to frequently visit the page anymore.
       competitions = Competition.includes(:delegate_report, :championships)
                                 .where(id: competition_ids.uniq).where("cancelled_at is null or end_date >= curdate()")
-                                .sort_by { |comp| comp.start_date || (Date.today + 20.year) }.reverse
+                                .sort_by { |comp| comp.start_date || (Date.today + 20.years) }.reverse
       @past_competitions, @not_past_competitions = competitions.partition(&:is_probably_over?)
       bookmarked_ids = current_user.competitions_bookmarked.pluck(:competition_id)
       @bookmarked_competitions = Competition.not_over
@@ -754,6 +754,6 @@ class CompetitionsController < ApplicationController
   def for_senior
     user_id = params[:user_id] || current_user.id
     @user = User.find(user_id)
-    @competitions = @user.subordinate_delegates.map(&:delegated_competitions).flatten.uniq.reject(&:is_probably_over?).sort_by { |c| c.start_date || (Date.today + 20.year) }.reverse
+    @competitions = @user.subordinate_delegates.map(&:delegated_competitions).flatten.uniq.reject(&:is_probably_over?).sort_by { |c| c.start_date || (Date.today + 20.years) }.reverse
   end
 end

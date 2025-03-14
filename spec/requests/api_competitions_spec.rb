@@ -12,14 +12,14 @@ RSpec.describe "API Competitions" do
     let!(:competition4) { FactoryBot.create :competition, :visible, starts: 3.weeks.from_now, name: "Fourth 2019" }
 
     it "orders competitions by date descending by default" do
-      get api_v0_competitions_path, params: { start: 2.week.from_now }
+      get api_v0_competitions_path, params: { start: 2.weeks.from_now }
       expect(response).to be_successful
       ids = response.parsed_body.map { |c| c["id"] }
       expect(ids).to eq [competition4, competition3].map(&:id)
     end
 
     it "allows ordering by date ascending" do
-      get api_v0_competitions_path, params: { start: 2.week.from_now, sort: "start_date" }
+      get api_v0_competitions_path, params: { start: 2.weeks.from_now, sort: "start_date" }
       expect(response).to be_successful
       ids = response.parsed_body.map { |c| c["id"] }
       expect(ids).to eq [competition3, competition4].map(&:id)

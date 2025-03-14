@@ -281,9 +281,6 @@ Rails/DynamicFindBy:
 Rails/SkipsModelValidations:
   Enabled: false
 
-Rails/PluralizationGrammar:
-  Enabled: false
-
 Rails/I18nLocaleAssignment:
   Enabled: false
 
@@ -302,16 +299,7 @@ Rails/OutputSafety:
 Rails/I18nLocaleTexts:
   Enabled: false
 
-Rails/RakeEnvironment:
-  Enabled: false
-
-Rails/ApplicationRecord:
-  Enabled: false
-
 Rails/HelperInstanceVariable:
-  Enabled: false
-
-Rails/ActionControllerFlashBeforeRender:
   Enabled: false
 
 Rails/UniqueValidationWithoutIndex:

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class WaitingList < ActiveRecord::Base
+class WaitingList < ApplicationRecord
   belongs_to :holder, polymorphic: true
 
   def remove(entry)

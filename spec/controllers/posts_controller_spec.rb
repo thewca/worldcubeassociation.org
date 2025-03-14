@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe PostsController do
-  let!(:post1) { FactoryBot.create(:post, created_at: 1.hours.ago) }
+  let!(:post1) { FactoryBot.create(:post, created_at: 1.hour.ago) }
   let!(:sticky_post) { FactoryBot.create(:post, sticky: true, created_at: 2.hours.ago) }
   let!(:wic_post) { FactoryBot.create(:post, created_at: 3.hours.ago, tags: "wic,othertag", show_on_homepage: false) }
 

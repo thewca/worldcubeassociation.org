@@ -42,7 +42,7 @@ RSpec.describe "JobsCheck" do
   end
 
   it "passes if there are young jobs" do
-    dummy_jobs.first.cronjob_statistics.update!(enqueued_at: 1.minutes.ago)
+    dummy_jobs.first.cronjob_statistics.update!(enqueued_at: 1.minute.ago)
 
     status, description = check.status_description
 

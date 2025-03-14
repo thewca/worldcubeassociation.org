@@ -23,7 +23,7 @@ class DatabaseController < ApplicationController
   def current_results_export(file_type)
     export_timestamp = DumpPublicResultsDatabase.successful_start_date
 
-    Rails.cache.fetch("database-export-#{export_timestamp}-#{file_type}", expires_in: 1.days) do
+    Rails.cache.fetch("database-export-#{export_timestamp}-#{file_type}", expires_in: 1.day) do
       base_name = DbDumpHelper.result_export_file_name(file_type, export_timestamp)
       file_name = "#{DbDumpHelper::RESULTS_EXPORT_FOLDER}/#{base_name}"
 
