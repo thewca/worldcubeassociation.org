@@ -114,6 +114,14 @@ RSpec.describe Api::V0::UserRolesController do
         expect(response).to be_successful
       end
 
+      it 'can ban a user if the user have any upcoming competitions' do
+        post :create, params: {
+          userId: user_to_be_banned_with_future_comps.id,
+          groupType: UserGroup.group_types[:banned_competitors],
+        }
+        expect(response).to be_successful
+      end
+
       it "can ban a user if the user's upcoming competitions are after end date" do
         post :create, params: {
           userId: user_to_be_banned_with_future_comps.id,
