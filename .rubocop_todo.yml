@@ -29,11 +29,6 @@ Naming/VariableName:
 ### End camelCase stuff
 ###
 
-# This was broken in Rubocop 0.48.1.
-# See https://github.com/bbatsov/rubocop/pull/4237
-Lint/AmbiguousBlockAssociation:
-  Enabled: false
-
 Metrics/CyclomaticComplexity:
   Exclude:
     - 'app/controllers/competitions_controller.rb'

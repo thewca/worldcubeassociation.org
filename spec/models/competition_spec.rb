@@ -1003,11 +1003,11 @@ RSpec.describe Competition do
 
     expect do
       competition.update_attribute(:id, "NewName2016")
-    end.not_to change {
+    end.not_to(change {
       [:results, :organizers, :delegates, :tabs, :registrations, :delegate_report].map do |associated|
         competition.send(associated)
       end
-    }
+    })
 
     expect(competition).to respond_to(:update_foreign_keys),
                            "This whole test should be removed alongside update_foreign_keys callback in the Competition model."

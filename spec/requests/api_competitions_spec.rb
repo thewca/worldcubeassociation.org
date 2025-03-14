@@ -346,7 +346,7 @@ RSpec.describe "API Competitions" do
           }]
           expect {
             patch api_v0_competition_update_wcif_path(competition), params: { persons: persons }.to_json, headers: headers
-          }.not_to change { competition.reload.to_wcif["persons"] }
+          }.not_to(change { competition.reload.to_wcif["persons"] })
         end
       end
     end
@@ -364,7 +364,7 @@ RSpec.describe "API Competitions" do
             competition.competition_venues.destroy_all
             # Reconstruct everything from the saved WCIF
             patch api_v0_competition_update_wcif_path(competition), params: wcif.to_json, headers: headers
-          }.not_to change { competition.reload.to_wcif["schedule"] }
+          }.not_to(change { competition.reload.to_wcif["schedule"] })
         end
 
         it "can update venues and rooms" do
@@ -453,7 +453,7 @@ RSpec.describe "API Competitions" do
           wcif["schedule"]["startDate"] = nil
           expect {
             patch api_v0_competition_update_wcif_path(competition), params: wcif.to_json, headers: headers
-          }.not_to change { competition.reload.competition_venues.size }
+          }.not_to(change { competition.reload.competition_venues.size })
         end
       end
     end
