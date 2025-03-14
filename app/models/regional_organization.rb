@@ -9,7 +9,7 @@ class RegionalOrganization < ApplicationRecord
   scope :pending_approval, -> { where(start_date: nil) }
   scope :previously_acknowledged, -> { where("start_date IS NOT NULL AND end_date IS NOT NULL AND end_date < ?", Date.today) }
 
-  validates_presence_of :name, :country, :email, :address, :directors_and_officers, :area_description, :past_and_current_activities, :future_plans
+  validates :name, :country, :email, :address, :directors_and_officers, :area_description, :past_and_current_activities, :future_plans, presence: true
   validates :website, presence: true, format: { with: %r{\Ahttps?://.*\z} }
   validates :logo, presence: true, blob: { content_type: 'image/png', size_range: 0..(200.kilobytes) }
   validates :bylaws, presence: true, blob: { content_type: 'application/pdf', size_range: 0..(250.kilobytes) }
