@@ -329,9 +329,6 @@ Rails/I18nLocaleTexts:
 Rails/ShortI18n:
   Enabled: false
 
-Rails/RakeEnvironment:
-  Enabled: false
-
 Rails/ReadWriteAttribute:
   Enabled: false
 
