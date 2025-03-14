@@ -13,7 +13,7 @@ RSpec.feature "Sign up" do
     page.driver.set_cookie('cookie_eu_consented', 'true')
   end
 
-  context 'when signing up as a returning competitor', js: true do
+  context 'when signing up as a returning competitor', :js do
     it 'disables sign up button until the user selects "have competed"' do
       visit "/users/sign_up"
 
@@ -155,7 +155,7 @@ RSpec.feature "Sign up" do
     end
   end
 
-  context 'when signing up as a first time competitor', js: true do
+  context 'when signing up as a first time competitor', :js do
     it 'can sign up' do
       visit "/users/sign_up"
 
@@ -206,7 +206,7 @@ RSpec.feature "Sign up" do
     end
   end
 
-  context "changing between noobie and have competed", js: true do
+  context "changing between noobie and have competed", :js do
     it "disables previous competitor fields when signing up as a noobie" do
       visit "/users/sign_up"
 
@@ -259,7 +259,7 @@ RSpec.feature "Sign up" do
     end
   end
 
-  context "changing have competed and noobie", js: true do
+  context "changing have competed and noobie", :js do
     it "does not leak birthdate information" do
       visit "/users/sign_up"
 
@@ -298,7 +298,7 @@ RSpec.feature "Sign up" do
     end
   end
 
-  context "when signing up as a non-english speaker", js: true do
+  context "when signing up as a non-english speaker", :js do
     it "stores the user's preferred locale" do
       page.driver.headers = { 'Accept-Language' => 'es' }
       visit "/users/sign_up"

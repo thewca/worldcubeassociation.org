@@ -43,7 +43,7 @@ RSpec.describe "DatabaseDumper" do
 
   # The default database cleaning method of transation does not work well when it comes to creating tables,
   # which is what we do in this test. Use truncation so we don't leave a dirty database behind.
-  it "dumps the database according to sanitizers", clean_db_with_truncation: true do
+  it "dumps the database according to sanitizers", :clean_db_with_truncation do
     not_visible_competition = FactoryBot.create :competition, :not_visible, :with_delegate
     visible_competition = FactoryBot.create :competition, :visible, remarks: "Super secret message to the Board"
     user = FactoryBot.create :user, dob: Date.new(1989, 1, 1)

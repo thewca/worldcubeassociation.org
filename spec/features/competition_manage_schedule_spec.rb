@@ -17,7 +17,7 @@ RSpec.feature "Competition events management" do
       visit "/competitions/#{competition.id}/schedule/edit"
     end
 
-    scenario "can add a venue and a room", js: true do
+    scenario "can add a venue and a room", :js do
       find("div", class: 'title', text: 'Edit venues information').click
 
       within(:css, "#venues-edit-panel-body") do
@@ -49,7 +49,7 @@ RSpec.feature "Competition events management" do
       visit "/competitions/#{competition.id}/schedule/edit"
     end
 
-    scenario "room calendar is rendered", js: true do
+    scenario "room calendar is rendered", :js do
       find("div", class: 'title', text: 'Edit schedules').click
 
       within(:css, "#schedules-edit-panel-body") do

@@ -376,9 +376,6 @@ RSpec/IndexedLet:
 RSpec/HookArgument:
   Enabled: false
 
-RSpec/MetadataStyle:
-  Enabled: false
-
 RSpec/AnyInstance:
   Enabled: false
 
