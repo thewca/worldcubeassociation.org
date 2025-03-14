@@ -287,24 +287,6 @@ Rails/PluralizationGrammar:
 Rails/I18nLocaleAssignment:
   Enabled: false
 
-Rails/ReversibleMigration:
-  Enabled: false
-
-Rails/BulkChangeTable:
-  Enabled: false
-
-Rails/ThreeStateBooleanColumn:
-  Enabled: false
-
-Rails/CreateTableWithTimestamps:
-  Enabled: false
-
-Rails/NotNullColumn:
-  Enabled: false
-
-Rails/DangerousColumnNames:
-  Enabled: false
-
 Rails/RedundantForeignKey:
   Enabled: false
 

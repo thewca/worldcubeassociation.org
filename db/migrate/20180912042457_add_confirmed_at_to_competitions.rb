@@ -1,3 +1,4 @@
+# rubocop:disable all
 # frozen_string_literal: true
 
 class AddConfirmedAtToCompetitions < ActiveRecord::Migration[5.2]
