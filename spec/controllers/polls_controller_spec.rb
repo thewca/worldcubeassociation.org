@@ -30,7 +30,8 @@ RSpec.describe PollsController do
   end
 
   context "logged in as a delegate" do
-    sign_in { create(:delegate) }
+    let(:delegate) { create(:delegate) }
+    sign_in { delegate }
     it "shows poll results" do
       poll = create(:poll)
       get :results, params: { id: poll.id }

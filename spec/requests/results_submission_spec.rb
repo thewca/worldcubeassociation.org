@@ -24,7 +24,8 @@ RSpec.describe ResultsSubmissionController, type: :request do
   end
 
   context "logged in as a regular delegate" do
-    sign_in { create(:delegate) }
+    let(:delegate) { create(:delegate) }
+    sign_in { delegate }
 
     it "redirects to home page" do
       get competition_submit_results_edit_path(comp.id)

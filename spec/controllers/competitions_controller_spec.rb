@@ -48,7 +48,8 @@ RSpec.describe CompetitionsController do
     end
 
     context 'when signed in as a delegate' do
-      sign_in { create(:delegate) }
+      let(:delegate) { create(:delegate) }
+      sign_in { delegate }
 
       it 'shows the competition creation form' do
         get :new
@@ -87,7 +88,8 @@ RSpec.describe CompetitionsController do
     end
 
     context 'when signed in as a regular Delegate' do
-      sign_in { create(:delegate) }
+      let(:delegate) { create(:delegate) }
+      sign_in { delegate }
 
       it 'does not allow access' do
         get :for_senior
