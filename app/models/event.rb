@@ -77,12 +77,12 @@ class Event < ApplicationRecord
     )
   end
 
-  alias_method :can_change_time_limit, :can_change_time_limit?
-  alias_method :can_have_cutoff, :can_have_cutoff?
-  alias_method :is_timed_event, :timed_event?
-  alias_method :is_fewest_moves, :fewest_moves?
-  alias_method :is_multiple_blindfolded, :multiple_blindfolded?
-  alias_method :is_official, :official?
+  alias can_change_time_limit can_change_time_limit?
+  alias can_have_cutoff can_have_cutoff?
+  alias is_timed_event timed_event?
+  alias is_fewest_moves fewest_moves?
+  alias is_multiple_blindfolded multiple_blindfolded?
+  alias is_official official?
 
   DEFAULT_SERIALIZE_OPTIONS = {
     only: ["id"],

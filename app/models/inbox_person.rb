@@ -9,7 +9,7 @@ class InboxPerson < ApplicationRecord
   alias_attribute :ref_id, :id
   alias_attribute :competition_id, :competitionId
 
-  alias_method :wca_person, :person
+  alias wca_person person
 
   validates :name, presence: true
   validates :dob, presence: true

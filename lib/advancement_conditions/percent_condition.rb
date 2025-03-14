@@ -2,7 +2,7 @@
 
 module AdvancementConditions
   class PercentCondition < AdvancementCondition
-    alias_method :percent, :level
+    alias percent level
 
     def self.wcif_type
       "percent"

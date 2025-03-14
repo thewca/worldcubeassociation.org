@@ -6,5 +6,5 @@ class CompetitionDelegate < ApplicationRecord
   belongs_to :delegate, class_name: "User"
   belongs_to :competition
 
-  alias_method :user, :delegate
+  alias user delegate
 end

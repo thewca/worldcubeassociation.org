@@ -4,7 +4,7 @@ class LiveResult < ApplicationRecord
   BEST_POSSIBLE_SCORE = 1
 
   has_many :live_attempts
-  alias_method :attempts, :live_attempts
+  alias attempts live_attempts
 
   after_create :recompute_ranks
   after_update :recompute_ranks, if: :should_recompute?

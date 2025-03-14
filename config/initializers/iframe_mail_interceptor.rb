@@ -13,7 +13,7 @@ class IframeMailInterceptor
       end
     end
 
-    alias_method :previewing_email, :delivering_email
+    alias previewing_email delivering_email
   end
 end
 

@@ -90,7 +90,7 @@ class UserAvatar < ApplicationRecord
     end
   end
 
-  alias_method :thumb_url, :thumbnail_url
+  alias thumb_url thumbnail_url
 
   def using_cdn?
     # Approved avatars are actively being used and should therefor be served by our CDN
@@ -125,7 +125,7 @@ class UserAvatar < ApplicationRecord
     self.local? && self.filename == DEFAULT_AVATAR_FILE
   end
 
-  alias_method :is_default, :default_avatar?
+  alias is_default default_avatar?
 
   def can_edit_thumbnail?
     # Only freshly uploaded pictures using the new ActiveStorage backend can affect their thumbnail.
@@ -133,7 +133,7 @@ class UserAvatar < ApplicationRecord
     self.active_storage?
   end
 
-  alias_method :can_edit_thumbnail, :can_edit_thumbnail?
+  alias can_edit_thumbnail can_edit_thumbnail?
 
   def thumbnail_previously_changed?
     self.thumbnail_crop_x_previously_changed? ||

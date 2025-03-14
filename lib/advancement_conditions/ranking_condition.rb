@@ -2,7 +2,7 @@
 
 module AdvancementConditions
   class RankingCondition < AdvancementCondition
-    alias_method :ranking, :level
+    alias ranking level
 
     def self.wcif_type
       "ranking"

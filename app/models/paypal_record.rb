@@ -98,7 +98,7 @@ class PaypalRecord < ApplicationRecord
     end
   end
 
-  alias_method :retrieve_remote, :retrieve_paypal
+  alias retrieve_remote retrieve_paypal
 
   def money_amount
     ruby_amount = PaypalRecord.amount_to_ruby(
