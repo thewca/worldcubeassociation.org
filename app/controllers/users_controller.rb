@@ -21,7 +21,7 @@ class UsersController < ApplicationController
         @users = User.in_region(params[:region])
         params[:search]&.split&.each do |part|
           like_query = %w(users.name wca_id email).map do |column|
-            column + " LIKE :part"
+            "#{column} LIKE :part"
           end.join(" OR ")
           @users = @users.where(like_query, part: "%#{part}%")
         end

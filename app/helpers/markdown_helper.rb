@@ -6,8 +6,8 @@ module MarkdownHelper
 
     def table(header, body)
       t = "<table class='table'>\n"
-      t += "<thead>" + header + "</thead>\n" if header
-      t += "<tbody>" + body + "</tbody>\n" if body
+      t += "<thead>#{header}</thead>\n" if header
+      t += "<tbody>#{body}</tbody>\n" if body
       t += "</table>"
       t
     end

@@ -90,16 +90,16 @@ class Qualification
 
   def to_s(event)
     if self.wcif_type == "ranking"
-      I18n.t("qualification." + self.result_type + ".ranking", ranking: level)
+      I18n.t("qualification.#{self.result_type}.ranking", ranking: level)
     elsif self.wcif_type == "anyResult"
-      I18n.t("qualification." + self.result_type + ".any_result")
+      I18n.t("qualification.#{self.result_type}.any_result")
     elsif event.event.timed_event?
-      I18n.t("qualification." + self.result_type + ".time", time: SolveTime.centiseconds_to_clock_format(level))
+      I18n.t("qualification.#{self.result_type}.time", time: SolveTime.centiseconds_to_clock_format(level))
     elsif event.event.fewest_moves?
       moves = self.result_type == "average" ? (level.to_f / 100).round(2) : level
-      I18n.t("qualification." + self.result_type + ".moves", moves: moves)
+      I18n.t("qualification.#{self.result_type}.moves", moves: moves)
     elsif event.event.multiple_blindfolded?
-      I18n.t("qualification." + self.result_type + ".points", points: SolveTime.multibld_attempt_to_points(level))
+      I18n.t("qualification.#{self.result_type}.points", points: SolveTime.multibld_attempt_to_points(level))
     end
   end
 end

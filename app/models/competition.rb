@@ -617,23 +617,23 @@ class Competition < ApplicationRecord
       end
 
       rounds.select(&:cutoff_is_greater_than_time_limit?).each do |round|
-        warnings['cutoff_is_greater_than_time_limit' + round.id.to_s] = I18n.t('competitions.messages.cutoff_is_greater_than_time_limit', round_number: round.number, event: I18n.t('events.' + round.event.id))
+        warnings["cutoff_is_greater_than_time_limit#{round.id}"] = I18n.t('competitions.messages.cutoff_is_greater_than_time_limit', round_number: round.number, event: I18n.t("events.#{round.event.id}"))
       end
 
       rounds.select(&:cutoff_is_too_fast?).each do |round|
-        warnings['cutoff_is_too_fast' + round.id.to_s] = I18n.t('competitions.messages.cutoff_is_too_fast', round_number: round.number, event: I18n.t('events.' + round.event.id))
+        warnings["cutoff_is_too_fast#{round.id}"] = I18n.t('competitions.messages.cutoff_is_too_fast', round_number: round.number, event: I18n.t("events.#{round.event.id}"))
       end
 
       rounds.select(&:cutoff_is_too_slow?).each do |round|
-        warnings['cutoff_is_too_slow' + round.id.to_s] = I18n.t('competitions.messages.cutoff_is_too_slow', round_number: round.number, event: I18n.t('events.' + round.event.id))
+        warnings["cutoff_is_too_slow#{round.id}"] = I18n.t('competitions.messages.cutoff_is_too_slow', round_number: round.number, event: I18n.t("events.#{round.event.id}"))
       end
 
       rounds.select(&:time_limit_is_too_fast?).each do |round|
-        warnings['time_limit_is_too_fast' + round.id.to_s] = I18n.t('competitions.messages.time_limit_is_too_fast', round_number: round.number, event: I18n.t('events.' + round.event.id))
+        warnings["time_limit_is_too_fast#{round.id}"] = I18n.t('competitions.messages.time_limit_is_too_fast', round_number: round.number, event: I18n.t("events.#{round.event.id}"))
       end
 
       rounds.select(&:time_limit_is_too_slow?).each do |round|
-        warnings['time_limit_is_too_slow' + round.id.to_s] = I18n.t('competitions.messages.time_limit_is_too_slow', round_number: round.number, event: I18n.t('events.' + round.event.id))
+        warnings["time_limit_is_too_slow#{round.id}"] = I18n.t('competitions.messages.time_limit_is_too_slow', round_number: round.number, event: I18n.t("events.#{round.event.id}"))
       end
 
       if championship_warnings.any?
@@ -810,7 +810,7 @@ class Competition < ApplicationRecord
         self.id = safe_name_without_year[0...(MAX_ID_LENGTH - year.length)] + year
       end
       if cellName.blank? || force_override
-        year = " " + year
+        year = " #{year}"
         self.cellName = name_without_year.truncate(MAX_CELL_NAME_LENGTH - year.length) + year
       end
     end

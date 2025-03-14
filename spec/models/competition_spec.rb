@@ -524,35 +524,35 @@ RSpec.describe Competition do
       round = FactoryBot.create :round, competition: competition, event_id: "333", time_limit: TimeLimit.new(centiseconds: 5.minutes.in_centiseconds), cutoff: Cutoff.new(number_of_attempts: 2, attempt_result: 6.minutes.in_centiseconds)
 
       expect(competition).to be_valid
-      expect(competition.warnings_for(nil)['cutoff_is_greater_than_time_limit' + round.id.to_s]).to eq I18n.t('competitions.messages.cutoff_is_greater_than_time_limit', round_number: 1, event: I18n.t('events.333'))
+      expect(competition.warnings_for(nil)["cutoff_is_greater_than_time_limit#{round.id}"]).to eq I18n.t('competitions.messages.cutoff_is_greater_than_time_limit', round_number: 1, event: I18n.t('events.333'))
     end
 
     it "warns if the cutoff is very fast" do
       round = FactoryBot.create :round, competition: competition, event_id: "333", cutoff: Cutoff.new(number_of_attempts: 2, attempt_result: 4.seconds.in_centiseconds)
 
       expect(competition).to be_valid
-      expect(competition.warnings_for(nil)['cutoff_is_too_fast' + round.id.to_s]).to eq I18n.t('competitions.messages.cutoff_is_too_fast', round_number: 1, event: I18n.t('events.333'))
+      expect(competition.warnings_for(nil)["cutoff_is_too_fast#{round.id}"]).to eq I18n.t('competitions.messages.cutoff_is_too_fast', round_number: 1, event: I18n.t('events.333'))
     end
 
     it "warns if the cutoff is very slow" do
       round = FactoryBot.create :round, competition: competition, event_id: "333", cutoff: Cutoff.new(number_of_attempts: 2, attempt_result: 11.minutes.in_centiseconds)
 
       expect(competition).to be_valid
-      expect(competition.warnings_for(nil)['cutoff_is_too_slow' + round.id.to_s]).to eq I18n.t('competitions.messages.cutoff_is_too_slow', round_number: 1, event: I18n.t('events.333'))
+      expect(competition.warnings_for(nil)["cutoff_is_too_slow#{round.id}"]).to eq I18n.t('competitions.messages.cutoff_is_too_slow', round_number: 1, event: I18n.t('events.333'))
     end
 
     it "warns if the time limit is very fast" do
       round =FactoryBot.create :round, competition: competition, event_id: "333", time_limit: TimeLimit.new(centiseconds: 9.seconds.in_centiseconds)
 
       expect(competition).to be_valid
-      expect(competition.warnings_for(nil)['time_limit_is_too_fast' + round.id.to_s]).to eq I18n.t('competitions.messages.time_limit_is_too_fast', round_number: 1, event: I18n.t('events.333'))
+      expect(competition.warnings_for(nil)["time_limit_is_too_fast#{round.id}"]).to eq I18n.t('competitions.messages.time_limit_is_too_fast', round_number: 1, event: I18n.t('events.333'))
     end
 
     it "warns if the time limit is very slow" do
       round =FactoryBot.create :round, competition: competition, event_id: "333", time_limit: TimeLimit.new(centiseconds: 11.minutes.in_centiseconds)
 
       expect(competition).to be_valid
-      expect(competition.warnings_for(nil)['time_limit_is_too_slow' + round.id.to_s]).to eq I18n.t('competitions.messages.time_limit_is_too_slow', round_number: 1, event: I18n.t('events.333'))
+      expect(competition.warnings_for(nil)["time_limit_is_too_slow#{round.id}"]).to eq I18n.t('competitions.messages.time_limit_is_too_slow', round_number: 1, event: I18n.t('events.333'))
     end
   end
 

@@ -57,8 +57,5 @@ Layout/EmptyLinesAroundAttributeAccessor:
 Style/SoleNestedConditional:
   Enabled: false
 
-Style/StringConcatenation:
-  Enabled: false
-
 Lint/EmptyBlock:
   Enabled: false
