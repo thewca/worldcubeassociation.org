@@ -91,7 +91,7 @@ class SessionsController < Devise::SessionsController
       user = self.resource = find_user
       if user_params[:otp_attempt].present? && session[:otp_user_id]
         authenticate_via_otp(user)
-      elsif user && user.valid_password?(user_params[:password])
+      elsif user&.valid_password?(user_params[:password])
         prompt_for_two_factor(user)
       end
     end

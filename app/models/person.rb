@@ -157,7 +157,7 @@ class Person < ApplicationRecord
 
   def world_rank(event, type)
     rank = rank_for_event_type(event, type)
-    rank ? rank.worldRank : nil
+    rank&.worldRank
   end
 
   def best_solve(event, type)

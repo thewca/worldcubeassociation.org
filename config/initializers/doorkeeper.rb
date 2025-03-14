@@ -28,7 +28,7 @@ Doorkeeper.configure do
   #  https://github.com/doorkeeper-gem/doorkeeper/wiki/Using-Resource-Owner-Password-Credentials-flow
   resource_owner_from_credentials do |routes|
     u = User.find_for_database_authentication(email: params[:username])
-    u if u && u.valid_password?(params[:password])
+    u if u&.valid_password?(params[:password])
   end
 
   # If you want to restrict access to the web interface for adding oauth authorized applications, you need to declare the block below.
