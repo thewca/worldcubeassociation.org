@@ -293,9 +293,6 @@ Rails/FindEach:
 Rails/IndexBy:
   Enabled: false
 
-Rails/NegateInclude:
-  Enabled: false
-
 Rails/Pluck:
   Enabled: false
 
@@ -359,13 +356,7 @@ Rails/RakeEnvironment:
 Rails/ApplicationRecord:
   Enabled: false
 
-Rails/Present:
-  Enabled: false
-
 Rails/WhereEquals:
-  Enabled: false
-
-Rails/CompactBlank:
   Enabled: false
 
 Rails/ReadWriteAttribute:
