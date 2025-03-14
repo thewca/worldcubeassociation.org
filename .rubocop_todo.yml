@@ -48,9 +48,6 @@ Metrics/PerceivedComplexity:
 Style/AccessorGrouping:
   Enabled: false
 
-Layout/EmptyLinesAroundAttributeAccessor:
-  Enabled: false
-
 Style/SoleNestedConditional:
   Enabled: false
 

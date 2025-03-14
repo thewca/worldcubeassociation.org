@@ -140,6 +140,7 @@ class TestModel
   include ActiveModel::Model
 
   attr_accessor :city
+
   validates :city, city: true
 
   attr_accessor :country

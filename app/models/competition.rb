@@ -716,6 +716,7 @@ class Competition < ApplicationRecord
   end
 
   attr_accessor :being_cloned_from_id, :being_cloned_from_cache
+
   def being_cloned_from
     @being_cloned_from_cache ||= Competition.find_by(id: being_cloned_from_id)
   end
@@ -817,6 +818,7 @@ class Competition < ApplicationRecord
   end
 
   attr_writer :staff_delegate_ids, :organizer_ids, :trainee_delegate_ids
+
   def staff_delegate_ids
     @staff_delegate_ids || staff_delegates.map(&:id).join(",")
   end
@@ -963,6 +965,7 @@ class Competition < ApplicationRecord
   end
 
   attr_accessor :editing_user_id
+
   validate :user_cannot_demote_themself
   def user_cannot_demote_themself
     if editing_user_id
@@ -992,6 +995,7 @@ class Competition < ApplicationRecord
   end
 
   attr_reader :receive_registration_emails
+
   def receive_registration_emails=(r)
     @receive_registration_emails = ActiveRecord::Type::Boolean.new.cast(r)
   end

@@ -19,6 +19,7 @@ class SolveTime
   end
 
   attr_reader :wca_value, :time_centiseconds, :move_count
+
   def wca_value=(wca_value)
     @wca_value = wca_value
     @move_count = nil

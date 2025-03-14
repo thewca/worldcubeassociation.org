@@ -4,6 +4,7 @@ class Qualification
   include ActiveModel::Validations
 
   attr_accessor :when_date, :level, :wcif_type, :result_type
+
   validates :when_date, presence: true
   validates :result_type, presence: true, inclusion: { in: ["single", "average"] }
   validates :wcif_type, presence: true, inclusion: { in: ["attemptResult", "ranking", "anyResult"] }
