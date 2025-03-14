@@ -293,9 +293,6 @@ Rails/FindEach:
 Rails/IndexBy:
   Enabled: false
 
-Rails/NegateInclude:
-  Enabled: false
-
 Rails/Pluck:
   Enabled: false
 
@@ -353,12 +350,6 @@ Rails/RakeEnvironment:
 Rails/ApplicationRecord:
   Enabled: false
 
-Rails/Present:
-  Enabled: false
-
-Rails/CompactBlank:
-  Enabled: false
-
 Rails/ReadWriteAttribute:
   Enabled: false
 
@@ -374,9 +365,6 @@ Rails/ActionControllerFlashBeforeRender:
 Rails/UniqueValidationWithoutIndex:
   Enabled: false
 
-Rails/ActionOrder:
-  Enabled: false
-
 Rails/FindById:
   Enabled: false
 
@@ -390,9 +378,6 @@ Rails/LexicallyScopedActionFilter:
   Enabled: false
 
 Rails/RenderInline:
-  Enabled: false
-
-Rails/ActiveRecordCallbacksOrder:
   Enabled: false
 
 # Rspec
@@ -535,13 +520,7 @@ RSpec/BeEmpty:
 RSpecRails/NegationBeValid:
   Enabled: false
 
-RSpecRails/HaveHttpStatus:
-  Enabled: false
-
 RSpecRails/InferredSpecType:
-  Enabled: false
-
-RSpecRails/HttpStatus:
   Enabled: false
 
 # Factory Bot

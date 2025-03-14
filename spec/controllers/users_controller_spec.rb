@@ -200,7 +200,7 @@ RSpec.describe UsersController do
     context 'not signed in' do
       it 'requires authentication' do
         post :acknowledge_cookies
-        expect(response.status).to eq 401
+        expect(response).to have_http_status :unauthorized
         response_json = response.parsed_body
         expect(response_json['ok']).to be false
       end

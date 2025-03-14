@@ -52,6 +52,12 @@ module Admin
       render json: json
     end
 
+    def show
+      respond_to do |format|
+        format.json { render json: Result.find(params.require(:id)) }
+      end
+    end
+
     def new
       competition = Competition.find(params[:competition_id])
       round = Round.find(params[:round_id])
@@ -64,12 +70,6 @@ module Admin
         format_id: round.format.id,
         event_id: round.event.id,
       }
-    end
-
-    def show
-      respond_to do |format|
-        format.json { render json: Result.find(params.require(:id)) }
-      end
     end
 
     def show_events_data

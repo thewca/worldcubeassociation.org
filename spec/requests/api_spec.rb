@@ -13,7 +13,7 @@ RSpec.describe "API misc" do
       AuxiliaryDataComputation.compute_concise_results
 
       get api_v0_records_path
-      expect(response.status).to eq 200
+      expect(response).to have_http_status :ok
       json = response.parsed_body
       expect(json['world_records']['333']['single']).to eq 444
       expect(json['continental_records']['_North America']['333']['single']).to eq 555

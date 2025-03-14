@@ -95,7 +95,7 @@ RSpec.describe "API Competitions" do
     context "when not signed in" do
       it "does not allow access" do
         patch api_v0_competition_wcif_path(competition)
-        expect(response).to have_http_status(401)
+        expect(response).to have_http_status(:unauthorized)
         response_json = response.parsed_body
         expect(response_json["error"]).to eq "Please log in"
       end
@@ -106,7 +106,7 @@ RSpec.describe "API Competitions" do
 
       it "does not allow access" do
         patch api_v0_competition_update_wcif_path(competition)
-        expect(response).to have_http_status(403)
+        expect(response).to have_http_status(:forbidden)
         response_json = response.parsed_body
         expect(response_json["error"]).to eq "Not authorized to manage competition"
       end
@@ -165,7 +165,7 @@ RSpec.describe "API Competitions" do
 
       it "does not allow access" do
         patch api_v0_competition_update_wcif_path(competition)
-        expect(response).to have_http_status(401)
+        expect(response).to have_http_status(:unauthorized)
         response_json = response.parsed_body
         expect(response_json["error"]).to eq "Please log in"
       end
@@ -178,7 +178,7 @@ RSpec.describe "API Competitions" do
 
       it "does not allow access" do
         patch api_v0_competition_update_wcif_path(competition)
-        expect(response).to have_http_status(403)
+        expect(response).to have_http_status(:forbidden)
         response_json = response.parsed_body
         expect(response_json["error"]).to eq "Not authorized to manage competition"
       end
@@ -206,7 +206,7 @@ RSpec.describe "API Competitions" do
           wcif = create_wcif_with_events(%w(333))
           wcif[:events][0][:rounds][0][:format] = "invalidformat"
           patch api_v0_competition_update_wcif_path(competition), params: wcif.to_json, headers: headers
-          expect(response).to have_http_status(400)
+          expect(response).to have_http_status(:bad_request)
           response_json = response.parsed_body
           expect(response_json["error"]).to eq "The property '#/events/0/rounds/0/format' value \"invalidformat\" did not match one of the following values: 1, 2, 3, a, m"
           expect(competition.reload.competition_events.find_by_event_id("333").rounds.length).to eq 2
@@ -217,13 +217,13 @@ RSpec.describe "API Competitions" do
 
           it "can add events" do
             patch api_v0_competition_update_wcif_path(competition), params: create_wcif_with_events(%w(333 333oh 222)).to_json, headers: headers
-            expect(response).to have_http_status(200)
+            expect(response).to have_http_status(:ok)
             expect(competition.reload.events.map(&:id)).to match_array %w(222 333 333oh)
           end
 
           it "can remove events" do
             patch api_v0_competition_update_wcif_path(competition), params: create_wcif_with_events(%w(333)).to_json, headers: headers
-            expect(response).to have_http_status(200)
+            expect(response).to have_http_status(:ok)
             expect(competition.reload.events.map(&:id)).to match_array %w(333)
           end
         end
@@ -257,14 +257,14 @@ RSpec.describe "API Competitions" do
 
           it "does not allow adding events" do
             patch api_v0_competition_update_wcif_path(competition), params: create_wcif_with_events(%w(333 333oh 222)).to_json, headers: headers
-            expect(response).to have_http_status(422)
+            expect(response).to have_http_status(:unprocessable_content)
             response_json = response.parsed_body
             expect(response_json["error"]).to eq "Cannot add events"
           end
 
           it "does not allow removing events" do
             patch api_v0_competition_update_wcif_path(competition), params: create_wcif_with_events(%w(333)).to_json, headers: headers
-            expect(response).to have_http_status(422)
+            expect(response).to have_http_status(:unprocessable_content)
             response_json = response.parsed_body
             expect(response_json["error"]).to eq "Cannot remove events"
           end
@@ -273,13 +273,13 @@ RSpec.describe "API Competitions" do
         context "unconfirmed competition" do
           it "allows adding events" do
             patch api_v0_competition_update_wcif_path(competition), params: create_wcif_with_events(%w(333 333oh 222)).to_json, headers: headers
-            expect(response).to have_http_status(200)
+            expect(response).to have_http_status(:ok)
             expect(competition.reload.events.map(&:id)).to match_array %w(222 333 333oh)
           end
 
           it "allows removing events" do
             patch api_v0_competition_update_wcif_path(competition), params: create_wcif_with_events(%w(333)).to_json, headers: headers
-            expect(response).to have_http_status(200)
+            expect(response).to have_http_status(:ok)
             expect(competition.reload.events.map(&:id)).to match_array %w(333)
           end
         end
@@ -289,7 +289,7 @@ RSpec.describe "API Competitions" do
 
           it "does not allow updating events" do
             patch api_v0_competition_update_wcif_path(competition), params: create_wcif_with_events(%w(222 333)).to_json, headers: headers
-            expect(response).to have_http_status(422)
+            expect(response).to have_http_status(:unprocessable_content)
             response_json = response.parsed_body
             expect(response_json["error"]).to eq "Cannot update events"
           end
@@ -524,7 +524,7 @@ RSpec.describe "API Competitions" do
         it "can't update wcif" do
           wcif = create_wcif_with_events(%w(333))
           patch api_v0_competition_update_wcif_path(competition), params: wcif.to_json, headers: { "CONTENT_TYPE" => "application/json" }
-          expect(response.status).to eq 403
+          expect(response).to have_http_status :forbidden
           response_json = response.parsed_body
           expect(response_json["error"]).to eq "Not authorized to manage competition"
           expect(competition.reload.competition_events.find_by_event_id("333").rounds.length).to eq 0

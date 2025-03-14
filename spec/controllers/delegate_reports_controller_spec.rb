@@ -50,7 +50,7 @@ RSpec.describe DelegateReportsController do
 
     it "can view edit page" do
       get :edit, params: { competition_id: comp.id }
-      expect(response.status).to eq 200
+      expect(response).to have_http_status :ok
     end
 
     it "can edit report" do
@@ -130,7 +130,7 @@ RSpec.describe DelegateReportsController do
 
     it "can view edit page" do
       get :edit, params: { competition_id: comp.id }
-      expect(response.status).to eq 200
+      expect(response).to have_http_status :ok
     end
 
     it "can edit report" do

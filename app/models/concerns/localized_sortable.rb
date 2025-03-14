@@ -16,7 +16,7 @@ module LocalizedSortable
   end
 
   def real?
-    !self.class::FICTIVE_IDS.include?(id)
+    self.class::FICTIVE_IDS.exclude?(id)
   end
 
   included do

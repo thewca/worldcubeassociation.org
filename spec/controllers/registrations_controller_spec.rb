@@ -15,7 +15,7 @@ RSpec.describe RegistrationsController, clean_db_with_truncation: true do
 
     it 'allows access to competition organizer' do
       get :index, params: { competition_id: competition }
-      expect(response.status).to eq 200
+      expect(response).to have_http_status :ok
     end
   end
 

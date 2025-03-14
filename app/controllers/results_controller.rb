@@ -43,7 +43,7 @@ class ResultsController < ApplicationController
 
     @quantities = ["100", "1000"]
 
-    if !@types.include?(params[:type])
+    if @types.exclude?(params[:type])
       flash[:danger] = t(".unknown_type")
       return redirect_to rankings_path(params[:event_id], "single")
     end
