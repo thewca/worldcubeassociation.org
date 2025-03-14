@@ -16,19 +16,19 @@ class Api::V0::PersonsController < Api::V0::ApiController
 
   def show
     wca_id = params[:wca_id]
-    person = Person.current.includes(:user, :ranksSingle, :ranksAverage).find_by_wca_id!(wca_id)
+    person = Person.current.includes(:user, :ranksSingle, :ranksAverage).find_by!(wca_id: wca_id)
     private_attributes = person.private_attributes_for_user(current_user)
 
     render json: person_to_json(person, private_attributes)
   end
 
   def results
-    person = Person.current.find_by_wca_id!(params[:wca_id])
+    person = Person.current.find_by!(wca_id: params[:wca_id])
     render json: person.results
   end
 
   def competitions
-    person = Person.current.find_by_wca_id!(params[:wca_id])
+    person = Person.current.find_by!(wca_id: params[:wca_id])
     render json: person.competitions
   end
 

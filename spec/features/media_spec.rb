@@ -24,7 +24,7 @@ RSpec.feature "Media" do
       fill_in "Competition", with: competition.id
       click_button "Submit media"
 
-      medium = CompetitionMedium.find_by_competitionId!(competition.id)
+      medium = CompetitionMedium.find_by!(competitionId: competition.id)
       expect(medium.status).to eq "pending"
       expect(medium.text).to eq "I am a brand new medium!"
       expect(medium.uri).to eq "https://example.com"
@@ -58,7 +58,7 @@ RSpec.feature "Media" do
           click_button "Delete"
         end
 
-        expect(CompetitionMedium.find_by_id(medium2.id)).to be_nil
+        expect(CompetitionMedium.find_by(id: medium2.id)).to be_nil
       end
     end
 
@@ -72,7 +72,7 @@ RSpec.feature "Media" do
 
       scenario "delete it" do
         click_link "Delete"
-        expect(CompetitionMedium.find_by_id(medium2.id)).to be_nil
+        expect(CompetitionMedium.find_by(id: medium2.id)).to be_nil
       end
 
       scenario "accept it" do

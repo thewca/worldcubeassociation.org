@@ -17,7 +17,7 @@ class Api::V0::Wfc::DuesRedirectsController < Api::V0::ApiController
     redirect_to_id = params.require(:redirectToId)
     if redirect_type == WfcDuesRedirect.redirect_source_types[:Country]
       redirect_from_country_iso2 = params.require(:redirectFromCountryIso2)
-      redirect_source = Country.find_by_iso2(redirect_from_country_iso2)
+      redirect_source = Country.find_by(iso2: redirect_from_country_iso2)
     elsif redirect_type == WfcDuesRedirect.redirect_source_types[:User]
       redirect_from_organizer_id = params.require(:redirectFromOrganizerId)
       redirect_source = User.find(redirect_from_organizer_id)

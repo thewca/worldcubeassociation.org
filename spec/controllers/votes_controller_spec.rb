@@ -30,7 +30,7 @@ RSpec.describe VotesController do
     describe "POST #create" do
       it "creates and updates a vote" do
         post :create, params: { vote: { poll_option_ids: [poll.poll_options.first.id], poll_id: poll.id } }
-        vote = Vote.find_by_user_id(delegate.id)
+        vote = Vote.find_by(user_id: delegate.id)
         expect(vote.poll_options.length).to eq 1
         expect(vote.poll_options.first.id).to eq poll.poll_options.first.id
 
@@ -44,7 +44,7 @@ RSpec.describe VotesController do
         multiple_poll = FactoryBot.create(:poll, :confirmed, :multiple)
 
         post :create, params: { vote: { poll_option_ids: multiple_poll.poll_options.pluck(:id), poll_id: multiple_poll.id } }
-        vote = Vote.find_by_user_id(delegate.id)
+        vote = Vote.find_by(user_id: delegate.id)
         expect(vote.poll_options.pluck(:id).sort).to eq multiple_poll.poll_options.pluck(:id).sort
 
         post :update, params: { id: vote.id, vote: { poll_option_ids: [multiple_poll.poll_options.first.id], poll_id: multiple_poll.id } }
@@ -64,7 +64,7 @@ RSpec.describe VotesController do
     describe "POST #create" do
       it "creates and updates a vote" do
         post :create, params: { vote: { poll_option_ids: [poll.poll_options.first.id], poll_id: poll.id } }
-        vote = Vote.find_by_user_id(staff_member.id)
+        vote = Vote.find_by(user_id: staff_member.id)
         expect(vote.poll_options.length).to eq 1
         expect(vote.poll_options.first.id).to eq poll.poll_options.first.id
 
@@ -78,7 +78,7 @@ RSpec.describe VotesController do
         multiple_poll = FactoryBot.create(:poll, :confirmed, :multiple)
 
         post :create, params: { vote: { poll_option_ids: multiple_poll.poll_options.pluck(:id), poll_id: multiple_poll.id } }
-        vote = Vote.find_by_user_id(staff_member.id)
+        vote = Vote.find_by(user_id: staff_member.id)
         expect(vote.poll_options.pluck(:id).sort).to eq multiple_poll.poll_options.pluck(:id).sort
 
         post :update, params: { id: vote.id, vote: { poll_option_ids: [multiple_poll.poll_options.first.id], poll_id: multiple_poll.id } }

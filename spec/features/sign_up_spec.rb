@@ -78,7 +78,7 @@ RSpec.feature "Sign up" do
       fill_in "user[password_confirmation]", with: "wca"
       click_button "Sign up"
 
-      u = User.find_by_email!("jack@example.com")
+      u = User.find_by!(email: "jack@example.com")
       expect(u.name).to eq person.name
       expect(u.gender).to eq person.gender
       expect(u.country_iso2).to eq person.country_iso2
@@ -180,7 +180,7 @@ RSpec.feature "Sign up" do
 
       expect(page).to have_content "A message with a confirmation link has been sent to your email address."
 
-      u = User.find_by_email!("jack@example.com")
+      u = User.find_by!(email: "jack@example.com")
       expect(u.gender).to eq "m"
     end
 
@@ -239,7 +239,7 @@ RSpec.feature "Sign up" do
       fill_in "user[password]", with: "wca"
       fill_in "user[password_confirmation]", with: "wca"
       click_button "Sign up"
-      u = User.find_by_email!("jack@example.com")
+      u = User.find_by!(email: "jack@example.com")
       expect(u.name).to eq "Jackson John"
     end
 
@@ -311,7 +311,7 @@ RSpec.feature "Sign up" do
 
       click_button "Registrarse"
 
-      user = User.find_by_email!("jack@example.com")
+      user = User.find_by!(email: "jack@example.com")
       expect(user.preferred_locale).to eq "es"
     end
   end

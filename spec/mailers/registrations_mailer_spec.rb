@@ -52,7 +52,7 @@ RSpec.describe RegistrationsMailer, type: :mailer do
 
     it "renders the headers" do
       # Set receive_registration_emails to true and test that the email headers are present
-      competition_delegate2 = competition_without_organizers.competition_delegates.find_by_delegate_id(delegate2.id)
+      competition_delegate2 = competition_without_organizers.competition_delegates.find_by(delegate_id: delegate2.id)
       competition_delegate2.receive_registration_emails = true
       competition_delegate2.save!
 
@@ -64,7 +64,7 @@ RSpec.describe RegistrationsMailer, type: :mailer do
 
     it "renders the body" do
       # Set receive_registration_emails to true and test that the email body is present
-      competition_delegate2 = competition_without_organizers.competition_delegates.find_by_delegate_id(delegate2.id)
+      competition_delegate2 = competition_without_organizers.competition_delegates.find_by(delegate_id: delegate2.id)
       competition_delegate2.receive_registration_emails = true
       competition_delegate2.save!
 
@@ -82,11 +82,11 @@ RSpec.describe RegistrationsMailer, type: :mailer do
     let(:mail) { RegistrationsMailer.notify_organizers_of_deleted_registration(registration) }
 
     it "renders the headers" do
-      competition_delegate1 = competition_without_organizers.competition_delegates.find_by_delegate_id(delegate1.id)
+      competition_delegate1 = competition_without_organizers.competition_delegates.find_by(delegate_id: delegate1.id)
       competition_delegate1.receive_registration_emails = true
       competition_delegate1.save!
 
-      competition_delegate2 = competition_without_organizers.competition_delegates.find_by_delegate_id(delegate2.id)
+      competition_delegate2 = competition_without_organizers.competition_delegates.find_by(delegate_id: delegate2.id)
       competition_delegate2.receive_registration_emails = true
       competition_delegate2.save!
 
@@ -97,11 +97,11 @@ RSpec.describe RegistrationsMailer, type: :mailer do
     end
 
     it "renders the body" do
-      competition_delegate1 = competition_without_organizers.competition_delegates.find_by_delegate_id(delegate1.id)
+      competition_delegate1 = competition_without_organizers.competition_delegates.find_by(delegate_id: delegate1.id)
       competition_delegate1.receive_registration_emails = true
       competition_delegate1.save!
 
-      competition_delegate2 = competition_without_organizers.competition_delegates.find_by_delegate_id(delegate2.id)
+      competition_delegate2 = competition_without_organizers.competition_delegates.find_by(delegate_id: delegate2.id)
       competition_delegate2.receive_registration_emails = true
       competition_delegate2.save!
 

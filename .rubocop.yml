@@ -275,9 +275,6 @@ Rails/TimeZone:
 Rails/Date:
   Enabled: false
 
-Rails/DynamicFindBy:
-  Enabled: false
-
 Rails/SkipsModelValidations:
   Enabled: false
 

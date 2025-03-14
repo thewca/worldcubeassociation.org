@@ -156,7 +156,7 @@ namespace :db do
             redirect_uri: "urn:ietf:wg:oauth:2.0:oob",
             dangerously_allow_any_redirect_uri: true,
             scopes: Doorkeeper.configuration.scopes.to_s,
-            owner_id: User.find_by_wca_id!("2005FLEI01").id,
+            owner_id: User.find_by!(wca_id: "2005FLEI01").id,
             owner_type: "User",
           )
         end

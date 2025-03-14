@@ -9,9 +9,9 @@ class CompetitionIdInput < SimpleForm::Inputs::Base
     end
     competitions = (@builder.object.send(attribute_name) || "").split(",").map do |id|
       if @options[:only_visible]
-        Competition.visible.find_by_id(id)
+        Competition.visible.find_by(id: id)
       else
-        Competition.find_by_id(id)
+        Competition.find_by(id: id)
       end
     end
     merged_input_options[:data] = { data: competitions.compact.to_json }

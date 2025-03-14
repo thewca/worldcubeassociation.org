@@ -589,11 +589,11 @@ RSpec.describe Competition do
     end
 
     it "over scope does include the competition" do
-      expect(Competition.over.find_by_id(competition.id)).to eq competition
+      expect(Competition.over.find_by(id: competition.id)).to eq competition
     end
 
     it "not_over scope does not include the competition" do
-      expect(Competition.not_over.find_by_id(competition.id)).to be nil
+      expect(Competition.not_over.find_by(id: competition.id)).to be nil
     end
   end
 
@@ -737,9 +737,9 @@ RSpec.describe Competition do
       expect(CompetitionDelegate.where(delegate_id: delegate.id).count).to eq 1
       expect(CompetitionOrganizer.where(organizer_id: organizer.id).count).to eq 1
 
-      cd = CompetitionDelegate.find_by_delegate_id(delegate.id)
+      cd = CompetitionDelegate.find_by(delegate_id: delegate.id)
       expect(cd).not_to be nil
-      co = CompetitionOrganizer.find_by_organizer_id(organizer.id)
+      co = CompetitionOrganizer.find_by(organizer_id: organizer.id)
       expect(co).not_to be nil
 
       c = Competition.find(competition.id)
@@ -762,7 +762,7 @@ RSpec.describe Competition do
       cd = CompetitionDelegate.where(competition_id: competition.id, delegate_id: delegate1.id).first
       expect(cd).not_to be_nil
       competition.destroy
-      expect(CompetitionDelegate.find_by_id(cd.id)).to be_nil
+      expect(CompetitionDelegate.find_by(id: cd.id)).to be_nil
     end
 
     it "deletes organizers" do
@@ -773,13 +773,13 @@ RSpec.describe Competition do
       cd = CompetitionOrganizer.where(competition_id: competition.id, organizer_id: organizer1.id).first
       expect(cd).not_to be_nil
       competition.destroy
-      expect(CompetitionOrganizer.find_by_id(cd.id)).to be_nil
+      expect(CompetitionOrganizer.find_by(id: cd.id)).to be_nil
     end
 
     it "deletes registrations" do
       registration = FactoryBot.create(:registration)
       registration.competition.destroy
-      expect(Registration.find_by_id(registration.id)).to be_nil
+      expect(Registration.find_by(id: registration.id)).to be_nil
     end
   end
 
@@ -861,21 +861,21 @@ RSpec.describe Competition do
       competition.delegates << delegate_enabled
       expect(competition.receiving_registration_emails?(delegate_enabled.id)).to be true
 
-      cd = competition.competition_delegates.find_by_delegate_id(delegate.id)
+      cd = competition.competition_delegates.find_by(delegate_id: delegate.id)
       cd.update_column(:receive_registration_emails, true)
       expect(competition.receiving_registration_emails?(delegate.id)).to be true
 
       competition.organizers << delegate
       expect(competition.receiving_registration_emails?(delegate.id)).to be true
 
-      co = competition.competition_organizers.find_by_organizer_id(delegate.id)
+      co = competition.competition_organizers.find_by(organizer_id: delegate.id)
       co.update_column(:receive_registration_emails, true)
       expect(competition.receiving_registration_emails?(delegate.id)).to be true
     end
 
     it "setting receive_registration_emails" do
       competition.delegates << delegate
-      cd = competition.competition_delegates.find_by_delegate_id(delegate.id)
+      cd = competition.competition_delegates.find_by(delegate_id: delegate.id)
       expect(cd.receive_registration_emails).to be false
 
       competition.receive_registration_emails = false
@@ -885,7 +885,7 @@ RSpec.describe Competition do
       expect(cd.reload.receive_registration_emails).to be false
 
       competition.organizers << delegate
-      co = competition.competition_organizers.find_by_organizer_id(delegate.id)
+      co = competition.competition_organizers.find_by(organizer_id: delegate.id)
       expect(co.receive_registration_emails).to be false
 
       competition.receive_registration_emails = false
@@ -898,7 +898,7 @@ RSpec.describe Competition do
       # Test we can change the setting for a delegate with notifications
       # enabled by default.
       competition.delegates << delegate_enabled
-      cde = competition.competition_delegates.find_by_delegate_id(delegate_enabled.id)
+      cde = competition.competition_delegates.find_by(delegate_id: delegate_enabled.id)
       expect(cde.receive_registration_emails).to be true
       competition.receive_registration_emails = false
       competition.editing_user_id = delegate_enabled.id

@@ -48,7 +48,7 @@ RSpec.feature "Competition events management" do
     # Regardless, it's annoying to restart a whole travis job just for that,
     # so we set the retry attempts to 3.
     feature 'change round attributes' do
-      let(:comp_event_333) { competition.competition_events.find_by_event_id("333") }
+      let(:comp_event_333) { competition.competition_events.find_by(event_id: "333") }
       let(:round_333_1) { comp_event_333.rounds.first }
 
       scenario "close with unsaved changes prompts user before discarding changes", :js do
@@ -191,7 +191,7 @@ RSpec.feature "Competition events management" do
     end
 
     context "even admin cannot create inconsistent competition state" do
-      let(:comp_event_222) { competition.competition_events.find_by_event_id("222") }
+      let(:comp_event_222) { competition.competition_events.find_by(event_id: "222") }
 
       scenario "by deleting main event", :js do
         sign_in FactoryBot.create(:admin)
@@ -225,7 +225,7 @@ RSpec.feature "Competition events management" do
 
   context "competition with results posted" do
     let!(:competition) { FactoryBot.create :competition, :confirmed, :visible, :past, :results_posted, event_ids: Event.where(id: '333') }
-    let(:competition_event) { competition.competition_events.find_by_event_id("333") }
+    let(:competition_event) { competition.competition_events.find_by(event_id: "333") }
 
     scenario "delegate cannot update events", :js do
       FactoryBot.create :round, number: 2, format_id: 'a', competition_event: competition_event, total_number_of_rounds: 2

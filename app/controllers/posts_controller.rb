@@ -112,7 +112,7 @@ class PostsController < ApplicationController
     #  | 2014 |
     #  +------+
     #  1 row in set, 1 warning (0.00 sec)
-    post = Post.find_by_slug(params[:id]) || Post.find_by_id(params[:id])
+    post = Post.find_by(slug: params[:id]) || Post.find_by(id: params[:id])
     if !post
       raise ActiveRecord::RecordNotFound.new("Couldn't find post")
     end

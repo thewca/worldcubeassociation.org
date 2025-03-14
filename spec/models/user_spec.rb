@@ -170,7 +170,7 @@ RSpec.describe User, type: :model do
       expect(user.name).to eq person_for_dummy.name
 
       # Check that the dummy account was deleted, and we inherited its avatar.
-      expect(User.find_by_id(dummy_user.id)).to be_nil
+      expect(User.find_by(id: dummy_user.id)).to be_nil
       expect(user.reload.avatar).to eq dummy_avatar
     end
 

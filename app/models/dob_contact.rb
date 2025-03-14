@@ -10,7 +10,7 @@ class DobContact < ContactForm
   end
 
   def validate_wca_id
-    errors.add(:wca_id, I18n.t('users.errors.not_found')) unless Person.find_by_wca_id(wca_id)
+    errors.add(:wca_id, I18n.t('users.errors.not_found')) unless Person.find_by(wca_id: wca_id)
   end
 
   def headers
@@ -18,6 +18,6 @@ class DobContact < ContactForm
   end
 
   def incorrect_wca_id_claim_count
-    Person.find_by_wca_id(wca_id)&.incorrect_wca_id_claim_count
+    Person.find_by(wca_id: wca_id)&.incorrect_wca_id_claim_count
   end
 end

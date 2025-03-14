@@ -37,7 +37,7 @@ class Poll < ApplicationRecord
   end
 
   def user_already_voted?(current_user)
-    self.votes.find_by_user_id(current_user)
+    self.votes.find_by(user_id: current_user)
   end
 
   def confirmed?

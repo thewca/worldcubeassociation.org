@@ -46,7 +46,7 @@ module Resultable
       # competition.find_round_for.
       Competition
         .includes(:rounds)
-        .find_by_id(competition_id)
+        .find_by(id: competition_id)
         &.find_round_for(event_id, round_type_id, format_id)
     end
 
