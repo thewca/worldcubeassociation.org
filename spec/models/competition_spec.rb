@@ -341,7 +341,7 @@ RSpec.describe Competition do
                                    registration_open: 1.month.ago,
                                    registration_close: 1.week.from_now,
                                    use_wca_registration: true,
-                                   waiting_list_deadline_date: 1.months.from_now
+                                   waiting_list_deadline_date: 1.month.from_now
     expect(competition).to be_valid
   end
 
@@ -426,7 +426,7 @@ RSpec.describe Competition do
     end
 
     it "does not warn for upcoming competitions" do
-      competition = FactoryBot.create :competition, :visible, :with_delegate, starts: 1.days.from_now
+      competition = FactoryBot.create :competition, :visible, :with_delegate, starts: 1.day.from_now
       delegate = competition.delegates.first
       expect(competition.user_should_post_delegate_report?(delegate)).to be false
     end

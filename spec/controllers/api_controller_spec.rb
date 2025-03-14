@@ -600,14 +600,14 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
 
       it 'includes result achieved on the qualification date' do
         expected_response = [
-          { "best"=>399, "eventId"=>"333oh", "type"=>"single", "on_or_before"=> 1.days.ago.to_date.iso8601 },
-          { "best"=>499, "eventId"=>"333oh", "type"=>"average", "on_or_before"=> 1.days.ago.to_date.iso8601 },
+          { "best"=>399, "eventId"=>"333oh", "type"=>"single", "on_or_before"=> 1.day.ago.to_date.iso8601 },
+          { "best"=>499, "eventId"=>"333oh", "type"=>"average", "on_or_before"=> 1.day.ago.to_date.iso8601 },
         ]
 
-        competition = FactoryBot.create(:competition, starts: 1.days.ago)
+        competition = FactoryBot.create(:competition, starts: 1.day.ago)
         FactoryBot.create(:result, competition: competition, best: 399, average: 499, person: @result.person)
 
-        get :user_qualification_data, params: { user_id: @user.id, date: 1.days.ago }
+        get :user_qualification_data, params: { user_id: @user.id, date: 1.day.ago }
         expect(response.parsed_body).to eq(expected_response)
       end
 
@@ -617,7 +617,7 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
           { "best"=>500, "eventId"=>"333oh", "type"=>"average", "on_or_before"=> 2.days.ago.to_date.iso8601 },
         ]
 
-        competition = FactoryBot.create(:competition, starts: 1.days.ago)
+        competition = FactoryBot.create(:competition, starts: 1.day.ago)
         FactoryBot.create(:result, competition: competition, best: 399, average: 499, person: @result.person)
 
         get :user_qualification_data, params: { user_id: @user.id, date: 2.days.ago }
@@ -625,7 +625,7 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
       end
 
       it 'still returns PR when user has DNF result' do
-        competition = FactoryBot.create(:competition, starts: 1.days.ago)
+        competition = FactoryBot.create(:competition, starts: 1.day.ago)
         FactoryBot.create(:result, competition: competition, best: -1, average: -1, person: @result.person)
 
         get :user_qualification_data, params: { user_id: @user.id }

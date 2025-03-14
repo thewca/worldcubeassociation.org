@@ -281,9 +281,6 @@ Rails/DynamicFindBy:
 Rails/SkipsModelValidations:
   Enabled: false
 
-Rails/PluralizationGrammar:
-  Enabled: false
-
 Rails/I18nLocaleAssignment:
   Enabled: false
 
