@@ -44,7 +44,7 @@ RSpec.describe "registrations" do
         ]
         expect {
           post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
-        }.not_to change { competition.registrations.count }
+        }.not_to(change { competition.registrations.count })
         follow_redirect!
         expect(response.body).to include "The given file includes 2 accepted registrations, which is more than the competitor limit of 1."
       end
@@ -67,7 +67,7 @@ RSpec.describe "registrations" do
         ]
         expect {
           post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
-        }.not_to change { competition.registrations.count }
+        }.not_to(change { competition.registrations.count })
         follow_redirect!
         expect(response.body).to include "Error importing #{two_timer_dave.name}: Validation failed: Competition You can only be accepted for one Series competition at a time."
       end
@@ -80,7 +80,7 @@ RSpec.describe "registrations" do
         ]
         expect {
           post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
-        }.not_to change { competition.registrations.count }
+        }.not_to(change { competition.registrations.count })
         follow_redirect!
         expect(response.body).to include "Email must be unique, found the following duplicates: sherlock@example.com."
       end
@@ -93,7 +93,7 @@ RSpec.describe "registrations" do
         ]
         expect {
           post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
-        }.not_to change { competition.registrations.count }
+        }.not_to(change { competition.registrations.count })
         follow_redirect!
         expect(response.body).to include "WCA ID must be unique, found the following duplicates: 2019HOLM01."
       end
@@ -107,7 +107,7 @@ RSpec.describe "registrations" do
         ]
         expect {
           post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
-        }.not_to change { competition.registrations.count }
+        }.not_to(change { competition.registrations.count })
         follow_redirect!
         expect(response.body).to include "Birthdate must follow the YYYY-mm-dd format (year-month-day, for example 1944-07-13), found the following dates which cannot be parsed: 01.01.2000, Jan 01 2000."
       end
@@ -122,7 +122,7 @@ RSpec.describe "registrations" do
             ]
             expect {
               post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
-            }.not_to change { competition.registrations.count }
+            }.not_to(change { competition.registrations.count })
             follow_redirect!
             expect(response.body).to match(/The WCA ID 1000DARN99 doesn.*t exist/)
           end
@@ -141,7 +141,7 @@ RSpec.describe "registrations" do
                     ]
                     expect {
                       post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
-                    }.not_to change { competition.registrations.count }
+                    }.not_to(change { competition.registrations.count })
                     follow_redirect!
                     expect(response.body).to include "There is already a user with email #{user.email}, but it has WCA ID of #{user.wca_id} instead of #{dummy_user.wca_id}."
                   end
@@ -221,7 +221,7 @@ RSpec.describe "registrations" do
                   ]
                   expect {
                     post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
-                  }.not_to change { competition.registrations.count }
+                  }.not_to(change { competition.registrations.count })
                   follow_redirect!
                   expect(response.body).to include "There is already a user with email #{user.email}, but it has unconfirmed WCA ID of #{unconfirmed_person.wca_id} instead of #{person.wca_id}."
                 end
@@ -349,7 +349,7 @@ RSpec.describe "registrations" do
             expect {
               post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
             }.to not_change { competition.registrations.count }
-              .and not_change { registration.reload.competing_status }
+              .and(not_change { registration.reload.competing_status })
           end
         end
 
@@ -380,7 +380,7 @@ RSpec.describe "registrations" do
             expect {
               post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
             }.to not_change { competition.registrations.count }
-              .and change { registration.reload.competing_status }
+              .and(change { registration.reload.competing_status })
             expect(registration.reload).to be_accepted
           end
         end
@@ -394,7 +394,7 @@ RSpec.describe "registrations" do
             expect {
               post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
             }.to not_change { competition.registrations.count }
-              .and not_change { registration.reload.competing_status }
+              .and(not_change { registration.reload.competing_status })
             expect(registration.reload).to be_cancelled
           end
         end
@@ -456,7 +456,7 @@ RSpec.describe "registrations" do
                 gender: user.gender, email: user.email, event_ids: ["444"]
               },
             }
-          }.to not_change { competition.registrations.count }
+          }.to(not_change { competition.registrations.count })
           expect(response.body).to include "This person already has a registration."
         end
       end
@@ -481,7 +481,7 @@ RSpec.describe "registrations" do
                 gender: two_timer_dave.gender, email: two_timer_dave.email, event_ids: ["444"]
               },
             }
-          }.not_to change { competition.registrations.count }
+          }.not_to(change { competition.registrations.count })
           expect(response.body).to include "You can only be accepted for one Series competition at a time"
         end
       end
@@ -518,7 +518,7 @@ RSpec.describe "registrations" do
                 gender: "m", email: "sherlock@example.com", event_ids: ["444"]
               },
             }
-          }.not_to change { competition.registrations.count }
+          }.not_to(change { competition.registrations.count })
           follow_redirect!
           expect(response.body).to include "The competitor limit has been reached"
         end
@@ -728,7 +728,7 @@ RSpec.describe "registrations" do
               payment_intent: payment_intent.payment_record.stripe_id,
               payment_intent_client_secret: payment_intent.client_secret,
             }
-          }.not_to change { registration.reload.outstanding_entry_fees }
+          }.not_to(change { registration.reload.outstanding_entry_fees })
 
           expect(registration.paid_entry_fees).to eq 0
           expect(payment_intent.payment_record.reload.stripe_status).to eq('requires_action')
@@ -799,7 +799,7 @@ RSpec.describe "registrations" do
               payment_intent: payment_intent.payment_record.stripe_id,
               payment_intent_client_secret: payment_intent.client_secret,
             }
-          }.not_to change { registration.reload.outstanding_entry_fees }
+          }.not_to(change { registration.reload.outstanding_entry_fees })
 
           expect(registration.paid_entry_fees).to eq 0
           expect(payment_intent.confirmed_at).to be_nil
@@ -829,7 +829,7 @@ RSpec.describe "registrations" do
               payment_intent: payment_intent.payment_record.stripe_id,
               payment_intent_client_secret: payment_intent.client_secret,
             }
-          }.not_to change { registration.reload.outstanding_entry_fees }
+          }.not_to(change { registration.reload.outstanding_entry_fees })
 
           expect(registration.paid_entry_fees).to eq 0
           expect(payment_intent.confirmed_at).to be_nil
@@ -859,7 +859,7 @@ RSpec.describe "registrations" do
               payment_intent: payment_intent.payment_record.stripe_id,
               payment_intent_client_secret: payment_intent.client_secret,
             }
-          }.not_to change { registration.reload.outstanding_entry_fees }
+          }.not_to(change { registration.reload.outstanding_entry_fees })
 
           expect(registration.paid_entry_fees).to eq 0
           expect(payment_intent.confirmed_at).to be_nil
@@ -889,7 +889,7 @@ RSpec.describe "registrations" do
               payment_intent: payment_intent.payment_record.stripe_id,
               payment_intent_client_secret: payment_intent.client_secret,
             }
-          }.not_to change { registration.reload.outstanding_entry_fees }
+          }.not_to(change { registration.reload.outstanding_entry_fees })
 
           expect(registration.paid_entry_fees).to eq 0
           expect(payment_intent.confirmed_at).to be_nil
@@ -916,7 +916,7 @@ RSpec.describe "registrations" do
               payment_intent: payment_intent.payment_record.stripe_id,
               payment_intent_client_secret: payment_intent.client_secret,
             }
-          }.not_to change { registration.reload.outstanding_entry_fees }
+          }.not_to(change { registration.reload.outstanding_entry_fees })
 
           expect(registration.paid_entry_fees).to eq 0
           expect(payment_intent.confirmed_at).to be_nil

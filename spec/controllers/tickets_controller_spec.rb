@@ -13,7 +13,7 @@ RSpec.describe TicketsController do
       post :anonymize, params: { wcaId: wca_id }
 
       expect(person.reload.name).to eq User::ANONYMOUS_NAME
-      expect(person.reload.wca_id).to include(wca_id.first(4) + 'ANON')
+      expect(person.reload.wca_id).to include("#{wca_id.first(4)}ANON")
     end
 
     it 'cannot anonymize banned person' do
@@ -49,12 +49,12 @@ RSpec.describe TicketsController do
       year = wca_id.first(4)
 
       (1..99).each do |i|
-        FactoryBot.create(:person_who_has_competed_once, wca_id: year + "ANON" + i.to_s.rjust(2, "0"))
+        FactoryBot.create(:person_who_has_competed_once, wca_id: "#{year}ANON#{i.to_s.rjust(2, "0")}")
       end
 
       post :anonymize, params: { wcaId: wca_id }
 
-      expect(person.reload.wca_id).to eq year + "ANOU01" # ANON, take the last N, pad with U.
+      expect(person.reload.wca_id).to eq "#{year}ANOU01" # ANON, take the last N, pad with U.
     end
 
     it "can anonymize person and results" do

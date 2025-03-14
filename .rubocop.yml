@@ -22,6 +22,7 @@ AllCops:
     - 'db/schema.rb'
     - 'db/developer_dump_schema.rb'
     - 'db/results_dump_schema.rb'
+    - '.git-hooks/**/*'
 
 Bundler/OrderedGems:
   Enabled: false

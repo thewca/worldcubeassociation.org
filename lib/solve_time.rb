@@ -18,7 +18,6 @@ class SolveTime
     self.wca_value = wca_value
   end
 
-  attr_reader :wca_value, :time_centiseconds, :move_count
   def wca_value=(wca_value)
     @wca_value = wca_value
     @move_count = nil
@@ -86,7 +85,7 @@ class SolveTime
     recompute_wca_value
   end
 
-  attr_reader :solved, :attempted
+  attr_reader :wca_value, :time_centiseconds, :move_count, :solved, :attempted
 
   def missed
     self.attempted - self.solved

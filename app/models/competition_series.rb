@@ -42,7 +42,7 @@ class CompetitionSeries < ApplicationRecord
         self.wcif_id = safe_name_without_year[0...(MAX_ID_LENGTH - year.length)] + year
       end
       if short_name.blank?
-        year = " " + year
+        year = " #{year}"
         self.short_name = name_without_year.truncate(MAX_SHORT_NAME_LENGTH - year.length) + year
       end
     end

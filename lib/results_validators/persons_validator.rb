@@ -102,10 +102,8 @@ module ResultsValidators
       end
 
       # Check for missing period in single letter middle name.
-      if split_name.length > 2
-        if split_name[1, split_name.length-2].any? { |n| n.length == 1 }
-          validation_issues << ValidationWarning.new(MISSING_PERIOD_WARNING, :persons, competition_id, name: name)
-        end
+      if split_name.length > 2 && split_name[1, split_name.length-2].any? { |n| n.length == 1 }
+        validation_issues << ValidationWarning.new(MISSING_PERIOD_WARNING, :persons, competition_id, name: name)
       end
 
       # Check for letter after period.

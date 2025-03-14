@@ -21,7 +21,7 @@ class UsersController < ApplicationController
         @users = User.in_region(params[:region])
         params[:search]&.split&.each do |part|
           like_query = %w(users.name wca_id email).map do |column|
-            column + " LIKE :part"
+            "#{column} LIKE :part"
           end.join(" OR ")
           @users = @users.where(like_query, part: "%#{part}%")
         end
@@ -220,8 +220,8 @@ class UsersController < ApplicationController
     return if redirect_if_cannot_edit_user(@user)
 
     dangerous_change = current_user == @user && [:password, :password_confirmation, :email].any? { |attribute| user_params.key? attribute }
-    if dangerous_change
-      return unless check_recent_authentication!
+    if dangerous_change && !check_recent_authentication!
+      return
     end
 
     old_confirmation_sent_at = @user.confirmation_sent_at

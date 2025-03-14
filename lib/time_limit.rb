@@ -24,6 +24,7 @@ class TimeLimit
 
   attr_accessor :centiseconds
   attr_reader :cumulative_round_ids
+
   validates :centiseconds, numericality: { only_integer: true }
   validate do
     unless self.cumulative_round_ids.is_a?(Array) && self.cumulative_round_ids.all?(String)
