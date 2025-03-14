@@ -4,16 +4,16 @@ require "rails_helper"
 
 RSpec.describe "WCA Live API" do
   describe "Ranking Recomputation" do
-    let!(:delegate) { FactoryBot.create :delegate }
+    let!(:delegate) { create(:delegate) }
 
     it "Ranks results correctly by average" do
-      competition = FactoryBot.create(:competition, event_ids: ["333"], delegates: [delegate])
-      round = FactoryBot.create(:round, competition: competition, event_id: "333")
+      competition = create(:competition, event_ids: ["333"], delegates: [delegate])
+      round = create(:round, competition: competition, event_id: "333")
 
       3.times do |i|
-        registration = FactoryBot.create(:registration, :accepted, competition: competition)
+        registration = create(:registration, :accepted, competition: competition)
 
-        FactoryBot.create(:live_result, round: round, registration: registration, average: (i + 1) * 100)
+        create(:live_result, round: round, registration: registration, average: (i + 1) * 100)
       end
 
       round.live_results.sort_by(&:average).each.with_index(1) do |r, i|
@@ -22,13 +22,13 @@ RSpec.describe "WCA Live API" do
     end
 
     it "Ranks results correctly by single" do
-      competition = FactoryBot.create(:competition, event_ids: ["333bf"], delegates: [delegate])
-      round = FactoryBot.create(:round, competition: competition, event_id: "333bf", format_id: "3")
+      competition = create(:competition, event_ids: ["333bf"], delegates: [delegate])
+      round = create(:round, competition: competition, event_id: "333bf", format_id: "3")
 
       3.times do |i|
-        registration = FactoryBot.create(:registration, :accepted, competition: competition, event_ids: ["333bf"])
+        registration = create(:registration, :accepted, competition: competition, event_ids: ["333bf"])
 
-        FactoryBot.create(:live_result, round: round, registration: registration, best: (i + 1) * 100)
+        create(:live_result, round: round, registration: registration, best: (i + 1) * 100)
       end
 
       round.live_results.sort_by(&:best).each.with_index(1) do |r, i|
@@ -37,13 +37,13 @@ RSpec.describe "WCA Live API" do
     end
 
     it "Handles ties correctly if both best and average is the same" do
-      competition = FactoryBot.create(:competition, event_ids: ["333"], delegates: [delegate])
-      round = FactoryBot.create(:round, competition: competition, event_id: "333")
+      competition = create(:competition, event_ids: ["333"], delegates: [delegate])
+      round = create(:round, competition: competition, event_id: "333")
 
       3.times do |i|
-        registration = FactoryBot.create(:registration, :accepted, competition: competition)
+        registration = create(:registration, :accepted, competition: competition)
 
-        FactoryBot.create(:live_result, round: round, registration: registration, average: 100)
+        create(:live_result, round: round, registration: registration, average: 100)
       end
 
       round.live_results.sort_by(&:average).each do |r|
@@ -52,13 +52,13 @@ RSpec.describe "WCA Live API" do
     end
 
     it "Handles ties correctly single beats average if tied" do
-      competition = FactoryBot.create(:competition, event_ids: ["333"], delegates: [delegate])
-      round = FactoryBot.create(:round, competition: competition, event_id: "333")
+      competition = create(:competition, event_ids: ["333"], delegates: [delegate])
+      round = create(:round, competition: competition, event_id: "333")
 
       3.times do |i|
-        registration = FactoryBot.create(:registration, :accepted, competition: competition)
+        registration = create(:registration, :accepted, competition: competition)
 
-        FactoryBot.create(:live_result, round: round, registration: registration, best: (i + 1) * 100)
+        create(:live_result, round: round, registration: registration, best: (i + 1) * 100)
       end
 
       round.live_results.sort_by(&:best).each.with_index(1) do |r, i|
@@ -67,13 +67,13 @@ RSpec.describe "WCA Live API" do
     end
 
     it "Handles ties correctly average does not beat single ties" do
-      competition = FactoryBot.create(:competition, event_ids: ["333bf"], delegates: [delegate])
-      round = FactoryBot.create(:round, competition: competition, event_id: "333bf", format_id: "3")
+      competition = create(:competition, event_ids: ["333bf"], delegates: [delegate])
+      round = create(:round, competition: competition, event_id: "333bf", format_id: "3")
 
       3.times do |i|
-        registration = FactoryBot.create(:registration, :accepted, competition: competition, event_ids: ["333bf"])
+        registration = create(:registration, :accepted, competition: competition, event_ids: ["333bf"])
 
-        FactoryBot.create(:live_result, round: round, registration: registration, best: 100, average: (i + 1) * 100)
+        create(:live_result, round: round, registration: registration, best: 100, average: (i + 1) * 100)
       end
 
       round.live_results.each do |r|
@@ -82,49 +82,49 @@ RSpec.describe "WCA Live API" do
     end
 
     it "Ranks results correctly by single even with DNFs present" do
-      competition = FactoryBot.create(:competition, event_ids: ["333bf"], delegates: [delegate])
-      round = FactoryBot.create(:round, competition: competition, event_id: "333bf", format_id: "3")
+      competition = create(:competition, event_ids: ["333bf"], delegates: [delegate])
+      round = create(:round, competition: competition, event_id: "333bf", format_id: "3")
 
       3.times do |i|
-        registration = FactoryBot.create(:registration, :accepted, competition: competition, event_ids: ["333bf"])
+        registration = create(:registration, :accepted, competition: competition, event_ids: ["333bf"])
 
-        FactoryBot.create(:live_result, round: round, registration: registration, best: (i + 1) * 100)
+        create(:live_result, round: round, registration: registration, best: (i + 1) * 100)
       end
 
-      registration = FactoryBot.create(:registration, :accepted, competition: competition, event_ids: ["333bf"])
-      FactoryBot.create(:live_result, round: round, registration: registration, best: -1)
+      registration = create(:registration, :accepted, competition: competition, event_ids: ["333bf"])
+      create(:live_result, round: round, registration: registration, best: -1)
 
       expect(round.live_results.sort_by(&:best).pluck(:ranking)).to eq [4, 1, 2, 3]
     end
 
     it "Ranks results correctly by single even with DNSs present" do
-      competition = FactoryBot.create(:competition, event_ids: ["333bf"], delegates: [delegate])
-      round = FactoryBot.create(:round, competition: competition, event_id: "333bf", format_id: "3")
+      competition = create(:competition, event_ids: ["333bf"], delegates: [delegate])
+      round = create(:round, competition: competition, event_id: "333bf", format_id: "3")
 
       3.times do |i|
-        registration = FactoryBot.create(:registration, :accepted, competition: competition, event_ids: ["333bf"])
+        registration = create(:registration, :accepted, competition: competition, event_ids: ["333bf"])
 
-        FactoryBot.create(:live_result, round: round, registration: registration, best: (i + 1) * 100)
+        create(:live_result, round: round, registration: registration, best: (i + 1) * 100)
       end
 
-      registration = FactoryBot.create(:registration, :accepted, competition: competition, event_ids: ["333bf"])
-      FactoryBot.create(:live_result, round: round, registration: registration, best: -2)
+      registration = create(:registration, :accepted, competition: competition, event_ids: ["333bf"])
+      create(:live_result, round: round, registration: registration, best: -2)
 
       expect(round.live_results.sort_by(&:best).pluck(:ranking)).to eq [4, 1, 2, 3]
     end
 
     it "Ranks results correctly by single even with incomplete results present" do
-      competition = FactoryBot.create(:competition, event_ids: ["333bf"], delegates: [delegate])
-      round = FactoryBot.create(:round, competition: competition, event_id: "333bf", format_id: "3")
+      competition = create(:competition, event_ids: ["333bf"], delegates: [delegate])
+      round = create(:round, competition: competition, event_id: "333bf", format_id: "3")
 
       3.times do |i|
-        registration = FactoryBot.create(:registration, :accepted, competition: competition, event_ids: ["333bf"])
+        registration = create(:registration, :accepted, competition: competition, event_ids: ["333bf"])
 
-        FactoryBot.create(:live_result, round: round, registration: registration, best: (i + 1) * 100)
+        create(:live_result, round: round, registration: registration, best: (i + 1) * 100)
       end
 
-      registration = FactoryBot.create(:registration, :accepted, competition: competition, event_ids: ["333bf"])
-      FactoryBot.create(:live_result, round: round, registration: registration, best: 0)
+      registration = create(:registration, :accepted, competition: competition, event_ids: ["333bf"])
+      create(:live_result, round: round, registration: registration, best: 0)
 
       expect(round.live_results.sort_by(&:best).pluck(:ranking)).to eq [nil, 1, 2, 3]
     end

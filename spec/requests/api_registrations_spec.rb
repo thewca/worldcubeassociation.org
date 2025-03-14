@@ -10,10 +10,10 @@ RSpec.describe 'API Registrations' do
 
   describe 'POST #create' do
     context 'create a registration' do
-      let(:user) { FactoryBot.create :user }
-      let(:competition) { FactoryBot.create :competition, :registration_open }
+      let(:user) { create(:user) }
+      let(:competition) { create(:competition, :registration_open) }
       let(:headers) { { 'Authorization' => registration_request['jwt_token'] } }
-      let(:registration_request) { FactoryBot.build(:registration_request, competition_id: competition.id, user_id: user.id) }
+      let(:registration_request) { build(:registration_request, competition_id: competition.id, user_id: user.id) }
 
       it 'returns 202' do
         # post api_v1_registrations_register_path, params: registration_request, headers: headers
@@ -51,24 +51,24 @@ RSpec.describe 'API Registrations' do
 
     context 'register with qualifications' do
       let(:events) { ['222', '333', '444', '555', 'minx', 'pyram'] }
-      let(:past_competition) { FactoryBot.create(:competition, :past) }
+      let(:past_competition) { create(:competition, :past) }
 
-      let(:comp_with_qualifications) { FactoryBot.create(:competition, :registration_open, :enforces_easy_qualifications) }
+      let(:comp_with_qualifications) { create(:competition, :registration_open, :enforces_easy_qualifications) }
 
-      let(:user_with_results) { FactoryBot.create(:user, :wca_id) }
-      let(:user_without_results) { FactoryBot.create(:user, :wca_id) }
+      let(:user_with_results) { create(:user, :wca_id) }
+      let(:user_without_results) { create(:user, :wca_id) }
 
       before do
-        FactoryBot.create(:result, competition: past_competition, person: user_with_results.person, eventId: '222', best: 400, average: 500)
-        FactoryBot.create(:result, competition: past_competition, person: user_with_results.person, eventId: '333', best: 410, average: 510)
-        FactoryBot.create(:result, competition: past_competition, person: user_with_results.person, eventId: '555', best: 420, average: 520)
-        FactoryBot.create(:result, competition: past_competition, person: user_with_results.person, eventId: '444', best: 430, average: 530)
-        FactoryBot.create(:result, competition: past_competition, person: user_with_results.person, eventId: 'pyram', best: 440, average: 540)
-        FactoryBot.create(:result, competition: past_competition, person: user_with_results.person, eventId: 'minx', best: 450, average: 550)
+        create(:result, competition: past_competition, person: user_with_results.person, eventId: '222', best: 400, average: 500)
+        create(:result, competition: past_competition, person: user_with_results.person, eventId: '333', best: 410, average: 510)
+        create(:result, competition: past_competition, person: user_with_results.person, eventId: '555', best: 420, average: 520)
+        create(:result, competition: past_competition, person: user_with_results.person, eventId: '444', best: 430, average: 530)
+        create(:result, competition: past_competition, person: user_with_results.person, eventId: 'pyram', best: 440, average: 540)
+        create(:result, competition: past_competition, person: user_with_results.person, eventId: 'minx', best: 450, average: 550)
       end
 
       it 'registers when qualifications are met' do
-        registration_request = FactoryBot.build(
+        registration_request = build(
           :registration_request, competition_id: comp_with_qualifications.id, user_id: user_with_results.id, events: events
         )
         headers = { 'Authorization' => registration_request['jwt_token'] }
@@ -84,7 +84,7 @@ RSpec.describe 'API Registrations' do
       end
 
       it 'cant register when qualifications arent met' do
-        registration_request = FactoryBot.build(
+        registration_request = build(
           :registration_request, competition_id: comp_with_qualifications.id, user_id: user_without_results.id, events: events
         )
 
@@ -109,12 +109,12 @@ RSpec.describe 'API Registrations' do
   end
 
   describe 'PATCH #update' do
-    let(:user) { FactoryBot.create :user }
-    let(:competition) { FactoryBot.create :competition, :registration_open, :editable_registrations, :with_organizer }
-    let(:registration) { FactoryBot.create(:registration, competition: competition, user: user) }
+    let(:user) { create(:user) }
+    let(:competition) { create(:competition, :registration_open, :editable_registrations, :with_organizer) }
+    let(:registration) { create(:registration, competition: competition, user: user) }
 
     it 'updates a registration' do
-      update_request = FactoryBot.build(
+      update_request = build(
         :update_request,
         user_id: registration.user_id,
         competition_id: registration.competition.id,
@@ -140,11 +140,11 @@ RSpec.describe 'API Registrations' do
     end
 
     it 'user can change events in a favourites competition' do
-      favourites_comp = FactoryBot.create(:competition, :with_event_limit, :editable_registrations, :registration_open)
-      favourites_reg = FactoryBot.create(:registration, competition: favourites_comp, user: user, event_ids: %w(333 333oh 555 pyram minx))
+      favourites_comp = create(:competition, :with_event_limit, :editable_registrations, :registration_open)
+      favourites_reg = create(:registration, competition: favourites_comp, user: user, event_ids: %w(333 333oh 555 pyram minx))
 
       new_event_ids = %w(333 333oh 555 pyram 444)
-      update_request = FactoryBot.build(
+      update_request = build(
         :update_request,
         user_id: favourites_reg.user_id,
         competition_id: favourites_reg.competition.id,
@@ -161,9 +161,9 @@ RSpec.describe 'API Registrations' do
     end
 
     it 'user gets registration email if they cancel and re-register' do
-      cancelled_reg = FactoryBot.create(:registration, :cancelled, competition: competition)
+      cancelled_reg = create(:registration, :cancelled, competition: competition)
 
-      update_request = FactoryBot.build(
+      update_request = build(
         :update_request,
         user_id: cancelled_reg.user_id,
         competition_id: cancelled_reg.competition.id,
@@ -181,9 +181,9 @@ RSpec.describe 'API Registrations' do
     end
 
     it 'user gets registration email if they were rejected and get moved to pending' do
-      rejected_reg = FactoryBot.create(:registration, :rejected, competition: competition)
+      rejected_reg = create(:registration, :rejected, competition: competition)
 
-      update_request = FactoryBot.build(
+      update_request = build(
         :update_request,
         user_id: rejected_reg.user_id,
         competition_id: rejected_reg.competition.id,
@@ -203,18 +203,18 @@ RSpec.describe 'API Registrations' do
   end
 
   describe 'PATCH #bulk_update' do
-    let(:competition) { FactoryBot.create :competition, :registration_open, :editable_registrations, :with_organizer }
+    let(:competition) { create(:competition, :registration_open, :editable_registrations, :with_organizer) }
 
-    let(:user1) { FactoryBot.create :user }
-    let(:user2) { FactoryBot.create :user }
-    let(:user3) { FactoryBot.create :user }
+    let(:user1) { create(:user) }
+    let(:user2) { create(:user) }
+    let(:user3) { create(:user) }
 
-    let(:registration1) { FactoryBot.create(:registration, competition: competition, user: user1) }
-    let(:registration2) { FactoryBot.create(:registration, competition: competition, user: user2) }
-    let(:registration3) { FactoryBot.create(:registration, competition: competition, user: user3) }
+    let(:registration1) { create(:registration, competition: competition, user: user1) }
+    let(:registration2) { create(:registration, competition: competition, user: user2) }
+    let(:registration3) { create(:registration, competition: competition, user: user3) }
 
     it 'admin submits a bulk update containing 1 update' do
-      bulk_update_request = FactoryBot.build(
+      bulk_update_request = build(
         :bulk_update_request,
         user_ids: [registration1.user_id],
         submitted_by: competition.organizers.first.id,
@@ -237,28 +237,28 @@ RSpec.describe 'API Registrations' do
     end
 
     it 'makes all changes in the given payload' do
-      update_request1 = FactoryBot.build(
+      update_request1 = build(
         :update_request,
         user_id: registration1.user_id,
         competition_id: registration1.competition.id,
         competing: { 'status' => 'cancelled' },
       )
 
-      update_request2 = FactoryBot.build(
+      update_request2 = build(
         :update_request,
         user_id: registration2.user_id,
         competition_id: registration2.competition.id,
         guests: 3,
       )
 
-      update_request3 = FactoryBot.build(
+      update_request3 = build(
         :update_request,
         user_id: registration3.user_id,
         competition_id: registration3.competition.id,
         competing: { 'event_ids' => ['333', '444'] },
       )
 
-      bulk_update_request = FactoryBot.build(
+      bulk_update_request = build(
         :bulk_update_request,
         user_ids: [registration1.user_id],
         submitted_by: competition.organizers.first.id,
@@ -280,28 +280,28 @@ RSpec.describe 'API Registrations' do
     end
 
     it 'fails if there are validation errors' do
-      update_request1 = FactoryBot.build(
+      update_request1 = build(
         :update_request,
         user_id: registration1.user_id,
         competition_id: registration1.competition.id,
         competing: { 'status' => 'cancelled' },
       )
 
-      update_request2 = FactoryBot.build(
+      update_request2 = build(
         :update_request,
         user_id: registration2.user_id,
         competition_id: registration2.competition.id,
         guests: 3,
       )
 
-      update_request3 = FactoryBot.build(
+      update_request3 = build(
         :update_request,
         user_id: registration3.user_id,
         competition_id: registration3.competition.id,
         competing: { 'event_ids' => ['333', '444', 'goofy ah'] },
       )
 
-      bulk_update_request = FactoryBot.build(
+      bulk_update_request = build(
         :bulk_update_request,
         user_ids: [registration1.user_id],
         submitted_by: competition.organizers.first.id,
@@ -320,7 +320,7 @@ RSpec.describe 'API Registrations' do
     end
 
     it 'returns 400 if blank JSON submitted' do
-      bulk_update_request = FactoryBot.build(
+      bulk_update_request = build(
         :bulk_update_request,
         user_ids: [registration1.user_id],
         submitted_by: competition.organizers.first.id,
@@ -335,35 +335,35 @@ RSpec.describe 'API Registrations' do
     end
 
     it 'accepts competitors from the waiting list' do
-      waitlisted1 = FactoryBot.create(:registration, :waiting_list, competition: competition)
-      waitlisted2 = FactoryBot.create(:registration, :waiting_list, competition: competition)
-      waitlisted3 = FactoryBot.create(:registration, :waiting_list, competition: competition)
+      waitlisted1 = create(:registration, :waiting_list, competition: competition)
+      waitlisted2 = create(:registration, :waiting_list, competition: competition)
+      waitlisted3 = create(:registration, :waiting_list, competition: competition)
       expect(waitlisted1.competing_status).to eq('waiting_list')
       expect(waitlisted2.competing_status).to eq('waiting_list')
       expect(waitlisted3.competing_status).to eq('waiting_list')
 
-      update_request1 = FactoryBot.build(
+      update_request1 = build(
         :update_request,
         user_id: waitlisted1.user_id,
         competition_id: waitlisted1.competition.id,
         competing: { 'status' => 'accepted' },
       )
 
-      update_request2 = FactoryBot.build(
+      update_request2 = build(
         :update_request,
         user_id: waitlisted2.user_id,
         competition_id: waitlisted2.competition.id,
         competing: { 'status' => 'accepted' },
       )
 
-      update_request3 = FactoryBot.build(
+      update_request3 = build(
         :update_request,
         user_id: waitlisted3.user_id,
         competition_id: waitlisted3.competition.id,
         competing: { 'status' => 'accepted' },
       )
 
-      bulk_update_request = FactoryBot.build(
+      bulk_update_request = build(
         :bulk_update_request,
         user_ids: [waitlisted1.user_id],
         submitted_by: competition.organizers.first.id,
@@ -383,21 +383,21 @@ RSpec.describe 'API Registrations' do
   end
 
   describe 'GET #list_admin' do
-    let(:competition) { FactoryBot.create :competition, :registration_open, :editable_registrations, :with_organizer }
+    let(:competition) { create(:competition, :registration_open, :editable_registrations, :with_organizer) }
 
-    let(:user1) { FactoryBot.create :user }
-    let(:user2) { FactoryBot.create :user }
-    let(:user3) { FactoryBot.create :user }
-    let(:user4) { FactoryBot.create :user }
-    let(:user5) { FactoryBot.create :user }
-    let(:user6) { FactoryBot.create :user }
+    let(:user1) { create(:user) }
+    let(:user2) { create(:user) }
+    let(:user3) { create(:user) }
+    let(:user4) { create(:user) }
+    let(:user5) { create(:user) }
+    let(:user6) { create(:user) }
 
-    let!(:registration1) { FactoryBot.create(:registration, :accepted, competition: competition, user: user1) }
-    let!(:registration2) { FactoryBot.create(:registration, :accepted, competition: competition, user: user2) }
-    let!(:registration3) { FactoryBot.create(:registration, :accepted, competition: competition, user: user3) }
-    let!(:registration4) { FactoryBot.create(:registration, :waiting_list, competition: competition, user: user4) }
-    let!(:registration5) { FactoryBot.create(:registration, :waiting_list, competition: competition, user: user5) }
-    let!(:registration6) { FactoryBot.create(:registration, :waiting_list, competition: competition, user: user6) }
+    let!(:registration1) { create(:registration, :accepted, competition: competition, user: user1) }
+    let!(:registration2) { create(:registration, :accepted, competition: competition, user: user2) }
+    let!(:registration3) { create(:registration, :accepted, competition: competition, user: user3) }
+    let!(:registration4) { create(:registration, :waiting_list, competition: competition, user: user4) }
+    let!(:registration5) { create(:registration, :waiting_list, competition: competition, user: user5) }
+    let!(:registration6) { create(:registration, :waiting_list, competition: competition, user: user6) }
 
     it 'returns multiple registrations' do
       headers = { 'Authorization' => fetch_jwt_token(competition.organizers.first.id) }
@@ -427,8 +427,8 @@ RSpec.describe 'API Registrations' do
 
   describe 'GET #payment_ticket' do
     it 'refuses ticket create request if registration is closed' do
-      closed_comp = FactoryBot.create(:competition, :registration_closed, :with_organizer, :stripe_connected)
-      reg = FactoryBot.create(:registration, :pending, competition: closed_comp)
+      closed_comp = create(:competition, :registration_closed, :with_organizer, :stripe_connected)
+      reg = create(:registration, :pending, competition: closed_comp)
 
       headers = { 'Authorization' => fetch_jwt_token(reg.user_id) }
       get api_v1_registrations_payment_ticket_path(competition_id: closed_comp.id), headers: headers

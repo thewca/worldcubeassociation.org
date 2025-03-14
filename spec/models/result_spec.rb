@@ -4,33 +4,33 @@ require 'rails_helper'
 
 RSpec.describe Result do
   it "defines a valid result" do
-    result = FactoryBot.build :result
+    result = build(:result)
     expect(result).to be_valid
   end
 
   context "associations" do
     it "validates competitionId" do
-      result = FactoryBot.build :result, competitionId: "foo", skip_round_creation: true
+      result = build(:result, competitionId: "foo", skip_round_creation: true)
       expect(result).to be_invalid_with_errors(competition: ["must exist"])
     end
 
     it "validates countryId" do
-      result = FactoryBot.build :result, countryId: "foo"
+      result = build(:result, countryId: "foo")
       expect(result).to be_invalid_with_errors(country: ["must exist"])
     end
 
     it "validates eventId" do
-      result = FactoryBot.build :result, eventId: "foo", skip_round_creation: true
+      result = build(:result, eventId: "foo", skip_round_creation: true)
       expect(result).to be_invalid_with_errors(event: ["must exist"])
     end
 
     it "validates formatId" do
-      result = FactoryBot.build :result, formatId: "foo", skip_round_creation: true
+      result = build(:result, formatId: "foo", skip_round_creation: true)
       expect(result).to be_invalid_with_errors(format: ["must exist"])
     end
 
     it "validates roundTypeId" do
-      result = FactoryBot.build :result, roundTypeId: "foo", skip_round_creation: true
+      result = build(:result, roundTypeId: "foo", skip_round_creation: true)
       # Skipping the round creation also creates a round validation error which
       # is reported on :round_type.
       expect(result).to be_invalid_with_errors(round_type:
@@ -41,10 +41,10 @@ RSpec.describe Result do
     end
 
     it "person association always looks for subId 1" do
-      person1 = FactoryBot.create :person_with_multiple_sub_ids
+      person1 = create(:person_with_multiple_sub_ids)
       person2 = Person.find_by!(wca_id: person1.wca_id, subId: 2)
-      result1 = FactoryBot.create :result, person: person1
-      result2 = FactoryBot.create :result, person: person2
+      result1 = create(:result, person: person1)
+      result2 = create(:result, person: person2)
       expect(result1.person).to eq person1
       expect(result2.person).to eq person1
     end
@@ -52,27 +52,27 @@ RSpec.describe Result do
 
   context "valid" do
     it "skipped solves must all come at the end" do
-      result = FactoryBot.build :result, value2: 0
+      result = build(:result, value2: 0)
       expect(result).to be_invalid_with_errors(base: ["Skipped solves must all come at the end."])
     end
 
     it "cannot skip all solves" do
-      result = FactoryBot.build :result, value1: -2, value2: -2, value3: 0, value4: 0, value5: 0, best: -2
+      result = build(:result, value1: -2, value2: -2, value3: 0, value4: 0, value5: 0, best: -2)
       expect(result).to be_invalid_with_errors(base: ["All solves cannot be DNS/skipped."])
     end
 
     it "values must all be >= -2" do
-      result = FactoryBot.build :result, value1: 0, value2: -3, value3: 0, value4: 0, value5: 0
+      result = build(:result, value1: 0, value2: -3, value3: 0, value4: 0, value5: 0)
       expect(result).to be_invalid(value2: ["invalid"])
     end
 
     it "position must be a number" do
-      result = FactoryBot.build :result, pos: nil
+      result = build(:result, pos: nil)
       expect(result).to be_invalid(pos: ["The position is not a valid number. Did you clear all the empty rows and synchronized WCA Live?"])
     end
 
     it "correctly computes best" do
-      result = FactoryBot.build :result, value1: 42, value2: 43, value3: 44, value4: 45, value5: 46, best: 42, average: 44
+      result = build(:result, value1: 42, value2: 43, value3: 44, value4: 45, value5: 46, best: 42, average: 44)
       expect(result).to be_valid
 
       result.best = 41
@@ -83,11 +83,11 @@ RSpec.describe Result do
       context "333 average 5" do
         let(:eventId) { "333" }
         let(:formatId) { "a" }
-        let(:competition) { FactoryBot.create(:competition) }
+        let(:competition) { create(:competition) }
 
         context "cutoff round" do
           let(:roundTypeId) { "c" }
-          let!(:round) { FactoryBot.create(:round, competition: competition, cutoff: Cutoff.new(number_of_attempts: 2, attempt_result: 60*100)) }
+          let!(:round) { create(:round, competition: competition, cutoff: Cutoff.new(number_of_attempts: 2, attempt_result: 60*100)) }
 
           it "all solves" do
             result = build_result(value1: 42, value2: 43, value3: 44, value4: 45, value5: 46, best: 42, average: 44)
@@ -108,7 +108,7 @@ RSpec.describe Result do
 
         context "uncutoff round" do
           let(:roundTypeId) { "f" }
-          let!(:round) { FactoryBot.create(:round, competition: competition) }
+          let!(:round) { create(:round, competition: competition) }
 
           it "all solves with average below 10 minutes" do
             # This average computes to 44.0066... and should be rounded to 44.01
@@ -151,11 +151,11 @@ RSpec.describe Result do
 
         context "777" do
           let(:eventId) { "777" }
-          let(:competition) { FactoryBot.create(:competition, event_ids: ["777"]) }
+          let(:competition) { create(:competition, event_ids: ["777"]) }
 
           context "cutoff round" do
             let(:roundTypeId) { "c" }
-            let!(:round) { FactoryBot.create(:round, competition: competition, cutoff: Cutoff.new(number_of_attempts: 2, attempt_result: 60*100), format_id: "m", event_id: "777") }
+            let!(:round) { create(:round, competition: competition, cutoff: Cutoff.new(number_of_attempts: 2, attempt_result: 60*100), format_id: "m", event_id: "777") }
 
             it "all solves" do
               result = build_result(value1: 42, value2: 43, value3: 44, value4: 0, value5: 0, best: 42, average: 43)
@@ -184,7 +184,7 @@ RSpec.describe Result do
 
           context "uncutoff round" do
             let(:roundTypeId) { "f" }
-            let!(:round) { FactoryBot.create(:round, competition: competition, format_id: "m", event_id: "777") }
+            let!(:round) { create(:round, competition: competition, format_id: "m", event_id: "777") }
 
             it "all solves with average below 10 minutes" do
               # This average computes to 44.0066... and should be rounded to 44.01
@@ -232,8 +232,8 @@ RSpec.describe Result do
         context "333fm uncutoff round" do
           let(:eventId) { "333fm" }
           let(:roundTypeId) { "f" }
-          let(:competition) { FactoryBot.create(:competition, event_ids: ["333fm"]) }
-          let!(:round) { FactoryBot.create(:round, competition: competition, format_id: "m", event_id: "333fm") }
+          let(:competition) { create(:competition, event_ids: ["333fm"]) }
+          let!(:round) { create(:round, competition: competition, format_id: "m", event_id: "333fm") }
 
           it "correctly computes average" do
             result = build_result(value1: 42, value2: 42, value3: 43, value4: 0, value5: 0, best: 42, average: 4233)
@@ -257,12 +257,12 @@ RSpec.describe Result do
 
       context "best of 3" do
         let(:roundTypeId) { "f" }
-        let(:competition) { FactoryBot.create(:competition, event_ids: ["333bf", "444bf", "555bf", "333mbf", "333ft", "333fm"]) }
+        let(:competition) { create(:competition, event_ids: ["333bf", "444bf", "555bf", "333mbf", "333ft", "333fm"]) }
 
         context "333bf" do
           let(:formatId) { "3" }
           let(:eventId) { "333bf" }
-          let!(:round) { FactoryBot.create(:round, competition: competition, event_id: "333bf", format_id: "3") }
+          let!(:round) { create(:round, competition: competition, event_id: "333bf", format_id: "3") }
 
           it "does compute average" do
             result = build_result(value1: 999, value2: 1000, value3: 1001, value4: 0, value5: 0, best: 999, average: 1000)
@@ -320,7 +320,7 @@ RSpec.describe Result do
         context "444bf" do
           let(:formatId) { "3" }
           let(:eventId) { "444bf" }
-          let!(:round) { FactoryBot.create(:round, competition: competition, event_id: "444bf", format_id: "3") }
+          let!(:round) { create(:round, competition: competition, event_id: "444bf", format_id: "3") }
 
           it "sets a valid average for 444bf if all three solves are completed" do
             result = build_result(value1: 999, value2: 1000, value3: 1001, value4: 0, value5: 0, best: 999, average: 1000)
@@ -335,7 +335,7 @@ RSpec.describe Result do
         context "555bf" do
           let(:formatId) { "3" }
           let(:eventId) { "555bf" }
-          let!(:round) { FactoryBot.create(:round, competition: competition, event_id: "555bf", format_id: "3") }
+          let!(:round) { create(:round, competition: competition, event_id: "555bf", format_id: "3") }
 
           it "sets a valid average for 555bf if all three solves are completed" do
             result = build_result(value1: 999, value2: 1000, value3: 1001, value4: 0, value5: 0, best: 999, average: 1000)
@@ -350,7 +350,7 @@ RSpec.describe Result do
         context "333fm" do
           let(:formatId) { "m" }
           let(:eventId) { "333fm" }
-          let!(:round) { FactoryBot.create(:round, competition: competition, event_id: "333fm", format_id: "m") }
+          let!(:round) { create(:round, competition: competition, event_id: "333fm", format_id: "m") }
 
           it "does compute average" do
             result = build_result(value1: 24, value2: 25, value3: 26, value4: 0, value5: 0, best: 24, average: 2500)
@@ -365,7 +365,7 @@ RSpec.describe Result do
         context "333mbf" do
           let(:formatId) { "3" }
           let(:eventId) { "333mbf" }
-          let!(:round) { FactoryBot.create(:round, competition: competition, event_id: "333mbf", format_id: "3") }
+          let!(:round) { create(:round, competition: competition, event_id: "333mbf", format_id: "3") }
 
           it "does not compute average" do
             solve_time = SolveTime.new("333mbf", :best, 0)
@@ -387,7 +387,7 @@ RSpec.describe Result do
 
     context "check number of non-zero solves" do
       def result_with_n_solves(n, options)
-        result = FactoryBot.build :result, options
+        result = build(:result, options)
         (1..5).each do |i|
           result.send :"value#{i}=", i <= n ? 42 : 0
         end
@@ -440,8 +440,8 @@ RSpec.describe Result do
     end
 
     it "times over 10 minutes must be rounded" do
-      expect(FactoryBot.build(:result, value2: (10*6000) + 4343)).to be_invalid_with_errors(value2: ["times over 10 minutes should be rounded"])
-      expect(FactoryBot.build(:result, value2: (10*6000) + 4300)).to be_valid
+      expect(build(:result, value2: (10*6000) + 4343)).to be_invalid_with_errors(value2: ["times over 10 minutes should be rounded"])
+      expect(build(:result, value2: (10*6000) + 4300)).to be_valid
     end
 
     context "multibld" do
@@ -452,7 +452,7 @@ RSpec.describe Result do
         solve_time.attempted = 30
         solve_time.time_centiseconds = 65*60*100
 
-        result = FactoryBot.build :result, eventId: "333mbf", value1: solve_time.wca_value, formatId: "1"
+        result = build(:result, eventId: "333mbf", value1: solve_time.wca_value, formatId: "1")
         expect(result).to be_invalid_with_errors(value1: ["should be less than or equal to 60 minutes"])
       end
 
@@ -462,7 +462,7 @@ RSpec.describe Result do
         solve_time.attempted = 3
         solve_time.time_centiseconds = 32*60*100
 
-        result = FactoryBot.build :result, eventId: "333mbf", value1: solve_time.wca_value, formatId: "1"
+        result = build(:result, eventId: "333mbf", value1: solve_time.wca_value, formatId: "1")
         expect(result).to be_invalid_with_errors(value1: ["should be less than or equal to 30 minutes"])
       end
     end
@@ -470,5 +470,5 @@ RSpec.describe Result do
 end
 
 def build_result(attrs)
-  FactoryBot.build :result, { competition: competition, roundTypeId: roundTypeId, formatId: formatId, eventId: eventId }.merge(attrs)
+  FactoryBot.build(:result, { competition: competition, roundTypeId: roundTypeId, formatId: formatId, eventId: eventId }.merge(attrs))
 end

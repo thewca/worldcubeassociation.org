@@ -4,10 +4,10 @@ require 'rails_helper'
 
 RSpec.describe RegistrationsController, clean_db_with_truncation: true do
   context "signed in as organizer" do
-    let!(:organizer) { FactoryBot.create(:user) }
-    let(:competition) { FactoryBot.create(:competition, :registration_open, :visible, organizers: [organizer], events: Event.where(id: %w(222 333))) }
-    let(:zzyzx_user) { FactoryBot.create :user, name: "Zzyzx" }
-    let(:registration) { FactoryBot.create(:registration, competition: competition, user: zzyzx_user) }
+    let!(:organizer) { create(:user) }
+    let(:competition) { create(:competition, :registration_open, :visible, organizers: [organizer], events: Event.where(id: %w(222 333))) }
+    let(:zzyzx_user) { create(:user, name: "Zzyzx") }
+    let(:registration) { create(:registration, competition: competition, user: zzyzx_user) }
 
     before :each do
       sign_in organizer
@@ -20,7 +20,7 @@ RSpec.describe RegistrationsController, clean_db_with_truncation: true do
   end
 
   context "register" do
-    let(:competition) { FactoryBot.create :competition, :confirmed, :visible, :registration_open }
+    let(:competition) { create(:competition, :confirmed, :visible, :registration_open) }
 
     it "redirects to competition root if competition is not using WCA registration" do
       competition.use_wca_registration = false
@@ -39,9 +39,9 @@ RSpec.describe RegistrationsController, clean_db_with_truncation: true do
 
   describe 'POST #refund_payment' do
     context 'when signed in as a competitor' do
-      let(:competition) { FactoryBot.create(:competition, :stripe_connected, :visible, :registration_open, events: Event.where(id: %w(222 333))) }
-      let!(:user) { FactoryBot.create(:user, :wca_id) }
-      let!(:registration) { FactoryBot.create(:registration, competition: competition, user: user) }
+      let(:competition) { create(:competition, :stripe_connected, :visible, :registration_open, events: Event.where(id: %w(222 333))) }
+      let!(:user) { create(:user, :wca_id) }
+      let!(:registration) { create(:registration, competition: competition, user: user) }
 
       it 'does not allow access and redirects to root_url' do
         sign_in user
@@ -57,16 +57,16 @@ RSpec.describe RegistrationsController, clean_db_with_truncation: true do
     end
 
     context 'when signed in as organizer' do
-      let(:organizer) { FactoryBot.create(:user) }
+      let(:organizer) { create(:user) }
       let(:competition) {
-        FactoryBot.create(:competition, :stripe_connected, :visible,
-                          organizers: [organizer],
-                          events: Event.where(id: %w(222 333)),
-                          use_wca_registration: true,
-                          starts: (ClearConnectedPaymentIntegrations::DELAY_IN_DAYS + 1).days.ago,
-                          registration_close: (ClearConnectedPaymentIntegrations::DELAY_IN_DAYS + 3).days.ago)
+        create(:competition, :stripe_connected, :visible,
+               organizers: [organizer],
+               events: Event.where(id: %w(222 333)),
+               use_wca_registration: true,
+               starts: (ClearConnectedPaymentIntegrations::DELAY_IN_DAYS + 1).days.ago,
+               registration_close: (ClearConnectedPaymentIntegrations::DELAY_IN_DAYS + 3).days.ago)
       }
-      let!(:registration) { FactoryBot.create(:registration, competition: competition, user: organizer) }
+      let!(:registration) { create(:registration, competition: competition, user: organizer) }
 
       context "processes a payment" do
         before :each do

@@ -504,11 +504,5 @@ RSpecRails/InferredSpecType:
 
 # Factory Bot
 
-FactoryBot/ConsistentParenthesesStyle:
-  Enabled: false
-
-FactoryBot/SyntaxMethods:
-  Enabled: false
-
 FactoryBot/ExcessiveCreateList:
   Enabled: false

@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe CompetitionEvent do
-  let(:competition) { FactoryBot.create :competition, event_ids: %w(333 444) }
+  let(:competition) { create(:competition, event_ids: %w(333 444)) }
   let(:competition_event) { competition.competition_events.find_by_event_id("333") }
 
   it "it's okay if there are no rounds yet" do

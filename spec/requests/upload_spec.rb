@@ -15,7 +15,7 @@ RSpec.describe ResultsSubmissionController, type: :request do
   end
 
   context "signed in as delegate" do
-    sign_in { FactoryBot.create :delegate }
+    sign_in { create(:delegate) }
 
     it "can upload an image" do
       post upload_image_path, params: { image: image }

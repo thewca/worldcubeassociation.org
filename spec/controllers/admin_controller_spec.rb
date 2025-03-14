@@ -4,10 +4,10 @@ require 'rails_helper'
 
 RSpec.describe AdminController, type: :controller do
   describe 'merge_people' do
-    sign_in { FactoryBot.create :admin }
+    sign_in { create(:admin) }
 
-    let(:person1) { FactoryBot.create(:person) }
-    let(:person2) { FactoryBot.create(:person, person1.attributes.symbolize_keys!.slice(:name, :countryId, :gender, :dob)) }
+    let(:person1) { create(:person) }
+    let(:person2) { create(:person, person1.attributes.symbolize_keys!.slice(:name, :countryId, :gender, :dob)) }
 
     it 'can merge people' do
       post :do_merge_people, params: { merge_people: { person1_wca_id: person1.wca_id, person2_wca_id: person2.wca_id } }
@@ -18,10 +18,10 @@ RSpec.describe AdminController, type: :controller do
   end
 
   describe 'reassign_wca_id' do
-    sign_in { FactoryBot.create :admin }
+    sign_in { create(:admin) }
 
-    let(:user1) { FactoryBot.create(:user_with_wca_id) }
-    let(:user2) { FactoryBot.create(:user, user1.attributes.symbolize_keys!.slice(:name, :country_iso2, :gender, :dob)) }
+    let(:user1) { create(:user_with_wca_id) }
+    let(:user2) { create(:user, user1.attributes.symbolize_keys!.slice(:name, :country_iso2, :gender, :dob)) }
 
     it 'can validate reassign wca id' do
       get :validate_reassign_wca_id, params: { reassign_wca_id: { account1: user1, account2: user2 } }

@@ -230,7 +230,7 @@ FactoryBot.define do
 
     trait :with_delegate_report do
       after(:create) do |competition|
-        FactoryBot.create :delegate_report, :posted, competition: competition
+        FactoryBot.create(:delegate_report, :posted, competition: competition)
       end
     end
 
