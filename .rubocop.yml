@@ -284,9 +284,6 @@ Rails/SkipsModelValidations:
 Rails/PluralizationGrammar:
   Enabled: false
 
-Rails/I18nLocaleAssignment:
-  Enabled: false
-
 Rails/RedundantForeignKey:
   Enabled: false
 
