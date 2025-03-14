@@ -381,8 +381,6 @@ class Competition < ApplicationRecord
       errors.add(:competition_events, I18n.t('competitions.errors.advancement_condition_must_be_present_for_all_non_final_rounds'))
     end
   end
-
-  attr_accessor :closing_full_registration
   private def should_validate_registration_closing?
     confirmed_or_visible? && (will_save_change_to_registration_close? || will_save_change_to_confirmed_at?) && !closing_full_registration
   end
@@ -715,8 +713,6 @@ class Competition < ApplicationRecord
     delegates.include?(user) || trainee_delegates.include?(user) || organizers.include?(user)
   end
 
-  attr_accessor :being_cloned_from_id, :being_cloned_from_cache
-
   def being_cloned_from
     @being_cloned_from_cache ||= Competition.find_by(id: being_cloned_from_id)
   end
@@ -773,8 +769,6 @@ class Competition < ApplicationRecord
       end
     end
   end
-
-  attr_accessor :clone_tabs
 
   before_validation :compute_coordinates
   before_validation :create_id_and_cell_name
@@ -964,7 +958,7 @@ class Competition < ApplicationRecord
     end
   end
 
-  attr_accessor :editing_user_id
+  attr_accessor :closing_full_registration, :being_cloned_from_id, :being_cloned_from_cache, :clone_tabs, :editing_user_id
 
   validate :user_cannot_demote_themself
   def user_cannot_demote_themself

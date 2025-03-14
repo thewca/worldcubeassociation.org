@@ -45,9 +45,6 @@ Metrics/PerceivedComplexity:
     - 'app/models/competition.rb'
     - 'lib/results_validators/*.rb'
 
-Style/AccessorGrouping:
-  Enabled: false
-
 Style/SoleNestedConditional:
   Enabled: false
 

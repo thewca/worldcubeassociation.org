@@ -102,8 +102,6 @@ class User < ApplicationRecord
 
   strip_attributes only: [:wca_id, :country_iso2]
 
-  attr_accessor :current_user
-
   devise :registerable,
          :recoverable, :rememberable, :trackable, :validatable,
          :confirmable
@@ -217,7 +215,7 @@ class User < ApplicationRecord
 
   # Virtual attribute for people claiming a WCA ID.
   attr_accessor :dob_verification
-  attr_accessor :was_incorrect_wca_id_claim
+  attr_accessor :current_user, :was_incorrect_wca_id_claim
 
   MAX_INCORRECT_WCA_ID_CLAIM_COUNT = 5
   validate :claim_wca_id_validations
