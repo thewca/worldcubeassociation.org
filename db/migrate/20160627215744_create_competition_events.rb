@@ -10,7 +10,7 @@ class CreateCompetitionEvents < ActiveRecord::Migration
     add_index :competition_events, [:competition_id, :event_id], unique: true
 
     # Move the data to the new table.
-    Competition.all.find_each do |competition|
+    Competition.find_each do |competition|
       # See https://github.com/thewca/worldcubeassociation.org/issues/95 for
       # what these equal signs are about.
       (competition.eventSpecs || []).split.each do |event_spec|

@@ -43,7 +43,7 @@ class Competition < ApplicationRecord
   accepts_nested_attributes_for :championships, allow_destroy: true
   accepts_nested_attributes_for :competition_series, allow_destroy: false
 
-  validates_numericality_of :base_entry_fee_lowest_denomination, greater_than_or_equal_to: 0, if: :entry_fee_required?
+  validates :base_entry_fee_lowest_denomination, numericality: { greater_than_or_equal_to: 0, if: :entry_fee_required? }
   monetize :base_entry_fee_lowest_denomination,
            as: "base_entry_fee",
            allow_nil: true,
@@ -199,12 +199,12 @@ class Competition < ApplicationRecord
   NEWCOMER_MONTH_ENABLED = true
   NEWCOMER_MONTH_RESERVATIONS_FRACTION = 0.5
 
-  validates_inclusion_of :competitor_limit_enabled, in: [true, false], if: :competitor_limit_required?
-  validates_numericality_of :competitor_limit, greater_than_or_equal_to: 1, less_than_or_equal_to: MAX_COMPETITOR_LIMIT, if: :competitor_limit_enabled?
+  validates :competitor_limit_enabled, inclusion: { in: [true, false], if: :competitor_limit_required? }
+  validates :competitor_limit, numericality: { greater_than_or_equal_to: 1, less_than_or_equal_to: MAX_COMPETITOR_LIMIT, if: :competitor_limit_enabled? }
   validates :competitor_limit_reason, presence: true, if: :competitor_limit_enabled?
   validates :guests_enabled, acceptance: { accept: true, message: I18n.t('competitions.errors.must_ask_about_guests_if_specifying_limit') }, if: :guests_per_registration_limit_enabled?
-  validates_numericality_of :guests_per_registration_limit, only_integer: true, greater_than_or_equal_to: 1, less_than_or_equal_to: MAX_GUEST_LIMIT, allow_blank: true, if: :some_guests_allowed?
-  validates_numericality_of :events_per_registration_limit, only_integer: true, greater_than_or_equal_to: 1, less_than_or_equal_to: :number_of_events, allow_blank: true, if: :event_restrictions?
+  validates :guests_per_registration_limit, numericality: { only_integer: true, greater_than_or_equal_to: 1, less_than_or_equal_to: MAX_GUEST_LIMIT, allow_blank: true, if: :some_guests_allowed? }
+  validates :events_per_registration_limit, numericality: { only_integer: true, greater_than_or_equal_to: 1, less_than_or_equal_to: :number_of_events, allow_blank: true, if: :event_restrictions? }
   validates :id, presence: true, uniqueness: { case_sensitive: false }, length: { maximum: MAX_ID_LENGTH },
                  format: { with: VALID_ID_RE }, if: :name_valid_or_updating?
   private def name_valid_or_updating?
@@ -218,20 +218,20 @@ class Competition < ApplicationRecord
   validates :external_website, format: { with: URL_RE }, allow_blank: true
   validates :external_registration_page, presence: true, format: { with: URL_RE }, if: :external_registration_page_required?
 
-  validates_inclusion_of :countryId, in: Country::ALL_COUNTRY_IDS
+  validates :countryId, inclusion: { in: Country::ALL_COUNTRY_IDS }
   validates :currency_code, inclusion: { in: Money::Currency, message: proc { I18n.t('competitions.errors.invalid_currency_code') } }
 
-  validates_numericality_of :refund_policy_percent, greater_than_or_equal_to: 0, less_than_or_equal_to: 100, if: :refund_policy_percent_required?
+  validates :refund_policy_percent, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 100, if: :refund_policy_percent_required? }
   validates :refund_policy_limit_date, presence: true, if: :refund_policy_percent?
-  validates_inclusion_of :on_the_spot_registration, in: [true, false], if: :on_the_spot_registration_required?
-  validates_numericality_of :on_the_spot_entry_fee_lowest_denomination, greater_than_or_equal_to: 0, if: :on_the_spot_entry_fee_required?
-  validates_inclusion_of :allow_registration_edits, in: [true, false]
-  validates_inclusion_of :allow_registration_self_delete_after_acceptance, in: [true, false]
+  validates :on_the_spot_registration, inclusion: { in: [true, false], if: :on_the_spot_registration_required? }
+  validates :on_the_spot_entry_fee_lowest_denomination, numericality: { greater_than_or_equal_to: 0, if: :on_the_spot_entry_fee_required? }
+  validates :allow_registration_edits, inclusion: { in: [true, false] }
+  validates :allow_registration_self_delete_after_acceptance, inclusion: { in: [true, false] }
   monetize :on_the_spot_entry_fee_lowest_denomination,
            as: "on_the_spot_base_entry_fee",
            allow_nil: true,
            with_model_currency: :currency_code
-  validates_numericality_of :guests_entry_fee_lowest_denomination, greater_than_or_equal_to: 0, if: :guests_entry_fee_required?
+  validates :guests_entry_fee_lowest_denomination, numericality: { greater_than_or_equal_to: 0, if: :guests_entry_fee_required? }
   monetize :guests_entry_fee_lowest_denomination,
            as: "guests_base_fee",
            allow_nil: true,
@@ -242,7 +242,7 @@ class Competition < ApplicationRecord
   # where we legitimately don't know whether or not they used qualification times so we have to set them to NULL.
   validates :qualification_results_reason, presence: true, if: :persisted_uses_qualification?
   validates :event_restrictions_reason, presence: true, if: :event_restrictions?
-  validates_inclusion_of :main_event_id, in: ->(comp) { [nil].concat(comp.persisted_events_id) }
+  validates :main_event_id, inclusion: { in: ->(comp) { [nil].concat(comp.persisted_events_id) } }
 
   # Validations are used to show form errors to the user. If string columns aren't validated for length, it produces an unexplained error for the user
   validates :name, length: { maximum: MAX_NAME_LENGTH }

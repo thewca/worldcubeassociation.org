@@ -22,14 +22,14 @@ class Person < ApplicationRecord
   }
 
   validates :name, presence: true
-  validates_inclusion_of :countryId, in: Country::WCA_COUNTRY_IDS
+  validates :countryId, inclusion: { in: Country::WCA_COUNTRY_IDS }
 
   # If creating a brand new person (ie: with subId equal to 1), then the
   # WCA ID must be unique.
   # Note: in general WCA ID are not unique in the table, as one person with
   # the same WCA ID may have multiple subIds (eg: if they changed nationality).
-  validates_uniqueness_of :wca_id, if: -> { new_record? && subId == 1 }, case_sensitive: true
-  validates_format_of :wca_id, with: User::WCA_ID_RE
+  validates :wca_id, uniqueness: { if: -> { new_record? && subId == 1 }, case_sensitive: true }
+  validates :wca_id, format: { with: User::WCA_ID_RE }
 
   # After checking with the WRT there are still missing dob in the db.
   # Therefore we'll enforce dob validation only for new records.

@@ -9,7 +9,7 @@ class CreateRegistrationEvents < ActiveRecord::Migration
     add_index :registration_events, [:registration_id, :event_id], unique: true
 
     # Move the data to the new table.
-    Registration.all.find_each do |registration|
+    Registration.find_each do |registration|
       (registration.eventIds || "").split.each do |event_id|
         RegistrationEvent.create!(registration_id: registration.id, event_id: event_id)
       end

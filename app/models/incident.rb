@@ -10,7 +10,7 @@ class Incident < ApplicationRecord
   scope :resolved, -> { where.not(resolved_at: nil) }
 
   validate :digest_sent_at_consistent
-  validates_presence_of :title
+  validates :title, presence: true
 
   include Taggable
 
