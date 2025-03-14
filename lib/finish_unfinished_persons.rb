@@ -124,8 +124,7 @@ module FinishUnfinishedPersons
       unless available_per_semi.key?(semi_id)
         last_id_taken = Person.where('wca_id LIKE ?', "#{semi_id}__")
                               .order(wca_id: :desc)
-                              .pluck(:wca_id)
-                              .first
+                              .pick(:wca_id)
 
         if last_id_taken.present?
           # 4 because the year prefix is 4 digits long

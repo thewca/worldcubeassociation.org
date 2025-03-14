@@ -287,15 +287,6 @@ Rails/PluralizationGrammar:
 Rails/I18nLocaleAssignment:
   Enabled: false
 
-Rails/Pluck:
-  Enabled: false
-
-Rails/Pick:
-  Enabled: false
-
-Rails/Delegate:
-  Enabled: false
-
 Rails/ReversibleMigration:
   Enabled: false
 
@@ -317,16 +308,10 @@ Rails/DangerousColumnNames:
 Rails/RedundantForeignKey:
   Enabled: false
 
-Rails/WhereRange:
-  Enabled: false
-
 Rails/InverseOf:
   Enabled: false
 
 Rails/Validation:
-  Enabled: false
-
-Rails/WhereExists:
   Enabled: false
 
 Rails/HasManyOrHasOneDependent:
@@ -348,9 +333,6 @@ Rails/RakeEnvironment:
   Enabled: false
 
 Rails/ApplicationRecord:
-  Enabled: false
-
-Rails/WhereEquals:
   Enabled: false
 
 Rails/ReadWriteAttribute:

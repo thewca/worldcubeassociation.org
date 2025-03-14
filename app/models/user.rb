@@ -370,9 +370,7 @@ class User < ApplicationRecord
   end
 
   # Convenience method for Discord SSO, because we need to maintain backwards compatibility
-  def avatar_url
-    avatar.url
-  end
+  delegate :url, to: :avatar, prefix: true
 
   # This method was copied and overridden from https://github.com/plataformatec/devise/blob/master/lib/devise/models/confirmable.rb#L182
   # to enable separate emails for sign-up and email reconfirmation
@@ -412,7 +410,7 @@ class User < ApplicationRecord
   end
 
   private def at_least_senior_teams_committees_member?(group)
-    teams_committees_at_least_senior_roles.where(group_id: group.id).exists?
+    teams_committees_at_least_senior_roles.exists?(group_id: group.id)
   end
 
   private def group_leader?(group)

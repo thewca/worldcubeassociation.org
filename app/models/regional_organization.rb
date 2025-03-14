@@ -6,7 +6,7 @@ class RegionalOrganization < ApplicationRecord
   has_one_attached :extra_file
 
   scope :currently_acknowledged, -> { where("start_date IS NOT NULL AND (end_date IS NULL OR end_date > ?)", Date.today) }
-  scope :pending_approval, -> { where("start_date IS NULL") }
+  scope :pending_approval, -> { where(start_date: nil) }
   scope :previously_acknowledged, -> { where("start_date IS NOT NULL AND end_date IS NOT NULL AND end_date < ?", Date.today) }
 
   validates_presence_of :name, :country, :email, :address, :directors_and_officers, :area_description, :past_and_current_activities, :future_plans

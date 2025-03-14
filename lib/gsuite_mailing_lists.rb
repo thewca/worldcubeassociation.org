@@ -34,7 +34,7 @@ module GsuiteMailingLists
       # and doing it for them only for the sake of retrieving one key seems overkill.
       #
       # see https://github.com/googleapis/google-api-ruby-client/blob/google-api-client/v0.53.0/generated/google-apis-admin_directory_v1/lib/google/apis/admin_directory_v1/representations.rb#L555
-      board_aliases = board_aliases.aliases.map { |a| a['alias'] }
+      board_aliases = board_aliases.aliases.pluck('alias')
 
       contained_aliases = desired_emails & board_aliases
       unless contained_aliases.empty?

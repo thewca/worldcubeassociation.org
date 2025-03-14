@@ -6,8 +6,6 @@ import {
   generateDbTokenUrl,
   serverStatusPageUrl,
   checkRecordsUrl,
-  computeAuxiliaryDataUrl,
-  generateDataExportsUrl,
   fixResultsUrl,
   mergeProfilesUrl,
   reassignConnectedWcaIdUrl,
@@ -38,6 +36,8 @@ import EditPersonRequestsPage from './pages/EditPersonRequestsPage';
 import AnonymizationScriptPage from './pages/AnonymizationScriptPage';
 import CreateNewcomersPage from './pages/CreateNewcomersPage';
 import RunValidatorsForm from './pages/RunValidatorsPage/RunValidatorsForm';
+import ComputeAuxiliaryDataPage from './pages/ComputeAuxiliaryDataPage';
+import GenerateDataExportsPage from './pages/GenerateDataExportsPage';
 
 export default {
   [PANEL_PAGES.postingDashboard]: {
@@ -170,11 +170,11 @@ export default {
   },
   [PANEL_PAGES.computeAuxiliaryData]: {
     name: 'Compute Auxiliary Data',
-    link: computeAuxiliaryDataUrl,
+    component: ComputeAuxiliaryDataPage,
   },
   [PANEL_PAGES.generateDataExports]: {
     name: 'Generate Data Exports',
-    link: generateDataExportsUrl,
+    component: GenerateDataExportsPage,
   },
   [PANEL_PAGES.fixResults]: {
     name: 'Fix Results',

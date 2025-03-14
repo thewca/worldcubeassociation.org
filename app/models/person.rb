@@ -219,7 +219,7 @@ class Person < ApplicationRecord
         podiums[championship_type.to_sym] = championship_podiums_with_condition do |results|
           results
             .joins(:country, competition: { championships: :eligible_country_iso2s_for_championship })
-            .where("eligible_country_iso2s_for_championship.championship_type = ?", championship_type)
+            .where(eligible_country_iso2s_for_championship: { championship_type: championship_type })
             .where("eligible_country_iso2s_for_championship.eligible_country_iso2 = Countries.iso2")
         end
       end
@@ -363,6 +363,18 @@ class Person < ApplicationRecord
     )
 
     new_wca_id
+  end
+
+  def private_attributes_for_user(user)
+    return [] if user.nil?
+
+    if user.wca_id == wca_id || user.any_kind_of_delegate?
+      %w[dob]
+    elsif user.can_admin_results?
+      %w[incorrect_wca_id_claim_count dob]
+    else
+      []
+    end
   end
 
   def serializable_hash(options = nil)
