@@ -2,7 +2,6 @@
 # frozen_string_literal: true
 
 class CreateTranslatorsGroup < ActiveRecord::Migration[7.1]
-  # rubocop:disable Style/NumericLiterals
   VERIFIED_TRANSLATORS_BY_LOCALE = {
     "ca" => [94007, 15295],
     "cs" => [8583],
