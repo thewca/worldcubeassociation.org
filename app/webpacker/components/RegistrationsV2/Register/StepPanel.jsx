@@ -73,7 +73,7 @@ export default function StepPanel({
   qualifications,
 }) {
   const {
-    isRegistered, isAccepted, isRejected, hasPaid,
+    isRegistered, isAccepted, isRejected, hasPaid, isPolling,
   } = useRegistration();
 
   const registrationFinished = (isRegistered && hasPaid) || (isRegistered && !competitionInfo['using_payment_integrations?']);
@@ -91,6 +91,12 @@ export default function StepPanel({
   }, [competitionInfo, isRegistered]);
 
   const [activeIndex, setActiveIndex] = useState(() => {
+    // skip ahead to competingStep if we are processing
+    if (isPolling) {
+      return steps.findIndex(
+        (step) => step === competingStepConfig,
+      );
+    }
     // Don't show payment panel if a user was accepted (for people with waived payment)
     if (registrationFinished || isAccepted || isRejected) {
       return steps.findIndex(
