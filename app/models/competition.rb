@@ -1809,7 +1809,7 @@ class Competition < ApplicationRecord
         raise WcaExceptions::BadApiParameter.new("Invalid continent: '#{params[:continent]}'")
       end
       competitions = competitions.joins('INNER JOIN Countries ON Competitions.countryId = Countries.id')
-                                 .where('continentId = ?', continent.id)
+                                 .where(continentId: continent.id)
     end
 
     if params[:country_iso2].present?
@@ -1826,7 +1826,7 @@ class Competition < ApplicationRecord
         raise WcaExceptions::BadApiParameter.new("Invalid delegate: '#{params[:delegate]}'")
       end
       competitions = competitions.left_outer_joins(:delegates)
-                                 .where('competition_delegates.delegate_id = ?', delegate_user.id)
+                                 .where(competition_delegates: { delegate_id: delegate_user.id })
     end
 
     if params[:event_ids].present?
@@ -1847,7 +1847,7 @@ class Competition < ApplicationRecord
       if !start_date
         raise WcaExceptions::BadApiParameter.new("Invalid start: '#{params[:start]}'")
       end
-      competitions = competitions.where("start_date >= ?", start_date)
+      competitions = competitions.where(start_date: start_date..)
     end
 
     if params[:end].present?
@@ -1855,7 +1855,7 @@ class Competition < ApplicationRecord
       if !end_date
         raise WcaExceptions::BadApiParameter.new("Invalid end: '#{params[:end]}'")
       end
-      competitions = competitions.where("end_date <= ?", end_date)
+      competitions = competitions.where(end_date: ..end_date)
     end
 
     if params[:ongoing_and_future].present?
@@ -1863,7 +1863,7 @@ class Competition < ApplicationRecord
       if !target_date
         raise WcaExceptions::BadApiParameter.new("Invalid ongoing_and_future: '#{params[:ongoing_and_future]}'")
       end
-      competitions = competitions.where("end_date >= ?", target_date)
+      competitions = competitions.where(end_date: target_date..)
     end
 
     if params[:announced_after].present?

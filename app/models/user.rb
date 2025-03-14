@@ -412,7 +412,7 @@ class User < ApplicationRecord
   end
 
   private def at_least_senior_teams_committees_member?(group)
-    teams_committees_at_least_senior_roles.where(group_id: group.id).exists?
+    teams_committees_at_least_senior_roles.exists?(group_id: group.id)
   end
 
   private def group_leader?(group)

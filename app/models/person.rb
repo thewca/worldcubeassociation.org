@@ -219,7 +219,7 @@ class Person < ApplicationRecord
         podiums[championship_type.to_sym] = championship_podiums_with_condition do |results|
           results
             .joins(:country, competition: { championships: :eligible_country_iso2s_for_championship })
-            .where("eligible_country_iso2s_for_championship.championship_type = ?", championship_type)
+            .where(eligible_country_iso2s_for_championship: { championship_type: championship_type })
             .where("eligible_country_iso2s_for_championship.eligible_country_iso2 = Countries.iso2")
         end
       end

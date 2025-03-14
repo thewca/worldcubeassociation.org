@@ -49,8 +49,8 @@ class Result < ApplicationRecord
   scope :average_succeeded, -> { where("average > 0") }
   scope :podium, -> { final.succeeded.where(pos: [1..3]) }
   scope :winners, -> { final.succeeded.where(pos: 1).joins(:event).order("Events.rank") }
-  scope :before, ->(date) { joins(:competition).where("end_date < ?", date) }
-  scope :on_or_before, ->(date) { joins(:competition).where("end_date <= ?", date) }
+  scope :before, ->(date) { joins(:competition).where(competition: { end_date: ...date }) }
+  scope :on_or_before, ->(date) { joins(:competition).where(competition: { end_date: ..date }) }
   scope :single_better_than, ->(time) { where("best < ? AND best > 0", time) }
   scope :average_better_than, ->(time) { where("average < ? AND average > 0", time) }
   scope :in_event, ->(event_id) { where(eventId: event_id) }
