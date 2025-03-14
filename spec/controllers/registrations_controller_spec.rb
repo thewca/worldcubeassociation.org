@@ -71,23 +71,23 @@ RSpec.describe RegistrationsController, :clean_db_with_truncation do
       context "processes a payment" do
         before :each do
           sign_in organizer
+
           post :load_payment_intent, params: {
             id: registration.id,
             payment_integration: :stripe,
             amount: registration.outstanding_entry_fees.cents,
           }
+
           payment_intent = registration.reload.payment_intents.first
-          Stripe::PaymentIntent.confirm(
-            payment_intent.payment_record.stripe_id,
-            { payment_method: 'pm_card_visa' },
-            stripe_account: competition.payment_account_for(:stripe).account_id,
-          )
+          payment_intent.payment_record.confirm_remote_for_test("pm_card_visa")
+
           get :payment_completion, params: {
             competition_id: competition.id,
             payment_integration: :stripe,
             payment_intent: payment_intent.payment_record.stripe_id,
             payment_intent_client_secret: payment_intent.client_secret,
           }
+
           @payment = registration.reload.registration_payments.first
         end
 
