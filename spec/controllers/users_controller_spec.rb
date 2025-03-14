@@ -5,8 +5,9 @@ require 'rails_helper'
 RSpec.describe UsersController do
   describe "GET #edit" do
     let(:user) { create(:user_with_wca_id) }
+    let(:admin) { create(:admin) }
 
-    sign_in { create(:admin) }
+    sign_in { admin }
 
     it "populates user" do
       get :edit, params: { id: user.id }
@@ -185,7 +186,8 @@ RSpec.describe UsersController do
   end
 
   describe "GET #index" do
-    sign_in { create(:admin) }
+    let(:admin) { create(:admin) }
+    sign_in { admin }
 
     it "is injection safe" do
       get :index, params: { format: :json, sort: "country", order: "ASC -- HMM" }

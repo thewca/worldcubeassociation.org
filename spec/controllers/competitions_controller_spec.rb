@@ -38,7 +38,8 @@ RSpec.describe CompetitionsController do
     end
 
     context 'when signed in as an admin' do
-      sign_in { create(:admin) }
+      let(:admin) { create(:admin) }
+      sign_in { admin }
 
       it 'shows the competition creation form' do
         get :new
@@ -153,7 +154,8 @@ RSpec.describe CompetitionsController do
     end
 
     context 'when signed in as an admin' do
-      sign_in { create(:admin) }
+      let(:admin) { create(:admin) }
+      sign_in { admin }
 
       it "creates a new competition" do
         creation_params = build_competition_update(Competition.new, name: "FatBoyXPC 2015", venue: { countryId: "USA" }, website: { usesWcaRegistration: false })
@@ -269,7 +271,8 @@ RSpec.describe CompetitionsController do
 
   describe 'POST #update' do
     context 'when signed in as an admin' do
-      sign_in { create(:admin) }
+      let(:admin) { create(:admin) }
+      sign_in { admin }
 
       it 'can confirm competition' do
         put :confirm, params: { competition_id: competition }
@@ -1119,7 +1122,8 @@ RSpec.describe CompetitionsController do
     end
 
     context 'when signed in as an admin' do
-      sign_in { create(:admin) }
+      let(:admin) { create(:admin) }
+      sign_in { admin }
 
       it 'shows the edit competition events form' do
         get :edit_events, params: { id: competition.id }
@@ -1149,7 +1153,8 @@ RSpec.describe CompetitionsController do
     end
 
     context 'when signed in as an admin' do
-      sign_in { create(:admin) }
+      let(:admin) { create(:admin) }
+      sign_in { admin }
 
       it 'displays payment setup status' do
         get :payment_integration_setup, params: { competition_id: competition }

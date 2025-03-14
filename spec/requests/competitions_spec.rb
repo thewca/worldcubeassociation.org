@@ -7,7 +7,8 @@ RSpec.describe "competitions" do
 
   describe "PATCH #update_competition" do
     context "when signed in as admin" do
-      sign_in { create(:admin) }
+      let(:admin) { create(:admin) }
+      sign_in { admin }
 
       it 'can confirm competition' do
         put competition_confirm_path(competition)

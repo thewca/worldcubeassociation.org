@@ -19,7 +19,8 @@ RSpec.describe PollsController do
   end
 
   context "logged in as an admin" do
-    sign_in { create(:admin) }
+    let(:admin) { create(:admin) }
+    sign_in { admin }
     it "shows poll results" do
       poll = create(:poll)
       get :results, params: { id: poll.id }
