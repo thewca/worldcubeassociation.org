@@ -332,9 +332,6 @@ Rails/ShortI18n:
 Rails/RakeEnvironment:
   Enabled: false
 
-Rails/ApplicationRecord:
-  Enabled: false
-
 Rails/ReadWriteAttribute:
   Enabled: false
 
