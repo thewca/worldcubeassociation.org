@@ -350,9 +350,6 @@ Rails/UniqueValidationWithoutIndex:
 Rails/DotSeparatedKeys:
   Enabled: false
 
-Rails/I18nLazyLookup:
-  Enabled: false
-
 Rails/LexicallyScopedActionFilter:
   Enabled: false
 

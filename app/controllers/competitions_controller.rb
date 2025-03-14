@@ -566,7 +566,7 @@ class CompetitionsController < ApplicationController
         CompetitionsMailer.notify_organizer_of_removal_from_competition(current_user, competition, removed_organizer).deliver_later
       end
 
-      response_data = { status: "ok", message: t('competitions.update.save_success') }
+      response_data = { status: "ok", message: t('.save_success') }
 
       if persisted_id != competition.id
         response_data[:redirect] = competition_admin_view ? competition_admin_edit_path(competition) : edit_competition_path(competition)
