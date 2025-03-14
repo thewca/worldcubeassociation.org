@@ -14,7 +14,7 @@ def within_modal(&)
   within(find_modal(&))
 end
 
-RSpec.feature "Registering for a competition", js: true do
+RSpec.feature "Registering for a competition", :js do
   let!(:user) { FactoryBot.create :user }
   let!(:delegate) { FactoryBot.create :delegate }
   let(:competition) { FactoryBot.create :competition, :registration_open, :visible, :editable_registrations, delegates: [delegate] }
