@@ -61,6 +61,10 @@ class PostsController < ApplicationController
     @post = Post.new(params[:post] ? post_params : {})
   end
 
+  def edit
+    @post = find_post
+  end
+
   def create
     @post = Post.new(post_params)
     @post.author = current_user
@@ -70,10 +74,6 @@ class PostsController < ApplicationController
     else
       render json: { status: 'validation failed', errors: @post.errors }, status: :bad_request
     end
-  end
-
-  def edit
-    @post = find_post
   end
 
   def update
