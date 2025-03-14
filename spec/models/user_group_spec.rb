@@ -12,9 +12,9 @@ RSpec.describe UserGroup, type: :model do
   let(:asia_west_region) { GroupsMetadataDelegateRegions.find_by!(friendly_id: 'asia-west').user_group }
   let(:india_region) { GroupsMetadataDelegateRegions.find_by!(friendly_id: 'india').user_group }
   let(:australia_region) { GroupsMetadataDelegateRegions.find_by!(friendly_id: 'australia').user_group }
-  let(:delegate_roles) { FactoryBot.create_list(:delegate_role, 44) }
+  let(:delegate_roles) { create_list(:delegate_role, 44) }
   let(:delegate_users) { delegate_roles.map(&:user) }
-  let(:users) { FactoryBot.create_list(:user_with_wca_id, 10) }
+  let(:users) { create_list(:user_with_wca_id, 10) }
 
   before do
     delegate_roles[0..4].each do |role|
@@ -71,12 +71,12 @@ RSpec.describe UserGroup, type: :model do
     delegate_roles[42..43].each do |role|
       role.update(end_date: Date.today - 1.day)
     end
-    FactoryBot.create :wrc_leader_role, user_id: users[0].id, start_date: Time.now - 10.months, updated_at: Time.now - 10.months
-    FactoryBot.create :wrc_senior_member_role, user_id: users[1].id, start_date: Time.now - 10.months, updated_at: Time.now - 10.months
-    FactoryBot.create :wrc_senior_member_role, user_id: users[2].id, start_date: Time.now - 10.months, updated_at: Time.now - 10.months
-    FactoryBot.create :wrc_member_role, user_id: users[3].id, start_date: Time.now - 10.months, updated_at: Time.now - 10.months
-    FactoryBot.create :wrc_member_role, user_id: users[4].id, start_date: Time.now - 10.months, updated_at: Time.now - 10.months
-    FactoryBot.create :wrc_member_role, user_id: users[5].id, start_date: Time.now - 10.months, updated_at: Time.now - 10.months
+    create(:wrc_leader_role, user_id: users[0].id, start_date: Time.now - 10.months, updated_at: Time.now - 10.months)
+    create(:wrc_senior_member_role, user_id: users[1].id, start_date: Time.now - 10.months, updated_at: Time.now - 10.months)
+    create(:wrc_senior_member_role, user_id: users[2].id, start_date: Time.now - 10.months, updated_at: Time.now - 10.months)
+    create(:wrc_member_role, user_id: users[3].id, start_date: Time.now - 10.months, updated_at: Time.now - 10.months)
+    create(:wrc_member_role, user_id: users[4].id, start_date: Time.now - 10.months, updated_at: Time.now - 10.months)
+    create(:wrc_member_role, user_id: users[5].id, start_date: Time.now - 10.months, updated_at: Time.now - 10.months)
   end
 
   it "direct_child_groups has the direct child groups of the user group" do
@@ -153,8 +153,8 @@ RSpec.describe UserGroup, type: :model do
 
   context "Monthly digest changes" do
     it "Added 2 new members" do
-      FactoryBot.create :wrc_member_role, user_id: users[6].id, start_date: Time.now - 4.days
-      FactoryBot.create :wrc_member_role, user_id: users[7].id, start_date: Time.now - 4.days
+      create(:wrc_member_role, user_id: users[6].id, start_date: Time.now - 4.days)
+      create(:wrc_member_role, user_id: users[7].id, start_date: Time.now - 4.days)
 
       expected_output = [
         "<br><b>Changes in WCA Regulations Committee</b>",
@@ -169,7 +169,7 @@ RSpec.describe UserGroup, type: :model do
       wrc_group = UserGroup.teams_committees_group_wrc
       team_member = wrc_group.roles[3]
       team_member.update_columns(end_date: Time.now - 5.days, updated_at: Time.now - 5.days)
-      FactoryBot.create :wrc_senior_member_role, user_id: team_member.user.id, start_date: Time.now - 5.days
+      create(:wrc_senior_member_role, user_id: team_member.user.id, start_date: Time.now - 5.days)
 
       expected_output = [
         "<br><b>Changes in WCA Regulations Committee</b>",
@@ -186,8 +186,8 @@ RSpec.describe UserGroup, type: :model do
       new_leader = wrc_group.roles[1]
       cur_leader.update_columns(end_date: Time.now - 10.days, updated_at: Time.now - 10.days)
       new_leader.update_columns(end_date: Time.now - 10.days, updated_at: Time.now - 10.days)
-      FactoryBot.create :wrc_senior_member_role, user_id: users[0].id, start_date: Time.now - 10.days
-      FactoryBot.create :wrc_leader_role, user_id: new_leader.user.id, start_date: Time.now - 10.days
+      create(:wrc_senior_member_role, user_id: users[0].id, start_date: Time.now - 10.days)
+      create(:wrc_leader_role, user_id: new_leader.user.id, start_date: Time.now - 10.days)
 
       expected_output = [
         "<br><b>Changes in WCA Regulations Committee</b>",

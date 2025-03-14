@@ -27,7 +27,7 @@ RSpec.feature "Set the locale" do
     expect(page).to have_content "English"
     expect(page).not_to have_content "Français"
 
-    user = FactoryBot.create :user, preferred_locale: "fr"
+    user = create(:user, preferred_locale: "fr")
     sign_in user
     visit "/"
 

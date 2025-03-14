@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe Competition do
   it "defines a valid competition" do
-    competition = FactoryBot.build :competition, name: "Foo: Test - 2015"
+    competition = build(:competition, name: "Foo: Test - 2015")
     expect(competition).to be_valid
     expect(competition.id).to eq "FooTest2015"
     expect(competition.name).to eq "Foo: Test - 2015"
@@ -20,7 +20,7 @@ RSpec.describe Competition do
       "Moldavian Nationals – Winter 2016",
       "PingSkills Cubing Classic, 2016",
     ].each do |name|
-      expect(FactoryBot.build(:competition, name: name)).to be_invalid_with_errors(
+      expect(build(:competition, name: name)).to be_invalid_with_errors(
         name: ["must end with a year and must contain only alphanumeric characters, dashes(-), ampersands(&), periods(.), colons(:), apostrophes('), and spaces( )"],
       )
     end
@@ -28,23 +28,23 @@ RSpec.describe Competition do
 
   it "rejects invalid city names" do
     city = "San Diego"
-    expect(FactoryBot.build(:competition, countryId: "USA", cityName: city)).to be_invalid_with_errors(
+    expect(build(:competition, countryId: "USA", cityName: city)).to be_invalid_with_errors(
       cityName: ["is not of the form 'city, state'"],
     )
 
     city = "San Diego, California"
-    expect(FactoryBot.build(:competition, countryId: "USA", cityName: city)).to be_valid
+    expect(build(:competition, countryId: "USA", cityName: city)).to be_valid
   end
 
   context "when there is an entry fee" do
     it "correctly identifies there is a fee when there is only a base fee" do
-      competition = FactoryBot.build :competition, name: "Foo: Test - 2015", base_entry_fee_lowest_denomination: 10
+      competition = build(:competition, name: "Foo: Test - 2015", base_entry_fee_lowest_denomination: 10)
       expect(competition.has_fees?).to be true
       expect(competition.has_base_entry_fee?).to eq competition.base_entry_fee
     end
 
     it "correctly identifies there is a fee when there is only event fees" do
-      competition = FactoryBot.create :competition, name: "Foo: Test - 2015", base_entry_fee_lowest_denomination: 0
+      competition = create(:competition, name: "Foo: Test - 2015", base_entry_fee_lowest_denomination: 0)
       competition.competition_events.first.update_attribute(:fee_lowest_denomination, 100)
       expect(competition.has_base_entry_fee?).to be nil
       expect(competition.has_fees?).to be true
@@ -52,7 +52,7 @@ RSpec.describe Competition do
   end
 
   it "requires entry fees" do
-    competition = FactoryBot.create :competition
+    competition = create(:competition)
     competition.confirmed = true
 
     # Required for non-multi venue competitions.
@@ -72,7 +72,7 @@ RSpec.describe Competition do
   end
 
   it "handles free guest entry status" do
-    competition = FactoryBot.create :competition
+    competition = create(:competition)
 
     competition.guest_entry_status = Competition.guest_entry_statuses['free']
     expect(competition.all_guests_allowed?).to be true
@@ -85,41 +85,41 @@ RSpec.describe Competition do
 
   context "when competition has a competitor limit" do
     it "requires competitor limit to be a number" do
-      competition = FactoryBot.build :competition, competitor_limit_enabled: true
+      competition = build(:competition, competitor_limit_enabled: true)
       expect(competition).to be_invalid_with_errors(competitor_limit: ["is not a number"])
     end
 
     it "requires competitor limit to be greater than 0" do
-      competition = FactoryBot.build :competition, competitor_limit_enabled: true, competitor_limit: 0, competitor_limit_reason: 'Because'
+      competition = build(:competition, competitor_limit_enabled: true, competitor_limit: 0, competitor_limit_reason: 'Because')
       expect(competition).to be_invalid_with_errors(competitor_limit: ["must be greater than or equal to 1"])
     end
 
     it "requires competitor limit to be less than 5001" do
-      competition = FactoryBot.build :competition, competitor_limit_enabled: true, competitor_limit: 5001, competitor_limit_reason: 'Because'
+      competition = build(:competition, competitor_limit_enabled: true, competitor_limit: 5001, competitor_limit_reason: 'Because')
       expect(competition).to be_invalid_with_errors(competitor_limit: ["must be less than or equal to 5000"])
     end
 
     it "requires a competitor limit reason" do
-      competition = FactoryBot.build :competition, competitor_limit_enabled: true, competitor_limit: 100
+      competition = build(:competition, competitor_limit_enabled: true, competitor_limit: 100)
       expect(competition).to be_invalid_with_errors(competitor_limit_reason: ["can't be blank"])
     end
   end
 
   context "when it is part of a Series" do
-    let!(:series) { FactoryBot.create :competition_series }
-    let!(:competition) { FactoryBot.create :competition, competition_series: series, latitude: 51_508_147, longitude: -75_848, starts: 1.week.ago }
+    let!(:series) { create(:competition_series) }
+    let!(:competition) { create(:competition, competition_series: series, latitude: 51_508_147, longitude: -75_848, starts: 1.week.ago) }
 
     context "checks WCRP requirements" do
       it "cannot link two competitions that are more than 100km apart" do
-        too_far_away_competition = FactoryBot.build :competition, competition_series: series, series_base: competition,
-                                                                  series_distance_km: 16_990, distance_direction_deg: 330.56652339271716
+        too_far_away_competition = build(:competition, competition_series: series, series_base: competition,
+                                                       series_distance_km: 16_990, distance_direction_deg: 330.56652339271716)
 
         # also expect the competition to report the exact problem
         expect(too_far_away_competition).to be_invalid_with_errors(competition_series: [I18n.t('competitions.errors.series_distance_km', competition: competition.name)])
       end
 
       it "cannot link two competitions that are more than 33 days apart" do
-        too_long_ago_competition = FactoryBot.build :competition, competition_series: series, series_base: competition, series_distance_days: 1095
+        too_long_ago_competition = build(:competition, competition_series: series, series_base: competition, series_distance_days: 1095)
 
         # also expect the competition to report the exact problem
         expect(too_long_ago_competition).to be_invalid_with_errors(competition_series: [I18n.t('competitions.errors.series_distance_days', competition: competition.name)])
@@ -127,10 +127,10 @@ RSpec.describe Competition do
 
       it "cannot extend the WCRP limitations by transitive property" do
         # Say you're organising three competitions that have venues on the same, 200km-long straight line street.
-        straight_line_series = FactoryBot.create :competition_series, wcif_id: "HaversineSeries2015", name: "Haversine Series 2015"
+        straight_line_series = create(:competition_series, wcif_id: "HaversineSeries2015", name: "Haversine Series 2015")
 
         # First, you create the comp at one end of the street. No linking yet, all good.
-        one_end_competition = FactoryBot.create :competition, name: "One End Open 2015", competition_series: straight_line_series
+        one_end_competition = create(:competition, name: "One End Open 2015", competition_series: straight_line_series)
         expect(one_end_competition).to be_valid
 
         # span a circle around the equator
@@ -140,32 +140,32 @@ RSpec.describe Competition do
         just_barely_distance_km = CompetitionSeries::MAX_SERIES_DISTANCE_KM - 1
 
         # Second, you create the comp at the middle of the street. It is within 100km from the original competition so still all good.
-        middle_competition = FactoryBot.create :competition, name: "Middle Open 2015", competition_series: straight_line_series,
-                                                             series_base: one_end_competition, series_distance_km: just_barely_distance_km,
-                                                             distance_direction_deg: walking_direction_deg
+        middle_competition = create(:competition, name: "Middle Open 2015", competition_series: straight_line_series,
+                                                  series_base: one_end_competition, series_distance_km: just_barely_distance_km,
+                                                  distance_direction_deg: walking_direction_deg)
         expect(middle_competition).to be_valid
 
         # Last, you create the competition at the other end of the road. You _can_ link it to the middle one,
         # which is (just a tiny bit under) 100km away making it a perfect partner competition. But it is not acceptable
         # as partner competition for the first comp at the other end of the road, and our code should detect that.
-        other_end_competition = FactoryBot.build :competition, name: "Other End Open 2015", competition_series: straight_line_series,
-                                                               series_base: middle_competition, series_distance_km: just_barely_distance_km,
-                                                               distance_direction_deg: walking_direction_deg
+        other_end_competition = build(:competition, name: "Other End Open 2015", competition_series: straight_line_series,
+                                                    series_base: middle_competition, series_distance_km: just_barely_distance_km,
+                                                    distance_direction_deg: walking_direction_deg)
 
         expect(other_end_competition).to be_invalid_with_errors(competition_series: [I18n.t('competitions.errors.series_distance_km', competition: one_end_competition.name)])
       end
     end
 
     it "does not include itself as a sibling" do
-      partner_competition = FactoryBot.create :competition, competition_series: series, series_base: competition
+      partner_competition = create(:competition, competition_series: series, series_base: competition)
 
       expect(competition.series_sibling_competitions).to eq [partner_competition]
       expect(series.competitions.count).to eq 2
     end
 
     context "it can be linked with more than one competition" do
-      let!(:same_place_different_day) { FactoryBot.create :competition, competition_series: series, series_base: competition, series_distance_days: 7 }
-      let!(:same_day_different_place) { FactoryBot.create :competition, competition_series: series, series_base: competition, series_distance_km: 4.628, distance_direction_deg: 185.6446971397621 }
+      let!(:same_place_different_day) { create(:competition, competition_series: series, series_base: competition, series_distance_days: 7) }
+      let!(:same_day_different_place) { create(:competition, competition_series: series, series_base: competition, series_distance_km: 4.628, distance_direction_deg: 185.6446971397621) }
 
       it "can be linked with more than one competition" do
         expect(competition.series_sibling_competitions.count).to eq 2
@@ -180,7 +180,7 @@ RSpec.describe Competition do
 
   context "delegates" do
     it "delegates for future comps must be current delegates" do
-      competition = FactoryBot.build :competition, :with_delegate, :future
+      competition = build(:competition, :with_delegate, :future)
       competition.delegates.first.delegate_roles.first.update!(end_date: Date.today)
 
       expect(competition).to be_invalid_with_errors(staff_delegate_ids: ["are not all Delegates"],
@@ -188,7 +188,7 @@ RSpec.describe Competition do
     end
 
     it "delegates for past comps no longer need to be delegates" do
-      competition = FactoryBot.build :competition, :with_delegate, :past
+      competition = build(:competition, :with_delegate, :past)
       competition.delegates.first.delegate_roles.first.update(end_date: Date.today)
 
       expect(competition).to be_valid
@@ -196,8 +196,8 @@ RSpec.describe Competition do
   end
 
   it "handles missing start/end_date" do
-    competition = FactoryBot.build :competition, start_date: nil, end_date: nil
-    competition2 = FactoryBot.build :competition, start_date: nil, end_date: nil
+    competition = build(:competition, start_date: nil, end_date: nil)
+    competition2 = build(:competition, start_date: nil, end_date: nil)
     expect(competition.is_probably_over?).to be false
     expect(competition.started?).to be false
     expect(competition.in_progress?).to be false
@@ -206,30 +206,30 @@ RSpec.describe Competition do
   end
 
   it "calculates the correct days until another future competition" do
-    competition = FactoryBot.build :competition, start_date: Date.parse("2021-01-01"), end_date: Date.parse("2021-01-03")
-    competition2 = FactoryBot.build :competition, start_date: Date.parse("2021-02-01"), end_date: Date.parse("2021-02-02")
+    competition = build(:competition, start_date: Date.parse("2021-01-01"), end_date: Date.parse("2021-01-03"))
+    competition2 = build(:competition, start_date: Date.parse("2021-02-01"), end_date: Date.parse("2021-02-02"))
     expect(competition.days_until_competition?(competition2)).to be 29
   end
 
   it "calculates the correct days until another past competition" do
-    competition = FactoryBot.build :competition, start_date: Date.parse("2021-02-01"), end_date: Date.parse("2021-02-02")
-    competition2 = FactoryBot.build :competition, start_date: Date.parse("2021-01-01"), end_date: Date.parse("2021-01-03")
+    competition = build(:competition, start_date: Date.parse("2021-02-01"), end_date: Date.parse("2021-02-02"))
+    competition2 = build(:competition, start_date: Date.parse("2021-01-01"), end_date: Date.parse("2021-01-03"))
     expect(competition.days_until_competition?(competition2)).to be(-29)
   end
 
   it "requires that registration_open be before registration_close" do
-    competition = FactoryBot.build :competition, name: "Foo Test 2015", starts: 1.month.from_now, ends: 1.month.from_now, registration_open: 1.week.ago, registration_close: 2.weeks.ago, use_wca_registration: true
+    competition = build(:competition, name: "Foo Test 2015", starts: 1.month.from_now, ends: 1.month.from_now, registration_open: 1.week.ago, registration_close: 2.weeks.ago, use_wca_registration: true)
     expect(competition).to be_invalid_with_errors(registration_close: ["registration close must be after registration open"])
   end
 
   it "requires registration period if use_wca_registration" do
-    competition = FactoryBot.build :competition, name: "Foo Test 2015", registration_open: nil, registration_close: nil, use_wca_registration: true
+    competition = build(:competition, name: "Foo Test 2015", registration_open: nil, registration_close: nil, use_wca_registration: true)
     expect(competition).to be_invalid_with_errors(registration_open: ["required"])
     expect(competition).to be_invalid_with_errors(registration_close: ["required"])
   end
 
   it "truncates name as necessary to produce id and cellName" do
-    competition = FactoryBot.build :competition, name: "Alexander and the Terrible Horrible No Good 2015"
+    competition = build(:competition, name: "Alexander and the Terrible Horrible No Good 2015")
     expect(competition).to be_valid
     expect(competition.id).to eq "AlexanderandtheTerribleHorri2015"
     expect(competition.name).to eq "Alexander and the Terrible Horrible No Good 2015"
@@ -237,26 +237,26 @@ RSpec.describe Competition do
   end
 
   it "saves without losing data" do
-    competition = FactoryBot.create :competition
+    competition = create(:competition)
     json_data = competition.as_json
     competition.save
     expect(competition.as_json).to eq json_data
   end
 
   it "requires that name end in a year" do
-    competition = FactoryBot.build :competition, name: "Name without year"
+    competition = build(:competition, name: "Name without year")
     expect(competition).to be_invalid_with_errors(
       name: ["must end with a year and must contain only alphanumeric characters, dashes(-), ampersands(&), periods(.), colons(:), apostrophes('), and spaces( )"],
     )
   end
 
   it "requires that cellName end in a year" do
-    competition = FactoryBot.build :competition, cellName: "Name no year"
+    competition = build(:competition, cellName: "Name no year")
     expect(competition).to be_invalid_with_errors(cellName: ["must end with a year and must contain only alphanumeric characters, dashes(-), ampersands(&), periods(.), colons(:), apostrophes('), and spaces( )"])
   end
 
   describe "invalid date formats become nil" do
-    let(:competition) { FactoryBot.create :competition }
+    let(:competition) { create(:competition) }
 
     it "start_date" do
       competition.start_date = "i am not a date"
@@ -270,7 +270,7 @@ RSpec.describe Competition do
   end
 
   it "requires that both dates are empty or both are valid" do
-    competition = FactoryBot.create :competition
+    competition = create(:competition)
     expect(competition).to be_valid
 
     competition.start_date = "1987-12-04"
@@ -282,14 +282,14 @@ RSpec.describe Competition do
   end
 
   it "requires that the start is before the end" do
-    competition = FactoryBot.create :competition
+    competition = create(:competition)
     competition.start_date = "1987-12-06"
     competition.end_date = "1987-12-05"
     expect(competition).to be_invalid_with_errors(end_date: ["End date cannot be before start date."])
   end
 
   it "last less than MAX_SPAN_DAYS days" do
-    competition = FactoryBot.create :competition
+    competition = create(:competition)
     competition.start_date = Date.today.strftime("%F")
     competition.end_date = (Date.today + Competition::MAX_SPAN_DAYS).strftime("%F")
     expect(competition).to be_invalid_with_errors(
@@ -298,113 +298,113 @@ RSpec.describe Competition do
   end
 
   it "requires the registration period to be before the competition" do
-    competition = FactoryBot.build :competition, name: "Foo Test 2015", starts: 1.month.from_now, ends: 1.month.from_now, registration_open: 2.months.from_now, registration_close: 3.months.from_now, use_wca_registration: true
+    competition = build(:competition, name: "Foo Test 2015", starts: 1.month.from_now, ends: 1.month.from_now, registration_open: 2.months.from_now, registration_close: 3.months.from_now, use_wca_registration: true)
     expect(competition).to be_invalid_with_errors(
       registration_close: [I18n.t('competitions.errors.registration_period_after_start')],
     )
   end
 
   it "requires the waiting list deadline to be after the registration close" do
-    competition = FactoryBot.build :competition,
-                                   name: "Foo Test 2015",
-                                   starts: 1.month.from_now,
-                                   ends: 1.month.from_now,
-                                   registration_open: 1.month.ago,
-                                   registration_close: 1.week.from_now,
-                                   use_wca_registration: true,
-                                   waiting_list_deadline_date: 1.day.from_now
+    competition = build(:competition,
+                        name: "Foo Test 2015",
+                        starts: 1.month.from_now,
+                        ends: 1.month.from_now,
+                        registration_open: 1.month.ago,
+                        registration_close: 1.week.from_now,
+                        use_wca_registration: true,
+                        waiting_list_deadline_date: 1.day.from_now)
     expect(competition).to be_invalid_with_errors(
       waiting_list_deadline_date: [I18n.t('competitions.errors.waiting_list_deadline_before_registration_close')],
     )
   end
 
   it "requires the waiting list deadline to be after the refund deadline" do
-    competition = FactoryBot.build :competition,
-                                   name: "Foo Test 2015",
-                                   starts: 1.month.from_now,
-                                   ends: 1.month.from_now,
-                                   registration_open: 1.month.ago,
-                                   registration_close: 1.week.from_now,
-                                   use_wca_registration: true,
-                                   waiting_list_deadline_date: 2.weeks.from_now,
-                                   refund_policy_limit_date: 3.weeks.from_now
+    competition = build(:competition,
+                        name: "Foo Test 2015",
+                        starts: 1.month.from_now,
+                        ends: 1.month.from_now,
+                        registration_open: 1.month.ago,
+                        registration_close: 1.week.from_now,
+                        use_wca_registration: true,
+                        waiting_list_deadline_date: 2.weeks.from_now,
+                        refund_policy_limit_date: 3.weeks.from_now)
     expect(competition).to be_invalid_with_errors(
       waiting_list_deadline_date: [I18n.t('competitions.errors.waiting_list_deadline_before_refund_date')],
     )
   end
 
   it "allows the waiting list deadline to be during the competition" do
-    competition = FactoryBot.build :competition,
-                                   name: "Foo Test 2015",
-                                   starts: 1.month.from_now,
-                                   ends: 1.month.from_now + 1.day,
-                                   registration_open: 1.month.ago,
-                                   registration_close: 1.week.from_now,
-                                   use_wca_registration: true,
-                                   waiting_list_deadline_date: 1.months.from_now
+    competition = build(:competition,
+                        name: "Foo Test 2015",
+                        starts: 1.month.from_now,
+                        ends: 1.month.from_now + 1.day,
+                        registration_open: 1.month.ago,
+                        registration_close: 1.week.from_now,
+                        use_wca_registration: true,
+                        waiting_list_deadline_date: 1.months.from_now)
     expect(competition).to be_valid
   end
 
   it "requires the waiting list deadline to be before the competition ends" do
-    competition = FactoryBot.build :competition,
-                                   name: "Foo Test 2015",
-                                   starts: 1.month.from_now,
-                                   ends: 1.month.from_now,
-                                   registration_open: 1.month.ago,
-                                   registration_close: 1.week.from_now,
-                                   use_wca_registration: true,
-                                   waiting_list_deadline_date: 2.months.from_now
+    competition = build(:competition,
+                        name: "Foo Test 2015",
+                        starts: 1.month.from_now,
+                        ends: 1.month.from_now,
+                        registration_open: 1.month.ago,
+                        registration_close: 1.week.from_now,
+                        use_wca_registration: true,
+                        waiting_list_deadline_date: 2.months.from_now)
     expect(competition).to be_invalid_with_errors(
       waiting_list_deadline_date: [I18n.t('competitions.errors.waiting_list_deadline_after_end')],
     )
   end
 
   it "requires the event change deadline to be after the registration close" do
-    competition = FactoryBot.build :competition,
-                                   name: "Foo Test 2015",
-                                   starts: 1.month.from_now,
-                                   ends: 1.month.from_now,
-                                   registration_open: 1.month.ago,
-                                   registration_close: 1.week.from_now,
-                                   use_wca_registration: true,
-                                   event_change_deadline_date: 1.day.from_now
+    competition = build(:competition,
+                        name: "Foo Test 2015",
+                        starts: 1.month.from_now,
+                        ends: 1.month.from_now,
+                        registration_open: 1.month.ago,
+                        registration_close: 1.week.from_now,
+                        use_wca_registration: true,
+                        event_change_deadline_date: 1.day.from_now)
     expect(competition).to be_invalid_with_errors(
       event_change_deadline_date: [I18n.t('competitions.errors.event_change_deadline_before_registration_close')],
     )
   end
 
   it "requires the event change deadline to be before the competition ends" do
-    competition = FactoryBot.build :competition,
-                                   name: "Foo Test 2015",
-                                   starts: 1.month.from_now,
-                                   ends: 1.month.from_now,
-                                   registration_open: 1.month.ago,
-                                   registration_close: 1.week.from_now,
-                                   use_wca_registration: true,
-                                   event_change_deadline_date: 2.months.from_now
+    competition = build(:competition,
+                        name: "Foo Test 2015",
+                        starts: 1.month.from_now,
+                        ends: 1.month.from_now,
+                        registration_open: 1.month.ago,
+                        registration_close: 1.week.from_now,
+                        use_wca_registration: true,
+                        event_change_deadline_date: 2.months.from_now)
     expect(competition).to be_invalid_with_errors(
       event_change_deadline_date: [I18n.t('competitions.errors.event_change_deadline_after_end_date')],
     )
   end
 
   it "requires the event change deadline to be during the competition if OTS is required" do
-    competition = FactoryBot.build :competition,
-                                   name: "Foo Test 2015",
-                                   starts: 1.month.from_now,
-                                   ends: 1.month.from_now,
-                                   registration_open: 1.month.ago,
-                                   registration_close: 1.week.from_now,
-                                   use_wca_registration: true,
-                                   event_change_deadline_date: 2.weeks.from_now,
-                                   on_the_spot_registration: true,
-                                   on_the_spot_entry_fee_lowest_denomination: 0
+    competition = build(:competition,
+                        name: "Foo Test 2015",
+                        starts: 1.month.from_now,
+                        ends: 1.month.from_now,
+                        registration_open: 1.month.ago,
+                        registration_close: 1.week.from_now,
+                        use_wca_registration: true,
+                        event_change_deadline_date: 2.weeks.from_now,
+                        on_the_spot_registration: true,
+                        on_the_spot_entry_fee_lowest_denomination: 0)
     expect(competition).to be_invalid_with_errors(
       event_change_deadline_date: [I18n.t('competitions.errors.event_change_deadline_with_ots')],
     )
   end
 
   it "requires competition name is not greater than 50 characters" do
-    competition = FactoryBot.build :competition, name: "A really long competition name that is greater than 50 characters 2016"
+    competition = build(:competition, name: "A really long competition name that is greater than 50 characters 2016")
     expect(competition).to be_invalid_with_errors(
       name: ["is too long (maximum is 50 characters)"],
     )
@@ -412,69 +412,69 @@ RSpec.describe Competition do
 
   context "#user_should_post_delegate_report?" do
     it "warns for unposted reports" do
-      competition = FactoryBot.create :competition, :visible, :with_delegate, starts: 2.days.ago
+      competition = create(:competition, :visible, :with_delegate, starts: 2.days.ago)
       delegate = competition.delegates.first
       expect(competition.user_should_post_delegate_report?(delegate)).to be true
     end
 
     it "does not warn for posted reports" do
-      competition = FactoryBot.create :competition, :visible, :with_delegate, starts: 2.days.ago
-      posted_dummy_dr = FactoryBot.create :delegate_report, :posted, competition: competition
+      competition = create(:competition, :visible, :with_delegate, starts: 2.days.ago)
+      posted_dummy_dr = create(:delegate_report, :posted, competition: competition)
       competition.delegate_report.update!(schedule_url: "http://example.com", posted: true, setup_images: posted_dummy_dr.setup_images_blobs)
       delegate = competition.delegates.first
       expect(competition.user_should_post_delegate_report?(delegate)).to be false
     end
 
     it "does not warn for upcoming competitions" do
-      competition = FactoryBot.create :competition, :visible, :with_delegate, starts: 1.days.from_now
+      competition = create(:competition, :visible, :with_delegate, starts: 1.days.from_now)
       delegate = competition.delegates.first
       expect(competition.user_should_post_delegate_report?(delegate)).to be false
     end
 
     it "does not warn board members" do
-      competition = FactoryBot.create :competition, :visible, :with_delegate, starts: 2.days.ago
-      board_member = FactoryBot.create :user, :board_member
+      competition = create(:competition, :visible, :with_delegate, starts: 2.days.ago)
+      board_member = create(:user, :board_member)
       expect(competition.user_should_post_delegate_report?(board_member)).to be false
     end
   end
 
   context "warnings_for" do
-    let(:competition) { FactoryBot.create(:competition) }
+    let(:competition) { create(:competition) }
 
     it "warns if competition name is greater than 32 characters and it's not publicly visible" do
-      competition = FactoryBot.build :competition, name: "A really long competition name 2016", showAtAll: false
+      competition = build(:competition, name: "A really long competition name 2016", showAtAll: false)
       expect(competition).to be_valid
       expect(competition.warnings_for(nil)[:name]).to eq "The competition name is longer than 32 characters. Please edit the competition ID and short name appropriately."
     end
 
     it "does not warn about name greater than 32 when competition is publicly visible" do
-      competition = FactoryBot.build :competition, :confirmed, :visible, name: "A really long competition name 2016"
+      competition = build(:competition, :confirmed, :visible, name: "A really long competition name 2016")
       expect(competition).to be_valid
       expect(competition.warnings_for(nil)[:name]).to be nil
     end
 
     it "warns if competition is not visible" do
-      competition = FactoryBot.build :competition, showAtAll: false
+      competition = build(:competition, showAtAll: false)
       expect(competition).to be_valid
       expect(competition.warnings_for(nil)[:invisible]).to eq "This competition is not visible to the public."
     end
 
     it "warns if competition has no events" do
-      competition = FactoryBot.build :competition, events: []
+      competition = build(:competition, events: [])
       expect(competition).to be_valid
       expect(competition.warnings_for(nil)[:events]).to eq "Please add at least one event before confirming the competition."
     end
 
     it "warns if competition is visible and hasn't been announced" do
-      competition = FactoryBot.create :competition, :confirmed, :visible, :future, announced_at: nil, announced_by: nil
+      competition = create(:competition, :confirmed, :visible, :future, announced_at: nil, announced_by: nil)
       expect(competition).to be_valid
       expect(competition.warnings_for(nil)[:announcement]).to eq "This competition is visible to the public but hasn't been announced yet."
     end
 
     it "warns if competition has results and haven't been posted" do
-      competition = FactoryBot.create :competition, :confirmed, :announced, :visible, :past, results_posted_at: nil, results_posted_by: nil
-      FactoryBot.create(:result, person: FactoryBot.create(:person), competitionId: competition.id)
-      wrt_member = FactoryBot.create :user, :wrt_member
+      competition = create(:competition, :confirmed, :announced, :visible, :past, results_posted_at: nil, results_posted_by: nil)
+      create(:result, person: create(:person), competitionId: competition.id)
+      wrt_member = create(:user, :wrt_member)
 
       expect(competition).to be_valid
       expect(competition.warnings_for(wrt_member)[:results]).to eq "This competition's results are visible but haven't been posted yet."
@@ -483,73 +483,73 @@ RSpec.describe Competition do
 
     it "does not warn about other different championships" do
       # Different championship type
-      FactoryBot.create :competition, :confirmed, :visible, starts: Date.new(2019, 5, 6), championship_types: ["_North America"]
+      create(:competition, :confirmed, :visible, starts: Date.new(2019, 5, 6), championship_types: ["_North America"])
       # Different year
-      FactoryBot.create :competition, :confirmed, :visible, starts: Date.new(2018, 2, 3), championship_types: ["world"]
+      create(:competition, :confirmed, :visible, starts: Date.new(2018, 2, 3), championship_types: ["world"])
 
-      competition = FactoryBot.create :competition, starts: Date.new(2019, 10, 1), championship_types: ["world"]
+      competition = create(:competition, starts: Date.new(2019, 10, 1), championship_types: ["world"])
       expect(competition).to be_valid
       expect(competition.warnings_for(nil)["world"]).to be nil
     end
 
     it "warns if championship already exists" do
-      FactoryBot.create :competition, :confirmed, :visible, starts: Date.new(2019, 5, 6), championship_types: ["world", "_Oceania"]
+      create(:competition, :confirmed, :visible, starts: Date.new(2019, 5, 6), championship_types: ["world", "_Oceania"])
 
-      competition = FactoryBot.create :competition, starts: Date.new(2019, 10, 1), championship_types: ["world"]
+      competition = create(:competition, starts: Date.new(2019, 10, 1), championship_types: ["world"])
       expect(competition).to be_valid
       expect(competition.championship_warnings["world"]).to eq "There is already a World Championship in 2019."
     end
 
     it "warns if competition id starts with a lowercase" do
-      competition = FactoryBot.build :competition, id: "lowercase2021"
+      competition = build(:competition, id: "lowercase2021")
       expect(competition).to be_valid
       expect(competition.warnings_for(nil)[:id]).to eq I18n.t('competitions.messages.id_starts_with_lowercase')
     end
 
     it "do not warn if competition id starts with a number" do
-      competition = FactoryBot.build :competition, id: "1stNumberedComp2021"
+      competition = build(:competition, id: "1stNumberedComp2021")
       expect(competition).to be_valid
       expect(competition.warnings_for(nil)[:id]).to be nil
     end
 
     it "warns if advancement condition isn't present for a non final round" do
-      FactoryBot.create :round, competition: competition, event_id: "333", number: 1
-      FactoryBot.create :round, competition: competition, event_id: "333", number: 2
+      create(:round, competition: competition, event_id: "333", number: 1)
+      create(:round, competition: competition, event_id: "333", number: 2)
 
       expect(competition).to be_valid
       expect(competition.warnings_for(nil)[:advancement_conditions]).to eq I18n.t('competitions.messages.advancement_condition_must_be_present_for_all_non_final_rounds')
     end
 
     it "warns if the cutoff is greater than the time limit for any round" do
-      round = FactoryBot.create :round, competition: competition, event_id: "333", time_limit: TimeLimit.new(centiseconds: 5.minutes.in_centiseconds), cutoff: Cutoff.new(number_of_attempts: 2, attempt_result: 6.minutes.in_centiseconds)
+      round = create(:round, competition: competition, event_id: "333", time_limit: TimeLimit.new(centiseconds: 5.minutes.in_centiseconds), cutoff: Cutoff.new(number_of_attempts: 2, attempt_result: 6.minutes.in_centiseconds))
 
       expect(competition).to be_valid
       expect(competition.warnings_for(nil)['cutoff_is_greater_than_time_limit' + round.id.to_s]).to eq I18n.t('competitions.messages.cutoff_is_greater_than_time_limit', round_number: 1, event: I18n.t('events.333'))
     end
 
     it "warns if the cutoff is very fast" do
-      round = FactoryBot.create :round, competition: competition, event_id: "333", cutoff: Cutoff.new(number_of_attempts: 2, attempt_result: 4.seconds.in_centiseconds)
+      round = create(:round, competition: competition, event_id: "333", cutoff: Cutoff.new(number_of_attempts: 2, attempt_result: 4.seconds.in_centiseconds))
 
       expect(competition).to be_valid
       expect(competition.warnings_for(nil)['cutoff_is_too_fast' + round.id.to_s]).to eq I18n.t('competitions.messages.cutoff_is_too_fast', round_number: 1, event: I18n.t('events.333'))
     end
 
     it "warns if the cutoff is very slow" do
-      round = FactoryBot.create :round, competition: competition, event_id: "333", cutoff: Cutoff.new(number_of_attempts: 2, attempt_result: 11.minutes.in_centiseconds)
+      round = create(:round, competition: competition, event_id: "333", cutoff: Cutoff.new(number_of_attempts: 2, attempt_result: 11.minutes.in_centiseconds))
 
       expect(competition).to be_valid
       expect(competition.warnings_for(nil)['cutoff_is_too_slow' + round.id.to_s]).to eq I18n.t('competitions.messages.cutoff_is_too_slow', round_number: 1, event: I18n.t('events.333'))
     end
 
     it "warns if the time limit is very fast" do
-      round =FactoryBot.create :round, competition: competition, event_id: "333", time_limit: TimeLimit.new(centiseconds: 9.seconds.in_centiseconds)
+      round =create(:round, competition: competition, event_id: "333", time_limit: TimeLimit.new(centiseconds: 9.seconds.in_centiseconds))
 
       expect(competition).to be_valid
       expect(competition.warnings_for(nil)['time_limit_is_too_fast' + round.id.to_s]).to eq I18n.t('competitions.messages.time_limit_is_too_fast', round_number: 1, event: I18n.t('events.333'))
     end
 
     it "warns if the time limit is very slow" do
-      round =FactoryBot.create :round, competition: competition, event_id: "333", time_limit: TimeLimit.new(centiseconds: 11.minutes.in_centiseconds)
+      round =create(:round, competition: competition, event_id: "333", time_limit: TimeLimit.new(centiseconds: 11.minutes.in_centiseconds))
 
       expect(competition).to be_valid
       expect(competition.warnings_for(nil)['time_limit_is_too_slow' + round.id.to_s]).to eq I18n.t('competitions.messages.time_limit_is_too_slow', round_number: 1, event: I18n.t('events.333'))
@@ -558,7 +558,7 @@ RSpec.describe Competition do
 
   context "info_for" do
     it "displays info if competition is finished but results aren't posted" do
-      competition = FactoryBot.build :competition, starts: 1.month.ago
+      competition = build(:competition, starts: 1.month.ago)
       expect(competition).to be_valid
       expect(competition.is_probably_over?).to be true
       expect(competition.results_posted?).to be false
@@ -566,7 +566,7 @@ RSpec.describe Competition do
     end
 
     it "displays info if competition is in progress" do
-      competition = FactoryBot.build :competition, :ongoing
+      competition = build(:competition, :ongoing)
       expect(competition).to be_valid
       expect(competition.in_progress?).to be true
       expect(competition.info_for(nil)[:in_progress]).to eq "This competition is ongoing. Come back after #{I18n.l(competition.end_date, format: :long)} to see the results!"
@@ -575,14 +575,14 @@ RSpec.describe Competition do
       expect(competition.info_for(nil)[:in_progress]).to eq "This competition is ongoing. You can check the live results <a href='https://live.worldcubeassociation.org/link/competitions/#{competition.id}'>here</a>!"
 
       competition.results_posted_at = Time.now
-      competition.results_posted_by = FactoryBot.create(:user, :wrt_member).id
+      competition.results_posted_by = create(:user, :wrt_member).id
       expect(competition.in_progress?).to be false
       expect(competition.info_for(nil)[:in_progress]).to be nil
     end
   end
 
   context "competition with results posted" do
-    let!(:competition) { FactoryBot.create :competition, :ongoing, :results_posted }
+    let!(:competition) { create(:competition, :ongoing, :results_posted) }
 
     it "in_progress? is false" do
       expect(competition.in_progress?).to be false
@@ -598,13 +598,13 @@ RSpec.describe Competition do
   end
 
   it "knows the calendar" do
-    competition = FactoryBot.create :competition
+    competition = create(:competition)
     competition.start_date = "1987-0-04"
     expect(competition.start_date).to be nil
   end
 
   it "gracefully handles multiyear competitions" do
-    competition = FactoryBot.create :competition
+    competition = create(:competition)
     competition.start_date = "1987-11-06"
     competition.end_date = "1988-12-07"
     competition.save
@@ -613,13 +613,13 @@ RSpec.describe Competition do
   end
 
   it "converts microdegrees to degrees" do
-    competition = FactoryBot.build :competition, latitude: 40, longitude: 30
+    competition = build(:competition, latitude: 40, longitude: 30)
     expect(competition.latitude_degrees).to eq 40/1e6
     expect(competition.longitude_degrees).to eq 30/1e6
   end
 
   it "converts degrees to microdegrees when saving" do
-    competition = FactoryBot.create :competition
+    competition = create(:competition)
     competition.latitude_degrees = 3.5
     competition.longitude_degrees = 4.6
     competition.save!
@@ -633,51 +633,51 @@ RSpec.describe Competition do
 
   describe "validates internal website" do
     it "likes http://foo.com" do
-      competition = FactoryBot.build :competition, external_website: "http://foo.com"
+      competition = build(:competition, external_website: "http://foo.com")
       expect(competition).to be_valid
     end
 
     it "dislikes [{foo}{http://foo.com}]" do
-      competition = FactoryBot.build :competition, external_website: "[{foo}{http://foo.com}]"
+      competition = build(:competition, external_website: "[{foo}{http://foo.com}]")
       expect(competition).not_to be_valid
     end
 
     it "dislikes htt://foo" do
-      competition = FactoryBot.build :competition, external_website: "htt://foo"
+      competition = build(:competition, external_website: "htt://foo")
       expect(competition).not_to be_valid
     end
 
     it "doesn't valitate if the inernal website is used" do
-      competition = FactoryBot.build :competition, external_website: "", generate_website: true
+      competition = build(:competition, external_website: "", generate_website: true)
       expect(competition).to be_valid
     end
   end
 
   it "saves staff_delegate_ids" do
-    delegate1 = FactoryBot.create(:delegate, name: "Daniel", email: "daniel@d.com")
-    delegate2 = FactoryBot.create(:delegate, name: "Chris", email: "chris@c.com")
+    delegate1 = create(:delegate, name: "Daniel", email: "daniel@d.com")
+    delegate2 = create(:delegate, name: "Chris", email: "chris@c.com")
     delegates = [delegate1, delegate2]
     staff_delegate_ids = delegates.map(&:id).join(",")
-    competition = FactoryBot.create :competition, staff_delegate_ids: staff_delegate_ids
+    competition = create(:competition, staff_delegate_ids: staff_delegate_ids)
     expect(competition.delegates.sort_by(&:name)).to eq delegates.sort_by(&:name)
   end
 
   it "saves organizer_ids" do
-    organizer1 = FactoryBot.create(:user, name: "Bob", email: "bob@b.com")
-    organizer2 = FactoryBot.create(:user, name: "Jane", email: "jane@j.com")
+    organizer1 = create(:user, name: "Bob", email: "bob@b.com")
+    organizer2 = create(:user, name: "Jane", email: "jane@j.com")
     organizers = [organizer1, organizer2]
     organizer_ids = organizers.map(&:id).join(",")
-    competition = FactoryBot.create :competition, organizer_ids: organizer_ids
+    competition = create(:competition, organizer_ids: organizer_ids)
     expect(competition.organizers.sort_by(&:name)).to eq organizers.sort_by(&:name)
   end
 
   describe "adding/removing events" do
     let(:two_by_two) { Event.find "222" }
     let(:three_by_three) { Event.find "333" }
-    let(:competition) { FactoryBot.create(:competition, :future, use_wca_registration: true, events: [two_by_two, three_by_three]) }
+    let(:competition) { create(:competition, :future, use_wca_registration: true, events: [two_by_two, three_by_three]) }
 
     it "removes registrations when event is removed" do
-      r = FactoryBot.create(:registration, competition: competition, competition_events: competition.competition_events)
+      r = create(:registration, competition: competition, competition_events: competition.competition_events)
 
       expect(RegistrationCompetitionEvent.count).to eq 2
       competition.competition_events.joins(:event).find_by(event: two_by_two).destroy!
@@ -689,24 +689,24 @@ RSpec.describe Competition do
   end
 
   describe "when changing the id of a competition" do
-    let(:competition) { FactoryBot.create(:competition, :future, :with_delegate, :with_organizer, use_wca_registration: true) }
+    let(:competition) { create(:competition, :future, :with_delegate, :with_organizer, use_wca_registration: true) }
 
     it "changes the competition_id of registrations" do
-      reg1 = FactoryBot.create(:registration, competition_id: competition.id)
+      reg1 = create(:registration, competition_id: competition.id)
       competition.update_attribute(:id, "NewID2015")
       expect(reg1.reload.competition_id).to eq "NewID2015"
     end
 
     it "changes the competitionId of results" do
-      r1 = FactoryBot.create(:result, competitionId: competition.id)
-      r2 = FactoryBot.create(:result, competitionId: competition.id)
+      r1 = create(:result, competitionId: competition.id)
+      r2 = create(:result, competitionId: competition.id)
       competition.update_attribute(:id, "NewID2015")
       expect(r1.reload.competitionId).to eq "NewID2015"
       expect(r2.reload.competitionId).to eq "NewID2015"
     end
 
     it "changes the competitionId of scrambles" do
-      scramble1 = FactoryBot.create(:scramble, competitionId: competition.id)
+      scramble1 = create(:scramble, competitionId: competition.id)
       competition.update_attribute(:id, "NewID2015")
       expect(scramble1.reload.competitionId).to eq "NewID2015"
     end
@@ -755,9 +755,9 @@ RSpec.describe Competition do
 
   describe "when deleting a competition" do
     it "deletes delegates" do
-      delegate1 = FactoryBot.create(:delegate)
+      delegate1 = create(:delegate)
       delegates = [delegate1]
-      competition = FactoryBot.create :competition, delegates: delegates
+      competition = create(:competition, delegates: delegates)
 
       cd = CompetitionDelegate.where(competition_id: competition.id, delegate_id: delegate1.id).first
       expect(cd).not_to be_nil
@@ -766,9 +766,9 @@ RSpec.describe Competition do
     end
 
     it "deletes organizers" do
-      organizer1 = FactoryBot.create(:delegate)
+      organizer1 = create(:delegate)
       organizers = [organizer1]
-      competition = FactoryBot.create :competition, organizers: organizers
+      competition = create(:competition, organizers: organizers)
 
       cd = CompetitionOrganizer.where(competition_id: competition.id, organizer_id: organizer1.id).first
       expect(cd).not_to be_nil
@@ -777,15 +777,15 @@ RSpec.describe Competition do
     end
 
     it "deletes registrations" do
-      registration = FactoryBot.create(:registration)
+      registration = create(:registration)
       registration.competition.destroy
       expect(Registration.find_by_id(registration.id)).to be_nil
     end
   end
 
   describe "when confirming or making visible" do
-    let(:competition_with_delegate) { FactoryBot.build :competition, :with_delegate, :with_organizer, generate_website: false }
-    let(:competition_without_delegate) { FactoryBot.build :competition }
+    let(:competition_with_delegate) { build(:competition, :with_delegate, :with_organizer, generate_website: false) }
+    let(:competition_without_delegate) { build(:competition) }
 
     [:confirmed, :showAtAll].each do |action|
       it "can set #{action}" do
@@ -817,7 +817,7 @@ RSpec.describe Competition do
     end
 
     it "sets confirmed_at when setting confirmed true" do
-      competition = FactoryBot.create :competition, :future, :with_delegate, :with_organizer, :with_valid_schedule
+      competition = create(:competition, :future, :with_delegate, :with_organizer, :with_valid_schedule)
       expect(competition.confirmed_at).to be_nil
 
       now = Time.at(Time.now.to_i)
@@ -828,7 +828,7 @@ RSpec.describe Competition do
     end
 
     it "does not update confirmed_at when confirming already confirmed competition" do
-      competition = FactoryBot.create :competition, :future, :confirmed
+      competition = create(:competition, :future, :confirmed)
 
       confirmed_at = competition.confirmed_at
       expect(confirmed_at).not_to be_nil
@@ -839,7 +839,7 @@ RSpec.describe Competition do
     end
 
     it "clears confirmed_at when setting confirmed false" do
-      competition = FactoryBot.create :competition, :confirmed
+      competition = create(:competition, :confirmed)
 
       expect(competition.confirmed_at).not_to be_nil
       competition.update!(confirmed: false)
@@ -848,9 +848,9 @@ RSpec.describe Competition do
   end
 
   describe "receive_registration_emails" do
-    let(:competition) { FactoryBot.create :competition }
-    let(:delegate) { FactoryBot.create :delegate }
-    let(:delegate_enabled) { FactoryBot.create :delegate, registration_notifications_enabled: true }
+    let(:competition) { create(:competition) }
+    let(:delegate) { create(:delegate) }
+    let(:delegate_enabled) { create(:delegate, registration_notifications_enabled: true) }
 
     it "computes receiving_registration_emails? via OR" do
       expect(competition.receiving_registration_emails?(delegate.id)).to be false
@@ -911,30 +911,30 @@ RSpec.describe Competition do
     let(:three_by_three) { Event.find "333" }
     let(:two_by_two) { Event.find "222" }
     let!(:competition) {
-      c = FactoryBot.create :competition, events: [three_by_three, two_by_two]
+      c = create(:competition, events: [three_by_three, two_by_two])
       # Create the results rounds right now so that we can use them later.
-      FactoryBot.create :round, competition: c, total_number_of_rounds: 2, number: 1, event_id: "333"
-      FactoryBot.create :round, competition: c, total_number_of_rounds: 2, number: 2, event_id: "333"
-      FactoryBot.create :round, competition: c, total_number_of_rounds: 1, number: 1, event_id: "222", cutoff: Cutoff.new(number_of_attempts: 2, attempt_result: 60*100)
+      create(:round, competition: c, total_number_of_rounds: 2, number: 1, event_id: "333")
+      create(:round, competition: c, total_number_of_rounds: 2, number: 2, event_id: "333")
+      create(:round, competition: c, total_number_of_rounds: 1, number: 1, event_id: "222", cutoff: Cutoff.new(number_of_attempts: 2, attempt_result: 60*100))
       c
     }
 
-    let(:person_one) { FactoryBot.create :person, name: "One" }
-    let(:person_two) { FactoryBot.create :person, name: "Two" }
-    let(:person_three) { FactoryBot.create :person, name: "Three" }
-    let(:person_four) { FactoryBot.create :person, name: "Four" }
+    let(:person_one) { create(:person, name: "One") }
+    let(:person_two) { create(:person, name: "Two") }
+    let(:person_three) { create(:person, name: "Three") }
+    let(:person_four) { create(:person, name: "Four") }
 
-    let!(:r_333_1_first) { FactoryBot.create :result, competition: competition, eventId: "333", roundTypeId: "1", pos: 1, person: person_one }
-    let!(:r_333_1_second) { FactoryBot.create :result, competition: competition, eventId: "333", roundTypeId: "1", pos: 2, person: person_two }
-    let!(:r_333_1_third) { FactoryBot.create :result, competition: competition, eventId: "333", roundTypeId: "1", pos: 3, person: person_three }
-    let!(:r_333_1_fourth) { FactoryBot.create :result, competition: competition, eventId: "333", roundTypeId: "1", pos: 4, person: person_four }
+    let!(:r_333_1_first) { create(:result, competition: competition, eventId: "333", roundTypeId: "1", pos: 1, person: person_one) }
+    let!(:r_333_1_second) { create(:result, competition: competition, eventId: "333", roundTypeId: "1", pos: 2, person: person_two) }
+    let!(:r_333_1_third) { create(:result, competition: competition, eventId: "333", roundTypeId: "1", pos: 3, person: person_three) }
+    let!(:r_333_1_fourth) { create(:result, competition: competition, eventId: "333", roundTypeId: "1", pos: 4, person: person_four) }
 
-    let!(:r_333_f_first) { FactoryBot.create :result, competition: competition, eventId: "333", roundTypeId: "f", pos: 1, person: person_one }
-    let!(:r_333_f_second) { FactoryBot.create :result, competition: competition, eventId: "333", roundTypeId: "f", pos: 2, person: person_two }
-    let!(:r_333_f_third) { FactoryBot.create :result, competition: competition, eventId: "333", roundTypeId: "f", pos: 3, person: person_three }
+    let!(:r_333_f_first) { create(:result, competition: competition, eventId: "333", roundTypeId: "f", pos: 1, person: person_one) }
+    let!(:r_333_f_second) { create(:result, competition: competition, eventId: "333", roundTypeId: "f", pos: 2, person: person_two) }
+    let!(:r_333_f_third) { create(:result, competition: competition, eventId: "333", roundTypeId: "f", pos: 3, person: person_three) }
 
-    let!(:r_222_c_second_tied) { FactoryBot.create :result, competition: competition, eventId: "222", roundTypeId: "c", pos: 1, person: person_two }
-    let!(:r_222_c_first_tied) { FactoryBot.create :result, competition: competition, eventId: "222", roundTypeId: "c", pos: 1, person: person_one }
+    let!(:r_222_c_second_tied) { create(:result, competition: competition, eventId: "222", roundTypeId: "c", pos: 1, person: person_two) }
+    let!(:r_222_c_first_tied) { create(:result, competition: competition, eventId: "222", roundTypeId: "c", pos: 1, person: person_one) }
 
     it "events_with_podium_results" do
       result = competition.events_with_podium_results
@@ -996,10 +996,10 @@ RSpec.describe Competition do
   end
 
   it "when id is changed, foreign keys are updated as well" do
-    competition = FactoryBot.create(:competition, :with_delegate, :with_organizer, :with_delegate_report, :registration_open)
-    FactoryBot.create(:result, competitionId: competition.id)
-    FactoryBot.create(:competition_tab, competition: competition)
-    FactoryBot.create(:registration, competition: competition)
+    competition = create(:competition, :with_delegate, :with_organizer, :with_delegate_report, :registration_open)
+    create(:result, competitionId: competition.id)
+    create(:competition_tab, competition: competition)
+    create(:registration, competition: competition)
 
     expect do
       competition.update_attribute(:id, "NewName2016")
@@ -1014,14 +1014,14 @@ RSpec.describe Competition do
   end
 
   context "when cloned competition is saved" do
-    let!(:competition) { FactoryBot.create(:competition) }
+    let!(:competition) { create(:competition) }
     let!(:clone) do
       competition.build_clone.tap do |clone|
         clone.name = "Cloned Competition 2016"
         clone.start_date, clone.end_date = [1.month.from_now.strftime("%F")] * 2
       end
     end
-    let!(:tab) { FactoryBot.create(:competition_tab, competition: competition) }
+    let!(:tab) { create(:competition_tab, competition: competition) }
 
     it "tabs are cloned" do
       expect do
@@ -1041,7 +1041,7 @@ RSpec.describe Competition do
   end
 
   context "website" do
-    let!(:competition) { FactoryBot.build(:competition, id: "Competition2016", external_website: "https://external.website.com") }
+    let!(:competition) { build(:competition, id: "Competition2016", external_website: "https://external.website.com") }
 
     it "returns the internal url if WCA website is used as competition's one" do
       competition.generate_website = true
@@ -1054,24 +1054,24 @@ RSpec.describe Competition do
   end
 
   context "competitors" do
-    let!(:competition) { FactoryBot.create(:competition) }
+    let!(:competition) { create(:competition) }
 
     it "works" do
-      FactoryBot.create_list :result, 2, competition: competition
+      create_list(:result, 2, competition: competition)
       expect(competition.competitors.count).to eq 2
     end
 
     it "handles competitors with multiple subIds" do
-      person_with_sub_ids = FactoryBot.create :person_with_multiple_sub_ids
-      FactoryBot.create :result, competition: competition, person: person_with_sub_ids
-      FactoryBot.create :result, competition: competition
+      person_with_sub_ids = create(:person_with_multiple_sub_ids)
+      create(:result, competition: competition, person: person_with_sub_ids)
+      create(:result, competition: competition)
       expect(competition.competitors.count).to eq 2
     end
   end
 
   describe "#contains" do
-    let!(:delegate) { FactoryBot.create :delegate, name: 'Pedro' }
-    let!(:search_comp) { FactoryBot.create :competition, name: "Awesome Comp 2016", cityName: "Piracicaba, São Paulo", countryId: "Brazil", delegates: [delegate] }
+    let!(:delegate) { create(:delegate, name: 'Pedro') }
+    let!(:search_comp) { create(:competition, name: "Awesome Comp 2016", cityName: "Piracicaba, São Paulo", countryId: "Brazil", delegates: [delegate]) }
 
     it "searching with two words" do
       expect(Competition.contains('eso').contains('aci').first).to eq search_comp
@@ -1083,18 +1083,18 @@ RSpec.describe Competition do
   end
 
   describe "#managed_by" do
-    let(:delegate1) { FactoryBot.create(:delegate) }
-    let(:delegate2) { FactoryBot.create(:delegate) }
-    let(:organizer1) { FactoryBot.create(:user) }
-    let(:organizer2) { FactoryBot.create(:user) }
-    let(:organizer3) { FactoryBot.create(:user) }
+    let(:delegate1) { create(:delegate) }
+    let(:delegate2) { create(:delegate) }
+    let(:organizer1) { create(:user) }
+    let(:organizer2) { create(:user) }
+    let(:organizer3) { create(:user) }
     let!(:competition) {
-      FactoryBot.create(:competition, :confirmed, delegates: [delegate1, delegate2], organizers: [organizer1, organizer2])
+      create(:competition, :confirmed, delegates: [delegate1, delegate2], organizers: [organizer1, organizer2])
     }
     let!(:competition_with_different_organizers) {
-      FactoryBot.create(:competition, :confirmed, delegates: [delegate1, delegate2], organizers: [organizer3])
+      create(:competition, :confirmed, delegates: [delegate1, delegate2], organizers: [organizer3])
     }
-    let!(:other_comp) { FactoryBot.create(:competition) }
+    let!(:other_comp) { create(:competition) }
 
     it "finds comps by delegate" do
       expect(Competition.managed_by(delegate1.id)).to match_array [competition, competition_with_different_organizers]
@@ -1106,7 +1106,7 @@ RSpec.describe Competition do
   end
 
   describe "#serializable_hash" do
-    let(:competition) { FactoryBot.create :competition, countryId: "USA" }
+    let(:competition) { create(:competition, countryId: "USA") }
 
     it "sets iso2 to nil when country is missing" do
       expect(competition).to be_valid
@@ -1120,22 +1120,22 @@ RSpec.describe Competition do
 
   describe "#registration_full?" do
     let(:competition) {
-      FactoryBot.create :competition,
-                        :registration_open,
-                        competitor_limit_enabled: true,
-                        competitor_limit: 10,
-                        competitor_limit_reason: "Dude, this is my closet"
+      create(:competition,
+             :registration_open,
+             competitor_limit_enabled: true,
+             competitor_limit: 10,
+             competitor_limit_reason: "Dude, this is my closet")
     }
 
     it "detects full competition" do
       expect(competition.registration_full?).to be false
 
       # Add 9 accepted registrations. The list should not yet be full.
-      FactoryBot.create_list :registration, 9, :accepted, competition: competition
+      create_list(:registration, 9, :accepted, competition: competition)
       expect(competition.registration_full?).to be false
 
       # Add a 10th registration, which will fill up the registration list.
-      new_registration = FactoryBot.create :registration, :accepted, competition: competition
+      new_registration = create(:registration, :accepted, competition: competition)
       expect(competition.registration_full?).to be true
 
       # Delete the 10th accepted registration. Now the list should not be full.
@@ -1143,30 +1143,30 @@ RSpec.describe Competition do
       expect(competition.registration_full?).to be false
 
       # Add an unpaid pending registration. The list should not yet be full.
-      FactoryBot.create :registration, :pending, competition: competition
+      create(:registration, :pending, competition: competition)
       expect(competition.registration_full?).to be false
 
       # Add a paid pending registration. The list should be full.
-      FactoryBot.create :registration, :paid_pending, competition: competition
+      create(:registration, :paid_pending, competition: competition)
       expect(competition.registration_full?).to be true
     end
   end
 
   describe '#registration_full_message' do
     let(:competition) {
-      FactoryBot.create :competition,
-                        :registration_open,
-                        competitor_limit_enabled: true,
-                        competitor_limit: 10,
-                        competitor_limit_reason: "Dude, this is my closet"
+      create(:competition,
+             :registration_open,
+             competitor_limit_enabled: true,
+             competitor_limit: 10,
+             competitor_limit_reason: "Dude, this is my closet")
     }
 
     it "detects full competition warning message" do
       # Add 9 accepted registrations
-      FactoryBot.create_list :registration, 9, :accepted, competition: competition
+      create_list(:registration, 9, :accepted, competition: competition)
 
       # Add a 10th accepted registration
-      new_registration = FactoryBot.create :registration, :accepted, competition: competition
+      new_registration = create(:registration, :accepted, competition: competition)
       expect(competition.registration_full_message).to eq(
         I18n.t('registrations.registration_full', competitor_limit: competition.competitor_limit),
       )
@@ -1175,7 +1175,7 @@ RSpec.describe Competition do
       new_registration.destroy
 
       # Add a paid pending registration
-      FactoryBot.create :registration, :paid_pending, competition: competition
+      create(:registration, :paid_pending, competition: competition)
       expect(competition.registration_full_message).to eq(
         I18n.t('registrations.registration_full_include_waiting_list', competitor_limit: competition.competitor_limit),
       )
@@ -1184,10 +1184,10 @@ RSpec.describe Competition do
 
   context "when changing the competition's date" do
     let(:competition) {
-      FactoryBot.create :competition,
-                        with_schedule: true,
-                        start_date: Date.parse("2018-10-24"),
-                        end_date: Date.parse("2018-10-26")
+      create(:competition,
+             with_schedule: true,
+             start_date: Date.parse("2018-10-24"),
+             end_date: Date.parse("2018-10-26"))
     }
     let(:all_activities) {
       competition.all_activities
@@ -1223,19 +1223,19 @@ RSpec.describe Competition do
 
   describe "has_defined_dates" do
     it "is false when no start and end date" do
-      competition = FactoryBot.create(:competition, start_date: nil, end_date: nil)
+      competition = create(:competition, start_date: nil, end_date: nil)
       expect(competition.has_defined_dates?).to be false
     end
 
     it "is true when has start and end date" do
-      competition = FactoryBot.create(:competition)
+      competition = create(:competition)
       expect(competition.has_defined_dates?).to be true
     end
   end
 
   it "cannot add organizers with missing data" do
-    organizer = FactoryBot.create :user, country_iso2: nil
-    competition = FactoryBot.build :competition, organizers: [organizer]
+    organizer = create(:user, country_iso2: nil)
+    competition = build(:competition, organizers: [organizer])
     expect(competition).not_to be_valid
     expect(competition.errors.messages[:organizer_ids].first).to match "Need a region"
   end
@@ -1245,48 +1245,48 @@ RSpec.describe Competition do
     let(:fmc) { Event.find "333fm" }
 
     it "is false when competition has no championships" do
-      competition = FactoryBot.create(:competition, events: [four_by_four], championship_types: [], countryId: "Canada", cityName: "Vancouver, British Columbia")
+      competition = create(:competition, events: [four_by_four], championship_types: [], countryId: "Canada", cityName: "Vancouver, British Columbia")
       expect(competition.exempt_from_wca_dues?).to be false
     end
 
     it "is false when competition is a national championship" do
-      competition = FactoryBot.create(:competition, events: Event.official, championship_types: ["CA"], countryId: "Canada", cityName: "Vancouver, British Columbia")
+      competition = create(:competition, events: Event.official, championship_types: ["CA"], countryId: "Canada", cityName: "Vancouver, British Columbia")
       expect(competition.exempt_from_wca_dues?).to be false
     end
 
     it "is false when 333fm is the only event and competition is in a single country" do
-      competition = FactoryBot.create(:competition, events: [fmc], championship_types: [], countryId: "Canada", cityName: "Vancouver, British Columbia")
+      competition = create(:competition, events: [fmc], championship_types: [], countryId: "Canada", cityName: "Vancouver, British Columbia")
       expect(competition.exempt_from_wca_dues?).to be false
     end
 
     it "is true when 333fm is the only event and competition is in multiple countries" do
-      competition = FactoryBot.create(:competition, events: [fmc], championship_types: [], countryId: "XN")
+      competition = create(:competition, events: [fmc], championship_types: [], countryId: "XN")
       expect(competition.exempt_from_wca_dues?).to be true
     end
 
     it "is true when 333fm is the only event and competition is in multiple continents" do
-      competition = FactoryBot.create(:competition, events: [fmc], championship_types: [], countryId: "XW")
+      competition = create(:competition, events: [fmc], championship_types: [], countryId: "XW")
       expect(competition.exempt_from_wca_dues?).to be true
     end
 
     it "is true when competition is a national championship and a world championship" do
-      competition = FactoryBot.create(:competition, events: Event.official, championship_types: ["AU", "world"], countryId: "Australia", cityName: "Melbourne, Victoria")
+      competition = create(:competition, events: Event.official, championship_types: ["AU", "world"], countryId: "Australia", cityName: "Melbourne, Victoria")
       expect(competition.exempt_from_wca_dues?).to be true
     end
 
     it "is true when competition is a continental championship" do
-      competition = FactoryBot.create(:competition, events: Event.official, championship_types: ["_North America"], countryId: "Canada", cityName: "Vancouver, British Columbia")
+      competition = create(:competition, events: Event.official, championship_types: ["_North America"], countryId: "Canada", cityName: "Vancouver, British Columbia")
       expect(competition.exempt_from_wca_dues?).to be true
     end
 
     it "is true when competition is a world championship" do
-      competition = FactoryBot.create(:competition, events: Event.official, championship_types: ["world"], countryId: "Korea")
+      competition = create(:competition, events: Event.official, championship_types: ["world"], countryId: "Korea")
       expect(competition.exempt_from_wca_dues?).to be true
     end
   end
 
   context "does not have guest limit" do
-    let(:competition) { FactoryBot.create :competition, guest_entry_status: Competition.guest_entry_statuses['free'] }
+    let(:competition) { create(:competition, guest_entry_status: Competition.guest_entry_statuses['free']) }
 
     it "accepts a competition that asks about guests, but does not have guest limit enabled" do
       competition.guests_enabled = true
@@ -1306,7 +1306,7 @@ RSpec.describe Competition do
   end
 
   context "has guest limit" do
-    let(:competition) { FactoryBot.create :competition, :with_guest_limit }
+    let(:competition) { create(:competition, :with_guest_limit) }
 
     it "accepts a competition that asks about guests and has a valid guest limit enabled" do
       expect(competition).to be_valid
@@ -1318,25 +1318,25 @@ RSpec.describe Competition do
     end
 
     it "requires guest limit to be a number" do
-      competition = FactoryBot.build :competition, :with_guest_limit
+      competition = build(:competition, :with_guest_limit)
       competition.guests_per_registration_limit = "string"
       expect(competition).to be_invalid_with_errors(guests_per_registration_limit: ["is not a number"])
     end
 
     it "requires guest limit to be an integer" do
-      competition = FactoryBot.build :competition, :with_guest_limit
+      competition = build(:competition, :with_guest_limit)
       competition.guests_per_registration_limit = 1.5
       expect(competition).to be_invalid_with_errors(guests_per_registration_limit: ["must be an integer"])
     end
 
     it "requires guest limit to be greater than or equal to 1" do
-      competition = FactoryBot.build :competition, :with_guest_limit
+      competition = build(:competition, :with_guest_limit)
       competition.guests_per_registration_limit = -1
       expect(competition).to be_invalid_with_errors(guests_per_registration_limit: ["must be greater than or equal to 1"])
     end
 
     it "requires guest limit to be less than or equal to 100" do
-      competition = FactoryBot.build :competition, :with_guest_limit
+      competition = build(:competition, :with_guest_limit)
       competition.guests_per_registration_limit = 101
       expect(competition).to be_invalid_with_errors(guests_per_registration_limit: ["must be less than or equal to 100"])
     end
@@ -1345,7 +1345,7 @@ RSpec.describe Competition do
   context "event restrictions and limits" do
     event_ids = ["222", "333", "444", "555"]
     number_of_events = event_ids.length
-    let(:competition) { FactoryBot.build :competition, :with_event_limit, event_ids: event_ids }
+    let(:competition) { build(:competition, :with_event_limit, event_ids: event_ids) }
 
     context "a competition that has event restrictions, reason for the restrictions, and a valid event limit" do
       it "accepts an event limit of one" do
@@ -1423,7 +1423,7 @@ RSpec.describe Competition do
   end
 
   context "has valid schedule" do
-    let(:competition) { FactoryBot.create :competition, :with_valid_schedule }
+    let(:competition) { create(:competition, :with_valid_schedule) }
 
     it "ics export includes all rounds" do
       competition.rounds.map(&:name).each do |r|
@@ -1435,94 +1435,94 @@ RSpec.describe Competition do
   context "payment integration methods" do
     describe "#payment_account_for" do
       it 'returns the connected stripe account' do
-        competition = FactoryBot.create(:competition, :stripe_connected, :paypal_connected)
+        competition = create(:competition, :stripe_connected, :paypal_connected)
         expect(competition.payment_account_for(:stripe).account_id).to eq('acct_19ZQVmE2qoiROdto')
       end
 
       it 'returns the connected paypal account' do
-        competition = FactoryBot.create(:competition, :stripe_connected, :paypal_connected)
+        competition = create(:competition, :stripe_connected, :paypal_connected)
         expect(competition.payment_account_for(:paypal).paypal_merchant_id).to eq('95XC2UKUP2CFW')
       end
 
       it 'returns nil if no matching account is found' do
-        competition = FactoryBot.create(:competition)
+        competition = create(:competition)
         expect(competition.payment_account_for(:paypal)).to be(nil)
       end
     end
 
     describe '#payments_enabled?' do
       it 'returns true when stripe is connected' do
-        competition = FactoryBot.create(:competition, :stripe_connected)
+        competition = create(:competition, :stripe_connected)
         expect(competition.payments_enabled?).to be(true)
       end
 
       it 'returns true when paypal is connected' do
-        competition = FactoryBot.create(:competition, :paypal_connected)
+        competition = create(:competition, :paypal_connected)
         expect(competition.payments_enabled?).to be(true)
       end
 
       it 'returns true when multiple integrations are connected' do
-        competition = FactoryBot.create(:competition, :stripe_connected, :paypal_connected)
+        competition = create(:competition, :stripe_connected, :paypal_connected)
         expect(competition.payments_enabled?).to be(true)
       end
 
       it 'returns false when no integrations are connected' do
-        competition = FactoryBot.create(:competition)
+        competition = create(:competition)
         expect(competition.payments_enabled?).to be(false)
       end
     end
 
     describe '#stripe_connected?' do
       it 'returns true when stripe is connected' do
-        competition = FactoryBot.create(:competition, :stripe_connected)
+        competition = create(:competition, :stripe_connected)
         expect(competition.stripe_connected?).to be(true)
       end
 
       it 'returns false when paypal is connected' do
-        competition = FactoryBot.create(:competition, :paypal_connected)
+        competition = create(:competition, :paypal_connected)
         expect(competition.stripe_connected?).to be(false)
       end
 
       it 'returns false when no integrations are connected' do
-        competition = FactoryBot.create(:competition)
+        competition = create(:competition)
         expect(competition.stripe_connected?).to be(false)
       end
     end
 
     describe '#paypal_connected?' do
       it 'returns false when stripe is connected' do
-        competition = FactoryBot.create(:competition, :stripe_connected)
+        competition = create(:competition, :stripe_connected)
         expect(competition.paypal_connected?).to be(false)
       end
 
       it 'returns true when paypal is connected' do
-        competition = FactoryBot.create(:competition, :paypal_connected)
+        competition = create(:competition, :paypal_connected)
         expect(competition.paypal_connected?).to be(true)
       end
 
       it 'returns false when no integrations are connected' do
-        competition = FactoryBot.create(:competition)
+        competition = create(:competition)
         expect(competition.paypal_connected?).to be(false)
       end
     end
 
     describe '#disconnect' do
       it 'disconnects a stripe payment integration' do
-        competition = FactoryBot.create(:competition, :payment_disconnect_delay_elapsed, :stripe_connected)
+        competition = create(:competition, :payment_disconnect_delay_elapsed, :stripe_connected)
 
         competition.disconnect_payment_integration(:stripe)
         expect(competition.competition_payment_integrations).to eq([])
       end
 
       it 'disconnects a paypal payment integration' do
-        competition = FactoryBot.create(:competition, :payment_disconnect_delay_elapsed, :paypal_connected)
+        competition = create(:competition, :payment_disconnect_delay_elapsed, :paypal_connected)
 
         competition.disconnect_payment_integration(:paypal)
         expect(competition.competition_payment_integrations).to eq([])
       end
 
       it 'disconnecting paypal leaves stripe connected' do
-        competition = FactoryBot.create(:competition, :payment_disconnect_delay_elapsed, :paypal_connected, :stripe_connected)
+        competition = create(:competition, :payment_disconnect_delay_elapsed, :paypal_connected, :stripe_connected)
 
         competition.disconnect_payment_integration(:paypal)
         expect(competition.paypal_connected?).to be(false)
@@ -1530,7 +1530,7 @@ RSpec.describe Competition do
       end
 
       it 'disconnecting stripe leaves paypal connected' do
-        competition = FactoryBot.create(:competition, :payment_disconnect_delay_elapsed, :paypal_connected, :stripe_connected)
+        competition = create(:competition, :payment_disconnect_delay_elapsed, :paypal_connected, :stripe_connected)
 
         competition.disconnect_payment_integration(:stripe)
         expect(competition.paypal_connected?).to be(true)
@@ -1538,7 +1538,7 @@ RSpec.describe Competition do
       end
 
       it 'fails silently on a competition with no payment integrations' do
-        competition = FactoryBot.create(:competition, :payment_disconnect_delay_elapsed)
+        competition = create(:competition, :payment_disconnect_delay_elapsed)
 
         expect { competition.disconnect_payment_integration(:stripe) }.not_to raise_error
       end
@@ -1546,7 +1546,7 @@ RSpec.describe Competition do
 
     describe '#disconnect_all' do
       it 'disconnects both integrations on a comp with two integrations' do
-        competition = FactoryBot.create(:competition, :payment_disconnect_delay_elapsed, :stripe_connected, :paypal_connected)
+        competition = create(:competition, :payment_disconnect_delay_elapsed, :stripe_connected, :paypal_connected)
         expect(competition.paypal_connected?).to be(true)
         expect(competition.stripe_connected?).to be(true)
 
@@ -1555,7 +1555,7 @@ RSpec.describe Competition do
       end
 
       it 'fails silently on a competition with no payment integrations' do
-        competition = FactoryBot.create(:competition, :payment_disconnect_delay_elapsed)
+        competition = create(:competition, :payment_disconnect_delay_elapsed)
 
         expect { competition.disconnect_all_payment_integrations }.not_to raise_error
       end
@@ -1563,7 +1563,7 @@ RSpec.describe Competition do
   end
 
   context "new competition is invalid when" do
-    let!(:new_competition) { FactoryBot.build(:competition, :with_delegate, :future, :visible, :with_valid_schedule) }
+    let!(:new_competition) { build(:competition, :with_delegate, :future, :visible, :with_valid_schedule) }
 
     it "nameReason is too long" do
       new_competition.name_reason = "Veeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeery long name reason"
@@ -1587,8 +1587,8 @@ RSpec.describe Competition do
   end
 
   describe "validate auto accept fields" do
-    let(:auto_accept_comp) { FactoryBot.build(:competition, :auto_accept) }
-    let(:competition) { FactoryBot.create(:competition, use_wca_registration: true) }
+    let(:auto_accept_comp) { build(:competition, :auto_accept) }
+    let(:competition) { create(:competition, use_wca_registration: true) }
 
     context 'cant enable auto-accept when' do
       it 'not using WCA registration' do
@@ -1598,7 +1598,7 @@ RSpec.describe Competition do
       end
 
       it 'any paid-pending registrations exist' do
-        FactoryBot.create(:registration, :paid, :pending, competition: competition)
+        create(:registration, :paid, :pending, competition: competition)
         competition.auto_accept_registrations = true
 
         expect(competition).not_to be_valid
@@ -1606,7 +1606,7 @@ RSpec.describe Competition do
       end
 
       it 'waitlisted registrations exist and accepted competitors < competition limit' do
-        FactoryBot.create(:registration, :waiting_list, competition: competition)
+        create(:registration, :waiting_list, competition: competition)
         competition.auto_accept_registrations = true
 
         expect(competition).not_to be_valid
@@ -1641,46 +1641,46 @@ RSpec.describe Competition do
   end
 
   context 'auto-close registrations' do
-    let!(:auto_close_comp) { FactoryBot.create(:competition, :registration_open, auto_close_threshold: 5) }
-    let(:comp) { FactoryBot.create(:competition, :registration_open, :with_competitor_limit, competitor_limit: 3) }
+    let!(:auto_close_comp) { create(:competition, :registration_open, auto_close_threshold: 5) }
+    let(:comp) { create(:competition, :registration_open, :with_competitor_limit, competitor_limit: 3) }
 
     it 'attempt auto close returns false when it fails' do
       expect(auto_close_comp.attempt_auto_close!).to be(false)
     end
 
     it 'attempt auto close returns true when it succeeds' do
-      FactoryBot.create_list(:registration, 4, :paid_no_hooks, competition: auto_close_comp)
-      FactoryBot.create(:registration, :paid_no_hooks, competition: auto_close_comp)
+      create_list(:registration, 4, :paid_no_hooks, competition: auto_close_comp)
+      create(:registration, :paid_no_hooks, competition: auto_close_comp)
 
       expect(auto_close_comp.attempt_auto_close!).to be(true)
     end
 
     it 'wont auto-close if threshold not reached' do
-      FactoryBot.create(:registration, :paid_no_hooks, competition: auto_close_comp)
+      create(:registration, :paid_no_hooks, competition: auto_close_comp)
       expect(auto_close_comp.attempt_auto_close!).to be(false)
     end
 
     it 'doesnt auto-close if threshold is null' do
-      FactoryBot.create(:registration, :paid_no_hooks, competition: comp)
+      create(:registration, :paid_no_hooks, competition: comp)
       expect(comp.attempt_auto_close!).to be(false)
     end
 
     it 'closes registrations when the close threshold is reached' do
-      FactoryBot.create_list(:registration, 5, :paid_no_hooks, competition: auto_close_comp)
+      create_list(:registration, 5, :paid_no_hooks, competition: auto_close_comp)
       expect(auto_close_comp.attempt_auto_close!).to be(true)
     end
 
     it 'closes registrations when the close threshold is exceeded' do
-      FactoryBot.create_list(:registration, 5, :paid_no_hooks, competition: comp)
+      create_list(:registration, 5, :paid_no_hooks, competition: comp)
 
       comp.update_column(:auto_close_threshold, 5)
-      FactoryBot.create(:registration, :paid_no_hooks, competition: comp)
+      create(:registration, :paid_no_hooks, competition: comp)
 
       expect(comp.attempt_auto_close!).to be(true)
     end
 
     it 'only auto-closes if the registrations are fully registrations' do
-      FactoryBot.create_list(:registration, 5, :partially_paid, competition: auto_close_comp)
+      create_list(:registration, 5, :partially_paid, competition: auto_close_comp)
       expect(auto_close_comp.attempt_auto_close!).to be(false)
     end
 
@@ -1709,14 +1709,14 @@ RSpec.describe Competition do
       end
 
       it 'cant set auto_close_threshold == number of paid registrations' do
-        FactoryBot.create_list(:registration, 3, :paid_no_hooks, competition: auto_close_comp)
+        create_list(:registration, 3, :paid_no_hooks, competition: auto_close_comp)
         auto_close_comp.auto_close_threshold = 3
         expect(auto_close_comp).not_to be_valid
         expect(auto_close_comp.errors[:auto_close_threshold]).to include("Auto close threshold must be greater than the number of currently paid registrations")
       end
 
       it 'cant set auto_close_threshold < number of paid registrations' do
-        FactoryBot.create_list(:registration, 3, :paid_no_hooks, competition: auto_close_comp)
+        create_list(:registration, 3, :paid_no_hooks, competition: auto_close_comp)
         auto_close_comp.auto_close_threshold = 2
         expect(auto_close_comp).not_to be_valid
         expect(auto_close_comp.errors[:auto_close_threshold]).to include("Auto close threshold must be greater than the number of currently paid registrations")
@@ -1732,26 +1732,26 @@ RSpec.describe Competition do
 
   describe 'newcomer month reserved spots' do
     it 'newcomer reserved spots can be nil' do
-      expect(FactoryBot.build(:competition, newcomer_month_reserved_spots: nil, competitor_limit: 100)).to be_valid
+      expect(build(:competition, newcomer_month_reserved_spots: nil, competitor_limit: 100)).to be_valid
     end
 
     it 'can reserve newcomer spots up to 50% of registrations' do
-      expect(FactoryBot.build(:competition, newcomer_month_reserved_spots: 50, competitor_limit: 100)).to be_valid
+      expect(build(:competition, newcomer_month_reserved_spots: 50, competitor_limit: 100)).to be_valid
     end
 
     it 'reserved newcomers spots cant exceed 50% of registrations' do
-      expect(FactoryBot.build(:competition, newcomer_month_reserved_spots: 51, competitor_limit: 100)).to be_invalid_with_errors(
+      expect(build(:competition, newcomer_month_reserved_spots: 51, competitor_limit: 100)).to be_invalid_with_errors(
         newcomer_month_reserved_spots: ['cant reserve more than 50% of spots for newcomers'],
       )
 
-      expect(FactoryBot.build(:competition, newcomer_month_reserved_spots: 50, competitor_limit: 99)).to be_invalid_with_errors(
+      expect(build(:competition, newcomer_month_reserved_spots: 50, competitor_limit: 99)).to be_invalid_with_errors(
         newcomer_month_reserved_spots: ['cant reserve more than 50% of spots for newcomers'],
       )
     end
 
     it 'newcomer_month_reserved_spots cant exceed (competitor limit - non_newcomers)' do
-      comp = FactoryBot.create(:competition, competitor_limit: 10)
-      FactoryBot.create_list(:registration, 6, :accepted, competition: comp)
+      comp = create(:competition, competitor_limit: 10)
+      create_list(:registration, 6, :accepted, competition: comp)
       comp.newcomer_month_reserved_spots = 5
       expect(comp).to be_invalid
       expect(comp.errors.messages[:newcomer_month_reserved_spots]).to include('Desired newcomer month reserved spots exceeds number of spots reservable')
@@ -1759,26 +1759,26 @@ RSpec.describe Competition do
   end
 
   describe '#fully_paid_registrations_count' do
-    let(:comp) { FactoryBot.create(:competition) }
+    let(:comp) { create(:competition) }
 
     it 'doesnt count unpaid registrations' do
-      FactoryBot.create_list(:registration, 5, competition: comp)
+      create_list(:registration, 5, competition: comp)
       expect(comp.fully_paid_registrations_count).to eq(0)
     end
 
     it 'counts registrations == competition fee' do
-      FactoryBot.create_list(:registration, 5, :paid, competition: comp)
+      create_list(:registration, 5, :paid, competition: comp)
       expect(comp.fully_paid_registrations_count).to eq(5)
     end
 
     it 'includes registrations > competition fee' do
-      FactoryBot.create_list(:registration, 5, :overpaid, competition: comp)
+      create_list(:registration, 5, :overpaid, competition: comp)
       expect(comp.fully_paid_registrations_count).to eq(5)
     end
 
     it 'considers refunds when determining total paid' do
-      FactoryBot.create_list(:registration, 5, :paid, competition: comp)
-      FactoryBot.create_list(:registration, 3, :refunded, competition: comp)
+      create_list(:registration, 5, :paid, competition: comp)
+      create_list(:registration, 3, :refunded, competition: comp)
       expect(comp.fully_paid_registrations_count).to eq(5)
     end
   end

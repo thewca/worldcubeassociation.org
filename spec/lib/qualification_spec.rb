@@ -1,16 +1,16 @@
 # frozen_string_literal: true
 
 RSpec.describe Qualification do
-  let(:user) { FactoryBot.create(:user_with_wca_id) }
+  let(:user) { create(:user_with_wca_id) }
   let(:first_competition) {
-    FactoryBot.create(
+    create(
       :competition,
       start_date: '2021-02-01',
       end_date: '2021-02-01',
     )
   }
   let(:second_competition) {
-    FactoryBot.create(
+    create(
       :competition,
       start_date: '2021-03-01',
       end_date: '2021-03-02',
@@ -18,7 +18,7 @@ RSpec.describe Qualification do
   }
 
   let!(:first_333_result) {
-    FactoryBot.create(
+    create(
       :result,
       personId: user.wca_id,
       competitionId: first_competition.id,
@@ -28,7 +28,7 @@ RSpec.describe Qualification do
     )
   }
   let!(:second_333_result) {
-    FactoryBot.create(
+    create(
       :result,
       personId: user.wca_id,
       competitionId: second_competition.id,
@@ -38,7 +38,7 @@ RSpec.describe Qualification do
     )
   }
   let!(:first_oh_result_no_single) {
-    FactoryBot.create(
+    create(
       :result,
       personId: user.wca_id,
       competitionId: first_competition.id,
@@ -48,7 +48,7 @@ RSpec.describe Qualification do
     )
   }
   let!(:second_oh_result) {
-    FactoryBot.create(
+    create(
       :result,
       personId: user.wca_id,
       competitionId: second_competition.id,
@@ -58,7 +58,7 @@ RSpec.describe Qualification do
     )
   }
   let!(:first_444_result_no_average) {
-    FactoryBot.create(
+    create(
       :result,
       personId: user.wca_id,
       competitionId: first_competition.id,
@@ -68,7 +68,7 @@ RSpec.describe Qualification do
     )
   }
   let!(:second_444_result) {
-    FactoryBot.create(
+    create(
       :result,
       personId: user.wca_id,
       competitionId: second_competition.id,

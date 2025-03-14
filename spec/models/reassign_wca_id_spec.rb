@@ -3,9 +3,9 @@
 require 'rails_helper'
 
 RSpec.describe ReassignWcaId do
-  let(:account1) { FactoryBot.create(:user_with_wca_id, country_iso2: "US") }
+  let(:account1) { create(:user_with_wca_id, country_iso2: "US") }
   let(:shared_attributes) { account1.attributes.symbolize_keys.slice(:name, :country_iso2, :gender, :dob) }
-  let(:account2) { FactoryBot.create(:user, shared_attributes) }
+  let(:account2) { create(:user, shared_attributes) }
   let(:reassign_wca_id) { ReassignWcaId.new(account1: account1, account2: account2) }
 
   it "is valid" do
@@ -18,13 +18,13 @@ RSpec.describe ReassignWcaId do
   end
 
   it "requires account1 to have a wca id" do
-    account3 = FactoryBot.create(:user, shared_attributes)
+    account3 = create(:user, shared_attributes)
     reassign_wca_id.account1 = account3
     expect(reassign_wca_id).to be_invalid_with_errors(account1: ["Account 1 must have a WCA ID assigned"])
   end
 
   it "requires account2 to not have a wca id" do
-    account3 = FactoryBot.create(:user_with_wca_id, shared_attributes)
+    account3 = create(:user_with_wca_id, shared_attributes)
     reassign_wca_id.account2 = account3
     expect(reassign_wca_id).to be_invalid_with_errors(account2: ["Account 2 must not have a WCA ID assigned"])
   end
@@ -50,12 +50,12 @@ RSpec.describe ReassignWcaId do
   end
 
   it "can actually reassign wca id" do
-    team_member = FactoryBot.create(:wfc_member_role, user_id: account1.id)
-    delegated_competition = FactoryBot.create(:competition)
+    team_member = create(:wfc_member_role, user_id: account1.id)
+    delegated_competition = create(:competition)
     delegated_competition.delegates << account1
-    organized_competition = FactoryBot.create(:competition)
+    organized_competition = create(:competition)
     organized_competition.organizers << account1
-    posted_competition = FactoryBot.create(:competition, :past, announced_by: account1.id, results_posted_by: account1.id)
+    posted_competition = create(:competition, :past, announced_by: account1.id, results_posted_by: account1.id)
 
     wca_id = account1.wca_id
     delegate_status = account1.delegate_status

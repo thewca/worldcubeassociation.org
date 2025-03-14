@@ -4,9 +4,10 @@ require 'rails_helper'
 
 RSpec.describe Api::V0::Wrt::PersonsController, type: :controller do
   describe 'PATCH #update person' do
-    sign_in { FactoryBot.create :admin }
+    let(:admin) { create(:admin) }
+    sign_in { admin }
 
-    let(:person) { FactoryBot.create(:person_who_has_competed_once, name: "Feliks Zemdegs", countryId: "Australia") }
+    let(:person) { create(:person_who_has_competed_once, name: "Feliks Zemdegs", countryId: "Australia") }
 
     it "shows a message with link to the check_regional_record_markers script if the person has been fixed and countryId has changed" do
       patch :update, params: { id: person.wca_id, method: "fix", person: {

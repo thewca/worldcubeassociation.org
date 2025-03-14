@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe UploadJson do
-  let(:upload_json) { FactoryBot.build(:upload_json) }
+  let(:upload_json) { build(:upload_json) }
 
   it "is valid" do
     expect(upload_json).to be_valid
@@ -18,7 +18,7 @@ RSpec.describe UploadJson do
   end
 
   it "fixes roundTypeId in case it doesn't match the actual competition round data" do
-    round = FactoryBot.create(:round, number: 1, event_id: "333", cutoff: nil)
+    round = create(:round, number: 1, event_id: "333", cutoff: nil)
     competition = round.competition
 
     results_json = {
@@ -57,7 +57,7 @@ RSpec.describe UploadJson do
       ],
     }.to_json
 
-    upload_json = FactoryBot.build(:upload_json, competition_id: competition.id, results_json_str: results_json)
+    upload_json = build(:upload_json, competition_id: competition.id, results_json_str: results_json)
 
     expect(upload_json.import_to_inbox).to be true
     expect(InboxResult.count).to eq 1
