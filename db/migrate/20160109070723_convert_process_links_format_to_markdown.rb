@@ -8,7 +8,7 @@ class ConvertProcessLinksFormatToMarkdown < ActiveRecord::Migration
   def change
     reversible do |dir|
       dir.up do
-        Competition.all.find_each do |competition|
+        Competition.find_each do |competition|
           competition.update_columns(
             venue: processLinks_to_markdown(competition.venue),
             venueDetails: processLinks_to_markdown(competition.venueDetails),

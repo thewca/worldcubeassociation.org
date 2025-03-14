@@ -317,9 +317,6 @@ Rails/Validation:
 Rails/HasManyOrHasOneDependent:
   Enabled: false
 
-Rails/RedundantActiveRecordAllMethod:
-  Enabled: false
-
 Rails/OutputSafety:
   Enabled: false
 
