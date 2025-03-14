@@ -314,25 +314,16 @@ Rails/InverseOf:
 Rails/HasManyOrHasOneDependent:
   Enabled: false
 
-Rails/RedundantActiveRecordAllMethod:
-  Enabled: false
-
 Rails/OutputSafety:
   Enabled: false
 
 Rails/I18nLocaleTexts:
   Enabled: false
 
-Rails/ShortI18n:
-  Enabled: false
-
 Rails/RakeEnvironment:
   Enabled: false
 
 Rails/ApplicationRecord:
-  Enabled: false
-
-Rails/ReadWriteAttribute:
   Enabled: false
 
 Rails/HelperInstanceVariable:
@@ -342,12 +333,6 @@ Rails/ActionControllerFlashBeforeRender:
   Enabled: false
 
 Rails/UniqueValidationWithoutIndex:
-  Enabled: false
-
-Rails/DotSeparatedKeys:
-  Enabled: false
-
-Rails/I18nLazyLookup:
   Enabled: false
 
 Rails/LexicallyScopedActionFilter:

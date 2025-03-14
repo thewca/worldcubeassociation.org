@@ -20,7 +20,7 @@ class Oauth::ApplicationsController < ApplicationController
     @application = Doorkeeper::Application.new(application_params)
     @application.owner = current_user
     if @application.save
-      flash[:notice] = I18n.t(:notice, scope: [:doorkeeper, :flash, :applications, :create])
+      flash[:notice] = I18n.t('doorkeeper.flash.applications.create.notice')
       redirect_to oauth_application_url(@application)
     else
       render :new
@@ -29,7 +29,7 @@ class Oauth::ApplicationsController < ApplicationController
 
   def update
     if @application.update(application_params)
-      flash[:notice] = I18n.t(:notice, scope: [:doorkeeper, :flash, :applications, :update])
+      flash[:notice] = I18n.t('doorkeeper.flash.applications.update.notice')
       redirect_to oauth_application_url(@application)
     else
       render :edit
@@ -37,7 +37,7 @@ class Oauth::ApplicationsController < ApplicationController
   end
 
   def destroy
-    flash[:notice] = I18n.t(:notice, scope: [:doorkeeper, :flash, :applications, :destroy]) if @application.destroy
+    flash[:notice] = I18n.t('doorkeeper.flash.applications.destroy.notice') if @application.destroy
     redirect_to oauth_applications_url
   end
 

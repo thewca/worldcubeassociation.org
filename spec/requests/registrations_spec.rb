@@ -1136,11 +1136,11 @@ RSpec.describe "registrations" do
     end
 
     it 'creates a PaypalRecord' do
-      expect(PaypalRecord.all.count).to eq(1)
+      expect(PaypalRecord.count).to eq(1)
     end
 
     it 'PaypalRecord amount matches registration cost' do
-      expect(PaypalRecord.all.first.money_amount).to eq(registration.competition.base_entry_fee)
+      expect(PaypalRecord.first.money_amount).to eq(registration.competition.base_entry_fee)
     end
   end
 
