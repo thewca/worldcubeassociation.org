@@ -388,9 +388,6 @@ RSpec/DescribeClass:
 RSpec/ContextWording:
   Enabled: false
 
-RSpec/ExpectChange:
-  Enabled: false
-
 RSpec/SpecFilePathFormat:
   Enabled: false
 

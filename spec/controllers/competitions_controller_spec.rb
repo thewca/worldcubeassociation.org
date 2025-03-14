@@ -187,7 +187,7 @@ RSpec.describe CompetitionsController do
         creation_params = build_competition_update(Competition.new, name: "Test 2015", venue: { countryId: "USA" }, staff: { staffDelegateIds: [delegate.id], organizerIds: [organizer.id] }, website: { usesWcaRegistration: false })
         expect do
           post :create, params: creation_params, as: :json
-        end.to change { enqueued_jobs.size }.by(1)
+        end.to change(enqueued_jobs, :size).by(1)
         expect(response).to be_successful
         new_comp = Competition.find("Test2015")
         expect(new_comp.id).to eq "Test2015"
@@ -468,7 +468,7 @@ RSpec.describe CompetitionsController do
         update_params = build_competition_update(competition, staff: { organizerIds: organizers.map(&:id) })
         expect do
           patch :update, params: update_params, as: :json
-        end.to change { enqueued_jobs.size }.by(1)
+        end.to change(enqueued_jobs, :size).by(1)
       end
 
       it "notifies organizers correctly when id changes" do
@@ -478,7 +478,7 @@ RSpec.describe CompetitionsController do
         expect(CompetitionsMailer).to receive(:notify_organizer_of_addition_to_competition).with(competition.delegates.last, competition, new_organizer).and_call_original
         expect do
           patch :update, params: update_params, as: :json
-        end.to change { enqueued_jobs.size }.by(1)
+        end.to change(enqueued_jobs, :size).by(1)
       end
 
       it "removes an organizer and expects him to receive a notification email" do
@@ -487,7 +487,7 @@ RSpec.describe CompetitionsController do
         update_params = build_competition_update(competition, staff: { organizerIds: [competition.organizers.first.id, organizer1.id] })
         expect do
           patch :update, params: update_params, as: :json
-        end.to change { enqueued_jobs.size }.by(1)
+        end.to change(enqueued_jobs, :size).by(1)
       end
 
       it "can confirm a competition and expects wcat and organizers to receive a notification email" do
@@ -496,7 +496,7 @@ RSpec.describe CompetitionsController do
         expect(CompetitionsMailer).to receive(:notify_wcat_of_confirmed_competition).with(competition.delegates.last, competition).and_call_original
         expect do
           put :confirm, params: { competition_id: competition }
-        end.to change { enqueued_jobs.size }.by(2)
+        end.to change(enqueued_jobs, :size).by(2)
         expect(response).to be_successful
         expect(competition.reload.confirmed?).to be true
       end
@@ -638,7 +638,7 @@ RSpec.describe CompetitionsController do
         update_params = build_competition_update(competition, staff: { organizerIds: organizers.map(&:id) })
         expect do
           patch :update, params: update_params, as: :json
-        end.to change { enqueued_jobs.size }.by(1)
+        end.to change(enqueued_jobs, :size).by(1)
       end
 
       it "notifies organizers correctly when id changes" do
@@ -648,7 +648,7 @@ RSpec.describe CompetitionsController do
         expect(CompetitionsMailer).to receive(:notify_organizer_of_addition_to_competition).with(competition.trainee_delegates.last, competition, new_organizer).and_call_original
         expect do
           patch :update, params: update_params, as: :json
-        end.to change { enqueued_jobs.size }.by(1)
+        end.to change(enqueued_jobs, :size).by(1)
       end
 
       it "removes an organizer and expects him to receive a notification email" do
@@ -657,7 +657,7 @@ RSpec.describe CompetitionsController do
         update_params = build_competition_update(competition, staff: { organizerIds: [competition.organizers.first.id, organizer1.id] })
         expect do
           patch :update, params: update_params, as: :json
-        end.to change { enqueued_jobs.size }.by(1)
+        end.to change(enqueued_jobs, :size).by(1)
       end
 
       it "cannot confirm a competition" do
@@ -760,7 +760,7 @@ RSpec.describe CompetitionsController do
         expect(CompetitionsMailer).to receive(:notify_organizer_of_announced_competition).with(competition, competition.organizers.last).and_call_original
         expect do
           put :announce, params: { competition_id: competition }
-        end.to change { enqueued_jobs.size }.by(1)
+        end.to change(enqueued_jobs, :size).by(1)
         competition.reload
         expect(competition.announced_at.to_f).to be < Time.now.to_f
         expect(competition.announced_by).to eq wcat_member.id
@@ -888,7 +888,7 @@ RSpec.describe CompetitionsController do
         expect(CompetitionsMailer).to receive(:notify_users_of_results_presence).and_call_original.exactly(4).times
         expect do
           post :post_results, params: { id: competition }
-        end.to change { enqueued_jobs.size }.by(4)
+        end.to change(enqueued_jobs, :size).by(4)
         competition.reload
         expect(competition.results_posted_at.to_f).to be < Time.now.to_f
         expect(competition.results_posted_by).to eq wrt_member.id
@@ -906,7 +906,7 @@ RSpec.describe CompetitionsController do
         expect(CompetitionsMailer).to receive(:notify_users_of_id_claim_possibility).and_call_original.exactly(2).times
         expect do
           post :post_results, params: { id: competition }
-        end.to change { enqueued_jobs.size }.by(2)
+        end.to change(enqueued_jobs, :size).by(2)
       end
 
       it "assigns wca id when user matches one person in results" do
