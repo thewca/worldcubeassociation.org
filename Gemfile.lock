@@ -682,6 +682,9 @@ GEM
       unicode-display_width (>= 2.4.0, < 4.0)
     rubocop-ast (1.39.0)
       parser (>= 3.3.1.0)
+    rubocop-capybara (2.22.1)
+      lint_roller (~> 1.1)
+      rubocop (~> 1.72, >= 1.72.1)
     rubocop-factory_bot (2.27.1)
       lint_roller (~> 1.1)
       rubocop (~> 1.72, >= 1.72.1)
@@ -695,6 +698,9 @@ GEM
       rack (>= 1.1)
       rubocop (>= 1.72.1, < 2.0)
       rubocop-ast (>= 1.38.0, < 2.0)
+    rubocop-rake (0.7.1)
+      lint_roller (~> 1.1)
+      rubocop (>= 1.72.1)
     rubocop-rspec (3.5.0)
       lint_roller (~> 1.1)
       rubocop (~> 1.72, >= 1.72.1)
@@ -959,9 +965,11 @@ DEPENDENCIES
   rspec-rails
   rspec-retry
   rubocop
+  rubocop-capybara
   rubocop-factory_bot
   rubocop-performance
   rubocop-rails
+  rubocop-rake
   rubocop-rspec
   rubocop-rspec_rails
   rubocop-thread_safety
