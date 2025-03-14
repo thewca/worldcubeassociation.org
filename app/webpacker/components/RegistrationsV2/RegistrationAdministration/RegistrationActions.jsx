@@ -11,6 +11,7 @@ import {
   getSkippedWaitlistCount,
   PENDING_COLOR, PENDING_ICON,
   REJECTED_COLOR, REJECTED_ICON,
+  sortRegistrations,
   WAITLIST_COLOR, WAITLIST_ICON,
 } from '../../../lib/utils/registrationAdmin';
 import { useConfirm } from '../../../lib/providers/ConfirmProvider';
@@ -116,22 +117,17 @@ export default function RegistrationActions({
     );
   };
 
-  const moveToWaitingList = (attendees) => {
-    const registrationsByUserId = _.groupBy(registrations, 'user_id');
-
-    const [paid, unpaid] = _.partition(
-      attendees,
-      (userId) => registrationsByUserId[userId]?.[0]?.payment?.updated_at,
+  const moveToWaitlist = (ids) => {
+    const registrationsToMove = registrations.filter(
+      (reg) => ids.includes(reg.user_id),
     );
-
-    paid.sort((a, b) => {
-      const dateA = new Date(registrationsByUserId[a][0].payment.updated_at);
-      const dateB = new Date(registrationsByUserId[b][0].payment.updated_at);
-      return dateA - dateB;
-    });
-
-    const combined = paid.concat(unpaid);
-    changeStatus(combined, 'waiting_list');
+    const sortedRegistrationsToMove = sortRegistrations(
+      registrationsToMove,
+      'paid_on_with_registered_on_fallback',
+      'ascending',
+    );
+    const sortedIdsToMove = sortedRegistrationsToMove.map((reg) => reg.user_id);
+    changeStatus(sortedIdsToMove, 'waiting_list');
   };
 
   const attemptToApprove = () => {
@@ -230,7 +226,7 @@ export default function RegistrationActions({
             icon={WAITLIST_ICON}
             color={WAITLIST_COLOR}
             isDisabled={!anyWaitlistable}
-            onClick={() => moveToWaitingList(
+            onClick={() => moveToWaitlist(
               [...pending, ...cancelled, ...accepted, ...rejected],
             )}
           />
