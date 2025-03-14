@@ -1,5 +1,7 @@
 import React, { useMemo } from 'react';
-import { Button, Dropdown } from 'semantic-ui-react';
+import {
+  Button, Dropdown, Popup, Table, TableBody, TableCell, TableHeader, TableHeaderCell, TableRow,
+} from 'semantic-ui-react';
 import { DateTime } from 'luxon';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { showMessage } from '../Register/RegistrationMessage';
@@ -14,6 +16,14 @@ import {
   WAITLIST_COLOR, WAITLIST_ICON,
 } from '../../../lib/utils/registrationAdmin';
 import { useConfirm } from '../../../lib/providers/ConfirmProvider';
+
+export const registrationStatusTranslationKeys = {
+  pending: 'pending',
+  waiting: 'waitlist',
+  accepted: 'approved',
+  cancelled: 'cancelled',
+  rejected: 'rejected',
+};
 
 function V3csvExport(selected, registrations, competition) {
   let csvContent = 'data:text/csv;charset=utf-8,';
@@ -59,11 +69,13 @@ function csvExport(selected, registrations, competition) {
 
 export default function RegistrationActions({
   partitionedSelectedIds,
+  partitionedRegistrations,
   refresh,
   registrations,
   spotsRemaining,
   competitionInfo,
   updateRegistrationMutation,
+  tableRefs,
 }) {
   const confirm = useConfirm();
   const dispatch = useDispatch();
@@ -168,8 +180,79 @@ export default function RegistrationActions({
     dispatch(showMessage('competitions.registration_v2.update.email_message', 'positive'));
   };
 
+  const scrollToRef = (ref) => ref.current.scrollIntoView(
+    { behavior: 'smooth', block: 'start' },
+  );
+
+  const hasCompetitorLimit = Boolean(competitionInfo.competitor_limit);
+
   return (
     <>
+      <Popup
+        flowing
+        position="bottom left"
+        trigger={
+          <Button color="black" icon="info" text={I18n.t('competitions.registration_v2.info')} />
+        }
+        content={(
+          <SummaryTable
+            partitionedSelectedIds={partitionedSelectedIds}
+            partitionedRegistrations={partitionedRegistrations}
+            partitionedMaximums={{ accepted: competitionInfo.competitor_limit }}
+            selectedCount={selectedCount}
+            registrationCount={registrations.length}
+            withSelectedCounts={anySelected}
+            withMaximums={hasCompetitorLimit}
+          />
+        )}
+      />
+
+      <Dropdown
+        pointing
+        className="icon white"
+        labeled
+        text={I18n.t('competitions.registration_v2.update.scroll_to')}
+        icon="th list"
+        button
+      >
+        <Dropdown.Menu>
+          <DropdownAction
+            text={I18n.t('competitions.registration_v2.update.pending')}
+            icon={PENDING_ICON}
+            color={PENDING_COLOR}
+            onClick={() => scrollToRef(tableRefs.pendingRef)}
+          />
+
+          <DropdownAction
+            text={I18n.t('competitions.registration_v2.update.waitlist')}
+            icon={WAITLIST_ICON}
+            color={WAITLIST_COLOR}
+            onClick={() => scrollToRef(tableRefs.waitlistRef)}
+          />
+
+          <DropdownAction
+            text={I18n.t('competitions.registration_v2.update.approved')}
+            icon={APPROVED_ICON}
+            color={APPROVED_COLOR}
+            onClick={() => scrollToRef(tableRefs.approvedRef)}
+          />
+
+          <DropdownAction
+            text={I18n.t('competitions.registration_v2.update.cancelled')}
+            icon={CANCELLED_ICON}
+            color={CANCELLED_COLOR}
+            onClick={() => scrollToRef(tableRefs.cancelledRef)}
+          />
+
+          <DropdownAction
+            text={I18n.t('competitions.registration_v2.update.rejected')}
+            icon={REJECTED_ICON}
+            color={REJECTED_COLOR}
+            onClick={() => scrollToRef(tableRefs.rejectedRef)}
+          />
+        </Dropdown.Menu>
+      </Dropdown>
+
       <Button
         content={I18n.t('registrations.list.export_csv')}
         icon="download"
@@ -184,25 +267,29 @@ export default function RegistrationActions({
         }}
       />
 
-      <Button
-        as="a"
-        content={I18n.t('competitions.registration_v2.update.email_send')}
-        href={`mailto:?bcc=${selectedEmails}`}
-        id="email-selected"
-        target="_blank"
-        rel="noreferrer"
+      <Dropdown
+        pointing
+        className="icon grey"
+        labeled
+        text={I18n.t('competitions.registration_v2.update.email', { count: selectedCount })}
         icon="envelope"
-        labelPosition="left"
+        button
         disabled={!anySelected}
-      />
+      >
+        <Dropdown.Menu>
+          <DropdownLink
+            text={I18n.t('competitions.registration_v2.update.email_send')}
+            icon="pencil"
+            href={`mailto:?bcc=${selectedEmails}`}
+          />
 
-      <Button
-        content={I18n.t('competitions.registration_v2.update.email_copy')}
-        icon="copy"
-        labelPosition="left"
-        onClick={() => copyEmails(selectedEmails)}
-        disabled={!anySelected}
-      />
+          <DropdownAction
+            text={I18n.t('competitions.registration_v2.update.email_copy')}
+            icon="copy"
+            onClick={() => copyEmails(selectedEmails)}
+          />
+        </Dropdown.Menu>
+      </Dropdown>
 
       <Dropdown
         pointing
@@ -214,7 +301,7 @@ export default function RegistrationActions({
         disabled={!anySelected}
       >
         <Dropdown.Menu>
-          <MoveAction
+          <DropdownAction
             text={I18n.t('competitions.registration_v2.update.pending')}
             icon={PENDING_ICON}
             color={PENDING_COLOR}
@@ -225,7 +312,7 @@ export default function RegistrationActions({
             )}
           />
 
-          <MoveAction
+          <DropdownAction
             text={I18n.t('competitions.registration_v2.update.waitlist')}
             icon={WAITLIST_ICON}
             color={WAITLIST_COLOR}
@@ -235,7 +322,7 @@ export default function RegistrationActions({
             )}
           />
 
-          <MoveAction
+          <DropdownAction
             text={I18n.t('competitions.registration_v2.update.approved')}
             icon={APPROVED_ICON}
             color={APPROVED_COLOR}
@@ -243,7 +330,7 @@ export default function RegistrationActions({
             onClick={attemptToApprove}
           />
 
-          <MoveAction
+          <DropdownAction
             text={I18n.t('competitions.registration_v2.update.cancelled')}
             icon={CANCELLED_ICON}
             color={CANCELLED_COLOR}
@@ -254,7 +341,7 @@ export default function RegistrationActions({
             )}
           />
 
-          <MoveAction
+          <DropdownAction
             text={I18n.t('competitions.registration_v2.update.rejected')}
             icon={REJECTED_ICON}
             color={REJECTED_COLOR}
@@ -270,7 +357,50 @@ export default function RegistrationActions({
   );
 }
 
-function MoveAction({
+function SummaryTable({
+  partitionedSelectedIds,
+  partitionedRegistrations,
+  partitionedMaximums,
+  selectedCount,
+  registrationCount,
+  withSelectedCounts,
+  withMaximums,
+}) {
+  return (
+    <Table basic="very">
+      <TableHeader>
+        <TableRow>
+          <TableHeaderCell />
+          {withSelectedCounts && <TableHeaderCell textAlign="right">Selected</TableHeaderCell>}
+          <TableHeaderCell textAlign="right">Size</TableHeaderCell>
+          {withMaximums && <TableHeaderCell textAlign="right">Max</TableHeaderCell>}
+        </TableRow>
+      </TableHeader>
+
+      <TableBody>
+        {Object.entries(registrationStatusTranslationKeys).map(([status, translationKey]) => (
+          <TableRow key={status}>
+            <TableCell>{I18n.t(`competitions.registration_v2.update.${translationKey}`)}</TableCell>
+            {withSelectedCounts && <TableCell textAlign="right">{partitionedSelectedIds[status].length}</TableCell>}
+            <TableCell textAlign="right">{partitionedRegistrations[status].length}</TableCell>
+            {withMaximums && <TableCell textAlign="right">{partitionedMaximums[status] ?? '-'}</TableCell>}
+          </TableRow>
+        ))}
+      </TableBody>
+
+      <Table.Footer>
+        <TableRow>
+          <TableCell>Total</TableCell>
+          {withSelectedCounts && <TableCell textAlign="right">{selectedCount}</TableCell>}
+          <TableCell textAlign="right">{registrationCount}</TableCell>
+          {withMaximums && <TableCell textAlign="right">-</TableCell>}
+        </TableRow>
+      </Table.Footer>
+    </Table>
+  );
+}
+
+function DropdownAction({
   text, icon, color, isDisabled, onClick,
 }) {
   return (
@@ -279,6 +409,23 @@ function MoveAction({
       icon={{ color, name: icon, size: 'large' }}
       disabled={isDisabled}
       onClick={onClick}
+    />
+  );
+}
+
+function DropdownLink({
+  text, icon, color, isDisabled, href,
+}) {
+  return (
+    <Dropdown.Item
+      content={text}
+      icon={{ color, name: icon, size: 'large' }}
+      disabled={isDisabled}
+      as="a"
+      href={href}
+      // id="email-selected"
+      target="_blank"
+      rel="noreferrer"
     />
   );
 }
