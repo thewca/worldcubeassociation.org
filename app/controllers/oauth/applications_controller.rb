@@ -9,11 +9,11 @@ class Oauth::ApplicationsController < ApplicationController
     @applications = current_user.admin? ? Doorkeeper::Application.all : current_user.oauth_applications
   end
 
-  def new
-    @application = Doorkeeper::Application.new
+  def show
   end
 
-  def show
+  def new
+    @application = Doorkeeper::Application.new
   end
 
   def create

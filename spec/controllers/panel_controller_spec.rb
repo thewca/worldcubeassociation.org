@@ -12,7 +12,7 @@ RSpec.describe PanelController do
 
     it "can view the pending claims for subordinate delegates" do
       get :pending_claims_for_subordinate_delegates
-      expect(response.status).to eq 200
+      expect(response).to have_http_status :ok
     end
   end
 
@@ -25,7 +25,7 @@ RSpec.describe PanelController do
 
     it "can view the pending claims for subordinate delegates of senior delegates" do
       get :pending_claims_for_subordinate_delegates
-      expect(response.status).to eq 200
+      expect(response).to have_http_status :ok
     end
   end
 end

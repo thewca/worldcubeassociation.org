@@ -6,7 +6,7 @@ RSpec.describe PersonsController, type: :controller do
   describe "GET #index" do
     it "responds to HTML request successfully" do
       get :index
-      expect(response.status).to eq 200
+      expect(response).to have_http_status :ok
     end
 
     # See section titled "InnoDB Full-Text Index Transaction Handling"

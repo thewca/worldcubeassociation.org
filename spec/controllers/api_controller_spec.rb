@@ -8,21 +8,21 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
 
     it 'requires query parameter' do
       get :competitions_search
-      expect(response.status).to eq 400
+      expect(response).to have_http_status :bad_request
       json = response.parsed_body
       expect(json["error"]).to eq "No query specified"
     end
 
     it "finds competition" do
       get :competitions_search, params: { q: "competition" }
-      expect(response.status).to eq 200
+      expect(response).to have_http_status :ok
       json = response.parsed_body
       expect(json["result"].length).to eq 1
     end
 
     it "works well with multiple parts" do
       get :competitions_search, params: { q: "Jfly Comp 15" }
-      expect(response.status).to eq 200
+      expect(response).to have_http_status :ok
       json = response.parsed_body
       expect(json["result"].length).to eq 1
     end
@@ -33,14 +33,14 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
 
     it 'requires query parameter' do
       get :posts_search
-      expect(response.status).to eq 400
+      expect(response).to have_http_status :bad_request
       json = response.parsed_body
       expect(json["error"]).to eq "No query specified"
     end
 
     it "finds post" do
       get :posts_search, params: { q: "post title" }
-      expect(response.status).to eq 200
+      expect(response).to have_http_status :ok
       json = response.parsed_body
       expect(json["result"].length).to eq 1
     end
@@ -60,14 +60,14 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
 
     it 'requires query parameter' do
       get :users_search
-      expect(response.status).to eq 400
+      expect(response).to have_http_status :bad_request
       json = response.parsed_body
       expect(json["error"]).to eq "No query specified"
     end
 
     it 'finds Jeremy' do
       get :users_search, params: { q: "erem" }
-      expect(response.status).to eq 200
+      expect(response).to have_http_status :ok
       json = response.parsed_body
       expect(json["result"].find { |u| u["name"] == "Jeremy" }).not_to be_nil
     end
@@ -75,7 +75,7 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
     it 'does not find dummy accounts' do
       FactoryBot.create :dummy_user, name: "Aaron"
       get :users_search, params: { q: "aaron" }
-      expect(response.status).to eq 200
+      expect(response).to have_http_status :ok
       json = response.parsed_body
       expect(json["result"].length).to eq 0
     end
@@ -83,7 +83,7 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
     it 'can find dummy accounts' do
       user.update_column(:encrypted_password, "")
       get :users_search, params: { q: "erem", include_dummy_accounts: true }
-      expect(response.status).to eq 200
+      expect(response).to have_http_status :ok
       json = response.parsed_body
       expect(json["result"].length).to eq 1
       expect(json["result"][0]["id"]).to eq user.id
@@ -91,7 +91,7 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
 
     it 'can find by wca_id' do
       get :users_search, params: { q: user.wca_id }
-      expect(response.status).to eq 200
+      expect(response).to have_http_status :ok
       json = response.parsed_body
       expect(json["result"].length).to eq 1
       expect(json["result"][0]["id"]).to eq user.id
@@ -99,7 +99,7 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
 
     it "can find by email" do
       get :users_search, params: { q: "example", email: true }
-      expect(response.status).to eq 200
+      expect(response).to have_http_status :ok
       json = response.parsed_body
       expect(json["result"].length).to eq 1
       expect(json["result"][0]["id"]).to eq user.id
@@ -110,7 +110,7 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
 
       it "can find by wca_id" do
         get :users_search, params: { q: userless_person.wca_id, persons_table: true }
-        expect(response.status).to eq 200
+        expect(response).to have_http_status :ok
         json = response.parsed_body
         expect(json["result"].length).to eq 1
         expect(json["result"][0]["id"]).to eq userless_person.wca_id
@@ -123,7 +123,7 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
 
       it "can find by name" do
         get :users_search, params: { q: "bo", persons_table: true }
-        expect(response.status).to eq 200
+        expect(response).to have_http_status :ok
         json = response.parsed_body
         expect(json["result"].length).to eq 1
         expect(json["result"][0]["id"]).to eq userless_person.wca_id
@@ -134,7 +134,7 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
     it 'does not find unconfirmed accounts' do
       user.update_column(:confirmed_at, nil)
       get :users_search, params: { q: "erem" }
-      expect(response.status).to eq 200
+      expect(response).to have_http_status :ok
       json = response.parsed_body
       expect(json["result"].length).to eq 0
     end
@@ -142,7 +142,7 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
     it 'can only find delegates' do
       delegate = FactoryBot.create(:delegate, name: "Jeremy")
       get :users_search, params: { q: "erem", only_staff_delegates: true }
-      expect(response.status).to eq 200
+      expect(response).to have_http_status :ok
       json = response.parsed_body
       expect(json["result"].length).to eq 1
       expect(json["result"][0]["id"]).to eq delegate.id
@@ -160,14 +160,14 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
 
     it 'requires query parameter' do
       get :omni_search
-      expect(response.status).to eq 400
+      expect(response).to have_http_status :bad_request
       json = response.parsed_body
       expect(json["error"]).to eq "No query specified"
     end
 
     it "finds all the things!" do
       get :omni_search, params: { q: "jeremy" }
-      expect(response.status).to eq 200
+      expect(response).to have_http_status :ok
       json = response.parsed_body
       expect(json["result"].length).to eq 2
       expect(json["result"].count { |r| r["class"] == "competition" }).to eq 1
@@ -178,7 +178,7 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
 
     it "works well when parts of the name are given" do
       get :omni_search, params: { q: "Flei Jer" }
-      expect(response.status).to eq 200
+      expect(response).to have_http_status :ok
       json = response.parsed_body
       expect(json["result"].length).to eq 1
       expect(json["result"][0]["name"]).to include "Jeremy Fleischman"
@@ -191,7 +191,7 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
       delegate = FactoryBot.create :delegate_role, group_id: senior_delegate.group.id
 
       get :delegates
-      expect(response.status).to eq 200
+      expect(response).to have_http_status :ok
       json = response.parsed_body
       expect(json.length).to eq 2
 
@@ -205,7 +205,7 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
   describe 'GET #scramble_program' do
     it 'works' do
       get :scramble_program
-      expect(response.status).to eq 200
+      expect(response).to have_http_status :ok
       json = response.parsed_body
       expect(json["current"]["name"]).to eq "TNoodle-WCA-1.2.2"
       # the actual key resides in regulations-data, so in the test environment it will simply prompt "false"
@@ -217,7 +217,7 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
     context 'not signed in' do
       it 'returns 401' do
         get :me
-        expect(response.status).to eq 401
+        expect(response).to have_http_status :unauthorized
         json = response.parsed_body
         expect(json['error']).to eq("Not authorized")
       end
@@ -230,7 +230,7 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
 
       it 'has correct team membership' do
         get :me
-        expect(response.status).to eq 200
+        expect(response).to have_http_status :ok
         json = response.parsed_body
 
         expect(json['me']['teams'].length).to eq 1
@@ -247,7 +247,7 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
 
       it 'has correct delegate_status' do
         get :me
-        expect(response.status).to eq 200
+        expect(response).to have_http_status :ok
         json = response.parsed_body
 
         expect(json['me']['delegate_status']).to eq 'junior_delegate'
@@ -261,7 +261,7 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
 
       it 'has correct delegate_status' do
         get :me
-        expect(response.status).to eq 200
+        expect(response).to have_http_status :ok
         json = response.parsed_body
 
         expect(json['me']['delegate_status']).to eq 'delegate'
@@ -276,7 +276,7 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
 
       it 'has correct team membership' do
         get :me
-        expect(response.status).to eq 200
+        expect(response).to have_http_status :ok
         json = response.parsed_body
 
         expect(json['me']['delegate_status']).to be nil
@@ -315,7 +315,7 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
 
       it 'works' do
         get :me
-        expect(response.status).to eq 200
+        expect(response).to have_http_status :ok
         json = response.parsed_body
         expect(json['me']['wca_id']).to eq(user.wca_id)
         expect(json['me']['name']).to eq(user.name)
@@ -337,7 +337,7 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
         scopes.add("dob")
 
         get :me
-        expect(response.status).to eq 200
+        expect(response).to have_http_status :ok
         json = response.parsed_body
         expect(json['me']['dob']).to eq("1987-12-04")
         expect(json['me']['email']).to be(nil)
@@ -347,7 +347,7 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
         scopes.add("email")
 
         get :me
-        expect(response.status).to eq 200
+        expect(response).to have_http_status :ok
         json = response.parsed_body
         expect(json['me']['email']).to eq(user.email)
       end
@@ -356,7 +356,7 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
         scopes.add("dob", "email")
 
         get :me
-        expect(response.status).to eq 200
+        expect(response).to have_http_status :ok
         json = response.parsed_body
         expect(json['me']['dob']).to eq("1987-12-04")
         expect(json['me']['email']).to eq(user.email)
@@ -380,7 +380,7 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
         scopes.add("dob", "email")
 
         get :me
-        expect(response.status).to eq 200
+        expect(response).to have_http_status :ok
         json = response.parsed_body
         expect(json['me']['wca_id']).to eq(user.wca_id)
         expect(json['me']['name']).to eq(user.name)
@@ -409,7 +409,7 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
         scopes.add("dob", "email")
 
         get :me
-        expect(response.status).to eq 200
+        expect(response).to have_http_status :ok
         json = response.parsed_body
         expect(json['me']['wca_id']).to eq(user.wca_id)
         expect(json['me']['name']).to eq(user.name)
@@ -432,7 +432,7 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
       DumpPublicResultsDatabase.cronjob_statistics.update!(run_start: export_timestamp)
 
       get :export_public
-      expect(response.status).to eq 200
+      expect(response).to have_http_status :ok
       json = response.parsed_body
       expect(json).to eq(
         'export_date' => export_timestamp.iso8601,
@@ -450,7 +450,7 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
 
     it 'returns series portion of wcif json' do
       get :competition_series, params: { id: series.wcif_id }
-      expect(response.status).to eq 200
+      expect(response).to have_http_status :ok
       json = response.parsed_body
       expect(json).to eq(
         'id' => series.wcif_id,
@@ -463,7 +463,7 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
     it 'returns series portion of wcif json with only competitions that are publicly visible' do
       competition2.update_column(:showAtAll, false)
       get :competition_series, params: { id: series.wcif_id }
-      expect(response.status).to eq 200
+      expect(response).to have_http_status :ok
       json = response.parsed_body
       expect(json).to eq(
         'id' => series.wcif_id,
@@ -478,14 +478,14 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
       competition2.update_column(:showAtAll, false)
       competition3.update_column(:showAtAll, false)
       get :competition_series, params: { id: series.wcif_id }
-      expect(response.status).to eq 404
+      expect(response).to have_http_status :not_found
       json = response.parsed_body
       expect(json['error']).to eq "Competition series with ID #{series.wcif_id} not found"
     end
 
     it 'returns 404 for unknown competition series id' do
       get :competition_series, params: { id: 'UnknownSeries1989' }
-      expect(response.status).to eq 404
+      expect(response).to have_http_status :not_found
       json = response.parsed_body
       expect(json['error']).to eq 'Competition series with ID UnknownSeries1989 not found'
     end

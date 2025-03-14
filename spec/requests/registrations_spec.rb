@@ -553,7 +553,7 @@ RSpec.describe "registrations" do
         user2 = FactoryBot.create(:user, :wca_id)
         registration2 = FactoryBot.create(:registration, competition: competition, user: user2)
         post registration_payment_intent_path(registration2.id, :stripe)
-        expect(response.status).to eq 403
+        expect(response).to have_http_status :forbidden
       end
 
       context "with a valid credit card without SCA" do
