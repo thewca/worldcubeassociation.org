@@ -7,6 +7,7 @@ class Accounts::RegistrationsController < Devise::RegistrationsController
   end
 
   def create
+    super
   end
 
   private
