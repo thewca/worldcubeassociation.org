@@ -1,3 +1,4 @@
+# rubocop:disable all
 # frozen_string_literal: true
 
 class AddBoardTeam < ActiveRecord::Migration[5.1]
