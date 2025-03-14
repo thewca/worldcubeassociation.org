@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.feature "competition results", js: true do
+RSpec.feature "competition results", :js do
   it "shows events in correct order" do
     competition = create(:competition, :registration_open, :visible, events: Event.where(id: %w(222)))
     # Add 333 after 222 in order to give 333 a higher id than 222, in an attempt to break event ordering.

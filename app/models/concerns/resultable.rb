@@ -21,7 +21,7 @@ module Resultable
     # Forgetting to synchronize the results in WCA Live is a very common mistake,
     # so this error message is hinting the user to check that, even if it's
     # outside the scope of the WCA website.
-    validates_numericality_of :pos, message: "The position is not a valid number. Did you clear all the empty rows and synchronized WCA Live?"
+    validates :pos, numericality: { message: "The position is not a valid number. Did you clear all the empty rows and synchronized WCA Live?" }
 
     # Define cached stuff with the same name as the associations for validation
     def round_type

@@ -28,7 +28,7 @@ RSpec.describe UsersController do
       expect(WcaIdClaimMailer).to receive(:notify_delegate_of_wca_id_claim).with(user).and_call_original
       expect do
         patch :update, params: { id: user, user: { claiming_wca_id: true, unconfirmed_wca_id: person.wca_id, delegate_id_to_handle_wca_id_claim: delegate.id, dob_verification: person.dob.strftime("%F") } }
-      end.to change { enqueued_jobs.size }.by(1)
+      end.to change(enqueued_jobs, :size).by(1)
       new_user = assigns(:user)
       expect(new_user).to be_valid
       expect(user.reload.unconfirmed_wca_id).to eq person.wca_id

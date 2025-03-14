@@ -1,3 +1,4 @@
+# rubocop:disable all
 # frozen_string_literal: true
 
 # This is done to clean up this table and make it comply with the 2020 regulations

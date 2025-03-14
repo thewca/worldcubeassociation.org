@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.feature "My competitions page", clean_db_with_truncation: true do
+RSpec.feature "My competitions page", :clean_db_with_truncation do
   context "when signed in as user" do
     let!(:user) { create(:user) }
 

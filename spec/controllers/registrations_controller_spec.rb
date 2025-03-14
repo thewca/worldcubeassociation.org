@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe RegistrationsController, clean_db_with_truncation: true do
+RSpec.describe RegistrationsController, :clean_db_with_truncation do
   context "signed in as organizer" do
     let!(:organizer) { create(:user) }
     let(:competition) { create(:competition, :registration_open, :visible, organizers: [organizer], events: Event.where(id: %w(222 333))) }

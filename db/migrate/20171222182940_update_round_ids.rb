@@ -1,3 +1,4 @@
+# rubocop:disable all
 # frozen_string_literal: true
 
 class UpdateRoundIds < ActiveRecord::Migration[5.1]

@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.feature "Competitions list", js: true do
+RSpec.feature "Competitions list", :js do
   context "admin view" do
     before :each do
       sign_in create(:admin)

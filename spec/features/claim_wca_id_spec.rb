@@ -7,7 +7,7 @@ RSpec.feature "Claim WCA ID" do
   let!(:person) { create(:person_who_has_competed_once, dob: '1988-02-03') }
   let!(:person_without_dob) { create(:person, :skip_validation, :missing_dob) }
 
-  context 'when signed in as user without wca id', js: true do
+  context 'when signed in as user without wca id', :js do
     before :each do
       sign_in user
     end

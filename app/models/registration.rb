@@ -47,9 +47,9 @@ class Registration < ApplicationRecord
     self.registered_at = current_time_from_proper_timezone
   end
 
-  validates_numericality_of :guests, greater_than_or_equal_to: 0
+  validates :guests, numericality: { greater_than_or_equal_to: 0 }
 
-  validates_numericality_of :guests, less_than_or_equal_to: :guest_limit, if: :check_guest_limit?
+  validates :guests, numericality: { less_than_or_equal_to: :guest_limit, if: :check_guest_limit? }
 
   after_save :mark_registration_processing_as_done
 

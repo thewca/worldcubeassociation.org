@@ -156,7 +156,7 @@ RSpec.describe "registrations" do
                     ]
                     expect {
                       post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
-                    }.to change { User.count }.by(-1)
+                    }.to change(User, :count).by(-1)
                     expect(User.exists?(dummy_user.id)).to be false
                     user.reload
                     expect(user.wca_id).to eq dummy_user.wca_id
@@ -175,7 +175,7 @@ RSpec.describe "registrations" do
                   ]
                   expect {
                     post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
-                  }.not_to change { User.count }
+                  }.not_to change(User, :count)
                   user = dummy_user.reload
                   expect(user).not_to be_dummy_account
                   expect(user).to be_locked_account
@@ -195,7 +195,7 @@ RSpec.describe "registrations" do
                 ]
                 expect {
                   post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
-                }.not_to change { User.count }
+                }.not_to change(User, :count)
                 expect(user.registrations.first.events.map(&:id)).to eq %w(333)
                 expect(competition.registrations.count).to eq 1
               end
@@ -243,7 +243,7 @@ RSpec.describe "registrations" do
                   ]
                   expect {
                     post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
-                  }.not_to change { User.count }
+                  }.not_to change(User, :count)
                   expect(user.reload.wca_id).to eq person.wca_id
                   expect(user.reload.unconfirmed_wca_id).to be_nil
                   expect(user.reload.delegate_to_handle_wca_id_claim).to be_nil
@@ -262,7 +262,7 @@ RSpec.describe "registrations" do
                   ]
                   expect {
                     post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
-                  }.not_to change { User.count }
+                  }.not_to change(User, :count)
                   expect(user.reload.wca_id).to eq person.wca_id
                   expect(user.registrations.first.events.map(&:id)).to eq %w(333)
                   expect(competition.registrations.count).to eq 1
@@ -280,7 +280,7 @@ RSpec.describe "registrations" do
                 ]
                 expect {
                   post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
-                }.to change { User.count }.by(1)
+                }.to change(User, :count).by(1)
                 user = competition.registrations.first.user
                 expect(user.wca_id).to eq person.wca_id
                 expect(user).to be_locked_account
@@ -299,7 +299,7 @@ RSpec.describe "registrations" do
               ]
               expect {
                 post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
-              }.not_to change { User.count }
+              }.not_to change(User, :count)
               expect(user.registrations.first.events.map(&:id)).to eq %w(333)
               expect(competition.registrations.count).to eq 1
             end
@@ -312,7 +312,7 @@ RSpec.describe "registrations" do
               ]
               expect {
                 post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
-              }.not_to change { User.count }
+              }.not_to change(User, :count)
               expect(user.reload.name).to eq "Sherlock Holmes"
               expect(user.dob).to eq Date.new(2000, 1, 1)
               expect(user.country_iso2).to eq "GB"
@@ -328,7 +328,7 @@ RSpec.describe "registrations" do
               ]
               expect {
                 post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
-              }.to change { User.count }.by(1)
+              }.to change(User, :count).by(1)
               user = competition.registrations.first.user
               expect(user.wca_id).to be_blank
               expect(user).to be_locked_account
@@ -1136,11 +1136,11 @@ RSpec.describe "registrations" do
     end
 
     it 'creates a PaypalRecord' do
-      expect(PaypalRecord.all.count).to eq(1)
+      expect(PaypalRecord.count).to eq(1)
     end
 
     it 'PaypalRecord amount matches registration cost' do
-      expect(PaypalRecord.all.first.money_amount).to eq(registration.competition.base_entry_fee)
+      expect(PaypalRecord.first.money_amount).to eq(registration.competition.base_entry_fee)
     end
   end
 

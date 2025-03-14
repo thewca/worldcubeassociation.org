@@ -287,37 +287,13 @@ Rails/PluralizationGrammar:
 Rails/I18nLocaleAssignment:
   Enabled: false
 
-Rails/ReversibleMigration:
-  Enabled: false
-
-Rails/BulkChangeTable:
-  Enabled: false
-
-Rails/ThreeStateBooleanColumn:
-  Enabled: false
-
-Rails/CreateTableWithTimestamps:
-  Enabled: false
-
-Rails/NotNullColumn:
-  Enabled: false
-
-Rails/DangerousColumnNames:
-  Enabled: false
-
 Rails/RedundantForeignKey:
   Enabled: false
 
 Rails/InverseOf:
   Enabled: false
 
-Rails/Validation:
-  Enabled: false
-
 Rails/HasManyOrHasOneDependent:
-  Enabled: false
-
-Rails/RedundantActiveRecordAllMethod:
   Enabled: false
 
 Rails/OutputSafety:
@@ -326,16 +302,10 @@ Rails/OutputSafety:
 Rails/I18nLocaleTexts:
   Enabled: false
 
-Rails/ShortI18n:
-  Enabled: false
-
 Rails/RakeEnvironment:
   Enabled: false
 
 Rails/ApplicationRecord:
-  Enabled: false
-
-Rails/ReadWriteAttribute:
   Enabled: false
 
 Rails/HelperInstanceVariable:
@@ -345,12 +315,6 @@ Rails/ActionControllerFlashBeforeRender:
   Enabled: false
 
 Rails/UniqueValidationWithoutIndex:
-  Enabled: false
-
-Rails/DotSeparatedKeys:
-  Enabled: false
-
-Rails/I18nLazyLookup:
   Enabled: false
 
 Rails/LexicallyScopedActionFilter:
@@ -376,9 +340,6 @@ RSpec/IndexedLet:
 RSpec/HookArgument:
   Enabled: false
 
-RSpec/MetadataStyle:
-  Enabled: false
-
 RSpec/AnyInstance:
   Enabled: false
 
@@ -389,9 +350,6 @@ RSpec/DescribeClass:
   Enabled: false
 
 RSpec/ContextWording:
-  Enabled: false
-
-RSpec/ExpectChange:
   Enabled: false
 
 RSpec/SpecFilePathFormat:

@@ -39,9 +39,9 @@ end
 # The retry count for this specific set of tests is ludicrously high because our slow and deprecated
 # Apparition browser engine does not render React state changes properly.
 # We can remove this `retry` count when we migrated to a "proper" browser engine in tests.
-RSpec.feature "Competition management", js: true, retry: 10 do
+RSpec.feature "Competition management", :js, retry: 10 do
   context "when signed in as admin" do
-    let!(:admin) { create(:admin) }
+    let!(:admin) { FactoryBot.create :admin }
 
     before :each do
       sign_in admin
@@ -74,7 +74,7 @@ RSpec.feature "Competition management", js: true, retry: 10 do
 
     feature "clone an existing competition" do
       scenario "with valid data" do
-        competition = create(:competition, :with_delegate)
+        competition = FactoryBot.create(:competition, :with_delegate)
         visit edit_competition_path(competition)
         click_link "Clone"
         fill_in "Name", with: "Pedro 2016"
@@ -87,7 +87,7 @@ RSpec.feature "Competition management", js: true, retry: 10 do
       end
 
       scenario "with validation errors" do
-        competition = create(:competition, :with_delegate)
+        competition = FactoryBot.create(:competition, :with_delegate)
         visit edit_competition_path(competition)
         click_link "Clone"
         # See https://github.com/thewca/worldcubeassociation.org/issues/1016#issuecomment-262573451
@@ -100,7 +100,7 @@ RSpec.feature "Competition management", js: true, retry: 10 do
     end
 
     scenario "User confirms a competition" do
-      competition = create(:competition, :future, :with_delegate, :with_organizer, :with_valid_schedule)
+      competition = FactoryBot.create(:competition, :future, :with_delegate, :with_organizer, :with_valid_schedule)
       visit edit_competition_path(competition)
       click_button "Confirm"
 
@@ -112,7 +112,7 @@ RSpec.feature "Competition management", js: true, retry: 10 do
     end
 
     scenario "change competition id of long name" do
-      competition = create(:competition, :with_delegate, name: "competition name id modify long 2016")
+      competition = FactoryBot.create(:competition, :with_delegate, name: "competition name id modify long 2016")
       visit edit_competition_path(competition)
 
       fill_in "ID", with: "NewId2016"
@@ -128,7 +128,7 @@ RSpec.feature "Competition management", js: true, retry: 10 do
     end
 
     scenario "change competition id to invalid id" do
-      competition = create(:competition, :with_delegate, id: "OldId2016", name: "competition name id modify as admin 2016")
+      competition = FactoryBot.create(:competition, :with_delegate, id: "OldId2016", name: "competition name id modify as admin 2016")
       visit edit_competition_path(competition)
       fill_in "ID", with: "NewId With Spaces"
       click_button "Update Competition"
@@ -142,7 +142,7 @@ RSpec.feature "Competition management", js: true, retry: 10 do
     end
 
     scenario "change competition id with validation error" do
-      competition = create(:competition, :with_delegate, id: "OldId2016", name: "competition name id modify as admin 2016")
+      competition = FactoryBot.create(:competition, :with_delegate, id: "OldId2016", name: "competition name id modify as admin 2016")
       visit edit_competition_path(competition)
       fill_in "ID", with: "NewId2016"
       fill_in "Name", with: "Name that does not end in a year but is long"
@@ -162,7 +162,7 @@ RSpec.feature "Competition management", js: true, retry: 10 do
     end
 
     scenario "custom approved ID not changing on confirmed competitions from organizer view" do
-      competition = create(:competition, :confirmed, id: "OldId2016", name: "competition name short 2016")
+      competition = FactoryBot.create(:competition, :confirmed, id: "OldId2016", name: "competition name short 2016")
       visit edit_competition_path(competition)
       click_button "Update Competition"
 
@@ -174,7 +174,7 @@ RSpec.feature "Competition management", js: true, retry: 10 do
     end
 
     scenario "can change id of short name from admin view" do
-      competition = create(:competition, :with_delegate, :with_competitor_limit, id: "OldId2016", name: "competition name short 2016")
+      competition = FactoryBot.create(:competition, :with_delegate, :with_competitor_limit, id: "OldId2016", name: "competition name short 2016")
       visit competition_admin_edit_path(competition)
       fill_in "ID", with: "NewId2016"
       click_button "Update Competition"
@@ -187,28 +187,28 @@ RSpec.feature "Competition management", js: true, retry: 10 do
     end
 
     scenario "cannot change id of short name from organizer view" do
-      competition = create(:competition, :with_delegate, id: "OldId2016", name: "competition name short 2016")
+      competition = FactoryBot.create(:competition, :with_delegate, id: "OldId2016", name: "competition name short 2016")
       visit edit_competition_path(competition)
 
       expect { fill_in "ID", with: "NewId2016" }.to raise_error(Capybara::ElementNotFound)
     end
 
     scenario "change guest entry fee to zero" do
-      competition = create(:competition, :with_delegate, id: "OldId2016", guests_entry_fee_lowest_denomination: 0)
+      competition = FactoryBot.create(:competition, :with_delegate, id: "OldId2016", guests_entry_fee_lowest_denomination: 0)
       visit edit_competition_path(competition)
 
       expect(page).to have_text("Display message for free guest entry")
     end
 
-    scenario "change guest entry fee to non-zero", js: true do
-      competition = create(:competition, :with_delegate, id: "OldId2016", guests_entry_fee_lowest_denomination: 666)
+    scenario "change guest entry fee to non-zero", :js do
+      competition = FactoryBot.create(:competition, :with_delegate, id: "OldId2016", guests_entry_fee_lowest_denomination: 666)
       visit edit_competition_path(competition)
 
       expect(page).not_to have_text("Display message for free guest entry")
     end
 
     scenario "select free guest entry status" do
-      competition = create(:competition, :with_delegate, id: "OldId2016", guest_entry_status: Competition.guest_entry_statuses['free'])
+      competition = FactoryBot.create(:competition, :with_delegate, id: "OldId2016", guest_entry_status: Competition.guest_entry_statuses['free'])
       visit competition_path(competition)
       find('div', id: 'show_registration_requirements').click_link('here')
 
@@ -216,7 +216,7 @@ RSpec.feature "Competition management", js: true, retry: 10 do
     end
 
     scenario "select restricted guest entry status" do
-      competition = create(:competition, :with_delegate, id: "OldId2016", guest_entry_status: Competition.guest_entry_statuses['restricted'])
+      competition = FactoryBot.create(:competition, :with_delegate, id: "OldId2016", guest_entry_status: Competition.guest_entry_statuses['restricted'])
       visit competition_path(competition)
       find('div', id: 'show_registration_requirements').click_link('here')
 
@@ -225,9 +225,9 @@ RSpec.feature "Competition management", js: true, retry: 10 do
   end
 
   context "when signed in as delegate" do
-    let!(:delegate) { create(:delegate) }
-    let(:cloned_delegate) { create(:delegate) }
-    let(:competition_to_clone) { create(:competition, :visible, cityName: 'Melbourne, Victoria', countryId: "Australia", delegates: [cloned_delegate]) }
+    let!(:delegate) { FactoryBot.create(:delegate) }
+    let(:cloned_delegate) { FactoryBot.create(:delegate) }
+    let(:competition_to_clone) { FactoryBot.create :competition, :visible, cityName: 'Melbourne, Victoria', countryId: "Australia", delegates: [cloned_delegate] }
 
     let(:threes) { Event.find("333") }
     let(:fours) { Event.find("444") }
@@ -236,7 +236,7 @@ RSpec.feature "Competition management", js: true, retry: 10 do
       sign_in delegate
     end
 
-    scenario 'create competition', js: true do
+    scenario 'create competition', :js do
       visit new_competition_path
 
       fill_in "Name", with: "New Comp 2015"
@@ -257,8 +257,8 @@ RSpec.feature "Competition management", js: true, retry: 10 do
       expect(new_competition.delegates).to eq [delegate]
     end
 
-    scenario "id and cellName changes for short comp name", js: true do
-      competition = create(:competition, delegates: [delegate], id: "competitionnameshort2016", name: "competition name short 2016")
+    scenario "id and cellName changes for short comp name", :js do
+      competition = FactoryBot.create(:competition, delegates: [delegate], id: "competitionnameshort2016", name: "competition name short 2016")
       visit edit_competition_path(competition)
       fill_in "Name", with: "New Id 2016"
 
@@ -273,14 +273,14 @@ RSpec.feature "Competition management", js: true, retry: 10 do
     end
 
     scenario "cannot submit a competition where registration has already closed" do
-      comp = create(:competition, :not_visible, :registration_closed, delegates: [delegate])
+      comp = FactoryBot.create(:competition, :not_visible, :registration_closed, delegates: [delegate])
       visit edit_competition_path(comp)
       # patch :update, params: { id: comp, competition: { name: comp.name }, commit: "Confirm" }
       click_button "Confirm"
       expect(comp.reload.confirmed?).to be false
     end
 
-    scenario 'clone competition', js: true do
+    scenario 'clone competition', :js do
       visit clone_competition_path(competition_to_clone)
 
       fill_in "Name", with: "New Comp 2015"
@@ -302,9 +302,9 @@ RSpec.feature "Competition management", js: true, retry: 10 do
     end
 
     feature "edit" do
-      let(:comp_with_fours) { create(:competition, events: [fours], delegates: [delegate]) }
+      let(:comp_with_fours) { FactoryBot.create :competition, events: [fours], delegates: [delegate] }
 
-      scenario 'can edit registration open datetime', js: true do
+      scenario 'can edit registration open datetime', :js do
         visit edit_competition_path(comp_with_fours)
 
         expect(page).to have_field("registration-openingDateTime", type: 'text', disabled: false)

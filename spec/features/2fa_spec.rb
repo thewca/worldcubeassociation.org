@@ -42,7 +42,7 @@ RSpec.feature "Sign in with 2FA" do
       expect(page).to have_content "Signed in successfully"
     end
 
-    it 'can send a OTP by email', js: true do
+    it 'can send a OTP by email', :js do
       visit "/users/sign_in"
       fill_in "Email", with: user.email
       fill_in "user[password]", with: "wca"
