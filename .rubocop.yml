@@ -317,9 +317,6 @@ Rails/ActionControllerFlashBeforeRender:
 Rails/UniqueValidationWithoutIndex:
   Enabled: false
 
-Rails/LexicallyScopedActionFilter:
-  Enabled: false
-
 # Rspec
 
 RSpec/MultipleExpectations:

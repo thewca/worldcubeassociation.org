@@ -6,6 +6,9 @@ class Accounts::RegistrationsController < Devise::RegistrationsController
     edit_user_registration_path
   end
 
+  def create
+  end
+
   private
 
     def check_captcha
