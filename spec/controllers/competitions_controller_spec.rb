@@ -13,7 +13,7 @@ RSpec.describe CompetitionsController do
       it 'redirects to the old php page' do
         competition.update_column(:showAtAll, true)
         get :show, params: { id: competition.id }
-        expect(response.status).to eq 200
+        expect(response).to have_http_status :ok
         expect(assigns(:competition)).to eq competition
       end
 
@@ -1153,7 +1153,7 @@ RSpec.describe CompetitionsController do
 
       it 'displays payment setup status' do
         get :payment_integration_setup, params: { competition_id: competition }
-        expect(response.status).to eq 200
+        expect(response).to have_http_status :ok
         expect(assigns(:competition)).to eq competition
       end
     end
@@ -1218,7 +1218,7 @@ RSpec.describe CompetitionsController do
       it 'displays the page' do
         # NOTE: we test the javascript part renders in the feature spec!
         get :edit_schedule, params: { id: competition }
-        expect(response.status).to eq 200
+        expect(response).to have_http_status :ok
         expect(assigns(:competition)).to eq competition
       end
     end
