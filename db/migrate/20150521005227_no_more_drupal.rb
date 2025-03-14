@@ -58,7 +58,7 @@ class NoMoreDrupal < ActiveRecord::Migration
     end
     add_index :posts, :slug, unique: true
 
-    Node.where(promote: true).each do |node|
+    Node.where(promote: true).find_each do |node|
       drupal_user = node.author
       devise_user = DeviseUser.find_by_email(drupal_user.mail)
       if !devise_user

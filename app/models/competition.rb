@@ -2108,7 +2108,7 @@ class Competition < ApplicationRecord
       { rounds: [:competition_event, :wcif_extensions] },
       :wcif_extensions,
     ]
-    self.competition_events.includes(competition_events_includes_assotiations).each do |competition_event|
+    self.competition_events.includes(competition_events_includes_assotiations).find_each do |competition_event|
       wcif_event = wcif_events.find { |e| e["id"] == competition_event.event.id }
       event_to_be_removed = !wcif_event || !wcif_event["rounds"]
       if event_to_be_removed

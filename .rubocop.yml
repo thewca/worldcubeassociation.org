@@ -287,12 +287,6 @@ Rails/PluralizationGrammar:
 Rails/I18nLocaleAssignment:
   Enabled: false
 
-Rails/FindEach:
-  Enabled: false
-
-Rails/IndexBy:
-  Enabled: false
-
 Rails/ReversibleMigration:
   Enabled: false
 
@@ -344,9 +338,6 @@ Rails/ApplicationRecord:
 Rails/ReadWriteAttribute:
   Enabled: false
 
-Rails/IndexWith:
-  Enabled: false
-
 Rails/HelperInstanceVariable:
   Enabled: false
 
@@ -354,9 +345,6 @@ Rails/ActionControllerFlashBeforeRender:
   Enabled: false
 
 Rails/UniqueValidationWithoutIndex:
-  Enabled: false
-
-Rails/FindById:
   Enabled: false
 
 Rails/DotSeparatedKeys:

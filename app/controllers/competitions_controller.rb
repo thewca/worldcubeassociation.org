@@ -470,7 +470,7 @@ class CompetitionsController < ApplicationController
 
   def unbookmark
     @competition = competition_from_params
-    BookmarkedCompetition.where(competition: @competition, user: current_user).each(&:destroy!)
+    BookmarkedCompetition.where(competition: @competition, user: current_user).destroy_all
     Rails.cache.delete("#{current_user.id}-competitions-bookmarked")
     head :ok
   end

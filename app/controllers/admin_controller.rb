@@ -302,7 +302,7 @@ class AdminController < ApplicationController
   end
 
   private def competition_from_params(associations: {})
-    Competition.includes(associations).find_by_id!(params[:competition_id])
+    Competition.includes(associations).find(params[:competition_id])
   end
 
   private def competition_list_from_string(competition_ids_string)
