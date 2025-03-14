@@ -441,22 +441,25 @@ class RegistrationsController < ApplicationController
     #   of the `enum :wca_status` declared in the `payment_intent.rb` model
     case stored_intent.wca_status
     when PaymentIntent.wca_statuses[:succeeded]
-      flash.now[:success] = t("registrations.payment_form.payment_successful")
+      # rubocop:disable Rails/ActionControllerFlashBeforeRender
+      # explicitly use flash instead of flash.now because we are redirecting
+      flash[:success] = t("registrations.payment_form.payment_successful")
     when PaymentIntent.wca_statuses[:pending]
-      flash.now[:warning] = t("registrations.payment_form.errors.payment_pending")
+      flash[:warning] = t("registrations.payment_form.errors.payment_pending")
     when PaymentIntent.wca_statuses[:created]
-      flash.now[:error] = t("registrations.payment_form.errors.payment_reset")
+      flash[:error] = t("registrations.payment_form.errors.payment_reset")
     when PaymentIntent.wca_statuses[:processing]
-      flash.now[:warning] = t("registrations.payment_form.payment_processing")
+      flash[:warning] = t("registrations.payment_form.payment_processing")
     when PaymentIntent.wca_statuses[:partial]
-      flash.now[:warning] = t("registrations.payment_form.payment_partial")
+      flash[:warning] = t("registrations.payment_form.payment_partial")
     when PaymentIntent.wca_statuses[:failed]
-      flash.now[:error] = t("registrations.payment_form.errors.payment_failed")
+      flash[:error] = t("registrations.payment_form.errors.payment_failed")
     when PaymentIntent.wca_statuses[:canceled]
-      flash.now[:error] = t("registrations.payment_form.errors.payment_canceled")
+      flash[:error] = t("registrations.payment_form.errors.payment_canceled")
     else
       # Invalid status
-      flash.now[:error] = "Invalid PaymentIntent status"
+      flash[:error] = "Invalid PaymentIntent status"
+      # rubocop:enable Rails/ActionControllerFlashBeforeRender
     end
 
     redirect_to competition_register_path(competition_id)
