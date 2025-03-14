@@ -326,9 +326,6 @@ Rails/OutputSafety:
 Rails/I18nLocaleTexts:
   Enabled: false
 
-Rails/ShortI18n:
-  Enabled: false
-
 Rails/RakeEnvironment:
   Enabled: false
 
