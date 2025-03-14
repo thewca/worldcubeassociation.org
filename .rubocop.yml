@@ -335,9 +335,6 @@ Rails/RakeEnvironment:
 Rails/ApplicationRecord:
   Enabled: false
 
-Rails/ReadWriteAttribute:
-  Enabled: false
-
 Rails/HelperInstanceVariable:
   Enabled: false
 
