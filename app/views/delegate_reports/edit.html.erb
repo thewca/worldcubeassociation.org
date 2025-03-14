@@ -43,7 +43,7 @@
 
     <%= f.input :wrc_feedback_requested, as: :boolean %>
     <%= f.input :wrc_incidents %>
-    <%= f.input :wic_feedback_requested, as: :boolean %>
+    <%= f.input :wic_feedback_requested, as: :boolean, input_html: { id: "wic_feedback_checkbox" } %>
     <%= f.input :wic_incidents %>
     <%# 'remarks' is the only Report section without a fixed template, so we include it irrespective of the version %>
     <%= f.input :remarks, input_html: { class: "markdown-editor markdown-editor-image-upload" } %>
@@ -64,3 +64,16 @@
     <% end %>
   <% end %>
 <% end %>
+
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const checkbox = document.getElementById("wic_feedback_checkbox");
+
+    checkbox.addEventListener("change", function () {
+      if (this.checked) {
+        alert("If the WIC incident is sensitive (including but not limited to crimes, harassment, assault, etc.), please exclude this from your report and email the WIC separately. For other WIC incidents, default to a brief, anonymized version of the incident and follow-up with the WIC privately with further details. The WIC will still provide feedback on anonymized versions for general awareness. For all WIC incidents involving a WCA Volunteer, please exclude all details from the report, and contact the WIC privately.");
+      }
+    });
+  });
+</script>
