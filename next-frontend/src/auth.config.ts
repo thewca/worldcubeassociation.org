@@ -1,4 +1,4 @@
-import { NextAuthConfig } from "next-auth"
+import { NextAuthConfig } from "next-auth";
 
 export const authConfig: NextAuthConfig = {
   debug: true,

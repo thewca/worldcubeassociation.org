@@ -1,68 +1,68 @@
-import { Block, GlobalConfig } from 'payload'
+import { Block, GlobalConfig } from "payload";
 
 const LinkItem: Block = {
-  slug: 'LinkItem', // required
+  slug: "LinkItem", // required
   fields: [
     // required
     {
-      name: 'displayText',
-      type: 'text',
+      name: "displayText",
+      type: "text",
       required: true,
     },
     {
-      name: 'targetLink',
-      type: 'text',
+      name: "targetLink",
+      type: "text",
       required: true,
     },
   ],
-}
+};
 
 const VisualDivider: Block = {
-  slug: 'VisualDivider', // required
+  slug: "VisualDivider", // required
   fields: [],
-}
+};
 
 const NestedDropdown: Block = {
-  slug: 'NestedDropdown',
+  slug: "NestedDropdown",
   fields: [
     {
-      name: 'title',
-      type: 'text',
+      name: "title",
+      type: "text",
       required: true,
     },
     {
-      name: 'entries',
-      type: 'blocks',
+      name: "entries",
+      type: "blocks",
       blocks: [LinkItem],
       required: true,
       maxRows: 20,
-    }
+    },
   ],
-}
+};
 
 const Dropdown: Block = {
-  slug: 'NavDropdown',
+  slug: "NavDropdown",
   fields: [
     {
-      name: 'title',
-      type: 'text',
+      name: "title",
+      type: "text",
       required: true,
     },
     {
-      name: 'entries',
-      type: 'blocks',
+      name: "entries",
+      type: "blocks",
       blocks: [LinkItem, NestedDropdown, VisualDivider],
       required: true,
-    }
+    },
   ],
-}
+};
 
 export const Nav: GlobalConfig = {
-  slug: 'nav',
+  slug: "nav",
   fields: [
     {
-      name: 'entry',
-      type: 'blocks',
+      name: "entry",
+      type: "blocks",
       blocks: [Dropdown, LinkItem],
       required: true,
       maxRows: 8,
@@ -70,7 +70,7 @@ export const Nav: GlobalConfig = {
   ],
   admin: {
     livePreview: {
-      url: '/'
-    }
-  }
-}
+      url: "/",
+    },
+  },
+};
