@@ -320,9 +320,6 @@ Rails/UniqueValidationWithoutIndex:
 Rails/LexicallyScopedActionFilter:
   Enabled: false
 
-Rails/RenderInline:
-  Enabled: false
-
 # Rspec
 
 RSpec/MultipleExpectations:
