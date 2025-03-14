@@ -58,9 +58,9 @@ class UsersController < ApplicationController
     current_user.otp_secret = User.generate_otp_secret
     current_user.save!
     if was_enabled
-      flash[:success] = I18n.t("devise.sessions.new.2fa.regenerated_secret")
+      flash.now[:success] = I18n.t("devise.sessions.new.2fa.regenerated_secret")
     else
-      flash[:success] = I18n.t("devise.sessions.new.2fa.enabled_success")
+      flash.now[:success] = I18n.t("devise.sessions.new.2fa.enabled_success")
     end
     @user = current_user
     render :edit
@@ -73,14 +73,14 @@ class UsersController < ApplicationController
       otp_secret: nil,
     }
     if current_user.update(disable_params)
-      flash[:success] = I18n.t("devise.sessions.new.2fa.disabled_success")
+      flash.now[:success] = I18n.t("devise.sessions.new.2fa.disabled_success")
       params[:section] = "2fa"
     else
       # Hopefully at some point we'll make it mandatory for admin-like
       # accounts to have 2FA (like on github).
       # NOTE: we reload the user to revert the assignment of disable_params above.
       current_user.reload
-      flash[:danger] = I18n.t("devise.sessions.new.2fa.disabled_failed")
+      flash.now[:danger] = I18n.t("devise.sessions.new.2fa.disabled_failed")
       params[:section] = "general"
     end
     @user = current_user
@@ -105,7 +105,7 @@ class UsersController < ApplicationController
       session[:last_authenticated_at] = Time.now
     end
     on_failure = -> do
-      flash[:danger] = I18n.t("users.edit.sensitive.failure")
+      flash.now[:danger] = I18n.t("users.edit.sensitive.failure")
     end
     if current_user.two_factor_enabled?
       if current_user.validate_and_consume_otp!(action_params[:otp_attempt]) ||

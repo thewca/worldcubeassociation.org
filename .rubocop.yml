@@ -341,9 +341,6 @@ Rails/ReadWriteAttribute:
 Rails/HelperInstanceVariable:
   Enabled: false
 
-Rails/ActionControllerFlashBeforeRender:
-  Enabled: false
-
 Rails/UniqueValidationWithoutIndex:
   Enabled: false
 
