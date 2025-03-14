@@ -28,7 +28,8 @@ RSpec.describe "Incidents management", type: :request do
     let!(:pending_incident) { create(:incident) }
 
     context "when logged in as a user" do
-      sign_in { create(:user) }
+      let(:user) { create(:user) }
+      sign_in { user }
       it "shows a resolved incident" do
         get incident_path(incident)
         expect(response).to be_successful

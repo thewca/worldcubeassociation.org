@@ -23,7 +23,8 @@ RSpec.describe "Country bands controller" do
     end
 
     context "when signed in as a regular user" do
-      sign_in { create(:user) }
+      let(:user) { create(:user) }
+      sign_in { user }
       it "redirect to root" do
         get edit_country_band_path(0)
         expect(response).to redirect_to root_url
@@ -43,7 +44,8 @@ RSpec.describe "Country bands controller" do
     let(:some_countries) { ["US", "AL"] }
 
     context "when signed in as a regular user" do
-      sign_in { create(:user) }
+      let(:user) { create(:user) }
+      sign_in { user }
       it "redirect to root" do
         put country_band_path(0, params: { countries: { iso2s: some_countries.join(",") } })
         expect(response).to redirect_to root_url

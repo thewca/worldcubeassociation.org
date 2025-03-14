@@ -11,7 +11,8 @@ RSpec.describe PollsController do
   end
 
   context "logged in as a regular user" do
-    sign_in { create(:user) }
+    let(:user) { create(:user) }
+    sign_in { user }
     it "redirects to home page" do
       post :create
       expect(response).to redirect_to(root_url)

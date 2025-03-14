@@ -19,7 +19,8 @@ RSpec.describe DelegateReportsController do
   end
 
   context "logged in as a regular user" do
-    sign_in { create(:user) }
+    let(:user) { create(:user) }
+    sign_in { user }
 
     it "redirects to home page" do
       get :show, params: { competition_id: comp.id }

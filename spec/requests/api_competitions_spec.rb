@@ -102,7 +102,8 @@ RSpec.describe "API Competitions" do
     end
 
     context "when signed in as not a competition manager" do
-      sign_in { create(:user) }
+      let(:user) { create(:user) }
+      sign_in { user }
 
       it "does not allow access" do
         patch api_v0_competition_update_wcif_path(competition)
@@ -174,7 +175,8 @@ RSpec.describe "API Competitions" do
     context "when signed in as not a competition manager" do
       let(:competition) { create(:competition, :visible) }
 
-      sign_in { create(:user) }
+      let(:user) { create(:user) }
+      sign_in { user }
 
       it "does not allow access" do
         patch api_v0_competition_update_wcif_path(competition)
@@ -543,7 +545,8 @@ RSpec.describe "API Competitions" do
       end
 
       context "cookies based user" do
-        sign_in { create(:user) }
+        let(:user) { create(:user) }
+        sign_in { user }
 
         it "prevents from CSRF attacks" do
           headers["ACCESS_TOKEN"] = "INVALID"

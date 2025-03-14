@@ -38,7 +38,8 @@ RSpec.describe Api::V0::UserRolesController do
     end
 
     context 'when user is logged in as a normal user' do
-      sign_in { create(:user) }
+      let(:user) { create(:user) }
+      sign_in { user }
 
       it 'fetches list of roles of a user' do
         get :index, params: { userId: user_whose_delegate_status_changes.id }

@@ -57,7 +57,8 @@ RSpec.describe CompetitionsController do
     end
 
     context 'when signed in as a regular user' do
-      sign_in { create(:user) }
+      let(:user) { create(:user) }
+      sign_in { user }
 
       it 'does not allow access' do
         get :new
@@ -146,7 +147,8 @@ RSpec.describe CompetitionsController do
     end
 
     context 'when signed in as a regular user' do
-      sign_in { create(:user) }
+      let(:user) { create(:user) }
+      sign_in { user }
       it 'does not allow creation' do
         post :create, params: { competition: { name: "Test2015" } }
         expect(response).to have_http_status(:forbidden)
@@ -861,7 +863,8 @@ RSpec.describe CompetitionsController do
     end
 
     context 'regular user trying to close registration via button' do
-      sign_in { create(:user) }
+      let(:user) { create(:user) }
+      sign_in { user }
       it 'does not allow regular user to use organiser reg close button' do
         comp_with_full_reg = create(:competition, :registration_open, competitor_limit_enabled: true, competitor_limit: 1, competitor_limit_reason: "we have a tiny venue")
         create(:registration, :accepted, :newcomer, competition: comp_with_full_reg)
@@ -1132,7 +1135,8 @@ RSpec.describe CompetitionsController do
     end
 
     context 'when signed in as a regular user' do
-      sign_in { create(:user) }
+      let(:user) { create(:user) }
+      sign_in { user }
 
       it 'does not allow access' do
         expect {
@@ -1164,7 +1168,8 @@ RSpec.describe CompetitionsController do
     end
 
     context 'when signed in as a regular user' do
-      sign_in { create(:user) }
+      let(:user) { create(:user) }
+      sign_in { user }
 
       it 'does not allow access' do
         expect {
@@ -1185,7 +1190,8 @@ RSpec.describe CompetitionsController do
     end
 
     context 'when signed in as a regular user' do
-      sign_in { create(:user) }
+      let(:user) { create(:user) }
+      sign_in { user }
 
       it 'does not allow access' do
         expect {
@@ -1206,7 +1212,8 @@ RSpec.describe CompetitionsController do
     end
 
     context 'when signed in as a regular user' do
-      sign_in { create(:user) }
+      let(:user) { create(:user) }
+      sign_in { user }
 
       it 'does not allow access' do
         expect {
