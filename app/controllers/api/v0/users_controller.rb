@@ -10,7 +10,7 @@ class Api::V0::UsersController < Api::V0::ApiController
   end
 
   def show_user_by_id
-    user = User.find_by_id(params[:id])
+    user = User.find_by(id: params[:id])
     show_user(user)
   end
 
@@ -25,7 +25,7 @@ class Api::V0::UsersController < Api::V0::ApiController
   end
 
   def show_user_by_wca_id
-    user = User.find_by_wca_id(params[:wca_id])
+    user = User.find_by(wca_id: params[:wca_id])
     show_user(user)
   end
 
@@ -39,7 +39,7 @@ class Api::V0::UsersController < Api::V0::ApiController
   def personal_records
     require_user!
     return render json: { single: [], average: [] } if current_user.wca_id.blank?
-    person = Person.includes(:ranksSingle, :ranksAverage).find_by_wca_id!(current_user.wca_id)
+    person = Person.includes(:ranksSingle, :ranksAverage).find_by!(wca_id: current_user.wca_id)
     render json: { single: person.ranksSingle.map(&:to_wcif), average: person.ranksAverage.map(&:to_wcif) }
   end
 
@@ -76,7 +76,7 @@ class Api::V0::UsersController < Api::V0::ApiController
           json[:ongoing_competitions] = user.accepted_competitions.select(&:in_progress?)
         end
         if show_rankings && user.wca_id.present?
-          person = Person.includes(:ranksSingle, :ranksAverage).find_by_wca_id!(user.wca_id)
+          person = Person.includes(:ranksSingle, :ranksAverage).find_by!(wca_id: user.wca_id)
           json[:rankings] = { single: person.ranksSingle, average: person.ranksAverage }
         end
         render status: :ok, json: json

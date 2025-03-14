@@ -138,7 +138,7 @@ RSpec.feature "Competition management", :js, retry: 10 do
       expect(page).to have_current_path(edit_competition_path("OldId2016"), wait: SLUGGISH_WAIT_TIME)
 
       expect(Competition.find("OldId2016")).not_to be_nil
-      expect(Competition.find_by_id("NewId With Spaces")).to be_nil
+      expect(Competition.find_by(id: "NewId With Spaces")).to be_nil
     end
 
     scenario "change competition id with validation error" do

@@ -1014,11 +1014,11 @@ class Competition < ApplicationRecord
   end
 
   def receiving_registration_emails?(user_id)
-    competition_delegate = competition_delegates.find_by_delegate_id(user_id)
+    competition_delegate = competition_delegates.find_by(delegate_id: user_id)
     if competition_delegate&.receive_registration_emails
       return true
     end
-    competition_organizer = competition_organizers.find_by_organizer_id(user_id)
+    competition_organizer = competition_organizers.find_by(organizer_id: user_id)
     if competition_organizer&.receive_registration_emails
       return true
     end
@@ -1027,11 +1027,11 @@ class Competition < ApplicationRecord
   end
 
   def can_receive_registration_emails?(user_id)
-    competition_delegate = competition_delegates.find_by_delegate_id(user_id)
+    competition_delegate = competition_delegates.find_by(delegate_id: user_id)
     if competition_delegate
       return true
     end
-    competition_organizer = competition_organizers.find_by_organizer_id(user_id)
+    competition_organizer = competition_organizers.find_by(organizer_id: user_id)
     if competition_organizer
       return true
     end
@@ -1041,11 +1041,11 @@ class Competition < ApplicationRecord
 
   def update_receive_registration_emails
     if editing_user_id && !@receive_registration_emails.nil?
-      competition_delegate = competition_delegates.find_by_delegate_id(editing_user_id)
+      competition_delegate = competition_delegates.find_by(delegate_id: editing_user_id)
       if competition_delegate
         competition_delegate.update_attribute(:receive_registration_emails, @receive_registration_emails)
       end
-      competition_organizer = competition_organizers.find_by_organizer_id(editing_user_id)
+      competition_organizer = competition_organizers.find_by(organizer_id: editing_user_id)
       if competition_organizer
         competition_organizer.update_attribute(:receive_registration_emails, @receive_registration_emails)
       end
@@ -1777,7 +1777,7 @@ class Competition < ApplicationRecord
   # For associated_events_picker
   def events_to_associated_events(events)
     events.map do |event|
-      competition_events.find_by_event_id(event.id) || competition_events.build(event_id: event.id)
+      competition_events.find_by(event_id: event.id) || competition_events.build(event_id: event.id)
     end
   end
 
@@ -1811,7 +1811,7 @@ class Competition < ApplicationRecord
     end
 
     if params[:country_iso2].present?
-      country = Country.find_by_iso2(params[:country_iso2])
+      country = Country.find_by(iso2: params[:country_iso2])
       if !country
         raise WcaExceptions::BadApiParameter.new("Invalid country_iso2: '#{params[:country_iso2]}'")
       end
@@ -2096,7 +2096,7 @@ class Competition < ApplicationRecord
       raise WcaExceptions::BadApiParameter.new("The Series must include the competition you're currently editing.")
     end
 
-    competition_series = CompetitionSeries.find_by_wcif_id(wcif_series["id"]) || CompetitionSeries.new
+    competition_series = CompetitionSeries.find_by(wcif_id: wcif_series["id"]) || CompetitionSeries.new
     competition_series.set_wcif!(wcif_series)
 
     self.competition_series = competition_series
@@ -2361,7 +2361,7 @@ class Competition < ApplicationRecord
   private def clean_series_when_leaving
     if competition_series_id.nil? && # if we just processed an update to remove the competition series
        (old_series_id = competition_series_id_previously_was) && # and we previously had an ID
-       (old_series = CompetitionSeries.find_by_id(old_series_id)) # and that series still exists
+       (old_series = CompetitionSeries.find_by(id: old_series_id)) # and that series still exists
       old_series.reload.destroy_if_orphaned # prompt it to check for orphaned state.
     end
   end
