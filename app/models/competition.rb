@@ -1658,12 +1658,15 @@ class Competition < ApplicationRecord
     keyword_init: true,
   )
 
+  # rubocop:disable Lint/StructNewOverride
+  # this does overwrite sort_by, but as it's never used in an array, it should be fine
   PsychSheet = Struct.new(
     :sorted_rankings,
     :sort_by,
     :sort_by_second,
     keyword_init: true,
   )
+  # rubocop:enable Lint/StructNewOverride
 
   def psych_sheet_event(event, sort_by)
     ActiveRecord::Base.connected_to(role: :read_replica) do

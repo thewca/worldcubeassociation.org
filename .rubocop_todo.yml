@@ -45,9 +45,6 @@ Metrics/PerceivedComplexity:
     - 'app/models/competition.rb'
     - 'lib/results_validators/*.rb'
 
-Lint/StructNewOverride:
-  Enabled: false
-
 Style/AccessorGrouping:
   Enabled: false
 
