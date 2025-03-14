@@ -26,12 +26,6 @@ AllCops:
 Bundler/OrderedGems:
   Enabled: false
 
-Lint/EmptyWhen:
-  Enabled: false
-
-Lint/UnusedBlockArgument:
-  Enabled: false
-
 Lint/UnusedMethodArgument:
   Enabled: false
 

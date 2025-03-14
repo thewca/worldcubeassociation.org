@@ -237,7 +237,7 @@ module ResultsValidators
           parsed_wcif_id = Round.parse_wcif_id(wcif_id)
           # Get the actual round_id from our expected rounds by id
 
-          actual_round_id = rounds_by_ids.find do |id, round|
+          actual_round_id = rounds_by_ids.find do |_id, round|
             round.event.id == parsed_wcif_id[:event_id] && round.number == parsed_wcif_id[:round_number]
           end
           unless actual_round_id

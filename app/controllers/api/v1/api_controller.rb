@@ -31,7 +31,7 @@ class Api::V1::ApiController < ActionController::API
     end
   end
 
-  rescue_from ActionController::ParameterMissing do |e|
+  rescue_from ActionController::ParameterMissing do |_e|
     render json: { error: Registrations::ErrorCodes::INVALID_REQUEST_DATA }, status: :bad_request
   end
 end

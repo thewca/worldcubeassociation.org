@@ -26,7 +26,7 @@ Doorkeeper.configure do
 
   # Copied from
   #  https://github.com/doorkeeper-gem/doorkeeper/wiki/Using-Resource-Owner-Password-Credentials-flow
-  resource_owner_from_credentials do |routes|
+  resource_owner_from_credentials do |_routes|
     u = User.find_for_database_authentication(email: params[:username])
     u if u&.valid_password?(params[:password])
   end

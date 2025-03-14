@@ -65,7 +65,7 @@ class SessionsController < Devise::SessionsController
     # Overrides Devise's create sign in method and pass it a block executed
     # after sign in, to mark use as recently authenticated upon sign in.
     # See https://www.rubydoc.info/github/plataformatec/devise/Devise/SessionsController#create-instance_method
-    super do |resource|
+    super do |_resource|
       session[:last_authenticated_at] = Time.now
     end
   end
