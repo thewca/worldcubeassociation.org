@@ -20,6 +20,26 @@ class RegionalOrganizationsController < ApplicationController
     @regional_organization = regional_organization_from_params
   end
 
+  def create
+    @regional_organization = RegionalOrganization.new(regional_organization_params)
+
+    @regional_organization.logo.attach(params[:regional_organization][:logo])
+    @regional_organization.bylaws.attach(params[:regional_organization][:bylaws])
+    @regional_organization.extra_file.attach(params[:regional_organization][:extra_file])
+    if @regional_organization.save
+      flash[:success] = t('.create_success')
+      RegionalOrganizationsMailer.notify_board_and_assistants_of_new_regional_organization_application(current_user, @regional_organization).deliver_later
+      if current_user.can_manage_regional_organizations?
+        redirect_to edit_regional_organization_path(@regional_organization)
+      else
+        redirect_to root_url
+      end
+    else
+      @regional_organization.errors[:id].each { |error| @regional_organization.errors.add(:name, error) }
+      render :new
+    end
+  end
+
   def update
     @regional_organization = regional_organization_from_params
 
@@ -43,26 +63,6 @@ class RegionalOrganizationsController < ApplicationController
       flash[:danger] = "Unable to delete Regional Organization because it is not pending"
     end
     redirect_to admin_regional_organizations_path
-  end
-
-  def create
-    @regional_organization = RegionalOrganization.new(regional_organization_params)
-
-    @regional_organization.logo.attach(params[:regional_organization][:logo])
-    @regional_organization.bylaws.attach(params[:regional_organization][:bylaws])
-    @regional_organization.extra_file.attach(params[:regional_organization][:extra_file])
-    if @regional_organization.save
-      flash[:success] = t('.create_success')
-      RegionalOrganizationsMailer.notify_board_and_assistants_of_new_regional_organization_application(current_user, @regional_organization).deliver_later
-      if current_user.can_manage_regional_organizations?
-        redirect_to edit_regional_organization_path(@regional_organization)
-      else
-        redirect_to root_url
-      end
-    else
-      @regional_organization.errors[:id].each { |error| @regional_organization.errors.add(:name, error) }
-      render :new
-    end
   end
 
   private def regional_organization_params

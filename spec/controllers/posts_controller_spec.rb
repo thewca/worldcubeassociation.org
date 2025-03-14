@@ -74,7 +74,7 @@ RSpec.describe PostsController do
     describe "GET #new" do
       it "works" do
         get :new
-        expect(response.status).to eq 200
+        expect(response).to have_http_status :ok
       end
     end
 
@@ -94,7 +94,7 @@ RSpec.describe PostsController do
     describe "GET #new" do
       it "returns 200" do
         get :new
-        expect(response.status).to eq 200
+        expect(response).to have_http_status :ok
       end
     end
 

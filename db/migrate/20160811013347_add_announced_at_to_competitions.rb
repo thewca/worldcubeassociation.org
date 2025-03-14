@@ -3,7 +3,7 @@
 class AddAnnouncedAtToCompetitions < ActiveRecord::Migration
   def up
     add_column :Competitions, :announced_at, :datetime
-    execute <<-SQL
+    execute <<-SQL.squish
       UPDATE Competitions
       SET announced_at = (SELECT created_at
         FROM posts

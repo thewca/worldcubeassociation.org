@@ -2,19 +2,19 @@
 
 class SimplifyRegistrations < ActiveRecord::Migration
   def up
-    execute <<-SQL
+    execute <<-SQL.squish
       CREATE TABLE old_registrations LIKE registrations;
     SQL
 
     # To keep things simple, just copy the entire registrations table over to
     # old_registrations.
-    execute <<-SQL
+    execute <<-SQL.squish
       INSERT INTO old_registrations SELECT registrations.* FROM registrations;
     SQL
 
     # Now delete all the registrations for competitions whose results have already
     # been uploaded.
-    execute <<-SQL
+    execute <<-SQL.squish
       DELETE registrations.*
       FROM registrations
       JOIN Competitions on Competitions.id=registrations.competitionId

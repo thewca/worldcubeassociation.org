@@ -20,7 +20,7 @@ class ScheduleActivity < ApplicationRecord
   delegate :color, to: :holder
 
   def included_in_parent_schedule
-    return unless errors.blank?
+    return if errors.present?
     unless start_time >= holder.start_time
       errors.add(:start_time, "should be after parent's start_time")
     end
@@ -33,7 +33,7 @@ class ScheduleActivity < ApplicationRecord
   end
 
   def valid_activity_code
-    return unless errors.blank?
+    return if errors.present?
 
     activity_id = activity_code.split('-').first
     unless VALID_ACTIVITY_CODE_BASE.include?(activity_id)

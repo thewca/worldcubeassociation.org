@@ -8,7 +8,7 @@ RSpec.describe ServerStatusController, type: :controller do
 
     get :index
 
-    expect(response).to have_http_status 200
+    expect(response).to have_http_status :ok
   end
 
   it "can fail" do
@@ -16,7 +16,7 @@ RSpec.describe ServerStatusController, type: :controller do
 
     get :index
 
-    expect(response).to have_http_status 503
+    expect(response).to have_http_status :service_unavailable
   end
 end
 

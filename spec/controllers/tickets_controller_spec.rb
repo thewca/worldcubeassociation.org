@@ -22,14 +22,14 @@ RSpec.describe TicketsController do
 
       post :anonymize, params: { wcaId: banned_person.wca_id }
 
-      expect(response.status).to eq 422
+      expect(response).to have_http_status :unprocessable_content
       expect(response.parsed_body["error"]).to eq "Error anonymizing: This person is currently banned and cannot be anonymized."
     end
 
     it 'cannot anonymize if both user ID and WCA ID is not provided' do
       post :anonymize
 
-      expect(response.status).to eq 422
+      expect(response).to have_http_status :unprocessable_content
       expect(response.parsed_body["error"]).to eq "User ID and WCA ID is not provided."
     end
 
@@ -39,7 +39,7 @@ RSpec.describe TicketsController do
 
       post :anonymize, params: { userId: user.id, wcaId: person.wca_id }
 
-      expect(response.status).to eq 422
+      expect(response).to have_http_status :unprocessable_content
       expect(response.parsed_body["error"]).to eq "Person and user not linked."
     end
 

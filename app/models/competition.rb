@@ -301,7 +301,7 @@ class Competition < ApplicationRecord
   end
 
   def has_administrative_notes?
-    registrations.any? { |registration| !registration.administrative_notes.blank? }
+    registrations.any? { |registration| registration.administrative_notes.present? }
   end
 
   NEARBY_DISTANCE_KM_WARNING = 250
@@ -775,6 +775,9 @@ class Competition < ApplicationRecord
 
   attr_accessor :clone_tabs
 
+  before_validation :compute_coordinates
+  before_validation :create_id_and_cell_name
+  before_validation :unpack_delegate_organizer_ids
   # After the cloned competition is created, clone other associations which cannot just be copied.
   after_create :clone_associations
   private def clone_associations
@@ -793,9 +796,7 @@ class Competition < ApplicationRecord
   alias_attribute :visible, :showAtAll
   alias_attribute :latitude_microdegrees, :latitude
   alias_attribute :longitude_microdegrees, :longitude
-  before_validation :compute_coordinates
 
-  before_validation :create_id_and_cell_name
   def create_id_and_cell_name(force_override: false)
     m = VALID_NAME_RE.match(name)
     if m
@@ -832,7 +833,6 @@ class Competition < ApplicationRecord
     user.cannot_register_for_competition_reasons(self).empty?
   end
 
-  before_validation :unpack_delegate_organizer_ids
   def unpack_delegate_organizer_ids
     # This is a mess. When changing competition ids, the calls to delegates=
     # and organizers= below will cause database writes with a new competition_id.
@@ -888,6 +888,10 @@ class Competition < ApplicationRecord
     end
   end
 
+  # We only do this after_update, because upon adding/removing a manager to a
+  # competition the attribute is automatically set to that manager's preference.
+  after_update :update_receive_registration_emails
+  after_update :clean_series_when_leaving
   # Workaround for PHP code that requires these tables to be clean.
   # Once we're in all railsland, this can go, and we can add a script
   # that checks our database sanity instead.
@@ -1035,9 +1039,6 @@ class Competition < ApplicationRecord
     false
   end
 
-  # We only do this after_update, because upon adding/removing a manager to a
-  # competition the attribute is automatically set to that manager's preference.
-  after_update :update_receive_registration_emails
   def update_receive_registration_emails
     if editing_user_id && !@receive_registration_emails.nil?
       competition_delegate = competition_delegates.find_by_delegate_id(editing_user_id)
@@ -2357,7 +2358,6 @@ class Competition < ApplicationRecord
     end
   end
 
-  after_update :clean_series_when_leaving
   private def clean_series_when_leaving
     if competition_series_id.nil? && # if we just processed an update to remove the competition series
        (old_series_id = competition_series_id_previously_was) && # and we previously had an ID
