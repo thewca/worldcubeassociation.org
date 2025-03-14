@@ -21,7 +21,7 @@ module JobUtils
     DelegatesMetadataSyncJob,
   ].freeze
 
-  WCA_CRONJOBS_MAP = WCA_CRONJOBS.to_h { |job| [job.name, job] }
+  WCA_CRONJOBS_MAP = WCA_CRONJOBS.index_by { |job| job.name }
 
   def self.cronjob_statistics_from_cronjob_name(cronjob_name)
     WCA_CRONJOBS_MAP[cronjob_name]&.cronjob_statistics
