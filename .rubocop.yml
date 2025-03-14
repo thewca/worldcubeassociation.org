@@ -311,9 +311,6 @@ Rails/RedundantForeignKey:
 Rails/InverseOf:
   Enabled: false
 
-Rails/Validation:
-  Enabled: false
-
 Rails/HasManyOrHasOneDependent:
   Enabled: false
 

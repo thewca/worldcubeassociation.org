@@ -14,7 +14,7 @@ class CompetitionEvent < ApplicationRecord
 
   accepts_nested_attributes_for :rounds, allow_destroy: true
 
-  validates_numericality_of :fee_lowest_denomination, greater_than_or_equal_to: 0
+  validates :fee_lowest_denomination, numericality: { greater_than_or_equal_to: 0 }
   monetize :fee_lowest_denomination,
            as: "fee",
            with_model_currency: :currency_code

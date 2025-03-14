@@ -21,8 +21,8 @@ class Result < ApplicationRecord
 
   MARKERS = [nil, "NR", "ER", "WR", "AfR", "AsR", "NAR", "OcR", "SAR"].freeze
 
-  validates_inclusion_of :regionalSingleRecord, in: MARKERS
-  validates_inclusion_of :regionalAverageRecord, in: MARKERS
+  validates :regionalSingleRecord, inclusion: { in: MARKERS }
+  validates :regionalAverageRecord, inclusion: { in: MARKERS }
   alias_attribute :regional_single_record, :regionalSingleRecord
   alias_attribute :regional_average_record, :regionalAverageRecord
 

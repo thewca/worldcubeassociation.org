@@ -9,11 +9,11 @@ class ScheduleActivity < ApplicationRecord
   has_many :wcif_extensions, as: :extendable, dependent: :delete_all
   has_many :assignments, dependent: :delete_all
 
-  validates_presence_of :name
-  validates_numericality_of :wcif_id, only_integer: true
-  validates_presence_of :start_time, allow_blank: false
-  validates_presence_of :end_time, allow_blank: false
-  validates_presence_of :activity_code, allow_blank: false
+  validates :name, presence: true
+  validates :wcif_id, numericality: { only_integer: true }
+  validates :start_time, presence: { allow_blank: false }
+  validates :end_time, presence: { allow_blank: false }
+  validates :activity_code, presence: { allow_blank: false }
   # TODO: we don't yet care for scramble_set_id
   validate :included_in_parent_schedule
   validate :valid_activity_code
