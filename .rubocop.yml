@@ -347,9 +347,6 @@ Rails/ActionControllerFlashBeforeRender:
 Rails/UniqueValidationWithoutIndex:
   Enabled: false
 
-Rails/DotSeparatedKeys:
-  Enabled: false
-
 Rails/LexicallyScopedActionFilter:
   Enabled: false
 
