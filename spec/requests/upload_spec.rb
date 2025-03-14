@@ -16,6 +16,7 @@ RSpec.describe ResultsSubmissionController, type: :request do
 
   context "signed in as delegate" do
     let(:delegate) { create(:delegate) }
+
     sign_in { delegate }
 
     it "can upload an image" do

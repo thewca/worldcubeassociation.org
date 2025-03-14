@@ -14,6 +14,7 @@ RSpec.describe "WFC controller" do
 
     context "when signed in as a regular user" do
       let(:user) { create(:user) }
+
       sign_in { user }
       it "redirect to root" do
         get panel_index_path(:wfc)
@@ -23,6 +24,7 @@ RSpec.describe "WFC controller" do
 
     context "when signed in as a WFC member" do
       let(:staff) { create(:user, :wfc_member) }
+
       sign_in { staff }
       it "shows the page" do
         get panel_index_path(:wfc)
@@ -34,6 +36,7 @@ RSpec.describe "WFC controller" do
   describe "GET /competitions_export" do
     context "when signed in as a regular user" do
       let(:user) { create(:user) }
+
       sign_in { user }
       it "redirect to root" do
         get wfc_competitions_export_path(from_date: Time.now, to_date: Time.now)
@@ -43,6 +46,7 @@ RSpec.describe "WFC controller" do
 
     context "when signed in as a WFC member" do
       let(:staff) { create(:user, :wfc_member) }
+
       sign_in { staff }
       it "shows the page" do
         get wfc_competitions_export_path(from_date: Time.now, to_date: Time.now)

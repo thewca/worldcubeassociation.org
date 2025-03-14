@@ -12,6 +12,7 @@ RSpec.describe PollsController do
 
   context "logged in as a regular user" do
     let(:user) { create(:user) }
+
     sign_in { user }
     it "redirects to home page" do
       post :create
@@ -21,6 +22,7 @@ RSpec.describe PollsController do
 
   context "logged in as an admin" do
     let(:admin) { create(:admin) }
+
     sign_in { admin }
     it "shows poll results" do
       poll = create(:poll)
@@ -31,6 +33,7 @@ RSpec.describe PollsController do
 
   context "logged in as a delegate" do
     let(:delegate) { create(:delegate) }
+
     sign_in { delegate }
     it "shows poll results" do
       poll = create(:poll)
@@ -41,6 +44,7 @@ RSpec.describe PollsController do
 
   context "logged in as a staff member" do
     let(:staff) { create(:user, :wrt_member) }
+
     sign_in { staff }
     it "shows poll results" do
       poll = create(:poll)

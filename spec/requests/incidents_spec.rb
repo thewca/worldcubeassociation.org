@@ -29,6 +29,7 @@ RSpec.describe "Incidents management", type: :request do
 
     context "when logged in as a user" do
       let(:user) { create(:user) }
+
       sign_in { user }
       it "shows a resolved incident" do
         get incident_path(incident)
@@ -42,6 +43,7 @@ RSpec.describe "Incidents management", type: :request do
 
     context "when logged in as a Delegate" do
       let(:delegate) { create(:delegate) }
+
       sign_in { delegate }
       it "does not show a pending incident" do
         get incident_path(pending_incident)
@@ -51,6 +53,7 @@ RSpec.describe "Incidents management", type: :request do
 
     context "when logged in as a WIC member" do
       let(:staff) { create(:user, :wic_member) }
+
       sign_in { staff }
       it "does not show a pending incident" do
         get incident_path(pending_incident)
@@ -60,6 +63,7 @@ RSpec.describe "Incidents management", type: :request do
 
     context "when logged in as a WQAC member" do
       let(:staff) { create(:user, :wqac_member) }
+
       sign_in { staff }
       it "does not show a pending incident" do
         get incident_path(pending_incident)
@@ -79,6 +83,7 @@ RSpec.describe "Incidents management", type: :request do
 
     context "when signed in as a delegate" do
       let(:delegate) { create(:delegate) }
+
       sign_in { delegate }
       it "does not allow access" do
         get new_incident_path
@@ -101,6 +106,7 @@ RSpec.describe "Incidents management", type: :request do
   describe "GET #edit" do
     context "when signed in as a delegate" do
       let(:delegate) { create(:delegate) }
+
       sign_in { delegate }
       it "does not allow access" do
         get edit_incident_path(incident)
@@ -127,6 +133,7 @@ RSpec.describe "Incidents management", type: :request do
 
     context "when signed in as a delegate" do
       let(:delegate) { create(:delegate) }
+
       sign_in { delegate }
       it "does not allow access" do
         post incidents_path, params: { incident: valid_attributes }
@@ -166,6 +173,7 @@ RSpec.describe "Incidents management", type: :request do
 
     context "when signed in as a delegate" do
       let(:delegate) { create(:delegate) }
+
       sign_in { delegate }
       it "does not allow access" do
         put incident_path(incident), params: { incident: {} }
@@ -207,6 +215,7 @@ RSpec.describe "Incidents management", type: :request do
   describe "DELETE #destroy" do
     context "when signed in as a delegate" do
       let(:delegate) { create(:delegate) }
+
       sign_in { delegate }
       it "does not allow access" do
         put incident_path(incident)
@@ -229,6 +238,7 @@ RSpec.describe "Incidents management", type: :request do
   describe "PATCH #mark_as" do
     context "when signed in as a delegate" do
       let(:delegate) { create(:delegate) }
+
       sign_in { delegate }
       it "does not allow access" do
         patch incident_mark_as_path(incident_id: incident.id, kind: "resolved")

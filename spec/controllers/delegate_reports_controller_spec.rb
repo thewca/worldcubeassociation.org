@@ -20,6 +20,7 @@ RSpec.describe DelegateReportsController do
 
   context "logged in as a regular user" do
     let(:user) { create(:user) }
+
     sign_in { user }
 
     it "redirects to home page" do
@@ -30,6 +31,7 @@ RSpec.describe DelegateReportsController do
 
   context "logged in as a regular delegate" do
     let(:delegate) { create(:delegate) }
+
     sign_in { delegate }
 
     it "redirects to home page" do

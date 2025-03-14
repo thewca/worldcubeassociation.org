@@ -24,6 +24,7 @@ RSpec.describe "Country bands controller" do
 
     context "when signed in as a regular user" do
       let(:user) { create(:user) }
+
       sign_in { user }
       it "redirect to root" do
         get edit_country_band_path(0)
@@ -33,6 +34,7 @@ RSpec.describe "Country bands controller" do
 
     context "when signed in as a WFC member" do
       let(:staff) { create(:user, :wfc_member) }
+
       sign_in { staff }
       it "shows the page" do
         get edit_country_band_path(0)
@@ -46,6 +48,7 @@ RSpec.describe "Country bands controller" do
 
     context "when signed in as a regular user" do
       let(:user) { create(:user) }
+
       sign_in { user }
       it "redirect to root" do
         put country_band_path(0, params: { countries: { iso2s: some_countries.join(",") } })

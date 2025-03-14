@@ -14,6 +14,7 @@ RSpec.describe VotesController do
 
   context "logged in as a regular user" do
     let(:user) { create(:user) }
+
     sign_in { user }
     it "redirects to home page" do
       post :create

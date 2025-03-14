@@ -103,6 +103,7 @@ RSpec.describe "API Competitions" do
 
     context "when signed in as not a competition manager" do
       let(:user) { create(:user) }
+
       sign_in { user }
 
       it "does not allow access" do
@@ -176,6 +177,7 @@ RSpec.describe "API Competitions" do
       let(:competition) { create(:competition, :visible) }
 
       let(:user) { create(:user) }
+
       sign_in { user }
 
       it "does not allow access" do
@@ -191,6 +193,7 @@ RSpec.describe "API Competitions" do
 
       context "when signed in as a board member" do
         let(:board) { create(:user, :board_member) }
+
         sign_in { board }
 
         it "updates the competition events of an unconfirmed competition" do
@@ -547,6 +550,7 @@ RSpec.describe "API Competitions" do
 
       context "cookies based user" do
         let(:user) { create(:user) }
+
         sign_in { user }
 
         it "prevents from CSRF attacks" do

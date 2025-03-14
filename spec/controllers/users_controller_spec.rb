@@ -187,6 +187,7 @@ RSpec.describe UsersController do
 
   describe "GET #index" do
     let(:admin) { create(:admin) }
+
     sign_in { admin }
 
     it "is injection safe" do
