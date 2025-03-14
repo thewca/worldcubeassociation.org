@@ -104,8 +104,7 @@
     "> 0.2%",
     "last 5 versions",
     "Firefox ESR",
-    "not dead",
-    "not op_mini all"
+    "not dead"
   ],
   "devDependencies": {
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.15",
