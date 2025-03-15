@@ -95,7 +95,7 @@ class User < ApplicationRecord
   end
 
   def self.all_discourse_groups
-    UserGroup.teams_committees.map(&:metadata).map(&:friendly_id) + UserGroup.councils.map(&:metadata).map(&:friendly_id) + RolesMetadataDelegateRegions.statuses.values + [UserGroup.group_types[:board]]
+    UserGroup.teams_committees.map { |x| x.metadata.friendly_id } + UserGroup.councils.map { |x| x.metadata.friendly_id } + RolesMetadataDelegateRegions.statuses.values + [UserGroup.group_types[:board]]
   end
 
   accepts_nested_attributes_for :user_preferred_events, allow_destroy: true
@@ -233,11 +233,11 @@ class User < ApplicationRecord
     end
 
     if claiming_wca_id || (unconfirmed_wca_id.present? && unconfirmed_wca_id_change)
-      if !delegate_id_to_handle_wca_id_claim.present?
+      if delegate_id_to_handle_wca_id_claim.blank?
         errors.add(:delegate_id_to_handle_wca_id_claim, I18n.t('simple_form.required.text'))
       end
 
-      if !unconfirmed_wca_id.present?
+      if unconfirmed_wca_id.blank?
         errors.add(:unconfirmed_wca_id, I18n.t('simple_form.required.text'))
       end
 
@@ -370,9 +370,7 @@ class User < ApplicationRecord
   end
 
   # Convenience method for Discord SSO, because we need to maintain backwards compatibility
-  def avatar_url
-    avatar.url
-  end
+  delegate :url, to: :avatar, prefix: true
 
   # This method was copied and overridden from https://github.com/plataformatec/devise/blob/master/lib/devise/models/confirmable.rb#L182
   # to enable separate emails for sign-up and email reconfirmation
@@ -412,7 +410,7 @@ class User < ApplicationRecord
   end
 
   private def at_least_senior_teams_committees_member?(group)
-    teams_committees_at_least_senior_roles.where(group_id: group.id).exists?
+    teams_committees_at_least_senior_roles.exists?(group_id: group.id)
   end
 
   private def group_leader?(group)
@@ -541,7 +539,7 @@ class User < ApplicationRecord
 
   def banned_at_date?(date)
     if banned?
-      !ban_end.present? || date < ban_end
+      ban_end.blank? || date < ban_end
     else
       false
     end

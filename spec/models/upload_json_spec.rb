@@ -59,7 +59,7 @@ RSpec.describe UploadJson do
 
     upload_json = FactoryBot.build(:upload_json, competition_id: competition.id, results_json_str: results_json)
 
-    expect(upload_json.import_to_inbox).to eq true
+    expect(upload_json.import_to_inbox).to be true
     expect(InboxResult.count).to eq 1
     inbox_result = InboxResult.first
     # There is no cutoff, so the incoming roundTypeId "c" should be converted to "f"

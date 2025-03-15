@@ -28,6 +28,7 @@ RSpec.describe "WFC controller" do
       end
     end
   end
+
   describe "GET /competitions_export" do
     context "when signed in as a regular user" do
       sign_in { FactoryBot.create :user }

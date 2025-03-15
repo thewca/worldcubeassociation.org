@@ -59,7 +59,6 @@ gem 'devise-jwt'
 gem 'jwt'
 gem 'iso', github: 'thewca/ruby-iso'
 gem 'csv'
-gem 'ostruct'
 
 # Pointing to jfly/selectize-rails which has a workaround for
 #  https://github.com/selectize/selectize.js/issues/953
@@ -132,6 +131,11 @@ group :development do
   gem 'overcommit', require: false
   gem 'rubocop', require: false
   gem 'rubocop-thread_safety', require: false
+  gem 'rubocop-performance', require: false
+  gem 'rubocop-rails', require: false
+  gem 'rubocop-rspec', require: false
+  gem 'rubocop-rspec_rails', require: false
+  gem 'rubocop-factory_bot', require: false
   gem 'better_errors'
   gem 'binding_of_caller'
   gem 'bullet'

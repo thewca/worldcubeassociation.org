@@ -1,8 +1,9 @@
+# rubocop:disable all
 # frozen_string_literal: true
 
 class UpdateRoundIds < ActiveRecord::Migration[5.1]
   def up
-    Round.where.not(time_limit: nil).each do |round|
+    Round.where.not(time_limit: nil).find_each do |round|
       time_limit = round.time_limit
       next if time_limit.cumulative_round_ids.empty?
 

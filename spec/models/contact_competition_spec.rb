@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.describe ContactCompetition do
-  let(:delegates) { [FactoryBot.create(:delegate), FactoryBot.create(:delegate)] }
+  let(:delegates) { FactoryBot.create_list(:delegate, 2) }
   let(:organizers) { [FactoryBot.create(:user)] }
 
   context "to email" do

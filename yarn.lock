@@ -261,12 +261,12 @@ __metadata:
   linkType: hard
 
 "@babel/helpers@npm:^7.26.9":
-  version: 7.26.9
-  resolution: "@babel/helpers@npm:7.26.9"
+  version: 7.26.10
+  resolution: "@babel/helpers@npm:7.26.10"
   dependencies:
     "@babel/template": "npm:^7.26.9"
-    "@babel/types": "npm:^7.26.9"
-  checksum: 10c0/3d4dbc4a33fe4181ed810cac52318b578294745ceaec07e2f6ecccf6cda55d25e4bfcea8f085f333bf911c9e1fc13320248dd1d5315ab47ad82ce1077410df05
+    "@babel/types": "npm:^7.26.10"
+  checksum: 10c0/f99e1836bcffce96db43158518bb4a24cf266820021f6461092a776cba2dc01d9fc8b1b90979d7643c5c2ab7facc438149064463a52dd528b21c6ab32509784f
   languageName: node
   linkType: hard
 
@@ -1341,12 +1341,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:^7.10.4, @babel/runtime@npm:^7.10.5, @babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.15.4, @babel/runtime@npm:^7.20.13, @babel/runtime@npm:^7.26.9, @babel/runtime@npm:^7.8.4, @babel/runtime@npm:^7.9.2":
+"@babel/runtime@npm:^7.10.4, @babel/runtime@npm:^7.10.5, @babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.15.4, @babel/runtime@npm:^7.20.13, @babel/runtime@npm:^7.8.4, @babel/runtime@npm:^7.9.2":
   version: 7.26.9
   resolution: "@babel/runtime@npm:7.26.9"
   dependencies:
     regenerator-runtime: "npm:^0.14.0"
   checksum: 10c0/e8517131110a6ec3a7360881438b85060e49824e007f4a64b5dfa9192cf2bb5c01e84bfc109f02d822c7edb0db926928dd6b991e3ee460b483fb0fac43152d9b
+  languageName: node
+  linkType: hard
+
+"@babel/runtime@npm:^7.26.10":
+  version: 7.26.10
+  resolution: "@babel/runtime@npm:7.26.10"
+  dependencies:
+    regenerator-runtime: "npm:^0.14.0"
+  checksum: 10c0/6dc6d88c7908f505c4f7770fb4677dfa61f68f659b943c2be1f2a99cb6680343462867abf2d49822adc435932919b36c77ac60125793e719ea8745f2073d3745
   languageName: node
   linkType: hard
 
@@ -1383,6 +1392,16 @@ __metadata:
     "@babel/helper-string-parser": "npm:^7.25.9"
     "@babel/helper-validator-identifier": "npm:^7.25.9"
   checksum: 10c0/999c56269ba00e5c57aa711fbe7ff071cd6990bafd1b978341ea7572cc78919986e2aa6ee51dacf4b6a7a6fa63ba4eb3f1a03cf55eee31b896a56d068b895964
+  languageName: node
+  linkType: hard
+
+"@babel/types@npm:^7.26.10":
+  version: 7.26.10
+  resolution: "@babel/types@npm:7.26.10"
+  dependencies:
+    "@babel/helper-string-parser": "npm:^7.25.9"
+    "@babel/helper-validator-identifier": "npm:^7.25.9"
+  checksum: 10c0/7a7f83f568bfc3dfabfaf9ae3a97ab5c061726c0afa7dcd94226d4f84a81559da368ed79671e3a8039d16f12476cf110381a377ebdea07587925f69628200dac
   languageName: node
   linkType: hard
 
@@ -2537,28 +2556,28 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@stripe/stripe-js@npm:^5.8.0":
-  version: 5.8.0
-  resolution: "@stripe/stripe-js@npm:5.8.0"
-  checksum: 10c0/63f77f0b731a744af3dc2d9dfe6f46eb05cf4b5258a167341afce756c9852d9da86ad1397faf20d00f24e034c9d54cb4a9b866d7b2f1ac3e0f92c534f62f4a91
+"@stripe/stripe-js@npm:^5.10.0":
+  version: 5.10.0
+  resolution: "@stripe/stripe-js@npm:5.10.0"
+  checksum: 10c0/0309007baaf939931de0e18ec8230bdfa41b1644cd5f65d72168ef0a05ea4d14da9a95ff628c94f9f1e222577296369b7490534803ce1ce18d08a557ae562644
   languageName: node
   linkType: hard
 
-"@tanstack/query-core@npm:5.67.1":
-  version: 5.67.1
-  resolution: "@tanstack/query-core@npm:5.67.1"
-  checksum: 10c0/449e1880b10d8413bfa746a6f1def962a1ad7ab670d8cc24b25780e8668df1a6fa2d537e6b1981ac12f32f2e7939ba1406f2b03bf16a26f0044eda2c48facecf
+"@tanstack/query-core@npm:5.67.2":
+  version: 5.67.2
+  resolution: "@tanstack/query-core@npm:5.67.2"
+  checksum: 10c0/1824fbd72d07a575a71565d7fd975270b51bdf311dcfcafe21cf83c4b704af06962bbdd49019994a27edb32013aef51180bf412cca8399ac2d4cf0dc6cc8993c
   languageName: node
   linkType: hard
 
-"@tanstack/react-query@npm:^5.67.1":
-  version: 5.67.1
-  resolution: "@tanstack/react-query@npm:5.67.1"
+"@tanstack/react-query@npm:^5.67.2":
+  version: 5.67.2
+  resolution: "@tanstack/react-query@npm:5.67.2"
   dependencies:
-    "@tanstack/query-core": "npm:5.67.1"
+    "@tanstack/query-core": "npm:5.67.2"
   peerDependencies:
     react: ^18 || ^19
-  checksum: 10c0/ac591f367335f7b09a8f6106a51456b3f725f08f8b4b834406411b9c51170eea7d563fb42dbf7c4e017c19b637ff49fc8bdc15e4994a835f2660feaab2a091de
+  checksum: 10c0/70665f0fb9668475948dd285542eb7c2b15fb9ee6e25dd4c710ce1db4a5bfa5a879983b05d5462b72e4782a09ac2fb5550486592dabb0d37544fdc5e65bafdc3
   languageName: node
   linkType: hard
 
@@ -3477,7 +3496,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"autoprefixer@npm:^10.4.19, autoprefixer@npm:^10.4.20":
+"autoprefixer@npm:^10.4.19":
   version: 10.4.20
   resolution: "autoprefixer@npm:10.4.20"
   dependencies:
@@ -3492,6 +3511,24 @@ __metadata:
   bin:
     autoprefixer: bin/autoprefixer
   checksum: 10c0/e1f00978a26e7c5b54ab12036d8c13833fad7222828fc90914771b1263f51b28c7ddb5803049de4e77696cbd02bb25cfc3634e80533025bb26c26aacdf938940
+  languageName: node
+  linkType: hard
+
+"autoprefixer@npm:^10.4.21":
+  version: 10.4.21
+  resolution: "autoprefixer@npm:10.4.21"
+  dependencies:
+    browserslist: "npm:^4.24.4"
+    caniuse-lite: "npm:^1.0.30001702"
+    fraction.js: "npm:^4.3.7"
+    normalize-range: "npm:^0.1.2"
+    picocolors: "npm:^1.1.1"
+    postcss-value-parser: "npm:^4.2.0"
+  peerDependencies:
+    postcss: ^8.1.0
+  bin:
+    autoprefixer: bin/autoprefixer
+  checksum: 10c0/de5b71d26d0baff4bbfb3d59f7cf7114a6030c9eeb66167acf49a32c5b61c68e308f1e0f869d92334436a221035d08b51cd1b2f2c4689b8d955149423c16d4d4
   languageName: node
   linkType: hard
 
@@ -3759,7 +3796,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"browserslist@npm:^4.0.0, browserslist@npm:^4.22.2, browserslist@npm:^4.23.0, browserslist@npm:^4.23.3, browserslist@npm:^4.24.0, browserslist@npm:^4.24.3, browserslist@npm:^4.24.4":
+"browserslist@npm:^4.0.0, browserslist@npm:^4.22.2, browserslist@npm:^4.23.3, browserslist@npm:^4.24.0, browserslist@npm:^4.24.3, browserslist@npm:^4.24.4":
   version: 4.24.4
   resolution: "browserslist@npm:4.24.4"
   dependencies:
@@ -3894,10 +3931,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"caniuse-lite@npm:^1.0.0, caniuse-lite@npm:^1.0.30001646, caniuse-lite@npm:^1.0.30001688":
-  version: 1.0.30001699
-  resolution: "caniuse-lite@npm:1.0.30001699"
-  checksum: 10c0/e87b3a0602c3124131f6a21f1eb262378e17a2ee3089e3c472ac8b9caa85cf7d6a219655379302c29c6f10a74051f2a712639d7f98ee0444c73fefcbaf25d519
+"caniuse-lite@npm:^1.0.0, caniuse-lite@npm:^1.0.30001646, caniuse-lite@npm:^1.0.30001688, caniuse-lite@npm:^1.0.30001702":
+  version: 1.0.30001703
+  resolution: "caniuse-lite@npm:1.0.30001703"
+  checksum: 10c0/ed88e318da28e9e59c4ac3a2e3c42859558b7b713aebf03696a1f916e4ed4b70734dda82be04635e2b62ec355b8639bbed829b7b12ff528d7f9cc31a3a5bea91
   languageName: node
   linkType: hard
 
@@ -4385,14 +4422,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"css-minimizer-webpack-plugin@npm:^7.0.0":
-  version: 7.0.0
-  resolution: "css-minimizer-webpack-plugin@npm:7.0.0"
+"css-minimizer-webpack-plugin@npm:^7.0.2":
+  version: 7.0.2
+  resolution: "css-minimizer-webpack-plugin@npm:7.0.2"
   dependencies:
     "@jridgewell/trace-mapping": "npm:^0.3.25"
-    cssnano: "npm:^7.0.1"
+    cssnano: "npm:^7.0.4"
     jest-worker: "npm:^29.7.0"
-    postcss: "npm:^8.4.38"
+    postcss: "npm:^8.4.40"
     schema-utils: "npm:^4.2.0"
     serialize-javascript: "npm:^6.0.2"
   peerDependencies:
@@ -4410,7 +4447,7 @@ __metadata:
       optional: true
     lightningcss:
       optional: true
-  checksum: 10c0/607258ea16b753b42cbcf88b0b20c99406d7f162ad3a4da50ec3e23d1fb652d1304815c0d0c577944256c76dff3df64e1708e5c5e255318694ba8aaba7820ca3
+  checksum: 10c0/da12f3214220cec8240af7206477f1d1a0036943b704ae36c75617bda8f1905b4d0f71869eda70dfbb184d3e200be541fc5b8b65781294bde71ede1660406a5b
   languageName: node
   linkType: hard
 
@@ -4528,43 +4565,43 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cssnano-preset-default@npm:^7.0.1":
-  version: 7.0.1
-  resolution: "cssnano-preset-default@npm:7.0.1"
+"cssnano-preset-default@npm:^7.0.6":
+  version: 7.0.6
+  resolution: "cssnano-preset-default@npm:7.0.6"
   dependencies:
-    browserslist: "npm:^4.23.0"
+    browserslist: "npm:^4.23.3"
     css-declaration-sorter: "npm:^7.2.0"
     cssnano-utils: "npm:^5.0.0"
-    postcss-calc: "npm:^10.0.0"
-    postcss-colormin: "npm:^7.0.0"
-    postcss-convert-values: "npm:^7.0.0"
-    postcss-discard-comments: "npm:^7.0.0"
-    postcss-discard-duplicates: "npm:^7.0.0"
+    postcss-calc: "npm:^10.0.2"
+    postcss-colormin: "npm:^7.0.2"
+    postcss-convert-values: "npm:^7.0.4"
+    postcss-discard-comments: "npm:^7.0.3"
+    postcss-discard-duplicates: "npm:^7.0.1"
     postcss-discard-empty: "npm:^7.0.0"
     postcss-discard-overridden: "npm:^7.0.0"
-    postcss-merge-longhand: "npm:^7.0.0"
-    postcss-merge-rules: "npm:^7.0.0"
+    postcss-merge-longhand: "npm:^7.0.4"
+    postcss-merge-rules: "npm:^7.0.4"
     postcss-minify-font-values: "npm:^7.0.0"
     postcss-minify-gradients: "npm:^7.0.0"
-    postcss-minify-params: "npm:^7.0.0"
-    postcss-minify-selectors: "npm:^7.0.0"
+    postcss-minify-params: "npm:^7.0.2"
+    postcss-minify-selectors: "npm:^7.0.4"
     postcss-normalize-charset: "npm:^7.0.0"
     postcss-normalize-display-values: "npm:^7.0.0"
     postcss-normalize-positions: "npm:^7.0.0"
     postcss-normalize-repeat-style: "npm:^7.0.0"
     postcss-normalize-string: "npm:^7.0.0"
     postcss-normalize-timing-functions: "npm:^7.0.0"
-    postcss-normalize-unicode: "npm:^7.0.0"
+    postcss-normalize-unicode: "npm:^7.0.2"
     postcss-normalize-url: "npm:^7.0.0"
     postcss-normalize-whitespace: "npm:^7.0.0"
-    postcss-ordered-values: "npm:^7.0.0"
-    postcss-reduce-initial: "npm:^7.0.0"
+    postcss-ordered-values: "npm:^7.0.1"
+    postcss-reduce-initial: "npm:^7.0.2"
     postcss-reduce-transforms: "npm:^7.0.0"
-    postcss-svgo: "npm:^7.0.0"
-    postcss-unique-selectors: "npm:^7.0.0"
+    postcss-svgo: "npm:^7.0.1"
+    postcss-unique-selectors: "npm:^7.0.3"
   peerDependencies:
     postcss: ^8.4.31
-  checksum: 10c0/bee65239d25de2ba87e85b4091cbc1cac9ba1b57c9f803dff5a71ea8a55a885045805840dd732be284c28cca6343dece37fc76d7096aba37cfa02eff2ee7714c
+  checksum: 10c0/5c827a9f6b35475267af0512d55f569994b8334eb06565498daa2070ef52f0cdd2013f5efc1cbc0b4664370f491b0080f93c8ee56a7730d38fdf451fb65b030c
   languageName: node
   linkType: hard
 
@@ -4598,15 +4635,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cssnano@npm:^7.0.1":
-  version: 7.0.1
-  resolution: "cssnano@npm:7.0.1"
+"cssnano@npm:^7.0.4":
+  version: 7.0.6
+  resolution: "cssnano@npm:7.0.6"
   dependencies:
-    cssnano-preset-default: "npm:^7.0.1"
-    lilconfig: "npm:^3.1.1"
+    cssnano-preset-default: "npm:^7.0.6"
+    lilconfig: "npm:^3.1.2"
   peerDependencies:
     postcss: ^8.4.31
-  checksum: 10c0/8b17d13efe98ec2db2fbde9ca24e91842b9afe2f80becc5e4271ee1170d77cf73eed3cdc2f35ed51bacdeac763ff85db45ae8e9627a8862bf01d457a819a640e
+  checksum: 10c0/19ff09931a1531e7c0c0d8928da554d99213aa0bb1f3b93cc6b4987727d60a8cd5537b113a5cf4f95cc1db65bba3f2b35476bd63bb57e7469d4eab73e07d736d
   languageName: node
   linkType: hard
 
@@ -4961,16 +4998,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"easymde@npm:^2.19.0":
-  version: 2.19.0
-  resolution: "easymde@npm:2.19.0"
+"easymde@npm:^2.20.0":
+  version: 2.20.0
+  resolution: "easymde@npm:2.20.0"
   dependencies:
     "@types/codemirror": "npm:^5.60.10"
     "@types/marked": "npm:^4.0.7"
     codemirror: "npm:^5.65.15"
     codemirror-spell-checker: "npm:1.1.2"
     marked: "npm:^4.1.0"
-  checksum: 10c0/43e0fb4202e824ba66db4d1aebcd54887888f283644034716b3fce1a491b0640a8c14dbe90c3c0815f5d7c9ff181f0074610e876e468fce42a883d54ad4bf774
+  checksum: 10c0/bbaf2b5e97a7e9ac191a97f844555b60973471ebbdbaa2fc1503facb956f5aba84f9127f03b5501519a16d675095658d160f000f72d0a45601c279db989bd55c
   languageName: node
   linkType: hard
 
@@ -7222,10 +7259,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lilconfig@npm:^3.0.0, lilconfig@npm:^3.1.1":
+"lilconfig@npm:^3.0.0":
   version: 3.1.1
   resolution: "lilconfig@npm:3.1.1"
   checksum: 10c0/311b559794546894e3fe176663427326026c1c644145be9e8041c58e268aa9328799b8dfe7e4dd8c6a4ae305feae95a1c9e007db3569f35b42b6e1bc8274754c
+  languageName: node
+  linkType: hard
+
+"lilconfig@npm:^3.1.2":
+  version: 3.1.3
+  resolution: "lilconfig@npm:3.1.3"
+  checksum: 10c0/f5604e7240c5c275743561442fbc5abf2a84ad94da0f5adc71d25e31fa8483048de3dcedcb7a44112a942fed305fd75841cdf6c9681c7f640c63f1049e9a5dcc
   languageName: node
   linkType: hard
 
@@ -8311,15 +8355,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss-calc@npm:^10.0.0":
-  version: 10.0.0
-  resolution: "postcss-calc@npm:10.0.0"
+"postcss-calc@npm:^10.0.2":
+  version: 10.1.1
+  resolution: "postcss-calc@npm:10.1.1"
   dependencies:
-    postcss-selector-parser: "npm:^6.0.16"
+    postcss-selector-parser: "npm:^7.0.0"
     postcss-value-parser: "npm:^4.2.0"
   peerDependencies:
     postcss: ^8.4.38
-  checksum: 10c0/d4d529f2f71b49f17441eed74a7564ccd2779c72ed8648d4bb2530261a27c0ca01fe6a07260e7bf57e55f46dd68dea07e52fd1a6b538db7bc13015124be258a5
+  checksum: 10c0/616d3b7b15a524fa86ff1b2be7d9f2369c7794fd44c946f117380e519b064e9ac8d1414ea29de0238b130f2b2a5eb2fb59758cc5478af40b04a012992fb1075b
   languageName: node
   linkType: hard
 
@@ -8399,17 +8443,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss-colormin@npm:^7.0.0":
-  version: 7.0.0
-  resolution: "postcss-colormin@npm:7.0.0"
+"postcss-colormin@npm:^7.0.2":
+  version: 7.0.2
+  resolution: "postcss-colormin@npm:7.0.2"
   dependencies:
-    browserslist: "npm:^4.23.0"
+    browserslist: "npm:^4.23.3"
     caniuse-api: "npm:^3.0.0"
     colord: "npm:^2.9.3"
     postcss-value-parser: "npm:^4.2.0"
   peerDependencies:
     postcss: ^8.4.31
-  checksum: 10c0/d365a5365e0a94748309d32c7208cd06249bc53eb82cc32c771de4073b109fa8552e58d60dbe84d7e69e68081ed8a01fbf645d38a650e90cb2e13b21043cd796
+  checksum: 10c0/76d09fb7e0218698e622a7c2cfc9087985f48f3a7e44f2655d5eefac4ae9c04198ae9d408dc7ace15d3aa5bde80e7031e462b0cb9b5bd50cfa76bbb1503c755b
   languageName: node
   linkType: hard
 
@@ -8425,15 +8469,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss-convert-values@npm:^7.0.0":
-  version: 7.0.0
-  resolution: "postcss-convert-values@npm:7.0.0"
+"postcss-convert-values@npm:^7.0.4":
+  version: 7.0.4
+  resolution: "postcss-convert-values@npm:7.0.4"
   dependencies:
-    browserslist: "npm:^4.23.0"
+    browserslist: "npm:^4.23.3"
     postcss-value-parser: "npm:^4.2.0"
   peerDependencies:
     postcss: ^8.4.31
-  checksum: 10c0/5d7cfa06f307e024574a1842016f006691e0c1932352f53a99ce8f2f9930c64c3c1ae17518e9e4e5176630b99f1beaab37bc339bc779fb07dc543670ae66bb21
+  checksum: 10c0/9839b29f7c638672115c9fef5ed7df016aa43ea9dd42a4a2ace16e6a49c75246d2c19f3e03a6409ed3bc7c2fa4de6203bf5789cef8268c76618326b68e3bc591
   languageName: node
   linkType: hard
 
@@ -8500,12 +8544,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss-discard-comments@npm:^7.0.0":
-  version: 7.0.0
-  resolution: "postcss-discard-comments@npm:7.0.0"
+"postcss-discard-comments@npm:^7.0.3":
+  version: 7.0.3
+  resolution: "postcss-discard-comments@npm:7.0.3"
+  dependencies:
+    postcss-selector-parser: "npm:^6.1.2"
   peerDependencies:
     postcss: ^8.4.31
-  checksum: 10c0/7fef7deea85c1e68161f69057be19a3aedd54d23c9b464c9b1531faa7a115f0c96a4f0ee3a560ce300578599dbc8114fe0fb744208b20b9d2fd8df1b4b39c58a
+  checksum: 10c0/7700c8fb9a83c6ea5cc784267b9afd6e2968fda0358d583af5913baa28dfc91b0f2a4bd0b2bd62a86ebcb8dadb2547e287beae25b5a097e21c1f723367ccf112
   languageName: node
   linkType: hard
 
@@ -8518,12 +8564,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss-discard-duplicates@npm:^7.0.0":
-  version: 7.0.0
-  resolution: "postcss-discard-duplicates@npm:7.0.0"
+"postcss-discard-duplicates@npm:^7.0.1":
+  version: 7.0.1
+  resolution: "postcss-discard-duplicates@npm:7.0.1"
   peerDependencies:
     postcss: ^8.4.31
-  checksum: 10c0/37d568dc18d47b8b9f0fd6d5115b1faf96c2bf429fc4586508a773533479e18627d6260cad6a3ca7d3bfc2f220fd9448410aee40e07f2ec6c6f96bbe3595dbc8
+  checksum: 10c0/5cc2cac249f68004864865ea2ec38b7d5e28184f33e904e531ff57b533aacb73ec49e4a7d83219184001b8d167e5bcabc1673248134468d7ebaa0bfb9ff78f0a
   languageName: node
   linkType: hard
 
@@ -8715,15 +8761,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss-merge-longhand@npm:^7.0.0":
-  version: 7.0.0
-  resolution: "postcss-merge-longhand@npm:7.0.0"
+"postcss-merge-longhand@npm:^7.0.4":
+  version: 7.0.4
+  resolution: "postcss-merge-longhand@npm:7.0.4"
   dependencies:
     postcss-value-parser: "npm:^4.2.0"
-    stylehacks: "npm:^7.0.0"
+    stylehacks: "npm:^7.0.4"
   peerDependencies:
     postcss: ^8.4.31
-  checksum: 10c0/5f814f396a5107dcb5e74c2d4e55ebcd03b9bc2b3619ed7aea63a441854023ce349bc371d30aec1ac33a375139afac02709e7721e055b5e624701ac6576e8a10
+  checksum: 10c0/6f50f7775dd361f83daf1acb3e0001d700ed2b7b9bea02df172143adc7fa196ce9209c9e482010ce36fd704512433b62692c5ab2eef5226db71ea3e694654dc7
   languageName: node
   linkType: hard
 
@@ -8741,17 +8787,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss-merge-rules@npm:^7.0.0":
-  version: 7.0.0
-  resolution: "postcss-merge-rules@npm:7.0.0"
+"postcss-merge-rules@npm:^7.0.4":
+  version: 7.0.4
+  resolution: "postcss-merge-rules@npm:7.0.4"
   dependencies:
-    browserslist: "npm:^4.23.0"
+    browserslist: "npm:^4.23.3"
     caniuse-api: "npm:^3.0.0"
     cssnano-utils: "npm:^5.0.0"
-    postcss-selector-parser: "npm:^6.0.16"
+    postcss-selector-parser: "npm:^6.1.2"
   peerDependencies:
     postcss: ^8.4.31
-  checksum: 10c0/d9cb3a4e55db57aa7ba0bb1caefb82db93c8493d2b3db66091dae9d5794ca04729e660115765ff254d0eb960e4db037f6c5b92562b396b05216888d12acc08e0
+  checksum: 10c0/fffdcef4ada68e92ab8e6dc34a3b9aa2b87188cd4d08f5ba0ff2aff7e3e3c7f086830748ff64db091b5ccb9ac59ac37cfaab1268ed3efb50ab9c4f3714eb5f6d
   languageName: node
   linkType: hard
 
@@ -8816,16 +8862,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss-minify-params@npm:^7.0.0":
-  version: 7.0.0
-  resolution: "postcss-minify-params@npm:7.0.0"
+"postcss-minify-params@npm:^7.0.2":
+  version: 7.0.2
+  resolution: "postcss-minify-params@npm:7.0.2"
   dependencies:
-    browserslist: "npm:^4.23.0"
+    browserslist: "npm:^4.23.3"
     cssnano-utils: "npm:^5.0.0"
     postcss-value-parser: "npm:^4.2.0"
   peerDependencies:
     postcss: ^8.4.31
-  checksum: 10c0/28a7ae313a197aeaff8b3fa1e695a6443b11a74258374a05adee6a1b05f5849ef52037b7a5069d6910614b03b4610acdaf4a76f38b89cb42e813a8cb5ec2fc01
+  checksum: 10c0/0e041f70554bae9d4a66c8ab2f2f3ed8bf73862c9d5ff9972ac7f1a596badd1544f093fa2362dd33e96c038af9e10287cdbfec9f480c49bffdcbaca9fdcb1e4e
   languageName: node
   linkType: hard
 
@@ -8840,14 +8886,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss-minify-selectors@npm:^7.0.0":
-  version: 7.0.0
-  resolution: "postcss-minify-selectors@npm:7.0.0"
+"postcss-minify-selectors@npm:^7.0.4":
+  version: 7.0.4
+  resolution: "postcss-minify-selectors@npm:7.0.4"
   dependencies:
-    postcss-selector-parser: "npm:^6.0.16"
+    cssesc: "npm:^3.0.0"
+    postcss-selector-parser: "npm:^6.1.2"
   peerDependencies:
     postcss: ^8.4.31
-  checksum: 10c0/6baf0ea71b8dfd01bdb5b516d01aa00244c55cad8d9c674358d735cef2a6aca6586dd480d419cc8d3f470e6d2d7d19354592044f19766993caf9800d3d7e0d36
+  checksum: 10c0/212b8f3d62eb2a27ed57d4e76b75b0886806ddb9e2497c0bb79308fa75dabaaaa4ed2b97734896e87603272d05231fd74aee2c256a48d77aa468b5b64cc7866a
   languageName: node
   linkType: hard
 
@@ -9048,15 +9095,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss-normalize-unicode@npm:^7.0.0":
-  version: 7.0.0
-  resolution: "postcss-normalize-unicode@npm:7.0.0"
+"postcss-normalize-unicode@npm:^7.0.2":
+  version: 7.0.2
+  resolution: "postcss-normalize-unicode@npm:7.0.2"
   dependencies:
-    browserslist: "npm:^4.23.0"
+    browserslist: "npm:^4.23.3"
     postcss-value-parser: "npm:^4.2.0"
   peerDependencies:
     postcss: ^8.4.31
-  checksum: 10c0/f2d6ab0076c006dcf3ed33ba30686f2d29e81a408c66acced22e2c942df6d613697ea786137833dd258aafab5fda4d3eb27df13a82df830357dbad9b79154881
+  checksum: 10c0/0df1aac932cc2340715178fd024e0f6d872ea5a4bee1bc8357317a75a7b2c904d885f754cc162af001aa2a9ded7c54fac7cbcd701e21e995c1ace92dc08f2b9d
   languageName: node
   linkType: hard
 
@@ -9125,15 +9172,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss-ordered-values@npm:^7.0.0":
-  version: 7.0.0
-  resolution: "postcss-ordered-values@npm:7.0.0"
+"postcss-ordered-values@npm:^7.0.1":
+  version: 7.0.1
+  resolution: "postcss-ordered-values@npm:7.0.1"
   dependencies:
     cssnano-utils: "npm:^5.0.0"
     postcss-value-parser: "npm:^4.2.0"
   peerDependencies:
     postcss: ^8.4.31
-  checksum: 10c0/42b14f9518b573318594c2aeb2f13fd1fbe44936d14f1b28a438e7a82644ace9a2946699bebfe7a2d383534dc24e7203c35308d749f3c585a86daa238ad920a4
+  checksum: 10c0/9fc62e9039c7d4fa417d165678b065fc577a7232aa41a94a4e9208ad7db2268e1ce003aaad7c6a569afdf890a43416b0bf21047461505b4e3a16eec311a6eb63
   languageName: node
   linkType: hard
 
@@ -9264,15 +9311,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss-reduce-initial@npm:^7.0.0":
-  version: 7.0.0
-  resolution: "postcss-reduce-initial@npm:7.0.0"
+"postcss-reduce-initial@npm:^7.0.2":
+  version: 7.0.2
+  resolution: "postcss-reduce-initial@npm:7.0.2"
   dependencies:
-    browserslist: "npm:^4.23.0"
+    browserslist: "npm:^4.23.3"
     caniuse-api: "npm:^3.0.0"
   peerDependencies:
     postcss: ^8.4.31
-  checksum: 10c0/ed50cd680ce258df953b82ce9b3fb52564d08548724577810800e236d017d80430cbccb4b1ad38b0f4d521663598e44ab93136b20064231181ef49e1e113ae10
+  checksum: 10c0/1e6fafaf5fac52b351c8de156ed62e4e1f48da7eb07f9ce90da54b45dca61da9af1e954b8a343271cb3e4ec99e0c5f18d7f9f96da0ca144511fca04498fac78c
   languageName: node
   linkType: hard
 
@@ -9343,7 +9390,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss-selector-parser@npm:^6.0.11, postcss-selector-parser@npm:^6.0.15, postcss-selector-parser@npm:^6.0.16, postcss-selector-parser@npm:^6.0.2, postcss-selector-parser@npm:^6.0.4":
+"postcss-selector-parser@npm:^6.0.11, postcss-selector-parser@npm:^6.0.15, postcss-selector-parser@npm:^6.0.2, postcss-selector-parser@npm:^6.0.4, postcss-selector-parser@npm:^6.1.2":
   version: 6.1.2
   resolution: "postcss-selector-parser@npm:6.1.2"
   dependencies:
@@ -9375,15 +9422,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss-svgo@npm:^7.0.0":
-  version: 7.0.0
-  resolution: "postcss-svgo@npm:7.0.0"
+"postcss-svgo@npm:^7.0.1":
+  version: 7.0.1
+  resolution: "postcss-svgo@npm:7.0.1"
   dependencies:
     postcss-value-parser: "npm:^4.2.0"
-    svgo: "npm:^3.2.0"
+    svgo: "npm:^3.3.2"
   peerDependencies:
     postcss: ^8.4.31
-  checksum: 10c0/0e724069b5de83aa2b8f8a4746cb60cb663e0a8bbab0e4ba995649cb0562205af57d1f54b89fb90d8ae04a4b7ac3ac6e3751afffc3cff697cb19f7a36b71b195
+  checksum: 10c0/7c7b177e6f4e2a3e9ada76d53afa02e08d900c8ac15600ba9daa80480269d538405e544bd8091bc5eb7529173a476896fad885a72a247258265424b29a9195ed
   languageName: node
   linkType: hard
 
@@ -9398,14 +9445,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss-unique-selectors@npm:^7.0.0":
-  version: 7.0.0
-  resolution: "postcss-unique-selectors@npm:7.0.0"
+"postcss-unique-selectors@npm:^7.0.3":
+  version: 7.0.3
+  resolution: "postcss-unique-selectors@npm:7.0.3"
   dependencies:
-    postcss-selector-parser: "npm:^6.0.16"
+    postcss-selector-parser: "npm:^6.1.2"
   peerDependencies:
     postcss: ^8.4.31
-  checksum: 10c0/33b532ad0e9271c5a379859e18adfdc72986bb538672cc0fbc06295d824f82dba3f7b57264e18a3214901bc5244ff5408d28b530374d24a088507287c7f520ce
+  checksum: 10c0/2eb90eb0745d1e29d411ea5108f1cd9737de5b8f739cabc717074872bc4015950c9963f870b23b33b9ef45e7887eecfe5560cffee56616d4e0b8d0fac4f7cb10
   languageName: node
   linkType: hard
 
@@ -9416,7 +9463,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss@npm:^8.2.14, postcss@npm:^8.4.24, postcss@npm:^8.4.33, postcss@npm:^8.4.38, postcss@npm:^8.5.3":
+"postcss@npm:^8.2.14, postcss@npm:^8.4.24, postcss@npm:^8.4.33, postcss@npm:^8.4.40, postcss@npm:^8.5.3":
   version: 8.5.3
   resolution: "postcss@npm:8.5.3"
   dependencies:
@@ -9647,16 +9694,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-intersection-observer@npm:^9.15.1":
-  version: 9.15.1
-  resolution: "react-intersection-observer@npm:9.15.1"
+"react-intersection-observer@npm:^9.16.0":
+  version: 9.16.0
+  resolution: "react-intersection-observer@npm:9.16.0"
   peerDependencies:
     react: ^17.0.0 || ^18.0.0 || ^19.0.0
     react-dom: ^17.0.0 || ^18.0.0 || ^19.0.0
   peerDependenciesMeta:
     react-dom:
       optional: true
-  checksum: 10c0/ac2ce7093aef2d6cc3ec9ddd88b8e3f54a7320d867170433a12014f881400553517b3304c4e7bd7b666a44dbd42e94472e5cffdfa45356c9e17d3a0a1ba02b3a
+  checksum: 10c0/2aee5103fb460c6e5a3ab5a4fdc8c69a5215e23699a12d7857f25ba765fed48eacbed94ca835d79edf00c0edcc9c4fbb5bb057a373402d0551718546810e0e48
   languageName: node
   linkType: hard
 
@@ -10155,7 +10202,7 @@ __metadata:
     "@babel/plugin-transform-runtime": "npm:^7.26.9"
     "@babel/preset-env": "npm:^7.26.9"
     "@babel/preset-react": "npm:^7.26.3"
-    "@babel/runtime": "npm:^7.26.9"
+    "@babel/runtime": "npm:^7.26.10"
     "@cubing/icons": "npm:^2.0.2"
     "@fullcalendar/core": "npm:^6.1.15"
     "@fullcalendar/interaction": "npm:^6.1.15"
@@ -10166,12 +10213,12 @@ __metadata:
     "@rails/actioncable": "npm:^8.0.100"
     "@rails/ujs": "npm:^7.1.501"
     "@stripe/react-stripe-js": "npm:^3.3.0"
-    "@stripe/stripe-js": "npm:^5.8.0"
-    "@tanstack/react-query": "npm:^5.67.1"
+    "@stripe/stripe-js": "npm:^5.10.0"
+    "@tanstack/react-query": "npm:^5.67.2"
     "@tanstack/react-table": "npm:^8.21.2"
     "@wca/helpers": "npm:^1.1.5"
     autonumeric: "npm:^4.10.8"
-    autoprefixer: "npm:^10.4.20"
+    autoprefixer: "npm:^10.4.21"
     autosize: "npm:^6.0.1"
     babel-loader: "npm:^10.0.0"
     babel-plugin-dynamic-import-node: "npm:^2.3.3"
@@ -10184,10 +10231,10 @@ __metadata:
     compression-webpack-plugin: "npm:^11.1.0"
     core-js: "npm:^3.41.0"
     css-loader: "npm:^7.1.2"
-    css-minimizer-webpack-plugin: "npm:^7.0.0"
+    css-minimizer-webpack-plugin: "npm:^7.0.2"
     date-fns: "npm:^4.1.0"
     dompurify: "npm:^3.2.4"
-    easymde: "npm:^2.19.0"
+    easymde: "npm:^2.20.0"
     eslint: "npm:^8.57.0"
     eslint-config-airbnb: "npm:^19.0.4"
     eslint-plugin-import: "npm:^2.31.0"
@@ -10225,7 +10272,7 @@ __metadata:
     react-dom: "npm:^18.3.1"
     react-google-recaptcha: "npm:^3.1.0"
     react-image-crop: "npm:^11.0.7"
-    react-intersection-observer: "npm:^9.15.1"
+    react-intersection-observer: "npm:^9.16.0"
     react-leaflet: "npm:^4.2.1"
     react-refresh: "npm:^0.16.0"
     react-simplemde-editor: "npm:^5.2.0"
@@ -10242,7 +10289,7 @@ __metadata:
     stylelint: "npm:^16.15.0"
     stylelint-config-recommended-scss: "npm:^14.1.0"
     stylelint-scss: "npm:^6.11.1"
-    terser-webpack-plugin: "npm:^5.3.12"
+    terser-webpack-plugin: "npm:^5.3.14"
     webpack: "npm:^5.98.0"
     webpack-assets-manifest: "npm:^5.2.1"
     webpack-bundle-analyzer: "npm:^4.10.2"
@@ -11050,15 +11097,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"stylehacks@npm:^7.0.0":
-  version: 7.0.0
-  resolution: "stylehacks@npm:7.0.0"
+"stylehacks@npm:^7.0.4":
+  version: 7.0.4
+  resolution: "stylehacks@npm:7.0.4"
   dependencies:
-    browserslist: "npm:^4.23.0"
-    postcss-selector-parser: "npm:^6.0.16"
+    browserslist: "npm:^4.23.3"
+    postcss-selector-parser: "npm:^6.1.2"
   peerDependencies:
     postcss: ^8.4.31
-  checksum: 10c0/c1c0231974ab7922af3a535a9cb78bfe84997767da7defe111cc76d7f10c9e139fe8cb0f9d5bea87b0c0cc0166c82a6ec98a3d6242d7e29ef90adceecfd330ae
+  checksum: 10c0/b4d0b280ba274503ecc04111cc11c713e0d65db079fbcd8b42d6350be1cca20e28611eddee93b419aa208176a0d3a5fff83d83ef958d1876713809b6a2787c0c
   languageName: node
   linkType: hard
 
@@ -11213,6 +11260,23 @@ __metadata:
   languageName: node
   linkType: hard
 
+"svgo@npm:^3.3.2":
+  version: 3.3.2
+  resolution: "svgo@npm:3.3.2"
+  dependencies:
+    "@trysound/sax": "npm:0.2.0"
+    commander: "npm:^7.2.0"
+    css-select: "npm:^5.1.0"
+    css-tree: "npm:^2.3.1"
+    css-what: "npm:^6.1.0"
+    csso: "npm:^5.0.5"
+    picocolors: "npm:^1.0.0"
+  bin:
+    svgo: ./bin/svgo
+  checksum: 10c0/a6badbd3d1d6dbb177f872787699ab34320b990d12e20798ecae915f0008796a0f3c69164f1485c9def399e0ce0a5683eb4a8045e51a5e1c364bb13a0d9f79e1
+  languageName: node
+  linkType: hard
+
 "tabbable@npm:^6.0.0":
   version: 6.2.0
   resolution: "tabbable@npm:6.2.0"
@@ -11254,7 +11318,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"terser-webpack-plugin@npm:^5.3.11, terser-webpack-plugin@npm:^5.3.12":
+"terser-webpack-plugin@npm:^5.3.11":
   version: 5.3.12
   resolution: "terser-webpack-plugin@npm:5.3.12"
   dependencies:
@@ -11273,6 +11337,28 @@ __metadata:
     uglify-js:
       optional: true
   checksum: 10c0/b37e21bf4258603456617a88f81fa123c684f9bcd928719ada94d6b713cb3f7d726d69e642f565f67fac04ba7cab9179ebe5d5b8e2c4961afc9a7a8759ee580e
+  languageName: node
+  linkType: hard
+
+"terser-webpack-plugin@npm:^5.3.14":
+  version: 5.3.14
+  resolution: "terser-webpack-plugin@npm:5.3.14"
+  dependencies:
+    "@jridgewell/trace-mapping": "npm:^0.3.25"
+    jest-worker: "npm:^27.4.5"
+    schema-utils: "npm:^4.3.0"
+    serialize-javascript: "npm:^6.0.2"
+    terser: "npm:^5.31.1"
+  peerDependencies:
+    webpack: ^5.1.0
+  peerDependenciesMeta:
+    "@swc/core":
+      optional: true
+    esbuild:
+      optional: true
+    uglify-js:
+      optional: true
+  checksum: 10c0/9b060947241af43bd6fd728456f60e646186aef492163672a35ad49be6fbc7f63b54a7356c3f6ff40a8f83f00a977edc26f044b8e106cc611c053c8c0eaf8569
   languageName: node
   linkType: hard
 

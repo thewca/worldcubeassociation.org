@@ -4,10 +4,6 @@ resource "aws_cloudwatch_log_group" "this" {
 
 locals {
   sidekiq_environment = [
-    {
-      "name" = "ECS_CONTAINER_STOP_TIMEOUT"
-      "value" = "305"
-    },
   ]
   rails_environment = [
     {
@@ -16,6 +12,10 @@ locals {
     },
     {
       name  = "ROOT_URL"
+      value = var.ROOT_URL
+    },
+    {
+      name  = "OIDC_ISSUER"
       value = var.ROOT_URL
     },
     {

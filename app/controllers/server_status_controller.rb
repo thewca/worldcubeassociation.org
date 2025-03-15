@@ -7,7 +7,7 @@ class ServerStatusController < ApplicationController
     @checks = checks
     @everything_good = @checks.all?(&:is_passing?)
     if !@everything_good
-      render status: 503
+      render status: :service_unavailable
     end
   end
 
@@ -50,7 +50,7 @@ class JobsCheck < StatusCheck
 
   protected def _status_description
     jobs_that_should_have_run_by_now = CronjobStatistic.where(recently_rejected: 0, run_start: nil)
-                                                       .where('enqueued_at < ?', MINUTES_IN_WHICH_A_JOB_SHOULD_HAVE_STARTED_RUNNING.minutes.ago)
+                                                       .where(enqueued_at: ...MINUTES_IN_WHICH_A_JOB_SHOULD_HAVE_STARTED_RUNNING.minutes.ago)
 
     oldest_job_that_should_have_run_by_now = jobs_that_should_have_run_by_now.order(:enqueued_at).first
 

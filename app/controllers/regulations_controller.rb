@@ -17,7 +17,7 @@ class RegulationsController < ApplicationController
     # Only attempt to redirect if the current url does not match the one
     # url_for would want.
     if trailing_slash?(request.env['REQUEST_URI']) != trailing_slash?(desired_url)
-      redirect_to desired_url, status: 301
+      redirect_to desired_url, status: :moved_permanently
     end
   end
 

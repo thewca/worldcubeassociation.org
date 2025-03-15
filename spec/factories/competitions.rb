@@ -104,7 +104,7 @@ FactoryBot.define do
     trait :auto_accept do
       use_wca_registration { true }
       auto_accept_registrations { true }
-      competitor_limit { 10 }
+      competitor_limit { 5 }
       auto_accept_disable_threshold { 4 }
     end
 
@@ -490,12 +490,12 @@ FactoryBot.define do
         end
       end
 
-      if competition.qualification_results && evaluator&.qualifications&.present?
+      if competition.qualification_results && evaluator&.qualifications.present?
         events_wcif = competition.to_wcif['events']
         qualification_data = evaluator.qualifications
 
         events_wcif.each do |event|
-          next unless qualification_data.keys.include?(event['id'])
+          next unless qualification_data.key?(event['id'])
           event['qualification'] = qualification_data[event['id']]
         end
 
