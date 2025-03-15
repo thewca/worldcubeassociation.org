@@ -227,6 +227,19 @@ function ActionItemContent({ actionItem, messageArgs }) {
           </List>
         </>
       );
+    case 'person_has_upcoming_registered_competitions':
+      return (
+        <>
+          This person has upcoming registered competitions. Please Take care of it.
+          <List ordered>
+            {messageArgs?.upcoming_registered_competitions?.map((competition) => (
+              <List.Item key={competition.id}>
+                <a href={competitionUrl(competition.id)}>{competition.name}</a>
+              </List.Item>
+            ))}
+          </List>
+        </>
+      );
     default:
       return `Unknown data (${actionItem}), please contact WST.`;
   }

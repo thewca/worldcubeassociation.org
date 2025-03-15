@@ -301,6 +301,7 @@ class Person < ApplicationRecord
   def anonymization_checks_with_message_args
     recent_competitions_3_months = competitions&.select { |c| c.start_date > (Date.today - 3.month) }
     competitions_with_external_website = competitions&.select { |c| c.external_website.present? }
+    upcoming_registered_competitions = user.competitions_registered_for.not_over.merge(Registration.not_cancelled)
 
     [
       {
@@ -309,12 +310,14 @@ class Person < ApplicationRecord
         person_competed_in_last_3_months: recent_competitions_3_months&.any?,
         competitions_with_external_website: competitions_with_external_website&.any?,
         recent_competitions_data_to_be_removed_wca_live: recent_competitions_3_months&.any?,
+        person_has_upcoming_registered_competitions: upcoming_registered_competitions.any?,
       },
       {
         records: records,
         championship_podiums: championship_podiums,
         recent_competitions_3_months: recent_competitions_3_months,
         competitions_with_external_website: competitions_with_external_website,
+        upcoming_registered_competitions: upcoming_registered_competitions,
       },
     ]
   end
