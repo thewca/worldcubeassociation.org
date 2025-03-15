@@ -8,7 +8,7 @@ RSpec.describe WaitingList do
 
   it 'position is nil when registration not on waiting list' do
     registration = FactoryBot.create(:registration)
-    expect(registration.waiting_list_position).to eq(nil)
+    expect(registration.waiting_list_position).to be(nil)
   end
 
   describe 'add to waiting list' do

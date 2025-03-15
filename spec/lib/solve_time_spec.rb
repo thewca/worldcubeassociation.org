@@ -18,7 +18,7 @@ RSpec.describe "SolveTime" do
   end
 
   it "skipped?" do
-    expect(solve_time(0).skipped?).to eq true
+    expect(solve_time(0).skipped?).to be true
     expect(solve_time(0).clock_format).to eq ""
     expect(solve_time(0).clock_format_with_units).to eq ""
   end
@@ -36,22 +36,22 @@ RSpec.describe "SolveTime" do
 
   describe "ordering" do
     it "orders regular solves" do
-      expect(solve_time(100) < solve_time(1000)).to eq true
+      expect(solve_time(100) < solve_time(1000)).to be true
     end
 
     it "treats skipped as worst" do
-      expect(solve_time(SolveTime::SKIPPED_VALUE) > solve_time(SolveTime::DNF_VALUE)).to eq true
-      expect(solve_time(SolveTime::SKIPPED_VALUE) > solve_time(SolveTime::DNS_VALUE)).to eq true
-      expect(solve_time(SolveTime::SKIPPED_VALUE) > solve_time(30)).to eq true
+      expect(solve_time(SolveTime::SKIPPED_VALUE) > solve_time(SolveTime::DNF_VALUE)).to be true
+      expect(solve_time(SolveTime::SKIPPED_VALUE) > solve_time(SolveTime::DNS_VALUE)).to be true
+      expect(solve_time(SolveTime::SKIPPED_VALUE) > solve_time(30)).to be true
     end
 
     it "treats DNS as worse than DNF" do
-      expect(solve_time(SolveTime::DNS_VALUE) > solve_time(SolveTime::DNF_VALUE)).to eq true
-      expect(solve_time(SolveTime::DNS_VALUE) > solve_time(30)).to eq true
+      expect(solve_time(SolveTime::DNS_VALUE) > solve_time(SolveTime::DNF_VALUE)).to be true
+      expect(solve_time(SolveTime::DNS_VALUE) > solve_time(30)).to be true
     end
 
     it "treats DNS as worse than a finished solve" do
-      expect(solve_time(SolveTime::DNF_VALUE) > solve_time(30)).to eq true
+      expect(solve_time(SolveTime::DNF_VALUE) > solve_time(30)).to be true
     end
   end
 

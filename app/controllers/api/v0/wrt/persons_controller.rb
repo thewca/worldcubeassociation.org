@@ -4,7 +4,7 @@ class Api::V0::Wrt::PersonsController < Api::V0::ApiController
   before_action :current_user_can_admin_results!
   private def current_user_can_admin_results!
     unless current_user.can_admin_results?
-      render json: {}, status: 401
+      render json: {}, status: :unauthorized
     end
   end
 

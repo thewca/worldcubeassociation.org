@@ -12,12 +12,12 @@ class DatabaseController < ApplicationController
 
   def sql_permalink
     url, = current_results_export("sql")
-    redirect_to url, status: 301, allow_other_host: true
+    redirect_to url, status: :moved_permanently, allow_other_host: true
   end
 
   def tsv_permalink
     url, = current_results_export("tsv")
-    redirect_to url, status: 301, allow_other_host: true
+    redirect_to url, status: :moved_permanently, allow_other_host: true
   end
 
   def current_results_export(file_type)

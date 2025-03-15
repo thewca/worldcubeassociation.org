@@ -56,7 +56,7 @@ RSpec.describe Round do
       let(:round) { FactoryBot.create :round, event_id: "333" }
 
       it "defaults to nil" do
-        expect(round.cutoff).to eq nil
+        expect(round.cutoff).to be nil
         expect(round.cutoff_to_s).to eq ""
       end
 
@@ -87,7 +87,7 @@ RSpec.describe Round do
       let(:round) { FactoryBot.create :round, event_id: "333fm", format_id: "m" }
 
       it "defaults to nil" do
-        expect(round.cutoff).to eq nil
+        expect(round.cutoff).to be nil
         expect(round.cutoff_to_s).to eq ""
       end
 
@@ -101,7 +101,7 @@ RSpec.describe Round do
       let(:round) { FactoryBot.create :round, event_id: "333mbf", format_id: "3" }
 
       it "defaults to nil" do
-        expect(round.cutoff).to eq nil
+        expect(round.cutoff).to be nil
         expect(round.cutoff_to_s).to eq ""
       end
 
@@ -115,7 +115,7 @@ RSpec.describe Round do
   context "advance to next round requirement" do
     it "defaults to nil" do
       first_round = create_rounds("333", count: 1)[0]
-      expect(first_round.advancement_condition).to eq nil
+      expect(first_round.advancement_condition).to be nil
       expect(first_round.advancement_condition_to_s).to eq ""
     end
 

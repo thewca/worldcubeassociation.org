@@ -22,6 +22,7 @@ RSpec.describe VotesController do
 
   context "logged in as delegate" do
     let!(:delegate) { FactoryBot.create :delegate }
+
     before :each do
       sign_in delegate
     end
@@ -55,6 +56,7 @@ RSpec.describe VotesController do
 
   context "logged in as staff member" do
     let!(:staff_member) { FactoryBot.create :user, :wrt_member }
+
     before :each do
       sign_in staff_member
     end

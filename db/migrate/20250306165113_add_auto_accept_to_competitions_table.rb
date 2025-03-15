@@ -1,3 +1,4 @@
+# rubocop:disable all
 # frozen_string_literal: true
 
 class AddAutoAcceptToCompetitionsTable < ActiveRecord::Migration[7.2]

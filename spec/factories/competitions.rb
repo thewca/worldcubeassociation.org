@@ -488,12 +488,12 @@ FactoryBot.define do
         end
       end
 
-      if competition.qualification_results && evaluator&.qualifications&.present?
+      if competition.qualification_results && evaluator&.qualifications.present?
         events_wcif = competition.to_wcif['events']
         qualification_data = evaluator.qualifications
 
         events_wcif.each do |event|
-          next unless qualification_data.keys.include?(event['id'])
+          next unless qualification_data.key?(event['id'])
           event['qualification'] = qualification_data[event['id']]
         end
 

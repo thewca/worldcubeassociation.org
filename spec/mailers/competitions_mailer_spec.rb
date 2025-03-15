@@ -411,7 +411,7 @@ RSpec.describe CompetitionsMailer, type: :mailer do
 
       it "renders the body" do
         expect(mail.body.encoded).to match(/This is a reminder that registration/)
-        expect(mail.body.encoded).to_not match(/You have registered/)
+        expect(mail.body.encoded).not_to match(/You have registered/)
         expect(mail.body.encoded).to include(competition_url(competition))
       end
     end
