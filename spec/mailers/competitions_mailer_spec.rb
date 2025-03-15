@@ -11,8 +11,9 @@ RSpec.describe CompetitionsMailer, type: :mailer do
     let(:third_delegate_role) { FactoryBot.create :trainee_delegate_role, group: second_senior_delegate_role.group }
     let(:competition) { FactoryBot.create :competition, :with_competitor_limit, championship_types: %w(world PL), delegates: [delegate_role.user, second_delegate_role.user, third_delegate_role.user] }
     let(:mail) do
-      I18n.locale = :pl
-      CompetitionsMailer.notify_wcat_of_confirmed_competition(delegate_role.user, competition)
+      I18n.with_locale(:pl) do
+        CompetitionsMailer.notify_wcat_of_confirmed_competition(delegate_role.user, competition)
+      end
     end
 
     it "renders in English" do
@@ -194,8 +195,9 @@ RSpec.describe CompetitionsMailer, type: :mailer do
     end
     let(:mail) do
       # Let's pick a foreign locale to make sure it's not localized
-      I18n.locale = :fr
-      CompetitionsMailer.notify_of_delegate_report_submission(competition)
+      I18n.with_locale(:fr) do
+        CompetitionsMailer.notify_of_delegate_report_submission(competition)
+      end
     end
 
     context "wrc & wic feedback requested" do

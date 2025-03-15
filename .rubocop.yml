@@ -284,9 +284,6 @@ Rails/SkipsModelValidations:
 Rails/PluralizationGrammar:
   Enabled: false
 
-Rails/I18nLocaleAssignment:
-  Enabled: false
-
 Rails/RedundantForeignKey:
   Enabled: false
 
@@ -315,12 +312,6 @@ Rails/ActionControllerFlashBeforeRender:
   Enabled: false
 
 Rails/UniqueValidationWithoutIndex:
-  Enabled: false
-
-Rails/LexicallyScopedActionFilter:
-  Enabled: false
-
-Rails/RenderInline:
   Enabled: false
 
 # Rspec
