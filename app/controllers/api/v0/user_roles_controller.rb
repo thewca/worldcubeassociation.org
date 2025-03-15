@@ -97,7 +97,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       end
       unless upcoming_registrations_for_user.empty?
         upcoming_registrations_for_user.each do |registration|
-          registration.update!(competing_status: Registrations::Helper::STATUS_CANCELLED)
+          registration.update!(competing_status: Registrations::Helper::STATUS_REJECTED)
           RegistrationsMailer.notify_delegates_of_registration_deletion_of_banned_competitor(registration, end_date).deliver_later
         end
       end
