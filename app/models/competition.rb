@@ -1806,8 +1806,8 @@ class Competition < ApplicationRecord
       if !continent
         raise WcaExceptions::BadApiParameter.new("Invalid continent: '#{params[:continent]}'")
       end
-      competitions = competitions.joins('INNER JOIN Countries ON Competitions.countryId = Countries.id')
-                                 .where(continentId: continent.id)
+      competitions = competitions.joins(:country)
+                                 .where(country: { continent: continent })
     end
 
     if params[:country_iso2].present?
