@@ -1806,8 +1806,10 @@ class Competition < ApplicationRecord
       if !continent
         raise WcaExceptions::BadApiParameter.new("Invalid continent: '#{params[:continent]}'")
       end
+      # rubocop:disable Rails/WhereEquals
       competitions = competitions.joins('INNER JOIN Countries ON Competitions.countryId = Countries.id')
                                  .where('continentId = ?', continent.id)
+      # rubocop:enable Rails/WhereEquals
     end
 
     if params[:country_iso2].present?
