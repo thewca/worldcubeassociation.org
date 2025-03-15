@@ -1366,19 +1366,19 @@ RSpec.describe Competition do
       it 'rejects limit of 0' do
         comp = FactoryBot.create(:competition)
         comp.events_per_registration_limit = 0
-        expect(comp.valid?).to eq(false)
+        expect(comp.valid?).to be(false)
       end
 
       it 'rejects limit of -1' do
         comp = FactoryBot.create(:competition)
         comp.events_per_registration_limit = -1
-        expect(comp.valid?).to eq(false)
+        expect(comp.valid?).to be(false)
       end
 
       it 'rejects non-nil value if event_restrictions is false', :tag do
         comp = FactoryBot.create(:competition)
         comp.events_per_registration_limit = 1
-        expect(comp.valid?).to eq(false)
+        expect(comp.valid?).to be(false)
       end
     end
 

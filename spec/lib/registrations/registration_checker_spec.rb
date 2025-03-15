@@ -480,8 +480,8 @@ RSpec.describe Registrations::RegistrationChecker do
 
         registration_request = FactoryBot.build(
           :registration_request, events: ['333', '222', '444', '555', '666', '777'],
-          competition_id: unenforced_event_limit_comp.id,
-          user_id: default_user.id,
+                                 competition_id: unenforced_event_limit_comp.id,
+                                 user_id: default_user.id
         )
 
         expect {
