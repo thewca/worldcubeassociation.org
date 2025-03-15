@@ -1,5 +1,21 @@
 ko:
   countries:
+    #original_hash: 530670d
+    AG: 앤티가 바부다
+    #original_hash: 62ac59b
+    BA: 보스니아 헤르체고비나
+    #original_hash: f39d280
+    CD: 콩고민주공화국
+    #original_hash: 77f256b
+    CG: 콩고 공화국
+    #original_hash: b218299
+    CI: 코트디부아르
+    #original_hash: 07dee45
+    CV: 카보베르데
+    #original_hash: ee10075
+    FM: 미크로네시아 연방
+    #original_hash: db871b0
+    GW: 기니비사우
     #original_hash: e758117
     HK: 홍콩
     #original_hash: 4430b22
@@ -9,13 +25,13 @@ ko:
     #original_hash: fefc818
     TW: 차이니스 타이베이
     #original_hash: 374ac0d
-    XM: 여러 나라 (북미)
+    XM: 여러 국가 (북미)
     #original_hash: 3f8c9de
-    XA: 여러 나라 (아시아)
+    XA: 여러 국가 (아시아)
     #original_hash: 090f3ce
-    XE: 여러 나라 (유럽)
+    XE: 여러 국가 (유럽)
     #original_hash: 459f987
-    XS: 여러 나라 (남미)
+    XS: 여러 국가 (남미)
   continents:
     #original_hash: 0f138c8
     Multiple Continents: 여러 대륙
@@ -33,19 +49,19 @@ ko:
     South America: 남아메리카
   events:
     #original_hash: 3732390
-    '222': 2x2x2 큐브
+    "222": 2x2x2 큐브
     #original_hash: 8180137
-    '333': 3x3x3 큐브
+    "333": 3x3x3 큐브
     #original_hash: 2ee5b5a
-    '444': 4x4x4 큐브
+    "444": 4x4x4 큐브
     #original_hash: b7a99fa
-    '555': 5x5x5 큐브
+    "555": 5x5x5 큐브
     #original_hash: 4e3ea57
-    '666': 6x6x6 큐브
+    "666": 6x6x6 큐브
     #original_hash: b567fc4
-    '777': 7x7x7 큐브
+    "777": 7x7x7 큐브
     #original_hash: 29d5411
-    333bf: 3x3x3 눈 가리고 맞추기
+    333bf: 3x3x3 블라인드
     #original_hash: 0a5e7bf
     333fm: 3x3x3 최소회전
     #original_hash: 31ed23f
@@ -63,65 +79,65 @@ ko:
     #original_hash: 1551a2c
     sq1: 스퀘어-1
     #original_hash: 5bae501
-    444bf: 4x4x4 눈 가리고 맞추기
+    444bf: 4x4x4 블라인드
     #original_hash: aea5216
-    555bf: 5x5x5 눈 가리고 맞추기
+    555bf: 5x5x5 블라인드
     #original_hash: cedbf87
-    333mbf: 3x3x3 눈 가리고 맞추기 (복수)
+    333mbf: 3x3x3 멀티 블라인드
     #original_hash: e6791be
     magic: 매직
     #original_hash: c962425
-    mmagic: 매스터 매직
+    mmagic: 마스터 매직
     #original_hash: 1843dc4
-    333mbo: 3x3x3 눈 가리고 맞추기 (복수) 과거
+    333mbo: 3x3x3 멀티 블라인드 (구)
   formats:
     #original_hash: e4b3c11
-    '1': 1회 단일
+    "1": 1회 단일
     #original_hash: 778e14d
-    '2': 2회 최고
+    "2": 2회 단일
     #original_hash: 21f623c
-    '3': 3회 최고
+    "3": 3회 단일
     #original_hash: 2342d2b
     a: 5회 평균
     #original_hash: 940c82d
     m: 3회 평균
     short:
       #original_hash: c21bc2a
-      '1': 단일(1회)
+      "1": 단일(1회)
       #original_hash: 49e914a
-      '2': 단일(2회)
+      "2": 단일(2회)
       #original_hash: b41f36f
-      '3': 단일(3회)
+      "3": 단일(3회)
       #original_hash: 4a34175
       a: 평균(5회)
       #original_hash: 53ba088
       m: 평균(3회)
   rounds:
-    '0':
+    "0":
       #original_hash: 4d618bb
-      name: 예선
+      name: 예선 라운드
       #original_hash: 4d618bb
       cellName: 예선 라운드
-    '1':
+    "1":
       #original_hash: 1e725b6
       name: 라운드 1
       #original_hash: 1e725b6
       cellName: 라운드 1
-    '2':
+    "2":
       #original_hash: 985c8d0
       name: 라운드 2
       #original_hash: 985c8d0
       cellName: 라운드 2
-    '3':
+    "3":
       #original_hash: e2f74d2
       name: 준결승
       #original_hash: e2f74d2
       cellName: 준결승
     b:
       #original_hash: 327c999
-      name: B결승
+      name: B 결승
       #original_hash: 327c999
-      cellName: B결승
+      cellName: B 결승
     c:
       #original_hash: 672b22c
       name: 결승
@@ -149,52 +165,52 @@ ko:
       cellName: 준결승
     h:
       #original_hash: 4d618bb
-      name: 예선
+      name: 예선 라운드
       #original_hash: 4d618bb
-      cellName: 예선
+      cellName: 예선 라운드
   attempts:
     #original_hash: 17dae1e
-    attempt_name: '시도 %{number}'
+    attempt_name: "%{number}회 차 시도"
   round:
     #original_hash: 236c41d
-    name: '%{event_name} %{round_name}'
+    name: "%{event_name} %{round_name}"
   advancement_condition:
     #original_hash: 6e55337
-    ranking: '상위 %{ranking}명의 선수가 다음 라운드 진출'
+    ranking: "상위 %{ranking}명이 다음 라운드로 진출"
     #original_hash: 7ee969c
-    percent: '상위 %{percent}%의 선수가 다음 라운드 진출'
+    percent: "상위 %{percent}%가 다음 라운드로 진출"
     attempt_result:
       #original_hash: 6173090
-      time: '%{round_format} < %{time}인 선수가 다음 라운드 진출'
+      time: "%{round_format} < %{time}인 선수가 다음 라운드로 진출"
       #original_hash: 581709d
-      moves: '%{round_format} < %{moves}회전인 선수가 다음 라운드 진출'
+      moves: "%{round_format} < %{moves}회전인 선수가 다음 라운드로 진출"
       #original_hash: e9f0c92
-      points: '%{round_format} < %{points}점인 선수가 다음 라운드 진출'
+      points: "%{round_format} < %{points}점인 선수가 다음 라운드로 진출"
   cutoff:
     #original_hash: cf458e7
     time:
-      zero: '%{count}번의 시도 중 단일기록 < %{time}'
-      other: '%{count}번의 시도 중 단일기록 < %{time}'
+      zero: "%{count}번의 시도 중 단일기록 < %{time}"
+      other: "%{count}번의 시도 중 단일 기록 < %{time}"
     #original_hash: b49d930
     moves:
-      zero: '%{count}번의 시도 중 단일기록 < %{moves}회전'
-      other: '%{count}번의 시도 중 단일기록 < %{moves}회전'
+      zero: "%{count}번의 시도 중 단일기록 < %{moves}회전"
+      other: "%{count}번의 시도 중 단일 기록 < %{moves}회전"
     #original_hash: eba1b97
     points:
-      zero: '%{count}번의 시도 중 단일기록 > %{points}점'
-      other: '%{count}번의 시도 중 단일기록 > %{points}점'
+      zero: "%{count}번의 시도 중 단일기록 > %{points}점"
+      other: "%{count}번의 시도 중 단일 기록 > %{points}점"
   time_limit:
     cumulative:
       #original_hash: 9da5a3e
-      one_round: '총 %{time}'
+      one_round: "누적 %{time}"
       #original_hash: c01adfa
-      across_rounds: '%{rounds}를 위한 총 시간: %{time}'
+      across_rounds: "%{rounds}를 위한 총 시간: %{time}"
     #original_hash: f030c3d
     333fm: 1시간
     #original_hash: cc7d8bb
-    333mbf: '큐브당 10분, 최대 60분'
+    333mbf: "큐브 당 10분, 최대 60분"
     #original_hash: da39a3e
-    333mbo: ''
+    333mbo: ""
   common:
     #original_hash: 2513cf0
     continent: 대륙
@@ -203,7 +219,7 @@ ko:
     #original_hash: 0154c0d
     here: 여기
     #original_hash: 77003d0
-    best: 단일
+    best: 최고
     #original_hash: dd11868
     single: 단일
     #original_hash: 15f86c0
@@ -220,15 +236,11 @@ ko:
     all_regions: 모든 지역
     errors:
       #original_hash: 81f344a
-      invalid: 오류
+      invalid: 유효하지 않음
     #original_hash: 49d0140
     days:
       zero: 0일
-      other: '%{count}일'
-    #original_hash: 203e1b3
-    these_events:
-      zero: 이 종목
-      other: 이 종목들
+      other: "%{count}일"
     #original_hash: 51ef7d4
     search_site: 홈페이지 검색
     #original_hash: d7decf1
@@ -238,7 +250,7 @@ ko:
     #original_hash: d3f8f7b
     date_placeholder: 년-월-일 (YYYY-MM-DD)
     #original_hash: 52249b5
-    datetime_placeholder: '년-월-일 시간 (YYYY-MM-DD HH:MM)'
+    datetime_placeholder: "년-월-일 시:분 (YYYY-MM-DD HH:MM)"
     #original_hash: 7136e3b
     time_format: 12h
   oauth:
@@ -248,13 +260,13 @@ ko:
       #original_hash: 6403f2b
       new: 추가
       #original_hash: 709a232
-      name: 성명
+      name: 이름
       #original_hash: f6f1389
-      callback_url: Callback Url
+      callback_url: 콜백 Url
       #original_hash: 89ff312
-      owner: 주인
+      owner: 소유자
       #original_hash: 557031c
-      application_id: 어플리케이션 ID
+      application_id: 애플리케이션 ID
       #original_hash: c3cd636
       actions: 동작
       #original_hash: f4e7a87
@@ -262,7 +274,7 @@ ko:
       #original_hash: c23540e
       scopes: 범위
       #original_hash: 3b0d449
-      callback_urls: Callback Url
+      callback_urls: 콜백 Url
   helpers:
     submit:
       competition_medium:
@@ -278,7 +290,7 @@ ko:
         #original_hash: 603a218
         wca_id: WCA ID
         #original_hash: cb77bea
-        unconfirmed_wca_id: 미확인된 WCA ID
+        unconfirmed_wca_id: 확인되지 않은 WCA ID
         #original_hash: 8ed8874
         login: 이메일 혹은 WCA ID
         #original_hash: fa4c045
@@ -296,19 +308,19 @@ ko:
         #original_hash: aefce7f
         password_confirmation: 비밀번호 재입력
         #original_hash: ced7b30
-        remember_me: 기억
+        remember_me: 자동 로그인
         #original_hash: 102efae
         pending_avatar: 새로운 아바타 업로드
         #original_hash: 58e0c56
-        remove_avatar: 아바타 제거
+        remove_avatar: 아바타 삭제
         #original_hash: 9af9099
-        results_notifications_enabled: 참가한 대회의 결과 등록시 이메일로 알림
+        results_notifications_enabled: 참가한 대회의 결과 등재시 이메일로 알림 받기
         #original_hash: de60ab8
         delegate_status: 파견위원 신분
         #original_hash: 0f21717
         region: 지역
         #original_hash: 57eaf24
-        user_preferred_events: 선호 종목
+        user_preferred_events: 선호하는 종목
       registration:
         #original_hash: 3c23a67
         guests: 참관객
@@ -321,19 +333,19 @@ ko:
         #original_hash: 709a232
         name: 성명
         #original_hash: a6b9d69
-        birthday: 생년월일
+        birthday: 생일
         #original_hash: c5497bc
         registration_competition_events: 종목
       competition_tab:
         #original_hash: 4f9be05
         content: 내용
         #original_hash: 709a232
-        name: 제목
+        name: 대회명
       delegate_report:
         #original_hash: 983d541
-        discussion_url: 구글 그룹 URL
+        discussion_url: 구글 그룹 토의 url
         #original_hash: 65a9b28
-        schedule_url: 일정 URL
+        schedule_url: 일정 url
         #original_hash: 36155d4
         equipment: 장비
         #original_hash: 67cd406
@@ -359,7 +371,7 @@ ko:
         #original_hash: 002ff59
         question: 질문
         #original_hash: 2b12f36
-        deadline: 마감
+        deadline: 기한
       post:
         #original_hash: 768e0c1
         title: 제목
@@ -389,22 +401,22 @@ ko:
         #original_hash: 1c2ed61
         public_summary: 요약 (공개)
         #original_hash: 62d6896
-        digest_worthy: 사건
+        digest_worthy: 다이제스트에 적합한
         #original_hash: 848eed0
         tags: 태그
         #original_hash: 861e459
-        competition_id: 중에 발생
+        competition_id: 도중에 발생
       competition_medium:
         #original_hash: 1917f4f
         competitionId: 대회
         #original_hash: 3deb745
-        type: 종류
+        type: 유형
         #original_hash: c3328c3
         text: 글
         #original_hash: d051707
         uri: 링크
         #original_hash: 1be755a
-        submitterName: 제출자
+        submitterName: 제출자 성명
         #original_hash: 78cdfee
         submitterEmail: 제출자 이메일
         #original_hash: 0d31f23
@@ -423,200 +435,183 @@ ko:
     competition_medium:
       status:
         #original_hash: 61a0572
-        accepted: 승락
+        accepted: 승인
         #original_hash: 96f608c
         pending: 대기
       type:
         #original_hash: ee45c30
         report: 보고
         #original_hash: 4360c2d
-        article: 조
+        article: 기사
         #original_hash: 82dabd0
-        multimedia: 보도자료
+        multimedia: 멀티미디어
   simple_form:
     #original_hash: 5397e05
-    'yes': 예
+    "yes": 예
     #original_hash: 816c52f
-    'no': 아니오
+    "no": 아니오
     required:
       #original_hash: 1a77d41
       text: 필수
       #original_hash: df58248
-      mark: '*'
+      mark: "*"
       #original_hash: da39a3e
-      html: ''
+      html: ""
     error_notification:
       #original_hash: d70e9cb
-      default_message: 아래의 문제를 수정하세요.
+      default_message: 아래 문제를 검토하십시오.
     hints:
       incident:
         #original_hash: c54e268
-        title: '반드시 영문으로 작성하셔야하며, 모두에게 공개됩니다.'
+        title: "이 항목은 공개된다는 점과, 영어로 작성해야 한다는 점을 명심하십시오."
         #original_hash: 67f2a1a
-        private_description: 반드시 영문으로 작성하세요. 파견위원들에게만 보여집니다.
+        private_description: 파견위원만 볼 수 있는 사건에 대한 설명입니다. 영어로 작성해 주십시오.
         #original_hash: b766029
-        private_wrc_decision: 반드시 영문으로 작성하세요. 사적인 정보까지 포함된 WRC의 최정 결정입니다.
+        private_wrc_decision: 비공개 정보를 포함한 WRC 최종 판단. 영어로 작성해 주십시오.
         #original_hash: 3de5729
-        public_summary: 반드시 영문으로 작성하세요. 공개적으로 보여질 사건의 전말과 결론입니다.
+        public_summary: 공개적으로 표시될 사건에 대한 전반적인 설명과 판단. 영어로 작성해 주십시오.
         #original_hash: da39a3e
-        digest_worthy: ''
+        digest_worthy: ""
         #original_hash: da39a3e
-        tags: ''
+        tags: ""
         #original_hash: da39a3e
-        competition_id: ''
+        competition_id: ""
       user:
         #original_hash: 7588d71
-        dob: 선수의 생년월일을 YYYY-MM-DD의 꼴로 입력하세요.
+        dob: 선수의 생년월일을 YYYY-MM-DD 형식으로 입력하십시오.
         #original_hash: ac908c9
         name: >-
-          선수의 성명을 입력하세요. 예시: <strong>Ilkyoo Choi</strong>. 잘못된 예시: <strong>I
-          Choi</strong> <br/>
+          선수의 성명을 정확히 입력하십시오. 예: <strong>Gildong Hong</strong>. 잘못된 예: <strong>GILDONG
+          HONG</strong>, <strong>홍길동</strong>, <strong>G Hong</strong>
         #original_hash: da39a3e
-        email: ''
+        email: ""
         #original_hash: 8a91e53
-        pending_avatar: '새로운 아바타를 업로드 할 시, WCA 결과팀이 승인하기를 기다리셔야 합니다.'
+        pending_avatar: "새로운 아바타를 업로드한 후, WCA 결과 팀의 승인을 기다려야 합니다."
         #original_hash: da39a3e
-        country_iso2: ''
+        country_iso2: ""
         #original_hash: da39a3e
-        dob_verification: ''
+        dob_verification: ""
         #original_hash: da39a3e
-        gender: ''
+        gender: ""
         #original_hash: da39a3e
-        login: ''
+        login: ""
         #original_hash: da39a3e
-        password: ''
+        password: ""
         #original_hash: da39a3e
-        password_confirmation: ''
+        password_confirmation: ""
         #original_hash: da39a3e
-        remember_me: ''
+        remember_me: ""
         #original_hash: da39a3e
-        results_notifications_enabled: ''
+        results_notifications_enabled: ""
         #original_hash: da39a3e
-        unconfirmed_wca_id: ''
+        unconfirmed_wca_id: ""
         #original_hash: da39a3e
-        wca_id: ''
+        wca_id: ""
       dob_contact:
         #original_hash: da39a3e
-        name: ''
+        name: ""
         #original_hash: da39a3e
-        your_email: ''
+        your_email: ""
         #original_hash: da39a3e
-        wca_id: ''
+        wca_id: ""
         #original_hash: 8723825
-        dob: 생년월일은 YYYY-MM-DD의 형식입니다.
+        dob: 생년월일의 올바른 형식은 YYYY-MM-DD입니다.
         #original_hash: 49ee4af
         document: >-
-          본인 확인과 본인의 생년월일을 확인하기 위해서는, 본인의 이름과 생년월일이 잘 보이는 신분증 (주민등록증, 운전면허증,
-          학생증, 여권 등)의 사진을 찍어서 보내주셔야합니다. 만약 영문이 아니라면 WCA 파견위원에게 연락하세요. 신분증에서 최소한
-          이름과 생년월일이 있어야 합니다. 다른 정보는 가려서 보내주셔도 됩니다.
+          귀하의 신원과 정확한 생년월일을 증명하기 위해, 귀하의 이름과 생년월일이 적힌 법적 문서(신분증, 운전 면허증, 학생증, 여권,
+          출생증명서 등)의 사진을 첨부해야 합니다. 문서의 내용이 영문이 아니라면 귀하의 지역 파견위원에게 문의하십시오. 신원 확인에는 최소한의
+          정보인 귀하의 성명과 생년월일만이 필요하므로, 그 외 개인 정보는 가린 후 보내주셔도 됩니다.
       post:
         #original_hash: 53c16eb
         body: >-
-          홈페이지의 미리보기를 사용하시려면 &lt;!-- break --&gt; 태그를 이용하세요. 이 태그 이전에 있는 모든 글이
-          홈페이지에 미리보기로 보여집니다. 홈페이지의 글에는 모든 내용이 보여집니다.
-        #original_hash: da39a3e
-        sticky: ''
-        #original_hash: da39a3e
-        unstick_at: ''
-        #original_hash: da39a3e
-        title: ''
-        #original_hash: da39a3e
-        tags: ''
+          &lt;!-- break --&gt; 태그를 사용하여 홈페이지에 미리보기를 표시합니다. 홈페이지의 모든 게시물은 이 태그 앞에 있는
+          모든 텍스트를 표시합니다. 실제 게시물은 전체 본문을 표시합니다.
       delegate_report:
         #original_hash: da39a3e
-        wrc_feedback_requested: ''
+        wrc_feedback_requested: ""
         #original_hash: da39a3e
-        wdc_feedback_requested: ''
+        wic_feedback_requested: ""
         #original_hash: da39a3e
-        discussion_url: ''
+        discussion_url: ""
       competition_tab:
         #original_hash: da39a3e
-        content: ''
+        content: ""
       person:
         #original_hash: da39a3e
-        person1_wca_id: ''
+        person1_wca_id: ""
         #original_hash: da39a3e
-        person2_wca_id: ''
-        #original_hash: da39a3e
-        person_wca_id: ''
+        person2_wca_id: ""
       poll:
         #original_hash: da39a3e
-        comment: ''
+        comment: ""
         #original_hash: da39a3e
-        multiple: ''
+        multiple: ""
         #original_hash: da39a3e
-        question: ''
-      registration:
-        #original_hash: da39a3e
-        comments: ''
-        #original_hash: da39a3e
-        guests: ''
-        #original_hash: da39a3e
-        status: ''
+        question: ""
       vote:
         #original_hash: da39a3e
-        comment: ''
+        comment: ""
       competition_medium:
         #original_hash: da39a3e
-        competitionId: ''
+        competitionId: ""
         #original_hash: da39a3e
-        type: ''
+        type: ""
         #original_hash: da39a3e
-        text: ''
+        text: ""
         #original_hash: da39a3e
-        uri: ''
+        uri: ""
         #original_hash: da39a3e
-        submitterName: ''
+        submitterName: ""
         #original_hash: da39a3e
-        submitterEmail: ''
+        submitterEmail: ""
         #original_hash: da39a3e
-        submitterComment: ''
+        submitterComment: ""
         #original_hash: da39a3e
-        status: ''
+        status: ""
       results_submission:
         #original_hash: da39a3e
-        schedule_url: ''
+        schedule_url: ""
         #original_hash: da39a3e
-        results_file: ''
+        results_file: ""
         #original_hash: da39a3e
-        message: ''
+        message: ""
         #original_hash: da39a3e
-        confirm_information: ''
+        confirm_information: ""
       regional_organization:
         #original_hash: da39a3e
-        name: ''
+        name: ""
         #original_hash: da39a3e
-        country: ''
+        country: ""
         #original_hash: da39a3e
-        address: ''
+        address: ""
         #original_hash: da39a3e
-        directors_and_officers: ''
+        directors_and_officers: ""
         #original_hash: da39a3e
-        area_description: ''
+        area_description: ""
         #original_hash: da39a3e
-        past_and_current_activities: ''
+        past_and_current_activities: ""
         #original_hash: da39a3e
-        future_plans: ''
+        future_plans: ""
         #original_hash: da39a3e
-        extra_information: ''
+        extra_information: ""
         #original_hash: da39a3e
-        start_date: ''
+        start_date: ""
         #original_hash: da39a3e
-        end_date: ''
+        end_date: ""
     options:
       registration:
         status:
           #original_hash: 61a0572
-          accepted: 승락
+          accepted: 승인
           #original_hash: a6b2452
-          pending: 대기
+          pending: 대기 명단
           #original_hash: 441bda6
           deleted: 삭제
   mail_form:
     attributes:
       contact_form:
         #original_hash: d31ab65
-        inquiry: 다음 중 본인의 문의 사항과 가장 비슷 한 것은?
+        inquiry: 다음 중 귀하의 문의 사항을 가장 잘 설명하는 것은 무엇입니까?
         #original_hash: 1917f4f
         competition_id: 대회
         #original_hash: 709a232
@@ -640,11 +635,11 @@ ko:
   errors:
     messages:
       #original_hash: dc2367c
-      wrong_size: '잘못된 크기 입니다 (%{file_size}이여야 합니다)'
+      wrong_size: "잘못된 크기입니다(%{file_size}이어야 함)"
       #original_hash: 1531237
-      size_too_small: '너무 작습니다 (최소 %{file_size})'
+      size_too_small: "너무 작습니다(최소 %{file_size} 이상이어야 함)"
       #original_hash: a2a43b3
-      size_too_big: '너무 큽니다 (최대 %{file_size})'
+      size_too_big: "너무 큽니다(최대 %{file_size}이어야 함)"
   devise:
     passwords:
       edit:
@@ -660,53 +655,53 @@ ko:
         sign_in: 로그인
     failure:
       #original_hash: 1186218
-      invalid: '이메일, WCA ID, 혹은 비밀번호가 잘못되었습니다.'
+      invalid: "이메일, WCA ID, 혹은 비밀번호가 잘못되었습니다."
       #original_hash: 1186218
-      not_found_in_database: '이메일, WCA ID, 혹은 비밀번호가 잘못되었습니다.'
+      not_found_in_database: "이메일, WCA ID, 혹은 비밀번호가 잘못되었습니다."
       #original_hash: 3f9db99
       unconfirmed: >-
-        계속 진행하시기전에 이메일을 검증받으셔야 합니다. 검증 이메일을 못 받으셨으면 다음 링크를 눌러서 새로 요청하세요:
-        https://www.worldcubeassociation.org/users/confirmation/new
+        계속하기 전에 이메일 주소를 확인해야 합니다. 확인 이메일을 받지 못하셨나요? https://www.worldcubeassociation.org/users/confirmation/new로
+        이동하여 새 이메일을 요청하십시오.
     mailer:
       confirmation_instructions:
         #original_hash: 0ea8196
-        subject: 새로운 이메일 주소 검증하세요
+        subject: 새로운 이메일 주소를 확인해 주십시오.
   wca:
     errors:
       messages:
         #original_hash: e88f903
         form_error:
-          zero: '하나의 오류가 있습니다:'
-          other: '%{count}개의 오류가 있습니다:'
+          zero: "하나의 오류가 있습니다:"
+          other: "%{count}개의 오류가 있습니다:"
     doorkeeper:
       applications:
         help:
           #original_hash: 95c10ec
-          https_info: 'HTTPS는 필수입니다 (예외: 호스트가 "localhost")'
+          https_info: '호스트가 "localhost"가 아닌 이상 HTTPS는 필수입니다.'
       scopes:
         #original_hash: 1920e95
-        public: '이름, WCA ID, 성별, 국적, 프로필 사진의 개인정보를 접근할 수 있습니다'
+        public: "귀하의 공개 데이터(이름, WCA ID, 성별, 국적, 프로필 사진)에 접근할 수 있습니다."
         #original_hash: d4003be
-        dob: 생년월일을 접근 할 수 있습니다.
+        dob: 귀하의 생년월일에 접근할 수 있습니다.
         #original_hash: 17aa24f
-        email: 이메일을 접근 할 수 있습니다
+        email: 귀하의 이메일 주소에 접근할 수 있습니다.
         #original_hash: e0d0654
-        manage_competitions: 주최자로서 다가오는 대회를 관리 할 수 있습니다
+        manage_competitions: 귀하가 주최하는 예정된 대회를 관리할 수 있습니다.
     devise:
       #original_hash: 06184f5
-      no_account: 계정 만들기
+      no_account: 계정이 없으십니까?
       #original_hash: a268696
-      have_competed: WCA 대회에 참가한적이 있습니다.
+      have_competed: WCA 대회에 참가한 적이 있습니다.
       #original_hash: dcd1d70
-      have_never_competed: WCA 대회에 참가한적이 없습니다.
+      have_never_competed: WCA 대회에 참가한 적이 없습니다.
       #original_hash: 3511bc5
-      let_us_know: WCA 대회에 참가한 적이 있으시면 알려주세요.
+      let_us_know: WCA 대회에 참가한 적이 있다면 알려주십시오.
       #original_hash: f9f512b
-      welcome_back: 환영합니다! WCA 홈페이지 계정을 생성하기 위해서는 어느 WCA ID로 WCA 대회에 참가 하셨는지 알려주세요.
+      welcome_back: 환영합니다! WCA 홈페이지 계정을 생성하기 위해, 어느 WCA ID로 WCA 대회에 참가하였는지 알려주십시오.
       #original_hash: ef8243e
       welcome_html: >-
-        환영합니다! 첫 WCA 대회에 참가하시기 전에, 몇 가지 추가적인 정보가 필요합니다. 허락없이 생년월일이 공개되지 않는다는 점
-        유념하세요.
+        환영합니다! 첫 WCA 대회에 참가하기 전에, 기록 보관을 위한 추가 정보가 필요합니다. 생년월일은 귀하의 허락 없이 공개되지 않습니다.<br/><br/>대리
+        가입하는 경우, <strong>선수</strong>의 세부 정보를 제공해 주십시오.
   layouts:
     navigation:
       #original_hash: 0eb5ed5
@@ -718,7 +713,7 @@ ko:
       #original_hash: d8fd3e4
       delegates: WCA 파견위원
       #original_hash: 37b8fdc
-      organizations: 지역별 단체
+      organizations: 지역 단체
       #original_hash: d790b40
       faq: 자주 묻는 질문들
       #original_hash: b37456c
@@ -744,17 +739,17 @@ ko:
       #original_hash: f3cf96e
       persons: 선수
       #original_hash: 5b72b5a
-      my_results: 내 기록
+      my_results: 나의 결과
       #original_hash: 2086b21
       statistics: 통계
       #original_hash: 82dabd0
-      multimedia: 보도자료
+      multimedia: 멀티미디어
       #original_hash: 1fa73f3
       regulations: 규정
       #original_hash: 6bce1b5
       about_regulations: 규정에 대하여
       #original_hash: 141d1d7
-      guidelines: 권장 사항
+      guidelines: 지침
       #original_hash: c4622c3
       scrambles: 스크램블
       #original_hash: 90ccd64
@@ -762,7 +757,7 @@ ko:
       #original_hash: 8ad8302
       translations: 번역본
       #original_hash: b8be3d1
-      administration: 관리자
+      administration: 관리
       #original_hash: b7ee3c4
       manage_users: 사용자 관리
       #original_hash: 12ab214
@@ -770,13 +765,11 @@ ko:
       #original_hash: 2f4bd74
       panel: 패널
       #original_hash: d3a928c
-      results_team: WCA 결과팀
-      #original_hash: 4e7afeb
-      results_admin: 관리자
+      results_team: WCA 결과 팀
       #original_hash: aee74b8
       new_post: 새 글
       #original_hash: dc1649a
-      sign_out: 로그 아웃
+      sign_out: 로그아웃
       #original_hash: 753a22b
       notifications: 알림
       #original_hash: 15141ea
@@ -790,70 +783,73 @@ ko:
   users:
     update_locale:
       #original_hash: 4cde9bc
-      success: 업데이트 완료.
+      success: 언어가 업데이트됨.
       #original_hash: dcc2f49
-      failure: 업데이트 실패.
+      failure: 프로필을 업데이트할 수 없습니다.
       #original_hash: c29870c
-      unavailable: 요청된 언어가 없습니다.
+      unavailable: 요청하신 언어를 사용할 수 없습니다.
     mailer:
       create_new_account:
         #original_hash: a4ef6b6
         header: 검증 방법
         #original_hash: 6ee63db
-        welcome: '환영합니다 %{user_email}!'
+        welcome: "%{user_email}님, 환영합니다!"
         #original_hash: da39d05
-        confirm: '본인 계정이 생성 되었으며, 사용 전에 활성화 시켜야 합니다. 아래 링크를 통해서 계정 검증을 해주세요:'
+        confirm: "귀하의 계정이 생성되었으며, 계정을 사용하려면 먼저 활성화해야 합니다. 아래 링크를 통해 귀하의 계정을 검증해 주세요:"
         #original_hash: 776476a
-        confirmation_link: 계정 검증.
+        confirmation_link: 계정을 검증합니다.
         #original_hash: d484f70
-        activate: '활성화 후, 세계 큐브 협회의 홈페이지에 로그인 하실 수 있습니다.'
+        activate: "활성화 후, 세계 큐브 협회의 홈페이지에 로그인할 수 있습니다."
         #original_hash: 333999b
-        addendum: '이 이메일은 자동으로 생성된 이메일 입니다. 세계 큐브 협회의 홈페이지에 계정을 생성하지 않았다면, 이 이메일을 무시해주세요.'
+        addendum:
+          "이 이메일은 자동으로 생성된 이메일 입니다. 세계 큐브 협회의 홈페이지에 계정을 생성하지 않았다면, 이 이메일을
+          무시해주세요."
         #original_hash: dbc2263
-        questions: '문의사항이 더 있으시면 주저하지 말고 이 곳으로 이메일을 보내주세요 %{contact_link}.'
+        questions: "다른 질문이 있으신가요? 기꺼이 답변해 드리겠습니다! %{contact_link}로 메일을 보내주세요."
       reconfirmation_mail:
         #original_hash: f34029e
-        welcome: '안녕하세요 %{user_email}!'
+        welcome: "안녕하세요 %{user_email}님!"
         #original_hash: 3095365
-        confirm: '아래 링크를 통해서 본인의 새로운 이메일 주소를 검증하실 수 있습니다:'
+        confirm: "아래 링크를 통해 새 계정의 이메일 주소를 검증할 수 있습니다."
         #original_hash: 4900afe
-        confirmation_link: 이메일 검증.
+        confirmation_link: 이메일 주소 검증.
       competition_submission_email:
         #original_hash: ac4841b
-        header: '%{competition}가 %{delegate_name}에 의해 신청되었습니다.'
+        header: "%{delegate_name}이(가) %{competition}을(를) 확정하였습니다."
         #original_hash: 3db81b5
-        organizers: '%{competition}의 주최자에게 보냅니다,'
+        organizers: "%{competition}의 주최자에게 보냅니다,"
         #original_hash: d353d8c
         confirmed: >-
-          파견위원인 %{delegate_name}가 %{competition}을 WCAT에게 신청했습니다. WCAT이 대회를 발표할 시
-          또 이메일을 받게 될 것 입니다.
+          귀하의 대회 파견위원 %{delegate_name}이(가) %{competition}을(를) 확정하고 WCAT에 제출서를 보냈습니다.
+          WCAT가 이 대회를 발표하자마자 또 다른 알림을 받게 될 것입니다.
         #original_hash: dfea09d
-        contact: '질문이 있으면, 대회의 파견위원에게 이메일로 연락하세요:'
+        contact: "더 많은 질문이 있으시면 이메일을 통해 대회 파견위원에게 문의하십시오."
       competition_announcement_email:
         #original_hash: 87f1f49
-        header: 'WCAT가 %{competition}을 발표했습니다.'
+        header: "WCAT가 %{competition}을(를) 발표했습니다."
     claim_wca_id:
       #original_hash: f28bf87
-      title: WCA ID 연결
+      title: WCA ID 연결하기
       #original_hash: 1b44f6d
       competition: 대회
       #original_hash: b396bfa
-      already_have_html: '이미 WCA ID가 연결 되어있습니다 %{wca_id}'
+      already_have_html: "이미 WCA ID가 연결되어 있습니다: %{wca_id}"
       #original_hash: 87f1062
-      already_claimed_html: 'WCA ID %{wca_id}와의 연결을 요청하셨습니다. 질문이 있으시면 %{delegate}에게 문의하세요.'
+      already_claimed_html:
+        "WCA ID %{wca_id}와의 연결을 요청하셨습니다. 질문이 있으시면 %{delegate}에게
+        문의하세요."
       #original_hash: 0660b5d
-      info_competed_before: 'WCA 대회에 참석하신 적이 있으시면, WCA ID와 WCA 홈페이지 계정을 연결 하실 수 있습니다.'
+      info_competed_before: "WCA 대회에 참가한 적이 있다면 WCA ID를 계정에 연결하는 것을 요청할 수 있습니다."
       #original_hash: 7d605f8
       info_never_competed_html: >-
-        WCA 대회에 참석하신 적이 없으시면, %{comp}에 참석해주세요. 본인의 첫 대회의 결과가 공인되는 순간 본인의 WCA ID가
-        생성 됩니다.
+        WCA 대회에 참가하신 적이 없다면 %{comp}에 참가하십시오. 첫 대회의 결과가 등재되면 WCA ID가 생성됩니다.
       #original_hash: f28bf87
       submit_value: WCA ID 연결하기
     edit_avatar_thumbnail:
       #original_hash: 79f14eb
-      current: '현재 썸네일:'
+      current: "현재 섬네일:"
       #original_hash: b42ba27
-      new: '새로운 썸네일:'
+      new: "새로운 섬네일:"
       #original_hash: efc007a
       save: 저장
     edit:
@@ -868,127 +864,130 @@ ko:
       #original_hash: 42619dd
       preferred_events_desc: 빠른 대회 참가 신청을 위해서 선호하시는 종목을 등록하세요.
       #original_hash: b402e03
-      please_fix_profile: '대회 참가 신청을 하기 위해서는 다음 오류를 수정하세요:'
+      please_fix_profile: "대회에 참가 신청하려면 다음 문제를 해결해야 합니다:"
       #original_hash: ff4fc02
       profile: 프로필
       #original_hash: 7b2c7f1
       approve: 승인
       #original_hash: 85de4b8
-      unconfirmed_email: '이 계정의 이메일 주소 (%{email})이 검증되지 않았습니다.'
-      #original_hash: 8a770cf
-      pending_mail_confirmation: '이 계정은 새로운 이메일 주소 %{email}의 검증을 기다리고 있습니다.'
+      unconfirmed_email: "이 계정의 이메일 주소 (%{email})는 검증되지 않았습니다."
+      #original_hash: ff43ee2
+      pending_mail_confirmation: "이 계정은 새 이메일 주소 %{email}의 검증을 기다리고 있습니다."
       #original_hash: 0340b0b
       pending_avatar_confirmation: 이 계정은 새로운 아바타의 승인을 기다리고 있습니다.
       #original_hash: 7b06f03
-      pending_claim_confirmation_html: '이 계정은 WCA 파견위원 %{delegate}가 연결 요청한 WCA ID %{wca_id}를 확인중 입니다.'
+      pending_claim_confirmation_html:
+        "이 계정은 연결 요청한 WCA ID %{wca_id}이(가) %{delegate}에
+        의해 승인되기를 기다리고 있습니다."
       #original_hash: e7554d8
       pending_claim_mail_confirmation_html: >-
-        이 계정은 WCA ID %{wca_id}와의 연결을 요청했습니다. 이 계정의 이메일이 검증되는 순간 WCA 파견위원
-        %{delegate}가 연락을 받을 것입니다.
+        이 사용자는 WCA ID %{wca_id}와의 연결을 요청했습니다. 해당 계정의 이메일이 검증되는 즉시 파견위원 %{delegate}에게
+        요청이 통지됩니다.
       #original_hash: 1cde7e6
-      your_thumbnail: '현재 계정 썸네일:'
+      your_thumbnail: "귀하의 계정 섬네일:"
       #original_hash: af18820
-      edit_thumbnail: 썸네일 수정을 위해서는 클릭하세요
+      edit_thumbnail: 섬네일을 편집하려면 클릭하세요
       #original_hash: cf65c6e
-      manage_pending: 대기중인 아바타 관리
+      manage_pending: 승인 대기 중인 아바타 관리
       #original_hash: 2d2ae5d
       have_no_wca_id_html: >-
-        현재 연결된 WCA ID가 없습니다. WCA 대회에 참가하신 적이 있으시면, 계정과 WCA ID를 연결하기 위해서 %{here}를
-        클릭하세요!
+        아직 WCA ID가 연결되지 않았습니다. 이전에 WCA 대회에 참가한 적이 있다면, %{here}에서 WCA ID 연결을 요청하세요!
       #original_hash: 29e25b5
-      have_wca_id_html: '본인의 WCA ID는 %{link_id} 입니다.'
+      have_wca_id_html: "귀하의 WCA ID는 %{link_id} 입니다."
       cannot_edit:
         #original_hash: 3d4d222
         msg: >-
-          성명, 생년월일, 성별, 대표 지역을 변경하실 수 없습니다. 사유: %{reason}. 변경을 하셔야하면  <a
-          href='%{wrt_contact_path}' target='_blank'>WCA 결과 부서</a> 또는 <a
-          href='%{delegate_url}'>WCA 파견위원</a>에게 연락하세요.
+          성명, 생년월일, 성별, 또는 지역을 변경할 수 없습니다. 사유: %{reason}. 이러한 정보를 변경해야 하는 경우  <a href='%{wrt_contact_path}'
+          target='_blank'>WCA 결과 팀</a> 또는 귀하의 지역 <a href='%{delegate_url}'>WCA 파견위원</a>에게
+          연락하십시오.
         reason:
           #original_hash: 370ff12
           assigned: 이미 연결된 WCA ID가 있습니다
           #original_hash: 1c4670f
-          registered: 대회 참가 신청하셨습니다.
+          registered: 대회에 참가 신청하셨습니다.
       #original_hash: fe7122d
-      guidelines_confirmation: 제 아바타는 아바타 권장 사항을 따릅니다.
-      #original_hash: d677ceb
-      confirm_guidelines: 아바타 권장 사항을 읽어보시고 그에 따른 사진을 제출하세요.
+      guidelines_confirmation: 저의 아바타가 모든 아바타 지침을 충족함을 확인했습니다.
+      #original_hash: 9a85f5e
+      confirm_guidelines: 아바타 지침을 읽고 유효한 사진을 제출하십시오.
       #original_hash: efc007a
       save: 저장
       #original_hash: 58e0c56
-      remove_avatar: 아바타 제거
+      remove_avatar: 아바타 삭제
       #original_hash: 4bd25cf
-      remove_avatar_confirm: 아바타를 제거 하시겠습니까
+      remove_avatar_confirm: 정말로 아바타를 삭제하시겠습니까?
       #original_hash: 141d1d7
-      guidelines: 권장 사항
+      guidelines: 지침
       avatar_guidelines:
         #original_hash: 255f28c
-        '1': 모든 아바타는 실존 인물의 사진이여야 합니다.
+        "1": 모든 아바타는 실존 인물의 사진이어야 합니다.
         #original_hash: b12d293
-        '2': 보여지는 사람이 현재의 본인이여야 합니다.
-        #original_hash: de9b742
-        '3': '만약 아바타에 두명 이상의 사람이 있다면, 본인이 어떤 사람인지 분명해야 합니다.'
+        "2": 표시된 사람은 현재의 당신의 모습이어야 합니다.
+        #original_hash: 8165cf0
+        "3": "아바타에 둘 이상의 사람이 있는 경우, 그중 누가 당신인지 쉽게 알 수 있어야 합니다."
         #original_hash: 4083c00
-        '4': 본인의 머리가 보여야 합니다. 얼굴 전체가 보일 필요는 없습니다.
-        #original_hash: 7c0aab3
-        '5': '아바타는 오버레이 문자 등과 같은 일반적인 배경 문자 이외의 문자, 부자연스러운 필터, 테두리 등이 있으면 안됩니다.'
-        #original_hash: cc5f23a
-        '6': 자연스러운 방향의 아바타 사진이 제출 되어야 합니다.
+        "4": 본인의 얼굴 전체가 보일 필요는 없지만 머리는 보여야 합니다.
+        #original_hash: 14c72b2
+        "5": "아바타에는 오버레이 텍스트, 스티커, 테두리를 비롯한 부자연스러운 필터가 포함되어서는 안 됩니다."
+        #original_hash: 7f9c9c6
+        "6": 아바타는 올바른 방향으로 제출되어야 합니다.
         #original_hash: 1a18831
-        '7': 보는 사람이 혐오감을 느끼는 아바타는 제출하면 안됩니다.
+        "7": "아바타에는 모욕적인 내용(예: 모욕적인 제스처)이 포함되어서는 안 됩니다."
     errors:
       #original_hash: 094b763
       not_found: 찾지 못함
       #original_hash: 49a6fe4
-      already_assigned: 이미 다른 계정과 연결됨
+      already_assigned: 이미 다른 사용자와 연결됨
       #original_hash: 51650d2
       dob_incorrect_html: >-
-        데이터베이스와 일치하지 않습니다. 만약 올바른 형식(YYYY-MM-DD)의 날짜를 입력하고 있다면 <a
-        href="%{dob_form_path}">이 문서</a>를 활용하여 WCA 결과팀에게 문의하세요.
+        데이터베이스와 일치하지 않습니다. 만약 올바른 형식(YYYY-MM-DD)으로 올바른 날짜를 입력하고 있다면 <a href="%{dob_form_path}">이
+        문서</a>를 활용하여 WCA 결과 팀에 문의하십시오.
       #original_hash: 26f70ed
       dob_past: 과거여야 합니다
       #original_hash: 48653a9
-      already_have_id: '이미 WCA ID %{wca_id}를 연결하셔서 다른 WCA ID의 연결을 요청하실 수 없습니다'
+      already_have_id: "이미 WCA ID %{wca_id}를 보유 중이므로 WCA ID의 연결을 요청하실 수 없습니다"
       #original_hash: ec5db95
       wca_id_no_birthdate_html: >-
-        이 WCA ID의 생년월일 정보를 저희가 가지고 있지 않습니다. 이 <a href="%{dob_form_path}">문서</a>를
-        활용하여 WCA 결과팀에게 문의하세요.
+        이 WCA ID에 대한 생년월일이 기록되어 있지 않습니다. 이 <a href="%{dob_form_path}">전용 양식</a>을 사용하여
+        WCA 결과 팀에게 문의하십시오.
       #original_hash: f7dde6e
-      wca_id_no_gender_html: "이 WCA ID의 성별 정보를 저희가 가지고 있지 않습니다.  <a href='%{wrt_contact_path}'='%{wrt_contact_path}' target='_blank'>WCA \b결과 부서</a>에 이메일을 보내 문의하세요."
+      wca_id_no_gender_html:
+        "이 WCA ID에 대한 성별 정보가 기록되어 있지 않습니다.  <a href='%{wrt_contact_path}'='%{wrt_contact_path}'
+        target='_blank'>WCA \b결과 팀</a>에 연락하여 이 문제를 해결하십시오."
       #original_hash: 11a7f81
       wca_id_no_citizenship_html: >-
-        이 WCA ID의 국적 정보를 저희가 가지고 있지 않습니다.  <a
-        href='%{wrt_contact_path}'='%{wrt_contact_path}'
-        target='_blank'>WCA 결과 부서</a>에 이메일을 보내 문의하세요.
+        이 WCA ID에 대한 국적 정보가 기록되어 있지 않습니다.  <a href='%{wrt_contact_path}'='%{wrt_contact_path}'
+        target='_blank'>WCA 결과 팀</a>에 연락하여 이 문제를 해결하십시오.
       #original_hash: 6890de8
       wca_id_no_name_html: >-
-        이 WCA ID의 성명 정보를 저희가 가지고 있지 않습니다.  <a
-        href='%{wrt_contact_path}'='%{wrt_contact_path}'
-        target='_blank'>WCA 결과 부서</a>에 이메일을 보내 문의하세요.
-      #original_hash: d02c03b
-      avatar_requires_wca_id: WCA ID와 연결 되어야 합니다.
+        이 WCA ID에 대한 이름이 기록되어 있지 않습니다.  <a href='%{wrt_contact_path}'='%{wrt_contact_path}'
+        target='_blank'>WCA 결과 팀</a>에 연락하여 이 문제를 해결하십시오.
     successes:
       messages:
         #original_hash: 31bd401
-        account_updated: 계정 업데이트 완료
+        account_updated: 계정이 업데이트됨
         #original_hash: 49e5851
-        wca_id_claimed: '%{wca_id}와의 연결을 성공적으로 요청하셨습니다. %{user}가 승인을 하면 이메일을 보낼 것이니 이메일을 확인하세요.'
+        wca_id_claimed:
+          "WCA ID %{wca_id}와의 연결을 성공적으로 요청하였습니다. 이메일을 확인하고, %{user}가
+          승인할 때까지 기다려 주세요!"
         #original_hash: dc89669
-        account_updated_confirm: '계정 업데이트 완료. 새로운 이메일을 검증할 수 있게 %{email}에게 이메일을 보냈습니다.'
+        account_updated_confirm:
+          "계정이 업데이트되었습니다. 새 이메일 주소를 검증하기 위해 %{email}로 이메일을
+          발송하였습니다."
     select_nearby_delegate:
       #original_hash: 407c4f8
       select_delegate_html: >-
-        이 계정과 WCA ID를 연결하기 위해서는,  <a href='%{link_delegate}' target='_blank'>WCA
-        파견위원</a>의 본인확인 절차를 거쳐야합니다. 본인의 생년월일을 입력하시고 본인을 제일 잘 알 것 같은 파견위원을 선택하세요.
+        WCA ID를 귀하의 계정에 연결하기 위해서는 귀하의 신원을 확인할 <a href='%{link_delegate}' target='_blank'>WCA
+        파견위원</a>이 필요합니다. 생년월일을 입력하고, 귀하를 가장 잘 안다고 생각되는 파견위원을 선택하십시오.
       #original_hash: 2564ee3
       already_assigned_html: >-
-        WCA ID %{link_id}는 이미 다른 계정에과 연결되어있습니다. 만약 이게 잘못된 것이라고 생각하시면, 가까운 <a
-        href='%{link_delegate}' target='_blank'>WCA 파견위원</a>에게 연락하세요.
+        WCA ID %{link_id}가 이미 다른 계정에 연결되어 있습니다. 만약 이것이 오류라고 생각하시면, 현지 <a href='%{link_delegate}'
+        target='_blank'>WCA 파견위원</a>에게 문의하십시오.
       #original_hash: 498dc1e
       missing_dob_html: >-
-        WCA ID %{link_id}에 해당되는 생년월일이 없습니다. 이 <a href="%{dob_form_path}">링크</a>를
-        통해 WCA 결과 부서에 연락을 취하세요.
+        WCA ID %{link_id}에 생년월일이 지정되어 있지 않습니다. 이 <a href="%{dob_form_path}">전용 양식</a>을
+        사용하여 WCA 결과 팀에게 문의하십시오.
       #original_hash: 92aa857
-      unknown_wca_id_html: 'WCA ID %{link_id}는 존재하지 않습니다.'
+      unknown_wca_id_html: "WCA ID %{link_id}이(가) 존재하지 않습니다."
   registrations:
     errors:
       #original_hash: 44ab952
@@ -999,10 +998,8 @@ ko:
       need_dob: 생년월일이 필요합니다
       #original_hash: aab7355
       need_country: 대표 지역이 필요합니다
-      #original_hash: e0bb243
-      cannot_be_deleted_and_accepted: 승인과 삭제를 동시에 진행할 수 없습니다
       #original_hash: 820bcf7
-      must_register: 최소 한 종목은 신청하셔야 합니다
+      must_register: 최소 한 종목은 신청해야 합니다.
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
@@ -1011,7 +1008,7 @@ ko:
       #original_hash: bc010e3
       returner:
         zero: 참가 경험자
-        other: 참가 경험자
+        other: 기참가자
       #original_hash: b7da17a
       person:
         zero: 명
@@ -1019,227 +1016,168 @@ ko:
     flash:
       #original_hash: da7ec53
       not_using_wca: 이 대회는 WCA 홈페이지에서 참가 신청을 받지 않습니다.
-      #original_hash: d528030
-      accepted_and_mailed:
-        zero: 승인 완료! 이메일 통보 완료.
-        other: 승인 완료! 이메일 통보 완료.
-      #original_hash: 42ea8de
-      rejected_and_mailed:
-        zero: 대기 명단으로 옮겼습니다.
-        other: 대기 명단으로 옮겼습니다.
-      #original_hash: a360b31
-      deleted_and_mailed:
-        zero: 참가 신청 삭제 됐습니다
-        other: 참가 신청 삭제 됐습니다
-      #original_hash: c3aa289
-      single_deletion_and_mail: '참가 신청 삭제 및 이메일 %{mail} 통보'
-      #original_hash: d8f067f
-      cannot_delete: 참가 신청을 취소할 수 없습니다.
       #original_hash: 82b3899
-      updated: 참가 신청 업데이트 완료
-      #original_hash: 856484a
-      failed: 참가 신청 업데이트 실패
-      #original_hash: 016b4ae
-      deleted: '%{comp}대회의 참가 신청을 취소했습니다'
+      updated: 참가 신청이 업데이트됨
       #original_hash: 7707307
-      registered: 참가 신청 성공! 아래의 요건에 따른 지침을 반드시 따르셔서 등록이 완료되도록 해주세요.
+      registered: 참가 신청 양식이 제출되었습니다. 참가 신청이 완료되도록 아래 신청 요건의 모든 지침을 반드시 따르십시오.
     edit_registration:
       #original_hash: 2d15eae
-      title: '%{comp}의 %{person}'
+      title: "%{comp}의 %{person}"
     mailer:
       #original_hash: 72e2180
-      regards_html: '감사합니다, %{people}.'
+      regards_html: "감사합니다, %{people}."
       new:
         #original_hash: 63591e5
-        mail_subject: '%{comp_name}에 참가 신청하여 승인 대기 상태 입니다.'
+        mail_subject: "%{comp_name}의 참가 신청이 승인 대기 중입니다."
         #original_hash: 6aa057a
-        registered_html: '%{comp_name}에 대한 참가 신청이 접수되었으며, 대회 운영진이 승인을 할 때 까지 최종 참가 확정이 아닙니다.'
+        registered_html: "현재 %{comp_name}에 대한 참가 신청이 보류 중이며, 대회 운영진의 승인을 기다리고 있습니다."
         #original_hash: f98b245
         awaits_approval: >-
-          대회의 등록 요건이 모두 만족되었는지 확인해 주세요. 예를 들어, 등록을 완료하기 전에 대회 참가비를 지불해야 할 수도
-          있습니다.
+          대회의 참가 신청 요건을 준수했는지 확인하십시오. 예를 들어, 참가 신청이 완료되기 전에 참가비를 지불해야 할 수도 있습니다.
         #original_hash: 826045f
         approval_info_html: >-
-          참가 신청 승인 통보는 이메일로 이루어 집니다. 참고로 참가 신청 승인은 자동으로 이루어지지 않으니 조금만 기다려주세요. 대회
-          참가를 위한 필수 요건이 더 있을 수 잇습니다. 대회 참가 필수 요건을 확인하시려면 대회 홈페이지를 확인하시거나 주최측에
-          연락하세요. 대회 접수 상태를 %{here}에서 확인 하실 수 있습니다.
+          참가 신청이 승인되면 이메일로 알려드립니다. 신청은 자동으로 승인되지 않으므로, 바로 승인되지 않더라도 기다려 주십시오. 신청이
+          승인되기 전에 따라야 할 절차가 더 있을 수 있습니다. 승인 기준을 보려면 대회 웹사이트를 방문하거나 운영진에게 문의하십시오. 또한
+          %{here}에서 신청 상태를 확인할 수 있습니다.
       accepted:
         #original_hash: 6f1fa1f
-        mail_subject: '%{comp_name}의 대회 참가 신청이 승인되었습니다.'
+        mail_subject: "%{comp_name}의 참가 신청이 승인되었습니다."
         #original_hash: 24d2883
-        message_html: '%{comp_name}의 대회 참가 신청이 승인되었습니다. 대회 참가 신청의 상태를 %{here} 확인하실 수 있습니다.'
+        message_html:
+          "%{comp_name}의 참가 신청이 승인되었습니다. %{here}에서 귀하의 참가 신청 상태를 확인할 수
+          있습니다."
         #original_hash: 1852cbf
-        see_you_soon: '%{comp_name}에서 뵈어요!'
-      pending:
-        #original_hash: 8d26297
-        mail_subject: '등록이 대기 명단으로 이동되었습니다: %{comp_name}'
-        #original_hash: 6fd0a8e
-        moved_html: '%{comp_name}의 대회 참가 신청이 대기 명단으로 옮겨졌습니다. 다음과 같은 이유 때문 일 수 있습니다:'
-        causes:
-          #original_hash: eadfc0d
-          accepted: 참가 신청이 실수로 승인 되었습니다.
-          #original_hash: 2ac6d84
-          withdrawal: 본인이 참가 신청을 철회했습니다.
-        #original_hash: 8f7358f
-        email_if_error: '만약 이것이 오류라고 생각되시면, 이 이메일에 답장해주세요.'
+        see_you_soon: "%{comp_name}에서 뵈어요!"
       deleted:
         #original_hash: 8cbc6c0
-        mail_subject: '참가 등록이 삭제되었습니다: %{comp_name}'
+        mail_subject: "%{comp_name}의 참가 신청이 삭제되었습니다."
         #original_hash: f66ae63
-        message_html: '%{comp_name}의 대회 참가 신청이 삭제 되었습니다. 다음과 같은 이유 때문 일 수 있습니다:'
+        message_html: "%{comp_name}의 참가 신청이 삭제되었습니다. 가능한 원인은 다음과 같습니다:"
         causes:
           #original_hash: 978944c
-          missing_info: 필수 정보를 모두 입력하지 않으셨습니다.
+          missing_info: 필수 세부 정보를 모두 제출하지 않았습니다.
           #original_hash: a700652
-          incomplete: 대회 필수 요건을 만족하지 못했습니다. 예를 들면 참가비 납부 혹은 종목의 예선전 기록 미충족.
+          incomplete: "대회 참가 신청 기준을 충족하지 못했습니다(예: 참가비 사전 지불 또는 종목 자격 충족 요건 기록 충족)"
           #original_hash: 1e225f0
-          registrations_full: 대회 참가자 명단에 이미 대회 참가자 제한 만큼의 참가자가 승인되었습니다.
-          #original_hash: 0d4cce9
-          multiple_registrations: 참가 신청을 두번 이상 하셨습니다.
+          registrations_full: 참가자 수가 한도에 도달했으며, 더 이상 남은 자리가 없습니다
+          #original_hash: 238f4ff
+          multiple_registrations: 2회 이상 참가 신청하였습니다
     list:
       #original_hash: 8b7631c
-      title: '%{comp}의 참가 신청 명단'
+      title: "%{comp}의 참가자 명단"
       #original_hash: 5301648
       edit: 수정
       #original_hash: beffc45
       country_plural:
         zero: 한 나라
-        other: '%{count} 나라'
+        other: "%{count} 개국"
       #original_hash: 1feee0e
       export_csv: CSV로 추출
       #original_hash: 84add5b
       email: 이메일
-      #original_hash: 7b2c7f1
-      approve: 승인
-      #original_hash: 2b03b59
-      reject: 거절
-      #original_hash: f6fdbe4
-      delete: 삭제
-      #original_hash: 92d40dc
-      waiting_list: 대기 명단
-      #original_hash: 06f7d1a
-      approved_registrations: 승인된 참가자 명단
-      #original_hash: bff04e8
-      deleted_registrations: 삭제된 참가자 명단
       #original_hash: ac5d958
-      not_paid: 참가비 미지급
+      not_paid: 참가비 미지불
       registered:
         #original_hash: 2c2f473
-        without_stripe: 접수 날짜
+        without_stripe: 접수 일시
         #original_hash: fca3213
-        with_stripe: 참가비 지불한 날짜
+        with_stripe: 참가비 지불 일시
       #original_hash: ce53c71
-      payment_requested_on: '%{date}에 참가비 요청'
+      payment_requested_on: "결제 요청일: %{date}"
       #original_hash: b25928c
       total: 총
     new_registration:
       #original_hash: 8b9f726
-      title: '%{comp} 참가 신청'
+      title: "%{comp} 참가 신청"
     #original_hash: 7cae988
-    registered_with_account_html: 'WCA 홈페이지 계정으로 참가 신청. 참가자의 개인정보 수정 %{here}.'
+    registered_with_account_html:
+      "이 사람은 WCA 홈페이지 계정으로 참가 신청을 하였습니다. %{here}에서 개인
+      정보를 편집할 수 있습니다."
     #original_hash: ada2e9e
     sign_in: 로그인
     #original_hash: 5d45a00
     profile: 프로필
-    #original_hash: 801b3e9
-    panel_title: 참가 신청 정보
     #original_hash: c0063c3
     register: 참가 신청!
     #original_hash: f484f15
     refund: 참가비 환불
     #original_hash: dc8d7d2
-    refund_confirmation: 참가비 환불을 하시겠습니까?
+    refund_confirmation: 이 결제를 환불하시겠습니까?
     #original_hash: a9af643
     update: 참가 신청 업데이트
-    #original_hash: f6fdbe4
-    delete: 삭제
     #original_hash: b72119a
-    delete_confirm: 참가 신청을 삭제 하시겠습니까?
-    #original_hash: cfc4865
-    delete_registration: 참가 신청 삭제.
+    delete_confirm: 참가 신청을 삭제하시겠습니까?
+    #original_hash: bbcc3dc
+    delete_registration: 참가 신청 삭제
     #original_hash: e9ddc6e
-    will_open_html: '<strong>%{days}</strong> %{time}에 참가 신청 기간이 시작 됩니다.'
+    will_open_html: "<strong>%{days}</strong> %{time}에 참가 신청 기간이 시작됩니다."
     #original_hash: 34eb009
-    will_close_html: '<strong>%{days}</strong> %{time}에 참가 신청 기간이 종료 됩니다.'
+    will_close_html: "<strong>%{days}</strong> %{time}에 참가 신청 기간이 종료됩니다."
     #original_hash: dc8a520
-    closed_html: '<strong>%{days}</strong>일 전 %{time}에 참가 신청 기간이 종료 되었습니다.'
+    closed_html: "<strong>%{days}</strong>일 전 %{time}에 참가 신청 기간이 종료되었습니다."
     #original_hash: 2e7024d
     please_sign_in_past_html: >-
-      참가 신청 상태 확인을 위해서는 %{sign_in}하세요. 만약 WCA계정이 없으시면, %{here}에서 가입하실 수 있지만, 이
-      대회의 참가 신청 기간은 이미 지났습니다.
+      참가 신청 상태 확인을 위해서는 %{sign_in}하세요. 만약 WCA 계정이 없으면 %{here}에서 가입할 수 있지만, 이 대회에 참가
+      신청하기에는 너무 늦었습니다.
     #original_hash: 7753b2e
     please_sign_in_not_yet_open_html: >-
-      참가 신청 상태 확인을 위해서는 %{sign_in}하세요. 만약 WCA계정이 없으시면, %{here}에서 가입하실 수 있지만, 이
-      대회의 참가 신청 기간이 시작되지 않았습니다.
+      참가 신청 상태 확인을 위해서는 %{sign_in}하세요. 만약 WCA 계정이 없으면 %{here}에서 가입할 수 있지만, 참가 신청 접수가
+      아직 시작되지 않았습니다.
     #original_hash: 4f84af0
-    please_sign_in_html: '%{comp}에 참가 신청하기 위해서는 %{sign_in}하세요. 만약 WCA 계정이 없으시면, %{here}서 만드실 수 있습니다.'
-    #original_hash: 89b4e7f
-    greeting: '%{name}님, 안녕하세요!'
+    please_sign_in_html:
+      "%{comp}에 참가 신청하기 위해서는 %{sign_in}하세요. 만약 WCA 계정이 없으면, %{here}에서
+      만들 수 있습니다."
     #original_hash: 322f646
-    please_fix_profile_html: '%{comp}에 참가 신청을 하시려면, %{profile}에 있는 다음 오류를 수정하세요:'
+    please_fix_profile_html: "%{comp}에 참가 신청을 하시려면, %{profile}에서 다음 오류를 수정하십시오:"
     #original_hash: f22ef22
     registration_full: >-
-      이 대회의 참가자 제한은 %{competitor_limit}명이며, 더 이상 여유가 없습니다. 지금 참가 신청을 하시게 되면,
-      대기명단에 올라가게 됩니다. 참가자 명단에 여유가 생겨야만 승인이 될 것입니다.
-    #original_hash: 855ca9c
-    can_register: '아래에서 %{comp}에 참가 신청 하실 수 있습니다.'
-    #original_hash: 4167ed7
-    check_registration_information: 참가비 입금과 같은 대회 참가 접수에 관련된 사항을 확인하세요.
-    #original_hash: 88ac7c3
-    have_registered: '%{comp}의 참가 신청을 하셨습니다. 아래에서 참가 신청 정보를 확인 하실 수 있습니다.'
-    #original_hash: 3c9141f
-    contact_organizer: 수정하고 싶으시면 대회 주최자에게 문의하세요.
-    #original_hash: 59354fd
-    waiting_list: 참가 신청이 대기 상태 입니다. 승인을 위해서는 참가비를 납부 해야 할 수도 있습니다. 대회 홈페이지에서 자세한 사항을 확인하세요.
-    #original_hash: 58b1a3c
-    accepted: 참가 신청이 승인 되었습니다!
+      이 대회의 참가자 정원은 %{competitor_limit}이며 이미 정원에 도달하였습니다. 참가 신청을 하게 되면 대기 명단에 올라갑니다.
+      공석이 생기지 않는 한 참가 신청이 승인되지 않을 수 있습니다.
     #original_hash: bcd7d70
-    entry_fees_fully_paid: '%{paid}을 지불하여 대회 참가비를 모두 납부하셨습니다.'
+    entry_fees_fully_paid: "%{paid}을(를) 지불하여 대회 참가비를 모두 납부하였습니다."
     #original_hash: 2e5d1b9
-    will_pay_here: 참가 신청 후 여기에서 참가비를 지불 할 것입니다.
-    #original_hash: b7ef562
-    wont_pay_here: 참가비 납부에 대한 정보를 대회 홈페이지에서 확인하세요.
+    will_pay_here: 참가 신청 후 여기에서 참가비를 지불하게 됩니다.
+    #original_hash: 86877d4
+    wont_pay_here: 결제 방법에 대한 지침은 대회 정보를 확인하십시오.
     payment_form:
-      #original_hash: 4de825f
-      title: 참가비
       hints:
         #original_hash: bf3a39e
-        donation: 주최측을 위한 기부금
+        donation: 운영진에게만 제공되는 선택적 기부금
       labels:
-        #original_hash: 4de825f
-        entry_fees: 참가비
         #original_hash: 2c09302
         donation: 기부금
       alerts:
-        #original_hash: a34940e
-        not_a_number: 합당한 금액을 입력하세요.
         #original_hash: 707b9ca
-        amount_too_low: 최종 금액은 납부해야하는 참가비보다 같거나 커야합니다.
+        amount_too_low: 총액은 최소한 지불해야 할 참가비와 같아야 합니다.
     #original_hash: 4cf01a2
-    preferred_events_prompt_html: '대회 참가 신청을 신속히 진행하기 위하여, 선호하는 종목을 선택할 수 있습니다 %{link}.'
+    preferred_events_prompt_html:
+      "나중에 대회 참가 신청을 신속히 하기 위하여, 선호하는 종목을 %{link}에서 선택할
+      수 있습니다."
     #original_hash: 67d8734
-    preferred_events_populated_html: '참가 종목을 미리 선호하는 종목으로 선택했습니다. 선호하는 종목 수정 %{link}'
+    preferred_events_populated_html:
+      "귀하의 참가 신청 종목을 선호하는 종목으로 자동 선택하였으며, %{link}에서
+      수정할 수 있습니다."
     #original_hash: ee89a3e
-    registration_requirements: '이 대회의 참가 필수 요건:'
+    registration_requirements: "이 대회의 참가 신청 요건:"
   competitions:
     messages:
-      #original_hash: 07de612
-      upload_results: 이미 끝난 대회 입니다. 대회 결과가 승인되기를 기다리는 중입니다.
+      #original_hash: 16dd227
+      upload_results: 이 대회는 종료되었습니다. 최대한 빨리 결과를 업로드하기 위해 노력하고 있습니다!
       #original_hash: a0168ee
-      in_progress: '이 대회는 진행중 입니다. %{date} 이후에 오셔서 결과를 확인하세요!'
+      in_progress: "이 대회는 진행 중입니다. %{date} 이후에 돌아와 결과를 확인하세요!"
       #original_hash: 3322400
-      tooltip_registered: 참가 신청 되셨습니다.
+      tooltip_registered: 귀하는 참가 신청되었습니다.
       #original_hash: f2d092f
-      tooltip_waiting_list: 현재 대기 명단에 있습니다.
+      tooltip_waiting_list: 귀하는 현재 대기 명단에 있습니다.
     my_competitions:
       #original_hash: 5c6d3ea
       title: 나의 대회
       #original_hash: 1fa5a4b
       disclaimer: >-
-        WCA 홈페이지상에서 참가 신청을 받는 대회들만 나열합니다. 만약 본인의 대회가 이 목록에 없으면, 해당 대회의 참가자 명단을
-        확인하세요.
+        WCA 참가 신청 시스템을 사용하는 대회만 이곳에 표시됩니다. 귀하의 대회가 이곳에 나열되지 않은 경우, 대회 웹사이트의 자체 신청자
+        명단을 확인하십시오.
       #original_hash: 94a2fc8
-      past_competitions: 과거 대회
+      past_competitions: 지난 대회
     competition_info:
       #original_hash: eb9a4bc
       date: 날짜
@@ -1250,7 +1188,7 @@ ko:
       #original_hash: d70f93d
       address: 주소
       #original_hash: dc3decb
-      details: 상세한 위치
+      details: 상세 위치
       #original_hash: 2e8a57c
       website: 홈페이지
       #original_hash: 680567f
@@ -1268,46 +1206,49 @@ ko:
       #original_hash: c5497bc
       events: 종목
       #original_hash: ff722f0
-      registration_requirements: 필수 참가 요건
+      registration_requirements: 참가 신청 요건
       #original_hash: 74d0bf1
-      create_wca_account_html: '아직 없으시면 %{here}에서 WCA 계정을 만드세요.'
+      create_wca_account_html: "WCA 계정이 없다면 %{here}에서 만드십시오."
       #original_hash: a082288
-      claim_wca_id_html: '만약 첫 참가자가 아니라면, %{here}에서 WCA ID와 WCA 계정을 연결해주세요.'
+      claim_wca_id_html: "이 대회가 귀하의 첫 대회가 아니라면, %{here}에서 WCA ID를 WCA 계정과 연결하십시오."
       #original_hash: 56fc229
-      register_link_html: '이 대회의 참가 신청은 %{here}에서 해주세요.'
+      register_link_html: "%{here}에서 이 대회에 참가 신청하십시오."
       #original_hash: 45834fd
-      register_below_html: 아래에서 이 대회의 참가신청을 해주세요.
+      register_below_html: 아래에서 이 대회에 참가 신청하십시오.
       #original_hash: 196725e
-      competitor_limit_is: '참가자 정원은 %{competitor_limit}명 입니다.'
+      competitor_limit_is: "참가자 정원은 %{competitor_limit}명입니다."
       #original_hash: 5101f65
-      no_competitor_limit: 참가자 제한이 없습니다.
+      no_competitor_limit: 참가자 정원이 없습니다.
       #original_hash: f979d5e
-      entry_fee_is: '이 대회의 기본 참가비는 %{base_entry_fee}원 입니다.'
+      entry_fee_is: "이 대회의 기본 참가비는 %{base_entry_fee}원입니다."
       #original_hash: 5390a91
-      no_entry_fee: 이 대회는 참가비가 별도로 없습니다.
+      no_entry_fee: 이 대회의 참가비는 무료입니다.
       #original_hash: 4aca553
-      no_refunds: 참가비는 어떠한 경우에도 환불 되지 않습니다.
+      no_refunds: 참가비는 어떠한 경우에도 환불되지 않습니다.
       #original_hash: 1637bea
-      on_the_spot_registration_free: On the spot registrations will be accepted for free.
+      on_the_spot_registration_free: 현장 참가 신청은 무료로 가능합니다.
       #original_hash: f5f687d
-      no_on_the_spot_registration: 현장 접수는 가능하지 않습니다.
+      no_on_the_spot_registration: 현장 참가 신청은 허용되지 않습니다.
       #original_hash: 4df139d
-      guests_pay: '일반 관객의 관람료는 %{guests_base_fee}원 입니다.'
+      guests_pay: "관람객 입장료는 %{guests_base_fee}원입니다."
       #original_hash: 97a31ee
-      click_to_display_requirements_html: '이미 종료 된 대회입니다. %{link_here}를 눌러 대회의 참가 필수 요건을 확인하세요.'
+      click_to_display_requirements_html:
+        "이 대회는 종료되었습니다. %{link_here}를 클릭하여 대회의 참가
+        신청 필수 요건을 확인하십시오."
       #original_hash: ff19a74
-      hide_requirements: 대회 필수 요건을 숨김
+      hide_requirements: 참가 신청 요건 숨기기.
       registration_period:
         #original_hash: 6888733
         label: 참가 신청 기간
         #original_hash: 0c7c1dc
-        range_future_html: '참가 신청 기간은 %{start_date_and_time}에서 %{end_date_and_time}까지 입니다.'
+        range_future_html: "온라인 참가 신청은 %{start_date_and_time}부터 %{end_date_and_time}까지입니다."
         #original_hash: 679222e
         range_ongoing_html: >-
-          참가 신청 기간은 %{start_date_and_time}에 시작 되었으며, %{end_date_and_time}에 끝날
-          예정입니다.
+          온라인 참가 신청은 %{start_date_and_time}에 시작되었으며, %{end_date_and_time}에 마감될 예정입니다.
         #original_hash: 7ac8349
-        range_past_html: '참가 신청 기간은 %{start_date_and_time}에 시작되어 %{end_date_and_time}에 끝났습니다.'
+        range_past_html:
+          "참가 신청 기간은 %{start_date_and_time}에 시작되었으며, %{end_date_and_time}에
+          마감되었습니다."
     index:
       #original_hash: db98a68
       title: 대회
@@ -1326,7 +1267,7 @@ ko:
       #original_hash: bce0641
       search: 검색
       #original_hash: 769bb19
-      state: 날짜
+      state: 일시
       #original_hash: 4e9f7a3
       present: 현재
       #original_hash: 76eec76
@@ -1338,83 +1279,79 @@ ko:
       #original_hash: 3f66052
       from_date: 시작
       #original_hash: ae79ea1
-      to_date: 끝
+      to_date: 종료
       #original_hash: 52c30f8
-      past_from: '%{year}년 대회'
+      past_from: "%{year}년 대회"
       #original_hash: 7cff459
-      past_all: 지난 연도 모두
+      past_all: 지난 년도 모두
       titles:
         #original_hash: 69447c9
         in_progress: 진행 중인 대회
         #original_hash: 9e66032
-        past: '%{year}년 대회'
+        past: "%{year}년 대회"
         #original_hash: f628f0e
         past_all: 지난 모든 대회
         #original_hash: cbe8a54
-        recent: '최근 대회 (최근 %{count}일)'
+        recent: "최근 대회 (최근 %{count}일)"
         #original_hash: 914742f
-        upcoming: 다가오는 대회
+        upcoming: 예정된 대회
         #original_hash: 8b57693
         custom: 선택된 기간의 대회
-      #original_hash: 6684214
-      no_access: 접근 권한이 없습니다!
       tooltips:
         hourglass:
           #original_hash: b5183e1
-          ended: '%{days}전에 종료'
+          ended: "%{days}전에 종료됨"
           #original_hash: 1dccb27
-          in_progress: 진행중!
+          in_progress: 진행 중!
           #original_hash: 1157462
-          posted: 결과 공인!
+          posted: 결과가 발표되었습니다!
           #original_hash: 89bcc37
-          starts_in: '%{days}일 후에 시작'
+          starts_in: "%{days}일 후에 시작"
         #original_hash: ccd2db9
         search: 이름 혹은 도시
         #original_hash: 3bc8082
-        recent: '지난 %{count}일'
+        recent: "지난 %{count}일"
       #original_hash: 8b09d74
-      no_comp_found: 대회가 없습니다
-      #original_hash: 7008166
-      no_comp_match: '%{events}를 가진 대회를 찾을 수 없습니다! 적은 갯수의 종목으로 검색해보세요.'
+      no_comp_found: 대회가 없습니다.
     my_competitions_table:
       #original_hash: 5301648
       edit: 수정
       #original_hash: dddbe64
       registrations: 참가 신청
       #original_hash: 4f98e6d
-      results_up: 결과 공인!
+      results_up: 결과가 발표되었습니다!
       #original_hash: 87ab5db
       report: 파견위원 보고서 보기
       #original_hash: b4ca252
       edit_report: 보고서 수정
       #original_hash: 7fc0b5f
-      no_upcoming_competitions_html: '현재 다가오는 대회가 없습니다! %{link}를 확인하세요'
+      no_upcoming_competitions_html: "현재 예정된 대회가 없습니다! %{link}를 확인하십시오."
       #original_hash: e0f66bb
       competitions_list: 대회 목록
       #original_hash: 9104a03
-      no_past_competitions: 지난 대회가 없습니다
+      no_past_competitions: 과거 대회 참가 내역이 없습니다.
     competition_form:
       labels:
         admin:
           #original_hash: 7f3d889
-          is_confirmed: 문서 내용 변경 불가 (주최자)
+          is_confirmed: 주최자가 이 대회를 수정하도록 하지 마십시오.
           #original_hash: d493e6a
-          is_visible: 대회 공개
+          is_visible: 대회 공개하기
         #original_hash: 89f89c0
         competition_id: ID
         #original_hash: 709a232
         name: 이름
         #original_hash: fdba578
-        short_name: 대회 별명
+        short_name: 대회 약칭
         venue:
           #original_hash: 0f21717
-          country_id: 나라
+          country_id: 지역
           #original_hash: 25b7b06
-          city_name: 도시
+          city_name: 도시 이름
           #original_hash: 67cd406
           name: 장소
           #original_hash: 08767af
-          details: 자세한 장소
+          details: 장소 상세
           #original_hash: 486f8fb
           address: 장소 주소
         #original_hash: ff99f5b
@@ -1425,11 +1362,11 @@ ko:
         information: 정보
         competitor_limit:
           #original_hash: 9bb1965
-          enabled: 대회 참가자 수 제한
+          enabled: 참가자 제한 여부
           #original_hash: 749f4c9
-          count: 대회 참가자 제한
+          count: 참가자 정원
           #original_hash: 4a8b6f1
-          reason: 대회 참가자 제한 이유
+          reason: 해당 참가자 정원에 대한 이유
         staff:
           #original_hash: 2e3ed8b
           staff_delegate_ids: WCA 파견위원
@@ -1439,110 +1376,110 @@ ko:
           contact: 문의
         website:
           #original_hash: 692e1f9
-          generate_website: 외부 홈페이지 대신 WCA 홈페이지 사용
+          generate_website: 추가 정보를 위해 외부 웹사이트가 아닌 WCA 웹사이트를 사용하고 싶습니다.
           #original_hash: 2e8a57c
           external_website: 홈페이지
           #original_hash: 87b7d5f
-          uses_wca_registration: 등록을 위해 WCA홈페이지 사용
+          uses_wca_registration: 참가 신청을 위해 WCA 홈페이지 사용
         entry_fees:
           #original_hash: 28a6fbb
-          currency_code: 화폐 단위
+          currency_code: 통화 코드
           #original_hash: 6cf623b
           base_entry_fee: 기본 참가비
           #original_hash: 69780b5
-          on_the_spot_entry_fee: 즉석 참가 신청 비용
+          on_the_spot_entry_fee: 현장 참가 신청 비용
           #original_hash: 3542671
-          guest_entry_fee: 관객 입장료
+          guest_entry_fee: 관람객 입장료
           #original_hash: 71c8461
-          donations_enabled: 참가비와 더불어 후원금도 지급가능
+          donations_enabled: 참가비 징수 외에 기부를 활성화하고 싶습니다.
           #original_hash: efbdbab
           refund_policy_percent: 환불 비율
           #original_hash: b332299
           refund_policy_limit_date: 환불 기한
         registration:
           #original_hash: d4aeed9
-          opening_date_time: 참가기간 시작
+          opening_date_time: 참가 신청 시작
           #original_hash: f8153a2
-          closing_date_time: 참가기간 종료
+          closing_date_time: 참가 신청 마감
           #original_hash: 2529d04
-          allow_on_the_spot: 즉석 참가 신청
+          allow_on_the_spot: 현장 참가 신청
           #original_hash: 3c23a67
-          guests_enabled: 참관객
+          guests_enabled: 관람객
           #original_hash: 556fda0
-          extra_requirements: 참가 신청 추가 필수 사항
+          extra_requirements: 참가 신청 추가 요구 사항
         #original_hash: d7020f4
         remarks: 비고
       hints:
         admin:
           #original_hash: da39a3e
-          is_confirmed: ''
+          is_confirmed: ""
           #original_hash: da39a3e
-          is_visible: ''
+          is_visible: ""
         #original_hash: da39a3e
-        competition_id: ''
+        competition_id: ""
         venue:
           #original_hash: da39a3e
-          country_id: ''
+          country_id: ""
           #original_hash: da39a3e
-          address: ''
+          address: ""
           coordinates:
             #original_hash: da39a3e
-            lat: ''
+            lat: ""
             #original_hash: da39a3e
-            long: ''
+            long: ""
         #original_hash: da39a3e
-        start_date: ''
+        start_date: ""
         #original_hash: da39a3e
-        end_date: ''
+        end_date: ""
         series:
           #original_hash: da39a3e
-          series_id: ''
+          series_id: ""
         website:
           #original_hash: da39a3e
-          generate_website: ''
+          generate_website: ""
           #original_hash: da39a3e
-          uses_wca_registration: ''
+          uses_wca_registration: ""
           #original_hash: da39a3e
-          uses_wca_live: ''
+          uses_wca_live: ""
         user_settings:
           #original_hash: da39a3e
-          receive_registration_emails: ''
+          receive_registration_emails: ""
         entry_fees:
           #original_hash: da39a3e
-          donations_enabled: ''
+          donations_enabled: ""
         registration:
           #original_hash: da39a3e
-          closing_date_time: ''
+          closing_date_time: ""
           #original_hash: da39a3e
-          allow_on_the_spot: ''
+          allow_on_the_spot: ""
           #original_hash: da39a3e
-          allow_self_delete_after_acceptance: ''
+          competitor_can_cancel: ""
           #original_hash: da39a3e
-          allow_self_edits: ''
+          allow_self_edits: ""
           #original_hash: da39a3e
-          guests_enabled: ''
+          guests_enabled: ""
           #original_hash: da39a3e
-          guest_entry_status: ''
+          guest_entry_status: ""
           #original_hash: da39a3e
-          force_comment: ''
+          force_comment: ""
         event_restrictions:
           forbid_newcomers:
             #original_hash: da39a3e
-            enabled: ''
+            enabled: ""
           early_puzzle_submission:
             #original_hash: da39a3e
-            enabled: ''
+            enabled: ""
           qualification_results:
             #original_hash: da39a3e
-            enabled: ''
+            enabled: ""
             #original_hash: da39a3e
-            allow_registration_without: ''
+            allow_registration_without: ""
           event_limitation:
             #original_hash: da39a3e
-            enabled: ''
+            enabled: ""
         cloning:
           #original_hash: da39a3e
-          clone_tabs: ''
+          clone_tabs: ""
     #original_hash: 06b01c4
     announcements: 공지
     show:
@@ -1556,24 +1493,30 @@ ko:
       time_limit_information:
         #original_hash: 88c5f1a
         time_limit_html: >-
-          만약 시도 중에 시간 제한을 넘기게 되면, 심판이 멈출 것을 요구 할 것이며, 결과는 DNF로 기록 될 것 입니다.
-          (%{regulation_link} 참고)
+          기록 측정 도중 기록 제한에 도달하면, 심판이 측정을 중지시킬 것이며 결과는 DNF로 처리됩니다(규정 %{regulation_link}
+          참고).
         #original_hash: 83d204f
-        regulation_link_text: '규정 %{number}'
+        regulation_link_text: "규정 %{number}"
         #original_hash: bd0e4a9
-        guideline_link_text: '권장 사항 %{number}'
+        guideline_link_text: "지침 %{number}"
         #original_hash: b2a983a
-        cumulative_time_limit: 누적 시간 제한
+        cumulative_time_limit: 누적 기록 제한
         #original_hash: d47f11a
-        cumulative_one_round_html: '%{cumulative_time_limit}이 있을 수 있습니다. (%{regulation_link} 참고)'
+        cumulative_one_round_html:
+          "%{cumulative_time_limit}이 적용될 수 있습니다(%{regulation_link}
+          참고)."
         #original_hash: c6190b6
-        cumulative_across_rounds_html: '%{cumulative_time_limit}이 몇몇 라운드에 있을 수 있습니다. (%{guideline_link} 참고)'
+        cumulative_across_rounds_html:
+          "%{cumulative_time_limit}이 여러 라운드에 걸쳐 적용될 수
+          있습니다(%{guideline_link} 참고)."
         #original_hash: e8d17df
-        cutoff_html: '컷오프 라운드에서 모든 시도를 할 자격을 얻기 위한 기준 시간. (%{regulation_link} 참고)'
+        cutoff_html:
+          "컷오프 라운드에서 모든 측정 기회를 시도할 자격을 얻기 위한 기준이 되는 결과(%{regulation_link}
+          참고)."
         #original_hash: f571a30
         format_html: >-
-          형식은 어떠한 방식으로 선수들의 순위를 결정하는 지 알려줍니다. 허용된 형식은 다음 링크에 있습니다 %{link_to_9b}.
-          각 형식의 설명은 %{link_to_9f}를 참고해 주세요.
+          형식은 선수의 순위를 결과에 따라 어떻게 결정하는지 설명합니다. 종목별로 허용되는 형식의 목록은 %{link_to_9b}에 설명되어
+          있습니다. 각 형식에 대한 설명은 %{link_to_9f}를 참고하십시오.
       #original_hash: 041a5de
       format: 형식
       #original_hash: 0d1fcc3
@@ -1581,7 +1524,7 @@ ko:
       #original_hash: 118de39
       cutoff: 컷오프
       #original_hash: 02ed4a4
-      proceed: 진출 인원
+      proceed: 후속 라운드 진출 인원
     schedule:
       display_as:
         #original_hash: 0424f6e
@@ -1589,12 +1532,12 @@ ko:
         #original_hash: adab509
         calendar: 달력
       #original_hash: 017e4d8
-      display_for_room: '어떤 장소의 일정:'
+      display_for_room: "다음에 대한 일정 표시:"
       range:
         #original_hash: 3f66052
-        from: 시작 시간
+        from: 시작 시각
         #original_hash: ae79ea1
-        to: 종료 시간
+        to: 종료 시각
       #original_hash: 952f375
       start: 시작
       #original_hash: a2bb9d3
@@ -1602,9 +1545,9 @@ ko:
       #original_hash: 81c0d91
       activity: 활동
       #original_hash: 97df911
-      timezone_message: '이 대회 장소의 시간대 입니다 %{timezone}'
+      timezone_message: "이 장소의 시간대는 %{timezone}입니다."
       #original_hash: 37b1adb
-      schedule_for_date: '%{day_name}의 일정 (%{full_date})'
+      schedule_for_date: "%{day_name}의 일정(%{full_date})"
     nav:
       menu:
         #original_hash: 612e12d
@@ -1624,7 +1567,7 @@ ko:
         #original_hash: d672995
         register: 참가 신청
         #original_hash: 855bd26
-        competitors: 참가 확정 명단
+        competitors: 선수 명단
     results_table:
       #original_hash: 3e9a6b5
       wca_profile: WCA 프로필
@@ -1645,7 +1588,7 @@ ko:
       create_button: 탭 생성
   notifications:
     #original_hash: 10bcdbd
-    connect_wca_id: WCA 홈페이지 계정과 WCA ID를 연결하세요!
+    connect_wca_id: WCA 계정과 WCA ID를 연결하십시오!
   persons:
     index:
       #original_hash: 5934b4c
@@ -1657,27 +1600,27 @@ ko:
       #original_hash: 02ae2bd
       podiums: 입상
       #original_hash: 56656a0
-      no_persons_found: 조건을 만족하는 선수가 없습니다
+      no_persons_found: 주어진 조건을 만족하는 선수가 없습니다
     show:
       #original_hash: 1e43436
       previously: 이전
       #original_hash: 4bc65e0
-      completed_solves: 완성된 시도
+      completed_solves: 완료된 시도
       #original_hash: fc78642
       personal_records: 현재 개인 기록
       #original_hash: 2ad8fd5
       odd_rank_reason: >-
-        대표 지역 변경으로 인하여 순위가 공백이거나 대륙 순위가 국가 순위보다 낮을 수 있습니다. 현재 지역 순위는 과거의 지역 순위를
-        고려하지 않습니다.
+        누락된 순위 또는 대륙 순위보다 더 낮은 지역 순위는 지역 변경으로 인한 것입니다. 현재 지역의 순위는 이전 지역에서의 결과에 영향을
+        받지 않습니다.
       #original_hash: a91508f
-      championship_podiums: 지역별 대회 입상
+      championship_podiums: 챔피언십 입상
       championship_podium_levels:
         #original_hash: 3746f3b
-        world: 세계 대회 입상
+        world: 세계 챔피언십 입상
         #original_hash: d248cd7
-        continental: 대륙 대회 입상
+        continental: 대륙 챔피언십 입상
         #original_hash: aa40175
-        national: 국가 대회 입상
+        national: 국가 챔피언십 입상
         #original_hash: 868be55
         greater_china: 중화권 대회 입상
       #original_hash: c32a014
@@ -1685,7 +1628,7 @@ ko:
       #original_hash: ddb18c1
       medal_collection: 입상 내역
       #original_hash: 9e69e13
-      record_collection: 기록 경력
+      record_collection: 신기록 내역
       medals:
         #original_hash: c57604d
         gold: 금
@@ -1698,221 +1641,228 @@ ko:
       #original_hash: 612e12d
       results: 전체 결과
       #original_hash: e51c552
-      records: 신기록 수립 이력
+      records: 신기록 경신 이력
       #original_hash: ab478f3
       competitions_map: 지도
       #original_hash: a99cec5
-      world_records: 역대 세계 기록
+      world_records: 역대 세계 신기록
       #original_hash: 2d36a49
-      continental_records: 역대 대륙 기록
+      continental_records: 역대 대륙 신기록
       #original_hash: 3ce631e
-      national_records: 역대 국가 기록
+      national_records: 역대 국가 신기록
   posts:
     #original_hash: 3dcbf6d
-    announcement_info_html: '%{date_time}에 %{author_name}에 의해 공지'
+    announcement_info_html: "%{date_time}에 %{author_name}에 의해 공지됨"
   contacts:
     dob:
       #original_hash: 907ac6c
-      title: 생년월일 변경 신청 문서
+      title: 생년월일 변경 신청 양식
       #original_hash: 8a4ced5
-      description: 실제 생년월일과 저희가 가지고 있는 생년월일의 정보가 다르면 이 문서를 활용하세요.
+      description: 데이터베이스에 저장된 생년월일이 실제 생년월일과 다른 경우 이 양식을 사용하십시오.
       #original_hash: 0ac13b9
       important_message_html: >-
-        <span class="text-danger">중요</span>: 본인의 성명과 생년월일이 보이게 <u>신분증</u>(주민등록증,
-        운전면서증, 여권 등)의 사진을 첨부하세요. 다른 개인 정보는 가리셔도 무방합니다.
+        <span class="text-danger">중요</span>: 본인의 성명과 생년월일이 적힌 <u>법적 문서</u>(신분증, 운전면허증,
+        여권 등)의 사진을 첨부하십시오. 이름과 생년월일을 제외한 다른 개인 정보는 가려도 됩니다.
       #original_hash: 19c17ec
-      submit: 변경 요청 접수
+      submit: 변경 요청
     messages:
       #original_hash: 41948b9
-      success: 감사합니다. 곧 연락 드리겠습니다.
+      success: 메시지를 보내주셔서 감사합니다. 곧 연락드리겠습니다!
       #original_hash: 8e3a9da
-      delivery_error: 접수 오류
+      delivery_error: 메시지를 보내는 중 오류가 발생했습니다.
   faq:
     #original_hash: d790b40
-    title: 자주 묻는 질문들
+    title: 자주 묻는 질문
     #original_hash: 3451241
-    contact_html: '만약 도움이 안되셨다면, %{contact_us}!'
+    contact_html: "도움이 되는 답변이 없다면 %{contact_us}(으)로 문의하십시오!"
     #original_hash: 6cf2723
     contact_us: 문의
     #original_hash: 9100be3
-    search_for_competition: '대회 검색은 여기서 하세요:'
+    search_for_competition: "이곳에서 대회를 검색하십시오:"
     #original_hash: cba12bc
     already_logged_in: 이미 WCA 계정으로 로그인 되어있습니다.
     #original_hash: 5b7fa52
-    create_an_account: '%{here}에서 WCA 계정을 생성하실 수 있습니다.'
+    create_an_account: "%{here}에서 WCA 계정을 생성할 수 있습니다."
     #original_hash: f8c910c
-    claim_your_wca_id: '%{here}서 WCA ID를 연결 요청하실 수 있습니다.'
+    claim_your_wca_id: "%{here}에서 WCA ID 연결을 요청할 수 있습니다."
     #original_hash: 4dfb4c7
-    create_an_account_and_claim: '%{here}서 WCA 계정을 만드세요. 새로운 WCA 계정으로 로그인 한 후, WCA ID 연결을 부탁드릴 것입니다.'
+    create_an_account_and_claim:
+      "%{here}서 WCA 계정을 만드십시오. 새 계정으로 로그인한 후 WCA ID를 연결
+      요청하라는 메시지가 표시됩니다."
     answers:
-      '1':
+      "1":
         #original_hash: f79b522
-        title: WCA ID와 WCA 프로필은 어떻게 생성 되나요?
+        title: WCA ID와 WCA 프로필은 어떻게 얻을 수 있나요?
         content:
           #original_hash: b645fe1
-          '1': >-
-            만약 WCA 대회에 참석한적이 없으시면, <a href='/competitions'>WCA 대회</a>에 참석해주세요!
-            참가하신 첫 대회의 결과가 공인된 이후에 본인의 WCA ID와 WCA 프로필가 생성됩니다.
-      '2':
+          "1": >-
+            만약 WCA 대회에 참가한 적이 없다면, <a href='/competitions'>대회</a>에 참가해 주세요! 참가한 첫
+            대회의 결과가 발표되면 WCA ID와 WCA 프로필이 생성됩니다.
+      "2":
         #original_hash: eb948e7
-        title: WCA 대회는 어떻게 찾나요?
+        title: WCA 대회는 어떻게 찾을 수 있나요?
         content:
           #original_hash: d195cec
-          '1': 저희 <a href='/competitions'>대회</a> 명단을 참고해주세요.
-      '3':
+          "1": <a href='/competitions'>대회</a> 목록을 확인하십시오.
+      "3":
         #original_hash: af6ad12
-        title: 대회 참가 신청은 어떻게 하나요? 대회 참가 신청시 오류가 발생하면 누구에게 연락하면 되나요?
+        title: 대회 참가 신청은 어떻게 하나요? 참가 신청에 문제가 있으면 누구에게 문의할 수 있나요?
         content:
           #original_hash: 7b91db1
-          '1': >-
-            많은 대회들은 현재 이 WCA 홈페이지에서 참가 신청을 받습니다만, 자체적인 시스템을 이용하는 대회들도 있습니다. 더
-            자세한 정보를 위해서는 참가하고 싶으신 대회의 주최측에 문의해주세요. %{comp_search_form}
-      '4':
+          "1": >-
+            많은 대회가 WCA 웹사이트에서 직접 참가 신청을 받지만, 일부 대회는 자체 외부 시스템을 사용합니다. 자세한 내용은 참가하고자
+            하는 대회의 주최자에게 문의하십시오. %{comp_search_form}
+      "4":
         #original_hash: 9a5ae28
-        title: WCA 대회의 참석 필수 요건은 무엇 인가요? WCA 대회에 참석하기 전에 어떠한 점들을 알아야 하나요?
+        title: WCA 대회에 참가하기 위한 요건은 무엇인가요? WCA 대회에 참가하기 전에 무엇을 알아야 하나요?
         content:
           #original_hash: 3bb4e11
-          '1': >-
-            일반적으로, WCA 대회에 참가하기 위한 필수 요건은 많지 않습니다. 하지만 대회의 모든 참가자는 <a
-            href='https://www.worldcubeassociation.org/regulations/'>WCA 규정</a>을
-            숙지 하셔야 합니다. 영어가 아닌 다른 언어로 <a
-            href='https://www.worldcubeassociation.org/regulations/translations/'>번역된
-            WCA 규정</a>도 있습니다.
-      '5':
+          "1": >-
+            일반적으로 WCA 대회에 참가하기 위한 요구 사항은 그렇게 많지 않습니다. 그러나 모든 대회 참가자는 <a href='https://www.worldcubeassociation.org/regulations/'>WCA
+            규정</a>을 잘 이해해야 합니다. 영어가 모국어가 아니고 문서를 이해하는 데 어려움이 있는 경우, <a href='https://www.worldcubeassociation.org/regulations/translations/'>번역본</a>을
+            읽어보십시오.
+      "5":
         #original_hash: 3b657aa
-        title: 제가 사는 도시에서 WCA 대회를 주최할 수 있나요?
+        title: 제가 사는 지역에서 WCA 대회를 열 수 있나요?
         content:
           #original_hash: 3d4eb1c
-          '1': 'WCA 대회를 주최하는데 관심이 있으시면, 경험을 쌓기위해서 먼저 다른 WCA 대회를 참가하시는 것을 강력히 추천드립니다.'
+          "1":
+            "대회 주최에 관심이 있으시다면, 경험을 통해 주최에 관해 배우기 위해 적어도 1~2개의 대회에 선수로 참가해 보는 것을
+            추천합니다."
           #original_hash: be305b8
-          '2': >-
-            WCA 대회는 반드시 <a target='_blank'
-            href='https://www.worldcubeassociation.org/regulations/'>WCA 규정</a>을
-            따라야 합니다. 주최자는 WCA 규정을 완벽히 외울 필요는 없지만, 기본적인 규정에 대해 숙지하신다면 WCA 대회를
-            주최하는데에 도움이 될 것입니다.
+          "2": >-
+            WCA 대회는 반드시 <a target='_blank' href='https://www.worldcubeassociation.org/regulations/'>WCA
+            규정</a>을 따라야 합니다. 주최자는 WCA 규정을 외울 필요는 없지만, 규정의 기본에 대한 심층적인 지식은 대회를 올바르게
+            조직하는 데 확실히 도움이 될 것입니다.
           #original_hash: dbd72c2
-          '3': >-
-            그 이후, 가까운 <a target='_blank'
-            href='https://www.worldcubeassociation.org/delegates'>WCA 파견위원</a>에게
-            연락하세요. 대회가 WCA 공인이 되기 위해서는 반드시 WCA 파견위원의 승인이 있어야 합니다. WCA 파견위원은 성공적인
-            대회 개최를 위해서 주최측을 도울 것입니다.
+          "3": >-
+            그 후, 주최자는 가까운 <a target='_blank' href='https://www.worldcubeassociation.org/delegates'>WCA
+            파견위원</a>에게 연락해야 합니다. WCA 파견위원의 감독은 대회가 WCA가 공식적으로 승인한 대회가 되기 위해 필요합니다.
+            WCA 파견위원은 주최진이 성공적인 대회를 주최하는 방법을 안내하는 데 도움을 줄 것입니다.
           #original_hash: 576c3b8
-          '4': >-
-            더 많은 정보는 <a target='_blank'
-            href='https://www.worldcubeassociation.org/organizer-guidelines'>WCA
-            대회 주최자 권장 사항</a>을 참고해주세요.
-      '6':
+          "4": >-
+            자세한 내용은 <a target='_blank' href='https://www.worldcubeassociation.org/organizer-guidelines'>WCA
+            대회 주최자 지침</a>을 참고해주세요.
+      "6":
         #original_hash: 8005a61
-        title: WCA 계정은 왜 있나요? WCA 계정과 WCA 프로필의 차이는 무엇 인가요?
+        title: WCA 계정은 무엇을 위한 것인가요? WCA 계정과 WCA 프로필의 차이점은 무엇인가요?
         content:
           #original_hash: 57a3767
-          '1': '참가하신 첫 대회의 결과가 공인이 되면, 본인의 WCA ID가 생성됩니다.'
+          "1": "참가한 첫 WCA 대회의 결과가 발표되면 WCA ID가 할당됩니다."
           #original_hash: c5ad7a3
-          '2': >-
-            WCA 계정은 본인 인증을 위해 필요합니다. 이는, 본인의 WCA 프로필에 사진 추가가 가능하게 되며, WCA 대회에 참가
-            신청 또한 가능하게 됩니다. 다른 사람이 본인을 사칭하는 경우를 방지합니다.
+          "2": >-
+            WCA 계정으로 자신이 누구인지 증명할 수 있으며, 이를 통해 WCA 프로필에 사진을 추가하고 대회에 참가 신청할 수 있습니다.
+            또한, 타인이 자신을 사칭하는 것을 방지할 수 있습니다.
           #original_hash: 9ff083a
-          '3': '%{current_user_status}'
-      '7':
+          "3": "%{current_user_status}"
+      "7":
         #original_hash: d7ee9bd
         title: 프로필 사진은 어떻게 변경하나요?
         content:
           #original_hash: e619524
-          '1': '먼저, my-wca-id''>WCA 계정을 만드시고 본인의 WCA ID와 연결</a>하셔야 합니다.'
+          "1":
+            "먼저, <a href='#how-do-i-connect-my-wca-account-with-my-wca-id'>WCA
+            계정을 만들고 귀하의 WCA ID와 연결</a>해야 합니다."
           #original_hash: 56a8f26
-          '2': >-
-            WCA 계정과 WCA ID가 연결된 후, <a href='%{profile_edit_path}'>프로필 수정</a>으로
-            가셔서 프로필 사진 수정하시면 됩니다.
-      '8':
+          "2": >-
+            WCA 계정과 WCA ID를 연결한 후, <a href='%{profile_edit_path}'>프로필 편집 페이지</a>에
+            접속하여 프로필 사진을 변경하십시오.
+      "8":
         #original_hash: 1d61217
-        title: WCA 계정과 WCA ID는 어떻게 연결하나요?
+        title: WCA 계정을 WCA ID와 연결하려면 어떻게 해야하나요?
         content:
           #original_hash: 07bb6ec
-          '1': '%{current_user_claim}'
-      '9':
+          "1": "%{current_user_claim}"
+      "9":
         #original_hash: 7a4a71d
         title: >-
-          현재 WCA 대회에 참가 신청이 승인 된 상태 입니다. 참가 종목을 추가하고 싶습니다, 어떻게 해야 하나요? 참관객이랑 같이
-          와도 되나요?
+          저는 대회에 참가 신청했고, 신청 종목을 추가하고 싶습니다. 어떻게 해야 하나요? 참관객을 데려갈 수 있나요?
         content:
           #original_hash: 957487d
-          '1': >-
-            대회 주최자에게 문의하세요. 대회 주최자 정보는 대회 홈페이지에서 확인하실 수 있습니다. <a
-            href='/competitions'>대회 목록</a>에서 참가하시는 대회를 찾으실 수 있습니다.
+          "1": >-
+            주최자에게 문의하십시오. 대회 웹사이트에서 연락처를 찾을 수 있습니다. <a href='/competitions'>대회 목록</a>에서
+            참가하는 대회의 웹사이트를 찾을 수 있습니다.
       results:
         #original_hash: 9aae576
-        title: WCA 대회의 결과는 언제 공인 되나요?
+        title: WCA 대회의 결과는 언제 WCA 웹사이트에 업로드되나요?
         content:
           #original_hash: 890d879
-          '1': >-
-            WCA 대회가 종료 된 후, WCA 파견위원은 모든 결과지와 참가자 정보를 확인 합니다. 그 이후에 대회 결과 공인을
-            담당하는 WCA 결과팀 (WRT)에 대회 결과가 보내지게 됩니다. WRT는 대회 결과 공인을 신속히하기 위해서 항상
-            노력중입니다.
+          "1": >-
+            대회 종료 후, WCA 파견위원은 모든 기록지와 개인 데이터를 검수하여 가능한 모든 오류를 제거해야 합니다. 이 작업이 완료되면
+            대회의 결과는 대회 결과를 업로드하고 WCA 데이터베이스를 유지 관리하는 WCA 결과 팀(WRT)으로 전송됩니다. 마지막으로
+            WRT는 가능한 한 빨리 WCA 데이터베이스에 결과를 업로드합니다.
           #original_hash: daf1cb1
-          '2': '대회의 규모와 WCA 파견위원의 개인적인 일정에 따라, 하루에서 일주일 사이의 시간이 걸립니다. 조금만 기다려주세요.'
+          "2":
+            "대회의 규모와 파견위원의 개인 일정에 따라 이 모든 것이 하루 또는 최대 일주일이 걸릴 수 있습니다. 인내심을 가지고
+            기다려주시면 감사하겠습니다."
           #original_hash: bf8adbe
-          '3': >-
-            추가적으로, WCA 계정과 WCA ID를 연결 하셨다면 (아래 참고), 본인의 대회 결과에 대한 정보를 이메일로 받으실 수
-            있습니다. 설정은 <a href='%{preferences_edit_path}'>여기</a>에서 하시면 됩니다.
+          "3": >-
+            또한, WCA 계정을 WCA ID(아래 참조)와 연결한 경우, <a href='%{preferences_edit_path}'>여기</a>에서
+            결과 제출에 대한 이메일 알림을 활성화할 수 있습니다.
       regulations1:
         #original_hash: 2951eb6
-        title: 제 퍼즐을 대회에서 사용할 수 있나요?
+        title: 제 퍼즐은 대회에서 이용 가능한 퍼즐인가요?
         content:
           #original_hash: 5ac78e4
-          '1': >-
-            WCA 규정의 <a
-            href='https://www.worldcubeassociation.org/regulations/#3'>Article
-            3</a>에서 이용 가능한 퍼즐의 규정을 찾을 수 있습니다. 모든 퍼즐은 WCA 파견위원의 허락을 받아야 합니다. 만약
-            본인의 퍼즐에 대한 의문이 있다면, 파견위원에게 문의하세요. 만약에 경우를 대비해서, 여분의 퍼즐을 준비해주세요.
+          "1": >-
+            퍼즐에 대한 규정은 <a href='https://www.worldcubeassociation.org/regulations/#3'>제3조</a>에서
+            찾을 수 있습니다. 모든 퍼즐은 WCA 파견위원의 승인을 받아야 합니다. 확실하지 않으면 대회 파견위원에게 물어보십시오. 퍼즐
+            사용이 허용되지 않는 경우를 대비해 대체 퍼즐을 가져오십시오.
       regulations2:
         #original_hash: 48f1234
-        title: WCA 대회에서 자석이 들어간 퍼즐을 사용해도 되나요?
+        title: 공인 WCA 대회에서 자석이 들어간 퍼즐을 사용할 수 있나요?
         content:
           #original_hash: 024ce81
-          '1': >-
-            <a target='_blank'
-            href='https://www.worldcubeassociation.org/regulations/'>WCA 규정</a>에
-            어긋나지 않는 퍼즐이라면, 자석이 들어간 퍼즐도 사용할 수 있습니다. <a
-            href='https://www.worldcubeassociation.org/regulations/#3h'>조항
-            3h</a>에 주목해주세요.
+          "1": >-
+            <a target='_blank' href='https://www.worldcubeassociation.org/regulations/'>WCA
+            규정</a>에 어긋나지 않는 퍼즐이라면, 자석이 들어간 퍼즐도 사용할 수 있습니다. 특히 <a href='https://www.worldcubeassociation.org/regulations/#3h'>규정
+            3h</a>에 주목해 주십시오.
       regulations3:
         #original_hash: c7460a5
-        title: 퍼즐의 중앙 캡 혹은 일부를 분실했습니다. 이 퍼즐을 그대로 사용해도 되나요?
+        title: 센터 캡 혹은 퍼즐 조각을 잃어버렸어요. 그래도 대회에서 사용할 수 있나요?
         content:
           #original_hash: 0d76323
-          '1': >-
-            그런 퍼즐은 사용 하실 수 없습니다. 손상된 퍼즐이나 한 조각이 같은 종류의 다른 조각과 구분이 되면 안됩니다. (<a
-            href='https://www.worldcubeassociation.org/regulations/#3j'>조항
-            3j</a> 참조.)
+          "1": >-
+            사용할 수 없습니다. 퍼즐은 유사한 조각과 크게 구별되는 손상 또는 기타 차이점이 없어야 합니다(<a href='https://www.worldcubeassociation.org/regulations/#3j'>규정
+            3j</a> 참고).
       regulations4:
         #original_hash: 43f9da8
-        title: WCA 대회에 참가하기 위한 나이 제한이 있나요?
+        title: WCA 대회에 참가 신청하기 위한 나이 제한이 있나요?
         content:
           #original_hash: 984704a
-          '1': >-
-            나이 제한은 없습니다. 하지만 어린 참가자 분들은 부모님과 상의해주세요 (<a
-            href='https://www.worldcubeassociation.org/regulations/#2b'>조항
-            2b</a> 참조).
+          "1": >-
+            나이 제한은 없습니다. 하지만 어린 참가자분들은 참가 신청 전에 부모님과 상의해주십시오(<a href='https://www.worldcubeassociation.org/regulations/#2b'>규정
+            2b</a> 참고).
   about:
     #original_hash: 9ac918a
-    title: WCA 알아보기
+    title: WCA 소개
     structure:
       #original_hash: 9482c5d
       title: 조직도
       board:
         #original_hash: e0d37a2
-        description: '세계 큐브 협회는 다음 WCA 대표단이 이끈다:'
+        description:
+          "WCA 이사회는 조직 전체를 이끌고 다른 팀, 위헌회 및 협의회가 수행하지 않는 모든 의무를 수행할 책임이
+          있습니다."
       #original_hash: 7e849d2
-      delegates_html: "<p><strong>WCA 파견위원</strong>은 WCA 회칙과 WCA 규정에 정의된 역할이다. 파견위원의 주된 업무는 WCA를 대표하여 WCA 대회를 관장하는 것이다. WCA 파견위원은 WCA 대회가 WCA의 목적, 정신, 규정을 따르도록 책임을 진다. WCA는 <strong>\bSenior 파견위원</strong>, <strong>Regional 파견위원</strong>, <strong>파견위원</strong>, <strong>Junior 파견위원</strong>, 그리고 <strong>Trainee 파견위원</strong>을 구분한다 %{see_link}.</p> <p>WCA 파견위원의 업무에 더해져서, Senior 파견위원 또는 Regional 파견위원은 관할 지역의 파견위원을 관리하며 그 지역의 회원들이 Senior 파견위원 또는 Regional 파견위원에게 자유롭게 연락할 수 있다.</p> <p>새로운 파견위원은 처음에는 Junior 파견위원이 된다. 파견위원으로 승격되기 위하여, 준 파견위원은 WCA 대회를 관할할 수 있는 능력을 증명해 보여야 한다.</p><p>Trainee 파견위원은 WCA 파견위원이 되기 위해 훈련중인 인원이며 다른 WCA 파견위원이 존재하는 대회에서만 파견위원 역할을 수행할 수 있다."
+      delegates_html:
+        "<p><strong>WCA 파견위원</strong>은 WCA 발의에서 정의되고 WCA 규정에 설명된 역할입니다.
+        파견위원의 주요 임무는 WCA를 대신하여 대회를 감독하는 것입니다. WCA 파견위원은 모든 WCA 대표가 WCA의 사명, 정신 및 규정에
+        따라 운영되도록 할 책임이 있습니다. WCA는 <strong>고위 파견위원</strong>, <strong>지역 파견위원</strong>,
+        <strong>파견위원</strong>, <strong>주니어 파견위원</strong> 및 <strong>수습 파견위원</strong>%{see_link}을
+        구분합니다.</p> <p>WCA 파견위원의 임무 외에도 고위 파견위원 또는 지역 파견위원은 해당 지역의 WCA 파견위원을 관리할 책임이
+        있으며, 지역 문제에 대해 커뮤니티에서 연락을 받을 수도 있습니다.</p> <p>새로운 파견위원은 처음에 주니어 파견위원으로 임명됩니다.
+        이후 WCA 파견위원으로 승격되기 전에 WCA 대회를 관리하는 능력을 증명해야 합니다.</p> <p>수습 파견위원은 WCA 파견위원에
+        대한 교육을 받으며, WCA 파견위원이 있는 대회에서만 파견위원 역할을 수행할 수 있습니다.</p>"
       #original_hash: 27d18ac
-      see_link_html: '(참고 %{link})'
+      see_link_html: " (%{link} 참고)"
       #original_hash: 5b01fcc
-      members_html: 모든 참가자는 본인의 첫 WCA 대회에서 자동으로 WCA <strong>회원</strong>이 된다.
+      members_html: 모든 선수는 본인의 첫 WCA 대회에서 자동으로 WCA <strong>회원</strong>이 됩니다.
   documents:
     #original_hash: 687c828
     title: 문서
     #original_hash: 9855f80
-    bylaws: 회칙
+    bylaws: 정관
     #original_hash: fdceb44
     motions: 발의
     #original_hash: 092f99e
@@ -1923,7 +1873,7 @@ ko:
     #original_hash: d8fd3e4
     title: WCA 파견위원
     #original_hash: 77b819c
-    acknowledges: 'WCA는 다음 WCA 파견위원을 인정한다:'
+    acknowledges: "WCA는 다음과 같은 WCA 파견위원을 인정합니다:"
     table:
       #original_hash: 709a232
       name: 성명
@@ -1935,122 +1885,40 @@ ko:
     #original_hash: 37b8fdc
     title: 지역 단체
     #original_hash: 15a06d6
-    content: WCA 공인 단체 목록
+    content: "WCA는 다음과 같은 지역 단체를 인정합니다:"
     how_to:
       #original_hash: b243b1f
-      title: WCA 공인 지역 단체가 되는 방법
+      title: WCA 지역 단체가 되는 방법
       #original_hash: 9f31403
       description: >-
-        WCA는 전 세계의 다양한 지역 단체를 인정합니다. WCA 지역 단체의 목적은 해당 지역에서 WCA 대회를 주최하고 해당 지역의
-        WCA 활동을 돕는 것입니다. 지역 단체를 인정 받고 싶은 지역은 지원서를 제출하기 전에 각자 지역에서 WCA과 함께 일할 것을
-        추천한다. 특정한 지역에서 WCA 대회 주최에 도움을 주기 위해서는 해당 지역의 파견위원에게 문의하세요.
+        WCA는 전 세계의 다양한 지역 단체를 인정합니다. WCA 지역 단체의 목적은 해당 지역에서 WCA 대회를 주최하고 해당 지역에서 WCA
+        활동을 지원하는 것입니다. 지역 단체를 구성하고자 하는 지역은 지원서를 제출하기 전에 해당 지역에서 WCA에 기여하는 것을 추천합니다.
+        해당 지역에서 WCA 대회 주최에 도움이 필요하다면 가장 가까운 WCA  파견위원에게 문의하십시오.
     requirements:
       #original_hash: 1e04fd7
       title: WCA 지역 단체 필수 요건
       list:
         #original_hash: 22a9f26
-        '1': 해당 지역에서 활발히 WCA 대회를 주최하거나 지원한다
+        "1": 단체가 속한 지역에서 WCA 대회를 적극적으로 주최하거나 지원한다
         #original_hash: 63714d1
-        '2': 해당 지역의 대륙 대회를 활발히 지원한다
+        "2": 해당 주최 팀에서 요구하는 경우, 지역 단체가 속한 대륙에서 개최되는 대륙권 WCA 대회에 이바지한다
         #original_hash: 3c07dd6
-        '3': WCA 회칙과 규정에 있는 목적들을 존중하며 실천에 옮긴다
+        "3": WCA 정관 및 발의에 명시된 목표를 존중하고 실천에 옮긴다
         #original_hash: 0c3576b
-        '4': WCA 규정을 지킨다
-        #original_hash: 1a9e6c5
-        '5': WCA 관계자의 결정에 따른다
+        "4": 모든 WCA 규정을 준수한다
+        #original_hash: 88cf548
+        "5": WCA 자원봉사자들의 결정을 수용하고 준수한다
         #original_hash: d4ae7c1
-        '6': 해당 지역 단체의 회식과 규정을 전자 형식으로 WCA에 제출한다
+        "6": 현재 정관 사본과, 해당되는 경우 전자 형식의 규정 사본을 WCA에 보관한다
     application_instructions:
       #original_hash: 4da829b
       title: 지원 방법
   score_tools:
     #original_hash: 4fc2133
-    title: WCA 기록 입력 도구
+    title: WCA 대회를 위한 소프트웨어 도구
   logo:
     #original_hash: c72c969
     title: WCA 로고
-  workbook_assistant:
-    #original_hash: e442ea4
-    title: WCA 워크북 도우미
-    #original_hash: a7c307f
-    download: WCA 워크북 도우미 다운로드
-    #original_hash: cf1b916
-    last_update: 최근 업데이트
-    #original_hash: feece00
-    version_history: 버전 역사
-    #original_hash: 8f3f4c0
-    header: WCA에 보내기 전에 WCA 대회 결과와 스크램블을 확인하는 방법
-    step1:
-      #original_hash: c0450b1
-      title: '1단계: WCA 워크북 도우미에서 WCA 결과를 연다'
-      #original_hash: 656d70d
-      content_html: <em>Open...</em> 버튼을 클릭하여 워크북을 열거나 워크북 파일을 프로그램 윈도우 위에 끌어 놓으세요
-    step2:
-      #original_hash: 3ad9881
-      title: '2단계: TNoodle의 스크러블 추가'
-      #original_hash: 080acc0
-      content_html: >-
-        TNoodle 스크램블을 추가하세요. <em>Add...</em> 버튼을 사용하거나 TNoodle 파일을 끌어다가 워크북 위에다가
-        놓으시면 됩니다. TNoodle에 의해 생성된 .zip 파일 혹은 .json 파일을 반드시 사용해 주세요.
-      #original_hash: 6cc90b8
-      content2_html: >-
-        여러 스크램블 파일을 추가할 수 있습니다. 스크램블이 여러 차례 걸쳐서 생성된 경우나 대회 도중에 생성된 경우를 대비하기
-        위함입니다.
-    step3:
-      #original_hash: b2d01b3
-      title: '3단계: 스크램블과 결과를 대응 시켜주세요.'
-      #original_hash: 36383b1
-      content_html: >-
-        WCA 워크북 도우미는 종목의 라운드와 스크램블을 자동으로 대응시켜 줍니다. 여러 스크램블 파일이 사용된 경우와 같은 몇몇
-        경우에는 대응이 수동으로 이루어 져야 합니다.
-      #original_hash: e869c1e
-      content2_html: 수동으로 스크램블을 선택하는 방법은 전체보기 패널에서 <em>Scrambles</em>을 더블 클릭하면 됩니다.
-      #original_hash: 8f4fdfd
-      content3_html: >-
-        결과가 있는 라운드는 스크램블 파일에서 하나의 스크램블만 대응 시킬 수 있습니다. 만약 한 라운드의 스크램블이 TNoodle상에서
-        여러 라운드로 생성 되었다면, <em>Edit groups...</em>버튼을 활용하여 수정 하실 수 있습니다.
-      #original_hash: 94353f2
-      content4_html: '이 예제에서는, 스큐브 종목의 첫 라운드가 한 그룹에서 두 그룹으로 변경 되어 스크램블 하나가 추가로 생성 되었습니다.'
-      #original_hash: 68c5b18
-      content5_html: 새로운 그룹의 스크램블을 드래그하여 기존의 라운드에 올려 놓을 수 있습니다. 이는 한 라운드에 두 그룹을 만들게 됩니다.
-    step4:
-      #original_hash: ed940d2
-      title: '4단계: 워크북 도우미가 알려주는 오류를 수정합니다.'
-      #original_hash: df2cf58
-      content_html: 입력 오류를 발견하기 위하여 결과를 다시 한번 확인 합니다. 오류가 있는 라운드는 빨간 아이콘으로 표시가 됩니다.
-      #original_hash: 7fbf6b8
-      content2_html: '오류가 있는 종목을 종목 목록 패널에서 고를 때에는, 워크북 도우미가 왼쪽 아래에 자세한 오류 정보를 나타냅니다.'
-      #original_hash: 0600502
-      content3_html: >-
-        워크북을 수정하여 저장하시면 오류를 바로잡을 수 있습니다. WCA 워크북 도우미상에 <em>Refresh</em> 버튼을 눌러서
-        새로고침 합니다. 이는 대회 결과만 업데이트되며, 워크북 도우미에 업로드된 스크램블과 같은 정보는 변경되지 않습니다.
-    step5:
-      #original_hash: 536ec4d
-      title: '5단계: 대회ID를 선택합니다'
-      #original_hash: 5aeb5bd
-      content_html: <em>Competition ID</em>옆에 있는 <em>Select...</em>버튼을 누르고 해당되는 대회ID를 선택합니다.
-      #original_hash: 3acf7d0
-      content2_html: 대회 목록이 나타날 것입니다.
-      #original_hash: ceeb6fe
-      content3_html: 대회 이름의 일부분이나 WCA 파견위원의 이름으로 검색 하실 수 있습니다.
-      #original_hash: 5ca74eb
-      content4_html: >-
-        처음에 보여지는 목록은 지난 1주일과 앞으로 1주일 사이에 있을 대회만 보여집니다. 그 이전 혹은 그 이후의 대회를 보기위해서는
-        <em>Only show current competitions</em>을 해제해주세요.
-    step6:
-      #original_hash: 52bb1f6
-      title: '6단계: 대회 결과 JSON 파일을 생성합니다.'
-      #original_hash: 6bfee23
-      content_html: >-
-        오른쪽 아래에 있는 <em>Export results JSON...</em> 버튼을 이용하여 대회 결과를 JSON 파일로
-        저장합니다.
-    step7:
-      #original_hash: 09fa37d
-      title: '7단계: WCA에 대회 결과 JSON 파일을 보냅니다.'
-      #original_hash: 9be089f
-      content_html: >-
-        WCA 워크북 도우미로 생성된 대회 결과 JSON 파일을 다음 이메일로 보냅니다.  <a
-        href="%{wrt_contact_path}">results@worldcubeassociation.org</a>
   search_results:
     index:
       #original_hash: db98a68
@@ -2062,19 +1930,19 @@ ko:
       #original_hash: a0ca0c3
       posts: 게시물
       #original_hash: 9d7ea9c
-      regulations_and_guidelines: 규정과 권장 사항
+      regulations_and_guidelines: 규정과 지침
       not_found:
         #original_hash: b8a7006
-        competitions: 검색 결과가 없습니다
+        competitions: 검색된 대회가 없습니다
         #original_hash: 99d4290
-        people: 검색 결과가 없습니다
+        people: 검색된 선수가 없습니다
         #original_hash: c6a04aa
-        posts: 검색 결과가 없습니다
+        posts: 검색된 게시물이 없습니다
         #original_hash: 76a6bf1
-        regulations_and_guidelines: 검색 결과가 없습니다
+        regulations_and_guidelines: 검색된 규정 혹은 지침이 없습니다
   incidents_log:
     #original_hash: 61ab89f
-    i18n_disclaimer: '참고: 아래의 정보는 영어로만 제공이 되며 번역되지 않습니다'
+    i18n_disclaimer: "사건 섹션은 영어로만 제공되며, 아래 내용은 번역되지 않습니다."
   about_regulations:
     #original_hash: 6bce1b5
     title: 규정에 대하여
@@ -2083,210 +1951,212 @@ ko:
       title: 규정
       #original_hash: 557095b
       content1_html: >-
-        모든 WCA 대회는 <a href="/regulations/">WCA 규정</a>을 따라야 합니다. 대회 첫 참가자는 반드시
-        WCA 규정을 숙지하시고 오세요.
+        모든 WCA 대회는 <a href="/regulations/">WCA 규정</a>을 따라야 합니다. 선수는 첫 대회에 참가하기 전에
+        규정을 숙지하는 것이 중요합니다.
       #original_hash: 4296902
       content2_html: >-
-        WCA 규정와 더불어 추가적인 정보와 설명이 덧붙여진 <a href="/regulations/guidelines.html">WCA
-        권장 사항</a>이 있습니다.
+        WCA 규정은 추가적인 명료화와 설명이 포함된 <a href="/regulations/guidelines.html">WCA 지침</a>으로
+        보완됩니다.
     panel2:
       #original_hash: 8ad8302
       title: 번역본
       #original_hash: 7477d9b
       content1_html: >-
-        WCA 규정은 영어뿐만 아니라 WCA 회원들이 여러 언어로 번역 하였습니다: <a
-        href="/regulations/translations/">번역본</a>.
+        WCA 규정은 영어로 제공될 뿐만 아니라, WCA 회원들에 의해 여러 언어로 번역되었습니다: <a href="/regulations/translations/">번역본</a>.
       #original_hash: 6add7a3
-      content2_html: '<strong>중요</strong>: 번역본은 틀림없이 중요하나, 정식 규정이 아닙니다.'
+      content2_html:
+        "<strong>중요</strong>: 번역본은 매우 유용하지만 공식적인 문서는 아닙니다. 대회에서는 WCA
+        규정의 영어 버전이 구속력을 갖습니다."
     panel3:
       #original_hash: 234fd4d
-      title: 자주 묻는 규정 질문들
+      title: 규정에 관하여 자주 묻는 질문들
       #original_hash: 8afba93
-      content1_html: <a href="/faq">자주 묻는 규정 질문들</a>은 WCA 규정에 대한 반복적인 문의 사항을 모아놨습니다.
+      content1_html:
+        <a href="/faq">자주 묻는 질문들</a> 섹션에서는 WCA 규정에 대한 반복적인 문의 사항에 대한
+        답변을 모아놓았습니다.
     panel4:
       #original_hash: ad5f6e7
-      title: 주최자 권장 사항
+      title: 주최자 지침
       #original_hash: 9bbdf16
       content1_html: >-
-        WCA 대회 주최를 계획 중이거나 진행 중이시면, <a href="/organizer-guidelines">주최자 권장
-        사항</a>을 확인해주세요
+        대회를 주최하는 데 관심이 있거나 이미 대회를 주최할 계획이 있다면 <a href="/organizer-guidelines">주최자
+        지침</a>을 읽어보십시오.
       #original_hash: 5016669
-      content2_html: 이 문서는 중요한 정보이며 모든 대회 주최자가 숙지하고 있어야 합니다
+      content2_html: 본 문서에는 중요한 정보가 포함되어 있으므로 모든 대회 주최자가 꼭 읽어야 합니다.
   organizer_guidelines:
     #original_hash: 7486ac4
-    title: WCA 대회 주최 권장 사항
+    title: WCA 대회 주최자 지침
     paragraph1:
       #original_hash: e5f5329
-      title: WCA 대회 주최 방법
+      title: 대회를 주최하는 방법
       #original_hash: 3dbbbee
       content: >-
-        모든 WCA 대회는 반드시 WCA 파견위원이 참석해야하며 WCA 파견위원의 관할입니다. 만약 WCA 대회 주최에 관심이 있으시면,
-        가까운 WCA 파견위원에 문의하세요. WCA 파견위원은 지역적 특성을 고려한 정보를 제공할 수 있습니다. 또한, 주변의 다른
-        WCA 대회에 대한 정보도 가지고 있기에, 합당한 대회 날짜도 상의할 수 있습니다. 만약 주변에 WCA 파견위원이 없으시면,
-        WCA 지역 대표 파견위원에게 문의하세요.
+        모든 WCA 대회는 WCA 파견위원이 참석하고 감독해야 합니다. 직접 대회를 주최하는 데 관심이 있다면 가장 가까운 WCA 파견위원에게
+        연락하십시오. 그들은 지역의 관행에 대한 자세한 정보를 제공할 수 있으며, 같은 기간에 계획된 다른 대회가 있는지 알고 있으므로 적합한
+        날짜를 찾는 데 도움을 줄 수 있습니다. 귀하의 지역 근처에 WCA 파견위원이 없는 경우, 지역의 고위 파견위원에게 연락하십시오.
     paragraph2:
       #original_hash: f20dd3b
-      title: WCA 대회 주최 경비
+      title: 대회 개최에 따른 예상 비용
       #original_hash: f16a06f
       content: >-
-        WCA 대회 주최 경비는 나라에 따라 확연히 차이가 납니다. 모든 대회 주최 경비를 참가비로 충당하는 것은 가능합니다. 하지만
-        참가비를 낮추기 위해 후원사를 찾는 것을 추천합니다. WCA 파견위원은 WCA 업무로 인해 돈을 받지 않는 자원봉사자 입니다만,
-        WCA 대회 주최자는 WCA 파견위원의 교통 및 숙박 등의 경비를 제공하는 것을 고려해주세요.
+        예상 비용은 국가마다 크게 다르며 대회장 규모 및 기타 일반 조건과 같은 여러 요인에 따라 결정됩니다. 참가비로 모든 비용을 충당하는
+        것은 가능합니다. 그러나 참가비를 가능한 한 낮게 유지하려면 후원사를 찾는 것이 좋습니다. WCA 파견위원이 자원봉사자이며 업무에 대한
+        급여를 받지 않지만, 주최자는 그들의 여행 경비에 대한 보상을 지불하는 것을 고려해야 합니다.
     paragraph3:
       #original_hash: 00d3bf8
-      title: WCA 대회 공지 마감일
+      title: 대회 발표 마감일
       #original_hash: 477a672
       content_html: >-
-        대회는 대회의 시작일 최소 28일 전에 공지되어야 합니다 (자세한 사항은 <a
-        href='https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>대회
-        요건</a> 참조). 그러나 이는 최소한의 조건으로 충분한 시간이 아닐 수 있습니다. 대회를 조직하는 데 필요한 모든 사항을
-        고려하고 충분한 준비 시간을 가지세요. 또한, 대회가 공지되기 전에 WCAT가 대회를 검토할 시간이 필요합니다. 필요한 시간에
-        대해 확실하지 않은 경우, 파견위원과 상담하세요.
+        대회는 대회 시작 최소 28일 전에 발표되어야 합니다(자세한 사항은 <a href='https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>대회
+        요건</a> 참고). 그러나 이 시간으로는 충분하지 않습니다. 대회를 주최하는 데 필요한 모든 것을 고려하고 준비할 충분한 시간을 가져야
+        합니다. 또한 WCAT는 대회가 발표되기 전에 대회를 검토할 시간이 필요합니다. 얼마나 많은 시간이 필요한지 확신이 서지 않으면 파견위원과
+        상의하십시오.
     paragraph4:
       #original_hash: b6dca56
-      title: WCA 대회 거리 정책
+      title: 거리 정책
       #original_hash: f5eeb95
-      content1: "WCA 대회는 다른 대회와 최소 10km 또는 5일 이상 떨어져 있는 경우에만 허용됩니다. 두 대회 간의 거리가 10km 미만이고 간격이 5일 미만인 경우, WCAT는 제안된 대회를 면밀히 검토할 것입니다. 이러한 대회에 대한 승인을 요청하는 \b파견위원은 대회가 허용되어야 하는 이유에 대한 추가 정보를 제공해야 합니다. 대회가 허용 되는 경우는 다음과 같은 것들이 포함될 수 있습니다:"
+      content1:
+        "WCA 대회는 다른 대회와 최소 10km 또는 5일 이상 떨어져 있는 경우 허용됩니다. WCAT는 특히 두 대회 사이의
+        거리가 10km 미만이고 두 대회 사이의 시간이 5일 미만인 다른 대회가 있는 경우 제안된 대회를 검토해야 합니다. 이러한 대회에 대한
+        승인을 요청하는 파견위원은 대회가 허용되어야 하는 이유에 대한 추가 정보를 제공해야 합니다. 이러한 대회가 허용되어야 한다는 것을 뒷받침하는
+        가능한 주장은 다음과 같습니다:"
       olist1:
         #original_hash: de00462
-        '1': 두 WCA 대회에 같은 종목이 없습니다
+        "1": 두 대회에는 공통된 종목이 없습니다.
         #original_hash: b8ff462
-        '2': 두 WCA대회는 다른 지역에서 열립니다
+        "2": 두 대회는 서로 다른 지역에서 개최됩니다.
       #original_hash: 5c5cf04
       content2: >-
-        "공동 3x3x3 최소 회전 대회"는 WCA 대회로서 종목은 3x3x3 최소 회전으로 맞추기 밖에 없으며 여러 장소에서 동시에
-        열리는 대회이다.
+        "3x3x3 최소회전 동시 대회"는 3x3x3 최소회전 종목만 있으며, 다양한 장소에서 동시에 진행되는 WCA 대회입니다.
       olist2:
-        '1':
+        "1":
           #original_hash: 316fd13
-          content1: 공동 3x3x3 최소 회전 대회는 다른 일반 대회의 일부일 수 없습니다.
+          content1: 3x3x3 최소회전 동시 대회는 다른 정규 대회의 일부가 될 수 없습니다.
           alist1:
             #original_hash: 75aa0c7
-            1a: 두 대회의 시상식 시간이 겹치면 안됩니다.
-        '2':
+            1a: 두 대회의 시상식 시간이 겹치면 안 됩니다.
+        "2":
           #original_hash: b2b8004
-          content1: '만약 대회 장소 중에 한 장소의 10km이내에 다른 일반 대회의 장소가 있다면,'
+          content1: "대회 장소 중 다른 정규 대회로부터 10km 이내에 있는 장소가 있는 경우,"
           alist1:
             #original_hash: 8f532bb
-            2a: '두 대회의 날짜는 최소 5일 이상 차이나야 하거나,'
+            2a: "두 대회는 최소 5일 이상 떨어져 있거나,"
             #original_hash: e14e11e
-            2b: 다른 일반 대회에 3x3x3 최소 회전으로 맞추기 종목이 있으면 안됩니다.
+            2b: 다른 정규 대회에 3x3x3 최소회전 종목이 있어서는 안 됩니다.
     paragraph-events:
       #original_hash: b16c5f1
       title: 종목 발표
       #original_hash: 7ad62c7
       content: >-
-        WCA 대회에서 열릴 종목은 WCAT에게 승인 요청할시 WCA 파견위원에 의해서 결정됩니다. 이는 추가적으로 열릴 수도 있는 임시
-        종목도 포함 됩니다. 이 이외의 종목 추가는 WCA 대표단의 승인이 있어야 합니다.
+        대회에서 개최되는 모든 종목은 대회 승인을 요청할 때 파견위원이 지정해야 합니다. 추가 사항은 WCAT에 의해 승인되어야 합니다.
     paragraph5:
       #original_hash: 17d01de
-      title: 대회 참가자 제한
+      title: 참가자 정원
       #original_hash: 6bfef2c
       content_html: >-
-        대회마다 또는 각 종목마다 참가자 수가 제한될 수 있습니다 (자세한 사항은 <a
-        href='https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>대회
-        요건</a> 참조). 대회의 참가자 제한에 관련한 사항은 파견위원이 WCAT의 승인을 받아야 합니다. 참가자 제한은 신중하게
-        설정하고 예상되는 참가자 관심에 따라 조정해야 합니다. 사소한 이유로 참가자 수를 너무 낮게 설정하지 않아야 합니다. 대회 장소를
-        찾을 때 참가자 제한을 미리 고려해야 합니다. 참가자 수 제한은 WCA 웹사이트의 대회 페이지에 명확히 기재되어야 합니다.
+        참가자 수는 종목 또는 대회당 제한될 수 있습니다(자세한 사항은 <a href='https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>대회
+        요건</a> 참고). 참가자 정원은 현명하게 선택해야 하며 예상되는 참가 관심도에 따라 선택해야 합니다. 사소한 이유로 정원을 낮추어서는
+        안 됩니다. 적절한 장소를 탐색할 때부터 참가자 정원은 고려되어야 합니다. 참가자 정원은 WCA 웹사이트의 대회 페이지에 명확히 기재되어야
+        합니다.
     paragraph6:
       #original_hash: ce4c3d0
       title: 참가 신청 관리
       #original_hash: bd669a1
       content: >-
-        참가자 관리는 반드시 선착순으로 이루어져야 합니다. 참가비가 선불제도라면, 대회의 참가신청은 참가비가 완납됐을 때 입니다. 이는
-        대회 홈페이지의 참가비 납부 방법에 명시 되어야 합니다.
+        참가 신청은 선착순으로 처리해야 합니다. 즉, 가장 먼저 완료된 신청이 먼저 처리되어야 합니다. 참가비 지불 방식이 선불이라면, 대회의
+        참가 신청은 참가비가 완납되었을 때 완료된 것으로 간주합니다. 이는 대회 웹사이트의 참가비 지불 안내에 명확히 기재되어야 합니다.
     paragraph7:
       #original_hash: e4f1c62
-      title: 대기명단 관리
+      title: 대기 명단 관리
       #original_hash: 81ca3f3
       content1: >-
-        대회의 참가자 제한만큼의 참가자 승인이 되었을 경우, 대기 명단이 열리는 것이 보통입니다. 참가 승인이 되었던 참가자가 참가
-        취소를 하게 되면, 그 참가자를 대신하여 대기 명단의 첫 번째 사람의 참가 승인이 이루어 집니다.
+        대회의 참가자 정원에 도달하면 대기 명단이 열려야 합니다. 참가 신청 및 승인된 선수가 신청을 취소하면, 대기 명단에 있는 다음 선수로
+        대체될 수 있습니다.
       #original_hash: 802b34f
       content2: >-
-        만약에 참가비가 선불제도라면, 대기명단의 첫번째 참가 신청자에게 참가비를 납부할 수 있는 기간(예: 48시간)을 정하는 것이
-        효과적입니다. 정해진 기간 내에 참가비 납부가 이루어 지지 않거나 대기 명단의 첫번째 참가 신청자가 거절하게 되면, 대기명단의
-        다음 사람에게 기회가 갑니다. 이 과정은 취소한 모든 참가자의 자리가 대기 명단에 있는 사람들로 채워질때까지 지속되는 것이 일반적
-        입니다. 대기명단의 순번을 무시하는 일은 있어서는 안됩니다.
+        대회 참가비를 선불로 지불하는 경우, 대기 명단에서 참가자 명단으로 올라갈 선수가 참가비를 납부할 수 있는 기한(예: 48시간)을 설정하는
+        것이 효율적인 접근 방식입니다. 제시간 내에 참가비를 지불하지 않거나 선수가 참가자 명단으로 올라가는 것을 거부하는 경우, 대기 명단에
+        있는 다음 선수가 참가자 명단으로 대신하여 올라갈 수 있습니다. 이 과정은 참가자 정원이 모두 채워질 때까지 계속되어야 합니다. 선수가
+        대기 명단의 순번을 무시하고 참가자 명단으로 올라가는 예외가 있어서는 안 됩니다.
       #original_hash: 37bcbd6
       content3: >-
-        만약 대회 참가자가 일반적인 승인 과정을 거치지 않고 대회에 참가했다면, 그 참가자의 기록은 무효처리 될 것입니다. (이는 참가자
-        제한이 존재했었고, 참가자 제한 만큼의 선수가 참가 했었다는 가정하에.)
+        선수가 정규 신청 절차를 거치지 않고 대회에 참가한 경우, 해당 선수의 결과는 소급하여 삭제됩니다(참가자 정원이 존재했으며 제한에 도달하였다고
+        가정).
     paragraph8:
       #original_hash: c8ad8e6
-      title: 대회 준비 사항
+      title: 대회 전에 해야 할 일
       list:
         #original_hash: c8abb5e
-        '1': '대회를 발표하기 전에, 대회 홈페이지에 공개될 대회 일정은 필수 사항입니다. 이 일정은 추후에 수정할 수 있습니다.'
+        "1": "대회를 발표하기 전에 대회 웹사이트에 일정을 게시해야 합니다. 이 일정은 나중에 조정될 수도 있습니다."
         #original_hash: e93d043
-        '2': >-
-          대회 참가자들은 여러 그룹으로 나뉘게 됩니다. 이에 맞게 기록지를 출력하여 정리합니다. 모든 종목의 최소한 첫 라운드의
-          스크램블을 담당할 믿음직한 사람을 배정하는 것을 추천 합니다.
+        "2": >-
+          선수는 여러 그룹으로 나뉘어야 하며, 기록지를 인쇄하여 그룹의 분배에 따라 나눠야 합니다. 또한 적어도 1라운드에 대해서는 모든
+          종목의 모든 그룹에서 누가 스크램블을 할지 계획하는 것이 좋습니다. 스크램블러는 신뢰할 수 있는 사람이어야 합니다.
     paragraph9:
       #original_hash: ead44f5
-      title: 대회 진행 관리 사항
+      title: 대회 중에 해야 할 일
       #original_hash: ee2e9c6
       content: >-
-        대회 주최자가 대회 중에 담당할 업무는 WCA 파견위원과 상의하길 바랍니다. 일반적인 업무는 다음과 같습니다 (물론 주최자가 아닌
-        다름 사람이 해도 무방합니다):
+        대회 기간 동안 주최자가 해야 할 업무는 WCA 파견위원과 논의해야 합니다. 일반적인 업무는 다음과 같습니다(신뢰할 수 있는 다른 사람에게
+        위임할 수 있음):
       list:
         #original_hash: 03aea46
-        '1': 대회 접수 관리
+        "1": 접수처 관리
         #original_hash: c4388f3
-        '2': 대회 공지 사항 전달
+        "2": 안내 방송
         #original_hash: 45c78ae
-        '3': 그룹 호명 및 기록지 나열
+        "3": 그룹 호출 및 기록지 나열
         #original_hash: 0b31986
-        '4': 기록 입력 및 결과 출력
+        "4": 기록 입력 및 결과 출력
         #original_hash: 7ab2d4c
-        '5': 스크램블과 심판 자원봉사자 찾기
+        "5": 스크램블러와 심판 물색
         #original_hash: 52e8316
-        '6': WiFI과 같은 대회 장소 관련 문의 사항
+        "6": "대회 장소에 관한 모든 운영 측면에서의 문제 처리(예: 열쇠 또는 WiFi)"
   media:
     common:
       #original_hash: f9b7a97
-      view_media_page: 모든 보도자료 보기
+      view_media_page: 모든 미디어 보기
       #original_hash: b251e98
-      confirm_delete: 이 보도자료 삭제?
+      confirm_delete: 이 미디어를 삭제하시겠습니까?
     new:
       #original_hash: 65cdb28
-      title: 보도자료 제출
+      title: 미디어 제출
       #original_hash: 35caed2
-      review_warning_html: 모든 보도자료는 <a href="/media">모든 보도자료 페이지</a>에 등록되기 전에 검수 받을 것 압니다.
+      review_warning_html: 모든 미디어는 <a href="/media">모든 미디어 페이지</a>에 게시되기 전에 검토를 거칩니다.
       #original_hash: 141d1d7
-      guidelines: 권장 사항
+      guidelines: 지침
       media_guidelines:
         #original_hash: fd6984b
-        '1': 모든 보도자료의 내용은 선택된 대회와 관련이 있어야 합니다.
+        "1": 모든 미디어 콘텐츠는 선택된 대회와 관련이 있어야 합니다.
         #original_hash: 9821119
-        '2': 모든 보도자료는 공격적인 내용이나 부적합한 내용을 담고 있으면 안됩니다.
+        "2": 모든 미디어 콘텐츠는 적절하고 깔끔해야 하며, 부적절하거나 불쾌한 내용을 포함해서는 안 됩니다.
         #original_hash: 5114fe4
-        '3': 모든 보도자료는 과도한 후원사 혹은 광고물 노출을 하면 안됩니다.
+        "3": 미디터 콘텐츠에는 후원사나 광고가 광범위하게 포함되어서는 안 됩니다.
         #original_hash: c9d797b
-        '4': 모든 보도자료는 적당한 제목이 있어야 합니다.
+        "4": 모든 미디어 콘텐츠에는 적절하고 설명이 포함된 제목이 있어야 합니다.
     edit:
       #original_hash: 32c7cc0
-      title: 보도자료 수정
+      title: 미디어 수정
       #original_hash: 6f161d0
-      validate_media_page: 모든 대기중인 보도자료 보기
+      validate_media_page: 승인 대기중인 모든 미디어 보기
     index:
       #original_hash: 0c77aee
-      title: 보도자료
+      title: 미디어
       #original_hash: df43670
-      validate_media: 보도자료 승인
+      validate_media: 미디어 승인
       #original_hash: 9f2158f
-      submit_media_html: 보도자료는 <a href="/media/new">여기</a>로 제출 해주세요.
+      submit_media_html: 미디어는 <a href="/media/new">여기</a>에 제출해 주십시오.
     validate:
       #original_hash: 1e0eee6
-      title: 연론물 승인
+      title: 미디어 승인
     media_table:
       #original_hash: 879e323
       year: 연도
       #original_hash: 573da9c
-      location: '국가, 도시'
+      location: "국가, 도시"
       #original_hash: bb54db5
       accept: 승인
       #original_hash: 66b69a8
-      confirm_accept: 이 보도자료를 승인하겠습니까?
+      confirm_accept: 이 미디어를 승인하시겠습니까?
       #original_hash: 5301648
       edit: 수정
