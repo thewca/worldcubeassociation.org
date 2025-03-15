@@ -468,6 +468,27 @@ RSpec.describe Registrations::RegistrationChecker do
         end
       end
 
+      it 'competitor can exceed event limit if event_restrictions not enforced' do
+        unenforced_event_limit_comp = FactoryBot.create(
+          :competition,
+          :registration_open,
+          :with_event_limit,
+          :skip_validations,
+          event_restrictions: false,
+          event_ids: ['333', '333oh', '222', '444', '555', '666', '777'],
+        )
+
+        registration_request = FactoryBot.build(
+          :registration_request, events: ['333', '222', '444', '555', '666', '777'],
+          competition_id: unenforced_event_limit_comp.id,
+          user_id: default_user.id,
+        )
+
+        expect {
+          Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['submitted_by']))
+        }.not_to raise_error
+      end
+
       it 'organizer cant register more events than the events_per_registration_limit' do
         registration_request = FactoryBot.build(
           :registration_request, events: ['333', '222', '444', '555', '666', '777'], competition_id: event_limit_comp.id, user_id: default_user.id
