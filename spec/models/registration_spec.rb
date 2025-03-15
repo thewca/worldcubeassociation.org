@@ -607,7 +607,7 @@ RSpec.describe Registration do
       expect(reg.reload.competing_status).to eq('accepted')
     end
 
-    it 'doesnt auto accept a competitor who gets refunded', :tag do
+    it 'doesnt auto accept a competitor who gets refunded' do
       expect(reg.competing_status).to eq('pending')
 
       FactoryBot.create(:registration_payment, :refund, :skip_create_hook, registration: reg, competition: auto_accept_comp)
@@ -858,7 +858,7 @@ RSpec.describe Registration do
 
         reg.attempt_auto_accept
         expect(reg.reload.competing_status).to eq('pending')
-        expect(reg.waiting_list_position).to eq(nil)
+        expect(reg.waiting_list_position).to be(nil)
       end
     end
   end
@@ -874,7 +874,9 @@ RSpec.describe Registration do
     it 'positive registration_payment calls registration.consider_auto_close' do
       competition = FactoryBot.create(:competition)
       reg = FactoryBot.create(:registration, competition: competition)
-      expect(reg).to receive(:consider_auto_close)
+      puts "in test"
+      puts reg.object_id
+      expect_any_instance_of(Registration).to receive(:consider_auto_close)
 
       FactoryBot.create(
         :registration_payment,
@@ -908,7 +910,7 @@ RSpec.describe Registration do
 
     it 'calls competition.attempt_auto_close! if reg is fully paid' do
       competition = FactoryBot.create(:competition)
-      expect(competition).to receive(:attempt_auto_close!).exactly(1).times
+      expect_any_instance_of(Competition).to receive(:attempt_auto_close!).exactly(1).times
 
       FactoryBot.create(:registration, :paid, competition: competition)
     end

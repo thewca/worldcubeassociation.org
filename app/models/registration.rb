@@ -328,7 +328,7 @@ class Registration < ApplicationRecord
   # functionality exists to use validations to raise errors on submitted registrations
   validate :does_not_exceed_competitor_limit
   private def does_not_exceed_competitor_limit
-    return unless competition&.competitor_limit.present?
+    return if competition&.competitor_limit.blank?
     return unless competing_status == Registrations::Helper::STATUS_ACCEPTED
     errors.add(:competitor_limit, I18n.t('registrations.errors.competitor_limit_reached')) if
       competition.registrations.competing_status_accepted.count >= competition.competitor_limit
