@@ -571,6 +571,28 @@ RSpec.describe "API Competitions" do
       end
     end
   end
+
+  describe "GET #competition_index" do
+    it 'returns a paginated list of competitions' do
+      FactoryBot.create_list(:competition, 5, :visible)
+      get api_v0_competition_index_path
+      expect(response).to be_successful
+
+      response_json = response.parsed_body
+      expect(response_json.length).to eq(5)
+    end
+
+    it 'takes parameter to filter by continent' do
+      FactoryBot.create_list(:competition, 6, :visible)
+      FactoryBot.create_list(:competition, 4, :visible, countryId: 'Afghanistan')
+
+      get api_v0_competition_index_path, params: { continent: '_North America' }
+      expect(response).to be_successful
+
+      response_json = response.parsed_body
+      expect(response_json.length).to eq(6)
+    end
+  end
 end
 
 def create_wcif_with_events(event_ids)
