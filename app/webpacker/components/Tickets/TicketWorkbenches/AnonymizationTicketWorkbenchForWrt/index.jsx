@@ -230,7 +230,7 @@ function ActionItemContent({ actionItem, messageArgs }) {
     case 'person_has_upcoming_registered_competitions':
       return (
         <>
-          This person has upcoming registered competitions. Please Take care of it.
+          This person has upcoming registered competitions. Please take care of it.
           <List ordered>
             {messageArgs?.upcoming_registered_competitions?.map((competition) => (
               <List.Item key={competition.id}>
