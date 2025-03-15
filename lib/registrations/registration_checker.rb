@@ -19,7 +19,7 @@ module Registrations
 
     def self.update_registration_allowed!(update_request, competition, current_user)
       registration = Registration.find_by(competition_id: competition.id, user_id: update_request['user_id'])
-      raise WcaExceptions::RegistrationError.new(:not_found, Registrations::ErrorCodes::REGISTRATION_NOT_FOUND) unless registration.present?
+      raise WcaExceptions::RegistrationError.new(:not_found, Registrations::ErrorCodes::REGISTRATION_NOT_FOUND) if registration.blank?
 
       target_user = User.find(update_request['user_id'])
       waiting_list_position = update_request.dig('competing', 'waiting_list_position')
@@ -40,8 +40,8 @@ module Registrations
     end
 
     def self.bulk_update_allowed!(bulk_update_request, current_user)
-      raise WcaExceptions::BulkUpdateError.new(:bad_request, [Registrations::ErrorCodes::INVALID_REQUEST_DATA]) unless
-        bulk_update_request['requests'].present?
+      raise WcaExceptions::BulkUpdateError.new(:bad_request, [Registrations::ErrorCodes::INVALID_REQUEST_DATA]) if
+        bulk_update_request['requests'].blank?
 
       competition = Competition.find(bulk_update_request['competition_id'])
 

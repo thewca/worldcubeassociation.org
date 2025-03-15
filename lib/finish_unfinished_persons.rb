@@ -89,7 +89,7 @@ module FinishUnfinishedPersons
       persons_with_probas.push [p, name_similarity, country_similarity]
     end
 
-    proba_threshold = only_probas.sort { |a, b| b <=> a }.take(2 * n).last
+    proba_threshold = only_probas.sort.reverse.take(2 * n).last
     sorting_candidates = persons_with_probas.filter { |_, np, _| np >= proba_threshold }
 
     # `sort_by` is _sinfully_ expensive, so we try to reduce the amount of comparisons as much as possible.
@@ -124,8 +124,7 @@ module FinishUnfinishedPersons
       unless available_per_semi.key?(semi_id)
         last_id_taken = Person.where('wca_id LIKE ?', "#{semi_id}__")
                               .order(wca_id: :desc)
-                              .pluck(:wca_id)
-                              .first
+                              .pick(:wca_id)
 
         if last_id_taken.present?
           # 4 because the year prefix is 4 digits long
@@ -192,7 +191,7 @@ module FinishUnfinishedPersons
     results_scope = Result
 
     if pending_id.present?
-      raise "Must supply a competition ID for updating newcomer results!" unless pending_comp_id.present?
+      raise "Must supply a competition ID for updating newcomer results!" if pending_comp_id.blank?
 
       results_scope = results_scope.where(
         personId: pending_id,

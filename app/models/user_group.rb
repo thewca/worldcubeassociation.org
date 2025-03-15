@@ -350,6 +350,10 @@ class UserGroup < ApplicationRecord
     group_changes.join("<br>")
   end
 
+  def email
+    metadata&.email
+  end
+
   DEFAULT_SERIALIZE_OPTIONS = {
     include: %w[metadata],
     methods: %w[lead_user],

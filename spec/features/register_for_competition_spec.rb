@@ -14,7 +14,7 @@ def within_modal(&)
   within(find_modal(&))
 end
 
-RSpec.feature "Registering for a competition", js: true do
+RSpec.feature "Registering for a competition", :js do
   let!(:user) { FactoryBot.create :user }
   let!(:delegate) { FactoryBot.create :delegate }
   let(:competition) { FactoryBot.create :competition, :registration_open, :visible, :editable_registrations, delegates: [delegate] }
@@ -75,7 +75,7 @@ RSpec.feature "Registering for a competition", js: true do
       click_button "Continue to next Step"
       expect(find("#checkbox-444")).to match_selector(".active")
       expect(find("#checkbox-555")).to match_selector(".active")
-      expect(find("#checkbox-666")).to_not match_selector(".active")
+      expect(find("#checkbox-666")).not_to match_selector(".active")
     end
 
     context "editing registration" do
@@ -131,6 +131,7 @@ RSpec.feature "Registering for a competition", js: true do
   context "signed in as delegate" do
     let!(:registration) { FactoryBot.create(:registration, user: user, competition: competition) }
     let(:delegate_registration) { FactoryBot.create(:registration, :accepted, user: delegate, competition: competition) }
+
     before :each do
       sign_in delegate
     end
@@ -181,7 +182,7 @@ RSpec.feature "Registering for a competition", js: true do
       end
 
       expect(page).to have_text("Updated registration")
-      expect(Registration.find_by_id(registration.id).cancelled?).to eq true
+      expect(Registration.find_by_id(registration.id).cancelled?).to be true
     end
   end
 end

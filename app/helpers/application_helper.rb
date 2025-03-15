@@ -31,7 +31,7 @@ module ApplicationHelper
 
   def link_to_google_maps_place(text, latitude, longitude)
     url = "https://www.google.com/maps/place/#{latitude},#{longitude}"
-    link_to text, url, target: "_blank"
+    link_to text, url, target: "_blank", rel: "noopener"
   end
 
   def link_to_competition_schedule_tab(comp)
@@ -49,11 +49,11 @@ module ApplicationHelper
     text = strip_tags(html)
     # Compute the first and last index where query parts appear and use the whole text between them for excerpt.
     search_in_me = ActiveSupport::Inflector.transliterate(text).downcase
-    first = phrases.map { |phrase| search_in_me.index(phrase.downcase) }.compact.min
-    last = phrases.map do |phrase|
+    first = phrases.filter_map { |phrase| search_in_me.index(phrase.downcase) }.min
+    last = phrases.filter_map do |phrase|
       index = search_in_me.index(phrase.downcase)
       index + phrase.length if index
-    end.compact.max
+    end.max
     excerpted = if first # At least one phrase matches the text.
                   excerpt(text, text[first..last], radius: WCA_EXCERPT_RADIUS)
                 else

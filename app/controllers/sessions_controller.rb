@@ -15,7 +15,7 @@ class SessionsController < Devise::SessionsController
                                 site: EnvConfig.STAGING_OAUTH_URL)
     redirect_uri = staging_login_url
 
-    unless params[:code].present?
+    if params[:code].blank?
       return redirect_to client.auth_code.authorize_url(
         redirect_uri: redirect_uri,
       ), allow_other_host: true

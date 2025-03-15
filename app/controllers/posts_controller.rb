@@ -11,7 +11,7 @@ class PostsController < ApplicationController
       format.json do
         tag = params[:tag]
         if tag
-          @posts = Post.joins(:post_tags).where('post_tags.tag = ?', tag)
+          @posts = Post.joins(:post_tags).where(post_tags: { tag: tag })
         else
           @posts = Post.where(show_on_homepage: true)
         end
@@ -42,7 +42,7 @@ class PostsController < ApplicationController
   def rss
     tag = params[:tag]
     if tag
-      @posts = Post.joins(:post_tags).where('post_tags.tag = ?', tag)
+      @posts = Post.joins(:post_tags).where(post_tags: { tag: tag })
     else
       @posts = Post
     end
@@ -61,6 +61,10 @@ class PostsController < ApplicationController
     @post = Post.new(params[:post] ? post_params : {})
   end
 
+  def edit
+    @post = find_post
+  end
+
   def create
     @post = Post.new(post_params)
     @post.author = current_user
@@ -72,14 +76,9 @@ class PostsController < ApplicationController
     end
   end
 
-  def edit
-    @post = find_post
-  end
-
   def update
     @post = find_post
     if @post.update(post_params)
-      puts(post_params.inspect)
       flash[:success] = "Updated post"
       render json: { status: 'ok', post: @post }
     else

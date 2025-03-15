@@ -77,12 +77,12 @@ module ResultsValidators
       end
 
       # Check for opening parenthesis without space before it.
-      if /[[:alnum:]]\(/ =~ name
+      if /[[:alnum:]]\(/.match?(name)
         validation_issues << ValidationError.new(WRONG_PARENTHESIS_FORMAT_ERROR, :persons, competition_id, name: name)
       end
 
       # Check for wrong parenthesis type.
-      if /[（）]/ =~ name
+      if /[（）]/.match?(name)
         validation_issues << ValidationError.new(WRONG_PARENTHESIS_TYPE_ERROR, :persons, competition_id, name: name)
       end
 
@@ -115,7 +115,7 @@ module ResultsValidators
 
       # Check for single letter first or last name.
       non_word_after_first_letter = [' ', '.'].include?(roman_readable[1])
-      space_before_last_letter = (roman_readable[-2] == " ") && !['I', 'V'].include?(roman_readable[-1]) # Roman numerals are allowed as suffixes
+      space_before_last_letter = (roman_readable[-2] == " ") && ['I', 'V'].exclude?(roman_readable[-1]) # Roman numerals are allowed as suffixes
       abbreviated_last_name = (roman_readable[-1] == ".") && (roman_readable[-3] == " ")
       if non_word_after_first_letter || space_before_last_letter || abbreviated_last_name
         validation_issues << ValidationWarning.new(SINGLE_LETTER_FIRST_OR_LAST_NAME_WARNING, :persons, competition_id, name: name)
@@ -174,7 +174,7 @@ module ResultsValidators
             end
           end
           # Look for if 2 new competitors that share the exact same name
-          if without_wca_id.select { |p2| p2.name == p.name }.length > 1 && !duplicate_newcomer_names.include?(p.name)
+          if without_wca_id.count { |p2| p2.name == p.name } > 1 && duplicate_newcomer_names.exclude?(p.name)
             duplicate_newcomer_names << p.name
           end
         end

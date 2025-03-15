@@ -70,7 +70,7 @@ class CompetitionSeries < ApplicationRecord
     options = DEFAULT_SERIALIZE_OPTIONS.merge(options || {})
     include_competitions = options[:include]&.delete("competitions")
     json = super
-    json.merge!(id: wcif_id)
+    json[:id] = wcif_id
     if include_competitions
       json[:competitions] = competitions.ids
     end

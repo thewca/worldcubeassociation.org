@@ -157,6 +157,62 @@ class CompetitionsController < ApplicationController
     colliding_registration_start_competitions
   end
 
+  def show
+    associations = {
+      competition_venues: {
+        venue_rooms: [:schedule_activities],
+      },
+      # FIXME: this part is triggerred by the competition menu generator when generating the psychsheet event list, should we care?
+      competition_events: {
+        # NOTE: we hit this association through competition.has_fees?, which then calls 'has_fee?' on each competition_event, which then use the competition to get the currency.
+        competition: [],
+        event: [],
+        # NOTE: we eventually hit the rounds->competition->competition_event in the TimeLimit 'to_s' method when having cumulative limit across rounds
+        rounds: {
+          competition: { rounds: [:competition_event] },
+          competition_event: [],
+        },
+      },
+      rounds: {
+        # Used by TimeLimit, but this is a weird includes...
+        competition: { rounds: [:competition_event] },
+      },
+    }
+    @competition = competition_from_params(includes: associations)
+    respond_to do |format|
+      format.html do
+      end
+      format.pdf do
+        unless @competition.has_schedule?
+          flash[:danger] = t('.no_schedule')
+          return redirect_to competition_path(@competition)
+        end
+        @colored_schedule = params.key?(:with_colors)
+        # Manually cache the pdf on:
+        #   - competiton.updated_at (touched by any change through WCIF)
+        #   - locale
+        #   - color or n&b
+        # We have a scheduled job to clear out old files
+        cached_path = helpers.path_to_cached_pdf(@competition, @colored_schedule)
+        begin
+          File.open(cached_path) do |f|
+            send_data f.read, filename: "#{helpers.pdf_name(@competition)}.pdf",
+                              type: "application/pdf", disposition: "inline"
+          end
+        rescue Errno::ENOENT
+          # This exception occurs when the file doesn't exist: let's create it!
+          helpers.create_pdfs_directory
+          render pdf: helpers.pdf_name(@competition), orientation: "Landscape",
+                 save_to_file: cached_path, disposition: "inline"
+        end
+      end
+      format.ics do
+        calendar = @competition.to_ics
+        render plain: calendar.to_ical, content_type: 'text/calendar'
+      end
+    end
+  end
+
   def new
     @competition = Competition.new(
       competitor_limit_enabled: true,
@@ -209,7 +265,7 @@ class CompetitionsController < ApplicationController
     connector = CompetitionPaymentIntegration::AVAILABLE_INTEGRATIONS[payment_integration.to_sym].safe_constantize
     account_reference = connector&.connect_account(params)
 
-    unless account_reference.present?
+    if account_reference.blank?
       raise ActionController::RoutingError.new("Payment Integration #{payment_integration} not Found")
     end
 
@@ -275,7 +331,7 @@ class CompetitionsController < ApplicationController
 
   def competition_form_nearby_json(competition, other_comp)
     if current_user.can_admin_results?
-      comp_link = ActionController::Base.helpers.link_to(other_comp.name, competition_admin_edit_path(other_comp.id), target: "_blank")
+      comp_link = ActionController::Base.helpers.link_to(other_comp.name, competition_admin_edit_path(other_comp.id), target: "_blank", rel: "noopener")
     else
       comp_link = ActionController::Base.helpers.link_to(other_comp.name, competition_path(other_comp.id))
     end
@@ -338,7 +394,7 @@ class CompetitionsController < ApplicationController
 
   def competition_form_registration_collision_json(competition, other_comp)
     if current_user.can_admin_results?
-      comp_link = ActionController::Base.helpers.link_to(other_comp.name, competition_admin_edit_path(other_comp.id), target: "_blank")
+      comp_link = ActionController::Base.helpers.link_to(other_comp.name, competition_admin_edit_path(other_comp.id), target: "_blank", rel: "noopener")
     else
       comp_link = ActionController::Base.helpers.link_to(other_comp.name, competition_path(other_comp.id))
     end
@@ -383,62 +439,6 @@ class CompetitionsController < ApplicationController
     }
   end
 
-  def show
-    associations = {
-      competition_venues: {
-        venue_rooms: [:schedule_activities],
-      },
-      # FIXME: this part is triggerred by the competition menu generator when generating the psychsheet event list, should we care?
-      competition_events: {
-        # NOTE: we hit this association through competition.has_fees?, which then calls 'has_fee?' on each competition_event, which then use the competition to get the currency.
-        competition: [],
-        event: [],
-        # NOTE: we eventually hit the rounds->competition->competition_event in the TimeLimit 'to_s' method when having cumulative limit across rounds
-        rounds: {
-          competition: { rounds: [:competition_event] },
-          competition_event: [],
-        },
-      },
-      rounds: {
-        # Used by TimeLimit, but this is a weird includes...
-        competition: { rounds: [:competition_event] },
-      },
-    }
-    @competition = competition_from_params(includes: associations)
-    respond_to do |format|
-      format.html do
-      end
-      format.pdf do
-        unless @competition.has_schedule?
-          flash[:danger] = t('.no_schedule')
-          return redirect_to competition_path(@competition)
-        end
-        @colored_schedule = params.key?(:with_colors)
-        # Manually cache the pdf on:
-        #   - competiton.updated_at (touched by any change through WCIF)
-        #   - locale
-        #   - color or n&b
-        # We have a scheduled job to clear out old files
-        cached_path = helpers.path_to_cached_pdf(@competition, @colored_schedule)
-        begin
-          File.open(cached_path) do |f|
-            send_data f.read, filename: "#{helpers.pdf_name(@competition)}.pdf",
-                              type: "application/pdf", disposition: "inline"
-          end
-        rescue Errno::ENOENT
-          # This exception occurs when the file doesn't exist: let's create it!
-          helpers.create_pdfs_directory
-          render pdf: helpers.pdf_name(@competition), orientation: "Landscape",
-                 save_to_file: cached_path, disposition: "inline"
-        end
-      end
-      format.ics do
-        calendar = @competition.to_ics
-        render plain: calendar.to_ical, content_type: 'text/calendar'
-      end
-    end
-  end
-
   def show_podiums
     @competition = competition_from_params
   end
@@ -470,7 +470,7 @@ class CompetitionsController < ApplicationController
 
   def unbookmark
     @competition = competition_from_params
-    BookmarkedCompetition.where(competition: @competition, user: current_user).each(&:destroy!)
+    BookmarkedCompetition.where(competition: @competition, user: current_user).destroy_all
     Rails.cache.delete("#{current_user.id}-competitions-bookmarked")
     head :ok
   end
@@ -566,7 +566,7 @@ class CompetitionsController < ApplicationController
         CompetitionsMailer.notify_organizer_of_removal_from_competition(current_user, competition, removed_organizer).deliver_later
       end
 
-      response_data = { status: "ok", message: t('competitions.update.save_success') }
+      response_data = { status: "ok", message: t('.save_success') }
 
       if persisted_id != competition.id
         response_data[:redirect] = competition_admin_view ? competition_admin_edit_path(competition) : edit_competition_path(competition)

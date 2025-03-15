@@ -7,7 +7,7 @@ class SemiId
   SEMI_ID_RE = /\A[1-9][[:digit:]]{3}[[:upper:]]{4}\z/
   # This is the char the php scripts used for filling WCA IDs.
   PADDING_CHAR = "U"
-  validates_format_of :value, with: SEMI_ID_RE
+  validates :value, format: { with: SEMI_ID_RE }
 
   def generate_wca_id
     # Try finding an appropriate WCA ID for our semi ID

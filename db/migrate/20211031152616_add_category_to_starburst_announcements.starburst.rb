@@ -1,3 +1,4 @@
+# rubocop:disable all
 # frozen_string_literal: true
 
 # This migration comes from starburst (originally 20141112140703)

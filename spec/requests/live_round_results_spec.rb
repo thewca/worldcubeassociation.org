@@ -18,7 +18,7 @@ RSpec.describe "WCA Live API" do
       get live_round_results_api_path(competition.id, round.id)
       expect(response).to be_successful
 
-      json = JSON.parse(response.body)
+      json = response.parsed_body
       expect(json.length).to eq 1
     end
   end

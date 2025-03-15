@@ -22,15 +22,15 @@ RSpec.describe TicketsController do
 
       post :anonymize, params: { wcaId: banned_person.wca_id }
 
-      expect(response.status).to eq 422
-      expect(JSON.parse(response.body)["error"]).to eq "Error anonymizing: This person is currently banned and cannot be anonymized."
+      expect(response).to have_http_status :unprocessable_content
+      expect(response.parsed_body["error"]).to eq "Error anonymizing: This person is currently banned and cannot be anonymized."
     end
 
     it 'cannot anonymize if both user ID and WCA ID is not provided' do
       post :anonymize
 
-      expect(response.status).to eq 422
-      expect(JSON.parse(response.body)["error"]).to eq "User ID and WCA ID is not provided."
+      expect(response).to have_http_status :unprocessable_content
+      expect(response.parsed_body["error"]).to eq "User ID and WCA ID is not provided."
     end
 
     it 'cannot anonymize if user ID connected with WCA ID is not the user ID provided' do
@@ -39,8 +39,8 @@ RSpec.describe TicketsController do
 
       post :anonymize, params: { userId: user.id, wcaId: person.wca_id }
 
-      expect(response.status).to eq 422
-      expect(JSON.parse(response.body)["error"]).to eq "Person and user not linked."
+      expect(response).to have_http_status :unprocessable_content
+      expect(response.parsed_body["error"]).to eq "Person and user not linked."
     end
 
     it 'generates padded wca id for a year with 99 ANON ids already' do
@@ -82,7 +82,7 @@ RSpec.describe TicketsController do
 
       expect(response).to be_successful
       user.reload
-      expect(user.wca_id).to eq nil
+      expect(user.wca_id).to be nil
       expect(user.email).to eq user.id.to_s + User::ANONYMOUS_ACCOUNT_EMAIL_ID_SUFFIX
       expect(user.name).to eq User::ANONYMOUS_NAME
       expect(user.dob).to eq User::ANONYMOUS_DOB.to_date
