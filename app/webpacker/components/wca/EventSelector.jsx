@@ -81,8 +81,8 @@ export default function EventSelector({
                   key={eventId}
                   disabled={selectedEvents.length === 0}
                   trigger={(
-                    <span>
-                      {/* Wrap in span so hover works on disabled buttons */}
+                    // hover events don't work on disabled buttons, so wrap in a div
+                    <div style={{ display: 'inline-block' }}>
                       <Button
                         key={eventId}
                         disabled={isDisabled}
@@ -104,7 +104,7 @@ export default function EventSelector({
                           style={eventsDisabled.includes(eventId) ? { color: '#FFBBBB' } : {}}
                         />
                       </Button>
-                    </span>
+                    </div>
                   )}
                 >
                   {eventsDisabled.includes(eventId) ? disabledText(eventId) : I18n.t(`events.${eventId}`)}
