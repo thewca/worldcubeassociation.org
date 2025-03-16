@@ -79,7 +79,6 @@ export default function EventSelector({
               return (
                 <Popup
                   key={eventId}
-                  disabled={selectedEvents.length === 0}
                   trigger={(
                     // hover events don't work on disabled buttons, so wrap in a div
                     <div style={{ display: 'inline-block' }}>
