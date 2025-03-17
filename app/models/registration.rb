@@ -371,6 +371,7 @@ class Registration < ApplicationRecord
 
   validate :forcing_competitors_to_add_comment, if: :is_competing?
   validates :comments, length: { maximum: COMMENT_CHARACTER_LIMIT, frontend_code: Registrations::ErrorCodes::USER_COMMENT_TOO_LONG }
+  validates :administrative_notes, length: { maximum: COMMENT_CHARACTER_LIMIT, frontend_code: Registrations::ErrorCodes::USER_COMMENT_TOO_LONG }
   private def forcing_competitors_to_add_comment
     if competition&.force_comment_in_registration.present? && comments&.strip.blank?
       errors.add(:user_id, I18n.t('registrations.errors.cannot_register_without_comment'), frontend_code: Registrations::ErrorCodes::REQUIRED_COMMENT_MISSING)

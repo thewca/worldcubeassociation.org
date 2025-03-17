@@ -26,18 +26,20 @@ module Registrations
       target_user = User.find(update_request['user_id'])
       waiting_list_position = update_request.dig('competing', 'waiting_list_position')
       comment = update_request.dig('competing', 'comment')
+      organizer_comment = request.dig('competing', 'organizer_comment')
       guests = update_request['guests']
       new_status = update_request.dig('competing', 'status')
       events = update_request.dig('competing', 'event_ids')
 
-      registration.comment = comment
+      registration.comments = comment
       registration.guests = guests
+      registration.administrative_notes = organizer_comment
 
       user_can_modify_registration!(competition, current_user, target_user, registration, new_status)
       validate_guests!(registration) unless guests.nil?
       validate_comment!(registration)
       validate_organizer_fields!(update_request, current_user, competition)
-      validate_organizer_comment!(update_request)
+      validate_organizer_comment!(registration) unless organizer_comment.nil?
       validate_waiting_list_position!(waiting_list_position, competition, registration) unless waiting_list_position.nil?
       validate_update_status!(new_status, competition, current_user, target_user, registration, events) unless new_status.nil?
       validate_update_events!(events, competition) unless events.nil?
@@ -158,10 +160,8 @@ module Registrations
         raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) if contains_organizer_fields?(request, organizer_fields) && !current_user.can_manage_competition?(competition)
       end
 
-      def validate_organizer_comment!(request)
-        organizer_comment = request.dig('competing', 'organizer_comment')
-        raise WcaExceptions::RegistrationError.new(:unprocessable_entity, Registrations::ErrorCodes::USER_COMMENT_TOO_LONG) if
-          !organizer_comment.nil? && organizer_comment.length > COMMENT_CHARACTER_LIMIT
+      def validate_organizer_comment!(registration)
+        process_validation_error!(registration, :administrative_notes)
       end
 
       def validate_waiting_list_position!(waiting_list_position, competition, registration)
