@@ -1653,7 +1653,7 @@ class Competition < ApplicationRecord
   )
 
   # rubocop:disable Lint/StructNewOverride
-  # this does overwrite sort_by, but as it's never used in an array, it should be fine
+  # this does overwrite sort_by because the frontend relies on the field, but as it's never used in an array, it should be fine
   PsychSheet = Struct.new(
     :sorted_rankings,
     :sort_by,

@@ -24,6 +24,11 @@ AllCops:
     - 'db/results_dump_schema.rb'
     - '.git-hooks/**/*'
 
+Style/StringConcatenation:
+  # We need to use + here because it's a custom operator TODO: At least until we only render from NExt
+  Exclude:
+  - 'app/helpers/application_helper.rb'
+
 Bundler/OrderedGems:
   Enabled: false
 
