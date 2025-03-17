@@ -31,6 +31,14 @@ Style/StringConcatenation:
   Exclude:
   - 'app/helpers/application_helper.rb'
 
+Rails/RenderInline:
+  Exclude:
+    - 'app/controllers/regulations_controller.rb'
+
+Rails/I18nLocaleAssignment:
+  Exclude:
+    - 'spec/support/locale_reset.rb'
+
 Bundler/OrderedGems:
   Enabled: false
 
@@ -289,9 +297,6 @@ Rails/SkipsModelValidations:
 Rails/PluralizationGrammar:
   Enabled: false
 
-Rails/I18nLocaleAssignment:
-  Enabled: false
-
 Rails/RedundantForeignKey:
   Enabled: false
 
@@ -320,12 +325,6 @@ Rails/ActionControllerFlashBeforeRender:
   Enabled: false
 
 Rails/UniqueValidationWithoutIndex:
-  Enabled: false
-
-Rails/LexicallyScopedActionFilter:
-  Enabled: false
-
-Rails/RenderInline:
   Enabled: false
 
 # Rspec
