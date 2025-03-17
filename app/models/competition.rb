@@ -906,7 +906,7 @@ class Competition < ApplicationRecord
 
   # We setup an alias here to be able to take advantage of `includes(:delegate_report)` on a competition,
   # while still being able to use the 'with_old_id' trick.
-  alias_method :original_delegate_report, :delegate_report
+  alias original_delegate_report delegate_report
   def delegate_report
     with_old_id do
       original_delegate_report
@@ -1045,13 +1045,9 @@ class Competition < ApplicationRecord
   def update_receive_registration_emails
     if editing_user_id && !@receive_registration_emails.nil?
       competition_delegate = competition_delegates.find_by(delegate_id: editing_user_id)
-      if competition_delegate
-        competition_delegate.update_attribute(:receive_registration_emails, @receive_registration_emails)
-      end
+      competition_delegate&.update_attribute(:receive_registration_emails, @receive_registration_emails)
       competition_organizer = competition_organizers.find_by(organizer_id: editing_user_id)
-      if competition_organizer
-        competition_organizer.update_attribute(:receive_registration_emails, @receive_registration_emails)
-      end
+      competition_organizer&.update_attribute(:receive_registration_emails, @receive_registration_emails)
     end
   end
 
@@ -2007,7 +2003,7 @@ class Competition < ApplicationRecord
                        .includes(includes_associations)
                        .to_enum
                        .with_index(1)
-                       .select { |r, registrant_id| authorized || r.wcif_status == "accepted" }
+                       .select { |r, _registrant_id| authorized || r.wcif_status == "accepted" }
                        .map do |r, registrant_id|
       managers.delete(r.user)
       r.user.to_wcif(self, r, registrant_id, authorized: authorized)
@@ -2181,32 +2177,30 @@ class Competition < ApplicationRecord
         # so we can safely skip validations by using update_attribute
         registration.update_attribute(:roles, roles)
       end
-      if wcif_person["assignments"]
-        wcif_person["assignments"].each do |assignment_wcif|
-          schedule_activity = competition_activities.find do |competition_activity|
-            competition_activity.wcif_id == assignment_wcif["activityId"]
-          end
-          unless schedule_activity
-            raise WcaExceptions::BadApiParameter.new("Cannot create assignment for non-existent activity with id #{assignment_wcif["activityId"]}")
-          end
-          assignment = registration.assignments.find do |a|
-            a.wcif_equal?(assignment_wcif)
-          end
-          # We need to be very careful about how we build the assignment:
-          # providing just the registration_id or the schedule_activity_id would
-          # actually trigger a select for each validation.
-          assignment ||= registration.assignments.build(
-            schedule_activity: schedule_activity,
-          )
-          assignment.assign_attributes(
-            station_number: assignment_wcif["stationNumber"],
-            assignment_code: assignment_wcif["assignmentCode"],
-          )
-          if assignment.valid?
-            local_assignments << assignment
-          else
-            raise WcaExceptions::BadApiParameter.new("Invalid assignment: #{a.errors.map(&:full_message)} for #{assignment_wcif}")
-          end
+      wcif_person["assignments"]&.each do |assignment_wcif|
+        schedule_activity = competition_activities.find do |competition_activity|
+          competition_activity.wcif_id == assignment_wcif["activityId"]
+        end
+        unless schedule_activity
+          raise WcaExceptions::BadApiParameter.new("Cannot create assignment for non-existent activity with id #{assignment_wcif["activityId"]}")
+        end
+        assignment = registration.assignments.find do |a|
+          a.wcif_equal?(assignment_wcif)
+        end
+        # We need to be very careful about how we build the assignment:
+        # providing just the registration_id or the schedule_activity_id would
+        # actually trigger a select for each validation.
+        assignment ||= registration.assignments.build(
+          schedule_activity: schedule_activity,
+        )
+        assignment.assign_attributes(
+          station_number: assignment_wcif["stationNumber"],
+          assignment_code: assignment_wcif["assignmentCode"],
+        )
+        if assignment.valid?
+          local_assignments << assignment
+        else
+          raise WcaExceptions::BadApiParameter.new("Invalid assignment: #{a.errors.map(&:full_message)} for #{assignment_wcif}")
         end
       end
       new_assignments.concat(local_assignments.map(&:attributes))
