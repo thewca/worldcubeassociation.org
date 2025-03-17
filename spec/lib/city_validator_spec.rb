@@ -139,8 +139,7 @@ end
 class TestModel
   include ActiveModel::Model
 
-  attr_accessor :city
-  validates :city, city: true
+  attr_accessor :city, :country
 
-  attr_accessor :country
+  validates :city, city: true
 end

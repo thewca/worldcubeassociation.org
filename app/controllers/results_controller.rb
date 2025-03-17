@@ -119,7 +119,7 @@ class ResultsController < ApplicationController
             #{limit_condition}
           SQL
         end
-        subquery = "(" + subqueries.join(") UNION ALL (") + ")"
+        subquery = "(#{subqueries.join(") UNION ALL (")})"
         @query = <<-SQL.squish
           SELECT *
           FROM (#{subquery}) result

@@ -3,8 +3,7 @@
 class ReassignWcaId
   include ActiveModel::Model
 
-  attr_reader :account1, :account2
-  attr_reader :account1_user, :account2_user
+  attr_reader :account1, :account2, :account1_user, :account2_user
 
   def account1=(account1)
     @account1 = account1

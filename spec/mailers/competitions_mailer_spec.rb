@@ -295,7 +295,7 @@ RSpec.describe CompetitionsMailer, type: :mailer do
         end
 
         expect(mail.subject).to eq "[wca-report] [Europe] FMC Europe 2016"
-        expect(mail.to).to eq countries.map { |c| DelegateReport.country_mailing_list(c) }
+        expect(mail.to).to eq(countries.map { |c| DelegateReport.country_mailing_list(c) })
         expect(mail.cc).to match_array competition.delegates.pluck(:email)
         expect(mail.from).to eq ["reports@worldcubeassociation.org"]
         expect(mail.reply_to).to match_array competition.delegates.pluck(:email)
@@ -324,7 +324,7 @@ RSpec.describe CompetitionsMailer, type: :mailer do
         end
 
         expect(mail.subject).to eq "[wca-report] [Multiple Continents] FMC World 2016"
-        expect(mail.to).to eq competition.venue_continents.map { |c| DelegateReport.continent_mailing_list(c) }
+        expect(mail.to).to eq(competition.venue_continents.map { |c| DelegateReport.continent_mailing_list(c) })
         expect(mail.cc).to match_array competition.delegates.pluck(:email)
         expect(mail.from).to eq ["reports@worldcubeassociation.org"]
         expect(mail.reply_to).to match_array competition.delegates.pluck(:email)

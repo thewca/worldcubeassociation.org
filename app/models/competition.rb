@@ -371,10 +371,8 @@ class Competition < ApplicationRecord
   # Competitions after 2018-12-31 will have this check. All comps from 2019 onwards required a schedule.
   # Check added per "Support for cancelled competitions" and adding some old cancelled competitions to the website without a schedule.
   def schedule_must_match_rounds
-    if start_date.present? && start_date > Date.new(2018, 12, 31)
-      unless has_any_round_per_event? && schedule_includes_rounds?
-        errors.add(:competition_events, I18n.t('competitions.errors.schedule_must_match_rounds'))
-      end
+    if start_date.present? && start_date > Date.new(2018, 12, 31) && !(has_any_round_per_event? && schedule_includes_rounds?)
+      errors.add(:competition_events, I18n.t('competitions.errors.schedule_must_match_rounds'))
     end
   end
 
@@ -384,8 +382,6 @@ class Competition < ApplicationRecord
       errors.add(:competition_events, I18n.t('competitions.errors.advancement_condition_must_be_present_for_all_non_final_rounds'))
     end
   end
-
-  attr_accessor :closing_full_registration
   private def should_validate_registration_closing?
     confirmed_or_visible? && (will_save_change_to_registration_close? || will_save_change_to_confirmed_at?) && !closing_full_registration
   end
@@ -620,23 +616,23 @@ class Competition < ApplicationRecord
       end
 
       rounds.select(&:cutoff_is_greater_than_time_limit?).each do |round|
-        warnings['cutoff_is_greater_than_time_limit' + round.id.to_s] = I18n.t('competitions.messages.cutoff_is_greater_than_time_limit', round_number: round.number, event: I18n.t('events.' + round.event.id))
+        warnings["cutoff_is_greater_than_time_limit#{round.id}"] = I18n.t('competitions.messages.cutoff_is_greater_than_time_limit', round_number: round.number, event: I18n.t("events.#{round.event.id}"))
       end
 
       rounds.select(&:cutoff_is_too_fast?).each do |round|
-        warnings['cutoff_is_too_fast' + round.id.to_s] = I18n.t('competitions.messages.cutoff_is_too_fast', round_number: round.number, event: I18n.t('events.' + round.event.id))
+        warnings["cutoff_is_too_fast#{round.id}"] = I18n.t('competitions.messages.cutoff_is_too_fast', round_number: round.number, event: I18n.t("events.#{round.event.id}"))
       end
 
       rounds.select(&:cutoff_is_too_slow?).each do |round|
-        warnings['cutoff_is_too_slow' + round.id.to_s] = I18n.t('competitions.messages.cutoff_is_too_slow', round_number: round.number, event: I18n.t('events.' + round.event.id))
+        warnings["cutoff_is_too_slow#{round.id}"] = I18n.t('competitions.messages.cutoff_is_too_slow', round_number: round.number, event: I18n.t("events.#{round.event.id}"))
       end
 
       rounds.select(&:time_limit_is_too_fast?).each do |round|
-        warnings['time_limit_is_too_fast' + round.id.to_s] = I18n.t('competitions.messages.time_limit_is_too_fast', round_number: round.number, event: I18n.t('events.' + round.event.id))
+        warnings["time_limit_is_too_fast#{round.id}"] = I18n.t('competitions.messages.time_limit_is_too_fast', round_number: round.number, event: I18n.t("events.#{round.event.id}"))
       end
 
       rounds.select(&:time_limit_is_too_slow?).each do |round|
-        warnings['time_limit_is_too_slow' + round.id.to_s] = I18n.t('competitions.messages.time_limit_is_too_slow', round_number: round.number, event: I18n.t('events.' + round.event.id))
+        warnings["time_limit_is_too_slow#{round.id}"] = I18n.t('competitions.messages.time_limit_is_too_slow', round_number: round.number, event: I18n.t("events.#{round.event.id}"))
       end
 
       if championship_warnings.any?
@@ -678,10 +674,8 @@ class Competition < ApplicationRecord
         end
       end
     end
-    if registration_range_specified? && registration_past?
-      unless self.announced?
-        warnings[:regclosed] = I18n.t('competitions.messages.registration_already_closed')
-      end
+    if registration_range_specified? && registration_past? && !self.announced?
+      warnings[:regclosed] = I18n.t('competitions.messages.registration_already_closed')
     end
 
     warnings
@@ -718,7 +712,6 @@ class Competition < ApplicationRecord
     delegates.include?(user) || trainee_delegates.include?(user) || organizers.include?(user)
   end
 
-  attr_accessor :being_cloned_from_id, :being_cloned_from_cache
   def being_cloned_from
     @being_cloned_from_cache ||= Competition.find_by(id: being_cloned_from_id)
   end
@@ -776,8 +769,6 @@ class Competition < ApplicationRecord
     end
   end
 
-  attr_accessor :clone_tabs
-
   before_validation :compute_coordinates
   before_validation :create_id_and_cell_name
   before_validation :unpack_delegate_organizer_ids
@@ -813,13 +804,14 @@ class Competition < ApplicationRecord
         self.id = safe_name_without_year[0...(MAX_ID_LENGTH - year.length)] + year
       end
       if cellName.blank? || force_override
-        year = " " + year
+        year = " #{year}"
         self.cellName = name_without_year.truncate(MAX_CELL_NAME_LENGTH - year.length) + year
       end
     end
   end
 
   attr_writer :staff_delegate_ids, :organizer_ids, :trainee_delegate_ids
+
   def staff_delegate_ids
     @staff_delegate_ids || staff_delegates.map(&:id).join(",")
   end
@@ -965,7 +957,8 @@ class Competition < ApplicationRecord
     end
   end
 
-  attr_accessor :editing_user_id
+  attr_accessor :closing_full_registration, :being_cloned_from_id, :being_cloned_from_cache, :clone_tabs, :editing_user_id
+
   validate :user_cannot_demote_themself
   def user_cannot_demote_themself
     if editing_user_id
@@ -995,6 +988,7 @@ class Competition < ApplicationRecord
   end
 
   attr_reader :receive_registration_emails
+
   def receive_registration_emails=(r)
     @receive_registration_emails = ActiveRecord::Type::Boolean.new.cast(r)
   end
@@ -1661,12 +1655,15 @@ class Competition < ApplicationRecord
     keyword_init: true,
   )
 
+  # rubocop:disable Lint/StructNewOverride
+  # this does overwrite sort_by because the frontend relies on the field, but as it's never used in an array, it should be fine
   PsychSheet = Struct.new(
     :sorted_rankings,
     :sort_by,
     :sort_by_second,
     keyword_init: true,
   )
+  # rubocop:enable Lint/StructNewOverride
 
   def psych_sheet_event(event, sort_by)
     ActiveRecord::Base.connected_to(role: :read_replica) do

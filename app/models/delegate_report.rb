@@ -27,7 +27,7 @@ class DelegateReport < ApplicationRecord
 
   before_create :set_discussion_url
   def set_discussion_url
-    self.discussion_url = "https://groups.google.com/a/worldcubeassociation.org/forum/#!topicsearchin/reports/" + URI.encode_www_form_component(competition.name)
+    self.discussion_url = "https://groups.google.com/a/worldcubeassociation.org/forum/#!topicsearchin/reports/#{URI.encode_www_form_component(competition.name)}"
   end
 
   private def render_section_template(section)

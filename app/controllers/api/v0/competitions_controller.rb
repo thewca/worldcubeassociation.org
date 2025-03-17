@@ -205,8 +205,8 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
 
   private def require_scope!(scope)
     require_user!
-    if current_api_user # If we deal with an OAuth user then check the scopes.
-      raise WcaExceptions::BadApiParameter.new("Missing required scope '#{scope}'") unless doorkeeper_token.scopes.include?(scope)
+    if current_api_user && doorkeeper_token.scopes.exclude?(scope) # If we deal with an OAuth user then check the scopes.
+      raise WcaExceptions::BadApiParameter.new("Missing required scope '#{scope}'")
     end
   end
 

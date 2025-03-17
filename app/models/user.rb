@@ -102,8 +102,6 @@ class User < ApplicationRecord
 
   strip_attributes only: [:wca_id, :country_iso2]
 
-  attr_accessor :current_user
-
   devise :registerable,
          :recoverable, :rememberable, :trackable, :validatable,
          :confirmable
@@ -200,23 +198,22 @@ class User < ApplicationRecord
   end
 
   attr_reader :claiming_wca_id
+
   def claiming_wca_id=(claiming_wca_id)
     @claiming_wca_id = ActiveRecord::Type::Boolean.new.cast(claiming_wca_id)
   end
 
   before_validation :maybe_clear_claimed_wca_id
   def maybe_clear_claimed_wca_id
-    unless claiming_wca_id
-      if (unconfirmed_wca_id_was.present? && wca_id == unconfirmed_wca_id_was) || unconfirmed_wca_id.blank?
-        self.unconfirmed_wca_id = nil
-        self.delegate_to_handle_wca_id_claim = nil
-      end
+    if !claiming_wca_id && ((unconfirmed_wca_id_was.present? && wca_id == unconfirmed_wca_id_was) || unconfirmed_wca_id.blank?)
+      self.unconfirmed_wca_id = nil
+      self.delegate_to_handle_wca_id_claim = nil
     end
   end
 
   # Virtual attribute for people claiming a WCA ID.
   attr_accessor :dob_verification
-  attr_accessor :was_incorrect_wca_id_claim
+  attr_accessor :current_user, :was_incorrect_wca_id_claim
 
   MAX_INCORRECT_WCA_ID_CLAIM_COUNT = 5
   validate :claim_wca_id_validations
