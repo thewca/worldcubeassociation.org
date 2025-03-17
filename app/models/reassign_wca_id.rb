@@ -8,12 +8,12 @@ class ReassignWcaId
 
   def account1=(account1)
     @account1 = account1
-    @account1_user = User.find_by_id(account1)
+    @account1_user = User.find_by(id: account1)
   end
 
   def account2=(account2)
     @account2 = account2
-    @account2_user = User.find_by_id(account2)
+    @account2_user = User.find_by(id: account2)
   end
 
   validates :account1, presence: true

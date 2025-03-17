@@ -19,7 +19,7 @@ class CompetitionVenue < ApplicationRecord
   validates :timezone_id, inclusion: { in: VALID_TIMEZONES }
 
   def country
-    Country.find_by_iso2(self.country_iso2)
+    Country.find_by(iso2: self.country_iso2)
   end
 
   def load_wcif!(wcif)

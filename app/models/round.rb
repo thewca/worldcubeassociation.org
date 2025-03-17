@@ -51,7 +51,7 @@ class Round < ApplicationRecord
   end
 
   validate do
-    unless event.preferred_formats.find_by_format_id(format_id)
+    unless event.preferred_formats.find_by(format_id: format_id)
       errors.add(:format, "'#{format_id}' is not allowed for '#{event.id}'")
     end
   end
