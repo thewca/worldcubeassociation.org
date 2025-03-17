@@ -187,7 +187,7 @@ RSpec.describe CompetitionsController do
         creation_params = build_competition_update(Competition.new, name: "Test 2015", venue: { countryId: "USA" }, staff: { staffDelegateIds: [delegate.id], organizerIds: [organizer.id] }, website: { usesWcaRegistration: false })
         expect do
           post :create, params: creation_params, as: :json
-        end.to change { enqueued_jobs.size }.by(1)
+        end.to change(enqueued_jobs, :size).by(1)
         expect(response).to be_successful
         new_comp = Competition.find("Test2015")
         expect(new_comp.id).to eq "Test2015"
@@ -291,7 +291,7 @@ RSpec.describe CompetitionsController do
         invalid_competition_delegate = CompetitionDelegate.last
         update_params = build_competition_update(competition, name: competition.name)
         patch :update, params: update_params, as: :json
-        expect(CompetitionDelegate.find_by_id(invalid_competition_delegate.id)).to be_nil
+        expect(CompetitionDelegate.find_by(id: invalid_competition_delegate.id)).to be_nil
       end
 
       it "saving removes nonexistent organizers" do
@@ -299,7 +299,7 @@ RSpec.describe CompetitionsController do
         invalid_competition_organizer = CompetitionOrganizer.last
         update_params = build_competition_update(competition, name: competition.name)
         patch :update, params: update_params, as: :json
-        expect(CompetitionOrganizer.find_by_id(invalid_competition_organizer.id)).to be_nil
+        expect(CompetitionOrganizer.find_by(id: invalid_competition_organizer.id)).to be_nil
       end
 
       it "can change competition id" do
@@ -438,7 +438,7 @@ RSpec.describe CompetitionsController do
         competition.update(showAtAll: false)
         delete :destroy, params: { id: competition }
         expect(response).to be_successful
-        expect(Competition.find_by_id(competition.id)).to be_nil
+        expect(Competition.find_by(id: competition.id)).to be_nil
       end
 
       it "board member cannot delete a visible competition" do
@@ -447,7 +447,7 @@ RSpec.describe CompetitionsController do
         expect(response).to have_http_status(:forbidden)
         parsed_body = response.parsed_body
         expect(parsed_body["error"]).to eq "Cannot delete a competition that is publicly visible."
-        expect(Competition.find_by_id(competition.id)).not_to be_nil
+        expect(Competition.find_by(id: competition.id)).not_to be_nil
       end
     end
 
@@ -468,7 +468,7 @@ RSpec.describe CompetitionsController do
         update_params = build_competition_update(competition, staff: { organizerIds: organizers.map(&:id) })
         expect do
           patch :update, params: update_params, as: :json
-        end.to change { enqueued_jobs.size }.by(1)
+        end.to change(enqueued_jobs, :size).by(1)
       end
 
       it "notifies organizers correctly when id changes" do
@@ -478,7 +478,7 @@ RSpec.describe CompetitionsController do
         expect(CompetitionsMailer).to receive(:notify_organizer_of_addition_to_competition).with(competition.delegates.last, competition, new_organizer).and_call_original
         expect do
           patch :update, params: update_params, as: :json
-        end.to change { enqueued_jobs.size }.by(1)
+        end.to change(enqueued_jobs, :size).by(1)
       end
 
       it "removes an organizer and expects him to receive a notification email" do
@@ -487,7 +487,7 @@ RSpec.describe CompetitionsController do
         update_params = build_competition_update(competition, staff: { organizerIds: [competition.organizers.first.id, organizer1.id] })
         expect do
           patch :update, params: update_params, as: :json
-        end.to change { enqueued_jobs.size }.by(1)
+        end.to change(enqueued_jobs, :size).by(1)
       end
 
       it "can confirm a competition and expects wcat and organizers to receive a notification email" do
@@ -496,7 +496,7 @@ RSpec.describe CompetitionsController do
         expect(CompetitionsMailer).to receive(:notify_wcat_of_confirmed_competition).with(competition.delegates.last, competition).and_call_original
         expect do
           put :confirm, params: { competition_id: competition }
-        end.to change { enqueued_jobs.size }.by(2)
+        end.to change(enqueued_jobs, :size).by(2)
         expect(response).to be_successful
         expect(competition.reload.confirmed?).to be true
       end
@@ -563,7 +563,7 @@ RSpec.describe CompetitionsController do
         expect(response).to have_http_status(:forbidden)
         errors = response.parsed_body
         expect(errors['error']).to eq "Cannot delete a competition that is publicly visible."
-        expect(Competition.find_by_id(competition.id)).not_to be_nil
+        expect(Competition.find_by(id: competition.id)).not_to be_nil
       end
 
       it "cannot delete confirmed competition" do
@@ -574,7 +574,7 @@ RSpec.describe CompetitionsController do
         expect(response).to have_http_status(:forbidden)
         errors = response.parsed_body
         expect(errors['error']).to eq "Cannot delete a confirmed competition."
-        expect(Competition.find_by_id(competition.id)).not_to be_nil
+        expect(Competition.find_by(id: competition.id)).not_to be_nil
       end
 
       it "can delete not confirmed and not visible competition" do
@@ -582,7 +582,7 @@ RSpec.describe CompetitionsController do
         # Attempt to delete competition. This should work, because we allow
         # deletion of (not confirmed and not visible) competitions.
         delete :destroy, params: { id: competition }
-        expect(Competition.find_by_id(competition.id)).to be_nil
+        expect(Competition.find_by(id: competition.id)).to be_nil
         expect(response).to be_successful
       end
 
@@ -638,7 +638,7 @@ RSpec.describe CompetitionsController do
         update_params = build_competition_update(competition, staff: { organizerIds: organizers.map(&:id) })
         expect do
           patch :update, params: update_params, as: :json
-        end.to change { enqueued_jobs.size }.by(1)
+        end.to change(enqueued_jobs, :size).by(1)
       end
 
       it "notifies organizers correctly when id changes" do
@@ -648,7 +648,7 @@ RSpec.describe CompetitionsController do
         expect(CompetitionsMailer).to receive(:notify_organizer_of_addition_to_competition).with(competition.trainee_delegates.last, competition, new_organizer).and_call_original
         expect do
           patch :update, params: update_params, as: :json
-        end.to change { enqueued_jobs.size }.by(1)
+        end.to change(enqueued_jobs, :size).by(1)
       end
 
       it "removes an organizer and expects him to receive a notification email" do
@@ -657,7 +657,7 @@ RSpec.describe CompetitionsController do
         update_params = build_competition_update(competition, staff: { organizerIds: [competition.organizers.first.id, organizer1.id] })
         expect do
           patch :update, params: update_params, as: :json
-        end.to change { enqueued_jobs.size }.by(1)
+        end.to change(enqueued_jobs, :size).by(1)
       end
 
       it "cannot confirm a competition" do
@@ -676,7 +676,7 @@ RSpec.describe CompetitionsController do
         expect(response).to have_http_status(:forbidden)
         errors = response.parsed_body
         expect(errors['error']).to eq "Cannot delete a competition that is publicly visible."
-        expect(Competition.find_by_id(competition.id)).not_to be_nil
+        expect(Competition.find_by(id: competition.id)).not_to be_nil
       end
 
       it "cannot delete confirmed competition" do
@@ -687,7 +687,7 @@ RSpec.describe CompetitionsController do
         expect(response).to have_http_status(:forbidden)
         errors = response.parsed_body
         expect(errors['error']).to eq "Cannot delete a confirmed competition."
-        expect(Competition.find_by_id(competition.id)).not_to be_nil
+        expect(Competition.find_by(id: competition.id)).not_to be_nil
       end
 
       it "can delete not confirmed and not visible competition" do
@@ -695,7 +695,7 @@ RSpec.describe CompetitionsController do
         # Attempt to delete competition. This should work, because we allow
         # deletion of (not confirmed and not visible) competitions.
         delete :destroy, params: { id: competition }
-        expect(Competition.find_by_id(competition.id)).to be_nil
+        expect(Competition.find_by(id: competition.id)).to be_nil
         expect(response).to be_successful
       end
 
@@ -743,7 +743,7 @@ RSpec.describe CompetitionsController do
         # Attempt to delete competition. This should not work, because we're
         # not the delegate for this competition.
         delete :destroy, params: { id: competition }
-        expect(Competition.find_by_id(competition.id)).not_to be_nil
+        expect(Competition.find_by(id: competition.id)).not_to be_nil
       end
     end
   end
@@ -760,7 +760,7 @@ RSpec.describe CompetitionsController do
         expect(CompetitionsMailer).to receive(:notify_organizer_of_announced_competition).with(competition, competition.organizers.last).and_call_original
         expect do
           put :announce, params: { competition_id: competition }
-        end.to change { enqueued_jobs.size }.by(1)
+        end.to change(enqueued_jobs, :size).by(1)
         competition.reload
         expect(competition.announced_at.to_f).to be < Time.now.to_f
         expect(competition.announced_by).to eq wcat_member.id
@@ -888,7 +888,7 @@ RSpec.describe CompetitionsController do
         expect(CompetitionsMailer).to receive(:notify_users_of_results_presence).and_call_original.exactly(4).times
         expect do
           post :post_results, params: { id: competition }
-        end.to change { enqueued_jobs.size }.by(4)
+        end.to change(enqueued_jobs, :size).by(4)
         competition.reload
         expect(competition.results_posted_at.to_f).to be < Time.now.to_f
         expect(competition.results_posted_by).to eq wrt_member.id
@@ -906,7 +906,7 @@ RSpec.describe CompetitionsController do
         expect(CompetitionsMailer).to receive(:notify_users_of_id_claim_possibility).and_call_original.exactly(2).times
         expect do
           post :post_results, params: { id: competition }
-        end.to change { enqueued_jobs.size }.by(2)
+        end.to change(enqueued_jobs, :size).by(2)
       end
 
       it "assigns wca id when user matches one person in results" do
@@ -956,7 +956,7 @@ RSpec.describe CompetitionsController do
     end
   end
 
-  describe 'GET #my_competitions', clean_db_with_truncation: true do
+  describe 'GET #my_competitions', :clean_db_with_truncation do
     let(:delegate) { FactoryBot.create(:delegate) }
     let(:organizer) { FactoryBot.create(:user) }
     let!(:future_competition1) { FactoryBot.create(:competition, :registration_open, starts: 5.weeks.from_now, organizers: [organizer], delegates: [delegate], events: Event.where(id: %w(222 333))) }

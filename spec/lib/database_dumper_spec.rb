@@ -43,7 +43,7 @@ RSpec.describe "DatabaseDumper" do
 
   # The default database cleaning method of transation does not work well when it comes to creating tables,
   # which is what we do in this test. Use truncation so we don't leave a dirty database behind.
-  it "dumps the database according to sanitizers", clean_db_with_truncation: true do
+  it "dumps the database according to sanitizers", :clean_db_with_truncation do
     not_visible_competition = FactoryBot.create :competition, :not_visible, :with_delegate
     visible_competition = FactoryBot.create :competition, :visible, remarks: "Super secret message to the Board"
     user = FactoryBot.create :user, dob: Date.new(1989, 1, 1)
@@ -57,15 +57,15 @@ RSpec.describe "DatabaseDumper" do
     dump_file.close
 
     with_database :developer_dump do
-      expect(ServerSetting.find_by_name(DatabaseDumper::DEV_TIMESTAMP_NAME)).to be_nil
+      expect(ServerSetting.find_by(name: DatabaseDumper::DEV_TIMESTAMP_NAME)).to be_nil
 
       DbHelper.execute_sql sql
 
       expect(Competition.count).to eq 1
       expect(visible_competition.reload.remarks).to eq "remarks to the board here"
-      expect(CompetitionDelegate.find_by_competition_id(not_visible_competition.id)).to be nil
+      expect(CompetitionDelegate.find_by(competition_id: not_visible_competition.id)).to be nil
       expect(user.reload.dob).to eq Date.new(1954, 12, 4)
-      expect(ServerSetting.find_by_name(DatabaseDumper::DEV_TIMESTAMP_NAME).as_datetime).to be >= before_dump
+      expect(ServerSetting.find_by(name: DatabaseDumper::DEV_TIMESTAMP_NAME).as_datetime).to be >= before_dump
 
       # It's ok for the public to know about the existence of a hidden group,
       # but we don't want them to know about the *members* of that hidden group.

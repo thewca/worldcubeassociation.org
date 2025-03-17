@@ -81,7 +81,7 @@ RSpec.describe PostsController do
     describe "POST #create" do
       it "creates a post" do
         post :create, params: { post: { title: "Title", body: "body" } }
-        p = Post.find_by_slug("Title")
+        p = Post.find_by(slug: "Title")
         expect(p.title).to eq "Title"
         expect(p.body).to eq "body"
       end
@@ -101,7 +101,7 @@ RSpec.describe PostsController do
     describe "POST #create" do
       it "creates a tagged post" do
         post :create, params: { post: { title: "Title", body: "body", tags: "wic, notes" } }
-        p = Post.find_by_slug("Title")
+        p = Post.find_by(slug: "Title")
         expect(p.title).to eq "Title"
         expect(p.body).to eq "body"
         expect(p.tags_array).to match_array %w(wic notes)

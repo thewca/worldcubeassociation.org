@@ -101,6 +101,10 @@ FactoryBot.define do
 
     registration_version { :v3 }
 
+    trait :skip_validations do
+      to_create { |instance| instance.save(validate: false) }
+    end
+
     trait :auto_accept do
       use_wca_registration { true }
       auto_accept_registrations { true }
@@ -519,10 +523,8 @@ FactoryBot.define do
       create(:waiting_list, holder: competition)
 
       competition.delegates.each do |delegate|
-        unless delegate.region_id.nil? # There can be cases where the competition delegate is actually not a delegate (temporary delegate)
-          if UserGroup.find(delegate.region_id).lead_user.nil? # Allowing to manually create senior delegate for the delegate if needed.
-            FactoryBot.create(:senior_delegate_role, group_id: delegate.region_id)
-          end
+        if !delegate.region_id.nil? && UserGroup.find(delegate.region_id).lead_user.nil? # Allowing to manually create senior delegate for the delegate if needed.
+          FactoryBot.create(:senior_delegate_role, group_id: delegate.region_id)
         end
       end
     end

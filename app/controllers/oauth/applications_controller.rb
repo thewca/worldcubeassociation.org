@@ -16,6 +16,9 @@ class Oauth::ApplicationsController < ApplicationController
     @application = Doorkeeper::Application.new
   end
 
+  def edit
+  end
+
   def create
     @application = Doorkeeper::Application.new(application_params)
     @application.owner = current_user

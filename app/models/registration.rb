@@ -103,7 +103,7 @@ class Registration < ApplicationRecord
   alias personId wca_id
 
   def person
-    Person.find_by_wca_id(personId)
+    Person.find_by(wca_id: personId)
   end
 
   def world_rank(event, type)
@@ -370,7 +370,7 @@ class Registration < ApplicationRecord
   def events_to_associated_events(events)
     events.map do |event|
       competition_event = competition.competition_events.find_by!(event: event)
-      registration_competition_events.find_by_competition_event_id(competition_event.id) || registration_competition_events.build(competition_event: competition_event)
+      registration_competition_events.find_by(competition_event_id: competition_event.id) || registration_competition_events.build(competition_event: competition_event)
     end
   end
 
@@ -391,10 +391,8 @@ class Registration < ApplicationRecord
 
   validate :only_one_accepted_per_series
   private def only_one_accepted_per_series
-    if competition&.part_of_competition_series? && competing_status_accepted?
-      unless series_sibling_registrations(:accepted).empty?
-        errors.add(:competition_id, I18n.t('registrations.errors.series_more_than_one_accepted'))
-      end
+    if competition&.part_of_competition_series? && competing_status_accepted? && !series_sibling_registrations(:accepted).empty?
+      errors.add(:competition_id, I18n.t('registrations.errors.series_more_than_one_accepted'))
     end
   end
 

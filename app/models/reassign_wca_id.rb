@@ -3,17 +3,16 @@
 class ReassignWcaId
   include ActiveModel::Model
 
-  attr_reader :account1, :account2
-  attr_reader :account1_user, :account2_user
+  attr_reader :account1, :account2, :account1_user, :account2_user
 
   def account1=(account1)
     @account1 = account1
-    @account1_user = User.find_by_id(account1)
+    @account1_user = User.find_by(id: account1)
   end
 
   def account2=(account2)
     @account2 = account2
-    @account2_user = User.find_by_id(account2)
+    @account2_user = User.find_by(id: account2)
   end
 
   validates :account1, presence: true

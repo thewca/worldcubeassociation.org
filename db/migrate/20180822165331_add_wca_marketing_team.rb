@@ -1,3 +1,4 @@
+# rubocop:disable all
 # frozen_string_literal: true
 
 class AddWcaMarketingTeam < ActiveRecord::Migration[5.2]

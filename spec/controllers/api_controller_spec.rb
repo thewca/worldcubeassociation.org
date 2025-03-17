@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
+RSpec.describe Api::V0::ApiController, :clean_db_with_truncation do
   describe 'GET #competitions_search' do
     let!(:comp) { FactoryBot.create(:competition, :confirmed, :visible, name: "Jfly's Competition 2015") }
 

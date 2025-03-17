@@ -3,17 +3,16 @@
 class MergePeople
   include ActiveModel::Model
 
-  attr_reader :person1_wca_id, :person2_wca_id
-  attr_reader :person1, :person2
+  attr_reader :person1_wca_id, :person2_wca_id, :person1, :person2
 
   def person1_wca_id=(wca_id)
     @person1_wca_id = wca_id
-    @person1 = Person.find_by_wca_id(person1_wca_id)
+    @person1 = Person.find_by(wca_id: person1_wca_id)
   end
 
   def person2_wca_id=(wca_id)
     @person2_wca_id = wca_id
-    @person2 = Person.find_by_wca_id(person2_wca_id)
+    @person2 = Person.find_by(wca_id: person2_wca_id)
   end
 
   validates :person1_wca_id, presence: true

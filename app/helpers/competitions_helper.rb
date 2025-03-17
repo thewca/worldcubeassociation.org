@@ -70,21 +70,21 @@ module CompetitionsHelper
                                                      result_sentence: pretty_print_result(winners.first),
                                                      event_name: main_event.name)
     if results_by_place[2]
-      text += " " + t('competitions.competition_info.first_runner_up',
-                      first_runner_up: people_to_sentence(results_by_place[2]),
-                      first_runner_up_result: pretty_print_result(top_three.second, short: true))
+      text += " #{t('competitions.competition_info.first_runner_up',
+                    first_runner_up: people_to_sentence(results_by_place[2]),
+                    first_runner_up_result: pretty_print_result(top_three.second, short: true))}"
       if results_by_place[3]
-        text += " " + t('competitions.competition_info.and')
-        text += " " + t('competitions.competition_info.second_runner_up',
-                        second_runner_up: people_to_sentence(results_by_place[3]),
-                        second_runner_up_result: pretty_print_result(top_three.third, short: true))
+        text += " #{t('competitions.competition_info.and')}"
+        text += " #{t('competitions.competition_info.second_runner_up',
+                      second_runner_up: people_to_sentence(results_by_place[3]),
+                      second_runner_up_result: pretty_print_result(top_three.third, short: true))}"
       else
         text += "."
       end
     elsif results_by_place[3]
-      text += " " + t('competitions.competition_info.second_runner_up',
-                      second_runner_up: people_to_sentence(results_by_place[3]),
-                      second_runner_up_result: pretty_print_result(top_three.third, short: true))
+      text += " #{t('competitions.competition_info.second_runner_up',
+                    second_runner_up: people_to_sentence(results_by_place[3]),
+                    second_runner_up_result: pretty_print_result(top_three.third, short: true))}"
     end
 
     text
@@ -294,7 +294,7 @@ module CompetitionsHelper
   end
 
   def preload_competition_series(form_competition, preload_competition_id)
-    competition = Competition.find_by_id(preload_competition_id)
+    competition = Competition.find_by(id: preload_competition_id)
 
     if (series = competition.competition_series)
       form_competition.competition_series = series
@@ -322,7 +322,7 @@ module CompetitionsHelper
       # Helper function for `competition_message_for_user`
       # Determines what message to display to the user based on the state of their registration.
 
-      registration_status = registration || competition.registrations.find_by_user_id(user.id)
+      registration_status = registration || competition.registrations.find_by(user_id: user.id)
       return if registration_status.blank?
 
       if registration_status.accepted?

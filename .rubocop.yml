@@ -7,6 +7,8 @@ plugins:
   - rubocop-rspec
   - rubocop-rspec_rails
   - rubocop-factory_bot
+  - rubocop-capybara
+  - rubocop-rake
 
 AllCops:
   TargetRubyVersion: 3.4
@@ -22,6 +24,20 @@ AllCops:
     - 'db/schema.rb'
     - 'db/developer_dump_schema.rb'
     - 'db/results_dump_schema.rb'
+    - '.git-hooks/**/*'
+
+Style/StringConcatenation:
+  # We need to use + here because it's a custom operator TODO: At least until we only render from NExt
+  Exclude:
+  - 'app/helpers/application_helper.rb'
+
+Rails/RenderInline:
+  Exclude:
+    - 'app/controllers/regulations_controller.rb'
+
+Rails/I18nLocaleAssignment:
+  Exclude:
+    - 'spec/support/locale_reset.rb'
 
 Bundler/OrderedGems:
   Enabled: false
@@ -279,31 +295,7 @@ Rails/TimeZone:
 Rails/Date:
   Enabled: false
 
-Rails/DynamicFindBy:
-  Enabled: false
-
 Rails/SkipsModelValidations:
-  Enabled: false
-
-Rails/I18nLocaleAssignment:
-  Enabled: false
-
-Rails/ReversibleMigration:
-  Enabled: false
-
-Rails/BulkChangeTable:
-  Enabled: false
-
-Rails/ThreeStateBooleanColumn:
-  Enabled: false
-
-Rails/CreateTableWithTimestamps:
-  Enabled: false
-
-Rails/NotNullColumn:
-  Enabled: false
-
-Rails/DangerousColumnNames:
   Enabled: false
 
 Rails/RedundantForeignKey:
@@ -327,12 +319,6 @@ Rails/HelperInstanceVariable:
 Rails/UniqueValidationWithoutIndex:
   Enabled: false
 
-Rails/LexicallyScopedActionFilter:
-  Enabled: false
-
-Rails/RenderInline:
-  Enabled: false
-
 # Rspec
 
 RSpec/MultipleExpectations:
@@ -350,9 +336,6 @@ RSpec/IndexedLet:
 RSpec/HookArgument:
   Enabled: false
 
-RSpec/MetadataStyle:
-  Enabled: false
-
 RSpec/AnyInstance:
   Enabled: false
 
@@ -363,9 +346,6 @@ RSpec/DescribeClass:
   Enabled: false
 
 RSpec/ContextWording:
-  Enabled: false
-
-RSpec/ExpectChange:
   Enabled: false
 
 RSpec/SpecFilePathFormat:
@@ -485,4 +465,65 @@ FactoryBot/SyntaxMethods:
   Enabled: false
 
 FactoryBot/ExcessiveCreateList:
+  Enabled: false
+
+# Capybara
+
+Capybara/AmbiguousClick:
+  Enabled: false
+
+Capybara/ClickLinkOrButtonStyle:
+  Enabled: false
+
+Capybara/CurrentPathExpectation:
+  Enabled: false
+
+Capybara/FindAllFirst:
+  Enabled: false
+
+Capybara/MatchStyle:
+  Enabled: false
+
+Capybara/NegationMatcher:
+  Enabled: false
+
+Capybara/NegationMatcherAfterVisit:
+  Enabled: false
+
+Capybara/RedundantWithinFind:
+  Enabled: false
+
+Capybara/SpecificActions:
+  Enabled: false
+
+Capybara/SpecificFinders:
+  Enabled: false
+
+Capybara/SpecificMatcher:
+  Enabled: false
+
+Capybara/VisibilityMatcher:
+  Enabled: false
+
+Capybara/RSpec/HaveSelector:
+  Enabled: false
+
+Capybara/RSpec/PredicateMatcher:
+  Enabled: false
+
+# Rake
+
+Rake/ClassDefinitionInTask:
+  Enabled: false
+
+Rake/Desc:
+  Enabled: false
+
+Rake/DuplicateTask:
+  Enabled: false
+
+Rake/DuplicateNamespace:
+  Enabled: false
+
+Rake/MethodDefinitionInTask:
   Enabled: false

@@ -28,29 +28,29 @@ end
 
 RSpec.describe WcaCronjob, type: :job do
   it "doesn't enqueue the same job multiple times" do
-    expect { ExampleJob.perform_later }.to change { enqueued_jobs.size }.by(1)
-    expect { ExampleJob.perform_later }.to change { enqueued_jobs.size }.by(0)
+    expect { ExampleJob.perform_later }.to change(enqueued_jobs, :size).by(1)
+    expect { ExampleJob.perform_later }.to change(enqueued_jobs, :size).by(0)
   end
 
   it "doesn't enqueue a failed job again" do
-    expect { FailingJob.perform_later }.to change { enqueued_jobs.size }.by(1)
+    expect { FailingJob.perform_later }.to change(enqueued_jobs, :size).by(1)
 
     expect { perform_enqueued_jobs }.to raise_error(RuntimeError)
 
-    expect { FailingJob.perform_later }.to change { enqueued_jobs.size }.by(0)
+    expect { FailingJob.perform_later }.to change(enqueued_jobs, :size).by(0)
   end
 
   it "allows enqueuing multiple jobs of different types at the same time" do
-    expect { ExampleJob.perform_later }.to change { enqueued_jobs.size }.by(1)
-    expect { ExampleJob2.perform_later }.to change { enqueued_jobs.size }.by(1)
+    expect { ExampleJob.perform_later }.to change(enqueued_jobs, :size).by(1)
+    expect { ExampleJob2.perform_later }.to change(enqueued_jobs, :size).by(1)
   end
 
   it "allows enqueuing the same job again after it has finished" do
-    expect { ExampleJob.perform_later }.to change { enqueued_jobs.size }.by(1)
+    expect { ExampleJob.perform_later }.to change(enqueued_jobs, :size).by(1)
 
     perform_enqueued_jobs
 
-    expect { ExampleJob.perform_later }.to change { enqueued_jobs.size }.by(1)
+    expect { ExampleJob.perform_later }.to change(enqueued_jobs, :size).by(1)
   end
 
   it "stores timestamps in cronjob_statistics table" do

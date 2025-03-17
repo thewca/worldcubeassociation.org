@@ -204,6 +204,9 @@ class Competition < ApplicationRecord
   validates :competitor_limit_reason, presence: true, if: :competitor_limit_enabled?
   validates :guests_enabled, acceptance: { accept: true, message: I18n.t('competitions.errors.must_ask_about_guests_if_specifying_limit') }, if: :guests_per_registration_limit_enabled?
   validates :guests_per_registration_limit, numericality: { only_integer: true, greater_than_or_equal_to: 1, less_than_or_equal_to: MAX_GUEST_LIMIT, allow_blank: true, if: :some_guests_allowed? }
+  validates :events_per_registration_limit, absence: true, unless: :event_restrictions?
+  validates :events_per_registration_limit, numericality: { only_integer: true, greater_than_or_equal_to: 1, less_than_or_equal_to: :number_of_events, allow_blank: true, if: :event_restrictions? }
+  validates :guests_per_registration_limit, numericality: { only_integer: true, greater_than_or_equal_to: 1, less_than_or_equal_to: MAX_GUEST_LIMIT, allow_blank: true, if: :some_guests_allowed? }
   validates :events_per_registration_limit, numericality: { only_integer: true, greater_than_or_equal_to: 1, less_than_or_equal_to: :number_of_events, allow_blank: true, if: :event_restrictions? }
   validates :id, presence: true, uniqueness: { case_sensitive: false }, length: { maximum: MAX_ID_LENGTH },
                  format: { with: VALID_ID_RE }, if: :name_valid_or_updating?
@@ -368,10 +371,8 @@ class Competition < ApplicationRecord
   # Competitions after 2018-12-31 will have this check. All comps from 2019 onwards required a schedule.
   # Check added per "Support for cancelled competitions" and adding some old cancelled competitions to the website without a schedule.
   def schedule_must_match_rounds
-    if start_date.present? && start_date > Date.new(2018, 12, 31)
-      unless has_any_round_per_event? && schedule_includes_rounds?
-        errors.add(:competition_events, I18n.t('competitions.errors.schedule_must_match_rounds'))
-      end
+    if start_date.present? && start_date > Date.new(2018, 12, 31) && !(has_any_round_per_event? && schedule_includes_rounds?)
+      errors.add(:competition_events, I18n.t('competitions.errors.schedule_must_match_rounds'))
     end
   end
 
@@ -381,8 +382,6 @@ class Competition < ApplicationRecord
       errors.add(:competition_events, I18n.t('competitions.errors.advancement_condition_must_be_present_for_all_non_final_rounds'))
     end
   end
-
-  attr_accessor :closing_full_registration
   private def should_validate_registration_closing?
     confirmed_or_visible? && (will_save_change_to_registration_close? || will_save_change_to_confirmed_at?) && !closing_full_registration
   end
@@ -617,23 +616,23 @@ class Competition < ApplicationRecord
       end
 
       rounds.select(&:cutoff_is_greater_than_time_limit?).each do |round|
-        warnings['cutoff_is_greater_than_time_limit' + round.id.to_s] = I18n.t('competitions.messages.cutoff_is_greater_than_time_limit', round_number: round.number, event: I18n.t('events.' + round.event.id))
+        warnings["cutoff_is_greater_than_time_limit#{round.id}"] = I18n.t('competitions.messages.cutoff_is_greater_than_time_limit', round_number: round.number, event: I18n.t("events.#{round.event.id}"))
       end
 
       rounds.select(&:cutoff_is_too_fast?).each do |round|
-        warnings['cutoff_is_too_fast' + round.id.to_s] = I18n.t('competitions.messages.cutoff_is_too_fast', round_number: round.number, event: I18n.t('events.' + round.event.id))
+        warnings["cutoff_is_too_fast#{round.id}"] = I18n.t('competitions.messages.cutoff_is_too_fast', round_number: round.number, event: I18n.t("events.#{round.event.id}"))
       end
 
       rounds.select(&:cutoff_is_too_slow?).each do |round|
-        warnings['cutoff_is_too_slow' + round.id.to_s] = I18n.t('competitions.messages.cutoff_is_too_slow', round_number: round.number, event: I18n.t('events.' + round.event.id))
+        warnings["cutoff_is_too_slow#{round.id}"] = I18n.t('competitions.messages.cutoff_is_too_slow', round_number: round.number, event: I18n.t("events.#{round.event.id}"))
       end
 
       rounds.select(&:time_limit_is_too_fast?).each do |round|
-        warnings['time_limit_is_too_fast' + round.id.to_s] = I18n.t('competitions.messages.time_limit_is_too_fast', round_number: round.number, event: I18n.t('events.' + round.event.id))
+        warnings["time_limit_is_too_fast#{round.id}"] = I18n.t('competitions.messages.time_limit_is_too_fast', round_number: round.number, event: I18n.t("events.#{round.event.id}"))
       end
 
       rounds.select(&:time_limit_is_too_slow?).each do |round|
-        warnings['time_limit_is_too_slow' + round.id.to_s] = I18n.t('competitions.messages.time_limit_is_too_slow', round_number: round.number, event: I18n.t('events.' + round.event.id))
+        warnings["time_limit_is_too_slow#{round.id}"] = I18n.t('competitions.messages.time_limit_is_too_slow', round_number: round.number, event: I18n.t("events.#{round.event.id}"))
       end
 
       if championship_warnings.any?
@@ -675,10 +674,8 @@ class Competition < ApplicationRecord
         end
       end
     end
-    if registration_range_specified? && registration_past?
-      unless self.announced?
-        warnings[:regclosed] = I18n.t('competitions.messages.registration_already_closed')
-      end
+    if registration_range_specified? && registration_past? && !self.announced?
+      warnings[:regclosed] = I18n.t('competitions.messages.registration_already_closed')
     end
 
     warnings
@@ -715,7 +712,6 @@ class Competition < ApplicationRecord
     delegates.include?(user) || trainee_delegates.include?(user) || organizers.include?(user)
   end
 
-  attr_accessor :being_cloned_from_id, :being_cloned_from_cache
   def being_cloned_from
     @being_cloned_from_cache ||= Competition.find_by(id: being_cloned_from_id)
   end
@@ -773,8 +769,6 @@ class Competition < ApplicationRecord
     end
   end
 
-  attr_accessor :clone_tabs
-
   before_validation :compute_coordinates
   before_validation :create_id_and_cell_name
   before_validation :unpack_delegate_organizer_ids
@@ -810,13 +804,14 @@ class Competition < ApplicationRecord
         self.id = safe_name_without_year[0...(MAX_ID_LENGTH - year.length)] + year
       end
       if cellName.blank? || force_override
-        year = " " + year
+        year = " #{year}"
         self.cellName = name_without_year.truncate(MAX_CELL_NAME_LENGTH - year.length) + year
       end
     end
   end
 
   attr_writer :staff_delegate_ids, :organizer_ids, :trainee_delegate_ids
+
   def staff_delegate_ids
     @staff_delegate_ids || staff_delegates.map(&:id).join(",")
   end
@@ -962,7 +957,8 @@ class Competition < ApplicationRecord
     end
   end
 
-  attr_accessor :editing_user_id
+  attr_accessor :closing_full_registration, :being_cloned_from_id, :being_cloned_from_cache, :clone_tabs, :editing_user_id
+
   validate :user_cannot_demote_themself
   def user_cannot_demote_themself
     if editing_user_id
@@ -992,6 +988,7 @@ class Competition < ApplicationRecord
   end
 
   attr_reader :receive_registration_emails
+
   def receive_registration_emails=(r)
     @receive_registration_emails = ActiveRecord::Type::Boolean.new.cast(r)
   end
@@ -1014,11 +1011,11 @@ class Competition < ApplicationRecord
   end
 
   def receiving_registration_emails?(user_id)
-    competition_delegate = competition_delegates.find_by_delegate_id(user_id)
+    competition_delegate = competition_delegates.find_by(delegate_id: user_id)
     if competition_delegate&.receive_registration_emails
       return true
     end
-    competition_organizer = competition_organizers.find_by_organizer_id(user_id)
+    competition_organizer = competition_organizers.find_by(organizer_id: user_id)
     if competition_organizer&.receive_registration_emails
       return true
     end
@@ -1027,11 +1024,11 @@ class Competition < ApplicationRecord
   end
 
   def can_receive_registration_emails?(user_id)
-    competition_delegate = competition_delegates.find_by_delegate_id(user_id)
+    competition_delegate = competition_delegates.find_by(delegate_id: user_id)
     if competition_delegate
       return true
     end
-    competition_organizer = competition_organizers.find_by_organizer_id(user_id)
+    competition_organizer = competition_organizers.find_by(organizer_id: user_id)
     if competition_organizer
       return true
     end
@@ -1041,11 +1038,11 @@ class Competition < ApplicationRecord
 
   def update_receive_registration_emails
     if editing_user_id && !@receive_registration_emails.nil?
-      competition_delegate = competition_delegates.find_by_delegate_id(editing_user_id)
+      competition_delegate = competition_delegates.find_by(delegate_id: editing_user_id)
       if competition_delegate
         competition_delegate.update_attribute(:receive_registration_emails, @receive_registration_emails)
       end
-      competition_organizer = competition_organizers.find_by_organizer_id(editing_user_id)
+      competition_organizer = competition_organizers.find_by(organizer_id: editing_user_id)
       if competition_organizer
         competition_organizer.update_attribute(:receive_registration_emails, @receive_registration_emails)
       end
@@ -1658,12 +1655,15 @@ class Competition < ApplicationRecord
     keyword_init: true,
   )
 
+  # rubocop:disable Lint/StructNewOverride
+  # this does overwrite sort_by because the frontend relies on the field, but as it's never used in an array, it should be fine
   PsychSheet = Struct.new(
     :sorted_rankings,
     :sort_by,
     :sort_by_second,
     keyword_init: true,
   )
+  # rubocop:enable Lint/StructNewOverride
 
   def psych_sheet_event(event, sort_by)
     ActiveRecord::Base.connected_to(role: :read_replica) do
@@ -1777,7 +1777,7 @@ class Competition < ApplicationRecord
   # For associated_events_picker
   def events_to_associated_events(events)
     events.map do |event|
-      competition_events.find_by_event_id(event.id) || competition_events.build(event_id: event.id)
+      competition_events.find_by(event_id: event.id) || competition_events.build(event_id: event.id)
     end
   end
 
@@ -1806,12 +1806,12 @@ class Competition < ApplicationRecord
       if !continent
         raise WcaExceptions::BadApiParameter.new("Invalid continent: '#{params[:continent]}'")
       end
-      competitions = competitions.joins('INNER JOIN Countries ON Competitions.countryId = Countries.id')
-                                 .where(continentId: continent.id)
+      competitions = competitions.joins(:country)
+                                 .where(country: { continent: continent })
     end
 
     if params[:country_iso2].present?
-      country = Country.find_by_iso2(params[:country_iso2])
+      country = Country.find_by(iso2: params[:country_iso2])
       if !country
         raise WcaExceptions::BadApiParameter.new("Invalid country_iso2: '#{params[:country_iso2]}'")
       end
@@ -2096,7 +2096,7 @@ class Competition < ApplicationRecord
       raise WcaExceptions::BadApiParameter.new("The Series must include the competition you're currently editing.")
     end
 
-    competition_series = CompetitionSeries.find_by_wcif_id(wcif_series["id"]) || CompetitionSeries.new
+    competition_series = CompetitionSeries.find_by(wcif_id: wcif_series["id"]) || CompetitionSeries.new
     competition_series.set_wcif!(wcif_series)
 
     self.competition_series = competition_series
@@ -2361,7 +2361,7 @@ class Competition < ApplicationRecord
   private def clean_series_when_leaving
     if competition_series_id.nil? && # if we just processed an update to remove the competition series
        (old_series_id = competition_series_id_previously_was) && # and we previously had an ID
-       (old_series = CompetitionSeries.find_by_id(old_series_id)) # and that series still exists
+       (old_series = CompetitionSeries.find_by(id: old_series_id)) # and that series still exists
       old_series.reload.destroy_if_orphaned # prompt it to check for orphaned state.
     end
   end

@@ -186,7 +186,7 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
 
   private def competition_from_params(associations: {})
     id = params[:competition_id] || params[:id]
-    competition = Competition.includes(associations).find_by_id(id)
+    competition = Competition.includes(associations).find_by(id: id)
 
     # If this competition exists, but is not publicly visible, then only show it
     # to the user if they are able to manage the competition.
@@ -205,8 +205,8 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
 
   private def require_scope!(scope)
     require_user!
-    if current_api_user # If we deal with an OAuth user then check the scopes.
-      raise WcaExceptions::BadApiParameter.new("Missing required scope '#{scope}'") unless doorkeeper_token.scopes.include?(scope)
+    if current_api_user && doorkeeper_token.scopes.exclude?(scope) # If we deal with an OAuth user then check the scopes.
+      raise WcaExceptions::BadApiParameter.new("Missing required scope '#{scope}'")
     end
   end
 
