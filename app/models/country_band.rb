@@ -11,7 +11,7 @@ class CountryBand < ApplicationRecord
   }
 
   def country
-    Country.find_by_iso2(self.iso2)
+    Country.find_by(iso2: self.iso2)
   end
 
   def active_country_band_detail

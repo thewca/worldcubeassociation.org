@@ -118,13 +118,13 @@ RSpec.describe PollsController do
       it "can delete an unconfirmed poll" do
         poll = FactoryBot.create(:poll)
         post :destroy, params: { id: poll.id }
-        expect(Poll.find_by_id(poll.id)).to be nil
+        expect(Poll.find_by(id: poll.id)).to be nil
       end
 
       it "can't delete a confirmed poll" do
         poll = FactoryBot.create(:poll, :confirmed)
         post :destroy, params: { id: poll.id }
-        expect(Poll.find_by_id(poll.id)).not_to be nil
+        expect(Poll.find_by(id: poll.id)).not_to be nil
       end
 
       it "deadline defaults to now if you don't change it" do

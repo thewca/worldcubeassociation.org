@@ -1,4 +1,4 @@
-import { Container, Heading } from "@chakra-ui/react";
+import { Container, Heading, Text } from "@chakra-ui/react";
 import PermissionProvider from "@/providers/PermissionProvider";
 import PermissionsTestMessage from "@/components/competitions/permissionsTestMessage";
 import { getCompetitionInfo } from "@/lib/wca/competitions/getCompetitionInfo";
@@ -13,16 +13,16 @@ export default async function CompetitionOverView({
     await getCompetitionInfo(competitionId);
 
   if (error) {
-    return <p>Error fetching competition</p>;
+    return <Text>Error fetching competition</Text>;
   }
 
   if (!competitionInfo) {
-    return <p>Competition does not exist</p>;
+    return <Text>Competition does not exist</Text>;
   }
 
   return (
     <Container centerContent>
-      <Heading>{competitionInfo.id}</Heading>
+      <Heading>{competitionInfo.name}</Heading>
       <PermissionProvider>
         <PermissionsTestMessage competitionInfo={competitionInfo} />
       </PermissionProvider>
