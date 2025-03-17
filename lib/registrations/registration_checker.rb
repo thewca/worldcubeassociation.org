@@ -10,7 +10,7 @@ module Registrations
       guests = registration_request['guests']
       comment = registration_request.dig('competing', 'comment')
 
-      r = Registration.new(guests: guests, competition: competition, comments: comment)
+      r = Registration.new(guests: guests.to_i, competition: competition, comments: comment)
 
       user_can_create_registration!(competition, current_user, target_user)
       validate_create_events!(registration_request, competition)
@@ -31,9 +31,9 @@ module Registrations
       new_status = update_request.dig('competing', 'status')
       events = update_request.dig('competing', 'event_ids')
 
-      registration.comments = comment
-      registration.guests = guests
-      registration.administrative_notes = organizer_comment
+      registration.comments = comment if comment.present?
+      registration.guests = guests.to_i if guests.present?
+      registration.administrative_notes = organizer_comment if organizer_comment.present?
 
       user_can_modify_registration!(competition, current_user, target_user, registration, new_status)
       validate_guests!(registration) unless guests.nil?
