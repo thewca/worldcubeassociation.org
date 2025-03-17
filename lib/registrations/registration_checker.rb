@@ -114,7 +114,7 @@ module Registrations
 
         event_limit = competition.events_per_registration_limit
         raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::INVALID_EVENT_SELECTION) if
-          competition.event_restrictions && event_limit.present? && event_ids.count > event_limit
+          competition.event_restrictions? && event_limit.present? && event_ids.count > event_limit
       end
 
       def validate_qualifications!(request, competition, target_user)
