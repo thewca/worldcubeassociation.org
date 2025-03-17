@@ -190,6 +190,10 @@ Style/StringLiteralsInInterpolation:
 Style/SymbolArray:
   Enabled: false
 
+# This causes a bunch of false positives as of 2025-03-17
+Rails/ActionControllerFlashBeforeRender:
+  Enabled: false
+
 # We currently have a couple enums that are defined with Arrays, disabling for now
 Rails/EnumHash:
   Enabled: false

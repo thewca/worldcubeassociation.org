@@ -441,8 +441,6 @@ class RegistrationsController < ApplicationController
     #   of the `enum :wca_status` declared in the `payment_intent.rb` model
     case stored_intent.wca_status
     when PaymentIntent.wca_statuses[:succeeded]
-      # rubocop:disable Rails/ActionControllerFlashBeforeRender
-      # explicitly use flash instead of flash.now because we are redirecting
       flash[:success] = t("registrations.payment_form.payment_successful")
     when PaymentIntent.wca_statuses[:pending]
       flash[:warning] = t("registrations.payment_form.errors.payment_pending")
@@ -459,7 +457,6 @@ class RegistrationsController < ApplicationController
     else
       # Invalid status
       flash[:error] = "Invalid PaymentIntent status"
-      # rubocop:enable Rails/ActionControllerFlashBeforeRender
     end
 
     redirect_to competition_register_path(competition_id)
