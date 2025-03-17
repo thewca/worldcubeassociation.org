@@ -299,7 +299,7 @@ class Person < ApplicationRecord
   end
 
   def anonymization_checks_with_message_args
-    recent_competitions_3_months = competitions&.select { |c| c.start_date > (Date.today - 3.month) }
+    recent_competitions_3_months = competitions&.select { |c| c.start_date > (Date.today - 3.months) }
     competitions_with_external_website = competitions&.select { |c| c.external_website.present? }
 
     [
