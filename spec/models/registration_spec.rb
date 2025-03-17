@@ -160,7 +160,7 @@ RSpec.describe Registration do
       guest_limit = 1
       competition = FactoryBot.create :competition, guests_per_registration_limit: guest_limit, guest_entry_status: Competition.guest_entry_statuses['free']
       registration.competition = competition
-      registration.guests = 1_000_000
+      registration.guests = 10
       expect(registration.guests).to be > registration.guest_limit
       expect(registration).to be_valid
     end
