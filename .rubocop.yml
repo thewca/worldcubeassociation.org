@@ -42,12 +42,6 @@ Rails/I18nLocaleAssignment:
 Bundler/OrderedGems:
   Enabled: false
 
-Lint/EmptyWhen:
-  Enabled: false
-
-Lint/UnusedBlockArgument:
-  Enabled: false
-
 Lint/UnusedMethodArgument:
   Enabled: false
 
@@ -55,15 +49,12 @@ Naming/AccessorMethodName:
   Enabled: false
 
 Style/Alias:
-  Enabled: false
+  EnforcedStyle: prefer_alias_method
 
 Style/EmptyMethod:
   EnforcedStyle: expanded
 
 Style/RedundantSelf:
-  Enabled: false
-
-Style/SafeNavigation:
   Enabled: false
 
 Style/StringLiterals:

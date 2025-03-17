@@ -133,7 +133,7 @@ class Api::V0::ApiController < ApplicationController
       end
     end
 
-    if current_user && current_user.can_admin_results?
+    if current_user&.can_admin_results?
       options = {
         private_attributes: %w[incorrect_wca_id_claim_count dob],
       }

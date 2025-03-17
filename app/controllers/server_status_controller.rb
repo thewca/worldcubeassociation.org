@@ -2,7 +2,7 @@
 
 class ServerStatusController < ApplicationController
   def index
-    @locale_stats = ApplicationController.locale_counts.sort_by { |locale, count| count }.reverse
+    @locale_stats = ApplicationController.locale_counts.sort_by { |_locale, count| count }.reverse
 
     @checks = checks
     @everything_good = @checks.all?(&:is_passing?)

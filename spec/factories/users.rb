@@ -107,13 +107,13 @@ FactoryBot.define do
     end
 
     trait :wrc_member do
-      after(:create) do |user, options|
+      after(:create) do |user, _options|
         FactoryBot.create(:wrc_member_role, user_id: user.id)
       end
     end
 
     trait :wrc_senior_member do
-      after(:create) do |user, options|
+      after(:create) do |user, _options|
         FactoryBot.create(:wrc_senior_member_role, user_id: user.id)
       end
     end
@@ -125,25 +125,25 @@ FactoryBot.define do
     end
 
     trait :wct_member do
-      after(:create) do |user, options|
+      after(:create) do |user, _options|
         FactoryBot.create(:wct_member_role, user_id: user.id)
       end
     end
 
     trait :wct_china_member do
-      after(:create) do |user, options|
+      after(:create) do |user, _options|
         FactoryBot.create(:wct_china_role, user_id: user.id)
       end
     end
 
     trait :wqac_member do
-      after(:create) do |user, options|
+      after(:create) do |user, _options|
         FactoryBot.create(:wqac_member_role, user_id: user.id)
       end
     end
 
     trait :wcat_member do
-      after(:create) do |user, options|
+      after(:create) do |user, _options|
         FactoryBot.create(:wcat_member_role, user_id: user.id)
       end
     end

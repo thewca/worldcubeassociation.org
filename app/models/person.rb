@@ -122,7 +122,7 @@ class Person < ApplicationRecord
     end
 
     counts_by_delegate = all_delegates.each_with_object(Hash.new(0)) { |d, counts| counts[d] += 1 }
-    most_frequent_delegate, _count = counts_by_delegate.max_by { |delegate, count| count }
+    most_frequent_delegate, _count = counts_by_delegate.max_by { |_delegate, count| count }
     most_recent_delegate = all_delegates.last
 
     [most_frequent_delegate, most_recent_delegate].uniq
@@ -157,7 +157,7 @@ class Person < ApplicationRecord
 
   def world_rank(event, type)
     rank = rank_for_event_type(event, type)
-    rank ? rank.worldRank : nil
+    rank&.worldRank
   end
 
   def best_solve(event, type)

@@ -80,8 +80,8 @@ FactoryBot.define do
     registration_open { 54.weeks.ago.change(usec: 0) }
     registration_close { 53.weeks.ago.change(usec: 0) }
 
-    start_date { starts.nil? ? nil : starts.strftime("%F") }
-    end_date { ends.nil? ? nil : ends.strftime("%F") }
+    start_date { starts&.strftime("%F") }
+    end_date { ends&.strftime("%F") }
 
     events { Event.where(id: event_ids) }
     main_event_id { events.first.id if events.any? }

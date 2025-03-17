@@ -67,7 +67,7 @@ unless Rails.env.production?
         end
 
         # If this is an enum, add all its possible values.
-        if ar_class && ar_class.defined_enums.include?(attribute)
+        if ar_class&.defined_enums&.include?(attribute)
           ar_class.defined_enums[attribute].each_key do |key|
             retval << ["enums.#{model}.#{attribute}.#{key}", occurrence]
           end

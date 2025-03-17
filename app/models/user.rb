@@ -221,7 +221,7 @@ class User < ApplicationRecord
     self.was_incorrect_wca_id_claim = false
     already_assigned_to_user = false
     if unconfirmed_wca_id.present?
-      already_assigned_to_user = unconfirmed_person && unconfirmed_person.user && !unconfirmed_person.user.dummy_account?
+      already_assigned_to_user = unconfirmed_person&.user && !unconfirmed_person.user.dummy_account?
       if !unconfirmed_person
         errors.add(:unconfirmed_wca_id, I18n.t('users.errors.not_found'))
       elsif already_assigned_to_user

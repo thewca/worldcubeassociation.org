@@ -44,7 +44,7 @@ class Vote < ApplicationRecord
 
   validate :poll_must_still_be_open
   def poll_must_still_be_open
-    if poll && poll.over?
+    if poll&.over?
       errors.add(:poll_id, "poll is closed")
     end
   end

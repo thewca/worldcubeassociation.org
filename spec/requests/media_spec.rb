@@ -65,7 +65,7 @@ RSpec.describe "media" do
   describe 'GET #new' do
     it_should_behave_like 'must sign in',
                           lambda { get new_medium_path },
-                          lambda { |current_user| expect(response).to be_successful }
+                          lambda { |_current_user| expect(response).to be_successful }
   end
 
   describe 'POST #create' do

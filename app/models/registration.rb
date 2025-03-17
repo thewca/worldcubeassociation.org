@@ -99,8 +99,8 @@ class Registration < ApplicationRecord
 
   delegate :name, :gender, :country, :email, :dob, :wca_id, to: :user
 
-  alias birthday dob
-  alias personId wca_id
+  alias_method :birthday, :dob
+  alias_method :personId, :wca_id
 
   def person
     Person.find_by(wca_id: personId)
