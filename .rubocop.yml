@@ -23,6 +23,14 @@ AllCops:
     - 'db/developer_dump_schema.rb'
     - 'db/results_dump_schema.rb'
 
+Rails/RenderInline:
+  Exclude:
+    - 'app/controllers/regulations_controller.rb'
+
+Rails/I18nLocaleAssignment:
+  Exclude:
+    - 'spec/support/locale_reset.rb'
+
 Bundler/OrderedGems:
   Enabled: false
 

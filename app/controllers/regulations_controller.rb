@@ -23,10 +23,7 @@ class RegulationsController < ApplicationController
 
   def render_regulations(route, version_file = REGULATIONS_VERSION_FILE)
     erb_file = RegulationsS3Helper.fetch_regulations_from_s3(route, version_file)
-    # We have to render inline here, as we are fetching the HTML from S3
-    # rubocop:disable Rails/RenderInline
     render inline: erb_file, layout: "application"
-    # rubocop:enable Rails/RenderInline
   end
 
   def guidelines
