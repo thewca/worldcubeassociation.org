@@ -6,5 +6,5 @@ class CompetitionOrganizer < ApplicationRecord
   belongs_to :organizer, class_name: "User"
   belongs_to :competition
 
-  alias user organizer
+  alias_method :user, :organizer
 end

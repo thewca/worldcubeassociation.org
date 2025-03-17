@@ -88,7 +88,7 @@ class StripeRecord < ApplicationRecord
     end
   end
 
-  alias retrieve_remote retrieve_stripe
+  alias_method :retrieve_remote, :retrieve_stripe
 
   def update_amount_remote(amount_iso, currency_iso)
     if self.payment_intent?

@@ -2,7 +2,7 @@
 
 module AdvancementConditions
   class AttemptResultCondition < AdvancementCondition
-    alias attempt_result level
+    alias_method :attempt_result, :level
 
     def self.wcif_type
       "attemptResult"

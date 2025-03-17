@@ -34,6 +34,9 @@ Lint/UnusedMethodArgument:
 Naming/AccessorMethodName:
   Enabled: false
 
+Style/Alias:
+  EnforcedStyle: prefer_alias_method
+
 Style/EmptyMethod:
   EnforcedStyle: expanded
 

@@ -906,7 +906,7 @@ class Competition < ApplicationRecord
 
   # We setup an alias here to be able to take advantage of `includes(:delegate_report)` on a competition,
   # while still being able to use the 'with_old_id' trick.
-  alias original_delegate_report delegate_report
+  alias_method :original_delegate_report, :delegate_report
   def delegate_report
     with_old_id do
       original_delegate_report
