@@ -130,9 +130,16 @@ module Registrations
 
       def validate_guests!(guests, competition)
         r = Registration.new(guests: guests, competition: competition)
+
         unless r.valid?
-          error = r.errors.details[:guests].first
-          raise WcaExceptions::RegistrationError.new(error[:error_status], error[:error_code]) if error.present?
+          guest_error_details = r.errors.details[:guests].first
+
+          if guest_error_details.present?
+            frontend_code = guest_error_details[:frontend_code] || Registrations::ErrorCodes::INVALID_REQUEST_DATA
+
+            # Assumption: If a model validation fails, it should always be HTTP status 422 (unprocessable entity)
+            raise WcaExceptions::RegistrationError.new(:unprocessable_entity, frontend_code, guest_error_details)
+          end
         end
       end
 

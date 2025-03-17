@@ -47,22 +47,10 @@ class Registration < ApplicationRecord
     self.registered_at = current_time_from_proper_timezone
   end
 
-  validate :guests_set_correctly, if: :is_competing?
-
-  private def guests_set_correctly
-    if guests < 0
-      errors.add(:guests, :too_few_guests, error_status: :unprocessable_entity, error_code: Registrations::ErrorCodes::INVALID_REQUEST_DATA)
-    end
-    if competition.guest_limit_exceeded?(guests)
-      errors.add(:guests, error_status: :unprocessable_entity, error_code: Registrations::ErrorCodes::GUEST_LIMIT_EXCEEDED)
-    end
-    if guests > Registrations::RegistrationChecker::DEFAULT_GUEST_LIMIT && !competition.guest_entry_status_restricted?
-      errors.add(:guests, error_status: :unprocessable_entity, error_code: Registrations::ErrorCodes::UNREASONABLE_GUEST_COUNT)
-    end
-  end
-
   validates :guests, numericality: { greater_than_or_equal_to: 0 }
-  validates :guests, numericality: { less_than_or_equal_to: :guest_limit, if: :check_guest_limit? }
+  validates :guests, numericality: { less_than_or_equal_to: :guest_limit, if: :check_guest_limit?, frontend_code: Registrations::ErrorCodes::GUEST_LIMIT_EXCEEDED }
+  validates :guests, numericality: { equal_to: 0, unless: :guests_allowed?, frontend_code: Registrations::ErrorCodes::GUEST_LIMIT_EXCEEDED }
+  validates :guests, numericality: { less_than_or_equal_to: Registrations::RegistrationChecker::DEFAULT_GUEST_LIMIT, if: :guests_unrestricted?, frontend_code: Registrations::ErrorCodes::UNREASONABLE_GUEST_COUNT }
 
   after_save :mark_registration_processing_as_done
 
@@ -79,7 +67,15 @@ class Registration < ApplicationRecord
   end
 
   def check_guest_limit?
-    competition.present? && competition.guests_per_registration_limit_enabled?
+    competition&.guests_per_registration_limit_enabled?
+  end
+
+  def guests_allowed?
+    competition&.guests_enabled?
+  end
+
+  def guests_unrestricted?
+    !competition&.guest_entry_status_restricted?
   end
 
   def rejected?
