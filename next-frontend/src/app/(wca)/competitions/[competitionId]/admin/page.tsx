@@ -31,7 +31,11 @@ export default async function CompetitionOverview({
         <p>You are administering this competition</p>
         <p>
           Go back to the public page{" "}
-          <Link href={`/competitions/${competitionInfo.id}`}>here</Link>
+          <Link
+            href={`/next-frontend/src/app/(wca)/competitions/${competitionInfo.id}`}
+          >
+            here
+          </Link>
         </p>
       </PermissionCheck>
     </Container>

@@ -1,11 +1,13 @@
 "use server";
 
 import React from "react";
-import { Button, HStack, Menu, Text } from "@chakra-ui/react";
+import { Button, HStack, IconButton, Menu, Text } from "@chakra-ui/react";
 import { getPayload } from "payload";
 import config from "@payload-config";
 import Link from "next/link";
 import { RefreshRouteOnSave } from "@/components/RefreshRouteOnSave";
+import { ColorModeButton } from "@/components/ui/color-mode";
+import { LuChevronDown, LuHouse } from "react-icons/lu";
 
 export default async function Navbar() {
   const payload = await getPayload({ config });
@@ -15,10 +17,15 @@ export default async function Navbar() {
     <HStack borderBottom="md" padding="3" justifyContent="space-between">
       <RefreshRouteOnSave />
       <HStack>
+        <IconButton asChild variant="ghost">
+          <Link href={"/"}>
+            <LuHouse />
+          </Link>
+        </IconButton>
         {navbar.entry.map((navbarEntry) => (
           <React.Fragment key={navbarEntry.id}>
             {navbarEntry.blockType === "LinkItem" && (
-              <Button asChild variant="outline" padding="2">
+              <Button asChild variant="outline">
                 <Link href={navbarEntry.targetLink}>
                   {navbarEntry.displayText}
                 </Link>
@@ -27,8 +34,9 @@ export default async function Navbar() {
             {navbarEntry.blockType === "NavDropdown" && (
               <Menu.Root>
                 <Menu.Trigger asChild>
-                  <Button variant="outline" padding="2">
+                  <Button variant="outline">
                     {navbarEntry.title}
+                    <LuChevronDown />
                   </Button>
                 </Menu.Trigger>
                 <Menu.Positioner>
@@ -87,7 +95,8 @@ export default async function Navbar() {
         )}
       </HStack>
       <HStack>
-        <Button asChild variant="outline" padding="2">
+        <ColorModeButton />
+        <Button asChild variant="outline">
           <Link href="/admin">Payload CMS</Link>
         </Button>
       </HStack>
