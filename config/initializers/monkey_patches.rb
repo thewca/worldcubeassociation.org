@@ -23,7 +23,7 @@ Rails.configuration.to_prepare do
         last_word_connector: ', and ',
       }
       if defined?(I18n)
-        i18n_connectors = I18n.translate(:'support.array', locale: options[:locale], default: {})
+        i18n_connectors = I18n.t(:'support.array', locale: options[:locale], default: {})
         default_connectors.merge!(i18n_connectors)
       end
       options = default_connectors.merge!(options)
@@ -87,7 +87,7 @@ Rails.configuration.to_prepare do
   Doorkeeper::OAuth::PreAuthorization.class_eval do
     old_validate_redirect_uri = instance_method(:validate_redirect_uri)
     define_method(:validate_redirect_uri) do
-      @client.application.dangerously_allow_any_redirect_uri ? true : old_validate_redirect_uri.bind(self).call
+      @client.application.dangerously_allow_any_redirect_uri ? true : old_validate_redirect_uri.bind_call(self)
     end
   end
 

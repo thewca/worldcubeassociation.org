@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.feature "Competitions list", js: true do
+RSpec.feature "Competitions list", :js do
   context "admin view" do
     before :each do
       sign_in FactoryBot.create(:admin)
@@ -36,7 +36,7 @@ RSpec.feature "Competitions list", js: true do
     it 'renders finished competition without results' do
       FactoryBot.create(:competition, :visible, starts: 2.days.ago, name: "Test Comp 2017")
       visit '/competitions?state=recent&display=admin'
-      expect(page).to have_http_status(200)
+      expect(page).to have_http_status(:ok)
       expect(page).to have_text "Test Comp 2017"
       tr = page.find("tr", text: "Test Comp 2017")
 

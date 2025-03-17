@@ -6,7 +6,7 @@ class StaticPagesController < ApplicationController
   before_action :current_user_can_admin_finances!, only: [:panel_wfc]
   private def current_user_can_admin_finances!
     unless current_user.can_admin_finances?
-      render json: {}, status: 401
+      render json: {}, status: :unauthorized
     end
   end
 

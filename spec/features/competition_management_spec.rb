@@ -39,9 +39,10 @@ end
 # The retry count for this specific set of tests is ludicrously high because our slow and deprecated
 # Apparition browser engine does not render React state changes properly.
 # We can remove this `retry` count when we migrated to a "proper" browser engine in tests.
-RSpec.feature "Competition management", js: true, retry: 10 do
+RSpec.feature "Competition management", :js, retry: 10 do
   context "when signed in as admin" do
     let!(:admin) { FactoryBot.create :admin }
+
     before :each do
       sign_in admin
     end
@@ -137,7 +138,7 @@ RSpec.feature "Competition management", js: true, retry: 10 do
       expect(page).to have_current_path(edit_competition_path("OldId2016"), wait: SLUGGISH_WAIT_TIME)
 
       expect(Competition.find("OldId2016")).not_to be_nil
-      expect(Competition.find_by_id("NewId With Spaces")).to be_nil
+      expect(Competition.find_by(id: "NewId With Spaces")).to be_nil
     end
 
     scenario "change competition id with validation error" do
@@ -199,7 +200,7 @@ RSpec.feature "Competition management", js: true, retry: 10 do
       expect(page).to have_text("Display message for free guest entry")
     end
 
-    scenario "change guest entry fee to non-zero", js: true do
+    scenario "change guest entry fee to non-zero", :js do
       competition = FactoryBot.create(:competition, :with_delegate, id: "OldId2016", guests_entry_fee_lowest_denomination: 666)
       visit edit_competition_path(competition)
 
@@ -235,7 +236,7 @@ RSpec.feature "Competition management", js: true, retry: 10 do
       sign_in delegate
     end
 
-    scenario 'create competition', js: true do
+    scenario 'create competition', :js do
       visit new_competition_path
 
       fill_in "Name", with: "New Comp 2015"
@@ -256,7 +257,7 @@ RSpec.feature "Competition management", js: true, retry: 10 do
       expect(new_competition.delegates).to eq [delegate]
     end
 
-    scenario "id and cellName changes for short comp name", js: true do
+    scenario "id and cellName changes for short comp name", :js do
       competition = FactoryBot.create(:competition, delegates: [delegate], id: "competitionnameshort2016", name: "competition name short 2016")
       visit edit_competition_path(competition)
       fill_in "Name", with: "New Id 2016"
@@ -276,10 +277,10 @@ RSpec.feature "Competition management", js: true, retry: 10 do
       visit edit_competition_path(comp)
       # patch :update, params: { id: comp, competition: { name: comp.name }, commit: "Confirm" }
       click_button "Confirm"
-      expect(comp.reload.confirmed?).to eq false
+      expect(comp.reload.confirmed?).to be false
     end
 
-    scenario 'clone competition', js: true do
+    scenario 'clone competition', :js do
       visit clone_competition_path(competition_to_clone)
 
       fill_in "Name", with: "New Comp 2015"
@@ -295,15 +296,15 @@ RSpec.feature "Competition management", js: true, retry: 10 do
       expect(new_competition.name).to eq "New Comp 2015"
       expect(new_competition.delegates).to eq [delegate, cloned_delegate]
       expect(new_competition.venue).to eq competition_to_clone.venue
-      expect(new_competition.showAtAll).to eq false
-      expect(new_competition.confirmed?).to eq false
+      expect(new_competition.showAtAll).to be false
+      expect(new_competition.confirmed?).to be false
       expect(new_competition.cityName).to eq 'Melbourne, Victoria'
     end
 
     feature "edit" do
       let(:comp_with_fours) { FactoryBot.create :competition, events: [fours], delegates: [delegate] }
 
-      scenario 'can edit registration open datetime', js: true do
+      scenario 'can edit registration open datetime', :js do
         visit edit_competition_path(comp_with_fours)
 
         expect(page).to have_field("registration-openingDateTime", type: 'text', disabled: false)

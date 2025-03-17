@@ -27,7 +27,7 @@ module Registrations
     end
 
     def self.user_qualification_data(user, date)
-      return [] unless user.person.present?
+      return [] if user.person.blank?
 
       # Compile singles
       best_singles_by_cutoff = user.person.best_singles_by(date)

@@ -61,6 +61,9 @@ class Registration < ApplicationRecord
     end
   end
 
+  validates :guests, numericality: { greater_than_or_equal_to: 0 }
+  validates :guests, numericality: { less_than_or_equal_to: :guest_limit, if: :check_guest_limit? }
+
   after_save :mark_registration_processing_as_done
 
   private def mark_registration_processing_as_done
@@ -107,34 +110,13 @@ class Registration < ApplicationRecord
     new_record? || cancelled? || !is_competing?
   end
 
-  def name
-    user.name
-  end
+  delegate :name, :gender, :country, :email, :dob, :wca_id, to: :user
 
-  def birthday
-    user.dob
-  end
-
-  def gender
-    user.gender
-  end
-
-  def country
-    user.country
-  end
-
-  def email
-    user.email
-  end
-
-  def wca_id
-    user.wca_id
-  end
-
+  alias birthday dob
   alias personId wca_id
 
   def person
-    Person.find_by_wca_id(personId)
+    Person.find_by(wca_id: personId)
   end
 
   def world_rank(event, type)
@@ -146,7 +128,7 @@ class Registration < ApplicationRecord
   end
 
   def entry_fee
-    sum_lowest_denomination = competition.base_entry_fee + competition_events.map(&:fee_lowest_denomination).sum
+    sum_lowest_denomination = competition.base_entry_fee + competition_events.sum(&:fee_lowest_denomination)
 
     Money.new(
       sum_lowest_denomination,
@@ -160,7 +142,7 @@ class Registration < ApplicationRecord
       # registration.includes(:registration_payments) that may exist.
       # It's fine to turn the associated records to an array and sum on ithere,
       # as it's usually just a couple of rows.
-      registration_payments.map(&:amount_lowest_denomination).sum,
+      registration_payments.sum(&:amount_lowest_denomination),
       competition.currency_code,
     )
   end
@@ -372,10 +354,10 @@ class Registration < ApplicationRecord
 
   validate :must_not_register_for_more_events_than_event_limit
   private def must_not_register_for_more_events_than_event_limit
-    if !competition.present? || !competition.events_per_registration_limit_enabled?
+    if competition.blank? || !competition.events_per_registration_limit_enabled?
       return
     end
-    if registration_competition_events.reject(&:marked_for_destruction?).length > competition.events_per_registration_limit
+    if registration_competition_events.count { |element| !element.marked_for_destruction? } > competition.events_per_registration_limit
       errors.add(:registration_competition_events, I18n.t('registrations.errors.exceeds_event_limit', count: competition.events_per_registration_limit))
     end
   end
@@ -392,7 +374,7 @@ class Registration < ApplicationRecord
 
   validate :forcing_competitors_to_add_comment, if: :is_competing?
   private def forcing_competitors_to_add_comment
-    if competition&.force_comment_in_registration.present? && !comments&.strip&.present?
+    if competition&.force_comment_in_registration.present? && comments&.strip.blank?
       errors.add(:user_id, I18n.t('registrations.errors.cannot_register_without_comment'))
     end
   end
@@ -401,7 +383,7 @@ class Registration < ApplicationRecord
   def events_to_associated_events(events)
     events.map do |event|
       competition_event = competition.competition_events.find_by!(event: event)
-      registration_competition_events.find_by_competition_event_id(competition_event.id) || registration_competition_events.build(competition_event: competition_event)
+      registration_competition_events.find_by(competition_event_id: competition_event.id) || registration_competition_events.build(competition_event: competition_event)
     end
   end
 

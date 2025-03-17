@@ -31,7 +31,7 @@ class Championship < ApplicationRecord
   end
 
   def country
-    Country.find_by_iso2(championship_type)
+    Country.find_by(iso2: championship_type)
   end
 
   def greater_china?

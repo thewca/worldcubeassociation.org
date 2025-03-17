@@ -887,8 +887,6 @@ it:
         person1_wca_id: ''
         #original_hash: da39a3e
         person2_wca_id: ''
-        #original_hash: da39a3e
-        person_wca_id: ''
       poll:
         #original_hash: da39a3e
         comment: ''
@@ -992,6 +990,9 @@ it:
         dob: Data di nascita corretta
         #original_hash: e214b8a
         document: Documento
+      contact_wrt:
+        #original_hash: 603a218
+        wca_id: WCA ID
     errors:
       dob_contact:
         #original_hash: 79ccfe2
@@ -1391,7 +1392,7 @@ it:
     teams_committees_councils:
       #original_hash: 0d62207
       title: 'Team, Commissioni e Consigli WCA'
-      #original_hash: d54d953
+      #original_hash: 4701b90
       description: >-
         I team e le commissioni WCA sono una parte integrante
         dell'organizzazione e svolgono i compiti quotidiani necessari al
@@ -1401,7 +1402,7 @@ it:
         delle funzioni del team e guidarne gli altri membri. I Consigli sono un
         tipo speciale di team poiché ricoprono un ruolo consultivo per il
         Consiglio Direttivo WCA e sono composti esclusivamente da membri della
-        community, non da personale WCA. Quando vengono aperti nuovi posti in
+        community, non da Volontari WCA. Quando vengono aperti nuovi posti in
         Team, Commissioni e Consigli, vengono pubblicate in home page le
         informazioni su come candidarsi.
       #original_hash: b37456c
@@ -1440,30 +1441,28 @@ it:
         #original_hash: 78949a7
         wapc: WCA Appeals Committee
       groups_description:
-        #original_hash: 5b1aade
+        #original_hash: d62001b
         wat: >-
-          Il WAT è responsabile dello sviluppo e del mantenimento di un archivio
-          storico della WCA. Documenta eventi chiave dello speedcubing e
-          traguardi speciali della WCA inserendoli in una grande 'linea del
-          tempo WCA' che preservi l'eredità dell'associazione per lo
-          speedcubing.
-        #original_hash: 50fd091
+          Il WCA Archive Team (WAT) è responsabile dello sviluppo e del
+          mantenimento di un archivio storico della WCA. Documenta eventi chiave
+          dello speedcubing e traguardi speciali della WCA inserendoli in una
+          grande 'linea del tempo WCA' che preservi l'eredità dell'associazione
+          per lo speedcubing.
+        #original_hash: 7803faf
         wct: >-
-          Il WCT ha il ruolo di supervisionare e supportare le comunicazioni tra
-          la WCA, la sua community e il grande pubblico. Le comunicazioni della
-          WCA devono perseguire i suoi Obiettivi e sostenere una generale
-          cultura positiva basata su amicizia, trasparenza, inclusività,
-          apertura e reattività.
-        #original_hash: 3e5570f
+          Il WCT supervisiona e promuove le comunicazioni tra la WCA, la sua
+          community e il grande pubblico. Le comunicazioni della WCA devono
+          perseguire i suoi Obiettivi e sostenere una generale cultura positiva
+          basata su amicizia, trasparenza, inclusività, apertura e reattività.
+        #original_hash: bd69012
         wcat: >-
-          Il WCAT ha il ruolo di approvare e annunciare le Competizioni WCA
-          proposte dai Delegati, ed assicurarsi che tali annunci aderiscano agli
-          standard qualitativi della WCA. Questo team è inoltre responsabile del
-          mantenimento di adeguati protocolli per la presentazione di
-          competizioni in documenti come la Politica sui Requisiti delle
-          Competizioni WCA (WCA Competition Requirements Policy). Il WCAT NON È
-          responsabile dell'organizzazione e dello svolgimento delle singole
-          competizioni.
+          Il WCAT approva e annuncia le Competizioni WCA proposte dai Delegati,
+          ed assicurarsi che tali annunci aderiscano agli standard qualitativi
+          della WCA. Questo team è inoltre responsabile del mantenimento di
+          adeguati protocolli per la presentazione di competizioni in documenti
+          come la Politica sui Requisiti delle Competizioni WCA (WCA Competition
+          Requirements Policy). Il WCAT NON È responsabile dell'organizzazione e
+          dello svolgimento delle singole competizioni.
         #original_hash: 5007698
         wic: >-
           Il WIC conduce indagini indipendenti riguardo membri della community
@@ -1471,69 +1470,68 @@ it:
           online ufficiali WCA. Tali incidenti costituiscono presunte violazioni
           dello Spirito, del Codice di Condotta, del Codice Etico e/o dei
           Regolamenti della WCA.
-        #original_hash: 889dd90
+        #original_hash: be491ec
         weat: >-
-          Questo team svolge i compiti amministrativi per conto del Consiglio
-          Direttivo WCA.
-        #original_hash: 43e4e33
+          Il WCA Executive Assistants Team (WEAT) svolge i compiti
+          amministrativi per conto del Consiglio Direttivo WCA.
+        #original_hash: fc67562
         wfc: >-
-          Questa commissione è responsabile della gestione generale delle
-          finanze della WCA, compresi la stesura del bilancio, la stesura di
-          relazioni, l'analisi, la contabilità e la compilazione delle
+          Il WCA Financial Committee (WFC) si occupa della gestione generale
+          delle finanze della WCA, compresi la stesura del bilancio, la stesura
+          di relazioni, l'analisi, la contabilità e la compilazione delle
           dichiarazioni fiscali. Gestisce inoltre il Sistema delle Quote
           Associative, principale fonte di reddito della WCA, insieme a vari
           programmi di finanziamento che forniscono supporto alle comunità
           locali in diverse fasi di sviluppo, tra cui il finanziamento dei
           viaggi e delle attrezzature e il sostegno alle organizzazioni
           regionali.
-        #original_hash: f2a0140
+        #original_hash: 88a00fa
         wmt: >-
-          Questo team è responsabile dello sviluppo e della gestione del marchio
-          WCA, della ricerca di sponsorizzazioni, del supporto alla
-          distribuzione della strumentazione per le competizioni WCA e della
-          commercializzazione del merchandising WCA.
-        #original_hash: e0dbf86
+          Il WCA Marketing Team (WMT) gestisce il marchio WCA attraverso la
+          ricerca di sponsorizzazioni, il supporto alla distribuzione della
+          strumentazione per le competizioni WCA e la commercializzazione del
+          merchandising WCA.
+        #original_hash: fcaa701
         wmct: >-
-          Il WCA Major Championships Team supervisiona il coordinamento e
+          Il WCA Major Championships Team (WMCT) supervisiona il coordinamento e
           l'avanzamento dei Campionati Continentali e Mondiali WCA tramite lo
           sviluppo di linee guida, gestendo la selezione della città ospitante,
           supportando i team organizzativi e garantendo esperienze di campionato
           all'altezza.
-        #original_hash: 0171b3b
+        #original_hash: 010e628
         wqac: >-
-          Questa commissione ha il compito di sostenere e promuovere il
+          Il WCA Quality Assurance Committee (WQAC) sostiene e promuove il
           miglioramento continuo della qualità all'interno della WCA, nonché
           l'applicazione a livello mondiale degli standard di qualità, per
-          garantire una qualità elevata e costante dei processi, del personale
-          WCA, delle organizzazioni regionali, degli organizzatori di gare e del
-          personale di gara.
-        #original_hash: a1260bb
+          garantire una qualità elevata e costante dei processi, dei Volontari
+          WCA, delle organizzazioni regionali, degli organizzatori di gare e dei
+          volontari di gara.
+        #original_hash: 355babe
         wrc: >-
-          Il WRC si occupa di tutte le questioni legate all'applicazione, al
-          miglioramento e allo sviluppo del Regolamento WCA. Supporta i Delegati
-          WCA in tutte le questioni procedurali che si verificano durante le
-          competizioni e prende decisioni su incidenti irrisolti o non trattati.
-        #original_hash: 7bc588b
+          Il WCA Regulations Committee (WRC) si occupa di tutte le questioni
+          legate all'applicazione, al miglioramento e allo sviluppo del
+          Regolamento WCA. Supporta i Delegati WCA in tutte le questioni
+          procedurali che si verificano durante le competizioni e prende
+          decisioni su incidenti irrisolti o non trattati.
+        #original_hash: 7ca3e6f
         wrt: >-
-          Il WRT è responsabile della gestione di tutti i dati presenti nel
-          database WCA, soprattutto i risultati delle competizioni e i dati
-          personali.
-        #original_hash: ec961e4
+          Il WCA Results Team (WRT) gestisce tutti i dati presenti nel database
+          WCA, compresi i risultati delle competizioni e i dati personali.
+        #original_hash: f905744
         wst: >-
-          Questo team è responsabile della gestione dei software della WCA
-          (sito, tool per gli scramble, cartelle di lavoro, strumenti di
-          amministrazione).
-        #original_hash: 8f888d6
+          Il WCA Software Team (WST) gestisce i software della WCA (sito, tool
+          per gli scramble, cartelle di lavoro, strumenti di amministrazione).
+        #original_hash: 638652c
         wsot: >-
-          Questo team ha il compito di supervisionare e sostenere il
+          Il WCA Sports Organization Team (WSOT) supervisiona e promuove il
           riconoscimento della WCA come organizzazione sportiva internazionale.
-        #original_hash: 9f45bfa
+        #original_hash: 30d6048
         wapc: >-
-          Il WCA Appeals Committee (WAC) ha il compito di revisionare e
-          risolvere i ricorsi per decisioni prese da altro personale WCA. Il WAC
-          offre un processo di revisione indipendente ed imparziale per
-          assicurare che le decisioni prese siano giuste e ragionevoli e
-          rispettino le politiche e il regolamento WCA.
+          Il WCA Appeals Committee (WAC) revisiona e risolve i ricorsi per
+          decisioni prese da altri Volontari WCA. Il WAC offre un processo di
+          revisione indipendente ed imparziale per assicurare che le decisioni
+          prese siano giuste e ragionevoli e rispettino le politiche e il
+          regolamento WCA.
     contacts:
       #original_hash: 4ef2aad
       title: Modulo di contatto WCA
@@ -2064,8 +2062,8 @@ it:
         #original_hash: 1a18831
         '7': L'avatar non deve contenere contenuti offensivi (es. gesti offensivi).
       staff_avatar_guidelines:
-        #original_hash: 5d5a47a
-        title: 'Ulteriori linee guida per membri dello Staff e Delegati in prova:'
+        #original_hash: f14a1fd
+        title: 'Ulteriori linee guida per Volontari e Delegati in prova:'
         paragraphs:
           #original_hash: ff6d2e8
           '1': >-
@@ -2345,6 +2343,17 @@ it:
           multiple_registrations: Ti sei iscritto due o più volte
           #original_hash: 70b1e2c
           competition_canceled: La competizione è stata cancellata
+      formerly_banned:
+        #original_hash: f2c70a9
+        ban_count: >-
+          Il partecipante è stato sospeso %{ban_count} volta/e, negli ambiti e
+          per le ragioni che seguono:
+        #original_hash: 67e08fe
+        scope_and_reason: 'Ambito: %{ban_scope}, Motivazioni: %{ban_reason}'
+        #original_hash: 2a246da
+        wic_message: >-
+          Se hai domande riguardo lo storico disciplinare del partecipante,
+          contatta il WIC rispondendo a questa email.
     list:
       #original_hash: 8b7631c
       title: 'Iscrizioni per la competizione %{comp}'
@@ -2359,12 +2368,6 @@ it:
       export_csv: Esporta in CSV
       #original_hash: 84add5b
       email: Email
-      #original_hash: 7b2c7f1
-      approve: Approva
-      #original_hash: 92d40dc
-      waiting_list: Lista d'attesa
-      #original_hash: 06f7d1a
-      approved_registrations: Iscrizioni approvate
       #original_hash: e86b1e1
       non_competing: Iscrizioni non-partecipanti
       #original_hash: ac5d958
@@ -2393,8 +2396,6 @@ it:
     sign_in: Accedi
     #original_hash: 5d45a00
     profile: profilo
-    #original_hash: 801b3e9
-    panel_title: Dettagli iscrizione
     #original_hash: c0063c3
     register: Registrati!
     #original_hash: f484f15
@@ -2427,8 +2428,6 @@ it:
     please_sign_in_html: >-
       %{sign_in} per iscriverti al %{comp}. Se non hai ancora un account WCA,
       puoi crearne uno %{here}.
-    #original_hash: 89b4e7f
-    greeting: 'Ciao, %{name}!'
     #original_hash: 322f646
     please_fix_profile_html: >-
       Per poterti iscrivere al %{comp}, devi prima correggere i seguenti
@@ -2444,28 +2443,6 @@ it:
       potrebbe essere stato raggiunto. Se ti iscrivi, la tua iscrizione sarà
       messa in lista d'attesa e non verrà approvata finché non si libererà un
       posto.
-    #original_hash: 855ca9c
-    can_register: 'Puoi iscriverti per il %{comp} qui sotto.'
-    #original_hash: 4167ed7
-    check_registration_information: >-
-      Controlla le informazioni sull'iscrizione per verificare se è necessario
-      eseguire ulteriori passaggi, per esempio il pagamento della tassa
-      d'iscrizione.
-    #original_hash: 88ac7c3
-    have_registered: >-
-      Ti sei iscritto al %{comp}. Di seguito puoi vedere le informazioni della
-      tua iscrizione.
-    #original_hash: 3c9141f
-    contact_organizer: Contatta l'organizzatore se desideri effettuare modifiche.
-    #original_hash: 59354fd
-    waiting_list: >-
-      La tua iscrizione è in attesa. Per l'approvazione potrebbero esserti
-      richiesti ulteriori passaggi, come il pagamento della tassa d'iscrizione.
-      Controlla il sito della competizione per verificare la presenza di
-      eventuali passaggi aggiuntivi e in caso completali, altrimenti la tua
-      iscrizione non sarà accettata.
-    #original_hash: 58b1a3c
-    accepted: La tua iscrizione è stata accettata!
     #original_hash: bcd7d70
     entry_fees_fully_paid: 'Hai pagato l''intera tassa d''iscrizione di %{paid}.'
     #original_hash: 2e5d1b9
@@ -2484,8 +2461,6 @@ it:
         #original_hash: 1cc5991
         refund_amount: Importo Rimborsato
     payment_form:
-      #original_hash: 4de825f
-      title: Tasse d'iscrizione
       #original_hash: 8897f02
       payment_successful: >-
         Il tuo pagamento è stato effettuato con successo, e la tua iscrizione
@@ -3211,7 +3186,8 @@ it:
       wcat: WCA Competition Announcement Team
       #original_hash: f957dcb
       supports_md_html: >-
-        Supporta i <a href='https://daringfireball.net/projects/markdown/basics'
+        Supporta il <a
+        href='https://daringfireball.net/projects/markdown/basics'
         target='_blank'>Markdown</a>
       #original_hash: 05c66b5
       series_save_first_hint: >-
@@ -3330,6 +3306,10 @@ it:
           count: Numero massimo di partecipanti
           #original_hash: 4a8b6f1
           reason: Motivazione per il limite partecipanti
+          #original_hash: e9e5b84
+          auto_close_threshold: Soglia di auto-chiusura
+          #original_hash: b1d5af4
+          newcomer_month_reserved_spots: Numero di posti da riservare per gli esordienti
         staff:
           #original_hash: 2e3ed8b
           staff_delegate_ids: Delegati WCA
@@ -3378,8 +3358,8 @@ it:
           event_change_deadline_date: Data limite dei partecipanti per modificare i propri eventi
           #original_hash: 2529d04
           allow_on_the_spot: Registrazioni in loco
-          #original_hash: 3d47eca
-          allow_self_delete_after_acceptance: Cancellazioni iscrizioni
+          #original_hash: b6faf84
+          competitor_can_cancel: Quando i partecipanti possono cancellare la propria iscrizione
           #original_hash: 7e53b96
           allow_self_edits: Modifiche alle iscrizioni
           #original_hash: 3c23a67
@@ -3528,6 +3508,16 @@ it:
           reason: >-
             Quale è la motivazione del limite massimo di partecipanti?
             Perfavore, scrivi la motivazione in inglese!
+          #original_hash: 045d250
+          auto_close_threshold: >-
+            Le iscrizioni chiuderanno automaticamente quando viene raggiunto
+            questo numero di iscrizioni pagate. Lascia vuoto per disabilitare,
+            ignora se non stai utilizzando il sistema di pagamento integrato.
+          #original_hash: e1cf4fc
+          newcomer_month_reserved_spots: >-
+            Consentito soltanto durante il Mese degli Esordienti - i posti
+            riservati non possono essere superiori alla metà del limite
+            partecipanti.
         staff:
           #original_hash: b4d020f
           staff_delegate_ids: Delegati WCA della competizione.
@@ -3616,7 +3606,7 @@ it:
           #original_hash: da39a3e
           allow_on_the_spot: ''
           #original_hash: da39a3e
-          allow_self_delete_after_acceptance: ''
+          competitor_can_cancel: ''
           #original_hash: da39a3e
           allow_self_edits: ''
           #original_hash: da39a3e
@@ -3695,7 +3685,7 @@ it:
         competitor_limit:
           enabled:
             #original_hash: d9c05cc
-            'true': Voglio specificare un limite di partecipanti
+            'true': Desidero specificare un limite di partecipanti
             #original_hash: 53397ec
             'false': NON desidero specificare un limite di partecipanti
         registration:
@@ -3713,15 +3703,13 @@ it:
             'false': >-
               I partecipanti NON possono apportare modifiche alla propria
               iscrizione una volta che questa è stata accettata
-          allow_self_delete_after_acceptance:
-            #original_hash: 5c2e8c1
-            'true': >-
-              I partecipanti possono cancellare la propria iscrizione anche dopo
-              che questa è stata accettata
-            #original_hash: 3b77604
-            'false': >-
-              I partecipanti NON possono cancellare la propria iscrizione una
-              volta che questa è stata accettata
+          competitor_can_cancel:
+            #original_hash: a91bcce
+            always: Sempre
+            #original_hash: b64ca70
+            not_accepted: Finché sono aperte
+            #original_hash: 4435d55
+            unpaid: Finché non pagano
           guest_entry_status:
             #original_hash: 7e54323
             unclear: >-
@@ -3763,7 +3751,7 @@ it:
         is_accepted: >-
           Prenota il tuo viaggio e fai le valigie: hai un posto alla
           competizione!
-        #original_hash: e29a4d3
+        #original_hash: 89448a8
         is_cancelled: >-
           La tua iscrizione è stata cancellata e non sei attualmente un
           partecipante, ma puoi iscriverti nuovamente.
@@ -3785,22 +3773,34 @@ it:
           zero: Nessun posto rimanente
           one: '%{count} posto rimanente'
           other: '%{count} posti rimanenti'
+        pending:
+          #original_hash: 4210670
+          title: Iscrizioni in attesa
+          #original_hash: 5e16c6d
+          information: >-
+            'In attesa' dovrebbe essere utilizzato soltanto per le iscrizioni
+            incomplete (es. non pagate). Usa la lista d'attesa se la
+            competizione è troppo piena per accettare nuovi partecipanti.
+        waitlist:
+          #original_hash: 3907ca4
+          title: Iscrizioni in lista d'attesa
+          #original_hash: a6c86ec
+          skipped_warning: >-
+            Hai saltato %{count} iscrizione/i in lista d'attesa. Sei sicuro di
+            voler approvare le altre iscrizioni?
+        approved:
+          #original_hash: a59612c
+          title: Registrazioni approvate
         cancelled:
-          #original_hash: e9c5a55
+          #original_hash: bd69c74
           title: Iscrizioni cancellate
           #original_hash: bb5b570
           information: I partecipanti cancellati possono iscriversi di nuovo.
         rejected:
-          #original_hash: 199b7c5
+          #original_hash: 9cef5ae
           title: Iscrizioni rifiutate
           #original_hash: 3fd2e0c
           information: I partecipanti respinti non possono reiscriversi.
-        pending:
-          #original_hash: 5e16c6d
-          information: >-
-            'In sospeso' dovrebbe essere utilizzato soltanto per le iscrizioni
-            incomplete (es. non pagate). Usa la lista d'attesa se la
-            competizione è troppo piena per accettare nuovi partecipanti.
         payment:
           #original_hash: d6fbc7a
           refunded_status: Rimborsati
@@ -3859,14 +3859,21 @@ it:
         email_copy: Copia email
         #original_hash: b83b663
         email_message: Copiato negli appunti. Ricorda di scrivere i destinatari in Ccn!
-        #original_hash: 71327f1
-        move_pending: Sposta in In attesa
-        #original_hash: 9144dd6
-        move_waiting: Sposta in Lista d'attesa
-        #original_hash: 284b24f
-        cancel: Cancella iscrizione
-        #original_hash: df40450
-        reject: Rifiuta iscrizione
+        #original_hash: beedd53
+        move_to:
+          zero: Sposta in
+          one: 'Sposta %{count} in'
+          other: 'Sposta %{count} in'
+        #original_hash: 96f608c
+        pending: In attesa
+        #original_hash: 92d40dc
+        waitlist: Lista d'attesa
+        #original_hash: 41b81eb
+        approved: Approvata
+        #original_hash: a1bf92e
+        cancelled: Cancellata
+        #original_hash: 27eeb7a
+        rejected: Rifiutata
         #original_hash: 43dc853
         amount: Quantità
         #original_hash: 67b3c7d
@@ -3880,6 +3887,11 @@ it:
         will_open_countdown: >-
           Le iscrizioni apriranno tra %{minutes} minuti e %{seconds} secondi.
           Questa pagina si aggiornerà automaticamente all'apertura delle
+          iscrizioni.
+        #original_hash: 604d27a
+        will_close_countdown: >-
+          Le iscrizioni chiuderanno tra %{minutes} minuti e %{seconds} secondi.
+          Questa pagina si aggiornerà automaticamente alla chiusura delle
           iscrizioni.
         panel:
           approval:
@@ -4013,13 +4025,38 @@ it:
         '-4011': Puoi accettare soltanto la prima persona in lista d'attesa
         #original_hash: 8d089d6
         '-4012': Non sei qualificato per competere negli eventi selezionati.
+        #original_hash: fb1d742
+        '-4013': >-
+          Non è possibile accettare veterani se sono rimasti solo posti
+          riservati agli esordienti.
         #original_hash: a244fde
         '-4014': Sei già registrato per questa competizione.
+        #original_hash: 369db78
+        '-4015': >-
+          Ti preghiamo di inserire un numero ragionevole di ospiti, oppure
+          contatta gli organizzatori se intendi portare un gruppo di ospiti
+          eccezionalmente grande.
         #original_hash: 0df821f
         '-6001': Il pagamento WCA non è abilitato per questa competizione
         #original_hash: 092da51
         '-6002': Devi portare a termine l'iscrizione prima di poter pagare
     errors:
+      #original_hash: 6d11b4e
+      auto_close_exceed_paid: >-
+        La soglia di auto-chiusura deve essere maggiore dell'attuale numero di
+        iscrizioni pagate.
+      #original_hash: abee516
+      auto_close_positive_nonzero: La soglia di auto-chiusura deve essere maggiore di 0
+      #original_hash: b81ee7e
+      must_exceed_competitor_limit: La soglia di auto-chiusura deve essere maggiore del limite partecipanti
+      #original_hash: 148c1d4
+      use_wca_registration: La competizione deve utilizzare le iscrizioni WCA
+      #original_hash: 2c41c57
+      newcomer_month_reservations_percentage: Non è possibile riservare agli esordienti più del 50% dei posti
+      #original_hash: 58d244e
+      newcomer_month_reservations_available: >-
+        Il numero di posti riservati desiderati è superiore al numero di posti
+        riservabili
       #original_hash: f7ef9f6
       invalid_name_message: >-
         deve finire con l'anno e deve contenere solo caratteri alfanumerici,
@@ -5146,18 +5183,18 @@ it:
     title: Guide WCA per l'apprendimento
     #original_hash: 081d65d
     description: >-
-      Il WQAC ha pubblicato per la community vari documenti che puoi scaricare
+      Il WQAC ha pubblicato per la community vari documenti, che puoi scaricare
       qui sotto.
     #original_hash: d0a3812
-    competitor_tutorial: Tutorial per partecipanti
+    competitor_tutorial: Tutorial per i partecipanti
     #original_hash: 9561bfc
-    judge_tutorial: Tutorial per i nuovi giudici
+    judge_tutorial: Tutorial per i giudici
     #original_hash: 12e47a3
     competition_templates: Template per competizioni
     #original_hash: 5ca0558
-    certificates: Template per attestati WCT
+    certificates: Template del WCT per gli attestati
     #original_hash: f580987
-    orga_guidelines: Linee guida per organizzatori
+    orga_guidelines: Linee guida per gli organizzatori
   delegates_page:
     #original_hash: d8fd3e4
     title: Delegati WCA
@@ -5220,8 +5257,8 @@ it:
           Mozioni WCA
         #original_hash: 0c3576b
         '4': Rispettare tutte le regole presenti nel Regolamento WCA
-        #original_hash: 1a9e6c5
-        '5': Accettare e rispettare le decisioni dello Staff WCA
+        #original_hash: 88cf548
+        '5': Accettare e rispettare le decisioni dei Volontari WCA
         #original_hash: d4ae7c1
         '6': >-
           Conservare presso la WCA una copia aggiornata del suo statuto e, se
@@ -5280,11 +5317,12 @@ it:
     before:
       #original_hash: 9850344
       title: Prima della competizione
-      #original_hash: 576e2f4
+      #original_hash: 6f64073
       desc: >-
         La gestione delle iscrizioni dei partecipanti può essere effettuata
-        direttamente sul sito WCA. Poiché gestire manualmente gruppi e staff può
-        essere un lavoro molto lungo, puoi aiutarti con uno dei tool qui sotto.
+        direttamente sul sito WCA. Poiché gestire manualmente gruppi e volontari
+        può essere un lavoro molto lungo, puoi aiutarti con uno dei tool qui
+        sotto.
     during:
       #original_hash: 9934200
       title: Durante la competizione
@@ -5594,16 +5632,16 @@ it:
     recommended:
       #original_hash: 6b843f3
       title: Documenti raccomandati
-      #original_hash: bfbd4bb
-      staff: Creazione dello staff
+      #original_hash: 6e4fb29
+      staff: Assegnare i ruoli
       #original_hash: 4735583
       emails: Email
       #original_hash: 8e7ca09
       running-systems: Gestione di runner e giudici
       #original_hash: 2b31c89
       new-competitors: Accogliere partecipanti alla prima gara
-      #original_hash: 3408054
-      enhancing-experience: Migliorare l'esperienza per partecipanti e staff
+      #original_hash: 00c4f78
+      enhancing-experience: Migliorare l'esperienza per partecipanti e volontari
       #original_hash: 2345aaa
       reflection: Riflessioni degli organizzatori
   organizer_guidelines:
@@ -5637,12 +5675,13 @@ it:
       #original_hash: f16a06f
       content: >-
         Le spese previste differiscono da paese a paese e sono determinate da
-        diversi fattori, fra cui la dimensione della sede e il costo dei
+        diversi fattori, tra cui la dimensione della sede e il costo dei
         materiali. È possibile coprire tutte le spese grazie alle tasse di
         iscrizione; anche se, per tenerle il più basso possibile, è consigliato
-        cercare degli sponsor. Anche se i Delegati WCA sono volontari e non
-        ricevono alcun compenso per il loro lavoro, gli organizzatori dovrebbero
-        prendere in considerazione un rimborso spese per ripagarli del viaggio.
+        cercare patrocini e sponsor. Anche se i Delegati WCA sono volontari e
+        non ricevono alcun compenso per il loro lavoro, gli organizzatori
+        dovrebbero prendere in considerazione un rimborso spese per il loro
+        viaggio.
     paragraph3:
       #original_hash: 00d3bf8
       title: Termine massimo per l'annuncio di una competizione
@@ -5835,7 +5874,7 @@ it:
       #original_hash: 32c7cc0
       title: Modifica media
       #original_hash: 6f161d0
-      validate_media_page: Mostra tutti  media in attesa
+      validate_media_page: Mostra tutti i media in attesa
     index:
       #original_hash: 0c77aee
       title: Media
@@ -5993,8 +6032,8 @@ it:
         ufficiale dei Campionati Mondiali e design ispirati ai record mondiali.
       #original_hash: 2865e1d
       '2': >-
-        Acquistare merchandising WCA tramite il nostro sito è uno dei migliori
-        modi per supportare la WCA, un'organizzazione no-profit gestita da
+        Acquistare merchandising WCA tramite il nostro sito è uno dei modi
+        migliori per supportare la WCA, un'organizzazione no-profit gestita da
         volontari. Investiamo l'intero ricavato dal merchandising per dare
         ulteriore sostegno economico a Campionati, rinnovo delle attrezzature e
         altre attività inerenti alla WCA.
@@ -6077,9 +6116,9 @@ it:
         riguardo per il WCA Results Team.
       #original_hash: da398a2
       empty_gender_warning: >-
-        Il sesso per il nuovo partecipante %{name} è vuoto. Valori validi per il
-        sesso sono 'Femmina', 'Maschio', e 'Altro'. Lascia un commento a
-        riguardo per il WCA Results Team.
+        Il sesso per l'esordiente %{name} è vuoto. Valori validi per il sesso
+        sono 'Femmina', 'Maschio', e 'Altro'. Lascia un commento a riguardo per
+        il WCA Results Team.
       #original_hash: 050c7e2
       non_matching_name_warning: >-
         Il nome '%{name}' fornito per (%{wca_id}) non coincide con il dato
@@ -6092,9 +6131,9 @@ it:
         riguardo per il WCA Results Team.
       #original_hash: e15e700
       multiple_newcomers_with_same_name_warning: >-
-        Ci sono più nuovi partecipanti con lo stesso identico nome: %{name}.
-        Assicurati che tutti i risultati per questi partecipanti siano corretti,
-        e che tutti i risultati siano correttamente contraddistinti dall'ID
+        Ci sono più esordienti con lo stesso identico nome: %{name}. Assicurati
+        che tutti i risultati per questi partecipanti siano corretti, e che
+        tutti i risultati siano correttamente contraddistinti dall'ID
         corrispondente.
       #original_hash: 7732038
       wrong_parenthesis_type_error: >-

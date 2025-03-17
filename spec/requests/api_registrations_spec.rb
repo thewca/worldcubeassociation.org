@@ -19,7 +19,7 @@ RSpec.describe 'API Registrations' do
         # post api_v1_registrations_register_path, params: registration_request, headers: headers
         post api_v1_registrations_register_path, params: registration_request, headers: headers
         expect(response.body).to eq({ status: "accepted", message: "Started Registration Process" }.to_json)
-        expect(response.status).to eq(202)
+        expect(response).to have_http_status(:accepted)
       end
 
       it 'enqueues an AddRegistrationJob' do
@@ -76,7 +76,7 @@ RSpec.describe 'API Registrations' do
         post api_v1_registrations_register_path, params: registration_request, headers: headers
         perform_enqueued_jobs
 
-        expect(response.status).to eq(202)
+        expect(response).to have_http_status(:accepted)
 
         registration = Registration.find_by(user_id: user_with_results.id)
         expect(registration).to be_present
@@ -93,7 +93,7 @@ RSpec.describe 'API Registrations' do
         post api_v1_registrations_register_path, params: registration_request, headers: headers
         perform_enqueued_jobs
 
-        expect(response.status).to eq(422)
+        expect(response).to have_http_status(:unprocessable_content)
 
         error_json = {
           error: Registrations::ErrorCodes::QUALIFICATION_NOT_MET,
@@ -125,7 +125,7 @@ RSpec.describe 'API Registrations' do
 
       patch api_v1_registrations_register_path, params: update_request, headers: headers
 
-      expect(response.status).to eq(200)
+      expect(response).to have_http_status(:ok)
 
       registration = Registration.find_by(user_id: user.id)
 
@@ -154,7 +154,7 @@ RSpec.describe 'API Registrations' do
 
       patch api_v1_registrations_register_path, params: update_request, headers: headers
 
-      expect(response.status).to eq(200)
+      expect(response).to have_http_status(:ok)
 
       registration = Registration.find_by(user_id: user.id, competition_id: favourites_reg.competition.id)
       expect(registration.event_ids.sort).to eq(new_event_ids.sort)
@@ -174,7 +174,7 @@ RSpec.describe 'API Registrations' do
       patch api_v1_registrations_register_path, params: update_request, headers: headers
       perform_enqueued_jobs
 
-      expect(response.status).to eq(200)
+      expect(response).to have_http_status(:ok)
 
       email = ActionMailer::Base.deliveries.last
       expect(email.subject).to eq(I18n.t('registrations.mailer.new.mail_subject', comp_name: registration.competition.name))
@@ -195,7 +195,7 @@ RSpec.describe 'API Registrations' do
       patch api_v1_registrations_register_path, params: update_request, headers: headers
       perform_enqueued_jobs
 
-      expect(response.status).to eq(200)
+      expect(response).to have_http_status(:ok)
 
       email = ActionMailer::Base.deliveries.last
       expect(email.subject).to eq(I18n.t('registrations.mailer.new.mail_subject', comp_name: registration.competition.name))
@@ -224,7 +224,7 @@ RSpec.describe 'API Registrations' do
       headers = { 'Authorization' => bulk_update_request['jwt_token'] }
       patch api_v1_registrations_bulk_update_path, params: bulk_update_request, headers: headers
 
-      expect(response.status).to eq(200)
+      expect(response).to have_http_status(:ok)
 
       registration = Registration.find_by(user_id: registration1.user_id)
 
@@ -269,9 +269,9 @@ RSpec.describe 'API Registrations' do
       headers = { 'Authorization' => bulk_update_request['jwt_token'] }
       patch api_v1_registrations_bulk_update_path, params: bulk_update_request, headers: headers
 
-      expect(response.status).to eq(200)
+      expect(response).to have_http_status(:ok)
 
-      body = JSON.parse(response.body)
+      body = response.parsed_body
       expect(body['updated_registrations'].count).to eq(3)
 
       expect(Registration.find_by(user_id: update_request1['user_id']).competing_status).to eq('cancelled')
@@ -312,7 +312,7 @@ RSpec.describe 'API Registrations' do
       headers = { 'Authorization' => bulk_update_request['jwt_token'] }
       patch api_v1_registrations_bulk_update_path, params: bulk_update_request, headers: headers
 
-      expect(response.status).to eq(422)
+      expect(response).to have_http_status(:unprocessable_content)
 
       expect(Registration.find_by(user_id: update_request1['user_id']).competing_status).to eq('pending')
       expect(Registration.find_by(user_id: update_request2['user_id']).guests).to eq(10)
@@ -331,7 +331,7 @@ RSpec.describe 'API Registrations' do
       headers = { 'Authorization' => bulk_update_request['jwt_token'] }
       patch api_v1_registrations_bulk_update_path, params: bulk_update_request, headers: headers
 
-      expect(response.status).to eq(400)
+      expect(response).to have_http_status(:bad_request)
     end
 
     it 'accepts competitors from the waiting list' do
@@ -374,7 +374,7 @@ RSpec.describe 'API Registrations' do
       headers = { 'Authorization' => bulk_update_request['jwt_token'] }
       patch api_v1_registrations_bulk_update_path, params: bulk_update_request, headers: headers
 
-      expect(response.status).to eq(200)
+      expect(response).to have_http_status(:ok)
 
       expect(Registration.find_by(user_id: update_request1['user_id']).competing_status).to eq('accepted')
       expect(Registration.find_by(user_id: update_request2['user_id']).competing_status).to eq('accepted')
@@ -403,17 +403,17 @@ RSpec.describe 'API Registrations' do
       headers = { 'Authorization' => fetch_jwt_token(competition.organizers.first.id) }
       get api_v1_registrations_list_admin_path(competition_id: competition.id), headers: headers
 
-      expect(response.status).to eq(200)
+      expect(response).to have_http_status(:ok)
 
-      body = JSON.parse(response.body)
+      body = response.parsed_body
       expect(body.count).to eq(6)
 
       user_ids = [user1.id, user2.id, user3.id, user4.id, user5.id, user6.id]
       body.each do |data|
-        expect(user_ids.include?(data['user_id'])).to eq(true)
+        expect(user_ids.include?(data['user_id'])).to be(true)
         if data['user_id'] == registration1[:user_id] || data['user_id'] == registration2[:user_id] ||data['user_id'] == registration3[:user_id]
           expect(data.dig('competing', 'registration_status')).to eq('accepted')
-          expect(data.dig('competing', 'waiting_list_position')).to eq(nil)
+          expect(data.dig('competing', 'waiting_list_position')).to be(nil)
         elsif data['user_id'] == registration4[:user_id]
           expect(data.dig('competing', 'waiting_list_position')).to eq(1)
         elsif data['user_id'] == registration5[:user_id]
@@ -433,8 +433,8 @@ RSpec.describe 'API Registrations' do
       headers = { 'Authorization' => fetch_jwt_token(reg.user_id) }
       get api_v1_registrations_payment_ticket_path(competition_id: closed_comp.id), headers: headers
 
-      body = JSON.parse(response.body)
-      expect(response.status).to eq(403)
+      body = response.parsed_body
+      expect(response).to have_http_status(:forbidden)
       expect(body).to eq({ error: Registrations::ErrorCodes::REGISTRATION_CLOSED }.with_indifferent_access)
     end
   end

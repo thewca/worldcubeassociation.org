@@ -142,6 +142,8 @@ class TicketsController < ApplicationController
     user, person = user_and_person_from_params
     return if check_errors(user, person)
 
+    person_private_attributes = person&.private_attributes_for_user(current_user)
+
     user_anonymization_checks, user_message_args = user&.anonymization_checks_with_message_args
     person_anonymization_checks, person_message_args = person&.anonymization_checks_with_message_args
 
@@ -154,7 +156,7 @@ class TicketsController < ApplicationController
 
     render json: {
       user: user,
-      person: person,
+      person: person&.as_json(private_attributes: person_private_attributes),
       action_items: action_items,
       non_action_items: non_action_items,
       message_args: message_args,

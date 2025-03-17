@@ -173,12 +173,12 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
       status: "Successfully saved WCIF",
     }
   rescue ActiveRecord::RecordInvalid => e
-    render status: 400, json: {
+    render status: :bad_request, json: {
       status: "Error while saving WCIF",
       error: e,
     }
   rescue JSON::Schema::ValidationError => e
-    render status: 400, json: {
+    render status: :bad_request, json: {
       status: "Error while saving WCIF",
       error: e.message,
     }
@@ -186,7 +186,7 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
 
   private def competition_from_params(associations: {})
     id = params[:competition_id] || params[:id]
-    competition = Competition.includes(associations).find_by_id(id)
+    competition = Competition.includes(associations).find_by(id: id)
 
     # If this competition exists, but is not publicly visible, then only show it
     # to the user if they are able to manage the competition.

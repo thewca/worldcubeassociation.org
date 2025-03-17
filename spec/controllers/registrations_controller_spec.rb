@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe RegistrationsController, clean_db_with_truncation: true do
+RSpec.describe RegistrationsController, :clean_db_with_truncation do
   context "signed in as organizer" do
     let!(:organizer) { FactoryBot.create(:user) }
     let(:competition) { FactoryBot.create(:competition, :registration_open, :visible, organizers: [organizer], events: Event.where(id: %w(222 333))) }
@@ -15,7 +15,7 @@ RSpec.describe RegistrationsController, clean_db_with_truncation: true do
 
     it 'allows access to competition organizer' do
       get :index, params: { competition_id: competition }
-      expect(response.status).to eq 200
+      expect(response).to have_http_status :ok
     end
   end
 
@@ -33,7 +33,7 @@ RSpec.describe RegistrationsController, clean_db_with_truncation: true do
 
     it "works when not logged in" do
       get :register, params: { competition_id: competition.id }
-      expect(assigns(:registration)).to eq nil
+      expect(assigns(:registration)).to be nil
     end
   end
 
