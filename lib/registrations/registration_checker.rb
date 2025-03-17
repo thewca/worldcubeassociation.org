@@ -129,10 +129,18 @@ module Registrations
       end
 
       def validate_guests!(guests, competition)
-        raise WcaExceptions::RegistrationError.new(:unprocessable_entity, ErrorCodes::INVALID_REQUEST_DATA) if guests < 0
-        raise WcaExceptions::RegistrationError.new(:unprocessable_entity, ErrorCodes::GUEST_LIMIT_EXCEEDED) if competition.guest_limit_exceeded?(guests)
-        raise WcaExceptions::RegistrationError.new(:unprocessable_entity, ErrorCodes::UNREASONABLE_GUEST_COUNT) if
-          guests > DEFAULT_GUEST_LIMIT && !competition.guest_entry_status_restricted?
+        r = Registration.new(guests: guests, competition: competition)
+
+        unless r.valid?
+          guest_error_details = r.errors.details[:guests].first
+
+          if guest_error_details.present?
+            frontend_code = guest_error_details[:frontend_code] || Registrations::ErrorCodes::INVALID_REQUEST_DATA
+
+            # Assumption: If a model validation fails, it should always be HTTP status 422 (unprocessable entity)
+            raise WcaExceptions::RegistrationError.new(:unprocessable_entity, frontend_code, guest_error_details)
+          end
+        end
       end
 
       def validate_comment!(comment, competition)
