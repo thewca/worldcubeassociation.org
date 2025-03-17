@@ -138,7 +138,7 @@ module Registrations
         return if registration.valid?
         error_details = registration.errors.details[field].first
 
-        return unless error_details.present?
+        return if error_details.blank?
 
         frontend_code = error_details[:frontend_code] || Registrations::ErrorCodes::INVALID_REQUEST_DATA
         raise WcaExceptions::RegistrationError.new(:unprocessable_entity, frontend_code, error_details)
