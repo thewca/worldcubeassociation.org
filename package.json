@@ -90,7 +90,7 @@
     "sass": "^1.85.1",
     "sass-loader": "^16.0.5",
     "semantic-ui-react": "^2.1.5",
-    "shakapacker": "8.1.0",
+    "shakapacker": "8.2.0",
     "style-loader": "^4.0.0",
     "terser-webpack-plugin": "^5.3.14",
     "webpack": "^5.98.0",
