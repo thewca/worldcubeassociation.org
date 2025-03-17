@@ -23,7 +23,7 @@ class InboxPerson < ApplicationRecord
   end
 
   def country
-    Country.find_by_iso2(countryId)
+    Country.find_by(iso2: countryId)
   end
 
   # NOTE: silly method overriding: we don't have an id on that table.

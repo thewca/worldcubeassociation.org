@@ -294,7 +294,7 @@ module CompetitionsHelper
   end
 
   def preload_competition_series(form_competition, preload_competition_id)
-    competition = Competition.find_by_id(preload_competition_id)
+    competition = Competition.find_by(id: preload_competition_id)
 
     if (series = competition.competition_series)
       form_competition.competition_series = series
@@ -322,7 +322,7 @@ module CompetitionsHelper
       # Helper function for `competition_message_for_user`
       # Determines what message to display to the user based on the state of their registration.
 
-      registration_status = registration || competition.registrations.find_by_user_id(user.id)
+      registration_status = registration || competition.registrations.find_by(user_id: user.id)
       return if registration_status.blank?
 
       if registration_status.accepted?

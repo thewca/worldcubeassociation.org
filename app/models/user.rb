@@ -162,7 +162,7 @@ class User < ApplicationRecord
   validate :wca_id_is_unique_or_for_dummy_account
   def wca_id_is_unique_or_for_dummy_account
     if wca_id_change && wca_id
-      user = User.find_by_wca_id(wca_id)
+      user = User.find_by(wca_id: wca_id)
       # If there is a non dummy user with this WCA ID, fail validation.
       if user && !user.dummy_account?
         errors.add(
@@ -389,12 +389,12 @@ class User < ApplicationRecord
   # For associated_events_picker
   def events_to_associated_events(events)
     events.map do |event|
-      user_preferred_events.find_by_event_id(event.id) || user_preferred_events.build(event_id: event.id)
+      user_preferred_events.find_by(event_id: event.id) || user_preferred_events.build(event_id: event.id)
     end
   end
 
   def country
-    Country.find_by_iso2(country_iso2)
+    Country.find_by(iso2: country_iso2)
   end
 
   def newcomer_month_eligible?

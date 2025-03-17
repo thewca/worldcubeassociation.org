@@ -7,6 +7,8 @@ plugins:
   - rubocop-rspec
   - rubocop-rspec_rails
   - rubocop-factory_bot
+  - rubocop-capybara
+  - rubocop-rake
 
 AllCops:
   TargetRubyVersion: 3.4
@@ -263,9 +265,6 @@ Rails/TimeZone:
 Rails/Date:
   Enabled: false
 
-Rails/DynamicFindBy:
-  Enabled: false
-
 Rails/SkipsModelValidations:
   Enabled: false
 
@@ -457,4 +456,65 @@ FactoryBot/SyntaxMethods:
   Enabled: false
 
 FactoryBot/ExcessiveCreateList:
+  Enabled: false
+
+# Capybara
+
+Capybara/AmbiguousClick:
+  Enabled: false
+
+Capybara/ClickLinkOrButtonStyle:
+  Enabled: false
+
+Capybara/CurrentPathExpectation:
+  Enabled: false
+
+Capybara/FindAllFirst:
+  Enabled: false
+
+Capybara/MatchStyle:
+  Enabled: false
+
+Capybara/NegationMatcher:
+  Enabled: false
+
+Capybara/NegationMatcherAfterVisit:
+  Enabled: false
+
+Capybara/RedundantWithinFind:
+  Enabled: false
+
+Capybara/SpecificActions:
+  Enabled: false
+
+Capybara/SpecificFinders:
+  Enabled: false
+
+Capybara/SpecificMatcher:
+  Enabled: false
+
+Capybara/VisibilityMatcher:
+  Enabled: false
+
+Capybara/RSpec/HaveSelector:
+  Enabled: false
+
+Capybara/RSpec/PredicateMatcher:
+  Enabled: false
+
+# Rake
+
+Rake/ClassDefinitionInTask:
+  Enabled: false
+
+Rake/Desc:
+  Enabled: false
+
+Rake/DuplicateTask:
+  Enabled: false
+
+Rake/DuplicateNamespace:
+  Enabled: false
+
+Rake/MethodDefinitionInTask:
   Enabled: false

@@ -102,7 +102,7 @@ class AdminController < ApplicationController
         inbox_person = inbox_res.inbox_person
 
         person_id = inbox_person&.wcaId.presence || inbox_res.personId
-        person_country = Country.find_by_iso2(inbox_person&.countryId)
+        person_country = Country.find_by(iso2: inbox_person&.countryId)
 
         {
           pos: inbox_res.pos,
