@@ -200,7 +200,9 @@ RSpec.describe Qualification do
       expect(qualification.can_register?(user, '333')).to be true
     end
 
+    # User's qualifying result was achieved on the 2nd
     it "requires end date before" do
+      # Result must be achieved by the 3rd - user qualifies because result achieved before whenDate
       input = {
         'resultType' => 'single',
         'type' => 'attemptResult',
@@ -211,10 +213,22 @@ RSpec.describe Qualification do
       expect(qualification).to be_valid
       expect(qualification.can_register?(user, '333')).to be true
 
+      # Result must be achieved by the 2nd - user qualifies because result achieved on whenDate
       input = {
         'resultType' => 'single',
         'type' => 'attemptResult',
         'whenDate' => '2021-03-02',
+        'level' => 1150,
+      }
+      qualification = Qualification.load(input)
+      expect(qualification).to be_valid
+      expect(qualification.can_register?(user, '333')).to be true
+
+      # Result must be achieved by the 1st - user does not qualify because result achieved after whenDate
+      input = {
+        'resultType' => 'single',
+        'type' => 'attemptResult',
+        'whenDate' => '2021-03-01',
         'level' => 1150,
       }
       qualification = Qualification.load(input)
@@ -331,7 +345,9 @@ RSpec.describe Qualification do
       expect(qualification.can_register?(user, '333')).to be true
     end
 
-    it "requires end date before" do
+    # User's qualifying result was achieved on the 2nd
+    it "supports achieving result on qualification date" do
+      # Result must be achieved by the 3rd - user qualifies because result achieved before whenDate
       input = {
         'resultType' => 'average',
         'type' => 'attemptResult',
@@ -342,11 +358,23 @@ RSpec.describe Qualification do
       expect(qualification).to be_valid
       expect(qualification.can_register?(user, '333oh')).to be true
 
+      # Result must be achieved by the 2nd - user qualifies because result achieved on whenDate
       input = {
         'resultType' => 'average',
         'type' => 'attemptResult',
         'whenDate' => '2021-03-02',
-        'level' => 2510,
+        'level' => 2500,
+      }
+      qualification = Qualification.load(input)
+      expect(qualification).to be_valid
+      expect(qualification.can_register?(user, '333oh')).to be true
+
+      # Result must be achieved by the 1st - user does not qualify because result achieved after whenDate
+      input = {
+        'resultType' => 'average',
+        'type' => 'attemptResult',
+        'whenDate' => '2021-03-01',
+        'level' => 2500,
       }
       qualification = Qualification.load(input)
       expect(qualification).to be_valid

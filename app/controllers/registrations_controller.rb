@@ -92,22 +92,26 @@ class RegistrationsController < ApplicationController
                    accepted_count: registration_rows.length,
                    limit: competition.competitor_limit)
     end
-    emails = registration_rows.map { |registration_row| registration_row[:email] }
+    emails = registration_rows.pluck(:email)
     email_duplicates = emails.select { |email| emails.count(email) > 1 }.uniq
     if email_duplicates.any?
       raise I18n.t("registrations.import.errors.email_duplicates", emails: email_duplicates.join(", "))
     end
-    wca_ids = registration_rows.map { |registration_row| registration_row[:wca_id] }
+    wca_ids = registration_rows.pluck(:wca_id)
     wca_id_duplicates = wca_ids.select { |wca_id| wca_ids.count(wca_id) > 1 }.uniq
     if wca_id_duplicates.any?
       raise I18n.t("registrations.import.errors.wca_id_duplicates", wca_ids: wca_id_duplicates.join(", "))
     end
-    raw_dobs = registration_rows.map { |registration_row| registration_row[:birth_date] }
+    raw_dobs = registration_rows.pluck(:birth_date)
     wrong_format_dobs = raw_dobs.select { |raw_dob| Date.safe_parse(raw_dob)&.to_fs != raw_dob }
     if wrong_format_dobs.any?
       raise I18n.t("registrations.import.errors.wrong_dob_format", raw_dobs: wrong_format_dobs.join(", "))
     end
     new_locked_users = []
+    # registered_at stores millisecond precision, but we want all registrations
+    #   from CSV import to be considered as one "batch". So we mark a timestamp
+    #   once, and then reuse it throughout the loop.
+    import_time = Time.now.utc
     ActiveRecord::Base.transaction do
       competition.registrations.accepted.each do |registration|
         unless emails.include?(registration.user.email)
@@ -117,7 +121,9 @@ class RegistrationsController < ApplicationController
       registration_rows.each do |registration_row|
         user, locked_account_created = user_for_registration!(registration_row)
         new_locked_users << user if locked_account_created
-        registration = competition.registrations.find_or_initialize_by(user_id: user.id)
+        registration = competition.registrations.find_or_initialize_by(user_id: user.id) do |reg|
+          reg.registered_at = import_time
+        end
         unless registration.accepted?
           registration.assign_attributes(competing_status: Registrations::Helper::STATUS_ACCEPTED)
         end
@@ -159,7 +165,9 @@ class RegistrationsController < ApplicationController
     end
     ActiveRecord::Base.transaction do
       user, locked_account_created = user_for_registration!(params[:registration_data])
-      registration = @competition.registrations.find_or_initialize_by(user_id: user.id)
+      registration = @competition.registrations.find_or_initialize_by(user_id: user.id) do |reg|
+        reg.registered_at = Time.now.utc
+      end
       raise I18n.t("registrations.add.errors.already_registered") unless registration.new_record?
       registration_comment = params.dig(:registration_data, :comments)
       registration.assign_attributes(comments: registration_comment) if registration_comment.present?
@@ -236,7 +244,7 @@ class RegistrationsController < ApplicationController
       email_user = User.find_by(email: registration_row[:email])
       # Use the user if exists, otherwise create a locked account without WCA ID.
       if email_user
-        unless email_user.wca_id.present?
+        if email_user.wca_id.blank?
           # If this is just a user account with no WCA ID, update its data.
           # Given it's verified by organizers, it's more trustworthy/official data (if different at all).
           email_user.update!(person_details)
@@ -261,9 +269,6 @@ class RegistrationsController < ApplicationController
 
   def register
     @competition = competition_from_params
-    if current_user
-      @registration = @competition.registrations.find_or_initialize_by(user_id: current_user.id, competition_id: @competition.id)
-    end
   end
 
   def payment_denomination
@@ -314,6 +319,7 @@ class RegistrationsController < ApplicationController
 
     # Create a default audit that marks the event as "unhandled".
     audit_event = StripeWebhookEvent.create_from_api(event)
+    audit_remote_timestamp = audit_event.created_at_remote
 
     stripe_intent = event.data.object # contains a polymorphic type that depends on the event
     stored_record = StripeRecord.find_by(stripe_id: stripe_intent.id)
@@ -327,6 +333,13 @@ class RegistrationsController < ApplicationController
       end
     end
 
+    connected_account = ConnectedStripeAccount.find_by(account_id: stored_record.account_id)
+
+    if connected_account.blank?
+      logger.error "Stripe webhook reported event for account '#{stored_record.account_id}' but we are not connected to that account."
+      return head :not_found
+    end
+
     # Handle the event
     case event.type
     when StripeWebhookEvent::PAYMENT_INTENT_SUCCEEDED
@@ -334,7 +347,7 @@ class RegistrationsController < ApplicationController
 
       stored_intent = stored_record.payment_intent
 
-      stored_intent.update_status_and_charges(stripe_intent, audit_event, audit_event.created_at_remote) do |charge_transaction|
+      stored_intent.update_status_and_charges(connected_account, stripe_intent, audit_event, audit_remote_timestamp) do |charge_transaction|
         ruby_money = charge_transaction.money_amount
         stored_holder = stored_intent.holder
 
@@ -350,14 +363,14 @@ class RegistrationsController < ApplicationController
           # Context: When our servers die due to traffic spikes, the Stripe webhook cannot be processed
           #   and Stripe tries again after an exponential backoff. So we (erroneously!) record the creation timestamp
           #   in our DB _after_ the backed-off event has been processed. This can lead to a wrong registration order :(
-          stored_payment.update!(created_at: audit_event.created_at_remote)
+          stored_payment.update!(created_at: audit_remote_timestamp)
         end
       end
     when StripeWebhookEvent::PAYMENT_INTENT_CANCELED
       # stripe_intent contains a Stripe::PaymentIntent as per Stripe documentation
 
       stored_intent = stored_record.payment_intent
-      stored_intent.update_status_and_charges(stripe_intent, audit_event, audit_event.created_at_remote)
+      stored_intent.update_status_and_charges(connected_account, stripe_intent, audit_event, audit_remote_timestamp)
     else
       logger.info "Unhandled Stripe event type: #{event.type}"
     end
@@ -367,42 +380,51 @@ class RegistrationsController < ApplicationController
 
   def payment_completion
     # Provided by Stripe upon redirect when the "PaymentElement" workflow is completed
-    intent_id = params[:payment_intent]
-    intent_secret = params[:payment_intent_client_secret]
     competition_id = params[:competition_id]
+    competition = Competition.find(competition_id)
 
-    # We expect that the record here is a top-level PaymentIntent in Stripe's API model
-    stored_record = StripeRecord.find_by(stripe_id: intent_id)
+    payment_integration = params[:payment_integration].to_sym
+    payment_account = competition.payment_account_for(payment_integration)
 
-    unless stored_record.present?
-      flash[:error] = t("registrations.payment_form.errors.stripe_not_found")
-      return redirect_to competition_register_path(competition_id)
+    if payment_account.blank?
+      flash[:danger] = t("registrations.payment_form.errors.cpi_disconnected")
+      return redirect_to competition_register_path(competition)
     end
 
-    unless stored_record.payment_intent?
-      flash[:error] = t("registrations.payment_form.errors.stripe_not_an_intent")
-      return redirect_to competition_register_path(competition_id)
+    stored_record, secret_check = payment_account.find_payment_from_request(params)
+
+    if stored_record.blank?
+      flash[:error] = t("registrations.payment_form.errors.generic.not_found", provider: t("payments.payment_providers.#{payment_integration}"))
+      return redirect_to competition_register_path(competition)
     end
 
     stored_intent = stored_record.payment_intent
 
+    if stored_intent.blank?
+      flash[:error] = t("registrations.payment_form.errors.generic.intent_not_found", provider: t("payments.payment_providers.#{payment_integration}"))
+      return redirect_to competition_register_path(competition)
+    end
+
+    # Some API gateways like Stripe provide the client_secret as a kind of "checksum" (or fraud protection)
+    #   back to us upon redirect. Other providers (like PayPal…) unfortunately don't.
+    #   So we only compare this secret value with our stored intent record if it's actually provided to us
+    if secret_check.present? && stored_intent.client_secret != secret_check
+      flash[:error] = t("registrations.payment_form.errors.generic.secret_invalid", provider: t("payments.payment_providers.#{payment_integration}"))
+      return redirect_to competition_register_path(competition)
+    end
+
+    remote_intent = stored_intent.retrieve_remote
+
+    if remote_intent.blank?
+      flash[:error] = t("registrations.payment_form.errors.generic.remote_not_found", provider: t("payments.payment_providers.#{payment_integration}"))
+      return redirect_to competition_register_path(competition)
+    end
+
     registration = stored_intent.holder
 
-    unless stored_intent.client_secret == intent_secret
-      flash[:error] = t("registrations.payment_form.errors.stripe_secret_invalid")
-      return redirect_to competition_register_path(competition_id)
-    end
-
-    # No need to create a new intent here. We can just query the stored intent from Stripe directly.
-    stripe_intent = stored_intent.retrieve_remote
-
-    unless stripe_intent.present?
-      flash[:error] = t("registrations.payment_form.errors.stripe_not_found")
-      return redirect_to competition_register_path(competition_id)
-    end
-
-    stored_intent.update_status_and_charges(stripe_intent, current_user) do |charge_transaction|
+    stored_intent.update_status_and_charges(payment_account, remote_intent, current_user) do |charge_transaction|
       ruby_money = charge_transaction.money_amount
+
       registration.record_payment(
         ruby_money.cents,
         ruby_money.currency.iso_code,
@@ -415,21 +437,23 @@ class RegistrationsController < ApplicationController
       #   this behavior differs and we overwrite created_at manually, see #stripe_webhook above.
     end
 
-    # Payment Intent lifecycle as per https://stripe.com/docs/payments/intents#intent-statuses
-    case stored_intent.payment_record.stripe_status
-    when 'succeeded'
+    # For details on what the individual statuses mean, please refer to the comments
+    #   of the `enum :wca_status` declared in the `payment_intent.rb` model
+    case stored_intent.wca_status
+    when PaymentIntent.wca_statuses[:succeeded]
       flash[:success] = t("registrations.payment_form.payment_successful")
-    when 'requires_action'
-      # Customer did not complete the payment
-      # For example, 3DSecure could still be pending.
+    when PaymentIntent.wca_statuses[:pending]
       flash[:warning] = t("registrations.payment_form.errors.payment_pending")
-    when 'requires_payment_method'
-      # Payment failed. If a payment fails, it is "reset" by Stripe,
-      # so from our end it looks like it never even started (i.e. the customer didn't choose a payment method yet)
+    when PaymentIntent.wca_statuses[:created]
       flash[:error] = t("registrations.payment_form.errors.payment_reset")
-    when 'processing'
-      # The payment can be pending, for example bank transfers can take multiple days to be fulfilled.
+    when PaymentIntent.wca_statuses[:processing]
       flash[:warning] = t("registrations.payment_form.payment_processing")
+    when PaymentIntent.wca_statuses[:partial]
+      flash[:warning] = t("registrations.payment_form.payment_partial")
+    when PaymentIntent.wca_statuses[:failed]
+      flash[:error] = t("registrations.payment_form.errors.payment_failed")
+    when PaymentIntent.wca_statuses[:canceled]
+      flash[:error] = t("registrations.payment_form.errors.payment_canceled")
     else
       # Invalid status
       flash[:error] = "Invalid PaymentIntent status"
@@ -473,7 +497,7 @@ class RegistrationsController < ApplicationController
     payment_integration = params[:payment_integration].to_sym
     payment_account = competition.payment_account_for(payment_integration)
 
-    unless payment_account.present?
+    if payment_account.blank?
       flash[:danger] = "You cannot issue a refund for this competition anymore. Please use your payment provider's dashboard to do so."
       return redirect_to competition_registrations_path(competition)
     end

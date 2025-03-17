@@ -11,7 +11,7 @@ class PostsController < ApplicationController
       format.json do
         tag = params[:tag]
         if tag
-          @posts = Post.joins(:post_tags).where('post_tags.tag = ?', tag)
+          @posts = Post.joins(:post_tags).where(post_tags: { tag: tag })
         else
           @posts = Post.where(show_on_homepage: true)
         end
@@ -42,7 +42,7 @@ class PostsController < ApplicationController
   def rss
     tag = params[:tag]
     if tag
-      @posts = Post.joins(:post_tags).where('post_tags.tag = ?', tag)
+      @posts = Post.joins(:post_tags).where(post_tags: { tag: tag })
     else
       @posts = Post
     end
@@ -61,28 +61,28 @@ class PostsController < ApplicationController
     @post = Post.new(params[:post] ? post_params : {})
   end
 
+  def edit
+    @post = find_post
+  end
+
   def create
     @post = Post.new(post_params)
     @post.author = current_user
     if @post.save
       flash[:success] = "Created new post"
-      redirect_to post_path(@post.slug)
+      render json: { status: 'ok', post: @post }
     else
-      render 'new'
+      render json: { status: 'validation failed', errors: @post.errors }, status: :bad_request
     end
-  end
-
-  def edit
-    @post = find_post
   end
 
   def update
     @post = find_post
     if @post.update(post_params)
       flash[:success] = "Updated post"
-      redirect_to post_path(@post.slug)
+      render json: { status: 'ok', post: @post }
     else
-      render 'edit'
+      render json: { status: 'validation failed', errors: @post.errors }, status: :bad_request
     end
   end
 
@@ -112,7 +112,7 @@ class PostsController < ApplicationController
     #  | 2014 |
     #  +------+
     #  1 row in set, 1 warning (0.00 sec)
-    post = Post.find_by_slug(params[:id]) || Post.find_by_id(params[:id])
+    post = Post.find_by(slug: params[:id]) || Post.find_by(id: params[:id])
     if !post
       raise ActiveRecord::RecordNotFound.new("Couldn't find post")
     end

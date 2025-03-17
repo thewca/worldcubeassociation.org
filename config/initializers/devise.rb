@@ -283,14 +283,14 @@ end
 # This way updating user's validity token invalidates all the sessions at once.
 # Based on https://stackoverflow.com/a/29214116
 
-Warden::Manager.after_set_user except: :fetch do |user, warden, opts|
+Warden::Manager.after_set_user except: :fetch do |user, warden, _opts|
   if user.session_validity_token.nil?
     user.update_attribute(:session_validity_token, Devise.friendly_token)
   end
   warden.raw_session["validity_token"] = user.session_validity_token
 end
 
-Warden::Manager.after_fetch do |user, warden, opts|
+Warden::Manager.after_fetch do |user, warden, _opts|
   unless user.session_validity_token == warden.raw_session["validity_token"]
     warden.logout
   end

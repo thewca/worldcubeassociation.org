@@ -49,7 +49,7 @@ class StripeRecord < ApplicationRecord
   serialize :parameters, coder: JSON
 
   def determine_wca_status
-    result = WCA_TO_STRIPE_STATUS_MAP.find { |key, values| values.include?(self.stripe_status) }
+    result = WCA_TO_STRIPE_STATUS_MAP.find { |_key, values| values.include?(self.stripe_status) }
     result&.first || raise("No associated wca_status for stripe_status: #{self.stripe_status} - our tests should prevent this from happening!")
   end
 
@@ -65,9 +65,9 @@ class StripeRecord < ApplicationRecord
     stripe_error = nil
 
     case self.stripe_record_type
-    when 'payment_intent'
+    when StripeRecord.stripe_record_types[:payment_intent]
       stripe_error = api_transaction.last_payment_error&.code
-    when 'charge'
+    when StripeRecord.stripe_record_types[:charge]
       stripe_error = api_transaction.failure_message
     end
 
@@ -79,11 +79,11 @@ class StripeRecord < ApplicationRecord
 
   def retrieve_stripe
     case self.stripe_record_type
-    when 'payment_intent'
+    when StripeRecord.stripe_record_types[:payment_intent]
       Stripe::PaymentIntent.retrieve(self.stripe_id, stripe_account: self.account_id)
-    when 'charge'
+    when StripeRecord.stripe_record_types[:charge]
       Stripe::Charge.retrieve(self.stripe_id, stripe_account: self.account_id)
-    when 'refund'
+    when StripeRecord.stripe_record_types[:refund]
       Stripe::Refund.retrieve(self.stripe_id, stripe_account: self.account_id)
     end
   end

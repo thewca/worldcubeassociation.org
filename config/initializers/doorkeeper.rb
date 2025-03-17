@@ -7,7 +7,7 @@ Doorkeeper.configure do
   # For more information go to
   # https://github.com/doorkeeper-gem/doorkeeper/wiki/Using-Scopes
   default_scopes  :public
-  optional_scopes :dob, :email, :manage_competitions, :openid
+  optional_scopes :dob, :email, :manage_competitions, :openid, :profile
 
   base_controller 'ApplicationController'
 
@@ -26,9 +26,9 @@ Doorkeeper.configure do
 
   # Copied from
   #  https://github.com/doorkeeper-gem/doorkeeper/wiki/Using-Resource-Owner-Password-Credentials-flow
-  resource_owner_from_credentials do |routes|
+  resource_owner_from_credentials do |_routes|
     u = User.find_for_database_authentication(email: params[:username])
-    u if u && u.valid_password?(params[:password])
+    u if u&.valid_password?(params[:password])
   end
 
   # If you want to restrict access to the web interface for adding oauth authorized applications, you need to declare the block below.

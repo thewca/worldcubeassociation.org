@@ -3,24 +3,24 @@
 class ScheduleActivity < ApplicationRecord
   # See https://docs.google.com/document/d/1hnzAZizTH0XyGkSYe-PxFL5xpKVWl_cvSdTzlT_kAs8/edit#heading=h.14uuu58hnua
   VALID_ACTIVITY_CODE_BASE = (Event::OFFICIAL_IDS + %w(other)).freeze
-  VALID_OTHER_ACTIVITY_CODE = %w(registration checkin multi breakfast lunch dinner awards unofficial misc tutorial).freeze
+  VALID_OTHER_ACTIVITY_CODE = %w(registration checkin multi breakfast lunch dinner awards unofficial misc tutorial setup teardown).freeze
   belongs_to :holder, polymorphic: true
   has_many :child_activities, class_name: "ScheduleActivity", as: :holder, dependent: :destroy
   has_many :wcif_extensions, as: :extendable, dependent: :delete_all
   has_many :assignments, dependent: :delete_all
 
-  validates_presence_of :name
-  validates_numericality_of :wcif_id, only_integer: true
-  validates_presence_of :start_time, allow_blank: false
-  validates_presence_of :end_time, allow_blank: false
-  validates_presence_of :activity_code, allow_blank: false
+  validates :name, presence: true
+  validates :wcif_id, numericality: { only_integer: true }
+  validates :start_time, presence: { allow_blank: false }
+  validates :end_time, presence: { allow_blank: false }
+  validates :activity_code, presence: { allow_blank: false }
   # TODO: we don't yet care for scramble_set_id
   validate :included_in_parent_schedule
   validate :valid_activity_code
   delegate :color, to: :holder
 
   def included_in_parent_schedule
-    return unless errors.blank?
+    return if errors.present?
     unless start_time >= holder.start_time
       errors.add(:start_time, "should be after parent's start_time")
     end
@@ -33,7 +33,7 @@ class ScheduleActivity < ApplicationRecord
   end
 
   def valid_activity_code
-    return unless errors.blank?
+    return if errors.present?
 
     activity_id = activity_code.split('-').first
     unless VALID_ACTIVITY_CODE_BASE.include?(activity_id)

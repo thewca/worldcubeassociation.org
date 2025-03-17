@@ -30,7 +30,7 @@ namespace :user_avatars do
 
         user = user_cache[wca_id] || User.find_by(wca_id: wca_id)
 
-        unless user.present?
+        if user.blank?
           puts "User #{wca_id} not found. File: #{f.key}"
           next
         end
@@ -77,7 +77,7 @@ namespace :user_avatars do
 
         user = user_cache[wca_id] || User.find_by(wca_id: wca_id)
 
-        unless user.present?
+        if user.blank?
           puts "User #{wca_id} not found. File: #{f.key}"
           next
         end
@@ -93,7 +93,7 @@ namespace :user_avatars do
           matching_avatar = user.pending_avatar
         end
 
-        break unless matching_avatar.present?
+        break if matching_avatar.blank?
 
         downloaded_image = StringIO.new(s3_active_storage.download(f.key))
 

@@ -18,7 +18,7 @@ class CompetitionMedium < ApplicationRecord
   # https://github.com/thewca/worldcubeassociation.org/issues/2070
   # tracks adding this gem to our codebase.
   def self.types_i18n
-    self.types.keys.to_h { |k| [k, k.titleize] }
+    self.types.keys.index_with { |k| k.titleize }
   end
 
   scope :belongs_to_region, lambda { |region_id|

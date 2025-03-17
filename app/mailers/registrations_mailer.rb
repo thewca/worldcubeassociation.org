@@ -55,14 +55,6 @@ class RegistrationsMailer < ApplicationMailer
                    reply_to: registration.competition.organizers_or_delegates.map(&:email)
   end
 
-  def notify_registrant_of_pending_registration(registration)
-    @registration = registration
-    localized_mail @registration.user.locale,
-                   -> { I18n.t('registrations.mailer.pending.mail_subject', comp_name: registration.competition.name) },
-                   to: registration.user.email,
-                   reply_to: registration.competition.organizers_or_delegates.map(&:email)
-  end
-
   def notify_registrant_of_deleted_registration(registration)
     @registration = registration
     localized_mail @registration.user.locale,
@@ -79,5 +71,25 @@ class RegistrationsMailer < ApplicationMailer
       reply_to: competition.organizers_or_delegates.map(&:email),
       subject: "Unlock your new account on the WCA website",
     )
+  end
+
+  def notify_registrant_of_waitlisted_registration(registration)
+    @registration = registration
+    localized_mail @registration.user.locale,
+                   -> { I18n.t('registrations.mailer.waiting_list.mail_subject', comp_name: registration.competition.name) },
+                   to: registration.user.email,
+                   reply_to: registration.competition.organizers_or_delegates.map(&:email)
+  end
+
+  def notify_delegates_of_formerly_banned_user_registration(registration)
+    @registration = registration
+    to = registration.competition.competition_delegates.map { |x| x.user.email }
+    unless to.empty?
+      mail(
+        to: to,
+        reply_to: UserGroup.teams_committees_group_wic.metadata.email,
+        subject: "A formerly-banned competitor just registered for #{registration.competition.name}",
+      )
+    end
   end
 end

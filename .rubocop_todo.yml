@@ -29,11 +29,6 @@ Naming/VariableName:
 ### End camelCase stuff
 ###
 
-# This was broken in Rubocop 0.48.1.
-# See https://github.com/bbatsov/rubocop/pull/4237
-Lint/AmbiguousBlockAssociation:
-  Enabled: false
-
 Metrics/CyclomaticComplexity:
   Exclude:
     - 'app/controllers/competitions_controller.rb'
@@ -49,21 +44,6 @@ Metrics/PerceivedComplexity:
     - 'app/jobs/sync_mailing_lists_job.rb'
     - 'app/models/competition.rb'
     - 'lib/results_validators/*.rb'
-
-Lint/StructNewOverride:
-  Enabled: false
-
-Style/AccessorGrouping:
-  Enabled: false
-
-Layout/EmptyLinesAroundAttributeAccessor:
-  Enabled: false
-
-Style/SoleNestedConditional:
-  Enabled: false
-
-Style/StringConcatenation:
-  Enabled: false
 
 Lint/EmptyBlock:
   Enabled: false

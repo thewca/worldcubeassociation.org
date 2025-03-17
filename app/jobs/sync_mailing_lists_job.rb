@@ -7,7 +7,7 @@ class SyncMailingListsJob < WcaCronjob
   end
 
   def perform
-    GsuiteMailingLists.sync_group("leaders@worldcubeassociation.org", UserGroup.teams_committees.map(&:lead_user).compact.map(&:email))
+    GsuiteMailingLists.sync_group("leaders@worldcubeassociation.org", UserGroup.teams_committees.filter_map(&:lead_user).map(&:email))
     GsuiteMailingLists.sync_group(GroupsMetadataBoard.email, UserGroup.board_group.active_users.map(&:email))
     translator_users = UserGroup.translators.flat_map(&:users)
     GsuiteMailingLists.sync_group("translators@worldcubeassociation.org", translator_users.map(&:email))
@@ -35,10 +35,10 @@ class SyncMailingListsJob < WcaCronjob
     # Special case: WIC is the first committee in our (recent) history that "absorbed" another team's duties:
     #   They are now a "mix" of WDC and WEC. The structures have been mapped so that WIC reuses WDC's groups,
     #   so they get WDC access "for free". But they _also_ need to be synced to ethics@ to view old conversations from there.
-    GsuiteMailingLists.sync_group("ethics@worldcubeassociation.org", GroupsMetadataTeamsCommittees.wic.user_group.active_users.map(&:email))
+    GsuiteMailingLists.sync_group("ethics@worldcubeassociation.org", GroupsMetadataTeamsCommittees.wic.user_group.active_users.pluck(:email))
 
     treasurers = UserGroup.officers.flat_map(&:active_roles).filter { |role| role.metadata.status == RolesMetadataOfficers.statuses[:treasurer] }
-    GsuiteMailingLists.sync_group("treasurer@worldcubeassociation.org", treasurers.map(&:user).map(&:email))
+    GsuiteMailingLists.sync_group("treasurer@worldcubeassociation.org", treasurers.map { |x| x.user.email })
 
     delegate_emails = []
     trainee_emails = []

@@ -38,7 +38,7 @@ namespace :registration_version do
 
     LogTask.log_task("Migrating Registrations for Competition #{competition_id}") do
       ActiveRecord::Base.transaction do
-        competition.registrations.includes(:registration_payments, :registration_history_entries).each do |registration|
+        competition.registrations.includes(:registration_payments, :registration_history_entries).find_each do |registration|
           registration.update_column :competing_status, registration.compute_competing_status
           if registration.paid_entry_fees > 0
             registration.registration_payments.each do |payment|
@@ -95,7 +95,7 @@ namespace :registration_version do
       wcif_v2 = clean_wcif_registrations(wcif_v2)
 
       ActiveRecord::Base.transaction do
-        competition.microservice_registrations.wcif_ordered.includes(:payment_intents).each do |registration|
+        competition.microservice_registrations.wcif_ordered.includes(:payment_intents).find_each do |registration|
           puts "Creating registration for user: #{registration.user_id}"
           new_registration = Registration.build(
             competition_id: competition_id,

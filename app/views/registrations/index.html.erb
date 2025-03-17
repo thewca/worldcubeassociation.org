@@ -1,12 +1,5 @@
 <% provide(:title, I18n.t('registrations.list.title', comp: @competition.name)) %>
 
 <%= render layout: "nav" do %>
-    <% cache [
-               "registrations_index",
-               @competition.events.pluck(:id),
-               @competition.registrations.accepted.joins(:user).order(:id).pluck(:id, :updated_at, :"users.updated_at"),
-               I18n.locale
-             ] do %>
-      <%= react_component('RegistrationsV2/Registrations', { competitionInfo: @competition.to_competition_info }) %>
-    <% end %>
+  <%= react_component('RegistrationsV2/Registrations', { competitionInfo: @competition.to_competition_info, userId: @current_user&.id }) %>
 <% end %>

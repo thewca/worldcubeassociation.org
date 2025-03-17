@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
 class Registration < ApplicationRecord
-  # TODO: Reg-V3 Cleanup: Remove all these and use the competing_status_{status} scopes
   scope :pending, -> { where(competing_status: 'pending') }
   scope :accepted, -> { where(competing_status: 'accepted') }
   scope :cancelled, -> { where(competing_status: 'cancelled') }
   scope :rejected, -> { where(competing_status: 'rejected') }
   scope :waitlisted, -> { where(competing_status: 'waiting_list') }
   scope :non_competing, -> { where(is_competing: false) }
+  scope :competing, -> { where(is_competing: true) }
   scope :not_cancelled, -> { where.not(competing_status: 'cancelled') }
   scope :with_payments, -> { joins(:registration_payments).distinct }
   scope :wcif_ordered, -> { order(:id) }
@@ -19,6 +19,7 @@ class Registration < ApplicationRecord
   has_many :registration_payments
   has_many :competition_events, through: :registration_competition_events
   has_many :events, through: :competition_events
+  has_many :live_results
   has_many :assignments, as: :registration, dependent: :delete_all
   has_many :wcif_extensions, as: :extendable, dependent: :delete_all
   has_many :payment_intents, as: :holder, dependent: :delete_all
@@ -37,9 +38,18 @@ class Registration < ApplicationRecord
 
   validates :user, presence: true, on: [:create]
 
-  validates_numericality_of :guests, greater_than_or_equal_to: 0
+  validates :registered_at, presence: true
+  # Set a `registered_at` timestamp for newly created records,
+  #   but only if there is no value already specified from the outside
+  after_initialize :mark_registered_at, if: :new_record?, unless: :registered_at?
 
-  validates_numericality_of :guests, less_than_or_equal_to: :guest_limit, if: :check_guest_limit?
+  private def mark_registered_at
+    self.registered_at = current_time_from_proper_timezone
+  end
+
+  validates :guests, numericality: { greater_than_or_equal_to: 0 }
+
+  validates :guests, numericality: { less_than_or_equal_to: :guest_limit, if: :check_guest_limit? }
 
   after_save :mark_registration_processing_as_done
 
@@ -87,34 +97,13 @@ class Registration < ApplicationRecord
     new_record? || cancelled? || !is_competing?
   end
 
-  def name
-    user.name
-  end
+  delegate :name, :gender, :country, :email, :dob, :wca_id, to: :user
 
-  def birthday
-    user.dob
-  end
-
-  def gender
-    user.gender
-  end
-
-  def country
-    user.country
-  end
-
-  def email
-    user.email
-  end
-
-  def wca_id
-    user.wca_id
-  end
-
-  alias personId wca_id
+  alias_method :birthday, :dob
+  alias_method :personId, :wca_id
 
   def person
-    Person.find_by_wca_id(personId)
+    Person.find_by(wca_id: personId)
   end
 
   def world_rank(event, type)
@@ -126,7 +115,7 @@ class Registration < ApplicationRecord
   end
 
   def entry_fee
-    sum_lowest_denomination = competition.base_entry_fee + competition_events.map(&:fee_lowest_denomination).sum
+    sum_lowest_denomination = competition.base_entry_fee + competition_events.sum(&:fee_lowest_denomination)
 
     Money.new(
       sum_lowest_denomination,
@@ -140,7 +129,7 @@ class Registration < ApplicationRecord
       # registration.includes(:registration_payments) that may exist.
       # It's fine to turn the associated records to an array and sum on ithere,
       # as it's usually just a couple of rows.
-      registration_payments.map(&:amount_lowest_denomination).sum,
+      registration_payments.sum(&:amount_lowest_denomination),
       competition.currency_code,
     )
   end
@@ -155,14 +144,6 @@ class Registration < ApplicationRecord
 
   def to_be_paid_through_wca?
     !new_record? && (pending? || accepted?) && competition.using_payment_integrations? && outstanding_entry_fees > 0
-  end
-
-  def show_payment_form?
-    competition.registration_currently_open? && to_be_paid_through_wca?
-  end
-
-  def show_details?(user)
-    (competition.registration_currently_open? || !(new_or_deleted?)) || (competition.user_can_pre_register?(user))
   end
 
   def record_payment(
@@ -213,7 +194,7 @@ class Registration < ApplicationRecord
   end
 
   def waiting_list_position
-    competition.waiting_list.position(id)
+    competition.waiting_list.position(self)
   end
 
   def wcif_status
@@ -273,7 +254,7 @@ class Registration < ApplicationRecord
                               guests: guests,
                               competing: {
                                 registration_status: competing_status,
-                                registered_on: created_at,
+                                registered_on: registered_at,
                                 comment: comments,
                                 admin_comment: administrative_notes,
                               },
@@ -319,8 +300,16 @@ class Registration < ApplicationRecord
     }
   end
 
+  def self.accepted_count
+    accepted.count
+  end
+
   def self.accepted_and_paid_pending_count
-    accepted.count + pending.with_payments.count
+    accepted_count + pending.with_payments.count
+  end
+
+  def self.newcomer_month_eligible_competitors_count
+    joins(:user).merge(User.newcomer_month_eligible).accepted_count
   end
 
   # Only run the validations when creating the registration as we don't want user changes
@@ -338,7 +327,7 @@ class Registration < ApplicationRecord
   # TODO: V3-REG cleanup. All these Validations can be used instead of the registration_checker checks
   validate :cannot_be_undeleted_when_banned, if: :competing_status_changed?
   private def cannot_be_undeleted_when_banned
-    if user.banned? && might_attend?
+    if user.banned_at_date?(competition.start_date) && might_attend?
       errors.add(:user_id, I18n.t('registrations.errors.undelete_banned'))
     end
   end
@@ -352,10 +341,10 @@ class Registration < ApplicationRecord
 
   validate :must_not_register_for_more_events_than_event_limit
   private def must_not_register_for_more_events_than_event_limit
-    if !competition.present? || !competition.events_per_registration_limit_enabled?
+    if competition.blank? || !competition.events_per_registration_limit_enabled?
       return
     end
-    if registration_competition_events.reject(&:marked_for_destruction?).length > competition.events_per_registration_limit
+    if registration_competition_events.count { |element| !element.marked_for_destruction? } > competition.events_per_registration_limit
       errors.add(:registration_competition_events, I18n.t('registrations.errors.exceeds_event_limit', count: competition.events_per_registration_limit))
     end
   end
@@ -372,7 +361,7 @@ class Registration < ApplicationRecord
 
   validate :forcing_competitors_to_add_comment, if: :is_competing?
   private def forcing_competitors_to_add_comment
-    if competition&.force_comment_in_registration.present? && !comments&.strip&.present?
+    if competition&.force_comment_in_registration.present? && comments&.strip.blank?
       errors.add(:user_id, I18n.t('registrations.errors.cannot_register_without_comment'))
     end
   end
@@ -381,16 +370,29 @@ class Registration < ApplicationRecord
   def events_to_associated_events(events)
     events.map do |event|
       competition_event = competition.competition_events.find_by!(event: event)
-      registration_competition_events.find_by_competition_event_id(competition_event.id) || registration_competition_events.build(competition_event: competition_event)
+      registration_competition_events.find_by(competition_event_id: competition_event.id) || registration_competition_events.build(competition_event: competition_event)
     end
+  end
+
+  def permit_user_cancellation?
+    case competition.competitor_can_cancel.to_sym
+    when :always
+      true
+    when :not_accepted
+      !accepted?
+    when :unpaid
+      paid_entry_fees == 0
+    end
+  end
+
+  def consider_auto_close
+    outstanding_entry_fees.zero? && competition.attempt_auto_close!
   end
 
   validate :only_one_accepted_per_series
   private def only_one_accepted_per_series
-    if competition&.part_of_competition_series? && competing_status_accepted?
-      unless series_sibling_registrations(:accepted).empty?
-        errors.add(:competition_id, I18n.t('registrations.errors.series_more_than_one_accepted'))
-      end
+    if competition&.part_of_competition_series? && competing_status_accepted? && !series_sibling_registrations(:accepted).empty?
+      errors.add(:competition_id, I18n.t('registrations.errors.series_more_than_one_accepted'))
     end
   end
 
@@ -418,6 +420,11 @@ class Registration < ApplicationRecord
     SERIES_SIBLING_DISPLAY_STATUSES.map { |st| series_sibling_registrations(st) }
                                    .map(&:count)
                                    .join(" + ")
+  end
+
+  def ensure_waitlist_eligibility!
+    raise ArgumentError.new("Registration must have a competing_status of 'waiting_list' to be added to the waiting list") unless
+      competing_status == Registrations::Helper::STATUS_WAITING_LIST
   end
 
   DEFAULT_SERIALIZE_OPTIONS = {

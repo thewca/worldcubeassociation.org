@@ -10,8 +10,9 @@ import {
 } from 'semantic-ui-react';
 import _ from 'lodash';
 
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import VenueLocationMap from './VenueLocationMap';
-import { countries, backendTimezones } from '../../../lib/wca-data.js.erb';
+import { backendTimezones } from '../../../lib/wca-data.js.erb';
 import RoomPanel from './RoomPanel';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { useConfirm } from '../../../lib/providers/ConfirmProvider';
@@ -21,14 +22,10 @@ import {
   removeVenue,
 } from '../store/actions';
 import { toDegrees, toMicrodegrees } from '../../../lib/utils/edit-schedule';
+import { fetchWithAuthenticityToken } from '../../../lib/requests/fetchWithAuthenticityToken';
+import { geocodingTimeZoneUrl } from '../../../lib/requests/routes.js.erb';
 import { getTimeZoneDropdownLabel, sortByOffset } from '../../../lib/utils/timezone';
-
-const countryOptions = countries.real.map((country) => ({
-  key: country.iso2,
-  text: country.name,
-  value: country.iso2,
-  flag: country.iso2.toLowerCase(),
-}));
+import CountrySelector from '../../CountrySelector/CountrySelector';
 
 function VenuePanel({
   venue,
@@ -102,6 +99,37 @@ function VenuePanel({
     ];
   }, [countryZones, referenceTime, makeTimeZoneOption]);
 
+  const fetchSuggestedTimeZones = useCallback(async () => {
+    const url = `${geocodingTimeZoneUrl}?${new URLSearchParams({
+      lat: venue.latitudeMicrodegrees,
+      lng: venue.longitudeMicrodegrees,
+    }).toString()}`;
+
+    const response = await fetchWithAuthenticityToken(url);
+    return response.json();
+  }, [venue.latitudeMicrodegrees, venue.longitudeMicrodegrees]);
+
+  const {
+    data: suggestedTimeZones,
+    isLoading: timeZonesLoading,
+    isError: timeZonesError,
+  } = useQuery({
+    queryFn: fetchSuggestedTimeZones,
+    queryKey: ['suggested-tz', venue.latitudeMicrodegrees, venue.longitudeMicrodegrees],
+    enabled: Boolean(venue.latitudeMicrodegrees && venue.longitudeMicrodegrees),
+    placeholderData: keepPreviousData,
+  });
+
+  const bestMatch = useMemo(() => suggestedTimeZones?.find(
+    (tz) => timezoneOptions.some((tzOpt) => tzOpt.key === tz),
+  ), [suggestedTimeZones, timezoneOptions]);
+
+  const handleDetectTimezone = async (evt) => {
+    if (bestMatch) {
+      handleVenueChange(evt, { name: 'timezone', value: bestMatch });
+    }
+  };
+
   return (
     <Card fluid raised>
       { /* Needs the className 'image' so that SemUI fills the top of the card */ }
@@ -140,14 +168,27 @@ function VenuePanel({
               value={venue.name}
               onChange={handleVenueChange}
             />
-            <Form.Select
-              search
-              label="Country"
+            <CountrySelector
               name="countryIso2"
-              options={countryOptions}
-              value={venue.countryIso2}
+              countryIso2={venue.countryIso2}
               onChange={handleVenueChange}
             />
+            {bestMatch && (
+              <Button
+                floated="right"
+                compact
+                icon
+                labelPosition="left"
+                primary
+                negative={timeZonesError}
+                disabled={timeZonesLoading}
+                onClick={handleDetectTimezone}
+              >
+                <Icon name="target" />
+                Use coordinate timezone
+                <div>{bestMatch}</div>
+              </Button>
+            )}
             <Form.Select
               label="Timezone"
               name="timezone"

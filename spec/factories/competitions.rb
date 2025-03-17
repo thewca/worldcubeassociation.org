@@ -80,8 +80,8 @@ FactoryBot.define do
     registration_open { 54.weeks.ago.change(usec: 0) }
     registration_close { 53.weeks.ago.change(usec: 0) }
 
-    start_date { starts.nil? ? nil : starts.strftime("%F") }
-    end_date { ends.nil? ? nil : ends.strftime("%F") }
+    start_date { starts&.strftime("%F") }
+    end_date { ends&.strftime("%F") }
 
     events { Event.where(id: event_ids) }
     main_event_id { events.first.id if events.any? }
@@ -98,6 +98,23 @@ FactoryBot.define do
     on_the_spot_registration { false }
     refund_policy_percent { 0 }
     guests_entry_fee_lowest_denomination { 0 }
+
+    trait :skip_validations do
+      to_create { |instance| instance.save(validate: false) }
+    end
+
+    trait :auto_accept do
+      use_wca_registration { true }
+      auto_accept_registrations { true }
+    end
+
+    trait :newcomer_month do
+      registration_open
+      with_organizer
+      with_competitor_limit
+      competitor_limit { 4 }
+      newcomer_month_reserved_spots { 2 }
+    end
 
     trait :enforces_qualifications do
       with_organizer
@@ -220,7 +237,7 @@ FactoryBot.define do
     end
 
     trait :with_guest_limit do
-      guest_entry_status { Competition.guest_entry_statuses['restricted'] }
+      guest_entry_status { :restricted }
       guests_per_registration_limit { 10 }
     end
 
@@ -262,14 +279,14 @@ FactoryBot.define do
 
     trait :registration_closed do
       registration_open { 4.weeks.ago.change(usec: 0) }
-      registration_close { 1.weeks.ago.change(usec: 0) }
+      registration_close { 1.week.ago.change(usec: 0) }
       starts { 1.month.from_now }
       ends { starts }
       use_wca_registration { true }
     end
 
     trait :registration_not_opened do
-      registration_open { 1.weeks.from_now.change(usec: 0) }
+      registration_open { 1.week.from_now.change(usec: 0) }
       registration_close { 4.weeks.from_now.change(usec: 0) }
       starts { 1.month.from_now }
       ends { starts }
@@ -469,12 +486,12 @@ FactoryBot.define do
         end
       end
 
-      if competition.qualification_results && evaluator&.qualifications&.present?
+      if competition.qualification_results && evaluator&.qualifications.present?
         events_wcif = competition.to_wcif['events']
         qualification_data = evaluator.qualifications
 
         events_wcif.each do |event|
-          next unless qualification_data.keys.include?(event['id'])
+          next unless qualification_data.key?(event['id'])
           event['qualification'] = qualification_data[event['id']]
         end
 
@@ -504,10 +521,8 @@ FactoryBot.define do
       create(:waiting_list, holder: competition)
 
       competition.delegates.each do |delegate|
-        unless delegate.region_id.nil? # There can be cases where the competition delegate is actually not a delegate (temporary delegate)
-          if UserGroup.find(delegate.region_id).lead_user.nil? # Allowing to manually create senior delegate for the delegate if needed.
-            FactoryBot.create(:senior_delegate_role, group_id: delegate.region_id)
-          end
+        if !delegate.region_id.nil? && UserGroup.find(delegate.region_id).lead_user.nil? # Allowing to manually create senior delegate for the delegate if needed.
+          FactoryBot.create(:senior_delegate_role, group_id: delegate.region_id)
         end
       end
     end

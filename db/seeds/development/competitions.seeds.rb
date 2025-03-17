@@ -48,7 +48,7 @@ after "development:users", "development:user_roles" do
       start_date: day.strftime("%F"),
       end_date: day.strftime("%F"),
       venue: Faker::Address.street_name,
-      venueAddress: Faker::Address.street_address + ", " + Faker::Address.city + " " + Faker::Address.postcode,
+      venueAddress: "#{Faker::Address.street_address}, #{Faker::Address.city} #{Faker::Address.postcode}",
       external_website: "https://www.worldcubeassociation.org",
       showAtAll: true,
       delegates: [delegate],
@@ -97,7 +97,7 @@ after "development:users", "development:user_roles" do
             regionalAverageRecord: k == 0 ? "WR" : nil,
           )
           round_format.expected_solve_count.times do |v|
-            result.send("value#{v+1}=", random_wca_value)
+            result.send(:"value#{v+1}=", random_wca_value)
           end
           result.average = result.compute_correct_average
           result.best = result.compute_correct_best
@@ -126,7 +126,7 @@ after "development:users", "development:user_roles" do
       start_date: day.strftime("%F"),
       end_date: day.strftime("%F"),
       venue: Faker::Address.street_name,
-      venueAddress: Faker::Address.street_address + ", " + Faker::Address.city + " " + Faker::Address.postcode,
+      venueAddress: "#{Faker::Address.street_address}, #{Faker::Address.city} #{Faker::Address.postcode}",
       external_website: "https://www.worldcubeassociation.org",
       showAtAll: true,
       delegates: [delegate],
@@ -179,7 +179,7 @@ after "development:users", "development:user_roles" do
       start_date: start_day.strftime("%F"),
       end_date: end_day.strftime("%F"),
       venue: Faker::Address.street_name,
-      venueAddress: Faker::Address.street_address + ", " + Faker::Address.city + " " + Faker::Address.postcode,
+      venueAddress: "#{Faker::Address.street_address}, #{Faker::Address.city} #{Faker::Address.postcode}",
       external_website: "https://www.worldcubeassociation.org",
       showAtAll: true,
       delegates: [delegate],

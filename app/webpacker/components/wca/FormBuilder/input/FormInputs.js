@@ -195,9 +195,10 @@ export const InputTextArea = wrapInput((props) => (
 ), [], '');
 
 export const InputNumber = wrapInput((props) => {
-  const onChangeNumber = useCallback((e, { value: newValue }) => {
-    const convertedNumber = Number(newValue);
-    props.onChange(e, { value: convertedNumber });
+  const onChangeNumber = useCallback((e, { value: inputValue }) => {
+    const setToNull = props.nullable && inputValue === '';
+    const processedValue = setToNull ? null : Number(inputValue);
+    props.onChange(e, { value: processedValue });
   }, [props]);
 
   return (
@@ -213,7 +214,7 @@ export const InputNumber = wrapInput((props) => {
       step={props.step}
     />
   );
-}, ['attachedLabel', 'min', 'max', 'step']);
+}, ['attachedLabel', 'min', 'max', 'step', 'nullable']);
 
 export const InputDate = wrapInput((props) => {
   const onChangeInternal = useCallback((isoDate) => {

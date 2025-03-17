@@ -45,6 +45,7 @@ gem 'time_will_tell', github: 'thewca/time_will_tell'
 gem 'redcarpet'
 gem 'bootstrap-table-rails'
 gem 'money-rails'
+gem 'money-currencylayer-bank'
 gem 'octokit'
 gem 'stripe'
 gem 'oauth2'
@@ -58,7 +59,6 @@ gem 'devise-jwt'
 gem 'jwt'
 gem 'iso', github: 'thewca/ruby-iso'
 gem 'csv'
-gem 'ostruct'
 
 # Pointing to jfly/selectize-rails which has a workaround for
 #  https://github.com/selectize/selectize.js/issues/953
@@ -87,7 +87,7 @@ gem 'i18n-country-translations', github: 'thewca/i18n-country-translations'
 gem 'http_accept_language'
 gem 'twitter_cldr'
 # version explicitly specified because Shakapacker wants to keep Gemfile and package.json in sync
-gem 'shakapacker', '8.0.2'
+gem 'shakapacker', '8.2.0'
 gem 'json-schema'
 gem 'translighterate'
 gem 'enum_help'
@@ -101,12 +101,13 @@ gem 'icalendar'
 gem 'starburst', github: 'thewca/starburst'
 gem 'react-rails'
 gem 'sprockets-rails'
-gem 'fuzzy-string-match'
+gem 'jaro_winkler'
 gem 'sidekiq'
 gem 'sidekiq-cron'
 gem 'after_commit_everywhere'
 gem 'slack-ruby-client'
 gem 'puma'
+gem "tzf"
 
 group :development, :test do
   gem 'spring'
@@ -130,6 +131,13 @@ group :development do
   gem 'overcommit', require: false
   gem 'rubocop', require: false
   gem 'rubocop-thread_safety', require: false
+  gem 'rubocop-performance', require: false
+  gem 'rubocop-rails', require: false
+  gem 'rubocop-rspec', require: false
+  gem 'rubocop-rspec_rails', require: false
+  gem 'rubocop-factory_bot', require: false
+  gem 'rubocop-capybara', require: false
+  gem 'rubocop-rake', require: false
   gem 'better_errors'
   gem 'binding_of_caller'
   gem 'bullet'
