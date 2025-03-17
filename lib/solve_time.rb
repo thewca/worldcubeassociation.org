@@ -81,7 +81,7 @@ class SolveTime
   end
 
   def time_centiseconds=(time_centiseconds)
-    raise "time out of range" unless 0 <= time_centiseconds && time_centiseconds <= 99_999 * 100
+    raise "time out of range" unless time_centiseconds.between?(0, 99_999 * 100)
     @time_centiseconds = time_centiseconds
     recompute_wca_value
   end
