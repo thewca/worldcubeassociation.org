@@ -26,7 +26,7 @@ module Registrations
       target_user = User.find(update_request['user_id'])
       waiting_list_position = update_request.dig('competing', 'waiting_list_position')
       comment = update_request.dig('competing', 'comment')
-      organizer_comment = request.dig('competing', 'organizer_comment')
+      organizer_comment = update_request.dig('competing', 'organizer_comment')
       guests = update_request['guests']
       new_status = update_request.dig('competing', 'status')
       events = update_request.dig('competing', 'event_ids')
