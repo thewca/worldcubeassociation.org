@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePermissions } from "@/providers/PermissionProvider";
 import { components } from "@/lib/wca/wcaSchema";
+import { Text, Link as ChakraLink } from "@chakra-ui/react";
 
 export default function PermissionsTestMessage({
   competitionInfo,
@@ -12,15 +13,12 @@ export default function PermissionsTestMessage({
   const permissions = usePermissions();
 
   return permissions?.canAdministerCompetition(competitionInfo.id) ? (
-    <p>
-      {" "}
+    <Text>
       You can administer this competition{" "}
-      <Link
-        href={`/next-frontend/src/app/(wca)/competitions/${competitionInfo.id}/admin`}
-      >
-        here
-      </Link>
-    </p>
+      <ChakraLink asChild variant="underline" colorPalette="teal">
+        <Link href={`/competitions/${competitionInfo.id}/admin`}>here</Link>
+      </ChakraLink>
+    </Text>
   ) : (
     <p> This is the public page, you cannot administer this competition</p>
   );

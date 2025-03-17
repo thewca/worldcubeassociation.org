@@ -1,4 +1,4 @@
-import { Heading } from "@chakra-ui/react";
+import { Heading, Text, Link as ChakraLink } from "@chakra-ui/react";
 import { Container } from "@chakra-ui/react";
 import Link from "next/link";
 import { getCompetitionInfo } from "@/lib/wca/competitions/getCompetitionInfo";
@@ -23,20 +23,18 @@ export default async function CompetitionOverview({
 
   return (
     <Container centerContent>
-      <Heading>{competitionInfo.id}</Heading>
+      <Heading>{competitionInfo.name}</Heading>
       <PermissionCheck
         requiredPermission={"canAdministerCompetition"}
         item={competitionId}
       >
-        <p>You are administering this competition</p>
-        <p>
+        <Text>You are administering this competition</Text>
+        <Text>
           Go back to the public page{" "}
-          <Link
-            href={`/next-frontend/src/app/(wca)/competitions/${competitionInfo.id}`}
-          >
-            here
-          </Link>
-        </p>
+          <ChakraLink asChild variant="underline" colorPalette="teal">
+            <Link href={`/competitions/${competitionInfo.id}`}>here</Link>
+          </ChakraLink>
+        </Text>
       </PermissionCheck>
     </Container>
   );

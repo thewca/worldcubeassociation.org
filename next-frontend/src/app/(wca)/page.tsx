@@ -2,22 +2,25 @@
 
 import { useSession, signIn, signOut } from "next-auth/react";
 import { usePermissions } from "@/providers/PermissionProvider";
+import { Button, Code, Container, Text } from "@chakra-ui/react";
 
 export default function Home() {
   const { data: session } = useSession();
   const permissions = usePermissions();
 
   return (
-    <div>
+    <Container centerContent>
       {session ? (
         <>
-          <p>Welcome, {session.user?.name}</p>
-          <button onClick={() => signOut()}>Sign out</button>
-          {permissions && JSON.stringify(permissions, null, 2)}
+          <Text>Welcome, {session.user?.name}</Text>
+          <Button onClick={() => signOut()}>Sign out</Button>
+          {permissions && (
+            <Code as="pre">{JSON.stringify(permissions, null, 2)}</Code>
+          )}
         </>
       ) : (
-        <button onClick={() => signIn("WCA")}>Sign in</button>
+        <Button onClick={() => signIn("WCA")}>Sign in</Button>
       )}
-    </div>
+    </Container>
   );
 }
