@@ -9640,9 +9640,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-datepicker@npm:^8.1.0":
-  version: 8.1.0
-  resolution: "react-datepicker@npm:8.1.0"
+"react-datepicker@npm:^8.2.1":
+  version: 8.2.1
+  resolution: "react-datepicker@npm:8.2.1"
   dependencies:
     "@floating-ui/react": "npm:^0.27.3"
     clsx: "npm:^2.1.1"
@@ -9650,7 +9650,7 @@ __metadata:
   peerDependencies:
     react: ^16.9.0 || ^17 || ^18 || ^19 || ^19.0.0-rc
     react-dom: ^16.9.0 || ^17 || ^18 || ^19 || ^19.0.0-rc
-  checksum: 10c0/c4116720488c3e22290d3d933495747e865f237a9dae4d88dcede617888e791ed1e2724dd9ee4a48aeea029ec0bc09bcb6c3ef55e88371f57cd6e9280f65f388
+  checksum: 10c0/a4665b51d138789f2ab43716e157ef1d6a1241ea6a8c2300ec18925ef773fc598592d700ba124631dff18a5077d254941f0d618090f587d853db406220e3a008
   languageName: node
   linkType: hard
 
@@ -10268,7 +10268,7 @@ __metadata:
     react: "npm:^18.3.1"
     react-beautiful-dnd: "npm:^13.1.1"
     react-csv: "npm:^2.2.2"
-    react-datepicker: "npm:^8.1.0"
+    react-datepicker: "npm:^8.2.1"
     react-dom: "npm:^18.3.1"
     react-google-recaptcha: "npm:^3.1.0"
     react-image-crop: "npm:^11.0.7"
