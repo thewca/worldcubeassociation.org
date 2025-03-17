@@ -204,6 +204,9 @@ class Competition < ApplicationRecord
   validates :competitor_limit_reason, presence: true, if: :competitor_limit_enabled?
   validates :guests_enabled, acceptance: { accept: true, message: I18n.t('competitions.errors.must_ask_about_guests_if_specifying_limit') }, if: :guests_per_registration_limit_enabled?
   validates :guests_per_registration_limit, numericality: { only_integer: true, greater_than_or_equal_to: 1, less_than_or_equal_to: MAX_GUEST_LIMIT, allow_blank: true, if: :some_guests_allowed? }
+  validates :events_per_registration_limit, absence: true, unless: :event_restrictions?
+  validates :events_per_registration_limit, numericality: { only_integer: true, greater_than_or_equal_to: 1, less_than_or_equal_to: :number_of_events, allow_blank: true, if: :event_restrictions? }
+  validates :guests_per_registration_limit, numericality: { only_integer: true, greater_than_or_equal_to: 1, less_than_or_equal_to: MAX_GUEST_LIMIT, allow_blank: true, if: :some_guests_allowed? }
   validates :events_per_registration_limit, numericality: { only_integer: true, greater_than_or_equal_to: 1, less_than_or_equal_to: :number_of_events, allow_blank: true, if: :event_restrictions? }
   validates :id, presence: true, uniqueness: { case_sensitive: false }, length: { maximum: MAX_ID_LENGTH },
                  format: { with: VALID_ID_RE }, if: :name_valid_or_updating?
