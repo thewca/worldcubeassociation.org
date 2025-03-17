@@ -2,7 +2,6 @@
 
 module Registrations
   class RegistrationChecker
-    COMMENT_CHARACTER_LIMIT = 240
     DEFAULT_GUEST_LIMIT = 99
 
     def self.create_registration_allowed!(registration_request, current_user)
@@ -136,16 +135,17 @@ module Registrations
           guests > DEFAULT_GUEST_LIMIT && !competition.guest_entry_status_restricted?
       end
 
-      def validate_comment!(comment, competition, registration = nil)
-        if comment.nil?
-          # Return if no comment was supplied in the request but one already exists for the registration
-          return if registration.present? && !registration.comments.nil? && !(registration.comments == '')
+      def validate_comment!(comment, competition)
+        r = Registration.new(comments: comment, competition: competition)
+        unless r.valid?
+          comment_error_details = r.errors.details[:comments].first
 
-          # Raise error if comment is mandatory, none has been supplied, and none exists for the registration
-          raise WcaExceptions::RegistrationError.new(:unprocessable_entity, Registrations::ErrorCodes::REQUIRED_COMMENT_MISSING) if competition.force_comment_in_registration
-        else
-          raise WcaExceptions::RegistrationError.new(:unprocessable_entity, ErrorCodes::USER_COMMENT_TOO_LONG) if comment.length > COMMENT_CHARACTER_LIMIT
-          raise WcaExceptions::RegistrationError.new(:unprocessable_entity, ErrorCodes::REQUIRED_COMMENT_MISSING) if competition.force_comment_in_registration && comment.strip.empty?
+          if comment_error_details.present?
+            frontend_code = comment_error_details[:frontend_code] || Registrations::ErrorCodes::INVALID_REQUEST_DATA
+
+            # Assumption: If a model validation fails, it should always be HTTP status 422 (unprocessable entity)
+            raise WcaExceptions::RegistrationError.new(:unprocessable_entity, frontend_code, comment_error_details)
+          end
         end
       end
 

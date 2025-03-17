@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class Registration < ApplicationRecord
+  COMMENT_CHARACTER_LIMIT = 240
   scope :pending, -> { where(competing_status: 'pending') }
   scope :accepted, -> { where(competing_status: 'accepted') }
   scope :cancelled, -> { where(competing_status: 'cancelled') }
@@ -360,9 +361,10 @@ class Registration < ApplicationRecord
   end
 
   validate :forcing_competitors_to_add_comment, if: :is_competing?
+  validates :comments, length: { maximum: COMMENT_CHARACTER_LIMIT, frontend_code: ErrorCodes::USER_COMMENT_TOO_LONG }
   private def forcing_competitors_to_add_comment
     if competition&.force_comment_in_registration.present? && comments&.strip.blank?
-      errors.add(:user_id, I18n.t('registrations.errors.cannot_register_without_comment'))
+      errors.add(:user_id, I18n.t('registrations.errors.cannot_register_without_comment'), frontend_code: ErrorCodes::REQUIRED_COMMENT_MISSING)
     end
   end
 
