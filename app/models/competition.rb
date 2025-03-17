@@ -292,7 +292,7 @@ class Competition < ApplicationRecord
   end
 
   def guests_per_registration_limit_enabled?
-    some_guests_allowed? && !guests_per_registration_limit.nil?
+    some_guests_allowed? && guests_per_registration_limit.present?
   end
 
   def events_per_registration_limit_enabled?
@@ -478,13 +478,6 @@ class Competition < ApplicationRecord
 
   def enforces_qualifications?
     uses_qualification? && !allow_registration_without_qualification
-  end
-
-  def guest_limit_exceeded?(guest_count)
-    guests_not_allowed_but_coming = !guests_enabled? && guest_count > 0
-    guests_exceeding_limit = guest_entry_status_restricted? && guests_per_registration_limit.present? && guest_count > guests_per_registration_limit
-
-    guests_not_allowed_but_coming || guests_exceeding_limit
   end
 
   def with_old_id
