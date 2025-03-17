@@ -8,12 +8,15 @@ module Registrations
       target_user = User.find(registration_request['user_id'])
       competition = Competition.find(registration_request['competition_id'])
       guests = registration_request['guests']
+      comment = registration_request.dig('competing', 'comment')
+
+      r = Registration.new(guests: guests, competition: competition, comments: comment)
 
       user_can_create_registration!(competition, current_user, target_user)
       validate_create_events!(registration_request, competition)
       validate_qualifications!(registration_request, competition, target_user)
-      validate_guests!(guests.to_i, competition) unless guests.nil?
-      validate_comment!(registration_request.dig('competing', 'comment'), competition)
+      validate_guests!(r) unless guests.nil?
+      validate_comment!(r)
     end
 
     def self.update_registration_allowed!(update_request, competition, current_user)
@@ -27,9 +30,12 @@ module Registrations
       new_status = update_request.dig('competing', 'status')
       events = update_request.dig('competing', 'event_ids')
 
+      registration.comment = comment
+      registration.guests = guests
+
       user_can_modify_registration!(competition, current_user, target_user, registration, new_status)
-      validate_guests!(guests.to_i, competition) unless guests.nil?
-      validate_comment!(comment, competition, registration)
+      validate_guests!(registration) unless guests.nil?
+      validate_comment!(registration)
       validate_organizer_fields!(update_request, current_user, competition)
       validate_organizer_comment!(update_request)
       validate_waiting_list_position!(waiting_list_position, competition, registration) unless waiting_list_position.nil?
@@ -128,33 +134,22 @@ module Registrations
         raise WcaExceptions::RegistrationError.new(:unprocessable_entity, Registrations::ErrorCodes::QUALIFICATION_NOT_MET, unqualified_events) unless unqualified_events.empty?
       end
 
-      def validate_guests!(guests, competition)
-        r = Registration.new(guests: guests, competition: competition)
+      def process_validation_error!(registration, field)
+        return if registration.valid?
+        error_details = registration.errors.details[field].first
 
-        unless r.valid?
-          guest_error_details = r.errors.details[:guests].first
+        return unless error_details.present?
 
-          if guest_error_details.present?
-            frontend_code = guest_error_details[:frontend_code] || Registrations::ErrorCodes::INVALID_REQUEST_DATA
-
-            # Assumption: If a model validation fails, it should always be HTTP status 422 (unprocessable entity)
-            raise WcaExceptions::RegistrationError.new(:unprocessable_entity, frontend_code, guest_error_details)
-          end
-        end
+        frontend_code = error_details[:frontend_code] || Registrations::ErrorCodes::INVALID_REQUEST_DATA
+        raise WcaExceptions::RegistrationError.new(:unprocessable_entity, frontend_code, error_details)
       end
 
-      def validate_comment!(comment, competition)
-        r = Registration.new(comments: comment, competition: competition)
-        unless r.valid?
-          comment_error_details = r.errors.details[:comments].first
+      def validate_guests!(registration)
+        process_validation_error!(registration, :guests)
+      end
 
-          if comment_error_details.present?
-            frontend_code = comment_error_details[:frontend_code] || Registrations::ErrorCodes::INVALID_REQUEST_DATA
-
-            # Assumption: If a model validation fails, it should always be HTTP status 422 (unprocessable entity)
-            raise WcaExceptions::RegistrationError.new(:unprocessable_entity, frontend_code, comment_error_details)
-          end
-        end
+      def validate_comment!(registration)
+        process_validation_error!(registration, :comments)
       end
 
       def validate_organizer_fields!(request, current_user, competition)
