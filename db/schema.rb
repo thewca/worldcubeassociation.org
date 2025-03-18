@@ -1065,6 +1065,10 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_06_165113) do
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
     t.integer "guests", default: 0, null: false
+    t.datetime "accepted_at", precision: nil
+    t.integer "accepted_by"
+    t.datetime "deleted_at", precision: nil
+    t.integer "deleted_by"
     t.text "roles"
     t.boolean "is_competing", default: true
     t.text "administrative_notes"
