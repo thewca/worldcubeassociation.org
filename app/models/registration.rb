@@ -368,15 +368,7 @@ class Registration < ApplicationRecord
     competition&.events_per_registration_limit_enabled?
   end
 
-  validate :cannot_register_for_unqualified_events
-  private def cannot_register_for_unqualified_events
-    if competition && competition.allow_registration_without_qualification
-      return
-    end
-    if registration_competition_events.reject(&:marked_for_destruction?).any? { |event| !event.competition_event&.can_register?(user) }
-      errors.add(:registration_competition_events, I18n.t('registrations.errors.can_only_register_for_qualified_events'))
-    end
-  end
+  delegate :allow_registration_without_qualification?, to: :competition, allow_nil: true
 
   strip_attributes only: [:comments, :administrative_notes]
 
