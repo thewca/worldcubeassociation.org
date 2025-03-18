@@ -344,21 +344,21 @@ class Registration < ApplicationRecord
     end
   end
 
-  validate :must_register_for_gte_one_event, if: :is_competing?
-  private def must_register_for_gte_one_event
-    if registration_competition_events.reject(&:marked_for_destruction?).empty?
-      errors.add(:registration_competition_events, I18n.t('registrations.errors.must_register'))
-    end
+  validates :registration_competition_events, presence: { if: :is_competing?, message: I18n.t('registrations.errors.must_register') },
+                                              length: {
+                                                maximum: :events_limit,
+                                                if: :events_limit_enabled?,
+                                                message: ->(_registration, data) {
+                                                  I18n.t('registrations.errors.exceeds_event_limit', count: data[:value])
+                                                },
+                                              }
+
+  private def events_limit
+    competition&.events_per_registration_limit
   end
 
-  validate :must_not_register_for_more_events_than_event_limit
-  private def must_not_register_for_more_events_than_event_limit
-    if competition.blank? || !competition.events_per_registration_limit_enabled?
-      return
-    end
-    if registration_competition_events.count { |element| !element.marked_for_destruction? } > competition.events_per_registration_limit
-      errors.add(:registration_competition_events, I18n.t('registrations.errors.exceeds_event_limit', count: competition.events_per_registration_limit))
-    end
+  private def events_limit_enabled?
+    competition&.events_per_registration_limit_enabled?
   end
 
   validate :cannot_register_for_unqualified_events
