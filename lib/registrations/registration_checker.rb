@@ -5,17 +5,21 @@ module Registrations
     def self.create_registration_allowed!(registration_request, current_user)
       target_user = User.find(registration_request['user_id'])
       competition = Competition.find(registration_request['competition_id'])
+      registration = Registration.new(competition: competition, user: target_user)
+
       guests = registration_request['guests']
       comment = registration_request.dig('competing', 'comment')
 
-      r = Registration.new(guests: guests.to_i, competition: competition, comments: comment)
+      registration.guests = guests.to_i if registration_request.key?('guests')
+      competing_payload = registration_request['competing']
+      registration.comments = comment if competing_payload&.key?('comment')
 
       user_can_create_registration!(competition, current_user, target_user)
       validate_create_events!(registration_request, competition)
       validate_qualifications!(registration_request, competition, target_user)
       # Migrated to ActiveRecord-style validations
-      validate_guests!(r)
-      validate_comment!(r)
+      validate_guests!(registration)
+      validate_comment!(registration)
     end
 
     def self.update_registration_allowed!(update_request, competition, current_user)
