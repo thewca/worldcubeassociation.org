@@ -1,8 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button, Modal } from 'semantic-ui-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import MarkdownEditor from '../wca/FormBuilder/input/MarkdownEditor';
-import useInputState from '../../lib/hooks/useInputState';
+import SimpleMdeReact from 'react-simplemde-editor';
 import createComment from './api/createComment';
 import Loading from '../Requests/Loading';
 import Errored from '../Requests/Errored';
@@ -10,7 +9,7 @@ import Errored from '../Requests/Errored';
 export default function TicketCommentCreate({
   open, onClose, ticketId, currentStakeholder,
 }) {
-  const [comment, setComment] = useInputState();
+  const [comment, setComment] = useState();
 
   const queryClient = useQueryClient();
   const {
@@ -39,8 +38,11 @@ export default function TicketCommentCreate({
     >
       <Modal.Header>Add new comment</Modal.Header>
       <Modal.Content>
-        <MarkdownEditor
-          id="new-comment"
+        <SimpleMdeReact
+          options={{
+            autofocus: true,
+            spellChecker: false,
+          }}
           value={comment}
           onChange={setComment}
         />
