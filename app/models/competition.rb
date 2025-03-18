@@ -97,10 +97,6 @@ class Competition < ApplicationRecord
 
   enum :competitor_can_cancel, [:not_accepted, :always, :unpaid], prefix: true
 
-  NEW_REG_SYSTEM_DEFAULT = :v3
-
-  enum :registration_version, [:v1, :v2, :v3], prefix: true, default: NEW_REG_SYSTEM_DEFAULT
-
   CLONEABLE_ATTRIBUTES = %w(
     cityName
     countryId
@@ -176,7 +172,6 @@ class Competition < ApplicationRecord
     waiting_list_deadline_date
     event_change_deadline_date
     competition_series_id
-    registration_version
     auto_accept_registrations
     auto_accept_disable_threshold
     newcomer_month_reserved_spots
