@@ -37,7 +37,9 @@ class Registration < ApplicationRecord
 
   serialize :roles, coder: YAML
 
+  # TODO: V3-REG cleanup. The "accepts_nested_attributes_for" directly below can be removed.
   accepts_nested_attributes_for :registration_competition_events, allow_destroy: true
+  validates_associated :registration_competition_events
 
   validates :user, presence: true, on: [:create]
 

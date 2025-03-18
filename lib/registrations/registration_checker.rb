@@ -2,17 +2,35 @@
 
 module Registrations
   class RegistrationChecker
+    def self.apply_payload(registration, raw_payload)
+      guests = raw_payload['guests']
+
+      registration.guests = guests.to_i if raw_payload.key?('guests')
+
+      competing_payload = raw_payload['competing']
+      comment = competing_payload&.dig('comment')
+      organizer_comment = competing_payload&.dig('organizer_comment')
+
+      registration.comments = comment if competing_payload&.key?('comment')
+      registration.administrative_notes = organizer_comment if competing_payload&.key?('organizer_comment')
+
+      if competing_payload&.key?('event_ids')
+        desired_events = competing_payload['event_ids']
+
+        competition_events_lookup = registration.competition.competition_events.where(event_id: desired_events).index_by(&:event_id)
+        competition_events = desired_events.map { competition_events_lookup[it] }
+
+        rce_build_params = competition_events.map { { competition_event: it } }
+        registration.registration_competition_events = registration.registration_competition_events.build(rce_build_params)
+      end
+    end
+
     def self.create_registration_allowed!(registration_request, current_user)
       target_user = User.find(registration_request['user_id'])
       competition = Competition.find(registration_request['competition_id'])
       registration = Registration.new(competition: competition, user: target_user)
 
-      guests = registration_request['guests']
-      comment = registration_request.dig('competing', 'comment')
-
-      registration.guests = guests.to_i if registration_request.key?('guests')
-      competing_payload = registration_request['competing']
-      registration.comments = comment if competing_payload&.key?('comment')
+      self.apply_payload(registration, registration_request)
 
       user_can_create_registration!(competition, current_user, target_user)
       validate_create_events!(registration_request, competition)
@@ -28,16 +46,10 @@ module Registrations
 
       target_user = User.find(update_request['user_id'])
       waiting_list_position = update_request.dig('competing', 'waiting_list_position')
-      comment = update_request.dig('competing', 'comment')
-      organizer_comment = update_request.dig('competing', 'organizer_comment')
-      guests = update_request['guests']
       new_status = update_request.dig('competing', 'status')
       events = update_request.dig('competing', 'event_ids')
 
-      registration.guests = guests.to_i if update_request.key?('guests')
-      competing_payload = update_request['competing']
-      registration.comments = comment if competing_payload&.key?('comment')
-      registration.administrative_notes = organizer_comment if competing_payload&.key?('organizer_comment')
+      self.apply_payload(registration, update_request)
 
       user_can_modify_registration!(competition, current_user, target_user, registration, new_status)
       # Migrated to ActiveRecord-style validations
