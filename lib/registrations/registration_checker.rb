@@ -6,7 +6,7 @@ module Registrations
       guests = registration_request['guests']
       comment = registration_request.dig('competing', 'comment')
 
-      r = Registration.new(guests: guests.to_i, competition: competition, comments: comment)
+      r = Registration.new(guests: guests.to_i, competition: competition, comments: comment, user: target_user)
 
       validate_create_events!(registration_request, competition)
       validate_qualifications!(registration_request, competition, target_user)

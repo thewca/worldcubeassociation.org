@@ -19,7 +19,7 @@ RSpec.describe Registrations::RegistrationChecker do
 
         expect {
           Registrations::RegistrationChecker.create_registration_allowed!(
-            registration_request, User.find(registration_request['submitted_by'])
+            registration_request, User.find(registration_request['user_id']), default_competition
           )
         }.to raise_error(WcaExceptions::RegistrationError) do |error|
           expect(error.status).to eq(:forbidden)
@@ -36,7 +36,7 @@ RSpec.describe Registrations::RegistrationChecker do
 
           expect {
             Registrations::RegistrationChecker.create_registration_allowed!(
-              registration_request, User.find(registration_request['submitted_by'])
+              registration_request, User.find(registration_request['user_id']), default_competition
             )
           }.not_to raise_error
         end
@@ -46,7 +46,7 @@ RSpec.describe Registrations::RegistrationChecker do
 
           expect {
             Registrations::RegistrationChecker.create_registration_allowed!(
-              registration_request, User.find(registration_request['submitted_by'])
+              registration_request, User.find(registration_request['user_id']), default_competition
             )
           }.not_to raise_error
         end
@@ -57,7 +57,7 @@ RSpec.describe Registrations::RegistrationChecker do
 
           expect {
             Registrations::RegistrationChecker.create_registration_allowed!(
-              registration_request, User.find(registration_request['submitted_by'])
+              registration_request, User.find(registration_request['user_id']), default_competition
             )
           }.to raise_error(WcaExceptions::RegistrationError) do |error|
             expect(error.status).to eq(:unprocessable_entity)
@@ -72,7 +72,8 @@ RSpec.describe Registrations::RegistrationChecker do
           expect {
             Registrations::RegistrationChecker.create_registration_allowed!(
               registration_request,
-              User.find(registration_request['submitted_by']),
+              User.find(registration_request['user_id']),
+              default_competition
             )
           }.to raise_error(WcaExceptions::RegistrationError) do |error|
             expect(error.status).to eq(:unprocessable_entity)
@@ -85,7 +86,7 @@ RSpec.describe Registrations::RegistrationChecker do
 
           expect {
             Registrations::RegistrationChecker.create_registration_allowed!(
-              registration_request, User.find(registration_request['submitted_by'])
+              registration_request, User.find(registration_request['user_id']), default_competition
             )
           }.to raise_error(WcaExceptions::RegistrationError) do |error|
             expect(error.status).to eq(:unprocessable_entity)
@@ -98,7 +99,7 @@ RSpec.describe Registrations::RegistrationChecker do
 
           expect {
             Registrations::RegistrationChecker.create_registration_allowed!(
-              registration_request, User.find(registration_request['submitted_by'])
+              registration_request, User.find(registration_request['user_id']), default_competition
             )
           }.to raise_error(WcaExceptions::RegistrationError) do |error|
             expect(error.status).to eq(:unprocessable_entity)
@@ -112,7 +113,7 @@ RSpec.describe Registrations::RegistrationChecker do
 
           expect {
             Registrations::RegistrationChecker.create_registration_allowed!(
-              registration_request, User.find(registration_request['submitted_by'])
+              registration_request, User.find(registration_request['user_id']), default_competition
             )
           }.not_to raise_error
         end
@@ -123,7 +124,7 @@ RSpec.describe Registrations::RegistrationChecker do
 
           expect {
             Registrations::RegistrationChecker.create_registration_allowed!(
-              registration_request, User.find(registration_request['submitted_by'])
+              registration_request, User.find(registration_request['user_id']), default_competition
             )
           }.to raise_error(WcaExceptions::RegistrationError) do |error|
             expect(error.error).to eq(Registrations::ErrorCodes::UNREASONABLE_GUEST_COUNT)
@@ -142,7 +143,7 @@ RSpec.describe Registrations::RegistrationChecker do
 
         expect {
           Registrations::RegistrationChecker.create_registration_allowed!(
-            registration_request, User.find(registration_request['submitted_by'])
+            registration_request, User.find(registration_request['user_id']), default_competition
           )
         }.to raise_error(WcaExceptions::RegistrationError) do |error|
           expect(error.status).to eq(:unprocessable_entity)
@@ -160,7 +161,7 @@ RSpec.describe Registrations::RegistrationChecker do
 
         expect {
           Registrations::RegistrationChecker.create_registration_allowed!(
-            registration_request, User.find(registration_request['submitted_by'])
+            registration_request, User.find(registration_request['user_id']), default_competition
           )
         }.not_to raise_error
       end
@@ -173,7 +174,7 @@ RSpec.describe Registrations::RegistrationChecker do
 
         expect {
           Registrations::RegistrationChecker.create_registration_allowed!(
-            registration_request, User.find(registration_request['submitted_by'])
+            registration_request, User.find(registration_request['user_id']), default_competition
           )
         }.not_to raise_error
       end
@@ -184,7 +185,7 @@ RSpec.describe Registrations::RegistrationChecker do
 
         expect {
           Registrations::RegistrationChecker.create_registration_allowed!(
-            registration_request, User.find(registration_request['submitted_by'])
+            registration_request, User.find(registration_request['user_id']), default_competition
           )
         }.to raise_error(WcaExceptions::RegistrationError) do |error|
           expect(error.status).to eq(:unprocessable_entity)
@@ -200,7 +201,7 @@ RSpec.describe Registrations::RegistrationChecker do
 
         expect {
           Registrations::RegistrationChecker.create_registration_allowed!(
-            registration_request, User.find(registration_request['submitted_by'])
+            registration_request, User.find(registration_request['user_id']), default_competition
           )
         }.to raise_error(WcaExceptions::RegistrationError) do |error|
           expect(error.status).to eq(:unprocessable_entity)
@@ -215,7 +216,7 @@ RSpec.describe Registrations::RegistrationChecker do
 
         expect {
           Registrations::RegistrationChecker.create_registration_allowed!(
-            registration_request, User.find(registration_request['submitted_by'])
+            registration_request, User.find(registration_request['user_id']), default_competition
           )
         }.not_to raise_error
       end
@@ -225,7 +226,7 @@ RSpec.describe Registrations::RegistrationChecker do
 
         expect {
           Registrations::RegistrationChecker.create_registration_allowed!(
-            registration_request, User.find(registration_request['submitted_by'])
+            registration_request, User.find(registration_request['user_id']), default_competition
           )
         }.to raise_error(WcaExceptions::RegistrationError) do |error|
           expect(error.status).to eq(:unauthorized)
@@ -239,7 +240,7 @@ RSpec.describe Registrations::RegistrationChecker do
 
         expect {
           Registrations::RegistrationChecker.create_registration_allowed!(
-            registration_request, User.find(registration_request['submitted_by'])
+            registration_request, User.find(registration_request['user_id']), default_competition
           )
         }.to raise_error(WcaExceptions::RegistrationError) do |error|
           expect(error.error).to eq(Registrations::ErrorCodes::REGISTRATION_CLOSED)
@@ -253,7 +254,7 @@ RSpec.describe Registrations::RegistrationChecker do
 
         expect {
           Registrations::RegistrationChecker.create_registration_allowed!(
-            registration_request, User.find(registration_request['submitted_by'])
+            registration_request, User.find(registration_request['user_id']), default_competition
           )
         }.not_to raise_error
       end
@@ -268,7 +269,7 @@ RSpec.describe Registrations::RegistrationChecker do
         )
 
         expect {
-          Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['submitted_by']))
+          Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['user_id']), default_competition)
         }.to raise_error(WcaExceptions::RegistrationError) do |error|
           expect(error.status).to eq(:unauthorized)
           expect(error.error).to eq(Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS)
@@ -280,7 +281,7 @@ RSpec.describe Registrations::RegistrationChecker do
         registration_request = FactoryBot.build(:registration_request, competition_id: default_competition.id, user_id: briefly_banned_user.id)
 
         expect {
-          Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['submitted_by']))
+          Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['user_id']), default_competition)
         }.not_to raise_error
       end
 
@@ -289,7 +290,7 @@ RSpec.describe Registrations::RegistrationChecker do
         registration_request = FactoryBot.build(:registration_request, competition_id: default_competition.id, user_id: banned_user.id)
 
         expect {
-          Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['submitted_by']))
+          Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['user_id']), default_competition)
         }.to raise_error(WcaExceptions::RegistrationError) do |error|
           expect(error.status).to eq(:unauthorized)
           expect(error.error).to eq(Registrations::ErrorCodes::USER_CANNOT_COMPETE)
@@ -301,7 +302,7 @@ RSpec.describe Registrations::RegistrationChecker do
         registration_request = FactoryBot.build(:registration_request, :incomplete, competition_id: default_competition.id, user_id: user.id)
 
         expect {
-          Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['submitted_by']))
+          Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['user_id']), default_competition)
         }.to raise_error(WcaExceptions::RegistrationError) do |error|
           expect(error.status).to eq(:unauthorized)
           expect(error.error).to eq(Registrations::ErrorCodes::USER_CANNOT_COMPETE)
@@ -315,7 +316,7 @@ RSpec.describe Registrations::RegistrationChecker do
         )
 
         expect {
-          Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['submitted_by']))
+          Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['user_id']), default_competition)
         }.to raise_error(WcaExceptions::RegistrationError) do |error|
           expect(error.status).to eq(:unauthorized)
           expect(error.error).to eq(Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS)
@@ -331,7 +332,7 @@ RSpec.describe Registrations::RegistrationChecker do
         )
 
         expect {
-          Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['submitted_by']))
+          Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['user_id']), default_competition)
         }.to raise_error(WcaExceptions::RegistrationError) do |error|
           expect(error.status).to eq(:unauthorized)
           expect(error.error).to eq(Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS)
@@ -346,7 +347,7 @@ RSpec.describe Registrations::RegistrationChecker do
         registration_request = FactoryBot.build(:registration_request, competition_id: competitionA.id, user_id: default_user.id)
 
         expect {
-          Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['submitted_by']))
+          Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['user_id']), default_competition)
         }.not_to raise_error
       end
 
@@ -363,7 +364,7 @@ RSpec.describe Registrations::RegistrationChecker do
         registration_request = FactoryBot.build(:registration_request, competition_id: competitionB.id, user_id: user.id)
 
         expect {
-          Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['submitted_by']))
+          Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['user_id']))
         }.to raise_error(WcaExceptions::RegistrationError) do |error|
           expect(error.error).to eq(Registrations::ErrorCodes::ALREADY_REGISTERED_IN_SERIES)
           expect(error.status).to eq(:forbidden)
@@ -383,7 +384,7 @@ RSpec.describe Registrations::RegistrationChecker do
         registration_request = FactoryBot.build(:registration_request, competition_id: competitionB.id, user_id: user.id)
 
         expect {
-          Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['submitted_by']))
+          Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['user_id']), default_competition)
         }.not_to raise_error
       end
 
@@ -400,7 +401,7 @@ RSpec.describe Registrations::RegistrationChecker do
         registration_request = FactoryBot.build(:registration_request, competition_id: competitionB.id, user_id: user.id)
 
         expect {
-          Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['submitted_by']))
+          Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['user_id']), default_competition)
         }.not_to raise_error
       end
     end
@@ -422,7 +423,7 @@ RSpec.describe Registrations::RegistrationChecker do
 
         expect {
           Registrations::RegistrationChecker.create_registration_allowed!(
-            registration_request, User.find(registration_request['submitted_by'])
+            registration_request, User.find(registration_request['user_id']), default_competition
           )
         }.to raise_error(WcaExceptions::RegistrationError) do |error|
           expect(error.status).to eq(:unprocessable_entity)
@@ -437,7 +438,7 @@ RSpec.describe Registrations::RegistrationChecker do
 
         expect {
           Registrations::RegistrationChecker.create_registration_allowed!(
-            registration_request, User.find(registration_request['submitted_by'])
+            registration_request, User.find(registration_request['user_id']), default_competition
           )
         }.to raise_error(WcaExceptions::RegistrationError) do |error|
           expect(error.status).to eq(:unprocessable_entity)
@@ -451,7 +452,7 @@ RSpec.describe Registrations::RegistrationChecker do
         )
 
         expect {
-          Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['submitted_by']))
+          Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['user_id']), default_competition)
         }.not_to raise_error
       end
 
@@ -461,7 +462,7 @@ RSpec.describe Registrations::RegistrationChecker do
         )
 
         expect {
-          Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['submitted_by']))
+          Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['user_id']), default_competition)
         }.to raise_error(WcaExceptions::RegistrationError) do |error|
           expect(error.status).to eq(:forbidden)
           expect(error.error).to eq(Registrations::ErrorCodes::INVALID_EVENT_SELECTION)
@@ -485,7 +486,7 @@ RSpec.describe Registrations::RegistrationChecker do
         )
 
         expect {
-          Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['submitted_by']))
+          Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['user_id']), default_competition)
         }.not_to raise_error
       end
 
@@ -495,7 +496,7 @@ RSpec.describe Registrations::RegistrationChecker do
         )
 
         expect {
-          Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['submitted_by']))
+          Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['user_id']), default_competition)
         }.to raise_error(WcaExceptions::RegistrationError) do |error|
           expect(error.status).to eq(:forbidden)
           expect(error.error).to eq(Registrations::ErrorCodes::INVALID_EVENT_SELECTION)
@@ -543,7 +544,7 @@ RSpec.describe Registrations::RegistrationChecker do
         )
 
         expect {
-          Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['submitted_by']))
+          Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['user_id']), default_competition)
         }.not_to raise_error
       end
 
@@ -556,7 +557,7 @@ RSpec.describe Registrations::RegistrationChecker do
         )
 
         expect {
-          Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['submitted_by']))
+          Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['user_id']), default_competition)
         }.to raise_error(WcaExceptions::RegistrationError) do |error|
           expect(error.error).to eq(Registrations::ErrorCodes::QUALIFICATION_NOT_MET)
           expect(error.status).to eq(:unprocessable_entity)
@@ -574,7 +575,7 @@ RSpec.describe Registrations::RegistrationChecker do
           )
 
           expect {
-            Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['submitted_by']))
+            Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['user_id']), default_competition)
           }.not_to raise_error
         end
 
@@ -587,7 +588,7 @@ RSpec.describe Registrations::RegistrationChecker do
           )
 
           expect {
-            Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['submitted_by']))
+            Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['user_id']), default_competition)
           }.not_to raise_error
         end
 
@@ -600,7 +601,7 @@ RSpec.describe Registrations::RegistrationChecker do
           )
 
           expect {
-            Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['submitted_by']))
+            Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['user_id']), default_competition)
           }.not_to raise_error
         end
       end
@@ -624,7 +625,7 @@ RSpec.describe Registrations::RegistrationChecker do
           )
 
           expect {
-            Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['submitted_by']))
+            Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['user_id']), default_competition)
           }.not_to raise_error
         end
 
@@ -637,7 +638,7 @@ RSpec.describe Registrations::RegistrationChecker do
           )
 
           expect {
-            Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['submitted_by']))
+            Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['user_id']), default_competition)
           }.not_to raise_error
         end
       end
@@ -661,7 +662,7 @@ RSpec.describe Registrations::RegistrationChecker do
           )
 
           expect {
-            Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['submitted_by']))
+            Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['user_id']), default_competition)
           }.to raise_error(WcaExceptions::RegistrationError) do |error|
             expect(error.error).to eq(Registrations::ErrorCodes::QUALIFICATION_NOT_MET)
             expect(error.status).to eq(:unprocessable_entity)
@@ -678,7 +679,7 @@ RSpec.describe Registrations::RegistrationChecker do
           )
 
           expect {
-            Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['submitted_by']))
+            Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['user_id']), default_competition)
           }.to raise_error(WcaExceptions::RegistrationError) do |error|
             expect(error.error).to eq(Registrations::ErrorCodes::QUALIFICATION_NOT_MET)
             expect(error.status).to eq(:unprocessable_entity)
@@ -695,7 +696,7 @@ RSpec.describe Registrations::RegistrationChecker do
           )
 
           expect {
-            Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['submitted_by']))
+            Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['user_id']), default_competition)
           }.to raise_error(WcaExceptions::RegistrationError) do |error|
             expect(error.error).to eq(Registrations::ErrorCodes::QUALIFICATION_NOT_MET)
             expect(error.status).to eq(:unprocessable_entity)
@@ -726,7 +727,7 @@ RSpec.describe Registrations::RegistrationChecker do
           )
 
           expect {
-            Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['submitted_by']))
+            Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['user_id']), default_competition)
           }.to raise_error(WcaExceptions::RegistrationError) do |error|
             expect(error.error).to eq(Registrations::ErrorCodes::QUALIFICATION_NOT_MET)
             expect(error.status).to eq(:unprocessable_entity)
@@ -746,7 +747,7 @@ RSpec.describe Registrations::RegistrationChecker do
           )
 
           expect {
-            Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['submitted_by']))
+            Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['user_id']), default_competition)
           }.to raise_error(WcaExceptions::RegistrationError) do |error|
             expect(error.error).to eq(Registrations::ErrorCodes::QUALIFICATION_NOT_MET)
             expect(error.status).to eq(:unprocessable_entity)
@@ -766,7 +767,7 @@ RSpec.describe Registrations::RegistrationChecker do
           )
 
           expect {
-            Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['submitted_by']))
+            Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['user_id']), default_competition)
           }.to raise_error(WcaExceptions::RegistrationError) do |error|
             expect(error.error).to eq(Registrations::ErrorCodes::QUALIFICATION_NOT_MET)
             expect(error.status).to eq(:unprocessable_entity)
@@ -786,7 +787,7 @@ RSpec.describe Registrations::RegistrationChecker do
           )
 
           expect {
-            Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['submitted_by']))
+            Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['user_id']), default_competition)
           }.to raise_error(WcaExceptions::RegistrationError) do |error|
             expect(error.error).to eq(Registrations::ErrorCodes::QUALIFICATION_NOT_MET)
             expect(error.status).to eq(:unprocessable_entity)
