@@ -93,9 +93,6 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
   end
 
   def user_can_bulk_modify_registrations
-    raise WcaExceptions::BulkUpdateError.new(:bad_request, [Registrations::ErrorCodes::INVALID_REQUEST_DATA]) if
-      params['requests'].blank?
-
     @competition = Competition.find(params['competition_id'])
 
     raise WcaExceptions::BulkUpdateError.new(:unauthorized, [Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS]) unless
@@ -103,7 +100,17 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
   end
 
   def validate_bulk_update_request
-    Registrations::RegistrationChecker.bulk_update_allowed!(params, @competition, @current_user)
+    errors = {}
+    params.require('requests').each do |update_request|
+      registration = Registration.find_by(competition_id: competition.id, user_id: update_request['user_id'])
+      raise WcaExceptions::RegistrationError.new(:not_found, Registrations::ErrorCodes::REGISTRATION_NOT_FOUND) if registration.blank?
+
+      Registrations::RegistrationChecker.update_registration_allowed!(params, registration, competition, @current_user)
+    rescue WcaExceptions::RegistrationError => e
+      errors[update_request['user_id']] = e.error
+    end
+
+    raise WcaExceptions::BulkUpdateError.new(:unprocessable_entity, errors) unless errors.empty?
   end
 
   def bulk_update

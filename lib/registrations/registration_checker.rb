@@ -44,20 +44,6 @@ module Registrations
       validate_qualifications!(update_request, competition, target_user) unless events.nil?
     end
 
-    def self.bulk_update_allowed!(bulk_update_request, competition, current_user)
-      errors = {}
-      bulk_update_request['requests'].each do |update_request|
-        registration = Registration.find_by(competition_id: competition.id, user_id: update_request['user_id'])
-        raise WcaExceptions::RegistrationError.new(:not_found, Registrations::ErrorCodes::REGISTRATION_NOT_FOUND) if registration.blank?
-
-        update_registration_allowed!(update_request, registration, competition, current_user)
-      rescue WcaExceptions::RegistrationError => e
-        errors[update_request['user_id']] = e.error
-      end
-
-      raise WcaExceptions::BulkUpdateError.new(:unprocessable_entity, errors) unless errors.empty?
-    end
-
     class << self
       def user_can_create_registration!(competition, current_user, target_user)
         raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::REGISTRATION_ALREADY_EXISTS) if
