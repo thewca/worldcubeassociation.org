@@ -26,9 +26,7 @@ class UsersController < ApplicationController
           @users = @users.where(like_query, part: "%#{part}%")
         end
         params[:sort] = params[:sort] == "country" ? :country_iso2 : params[:sort]
-        if params[:sort]
-          @users = @users.order(params[:sort] => params[:order])
-        end
+        @users = @users.order(params[:sort] => params[:order]) if params[:sort]
         render json: {
           total: @users.size,
           rows: @users.limit(params[:limit]).offset(params[:offset]).map do |user|
@@ -88,9 +86,7 @@ class UsersController < ApplicationController
   end
 
   def regenerate_2fa_backup_codes
-    unless current_user.otp_required_for_login
-      return render json: { error: { message: I18n.t("devise.sessions.new.2fa.errors.not_enabled") } }
-    end
+    return render json: { error: { message: I18n.t("devise.sessions.new.2fa.errors.not_enabled") } } unless current_user.otp_required_for_login
     codes = current_user.generate_otp_backup_codes!
     current_user.save!
     render json: { codes: codes }
@@ -220,9 +216,7 @@ class UsersController < ApplicationController
     return if redirect_if_cannot_edit_user(@user)
 
     dangerous_change = current_user == @user && [:password, :password_confirmation, :email].any? { |attribute| user_params.key? attribute }
-    if dangerous_change && !check_recent_authentication!
-      return
-    end
+    return if dangerous_change && !check_recent_authentication!
 
     old_confirmation_sent_at = @user.confirmation_sent_at
     if @user.update(user_params)
@@ -245,9 +239,7 @@ class UsersController < ApplicationController
         redirect_to edit_user_url(@user, params.permit(:section))
       end
       # Send notification email to user about avatar removal
-      if ActiveRecord::Type::Boolean.new.cast(user_params['remove_avatar'])
-        AvatarsMailer.notify_user_of_avatar_removal(@user.current_user, @user, params[:user][:removal_reason]).deliver_later
-      end
+      AvatarsMailer.notify_user_of_avatar_removal(@user.current_user, @user, params[:user][:removal_reason]).deliver_later if ActiveRecord::Type::Boolean.new.cast(user_params['remove_avatar'])
       # Clear preferred Events cache
       Rails.cache.delete("#{current_user.id}-preferred-events") if user_params.key? "user_preferred_events_attributes"
     elsif @user.claiming_wca_id
@@ -337,9 +329,7 @@ class UsersController < ApplicationController
 
   private def user_params
     params.require(:user).permit(current_user.editable_fields_of_user(user_to_edit).to_a).tap do |user_params|
-      if user_params.key?(:wca_id)
-        user_params[:wca_id] = user_params[:wca_id].upcase
-      end
+      user_params[:wca_id] = user_params[:wca_id].upcase if user_params.key?(:wca_id)
       if user_params.key?(:delegate_reports_region)
         raw_region = user_params.delete(:delegate_reports_region)
 

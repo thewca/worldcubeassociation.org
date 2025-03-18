@@ -11,9 +11,7 @@ class SemiId
 
   def generate_wca_id
     # Try finding an appropriate WCA ID for our semi ID
-    unless valid?
-      return ""
-    end
+    return "" unless valid?
 
     # From all persons with that semi id, take the last WCA ID, or default
     # to "AAAABBBB00".

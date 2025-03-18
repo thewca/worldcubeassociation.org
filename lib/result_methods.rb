@@ -58,9 +58,7 @@ module ResultMethods
     unless @counting
       @counting = []
       solve_times.each_with_index do |solve_time, i|
-        if trimmed_indices.exclude?(i) && i < format.expected_solve_count
-          @counting << solve_time
-        end
+        @counting << solve_time if trimmed_indices.exclude?(i) && i < format.expected_solve_count
       end
     end
     @counting

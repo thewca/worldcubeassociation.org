@@ -88,18 +88,10 @@ module ApplicationHelper
   def wca_table(responsive: true, hover: true, striped: true, floatThead: true, table_class: "", data: {}, greedy: true, table_id: nil, &block)
     data[:locale] = I18n.locale
     table_classes = "table table-condensed #{table_class}"
-    if floatThead
-      table_classes += " floatThead"
-    end
-    if hover
-      table_classes += " table-hover"
-    end
-    if striped
-      table_classes += " table-striped"
-    end
-    if greedy
-      table_classes += " table-greedy-last-column"
-    end
+    table_classes += " floatThead" if floatThead
+    table_classes += " table-hover" if hover
+    table_classes += " table-striped" if striped
+    table_classes += " table-greedy-last-column" if greedy
 
     content_tag :div, class: (responsive ? "table-responsive" : "") do
       content_tag :table, id: table_id, class: table_classes, data: data, &block
@@ -128,9 +120,7 @@ module ApplicationHelper
 
   def alert(type, content = nil, note: false, &block)
     content = capture(&block) if block_given?
-    if note
-      content = content_tag(:strong, "Note:") + " " + content
-    end
+    content = content_tag(:strong, "Note:") + " " + content if note
     content_tag :div, content, class: "alert alert-#{type}"
   end
 

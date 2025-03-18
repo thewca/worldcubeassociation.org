@@ -16,9 +16,7 @@ class Person < ApplicationRecord
   scope :current, -> { where(subId: 1) }
 
   scope :in_region, lambda { |region_id|
-    unless region_id.blank? || region_id == 'all'
-      where(countryId: (Continent.country_ids(region_id) || region_id))
-    end
+    where(countryId: (Continent.country_ids(region_id) || region_id)) unless region_id.blank? || region_id == 'all'
   }
 
   validates :name, presence: true
@@ -38,16 +36,12 @@ class Person < ApplicationRecord
   # then fix them to a blank dob.
   validate :dob_must_be_valid
   private def dob_must_be_valid
-    if new_record? && !dob
-      errors.add(:dob, I18n.t('errors.messages.invalid'))
-    end
+    errors.add(:dob, I18n.t('errors.messages.invalid')) if new_record? && !dob
   end
 
   validate :dob_must_be_in_the_past
   private def dob_must_be_in_the_past
-    if dob && dob >= Date.today
-      errors.add(:dob, I18n.t('users.errors.dob_past'))
-    end
+    errors.add(:dob, I18n.t('users.errors.dob_past')) if dob && dob >= Date.today
   end
 
   # If someone represented country A, and now represents country B, it's
@@ -59,9 +53,7 @@ class Person < ApplicationRecord
   private def cannot_change_country_to_country_represented_before
     if countryId_changed? && !new_record? && !@updating_using_sub_id
       has_represented_this_country_already = Person.exists?(wca_id: wca_id, countryId: countryId)
-      if has_represented_this_country_already
-        errors.add(:countryId, I18n.t('users.errors.already_represented_country'))
-      end
+      errors.add(:countryId, I18n.t('users.errors.already_represented_country')) if has_represented_this_country_already
     end
   end
 
@@ -117,9 +109,7 @@ class Person < ApplicationRecord
 
   def likely_delegates
     all_delegates = competitions.order(:start_date).map(&:staff_delegates).flatten.select(&:any_kind_of_delegate?)
-    if all_delegates.empty?
-      return []
-    end
+    return [] if all_delegates.empty?
 
     counts_by_delegate = all_delegates.each_with_object(Hash.new(0)) { |d, counts| counts[d] += 1 }
     most_frequent_delegate, _count = counts_by_delegate.max_by { |_delegate, count| count }
@@ -383,13 +373,9 @@ class Person < ApplicationRecord
     json[:id] = self.wca_id
 
     private_attributes = options&.fetch(:private_attributes, []) || []
-    if private_attributes.include?("dob")
-      json[:dob] = dob.to_s
-    end
+    json[:dob] = dob.to_s if private_attributes.include?("dob")
 
-    if private_attributes.include?("incorrect_wca_id_claim_count")
-      json[:incorrect_wca_id_claim_count] = incorrect_wca_id_claim_count
-    end
+    json[:incorrect_wca_id_claim_count] = incorrect_wca_id_claim_count if private_attributes.include?("incorrect_wca_id_claim_count")
 
     # Passing down options from Person to User (which are completely different models in the DB!)
     #   is a horrible idea. Unfortunately, our external APIs have come to rely on it,

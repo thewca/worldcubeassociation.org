@@ -21,36 +21,24 @@ class ScheduleActivity < ApplicationRecord
 
   def included_in_parent_schedule
     return if errors.present?
-    unless start_time >= holder.start_time
-      errors.add(:start_time, "should be after parent's start_time")
-    end
-    unless end_time <= holder.end_time
-      errors.add(:end_time, "should be before parent's end_time")
-    end
-    unless start_time <= end_time
-      errors.add(:end_time, "should be after start_time")
-    end
+    errors.add(:start_time, "should be after parent's start_time") unless start_time >= holder.start_time
+    errors.add(:end_time, "should be before parent's end_time") unless end_time <= holder.end_time
+    errors.add(:end_time, "should be after start_time") unless start_time <= end_time
   end
 
   def valid_activity_code
     return if errors.present?
 
     activity_id = activity_code.split('-').first
-    unless VALID_ACTIVITY_CODE_BASE.include?(activity_id)
-      errors.add(:activity_code, "should be a valid activity code")
-    end
+    errors.add(:activity_code, "should be a valid activity code") unless VALID_ACTIVITY_CODE_BASE.include?(activity_id)
     if activity_id == "other"
       other_id = activity_code.split('-').second
-      unless VALID_OTHER_ACTIVITY_CODE.include?(other_id)
-        errors.add(:activity_code, "is an invalid 'other' activity code")
-      end
+      errors.add(:activity_code, "is an invalid 'other' activity code") unless VALID_OTHER_ACTIVITY_CODE.include?(other_id)
     end
 
     if holder.has_attribute?(:activity_code)
       holder_activity_id = holder.activity_code.split('-').first
-      unless activity_id == holder_activity_id
-        errors.add(:activity_code, "should share its base activity id with parent")
-      end
+      errors.add(:activity_code, "should share its base activity id with parent") unless activity_id == holder_activity_id
     end
   end
 
@@ -65,12 +53,8 @@ class ScheduleActivity < ApplicationRecord
     else
       inferred_name = Event.c_find(parts[:event_id]).name
       round = rounds_by_wcif_id["#{parts[:event_id]}-r#{parts[:round_number]}"]
-      if round
-        inferred_name = round[:name]
-      end
-      if parts[:attempt_number]
-        inferred_name += " (#{I18n.t("attempts.attempt_name", number: parts[:attempt_number])})"
-      end
+      inferred_name = round[:name] if round
+      inferred_name += " (#{I18n.t("attempts.attempt_name", number: parts[:attempt_number])})" if parts[:attempt_number]
       inferred_name
     end
   end

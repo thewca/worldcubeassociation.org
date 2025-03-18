@@ -61,9 +61,7 @@ module Resultable
     validate :validate_each_solve, if: :event
     def validate_each_solve
       solve_times.each_with_index do |solve_time, i|
-        unless solve_time.valid?
-          errors.add(:"value#{i + 1}", solve_time.errors.full_messages.join(" "))
-        end
+        errors.add(:"value#{i + 1}", solve_time.errors.full_messages.join(" ")) unless solve_time.valid?
       end
     end
 
@@ -92,19 +90,13 @@ module Resultable
     return "Invalid round_type" unless round_type
     return "All solves cannot be DNS/skipped." if solve_times.all? { |s| s.dns? || s.skipped? }
 
-    unless solve_times.drop_while(&:unskipped?).all?(&:skipped?)
-      return "Skipped solves must all come at the end."
-    end
+    return "Skipped solves must all come at the end." unless solve_times.drop_while(&:unskipped?).all?(&:skipped?)
 
     unskipped_count = solve_times.count(&:unskipped?)
     if round_type.combined?
-      if unskipped_count > format.expected_solve_count
-        "Expected at most #{hlp.pluralize(format.expected_solve_count, 'solve')}, but found #{unskipped_count}."
-      end
+      "Expected at most #{hlp.pluralize(format.expected_solve_count, 'solve')}, but found #{unskipped_count}." if unskipped_count > format.expected_solve_count
     else
-      if unskipped_count != format.expected_solve_count
-        "Expected #{hlp.pluralize(format.expected_solve_count, 'solve')}, but found #{unskipped_count}."
-      end
+      "Expected #{hlp.pluralize(format.expected_solve_count, 'solve')}, but found #{unskipped_count}." if unskipped_count != format.expected_solve_count
     end
   end
 

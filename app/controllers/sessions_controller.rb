@@ -53,9 +53,7 @@ class SessionsController < Devise::SessionsController
   end
 
   def generate_email_otp
-    unless session[:otp_user_id] || current_user
-      return render json: { error: { message: I18n.t("devise.sessions.new.2fa.errors.cant_send_email") } }
-    end
+    return render json: { error: { message: I18n.t("devise.sessions.new.2fa.errors.cant_send_email") } } unless session[:otp_user_id] || current_user
     user = User.find(session[:otp_user_id] || current_user.id)
     TwoFactorMailer.send_otp_to_user(user).deliver_now
     render json: { status: "ok" }

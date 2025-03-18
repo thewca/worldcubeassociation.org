@@ -150,9 +150,7 @@ class StripeRecord < ApplicationRecord
       # In practice this should never happen because the inflation on those currencies
       # makes it absolutely impractical for Delegates to charge 0.45 HUF for example.
       # If this error is actually ever thrown, talk to the Delegates of the competition in question.
-      if amount_times_hundred % 100 != 0
-        raise "Trying to charge an amount of #{amount_lowest_denomination} #{iso_currency}, which is smaller than what the Stripe API accepts for sub-hundred currencies"
-      end
+      raise "Trying to charge an amount of #{amount_lowest_denomination} #{iso_currency}, which is smaller than what the Stripe API accepts for sub-hundred currencies" if amount_times_hundred % 100 != 0
 
       return amount_times_hundred
     end
@@ -169,9 +167,7 @@ class StripeRecord < ApplicationRecord
       # We're losing precision after dividing it down to the "smaller" denomination.
       # Normally, this should not happen as the Stripe API docs specify that sub-hundreds
       # on the special currencies are not accepted and thus should never be returned by the API.
-      if amount_div_hundred.truncate != amount_div_hundred
-        raise "Trying to receive an amount of #{amount_stripe_denomination} #{iso_currency}, which is more precise than what the Stripe API returns for sub-hundred currencies"
-      end
+      raise "Trying to receive an amount of #{amount_stripe_denomination} #{iso_currency}, which is more precise than what the Stripe API returns for sub-hundred currencies" if amount_div_hundred.truncate != amount_div_hundred
 
       return amount_div_hundred
     end

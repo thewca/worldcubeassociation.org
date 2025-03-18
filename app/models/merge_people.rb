@@ -20,9 +20,7 @@ class MergePeople
 
   validate :require_different_people
   def require_different_people
-    if person1_wca_id == person2_wca_id
-      errors.add(:person2_wca_id, "Cannot merge a person with themself!")
-    end
+    errors.add(:person2_wca_id, "Cannot merge a person with themself!") if person1_wca_id == person2_wca_id
   end
 
   validate :require_valid_wca_ids
@@ -42,41 +40,27 @@ class MergePeople
   validate :must_look_like_the_same_person
   def must_look_like_the_same_person
     if person1 && person2
-      if person1.name != person2.name
-        errors.add(:person2_wca_id, "Names don't match")
-      end
-      if person1.countryId != person2.countryId
-        errors.add(:person2_wca_id, "Countries don't match")
-      end
-      if person1.gender != person2.gender
-        errors.add(:person2_wca_id, "Genders don't match")
-      end
-      if person1.dob != person2.dob
-        errors.add(:person2_wca_id, "Birthdays don't match")
-      end
+      errors.add(:person2_wca_id, "Names don't match") if person1.name != person2.name
+      errors.add(:person2_wca_id, "Countries don't match") if person1.countryId != person2.countryId
+      errors.add(:person2_wca_id, "Genders don't match") if person1.gender != person2.gender
+      errors.add(:person2_wca_id, "Birthdays don't match") if person1.dob != person2.dob
     end
   end
 
   validate :person2_must_not_have_associated_user
   def person2_must_not_have_associated_user
-    if @person2&.user
-      errors.add(:person2_wca_id, "Must not have an account")
-    end
+    errors.add(:person2_wca_id, "Must not have an account") if @person2&.user
   end
 
   validate :person2_year_must_not_be_earlier
   def person2_year_must_not_be_earlier
     year1 = person1_wca_id[0, 4].to_i
     year2 = person2_wca_id[0, 4].to_i
-    if year2 < year1
-      errors.add(:person2_wca_id, "WCA ID year cannot be earlier than person1's WCA ID year")
-    end
+    errors.add(:person2_wca_id, "WCA ID year cannot be earlier than person1's WCA ID year") if year2 < year1
   end
 
   def do_merge
-    if !valid?
-      return false
-    end
+    return false if !valid?
 
     ActiveRecord::Base.transaction do
       Result.where(personId: person2.wca_id).update_all(personId: person1.wca_id)

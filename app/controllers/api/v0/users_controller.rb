@@ -31,9 +31,7 @@ class Api::V0::UsersController < Api::V0::ApiController
 
   def permissions
     require_user!
-    if stale?(authenticated_user)
-      render json: authenticated_user.permissions
-    end
+    render json: authenticated_user.permissions if stale?(authenticated_user)
   end
 
   def personal_records
@@ -69,12 +67,8 @@ class Api::V0::UsersController < Api::V0::ApiController
     def show_user(user, show_rankings: false, private_attributes: [])
       if user
         json = { user: user.serializable_hash(private_attributes: private_attributes) }
-        if params[:upcoming_competitions]
-          json[:upcoming_competitions] = user.accepted_competitions.select(&:upcoming?)
-        end
-        if params[:ongoing_competitions]
-          json[:ongoing_competitions] = user.accepted_competitions.select(&:in_progress?)
-        end
+        json[:upcoming_competitions] = user.accepted_competitions.select(&:upcoming?) if params[:upcoming_competitions]
+        json[:ongoing_competitions] = user.accepted_competitions.select(&:in_progress?) if params[:ongoing_competitions]
         if show_rankings && user.wca_id.present?
           person = Person.includes(:ranksSingle, :ranksAverage).find_by!(wca_id: user.wca_id)
           json[:rankings] = { single: person.ranksSingle, average: person.ranksAverage }

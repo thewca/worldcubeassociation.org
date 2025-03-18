@@ -24,18 +24,10 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     if !is_active.nil?
       active_record = is_active ? active_record.active : active_record.inactive
     end
-    if !is_group_hidden.nil?
-      active_record = active_record.where(group: { is_hidden: is_group_hidden })
-    end
-    if group_type.present?
-      active_record = active_record.where(group: { group_type: group_type })
-    end
-    if group_id.present?
-      active_record = active_record.where(group_id: group_id)
-    end
-    if user_id.present?
-      active_record = active_record.where(user_id: user_id)
-    end
+    active_record = active_record.where(group: { is_hidden: is_group_hidden }) if !is_group_hidden.nil?
+    active_record = active_record.where(group: { group_type: group_type }) if group_type.present?
+    active_record = active_record.where(group_id: group_id) if group_id.present?
+    active_record = active_record.where(user_id: user_id) if user_id.present?
     active_record
   end
 
@@ -92,9 +84,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       ban_reason = params[:banReason]
       scope = params[:scope]
       upcoming_comps_for_user = user.competitions_registered_for.not_over.merge(Registration.not_cancelled)
-      if end_date.present?
-        upcoming_comps_for_user = upcoming_comps_for_user.between_dates(Date.today, end_date)
-      end
+      upcoming_comps_for_user = upcoming_comps_for_user.between_dates(Date.today, end_date) if end_date.present?
       unless upcoming_comps_for_user.empty?
         return render status: :unprocessable_entity, json: {
           error: "The user has upcoming competitions: #{upcoming_comps_for_user.pluck(:id).join(', ')}. Before banning the user, make sure their registrations are deleted.",
@@ -111,9 +101,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     ActiveRecord::Base.transaction do
       if status.present? && group.unique_status?(status)
         role_to_end = group.lead_role
-        if role_to_end.present?
-          role_to_end.update!(end_date: Date.today)
-        end
+        role_to_end.update!(end_date: Date.today) if role_to_end.present?
       end
 
       if group.group_type == UserGroup.group_types[:delegate_regions]
@@ -279,17 +267,11 @@ class Api::V0::UserRolesController < Api::V0::ApiController
         return render status: :unprocessable_entity, json: { error: "Invalid parameter to be changed" }
       end
     elsif group_type == UserGroup.group_types[:banned_competitors]
-      if params.key?(:endDate)
-        role.end_date = params[:endDate]
-      end
+      role.end_date = params[:endDate] if params.key?(:endDate)
 
-      if params.key?(:banReason)
-        role.metadata.ban_reason = params[:banReason]
-      end
+      role.metadata.ban_reason = params[:banReason] if params.key?(:banReason)
 
-      if params.key?(:scope)
-        role.metadata.scope = params.require(:scope)
-      end
+      role.metadata.scope = params.require(:scope) if params.key?(:scope)
 
       ActiveRecord::Base.transaction do
         role.metadata&.save!
@@ -312,9 +294,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     return head :unauthorized unless current_user.has_permission?(:can_edit_groups, role.group.id)
     role.update!(end_date: Date.today)
     RoleChangeMailer.notify_role_end(role, current_user).deliver_later
-    if role.group.delegate_regions? && !role.user.any_kind_of_delegate?
-      remove_pending_wca_id_claims(role)
-    end
+    remove_pending_wca_id_claims(role) if role.group.delegate_regions? && !role.user.any_kind_of_delegate?
     render json: {
       success: true,
     }

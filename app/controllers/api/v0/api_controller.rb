@@ -24,12 +24,8 @@ class Api::V0::ApiController < ApplicationController
   end
 
   def auth_results
-    if !current_user
-      return render status: :unauthorized, json: { error: "Please log in" }
-    end
-    if !current_user.can_admin_results?
-      return render status: :forbidden, json: { error: "Cannot adminster results" }
-    end
+    return render status: :unauthorized, json: { error: "Please log in" } if !current_user
+    return render status: :forbidden, json: { error: "Cannot adminster results" } if !current_user.can_admin_results?
 
     render json: { status: "ok" }
   end
@@ -253,9 +249,7 @@ class Api::V0::ApiController < ApplicationController
 
   def competition_series
     competition_series = CompetitionSeries.find_by(wcif_id: params[:id])
-    if competition_series.blank? || competition_series.public_competitions.empty?
-      raise WcaExceptions::NotFound.new("Competition series with ID #{params[:id]} not found")
-    end
+    raise WcaExceptions::NotFound.new("Competition series with ID #{params[:id]} not found") if competition_series.blank? || competition_series.public_competitions.empty?
     render json: competition_series.to_wcif
   end
 end

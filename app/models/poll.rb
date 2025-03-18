@@ -12,24 +12,18 @@ class Poll < ApplicationRecord
   # Validations for confirming a poll
   validate :must_have_at_least_two_options, if: :confirmed?
   def must_have_at_least_two_options
-    if self.poll_options.count { |element| !element.marked_for_destruction? } < 2
-      errors.add(:poll_options, "Poll must have at least two options")
-    end
+    errors.add(:poll_options, "Poll must have at least two options") if self.poll_options.count { |element| !element.marked_for_destruction? } < 2
   end
 
   validate :can_only_edit_deadline_after_confirming
   def can_only_edit_deadline_after_confirming
-    if confirmed_at_was && self.changed != ['deadline']
-      errors.add(:deadline, "you can only change the deadline")
-    end
+    errors.add(:deadline, "you can only change the deadline") if confirmed_at_was && self.changed != ['deadline']
   end
 
   accepts_nested_attributes_for :poll_options, reject_if: :all_blank, allow_destroy: true
 
   def deadline_cannot_be_in_the_past
-    if deadline.present? && deadline < Date.today
-      errors.add(:deadline, "can't be in the past")
-    end
+    errors.add(:deadline, "can't be in the past") if deadline.present? && deadline < Date.today
   end
 
   def over?

@@ -8,9 +8,7 @@ module CompetitionsHelper
 
     messages_to_join = []
 
-    if competition.cancelled? # If the competition is cancelled, that's the only string we need to show the user.
-      return t('competitions.messages.cancelled')
-    end
+    return t('competitions.messages.cancelled') if competition.cancelled? # If the competition is cancelled, that's the only string we need to show the user.
 
     messages_to_join << get_registration_status_message_if_registered(competition, user, registration)
     messages_to_join << get_competition_status_message(competition)
@@ -114,12 +112,8 @@ module CompetitionsHelper
             end.map do |result|
               event = Event.c_find(result.eventId)
               record_strs = []
-              if result.regionalSingleRecord == code
-                record_strs << t('competitions.competition_info.regional_single_record', event_name: event.name, result: (result.to_s :best))
-              end
-              if result.regionalAverageRecord == code
-                record_strs << t('competitions.competition_info.regional_average_record', event_name: event.name, result: (result.to_s :average))
-              end
+              record_strs << t('competitions.competition_info.regional_single_record', event_name: event.name, result: (result.to_s :best)) if result.regionalSingleRecord == code
+              record_strs << t('competitions.competition_info.regional_average_record', event_name: event.name, result: (result.to_s :average)) if result.regionalAverageRecord == code
               record_strs
             end.flatten
             "#{uniqueName}&lrm; #{record_strs.to_sentence}"

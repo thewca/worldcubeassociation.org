@@ -107,9 +107,7 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
     competition_id = list_params
     # TODO: Do we set this as an instance variable here so we can use it below?
     @competition = Competition.find(competition_id)
-    unless @current_user.can_manage_competition?(@competition)
-      render_error(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS)
-    end
+    render_error(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless @current_user.can_manage_competition?(@competition)
   end
 
   def list_admin

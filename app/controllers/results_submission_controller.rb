@@ -14,9 +14,7 @@ class ResultsSubmissionController < ApplicationController
 
   def upload_json
     @competition = competition_from_params
-    if @competition.results_submitted?
-      return redirect_to competition_submit_results_edit_path
-    end
+    return redirect_to competition_submit_results_edit_path if @competition.results_submitted?
     # Do json analysis + insert record in db, then redirect to check inbox
     # (and delete existing record if any)
     upload_json_params = params.require(:upload_json).permit(:results_file)
