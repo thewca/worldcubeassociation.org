@@ -71,7 +71,7 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
 
   def ensure_registration_exists
     @competition = Competition.find(params.require('competition_id'))
-    @registration = Registration.find_by(competition: @competition, user_id: params.require('user_id')).includes(:user)
+    @registration = Registration.includes(:user).find_by(competition: @competition, user_id: params.require('user_id'))
     raise WcaExceptions::RegistrationError.new(:not_found, Registrations::ErrorCodes::REGISTRATION_NOT_FOUND) if @registration.blank?
   end
 
@@ -102,10 +102,10 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
   def validate_bulk_update_request
     errors = {}
     params.require('requests').each do |update_request|
-      registration = Registration.find_by(competition_id: competition.id, user_id: update_request['user_id'])
+      registration = Registration.find_by(competition: @competition, user_id: update_request['user_id'])
       raise WcaExceptions::RegistrationError.new(:not_found, Registrations::ErrorCodes::REGISTRATION_NOT_FOUND) if registration.blank?
 
-      Registrations::RegistrationChecker.update_registration_allowed!(params, registration, competition, @current_user)
+      Registrations::RegistrationChecker.update_registration_allowed!(params, registration, @competition, @current_user)
     rescue WcaExceptions::RegistrationError => e
       errors[update_request['user_id']] = e.error
     end

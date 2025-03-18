@@ -2134,7 +2134,7 @@ RSpec.describe Registrations::RegistrationChecker do
         )
 
         expect {
-          Registrations::RegistrationChecker.update_registration_allowed!(update_request, waitlisted_registration, Competition.find(update_request['competition_id']), User.find(update_request['submitted_by']))
+          Registrations::RegistrationChecker.update_registration_allowed!(update_request, default_registration, Competition.find(update_request['competition_id']), User.find(update_request['submitted_by']))
         }.to raise_error(WcaExceptions::RegistrationError) do |error|
           expect(error.status).to eq(:unprocessable_entity)
           expect(error.error).to eq(Registrations::ErrorCodes::INVALID_REQUEST_DATA)
