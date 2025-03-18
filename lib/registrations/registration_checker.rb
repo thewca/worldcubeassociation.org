@@ -269,11 +269,6 @@ module Registrations
           Registration.find_by(competition_id: comp_id, user_id: target_user.id)&.might_attend?
         end
       end
-
-      def competitor_qualifies_for_event?(event, qualification, target_user)
-        qualification = Qualification.load(qualification)
-        qualification.can_register?(target_user, event)
-      end
     end
   end
 end
