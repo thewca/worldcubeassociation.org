@@ -3,6 +3,8 @@ import SimpleMDE from 'react-simplemde-editor';
 import { fetchWithAuthenticityToken } from '../../../../lib/requests/fetchWithAuthenticityToken';
 import 'easymde/dist/easymde.min.css';
 
+const DEFAULT_EDITOR_OPTIONS = { enableImageUpload: true };
+
 function insertText(editor, markup, promptText) {
   const cm = editor.codemirror;
 
@@ -28,7 +30,7 @@ function insertText(editor, markup, promptText) {
   cm.focus();
 }
 
-function getOptions(disabled) {
+function getOptions(editorOptions) {
   const table = {
     name: 'table-custom',
     action: '\n\n| Column 1 | Column 2 | Column 3 |\n| -------- | -------- | -------- |\n| Text     | Text      | Text     |\n\n',
@@ -69,16 +71,22 @@ function getOptions(disabled) {
 
   const textFormattings = ['bold', 'italic', 'heading'];
   const textStructures = ['quote', 'unordered-list', 'ordered-list', table];
-  const uploadsAndInserts = ['link', 'upload-image', map, youtube];
+  const inserts = ['link', map, youtube];
+  const uploadImageTool = editorOptions?.enableImageUpload ? ['upload-image'] : [];
   const previews = ['preview', 'side-by-side', 'fullscreen'];
   const helps = ['guide'];
   const toolbar = [
     ...textFormattings,
     '|', ...textStructures,
-    '|', ...uploadsAndInserts,
+    '|', ...inserts, ...uploadImageTool,
     '|', ...previews,
     '|', ...helps,
   ];
+
+  const imageOptions = editorOptions.enableImageUpload ? {
+    status: ['upload-image'],
+    uploadImage: true,
+  } : {};
 
   function previewRender(plainText, preview) {
     const previewTarget = preview;
@@ -100,8 +108,8 @@ function getOptions(disabled) {
     spellChecker: false,
     promptURLs: true,
     previewRender,
-    status: ['upload-image'],
-    uploadImage: true,
+    status: [],
+    uploadImage: false,
     async imageUploadFunction(file, onSuccess, onError) {
       const formData = new FormData();
       formData.append('image', file);
@@ -113,7 +121,7 @@ function getOptions(disabled) {
         onError(e);
       }
     },
-    disabled,
+    ...imageOptions,
   };
 }
 
@@ -121,8 +129,9 @@ export default function MarkdownEditor({
   id,
   value,
   onChange,
+  editorOptions = DEFAULT_EDITOR_OPTIONS,
 }) {
-  const options = useMemo(() => getOptions(false), []);
+  const options = useMemo(() => getOptions(editorOptions), [editorOptions]);
   const mdChange = useCallback((text) => onChange(null, { value: text }), [onChange]);
 
   return (
