@@ -2,15 +2,12 @@
 
 module Registrations
   class RegistrationChecker
-    def self.create_registration_allowed!(registration_request, current_user)
-      target_user = User.find(registration_request['user_id'])
-      competition = Competition.find(registration_request['competition_id'])
+    def self.create_registration_allowed!(registration_request, target_user, competition)
       guests = registration_request['guests']
       comment = registration_request.dig('competing', 'comment')
 
       r = Registration.new(guests: guests.to_i, competition: competition, comments: comment)
 
-      user_can_create_registration!(competition, current_user, target_user)
       validate_create_events!(registration_request, competition)
       validate_qualifications!(registration_request, competition, target_user)
       # Migrated to ActiveRecord-style validations
@@ -68,23 +65,6 @@ module Registrations
     end
 
     class << self
-      def user_can_create_registration!(competition, current_user, target_user)
-        raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::REGISTRATION_ALREADY_EXISTS) if
-          Registration.exists?(competition_id: competition.id, user_id: target_user.id)
-
-        # Only the user themselves can create a registration for the user
-        raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless current_user.id == target_user.id
-
-        # Only organizers can register when registration is closed, and they can only register for themselves - not for other users
-        raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::REGISTRATION_CLOSED) unless competition.registration_currently_open? || organizer_modifying_own_registration?(competition, current_user, target_user)
-
-        # Users must have the necessary permissions to compete - eg, they cannot be banned or have incomplete profiles
-        raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::USER_CANNOT_COMPETE) unless target_user.cannot_register_for_competition_reasons(competition).empty?
-
-        # Users cannot sign up for multiple competitions in a series
-        raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::ALREADY_REGISTERED_IN_SERIES) if existing_registration_in_series?(competition, target_user)
-      end
-
       def user_can_modify_registration!(competition, current_user, target_user, registration, new_status)
         raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless
           can_administer_or_current_user?(competition, current_user, target_user)
