@@ -8,7 +8,10 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
   before_action :validate_create_request, only: [:create]
   before_action :validate_show_registration, only: [:show]
   before_action :validate_list_admin, only: [:list_admin]
+  before_action :ensure_registration_exists, only: [:update]
+  before_action :user_can_modify_registration, only: [:update]
   before_action :validate_update_request, only: [:update]
+  before_action :user_can_bulk_modify_registrations, only: [:bulk_update]
   before_action :validate_bulk_update_request, only: [:bulk_update]
   before_action :validate_payment_ticket_request, only: [:payment_ticket]
 
@@ -66,25 +69,52 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
     render json: { status: 'bad request', message: 'You need to supply at least one lane' }, status: :bad_request
   end
 
+  def ensure_registration_exists
+    @competition = Competition.find(params.require('competition_id'))
+    @registration = Registration.find_by(competition: @competition, user_id: params.require('user_id')).includes(:user)
+    raise WcaExceptions::RegistrationError.new(:not_found, Registrations::ErrorCodes::REGISTRATION_NOT_FOUND) if @registration.blank?
+  end
+
+  def user_can_modify_registration
+    new_status = update_request.dig('competing', 'status')
+    target_user = @registration.user
+    raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless
+      can_administer_or_current_user?(@competition, @current_user, target_user)
+    raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::USER_EDITS_NOT_ALLOWED) unless
+      competition.registration_edits_currently_permitted? || current_user.can_manage_competition?(@competition) || user_uncancelling_registration?(@registration, new_status)
+    raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::REGISTRATION_IS_REJECTED) if
+      user_is_rejected?(current_user, target_user, @registration) && !organizer_modifying_own_registration?(@competition, @current_user, target_user)
+    raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::ALREADY_REGISTERED_IN_SERIES) if
+      existing_registration_in_series?(@competition, target_user) && !current_user.can_manage_competition?(@competition)
+  end
+
   def validate_update_request
-    @competition = Competition.find(params[:competition_id])
-    Registrations::RegistrationChecker.update_registration_allowed!(params, @competition, @current_user)
+    Registrations::RegistrationChecker.update_registration_allowed!(params, @registration, @competition, @current_user)
+  end
+
+  def user_can_bulk_modify_registrations
+    raise WcaExceptions::BulkUpdateError.new(:bad_request, [Registrations::ErrorCodes::INVALID_REQUEST_DATA]) if
+      params['requests'].blank?
+
+    @competition = Competition.find(params['competition_id'])
+
+    raise WcaExceptions::BulkUpdateError.new(:unauthorized, [Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS]) unless
+      current_user.can_manage_competition?(@competition)
+  end
+
+  def validate_bulk_update_request
+    Registrations::RegistrationChecker.bulk_update_allowed!(params, @competition, @current_user)
   end
 
   def bulk_update
     updated_registrations = {}
     update_requests = params[:requests]
-    competition = Competition.find(params[:competition_id])
 
     update_requests.each do |update|
-      updated_registrations[update['user_id']] = Registrations::Lanes::Competing.update!(update, competition, @current_user.id)
+      updated_registrations[update['user_id']] = Registrations::Lanes::Competing.update!(update, @competition, @current_user.id)
     end
 
     render json: { status: 'ok', updated_registrations: updated_registrations }
-  end
-
-  def validate_bulk_update_request
-    Registrations::RegistrationChecker.bulk_update_allowed!(params, @current_user)
   end
 
   def list
