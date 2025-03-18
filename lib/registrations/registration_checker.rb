@@ -33,11 +33,10 @@ module Registrations
       self.apply_payload(registration, registration_request)
 
       user_can_create_registration!(competition, current_user, target_user)
-      validate_create_events!(registration_request, competition, registration)
-      validate_qualifications!(registration_request, competition, target_user)
       # Migrated to ActiveRecord-style validations
       validate_guests!(registration)
       validate_comment!(registration)
+      validate_registration_events!(registration)
     end
 
     def self.update_registration_allowed!(update_request, competition, current_user)
@@ -56,12 +55,11 @@ module Registrations
       validate_guests!(registration)
       validate_comment!(registration)
       validate_organizer_comment!(registration)
+      validate_registration_events!(registration)
       # Old-style validations within this class
       validate_organizer_fields!(update_request, current_user, competition)
       validate_waiting_list_position!(waiting_list_position, competition, registration) unless waiting_list_position.nil?
       validate_update_status!(new_status, competition, current_user, target_user, registration, events) unless new_status.nil?
-      validate_update_events!(events, competition, registration) unless events.nil?
-      validate_qualifications!(update_request, competition, target_user) unless events.nil?
     end
 
     def self.bulk_update_allowed!(bulk_update_request, current_user)
@@ -131,35 +129,43 @@ module Registrations
         (current_user.id == target_user.id) || current_user.can_manage_competition?(competition)
       end
 
-      def validate_create_events!(request, competition, registration)
-        event_ids = request['competing']['event_ids']
-        # Event submitted must be held at the competition
-        raise WcaExceptions::RegistrationError.new(:unprocessable_entity, Registrations::ErrorCodes::INVALID_EVENT_SELECTION) unless
-          event_ids.present? && competition.events_held?(event_ids)
-
+      def validate_registration_events!(registration)
+        process_nested_validation_error!(registration, :registration_competition_events, :competition_event) { it.event_id }
         process_validation_error!(registration, :registration_competition_events)
       end
 
-      def validate_qualifications!(request, competition, target_user)
-        return unless competition.enforces_qualifications?
-        event_ids = request.dig('competing', 'event_ids')
-
-        unqualified_events = event_ids.filter do |event|
-          qualification = competition.qualification_wcif[event]
-          qualification.present? && !competitor_qualifies_for_event?(event, qualification, target_user)
-        end
-
-        raise WcaExceptions::RegistrationError.new(:unprocessable_entity, Registrations::ErrorCodes::QUALIFICATION_NOT_MET, unqualified_events) unless unqualified_events.empty?
+      def read_error_details(ar_entity, field)
+        return if ar_entity.valid?
+        ar_entity.errors.details[field].first
       end
 
       def process_validation_error!(registration, field)
-        return if registration.valid?
-        error_details = registration.errors.details[field].first
+        error_details = read_error_details(registration, field)
 
         return if error_details.blank?
 
         frontend_code = error_details[:frontend_code] || Registrations::ErrorCodes::INVALID_REQUEST_DATA
         raise WcaExceptions::RegistrationError.new(:unprocessable_entity, frontend_code, error_details)
+      end
+
+      def process_nested_validation_error!(registration, association, field)
+        return if registration.valid?
+
+        error_details = registration.association(association).reader.index_with do |entity|
+          read_error_details(entity, field)
+        end.compact
+
+        return if error_details.empty?
+
+        # We somewhat arbitrarily throw an error about the first thing that we stumble upon
+        first_error_type = error_details.values.first[:error]
+        same_error_details = error_details.select { |_, v| v[:error] == first_error_type }
+
+        grouped_error_details = same_error_details.keys
+        grouped_error_details = grouped_error_details.map { yield it } if block_given?
+
+        frontend_code = same_error_details.values.first[:frontend_code] || Registrations::ErrorCodes::INVALID_REQUEST_DATA
+        raise WcaExceptions::RegistrationError.new(:unprocessable_entity, frontend_code, grouped_error_details)
       end
 
       def validate_guests!(registration)
@@ -254,13 +260,6 @@ module Registrations
           events.present? && registration.event_ids != events
       end
       # rubocop:enable Metrics/ParameterLists
-
-      def validate_update_events!(event_ids, competition, registration)
-        raise WcaExceptions::RegistrationError.new(:unprocessable_entity, Registrations::ErrorCodes::INVALID_EVENT_SELECTION) unless
-          event_ids.present? && competition.events_held?(event_ids)
-
-        process_validation_error!(registration, :registration_competition_events)
-      end
 
       def existing_registration_in_series?(competition, target_user)
         return false unless competition.part_of_competition_series?
