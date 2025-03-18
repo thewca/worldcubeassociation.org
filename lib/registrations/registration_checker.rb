@@ -24,9 +24,7 @@ module Registrations
           registration.registration_competition_events.find_or_initialize_by(competition_event: it)
         }
 
-        # This is like a "very careful write operation". Using `registration_competition_events=`
-        #   would immediately fire database calls, even without calling `save`
-        registration.registration_competition_events.records.replace(upserted_events)
+        registration.registration_competition_events = upserted_events
       end
     end
 
@@ -43,6 +41,9 @@ module Registrations
         validate_guests!(registration)
         validate_comment!(registration)
         validate_registration_events!(registration)
+
+        # The `apply_payload` can trigger write operations on associations, so we manually roll back to be sure
+        raise ActiveRecord::Rollback
       end
     end
 
@@ -68,6 +69,9 @@ module Registrations
         validate_organizer_fields!(update_request, current_user, competition)
         validate_waiting_list_position!(waiting_list_position, competition, registration) unless waiting_list_position.nil?
         validate_update_status!(new_status, competition, current_user, target_user, registration, events) unless new_status.nil?
+
+        # The `apply_payload` can trigger write operations on associations, so we manually roll back to be sure
+        raise ActiveRecord::Rollback
       end
     end
 
