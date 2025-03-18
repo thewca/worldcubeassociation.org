@@ -332,7 +332,7 @@ ko:
     #original_hash: 2513cf0
     continent: 대륙
     #original_hash: 0f21717
-    country: 지역
+    country: 국가
     #original_hash: 0154c0d
     here: 여기
     #original_hash: 77003d0
@@ -344,7 +344,7 @@ ko:
     #original_hash: e7f6fc5
     solves: 시도
     #original_hash: c9d0561
-    hello: "안녕하세요 %{name}님,"
+    hello: "안녕하십니까 %{name}님,"
     date:
       #original_hash: acb6273
       no_date: 날짜 없음
@@ -627,7 +627,7 @@ ko:
           #original_hash: 621101a
           trainee_delegate: 수습 파견위원
           #original_hash: 9b97968
-          junior_delegate: 주니어 파견위원
+          junior_delegate: 준 파견위원
           #original_hash: 12ab214
           delegate: 파견위원
           #original_hash: 45c2317
@@ -787,15 +787,15 @@ ko:
         #original_hash: 2822e8d
         summary: >-
           위에 나열된 사항은 완전한 보고서를 작성하기 위한 지침일 뿐입니다. 재량에 따라 적절하다고 판단되는 용도에 맞게 사용하십시오.
-          사용하지 않는 부분은 삭제해 주세요!
+          사용하지 않는 부분은 삭제해 주십시오!
         #original_hash: 2822e8d
         venue: >-
           위에 나열된 사항은 완전한 보고서를 작성하기 위한 지침일 뿐입니다. 재량에 따라 적절하다고 판단되는 용도에 맞게 사용하십시오.
-          사용하지 않는 부분은 삭제해 주세요!
+          사용하지 않는 부분은 삭제해 주십시오!
         #original_hash: 2822e8d
         organization: >-
           위에 나열된 사항은 완전한 보고서를 작성하기 위한 지침일 뿐입니다. 재량에 따라 적절하다고 판단되는 용도에 맞게 사용하십시오.
-          사용하지 않는 부분은 삭제해 주세요!
+          사용하지 않는 부분은 삭제해 주십시오!
         #original_hash: 74affff
         incidents: >-
           일반적이지 않은 모든 사건을 보고해 주십시오. 사건에 "1."부터 번호를 매겨 다른 파견위원이 해당 번호를 언급하여 의견을
@@ -987,7 +987,7 @@ ko:
             #original_hash: f82488f
             2fa_attempt: >-
               귀하는 WCA 웹사이트에서 인증을 시도하고 있습니다. 2단계 인증을 활성화하였고 방금 이메일로 일회용 비밀번호를 전송해
-              달라고 요청했습니다. 아래에서 확인하세요:
+              달라고 요청했습니다. 아래에서 확인하십시오:
             #original_hash: 8aeccbf
             disclaimer: >-
               인증 코드를 요청하지 않으셨다면 이 이메일에 답장하여 즉시 WST에 문의하십시오. 어딘가에 공개 세션이 있거나
@@ -1030,7 +1030,7 @@ ko:
             WST에서는 로그인 시 일회용 비밀번호를 얻기 위해 개인 기기에서 %{authy}를 사용할 것을 권장합니다.<br/>다른
             대안으로는 %{google}과 %{microsoft}가 있습니다.
           #original_hash: f1b2ec2
-          scan_qrcode_html: "2FA 애플리케이션에서 메시지가 표시되면 아래 QR 코드를 스캔합니다(모바일을 사용하는 경우 %{here}를 클릭하세요)."
+          scan_qrcode_html: "2FA 애플리케이션에서 메시지가 표시되면 아래 QR 코드를 스캔합니다(모바일을 사용하는 경우 %{here}를 클릭하십시오)."
           #original_hash: e7cba1a
           backup_codes: 백업 코드
           #original_hash: fa62416
@@ -1056,7 +1056,7 @@ ko:
           #original_hash: 4569d81
           disable_section_content: >-
             WST는 2FA를 비활성화하지 말 것을 강력히 권고하지만, 아래 버튼을 클릭하면 비활성화할 수 있습니다. 2FA를 다시
-            활성화하는 경우 기기를 재설정해야 한다는 점에 유의하세요.
+            활성화하는 경우 기기를 재설정해야 한다는 점에 유의하십시오.
           #original_hash: ab1b77d
           disabled_success: 2단계 인증을 성공적으로 비활성화했습니다.
           #original_hash: c36d556
@@ -1564,7 +1564,7 @@ ko:
       title: WCA 후원하기
       #original_hash: 1aaf818
       text: >-
-        세계 큐브 협회는 501(c)(3) 비과세법인입니다. 100% 자원봉사로 운영되는 비영리 단체로서, 전 세계에서 더 즐거운 대회를
+        세계 큐브 협회는 501(c)(3) 비과세법인입니다. 100% 자원 봉사로 운영되는 비영리 단체로서, 전 세계에서 더 즐거운 대회를
         펼칠 수 있도록 비전을 더욱 발전시키는 데 도움이 되는 기부를 환영합니다.
       #original_hash: 65c84ec
       button: WCA를 후원하는 방법에 대해 자세히 알아보세요
@@ -1583,7 +1583,7 @@ ko:
         #original_hash: 6ee63db
         welcome: "%{user_email}님, 환영합니다!"
         #original_hash: da39d05
-        confirm: "귀하의 계정이 생성되었으며, 계정을 사용하려면 먼저 활성화해야 합니다. 아래 링크를 통해 귀하의 계정을 검증해 주세요:"
+        confirm: "귀하의 계정이 생성되었으며, 계정을 사용하려면 먼저 활성화해야 합니다. 아래 링크를 통해 귀하의 계정을 검증해 주십시오:"
         #original_hash: 776476a
         confirmation_link: 계정을 검증합니다.
         #original_hash: d484f70
@@ -1591,9 +1591,9 @@ ko:
         #original_hash: fb02586
         login_form: 로그인 양식
         #original_hash: 333999b
-        addendum: "이 이메일은 자동으로 생성된 이메일 입니다. 세계 큐브 협회의 홈페이지에 계정을 생성하지 않았다면, 이 이메일을 무시해주세요."
+        addendum: "이 이메일은 자동으로 생성된 이메일 입니다. 세계 큐브 협회의 홈페이지에 계정을 생성하지 않았다면, 이 이메일을 무시해주십시오."
         #original_hash: dbc2263
-        questions: "다른 질문이 있으신가요? 기꺼이 답변해 드리겠습니다! %{contact_link}로 메일을 보내주세요."
+        questions: "다른 질문이 있으신가요? 기꺼이 답변해 드리겠습니다! %{contact_link}로 메일을 보내주십시오."
       reconfirmation_mail:
         #original_hash: f34029e
         welcome: "안녕하세요 %{user_email}님!"
@@ -1631,7 +1631,7 @@ ko:
         #original_hash: dc6f415
         header: "귀하께서는 %{competition}에 주최자로 추가되었습니다"
         #original_hash: c9d0561
-        intro: "안녕하세요 %{name}님,"
+        intro: "안녕하십니까 %{name}님,"
         #original_hash: 372b27f
         information: "%{confirmer}가 당신을 %{competition}에 주최자로 추가했습니다. 여기에서 이 대회를 편집할 수 있습니다:"
       organizer_removal_email:
@@ -1643,7 +1643,7 @@ ko:
         #original_hash: 7d355cb
         header: "%{competition}의 참가 신청이 곧 시작됩니다"
         #original_hash: c9d0561
-        intro: "안녕하세요 %{name}님,"
+        intro: "안녕하십니까 %{name}님,"
         #original_hash: a8f7e72
         information_html: >-
           <a href=%{competition_url}>%{competition}</a>에 대한 참가 신청이 24시간 이내에
@@ -1651,7 +1651,7 @@ ko:
         #original_hash: 2b93022
         not_accepted_html: "귀하께서는 참가 신청을 하였지만, 신청이 승인되지 않았습니다."
         #original_hash: d4087ee
-        more_info_html: "자세한 정보와 참가 신청 요건은 <a href=%{competition_url}>대회 WCA 페이지</a>를 참조하세요."
+        more_info_html: "자세한 정보와 참가 신청 요건은 <a href=%{competition_url}>대회 WCA 페이지</a>를 참조하십시오."
       results_presence_email:
         #original_hash: 7ce2558
         header: "%{competition}의 결과가 발표되었습니다"
@@ -1667,7 +1667,7 @@ ko:
         #original_hash: 3ffeb60
         subject: 귀하의 WCA 계정 비밀번호를 재설정하십시오
         #original_hash: 65611e9
-        greeting: "안녕하세요,"
+        greeting: "안녕하십니까,"
         #original_hash: 7ea5bc8
         instruction1: >-
           %{user_email}와(과) 관련된 WCA 계정의 비밀번호를 재설정해 달라는 요청을 받았습니다. 아직 귀하의 계정에 변경
@@ -1677,7 +1677,7 @@ ko:
         #original_hash: 00850c3
         instruction3: 새 비밀번호를 요청하지 않으셨다면 이 이메일을 무시하십시오.
         #original_hash: dbc2263
-        instruction4: "다른 질문이 있으신가요? 기꺼이 답변해드리겠습니다! %{contact_link}로 메일을 보내주세요."
+        instruction4: "다른 질문이 있으신가요? 기꺼이 답변해드리겠습니다! %{contact_link}로 메일을 보내주십시오."
     claim_wca_id:
       #original_hash: f28bf87
       title: WCA ID 연결하기
@@ -1686,7 +1686,7 @@ ko:
       #original_hash: b396bfa
       already_have_html: "이미 WCA ID가 연결되어 있습니다: %{wca_id}"
       #original_hash: 87f1062
-      already_claimed_html: "WCA ID %{wca_id}와의 연결을 요청하셨습니다. 질문이 있으시면 %{delegate}에게 문의하세요."
+      already_claimed_html: "WCA ID %{wca_id}와의 연결을 요청하셨습니다. 질문이 있으시면 %{delegate}에게 문의하십시오."
       #original_hash: 0660b5d
       info_competed_before: WCA 대회에 참가한 적이 있다면 WCA ID를 계정에 연결하는 것을 요청할 수 있습니다.
       #original_hash: 7d605f8
@@ -1716,7 +1716,7 @@ ko:
       #original_hash: 8be3c94
       password: 비밀번호
       #original_hash: 42619dd
-      preferred_events_desc: 빠른 대회 참가 신청을 위해서 선호하시는 종목을 등록하세요.
+      preferred_events_desc: 빠른 대회 참가 신청을 위해서 선호하는 종목을 등록하십시오.
       #original_hash: b402e03
       please_fix_profile: "대회에 참가 신청하려면 다음 문제를 해결해야 합니다:"
       #original_hash: ff4fc02
@@ -1744,13 +1744,13 @@ ko:
       #original_hash: 1cde7e6
       your_thumbnail: "귀하의 계정 섬네일:"
       #original_hash: af18820
-      edit_thumbnail: 섬네일을 편집하려면 클릭하세요
+      edit_thumbnail: 섬네일을 편집하려면 클릭하십시오
       #original_hash: cf65c6e
       manage_pending: 승인 대기 중인 아바타 관리
       #original_hash: 2d2ae5d
       have_no_wca_id_html: >-
         아직 WCA ID가 연결되지 않았습니다. 이전에 WCA 대회에 참가한 적이 있다면, %{here}에서 WCA ID 연결을
-        요청하세요!
+        요청하십시오!
       #original_hash: 29e25b5
       have_wca_id_html: "귀하의 WCA ID는 %{link_id} 입니다."
       #original_hash: bf654e1
@@ -1827,7 +1827,7 @@ ko:
         #original_hash: 4324c73
         confirm_proceed: 확인 후 계속 진행
         #original_hash: 10a90b7
-        identity_error: 데이터를 수정할 수 없습니다. 다시 시도하기 전에 아래에서 신원을 확인하세요.
+        identity_error: 데이터를 수정할 수 없습니다. 다시 시도하기 전에 아래에서 신원을 확인하십시오.
     errors:
       #original_hash: 094b763
       not_found: 찾지 못함
@@ -1882,7 +1882,7 @@ ko:
         #original_hash: 49e5851
         wca_id_claimed: >-
           WCA ID %{wca_id}와의 연결을 성공적으로 요청하였습니다. 이메일을 확인하고, %{user}가 승인할 때까지 기다려
-          주세요!
+          주십시오!
         #original_hash: dc89669
         account_updated_confirm: "계정이 업데이트되었습니다. 새 이메일 주소를 검증하기 위해 %{email}로 이메일을 발송하였습니다."
     select_nearby_delegate:
@@ -2095,14 +2095,14 @@ ko:
     closed_html: "<strong>%{days}</strong>일 전 %{time}에 참가 신청 기간이 종료되었습니다."
     #original_hash: 2e7024d
     please_sign_in_past_html: >-
-      참가 신청 상태 확인을 위해서는 %{sign_in}하세요. 만약 WCA 계정이 없으면 %{here}에서 가입할 수 있지만, 이 대회에
+      참가 신청 상태 확인을 위해서는 %{sign_in}하십시오. 만약 WCA 계정이 없으면 %{here}에서 가입할 수 있지만, 이 대회에
       참가 신청하기에는 너무 늦었습니다.
     #original_hash: 7753b2e
     please_sign_in_not_yet_open_html: >-
-      참가 신청 상태 확인을 위해서는 %{sign_in}하세요. 만약 WCA 계정이 없으면 %{here}에서 가입할 수 있지만, 참가 신청
+      참가 신청 상태 확인을 위해서는 %{sign_in}하십시오. 만약 WCA 계정이 없으면 %{here}에서 가입할 수 있지만, 참가 신청
       접수가 아직 시작되지 않았습니다.
     #original_hash: 4f84af0
-    please_sign_in_html: "%{comp}에 참가 신청하기 위해서는 %{sign_in}하세요. 만약 WCA 계정이 없으면, %{here}에서 만들 수 있습니다."
+    please_sign_in_html: "%{comp}에 참가 신청하기 위해서는 %{sign_in}하십시오. 만약 WCA 계정이 없으면, %{here}에서 만들 수 있습니다."
     #original_hash: 322f646
     please_fix_profile_html: "%{comp}에 참가 신청을 하시려면, %{profile}에서 다음 오류를 수정하십시오:"
     #original_hash: f22ef22
@@ -2318,7 +2318,7 @@ ko:
       #original_hash: 79e8b95
       no_main_event_results: "주 종목(%{event_name})에 대한 결과가 없습니다."
       #original_hash: a0168ee
-      in_progress: "이 대회는 진행 중입니다. %{date} 이후에 돌아와 결과를 확인하세요!"
+      in_progress: "이 대회는 진행 중입니다. %{date} 이후에 돌아와 결과를 확인하십시오!"
       #original_hash: 8eeeb44
       in_progress_at_wca_live_html: "이 대회는 진행 중입니다. 실시간 결과는 <a href='%{link_here}'>여기</a>에서 확인할 수 있습니다!"
       #original_hash: 8ab1548
@@ -3951,7 +3951,7 @@ ko:
       confirm_account_disconnect: "%{provider} 계정을 연결 해제하시겠습니까? 이 작업은 취소할 수 없습니다."
       #original_hash: ddea6cf
       supported_currency_warning: >-
-        선택한 통화가 선택한 통합 결제에서 지원되는지 확인하세요! 지원되는 통화는 계정이 기반을 둔 국가에 따라 달라지며, 아래에서
+        선택한 통화가 선택한 통합 결제에서 지원되는지 확인하십시오! 지원되는 통화는 계정이 기반을 둔 국가에 따라 달라지며, 아래에서
         확인할 수 있습니다:
       #original_hash: 9711365
       supported_currencies: "%{provider} 지원 통화"
@@ -4113,7 +4113,7 @@ ko:
         content:
           #original_hash: b645fe1
           "1": >-
-            만약 WCA 대회에 참가한 적이 없다면, <a href='/competitions'>대회</a>에 참가해 주세요! 참가한
+            만약 WCA 대회에 참가한 적이 없다면, <a href='/competitions'>대회</a>에 참가해 주십시오! 참가한
             첫 대회의 결과가 발표되면 WCA ID와 WCA 프로필이 생성됩니다.
       "2":
         #original_hash: eb948e7
@@ -4164,7 +4164,7 @@ ko:
           "4": >-
             자세한 내용은 <a target='_blank'
             href='https://www.worldcubeassociation.org/organizer-guidelines'>WCA
-            대회 주최자 지침</a>을 참고해주세요.
+            대회 주최자 지침</a>을 참고해주십시오.
       "6":
         #original_hash: 8005a61
         title: WCA 계정은 무엇을 위한 것인가요? WCA 계정과 WCA 프로필의 차이점은 무엇인가요?
@@ -4347,10 +4347,10 @@ ko:
         <p><strong>WCA 파견위원</strong>은 WCA 발의에서 정의되고 WCA 규정에 설명된 역할입니다. 파견위원의 주요
         임무는 WCA를 대신하여 대회를 감독하는 것입니다. WCA 파견위원은 모든 WCA 대표가 WCA의 사명, 정신 및 규정에 따라
         운영되도록 할 책임이 있습니다. WCA는 <strong>수석 파견위원</strong>, <strong>지역
-        파견위원</strong>, <strong>파견위원</strong>, <strong>주니어 파견위원</strong> 및
+        파견위원</strong>, <strong>파견위원</strong>, <strong>준 파견위원</strong> 및
         <strong>수습 파견위원</strong>%{see_link}을 구분합니다.</p> <p>WCA 파견위원의 임무 외에도 수석
         파견위원 또는 지역 파견위원은 해당 지역의 WCA 파견위원을 관리할 책임이 있으며, 지역 문제에 대해 커뮤니티에서 연락을 받을
-        수도 있습니다.</p> <p>새로운 파견위원은 처음에 주니어 파견위원으로 임명됩니다. 이후 WCA 파견위원으로 승격되기 전에
+        수도 있습니다.</p> <p>새로운 파견위원은 처음에 준 파견위원으로 임명됩니다. 이후 WCA 파견위원으로 승격되기 전에
         WCA 대회를 관리하는 능력을 증명해야 합니다.</p> <p>수습 파견위원은 WCA 파견위원에 대한 교육을 받으며, WCA
         파견위원이 있는 대회에서만 파견위원 역할을 수행할 수 있습니다.</p>
       #original_hash: 27d18ac
@@ -5024,7 +5024,7 @@ ko:
       #original_hash: aa7ab5c
       body_html: >-
         인스타그램이나 다른 소셜 미디어 콘텐츠에 대한 또다른 제안이 있으신가요? <a
-        href="https://www.worldcubeassociation.org/contact/website">알려주세요</a>!
+        href="https://www.worldcubeassociation.org/contact/website">알려주십시오</a>!
   footer:
     #original_hash: cf01481
     privacy: 개인 정보
