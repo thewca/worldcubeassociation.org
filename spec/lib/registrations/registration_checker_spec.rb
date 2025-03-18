@@ -73,7 +73,7 @@ RSpec.describe Registrations::RegistrationChecker do
             Registrations::RegistrationChecker.create_registration_allowed!(
               registration_request,
               User.find(registration_request['user_id']),
-              default_competition
+              default_competition,
             )
           }.to raise_error(WcaExceptions::RegistrationError) do |error|
             expect(error.status).to eq(:unprocessable_entity)
