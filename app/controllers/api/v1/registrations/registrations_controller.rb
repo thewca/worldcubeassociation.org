@@ -212,4 +212,14 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
     def list_params
       params.require(:competition_id)
     end
+
+    # Some of these are currently duplicated while migrating from registration_checker
+
+    def organizer_modifying_own_registration?(competition, current_user, target_user)
+      (current_user.id == target_user.id) && current_user.can_manage_competition?(competition)
+    end
+
+    def user_uncancelling_registration?(registration, new_status)
+      registration.competing_status_cancelled? && new_status == Registrations::Helper::STATUS_PENDING
+    end
 end
