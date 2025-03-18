@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_03_06_165113) do
+ActiveRecord::Schema[7.2].define(version: 2025_03_17_115106) do
   create_table "Competitions", id: { type: :string, limit: 32, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", limit: 50, default: "", null: false
     t.string "cityName", limit: 50, default: "", null: false
@@ -792,6 +792,15 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_06_165113) do
     t.datetime "resolved_at", precision: nil
     t.boolean "digest_worthy", default: false
     t.datetime "digest_sent_at", precision: nil
+  end
+
+  create_table "invoice_items", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.bigint "registration_id"
+    t.integer "amount_lowest_denomination"
+    t.string "currency_code"
+    t.integer "status"
+    t.string "display_name"
+    t.index ["registration_id"], name: "index_invoice_items_on_registration_id"
   end
 
   create_table "jwt_denylist", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|

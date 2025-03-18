@@ -272,8 +272,9 @@ class RegistrationsController < ApplicationController
   end
 
   def payment_denomination
-    ruby_denomination = params.require(:amount)
-    currency_iso = params.require(:currency_iso)
+    registration = registration_from_params
+    ruby_denomination = registration.invoice_items_total_amount
+    currency_iso = registration.invoice_items_currency_code
 
     ruby_money = Money.new(ruby_denomination, currency_iso)
     human_amount = helpers.format_money(ruby_money)

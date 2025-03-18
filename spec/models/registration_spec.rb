@@ -621,6 +621,13 @@ RSpec.describe Registration do
 
       FactoryBot.create(:registration, :paid, competition: competition)
     end
+
+    it 'calls add_invoice_item after create' do
+      competition = FactoryBot.create(:competition)
+      reg = FactoryBot.build(:registration, competition: competition)
+      expect(reg).to receive(:add_competition_entry_invoice_item)
+      reg.save
+    end
   end
 
   describe '#newcomer_month_eligible_competitors_count' do
@@ -652,5 +659,33 @@ RSpec.describe Registration do
     reg = FactoryBot.build(:registration, registered_at: nil)
     expect(reg).not_to be_valid
     expect(reg.errors[:registered_at]).to include("can't be blank")
+  end
+
+  describe 'invoice items' do
+
+    describe 'competition entry invoice item' do
+      context 'when a registration is created', :tag do
+        let(:comp) { FactoryBot.create(:competition) }
+        let(:reg) { FactoryBot.create(:registration, competition: comp) }
+
+        it 'adds a competition entry invoice item on create' do
+          expect(reg.invoice_items.count).to eq(1)
+        end
+
+        it 'populates competition entry with competition price data' do
+          expect(reg.invoice_items.first.currency_code).to eq(comp.currency_code)
+          expect(reg.invoice_items.first.amount_lowest_denomination).to eq(comp.base_entry_fee_lowest_denomination)
+        end
+
+        it 'populates with display name and status' do
+          expect(reg.invoice_items.first.display_name).to eq("#{comp.id} registration")
+          expect(reg.invoice_items.first.status).to eq('unpaid') #TODO: Do we want to define the enum with integers or strings?
+        end
+      end
+
+      it 'doesnt add a competition entry if entry is free' do
+        expect(true).to be(false)
+      end
+    end
   end
 end
