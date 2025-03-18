@@ -3,7 +3,9 @@
 class RegistrationCompetitionEvent < ApplicationRecord
   belongs_to :registration, touch: true
 
-  belongs_to :competition_event
+  # We disable the "default" presence validation so that we can pass our own error information
+  belongs_to :competition_event, optional: true
+  validates :competition_event, presence: { frontend_code: Registrations::ErrorCodes::INVALID_EVENT_SELECTION }
 
   has_one :event, through: :competition_event
   delegate :event, to: :competition_event, allow_nil: true

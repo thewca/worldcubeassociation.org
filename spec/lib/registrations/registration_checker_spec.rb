@@ -463,7 +463,7 @@ RSpec.describe Registrations::RegistrationChecker do
         expect {
           Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['submitted_by']))
         }.to raise_error(WcaExceptions::RegistrationError) do |error|
-          expect(error.status).to eq(:forbidden)
+          expect(error.status).to eq(:unprocessable_entity)
           expect(error.error).to eq(Registrations::ErrorCodes::INVALID_EVENT_SELECTION)
         end
       end
@@ -497,7 +497,7 @@ RSpec.describe Registrations::RegistrationChecker do
         expect {
           Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['submitted_by']))
         }.to raise_error(WcaExceptions::RegistrationError) do |error|
-          expect(error.status).to eq(:forbidden)
+          expect(error.status).to eq(:unprocessable_entity)
           expect(error.error).to eq(Registrations::ErrorCodes::INVALID_EVENT_SELECTION)
         end
       end
@@ -1996,7 +1996,7 @@ RSpec.describe Registrations::RegistrationChecker do
         expect {
           Registrations::RegistrationChecker.update_registration_allowed!(update_request, Competition.find(update_request['competition_id']), User.find(update_request['submitted_by']))
         }.to raise_error(WcaExceptions::RegistrationError) do |error|
-          expect(error.status).to eq(:forbidden)
+          expect(error.status).to eq(:unprocessable_entity)
           expect(error.error).to eq(Registrations::ErrorCodes::INVALID_EVENT_SELECTION)
         end
       end
@@ -2014,7 +2014,7 @@ RSpec.describe Registrations::RegistrationChecker do
         expect {
           Registrations::RegistrationChecker.update_registration_allowed!(update_request, Competition.find(update_request['competition_id']), User.find(update_request['submitted_by']))
         }.to raise_error(WcaExceptions::RegistrationError) do |error|
-          expect(error.status).to eq(:forbidden)
+          expect(error.status).to eq(:unprocessable_entity)
           expect(error.error).to eq(Registrations::ErrorCodes::INVALID_EVENT_SELECTION)
         end
       end
