@@ -360,11 +360,11 @@ class Registration < ApplicationRecord
                                                 frontend_code: Registrations::ErrorCodes::INVALID_EVENT_SELECTION,
                                               }
 
-  private def events_limit
+  def events_limit
     competition&.events_per_registration_limit
   end
 
-  private def events_limit_enabled?
+  def events_limit_enabled?
     competition&.events_per_registration_limit_enabled?
   end
 

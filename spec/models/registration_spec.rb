@@ -342,7 +342,13 @@ RSpec.describe Registration do
       competition.allow_registration_without_qualification = false
       competition.save!
       registration.reload
-      expect(registration).to be_invalid_with_errors(registration_competition_events: ["You cannot register for events you are not qualified for."])
+      expect(registration).to be_invalid_with_errors(
+        registration_competition_events: ["is invalid"],
+      )
+      rce = registration.registration_competition_events.find_by(competition_event: competition_event)
+      expect(rce).to be_invalid_with_errors(
+        competition_event: ["You cannot register for events you are not qualified for."],
+      )
     end
   end
 

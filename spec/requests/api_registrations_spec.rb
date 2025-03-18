@@ -316,7 +316,7 @@ RSpec.describe 'API Registrations' do
 
       expect(Registration.find_by(user_id: update_request1['user_id']).competing_status).to eq('pending')
       expect(Registration.find_by(user_id: update_request2['user_id']).guests).to eq(10)
-      expect(Registration.find_by(user_id: update_request3['user_id']).events.pluck(:id)).to eq(['333', '333oh'])
+      expect(Registration.find_by(user_id: update_request3['user_id']).event_ids).to eq(['333', '333oh'])
     end
 
     it 'returns 400 if blank JSON submitted' do
