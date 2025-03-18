@@ -37,10 +37,12 @@ module Registrations
       registration.administrative_notes = organizer_comment if competing_payload.key?('organizer_comment')
 
       user_can_modify_registration!(competition, current_user, target_user, registration, new_status)
-      validate_guests!(registration) unless guests.nil?
+      # Migrated to ActiveRecord-style validations
+      validate_guests!(registration)
       validate_comment!(registration)
+      validate_organizer_comment!(registration)
+      # Old-style validations within this class
       validate_organizer_fields!(update_request, current_user, competition)
-      validate_organizer_comment!(registration) unless organizer_comment.nil?
       validate_waiting_list_position!(waiting_list_position, competition, registration) unless waiting_list_position.nil?
       validate_update_status!(new_status, competition, current_user, target_user, registration, events) unless new_status.nil?
       validate_update_events!(events, competition) unless events.nil?
