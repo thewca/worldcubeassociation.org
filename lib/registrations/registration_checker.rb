@@ -2,8 +2,6 @@
 
 module Registrations
   class RegistrationChecker
-    DEFAULT_GUEST_LIMIT = 99
-
     def self.create_registration_allowed!(registration_request, current_user)
       target_user = User.find(registration_request['user_id'])
       competition = Competition.find(registration_request['competition_id'])
