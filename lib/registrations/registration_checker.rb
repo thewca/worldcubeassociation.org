@@ -13,7 +13,8 @@ module Registrations
       user_can_create_registration!(competition, current_user, target_user)
       validate_create_events!(registration_request, competition)
       validate_qualifications!(registration_request, competition, target_user)
-      validate_guests!(r) unless guests.nil?
+      # Migrated to ActiveRecord-style validations
+      validate_guests!(r)
       validate_comment!(r)
     end
 
