@@ -354,8 +354,8 @@ class Registration < ApplicationRecord
                                               length: {
                                                 maximum: :events_limit,
                                                 if: :events_limit_enabled?,
-                                                message: ->(_registration, data) {
-                                                  I18n.t('registrations.errors.exceeds_event_limit', count: data[:value])
+                                                message: ->(registration, _data) {
+                                                  I18n.t('registrations.errors.exceeds_event_limit', count: registration.events_limit)
                                                 },
                                                 frontend_code: Registrations::ErrorCodes::INVALID_EVENT_SELECTION,
                                               }
