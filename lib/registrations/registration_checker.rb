@@ -54,7 +54,9 @@ module Registrations
       target_user = User.find(update_request['user_id'])
       waiting_list_position = update_request.dig('competing', 'waiting_list_position')
       new_status = update_request.dig('competing', 'status')
-      events = update_request.dig('competing', 'event_ids')
+
+      # Rails does not track changes to `has_many` associations like it would for attributes :(
+      old_events = registration.event_ids
 
       ActiveRecord::Base.transaction do
         self.apply_payload(registration, update_request)
@@ -68,7 +70,7 @@ module Registrations
         # Old-style validations within this class
         validate_organizer_fields!(update_request, current_user, competition)
         validate_waiting_list_position!(waiting_list_position, competition, registration) unless waiting_list_position.nil?
-        validate_update_status!(new_status, competition, current_user, target_user, registration, events) unless new_status.nil?
+        validate_update_status!(new_status, competition, current_user, target_user, registration, old_events) unless new_status.nil?
 
         # The `apply_payload` can trigger write operations on associations, so we manually roll back to be sure
         raise ActiveRecord::Rollback
