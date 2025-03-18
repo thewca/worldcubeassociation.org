@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 class Registration < ApplicationRecord
+  COMMENT_CHARACTER_LIMIT = 240
+  DEFAULT_GUEST_LIMIT = 99
+
   scope :pending, -> { where(competing_status: 'pending') }
   scope :accepted, -> { where(competing_status: 'accepted') }
   scope :cancelled, -> { where(competing_status: 'cancelled') }
@@ -50,7 +53,7 @@ class Registration < ApplicationRecord
   validates :guests, numericality: { greater_than_or_equal_to: 0 }
   validates :guests, numericality: { less_than_or_equal_to: :guest_limit, if: :check_guest_limit?, frontend_code: Registrations::ErrorCodes::GUEST_LIMIT_EXCEEDED }
   validates :guests, numericality: { equal_to: 0, unless: :guests_allowed?, frontend_code: Registrations::ErrorCodes::GUEST_LIMIT_EXCEEDED }
-  validates :guests, numericality: { less_than_or_equal_to: Registrations::RegistrationChecker::DEFAULT_GUEST_LIMIT, if: :guests_unrestricted?, frontend_code: Registrations::ErrorCodes::UNREASONABLE_GUEST_COUNT }
+  validates :guests, numericality: { less_than_or_equal_to: DEFAULT_GUEST_LIMIT, if: :guests_unrestricted?, frontend_code: Registrations::ErrorCodes::UNREASONABLE_GUEST_COUNT }
 
   after_save :mark_registration_processing_as_done
 
@@ -368,11 +371,15 @@ class Registration < ApplicationRecord
     end
   end
 
-  validate :forcing_competitors_to_add_comment, if: :is_competing?
-  private def forcing_competitors_to_add_comment
-    if competition&.force_comment_in_registration.present? && comments&.strip.blank?
-      errors.add(:user_id, I18n.t('registrations.errors.cannot_register_without_comment'))
-    end
+  strip_attributes only: [:comments, :administrative_notes]
+
+  validates :comments, length: { maximum: COMMENT_CHARACTER_LIMIT, frontend_code: Registrations::ErrorCodes::USER_COMMENT_TOO_LONG },
+                       presence: { message: I18n.t('registrations.errors.cannot_register_without_comment'), if: :force_comment?, frontend_code: Registrations::ErrorCodes::REQUIRED_COMMENT_MISSING }
+
+  validates :administrative_notes, length: { maximum: COMMENT_CHARACTER_LIMIT, frontend_code: Registrations::ErrorCodes::USER_COMMENT_TOO_LONG }
+
+  def force_comment?
+    competition&.force_comment_in_registration?
   end
 
   # For associated_events_picker
