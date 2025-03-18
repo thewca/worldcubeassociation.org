@@ -316,6 +316,9 @@ en:
         birthday: "Birthday"
         registration_competition_events: "Events"
         email: "Email"
+        search: "Search..."
+        too_few_chars: "Too few characters"
+        no_results: "No results"
       #context: a competition tab
       competition_tab:
         content: "Content"
