@@ -33,7 +33,7 @@ module Registrations
       self.apply_payload(registration, registration_request)
 
       user_can_create_registration!(competition, current_user, target_user)
-      validate_create_events!(registration_request, competition)
+      validate_create_events!(registration_request, competition, registration)
       validate_qualifications!(registration_request, competition, target_user)
       # Migrated to ActiveRecord-style validations
       validate_guests!(registration)
@@ -60,7 +60,7 @@ module Registrations
       validate_organizer_fields!(update_request, current_user, competition)
       validate_waiting_list_position!(waiting_list_position, competition, registration) unless waiting_list_position.nil?
       validate_update_status!(new_status, competition, current_user, target_user, registration, events) unless new_status.nil?
-      validate_update_events!(events, competition) unless events.nil?
+      validate_update_events!(events, competition, registration) unless events.nil?
       validate_qualifications!(update_request, competition, target_user) unless events.nil?
     end
 
@@ -131,15 +131,13 @@ module Registrations
         (current_user.id == target_user.id) || current_user.can_manage_competition?(competition)
       end
 
-      def validate_create_events!(request, competition)
+      def validate_create_events!(request, competition, registration)
         event_ids = request['competing']['event_ids']
         # Event submitted must be held at the competition
         raise WcaExceptions::RegistrationError.new(:unprocessable_entity, Registrations::ErrorCodes::INVALID_EVENT_SELECTION) unless
           event_ids.present? && competition.events_held?(event_ids)
 
-        event_limit = competition.events_per_registration_limit
-        raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::INVALID_EVENT_SELECTION) if
-          competition.event_restrictions? && event_limit.present? && event_ids.count > event_limit
+        process_validation_error!(registration, :registration_competition_events)
       end
 
       def validate_qualifications!(request, competition, target_user)
@@ -257,12 +255,11 @@ module Registrations
       end
       # rubocop:enable Metrics/ParameterLists
 
-      def validate_update_events!(event_ids, competition)
+      def validate_update_events!(event_ids, competition, registration)
         raise WcaExceptions::RegistrationError.new(:unprocessable_entity, Registrations::ErrorCodes::INVALID_EVENT_SELECTION) unless
           event_ids.present? && competition.events_held?(event_ids)
 
-        event_limit = competition.events_per_registration_limit
-        raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::INVALID_EVENT_SELECTION) if event_limit.present? && event_ids.count > event_limit
+        process_validation_error!(registration, :registration_competition_events)
       end
 
       def existing_registration_in_series?(competition, target_user)

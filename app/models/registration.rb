@@ -346,13 +346,18 @@ class Registration < ApplicationRecord
     end
   end
 
-  validates :registration_competition_events, presence: { if: :is_competing?, message: I18n.t('registrations.errors.must_register') },
+  validates :registration_competition_events, presence: {
+                                                if: :is_competing?,
+                                                message: I18n.t('registrations.errors.must_register'),
+                                                frontend_code: Registrations::ErrorCodes::INVALID_EVENT_SELECTION,
+                                              },
                                               length: {
                                                 maximum: :events_limit,
                                                 if: :events_limit_enabled?,
                                                 message: ->(_registration, data) {
                                                   I18n.t('registrations.errors.exceeds_event_limit', count: data[:value])
                                                 },
+                                                frontend_code: Registrations::ErrorCodes::INVALID_EVENT_SELECTION,
                                               }
 
   private def events_limit
