@@ -31,9 +31,10 @@ module Registrations
       new_status = update_request.dig('competing', 'status')
       events = update_request.dig('competing', 'event_ids')
 
-      registration.comments = comment if comment.present?
-      registration.guests = guests.to_i if guests.present?
-      registration.administrative_notes = organizer_comment if organizer_comment.present?
+      competing_payload = update_request['competing']
+      registration.comments = comment if competing_payload&.key?('comment')
+      registration.guests = guests.to_i if competing_payload&.key?('guests')
+      registration.administrative_notes = organizer_comment if competing_payload.key?('organizer_comment')
 
       user_can_modify_registration!(competition, current_user, target_user, registration, new_status)
       validate_guests!(registration) unless guests.nil?
