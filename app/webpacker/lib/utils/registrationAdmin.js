@@ -33,13 +33,16 @@ export const partitionRegistrations = (registrations) => registrations.reduce(
       case 'rejected':
         result.rejected.push(registration);
         break;
+      case 'non_competing':
+        result.nonCompeting.push(registration);
+        break;
       default:
         break;
     }
     return result;
   },
   {
-    pending: [], waiting: [], accepted: [], cancelled: [], rejected: [],
+    pending: [], waiting: [], accepted: [], cancelled: [], rejected: [], nonCompeting: [],
   },
 );
 
