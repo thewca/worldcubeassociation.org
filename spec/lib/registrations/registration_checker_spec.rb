@@ -800,6 +800,24 @@ RSpec.describe Registrations::RegistrationChecker do
   describe '#update' do
     let(:default_registration) { FactoryBot.create(:registration, competition: default_competition) }
 
+    describe '#update_registration_allowed!' do
+      it 'does not alter the base registration during checking' do
+        update_request = FactoryBot.build(
+          :update_request,
+          competition_id: default_registration.competition.id,
+          user_id: default_registration.user_id,
+          competing: { 'event_ids' => ['333'] },
+        )
+
+        expect {
+          Registrations::RegistrationChecker.update_registration_allowed!(update_request, Competition.find(update_request['competition_id']), User.find(update_request['submitted_by']))
+        }.not_to raise_error
+
+        # We never actually fired the update, we just checked whether it _would_ be permissible to do so
+        expect(default_registration.reload.event_ids).to eq(['333', '333oh'])
+      end
+    end
+
     describe '#update_registration_allowed!.user_can_modify_registration!' do
       it 'raises error if registration doesnt exist' do
         update_request = FactoryBot.build(:update_request, competition_id: default_competition.id, user_id: default_user.id)

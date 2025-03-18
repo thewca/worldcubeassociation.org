@@ -20,8 +20,13 @@ module Registrations
         competition_events_lookup = registration.competition.competition_events.where(event_id: desired_events).index_by(&:event_id)
         competition_events = desired_events.map { competition_events_lookup[it] }
 
-        rce_build_params = competition_events.map { { competition_event: it } }
-        registration.registration_competition_events = registration.registration_competition_events.build(rce_build_params)
+        upserted_events = competition_events.map {
+          registration.registration_competition_events.find_or_initialize_by(competition_event: it)
+        }
+
+        # This is like a "very careful write operation". Using `registration_competition_events=`
+        #   would immediately fire database calls, even without calling `save`
+        registration.registration_competition_events.records.replace(upserted_events)
       end
     end
 
@@ -30,13 +35,15 @@ module Registrations
       competition = Competition.find(registration_request['competition_id'])
       registration = Registration.new(competition: competition, user: target_user)
 
-      self.apply_payload(registration, registration_request)
+      ActiveRecord::Base.transaction do
+        self.apply_payload(registration, registration_request)
 
-      user_can_create_registration!(competition, current_user, target_user)
-      # Migrated to ActiveRecord-style validations
-      validate_guests!(registration)
-      validate_comment!(registration)
-      validate_registration_events!(registration)
+        user_can_create_registration!(competition, current_user, target_user)
+        # Migrated to ActiveRecord-style validations
+        validate_guests!(registration)
+        validate_comment!(registration)
+        validate_registration_events!(registration)
+      end
     end
 
     def self.update_registration_allowed!(update_request, competition, current_user)
@@ -48,18 +55,20 @@ module Registrations
       new_status = update_request.dig('competing', 'status')
       events = update_request.dig('competing', 'event_ids')
 
-      self.apply_payload(registration, update_request)
+      ActiveRecord::Base.transaction do
+        self.apply_payload(registration, update_request)
 
-      user_can_modify_registration!(competition, current_user, target_user, registration, new_status)
-      # Migrated to ActiveRecord-style validations
-      validate_guests!(registration)
-      validate_comment!(registration)
-      validate_organizer_comment!(registration)
-      validate_registration_events!(registration)
-      # Old-style validations within this class
-      validate_organizer_fields!(update_request, current_user, competition)
-      validate_waiting_list_position!(waiting_list_position, competition, registration) unless waiting_list_position.nil?
-      validate_update_status!(new_status, competition, current_user, target_user, registration, events) unless new_status.nil?
+        user_can_modify_registration!(competition, current_user, target_user, registration, new_status)
+        # Migrated to ActiveRecord-style validations
+        validate_guests!(registration)
+        validate_comment!(registration)
+        validate_organizer_comment!(registration)
+        validate_registration_events!(registration)
+        # Old-style validations within this class
+        validate_organizer_fields!(update_request, current_user, competition)
+        validate_waiting_list_position!(waiting_list_position, competition, registration) unless waiting_list_position.nil?
+        validate_update_status!(new_status, competition, current_user, target_user, registration, events) unless new_status.nil?
+      end
     end
 
     def self.bulk_update_allowed!(bulk_update_request, current_user)
@@ -151,7 +160,7 @@ module Registrations
       def process_nested_validation_error!(registration, association, field)
         return if registration.valid?
 
-        error_details = registration.association(association).reader.index_with do |entity|
+        error_details = registration.public_send(association).index_with do |entity|
           read_error_details(entity, field)
         end.compact
 
