@@ -42,6 +42,7 @@ namespace :db do
       DbDumpHelper.dump_developer_db
     end
 
+    desc 'Generates a partial dump of our database containing only results and relevant stuff for statistics.'
     task public_results: :environment do
       DbDumpHelper.dump_results_db
     end

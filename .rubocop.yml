@@ -501,20 +501,3 @@ Capybara/RSpec/HaveSelector:
 
 Capybara/RSpec/PredicateMatcher:
   Enabled: false
-
-# Rake
-
-Rake/ClassDefinitionInTask:
-  Enabled: false
-
-Rake/Desc:
-  Enabled: false
-
-Rake/DuplicateTask:
-  Enabled: false
-
-Rake/DuplicateNamespace:
-  Enabled: false
-
-Rake/MethodDefinitionInTask:
-  Enabled: false

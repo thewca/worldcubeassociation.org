@@ -73,6 +73,7 @@ namespace :registration_version do
     end
   end
 
+  desc "Migrate v2 microservice registrations to v3 integrated registrations"
   task :migrate_v2_v3, [:competition_id] => [:environment] do |_, args|
     competition_id = args[:competition_id]
 
