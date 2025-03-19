@@ -148,8 +148,6 @@ class UserRole < ApplicationRecord
       group.metadata.friendly_id
     when UserGroup.group_types[:board]
       UserGroup.group_types[:board]
-    else
-      nil
     end
   end
 
@@ -195,11 +193,11 @@ class UserRole < ApplicationRecord
   end
 
   def deprecated_team_role
-    if group_type == UserGroup.group_types[:board]
-      friendly_id = UserGroup.group_types[:board]
-    else
-      friendly_id = group.metadata.friendly_id
-    end
+    friendly_id = if group_type == UserGroup.group_types[:board]
+                    UserGroup.group_types[:board]
+                  else
+                    group.metadata.friendly_id
+                  end
     {
       id: self.id,
       friendly_id: friendly_id,

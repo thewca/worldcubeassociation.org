@@ -553,11 +553,11 @@ class Competition < ApplicationRecord
       warnings[:announcement] = I18n.t('competitions.messages.not_announced') unless self.announced?
 
       if self.results.any? && !self.results_posted?
-        if user&.can_admin_results?
-          warnings[:results] = I18n.t('competitions.messages.results_not_posted')
-        else
-          warnings[:results] = I18n.t('competitions.messages.results_still_processing')
-        end
+        warnings[:results] = if user&.can_admin_results?
+                               I18n.t('competitions.messages.results_not_posted')
+                             else
+                               I18n.t('competitions.messages.results_still_processing')
+                             end
       end
     else
       warnings[:invisible] = I18n.t('competitions.messages.not_visible')
@@ -646,11 +646,11 @@ class Competition < ApplicationRecord
     info = {}
     info[:upload_results] = I18n.t('competitions.messages.upload_results') if !self.results_posted? && self.is_probably_over? && !self.cancelled?
     if self.in_progress? && !self.cancelled?
-      if self.use_wca_live_for_scoretaking
-        info[:in_progress] = I18n.t('competitions.messages.in_progress_at_wca_live_html', link_here: self.wca_live_link).html_safe
-      else
-        info[:in_progress] = I18n.t('competitions.messages.in_progress', date: I18n.l(self.end_date, format: :long))
-      end
+      info[:in_progress] = if self.use_wca_live_for_scoretaking
+                             I18n.t('competitions.messages.in_progress_at_wca_live_html', link_here: self.wca_live_link).html_safe
+                           else
+                             I18n.t('competitions.messages.in_progress', date: I18n.l(self.end_date, format: :long))
+                           end
     end
     info
   end
@@ -924,7 +924,7 @@ class Competition < ApplicationRecord
 
   validate :registration_must_close_after_it_opens
   def registration_must_close_after_it_opens
-    errors.add(:registration_close, I18n.t('competitions.errors.registration_close_after_open')) if registration_open && registration_close && !(registration_open < registration_close)
+    errors.add(:registration_close, I18n.t('competitions.errors.registration_close_after_open')) if registration_open && registration_close && registration_open >= registration_close
   end
 
   attr_reader :receive_registration_emails
@@ -1514,7 +1514,7 @@ class Competition < ApplicationRecord
   end
 
   def ineligible_events(user)
-    competition_events.select { |ce| !ce.can_register?(user) }.map(&:event)
+    competition_events.reject { |ce| ce.can_register?(user) }.map(&:event)
   end
 
   # Profiling the rendering of _results_table.html.erb showed quite some
@@ -1688,11 +1688,11 @@ class Competition < ApplicationRecord
   end
 
   def self.search(query, params: {}, managed_by_user: nil)
-    if managed_by_user
-      competitions = Competition.managed_by(managed_by_user.id)
-    else
-      competitions = Competition.visible
-    end
+    competitions = if managed_by_user
+                     Competition.managed_by(managed_by_user.id)
+                   else
+                     Competition.visible
+                   end
 
     if params[:include_cancelled].present?
       include_cancelled = ActiveRecord::Type::Boolean.new.cast(params[:include_cancelled])
@@ -1781,22 +1781,22 @@ class Competition < ApplicationRecord
     end
 
     orderable_fields = %i(name start_date end_date announced_at)
-    if params[:sort]
-      order = params[:sort].split(',')
+    order = if params[:sort]
+              params[:sort].split(',')
                            .map do |part|
-                             reverse, field = part.match(/^(-)?(\w+)$/).captures
-                             [field.to_sym, reverse ? :desc : :asc]
-                           end
-                           # rubocop:disable Style/HashSlice
-                           #   RuboCop suggests using `slice` here, which is a noble intention but breaks the order
-                           #   of sort arguments. However, this order is crucial (sorting by "name then start_date"
-                           #   is different from sorting by "start_date then name") so we insist on doing it our way.
-                           .select { |field, _| orderable_fields.include?(field) }
+                reverse, field = part.match(/^(-)?(\w+)$/).captures
+                [field.to_sym, reverse ? :desc : :asc]
+              end
+                                   # rubocop:disable Style/HashSlice
+                                   #   RuboCop suggests using `slice` here, which is a noble intention but breaks the order
+                                   #   of sort arguments. However, this order is crucial (sorting by "name then start_date"
+                                   #   is different from sorting by "start_date then name") so we insist on doing it our way.
+                                   .select { |field, _| orderable_fields.include?(field) }
                            # rubocop:enable Style/HashSlice
                            .to_h
-    else
-      order = { start_date: :desc }
-    end
+            else
+              { start_date: :desc }
+            end
 
     # Respect other `includes` associations that might have been specified ahead of time
     previous_includes = competitions.includes_values
@@ -2514,16 +2514,16 @@ class Competition < ApplicationRecord
         self.competition_series = nil
       end
 
-      if (form_championships = form_data["championships"]).present?
-        self.championships = form_championships.map do |type|
-          Championship.new(championship_type: type)
-        end
-      else
-        # explicitly sending an empty array of championships
-        #   (which prominently happens when removing the only championship there is)
-        #   makes `present?` return `false`, so we explicitly set this default value.
-        self.championships = []
-      end
+      self.championships = if (form_championships = form_data["championships"]).present?
+                             form_championships.map do |type|
+                               Championship.new(championship_type: type)
+                             end
+                           else
+                             # explicitly sending an empty array of championships
+                             #   (which prominently happens when removing the only championship there is)
+                             #   makes `present?` return `false`, so we explicitly set this default value.
+                             []
+                           end
 
       assign_attributes(Competition.form_data_to_attributes(form_data))
     end

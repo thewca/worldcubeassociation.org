@@ -233,7 +233,7 @@ module ApplicationHelper
   end
 
   def filter_css_packs(*names)
-    names.select { |pack| !current_shakapacker_instance.manifest.lookup_pack_with_chunks(pack, type: :stylesheet).nil? }
+    names.reject { |pack| current_shakapacker_instance.manifest.lookup_pack_with_chunks(pack, type: :stylesheet).nil? }
   end
 
   def add_to_css_assets(name)

@@ -131,22 +131,10 @@ Style/ClassAndModuleChildren:
 Style/ClassVars:
   Enabled: false
 
-Style/ConditionalAssignment:
-  Enabled: false
-
 Style/Documentation:
   Enabled: false
 
-Style/DoubleNegation:
-  Enabled: false
-
-Style/EmptyElse:
-  EnforcedStyle: empty
-
 Style/IfInsideElse:
-  Enabled: false
-
-Style/InverseMethods:
   Enabled: false
 
 Style/Lambda:

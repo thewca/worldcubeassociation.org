@@ -38,11 +38,11 @@ class PollsController < ApplicationController
   def update
     @poll = Poll.find(params[:id])
     if @poll.update(poll_params)
-      if params[:commit] == "Confirm"
-        flash[:success] = "Poll confirmed and open to voting"
-      else
-        flash[:success] = "Updated poll"
-      end
+      flash[:success] = if params[:commit] == "Confirm"
+                          "Poll confirmed and open to voting"
+                        else
+                          "Updated poll"
+                        end
       redirect_to edit_poll_path(@poll)
     else
       render :edit
