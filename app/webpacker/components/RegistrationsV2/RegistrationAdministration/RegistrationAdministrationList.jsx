@@ -363,10 +363,10 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
             <RegistrationAdministrationTable
               columnsExpanded={expandedColumns}
               registrations={nonCompeting}
-              selected={partitionedSelectedIds.nonCompeting}
-              onSelect={selectedIds.add}
-              onUnselect={selectedIds.remove}
-              onToggle={selectedIds.toggle}
+              selected={[]}
+              onSelect={() => {}}
+              onUnselect={() => {}}
+              onToggle={() => {}}
               competitionInfo={competitionInfo}
               color={NON_COMPETING_COLOR}
             />
