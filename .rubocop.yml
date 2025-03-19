@@ -173,9 +173,6 @@ Style/PerlBackrefs:
 Style/RaiseArgs:
   EnforcedStyle: compact
 
-Style/RedundantParentheses:
-  Enabled: false
-
 Style/SignalException:
   EnforcedStyle: only_raise
 

@@ -443,7 +443,7 @@ RSpec.describe Registration do
       ]
 
       it 'tests cover all possible status update combinations' do
-        combined_updates = (competing_status_updates).flatten
+        combined_updates = competing_status_updates.flatten
         expect(combined_updates).to match_array(REGISTRATION_TRANSITIONS)
       end
 

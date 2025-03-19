@@ -26,10 +26,8 @@ class Ticket < ApplicationRecord
   def can_user_access?(user)
     return false if user.nil?
 
-    (
-      ticket_stakeholders.belongs_to_user(user).any? ||
+    ticket_stakeholders.belongs_to_user(user).any? ||
       ticket_stakeholders.belongs_to_groups(user.active_groups).any?
-    )
   end
 
   def action_allowed?(action, user)

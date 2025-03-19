@@ -184,7 +184,7 @@ FactoryBot.define do
     end
 
     trait :payment_disconnect_delay_not_elapsed do
-      starts { (ClearConnectedPaymentIntegrations::DELAY_IN_DAYS).days.ago }
+      starts { ClearConnectedPaymentIntegrations::DELAY_IN_DAYS.days.ago }
       ends { (ClearConnectedPaymentIntegrations::DELAY_IN_DAYS-1).days.ago }
     end
 
