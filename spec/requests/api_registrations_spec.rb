@@ -202,7 +202,7 @@ RSpec.describe 'API Registrations' do
     end
 
     it 'raises error if registration doesnt exist' do
-      update_request = FactoryBot.build(:update_request, competition_id: default_competition.id, user_id: default_user.id)
+      update_request = FactoryBot.build(:update_request, competition_id: competition.id, user_id: user.id)
       headers = { 'Authorization' => update_request['jwt_token'] }
 
       patch api_v1_registrations_register_path, params: update_request, headers: headers
@@ -219,8 +219,8 @@ RSpec.describe 'API Registrations' do
       update_request = FactoryBot.build(
         :update_request,
         :for_another_user,
-        competition_id: default_registration.competition.id,
-        user_id: default_registration.user_id,
+        competition_id: registration.competition.id,
+        user_id: registration.user_id,
       )
       headers = { 'Authorization' => update_request['jwt_token'] }
 
@@ -300,9 +300,9 @@ RSpec.describe 'API Registrations' do
     it 'organizer can change user registration' do
       update_request = FactoryBot.build(
         :update_request,
-        user_id: default_registration.user_id,
-        competition_id: default_registration.competition.id,
-        submitted_by: default_competition.organizers.first.id,
+        user_id: registration.user_id,
+        competition_id: registration.competition.id,
+        submitted_by: competition.organizers.first.id,
       )
       headers = { 'Authorization' => update_request['jwt_token'] }
 
