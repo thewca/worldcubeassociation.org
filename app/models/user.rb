@@ -994,8 +994,6 @@ class User < ApplicationRecord
       I18n.t('competitions.errors.cannot_delete_public')
     elsif competition.confirmed? && !self.can_admin_results?
       I18n.t('competitions.errors.cannot_delete_confirmed')
-    else
-      nil
     end
   end
 

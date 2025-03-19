@@ -134,12 +134,6 @@ Style/ClassVars:
 Style/Documentation:
   Enabled: false
 
-Style/DoubleNegation:
-  Enabled: false
-
-Style/EmptyElse:
-  EnforcedStyle: empty
-
 Style/IfInsideElse:
   Enabled: false
 

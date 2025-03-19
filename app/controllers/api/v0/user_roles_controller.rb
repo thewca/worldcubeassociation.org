@@ -68,17 +68,9 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     ]
     group = UserGroup.find(group_id)
 
-    status = if UserGroup.group_types_containing_status_metadata.include?(group.group_type)
-               params.require(:status)
-             else
-               nil
-             end
+    status = (params.require(:status) if UserGroup.group_types_containing_status_metadata.include?(group.group_type))
 
-    location = if group.group_type == UserGroup.group_types[:delegate_regions]
-                 params[:location]
-               else
-                 nil
-               end
+    location = (params[:location] if group.group_type == UserGroup.group_types[:delegate_regions])
 
     if group.banned_competitors?
       user = User.find(user_id)
@@ -115,8 +107,6 @@ class Api::V0::UserRolesController < Api::V0::ApiController
                    RolesMetadataCouncils.create!(status: status)
                  elsif group.group_type == UserGroup.group_types[:banned_competitors]
                    RolesMetadataBannedCompetitors.create!(ban_reason: ban_reason, scope: scope)
-                 else
-                   nil
                  end
 
       new_role = UserRole.create!(
@@ -136,16 +126,11 @@ class Api::V0::UserRolesController < Api::V0::ApiController
   end
 
   private def changed_key_to_human_readable(changed_key)
-    case changed_key
-    when 'end_date'
-      'End Date'
-    when 'ban_reason'
-      'Ban reason'
-    when 'scope'
-      'Ban scope'
-    else
-      nil
-    end
+    {
+      'end_date' => 'End Date',
+      'ban_reason' => 'Ban reason',
+      'scope' => 'Ban scope',
+    }[changed_key]
   end
 
   private def changed_value_to_human_readable(changed_value)

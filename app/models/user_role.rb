@@ -148,8 +148,6 @@ class UserRole < ApplicationRecord
       group.metadata.friendly_id
     when UserGroup.group_types[:board]
       UserGroup.group_types[:board]
-    else
-      nil
     end
   end
 
