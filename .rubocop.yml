@@ -183,6 +183,7 @@ Naming/PredicateName:
     # These are database columns
     - is_active?
     - is_hidden?
+    # This one actually makes sense
     - has_permission?
 
 Lint/EmptyFile:
