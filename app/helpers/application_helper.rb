@@ -147,9 +147,9 @@ module ApplicationHelper
     options_for_select((use_world ? [[t('common.world'), "world"]] : [[t('common.all_regions'), "all"]]), selected_id) + grouped_options_for_select(regions, selected_id)
   end
 
-  def simple_form_for(resource, **options, &block)
+  def simple_form_for(resource, **options, &)
     super do |f|
-      form = capture(f, &block)
+      form = capture(f, &)
       error_messages = render('shared/error_messages', f: f)
       error_messages + form
     end
