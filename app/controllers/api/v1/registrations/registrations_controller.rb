@@ -76,7 +76,7 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
   end
 
   def user_can_modify_registration
-    new_status = update_request.dig('competing', 'status')
+    new_status = params.dig('competing', 'status')
     target_user = @registration.user
     raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless
       can_administer_or_current_user?(@competition, @current_user, target_user)
