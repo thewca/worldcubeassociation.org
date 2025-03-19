@@ -2,7 +2,8 @@
 
 import { useSession, signIn, signOut } from "next-auth/react";
 import { usePermissions } from "@/providers/PermissionProvider";
-import { Button, Code, Container, Text } from "@chakra-ui/react";
+import { Button, Code, Container, Text, Link as ChakraLink, HStack } from "@chakra-ui/react";
+import Link from "next/link";
 
 export default function Home() {
   const { data: session } = useSession();
@@ -19,8 +20,26 @@ export default function Home() {
           )}
         </>
       ) : (
-        <Button onClick={() => signIn("WCA")}>Sign in</Button>
+        <Button onClick={() => signIn("WCA")} colorPalette="blue">Sign in</Button>
       )}
+      <Text>Test Links:</Text>
+      <HStack>
+      <ChakraLink asChild variant="plainLink">
+        <Link href="competitions/OC2024">
+          <Button variant="outline">OC2024</Button>
+        </Link>
+      </ChakraLink>
+      <ChakraLink asChild variant="plainLink">
+        <Link href="competitions/WC2025">
+          <Button variant="outline" colorPalette="red">WC2025</Button>
+        </Link>
+      </ChakraLink>
+      <ChakraLink asChild variant="plainLink">
+        <Link href="persons/2022ANDE01">
+          <Button variant="outline" colorPalette="red">2022ANDE01</Button>
+        </Link>
+      </ChakraLink>
+      </HStack>
     </Container>
   );
 }
