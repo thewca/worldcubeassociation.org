@@ -69,9 +69,6 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
 
     # Users must have the necessary permissions to compete - eg, they cannot be banned or have incomplete profiles
     raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::USER_CANNOT_COMPETE) unless @target_user.cannot_register_for_competition_reasons(@competition).empty?
-
-    # Users cannot sign up for multiple competitions in a series
-    raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::ALREADY_REGISTERED_IN_SERIES) if existing_registration_in_series?(@competition, @target_user)
   end
 
   def validate_create_request
