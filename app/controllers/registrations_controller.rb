@@ -256,6 +256,7 @@ class RegistrationsController < ApplicationController
 
   def register
     @competition = competition_from_params
+    @is_processing = current_user.present? && Rails.cache.read(CacheAccess.registration_processing_cache_key(@competition.id, current_user.id)).present?
   end
 
   def payment_denomination
