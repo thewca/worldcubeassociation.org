@@ -16,16 +16,15 @@ module Registrations
         new_registration.comments = comment if competing_payload&.key?('comment')
         new_registration.administrative_notes = organizer_comment if competing_payload&.key?('organizer_comment')
 
-        if competing_payload&.key?('event_ids')
-          desired_events = competing_payload['event_ids']
+        # Since even deep cloning does not take care of associations, we must fall back to the original registration.
+        #   Otherwise, every payload that does not specify `event_ids` would trigger "must register for >= 1 event"
+        desired_events = competing_payload&.dig('event_ids') || registration.event_ids
 
-          competition_events_lookup = registration.competition.competition_events.where(event_id: desired_events).index_by(&:event_id)
-          competition_events = desired_events.map { competition_events_lookup[it]&.deep_dup }
+        competition_events_lookup = registration.competition.competition_events.where(event_id: desired_events).index_by(&:event_id)
+        competition_events = desired_events.map { competition_events_lookup[it]&.deep_dup }
 
-          competition_events.each {
-            new_registration.registration_competition_events.build(competition_event: it)
-          }
-        end
+        # Since `new_registration` is a cloned in-memory entity, this does not fire any writes
+        new_registration.competition_events = competition_events
       end
     end
 
@@ -33,10 +32,10 @@ module Registrations
       target_user = User.find(registration_request['user_id'])
       competition = Competition.find(registration_request['competition_id'])
 
+      user_can_create_registration!(competition, current_user, target_user)
+
       registration = Registration.new(competition: competition, user: target_user)
       registration = self.apply_payload(registration, registration_request)
-
-      user_can_create_registration!(competition, current_user, target_user)
 
       # Migrated to ActiveRecord-style validations
       validate_guests!(registration)
@@ -47,29 +46,27 @@ module Registrations
     def self.update_registration_allowed!(update_request, competition, current_user)
       target_user = User.find(update_request['user_id'])
 
-      registration = Registration.find_by(competition: competition, user: target_user)
-      raise WcaExceptions::RegistrationError.new(:not_found, Registrations::ErrorCodes::REGISTRATION_NOT_FOUND) if registration.blank?
+      persisted_registration = Registration.find_by(competition: competition, user: target_user)
+      raise WcaExceptions::RegistrationError.new(:not_found, Registrations::ErrorCodes::REGISTRATION_NOT_FOUND) unless persisted_registration.present?
 
-      # Rails does not track changes to `has_many` associations like it would for attributes :(
-      old_events = registration.event_ids
-
-      registration = self.apply_payload(registration, update_request)
-
-      waiting_list_position = update_request.dig('competing', 'waiting_list_position')
       new_status = update_request.dig('competing', 'status')
 
-      user_can_modify_registration!(competition, current_user, target_user, registration, new_status)
+      user_can_modify_registration!(competition, current_user, target_user, persisted_registration, new_status)
+
+      updated_registration = self.apply_payload(persisted_registration, update_request)
+
+      waiting_list_position = update_request.dig('competing', 'waiting_list_position')
 
       # Migrated to ActiveRecord-style validations
-      validate_guests!(registration)
-      validate_comment!(registration)
-      validate_organizer_comment!(registration)
-      validate_registration_events!(registration)
+      validate_guests!(updated_registration)
+      validate_comment!(updated_registration)
+      validate_organizer_comment!(updated_registration)
+      validate_registration_events!(updated_registration)
 
       # Old-style validations within this class
       validate_organizer_fields!(update_request, current_user, competition)
-      validate_waiting_list_position!(waiting_list_position, competition, registration) unless waiting_list_position.nil?
-      validate_update_status!(new_status, competition, current_user, target_user, registration, old_events) unless new_status.nil?
+      validate_waiting_list_position!(waiting_list_position, competition, updated_registration) unless waiting_list_position.nil?
+      validate_update_status!(new_status, current_user, persisted_registration, updated_registration) unless new_status.nil?
     end
 
     def self.bulk_update_allowed!(bulk_update_request, current_user)
@@ -197,10 +194,10 @@ module Registrations
         process_validation_error!(registration, :administrative_notes)
       end
 
-      def validate_waiting_list_position!(waiting_list_position, competition, registration)
+      def validate_waiting_list_position!(waiting_list_position, competition, updated_registration)
         # User must be on the wating list
         raise WcaExceptions::RegistrationError.new(:unprocessable_entity, Registrations::ErrorCodes::INVALID_REQUEST_DATA) unless
-         registration.competing_status == Registrations::Helper::STATUS_WAITING_LIST
+         updated_registration.competing_status == Registrations::Helper::STATUS_WAITING_LIST
 
         # Floats are not allowed
         raise WcaExceptions::RegistrationError.new(:unprocessable_entity, Registrations::ErrorCodes::INVALID_WAITING_LIST_POSITION) if waiting_list_position.is_a? Float
@@ -219,8 +216,10 @@ module Registrations
         request['competing']&.keys&.any? { |key| organizer_fields.include?(key) }
       end
 
-      # rubocop:disable Metrics/ParameterLists
-      def validate_update_status!(new_status, competition, current_user, target_user, registration, events)
+      def validate_update_status!(new_status, current_user, persisted_registration, updated_registration)
+        competition = persisted_registration.competition
+        target_user = persisted_registration.user
+
         raise WcaExceptions::RegistrationError.new(:unprocessable_entity, Registrations::ErrorCodes::INVALID_REQUEST_DATA) unless
           Registration.competing_statuses.include?(new_status)
         raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::ALREADY_REGISTERED_IN_SERIES) if
@@ -251,9 +250,9 @@ module Registrations
 
         # User reactivating registration
         if new_status == Registrations::Helper::STATUS_PENDING
-          raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless registration.cancelled?
+          raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless persisted_registration.cancelled?
           raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::REGISTRATION_CLOSED) if
-            registration.cancelled? && !competition.registration_currently_open?
+            persisted_registration.cancelled? && !competition.registration_currently_open?
 
           return # No further checks needed if status is pending
         end
@@ -264,13 +263,12 @@ module Registrations
 
         # Raise an error if competition prevents users from cancelling a registration once it is accepted
         raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::ORGANIZER_MUST_CANCEL_REGISTRATION) unless
-          registration.permit_user_cancellation?
+          persisted_registration.permit_user_cancellation?
 
         # Users aren't allowed to change events when cancelling
         raise WcaExceptions::RegistrationError.new(:unprocessable_entity, Registrations::ErrorCodes::INVALID_REQUEST_DATA) if
-          events.present? && registration.event_ids != events
+          updated_registration.volatile_event_ids != persisted_registration.event_ids
       end
-      # rubocop:enable Metrics/ParameterLists
 
       def existing_registration_in_series?(competition, target_user)
         return false unless competition.part_of_competition_series?

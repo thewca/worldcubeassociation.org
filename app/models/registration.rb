@@ -111,6 +111,13 @@ class Registration < ApplicationRecord
     new_record? || cancelled? || !is_competing?
   end
 
+  def volatile_event_ids
+    # When checking registration validity as part of the user-facing registration frontend,
+    #   we want to avoid database writes at all cost. So we create an in-memory dummy registration,
+    #   but unfortunately `through` association support is very limited for such volatile models.
+    competition_events.map(&:event_id)
+  end
+
   delegate :name, :gender, :country, :email, :dob, :wca_id, to: :user
 
   alias_method :birthday, :dob
