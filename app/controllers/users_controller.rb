@@ -16,7 +16,7 @@ class UsersController < ApplicationController
     end
 
     respond_to do |format|
-      format.html {}
+      format.html
       format.json do
         @users = User.in_region(params[:region])
         params[:search]&.split&.each do |part|

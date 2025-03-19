@@ -44,6 +44,3 @@ Metrics/PerceivedComplexity:
     - 'app/jobs/sync_mailing_lists_job.rb'
     - 'app/models/competition.rb'
     - 'lib/results_validators/*.rb'
-
-Lint/EmptyBlock:
-  Enabled: false
