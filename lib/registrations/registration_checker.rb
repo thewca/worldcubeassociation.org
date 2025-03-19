@@ -44,18 +44,17 @@ module Registrations
     end
 
     def self.update_registration_allowed!(update_request, competition, current_user)
-      target_user = User.find(update_request['user_id'])
+      persisted_registration = Registration.find_by(competition_id: competition.id, user_id: update_request['user_id'])
+      raise WcaExceptions::RegistrationError.new(:not_found, Registrations::ErrorCodes::REGISTRATION_NOT_FOUND) if persisted_registration.blank?
 
-      persisted_registration = Registration.find_by(competition: competition, user: target_user)
-      raise WcaExceptions::RegistrationError.new(:not_found, Registrations::ErrorCodes::REGISTRATION_NOT_FOUND) unless persisted_registration.present?
+      target_user = persisted_registration.user
 
+      waiting_list_position = update_request.dig('competing', 'waiting_list_position')
       new_status = update_request.dig('competing', 'status')
 
       user_can_modify_registration!(competition, current_user, target_user, persisted_registration, new_status)
 
       updated_registration = self.apply_payload(persisted_registration, update_request)
-
-      waiting_list_position = update_request.dig('competing', 'waiting_list_position')
 
       # Migrated to ActiveRecord-style validations
       validate_guests!(updated_registration)
