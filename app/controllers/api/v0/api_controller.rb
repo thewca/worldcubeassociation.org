@@ -24,8 +24,8 @@ class Api::V0::ApiController < ApplicationController
   end
 
   def auth_results
-    return render status: :unauthorized, json: { error: "Please log in" } if !current_user
-    return render status: :forbidden, json: { error: "Cannot adminster results" } if !current_user.can_admin_results?
+    return render status: :unauthorized, json: { error: "Please log in" } unless current_user
+    return render status: :forbidden, json: { error: "Cannot adminster results" } unless current_user.can_admin_results?
 
     render json: { status: "ok" }
   end

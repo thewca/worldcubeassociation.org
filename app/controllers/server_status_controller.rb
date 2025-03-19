@@ -6,7 +6,7 @@ class ServerStatusController < ApplicationController
 
     @checks = checks
     @everything_good = @checks.all?(&:is_passing?)
-    render status: :service_unavailable if !@everything_good
+    render status: :service_unavailable unless @everything_good
   end
 
   def checks

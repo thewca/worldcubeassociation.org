@@ -149,9 +149,6 @@ Style/Lambda:
 Style/MultilineBlockChain:
   Enabled: false
 
-Style/NegatedIf:
-  Enabled: false
-
 Style/Next:
   Enabled: false
 
