@@ -211,15 +211,13 @@ module ResultsValidators
                                            person_name: result.personName,
                                            cutoff: cutoff.to_s(round))
           end
-        else
+        elsif unskipped.any?
           # Doesn't meet the cutoff, all results should be SKIPPED
-          if unskipped.any?
-            @errors << ValidationError.new(DIDNT_MEET_CUTOFF_HAS_RESULTS_ERROR,
-                                           :results, competition_id,
-                                           round_id: round_id,
-                                           person_name: result.personName,
-                                           cutoff: cutoff.to_s(round))
-          end
+          @errors << ValidationError.new(DIDNT_MEET_CUTOFF_HAS_RESULTS_ERROR,
+                                         :results, competition_id,
+                                         round_id: round_id,
+                                         person_name: result.personName,
+                                         cutoff: cutoff.to_s(round))
         end
       end
 

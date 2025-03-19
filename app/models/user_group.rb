@@ -268,14 +268,12 @@ class UserGroup < ApplicationRecord
           else
             no_more_leaders.append("#{name} is no longer the Leader and no longer a member.")
           end
+        elsif new_member
+          no_more_leaders.append("#{name} was the Leader for few days and is continuing as member.")
+        elsif new_senior_member
+          no_more_leaders.append("#{name} was the Leader for few days and is continuing as Senior member.")
         else
-          if new_member
-            no_more_leaders.append("#{name} was the Leader for few days and is continuing as member.")
-          elsif new_senior_member
-            no_more_leaders.append("#{name} was the Leader for few days and is continuing as Senior member.")
-          else
-            no_more_leaders.append("#{name} was the Leader for few days and is no longer a member.")
-          end
+          no_more_leaders.append("#{name} was the Leader for few days and is no longer a member.")
         end
       else
         if new_senior_member || new_and_ex_senior_member

@@ -622,8 +622,8 @@ class Competition < ApplicationRecord
     if registration_range_specified? && !registration_past?
       if self.announced?
         warnings[:regearly] = I18n.t('competitions.messages.reg_opens_too_early') if (self.registration_open - self.announced_at) < REGISTRATION_OPENING_EARLIEST
-      else
-        warnings[:regearly] = I18n.t('competitions.messages.reg_opens_too_early') if (self.registration_open - Time.now.utc) < REGISTRATION_OPENING_EARLIEST
+      elsif (self.registration_open - Time.now.utc) < REGISTRATION_OPENING_EARLIEST
+        warnings[:regearly] = I18n.t('competitions.messages.reg_opens_too_early')
       end
     end
     warnings[:regclosed] = I18n.t('competitions.messages.registration_already_closed') if registration_range_specified? && registration_past? && !self.announced?

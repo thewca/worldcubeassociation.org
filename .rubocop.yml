@@ -119,9 +119,6 @@ Naming/MemoizedInstanceVariableName:
 Style/AccessModifierDeclarations:
   Enabled: false
 
-Style/AsciiComments:
-  Enabled: false
-
 Style/BlockDelimiters:
   Enabled: false
 
@@ -142,9 +139,6 @@ Style/DoubleNegation:
 
 Style/EmptyElse:
   EnforcedStyle: empty
-
-Style/IfInsideElse:
-  Enabled: false
 
 Style/InverseMethods:
   Enabled: false
