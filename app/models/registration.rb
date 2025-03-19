@@ -265,7 +265,7 @@ class Registration < ApplicationRecord
       base_json.deep_merge!({
                               guests: guests,
                               competing: {
-                                registration_status: competing_status,
+                                registration_status: is_competing ? competing_status : 'non_competing',
                                 registered_on: registered_at,
                                 comment: comments,
                                 admin_comment: administrative_notes,
