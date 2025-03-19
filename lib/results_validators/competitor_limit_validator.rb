@@ -8,7 +8,7 @@ module ResultsValidators
       "For competition with a competitor limit, this validator checks that this limit is respected."
     end
 
-    def self.has_automated_fix?
+    def self.automated_fix?
       false
     end
 

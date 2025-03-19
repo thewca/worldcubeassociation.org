@@ -21,7 +21,7 @@
   <%= render "results_submission/submit_json_panel",
     upload_json: @upload_json,
     action: competition_admin_upload_results_path,
-    already_has_submitted_result: @results_validator.has_results?
+    already_has_submitted_result: @results_validator.results?
   %>
 
   <%= render "results_submission/check_results_panel", results_validator: @results_validator %>

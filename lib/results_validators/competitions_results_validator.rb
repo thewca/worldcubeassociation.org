@@ -6,7 +6,7 @@ module ResultsValidators
       "This validator is an aggregate of an arbitrary set of other validators, running on an arbitrary set of competitions."
     end
 
-    def self.has_automated_fix?
+    def self.automated_fix?
       false
     end
 
@@ -35,7 +35,7 @@ module ResultsValidators
       @check_real_results
     end
 
-    def has_results?
+    def results?
       @results.any?
     end
 

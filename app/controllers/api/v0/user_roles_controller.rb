@@ -86,7 +86,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     end
 
     return render status: :unprocessable_entity, json: { error: "Invalid group type" } unless create_supported_groups.include?(group.group_type)
-    return head :unauthorized unless current_user.has_permission?(:can_edit_groups, group_id.to_i)
+    return head :unauthorized unless current_user.fulfills_permission?(:can_edit_groups, group_id.to_i)
 
     role_to_end = nil
     new_role = nil
@@ -159,7 +159,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     group_type = role.group.group_type
     changes = []
 
-    return head :unauthorized unless current_user.has_permission?(:can_edit_groups, role.group.id)
+    return head :unauthorized unless current_user.fulfills_permission?(:can_edit_groups, role.group.id)
 
     if group_type == UserGroup.group_types[:delegate_regions]
       new_role = UserRole.new(
@@ -206,7 +206,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       end
 
       return render status: :unprocessable_entity, json: { error: "No valid parameters to be changed" } if changes.empty?
-      return head :unauthorized unless current_user.has_permission?(:can_edit_groups, new_role.group_id)
+      return head :unauthorized unless current_user.fulfills_permission?(:can_edit_groups, new_role.group_id)
 
       ActiveRecord::Base.transaction do
         role.update!(end_date: Date.today)
@@ -275,7 +275,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
 
     role = UserRole.find(id)
 
-    return head :unauthorized unless current_user.has_permission?(:can_edit_groups, role.group.id)
+    return head :unauthorized unless current_user.fulfills_permission?(:can_edit_groups, role.group.id)
 
     role.update!(end_date: Date.today)
     RoleChangeMailer.notify_role_end(role, current_user).deliver_later
@@ -289,7 +289,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     query = params.require(:query)
     group_type = params.require(:groupType)
     roles = UserGroup.roles_of_group_type(group_type)
-    active_roles = roles.select { |role| role.is_active? }
+    active_roles = roles.select { |role| role.active? }
 
     query.split.each do |part|
       active_roles = active_roles.select do |role|

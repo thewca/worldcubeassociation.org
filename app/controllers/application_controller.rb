@@ -8,7 +8,7 @@ class ApplicationController < ActionController::Base
 
   protect_from_forgery with: :exception
 
-  prepend_before_action :set_locale, unless: :is_api_request?
+  prepend_before_action :set_locale, unless: :api_request?
   before_action :store_user_location!, if: :storable_location?
   before_action :add_new_relic_headers
   protected def add_new_relic_headers
@@ -94,7 +94,7 @@ class ApplicationController < ActionController::Base
     def redirect_to_root_unless_user(action, *)
       redirecting = !current_user&.send(action, *)
       if redirecting
-        flash[:danger] = if action == :has_permission?
+        flash[:danger] = if action == :fulfills_permission?
                            t("errors.messages.no_permission")
                          else
                            "You are not allowed to #{action.to_s.sub(/^can_/, '').chomp('?').humanize.downcase}"
@@ -106,10 +106,10 @@ class ApplicationController < ActionController::Base
 
     # For redirecting user to source after login - https://github.com/heartcombo/devise/wiki/How-To:-Redirect-back-to-current-page-after-sign-in,-sign-out,-sign-up,-update
     def storable_location?
-      request.get? && is_navigational_format? && !devise_controller? && !request.xhr? && !is_api_request?
+      request.get? && is_navigational_format? && !devise_controller? && !request.xhr? && !api_request?
     end
 
-    def is_api_request?
+    def api_request?
       request.fullpath.include?('/api/')
     end
 

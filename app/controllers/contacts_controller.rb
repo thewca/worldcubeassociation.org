@@ -130,7 +130,7 @@ class ContactsController < ApplicationController
 
     if current_user.nil?
       return render status: :unauthorized, json: { error: "Cannot request profile change without login" }
-    elsif edit_others_profile_mode && !current_user.has_permission?(:can_request_to_edit_others_profile)
+    elsif edit_others_profile_mode && !current_user.fulfills_permission?(:can_request_to_edit_others_profile)
       return render status: :unauthorized, json: { error: "Cannot request to change others profile" }
     end
 

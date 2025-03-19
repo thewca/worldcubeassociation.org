@@ -8,7 +8,7 @@
   <% end %>
   The results of the validations are below.
 </p>
-<% if results_validator.has_infos? %>
+<% if results_validator.infos? %>
   <%# NOTE: this can be only visible to the WRT when they apply automatic fixes. %>
   <h3>Infos</h3>
   <% results_validator.infos.group_by(&:kind).each do |type, infos| %>
@@ -29,7 +29,7 @@
   <% end %>
 <% end %>
 <h3>Errors</h3>
-<% if results_validator.has_errors? %>
+<% if results_validator.errors? %>
   <p>Please fix the errors below:</p>
   <% results_validator.errors.group_by(&:kind).each do |type, errors| %>
     <% if errors.any? %>
@@ -47,7 +47,7 @@
       </ul>
     <% end %>
   <% end %>
-<% elsif !results_validator.has_results? %>
+<% elsif !results_validator.results? %>
   <p class="text-danger">
   <% if results_validator.check_real_results? %>
     No results for the competition yet.
@@ -59,7 +59,7 @@
   <p>No error detected in the results.</p>
 <% end %>
 <h3>Warnings</h3>
-<% if results_validator.has_warnings? %>
+<% if results_validator.warnings? %>
   <p>
   Please pay attention to the warnings below.
   <% unless results_validator.check_real_results? %>
@@ -82,7 +82,7 @@
       </ul>
     <% end %>
   <% end %>
-<% elsif !results_validator.has_results? %>
+<% elsif !results_validator.results? %>
   <p class="text-danger">
   <% if results_validator.check_real_results? %>
     No results for the competition yet.

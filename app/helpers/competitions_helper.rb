@@ -150,7 +150,7 @@ module CompetitionsHelper
       submitted_by_competition_delegate = competition.delegates.include?(competition.delegate_report.posted_by_user)
       submitted_by_competition_delegate ? "#{pluralize(days_report, "day")} after" : "submitted by other"
     else
-      competition.is_probably_over? ? "pending" : ""
+      competition.probably_over? ? "pending" : ""
     end
   end
 
@@ -158,7 +158,7 @@ module CompetitionsHelper
     days_report = days_after_competition(competition.delegate_report.posted_at, competition)
     if days_report
       report_and_results_days_to_class(days_report)
-    elsif competition.is_probably_over?
+    elsif competition.probably_over?
       days_report = days_after_competition(Date.today, competition)
       report_and_results_days_to_class(days_report)
     else
@@ -171,12 +171,12 @@ module CompetitionsHelper
     if days_results
       "#{pluralize(days_results, "day")} after"
     else
-      competition.is_probably_over? ? "pending" : ""
+      competition.probably_over? ? "pending" : ""
     end
   end
 
   def results_class(competition)
-    return "" unless competition.is_probably_over?
+    return "" unless competition.probably_over?
 
     days_results = days_after_competition(competition.results_posted_at, competition)
     days_results ? report_and_results_days_to_class(days_results) : ""
@@ -195,7 +195,7 @@ module CompetitionsHelper
         longitude_degrees: c.longitude_degrees,
         cityName: c.cityName,
         marker_date: wca_date_range(c.start_date, c.end_date),
-        is_probably_over: c.is_probably_over?,
+        is_probably_over: c.probably_over?,
         url: competition_path(c),
       }
     end.to_json.html_safe

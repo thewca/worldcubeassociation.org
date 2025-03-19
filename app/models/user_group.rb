@@ -44,7 +44,7 @@ class UserGroup < ApplicationRecord
   scope :root_groups, -> { where(parent_group: nil) }
   scope :active_groups, -> { where(is_active: true) }
 
-  validates :active_roles, absence: true, unless: :is_active?
+  validates :active_roles, absence: true, unless: :active?
 
   def all_child_groups
     [direct_child_groups, direct_child_groups.map(&:all_child_groups)].flatten
@@ -170,7 +170,7 @@ class UserGroup < ApplicationRecord
   end
 
   def lead_role
-    active_roles.includes(:group, :metadata).find { |role| role.is_lead? }
+    active_roles.includes(:group, :metadata).find { |role| role.lead? }
   end
 
   # TODO: Once the roles migration is done, add a validation to make sure there is only one lead_user per group.
@@ -189,7 +189,7 @@ class UserGroup < ApplicationRecord
     end
   end
 
-  def is_root_group?
+  def root_group?
     parent_group_id.nil?
   end
 

@@ -4,8 +4,8 @@ class PanelController < ApplicationController
   include DocumentsHelper
 
   before_action :authenticate_user!
-  before_action -> { redirect_to_root_unless_user(:has_permission?, 'can_access_panels', params[:panel_id].to_sym) }, only: [:index]
-  before_action -> { redirect_to_root_unless_user(:has_permission?, 'can_access_panels', :admin) }, only: [:generate_db_token]
+  before_action -> { redirect_to_root_unless_user(:fulfills_permission?, 'can_access_panels', params[:panel_id].to_sym) }, only: [:index]
+  before_action -> { redirect_to_root_unless_user(:fulfills_permission?, 'can_access_panels', :admin) }, only: [:generate_db_token]
   before_action -> { redirect_to_root_unless_user(:can_access_senior_delegate_panel?) }, only: [:pending_claims_for_subordinate_delegates]
 
   def pending_claims_for_subordinate_delegates
@@ -62,7 +62,7 @@ class PanelController < ApplicationController
     )
     results_validator.validate(competition_ids)
     render json: {
-      has_results: results_validator.has_results?,
+      has_results: results_validator.results?,
       validators: results_validator.validators,
       infos: results_validator.infos,
       errors: results_validator.errors,

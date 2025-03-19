@@ -9,15 +9,15 @@ module ResultsValidators
       reset_state
     end
 
-    def has_errors?
+    def errors?
       @errors.any?
     end
 
-    def has_warnings?
+    def warnings?
       @warnings.any?
     end
 
-    def has_infos?
+    def infos?
       @infos.any?
     end
 
