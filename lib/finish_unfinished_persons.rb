@@ -126,12 +126,12 @@ module FinishUnfinishedPersons
                               .order(wca_id: :desc)
                               .pick(:wca_id)
 
-        if last_id_taken.present?
-          # 4 because the year prefix is 4 digits long
-          counter = last_id_taken[(4 + WCA_QUARTER_ID_LENGTH)..].to_i
-        else
-          counter = 0
-        end
+        counter = if last_id_taken.present?
+                    # 4 because the year prefix is 4 digits long
+                    last_id_taken[(4 + WCA_QUARTER_ID_LENGTH)..].to_i
+                  else
+                    0
+                  end
 
         available_per_semi[semi_id] = 99 - counter
       end
@@ -144,9 +144,7 @@ module FinishUnfinishedPersons
       end
     end
 
-    unless cleared_id
-      raise "Could not compute a semi-id for #{person_name}"
-    end
+    raise "Could not compute a semi-id for #{person_name}" unless cleared_id
 
     [semi_id, available_per_semi]
   end

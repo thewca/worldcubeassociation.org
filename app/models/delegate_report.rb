@@ -56,9 +56,7 @@ class DelegateReport < ApplicationRecord
 
   validate :setup_image_count, if: [:posted?, :requires_setup_images?]
   private def setup_image_count
-    if self.setup_images.count < self.required_setup_images_count
-      errors.add(:setup_images, "Needs at least #{self.required_setup_images_count} images")
-    end
+    errors.add(:setup_images, "Needs at least #{self.required_setup_images_count} images") if self.setup_images.count < self.required_setup_images_count
   end
 
   validates :setup_images, blob: { content_type: :web_image }

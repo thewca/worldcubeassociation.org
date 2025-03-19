@@ -146,6 +146,7 @@ module Registrations
 
       def read_error_details(ar_entity, field)
         return if ar_entity.valid?
+
         ar_entity.errors.details[field].first
       end
 

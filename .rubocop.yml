@@ -82,9 +82,6 @@ Style/TrailingCommaInHashLiteral:
   # non-empty array and hash literals.
   EnforcedStyleForMultiline: comma
 
-Style/GuardClause:
-  Enabled: false
-
 Metrics/AbcSize:
   Enabled: false
 
@@ -122,9 +119,6 @@ Naming/MemoizedInstanceVariableName:
 Style/AccessModifierDeclarations:
   Enabled: false
 
-Style/AsciiComments:
-  Enabled: false
-
 Style/BlockDelimiters:
   Enabled: false
 
@@ -134,34 +128,13 @@ Style/ClassAndModuleChildren:
 Style/ClassVars:
   Enabled: false
 
-Style/ConditionalAssignment:
-  Enabled: false
-
 Style/Documentation:
-  Enabled: false
-
-Style/DoubleNegation:
-  Enabled: false
-
-Style/EmptyElse:
-  EnforcedStyle: empty
-
-Style/IfInsideElse:
-  Enabled: false
-
-Style/IfUnlessModifier:
-  Enabled: false
-
-Style/InverseMethods:
   Enabled: false
 
 Style/Lambda:
   Enabled: false
 
 Style/MultilineBlockChain:
-  Enabled: false
-
-Style/NegatedIf:
   Enabled: false
 
 Style/Next:
@@ -173,14 +146,8 @@ Style/NumericPredicate:
 Style/PercentLiteralDelimiters:
   Enabled: false
 
-Style/PerlBackrefs:
-  Enabled: false
-
 Style/RaiseArgs:
   EnforcedStyle: compact
-
-Style/RedundantParentheses:
-  Enabled: false
 
 Style/SignalException:
   EnforcedStyle: only_raise
@@ -218,15 +185,6 @@ Naming/BlockParameterName:
   Enabled: false
 
 Naming/MethodParameterName:
-  Enabled: false
-
-Style/YodaCondition:
-  Enabled: false
-
-Style/FormatStringToken:
-  Enabled: false
-
-Layout/EmptyLineAfterGuardClause:
   Enabled: false
 
 Lint/EmptyFile:
@@ -500,21 +458,4 @@ Capybara/RSpec/HaveSelector:
   Enabled: false
 
 Capybara/RSpec/PredicateMatcher:
-  Enabled: false
-
-# Rake
-
-Rake/ClassDefinitionInTask:
-  Enabled: false
-
-Rake/Desc:
-  Enabled: false
-
-Rake/DuplicateTask:
-  Enabled: false
-
-Rake/DuplicateNamespace:
-  Enabled: false
-
-Rake/MethodDefinitionInTask:
   Enabled: false

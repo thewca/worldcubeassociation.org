@@ -3,9 +3,7 @@
 class Api::V0::Wfc::DuesRedirectsController < Api::V0::ApiController
   before_action :current_user_can_admin_finances!, only: [:index, :create]
   private def current_user_can_admin_finances!
-    unless current_user.can_admin_finances?
-      render json: {}, status: :unauthorized
-    end
+    render json: {}, status: :unauthorized unless current_user.can_admin_finances?
   end
 
   def index

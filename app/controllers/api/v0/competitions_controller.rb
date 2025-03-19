@@ -40,9 +40,7 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
   def show
     competition = competition_from_params
 
-    if stale?(competition)
-      render json: competition.to_competition_info
-    end
+    render json: competition.to_competition_info if stale?(competition)
   end
 
   def qualifications
@@ -156,11 +154,11 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
     cache_key = "wcif/#{id}"
     competition = competition_from_params
     expires_in 5.minutes, public: true
-    if stale?(competition, public: true)
-      render json: Rails.cache.fetch(cache_key, expires_in: 5.minutes) {
-        competition.to_wcif
-      }
-    end
+    return unless stale?(competition, public: true)
+
+    render json: Rails.cache.fetch(cache_key, expires_in: 5.minutes) {
+      competition.to_wcif
+    }
   end
 
   def update_wcif
@@ -190,11 +188,10 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
 
     # If this competition exists, but is not publicly visible, then only show it
     # to the user if they are able to manage the competition.
-    if competition && !competition.showAtAll && !can_manage?(competition)
-      competition = nil
-    end
+    competition = nil if competition && !competition.showAtAll && !can_manage?(competition)
 
     raise WcaExceptions::NotFound.new("Competition with id #{id} not found") unless competition
+
     competition
   end
 
@@ -205,9 +202,7 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
 
   private def require_scope!(scope)
     require_user!
-    if current_api_user && doorkeeper_token.scopes.exclude?(scope) # If we deal with an OAuth user then check the scopes.
-      raise WcaExceptions::BadApiParameter.new("Missing required scope '#{scope}'")
-    end
+    raise WcaExceptions::BadApiParameter.new("Missing required scope '#{scope}'") if current_api_user && doorkeeper_token.scopes.exclude?(scope) # If we deal with an OAuth user then check the scopes.
   end
 
   def require_can_manage!(competition)

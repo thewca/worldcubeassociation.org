@@ -273,9 +273,7 @@ class Registration < ApplicationRecord
                                 admin_comment: administrative_notes,
                               },
                             })
-      if competing_status == "waiting_list"
-        base_json[:competing][:waiting_list_position] = waiting_list_position
-      end
+      base_json[:competing][:waiting_list_position] = waiting_list_position if competing_status == "waiting_list"
     end
     if history
       base_json.deep_merge!({
@@ -333,17 +331,13 @@ class Registration < ApplicationRecord
   validate :user_can_register_for_competition, on: :create, unless: :rejected?
   private def user_can_register_for_competition
     cannot_register_reasons = user&.cannot_register_for_competition_reasons(competition, is_competing: self.is_competing?)
-    if cannot_register_reasons.present?
-      errors.add(:user_id, cannot_register_reasons.to_sentence)
-    end
+    errors.add(:user_id, cannot_register_reasons.to_sentence) if cannot_register_reasons.present?
   end
 
   # TODO: V3-REG cleanup. All these Validations can be used instead of the registration_checker checks
   validate :cannot_be_undeleted_when_banned, if: :competing_status_changed?
   private def cannot_be_undeleted_when_banned
-    if user.banned_at_date?(competition.start_date) && might_attend?
-      errors.add(:user_id, I18n.t('registrations.errors.undelete_banned'))
-    end
+    errors.add(:user_id, I18n.t('registrations.errors.undelete_banned')) if user.banned_at_date?(competition.start_date) && might_attend?
   end
 
   validates :registration_competition_events, presence: {
@@ -406,9 +400,7 @@ class Registration < ApplicationRecord
 
   validate :only_one_accepted_per_series
   private def only_one_accepted_per_series
-    if competition&.part_of_competition_series? && competing_status_accepted? && !series_sibling_registrations(:accepted).empty?
-      errors.add(:competition_id, I18n.t('registrations.errors.series_more_than_one_accepted'))
-    end
+    errors.add(:competition_id, I18n.t('registrations.errors.series_more_than_one_accepted')) if competition&.part_of_competition_series? && competing_status_accepted? && !series_sibling_registrations(:accepted).empty?
   end
 
   def series_sibling_registrations(registration_status = nil)

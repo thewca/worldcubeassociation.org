@@ -12,9 +12,7 @@ class TicketComment < ApplicationRecord
   private def stakeholders_to_email_notify
     stakeholders = ticket.ticket_stakeholders.includes(:stakeholder)
 
-    if acting_stakeholder.user_stakeholder?
-      stakeholders = stakeholders.reject { |stakeholder| stakeholder.id == acting_stakeholder_id }
-    end
+    stakeholders = stakeholders.reject { |stakeholder| stakeholder.id == acting_stakeholder_id } if acting_stakeholder.user_stakeholder?
 
     stakeholders.map(&:stakeholder)
   end

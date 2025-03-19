@@ -2838,7 +2838,7 @@ RSpec.describe Registrations::RegistrationChecker do
           :update_request, user_id: registration_3.user_id, competition_id: registration_3.competition.id, competing: { 'status' => 'accepted' }
         )
 
-        missing_registration_user_id = (999_999_999)
+        missing_registration_user_id = 999_999_999
         failed_update2 = FactoryBot.build(
           :update_request, user_id: missing_registration_user_id, competition_id: registration_2.competition.id, competing: { 'status' => 'accepted' }
         )

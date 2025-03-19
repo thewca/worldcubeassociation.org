@@ -99,8 +99,6 @@ FactoryBot.define do
     refund_policy_percent { 0 }
     guests_entry_fee_lowest_denomination { 0 }
 
-    registration_version { :v3 }
-
     trait :skip_validations do
       to_create { |instance| instance.save(validate: false) }
     end
@@ -186,7 +184,7 @@ FactoryBot.define do
     end
 
     trait :payment_disconnect_delay_not_elapsed do
-      starts { (ClearConnectedPaymentIntegrations::DELAY_IN_DAYS).days.ago }
+      starts { ClearConnectedPaymentIntegrations::DELAY_IN_DAYS.days.ago }
       ends { (ClearConnectedPaymentIntegrations::DELAY_IN_DAYS-1).days.ago }
     end
 
@@ -494,6 +492,7 @@ FactoryBot.define do
 
         events_wcif.each do |event|
           next unless qualification_data.key?(event['id'])
+
           event['qualification'] = qualification_data[event['id']]
         end
 
@@ -523,9 +522,7 @@ FactoryBot.define do
       create(:waiting_list, holder: competition)
 
       competition.delegates.each do |delegate|
-        if !delegate.region_id.nil? && UserGroup.find(delegate.region_id).lead_user.nil? # Allowing to manually create senior delegate for the delegate if needed.
-          FactoryBot.create(:senior_delegate_role, group_id: delegate.region_id)
-        end
+        FactoryBot.create(:senior_delegate_role, group_id: delegate.region_id) if !delegate.region_id.nil? && UserGroup.find(delegate.region_id).lead_user.nil? # Allowing to manually create senior delegate for the delegate if needed.
       end
     end
   end
