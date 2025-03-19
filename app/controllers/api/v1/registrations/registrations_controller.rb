@@ -233,4 +233,13 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
     def user_is_rejected?(current_user, target_user, registration)
       current_user.id == target_user.id && registration.rejected?
     end
+
+    def existing_registration_in_series?(competition, target_user)
+      return false unless competition.part_of_competition_series?
+
+      other_series_ids = competition.other_series_ids
+      other_series_ids.any? do |comp_id|
+        Registration.find_by(competition_id: comp_id, user_id: target_user.id)&.might_attend?
+      end
+    end
 end
