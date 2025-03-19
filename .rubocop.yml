@@ -189,12 +189,6 @@ Lint/EmptyFile:
 Naming/VariableNumber:
   Enabled: false
 
-# If an external library requires us to use terms like "blacklist",
-# we have no choice but to follow their conventions until they update
-Naming/InclusiveLanguage:
-  Exclude:
-    - 'config/**/*'
-
 Style/OpenStructUse:
   Exclude:
     - 'spec/lib/middlewares/warden_user_logger_spec.rb'
