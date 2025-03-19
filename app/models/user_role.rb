@@ -156,6 +156,7 @@ class UserRole < ApplicationRecord
   def can_user_read?(user)
     return true unless group.is_hidden # Roles of non-hidden groups are public
     return false if user.nil? # Roles of hidden groups are visible only to a set of users based on permisssions.
+
     role_permission = is_active? ? :can_read_groups_current : :can_read_groups_past
     user.has_permission?(role_permission, group.id)
   end

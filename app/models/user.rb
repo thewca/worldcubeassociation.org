@@ -157,19 +157,19 @@ class User < ApplicationRecord
 
   validate :wca_id_is_unique_or_for_dummy_account
   def wca_id_is_unique_or_for_dummy_account
-    if wca_id_change && wca_id
-      user = User.find_by(wca_id: wca_id)
-      # If there is a non dummy user with this WCA ID, fail validation.
-      if user && !user.dummy_account?
-        errors.add(
-          :wca_id,
-          I18n.t('users.errors.unique_html',
-                 used_name: user.name,
-                 used_email: user.email,
-                 used_edit_path: Rails.application.routes.url_helpers.edit_user_path(user)).html_safe,
-        )
-      end
-    end
+    return unless wca_id_change && wca_id
+
+    user = User.find_by(wca_id: wca_id)
+    # If there is a non dummy user with this WCA ID, fail validation.
+    return unless user && !user.dummy_account?
+
+    errors.add(
+      :wca_id,
+      I18n.t('users.errors.unique_html',
+             used_name: user.name,
+             used_email: user.email,
+             used_edit_path: Rails.application.routes.url_helpers.edit_user_path(user)).html_safe,
+    )
   end
 
   validate :name_must_match_person_name
@@ -179,10 +179,10 @@ class User < ApplicationRecord
 
   validate :check_if_email_used_by_locked_account, on: :create
   private def check_if_email_used_by_locked_account
-    if User.find_by(email: email)&.locked_account?
-      errors.delete(:email)
-      errors.add(:email, I18n.t('users.errors.email_used_by_locked_account_html').html_safe)
-    end
+    return unless User.find_by(email: email)&.locked_account?
+
+    errors.delete(:email)
+    errors.add(:email, I18n.t('users.errors.email_used_by_locked_account_html').html_safe)
   end
 
   validate do
@@ -201,10 +201,10 @@ class User < ApplicationRecord
 
   before_validation :maybe_clear_claimed_wca_id
   def maybe_clear_claimed_wca_id
-    if !claiming_wca_id && ((unconfirmed_wca_id_was.present? && wca_id == unconfirmed_wca_id_was) || unconfirmed_wca_id.blank?)
-      self.unconfirmed_wca_id = nil
-      self.delegate_to_handle_wca_id_claim = nil
-    end
+    return unless !claiming_wca_id && ((unconfirmed_wca_id_was.present? && wca_id == unconfirmed_wca_id_was) || unconfirmed_wca_id.blank?)
+
+    self.unconfirmed_wca_id = nil
+    self.delegate_to_handle_wca_id_claim = nil
   end
 
   # Virtual attribute for people claiming a WCA ID.
@@ -225,31 +225,31 @@ class User < ApplicationRecord
       end
     end
 
-    if claiming_wca_id || (unconfirmed_wca_id.present? && unconfirmed_wca_id_change)
-      errors.add(:delegate_id_to_handle_wca_id_claim, I18n.t('simple_form.required.text')) if delegate_id_to_handle_wca_id_claim.blank?
+    return unless claiming_wca_id || (unconfirmed_wca_id.present? && unconfirmed_wca_id_change)
 
-      errors.add(:unconfirmed_wca_id, I18n.t('simple_form.required.text')) if unconfirmed_wca_id.blank?
+    errors.add(:delegate_id_to_handle_wca_id_claim, I18n.t('simple_form.required.text')) if delegate_id_to_handle_wca_id_claim.blank?
 
-      dob_verification_date = Date.safe_parse(dob_verification, nil)
-      if unconfirmed_person && (!current_user || !current_user.can_view_all_users?)
-        dob_form_path = Rails.application.routes.url_helpers.contact_dob_path
-        wrt_contact_path = Rails.application.routes.url_helpers.contact_path(contactRecipient: 'wrt')
-        remaining_wca_id_claims = [0, MAX_INCORRECT_WCA_ID_CLAIM_COUNT - unconfirmed_person.incorrect_wca_id_claim_count].max
-        if remaining_wca_id_claims == 0 || !unconfirmed_person.dob
-          errors.add(:dob_verification, I18n.t('users.errors.wca_id_no_birthdate_html', dob_form_path: dob_form_path).html_safe)
-        elsif unconfirmed_person.gender.blank?
-          errors.add(:gender, I18n.t('users.errors.wca_id_no_gender_html', wrt_contact_path: wrt_contact_path).html_safe)
-        elsif !already_assigned_to_user && unconfirmed_person.dob != dob_verification_date
-          # Note that we don't verify DOB for WCA IDs that have already been
-          # claimed. This protects people from DOB guessing attacks.
-          self.was_incorrect_wca_id_claim = true
-          errors.add(:dob_verification, I18n.t('users.errors.dob_incorrect_html', dob_form_path: dob_form_path).html_safe)
-        end
+    errors.add(:unconfirmed_wca_id, I18n.t('simple_form.required.text')) if unconfirmed_wca_id.blank?
+
+    dob_verification_date = Date.safe_parse(dob_verification, nil)
+    if unconfirmed_person && (!current_user || !current_user.can_view_all_users?)
+      dob_form_path = Rails.application.routes.url_helpers.contact_dob_path
+      wrt_contact_path = Rails.application.routes.url_helpers.contact_path(contactRecipient: 'wrt')
+      remaining_wca_id_claims = [0, MAX_INCORRECT_WCA_ID_CLAIM_COUNT - unconfirmed_person.incorrect_wca_id_claim_count].max
+      if remaining_wca_id_claims == 0 || !unconfirmed_person.dob
+        errors.add(:dob_verification, I18n.t('users.errors.wca_id_no_birthdate_html', dob_form_path: dob_form_path).html_safe)
+      elsif unconfirmed_person.gender.blank?
+        errors.add(:gender, I18n.t('users.errors.wca_id_no_gender_html', wrt_contact_path: wrt_contact_path).html_safe)
+      elsif !already_assigned_to_user && unconfirmed_person.dob != dob_verification_date
+        # Note that we don't verify DOB for WCA IDs that have already been
+        # claimed. This protects people from DOB guessing attacks.
+        self.was_incorrect_wca_id_claim = true
+        errors.add(:dob_verification, I18n.t('users.errors.dob_incorrect_html', dob_form_path: dob_form_path).html_safe)
       end
-      errors.add(:unconfirmed_wca_id, I18n.t('users.errors.already_have_id', wca_id: wca_id)) if claiming_wca_id && person
-
-      errors.add(:delegate_id_to_handle_wca_id_claim, I18n.t('users.errors.not_found')) if delegate_id_to_handle_wca_id_claim.present? && !delegate_to_handle_wca_id_claim&.any_kind_of_delegate?
     end
+    errors.add(:unconfirmed_wca_id, I18n.t('users.errors.already_have_id', wca_id: wca_id)) if claiming_wca_id && person
+
+    errors.add(:delegate_id_to_handle_wca_id_claim, I18n.t('users.errors.not_found')) if delegate_id_to_handle_wca_id_claim.present? && !delegate_to_handle_wca_id_claim&.any_kind_of_delegate?
   end
 
   # workaround / very nasty hotfix for Rails 6 issue with rollback triggers.
@@ -281,22 +281,22 @@ class User < ApplicationRecord
     # Otherwise (when setting WCA ID directly) we want to validate
     # that the user details matches the person details instead.
     p = (wca_id_was.present? && person) || unconfirmed_person
-    if p
-      self.name = p.name
-      self.dob = p.dob
-      self.gender = p.gender
-      self.country_iso2 = p.country_iso2
-    end
+    return unless p
+
+    self.name = p.name
+    self.dob = p.dob
+    self.gender = p.gender
+    self.country_iso2 = p.country_iso2
   end
 
   validate :must_look_like_the_corresponding_person
   private def must_look_like_the_corresponding_person
-    if person
-      errors.add(:name, I18n.t("users.errors.must_match_person")) if self.name != person.name
-      errors.add(:country_iso2, I18n.t("users.errors.must_match_person")) if self.country_iso2 != person.country_iso2
-      errors.add(:gender, I18n.t("users.errors.must_match_person")) if self.gender != person.gender
-      errors.add(:dob, I18n.t("users.errors.must_match_person")) if self.dob != person.dob
-    end
+    return unless person
+
+    errors.add(:name, I18n.t("users.errors.must_match_person")) if self.name != person.name
+    errors.add(:country_iso2, I18n.t("users.errors.must_match_person")) if self.country_iso2 != person.country_iso2
+    errors.add(:gender, I18n.t("users.errors.must_match_person")) if self.gender != person.gender
+    errors.add(:dob, I18n.t("users.errors.must_match_person")) if self.dob != person.dob
   end
 
   before_validation :strip_name
@@ -307,10 +307,10 @@ class User < ApplicationRecord
   validate :wca_id_prereqs
   def wca_id_prereqs
     p = person || unconfirmed_person
-    if p
-      cannot_be_assigned_reasons = p.cannot_be_assigned_to_user_reasons
-      errors.add(:wca_id, cannot_be_assigned_reasons.xss_aware_to_sentence) unless cannot_be_assigned_reasons.empty?
-    end
+    return unless p
+
+    cannot_be_assigned_reasons = p.cannot_be_assigned_to_user_reasons
+    errors.add(:wca_id, cannot_be_assigned_reasons.xss_aware_to_sentence) unless cannot_be_assigned_reasons.empty?
   end
 
   # To handle profile pictures that predate our user account system, we created
@@ -319,21 +319,21 @@ class User < ApplicationRecord
   # avatar.
   before_save :remove_dummy_account_and_copy_name_when_wca_id_changed
   def remove_dummy_account_and_copy_name_when_wca_id_changed
-    if wca_id_change && wca_id.present?
-      dummy_user = User.find_by(wca_id: wca_id, dummy_account: true)
-      if dummy_user
-        # Transfer current and pending avatar associations
-        self.current_avatar = dummy_user.current_avatar
-        self.pending_avatar = dummy_user.pending_avatar
+    return unless wca_id_change && wca_id.present?
 
-        # Transfer historic avatars
-        self.user_avatars = dummy_user.user_avatars
+    dummy_user = User.find_by(wca_id: wca_id, dummy_account: true)
+    return unless dummy_user
 
-        # The `reload` is necessary because otherwise, the old pre-reload `user_avatars`
-        # association on `dummy_user` would pull the avatars to the grave.
-        dummy_user.reload.destroy!
-      end
-    end
+    # Transfer current and pending avatar associations
+    self.current_avatar = dummy_user.current_avatar
+    self.pending_avatar = dummy_user.pending_avatar
+
+    # Transfer historic avatars
+    self.user_avatars = dummy_user.user_avatars
+
+    # The `reload` is necessary because otherwise, the old pre-reload `user_avatars`
+    # association on `dummy_user` would pull the avatars to the grave.
+    dummy_user.reload.destroy!
   end
 
   def avatar
@@ -545,6 +545,7 @@ class User < ApplicationRecord
 
   private def groups_with_read_access_for_current
     return "*" if can_edit_any_groups?
+
     groups = groups_with_read_access_for_past
 
     groups += UserGroup.banned_competitors.ids if can_view_current_banned_competitors?
@@ -554,6 +555,7 @@ class User < ApplicationRecord
 
   private def groups_with_read_access_for_past
     return "*" if can_edit_any_groups?
+
     groups = groups_with_edit_access
 
     groups += UserGroup.banned_competitors.ids if can_view_past_banned_competitors?
@@ -563,6 +565,7 @@ class User < ApplicationRecord
 
   private def groups_with_edit_access
     return "*" if can_edit_any_groups?
+
     groups = []
 
     active_roles.select do |role|
@@ -1029,12 +1032,12 @@ class User < ApplicationRecord
                          elsif user_to_edit == self && !(admin? || any_kind_of_delegate?) && user_to_edit.registrations.accepted.count > 0
                            I18n.t('users.edit.cannot_edit.reason.registered')
                          end
-    if cannot_edit_reason
-      I18n.t('users.edit.cannot_edit.msg',
-             reason: cannot_edit_reason,
-             wrt_contact_path: Rails.application.routes.url_helpers.contact_path(contactRecipient: 'wrt'),
-             delegate_url: Rails.application.routes.url_helpers.delegates_path).html_safe
-    end
+    return unless cannot_edit_reason
+
+    I18n.t('users.edit.cannot_edit.msg',
+           reason: cannot_edit_reason,
+           wrt_contact_path: Rails.application.routes.url_helpers.contact_path(contactRecipient: 'wrt'),
+           delegate_url: Rails.application.routes.url_helpers.delegates_path).html_safe
   end
 
   CLAIM_WCA_ID_PARAMS = [
@@ -1050,6 +1053,7 @@ class User < ApplicationRecord
       # That's the only field we want to be able to edit for these accounts
       return %i(remove_avatar)
     end
+
     fields += editable_personal_preference_fields(user)
     fields += editable_competitor_info_fields(user)
     fields += editable_avatar_fields(user)
@@ -1124,14 +1128,14 @@ class User < ApplicationRecord
   end
 
   def maybe_assign_wca_id_by_results(competition, notify: true)
-    if !wca_id && !unconfirmed_wca_id
-      matches = []
-      matches = competition.competitors.where(name: name, dob: dob, gender: gender, countryId: country.id).to_a unless country.nil? || dob.nil?
-      if matches.size == 1 && matches.first.user.nil?
-        update(wca_id: matches.first.wca_id)
-      elsif notify
-        notify_of_id_claim_possibility(competition)
-      end
+    return unless !wca_id && !unconfirmed_wca_id
+
+    matches = []
+    matches = competition.competitors.where(name: name, dob: dob, gender: gender, countryId: country.id).to_a unless country.nil? || dob.nil?
+    if matches.size == 1 && matches.first.user.nil?
+      update(wca_id: matches.first.wca_id)
+    elsif notify
+      notify_of_id_claim_possibility(competition)
     end
   end
 

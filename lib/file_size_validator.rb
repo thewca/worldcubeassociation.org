@@ -14,6 +14,7 @@ class FileSizeValidator < ActiveModel::EachValidator
     range = (options.delete(:in) || options.delete(:within))
     if range
       raise ArgumentError.new(":in and :within must be a Range") unless range.is_a?(Range)
+
       options[:minimum] = range.begin
       options[:maximum] = range.end
       options[:maximum] -= 1 if range.exclude_end?

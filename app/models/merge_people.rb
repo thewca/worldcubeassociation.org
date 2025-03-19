@@ -39,12 +39,12 @@ class MergePeople
 
   validate :must_look_like_the_same_person
   def must_look_like_the_same_person
-    if person1 && person2
-      errors.add(:person2_wca_id, "Names don't match") if person1.name != person2.name
-      errors.add(:person2_wca_id, "Countries don't match") if person1.countryId != person2.countryId
-      errors.add(:person2_wca_id, "Genders don't match") if person1.gender != person2.gender
-      errors.add(:person2_wca_id, "Birthdays don't match") if person1.dob != person2.dob
-    end
+    return unless person1 && person2
+
+    errors.add(:person2_wca_id, "Names don't match") if person1.name != person2.name
+    errors.add(:person2_wca_id, "Countries don't match") if person1.countryId != person2.countryId
+    errors.add(:person2_wca_id, "Genders don't match") if person1.gender != person2.gender
+    errors.add(:person2_wca_id, "Birthdays don't match") if person1.dob != person2.dob
   end
 
   validate :person2_must_not_have_associated_user

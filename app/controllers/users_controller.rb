@@ -87,6 +87,7 @@ class UsersController < ApplicationController
 
   def regenerate_2fa_backup_codes
     return render json: { error: { message: I18n.t("devise.sessions.new.2fa.errors.not_enabled") } } unless current_user.otp_required_for_login
+
     codes = current_user.generate_otp_backup_codes!
     current_user.save!
     render json: { codes: codes }
@@ -123,6 +124,7 @@ class UsersController < ApplicationController
 
     @user = user_to_edit
     return if redirect_if_cannot_edit_user(@user)
+
     @current_user = current_user
   end
 

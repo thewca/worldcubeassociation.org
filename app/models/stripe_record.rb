@@ -91,29 +91,29 @@ class StripeRecord < ApplicationRecord
   alias_method :retrieve_remote, :retrieve_stripe
 
   def update_amount_remote(amount_iso, currency_iso)
-    if self.payment_intent?
-      stripe_amount = StripeRecord.amount_to_stripe(amount_iso, currency_iso)
+    return unless self.payment_intent?
 
-      update_intent_args = {
-        amount: stripe_amount,
-        currency: currency_iso,
-      }
+    stripe_amount = StripeRecord.amount_to_stripe(amount_iso, currency_iso)
 
-      Stripe::PaymentIntent.update(
-        self.stripe_id,
-        update_intent_args,
-        stripe_account: self.account_id,
-      )
+    update_intent_args = {
+      amount: stripe_amount,
+      currency: currency_iso,
+    }
 
-      updated_parameters = self.parameters.deep_merge(update_intent_args)
+    Stripe::PaymentIntent.update(
+      self.stripe_id,
+      update_intent_args,
+      stripe_account: self.account_id,
+    )
 
-      # Update our own journals so that we know we changed something
-      self.update!(
-        parameters: updated_parameters,
-        amount_stripe_denomination: stripe_amount,
-        currency_code: currency_iso,
-      )
-    end
+    updated_parameters = self.parameters.deep_merge(update_intent_args)
+
+    # Update our own journals so that we know we changed something
+    self.update!(
+      parameters: updated_parameters,
+      amount_stripe_denomination: stripe_amount,
+      currency_code: currency_iso,
+    )
   end
 
   def money_amount

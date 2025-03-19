@@ -47,6 +47,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     id = params.require(:id)
     role = UserRole.find(id)
     return render status: :unauthorized, json: { error: "Cannot access role" } unless role.can_user_read?(current_user)
+
     render json: role
   end
 
@@ -228,44 +229,42 @@ class Api::V0::UserRolesController < Api::V0::ApiController
         new_role.save!
       end
     elsif group_type == UserGroup.group_types[:delegate_probation]
-      if params.key?(:endDate)
-        end_date = params.require(:endDate)
-        changes << UserRole::UserRoleChange.new(
-          changed_parameter: 'End Date',
-          previous_value: role.end_date || 'Empty',
-          new_value: end_date,
-        )
+      return render status: :unprocessable_entity, json: { error: "Invalid parameter to be changed" } unless params.key?(:endDate)
 
-        role.update!(end_date: Date.safe_parse(end_date))
-      else
-        return render status: :unprocessable_entity, json: { error: "Invalid parameter to be changed" }
-      end
+      end_date = params.require(:endDate)
+      changes << UserRole::UserRoleChange.new(
+        changed_parameter: 'End Date',
+        previous_value: role.end_date || 'Empty',
+        new_value: end_date,
+      )
+
+      role.update!(end_date: Date.safe_parse(end_date))
+
     elsif [UserGroup.group_types[:teams_committees], UserGroup.group_types[:councils]].include?(group_type)
-      if params.key?(:status)
-        status = params.require(:status)
-        changes << UserRole::UserRoleChange.new(
-          changed_parameter: 'Status',
-          previous_value: I18n.t("enums.user_roles.status.#{group_type}.#{role.metadata.status}", locale: 'en'),
-          new_value: I18n.t("enums.user_roles.status.#{group_type}.#{status}", locale: 'en'),
-        )
+      return render status: :unprocessable_entity, json: { error: "Invalid parameter to be changed" } unless params.key?(:status)
 
-        ActiveRecord::Base.transaction do
-          role.update!(end_date: Date.today)
-          if group_type == UserGroup.group_types[:teams_committees]
-            metadata = RolesMetadataTeamsCommittees.create!(status: status)
-          elsif group_type == UserGroup.group_types[:councils]
-            metadata = RolesMetadataCouncils.create!(status: status)
-          end
-          role = UserRole.create!(
-            user_id: role.user.id,
-            group_id: role.group.id,
-            start_date: Date.today,
-            metadata: metadata,
-          )
+      status = params.require(:status)
+      changes << UserRole::UserRoleChange.new(
+        changed_parameter: 'Status',
+        previous_value: I18n.t("enums.user_roles.status.#{group_type}.#{role.metadata.status}", locale: 'en'),
+        new_value: I18n.t("enums.user_roles.status.#{group_type}.#{status}", locale: 'en'),
+      )
+
+      ActiveRecord::Base.transaction do
+        role.update!(end_date: Date.today)
+        if group_type == UserGroup.group_types[:teams_committees]
+          metadata = RolesMetadataTeamsCommittees.create!(status: status)
+        elsif group_type == UserGroup.group_types[:councils]
+          metadata = RolesMetadataCouncils.create!(status: status)
         end
-      else
-        return render status: :unprocessable_entity, json: { error: "Invalid parameter to be changed" }
+        role = UserRole.create!(
+          user_id: role.user.id,
+          group_id: role.group.id,
+          start_date: Date.today,
+          metadata: metadata,
+        )
       end
+
     elsif group_type == UserGroup.group_types[:banned_competitors]
       role.end_date = params[:endDate] if params.key?(:endDate)
 
@@ -292,6 +291,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     role = UserRole.find(id)
 
     return head :unauthorized unless current_user.has_permission?(:can_edit_groups, role.group.id)
+
     role.update!(end_date: Date.today)
     RoleChangeMailer.notify_role_end(role, current_user).deliver_later
     remove_pending_wca_id_claims(role) if role.group.delegate_regions? && !role.user.any_kind_of_delegate?

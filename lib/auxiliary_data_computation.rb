@@ -69,6 +69,7 @@ module AuxiliaryDataComputation
             # e.g. 2008SEAR01 twice in North America and World because of his two countries).
             ["World", continent_id, country_id].each do |region|
               next if ranked[region][person_id]
+
               counter[region] += 1
               # As we ordered by value it can either be greater or tie the previous one.
               current_rank[region] = counter[region] if previous_value[region].nil? || value > previous_value[region]
@@ -80,6 +81,7 @@ module AuxiliaryDataComputation
             # in other words, the personId from the Concise*Results table is not found in the Persons table.
             # In the past, this has occurred when temporary results have been inserted for newcomers.
             next if cached_country.nil?
+
             # Set the person's data (first time the current location is matched).
             personal_rank[person_id][:best] ||= value
             personal_rank[person_id][:world_rank] ||= current_rank["World"]

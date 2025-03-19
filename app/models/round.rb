@@ -141,6 +141,7 @@ class Round < ApplicationRecord
 
   def previous_round
     return nil if number == 1
+
     Round.joins(:competition_event).find_by(competition_event: competition_event, number: number - 1)
   end
 

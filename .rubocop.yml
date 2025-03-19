@@ -82,9 +82,6 @@ Style/TrailingCommaInHashLiteral:
   # non-empty array and hash literals.
   EnforcedStyleForMultiline: comma
 
-Style/GuardClause:
-  Enabled: false
-
 Metrics/AbcSize:
   Enabled: false
 
@@ -221,9 +218,6 @@ Style/YodaCondition:
   Enabled: false
 
 Style/FormatStringToken:
-  Enabled: false
-
-Layout/EmptyLineAfterGuardClause:
   Enabled: false
 
 Lint/EmptyFile:

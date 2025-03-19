@@ -21,6 +21,7 @@ class ScheduleActivity < ApplicationRecord
 
   def included_in_parent_schedule
     return if errors.present?
+
     errors.add(:start_time, "should be after parent's start_time") unless start_time >= holder.start_time
     errors.add(:end_time, "should be before parent's end_time") unless end_time <= holder.end_time
     errors.add(:end_time, "should be after start_time") unless start_time <= end_time
@@ -36,10 +37,10 @@ class ScheduleActivity < ApplicationRecord
       errors.add(:activity_code, "is an invalid 'other' activity code") unless VALID_OTHER_ACTIVITY_CODE.include?(other_id)
     end
 
-    if holder.has_attribute?(:activity_code)
-      holder_activity_id = holder.activity_code.split('-').first
-      errors.add(:activity_code, "should share its base activity id with parent") unless activity_id == holder_activity_id
-    end
+    return unless holder.has_attribute?(:activity_code)
+
+    holder_activity_id = holder.activity_code.split('-').first
+    errors.add(:activity_code, "should share its base activity id with parent") unless activity_id == holder_activity_id
   end
 
   # Name can be specified externally, but we may want to infer the activity name
@@ -85,6 +86,7 @@ class ScheduleActivity < ApplicationRecord
   # TODO: not a fan of how it works (= passing round information)
   def to_event(rounds_by_wcif_id = {})
     raise "#to_event called for nested activity" unless holder.is_a?(VenueRoom)
+
     {
       title: localized_name(rounds_by_wcif_id),
       roomId: holder.id,

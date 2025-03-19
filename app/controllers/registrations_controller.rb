@@ -14,6 +14,7 @@ class RegistrationsController < ApplicationController
                     Registration.find(params[:id]).competition
                   end
     raise ActionController::RoutingError.new('Not Found') unless competition.user_can_view?(current_user)
+
     competition
   end
 
@@ -22,10 +23,10 @@ class RegistrationsController < ApplicationController
 
   before_action :competition_must_be_using_wca_registration!, except: [:import, :do_import, :add, :do_add, :index, :psych_sheet, :psych_sheet_event, :stripe_webhook, :payment_denomination]
   private def competition_must_be_using_wca_registration!
-    if !competition_from_params.use_wca_registration?
-      flash[:danger] = I18n.t('registrations.flash.not_using_wca')
-      redirect_to competition_path(competition_from_params)
-    end
+    return if competition_from_params.use_wca_registration?
+
+    flash[:danger] = I18n.t('registrations.flash.not_using_wca')
+    redirect_to competition_path(competition_from_params)
   end
 
   before_action :competition_must_not_be_using_wca_registration!, only: [:import, :do_import]
@@ -78,6 +79,7 @@ class RegistrationsController < ApplicationController
     headers = CSV.read(file.path).first.compact.map(&:downcase)
     missing_headers = required_columns - headers
     raise I18n.t("registrations.import.errors.missing_columns", columns: missing_headers.join(", ")) if missing_headers.any?
+
     registration_rows = CSV.read(file.path, headers: true, header_converters: :symbol, skip_blanks: true, converters: ->(string) { string&.strip })
                            .map(&:to_hash)
                            .select { |registration_row| registration_row[:status] == "a" }
@@ -89,12 +91,15 @@ class RegistrationsController < ApplicationController
     emails = registration_rows.pluck(:email)
     email_duplicates = emails.select { |email| emails.count(email) > 1 }.uniq
     raise I18n.t("registrations.import.errors.email_duplicates", emails: email_duplicates.join(", ")) if email_duplicates.any?
+
     wca_ids = registration_rows.pluck(:wca_id)
     wca_id_duplicates = wca_ids.select { |wca_id| wca_ids.count(wca_id) > 1 }.uniq
     raise I18n.t("registrations.import.errors.wca_id_duplicates", wca_ids: wca_id_duplicates.join(", ")) if wca_id_duplicates.any?
+
     raw_dobs = registration_rows.pluck(:birth_date)
     wrong_format_dobs = raw_dobs.select { |raw_dob| Date.safe_parse(raw_dob)&.to_fs != raw_dob }
     raise I18n.t("registrations.import.errors.wrong_dob_format", raw_dobs: wrong_format_dobs.join(", ")) if wrong_format_dobs.any?
+
     new_locked_users = []
     # registered_at stores millisecond precision, but we want all registrations
     #   from CSV import to be considered as one "batch". So we mark a timestamp
@@ -153,6 +158,7 @@ class RegistrationsController < ApplicationController
         reg.registered_at = Time.now.utc
       end
       raise I18n.t("registrations.add.errors.already_registered") unless registration.new_record?
+
       registration_comment = params.dig(:registration_data, :comments)
       registration.assign_attributes(comments: registration_comment) if registration_comment.present?
       registration.assign_attributes(competing_status: Registrations::Helper::STATUS_ACCEPTED)
@@ -182,6 +188,7 @@ class RegistrationsController < ApplicationController
     }
     if registration_row[:wca_id].present?
       raise I18n.t("registrations.import.errors.non_existent_wca_id", wca_id: registration_row[:wca_id]) unless Person.exists?(wca_id: registration_row[:wca_id])
+
       user = User.find_by(wca_id: registration_row[:wca_id])
       if user
         if user.dummy_account?

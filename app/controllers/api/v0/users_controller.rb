@@ -3,10 +3,10 @@
 class Api::V0::UsersController < Api::V0::ApiController
   def show_me
     require_user!
-    if stale?(current_user)
-      # Also include the users current prs so we can handle qualifications on the Frontend
-      show_user(current_user, show_rankings: true, private_attributes: ['email'])
-    end
+    return unless stale?(current_user)
+
+    # Also include the users current prs so we can handle qualifications on the Frontend
+    show_user(current_user, show_rankings: true, private_attributes: ['email'])
   end
 
   def show_user_by_id
@@ -37,6 +37,7 @@ class Api::V0::UsersController < Api::V0::ApiController
   def personal_records
     require_user!
     return render json: { single: [], average: [] } if current_user.wca_id.blank?
+
     person = Person.includes(:ranksSingle, :ranksAverage).find_by!(wca_id: current_user.wca_id)
     render json: { single: person.ranksSingle.map(&:to_wcif), average: person.ranksAverage.map(&:to_wcif) }
   end

@@ -240,6 +240,7 @@ class Api::V0::ApiController < ApplicationController
 
   private def require_user!
     raise WcaExceptions::MustLogIn.new if current_api_user.nil? && current_user.nil?
+
     current_api_user || current_user
   end
 
@@ -250,6 +251,7 @@ class Api::V0::ApiController < ApplicationController
   def competition_series
     competition_series = CompetitionSeries.find_by(wcif_id: params[:id])
     raise WcaExceptions::NotFound.new("Competition series with ID #{params[:id]} not found") if competition_series.blank? || competition_series.public_competitions.empty?
+
     render json: competition_series.to_wcif
   end
 end

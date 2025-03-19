@@ -151,6 +151,7 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
       if status == 'cancelled'
         return self_updating ? 'Competitor delete' : 'Admin delete'
       end
+
       self_updating ? 'Competitor update' : 'Admin update'
     end
 

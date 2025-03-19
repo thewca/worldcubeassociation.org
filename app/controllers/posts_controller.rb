@@ -114,6 +114,7 @@ class PostsController < ApplicationController
     #  1 row in set, 1 warning (0.00 sec)
     post = Post.find_by(slug: params[:id]) || Post.find_by(id: params[:id])
     raise ActiveRecord::RecordNotFound.new("Couldn't find post") if !post
+
     post
   end
 end

@@ -31,21 +31,21 @@ class CompetitionSeries < ApplicationRecord
   before_validation :create_id_and_cell_name
   def create_id_and_cell_name
     m = VALID_NAME_RE.match(name)
-    if m
-      name_without_year = m[1]
-      year = m[2]
-      if wcif_id.blank?
-        # Generate competition id from name
-        # By replacing accented chars with their ascii equivalents, and then
-        # removing everything that isn't a digit or a character.
-        safe_name_without_year = ActiveSupport::Inflector.transliterate(name_without_year).gsub(/[^a-z0-9]+/i, '')
-        self.wcif_id = safe_name_without_year[0...(MAX_ID_LENGTH - year.length)] + year
-      end
-      if short_name.blank?
-        year = " #{year}"
-        self.short_name = name_without_year.truncate(MAX_SHORT_NAME_LENGTH - year.length) + year
-      end
+    return unless m
+
+    name_without_year = m[1]
+    year = m[2]
+    if wcif_id.blank?
+      # Generate competition id from name
+      # By replacing accented chars with their ascii equivalents, and then
+      # removing everything that isn't a digit or a character.
+      safe_name_without_year = ActiveSupport::Inflector.transliterate(name_without_year).gsub(/[^a-z0-9]+/i, '')
+      self.wcif_id = safe_name_without_year[0...(MAX_ID_LENGTH - year.length)] + year
     end
+    return if short_name.present?
+
+    year = " #{year}"
+    self.short_name = name_without_year.truncate(MAX_SHORT_NAME_LENGTH - year.length) + year
   end
 
   # The notion of circumventing model associations is stolen from competition.rb#delegate_ids et al.
@@ -56,9 +56,9 @@ class CompetitionSeries < ApplicationRecord
   end
 
   def destroy_if_orphaned
-    if persisted? && competitions.count <= 1
-      self.destroy # NULL is handled by has_many#dependent set to :nullify above
-    end
+    return unless persisted? && competitions.count <= 1
+
+    self.destroy # NULL is handled by has_many#dependent set to :nullify above
   end
 
   DEFAULT_SERIALIZE_OPTIONS = {
@@ -172,10 +172,10 @@ class CompetitionSeries < ApplicationRecord
 
   before_save :unpack_competition_ids
   private def unpack_competition_ids
-    if @competition_ids
-      unpacked_competitions = @competition_ids.split(',').map { |id| Competition.find(id) }
-      self.competitions = unpacked_competitions
-    end
+    return unless @competition_ids
+
+    unpacked_competitions = @competition_ids.split(',').map { |id| Competition.find(id) }
+    self.competitions = unpacked_competitions
   end
 
   after_save :clear_competition_ids
