@@ -193,7 +193,6 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
               onSelect={selectedIds.add}
               onUnselect={selectedIds.remove}
               onToggle={selectedIds.toggle}
-              competition_id={competitionInfo.id}
               competitionInfo={competitionInfo}
               color={PENDING_COLOR}
               distinguishPaidUnpaid
@@ -229,7 +228,6 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
               onSelect={selectedIds.add}
               onUnselect={selectedIds.remove}
               onToggle={selectedIds.toggle}
-              competition_id={competitionInfo.id}
               initialSortColumn="waiting_list_position"
               competitionInfo={competitionInfo}
               registrations={waiting.toSorted(
@@ -274,7 +272,6 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
             onSelect={selectedIds.add}
             onUnselect={selectedIds.remove}
             onToggle={selectedIds.toggle}
-            competition_id={competitionInfo.id}
             competitionInfo={competitionInfo}
             color={APPROVED_COLOR}
           />
@@ -306,7 +303,6 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
               onSelect={selectedIds.add}
               onUnselect={selectedIds.remove}
               onToggle={selectedIds.toggle}
-              competition_id={competitionInfo.id}
               competitionInfo={competitionInfo}
               color={CANCELLED_COLOR}
             />
@@ -339,7 +335,6 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
               onSelect={selectedIds.add}
               onUnselect={selectedIds.remove}
               onToggle={selectedIds.toggle}
-              competition_id={competitionInfo.id}
               competitionInfo={competitionInfo}
               color={REJECTED_COLOR}
             />
@@ -372,7 +367,6 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
               onSelect={selectedIds.add}
               onUnselect={selectedIds.remove}
               onToggle={selectedIds.toggle}
-              competition_id={competitionInfo.id}
               competitionInfo={competitionInfo}
               color={NON_COMPETING_COLOR}
             />
