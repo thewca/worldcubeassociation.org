@@ -110,9 +110,6 @@ Metrics/MethodLength:
 Metrics/ModuleLength:
   Enabled: false
 
-Naming/MemoizedInstanceVariableName:
-  Enabled: false
-
 Style/AccessModifierDeclarations:
   Enabled: false
 

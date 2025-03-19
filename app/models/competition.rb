@@ -657,7 +657,7 @@ class Competition < ApplicationRecord
   end
 
   def being_cloned_from
-    @being_cloned_from_cache ||= Competition.find_by(id: being_cloned_from_id)
+    @being_cloned_from ||= Competition.find_by(id: being_cloned_from_id)
   end
 
   def build_clone
@@ -897,7 +897,7 @@ class Competition < ApplicationRecord
     end
   end
 
-  attr_accessor :closing_full_registration, :being_cloned_from_id, :being_cloned_from_cache, :clone_tabs, :editing_user_id
+  attr_accessor :closing_full_registration, :being_cloned_from_id, :clone_tabs, :editing_user_id
 
   validate :user_cannot_demote_themself
   def user_cannot_demote_themself
