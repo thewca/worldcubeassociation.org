@@ -62,10 +62,6 @@ module Registrations
         raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::ALREADY_REGISTERED_IN_SERIES) if existing_registration_in_series?(competition, target_user)
       end
 
-      def user_is_rejected?(current_user, target_user, registration)
-        current_user.id == target_user.id && registration.rejected?
-      end
-
       def organizer_modifying_own_registration?(competition, current_user, target_user)
         (current_user.id == target_user.id) && current_user.can_manage_competition?(competition)
       end

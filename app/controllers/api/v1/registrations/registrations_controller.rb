@@ -81,9 +81,9 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
     raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless
       can_administer_or_current_user?(@competition, @current_user, target_user)
     raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::USER_EDITS_NOT_ALLOWED) unless
-      competition.registration_edits_currently_permitted? || current_user.can_manage_competition?(@competition) || user_uncancelling_registration?(@registration, new_status)
+      @competition.registration_edits_currently_permitted? || @current_user.can_manage_competition?(@competition) || user_uncancelling_registration?(@registration, new_status)
     raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::REGISTRATION_IS_REJECTED) if
-      user_is_rejected?(current_user, target_user, @registration) && !organizer_modifying_own_registration?(@competition, @current_user, target_user)
+      user_is_rejected?(@current_user, target_user, @registration) && !organizer_modifying_own_registration?(@competition, @current_user, target_user)
     raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::ALREADY_REGISTERED_IN_SERIES) if
       existing_registration_in_series?(@competition, target_user) && !current_user.can_manage_competition?(@competition)
   end
@@ -228,5 +228,9 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
       # One case where organizers need to create registrations for users is if a 3rd-party registration system is being used, and registration data is being
       # passed to the Registration Service from it
       (current_user.id == target_user.id) || current_user.can_manage_competition?(competition)
+    end
+
+    def user_is_rejected?(current_user, target_user, registration)
+      current_user.id == target_user.id && registration.rejected?
     end
 end
