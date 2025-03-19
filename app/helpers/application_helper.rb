@@ -85,10 +85,10 @@ module ApplicationHelper
     end
   end
 
-  def wca_table(responsive: true, hover: true, striped: true, floatThead: true, table_class: "", data: {}, greedy: true, table_id: nil, &block)
+  def wca_table(responsive: true, hover: true, striped: true, float_thead: true, table_class: "", data: {}, greedy: true, table_id: nil, &block)
     data[:locale] = I18n.locale
     table_classes = "table table-condensed #{table_class}"
-    table_classes += " floatThead" if floatThead
+    table_classes += " floatThead" if float_thead
     table_classes += " table-hover" if hover
     table_classes += " table-striped" if striped
     table_classes += " table-greedy-last-column" if greedy

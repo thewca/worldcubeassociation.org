@@ -27,24 +27,24 @@ class LightResult
               :regionalAverageRecord,
               :country
 
-  def initialize(r)
-    @id = r["id"]
-    @value1 = r["value1"]
-    @value2 = r["value2"]
-    @value3 = r["value3"]
-    @value4 = r["value4"]
-    @value5 = r["value5"]
-    @best = r["best"]
-    @average = r["average"]
-    @personName = r["personName"]
-    @pos = r["pos"]
-    @personId = r["personId"]
-    @regionalSingleRecord = r["regionalSingleRecord"]
-    @regionalAverageRecord = r["regionalAverageRecord"]
-    @country = Country.c_find(r["countryId"])
-    @format = Format.c_find(r["formatId"])
-    @round_type = RoundType.c_find(r["roundTypeId"])
-    @event = Event.c_find(r["eventId"])
+  def initialize(params)
+    @id = params["id"]
+    @value1 = params["value1"]
+    @value2 = params["value2"]
+    @value3 = params["value3"]
+    @value4 = params["value4"]
+    @value5 = params["value5"]
+    @best = params["best"]
+    @average = params["average"]
+    @personName = params["personName"]
+    @pos = params["pos"]
+    @personId = params["personId"]
+    @regionalSingleRecord = params["regionalSingleRecord"]
+    @regionalAverageRecord = params["regionalAverageRecord"]
+    @country = Country.c_find(params["countryId"])
+    @format = Format.c_find(params["formatId"])
+    @round_type = RoundType.c_find(params["roundTypeId"])
+    @event = Event.c_find(params["eventId"])
   end
 
   def eventId

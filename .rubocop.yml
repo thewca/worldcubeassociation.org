@@ -176,7 +176,10 @@ Style/SymbolProc:
   Enabled: false
 
 Naming/MethodParameterName:
-  Enabled: false
+  AllowedNames:
+    - c
+    - n
+    - id
 
 Lint/EmptyFile:
   Exclude:
