@@ -175,9 +175,6 @@ Style/WordArray:
 Style/SymbolProc:
   Enabled: false
 
-Naming/BlockParameterName:
-  Enabled: false
-
 Naming/MethodParameterName:
   Enabled: false
 

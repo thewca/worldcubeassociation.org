@@ -1460,8 +1460,8 @@ class Competition < ApplicationRecord
   def person_ids_with_results
     light_results_from_relation(results)
       .group_by(&:personId)
-      .sort_by { |_personId, results| results.first.personName }
-      .map do |personId, results|
+      .sort_by { |_person_id, results| results.first.personName }
+      .map do |person_id, results|
         results.sort_by! { |r| [r.event.rank, -r.round_type.rank] }
 
         # Mute (soften) each result that wasn't the competitor's last for the event.
@@ -1471,7 +1471,7 @@ class Competition < ApplicationRecord
           last_event = result.event
         end
 
-        [personId, results.sort_by { |r| [r.event.rank, -r.round_type.rank] }]
+        [person_id, results.sort_by { |r| [r.event.rank, -r.round_type.rank] }]
       end
   end
 

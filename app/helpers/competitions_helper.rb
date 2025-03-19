@@ -96,15 +96,15 @@ module CompetitionsHelper
       unless comp_records.empty?
         text += t("competitions.competition_info.records.#{code.downcase}")
         text += ": "
-        record_strs = comp_records.group_by(&:personName).sort.map do |personName, results_for_name|
+        record_strs = comp_records.group_by(&:personName).sort.map do |person_name, results_for_name|
           results_by_personId = results_for_name.group_by(&:personId).sort
-          results_by_personId.map do |personId, results|
+          results_by_personId.map do |person_id, results|
             uniqueName = if results_by_personId.length > 1
                            # Two or more people with the same name set records at this competition!
                            # Append their WCA IDs to distinguish between them.
-                           "[#{personName} (#{personId})](#{person_url personId})"
+                           "[#{person_name} (#{person_id})](#{person_url person_id})"
                          else
-                           "[#{personName}](#{person_url personId})"
+                           "[#{person_name}](#{person_url person_id})"
                          end
             record_strs = results.sort_by do |r|
               round_type = RoundType.c_find(r.roundTypeId)
