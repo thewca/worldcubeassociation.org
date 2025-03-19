@@ -924,7 +924,7 @@ class Competition < ApplicationRecord
 
   validate :registration_must_close_after_it_opens
   def registration_must_close_after_it_opens
-    errors.add(:registration_close, I18n.t('competitions.errors.registration_close_after_open')) if registration_open && registration_close && !(registration_open < registration_close)
+    errors.add(:registration_close, I18n.t('competitions.errors.registration_close_after_open')) if registration_open && registration_close && registration_open >= registration_close
   end
 
   attr_reader :receive_registration_emails
@@ -1514,7 +1514,7 @@ class Competition < ApplicationRecord
   end
 
   def ineligible_events(user)
-    competition_events.select { |ce| !ce.can_register?(user) }.map(&:event)
+    competition_events.reject { |ce| ce.can_register?(user) }.map(&:event)
   end
 
   # Profiling the rendering of _results_table.html.erb showed quite some
