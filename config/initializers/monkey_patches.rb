@@ -55,7 +55,7 @@ Rails.configuration.to_prepare do
     def merge_serialization_opts(other = nil)
       self.to_h do |key, value|
         # Try to read `key` from the other hash, fall back to empty array.
-        other_value = (other&.fetch(key.to_s, []) || [])
+        other_value = other&.fetch(key.to_s, []) || []
 
         # Merge arrays together, making sure to respect the difference between symbols and strings.
         merged_value = value.map(&:to_sym) & other_value.map(&:to_sym)

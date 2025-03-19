@@ -182,7 +182,7 @@ after "development:users", "development:user_roles" do
       organizers: User.all.sample(2),
       use_wca_registration: true,
       registration_open: 1.week.ago,
-      registration_close: start_day - (1.week),
+      registration_close: start_day - 1.week,
       latitude_degrees: rand(-90.0..90.0),
       longitude_degrees: rand(-180.0..180.0),
     )

@@ -1091,13 +1091,11 @@ class Competition < ApplicationRecord
   end
 
   def entry_fee_required?
-    (
-      confirmed? && created_at.present? && created_at > Date.new(2018, 7, 17) &&
+    confirmed? && created_at.present? && created_at > Date.new(2018, 7, 17) &&
 
       # The different venues may have different entry fees. It's better for
       # people to leave this blank than to set an incorrect value here.
       country.present? && !country.multiple_countries?
-    )
   end
 
   def competitor_limit_required?
@@ -1109,33 +1107,27 @@ class Competition < ApplicationRecord
   end
 
   def on_the_spot_entry_fee_required?
-    (
-      on_the_spot_registration? &&
+    on_the_spot_registration? &&
 
       # The different venues may have different entry fees. It's better for
       # people to leave this blank than to set an incorrect value here.
       country.present? && !country.multiple_countries?
-    )
   end
 
   def refund_policy_percent_required?
-    (
-      confirmed? && created_at.present? && created_at > Date.new(2018, 8, 22) &&
+    confirmed? && created_at.present? && created_at > Date.new(2018, 8, 22) &&
 
       # The different venues may have different entry fees. It's better for
       # people to leave this blank than to set an incorrect value here.
       country.present? && !country.multiple_countries?
-    )
   end
 
   def guests_entry_fee_required?
-    (
-      confirmed? && created_at.present? && created_at > Date.new(2018, 8, 22) &&
+    confirmed? && created_at.present? && created_at > Date.new(2018, 8, 22) &&
 
       # The different venues may have different entry fees. It's better for
       # people to leave this blank than to set an incorrect value here.
       country.present? && !country.multiple_countries?
-    )
   end
 
   def all_guests_allowed?
@@ -1281,7 +1273,7 @@ class Competition < ApplicationRecord
 
   # The division is to convert the end result from secods to days. .to_date removed some hours from the subtraction
   def days_until
-    start_date ? ((start_date.to_time(:utc) - Time.now.utc)/(86_400)).to_i : nil
+    start_date ? ((start_date.to_time(:utc) - Time.now.utc)/86_400).to_i : nil
   end
 
   def time_until_registration
@@ -2255,14 +2247,12 @@ class Competition < ApplicationRecord
 
   def dues_per_competitor_in_usd
     dues = DuesCalculator.dues_per_competitor_in_usd(self.country_iso2, self.base_entry_fee_lowest_denomination.to_i, self.currency_code)
-    (dues.presence || 0)
+    dues.presence || 0
   end
 
   private def xero_dues_payer
-    (
-      self.country&.wfc_dues_redirect&.redirect_to ||
-        self.organizers.find { |organizer| organizer.wfc_dues_redirect.present? }&.wfc_dues_redirect&.redirect_to
-    )
+    self.country&.wfc_dues_redirect&.redirect_to ||
+    self.organizers.find { |organizer| organizer.wfc_dues_redirect.present? }&.wfc_dues_redirect&.redirect_to
   end
 
   # WFC usually sends dues to the first staff delegate in alphabetical order if there are no redirects setup for the country or organizer.

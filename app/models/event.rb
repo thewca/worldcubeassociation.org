@@ -42,7 +42,7 @@ class Event < ApplicationRecord
   end
 
   def deprecated?
-    990 <= rank && rank < 1000
+    rank >= 990 && rank < 1000
   end
 
   # See https://www.worldcubeassociation.org/regulations/#9f12

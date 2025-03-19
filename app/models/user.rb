@@ -65,7 +65,7 @@ class User < ApplicationRecord
   scope :newcomer_month_eligible, -> { newcomers.or(where('wca_id LIKE ?', "#{Time.current.year}%")) }
 
   scope :in_region, lambda { |region_id|
-    where(country_iso2: (Continent.country_iso2s(region_id) || Country.c_find(region_id)&.iso2)) unless region_id.blank? || region_id == 'all'
+    where(country_iso2: Continent.country_iso2s(region_id) || Country.c_find(region_id)&.iso2) unless region_id.blank? || region_id == 'all'
   }
 
   ANONYMOUS_ACCOUNT_EMAIL_ID_SUFFIX = '@worldcubeassociation.org'
@@ -146,7 +146,7 @@ class User < ApplicationRecord
   attr_accessor :sign_up_panel_to_show
 
   ALLOWABLE_GENDERS = [:m, :f, :o].freeze
-  enum :gender, (ALLOWABLE_GENDERS.index_with(&:to_s))
+  enum :gender, ALLOWABLE_GENDERS.index_with(&:to_s)
   GENDER_LABEL_METHOD = lambda do |g|
     {
       m: I18n.t('enums.user.gender.m'),
@@ -846,11 +846,9 @@ class User < ApplicationRecord
   end
 
   def can_upload_images?
-    (
-      can_create_posts? ||
+    can_create_posts? ||
       any_kind_of_delegate? || # Delegates are allowed to upload photos when writing a delegate report.
       can_manage_any_not_over_competitions? # Competition managers may want to upload photos to their competition tabs.
-    )
   end
 
   def can_admin_competitions?
@@ -860,14 +858,12 @@ class User < ApplicationRecord
   alias_method :can_announce_competitions?, :can_admin_competitions?
 
   def can_manage_competition?(competition)
-    (
-      can_admin_competitions? ||
+    can_admin_competitions? ||
       competition.organizers.include?(self) ||
       competition.delegates.include?(self) ||
       competition.delegates.flat_map(&:senior_delegates).compact.include?(self) ||
       competition.delegates.flat_map(&:regional_delegates).compact.include?(self) ||
       wic_team?
-    )
   end
 
   def can_manage_any_not_over_competitions?
@@ -880,7 +876,7 @@ class User < ApplicationRecord
 
   def can_edit_registration?(registration)
     # A registration can be edited by a user if it hasn't been accepted yet, and if edits are allowed.
-    editable_by_user = (!registration.accepted? || registration.competition.registration_edits_currently_permitted?)
+    editable_by_user = !registration.accepted? || registration.competition.registration_edits_currently_permitted?
     can_manage_competition?(registration.competition) || (registration.user_id == self.id && editable_by_user)
   end
 

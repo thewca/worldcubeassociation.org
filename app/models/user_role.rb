@@ -172,12 +172,11 @@ class UserRole < ApplicationRecord
     roles.reject do |role|
       # Here, instead of foo.present? we are using !foo.nil? because foo.present? returns false if
       # foo is a boolean false but we need to actually check if the boolean is present or not.
-      (
-        (!status.nil? && status != role.metadata&.status) ||
+
+      (!status.nil? && status != role.metadata&.status) ||
         (!is_active.nil? && is_active != role.is_active?) ||
         (!group_type.nil? && group_type != role.group_type) ||
         (!is_lead.nil? && is_lead != role.is_lead?)
-      )
     end
   end
 

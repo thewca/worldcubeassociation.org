@@ -155,14 +155,8 @@ Style/NumericPredicate:
 Style/PercentLiteralDelimiters:
   Enabled: false
 
-Style/PerlBackrefs:
-  Enabled: false
-
 Style/RaiseArgs:
   EnforcedStyle: compact
-
-Style/RedundantParentheses:
-  Enabled: false
 
 Style/SignalException:
   EnforcedStyle: only_raise
@@ -200,12 +194,6 @@ Naming/BlockParameterName:
   Enabled: false
 
 Naming/MethodParameterName:
-  Enabled: false
-
-Style/YodaCondition:
-  Enabled: false
-
-Style/FormatStringToken:
   Enabled: false
 
 Lint/EmptyFile:

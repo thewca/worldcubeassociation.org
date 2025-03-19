@@ -32,13 +32,13 @@ module MarkdownHelper
     def postprocess(full_document)
       # Support embed Open Street Map
       full_document.gsub!(/map\(([^)]*)\)/) do
-        "<iframe width='600' height='450' style='overflow: hidden' frameborder='0' style='border:0' data-src=\"#{embedded_map_url($1)}\"></iframe>"
+        "<iframe width='600' height='450' style='overflow: hidden' frameborder='0' style='border:0' data-src=\"#{embedded_map_url(::Regexp.last_match(1))}\"></iframe>"
       end
 
       # Support embed YouTube videos
       # Note: the URL in parentheses is turned into an <a></a> tag by the `autolink` extension.
       full_document.gsub!(/youtube\(.*?href="([^)]*)".*?\)/) do
-        embed_url = $1.gsub("watch?v=", "embed/")
+        embed_url = ::Regexp.last_match(1).gsub("watch?v=", "embed/")
         "<iframe width='640' height='390' frameborder='0' src='#{embed_url}'></iframe>"
       end
 

@@ -13,12 +13,11 @@ class Api::V0::UserGroupsController < Api::V0::ApiController
     groups.reject do |group|
       # Here, instead of foo.present? we are using !foo.nil? because foo.present? returns false if
       # foo is a boolean false but we need to actually check if the boolean is present or not.
-      (
-        (!is_active.nil? && is_active != group.is_active) ||
+
+      (!is_active.nil? && is_active != group.is_active) ||
         (!is_hidden.nil? && is_hidden != group.is_hidden) ||
         (!parent_group_id.nil? && parent_group_id != group.parent_group_id) ||
         (!is_root_group.nil? && is_root_group != group.is_root_group?)
-      )
     end
   end
 
