@@ -178,8 +178,7 @@ class CompetitionsController < ApplicationController
     }
     @competition = competition_from_params(includes: associations)
     respond_to do |format|
-      format.html do
-      end
+      format.html
       format.pdf do
         unless @competition.has_schedule?
           flash[:danger] = t('.no_schedule')

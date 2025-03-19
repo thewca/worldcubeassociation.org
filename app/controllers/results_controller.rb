@@ -423,7 +423,7 @@ class ResultsController < ApplicationController
 
   private def respond_from_cache(key_prefix, &)
     respond_to do |format|
-      format.html {}
+      format.html
       format.json do
         cached_data = Rails.cache.fetch [key_prefix, *@cache_params, @record_timestamp] do
           rows = DbHelper.execute_cached_query(@cache_params, @record_timestamp, @query)
