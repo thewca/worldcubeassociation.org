@@ -189,11 +189,11 @@ class ResultsController < ApplicationController
     @cache_params = ResultsController.compute_cache_key(MODE_RECORDS, **params_for_cache)
 
     if @is_histories
-      if @is_history
-        order = 'event.`rank`, type desc, value, start_date desc, roundType.`rank` desc'
-      else
-        order = 'start_date desc, event.`rank`, type desc, value, roundType.`rank` desc'
-      end
+      order = if @is_history
+                'event.`rank`, type desc, value, start_date desc, roundType.`rank` desc'
+              else
+                'start_date desc, event.`rank`, type desc, value, roundType.`rank` desc'
+              end
 
       @query = <<-SQL.squish
         SELECT
@@ -345,14 +345,14 @@ class ResultsController < ApplicationController
     end
 
     @gender = params[:gender]
-    case params[:gender]
-    when "Male"
-      @gender_condition = "AND gender = 'm'"
-    when "Female"
-      @gender_condition = "AND gender = 'f'"
-    else
-      @gender_condition = ""
-    end
+    @gender_condition = case params[:gender]
+                        when "Male"
+                          "AND gender = 'm'"
+                        when "Female"
+                          "AND gender = 'f'"
+                        else
+                          ""
+                        end
 
     @is_all_years = params[:years] == YEARS_ALL
     splitted_years_param = params[:years].split

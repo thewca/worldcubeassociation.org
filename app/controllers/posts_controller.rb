@@ -10,11 +10,11 @@ class PostsController < ApplicationController
     respond_to do |format|
       format.json do
         tag = params[:tag]
-        if tag
-          @posts = Post.joins(:post_tags).where(post_tags: { tag: tag })
-        else
-          @posts = Post.where(show_on_homepage: true)
-        end
+        @posts = if tag
+                   Post.joins(:post_tags).where(post_tags: { tag: tag })
+                 else
+                   Post.where(show_on_homepage: true)
+                 end
         @posts = @posts
                  .order(sticky: :desc, created_at: :desc)
                  .includes(:author)
@@ -41,11 +41,11 @@ class PostsController < ApplicationController
 
   def rss
     tag = params[:tag]
-    if tag
-      @posts = Post.joins(:post_tags).where(post_tags: { tag: tag })
-    else
-      @posts = Post
-    end
+    @posts = if tag
+               Post.joins(:post_tags).where(post_tags: { tag: tag })
+             else
+               Post
+             end
     @posts = @posts.order(created_at: :desc).includes(:author).page(params[:page])
 
     # Force responding with xml, regardless of the given HTTP_ACCEPT headers.

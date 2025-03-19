@@ -2,11 +2,11 @@
 
 class Api::V0::PersonsController < Api::V0::ApiController
   def index
-    if params[:q].present?
-      persons = Person.search(params[:q])
-    else
-      persons = Person.current.includes(:user)
-    end
+    persons = if params[:q].present?
+                Person.search(params[:q])
+              else
+                Person.current.includes(:user)
+              end
     persons = persons.includes(:ranksSingle, :ranksAverage)
     persons = persons.where(wca_id: params[:wca_ids].split(',')) if params[:wca_ids].present?
     render json: paginate(persons).map { |person| person_to_json person }

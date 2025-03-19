@@ -109,13 +109,13 @@ class ContactsController < ApplicationController
   end
 
   private def requestor_info(user, edit_others_profile_mode)
-    if !edit_others_profile_mode
-      requestor_role = "Self"
-    elsif user.any_kind_of_delegate?
-      requestor_role = "Delegate"
-    else
-      requestor_role = "Unknown"
-    end
+    requestor_role = if !edit_others_profile_mode
+                       "Self"
+                     elsif user.any_kind_of_delegate?
+                       "Delegate"
+                     else
+                       "Unknown"
+                     end
     "#{user.name} (#{requestor_role})"
   end
 

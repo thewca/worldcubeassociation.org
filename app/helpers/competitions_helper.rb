@@ -99,13 +99,13 @@ module CompetitionsHelper
         record_strs = comp_records.group_by(&:personName).sort.map do |personName, results_for_name|
           results_by_personId = results_for_name.group_by(&:personId).sort
           results_by_personId.map do |personId, results|
-            if results_by_personId.length > 1
-              # Two or more people with the same name set records at this competition!
-              # Append their WCA IDs to distinguish between them.
-              uniqueName = "[#{personName} (#{personId})](#{person_url personId})"
-            else
-              uniqueName = "[#{personName}](#{person_url personId})"
-            end
+            uniqueName = if results_by_personId.length > 1
+                           # Two or more people with the same name set records at this competition!
+                           # Append their WCA IDs to distinguish between them.
+                           "[#{personName} (#{personId})](#{person_url personId})"
+                         else
+                           "[#{personName}](#{person_url personId})"
+                         end
             record_strs = results.sort_by do |r|
               round_type = RoundType.c_find(r.roundTypeId)
               [Event.c_find(r.eventId).rank, round_type.rank]

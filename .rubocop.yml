@@ -131,9 +131,6 @@ Style/ClassAndModuleChildren:
 Style/ClassVars:
   Enabled: false
 
-Style/ConditionalAssignment:
-  Enabled: false
-
 Style/Documentation:
   Enabled: false
 
