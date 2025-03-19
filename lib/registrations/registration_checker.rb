@@ -3,82 +3,73 @@
 module Registrations
   class RegistrationChecker
     def self.apply_payload(registration, raw_payload)
-      guests = raw_payload['guests']
+      # Duplicate everything to make sure we don't trigger unwanted DB write operations
+      registration.deep_dup.tap do |new_registration|
+        guests = raw_payload['guests']
 
-      registration.guests = guests.to_i if raw_payload.key?('guests')
+        new_registration.guests = guests.to_i if raw_payload.key?('guests')
 
-      competing_payload = raw_payload['competing']
-      comment = competing_payload&.dig('comment')
-      organizer_comment = competing_payload&.dig('organizer_comment')
+        competing_payload = raw_payload['competing']
+        comment = competing_payload&.dig('comment')
+        organizer_comment = competing_payload&.dig('organizer_comment')
 
-      registration.comments = comment if competing_payload&.key?('comment')
-      registration.administrative_notes = organizer_comment if competing_payload&.key?('organizer_comment')
+        new_registration.comments = comment if competing_payload&.key?('comment')
+        new_registration.administrative_notes = organizer_comment if competing_payload&.key?('organizer_comment')
 
-      if competing_payload&.key?('event_ids')
-        desired_events = competing_payload['event_ids']
+        if competing_payload&.key?('event_ids')
+          desired_events = competing_payload['event_ids']
 
-        competition_events_lookup = registration.competition.competition_events.where(event_id: desired_events).index_by(&:event_id)
-        competition_events = desired_events.map { competition_events_lookup[it] }
+          competition_events_lookup = registration.competition.competition_events.where(event_id: desired_events).index_by(&:event_id)
+          competition_events = desired_events.map { competition_events_lookup[it]&.deep_dup }
 
-        upserted_events = competition_events.map {
-          registration.registration_competition_events.find_or_initialize_by(competition_event: it)
-        }
-
-        registration.registration_competition_events = upserted_events
-
-        # Bit frustrating that Rails doesn't invalidate `through` proxies automatically, but what can you do…
-        registration.competition_events.reload
-        registration.events.reload
+          competition_events.each {
+            new_registration.registration_competition_events.build(competition_event: it)
+          }
+        end
       end
     end
 
     def self.create_registration_allowed!(registration_request, current_user)
       target_user = User.find(registration_request['user_id'])
       competition = Competition.find(registration_request['competition_id'])
+
       registration = Registration.new(competition: competition, user: target_user)
+      registration = self.apply_payload(registration, registration_request)
 
-      ActiveRecord::Base.transaction do
-        self.apply_payload(registration, registration_request)
+      user_can_create_registration!(competition, current_user, target_user)
 
-        user_can_create_registration!(competition, current_user, target_user)
-        # Migrated to ActiveRecord-style validations
-        validate_guests!(registration)
-        validate_comment!(registration)
-        validate_registration_events!(registration)
-
-        # The `apply_payload` can trigger write operations on associations, so we manually roll back to be sure
-        raise ActiveRecord::Rollback
-      end
+      # Migrated to ActiveRecord-style validations
+      validate_guests!(registration)
+      validate_comment!(registration)
+      validate_registration_events!(registration)
     end
 
     def self.update_registration_allowed!(update_request, competition, current_user)
-      registration = Registration.find_by(competition_id: competition.id, user_id: update_request['user_id'])
-      raise WcaExceptions::RegistrationError.new(:not_found, Registrations::ErrorCodes::REGISTRATION_NOT_FOUND) if registration.blank?
-
       target_user = User.find(update_request['user_id'])
-      waiting_list_position = update_request.dig('competing', 'waiting_list_position')
-      new_status = update_request.dig('competing', 'status')
+
+      registration = Registration.find_by(competition: competition, user: target_user)
+      raise WcaExceptions::RegistrationError.new(:not_found, Registrations::ErrorCodes::REGISTRATION_NOT_FOUND) if registration.blank?
 
       # Rails does not track changes to `has_many` associations like it would for attributes :(
       old_events = registration.event_ids
 
-      ActiveRecord::Base.transaction do
-        self.apply_payload(registration, update_request)
+      registration = self.apply_payload(registration, update_request)
 
-        user_can_modify_registration!(competition, current_user, target_user, registration, new_status)
-        # Migrated to ActiveRecord-style validations
-        validate_guests!(registration)
-        validate_comment!(registration)
-        validate_organizer_comment!(registration)
-        validate_registration_events!(registration)
-        # Old-style validations within this class
-        validate_organizer_fields!(update_request, current_user, competition)
-        validate_waiting_list_position!(waiting_list_position, competition, registration) unless waiting_list_position.nil?
-        validate_update_status!(new_status, competition, current_user, target_user, registration, old_events) unless new_status.nil?
+      waiting_list_position = update_request.dig('competing', 'waiting_list_position')
+      new_status = update_request.dig('competing', 'status')
 
-        # The `apply_payload` can trigger write operations on associations, so we manually roll back to be sure
-        raise ActiveRecord::Rollback
-      end
+      user_can_modify_registration!(competition, current_user, target_user, registration, new_status)
+
+      # Migrated to ActiveRecord-style validations
+      validate_guests!(registration)
+      validate_comment!(registration)
+      validate_organizer_comment!(registration)
+      validate_registration_events!(registration)
+
+      # Old-style validations within this class
+      validate_organizer_fields!(update_request, current_user, competition)
+      validate_waiting_list_position!(waiting_list_position, competition, registration) unless waiting_list_position.nil?
+      validate_update_status!(new_status, competition, current_user, target_user, registration, old_events) unless new_status.nil?
     end
 
     def self.bulk_update_allowed!(bulk_update_request, current_user)
