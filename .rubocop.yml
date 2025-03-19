@@ -128,19 +128,7 @@ Style/ClassAndModuleChildren:
 Style/ClassVars:
   Enabled: false
 
-Style/ConditionalAssignment:
-  Enabled: false
-
 Style/Documentation:
-  Enabled: false
-
-Style/DoubleNegation:
-  Enabled: false
-
-Style/EmptyElse:
-  EnforcedStyle: empty
-
-Style/InverseMethods:
   Enabled: false
 
 Style/Lambda:
@@ -158,14 +146,8 @@ Style/NumericPredicate:
 Style/PercentLiteralDelimiters:
   Enabled: false
 
-Style/PerlBackrefs:
-  Enabled: false
-
 Style/RaiseArgs:
   EnforcedStyle: compact
-
-Style/RedundantParentheses:
-  Enabled: false
 
 Style/SignalException:
   EnforcedStyle: only_raise
@@ -203,12 +185,6 @@ Naming/BlockParameterName:
   Enabled: false
 
 Naming/MethodParameterName:
-  Enabled: false
-
-Style/YodaCondition:
-  Enabled: false
-
-Style/FormatStringToken:
   Enabled: false
 
 Lint/EmptyFile:

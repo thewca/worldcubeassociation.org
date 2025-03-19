@@ -55,11 +55,11 @@ class UsersController < ApplicationController
     current_user.otp_required_for_login = true
     current_user.otp_secret = User.generate_otp_secret
     current_user.save!
-    if was_enabled
-      flash[:success] = I18n.t("devise.sessions.new.2fa.regenerated_secret")
-    else
-      flash[:success] = I18n.t("devise.sessions.new.2fa.enabled_success")
-    end
+    flash[:success] = if was_enabled
+                        I18n.t("devise.sessions.new.2fa.regenerated_secret")
+                      else
+                        I18n.t("devise.sessions.new.2fa.enabled_success")
+                      end
     @user = current_user
     render :edit
   end
@@ -335,14 +335,14 @@ class UsersController < ApplicationController
       if user_params.key?(:delegate_reports_region)
         raw_region = user_params.delete(:delegate_reports_region)
 
-        if raw_region.blank?
-          # Explicitly reset the region type column when "worldwide" (represented by a blank value) was selected
-          user_params[:delegate_reports_region_type] = nil
-        elsif raw_region.starts_with?('_')
-          user_params[:delegate_reports_region_type] = 'Continent'
-        else
-          user_params[:delegate_reports_region_type] = 'Country'
-        end
+        user_params[:delegate_reports_region_type] = if raw_region.blank?
+                                                       # Explicitly reset the region type column when "worldwide" (represented by a blank value) was selected
+                                                       nil
+                                                     elsif raw_region.starts_with?('_')
+                                                       'Continent'
+                                                     else
+                                                       'Country'
+                                                     end
 
         user_params[:delegate_reports_region_id] = raw_region.presence
       end

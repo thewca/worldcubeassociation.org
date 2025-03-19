@@ -118,11 +118,11 @@ namespace :db do
 
               # Swap tables between the databases
               temp_tables.each do |table|
-                if current_tables.include?(table)
-                  rename_sql = "RENAME TABLE #{database_name}.#{table} TO #{database_name}_old.#{table}, #{temp_db_name}.#{table} TO #{database_name}.#{table};"
-                else
-                  rename_sql = "RENAME TABLE #{temp_db_name}.#{table} TO #{database_name}.#{table};"
-                end
+                rename_sql = if current_tables.include?(table)
+                               "RENAME TABLE #{database_name}.#{table} TO #{database_name}_old.#{table}, #{temp_db_name}.#{table} TO #{database_name}.#{table};"
+                             else
+                               "RENAME TABLE #{temp_db_name}.#{table} TO #{database_name}.#{table};"
+                             end
                 ActiveRecord::Base.connection.execute(rename_sql)
               end
             end

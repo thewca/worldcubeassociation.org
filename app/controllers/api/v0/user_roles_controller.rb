@@ -68,17 +68,9 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     ]
     group = UserGroup.find(group_id)
 
-    if UserGroup.group_types_containing_status_metadata.include?(group.group_type)
-      status = params.require(:status)
-    else
-      status = nil
-    end
+    status = (params.require(:status) if UserGroup.group_types_containing_status_metadata.include?(group.group_type))
 
-    if group.group_type == UserGroup.group_types[:delegate_regions]
-      location = params[:location]
-    else
-      location = nil
-    end
+    location = (params[:location] if group.group_type == UserGroup.group_types[:delegate_regions])
 
     if group.banned_competitors?
       user = User.find(user_id)
@@ -105,19 +97,17 @@ class Api::V0::UserRolesController < Api::V0::ApiController
         role_to_end.update!(end_date: Date.today) if role_to_end.present?
       end
 
-      if group.group_type == UserGroup.group_types[:delegate_regions]
-        metadata = RolesMetadataDelegateRegions.create!(status: status, location: location)
-      elsif group.group_type == UserGroup.group_types[:officers]
-        metadata = RolesMetadataOfficers.create!(status: status)
-      elsif group.group_type == UserGroup.group_types[:teams_committees]
-        metadata = RolesMetadataTeamsCommittees.create!(status: status)
-      elsif group.group_type == UserGroup.group_types[:councils]
-        metadata = RolesMetadataCouncils.create!(status: status)
-      elsif group.group_type == UserGroup.group_types[:banned_competitors]
-        metadata = RolesMetadataBannedCompetitors.create!(ban_reason: ban_reason, scope: scope)
-      else
-        metadata = nil
-      end
+      metadata = if group.group_type == UserGroup.group_types[:delegate_regions]
+                   RolesMetadataDelegateRegions.create!(status: status, location: location)
+                 elsif group.group_type == UserGroup.group_types[:officers]
+                   RolesMetadataOfficers.create!(status: status)
+                 elsif group.group_type == UserGroup.group_types[:teams_committees]
+                   RolesMetadataTeamsCommittees.create!(status: status)
+                 elsif group.group_type == UserGroup.group_types[:councils]
+                   RolesMetadataCouncils.create!(status: status)
+                 elsif group.group_type == UserGroup.group_types[:banned_competitors]
+                   RolesMetadataBannedCompetitors.create!(ban_reason: ban_reason, scope: scope)
+                 end
 
       new_role = UserRole.create!(
         user_id: user_id,
@@ -136,16 +126,11 @@ class Api::V0::UserRolesController < Api::V0::ApiController
   end
 
   private def changed_key_to_human_readable(changed_key)
-    case changed_key
-    when 'end_date'
-      'End Date'
-    when 'ban_reason'
-      'Ban reason'
-    when 'scope'
-      'Ban scope'
-    else
-      nil
-    end
+    {
+      'end_date' => 'End Date',
+      'ban_reason' => 'Ban reason',
+      'scope' => 'Ban scope',
+    }[changed_key]
   end
 
   private def changed_value_to_human_readable(changed_value)

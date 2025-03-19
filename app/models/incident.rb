@@ -62,11 +62,11 @@ class Incident < ApplicationRecord
   }.freeze
 
   def serializable_hash(options = nil)
-    if options && options[:can_view_delegate_matters]
-      options = DEFAULT_DELEGATE_MATTERS_SERIALIZE_OPTIONS.merge(options || {})
-    else
-      options = DEFAULT_PUBLIC_SERIALIZE_OPTIONS.merge(options || {})
-    end
+    options = if options && options[:can_view_delegate_matters]
+                DEFAULT_DELEGATE_MATTERS_SERIALIZE_OPTIONS.merge(options || {})
+              else
+                DEFAULT_PUBLIC_SERIALIZE_OPTIONS.merge(options || {})
+              end
 
     json = super
     json[:class] = self.class.to_s.downcase

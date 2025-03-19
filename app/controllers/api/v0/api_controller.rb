@@ -129,13 +129,13 @@ class Api::V0::ApiController < ApplicationController
       end
     end
 
-    if current_user&.can_admin_results?
-      options = {
-        private_attributes: %w[incorrect_wca_id_claim_count dob],
-      }
-    else
-      options = {}
-    end
+    options = if current_user&.can_admin_results?
+                {
+                  private_attributes: %w[incorrect_wca_id_claim_count dob],
+                }
+              else
+                {}
+              end
 
     render status: :ok, json: { result: result.as_json(options) }
   end

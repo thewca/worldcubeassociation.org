@@ -9,14 +9,14 @@ class Person < ApplicationRecord
   has_many :ranksAverage, primary_key: "wca_id", foreign_key: "personId", class_name: "RanksAverage"
   has_many :ranksSingle, primary_key: "wca_id", foreign_key: "personId", class_name: "RanksSingle"
 
-  enum :gender, (User::ALLOWABLE_GENDERS.index_with(&:to_s))
+  enum :gender, User::ALLOWABLE_GENDERS.index_with(&:to_s)
 
   alias_attribute :ref_id, :wca_id
 
   scope :current, -> { where(subId: 1) }
 
   scope :in_region, lambda { |region_id|
-    where(countryId: (Continent.country_ids(region_id) || region_id)) unless region_id.blank? || region_id == 'all'
+    where(countryId: Continent.country_ids(region_id) || region_id) unless region_id.blank? || region_id == 'all'
   }
 
   validates :name, presence: true
@@ -234,7 +234,7 @@ class Person < ApplicationRecord
     records = results.pluck(:regionalSingleRecord, :regionalAverageRecord).flatten.compact_blank
     {
       national: records.count("NR"),
-      continental: records.count { |record| !(%w(NR WR).include?(record)) },
+      continental: records.count { |record| %w(NR WR).exclude?(record) },
       world: records.count("WR"),
       total: records.count,
     }
