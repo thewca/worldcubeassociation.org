@@ -32,6 +32,7 @@ class CompetitionSeries < ApplicationRecord
   def create_id_and_cell_name
     m = VALID_NAME_RE.match(name)
     return unless m
+
     name_without_year = m[1]
     year = m[2]
     if wcif_id.blank?
@@ -42,6 +43,7 @@ class CompetitionSeries < ApplicationRecord
       self.wcif_id = safe_name_without_year[0...(MAX_ID_LENGTH - year.length)] + year
     end
     return if short_name.present?
+
     year = " #{year}"
     self.short_name = name_without_year.truncate(MAX_SHORT_NAME_LENGTH - year.length) + year
   end
@@ -55,6 +57,7 @@ class CompetitionSeries < ApplicationRecord
 
   def destroy_if_orphaned
     return unless persisted? && competitions.count <= 1
+
     self.destroy # NULL is handled by has_many#dependent set to :nullify above
   end
 
@@ -170,6 +173,7 @@ class CompetitionSeries < ApplicationRecord
   before_save :unpack_competition_ids
   private def unpack_competition_ids
     return unless @competition_ids
+
     unpacked_competitions = @competition_ids.split(',').map { |id| Competition.find(id) }
     self.competitions = unpacked_competitions
   end

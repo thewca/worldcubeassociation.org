@@ -85,6 +85,7 @@ class RegistrationsMailer < ApplicationMailer
     @registration = registration
     to = registration.competition.competition_delegates.map { |x| x.user.email }
     return if to.empty?
+
     mail(
       to: to,
       reply_to: UserGroup.teams_committees_group_wic.metadata.email,

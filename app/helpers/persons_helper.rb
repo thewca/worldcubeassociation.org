@@ -22,6 +22,7 @@ module PersonsHelper
 
   def return_podium_class(result)
     return unless (['f', 'c'].include?(result.roundTypeId)) && !result.best_solve.dnf?
+
     case result.pos
     when 1
       "gold-place"

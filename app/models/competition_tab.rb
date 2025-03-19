@@ -47,6 +47,7 @@ class CompetitionTab < ApplicationRecord
     other_display_order = display_order + (direction.to_s == "up" ? -1 : 1)
     other_tab = competition.tabs.find_by(display_order: other_display_order)
     return unless other_tab
+
     ActiveRecord::Base.transaction do
       update_column :display_order, nil
       other_tab.update_column :display_order, current_display_order

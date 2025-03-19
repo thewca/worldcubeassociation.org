@@ -158,9 +158,11 @@ class User < ApplicationRecord
   validate :wca_id_is_unique_or_for_dummy_account
   def wca_id_is_unique_or_for_dummy_account
     return unless wca_id_change && wca_id
+
     user = User.find_by(wca_id: wca_id)
     # If there is a non dummy user with this WCA ID, fail validation.
     return unless user && !user.dummy_account?
+
     errors.add(
       :wca_id,
       I18n.t('users.errors.unique_html',
@@ -178,6 +180,7 @@ class User < ApplicationRecord
   validate :check_if_email_used_by_locked_account, on: :create
   private def check_if_email_used_by_locked_account
     return unless User.find_by(email: email)&.locked_account?
+
     errors.delete(:email)
     errors.add(:email, I18n.t('users.errors.email_used_by_locked_account_html').html_safe)
   end
@@ -199,6 +202,7 @@ class User < ApplicationRecord
   before_validation :maybe_clear_claimed_wca_id
   def maybe_clear_claimed_wca_id
     return unless !claiming_wca_id && ((unconfirmed_wca_id_was.present? && wca_id == unconfirmed_wca_id_was) || unconfirmed_wca_id.blank?)
+
     self.unconfirmed_wca_id = nil
     self.delegate_to_handle_wca_id_claim = nil
   end
@@ -222,6 +226,7 @@ class User < ApplicationRecord
     end
 
     return unless claiming_wca_id || (unconfirmed_wca_id.present? && unconfirmed_wca_id_change)
+
     errors.add(:delegate_id_to_handle_wca_id_claim, I18n.t('simple_form.required.text')) if delegate_id_to_handle_wca_id_claim.blank?
 
     errors.add(:unconfirmed_wca_id, I18n.t('simple_form.required.text')) if unconfirmed_wca_id.blank?
@@ -277,6 +282,7 @@ class User < ApplicationRecord
     # that the user details matches the person details instead.
     p = (wca_id_was.present? && person) || unconfirmed_person
     return unless p
+
     self.name = p.name
     self.dob = p.dob
     self.gender = p.gender
@@ -286,6 +292,7 @@ class User < ApplicationRecord
   validate :must_look_like_the_corresponding_person
   private def must_look_like_the_corresponding_person
     return unless person
+
     errors.add(:name, I18n.t("users.errors.must_match_person")) if self.name != person.name
     errors.add(:country_iso2, I18n.t("users.errors.must_match_person")) if self.country_iso2 != person.country_iso2
     errors.add(:gender, I18n.t("users.errors.must_match_person")) if self.gender != person.gender
@@ -301,6 +308,7 @@ class User < ApplicationRecord
   def wca_id_prereqs
     p = person || unconfirmed_person
     return unless p
+
     cannot_be_assigned_reasons = p.cannot_be_assigned_to_user_reasons
     errors.add(:wca_id, cannot_be_assigned_reasons.xss_aware_to_sentence) unless cannot_be_assigned_reasons.empty?
   end
@@ -312,8 +320,10 @@ class User < ApplicationRecord
   before_save :remove_dummy_account_and_copy_name_when_wca_id_changed
   def remove_dummy_account_and_copy_name_when_wca_id_changed
     return unless wca_id_change && wca_id.present?
+
     dummy_user = User.find_by(wca_id: wca_id, dummy_account: true)
     return unless dummy_user
+
     # Transfer current and pending avatar associations
     self.current_avatar = dummy_user.current_avatar
     self.pending_avatar = dummy_user.pending_avatar
@@ -535,6 +545,7 @@ class User < ApplicationRecord
 
   private def groups_with_read_access_for_current
     return "*" if can_edit_any_groups?
+
     groups = groups_with_read_access_for_past
 
     groups += UserGroup.banned_competitors.ids if can_view_current_banned_competitors?
@@ -544,6 +555,7 @@ class User < ApplicationRecord
 
   private def groups_with_read_access_for_past
     return "*" if can_edit_any_groups?
+
     groups = groups_with_edit_access
 
     groups += UserGroup.banned_competitors.ids if can_view_past_banned_competitors?
@@ -553,6 +565,7 @@ class User < ApplicationRecord
 
   private def groups_with_edit_access
     return "*" if can_edit_any_groups?
+
     groups = []
 
     active_roles.select do |role|
@@ -1020,6 +1033,7 @@ class User < ApplicationRecord
                            I18n.t('users.edit.cannot_edit.reason.registered')
                          end
     return unless cannot_edit_reason
+
     I18n.t('users.edit.cannot_edit.msg',
            reason: cannot_edit_reason,
            wrt_contact_path: Rails.application.routes.url_helpers.contact_path(contactRecipient: 'wrt'),
@@ -1039,6 +1053,7 @@ class User < ApplicationRecord
       # That's the only field we want to be able to edit for these accounts
       return %i(remove_avatar)
     end
+
     fields += editable_personal_preference_fields(user)
     fields += editable_competitor_info_fields(user)
     fields += editable_avatar_fields(user)
@@ -1114,6 +1129,7 @@ class User < ApplicationRecord
 
   def maybe_assign_wca_id_by_results(competition, notify: true)
     return unless !wca_id && !unconfirmed_wca_id
+
     matches = []
     matches = competition.competitors.where(name: name, dob: dob, gender: gender, countryId: country.id).to_a unless country.nil? || dob.nil?
     if matches.size == 1 && matches.first.user.nil?

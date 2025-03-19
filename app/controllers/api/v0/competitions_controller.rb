@@ -155,6 +155,7 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
     competition = competition_from_params
     expires_in 5.minutes, public: true
     return unless stale?(competition, public: true)
+
     render json: Rails.cache.fetch(cache_key, expires_in: 5.minutes) {
       competition.to_wcif
     }
@@ -190,6 +191,7 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
     competition = nil if competition && !competition.showAtAll && !can_manage?(competition)
 
     raise WcaExceptions::NotFound.new("Competition with id #{id} not found") unless competition
+
     competition
   end
 

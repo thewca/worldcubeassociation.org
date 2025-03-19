@@ -11,6 +11,7 @@ class SearchResultsController < ApplicationController
     @omni_query = sanitize(@omni_query, tags: [], attributes: [])
 
     return unless @omni_query.present?
+
     @competitions = Competition.search(@omni_query).page(params[:competitions_page]).per(SEARCH_RESULT_LIMIT)
     @persons = User.search(@omni_query, params: { persons_table: true }).page(params[:people_page]).per(SEARCH_RESULT_LIMIT)
     @posts = Post.search(@omni_query).page(params[:posts_page]).per(SEARCH_RESULT_LIMIT)

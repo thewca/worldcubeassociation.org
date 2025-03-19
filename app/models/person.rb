@@ -52,6 +52,7 @@ class Person < ApplicationRecord
   validate :cannot_change_country_to_country_represented_before
   private def cannot_change_country_to_country_represented_before
     return unless countryId_changed? && !new_record? && !@updating_using_sub_id
+
     has_represented_this_country_already = Person.exists?(wca_id: wca_id, countryId: countryId)
     errors.add(:countryId, I18n.t('users.errors.already_represented_country')) if has_represented_this_country_already
   end
@@ -191,6 +192,7 @@ class Person < ApplicationRecord
                 previous_old_pos = old_pos
                 previous_new_pos = result.pos
                 break if result.pos > 3
+
                 championship_podium_results.push result if result.personId == self.wca_id
               end
             end

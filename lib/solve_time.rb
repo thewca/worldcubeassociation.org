@@ -81,6 +81,7 @@ class SolveTime
 
   def time_centiseconds=(time_centiseconds)
     raise "time out of range" unless time_centiseconds.between?(0, 99_999 * 100)
+
     @time_centiseconds = time_centiseconds
     recompute_wca_value
   end
@@ -97,12 +98,14 @@ class SolveTime
 
   def solved=(solved)
     raise "solved out of range" unless (0...100).cover?(solved)
+
     @solved = solved
     recompute_wca_value
   end
 
   def attempted=(attempted)
     raise "attempted out of range" unless (0...100).cover?(attempted)
+
     @attempted = attempted
     recompute_wca_value
   end
@@ -254,6 +257,7 @@ class SolveTime
   validate :time_centiseconds_must_not_be_nil
   def time_centiseconds_must_not_be_nil
     return if incomplete? || (!@event.timed_event? && !@event.multiple_blindfolded?)
+
     # For 333mbo only, time_centiseconds may be nil to indicate an unknown time.
     errors.add(:base, "time_centiseconds must not be nil") unless time_centiseconds || @event.id == "333mbo"
   end
@@ -262,6 +266,7 @@ class SolveTime
   def times_over_10_minutes_must_be_rounded
     # See validation for nil time_centiseconds above
     return if incomplete? || time_centiseconds.nil?
+
     errors.add(:base, "times over 10 minutes should be rounded") if (@event.timed_event? || @event.multiple_blindfolded?) && time_minutes > 10 && time_centiseconds % 100 > 0
   end
 

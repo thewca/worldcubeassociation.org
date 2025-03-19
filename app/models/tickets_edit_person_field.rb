@@ -17,6 +17,7 @@ class TicketsEditPersonField < ApplicationRecord
     end
 
     return unless field_name_country_iso2?
+
     country_error_message = "must be one of the allowed countries"
     errors.add(:old_value, country_error_message) unless Country::WCA_COUNTRY_ISO_CODES.include?(old_value)
     errors.add(:new_value, country_error_message) unless Country::WCA_COUNTRY_ISO_CODES.include?(new_value)

@@ -40,6 +40,7 @@ class ReassignWcaId
   validate :must_look_like_the_same_person
   def must_look_like_the_same_person
     return unless account1_user && account2_user
+
     errors.add(:account2, "Names don't match") unless account1_user.name == account2_user.name
     errors.add(:account2, "Countries don't match") unless account1_user.country_iso2 == account2_user.country_iso2
     errors.add(:account2, "Genders don't match") unless account1_user.gender == account2_user.gender

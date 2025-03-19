@@ -42,6 +42,7 @@ class SemiId
       # The given name has no usable parts, we can only generate an invalid SemiId
       return SemiId.new
     end
+
     # Take the first 4 chars of the last name
     semi_id_name = name_parts.pop.first(4)
     # If needed, take the first few chars of the first name.

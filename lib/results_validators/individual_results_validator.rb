@@ -159,6 +159,7 @@ module ResultsValidators
         first_index = all_solve_times.find_index(&:dns?)
         # Just use '5' here to get all of them
         return unless first_index && all_solve_times[first_index, 5].any?(&:complete?)
+
         competition_id, result, round_id, = context
         @warnings << ValidationWarning.new(RESULT_AFTER_DNS_WARNING,
                                            :results, competition_id,
@@ -172,6 +173,7 @@ module ResultsValidators
         # "check consistency of roundTypeIds and formatIds" across a given round
         # Check that the result's format matches the round format
         return if round_info.format.id == result.formatId
+
         @errors << ValidationError.new(MISMATCHED_RESULT_FORMAT_ERROR,
                                        :results, competition_id,
                                        round_id: round_id,
@@ -275,6 +277,7 @@ module ResultsValidators
         avg_per_solve = sum_of_times_for_rounds.to_f / completed_solves_for_rounds.size
         # We want to issue a warning if the estimated time for all solves + DNFs goes roughly over the cumulative time limit by at least 20% (estimation tolerance to reduce false positive).
         return unless (number_of_dnf_solves + completed_solves_for_rounds.size) * avg_per_solve >= 1.2 * time_limit_for_round.centiseconds
+
         @warnings << ValidationWarning.new(SUSPICIOUS_DNF_WARNING,
                                            :results, competition_id,
                                            round_ids: cumulative_round_ids.join(","),
@@ -293,6 +296,7 @@ module ResultsValidators
         # return (A, B), which is why we require A.id < B.id.
         results.each_with_index do |r, index|
           next if index >= reference_index
+
           # We attribute 1 point for each identical solve_time, we then just have to count the points.
           score = r.solve_times.zip(reference.solve_times).count do |solve_time, reference_solve_time|
             solve_time.complete? && solve_time == reference_solve_time

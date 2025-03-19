@@ -58,6 +58,7 @@ class TimeLimit
   # this file.
   def self.load(json)
     return UNDEF_TL.dup if json.nil?
+
     TimeLimit.new.tap do |time_limit|
       json_obj = json.is_a?(Hash) ? json : JSON.parse(json)
       time_limit.cumulative_round_ids = json_obj['cumulativeRoundIds']
@@ -81,6 +82,7 @@ class TimeLimit
 
   def to_s(round)
     return "" if round.has_undef_tl?
+
     time_str = SolveTime.new(round.event.id, :best, self.centiseconds).clock_format
     case self.cumulative_round_ids.length
     when 0

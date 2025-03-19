@@ -9,6 +9,7 @@ class Api::V1::ApiController < ActionController::API
   def validate_jwt_token
     auth_header = request.headers['Authorization']
     return render json: { error: Registrations::ErrorCodes::MISSING_AUTHENTICATION }, status: :unauthorized if auth_header.blank?
+
     token = auth_header.split[1]
     begin
       decode_result = JWT.decode token, AppSecrets.JWT_KEY, true, { algorithm: 'HS256' }

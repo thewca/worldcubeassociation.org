@@ -53,6 +53,7 @@ module Resultable
     validate :belongs_to_a_round
     def belongs_to_a_round
       return if round.present?
+
       errors.add(:round_type,
                  "Result must belong to a valid round. Please check that the tuple (competitionId, eventId, roundTypeId, formatId) matches an existing round.")
     end

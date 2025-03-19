@@ -179,6 +179,7 @@ module ApplicationHelper
 
   def wca_id_link(wca_id, **options)
     return unless wca_id.present?
+
     content_tag :span, class: "wca-id" do
       link_to wca_id, person_url(wca_id), options
     end

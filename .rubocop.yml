@@ -220,9 +220,6 @@ Style/YodaCondition:
 Style/FormatStringToken:
   Enabled: false
 
-Layout/EmptyLineAfterGuardClause:
-  Enabled: false
-
 Lint/EmptyFile:
   Exclude:
     - 'db/seeds.rb'

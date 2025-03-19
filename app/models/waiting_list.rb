@@ -30,6 +30,7 @@ class WaitingList < ApplicationRecord
   # This is the position from the user/organizers perspective - ie, we start counting at 1
   def position(entry)
     return nil unless entries.include?(entry.id)
+
     entries.index(entry.id) + 1
   end
 end

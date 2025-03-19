@@ -92,6 +92,7 @@ class StripeRecord < ApplicationRecord
 
   def update_amount_remote(amount_iso, currency_iso)
     return unless self.payment_intent?
+
     stripe_amount = StripeRecord.amount_to_stripe(amount_iso, currency_iso)
 
     update_intent_args = {

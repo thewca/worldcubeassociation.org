@@ -47,6 +47,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     id = params.require(:id)
     role = UserRole.find(id)
     return render status: :unauthorized, json: { error: "Cannot access role" } unless role.can_user_read?(current_user)
+
     render json: role
   end
 
@@ -229,6 +230,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       end
     elsif group_type == UserGroup.group_types[:delegate_probation]
       return render status: :unprocessable_entity, json: { error: "Invalid parameter to be changed" } unless params.key?(:endDate)
+
       end_date = params.require(:endDate)
       changes << UserRole::UserRoleChange.new(
         changed_parameter: 'End Date',
@@ -240,6 +242,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
 
     elsif [UserGroup.group_types[:teams_committees], UserGroup.group_types[:councils]].include?(group_type)
       return render status: :unprocessable_entity, json: { error: "Invalid parameter to be changed" } unless params.key?(:status)
+
       status = params.require(:status)
       changes << UserRole::UserRoleChange.new(
         changed_parameter: 'Status',
@@ -288,6 +291,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     role = UserRole.find(id)
 
     return head :unauthorized unless current_user.has_permission?(:can_edit_groups, role.group.id)
+
     role.update!(end_date: Date.today)
     RoleChangeMailer.notify_role_end(role, current_user).deliver_later
     remove_pending_wca_id_claims(role) if role.group.delegate_regions? && !role.user.any_kind_of_delegate?

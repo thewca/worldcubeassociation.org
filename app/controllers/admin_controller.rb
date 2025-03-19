@@ -313,6 +313,7 @@ class AdminController < ApplicationController
     @persons_to_finish = FinishUnfinishedPersons.search_persons(@competition_ids)
 
     return unless @persons_to_finish.empty?
+
     flash[:warning] = "There are no persons to complete for the selected competition"
     redirect_to panel_page_path(id: User.panel_pages[:createNewComers], competition_ids: @competition_ids)
   end
