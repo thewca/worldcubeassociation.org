@@ -23,8 +23,8 @@ module Registrations
         competition_events_lookup = registration.competition.competition_events.where(event_id: desired_events).index_by(&:event_id)
         competition_events = desired_events.map { competition_events_lookup[it]&.deep_dup }
 
-        # Since `new_registration` is a cloned in-memory entity, this does not fire any writes
-        new_registration.competition_events = competition_events
+        upserted_competition_events = competition_events.map { new_registration.registration_competition_events.build(competition_event: it) }
+        new_registration.registration_competition_events = upserted_competition_events
       end
     end
 
