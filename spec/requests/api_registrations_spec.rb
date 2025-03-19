@@ -213,7 +213,7 @@ RSpec.describe 'API Registrations' do
 
       expect(response.body).to eq(error_json)
       expect(response).to have_http_status(:not_found)
-      end
+    end
 
     it 'User A cant change User Bs registration' do
       update_request = FactoryBot.build(
@@ -221,7 +221,7 @@ RSpec.describe 'API Registrations' do
         :for_another_user,
         competition_id: default_registration.competition.id,
         user_id: default_registration.user_id,
-        )
+      )
       headers = { 'Authorization' => update_request['jwt_token'] }
 
       patch api_v1_registrations_register_path, params: update_request, headers: headers
@@ -242,7 +242,7 @@ RSpec.describe 'API Registrations' do
         :update_request,
         competition_id: registration.competition.id,
         user_id: registration.user_id,
-        )
+      )
       headers = { 'Authorization' => update_request['jwt_token'] }
 
       patch api_v1_registrations_register_path, params: update_request, headers: headers
@@ -263,7 +263,7 @@ RSpec.describe 'API Registrations' do
         :update_request,
         competition_id: registration.competition.id,
         user_id: registration.user_id,
-        )
+      )
       headers = { 'Authorization' => update_request['jwt_token'] }
 
       patch api_v1_registrations_register_path, params: update_request, headers: headers
@@ -284,7 +284,7 @@ RSpec.describe 'API Registrations' do
         :update_request,
         competition_id: registration.competition.id,
         user_id: registration.user_id,
-        )
+      )
       headers = { 'Authorization' => update_request['jwt_token'] }
 
       patch api_v1_registrations_register_path, params: update_request, headers: headers
@@ -303,7 +303,7 @@ RSpec.describe 'API Registrations' do
         user_id: default_registration.user_id,
         competition_id: default_registration.competition.id,
         submitted_by: default_competition.organizers.first.id,
-        )
+      )
       headers = { 'Authorization' => update_request['jwt_token'] }
 
       patch api_v1_registrations_register_path, params: update_request, headers: headers
@@ -321,7 +321,7 @@ RSpec.describe 'API Registrations' do
         competition_id: registration.competition.id,
         competing: { 'comment' => 'this is a new comment' },
         submitted_by: edit_deadline_passed.organizers.first.id,
-        )
+      )
       headers = { 'Authorization' => update_request['jwt_token'] }
 
       patch api_v1_registrations_register_path, params: update_request, headers: headers
