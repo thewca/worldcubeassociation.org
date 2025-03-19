@@ -36,10 +36,9 @@ class ScheduleActivity < ApplicationRecord
       errors.add(:activity_code, "is an invalid 'other' activity code") unless VALID_OTHER_ACTIVITY_CODE.include?(other_id)
     end
 
-    if holder.has_attribute?(:activity_code)
-      holder_activity_id = holder.activity_code.split('-').first
-      errors.add(:activity_code, "should share its base activity id with parent") unless activity_id == holder_activity_id
-    end
+    return unless holder.has_attribute?(:activity_code)
+    holder_activity_id = holder.activity_code.split('-').first
+    errors.add(:activity_code, "should share its base activity id with parent") unless activity_id == holder_activity_id
   end
 
   # Name can be specified externally, but we may want to infer the activity name

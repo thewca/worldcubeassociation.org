@@ -349,13 +349,12 @@ class Competition < ApplicationRecord
   validate :auto_close_threshold_validations, if: -> { auto_close_threshold.present? }
   private def auto_close_threshold_validations
     errors.add(:auto_close_threshold, I18n.t('competitions.errors.auto_close_positive_nonzero')) unless auto_close_threshold > 0
-    if auto_close_threshold != 0
-      errors.add(:auto_close_threshold, I18n.t('competitions.errors.use_wca_registration')) unless use_wca_registration
-      errors.add(:auto_close_threshold, I18n.t('competitions.errors.must_exceed_competitor_limit')) if
-        competitor_limit.present? && auto_close_threshold <= competitor_limit
-      errors.add(:auto_close_threshold, I18n.t('competitions.errors.auto_close_exceed_paid')) if
-        will_save_change_to_auto_close_threshold? && auto_close_threshold <= registrations.with_payments.count
-    end
+    return unless auto_close_threshold != 0
+    errors.add(:auto_close_threshold, I18n.t('competitions.errors.use_wca_registration')) unless use_wca_registration
+    errors.add(:auto_close_threshold, I18n.t('competitions.errors.must_exceed_competitor_limit')) if
+      competitor_limit.present? && auto_close_threshold <= competitor_limit
+    errors.add(:auto_close_threshold, I18n.t('competitions.errors.auto_close_exceed_paid')) if
+      will_save_change_to_auto_close_threshold? && auto_close_threshold <= registrations.with_payments.count
   end
 
   # Only validate on update: nobody can confirm competition on creation.
@@ -378,10 +377,9 @@ class Competition < ApplicationRecord
   # Same comment as for start_date_must_be_28_days_in_advance
   validate :registation_must_not_be_past, if: :should_validate_registration_closing?
   private def registation_must_not_be_past
-    if editing_user_id
-      editing_user = User.find(editing_user_id)
-      errors.add(:registration_close, I18n.t('competitions.errors.registration_already_closed')) if !editing_user.can_admin_competitions? && registration_range_specified? && registration_past?
-    end
+    return unless editing_user_id
+    editing_user = User.find(editing_user_id)
+    errors.add(:registration_close, I18n.t('competitions.errors.registration_already_closed')) if !editing_user.can_admin_competitions? && registration_range_specified? && registration_past?
   end
 
   validate :auto_accept_validations
@@ -400,11 +398,10 @@ class Competition < ApplicationRecord
 
     # TODO: This logic belongs in a controller more appropriately than in the validation.
     # IF we build a controller endpoint specifically for auto_accept, this logic should be move there.
-    if auto_accept_registrations_changed? && auto_accept_registrations?
-      errors.add(:auto_accept_registrations, I18n.t('competitions.errors.auto_accept_accept_paid_pending')) if registrations.pending.with_payments.count > 0
-      errors.add(:auto_accept_registrations, I18n.t('competitions.errors.auto_accept_accept_waitlisted')) if
-        registrations.waitlisted.count > 0 && !registration_full_and_accepted?
-    end
+    return unless auto_accept_registrations_changed? && auto_accept_registrations?
+    errors.add(:auto_accept_registrations, I18n.t('competitions.errors.auto_accept_accept_paid_pending')) if registrations.pending.with_payments.count > 0
+    errors.add(:auto_accept_registrations, I18n.t('competitions.errors.auto_accept_accept_waitlisted')) if
+      registrations.waitlisted.count > 0 && !registration_full_and_accepted?
   end
 
   def has_any_round_per_event?
@@ -532,10 +529,9 @@ class Competition < ApplicationRecord
   # this validation.
   validate :delegates_must_be_delegates, unless: :is_probably_over?
   def delegates_must_be_delegates
-    unless self.delegates.all?(&:any_kind_of_delegate?)
-      errors.add(:staff_delegate_ids, I18n.t('competitions.errors.not_all_delegates'))
-      errors.add(:trainee_delegate_ids, I18n.t('competitions.errors.not_all_delegates'))
-    end
+    return if self.delegates.all?(&:any_kind_of_delegate?)
+    errors.add(:staff_delegate_ids, I18n.t('competitions.errors.not_all_delegates'))
+    errors.add(:trainee_delegate_ids, I18n.t('competitions.errors.not_all_delegates'))
   end
 
   def user_should_post_delegate_report?(user)
@@ -724,10 +720,9 @@ class Competition < ApplicationRecord
   after_create :clone_associations
   private def clone_associations
     # Clone competition tabs.
-    if clone_tabs
-      being_cloned_from&.tabs&.each do |tab|
-        tabs.create!(tab.attributes.slice(*CompetitionTab::CLONEABLE_ATTRIBUTES))
-      end
+    return unless clone_tabs
+    being_cloned_from&.tabs&.each do |tab|
+      tabs.create!(tab.attributes.slice(*CompetitionTab::CLONEABLE_ATTRIBUTES))
     end
   end
 
@@ -741,21 +736,19 @@ class Competition < ApplicationRecord
 
   def create_id_and_cell_name(force_override: false)
     m = VALID_NAME_RE.match(name)
-    if m
-      name_without_year = m[1]
-      year = m[2]
-      if id.blank? || force_override
-        # Generate competition id from name
-        # By replacing accented chars with their ascii equivalents, and then
-        # removing everything that isn't a digit or a character.
-        safe_name_without_year = ActiveSupport::Inflector.transliterate(name_without_year, locale: :en).gsub(/[^a-z0-9]+/i, '')
-        self.id = safe_name_without_year[0...(MAX_ID_LENGTH - year.length)] + year
-      end
-      if cellName.blank? || force_override
-        year = " #{year}"
-        self.cellName = name_without_year.truncate(MAX_CELL_NAME_LENGTH - year.length) + year
-      end
+    return unless m
+    name_without_year = m[1]
+    year = m[2]
+    if id.blank? || force_override
+      # Generate competition id from name
+      # By replacing accented chars with their ascii equivalents, and then
+      # removing everything that isn't a digit or a character.
+      safe_name_without_year = ActiveSupport::Inflector.transliterate(name_without_year, locale: :en).gsub(/[^a-z0-9]+/i, '')
+      self.id = safe_name_without_year[0...(MAX_ID_LENGTH - year.length)] + year
     end
+    return unless cellName.blank? || force_override
+    year = " #{year}"
+    self.cellName = name_without_year.truncate(MAX_CELL_NAME_LENGTH - year.length) + year
   end
 
   attr_writer :staff_delegate_ids, :organizer_ids, :trainee_delegate_ids
@@ -905,14 +898,12 @@ class Competition < ApplicationRecord
 
   validate :user_cannot_demote_themself
   def user_cannot_demote_themself
-    if editing_user_id
-      editing_user = User.find(editing_user_id)
-      unless editing_user.can_manage_competition?(self)
-        errors.add(:staff_delegate_ids, "You cannot demote yourself")
-        errors.add(:trainee_delegate_ids, "You cannot demote yourself")
-        errors.add(:organizer_ids, "You cannot demote yourself")
-      end
-    end
+    return unless editing_user_id
+    editing_user = User.find(editing_user_id)
+    return if editing_user.can_manage_competition?(self)
+    errors.add(:staff_delegate_ids, "You cannot demote yourself")
+    errors.add(:trainee_delegate_ids, "You cannot demote yourself")
+    errors.add(:organizer_ids, "You cannot demote yourself")
   end
 
   validate :organizers_can_organize_competition
@@ -969,12 +960,11 @@ class Competition < ApplicationRecord
   end
 
   def update_receive_registration_emails
-    if editing_user_id && !@receive_registration_emails.nil?
-      competition_delegate = competition_delegates.find_by(delegate_id: editing_user_id)
-      competition_delegate&.update_attribute(:receive_registration_emails, @receive_registration_emails)
-      competition_organizer = competition_organizers.find_by(organizer_id: editing_user_id)
-      competition_organizer&.update_attribute(:receive_registration_emails, @receive_registration_emails)
-    end
+    return unless editing_user_id && !@receive_registration_emails.nil?
+    competition_delegate = competition_delegates.find_by(delegate_id: editing_user_id)
+    competition_delegate&.update_attribute(:receive_registration_emails, @receive_registration_emails)
+    competition_organizer = competition_organizers.find_by(organizer_id: editing_user_id)
+    competition_organizer&.update_attribute(:receive_registration_emails, @receive_registration_emails)
   end
 
   def using_payment_integrations?
@@ -1201,20 +1191,18 @@ class Competition < ApplicationRecord
 
   validate :waiting_list_dates_must_be_valid
   private def waiting_list_dates_must_be_valid
-    if waiting_list_deadline_date?
-      errors.add(:waiting_list_deadline_date, I18n.t('competitions.errors.waiting_list_deadline_before_registration_close')) if waiting_list_deadline_date < registration_close
-      errors.add(:waiting_list_deadline_date, I18n.t('competitions.errors.waiting_list_deadline_before_refund_date')) if refund_policy_limit_date? && waiting_list_deadline_date < refund_policy_limit_date
-      errors.add(:waiting_list_deadline_date, I18n.t('competitions.errors.waiting_list_deadline_after_end')) if waiting_list_deadline_date > end_date
-    end
+    return unless waiting_list_deadline_date?
+    errors.add(:waiting_list_deadline_date, I18n.t('competitions.errors.waiting_list_deadline_before_registration_close')) if waiting_list_deadline_date < registration_close
+    errors.add(:waiting_list_deadline_date, I18n.t('competitions.errors.waiting_list_deadline_before_refund_date')) if refund_policy_limit_date? && waiting_list_deadline_date < refund_policy_limit_date
+    errors.add(:waiting_list_deadline_date, I18n.t('competitions.errors.waiting_list_deadline_after_end')) if waiting_list_deadline_date > end_date
   end
 
   validate :event_change_dates_must_be_valid
   private def event_change_dates_must_be_valid
-    if event_change_deadline_date?
-      errors.add(:event_change_deadline_date, I18n.t('competitions.errors.event_change_deadline_before_registration_close')) if event_change_deadline_date < registration_close
-      errors.add(:event_change_deadline_date, I18n.t('competitions.errors.event_change_deadline_with_ots')) if on_the_spot_registration? && event_change_deadline_date < start_date
-      errors.add(:event_change_deadline_date, I18n.t('competitions.errors.event_change_deadline_after_end_date')) if event_change_deadline_date > end_date.to_datetime.end_of_day
-    end
+    return unless event_change_deadline_date?
+    errors.add(:event_change_deadline_date, I18n.t('competitions.errors.event_change_deadline_before_registration_close')) if event_change_deadline_date < registration_close
+    errors.add(:event_change_deadline_date, I18n.t('competitions.errors.event_change_deadline_with_ots')) if on_the_spot_registration? && event_change_deadline_date < start_date
+    errors.add(:event_change_deadline_date, I18n.t('competitions.errors.event_change_deadline_after_end_date')) if event_change_deadline_date > end_date.to_datetime.end_of_day
   end
 
   # Since Competition.events only includes saved events
@@ -1301,10 +1289,9 @@ class Competition < ApplicationRecord
   # updating competition-specific setttings, such as the receive notifications checkbox.
   validate :start_date_must_be_28_days_in_advance, if: :should_validate_start_date?
   def start_date_must_be_28_days_in_advance
-    if editing_user_id
-      editing_user = User.find(editing_user_id)
-      errors.add(:start_date, I18n.t('competitions.errors.start_date_must_be_28_days_in_advance')) if !editing_user.can_admin_competitions? && start_date && days_until < MUST_BE_ANNOUNCED_GTE_THIS_MANY_DAYS
-    end
+    return unless editing_user_id
+    editing_user = User.find(editing_user_id)
+    errors.add(:start_date, I18n.t('competitions.errors.start_date_must_be_28_days_in_advance')) if !editing_user.can_admin_competitions? && start_date && days_until < MUST_BE_ANNOUNCED_GTE_THIS_MANY_DAYS
   end
 
   def should_validate_start_date?
@@ -2054,11 +2041,8 @@ class Competition < ApplicationRecord
           station_number: assignment_wcif["stationNumber"],
           assignment_code: assignment_wcif["assignmentCode"],
         )
-        if assignment.valid?
-          local_assignments << assignment
-        else
-          raise WcaExceptions::BadApiParameter.new("Invalid assignment: #{a.errors.map(&:full_message)} for #{assignment_wcif}")
-        end
+        raise WcaExceptions::BadApiParameter.new("Invalid assignment: #{a.errors.map(&:full_message)} for #{assignment_wcif}") unless assignment.valid?
+        local_assignments << assignment
       end
       new_assignments.concat(local_assignments.map(&:attributes))
       removed_assignments.concat(registration.assignments.ids - local_assignments.map(&:id))
@@ -2200,11 +2184,10 @@ class Competition < ApplicationRecord
 
   validate :series_siblings_must_be_valid
   private def series_siblings_must_be_valid
-    if part_of_competition_series?
-      series_sibling_competitions.each do |comp|
-        errors.add(:competition_series, I18n.t('competitions.errors.series_distance_km', competition: comp.name)) unless self.distance_adjacent_to?(comp, CompetitionSeries::MAX_SERIES_DISTANCE_KM)
-        errors.add(:competition_series, I18n.t('competitions.errors.series_distance_days', competition: comp.name)) unless self.start_date_adjacent_to?(comp, CompetitionSeries::MAX_SERIES_DISTANCE_DAYS)
-      end
+    return unless part_of_competition_series?
+    series_sibling_competitions.each do |comp|
+      errors.add(:competition_series, I18n.t('competitions.errors.series_distance_km', competition: comp.name)) unless self.distance_adjacent_to?(comp, CompetitionSeries::MAX_SERIES_DISTANCE_KM)
+      errors.add(:competition_series, I18n.t('competitions.errors.series_distance_days', competition: comp.name)) unless self.start_date_adjacent_to?(comp, CompetitionSeries::MAX_SERIES_DISTANCE_DAYS)
     end
   end
 

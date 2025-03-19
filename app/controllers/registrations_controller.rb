@@ -22,10 +22,9 @@ class RegistrationsController < ApplicationController
 
   before_action :competition_must_be_using_wca_registration!, except: [:import, :do_import, :add, :do_add, :index, :psych_sheet, :psych_sheet_event, :stripe_webhook, :payment_denomination]
   private def competition_must_be_using_wca_registration!
-    if !competition_from_params.use_wca_registration?
-      flash[:danger] = I18n.t('registrations.flash.not_using_wca')
-      redirect_to competition_path(competition_from_params)
-    end
+    return if competition_from_params.use_wca_registration?
+    flash[:danger] = I18n.t('registrations.flash.not_using_wca')
+    redirect_to competition_path(competition_from_params)
   end
 
   before_action :competition_must_not_be_using_wca_registration!, only: [:import, :do_import]

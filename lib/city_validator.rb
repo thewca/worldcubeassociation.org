@@ -11,10 +11,9 @@ class CityValidator < ActiveModel::EachValidator
     end
 
     city_validator = self.class.get_validator_for_country(record.country.iso2)
-    if city_validator
-      reason_why_invalid = city_validator.reason_why_invalid(value)
-      record.errors.add(attribute, reason_why_invalid) if reason_why_invalid
-    end
+    return unless city_validator
+    reason_why_invalid = city_validator.reason_why_invalid(value)
+    record.errors.add(attribute, reason_why_invalid) if reason_why_invalid
   end
 
   def self.get_validator_for_country(country_iso2)

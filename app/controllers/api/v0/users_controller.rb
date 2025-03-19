@@ -3,10 +3,9 @@
 class Api::V0::UsersController < Api::V0::ApiController
   def show_me
     require_user!
-    if stale?(current_user)
-      # Also include the users current prs so we can handle qualifications on the Frontend
-      show_user(current_user, show_rankings: true, private_attributes: ['email'])
-    end
+    return unless stale?(current_user)
+    # Also include the users current prs so we can handle qualifications on the Frontend
+    show_user(current_user, show_rankings: true, private_attributes: ['email'])
   end
 
   def show_user_by_id

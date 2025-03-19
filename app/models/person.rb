@@ -51,10 +51,9 @@ class Person < ApplicationRecord
   # to A, then we cannot go back, as all their results are now for country A.
   validate :cannot_change_country_to_country_represented_before
   private def cannot_change_country_to_country_represented_before
-    if countryId_changed? && !new_record? && !@updating_using_sub_id
-      has_represented_this_country_already = Person.exists?(wca_id: wca_id, countryId: countryId)
-      errors.add(:countryId, I18n.t('users.errors.already_represented_country')) if has_represented_this_country_already
-    end
+    return unless countryId_changed? && !new_record? && !@updating_using_sub_id
+    has_represented_this_country_already = Person.exists?(wca_id: wca_id, countryId: countryId)
+    errors.add(:countryId, I18n.t('users.errors.already_represented_country')) if has_represented_this_country_already
   end
 
   # This is necessary because we use a view instead of a real table.
