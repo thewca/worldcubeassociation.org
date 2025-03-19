@@ -70,13 +70,6 @@ module Registrations
         (current_user.id == target_user.id) && current_user.can_manage_competition?(competition)
       end
 
-      def can_administer_or_current_user?(competition, current_user, target_user)
-        # Only an organizer or the user themselves can create a registration for the user
-        # One case where organizers need to create registrations for users is if a 3rd-party registration system is being used, and registration data is being
-        # passed to the Registration Service from it
-        (current_user.id == target_user.id) || current_user.can_manage_competition?(competition)
-      end
-
       def validate_create_events!(request, competition)
         event_ids = request['competing']['event_ids']
         # Event submitted must be held at the competition

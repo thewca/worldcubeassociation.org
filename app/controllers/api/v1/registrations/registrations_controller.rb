@@ -222,4 +222,11 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
     def user_uncancelling_registration?(registration, new_status)
       registration.competing_status_cancelled? && new_status == Registrations::Helper::STATUS_PENDING
     end
+
+    def can_administer_or_current_user?(competition, current_user, target_user)
+      # Only an organizer or the user themselves can create a registration for the user
+      # One case where organizers need to create registrations for users is if a 3rd-party registration system is being used, and registration data is being
+      # passed to the Registration Service from it
+      (current_user.id == target_user.id) || current_user.can_manage_competition?(competition)
+    end
 end
