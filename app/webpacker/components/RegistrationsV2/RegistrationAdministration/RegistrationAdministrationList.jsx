@@ -63,6 +63,15 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
 
   const actionsRef = useRef();
 
+  const pendingRef = useRef();
+  const waitlistRef = useRef();
+  const approvedRef = useRef();
+  const cancelledRef = useRef();
+  const rejectedRef = useRef();
+  const tableRefs = useMemo(() => ({
+    pendingRef, waitlistRef, approvedRef, cancelledRef, rejectedRef,
+  }), []);
+
   const {
     isLoading: isRegistrationsLoading,
     data: registrations,
@@ -108,12 +117,13 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
     },
   });
 
-  const {
-    waiting, accepted, cancelled, pending, rejected,
-  } = useMemo(
+  const partitionedRegistrations = useMemo(
     () => partitionRegistrations(registrations ?? []),
     [registrations],
   );
+  const {
+    waiting, accepted, cancelled, pending, rejected,
+  } = partitionedRegistrations;
 
   const selectedIds = useOrderedSet();
   const partitionedSelectedIds = useMemo(
@@ -172,6 +182,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
             title={I18n.t('competitions.registration_v2.list.pending.title')}
             inParens={pending.length}
             color={PENDING_COLOR}
+            sectionRef={pendingRef}
           />
         ),
       },
@@ -206,6 +217,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
             title={I18n.t('competitions.registration_v2.list.waitlist.title')}
             inParens={waiting.length}
             color={WAITLIST_COLOR}
+            sectionRef={waitlistRef}
           />
         ),
       },
@@ -257,6 +269,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
               }`
             }
             color={APPROVED_COLOR}
+            sectionRef={approvedRef}
           />
         ),
       },
@@ -285,6 +298,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
             title={I18n.t('competitions.registration_v2.list.cancelled.title')}
             inParens={cancelled.length}
             color={CANCELLED_COLOR}
+            sectionRef={cancelledRef}
           />
         ),
       },
@@ -318,6 +332,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
             title={I18n.t('competitions.registration_v2.list.rejected.title')}
             inParens={rejected.length}
             color={REJECTED_COLOR}
+            sectionRef={rejectedRef}
           />
         ),
       },
@@ -378,11 +393,13 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
         <Sticky context={actionsRef} offset={20}>
           <RegistrationActions
             partitionedSelectedIds={partitionedSelectedIds}
+            partitionedRegistrations={partitionedRegistrations}
             refresh={selectedIds.clear}
             registrations={registrations}
             spotsRemaining={spotsRemaining}
             competitionInfo={competitionInfo}
             updateRegistrationMutation={updateRegistrationMutation}
+            tableRefs={tableRefs}
           />
         </Sticky>
 
@@ -400,12 +417,14 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
 }
 
 function SectionToggle({
-  icon, title, inParens, color,
+  icon, title, inParens, color, sectionRef,
 }) {
   return (
-    <Header as="span" size="large">
-      <Icon name={icon} color={color} />
-      {`${title} (${inParens})`}
-    </Header>
+    <span ref={sectionRef} style={{ scrollMarginTop: '7em' }}>
+      <Header as="span" size="large">
+        <Icon name={icon} color={color} />
+        {`${title} (${inParens})`}
+      </Header>
+    </span>
   );
 }
