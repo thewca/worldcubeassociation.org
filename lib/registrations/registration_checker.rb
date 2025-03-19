@@ -25,6 +25,10 @@ module Registrations
         }
 
         registration.registration_competition_events = upserted_events
+
+        # Bit frustrating that Rails doesn't invalidate `through` proxies automatically, but what can you do…
+        registration.competition_events.reload
+        registration.events.reload
       end
     end
 
