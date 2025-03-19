@@ -662,9 +662,8 @@ RSpec.describe Registration do
   end
 
   describe 'invoice items' do
-
     describe 'competition entry invoice item' do
-      context 'when a registration is created', :tag do
+      context 'when a registration is created' do
         let(:comp) { FactoryBot.create(:competition) }
         let(:reg) { FactoryBot.create(:registration, competition: comp) }
 
@@ -685,6 +684,26 @@ RSpec.describe Registration do
 
       it 'doesnt add a competition entry if entry is free' do
         expect(true).to be(false)
+      end
+    end
+  end
+
+  describe 'order functions' do
+    describe '#invoice_items_total', :tag do
+      let(:registration) { FactoryBot.build_stubbed(:registration) }
+
+      it 'returns 0 if no invoice items exist' do
+        expect(registration.invoice_items_total).to be(0)
+      end
+
+      it 'returns total if one invoice_item exists' do
+        FactoryBot.create(:invoice_item, :entry, custom_registration: registration)
+        expect(registration.invoice_items_total).to be(1000)
+      end
+
+      it 'returns the total of 3 invoice items' do
+        FactoryBot.create_list(:invoice_item, 3, :entry, custom_registration: registration)
+        expect(registration.invoice_items_total).to be(3000)
       end
     end
   end

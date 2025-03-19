@@ -157,6 +157,14 @@ class Registration < ApplicationRecord
     !new_record? && (pending? || accepted?) && competition.using_payment_integrations? && outstanding_entry_fees > 0
   end
 
+  def invoice_items_total
+    invoice_items.sum(:amount_lowest_denomination)
+  end
+
+  def invoice_items_currency_code
+    invoice_items.first.currency_code
+  end
+
   def record_payment(
     amount_lowest_denomination,
     currency_code,

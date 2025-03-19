@@ -137,9 +137,15 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
   end
 
   def payment_ticket
-    donation = params[:donation_iso].to_i || 0
-    amount_iso = @competition.base_entry_fee_lowest_denomination
-    currency_iso = @competition.currency_code
+    donation_amount = params[:donation_iso].to_i || 0
+    @registration.invoice_items.create(
+      amount_lowest_denomination: donation_amount,
+      currency_code: @competition.currency_code,
+      display_name: "Optional donation"
+    ) if donation_amount > 0
+
+    amount_iso = @registration.invoice_items_total
+    currency_iso = @registration.invoice_items_currency_code
     payment_account = @competition.payment_account_for(:stripe)
     payment_intent = payment_account.prepare_intent(@registration, amount_iso + donation, currency_iso, @current_user)
     render json: { client_secret: payment_intent.client_secret }

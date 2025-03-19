@@ -273,7 +273,7 @@ class RegistrationsController < ApplicationController
 
   def payment_denomination
     registration = registration_from_params
-    ruby_denomination = registration.invoice_items_total_amount
+    ruby_denomination = registration.invoice_items_total
     currency_iso = registration.invoice_items_currency_code
 
     ruby_money = Money.new(ruby_denomination, currency_iso)
