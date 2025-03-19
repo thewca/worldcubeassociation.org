@@ -62,6 +62,22 @@ RSpec.describe 'API Registrations' do
         expect(response).to have_http_status(:forbidden)
       end
 
+      it 'user cant create a duplicate registration' do
+        existing_reg = FactoryBot.create(:registration, competition: competition)
+
+        registration_request = FactoryBot.build(
+          :registration_request, guests: 10, competition_id: competition.id, user_id: existing_reg.user_id
+        )
+
+        post api_v1_registrations_register_path, params: registration_request, headers: headers
+
+        error_json = {
+          error: Registrations::ErrorCodes::REGISTRATION_ALREADY_EXISTS,
+        }.to_json
+        expect(response.body).to eq(error_json)
+        expect(response).to have_http_status(:forbidden)
+      end
+
       it 'doesnt leak data if organizer tries to register for a banned user' do
         banned_user = FactoryBot.create(:user, :banned)
         competition = FactoryBot.create(:competition, :registration_open, :with_organizer)
@@ -78,7 +94,7 @@ RSpec.describe 'API Registrations' do
         }.to_json
 
         expect(response.body).to eq(error_json)
-        expect(response).to have_http_status(:forbidden)
+        expect(response).to have_http_status(:unauthorized)
       end
 
       it 'doesnt leak data if user tries to register for a banned user' do
@@ -95,7 +111,7 @@ RSpec.describe 'API Registrations' do
         }.to_json
 
         expect(response.body).to eq(error_json)
-        expect(response).to have_http_status(:forbidden)
+        expect(response).to have_http_status(:unauthorized)
       end
 
       it 'user with incomplete profile cant register' do
@@ -110,7 +126,7 @@ RSpec.describe 'API Registrations' do
         }.to_json
 
         expect(response.body).to eq(error_json)
-        expect(response).to have_http_status(:forbidden)
+        expect(response).to have_http_status(:unauthorized)
       end
 
       it 'cant register if ban ends after competition starts' do
@@ -125,7 +141,7 @@ RSpec.describe 'API Registrations' do
         }.to_json
 
         expect(response.body).to eq(error_json)
-        expect(response).to have_http_status(:forbidden)
+        expect(response).to have_http_status(:unauthorized)
       end
 
       it 'can register if ban ends before competition starts' do
@@ -135,12 +151,7 @@ RSpec.describe 'API Registrations' do
 
         post api_v1_registrations_register_path, params: registration_request, headers: headers
 
-        error_json = {
-          error: Registrations::ErrorCodes::USER_CANNOT_COMPETE,
-        }.to_json
-
-        expect(response.body).to eq(error_json)
-        expect(response).to have_http_status(:forbidden)
+        expect(response).to have_http_status(:ok)
       end
 
       it 'organizers cannot create registrations for users' do
@@ -184,7 +195,7 @@ RSpec.describe 'API Registrations' do
         }.to_json
 
         expect(response.body).to eq(error_json)
-        expect(response).to have_http_status(:forbidden)
+        expect(response).to have_http_status(:unauthorized)
       end
     end
 

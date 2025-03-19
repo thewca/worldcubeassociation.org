@@ -10,23 +10,6 @@ RSpec.describe Registrations::RegistrationChecker do
 
   describe '#create' do
     describe '#create_registration_allowed!' do
-      it 'user cant create a duplicate registration' do
-        existing_reg = FactoryBot.create(:registration, competition: default_competition)
-
-        registration_request = FactoryBot.build(
-          :registration_request, guests: 10, competition_id: default_competition.id, user_id: existing_reg.user_id
-        )
-
-        expect {
-          Registrations::RegistrationChecker.create_registration_allowed!(
-            registration_request, User.find(registration_request['user_id']), default_competition
-          )
-        }.to raise_error(WcaExceptions::RegistrationError) do |error|
-          expect(error.status).to eq(:forbidden)
-          expect(error.error).to eq(Registrations::ErrorCodes::REGISTRATION_ALREADY_EXISTS)
-        end
-      end
-
       describe 'validate_guests!' do
         it 'guests can equal the maximum allowed' do
           comp = FactoryBot.create(:competition, :with_guest_limit, :registration_open)
