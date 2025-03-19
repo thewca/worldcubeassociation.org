@@ -150,7 +150,7 @@ RSpec.describe 'API Registrations' do
           competition_id: competition.id,
           user_id: user.id,
           submitted_by: competition.organizers.first.id,
-          )
+        )
         headers = { 'Authorization' => registration_request['jwt_token'] }
 
         post api_v1_registrations_register_path, params: registration_request, headers: headers
