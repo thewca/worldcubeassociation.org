@@ -151,7 +151,7 @@ RSpec.describe 'API Registrations' do
 
         post api_v1_registrations_register_path, params: registration_request, headers: headers
 
-        expect(response).to have_http_status(:ok)
+        expect(response).to have_http_status(:accepted)
       end
 
       it 'organizers cannot create registrations for users' do
