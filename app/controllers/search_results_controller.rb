@@ -10,7 +10,7 @@ class SearchResultsController < ApplicationController
     # strict sanitization to prevent injecting any HTML tags at all
     @omni_query = sanitize(@omni_query, tags: [], attributes: [])
 
-    return unless @omni_query.present?
+    return if @omni_query.blank?
 
     @competitions = Competition.search(@omni_query).page(params[:competitions_page]).per(SEARCH_RESULT_LIMIT)
     @persons = User.search(@omni_query, params: { persons_table: true }).page(params[:people_page]).per(SEARCH_RESULT_LIMIT)
