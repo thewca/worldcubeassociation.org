@@ -21,10 +21,10 @@ class Api::V0::UserRolesController < Api::V0::ApiController
 
     # In next few lines, instead of foo.present? we are using !foo.nil? because foo.present? returns
     # false if foo is a boolean false but we need to actually check if the boolean is present or not.
-    if !is_active.nil?
+    unless is_active.nil?
       active_record = is_active ? active_record.active : active_record.inactive
     end
-    active_record = active_record.where(group: { is_hidden: is_group_hidden }) if !is_group_hidden.nil?
+    active_record = active_record.where(group: { is_hidden: is_group_hidden }) unless is_group_hidden.nil?
     active_record = active_record.where(group: { group_type: group_type }) if group_type.present?
     active_record = active_record.where(group_id: group_id) if group_id.present?
     active_record = active_record.where(user_id: user_id) if user_id.present?

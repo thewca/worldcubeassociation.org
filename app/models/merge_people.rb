@@ -60,7 +60,7 @@ class MergePeople
   end
 
   def do_merge
-    return false if !valid?
+    return false unless valid?
 
     ActiveRecord::Base.transaction do
       Result.where(personId: person2.wca_id).update_all(personId: person1.wca_id)

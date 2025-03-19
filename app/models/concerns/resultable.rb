@@ -95,8 +95,8 @@ module Resultable
     unskipped_count = solve_times.count(&:unskipped?)
     if round_type.combined?
       "Expected at most #{hlp.pluralize(format.expected_solve_count, 'solve')}, but found #{unskipped_count}." if unskipped_count > format.expected_solve_count
-    else
-      "Expected #{hlp.pluralize(format.expected_solve_count, 'solve')}, but found #{unskipped_count}." if unskipped_count != format.expected_solve_count
+    elsif unskipped_count != format.expected_solve_count
+      "Expected #{hlp.pluralize(format.expected_solve_count, 'solve')}, but found #{unskipped_count}."
     end
   end
 
@@ -146,21 +146,19 @@ module Resultable
   def compute_correct_average
     if average_is_not_computable_reason || missed_combined_round_cutoff? || !should_compute_average?
       0
+    elsif counting_solve_times.any?(&:incomplete?)
+      SolveTime::DNF_VALUE
+    elsif eventId == "333fm"
+      sum_moves = counting_solve_times.sum(&:move_count).to_f
+      (100 * sum_moves / counting_solve_times.length).round
     else
-      if counting_solve_times.any?(&:incomplete?)
-        SolveTime::DNF_VALUE
-      elsif eventId == "333fm"
-        sum_moves = counting_solve_times.sum(&:move_count).to_f
-        (100 * sum_moves / counting_solve_times.length).round
-      else
-        # Cast at least one of the operands to float
-        sum_centis = counting_solve_times.sum(&:time_centiseconds).to_f
-        raw_average = sum_centis / counting_solve_times.length
-        # Round the result.
-        # If the average is above 10 minutes, round it to the nearest second as per
-        # https://www.worldcubeassociation.org/regulations/#9f2
-        raw_average > 60_000 ? raw_average.round(-2) : raw_average.round
-      end
+      # Cast at least one of the operands to float
+      sum_centis = counting_solve_times.sum(&:time_centiseconds).to_f
+      raw_average = sum_centis / counting_solve_times.length
+      # Round the result.
+      # If the average is above 10 minutes, round it to the nearest second as per
+      # https://www.worldcubeassociation.org/regulations/#9f2
+      raw_average > 60_000 ? raw_average.round(-2) : raw_average.round
     end
   end
 

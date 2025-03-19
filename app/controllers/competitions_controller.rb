@@ -669,13 +669,11 @@ class CompetitionsController < ApplicationController
       else
         render json: { error: t('competitions.messages.uncancel_failure') }, status: :bad_request
       end
+    elsif competition.can_be_cancelled?
+      competition.update!(cancelled_at: Time.now, cancelled_by: current_user.id)
+      render json: { status: "ok", message: t('competitions.messages.cancel_success') }
     else
-      if competition.can_be_cancelled?
-        competition.update!(cancelled_at: Time.now, cancelled_by: current_user.id)
-        render json: { status: "ok", message: t('competitions.messages.cancel_success') }
-      else
-        render json: { error: t('competitions.messages.cancel_failure') }, status: :bad_request
-      end
+      render json: { error: t('competitions.messages.cancel_failure') }, status: :bad_request
     end
   end
 

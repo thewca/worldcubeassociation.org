@@ -568,7 +568,7 @@ class Competition < ApplicationRecord
 
       warnings[:events] = I18n.t('competitions.messages.must_have_events') if no_events?
 
-      warnings[:waiting_list_deadline_missing] = I18n.t('competitions.messages.no_waiting_list_specified') if !self.waiting_list_deadline_date
+      warnings[:waiting_list_deadline_missing] = I18n.t('competitions.messages.no_waiting_list_specified') unless self.waiting_list_deadline_date
 
       # NOTE: this will show up on the edit schedule page, and stay even if the
       # schedule matches when saved. Should we add some logic to not show this
@@ -622,8 +622,8 @@ class Competition < ApplicationRecord
     if registration_range_specified? && !registration_past?
       if self.announced?
         warnings[:regearly] = I18n.t('competitions.messages.reg_opens_too_early') if (self.registration_open - self.announced_at) < REGISTRATION_OPENING_EARLIEST
-      else
-        warnings[:regearly] = I18n.t('competitions.messages.reg_opens_too_early') if (self.registration_open - Time.now.utc) < REGISTRATION_OPENING_EARLIEST
+      elsif (self.registration_open - Time.now.utc) < REGISTRATION_OPENING_EARLIEST
+        warnings[:regearly] = I18n.t('competitions.messages.reg_opens_too_early')
       end
     end
     warnings[:regclosed] = I18n.t('competitions.messages.registration_already_closed') if registration_range_specified? && registration_past? && !self.announced?
@@ -1693,7 +1693,7 @@ class Competition < ApplicationRecord
 
     if params[:continent].present?
       continent = Continent.find(params[:continent])
-      raise WcaExceptions::BadApiParameter.new("Invalid continent: '#{params[:continent]}'") if !continent
+      raise WcaExceptions::BadApiParameter.new("Invalid continent: '#{params[:continent]}'") unless continent
 
       competitions = competitions.joins(:country)
                                  .where(country: { continent: continent })
@@ -1701,7 +1701,7 @@ class Competition < ApplicationRecord
 
     if params[:country_iso2].present?
       country = Country.find_by(iso2: params[:country_iso2])
-      raise WcaExceptions::BadApiParameter.new("Invalid country_iso2: '#{params[:country_iso2]}'") if !country
+      raise WcaExceptions::BadApiParameter.new("Invalid country_iso2: '#{params[:country_iso2]}'") unless country
 
       competitions = competitions.where(countryId: country.id)
     end
@@ -1728,28 +1728,28 @@ class Competition < ApplicationRecord
 
     if params[:start].present?
       start_date = Date.safe_parse(params[:start])
-      raise WcaExceptions::BadApiParameter.new("Invalid start: '#{params[:start]}'") if !start_date
+      raise WcaExceptions::BadApiParameter.new("Invalid start: '#{params[:start]}'") unless start_date
 
       competitions = competitions.where(start_date: start_date..)
     end
 
     if params[:end].present?
       end_date = Date.safe_parse(params[:end])
-      raise WcaExceptions::BadApiParameter.new("Invalid end: '#{params[:end]}'") if !end_date
+      raise WcaExceptions::BadApiParameter.new("Invalid end: '#{params[:end]}'") unless end_date
 
       competitions = competitions.where(end_date: ..end_date)
     end
 
     if params[:ongoing_and_future].present?
       target_date = Date.safe_parse(params[:ongoing_and_future])
-      raise WcaExceptions::BadApiParameter.new("Invalid ongoing_and_future: '#{params[:ongoing_and_future]}'") if !target_date
+      raise WcaExceptions::BadApiParameter.new("Invalid ongoing_and_future: '#{params[:ongoing_and_future]}'") unless target_date
 
       competitions = competitions.where(end_date: target_date..)
     end
 
     if params[:announced_after].present?
       announced_date = Date.safe_parse(params[:announced_after])
-      raise WcaExceptions::BadApiParameter.new("Invalid announced date: '#{params[:announced_after]}'") if !announced_date
+      raise WcaExceptions::BadApiParameter.new("Invalid announced date: '#{params[:announced_after]}'") unless announced_date
 
       competitions = competitions.where("announced_at > ?", announced_date)
     end

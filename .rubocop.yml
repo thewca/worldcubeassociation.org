@@ -119,9 +119,6 @@ Naming/MemoizedInstanceVariableName:
 Style/AccessModifierDeclarations:
   Enabled: false
 
-Style/AsciiComments:
-  Enabled: false
-
 Style/BlockDelimiters:
   Enabled: false
 
@@ -134,16 +131,10 @@ Style/ClassVars:
 Style/Documentation:
   Enabled: false
 
-Style/IfInsideElse:
-  Enabled: false
-
 Style/Lambda:
   Enabled: false
 
 Style/MultilineBlockChain:
-  Enabled: false
-
-Style/NegatedIf:
   Enabled: false
 
 Style/Next:

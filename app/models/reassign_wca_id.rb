@@ -20,8 +20,8 @@ class ReassignWcaId
 
   validate :require_valid_accounts
   def require_valid_accounts
-    errors.add(:account1, "Not found") if !@account1_user
-    errors.add(:account2, "Not found") if !@account2_user
+    errors.add(:account1, "Not found") unless @account1_user
+    errors.add(:account2, "Not found") unless @account2_user
   end
 
   validate :require_different_people

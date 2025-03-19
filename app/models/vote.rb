@@ -9,7 +9,7 @@ class Vote < ApplicationRecord
 
   validate :poll_id_must_be_valid
   def poll_id_must_be_valid
-    errors.add(:poll_id, "is not valid") if !poll
+    errors.add(:poll_id, "is not valid") unless poll
   end
 
   validate :option_must_match_poll

@@ -268,14 +268,12 @@ class UserGroup < ApplicationRecord
           else
             no_more_leaders.append("#{name} is no longer the Leader and no longer a member.")
           end
+        elsif new_member
+          no_more_leaders.append("#{name} was the Leader for few days and is continuing as member.")
+        elsif new_senior_member
+          no_more_leaders.append("#{name} was the Leader for few days and is continuing as Senior member.")
         else
-          if new_member
-            no_more_leaders.append("#{name} was the Leader for few days and is continuing as member.")
-          elsif new_senior_member
-            no_more_leaders.append("#{name} was the Leader for few days and is continuing as Senior member.")
-          else
-            no_more_leaders.append("#{name} was the Leader for few days and is no longer a member.")
-          end
+          no_more_leaders.append("#{name} was the Leader for few days and is no longer a member.")
         end
       else
         if new_senior_member || new_and_ex_senior_member
@@ -322,7 +320,7 @@ class UserGroup < ApplicationRecord
     group_changes = []
     [UserGroup.teams_committees, UserGroup.councils].flatten!.each do |group|
       current_group_changes = group.changes_in_group_for_digest
-      group_changes.push(current_group_changes) if !current_group_changes.empty?
+      group_changes.push(current_group_changes) unless current_group_changes.empty?
     end
     group_changes.push("There are no changes to show.") if group_changes.empty?
     group_changes.join("<br>")
