@@ -178,6 +178,13 @@ Naming/MethodParameterName:
     - n
     - id
 
+Naming/PredicateName:
+  AllowedMethods:
+    # These are database columns
+    - is_active?
+    - is_hidden?
+    - has_permission?
+
 Lint/EmptyFile:
   Exclude:
     - 'db/seeds.rb'

@@ -716,42 +716,42 @@ RSpec.describe User, type: :model do
   describe "has_permission? method" do
     it "returns false for any permissions that are not defined" do
       user = FactoryBot.create(:user)
-      expect(user.fulfills_permission?(:not_defined_permission)).to be false
+      expect(user.has_permission?(:not_defined_permission)).to be false
     end
 
     it "returns true for board user for any group" do
       americas_region = GroupsMetadataDelegateRegions.find_by!(friendly_id: 'americas').user_group
       board_user = FactoryBot.create(:user, :board_member)
-      expect(board_user.fulfills_permission?(:can_edit_groups, americas_region.id)).to be true
+      expect(board_user.has_permission?(:can_edit_groups, americas_region.id)).to be true
     end
 
     it "returns true for WRT user for any group" do
       americas_region = GroupsMetadataDelegateRegions.find_by!(friendly_id: 'americas').user_group
       wrt_user = FactoryBot.create(:user, :wrt_member)
-      expect(wrt_user.fulfills_permission?(:can_edit_groups, americas_region.id)).to be true
+      expect(wrt_user.has_permission?(:can_edit_groups, americas_region.id)).to be true
     end
 
     it "returns true for admin user for any group" do
       americas_region = GroupsMetadataDelegateRegions.find_by!(friendly_id: 'americas').user_group
       admin_user = FactoryBot.create(:admin)
-      expect(admin_user.fulfills_permission?(:can_edit_groups, americas_region.id)).to be true
+      expect(admin_user.has_permission?(:can_edit_groups, americas_region.id)).to be true
     end
 
     it "returns true for senior delegate if scope requested is own region" do
       senior_delegate_role = FactoryBot.create(:senior_delegate_role)
-      expect(senior_delegate_role.user.fulfills_permission?(:can_edit_groups, senior_delegate_role.group.id)).to be true
+      expect(senior_delegate_role.user.has_permission?(:can_edit_groups, senior_delegate_role.group.id)).to be true
     end
 
     it "returns true for senior delegate if scope requested is their subregion" do
       asia_east_region = GroupsMetadataDelegateRegions.find_by!(friendly_id: 'asia-east').user_group
       senior_delegate = FactoryBot.create(:senior_delegate_role, group: asia_east_region.parent_group).user
-      expect(senior_delegate.fulfills_permission?(:can_edit_groups, asia_east_region.id)).to be true
+      expect(senior_delegate.has_permission?(:can_edit_groups, asia_east_region.id)).to be true
     end
 
     it "returns false for senior delegate if scope requested is other's region" do
       asia_region = GroupsMetadataDelegateRegions.find_by!(friendly_id: 'asia').user_group
       senior_delegate = FactoryBot.create(:senior_delegate_role).user
-      expect(senior_delegate.fulfills_permission?(:can_edit_groups, asia_region.id)).to be false
+      expect(senior_delegate.has_permission?(:can_edit_groups, asia_region.id)).to be false
     end
   end
 

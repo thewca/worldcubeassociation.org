@@ -792,7 +792,7 @@ class User < ApplicationRecord
     permissions
   end
 
-  def fulfills_permission?(permission_name, scope = nil)
+  def has_permission?(permission_name, scope = nil)
     permission = permissions[permission_name.to_sym]
     permission.present? && (permission[:scope] == "*" || permission[:scope].include?(scope))
   end

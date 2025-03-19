@@ -4,7 +4,7 @@ class Api::V0::UserGroupsController < Api::V0::ApiController
   # Don't list hidden groups if the user doesn't have edit permission.
   private def filter_groups_for_logged_in_user(groups)
     groups.reject do |group|
-      group.is_hidden && !current_user&.fulfills_permission?(:can_edit_groups, group.id)
+      group.is_hidden && !current_user&.has_permission?(:can_edit_groups, group.id)
     end
   end
 
@@ -51,7 +51,7 @@ class Api::V0::UserGroupsController < Api::V0::ApiController
     is_hidden = ActiveRecord::Type::Boolean.new.cast(params.require(:is_hidden))
     friendly_id = params[:friendlyId]
 
-    return head :unauthorized unless current_user&.fulfills_permission?(:can_create_groups, group_type)
+    return head :unauthorized unless current_user&.has_permission?(:can_create_groups, group_type)
 
     ActiveRecord::Base.transaction do
       metadata = (GroupsMetadataDelegateRegions.create!(friendly_id: friendly_id) if group_type == UserGroup.group_types[:delegate_regions])
@@ -67,7 +67,7 @@ class Api::V0::UserGroupsController < Api::V0::ApiController
     user_group_id = params.require(:id)
     user_group = UserGroup.find(user_group_id)
 
-    return head :unauthorized unless current_user&.fulfills_permission?(:can_edit_groups, user_group_id)
+    return head :unauthorized unless current_user&.has_permission?(:can_edit_groups, user_group_id)
 
     user_group.update!(user_group_params)
 

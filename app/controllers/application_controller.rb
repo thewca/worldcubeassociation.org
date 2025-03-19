@@ -94,7 +94,7 @@ class ApplicationController < ActionController::Base
     def redirect_to_root_unless_user(action, *)
       redirecting = !current_user&.send(action, *)
       if redirecting
-        flash[:danger] = if action == :fulfills_permission?
+        flash[:danger] = if action == :has_permission?
                            t("errors.messages.no_permission")
                          else
                            "You are not allowed to #{action.to_s.sub(/^can_/, '').chomp('?').humanize.downcase}"
