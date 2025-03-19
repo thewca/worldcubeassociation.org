@@ -39,9 +39,7 @@ class DelegateReportsController < ApplicationController
 
     @delegate_report.assign_attributes(delegate_report_params)
     is_posting = @delegate_report.posted? && !was_previously_posted
-    if is_posting
-      assign_wrc_users @delegate_report
-    end
+    assign_wrc_users @delegate_report if is_posting
 
     if @delegate_report.save
       flash[:success] = "Updated report"

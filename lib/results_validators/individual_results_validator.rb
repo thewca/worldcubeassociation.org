@@ -301,9 +301,7 @@ module ResultsValidators
             solve_time.complete? && solve_time == reference_solve_time
           end
           # We have at least 3 matching values, consider this similar
-          if score > 2
-            similar_results << r
-          end
+          similar_results << r if score > 2
         end
         similar_results
       end

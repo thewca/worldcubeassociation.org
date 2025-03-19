@@ -27,9 +27,7 @@ class TimeLimit
 
   validates :centiseconds, numericality: { only_integer: true }
   validate do
-    unless self.cumulative_round_ids.is_a?(Array) && self.cumulative_round_ids.all?(String)
-      errors.add(:cumulative_round_ids, "must be an Array of Strings")
-    end
+    errors.add(:cumulative_round_ids, "must be an Array of Strings") unless self.cumulative_round_ids.is_a?(Array) && self.cumulative_round_ids.all?(String)
   end
 
   def initialize(centiseconds: 10.minutes.in_centiseconds, cumulative_round_ids: [].freeze)

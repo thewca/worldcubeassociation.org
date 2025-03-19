@@ -25,16 +25,12 @@ class FileSizeValidator < ActiveModel::EachValidator
   def check_validity!
     keys = CHECKS.keys & options.keys
 
-    if keys.empty?
-      raise ArgumentError.new('Range unspecified. Specify the :within, :maximum, :minimum, or :is option.')
-    end
+    raise ArgumentError.new('Range unspecified. Specify the :within, :maximum, :minimum, or :is option.') if keys.empty?
 
     keys.each do |key|
       value = options[key]
 
-      unless value.is_a?(Integer) && value >= 0
-        raise ArgumentError.new(":#{key} must be a nonnegative Integer")
-      end
+      raise ArgumentError.new(":#{key} must be a nonnegative Integer") unless value.is_a?(Integer) && value >= 0
     end
   end
 

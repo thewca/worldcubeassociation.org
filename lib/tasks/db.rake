@@ -50,9 +50,7 @@ namespace :db do
   namespace :load do
     desc 'Download and import the publicly accessible database dump from the production server, use the reload parameter to replace an already existing DB without downtime'
     task :development, [:reload] => [:environment] do |_, args|
-      if EnvConfig.WCA_LIVE_SITE?
-        abort "This actions is disabled for the production server!"
-      end
+      abort "This actions is disabled for the production server!" if EnvConfig.WCA_LIVE_SITE?
 
       reload = args[:reload] || false
 
@@ -90,9 +88,7 @@ namespace :db do
             DatabaseDumper.mysql("SET unique_checks=0", working_db)
             DatabaseDumper.mysql("SET foreign_key_checks=0", working_db)
             DatabaseDumper.mysql("SET autocommit=0", working_db)
-            if Rails.env.development?
-              DatabaseDumper.mysql("SET GLOBAL innodb_flush_log_at_trx_commit=0", working_db)
-            end
+            DatabaseDumper.mysql("SET GLOBAL innodb_flush_log_at_trx_commit=0", working_db) if Rails.env.development?
 
             # Explicitly loading the schema is not necessary because the downloaded SQL dump file contains CREATE TABLE
             # definitions, so if we load the schema here the SOURCE command below would overwrite it anyways
@@ -102,9 +98,7 @@ namespace :db do
             DatabaseDumper.mysql("SET unique_checks=1", working_db)
             DatabaseDumper.mysql("SET foreign_key_checks=1", working_db)
             DatabaseDumper.mysql("SET autocommit=1", working_db)
-            if Rails.env.development?
-              DatabaseDumper.mysql("SET GLOBAL innodb_flush_log_at_trx_commit=1", working_db)
-            end
+            DatabaseDumper.mysql("SET GLOBAL innodb_flush_log_at_trx_commit=1", working_db) if Rails.env.development?
 
             DatabaseDumper.mysql("COMMIT", working_db)
           end

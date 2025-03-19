@@ -20,9 +20,7 @@ module Registrations
       if status == STATUS_CANCELLED
         return self_updating ? 'Competitor delete' : 'Admin delete'
       end
-      if status == STATUS_REJECTED
-        return 'Admin reject'
-      end
+      return 'Admin reject' if status == STATUS_REJECTED
       self_updating ? 'Competitor update' : 'Admin update'
     end
 

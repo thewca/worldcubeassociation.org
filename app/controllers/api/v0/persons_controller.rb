@@ -8,9 +8,7 @@ class Api::V0::PersonsController < Api::V0::ApiController
       persons = Person.current.includes(:user)
     end
     persons = persons.includes(:ranksSingle, :ranksAverage)
-    if params[:wca_ids].present?
-      persons = persons.where(wca_id: params[:wca_ids].split(','))
-    end
+    persons = persons.where(wca_id: params[:wca_ids].split(',')) if params[:wca_ids].present?
     render json: paginate(persons).map { |person| person_to_json person }
   end
 

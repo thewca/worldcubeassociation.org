@@ -51,15 +51,11 @@ class Round < ApplicationRecord
   end
 
   validate do
-    unless event.preferred_formats.find_by(format_id: format_id)
-      errors.add(:format, "'#{format_id}' is not allowed for '#{event.id}'")
-    end
+    errors.add(:format, "'#{format_id}' is not allowed for '#{event.id}'") unless event.preferred_formats.find_by(format_id: format_id)
   end
 
   validate do
-    if final_round? && advancement_condition
-      errors.add(:advancement_condition, "cannot be set on a final round")
-    end
+    errors.add(:advancement_condition, "cannot be set on a final round") if final_round? && advancement_condition
   end
 
   def initialize(attributes = nil)

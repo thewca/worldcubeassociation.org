@@ -70,9 +70,7 @@ class PollsController < ApplicationController
       :confirmed_at,
       poll_options_attributes: [:id, :description, :_destroy],
     ).tap do |poll_params|
-      if params[:commit] == "Confirm" && current_user.can_create_poll?
-        poll_params[:confirmed_at] = Time.now
-      end
+      poll_params[:confirmed_at] = Time.now if params[:commit] == "Confirm" && current_user.can_create_poll?
     end
   end
 end

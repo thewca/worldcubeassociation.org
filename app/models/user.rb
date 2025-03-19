@@ -65,9 +65,7 @@ class User < ApplicationRecord
   scope :newcomer_month_eligible, -> { newcomers.or(where('wca_id LIKE ?', "#{Time.current.year}%")) }
 
   scope :in_region, lambda { |region_id|
-    unless region_id.blank? || region_id == 'all'
-      where(country_iso2: (Continent.country_iso2s(region_id) || Country.c_find(region_id)&.iso2))
-    end
+    where(country_iso2: (Continent.country_iso2s(region_id) || Country.c_find(region_id)&.iso2)) unless region_id.blank? || region_id == 'all'
   }
 
   ANONYMOUS_ACCOUNT_EMAIL_ID_SUFFIX = '@worldcubeassociation.org'
@@ -176,9 +174,7 @@ class User < ApplicationRecord
 
   validate :name_must_match_person_name
   def name_must_match_person_name
-    if wca_id && !person
-      errors.add(:wca_id, I18n.t('users.errors.not_found'))
-    end
+    errors.add(:wca_id, I18n.t('users.errors.not_found')) if wca_id && !person
   end
 
   validate :check_if_email_used_by_locked_account, on: :create
@@ -230,13 +226,9 @@ class User < ApplicationRecord
     end
 
     if claiming_wca_id || (unconfirmed_wca_id.present? && unconfirmed_wca_id_change)
-      if delegate_id_to_handle_wca_id_claim.blank?
-        errors.add(:delegate_id_to_handle_wca_id_claim, I18n.t('simple_form.required.text'))
-      end
+      errors.add(:delegate_id_to_handle_wca_id_claim, I18n.t('simple_form.required.text')) if delegate_id_to_handle_wca_id_claim.blank?
 
-      if unconfirmed_wca_id.blank?
-        errors.add(:unconfirmed_wca_id, I18n.t('simple_form.required.text'))
-      end
+      errors.add(:unconfirmed_wca_id, I18n.t('simple_form.required.text')) if unconfirmed_wca_id.blank?
 
       dob_verification_date = Date.safe_parse(dob_verification, nil)
       if unconfirmed_person && (!current_user || !current_user.can_view_all_users?)
@@ -254,13 +246,9 @@ class User < ApplicationRecord
           errors.add(:dob_verification, I18n.t('users.errors.dob_incorrect_html', dob_form_path: dob_form_path).html_safe)
         end
       end
-      if claiming_wca_id && person
-        errors.add(:unconfirmed_wca_id, I18n.t('users.errors.already_have_id', wca_id: wca_id))
-      end
+      errors.add(:unconfirmed_wca_id, I18n.t('users.errors.already_have_id', wca_id: wca_id)) if claiming_wca_id && person
 
-      if delegate_id_to_handle_wca_id_claim.present? && !delegate_to_handle_wca_id_claim&.any_kind_of_delegate?
-        errors.add(:delegate_id_to_handle_wca_id_claim, I18n.t('users.errors.not_found'))
-      end
+      errors.add(:delegate_id_to_handle_wca_id_claim, I18n.t('users.errors.not_found')) if delegate_id_to_handle_wca_id_claim.present? && !delegate_to_handle_wca_id_claim&.any_kind_of_delegate?
     end
   end
 
@@ -304,18 +292,10 @@ class User < ApplicationRecord
   validate :must_look_like_the_corresponding_person
   private def must_look_like_the_corresponding_person
     if person
-      if self.name != person.name
-        errors.add(:name, I18n.t("users.errors.must_match_person"))
-      end
-      if self.country_iso2 != person.country_iso2
-        errors.add(:country_iso2, I18n.t("users.errors.must_match_person"))
-      end
-      if self.gender != person.gender
-        errors.add(:gender, I18n.t("users.errors.must_match_person"))
-      end
-      if self.dob != person.dob
-        errors.add(:dob, I18n.t("users.errors.must_match_person"))
-      end
+      errors.add(:name, I18n.t("users.errors.must_match_person")) if self.name != person.name
+      errors.add(:country_iso2, I18n.t("users.errors.must_match_person")) if self.country_iso2 != person.country_iso2
+      errors.add(:gender, I18n.t("users.errors.must_match_person")) if self.gender != person.gender
+      errors.add(:dob, I18n.t("users.errors.must_match_person")) if self.dob != person.dob
     end
   end
 
@@ -329,9 +309,7 @@ class User < ApplicationRecord
     p = person || unconfirmed_person
     if p
       cannot_be_assigned_reasons = p.cannot_be_assigned_to_user_reasons
-      unless cannot_be_assigned_reasons.empty?
-        errors.add(:wca_id, cannot_be_assigned_reasons.xss_aware_to_sentence)
-      end
+      errors.add(:wca_id, cannot_be_assigned_reasons.xss_aware_to_sentence) unless cannot_be_assigned_reasons.empty?
     end
   end
 
@@ -378,9 +356,7 @@ class User < ApplicationRecord
   # After the user confirms their account, if they claimed a WCA ID, now is the
   # time to notify their delegate!
   def after_confirmation
-    if unconfirmed_wca_id.present?
-      WcaIdClaimMailer.notify_delegate_of_wca_id_claim(self).deliver_later
-    end
+    WcaIdClaimMailer.notify_delegate_of_wca_id_claim(self).deliver_later if unconfirmed_wca_id.present?
   end
 
   # For associated_events_picker
@@ -571,9 +547,7 @@ class User < ApplicationRecord
     return "*" if can_edit_any_groups?
     groups = groups_with_read_access_for_past
 
-    if can_view_current_banned_competitors?
-      groups += UserGroup.banned_competitors.ids
-    end
+    groups += UserGroup.banned_competitors.ids if can_view_current_banned_competitors?
 
     groups
   end
@@ -582,9 +556,7 @@ class User < ApplicationRecord
     return "*" if can_edit_any_groups?
     groups = groups_with_edit_access
 
-    if can_view_past_banned_competitors?
-      groups += UserGroup.banned_competitors.ids
-    end
+    groups += UserGroup.banned_competitors.ids if can_view_past_banned_competitors?
 
     groups
   end
@@ -597,27 +569,17 @@ class User < ApplicationRecord
       group = role.group
       group_type = role.group_type
       if [UserGroup.group_types[:councils], UserGroup.group_types[:teams_committees]].include?(group_type)
-        if role.is_lead?
-          groups << group.id
-        end
+        groups << group.id if role.is_lead?
       elsif group_type == UserGroup.group_types[:delegate_regions]
-        if role.is_lead? && role.metadata.status == RolesMetadataDelegateRegions.statuses[:senior_delegate]
-          groups += [group.id, group.all_child_groups.map(&:id)].flatten.uniq
-        end
+        groups += [group.id, group.all_child_groups.map(&:id)].flatten.uniq if role.is_lead? && role.metadata.status == RolesMetadataDelegateRegions.statuses[:senior_delegate]
       end
     end
 
-    if can_manage_delegate_probation?
-      groups += UserGroup.delegate_probation.ids
-    end
+    groups += UserGroup.delegate_probation.ids if can_manage_delegate_probation?
 
-    if software_team?
-      groups << UserGroup.translators.ids
-    end
+    groups << UserGroup.translators.ids if software_team?
 
-    if can_edit_banned_competitors?
-      groups += UserGroup.banned_competitors.ids
-    end
+    groups += UserGroup.banned_competitors.ids if can_edit_banned_competitors?
 
     groups
   end
@@ -1103,9 +1065,7 @@ class User < ApplicationRecord
         registration_notifications_enabled
       )
       fields << { user_preferred_events_attributes: [:id, :event_id, :_destroy] }
-      if user.staff_or_any_delegate?
-        fields += %i(receive_delegate_reports delegate_reports_region)
-      end
+      fields += %i(receive_delegate_reports delegate_reports_region) if user.staff_or_any_delegate?
     end
     fields
   end
@@ -1113,21 +1073,15 @@ class User < ApplicationRecord
   private def editable_competitor_info_fields(user)
     fields = Set.new
     if user == self || can_edit_any_user?
-      unless cannot_edit_data_reason_html(user)
-        fields += %i(name dob gender country_iso2)
-      end
+      fields += %i(name dob gender country_iso2) unless cannot_edit_data_reason_html(user)
       fields += CLAIM_WCA_ID_PARAMS
     end
-    if user.wca_id.blank? && organizer_for?(user)
-      fields << :name
-    end
+    fields << :name if user.wca_id.blank? && organizer_for?(user)
     if can_edit_any_user?
       fields += %i(
         unconfirmed_wca_id
       )
-      unless user.is_special_account?
-        fields += %i(wca_id)
-      end
+      fields += %i(wca_id) unless user.is_special_account?
     end
     fields
   end
@@ -1137,9 +1091,7 @@ class User < ApplicationRecord
     if user == self || admin? || results_team? || is_senior_delegate_for?(user)
       fields += %i(pending_avatar avatar_thumbnail remove_avatar)
 
-      if can_admin_results?
-        fields += %i(current_avatar)
-      end
+      fields += %i(current_avatar) if can_admin_results?
     end
     fields
   end
@@ -1168,17 +1120,13 @@ class User < ApplicationRecord
   end
 
   def notify_of_results_posted(competition)
-    if results_notifications_enabled?
-      CompetitionsMailer.notify_users_of_results_presence(self, competition).deliver_later
-    end
+    CompetitionsMailer.notify_users_of_results_presence(self, competition).deliver_later if results_notifications_enabled?
   end
 
   def maybe_assign_wca_id_by_results(competition, notify: true)
     if !wca_id && !unconfirmed_wca_id
       matches = []
-      unless country.nil? || dob.nil?
-        matches = competition.competitors.where(name: name, dob: dob, gender: gender, countryId: country.id).to_a
-      end
+      matches = competition.competitors.where(name: name, dob: dob, gender: gender, countryId: country.id).to_a unless country.nil? || dob.nil?
       if matches.size == 1 && matches.first.user.nil?
         update(wca_id: matches.first.wca_id)
       elsif notify
@@ -1188,9 +1136,7 @@ class User < ApplicationRecord
   end
 
   def notify_of_id_claim_possibility(competition)
-    if !wca_id && !unconfirmed_wca_id
-      CompetitionsMailer.notify_users_of_id_claim_possibility(self, competition).deliver_later
-    end
+    CompetitionsMailer.notify_users_of_id_claim_possibility(self, competition).deliver_later if !wca_id && !unconfirmed_wca_id
   end
 
   def is_bookmarked?(competition)
@@ -1231,17 +1177,11 @@ class User < ApplicationRecord
       users = User.confirmed_email.not_dummy_account
       search_by_email = ActiveRecord::Type::Boolean.new.cast(params[:email])
 
-      if ActiveRecord::Type::Boolean.new.cast(params[:only_staff_delegates])
-        users = users.where(id: self.staff_delegate_ids)
-      end
+      users = users.where(id: self.staff_delegate_ids) if ActiveRecord::Type::Boolean.new.cast(params[:only_staff_delegates])
 
-      if ActiveRecord::Type::Boolean.new.cast(params[:only_trainee_delegates])
-        users = users.where(id: self.trainee_delegate_ids)
-      end
+      users = users.where(id: self.trainee_delegate_ids) if ActiveRecord::Type::Boolean.new.cast(params[:only_trainee_delegates])
 
-      if ActiveRecord::Type::Boolean.new.cast(params[:only_with_wca_ids])
-        users = users.where.not(wca_id: nil)
-      end
+      users = users.where.not(wca_id: nil) if ActiveRecord::Type::Boolean.new.cast(params[:only_with_wca_ids])
     end
 
     query.split.each do |part|
@@ -1285,9 +1225,7 @@ class User < ApplicationRecord
     # of the freezed variables (which would leak PII)!
     default_options = DEFAULT_SERIALIZE_OPTIONS.deep_dup
     # Delegates's emails and regions are public information.
-    if staff_delegate?
-      default_options[:methods].push("email", "location", "region_id")
-    end
+    default_options[:methods].push("email", "location", "region_id") if staff_delegate?
 
     options = default_options.merge(options || {}).deep_dup
     # Preempt the values for avatar and teams, they have a special treatment.
@@ -1299,22 +1237,14 @@ class User < ApplicationRecord
     # put them in DEFAULT_SERIALIZE_OPTIONS (eg: "teams" doesn't have a default
     # scope at the moment).
     json[:class] = self.class.to_s.downcase
-    if include_teams
-      json[:teams] = deprecated_team_roles
-    end
-    if include_avatar
-      json[:avatar] = self.avatar
-    end
+    json[:teams] = deprecated_team_roles if include_teams
+    json[:avatar] = self.avatar if include_avatar
 
     # Private attributes to include.
     private_attributes = options&.fetch(:private_attributes, []) || []
-    if private_attributes.include?("dob")
-      json[:dob] = self.dob
-    end
+    json[:dob] = self.dob if private_attributes.include?("dob")
 
-    if private_attributes.include?("email")
-      json[:email] = self.email
-    end
+    json[:email] = self.email if private_attributes.include?("email")
 
     json
   end

@@ -149,9 +149,6 @@ Style/EmptyElse:
 Style/IfInsideElse:
   Enabled: false
 
-Style/IfUnlessModifier:
-  Enabled: false
-
 Style/InverseMethods:
   Enabled: false
 

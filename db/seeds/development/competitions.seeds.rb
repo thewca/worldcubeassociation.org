@@ -11,18 +11,14 @@ after "development:users", "development:user_roles" do
       r = rand(5000..100_000)
 
       # Solves over 10 minutes must be rounded to the nearest second.
-      if r > 10 * 60 * 100
-        r = 100 * (r / 100)
-      end
+      r = 100 * (r / 100) if r > 10 * 60 * 100
       r
     end
 
     def random_city(country)
       city = Faker::Address.city
       state_validator = CityValidator.get_validator_for_country(country.iso2)
-      if state_validator
-        city += ", #{state_validator.valid_regions.to_a.sample}"
-      end
+      city += ", #{state_validator.valid_regions.to_a.sample}" if state_validator
       city
     end
   end

@@ -36,9 +36,7 @@ class IncidentsController < ApplicationController
 
   def show
     set_incident
-    unless @incident.resolved?
-      redirect_to_root_unless_user(:can_manage_incidents?)
-    end
+    redirect_to_root_unless_user(:can_manage_incidents?) unless @incident.resolved?
   end
 
   def new

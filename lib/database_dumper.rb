@@ -1190,9 +1190,7 @@ module DatabaseDumper
         ActiveRecord::Base.connection.execute(populate_table_sql.strip)
       end
 
-      if dump_ts_name.present?
-        ActiveRecord::Base.connection.execute("INSERT INTO #{dump_db_name}.server_settings (name, value, created_at, updated_at) VALUES ('#{dump_ts_name}', UNIX_TIMESTAMP(), NOW(), NOW())")
-      end
+      ActiveRecord::Base.connection.execute("INSERT INTO #{dump_db_name}.server_settings (name, value, created_at, updated_at) VALUES ('#{dump_ts_name}', UNIX_TIMESTAMP(), NOW(), NOW())") if dump_ts_name.present?
     end
 
     yield dump_db_name

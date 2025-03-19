@@ -22,19 +22,13 @@ namespace :registration_version do
   task :migrate_v1_v3, [:competition_id] => [:environment] do |_, args|
     competition_id = args[:competition_id]
 
-    if competition_id.blank?
-      abort "Competition id is required"
-    end
+    abort "Competition id is required" if competition_id.blank?
 
     competition = Competition.find(competition_id)
 
-    if competition.nil?
-      abort "Competition #{competition_id} not found"
-    end
+    abort "Competition #{competition_id} not found" if competition.nil?
 
-    unless competition.registration_version_v1?
-      abort "Competition #{competition_id} is not on version 1"
-    end
+    abort "Competition #{competition_id} is not on version 1" unless competition.registration_version_v1?
 
     LogTask.log_task("Migrating Registrations for Competition #{competition_id}") do
       ActiveRecord::Base.transaction do
@@ -43,19 +37,13 @@ namespace :registration_version do
           if registration.paid_entry_fees > 0
             registration.registration_payments.each do |payment|
               # If the payments were made after November 6th we already have history entries for it
-              if payment.created_at < Time.new(2024, 11, 6)
-                registration.add_history_entry({ payment_status: payment.payment_status, iso_amount: payment.amount_lowest_denomination }, "user", payment.user_id, "V2 Migration", payment.created_at)
-              end
+              registration.add_history_entry({ payment_status: payment.payment_status, iso_amount: payment.amount_lowest_denomination }, "user", payment.user_id, "V2 Migration", payment.created_at) if payment.created_at < Time.new(2024, 11, 6)
             end
           end
 
-          if registration.accepted_at.present?
-            registration.add_history_entry({ competing_status: 'accepted' }, "user", registration.accepted_by, "V2 Migration", registration.accepted_at)
-          end
+          registration.add_history_entry({ competing_status: 'accepted' }, "user", registration.accepted_by, "V2 Migration", registration.accepted_at) if registration.accepted_at.present?
 
-          if registration.deleted_at.present?
-            registration.add_history_entry({ competing_status: 'cancelled' }, "user", registration.deleted_by, "V2 Migration", registration.deleted_at)
-          end
+          registration.add_history_entry({ competing_status: 'cancelled' }, "user", registration.deleted_by, "V2 Migration", registration.deleted_at) if registration.deleted_at.present?
 
           registration.add_history_entry({
                                            competing_status: 'pending',
@@ -76,19 +64,13 @@ namespace :registration_version do
   task :migrate_v2_v3, [:competition_id] => [:environment] do |_, args|
     competition_id = args[:competition_id]
 
-    if competition_id.blank?
-      abort "Competition id is required"
-    end
+    abort "Competition id is required" if competition_id.blank?
 
     competition = Competition.includes(:competition_events).find(competition_id)
 
-    if competition.nil?
-      abort "Competition #{competition_id} not found"
-    end
+    abort "Competition #{competition_id} not found" if competition.nil?
 
-    unless competition.registration_version_v2?
-      abort "Competition #{competition_id} is not on version 2"
-    end
+    abort "Competition #{competition_id} is not on version 2" unless competition.registration_version_v2?
 
     LogTask.log_task("Migrating Registrations for Competition #{competition_id}") do
       wcif_v2 = competition.to_wcif(authorized: true)

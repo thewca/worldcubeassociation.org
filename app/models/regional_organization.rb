@@ -22,9 +22,7 @@ class RegionalOrganization < ApplicationRecord
 
   validate :start_date_must_be_earlier_than_end_date
   def start_date_must_be_earlier_than_end_date
-    if start_date && end_date && start_date >= end_date
-      errors.add(:start_date, I18n.t('regional_organizations.errors.end_date_after_start_date'))
-    end
+    errors.add(:start_date, I18n.t('regional_organizations.errors.end_date_after_start_date')) if start_date && end_date && start_date >= end_date
   end
 
   def is_pending?

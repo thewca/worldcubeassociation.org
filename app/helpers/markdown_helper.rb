@@ -47,9 +47,7 @@ module MarkdownHelper
   end
 
   def md(content, target_blank: false, toc: false)
-    if content.nil?
-      return ""
-    end
+    return "" if content.nil?
 
     options = {
       escape_html: true,
@@ -62,9 +60,7 @@ module MarkdownHelper
       strikethrough: true,
     }
 
-    if target_blank
-      options[:link_attributes] = { target: "_blank" }
-    end
+    options[:link_attributes] = { target: "_blank" } if target_blank
 
     output = "".html_safe
 

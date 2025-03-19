@@ -379,22 +379,16 @@ class ResultsController < ApplicationController
     params[:region]&.tr!("+", " ")
 
     params[:years]&.tr!("+", " ")
-    if params[:years] == "all"
-      params[:years] = nil
-    end
+    params[:years] = nil if params[:years] == "all"
 
     params[:show]&.tr!("+", " ")
     params[:show]&.downcase!
     # We are not supporting the all option anymore!
-    if params[:show]&.include?("all")
-      params[:show] = nil
-    end
+    params[:show] = nil if params[:show]&.include?("all")
   end
 
   private def compute_rankings_by_region(rows, continent, country)
-    if rows.empty?
-      return [[], 0, 0]
-    end
+    return [[], 0, 0] if rows.empty?
     best_value_of_world = rows.first["value"]
     best_values_of_continents = {}
     best_values_of_countries = {}
@@ -410,17 +404,13 @@ class ResultsController < ApplicationController
       if best_values_of_continents[result.country.continent.id].nil? || value == best_values_of_continents[result.country.continent.id]
         best_values_of_continents[result.country.continent.id] = value
 
-        if (country.present? && country.continent.id == result.country.continent.id) || (continent.present? && continent.id == result.country.continent.id) || params[:region] == "world"
-          continents_rows << row
-        end
+        continents_rows << row if (country.present? && country.continent.id == result.country.continent.id) || (continent.present? && continent.id == result.country.continent.id) || params[:region] == "world"
       end
 
       if best_values_of_countries[result.country.id].nil? || value == best_values_of_countries[result.country.id]
         best_values_of_countries[result.country.id] = value
 
-        if (country.present? && country.id == result.country.id) || params[:region] == "world"
-          countries_rows << row
-        end
+        countries_rows << row if (country.present? && country.id == result.country.id) || params[:region] == "world"
       end
     end
 

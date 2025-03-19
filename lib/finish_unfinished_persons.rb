@@ -144,9 +144,7 @@ module FinishUnfinishedPersons
       end
     end
 
-    unless cleared_id
-      raise "Could not compute a semi-id for #{person_name}"
-    end
+    raise "Could not compute a semi-id for #{person_name}" unless cleared_id
 
     [semi_id, available_per_semi]
   end

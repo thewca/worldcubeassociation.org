@@ -71,9 +71,7 @@ class CompetitionsController < ApplicationController
 
   private def competition_from_params(includes: nil)
     Competition.includes(includes).find(params[:competition_id] || params[:id]).tap do |competition|
-      unless competition.user_can_view?(current_user)
-        raise ActionController::RoutingError.new('Not Found')
-      end
+      raise ActionController::RoutingError.new('Not Found') unless competition.user_can_view?(current_user)
 
       assign_editing_user(competition)
     end
@@ -253,9 +251,7 @@ class CompetitionsController < ApplicationController
     competition = competition_from_params
     payment_integration = params.require(:payment_integration)
 
-    unless current_user&.can_manage_competition?(competition)
-      raise ActionController::RoutingError.new('Not Found')
-    end
+    raise ActionController::RoutingError.new('Not Found') unless current_user&.can_manage_competition?(competition)
 
     if payment_integration == 'paypal' && PaypalInterface.paypal_disabled?
       flash[:error] = 'PayPal is not yet available in production environments'
@@ -265,9 +261,7 @@ class CompetitionsController < ApplicationController
     connector = CompetitionPaymentIntegration::AVAILABLE_INTEGRATIONS[payment_integration.to_sym].safe_constantize
     account_reference = connector&.connect_account(params)
 
-    if account_reference.blank?
-      raise ActionController::RoutingError.new("Payment Integration #{payment_integration} not Found")
-    end
+    raise ActionController::RoutingError.new("Payment Integration #{payment_integration} not Found") if account_reference.blank?
 
     competition.competition_payment_integrations.new(connected_account: account_reference)
 
@@ -290,9 +284,7 @@ class CompetitionsController < ApplicationController
     competition_id = params.require(:state)
     competition = Competition.find(competition_id)
 
-    unless current_user&.can_manage_competition?(competition)
-      raise ActionController::RoutingError.new('Not Found')
-    end
+    raise ActionController::RoutingError.new('Not Found') unless current_user&.can_manage_competition?(competition)
 
     redirect_to competition_connect_payment_integration_path(
       competition_id,
@@ -652,9 +644,7 @@ class CompetitionsController < ApplicationController
   def announce
     competition = competition_from_params
 
-    if competition.announced?
-      return render json: { error: "Already announced" }
-    end
+    return render json: { error: "Already announced" } if competition.announced?
 
     competition.update!(announced_at: Time.now, announced_by: current_user.id, showAtAll: true)
 
@@ -733,9 +723,7 @@ class CompetitionsController < ApplicationController
         [r.competition_id, r.competing_status]
       end
       competition_ids.concat(@registered_for_by_competition_id.keys)
-      if current_user.person
-        competition_ids.concat(current_user.person.competitions.pluck(:competitionId))
-      end
+      competition_ids.concat(current_user.person.competitions.pluck(:competitionId)) if current_user.person
       # An organiser might still have duties to perform for a cancelled competition until the date of the competition has passed.
       # For example, mailing all competitors about the cancellation.
       # In general ensuring ease of access until it is certain that they won't need to frequently visit the page anymore.
