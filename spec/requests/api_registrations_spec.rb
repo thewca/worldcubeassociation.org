@@ -203,7 +203,7 @@ RSpec.describe 'API Registrations' do
   end
 
   describe 'PATCH #bulk_update' do
-    let(:competition) { FactoryBot.create :competition, :registration_open, :editable_registrations, :with_organizer }
+    let(:competition) { FactoryBot.create :competition, :registration_open, :editable_registrations, :with_competitor_limit, :with_organizer }
 
     let(:user1) { FactoryBot.create :user }
     let(:user2) { FactoryBot.create :user }
@@ -334,51 +334,78 @@ RSpec.describe 'API Registrations' do
       expect(response).to have_http_status(:bad_request)
     end
 
-    it 'accepts competitors from the waiting list' do
-      waitlisted1 = FactoryBot.create(:registration, :waiting_list, competition: competition)
-      waitlisted2 = FactoryBot.create(:registration, :waiting_list, competition: competition)
-      waitlisted3 = FactoryBot.create(:registration, :waiting_list, competition: competition)
-      expect(waitlisted1.competing_status).to eq('waiting_list')
-      expect(waitlisted2.competing_status).to eq('waiting_list')
-      expect(waitlisted3.competing_status).to eq('waiting_list')
+    context 'when bulk accepting registrations' do
+      let(:waitlisted1) { FactoryBot.create(:registration, :waiting_list, competition: competition) }
+      let(:waitlisted2) { FactoryBot.create(:registration, :waiting_list, competition: competition) }
+      let(:waitlisted3) { FactoryBot.create(:registration, :waiting_list, competition: competition) }
 
-      update_request1 = FactoryBot.build(
-        :update_request,
-        user_id: waitlisted1.user_id,
-        competition_id: waitlisted1.competition.id,
-        competing: { 'status' => 'accepted' },
-      )
+      let(:update_request1) {
+        FactoryBot.build(
+          :update_request,
+          user_id: waitlisted1.user_id,
+          competition_id: waitlisted1.competition.id,
+          competing: { 'status' => 'accepted' },
+        )
+      }
 
-      update_request2 = FactoryBot.build(
-        :update_request,
-        user_id: waitlisted2.user_id,
-        competition_id: waitlisted2.competition.id,
-        competing: { 'status' => 'accepted' },
-      )
+      let(:update_request2) {
+        FactoryBot.build(
+          :update_request,
+          user_id: waitlisted2.user_id,
+          competition_id: waitlisted2.competition.id,
+          competing: { 'status' => 'accepted' },
+        )
+      }
 
-      update_request3 = FactoryBot.build(
-        :update_request,
-        user_id: waitlisted3.user_id,
-        competition_id: waitlisted3.competition.id,
-        competing: { 'status' => 'accepted' },
-      )
+      let(:update_request3) {
+        FactoryBot.build(
+          :update_request,
+          user_id: waitlisted3.user_id,
+          competition_id: waitlisted3.competition.id,
+          competing: { 'status' => 'accepted' },
+        )
+      }
 
-      bulk_update_request = FactoryBot.build(
-        :bulk_update_request,
-        user_ids: [waitlisted1.user_id],
-        submitted_by: competition.organizers.first.id,
-        competition_id: competition.id,
-        requests: [update_request1, update_request2, update_request3],
-      )
+      let(:bulk_update_request) {
+        FactoryBot.build(
+          :bulk_update_request,
+          user_ids: [waitlisted1.user_id],
+          submitted_by: competition.organizers.first.id,
+          competition_id: competition.id,
+          requests: [update_request1, update_request2, update_request3],
+        )
+      }
 
-      headers = { 'Authorization' => bulk_update_request['jwt_token'] }
-      patch api_v1_registrations_bulk_update_path, params: bulk_update_request, headers: headers
+      let(:headers) { { 'Authorization' => bulk_update_request['jwt_token'] } }
 
-      expect(response).to have_http_status(:ok)
+      it 'accepts competitors from the waiting list if there is space in accepted' do
+        patch api_v1_registrations_bulk_update_path, params: bulk_update_request, headers: headers
 
-      expect(Registration.find_by(user_id: update_request1['user_id']).competing_status).to eq('accepted')
-      expect(Registration.find_by(user_id: update_request2['user_id']).competing_status).to eq('accepted')
-      expect(Registration.find_by(user_id: update_request3['user_id']).competing_status).to eq('accepted')
+        expect(response).to have_http_status(:ok)
+
+        expect(Registration.find_by(user_id: update_request1['user_id']).competing_status).to eq('accepted')
+        expect(Registration.find_by(user_id: update_request2['user_id']).competing_status).to eq('accepted')
+        expect(Registration.find_by(user_id: update_request3['user_id']).competing_status).to eq('accepted')
+      end
+
+      it 'can accept competitors up to the competitor limit' do
+        competition.update(competitor_limit: 3)
+
+        patch api_v1_registrations_bulk_update_path, params: bulk_update_request, headers: headers
+
+        expect(response).to have_http_status(:ok)
+
+        expect(Registration.find_by(user_id: update_request1['user_id']).competing_status).to eq('accepted')
+        expect(Registration.find_by(user_id: update_request2['user_id']).competing_status).to eq('accepted')
+        expect(Registration.find_by(user_id: update_request3['user_id']).competing_status).to eq('accepted')
+      end
+
+      it 'wont accept competitors over the competitor limit' do
+        competition.update(competitor_limit: 2)
+
+        patch api_v1_registrations_bulk_update_path, params: bulk_update_request, headers: headers
+        expect(response).to have_http_status(:forbidden)
+      end
     end
   end
 
