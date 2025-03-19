@@ -144,7 +144,7 @@ module Registrations
         process_validation_error!(registration, :competing_status)
 
         raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::ALREADY_REGISTERED_IN_SERIES) if
-          new_status == Registrations::Helper::STATUS_ACCEPTED && existing_registration_in_series?(competition, target_user)
+          new_status == Registrations::Helper::STATUS_ACCEPTED && existing_registration_in_series?(registration)
 
         return unless new_status == Registrations::Helper::STATUS_ACCEPTED && competition.competitor_limit_enabled?
         raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::COMPETITOR_LIMIT_REACHED) if
@@ -168,13 +168,8 @@ module Registrations
           updated_registration.volatile_event_ids != persisted_registration.event_ids
       end
 
-      def existing_registration_in_series?(competition, target_user)
-        return false unless competition.part_of_competition_series?
-
-        other_series_ids = competition.other_series_ids
-        other_series_ids.any? do |comp_id|
-          Registration.find_by(competition_id: comp_id, user_id: target_user.id)&.might_attend?
-        end
+      def existing_registration_in_series?(registration)
+        registration.part_of_competition_series? && registration.series_sibling_registrations.might_attend.any?
       end
     end
   end

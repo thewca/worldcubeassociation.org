@@ -14,6 +14,7 @@ class Registration < ApplicationRecord
   scope :not_cancelled, -> { where.not(competing_status: 'cancelled') }
   scope :with_payments, -> { joins(:registration_payments).distinct }
   scope :wcif_ordered, -> { order(:id) }
+  scope :might_attend, -> { where(competing_status: ['accepted', 'waiting_list']) }
 
   belongs_to :competition
   belongs_to :user, optional: true # A user may be deleted later. We only enforce validation directly on creation further down below.
@@ -414,8 +415,10 @@ class Registration < ApplicationRecord
     errors.add(:competition_id, I18n.t('registrations.errors.series_more_than_one_accepted')) if competition&.part_of_competition_series? && competing_status_accepted? && !series_sibling_registrations.accepted.empty?
   end
 
+  delegate :part_of_competition_series?, to: :competition
+
   def series_sibling_registrations
-    return [] unless competition.part_of_competition_series?
+    return [] unless part_of_competition_series?
 
     competition.series_sibling_registrations
                .where(user_id: self.user_id)
